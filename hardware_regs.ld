@@ -1,11 +1,11 @@
 // Peripheral/Parallel Interface Registers
-PI_DRAM_ADDR_REG = 0xA4600000; // defined:True
-PI_CART_ADDR_REG = 0xA4600004; // defined:True
+PI_DRAM_ADDR_REG = 0xa4600000; // size:0x4
+PI_CART_ADDR_REG = 0xa4600004; // size:0x4
+PI_RD_LEN_REG = 0xa4600008; // defined:true size:0x4
+PI_WR_LEN_REG = 0xa460000c; // size:0x4
 D_A4600005 = 0xA4600005; // defined:True // TODO figure out its name
 D_A4600006 = 0xA4600006; // defined:True // TODO figure out its name
 D_A4600007 = 0xA4600007; // defined:True // TODO figure out its name
-PI_RD_LEN_REG = 0xA4600008; // defined:True
-PI_WR_LEN_REG = 0xA460000C; // defined:True
 PI_STATUS_REG = 0xA4600010; // defined:True
 PI_BSD_DOM1_LAT_REG = 0xA4600014; // defined:True // PI dom1 latency
 PI_BSD_DOM1_PWD_REG = 0xA4600018; // defined:True // PI dom1 pulse width
