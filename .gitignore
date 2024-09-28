@@ -1,0 +1,15 @@
+build
+assets
+asm
+snowboardkids2.d
+snowboardkids2.ld
+snowboardkids2.z64
+undefined_funcs_auto.txt
+undefined_syms_auto.txt
+.clj-kondo
+.lsp
+macro.inc
+patch.ld
+patch_linker.sh
+requirements.txt
+symbol_addrs.txt
