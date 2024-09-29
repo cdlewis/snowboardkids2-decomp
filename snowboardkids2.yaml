@@ -8,9 +8,6 @@ options:
   platform: n64
   compiler: GCC
 
-  # asm_path: asm
-  # src_path: src
-  # build_path: build
   create_asm_dependencies: True
 
   ld_script_path: snowboardkids2.ld
@@ -51,7 +48,7 @@ options:
   data_string_guesser_level: 2
   libultra_symbols: True
   hardware_regs: True
-  # gfx_ucode: # one of [f3d, f3db, f3dex, f3dexb, f3dex2]
+
 segments:
   - name: header
     type: header
@@ -60,11 +57,6 @@ segments:
   - name: boot
     type: bin
     start: 0x40
-
-  - name: possible_assets
-    type: bin
-    start: 0x1000
-    vram: 0x04000000
 
   - name: entry
     type: code
@@ -186,13 +178,17 @@ segments:
       - [0x717D0, asm]
       - [0x72220, asm]
       - [0x75400, asm]
-      - [0x75E60, asm]
+      - [0x75450, asm, alSynNew]
+      - [0x7571C, asm, alSynAllocFX]
+      - [0x75C84, asm, ChangeCustomEffect]
+      - [0x75CE0, asm, __cosf]
+      - [0x75E60, asm, lookatref]
+      - [0x763D8, asm, guLookAtReflect]
       - [0x76450, asm, guMtxF2L]
       - [0x764E8, asm, guMtxL2F]
       - [0x76590, asm, guMtxIdentF]
       - [0x765E0, asm, guMtxIdent]
-      - [0x766D0, asm, guPerspectiveF]
-      - [0x76880, asm, guPerspective]
+      - [0x766D0, asm, guPerspective]
       - [0x76A50, asm, sinf]
       - [0x76C50, asm, osInvalDCache]
       - [0x76DE0, asm, osSetIntMask]
@@ -206,8 +202,7 @@ segments:
       - [0x77340, asm, osStartThread]
       - [0x77460, asm, __osDequeueThread]
       - [0x774A0, asm, osVirtualToPhysical]
-      - [0x77500, asm, init_lpfilter]
-      - [0x775A4, asm, alFxNew]
+      - [0x77500, asm, alFxNew]
       - [0x77A3C, asm, alEnvmixerNew]
       - [0x77AF4, asm, alLoadNew]
       - [0x77BA4, asm, alResampleNew]
@@ -219,15 +214,10 @@ segments:
       - [0x78840, asm, alAuxBusPull]
       - [0x7891C, asm, alAuxBusParam]
       - [0x78950, asm, alEnvmixerPull]
-      - [0x78E9C, asm, alEnvmixerParam]
-      - [0x79270, asm, _frexpf]
-      - [0x79350, asm, _ldexpf]
       - [0x79680, asm, alFilterNew]
       - [0x796A0, asm, alMainBusPull]
       - [0x79810, asm, alResamplePull]
       - [0x79AC0, asm, alFxPull]
-      - [0x79E70, asm, alFxParam]
-      - [0x79E84, asm, alFxParamHdl]
       - [0x7A608, asm, _doModFunc]
       - [0x7A6A0, asm, alSavePull]
       - [0x7A7A0, asm, alSaveParam]
@@ -237,11 +227,6 @@ segments:
       - [0x7A8C0, asm, alHeapDBAlloc]
       - [0x7A910, asm, alCopy]
       - [0x7A950, asm, alSynNew_0]
-      - [0x7AC1C, asm, alAudioFrame]
-      - [0x7ADCC, asm, __allocParam]
-      - [0x7ADF8, asm, __freeParam]
-      - [0x7AE64, asm, _freePVoice]
-      - [0x7AEEC, asm, _timeToSamples]
       - [0x7AFE0, asm, alSynDelete]
       - [0x7AFF0, asm, alSynAddPlayer]
       - [0x7B040, asm, alSynAllocVoice]
@@ -331,9 +316,9 @@ segments:
       - [0x807F0, asm, __osSpSetStatus]
       - [0x80800, asm, __osSpSetPc]
       - [0x80830, asm, __osSpRawStartDma]
-      - [0x80930, asm, __osViInit]
-      - [0x80A40, asm, __osViGetCurrentContext]
-      - [0x80A50, asm, __osSpRawReadIo]
+      - [0x80930, asm]
+      - [0x80A40, asm]
+      - [0x80A50, asm]
       - [0x80AE0, asm, __osSiRawWriteIo]
       - [0x80B50, asm, __osSiCreateAccessQueue]
       - [0x80C10, asm, __osSiRelAccess]
@@ -376,7 +361,9 @@ segments:
       - [0x85190, asm, __udivdi3]
       - [0x851B0, asm, __umoddi3]
       - [0x851F0, asm, rspbootTextStart]
-      - [0x852C0, data, aspMainTextStart]
+      - [0x852C0, asm]
+      - [0x85420, data]
+      # - [0x852C0, data, aspMainTextStart]
       - [0x88EB0, data]
       - [0x891D0, data]
       - [0x891E0, data]
@@ -452,17 +439,17 @@ segments:
       - [0x8DAD0, rodata]
       - [0x8DD50, rodata]
       - [0x8E020, rodata]
-      - [0x8E2B0, rodata]
+      - [0x8E2B0, rodata, "198B0"]
       - [0x8E360, rodata]
-      - [0x8E3C0, rodata]
-      - [0x8E3D0, rodata]
-      - [0x8E3F0, rodata]
+      - [0x8E3C0, rodata, "19F20"]
+      - [0x8E3D0, rodata, "1A020"]
+      - [0x8E3F0, rodata, "1A570"]
       - [0x8E4E0, rodata]
       - [0x8E5B0, rodata]
       - [0x8E5C0, rodata]
       - [0x8E5D0, rodata]
       - [0x8E8C0, rodata]
-      - [0x8E8D0, rodata]
+      - [0x8E8D0, rodata, "232F0"]
       - [0x8EAF0, rodata]
       - [0x8EB00, rodata]
       - [0x8F710, rodata]
@@ -718,49 +705,51 @@ segments:
       - [0x9DCB0, rodata]
       - [0x9DCC0, rodata]
       - [0x9DCD0, rodata]
-      - [0x9DDD0, rodata, xprintf_data]
+      - [0x9DDD0, rodata, _Printf]
       - [0x9DE20, rodata]
       - [0x9DE30, rodata]
-      - [0x9DE40, rodata, xlitob_data]
-      - [0x9DE70, rodata]
-      - [0x9F480, rodata]
-      - [0x9F660, rodata]
-      - [0x9F740, rodata]
-      - [0x9F758, rodata]
-      - [0x9F798, rodata]
-      - [0x9F7B0, rodata, lookatref_rodata]
-      - [0x9F7C0, rodata, perspective_rodata]
-      - [0x9F808, rodata, sinf_rodata]
+      - [0x9DE40, rodata, _Litob]
+      - [0x9DE70, rodata, 4050]
+      - [0x9F480, rodata, 4CD70]
+      - [0x9F660, rodata, 717D0]
+      - [0x9F740, rodata, __cosf]
+      - [0x9F7B0, rodata, lookatref]
+      - [0x9F7C0, rodata, guPerspective]
+      - [0x9F808, rodata, sinf]
       - [0x9F860, rodata, __osRcpImTable]
-      - [0x9F8E0, rodata, drvrnew_rodata]
-      - [0x9F920, rodata, env_rodata]
-      - [0x9FA20, rodata, resample_rodata]
-      - [0x9FA50, rodata, reverb_rodata]
-      - [0x9FAB0, rodata, save_rodata]
-      - [0x9FAC0, rodata, synthesizer_rodata]
-      - [0x9FB00, rodata, aisetfreq_rodata]
-      - [0x9FB10, rodata, viswapcontext_rodata]
-      - [0x9FB20, rodata]
+      - [0x9F8E0, rodata, alFxNew]
+      - [0x9F920, rodata, alEnvmixerPull]
+      - [0x9FA20, rodata, alResamplePull]
+      - [0x9FA50, rodata, alFxPull]
+      - [0x9FAB0, rodata, alSavePull]
+      - [0x9FAC0, rodata, alSynNew_0]
+      - [0x9FB00, rodata, osAiSetFrequency]
+      - [0x9FB10, rodata, __osViSwapContext]
+      - [0x9FB20, rodata, __osException]
       - [0x9FB70, rodata, __libm_qnan_f]
-      - [0x9FB80, rodata, sprawdma_rodata]
-      - [0x9FBA0, rodata, sirawwrite_rodata]
-      - [0x9FBB4, rodata, pirawread_rodata]
-      - [0x9FBC8, rodata, devmgr_rodata]
-      - [0x9FBE8, rodata, xprintf_rodata]
-      - [0x9FC08, rodata, xprintf_rodata_0]
-      - [0x9FD80, rodata, xldtob_rodata]
-      - [0x9FDF0, rodata]
-      - [0x9FE70, rodata]
-      - [0x9FF70, rodata]
-      - [0xA7104, bss, player_bss]
-      - [0xA7130, bss, sptask_bss]
-      - [0xA7170, bss, motor_bss]
-      - [0xA7270, bss, pimgr_bss]
-      - [0xA8440, bss, vimgr_bss]
-      - [0xA9660, bss, siacs_bss]
-      - [0xA969C, bss, __osBaseCounter]
-      - [0xA96A4, bss, DriveRomHandle]
-      - [0xA98D0, bss, __osContPifRam]
-      - [0xA991C, bss, __Dom2SpeedParam_0]
+      - [0x9FB80, rodata, __osSpRawStartDma]
+      - [0x9FBA0, rodata, __osSiRawWriteIo]
+      - [0x9FBC8, rodata, __osDevMgrMain]
+      - [0x9FBE8, rodata, _Printf]
+      - [0x9FC08, rodata, _Printf] # splat complains if i merge this with above :shrug:
+      - [0x9FD60, rodata, osEPiRawReadIo]
+      - [0x9FD80, rodata, _Ldtob]
+      - [0x9FDF0, rodata, osEPiRawReadIo]
+
+      - { start: 0x9FDF0, type: bss, vram: 0x8009F1F0 }
+      # - [0xA7104, bss, player_bss]
+      # - [0xA7130, bss, sptask_bss]
+      # - [0xA7170, bss, motor_bss]
+      # - [0xA7270, bss, pimgr_bss]
+      # - [0xA8440, bss, vimgr_bss]
+      # - [0xA9660, bss, siacs_bss]
+      # - [0xA969C, bss, __osBaseCounter]
+      # - [0xA96A4, bss, DriveRomHandle]
+      # - [0xA98D0, bss, __osContPifRam]
+      # - [0xA991C, bss, __Dom2SpeedParam_0]
+
+  - type: bin
+    start: 0x9FDF0
+    follows_vram: main
 
   - [0x1000000]
