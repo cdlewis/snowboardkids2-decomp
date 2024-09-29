@@ -74,6 +74,7 @@ segments:
     subsegments:
       - [0x1050, asm]
       - [0x1058, asm, osVoiceCheckWord]
+      - [0x1060, asm]
       - [0x20F0, asm]
       - [0x3870, asm]
       - [0x3B80, asm]
@@ -368,7 +369,6 @@ segments:
       - [0x851F0, asm, rspbootTextStart]
       - [0x852C0, asm]
       - [0x85420, data]
-      # - [0x852C0, data, aspMainTextStart]
       - [0x88EB0, data]
       - [0x891D0, data]
       - [0x891E0, data]
@@ -747,19 +747,7 @@ segments:
       - [0x9FBE8, rodata, xprintf]
       - [0x9FD60, rodata, osEPiRawReadIo]
       - [0x9FD80, rodata, _Ldtob]
-      - [0x9FDF0, rodata, osEPiRawReadIo]
-
-      - { start: 0x9FDF0, type: bss, vram: 0x8009F1F0 }
-      # - [0xA7104, bss, player_bss]
-      # - [0xA7130, bss, sptask_bss]
-      # - [0xA7170, bss, motor_bss]
-      # - [0xA7270, bss, pimgr_bss]
-      # - [0xA8440, bss, vimgr_bss]
-      # - [0xA9660, bss, siacs_bss]
-      # - [0xA969C, bss, __osBaseCounter]
-      # - [0xA96A4, bss, DriveRomHandle]
-      # - [0xA98D0, bss, __osContPifRam]
-      # - [0xA991C, bss, __Dom2SpeedParam_0]
+      - [0x9FDF0, bss]
 
   - type: bin
     start: 0x9FDF0
