@@ -56,14 +56,6 @@
 
 .set D_A4800000, 0xA4800000;
 
-.set vi_data_0000, 0x8009D050;
-.set vi_data_0002, 0x8009D052;
-.set vi_data_0004, 0x8009D054;
-.set vi_data_0032, 0x8009D082;
-.set vi_data_0034, 0x8009D084;
-.set vi_data_0038, 0x8009D088;
-.set vi_text_0094, 0x8007FDC4;
-
 .set osTvType, 0x80000300;
 
 .set SP_MEM_ADDR_REG, 0xA4040000; 

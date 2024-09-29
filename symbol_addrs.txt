@@ -944,6 +944,9 @@ viswapcontext_rodata_0000 = 0x8009EF10;
 viswapcontext_text_0088 = 0x8007E3A8;
 viswapcontext_text_011C = 0x8007E43C;
 viswapcontext_text_0150 = 0x8007E470;
+
+// xldtob
+
 xldtob_rodata_0000 = 0x8009F180;
 xldtob_rodata_0048 = 0x8009F1C8;
 xldtob_rodata_004C = 0x8009F1CC;
