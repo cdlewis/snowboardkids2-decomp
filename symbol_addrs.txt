@@ -966,12 +966,16 @@ xlitob_data_0000 = 0x8009D240;
 xlitob_data_0014 = 0x8009D254;
 xlitob_text_0074 = 0x80083404;
 xlitob_text_0124 = 0x800834B4;
+
+// xprintf
+
 xprintf_data_0000 = 0x8009D1D0;
 xprintf_data_0024 = 0x8009D1F4;
-xprintf_rodata_0000 = 0x8009EFE8;
-xprintf_rodata_0008 = 0x8009EFF0;
-xprintf_rodata_0020 = 0x8009F008;
-xprintf_rodata_0028 = 0x8009F010;
+xprintf_rodata_0000 = 0x8009EFE8; // type:asciz size:0x4
+xprintf_rodata_0008 = 0x8009EFF0; // type:asciz size:0x4
+xprintf_rodata_0020 = 0x8009F008; // type:asciz size:0x4
+xprintf_rodata_0024 = 0x8009F00C; // type:asciz size:0x4
+xprintf_rodata_0028 = 0x8009F010; // type:asciz size:0x4
 xprintf_text_003C = 0x800806BC;
 xprintf_text_004C = 0x800806CC;
 xprintf_text_00A8 = 0x80080728;
