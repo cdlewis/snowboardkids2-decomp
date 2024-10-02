@@ -487,6 +487,8 @@ segments:
       - [0x910E0, data]
       - [0x91120, data]
       - [0x91374, data]
+      - [0x91380, data]
+      - [0x91382, data]
       - [0x9139E, data]
       - [0x913E0, data]
       - [0x916F0, data]
