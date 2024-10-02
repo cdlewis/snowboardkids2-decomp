@@ -818,11 +818,11 @@ segments:
 
   - name: cool_new_section
     type: code
-    start: 0x9FDF8
+    start: 0x9FDF0
     follows_vram: main
     vram: 0x800AFF30
     subsegments:
-      - [0x9FDF8, asm]
+      - [0x9FDF0, asm]
       - [0x9FE70, data]
       - [0xBADE0, data]
 
