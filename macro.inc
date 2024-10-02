@@ -1,5 +1,7 @@
 .set leoBootID, 0x800001A0
 
+.set D_A4620000, 0xA4620000
+
 .set osAppNmiBuffer, 0x8000031C;
 
 .set D_80000000, 0x80000000

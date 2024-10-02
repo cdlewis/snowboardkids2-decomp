@@ -1,5 +1,5 @@
 osAppNmiBuffer = 0x8000031C;
-
+func_800AFF44 = 0x800AFF44;
 
 // Unknown RSP functions
 func_8400103C = 0x8400103C;
@@ -7,7 +7,8 @@ func_84001008 = 0x84001008;
 func_84001064 = 0x84001064;
 
 // probably wrong 
-
+D_8009D530 = 0x8009D530; // size:0x4
+D_8009D8C0 = 0x8009D8C0; // size:0x4
 D_80000004 = 0x80000004;
 D_80000008 = 0x80000008;
 D_8000000C = 0x8000000C;
@@ -274,6 +275,7 @@ SP_DMA_BUSY_REG = 0xA4040018;
 SP_SEMAPHORE_REG = 0xA404001C; 
 
 D_A4080000 = 0xA4080000; // SP PC
+D_A4620000 = 0xA4620000; // some hardware register?
 
 // Display Processor Command Registers / Rasterizer Interface
 
