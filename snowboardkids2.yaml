@@ -18,6 +18,7 @@ options:
 
   o_as_suffix: True
   use_legacy_include_asm: False
+  symbol_name_format: $VRAM_$ROM
 
   asm_function_macro: glabel
   asm_jtbl_label_macro: jlabel
@@ -73,8 +74,6 @@ segments:
     bss_size: 0x10D40
     subsegments:
       - [0x1050, asm]
-      - [0x1058, asm, osVoiceCheckWord]
-      - [0x1060, asm]
       - [0x20F0, asm]
       - [0x3870, asm]
       - [0x3B80, asm]

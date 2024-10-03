@@ -247,14 +247,10 @@ jtbl_8009EF40 = 0x8009EF40;
 
 // end probably right
 
-
-
 // Hail mary
-D_646850 = 0x80646850;
 D_800B9C70 = 0x800B9C70;
 D_800BAEB0 = 0x800BAEB0;
 D_800BAF10 = 0x800BAF10;
-
 
 // Generic N64 Register Info
 
