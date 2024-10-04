@@ -349,7 +349,7 @@ segments:
       - [0x81190, asm, __osPiCreateAccessQueue]
       - [0x811E4, asm]
       - [0x81280, asm, xprintf]
-      - [0x81CB0, asm, __osSumcalc]
+      - [0x81CB0, asm]
       - [0x82178, asm, __osGetId]
       - [0x82344, asm, __osCheckId]
       - [0x823FC, asm, __osPfsRWInode]
@@ -825,8 +825,15 @@ segments:
       - [0x9FE70, data]
       - [0xBADE0, data]
 
-  - type: bin
+  - name: blurk
+    type: code
+    vram: 0x840010D4
     start: 0xBFFFF
-    follows_vram: cool_new_section
+    subsegments:
+      - [0xBFFFF, asm]
+
+  - type: bin
+    start: 0xCFFFF
+    follows_vram: blurk
 
   - [0x1000000]

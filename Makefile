@@ -31,7 +31,7 @@ OBJCOPYFLAGS = -O binary
 
 ASFLAGS = -EB -mtune=vr4300 -march=vr4300 -mabi=32 -I include
 
-LDFLAGS = -T $(LD_SCRIPT) -Map $(TARGET).map --no-check-sections
+LDFLAGS = -T undefined_funcs_auto.txt -T undefined_syms_auto.txt -T $(LD_SCRIPT) -Map $(TARGET).map --no-check-sections
 
 ### Targets
 
