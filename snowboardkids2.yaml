@@ -821,8 +821,29 @@ segments:
     vram: 0x800AFF30
     subsegments:
       - [0x9FDF0, asm]
-      - [0x9FE70, data]
-      - [0xBADE0, data]
+      - [0x9FE70, data] # why is this data here?? this is weird
+      - [0x9FF80, asm]
+      - [0xA01F4, data]
+      - [0xA0620, asm]
+      - [0xA0660, data]
+      - [0xA07F0, asm]
+      - [0xA0840, data]
+      - [0xA26BC, asm]
+      - [0xA2810, asm]
+      - [0xA3CA0, asm]
+      - [0xA7A2C, asm]
+      - [0xA8188, asm]
+      - [0xA8198, asm]
+      - [0xA8744, asm]
+      - [0xA9A40, asm]
+      - [0xAA544, data]
+      - [0xAAEC0, rodata, 9FF80]
+      - [0xAB070, rodata, A2810]
+      - [0xAB0A0, rodata]
+      - [0xAB0D0, rodata, A7A2C]
+      - [0xAB120, rodata, A8744]
+      - [0xAB160, rodata]
+      - [0xAB6B0, rodata]
 
   - name: blurk
     type: code
