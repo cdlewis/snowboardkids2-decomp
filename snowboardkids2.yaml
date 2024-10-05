@@ -437,6 +437,8 @@ segments:
       - [0x8A180, data]
       - [0x8A190, data]
       - [0x8A1A0, data]
+      - [0x8A68C, data]
+      - [0x8C928, data]
       - [0x8C980, data]
       - [0x8CA90, data]
       - [0x8CB90, data]
