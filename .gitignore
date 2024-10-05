@@ -4,7 +4,5 @@ asm
 snowboardkids2.d
 snowboardkids2.ld
 snowboardkids2.z64
-undefined_funcs_auto.txt
-undefined_syms_auto.txt
 .clj-kondo
 .lsp
