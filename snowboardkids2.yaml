@@ -875,8 +875,9 @@ segments:
       - [0xAC87C, asm]
       - [0xAC89C, rodata]
       - [0xAC8D0, asm]
-      - [0xACC70, asm]
-      - [0xAD630, asm]
+      - [0xACC70, rodata]
+      - [0xACD90, asm]
+      - [0xAD630, data]
 
   - name: blurk
     type: code
