@@ -40,7 +40,6 @@ func_800BC9BC = 0x800BC9BC; // type:func
 func_84001150 = 0x84001150; // type:func
 func_84001184 = 0x84001184; // type:func
 
-
 // probably wrong 
 D_8009D530 = 0x8009D530; // size:0x4
 D_8009D8C0 = 0x8009D8C0; // size:0x4
