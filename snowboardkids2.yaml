@@ -459,7 +459,7 @@ segments:
       - [0x8DAD0, data]
       - [0x8DD50, data]
       - [0x8E020, data]
-      - [0x8E2B0, data, "198B0"] # game text?
+      - [0x8E314, data, "198B0"] # game text?
       - [0x8E360, data]
       - [0x8E3C0, data, "19F20"] # game text?
       - [0x8E3D0, data, "1A020"] # game text?
