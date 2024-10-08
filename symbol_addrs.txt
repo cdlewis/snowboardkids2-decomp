@@ -38,6 +38,10 @@ D_8008DE7A = 0x8008DE7A; // type:u16 size:0x24
 D_8008DE9E = 0x8008DE9E; // type:u16 size:0x10
 D_8008DECE = 0x8008DECE; // type:u16 size:0x30
 
+// vi_data.data.s
+
+vi_data = 0x8009D050; // type:u16 size:0x60
+
 func_800B00E4_9FFA4 = 0x800B00E4;
 func_800B00FC_9FFBC = 0x800B00FC;
 func_800B02AC_A016C = 0x800B02AC;
@@ -945,12 +949,6 @@ thread_text_002C = 0x8007688C;
 timerintr_text_0074 = 0x8007F904;
 timerintr_text_0180 = 0x8007FA10;
 timerintr_text_0300 = 0x8007FAE8;
-vi_data_0000 = 0x8009D050;
-vi_data_0002 = 0x8009D052;
-vi_data_0004 = 0x8009D054;
-vi_data_0032 = 0x8009D082;
-vi_data_0034 = 0x8009D084;
-vi_data_0038 = 0x8009D088;
 vi_text_0094 = 0x8007FDC4;
 viblack_text_0044 = 0x8007AF74;
 vimgr_bss_0000 = 0x800A7840;
