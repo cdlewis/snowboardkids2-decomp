@@ -490,8 +490,6 @@ segments:
       - [0x91120, data]
       - [0x91374, data]
       - [0x91380, data]
-      - [0x9139E, data]
-      - [0x913E0, data]
       - [0x916F0, data]
       - [0x917D4, data]
       - [0x919B0, data]
