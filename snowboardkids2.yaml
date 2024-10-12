@@ -826,6 +826,7 @@ segments:
       # new section?
       - [0x9FF80, asm]
       - [0xA015C, asm]
+      - [0xA01E4, asm]
       - [0xA08B0, asm]
       - [0xA0CE4, asm]
       - [0xA7A3C, asm]
