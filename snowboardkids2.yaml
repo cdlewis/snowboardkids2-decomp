@@ -822,7 +822,8 @@ segments:
     vram: 0x800AFF30
     subsegments:
       - [0x9FDF0, asm]
-      - [0x9FE70, data] # why is this data here?? this is weird
+      - [0x9FE70, data]
+      # new section?
       - [0x9FF80, asm]
       - [0xA015C, asm]
       - [0xA08B0, asm]
@@ -832,58 +833,123 @@ segments:
       - [0xA93B0, asm]
       - [0xA9A40, asm]
       - [0xAA8F0, data]
+      - [0xAAD10, rodata]
       - [0xAAEC0, rodata, 9FF80]
       - [0xAAEE0, rodata, A08B0]
       - [0xAB070, rodata, A0CE4]
       - [0xAB0A0, rodata]
       - [0xAB0D0, rodata, A7A3C]
       - [0xAB120, rodata, A8744]
-      - [0xAB160, rodata]
-      - [0xAB6B0, rodata]
+      # new section?
+      - [0xAB160, asm]
+      - [0xAB6B0, asm]
       - [0xAB910, asm]
-      - [0xAB93C, rodata]
+      - [0xAB93C, asm]
       - [0xAB958, asm]
-      - [0xAB968, rodata]
+      - [0xAB968, asm]
       - [0xAB9F4, asm]
-      - [0xAB9F8, rodata]
+      - [0xAB9F8, asm]
       - [0xABA50, asm]
-      - [0xABA70, rodata]
+      - [0xABA70, data]
+      # new section?
+      - [0xABADC, asm]
       - [0xABD98, asm]
-      - [0xABDE8, rodata]
+      - [0xABDE8, asm]
       - [0xABEAC, asm]
-      - [0xABF18, rodata]
+      - [0xABF18, asm]
       - [0xABFA8, asm]
-      - [0xABFFC, rodata]
+      - [0xABFFC, asm]
       - [0xAC0FC, asm]
-      - [0xAC1A0, rodata]
+      - [0xAC1A0, asm]
       - [0xAC1F0, asm]
-      - [0xAC1FC, rodata]
+      - [0xAC1FC, asm]
       - [0xAC238, asm]
-      - [0xAC290, rodata]
+      - [0xAC290, asm]
       - [0xAC3E0, asm]
-      - [0xAC3E8, rodata]
+      - [0xAC3E8, asm]
       - [0xAC468, asm]
-      - [0xAC584, rodata]
+      - [0xAC584, asm]
       - [0xAC668, asm]
-      - [0xAC6B0, rodata]
+      - [0xAC6B0, asm]
       - [0xAC75C, asm]
-      - [0xAC788, rodata]
+      - [0xAC788, asm]
       - [0xAC87C, asm]
-      - [0xAC89C, rodata]
+      - [0xAC89C, asm]
       - [0xAC8D0, asm]
-      - [0xACC70, rodata]
+      - [0xACC70, data]
+      # new section?
+      - [0xACD30, asm]
       - [0xACD90, asm]
       - [0xAD630, data]
-
-  - name: blurk
-    type: code
-    vram: 0x840010D4
-    start: 0xBFFFF
-    subsegments:
-      - [0xBFFFF, data]
+      - [0xAD650, data] # predicted to be asm but not?
+      - [0xAEE10, data]
+      # new section?
+      - [0xAEFA0, asm]
+      - [0xB04E0, data]
+      # new section?
+      - [0xB0760, asm]
+      - [0xB1EE0, data]
+      # new section?
+      - [0xB2030, asm]
+      - [0xB2530, data]
+      # new section?
+      - [0xB2750, asm]
+      - [0xB2870, asm]
+      - [0xB40E0, data]
+      # new section?
+      - [0xB4240, asm]
+      - [0xB4B20, data]
+      # new section?
+      - [0xB4BB0, asm]
+      - [0xB5450, data]
+      # new section?
+      - [0xB54C0, asm]
+      - [0xB5B40, data]
+      # new section?
+      - [0xB5B90, asm]
+      - [0xB6310, data]
+      # new section?
+      - [0xB74F0, asm]
+      - [0xB7DD0, data]
+      # new section
+      - [0x1DA660, asm]
+      - [0x1DB6E0, data]
+      # new section
+      - [0x1DB7A0, asm]
+      - [0x1DC080, data]
+      # new section
+      - [0x1DC260, asm]
+      - [0x1DC480, asm]
+      - [0x1DC900, asm]
+      - [0x1DCF60, asm]
+      - [0x1DD080, data]
+      # new section
+      - [0x1DD170, asm]
+      - [0x1DD8C0, asm]
+      - [0x1DD970, asm]
+      - [0x1DDAF0, asm]
+      - [0x1DED40, asm]
+      - [0x1DF180, asm]
+      - [0x1DF310, asm]
+      - [0x1DF8B0, asm]
+      - [0x1DFAA0, asm]
+      - [0x1E1BA0, asm]
+      - [0x1E2070, asm]
+      - [0x1E25B0, asm]
+      - [0x1E2890, asm]
+      - [0x1E2BE0, asm]
+      - [0x1E36C0, asm]
+      - [0x1E60D0, asm]
+      - [0x1E64A0, asm]
+      - [0x1E6D20, data]
+      # new section
+      - [0x1E7F60, asm]
+      - [0x1E8230, asm]
+      - [0x1E8240, asm]
+      - [0x1E8900, data]
 
   - type: bin
-    start: 0xCFFFF
-    follows_vram: blurk
+    start: 0x2E0000
+    follows_vram: cool_new_section
 
   - [0x1000000]
