@@ -1,3 +1,7 @@
+# Display Processor Command Registers / Rasterizer Interface
+
+.set DPC_START_REG, 0xA4100000
+
 .set leoBootID, 0x800001A0
 
 .set D_A4620000, 0xA4620000

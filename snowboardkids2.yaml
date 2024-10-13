@@ -844,11 +844,8 @@ segments:
       - [0xAB120, rodata, A8744]
       # new section?
       - [0xAB160, asm]
-      - [0xAB6B0, asm]
+      - [0xAB690, asm]
       - [0xAB910, asm]
-      - [0xAB93C, asm]
-      - [0xAB958, asm]
-      - [0xAB968, asm]
       - [0xAB9F4, asm]
       - [0xAB9F8, asm]
       - [0xABA50, asm]
