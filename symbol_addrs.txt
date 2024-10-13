@@ -1,6 +1,71 @@
 osAppNmiBuffer = 0x8000031C;
 func_800AFF44 = 0x800AFF44;
 
+// 8A68C.data.s
+
+D_80089A8C_8A68C = 0x80089A8C; // type:s16 size:0x229C
+D_8008BF90_8CB90 = 0x8008BF90; // type:s16 size:0x10
+D_8008BFA0_8CBA0 = 0x8008BFA0; // type:s32 size:0x50
+D_8008C000_8CC00 = 0x8008C000; // type:s16 size:0x120
+D_8008CE10_8DA10 = 0x8008CE10; // type:s16 size:0x4
+D_8008D3C0_8DFC0 = 0x8008D3C0; // type:s16 size:0x10
+D_8008D6EC_8E2EC = 0x8008D6EC; // type:s16 size:0x28
+
+// 91380.data.s
+
+D_80090780 = 0x80090780; // type:u16 size:0x1C
+D_8009079C = 0x8009079C; // type:u16 size:0x44
+D_80090928 = 0x80090928; // type:u8 size:0x14
+D_80090994 = 0x80090994; // type:u16 size:0x4
+D_80090998 = 0x80090998; // type:u16 size:0x8
+D_800909A0 = 0x800909A0; // type:u16 size:80
+
+// 8E9BE.data.s
+
+D_8008DDBE = 0x8008DDBE; // type:u16 size:0x2C
+D_8008DE02 = 0x8008DE02; // type:u8 size:0x18
+
+// vi_data.data.s
+
+vi_data = 0x8009D050; // type:u16 size:0x60
+
+// 8FB70.data.s
+
+D_8008F044_8FC44 = 0x8008F044; // type:u8 size:0x10
+
+// 8FC70.data.s
+
+D_8008F0B4_8FCB4 = 0x8008F0B4; // type:u16 size:0x5C
+D_8008F070_8FC70 = 0x8008F070; // type:s32 size:0x44
+
+// 8FD50.data.s
+
+D_8008F16C_8FD6C = 0x8008F16C; // type:u16 size:0x10
+D_8008F200_8FE00 = 0x8008F200; // type:u32 size:0xC
+D_8008F22C_8FE2C = 0x8008F22C; // type:u16 size:0x80
+
+// 90930.data.s
+
+D_8008FE8C_90A8C = 0x8008FE8C; // type:u8 size:0x8
+
+// 90AF0.data.s
+
+D_800901CC_90DCC = 0x800901CC; // type:u16 size:0x4
+
+// 90ED0.data.s
+
+D_800902D0_90ED0 = 0x800902D0; // type:u8 size:0x180
+
+// 91380.data.s
+
+# D_80090780 = 0x80090780; // type:u16 size:0x1C
+# D_8009079C = 0x8009079C; // type:u16 size:0x44
+# D_80090928 = 0x80090928; // type:u8 size:0x14
+# D_80090994 = 0x80090994; // type:u16 size:0x4
+# D_80090998 = 0x80090998; // type:u16 size:0x8
+D_800909A0 = 0x800909A0; // type:u16 size:80
+
+
 func_8007EBBC_7F7BC = 0x8007EBBC;
 func_800AFF30 = 0x800AFF30;
 func_800AFF6C = 0x800AFF6C;
@@ -712,7 +777,7 @@ alSynSetVol = 0x8007A7D0;
 alSynStartVoice = 0x8007A6A0;
 alSynStopVoice = 0x8007A620;
 alUnlink = 0x80079C4C;
-aspMainTextStart = 0x800846C0; //name_end:aspMainTextEnd
+aspmain = 0x800846C0;
 bcopy = 0x8007B610;
 conteepprobe_text_0058 = 0x8007BE98;
 conteepread_text_0080 = 0x8007BF40;
@@ -983,7 +1048,7 @@ reverb_text_093C = 0x800797FC;
 reverb_text_0A3C = 0x80079938;
 reverb_text_0AAC = 0x8007996C;
 rmonmisc_text_010C = 0x80000B88;
-rspbootTextStart = 0x800845F0;
+rspboot = 0x800845F0;
 save_rodata_0000 = 0x8009EEB0;
 save_rodata_0004 = 0x8009EEB4;
 save_text_00C8 = 0x80079BC0;
