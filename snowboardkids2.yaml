@@ -833,8 +833,7 @@ segments:
       - [0xA8744, asm]
       - [0xA93B0, asm]
       - [0xA9A40, asm]
-      - [0xAA8E0, asm]
-      - [0xAA8F0, data]
+      - [0xAA8E0, data]
       - [0xAAD10, rodata]
       - [0xAAEC0, rodata, 9FF80]
       - [0xAAEE0, rodata, A08B0]
@@ -885,9 +884,6 @@ segments:
       # new section?
       - [0xAEFA0, asm]
       - [0xB04E0, data]
-      # new section?
-      - [0xB0760, asm]
-      - [0xB1EE0, data]
       # new section?
       - [0xB2030, asm]
       - [0xB2530, data]
