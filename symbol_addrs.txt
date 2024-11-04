@@ -1,3 +1,8 @@
+jtbl_800BCBD0_ACA90 = 0x800BCBD0; // type:s32 size:0x4
+jtbl_800BCC60_ACB20 = 0x800BCC60; // type:s32 size:0x8
+
+D_8008DD4E_8E94E = 0x8008DD4E; // type:s16 size:0x2
+
 osAppNmiBuffer = 0x8000031C;
 func_800AFF44 = 0x800AFF44;
 

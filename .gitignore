@@ -6,3 +6,5 @@ snowboardkids2.ld
 snowboardkids2.z64
 .clj-kondo
 .lsp
+.DS_Store
+snowboardkids2.eeprom
