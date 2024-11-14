@@ -59,7 +59,7 @@ dirs:
 
 no_verify: $(TARGET).z64
 	@echo "Skipping SHA1SUM check, updating CRC"
-	@$(PYTHON) $(N64CRC) $(TARGET).z64
+	#@$(PYTHON) $(N64CRC) $(TARGET).z64
 
 
 extract:

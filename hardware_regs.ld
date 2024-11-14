@@ -21,7 +21,7 @@ PI_BSD_DOM2_RLS_REG = 0xA4600030; // defined:True // PI dom2 release
 KUBASE = 0;
 K0BASE = 0x80000000; // defined:true
 K1BASE = 0xA0000000; // defined:true
-K2BASE = 0xC0000000; // defined:true
+//K2BASE = 0xC0000000; // defined:true
 
 D_80000004 = 0x80000004; // ignore:true
 D_80000008 = 0x80000008; // ignore:true
