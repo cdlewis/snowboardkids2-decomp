@@ -71,6 +71,9 @@ clean:
 	rm -rf build
 	rm -f *auto.txt
 
+diff:
+	diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) | grep "   |   " | wc -l
+
 $(TARGET).elf: $(O_FILES)
 	@$(LD) $(LDFLAGS) -o $@
 	@printf "[$(PINK) linker $(NO_COL)]  $<\n"
@@ -94,6 +97,6 @@ $(TARGET).z64: $(TARGET).bin
 
 ### Settings
 .SECONDARY:
-.PHONY: all clean default
+.PHONY: all clean default diff
 SHELL = /bin/bash -e -o pipefail
 

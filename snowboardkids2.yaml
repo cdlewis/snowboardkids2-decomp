@@ -821,8 +821,6 @@ segments:
     vram: 0x800AFF30
     subsegments:
       - [0xA02E0, asm]
-      - [0xA93B0, asm]
-      - [0xA9A40, asm]
       - [0xAA8E0, data]
       - [0xAAD10, rodata]
       - [0xAAEC0, rodata]
@@ -847,27 +845,18 @@ segments:
     vram: 0x800C2420
     subsegments:
       - [0xB27D0, asm]
-
-      # - [0xB2870, asm]
-      # - [0xB40E0, asm]
-      # new section?
       - [0xB4240, asm]
       - [0xB4B20, asm]
-      # new section?
       - [0xB4BB0, asm]
       - [0xB5450, asm]
-      # new section?
       - [0xB54C0, asm]
       - [0xB5B40, asm]
-      # new section?
       - [0xB5B90, asm]
       - [0xB6310, asm]
-      # new section?
       - [0xB74F0, asm]
       - [0xB7DD0, asm]
-      # new section
-      - [0xBBA34, asm] # last function seen in emulator (so far)
-      - [0xBCB7C, bin]
+      # - [0xBBA34, asm] # last function seen in emulator (so far)
+      - [0xBDBC0, bin]
 
   # - type: bin
   #   start: 0x101000
