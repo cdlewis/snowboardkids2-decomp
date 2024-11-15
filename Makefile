@@ -71,8 +71,15 @@ clean:
 	rm -rf build
 	rm -f *auto.txt
 
+
 diff:
-	diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) | grep "   |   " | wc -l
+	@echo "Prev:"
+	@cat romdiff | grep "   |   " | wc -l
+	@echo "Current:"
+	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) | grep "   |   " | wc -l 2>&1
+
+updatediff:
+	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
 $(TARGET).elf: $(O_FILES)
 	@$(LD) $(LDFLAGS) -o $@
@@ -97,6 +104,6 @@ $(TARGET).z64: $(TARGET).bin
 
 ### Settings
 .SECONDARY:
-.PHONY: all clean default diff
+.PHONY: all clean default diff updatediff
 SHELL = /bin/bash -e -o pipefail
 

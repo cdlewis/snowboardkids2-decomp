@@ -272,7 +272,7 @@ segments:
       - [0x7C5D0, asm, strchr]
       # - [0x7C608, asm, strlen]
       # - [0x7C62C, asm, memcpy]
-      - [0x7C660, asm, sprintf]
+      # - [0x7C660, asm, sprintf]
       - [0x7C6F0, asm, osAiSetFrequency]
       - [0x7C810, asm]
       - [0x7CA40, asm, osEepromProbe]
