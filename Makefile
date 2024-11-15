@@ -74,12 +74,13 @@ clean:
 
 diff:
 	@echo "Prev:"
-	@cat romdiff | grep "   |   " | wc -l
+	@cat romdiffcount
 	@echo "Current:"
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) | grep "   |   " | wc -l 2>&1
 
 updatediff:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
+	@cat romdiff | grep "   |   " | wc -l 2>&1 > romdiffcount
 
 $(TARGET).elf: $(O_FILES)
 	@$(LD) $(LDFLAGS) -o $@
