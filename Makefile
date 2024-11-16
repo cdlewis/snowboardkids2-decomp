@@ -52,14 +52,17 @@ LDFLAGS = -T undefined_funcs_auto.txt -T undefined_syms_auto.txt -T $(LD_SCRIPT)
 
 default: all
 
-all: dirs no_verify
+all: dirs verify
 
 dirs:
 	$(foreach dir,$(ASM_DIRS) $(BIN_DIRS),$(shell mkdir -p $(BUILD_DIR)/$(dir)))
 
+verify: $(TARGET).z64
+	@shasum --check $(BASENAME).sha1
+
 no_verify: $(TARGET).z64
 	@echo "Skipping SHA1SUM check, updating CRC"
-	#@$(PYTHON) $(N64CRC) $(TARGET).z64
+	@$(PYTHON) $(N64CRC) $(TARGET).z64
 
 
 extract:

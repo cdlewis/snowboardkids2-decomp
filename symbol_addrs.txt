@@ -1,11 +1,7 @@
-//jtbl_800BCBD0_ACA90 = 0x800BCBD0; // type:s32 size:0x4
-//jtbl_800BCC60_ACB20 = 0x800BCC60; // type:s32 size:0x8
-
 D_8008DD4E_8E94E = 0x8008DD4E; // type:s16 size:0x2
 func_8007EFA0_7FBA0 = 0x8007EFA0;
 
 osAppNmiBuffer = 0x8000031C;
-//func_800AFF44 = 0x800AFF44;
 
 jtbl_800BB020_AB3D0 = 0x800BB020; // type:u32 size:0x64
 jtbl_800BB1B0_AB560 = 0x800BB1B0; // type:u32 size:0xA
@@ -17,73 +13,6 @@ jtbl_800BB248_AB5F8 = 0x800BB248; // type:u32 size:0xA
 jtbl_800BB270_AB620 = 0x800BB270; // type:u32 size:0xC
 jtbl_800BCBD0_ACF80 = 0x800BCBD0; // type:u32 size:0x4
 jtbl_800BCC60_AD010 = 0x800BCC60; // type:u32 size:0x8
-
-// 8A68C.data.s
-
-//D_80089A8C_8A68C = 0x80089A8C; // type:s16 size:0x229C
-//D_8008BF90_8CB90 = 0x8008BF90; // type:s16 size:0x10
-//D_8008BFA0_8CBA0 = 0x8008BFA0; // type:s32 size:0x50
-//D_8008C000_8CC00 = 0x8008C000; // type:s16 size:0x120
-//D_8008CE10_8DA10 = 0x8008CE10; // type:s16 size:0x4
-//D_8008D3C0_8DFC0 = 0x8008D3C0; // type:s16 size:0x10
-//D_8008D6EC_8E2EC = 0x8008D6EC; // type:s16 size:0x28
-
-// 91380.data.s
-
-//D_80090780 = 0x80090780; // type:u16 size:0x1C
-//D_8009079C = 0x8009079C; // type:u16 size:0x44
-//D_80090928 = 0x80090928; // type:u8 size:0x14
-//D_80090994 = 0x80090994; // type:u16 size:0x4
-//D_80090998 = 0x80090998; // type:u16 size:0x8
-//D_800909A0 = 0x800909A0; // type:u16 size:80
-
-// 8E9BE.data.s
-
-//D_8008DDBE = 0x8008DDBE; // type:u16 size:0x2C
-//D_8008DE02 = 0x8008DE02; // type:u8 size:0x18
-
-// vi_data.data.s
-
-//vi_data = 0x8009D050; // type:u16 size:0x60
-
-// 8FB70.data.s
-
-//D_8008F044_8FC44 = 0x8008F044; // type:u8 size:0x10
-
-// 8FC70.data.s
-
-//D_8008F0B4_8FCB4 = 0x8008F0B4; // type:u16 size:0x5C
-//D_8008F070_8FC70 = 0x8008F070; // type:s32 size:0x44
-
-// 8FD50.data.s
-
-//D_8008F16C_8FD6C = 0x8008F16C; // type:u16 size:0x10
-//D_8008F200_8FE00 = 0x8008F200; // type:u32 size:0xC
-//D_8008F22C_8FE2C = 0x8008F22C; // type:u16 size:0x80
-
-// 90930.data.s
-
-//D_8008FE8C_90A8C = 0x8008FE8C; // type:u8 size:0x8
-
-// 90AF0.data.s
-
-//D_800901CC_90DCC = 0x800901CC; // type:u16 size:0x4
-
-// 90ED0.data.s
-
-//D_800902D0_90ED0 = 0x800902D0; // type:u8 size:0x180
-
-// 91D74.data.s
-
-//D_80090C94_91894 = 0x80090C94; // type:u8 size:0x14
-
-// 947A5.data.s
-
-//D_80093BA5_947A5 = 0x80093BA5; // type:u8 size:0x8
-
-// 9BAD0.data.s
-
-//D_8009AFC8_9BBC8 = 0x8009AFC8; // type:u32 size:0x8
 
 func_8007EBBC_7F7BC = 0x8007EBBC;
 func_800AFF30 = 0x800AFF30;
