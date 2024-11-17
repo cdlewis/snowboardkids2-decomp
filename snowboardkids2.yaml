@@ -660,8 +660,7 @@ segments:
       - [0xABAE0, rodata]
       - [0xB04E0, rodata]
 
-      # todo: add bss
-      # - { start: 0xA02E0, type: bss, vram: 0x8009F6E0 }
+      - { start: 0xB27D0, type: bss, vram: 0x800C2420 }
 
   - name: cool_new_section_2
     type: code
@@ -671,17 +670,43 @@ segments:
     subsegments:
       - [0xB27D0, asm]
       - [0xB2870, asm]
-      - [0xB40E0, asm]
+      - [0xB40E0, data]
+
+  - name: cool_new_section_3
+    type: code
+    start: 0xB4240
+    follows_vram: cool_new_section_2
+    vram: 0x800C3E90
+    subsegments:
       - [0xB4240, asm]
-      - [0xB4B20, asm]
+      - [0xB4B20, data]
+
+  - name: cool_new_section_4
+    type: code
+    start: 0xB4BB0
+    follows_vram: cool_new_section_3
+    vram: 0x800C4800
+    subsegments:
       - [0xB4BB0, asm]
-      - [0xB5450, asm]
+      - [0xB5450, data]
+
+  - name: cool_new_section_5
+    type: code
+    start: 0xB54C0
+    follows_vram: cool_new_section_4
+    vram: 0x800C5110
+    subsegments:
       - [0xB54C0, asm]
-      - [0xB5B40, asm]
-      - [0xB5B90, asm]
-      - [0xB6310, asm]
+      - [0xB5B40, data]
+
+  - name: cool_new_section_6
+    type: code
+    start: 0xB74F0
+    follows_vram: cool_new_section_5
+    vram: 0x800C7140
+    subsegments:
       - [0xB74F0, asm]
-      - [0xB7DD0, asm]
+      - [0xB7DD0, data]
       - [0xBDBC0, bin]
 
   # - type: bin
