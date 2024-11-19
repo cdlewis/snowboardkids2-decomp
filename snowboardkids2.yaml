@@ -73,7 +73,7 @@ segments:
     follows_vram: entry
     bss_size: 0x10850
     subsegments:
-      - [0x1050, asm, main_1050]
+      - [0x1050, c, main]
       - [0x20F0, asm]
       - [0x3870, asm]
       - [0x3B80, asm]

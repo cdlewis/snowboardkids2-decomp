@@ -17,14 +17,17 @@ BUILD_DIR = build
 ASM_DIRS  = asm asm/data
 BIN_DIRS  = assets
 TOOLS_DIR = tools
+SRC_DIRS  = src
 
 # Files
 
 S_FILES   = $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
+C_FILES   = $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 BIN_FILES = $(foreach dir,$(BIN_DIRS),$(wildcard $(dir)/*.bin))
 
 O_FILES := $(foreach file,$(S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
-           $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(basename $(file)).o)
+           $(foreach file,$(C_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
+           $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o)
 
 # Tools
 
@@ -36,15 +39,25 @@ OBJCOPY = $(CROSS)objcopy
 PYTHON = python3
 SPLAT = $(TOOLS_DIR)/splat/split.py
 N64CRC = $(TOOLS_DIR)/n64crc.py
+CPP := cpp -P
+
+COMPILER_DIR = ../old-gcc/build-gcc-2.7.2
+CC = COMPILER_DIR=$(COMPILER_DIR) $(COMPILER_DIR)/cc1 
+
+CC_CHECK := gcc -fsyntax-only -fsigned-char -nostdinc -fno-builtin -I include -I $(BUILD_DIR)/include -I src\
+	-D CC_CHECK\
+	-std=gnu90 -Wall -Wextra -Wno-format-security -Wno-unused-parameter -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast $(GRUCODE_CFLAGS)
 
 # Flags
+
+GRUCODE_CFLAGS := -DF3DEX_GBI_2
 
 TARGET = $(BUILD_DIR)/$(BASENAME)
 LD_SCRIPT = $(BASENAME).ld
 
 OBJCOPYFLAGS = -O binary
 
-ASFLAGS = -EB -mtune=vr4300 -march=vr4300 -mabi=32 -I include
+ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
 LDFLAGS = -T undefined_funcs_auto.txt -T undefined_syms_auto.txt -T $(LD_SCRIPT) -Map $(TARGET).map --no-check-sections
 
@@ -74,7 +87,6 @@ clean:
 	rm -rf build
 	rm -f *auto.txt
 
-
 diff:
 	@echo "Prev:"
 	@cat romdiffcount
@@ -88,6 +100,15 @@ updatediff:
 $(TARGET).elf: $(O_FILES)
 	@$(LD) $(LDFLAGS) -o $@
 	@printf "[$(PINK) linker $(NO_COL)]  $<\n"
+
+$(BUILD_DIR)/src/%.i: src/%.c
+	@mkdir -p $(shell dirname $@)
+	@$(CC_CHECK) -MMD -MP -MT $@ -MF $@.d $<
+	$(CPP) -MMD -MP -MT $@ -MF $@.d -I include/ -o $@ $<
+
+$(BUILD_DIR)/src/%.s: $(BUILD_DIR)/src/%.i
+	@mkdir -p $(shell dirname $@)
+	$(CC) $(CFLAGS) -o $@ $<
 
 $(BUILD_DIR)/%.o: %.s
 	$(AS) $(ASFLAGS) $< -o $(BUILD_DIR)/$(dir $<)$(notdir $(basename $<)).o
