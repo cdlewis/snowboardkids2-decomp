@@ -1,5 +1,11 @@
+osSpTaskYielded = 0x8007AD60;
 bcopy = 0x8007B610;
 bzero = 0x8007B930;
+sprintf = 0x8007BA60;
+osAiSetFrequency = 0x8007BAF0;
+osEepromRead = 0x8007BEC0;
+osEepromWrite = 0x8007C0E0;
+__osEepStatus = 0x8007C2F0;
 func_800B00D4_A0484 = 0x800B00D4;
 func_800B7B44_A7EF4 = 0x800B7B44;
 func_800B8894_A8C44 = 0x800B8894;
