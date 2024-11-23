@@ -37,6 +37,7 @@ options:
   undefined_syms_auto_path: undefined_syms_auto.txt
 
   extensions_path: tools/splat_ext
+  lib_path: build/lib
 
   # guessing
   migrate_rodata_to_functions: yes
@@ -210,7 +211,7 @@ segments:
       - [0x7BF90, asm]
       - [0x7C0A0, asm]
       - [0x7C160, asm]
-      - [0x7C210, asm]
+      - [0x7C210, lib, libgultra_rom, bcopy]
       - [0x7C530, asm]
       - [0x7C660, asm]
       - [0x7C6F0, asm]

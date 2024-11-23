@@ -4,3 +4,6 @@
 [submodule "tools/findcode"]
 	path = tools/findcode
 	url = git@github.com:cdlewis/findcode.git
+[submodule "lib/ultralib"]
+	path = lib/ultralib
+	url = git@github.com:decompals/ultralib.git

@@ -59,7 +59,7 @@ OBJCOPYFLAGS = -O binary
 
 ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
-LDFLAGS = -T undefined_funcs_auto.txt -T undefined_syms_auto.txt -T $(LD_SCRIPT) -Map $(TARGET).map --no-check-sections
+LIBULTRA = lib/ultralib/build/L/libgultra_rom/libgultra_rom.a
 
 # Targets
 
@@ -76,7 +76,6 @@ verify: $(TARGET).z64
 no_verify: $(TARGET).z64
 	@echo "Skipping SHA1SUM check, updating CRC"
 	@$(PYTHON) $(N64CRC) $(TARGET).z64
-
 
 extract:
 	$(PYTHON) $(SPLAT) $(BASENAME).yaml
@@ -97,9 +96,9 @@ updatediff:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 	@cat romdiff | grep "   |   " | wc -l 2>&1 > romdiffcount
 
-$(TARGET).elf: $(O_FILES)
-	@$(LD) $(LDFLAGS) -o $@
-	@printf "[$(PINK) linker $(NO_COL)]  $<\n"
+$(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(O_FILES)
+	@$(LD) -T $(LD_SCRIPT) -T undefined_syms_auto.txt -Map $(TARGET).map --no-check-sections -Lbuild/lib -lgultra_rom -o $@
+	@printf "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
 
 $(BUILD_DIR)/src/%.i: src/%.c
 	@mkdir -p $(shell dirname $@)
@@ -110,6 +109,10 @@ $(BUILD_DIR)/src/%.s: $(BUILD_DIR)/src/%.i
 	@mkdir -p $(shell dirname $@)
 	$(CC) $(CFLAGS) -o $@ $<
 
+$(BUILD_DIR)/lib/libgultra_rom.a: $(LIBULTRA)
+	@mkdir -p $$(dirname $@)
+	@cp $< $@
+
 $(BUILD_DIR)/%.o: %.s
 	$(AS) $(ASFLAGS) $< -o $(BUILD_DIR)/$(dir $<)$(notdir $(basename $<)).o
 	@printf "[$(GREEN)   as   $(NO_COL)]  $<\n"
@@ -118,7 +121,6 @@ $(BUILD_DIR)/%.o: %.bin
 	./patch_linker.sh
 	$(LD) -r -b binary -o $(BUILD_DIR)/$(basename $<).o $<
 	@printf "[$(PINK) linker $(NO_COL)]  $<\n"
-
 
 $(TARGET).bin: $(TARGET).elf
 	$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
