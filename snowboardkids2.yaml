@@ -217,28 +217,31 @@ segments:
       - [0x7C660, lib, libgultra_rom, sprintf]
       - [0x7C6F0, lib, libgultra_rom, aisetfreq]
       - [0x7C810, asm]
-      - [0x7CA40, asm]
-      - [0x7CAC0, asm]
+      - [0x7CA40, lib, libgultra_rom, conteepprobe]
+      - [0x7CAC0, lib, libgultra_rom, conteepread]
+      - [0x7CCE0, lib, libgultra_rom, conteepwrite]
       - [0x7D090, asm]
       - [0x7D270, asm]
-      - [0x7D600, asm]
-      - [0x7DA30, asm]
+      - [0x7D600, lib, libgultra_rom, pfsallocatefile]
+      - [0x7DA30, lib, libgultra_rom, pfsdeletefile]
       - [0x7DC50, asm]
-      - [0x7DDE0, asm]
+      - [0x7DDE0, lib, libgultra_rom, pfsfreeblocks]
       - [0x7DEF0, asm]
       - [0x7E0E0, asm]
       - [0x7E1E0, asm]
-      - [0x7E620, asm]
-      - [0x7E830, asm]
-      - [0x7EA70, asm]
-      - [0x7EDB0, asm]
-      - [0x7EF20, asm]
-      - [0x7F230, asm]
-      - [0x7FBA0, asm]
-      - [0x7FEB0, asm]
-      - [0x7FEC0, asm]
-      - [0x7FED0, asm]
-      - [0x7FEE0, asm]
+      - [0x7E620, asm] # pfssearchfile but no match?
+      - [0x7E7C0, lib, libgultra_rom, pfsselectbank]
+      - [0x7E830, asm] # pimgr?
+      - [0x7E9C0, asm] # sirawdma?
+      - [0x7EA70, asm] # vimgr?
+      - [0x7EDB0, lib, libgultra_rom, visetspecial]
+      - [0x7EF20, asm] # viswapcontext?
+      - [0x7F230, asm] # part of os init?
+      - [0x7FBA0, asm] # part of os init?
+      - [0x7FEB0, lib, libgultra_rom, sqrtf]
+      - [0x7FEC0, lib, libgultra_rom, getcount]
+      - [0x7FED0, lib, libgultra_rom, getsr]
+      - [0x7FEE0, asm] # interrupt?
       - [0x7FF20, asm]
       - [0x7FFE0, asm]
       - [0x80050, asm]
