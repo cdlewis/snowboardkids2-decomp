@@ -242,23 +242,36 @@ segments:
       - [0x7FEC0, lib, libgultra_rom, getcount]
       - [0x7FED0, lib, libgultra_rom, getsr]
       - [0x7FEE0, asm] # interrupt?
-      - [0x7FF20, asm]
-      - [0x7FFE0, asm]
-      - [0x80050, asm]
-      - [0x800D0, asm]
-      - [0x80130, asm]
-      - [0x80200, asm]
-      - [0x80220, asm]
-      - [0x802B0, asm]
-      - [0x803F0, asm]
-      - [0x80490, asm]
-      - [0x80790, asm]
-      - [0x807A0, asm]
-      - [0x807C0, asm]
-      - [0x807E0, asm]
-      - [0x81CB0, asm]
-      - [0x82740, asm]
-      - [0x82940, asm]
+      - [0x7FF20, lib, libgultra_rom, probetlb]
+      - [0x7FFE0, lib, libgultra_rom, setfpccsr]
+      - [0x7FFF0, lib, libgultra_rom, setsr]
+      - [0x80000, lib, libgultra_rom, unmaptlball]
+      - [0x80050, lib, libgultra_rom, writebackdcache]
+      - [0x800D0, lib, libgultra_rom, maptlbrdb]
+      - [0x80130, asm] # destroythread?
+      - [0x80200, lib, libgultra_rom, getthreadpri]
+      - [0x80220, lib, libgultra_rom, gettime]
+      - [0x802B0, lib, libgultra_rom, jammesg]
+      - [0x803F0, lib, libgultra_rom, settimer]
+      - [0x80490, asm] # timerintr?
+      - [0x80790, asm] # something about assert?
+      - [0x807A0, lib, libgultra_rom, ai]
+      - [0x807C0, lib, libgultra_rom, sp]
+      - [0x807E0, lib, libgultra_rom, spgetstat]
+      - [0x807F0, lib, libgultra_rom, spsetstat]
+      - [0x80800, lib, libgultra_rom, spsetpc]
+      - [0x80830, asm] # sprawdma?
+      - [0x80930, asm] # vi?
+      - [0x80A40, lib, libgultra_rom, vigetcurrcontext]
+      - [0x80A50, asm] # sprawread?
+      - [0x80AE0, asm] # sirawwrite?
+      - [0x80B50, asm] # siacs?
+      - [0x80C40, asm] # pirawread?
+      - [0x80CE0, asm] # pirawdma?
+      - [0x80DB0, asm] # pigetcmdq?
+      - [0x81CB0, asm] # contpfs?
+      - [0x82740, asm] # contramread?
+      - [0x82940, asm] # contramwrite?
       - [0x82B60, asm]
       - [0x82C50, asm]
       - [0x82E40, asm]
@@ -597,7 +610,7 @@ segments:
       - [0x9CA70, data]
       - [0x9DC20, data]
       - [0x9DC30, data]
-      - [0x9DC40, data]
+      - [0x9DC40, data] # timerintr?
       - [0x9DC50, data]
       - [0x9DCB0, data]
       - [0x9DCC0, data]
@@ -637,7 +650,7 @@ segments:
       - [0x9FB10, rodata, 7EF20]
       - [0x9FB20, rodata, 7F230]
       - [0x9FB70, rodata]
-      - [0x9FB80, rodata, 807E0]
+      - [0x9FB80, rodata] # has a bunch of spraw stuff
       - [0x9FD60, rodata, 82E40]
       - [0x9FD80, rodata, 841E0]
       - [0x9FDF0, rodata]
