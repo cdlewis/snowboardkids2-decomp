@@ -10,3 +10,6 @@ snowboardkids2.z64
 snowboardkids2.eeprom
 romdiff
 romdiffcount
+.vscode
+undefined_funcs_auto.txt
+undefined_syms_auto.txt
