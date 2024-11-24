@@ -226,15 +226,15 @@ segments:
       - [0x7C160, asm] # pidma?
       - [0x7C210, lib, libgultra_rom, bcopy]
       - [0x7C530, lib, libgultra_rom, bzero]
-      - [0x7C5D0, asm]
+      - [0x7C5D0, lib, libgultra_rom, string]
       - [0x7C660, lib, libgultra_rom, sprintf]
       - [0x7C6F0, lib, libgultra_rom, aisetfreq]
       - [0x7C810, asm]
       - [0x7CA40, lib, libgultra_rom, conteepprobe]
       - [0x7CAC0, lib, libgultra_rom, conteepread]
       - [0x7CCE0, lib, libgultra_rom, conteepwrite]
-      - [0x7D090, asm]
-      - [0x7D270, asm]
+      - [0x7D090, lib, libgultra_rom, contreaddata]
+      - [0x7D270, asm] # motor? needs bss
       - [0x7D600, lib, libgultra_rom, pfsallocatefile]
       - [0x7DA30, lib, libgultra_rom, pfsdeletefile]
       - [0x7DC50, asm]
@@ -290,14 +290,17 @@ segments:
       - [0x82740, asm] # contramread?
       - [0x82940, asm] # contramwrite?
       - [0x82B60, asm] # crc?
-      - [0x82C50, asm]
-      - [0x82E40, asm]
-      - [0x83160, asm]
-      - [0x83A90, asm]
-      - [0x83AA0, asm]
-      - [0x83AF0, asm]
-      - [0x83B80, asm]
-      - [0x83BA0, asm]
+      - [0x82C50, asm] # epirawdma?
+      - [0x82E40, asm] # epirawread? mismatch
+      - [0x82FF0, lib, libgultra_rom, epirawwrite]
+      - [0x83160, asm] # pfschecker?
+      - [0x83880, lib, libgultra_rom, pfsgetstatus]
+      - [0x83A90, lib, libgultra_rom, setcompare]
+      - [0x83AA0, lib, libgultra_rom, resetglobalintmask]
+      - [0x83AF0, lib, libgultra_rom, setglobalintmask]
+      - [0x83B30, lib, libgultra_rom, yieldthread]
+      - [0x83B80, lib, libgultra_rom, si]
+      - [0x83BA0, asm] # pfsisplug? with some bss
       - [0x83E80, lib, libgultra_rom, bcmp]
       - [0x83F90, asm] # xlitob?
       - [0x84C60, asm] # ldiv but it's too big
