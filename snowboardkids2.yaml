@@ -167,34 +167,45 @@ segments:
       - [0x717D0, asm]
       - [0x72220, asm]
       - [0x75400, asm]
-      - [0x75E60, asm]
-      - [0x76450, asm]
-      - [0x765E0, asm, guMtxIdent]
-      - [0x76C50, asm]
-      - [0x76DE0, asm]
-      - [0x76EB0, asm]
-      - [0x76EE0, asm]
-      - [0x770E0, asm]
-      - [0x77270, asm]
-      - [0x77340, asm]
-      - [0x77460, asm]
-      - [0x774A0, asm]
-      - [0x77500, asm]
-      - [0x77D30, asm]
-      - [0x78840, asm]
-      - [0x78950, asm]
-      - [0x79680, asm]
-      - [0x796A0, asm]
-      - [0x79AC0, asm]
-      - [0x7A6A0, asm]
-      - [0x7A7D0, asm]
-      - [0x7A880, asm]
-      - [0x7A8C0, asm]
-      - [0x7A910, asm]
-      - [0x7A950, asm]
-      - [0x7AFF0, asm]
-      - [0x7B2A0, asm]
-      - [0x7B340, asm]
+      - [0x75CE0, asm] # cosf needs rodata
+      - [0x75E30, lib, libgultra_rom, coss]
+      - [0x75E60, asm] # lookatref?
+      - [0x76450, lib, libgultra_rom, mtxutil]
+      - [0x766D0, asm] # perspective?
+      - [0x76C50, lib, libgultra_rom, invaldcache]
+      - [0x76D00, asm]
+      - [0x76DE0, lib, libgultra_rom, setintmask]
+      - [0x76E80, asm] # writebackcacheall?
+      - [0x76EB0, lib, libgultra_rom, createmesgqueue]
+      - [0x76EE0, asm] # createthread?
+      - [0x76FB0, lib, libgultra_rom, recvmesg]
+      - [0x770E0, lib, libgultra_rom, sendmesg]
+      - [0x77210, asm] # seteventmesg?
+      - [0x77270, lib, libgultra_rom, setthreadpri]
+      - [0x77340, lib, libgultra_rom, startthread]
+      - [0x77460, asm] # part of thread?
+      - [0x774A0, lib, libgultra_rom, virtualtophysical]
+      - [0x77500, asm] # drvrnew?
+      - [0x77D30, lib, libgultra_rom, load]
+      - [0x78840, lib, libgultra_rom, auxbus]
+      - [0x78950, asm] # env?
+      - [0x79680, lib, libgultra_rom, filter]
+      - [0x796A0, lib, libgultra_rom, mainbus]
+      - [0x79810, asm] # resample?
+      - [0x79AC0, asm] # reverb? data/rodata issues
+      - [0x7A6A0, asm] # save?
+      - [0x7A7D0, asm, sl] # sl but some matching issue
+      - [0x7A880, lib, libgultra_rom, heapinit]
+      - [0x7A8C0, lib, libgultra_rom, heapalloc]
+      - [0x7A910, lib, libgultra_rom, copy]
+      - [0x7A950, asm] # something around audio init
+      - [0x7AFE0, lib, libgultra_rom, syndelete]
+      - [0x7AFF0, lib, libgultra_rom, synaddplayer]
+      - [0x7B040, lib, libgultra_rom, synallocvoice]
+      - [0x7B220, lib, libgultra_rom, synstopvoice]
+      - [0x7B2A0, lib, libgultra_rom, synstartvoice]
+      - [0x7B340, lib, libgultra_rom, synsetpitch]
+      - [0x7B3D0, lib, libgultra_rom, synsetvol]
       - [0x7B490, asm] # synsetfxmix
       - [0x7B520, asm] # synsetpan?
       - [0x7B650, lib, libgultra_rom, aigetlen]
@@ -278,7 +289,7 @@ segments:
       # - [0x81CB0, lib, libgultra_rom, contpfs]
       - [0x82740, asm] # contramread?
       - [0x82940, asm] # contramwrite?
-      - [0x82B60, asm]
+      - [0x82B60, asm] # crc?
       - [0x82C50, asm]
       - [0x82E40, asm]
       - [0x83160, asm]
@@ -607,7 +618,8 @@ segments:
       - [0x9C730, data]
       - [0x9C870, data]
       - [0x9C8C0, data]
-      - [0x9C9E0, data]
+      # - [0x9C9E0, lib, libgultra_rom, sl, .data]
+      - [0x9C9E0, data, sl]
       - [0x9C9F0, data]
       - [0x9CA00, data]
       - [0x9CA10, data]
@@ -647,7 +659,7 @@ segments:
       - [0x9F740, rodata, 75400]
       - [0x9F7B0, rodata, 75E60]
       - [0x9F7C0, rodata, guMtxIdent]
-      - [0x9F860, rodata]
+      - [0x9F860, lib, libgultra_rom, setintmask, .rodata]
       - [0x9F8E0, rodata, 77500]
       - [0x9F920, rodata, 78950]
       - [0x9FA20, rodata, 796A0]
