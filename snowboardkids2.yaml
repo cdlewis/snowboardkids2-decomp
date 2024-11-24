@@ -195,22 +195,24 @@ segments:
       - [0x7AFF0, asm]
       - [0x7B2A0, asm]
       - [0x7B340, asm]
-      - [0x7B490, asm]
-      - [0x7B650, asm]
-      - [0x7B700, asm]
-      - [0x7B940, asm]
+      - [0x7B490, asm] # synsetfxmix
+      - [0x7B520, asm] # synsetpan?
+      - [0x7B650, lib, libgultra_rom, aigetlen]
+      - [0x7B660, asm] # aisetnextbuf? missing text
+      - [0x7B700, asm] # sptask? but needs bss labelled
+      - [0x7B940, lib, libgultra_rom, sptaskyield]
       - [0x7B960, lib, libgultra_rom, sptaskyielded]
-      - [0x7B9B0, asm]
+      - [0x7B9B0, lib, libgultra_rom, vigetcurrframebuf]
       - [0x7B9F0, asm]
-      - [0x7BA30, asm]
-      - [0x7BA90, asm]
-      - [0x7BAE0, asm]
-      - [0x7BB30, asm]
-      - [0x7BB90, asm]
-      - [0x7BEA0, asm]
-      - [0x7BF90, asm]
-      - [0x7C0A0, asm]
-      - [0x7C160, asm]
+      - [0x7BA30, lib, libgultra_rom, visetevent]
+      - [0x7BA90, lib, libgultra_rom, visetmode]
+      - [0x7BAE0, lib, libgultra_rom, viswapbuf]
+      - [0x7BB30, lib, libgultra_rom, viblack]
+      - [0x7BB90, asm] # controller?
+      - [0x7BEA0, asm] # conteeplongwrite?
+      - [0x7BF90, asm] # conteeplongread?
+      - [0x7C0A0, asm] # driverominit?
+      - [0x7C160, asm] # pidma?
       - [0x7C210, lib, libgultra_rom, bcopy]
       - [0x7C530, lib, libgultra_rom, bzero]
       - [0x7C5D0, asm]
@@ -260,16 +262,20 @@ segments:
       - [0x807E0, lib, libgultra_rom, spgetstat]
       - [0x807F0, lib, libgultra_rom, spsetstat]
       - [0x80800, lib, libgultra_rom, spsetpc]
-      - [0x80830, asm] # sprawdma?
+      - [0x80830, asm, sprawdma]
       - [0x80930, asm] # vi?
       - [0x80A40, lib, libgultra_rom, vigetcurrcontext]
-      - [0x80A50, asm] # sprawread?
-      - [0x80AE0, asm] # sirawwrite?
+      - [0x80A50, asm, sprawread]
+      - [0x80AE0, asm, sirawwrite]
       - [0x80B50, asm] # siacs?
       - [0x80C40, asm] # pirawread?
       - [0x80CE0, asm] # pirawdma?
       - [0x80DB0, asm] # pigetcmdq?
+      - [0x80DD0, asm] # devmgr?
+      - [0x81190, asm] # piacs?
+      - [0x81280, asm] # printf?
       - [0x81CB0, asm] # contpfs?
+      # - [0x81CB0, lib, libgultra_rom, contpfs]
       - [0x82740, asm] # contramread?
       - [0x82940, asm] # contramwrite?
       - [0x82B60, asm]
@@ -281,12 +287,12 @@ segments:
       - [0x83AF0, asm]
       - [0x83B80, asm]
       - [0x83BA0, asm]
-      - [0x83E80, asm]
-      - [0x841E0, asm]
-      - [0x84C60, asm]
-      - [0x85020, asm]
-      - [0x85190, asm]
-      - [0x851B0, asm]
+      - [0x83E80, lib, libgultra_rom, bcmp]
+      - [0x83F90, asm] # xlitob?
+      - [0x84C60, asm] # ldiv but it's too big
+      - [0x85020, asm] # related to xlibtob?
+      - [0x85190, asm] # related to xlibtob?
+      - [0x851B0, asm] # related to xlibtob?
       - [0x851F0, textbin]
       - [0x88D30, data]
       - [0x891D0, data]
@@ -615,7 +621,9 @@ segments:
       - [0x9DCB0, data]
       - [0x9DCC0, data]
       - [0x9DCD0, data]
-      - [0x9DDD0, data, xprintf]
+      - [0x9DDD0, data]
+      # - [0x9DE20, lib, libgultra_rom, contpfs, .data]
+      - [0x9DE30, data]
       - [0x9DE40, rodata, 83E80]
       - [0x9DE70, rodata]
       - [0x9E8E0, rodata, 4050]
@@ -650,7 +658,10 @@ segments:
       - [0x9FB10, rodata, 7EF20]
       - [0x9FB20, rodata, 7F230]
       - [0x9FB70, rodata]
-      - [0x9FB80, rodata] # has a bunch of spraw stuff
+      - [0x9FB80, rodata, sprawdma]
+      - [0x9FB90, rodata, sprawread]
+      - [0x9FBA0, rodata, sirawwrite]
+      - [0x9FBB0, rodata]
       - [0x9FD60, rodata, 82E40]
       - [0x9FD80, rodata, 841E0]
       - [0x9FDF0, rodata]
