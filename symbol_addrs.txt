@@ -1,5 +1,16 @@
+// guesses from libreultra exceptasm.s
+__osThreadSave = 0x800A8B18;
+__osIntOffTable = 0x8009EF20;
+__osIntTable = 0x8009EF40;
+__osHwIntTable = 0x8009CFF0;
+__osPiIntTable = 0x8009D018;
+__osShutdown = 0x8009D02C;
+__osFaultedThread = 0x8009BB24;
+
+// guesses from libreultra initialize.c
+__osInitialize_common = 0x8007EFA0;
+
 D_8008DD4E_8E94E = 0x8008DD4E; // type:s16 size:0x2
-func_8007EFA0_7FBA0 = 0x8007EFA0;
 
 osAppNmiBuffer = 0x8000031C;
 
@@ -311,7 +322,6 @@ jtbl_8009E9D8 = 0x8009E9D8;
 jtbl_8009EA00 = 0x8009EA00;
 jtbl_8009EA28 = 0x8009EA28;
 jtbl_8009EA40 = 0x8009EA40;
-jtbl_8009EF40 = 0x8009EF40;
 
 // end probably right
 
@@ -634,7 +644,7 @@ load_text_098C = 0x80077ABC;
 load_text_0A40 = 0x80077B70;
 lookatref_rodata_0000 = 0x8009EBB0;
 lookatref_rodata_0008 = 0x8009EBB8;
-lookatref_text_0000 = 0x80075260;
+guLookAtReflectF = 0x80075260;
 lookatref_text_02C4 = 0x80075524;
 lookatref_text_0308 = 0x80075568;
 lookatref_text_034C = 0x800755AC;
@@ -806,7 +816,7 @@ sinf_rodata_0050 = 0x8009EC50;
 sinf_text_00D8 = 0x80075F28;
 sinf_text_0198 = 0x80075FE8;
 sins = 0x80075FF0;
-sins_data_0000 = 0x8009B310;
+sintable = 0x8009B310;
 sins_text_0024 = 0x80076014;
 sins_text_004C = 0x8007603C;
 sirawdma_text_006C = 0x8007DE2C;
