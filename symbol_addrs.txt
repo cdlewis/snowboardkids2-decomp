@@ -1,3 +1,5 @@
+__osBaseTimer = 0x800AB458; // guessing from timerintr.c
+
 // guesses from libreultra exceptasm.s
 __osThreadSave = 0x800A8B18;
 __osIntOffTable = 0x8009EF20;
@@ -417,8 +419,9 @@ __osPfsGetOneChannelData = 0x80082E04;
 __osPfsGetStatus = 0x80082C80;
 __osPfsInodeCache = 0x800AFCE8;
 __osPfsInodeCacheBank = 0x8009D224;
-__osPfsPifRam = 0x800AFE90;
-__osPfsPifRam_0 = 0x800AFECC;
+__osPfsPifRam = 0x800AFE90; // type:u32 size:0x40
+//__osPfsPifRam = 0x800AFE90; 
+//__osPfsPifRam_0 = 0x800AFECC;
 __osPfsRWInode = 0x800817FC;
 __osPfsSelectBank = 0x8007DBC0;
 __osPiAccessQueue = 0x800AB180;
@@ -513,8 +516,8 @@ alSaveNew = 0x800770E8;
 alSaveParam = 0x80079BA0;
 alSavePull = 0x80079AA0;
 alSynAddPlayer = 0x8007A3F0;
-alSynAllocFX = 0x80074B1C;
-alSynAllocFX_0 = 0x8007A9B0;
+alSynAllocFX_0 = 0x80074B1C;
+alSynAllocFX = 0x8007A9B0;
 alSynAllocVoice = 0x8007A440;
 alSynDelete = 0x8007A3E0;
 alSynNew = 0x80074850;

@@ -168,13 +168,11 @@ segments:
       - [0x72220, asm]
       - [0x75400, asm]
       - [0x75450, asm] # synthesizer sort of..?
-      # - [0x75CE0, lib, libgultra_rom, cosf] # cosf needs rodata
-      - [0x75CE0, asm, cosf]
+      - [0x75CE0, lib, libgultra_rom, cosf]
       - [0x75E30, lib, libgultra_rom, coss]
       - [0x75E60, asm, lookatref] # lookatref?
       - [0x76450, lib, libgultra_rom, mtxutil]
-      - [0x766D0, asm] # perspective?
-      # - [0x766D0, lib, libgultra_rom, perspective]
+      - [0x766D0, lib, libgultra_rom, perspective]
       - [0x76A50, lib, libgultra_rom, sinf]
       - [0x76BF0, lib, libgultra_rom, sins]
       - [0x76C50, lib, libgultra_rom, invaldcache]
@@ -211,8 +209,10 @@ segments:
       - [0x7B2A0, lib, libgultra_rom, synstartvoice]
       - [0x7B340, lib, libgultra_rom, synsetpitch]
       - [0x7B3D0, lib, libgultra_rom, synsetvol]
-      - [0x7B490, asm] # synsetfxmix
-      - [0x7B520, asm] # synsetpan?
+      - [0x7B490, asm, synsetfxmix]
+      # - [0x7B490, lib, libgultra_rom, synsetfxmix]
+      - [0x7B520, lib, libgultra_rom, synsetpan]
+      - [0x7B5B0, lib, libgultra_rom, synallocfx]
       - [0x7B650, lib, libgultra_rom, aigetlen]
       - [0x7B660, asm] # aisetnextbuf? missing text
       - [0x7B700, asm] # sptask? but needs bss labelled
@@ -260,7 +260,8 @@ segments:
       - [0x7FEB0, lib, libgultra_rom, sqrtf]
       - [0x7FEC0, lib, libgultra_rom, getcount]
       - [0x7FED0, lib, libgultra_rom, getsr]
-      - [0x7FEE0, asm] # interrupt?
+      - [0x7FEE0, asm] # uses the I version of interrupt??
+      # - [0x7FEE0, lib, libgultra_rom, interrupt] # interrupt?
       - [0x7FF20, lib, libgultra_rom, probetlb]
       - [0x7FFE0, lib, libgultra_rom, setfpccsr]
       - [0x7FFF0, lib, libgultra_rom, setsr]
@@ -268,12 +269,14 @@ segments:
       - [0x80050, lib, libgultra_rom, writebackdcache]
       - [0x800D0, lib, libgultra_rom, maptlbrdb]
       - [0x80130, asm] # destroythread?
+      # - [0x80130, lib, libgultra_rom, destroythread]
       - [0x80200, lib, libgultra_rom, getthreadpri]
       - [0x80220, lib, libgultra_rom, gettime]
       - [0x802B0, lib, libgultra_rom, jammesg]
       - [0x803F0, lib, libgultra_rom, settimer]
-      - [0x80490, asm] # timerintr?
-      - [0x80790, asm] # something about assert?
+      - [0x80490, lib, libgultra_rom, timerintr]
+      # - [0x80790, lib, libgultra_rom, assert]
+      - [0x80790, asm, assert]
       - [0x807A0, lib, libgultra_rom, ai]
       - [0x807C0, lib, libgultra_rom, sp]
       - [0x807E0, lib, libgultra_rom, spgetstat]
@@ -300,13 +303,15 @@ segments:
       - [0x82E40, asm] # epirawread? mismatch
       - [0x82FF0, lib, libgultra_rom, epirawwrite]
       - [0x83160, asm] # pfschecker?
+      # - [0x83160, lib, libgultra_rom, pfschecker]
       - [0x83880, lib, libgultra_rom, pfsgetstatus]
       - [0x83A90, lib, libgultra_rom, setcompare]
       - [0x83AA0, lib, libgultra_rom, resetglobalintmask]
       - [0x83AF0, lib, libgultra_rom, setglobalintmask]
       - [0x83B30, lib, libgultra_rom, yieldthread]
       - [0x83B80, lib, libgultra_rom, si]
-      - [0x83BA0, asm] # pfsisplug? with some bss
+      - [0x83BA0, asm, pfsisplug]
+      # - [0x83BA0, lib, libgultra_rom, pfsisplug]
       - [0x83E80, lib, libgultra_rom, bcmp]
       - [0x83F90, asm] # xlitob?
       - [0x84C60, asm] # ldiv but it's too big
@@ -639,7 +644,7 @@ segments:
       # - [0x9DBF0, lib, libgultra_rom, exceptasm, .data]
       - [0x9DC20, data]
       - [0x9DC30, data]
-      - [0x9DC40, data] # timerintr?
+      - [0x9DC40, lib, libgultra_rom, timerintr, .data]
       - [0x9DC50, data]
       - [0x9DCB0, data]
       - [0x9DCC0, data]
@@ -667,11 +672,11 @@ segments:
       - [0x9F3C0, rodata, 46080]
       - [0x9F480, rodata, 4CD70]
       - [0x9F660, rodata, 717D0]
-      - [0x9F740, rodata, cosf]
-      # - [0x9F740, lib, libgultra_rom, cosf, .rodata]
+      - [0x9F740, rodata]
+      - [0x9F750, lib, libgultra_rom, cosf, .rodata]
       - [0x9F7B0, rodata, lookatref]
       # - [0x9F7B0, lib, libgultra_rom, lookatref .rodata]
-      - [0x9F7C0, rodata, guMtxIdent]
+      - [0x9F7C0, lib, libgultra_rom, perspective, .rodata]
       - [0x9F800, lib, libgultra_rom, sinf, .rodata]
       - [0x9F860, lib, libgultra_rom, setintmask, .rodata]
       - [0x9F8E0, rodata, 77500]
