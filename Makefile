@@ -59,7 +59,7 @@ OBJCOPYFLAGS = -O binary
 
 ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
-LIBULTRA = lib/ultralib/build/J/libgultra_rom/libgultra_rom.a
+LIBULTRA = lib/ultralib/build/I/libgultra_rom/libgultra_rom.a
 
 # Targets
 
