@@ -1,3 +1,5 @@
+osInvalICache = 0x80076100; // guessing from assembly
+
 __osBaseTimer = 0x800AB458; // guessing from timerintr.c
 
 // guesses from libreultra exceptasm.s
@@ -10,7 +12,7 @@ __osShutdown = 0x8009D02C;
 __osFaultedThread = 0x8009BB24;
 
 // guesses from libreultra initialize.c
-__osInitialize_common = 0x8007EFA0;
+osInitialize = 0x8007EFA0;
 
 D_8008DD4E_8E94E = 0x8008DD4E; // type:s16 size:0x2
 
@@ -450,7 +452,7 @@ __osSiRawWriteIo = 0x8007FEE0;
 __osSiRelAccess = 0x80080010;
 __osSpDeviceBusy = 0x8007FBC0;
 __osSpGetStatus = 0x8007FBE0;
-__osSpRawReadIo = 0x8007FE50;
+__osSiRawReadIo = 0x8007FE50;
 __osSpRawStartDma = 0x8007FC30;
 __osSpSetPc = 0x8007FC00;
 __osSpSetStatus = 0x8007FBF0;
@@ -767,8 +769,9 @@ pimgr_data_0014 = 0x8009BE34;
 pimgr_data_0018 = 0x8009BE38;
 pirawdma_text_00AC = 0x8008018C;
 pirawdma_text_00B8 = 0x80080198;
-pirawread_rodata_0000 = 0x8009EFB4;
-pirawread_rodata_0004 = 0x8009EFB8;
+pirawread_rodata = 0x8009EFB0; // type:u8
+//pirawread_rodata_0000 = 0x8009EFB4;
+//pirawread_rodata_0004 = 0x8009EFB8;
 player_bss_002C = 0x800A6504;
 player_bss_002E = 0x800A6506;
 player_bss_003C = 0x8009BE28;
@@ -824,8 +827,9 @@ sins_text_0024 = 0x80076014;
 sins_text_004C = 0x8007603C;
 sirawdma_text_006C = 0x8007DE2C;
 sirawdma_text_0090 = 0x8007DE50;
-sirawwrite_rodata_0000 = 0x8009EFA0;
-sirawwrite_rodata_0004 = 0x8009EFA4;
+//sirawwrite_rodata = 0x8009EFA0; // type:u8
+//sirawwrite_rodata_0000 = 0x8009EFA0;
+//sirawwrite_rodata_0004 = 0x8009EFA4;
 sprawdma_rodata_0000 = 0x8009EF80;
 sprawdma_rodata_0004 = 0x8009EF84;
 sprawdma_text_00D0 = 0x8007FD00;
