@@ -184,19 +184,20 @@ segments:
       # - [0x76EE0, lib, libgultra_rom, createthread]
       - [0x76FB0, lib, libgultra_rom, recvmesg]
       - [0x770E0, lib, libgultra_rom, sendmesg]
-      - [0x77210, asm] # seteventmesg?
+      - [0x77210, lib, libgultra_rom, seteventmesg]
       - [0x77270, lib, libgultra_rom, setthreadpri]
       - [0x77340, lib, libgultra_rom, startthread]
       - [0x77460, lib, libgultra_rom, thread]
       - [0x774A0, lib, libgultra_rom, virtualtophysical]
-      - [0x77500, asm] # drvrnew?
+      - [0x77500, asm, drvrnew]
+      # - [0x77500, lib, libgultra_rom, drvrnew]
       - [0x77D30, lib, libgultra_rom, load]
       - [0x78840, lib, libgultra_rom, auxbus]
       - [0x78950, asm] # env?
       - [0x79680, lib, libgultra_rom, filter]
       - [0x796A0, lib, libgultra_rom, mainbus]
-      - [0x79810, asm] # resample?
-      - [0x79AC0, asm] # reverb? data/rodata issues
+      - [0x79810, lib, libgultra_rom, resample]
+      - [0x79AC0, lib, libgultra_rom, reverb]
       - [0x7A6A0, asm] # save?
       - [0x7A7D0, asm, sl] # sl but some matching issue
       - [0x7A880, lib, libgultra_rom, heapinit]
@@ -268,8 +269,7 @@ segments:
       - [0x7FEB0, lib, libgultra_rom, sqrtf]
       - [0x7FEC0, lib, libgultra_rom, getcount]
       - [0x7FED0, lib, libgultra_rom, getsr]
-      - [0x7FEE0, asm] # uses the I version of interrupt??
-      # - [0x7FEE0, lib, libgultra_rom, interrupt] # interrupt?
+      - [0x7FEE0, lib, libgultra_rom, interrupt] # interrupt?
       - [0x7FF20, lib, libgultra_rom, probetlb]
       - [0x7FFE0, lib, libgultra_rom, setfpccsr]
       - [0x7FFF0, lib, libgultra_rom, setsr]
@@ -300,9 +300,13 @@ segments:
       - [0x80C40, asm] # pirawread?
       - [0x80CE0, asm] # pirawdma?
       - [0x80DB0, asm] # pigetcmdq?
-      - [0x80DD0, asm] # devmgr?
+      # - [0x80DC0, asm]
+      # - [0x80DD0, lib, libgultra_rom, devmgr]
+      - [0x80DD0, asm, devmgr]
+      # - [0x81164, asm]
       - [0x81190, asm] # piacs?
-      - [0x81280, asm] # printf?
+      - [0x81280, asm, xprintf]
+      # - [0x81280, lib, libgultra_rom, xprintf]
       - [0x81CB0, asm] # contpfs?
       # - [0x81CB0, lib, libgultra_rom, contpfs]
       - [0x82740, asm] # contramread?
@@ -311,7 +315,7 @@ segments:
       - [0x82C50, asm] # epirawdma?
       - [0x82E40, asm] # epirawread? mismatch
       # - [0x82FF0, lib, libgultra_rom, epirawwrite]
-      - [0x82FF0, asm]
+      - [0x82FF0, asm, epirawwrite]
       - [0x83160, asm] # pfschecker?
       # - [0x83160, lib, libgultra_rom, pfschecker]
       # - [0x83880, lib, libgultra_rom, pfsgetstatus]
@@ -324,7 +328,9 @@ segments:
       - [0x83BA0, asm, pfsisplug]
       # - [0x83BA0, lib, libgultra_rom, pfsisplug]
       - [0x83E80, lib, libgultra_rom, bcmp]
-      - [0x83F90, asm] # xlitob?
+      - [0x83F90, lib, libgultra_rom, xlitob]
+      - [0x841E0, lib, libgultra_rom, xldtob]
+      # - [0x84C60, lib, libgultra_rom, ldiv]
       - [0x84C60, asm] # ldiv but it's too big
       - [0x85020, asm] # related to xlibtob?
       - [0x85190, asm] # related to xlibtob?
@@ -640,7 +646,8 @@ segments:
       - [0x9BF10, lib, libgultra_rom, sins, .data]
       - [0x9C710, lib, libgultra_rom, thread, .data]
       - [0x9C730, data]
-      - [0x9C870, data]
+      - [0x9C870, data, drvrnew]
+      # - [0x9C870, lib, libgultra_rom, drvrnew, .data]
       - [0x9C8C0, data]
       # - [0x9C9E0, lib, libgultra_rom, sl, .data]
       - [0x9C9E0, data, sl]
@@ -667,7 +674,7 @@ segments:
       - [0x9DDD0, data]
       # - [0x9DE20, lib, libgultra_rom, contpfs, .data]
       - [0x9DE30, data]
-      - [0x9DE40, rodata, 83E80]
+      - [0x9DE40, lib, libgultra_rom, xlitob, .data]
       - [0x9DE70, rodata]
       - [0x9E8E0, rodata, 4050]
       - [0x9E910, rodata, 5520]
@@ -693,10 +700,11 @@ segments:
       - [0x9F7C0, lib, libgultra_rom, perspective, .rodata]
       - [0x9F800, lib, libgultra_rom, sinf, .rodata]
       - [0x9F860, lib, libgultra_rom, setintmask, .rodata]
-      - [0x9F8E0, rodata, 77500]
+      - [0x9F8E0, rodata, drvrnew]
+      # - [0x9F8E0, lib, libgultra_rom, drvrnew, .rodata]
       - [0x9F920, rodata, 78950]
-      - [0x9FA20, rodata, 796A0]
-      - [0x9FA50, rodata, 79AC0]
+      - [0x9FA20, lib, libgultra_rom, resample, .rodata]
+      - [0x9FA50, lib, libgultra_rom, reverb, .rodata]
       - [0x9FAB0, rodata, 7A6A0]
       - [0x9FAC0, rodata, 7A950]
       # - [0x9FB00, lib, libgultra_rom, aisetfreq, .rodata]
@@ -710,7 +718,7 @@ segments:
       - [0x9FBA0, rodata, sirawwrite]
       - [0x9FBB0, rodata]
       - [0x9FD60, rodata, 82E40]
-      - [0x9FD80, rodata, 841E0]
+      - [0x9FD80, lib, libgultra_rom, xldtob, .rodata]
       - [0x9FDF0, rodata]
 
       - { start: 0xA02E0, type: bss, vram: 0x8009F6E0 }
