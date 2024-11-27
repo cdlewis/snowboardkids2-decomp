@@ -1,3 +1,4 @@
+osViGetNextFramebuffer = 0x8007ADF0; // guess
 osInvalICache = 0x80076100; // guessing from assembly
 __osBaseTimer = 0x800AB458; // guessing from timerintr.c
 

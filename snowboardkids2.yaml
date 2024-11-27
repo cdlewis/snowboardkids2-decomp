@@ -224,7 +224,7 @@ segments:
       - [0x7B940, lib, libgultra_rom, sptaskyield]
       - [0x7B960, lib, libgultra_rom, sptaskyielded]
       - [0x7B9B0, lib, libgultra_rom, vigetcurrframebuf]
-      - [0x7B9F0, asm]
+      - [0x7B9F0, lib, libgultra_rom, vigetnextframebuf]
       - [0x7BA30, lib, libgultra_rom, visetevent]
       - [0x7BA90, lib, libgultra_rom, visetmode]
       - [0x7BAE0, lib, libgultra_rom, viswapbuf]
