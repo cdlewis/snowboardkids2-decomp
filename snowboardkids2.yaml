@@ -190,7 +190,7 @@ segments:
       - [0x77340, lib, libgultra_rom, startthread]
       - [0x77460, lib, libgultra_rom, thread]
       - [0x774A0, lib, libgultra_rom, virtualtophysical]
-      - [0x77500, asm] # drvrnew?
+      - [0x77500, lib, libgultra_rom, drvrnew]
       - [0x77D30, lib, libgultra_rom, load]
       - [0x78840, lib, libgultra_rom, auxbus]
       - [0x78950, asm] # env?
@@ -630,8 +630,7 @@ segments:
       - [0x9BEF0, data]
       - [0x9BF10, lib, libgultra_rom, sins, .data]
       - [0x9C710, lib, libgultra_rom, thread, .data]
-      - [0x9C730, data]
-      - [0x9C870, data]
+      - [0x9C730, lib, libgultra_rom, drvrnew, .data]
       - [0x9C8C0, data]
       # - [0x9C9E0, lib, libgultra_rom, sl, .data]
       - [0x9C9E0, data, sl]
@@ -679,7 +678,7 @@ segments:
       - [0x9F7C0, lib, libgultra_rom, perspective, .rodata]
       - [0x9F800, lib, libgultra_rom, sinf, .rodata]
       - [0x9F860, lib, libgultra_rom, setintmask, .rodata]
-      - [0x9F8E0, rodata, 77500]
+      - [0x9F8E0, lib, libgultra_rom, drvrnew, .rodata]
       - [0x9F920, rodata, 78950]
       - [0x9FA20, lib, libgultra_rom, resample, .rodata]
       - [0x9FA50, rodata, 79AC0]
