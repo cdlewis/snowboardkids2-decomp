@@ -322,7 +322,8 @@ segments:
       - [0x83E80, lib, libgultra_rom, bcmp]
       - [0x83F90, lib, libgultra_rom, xlitob]
       - [0x841E0, lib, libgultra_rom, xldtob]
-      - [0x84C60, asm] # ldiv but it's too big
+      - [0x84C60, lib, libgultra_rom, ldiv]
+      - [0x84E20, asm]
       - [0x85020, asm] # related to xlibtob?
       - [0x85190, asm] # related to xlibtob?
       - [0x851B0, asm] # related to xlibtob?
