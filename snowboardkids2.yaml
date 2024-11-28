@@ -299,7 +299,8 @@ segments:
       - [0x80DB0, asm] # pigetcmdq?
       - [0x80DD0, asm] # devmgr?
       - [0x81190, asm] # piacs?
-      - [0x81280, asm] # printf?
+      - [0x81280, asm, xprintf]
+      # - [0x81280, lib, libgultra_rom, xprintf]
       - [0x81CB0, asm] # contpfs?
       # - [0x81CB0, lib, libgultra_rom, contpfs]
       - [0x82740, asm] # contramread?
@@ -319,7 +320,8 @@ segments:
       - [0x83BA0, asm, pfsisplug]
       # - [0x83BA0, lib, libgultra_rom, pfsisplug]
       - [0x83E80, lib, libgultra_rom, bcmp]
-      - [0x83F90, asm] # xlitob?
+      - [0x83F90, lib, libgultra_rom, xlitob]
+      - [0x841E0, asm] # xldtob?
       - [0x84C60, asm] # ldiv but it's too big
       - [0x85020, asm] # related to xlibtob?
       - [0x85190, asm] # related to xlibtob?
@@ -654,10 +656,12 @@ segments:
       - [0x9DCB0, data]
       - [0x9DCC0, data]
       - [0x9DCD0, data]
-      - [0x9DDD0, data]
+      - [0x9DDD0, data, xprintf]
+      # - [0x9DDD0, lib, libgultra_rom, xprintf, .data]
+      - [0x9DE20, data]
       # - [0x9DE20, lib, libgultra_rom, contpfs, .data]
       - [0x9DE30, data]
-      - [0x9DE40, rodata, 83E80]
+      - [0x9DE40, lib, libgultra_rom, xlitob, .data]
       - [0x9DE70, rodata]
       - [0x9E8E0, rodata, 4050]
       - [0x9E910, rodata, 5520]
@@ -701,9 +705,12 @@ segments:
       - [0x9FB90, rodata, sprawread]
       # - [0x9FB90, lib, libgultra_rom, sprawread, .rodata]
       - [0x9FBA0, rodata, sirawwrite]
-      - [0x9FBB0, rodata]
-      - [0x9FD60, rodata, 82E40]
-      - [0x9FD80, rodata, 841E0]
+      - [0x9FBB0, rodata, pirawread]
+      - [0x9FBC0, rodata, devmgr]
+      - [0x9FBE0, rodata]
+      # - [0x9FBE8, lib, libgultra_rom, xprintf, .rodata]
+      - [0x9FD60, rodata, epirawread]
+      - [0x9FD80, rodata, xldtob]
       - [0x9FDF0, rodata]
 
       - { start: 0xA02E0, type: bss, vram: 0x8009F6E0 }
