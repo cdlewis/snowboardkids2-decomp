@@ -321,7 +321,7 @@ segments:
       # - [0x83BA0, lib, libgultra_rom, pfsisplug]
       - [0x83E80, lib, libgultra_rom, bcmp]
       - [0x83F90, lib, libgultra_rom, xlitob]
-      - [0x841E0, asm] # xldtob?
+      - [0x841E0, lib, libgultra_rom, xldtob]
       - [0x84C60, asm] # ldiv but it's too big
       - [0x85020, asm] # related to xlibtob?
       - [0x85190, asm] # related to xlibtob?
@@ -710,7 +710,7 @@ segments:
       - [0x9FBE0, rodata]
       # - [0x9FBE8, lib, libgultra_rom, xprintf, .rodata]
       - [0x9FD60, rodata, epirawread]
-      - [0x9FD80, rodata, xldtob]
+      - [0x9FD80, lib, libgultra_rom, xldtob, .rodata]
       - [0x9FDF0, rodata]
 
       - { start: 0xA02E0, type: bss, vram: 0x8009F6E0 }
