@@ -1,3 +1,7 @@
+div64_32 = 0x80084354;
+div64_64 = 0x80084258;
+__muldi3 = 0x80084224;
+
 osViGetNextFramebuffer = 0x8007ADF0; // guess
 osInvalICache = 0x80076100; // guessing from assembly
 __osBaseTimer = 0x800AB458; // guessing from timerintr.c

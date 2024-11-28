@@ -24,10 +24,12 @@ SRC_DIRS  = src
 S_FILES   = $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 C_FILES   = $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 BIN_FILES = $(foreach dir,$(BIN_DIRS),$(wildcard $(dir)/*.bin))
+LIBKMC_S_FILES = $(foreach dir,lib/libkmc,$(wildcard $(dir)/*.s))
 
 O_FILES := $(foreach file,$(S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
            $(foreach file,$(C_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
-           $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o)
+           $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
+					 $(foreach file,$(LIBKMC_S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o)
 
 # Tools
 
@@ -40,6 +42,7 @@ PYTHON = python3
 SPLAT = $(TOOLS_DIR)/splat/split.py
 N64CRC = $(TOOLS_DIR)/n64crc.py
 CPP := cpp -P
+ICONV := iconv --from-code=UTF-8 --to-code=Shift-JIS
 
 COMPILER_DIR = ../old-gcc/build-gcc-2.7.2
 CC = COMPILER_DIR=$(COMPILER_DIR) $(COMPILER_DIR)/cc1 
@@ -86,15 +89,8 @@ clean:
 	rm -rf build
 	rm -f *auto.txt
 
-diff:
-	@echo "Prev:"
-	@cat romdiffcount
-	@echo "Current:"
-	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) | grep "   |   " | wc -l 2>&1
-
 updatediff:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
-	@cat romdiff | grep "   |   " | wc -l 2>&1 > romdiffcount
 
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(O_FILES)
 	@$(LD) -T $(LD_SCRIPT) -T undefined_syms_auto.txt -Map $(TARGET).map --no-check-sections -Lbuild/lib -lgultra_rom -o $@
@@ -109,13 +105,23 @@ $(BUILD_DIR)/src/%.s: $(BUILD_DIR)/src/%.i
 	@mkdir -p $(shell dirname $@)
 	$(CC) $(CFLAGS) -o $@ $<
 
+$(BUILD_DIR)/lib/libkmc/%.o: lib/libkmc/%.s
+	@mkdir -p $(shell dirname $@)
+	@printf "[$(GREEN)   as   $(NO_COL)]  $<\n"; \
+	$(CPP) -I include -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) $< | \
+		$(ICONV) | \
+		$(AS) $(ASFLAGS) -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) -o $@
+	$(OBJDUMP_CMD)
+
 $(BUILD_DIR)/lib/libgultra_rom.a: $(LIBULTRA)
 	@mkdir -p $$(dirname $@)
 	@cp $< $@
 
 $(BUILD_DIR)/%.o: %.s
-	$(AS) $(ASFLAGS) $< -o $(BUILD_DIR)/$(dir $<)$(notdir $(basename $<)).o
-	@printf "[$(GREEN)   as   $(NO_COL)]  $<\n"
+	@if [ "$(dir $<)" != "lib/libkmc/" ]; then \
+		printf "[$(GREEN)   as   $(NO_COL)]  $<\n"; \
+		$(AS) $(ASFLAGS) $< -o $(BUILD_DIR)/$(dir $<)$(notdir $(basename $<)).o; \
+	fi
 
 $(BUILD_DIR)/%.o: %.bin
 	./patch_linker.sh
@@ -131,6 +137,6 @@ $(TARGET).z64: $(TARGET).bin
 
 ### Settings
 .SECONDARY:
-.PHONY: all clean default diff updatediff
+.PHONY: all clean default updatediff
 SHELL = /bin/bash -e -o pipefail
 
