@@ -13,3 +13,4 @@ romdiffcount
 .vscode
 undefined_funcs_auto.txt
 undefined_syms_auto.txt
+.venv

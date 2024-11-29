@@ -44,7 +44,7 @@ N64CRC = $(TOOLS_DIR)/n64crc.py
 CPP := cpp -P
 ICONV := iconv --from-code=UTF-8 --to-code=Shift-JIS
 
-COMPILER_DIR = ../old-gcc/build-gcc-2.7.2
+COMPILER_DIR = tools/old-gcc/build-gcc-2.7.2
 CC = COMPILER_DIR=$(COMPILER_DIR) $(COMPILER_DIR)/cc1 
 
 CC_CHECK := gcc -fsyntax-only -fsigned-char -nostdinc -fno-builtin -I include -I $(BUILD_DIR)/include -I src\
