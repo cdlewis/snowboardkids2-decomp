@@ -184,8 +184,7 @@ segments:
       - [0x76EE0, asm] # createthread?
       - [0x76FB0, lib, libgultra_rom, recvmesg]
       - [0x770E0, lib, libgultra_rom, sendmesg]
-      - [0x77210, asm, seteventmesg] # seems to use version I
-      # - [0x77210, lib, libgultra_rom, seteventmesg]
+      - [0x77210, lib, libgultra_rom, seteventmesg]
       - [0x77270, lib, libgultra_rom, setthreadpri]
       - [0x77340, lib, libgultra_rom, startthread]
       - [0x77460, lib, libgultra_rom, thread]
