@@ -1,3 +1,5 @@
+[progress](https://img.shields.io/badge/progress-4.03%25-blue)
+
 # Snowboard Kids 2
 
 A (very much) work-in-progress matching decomp of the N64 game, Snowboard Kids 2.
