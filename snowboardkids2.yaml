@@ -228,7 +228,7 @@ segments:
       - [0x7BAE0, lib, libgultra_rom, viswapbuf]
       - [0x7BB30, lib, libgultra_rom, viblack]
       - [0x7BB90, lib, libgultra_rom, controller]
-      - [0x7BEA0, asm] # conteeplongwrite?
+      - [0x7BEA0, lib, libgultra_rom, conteeplongwrite] 
       - [0x7BF90, asm] # conteeplongread?
       - [0x7C0A0, asm] # driverominit?
       - [0x7C160, asm] # pidma?
