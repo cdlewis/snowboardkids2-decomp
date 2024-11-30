@@ -781,8 +781,6 @@ segments:
       - [0xB7DD0, data]
       - [0xBDBC0, bin]
 
-  # - type: bin
-  #   start: 0x101000
-  #   follows_vram: cool_new_section
+  - [0xE0CAD0, bin, trailer]
 
   - [0x1000000]
