@@ -177,7 +177,7 @@ segments:
       - [0x76BF0, lib, libgultra_rom, sins]
       - [0x76C50, lib, libgultra_rom, invaldcache]
       - [0x76D00, lib, libgultra_rom, invalicache]
-      - [0x76D80, pad] # invalicache has extra padding at the end
+      - [0x76D80, pad, invalicache_padding]
       - [0x76DE0, lib, libgultra_rom, setintmask]
       - [0x76E80, lib, libgultra_rom, writebackdcacheall]
       - [0x76EB0, lib, libgultra_rom, createmesgqueue]
