@@ -1,0 +1,27 @@
+
+###################################################################
+#
+#  Makefile.depend : Nintendo 64 Music Tools Programmers Library
+#  (c) Copyright 1997/1998, Software Creations (Holdings) Ltd.
+#
+#  Version 3.14
+#
+#  File dependancies for library.
+#
+###################################################################
+
+# Library files...
+player.o:	player.c player_commands.c player_api.c player_fifo.c player.h player_fifo.h player_fx.h libmus_config.h
+player_fx.o:	player_fx.c player_fx.h libmus_config.h
+
+aud_dma.o:		aud_dma.c aud_dma.h libmus.h libmus_config.h
+aud_samples.o:	aud_samples.c aud_samples.h libmus.h libmus_config.h
+aud_sched.o:		aud_sched.c aud_sched.h libmus.h libmus_config.h
+aud_thread.o:		aud_thread.c aud_thread.h libmus.h libmus_config.h
+lib_memory.o:		lib_memory.c lib_memory.h libmus.h libmus_config.h
+
+# end of file #
+
+
+
+
