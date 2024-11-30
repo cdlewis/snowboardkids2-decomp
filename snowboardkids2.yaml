@@ -181,7 +181,7 @@ segments:
       - [0x76DE0, lib, libgultra_rom, setintmask]
       - [0x76E80, lib, libgultra_rom, writebackdcacheall]
       - [0x76EB0, lib, libgultra_rom, createmesgqueue]
-      - [0x76EE0, asm] # createthread?
+      - [0x76EE0, lib, libgultra_rom, createthread]
       - [0x76FB0, lib, libgultra_rom, recvmesg]
       - [0x770E0, lib, libgultra_rom, sendmesg]
       - [0x77210, lib, libgultra_rom, seteventmesg]
