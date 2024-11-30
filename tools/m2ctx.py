@@ -15,6 +15,8 @@ CPP_FLAGS = [
     "-Iinclude",
     "-Isrc",
     "-Ilib/ultralib/include",
+    "-Ilib/ultralib/include/PR",
+    "-Ilib/libmus/include",
     "-D_LANGUAGE_C",
     "-DF3DEX_GBI_2",
     "-D_MIPS_SZLONG=32",

@@ -1,4 +1,4 @@
-![progress](https://img.shields.io/badge/progress-8.71%25-blue)
+![progress](https://img.shields.io/badge/progress-9.08%25-blue)
 
 # Snowboard Kids 2
 
@@ -10,7 +10,9 @@ This repository does **not** contain any game assets or assembly whatsoever. An 
 
 ## Dependencies
 
-System packages (list is incomplete):
+This project has been tested on Ubuntu (x86). Your milege may vary on other systems.
+
+System packages:
 
 * make
 * git
@@ -18,11 +20,10 @@ System packages (list is incomplete):
 * python3
 * pip3
 
-Build GCC 2.7.2:
+Build tools:
 
 ```bash
-cd tools/old-gcc
-VERSION=2.7.2 make
+make setup
 ```
 
 Build Python dependencies:

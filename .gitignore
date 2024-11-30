@@ -15,3 +15,4 @@ undefined_funcs_auto.txt
 undefined_syms_auto.txt
 .venv
 ctx.c
+tools/gcc_kmc
