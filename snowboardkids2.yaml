@@ -270,8 +270,7 @@ segments:
       - [0x80000, lib, libgultra_rom, unmaptlball]
       - [0x80050, lib, libgultra_rom, writebackdcache]
       - [0x800D0, lib, libgultra_rom, maptlbrdb]
-      - [0x80130, asm, destroythread] # possibly version I
-      # - [0x80130, lib, libgultra_rom, destroythread]
+      - [0x80130, lib, libgultra_rom, destroythread]
       - [0x80200, lib, libgultra_rom, getthreadpri]
       - [0x80220, lib, libgultra_rom, gettime]
       - [0x802B0, lib, libgultra_rom, jammesg]
