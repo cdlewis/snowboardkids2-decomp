@@ -227,7 +227,7 @@ segments:
       - [0x7BA90, lib, libgultra_rom, visetmode]
       - [0x7BAE0, lib, libgultra_rom, viswapbuf]
       - [0x7BB30, lib, libgultra_rom, viblack]
-      - [0x7BB90, asm] # controller?
+      - [0x7BB90, lib, libgultra_rom, controller]
       - [0x7BEA0, asm] # conteeplongwrite?
       - [0x7BF90, asm] # conteeplongread?
       - [0x7C0A0, asm] # driverominit?
@@ -617,7 +617,7 @@ segments:
       - [0x9B460, data]
       - [0x9B470, data]
       - [0x9B490, data]
-      - [0x9B4D0, data]
+      - [0x9B4D0, data] # 0x9b510 / 0x9b730 has some kind of keyboard / alphabet?
       - [0x9B9F0, data]
       - [0x9BAD0, data]
       - [0x9BBF0, data]
@@ -635,7 +635,7 @@ segments:
       # - [0x9C9E0, lib, libgultra_rom, sl, .data]
       - [0x9C9E0, data, sl]
       - [0x9C9F0, data]
-      - [0x9CA00, data]
+      - [0x9CA00, lib, libgultra_rom, controller, .data]
       - [0x9CA10, data]
       - [0x9CA20, data]
       - [0x9CA50, data]
