@@ -109,7 +109,7 @@ func parseSubSegment(segment []string) Subsegment {
 		finished = true
 	}
 
-	if segment[1] == "lib" {
+	if segment[1] == "lib" || segment[1] == "pad" {
 		finished = true
 	}
 
