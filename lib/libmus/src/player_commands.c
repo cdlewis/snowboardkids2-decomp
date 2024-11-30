@@ -675,39 +675,6 @@ static unsigned char *Fchangefx(channel_t *cp, unsigned char *ptr)
   return (ptr);
 }
 
-/* Command : Marker definition
-	Format  : Cmarker, number, <rest length> or Cmarker, number, <rest&0x7f00>, <rest&0xff> */
-static unsigned char *Fmarker(channel_t *cp, unsigned char *ptr)
-{
-  int rest;
-  int number;
-
-  number = *ptr++; /* marker number */
-  rest = *ptr++;
-  if(rest&0x80)
-  {
-    rest &= 0x7f;
-    rest <<= 8;
-    rest |= *ptr++;
-  }
-  /* if not going to a marker but marker is found on the mastertrack try callback */
-  if ((cp->channel_flag&CHFLAG_MASTERTRACK) && !(cp->channel_flag&CHFLAG_PAUSE))
-  {
-		if (marker_callback)
-			marker_callback(cp->handle, number);
-  }
-  return (ptr);
-}
-
-/* Command : Disable fixed length mode (replaces Clength,0)
-   Format  : Clength0 */
-static unsigned char *Flength0(channel_t *cp, unsigned char *ptr)
-{
-	cp->fixed_length = 0;
-	return (ptr);
-}
-
-
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 /* array of functions for music data commands */
 
@@ -756,8 +723,6 @@ command_func_t jumptable[]=
   { Fbendrange },		//a8
   { Fsweep },		   //a9
   { Fchangefx },		//aa
-  { Fmarker },		   // ab
-  { Flength0 },		// ac
 };
 
 

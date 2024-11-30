@@ -31,7 +31,7 @@ O_FILES := $(foreach file,$(S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basen
            $(foreach file,$(C_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
            $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
 					 $(foreach file,$(LIBKMC_S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
-					 $(foreach file,$(LIBMUS_S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o)
+					 $(foreach file,$(LIBMUS_C_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o)
 
 # Tools
 
