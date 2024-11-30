@@ -44,7 +44,7 @@ N64CRC = $(TOOLS_DIR)/n64crc.py
 CPP := cpp -P
 ICONV := iconv --from-code=UTF-8 --to-code=Shift-JIS
 
-COMPILER_DIR = tools/old-gcc/build-gcc-2.7.2
+COMPILER_DIR = tools/gcc_kmc
 CC = COMPILER_DIR=$(COMPILER_DIR) $(COMPILER_DIR)/cc1 
 
 CC_CHECK := gcc -fsyntax-only -fsigned-char -nostdinc -fno-builtin -I include -I $(BUILD_DIR)/include -I src\
@@ -63,6 +63,7 @@ OBJCOPYFLAGS = -O binary
 ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
 LIBULTRA = lib/ultralib/build/J/libgultra_rom/libgultra_rom.a
+LIBMUS = lib/libmus/build/libmus.a
 
 # note: his is probably an issue with headers. Once ultra headers are properly included this should
 # go away.
@@ -97,14 +98,17 @@ clean:
 clean-ultralib:
 	rm -r lib/ultralib/build
 
+clean-libmus:
+	rm -r lib/libmus/build
+
 diff-line:
 	@(diff --old-line-format='OLD: %L' --new-line-format='NEW: %L' <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
 diff-sxs:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
-$(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(O_FILES)
-	@$(LD) -T $(LD_SCRIPT) -T undefined_syms_auto.txt $(LD_FLAGS_EXTRA) -Map $(TARGET).map --no-check-sections -Lbuild/lib -lgultra_rom -o $@
+$(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
+	@$(LD) -T $(LD_SCRIPT) -T undefined_syms_auto.txt $(LD_FLAGS_EXTRA) -Map $(TARGET).map --no-check-sections -Lbuild/lib -lgultra_rom -lmus -o $@
 	@printf "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
 
 $(BUILD_DIR)/src/%.i: src/%.c
@@ -128,10 +132,18 @@ $(BUILD_DIR)/lib/libgultra_rom.a: $(LIBULTRA)
 	@mkdir -p $$(dirname $@)
 	@cp $< $@
 
+$(BUILD_DIR)/lib/libmus.a: $(LIBMUS)
+	@mkdir -p $$(dirname $@)
+	@cp $< $@
+
 LIBULTRA_FLAGS = VERSION=J TARGET=libgultra_rom COMPARE=0 MODERN_LD=1
 $(LIBULTRA):
 	$(LIBULTRA_FLAGS) $(MAKE) -C lib/ultralib setup
 	$(LIBULTRA_FLAGS) $(MAKE) -C lib/ultralib
+
+LIBMUS_FLAGS = COMPILER_DIR=../../$(COMPILER_DIR) ULTRA_DIR=../ultralib
+$(LIBMUS):
+	$(LIBMUS_FLAGS) $(MAKE) -C lib/libmus
 
 $(BUILD_DIR)/%.o: %.s
 	@if [ "$(dir $<)" != "lib/libkmc/" ]; then \
@@ -150,6 +162,9 @@ $(TARGET).bin: $(TARGET).elf
 
 $(TARGET).z64: $(TARGET).bin
 	@cp $< $@
+
+setup:
+	$(MAKE) -C tools
 
 ### Settings
 .SECONDARY:
