@@ -263,8 +263,7 @@ segments:
       - [0x7FEB0, lib, libgultra_rom, sqrtf]
       - [0x7FEC0, lib, libgultra_rom, getcount]
       - [0x7FED0, lib, libgultra_rom, getsr]
-      - [0x7FEE0, asm] # uses the I version of interrupt??
-      # - [0x7FEE0, lib, libgultra_rom, interrupt] # interrupt?
+      - [0x7FEE0, lib, libgultra_rom, interrupt]
       - [0x7FF20, lib, libgultra_rom, probetlb]
       - [0x7FFE0, lib, libgultra_rom, setfpccsr]
       - [0x7FFF0, lib, libgultra_rom, setsr]
