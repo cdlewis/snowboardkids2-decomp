@@ -286,8 +286,8 @@ segments:
       - [0x80830, lib, libgultra_rom, sprawdma]
       - [0x80930, asm] # vi?
       - [0x80A40, lib, libgultra_rom, vigetcurrcontext]
-      - [0x80A50, asm, sprawread] # doesn't match J
-      # - [0x80A50, lib, libgultra_rom, sprawread]
+      - [0x80A50, asm, sirawread] # doesn't match J
+      # - [0x80A50, lib, libgultra_rom, sirawread]
       - [0x80AE0, asm, sirawwrite]
       - [0x80B50, asm] # siacs?
       - [0x80C40, asm] # pirawread?
@@ -696,8 +696,8 @@ segments:
       - [0x9FB20, lib, libgultra_rom, exceptasm, .rodata]
       - [0x9FB70, rodata]
       - [0x9FB80, lib, libgultra_rom, sprawdma, .rodata]
-      - [0x9FB90, rodata, sprawread]
-      # - [0x9FB90, lib, libgultra_rom, sprawread, .rodata]
+      - [0x9FB90, rodata, sirawread]
+      # - [0x9FB90, lib, libgultra_rom, sirawread, .rodata]
       - [0x9FBA0, rodata, sirawwrite]
       - [0x9FBB0, rodata, pirawread]
       - [0x9FBC0, rodata, devmgr]
