@@ -2,7 +2,9 @@
 
 # Snowboard Kids 2
 
-A (very much) work-in-progress matching decomp of the N64 game, Snowboard Kids 2.
+![box art](Snowboard_Kids_2_cover.jpg)
+
+A (very much) work-in-progress matching decompilation of the greatest N64 game ever made, [Snowboard Kids 2](https://en.wikipedia.org/wiki/Snowboard_Kids_2).
 
 ## Dependencies
 
