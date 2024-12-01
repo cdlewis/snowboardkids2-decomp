@@ -255,7 +255,7 @@ segments:
       - [0x7E620, asm] # pfssearchfile but no match?
       - [0x7E7C0, lib, libgultra_rom, pfsselectbank]
       - [0x7E830, asm] # pimgr?
-      - [0x7E9C0, asm] # sirawdma?
+      - [0x7E9C0, lib, libgultra_rom, sirawdma]
       - [0x7EA70, asm] # vimgr?
       - [0x7EDB0, lib, libgultra_rom, visetspecial]
       - [0x7EF20, asm] # viswapcontext?
