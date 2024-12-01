@@ -117,6 +117,11 @@ $(BUILD_DIR)/lib/libgultra_rom.a: $(LIBULTRA)
 	@mkdir -p $$(dirname $@)
 	@cp $< $@
 
+LIBULTRA_FLAGS = VERSION=J TARGET=libgultra_rom COMPARE=0 MODERN_LD=1
+$(LIBULTRA):
+	$(LIBULTRA_FLAGS) $(MAKE) -C lib/ultralib setup
+	$(LIBULTRA_FLAGS) $(MAKE) -C lib/ultralib
+
 $(BUILD_DIR)/%.o: %.s
 	@if [ "$(dir $<)" != "lib/libkmc/" ]; then \
 		printf "[$(GREEN)   as   $(NO_COL)]  $<\n"; \

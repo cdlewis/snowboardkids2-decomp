@@ -29,14 +29,6 @@ source .venv/bin/activate
 python3 -m pip install -U -r requirements.txt
 ```
 
-Build Ultra:
-
-```bash
-cd lib/ultralib
-make VERSION=J TARGET=libgultra_rom COMPARE=0 MODERN_LD=1 setup
-make VERSION=J TARGET=libgultra_rom COMPARE=0 MODERN_LD=1
-```
-
 ## Building
 
 Copy your big-endian Snowboard Kids 2 rom into the root of the repository. Rename it to `snowboardkids2.z64`. Then run:
