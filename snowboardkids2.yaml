@@ -259,8 +259,7 @@ segments:
       - [0x7EA70, asm] # vimgr?
       - [0x7EDB0, lib, libgultra_rom, visetspecial]
       - [0x7EF20, asm] # viswapcontext?
-      - [0x7F230, asm, exceptasm] # part of exceptasm?
-      # - [0x7F230, lib, libgultra_rom, exceptasm]
+      - [0x7F230, lib, libgultra_rom, exceptasm]
       - [0x7FBA0, asm] # part of os init?
       - [0x7FEB0, lib, libgultra_rom, sqrtf]
       - [0x7FEC0, lib, libgultra_rom, getcount]
@@ -643,8 +642,7 @@ segments:
       - [0x9CA20, data]
       - [0x9CA50, data]
       - [0x9CA70, data]
-      - [0x9DBF0, data, exceptasm]
-      # - [0x9DBF0, lib, libgultra_rom, exceptasm, .data]
+      - [0x9DBF0, lib, libgultra_rom, exceptasm, .data]
       - [0x9DC20, data]
       - [0x9DC30, data]
       - [0x9DC40, lib, libgultra_rom, timerintr, .data]
@@ -694,8 +692,8 @@ segments:
       # - [0x9FAC0, lib, libgultra_rom, synthesizer, .rodata]
       - [0x9FB00, lib, libgultra_rom, aisetfreq, .rodata]
       - [0x9FB10, rodata, 7EF20]
-      - [0x9FB20, rodata, exceptasm]
-      # - [0x9FB20, lib, libgultra_rom, exceptasm, .rodata]
+      # - [0x9FB20, rodata, exceptasm]
+      - [0x9FB20, lib, libgultra_rom, exceptasm, .rodata]
       - [0x9FB70, rodata]
       - [0x9FB80, rodata, sprawdma]
       - [0x9FB90, rodata, sprawread]

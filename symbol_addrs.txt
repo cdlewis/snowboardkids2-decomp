@@ -1,3 +1,5 @@
+send_mesg = 0x8007EBBC;
+
 // probable player commands
 player_commands_jumptable = 0x8009B050;
 
@@ -101,7 +103,6 @@ jtbl_800BB270_AB620 = 0x800BB270; // type:u32 size:0xC
 jtbl_800BCBD0_ACF80 = 0x800BCBD0; // type:u32 size:0x4
 jtbl_800BCC60_AD010 = 0x800BCC60; // type:u32 size:0x8
 
-func_8007EBBC_7F7BC = 0x8007EBBC;
 func_800AFF30 = 0x800AFF30;
 func_800AFF6C = 0x800AFF6C;
 func_800AFF94 = 0x800AFF94;
