@@ -287,9 +287,11 @@ segments:
       - [0x80930, asm] # vi?
       - [0x80A40, lib, libgultra_rom, vigetcurrcontext]
       - [0x80A50, lib, libgultra_rom, sirawread]
+      # - [0x80AE0, lib, libgultra_rom, sirawwrite]
       - [0x80AE0, asm, sirawwrite]
       - [0x80B50, asm] # siacs?
-      - [0x80C40, asm] # pirawread?
+      - [0x80C40, asm, pirawread]
+      # - [0x80C40, lib, libgultra_rom, pirawread]
       - [0x80CE0, asm] # pirawdma?
       - [0x80DB0, asm] # pigetcmdq?
       - [0x80DD0, asm] # devmgr?
@@ -696,8 +698,10 @@ segments:
       - [0x9FB70, rodata]
       - [0x9FB80, lib, libgultra_rom, sprawdma, .rodata]
       - [0x9FB90, lib, libgultra_rom, sirawread, .rodata]
+      # - [0x9FBA0, lib, libgultra_rom, sirawwrite, .rodata]
       - [0x9FBA0, rodata, sirawwrite]
-      - [0x9FBB0, rodata, pirawread]
+      # - [0x9FBB0, lib, libgultra_rom, pirawread, .rodata]
+      - [0x9FBB0, rodata, pirawread] # a row of extra 00s :/
       - [0x9FBC0, rodata, devmgr]
       - [0x9FBE0, rodata]
       # - [0x9FBE8, lib, libgultra_rom, xprintf, .rodata]
