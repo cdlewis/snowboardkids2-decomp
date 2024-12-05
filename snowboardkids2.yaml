@@ -220,7 +220,8 @@ segments:
       - [0x7B5B0, lib, libgultra_rom, synallocfx]
       - [0x7B650, lib, libgultra_rom, aigetlen]
       - [0x7B660, asm] # aisetnextbuf? missing text
-      - [0x7B700, asm] # sptask? but needs bss labelled
+      - [0x7B700, asm, sptask] # needs bss labelled
+      # - [0x78700, lib, libgultra_rom, sptask]
       - [0x7B940, lib, libgultra_rom, sptaskyield]
       - [0x7B960, lib, libgultra_rom, sptaskyielded]
       - [0x7B9B0, lib, libgultra_rom, vigetcurrframebuf]
@@ -244,7 +245,7 @@ segments:
       - [0x7CAC0, lib, libgultra_rom, conteepread]
       - [0x7CCE0, lib, libgultra_rom, conteepwrite]
       - [0x7D090, lib, libgultra_rom, contreaddata]
-      - [0x7D270, asm] # motor? needs bss
+      - [0x7D270, lib, libgultra_rom, motor]
       - [0x7D600, lib, libgultra_rom, pfsallocatefile]
       - [0x7DA30, lib, libgultra_rom, pfsdeletefile]
       - [0x7DC50, asm]
@@ -709,7 +710,9 @@ segments:
       - [0x9FD80, lib, libgultra_rom, xldtob, .rodata]
       - [0x9FDF0, rodata]
 
-      - { start: 0xA02E0, type: bss, vram: 0x8009F6E0 }
+      - { start: 0xA02E0, type: bss, vram: 0x8009F6E0, name: A02E0 }
+      - { type: lib, vram: 0x800A6570, name: libgultra_rom, object: motor, section: .bss }
+      - { type: bss, vram: 0x800A6670, name: AB0A8 }
 
   - name: cool_new_section
     type: code
