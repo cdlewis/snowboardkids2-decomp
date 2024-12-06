@@ -256,7 +256,7 @@ segments:
       - [0x7E7C0, lib, libgultra_rom, pfsselectbank]
       - [0x7E830, lib, libgultra_rom, pimgr]
       - [0x7E9C0, lib, libgultra_rom, sirawdma]
-      - [0x7EA70, asm] # vimgr?
+      - [0x7EA70, lib, libgultra_rom, vimgr]
       - [0x7EDB0, lib, libgultra_rom, visetspecial]
       - [0x7EF20, asm] # viswapcontext?
       - [0x7F230, lib, libgultra_rom, exceptasm]
@@ -641,7 +641,7 @@ segments:
       - [0x9CA00, lib, libgultra_rom, controller, .data]
       - [0x9CA10, data]
       - [0x9CA20, lib, libgultra_rom, pimgr, .data]
-      - [0x9CA50, data]
+      - [0x9CA50, lib, libgultra_rom, vimgr, .data]
       - [0x9CA70, data]
       - [0x9DBF0, lib, libgultra_rom, exceptasm, .data]
       - [0x9DC20, data]
@@ -713,7 +713,8 @@ segments:
       - { type: lib, vram: 0x800A6530, name: libgultra_rom, object: sptask, section: .bss }
       - { type: lib, vram: 0x800A6570, name: libgultra_rom, object: motor, section: .bss }
       - { type: lib, vram: 0x800A6670, name: libgultra_rom, object: pimgr, section: .bss }
-      - { type: bss, vram: 0x800A7840, name: A7840 }
+      - { type: lib, vram: 0x800A7840, name: libgultra_rom, object: vimgr, section: .bss}
+      - { type: bss, vram: 0x800A8A60, name: A7840 }
 
   - name: cool_new_section
     type: code
