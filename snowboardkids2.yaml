@@ -202,7 +202,7 @@ segments:
       - [0x79AC0, asm] # reverb? data/rodata issues
       - [0x7A6A0, asm, save] # matching issues
       # - [0x7A6A0, lib, libgultra_rom, save]
-      - [0x7A7D0, asm, sl] # sl but some matching issue
+      - [0x7A7D0, lib, libgultra_rom, sl]
       - [0x7A880, lib, libgultra_rom, heapinit]
       - [0x7A8C0, lib, libgultra_rom, heapalloc]
       - [0x7A910, lib, libgultra_rom, copy]
@@ -635,8 +635,7 @@ segments:
       - [0x9C730, lib, libgultra_rom, drvrnew, .data]
       - [0x9C8C0, data, env]
       # - [0x9C8C0, lib, libgultra_rom, env, .data]
-      # - [0x9C9E0, lib, libgultra_rom, sl, .data]
-      - [0x9C9E0, data, sl]
+      - [0x9C9E0, lib, libgultra_rom, sl, .data]
       - [0x9C9F0, data]
       - [0x9CA00, lib, libgultra_rom, controller, .data]
       - [0x9CA10, data]
