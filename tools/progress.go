@@ -17,7 +17,7 @@ import (
  */
 
 var finishedCSegments = []string{}
-var re = regexp.MustCompile(`start:\s*(0x[0-9A-Fa-f]+).*type:\s*([a-zA-Z0-9_]+)`)
+var re = regexp.MustCompile(`(?i)([a-z_]+): ([a-z_0-9\.]+)`)
 
 type SplatConfig struct {
 	Segments []Segment `yaml:"segments"`
@@ -41,17 +41,26 @@ func main() {
 		line := scanner.Text()
 
 		// adapt weirdly formatted bss segments
-		matches := re.FindStringSubmatch(line)
-		if len(matches) > 0 {
+		matches := parseMapFields(line)
+
+		if matches["type"] == "bss" {
+			if matches["start"] == "" {
+				continue
+			}
+
 			padding := strings.Split(line, "-")
-			line = fmt.Sprintf("%s- [%s, bss]", padding[0], matches[1])
+			line = fmt.Sprintf("%s- [%s, bss]", padding[0], matches["start"])
+		}
+
+		if matches["section"] == ".bss" {
+			continue
 		}
 
 		// ignore final entry
 		if strings.HasPrefix(line, "  - [") {
 			continue
 		}
-
+		// fmt.Println(line)
 		yamlString += line + "\n"
 	}
 
@@ -88,8 +97,6 @@ func main() {
 	}
 
 	fmt.Println(float64(decompiledCodeSize) / float64(codeSize) * 100)
-
-
 }
 
 type Subsegment struct {
@@ -119,4 +126,16 @@ func parseSubSegment(segment []string) Subsegment {
 		Finished: finished,
 	}
 
+}
+
+func parseMapFields(line string) map[string]string {
+	matches := re.FindAllStringSubmatch(line, -1)
+	results := map[string]string{}
+	for _, i := range matches {
+		if len(i) < 3 {
+			continue
+		}
+		results[i[1]] = i[2]
+	}
+	return results
 }
