@@ -220,8 +220,7 @@ segments:
       - [0x7B5B0, lib, libgultra_rom, synallocfx]
       - [0x7B650, lib, libgultra_rom, aigetlen]
       - [0x7B660, asm] # aisetnextbuf? missing text
-      - [0x7B700, asm, sptask] # needs bss labelled
-      # - [0x78700, lib, libgultra_rom, sptask]
+      - [0x7B700, lib, libgultra_rom, sptask]
       - [0x7B940, lib, libgultra_rom, sptaskyield]
       - [0x7B960, lib, libgultra_rom, sptaskyielded]
       - [0x7B9B0, lib, libgultra_rom, vigetcurrframebuf]
@@ -711,6 +710,7 @@ segments:
       - [0x9FDF0, rodata]
 
       - { start: 0xA02E0, type: bss, vram: 0x8009F6E0, name: A02E0 }
+      - { type: lib, vram: 0x800A6530, name: libgultra_rom, object: sptask, section: .bss }
       - { type: lib, vram: 0x800A6570, name: libgultra_rom, object: motor, section: .bss }
       - { type: bss, vram: 0x800A6670, name: AB0A8 }
 
