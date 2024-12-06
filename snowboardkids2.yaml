@@ -289,7 +289,7 @@ segments:
       - [0x80A50, lib, libgultra_rom, sirawread]
       # - [0x80AE0, lib, libgultra_rom, sirawwrite]
       - [0x80AE0, asm, sirawwrite]
-      - [0x80B50, asm] # siacs?
+      - [0x80B50, lib, libgultra_rom, siacs]
       - [0x80C40, asm, pirawread]
       # - [0x80C40, lib, libgultra_rom, pirawread]
       - [0x80CE0, asm] # pirawdma?
@@ -649,7 +649,7 @@ segments:
       - [0x9DC40, lib, libgultra_rom, timerintr, .data]
       - [0x9DC50, data]
       - [0x9DCB0, data]
-      - [0x9DCC0, data]
+      - [0x9DCC0, lib, libgultra_rom, siacs, .data]
       - [0x9DCD0, data]
       - [0x9DDD0, data, xprintf]
       # - [0x9DDD0, lib, libgultra_rom, xprintf, .data]
@@ -713,8 +713,9 @@ segments:
       - { type: lib, vram: 0x800A6530, name: libgultra_rom, object: sptask, section: .bss }
       - { type: lib, vram: 0x800A6570, name: libgultra_rom, object: motor, section: .bss }
       - { type: lib, vram: 0x800A6670, name: libgultra_rom, object: pimgr, section: .bss }
-      - { type: lib, vram: 0x800A7840, name: libgultra_rom, object: vimgr, section: .bss}
-      - { type: bss, vram: 0x800A8A60, name: A7840 }
+      - { type: lib, vram: 0x800A7840, name: libgultra_rom, object: vimgr, section: .bss }
+      - { type: lib, vram: 0x800A8A60, name: libgultra_rom, object: siacs, section: .bss }
+      - { type: bss, vram: 0x800A8A70, name: A7840 }
 
   - name: cool_new_section
     type: code
