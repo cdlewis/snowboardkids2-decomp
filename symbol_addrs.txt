@@ -405,15 +405,7 @@ jtbl_8009EA40 = 0x8009EA40;
 // Auto discovered symbols
 
 ChangeCustomEffect = 0x80075084;
-DriveRomHandle = 0x800A8AA0;
-DriveRomHandle_0 = 0x800A8AA4;
-DriveRomHandle_1 = 0x800A8AA5;
-DriveRomHandle_2 = 0x800A8AA6;
-DriveRomHandle_3 = 0x800A8AA7;
-DriveRomHandle_4 = 0x800A8AA8;
-DriveRomHandle_5 = 0x800A8AA9;
-DriveRomHandle_6 = 0x800A8AAC;
-DriveRomHandle_7 = 0x800A8AB0;
+DriveRomHandle = 0x800A8AA0; // type:OSPiHandle size:0x74
 MusFxBankNumberOfEffects = 0x8007F610;
 MusHandlePause = 0x80072E18;
 MusHandleUnPause = 0x80072E3C;
