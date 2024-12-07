@@ -219,7 +219,7 @@ segments:
       - [0x7B520, lib, libgultra_rom, synsetpan]
       - [0x7B5B0, lib, libgultra_rom, synallocfx]
       - [0x7B650, lib, libgultra_rom, aigetlen]
-      - [0x7B660, asm] # aisetnextbuf? missing text
+      - [0x7B660, lib, libgultra_rom, aisetnextbuf]
       - [0x7B700, lib, libgultra_rom, sptask]
       - [0x7B940, lib, libgultra_rom, sptaskyield]
       - [0x7B960, lib, libgultra_rom, sptaskyielded]
@@ -636,7 +636,7 @@ segments:
       - [0x9C8C0, data, env]
       # - [0x9C8C0, lib, libgultra_rom, env, .data]
       - [0x9C9E0, lib, libgultra_rom, sl, .data]
-      - [0x9C9F0, data]
+      - [0x9C9F0, lib, libgultra_rom, aisetnextbuf, .data]
       - [0x9CA00, lib, libgultra_rom, controller, .data]
       - [0x9CA10, data]
       - [0x9CA20, lib, libgultra_rom, pimgr, .data]
