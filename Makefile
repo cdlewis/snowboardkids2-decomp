@@ -89,7 +89,13 @@ clean:
 	rm -rf build
 	rm -f *auto.txt
 
-updatediff:
+clean-ultralib:
+	rm -r lib/ultralib/build
+
+diff-line:
+	@(diff --old-line-format='OLD: %L' --new-line-format='NEW: %L' <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
+
+diff-sxs:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(O_FILES)
