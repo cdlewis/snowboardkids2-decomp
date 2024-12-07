@@ -234,7 +234,7 @@ segments:
       - [0x7BF90, lib, libgultra_rom, conteeplongread]
       - [0x7C000, lib, libgultra_rom, epidma]
       - [0x7C0A0, lib, libgultra_rom, driverominit]
-      - [0x7C160, asm] # pidma?
+      - [0x7C160, lib, libgultra_rom, pidma]
       - [0x7C210, lib, libgultra_rom, bcopy]
       - [0x7C530, lib, libgultra_rom, bzero]
       - [0x7C5D0, lib, libgultra_rom, string]
