@@ -306,16 +306,15 @@ segments:
       - [0x82C50, asm] # epirawdma?
       - [0x82E40, asm] # epirawread? mismatch
       - [0x82FF0, lib, libgultra_rom, epirawwrite]
-      - [0x83160, asm] # pfschecker?
-      # - [0x83160, lib, libgultra_rom, pfschecker]
+      - [0x83160, lib, libgultra_rom, pfschecker]
       - [0x83880, lib, libgultra_rom, pfsgetstatus]
       - [0x83A90, lib, libgultra_rom, setcompare]
       - [0x83AA0, lib, libgultra_rom, resetglobalintmask]
       - [0x83AF0, lib, libgultra_rom, setglobalintmask]
       - [0x83B30, lib, libgultra_rom, yieldthread]
       - [0x83B80, lib, libgultra_rom, si]
-      # - [0x83BA0, asm, pfsisplug] # lots of additional text at top of function?
-      - [0x83BA0, lib, libgultra_rom, pfsisplug]
+      - [0x83BA0, asm, pfsisplug] # lots of additional text at top of function?
+      # - [0x83BA0, lib, libgultra_rom, pfsisplug]
       - [0x83E80, lib, libgultra_rom, bcmp]
       - [0x83F90, lib, libgultra_rom, xlitob]
       - [0x841E0, lib, libgultra_rom, xldtob]
