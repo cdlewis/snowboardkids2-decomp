@@ -314,8 +314,8 @@ segments:
       - [0x83AF0, lib, libgultra_rom, setglobalintmask]
       - [0x83B30, lib, libgultra_rom, yieldthread]
       - [0x83B80, lib, libgultra_rom, si]
-      - [0x83BA0, asm, pfsisplug]
-      # - [0x83BA0, lib, libgultra_rom, pfsisplug]
+      # - [0x83BA0, asm, pfsisplug] # lots of additional text at top of function?
+      - [0x83BA0, lib, libgultra_rom, pfsisplug]
       - [0x83E80, lib, libgultra_rom, bcmp]
       - [0x83F90, lib, libgultra_rom, xlitob]
       - [0x841E0, lib, libgultra_rom, xldtob]
