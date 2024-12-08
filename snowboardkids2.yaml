@@ -282,7 +282,7 @@ segments:
       - [0x807F0, lib, libgultra_rom, spsetstat]
       - [0x80800, lib, libgultra_rom, spsetpc]
       - [0x80830, lib, libgultra_rom, sprawdma]
-      - [0x80930, asm] # vi?
+      - [0x80930, lib, libgultra_rom, vi]
       - [0x80A40, lib, libgultra_rom, vigetcurrcontext]
       - [0x80A50, lib, libgultra_rom, sirawread]
       # - [0x80AE0, lib, libgultra_rom, sirawwrite]
@@ -643,8 +643,7 @@ segments:
       - [0x9DC20, data]
       - [0x9DC30, data]
       - [0x9DC40, lib, libgultra_rom, timerintr, .data]
-      - [0x9DC50, data]
-      - [0x9DCB0, data]
+      - [0x9DC50, lib, libgultra_rom, vi, .data]
       - [0x9DCC0, lib, libgultra_rom, siacs, .data]
       - [0x9DCD0, data]
       - [0x9DDD0, data, xprintf]

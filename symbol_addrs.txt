@@ -1,3 +1,8 @@
+osViModeMpalLan1 = 0x8009D170;
+osViModePalLan1 = 0x8009D120;
+
+vi = 0x8009D050;
+
 send_mesg = 0x8007EBBC;
 
 // probable player commands
