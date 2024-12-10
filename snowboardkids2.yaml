@@ -258,7 +258,7 @@ segments:
       - [0x7EDB0, lib, libgultra_rom, visetspecial]
       - [0x7EF20, lib, libgultra_rom, viswapcontext]
       - [0x7F230, lib, libgultra_rom, exceptasm]
-      - [0x7FBA0, asm, initialize] # doesn't match I or J
+      - [0x7FBA0, asm, initialize] # [hard] doesn't match I or J
       # - [0x7FBA0, lib, libgultra_rom, initialize]
       - [0x7FEB0, lib, libgultra_rom, sqrtf]
       - [0x7FEC0, lib, libgultra_rom, getcount]
@@ -693,7 +693,7 @@ segments:
       # - [0x9FBA0, lib, libgultra_rom, sirawwrite, .rodata]
       - [0x9FBA0, rodata, sirawwrite]
       # - [0x9FBB0, lib, libgultra_rom, pirawread, .rodata]
-      - [0x9FBB0, rodata, pirawread] # a row of extra 00s :/
+      - [0x9FBB0, rodata, pirawread] # [hard] expects 4 bytes of padding?
       - [0x9FBC0, rodata, devmgr]
       - [0x9FBE0, rodata]
       # - [0x9FBE8, lib, libgultra_rom, xprintf, .rodata]
