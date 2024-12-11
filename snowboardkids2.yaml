@@ -302,7 +302,7 @@ segments:
       # - [0x81CB0, lib, libgultra_rom, contpfs]
       - [0x82740, asm] # contramread?
       - [0x82940, asm] # contramwrite?
-      - [0x82B60, asm] # crc?
+      - [0x82B60, lib, libgultra_rom, crc]
       - [0x82C50, lib, libgultra_rom, epirawdma]
       - [0x82E40, asm, epirawread] # [hard] Not I or J
       # - [0x82E40, lib, libgultra_rom, epirawread]
