@@ -295,7 +295,7 @@ segments:
       - [0x80DB0, lib, libgultra_rom, pigetcmdq]
       - [0x80DD0, asm, devmgr] # [hard] rodata alignment
       # - [0x80DD0, lib, libgultra_rom, devmgr]
-      - [0x81190, asm] # piacs?
+      - [0x81190, lib, libgultra_rom, piacs]
       - [0x81280, asm, xprintf] # [hard] rodata alignment
       # - [0x81280, lib, libgultra_rom, xprintf]
       - [0x81CB0, lib, libgultra_rom, contpfs]
@@ -650,6 +650,7 @@ segments:
       - [0x9DC50, lib, libgultra_rom, vi, .data]
       - [0x9DCC0, lib, libgultra_rom, siacs, .data]
       - [0x9DCD0, data]
+      - [0x9DDC0, lib, libgultra_rom, piacs, .data]
       - [0x9DDD0, data, xprintf]
       # - [0x9DDD0, lib, libgultra_rom, xprintf, .data]
       - [0x9DE20, lib, libgultra_rom, contpfs, .data]
@@ -712,7 +713,8 @@ segments:
       - { type: lib, vram: 0x800A6670, name: libgultra_rom, object: pimgr, section: .bss }
       - { type: lib, vram: 0x800A7840, name: libgultra_rom, object: vimgr, section: .bss }
       - { type: lib, vram: 0x800A8A60, name: libgultra_rom, object: siacs, section: .bss }
-      - { type: bss, vram: 0x800A8A70, name: A7840 }
+      - { type: lib, vram: 0x800A8A70, name: libgultra_rom, object: piacs, section: .bss }
+      - { type: bss, vram: 0x800A8A80, name: A8A80 }
 
   - name: cool_new_section
     type: code
