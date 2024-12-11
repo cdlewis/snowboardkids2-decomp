@@ -298,10 +298,11 @@ segments:
       - [0x81190, asm] # piacs?
       - [0x81280, asm, xprintf] # [hard] rodata alignment
       # - [0x81280, lib, libgultra_rom, xprintf]
-      - [0x81CB0, asm] # contpfs?
-      # - [0x81CB0, lib, libgultra_rom, contpfs]
-      - [0x82740, asm] # contramread?
-      - [0x82940, asm] # contramwrite?
+      - [0x81CB0, lib, libgultra_rom, contpfs]
+      - [0x82740, asm, contramread]
+      # - [0x82740, lib, libgultra_rom, contramread]
+      - [0x82940, asm, contramwrite]
+      # - [0x82940, lib, libgultra_rom, contramwrite]
       - [0x82B60, lib, libgultra_rom, crc]
       - [0x82C50, lib, libgultra_rom, epirawdma]
       - [0x82E40, asm, epirawread] # [hard] Not I or J
@@ -651,9 +652,9 @@ segments:
       - [0x9DCD0, data]
       - [0x9DDD0, data, xprintf]
       # - [0x9DDD0, lib, libgultra_rom, xprintf, .data]
-      - [0x9DE20, data]
-      # - [0x9DE20, lib, libgultra_rom, contpfs, .data]
-      - [0x9DE30, data]
+      - [0x9DE20, lib, libgultra_rom, contpfs, .data]
+      - [0x9DE30, data, contramread]
+      # - [0x9DE30, lib, libgultra_rom, contramread, .data]
       - [0x9DE40, lib, libgultra_rom, xlitob, .data]
       - [0x9DE70, rodata]
       - [0x9E8E0, rodata, 4050]
