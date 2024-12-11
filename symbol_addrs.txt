@@ -1,3 +1,6 @@
+__osPiGetAccess = 0x800805E4;
+__osPiRelAccess = 0x80080650;
+
 D_8009EFC0_9FBC0 = 0x8009EFC0; // type:u8 size:0x4
 
 spaces = 0x8009D1D0;
