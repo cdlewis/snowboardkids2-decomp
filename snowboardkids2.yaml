@@ -299,9 +299,9 @@ segments:
       - [0x81280, asm, xprintf] # [hard] rodata alignment
       # - [0x81280, lib, libgultra_rom, xprintf]
       - [0x81CB0, lib, libgultra_rom, contpfs]
-      - [0x82740, asm, contramread]
+      - [0x82740, asm, contramread] # [hard] mismatch
       # - [0x82740, lib, libgultra_rom, contramread]
-      - [0x82940, asm, contramwrite]
+      - [0x82940, asm, contramwrite] # [hard] mismatch
       # - [0x82940, lib, libgultra_rom, contramwrite]
       - [0x82B60, lib, libgultra_rom, crc]
       - [0x82C50, lib, libgultra_rom, epirawdma]
