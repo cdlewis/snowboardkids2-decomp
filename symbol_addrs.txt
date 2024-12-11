@@ -1,3 +1,5 @@
+__osPfsLastChannel = 0x8009D230;
+
 __osPiGetAccess = 0x800805E4;
 __osPiRelAccess = 0x80080650;
 
