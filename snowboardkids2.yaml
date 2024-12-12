@@ -6,7 +6,7 @@ options:
   elf_path: build/snowboardkids2.elf
   base_path: .
   platform: n64
-  compiler: GCC
+  compiler: KMC
 
   create_asm_dependencies: True
 
@@ -18,7 +18,7 @@ options:
 
   o_as_suffix: True
   use_legacy_include_asm: False
-  symbol_name_format: $VRAM_$ROM
+  mips_abi_float_regs: o32
 
   asm_function_macro: glabel
   asm_jtbl_label_macro: jlabel
@@ -39,10 +39,9 @@ options:
   extensions_path: tools/splat_ext
   lib_path: build/lib
 
-  # guessing
+  symbol_name_format: $VRAM_$ROM
   migrate_rodata_to_functions: yes
   gfx_ucode: f3dex
-  mips_abi_float_regs: o32
 
   string_encoding: ASCII
   data_string_encoding: ASCII
