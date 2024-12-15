@@ -64,6 +64,11 @@ ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
 LIBULTRA = lib/ultralib/build/J/libgultra_rom/libgultra_rom.a
 
+# Dependencies
+
+tools/cli:
+	$(MAKE) -C tools/cli
+
 # Targets
 
 default: all
@@ -145,6 +150,12 @@ $(TARGET).bin: $(TARGET).elf
 
 $(TARGET).z64: $(TARGET).bin
 	@cp $< $@
+
+progress: tools/cli
+	tools/cli/progress/progress snowboardkids2.yaml
+
+format-symbols: tools/cli
+	tools/cli/formatsymbols/formatsymbols snowboardkids2.yaml symbol_addrs.txt > symbol_addrs.txt
 
 ### Settings
 .SECONDARY:
