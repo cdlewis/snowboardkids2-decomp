@@ -64,6 +64,11 @@ ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
 LIBULTRA = lib/ultralib/build/J/libgultra_rom/libgultra_rom.a
 
+# Dependencies
+
+$(COMPILER_DIR):
+	VERSION=2.7.2 $(MAKE) -C tools/old-gcc
+
 # Targets
 
 default: all
