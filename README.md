@@ -8,20 +8,15 @@ A (very much) work-in-progress matching decompilation of the greatest N64 game e
 
 ## Dependencies
 
-System packages (list is incomplete):
+This project has been tested on Ubuntu (x86). Your milege may vary on other systems.
 
-* make
-* git
-* docker
-* python3
-* pip3
+System packages:
 
-Build GCC 2.7.2:
-
-```bash
-cd tools/old-gcc
-VERSION=2.7.2 make
-```
+- make
+- git
+- docker
+- python3
+- pip3
 
 Build Python dependencies:
 
