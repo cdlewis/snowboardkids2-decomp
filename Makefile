@@ -155,7 +155,7 @@ progress: tools/cli
 	tools/cli/progress/progress snowboardkids2.yaml
 
 format-symbols: tools/cli
-	tools/cli/formatsymbols/formatsymbols snowboardkids2.yaml symbol_addrs.txt > symbol_addrs.txt
+	tools/cli/formatsymbols/formatsymbols snowboardkids2.yaml symbol_addrs.txt
 
 ### Settings
 .SECONDARY:

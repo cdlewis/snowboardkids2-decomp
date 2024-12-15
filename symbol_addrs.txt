@@ -1,0 +1,1339 @@
+__dummy = 0x7FFFFD04;
+osTvType = 0x80000300;
+osRomBase = 0x80000308; // defined:true
+osAppNmiBuffer = 0x8000031C;
+osVoiceCheckWord = 0x80000458;
+__rmonPanic = 0x80000AD8;
+rmonmisc_text_010C = 0x80000B88;
+
+// main 
+
+__osGetActiveQueue = 0x80001560;
+
+// 0x20F0 
+
+__udiv_w_sdiv = 0x80003464;
+
+// 0xB040 
+
+n_alSeqpDelete = 0x8000C590;
+
+// 0x17F50 
+
+abs = 0x800187E4;
+
+// 0x6E840 
+
+osViExtendVStart = 0x8006F4F8;
+n_alSynRemovePlayer = 0x8006FF00;
+
+// 0x70DB0 
+
+Fstop = 0x80071620;
+Fwave = 0x80071640;
+Fport = 0x80071670;
+Fportoff = 0x80071690;
+Fdefa = 0x8007169C;
+Ftempo = 0x800717C4;
+Fendit = 0x800718A8;
+Fcutoff = 0x800718BC;
+Fvibup = 0x800718E0;
+Fvibdown = 0x80071950;
+Fviboff = 0x800719C4;
+Flength = 0x800719D4;
+Fignore = 0x80071A14;
+Ftrans = 0x80071A24;
+Fignore_trans = 0x80071A34;
+Fdistort = 0x80071A44;
+Fenvelope = 0x80071A9C;
+Fenvon = 0x80071AFC;
+Fenvoff = 0x80071B0C;
+Ftron = 0x80071B18;
+Ftroff = 0x80071B28;
+Ffor = 0x80071B34;
+Fnext = 0x80071BE8;
+
+// 0x717D0 
+
+unknown_libmus_71C94 = 0x80071C94;
+unknown_libmus_71CBC = 0x80071CBC;
+Fwobble = 0x80071CC8; // Things are a lil sketchy around here
+Fwobbleoff = 0x80071CD8;
+Fvelon = 0x80071CE4;
+Fveloff = 0x80071CF8;
+Fstereo = 0x80071D0C;
+Fdrums = 0x80071D14;
+Fdrumsoff = 0x80071D3C;
+Fprint = 0x80071D48;
+Fgoto = 0x80071D50;
+Freverb = 0x80071DC0;
+FrandNote = 0x80071DD0;
+FrandVolume = 0x80071E20;
+FrandPan = 0x80071E70;
+Fvolume = 0x80071EC0;
+Fstartfx = 0x80071ED0;
+Fbendrange = 0x80071FA0;
+Fsweep = 0x80071FDC;
+Fchangefx = 0x80071FEC;
+MusSetMasterVolume = 0x8007239C;
+
+// player_commands 
+
+MusHandlePause = 0x80072E18;
+MusHandleUnPause = 0x80072E3C;
+MusSetFxType = 0x80072E64;
+player_text_1AE0 = 0x80073058;
+
+// 0x72C30 
+
+CustomInit = 0x80074800;
+CustomSynNew = 0x80074850; // probably libmus
+synthesizer_text_0160 = 0x800749B0;
+CustomAllocFX = 0x80074B1C;
+CustomFxNew = 0x80074BB8;
+CustomFxSet = 0x80074D04;
+SetForCustom = 0x80074FE4;
+GetFxMostSections = 0x80074FFC;
+GetFxLongest = 0x80075040;
+ChangeCustomEffect = 0x80075084;
+__cosf = 0x800750E0;
+cosf_text_0148 = 0x80075228;
+coss = 0x80075230;
+guLookAtReflectF = 0x80075260;
+lookatref_text_02C4 = 0x80075524;
+lookatref_text_0308 = 0x80075568;
+lookatref_text_034C = 0x800755AC;
+lookatref_text_0390 = 0x800755F0;
+lookatref_text_03D4 = 0x80075634;
+lookatref_text_0420 = 0x80075680;
+guLookAtReflect = 0x800757D8;
+
+// player_fx 
+
+guMtxF2L = 0x80075850;
+guMtxL2F = 0x800758E8;
+guMtxIdentF = 0x80075990;
+guMtxIdent = 0x800759E0;
+guPerspectiveF = 0x80075AD0;
+perspective_text_0170 = 0x80075C40;
+guPerspective = 0x80075C80;
+perspective_text_0328 = 0x80075DF8;
+sinf = 0x80075E50;
+sinf_text_00D8 = 0x80075F28;
+sinf_text_0198 = 0x80075FE8;
+sins = 0x80075FF0;
+sins_text_0024 = 0x80076014;
+sins_text_004C = 0x8007603C;
+osInvalDCache = 0x80076050;
+osInvalICache = 0x80076100; // guessing from assembly
+
+// cosf 
+
+osSetIntMask = 0x800761E0;
+
+// coss 
+
+osWritebackDCacheAll = 0x80076280;
+
+// lookatref 
+
+osCreateMesgQueue = 0x800762B0;
+osCreateThread = 0x800762E0;
+osRecvMesg = 0x800763B0;
+recvmesg_text_0104 = 0x800764B4;
+osSendMesg = 0x800764E0;
+sendmesg_text_010C = 0x800765EC;
+osSetEventMesg = 0x80076610;
+osSetThreadPri = 0x80076670;
+osStartThread = 0x80076740;
+startthread_text_00A4 = 0x800767E4;
+startthread_text_00F8 = 0x80076838;
+__osDequeueThread = 0x80076860;
+thread_text_002C = 0x8007688C;
+
+// mtxutil 
+
+osVirtualToPhysical = 0x800768A0;
+virtualtophysical_text_0048 = 0x800768E8;
+_init_lpfilter = 0x80076900;
+alFxNew = 0x800769A4;
+drvrnew_text_017C = 0x80076A7C;
+
+// perspective 
+
+drvrnew_text_03DC = 0x80076CDC;
+drvrnew_text_04F4 = 0x80076DF4;
+alEnvmixerNew = 0x80076E3C;
+
+// sinf 
+
+alLoadNew = 0x80076EF4;
+alResampleNew = 0x80076FA4;
+alAuxBusNew = 0x80077030;
+
+// sins 
+
+alMainBusNew = 0x8007708C;
+
+// invaldcache 
+
+alSaveNew = 0x800770E8;
+alAdpcmPull = 0x80077130;
+
+// invalicache_padding 
+
+load_text_00CC = 0x800771FC;
+
+// setintmask 
+
+load_text_0134 = 0x80077264;
+
+// recvmesg 
+
+load_text_0370 = 0x800774A0;
+load_text_03BC = 0x800774EC;
+load_text_03E0 = 0x80077510;
+
+// sendmesg 
+
+load_text_0414 = 0x80077544;
+load_text_0444 = 0x80077574;
+load_text_0514 = 0x80077644;
+
+// setthreadpri 
+
+load_text_05D4 = 0x80077704;
+
+// startthread 
+
+load_text_0748 = 0x80077878;
+
+// thread 
+
+load_text_07B8 = 0x800778E8;
+
+// virtualtophysical 
+
+alLoadParam = 0x80077910;
+
+// drvrnew 
+
+load_text_0978 = 0x80077AA8;
+load_text_0980 = 0x80077AB0;
+load_text_098C = 0x80077ABC;
+load_text_0A40 = 0x80077B70;
+alAuxBusPull = 0x80077C40;
+alAuxBusParam = 0x80077D1C;
+alEnvmixerPull = 0x80077D50;
+env_text_01F4 = 0x80077F44;
+env_text_030C = 0x8007805C;
+
+// load 
+
+env_text_043C = 0x8007818C;
+env_text_04A8 = 0x800781F8;
+alEnvmixerParam = 0x8007829C;
+env_text_05AC = 0x80078348;
+env_text_05BC = 0x80078358;
+env_text_05C4 = 0x80078360;
+env_text_0620 = 0x80078370;
+env_text_08C8 = 0x80078618;
+env_text_08FC = 0x8007864C;
+_frexpf = 0x80078670;
+env_text_0980 = 0x80078748;
+_ldexpf = 0x80078750;
+env_text_0A24 = 0x80078774;
+env_text_0C24 = 0x800789EC;
+env_text_0CA4 = 0x800789F4;
+env_text_0CA8 = 0x80078A70;
+alFilterNew = 0x80078A80;
+alMainBusPull = 0x80078AA0;
+alMainBusParam = 0x80078BE0;
+alResamplePull = 0x80078C10;
+
+// env 
+
+resample_text_01C8 = 0x80078DD8;
+alResampleParam = 0x80078DFC;
+resample_text_0294 = 0x80078EA4;
+resample_text_029C = 0x80078EAC;
+alFxPull = 0x80078EC0;
+reverb_text_019C = 0x8007905C;
+alFxParam = 0x80079270;
+alFxParamHdl = 0x80079284;
+reverb_text_0568 = 0x80079464;
+reverb_text_05B4 = 0x80079474;
+reverb_text_075C = 0x80079658;
+reverb_text_07CC = 0x8007968C;
+reverb_text_08A8 = 0x800797A4;
+reverb_text_093C = 0x800797FC;
+reverb_text_0A3C = 0x80079938;
+reverb_text_0AAC = 0x8007996C;
+_doModFunc = 0x80079A08;
+alSavePull = 0x80079AA0;
+
+// mainbus 
+
+alSaveParam = 0x80079BA0;
+save_text_00C8 = 0x80079BC0;
+alInit = 0x80079BD0;
+alClose = 0x80079BFC;
+alLink = 0x80079C2C;
+alUnlink = 0x80079C4C;
+
+// resample 
+
+alHeapInit = 0x80079C80;
+heapinit_text_0020 = 0x80079CA0;
+alHeapDBAlloc = 0x80079CC0;
+alCopy = 0x80079D10;
+alSynNew = 0x80079D50;
+
+// reverb 
+
+alAudioFrame = 0x8007A01C;
+synthesizer_text_0448 = 0x8007A198;
+__allocParam = 0x8007A1CC;
+__freeParam = 0x8007A1F8;
+synthesizer_text_04C0 = 0x8007A210;
+_freePVoice = 0x8007A264;
+synthesizer_text_0554 = 0x8007A2A4;
+_timeToSamples = 0x8007A2EC;
+synthesizer_text_05E8 = 0x8007A338;
+alSynDelete = 0x8007A3E0;
+alSynAddPlayer = 0x8007A3F0;
+alSynAllocVoice = 0x8007A440;
+synallocvoice_text_00FC = 0x8007A53C;
+_allocatePVoice = 0x8007A568;
+synallocvoice_text_01C8 = 0x8007A608;
+alSynStopVoice = 0x8007A620;
+alSynStartVoice = 0x8007A6A0;
+alSynSetPitch = 0x8007A740;
+alSynSetVol = 0x8007A7D0;
+alSynSetFXMix = 0x8007A890;
+alSynSetPan = 0x8007A920;
+alSynAllocFX = 0x8007A9B0;
+osAiGetLength = 0x8007AA50;
+osAiSetNextBuffer = 0x8007AA60;
+aisetnextbuf_text_004C = 0x8007AAAC;
+
+// save 
+
+osSpTaskLoad = 0x8007AB00;
+
+// heapinit 
+
+osSpTaskStartGo = 0x8007AD0C;
+
+// heapalloc 
+
+osSpTaskYield = 0x8007AD40;
+
+// copy 
+
+osSpTaskYielded = 0x8007AD60;
+
+// synthesizer 
+
+osViGetCurrentFramebuffer = 0x8007ADB0;
+osViGetNextFramebuffer = 0x8007ADF0; // guess
+osViSetEvent = 0x8007AE30;
+osViSetMode = 0x8007AE90;
+osViSwapBuffer = 0x8007AEE0;
+osViBlack = 0x8007AF30;
+viblack_text_0044 = 0x8007AF74;
+osContInit = 0x8007AF90;
+controller_text_0174 = 0x8007B104;
+__osContGetInitData = 0x8007B12C;
+controller_text_0250 = 0x8007B1E0;
+osEepromLongWrite = 0x8007B2A0;
+osEepromLongRead = 0x8007B390;
+osEPiStartDma = 0x8007B400;
+
+// syndelete 
+
+epidma_text_0038 = 0x8007B438;
+
+// synaddplayer 
+
+epidma_text_0084 = 0x8007B484;
+
+// synallocvoice 
+
+osDriveRomInit = 0x8007B4A0;
+osPiStartDma = 0x8007B560;
+pidma_text_0098 = 0x8007B5F8;
+bcopy = 0x8007B610;
+
+// synsetfxmix 
+
+bzero = 0x8007B930;
+
+// synsetpan 
+
+strchr = 0x8007B9D0;
+
+// synallocfx 
+
+string_text_0030 = 0x8007BA00;
+strlen = 0x8007BA08;
+memcpy = 0x8007BA2C;
+sprintf = 0x8007BA60;
+
+// aisetnextbuf 
+
+sprintf_text_0058 = 0x8007BAB8;
+osAiSetFrequency = 0x8007BAF0;
+
+// sptask 
+
+aisetfreq_text_008C = 0x8007BB7C;
+
+// vigetnextframebuf 
+
+osEepromProbe = 0x8007BE40;
+
+// visetevent 
+
+conteepprobe_text_0058 = 0x8007BE98;
+osEepromRead = 0x8007BEC0;
+
+// viswapbuf 
+
+conteepread_text_0080 = 0x8007BF40;
+
+// controller 
+
+conteepread_text_016C = 0x8007C02C;
+__osPackEepReadData = 0x8007C058;
+osEepromWrite = 0x8007C0E0;
+conteepwrite_text_0080 = 0x8007C160;
+conteepwrite_text_013C = 0x8007C21C;
+__osPackEepWriteData = 0x8007C248;
+
+// conteeplongwrite 
+
+__osEepStatus = 0x8007C2F0;
+
+// epidma 
+
+osContStartReadData = 0x8007C490;
+
+// driverominit 
+
+osContGetReadData = 0x8007C518;
+
+// pidma 
+
+contreaddata_text_0124 = 0x8007C5B4;
+
+// bcopy 
+
+__osMotorAccess = 0x8007C670;
+motor_text_011C = 0x8007C78C;
+motor_text_0128 = 0x8007C798;
+osMotorInit = 0x8007C7B4;
+
+// bzero 
+
+motor_text_0334 = 0x8007C9A4;
+motor_text_0370 = 0x8007C9E0;
+osPfsAllocateFile = 0x8007CA00;
+
+// 0x7C810 
+
+pfsallocatefile_text_02DC = 0x8007CCDC;
+pfsallocatefile_text_030C = 0x8007CD0C;
+pfsallocatefile_text_041C = 0x8007CE1C;
+osPfsDeleteFile = 0x8007CE30;
+
+// conteepread 
+
+pfsdeletefile_text_0188 = 0x8007CFB8;
+pfsdeletefile_text_01AC = 0x8007CFDC;
+
+// conteepwrite 
+
+osPfsFreeBlocks = 0x8007D1E0;
+pfsfreeblocks_text_00E8 = 0x8007D2C8;
+
+// motor 
+
+osPfsFindFile = 0x8007DA20;
+
+// pfsallocatefile 
+
+__osPfsSelectBank = 0x8007DBC0;
+osCreatePiManager = 0x8007DC30;
+__osSiRawStartDma = 0x8007DDC0;
+sirawdma_text_006C = 0x8007DE2C;
+sirawdma_text_0090 = 0x8007DE50;
+osCreateViManager = 0x8007DE70;
+
+// pfsdeletefile 
+
+vimgr_text_01A0 = 0x8007E010;
+vimgr_text_01EC = 0x8007E064;
+
+// 0x7DC50 
+
+osViSetSpecialFeatures = 0x8007E1B0;
+
+// pfsfreeblocks 
+
+__osViSwapContext = 0x8007E320;
+
+// 0x7DEF0 
+
+viswapcontext_text_0088 = 0x8007E3A8;
+viswapcontext_text_011C = 0x8007E43C;
+viswapcontext_text_0150 = 0x8007E470;
+
+// 0x7E1E0 
+
+__osExceptionPreamble = 0x8007E630;
+__osException = 0x8007E640;
+
+// pfssearchfile 
+
+send_mesg = 0x8007EBBC;
+
+// pfsselectbank 
+
+handle_CpU = 0x8007EC78;
+
+// pimgr 
+
+__osEnqueueAndYield = 0x8007ECAC;
+__osEnqueueThread = 0x8007EDB4;
+__osPopThread = 0x8007EDFC;
+__osDispatchThread = 0x8007EE0C;
+
+// vimgr 
+
+__osCleanupThread = 0x8007EF88;
+osInitialize = 0x8007EFA0;
+createSpeedParam = 0x8007F1F0;
+
+// visetspecial 
+
+sqrtf = 0x8007F2B0;
+osGetCount = 0x8007F2C0;
+__osGetSR = 0x8007F2D0;
+__osDisableInt = 0x8007F2E0;
+__osRestoreInt = 0x8007F300;
+__osProbeTLB = 0x8007F320;
+
+// viswapcontext 
+
+__osSetFpcCsr = 0x8007F3E0;
+__osSetSR = 0x8007F3F0;
+osUnmapTLBAll = 0x8007F400;
+osWritebackDCache = 0x8007F450;
+osMapTLBRdb = 0x8007F4D0;
+osDestroyThread = 0x8007F530;
+destroythread_text_0048 = 0x8007F578;
+destroythread_text_0098 = 0x8007F5C8;
+osGetThreadPri = 0x8007F600;
+MusFxBankNumberOfEffects = 0x8007F610;
+osGetTime = 0x8007F620;
+
+// exceptasm 
+
+osJamMesg = 0x8007F6B0;
+jammesg_text_0110 = 0x8007F7C0;
+osSetTimer = 0x8007F7F0;
+__osTimerServicesInit = 0x8007F890;
+__osTimerInterrupt = 0x8007F8E4;
+timerintr_text_0074 = 0x8007F904;
+timerintr_text_0180 = 0x8007FA10;
+__osSetTimerIntr = 0x8007FA20;
+__osInsertTimer = 0x8007FA80;
+timerintr_text_0300 = 0x8007FAE8;
+__assert = 0x8007FB90;
+__osAiDeviceBusy = 0x8007FBA0;
+__osSpDeviceBusy = 0x8007FBC0;
+__osSpGetStatus = 0x8007FBE0;
+__osSpSetStatus = 0x8007FBF0;
+__osSpSetPc = 0x8007FC00;
+spsetpc_text_0028 = 0x8007FC28;
+__osSpRawStartDma = 0x8007FC30;
+sprawdma_text_00D0 = 0x8007FD00;
+__osViInit = 0x8007FD30;
+vi_text_0094 = 0x8007FDC4;
+__osViGetCurrentContext = 0x8007FE40;
+__osSiRawReadIo = 0x8007FE50;
+__osSiRawWriteIo = 0x8007FEE0;
+__osSiCreateAccessQueue = 0x8007FF50;
+__osSiGetAccess = 0x8007FFA4;
+
+// initialize 
+
+__osSiRelAccess = 0x80080010;
+__osPiRawReadIo = 0x80080040;
+__osPiRawStartDma = 0x800800E0;
+pirawdma_text_00AC = 0x8008018C;
+pirawdma_text_00B8 = 0x80080198;
+osPiGetCmdQueue = 0x800801B0;
+MusPtrBankGetCurrent = 0x800801C0;
+__osDevMgrMain = 0x800801D0;
+devmgr_text_0030 = 0x80080200;
+
+// maptlbrdb 
+
+devmgr_text_0358 = 0x80080528;
+
+// destroythread 
+
+__osPiCreateAccessQueue = 0x80080590;
+__osPiGetAccess = 0x800805E4;
+
+// getthreadpri 
+
+__osPiRelAccess = 0x80080650;
+
+// gettime 
+
+_Printf = 0x80080680;
+xprintf_text_003C = 0x800806BC;
+xprintf_text_004C = 0x800806CC;
+
+// jammesg 
+
+xprintf_text_00A8 = 0x80080728;
+xprintf_text_0180 = 0x80080800;
+
+// settimer 
+
+xprintf_text_0228 = 0x800808A8;
+xprintf_text_0250 = 0x800808D0;
+
+// ai 
+
+xprintf_text_0570 = 0x80080BF0;
+
+// sprawdma 
+
+xprintf_text_0658 = 0x80080CD8;
+xprintf_text_06F4 = 0x80080D74;
+
+// vi 
+
+xprintf_text_0758 = 0x80080DD8;
+xprintf_text_0788 = 0x80080E08;
+xprintf_text_07EC = 0x80080E6C;
+
+// sirawread 
+
+xprintf_text_0898 = 0x80080F18;
+
+// pirawread 
+
+xprintf_text_0A1C = 0x8008109C;
+__osSumcalc = 0x800810B0;
+__osIdCheckSum = 0x800810E4;
+__osRepairPackId = 0x80081128;
+
+// devmgr 
+
+__osCheckPackId = 0x80081414;
+contpfs_text_04A4 = 0x80081554;
+__osGetId = 0x80081578;
+
+// xprintf 
+
+contpfs_text_0680 = 0x80081730;
+__osCheckId = 0x80081744;
+__osPfsRWInode = 0x800817FC;
+contpfs_text_08E0 = 0x80081990;
+contpfs_text_0A54 = 0x80081B04;
+__osContRamRead = 0x80081B40;
+__osContRamWrite = 0x80081D40;
+__osContAddressCrc = 0x80081F60;
+crc_text_0038 = 0x80081F98;
+__osContDataCrc = 0x80081FCC;
+crc_text_00A8 = 0x80082008;
+__osEPiRawStartDma = 0x80082050;
+
+// contpfs 
+
+epirawdma_text_0140 = 0x80082190;
+epirawdma_text_01C4 = 0x80082214;
+epirawdma_text_01D0 = 0x80082220;
+__osEPiRawReadIo = 0x80082240;
+__osEPiRawWriteIo = 0x800823F0;
+epirawwrite_text_011C = 0x8008250C;
+osPfsChecker = 0x80082560;
+pfschecker_text_0190 = 0x800826F0;
+pfschecker_text_01B0 = 0x80082710;
+pfschecker_text_0428 = 0x80082988;
+pfschecker_text_0430 = 0x80082990;
+corrupted_init = 0x800829C0;
+corrupted = 0x80082B18;
+
+// contramread 
+
+__osPfsGetStatus = 0x80082C80;
+pfsgetstatus_text_00D4 = 0x80082D54;
+pfsgetstatus_text_00F0 = 0x80082D70;
+
+// contramwrite 
+
+__osPfsGetOneChannelData = 0x80082E04;
+__osSetCompare = 0x80082E90;
+__osResetGlobalIntMask = 0x80082EA0;
+__osSetGlobalIntMask = 0x80082EF0;
+osYieldThread = 0x80082F30;
+__osSiDeviceBusy = 0x80082F80;
+osPfsIsPlug = 0x80082FA0;
+
+// crc 
+
+pfsisplug_text_00D8 = 0x80083078;
+
+// epirawdma 
+
+pfsisplug_text_017C = 0x8008311C;
+pfsisplug_text_0240 = 0x800831C0;
+bcmp = 0x80083280;
+
+// epirawread 
+
+_Litob = 0x80083390;
+xlitob_text_0074 = 0x80083404;
+
+// epirawwrite 
+
+xlitob_text_0124 = 0x800834B4;
+
+// pfschecker 
+
+_Ldtob = 0x800835E0;
+xldtob_text_0074 = 0x80083654;
+xldtob_text_01D4 = 0x800837B4;
+xldtob_text_0220 = 0x80083800;
+xldtob_text_02B4 = 0x80083894;
+xldtob_text_0344 = 0x80083924;
+xldtob_text_03F0 = 0x800839D0;
+xldtob_text_0410 = 0x800839F0;
+xldtob_text_0440 = 0x80083A20;
+xldtob_text_04DC = 0x80083AB0;
+xldtob_text_04D8 = 0x80083AB8;
+
+// setcompare 
+
+xldtob_text_0900 = 0x80083EE0;
+
+// si 
+
+xldtob_text_0A08 = 0x80083FE8;
+
+// pfsisplug 
+
+ldiv = 0x80084060;
+lldiv = 0x800840E4;
+__muldi3 = 0x80084224;
+div64_64 = 0x80084258;
+
+// bcmp 
+
+div64_32 = 0x80084354;
+
+// xlitob 
+
+__divdi3 = 0x80084420;
+__udivdi3 = 0x80084590;
+__umoddi3 = 0x800845B0;
+rspboot = 0x800845F0; // name_end:rspbootTextEnd
+
+// xldtob 
+
+aspmain = 0x800846C0;
+
+// 0x851F0 
+
+D_80088650 = 0x80088650;
+D_80088660 = 0x80088660;
+
+// 0x88D30 
+
+D_80089510 = 0x80089510;
+D_80089520 = 0x80089520;
+
+// 0x8A1A0 
+
+__osActiveQueue_0 = 0x8008BD28;
+
+// 0x8D8F0 
+
+D_8008DD4E_8E94E = 0x8008DD4E; // type:s16 size:0x2
+
+// 0x9AAA0 
+
+__additional_scanline_0 = 0x8009AFD4;
+
+// 0x9ABA0 
+
+player_commands_jumptable = 0x8009B050;
+
+// 0x9ACA0 
+
+SmallRoomParams = 0x8009B100;
+BigRoomParams = 0x8009B168;
+
+// 0x9ADA0 
+
+EchoParams = 0x8009B1F0;
+ChorusParams = 0x8009B218;
+FlangeParams = 0x8009B2A0;
+NoFxParams = 0x8009B2C8;
+
+// 0x9AEA0 
+
+EffectCount = 0x8009B2F0;
+EffectList = 0x8009B2F4;
+sintable = 0x8009B310;
+
+// 0x9B4D0 
+
+__osThreadTail = 0x8009BB10;
+__osRunQueue = 0x8009BB18;
+__osActiveQueue = 0x8009BB1C;
+__osRunningThread = 0x8009BB20;
+__osFaultedThread = 0x8009BB24;
+drvrnew_data_0168 = 0x8009BC98;
+eqpower = 0x8009BCC0; // type:s16
+alGlobals = 0x8009BDE0;
+aisetnextbuf_data_0000 = 0x8009BDF0;
+controller_data_0000 = 0x8009BE00;
+pimgr_data_0000 = 0x8009BE20;
+pimgr_data_0004 = 0x8009BE24;
+player_bss_003C = 0x8009BE28;
+pimgr_data_000C = 0x8009BE2C;
+pimgr_data_0010 = 0x8009BE30;
+pimgr_data_0014 = 0x8009BE34;
+pimgr_data_0018 = 0x8009BE38;
+__osPiTable = 0x8009BE3C;
+
+// 0x9B9F0 
+
+__osCurrentHandle = 0x8009BE40;
+vimgr_data_0000 = 0x8009BE50;
+vimgr_data_0004 = 0x8009BE54;
+vimgr_data_0008 = 0x8009BE58;
+vimgr_data_000C = 0x8009BE5C;
+vimgr_data_0010 = 0x8009BE60;
+vimgr_data_0014 = 0x8009BE64;
+vimgr_data_0018 = 0x8009BE68;
+__additional_scanline = 0x8009BE6C;
+
+// 0x9CA70 
+
+__osHwIntTable = 0x8009CFF0;
+__osPiIntTable = 0x8009D018;
+osClockRate = 0x8009D024;
+osViClock = 0x8009D028;
+__osShutdown = 0x8009D02C;
+__OSGlobalIntMask = 0x8009D030;
+__osTimerList = 0x8009D040;
+vi = 0x8009D050;
+__osViCurr = 0x8009D0B0;
+__osViNext = 0x8009D0B4;
+__osSiAccessQueueEnabled = 0x8009D0C0;
+osViModeNtscLan1 = 0x8009D0D0;
+osViModePalLan1 = 0x8009D120;
+osViModeMpalLan1 = 0x8009D170;
+__osPiAccessQueueEnabled = 0x8009D1C0;
+spaces = 0x8009D1D0;
+zeroes = 0x8009D1F4;
+contpfs_data_0000 = 0x8009D220;
+__osPfsInodeCacheBank = 0x8009D224;
+__osPfsLastChannel = 0x8009D230;
+xlitob_data_0000 = 0x8009D240;
+xlitob_data_0014 = 0x8009D254;
+jtbl_8009DCE0 = 0x8009DCE0;
+jtbl_8009DD10 = 0x8009DD10;
+jtbl_8009DD38 = 0x8009DD38;
+jtbl_8009DD50 = 0x8009DD50;
+jtbl_8009DD70 = 0x8009DD70;
+jtbl_8009DD88 = 0x8009DD88;
+jtbl_8009DDA8 = 0x8009DDA8;
+jtbl_8009DDC0 = 0x8009DDC0;
+jtbl_8009DDE0 = 0x8009DDE0;
+jtbl_8009DE70 = 0x8009DE70;
+jtbl_8009DE90 = 0x8009DE90;
+jtbl_8009DF38 = 0x8009DF38;
+jtbl_8009DF78 = 0x8009DF78;
+jtbl_8009DF90 = 0x8009DF90;
+jtbl_8009DFA8 = 0x8009DFA8;
+jtbl_8009DFC0 = 0x8009DFC0;
+jtbl_8009DFE8 = 0x8009DFE8;
+
+// exceptasm(.data) 
+
+jtbl_8009E060 = 0x8009E060;
+
+// timerintr(.data) 
+
+jtbl_8009E090 = 0x8009E090;
+
+// vi(.data) 
+
+jtbl_8009E0E0 = 0x8009E0E0;
+
+// 0x9DCD0 
+
+jtbl_8009E1D8 = 0x8009E1D8;
+jtbl_8009E208 = 0x8009E208;
+
+// xlitob(.data) 
+
+jtbl_8009E290 = 0x8009E290;
+jtbl_8009E2A8 = 0x8009E2A8;
+
+// 0x9DE70 
+
+jtbl_8009E410 = 0x8009E410;
+jtbl_8009E428 = 0x8009E428;
+jtbl_8009E490 = 0x8009E490;
+jtbl_8009E4B0 = 0x8009E4B0;
+jtbl_8009E4C8 = 0x8009E4C8;
+jtbl_8009E5E8 = 0x8009E5E8;
+jtbl_8009E708 = 0x8009E708;
+jtbl_8009E740 = 0x8009E740;
+jtbl_8009E770 = 0x8009E770;
+jtbl_8009E798 = 0x8009E798;
+jtbl_8009E7C0 = 0x8009E7C0;
+jtbl_8009E7E8 = 0x8009E7E8;
+jtbl_8009E828 = 0x8009E828;
+jtbl_8009E930 = 0x8009E930;
+jtbl_8009E960 = 0x8009E960;
+jtbl_8009E980 = 0x8009E980;
+jtbl_8009E998 = 0x8009E998;
+jtbl_8009E9D8 = 0x8009E9D8;
+jtbl_8009EA00 = 0x8009EA00;
+jtbl_8009EA28 = 0x8009EA28;
+jtbl_8009EA40 = 0x8009EA40;
+cosf_rodata_0008 = 0x8009EB58;
+cosf_rodata_0010 = 0x8009EB60;
+cosf_rodata_0018 = 0x8009EB68;
+cosf_rodata_0020 = 0x8009EB70;
+cosf_rodata_0028 = 0x8009EB78;
+cosf_rodata_0030 = 0x8009EB80;
+cosf_rodata_0038 = 0x8009EB88;
+cosf_rodata_0048 = 0x8009EB98;
+cosf_rodata_0050 = 0x8009EBA0;
+lookatref_rodata_0000 = 0x8009EBB0;
+lookatref_rodata_0008 = 0x8009EBB8;
+perspective_rodata_0000 = 0x8009EBC0;
+perspective_rodata_0008 = 0x8009EBC8;
+perspective_rodata_0010 = 0x8009EBD0;
+perspective_rodata_0018 = 0x8009EBD8;
+perspective_rodata_0020 = 0x8009EBE0;
+perspective_rodata_0028 = 0x8009EBE8;
+perspective_rodata_0030 = 0x8009EBF0;
+perspective_rodata_0038 = 0x8009EBF8;
+sinf_rodata_0008 = 0x8009EC08;
+sinf_rodata_0010 = 0x8009EC10;
+sinf_rodata_0018 = 0x8009EC18;
+sinf_rodata_0020 = 0x8009EC20;
+sinf_rodata_0028 = 0x8009EC28;
+sinf_rodata_0030 = 0x8009EC30;
+sinf_rodata_0038 = 0x8009EC38;
+sinf_rodata_0048 = 0x8009EC48;
+sinf_rodata_0050 = 0x8009EC50;
+__osRcpImTable = 0x8009EC60;
+drvrnew_rodata_0000 = 0x8009ECE0;
+drvrnew_rodata_0008 = 0x8009ECE8;
+drvrnew_rodata_0020 = 0x8009ED00;
+drvrnew_rodata_0028 = 0x8009ED08;
+drvrnew_rodata_0030 = 0x8009ED10;
+env_rodata_0000 = 0x8009ED20;
+env_rodata_0004 = 0x8009ED24;
+
+// 4050 
+
+env_rodata_0010 = 0x8009ED30;
+
+// 5520 
+
+env_rodata_0048 = 0x8009ED78;
+env_rodata_0050 = 0x8009ED80;
+env_rodata_0058 = 0x8009ED88;
+env_rodata_0060 = 0x8009ED90;
+
+// 8A40 
+
+env_rodata_00A0 = 0x8009EDD0;
+env_rodata_00A8 = 0x8009EDD8;
+env_rodata_00B0 = 0x8009EDE0;
+env_rodata_00B8 = 0x8009EDE8;
+env_rodata_00C0 = 0x8009EDF0;
+env_rodata_00C8 = 0x8009EDF8;
+env_rodata_00D0 = 0x8009EE00;
+env_rodata_00D8 = 0x8009EE08;
+
+// DC90 
+
+env_rodata_00E0 = 0x8009EE10;
+env_rodata_00E8 = 0x8009EE18;
+resample_rodata_0000 = 0x8009EE20;
+resample_rodata_0008 = 0x8009EE28;
+
+// E090 
+
+reverb_rodata_0000 = 0x8009EE50;
+reverb_rodata_0004 = 0x8009EE54;
+reverb_rodata_0000_0 = 0x8009EE60;
+reverb_rodata_0020 = 0x8009EE80;
+reverb_rodata_0028 = 0x8009EE88;
+reverb_rodata_0030 = 0x8009EE90;
+reverb_rodata_0038 = 0x8009EE98;
+reverb_rodata_0040 = 0x8009EEA0;
+reverb_rodata_0048 = 0x8009EEA8;
+save_rodata_0000 = 0x8009EEB0;
+save_rodata_0004 = 0x8009EEB4;
+synthesizer_rodata_0000 = 0x8009EEC0;
+synthesizer_rodata_0008 = 0x8009EEC8;
+synthesizer_rodata_0010 = 0x8009EED0;
+synthesizer_rodata_0018 = 0x8009EED8;
+
+// E770 
+
+synthesizer_rodata_0020 = 0x8009EEE0;
+synthesizer_rodata_0024 = 0x8009EEE4;
+aisetfreq_rodata_0000 = 0x8009EF00;
+viswapcontext_rodata_0000 = 0x8009EF10;
+__osIntOffTable = 0x8009EF20;
+__osIntTable = 0x8009EF40;
+__libm_qnan_f = 0x8009EF70;
+sprawdma_rodata_0000 = 0x8009EF80;
+sprawdma_rodata_0004 = 0x8009EF84;
+sirawread_rodata_0000 = 0x8009EF90;
+sirawread_rodata_0004 = 0x8009EF94;
+sirawwrite_rodata_0000 = 0x8009EFA0;
+sirawwrite_rodata_0004 = 0x8009EFA4;
+pirawread_rodata_0000 = 0x8009EFB4;
+pirawread_rodata_0004 = 0x8009EFB8; 
+D_8009EFC0_9FBC0 = 0x8009EFC0; // type:u8 size:0x4
+devmgr_rodata_0000 = 0x8009EFC8; // type:jtbl
+fchar = 0x8009EFE8;
+fbit = 0x8009EFF0;
+xprintf_rodata_0020 = 0x8009F008;
+xprintf_rodata_0024 = 0x8009F00C;
+xprintf_rodata_0028 = 0x8009F010;
+
+// 1D520 
+
+xldtob_rodata_0000 = 0x8009F180;
+xldtob_rodata_0048 = 0x8009F1C8;
+xldtob_rodata_004C = 0x8009F1CC;
+xldtob_rodata_0050 = 0x8009F1D0;
+xldtob_rodata_0058 = 0x8009F1D8;
+xldtob_rodata_0060 = 0x8009F1E0; // type:u8 size:0x4
+myfree = 0x8009F1F8;
+
+player_bss_002C = 0x800A6504;
+player_bss_002E = 0x800A6506;
+player_bss_0040 = 0x800A6518;
+player_bss_0044 = 0x800A651C;
+sptask_bss_0000 = 0x800A6530;
+sptask_bss_0004 = 0x800A6534;
+sptask_bss_0010 = 0x800A6540;
+sptask_bss_0018 = 0x800A6548;
+sptask_bss_001C = 0x800A654C;
+sptask_bss_0020 = 0x800A6550;
+sptask_bss_0028 = 0x800A6558;
+sptask_bss_002C = 0x800A655C;
+sptask_bss_0030 = 0x800A6560;
+sptask_bss_0038 = 0x800A6568;
+sptask_bss_003C = 0x800A656C;
+motor_bss_0000 = 0x800A6570;
+motor_bss_003C = 0x800A65AC;
+pimgr_bss_0000 = 0x800A6670;
+pimgr_bss_11B0 = 0x800A7820;
+pimgr_bss_11C8 = 0x800A7838;
+vimgr_bss_0000 = 0x800A7840;
+vimgr_bss_0008 = 0x800A7848;
+vimgr_bss_11C0 = 0x800A8A00;
+vimgr_bss_11D8 = 0x800A8A18;
+vimgr_bss_11F0 = 0x800A8A30;
+vimgr_bss_11F2 = 0x800A8A32;
+vimgr_bss_11F4 = 0x800A8A34;
+vimgr_bss_1208 = 0x800A8A48;
+vimgr_bss_120A = 0x800A8A4A;
+vimgr_bss_120C = 0x800A8A4C;
+siacs_bss_0000 = 0x800A8A60;
+__osBaseCounter = 0x800A8A9C;
+DriveRomHandle = 0x800A8AA0; // type:OSPiHandle size:0x74
+__osThreadSave = 0x800A8B18;
+__osContPifRam = 0x800A8CD0;
+__osContPifRam_0 = 0x800A8D08;
+__osContPifRam_1 = 0x800A8D0C;
+__Dom2SpeedParam = 0x800A8D18; // size:0x72
+D_800AB04B = 0x800AB04B;
+__osViIntrCount = 0x800AB04C;
+D_800AB052 = 0x800AB052;
+__osMaxControllers = 0x800AB09C;
+__osCurrentTime = 0x800AB0A0;
+__osCurrentTime_0 = 0x800AB0A4;
+__osEepPifRam = 0x800AB140;
+__osEepPifRam_0 = 0x800AB17C;
+__osPiAccessQueue = 0x800AB180;
+__Dom1SpeedParam = 0x800AB1D0; // size:0x72
+__osContLastCmd = 0x800AB252;
+__osEepromTimerMsg = 0x800AB254;
+__osBaseTimer = 0x800AB458; // guessing from timerintr.c
+__osTimerCounter = 0x800AB47C;
+__osEepromTimer = 0x800AFCB0;
+__osPfsInodeCache = 0x800AFCE8;
+__osEventStateTab = 0x800AFDE8;
+gReverbFx = 0x800AFE60; // type:u8 size:0x28
+__osFinalrom = 0x800AFE88;
+__osPfsPifRam = 0x800AFE90; // type:u32 size:0x40
+//__osPfsPifRam = 0x800AFE90; 
+//__osPfsPifRam_0 = 0x800AFECC;
+__osEepromTimerQ = 0x800AFED8;
+__osSiAccessQueue = 0x800AFEF8;
+func_800AFF30 = 0x800AFF30;
+func_800AFF6C = 0x800AFF6C;
+func_800AFF94 = 0x800AFF94;
+D_800AFFB0 = 0x800AFFB0;
+D_800B00B0 = 0x800B00B0;
+func_800B00C0 = 0x800B00C0;
+func_800B00E4_9FFA4 = 0x800B00E4;
+func_800B00F4_9FFB4 = 0x800B00F4;
+func_800B00FC_9FFBC = 0x800B00FC;
+func_800B016C = 0x800B016C;
+D_800B01B8_A0078 = 0x800B01B8;
+func_800B02AC_A016C = 0x800B02AC;
+func_800B02E0 = 0x800B02E0;
+func_800B0300_A01C0 = 0x800B0300;
+D_800B0334 = 0x800B0334;
+D_800B0368 = 0x800B0368;
+D_800B054C = 0x800B054C;
+D_800B0598_A0458 = 0x800B0598;
+func_800B05B8_A0478 = 0x800B05B8;
+func_800B0628_A04E8 = 0x800B0628;
+D_800B0664_A0524 = 0x800B0664;
+D_800B0690 = 0x800B0690;
+D_800B0720_A05E0 = 0x800B0720;
+func_800B0760 = 0x800B0760;
+D_800B0774_A0634 = 0x800B0774;
+D_800B07A0 = 0x800B07A0;
+func_800B07F0_A06B0 = 0x800B07F0;
+D_800B08A8 = 0x800B08A8;
+D_800B08FC_A07BC = 0x800B08FC;
+D_800B0920_A07E0 = 0x800B0920;
+func_800B0930 = 0x800B0930;
+D_800B0964_A0824 = 0x800B0964;
+D_800B0980 = 0x800B0980;
+D_800B09A0_A0860 = 0x800B09A0;
+D_800B09A8_A0868 = 0x800B09A8;
+D_800B09B8_A0878 = 0x800B09B8;
+jtbl_800B09D0_A0890 = 0x800B09D0;
+D_800B09F0 = 0x800B09F0;
+D_800B0BC0_A0A80 = 0x800B0BC0;
+D_800B0C54_A0B14 = 0x800B0C54;
+D_800B0D4C_A0C0C = 0x800B0D4C;
+D_800B0D78 = 0x800B0D78;
+func_800B0DC0_A0C80 = 0x800B0DC0;
+func_800B0DD0_A0C90 = 0x800B0DD0;
+D_800B0DF8_A0CB8 = 0x800B0DF8;
+D_800B0E24 = 0x800B0E24;
+func_800B0E80_A0D40 = 0x800B0E80;
+D_800B0EE0_A0DA0 = 0x800B0EE0;
+D_800B0EEC_A0DAC = 0x800B0EEC;
+D_800B0F18 = 0x800B0F18;
+D_800B0F88_A0E48 = 0x800B0F88;
+D_800B0F90_A0E50 = 0x800B0F90;
+D_800B0F98_A0E58 = 0x800B0F98;
+D_800B0FA0_A0E60 = 0x800B0FA0;
+D_800B0FD0 = 0x800B0FD0;
+D_800B0FE0_A0EA0 = 0x800B0FE0;
+D_800B100C = 0x800B100C;
+D_800B10D4_A0F94 = 0x800B10D4;
+D_800B1104_A0FC4 = 0x800B1104;
+D_800B1140_A1000 = 0x800B1140;
+D_800B1150_A1010 = 0x800B1150;
+D_800B115C_A101C = 0x800B115C;
+D_800B11A0_A1060 = 0x800B11A0;
+D_800B11F0_A10B0 = 0x800B11F0;
+D_800B1200 = 0x800B1200;
+func_800B1F60_A1E20 = 0x800B1F60;
+func_800B27FC_A26BC = 0x800B27FC;
+func_800B2818_A26D8 = 0x800B2818;
+func_800B2950_A2810 = 0x800B2950;
+func_800B29F0_A28B0 = 0x800B29F0;
+func_800B2A50_A2910 = 0x800B2A50;
+func_800B2A78_A2938 = 0x800B2A78;
+func_800B2AA0 = 0x800B2AA0;
+func_800B2B3C_A29FC = 0x800B2B3C;
+func_800B2C18_A2AD8 = 0x800B2C18;
+func_800B2C78 = 0x800B2C78;
+func_800B2D04 = 0x800B2D04;
+func_800B2D68_A2C28 = 0x800B2D68;
+func_800B2DDC_A2C9C = 0x800B2DDC;
+func_800B2E48_A2D08 = 0x800B2E48;
+func_800B2E80_A2D40 = 0x800B2E80;
+func_800B2EE4_A2DA4 = 0x800B2EE4;
+func_800B2F2C = 0x800B2F2C;
+func_800B305C = 0x800B305C;
+func_800B3360 = 0x800B3360;
+func_800B3460_A3320 = 0x800B3460;
+func_800B3490_A3350 = 0x800B3490;
+func_800B34B0_A3370 = 0x800B34B0;
+func_800B34D0_A3390 = 0x800B34D0;
+func_800B34F0 = 0x800B34F0;
+func_800B3570 = 0x800B3570;
+func_800B36C0 = 0x800B36C0;
+func_800B36F0_A35B0 = 0x800B36F0;
+func_800B3784_A3644 = 0x800B3784;
+func_800B384C_A370C = 0x800B384C;
+func_800B386C_A372C = 0x800B386C;
+func_800B388C_A374C = 0x800B388C;
+func_800B38E4 = 0x800B38E4;
+func_800B3B40 = 0x800B3B40;
+func_800B3D24_A3BE4 = 0x800B3D24;
+func_800B3F48_A3E08 = 0x800B3F48;
+func_800B4058_A3F18 = 0x800B4058;
+func_800B40D4_A3F94 = 0x800B40D4;
+func_800B419C_A405C = 0x800B419C;
+func_800B42A8_A4168 = 0x800B42A8;
+func_800B4534_A43F4 = 0x800B4534;
+func_800B46BC_A457C = 0x800B46BC;
+func_800B46E0 = 0x800B46E0;
+D_800B4914_A47D4 = 0x800B4914;
+D_800B4ACC_A498C = 0x800B4ACC;
+func_800B4B30_A49F0 = 0x800B4B30;
+func_800B4BDC_A4A9C = 0x800B4BDC;
+func_800B4CB0_A4B70 = 0x800B4CB0;
+D_800B4D74_A4C34 = 0x800B4D74;
+D_800B4E7C_A4D3C = 0x800B4E7C;
+func_800B4F60_A4E20 = 0x800B4F60;
+D_800B4FC0_A4E80 = 0x800B4FC0;
+D_800B5210_A50D0 = 0x800B5210;
+func_800B523C_A50FC = 0x800B523C;
+func_800B5290_A5150 = 0x800B5290;
+D_800B5318_A51D8 = 0x800B5318;
+D_800B5438_A52F8 = 0x800B5438;
+func_800B5500_A53C0 = 0x800B5500;
+D_800B5590_A5450 = 0x800B5590;
+D_800B5660_A5520 = 0x800B5660;
+D_800B5794_A5654 = 0x800B5794;
+func_800B57F0_A56B0 = 0x800B57F0;
+D_800B5898_A5758 = 0x800B5898;
+D_800B5984_A5844 = 0x800B5984;
+func_800B598C_A584C = 0x800B598C;
+D_800B5B20_A59E0 = 0x800B5B20;
+func_800B5B30_A59F0 = 0x800B5B30;
+func_800B5B38_A59F8 = 0x800B5B38;
+func_800B5B7C_A5A3C = 0x800B5B7C;
+func_800B5BFC_A5ABC = 0x800B5BFC;
+func_800B5C18_A5AD8 = 0x800B5C18;
+func_800B5E64_A5D24 = 0x800B5E64;
+func_800B5EC4_A5D84 = 0x800B5EC4;
+func_800B5F2C_A5DEC = 0x800B5F2C;
+func_800B5FB0_A5E70 = 0x800B5FB0;
+func_800B6034_A5EF4 = 0x800B6034;
+func_800B6088_A5F48 = 0x800B6088;
+func_800B60DC_A5F9C = 0x800B60DC;
+func_800B6130_A5FF0 = 0x800B6130;
+func_800B6180_A6040 = 0x800B6180;
+func_800B6190_A6050 = 0x800B6190;
+func_800B6544_A6404 = 0x800B6544;
+func_800B6590_A6450 = 0x800B6590;
+func_800B65F8_A64B8 = 0x800B65F8;
+func_800B6618_A64D8 = 0x800B6618;
+func_800B66B4_A6574 = 0x800B66B4;
+func_800B6760_A6620 = 0x800B6760;
+func_800B6BDC_A6A9C = 0x800B6BDC;
+func_800B6C04_A6AC4 = 0x800B6C04;
+func_800B6FA4_A6E64 = 0x800B6FA4;
+func_800B7128_A6FE8 = 0x800B7128;
+func_800B7450_A7310 = 0x800B7450;
+func_800B75C4_A7484 = 0x800B75C4;
+func_800B7620_A74E0 = 0x800B7620;
+func_800B7760_A7620 = 0x800B7760;
+func_800B77C4_A7684 = 0x800B77C4;
+func_800B7828_A76E8 = 0x800B7828;
+func_800B788C_A774C = 0x800B788C;
+func_800B7914_A77D4 = 0x800B7914;
+func_800B7B64_A7A24 = 0x800B7B64;
+D_800B7B7C = 0x800B7B7C;
+func_800B7C48_A7B08 = 0x800B7C48;
+func_800B826C_A812C = 0x800B826C;
+func_800B82D8_A8198 = 0x800B82D8;
+func_800B83B8_A8278 = 0x800B83B8;
+func_800B844C_A830C = 0x800B844C;
+func_800B8874_A8734 = 0x800B8874;
+func_800B8AC4_A8984 = 0x800B8AC4;
+func_800B8C3C_A8AFC = 0x800B8C3C;
+func_800B8D34_A8BF4 = 0x800B8D34;
+func_800B8DA8_A8C68 = 0x800B8DA8;
+func_800B8E38_A8CF8 = 0x800B8E38;
+func_800B9020 = 0x800B9020;
+func_800B9074_A8F34 = 0x800B9074;
+D_800B90DC_A8F9C = 0x800B90DC;
+D_800B9180_A9040 = 0x800B9180;
+D_800B91E4_A90A4 = 0x800B91E4;
+D_800B9264_A9124 = 0x800B9264;
+D_800B9290_A9150 = 0x800B9290;
+D_800B92D4_A9194 = 0x800B92D4;
+D_800B93CC_A928C = 0x800B93CC;
+func_800B93F0_A92B0 = 0x800B93F0;
+func_800B9440_A9300 = 0x800B9440;
+func_800B956C_A942C = 0x800B956C;
+func_800B9680_A9540 = 0x800B9680;
+func_800B96B4_A9574 = 0x800B96B4;
+func_800B9708_A95C8 = 0x800B9708;
+func_800B9774_A9634 = 0x800B9774;
+func_800B97C8_A9688 = 0x800B97C8;
+D_800B993C_A97FC = 0x800B993C;
+D_800B99A0_A9860 = 0x800B99A0;
+func_800B99E0 = 0x800B99E0;
+func_800B9AE0 = 0x800B9AE0;
+D_800B9C20_A9AE0 = 0x800B9C20;
+D_800B9C70_A9B30 = 0x800B9C70;
+func_800B9EF0_A9DB0 = 0x800B9EF0;
+jtbl_800BB020_AB3D0 = 0x800BB020; // type:u32 size:0x64
+jtbl_800BB1B0_AB560 = 0x800BB1B0; // type:u32 size:0xA
+jtbl_800BB1D8_AB588 = 0x800BB1D8; // type:u32 size:0x6
+jtbl_800BB1F0_AB5A0 = 0x800BB1F0; // type:u32 size:0x6
+jtbl_800BB208_AB5B8 = 0x800BB208; // type:u32 size:0x6
+jtbl_800BB220_AB5D0 = 0x800BB220; // type:u32 size:0xA
+jtbl_800BB248_AB5F8 = 0x800BB248; // type:u32 size:0xA
+jtbl_800BB270_AB620 = 0x800BB270; // type:u32 size:0xC
+func_800BC0FC = 0x800BC0FC;
+D_800BC1E0_AC0A0 = 0x800BC1E0;
+D_800BC220_AC0E0 = 0x800BC220;
+D_800BC440_AC300 = 0x800BC440;
+D_800BC44C_AC30C = 0x800BC44C;
+D_800BC454_AC314 = 0x800BC454;
+D_800BC460_AC320 = 0x800BC460;
+func_800BC474_AC334 = 0x800BC474;
+D_800BC528 = 0x800BC528;
+D_800BC72C = 0x800BC72C;
+D_800BC750_AC610 = 0x800BC750;
+D_800BC830_AC6F0 = 0x800BC830;
+D_800BC844_AC704 = 0x800BC844;
+D_800BC884_AC744 = 0x800BC884;
+D_800BC908_AC7C8 = 0x800BC908;
+D_800BC914_AC7D4 = 0x800BC914;
+D_800BC91C_AC7DC = 0x800BC91C;
+func_800BC9BC = 0x800BC9BC;
+D_800BCB20_AC9E0 = 0x800BCB20;
+D_800BCB30_AC9F0 = 0x800BCB30;
+D_800BCB3C_AC9FC = 0x800BCB3C;
+D_800BCB54_ACA14 = 0x800BCB54;
+D_800BCB5C_ACA1C = 0x800BCB5C;
+D_800BCB68_ACA28 = 0x800BCB68;
+D_800BCB74_ACA34 = 0x800BCB74;
+D_800BCB7C_ACA3C = 0x800BCB7C;
+D_800BCB94_ACA54 = 0x800BCB94;
+D_800BCBA0_ACA60 = 0x800BCBA0;
+jtbl_800BCBD0_ACF80 = 0x800BCBD0; // type:u32 size:0x4
+jtbl_800BCC60_AD010 = 0x800BCC60; // type:u32 size:0x8
+
+D_8016A000 = 0x8016A000;
+

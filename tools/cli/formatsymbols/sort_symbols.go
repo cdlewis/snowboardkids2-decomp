@@ -39,17 +39,18 @@ func main() {
 		if !ok {
 			continue
 		}
-		// fmt.Printf("0x%x\n", addr)
+
 		symbols = append(symbols, Symbol{
 			VRAMAddress: addr,
 			Line:        idx,
 		})
 	}
-	// fmt.Printf("0x%x\n", symbols[0].RomAddress)
 
 	slices.SortFunc(symbols, func(a, b Symbol) int {
 		return a.VRAMAddress - b.VRAMAddress
 	})
+
+	var output string
 	for _, segment := range splatConfig.Segments {
 		offset := segment.VRAM
 
@@ -62,23 +63,21 @@ func main() {
 
 			startAddress := subsegment.RomOffset + offset
 			endAddress := segment.Subsegments[jdx+1].RomOffset + offset
-			// fmt.Println(subsegment.Name)
+
 			// flush anything that's less than the start address
 			// something weird has happened (or address is just weird)
 			flushed := false
-			// fmt.Printf("%x %x %v\n", symbols[0].RomAddress, startAddress, symbols[0].RomAddress > startAddress)
 			for len(symbols) > 0 && symbols[0].VRAMAddress < startAddress {
-				fmt.Println(lines[symbols[0].Line])
+				output += lines[symbols[0].Line] + "\n"
 				symbols = symbols[1:]
 				flushed = true
 			}
 			if flushed {
-				fmt.Println()
+				output += "\n"
 			}
 
 			for len(symbols) > 0 {
 				curr := symbols[0]
-				// fmt.Printf("0x%x 0x%x 0x%x\n", startAddress, endAddress, curr.RomAddress)
 				if curr.VRAMAddress >= startAddress && curr.VRAMAddress < endAddress {
 					resultBuffer += lines[curr.Line] + "\n"
 					symbols = symbols[1:]
@@ -89,10 +88,15 @@ func main() {
 			}
 
 			if len(resultBuffer) > 0 {
-				fmt.Printf("// %s \n\n", subsegment.Name)
-				fmt.Println(resultBuffer)
+				output += fmt.Sprintf("// %s \n\n", subsegment.Name)
+				output += resultBuffer + "\n"
 			}
 		}
+	}
+
+	err = os.WriteFile(symbolFile, []byte(output), 0644)
+	if err != nil {
+		panic(err)
 	}
 }
 
