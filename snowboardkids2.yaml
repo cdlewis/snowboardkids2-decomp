@@ -72,6 +72,7 @@ segments:
     vram: 0x80000450
     follows_vram: entry
     bss_size: 0x10850
+    subalign: 8
     subsegments:
       - [0x1050, c, main]
       - [0x20F0, asm]
@@ -294,8 +295,7 @@ segments:
       - [0x80DD0, asm, devmgr] # [hard] rodata alignment
       # - [0x80DD0, lib, libgultra_rom, devmgr]
       - [0x81190, lib, libgultra_rom, piacs]
-      - [0x81280, asm, xprintf] # [hard] rodata alignment
-      # - [0x81280, lib, libgultra_rom, xprintf]
+      - [0x81280, lib, libgultra_rom, xprintf]
       - [0x81CB0, lib, libgultra_rom, contpfs]
       - [0x82740, asm, contramread] # [hard] mismatch
       # - [0x82740, lib, libgultra_rom, contramread]
@@ -649,8 +649,7 @@ segments:
       - [0x9DCC0, lib, libgultra_rom, siacs, .data]
       - [0x9DCD0, data]
       - [0x9DDC0, lib, libgultra_rom, piacs, .data]
-      - [0x9DDD0, data, xprintf]
-      # - [0x9DDD0, lib, libgultra_rom, xprintf, .data]
+      - [0x9DDD0, lib, libgultra_rom, xprintf, .data]
       - [0x9DE20, lib, libgultra_rom, contpfs, .data]
       - [0x9DE30, data, contramread]
       # - [0x9DE30, lib, libgultra_rom, contramread, .data]
@@ -697,8 +696,8 @@ segments:
       - [0x9FBB0, rodata, pirawread] # [hard] expects 4 bytes of padding?
       - [0x9FBC0, rodata, devmgr]
       # - [0x9FBC8, lib, libgultra_rom, devmgr, .rodata]
-      - [0x9FBE0, rodata, xprintf]
-      # - [0x9FBE0, lib, libgultra_rom, xprintf, .rodata]
+      - [0x9FBE0, rodata]
+      - [0x9FBE8, lib, libgultra_rom, xprintf, .rodata]
       - [0x9FD60, rodata, epirawread]
       # - [0x9FD60, lib, libgultra_rom, epirawread, .rodata]
       - [0x9FD80, lib, libgultra_rom, xldtob, .rodata]
