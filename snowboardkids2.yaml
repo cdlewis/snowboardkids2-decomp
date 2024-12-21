@@ -292,8 +292,7 @@ segments:
       # - [0x80C40, lib, libgultra_rom, pirawread]
       - [0x80CE0, lib, libgultra_rom, pirawdma]
       - [0x80DB0, lib, libgultra_rom, pigetcmdq]
-      - [0x80DD0, asm, devmgr] # [hard] rodata alignment
-      # - [0x80DD0, lib, libgultra_rom, devmgr]
+      - [0x80DD0, lib, libgultra_rom, devmgr]
       - [0x81190, lib, libgultra_rom, piacs]
       - [0x81280, lib, libgultra_rom, xprintf]
       - [0x81CB0, lib, libgultra_rom, contpfs]
@@ -694,9 +693,7 @@ segments:
       - [0x9FBA0, lib, libgultra_rom, sirawwrite, .rodata]
       # - [0x9FBB0, lib, libgultra_rom, pirawread, .rodata]
       - [0x9FBB0, rodata, pirawread] # [hard] expects 4 bytes of padding?
-      - [0x9FBC0, rodata, devmgr]
-      # - [0x9FBC8, lib, libgultra_rom, devmgr, .rodata]
-      - [0x9FBE0, rodata]
+      - [0x9FBC8, lib, libgultra_rom, devmgr, .rodata]
       - [0x9FBE8, lib, libgultra_rom, xprintf, .rodata]
       - [0x9FD60, rodata, epirawread]
       # - [0x9FD60, lib, libgultra_rom, epirawread, .rodata]
