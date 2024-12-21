@@ -1,3 +1,6 @@
+osCartRomInit = 0x8007BC10;
+__CartRomHandle = 0x800AB0B8;
+
 __osPfsLastChannel = 0x8009D230;
 
 __osPiGetAccess = 0x800805E4;
