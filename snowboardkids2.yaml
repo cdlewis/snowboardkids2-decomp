@@ -237,7 +237,8 @@ segments:
       - [0x7C5D0, lib, libgultra_rom, string]
       - [0x7C660, lib, libgultra_rom, sprintf]
       - [0x7C6F0, lib, libgultra_rom, aisetfreq]
-      - [0x7C810, asm]
+      - [0x7C810, asm, cartrominit] # speculative
+      # - [0x7C810, lib, libgultra_rom, cartrominit]
       - [0x7CA40, lib, libgultra_rom, conteepprobe]
       - [0x7CAC0, lib, libgultra_rom, conteepread]
       - [0x7CCE0, lib, libgultra_rom, conteepwrite]
@@ -636,7 +637,8 @@ segments:
       - [0x9C9E0, lib, libgultra_rom, sl, .data]
       - [0x9C9F0, lib, libgultra_rom, aisetnextbuf, .data]
       - [0x9CA00, lib, libgultra_rom, controller, .data]
-      - [0x9CA10, data]
+      - [0x9CA10, data, cartrominit] # speculative
+      # - [0x9CA10, lib, libgultra_rom, cartrominit, .data]
       - [0x9CA20, lib, libgultra_rom, pimgr, .data]
       - [0x9CA50, lib, libgultra_rom, vimgr, .data]
       - [0x9CA70, data]
