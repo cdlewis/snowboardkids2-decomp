@@ -18,9 +18,6 @@ CPP_FLAGS = [
     "-D_LANGUAGE_C",
     "-DF3DEX_GBI_2",
     "-D_MIPS_SZLONG=32",
-    "-DSCRIPT(...)={}",
-    "-D__attribute__(...)=",
-    "-D__asm__(...)=",
     "-ffreestanding",
     "-DM2CTX",
 ]
