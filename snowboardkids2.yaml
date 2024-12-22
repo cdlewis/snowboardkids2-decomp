@@ -251,7 +251,7 @@ segments:
       - [0x7DEF0, asm]
       - [0x7E0E0, asm]
       - [0x7E1E0, asm]
-      - [0x7E620, asm, pfssearchfile] # [hard] but no match?
+      - [0x7E620, lib, libgultra_rom, pfssearchfile]
       - [0x7E7C0, lib, libgultra_rom, pfsselectbank]
       - [0x7E830, lib, libgultra_rom, pimgr]
       - [0x7E9C0, lib, libgultra_rom, sirawdma]
