@@ -6,8 +6,6 @@ __osPfsLastChannel = 0x8009D230;
 __osPiGetAccess = 0x800805E4;
 __osPiRelAccess = 0x80080650;
 
-D_8009EFC0_9FBC0 = 0x8009EFC0; // type:u8 size:0x4
-
 spaces = 0x8009D1D0;
 zeroes = 0x8009D1F4;
 fchar = 0x8009EFE8;
@@ -844,7 +842,7 @@ pimgr_data_0018 = 0x8009BE38;
 pirawdma_text_00AC = 0x8008018C;
 pirawdma_text_00B8 = 0x80080198;
 pirawread_rodata_0000 = 0x8009EFB4;
-pirawread_rodata_0004 = 0x8009EFB8; 
+pirawread_rodata_0004 = 0x8009EFB8; // type:asciz size:0x10
 player_bss_002C = 0x800A6504;
 player_bss_002E = 0x800A6506;
 player_bss_003C = 0x8009BE28;
