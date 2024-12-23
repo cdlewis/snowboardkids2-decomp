@@ -1,3 +1,6 @@
+epirawread_rodata_0000 = 0x8009F160;
+epirawread_rodata_0004 = 0x8009F164;
+
 osCartRomInit = 0x8007BC10;
 __CartRomHandle = 0x800AB0B8;
 

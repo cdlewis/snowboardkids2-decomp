@@ -300,8 +300,7 @@ segments:
       - [0x82940, lib, libgultra_rom, contramwrite]
       - [0x82B60, lib, libgultra_rom, crc]
       - [0x82C50, lib, libgultra_rom, epirawdma]
-      - [0x82E40, asm, epirawread] # [hard] Not I or J
-      # - [0x82E40, lib, libgultra_rom, epirawread]
+      - [0x82E40, lib, libgultra_rom, epirawread]
       - [0x82FF0, lib, libgultra_rom, epirawwrite]
       - [0x83160, lib, libgultra_rom, pfschecker]
       - [0x83880, lib, libgultra_rom, pfsgetstatus]
@@ -692,8 +691,7 @@ segments:
       - [0x9FBB0, lib, libgultra_rom, pirawread, .rodata]
       - [0x9FBC8, lib, libgultra_rom, devmgr, .rodata]
       - [0x9FBE8, lib, libgultra_rom, xprintf, .rodata]
-      - [0x9FD60, rodata, epirawread]
-      # - [0x9FD60, lib, libgultra_rom, epirawread, .rodata]
+      - [0x9FD60, lib, libgultra_rom, epirawread, .rodata]
       - [0x9FD80, lib, libgultra_rom, xldtob, .rodata]
       - [0x9FDF0, rodata]
 
