@@ -18,6 +18,8 @@ CPP_FLAGS = [
     "-D_LANGUAGE_C",
     "-DF3DEX_GBI_2",
     "-D_MIPS_SZLONG=32",
+    "-DBUILD_VERSION=7",
+    "-DVERSION_J=7",
     "-ffreestanding",
     "-DM2CTX",
 ]

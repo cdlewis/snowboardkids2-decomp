@@ -296,8 +296,7 @@ segments:
       - [0x81190, lib, libgultra_rom, piacs]
       - [0x81280, lib, libgultra_rom, xprintf]
       - [0x81CB0, lib, libgultra_rom, contpfs]
-      - [0x82740, asm, contramread] # [hard] mismatch
-      # - [0x82740, lib, libgultra_rom, contramread]
+      - [0x82740, lib, libgultra_rom, contramread]
       - [0x82940, asm, contramwrite] # [hard] mismatch
       # - [0x82940, lib, libgultra_rom, contramwrite]
       - [0x82B60, lib, libgultra_rom, crc]
@@ -651,8 +650,7 @@ segments:
       - [0x9DDC0, lib, libgultra_rom, piacs, .data]
       - [0x9DDD0, lib, libgultra_rom, xprintf, .data]
       - [0x9DE20, lib, libgultra_rom, contpfs, .data]
-      - [0x9DE30, data, contramread]
-      # - [0x9DE30, lib, libgultra_rom, contramread, .data]
+      - [0x9DE30, lib, libgultra_rom, contramread, .data]
       - [0x9DE40, lib, libgultra_rom, xlitob, .data]
       - [0x9DE70, rodata]
       - [0x9E8E0, rodata, 4050]
