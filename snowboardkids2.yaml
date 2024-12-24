@@ -248,7 +248,7 @@ segments:
       - [0x7DA30, lib, libgultra_rom, pfsdeletefile]
       - [0x7DC50, asm]
       - [0x7DDE0, lib, libgultra_rom, pfsfreeblocks]
-      - [0x7DEF0, asm] # pfsinitpak?
+      - [0x7DEF0, lib, libgultra_rom, pfsinitpak]
       - [0x7E0E0, asm]
       - [0x7E1E0, asm]
       - [0x7E620, lib, libgultra_rom, pfssearchfile]
