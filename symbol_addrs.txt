@@ -15,7 +15,8 @@ fchar = 0x8009EFE8;
 fbit = 0x8009EFF0;
 
 __osFinalrom = 0x800AFE88;
-osClockRate = 0x8009D024;
+clock = 0x8009D024;
+osClockRate = 0x8009D020;
 
 osViModeMpalLan1 = 0x8009D170;
 osViModePalLan1 = 0x8009D120;
