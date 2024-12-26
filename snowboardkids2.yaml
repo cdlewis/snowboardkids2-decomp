@@ -249,7 +249,7 @@ segments:
       - [0x7DDE0, lib, libgultra_rom, pfsfreeblocks]
       - [0x7DEF0, lib, libgultra_rom, pfsinitpak]
       - [0x7E0E0, asm]
-      - [0x7E1E0, asm]
+      - [0x7E1E0, lib, libgultra_rom, pfsreadwritefile]
       - [0x7E620, lib, libgultra_rom, pfssearchfile]
       - [0x7E7C0, lib, libgultra_rom, pfsselectbank]
       - [0x7E830, lib, libgultra_rom, pimgr]
