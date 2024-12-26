@@ -1,3 +1,5 @@
+osPfsFileState = 0x8007D050;
+
 osPfsNumFiles = 0x8007D4E0;
 
 osPfsReadWriteFile = 0x8007D5E0;
