@@ -1,3 +1,5 @@
+osPfsNumFiles = 0x8007D4E0;
+
 osPfsReadWriteFile = 0x8007D5E0;
 
 osPfsInitPak = 0x8007D2F0;
