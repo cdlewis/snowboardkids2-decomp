@@ -245,7 +245,7 @@ segments:
       - [0x7D270, lib, libgultra_rom, motor]
       - [0x7D600, lib, libgultra_rom, pfsallocatefile]
       - [0x7DA30, lib, libgultra_rom, pfsdeletefile]
-      - [0x7DC50, asm]
+      - [0x7DC50, lib, libgultra_rom, pfsfilestate]
       - [0x7DDE0, lib, libgultra_rom, pfsfreeblocks]
       - [0x7DEF0, lib, libgultra_rom, pfsinitpak]
       - [0x7E0E0, lib, libgultra_rom, pfsnumfiles]
