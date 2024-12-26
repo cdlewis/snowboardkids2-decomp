@@ -64,6 +64,11 @@ ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
 LIBULTRA = lib/ultralib/build/J/libgultra_rom/libgultra_rom.a
 
+# note: his is probably an issue with headers. Once ultra headers are properly included this should
+# go away.
+UNDEFINED_SYMS := osPfsIsPlug
+LD_FLAGS_EXTRA += $(foreach sym,$(UNDEFINED_SYMS),-u $(sym))
+
 # Targets
 
 default: all
@@ -99,7 +104,7 @@ diff-sxs:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(O_FILES)
-	@$(LD) -T $(LD_SCRIPT) -T undefined_syms_auto.txt -Map $(TARGET).map --no-check-sections -Lbuild/lib -lgultra_rom -o $@
+	@$(LD) -T $(LD_SCRIPT) -T undefined_syms_auto.txt $(LD_FLAGS_EXTRA) -Map $(TARGET).map --no-check-sections -Lbuild/lib -lgultra_rom -o $@
 	@printf "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
 
 $(BUILD_DIR)/src/%.i: src/%.c
