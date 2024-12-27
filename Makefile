@@ -152,7 +152,6 @@ $(BUILD_DIR)/%.o: %.s
 	fi
 
 $(BUILD_DIR)/%.o: %.bin
-	./patch_linker.sh
 	$(LD) -r -b binary -o $(BUILD_DIR)/$(basename $<).o $<
 	@printf "[$(PINK) linker $(NO_COL)]  $<\n"
 
