@@ -10,3 +10,6 @@
 [submodule "tools/old-gcc"]
 	path = tools/old-gcc
 	url = git@github.com:decompals/old-gcc.git
+[submodule "lib/libmus"]
+	path = lib/libmus
+	url = git@github.com:cdlewis/libmus.git

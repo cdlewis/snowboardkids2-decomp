@@ -25,13 +25,11 @@ S_FILES   = $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 C_FILES   = $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 BIN_FILES = $(foreach dir,$(BIN_DIRS),$(wildcard $(dir)/*.bin))
 LIBKMC_S_FILES = $(foreach dir,lib/libkmc,$(wildcard $(dir)/*.s))
-LIBMUS_C_FILES = $(foreach dir,lib/libmus,$(wildcard $(dir)/*.c))
 
 O_FILES := $(foreach file,$(S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
            $(foreach file,$(C_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
            $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
-					 $(foreach file,$(LIBKMC_S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
-					 $(foreach file,$(LIBMUS_C_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o)
+					 $(foreach file,$(LIBKMC_S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o)
 
 # Tools
 
@@ -65,6 +63,7 @@ OBJCOPYFLAGS = -O binary
 ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
 LIBULTRA = lib/ultralib/build/J/libgultra_rom/libgultra_rom.a
+LIBMUS = lib/libmus/build/libmus.a
 
 # note: his is probably an issue with headers. Once ultra headers are properly included this should
 # go away.
@@ -99,23 +98,23 @@ clean:
 clean-ultralib:
 	rm -r lib/ultralib/build
 
+clean-libmus:
+	rm -r lib/libmus/build
+
 diff-line:
 	@(diff --old-line-format='OLD: %L' --new-line-format='NEW: %L' <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
 diff-sxs:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
-$(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(O_FILES) libmus
-	@$(LD) -T $(LD_SCRIPT) -T undefined_syms_auto.txt $(LD_FLAGS_EXTRA) -Map $(TARGET).map --no-check-sections -Lbuild/lib -lgultra_rom -o $@
+$(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
+	@$(LD) -T $(LD_SCRIPT) -T undefined_syms_auto.txt $(LD_FLAGS_EXTRA) -Map $(TARGET).map --no-check-sections -Lbuild/lib -lgultra_rom -lmus -o $@
 	@printf "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
 
 $(BUILD_DIR)/src/%.i: src/%.c
 	@mkdir -p $(shell dirname $@)
 	@$(CC_CHECK) -MMD -MP -MT $@ -MF $@.d $<
 	$(CPP) -MMD -MP -MT $@ -MF $@.d -I include/ -o $@ $<
-
-libmus:
-	$(MAKE) -C lib/
 
 $(BUILD_DIR)/src/%.s: $(BUILD_DIR)/src/%.i
 	@mkdir -p $(shell dirname $@)
@@ -133,10 +132,18 @@ $(BUILD_DIR)/lib/libgultra_rom.a: $(LIBULTRA)
 	@mkdir -p $$(dirname $@)
 	@cp $< $@
 
+$(BUILD_DIR)/lib/libmus.a: $(LIBMUS)
+	@mkdir -p $$(dirname $@)
+	@cp $< $@
+
 LIBULTRA_FLAGS = VERSION=J TARGET=libgultra_rom COMPARE=0 MODERN_LD=1
 $(LIBULTRA):
 	$(LIBULTRA_FLAGS) $(MAKE) -C lib/ultralib setup
 	$(LIBULTRA_FLAGS) $(MAKE) -C lib/ultralib
+
+LIBMUS_FLAGS = COMPILER_DIR=../../tools/gcc-kmc ULTRA_DIR=../ultralib
+$(LIBMUS):
+	$(LIBMUS_FLAGS) $(MAKE) -C lib/libmus
 
 $(BUILD_DIR)/%.o: %.s
 	@if [ "$(dir $<)" != "lib/libkmc/" ]; then \
