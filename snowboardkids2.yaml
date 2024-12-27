@@ -167,7 +167,8 @@ segments:
       - [0x717D0, asm]
       - [0x72220, asm, player_commands]
       # - [0x72220, c, ../lib/libmus/src/player_commands]
-      - [0x72C30, asm] # player?
+      - [0x72C30, asm, player_api]
+      # - [0x72C30, lib, libmus, player_api]
       - [0x75400, lib, libmus, player_fx]
       - [0x75CE0, lib, libgultra_rom, cosf]
       - [0x75E30, lib, libgultra_rom, coss]
