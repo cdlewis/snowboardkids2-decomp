@@ -1,3 +1,9 @@
+MusInitialize = 0x80072030;
+__MusIntMemSet = 0x8007466C;
+__MusIntInitialiseChannel = 0x800743B8;
+__MusIntAudManInit = 0x80070BD0;
+marker_callback = 0x800A64FC;
+
 osPfsFileState = 0x8007D050;
 
 osPfsNumFiles = 0x8007D4E0;
@@ -856,12 +862,11 @@ pirawdma_text_00AC = 0x8008018C;
 pirawdma_text_00B8 = 0x80080198;
 pirawread_rodata_0000 = 0x8009EFB4;
 pirawread_rodata_0004 = 0x8009EFB8; // type:asciz size:0x10
-player_bss_002C = 0x800A6504;
-player_bss_002E = 0x800A6506;
+mus_master_volume_effects = 0x800A6504;
+mus_master_volume_songs = 0x800A6506;
 player_bss_003C = 0x8009BE28;
 player_bss_0040 = 0x800A6518;
-player_bss_0044 = 0x800A651C;
-player_text_1AE0 = 0x80073058;
+mus_last_fxtype = 0x800A651C;
 recvmesg_text_0104 = 0x800764B4;
 resample_rodata_0000 = 0x8009EE20;
 resample_rodata_0008 = 0x8009EE28;
