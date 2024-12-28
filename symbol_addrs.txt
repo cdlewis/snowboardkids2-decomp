@@ -1,8 +1,34 @@
+
+// insanely speculative
+
 MusInitialize = 0x80072030;
 __MusIntMemSet = 0x8007466C;
 __MusIntInitialiseChannel = 0x800743B8;
 __MusIntAudManInit = 0x80070BD0;
+//__MusIntAudManInit = 0x80070BD0;
 marker_callback = 0x800A64FC;
+//__MusIntStartEffect = 0x80074704;
+__MusIntMemMove = 0x80074698;
+
+MusStartEffect = 0x80072540;
+
+//__MusIntDmaInit = 0x80070BD0;
+__libmus_alglobals = 0x800A8FC8;
+cartrom_handle = 0x800A64AC;
+diskrom_handle = 0x800A6460;
+
+__MusIntFindChannelAndStart = 0x800725F4;
+
+player_bss_000 = 0x800A64E8;
+player_bss_001 = 0x800A64EC;
+player_bss_002 = 0x800A64F0;
+
+__MusIntFifoProcessCommand = 0x80072FD8;
+__MusIntHandleSetFlag = 0x800747A0;
+
+MusStartSongFromMarker = 0x800723C8;
+
+// end insanely speculative
 
 osPfsFileState = 0x8007D050;
 
