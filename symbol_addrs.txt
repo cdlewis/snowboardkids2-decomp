@@ -30,6 +30,17 @@ MusStartSongFromMarker = 0x800723C8;
 
 // end insanely speculative
 
+// moderately speculative
+
+leoBootID = 0x800001A0;
+osRomType = 0x80000304;
+osResetType = 0x8000030C;
+osCicId = 0x80000310;
+osVersion = 0x80000314;
+osMemSize = 0x80000318;
+
+// end moderately speculative
+
 osPfsFileState = 0x8007D050;
 
 osPfsNumFiles = 0x8007D4E0;
@@ -822,7 +833,7 @@ __osPiRawReadIo = 0x80080040;
 __osPiRawStartDma = 0x800800E0;
 osPiStartDma = 0x8007B560;
 osRecvMesg = 0x800763B0;
-osRomBase = 0x80000308; // defined:true
+osRomBase = 0x80000308;
 osSendMesg = 0x800764E0;
 osSetEventMesg = 0x80076610;
 osSetIntMask = 0x800761E0;

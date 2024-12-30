@@ -41,19 +41,22 @@ OBJCOPY = $(CROSS)objcopy
 PYTHON = python3
 SPLAT = $(TOOLS_DIR)/splat/split.py
 N64CRC = $(TOOLS_DIR)/n64crc.py
-CPP := cpp -P
+CPP := $(CROSS)cpp
 ICONV := iconv --from-code=UTF-8 --to-code=Shift-JIS
 
 COMPILER_DIR = tools/gcc_kmc
-CC = COMPILER_DIR=$(COMPILER_DIR) $(COMPILER_DIR)/cc1 
-
-CC_CHECK := gcc -fsyntax-only -fsigned-char -nostdinc -fno-builtin -I include -I $(BUILD_DIR)/include -I src\
-	-D CC_CHECK\
-	-std=gnu90 -Wall -Wextra -Wno-format-security -Wno-unused-parameter -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast $(GRUCODE_CFLAGS)
+CC := COMPILER_PATH=$(COMPILER_DIR) $(COMPILER_DIR)/gcc
+CC_CHECK := clang
 
 # Flags
 
-GRUCODE_CFLAGS := -DF3DEX_GBI_2
+MACROS := -D_LANGUAGE_C -D_MIPS_SZLONG=32 -D_MIPS_SZINT=32 -D_MIPS_SZLONG=32 -D__USE_ISOC99 -DF3DEX_GBI_2 -DNDEBUG -D_FINALROM
+ABIFLAG ?= -mabi=32 -mgp32 -mfp32
+CFLAGS := $(ABIFLAG) -mno-abicalls -nostdinc -fno-PIC -G 0 -Wa,-force-n64align -funsigned-char -w -mips3 -EB -O2
+IINC := -I include -I lib/ultralib/include -I lib/ultralib/include/PR -I lib/libmus/include
+
+MIPS_BUILTIN_DEFS := -D_MIPS_ISA_MIPS2=2 -D_MIPS_ISA=_MIPS_ISA_MIPS2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZPTR=32
+CC_CHECK_FLAGS    := -MMD -MP -fno-builtin -fsyntax-only -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1
 
 TARGET = $(BUILD_DIR)/$(BASENAME)
 LD_SCRIPT = $(BASENAME).ld
@@ -69,6 +72,8 @@ LIBMUS = lib/libmus/build/libmus.a
 # go away.
 UNDEFINED_SYMS := osPfsIsPlug
 LD_FLAGS_EXTRA += $(foreach sym,$(UNDEFINED_SYMS),-u $(sym))
+
+LINKER_SCRIPTS := $(LD_SCRIPT) linker_scripts/hardware_regs.ld linker_scripts/libultra_syms.ld
 
 # Targets
 
@@ -108,17 +113,15 @@ diff-sxs:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
-	@$(LD) -T $(LD_SCRIPT) -T undefined_syms_auto.txt $(LD_FLAGS_EXTRA) -Map $(TARGET).map --no-check-sections -Lbuild/lib -lmus -lgultra_rom -o $@
+	@$(LD) -T undefined_syms_auto.txt $(LD_FLAGS_EXTRA) -Map $(TARGET).map $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) --no-check-sections -Lbuild/lib -lmus -lgultra_rom -o $@
 	@printf "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
 
-$(BUILD_DIR)/src/%.i: src/%.c
+$(BUILD_DIR)/src/%.o: src/%.c
 	@mkdir -p $(shell dirname $@)
-	@$(CC_CHECK) -MMD -MP -MT $@ -MF $@.d $<
-	$(CPP) -MMD -MP -MT $@ -MF $@.d -I include/ -o $@ $<
-
-$(BUILD_DIR)/src/%.s: $(BUILD_DIR)/src/%.i
-	@mkdir -p $(shell dirname $@)
-	$(CC) $(CFLAGS) -o $@ $<
+	@printf "[$(GREEN)   c    $(NO_COL)]  $<\n"; \
+	$(CC_CHECK) $(CC_CHECK_FLAGS) $(IINC) $(MACROS) -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) -o $@ $<
+	@$(CC) $(CFLAGS) -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) -E $< | $(CC) -x c $(CFLAGS) -fno-asm -I $(dir $*) -c -o $@ -
+	$(OBJDUMP_CMD)
 
 $(BUILD_DIR)/lib/libkmc/%.o: lib/libkmc/%.s
 	@mkdir -p $(shell dirname $@)
@@ -152,12 +155,12 @@ $(BUILD_DIR)/%.o: %.s
 	fi
 
 $(BUILD_DIR)/%.o: %.bin
-	$(LD) -r -b binary -o $(BUILD_DIR)/$(basename $<).o $<
 	@printf "[$(PINK) linker $(NO_COL)]  $<\n"
+	@$(LD) -r -b binary -o $(BUILD_DIR)/$(basename $<).o $<
 
 $(TARGET).bin: $(TARGET).elf
-	$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
 	@printf "[$(CYAN) objcpy $(NO_COL)]  $<\n"
+	@$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
 
 $(TARGET).z64: $(TARGET).bin
 	@cp $< $@
@@ -170,3 +173,5 @@ setup:
 .PHONY: all clean default updatediff
 SHELL = /bin/bash -e -o pipefail
 
+# Print target for debugging
+print-% : ; $(info $* is a $(flavor $*) variable set to [$($*)]) @true
