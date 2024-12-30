@@ -29,7 +29,6 @@ options:
 
   symbol_addrs_path:
     - symbol_addrs.txt
-    - hardware_regs.ld
   reloc_addrs_path:
     - reloc_addrs.txt
 
