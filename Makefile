@@ -26,10 +26,12 @@ C_FILES   = $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 BIN_FILES = $(foreach dir,$(BIN_DIRS),$(wildcard $(dir)/*.bin))
 LIBKMC_S_FILES = $(foreach dir,lib/libkmc,$(wildcard $(dir)/*.s))
 
-O_FILES := $(foreach file,$(S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
-           $(foreach file,$(C_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
-           $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
-					 $(foreach file,$(LIBKMC_S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o)
+# O_FILES := $(foreach file,$(S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
+          #  $(foreach file,$(C_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
+          #  $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
+					#  $(foreach file,$(LIBKMC_S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o)
+O_FILES := $(shell grep -E 'build\/(asm|assets|src|bin|lib\/libkmc)\/.+\.o' snowboardkids2.ld -o | sort | uniq)
+
 
 # Tools
 
@@ -53,13 +55,12 @@ CC_CHECK := clang
 MACROS := -D_LANGUAGE_C -D_MIPS_SZLONG=32 -D_MIPS_SZINT=32 -D_MIPS_SZLONG=32 -D__USE_ISOC99 -DF3DEX_GBI_2 -DNDEBUG -D_FINALROM
 ABIFLAG ?= -mabi=32 -mgp32 -mfp32
 CFLAGS := $(ABIFLAG) -mno-abicalls -nostdinc -fno-PIC -G 0 -Wa,-force-n64align -funsigned-char -w -mips3 -EB -O2
-IINC := -I include -I lib/ultralib/include -I lib/ultralib/include/PR -I lib/libmus/include
+IINC := -I include -I lib/ultralib/include -I lib/ultralib/include/PR -I lib/libmus/include/PR -I lib/libmus/src
 
 MIPS_BUILTIN_DEFS := -D_MIPS_ISA_MIPS2=2 -D_MIPS_ISA=_MIPS_ISA_MIPS2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZPTR=32
 CC_CHECK_FLAGS    := -MMD -MP -fno-builtin -fsyntax-only -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1
 
 TARGET = $(BUILD_DIR)/$(BASENAME)
-LD_SCRIPT = $(BASENAME).ld
 
 OBJCOPYFLAGS = -O binary
 
@@ -71,9 +72,9 @@ LIBMUS = lib/libmus/build/libmus.a
 # note: his is probably an issue with headers. Once ultra headers are properly included this should
 # go away.
 UNDEFINED_SYMS := osPfsIsPlug
-LD_FLAGS_EXTRA += $(foreach sym,$(UNDEFINED_SYMS),-u $(sym))
-
-LINKER_SCRIPTS := $(LD_SCRIPT) linker_scripts/hardware_regs.ld linker_scripts/libultra_syms.ld
+LD_SCRIPT = $(BASENAME).ld
+LINKER_SCRIPTS := linker_scripts/hardware_regs.ld linker_scripts/libultra_syms.ld
+LD_FLAGS := -T $(LD_SCRIPT) -T undefined_syms_auto.txt -Map snowboardkids2.map --no-check-sections $(foreach sym,$(UNDEFINED_SYMS),-u $(sym)) -Lbuild/lib -lmus -lgultra_rom
 
 # Targets
 
@@ -113,8 +114,8 @@ diff-sxs:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
-	@$(LD) -T undefined_syms_auto.txt $(LD_FLAGS_EXTRA) -Map $(TARGET).map $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) --no-check-sections -Lbuild/lib -lmus -lgultra_rom -o $@
 	@printf "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
+	@$(LD) $(LD_FLAGS) $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) -o $@
 
 $(BUILD_DIR)/src/%.o: src/%.c
 	@mkdir -p $(shell dirname $@)
@@ -126,7 +127,7 @@ $(BUILD_DIR)/src/%.o: src/%.c
 $(BUILD_DIR)/lib/libkmc/%.o: lib/libkmc/%.s
 	@mkdir -p $(shell dirname $@)
 	@printf "[$(GREEN)   as   $(NO_COL)]  $<\n"; \
-	$(CPP) -I include -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) $< | \
+	cpp -P -I include -I $(BUILD_DIR)/$(dir $*) $< | \
 		$(ICONV) | \
 		$(AS) $(ASFLAGS) -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) -o $@
 	$(OBJDUMP_CMD)
