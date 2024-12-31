@@ -39,7 +39,7 @@ options:
   lib_path: build/lib
 
   symbol_name_format: $VRAM_$ROM
-  migrate_rodata_to_functions: yes
+  migrate_rodata_to_functions: True
   gfx_ucode: f3dex
 
   string_encoding: ASCII
@@ -164,7 +164,7 @@ segments:
       - [0x6E840, asm]
       - [0x70DB0, asm]
       - [0x717D0, asm]
-      - [0x72220, asm, player]
+      - [0x72220, c, player]
       # - [0x72220, lib, libmus, player]
       - [0x75400, lib, libmus, player_fx]
       - [0x75CE0, lib, libgultra_rom, cosf]
@@ -658,7 +658,7 @@ segments:
       - [0x9F090, rodata, 36E50]
       - [0x9F3C0, rodata, 46080]
       - [0x9F480, rodata, 4CD70]
-      - [0x9F660, rodata, player]
+      - [0x9F660, rodata]
       # - [0x9F660, lib, libmus, player, .rodata]
       - [0x9F740, lib, libmus, player_fx, .rodata]
       - [0x9F750, lib, libgultra_rom, cosf, .rodata]
