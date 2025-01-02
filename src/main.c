@@ -2,7 +2,9 @@
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000450_1050);
 
-INCLUDE_ASM("asm/nonmatchings/main", osVoiceCheckWord);
+s32 osVoiceCheckWord(u8* data) {
+    return 0xE;
+}
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000460_1060);
 
