@@ -1,6 +1,4 @@
 #include "common.h"
-#include "ultra64.h"
-#include "player.h"
 
 INCLUDE_ASM("asm/nonmatchings/player", Fstop);
 

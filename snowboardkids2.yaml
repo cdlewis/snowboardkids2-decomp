@@ -48,6 +48,7 @@ options:
   data_string_guesser_level: 2
   libultra_symbols: True
   hardware_regs: True
+  hasm_in_src_path: True
 
 segments:
   - name: header
@@ -63,14 +64,14 @@ segments:
     start: 0x1000
     vram: 0x80000400
     subsegments:
-      - [0x1000, hasm, entrypoint]
+      - [0x1000, hasm, entrypoint/entrypoint]
 
   - name: main
     type: code
     start: 0x1050
     vram: 0x80000450
     follows_vram: entry
-    bss_size: 0x10850
+    bss_size: 0x10D40
     subalign: 8
     subsegments:
       - [0x1050, c, main]
@@ -634,12 +635,13 @@ segments:
       - [0x9DC40, lib, libgultra_rom, timerintr, .data]
       - [0x9DC50, lib, libgultra_rom, vi, .data]
       - [0x9DCC0, lib, libgultra_rom, siacs, .data]
-      - [0x9DCD0, data]
+      - [0x9DCD0, data] # contains osViMode
       - [0x9DDC0, lib, libgultra_rom, piacs, .data]
       - [0x9DDD0, lib, libgultra_rom, xprintf, .data]
       - [0x9DE20, lib, libgultra_rom, contpfs, .data]
       - [0x9DE30, lib, libgultra_rom, contramread, .data]
       - [0x9DE40, lib, libgultra_rom, xlitob, .data]
+      # F3Dex fifo 2.05 microcode at 0x9E600
       - [0x9DE70, rodata]
       - [0x9E8E0, rodata, 4050]
       - [0x9E910, rodata, 5520]
@@ -684,9 +686,8 @@ segments:
       - [0x9FBE8, lib, libgultra_rom, xprintf, .rodata]
       - [0x9FD60, lib, libgultra_rom, epirawread, .rodata]
       - [0x9FD80, lib, libgultra_rom, xldtob, .rodata]
-      - [0x9FDF0, rodata]
 
-      - { start: 0xA02E0, type: bss, vram: 0x8009F6E0, name: A02E0 }
+      - { start: 0x9FDF0, type: bss, vram: 0x8009F1F0, name: A02E0 }
       # - { type: lib, vram: 0x800A64C0, name: libmus, object: player, section: .bss }
       - { type: lib, vram: 0x800A6530, name: libgultra_rom, object: sptask, section: .bss }
       - { type: lib, vram: 0x800A6570, name: libgultra_rom, object: motor, section: .bss }
@@ -698,11 +699,11 @@ segments:
 
   - name: cool_new_section
     type: code
-    start: 0xA02E0
+    start: 0x9FDF0
     follows_vram: main
     vram: 0x800AFF30
     subsegments:
-      - [0xA02E0, asm]
+      - [0x9FDF0, asm]
       - [0xAA8E0, data]
       - [0xAAD10, rodata]
       - [0xAAEC0, rodata]
@@ -717,15 +718,13 @@ segments:
       - [0xABAE0, rodata]
       - [0xB04E0, rodata]
 
-      - { start: 0xB27D0, type: bss, vram: 0x800C2420 }
-
   - name: cool_new_section_2
     type: code
-    start: 0xB27D0
+    start: 0xB22E0
     follows_vram: cool_new_section
     vram: 0x800C2420
     subsegments:
-      - [0xB27D0, asm]
+      - [0xB22E0, asm]
       - [0xB2870, asm]
       - [0xB40E0, data]
 
@@ -733,7 +732,7 @@ segments:
     type: code
     start: 0xB4240
     follows_vram: cool_new_section_2
-    vram: 0x800C3E90
+    vram: 0x800C4380
     subsegments:
       - [0xB4240, asm]
       - [0xB4B20, data]
@@ -742,7 +741,7 @@ segments:
     type: code
     start: 0xB4BB0
     follows_vram: cool_new_section_3
-    vram: 0x800C4800
+    vram: 0x800C4CF0
     subsegments:
       - [0xB4BB0, asm]
       - [0xB5450, data]
@@ -751,7 +750,7 @@ segments:
     type: code
     start: 0xB54C0
     follows_vram: cool_new_section_4
-    vram: 0x800C5110
+    vram: 0x800C5600
     subsegments:
       - [0xB54C0, asm]
       - [0xB5B40, data]
@@ -760,7 +759,7 @@ segments:
     type: code
     start: 0xB74F0
     follows_vram: cool_new_section_5
-    vram: 0x800C7140
+    vram: 0x800C7630
     subsegments:
       - [0xB74F0, asm]
       - [0xB7DD0, data]
