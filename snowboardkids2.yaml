@@ -630,7 +630,7 @@ segments:
       - [0x9CA10, lib, libgultra_rom, cartrominit, .data]
       - [0x9CA20, lib, libgultra_rom, pimgr, .data]
       - [0x9CA50, lib, libgultra_rom, vimgr, .data]
-      - [0x9CA70, data] # possibly variant of vitbl
+      - [0x9CA70, lib, libgultra_rom, vitbl, .data]
       - [0x9DBF0, lib, libgultra_rom, exceptasm, .data]
       - [0x9DC20, lib, libgultra_rom, initialize, .data]
       - [0x9DC40, lib, libgultra_rom, timerintr, .data]
