@@ -30,7 +30,7 @@ LIBKMC_S_FILES = $(foreach dir,lib/libkmc,$(wildcard $(dir)/*.s))
           #  $(foreach file,$(C_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
           #  $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o) \
 					#  $(foreach file,$(LIBKMC_S_FILES),$(BUILD_DIR)/$(dir $(file))$(notdir $(basename $(file))).o)
-O_FILES := $(shell grep -E 'build\/(asm|assets|src|bin|lib\/libkmc)\/.+\.o' snowboardkids2.ld -o | sort | uniq)
+O_FILES := $(shell grep -E 'build\/(asm|assets|src|src\/entrypoint|bin|lib\/libkmc)\/.+\.o' snowboardkids2.ld -o | sort | uniq)
 
 
 # Tools
@@ -124,7 +124,7 @@ $(BUILD_DIR)/src/%.o: src/%.c
 	@$(CC) $(CFLAGS) -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) -E $< | $(CC) -x c $(CFLAGS) -fno-asm -I $(dir $*) -c -o $@ -
 	$(OBJDUMP_CMD)
 
-$(BUILD_DIR)/lib/libkmc/%.o: lib/libkmc/%.s
+$(BUILD_DIR)/%.o: %.s
 	@mkdir -p $(shell dirname $@)
 	@printf "[$(GREEN)   as   $(NO_COL)]  $<\n"; \
 	cpp -P -I include -I $(BUILD_DIR)/$(dir $*) $< | \
@@ -148,12 +148,6 @@ $(LIBULTRA):
 LIBMUS_FLAGS = COMPILER_DIR=../../$(COMPILER_DIR) ULTRA_DIR=../ultralib
 $(LIBMUS):
 	$(LIBMUS_FLAGS) $(MAKE) -C lib/libmus
-
-$(BUILD_DIR)/%.o: %.s
-	@if [ "$(dir $<)" != "lib/libkmc/" ]; then \
-		printf "[$(GREEN)   as   $(NO_COL)]  $<\n"; \
-		$(AS) $(ASFLAGS) $< -o $(BUILD_DIR)/$(dir $<)$(notdir $(basename $<)).o; \
-	fi
 
 $(BUILD_DIR)/%.o: %.bin
 	@printf "[$(PINK) linker $(NO_COL)]  $<\n"
