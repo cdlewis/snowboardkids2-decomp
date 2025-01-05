@@ -630,7 +630,7 @@ segments:
       - [0x9CA10, lib, libgultra_rom, cartrominit, .data]
       - [0x9CA20, lib, libgultra_rom, pimgr, .data]
       - [0x9CA50, lib, libgultra_rom, vimgr, .data]
-      - [0x9CA70, data]
+      - [0x9CA70, data] # possibly variant of vitbl
       - [0x9DBF0, lib, libgultra_rom, exceptasm, .data]
       - [0x9DC20, lib, libgultra_rom, initialize, .data]
       - [0x9DC40, lib, libgultra_rom, timerintr, .data]
@@ -683,7 +683,7 @@ segments:
       - [0x9FB00, lib, libgultra_rom, aisetfreq, .rodata]
       - [0x9FB10, lib, libgultra_rom, viswapcontext, .rodata]
       - [0x9FB20, lib, libgultra_rom, exceptasm, .rodata]
-      - [0x9FB70, rodata]
+      - [0x9FB70, lib, libgultra_rom, libm_vals, .rodata]
       - [0x9FB80, lib, libgultra_rom, sprawdma, .rodata]
       - [0x9FB90, lib, libgultra_rom, sirawread, .rodata]
       - [0x9FBA0, lib, libgultra_rom, sirawwrite, .rodata]
