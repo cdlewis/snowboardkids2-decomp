@@ -636,7 +636,9 @@ segments:
       - [0x9DC40, lib, libgultra_rom, timerintr, .data]
       - [0x9DC50, lib, libgultra_rom, vi, .data]
       - [0x9DCC0, lib, libgultra_rom, siacs, .data]
-      - [0x9DCD0, data] # contains osViMode
+      - [0x9DCD0, lib, libgultra_rom, vimodentsclan1, .data]
+      - [0x9DD20, lib, libgultra_rom, vimodepallan1, .data]
+      - [0x9DD70, lib, libgultra_rom, vimodempallan1, .data]
       - [0x9DDC0, lib, libgultra_rom, piacs, .data]
       - [0x9DDD0, lib, libgultra_rom, xprintf, .data]
       - [0x9DE20, lib, libgultra_rom, contpfs, .data]
