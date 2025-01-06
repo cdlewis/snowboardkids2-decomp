@@ -16,7 +16,7 @@ import (
  * Very hacky script to calculate completion %
  */
 
-var finishedCSegments = []string{}
+var finishedCSegments = []string{"boot"}
 var re = regexp.MustCompile(`(?i)([a-z_]+): ([a-z_0-9\.]+)`)
 
 type SplatConfig struct {
