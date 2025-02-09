@@ -10,3 +10,9 @@
 [submodule "lib/libmus"]
 	path = lib/libmus
 	url = git@github.com:cdlewis/libmus.git
+[submodule "tools/asm-differ"]
+	path = tools/asm-differ
+	url = git@github.com:simonlindholm/asm-differ.git
+[submodule "tools/decomp-permuter"]
+	path = tools/decomp-permuter
+	url = git@github.com:simonlindholm/decomp-permuter.git

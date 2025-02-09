@@ -1,3 +1,6 @@
+mainMessageQueue = 0x800AB1B0;
+mainMessageQueueBuffer = 0x800A32E0;
+
 idleThread = 0x800A24B0;
 idleThreadEntrypoint = 0x8005600C;
 mainThread = 0x800A27E0;
