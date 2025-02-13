@@ -1,5 +1,49 @@
+thread_function_1 = 0x80070448; 
+thread_function_2 = 0x800706B8; 
+thread_function_3 = 0x8007091C; 
+thread_function_4 = 0x800709B8;
+
+thread_a = 0x800A3900; // size:0x1B0
+thread_b = 0x800A3F60; // size:0x1B0
+thread_c = 0x800A35D0; // size:0x1B0
+thread_d = 0x800A3C30; // size:0x1B0
+
+thread_a_stack = 0x800A3780;
+thread_b_stack = 0x800A3AB0;
+thread_c_stack = 0x800A3DE0;
+thread_d_stack = 0x800A4110;
+
+viEventQueue = 0x800A4290;
+eventQueue1 = 0x800A42B8;
+eventQueue2 = 0x800A42F0;
+threadSyncQueue = 0x800A4328;
+taskCompletionQueue = 0x800A43C0;
+eventQueue3 = 0x800A43E8;
+frameBufferQueue = 0x800A4410;
+eventQueue4 = 0x800A4438;
+
+vertical_retrace_message = 0x8009AFF0;
+sp_task_done_message = 0x8009AFFC;
+dp_interrupt_message = 0x8009B008;
+prenmi_interrupt_message = 0x8009B014;
+
+viConfigFlags = 0x800A4454;
+frameCounter = 0x800A4458;
+frameDelay = 0x800A445A;
+
+initialize_video_and_threads = 0x800701B0;
+
 mainMessageQueue = 0x800AB1B0;
 mainMessageQueueBuffer = 0x800A32E0;
+
+framebuffer_message = 0x800A4428;
+vi_message = 0x800A42A8;
+event_queue_1_message = 0x800A42D0;
+event_queue_2_message = 0x800A4308;
+thread_sync_message = 0x800A4340;
+task_completion_message = 0x800A43D8;
+event_queue_3_message = 0x800A4400;
+event_queue_4_message = 0x800A4450;
 
 idleThread = 0x800A24B0;
 idleThreadEntrypoint = 0x8005600C;

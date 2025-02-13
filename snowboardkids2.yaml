@@ -164,7 +164,8 @@ segments:
       # - [0x6E640, c, mainEntrypoint] (~80% matching)
       - [0x6E640, asm, mainEntrypoint]
       - [0x6E840, asm]
-      - [0x70DB0, asm]
+      # - [0x70DB0, asm]
+      - [0x70DB0, c]
       - [0x717D0, asm]
       - [0x72220, c, player]
       # - [0x72220, lib, libmus, player]
@@ -614,7 +615,7 @@ segments:
       - [0x9B4D0, data] # 0x9b510 / 0x9b730 has some kind of keyboard / alphabet?
       - [0x9B9F0, data]
       - [0x9BAD0, data]
-      - [0x9BBF0, data]
+      - [0x9BBF0, .data, 70DB0]
       - [0x9BC20, data]
       - [0x9BC30, data]
       - [0x9BC50, data, player]
