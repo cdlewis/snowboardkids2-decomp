@@ -97,7 +97,7 @@ void func_800705D0_711D0(viConfig *config, s32 mode, s32 frameCount) {
     viConfig **prevConfig;
     u32 nextIntMask;
 
-    nextIntMask = osSetIntMask(1U);
+    nextIntMask = osSetIntMask(SR_IE);
     if (currentViConfig != NULL) {
         *currentViConfig = config;
     }
@@ -150,21 +150,21 @@ void thread_function_3(void* arg) {
     stack.eventQueueOneMessage = (OSMesg)0xB;
 
     while (TRUE) {
-        osRecvMesg(&eventQueue2, &stack.message, 1);
-        osSendMesg(&eventQueue1, &stack.eventQueueOneMessage, 1);
-        osRecvMesg(&frameBufferQueue, &frameBufferQueueMessage, 1);
+        osRecvMesg(&eventQueue2, &stack.message, OS_MESG_BLOCK);
+        osSendMesg(&eventQueue1, &stack.eventQueueOneMessage, OS_MESG_BLOCK);
+        osRecvMesg(&frameBufferQueue, &frameBufferQueueMessage, OS_MESG_BLOCK);
 
         temp = stack.message;  // force a copy into v0
-        osSendMesg(temp->messageQueue, temp->message, 1);
+        osSendMesg(temp->messageQueue, temp->message, OS_MESG_BLOCK);
     }
 }
 
 void sendMessageToEventQueue2(OSMesg message) {
-    osSendMesg(&eventQueue2, message, 1);
+    osSendMesg(&eventQueue2, message, OS_MESG_BLOCK);
 }
 
 INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_4);
 
 void sendMessageToThreadSyncQueue(OSMesg message) {
-    osSendMesg(&threadSyncQueue, message, 1);
+    osSendMesg(&threadSyncQueue, message, OS_MESG_BLOCK);
 }
