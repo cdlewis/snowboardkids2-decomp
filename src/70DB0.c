@@ -111,7 +111,29 @@ void func_800705D0_711D0(viConfig *config, s32 mode, s32 frameCount) {
     osSetIntMask(nextIntMask);
 }
 
-INCLUDE_ASM("asm/nonmatchings/70DB0", func_80070650_71250);
+void removeViConfig(viConfig *configs) {
+    u32 previousInterruptMask;
+    viConfig **temp;
+
+    previousInterruptMask = osSetIntMask(SR_IE);
+    temp = (viConfig**)configs->prevConfig;
+    
+    // If there was a previous config, update its next pointer
+    if (temp != NULL) {
+        // Highly questionable pointer arithmatic
+        *(temp+1) = configs->nextConfig;
+    } else {
+        // If this was the first node, update the global pointer
+        currentViConfig = (viConfig**)configs->nextConfig;
+    }
+
+    // If there was a next config, set it to the previous one
+    temp = (viConfig**)configs->nextConfig;
+    if (temp != NULL) {
+        *temp = configs->prevConfig;
+    }
+    osSetIntMask(previousInterruptMask);
+}
 
 INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_2);
 

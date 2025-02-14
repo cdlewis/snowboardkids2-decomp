@@ -1,3 +1,5 @@
+removeViConfig = 0x80070650;
+
 thread_function_1 = 0x80070448; 
 thread_function_2 = 0x800706B8; 
 thread_function_3 = 0x8007091C; 
