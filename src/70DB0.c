@@ -159,12 +159,12 @@ void thread_function_3(void* arg) {
     }
 }
 
-void func_80070990_71590(void* arg0) {
-    osSendMesg(&eventQueue2, arg0, 1);
+void sendMessageToEventQueue2(OSMesg message) {
+    osSendMesg(&eventQueue2, message, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_4);
 
-void func_80070B9C_7179C(void* arg0) {
-    osSendMesg(&threadSyncQueue, arg0, 1);
+void sendMessageToThreadSyncQueue(OSMesg message) {
+    osSendMesg(&threadSyncQueue, message, 1);
 }

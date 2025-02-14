@@ -1,3 +1,5 @@
+sendMessageToEventQueue2 = 0x80070990;
+sendMessageToThreadSyncQueue = 0x80070B9C;
 removeViConfig = 0x80070650;
 
 thread_function_1 = 0x80070448; 
