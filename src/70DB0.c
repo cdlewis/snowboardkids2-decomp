@@ -15,4 +15,6 @@ INCLUDE_ASM("asm/nonmatchings/70DB0", func_80070990_71590);
 
 INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_4);
 
-INCLUDE_ASM("asm/nonmatchings/70DB0", func_80070B9C_7179C);
+void func_80070B9C_7179C(void* arg0) {
+    osSendMesg(&threadSyncQueue, arg0, 1);
+}
