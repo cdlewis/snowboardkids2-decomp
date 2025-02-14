@@ -27,7 +27,7 @@ sp_task_done_message = 0x8009AFFC;
 dp_interrupt_message = 0x8009B008;
 prenmi_interrupt_message = 0x8009B014;
 
-viConfigFlags = 0x800A4454;
+currentViConfig = 0x800A4454;
 frameCounter = 0x800A4458;
 frameDelay = 0x800A445A;
 

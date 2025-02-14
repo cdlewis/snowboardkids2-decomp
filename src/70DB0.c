@@ -11,6 +11,14 @@ typedef struct {
     OSMesg message;
 } eventQueue2Response;
 
+typedef struct {
+    struct viConfig **prevConfig;
+    struct viConfig **nextConfig;
+    int mode;
+    u16 frameCounter;
+    u16 maxFrames;
+} viConfig;
+
 // data
 int vertical_retrace_message[3] = {0x5, 0, 0};
 int sp_task_done_message[3] = {0x6, 0, 0};
@@ -36,7 +44,7 @@ char thread_c_stack[0x180];
 char thread_d_stack[0x180];
 s16 frameCounter;
 s16 frameDelay;
-s32 viConfigFlags;
+viConfig **currentViConfig;
 OSMesgQueue viEventQueue;
 OSMesgQueue eventQueue1;
 OSMesgQueue eventQueue2;
@@ -54,7 +62,7 @@ void initialize_video_and_threads(s32 viMode) {
     osViSetSpecialFeatures(OS_VI_GAMMA_OFF | OS_VI_GAMMA_DITHER_OFF | OS_VI_DIVOT_OFF | OS_VI_DITHER_FILTER_ON);
     frameCounter = 0;
     frameDelay = 0x1E;
-    viConfigFlags = 0;
+    currentViConfig = 0;
     osCreateMesgQueue(&viEventQueue, &vi_message, 4);
     osViSetEvent(&viEventQueue, &vertical_retrace_message, 1U);
     osSetEventMesg(OS_EVENT_PRENMI, &viEventQueue, &prenmi_interrupt_message);
@@ -85,7 +93,23 @@ void initialize_video_and_threads(s32 viMode) {
 
 INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_1);
 
-INCLUDE_ASM("asm/nonmatchings/70DB0", func_800705D0_711D0);
+void func_800705D0_711D0(viConfig *config, s32 mode, s32 frameCount) {
+    viConfig **prevConfig;
+    u32 nextIntMask;
+
+    nextIntMask = osSetIntMask(1U);
+    if (currentViConfig != NULL) {
+        *currentViConfig = config;
+    }
+    prevConfig = currentViConfig;
+    config->prevConfig = NULL;
+    config->mode = mode;
+    config->frameCounter = 0;
+    config->maxFrames = (s16) (frameCount - 1);
+    currentViConfig = config;
+    config->nextConfig = prevConfig;
+    osSetIntMask(nextIntMask);
+}
 
 INCLUDE_ASM("asm/nonmatchings/70DB0", func_80070650_71250);
 
