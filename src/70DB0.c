@@ -11,13 +11,14 @@ typedef struct {
     OSMesg message;
 } eventQueue2Response;
 
-typedef struct {
-    struct viConfig **prevConfig;
-    struct viConfig **nextConfig;
+typedef struct viConfig_s ViConfig;
+struct viConfig_s {
+    ViConfig **prevConfig;
+    ViConfig **nextConfig;
     int mode;
     u16 frameCounter;
     u16 maxFrames;
-} viConfig;
+};
 
 // data
 int vertical_retrace_message[3] = {0x5, 0, 0};
@@ -44,7 +45,7 @@ char thread_c_stack[0x180];
 char thread_d_stack[0x180];
 s16 frameCounter;
 s16 frameDelay;
-viConfig **currentViConfig;
+ViConfig **currentViConfig;
 OSMesgQueue viEventQueue;
 OSMesgQueue eventQueue1;
 OSMesgQueue eventQueue2;
@@ -62,7 +63,7 @@ void initialize_video_and_threads(s32 viMode) {
     osViSetSpecialFeatures(OS_VI_GAMMA_OFF | OS_VI_GAMMA_DITHER_OFF | OS_VI_DIVOT_OFF | OS_VI_DITHER_FILTER_ON);
     frameCounter = 0;
     frameDelay = 0x1E;
-    currentViConfig = 0;
+    currentViConfig = NULL;
     osCreateMesgQueue(&viEventQueue, &vi_message, 4);
     osViSetEvent(&viEventQueue, &vertical_retrace_message, 1U);
     osSetEventMesg(OS_EVENT_PRENMI, &viEventQueue, &prenmi_interrupt_message);
@@ -93,8 +94,8 @@ void initialize_video_and_threads(s32 viMode) {
 
 INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_1);
 
-void func_800705D0_711D0(viConfig *config, s32 mode, s32 frameCount) {
-    viConfig **prevConfig;
+void func_800705D0_711D0(ViConfig *config, s32 mode, s32 frameCount) {
+    ViConfig **prevConfig;
     u32 nextIntMask;
 
     nextIntMask = osSetIntMask(SR_IE);
@@ -111,12 +112,12 @@ void func_800705D0_711D0(viConfig *config, s32 mode, s32 frameCount) {
     osSetIntMask(nextIntMask);
 }
 
-void removeViConfig(viConfig *configs) {
+void removeViConfig(ViConfig *configs) {
     u32 previousInterruptMask;
-    viConfig **temp;
+    ViConfig **temp;
 
     previousInterruptMask = osSetIntMask(SR_IE);
-    temp = (viConfig**)configs->prevConfig;
+    temp = configs->prevConfig;
     
     // If there was a previous config, update its next pointer
     if (temp != NULL) {
@@ -124,11 +125,11 @@ void removeViConfig(viConfig *configs) {
         *(temp+1) = configs->nextConfig;
     } else {
         // If this was the first node, update the global pointer
-        currentViConfig = (viConfig**)configs->nextConfig;
+        currentViConfig = configs->nextConfig;
     }
 
     // If there was a next config, set it to the previous one
-    temp = (viConfig**)configs->nextConfig;
+    temp = configs->nextConfig;
     if (temp != NULL) {
         *temp = configs->prevConfig;
     }
