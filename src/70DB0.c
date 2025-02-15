@@ -1,9 +1,9 @@
 #include "common.h"
 
-void thread_function_1(void*);
-void thread_function_2(void*);
-void thread_function_3(void*);
-void thread_function_4(void*);
+void thread_function_1(void *);
+void thread_function_2(void *);
+void thread_function_3(void *);
+void thread_function_4(void *);
 
 typedef struct {
     char padding[61];
@@ -45,7 +45,11 @@ char thread_c_stack[0x180];
 char thread_d_stack[0x180];
 s16 frameCounter;
 s16 frameDelay;
+
+// I'm not convinced this is **. A single pointer would
+// make more sense.
 ViConfig **currentViConfig;
+
 OSMesgQueue viEventQueue;
 OSMesgQueue eventQueue1;
 OSMesgQueue eventQueue2;
@@ -94,11 +98,12 @@ void initialize_video_and_threads(s32 viMode) {
 
 INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_1);
 
-void func_800705D0_711D0(ViConfig *config, s32 mode, s32 frameCount) {
-    ViConfig **prevConfig;
+void addViConfig(ViConfig *config, s32 mode, s32 frameCount) {
+    ViConfig *prevConfig;
     u32 nextIntMask;
 
     nextIntMask = osSetIntMask(SR_IE);
+
     if (currentViConfig != NULL) {
         *currentViConfig = config;
     }
@@ -106,9 +111,10 @@ void func_800705D0_711D0(ViConfig *config, s32 mode, s32 frameCount) {
     config->prevConfig = NULL;
     config->mode = mode;
     config->frameCounter = 0;
-    config->maxFrames = (s16) (frameCount - 1);
+    config->maxFrames = (s16)(frameCount - 1);
     currentViConfig = config;
     config->nextConfig = prevConfig;
+
     osSetIntMask(nextIntMask);
 }
 
@@ -118,11 +124,11 @@ void removeViConfig(ViConfig *configs) {
 
     previousInterruptMask = osSetIntMask(SR_IE);
     temp = configs->prevConfig;
-    
+
     // If there was a previous config, update its next pointer
     if (temp != NULL) {
         // Highly questionable pointer arithmatic
-        *(temp+1) = configs->nextConfig;
+        *(temp + 1) = configs->nextConfig;
     } else {
         // If this was the first node, update the global pointer
         currentViConfig = configs->nextConfig;
@@ -138,7 +144,7 @@ void removeViConfig(ViConfig *configs) {
 
 INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_2);
 
-void thread_function_3(void* arg) {
+void thread_function_3(void *arg) {
     // force specific layout of these variables on the stack
     struct {
         OSMesg eventQueueOneMessage;
@@ -146,7 +152,7 @@ void thread_function_3(void* arg) {
         OSMesg message;
     } stack;
     OSMesg frameBufferQueueMessage;
-    eventQueue2Response* temp;
+    eventQueue2Response *temp;
 
     stack.eventQueueOneMessage = (OSMesg)0xB;
 
