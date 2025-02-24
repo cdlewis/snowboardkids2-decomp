@@ -205,7 +205,9 @@ void removeViConfig(ViConfig *configs) {
     osSetIntMask(previousInterruptMask);
 }
 
+// 83.73% match
 INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_2);
+// #include "thread_function_2.c"
 
 void thread_function_3(void *arg) {
     // force specific layout of these variables on the stack
@@ -233,7 +235,9 @@ void sendMessageToEventQueue2(OSMesg message) {
     osSendMesg(&eventQueue2, message, OS_MESG_BLOCK);
 }
 
+// 99.79% match
 INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_4);
+// #include "thread_function_4.c"
 
 void sendMessageToThreadSyncQueue(OSMesg message) {
     osSendMesg(&threadSyncQueue, message, OS_MESG_BLOCK);
