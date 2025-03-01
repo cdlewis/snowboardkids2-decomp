@@ -20,6 +20,16 @@ struct viConfig_s {
     u16 maxFrames;
 };
 
+typedef struct {
+    char padding2[61];
+    OSMesg messageQueue;
+    OSMesg message;
+    void *unk48;
+    u16 unk4C;
+    u16 unk4E;
+    u32 padding;
+} FrameInfo;
+
 // data
 int vertical_retrace_message[3] = {0x5, 0, 0};
 int sp_task_done_message[3] = {0x6, 0, 0};
@@ -98,7 +108,7 @@ void initialize_video_and_threads(s32 viMode) {
     osStartThread(&thread_d);
 }
 
-void thread_function_1(void* arg) {
+void thread_function_1(void *arg) {
     u32 temp = 0xA << 16;
     s32 *message;
     s16 temp_v0;
@@ -110,7 +120,7 @@ void thread_function_1(void* arg) {
     while (TRUE) {
         osRecvMesg(&viEventQueue, (OSMesg *)&message, OS_MESG_BLOCK);
         messageType = *message;
-        
+
         if (messageType != 0x5) {
             if (messageType == 0xA) {
                 // run through all configs and send as message until none are left?
@@ -120,28 +130,28 @@ void thread_function_1(void* arg) {
                 var_s1 |= (u16)frameCounter;
                 var_s0 = currentViConfig;
                 while (var_s0) {
-                    osSendMesg(var_s0->messageQueue, (OSMesg) var_s1, OS_MESG_NOBLOCK);
+                    osSendMesg(var_s0->messageQueue, (OSMesg)var_s1, OS_MESG_NOBLOCK);
                     var_s0 = var_s0->nextConfig;
                 }
-                
+
                 osViBlack(TRUE);
                 D_8009B020_9BC20 = 1;
             }
-            
+
             continue;
         }
 
         // Increment frameCounter and wrap if > 0xFFF
         frameCounter = (frameCounter + 1) & 0xFFF;
-        
+
         if (D_8009B020_9BC20 && D_8009B024_9BC24) {
             D_8009B024_9BC24--;
         }
-        
+
         var_s1 = var_s1 & 0xFFFF;
         var_s1 |= 0x50000;
         var_s1 = (var_s1 & 0xFFFF0000);
-        var_s1 |= (u16) frameCounter;
+        var_s1 |= (u16)frameCounter;
         config = currentViConfig;
         while (config) {
             temp_v0 = config->frameCounter;
@@ -153,7 +163,7 @@ void thread_function_1(void* arg) {
             }
             config = config->nextConfig;
         }
-        
+
         if (frameDelay == 0) {
             continue;
         }
@@ -235,9 +245,59 @@ void sendMessageToEventQueue2(OSMesg message) {
     osSendMesg(&eventQueue2, message, OS_MESG_BLOCK);
 }
 
-// 99.79% match
-INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_4);
-// #include "thread_function_4.c"
+void thread_function_4(void *arg) {
+    s32 temp_v0;
+    s32 delayCounter;
+    s16 frameIndex;
+    void *frameBuffer;
+    struct
+    {
+        s32 sp10;
+        FrameInfo *frameInfo;
+        s32 temp_a0;
+        char padding2[4];
+        ViConfig sp20;
+        void *sp30;
+        void *sp34;
+    } stack;
+    delayCounter = 1;
+    stack.sp10 = 7;
+    addViConfig(&stack.sp20, &eventQueue4, 1);
+    while (1) {
+        osRecvMesg(&threadSyncQueue, (OSMesg *)(&stack.frameInfo), 1);
+        frameIndex = stack.frameInfo->unk4C;
+        frameBuffer = stack.frameInfo->unk48;
+        while ((osViGetCurrentFramebuffer() == frameBuffer) || (osViGetNextFramebuffer() == frameBuffer)) {
+            osRecvMesg(&eventQueue4, &stack.sp30, 1);
+        }
+
+        osSendMesg(&eventQueue1, &stack.sp10, 1);
+        osRecvMesg(&eventQueue3, &stack.sp34, 1);
+        osRecvMesg(&taskCompletionQueue, &stack.sp34, 1);
+        if (!(stack.frameInfo->unk4E & 1)) {
+            continue;
+        }
+        osSendMesg(stack.frameInfo->messageQueue, stack.frameInfo->message, 1);
+
+        while (((frameCounter - frameIndex & 0xFFF) != 0) && (frameCounter - frameIndex & 0xFFF) < 0x800) {
+            frameIndex++;
+        }
+
+        while ((frameCounter - frameIndex & 0xFFF) >= 0x801) {
+            osRecvMesg(&eventQueue4, &stack.sp30, 1);
+        }
+
+        osViSwapBuffer((void *)frameBuffer);
+        if ((!(delayCounter & 0xFF)) || (frameDelay != 0)) {
+            continue;
+        }
+        delayCounter--;
+        if (D_8009B020_9BC20) {
+            continue;
+        }
+        osViBlack(0);
+    }
+}
 
 void sendMessageToThreadSyncQueue(OSMesg message) {
     osSendMesg(&threadSyncQueue, message, OS_MESG_BLOCK);
