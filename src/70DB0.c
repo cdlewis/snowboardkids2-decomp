@@ -45,7 +45,7 @@ char thread_a_stack[0x180];
 char thread_b_stack[0x180];
 char thread_c_stack[0x180];
 char thread_d_stack[0x180];
-u16 frameCounter;
+s16 frameCounter;
 s16 frameDelay;
 
 // I'm not convinced this is **. A single pointer would
@@ -98,63 +98,63 @@ void initialize_video_and_threads(s32 viMode) {
     osStartThread(&thread_d);
 }
 
-void thread_function_1(void *arg) {
+void thread_function_1(void* arg) {
     u32 temp = 0xA << 16;
     s32 *message;
     s16 temp_v0;
     s32 messageType;
-    u32 messagePayload;
-    ViConfig *currentConfig;
+    u32 var_s1;
+    ViConfig *var_s0;
     ViConfig *config;
 
     while (TRUE) {
         osRecvMesg(&viEventQueue, (OSMesg *)&message, OS_MESG_BLOCK);
         messageType = *message;
-
+        
         if (messageType != 0x5) {
             if (messageType == 0xA) {
                 // run through all configs and send as message until none are left?
-                messagePayload = 0xFFFF & messagePayload;
-                messagePayload = messagePayload | temp;
-                messagePayload = (messagePayload & 0xFFFF0000);
-                messagePayload = messagePayload | frameCounter;
-                currentConfig = currentViConfig;
-                while (currentConfig) {
-                    osSendMesg(currentConfig->messageQueue, (OSMesg)messagePayload, OS_MESG_NOBLOCK);
-                    currentConfig = currentConfig->nextConfig;
+                var_s1 = 0xFFFF & var_s1;
+                var_s1 |= temp;
+                var_s1 = (var_s1 & 0xFFFF0000);
+                var_s1 |= (u16)frameCounter;
+                var_s0 = currentViConfig;
+                while (var_s0) {
+                    osSendMesg(var_s0->messageQueue, (OSMesg) var_s1, OS_MESG_NOBLOCK);
+                    var_s0 = var_s0->nextConfig;
                 }
-
+                
                 osViBlack(TRUE);
                 D_8009B020_9BC20 = 1;
             }
-
+            
             continue;
         }
 
         // Increment frameCounter and wrap if > 0xFFF
         frameCounter = (frameCounter + 1) & 0xFFF;
-
+        
         if (D_8009B020_9BC20 && D_8009B024_9BC24) {
             D_8009B024_9BC24--;
         }
-
-        messagePayload = messagePayload & 0xFFFF;
-        messagePayload = messagePayload | 0x50000;
-        messagePayload = (messagePayload & 0xFFFF0000);
-        messagePayload = messagePayload | frameCounter;
+        
+        var_s1 = var_s1 & 0xFFFF;
+        var_s1 |= 0x50000;
+        var_s1 = (var_s1 & 0xFFFF0000);
+        var_s1 |= (u16) frameCounter;
         config = currentViConfig;
         while (config) {
             temp_v0 = config->frameCounter;
             if (temp_v0) {
-                config->frameCounter = (s16)(temp_v0 - 1);
+                config->frameCounter = temp_v0 - 1;
             } else {
                 config->frameCounter = config->maxFrames;
-                osSendMesg(config->messageQueue, (OSMesg)messagePayload, OS_MESG_NOBLOCK);
+                osSendMesg(config->messageQueue, (OSMesg)var_s1, OS_MESG_NOBLOCK);
             }
             config = config->nextConfig;
         }
-
-        if (!frameDelay) {
+        
+        if (frameDelay == 0) {
             continue;
         }
         frameDelay--;
