@@ -30,6 +30,12 @@ typedef struct {
     u32 padding;
 } FrameInfo;
 
+typedef struct {
+    u32 type;
+    OSTask *task;
+    OSTask *pendingTask;
+} eventQueue1_message;
+
 // data
 int vertical_retrace_message[3] = {0x5, 0, 0};
 int sp_task_done_message[3] = {0x6, 0, 0};
@@ -215,9 +221,100 @@ void removeViConfig(ViConfig *configs) {
     osSetIntMask(previousInterruptMask);
 }
 
-// 83.73% match
-INCLUDE_ASM("asm/nonmatchings/70DB0", thread_function_2);
-// #include "thread_function_2.c"
+void thread_function_2(void *arg) {
+    eventQueue1_message *msg;
+    s32 task;
+    s32 next_task;
+    s32 status_flags = 0;
+    OSTask *current_task;
+    OSTask *pending_task;
+    u32 event;
+    s32 mask;
+
+    while (TRUE) {
+        osRecvMesg(&eventQueue1, (OSMesg *)&msg, OS_MESG_BLOCK);
+        event = msg->type;
+
+        switch (event) {
+            case 7:
+                if (!D_8009B020_9BC20) {
+                    current_task = msg->task;
+
+                    if ((status_flags & 2)) {
+                        status_flags |= 4;
+                    } else {
+                        status_flags |= 1;
+                        mask = osSetIntMask(OS_IM_NONE);
+                        osWritebackDCacheAll();
+                        osSetIntMask(mask);
+                        osSpTaskStart(current_task);
+                    }
+                }
+                break;
+            case 0xB:
+                if (D_8009B024_9BC24 >= 5) {
+                    pending_task = msg->pendingTask;
+
+                    if (status_flags & 1) {
+                        status_flags |= 8;
+                        osSpTaskYield();
+                    } else {
+                        s32 mask = osSetIntMask(OS_IM_NONE);
+                        osWritebackDCacheAll();
+                        osSetIntMask(mask);
+                        osSpTaskStart(pending_task);
+                        status_flags |= 2;
+                    }
+                }
+                break;
+            case 6:
+                if (status_flags & 2) {
+                    status_flags &= ~2;
+
+                    if (status_flags & 4) {
+                        if (D_8009B020_9BC20 == 0) {
+                            s32 mask = osSetIntMask(OS_IM_NONE);
+                            osWritebackDCacheAll();
+                            osSetIntMask(mask);
+                            osSpTaskStart(current_task);
+                            status_flags |= 1;
+                        }
+                        status_flags &= ~4;
+                    }
+
+                    if (status_flags & 0x10) {
+                        osSpTaskStart(current_task);
+                        status_flags &= ~0x10;
+                        status_flags |= 1;
+                    }
+                    osSendMesg(&frameBufferQueue, (OSMesg)6, OS_MESG_BLOCK);
+                } else if (status_flags & 1) {
+                    status_flags &= ~1;
+
+                    if (status_flags & 8) {
+                        if (osSpTaskYielded(current_task)) {
+                            status_flags |= 0x10;
+                        } else {
+                            status_flags |= 0x20;
+                        }
+                        mask = osSetIntMask(OS_IM_NONE);
+                        osWritebackDCacheAll();
+                        osSetIntMask(mask);
+                        osSpTaskStart(pending_task);
+                        status_flags &= ~8;
+                        status_flags |= 2;
+                    } else {
+                        status_flags |= 0x20;
+                    }
+                    if (status_flags & 0x20) {
+                        status_flags &= ~0x20;
+                        osSendMesg(&eventQueue3, (OSMesg)6, OS_MESG_BLOCK);
+                    }
+                }
+                break;
+        }
+    }
+}
 
 void thread_function_3(void *arg) {
     // force specific layout of these variables on the stack
