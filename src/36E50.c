@@ -5,9 +5,15 @@ typedef struct {
     u8 unk10;
     u8 padding1[98];
     u8 unk73;
-    u8 padding2[944];
+    char padding[911];
+    u8 unk403;
+    char padding3[28];
+    u8 unk420;
+    char padding4[3];
     u8 unk424;
     u8 unk425;
+    char padding2[7];
+    u8 unk42D;
 } func_80036274_36E74_large_struct;
 
 typedef struct {
@@ -41,6 +47,16 @@ typedef struct {
     s8 unk72;
 } func_80036328_36F28_arg;
 
+typedef struct {
+    char padding[9];
+    u8 unk9;
+} D_800AFE8C_A71FC_type;
+
+typedef struct {
+    char padding[64];
+    void* unk40;
+} func_800371CC_37DCC_arg;
+
 s32 func_80035F80_36B80(int);
 void func_80069CE8_6A8E8(void*);
 s32 func_80069F94_6AB94(void*, void*, int);
@@ -54,6 +70,12 @@ extern void D_45A890;
 extern void D_45B130;
 extern func_80036274_36E74_large_struct* func_800698BC_6A4BC();
 extern func_80036274_36E74_large_struct* func_800699F4_6A5F4(void*, int, int, int);
+
+extern void func_80058220_58E20(u16, void*);
+extern void D_8008FAC0_906C0;
+extern s16 D_8008FD10_90910[];
+extern char D_8008FD1C_9091C[];
+extern D_800AFE8C_A71FC_type* D_800AFE8C_A71FC;
 
 void func_80036250_36E50(s8* arg0) {
     *arg0 = 0;
@@ -151,4 +173,13 @@ INCLUDE_ASM("asm/nonmatchings/36E50", func_80036C20_37820);
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036D54_37954);
 
-INCLUDE_ASM("asm/nonmatchings/36E50", func_800371CC_37DCC);
+void func_800371CC_37DCC(func_800371CC_37DCC_arg* arg0) {
+    func_80036274_36E74_large_struct* temp_v0;
+
+    temp_v0 = func_800698BC_6A4BC();
+    if (temp_v0->unk420 == 3 && temp_v0->unk42D == 8) {
+        arg0->unk40 = &D_8008FAC0_906C0;
+        func_80058220_58E20(D_8008FD10_90910[D_800AFE8C_A71FC->unk9], 0);
+        temp_v0->unk403 = D_8008FD1C_9091C[D_800AFE8C_A71FC->unk9];
+    }
+}
