@@ -1,8 +1,36 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A540_6B140);
+s16 approximateSin(s16 inputAngle) {
+    u16 temp_a0;
+    inputAngle = inputAngle & 0x1FFF;
+    temp_a0 = inputAngle;
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A588_6B188);
+    if (temp_a0 == 0x800) {
+        return 0x2000;
+    }
+
+    if (temp_a0 == 0x1800) {
+        return -0x2000;
+    }
+
+    return (sins(inputAngle << 3) << 0x10) >> 0x12;
+}
+
+s16 approximateCos(s16 inputAngle) {
+    u16 temp_a0;
+    inputAngle = inputAngle & 0x1FFF;
+    temp_a0 = inputAngle;
+
+    if (temp_a0 == 0) {
+        return 0x2000;
+    }
+
+    if (temp_a0 == 0x1000) {
+        return -0x2000;
+    }
+
+    return (coss(inputAngle << 3) << 0x10) >> 0x12;
+}
 
 INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A5CC_6B1CC);
 
