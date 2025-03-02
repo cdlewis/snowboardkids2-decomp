@@ -1,3 +1,5 @@
+approximateSin = 0x8006A540;
+approximateCos = 0x8006A588;
 approximate_sqrt = 0x8006C3F0;
 
 addViConfig = 0x800705D0;
