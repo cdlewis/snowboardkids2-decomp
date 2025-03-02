@@ -1,3 +1,5 @@
+approximate_sqrt = 0x8006C3F0;
+
 addViConfig = 0x800705D0;
 sendMessageToEventQueue2 = 0x80070990;
 sendMessageToThreadSyncQueue = 0x80070B9C;

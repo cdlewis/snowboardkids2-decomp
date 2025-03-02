@@ -160,7 +160,7 @@ segments:
       - [0x68CF0, asm]
       - [0x69EF0, asm]
       - [0x6AE20, asm]
-      - [0x6B140, asm]
+      - [0x6B140, c]
       - [0x6DE50, asm]
       # - [0x6E640, c, mainEntrypoint] (~80% matching)
       - [0x6E640, asm, mainEntrypoint]
