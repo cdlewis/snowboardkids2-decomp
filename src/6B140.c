@@ -1,5 +1,9 @@
 #include "common.h"
 
+typedef struct {
+    s16 m[9];
+} Mat3x3;
+
 s16 approximateSin(s16 inputAngle) {
     u16 temp_a0;
     inputAngle = inputAngle & 0x1FFF;
@@ -34,7 +38,15 @@ s16 approximateCos(s16 inputAngle) {
 
 INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A5CC_6B1CC);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A640_6B240);
+void createYRotationMatrix(Mat3x3 *matrix, s16 angle) {
+    s16 sinTheta = approximateSin(angle);
+    s16 cosTheta = approximateCos(angle);
+
+    *matrix = (Mat3x3){
+        cosTheta, 0, -sinTheta,
+        0, 0x2000, 0,
+        sinTheta, 0, cosTheta};
+}
 
 INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A6B0_6B2B0);
 

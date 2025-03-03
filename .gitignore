@@ -19,3 +19,4 @@ tools/gcc_kmc
 snowboardkids2.map
 nonmatchings
 __pycache__
+src/temp.c
