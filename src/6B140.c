@@ -123,4 +123,6 @@ INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C8FC_6D4FC);
 
 INCLUDE_ASM("asm/nonmatchings/6B140", func_8006CF7C_6DB7C);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006D21C_6DE1C);
+s16 func_8006D21C_6DE1C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    return func_8006CF7C_6DB7C(arg2 - arg0, arg3 - arg1);
+}
