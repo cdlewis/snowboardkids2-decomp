@@ -57,6 +57,21 @@ typedef struct {
     void* unk40;
 } func_800371CC_37DCC_arg;
 
+typedef struct {
+    char padding[1012];
+    s16 unk3F4;
+    s32 unk3F8;
+    char padding2[7];
+    u8 unk403;
+    char padding3[28];
+    u8 unk420;
+    char padding5[3];
+    u8 unk424;
+    u8 unk425;
+    char padding4[7];
+    u8 unk42D;
+} func_800698BC_6A4BC_return;
+
 s32 func_80035F80_36B80(int);
 void func_80069CE8_6A8E8(void*);
 s32 func_80069F94_6AB94(void*, void*, int);
@@ -68,7 +83,7 @@ void func_80036880_37480(void);
 
 extern void D_45A890;
 extern void D_45B130;
-extern func_80036274_36E74_large_struct* func_800698BC_6A4BC();
+extern func_800698BC_6A4BC_return* func_800698BC_6A4BC();
 extern func_80036274_36E74_large_struct* func_800699F4_6A5F4(void*, int, int, int);
 
 extern void func_80058220_58E20(u16, void*);
@@ -83,7 +98,7 @@ void func_80036250_36E50(s8* arg0) {
 }
 
 void func_80036274_36E74(u8* arg0) {
-    func_80036274_36E74_large_struct* temp_v0;
+    func_800698BC_6A4BC_return* temp_v0;
     func_80036274_36E74_large_struct* temp_v0_2;
     func_80036274_36E74_large_struct* temp_v0_3;
 
@@ -165,7 +180,28 @@ INCLUDE_ASM("asm/nonmatchings/36E50", func_80036A10_37610);
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036A3C_3763C);
 
-INCLUDE_ASM("asm/nonmatchings/36E50", func_80036A68_37668);
+void func_80036A68_37668(u8* arg0) {
+    s16 temp_v0_2;
+    s16 var_v1;
+    func_800698BC_6A4BC_return* temp_v0 = func_800698BC_6A4BC();
+
+    if (temp_v0->unk3F8 > 0x400000) {
+        temp_v0_2 = temp_v0->unk3F4;
+        var_v1 = temp_v0_2;
+        if (temp_v0_2 >= 0x1001) {
+            var_v1 -= 0x2000;
+        }
+        if (var_v1 >= 0x821) {
+            temp_v0->unk424 = 1;
+            temp_v0->unk425 = (u8)*arg0;
+            return;
+        }
+        if (var_v1 < -0x844) {
+            temp_v0->unk424 = 1;
+            temp_v0->unk425 = (u8)(*arg0 + 1);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036AF8_376F8);
 
@@ -174,9 +210,8 @@ INCLUDE_ASM("asm/nonmatchings/36E50", func_80036C20_37820);
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036D54_37954);
 
 void func_800371CC_37DCC(func_800371CC_37DCC_arg* arg0) {
-    func_80036274_36E74_large_struct* temp_v0;
+    func_800698BC_6A4BC_return* temp_v0 = func_800698BC_6A4BC();
 
-    temp_v0 = func_800698BC_6A4BC();
     if (temp_v0->unk420 == 3 && temp_v0->unk42D == 8) {
         arg0->unk40 = &D_8008FAC0_906C0;
         func_80058220_58E20(D_8008FD10_90910[D_800AFE8C_A71FC->unk9], 0);
