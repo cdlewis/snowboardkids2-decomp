@@ -72,12 +72,19 @@ typedef struct {
     u8 unk42D;
 } func_800698BC_6A4BC_return;
 
+typedef struct {
+    char padding;
+    s32 unk4;
+    char padding2[78];
+    s32 unk58;
+} func_80036848_37448_arg;
+
 s32 func_80035F80_36B80(int);
 void func_80069CE8_6A8E8(void*);
 s32 func_80069F94_6AB94(void*, void*, int);
 void func_80036274_36E74(u8*);
 void func_80036424_37024(void);
-void func_80036848_37448(void);
+void func_80036848_37448(func_80036848_37448_arg*);
 void func_80036328_36F28(func_80036328_36F28_arg*);
 void func_80036880_37480(void);
 
@@ -91,6 +98,7 @@ extern void D_8008FAC0_906C0;
 extern s16 D_8008FD10_90910[];
 extern char D_8008FD1C_9091C[];
 extern D_800AFE8C_A71FC_type* D_800AFE8C_A71FC;
+extern s32 func_8006A200_6AE00(s32);
 
 void func_80036250_36E50(s8* arg0) {
     *arg0 = 0;
@@ -170,7 +178,10 @@ void func_80036328_36F28(func_80036328_36F28_arg* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036424_37024);
 
-INCLUDE_ASM("asm/nonmatchings/36E50", func_80036848_37448);
+void func_80036848_37448(func_80036848_37448_arg* arg0) {
+    arg0->unk4 = func_8006A200_6AE00(arg0->unk4);
+    arg0->unk58 = func_8006A200_6AE00(arg0->unk58);
+}
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036880_37480);
 
