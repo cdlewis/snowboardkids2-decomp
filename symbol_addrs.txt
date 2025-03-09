@@ -1,3 +1,4 @@
+distance_2d = 0x8006C590;
 createYRotationMatrix = 0x8006A640;
 approximateSin = 0x8006A540;
 approximateCos = 0x8006A588;
