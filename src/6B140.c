@@ -113,7 +113,7 @@ s32 approximate_sqrt(u32 input) {
 
 INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C438_6D038);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C590_6D190);
+INCLUDE_ASM("asm/nonmatchings/6B140", distance_2d);
 
 INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C5E0_6D1E0);
 
