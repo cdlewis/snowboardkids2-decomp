@@ -79,6 +79,11 @@ typedef struct {
     s32 unk58;
 } func_80036848_37448_arg;
 
+typedef struct {
+    u8 unk0;
+    u8 unk1;
+} func_80036A3C_3763C_arg;
+
 s32 func_80035F80_36B80(int);
 void func_80069CE8_6A8E8(void*);
 s32 func_80069F94_6AB94(void*, void*, int);
@@ -87,6 +92,7 @@ void func_80036424_37024(void);
 void func_80036848_37448(func_80036848_37448_arg*);
 void func_80036328_36F28(func_80036328_36F28_arg*);
 void func_80036880_37480(void);
+void func_80036A68_37668(u8*);
 
 extern void D_45A890;
 extern void D_45B130;
@@ -189,7 +195,11 @@ INCLUDE_ASM("asm/nonmatchings/36E50", func_80036920_37520);
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036A10_37610);
 
-INCLUDE_ASM("asm/nonmatchings/36E50", func_80036A3C_3763C);
+void func_80036A3C_3763C(func_80036A3C_3763C_arg *arg0) {
+    arg0->unk0 = 0xA;
+    arg0->unk1 = 0;
+    func_80069CC0_6A8C0(&func_80036A68_37668);
+}
 
 void func_80036A68_37668(u8* arg0) {
     s16 temp_v0_2;
@@ -217,6 +227,8 @@ void func_80036A68_37668(u8* arg0) {
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036AF8_376F8);
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036C20_37820);
+// 93% match
+// #include "func_80036C20_37820"
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036D54_37954);
 
