@@ -89,6 +89,20 @@ typedef struct {
     s32 unk4;
 } func_80036A10_37610_arg;
 
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    u32 unk4;
+    u16 unk8;
+    u16 unkA;
+    u8 unkC;
+    u8 unkD;
+    char padding[2];
+    u8 unk10;
+    u8 unk11;
+    u8 unk12;
+} func_80036880_37480_arg;
+
 s32 func_80035F80_36B80(int);
 void func_80069CE8_6A8E8(void*);
 s32 func_80069F94_6AB94(void*, void*, int);
@@ -96,8 +110,9 @@ void func_80036274_36E74(u8*);
 void func_80036424_37024(void);
 void func_80036848_37448(func_80036848_37448_arg*);
 void func_80036328_36F28(func_80036328_36F28_arg*);
-void func_80036880_37480(void);
+void func_80036880_37480(func_80036880_37480_arg*);
 void func_80036A68_37668(u8*);
+void func_80036A10_37610(func_80036A10_37610_arg*);
 
 extern void D_45A890;
 extern void D_45B130;
@@ -110,6 +125,7 @@ extern s16 D_8008FD10_90910[];
 extern char D_8008FD1C_9091C[];
 extern D_800AFE8C_A71FC_type* D_800AFE8C_A71FC;
 extern s32 func_8006A200_6AE00(s32);
+extern void func_80036920_37520;
 
 void func_80036250_36E50(s8* arg0) {
     *arg0 = 0;
@@ -194,7 +210,26 @@ void func_80036848_37448(func_80036848_37448_arg* arg0) {
     arg0->unk58 = func_8006A200_6AE00(arg0->unk58);
 }
 
-INCLUDE_ASM("asm/nonmatchings/36E50", func_80036880_37480);
+void func_80036880_37480(func_80036880_37480_arg* arg0) {
+    s32 temp_s0;
+
+    temp_s0 = func_80069F94_6AB94(&D_45A890, &D_45B130, 0x3108);
+    func_80069CE8_6A8E8(&func_80036A10_37610);
+    arg0->unk8 = 8;
+    arg0->unkA = 0xFF;
+    arg0->unk0 = 0;
+    arg0->unk2 = 0;
+    arg0->unk4 = temp_s0;
+    arg0->unkD = 0;
+    if (arg0->unk10 == 0xB) {
+        arg0->unkC = 1;
+    } else {
+        arg0->unkC = 0;
+    }
+    arg0->unk11 = 0;
+    arg0->unk12 = 0;
+    func_80069CC0_6A8C0(&func_80036920_37520);
+}
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036920_37520);
 
@@ -202,7 +237,7 @@ void func_80036A10_37610(func_80036A10_37610_arg* arg0) {
     arg0->unk4 = func_8006A200_6AE00(arg0->unk4);
 }
 
-void func_80036A3C_3763C(func_80036A3C_3763C_arg *arg0) {
+void func_80036A3C_3763C(func_80036A3C_3763C_arg* arg0) {
     arg0->unk0 = 0xA;
     arg0->unk1 = 0;
     func_80069CC0_6A8C0(&func_80036A68_37668);
