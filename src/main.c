@@ -1,5 +1,7 @@
 #include "common.h"
 
+void* func_80009F5C_AB5C(s32);
+
 INCLUDE_ASM("asm/nonmatchings/main", func_80000450_1050);
 
 s32 osVoiceCheckWord(u8* data) {
@@ -60,4 +62,6 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80001280_1E80);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_800013B8_1FB8);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_800014C8_20C8);
+void func_800014C8_20C8(s32 arg0) {
+    func_80009F5C_AB5C(arg0 + 8);
+}
