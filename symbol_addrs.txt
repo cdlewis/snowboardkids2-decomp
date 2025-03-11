@@ -1,3 +1,4 @@
+D_8009A870_9B470 = 0x8009A870; // type:s16 size:0x20
 distance_2d = 0x8006C590;
 createYRotationMatrix = 0x8006A640;
 approximateSin = 0x8006A540;
