@@ -19,6 +19,7 @@ System packages:
 * docker
 * python3
 * pip3
+* binutils-mips-linux-gnu
 
 Build tools:
 
