@@ -2,6 +2,14 @@
 
 void* func_80009F5C_AB5C(s32);
 
+extern s32 func_8006A200_6AE00(s32);
+
+typedef struct {
+    char padding[44];
+    s32 unk2C;
+    s32 unk30;
+} func_80000BF4_17F4_arg;
+
 INCLUDE_ASM("asm/nonmatchings/main", func_80000450_1050);
 
 s32 osVoiceCheckWord(u8* data) {
@@ -32,7 +40,10 @@ INCLUDE_ASM("asm/nonmatchings/main", __rmonPanic);
 
 INCLUDE_ASM("asm/nonmatchings/main", rmonmisc_text_010C);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000BF4_17F4);
+void func_80000BF4_17F4(func_80000BF4_17F4_arg* arg0) {
+    arg0->unk30 = func_8006A200_6AE00(arg0->unk30);
+    arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000C2C_182C);
 
