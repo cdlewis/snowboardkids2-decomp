@@ -55,7 +55,10 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000DC0_19C0);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000E84_1A84);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000F14_1B14);
+void func_80000F14_1B14(func_80000BF4_17F4_arg* arg0) {
+    arg0->unk30 = func_8006A200_6AE00(arg0->unk30);
+    arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000F4C_1B4C);
 
