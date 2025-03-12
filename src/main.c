@@ -10,6 +10,14 @@ typedef struct {
     s32 unk30;
 } func_80000BF4_17F4_arg;
 
+typedef struct {
+    char padding[0x2C];
+    s32 unk2C;
+    s32 unk30;
+    char padding2[0x10];
+    s32 unk44;
+} func_80001114_1D14_arg;
+
 INCLUDE_ASM("asm/nonmatchings/main", func_80000450_1050);
 
 s32 osVoiceCheckWord(u8* data) {
@@ -34,6 +42,7 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000968_1568);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_800009A0_15A0);
 
+// connected to __rmonPanic via L80000AE0_16E0
 INCLUDE_ASM("asm/nonmatchings/main", func_80000A68_1668);
 
 INCLUDE_ASM("asm/nonmatchings/main", __rmonPanic);
@@ -66,7 +75,11 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000F4C_1B4C);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80001040_1C40);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80001114_1D14);
+void func_80001114_1D14(func_80001114_1D14_arg* arg0) {
+    arg0->unk44 = func_8006A200_6AE00(arg0->unk44);
+    arg0->unk30 = func_8006A200_6AE00(arg0->unk30);
+    arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80001158_1D58);
 
