@@ -614,6 +614,7 @@ segments:
       - [0x9B470, data]
       - [0x9B490, data]
       - [0x9B4D0, data] # 0x9b510 / 0x9b730 has some kind of keyboard / alphabet?
+      - [0x9B9E0, data]
       - [0x9B9F0, data]
       - [0x9BAD0, data]
       - [0x9BBF0, .data, 70DB0]

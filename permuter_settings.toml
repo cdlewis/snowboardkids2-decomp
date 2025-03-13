@@ -1,4 +1,4 @@
-compiler_command = "tools/gcc_kmc/gcc -w -Iinclude -Ilib/ultralib/include -Isrc  -D_LANGUAGE_C -D_FINALROM -DVERSION=us -DF3DEX_GBI_2 -D_MIPS_SZLONG=32 -nostdinc -c -G0 -mips3 -O2 -x c -B tools/gcc_kmc/  -Wmissing-braces -Wimplicit -Wredundant-decls -Wstrict-prototypes -DPERMUTER"
+compiler_command = "tools/gcc_kmc/gcc -Iinclude -Ilib/ultralib/include -c -O2 -mips3 -mgp32 -mfp32 -mno-abicalls -G0 -fno-common -fno-builtin -B tools/gcc_kmc/ -DPERMUTER"
 
 assembler_command = "mips-linux-gnu-as -EB -march=vr4300 -mtune=vr4300 -Iinclude"
 
