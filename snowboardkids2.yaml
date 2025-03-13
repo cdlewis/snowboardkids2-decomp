@@ -164,7 +164,7 @@ segments:
       - [0x6DE50, asm]
       # - [0x6E640, c, mainEntrypoint] (~80% matching)
       - [0x6E640, asm, mainEntrypoint]
-      - [0x6E840, asm]
+      - [0x6E840, c]
       - [0x70DB0, c]
       - [0x717D0, asm]
       - [0x72220, c, player]
