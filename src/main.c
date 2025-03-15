@@ -1,6 +1,7 @@
 #include "common.h"
 
-void* func_80009F5C_AB5C(s32);
+void *func_80009F5C_AB5C(s32);
+void func_8006FC70_70870(u16, u16, u8 *, u8 *);
 
 extern s32 func_8006A200_6AE00(s32);
 
@@ -18,13 +19,84 @@ typedef struct {
     s32 unk44;
 } func_80001114_1D14_arg;
 
+typedef struct
+{
+    u8 unk0;
+    char padding[0x33];
+    u8 unk34;
+    u8 unk35;
+    u8 unk36;
+    u8 unk37;
+    u8 unk38;
+    u8 unk39;
+    u8 unk3A;
+} D_800891A8_89DA8_entry;
+extern D_800891A8_89DA8_entry *D_800891A8_89DA8[];
+typedef struct
+{
+    char padding[0xD5];
+    s32 unkDA;
+} func_80000460_1060_arg0_unk0;
+typedef struct
+{
+    func_80000460_1060_arg0_unk0 *unk0;
+    char padding[0x80];
+    s16 unk84;
+} func_80000460_1060_arg0;
+
 INCLUDE_ASM("asm/nonmatchings/main", func_80000450_1050);
 
-s32 osVoiceCheckWord(u8* data) {
+s32 osVoiceCheckWord(u8 *data) {
     return 0xE;
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000460_1060);
+void func_80000460_1060(func_80000460_1060_arg0 *arg0, s8 *arg1, s8 *arg2) {
+    s32 temp_v0;
+    s32 temp_v0_2;
+    int new_var3;
+    s32 temp_t1;
+    s32 var_a1;
+    u8 temp_a0;
+    s32 new_var;
+    D_800891A8_89DA8_entry *temp_a2;
+    s16 index;
+    temp_a2 = (D_800891A8_89DA8_entry *)((s32)D_800891A8_89DA8 + arg0->unk84 * 0x3C);
+    new_var3 = temp_a2->unk34 + temp_a2->unk35;
+    temp_v0 = new_var3;
+    temp_a0 = temp_a2->unk36;
+    new_var = (temp_v0 + temp_a0) / 3;
+    var_a1 = new_var;
+    temp_v0 = ((u32)new_var) >> 0x1F;
+    temp_v0 = var_a1 + ((s8)temp_v0);
+    new_var = temp_v0 >> 0x1;
+    temp_t1 = new_var;
+    if (var_a1 < 0) {
+        var_a1 += 3;
+    }
+    arg1[0x4] = 0;
+    arg1[0x5] = 0x7F;
+    arg1[0x6] = 0x7F;
+    arg1[0x0] = temp_a2->unk34;
+    arg1[0x1] = temp_a2->unk35;
+    temp_v0_2 = var_a1 >> 2;
+    arg1[0x2] = temp_a2->unk36;
+    arg1[0x8] = temp_v0_2;
+    arg1[0x9] = temp_v0_2;
+    arg1[0xA] = temp_v0_2;
+    arg1[0xC] = 0x7F;
+    arg1[0xD] = 0x7F;
+    arg1[0xE] = 0;
+    arg1[0x14] = -0x7F;
+    arg1[0x15] = 0x7F;
+    arg1[0x16] = 0;
+    arg1[0x10] = temp_t1;
+    arg1[0x11] = temp_t1;
+    arg1[0x12] = temp_t1;
+    arg2[0x0] = temp_a2->unk38;
+    arg2[0x1] = temp_a2->unk39;
+    arg2[0x2] = temp_a2->unk3A;
+    func_8006FC70_70870(arg0->unk0->unkDA, 3, arg1, arg2);
+}
 
 INCLUDE_ASM("asm/nonmatchings/main", func_8000056C_116C);
 
@@ -49,7 +121,7 @@ INCLUDE_ASM("asm/nonmatchings/main", __rmonPanic);
 
 INCLUDE_ASM("asm/nonmatchings/main", rmonmisc_text_010C);
 
-void func_80000BF4_17F4(func_80000BF4_17F4_arg* arg0) {
+void func_80000BF4_17F4(func_80000BF4_17F4_arg *arg0) {
     arg0->unk30 = func_8006A200_6AE00(arg0->unk30);
     arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
 }
@@ -66,7 +138,7 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000DC0_19C0);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000E84_1A84);
 
-void func_80000F14_1B14(func_80000BF4_17F4_arg* arg0) {
+void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0) {
     arg0->unk30 = func_8006A200_6AE00(arg0->unk30);
     arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
 }
@@ -75,7 +147,7 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000F4C_1B4C);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80001040_1C40);
 
-void func_80001114_1D14(func_80001114_1D14_arg* arg0) {
+void func_80001114_1D14(func_80001114_1D14_arg *arg0) {
     arg0->unk44 = func_8006A200_6AE00(arg0->unk44);
     arg0->unk30 = func_8006A200_6AE00(arg0->unk30);
     arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
