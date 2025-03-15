@@ -158,7 +158,7 @@ segments:
       - [0x5EA60, asm]
       - [0x615A0, asm]
       - [0x68CF0, asm]
-      - [0x69EF0, asm]
+      - [0x69EF0, c]
       - [0x6AE20, asm]
       - [0x6B140, c]
       - [0x6DE50, asm]
