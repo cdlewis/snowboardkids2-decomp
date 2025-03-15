@@ -1,0 +1,1 @@
+./tools/decomp-permuter/import.py src/temp.c $1

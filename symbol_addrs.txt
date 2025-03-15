@@ -1,3 +1,6 @@
+GameStateGet = 0x800698BC;
+PhoneTriggerInit = 0x80019320;
+PhoneTriggerCheck = 0x80019368;
 createZRotationMatrix = 0x8006A6B0;
 D_8009A870_9B470 = 0x8009A870; // type:s16 size:0x20
 distance_2d = 0x8006C590;
