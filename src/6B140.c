@@ -48,7 +48,28 @@ void createYRotationMatrix(Mat3x3 *matrix, s16 angle) {
         sinTheta, 0, cosTheta};
 }
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A6B0_6B2B0);
+void createZRotationMatrix(s16 matrix[3][3], s16 angle) {
+    s16 new_var;
+    int new_var2;
+    int new_var3;
+    s16 sinVal = approximateSin(angle);
+    s16 cosVal;
+    sinVal++;
+    sinVal--;
+    cosVal = approximateCos(angle);
+    matrix[0][0] = cosVal;
+    matrix[0][1] = sinVal;
+    new_var = cosVal;
+    new_var3 = 0;
+    new_var2 = 2;
+    matrix[0][new_var2] = 0;
+    matrix[0, 1][0] = -sinVal;
+    matrix[1][1] = new_var;
+    matrix[1][new_var2] = 0;
+    matrix[new_var2][0] = 0;
+    matrix[new_var2][1] = new_var3;
+    matrix[new_var2][new_var2] = 0x2000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A724_6B324);
 
