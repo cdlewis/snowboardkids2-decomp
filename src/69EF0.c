@@ -1,6 +1,21 @@
 #include "common.h"
 
-extern void func_8006A3FC_6AFFC();                            /* extern */
+typedef struct {
+    char padding[0x20];
+    s32 unk20;
+} D_8009A864_9B464_type;
+
+typedef struct {
+    char padding[0x10];
+    s32 unk10;
+    char padding2[0x19];
+    s32 unk30;
+} D_8009A860_9B460_type;
+
+extern D_8009A860_9B460_type* D_8009A860_9B460;
+extern D_8009A864_9B464_type* D_8009A864_9B464;
+
+extern void func_8006A3FC_6AFFC();
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
 
@@ -16,7 +31,9 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_800697F4_6A3F4);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069810_6A410);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006982C_6A42C);
+void func_8006982C_6A42C(s32 arg0) {
+    D_8009A860_9B460->unk10 = arg0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006983C_6A43C);
 
@@ -36,7 +53,9 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069AEC_6A6EC);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069B04_6A704);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CC0_6A8C0);
+void func_80069CC0_6A8C0(s32 arg0) {
+    D_8009A864_9B464->unk20 = arg0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CD0_6A8D0);
 
@@ -44,7 +63,9 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CE8_6A8E8);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CF8_6A8F8);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D20_6A920);
+s32 func_80069D20_6A920(void) {
+    return D_8009A860_9B460->unk30 != 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D34_6A934);
 
