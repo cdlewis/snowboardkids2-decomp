@@ -1,0 +1,65 @@
+#include "common.h"
+
+extern void func_8006A3FC_6AFFC();                            /* extern */
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_800693C4_69FC4);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069470_6A070);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069530_6A130);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_800697CC_6A3CC);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_800697F4_6A3F4);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069810_6A410);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006982C_6A42C);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006983C_6A43C);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069854_6A454);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698BC_6A4BC);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698CC_6A4CC);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698DC_6A4DC);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698EC_6A4EC);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_800699F4_6A5F4);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069AEC_6A6EC);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069B04_6A704);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CC0_6A8C0);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CD0_6A8D0);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CE8_6A8E8);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CF8_6A8F8);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D20_6A920);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D34_6A934);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D7C_6A97C);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069DD4_6A9D4);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069E3C_6AA3C);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069F94_6AB94);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006A0EC_6ACEC);
+
+INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006A1C0_6ADC0);
+
+void func_8006A200_6AE00(void) {
+    func_8006A3FC_6AFFC();
+}
