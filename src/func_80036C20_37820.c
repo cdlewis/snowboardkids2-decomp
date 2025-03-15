@@ -29,7 +29,7 @@ typedef struct
     u8 status;
     u8 unk42D;
 } func_80036274_36E74_large_struct;
-extern func_80036274_36E74_large_struct *func_800698BC_6A4BC();
+extern func_80036274_36E74_large_struct *GameStateGet();
 s32 func_8006C590_6D190(u32, u32);
 extern s32 D_800AFF10_A7280;
 
@@ -47,7 +47,7 @@ s32 func_80036C20_37820(func_80036C20_37820_arg *arg0) {
     volatile s32 new_var;
     s32 distances[4];
 
-    temp_v0 = func_800698BC_6A4BC();
+    temp_v0 = GameStateGet();
 
     if (temp_v0->numEntries == 0 || temp_v0->unk421 == 1 || temp_v0->unk422 == 1) {
         return 0;

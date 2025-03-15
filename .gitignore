@@ -20,3 +20,4 @@ snowboardkids2.map
 nonmatchings
 __pycache__
 src/temp.c
+.push_secrets

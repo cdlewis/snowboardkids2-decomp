@@ -39,7 +39,7 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006983C_6A43C);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069854_6A454);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698BC_6A4BC);
+INCLUDE_ASM("asm/nonmatchings/69EF0", GameStateGet);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698CC_6A4CC);
 
