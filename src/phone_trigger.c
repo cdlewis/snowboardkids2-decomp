@@ -1,14 +1,5 @@
 #include "common.h"
-
-typedef struct {
-    s8 unk0;
-    s8 unk1;
-    char padding[2];
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    void *unkC;
-} PhoneInitArg;
+#include "event_trigger.h"
 
 typedef struct {
     char padding[0x3F4];
@@ -28,7 +19,7 @@ extern u8 D_8008D6C4_8E2C4[];
 
 char PhoneLabel[] = "PHONE";
 
-void PhoneTriggerInit(PhoneInitArg *arg0) {
+void PhoneTriggerInit(EventTrigger *arg0) {
     arg0->unk0 = 6;
     arg0->unk6 = -0x68;
     arg0->unk1 = 0;
