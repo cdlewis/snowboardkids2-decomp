@@ -27,4 +27,25 @@ void func_80019280_19E80(void *arg0, u16 arg1, void *arg2) {
     *((u16 *)(new_var2 + 10)) = *((u16 *)(ptr2 + 8));
 }
 
-INCLUDE_ASM("asm/nonmatchings/19E80", func_800192CC_19ECC);
+void func_800192CC_19ECC(void *arg0, u32 arg1, u8 arg2, void *arg3) {
+    void *base;
+    u32 new_var;
+    void *ptr1;
+    u32 offset;
+    u16 temp;
+    void *temp2 = arg0 + 4;
+    new_var = *((u32 *)temp2);
+    base = arg0 + 8;
+    arg1 &= (u16)0xFFFF;
+    arg1 <<= 4;
+    ptr1 = base + (new_var << 4);
+    base += arg1;
+    offset = *((u32 *)base);
+    arg2 &= 0xFF;
+    ptr1 += arg2 << 5;
+    *((void **)arg3) = arg0 + offset;
+    *((void **)(arg3 + 4)) = ptr1;
+    new_var = *((u16 *)(base + 6));
+    *((u16 *)(arg3 + 8)) = new_var;
+    *((u16 *)(arg3 + 10)) = *((u16 *)(base + 8));
+}
