@@ -1,5 +1,8 @@
 #include "common.h"
 
+#define PHONE_EVENT_ID 6
+#define WALL_NEWSPAPER_EVENT_ID 7
+
 typedef struct {
     s8 unk0;
     s8 unk1;

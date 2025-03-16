@@ -1,3 +1,5 @@
+WallNewspaperTriggerInit = 0x80019420;
+WallNewspaperTriggerCheck = 0x80019468;
 createXRotationMatrix = 0x8006A5CC;
 GameStateGet = 0x800698BC;
 PhoneTriggerInit = 0x80019320;
