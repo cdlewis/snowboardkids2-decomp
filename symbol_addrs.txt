@@ -1,3 +1,4 @@
+createXRotationMatrix = 0x8006A5CC;
 GameStateGet = 0x800698BC;
 PhoneTriggerInit = 0x80019320;
 PhoneTriggerCheck = 0x80019368;
