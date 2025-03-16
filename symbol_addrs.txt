@@ -1,3 +1,5 @@
+ClocktowerTriggerInit = 0x80019970;
+ClocktowerTriggerCheck = 0x800199B8;
 WallNewspaperTriggerInit = 0x80019420;
 WallNewspaperTriggerCheck = 0x80019468;
 createXRotationMatrix = 0x8006A5CC;
