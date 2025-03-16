@@ -12,6 +12,7 @@ void func_80069CC0_6A8C0(void *);
 extern void func_8001730C_17F0C();
 extern void func_800172DC_17EDC();
 extern void func_80017328_17F28();
+extern void func_80000760_1360();
 
 INCLUDE_ASM("asm/nonmatchings/17AA0", func_80016EA0_17AA0);
 
@@ -38,7 +39,9 @@ void func_800172DC_17EDC(void) {
     func_80069CC0_6A8C0(&func_8001730C_17F0C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/17AA0", func_8001730C_17F0C);
+void func_8001730C_17F0C(void) {
+    func_80000760_1360();
+}
 
 void func_80017328_17F28(void) {
     func_80000710_1310();
