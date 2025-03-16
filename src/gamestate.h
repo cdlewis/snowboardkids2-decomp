@@ -8,4 +8,6 @@ typedef struct {
     char padding2[0x26];
     u8 unk424;
     s8 unk425;
+    char paddding3[3];
+    s8 unk429;
 } GameState;

@@ -7,7 +7,9 @@ void func_8000056C_116C(s32, s32, GameState *);
 void func_80069CC0_6A8C0(void *);
 void func_80069CE8_6A8E8(void *);
 void func_80000710_1310();
+void func_80069CC0_6A8C0(void *);
 
+extern void func_8001730C_17F0C();
 extern void func_800172DC_17EDC();
 extern void func_80017328_17F28();
 
@@ -31,7 +33,10 @@ void func_80017280_17E80(s32 arg0) {
     func_80069CC0_6A8C0(&func_800172DC_17EDC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/17AA0", func_800172DC_17EDC);
+void func_800172DC_17EDC(void) {
+    GameStateGet()->unk429 = 2;
+    func_80069CC0_6A8C0(&func_8001730C_17F0C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/17AA0", func_8001730C_17F0C);
 
