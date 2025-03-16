@@ -114,7 +114,7 @@ segments:
       - [0x19AB0, asm]
       - [0x19E80, asm]
       - [0x19F20, c, phone_trigger]
-      - [0x1A020, c]
+      - [0x1A020, c, wall_newspaper_trigger]
       - [0x1A110, asm]
       - [0x1A570, asm]
       - [0x1A680, asm]
@@ -392,7 +392,7 @@ segments:
       - [0x8E020, data]
       - [0x8E360, data]
       - [0x8E3C0, .data, "phone_trigger"]
-      - [0x8E3D0, .data, "1A020"] # game text?
+      - [0x8E3D0, .data, "wall_newspaper_trigger"]
       - [0x8E3E0, data]
       - [0x8E3F0, data, "1A570"] # game text?
       - [0x8E4E0, data]
