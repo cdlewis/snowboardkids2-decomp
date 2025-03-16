@@ -1,3 +1,5 @@
+TrickTriggerCheck = 0x80019AC8;
+TrickTriggerInit = 0x80019A80;
 ClocktowerTriggerInit = 0x80019970;
 ClocktowerTriggerCheck = 0x800199B8;
 WallNewspaperTriggerInit = 0x80019420;
