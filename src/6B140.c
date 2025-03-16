@@ -36,7 +36,23 @@ s16 approximateCos(s16 inputAngle) {
     return (coss(inputAngle << 3) << 0x10) >> 0x12;
 }
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A5CC_6B1CC);
+void createXRotationMatrix(s16 matrix[3][3], s16 angle) {
+    s16 sinVal;
+    s16 cosVal;
+    sinVal = approximateSin(angle);
+    sinVal++;
+    sinVal--;
+    cosVal = approximateCos(angle);
+    matrix[0][0] = 0x2000;
+    matrix[0][1] = 0;
+    matrix[0][2] = 0;
+    matrix[1][0] = 0;
+    matrix[1][1] = cosVal;
+    matrix[1][2] = sinVal;
+    matrix[2][0] = 0;
+    matrix[2][1] = -sinVal;
+    matrix[2][2] = cosVal;
+}
 
 void createYRotationMatrix(Mat3x3 *matrix, s16 angle) {
     s16 sinTheta = approximateSin(angle);
