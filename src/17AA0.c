@@ -9,6 +9,7 @@ void func_80069CE8_6A8E8(void *);
 void func_80000710_1310();
 void func_80069CC0_6A8C0(void *);
 
+extern void func_800697F4_6A3F4(s32);
 extern void func_8001730C_17F0C();
 extern void func_800172DC_17EDC();
 extern void func_80017328_17F28();
@@ -22,7 +23,9 @@ INCLUDE_ASM("asm/nonmatchings/17AA0", func_8001716C_17D6C);
 
 INCLUDE_ASM("asm/nonmatchings/17AA0", func_80017248_17E48);
 
-INCLUDE_ASM("asm/nonmatchings/17AA0", func_80017264_17E64);
+void func_80017264_17E64(void) {
+    func_800697F4_6A3F4(0xFF);
+}
 
 void func_80017280_17E80(s32 arg0) {
     char *sp10[5];
