@@ -3,6 +3,7 @@
 #define PHONE_EVENT_ID 6
 #define WALL_NEWSPAPER_EVENT_ID 7
 #define CLOCKTOWER_EVENT_ID 8
+#define TRICK_EVENT_ID 9
 
 typedef struct {
     s8 unk0;
