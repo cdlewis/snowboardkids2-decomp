@@ -762,23 +762,39 @@ segments:
     subsegments:
       - [0xABA60, asm]
       - [0xABA70, data]
+
+  - name: unknown_section_3_1
+    type: code
+    start: 0xAC8D0
+    follows_vram: unknown_section_3
+    vram: 0x800BCA10
+    subsegments:
+      - [0xAC8D0, asm]
       - [0xAC9E0, rodata]
       - [0xB04E0, rodata]
 
   - name: unknown_section_4
     type: code
     start: 0xB22E0
-    follows_vram: unknown_section_3
+    follows_vram: unknown_section_3_1
     vram: 0x800C2420
     subsegments:
       - [0xB22E0, asm]
+      - [0xB2530, data]
+
+  - name: unknown_section_4_1
+    type: code
+    start: 0xB2870
+    follows_vram: unknown_section_4
+    vram: 0x800C29B0
+    subsegments:
       - [0xB2870, asm]
       - [0xB40E0, data]
 
   - name: unknown_section_5
     type: code
     start: 0xB4240
-    follows_vram: unknown_section_4
+    follows_vram: unknown_section_4_1
     vram: 0x800C4380
     subsegments:
       - [0xB4240, asm]
