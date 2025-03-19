@@ -44,7 +44,14 @@ typedef struct
     s16 unk84;
 } func_80000460_1060_arg0;
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000450_1050);
+typedef struct {
+    char padding[0x87];
+    char unk87;
+} func_80000450_1050_arg;
+
+void func_80000450_1050(func_80000450_1050_arg* arg0, s8 arg1) {
+    arg0->unk87 = arg1;
+}
 
 s32 osVoiceCheckWord(u8 *data) {
     return 0xE;
