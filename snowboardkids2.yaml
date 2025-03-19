@@ -751,13 +751,21 @@ segments:
       - [0xAB0D0, rodata]
       - [0xAB120, rodata]
       - [0xAB160, rodata]
-      - [0xAB170, rodata]
-      - [0xAB6B0, rodata]
+
+
+  - name: unknown_section_2_1
+    type: code
+    start: 0xAB170
+    follows_vram: unknown_section_2
+    vram: 0x800BB2B0
+    subsegments:
+      - [0xAB170, asm]
+      - [0xAB1D0, data]
 
   - name: unknown_section_3
     type: code
     start: 0xABA60
-    follows_vram: unknown_section_2
+    follows_vram: unknown_section_2_1
     vram: 0x800BBBA0
     subsegments:
       - [0xABA60, asm]
