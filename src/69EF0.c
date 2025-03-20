@@ -3,6 +3,7 @@
 typedef struct {
     char padding[0x20];
     s32 unk20;
+    s32 unk24;
 } D_8009A864_9B464_type;
 
 typedef struct {
@@ -71,7 +72,9 @@ void func_80069CC0_6A8C0(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CD0_6A8D0);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CE8_6A8E8);
+void func_80069CE8_6A8E8(s32 arg0) {
+    D_8009A864_9B464->unk24 = arg0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CF8_6A8F8);
 
