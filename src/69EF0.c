@@ -10,7 +10,8 @@ typedef struct {
     s32 unk10;
     char padding2[0x19];
     s32 unk30;
-    char padding3[0x15];
+    char padding3[0x4];
+    s16 unk38[9];
     s16 unk4A;
 } D_8009A860_9B460_type;
 
@@ -58,7 +59,9 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698EC_6A4EC);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800699F4_6A5F4);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069AEC_6A6EC);
+s16 func_80069AEC_6A6EC(s32 arg0) {
+    return D_8009A860_9B460->unk38[arg0];
+}
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069B04_6A704);
 
