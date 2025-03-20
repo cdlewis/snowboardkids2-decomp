@@ -10,6 +10,8 @@ typedef struct {
     s32 unk10;
     char padding2[0x19];
     s32 unk30;
+    char padding3[0x15];
+    s16 unk4A;
 } D_8009A860_9B460_type;
 
 extern D_8009A860_9B460_type* D_8009A860_9B460;
@@ -29,7 +31,14 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_800697CC_6A3CC);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800697F4_6A3F4);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069810_6A410);
+s16 func_80069810_6A410(void) {
+    s16 temp_v0;
+
+    temp_v0 = D_8009A860_9B460->unk4A;
+    D_8009A860_9B460->unk4A = 0;
+
+    return temp_v0;
+}
 
 void func_8006982C_6A42C(s32 arg0) {
     D_8009A860_9B460->unk10 = arg0;
