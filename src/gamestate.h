@@ -1,21 +1,29 @@
 #include "common.h"
 
 typedef struct {
-    char padding[0x3DC];
+    u8 padding[8];
+    void* audioPlayerA;
+    u8 padding0[0x1D4];
+    void* audioPlayerB;
+    u8 padding1[0x1D4];
+    void* audioPlayerC;
+    u8 padding2[0x20];
     void* unk3DC;
     void* unk3E0;
     void* unk3E4;
-    char padding5[0xC];
+    u8 padding3[0x0C];
     s16 unk3F4;
     s32 unk3F8;
     u16 unk3FC;
-    char padding2[0x26];
+    u8 padding4[0x26];
     u8 unk424;
     s8 unk425;
-    char padding4[1];
+    u8 padding5[1];
     u8 unk427;
-    char paddding3[1];
+    u8 padding6[1];
     s8 unk429;
-    char padding3[4];
+    u8 padding7[4];
     s8 unk42E;
+    u8 padding8[0x13B1];
+    s8 unk17E0;
 } GameState;

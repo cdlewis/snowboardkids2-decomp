@@ -1,4 +1,4 @@
-#include "common.h"
+#include "69EF0.h"
 
 typedef struct {
     char padding[0x20];
@@ -8,7 +8,7 @@ typedef struct {
 
 typedef struct {
     char padding[0x10];
-    s32 unk10;
+    void* unk10;
     char padding2[0x19];
     s32 unk30;
     char padding3[0x4];
@@ -42,7 +42,7 @@ s16 func_80069810_6A410(void) {
     return temp_v0;
 }
 
-void func_8006982C_6A42C(s32 arg0) {
+void func_8006982C_6A42C(void* arg0) {
     D_8009A860_9B460->unk10 = arg0;
 }
 
