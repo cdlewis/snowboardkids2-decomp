@@ -21,3 +21,4 @@ nonmatchings
 __pycache__
 src/temp.c
 .push_secrets
+astemp_*
