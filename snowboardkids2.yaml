@@ -149,7 +149,7 @@ segments:
       - [0x38310, asm]
       - [0x38BE0, asm]
       - [0x38C90, asm]
-      - [0x3A1F0, asm]
+      - [0x3A1F0, c]
       - [0x3C960, asm]
       - [0x3CD70, asm]
       - [0x3E160, asm]
