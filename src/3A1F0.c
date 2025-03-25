@@ -1,8 +1,18 @@
 #include "common.h"
 
+typedef struct {
+    s16 command;
+    s16 pad;
+    s32 arg;
+} Entry;
+
 extern OSMesgQueue D_800A1888_A2488;
 extern OSMesgQueue mainStack;
 extern u8 D_800AB090_A2400;
+extern s8 D_8008FE8F_90A8F;
+extern s16 D_8008FE8C_90A8C;
+extern Entry D_800A1C20_A2820[];
+extern OSMesgQueue D_800A1820_A2420;
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
 
@@ -116,7 +126,18 @@ void func_8003B1C0_3BDC0() {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B1F4_3BDF4);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B28C_3BE8C);
+void* func_8003B28C_3BE8C(void) {
+    void* sp10;
+    void* var_v0;
+
+    sp10 = NULL;
+    var_v0 = (void*)-1;
+    if (osRecvMesg(&D_800A1888_A2488, &sp10, 0) == 0) {
+        D_8008FE8F_90A8F = 0;
+        var_v0 = sp10;
+    }
+    return var_v0;
+}
 
 void func_8003B2DC_3BEDC(s32 arg0, u8* arg1) {
     u8 a1 = ((arg0 & 0xFF) * 0x10) & 0xF0;
@@ -132,7 +153,26 @@ INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B3B0_3BFB0);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B400_3C000);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B47C_3C07C);
+void func_8003B47C_3C07C(s32 arg0) {
+    u32 new_var;
+    s16 index;
+    s16* addr;
+
+    index = D_8008FE8C_90A8C;
+    new_var = index;
+    D_8008FE8F_90A8F = 1;
+    D_800A1C20_A2820[index].command = 0x140;
+    D_800A1C20_A2820[new_var].arg = arg0;
+
+    osSendMesg(&D_800A1820_A2420, &D_800A1C20_A2820[index], OS_MESG_BLOCK);
+
+    index = D_8008FE8C_90A8C + 1;
+    D_8008FE8C_90A8C = index;
+
+    if (index >= 0xF) {
+        D_8008FE8C_90A8C = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B510_3C110);
 

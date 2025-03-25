@@ -1,3 +1,5 @@
+D_800A1C20_A2820 = 0x800A1C20; // type:u32 size:0x78
+
 TrickTriggerCheck = 0x80019AC8;
 TrickTriggerInit = 0x80019A80;
 ClocktowerTriggerInit = 0x80019970;
