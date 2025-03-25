@@ -2,6 +2,7 @@
 
 extern OSMesgQueue D_800A1888_A2488;
 extern OSMesgQueue mainStack;
+extern u8 D_800AB090_A2400;
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
 
@@ -14,7 +15,9 @@ INCLUDE_ASM("asm/nonmatchings/3A1F0", func_80039C34_3A834);
 void func_8003A1DC_3ADDC() {
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A1E4_3ADE4);
+int func_8003A1E4_3ADE4() {
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A1EC_3ADEC);
 
@@ -39,28 +42,36 @@ INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A52C_3B12C);
 void func_8003A854_3B454() {
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A85C_3B45C);
+int func_8003A85C_3B45C() {
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A864_3B464);
 
 void func_8003A9DC_3B5DC() {
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A9E4_3B5E4);
+int func_8003A9E4_3B5E4() {
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A9EC_3B5EC);
 
 void func_8003AAC4_3B6C4() {
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AACC_3B6CC);
+int func_8003AACC_3B6CC() {
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AAD4_3B6D4);
 
 void func_8003AB74_3B774() {
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AB7C_3B77C);
+int func_8003AB7C_3B77C() {
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AB84_3B784);
 
@@ -73,7 +84,18 @@ INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AC58_3B858);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AF38_3BB38);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AF6C_3BB6C);
+void func_8003AF6C_3BB6C() {
+    u8* var_v1;
+    u8 a1 = 1;
+
+    var_v1 = &D_800AB090_A2400;
+    do {
+        if (*var_v1 == 0) {
+            *var_v1 = a1;
+        }
+        var_v1 += 1;
+    } while ((s32)var_v1 < (s32)(&D_800AB090_A2400 + 4));
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AFA0_3BBA0);
 
@@ -85,13 +107,24 @@ INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B0E8_3BCE8);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B170_3BD70);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B1C0_3BDC0);
+void func_8003B1C0_3BDC0() {
+    osSendMesg(
+        &D_800A1888_A2488,
+        (OSMesg*)osEepromProbe(&mainStack),
+        1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B1F4_3BDF4);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B28C_3BE8C);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B2DC_3BEDC);
+void func_8003B2DC_3BEDC(s32 arg0, u8* arg1) {
+    u8 a1 = ((arg0 & 0xFF) * 0x10) & 0xF0;
+    osSendMesg(
+        &D_800A1888_A2488,
+        (OSMesg*)osEepromLongRead(&mainStack, a1, arg1, 0x58),
+        1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B324_3BF24);
 
