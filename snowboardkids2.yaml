@@ -119,7 +119,7 @@ segments:
       - [0x1A570, c, clocktower_trigger]
       - [0x1A680, c, trick_trigger]
       - [0x1A770, asm]
-      - [0x1BBA0, asm]
+      - [0x1BBA0, c]
       - [0x1C9C0, asm]
       - [0x1D410, asm]
       - [0x1D520, asm]
@@ -678,7 +678,7 @@ segments:
       - [0x9EA90, rodata, E770]
       - [0x9EAB0, rodata]
       - [0x9EB50, rodata]
-      - [0x9EC60, rodata, 1BBA0]
+      - [0x9EC60, rodata] # 1BBA0
       - [0x9EC90, rodata, 1C9C0]
       - [0x9ECE0, rodata, 1D520]
       - [0x9EE00, rodata, 202A0]

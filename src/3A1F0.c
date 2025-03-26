@@ -15,6 +15,9 @@ extern s8 D_8008FE8F_90A8F;
 extern s16 D_8008FE8C_90A8C;
 extern s32 D_8008FEA0_90AA0;
 extern Entry D_800A1C20_A2820[];
+extern u8 D_800AB078_A23E8[];
+
+void func_8003AC58_3B858(void*);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
 
@@ -90,7 +93,9 @@ INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AB84_3B784);
 void func_8003AC30_3B830() {
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AC38_3B838);
+void func_8003AC38_3B838() {
+    func_8003AC58_3B858(D_800AB078_A23E8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AC58_3B858);
 
