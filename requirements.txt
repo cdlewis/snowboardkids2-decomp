@@ -1,1 +1,4 @@
 -r tools/splat/requirements.txt
+
+# tools/progress.py deps
+mapfile_parser>=2.7.0
