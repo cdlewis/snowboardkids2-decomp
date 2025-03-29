@@ -3,7 +3,13 @@
 typedef struct {
     u8 padding[8];
     void* audioPlayerA;
-    u8 padding0[0x1D4];
+    char padding10[0x1A];
+    s32 unk28;
+    char padding11[0x4];
+    s32 unk30;
+    char padding9[0x28];
+    u8 unk5C;
+    u8 padding0[0x180];
     void* audioPlayerB;
     u8 padding1[0x1D4];
     void* audioPlayerC;
