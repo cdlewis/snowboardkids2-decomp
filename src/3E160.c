@@ -1,10 +1,18 @@
 #include "common.h"
+#include "gamestate.h"
 
 void func_80057564_58164(s32);
 void func_8006982C_6A42C(void*);
 void func_8006FDA0_709A0(s32, s32, s32);
 extern s32 D_800AFF10_A7280;
 extern void func_80040608_41208();
+GameState* GameStateGet();
+s32 func_80055D34_56934(u8);
+void func_8006983C_6A43C(void*);
+s32 func_80069F94_6AB94(void*, void*, s32);
+extern s32 D_3FF010;
+extern s32 D_3FF910;
+extern void func_8003EDF8_3F9F8();
 
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);
 
@@ -14,8 +22,14 @@ INCLUDE_ASM("asm/nonmatchings/3E160", func_8003D560_3E160);
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003E4F0_3F0F0);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003EDA0_3F9A0);
+void func_8003EDA0_3F9A0(void) {
+    GameState* temp_v0;
 
+    temp_v0 = GameStateGet();
+    temp_v0->unk30 = func_80055D34_56934(temp_v0->unk5C);
+    temp_v0->unk28 = func_80069F94_6AB94(&D_3FF010, &D_3FF910, 0x16E0);
+    func_8006983C_6A43C(&func_8003EDF8_3F9F8);
+}
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003EDF8_3F9F8);
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003EE50_3FA50);
