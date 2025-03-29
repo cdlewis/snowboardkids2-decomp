@@ -3,7 +3,7 @@
 typedef struct {
     s16 command;
     s16 pad;
-    s32 arg;
+    void* arg;
 } Entry;
 
 extern OSMesgQueue mainStack;
@@ -16,7 +16,9 @@ extern s16 D_8008FE8C_90A8C;
 extern s32 D_8008FEA0_90AA0;
 extern Entry D_800A1C20_A2820[];
 extern u8 D_800AB078_A23E8[];
-
+extern s16 D_8008FE8C_90A8C;
+extern s8 D_8008FE8F_90A8F;
+extern OSMesgQueue D_800A1820_A2420;
 void func_8003AC58_3B858(void*);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
@@ -116,7 +118,21 @@ void func_8003AF6C_3BB6C() {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AFA0_3BBA0);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B000_3BC00);
+void func_8003B000_3BC00(s32 arg0) {
+    s16 temp_v0;
+    s32 temp_a1;
+    temp_v0 = arg0 + 0x80;
+    temp_a1 = D_8008FE8C_90A8C;
+    D_800A1C20_A2820[temp_a1].arg = &D_800AB078_A23E8;
+    D_800A1C20_A2820[temp_a1].command = temp_v0;
+    osSendMesg(&D_800A1820_A2420, (OSMesg*)(&D_800A1C20_A2820[temp_a1]), 1);
+    temp_v0 = ((u16)D_8008FE8C_90A8C) + 1;
+    D_8008FE8C_90A8C = temp_v0;
+    if (temp_v0 >= 0xF) {
+        D_8008FE8C_90A8C = 0;
+    }
+    D_8008FE8F_90A8F = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B098_3BC98);
 
@@ -160,7 +176,7 @@ INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B3B0_3BFB0);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B400_3C000);
 
-void func_8003B47C_3C07C(s32 arg0) {
+void func_8003B47C_3C07C(void* arg0) {
     u32 new_var;
     s16 index;
     s16* addr;
