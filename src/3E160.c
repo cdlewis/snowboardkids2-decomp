@@ -1,5 +1,11 @@
 #include "common.h"
 
+void func_80057564_58164(s32);
+void func_8006982C_6A42C(void*);
+void func_8006FDA0_709A0(s32, s32, s32);
+extern s32 D_800AFF10_A7280;
+extern void func_80040608_41208();
+
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);
 
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E5E8_9F1E8);
@@ -36,7 +42,13 @@ INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FBE0_407E0);
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FCD8_408D8);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FD3C_4093C);
+void func_8003FD3C_4093C(void) {
+    if (D_800AFF10_A7280 & 0x8000) {
+        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        func_80057564_58164(0x3C);
+        func_8006982C_6A42C(&func_80040608_41208);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FD84_40984);
 
