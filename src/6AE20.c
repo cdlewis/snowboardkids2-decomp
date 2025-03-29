@@ -25,7 +25,11 @@ INCLUDE_ASM("asm/nonmatchings/6AE20", func_8006A428_6B028);
 
 INCLUDE_ASM("asm/nonmatchings/6AE20", func_8006A4DC_6B0DC);
 
-INCLUDE_ASM("asm/nonmatchings/6AE20", func_8006A4E8_6B0E8);
+void func_8006A4E8_6B0E8(s32* arg0) {
+    u32 mask = osSetIntMask(1);
+    arg0[-3] = 0;
+    osSetIntMask(mask);
+}
 
 INCLUDE_ASM("asm/nonmatchings/6AE20", func_8006A51C_6B11C);
 
