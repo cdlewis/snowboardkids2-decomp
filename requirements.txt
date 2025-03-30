@@ -6,3 +6,9 @@ mapfile_parser>=2.7.0
 # permuter
 toml
 pycparser
+
+# asm-differ
+colorama
+watchdog
+levenshtein
+cxxfilt

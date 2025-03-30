@@ -20,6 +20,22 @@ extern s16 D_8008FE8C_90A8C;
 extern s8 D_8008FE8F_90A8F;
 extern OSMesgQueue D_800A1820_A2420;
 void func_8003AC58_3B858(void*);
+extern s32 D_800A2488_A3088;
+extern s32 D_800A2490_A3090;
+extern s32 D_800A2108_A2D08;
+extern s32 D_800A248C_A308C;
+extern s32 D_800A2494_A3094;
+extern OSMesg D_800A2128_A2D28[];
+extern OSMesgQueue D_800A2110_A2D10;
+extern OSMesg gPiDmaMsgBuf[];
+extern OSMesgQueue gPiDmaMsgQueue;
+extern OSMesgQueue D_800A20F0_A2CF0;
+extern OSMesgQueue* D_800A2150_A2D50[];
+extern u8 D_800A2168_A2D68[];
+extern OSThread D_800A1DC0_A29C0;
+extern void func_8003B6B4_3C2B4(void* arg);
+extern s32 func_8006A258_6AE58(s32 arg0, s32 size, void* info);
+extern char piManagerThreadStack[0x8];  // this size seems wrong
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
 
@@ -206,7 +222,24 @@ void func_8003B560_3C160(u8* arg0) {
         1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B5A0_3C1A0);
+void initPiManager() {
+    u8 flag;
+
+    D_800A2488_A3088 = 0;
+    D_800A2490_A3090 = 0;
+    D_800A2108_A2D08 = func_8006A258_6AE58(0, 0x168, &flag);
+    D_800A248C_A308C = func_8006A258_6AE58(0, 0x730, &flag);
+    D_800A2494_A3094 = func_8006A258_6AE58(0, 0x1000, &flag);
+
+    osCreatePiManager(150, (OSMesgQueue*)D_800A2150_A2D50, (OSMesg*)D_800A2168_A2D68, 200);
+    osCreateMesgQueue(&D_800A2110_A2D10, D_800A2128_A2D28, 1);
+    osCreateMesgQueue(&gPiDmaMsgQueue, gPiDmaMsgBuf, 1);
+    osCreateMesgQueue(&D_800A20F0_A2CF0, (OSMesg*)D_800A2108_A2D08, 90);
+
+    osCreateThread(&D_800A1DC0_A29C0, 7, func_8003B6B4_3C2B4, 0, &piManagerThreadStack + sizeof(piManagerThreadStack), 1);
+
+    osStartThread(&D_800A1DC0_A29C0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B6B4_3C2B4);
 
