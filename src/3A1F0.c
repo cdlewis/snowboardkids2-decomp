@@ -39,7 +39,7 @@ extern u8 D_8008FE8E_90A8E;
 extern OSPfs controllerPacks[];
 
 typedef struct {
-    u8 padding[4];
+    u32 unknown;
     u32 gameCode;
     u16 companyCode;
     u8 gameName[16];
@@ -129,7 +129,31 @@ int func_8003A9E4_3B5E4() {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A9EC_3B5EC);
+void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]) {
+    OSPfs* selectedPack;
+    s32 controllerID;
+    s32 err;
+    controllerPackFileHeader* header;
+    u16 new_var;
+    controllerID = arg0 & 0xFFFF;
+    new_var = arg1 & 0xFFFF;
+    selectedPack = &controllerPacks[controllerID];
+
+    err = osPfsInitPak(&mainStack, selectedPack, controllerID);
+    if (!err) {
+        // some kind of 2D array lookup?
+        header = ((void*)(((controllerID * 0x10) + new_var) * 0x24)) + ((u32)arg2);
+
+        err = osPfsDeleteFile(selectedPack, header->companyCode, header->gameCode, header->gameName, header->extName);
+        if (!err) {
+            header->companyCode = 0;
+            header->gameCode = 0;
+            header->unknown = 0;
+        }
+    }
+
+    osSendMesg(&D_800A1888_A2488, (void*)err, 1);
+}
 
 void func_8003AAC4_3B6C4() {
 }
@@ -138,7 +162,7 @@ int func_8003AACC_3B6CC() {
     return 0;
 }
 
-void controllerPackDeleteFile(s32 selectedPack, controllerPackFileHeader* header) {
+void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader* header) {
     OSPfs* selectedControllerPack;
     s32 err;
 
