@@ -1,3 +1,6 @@
+gControllerPackFreeBlockCount = 0x800AB24C;
+gControllerPackFileCount = 0x800A8A88;
+controllerPackReadStatus = 0x8003AB84;
 controllerPackDeleteFile = 0x8003A9EC;
 controllerPackDeleteFileFromHeader = 0x8003AAD4;
 controllerPacks = 0x800A18C8;

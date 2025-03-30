@@ -38,6 +38,8 @@ extern u8 D_800A1C98_A2898;
 extern u8 D_8008FE8E_90A8E;
 extern OSPfs controllerPacks[];
 extern u8 D_800AFED0_A7240;
+extern s32 gControllerPackFileCount;
+extern s32 gControllerPackFreeBlockCount;
 
 typedef struct {
     u32 unknown;
@@ -193,7 +195,27 @@ int func_8003AB7C_3B77C() {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AB84_3B784);
+void controllerPackReadStatus(s32 arg0) {
+    s32 sp10;
+    s32 temp_a2;
+    s32 err;
+
+    temp_a2 = arg0 & 0xFFFF;
+    err = osPfsInitPak(&mainStack, &controllerPacks[temp_a2], temp_a2);
+    if (err == 0) {
+        err = osPfsFreeBlocks(&controllerPacks, &gControllerPackFreeBlockCount);
+        if (err == 0) {
+            err = osPfsNumFiles(&controllerPacks, &sp10, &gControllerPackFileCount);
+            if (err != 0) {
+                gControllerPackFileCount = 0;
+            }
+        } else {
+            gControllerPackFreeBlockCount = 0;
+        }
+    }
+
+    osSendMesg(&D_800A1888_A2488, (OSMesg*)err, OS_MESG_BLOCK);
+}
 
 void func_8003AC30_3B830() {
 }
