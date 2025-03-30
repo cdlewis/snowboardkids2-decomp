@@ -11,13 +11,11 @@ extern OSMesgQueue D_800A1820_A2420;
 extern OSMesgQueue D_800A1888_A2488;
 extern OSMesgQueue gPiDmaMsgQueue;
 extern u8 D_800AB090_A2400;
-extern s8 D_8008FE8F_90A8F;
+extern u8 D_8008FE8F_90A8F;
 extern s16 D_8008FE8C_90A8C;
 extern s32 D_8008FEA0_90AA0;
 extern Entry D_800A1C20_A2820[];
 extern u8 D_800AB078_A23E8[];
-extern s16 D_8008FE8C_90A8C;
-extern s8 D_8008FE8F_90A8F;
 extern OSMesgQueue D_800A1820_A2420;
 void func_8003AC58_3B858(void*);
 extern s32 D_800A2488_A3088;
@@ -36,12 +34,29 @@ extern OSThread D_800A1DC0_A29C0;
 extern void func_8003B6B4_3C2B4(void* arg);
 extern s32 func_8006A258_6AE58(s32 arg0, s32 size, void* info);
 extern char piManagerThreadStack[0x8];  // this size seems wrong
+extern u8 D_800A1C98_A2898;
+extern u8 D_8008FE8E_90A8E;
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800397CC_3A3CC);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_80039B88_3A788);
+void func_80039B88_3A788(void) {
+    s16 temp_v0;
+    s32 temp_a1;
+
+    if ((D_8008FE8F_90A8F == 0) && (D_800A1C98_A2898 == 0) && (D_8008FE8E_90A8E != 0)) {
+        temp_a1 = D_8008FE8C_90A8C;
+        D_800A1C20_A2820[temp_a1].command = 0x10;
+        osSendMesg(&D_800A1820_A2420, (OSMesg*)&D_800A1C20_A2820[temp_a1], 1);
+        temp_v0 = (u16)D_8008FE8C_90A8C + 1;
+        D_8008FE8C_90A8C = temp_v0;
+        if (temp_v0 >= 0xF) {
+            D_8008FE8C_90A8C = 0;
+        }
+        D_800A1C98_A2898 = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_80039C34_3A834);
 
