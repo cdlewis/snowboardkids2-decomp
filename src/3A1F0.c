@@ -38,6 +38,14 @@ extern u8 D_800A1C98_A2898;
 extern u8 D_8008FE8E_90A8E;
 extern OSPfs controllerPacks[];
 
+typedef struct {
+    u8 padding[4];
+    u32 gameCode;
+    u16 companyCode;
+    u8 gameName[16];
+    u8 extName[1];  // maybe wrong
+} controllerPackFileHeader;
+
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800397CC_3A3CC);
@@ -130,7 +138,28 @@ int func_8003AACC_3B6CC() {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AAD4_3B6D4);
+void controllerPackDeleteFile(s32 selectedPack, controllerPackFileHeader* header) {
+    OSPfs* selectedControllerPack;
+    s32 err;
+
+    selectedControllerPack = &controllerPacks[(u16)selectedPack];
+    err = osPfsInitPak(&mainStack, selectedControllerPack, (u16)selectedPack);
+    if (!err) {
+        err = osPfsDeleteFile(
+            selectedControllerPack,
+            header->companyCode,
+            header->gameCode,
+            header->gameName,
+            header->extName);
+
+        if (!err) {
+            header->companyCode = 0;
+            header->gameCode = 0;
+        }
+    }
+
+    osSendMesg(&D_800A1888_A2488, (void*)err, 1);
+}
 
 void func_8003AB74_3B774() {
 }
