@@ -15,7 +15,7 @@ extern u8 D_8008FE8F_90A8F;
 extern s16 D_8008FE8C_90A8C;
 extern s32 D_8008FEA0_90AA0;
 extern Entry D_800A1C20_A2820[];
-extern u8 D_800AB078_A23E8[];
+extern s16 D_800AB078_A23E8[];
 extern OSMesgQueue D_800A1820_A2420;
 void func_8003AC58_3B858(void*);
 extern s32 D_800A2488_A3088;
@@ -37,6 +37,7 @@ extern char piManagerThreadStack[0x8];  // this size seems wrong
 extern u8 D_800A1C98_A2898;
 extern u8 D_8008FE8E_90A8E;
 extern OSPfs controllerPacks[];
+extern u8 D_800AFED0_A7240;
 
 typedef struct {
     u32 unknown;
@@ -203,7 +204,14 @@ void func_8003AC38_3B838() {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AC58_3B858);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AF38_3BB38);
+void func_8003AF38_3BB38(s32 arg0) {
+    s32 temp_v1;
+    temp_v1 = arg0 & 0xFFFF;
+
+    if (((s32)D_800AFED0_A7240 >> temp_v1) & 1) {
+        D_800AB078_A23E8[temp_v1] = 1;
+    }
+}
 
 void func_8003AF6C_3BB6C() {
     u8* var_v1;
