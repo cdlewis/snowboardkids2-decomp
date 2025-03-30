@@ -1,3 +1,6 @@
+initPiManager = 0x8003B5A0;
+piManagerThreadStack = 0x800A20B0;
+
 gPiDmaMsgQueue = 0x800A2130;
 gPiDmaMsgBuf = 0x800A2148;
 dmaLoadAndInvalidate = 0x8003BC60;
