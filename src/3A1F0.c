@@ -36,6 +36,7 @@ extern s32 func_8006A258_6AE58(s32 arg0, s32 size, void* info);
 extern char piManagerThreadStack[0x8];  // this size seems wrong
 extern u8 D_800A1C98_A2898;
 extern u8 D_8008FE8E_90A8E;
+extern OSPfs controllerPacks[];
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
 
@@ -67,7 +68,24 @@ int func_8003A1E4_3ADE4() {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A1EC_3ADEC);
+void initControllerPack(s32 channel) {
+    OSMesgQueue* mainStackLocal;
+    OSPfs* selectedPack;
+    s32 controllerPortNumber;
+    s32 controllerPackStatus;
+    mainStackLocal = &mainStack;
+
+    controllerPortNumber = channel & 0xFFFF;
+    selectedPack = &controllerPacks[controllerPortNumber];
+
+    controllerPackStatus = osPfsInitPak(mainStackLocal, selectedPack, controllerPortNumber);
+
+    if (controllerPackStatus == PFS_ERR_NEW_PACK) {
+        controllerPackStatus = osPfsInitPak(mainStackLocal, selectedPack, controllerPortNumber);
+    }
+
+    osSendMesg(&D_800A1888_A2488, (OSMesg*)controllerPackStatus, OS_MESG_BLOCK);
+}
 
 void func_8003A284_3AE84() {
 }
