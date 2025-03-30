@@ -1,4 +1,5 @@
-controllerPackDeleteFile = 0x8003AAD4;
+controllerPackDeleteFile = 0x8003A9EC;
+controllerPackDeleteFileFromHeader = 0x8003AAD4;
 controllerPacks = 0x800A18C8;
 initControllerPack = 0x8003A1EC;
 initPiManager = 0x8003B5A0;
