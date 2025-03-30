@@ -216,7 +216,18 @@ INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B098_3BC98);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B0E8_3BCE8);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B170_3BD70);
+void* func_8003B170_3BD70(void) {
+    void* sp10;
+    void* var_v0;
+
+    sp10 = NULL;
+    var_v0 = (void*)-1;
+    if (osRecvMesg(&D_800A1888_A2488, &sp10, 0) == 0) {
+        D_8008FE8F_90A8F = 0;
+        var_v0 = sp10;
+    }
+    return var_v0;
+}
 
 void func_8003B1C0_3BDC0() {
     osSendMesg(
