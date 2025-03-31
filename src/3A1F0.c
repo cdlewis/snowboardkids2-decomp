@@ -369,7 +369,18 @@ void func_8003B2DC_3BEDC(s32 arg0, u8* arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B324_3BF24);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B3B0_3BFB0);
+void* func_8003B3B0_3BFB0(void) {
+    void* sp10;
+    void* var_v0;
+
+    sp10 = NULL;
+    var_v0 = (void*)-1;
+    if (osRecvMesg(&D_800A1888_A2488, &sp10, OS_MESG_NOBLOCK) == 0) {
+        D_8008FE8F_90A8F = 0;
+        var_v0 = sp10;
+    }
+    return var_v0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B400_3C000);
 
