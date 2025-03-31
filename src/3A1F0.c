@@ -43,6 +43,7 @@ extern s32 gControllerPackFreeBlockCount;
 extern u32 D_800AB080_A23F0[];
 extern u8 D_800AB094_A2404[];
 extern u8 D_800AB098_A2408[];
+extern OSMesgQueue D_800A18A8_A24A8;
 
 typedef struct {
     u32 unknown;
@@ -293,7 +294,18 @@ void func_8003B000_3BC00(s32 arg0) {
     D_8008FE8F_90A8F = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B098_3BC98);
+void* func_8003B098_3BC98(void) {
+    void* sp10;
+    void* var_v0;
+
+    sp10 = NULL;
+    var_v0 = (void*)-1;
+    if (osRecvMesg(&D_800A18A8_A24A8, &sp10, OS_MESG_NOBLOCK) == 0) {
+        D_8008FE8F_90A8F = 0;
+        var_v0 = sp10;
+    }
+    return var_v0;
+}
 
 void func_8003B0E8_3BCE8(void) {
     s16 temp_v0;
