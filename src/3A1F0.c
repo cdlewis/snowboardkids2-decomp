@@ -10,7 +10,7 @@ extern OSMesgQueue mainStack;
 extern OSMesgQueue D_800A1820_A2420;
 extern OSMesgQueue D_800A1888_A2488;
 extern OSMesgQueue gPiDmaMsgQueue;
-extern u8 D_800AB090_A2400;
+extern u8 D_800AB090_A2400[];
 extern u8 D_8008FE8F_90A8F;
 extern s16 D_8008FE8C_90A8C;
 extern s32 D_8008FEA0_90AA0;
@@ -40,6 +40,9 @@ extern OSPfs controllerPacks[];
 extern u8 D_800AFED0_A7240;
 extern s32 gControllerPackFileCount;
 extern s32 gControllerPackFreeBlockCount;
+extern u32 D_800AB080_A23F0[];
+extern u8 D_800AB094_A2404[];
+extern u8 D_800AB098_A2408[];
 
 typedef struct {
     u32 unknown;
@@ -235,20 +238,44 @@ void func_8003AF38_3BB38(s32 arg0) {
     }
 }
 
-void func_8003AF6C_3BB6C() {
+void func_8003AF6C_3BB6C(void) {
     u8* var_v1;
+    u8* end;
     u8 a1 = 1;
 
-    var_v1 = &D_800AB090_A2400;
+    var_v1 = (u8*)D_800AB090_A2400;
+    end = var_v1 + 4;
+
     do {
         if (*var_v1 == 0) {
             *var_v1 = a1;
         }
-        var_v1 += 1;
-    } while ((s32)var_v1 < (s32)(&D_800AB090_A2400 + 4));
+        var_v1++;
+    } while ((s32)var_v1 < (s32)end);
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AFA0_3BBA0);
+void func_8003AFA0_3BBA0(void) {
+    s32 var_v1;
+    int new_var2;
+    s32* var_a0;
+    s16* var_a1;
+    int new_var;
+    new_var = 2;
+    var_v1 = 0;
+    new_var2 = 1;
+    var_a1 = D_800AB080_A23F0 - new_var;
+    var_a0 = D_800AB080_A23F0;
+    do {
+        D_800AB090_A2400[var_v1] = 0;
+        *var_a0 = new_var2;
+        *var_a1 = 0;
+        var_a1++;
+        D_800AB094_A2404[var_v1] = 0;
+        D_800AB098_A2408[var_v1] = 0;
+        var_v1++;
+        var_a0++;
+    } while (var_v1 < 4);
+}
 
 void func_8003B000_3BC00(s32 arg0) {
     s16 temp_v0;
