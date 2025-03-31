@@ -330,7 +330,21 @@ void func_8003B1C0_3BDC0() {
         1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B1F4_3BDF4);
+void func_8003B1F4_3BDF4(s32 arg0, void* arg1) {
+    s16 temp_v0;
+    s32 temp_v1;
+
+    D_8008FE8F_90A8F = 1;
+    temp_v1 = D_8008FE8C_90A8C;
+    D_800A1C20_A2820[temp_v1].arg = arg1;
+    D_800A1C20_A2820[temp_v1].command = (arg0 & 0xFF) + 0xE0;
+    osSendMesg(&D_800A1820_A2420, (OSMesg*)&D_800A1C20_A2820[temp_v1], 1);
+    temp_v0 = (u16)D_8008FE8C_90A8C + 1;
+    D_8008FE8C_90A8C = temp_v0;
+    if (temp_v0 >= 0xF) {
+        D_8008FE8C_90A8C = 0;
+    }
+}
 
 void* func_8003B28C_3BE8C(void) {
     void* sp10;
