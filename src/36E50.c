@@ -1,3 +1,4 @@
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 
 typedef struct {
@@ -46,11 +47,6 @@ typedef struct {
     s16 unk70;
     s8 unk72;
 } func_80036328_36F28_arg;
-
-typedef struct {
-    char padding[9];
-    u8 unk9;
-} D_800AFE8C_A71FC_type;
 
 typedef struct {
     char padding[64];
@@ -123,7 +119,6 @@ extern void func_80058220_58E20(u16, void*);
 extern void D_8008FAC0_906C0;
 extern s16 D_8008FD10_90910[];
 extern char D_8008FD1C_9091C[];
-extern D_800AFE8C_A71FC_type* D_800AFE8C_A71FC;
 extern s32 func_8006A200_6AE00(s32);
 extern void func_80036920_37520;
 
