@@ -42,3 +42,5 @@ typedef struct {
     u8 padding15[0x124E];
     s8 unk17E0;
 } GameState;
+
+GameState* GameStateGet();
