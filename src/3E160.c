@@ -111,7 +111,3 @@ INCLUDE_ASM("asm/nonmatchings/3E160", func_80040588_41188);
 INCLUDE_ASM("asm/nonmatchings/3E160", func_80040608_41208);
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_800407B4_413B4);
-
-INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E798_9F398);
-
-INCLUDE_RODATA("asm/nonmatchings/3E160", D_8009E7AC_9F3AC);
