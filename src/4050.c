@@ -132,9 +132,9 @@ void func_80003C34_4834(void) {
 
     temp_v0 = GameStateGet();
     if (temp_v0->unk17E0 != 0) {
-        n_alSynRemovePlayer(&temp_v0->audioPlayerC);
-        n_alSynRemovePlayer(&temp_v0->audioPlayerB);
-        n_alSynRemovePlayer(&temp_v0->audioPlayerA);
+        n_alSynRemovePlayer(&temp_v0->audioPlayer5);
+        n_alSynRemovePlayer(&temp_v0->audioPlayer3);
+        n_alSynRemovePlayer(&temp_v0->audioPlayer1);
         func_800697CC_6A3CC(&func_80003C88_4888);
     }
 }
