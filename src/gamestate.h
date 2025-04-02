@@ -8,38 +8,40 @@ typedef struct {
     s32 unk28;
     u8 padding2[0x4];
     s32 unk30;
-    u8 padding3[0x28];
+    u8 padding3[0x18];
+    s32 unk4C;
+    u8 padding4[0xC];
     u8 unk5C;
-    u8 padding4[0x17A];
+    u8 padding5[0x17A];
     ALPlayer* audioPlayer2;  // 0x1D8
-    u8 padding5[0x4];
+    u8 padding6[0x4];
     ALPlayer* audioPlayer3;  // 0x1E0
-    u8 padding6[0x1CA];
+    u8 padding7[0x1CA];
     ALPlayer* audioPlayer4;  // 0x3B0
-    u8 padding7[0x4];
+    u8 padding8[0x4];
     ALPlayer* audioPlayer5;  // 0x3B8
-    u8 padding8[0x20];
+    u8 padding9[0x20];
     void* unk3DC;
     void* unk3E0;
     void* unk3E4;
-    u8 padding9[0x0C];
+    u8 padding10[0x0C];
     s16 unk3F4;
     s32 unk3F8;
     u16 unk3FC;
-    u8 padding10[0x26];
+    u8 padding11[0x26];
     u8 unk424;
     s8 unk425;
-    u8 padding11[1];
-    u8 unk427;
     u8 padding12[1];
+    u8 unk427;
+    u8 padding13[1];
     s8 unk429;
-    u8 padding13[4];
+    u8 padding14[4];
     s8 unk42E;
-    u8 padding14[0x158];
+    u8 padding15[0x158];
     s32 unk588;
     s32 unk58C;
     u16 unk590;
-    u8 padding15[0x124E];
+    u8 padding16[0x124E];
     s8 unk17E0;
 } GameState;
 
