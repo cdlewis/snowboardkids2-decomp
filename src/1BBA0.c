@@ -70,4 +70,13 @@ void func_8001BCC0_1C8C0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001BCDC_1C8DC);
 
-INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001BD74_1C974);
+void func_8001BD74_1C974(s8* a0) {
+    if (*a0 == 3) {
+        *a0 = 2;
+    } else if (*a0 == 8) {
+        *a0 = 7;
+    } else if (*a0 != 4) {
+    } else {
+        *a0 = 0;
+    }
+}
