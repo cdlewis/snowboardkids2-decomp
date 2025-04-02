@@ -1,5 +1,7 @@
 #include "69EF0.h"
 
+#include "gamestate.h"
+
 typedef struct {
     char padding[0x20];
     s32 unk20;
@@ -9,9 +11,11 @@ typedef struct {
 typedef struct {
     char padding[0x10];
     void* unk10;
-    char padding2[0x19];
+    char padding1[0x14];
+    void* GameState;  // 0x28
+    char padding3[0x2];
     s32 unk30;
-    char padding3[0x4];
+    char padding4[0x4];
     s16 unk38[9];
     s16 unk4A;
 } D_8009A860_9B460_type;
@@ -50,7 +54,9 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006983C_6A43C);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069854_6A454);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", GameStateGet);
+GameState* GameStateGet() {
+    return D_8009A860_9B460->GameState;
+}
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698CC_6A4CC);
 
