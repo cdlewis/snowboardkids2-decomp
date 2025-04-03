@@ -7,3 +7,7 @@ osCicId = 0x80000310;
 osVersion = 0x80000314;
 osMemSize = 0x80000318;
 osAppNMIBuffer = 0x8000031C;
+
+func_800BB404 = 0x800BB404;
+func_800BB2F4 = 0x800BB2F4;
+func_800BB47C = 0x800BB47C;
