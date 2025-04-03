@@ -1,6 +1,9 @@
 #include "common.h"
 
 extern u32 __additional_scanline_0;
+extern s32 D_800A3558_A4158;
+extern s32 D_800A3580_A4180[];
+extern s32 D_800A8A84_9FDF4;
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
 
@@ -32,7 +35,13 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F644_70244);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F668_70268);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F6AC_702AC);
+void func_8006F6AC_702AC(s32 arg0) {
+    s32 temp_v0;
+
+    temp_v0 = D_800A3580_A4180[arg0];
+    D_800A8A84_9FDF4 = temp_v0;
+    D_800A3558_A4158 = temp_v0 + 0x10000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F6D8_702D8);
 
