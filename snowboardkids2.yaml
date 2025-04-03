@@ -669,7 +669,7 @@ segments:
       - [0x9E2B0, rodata]
       - [0x9E5F8, rodatabin, gspF3DEX_fifoData]
       - [0x9E640, rodata]
-      - [0x9E8E0, rodata] # 4050
+      - [0x9E8E0, .rodata, 4050]
       - [0x9E910, rodata, 5520]
       - [0x9E950, rodata, 8700]
       - [0x9E970, rodata, 8A40]
@@ -726,117 +726,234 @@ segments:
       - { type: lib, vram: 0x800A8A70, name: libgultra_rom, object: piacs, section: .bss }
       - { type: bss, vram: 0x800A8A80, name: A8A80 }
 
-  - name: unknown_section_1
+  - name: _9FDF0
     type: code
-    start: 0x9FDF0
-    follows_vram: main
     vram: 0x800AFF30
+    start: 0x9FDF0
+    exclusive_ram_id: 800AFF30
+    overlay: true
     subsegments:
       - [0x9FDF0, asm]
-      - [0x9FE70, data]
-  
-  - name: unknown_section_2
+      - [0x9FE70, data, 9FDF0]
+
+  - name: _9FF70
     type: code
-    start: 0x9FF80
-    follows_vram: unknown_section_1
     vram: 0x800B00C0
+    start: 0x9FF70
+    exclusive_ram_id: 800B00C0
+    overlay: true
     subsegments:
-      - [0x9FF80, asm]
+      - [0x9FF70, asm]
       - [0xA9A40, asm]
       - [0xAA8E0, data]
-      - [0xAAD10, rodata]
-      - [0xAAEC0, rodata]
-      - [0xAAEE0, rodata]
-      - [0xAB070, rodata]
-      - [0xAB0A0, rodata]
-      - [0xAB0D0, rodata]
-      - [0xAB120, rodata]
-      - [0xAB160, rodata]
+      - [0xAAEB0, rodata, 9FF70]
 
-
-  - name: unknown_section_2_1
+  - name: _AB160
     type: code
-    start: 0xAB170
-    follows_vram: unknown_section_2
     vram: 0x800BB2B0
+    start: 0xAB160
+    overlay: true
+    exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xAB170, asm]
-      - [0xAB1D0, data]
+      - [0xAB160, asm]
+      - [0xABA70, data, AB160]
 
-  - name: unknown_section_3
+  - name: _ABAE0
     type: code
-    start: 0xABA60
-    follows_vram: unknown_section_2_1
-    vram: 0x800BBBA0
+    vram: 0x800BB2B0
+    start: 0xABAE0
+    exclusive_ram_id: 800BB2B0
+    overlay: true
     subsegments:
-      - [0xABA60, asm]
-      - [0xABA70, data]
+      - [0xABAE0, asm]
+      - [0xACC70, data, ACC70]
 
-  - name: unknown_section_3_1
+  - name: _ACD30
     type: code
-    start: 0xAC8D0
-    follows_vram: unknown_section_3
-    vram: 0x800BCA10
+    vram: 0x800BB2B0
+    start: 0xACD30
+    exclusive_ram_id: 800BB2B0
+    overlay: true
     subsegments:
-      - [0xAC8D0, asm]
-      - [0xAC9E0, rodata]
-      - [0xB04E0, rodata]
+      - [0xACD30, asm]
+      - [0xAD630, data, ACD30]
 
-  - name: unknown_section_4
+  - name: _AD670
     type: code
-    start: 0xB22E0
-    follows_vram: unknown_section_3_1
-    vram: 0x800C2420
+    vram: 0x800BB2B0
+    start: 0xAD670
+    exclusive_ram_id: 800BB2B0
+    overlay: true
     subsegments:
-      - [0xB22E0, asm]
-      - [0xB2530, data]
+      - [0xAD670, asm]
+      - [0xAEDF0, data, AD670]
+      - [0xAEF80, rodata, AD670]
 
-  - name: unknown_section_4_1
+  - name: _AEFA0
     type: code
+    vram: 0x800BB2B0
+    start: 0xAEFA0
+    exclusive_ram_id: 800BB2B0
+    overlay: true
+    subsegments:
+      - [0xAEFA0, asm]
+      - [0xB04E0, data, AEFA0]
+
+  - name: _B07A0
+    type: code
+    vram: 0x800BB2B0
+    start: 0xB07A0
+    overlay: true
+    exclusive_ram_id: 800BB2B0
+    subsegments:
+      - [0xB07A0, asm]
+      - [0xB1EE0, data, B07A0]
+
+  - name: _B2030
+    type: code
+    vram: 0x800BB2B0
+    start: 0xB2030
+    overlay: true
+    exclusive_ram_id: 800BB2B0
+    subsegments:
+      - [0xB2030, asm]
+      - [0xB2530, data, B2530]
+
+  - name: _B2750
+    type: code
+    vram: 0x800BB2B0
+    start: 0xB2750
+    overlay: true
+    exclusive_ram_id: 800BB2B0
+    subsegments:
+      - [0xB2750, asm]
+      # no data
+
+  - name: _B2870
+    type: code
+    vram: 0x800BB2B0
     start: 0xB2870
-    follows_vram: unknown_section_4
-    vram: 0x800C29B0
+    overlay: true
+    exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB2870, asm]
-      - [0xB40E0, data]
+      - [0xB40E0, data, B2870]
+      - [0xB4220, rodata, B2870]
 
-  - name: unknown_section_5
+  - name: _B4240
     type: code
+    vram: 0x800BB2B0
     start: 0xB4240
-    follows_vram: unknown_section_4_1
-    vram: 0x800C4380
+    overlay: true
+    exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB4240, asm]
-      - [0xB4B20, data]
+      - [0xB4B20, data, B4B20]
 
-  - name: unknown_section_6
+  - name: _B4BB0
     type: code
+    vram: 0x800BB2B0
     start: 0xB4BB0
-    follows_vram: unknown_section_5
-    vram: 0x800C4CF0
+    overlay: true
+    exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB4BB0, asm]
-      - [0xB5450, data]
+      - [0xB5450, data, B4BB0]
 
-  - name: unknown_section_7
+  - name: _B54C0
     type: code
+    vram: 0x800BB2B0
     start: 0xB54C0
-    follows_vram: unknown_section_6
-    vram: 0x800C5600
+    overlay: true
+    exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB54C0, asm]
-      - [0xB5B40, data]
+      - [0xB5B40, data, B54C0]
 
-  - name: unknown_section_8
+  - name: _B5B90
     type: code
+    vram: 0x800BB2B0
+    start: 0xB5B90
+    overlay: true
+    exclusive_ram_id: 800BB2B0
+    subsegments:
+      - [0xB5B90, asm]
+      - [0xB6310, data, B5B90]
+      - [0xB74B0, rodata, B5B90]
+
+  - name: _B74F0
+    type: code
+    vram: 0x800BB2B0
     start: 0xB74F0
-    follows_vram: unknown_section_7
-    vram: 0x800C7630
+    overlay: true
+    exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB74F0, asm]
-      - [0xB7DD0, data]
-      - [0xBDBC0, bin]
+      - [0xB7DD0, data, B74F0]
 
-  - [0xE0CAD0, bin, trailer]
+  - name: _1DA660
+    type: code
+    vram: 0x800B00C0
+    start: 0x1DA660
+    overlay: true
+    exclusive_ram_id: 800B00C0
+    subsegments:
+      - [0x1DA660, asm]
+      - [0x1DB6E0, data]
+
+  - name: _1DB7A0
+    type: code
+    vram: 0x800B00C0
+    start: 0x1DB7A0
+    overlay: true
+    exclusive_ram_id: 800B00C0
+    subsegments:
+      - [0x1DB7A0, asm]
+      - [0x1DC080, asm]
+
+  - name: _1DC260
+    type: code
+    vram: 0x800B00C0
+    start: 0x1DC260
+    overlay: true
+    exclusive_ram_id: 800B00C0
+    subsegments:
+      - [0x1DC260, asm]
+      - [0x1DC480, asm]
+      - [0x1DC900, asm]
+      - [0x1DCF60, asm]
+      - [0x1DD080, data]
+      - [0x1DD150, rodata, 1DC900]
+
+  - name: _1DD170
+    type: code
+    vram: 0x800B00C0
+    start: 0x1DD170
+    bss_size: 0x60
+    overlay: true
+    exclusive_ram_id: 800B00C0
+    subsegments:
+      - [0x1DD170, asm]
+      - [0x1DD8C0, asm]
+      - [0x1DD970, asm]
+      - [0x1DDAF0, asm]
+      - [0x1DED40, asm]
+      - [0x1DF180, asm]
+      - [0x1DF310, asm]
+      - [0x1DF8B0, asm]
+      - [0x1DFAA0, asm]
+      - [0x1E1BA0, asm]
+      - [0x1E2070, asm]
+      - [0x1E25B0, asm]
+      - [0x1E2890, asm]
+      - [0x1E2BE0, asm]
+      - [0x1E36C0, asm]
+      - [0x1E60D0, asm]
+      - [0x1E64A0, asm]
+      - [0x1E6D20, data] # 1E6D30 has some interesting text
+      - [0x1E7F00, rodata]
+      - { start: 0x1E7F60, type: bss, vram: 0x800BAEB0, name: 1DD170 }
+
+  - [0x1E7F60, bin, trailer]
 
   - [0x1000000]

@@ -1,3 +1,41 @@
+D_80090520_91120 = 0x80090520; // type:u32
+
+// wrong but hopefully it doesn't matter which overlay its mapped to (yet)
+func_800BB2B0 = 0x800BB2B0; // type:func rom:0xAB160
+
+func_800B3B40 = 0x800B3B40; // type:func rom:0x1E0BF0
+func_800B02E0 = 0x800B02E0; // type:func rom:0x1DC480
+func_800BBED8 = 0x800BBED8; // type:func rom:0xAE298
+func_800BBB90 = 0x800BBB90; // type:func rom:0xADF50
+func_800BBA50 = 0x800BBA50; // type:func rom:0xAD4D0
+func_800BBB34 = 0x800BBB34; // type:func rom:0xB4AC4
+func_800B34F0 = 0x800B34F0; // type:func rom:0x1E05A0
+func_800B305C = 0x800B305C; // type:func rom:0x1E010C
+func_800B2F2C = 0x800B2F2C; // type:func rom:0x1DFFDC
+func_800B016C = 0x800B016C; // type:func rom:0x1DC30C
+func_800B46E0 = 0x800B46E0; // type:func rom:0x1E1790
+func_800B9AE0 = 0x800B9AE0; // type:func rom:0xA9990
+func_800AFF94 = 0x800AFF94; // type:func rom:0x9FE54
+func_800BC9BC = 0x800BC9BC; // type:func rom:0xAED7C
+func_800BBA98 = 0x800BBA98; // type:func rom:0xB7AF0
+func_800BB504 = 0x800BB504; // type:func rom:0xACF84
+func_800B0930 = 0x800B0930; // type:func rom:0x1DCAD0
+func_800B3360 = 0x800B3360; // type:func rom:0x1E0410
+func_800B9020 = 0x800B9020; // type:func rom:0x1E60D0
+func_800B38E4 = 0x800B38E4; // type:func rom:0x1E0994
+func_800B3570 = 0x800B3570; // type:func rom:0x1DFAA0
+func_800BC0FC = 0x800BC0FC; // type:func rom:0xAEFA0
+func_800AFF30 = 0x800AFF30; // type:func rom:0x9FDF0
+func_800B99E0 = 0x800B99E0; // type:func rom:0xA9890
+func_800AFF6C = 0x800AFF6C; // type:func rom:0x9FE2C
+func_800B2AA0 = 0x800B2AA0; // type:func rom:0x1DF850
+func_800B2D04 = 0x800B2D04; // type:func rom:0x1DFDB4
+func_800B0760 = 0x800B0760; // type:func rom:0x1DC900
+func_800B2C78 = 0x800B2C78; // type:func rom:0x1DFD28
+func_800B36C0 = 0x800B36C0; // type:func rom:0x1E0770
+
+Overlays = 0x80090534; // type:u32 size:0x240
+
 pushStartButtonText = 0x8009E7AC;
 
 gControllerPackFreeBlockCount = 0x800AB24C;
@@ -95,7 +133,6 @@ mainStack = 0x800AF490;
 osViModeTable = 0x8009BE70; // defined:true
 
 D_800AFFB0_9FE70 = 0x800AFFB0; // type:u8 size:0x50
-func_800B00C0 = 0x800B00C0; // type:func
 func_800B02AC = 0x800B02AC; // type:func
 
 entrypoint = 0x80000400;
