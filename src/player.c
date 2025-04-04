@@ -1,6 +1,17 @@
+#include "player.h"
+
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/player", Fstop);
+u8 *Fstop(channel_t *cp, u8 *ptr) {
+    cp->pvolume = NULL;
+    cp->ppitchbend = NULL;
+    cp->song_addr = NULL;
+    cp->cont_vol_repeat_count = NULL;
+    cp->handle = 0;
+    cp->pending = NULL;
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", Fwave);
 
