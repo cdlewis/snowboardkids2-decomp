@@ -1,14 +1,21 @@
 #include "common.h"
 
 typedef struct {
+    s32 unk0;
+    s32 unk4;
+} GameStateUnk28;
+
+typedef struct {
     ALPlayer* audioPlayer0;
     u8 padding0[4];
     ALPlayer* audioPlayer1;  // 0x8
     u8 padding1[0x1A];
-    s32 unk28;
+    GameStateUnk28* unk28;
     u8 padding2[0x4];
     s32 unk30;
-    u8 padding3[0x18];
+    u8 padding3[0x10];
+    u8* unk44;
+    u8* unk48;
     s32 unk4C;
     u8 padding4[0xC];
     u8 unk5C;
