@@ -9,7 +9,7 @@ extern void func_80040608_41208();
 GameState* GameStateGet();
 s32 func_80055D34_56934(u8);
 void func_8006983C_6A43C(void*);
-s32 func_80069F94_6AB94(void*, void*, s32);
+GameStateUnk28* func_80069F94_6AB94(void*, void*, s32);
 extern s32 D_3FF010;
 extern s32 D_3FF910;
 extern void func_8003EDF8_3F9F8();
@@ -17,6 +17,8 @@ void func_800697F4_6A3F4(u8);
 extern u8 D_800A24A0_A30A0;
 void func_800574A0_580A0(s32);
 extern void func_800404A8_410A8();
+void func_800609A0_615A0(s32);
+void func_8003EE50_3FA50();
 
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);
 
@@ -34,7 +36,17 @@ void func_8003EDA0_3F9A0(void) {
     temp_v0->unk28 = func_80069F94_6AB94(&D_3FF010, &D_3FF910, 0x16E0);
     func_8006983C_6A43C(&func_8003EDF8_3F9F8);
 }
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003EDF8_3F9F8);
+
+void func_8003EDF8_3F9F8() {
+    GameState* s0 = GameStateGet();
+
+    func_800609A0_615A0((s32)s0 + 0x30);
+
+    s0->unk44 = (u8*)s0->unk28 + s0->unk28->unk0;
+    s0->unk48 = (u8*)s0->unk28 + s0->unk28->unk4;
+
+    func_8006983C_6A43C(&func_8003EE50_3FA50);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003EE50_3FA50);
 
