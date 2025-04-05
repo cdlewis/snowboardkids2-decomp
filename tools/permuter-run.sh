@@ -9,7 +9,9 @@ IDENTIFIER="${IDENTIFIER%/}"
 python3 tools/decomp-permuter/permuter.py \
   -j 16 \
   --best-only \
-  --stop-on-zero $1
+  --stop-on-zero \
+  --stack-diffs \
+  --algorithm levenshtein $1
 
 if [ $INTERRUPTED -eq 0 ] && [ $? -eq 0 ]; then
   curl -s \

@@ -8,6 +8,9 @@ extern s32 D_800AB054_A23C4;
 extern s32 D_800AFF14_A7284;
 extern void func_80068128_68D28();
 extern void func_8002FA44_30644();
+void func_800635CC_641CC(s32, s32);
+void func_80069CC0_6A8C0(void *);
+extern void func_8002F290_2FE90();
 
 typedef struct {
     u8 padding[0x2C];
@@ -81,7 +84,13 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F3E4_2FFE4);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F518_30118);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F5C8_301C8);
+void func_8002F5C8_301C8(s32 arg0) {
+    volatile u8 pad[0x20];
+    if (GameStateGet()->unk5C5 == 1) {
+        func_80069CC0_6A8C0(&func_8002F290_2FE90);
+    }
+    func_800635CC_641CC(0, arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F614_30214);
 
