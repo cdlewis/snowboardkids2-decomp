@@ -9,23 +9,19 @@ extern s32 D_800AB054_A23C4;
 extern s32 D_800AFF14_A7284;
 extern void func_80068128_68D28();
 extern void func_8002FA44_30644();
-void func_800635CC_641CC(s32, s32);
-void func_80069CC0_6A8C0(void *);
 extern void func_8002F290_2FE90();
 void func_8000153C_213C(s32, void *);
 void func_800021B8_2DB8(s32, s16);
 void func_80002750_3350(s32);
-void func_80069CC0_6A8C0(void *);
 extern void func_8002F024_2FC24();
-void func_80069CC0_6A8C0(void *);
 void func_80069CE8_6A8E8(void *);
 void func_8006A838_6B438(void *, s32, s32);
 void func_8006B084_6BC84(void *, void *, void *);
 extern s32 D_8009A870_9B470;
 extern void func_8002F72C_3032C();
 extern void func_8002F980_30580();
-typedef struct
-{
+
+typedef struct {
     u8 padding[0x20];
     s32 unk20;
     s32 unk24;
@@ -56,8 +52,19 @@ typedef struct
     s16 cameraRotation;
 } cameraState;
 
+typedef struct {
+    u8 padding[0x3C];
+    s32 unk3C;
+    u8 padding2[0x10];
+    u32 unk50;
+    u8 padding3[0xC];
+    u8 unk60;
+} S0;
+
+void func_80069CC0_6A8C0(void (*func)(S0 *));
+void func_8002F5C8_301C8(S0 *);
+extern void func_800635CC_641CC(int, S0 *);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
-void func_80069CC0_6A8C0(void *);
 
 // 100% match but something weird is happening
 // #include "initDebugCameraController.c"
@@ -117,9 +124,34 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F36C_2FF6C);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F3E4_2FFE4);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F518_30118);
+void func_8002F518_30118(S0 *s0) {
+    volatile u8 padding[0x20];
+    u32 new_var;
+    GameState *s1 = GameStateGet();
+    u32 offset;
+    new_var = s1->unk5C6;
 
-void func_8002F5C8_301C8(s32 arg0) {
+    if (new_var == 2) {
+        offset = 0xFFF80000;
+    } else {
+        offset = 0x00080000;
+    }
+
+    s0->unk50 += offset;
+
+    memcpy(s0, (void *)((s32)s0 + 0x3C), 0x20);
+
+    s0->unk60++;
+    if (s0->unk60 == 4) {
+        s0->unk60 = 0;
+        s1->unk5C7++;
+        func_80069CC0_6A8C0(func_8002F5C8_301C8);
+    }
+
+    func_800635CC_641CC(0, s0);
+}
+
+void func_8002F5C8_301C8(S0 *arg0) {
     volatile u8 pad[0x20];
     if (GameStateGet()->unk5C5 == 1) {
         func_80069CC0_6A8C0(&func_8002F290_2FE90);
@@ -141,7 +173,7 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     memcpy(&sp30, temp_s3, 0x20);
     memcpy(new_var, &sp30, 0x20);
     func_8006A838_6B438(&sp10, 0x1000, 0x800);
-    createZRotationMatrix(&sp30, 0x1F00);
+    createZRotationMatrix((s16(*)[3])(&sp30), 0x1F00);
     func_8006B084_6BC84(&sp10, &sp30, temp_s3);
     arg0->unk60 = 0;
     arg0->unk20 = 0;
