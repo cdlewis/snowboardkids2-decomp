@@ -909,7 +909,7 @@ segments:
     exclusive_ram_id: 800B00C0
     subsegments:
       - [0x1DB7A0, asm]
-      - [0x1DC080, asm]
+      - [0x1DC080, data]
 
   - name: _1DC260
     type: code
