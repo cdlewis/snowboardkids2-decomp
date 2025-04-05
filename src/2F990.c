@@ -7,6 +7,12 @@ void func_8006FF90_70B90(s32, s32, void *, void *);
 extern s32 D_800AB054_A23C4;
 extern s32 D_800AFF14_A7284;
 extern void func_80068128_68D28();
+extern void func_8002FA44_30644();
+
+typedef struct {
+    u8 padding[0x2C];
+    s32 unk2C;
+} func_8002FA1C_3061C_arg;
 typedef struct
 {
     u8 padding[0x8];
@@ -16,6 +22,9 @@ typedef struct
     s32 cameraY;
     s16 cameraRotation;
 } cameraState;
+
+void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
+void func_80069CC0_6A8C0(void *);
 
 // 100% match but something weird is happening
 // #include "initDebugCameraController.c"
@@ -90,7 +99,10 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F980_30580);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F9C4_305C4);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA1C_3061C);
+void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
+    func_800394BC_3A0BC(arg0, arg0->unk2C);
+    func_80069CC0_6A8C0(&func_8002FA44_30644);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA44_30644);
 
