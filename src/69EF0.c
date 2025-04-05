@@ -2,11 +2,16 @@
 
 #include "gamestate.h"
 
+s32 func_8006A258_6AE58(s32, s32, void*);
+
 typedef struct {
-    char padding[0x20];
+    char padding[0x11];
+    s8 unk11;
+    s8 padding2[0xC];
     s32 unk20;
     s32 unk24;
 } D_8009A864_9B464_type;
+extern D_8009A864_9B464_type* D_8009A864_9B464;
 
 typedef struct {
     char padding[0x10];
@@ -21,7 +26,6 @@ typedef struct {
 } D_8009A860_9B460_type;
 
 extern D_8009A860_9B460_type* D_8009A860_9B460;
-extern D_8009A864_9B464_type* D_8009A864_9B464;
 
 extern void func_8006A3FC_6AFFC();
 
@@ -100,7 +104,16 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069F94_6AB94);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006A0EC_6ACEC);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006A1C0_6ADC0);
+s32 func_8006A1C0_6ADC0(s32 arg0) {
+    s32 sp10;
+    s32 temp_a0;
+
+    temp_a0 = func_8006A258_6AE58(0, arg0, &sp10);
+    if (D_8009A864_9B464 != NULL) {
+        D_8009A864_9B464->unk11 = 1;
+    }
+    return temp_a0;
+}
 
 void func_8006A200_6AE00(void) {
     func_8006A3FC_6AFFC();

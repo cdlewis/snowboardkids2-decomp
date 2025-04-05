@@ -4,6 +4,13 @@ typedef struct {
     s16 m[9];
 } Mat3x3;
 
+typedef struct {
+    u8 padding[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+} func_8006AFDC_6BBDC_arg;
+
 s16 approximateSin(s16 inputAngle) {
     u16 temp_a0;
     inputAngle = inputAngle & 0x1FFF;
@@ -54,7 +61,7 @@ void createXRotationMatrix(s16 matrix[3][3], s16 angle) {
     matrix[2][2] = cosVal;
 }
 
-void createYRotationMatrix(Mat3x3 *matrix, s16 angle) {
+void createYRotationMatrix(Mat3x3* matrix, s16 angle) {
     s16 sinTheta = approximateSin(angle);
     s16 cosTheta = approximateCos(angle);
 
@@ -99,7 +106,11 @@ INCLUDE_ASM("asm/nonmatchings/6B140", func_8006AB64_6B764);
 
 INCLUDE_ASM("asm/nonmatchings/6B140", func_8006AD9C_6B99C);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006AFDC_6BBDC);
+void func_8006AFDC_6BBDC(func_8006AFDC_6BBDC_arg* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    arg0->unk14 = arg1;
+    arg0->unk18 = arg2;
+    arg0->unk1C = arg3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/6B140", func_8006AFEC_6BBEC);
 
