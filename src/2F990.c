@@ -11,6 +11,18 @@ extern void func_8002FA44_30644();
 void func_800635CC_641CC(s32, s32);
 void func_80069CC0_6A8C0(void *);
 extern void func_8002F290_2FE90();
+void func_8000153C_213C(s32, void *);
+void func_800021B8_2DB8(s32, s16);
+void func_80002750_3350(s32);
+void func_80069CC0_6A8C0(void *);
+extern void func_8002F024_2FC24();
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    u8 padding[0x1B];
+    s16 unk24;
+} func_8002EFD8_2FBD8_arg;
 
 typedef struct {
     u8 padding[0x2C];
@@ -68,7 +80,12 @@ void updateDebugCameraYState(cameraState *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002EF3C_2FB3C);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002EFD8_2FBD8);
+void func_8002EFD8_2FBD8(func_8002EFD8_2FBD8_arg *arg0) {
+    func_8000153C_213C(arg0->unk0, (void *)((s32)arg0 + 4));
+    func_800021B8_2DB8(arg0->unk0, arg0->unk24);
+    func_80002750_3350(arg0->unk0);
+    func_80069CC0_6A8C0(&func_8002F024_2FC24);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F024_2FC24);
 
