@@ -1,3 +1,4 @@
+#include "6B140.h"
 #include "common.h"
 #include "gamestate.h"
 
@@ -16,6 +17,23 @@ void func_800021B8_2DB8(s32, s16);
 void func_80002750_3350(s32);
 void func_80069CC0_6A8C0(void *);
 extern void func_8002F024_2FC24();
+void func_80069CC0_6A8C0(void *);
+void func_80069CE8_6A8E8(void *);
+void func_8006A838_6B438(void *, s32, s32);
+void func_8006B084_6BC84(void *, void *, void *);
+extern s32 D_8009A870_9B470;
+extern void func_8002F72C_3032C();
+extern void func_8002F980_30580();
+typedef struct
+{
+    u8 padding[0x20];
+    s32 unk20;
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    u8 padding2[0x30];
+    s8 unk60;
+} func_8002F658_30258_arg;
 
 typedef struct {
     s32 unk0;
@@ -111,7 +129,28 @@ void func_8002F5C8_301C8(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F614_30214);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F658_30258);
+void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
+    u8 sp10[0x20];
+    u8 sp30[0x20];
+    u8(*new_var)[0x20];
+    void *temp_s3;
+    GameStateGet();
+    new_var = &sp10;
+    temp_s3 = ((void *)((s32)arg0)) + 0x3C;
+    memcpy(temp_s3, &D_8009A870_9B470, 0x20);
+    memcpy(&sp30, temp_s3, 0x20);
+    memcpy(new_var, &sp30, 0x20);
+    func_8006A838_6B438(&sp10, 0x1000, 0x800);
+    createZRotationMatrix(&sp30, 0x1F00);
+    func_8006B084_6BC84(&sp10, &sp30, temp_s3);
+    arg0->unk60 = 0;
+    arg0->unk20 = 0;
+    arg0->unk24 = 0;
+    arg0->unk28 = 0;
+    arg0->unk2C = 0;
+    func_80069CE8_6A8E8(&func_8002F980_30580);
+    func_80069CC0_6A8C0(&func_8002F72C_3032C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F72C_3032C);
 
