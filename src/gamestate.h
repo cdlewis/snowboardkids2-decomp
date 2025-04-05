@@ -19,7 +19,9 @@ typedef struct {
     s32 unk4C;
     u8 padding4[0xC];
     u8 unk5C;
-    u8 padding5[0x17A];
+    u8 paddingN[0x7D];
+    u16 unkDA;
+    u8 padding5[0xF9];
     ALPlayer* audioPlayer2;  // 0x1D8
     u8 padding6[0x4];
     ALPlayer* audioPlayer3;  // 0x1E0
