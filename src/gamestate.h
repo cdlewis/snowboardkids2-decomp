@@ -43,7 +43,7 @@ typedef struct {
     u8 padding12[1];
     u8 unk427;
     u8 padding13[1];
-    s8 unk429;
+    u8 unk429;
     u8 padding14[4];
     s8 unk42E;
     u8 padding15[0x158];
