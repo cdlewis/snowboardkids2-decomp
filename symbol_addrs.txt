@@ -1,3 +1,4 @@
+updateDebugCameraYState = 0x8002EDEC;
 D_80090520_91120 = 0x80090520; // type:u32
 
 // wrong but hopefully it doesn't matter which overlay its mapped to (yet)
