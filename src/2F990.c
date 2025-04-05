@@ -48,8 +48,8 @@ void updateDebugCameraYState(cameraState *arg0) {
     arg0->cameraYString = cameraYString;
     arg0->cameraYRotationString = cameraYRotation;
 
-    func_8006FF90_70B90(8, 7, &func_80068128_68D28, arg0);
-    func_8006FF90_70B90(8, 7, &func_80068128_68D28, ((void *)((s32)arg0)) + 0xC);
+    debugEnqueueCallback(8, 7, &func_80068128_68D28, arg0);
+    debugEnqueueCallback(8, 7, &func_80068128_68D28, ((void *)((s32)arg0)) + 0xC);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002EF3C_2FB3C);

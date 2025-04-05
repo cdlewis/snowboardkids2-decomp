@@ -9,6 +9,8 @@ extern u16 D_800A3412_A4012;
 extern u16 D_800A8A9A_9FE0A;
 extern u16 D_800AB478_A27E8;
 extern s32 D_800A3370_A3F70;
+extern void *D_800A3588_A4188[];
+extern void *func_8006F610_70210(s32 size);
 
 typedef struct {
     u8 padding[0xBC];
@@ -94,8 +96,8 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FDC8_709C8);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FE10_70A10);
 
-void func_8006FE28_70A28(func_8006FE28_70A28_arg* arg0, s8 arg1, s8 arg2, s8 arg3) {
-    func_8006FE28_70A28_arg* var_a0;
+void func_8006FE28_70A28(func_8006FE28_70A28_arg *arg0, s8 arg1, s8 arg2, s8 arg3) {
+    func_8006FE28_70A28_arg *var_a0;
 
     var_a0 = arg0;
     if (var_a0 == NULL) {
@@ -109,7 +111,7 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FE48_70A48);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FE94_70A94);
 
-void func_8006FEBC_70ABC(func_8006FEBC_70ABC_arg* arg0) {
+void func_8006FEBC_70ABC(func_8006FEBC_70ABC_arg *arg0) {
     if (arg0 != NULL) {
         arg0->unkB8 = (u8)(arg0->unkB8 & 0xFE);
     }
@@ -123,7 +125,24 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FEF8_70AF8);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", n_alSynRemovePlayer);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FF90_70B90);
+void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3) {
+    void *temp_s0;
+    void *block;
+    void *ptr;
+
+    temp_s0 = D_800A3588_A4188[index];
+    if (temp_s0 != NULL) {
+        block = func_8006F610_70210(0x10);
+        if (block != NULL) {
+            ptr = (u8 *)temp_s0 + (arg1 << 4);
+            *(void **)block = *(void **)((u8 *)ptr + 0x18);
+            *(void **)((u8 *)block + 4) = arg2;
+            *(void **)((u8 *)block + 8) = arg3;
+            *(((u8 *)block) + 0xF) = arg1;
+            *(void **)((u8 *)ptr + 0x18) = block;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8007001C_70C1C);
 
