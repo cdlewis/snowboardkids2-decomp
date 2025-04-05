@@ -16,7 +16,9 @@ extern D_8009A864_9B464_type* D_8009A864_9B464;
 typedef struct {
     char padding[0x10];
     void* unk10;
-    char padding1[0x14];
+    s32 unk14;
+    s8 unk18;
+    char padding1[12];
     void* GameState;  // 0x28
     char padding3[0x2];
     s32 unk30;
@@ -37,7 +39,12 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069470_6A070);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069530_6A130);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_800697CC_6A3CC);
+void func_800697CC_6A3CC(s32 arg0) {
+    if (D_8009A860_9B460 != NULL) {
+        D_8009A860_9B460->unk18 = 2;
+        D_8009A860_9B460->unk14 = arg0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800697F4_6A3F4);
 
