@@ -17,7 +17,9 @@ typedef struct
     s16 cameraRotation;
 } cameraState;
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002ED90_2F990);
+// 100% match but something weird is happening
+// #include "initDebugCameraController.c"
+INCLUDE_ASM("asm/nonmatchings/2F990", initDebugCameraController);
 
 void updateDebugCameraYState(cameraState *arg0) {
     s32 sp20[8];
