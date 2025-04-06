@@ -1,5 +1,6 @@
 #include "common.h"
 #include "gamestate.h"
+#include "6E840.h"
 
 GameState *GameStateGet();
 void func_80000460_1060(s32, void *, void *);
@@ -10,7 +11,6 @@ void func_80000710_1310();
 void func_80069CC0_6A8C0(void *);
 s32 func_8003BB5C_3C75C();
 void func_8006982C_6A42C(void *);
-void func_8006FDA0_709A0(s32, s32, s32);
 extern void func_8001716C_17D6C();
 extern void func_800697F4_6A3F4(s32);
 extern void func_8001730C_17F0C();
@@ -36,7 +36,7 @@ void func_80017110_17D10(void) {
         gameState->unk429--;
     } else {
         if (func_8003BB5C_3C75C() == 0) {
-            func_8006FDA0_709A0(0, 0, 0x10);
+            func_8006FDA0_709A0(NULL, 0, 0x10);
             func_8006982C_6A42C(func_8001716C_17D6C);
         }
     }

@@ -1,3 +1,5 @@
+#include "6E840.h"
+
 #include "common.h"
 
 extern u32 __additional_scanline_0;
@@ -8,9 +10,9 @@ extern u16 D_800A3410_A4010;
 extern u16 D_800A3412_A4012;
 extern u16 D_800A8A9A_9FE0A;
 extern u16 D_800AB478_A27E8;
-extern s32 D_800A3370_A3F70;
 extern void *D_800A3588_A4188[];
 extern void *func_8006F610_70210(s32 size);
+extern func_8006FDA0_709A0_arg *D_800A3370_A3F70;
 
 typedef struct {
     u8 padding[0xBC];
@@ -90,7 +92,20 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FC70_70870);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FD3C_7093C);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FDA0_709A0);
+void func_8006FDA0_709A0(func_8006FDA0_709A0_arg *arg0, u8 arg1, u8 arg2) {
+    func_8006FDA0_709A0_arg *var_a0;
+
+    var_a0 = arg0;
+    if (var_a0 == NULL) {
+        var_a0 = &D_800A3370_A3F70;
+    }
+
+    var_a0->unkC0 = arg1;
+    var_a0->unkC1 = arg2;
+    if (!(arg2 & 0xFF)) {
+        var_a0->unkBF = arg1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FDC8_709C8);
 
