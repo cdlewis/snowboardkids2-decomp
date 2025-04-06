@@ -1,4 +1,5 @@
 #include "69EF0.h"
+#include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 
@@ -45,7 +46,6 @@ extern void func_8006F9BC_705BC(void *, f32, f32);
 extern void func_8006FA0C_7060C(void *, f32, f32, f32, f32);
 extern void func_8006FAA4_706A4(void *, s32, s32, s32, s32);
 extern void func_8006FD3C_7093C(u16, void *);
-extern void func_8006FDA0_709A0(void *, s32, s32);
 extern void func_8006FE28_70A28(void *, s32, s32, s32);
 extern void func_8006FEF8_70AF8(void *, s32);
 extern void func_80069470_6A070(void *, s32);
@@ -100,7 +100,7 @@ void func_80003508_4108() {
 
     new_var3 = ((u8 *)s.s1) + 0x1E0;
     func_8006FD3C_7093C(s.s1->unkE2, temp);
-    func_8006FDA0_709A0(0, 0, 0);
+    func_8006FDA0_709A0(NULL, 0, 0);
 
     s0 = new_var3;
     func_8006FAA4_706A4(s0, 0, 1, 11, 0);

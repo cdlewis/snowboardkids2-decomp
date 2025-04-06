@@ -1,3 +1,4 @@
+#include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "gamestate.h"
@@ -18,7 +19,6 @@ extern void func_8001BC78_1C878();
 extern void func_8001BCC0_1C8C0();
 extern GameState* GameStateGet();
 extern s32 func_8003BB5C_3C75C(void);
-extern void func_8006FDA0_709A0(s32, s32, s32);
 extern void func_8006982C_6A42C(void (*cb)(void));
 extern void func_8001B3B8_1BFB8(void);
 
@@ -36,7 +36,7 @@ void func_8001B368_1BF68(void) {
         return;
     }
 
-    func_8006FDA0_709A0(0, 0, 0x10);
+    func_8006FDA0_709A0(NULL, 0, 0x10);
 
     func_8006982C_6A42C(func_8001B3B8_1BFB8);
 }
