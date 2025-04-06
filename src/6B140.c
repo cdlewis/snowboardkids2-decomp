@@ -11,6 +11,48 @@ typedef struct {
     s32 unk1C;
 } func_8006AFDC_6BBDC_arg;
 
+typedef struct {
+    s16 unk0;
+    u16 unk2;
+    s16 unk4;
+    s16 unk6;
+    u16 unk8;
+    s16 unkA;
+    s16 unkC;
+    u16 unkE;
+    s16 unk10;
+    s32 unk14;
+    u16 unk18;
+    u16 unk1A;
+    s32 unk1C;
+    s32 unk20;
+    s32 unk24;
+    s32 unk28;
+    s32 unk30;
+    s32 unk34;
+    s32 unk38;
+    s32 unk3C;
+} func_8006C2A8_6CEA8_arg0;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    s32 unk38;
+    s32 unk3C;
+} func_8006C2A8_6CEA8_arg1;
+
 s16 approximateSin(s16 inputAngle) {
     u16 temp_a0;
     inputAngle = inputAngle & 0x1FFF;
@@ -136,7 +178,24 @@ INCLUDE_ASM("asm/nonmatchings/6B140", func_8006BFB8_6CBB8);
 
 INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C130_6CD30);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C2A8_6CEA8);
+void func_8006C2A8_6CEA8(func_8006C2A8_6CEA8_arg0* arg0, func_8006C2A8_6CEA8_arg1* arg1) {
+    arg1->unk0 = (s32)((arg0->unk0 & 0xFFFF0000) + (((s32)(arg0->unk2 << 0x10) >> 0x1F) & 0xFFFF));
+    arg1->unk4 = (s32)(arg0->unk4 & 0xFFFF0000);
+    arg1->unk8 = (s32)((arg0->unk6 & 0xFFFF0000) + (((s32)(arg0->unk8 << 0x10) >> 0x1F) & 0xFFFF));
+    arg1->unkC = (s32)(arg0->unkA & 0xFFFF0000);
+    arg1->unk10 = (s32)((arg0->unkC & 0xFFFF0000) + (((s32)(arg0->unkE << 0x10) >> 0x1F) & 0xFFFF));
+    arg1->unk14 = (s32)(arg0->unk10 & 0xFFFF0000);
+    arg1->unk18 = (s32)((arg0->unk14 & 0xFFFF0000) + arg0->unk18);
+    arg1->unk1C = (s32)((arg0->unk1C & 0xFFFF0000) + 1);
+    arg1->unk20 = (s32)(((arg0->unk0 << 0x10) & 0xFFFF0000) + arg0->unk2);
+    arg1->unk24 = (s32)((arg0->unk4 << 0x10) & 0xFFFF0000);
+    arg1->unk28 = (s32)(((arg0->unk6 << 0x10) & 0xFFFF0000) + arg0->unk8);
+    arg1->unk2C = (s32)((arg0->unkA << 0x10) & 0xFFFF0000);
+    arg1->unk30 = (s32)(((arg0->unkC << 0x10) & 0xFFFF0000) + arg0->unkE);
+    arg1->unk34 = (s32)((arg0->unk10 << 0x10) & 0xFFFF0000);
+    arg1->unk38 = (s32)((arg0->unk14 << 0x10) + arg0->unk1A);
+    arg1->unk3C = (s32)(arg0->unk1C << 0x10);
+}
 
 s32 approximate_sqrt(u32 input) {
     u32 remainder = 0;
