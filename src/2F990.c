@@ -20,6 +20,8 @@ void func_8006B084_6BC84(void *, void *, void *);
 extern s32 D_8009A870_9B470;
 extern void func_8002F72C_3032C();
 extern void func_8002F980_30580();
+void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
+extern void func_8000FED0_10AD0();
 
 typedef struct {
     u8 padding[0x20];
@@ -249,7 +251,14 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_800308C4_314C4);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_800308FC_314FC);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030974_31574);
+void func_80030974_31574(void *arg0) {
+    GameState *state = GameStateGet();
+    s8 index = state->unk5C8;
+
+    if (state->unk5CA[index] >= 0x80 || state->unk5C9 == 0) {
+        debugEnqueueCallback(8, 1, func_8000FED0_10AD0, arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_800309D4_315D4);
 
