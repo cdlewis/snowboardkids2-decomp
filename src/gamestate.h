@@ -56,7 +56,10 @@ typedef struct {
     u8 unk5C5;
     u8 unk5C6;
     u8 unk5C7;
-    u8 padding19[0x1218];
+    s8 unk5C8;
+    u8 unk5C9;
+    u8 unk5CA[0];
+    u8 padding19[0x1216];
     s8 unk17E0;
 } GameState;
 
