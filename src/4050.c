@@ -52,7 +52,6 @@ extern void func_80069470_6A070(void *, s32);
 
 void func_80003488_4088();
 void func_8000378C_438C();
-void func_8006982C_6A42C(void *);
 void func_80003C88_4888();
 void func_8006982C_6A42C(void *);
 void func_80003D30_4930();
