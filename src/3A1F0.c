@@ -207,9 +207,9 @@ void controllerPackReadStatus(s32 arg0) {
     temp_a2 = arg0 & 0xFFFF;
     err = osPfsInitPak(&mainStack, &controllerPacks[temp_a2], temp_a2);
     if (err == 0) {
-        err = osPfsFreeBlocks(&controllerPacks, &gControllerPackFreeBlockCount);
+        err = osPfsFreeBlocks(controllerPacks, &gControllerPackFreeBlockCount);
         if (err == 0) {
-            err = osPfsNumFiles(&controllerPacks, &sp10, &gControllerPackFileCount);
+            err = osPfsNumFiles(controllerPacks, &sp10, &gControllerPackFileCount);
             if (err != 0) {
                 gControllerPackFileCount = 0;
             }

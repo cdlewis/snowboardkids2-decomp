@@ -1,7 +1,7 @@
 #include "common.h"
 
 void *func_80009F5C_AB5C(s32);
-void func_8006FC70_70870(u16, u16, u8 *, u8 *);
+void func_8006FC70_70870(u16, u16, s8 *, s8 *);
 
 extern s32 func_8006A200_6AE00(s32);
 
