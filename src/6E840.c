@@ -4,7 +4,7 @@
 
 extern u32 __additional_scanline_0;
 extern s32 gRegionAllocEnd;
-extern s32 gLinearArenaRegions[];
+extern void **gLinearArenaRegions;
 extern s32 gRegionAllocPtr;
 extern u16 D_800A3410_A4010;
 extern u16 D_800A3412_A4012;
@@ -22,6 +22,7 @@ extern s32 D_800A3550_A4150[];
 extern s32 D_800AB12C_A249C;
 extern void *D_800A3564_A4164;
 extern u32 D_800A3568_A4168;
+extern void *gLinearArenaBuffer;
 
 typedef struct {
     u8 padding[0xBC];
@@ -121,12 +122,23 @@ void advanceLinearAlloc(s32 arg0) {
     linearAlloc((arg0 + 7) & ~7);
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F668_70268);
+void initLinearArenaRegions() {
+    s32 temp;
+    void *result;
+    s32 sp10;
+
+    result = func_8006A258_6AE58(0, 0x10000, &sp10);
+    gLinearArenaRegions = result;
+
+    result = func_8006A258_6AE58(0, 0x10000, &sp10);
+    gLinearArenaBuffer = result;
+}
 
 void linearAllocSelectRegion(s32 region) {
     s32 temp_v0;
 
-    temp_v0 = gLinearArenaRegions[region];
+    temp_v0 = ((s32 *)&gLinearArenaRegions)[region];
+
     gRegionAllocPtr = temp_v0;
     gRegionAllocEnd = temp_v0 + 0x10000;
 }
