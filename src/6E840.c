@@ -20,6 +20,8 @@ extern void *func_8006A258_6AE58(s32, u32, void *);
 extern s32 D_800A3548_A4148[];
 extern s32 D_800A3550_A4150[];
 extern s32 D_800AB12C_A249C;
+extern void *D_800A3564_A4164;
+extern u32 D_800A3568_A4168;
 
 typedef struct {
     u8 padding[0xBC];
@@ -68,7 +70,20 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F504_70104);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F550_70150);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F580_70180);
+void *func_8006F580_70180(s32 size) {
+    void *result;
+    u32 alignedSize = (size + 0xF) & ~0xF;
+    u32 *cur = (u32 *)D_800A3564_A4164;
+    u32 *end = (u32 *)D_800A3568_A4168;
+
+    if ((u32 *)((u8 *)cur + alignedSize) > end) {
+        return NULL;
+    }
+
+    result = cur;
+    D_800A3564_A4164 = (void *)((u8 *)cur + alignedSize);
+    return result;
+}
 
 void func_8006F5C0_701C0() {
     void *result;
