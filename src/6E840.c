@@ -3,19 +3,20 @@
 #include "common.h"
 
 extern u32 __additional_scanline_0;
-extern s32 D_800A3558_A4158;
-extern s32 D_800A3580_A4180[];
-extern s32 D_800A8A84_9FDF4;
+extern s32 gRegionAllocEnd;
+extern s32 gLinearArenaRegions[];
+extern s32 gRegionAllocPtr;
 extern u16 D_800A3410_A4010;
 extern u16 D_800A3412_A4012;
 extern u16 D_800A8A9A_9FE0A;
 extern u16 D_800AB478_A27E8;
 extern void *D_800A3588_A4188[];
-extern void *func_8006F610_70210(s32 size);
+void *LinearAlloc(size_t size);
 extern func_8006FDA0_709A0_arg *D_800A3370_A3F70;
-extern s32 D_800A3574_A4174;
-extern s32 D_800A3578_A4178;
-extern s32 D_800A357C_A417C;
+extern void *gArenaBasePtr;
+extern void *gLinearAllocPtr;
+extern void *gLinearAllocEnd;
+extern void *func_8006A258_6AE58(s32, u32, void *);
 
 typedef struct {
     u8 padding[0xBC];
@@ -62,27 +63,50 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F550_70150);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F580_70180);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F5C0_701C0);
+void func_8006F5C0_701C0() {
+    void *result;
+    void *dummy;
 
-void func_8006F5EC_701EC(void) {
-    D_800A3578_A4178 = D_800A3574_A4174;
-    D_800A357C_A417C = D_800A3574_A4174 + 0x10000;
+    result = func_8006A258_6AE58(0, 0x10000, &dummy);
+    gArenaBasePtr = result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F610_70210);
+void resetLinearAllocator(void) {
+    gLinearAllocPtr = gArenaBasePtr;
+    gLinearAllocEnd = gArenaBasePtr + 0x10000;
+}
 
-void func_8006F644_70244(s32 arg0) {
-    func_8006F610_70210((arg0 + 7) & ~7);
+void *linearAlloc(size_t size) {
+    // Load the current pointer and limit
+    u8 *base = (u8 *)gLinearAllocPtr;
+    u8 *limit = (u8 *)gLinearAllocEnd;
+
+    // Compute the new pointer
+    u8 *newPtr = base + size;
+
+    // If we exceed the limit, return NULL
+    if (newPtr > limit) {
+        return NULL;
+    }
+
+    // Otherwise, update the global "current" pointer and return the old base
+    gLinearAllocPtr = newPtr;
+    return base;
+}
+
+void advanceLinearAlloc(s32 arg0) {
+    // ensure next allocation will be aligned (0x8 boundary)
+    linearAlloc((arg0 + 7) & ~7);
 }
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F668_70268);
 
-void func_8006F6AC_702AC(s32 arg0) {
+void linearAllocSelectRegion(s32 region) {
     s32 temp_v0;
 
-    temp_v0 = D_800A3580_A4180[arg0];
-    D_800A8A84_9FDF4 = temp_v0;
-    D_800A3558_A4158 = temp_v0 + 0x10000;
+    temp_v0 = gLinearArenaRegions[region];
+    gRegionAllocPtr = temp_v0;
+    gRegionAllocEnd = temp_v0 + 0x10000;
 }
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F6D8_702D8);
@@ -177,7 +201,7 @@ void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3) {
 
     temp_s0 = D_800A3588_A4188[index];
     if (temp_s0 != NULL) {
-        block = func_8006F610_70210(0x10);
+        block = linearAlloc(0x10);
         if (block != NULL) {
             ptr = (u8 *)temp_s0 + (arg1 << 4);
             *(void **)block = *(void **)((u8 *)ptr + 0x18);

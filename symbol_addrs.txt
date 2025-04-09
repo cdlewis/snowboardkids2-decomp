@@ -1,3 +1,14 @@
+gRegionAllocEnd = 0x800A3558;
+gRegionAllocPtr = 0x800A8A84;
+gLinearArenaRegions = 0x800A3580;
+linearAllocSelectRegion = 0x8006F6AC;
+advanceLinearAlloc = 0x8006F644;
+gArenaBasePtr = 0x800A3574;
+resetLinearAllocator = 0x8006F5EC;
+gLinearAllocEnd = 0x800A357C;
+gLinearAllocPtr = 0x800A3578;
+linearAlloc = 0x8006F610;
+
 initDebugCameraController = 0x8002ED90;
 debugEnqueueCallback = 0x8006FF90;
 updateDebugCameraYState = 0x8002EDEC;
