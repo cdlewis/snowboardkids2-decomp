@@ -13,6 +13,9 @@ extern u16 D_800AB478_A27E8;
 extern void *D_800A3588_A4188[];
 extern void *func_8006F610_70210(s32 size);
 extern func_8006FDA0_709A0_arg *D_800A3370_A3F70;
+extern s32 D_800A3574_A4174;
+extern s32 D_800A3578_A4178;
+extern s32 D_800A357C_A417C;
 
 typedef struct {
     u8 padding[0xBC];
@@ -61,7 +64,10 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F580_70180);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F5C0_701C0);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F5EC_701EC);
+void func_8006F5EC_701EC(void) {
+    D_800A3578_A4178 = D_800A3574_A4174;
+    D_800A357C_A417C = D_800A3574_A4174 + 0x10000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F610_70210);
 
