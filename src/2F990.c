@@ -22,6 +22,12 @@ extern void func_8002F72C_3032C();
 extern void func_8002F980_30580();
 void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0();
+s32 func_8006A200_6AE00(s32);
+
+typedef struct {
+    u8 padding[0x2C];
+    s32 unk2C;
+} func_8002FA70_30670_arg;
 
 typedef struct {
     u8 padding[0x20];
@@ -205,7 +211,9 @@ void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA44_30644);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA70_30670);
+void func_8002FA70_30670(func_8002FA70_30670_arg *arg0) {
+    arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA9C_3069C);
 
