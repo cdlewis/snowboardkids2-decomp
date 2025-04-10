@@ -1,14 +1,25 @@
 #include "common.h"
 
-extern s32 D_800AB130_A24A0;
 extern s8 D_8018F800;
 extern s32 D_800AB064_A23D4;
+typedef struct LinkedList_6AE20 {
+    /* 0x0 */ struct LinkedList_6AE20 *prev;  // 0x0
+    /* 0x4 */ struct LinkedList_6AE20 *next;  // 0x4
+    u8 padding1[0x4];
+    s32 unk_0C;
+    u8 padding2[0x4];
+    s32 unk_14;
+    s32 unk_18;
+} LinkedList_6AE20;
+
+extern LinkedList_6AE20 *D_800AB130_A24A0;
+extern s32 D_800AB12C_A249C;
 
 void func_8006A220_6AE20(void) {
     s32 var_v1;
     s8 *var_a0;
 
-    D_800AB130_A24A0 = 0;
+    D_800AB130_A24A0 = NULL;
     var_a0 = &D_8018F800;
     var_v1 = 0;
     do {
@@ -29,7 +40,37 @@ s32 func_8006A3FC_6AFFC(s32 *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/6AE20", func_8006A428_6B028);
+void func_8006A428_6B028() {
+    s32 globalVal;
+
+    LinkedList_6AE20 *curr = D_800AB130_A24A0;
+    if (curr == 0) {
+        return;
+    }
+
+    globalVal = D_800AB12C_A249C;
+
+    while (curr != 0) {
+        s32 diff = (globalVal - curr->unk_18) & 0x0FFFFFFF;
+        if (diff <= 0x07FFFFFF) {
+            curr->unk_18 = -1;
+        }
+
+        if (((curr->unk_0C == 0) && (curr->unk_14 == 0)) && (curr->unk_18 < 0)) {
+            LinkedList_6AE20 *prev;
+            LinkedList_6AE20 *next;
+            if (curr->prev != 0) {
+                curr->prev->next = curr->next;
+            } else {
+                D_800AB130_A24A0 = curr->next;
+            }
+            if (curr->next != 0) {
+                curr->next->prev = curr->prev;
+            }
+        }
+        curr = curr->next;
+    }
+}
 
 void func_8006A4DC_6B0DC(s32 *arg0) {
     arg0[-0x3] = 1;
