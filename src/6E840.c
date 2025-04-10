@@ -23,6 +23,8 @@ extern s32 D_800AB12C_A249C;
 extern void *D_800A3564_A4164;
 extern u32 D_800A3568_A4168;
 extern void *gLinearArenaBuffer;
+void func_8006DEE4_6EAE4();
+extern u8 D_800A356C_A416C;
 
 typedef struct {
     u8 padding[0xBC];
@@ -59,7 +61,11 @@ void func_8006E000_6EC00(s32 arg0) {
     D_800AB12C_A249C = D_800A3550_A4150[temp_a0];
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006E02C_6EC2C);
+void func_8006E02C_6EC2C(void) {
+    if (D_800A356C_A416C != 0) {
+        func_8006DEE4_6EAE4();
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006E054_6EC54);
 
@@ -143,7 +149,9 @@ void linearAllocSelectRegion(s32 region) {
     gRegionAllocEnd = temp_v0 + 0x10000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F6D8_702D8);
+s32 func_8006F6D8_702D8(void) {
+    return (u32)(gRegionAllocEnd - gRegionAllocPtr) < 0x1AE1U;
+}
 
 void func_8006F6F4_702F4() {
     D_800A3410_A4010 = D_800AB478_A27E8;
