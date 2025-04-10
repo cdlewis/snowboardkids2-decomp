@@ -2,6 +2,7 @@
 
 extern s32 D_800AB130_A24A0;
 extern s8 D_8018F800;
+extern s32 D_800AB064_A23D4;
 
 void func_8006A220_6AE20(void) {
     s32 var_v1;
@@ -19,11 +20,20 @@ void func_8006A220_6AE20(void) {
 
 INCLUDE_ASM("asm/nonmatchings/6AE20", func_8006A258_6AE58);
 
-INCLUDE_ASM("asm/nonmatchings/6AE20", func_8006A3FC_6AFFC);
+s32 func_8006A3FC_6AFFC(s32 *arg0) {
+    if (arg0 == NULL) {
+        return 0;
+    }
+    arg0[-5]--;
+    arg0[-2] = D_800AB064_A23D4;
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/6AE20", func_8006A428_6B028);
 
-INCLUDE_ASM("asm/nonmatchings/6AE20", func_8006A4DC_6B0DC);
+void func_8006A4DC_6B0DC(s32 *arg0) {
+    arg0[-0x3] = 1;
+}
 
 void func_8006A4E8_6B0E8(s32 *arg0) {
     u32 mask = osSetIntMask(1);
