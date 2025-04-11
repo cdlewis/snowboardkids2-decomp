@@ -180,9 +180,16 @@ void func_80069CE8_6A8E8(s32 arg0) {
     D_8009A864_9B464->unk24 = arg0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069CF8_6A8F8);
+void func_80069CF8_6A8F8(void) {
+    u8 temp = D_8009A864_9B464->unk0E - 3;
+    if (temp < 2) {
+        D_8009A864_9B464->unk0E = 4;
+    } else {
+        D_8009A864_9B464->unk0E = 2;
+    }
+}
 
-s32 func_80069D20_6A920(void) {
+s32 func_80069D20_6A920() {
     return D_8009A860_9B460->activeList != NULL;
 }
 
