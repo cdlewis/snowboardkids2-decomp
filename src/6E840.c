@@ -236,7 +236,7 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FEF8_70AF8);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", n_alSynRemovePlayer);
 
-void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3) {
+void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, debugEnqueueCallback_arg3 *arg3) {
     void *temp_s0;
     void *block;
     void *ptr;

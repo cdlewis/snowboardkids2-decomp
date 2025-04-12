@@ -1,3 +1,4 @@
+#include "6E840.h"
 #include "common.h"
 #include "overlay.h"
 
@@ -9,6 +10,7 @@ s32 func_80069F94_6AB94(void*, void*, s32);
 extern s32 D_215D70;
 extern s32 D_216290;
 extern void func_80068060_68C60();
+extern void func_80066474_67074();
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800609A0_615A0);
 
@@ -126,7 +128,10 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80066444_67044);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80066474_67074);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80066AC0_676C0);
+void func_80066AC0_676C0(s32 arg0, debugEnqueueCallback_arg3* arg1) {
+    arg1->unk30 = 0;
+    debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80066474_67074, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80066AF0_676F0);
 

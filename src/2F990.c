@@ -1,4 +1,5 @@
 #include "6B140.h"
+#include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 
@@ -20,7 +21,6 @@ void func_8006B084_6BC84(void *, void *, void *);
 extern s32 D_8009A870_9B470;
 extern void func_8002F72C_3032C();
 extern void func_8002F980_30580();
-void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0();
 s32 func_8006A200_6AE00(s32);
 
