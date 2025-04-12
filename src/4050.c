@@ -2,6 +2,9 @@
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
+#include "overlay.h"
+
+USE_OVERLAY(_1DD170)
 
 /*
 s8 D_8008BF90_8CB90 = 0;
@@ -50,12 +53,14 @@ extern void func_8006FE28_70A28(void *, s32, s32, s32);
 extern void func_8006FEF8_70AF8(void *, s32);
 extern void func_80069470_6A070(void *, s32);
 
-void func_80003488_4088();
+void loadOverlay_1DD170();
 void func_8000378C_438C();
 void func_80003C88_4888();
 void func_8006982C_6A42C(void *);
 void func_80003D30_4930();
 void func_80003CC4_48C4();
+extern void *func_800B00C0_9FF70();
+void func_80003508_4108();
 
 void func_80003450_4050(s16 arg0, s16 arg1) {
     D_800AB070_A23E0 = arg0;
@@ -72,7 +77,10 @@ void func_8000346C_406C(s16 arg0, s16 arg1, s16 arg2) {
     D_8008BF94_8CB94 = arg2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/4050", func_80003488_4088);
+void loadOverlay_1DD170(void) {
+    LOAD_OVERLAY(_1DD170)
+    func_8006982C_6A42C(&func_80003508_4108);
+}
 
 void func_80003508_4108() {
     u8 *new_var3;
@@ -151,7 +159,7 @@ void func_80003CC4_48C4() {
         D_8008BF9C_8CB9C = 1;
     }
     func_80003450_4050(D_8008BF9A_8CB9A, D_8008BF9E_8CB9E);
-    func_80069470_6A070(&func_80003488_4088, 0x64);
+    func_80069470_6A070(&loadOverlay_1DD170, 0x64);
     func_8006982C_6A42C(&func_80003D30_4930);
 }
 
