@@ -11,9 +11,9 @@ typedef struct {
     u8 unk10;
     u8 unk11;
     u8 padding3[0x4];
-    u32 unk18;
+    void *unk18;
     void *unk1C;
-    s32 unk20;
+    void *unk20;
     s32 unk24;
 } D_8009A864_9B464_type;
 extern D_8009A864_9B464_type *D_8009A864_9B464;
@@ -41,7 +41,7 @@ typedef struct {
     s32 unk14;
     u8 unk18;
     char padding5[0x4];
-    u32 unk20;
+    void *unk20;
     void *unk24;
     /* 0x28 */ GameState *GameState;
     char padding3[0x2];
@@ -53,9 +53,10 @@ typedef struct {
 extern D_8009A860_9B460_type *D_8009A860_9B460;
 
 extern void *func_8003B8F0_3C4F0(void);
-extern s32 func_8006A51C_6B11C(void *ptr);
-extern s32 func_8006A52C_6B12C(void *ptr);
+extern s32 func_8006A51C_6B11C(void *);
+extern void *func_8006A52C_6B12C(void *);
 extern void func_8006A3FC_6AFFC();
+extern void *func_8003BA24_3C624(void);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
 
@@ -167,11 +168,11 @@ s16 func_80069AEC_6A6EC(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069B04_6A704);
 
-void func_80069CC0_6A8C0(s32 arg0) {
+void func_80069CC0_6A8C0(void *arg0) {
     D_8009A864_9B464->unk20 = arg0;
 }
 
-void func_80069CD0_6A8D0(s32 arg0) {
+void func_80069CD0_6A8D0(void *arg0) {
     D_8009A864_9B464->unk20 = arg0;
     D_8009A864_9B464->unk10 = 1;
 }
@@ -234,7 +235,43 @@ void *func_80069E3C_6AA3C(void) {
     return s0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069F94_6AB94);
+void *func_80069F94_6AB94(void *arg0, void *arg1, int arg2) {
+    void *s0;
+
+    if (D_8009A864_9B464 == NULL) {
+        s0 = func_8003BA24_3C624();
+        if (func_8006A51C_6B11C(s0) != NULL) {
+            if (D_8009A860_9B460->unk18 != 3) {
+                D_8009A860_9B460->unk20 = func_8006A52C_6B12C(s0);
+                D_8009A860_9B460->unk24 = s0;
+                D_8009A860_9B460->unk18 = 3;
+            } else {
+                if (D_8009A860_9B460->unk20 < func_8006A52C_6B12C(s0)) {
+                    D_8009A860_9B460->unk20 = func_8006A52C_6B12C(s0);
+                    D_8009A860_9B460->unk24 = s0;
+                }
+            }
+        }
+    } else {
+        s0 = func_8003BA24_3C624();
+        if (func_8006A51C_6B11C(s0) != 0) {
+            if (D_8009A864_9B464->unk0E < 3 || D_8009A864_9B464->unk0E >= 5) {
+                D_8009A864_9B464->unk18 = func_8006A52C_6B12C(s0);
+                D_8009A864_9B464->unk1C = s0;
+                D_8009A864_9B464->unk0E = 3;
+            } else {
+                if (D_8009A864_9B464->unk18 < func_8006A52C_6B12C(s0)) {
+                    D_8009A864_9B464->unk18 = func_8006A52C_6B12C(s0);
+                    D_8009A864_9B464->unk1C = s0;
+                }
+            }
+        }
+
+        D_8009A864_9B464->unk11 = 1;
+    }
+
+    return s0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006A0EC_6ACEC);
 
