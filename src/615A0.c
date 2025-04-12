@@ -1,5 +1,6 @@
 #include "6E840.h"
 #include "common.h"
+#include "gamestate.h"
 #include "overlay.h"
 
 USE_OVERLAY(_9FDF0)
@@ -15,6 +16,7 @@ void func_800697CC_6A3CC(void*);
 s32 func_80069810_6A410();
 extern void func_800680C4_68CC4();
 extern void func_80065DD8_669D8();
+void func_800680F0_68CF0(ALPlayer*);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800609A0_615A0);
 
@@ -165,7 +167,10 @@ void func_80067FB0_68BB0(void) {
     func_8006982C_6A42C(&func_80068060_68C60);
 }
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80068060_68C60);
+void func_80068060_68C60(void) {
+    func_800680F0_68CF0(GameStateGet()->audioPlayer0);
+    func_800697CC_6A3CC(&func_800680C4_68CC4);
+}
 
 void func_80068090_68C90(void) {
     if ((func_80069810_6A410() << 0x10) != 0) {
