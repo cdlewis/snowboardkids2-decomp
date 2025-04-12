@@ -189,7 +189,13 @@ INCLUDE_ASM("asm/nonmatchings/3E160", func_80040238_40E38);
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_80040304_40F04);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_80040420_41020);
+void func_80040420_41020(void) {
+    if (D_800AFF10_A7280 & 0x8000) {
+        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        func_80057564_58164(0x3C);
+        func_8006982C_6A42C(&func_80040608_41208);
+    }
+}
 
 void func_80040468_41068(void) {
     s32 temp_v1;
