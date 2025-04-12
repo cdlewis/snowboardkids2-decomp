@@ -24,9 +24,15 @@ extern void func_80040608_41208();
 extern void func_8004F1D4_4FDD4();
 void func_8003FD3C_4093C();
 extern void func_8003FB90_40790(void);
-void func_800699F4_6A5F4(void*, s32, s32, s32);                
+void func_800699F4_6A5F4(void*, s32, s32, s32);
 extern void func_800401A0_40DA0();
 extern void func_8004D9D0_4E5D0();
+s32 func_80055E7C_56A7C();                          
+s32 func_80055EA4_56AA4();                          
+void func_800B99E0(void*);                               
+extern s32 D_34CB50;
+extern s32 D_34F7E0;
+extern void func_8003EEEC_3FAEC();
 
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);
 
@@ -56,7 +62,26 @@ void func_8003EDF8_3F9F8() {
     func_8006983C_6A43C(&func_8003EE50_3FA50);
 }
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003EE50_3FA50);
+void func_8003EE50_3FA50(void) {
+    GameState* gs = GameStateGet();
+    s32 i = 0;
+    s32 offset;
+    int new_var;
+    new_var = 0;
+    if (gs->unk5E <= new_var) {
+    } else {
+        offset = 0;
+        do {
+            func_800B99E0((void*)(((u8*)gs->unk10) + offset));
+            i++;
+            offset += 0xBE8;
+        } while (i < gs->unk5E);
+    }
+    gs->unk18 = func_80069F94_6AB94(&D_34CB50, &D_34F7E0, 0x5E28);
+    gs->unk1C = func_80055E7C_56A7C();
+    gs->unk20 = func_80055EA4_56AA4();
+    func_8006983C_6A43C(&func_8003EEEC_3FAEC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003EEEC_3FAEC);
 
