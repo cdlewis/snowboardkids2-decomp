@@ -2,6 +2,9 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "gamestate.h"
+#include "overlay.h"
+
+USE_OVERLAY(_1DA660)
 
 typedef struct {
     char padding[0x10];
@@ -21,8 +24,13 @@ extern GameState* GameStateGet();
 extern s32 func_8003BB5C_3C75C(void);
 extern void func_8006982C_6A42C(void (*cb)(void));
 extern void func_8001B3B8_1BFB8(void);
+extern void func_8001B020_1BC20;
+extern void func_800B00C0_9FF70;
 
-INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001AFA0_1BBA0);
+void loadOverlay_1BBA0(void) {
+    LOAD_OVERLAY(_1DA660)
+    func_8006982C_6A42C(&func_8001B020_1BC20);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001B020_1BC20);
 
