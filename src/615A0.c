@@ -14,6 +14,7 @@ extern void func_80066474_67074();
 void func_800697CC_6A3CC(void*);
 s32 func_80069810_6A410();
 extern void func_800680C4_68CC4();
+extern void func_80065DD8_669D8();
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800609A0_615A0);
 
@@ -127,7 +128,10 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80065DA8_669A8);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80065DD8_669D8);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80066444_67044);
+void func_80066444_67044(s32 arg0, debugEnqueueCallback_arg3* arg1) {
+    arg1->unk1C = 0;
+    debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80065DD8_669D8, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80066474_67074);
 
