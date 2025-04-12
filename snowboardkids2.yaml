@@ -168,7 +168,7 @@ segments:
       - [0x5DBC0, asm]
       - [0x5E590, asm]
       - [0x5EA60, asm]
-      - [0x615A0, asm]
+      - [0x615A0, c]
       - [0x68CF0, asm]
       - [0x69EF0, c]
       - [0x6AE20, c]
@@ -732,9 +732,11 @@ segments:
     start: 0x9FDF0
     exclusive_ram_id: 800AFF30
     overlay: true
+    bss_size: 0x10
     subsegments:
       - [0x9FDF0, asm]
       - [0x9FE70, data, 9FDF0]
+      - { type: bss, vram: 0x800B00B0, name: 9FDF0 }
 
   - name: _9FF70
     type: code

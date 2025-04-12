@@ -1,4 +1,5 @@
 #include "3A1F0.h"
+#include "common.h"
 
 #define USE_OVERLAY(id)           \
     extern u32* id##_ROM_START;   \
