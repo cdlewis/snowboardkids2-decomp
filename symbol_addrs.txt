@@ -1,3 +1,4 @@
+loadOverlay_1DD170 = 0x80003488;
 gLinearArenaBuffer = 0x800A3584;
 initLinearArenaRegions = 0x8006F668;
 gRegionAllocEnd = 0x800A3558;
