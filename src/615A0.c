@@ -11,6 +11,9 @@ extern s32 D_215D70;
 extern s32 D_216290;
 extern void func_80068060_68C60();
 extern void func_80066474_67074();
+void func_800697CC_6A3CC(void*);
+s32 func_80069810_6A410();
+extern void func_800680C4_68CC4();
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800609A0_615A0);
 
@@ -160,6 +163,10 @@ void func_80067FB0_68BB0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80068060_68C60);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80068090_68C90);
+void func_80068090_68C90(void) {
+    if ((func_80069810_6A410() << 0x10) != 0) {
+        func_800697CC_6A3CC(&func_800680C4_68CC4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800680C4_68CC4);
