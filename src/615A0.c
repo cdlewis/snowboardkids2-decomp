@@ -45,6 +45,13 @@ typedef struct {
     func_8006411C_64D1C_arg_unk20* unk20;
 } func_8006411C_64D1C_arg;
 
+extern void func_800659E4_665E4;
+
+typedef struct {
+    u8 padding[0x30];
+    s32 unk30;
+} func_80065DA8_669A8_arg;
+
 void func_80063A94_64694(void*);
 extern s32* gRegionAllocPtr;
 
@@ -192,7 +199,10 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80065900_66500);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800659E4_665E4);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80065DA8_669A8);
+void func_80065DA8_669A8(s32 arg0, func_80065DA8_669A8_arg* arg1) {
+    arg1->unk30 = 0;
+    debugEnqueueCallback(arg0 & 0xFFFF, 0, &func_800659E4_665E4, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80065DD8_669D8);
 
