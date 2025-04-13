@@ -19,6 +19,21 @@ extern void func_80065DD8_669D8();
 void func_800680F0_68CF0(ALPlayer*);
 
 typedef struct {
+    u8 padding[0x4];
+    s32 unk4;
+} func_80063824_64424_arg_unk20;
+
+typedef struct {
+    u8 padding[0x20];
+    func_80063824_64424_arg_unk20* unk20;
+    u8 padding2[0x17];
+    u8 unk3B;
+} func_80063824_64424_arg;
+
+void func_8006318C_63D8C(void*);
+s32 func_80070140_70D40(void*);
+
+typedef struct {
     u8 padding[0xC];
     s32 unkC;
 } func_8006411C_64D1C_arg_unk20;
@@ -31,7 +46,6 @@ typedef struct {
 } func_8006411C_64D1C_arg;
 
 void func_80063A94_64694(void*);
-s32 func_80070140_70D40(s32);
 extern s32* gRegionAllocPtr;
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800609A0_615A0);
@@ -92,7 +106,33 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80063728_64328);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063788_64388);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80063824_64424);
+void buildDisplayListSegment(func_80063824_64424_arg* arg0) {
+    s32* temp_a0;
+    s32 v1;
+
+    if (func_80070140_70D40((void*)((s32)arg0) + 0x14) == 0) {
+        func_8006318C_63D8C(arg0);
+        temp_a0 = gRegionAllocPtr;
+        gRegionAllocPtr = temp_a0 + 2;
+
+        // G_NOOP
+        temp_a0[0x0] = 0xE7000000;
+        gRegionAllocPtr = temp_a0 + 0x4;
+        temp_a0[0x1] = 0;
+
+        // G_SETOTHERMODE_H
+        temp_a0[0x2] = 0xFB000000;
+
+        v1 = arg0->unk3B;
+
+        // G_DL
+        temp_a0[0x4] = 0xDE000000;
+        v1 = v1 | (~0xFF);
+        temp_a0[0x3] = v1;
+        gRegionAllocPtr = temp_a0 + 0x6;
+        temp_a0[0x5] = (s32)arg0->unk20->unk4;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800638C0_644C0);
 
@@ -109,7 +149,7 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800640BC_64CBC);
 void func_8006411C_64D1C(func_8006411C_64D1C_arg* arg0) {
     s32* temp_v1;
 
-    if (func_80070140_70D40((s32)arg0 + 0x14) == 0) {
+    if (func_80070140_70D40((void*)(s32)arg0 + 0x14) == 0) {
         func_80063A94_64694(arg0);
         temp_v1 = gRegionAllocPtr;
         temp_v1[0] = 0xDE000000;

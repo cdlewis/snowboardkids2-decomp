@@ -912,6 +912,7 @@ segments:
     subsegments:
       - [0x1DB7A0, asm]
       - [0x1DC080, data]
+      - [0x1DC0B0, rodata]
 
   - name: _1DC260
     type: code
