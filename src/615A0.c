@@ -24,6 +24,28 @@ s32 func_80070140_70D40(void*);
 extern void func_800659E4_665E4;
 void func_80063A94_64694(void*);
 extern s32* gRegionAllocPtr;
+void func_800648EC_654EC();
+
+typedef struct {
+    u8 padding[0x148];
+    u8 unk148;
+    u8 unk149;
+    u8 unk14A;
+    u8 padding2[0xD];
+    u8 unk158;
+    u8 unk159;
+    u8 unk15A;
+} D_800AB068_A23D8_arg;
+
+extern D_800AB068_A23D8_arg* D_800AB068_A23D8;
+
+typedef struct {
+    u8 padding[0x20];
+    struct {
+        u8 padding[0x8];
+        s32 unk8;
+    }* unk20;
+} func_80064E34_65A34_arg;
 
 typedef struct {
     u8 padding[0x8];
@@ -202,7 +224,32 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800648EC_654EC);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80064CF4_658F4);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80064E34_65A34);
+void func_80064E34_65A34(func_80064E34_65A34_arg* arg0) {
+    s32* temp_a1;
+    func_800648EC_654EC();
+
+    temp_a1 = gRegionAllocPtr;
+    temp_a1[0x0] = 0xDE000000;
+
+    gRegionAllocPtr = temp_a1 + 0x2;
+    temp_a1[0x1] = arg0->unk20->unk8;
+
+    gRegionAllocPtr = temp_a1 + 0x4;
+    temp_a1[0x2] = 0xDB0A0000;
+    temp_a1[0x3] = D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8;
+
+    gRegionAllocPtr = temp_a1 + 0x6;
+    temp_a1[0x4] = 0xDB0A0004;
+    temp_a1[0x5] = D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8;
+
+    gRegionAllocPtr = temp_a1 + 0x8;
+    temp_a1[0x6] = 0xDB0A0018;
+    temp_a1[0x7] = D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8;
+
+    gRegionAllocPtr = temp_a1 + 0xA;
+    temp_a1[0x8] = 0xDB0A001C;
+    temp_a1[0x9] = D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8;
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80064F74_65B74);
 
