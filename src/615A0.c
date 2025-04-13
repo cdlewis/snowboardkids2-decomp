@@ -17,6 +17,23 @@ s32 func_80069810_6A410();
 extern void func_800680C4_68CC4();
 extern void func_80065DD8_669D8();
 void func_800680F0_68CF0(ALPlayer*);
+void func_8006318C_63D8C(void*);
+extern s32* gRegionAllocPtr;
+void func_8006318C_63D8C(void*);
+s32 func_80070140_70D40(void*);
+extern void func_800659E4_665E4;
+void func_80063A94_64694(void*);
+extern s32* gRegionAllocPtr;
+
+typedef struct {
+    u8 padding[0x8];
+    s32 unk8;
+} func_800636C8_642C8_arg_unk20;
+
+typedef struct {
+    u8 padding[0x20];
+    func_800636C8_642C8_arg_unk20* unk20;
+} func_800636C8_642C8_arg;
 
 typedef struct {
     u8 padding[0x4];
@@ -30,9 +47,6 @@ typedef struct {
     u8 unk3B;
 } func_80063824_64424_arg;
 
-void func_8006318C_63D8C(void*);
-s32 func_80070140_70D40(void*);
-
 typedef struct {
     u8 padding[0xC];
     s32 unkC;
@@ -45,15 +59,10 @@ typedef struct {
     func_8006411C_64D1C_arg_unk20* unk20;
 } func_8006411C_64D1C_arg;
 
-extern void func_800659E4_665E4;
-
 typedef struct {
     u8 padding[0x30];
     s32 unk30;
 } func_80065DA8_669A8_arg;
-
-void func_80063A94_64694(void*);
-extern s32* gRegionAllocPtr;
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800609A0_615A0);
 
@@ -107,7 +116,17 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800635CC_641CC);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063668_64268);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_800636C8_642C8);
+void func_800636C8_642C8(func_800636C8_642C8_arg* arg0) {
+    s32* temp_v1;
+
+    if (func_80070140_70D40((void*)(s32)arg0 + 0x14) == 0) {
+        func_8006318C_63D8C(arg0);
+        temp_v1 = gRegionAllocPtr;
+        temp_v1[0] = 0xDE000000;
+        gRegionAllocPtr = temp_v1 + 2;
+        temp_v1[1] = (s32)arg0->unk20->unk8;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063728_64328);
 
