@@ -18,6 +18,22 @@ extern void func_800680C4_68CC4();
 extern void func_80065DD8_669D8();
 void func_800680F0_68CF0(ALPlayer*);
 
+typedef struct {
+    u8 padding[0xC];
+    s32 unkC;
+} func_8006411C_64D1C_arg_unk20;
+
+typedef struct {
+    u8 padding[0x14];
+    s32 unk14;
+    u8 padding2[0x8];
+    func_8006411C_64D1C_arg_unk20* unk20;
+} func_8006411C_64D1C_arg;
+
+void func_80063A94_64694(void*);
+s32 func_80070140_70D40(s32);
+extern s32* gRegionAllocPtr;
+
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800609A0_615A0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800609E8_615E8);
@@ -90,7 +106,17 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_8006405C_64C5C);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800640BC_64CBC);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_8006411C_64D1C);
+void func_8006411C_64D1C(func_8006411C_64D1C_arg* arg0) {
+    s32* temp_v1;
+
+    if (func_80070140_70D40((s32)arg0 + 0x14) == 0) {
+        func_80063A94_64694(arg0);
+        temp_v1 = gRegionAllocPtr;
+        temp_v1[0] = 0xDE000000;
+        gRegionAllocPtr = temp_v1 + 2;
+        temp_v1[1] = (s32)arg0->unk20->unkC;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_8006417C_64D7C);
 
