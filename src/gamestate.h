@@ -32,7 +32,9 @@ typedef struct {
     u8 unk5C;
     u8 unk5D;
     u8 unk5E;
-    u8 PAD_6[0x1C];
+    u8 PAD_6[0x1A];
+    u8 unk79;
+    u8 unk7A;
     s8 unk7B;
     s8 unk7C;
     u8 PAD_7[0x5D];

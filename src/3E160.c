@@ -27,12 +27,13 @@ extern void func_8003FB90_40790(void);
 void func_800699F4_6A5F4(void*, s32, s32, s32);
 extern void func_800401A0_40DA0();
 extern void func_8004D9D0_4E5D0();
-s32 func_80055E7C_56A7C();                          
-s32 func_80055EA4_56AA4();                          
-void func_800B99E0(void*);                               
+s32 func_80055E7C_56A7C();
+s32 func_80055EA4_56AA4();
+void func_800B99E0(void*);
 extern s32 D_34CB50;
 extern s32 D_34F7E0;
 extern void func_8003EEEC_3FAEC();
+void func_8003F368_3FF68();
 
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);
 
@@ -89,7 +90,21 @@ INCLUDE_ASM("asm/nonmatchings/3E160", func_8003EFDC_3FBDC);
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003F0AC_3FCAC);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003F178_3FD78);
+void func_8003F178_3FD78(void) {
+    GameState* state = GameStateGet();
+
+    if ((state->unk79 == 0) || (state->unk7A == 0xB)) {
+        s32 ret = func_80055D10_56910(state->unk5C);
+
+        if (state->unk7A == 0xB) {
+            func_800574A0_580A0(0x20);
+        } else {
+            func_800574A0_580A0(*(s16*)(ret + 0x28));
+        }
+
+        func_8006982C_6A42C(func_8003F368_3FF68);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003F1F0_3FDF0);
 
