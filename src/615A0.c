@@ -27,6 +27,23 @@ extern s32* gRegionAllocPtr;
 void func_800648EC_654EC();
 
 typedef struct {
+    u8 padding[0x10];
+    s32 unk10;
+    s32 unk14;
+    s8 unk18;
+    u8 unk19;
+} func_80067F5C_68B5C_arg;
+
+typedef struct {
+    s32 sp10;
+    s32 sp14;
+    u16 sp18;
+    u16 sp1A;
+} func_80067F5C_68B5C_sp10;
+
+void func_800192CC_19ECC(s32, s32, s32, func_80067F5C_68B5C_sp10*);
+
+typedef struct {
     u8 padding[0x148];
     u8 unk148;
     u8 unk149;
@@ -298,7 +315,15 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80067EDC_68ADC);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80067F0C_68B0C);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80067F5C_68B5C);
+void func_80067F5C_68B5C(func_80067F5C_68B5C_arg* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    func_80067F5C_68B5C_sp10 sp10;
+
+    func_800192CC_19ECC(arg1, arg2 & 0xFFFF, arg3 & 0xFF, &sp10);
+    arg0->unk10 = sp10.sp10;
+    arg0->unk14 = sp10.sp14;
+    arg0->unk18 = sp10.sp18;
+    arg0->unk19 = sp10.sp1A;
+}
 
 void func_80067FB0_68BB0(void) {
     s32* temp_s0;
