@@ -103,7 +103,29 @@ typedef struct {
     s32 unk30;
 } func_80065DA8_669A8_arg;
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_800609A0_615A0);
+void func_800609A0_615A0(u32* arg0) {
+    u16 temp;
+    u32 addr;
+    int new_var;
+
+    addr = arg0[0];
+    temp = *((u16*)addr);
+    new_var = temp * 6;
+    addr += 2;
+    arg0[1] = addr;
+
+    addr += new_var;
+    temp = *((u16*)addr);
+    addr += 2;
+    arg0[2] = addr;
+
+    addr += temp * 8;
+    temp = *((u16*)addr);
+    addr += 2;
+    arg0[3] = addr;
+
+    *((u16*)(((u8*)arg0) + 0x10)) = temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800609E8_615E8);
 
