@@ -1,6 +1,7 @@
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
+#include "gbi.h"
 #include "overlay.h"
 
 USE_OVERLAY(_9FDF0)
@@ -193,7 +194,7 @@ void func_800636C8_642C8(func_800636C8_642C8_arg* arg0) {
     if (func_80070140_70D40((void*)(s32)arg0 + 0x14) == 0) {
         func_8006318C_63D8C(arg0);
         temp_v1 = gRegionAllocPtr;
-        temp_v1[0] = 0xDE000000;
+        temp_v1[0] = (s32)gsSPDisplayList(0);
         gRegionAllocPtr = temp_v1 + 2;
         temp_v1[1] = (s32)arg0->unk20->unk8;
     }
@@ -206,7 +207,7 @@ void func_80063728_64328(func_80063728_64328_arg* arg0) {
         func_8006318C_63D8C(arg0);
 
         temp_v1 = gRegionAllocPtr;
-        temp_v1[0] = 0xDE000000;
+        temp_v1[0] = (s32)gsSPDisplayList(0);
 
         gRegionAllocPtr = (void*)temp_v1 + 8;
         temp_v1[1] = (s32)arg0->unk20->unkC;
@@ -224,18 +225,15 @@ void buildDisplayListSegment(func_80063824_64424_arg* arg0) {
         temp_a0 = gRegionAllocPtr;
         gRegionAllocPtr = temp_a0 + 2;
 
-        // G_NOOP
-        temp_a0[0x0] = 0xE7000000;
+        temp_a0[0x0] = (s32)gsDPPipeSync();
         gRegionAllocPtr = temp_a0 + 0x4;
-        temp_a0[0x1] = 0;
+        temp_a0[0x1] = (s32)gsDPNoOp();
 
-        // G_SETOTHERMODE_H
-        temp_a0[0x2] = 0xFB000000;
+        temp_a0[0x2] = (s32)gsDPSetEnvColor(0, 0, 0, 0);
 
         v1 = arg0->unk3B;
 
-        // G_DL
-        temp_a0[0x4] = 0xDE000000;
+        temp_a0[0x4] = (s32)gsSPDisplayList(0x0);
         v1 = v1 | (~0xFF);
         temp_a0[0x3] = v1;
         gRegionAllocPtr = temp_a0 + 0x6;
@@ -261,7 +259,7 @@ void func_8006411C_64D1C(func_8006411C_64D1C_arg* arg0) {
     if (func_80070140_70D40((void*)(s32)arg0 + 0x14) == 0) {
         func_80063A94_64694(arg0);
         temp_v1 = gRegionAllocPtr;
-        temp_v1[0] = 0xDE000000;
+        temp_v1[0] = (s32)gsSPDisplayList(0x0);
         gRegionAllocPtr = temp_v1 + 2;
         temp_v1[1] = (s32)arg0->unk20->unkC;
     }
@@ -290,25 +288,25 @@ void func_80064E34_65A34(func_80064E34_65A34_arg* arg0) {
     func_800648EC_654EC();
 
     temp_a1 = gRegionAllocPtr;
-    temp_a1[0x0] = 0xDE000000;
+    temp_a1[0x0] = (s32)gsSPDisplayList(0x0);
 
     gRegionAllocPtr = temp_a1 + 0x2;
     temp_a1[0x1] = arg0->unk20->unk8;
 
     gRegionAllocPtr = temp_a1 + 0x4;
-    temp_a1[0x2] = 0xDB0A0000;
+    temp_a1[0x2] = (s32)gsMoveWd(0xA, 0, 0);
     temp_a1[0x3] = D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8;
 
     gRegionAllocPtr = temp_a1 + 0x6;
-    temp_a1[0x4] = 0xDB0A0004;
+    temp_a1[0x4] = (s32)gsMoveWd(0xA, 0x4, 0);
     temp_a1[0x5] = D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8;
 
     gRegionAllocPtr = temp_a1 + 0x8;
-    temp_a1[0x6] = 0xDB0A0018;
+    temp_a1[0x6] = (s32)gsMoveWd(0xA, 0x18, 0);
     temp_a1[0x7] = D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8;
 
     gRegionAllocPtr = temp_a1 + 0xA;
-    temp_a1[0x8] = 0xDB0A001C;
+    temp_a1[0x8] = (s32)gsMoveWd(0xA, 0x1C, 0);
     temp_a1[0x9] = D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8;
 }
 
