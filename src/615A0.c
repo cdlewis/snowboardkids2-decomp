@@ -114,6 +114,11 @@ typedef struct {
     s32 unk30;
 } func_80065DA8_669A8_arg;
 
+typedef struct {
+    s16 unk0;
+    u8 _pad[0x22];
+} func_80062C98_63898_arg;
+
 void func_800609A0_615A0(u32* arg0) {
     u16 temp;
     u32 addr;
@@ -162,7 +167,17 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80062918_63518);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80062B1C_6371C);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80062C98_63898);
+s32 func_80062C98_63898(func_80062C98_63898_arg** arg0, u16 index) {
+    s16 temp_v0;
+    s16 var_a1 = index;
+
+    temp_v0 = arg0[3][index].unk0;
+
+    if (temp_v0 >= 0) {
+        var_a1 = temp_v0;
+    }
+    return var_a1 & 0xFFFF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80062CD0_638D0);
 
