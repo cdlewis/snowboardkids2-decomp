@@ -1,3 +1,5 @@
+#include "70DB0.h"
+
 #include "common.h"
 
 void thread_function_1(void *);
@@ -10,15 +12,6 @@ typedef struct {
     OSMesg messageQueue;
     OSMesg message;
 } eventQueue2Response;
-
-typedef struct viConfig_s ViConfig;
-struct viConfig_s {
-    ViConfig **prevConfig;
-    ViConfig **nextConfig;
-    OSMesgQueue *messageQueue;
-    u16 frameCounter;
-    u16 maxFrames;
-};
 
 typedef struct {
     char padding2[61];
