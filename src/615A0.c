@@ -24,7 +24,6 @@ s32 func_80070140_70D40(void*);
 extern void func_800659E4_665E4;
 void func_80063A94_64694(void*);
 void func_800648EC_654EC();
-void func_8006318C_63D8C(void*);
 s32 func_80070140_70D40(void*);
 
 typedef struct {
@@ -119,6 +118,18 @@ typedef struct {
     u8 _pad[0x22];
 } func_80062C98_63898_arg;
 
+void func_80062CF0_638F0();
+
+typedef struct {
+    u8 padding[0x20];
+    struct {
+        s32 padding;
+        s32 unk4;
+        u8 padding2[0x4];
+        s32 unkC;
+    }* unk20;
+} func_800630A4_63CA4_arg;
+
 void func_800609A0_615A0(u32* arg0) {
     u16 temp;
     u32 addr;
@@ -187,13 +198,29 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_8006300C_63C0C);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063058_63C58);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_800630A4_63CA4);
+void func_800630A4_63CA4(func_800630A4_63CA4_arg* arg0) {
+    s32* temp_v1;
+
+    func_80062CF0_638F0();
+    temp_v1 = gRegionAllocPtr;
+    temp_v1[0] = 0xDE000000;
+    gRegionAllocPtr = temp_v1 + 2;
+    temp_v1[1] = (s32)arg0->unk20->unkC;
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800630F0_63CF0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_8006318C_63D8C);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_800634E8_640E8);
+void func_800634E8_640E8(func_800630A4_63CA4_arg* arg0) {
+    s32* temp_v1;
+
+    func_8006318C_63D8C(arg0);
+    temp_v1 = gRegionAllocPtr;
+    temp_v1[0] = 0xDE000000;
+    gRegionAllocPtr = temp_v1 + 2;
+    temp_v1[1] = (s32)arg0->unk20->unk4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063534_64134);
 
