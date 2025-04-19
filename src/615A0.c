@@ -25,6 +25,8 @@ extern void func_800659E4_665E4;
 void func_80063A94_64694(void*);
 void func_800648EC_654EC();
 s32 func_80070140_70D40(void*);
+extern void func_800638C0_644C0();
+extern void func_8006395C_6455C();
 
 typedef struct {
     s32 unk0;
@@ -75,37 +77,31 @@ typedef struct {
 } func_80064E34_65A34_arg;
 
 typedef struct {
-    u8 padding[0x8];
-    s32 unk8;
-} func_800636C8_642C8_arg_unk20;
-
-typedef struct {
     u8 padding[0x20];
-    func_800636C8_642C8_arg_unk20* unk20;
+    struct {
+        u8 padding[0x8];
+        s32 unk8;
+    }* unk20;
 } func_800636C8_642C8_arg;
 
 typedef struct {
-    u8 padding[0x4];
-    s32 unk4;
-} func_80063824_64424_arg_unk20;
-
-typedef struct {
     u8 padding[0x20];
-    func_80063824_64424_arg_unk20* unk20;
+    struct {
+        u8 padding[0x4];
+        s32 unk4;
+    }* unk20;
     u8 padding2[0x17];
     u8 unk3B;
 } func_80063824_64424_arg;
 
 typedef struct {
-    u8 padding[0xC];
-    s32 unkC;
-} func_8006411C_64D1C_arg_unk20;
-
-typedef struct {
     u8 padding[0x14];
     s32 unk14;
     u8 padding2[0x8];
-    func_8006411C_64D1C_arg_unk20* unk20;
+    struct {
+        u8 padding[0xC];
+        s32 unkC;
+    }* unk20;
 } func_8006411C_64D1C_arg;
 
 typedef struct {
@@ -129,6 +125,13 @@ typedef struct {
         s32 unkC;
     }* unk20;
 } func_800630A4_63CA4_arg;
+
+typedef struct {
+    u8 padding[0x1C];
+    s32 unk1C;
+    u8 padding2[0x10];
+    s32 unk30;
+} func_80066444_67044_arg1;
 
 void func_800609A0_615A0(u32* arg0) {
     u16 temp;
@@ -287,7 +290,30 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800638C0_644C0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_8006395C_6455C);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_800639F8_645F8);
+typedef struct {
+    u8 padding[0x20];
+    struct {
+        u8 : 0x4;
+        s32 unk4;
+        s32 unk8;
+        s32 unkC;
+    }* unk20;
+    u8 padding2[0xC];
+    s32 unk30;
+} func_800639F8_645F8_arg;
+
+void func_800639F8_645F8(s32 arg0, func_800639F8_645F8_arg* arg1) {
+    arg1->unk30 = 0;
+    if (arg1->unk20->unk4 != 0) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 1, &buildDisplayListSegment, arg1);
+    }
+    if (arg1->unk20->unk8 != 0) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 3, &func_800638C0_644C0, arg1);
+    }
+    if (arg1->unk20->unkC != 0) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_8006395C_6455C, arg1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063A94_64694);
 
@@ -373,14 +399,14 @@ void func_80065DA8_669A8(s32 arg0, func_80065DA8_669A8_arg* arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80065DD8_669D8);
 
-void func_80066444_67044(s32 arg0, debugEnqueueCallback_arg3* arg1) {
+void func_80066444_67044(s32 arg0, func_80066444_67044_arg1* arg1) {
     arg1->unk1C = 0;
     debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80065DD8_669D8, arg1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80066474_67074);
 
-void func_80066AC0_676C0(s32 arg0, debugEnqueueCallback_arg3* arg1) {
+void func_80066AC0_676C0(s32 arg0, func_80066444_67044_arg1* arg1) {
     arg1->unk30 = 0;
     debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80066474_67074, arg1);
 }
