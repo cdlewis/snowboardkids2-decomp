@@ -27,6 +27,18 @@ void func_800648EC_654EC();
 s32 func_80070140_70D40(void*);
 extern void func_800638C0_644C0();
 extern void func_8006395C_6455C();
+extern void func_80065150_65D50();
+extern void func_800653E0_65FE0();
+extern void func_80065670_66270();
+
+typedef struct {
+    u8 padding[0x20];
+    s32 *unk20;
+    u8 padding3[0x9];
+    s32 unk30;
+    u8 padding2[0x3];
+    s8 unk37;
+} func_80065900_66500_arg1;
 
 typedef struct {
     s32 unk0;
@@ -197,7 +209,15 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80062CD0_638D0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80062CF0_638F0);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_8006300C_63C0C);
+void func_8006300C_63C0C(func_80063824_64424_arg* arg0) {
+    s32* temp_v1;
+
+    func_80062CF0_638F0();
+    temp_v1 = gRegionAllocPtr;
+    temp_v1[0] = 0xDE000000;
+    gRegionAllocPtr = temp_v1 + 2;
+    temp_v1[1] = (s32)arg0->unk20->unk4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063058_63C58);
 
@@ -388,7 +408,45 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800653E0_65FE0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80065670_66270);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80065900_66500);
+void func_80065900_66500(s32 arg0, func_80065900_66500_arg1 *arg1, s32 arg2) {
+    func_80065900_66500_arg1 *new_var;
+    s32 var_a1;
+    s32 var_s0;
+    s32 *temp_v1;
+    func_80065900_66500_arg1 *var_a0;
+    volatile u8 padding[0x1];
+    var_a1 = 0;
+    var_s0 = 0;
+    arg1->unk37 = arg2;
+    if (arg2 > 0) {
+        var_a0 = arg1;
+        do {
+            temp_v1 = var_a0->unk20;
+            (new_var = var_a0)->unk30 = 0;
+            if (temp_v1[1] != 0) {
+                var_s0 |= 1;
+            }
+            if (temp_v1[2] != 0) {
+                var_s0 |= 2;
+            }
+            if (temp_v1[0x3] != 0) {
+                var_s0 |= 4;
+            }
+            var_a1 += 1;
+            var_a0 = (func_80065900_66500_arg1 *)(((s32)var_a0) + 0x3C);
+        } while (var_a1 < arg2);
+    }
+    if (var_s0 & 1) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 1, &func_80065150_65D50, arg1);
+    }
+    new_var = arg1;
+    if (var_s0 & 2) {
+        debugEnqueueCallback((arg0 & 0xFFFF) ^ 0, 3, &func_800653E0_65FE0, new_var);
+    }
+    if (var_s0 & 4) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_80065670_66270, arg1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800659E4_665E4);
 
