@@ -1,3 +1,12 @@
+dmaRequestAndUpdateState = 0x80069F94;
+
+dmaQueueRequest = 0x8003BA24;
+gDmaQueueIndex = 0x800A2488;
+gDmaQueue = 0x800A248C;
+gDmaMsgQueue = 0x800A20F0;
+gDmaRequestCount = 0x800A2490;
+gPendingDmaCount = 0x8008FEA0;
+
 buildDisplayListSegment = 0x80063824;
 
 loadOverlay_1BBA0 = 0x8001AFA0;

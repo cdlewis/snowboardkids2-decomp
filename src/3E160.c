@@ -9,7 +9,7 @@ extern void func_80040608_41208();
 GameState* GameStateGet();
 s32 func_80055D34_56934(u8);
 void func_8006983C_6A43C(void*);
-GameStateUnk28* func_80069F94_6AB94(void*, void*, s32);
+GameStateUnk28* dmaRequestAndUpdateState(void*, void*, s32);
 extern s32 D_3FF010;
 extern s32 D_3FF910;
 extern void func_8003EDF8_3F9F8();
@@ -48,7 +48,7 @@ void func_8003EDA0_3F9A0(void) {
 
     temp_v0 = GameStateGet();
     temp_v0->unk30 = func_80055D34_56934(temp_v0->unk5C);
-    temp_v0->unk28 = func_80069F94_6AB94(&D_3FF010, &D_3FF910, 0x16E0);
+    temp_v0->unk28 = dmaRequestAndUpdateState(&D_3FF010, &D_3FF910, 0x16E0);
     func_8006983C_6A43C(&func_8003EDF8_3F9F8);
 }
 
@@ -78,7 +78,7 @@ void func_8003EE50_3FA50(void) {
             offset += 0xBE8;
         } while (i < gs->unk5E);
     }
-    gs->unk18 = func_80069F94_6AB94(&D_34CB50, &D_34F7E0, 0x5E28);
+    gs->unk18 = dmaRequestAndUpdateState(&D_34CB50, &D_34F7E0, 0x5E28);
     gs->unk1C = func_80055E7C_56A7C();
     gs->unk20 = func_80055EA4_56AA4();
     func_8006983C_6A43C(&func_8003EEEC_3FAEC);

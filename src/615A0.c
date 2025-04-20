@@ -8,7 +8,7 @@ USE_OVERLAY(_9FDF0)
 
 void func_8006982C_6A42C(void*);
 s32* func_80069854_6A454(s32);
-s32 func_80069F94_6AB94(void*, void*, s32);
+s32 dmaRequestAndUpdateState(void*, void*, s32);
 extern s32 D_215D70;
 extern s32 D_216290;
 extern void func_80068060_68C60();
@@ -33,7 +33,7 @@ extern void func_80065670_66270();
 
 typedef struct {
     u8 padding[0x20];
-    s32 *unk20;
+    s32* unk20;
     u8 padding3[0x9];
     s32 unk30;
     u8 padding2[0x3];
@@ -408,12 +408,12 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800653E0_65FE0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80065670_66270);
 
-void func_80065900_66500(s32 arg0, func_80065900_66500_arg1 *arg1, s32 arg2) {
-    func_80065900_66500_arg1 *new_var;
+void func_80065900_66500(s32 arg0, func_80065900_66500_arg1* arg1, s32 arg2) {
+    func_80065900_66500_arg1* new_var;
     s32 var_a1;
     s32 var_s0;
-    s32 *temp_v1;
-    func_80065900_66500_arg1 *var_a0;
+    s32* temp_v1;
+    func_80065900_66500_arg1* var_a0;
     volatile u8 padding[0x1];
     var_a1 = 0;
     var_s0 = 0;
@@ -433,7 +433,7 @@ void func_80065900_66500(s32 arg0, func_80065900_66500_arg1 *arg1, s32 arg2) {
                 var_s0 |= 4;
             }
             var_a1 += 1;
-            var_a0 = (func_80065900_66500_arg1 *)(((s32)var_a0) + 0x3C);
+            var_a0 = (func_80065900_66500_arg1*)(((s32)var_a0) + 0x3C);
         } while (var_a1 < arg2);
     }
     if (var_s0 & 1) {
@@ -498,7 +498,7 @@ void func_80067FB0_68BB0(void) {
 
     temp_s0 = func_80069854_6A454(4);
     LOAD_OVERLAY(_9FDF0)
-    *temp_s0 = func_80069F94_6AB94(&D_215D70, &D_216290, 0x918);
+    *temp_s0 = dmaRequestAndUpdateState(&D_215D70, &D_216290, 0x918);
     func_8006982C_6A42C(&func_80068060_68C60);
 }
 

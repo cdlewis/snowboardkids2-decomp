@@ -101,7 +101,7 @@ typedef struct {
 
 s32 func_80035F80_36B80(int);
 void func_80069CE8_6A8E8(void*);
-s32 func_80069F94_6AB94(void*, void*, int);
+s32 dmaRequestAndUpdateState(void*, void*, int);
 void func_80036274_36E74(u8*);
 void func_80036424_37024(void);
 void func_80036848_37448(func_80036848_37448_arg*);
@@ -161,7 +161,7 @@ void func_80036328_36F28(func_80036328_36F28_arg* arg0) {
 
     func_80036328_36F28_arg_item* var_v1;
 
-    resource_id = func_80069F94_6AB94(&D_45A890, &D_45B130, 0x3108);
+    resource_id = dmaRequestAndUpdateState(&D_45A890, &D_45B130, 0x3108);
     temp_value = func_80035F80_36B80(1);
 
     func_80069CE8_6A8E8(&func_80036848_37448);
@@ -208,7 +208,7 @@ void func_80036848_37448(func_80036848_37448_arg* arg0) {
 void func_80036880_37480(func_80036880_37480_arg* arg0) {
     s32 temp_s0;
 
-    temp_s0 = func_80069F94_6AB94(&D_45A890, &D_45B130, 0x3108);
+    temp_s0 = dmaRequestAndUpdateState(&D_45A890, &D_45B130, 0x3108);
     func_80069CE8_6A8E8(&func_80036A10_37610);
     arg0->unk8 = 8;
     arg0->unkA = 0xFF;
