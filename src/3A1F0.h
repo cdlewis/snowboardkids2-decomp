@@ -10,3 +10,5 @@ void dmaLoadAndInvalidate(
     void* dcacheEnd,
     void* bssStart,
     void* bssEnd);
+
+void* dmaQueueRequest(void* arg0, void* arg1, s32 arg2);

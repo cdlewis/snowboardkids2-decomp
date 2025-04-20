@@ -3,6 +3,7 @@
 #include "gamestate.h"
 
 s32 func_8006A258_6AE58(s32, s32, void *);
+void *dmaQueueRequest(void *arg0, void *arg1, s32 arg2);
 
 typedef struct {
     u8 padding[0xE];
@@ -56,7 +57,6 @@ extern void *func_8003B8F0_3C4F0(void);
 extern s32 func_8006A51C_6B11C(void *);
 extern void *func_8006A52C_6B12C(void *);
 extern void func_8006A3FC_6AFFC();
-extern void *func_8003BA24_3C624(void);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
 
@@ -235,11 +235,11 @@ void *func_80069E3C_6AA3C(void) {
     return s0;
 }
 
-void *func_80069F94_6AB94(void *arg0, void *arg1, int arg2) {
+void *dmaRequestAndUpdateState(void *arg0, void *arg1, int arg2) {
     void *s0;
 
     if (D_8009A864_9B464 == NULL) {
-        s0 = func_8003BA24_3C624();
+        s0 = dmaQueueRequest(arg0, arg1, arg2);
         if (func_8006A51C_6B11C(s0) != NULL) {
             if (D_8009A860_9B460->unk18 != 3) {
                 D_8009A860_9B460->unk20 = func_8006A52C_6B12C(s0);
@@ -253,7 +253,7 @@ void *func_80069F94_6AB94(void *arg0, void *arg1, int arg2) {
             }
         }
     } else {
-        s0 = func_8003BA24_3C624();
+        s0 = dmaQueueRequest(arg0, arg1, arg2);
         if (func_8006A51C_6B11C(s0) != 0) {
             if (D_8009A864_9B464->unk0E < 3 || D_8009A864_9B464->unk0E >= 5) {
                 D_8009A864_9B464->unk18 = func_8006A52C_6B12C(s0);
