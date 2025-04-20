@@ -1,0 +1,1 @@
+./compile.sh base.c 1 base.o
