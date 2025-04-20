@@ -1,3 +1,5 @@
+#include "3A1F0.h"
+
 #include "common.h"
 
 typedef struct {
@@ -528,8 +530,8 @@ void func_8003BC58_3C858() {
 }
 
 void dmaLoadAndInvalidate(
-    u32 romStart,
-    s32 romEnd,
+    void* romStart,
+    void* romEnd,
     void* ramStart,
     void* icacheStart,
     void* icacheEnd,
@@ -540,7 +542,7 @@ void dmaLoadAndInvalidate(
     OSIoMesg dmaMessage;
     void* dummyMessage;
     u32 remainingBytes;
-    u32 currentRomOffset;
+    void* currentRomOffset;
     u32 currentChunkSize;
     void* currentRamDest;
 

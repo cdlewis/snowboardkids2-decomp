@@ -1,9 +1,9 @@
 #include "69EF0.h"
 
+#include "3A1F0.h"
 #include "gamestate.h"
 
 s32 func_8006A258_6AE58(s32, s32, void *);
-void *dmaQueueRequest(void *arg0, void *arg1, s32 arg2);
 
 typedef struct {
     u8 padding[0xE];
