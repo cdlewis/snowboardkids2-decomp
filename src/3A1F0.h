@@ -1,8 +1,8 @@
 #include "common.h"
 
 void dmaLoadAndInvalidate(
-    u32* romStart,
-    s32* romEnd,
+    void* romStart,
+    void* romEnd,
     void* ramStart,
     void* icacheStart,
     void* icacheEnd,
