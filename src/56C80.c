@@ -18,7 +18,12 @@ typedef struct {
     u8 padding2[0x4];
     s16 unk10;
     u16 unk12;
-    u8 padding3[0xC];
+    u8 padding3[0x2];
+    s16 unk16;
+    s16 unk18;
+    s16 unk1A;
+    s8 unk1C;
+    s8 unk1D;
     s32 unk20;
 } D_800A2990_A3590_type;
 extern D_800A2990_A3590_type *D_800A2990_A3590;
@@ -31,6 +36,7 @@ extern s32 D_800A2D20_A3920;
 extern s32 D_800A2D24_A3924;
 extern s32 D_800A2D28_A3928;
 extern s32 D_800A2D38_A3938;
+extern u8 D_80093B84_94784[];
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -99,7 +105,15 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_800574A0_580A0);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800574E0_580E0);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057514_58114);
+void func_80057514_58114(u32 arg0, s16 arg1, s16 arg2) {
+    D_800A2990_A3590_type *new_var;
+    D_800A2990_A3590->unk1D = 2;
+    D_800A2990_A3590->unk10 = arg0;
+    D_800A2990_A3590->unk16 = 0;
+    D_800A2990_A3590->unk18 = arg1;
+    D_800A2990_A3590->unk1A = arg2;
+    D_800A2990_A3590->unk1C = D_80093B84_94784[arg0];
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057550_58150);
 
