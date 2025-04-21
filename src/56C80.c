@@ -2,6 +2,8 @@
 
 void func_80069CC0_6A8C0(void *);
 void func_8006A0EC_6ACEC(s32, s32, s32, s32);
+void func_800584AC_590AC(s32, s32, s32);
+void func_80058414_59014(s32, s32, s32);
 extern s32 D_800937E8_943E8[];
 extern s32 D_800937EC_943EC[];
 extern s32 D_800937F0_943F0[];
@@ -9,16 +11,26 @@ extern s32 D_80093974_94574[];
 extern s32 D_80093978_94578[];
 extern s32 D_8009397C_9457C[];
 extern s32 func_800571D0_57DD0;
-typedef struct
-{
+typedef struct {
     s32 padding;
     s32 unk4;
     s32 unk8;
     u8 padding2[0x4];
     s16 unk10;
     u16 unk12;
+    u8 padding3[0xC];
+    s32 unk20;
 } D_800A2990_A3590_type;
 extern D_800A2990_A3590_type *D_800A2990_A3590;
+
+void func_800570BC_57CBC();
+extern OSMesgQueue D_800A2CD0_A38D0;
+extern OSMesgQueue D_800A2CF0_A38F0;
+extern s32 D_800A2D1C_A391C;
+extern s32 D_800A2D20_A3920;
+extern s32 D_800A2D24_A3924;
+extern s32 D_800A2D28_A3928;
+extern s32 D_800A2D38_A3938;
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -153,13 +165,31 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_80058380_58F80);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800583F8_58FF8);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80058414_59014);
+void func_80058414_59014(s32 arg0, s32 arg1, s32 arg2) {
+    void *sp10;
+    s32 *new_var;
+    s32 new_var2;
+    D_800A2D1C_A391C = arg0;
+    D_800A2D24_A3924 = arg1;
+    D_800A2D28_A3928 = 0x80;
+    new_var = &D_800A2990_A3590->unk20;
+    new_var2 = *new_var;
+    D_800A2D38_A3938 = arg2;
+    D_800A2D20_A3920 = new_var2;
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, 1);
+    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), 1);
+    func_800570BC_57CBC();
+}
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80058490_59090);
+void func_80058490_59090(s32 arg0, s32 arg1) {
+    func_80058414_59014(arg0, arg1, 0xC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800584AC_590AC);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80058530_59130);
+void func_80058530_59130(s32 arg0, s32 arg1) {
+    func_800584AC_590AC(arg0, arg1, 0xC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_8005854C_5914C);
 
