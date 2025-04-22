@@ -1,0 +1,1 @@
+./claude-compile.sh && ./claude-analyse.sh

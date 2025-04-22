@@ -18,8 +18,7 @@ You can view the target code by running `./claude-target.sh`.
 
 Repeat the following steps until you get an exact match or are no longer able to make progress:
 
-1. Run `./claude-compile.sh` to build base.c
-2. Run `./claude-analyse.sh` to analyze the difference between source and target files. If you forget what the target looks like, re-run `./claude-target.sh`.
-3. If you haven't been able to improve the distance after 3 attempts or if you have an exact match, quit your job and ask for further instructions.
-4. Update base.c to better match the target assembly code
+1. Run `./claude-compile-and-analyse.sh` to build base.c and get an object dump of the compiled code.
+2. Analyze the difference between source and target files. If you forget what the target looks like, re-run `./claude-target.sh`.
+3. Update base.c to better match the target assembly code. Try to focus on one area at a time to gradually improve the match.
 5. Go to step 1
