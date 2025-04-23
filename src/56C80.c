@@ -287,7 +287,21 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_800582DC_58EDC);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80058360_58F60);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80058380_58F80);
+void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    s32 *new_var;
+    void *sp10;
+    s32 new_var2;
+    D_800A2D1C_A391C = arg0;
+    D_800A2D24_A3924 = arg1;
+    D_800A2D28_A3928 = arg2;
+    new_var = &D_800A2990_A3590->unk20;
+    new_var2 = *new_var;
+    D_800A2D38_A3938 = arg3;
+    D_800A2D20_A3920 = new_var2;
+    osSendMesg(&D_800A2CD0_A38D0, (void *)1, 1);
+    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+    func_800570BC_57CBC();
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800583F8_58FF8);
 
