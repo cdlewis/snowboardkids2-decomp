@@ -59,8 +59,9 @@ extern OSMesgQueue D_800A2CF0_A38F0;
 extern s32 D_800A2D30_A3930;
 void func_80057E18_58A18(s32, s32, s32, s32, s32);
 void func_80057124_57D24(void);
-s32 func_80058638_59238();
+void *func_80058638_59238();
 void func_80069CD0_6A8D0(void *);
+extern u8 D_80093BA5_947A5;
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -164,7 +165,7 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_800573F8_57FF8);
 extern void func_800570E0_57CE0();
 
 void func_80057470_58070(void) {
-    if (func_80058638_59238() == 0) {
+    if (func_80058638_59238() == NULL) {
         func_80069CD0_6A8D0(&func_800570E0_57CE0);
     }
 }
@@ -347,4 +348,15 @@ void func_800585C8_591C8(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800585E4_591E4);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80058638_59238);
+void *func_80058638_59238() {
+    void *message;
+
+    if (D_80093BA5_947A5 != NULL) {
+        osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xE, OS_MESG_BLOCK);
+        osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+
+        return message;
+    }
+
+    return NULL;
+}
