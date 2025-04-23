@@ -18,7 +18,7 @@ typedef struct {
     u8 padding2[0x4];
     s16 unk10;
     u16 unk12;
-    u8 padding3[0x2];
+    s16 unk14;
     s16 unk16;
     s16 unk18;
     s16 unk1A;
@@ -47,7 +47,7 @@ extern s32 D_800A2D28_A3928;
 extern s32 D_800A2D38_A3938;
 extern u8 D_80093B84_94784[];
 extern s32 D_800A2D2C_A392C;
-void func_80057F48_58B48(s32 arg0, s32 arg1, s32 arg2, s32 arg3); /* extern */
+void func_80057F48_58B48(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern void func_80057214_57E14();
 void func_800579E8_585E8(s32, s32);
 extern s32 D_80093B00_94700;
@@ -65,6 +65,7 @@ extern u8 D_80093BA5_947A5;
 extern u8 D_80093BA6_947A6;
 extern s32 D_800A2D14_A3914;
 extern s32 D_800A2D18_A3918;
+void func_800582DC_58EDC(s32, s32, s32, s32, s32);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -199,7 +200,16 @@ void func_80057550_58150(s16 arg0, s16 arg1) {
     D_800A2990_A3590->unk1A = arg1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057564_58164);
+void func_80057564_58164(int arg0) {
+    int var_a0;
+    D_800A2990_A3590_type *new_var;
+    var_a0 = arg0;
+    if (arg0 < 8) {
+        var_a0 = 8;
+    }
+    D_800A2990_A3590->unk1D = 0;
+    (new_var = D_800A2990_A3590)->unk14 = var_a0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_8005758C_5818C);
 
@@ -330,7 +340,9 @@ void func_800582C0_58EC0(s32 arg0, s32 arg1, s32 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800582DC_58EDC);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80058360_58F60);
+void func_80058360_58F60(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    func_800582DC_58EDC(arg0, arg1, arg2, arg3, 0xC);
+}
 
 void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 *new_var;

@@ -10,24 +10,24 @@ typedef struct
     u16 field_0xE;  // Derived from $a2 - 1, likely a size or count
 } D_800A32D0_Type;
 
-extern void func_800395F0_3A1F0();                                      /* extern */
-extern void func_80039B88_3A788();                                      /* extern */
-extern void func_80039C34_3A834();                                      /* extern */
-extern void func_8003AC38_3B838();                                      /* extern */
-extern void func_8003AF6C_3BB6C();                                      /* extern */
-extern void func_8003B5A0_3C1A0();                                      /* extern */
-extern void func_80057870_58470(s32);                                   /* extern */
-extern void func_800692F0_69EF0();                                      /* extern */
-extern void func_800693C4_69FC4(void *, s32);                           /* extern */
-extern void func_80069530_6A130();                                      /* extern */
-extern void func_8006A220_6AE20();                                      /* extern */
-extern void func_8006A428_6B028();                                      /* extern */
-extern void func_8006DC40_6E840();                                      /* extern */
-extern void func_8006E000_6EC00(u16);                                   /* extern */
-extern void func_8006E02C_6EC2C();                                      /* extern */
-extern void func_8006E054_6EC54(s32);                                   /* extern */
-extern void func_800701B0_70DB0(s32);                                   /* extern */
-extern void func_800705D0_711D0(D_800A32D0_Type *, OSMesgQueue *, s32); /* extern */
+extern void func_800395F0_3A1F0();
+extern void func_80039B88_3A788();
+extern void func_80039C34_3A834();
+extern void func_8003AC38_3B838();
+extern void func_8003AF6C_3BB6C();
+extern void func_8003B5A0_3C1A0();
+extern void func_80057870_58470(s32);
+extern void func_800692F0_69EF0();
+extern void func_800693C4_69FC4(void *, s32);
+extern void func_80069530_6A130();
+extern void func_8006A220_6AE20();
+extern void func_8006A428_6B028();
+extern void func_8006DC40_6E840();
+extern void func_8006E000_6EC00(u16);
+extern void func_8006E02C_6EC2C();
+extern void func_8006E054_6EC54(s32);
+extern void func_800701B0_70DB0(s32);
+extern void func_800705D0_711D0(D_800A32D0_Type *, OSMesgQueue *, s32);
 extern u16 D_8009ADE0_9B9E0;
 extern void D_800A32D0_A3ED0;
 extern s8 D_800AFCE2_A7052;
