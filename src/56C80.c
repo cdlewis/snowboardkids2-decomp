@@ -11,7 +11,8 @@ extern s32 D_80093974_94574[];
 extern s32 D_80093978_94578[];
 extern s32 D_8009397C_9457C[];
 extern void func_800571D0_57DD0();
-typedef struct {
+typedef struct
+{
     s32 padding;
     s32 unk4;
     s32 unk8;
@@ -25,7 +26,11 @@ typedef struct {
     s8 unk1C;
     s8 unk1D;
     s32 unk20;
-    u8 padding4[0x510];
+    u8 padding4[0x3E4];
+    s32 unk408;
+    u8 padding6[0x100];
+    s8 unk50C[0x8];
+    s32 unk514[8];
     s32 unk534;
     s32 unk538;
 } D_800A2990_A3590_type;
@@ -64,7 +69,32 @@ void func_80056990_57590(s32 arg0, s32 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800569A4_575A4);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80056A88_57688);
+void func_80056A88_57688(void *arg0, u8 arg1, s32 arg2) {
+    s32 i;
+    s8 id;
+    void *dst;
+    volatile u8 padding[0x2];
+
+    i = 0;
+    id = arg2;
+    if (D_800A2990_A3590->unk408 > 0) {
+        do {
+            if (D_800A2990_A3590->unk50C[i] == id) {
+                dst = (void *)((i << 5) + (s32)D_800A2990_A3590 + 0x40C);
+                memcpy(dst, arg0, 0x20);
+                return;
+            }
+            i++;
+        } while (i < D_800A2990_A3590->unk408);
+    }
+    if (D_800A2990_A3590->unk408 < 8) {
+        D_800A2990_A3590->unk50C[D_800A2990_A3590->unk408] = id;
+        dst = (void *)(((D_800A2990_A3590->unk408) << 5) + (s32)D_800A2990_A3590 + 0x40C);
+        memcpy(dst, arg0, 0x20);
+        D_800A2990_A3590->unk514[D_800A2990_A3590->unk408] = arg1;
+        D_800A2990_A3590->unk408++;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056B7C_5777C);
 
