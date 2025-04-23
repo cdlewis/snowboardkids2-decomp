@@ -11,8 +11,7 @@ extern s32 D_80093974_94574[];
 extern s32 D_80093978_94578[];
 extern s32 D_8009397C_9457C[];
 extern void func_800571D0_57DD0();
-typedef struct
-{
+typedef struct {
     s32 padding;
     s32 unk4;
     s32 unk8;
@@ -26,7 +25,9 @@ typedef struct
     s8 unk1C;
     s8 unk1D;
     s32 unk20;
-    u8 padding4[0x3E4];
+    u8 padding7[0x60];
+    s32 unk84;
+    u8 padding4[0x380];
     s32 unk408;
     u8 padding6[0x100];
     s8 unk50C[0x8];
@@ -53,6 +54,9 @@ extern s32 D_80093B00_94700;
 void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
 void func_8005854C_5914C(s32, s32);
 void func_80058064_58C64(s32, s32, s32, s32);
+extern OSMesgQueue D_800A2CD0_A38D0;
+extern OSMesgQueue D_800A2CF0_A38F0;
+extern s32 D_800A2D30_A3930;
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -213,7 +217,15 @@ void *func_80057A7C_5867C(void) {
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057ABC_586BC);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057B1C_5871C);
+void func_80057B1C_5871C(s32 arg0) {
+    void *sp10;
+
+    D_800A2D30_A3930 = arg0;
+    osSendMesg(&D_800A2CD0_A38D0, (void *)6, 1);
+    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+    D_800A2990_A3590->unk84 = 0;
+    D_800A2990_A3590->unk408 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057B70_58770);
 
