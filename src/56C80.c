@@ -59,6 +59,8 @@ extern OSMesgQueue D_800A2CF0_A38F0;
 extern s32 D_800A2D30_A3930;
 void func_80057E18_58A18(s32, s32, s32, s32, s32);
 void func_80057124_57D24(void);
+s32 func_80058638_59238();
+void func_80069CD0_6A8D0(void *);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -159,7 +161,13 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_800572B0_57EB0);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800573F8_57FF8);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057470_58070);
+extern void func_800570E0_57CE0();
+
+void func_80057470_58070(void) {
+    if (func_80058638_59238() == 0) {
+        func_80069CD0_6A8D0(&func_800570E0_57CE0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800574A0_580A0);
 
