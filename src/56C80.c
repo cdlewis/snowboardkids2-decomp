@@ -163,7 +163,14 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_80057470_58070);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800574A0_580A0);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800574E0_580E0);
+void func_800574E0_580E0(s16 arg0, s8 arg1) {
+    D_800A2990_A3590->unk1D = 2;
+    D_800A2990_A3590->unk10 = arg0;
+    D_800A2990_A3590->unk16 = 0x80;
+    D_800A2990_A3590->unk18 = 0x80;
+    D_800A2990_A3590->unk1A = 0;
+    D_800A2990_A3590->unk1C = arg1;
+}
 
 void func_80057514_58114(u32 arg0, s16 arg1, s16 arg2) {
     D_800A2990_A3590_type *new_var;
@@ -188,8 +195,14 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_80057614_58214);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057870_58470);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800578DC_584DC);
+void func_800578DC_584DC(s32 arg0, s32 arg1) {
+    void *sp10;
 
+    D_800A2D2C_A392C = arg0;
+    D_800A2D30_A3930 = arg1;
+    osSendMesg(&D_800A2CD0_A38D0, (void *)7, 1);
+    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+}
 void func_80057928_58528(s32 arg0, s32 arg1) {
     void *sp10;
 
