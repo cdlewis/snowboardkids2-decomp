@@ -23,7 +23,7 @@ typedef struct {
     s16 unk18;
     s16 unk1A;
     s8 unk1C;
-    s8 unk1D;
+    u8 unk1D;
     s32 unk20;
     u8 padding7[0x60];
     s32 unk84;
@@ -58,6 +58,7 @@ extern OSMesgQueue D_800A2CD0_A38D0;
 extern OSMesgQueue D_800A2CF0_A38F0;
 extern s32 D_800A2D30_A3930;
 void func_80057E18_58A18(s32, s32, s32, s32, s32);
+void func_80057124_57D24(void);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -115,7 +116,12 @@ void func_800570BC_57CBC() {
     D_800A2990_A3590->unk20 = (s32)((D_800A2990_A3590->unk20 + 1) & 0xFFFFFF);
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800570E0_57CE0);
+void func_800570E0_57CE0(void) {
+    func_80069CE8_6A8E8(func_800570E0_57CE0);
+    if (D_800A2990_A3590->unk1D != 0) {
+        func_80069CC0_6A8C0(&func_80057124_57D24);
+    }
+}
 
 void func_80057124_57D24(void) {
     s32 temp_v0;
