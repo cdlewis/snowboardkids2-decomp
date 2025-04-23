@@ -66,6 +66,7 @@ extern u8 D_80093BA6_947A6;
 extern s32 D_800A2D14_A3914;
 extern s32 D_800A2D18_A3918;
 void func_800582DC_58EDC(s32, s32, s32, s32, s32);
+extern s32 D_800A2D10_A3910;
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -244,7 +245,16 @@ void func_80057928_58528(s32 arg0, s32 arg1) {
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057974_58574);
+void *func_80057974_58574(s32 arg0, s32 arg1, s32 arg2) {
+    void *sp10;
+
+    D_800A2D14_A3914 = arg0;
+    D_800A2D10_A3910 = arg1;
+    D_800A2D38_A3938 = arg2;
+    osSendMesg(&D_800A2CD0_A38D0, (void *)0xB, 1);
+    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+    return sp10;
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800579CC_585CC);
 
