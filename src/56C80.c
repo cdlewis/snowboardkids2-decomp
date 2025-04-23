@@ -63,6 +63,8 @@ void *func_80058638_59238();
 void func_80069CD0_6A8D0(void *);
 extern u8 D_80093BA5_947A5;
 extern u8 D_80093BA6_947A6;
+extern s32 D_800A2D14_A3914;
+extern s32 D_800A2D18_A3918;
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -236,7 +238,14 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_80057974_58574);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800579CC_585CC);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800579E8_585E8);
+void func_800579E8_585E8(s32 arg0, s32 arg1) {
+    void *message;
+
+    D_800A2D14_A3914 = arg0;
+    D_800A2D18_A3918 = arg1;
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xA, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+}
 
 void *func_80057A34_58634(s32 arg0) {
     void *message;
@@ -299,9 +308,25 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_80058154_58D54);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80058220_58E20);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_8005823C_58E3C);
+void func_8005823C_58E3C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    void *message;
+    D_800A2990_A3590_type *new_var;
+    s32 *new_var2;
+    D_800A2D1C_A391C = arg0;
+    D_800A2D24_A3924 = arg1;
+    D_800A2D28_A3928 = 0x80;
+    new_var = D_800A2990_A3590;
+    new_var2 = &new_var->unk20;
+    D_800A2D20_A3920 = (*new_var2) + (arg2 << 0x18);
+    D_800A2D38_A3938 = arg3;
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    func_800570BC_57CBC();
+}
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800582C0_58EC0);
+void func_800582C0_58EC0(s32 arg0, s32 arg1, s32 arg2) {
+    func_8005823C_58E3C(arg0, arg1, arg2, 0xC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800582DC_58EDC);
 
