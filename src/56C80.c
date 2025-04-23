@@ -62,6 +62,7 @@ void func_80057124_57D24(void);
 void *func_80058638_59238();
 void func_80069CD0_6A8D0(void *);
 extern u8 D_80093BA5_947A5;
+extern u8 D_80093BA6_947A6;
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -202,23 +203,33 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_8005758C_5818C);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057614_58214);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057870_58470);
+void func_80057870_58470(s32 arg0) {
+    void *message;
+
+    if ((D_80093BA5_947A5 != NULL) && (D_80093BA6_947A6 == NULL)) {
+        D_80093BA6_947A6++;
+        D_800A2D30_A3930 = arg0;
+        osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xD, OS_MESG_BLOCK);
+        osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    }
+}
 
 void func_800578DC_584DC(s32 arg0, s32 arg1) {
-    void *sp10;
+    void *message;
 
     D_800A2D2C_A392C = arg0;
     D_800A2D30_A3930 = arg1;
-    osSendMesg(&D_800A2CD0_A38D0, (void *)7, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)7, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
 }
+
 void func_80057928_58528(s32 arg0, s32 arg1) {
-    void *sp10;
+    void *message;
 
     D_800A2D2C_A392C = arg0;
     D_800A2D24_A3924 = arg1;
-    osSendMesg(&D_800A2CD0_A38D0, (void *)0xC, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xC, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
 }
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057974_58574);
@@ -228,30 +239,30 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_800579CC_585CC);
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800579E8_585E8);
 
 void *func_80057A34_58634(s32 arg0) {
-    void *sp10;
+    void *message;
 
     D_800A2D2C_A392C = arg0;
-    osSendMesg(&D_800A2CD0_A38D0, (void *)9, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
-    return sp10;
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)9, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    return message;
 }
 
 void *func_80057A7C_5867C(void) {
-    void *sp10;
+    void *message;
 
-    osSendMesg(&D_800A2CD0_A38D0, (void *)8, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
-    return sp10;
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)8, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    return message;
 }
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057ABC_586BC);
 
 void func_80057B1C_5871C(s32 arg0) {
-    void *sp10;
+    void *message;
 
     D_800A2D30_A3930 = arg0;
-    osSendMesg(&D_800A2CD0_A38D0, (void *)6, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)6, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
     D_800A2990_A3590->unk84 = 0;
     D_800A2990_A3590->unk408 = 0;
 }
@@ -298,7 +309,7 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_80058360_58F60);
 
 void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 *new_var;
-    void *sp10;
+    void *message;
     s32 new_var2;
     D_800A2D1C_A391C = arg0;
     D_800A2D24_A3924 = arg1;
@@ -307,8 +318,8 @@ void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     new_var2 = *new_var;
     D_800A2D38_A3938 = arg3;
     D_800A2D20_A3920 = new_var2;
-    osSendMesg(&D_800A2CD0_A38D0, (void *)1, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
     func_800570BC_57CBC();
 }
 
@@ -325,8 +336,8 @@ void func_80058414_59014(s32 arg0, s32 arg1, s32 arg2) {
     new_var2 = *new_var;
     D_800A2D38_A3938 = arg2;
     D_800A2D20_A3920 = new_var2;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), 1);
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     func_800570BC_57CBC();
 }
 
