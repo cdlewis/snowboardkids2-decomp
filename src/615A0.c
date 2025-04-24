@@ -251,7 +251,17 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80063580_64180);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800635CC_641CC);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80063668_64268);
+void func_80063668_64268(func_80063824_64424_arg* arg0) {
+    s32* temp_v1;
+
+    if (func_80070140_70D40((void*)((s32)arg0 + 0x14)) == NULL) {
+        func_8006318C_63D8C(arg0);
+        temp_v1 = gRegionAllocPtr;
+        temp_v1[0] = 0xDE000000;
+        gRegionAllocPtr = temp_v1 + 2;
+        temp_v1[1] = (s32)arg0->unk20->unk4;
+    }
+}
 
 void func_800636C8_642C8(func_800636C8_642C8_arg* arg0) {
     s32* temp_v1;
