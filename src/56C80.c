@@ -1,16 +1,5 @@
 #include "common.h"
 
-void func_80069CC0_6A8C0(void *);
-void func_8006A0EC_6ACEC(s32, s32, s32, s32);
-void func_800584AC_590AC(s32, s32, s32);
-void func_80058414_59014(s32, s32, s32);
-extern s32 D_800937E8_943E8[];
-extern s32 D_800937EC_943EC[];
-extern s32 D_800937F0_943F0[];
-extern s32 D_80093974_94574[];
-extern s32 D_80093978_94578[];
-extern s32 D_8009397C_9457C[];
-extern void func_800571D0_57DD0();
 typedef struct {
     s32 padding;
     s32 unk4;
@@ -40,36 +29,46 @@ typedef struct {
 } D_800A2990_A3590_type;
 extern D_800A2990_A3590_type *D_800A2990_A3590;
 
-void func_800570BC_57CBC();
 extern OSMesgQueue D_800A2CD0_A38D0;
 extern OSMesgQueue D_800A2CF0_A38F0;
+extern s32 D_800937E8_943E8[];
+extern s32 D_800937EC_943EC[];
+extern s32 D_800937F0_943F0[];
+extern s32 D_80093974_94574[];
+extern s32 D_80093978_94578[];
+extern s32 D_8009397C_9457C[];
+extern s32 D_80093B00_94700;
+extern s32 D_800A2D10_A3910;
+extern s32 D_800A2D14_A3914;
+extern s32 D_800A2D18_A3918;
 extern s32 D_800A2D1C_A391C;
 extern s32 D_800A2D20_A3920;
 extern s32 D_800A2D24_A3924;
 extern s32 D_800A2D28_A3928;
+extern s32 D_800A2D2C_A392C;
+extern s32 D_800A2D30_A3930;
 extern s32 D_800A2D38_A3938;
 extern u8 D_80093B84_94784[];
-extern s32 D_800A2D2C_A392C;
-void func_80057F48_58B48(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern void func_80057214_57E14();
-void func_800579E8_585E8(s32, s32);
-extern s32 D_80093B00_94700;
-void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
-void func_8005854C_5914C(s32, s32);
-void func_80058064_58C64(s32, s32, s32, s32);
-extern OSMesgQueue D_800A2CD0_A38D0;
-extern OSMesgQueue D_800A2CF0_A38F0;
-extern s32 D_800A2D30_A3930;
-void func_80057E18_58A18(s32, s32, s32, s32, s32);
-void func_80057124_57D24(void);
-void *func_80058638_59238();
-void func_80069CD0_6A8D0(void *);
 extern u8 D_80093BA5_947A5;
 extern u8 D_80093BA6_947A6;
-extern s32 D_800A2D14_A3914;
-extern s32 D_800A2D18_A3918;
+extern void func_800571D0_57DD0();
+extern void func_80057214_57E14();
+void *func_80058638_59238();
+void func_800570BC_57CBC();
+void func_80057124_57D24();
+void func_800579E8_585E8(s32, s32);
+void func_80057B70_58770(s32, s32, s32, s32, s32, s32, s32);
+void func_80057CE4_588E4(s32, s32, s32, s32, s32, s32);
+void func_80057E18_58A18(s32, s32, s32, s32, s32);
+void func_80057F48_58B48(s32, s32, s32, s32);
+void func_80058064_58C64(s32, s32, s32, s32);
 void func_800582DC_58EDC(s32, s32, s32, s32, s32);
-extern s32 D_800A2D10_A3910;
+void func_80058414_59014(s32, s32, s32);
+void func_800584AC_590AC(s32, s32, s32);
+void func_8005854C_5914C(s32, s32);
+void func_80069CC0_6A8C0(void *);
+void func_80069CD0_6A8D0(void *);
+void func_8006A0EC_6ACEC(s32, s32, s32, s32);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -301,7 +300,9 @@ void func_80057B1C_5871C(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057B70_58770);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057CB4_588B4);
+void func_80057CB4_588B4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    func_80057B70_58770(arg0, arg1, arg2, arg3, arg4, arg5, 0xC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057CE4_588E4);
 
@@ -405,7 +406,9 @@ void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     func_800570BC_57CBC();
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800583F8_58FF8);
+void func_800583F8_58FF8(s32 arg0, s32 arg1, s32 arg2) {
+    func_80058380_58F80(arg0, arg1, arg2, 0xC);
+}
 
 void func_80058414_59014(s32 arg0, s32 arg1, s32 arg2) {
     void *sp10;
