@@ -51,6 +51,15 @@ typedef struct {
     s8 unkBB;
 } func_8006FE94_70A94_arg;
 
+typedef struct
+{
+    u8 padding[0xC8];
+    s16 unkC8;
+    s16 unkCA;
+    u8 padding2[0x104];
+    f32 unk1D0;
+} func_8006F9BC_705BC_arg;
+
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DEE4_6EAE4);
@@ -164,7 +173,11 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F82C_7042C);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F994_70594);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F9BC_705BC);
+void func_8006F9BC_705BC(func_8006F9BC_705BC_arg *arg0, f32 arg1, f32 arg2) {
+    arg0->unk1D0 = arg2;
+    arg0->unkC8 = (s16)(arg1 * 640.0f);
+    arg0->unkCA = (s16)(arg2 * 480.0f);
+}
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FA0C_7060C);
 
