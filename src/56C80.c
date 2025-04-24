@@ -1,6 +1,7 @@
 #include "common.h"
 
-typedef struct {
+typedef struct
+{
     s32 padding;
     s32 unk4;
     s32 unk8;
@@ -19,7 +20,14 @@ typedef struct {
     s16 unk64;
     u8 padding7[0x1D];
     s32 unk84;
-    u8 padding4[0x380];
+    s16 unk88;
+    s16 unk8A;
+    s16 unk8C;
+    s16 unk8E;
+    f32 unk90;
+    u8 padding9[0xC];
+    s16 unkA0;
+    u8 padding4[0x364];
     s32 unk408;
     u8 padding6[0x100];
     s8 unk50C[0x8];
@@ -118,7 +126,33 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_80056C6C_5786C);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056D64_57964);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80056E64_57A64);
+void func_80056E64_57A64(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4) {
+    s32 temp_v1;
+    D_800A2990_A3590_type *new_var2;
+    int new_var4;
+    s32 temp_s2;
+    D_800A2990_A3590_type *new_var3;
+    D_800A2990_A3590_type *new_var;
+    s32 a0;
+    temp_s2 = arg4;
+    temp_v1 = D_800A2990_A3590->unk84;
+    if (temp_v1 < 0x20) {
+        a0 = (s32)((u8 *)D_800A2990_A3590) + ((temp_v1 * 7) * 4);
+        a0 = a0 + 0x94;
+        memcpy((void *)a0, arg0, 0xC);
+        ((D_800A2990_A3590_type *)(((u8 *)D_800A2990_A3590) - (-((D_800A2990_A3590->unk84 * 7) * 4))))->unk88 = arg1;
+        new_var = (D_800A2990_A3590_type *)(((u8 *)D_800A2990_A3590) + ((D_800A2990_A3590->unk84 * 7) * 4));
+        new_var->unk8A = (s16)temp_s2;
+        new_var3 = (D_800A2990_A3590_type *)(((u8 *)D_800A2990_A3590) + ((D_800A2990_A3590->unk84 * 7) * 4));
+        new_var3->unk8C = arg3;
+        new_var2 = D_800A2990_A3590;
+        ((D_800A2990_A3590_type *)(((u8 *)new_var2) - (-((new_var2->unk84 * 7) * 4))))->unk8E = 1;
+        ((D_800A2990_A3590_type *)(((u8 *)new_var2) - (-((new_var2->unk84 * 7) * 4))))->unk90 = arg2;
+        new_var4 = (new_var2->unk84 * 7) * 4;
+        ((D_800A2990_A3590_type *)(((u8 *)new_var2) + new_var4))->unkA0 = 0x80;
+        new_var2->unk84++;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056F8C_57B8C);
 
@@ -456,7 +490,17 @@ void func_800585C8_591C8(s32 arg0) {
     func_8005854C_5914C(arg0, 0xC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800585E4_591E4);
+void *func_800585E4_591E4(void) {
+    void *result;
+
+    if (D_80093BA5_947A5 != 0) {
+        osSendMesg(&D_800A2CD0_A38D0, 0, 1);
+        osRecvMesg(&D_800A2CF0_A38F0, &result, 1);
+        return result;
+    }
+
+    return 0;
+}
 
 void *func_80058638_59238() {
     void *message;
