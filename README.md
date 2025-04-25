@@ -6,7 +6,7 @@
 
 A (very much) work-in-progress matching decompilation of the greatest N64 game ever made, [Snowboard Kids 2](https://en.wikipedia.org/wiki/Snowboard_Kids_2).
 
-This repository does **not** contain any game assets or assembly whatsoever. An existing copy of the game is required.
+**This repository does not contain any game assets or assembly whatsoever. An existing copy of the game is required.**
 
 ## Dependencies
 
