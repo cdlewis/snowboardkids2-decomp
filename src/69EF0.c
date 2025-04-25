@@ -3,7 +3,7 @@
 #include "3A1F0.h"
 #include "gamestate.h"
 
-s32 func_8006A258_6AE58(s32, s32, void *);
+GameState *func_8006A258_6AE58(s32, s32, void *);
 
 typedef struct {
     u8 padding[0xE];
@@ -90,7 +90,24 @@ void func_8006982C_6A42C(void *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006983C_6A43C);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069854_6A454);
+GameState *func_80069854_6A454(s32 arg0) {
+    s32 sp10;
+    u32 temp_a0;
+    GameState *temp_v0;
+    s8 *var_v1;
+
+    temp_v0 = func_8006A258_6AE58(0, arg0, &sp10);
+    D_8009A860_9B460->GameState = temp_v0;
+    if (arg0 != 0) {
+        var_v1 = (s8 *)temp_v0;
+        temp_a0 = ((s32)arg0 + (s32)var_v1);
+        do {
+            *var_v1 = 0;
+            var_v1 += 1;
+        } while ((u32)var_v1 < (u32)temp_a0);
+    }
+    return D_8009A860_9B460->GameState;
+}
 
 GameState *GameStateGet() {
     return D_8009A860_9B460->GameState;
@@ -275,9 +292,9 @@ void *dmaRequestAndUpdateState(void *arg0, void *arg1, int arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006A0EC_6ACEC);
 
-s32 func_8006A1C0_6ADC0(s32 arg0) {
+GameState *func_8006A1C0_6ADC0(s32 arg0) {
     s32 sp10;
-    s32 temp_a0;
+    GameState *temp_a0;
 
     temp_a0 = func_8006A258_6AE58(0, arg0, &sp10);
     if (D_8009A864_9B464 != NULL) {
