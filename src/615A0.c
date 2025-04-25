@@ -1,3 +1,4 @@
+#include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
@@ -8,7 +9,6 @@ USE_OVERLAY(_9FDF0)
 
 void func_8006982C_6A42C(void*);
 s32* func_80069854_6A454(s32);
-s32 dmaRequestAndUpdateState(void*, void*, s32);
 extern s32 D_215D70;
 extern s32 D_216290;
 extern void func_80068060_68C60();
@@ -508,7 +508,7 @@ void func_80067F5C_68B5C(func_80067F5C_68B5C_arg* arg0, s32 arg1, s32 arg2, s32 
 }
 
 void func_80067FB0_68BB0(void) {
-    s32* temp_s0;
+    void** temp_s0;
 
     temp_s0 = func_80069854_6A454(4);
     LOAD_OVERLAY(_9FDF0)
