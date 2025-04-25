@@ -1,3 +1,13 @@
+initializeGameState = 0x80016EA0;
+gameStateCountdownHandler = 0x80017110;
+gameStateCleanupHandler = 0x8001716C;
+transitionToNextGameMode = 0x80017248;
+transitionToMainMenu = 0x80017264;
+setupGameStateTransition = 0x80017280;
+setShortCountdownAndContinue = 0x800172DC;
+invokeTransitionEffect = 0x8001730C;
+cleanupTransitionEffect = 0x80017328;
+
 dmaRequestAndUpdateState = 0x80069F94;
 
 dmaQueueRequest = 0x8003BA24;
