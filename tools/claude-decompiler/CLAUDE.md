@@ -6,7 +6,7 @@ You are decompiling Nintendo 64 assembly code from Snowboard Kids 2. Your goal i
 
 The compiler is GCC 2.7.2. The following compiler flags are being used: -O2 -mips3.
 
-base.c holds our best guess at the correct C code. target.o is the target binary.
+base.c holds our best guess at the correct C code. target.o is the target binary. Both these files are in the current working directory.
 
 In terms of code structure:
 * Never add comments to code.

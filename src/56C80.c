@@ -122,7 +122,33 @@ void func_80056A88_57688(void *arg0, u8 arg1, s32 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056B7C_5777C);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80056C6C_5786C);
+void func_80056C6C_5786C(void *arg0, unsigned int arg1, s16 arg2) {
+    int new_var;
+    char *new_var2;
+    s32 v1;
+    s32 v0;
+    v1 = D_800A2990_A3590->unk84;
+    if (v1 < 0x20) {
+        memcpy((void *)((((char *)D_800A2990_A3590) + (((v1 << 3) - v1) << 2)) + 0x94), arg0, 0xC);
+        v1 = D_800A2990_A3590->unk84;
+        v0 = ((v1 << 3) - v1) << 2;
+        *((s16 *)((((char *)D_800A2990_A3590) + v0) + 0x88)) = arg1;
+        v1 = D_800A2990_A3590->unk84;
+        v0 = ((v1 << 3) - v1) << 2;
+        *((s16 *)((((char *)D_800A2990_A3590) + v0) + 0x8A)) = arg2;
+        v1 = D_800A2990_A3590->unk84;
+        ;
+        new_var = 4;
+        *((s16 *)((((char *)D_800A2990_A3590) + (((v1 << 3) - v1) << 2)) + 0x8C)) = (f32)new_var;
+        v1 = D_800A2990_A3590->unk84;
+        v0 = ((v1 << 3) - v1) << 2;
+        *((s16 *)((((char *)D_800A2990_A3590) + v0) + 0x8E)) = 0;
+        v1 = D_800A2990_A3590->unk84;
+        *((s16 *)(((new_var2 = (char *)D_800A2990_A3590) + (((v1 << 3) - v1) << 2)) + 0xA0)) = 0x80;
+        v0 = D_800A2990_A3590->unk84;
+        D_800A2990_A3590->unk84 = v0 + 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056D64_57964);
 
