@@ -43,17 +43,20 @@ extern u8 D_800AB094_A2404[];
 extern u8 D_800AB098_A2408[];
 extern OSMesgQueue D_800A18A8_A24A8;
 
-typedef struct {
-    void* unk0;
-    void* unk4;
+typedef struct
+{
+    void* start;
+    void* end;
     s32 unk8;
-    s32 unkC;
+    s32 size;
     void* unk10;
 } Entry248C;
 extern Entry248C* gDmaQueue;
 extern Entry248C* func_8006A258_6AE58(void* arg0, s32 size, void* info);
 extern Entry248C* D_800A2494_A3094;
 extern Entry248C* D_800A2108_A2D08;
+void func_8006A4DC_6B0DC(void*);
+void func_8006A524_6B124(void*, s32);
 
 typedef struct {
     u32 unknown;
@@ -481,7 +484,40 @@ void initPiManager() {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B6B4_3C2B4);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B8F0_3C4F0);
+void* func_8003B8F0_3C4F0(void* start, void* end) {
+    void* s0;
+    u8 stack;
+    s32 size;
+    size = (s32)end - (s32)start;
+
+    gDmaQueue[gDmaQueueIndex].size = size;
+
+    s0 = func_8006A258_6AE58(start, size, &stack);
+
+    gDmaQueue[gDmaQueueIndex].unk10 = s0;
+
+    if (stack != 0) {
+        return s0;
+    }
+
+    func_8006A4DC_6B0DC(s0);
+
+    gDmaQueue[gDmaQueueIndex].start = start;
+    gDmaQueue[gDmaQueueIndex].end = end;
+    gDmaQueue[gDmaQueueIndex].unk8 = 0;
+
+    gPendingDmaCount++;
+    osSendMesg(&gDmaMsgQueue, (OSMesg)&gDmaQueue[gDmaQueueIndex], 1);
+    if ((++gDmaQueueIndex) >= 0x5C) {
+        gDmaQueueIndex = 0;
+    }
+
+    gDmaRequestCount++;
+
+    func_8006A524_6B124(s0, gDmaRequestCount);
+
+    return s0;
+}
 
 extern s32 gDmaQueueIndex;
 extern OSMesgQueue gDmaMsgQueue;
@@ -495,14 +531,14 @@ void* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
     void* ret;
     s32 a1Val;
     s32 a1;
-    (gDmaQueue + gDmaQueueIndex)->unkC = size;
+    (gDmaQueue + gDmaQueueIndex)->size = size;
     ret = func_8006A258_6AE58(romStart, size, &flag);
     (gDmaQueue + gDmaQueueIndex)->unk10 = ret;
     if (flag == 0) {
         func_8006A4DC_6B0DC(ret);
-        (gDmaQueue + gDmaQueueIndex)->unk0 = romStart;
+        (gDmaQueue + gDmaQueueIndex)->start = romStart;
         entry = gDmaQueue + gDmaQueueIndex;
-        entry->unk4 = romEnd;
+        entry->end = romEnd;
         entry->unk8 = 1;
         gPendingDmaCount++;
         osSendMesg(&gDmaMsgQueue, entry, 1);
