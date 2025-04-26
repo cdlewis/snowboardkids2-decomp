@@ -75,7 +75,7 @@ segments:
     subalign: 8
     subsegments:
       - [0x1050, c, main]
-      - [0x20F0, asm]
+      - [0x20F0, c]
       - [0x3870, asm]
       - [0x3B80, asm]
       - [0x4050, c]
@@ -376,13 +376,7 @@ segments:
       - [0x89A60, data]
       - [0x89A80, data]
       - [0x89B00, data]
-      - [0x8A140, data]
-      - [0x8A150, data]
-      - [0x8A160, data]
-      - [0x8A170, data]
-      - [0x8A180, data]
-      - [0x8A190, data]
-      - [0x8A1A0, data]
+      - [0x8A140, data, 20F0]
       - [0x8C980, data]
       - [0x8CA90, data]
       - [0x8CB90, data, 4050]
