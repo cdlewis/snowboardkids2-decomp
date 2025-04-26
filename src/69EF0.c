@@ -53,7 +53,7 @@ typedef struct {
 } D_8009A860_9B460_type;
 extern D_8009A860_9B460_type *D_8009A860_9B460;
 
-extern void *func_8003B8F0_3C4F0(void);
+extern void *func_8003B8F0_3C4F0(void *, void *);
 extern s32 func_8006A51C_6B11C(void *);
 extern void *func_8006A52C_6B12C(void *);
 extern void func_8006A3FC_6AFFC();
@@ -217,11 +217,11 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D7C_6A97C);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069DD4_6A9D4);
 
-void *func_80069E3C_6AA3C(void) {
+void *func_80069E3C_6AA3C(void *start, void *end) {
     void *s0;
 
-    if (D_8009A864_9B464 == 0) {
-        s0 = func_8003B8F0_3C4F0();
+    if (D_8009A864_9B464 == NULL) {
+        s0 = func_8003B8F0_3C4F0(start, end);
         if (func_8006A51C_6B11C(s0) != 0) {
             if (D_8009A860_9B460->unk18 != 3) {
                 D_8009A860_9B460->unk20 = func_8006A52C_6B12C(s0);
@@ -233,9 +233,9 @@ void *func_80069E3C_6AA3C(void) {
             }
         }
     } else {
-        s0 = func_8003B8F0_3C4F0();
+        s0 = func_8003B8F0_3C4F0(start, end);
         if (func_8006A51C_6B11C(s0) != 0) {
-            if ((((u8)(D_8009A864_9B464->unk0E - 3)) >= 2)) {
+            if (((u8)(D_8009A864_9B464->unk0E - 3)) >= 2) {
                 D_8009A864_9B464->unk18 = func_8006A52C_6B12C(s0);
                 D_8009A864_9B464->unk1C = s0;
                 D_8009A864_9B464->unk0E = 3;
