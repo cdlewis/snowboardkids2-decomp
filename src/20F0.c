@@ -1,3 +1,4 @@
+#include "69EF0.h"
 #include "common.h"
 
 typedef struct {
@@ -5,7 +6,11 @@ typedef struct {
     s32 unk4;
     s32 unk8;
     s32 unkC;
-    u8 padding[0x3C];
+    u8 padding[0x24];
+    void* unk34;
+    void* unk38;
+    s32 unk3C;
+    u8 padding2[0xC];
 } D_80089A6C_8A66C_type;
 extern D_80089A6C_8A66C_type D_80089A6C_8A66C[];
 
@@ -176,7 +181,24 @@ s32 func_800017F4_23F4(func_80002B50_3750_arg* arg0) {
     return new_var;
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001818_2418);
+typedef struct {
+    u8 padding[0xC];
+    s16 unkC;
+} func_80001818_2418_arg;
+
+void* func_80001818_2418(func_80001818_2418_arg* arg0) {
+    void* temp_a0;
+    void* var_v0;
+    D_80089A6C_8A66C_type* temp_v1 = &D_80089A6C_8A66C[arg0->unkC];
+
+    temp_a0 = temp_v1->unk34;
+    var_v0 = NULL;
+    if (temp_a0 != NULL) {
+        var_v0 = dmaRequestAndUpdateState(temp_a0, temp_v1->unk38, temp_v1->unk3C);
+    }
+
+    return var_v0;
+}
 
 void func_80069E3C_6AA3C(s32, s32);
 
