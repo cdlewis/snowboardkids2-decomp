@@ -3,13 +3,6 @@
 #include "common.h"
 
 typedef struct {
-    u8 padding[0x4C];
-    s16 unk4C;
-    s8 unk4E;
-    s8 unk4F;
-} func_80001630_2230_arg;
-
-typedef struct {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -21,6 +14,26 @@ typedef struct {
     u8 padding2[0xC];
 } D_80089A6C_8A66C_type;
 extern D_80089A6C_8A66C_type D_80089A6C_8A66C[];
+extern D_80089A6C_8A66C_type D_80089A74_8A674[];
+
+typedef struct {
+    s16 unk0;
+    u8 padding[0x49];
+} D_80089A8E_8A68E_type;
+extern D_80089A8E_8A68E_type D_80089A8E_8A68E[];
+
+typedef struct {
+    s8 unk0;
+    u8 padding[0x4B];
+} D_80089A8C_8A68C_type;
+extern D_80089A8C_8A68C_type D_80089A8C_8A68C[];
+
+typedef struct {
+    u8 padding[0x4C];
+    s16 unk4C;
+    s8 unk4E;
+    s8 unk4F;
+} func_80001630_2230_arg;
 
 extern OSThread* __osActiveQueue_0;
 s32 func_800018F4_24F4(void*);
@@ -47,11 +60,6 @@ typedef struct {
 
 s32 func_800018F4_24F4(void*);
 s32 func_80001904_2504(s16);
-
-typedef struct {
-    u8 padding[0xC];
-    s16 unkC;
-} func_80002BD0_37D0_arg;
 
 typedef struct {
     u8 padding[0x3C];
@@ -127,21 +135,9 @@ OSThread* __osGetActiveQueue(void) {
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_8000156C_216C);
 
-typedef struct {
-    s16 unk0;
-    u8 padding[0x49];
-} D_80089A8E_8A68E_type;
-extern D_80089A8E_8A68E_type D_80089A8E_8A68E[];
-
 s16 func_80001574_2174(s16 arg0) {
     return D_80089A8E_8A68E[arg0].unk0;
 }
-
-typedef struct {
-    s8 unk0;
-    u8 padding[0x4B];
-} D_80089A8C_8A68C_type;
-extern D_80089A8C_8A68C_type D_80089A8C_8A68C[0];
 
 s8 func_800015A0_21A0(s16 arg0) {
     return D_80089A8C_8A68C[arg0].unk0;
@@ -305,12 +301,6 @@ INCLUDE_ASM("asm/nonmatchings/20F0", func_800018AC_24AC);
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_800018F4_24F4);
 
-typedef struct {
-    s32 unk0;
-    u8 padding[0x48];
-} D_80089A74_8A674_type;
-extern D_80089A74_8A674_type D_80089A74_8A674[];
-
 s32 func_80001904_2504(s16 arg0) {
     return D_80089A74_8A674[arg0].unk0 == 0;
 }
@@ -407,7 +397,7 @@ s32 func_80002B8C_378C(func_80002B8C_378C_arg* arg0) {
     return new_var;
 }
 
-s32 func_80002BD0_37D0(func_80002BD0_37D0_arg* arg0) {
+s32 func_80002BD0_37D0(func_80002B8C_378C_arg* arg0) {
     u32 new_var = arg0->unkC;
     if (func_80001904_2504(new_var) == 0) {
         return 8;
