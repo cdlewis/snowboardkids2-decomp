@@ -2,6 +2,13 @@
 #include "common.h"
 
 typedef struct {
+    u8 padding[0x4C];
+    s16 unk4C;
+    s8 unk4E;
+    s8 unk4F;
+} func_80001630_2230_arg;
+
+typedef struct {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -23,10 +30,12 @@ typedef struct
     s16 unkC;
 } func_80002B8C_378C_arg;
 
-void func_800635CC_641CC(u16);
+void func_800635CC_641CC(s32 arg0, void* arg1);
 
 typedef struct {
-    u8 padding[0x10];
+    s32 unk0;
+    u8 padding[0x9];
+    s16 unkE;
     struct {
         u8 padding[0x16];
         u16 unk16;
@@ -50,6 +59,21 @@ typedef struct {
     s8 unk3C;
 } func_800014F0_20F0_arg;
 
+typedef struct {
+    u8 padding[0x13];
+    s8 unk13;
+} func_80001688_2288_arg_9C;
+
+typedef struct {
+    u8 padding[0x89];
+    s8 unk89;
+    s16 unk8A;
+    u8 padding3[0x8];
+    s8 unk94;
+    u8 padding2[0x4];
+    func_80001688_2288_arg_9C* unk9C;
+} func_80001688_2288_arg;
+
 void func_800014F0_20F0(func_800014F0_20F0_arg* arg0) {
     arg0->unk3C = 1;
 }
@@ -63,17 +87,38 @@ void func_800014FC_20FC(func_800014FC_20FC_arg* arg0, s32 arg1) {
     arg0->unk158 = arg1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001504_2104);
+typedef struct {
+    u8 padding[0x15C];
+    s8 unk15C;
+} func_8000150C_210C_arg;
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_8000150C_210C);
+void func_80001504_2104(func_8000150C_210C_arg* arg0) {
+    arg0->unk15C = 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001518_2118);
+void func_8000150C_210C(func_8000150C_210C_arg* arg0) {
+    arg0->unk15C = 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001524_2124);
+typedef struct {
+    u8 padding[0x96];
+    u8 unk96;
+    s8 unk97;
+} func_80001534_2134_arg;
+
+void func_80001518_2118(func_80001534_2134_arg* arg0) {
+    arg0->unk97 = 1;
+}
+
+void func_80001524_2124(func_80001534_2134_arg* arg0) {
+    arg0->unk97 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_8000152C_212C);
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001534_2134);
+u8 func_80001534_2134(func_80001534_2134_arg* arg0) {
+    return arg0->unk96;
+}
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_8000153C_213C);
 
@@ -83,7 +128,15 @@ OSThread* __osGetActiveQueue(void) {
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_8000156C_216C);
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001574_2174);
+typedef struct {
+    s16 unk0;
+    u8 padding[0x49];
+} D_80089A8E_8A68E_type;
+extern D_80089A8E_8A68E_type D_80089A8E_8A68E[];
+
+s16 func_80001574_2174(s16 arg0) {
+    return D_80089A8E_8A68E[arg0].unk0;
+}
 
 typedef struct {
     s8 unk0;
@@ -133,25 +186,62 @@ void func_800015FC_21FC(func_800015FC_21FC_arg* arg0, s8 arg1) {
     arg0->unk88 = arg1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001604_2204);
+typedef struct {
+    u8 padding[0x3F];
+    s8 unk3F;
+} func_80001604_2204_arg;
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_8000160C_220C);
+void func_80001604_2204(func_80001604_2204_arg* arg0, s8 arg1) {
+    arg0->unk3F = arg1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001624_2224);
+void func_8000160C_220C(func_80001630_2230_arg* arg0, s8 arg1) {
+    if (arg0->unk4C != -1) {
+        arg0->unk4E = arg1;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001630_2230);
+extern s32 D_80089768_8A368;
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001638_2238);
+s32 func_80001624_2224(void) {
+    return D_80089768_8A368;
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001640_2240);
+void func_80001630_2230(func_80001630_2230_arg* arg0, s8 arg1) {
+    arg0->unk4F = arg1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001650_2250);
+s16 func_80001638_2238(func_80001688_2288_arg* arg0) {
+    return arg0->unk8A;
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001660_2260);
+void func_80001640_2240(func_80001688_2288_arg* arg0) {
+    arg0->unk89 |= 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001668_2268);
+void func_80001650_2250(func_80001688_2288_arg* arg0) {
+    arg0->unk89 &= 0xFE;
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001688_2288);
+s8 func_80001660_2260(func_80001688_2288_arg* arg0) {
+    return arg0->unk94;
+}
+
+s8 func_80001668_2268(func_80001688_2288_arg* arg0) {
+    func_80001688_2288_arg_9C* temp_v0;
+
+    temp_v0 = arg0->unk9C;
+    if (temp_v0 != NULL) {
+        return temp_v0->unk13;
+    }
+    return 0;
+}
+
+void func_80001688_2288(func_80001688_2288_arg* arg0, s8 arg1) {
+    if (arg1 < func_80001668_2268(arg0)) {
+        arg0->unk94 = arg1;
+    }
+}
 
 typedef struct {
     u8 padding[0x110];
@@ -271,7 +361,11 @@ void func_80002014_2C14(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_80002040_2C40);
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80002170_2D70);
+void func_80002170_2D70(func_80002B50_3750_arg* arg0, s16 arg1) {
+    if (arg1 < arg0->unkE) {
+        func_800635CC_641CC(arg0->unk10->unk16, (void*) arg0->unk0 + (arg1 * 0x3C));
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_800021B8_2DB8);
 
@@ -295,9 +389,9 @@ INCLUDE_ASM("asm/nonmatchings/20F0", func_80002484_3084);
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_80002750_3350);
 
-void func_80002B50_3750(func_80002B50_3750_arg* arg0) {
+void func_80002B50_3750(func_80002B50_3750_arg* arg0, void* arg1) {
     if ((arg0 != NULL) && (arg0->unk88 != 0) && (arg0->unk3F != 0)) {
-        func_800635CC_641CC(arg0->unk10->unk16);
+        func_800635CC_641CC(arg0->unk10->unk16, arg1);
     }
 }
 
