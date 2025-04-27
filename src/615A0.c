@@ -1,3 +1,5 @@
+#include "615A0.h"
+
 #include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
@@ -96,16 +98,6 @@ typedef struct {
         s32 unk8;
     }* unk20;
 } func_800636C8_642C8_arg;
-
-typedef struct {
-    u8 padding[0x20];
-    struct {
-        u8 padding[0x4];
-        s32 unk4;
-    }* unk20;
-    u8 padding2[0x17];
-    u8 unk3B;
-} func_80063824_64424_arg;
 
 typedef struct {
     u8 padding[0x14];
@@ -250,7 +242,21 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80063534_64134);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063580_64180);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_800635CC_641CC);
+void func_80063534_64134();
+void func_80063580_64180();
+
+void func_800635CC_641CC(s32 arg0, func_80063824_64424_arg* arg1) {
+    arg1->unk30 = 0;
+    if (arg1->unk20->unk4 != 0) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 1, &func_800634E8_640E8, arg1);
+    }
+    if (arg1->unk20->unk8 != 0) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 3, &func_80063534_64134, arg1);
+    }
+    if (arg1->unk20->unkC != 0) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_80063580_64180, arg1);
+    }
+}
 
 void func_80063668_64268(func_80063824_64424_arg* arg0) {
     s32* temp_v1;

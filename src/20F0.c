@@ -1,3 +1,4 @@
+#include "615A0.h"
 #include "69EF0.h"
 #include "common.h"
 
@@ -29,8 +30,6 @@ typedef struct
     u8 padding[0xC];
     s16 unkC;
 } func_80002B8C_378C_arg;
-
-void func_800635CC_641CC(s32 arg0, void* arg1);
 
 typedef struct {
     s32 unk0;
@@ -363,7 +362,7 @@ INCLUDE_ASM("asm/nonmatchings/20F0", func_80002040_2C40);
 
 void func_80002170_2D70(func_80002B50_3750_arg* arg0, s16 arg1) {
     if (arg1 < arg0->unkE) {
-        func_800635CC_641CC(arg0->unk10->unk16, (void*) arg0->unk0 + (arg1 * 0x3C));
+        func_800635CC_641CC(arg0->unk10->unk16, (void*)arg0->unk0 + (arg1 * 0x3C));
     }
 }
 
@@ -389,7 +388,7 @@ INCLUDE_ASM("asm/nonmatchings/20F0", func_80002484_3084);
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_80002750_3350);
 
-void func_80002B50_3750(func_80002B50_3750_arg* arg0, void* arg1) {
+void func_80002B50_3750(func_80002B50_3750_arg* arg0, func_80063824_64424_arg* arg1) {
     if ((arg0 != NULL) && (arg0->unk88 != 0) && (arg0->unk3F != 0)) {
         func_800635CC_641CC(arg0->unk10->unk16, arg1);
     }

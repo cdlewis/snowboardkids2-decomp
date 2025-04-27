@@ -1,3 +1,4 @@
+#include "615A0.h"
 #include "6B140.h"
 #include "6E840.h"
 #include "common.h"
@@ -69,9 +70,8 @@ typedef struct {
     u8 unk60;
 } S0;
 
-void func_80069CC0_6A8C0(void (*func)(S0 *));
-void func_8002F5C8_301C8(S0 *);
-extern void func_800635CC_641CC(int, S0 *);
+void func_80069CC0_6A8C0(void (*func)(func_80063824_64424_arg *));
+void func_8002F5C8_301C8(func_80063824_64424_arg *arg0);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 
 // 100% match but something weird is happening
@@ -132,7 +132,7 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F36C_2FF6C);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F3E4_2FFE4);
 
-void func_8002F518_30118(S0 *s0) {
+void func_8002F518_30118(func_80063824_64424_arg *s0) {
     volatile u8 padding[0x20];
     u32 new_var;
     GameState *s1 = GameStateGet();
@@ -159,7 +159,7 @@ void func_8002F518_30118(S0 *s0) {
     func_800635CC_641CC(0, s0);
 }
 
-void func_8002F5C8_301C8(S0 *arg0) {
+void func_8002F5C8_301C8(func_80063824_64424_arg *arg0) {
     volatile u8 pad[0x20];
     if (GameStateGet()->unk5C5 == 1) {
         func_80069CC0_6A8C0(&func_8002F290_2FE90);
