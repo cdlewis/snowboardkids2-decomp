@@ -1,5 +1,14 @@
 #include "common.h"
 
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    u8 padding[0x3C];
+} D_80089A6C_8A66C_type;
+extern D_80089A6C_8A66C_type D_80089A6C_8A66C[];
+
 extern OSThread* __osActiveQueue_0;
 s32 func_800018F4_24F4(void*);
 s32 func_80001904_2504(s16);
@@ -169,17 +178,60 @@ s32 func_800017F4_23F4(func_80002B50_3750_arg* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_80001818_2418);
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001868_2468);
+void func_80069E3C_6AA3C(s32, s32);
+
+typedef struct {
+    u8 padding[0xC];
+    s16 unkC;
+} func_80001868_2468_arg;
+
+void func_80001868_2468(func_80001868_2468_arg* arg0) {
+    D_80089A6C_8A66C_type* temp_v1 = &D_80089A6C_8A66C[arg0->unkC];
+    func_80069E3C_6AA3C(temp_v1->unk8, temp_v1->unkC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_800018AC_24AC);
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_800018F4_24F4);
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001904_2504);
+typedef struct {
+    s32 unk0;
+    u8 padding[0x48];
+} D_80089A74_8A674_type;
+extern D_80089A74_8A674_type D_80089A74_8A674[];
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001934_2534);
+s32 func_80001904_2504(s16 arg0) {
+    return D_80089A74_8A674[arg0].unk0 == 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001970_2570);
+extern D_80089A6C_8A66C_type D_8008BD2C_8C92C;
+
+D_80089A6C_8A66C_type* func_80001934_2534(s32 arg0) {
+    if (arg0 != -1) {
+        return &D_80089A6C_8A66C[arg0];
+    }
+
+    return &D_8008BD2C_8C92C;
+}
+
+typedef struct {
+    u8 padding[0x14];
+    s16 unk14;
+    s16 unk16;
+    u8 padding2[0x20];
+    s16 unk38;
+    s16 unk3A;
+    u8 padding5[0x52];
+    s16 unk8E;
+} func_80001970_2570_arg;
+
+void func_80001970_2570(func_80001970_2570_arg* arg0) {
+    arg0->unk14 = -1;
+    arg0->unk16 = -1;
+    arg0->unk3A = -1;
+    arg0->unk38 = -1;
+    arg0->unk8E = -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_8000198C_258C);
 
@@ -203,7 +255,11 @@ INCLUDE_ASM("asm/nonmatchings/20F0", func_800021B8_2DB8);
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_800021E8_2DE8);
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80002220_2E20);
+void func_80002260_2E60(s32, s16, s16, s8, s32, s32);
+
+void func_80002220_2E20(s32 arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
+    func_80002260_2E60(arg0, arg1, arg2, arg3, (s32)arg4, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_80002260_2E60);
 
