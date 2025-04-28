@@ -36,13 +36,17 @@ typedef struct {
 } func_80001630_2230_arg;
 
 extern OSThread* __osActiveQueue_0;
-s32 func_800018F4_24F4(void*);
-s32 func_80001904_2504(s16);
-typedef struct
-{
+
+typedef struct {
     u8 padding[0xC];
     s16 unkC;
+    u8 padding2[0x3D0];
+    s32 unk3E0;
 } func_80002B8C_378C_arg;
+
+s32 func_800018F4_24F4(func_80002B8C_378C_arg** arg0);
+
+s32 func_80001904_2504(s16);
 
 typedef struct {
     s32 unk0;
@@ -58,7 +62,6 @@ typedef struct {
     s8 unk88;
 } func_80002B50_3750_arg;
 
-s32 func_800018F4_24F4(void*);
 s32 func_80001904_2504(s16);
 
 typedef struct {
@@ -300,7 +303,9 @@ void func_800018AC_24AC(func_80002B8C_378C_arg* arg0) {
     dmaRequestAndUpdateState(temp_v1->unk10, temp_v1->unk14, temp_v1->unk18);
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_800018F4_24F4);
+s32 func_800018F4_24F4(func_80002B8C_378C_arg** arg0) {
+    return (*arg0)->unk3E0 != 0;
+}
 
 s32 func_80001904_2504(s16 arg0) {
     return D_80089A6C_8A66C.entities[arg0].unk8 == 0;
