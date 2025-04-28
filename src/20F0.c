@@ -8,7 +8,10 @@ typedef struct {
     s32 unk4;
     s32 unk8;
     s32 unkC;
-    u8 padding3[0x10];
+    void* unk10;
+    void* unk14;
+    s32 unk18;
+    u8 padding3[0x4];
     s8 unk20;
     s8 unk21;
     s16 unk22;
@@ -292,7 +295,10 @@ void func_80001868_2468(func_80001868_2468_arg* arg0) {
     func_80069E3C_6AA3C(temp_v1->unk8, temp_v1->unkC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_800018AC_24AC);
+void func_800018AC_24AC(func_80002B8C_378C_arg* arg0) {
+    Entity* temp_v1 = &D_80089A6C_8A66C.entities[arg0->unkC];
+    dmaRequestAndUpdateState(temp_v1->unk10, temp_v1->unk14, temp_v1->unk18);
+}
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_800018F4_24F4);
 
