@@ -3,6 +3,8 @@
 #include "69EF0.h"
 #include "common.h"
 
+void func_80002220_2E20(s32 arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4);
+
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -124,7 +126,9 @@ void func_80001524_2124(func_80001534_2134_arg* arg0) {
     arg0->unk97 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_8000152C_212C);
+void func_8000152C_212C(func_80001534_2134_arg* arg0, s8 arg1) {
+    arg0->unk96 = arg1;
+}
 
 u8 func_80001534_2134(func_80001534_2134_arg* arg0) {
     return arg0->unk96;
@@ -362,9 +366,13 @@ void func_80002170_2D70(func_80002B50_3750_arg* arg0, s16 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_800021B8_2DB8);
+void func_800021B8_2DB8(s32 arg0, s16 arg1) {
+    func_80002220_2E20(arg0, arg1, -1, -1, -1);
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_800021E8_2DE8);
+void func_800021E8_2DE8(s32 arg0, s16 arg1, s16 arg2, s8 arg3) {
+    func_80002220_2E20(arg0, arg1, arg2, arg3, -1);
+}
 
 void func_80002260_2E60(s32, s16, s16, s8, s32, s32);
 
