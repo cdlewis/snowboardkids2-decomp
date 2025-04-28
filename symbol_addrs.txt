@@ -1,3 +1,5 @@
+D_80089A6C_8A66C = 0x80089A6C; // type:u8 size:0x22BC
+
 initializeGameState = 0x80016EA0;
 gameStateCountdownHandler = 0x80017110;
 gameStateCleanupHandler = 0x8001716C;

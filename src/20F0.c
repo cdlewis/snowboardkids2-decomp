@@ -7,26 +7,22 @@ typedef struct {
     s32 unk4;
     s32 unk8;
     s32 unkC;
-    u8 padding[0x24];
+    u8 padding3[0x10];
+    s8 unk20;
+    s8 unk21;
+    s16 unk22;
+    u8 padding[0x10];
     void* unk34;
     void* unk38;
     s32 unk3C;
-    u8 padding2[0xC];
+    u8 padding2[0x9];
+} Entity;
+
+typedef struct {
+    Entity entities[0];
 } D_80089A6C_8A66C_type;
-extern D_80089A6C_8A66C_type D_80089A6C_8A66C[];
-extern D_80089A6C_8A66C_type D_80089A74_8A674[];
 
-typedef struct {
-    s16 unk0;
-    u8 padding[0x49];
-} D_80089A8E_8A68E_type;
-extern D_80089A8E_8A68E_type D_80089A8E_8A68E[];
-
-typedef struct {
-    s8 unk0;
-    u8 padding[0x4B];
-} D_80089A8C_8A68C_type;
-extern D_80089A8C_8A68C_type D_80089A8C_8A68C[];
+extern D_80089A6C_8A66C_type D_80089A6C_8A66C;
 
 typedef struct {
     u8 padding[0x4C];
@@ -136,11 +132,11 @@ OSThread* __osGetActiveQueue(void) {
 INCLUDE_ASM("asm/nonmatchings/20F0", func_8000156C_216C);
 
 s16 func_80001574_2174(s16 arg0) {
-    return D_80089A8E_8A68E[arg0].unk0;
+    return D_80089A6C_8A66C.entities[arg0].unk22;
 }
 
 s8 func_800015A0_21A0(s16 arg0) {
-    return D_80089A8C_8A68C[arg0].unk0;
+    return D_80089A6C_8A66C.entities[arg0].unk20;
 }
 
 typedef struct {
@@ -272,17 +268,15 @@ typedef struct {
 } func_80001818_2418_arg;
 
 void* func_80001818_2418(func_80001818_2418_arg* arg0) {
-    void* temp_a0;
-    void* var_v0;
-    D_80089A6C_8A66C_type* temp_v1 = &D_80089A6C_8A66C[arg0->unkC];
+    s16 idx = arg0->unkC;
+    Entity* entry = &D_80089A6C_8A66C.entities[idx];
+    void* result = NULL;
 
-    temp_a0 = temp_v1->unk34;
-    var_v0 = NULL;
-    if (temp_a0 != NULL) {
-        var_v0 = dmaRequestAndUpdateState(temp_a0, temp_v1->unk38, temp_v1->unk3C);
+    if (entry->unk34 != NULL) {
+        result = dmaRequestAndUpdateState(entry->unk34, entry->unk38, entry->unk3C);
     }
 
-    return var_v0;
+    return result;
 }
 
 void func_80069E3C_6AA3C(s32, s32);
@@ -293,7 +287,7 @@ typedef struct {
 } func_80001868_2468_arg;
 
 void func_80001868_2468(func_80001868_2468_arg* arg0) {
-    D_80089A6C_8A66C_type* temp_v1 = &D_80089A6C_8A66C[arg0->unkC];
+    Entity* temp_v1 = &D_80089A6C_8A66C.entities[arg0->unkC];
     func_80069E3C_6AA3C(temp_v1->unk8, temp_v1->unkC);
 }
 
@@ -302,14 +296,14 @@ INCLUDE_ASM("asm/nonmatchings/20F0", func_800018AC_24AC);
 INCLUDE_ASM("asm/nonmatchings/20F0", func_800018F4_24F4);
 
 s32 func_80001904_2504(s16 arg0) {
-    return D_80089A74_8A674[arg0].unk0 == 0;
+    return D_80089A6C_8A66C.entities[arg0].unk8 == 0;
 }
 
-extern D_80089A6C_8A66C_type D_8008BD2C_8C92C;
+extern Entity D_8008BD2C_8C92C;
 
-D_80089A6C_8A66C_type* func_80001934_2534(s32 arg0) {
+Entity* func_80001934_2534(s32 arg0) {
     if (arg0 != -1) {
-        return &D_80089A6C_8A66C[arg0];
+        return &D_80089A6C_8A66C.entities[arg0];
     }
 
     return &D_8008BD2C_8C92C;
