@@ -1,3 +1,4 @@
+#include "19E80.h"
 #include "615A0.h"
 #include "69EF0.h"
 #include "common.h"
@@ -405,4 +406,20 @@ s32 func_80002BD0_37D0(func_80002B8C_378C_arg* arg0) {
     return 0x90;
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80002C14_3814);
+typedef struct {
+    u8 padding[0x24];
+    s32 unk24;
+    s32 unk28;
+    s8 unk2C;
+    s8 unk2D;
+} func_80002C14_3814_arg;
+
+void func_80002C14_3814(func_80002C14_3814_arg* arg0, void* arg1, s32 arg2) {
+    func_80019280_19E80_return result;
+    func_80019280_19E80(arg1, arg2 & 0xFFFF, &result);
+
+    arg0->unk24 = result.unk0;
+    arg0->unk28 = result.unk4;
+    arg0->unk2C = result.unk18;
+    arg0->unk2D = result.unk1A;
+}

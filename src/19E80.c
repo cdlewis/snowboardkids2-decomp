@@ -1,6 +1,8 @@
+#include "19E80.h"
+
 #include "common.h"
 
-void func_80019280_19E80(void *arg0, u16 arg1, void *arg2) {
+void func_80019280_19E80(void *arg0, u16 arg1, func_80019280_19E80_return *arg2) {
     u32 v0;
     int new_var3;
     u16 temp;
@@ -22,7 +24,7 @@ void func_80019280_19E80(void *arg0, u16 arg1, void *arg2) {
     new_var = &(*((u16 *)(ptr2 + 6)));
     new_var2 = arg2;
     temp = *((u16 *)(ptr2 + 4));
-    *((void **)(4 + arg2)) = ptr1 + (temp << 5);
+    *((void **)(4 + (u32)arg2)) = ptr1 + (temp << 5);
     *((u16 *)(new_var2 + 8)) = *new_var;
     *((u16 *)(new_var2 + 10)) = *((u16 *)(ptr2 + 8));
 }
