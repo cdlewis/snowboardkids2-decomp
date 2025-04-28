@@ -4,6 +4,9 @@
 #include "common.h"
 
 void func_80002220_2E20(s32 arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4);
+void func_80001A6C_266C(void*, void*, void*, s8, s8, s8, s16);
+void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5);
+extern void* func_8006A1C0_6ADC0(s32);
 
 typedef struct {
     s32 unk0;
@@ -134,13 +137,19 @@ u8 func_80001534_2134(func_80001534_2134_arg* arg0) {
     return arg0->unk96;
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_8000153C_213C);
+void func_8000153C_213C(s32 arg0, s32 arg1) {
+    if (arg0 != 0) {
+        memcpy(arg0 + 0x18, arg1, 0x20);
+    }
+}
 
 OSThread* __osGetActiveQueue(void) {
     return __osActiveQueue_0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_8000156C_216C);
+s32 func_8000156C_216C(s32 arg0) {
+    return arg0 + 0x18;
+}
 
 s16 func_80001574_2174(s16 arg0) {
     return D_80089A6C_8A66C.entities[arg0].unk22;
@@ -344,9 +353,17 @@ void func_80001970_2570(func_80001970_2570_arg* arg0) {
     arg0->unk8E = -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_8000198C_258C);
+void func_8000198C_258C(void* arg0, void* arg1) {
+    func_800019B8_25B8(arg0, arg1, 0, -1, -1, -1);
+}
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_800019B8_25B8);
+void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {
+    void* obj = func_8006A1C0_6ADC0(0x160);
+    if (obj != NULL) {
+        func_80001A6C_266C(obj, arg0, arg1, arg2, arg3, arg4, arg5);
+    }
+    return obj;
+}
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_80001A6C_266C);
 
