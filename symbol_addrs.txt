@@ -10,7 +10,8 @@ setShortCountdownAndContinue = 0x800172DC;
 invokeTransitionEffect = 0x8001730C;
 cleanupTransitionEffect = 0x80017328;
 
-dmaRequestAndUpdateState = 0x80069F94;
+dmaRequestAndUpdateState = 0x80069E3C;
+dmaRequestAndUpdateStateWithSize = 0x80069F94;
 
 dmaQueueRequest = 0x8003BA24;
 gDmaQueueIndex = 0x800A2488;

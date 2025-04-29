@@ -217,7 +217,7 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D7C_6A97C);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069DD4_6A9D4);
 
-void *func_80069E3C_6AA3C(void *start, void *end) {
+void *dmaRequestAndUpdateState(void *start, void *end) {
     void *s0;
 
     if (D_8009A864_9B464 == NULL) {
@@ -252,11 +252,11 @@ void *func_80069E3C_6AA3C(void *start, void *end) {
     return s0;
 }
 
-void *dmaRequestAndUpdateState(void *arg0, void *arg1, int arg2) {
+void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
     void *s0;
 
     if (D_8009A864_9B464 == NULL) {
-        s0 = dmaQueueRequest(arg0, arg1, arg2);
+        s0 = dmaQueueRequest(romStart, romEnd, size);
         if (func_8006A51C_6B11C(s0) != NULL) {
             if (D_8009A860_9B460->unk18 != 3) {
                 D_8009A860_9B460->unk20 = func_8006A52C_6B12C(s0);
@@ -270,8 +270,8 @@ void *dmaRequestAndUpdateState(void *arg0, void *arg1, int arg2) {
             }
         }
     } else {
-        s0 = dmaQueueRequest(arg0, arg1, arg2);
-        if (func_8006A51C_6B11C(s0) != 0) {
+        s0 = dmaQueueRequest(romStart, romEnd, size);
+        if (func_8006A51C_6B11C(s0) != NULL) {
             if (D_8009A864_9B464->unk0E < 3 || D_8009A864_9B464->unk0E >= 5) {
                 D_8009A864_9B464->unk18 = func_8006A52C_6B12C(s0);
                 D_8009A864_9B464->unk1C = s0;

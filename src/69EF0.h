@@ -2,4 +2,5 @@
 
 void func_8006982C_6A42C(void *arg0);
 
-void *dmaRequestAndUpdateState(void *, void *, int);
+void *dmaRequestAndUpdateStateWithSize(void *, void *, s32);
+void *dmaRequestAndUpdateState(void *start, void *end);
