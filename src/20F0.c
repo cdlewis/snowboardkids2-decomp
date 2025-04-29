@@ -3,19 +3,33 @@
 #include "69EF0.h"
 #include "common.h"
 
+#define MODE_DMA 0
+#define MODE_QUEUED_DMA 1
+#define MODE_DIRECT_FETCH 2
+
 void func_80002220_2E20(s32 arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4);
 void func_80001A6C_266C(void*, void*, void*, s8, s8, s8, s16);
 void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5);
 extern void* func_8006A1C0_6ADC0(s32);
 
 typedef struct {
+    void* romAStart;
+    void* romAEnd;
+    void* romBStart;
+    void* romBEnd;
+    u16 romBSize;
+    u16 padding;
+    void* unk14;
+} Entity_unk44;
+
+typedef struct {
     s32 unk0;
     s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    void* unk10;
-    void* unk14;
-    s32 unk18;
+    void* romAStart;
+    void* romAEnd;
+    void* romBStart;
+    void* romBEnd;
+    s32 size;
     u8 padding3[0x4];
     s8 unk20;
     s8 unk21;
@@ -24,7 +38,9 @@ typedef struct {
     void* unk34;
     void* unk38;
     s32 unk3C;
-    u8 padding2[0x9];
+    s32 unk40;
+    Entity_unk44* unk44;
+    s8 count;
 } Entity;
 
 typedef struct {
@@ -44,7 +60,7 @@ extern OSThread* __osActiveQueue_0;
 
 typedef struct {
     u8 padding[0xC];
-    s16 unkC;
+    s16 index;
     u8 padding2[0x3D0];
     s32 unk3E0;
 } func_80002B8C_378C_arg;
@@ -267,7 +283,38 @@ void func_800016F8_22F8(func_800016E0_22E0_arg* arg0, s32 arg1) {
     arg0->unk110 = (s32)(arg0->unk110 & ~(1 << arg1));
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001714_2314);
+void* func_80001714_2314(s16 groupIndex, s16 entityIndex, s16 mode) {
+    Entity* group;
+    Entity_unk44* entity;
+
+    group = &D_80089A6C_8A66C.entities[groupIndex];
+    if (group->unk44 == NULL) {
+        return NULL;
+    }
+
+    if (entityIndex >= group->count) {
+        return NULL;
+    }
+
+    entity = &group->unk44[entityIndex];
+    if (entity == NULL) {
+        return NULL;
+    }
+
+    switch (mode) {
+        case MODE_DMA:
+            return dmaRequestAndUpdateState(entity->romAStart, entity->romAEnd);
+
+        case MODE_QUEUED_DMA:
+            return dmaRequestAndUpdateStateWithSize(entity->romBStart, entity->romBEnd, entity->romBSize);
+
+        case MODE_DIRECT_FETCH:
+            return entity->unk14;
+
+        default:
+            return NULL;
+    }
+}
 
 s32 func_800017F4_23F4(func_80002B50_3750_arg* arg0) {
     s32 new_var;
@@ -293,27 +340,25 @@ void* func_80001818_2418(func_80001818_2418_arg* arg0) {
     void* result = NULL;
 
     if (entry->unk34 != NULL) {
-        result = dmaRequestAndUpdateState(entry->unk34, entry->unk38, entry->unk3C);
+        result = dmaRequestAndUpdateStateWithSize(entry->unk34, entry->unk38, entry->unk3C);
     }
 
     return result;
 }
 
-void func_80069E3C_6AA3C(s32, s32);
-
 typedef struct {
     u8 padding[0xC];
-    s16 unkC;
+    s16 index;
 } func_80001868_2468_arg;
 
 void func_80001868_2468(func_80001868_2468_arg* arg0) {
-    Entity* temp_v1 = &D_80089A6C_8A66C.entities[arg0->unkC];
-    func_80069E3C_6AA3C(temp_v1->unk8, temp_v1->unkC);
+    Entity* entity = &D_80089A6C_8A66C.entities[arg0->index];
+    dmaRequestAndUpdateState(entity->romAStart, entity->romAEnd);
 }
 
 void func_800018AC_24AC(func_80002B8C_378C_arg* arg0) {
-    Entity* temp_v1 = &D_80089A6C_8A66C.entities[arg0->unkC];
-    dmaRequestAndUpdateState(temp_v1->unk10, temp_v1->unk14, temp_v1->unk18);
+    Entity* entity = &D_80089A6C_8A66C.entities[arg0->index];
+    dmaRequestAndUpdateStateWithSize(entity->romBStart, entity->romBEnd, entity->size);
 }
 
 s32 func_800018F4_24F4(func_80002B8C_378C_arg** arg0) {
@@ -321,7 +366,7 @@ s32 func_800018F4_24F4(func_80002B8C_378C_arg** arg0) {
 }
 
 s32 func_80001904_2504(s16 arg0) {
-    return D_80089A6C_8A66C.entities[arg0].unk8 == 0;
+    return D_80089A6C_8A66C.entities[arg0].romAStart == NULL;
 }
 
 extern Entity D_8008BD2C_8C92C;
@@ -417,7 +462,7 @@ void func_80002B50_3750(func_80002B50_3750_arg* arg0, func_80063824_64424_arg* a
 
 s32 func_80002B8C_378C(func_80002B8C_378C_arg* arg0) {
     s32 new_var;
-    if (func_80001904_2504(arg0->unkC) == 0) {
+    if (func_80001904_2504(arg0->index) == 0) {
         return 0;
     }
     new_var = func_800018F4_24F4(arg0);
@@ -429,14 +474,14 @@ s32 func_80002B8C_378C(func_80002B8C_378C_arg* arg0) {
 }
 
 s32 func_80002BD0_37D0(func_80002B8C_378C_arg* arg0) {
-    u32 new_var = arg0->unkC;
-    if (func_80001904_2504(new_var) == 0) {
+    u32 index = arg0->index;
+    if (func_80001904_2504(index) == 0) {
         return 8;
     }
 
     if (func_800018F4_24F4(arg0) != 0) {
-        new_var = 8;
-        return new_var;
+        index = 8;
+        return index;
     }
 
     return 0x90;

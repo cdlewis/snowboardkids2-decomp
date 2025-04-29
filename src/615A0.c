@@ -518,7 +518,7 @@ void func_80067FB0_68BB0(void) {
 
     temp_s0 = func_80069854_6A454(4);
     LOAD_OVERLAY(_9FDF0)
-    *temp_s0 = dmaRequestAndUpdateState(&D_215D70, &D_216290, 0x918);
+    *temp_s0 = dmaRequestAndUpdateStateWithSize(&D_215D70, &D_216290, 0x918);
     func_8006982C_6A42C(&func_80068060_68C60);
 }
 
