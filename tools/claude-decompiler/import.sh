@@ -1,5 +1,9 @@
+#!/usr/bin/env bash
+
+CLAUDE_DIR="$(pwd)/tools/claude-decompiler"
+
 for dir in nonmatchings/*; do
-  cp tools/claude-decompiler/* "$dir"
-  cp "$dir/base.c" "$dir/base_original.c"
-  echo "Imported to $dir"
+  ln -sf "${CLAUDE_DIR}"/* "$dir"/
+
+  echo "Linked claude-decompiler files into $dir"
 done
