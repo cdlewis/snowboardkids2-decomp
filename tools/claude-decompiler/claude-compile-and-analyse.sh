@@ -1,1 +1,1 @@
-./claude-compile.sh && ./claude-analyse.sh
+./compile.sh $1 1 $1.o && ./claude-analyse.sh $1
