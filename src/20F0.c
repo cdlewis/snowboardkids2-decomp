@@ -156,9 +156,8 @@ typedef struct {
 } func_80001688_2288_arg;
 
 void func_80002220_2E20(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4);
-void func_80001A6C_266C(void*, void*, void*, s8, s8, s8, s16);
+void func_80001A6C_266C(GameState*, void*, void*, s8, s8, s8, s16);
 void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5);
-extern void* func_8006A1C0_6ADC0(s32);
 void* func_80009F5C_AB5C(s32);
 s32 func_8000CDE0_D9E0(s32);
 s32 func_8000CDFC_D9FC(s32);
@@ -464,7 +463,7 @@ void func_8000198C_258C(void* arg0, void* arg1) {
 }
 
 void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {
-    void* obj = func_8006A1C0_6ADC0(0x160);
+    GameState* obj = func_8006A1C0_6ADC0(0x160);
     if (obj != NULL) {
         func_80001A6C_266C(obj, arg0, arg1, arg2, arg3, arg4, arg5);
     }
