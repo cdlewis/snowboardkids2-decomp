@@ -7,15 +7,6 @@
 #define MODE_QUEUED_DMA 1
 #define MODE_DIRECT_FETCH 2
 
-void func_80002220_2E20(s32 arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4);
-void func_80001A6C_266C(void*, void*, void*, s8, s8, s8, s16);
-void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5);
-extern void* func_8006A1C0_6ADC0(s32);
-void* func_80009F5C_AB5C(s32);
-s32 func_8000CDE0_D9E0(s32);
-s32 func_8000CDFC_D9FC(s32);
-void* func_8006A200_6AE00(void*);
-
 typedef struct
 {
     u8 padding[0x24];
@@ -31,20 +22,42 @@ typedef struct
     void* unk424;
 } func_80002040_2C40_arg_unk0;
 
+typedef struct
+{
+    s32 unk0;
+    u8 padding[0x48];
+} func_80002040_2C40_arg_unk4;
+
 typedef struct {
     u8 padding[0x24];
     void* unk24;
     void* unk28;
 } func_80002040_2C40_arg_unk98;
 
-typedef struct {
+typedef struct
+{
     func_80002040_2C40_arg_unk0* unk0;
-    void* unk4;
+    func_80002040_2C40_arg_unk4* unk4;
     void* unk8;
     /* 0xC */ s16 index;
-    u8 padding[0x2E];
+    u8 paddingA[0x06];
+    s16 unk14;
+    s16 unk16;
+    u8 padding[0x1F];
+    s16 unk38;
+    s16 unk3A;
     s8 unk3C;
-    u8 padding2[0x58];
+    s8 unk3D;
+    s8 unk3E;
+    u8 padding2[0x4A];
+    s8 unk89;
+    s8 unk8A;
+    s8 unk8B;
+    s16 unk8C;
+    s16 unk8E;
+    s32 unk90;
+    s8 unk94;
+    s8 unk95;
     func_80002040_2C40_arg_unk98* unk98;
     u8 padding3[0x78];
     s32 unk114;
@@ -65,7 +78,8 @@ typedef struct {
     void* unk14;
 } Entity_unk44;
 
-typedef struct {
+typedef struct
+{
     s32 unk0;
     s32 unk4;
     void* romAStart;
@@ -140,6 +154,17 @@ typedef struct {
     u8 padding2[0x4];
     func_80001688_2288_arg_9C* unk9C;
 } func_80001688_2288_arg;
+
+void func_80002220_2E20(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4);
+void func_80001A6C_266C(void*, void*, void*, s8, s8, s8, s16);
+void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5);
+extern void* func_8006A1C0_6ADC0(s32);
+void* func_80009F5C_AB5C(s32);
+s32 func_8000CDE0_D9E0(s32);
+s32 func_8000CDFC_D9FC(s32);
+void* func_8006A200_6AE00(void*);
+void func_80002468_3068(s32);
+void func_8005DE98_5EA98(s32, s16, s16, s32);
 
 void func_800014F0_20F0(func_800014F0_20F0_arg* arg0) {
     arg0->unk3C = 1;
@@ -493,21 +518,100 @@ void func_80002170_2D70(func_80002B50_3750_arg* arg0, s16 arg1) {
     }
 }
 
-void func_800021B8_2DB8(s32 arg0, s16 arg1) {
+void func_800021B8_2DB8(func_80002040_2C40_arg* arg0, s16 arg1) {
     func_80002220_2E20(arg0, arg1, -1, -1, -1);
 }
 
-void func_800021E8_2DE8(s32 arg0, s16 arg1, s16 arg2, s8 arg3) {
+void func_800021E8_2DE8(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3) {
     func_80002220_2E20(arg0, arg1, arg2, arg3, -1);
 }
 
-void func_80002260_2E60(s32, s16, s16, s8, s32, s32);
+void func_80002260_2E60(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5);
 
-void func_80002220_2E20(s32 arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
+void func_80002220_2E20(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
     func_80002260_2E60(arg0, arg1, arg2, arg3, (s32)arg4, 1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80002260_2E60);
+void func_80002260_2E60(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5) {
+    int new_var;
+    s16 var_t0;
+    s16 var_a1;
+    Entity* entity;
+
+    s16 local_arg2 = arg2;
+    s16 local_arg1 = arg1;
+    s16 local_arg4 = arg4;
+
+    entity = &D_80089A6C_8A66C.entities[arg0->index];
+
+    arg0->unk89 &= 0xFD;
+    if (arg5) {
+        arg0->unk89 |= 2;
+    }
+
+    if (arg0->unk8) {
+        s16 temp_v0 = (local_arg1 < entity->unk22) ? -1 : 0;
+        var_t0 = local_arg1 & temp_v0;
+        temp_v0 = var_t0;
+
+        if (local_arg2 >= entity->unk22) {
+            local_arg2 = -1;
+        }
+
+        if (((s16)local_arg4) >= entity->unk22) {
+            local_arg4 = -1;
+        }
+
+        new_var = -1;
+        if (arg0->unk3A != new_var) {
+            local_arg1 = local_arg4;
+        }
+
+        if ((arg0->unk16 != local_arg1) | ((~((s16)local_arg4)) != 0)) {
+            arg0->unk95 = 0;
+            arg0->unk8C = 0;
+            temp_v0 = arg0->unk16;
+            arg0->unk16 = var_t0;
+            arg0->unk14 = temp_v0;
+
+            if (arg3 == new_var) {
+                if (var_t0 != local_arg2) {
+                    arg0->unk38 = local_arg2;
+                    arg0->unk8E = local_arg2;
+                } else {
+                    arg0->unk38 = -1;
+                    arg0->unk8E = new_var;
+                }
+            } else {
+                arg0->unk38 = local_arg2;
+                arg0->unk8E = local_arg2;
+            }
+
+            arg0->unk3A = local_arg4;
+            arg0->unk3E = arg3;
+            arg0->unk90 = 0;
+
+            if (arg0->unk3A == -1) {
+                var_a1 = var_t0;
+            } else {
+                var_a1 = local_arg4;
+                if (arg0->unk3E != -1) {
+                    arg0->unk3E++;
+                }
+            }
+
+            {
+                s32 i;
+                s32 count = func_8006097C_6157C((s32)arg0->unk8, var_a1);
+                for (i = 0; i < count; i++) {
+                    func_8005DE98_5EA98((s32)arg0->unk8, var_a1, i, (u32)(arg0->unk4 + i));
+                }
+            }
+
+            func_80002468_3068((s32)arg0);
+        }
+    }
+}
 
 void func_80002484_3084(s32, s32);
 
