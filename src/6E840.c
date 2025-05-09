@@ -1,6 +1,7 @@
 #include "6E840.h"
 
 #include "common.h"
+#include "memory_allocator.h"
 
 extern u32 __additional_scanline_0;
 extern s32 gRegionAllocEnd;
@@ -16,7 +17,6 @@ extern func_8006FDA0_709A0_arg *D_800A3370_A3F70;
 extern void *gArenaBasePtr;
 extern void *gLinearAllocPtr;
 extern void *gLinearAllocEnd;
-extern void *func_8006A258_6AE58(s32, u32, void *);
 extern s32 D_800A3548_A4148[];
 extern s32 D_800A3550_A4150[];
 extern s32 D_800AB12C_A249C;
@@ -103,9 +103,9 @@ void *func_8006F580_70180(s32 size) {
 
 void func_8006F5C0_701C0() {
     void *result;
-    void *dummy;
+    u8 *nodeExists;
 
-    result = func_8006A258_6AE58(0, 0x10000, &dummy);
+    result = allocateMemoryNode(0, 0x10000, &nodeExists);
     gArenaBasePtr = result;
 }
 
@@ -140,12 +140,12 @@ void advanceLinearAlloc(s32 arg0) {
 void initLinearArenaRegions() {
     s32 temp;
     void *result;
-    s32 sp10;
+    u8 *nodeExists;
 
-    result = func_8006A258_6AE58(0, 0x10000, &sp10);
+    result = allocateMemoryNode(0, 0x10000, &nodeExists);
     gLinearArenaRegions = result;
 
-    result = func_8006A258_6AE58(0, 0x10000, &sp10);
+    result = allocateMemoryNode(0, 0x10000, &nodeExists);
     gLinearArenaBuffer = result;
 }
 

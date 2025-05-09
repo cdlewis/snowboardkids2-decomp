@@ -2,8 +2,7 @@
 
 #include "3A1F0.h"
 #include "gamestate.h"
-
-GameState *func_8006A258_6AE58(s32, s32, void *);
+#include "memory_allocator.h"
 
 typedef struct {
     u8 padding[0xE];
@@ -54,9 +53,6 @@ typedef struct {
 extern D_8009A860_9B460_type *D_8009A860_9B460;
 
 extern void *func_8003B8F0_3C4F0(void *, void *);
-extern s32 func_8006A51C_6B11C(void *);
-extern void *func_8006A52C_6B12C(void *);
-extern void func_8006A3FC_6AFFC();
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
 
@@ -91,12 +87,12 @@ void func_8006982C_6A42C(void *arg0) {
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006983C_6A43C);
 
 GameState *func_80069854_6A454(s32 arg0) {
-    s32 sp10;
+    u8 *node_exists;
     u32 temp_a0;
     GameState *temp_v0;
     s8 *var_v1;
 
-    temp_v0 = func_8006A258_6AE58(0, arg0, &sp10);
+    temp_v0 = allocateMemoryNode(0, arg0, &node_exists);
     D_8009A860_9B460->GameState = temp_v0;
     if (arg0 != 0) {
         var_v1 = (s8 *)temp_v0;
@@ -222,26 +218,26 @@ void *dmaRequestAndUpdateState(void *start, void *end) {
 
     if (D_8009A864_9B464 == NULL) {
         s0 = func_8003B8F0_3C4F0(start, end);
-        if (func_8006A51C_6B11C(s0) != 0) {
+        if (getNodeOwner(s0) != 0) {
             if (D_8009A860_9B460->unk18 != 3) {
-                D_8009A860_9B460->unk20 = func_8006A52C_6B12C(s0);
+                D_8009A860_9B460->unk20 = getNodeUserData(s0);
                 D_8009A860_9B460->unk24 = s0;
                 D_8009A860_9B460->unk18 = 3;
-            } else if (D_8009A860_9B460->unk20 < func_8006A52C_6B12C(s0)) {
-                D_8009A860_9B460->unk20 = func_8006A52C_6B12C(s0);
+            } else if (D_8009A860_9B460->unk20 < getNodeUserData(s0)) {
+                D_8009A860_9B460->unk20 = getNodeUserData(s0);
                 D_8009A860_9B460->unk24 = s0;
             }
         }
     } else {
         s0 = func_8003B8F0_3C4F0(start, end);
-        if (func_8006A51C_6B11C(s0) != 0) {
+        if (getNodeOwner(s0) != 0) {
             if (((u8)(D_8009A864_9B464->unk0E - 3)) >= 2) {
-                D_8009A864_9B464->unk18 = func_8006A52C_6B12C(s0);
+                D_8009A864_9B464->unk18 = getNodeUserData(s0);
                 D_8009A864_9B464->unk1C = s0;
                 D_8009A864_9B464->unk0E = 3;
             } else {
-                if (D_8009A864_9B464->unk18 < func_8006A52C_6B12C(s0)) {
-                    D_8009A864_9B464->unk18 = func_8006A52C_6B12C(s0);
+                if (D_8009A864_9B464->unk18 < getNodeUserData(s0)) {
+                    D_8009A864_9B464->unk18 = getNodeUserData(s0);
                     D_8009A864_9B464->unk1C = s0;
                 }
             }
@@ -257,28 +253,28 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
 
     if (D_8009A864_9B464 == NULL) {
         s0 = dmaQueueRequest(romStart, romEnd, size);
-        if (func_8006A51C_6B11C(s0) != NULL) {
+        if (getNodeOwner(s0) != NULL) {
             if (D_8009A860_9B460->unk18 != 3) {
-                D_8009A860_9B460->unk20 = func_8006A52C_6B12C(s0);
+                D_8009A860_9B460->unk20 = getNodeUserData(s0);
                 D_8009A860_9B460->unk24 = s0;
                 D_8009A860_9B460->unk18 = 3;
             } else {
-                if (D_8009A860_9B460->unk20 < func_8006A52C_6B12C(s0)) {
-                    D_8009A860_9B460->unk20 = func_8006A52C_6B12C(s0);
+                if (D_8009A860_9B460->unk20 < getNodeUserData(s0)) {
+                    D_8009A860_9B460->unk20 = getNodeUserData(s0);
                     D_8009A860_9B460->unk24 = s0;
                 }
             }
         }
     } else {
         s0 = dmaQueueRequest(romStart, romEnd, size);
-        if (func_8006A51C_6B11C(s0) != NULL) {
+        if (getNodeOwner(s0) != NULL) {
             if (D_8009A864_9B464->unk0E < 3 || D_8009A864_9B464->unk0E >= 5) {
-                D_8009A864_9B464->unk18 = func_8006A52C_6B12C(s0);
+                D_8009A864_9B464->unk18 = getNodeUserData(s0);
                 D_8009A864_9B464->unk1C = s0;
                 D_8009A864_9B464->unk0E = 3;
             } else {
-                if (D_8009A864_9B464->unk18 < func_8006A52C_6B12C(s0)) {
-                    D_8009A864_9B464->unk18 = func_8006A52C_6B12C(s0);
+                if (D_8009A864_9B464->unk18 < getNodeUserData(s0)) {
+                    D_8009A864_9B464->unk18 = getNodeUserData(s0);
                     D_8009A864_9B464->unk1C = s0;
                 }
             }
@@ -293,16 +289,16 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006A0EC_6ACEC);
 
 GameState *func_8006A1C0_6ADC0(s32 arg0) {
-    s32 sp10;
+    u8 *exists;
     GameState *temp_a0;
 
-    temp_a0 = func_8006A258_6AE58(0, arg0, &sp10);
+    temp_a0 = allocateMemoryNode(0, arg0, &exists);
     if (D_8009A864_9B464 != NULL) {
         D_8009A864_9B464->unk11 = 1;
     }
     return temp_a0;
 }
 
-void func_8006A200_6AE00(void) {
-    func_8006A3FC_6AFFC();
+void func_8006A200_6AE00(s32 *arg0) {
+    decrementNodeRefCount(arg0);
 }

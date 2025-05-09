@@ -1,6 +1,7 @@
 #include "3A1F0.h"
 
 #include "common.h"
+#include "memory_allocator.h"
 
 typedef struct {
     s16 command;
@@ -52,11 +53,8 @@ typedef struct
     void* unk10;
 } Entry248C;
 extern Entry248C* gDmaQueue;
-extern Entry248C* func_8006A258_6AE58(void* arg0, s32 size, void* info);
 extern Entry248C* D_800A2494_A3094;
 extern Entry248C* D_800A2108_A2D08;
-void func_8006A4DC_6B0DC(void*);
-void func_8006A524_6B124(void*, s32);
 
 typedef struct {
     u32 unknown;
@@ -468,9 +466,9 @@ void initPiManager() {
 
     gDmaQueueIndex = 0;
     gDmaRequestCount = 0;
-    D_800A2108_A2D08 = func_8006A258_6AE58(0, 0x168, &flag);
-    gDmaQueue = func_8006A258_6AE58(0, 0x730, &flag);
-    D_800A2494_A3094 = func_8006A258_6AE58(0, 0x1000, &flag);
+    D_800A2108_A2D08 = allocateMemoryNode(0, 0x168, &flag);
+    gDmaQueue = allocateMemoryNode(0, 0x730, &flag);
+    D_800A2494_A3094 = allocateMemoryNode(0, 0x1000, &flag);
 
     osCreatePiManager(150, (OSMesgQueue*)D_800A2150_A2D50, (OSMesg*)D_800A2168_A2D68, 200);
     osCreateMesgQueue(&D_800A2110_A2D10, D_800A2128_A2D28, 1);
@@ -492,7 +490,7 @@ void* func_8003B8F0_3C4F0(void* start, void* end) {
 
     gDmaQueue[gDmaQueueIndex].size = size;
 
-    s0 = func_8006A258_6AE58(start, size, &stack);
+    s0 = allocateMemoryNode((s32)start, size, &stack);
 
     gDmaQueue[gDmaQueueIndex].unk10 = s0;
 
@@ -500,7 +498,7 @@ void* func_8003B8F0_3C4F0(void* start, void* end) {
         return s0;
     }
 
-    func_8006A4DC_6B0DC(s0);
+    markNodeAsLocked(s0);
 
     gDmaQueue[gDmaQueueIndex].start = start;
     gDmaQueue[gDmaQueueIndex].end = end;
@@ -514,7 +512,7 @@ void* func_8003B8F0_3C4F0(void* start, void* end) {
 
     gDmaRequestCount++;
 
-    func_8006A524_6B124(s0, gDmaRequestCount);
+    setNodeUserData(s0, (void*)gDmaRequestCount);
 
     return s0;
 }
@@ -522,8 +520,6 @@ void* func_8003B8F0_3C4F0(void* start, void* end) {
 extern s32 gDmaQueueIndex;
 extern OSMesgQueue gDmaMsgQueue;
 extern s32 gPendingDmaCount;
-extern void func_8006A4DC_6B0DC(void*);
-extern void func_8006A524_6B124(void*, s32);
 
 void* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
     u8 flag;
@@ -532,10 +528,10 @@ void* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
     s32 a1Val;
     s32 a1;
     (gDmaQueue + gDmaQueueIndex)->size = size;
-    ret = func_8006A258_6AE58(romStart, size, &flag);
+    ret = allocateMemoryNode((s32)romStart, size, &flag);
     (gDmaQueue + gDmaQueueIndex)->unk10 = ret;
     if (flag == 0) {
-        func_8006A4DC_6B0DC(ret);
+        markNodeAsLocked(ret);
         (gDmaQueue + gDmaQueueIndex)->start = romStart;
         entry = gDmaQueue + gDmaQueueIndex;
         entry->end = romEnd;
@@ -551,7 +547,7 @@ void* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
             a1++;
             gDmaRequestCount = a1;
         }
-        func_8006A524_6B124(ret, a1);
+        setNodeUserData(ret, (void*)a1);
     }
     return ret;
 }

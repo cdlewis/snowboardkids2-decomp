@@ -1,3 +1,6 @@
+#ifndef _GAMESTATE_H_
+#define _GAMESTATE_H_
+
 #include "common.h"
 
 typedef struct {
@@ -90,3 +93,5 @@ typedef struct {
 } GameState;
 
 GameState* GameStateGet();
+
+#endif
