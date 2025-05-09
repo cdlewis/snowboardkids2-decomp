@@ -187,7 +187,22 @@ void func_8003FD84_40984(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FDD4_409D4);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FF14_40B14);
+GameState* GameStateGet();
+void func_800574A0_580A0(s32);
+void func_8006982C_6A42C(void*);
+extern void func_8003FF78_40B78;
+
+void func_8003FF14_40B14(void) {
+    GameState* gs = GameStateGet();
+    gs->unk4C--;
+
+    if (gs->unk4C == 0) {
+        gs->unk7C = 1;
+        func_800574A0_580A0(0xA);
+        func_800699F4_6A5F4(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
+        func_8006982C_6A42C(&func_8003FF78_40B78);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FF78_40B78);
 
