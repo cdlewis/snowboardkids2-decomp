@@ -1,3 +1,17 @@
+gMemoryAllocatorHead = 0x800AB130;
+gMemoryHeapBase = 0x8018F800;
+gMemoryHeapEnd = 0x8038F800;
+
+initializeMemoryAllocatorRegion = 0x8006A220;
+allocateMemoryNode = 0x8006A258;
+decrementNodeRefCount = 0x8006A3FC;
+cleanupUnusedNodes = 0x8006A428;
+markNodeAsLocked = 0x8006A4DC;
+unlockNodeWithInterruptDisable = 0x8006A4E8;
+getNodeOwner = 0x8006A51C;
+setNodeUserData = 0x8006A524;
+getNodeUserData = 0x8006A52C;
+
 D_80089A6C_8A66C = 0x80089A6C; // type:u8 size:0x22BC
 
 initializeGameState = 0x80016EA0;
