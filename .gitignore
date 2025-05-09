@@ -22,3 +22,4 @@ __pycache__
 src/temp.c
 .push_secrets
 astemp_*
+**/.claude/settings.local.json
