@@ -168,11 +168,11 @@ void *func_800699F4_6A5F4(void *a0, u8 a1, u8 a2, u8 a3) {
             newNode->field_11 = 0;
             newNode->field_18 = 0;
 
-            return (void *)((s32)newNode + 0x28);
+            return (void *)(newNode + 0x1);
         }
     }
 
-    return 0;
+    return NULL;
 }
 
 s16 func_80069AEC_6A6EC(s32 arg0) {
