@@ -1,4 +1,3 @@
-#include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
@@ -11,6 +10,7 @@ extern u16 D_8008D6B0_8E2B0;
 extern u8 D_800A8CC8_A0038;
 extern void *func_80035F80_36B80(s32);
 extern void *dmaRequestAndUpdateState(void *, void *);
+void *dmaRequestAndUpdateStateWithSize(void *, void *, s32);
 extern void *func_8006A200_6AE00(void *ptr);
 extern void ClocktowerTriggerInit();
 extern void func_80000460_1060(s32, void *, void *);
