@@ -1,3 +1,4 @@
+#include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
@@ -9,7 +10,6 @@ extern void func_80040608_41208();
 GameState* GameStateGet();
 s32 func_80055D34_56934(u8);
 void func_8006983C_6A43C(void*);
-GameStateUnk28* dmaRequestAndUpdateStateWithSize(void*, void*, s32);
 extern s32 D_3FF010;
 extern s32 D_3FF910;
 extern void func_8003EDF8_3F9F8();
@@ -24,7 +24,6 @@ extern void func_80040608_41208();
 extern void func_8004F1D4_4FDD4();
 void func_8003FD3C_4093C();
 extern void func_8003FB90_40790(void);
-void func_800699F4_6A5F4(void*, s32, s32, s32);
 extern void func_800401A0_40DA0();
 extern void func_8004D9D0_4E5D0();
 s32 func_80055E7C_56A7C();
