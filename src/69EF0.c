@@ -80,7 +80,7 @@ s16 func_80069810_6A410(void) {
     return temp_v0;
 }
 
-void func_8006982C_6A42C(void *arg0) {
+void setGameStateHandler(void *arg0) {
     D_8009A860_9B460->unk10 = arg0;
 }
 
@@ -115,7 +115,7 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698DC_6A4DC);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698EC_6A4EC);
 
-void *func_800699F4_6A5F4(void *a0, u8 a1, u8 a2, u8 a3) {
+s32 *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) {
     Node *newNode;
     Node *active;
     Node *freeNxt;
@@ -124,8 +124,8 @@ void *func_800699F4_6A5F4(void *a0, u8 a1, u8 a2, u8 a3) {
     Node *temp;
 
     if (D_8009A860_9B460) {
-        if (g->counters[a1]) {
-            g->counters[a1]--;
+        if (g->counters[nodeType]) {
+            g->counters[nodeType]--;
 
             newNode = D_8009A860_9B460->freeList;
             active = D_8009A860_9B460->activeList;
@@ -136,7 +136,7 @@ void *func_800699F4_6A5F4(void *a0, u8 a1, u8 a2, u8 a3) {
                 newNode->next = NULL;
                 newNode->prev = NULL;
                 D_8009A860_9B460->activeList = newNode;
-            } else if (a3 < active->priority) {
+            } else if (priority < active->priority) {
                 newNode->next = active;
                 newNode->prev = NULL;
                 temp = newNode->next;
@@ -145,7 +145,7 @@ void *func_800699F4_6A5F4(void *a0, u8 a1, u8 a2, u8 a3) {
             } else {
                 Node *it = active;
                 while (it->next != NULL) {
-                    if (a3 < it->next->priority) {
+                    if (priority < it->next->priority) {
                         break;
                     }
                     it = it->next;
@@ -159,10 +159,10 @@ void *func_800699F4_6A5F4(void *a0, u8 a1, u8 a2, u8 a3) {
                 }
             }
 
-            newNode->field_C = a1;
-            newNode->field_D = a2;
-            newNode->priority = a3;
-            newNode->field_20 = a0;
+            newNode->field_C = nodeType;
+            newNode->field_D = identifierFlag;
+            newNode->priority = priority;
+            newNode->field_20 = callback;
             newNode->field_24 = 0;
             newNode->field_E = 1;
             newNode->field_11 = 0;
@@ -288,7 +288,7 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006A0EC_6ACEC);
 
-GameState *func_8006A1C0_6ADC0(s32 arg0) {
+GameState *allocateGameStateMemory(s32 arg0) {
     u8 *exists;
     GameState *temp_a0;
 
@@ -299,6 +299,6 @@ GameState *func_8006A1C0_6ADC0(s32 arg0) {
     return temp_a0;
 }
 
-void func_8006A200_6AE00(s32 *arg0) {
+void freeGameStateMemory(s32 *arg0) {
     decrementNodeRefCount(arg0);
 }

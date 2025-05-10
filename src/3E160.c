@@ -4,7 +4,7 @@
 #include "gamestate.h"
 
 void func_80057564_58164(s32);
-void func_8006982C_6A42C(void*);
+void setGameStateHandler(void*);
 extern s32 D_800AFF10_A7280;
 extern void func_80040608_41208();
 GameState* GameStateGet();
@@ -101,7 +101,7 @@ void func_8003F178_3FD78(void) {
             func_800574A0_580A0(*(s16*)(ret + 0x28));
         }
 
-        func_8006982C_6A42C(func_8003F368_3FF68);
+        setGameStateHandler(func_8003F368_3FF68);
     }
 }
 
@@ -130,7 +130,7 @@ void func_8003FB00_40700(void) {
     state->unk4C = 0x96;
     state->unk7B = 1;
 
-    func_8006982C_6A42C(func_8003FB90_40790);
+    setGameStateHandler(func_8003FB90_40790);
 }
 
 void func_8003FB90_40790(void) {
@@ -143,7 +143,7 @@ void func_8003FB90_40790(void) {
     if (temp_v1 == 0) {
         func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        func_8006982C_6A42C(&func_80040608_41208);
+        setGameStateHandler(&func_80040608_41208);
     }
 }
 
@@ -158,9 +158,9 @@ void func_8003FCD8_408D8(void) {
     temp_v0->unk4C = temp_v0_2;
     if (temp_v0_2 == 0) {
         temp_v0->unk7C = 1;
-        func_800699F4_6A5F4(&func_8004F1D4_4FDD4, 1, 0, 0xE6);
+        scheduleTask(&func_8004F1D4_4FDD4, 1, 0, 0xE6);
         func_800574A0_580A0(0xA);
-        func_8006982C_6A42C(&func_8003FD3C_4093C);
+        setGameStateHandler(&func_8003FD3C_4093C);
     }
 }
 
@@ -168,7 +168,7 @@ void func_8003FD3C_4093C(void) {
     if (D_800AFF10_A7280 & 0x8000) {
         func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        func_8006982C_6A42C(&func_80040608_41208);
+        setGameStateHandler(&func_80040608_41208);
     }
 }
 
@@ -180,7 +180,7 @@ void func_8003FD84_40984(void) {
     if (temp == 0) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        func_8006982C_6A42C(func_80040608_41208);
+        setGameStateHandler(func_80040608_41208);
     }
 }
 
@@ -188,7 +188,7 @@ INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FDD4_409D4);
 
 GameState* GameStateGet();
 void func_800574A0_580A0(s32);
-void func_8006982C_6A42C(void*);
+void setGameStateHandler(void*);
 extern void func_8003FF78_40B78;
 
 void func_8003FF14_40B14(void) {
@@ -198,8 +198,8 @@ void func_8003FF14_40B14(void) {
     if (gs->unk4C == 0) {
         gs->unk7C = 1;
         func_800574A0_580A0(0xA);
-        func_800699F4_6A5F4(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
-        func_8006982C_6A42C(&func_8003FF78_40B78);
+        scheduleTask(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
+        setGameStateHandler(&func_8003FF78_40B78);
     }
 }
 
@@ -215,7 +215,7 @@ void func_8003FFC0_40BC0() {
     if (temp_v1 == 0) {
         func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        func_8006982C_6A42C(&func_80040608_41208);
+        setGameStateHandler(&func_80040608_41208);
     }
 }
 
@@ -231,8 +231,8 @@ void func_8004013C_40D3C(void) {
     if (temp_v0_2 == 0) {
         temp_v0->unk7C = 1;
         func_800574A0_580A0(0xA);
-        func_800699F4_6A5F4(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
-        func_8006982C_6A42C(&func_800401A0_40DA0);
+        scheduleTask(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
+        setGameStateHandler(&func_800401A0_40DA0);
     }
 }
 
@@ -240,7 +240,7 @@ void func_800401A0_40DA0() {
     if (D_800AFF10_A7280 & 0x8000) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        func_8006982C_6A42C(func_80040608_41208);
+        setGameStateHandler(func_80040608_41208);
     }
 }
 
@@ -251,7 +251,7 @@ void func_800401E8_40DE8(void) {
     if (temp == 0) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        func_8006982C_6A42C(func_80040608_41208);
+        setGameStateHandler(func_80040608_41208);
     }
 }
 
@@ -263,7 +263,7 @@ void func_80040420_41020(void) {
     if (D_800AFF10_A7280 & 0x8000) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        func_8006982C_6A42C(&func_80040608_41208);
+        setGameStateHandler(&func_80040608_41208);
     }
 }
 
@@ -276,7 +276,7 @@ void func_80040468_41068(void) {
     temp_v0->unk4C = temp_v1;
     if (temp_v1 == 0) {
         func_800574A0_580A0(0xA);
-        func_8006982C_6A42C(&func_800404A8_410A8);
+        setGameStateHandler(&func_800404A8_410A8);
     }
 }
 

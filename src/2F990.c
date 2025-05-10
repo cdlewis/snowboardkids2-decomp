@@ -1,4 +1,5 @@
 #include "615A0.h"
+#include "69EF0.h"
 #include "6B140.h"
 #include "6E840.h"
 #include "common.h"
@@ -23,7 +24,6 @@ extern s32 D_8009A870_9B470;
 extern void func_8002F72C_3032C();
 extern void func_8002F980_30580();
 extern void func_8000FED0_10AD0();
-s32 func_8006A200_6AE00(s32);
 
 typedef struct {
     u8 padding[0x2C];
@@ -212,7 +212,7 @@ void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA44_30644);
 
 void func_8002FA70_30670(func_8002FA70_30670_arg *arg0) {
-    arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
+    arg0->unk2C = freeGameStateMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA9C_3069C);

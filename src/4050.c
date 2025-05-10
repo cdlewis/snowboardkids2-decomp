@@ -56,7 +56,7 @@ extern void func_80069470_6A070(void *, s32);
 void loadOverlay_1DD170();
 void func_8000378C_438C();
 void func_80003C88_4888();
-void func_8006982C_6A42C(void *);
+void setGameStateHandler(void *);
 void func_80003D30_4930();
 void func_80003CC4_48C4();
 extern void *func_800B00C0_9FF70();
@@ -79,7 +79,7 @@ void func_8000346C_406C(s16 arg0, s16 arg1, s16 arg2) {
 
 void loadOverlay_1DD170(void) {
     LOAD_OVERLAY(_1DD170)
-    func_8006982C_6A42C(&func_80003508_4108);
+    setGameStateHandler(&func_80003508_4108);
 }
 
 void func_80003508_4108() {
@@ -127,7 +127,7 @@ void func_80003508_4108() {
     func_8006FE28_70A28(s.s1, 0, 0, 0);
     func_8006FDA0_709A0(s.s1, 0xFF, 0);
     func_8006FDA0_709A0(s.s1, 0, 8);
-    func_8006982C_6A42C(func_8000378C_438C);
+    setGameStateHandler(func_8000378C_438C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/4050", func_8000378C_438C);
@@ -151,7 +151,7 @@ void func_80003C88_4888() {
 }
 
 void func_80003CA4_48A4() {
-    func_8006982C_6A42C(&func_80003CC4_48C4);
+    setGameStateHandler(&func_80003CC4_48C4);
 }
 
 void func_80003CC4_48C4() {
@@ -160,7 +160,7 @@ void func_80003CC4_48C4() {
     }
     func_80003450_4050(D_8008BF9A_8CB9A, D_8008BF9E_8CB9E);
     func_80069470_6A070(&loadOverlay_1DD170, 0x64);
-    func_8006982C_6A42C(&func_80003D30_4930);
+    setGameStateHandler(&func_80003D30_4930);
 }
 
 INCLUDE_ASM("asm/nonmatchings/4050", func_80003D30_4930);

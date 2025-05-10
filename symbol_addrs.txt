@@ -1,3 +1,8 @@
+setGameStateHandler = 0x8006982C;
+freeGameStateMemory = 0x8006A200;
+allocateGameStateMemory = 0x8006A1C0;
+scheduleTask = 0x800699F4;
+
 gMemoryAllocatorHead = 0x800AB130;
 gMemoryHeapBase = 0x8018F800;
 gMemoryHeapEnd = 0x8038F800;
