@@ -1,3 +1,4 @@
+#include "69EF0.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
@@ -16,20 +17,18 @@ s32 func_8006FE10_70A10(s32);
 extern void func_8001B3E8_1BFE8();
 extern D_800A8D14_A0084_type* D_800A8D14_A0084;
 extern void func_800697CC_6A3CC(void (*func)(void));
-s32 func_8006A200_6AE00(s32);
 s32 func_8006FE10_70A10(s32);
 extern void func_8001BC78_1C878();
 extern void func_8001BCC0_1C8C0();
 extern GameState* GameStateGet();
 extern s32 func_8003BB5C_3C75C(void);
-extern void func_8006982C_6A42C(void (*cb)(void));
 extern void func_8001B3B8_1BFB8(void);
 extern void func_8001B020_1BC20;
 extern void func_800B00C0_9FF70;
 
 void loadOverlay_1BBA0(void) {
     LOAD_OVERLAY(_1DA660)
-    func_8006982C_6A42C(&func_8001B020_1BC20);
+    setGameStateHandler(&func_8001B020_1BC20);
 }
 
 INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001B020_1BC20);
@@ -46,12 +45,12 @@ void func_8001B368_1BF68(void) {
 
     func_8006FDA0_709A0(NULL, 0, 0x10);
 
-    func_8006982C_6A42C(func_8001B3B8_1BFB8);
+    setGameStateHandler(func_8001B3B8_1BFB8);
 }
 
 void func_8001B3B8_1BFB8() {
     if (!func_8006FE10_70A10(0)) {
-        func_8006982C_6A42C(&func_8001B3E8_1BFE8);
+        setGameStateHandler(&func_8001B3E8_1BFE8);
     }
 }
 
@@ -67,8 +66,8 @@ void func_8001BBE8_1C7E8(void) {
         n_alSynRemovePlayer(&temp_s0->audioPlayer2);
         n_alSynRemovePlayer(&temp_s0->audioPlayer4);
         osViExtendVStart(0);
-        temp_s0->unk588 = func_8006A200_6AE00(temp_s0->unk588);
-        temp_s0->unk58C = func_8006A200_6AE00(temp_s0->unk58C);
+        temp_s0->unk588 = freeGameStateMemory(temp_s0->unk588);
+        temp_s0->unk58C = freeGameStateMemory(temp_s0->unk58C);
         if (temp_s0->unk590 != 0) {
             var_a0 = &func_8001BCC0_1C8C0;
         } else {

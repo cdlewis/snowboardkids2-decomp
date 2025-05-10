@@ -1,9 +1,8 @@
+#include "69EF0.h"
 #include "common.h"
 
 void *func_80009F5C_AB5C(s32);
 void func_8006FC70_70870(u16, u16, s8 *, s8 *);
-
-extern s32 func_8006A200_6AE00(s32);
 
 typedef struct {
     char padding[44];
@@ -49,7 +48,7 @@ typedef struct {
     char unk87;
 } func_80000450_1050_arg;
 
-void func_80000450_1050(func_80000450_1050_arg* arg0, s8 arg1) {
+void func_80000450_1050(func_80000450_1050_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;
 }
 
@@ -129,8 +128,8 @@ INCLUDE_ASM("asm/nonmatchings/main", __rmonPanic);
 INCLUDE_ASM("asm/nonmatchings/main", rmonmisc_text_010C);
 
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *arg0) {
-    arg0->unk30 = func_8006A200_6AE00(arg0->unk30);
-    arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
+    arg0->unk30 = freeGameStateMemory(arg0->unk30);
+    arg0->unk2C = freeGameStateMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000C2C_182C);
@@ -146,8 +145,8 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000DC0_19C0);
 INCLUDE_ASM("asm/nonmatchings/main", func_80000E84_1A84);
 
 void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0) {
-    arg0->unk30 = func_8006A200_6AE00(arg0->unk30);
-    arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
+    arg0->unk30 = freeGameStateMemory(arg0->unk30);
+    arg0->unk2C = freeGameStateMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000F4C_1B4C);
@@ -155,9 +154,9 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000F4C_1B4C);
 INCLUDE_ASM("asm/nonmatchings/main", func_80001040_1C40);
 
 void func_80001114_1D14(func_80001114_1D14_arg *arg0) {
-    arg0->unk44 = func_8006A200_6AE00(arg0->unk44);
-    arg0->unk30 = func_8006A200_6AE00(arg0->unk30);
-    arg0->unk2C = func_8006A200_6AE00(arg0->unk2C);
+    arg0->unk44 = freeGameStateMemory(arg0->unk44);
+    arg0->unk30 = freeGameStateMemory(arg0->unk30);
+    arg0->unk2C = freeGameStateMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80001158_1D58);

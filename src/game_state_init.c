@@ -1,3 +1,4 @@
+#include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
@@ -9,9 +10,6 @@ extern s32 D_45B130;
 extern u16 D_8008D6B0_8E2B0;
 extern u8 D_800A8CC8_A0038;
 extern void *func_80035F80_36B80(s32);
-extern void *dmaRequestAndUpdateState(void *, void *);
-void *dmaRequestAndUpdateStateWithSize(void *, void *, s32);
-extern void *func_8006A200_6AE00(void *ptr);
 extern void ClocktowerTriggerInit();
 extern void func_80000460_1060(s32, void *, void *);
 extern void func_8000056C_116C(s32, s32, GameState *);
@@ -30,7 +28,7 @@ extern void func_800574A0_580A0(s32);
 extern void func_80057564_58164(s32 a0);
 extern void func_800697CC_6A3CC(void (*func)(void));
 extern void func_800697F4_6A3F4(s32);
-extern void func_8006982C_6A42C(void *);
+extern void setGameStateHandler(void *);
 extern void func_800698EC_6A4EC(s32, s32, s32, void *, s32, s32, s32, s32);
 extern void func_80069CC0_6A8C0(void *);
 extern void func_80069CE8_6A8E8(void *);
@@ -40,7 +38,6 @@ extern void n_alSynRemovePlayer(void *player);
 extern void PhoneTriggerInit;
 GameState *func_80069854_6A454(s32 arg0);
 s32 func_8003BB5C_3C75C();
-s8 *func_800699F4_6A5F4(void *, void *, void *, s32);
 
 void cleanupTransitionEffect();
 void gameStateCleanupHandler();
@@ -75,28 +72,28 @@ void initializeGameState(s32 arg0, s32 arg1, s32 arg2) {
         func_800698EC_6A4EC(0x30, 0xA, 0x14, 0, 0, 0, 0, 0);
         func_80027CA0_288A0(temp_s0, 0, 0xA, 0);
         func_80027CA0_288A0(((void *)((s32)temp_s0)) + 0x1D8, 8, 0xF, 1);
-        func_800699F4_6A5F4(&func_80017350_17F50, 0, 0, 0x5A);
-        func_800699F4_6A5F4(&func_80018800_19400, 0, 0, 0x5B);
-        func_800699F4_6A5F4(&func_80028480_29080, 0, 0, 0x5B);
+        scheduleTask(&func_80017350_17F50, 0, 0, 0x5A);
+        scheduleTask(&func_80018800_19400, 0, 0, 0x5B);
+        scheduleTask(&func_80028480_29080, 0, 0, 0x5B);
         var_s1++;
         var_s1--;
-        func_800699F4_6A5F4(&func_80019B70_1A770, 0, 0, 0x5C);
-        func_800699F4_6A5F4(&setupGameStateTransition, 0, 0, 0x5D);
-        func_800699F4_6A5F4(&func_80018A90_19690, 0, 0, 0x62);
+        scheduleTask(&func_80019B70_1A770, 0, 0, 0x5C);
+        scheduleTask(&setupGameStateTransition, 0, 0, 0x5D);
+        scheduleTask(&func_80018A90_19690, 0, 0, 0x62);
         do {
-            *func_800699F4_6A5F4(&func_80018CB0_198B0, 0, 0, 0x64) = var_s1;
+            *(s8 *)scheduleTask(&func_80018CB0_198B0, 0, 0, 0x64) = var_s1;
             var_s1 += 1;
         } while (var_s1 < 6);
-        func_800699F4_6A5F4(&PhoneTriggerInit, 0, 0, 0x64);
+        scheduleTask(&PhoneTriggerInit, 0, 0, 0x64);
     } while (0);
-    func_800699F4_6A5F4(&ClocktowerTriggerInit, 0, 0, 0x64);
-    func_800699F4_6A5F4(&func_80036A3C_3763C, 0, 0, 0x64);
-    func_800699F4_6A5F4(&func_80036250_36E50, 0, 0, 0x64);
+    scheduleTask(&ClocktowerTriggerInit, 0, 0, 0x64);
+    scheduleTask(&func_80036A3C_3763C, 0, 0, 0x64);
+    scheduleTask(&func_80036250_36E50, 0, 0, 0x64);
     temp_s0->unk3E4 = dmaRequestAndUpdateState(&D_419440, &D_4196E0);
     temp_s0->unk3DC = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
     temp_s0->unk3E0 = func_80035F80_36B80(1);
     func_8006FDA0_709A0(NULL, 0xFF, 0);
-    func_8006982C_6A42C(&gameStateCountdownHandler);
+    setGameStateHandler(&gameStateCountdownHandler);
 }
 
 void gameStateCountdownHandler(void) {
@@ -107,7 +104,7 @@ void gameStateCountdownHandler(void) {
     } else {
         if (func_8003BB5C_3C75C() == 0) {
             func_8006FDA0_709A0(NULL, 0, 0x10);
-            func_8006982C_6A42C(gameStateCleanupHandler);
+            setGameStateHandler(gameStateCleanupHandler);
         }
     }
 }
@@ -130,9 +127,9 @@ void gameStateCleanupHandler(void) {
         n_alSynRemovePlayer(gs);
         n_alSynRemovePlayer((void *)((u8 *)gs + 0x1D8));
 
-        gs->unk3E4 = func_8006A200_6AE00((void *)gs->unk3E4);
-        gs->unk3DC = func_8006A200_6AE00((void *)gs->unk3DC);
-        gs->unk3E0 = func_8006A200_6AE00((void *)gs->unk3E0);
+        gs->unk3E4 = (void *)freeGameStateMemory((void *)gs->unk3E4);
+        gs->unk3DC = (void *)freeGameStateMemory((void *)gs->unk3DC);
+        gs->unk3E0 = (void *)freeGameStateMemory((void *)gs->unk3E0);
 
         if (gs->unk427 == 0xFF) {
             func_800697CC_6A3CC(transitionToMainMenu);

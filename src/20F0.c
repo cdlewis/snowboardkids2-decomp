@@ -161,7 +161,6 @@ void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 
 void* func_80009F5C_AB5C(s32);
 s32 func_8000CDE0_D9E0(s32);
 s32 func_8000CDFC_D9FC(s32);
-void* func_8006A200_6AE00(void*);
 void func_80002468_3068(s32);
 void func_8005DE98_5EA98(s32, s16, s16, s32);
 
@@ -463,7 +462,7 @@ void func_8000198C_258C(void* arg0, void* arg1) {
 }
 
 void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {
-    GameState* obj = func_8006A1C0_6ADC0(0x160);
+    GameState* obj = allocateGameStateMemory(0x160);
     if (obj != NULL) {
         func_80001A6C_266C(obj, arg0, arg1, arg2, arg3, arg4, arg5);
     }
@@ -474,7 +473,7 @@ INCLUDE_ASM("asm/nonmatchings/20F0", func_80001A6C_266C);
 
 void func_80002014_2C14(func_80002040_2C40_arg* arg0) {
     func_80002040_2C40(arg0);
-    func_8006A200_6AE00(arg0);
+    freeGameStateMemory(arg0);
 }
 
 void* func_80002040_2C40(func_80002040_2C40_arg* arg0) {
@@ -486,28 +485,28 @@ void* func_80002040_2C40(func_80002040_2C40_arg* arg0) {
         return 0;
     }
     arg0->unk3C = 1;
-    arg0->unk120 = func_8006A200_6AE00(arg0->unk120);
-    arg0->unk11C = func_8006A200_6AE00(arg0->unk11C);
+    arg0->unk120 = (void*)freeGameStateMemory(arg0->unk120);
+    arg0->unk11C = (void*)freeGameStateMemory(arg0->unk11C);
     arg0->unk118 = func_8000CDFC_D9FC(arg0->unk118);
     arg0->unk114 = func_8000CDE0_D9E0(arg0->unk114);
     func_80009F5C_AB5C(((s32)arg0) + 0xA4);
     temp_s0 = arg0->unk98;
-    temp_s0->unk24 = func_8006A200_6AE00(temp_s0->unk24);
-    temp_s0->unk28 = func_8006A200_6AE00(temp_s0->unk28);
-    new_var = func_8006A200_6AE00(arg0->unk98);
+    temp_s0->unk24 = (void*)freeGameStateMemory(temp_s0->unk24);
+    temp_s0->unk28 = (void*)freeGameStateMemory(temp_s0->unk28);
+    new_var = (void*)freeGameStateMemory(arg0->unk98);
     temp_s0_2 = arg0->unk0;
     arg0->unk98 = new_var;
-    temp_s0_2->unk420 = func_8006A200_6AE00(temp_s0_2->unk420);
-    temp_s0_2->unk424 = func_8006A200_6AE00(temp_s0_2->unk424);
+    temp_s0_2->unk420 = (void*)freeGameStateMemory(temp_s0_2->unk420);
+    temp_s0_2->unk424 = (void*)freeGameStateMemory(temp_s0_2->unk424);
     temp_s0_3 = arg0->unk0;
-    temp_s0_3->unk3E4 = func_8006A200_6AE00(temp_s0_3->unk3E4);
-    temp_s0_3->unk3E8 = func_8006A200_6AE00(temp_s0_3->unk3E8);
-    temp_s0_3->unk3EC = func_8006A200_6AE00(temp_s0_3->unk3EC);
-    arg0->unk4 = func_8006A200_6AE00(arg0->unk4);
-    arg0->unk8 = func_8006A200_6AE00(arg0->unk8);
-    arg0->unk0->unk24 = func_8006A200_6AE00(arg0->unk0->unk24);
-    arg0->unk0->unk28 = func_8006A200_6AE00(arg0->unk0->unk28);
-    arg0->unk0 = func_8006A200_6AE00(arg0->unk0);
+    temp_s0_3->unk3E4 = (void*)freeGameStateMemory(temp_s0_3->unk3E4);
+    temp_s0_3->unk3E8 = (void*)freeGameStateMemory(temp_s0_3->unk3E8);
+    temp_s0_3->unk3EC = (void*)freeGameStateMemory(temp_s0_3->unk3EC);
+    arg0->unk4 = (void*)freeGameStateMemory(arg0->unk4);
+    arg0->unk8 = (void*)freeGameStateMemory(arg0->unk8);
+    arg0->unk0->unk24 = (void*)freeGameStateMemory(arg0->unk0->unk24);
+    arg0->unk0->unk28 = (void*)freeGameStateMemory(arg0->unk0->unk28);
+    arg0->unk0 = (void*)freeGameStateMemory(arg0->unk0);
     return arg0;
 }
 

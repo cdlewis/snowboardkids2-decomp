@@ -9,7 +9,7 @@
 
 USE_OVERLAY(_9FDF0)
 
-void func_8006982C_6A42C(void*);
+void setGameStateHandler(void*);
 s32* func_80069854_6A454(s32);
 extern s32 D_215D70;
 extern s32 D_216290;
@@ -519,7 +519,7 @@ void func_80067FB0_68BB0(void) {
     temp_s0 = func_80069854_6A454(4);
     LOAD_OVERLAY(_9FDF0)
     *temp_s0 = dmaRequestAndUpdateStateWithSize(&D_215D70, &D_216290, 0x918);
-    func_8006982C_6A42C(&func_80068060_68C60);
+    setGameStateHandler(&func_80068060_68C60);
 }
 
 void func_80068060_68C60(void) {

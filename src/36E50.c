@@ -1,3 +1,4 @@
+#include "69EF0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 
@@ -20,7 +21,7 @@ typedef struct {
 typedef struct {
     s16 unk0;
     s16 unk2;
-    s32 unk4;
+    void* unk4;
     s16 unk8;
     s16 unkA;
     s16 unkC;
@@ -88,7 +89,7 @@ typedef struct {
 typedef struct {
     u16 unk0;
     u16 unk2;
-    u32 unk4;
+    void* unk4;
     u16 unk8;
     u16 unkA;
     u8 unkC;
@@ -101,7 +102,6 @@ typedef struct {
 
 s32 func_80035F80_36B80(int);
 void func_80069CE8_6A8E8(void*);
-s32 dmaRequestAndUpdateStateWithSize(void*, void*, int);
 void func_80036274_36E74(u8*);
 void func_80036424_37024(void);
 void func_80036848_37448(func_80036848_37448_arg*);
@@ -110,16 +110,14 @@ void func_80036880_37480(func_80036880_37480_arg*);
 void func_80036A68_37668(u8*);
 void func_80036A10_37610(func_80036A10_37610_arg*);
 
-extern void D_45A890;
-extern void D_45B130;
-extern func_800698BC_6A4BC_return* GameStateGet();
-extern func_80036274_36E74_large_struct* func_800699F4_6A5F4(void*, int, int, int);
+extern void* D_45A890;
+extern void* D_45B130;
 
 extern void func_80058220_58E20(u16, void*);
 extern void D_8008FAC0_906C0;
 extern s16 D_8008FD10_90910[];
 extern char D_8008FD1C_9091C[];
-extern s32 func_8006A200_6AE00(s32);
+extern s32 freeGameStateMemory(s32);
 extern void func_80036920_37520;
 
 void func_80036250_36E50(s8* arg0) {
@@ -136,12 +134,12 @@ void func_80036274_36E74(u8* arg0) {
     if (temp_v0->unk424 != 0) {
         if (*arg0 == 0) {
             if ((u8)temp_v0->unk425 < 0xAU) {
-                temp_v0_2 = func_800699F4_6A5F4(&func_80036328_36F28, 0, 0, 0x64);
+                temp_v0_2 = scheduleTask(&func_80036328_36F28, 0, 0, 0x64);
                 if (temp_v0_2 != NULL) {
                     temp_v0_2->unk73 = (u8)temp_v0->unk425;
                 }
             } else {
-                temp_v0_3 = func_800699F4_6A5F4(&func_80036880_37480, 0, 0, 0x64);
+                temp_v0_3 = scheduleTask(&func_80036880_37480, 0, 0, 0x64);
                 if (temp_v0_3 != NULL) {
                     temp_v0_3->unk10 = (u8)temp_v0->unk425;
                 }
@@ -154,14 +152,14 @@ void func_80036274_36E74(u8* arg0) {
 }
 
 void func_80036328_36F28(func_80036328_36F28_arg* arg0) {
-    s32 resource_id;
+    void* resource;
     s32 temp_value;
     s32 i;
     s16 var_a0;
 
     func_80036328_36F28_arg_item* var_v1;
 
-    resource_id = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
+    resource = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
     temp_value = func_80035F80_36B80(1);
 
     func_80069CE8_6A8E8(&func_80036848_37448);
@@ -187,7 +185,7 @@ void func_80036328_36F28(func_80036328_36F28_arg* arg0) {
         var_v1->unk10 = 0xFF;
         var_v1->unkA = 0x400;
         var_v1->unkC = 0x400;
-        var_v1->unk4 = resource_id;
+        var_v1->unk4 = resource;
     }
 
     arg0->unk58 = temp_value;
@@ -201,20 +199,20 @@ void func_80036328_36F28(func_80036328_36F28_arg* arg0) {
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036424_37024);
 
 void func_80036848_37448(func_80036848_37448_arg* arg0) {
-    arg0->unk4 = func_8006A200_6AE00(arg0->unk4);
-    arg0->unk58 = func_8006A200_6AE00(arg0->unk58);
+    arg0->unk4 = freeGameStateMemory(arg0->unk4);
+    arg0->unk58 = freeGameStateMemory(arg0->unk58);
 }
 
 void func_80036880_37480(func_80036880_37480_arg* arg0) {
-    s32 temp_s0;
+    void* resource;
 
-    temp_s0 = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
+    resource = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
     func_80069CE8_6A8E8(&func_80036A10_37610);
     arg0->unk8 = 8;
     arg0->unkA = 0xFF;
     arg0->unk0 = 0;
     arg0->unk2 = 0;
-    arg0->unk4 = temp_s0;
+    arg0->unk4 = resource;
     arg0->unkD = 0;
     if (arg0->unk10 == 0xB) {
         arg0->unkC = 1;
@@ -229,7 +227,7 @@ void func_80036880_37480(func_80036880_37480_arg* arg0) {
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036920_37520);
 
 void func_80036A10_37610(func_80036A10_37610_arg* arg0) {
-    arg0->unk4 = func_8006A200_6AE00(arg0->unk4);
+    arg0->unk4 = freeGameStateMemory(arg0->unk4);
 }
 
 void func_80036A3C_3763C(func_80036A3C_3763C_arg* arg0) {
