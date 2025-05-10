@@ -78,15 +78,14 @@ typedef struct {
     void* unk14;
 } Entity_unk44;
 
-typedef struct
-{
+typedef struct {
     s32 unk0;
     s32 unk4;
-    void* romAStart;
-    void* romAEnd;
-    void* romBStart;
-    void* romBEnd;
-    s32 size;
+    /* 0x8  */ void* romAStart;
+    /* 0xC  */ void* romAEnd;
+    /* 0x10 */ void* romBStart;
+    /* 0x14 */ void* romBEnd;
+    /* 0x18 */ s32 size;
     u8 padding3[0x4];
     s8 unk20;
     s8 unk21;
