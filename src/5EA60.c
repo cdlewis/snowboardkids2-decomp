@@ -4,7 +4,32 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE60_5EA60);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE6C_5EA6C);
 
-INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE98_5EA98);
+extern void* func_8005DE60_5EA60(void*);
+extern void* func_8005DE6C_5EA6C(void*, short, short);
+
+typedef struct {
+    u8 padding[0x40];
+    void* unk40;
+    void* unk44;
+    s16 unk48;
+} func_8005DE98_5EA98_arg;
+
+void func_8005DE98_5EA98(void* arg0, int arg1, int arg2, func_8005DE98_5EA98_arg* arg3) {
+    void* result;
+    s16 s_arg1;
+    s16 s_arg2;
+
+    result = func_8005DE60_5EA60(arg0);
+    arg3->unk44 = result;
+
+    s_arg1 = (s16)(arg1 << 16 >> 16);
+    s_arg2 = (s16)(arg2 << 16 >> 16);
+
+    result = func_8005DE6C_5EA6C(arg0, s_arg1, s_arg2);
+    arg3->unk40 = result;
+
+    arg3->unk48 = *(u16*)result + 0x8000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DF10_5EB10);
 
@@ -12,7 +37,101 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E22C_5EE2C);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E500_5F100);
 
-INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E800_5F400);
+typedef struct {
+    /* 0x00 */ s16 values[0xA];
+    /* 0x14 */ s32 position[3];
+    /* 0x20 */ s32 prev_position[3];
+    /* 0x2C */ s32 unknown[2];
+    /* 0x34 */ s32 interpolated[3];
+    /* 0x40 */ s16* animation_data;
+    /* 0x44 */ s16* frame_data;
+    /* 0x48 */ u16 flags;
+    /* 0x4A */ u16 counter;
+} func_8005E800_5F400_arg;
+
+extern void func_8005DF10_5EB10(s16, s16, s16, s16*);
+extern void func_8006BDBC_6C9BC(func_8005E800_5F400_arg*, void*, void*);
+extern void memcpy(void*, void*, s32);
+
+void func_8005E800_5F400(func_8005E800_5F400_arg* entity, u16 param_2) {
+    s16 stack_data[0x10];
+
+    if (entity->flags & 0x8000) {
+        entity->flags &= 0x7FFF;
+        func_8005DF10_5EB10(entity->animation_data[1], entity->animation_data[2], entity->animation_data[3], entity->values);
+        {
+            u16 idx;
+            s16 temp_val;
+
+            idx = entity->animation_data[4];
+            temp_val = entity->frame_data[idx * 3];
+            entity->position[0] = temp_val << 10;
+
+            idx = entity->animation_data[4];
+            temp_val = entity->frame_data[(idx * 3) + 1];
+            entity->position[1] = temp_val << 10;
+
+            idx = entity->animation_data[4];
+            temp_val = entity->frame_data[(idx * 3) + 2];
+            entity->position[2] = temp_val << 10;
+
+            memcpy(entity->prev_position, entity->values, 0x20);
+            entity->animation_data += 5;
+            entity->counter = entity->animation_data[3];
+        }
+    }
+
+    {
+        s32 result;
+
+        result = entity->animation_data[3] * (param_2 & 0xFFFF);
+        if (result < 0) {
+            result += 0x1FF;
+        }
+        entity->counter = result >> 9;
+
+        if (entity->counter & 0xFFFF) {
+            func_8005DF10_5EB10(entity->animation_data[1], entity->animation_data[2], entity->counter, stack_data);
+            func_8006BDBC_6C9BC(entity, stack_data, entity->prev_position);
+        }
+    }
+
+    {
+        u16 idx;
+        s32 source_val;
+        s32 dest_val;
+        s32 result;
+
+        /* First interpolation */
+        idx = entity->animation_data[4];
+        source_val = entity->frame_data[idx * 3] << 10;
+        dest_val = entity->position[0];
+        result = (source_val - dest_val) * param_2;
+        if (result < 0) {
+            result += 0x1FF;
+        }
+        entity->interpolated[0] = (result >> 9) + dest_val;
+
+        /* Second interpolation */
+        idx = entity->animation_data[4];
+        source_val = entity->frame_data[(idx * 3) + 1] << 10;
+        dest_val = entity->position[1];
+        result = (source_val - dest_val) * param_2;
+        if (result < 0) {
+            result += 0x1FF;
+        }
+        entity->interpolated[1] = (result >> 9) + dest_val;
+
+        /* Third interpolation */
+        idx = entity->animation_data[4];
+        source_val = entity->frame_data[(idx * 3) + 2] << 10;
+        result = (source_val - entity->position[2]) * param_2;
+        if (result < 0) {
+            result += 0x1FF;
+        }
+        entity->interpolated[2] = (result >> 9) + entity->position[2];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005EA44_5F644);
 
@@ -45,10 +164,10 @@ typedef struct {
     func_8006097C_6157C_arg_item data[0];
 } func_8006097C_6157C_arg;
 
-u16 func_8006097C_6157C(func_8006097C_6157C_arg *table, s32 index) {
+u16 func_8006097C_6157C(func_8006097C_6157C_arg* table, s32 index) {
     s32 adjusted_index = (index << 16) >> 14;
-    func_8006097C_6157C_arg_item *entry = (func_8006097C_6157C_arg_item *)((s8 *)table + adjusted_index);
-    u16 *data_ptr = (u16 *)((s8 *)table + entry->unk8);
+    func_8006097C_6157C_arg_item* entry = (func_8006097C_6157C_arg_item*)((s8*)table + adjusted_index);
+    u16* data_ptr = (u16*)((s8*)table + entry->unk8);
 
     return *data_ptr;
 }
