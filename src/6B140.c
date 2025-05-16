@@ -1,8 +1,6 @@
-#include "common.h"
+#include "6B140.h"
 
-typedef struct {
-    s16 m[9];
-} Mat3x3;
+#include "common.h"
 
 typedef struct {
     u8 padding[0x14];

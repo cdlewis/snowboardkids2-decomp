@@ -8,8 +8,7 @@
 #define MODE_QUEUED_DMA 1
 #define MODE_DIRECT_FETCH 2
 
-typedef struct
-{
+typedef struct {
     u8 padding[0x24];
     void* unk24;
     void* unk28;
@@ -35,8 +34,7 @@ typedef struct {
     void* unk28;
 } func_80002040_2C40_arg_unk98;
 
-typedef struct
-{
+typedef struct {
     func_80002040_2C40_arg_unk0* unk0;
     func_80002040_2C40_arg_unk4* unk4;
     void* unk8;
