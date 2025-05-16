@@ -1,3 +1,5 @@
+#include "5EA60.h"
+
 #include "common.h"
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE60_5EA60);
@@ -7,14 +9,7 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE6C_5EA6C);
 extern void* func_8005DE60_5EA60(void*);
 extern void* func_8005DE6C_5EA6C(void*, short, short);
 
-typedef struct {
-    u8 padding[0x40];
-    void* unk40;
-    void* unk44;
-    s16 unk48;
-} func_8005DE98_5EA98_arg;
-
-void func_8005DE98_5EA98(void* arg0, int arg1, int arg2, func_8005DE98_5EA98_arg* arg3) {
+void func_8005DE98_5EA98(void* arg0, s32 arg1, s32 arg2, func_8005DE98_5EA98_arg* arg3) {
     void* result;
     s16 s_arg1;
     s16 s_arg2;
@@ -155,16 +150,7 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_80060504_61104);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_80060950_61550);
 
-typedef struct {
-    u8 padding[0x8];
-    u32 unk8;
-} func_8006097C_6157C_arg_item;
-
-typedef struct {
-    func_8006097C_6157C_arg_item data[0];
-} func_8006097C_6157C_arg;
-
-u16 func_8006097C_6157C(func_8006097C_6157C_arg* table, s32 index) {
+s32 func_8006097C_6157C(func_8006097C_6157C_arg* table, s32 index) {
     s32 adjusted_index = (index << 16) >> 14;
     func_8006097C_6157C_arg_item* entry = (func_8006097C_6157C_arg_item*)((s8*)table + adjusted_index);
     u16* data_ptr = (u16*)((s8*)table + entry->unk8);
