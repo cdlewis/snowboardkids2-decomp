@@ -619,7 +619,97 @@ extern s32 func_8005ECB8_5F8B8(void* arg0, s32 arg1, s32 arg2, void* arg3);
 extern void func_8005E800_5F400(void* arg0, u16 arg1);
 extern u8 D_8009A870_9B470[32];
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80002484_3084);
+s32 func_80002484_3084(func_80002040_2C40_arg* arg0, s16 arg1) {
+    s8 local_buffer[0x20];
+    s32 s3;
+    s32 i;
+    s32 s4;
+    s32 s6;
+    s32 s7;
+    s16 s5 = arg1;
+    s16 temp;
+
+    memcpy(&local_buffer, &D_8009A870_9B470, sizeof(local_buffer));
+
+    s7 = 0;
+    s4 = 0;
+    s6 = 0;
+
+    temp = arg0->unk16;
+
+    if (arg0->unk8 == 0) {
+        return 0;
+    }
+
+    if (temp == (-1)) {
+        return 0;
+    }
+
+    arg0->unk8C++;
+    if (arg0->unk3E != 0) {
+        temp = (arg0->unk3A != -1) ? arg0->unk3A : arg0->unk16;
+        s3 = func_8006097C_6157C(arg0->unk8, temp);
+        if (s3 >= 32) {
+            s3 = 31;
+        }
+
+        if (arg1 == -1) {
+            for (i = 0; i < s3; i++) {
+                s4 |= func_8005ECB8_5F8B8(arg0->unk8, temp, (s16)i, &arg0->unk4[i]);
+                s6 |= 1 << i;
+                arg0->unk90 |= s4 << i;
+            }
+        } else {
+            for (i = 0; i < s3; i++) {
+                func_8005E800_5F400(&arg0->unk4[i], arg1 & 0xFFFF);
+            }
+        }
+    } else if (arg0->unk38 != -1) {
+        arg0->unk14 = arg0->unk16;
+        arg0->unk16 = arg0->unk38;
+        arg0->unk3E = -1;
+        arg0->unk38 = -1;
+
+        s3 = func_8006097C_6157C(arg0->unk8, arg0->unk16);
+        for (i = 0; i < s3; i++) {
+            func_8005DE98_5EA98(arg0->unk8, arg0->unk16, (s16)i, &arg0->unk4[i]);
+        }
+    }
+
+    if ((arg0->unk90 & s6) == s6) {
+        s7 = 1;
+        arg0->unk90 = 0;
+    }
+
+    if (s7 != 0) {
+        arg0->unk95++;
+        s7 = arg0->unk95;
+        if (arg0->unk3E > 0) {
+            arg0->unk3E--;
+        }
+
+        arg0->unk3A = -1;
+        if (arg0->unk16 != arg0->unk8E) {
+            if (arg0->unk16 != arg0->unk14) {
+                arg0->unk8A = arg0->unk8C;
+            }
+            if (arg0->unk16 != arg0->unk8E) {
+                arg0->unk8C = 0;
+                return s7;
+            }
+        }
+
+        if (arg0->unk16 == arg0->unk14) {
+            if (arg0->unk8A != arg0->unk8C) {
+                arg0->unk8A = arg0->unk8C;
+            }
+        }
+
+        arg0->unk8C = 0;
+    }
+
+    return s7;
+}
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_80002750_3350);
 
