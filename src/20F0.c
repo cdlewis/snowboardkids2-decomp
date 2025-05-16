@@ -1,4 +1,5 @@
 #include "19E80.h"
+#include "5EA60.h"
 #include "615A0.h"
 #include "69EF0.h"
 #include "common.h"
@@ -51,8 +52,7 @@ typedef struct
     s8 unk3E;
     u8 padding2[0x4A];
     s8 unk89;
-    s8 unk8A;
-    s8 unk8B;
+    s16 unk8A;
     s16 unk8C;
     s16 unk8E;
     s32 unk90;
@@ -160,8 +160,7 @@ void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 
 void* func_80009F5C_AB5C(s32);
 s32 func_8000CDE0_D9E0(s32);
 s32 func_8000CDFC_D9FC(s32);
-void func_80002468_3068(s32);
-void func_8005DE98_5EA98(s32, s16, s16, s32);
+void func_80002468_3068(func_80002040_2C40_arg* arg0);
 
 void func_800014F0_20F0(func_800014F0_20F0_arg* arg0) {
     arg0->unk3C = 1;
@@ -599,22 +598,26 @@ void func_80002260_2E60(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg
 
             {
                 s32 i;
-                s32 count = func_8006097C_6157C((s32)arg0->unk8, var_a1);
+                s32 count = func_8006097C_6157C(arg0->unk8, var_a1);
                 for (i = 0; i < count; i++) {
-                    func_8005DE98_5EA98((s32)arg0->unk8, var_a1, i, (u32)(arg0->unk4 + i));
+                    func_8005DE98_5EA98(arg0->unk8, var_a1, (s16)i, arg0->unk4 + i);
                 }
             }
 
-            func_80002468_3068((s32)arg0);
+            func_80002468_3068(arg0);
         }
     }
 }
 
-void func_80002484_3084(s32, s32);
+s32 func_80002484_3084(func_80002040_2C40_arg*, s16);
 
-void func_80002468_3068(s32 arg0) {
+void func_80002468_3068(func_80002040_2C40_arg* arg0) {
     func_80002484_3084(arg0, -1);
 }
+
+extern s32 func_8005ECB8_5F8B8(void* arg0, s32 arg1, s32 arg2, void* arg3);
+extern void func_8005E800_5F400(void* arg0, u16 arg1);
+extern u8 D_8009A870_9B470[32];
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_80002484_3084);
 

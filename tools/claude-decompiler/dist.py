@@ -106,8 +106,8 @@ def score_files(target_lines: List[str], cand_lines: List[str], *, debug_mode: b
         oldsp = re.search(arch.re_sprel, old)
         newsp = re.search(arch.re_sprel, new)
         if oldsp and newsp:
-            oldrel = int(oldsp.group(1) or "0", 0)
-            newrel = int(newsp.group(1) or "0", 0)
+            oldrel = int(oldsp.group(1) or "0", 16)
+            newrel = int(newsp.group(1) or "0", 16)
             num_stack_penalties += abs(oldrel - newrel)
             ignore_last_field = True
 
