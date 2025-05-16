@@ -88,7 +88,9 @@ typedef struct {
     s8 unk5C8;
     u8 unk5C9;
     u8 unk5CA[0];
-    u8 PAD_15[0x1216];
+    u8 PAD_15[0x1D1];
+    u8 unk79B;
+    u8 PAD_16[0x1044];
     s8 unk17E0;
 } GameState;
 
