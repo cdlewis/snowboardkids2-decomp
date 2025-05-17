@@ -148,7 +148,30 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_800600E4_60CE4);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_80060504_61104);
 
-INCLUDE_ASM("asm/nonmatchings/5EA60", func_80060950_61550);
+typedef struct {
+    s32 baseOffset;
+    s32 offsetTable[0];
+} func_80060950_61550_arg;
+
+typedef struct {
+    u16 padding;
+    u16 index;
+} func_80060950_61550_target;
+
+s32 func_80060950_61550(func_80060950_61550_arg* data, s16 index) {
+    s32 baseOffset;
+    s32 targetOffset;
+    func_80060950_61550_target* target;
+    s32 indexValue;
+    func_80060950_61550_arg* baseData;
+
+    targetOffset = data->offsetTable[index + 1];
+    target = (func_80060950_61550_target*)(((s8*)data) + targetOffset);
+    baseOffset = data->baseOffset;
+    indexValue = target->index;
+    baseData = (func_80060950_61550_arg*)(((s8*)data) + baseOffset);
+    return (s32)(((s8*)baseData) + (indexValue << 1));
+}
 
 s32 func_8006097C_6157C(func_8006097C_6157C_arg* table, s32 index) {
     s32 adjusted_index = (index << 16) >> 14;
