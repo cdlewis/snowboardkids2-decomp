@@ -4,7 +4,6 @@
 #include "gamestate.h"
 
 void func_80057564_58164(s32);
-void setGameStateHandler(void*);
 extern s32 D_800AFF10_A7280;
 extern void func_80040608_41208();
 GameState* GameStateGet();
@@ -282,7 +281,20 @@ void func_80040468_41068(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_800404A8_410A8);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_80040528_41128);
+extern void func_800574A0_580A0(s32);
+extern void func_80040588_41188;
+void func_80040528_41128(void) {
+    GameState* gs;
+    s32 new_var;
+    gs = GameStateGet();
+    gs->unk4C--;
+    if (gs->unk4C == 0) {
+        new_var = gs->unk10->unkBC4 == 0;
+        D_800A24A0_A30A0 = (new_var) ? 3 : 4;
+        func_800574A0_580A0(0xA);
+        setGameStateHandler(&func_80040588_41188);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_80040588_41188);
 

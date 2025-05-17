@@ -9,7 +9,9 @@ typedef struct {
 } GameStateUnk28;
 
 typedef struct {
-    u8 padding[0x176C];
+    u8 padding[0xBC4];
+    u8 unkBC4;
+    u8 padding2[0xBA4];
     s32 unk176C;
 } GameStateUnk10;
 
