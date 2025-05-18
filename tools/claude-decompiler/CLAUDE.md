@@ -20,6 +20,7 @@ Repeat the following steps:
 
 ## Coding Guidelines
 
+* Always use array and struct access. Do not introduce manual pointer arithmatic.
 * Favour struct or array accesses. Avoid pointer arithamtic whenever possible.
 * Favour `for` loops over `do` or `while` loops.
 * VARIABLE DECLARATIONS MUST APPEAR AT THE START OF THE FUNCTION.

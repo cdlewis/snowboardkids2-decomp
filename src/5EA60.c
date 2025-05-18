@@ -2,12 +2,12 @@
 
 #include "common.h"
 
+void* func_8005DE60_5EA60(void*);
+u16* func_8005DE6C_5EA6C(void* base, s16 tableIndex, s16 subIndex);
+
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE60_5EA60);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE6C_5EA6C);
-
-extern void* func_8005DE60_5EA60(void*);
-extern void* func_8005DE6C_5EA6C(void*, short, short);
 
 void func_8005DE98_5EA98(void* arg0, s32 arg1, s32 arg2, func_8005DE98_5EA98_arg* arg3) {
     void* result;
@@ -134,7 +134,22 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005ECB8_5F8B8);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005EFC4_5FBC4);
 
-INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005F2FC_5FEFC);
+extern u16* func_8005DE6C_5EA6C(void* base, s16 tableIndex, s16 subIndex);
+typedef struct
+{
+    u8 padding[0x40];
+    s16 unk40;
+    s16 padding2;
+    s16 unk44;
+} func_8005F2FC_5FEFC_arg;
+void func_8005F2FC_5FEFC(s16 arg0, s16 arg1, s16 arg2, func_8005F2FC_5FEFC_arg* arg3) {
+    func_8005F2FC_5FEFC_arg* new_var2;
+    u16 new_var;
+
+    arg3->unk44 = 0;
+    new_var = *func_8005DE6C_5EA6C(new_var2, arg1, arg2);
+    arg3->unk40 = (s16)(new_var + 0x8000);
+}
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005F344_5FF44);
 
