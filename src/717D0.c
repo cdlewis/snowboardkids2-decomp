@@ -33,33 +33,41 @@ typedef struct
     s32 unk50;
 } AudioStruct;
 
-extern Acmd *gAudioCmdBuffers[];
-extern ALGlobals __libmus_alglobals;
-extern OSMesgQueue D_800A8F58_A02C8;
-extern s32 gAudioCmdBufferToggle;
-extern s32 D_8009B044_9BC44;
-extern s32 gAudioDataMemory;
-extern s32 D_800A6464_A7064;
-extern s32 D_800A6468_A7068;
-extern s32 gAudioBufferSize;
-extern s32 D_800A6498_A7098;
-extern s32 gAudioBufferPadding;
-extern u32 D_8009B030_9BC30;
-extern u32 gMinAudioFrameSize;
-extern u8 diskrom_handle;
-extern void *D_8009B040_9BC40;
-extern void addViConfig(ViConfig *, OSMesgQueue *, s32);
-extern void func_80071294_71E94(void *);
-extern void func_800712D4_71ED4();
-extern void func_80071518_72118(void);
-s32 audioCreateAndScheduleTask(AudioStruct *, AudioBuffer *);
-void sendMessageToEventQueue2(OSMesg);
+typedef struct AudioNode_s {
+    ALLink l;
+    s32 data;
+    s32 timestamp;
+} AudioNode;
 
 typedef struct {
     u16 type;
     u16 pad;
     void *data;
 } Msg;
+
+extern Acmd *gAudioCmdBuffers[];
+extern ALGlobals __libmus_alglobals;
+extern AudioNode gActiveListHead;
+extern OSMesgQueue gAudioMsgQueue;
+extern OSMesgQueue D_800A8F58_A02C8;
+extern s32 D_8009B044_9BC44;
+extern s32 D_800A6468_A7068;
+extern s32 D_800A6498_A7098;
+extern s32 gAudioBufferPadding;
+extern s32 gAudioBufferSize;
+extern s32 gAudioCmdBufferToggle;
+extern s32 gAudioDataMemory;
+extern u32 gCurrentFrame;
+extern u32 D_8009B034_9BC34;
+extern u32 gMinAudioFrameSize;
+extern u8 diskrom_handle;
+extern void *gPendingMessages;
+extern void addViConfig(ViConfig *, OSMesgQueue *, s32);
+extern void func_80071294_71E94(void *);
+extern void func_800712D4_71ED4();
+extern void processAudioNodeList(void);
+s32 audioCreateAndScheduleTask(AudioStruct *, AudioBuffer *);
+void sendMessageToEventQueue2(OSMesg);
 
 INCLUDE_ASM("asm/nonmatchings/717D0", __MusIntAudManInit);
 
@@ -75,12 +83,12 @@ void func_80071000_71C00(void) {
         osRecvMesg(q, 0, 0 * 0);
         if (((Msg *)(&msg))->type == 5) {
             void **tbl = (void **)(((u8 *)q) - 0x1C0);
-            void *ptr = tbl[D_8009B030_9BC30 & 3];
-            if (audioCreateAndScheduleTask(ptr, D_8009B040_9BC40)) {
+            void *ptr = tbl[gCurrentFrame & 3];
+            if (audioCreateAndScheduleTask(ptr, gPendingMessages)) {
                 osRecvMesg((OSMesgQueue *)(((u8 *)q) + 0x38), &msg2, 1);
                 ;
                 func_80071294_71E94(*((void **)(((u8 *)msg2) + 4)));
-                D_8009B040_9BC40 = *((void **)(((u8 *)msg2) + 4));
+                gPendingMessages = *((void **)(((u8 *)msg2) + 4));
             }
         }
     }
@@ -98,7 +106,7 @@ s32 audioCreateAndScheduleTask(AudioStruct *audioTaskDesc, AudioBuffer *prevBuff
     s32 samplesToProcess;
     s32 currentSamplesInBuffer;
 
-    func_80071518_72118();
+    processAudioNodeList();
     outputBuffer = (s16 *)osVirtualToPhysical(audioTaskDesc->outputBuffer);
     if (prevBuffer != 0) {
         osAiSetNextBuffer(prevBuffer->buf, prevBuffer->len * 4);
@@ -160,7 +168,7 @@ void *func_800714D8_720D8(void *arg0) {
 
     if (*handle == 0) {
         u32 value = D_800A6498_A7098;
-        D_800A6464_A7064 = 0;
+        gActiveListHead.l.next = NULL;
         *handle = 1;
         D_800A6468_A7068 = value;
     }
@@ -169,4 +177,39 @@ void *func_800714D8_720D8(void *arg0) {
     return &func_800712D4_71ED4;
 }
 
-INCLUDE_ASM("asm/nonmatchings/717D0", func_80071518_72118);
+void processAudioNodeList(void) {
+    void *message;
+    u32 i;
+    AudioNode *nextNode;
+    AudioNode *node;
+    AudioNode *headPtr;
+
+    for (i = 0; i < D_8009B034_9BC34; i++) {
+        osRecvMesg(&gAudioMsgQueue, &message, 0);
+    }
+
+    headPtr = &gActiveListHead;
+    node = (AudioNode *)gActiveListHead.l.next;
+    while (node != NULL) {
+        nextNode = (AudioNode *)node->l.next;
+        if ((node->timestamp + 1) >= gCurrentFrame) {
+            node = nextNode;
+        } else {
+            if ((&gActiveListHead)->l.next == ((ALLink *)node)) {
+                (&gActiveListHead)->l.next = (ALLink *)nextNode;
+            }
+            alUnlink((ALLink *)node);
+            if ((&gActiveListHead)->l.prev != 0) {
+                alLink((ALLink *)node, (&gActiveListHead)->l.prev);
+            } else {
+                (&gActiveListHead)->l.prev = (ALLink *)node;
+                node->l.next = 0;
+                node->l.prev = 0;
+            }
+            node = nextNode;
+        }
+    }
+
+    D_8009B034_9BC34 = 0;
+    gCurrentFrame += 1;
+}
