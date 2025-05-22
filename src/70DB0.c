@@ -313,7 +313,7 @@ void thread_function_3(void *arg) {
     // force specific layout of these variables on the stack
     struct {
         OSMesg eventQueueOneMessage;
-        OSMesg messageQueue;
+        OSMesgQueue *messageQueue;
         OSMesg message;
     } stack;
     OSMesg frameBufferQueueMessage;

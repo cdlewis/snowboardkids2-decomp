@@ -1,3 +1,8 @@
+processAudioNodeList = 0x80071518;
+gAudioMsgQueue = 0x800A6480;
+gActiveListHead = 0x800A6464;
+gCurrentFrame = 0x8009B030;
+gPendingMessages = 0x8009B040;
 audioCreateAndScheduleTask = 0x800710EC;
 gAudioCmdBuffers = 0x800A8D90;
 gAudioDataMemory = 0x8009D270;
