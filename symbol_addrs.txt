@@ -1,3 +1,20 @@
+gAudioMsgBuffer = 0x800A64A0;
+gAudioDmaMessages = 0x800A649C;
+gAudioNodePool = 0x800A6498;
+gMaxVoices = 0x800A64A4;
+gAudioThreadCreated = 0x8009B03C;
+gAudioRspCmdCount = 0x800A6478;
+audioThreadMain = 0x80071000;
+loadAudioDataWithCache = 0x800712D4;
+initAudioDriveAndGetLoader = 0x800714D8;
+gAudioUnderrunFlag = 0x8009B044;
+handleAudioUnderrun = 0x80071294;
+gCartRomHandle = 0x800A64AC;
+gDriveRomHandle = 0x800A64B0;
+gDriveRomInitialized = 0x800A6460;
+gAudioManagerStack = 0x800A445C;
+gAudioManager = 0x800A8D98; // type:u8 size:0x230
+
 processAudioNodeList = 0x80071518;
 gAudioMsgQueue = 0x800A6480;
 gActiveListHead = 0x800A6464;
@@ -217,19 +234,13 @@ bootproc = 0x80055FB0;
 MusInitialize = 0x80072030;
 __MusIntMemSet = 0x8007466C;
 __MusIntInitialiseChannel = 0x800743B8;
-__MusIntAudManInit = 0x80070BD0;
-//__MusIntAudManInit = 0x80070BD0;
+initAudioManager = 0x80070BD0;
 marker_callback = 0x800A64FC;
-//__MusIntStartEffect = 0x80074704;
 __MusIntMemMove = 0x80074698;
 
 MusStartEffect = 0x80072540;
 
-//__MusIntDmaInit = 0x80070BD0;
 __libmus_alglobals = 0x800A8FC8;
-cartrom_handle = 0x800A64AC;
-diskrom_handle = 0x800A6460;
-
 __MusIntFindChannelAndStart = 0x800725F4;
 
 player_bss_000 = 0x800A64E8;
