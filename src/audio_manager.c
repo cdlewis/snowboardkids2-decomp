@@ -105,7 +105,7 @@ extern void handleAudioUnderrun(void *);
 extern void processAudioNodeList(void);
 s32 audioCreateAndScheduleTask(AudioStruct *, AudioBuffer *);
 void *initAudioDriveAndGetLoader(void *arg0);
-void audioThreadMain(void *);
+void audioManagerThread(void *);
 void sendMessageToEventQueue2(OSMesg);
 
 typedef struct AudioParams_s {
@@ -210,30 +210,32 @@ void initAudioManager(ALSynConfig *config, OSPri fp, AudioParams *audioParams, s
     osCreateMesgQueue(&gAudioManager.audioReplyMsgQ, gAudioManager.audioReplyMsgBuf, 8);
     osCreateMesgQueue(&gAudioMsgQueue, (OSMesg *)gAudioMsgBuffer, maxChannels * 2);
     if (!gAudioThreadCreated) {
-        osCreateThread(&gAudioManager.thread, 3, audioThreadMain, 0, &gDriveRomInitialized, fp);
+        osCreateThread(&gAudioManager.thread, 3, audioManagerThread, 0, &gDriveRomInitialized, fp);
     }
     osStartThread(&gAudioManager.thread);
 
     gAudioThreadCreated = 1;
 }
 
-void audioThreadMain(void *arg) {
+void audioManagerThread(void *arg) {
     ViConfig cfg;
-    OSMesg msg;
-    OSMesg msg2;
+    Msg *frameMsg;
+    AudioMsg *taskCompleteMsg;
     OSMesgQueue *q = &gAudioManager.audioReplyMsgQ;
-    s32 quit = 0;
-    addViConfig(&cfg, q, 1);
-    while (quit == 0) {
-        osRecvMesg(q, &msg, 1);
-        osRecvMesg(q, 0, 0 * 0);
-        if (((Msg *)(&msg))->type == 5) {
-            void **tbl = (void **)(((u8 *)q) - 0x1C0);
-            void *ptr = tbl[gCurrentFrame & 3];
-            if (audioCreateAndScheduleTask(ptr, gPendingMessages)) {
-                osRecvMesg((OSMesgQueue *)(((u8 *)q) + 0x38), &msg2, 1);
-                handleAudioUnderrun(*((void **)(((u8 *)msg2) + 4)));
-                gPendingMessages = *((void **)(((u8 *)msg2) + 4));
+    s32 stop = FALSE;
+
+    addViConfig(&cfg, &gAudioManager.audioReplyMsgQ, 1);
+
+    while (!stop) {
+        osRecvMesg(&gAudioManager.audioReplyMsgQ, (OSMesg)&frameMsg, OS_MESG_BLOCK);
+        osRecvMesg(&gAudioManager.audioReplyMsgQ, NULL, OS_MESG_NOBLOCK);
+
+        if (((Msg *)(&frameMsg))->type == 5) {
+            void *currentAudioInfo = gAudioManager.audioInfo[gCurrentFrame % 4];
+            if (audioCreateAndScheduleTask(currentAudioInfo, gPendingMessages)) {
+                osRecvMesg(&gAudioManager.audioFrameMsgQ, (OSMesg)&taskCompleteMsg, OS_MESG_BLOCK);
+                handleAudioUnderrun(taskCompleteMsg->done.info);
+                gPendingMessages = taskCompleteMsg->done.info;
             }
         }
     }
