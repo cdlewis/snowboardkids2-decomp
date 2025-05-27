@@ -1,6 +1,27 @@
-#include "player.h"
 
 #include "common.h"
+
+typedef struct {
+    u8 padding[0x8];
+    /* 0x8 */ void *pending;
+    u8 padding8[0x20];
+    /* 0x2C */ f32 base_note;
+    u8 padding2[0x4];
+    /* 0x34 */ void *ppitchbend;
+    /* 0x38 */ s32 pvolume;
+    u8 padding5[0x8];
+    /* 0x44 */ s32 handle;
+    u8 padding9[0x8];
+    /* 0x50 */ float port_base;
+    u8 padding3[0x20];
+    /* 0x74 */ void *song_addr;
+    u8 padding4[0x2A];
+    /* 0xA2 */ s16 cont_vol_repeat_count;
+    u8 padding6[0x6];
+    /* 0xAA */ s16 wave;
+    u8 padding7[0x8];
+    /* 0xB4*/ s8 port;
+} channel_t;
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
     cp->pvolume = NULL;
@@ -13,9 +34,30 @@ u8 *Fstop(channel_t *cp, u8 *ptr) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", Fwave);
+u8 *Fwave(channel_t *cp, u8 *ptr) {
+    u16 wave;
 
-INCLUDE_ASM("asm/nonmatchings/player", Fport);
+    wave = *ptr++;
+
+    if (wave & 0x80) {
+        wave &= 0x7f;
+        wave <<= 8;
+        wave |= *ptr++;
+    }
+
+    cp->wave = wave;
+    return (ptr);
+}
+
+u8 *Fport(channel_t *cp, u8 *ptr) {
+    cp->port = *ptr++;
+
+    if (cp->port) {
+        cp->port_base = cp->base_note;
+    }
+
+    return ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", Fportoff);
 
