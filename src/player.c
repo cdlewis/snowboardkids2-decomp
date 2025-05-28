@@ -2,32 +2,56 @@
 #include "common.h"
 
 typedef struct {
-    u8 padding[0x8];
+    u8 padding000[0x8];
     /* 0x8 */ void *pending;
-    u8 padding8[0x20];
+    u8 padding001[0x20];
     /* 0x2C */ f32 base_note;
-    u8 padding2[0x4];
+    u8 padding002[0x4];
     /* 0x34 */ void *ppitchbend;
     /* 0x38 */ s32 pvolume;
-    u8 padding5[0x8];
+    u8 padding003[0x8];
     /* 0x44 */ s32 handle;
-    u8 padding9[0x8];
+    u8 padding004[0x8];
     /* 0x50 */ float port_base;
-    u8 padding3[0x20];
+    u8 padding005[0x4];
+    /* 0x58 */ f32 env_attack_calc;
+    /* 0x5C */ f32 env_decay_calc;
+    /* 0x60 */ f32 env_release_calc;
+    /* 0x64 */ s32 env_speed_calc;
+    u8 padding006[0xC];
     /* 0x74 */ void *song_addr;
-    u8 padding4[0x2A];
-    /* 0xA2 */ s16 cont_vol_repeat_count;
-    u8 padding6[0x6];
+    u8 padding007[0x1C];
+    /* 0x94 */ s16 temscale;
+    u8 padding008[0x2];
+    /* 0x98 */ s16 channel_tempo;
+    u8 padding009[0x8];
+    /* 0xA2 */ u16 fx_addr;
+    /* 0xC */ s16 channel_tempo_save;
+    u8 padding010[0x4];
     /* 0xAA */ s16 wave;
-    u8 padding7[0x8];
+    u8 padding011[0x8];
     /* 0xB4*/ s8 port;
+    u8 padding012[0x6];
+    /* 0xBB */ s8 env_speed;
+    /* 0xBC */ u8 env_init_vol;
+    /* 0xBD */ u8 env_max_vol;
+    /* 0xBE */ u8 env_sustain_vol;
+    u8 padding013[0x3];
+    /* 0xC2 */ u8 env_attack_speed;
+    /* 0xC3 */ u8 env_decay_speed;
+    /* 0xC4 */ u8 env_release_speed;
+    u8 padding999[0x6C];
 } channel_t;
+
+extern s32 mus_vsyncs_per_second;
+extern channel_t *mus_channels;
+extern s32 max_channels;
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
     cp->pvolume = NULL;
     cp->ppitchbend = NULL;
     cp->song_addr = NULL;
-    cp->cont_vol_repeat_count = NULL;
+    cp->fx_addr = NULL;
     cp->handle = 0;
     cp->pending = NULL;
 
@@ -59,11 +83,78 @@ u8 *Fport(channel_t *cp, u8 *ptr) {
     return ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", Fportoff);
+u8 *Fportoff(channel_t *cp, u8 *ptr) {
+    cp->port = 0;
+    return ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", Fdefa);
+/*
+u8 *Fdefa(channel_t *cp, u8 *ptr) {
+    u8 value;
 
-INCLUDE_ASM("asm/nonmatchings/player", Ftempo);
+    // get envelope speed
+    value = *ptr++;
+    if (value == 0) {
+        value = 1;
+    }
+    cp->env_speed = value;
+    cp->env_speed_calc = 1024 / value;
+
+    // get envelope initial volume level
+    cp->env_init_vol = *ptr++;
+
+    // get attack speed
+    value = *ptr++;
+
+    cp->env_attack_speed = value;
+
+    // get peak volume
+    cp->env_max_vol = *ptr++;
+
+    // get attack precalc value
+    cp->env_attack_calc = (1.0 / ((float)value)) * ((float)(cp->env_max_vol - cp->env_init_vol));
+
+    // get decay speed
+    value = *ptr++;
+
+    cp->env_decay_speed = value;
+
+    // get sustain volume level
+    cp->env_sustain_vol = *ptr++;
+
+    // get sustain precalc value
+    cp->env_decay_calc = (1.0 / ((float)value)) * ((float)(cp->env_sustain_vol - cp->env_max_vol));
+
+    // get release speed
+    value = *ptr++;
+
+    cp->env_release_speed = value;
+    cp->env_release_calc = 1.0 / ((float)value);
+
+    return ptr;
+}
+*/
+
+u8 *Ftempo(channel_t *cp, u8 *ptr) {
+    channel_t *sp;
+    int i;
+    int temp, temp2;
+
+    temp = (*ptr++) * 256 * 96 / 120 / mus_vsyncs_per_second;
+    temp2 = (temp * cp->temscale) >> 7;
+    if (cp->fx_addr) {
+        cp->channel_tempo = temp;
+    } else {
+        for (i = 0, sp = mus_channels; i < max_channels; i++, sp++) {
+            if (sp->song_addr == cp->song_addr) {
+                sp->channel_tempo_save = temp;
+                sp->channel_tempo = temp2;
+            }
+        }
+    }
+    return ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", Fendit);
 

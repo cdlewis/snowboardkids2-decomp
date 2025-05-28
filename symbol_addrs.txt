@@ -1,3 +1,7 @@
+mus_channels = 0x800A64F0;
+player_bss_001 = 0x800A64EC;
+max_channels = 0x800A64E8;
+mus_vsyncs_per_second = 0x800A64FC;
 gAudioMsgBuffer = 0x800A64A0;
 gAudioDmaMessages = 0x800A649C;
 gAudioNodePool = 0x800A6498;
@@ -235,17 +239,12 @@ MusInitialize = 0x80072030;
 __MusIntMemSet = 0x8007466C;
 __MusIntInitialiseChannel = 0x800743B8;
 initAudioManager = 0x80070BD0;
-marker_callback = 0x800A64FC;
 __MusIntMemMove = 0x80074698;
 
 MusStartEffect = 0x80072540;
 
 __libmus_alglobals = 0x800A8FC8;
 __MusIntFindChannelAndStart = 0x800725F4;
-
-player_bss_000 = 0x800A64E8;
-player_bss_001 = 0x800A64EC;
-player_bss_002 = 0x800A64F0;
 
 __MusIntFifoProcessCommand = 0x80072FD8;
 __MusIntHandleSetFlag = 0x800747A0;
