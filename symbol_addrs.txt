@@ -1,3 +1,11 @@
+mus_random_seed = 0x800A650C;
+mus_current_handle = 0x800A6508;
+plr_player = 0x800A64C0;
+libmus_fxheader_current = 0x800A6514;
+libmus_fxheader_single = 0x800A6510;
+MusPtrBankInitialize = 0x8007418C;
+mus_next_frame_time = 0x800A6500;
+__MusIntMain = 0x800730EC;
 __MusIntRandom = 0x80074324;
 __MusIntProcessContinuousPitchBend = 0x80073EE4;
 //__MusIntRemapPtrs = 0x800746CC;

@@ -533,14 +533,14 @@ u8 *Fsweep(channel_t *cp, u8 *ptr) {
 }
 
 u8 *Fchangefx(channel_t *cp, u8 *ptr) {
-    int fxtype;
+    s32 fxtype;
 
     fxtype = *ptr++;
     if (mus_songfxchange_flag == TRUE) {
         ChangeCustomEffect(fxtype);
     }
 
-    return (ptr);
+    return ptr;
 }
 
 INCLUDE_ASM("asm/nonmatchings/player", MusInitialize);
@@ -599,7 +599,7 @@ INCLUDE_ASM("asm/nonmatchings/player", __MusIntFifoProcessCommand);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073058_73C58);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_800730EC_73CEC);
+INCLUDE_ASM("asm/nonmatchings/player", __MusIntMain);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_8007335C_73F5C);
 
@@ -699,7 +699,7 @@ f32 __MusIntPowerOf2(f32 x) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_8007418C_74D8C);
+INCLUDE_ASM("asm/nonmatchings/player", MusPtrBankInitialize);
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntRandom);
 
