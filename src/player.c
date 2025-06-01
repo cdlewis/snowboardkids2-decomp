@@ -591,7 +591,7 @@ INCLUDE_ASM("asm/nonmatchings/player", MusSetFxType);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072E94_73A94);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072ED8_73AD8);
+INCLUDE_ASM("asm/nonmatchings/player", __MusIntFifoOpen);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072F54_73B54);
 

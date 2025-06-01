@@ -1,6 +1,8 @@
+__MusIntFifoOpen = 0x80072ED8;
+audio_heap = 0x800A64D8; // type:s32 size:0x10
 mus_random_seed = 0x800A650C;
 mus_current_handle = 0x800A6508;
-plr_player = 0x800A64C0;
+plr_player = 0x800A64C0; // type:s32 size:0x14
 libmus_fxheader_current = 0x800A6514;
 libmus_fxheader_single = 0x800A6510;
 MusPtrBankInitialize = 0x8007418C;
