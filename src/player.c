@@ -44,9 +44,11 @@ typedef struct {
     /* 0x6C */ f32 pitchbend_precalc;
     /* 0x70 */ f32 pitchbend;
     /* 0x74 */ song_t *song_addr;
-    u8 padding006[0x8];
+    u8 padding006[0x4];
+    /* 0x7C */ u8 *pbase;
     /* 0x80 */ drum_t *pdrums;
-    u8 padding[0x8];
+    /* 0x84 */ u8 *ppitchbendbase;
+    /* 0x88 */ u8 *pvolumebase;
     /* 0x8C */ f32 distort;
     u8 padding007[0x4];
     /* 0x94 */ s16 temscale;
@@ -411,11 +413,34 @@ u8 *Fdrums(channel_t *cp, u8 *ptr) {
     return ptr + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", Fdrumsoff);
+u8 *Fdrumsoff(channel_t *cp, u8 *ptr) {
+    cp->pdrums = NULL;
+    return (ptr);
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fprint);
+u8 *Fprint(channel_t *cp, u8 *ptr) {
+    ptr++;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fgoto);
+u8 *Fgoto(channel_t *cp, u8 *ptr) {
+    int off, off1;
+
+    off1 = *ptr++ << 8;
+    off1 += *ptr++;
+
+    off = *ptr++ << 8;
+    off += *ptr++;
+    cp->pvolume = cp->pvolumebase + off;
+    cp->cont_vol_repeat_count = 1;
+
+    off = *ptr++ << 8;
+    off += *ptr++;
+    cp->ppitchbend = cp->ppitchbendbase + off;
+    cp->cont_pb_repeat_count = 1;
+
+    return (cp->pbase + off1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", Freverb);
 
