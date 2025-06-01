@@ -1,3 +1,4 @@
+__MusIntRandom = 0x80074324;
 __MusIntProcessContinuousPitchBend = 0x80073EE4;
 //__MusIntRemapPtrs = 0x800746CC;
 // __MusIntRemapPtrBank = 0x8007418C;
@@ -834,7 +835,7 @@ pirawread_rodata_0004 = 0x8009EFB8; // type:asciz size:0x10
 mus_master_volume_effects = 0x800A6504;
 mus_master_volume_songs = 0x800A6506;
 player_bss_003C = 0x8009BE28;
-player_bss_0040 = 0x800A6518;
+mus_songfxchange_flag = 0x800A6518;
 mus_last_fxtype = 0x800A651C;
 recvmesg_text_0104 = 0x800764B4;
 resample_rodata_0000 = 0x8009EE20;

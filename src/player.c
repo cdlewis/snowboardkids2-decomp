@@ -16,6 +16,18 @@ typedef struct {
     s32 *drum_table;
 } song_t;
 
+typedef struct
+{
+    unsigned char header_name[16];
+    unsigned long flags;
+    unsigned long wbk_name[3];
+    int count;
+
+    unsigned char *basenote;
+    float *detune;
+    ALWaveTable **wave_list;
+} ptr_bank_t;
+
 typedef struct {
     u8 padding000[0x8];
     /* 0x8 */ void *pending;
@@ -32,10 +44,10 @@ typedef struct {
     /* 0x38 */ u8 *pvolume;
     u8 padding003[0x8];
     /* 0x44 */ s32 handle;
-    u8 padding004[0x4];
+    /* 0x48 */ s32 priority;
     /* 0x4C */ f32 last_note;
     /* 0x50 */ float port_base;
-    u8 padding005[0x4];
+    u8 padding004[0x4];
     /* 0x58 */ f32 env_attack_calc;
     /* 0x5C */ f32 env_decay_calc;
     /* 0x60 */ f32 env_release_calc;
@@ -44,17 +56,17 @@ typedef struct {
     /* 0x6C */ f32 pitchbend_precalc;
     /* 0x70 */ f32 pitchbend;
     /* 0x74 */ song_t *song_addr;
-    u8 padding006[0x4];
+    /* 0x78 */ ptr_bank_t *sample_bank;
     /* 0x7C */ u8 *pbase;
     /* 0x80 */ drum_t *pdrums;
     /* 0x84 */ u8 *ppitchbendbase;
     /* 0x88 */ u8 *pvolumebase;
     /* 0x8C */ f32 distort;
-    u8 padding007[0x4];
+    u8 padding005[0x4];
     /* 0x94 */ s16 temscale;
-    u8 padding008[0x2];
+    u8 padding006[0x2];
     /* 0x98 */ s16 channel_tempo;
-    u8 padding009[0x4];
+    u8 padding007[0x4];
     /* 0x9E */ s16 cont_vol_repeat_count;
     /* 0xA0 */ u16 cont_pb_repeat_count;
     /* 0xA2 */ u16 fx_addr;
@@ -62,7 +74,7 @@ typedef struct {
     /* 0xA6 */ u16 count;
     /* 0xA8 */ s16 fixed_length;
     /* 0xAA */ s16 wave;
-    u8 padding010[0x1];
+    u8 padding008[0x1];
     /* 0xAE */ s16 cutoff;
     /* 0xB0 */ s16 endit;
     /* 0xB2 */ u8 vib_delay;
@@ -72,26 +84,30 @@ typedef struct {
     /* 0xB6 */ u8 ignore_transpose;
     /* 0xB7 */ s8 velocity;
     /* 0xB8 */ u8 volume;
-    u8 padding011[0x2];
+    /* 0xB9 */ u8 pan;
+    u8 padding009[0x1];
     /* 0xBB */ s8 env_speed;
     /* 0xBC */ u8 env_init_vol;
     /* 0xBD */ u8 env_max_vol;
     /* 0xBE */ u8 env_sustain_vol;
-    u8 padding012[0x3];
+    u8 padding010[0x3];
     /* 0xC2 */ u8 env_attack_speed;
     /* 0xC3 */ u8 env_decay_speed;
     /* 0xC4 */ u8 env_release_speed;
-    u8 padding013[0x5];
+    u8 padding011[0x1];
+    /* 0xC6 */ u8 reverb;
+    u8 padding012[0x3];
     /* 0xCA */ s8 wobble_on_speed;
     /* 0xCB */ s8 wobble_off_speed;
-    u8 padding0130[0x2];
+    u8 padding013[0x2];
     /* 0xCE */ u8 velocity_on;
-    u8 padding0131[0x2];
+    u8 padding014[0x1];
+    /* 0xD0 */ u8 sweep_speed;
     /* 0xD1 */ u8 vib_speed;
     /* 0xD2 */ u8 env_trigger_off;
     /* 0xD3 */ u8 trigger_off;
     /* 0xD4 */ s8 wobble_amount;
-    u8 padding014[0x2];
+    u8 padding015[0x2];
     /* 0xD7 */ u8 for_stack_count;
     /* 0xD8 */ f32 vib_precalc;
     /* 0xDC */ u8 *for_stack[FORNEXT_DEPTH];
@@ -108,11 +124,13 @@ typedef struct {
 
 extern ALGlobals __libmus_alglobals;
 extern ALVoice *mus_voices;
+extern s32 ChangeCustomEffect(u8);
 
 // bss
 extern s32 mus_vsyncs_per_second;
 extern channel_t *mus_channels;
 extern s32 max_channels;
+extern s32 mus_songfxchange_flag;
 
 f32 __MusIntPowerOf2(f32 x);
 
@@ -139,7 +157,7 @@ u8 *Fwave(channel_t *cp, u8 *ptr) {
     }
 
     cp->wave = wave;
-    return (ptr);
+    return ptr;
 }
 
 u8 *Fport(channel_t *cp, u8 *ptr) {
@@ -244,7 +262,7 @@ u8 *Fvibup(channel_t *cp, u8 *ptr) {
     cp->vib_speed = *ptr++;
     cp->vib_amount = ((float)*ptr++) / 50.0;
     cp->vib_precalc = (2 * 3.1415926) / (float)cp->vib_speed;
-    return (ptr);
+    return ptr;
 }
 
 u8 *Fvibdown(channel_t *cp, u8 *ptr) {
@@ -284,12 +302,12 @@ u8 *Fignore(channel_t *cp, u8 *ptr) {
 
 u8 *Ftrans(channel_t *cp, u8 *ptr) {
     cp->transpose = *ptr++;
-    return (ptr);
+    return ptr;
 }
 
 u8 *Fignore_trans(channel_t *cp, u8 *ptr) {
     cp->ignore_transpose = 1;
-    return (ptr);
+    return ptr;
 }
 
 u8 *Fdistort(channel_t *cp, u8 *ptr) {
@@ -305,7 +323,7 @@ u8 *Fdistort(channel_t *cp, u8 *ptr) {
     cp->freqoffset -= cp->distort;
     cp->freqoffset += f;
     cp->distort = f;
-    return (ptr);
+    return ptr;
 }
 
 u8 *Fenvelope(channel_t *cp, u8 *ptr) {
@@ -415,7 +433,7 @@ u8 *Fdrums(channel_t *cp, u8 *ptr) {
 
 u8 *Fdrumsoff(channel_t *cp, u8 *ptr) {
     cp->pdrums = NULL;
-    return (ptr);
+    return ptr;
 }
 
 u8 *Fprint(channel_t *cp, u8 *ptr) {
@@ -442,17 +460,57 @@ u8 *Fgoto(channel_t *cp, u8 *ptr) {
     return (cp->pbase + off1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", Freverb);
+u8 *Freverb(channel_t *cp, u8 *ptr) {
+    cp->reverb = *ptr++;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", FrandNote);
+u8 *FrandNote(channel_t *cp, u8 *ptr) {
+    cp->transpose = __MusIntRandom(*ptr++);
+    cp->transpose += *ptr++;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", FrandVolume);
+u8 *FrandVolume(channel_t *cp, u8 *ptr) {
+    cp->volume = __MusIntRandom(*ptr++);
+    cp->volume += *ptr++;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", FrandPan);
+u8 *FrandPan(channel_t *cp, u8 *ptr) {
+    cp->pan = __MusIntRandom(*ptr++);
+    cp->pan += *ptr++;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fvolume);
+u8 *Fvolume(channel_t *cp, u8 *ptr) {
+    cp->volume = *ptr++;
+    return (ptr);
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fstartfx);
+u8 *Fstartfx(channel_t *cp, u8 *ptr) {
+    s32 i;
+    s32 number;
+    channel_t *sp;
+    u32 new_handle;
+
+    number = *(ptr++);
+    if (number >= 0x80)
+        number = ((number & 0x7f) << 8) + (*(ptr++));
+
+    new_handle = __MusIntFindChannelAndStart(number, cp->volume, cp->pan, 0, cp->priority++);
+    cp->priority--;
+
+    if (new_handle) {
+        for (i = 0, sp = mus_channels; i < max_channels; i++, sp++) {
+            if (sp->handle == new_handle) {
+                sp->handle = cp->handle;
+                sp->sample_bank = cp->sample_bank;
+            }
+        }
+    }
+    return ptr;
+}
 
 u8 *Fbendrange(channel_t *cp, u8 *ptr) {
     f32 f;
@@ -469,9 +527,21 @@ u8 *Fbendrange(channel_t *cp, u8 *ptr) {
     return ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", Fsweep);
+u8 *Fsweep(channel_t *cp, u8 *ptr) {
+    cp->sweep_speed = *ptr++;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fchangefx);
+u8 *Fchangefx(channel_t *cp, u8 *ptr) {
+    int fxtype;
+
+    fxtype = *ptr++;
+    if (mus_songfxchange_flag == TRUE) {
+        ChangeCustomEffect(fxtype);
+    }
+
+    return (ptr);
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", MusInitialize);
 
@@ -631,7 +701,7 @@ f32 __MusIntPowerOf2(f32 x) {
 
 INCLUDE_ASM("asm/nonmatchings/player", func_8007418C_74D8C);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80074324_74F24);
+INCLUDE_ASM("asm/nonmatchings/player", __MusIntRandom);
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntInitialiseChannel);
 
