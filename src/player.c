@@ -1,51 +1,106 @@
 
 #include "common.h"
 
+#define FORNEXT_DEPTH 4
+
+typedef struct {
+    u8 padding[0x10];
+    /* 0x10 */ u8 *env_table;
+} song_t;
+
 typedef struct {
     u8 padding000[0x8];
     /* 0x8 */ void *pending;
-    u8 padding001[0x20];
+    /* 0xC */ s32 channel_frame;
+    u8 padding001[0x8];
+    /* 0x18 */ u32 pitchbend_frame;
+    u8 padding002[0x2];
+    /* 0x20 */ f32 vib_amount;
+    /* 0x24 */ f32 bendrange;
+    /* 0x28 */ f32 old_frequency;
     /* 0x2C */ f32 base_note;
-    u8 padding002[0x4];
-    /* 0x34 */ void *ppitchbend;
-    /* 0x38 */ s32 pvolume;
+    /* 0x30 */ f32 freqoffset;
+    /* 0x34 */ u8 *ppitchbend;
+    /* 0x38 */ u8 *pvolume;
     u8 padding003[0x8];
     /* 0x44 */ s32 handle;
-    u8 padding004[0x8];
+    u8 padding004[0x4];
+    /* 0x4C */ f32 last_note;
     /* 0x50 */ float port_base;
     u8 padding005[0x4];
     /* 0x58 */ f32 env_attack_calc;
     /* 0x5C */ f32 env_decay_calc;
     /* 0x60 */ f32 env_release_calc;
     /* 0x64 */ s32 env_speed_calc;
-    u8 padding006[0xC];
-    /* 0x74 */ void *song_addr;
-    u8 padding007[0x1C];
+    /* 0x68 */ s32 vibrato;
+    /* 0x6C */ f32 pitchbend_precalc;
+    /* 0x70 */ f32 pitchbend;
+    /* 0x74 */ song_t *song_addr;
+    u8 padding006[0x14];
+    /* 0x8C */ f32 distort;
+    u8 padding007[0x4];
     /* 0x94 */ s16 temscale;
     u8 padding008[0x2];
     /* 0x98 */ s16 channel_tempo;
-    u8 padding009[0x8];
+    u8 padding009[0x4];
+    /* 0x9E */ s16 cont_vol_repeat_count;
+    /* 0xA0 */ u16 cont_pb_repeat_count;
     /* 0xA2 */ u16 fx_addr;
-    /* 0xC */ s16 channel_tempo_save;
-    u8 padding010[0x4];
+    /* 0xA4 */ s16 channel_tempo_save;
+    /* 0xA6 */ u16 count;
+    /* 0xA8 */ s16 fixed_length;
     /* 0xAA */ s16 wave;
-    u8 padding011[0x8];
-    /* 0xB4*/ s8 port;
-    u8 padding012[0x6];
+    u8 padding010[0x1];
+    /* 0xAE */ s16 cutoff;
+    /* 0xB0 */ s16 endit;
+    /* 0xB2 */ u8 vib_delay;
+    /* 0xB3 */ u8 ignore;
+    /* 0xB4 */ u8 port;
+    /* 0xB5 */ u8 transpose;
+    /* 0xB6 */ u8 ignore_transpose;
+    /* 0xB7 */ s8 velocity;
+    /* 0xB8 */ u8 volume;
+    u8 padding011[0x2];
     /* 0xBB */ s8 env_speed;
     /* 0xBC */ u8 env_init_vol;
     /* 0xBD */ u8 env_max_vol;
     /* 0xBE */ u8 env_sustain_vol;
-    u8 padding013[0x3];
+    u8 padding012[0x3];
     /* 0xC2 */ u8 env_attack_speed;
     /* 0xC3 */ u8 env_decay_speed;
     /* 0xC4 */ u8 env_release_speed;
-    u8 padding999[0x6C];
+    u8 padding013[0x5];
+    /* 0xCA */ s8 wobble_on_speed;
+    /* 0xCB */ s8 wobble_off_speed;
+    u8 padding0131[0x5];
+    /* 0xD1 */ u8 vib_speed;
+    /* 0xD2 */ u8 env_trigger_off;
+    /* 0xD3 */ u8 trigger_off;
+    /* 0xD4 */ s8 wobble_amount;
+    u8 padding014[0x2];
+    /* 0xD7 */ u8 for_stack_count;
+    /* 0xD8 */ f32 vib_precalc;
+    /* 0xDC */ u8 *for_stack[FORNEXT_DEPTH];
+    /* 0xEC */ u8 *for_stackvol[FORNEXT_DEPTH];
+    /* 0xFC */ u8 *for_stackpb[FORNEXT_DEPTH];
+    /* 0x10C */ u16 for_vol_count[FORNEXT_DEPTH];
+    /* 0x114 */ u16 for_pb_count[FORNEXT_DEPTH];
+    /* 0x11C */ u8 for_count[FORNEXT_DEPTH];
+    /* 0x120 */ u8 for_volume[FORNEXT_DEPTH];
+    /* 0x124 */ u8 for_pitchbend[FORNEXT_DEPTH];
+
+    u8 padding999[0xC];
 } channel_t;
 
+extern ALGlobals __libmus_alglobals;
+extern ALVoice *mus_voices;
+
+// bss
 extern s32 mus_vsyncs_per_second;
 extern channel_t *mus_channels;
 extern s32 max_channels;
+
+f32 __MusIntPowerOf2(f32 x);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
     cp->pvolume = NULL;
@@ -88,8 +143,6 @@ u8 *Fportoff(channel_t *cp, u8 *ptr) {
     return ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", Fdefa);
-/*
 u8 *Fdefa(channel_t *cp, u8 *ptr) {
     u8 value;
 
@@ -134,12 +187,11 @@ u8 *Fdefa(channel_t *cp, u8 *ptr) {
 
     return ptr;
 }
-*/
 
 u8 *Ftempo(channel_t *cp, u8 *ptr) {
     channel_t *sp;
-    int i;
-    int temp, temp2;
+    s32 i;
+    s32 temp, temp2;
 
     temp = (*ptr++) * 256 * 96 / 120 / mus_vsyncs_per_second;
     temp2 = (temp * cp->temscale) >> 7;
@@ -156,47 +208,171 @@ u8 *Ftempo(channel_t *cp, u8 *ptr) {
     return ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", Fendit);
+u8 *Fendit(channel_t *cp, u8 *ptr) {
+    cp->endit = *ptr++;
+    cp->cutoff = 0;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fcutoff);
+u8 *Fcutoff(channel_t *cp, u8 *ptr) {
+    short tmp;
 
-INCLUDE_ASM("asm/nonmatchings/player", Fvibup);
+    tmp = (*ptr++) << 8;
+    tmp |= *ptr++;
 
-INCLUDE_ASM("asm/nonmatchings/player", Fvibdown);
+    cp->cutoff = tmp;
+    cp->endit = 0;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fviboff);
+u8 *Fvibup(channel_t *cp, u8 *ptr) {
+    cp->vib_delay = *ptr++;
+    cp->vib_speed = *ptr++;
+    cp->vib_amount = ((float)*ptr++) / 50.0;
+    cp->vib_precalc = (2 * 3.1415926) / (float)cp->vib_speed;
+    return (ptr);
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Flength);
+u8 *Fvibdown(channel_t *cp, u8 *ptr) {
+    cp->vib_delay = *ptr++;
+    cp->vib_speed = *ptr++;
+    cp->vib_amount = (-((float)*ptr++)) / 50.0;
+    cp->vib_precalc = (2 * 3.1415926) / (float)cp->vib_speed;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fignore);
+u8 *Fviboff(channel_t *cp, u8 *ptr) {
+    cp->vib_speed = 0;
+    cp->vibrato = 0;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Ftrans);
+u8 *Flength(channel_t *cp, u8 *ptr) {
+    u8 length;
+    u16 temp;
 
-INCLUDE_ASM("asm/nonmatchings/player", Fignore_trans);
+    length = *ptr++;
+    if ((u8)length < 0x80) {
+        cp->fixed_length = length;
+    } else {
+        temp = (length & 0x7f) << 8;
+        cp->fixed_length = temp;
+        cp->fixed_length = temp + *ptr++;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/player", Fdistort);
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fenvelope);
+u8 *Fignore(channel_t *cp, u8 *ptr) {
+    cp->ignore = TRUE;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fenvon);
+u8 *Ftrans(channel_t *cp, u8 *ptr) {
+    cp->transpose = *ptr++;
+    return (ptr);
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fenvoff);
+u8 *Fignore_trans(channel_t *cp, u8 *ptr) {
+    cp->ignore_transpose = 1;
+    return (ptr);
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Ftron);
+u8 *Fdistort(channel_t *cp, u8 *ptr) {
+    int c;
+    float f;
 
-INCLUDE_ASM("asm/nonmatchings/player", Ftroff);
+    c = (s32)(*ptr++);
+    if (c & 0x80) {
+        c |= 0xffffff00;
+    }
+    f = (float)(c) / 100.0;
+
+    cp->freqoffset -= cp->distort;
+    cp->freqoffset += f;
+    cp->distort = f;
+    return (ptr);
+}
+
+u8 *Fenvelope(channel_t *cp, u8 *ptr) {
+    s32 tmp;
+
+    tmp = *ptr++;
+    if (tmp & 0x80) {
+        tmp &= 0x7f;
+        tmp <<= 8;
+        tmp |= *ptr++;
+    }
+
+    (void)Fdefa(cp, &cp->song_addr->env_table[tmp * 7]);
+
+    return ptr;
+}
+
+u8 *Fenvoff(channel_t *cp, u8 *ptr) {
+    cp->env_trigger_off = TRUE;
+    return ptr;
+}
+
+u8 *Fenvon(channel_t *cp, u8 *ptr) {
+    cp->env_trigger_off = FALSE;
+    return ptr;
+}
+
+u8 *Ftroff(channel_t *cp, u8 *ptr) {
+    cp->trigger_off = TRUE;
+    return ptr;
+}
+
+u8 *Ftron(channel_t *cp, u8 *ptr) {
+    cp->trigger_off = FALSE;
+    return ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", Ffor);
 
-INCLUDE_ASM("asm/nonmatchings/player", Fnext);
+u8 *Fnext(channel_t *cp, u8 *ptr) {
+    int index;
 
-INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71C94);
+    index = cp->for_stack_count - 1;
+    if (cp->for_count[index] != 0xff) {
+        if (--(cp->for_count[index]) == 0) {
+            cp->for_stack_count = index;
+            index = -1;
+        }
+    }
 
-INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CBC);
+    if (index > -1) {
+        ptr = cp->for_stack[index];
+        cp->pvolume = cp->for_stackvol[index];
+        cp->ppitchbend = cp->for_stackpb[index];
+        cp->volume = cp->for_volume[index];
+        cp->pitchbend = cp->for_pitchbend[index];
+        cp->cont_vol_repeat_count = cp->for_vol_count[index];
+        cp->cont_pb_repeat_count = cp->for_pb_count[index];
 
-INCLUDE_ASM("asm/nonmatchings/player", Fwobble);
+        // pitchbend_precalc bendrange wrong order?
+        cp->bendrange = cp->pitchbend * cp->pitchbend_precalc;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/player", Fwobbleoff);
+    return ptr;
+}
+
+void *Fwobble(channel_t *cp, u8 *ptr) {
+    cp->wobble_amount = *ptr++;
+    cp->wobble_on_speed = *ptr++;
+    cp->wobble_off_speed = *ptr++;
+    return ptr;
+}
+
+void *Fwobbleoff(channel_t *cp, u8 *ptr) {
+    cp->wobble_on_speed = 0;
+    return ptr;
+}
+
+INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CC8);
+
+INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CD8);
 
 INCLUDE_ASM("asm/nonmatchings/player", Fvelon);
 
@@ -224,7 +400,20 @@ INCLUDE_ASM("asm/nonmatchings/player", Fvolume);
 
 INCLUDE_ASM("asm/nonmatchings/player", Fstartfx);
 
-INCLUDE_ASM("asm/nonmatchings/player", Fbendrange);
+u8 *Fbendrange(channel_t *cp, u8 *ptr) {
+    f32 f;
+    u8 val;
+    f64 d;
+
+    f = cp->pitchbend;
+    f *= f;
+    val = *ptr++;
+    d = (f64)((f32)val);
+    d *= (1.0 / 64.0);
+    cp->bendrange = f;
+    cp->pitchbend_precalc = (f32)d;
+    return ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", Fsweep);
 
@@ -294,7 +483,35 @@ INCLUDE_ASM("asm/nonmatchings/player", func_80073738_74338);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_800737C4_743C4);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073928_74528);
+void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset) {
+    f32 frequency, temp;
+
+    frequency = cp->base_note;
+
+    if (cp->port != 0) {
+        if (cp->count <= cp->port) {
+            temp = (frequency - cp->last_note) / (float)(cp->port);
+            temp *= (float)cp->count;
+            frequency = cp->last_note + temp;
+        }
+        cp->port_base = frequency;
+    }
+
+    frequency += offset + cp->bendrange;  // pitchbend_precalc?
+
+    if (frequency == cp->old_frequency) {
+        return;
+    }
+    cp->old_frequency = frequency;
+    frequency = __MusIntPowerOf2(frequency * (1.0 / 12.0));
+
+    if (frequency > 2.0) {
+        frequency = 2.0;
+        cp->velocity = 0;
+    }
+
+    alSynSetPitch(&__libmus_alglobals.drvr, mus_voices + x, frequency);
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073A3C_7463C);
 
@@ -310,9 +527,53 @@ INCLUDE_ASM("asm/nonmatchings/player", func_80073DC4_749C4);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073E20_74A20);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073EE4_74AE4);
+extern f64 D_8009EAB8_9F6B8;
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073FF8_74BF8);
+void __MusIntProcessContinuousPitchBend(channel_t *cp) {
+    u8 work_pb;
+
+    do {
+        cp->pitchbend_frame += 256;
+        cp->cont_pb_repeat_count--;
+        if (cp->cont_pb_repeat_count == 0) {
+            work_pb = *(cp->ppitchbend++);
+            if (work_pb > 127) {
+                cp->pitchbend = ((float)(work_pb & 0x7f)) - 64.0;
+                // order of pitchbend_precalc, bendrange wrong?
+                cp->bendrange = cp->pitchbend * cp->pitchbend_precalc;
+                work_pb = *(cp->ppitchbend++);
+                if (work_pb > 127) {
+                    cp->cont_pb_repeat_count = ((int)(work_pb & 0x7f) * 256);
+                    cp->cont_pb_repeat_count += (int)*(cp->ppitchbend++) + 2;
+                } else
+                    cp->cont_pb_repeat_count = (int)work_pb + 2;
+            } else {
+                cp->pitchbend = ((f32)work_pb) - 64.0;
+
+                // order of pitchbend_precalc, bendrange wrong?
+                cp->bendrange = cp->pitchbend * cp->pitchbend_precalc;
+
+                cp->cont_pb_repeat_count = 1;
+            }
+        }
+    } while (cp->pitchbend_frame < cp->channel_frame);
+}
+
+f32 __MusIntPowerOf2(f32 x) {
+    f32 x2;
+
+    if (x == 0)
+        return 1;
+
+    if (x > 0) {
+        x2 = x * x;
+        return (1 + (x * .693147180559945) + (x2 * .240226506959101) + (x2 * x * 5.55041086648216E-02) + (x2 * x2 * 9.61812910762848E-03) + (x2 * x2 * x * 1.33335581464284E-03) + (x2 * x2 * x2 * 1.54035303933816E-04));
+    } else {
+        x = -x;
+        x2 = x * x;
+        return (1 / (1 + (x * .693147180559945) + (x2 * .240226506959101) + (x2 * x * 5.55041086648216E-02) + (x2 * x2 * 9.61812910762848E-03) + (x2 * x2 * x * 1.33335581464284E-03) + (x2 * x2 * x2 * 1.54035303933816E-04)));
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_8007418C_74D8C);
 
