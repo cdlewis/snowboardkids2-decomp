@@ -72,7 +72,9 @@ typedef struct {
     u8 padding013[0x5];
     /* 0xCA */ s8 wobble_on_speed;
     /* 0xCB */ s8 wobble_off_speed;
-    u8 padding0131[0x5];
+    u8 padding0130[0x2];
+    /* 0xCE */ u8 velocity_on;
+    u8 padding0131[0x2];
     /* 0xD1 */ u8 vib_speed;
     /* 0xD2 */ u8 env_trigger_off;
     /* 0xD3 */ u8 trigger_off;
@@ -358,25 +360,31 @@ u8 *Fnext(channel_t *cp, u8 *ptr) {
     return ptr;
 }
 
-void *Fwobble(channel_t *cp, u8 *ptr) {
+u8 *Fwobble(channel_t *cp, u8 *ptr) {
     cp->wobble_amount = *ptr++;
     cp->wobble_on_speed = *ptr++;
     cp->wobble_off_speed = *ptr++;
     return ptr;
 }
 
-void *Fwobbleoff(channel_t *cp, u8 *ptr) {
+u8 *Fwobbleoff(channel_t *cp, u8 *ptr) {
     cp->wobble_on_speed = 0;
     return ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CC8);
+u8 *Fvelon(channel_t *cp, u8 *ptr) {
+    cp->velocity_on = 1;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CD8);
+u8 *Fveloff(channel_t *cp, u8 *ptr) {
+    cp->velocity_on = 0;
+    return ptr;
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fvelon);
+INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CE4);
 
-INCLUDE_ASM("asm/nonmatchings/player", Fveloff);
+INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CE8);
 
 INCLUDE_ASM("asm/nonmatchings/player", Fstereo);
 
