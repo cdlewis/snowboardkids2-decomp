@@ -4,8 +4,16 @@
 #define FORNEXT_DEPTH 4
 
 typedef struct {
+    u16 wave;
+    u16 adsr;
+    u8 pan;
+    u8 pitch;
+} drum_t;
+
+typedef struct {
     u8 padding[0x10];
     /* 0x10 */ u8 *env_table;
+    s32 *drum_table;
 } song_t;
 
 typedef struct {
@@ -36,7 +44,9 @@ typedef struct {
     /* 0x6C */ f32 pitchbend_precalc;
     /* 0x70 */ f32 pitchbend;
     /* 0x74 */ song_t *song_addr;
-    u8 padding006[0x14];
+    u8 padding006[0x8];
+    /* 0x80 */ drum_t *pdrums;
+    u8 padding[0x8];
     /* 0x8C */ f32 distort;
     u8 padding007[0x4];
     /* 0x94 */ s16 temscale;
@@ -386,9 +396,20 @@ INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CE4);
 
 INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CE8);
 
-INCLUDE_ASM("asm/nonmatchings/player", Fstereo);
+u8 *Fstereo(channel_t *cp, unsigned char *ptr) {
+    return (ptr + 2);
+}
 
-INCLUDE_ASM("asm/nonmatchings/player", Fdrums);
+u8 *Fdrums(channel_t *cp, u8 *ptr) {
+    u32 offset;
+    song_t *song;
+
+    song = cp->song_addr;
+    offset = song->drum_table[*ptr];
+    cp->pdrums = (drum_t *)((u8 *)song + offset);
+
+    return ptr + 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", Fdrumsoff);
 
