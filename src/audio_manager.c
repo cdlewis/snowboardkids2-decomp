@@ -126,7 +126,7 @@ s32 gAudioUnderrunFlag = 1;
 const f64 D_8009EA60_9F660 = 4294967296;
 const f64 D_8009EA68_9F668 = 4294967296;
 
-void initAudioManager(ALSynConfig *config, OSPri fp, AudioParams *audioParams, s32 maxChannels, s32 maxVoices, s32 sampleRate) {
+void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s32 maxChannels, s32 maxVoices, s32 sampleRate) {
     u32 *new_var;
     u32 i;
     f64 tempDouble;
@@ -210,7 +210,7 @@ void initAudioManager(ALSynConfig *config, OSPri fp, AudioParams *audioParams, s
     osCreateMesgQueue(&gAudioManager.audioReplyMsgQ, gAudioManager.audioReplyMsgBuf, 8);
     osCreateMesgQueue(&gAudioMsgQueue, (OSMesg *)gAudioMsgBuffer, maxChannels * 2);
     if (!gAudioThreadCreated) {
-        osCreateThread(&gAudioManager.thread, 3, audioManagerThread, 0, &gDriveRomInitialized, fp);
+        osCreateThread(&gAudioManager.thread, 3, audioManagerThread, 0, &gDriveRomInitialized, id);
     }
     osStartThread(&gAudioManager.thread);
 
