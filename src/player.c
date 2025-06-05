@@ -22,123 +22,127 @@ typedef struct {
 } drum_t;
 
 typedef struct {
-    u8 padding[0x10];
+    /* 0x00 */ s32 num_channels;
+    /* 0x04 */ u8 **channel_data;
+    /* 0x08 */ u8 **volume_data;
+    /* 0x0C */ u8 **pitchbend_data;
     /* 0x10 */ u8 *env_table;
-    s32 *drum_table;
+    /* 0x14 */ s32 *drum_table;
 } song_t;
 
 typedef struct
 {
-    unsigned char header_name[16];
-    unsigned long flags;
-    unsigned long wbk_name[3];
-    int count;
+    u8 header_name[16];
+    u32 flags;
+    u32 wbk_name[3];
+    u32 count;
 
-    unsigned char *basenote;
-    float *detune;
+    u8 *basenote;
+    f32 *detune;
     ALWaveTable **wave_list;
 } ptr_bank_t;
 
 typedef struct {
-    unsigned char *fxdata;
-    int priority;
+    u8 *fxdata;
+    s32 priority;
 } fx_t;
 
 typedef struct {
-    int number_of_components;
-    int number_of_effects;
-    int num_waves;
-    unsigned long flags;
+    s32 number_of_components;
+    s32 number_of_effects;
+    s32 num_waves;
+    u32 flags;
     ptr_bank_t *ptr_addr;
-    unsigned short *wave_table;
+    u16 *wave_table;
     fx_t effects[1];
 } fx_header_t;
 
 typedef struct {
-    u8 padding000[0x8];
-    /* 0x8 */ void *pending;
-    /* 0xC */ s32 channel_frame;
-    u8 padding001[0x8];
-    /* 0x18 */ u32 pitchbend_frame;
-    u8 padding002[0x2];
-    /* 0x20 */ f32 vib_amount;
-    /* 0x24 */ f32 bendrange;
-    /* 0x28 */ f32 old_frequency;
-    /* 0x2C */ f32 base_note;
-    /* 0x30 */ f32 freqoffset;
-    /* 0x34 */ u8 *ppitchbend;
-    /* 0x38 */ u8 *pvolume;
-    u8 padding003[0x8];
-    /* 0x44 */ s32 handle;
-    /* 0x48 */ s32 priority;
-    /* 0x4C */ f32 last_note;
-    /* 0x50 */ float port_base;
-    u8 padding004[0x4];
-    /* 0x58 */ f32 env_attack_calc;
-    /* 0x5C */ f32 env_decay_calc;
-    /* 0x60 */ f32 env_release_calc;
-    /* 0x64 */ s32 env_speed_calc;
-    /* 0x68 */ s32 vibrato;
-    /* 0x6C */ f32 pitchbend_precalc;
-    /* 0x70 */ f32 pitchbend;
-    /* 0x74 */ song_t *song_addr;
-    /* 0x78 */ ptr_bank_t *sample_bank;
-    /* 0x7C */ u8 *pbase;
-    /* 0x80 */ drum_t *pdrums;
-    /* 0x84 */ u8 *ppitchbendbase;
-    /* 0x88 */ u8 *pvolumebase;
-    /* 0x8C */ f32 distort;
-    u8 padding005[0x4];
-    /* 0x94 */ s16 temscale;
-    u8 padding006[0x2];
-    /* 0x98 */ s16 channel_tempo;
-    u8 padding007[0x4];
-    /* 0x9E */ s16 cont_vol_repeat_count;
-    /* 0xA0 */ u16 cont_pb_repeat_count;
-    /* 0xA2 */ u16 fx_addr;
-    /* 0xA4 */ s16 channel_tempo_save;
-    /* 0xA6 */ u16 count;
-    /* 0xA8 */ s16 fixed_length;
-    /* 0xAA */ s16 wave;
-    u8 padding008[0x1];
-    /* 0xAE */ s16 cutoff;
-    /* 0xB0 */ s16 endit;
-    /* 0xB2 */ u8 vib_delay;
-    /* 0xB3 */ u8 ignore;
-    /* 0xB4 */ u8 port;
-    /* 0xB5 */ u8 transpose;
-    /* 0xB6 */ u8 ignore_transpose;
-    /* 0xB7 */ s8 velocity;
-    /* 0xB8 */ u8 volume;
-    /* 0xB9 */ u8 pan;
-    u8 padding009[0x1];
-    /* 0xBB */ s8 env_speed;
-    /* 0xBC */ u8 env_init_vol;
-    /* 0xBD */ u8 env_max_vol;
-    /* 0xBE */ u8 env_sustain_vol;
-    u8 padding010[0x3];
-    /* 0xC2 */ u8 env_attack_speed;
-    /* 0xC3 */ u8 env_decay_speed;
-    /* 0xC4 */ u8 env_release_speed;
-    /* 0xC5 */ u8 playing;
-    /* 0xC6 */ u8 reverb;
-    u8 padding012[0x3];
-    /* 0xCA */ s8 wobble_on_speed;
-    /* 0xCB */ s8 wobble_off_speed;
-    u8 padding013[0x2];
-    /* 0xCE */ u8 velocity_on;
-    u8 padding014[0x1];
-    /* 0xD0 */ u8 sweep_speed;
-    /* 0xD1 */ u8 vib_speed;
-    /* 0xD2 */ u8 env_trigger_off;
-    /* 0xD3 */ u8 trigger_off;
-    /* 0xD4 */ s8 wobble_amount;
-    u8 padding015[0x2];
-    /* 0xD7 */ u8 for_stack_count;
-    /* 0xD8 */ f32 vib_precalc;
-    /* 0xDC */ u8 *for_stack[FORNEXT_DEPTH];
-    /* 0xEC */ u8 *for_stackvol[FORNEXT_DEPTH];
-    /* 0xFC */ u8 *for_stackpb[FORNEXT_DEPTH];
+    /* 0x000 */ s32 flags;
+    /* 0x004 */ u8 *pdata;
+    /* 0x008 */ void *pending;
+    /* 0x00C */ s32 channel_frame;
+    u8 padding01[0x8];
+    /* 0x018 */ u32 pitchbend_frame;
+    u8 padding02[0x2];
+    /* 0x020 */ f32 vib_amount;
+    /* 0x024 */ f32 bendrange;
+    /* 0x028 */ f32 old_frequency;
+    /* 0x02C */ f32 base_note;
+    /* 0x030 */ f32 freqoffset;
+    /* 0x034 */ u8 *ppitchbend;
+    /* 0x038 */ u8 *pvolume;
+    u8 padding03[0x8];
+    /* 0x044 */ s32 handle;
+    /* 0x048 */ s32 priority;
+    /* 0x04C */ f32 last_note;
+    /* 0x050 */ float port_base;
+    u8 padding04[0x4];
+    /* 0x058 */ f32 env_attack_calc;
+    /* 0x05C */ f32 env_decay_calc;
+    /* 0x060 */ f32 env_release_calc;
+    /* 0x064 */ s32 env_speed_calc;
+    /* 0x068 */ s32 vibrato;
+    /* 0x06C */ f32 pitchbend_precalc;
+    /* 0x070 */ f32 pitchbend;
+    /* 0x074 */ song_t *song_addr;
+    /* 0x078 */ ptr_bank_t *sample_bank;
+    /* 0x07C */ u8 *pbase;
+    /* 0x080 */ drum_t *pdrums;
+    /* 0x084 */ u8 *ppitchbendbase;
+    /* 0x088 */ u8 *pvolumebase;
+    /* 0x08C */ f32 distort;
+    u8 padding05[0x4];
+    /* 0x094 */ s16 temscale;
+    u8 padding06[0x2];
+    /* 0x098 */ s16 channel_tempo;
+    u8 padding07[0x4];
+    /* 0x09E */ s16 cont_vol_repeat_count;
+    /* 0x0A0 */ u16 cont_pb_repeat_count;
+    /* 0x0A2 */ u16 fx_addr;
+    /* 0x0A4 */ s16 channel_tempo_save;
+    /* 0x0A6 */ u16 count;
+    /* 0x0A8 */ s16 fixed_length;
+    /* 0x0AA */ s16 wave;
+    u8 padding08[0x1];
+    /* 0x0AE */ s16 cutoff;
+    /* 0x0B0 */ s16 endit;
+    /* 0x0B2 */ u8 vib_delay;
+    /* 0x0B3 */ u8 ignore;
+    /* 0x0B4 */ u8 port;
+    /* 0x0B5 */ u8 transpose;
+    /* 0x0B6 */ u8 ignore_transpose;
+    /* 0x0B7 */ s8 velocity;
+    /* 0x0B8 */ u8 volume;
+    /* 0x0B9 */ u8 pan;
+    u8 padding09[0x1];
+    /* 0x0BB */ s8 env_speed;
+    /* 0x0BC */ u8 env_init_vol;
+    /* 0x0BD */ u8 env_max_vol;
+    /* 0x0BE */ u8 env_sustain_vol;
+    u8 padding10[0x3];
+    /* 0x0C2 */ u8 env_attack_speed;
+    /* 0x0C3 */ u8 env_decay_speed;
+    /* 0x0C4 */ u8 env_release_speed;
+    /* 0x0C5 */ u8 playing;
+    /* 0x0C6 */ u8 reverb;
+    u8 padding12[0x3];
+    /* 0x0CA */ s8 wobble_on_speed;
+    /* 0x0CB */ s8 wobble_off_speed;
+    u8 padding13[0x2];
+    /* 0x0CE */ u8 velocity_on;
+    u8 padding14[0x1];
+    /* 0x0D0 */ u8 sweep_speed;
+    /* 0x0D1 */ u8 vib_speed;
+    /* 0x0D2 */ u8 env_trigger_off;
+    /* 0x0D3 */ u8 trigger_off;
+    /* 0x0D4 */ s8 wobble_amount;
+    u8 padding15[0x2];
+    /* 0x0D7 */ u8 for_stack_count;
+    /* 0x0D8 */ f32 vib_precalc;
+    /* 0x0DC */ u8 *for_stack[FORNEXT_DEPTH];
+    /* 0x0EC */ u8 *for_stackvol[FORNEXT_DEPTH];
+    /* 0x0FC */ u8 *for_stackpb[FORNEXT_DEPTH];
     /* 0x10C */ u16 for_vol_count[FORNEXT_DEPTH];
     /* 0x114 */ u16 for_pb_count[FORNEXT_DEPTH];
     /* 0x11C */ u8 for_count[FORNEXT_DEPTH];
@@ -709,7 +713,43 @@ void MusSetMasterVolume(u32 flags, u32 volume) {
         mus_master_volume_songs = volume;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", MusStartSongFromMarker);
+musHandle __MusIntStartSong(void *addr, int marker) {
+    song_t *song;
+    s32 num_channels;
+    s32 i;
+    s32 channel_index;
+    channel_t *cp;
+    musHandle handle;
+
+    song = (song_t *)addr;
+    num_channels = song->num_channels;
+
+    if (song->channel_data < (u8 **)0x400) {
+        __MusIntRemapPtrs(&song->channel_data, song, 5);
+        __MusIntRemapPtrs(song->channel_data, song, num_channels);
+        __MusIntRemapPtrs(song->volume_data, song, num_channels);
+        __MusIntRemapPtrs(song->pitchbend_data, song, num_channels);
+    }
+
+    handle = mus_current_handle++;
+
+    for (i = 0; i < num_channels; i++) {
+        if (song->channel_data[i] != 0) {
+            channel_index = func_800744EC_750EC(song, i);
+            cp = &mus_channels[channel_index];
+            __MusIntInitialiseChannel(cp);
+            cp->song_addr = song;
+            cp->flags |= 1;
+            cp->pvolume = cp->pvolumebase = song->volume_data[i];
+            cp->ppitchbend = cp->ppitchbendbase = song->pitchbend_data[i];
+            cp->pdata = cp->pbase = song->channel_data[i];
+            cp->handle = handle;
+        }
+    }
+
+    MusHandleUnPause(handle);
+    return handle;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", MusStartEffect);
 
@@ -873,7 +913,7 @@ INCLUDE_ASM("asm/nonmatchings/player", __MusIntMemSet);
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntMemMove);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_800746CC_752CC);
+INCLUDE_ASM("asm/nonmatchings/player", __MusIntRemapPtrs);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80074704_75304);
 
