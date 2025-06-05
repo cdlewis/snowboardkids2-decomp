@@ -168,6 +168,7 @@ ALHeap audio_heap;
 
 void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s32 maxChannels, s32 maxVoices, s32 sampleRate);
 f32 __MusIntPowerOf2(f32 x);
+void MusSetMasterVolume(u32 flags, u32 volume);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
     cp->pvolume = NULL;
@@ -698,7 +699,15 @@ s32 MusInitialize(musConfig *config) {
     return audio_heap.cur - audio_heap.base;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", MusSetMasterVolume);
+extern s16 mus_master_volume_effects;
+extern s16 mus_master_volume_songs;
+
+void MusSetMasterVolume(u32 flags, u32 volume) {
+    if (flags & MUSFLAG_EFFECTS)
+        mus_master_volume_effects = volume;
+    if (flags & MUSFLAG_SONGS)
+        mus_master_volume_songs = volume;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", MusStartSongFromMarker);
 
