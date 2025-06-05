@@ -1,3 +1,4 @@
+__muscontrol_flag = 0x800AB480;
 __MusIntFifoOpen = 0x80072ED8;
 audio_heap = 0x800A64D8; // type:s32 size:0x10
 mus_random_seed = 0x800A650C;

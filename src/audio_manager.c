@@ -91,7 +91,7 @@ extern OSMesgQueue gAudioMsgQueue;
 extern OSPiHandle *gCartRomHandle;
 extern OSPiHandle *gDriveRomHandle;
 extern s32 D_800A6474_A7074;
-extern s32 D_800AB480_A27F0;
+extern s32 __muscontrol_flag;
 extern s32 gAudioBufferPadding;
 extern s32 gAudioBufferSize;
 extern s32 gAudioDataMemory;
@@ -328,7 +328,7 @@ int loadAudioDataWithCache(s32 romAddr, s32 requestSize) {
         alignedAddress = alignedAddress & 0xFFFFFF;
         alignedAddress = alignedAddress + 0x140000;
     } else {
-        if (D_800AB480_A27F0 & 1) {
+        if (__muscontrol_flag & 1) {
             return osVirtualToPhysical((void *)alignedAddress);
         }
         piHandle = gCartRomHandle;

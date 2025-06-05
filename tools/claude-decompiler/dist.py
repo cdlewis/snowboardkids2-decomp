@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# dist.py takes a base dump and a target dump, computing the distance between them.
+# usage: python3 dist.py base_dump target_dump
+
 import argparse
 import difflib
 import hashlib
