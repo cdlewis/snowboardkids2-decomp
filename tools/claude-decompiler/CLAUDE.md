@@ -14,6 +14,11 @@ Repeat the following steps:
 4. Run `./claude-compile-and-analyse.sh base_n.c` (where `n` is your attempt number).
 5. If your possible solution did not improve the match percentage, print why you think it made it worse. Apply this theory to improving the match in your next attempt.
 
+## Tools
+
+* ./claude-target.sh: dumps the assembly code from the target object (the object that we're trying to create matching code for).
+* claude-compile-and-analyse.sh $file_to_compile.c: takes a .c file, compiles it, and diffs the resulting object code against the target assembly.
+
 ## Project Structure
 
 * You might also find it useful to consider the attempts in output-{diff}-x folders. These are messy / brute force but you might get some ideas from them.

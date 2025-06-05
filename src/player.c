@@ -1,7 +1,18 @@
-
 #include "common.h"
 
 #define FORNEXT_DEPTH 4
+#define MAX_SONGS 4
+#define MUSFLAG_EFFECTS 1
+#define MUSFLAG_SONGS 2
+
+typedef unsigned long musHandle;
+typedef void (*LIBMUScb_marker)(musHandle, int);
+
+typedef struct AudioParams_s {
+    u32 syn_output_rate;
+    s32 sample_rate;
+    s32 syn_rsp_cmds;
+} AudioParams;
 
 typedef struct {
     u16 wave;
@@ -27,6 +38,21 @@ typedef struct
     float *detune;
     ALWaveTable **wave_list;
 } ptr_bank_t;
+
+typedef struct {
+    unsigned char *fxdata;
+    int priority;
+} fx_t;
+
+typedef struct {
+    int number_of_components;
+    int number_of_effects;
+    int num_waves;
+    unsigned long flags;
+    ptr_bank_t *ptr_addr;
+    unsigned short *wave_table;
+    fx_t effects[1];
+} fx_header_t;
 
 typedef struct {
     u8 padding000[0x8];
@@ -94,7 +120,7 @@ typedef struct {
     /* 0xC2 */ u8 env_attack_speed;
     /* 0xC3 */ u8 env_decay_speed;
     /* 0xC4 */ u8 env_release_speed;
-    u8 padding011[0x1];
+    /* 0xC5 */ u8 playing;
     /* 0xC6 */ u8 reverb;
     u8 padding012[0x3];
     /* 0xCA */ s8 wobble_on_speed;
@@ -125,6 +151,9 @@ typedef struct {
 extern ALGlobals __libmus_alglobals;
 extern ALVoice *mus_voices;
 extern s32 ChangeCustomEffect(u8);
+extern ALMicroTime mus_next_frame_time;
+extern fx_header_t *libmus_fxheader_current;
+extern fx_header_t *libmus_fxheader_single;
 
 // bss
 extern s32 mus_vsyncs_per_second;
@@ -132,6 +161,12 @@ extern channel_t *mus_channels;
 extern s32 max_channels;
 extern s32 mus_songfxchange_flag;
 
+u32 __muscontrol_flag;
+void *D_800A64F4_A70F4;
+s32 D_800A64F8_A70F8;
+ALHeap audio_heap;
+
+void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s32 maxChannels, s32 maxVoices, s32 sampleRate);
 f32 __MusIntPowerOf2(f32 x);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
@@ -543,7 +578,125 @@ u8 *Fchangefx(channel_t *cp, u8 *ptr) {
     return ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", MusInitialize);
+extern s32 ChangeCustomEffect(u8);
+extern ALMicroTime __MusIntMain(void *node);
+
+// bss
+extern s32 mus_vsyncs_per_second;
+extern channel_t *mus_channels;
+extern s32 max_channels;
+extern s32 mus_songfxchange_flag;
+extern ALGlobals __libmus_alglobals;
+extern ALVoice *mus_voices;
+extern LIBMUScb_marker marker_callback;
+extern s32 mus_last_fxtype;
+extern s32 mus_current_handle;
+extern s32 mus_random_seed;
+extern ALPlayer plr_player;
+
+typedef struct
+{
+    u32 control_flag;
+    u32 channels;
+
+    u32 thread_priority;
+    u8 *heap;
+    s32 heap_length;
+
+    u8 *ptr;
+
+    u8 *wbk;
+
+    void *sched;
+
+    void *default_fxbank;
+
+    s32 fifo_length;
+
+    int syn_updates;
+    int syn_output_rate;
+    int syn_rsp_cmds;
+    int syn_retraceCount;
+    int syn_num_dma_bufs;
+    int syn_dma_buf_size;
+
+    // Special Addition
+    OSPiHandle *diskrom_handle;
+} musConfig;
+
+s32 MusInitialize(musConfig *config) {
+    ALVoiceConfig vc;
+    s32 i;
+    ALSynConfig audioConfig;
+    AudioParams audioParams;
+
+    __muscontrol_flag = config->control_flag;
+
+    max_channels = config->channels;
+
+    D_800A64F4_A70F4 = config->sched;
+    D_800A64F8_A70F8 = (s32)config->default_fxbank;
+
+    if (osTvType == OS_TV_PAL) {
+        mus_vsyncs_per_second = 50;
+    } else {
+        mus_vsyncs_per_second = 60;
+    }
+    mus_next_frame_time = 1000000 / mus_vsyncs_per_second;
+
+    __MusIntMemSet(config->heap, 0, config->heap_length);
+
+    alHeapInit(&audio_heap, config->heap, config->heap_length);
+
+    mus_voices = (ALVoice *)alHeapDBAlloc(0, 0, &audio_heap, 1, max_channels * (sizeof(ALVoice)));
+    mus_channels = (channel_t *)alHeapDBAlloc(0, 0, &audio_heap, 1, max_channels * (sizeof(channel_t)));
+    __MusIntFifoOpen(config->fifo_length);
+    __MusIntMemSet(mus_voices, 0, max_channels * (sizeof(ALVoice)));
+    __MusIntMemSet(mus_channels, 0, max_channels * (sizeof(channel_t)));
+
+    if (config->ptr) {
+        MusPtrBankInitialize(config->ptr, config->wbk);
+        libmus_fxheader_single = (fx_header_t *)config->ptr;
+        libmus_fxheader_current = libmus_fxheader_single;
+    } else {
+        libmus_fxheader_current = NULL;
+    }
+
+    audioConfig.maxVVoices = max_channels;
+    audioConfig.maxPVoices = max_channels;
+    audioConfig.maxUpdates = config->syn_output_rate;
+    audioConfig.fxType = 2;
+    audioConfig.dmaproc = 0;
+    audioConfig.outputRate = 0;
+    audioConfig.heap = &audio_heap;
+    audioParams.syn_output_rate = config->syn_rsp_cmds;
+    audioParams.sample_rate = config->syn_num_dma_bufs;
+    audioParams.syn_rsp_cmds = config->syn_retraceCount;
+
+    mus_last_fxtype = AL_FX_BIGROOM;
+    initAudioManager(&audioConfig, config->thread_priority, &audioParams, config->syn_dma_buf_size, (s32)config->diskrom_handle, mus_vsyncs_per_second);
+
+    MusSetMasterVolume(3, 0x7fff);
+
+    mus_current_handle = 1;
+    mus_random_seed = 0x12345678;
+
+    plr_player.next = NULL;
+    plr_player.handler = __MusIntMain;
+    plr_player.clientData = &plr_player;
+    alSynAddPlayer(&__libmus_alglobals.drvr, &plr_player);
+
+    for (i = 0; i < max_channels; i++) {
+        mus_channels[i].playing = 0;
+        __MusIntInitialiseChannel(&mus_channels[i]);
+        vc.unityPitch = 0;
+        vc.priority = config->thread_priority;
+        vc.fxBus = 0;
+        alSynAllocVoice(&__libmus_alglobals.drvr, &mus_voices[i], &vc);
+    }
+
+    return audio_heap.cur - audio_heap.base;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", MusSetMasterVolume);
 
