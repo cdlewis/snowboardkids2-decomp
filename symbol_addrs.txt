@@ -1,3 +1,4 @@
+__MusIntRemapPtrs = 0x800746CC;
 __muscontrol_flag = 0x800AB480;
 __MusIntFifoOpen = 0x80072ED8;
 audio_heap = 0x800A64D8; // type:s32 size:0x10
@@ -11,8 +12,6 @@ mus_next_frame_time = 0x800A6500;
 __MusIntMain = 0x800730EC;
 __MusIntRandom = 0x80074324;
 __MusIntProcessContinuousPitchBend = 0x80073EE4;
-//__MusIntRemapPtrs = 0x800746CC;
-// __MusIntRemapPtrBank = 0x8007418C;
 __MusIntSetPitch = 0x80073928;
 __MusIntPowerOf2 = 0x80073FF8;
 mus_channels = 0x800A64F0;
@@ -266,7 +265,7 @@ __MusIntFindChannelAndStart = 0x800725F4;
 __MusIntFifoProcessCommand = 0x80072FD8;
 __MusIntHandleSetFlag = 0x800747A0;
 
-MusStartSongFromMarker = 0x800723C8;
+__MusIntStartSong = 0x800723C8;
 
 // end insanely speculative
 
@@ -363,7 +362,6 @@ Fstartfx = 0x80071ED0;
 Fbendrange = 0x80071FA0;
 Fsweep = 0x80071FDC;
 Fchangefx = 0x80071FEC;
-
 
 // probable libmus functions
 CustomInit = 0x80074800;
