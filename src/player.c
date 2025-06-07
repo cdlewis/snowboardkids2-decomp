@@ -131,7 +131,7 @@ typedef struct {
     /* 0x0CB */ s8 wobble_off_speed;
     u8 padding13[0x2];
     /* 0x0CE */ u8 velocity_on;
-    u8 padding14[0x1];
+    /* 0x0CF */ u8 default_velocity;
     /* 0x0D0 */ u8 sweep_speed;
     /* 0x0D1 */ u8 vib_speed;
     /* 0x0D2 */ u8 env_trigger_off;
@@ -467,7 +467,11 @@ u8 *Fveloff(channel_t *cp, u8 *ptr) {
     return ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CE4);
+u8 *Fvelocity(channel_t *cp, u8 *ptr) {
+    cp->default_velocity = *ptr++;
+    cp->velocity_on = 0;
+    return ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CE8);
 
