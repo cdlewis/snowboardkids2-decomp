@@ -8,6 +8,7 @@ CLAUDE_DIR="$(pwd)/tools/claude-decompiler"
 
 for dir in nonmatchings/*; do
   ln -sf "${CLAUDE_DIR}"/* "$dir"/
+  ln -sf "${CLAUDE_DIR}"../.claude "$dir"/
 
   echo "Linked claude-decompiler files into $dir"
 done

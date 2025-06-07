@@ -212,6 +212,7 @@ void MusSetMasterVolume(u32 flags, u32 volume);
 void __MusIntInitialiseChannel(channel_t *cp);
 u32 __MusIntStartEffect(channel_t *cp, s32 number, s32 volume, s32 pan, s32 priority);
 ALMicroTime __MusIntMain(void *node);
+void __MusIntRemapPtrs(void *addr, void *offset, s32 count);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
     cp->pvolume = NULL;
@@ -1001,7 +1002,18 @@ INCLUDE_ASM("asm/nonmatchings/player", __MusIntMemSet);
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntMemMove);
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntRemapPtrs);
+void __MusIntRemapPtrs(void *addr, void *offset, s32 count) {
+    u32 *dest, add;
+    s32 i;
+
+    dest = (unsigned long *)addr;
+    add = (unsigned long)offset;
+    for (i = 0; i < count; i++) {
+        if (dest[i]) {
+            dest[i] += add;
+        }
+    }
+}
 
 u32 __MusIntStartEffect(channel_t *cp, s32 number, s32 volume, s32 pan, s32 priority) {
     u32 handle;
