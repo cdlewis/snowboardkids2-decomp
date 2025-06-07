@@ -1,3 +1,5 @@
+func_800725F4_731F4 = 0x800725F4;
+__MusIntFindChannelAndStart = 0x80072540;
 __MusIntRemapPtrs = 0x800746CC;
 __muscontrol_flag = 0x800AB480;
 __MusIntFifoOpen = 0x80072ED8;
@@ -256,11 +258,7 @@ __MusIntMemSet = 0x8007466C;
 __MusIntInitialiseChannel = 0x800743B8;
 initAudioManager = 0x80070BD0;
 __MusIntMemMove = 0x80074698;
-
-MusStartEffect = 0x80072540;
-
 __libmus_alglobals = 0x800A8FC8;
-__MusIntFindChannelAndStart = 0x800725F4;
 
 __MusIntFifoProcessCommand = 0x80072FD8;
 __MusIntHandleSetFlag = 0x800747A0;

@@ -538,7 +538,7 @@ u8 *Fstartfx(channel_t *cp, u8 *ptr) {
     if (number >= 0x80)
         number = ((number & 0x7f) << 8) + (*(ptr++));
 
-    new_handle = __MusIntFindChannelAndStart(number, cp->volume, cp->pan, 0, cp->priority++);
+    new_handle = func_800725F4_731F4(number, cp->volume, cp->pan, 0, cp->priority++);
     cp->priority--;
 
     if (new_handle) {
@@ -751,9 +751,9 @@ musHandle __MusIntStartSong(void *addr, int marker) {
     return handle;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", MusStartEffect);
-
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntFindChannelAndStart);
+
+INCLUDE_ASM("asm/nonmatchings/player", func_800725F4_731F4);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072704_73304);
 
