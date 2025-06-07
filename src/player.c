@@ -62,7 +62,8 @@ typedef struct {
     /* 0x004 */ u8 *pdata;
     /* 0x008 */ void *pending;
     /* 0x00C */ s32 channel_frame;
-    u8 padding01[0x8];
+    /* 0x010 */ s32 stopping;
+    u8 padding01[0x4];
     /* 0x018 */ u32 pitchbend_frame;
     u8 padding02[0x2];
     /* 0x020 */ f32 vib_amount;
@@ -94,9 +95,10 @@ typedef struct {
     /* 0x08C */ f32 distort;
     u8 padding05[0x4];
     /* 0x094 */ s16 temscale;
-    u8 padding06[0x2];
+    s16 unk96;
     /* 0x098 */ s16 channel_tempo;
-    u8 padding07[0x4];
+    /* 0x09A */ s16 volscale;
+    /* 0x09C */ u16 old_volume;
     /* 0x09E */ s16 cont_vol_repeat_count;
     /* 0x0A0 */ u16 cont_pb_repeat_count;
     /* 0x0A2 */ u16 fx_addr;
@@ -104,7 +106,7 @@ typedef struct {
     /* 0x0A6 */ u16 count;
     /* 0x0A8 */ s16 fixed_length;
     /* 0x0AA */ s16 wave;
-    u8 padding08[0x1];
+    /* 0x0AC */ s16 panscale;
     /* 0x0AE */ s16 cutoff;
     /* 0x0B0 */ s16 endit;
     /* 0x0B2 */ u8 vib_delay;
@@ -115,7 +117,7 @@ typedef struct {
     /* 0x0B7 */ s8 velocity;
     /* 0x0B8 */ u8 volume;
     /* 0x0B9 */ u8 pan;
-    u8 padding09[0x1];
+    /* 0x0BA */ u8 old_pan;
     /* 0x0BB */ s8 env_speed;
     /* 0x0BC */ u8 env_init_vol;
     /* 0x0BD */ u8 env_max_vol;
@@ -126,7 +128,9 @@ typedef struct {
     /* 0x0C4 */ u8 env_release_speed;
     /* 0x0C5 */ u8 playing;
     /* 0x0C6 */ u8 reverb;
-    u8 padding12[0x3];
+    u8 padding11;
+    /* 0x0C8 */ u8 old_reverb;
+    u8 padding12;
     /* 0x0CA */ s8 wobble_on_speed;
     /* 0x0CB */ s8 wobble_off_speed;
     u8 padding13[0x2];
@@ -173,6 +177,7 @@ ALHeap audio_heap;
 void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s32 maxChannels, s32 maxVoices, s32 sampleRate);
 f32 __MusIntPowerOf2(f32 x);
 void MusSetMasterVolume(u32 flags, u32 volume);
+void __MusIntInitialiseChannel(channel_t *cp);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
     cp->pvolume = NULL;
@@ -952,7 +957,57 @@ INCLUDE_ASM("asm/nonmatchings/player", MusPtrBankInitialize);
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntRandom);
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntInitialiseChannel);
+void __MusIntInitialiseChannel(channel_t *cp) {
+    u8 old_playing;
+    u8 *work_ptr;
+    u32 i;
+    s16 tempo;
+    ptr_bank_t *bank;
+
+    old_playing = cp->playing;
+
+    work_ptr = (u8 *)cp;
+    i = 0;
+    cp->pdata = 0;
+
+    do {
+        *work_ptr = 0;
+        work_ptr++;
+        i++;
+    } while (i < 0x134);
+
+    cp->old_reverb = 0xff;
+    cp->old_pan = 0xff;
+    tempo = (96 * 256) / mus_vsyncs_per_second;
+    cp->old_frequency = 99.9f;
+    cp->pitchbend_precalc = 0.03125f;
+    cp->env_attack_calc = 1.0f;
+    cp->env_decay_calc = 0.00392156862745098f;
+    cp->env_release_calc = 0.06666666666666667f;
+    cp->velocity_on = 0;
+    cp->default_velocity = 127;
+    cp->volume = 127;
+    cp->env_max_vol = 127;
+    cp->pan = 64;
+    cp->env_speed = 1;
+    cp->env_decay_speed = 0xff;
+    cp->env_sustain_vol = 127;
+    cp->old_volume = 0xffff;
+    cp->env_attack_speed = 1;
+    cp->env_release_speed = 15;
+    bank = libmus_fxheader_single;
+    cp->unk96 = 1;
+    cp->cont_vol_repeat_count = 1;
+    cp->cont_pb_repeat_count = 1;
+    cp->stopping = -1;
+    cp->volscale = 0x80;
+    cp->panscale = 0x80;
+    cp->temscale = 0x80;
+    cp->playing = old_playing;
+    cp->sample_bank = bank;
+    cp->channel_tempo_save = tempo;
+    cp->channel_tempo = tempo;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_800744EC_750EC);
 
