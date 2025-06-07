@@ -44,7 +44,6 @@ typedef struct
 
 typedef struct {
     u8 *fxdata;
-    s32 priority;
 } fx_t;
 
 typedef struct {
@@ -156,6 +155,26 @@ typedef struct {
     u8 padding999[0xC];
 } channel_t;
 
+typedef struct {
+    u32 control_flag;
+    u32 channels;
+    u32 thread_priority;
+    u8 *heap;
+    s32 heap_length;
+    u8 *ptr;
+    u8 *wbk;
+    void *sched;
+    void *default_fxbank;
+    s32 fifo_length;
+    s32 syn_updates;
+    s32 syn_output_rate;
+    s32 syn_rsp_cmds;
+    s32 syn_retraceCount;
+    s32 syn_num_dma_bufs;
+    s32 syn_dma_buf_size;
+    OSPiHandle *diskrom_handle;
+} musConfig;
+
 extern ALGlobals __libmus_alglobals;
 extern ALVoice *mus_voices;
 extern s32 ChangeCustomEffect(u8);
@@ -168,9 +187,22 @@ extern s32 mus_vsyncs_per_second;
 extern channel_t *mus_channels;
 extern s32 max_channels;
 extern s32 mus_songfxchange_flag;
+extern s32 mus_vsyncs_per_second;
+extern channel_t *mus_channels;
+extern s32 max_channels;
+extern s32 mus_songfxchange_flag;
+extern ALGlobals __libmus_alglobals;
+extern ALVoice *mus_voices;
+extern LIBMUScb_marker marker_callback;
+extern s32 mus_last_fxtype;
+extern s32 mus_current_handle;
+extern s32 mus_random_seed;
+extern ALPlayer plr_player;
+extern s16 mus_master_volume_effects;
+extern s16 mus_master_volume_songs;
 
 u32 __muscontrol_flag;
-void *D_800A64F4_A70F4;
+fx_t *D_800A64F4_A70F4;
 s32 *D_800A64F8_A70F8;
 ALHeap audio_heap;
 
@@ -178,6 +210,8 @@ void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s3
 f32 __MusIntPowerOf2(f32 x);
 void MusSetMasterVolume(u32 flags, u32 volume);
 void __MusIntInitialiseChannel(channel_t *cp);
+u32 __MusIntStartEffect(channel_t *cp, s32 number, s32 volume, s32 pan, s32 priority);
+ALMicroTime __MusIntMain(void *node);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
     cp->pvolume = NULL;
@@ -610,54 +644,6 @@ u8 *Fchangefx(channel_t *cp, u8 *ptr) {
     return ptr;
 }
 
-extern s32 ChangeCustomEffect(u8);
-extern ALMicroTime __MusIntMain(void *node);
-
-// bss
-extern s32 mus_vsyncs_per_second;
-extern channel_t *mus_channels;
-extern s32 max_channels;
-extern s32 mus_songfxchange_flag;
-extern ALGlobals __libmus_alglobals;
-extern ALVoice *mus_voices;
-extern LIBMUScb_marker marker_callback;
-extern s32 mus_last_fxtype;
-extern s32 mus_current_handle;
-extern s32 mus_random_seed;
-extern ALPlayer plr_player;
-extern s16 mus_master_volume_effects;
-extern s16 mus_master_volume_songs;
-
-typedef struct
-{
-    u32 control_flag;
-    u32 channels;
-
-    u32 thread_priority;
-    u8 *heap;
-    s32 heap_length;
-
-    u8 *ptr;
-
-    u8 *wbk;
-
-    void *sched;
-
-    void *default_fxbank;
-
-    s32 fifo_length;
-
-    int syn_updates;
-    int syn_output_rate;
-    int syn_rsp_cmds;
-    int syn_retraceCount;
-    int syn_num_dma_bufs;
-    int syn_dma_buf_size;
-
-    // Special Addition
-    OSPiHandle *diskrom_handle;
-} musConfig;
-
 s32 MusInitialize(musConfig *config) {
     ALVoiceConfig vc;
     s32 i;
@@ -1017,6 +1003,32 @@ INCLUDE_ASM("asm/nonmatchings/player", __MusIntMemMove);
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntRemapPtrs);
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntStartEffect);
+u32 __MusIntStartEffect(channel_t *cp, s32 number, s32 volume, s32 pan, s32 priority) {
+    u32 handle;
+    u8 *fx_data;
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntHandleSetFlag);
+    __MusIntInitialiseChannel(cp);
+    handle = mus_current_handle;
+    cp->fx_addr = number;
+    cp->volscale = volume;
+    cp->panscale = pan;
+    cp->handle = handle;
+    cp->priority = priority;
+    mus_current_handle = handle + 1;
+    fx_data = D_800A64F4_A70F4[number].fxdata;
+    cp->pbase = fx_data;
+    cp->pdata = fx_data;
+    return cp->handle;
+}
+
+void __MusIntHandleSetFlag(u32 handle, u32 clear, u32 set) {
+    s32 i;
+    channel_t *cp;
+
+    for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
+        if (cp->handle == handle) {
+            cp->flags &= clear;
+            cp->flags |= set;
+        }
+    }
+}
