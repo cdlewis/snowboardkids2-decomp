@@ -5,10 +5,14 @@
 # as part of setting up the build directory.
 
 CLAUDE_DIR="$(pwd)/tools/claude-decompiler"
+CLAUDE_CONFIG="$(pwd)/.claude"
 
 for dir in nonmatchings/*; do
+  # Link all files from claude-decompiler directory
   ln -sf "${CLAUDE_DIR}"/* "$dir"/
-  ln -sf "${CLAUDE_DIR}"../.claude "$dir"/
+  
+  # Link the .claude config file from the parent directory
+  ln -sf "${CLAUDE_CONFIG}" "$dir"/
 
-  echo "Linked claude-decompiler files into $dir"
+  echo "Linked claude-decompiler files and .claude config into $dir"
 done

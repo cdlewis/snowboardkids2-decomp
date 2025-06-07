@@ -1000,7 +1000,11 @@ INCLUDE_ASM("asm/nonmatchings/player", func_800744EC_750EC);
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntMemSet);
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntMemMove);
+void __MusIntMemMove(u8 *arg0, u8 *arg1, s32 arg2) {
+    while (--arg2 != -1) {
+        *arg1++ = *arg0++;
+    }
+}
 
 void __MusIntRemapPtrs(void *addr, void *offset, s32 count) {
     u32 *dest, add;
