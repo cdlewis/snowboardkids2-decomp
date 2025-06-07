@@ -167,7 +167,7 @@ extern s32 mus_songfxchange_flag;
 
 u32 __muscontrol_flag;
 void *D_800A64F4_A70F4;
-s32 D_800A64F8_A70F8;
+s32 *D_800A64F8_A70F8;
 ALHeap audio_heap;
 
 void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s32 maxChannels, s32 maxVoices, s32 sampleRate);
@@ -598,6 +598,8 @@ extern s32 mus_last_fxtype;
 extern s32 mus_current_handle;
 extern s32 mus_random_seed;
 extern ALPlayer plr_player;
+extern s16 mus_master_volume_effects;
+extern s16 mus_master_volume_songs;
 
 typedef struct
 {
@@ -640,7 +642,7 @@ s32 MusInitialize(musConfig *config) {
     max_channels = config->channels;
 
     D_800A64F4_A70F4 = config->sched;
-    D_800A64F8_A70F8 = (s32)config->default_fxbank;
+    D_800A64F8_A70F8 = (s32 *)config->default_fxbank;
 
     if (osTvType == OS_TV_PAL) {
         mus_vsyncs_per_second = 50;
@@ -703,9 +705,6 @@ s32 MusInitialize(musConfig *config) {
     return audio_heap.cur - audio_heap.base;
 }
 
-extern s16 mus_master_volume_effects;
-extern s16 mus_master_volume_songs;
-
 void MusSetMasterVolume(u32 flags, u32 volume) {
     if (flags & MUSFLAG_EFFECTS)
         mus_master_volume_effects = volume;
@@ -751,7 +750,33 @@ musHandle __MusIntStartSong(void *addr, int marker) {
     return handle;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntFindChannelAndStart);
+u32 __MusIntFindChannelAndStart(s32 number) {
+    s32 i;
+    s32 priority;
+    s32 current_priority;
+    channel_t *cp;
+    channel_t *current_cp;
+
+    priority = D_800A64F8_A70F8[number];
+    current_priority = priority + 1;
+
+    for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
+        if (cp->pdata == 0) {
+            return __MusIntStartEffect(cp, number, 0x80, 0x80, priority);
+        }
+
+        if (cp->fx_addr && (cp->priority < current_priority)) {
+            current_priority = cp->priority;
+            current_cp = cp;
+        }
+    }
+
+    if (current_priority < priority) {
+        return __MusIntStartEffect(current_cp, number, 0x80, 0x80, priority);
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_800725F4_731F4);
 
@@ -915,6 +940,6 @@ INCLUDE_ASM("asm/nonmatchings/player", __MusIntMemMove);
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntRemapPtrs);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80074704_75304);
+INCLUDE_ASM("asm/nonmatchings/player", __MusIntStartEffect);
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntHandleSetFlag);
