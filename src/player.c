@@ -401,7 +401,22 @@ u8 *Ftron(channel_t *cp, u8 *ptr) {
     return ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", Ffor);
+u8 *Ffor(channel_t *cp, u8 *ptr) {
+    s32 index;
+
+    index = cp->for_stack_count;
+    cp->for_count[index] = *ptr++;
+    cp->for_stack[index] = ptr;
+    cp->for_stackvol[index] = cp->pvolume;
+    cp->for_stackpb[index] = cp->ppitchbend;
+    cp->for_volume[index] = cp->volume;
+    cp->for_pitchbend[index] = cp->pitchbend;
+    cp->for_vol_count[index] = cp->cont_vol_repeat_count;
+    cp->for_pb_count[index] = cp->cont_pb_repeat_count;
+    cp->for_stack_count++;
+
+    return ptr;
+}
 
 u8 *Fnext(channel_t *cp, u8 *ptr) {
     int index;
