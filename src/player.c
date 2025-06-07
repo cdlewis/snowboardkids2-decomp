@@ -473,7 +473,10 @@ u8 *Fvelocity(channel_t *cp, u8 *ptr) {
     return ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", unknown_libmus_71CE8);
+u8 *Fpan(channel_t *cp, u8 *ptr) {
+    cp->pan = (*ptr++) / 2;
+    return ptr;
+}
 
 u8 *Fstereo(channel_t *cp, unsigned char *ptr) {
     return (ptr + 2);
