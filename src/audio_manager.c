@@ -94,7 +94,6 @@ extern s32 D_800A6474_A7074;
 extern s32 __muscontrol_flag;
 extern s32 gAudioBufferPadding;
 extern s32 gAudioBufferSize;
-extern s32 gAudioDataMemory;
 extern s32 gAudioRspCmdCount;
 extern u32 gMaxVoices;
 extern u32 gMinAudioFrameSize;
@@ -285,7 +284,7 @@ s32 audioCreateAndScheduleTask(AudioStruct *audioTaskDesc, AudioBuffer *prevBuff
     audioTaskDesc->bootCodeSize = (u32)rspbootTextEnd - (u32)rspbootTextStart;
     audioTaskDesc->taskCode = aspMainTextStart;
     audioTaskDesc->taskFlags = 0;
-    audioTaskDesc->dataMemory = &gAudioDataMemory;
+    audioTaskDesc->dataMemory = &aspMainDataStart;
     audioTaskDesc->dataMemorySize = 0x800;
     audioTaskDesc->unk28 = 0;
     audioTaskDesc->unk2C = 0;
