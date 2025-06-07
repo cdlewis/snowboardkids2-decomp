@@ -659,7 +659,7 @@ segments:
       - [0x9DE20, lib, libgultra_rom, contpfs, .data]
       - [0x9DE30, lib, libgultra_rom, contramread, .data]
       - [0x9DE40, lib, libgultra_rom, xlitob, .data]
-      - [0x9DE70, rodata]
+      - [0x9DE70, rodatabin, aspMainData]
       - [0x9E268, rodatabin, gspS2DEX_fifoData]
       - [0x9E2B0, rodatabin, gspF3DEX_fifoData]
       - [0x9E640, rodata]
