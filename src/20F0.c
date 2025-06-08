@@ -64,44 +64,43 @@ typedef struct {
     void* unk120;
 } func_80002040_2C40_arg;
 
-void* func_80002040_2C40(func_80002040_2C40_arg* arg0);
-
 typedef struct {
-    void* romAStart;
-    void* romAEnd;
-    void* romBStart;
-    void* romBEnd;
+    void* displayListStart;
+    void* displayListEnd;
+    void* vertexDataStart;
+    void* vertexDataEnd;
     u16 romBSize;
     u16 padding;
     void* unk14;
-} Entity_unk44;
+} Asset;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    /* 0x8  */ void* romAStart;
-    /* 0xC  */ void* romAEnd;
-    /* 0x10 */ void* romBStart;
-    /* 0x14 */ void* romBEnd;
+    /* 0x00 */ char name[8];
+    /* 0x08 */ void* displayListStart;
+    /* 0x0C */ void* displayListEnd;
+    /* 0x10 */ void* vertexDataStart;
+    /* 0x14 */ void* vertexDataEnd;
     /* 0x18 */ s32 size;
     u8 padding3[0x4];
     s8 unk20;
     s8 unk21;
     s16 unk22;
     u8 padding[0x10];
-    void* unk34;
-    void* unk38;
-    s32 unk3C;
+    /* 0x34 */ void* soundSequenceDataStart;
+    /* 0x38 */ void* soundSequenceDataEnd;
+    /* 0x3C */ s32 soundSequenceDataSize;
     s32 unk40;
-    Entity_unk44* unk44;
+    Asset* Assets;
     s8 count;
-} Entity;
+} AssetGroup;
 
 typedef struct {
-    Entity entities[0];
-} D_80089A6C_8A66C_type;
-
-extern D_80089A6C_8A66C_type D_80089A6C_8A66C;
+    u8 padding[0x24];
+    s32 unk24;
+    s32 unk28;
+    s8 unk2C;
+    s8 unk2D;
+} func_80002C14_3814_arg;
 
 typedef struct {
     u8 padding[0x4C];
@@ -109,12 +108,6 @@ typedef struct {
     s8 unk4E;
     s8 unk4F;
 } func_80001630_2230_arg;
-
-extern OSThread* __osActiveQueue_0;
-
-s32 func_800018F4_24F4(func_80002040_2C40_arg* arg0);
-
-s32 func_80001904_2504(s16);
 
 typedef struct {
     s32 unk0;
@@ -129,8 +122,6 @@ typedef struct {
     u8 padding3[0x48];
     s8 unk88;
 } func_80002B50_3750_arg;
-
-s32 func_80001904_2504(s16);
 
 typedef struct {
     u8 padding[0x3C];
@@ -152,31 +143,85 @@ typedef struct {
     func_80001688_2288_arg_9C* unk9C;
 } func_80001688_2288_arg;
 
-void func_80002220_2E20(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4);
-void func_80001A6C_266C(GameState*, void*, void*, s8, s8, s8, s16);
-void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5);
-void* func_80009F5C_AB5C(s32);
-s32 func_8000CDE0_D9E0(s32);
-s32 func_8000CDFC_D9FC(s32);
-void func_80002468_3068(func_80002040_2C40_arg* arg0);
-
-void func_800014F0_20F0(func_800014F0_20F0_arg* arg0) {
-    arg0->unk3C = 1;
-}
-
 typedef struct {
     u8 padding[0x158];
     s32 unk158;
 } func_800014FC_20FC_arg;
 
-void func_800014FC_20FC(func_800014FC_20FC_arg* arg0, s32 arg1) {
-    arg0->unk158 = arg1;
-}
-
 typedef struct {
     u8 padding[0x15C];
     s8 unk15C;
 } func_8000150C_210C_arg;
+
+typedef struct {
+    u8 padding[0x96];
+    u8 unk96;
+    s8 unk97;
+} func_80001534_2134_arg;
+
+typedef struct {
+    u8 padding[0x3D];
+    s8 unk3D;
+} func_800015CC_21CC_arg;
+
+typedef struct {
+    u8 padding[0x88];
+    s8 unk88;
+} func_800015FC_21FC_arg;
+
+typedef struct {
+    u8 padding[0x3F];
+    s8 unk3F;
+} func_80001604_2204_arg;
+
+typedef struct {
+    u8 padding[0x110];
+    s32 unk110;
+} func_800016E0_22E0_arg;
+
+typedef struct {
+    u8 padding[0xC];
+    s16 index;
+} func_80001868_2468_arg;
+
+typedef struct {
+    u8 padding[0x14];
+    s16 unk14;
+    s16 unk16;
+    u8 padding2[0x20];
+    s16 unk38;
+    s16 unk3A;
+    u8 padding5[0x52];
+    s16 unk8E;
+} func_80001970_2570_arg;
+
+extern OSThread* __osActiveQueue_0;
+extern AssetGroup gameAssets[];
+extern s32 D_80089768_8A368;
+extern AssetGroup D_8008BD2C_8C92C;
+extern s32 func_8005ECB8_5F8B8(void* arg0, s32 arg1, s32 arg2, void* arg3);
+extern void func_8005E800_5F400(void* arg0, u16 arg1);
+extern u8 D_8009A870_9B470[32];
+
+s32 func_800018F4_24F4(func_80002040_2C40_arg*);
+s32 func_80001904_2504(s16);
+s32 func_80002484_3084(func_80002040_2C40_arg*, s16);
+s32 func_8000CDE0_D9E0(s32);
+s32 func_8000CDFC_D9FC(s32);
+void func_80001A6C_266C(GameState*, void*, void*, s8, s8, s8, s16);
+void func_80002220_2E20(func_80002040_2C40_arg*, s16, s16, s8, s16);
+void func_80002468_3068(func_80002040_2C40_arg*);
+void* func_800019B8_25B8(void*, void*, s8, s8, s8, s16);
+void* func_80002040_2C40(func_80002040_2C40_arg* arg0);
+void* func_80009F5C_AB5C(s32);
+
+void func_800014F0_20F0(func_800014F0_20F0_arg* arg0) {
+    arg0->unk3C = 1;
+}
+
+void func_800014FC_20FC(func_800014FC_20FC_arg* arg0, s32 arg1) {
+    arg0->unk158 = arg1;
+}
 
 void func_80001504_2104(func_8000150C_210C_arg* arg0) {
     arg0->unk15C = 0;
@@ -185,12 +230,6 @@ void func_80001504_2104(func_8000150C_210C_arg* arg0) {
 void func_8000150C_210C(func_8000150C_210C_arg* arg0) {
     arg0->unk15C = 1;
 }
-
-typedef struct {
-    u8 padding[0x96];
-    u8 unk96;
-    s8 unk97;
-} func_80001534_2134_arg;
 
 void func_80001518_2118(func_80001534_2134_arg* arg0) {
     arg0->unk97 = 1;
@@ -223,17 +262,12 @@ s32 func_8000156C_216C(s32 arg0) {
 }
 
 s16 func_80001574_2174(s16 arg0) {
-    return D_80089A6C_8A66C.entities[arg0].unk22;
+    return gameAssets[arg0].unk22;
 }
 
 s8 func_800015A0_21A0(s16 arg0) {
-    return D_80089A6C_8A66C.entities[arg0].unk20;
+    return gameAssets[arg0].unk20;
 }
-
-typedef struct {
-    u8 padding[0x3D];
-    s8 unk3D;
-} func_800015CC_21CC_arg;
 
 void func_800015CC_21CC(func_800015CC_21CC_arg* arg0, s8 arg1) {
     arg0->unk3D = arg1;
@@ -259,19 +293,9 @@ s32 func_800015F4_21F4(void) {
     return 6;
 }
 
-typedef struct {
-    u8 padding[0x88];
-    s8 unk88;
-} func_800015FC_21FC_arg;
-
 void func_800015FC_21FC(func_800015FC_21FC_arg* arg0, s8 arg1) {
     arg0->unk88 = arg1;
 }
-
-typedef struct {
-    u8 padding[0x3F];
-    s8 unk3F;
-} func_80001604_2204_arg;
 
 void func_80001604_2204(func_80001604_2204_arg* arg0, s8 arg1) {
     arg0->unk3F = arg1;
@@ -282,8 +306,6 @@ void func_8000160C_220C(func_80001630_2230_arg* arg0, s8 arg1) {
         arg0->unk4E = arg1;
     }
 }
-
-extern s32 D_80089768_8A368;
 
 s32 func_80001624_2224(void) {
     return D_80089768_8A368;
@@ -325,11 +347,6 @@ void func_80001688_2288(func_80001688_2288_arg* arg0, s8 arg1) {
     }
 }
 
-typedef struct {
-    u8 padding[0x110];
-    s32 unk110;
-} func_800016E0_22E0_arg;
-
 void func_800016E0_22E0(func_800016E0_22E0_arg* arg0, s32 arg1) {
     arg0->unk110 = (s32)(arg0->unk110 | (1 << arg1));
 }
@@ -339,11 +356,11 @@ void func_800016F8_22F8(func_800016E0_22E0_arg* arg0, s32 arg1) {
 }
 
 void* func_80001714_2314(s16 groupIndex, s16 entityIndex, s16 mode) {
-    Entity* group;
-    Entity_unk44* entity;
+    AssetGroup* group;
+    Asset* entity;
 
-    group = &D_80089A6C_8A66C.entities[groupIndex];
-    if (group->unk44 == NULL) {
+    group = &gameAssets[groupIndex];
+    if (group->Assets == NULL) {
         return NULL;
     }
 
@@ -351,17 +368,17 @@ void* func_80001714_2314(s16 groupIndex, s16 entityIndex, s16 mode) {
         return NULL;
     }
 
-    entity = &group->unk44[entityIndex];
+    entity = &group->Assets[entityIndex];
     if (entity == NULL) {
         return NULL;
     }
 
     switch (mode) {
         case MODE_DMA:
-            return dmaRequestAndUpdateState(entity->romAStart, entity->romAEnd);
+            return dmaRequestAndUpdateState(entity->displayListStart, entity->displayListEnd);
 
         case MODE_QUEUED_DMA:
-            return dmaRequestAndUpdateStateWithSize(entity->romBStart, entity->romBEnd, entity->romBSize);
+            return dmaRequestAndUpdateStateWithSize(entity->vertexDataStart, entity->vertexDataEnd, entity->romBSize);
 
         case MODE_DIRECT_FETCH:
             return entity->unk14;
@@ -391,29 +408,24 @@ typedef struct {
 
 void* func_80001818_2418(func_80001818_2418_arg* arg0) {
     s16 idx = arg0->unkC;
-    Entity* entry = &D_80089A6C_8A66C.entities[idx];
+    AssetGroup* entry = &gameAssets[idx];
     void* result = NULL;
 
-    if (entry->unk34 != NULL) {
-        result = dmaRequestAndUpdateStateWithSize(entry->unk34, entry->unk38, entry->unk3C);
+    if (entry->soundSequenceDataStart != NULL) {
+        result = dmaRequestAndUpdateStateWithSize(entry->soundSequenceDataStart, entry->soundSequenceDataEnd, entry->soundSequenceDataSize);
     }
 
     return result;
 }
 
-typedef struct {
-    u8 padding[0xC];
-    s16 index;
-} func_80001868_2468_arg;
-
 void func_80001868_2468(func_80001868_2468_arg* arg0) {
-    Entity* entity = &D_80089A6C_8A66C.entities[arg0->index];
-    dmaRequestAndUpdateState(entity->romAStart, entity->romAEnd);
+    AssetGroup* entity = &gameAssets[arg0->index];
+    dmaRequestAndUpdateState(entity->displayListStart, entity->displayListEnd);
 }
 
 void func_800018AC_24AC(func_80002040_2C40_arg* arg0) {
-    Entity* entity = &D_80089A6C_8A66C.entities[arg0->index];
-    dmaRequestAndUpdateStateWithSize(entity->romBStart, entity->romBEnd, entity->size);
+    AssetGroup* entity = &gameAssets[arg0->index];
+    dmaRequestAndUpdateStateWithSize(entity->vertexDataStart, entity->vertexDataEnd, entity->size);
 }
 
 s32 func_800018F4_24F4(func_80002040_2C40_arg* arg0) {
@@ -421,29 +433,16 @@ s32 func_800018F4_24F4(func_80002040_2C40_arg* arg0) {
 }
 
 s32 func_80001904_2504(s16 arg0) {
-    return D_80089A6C_8A66C.entities[arg0].romAStart == NULL;
+    return gameAssets[arg0].displayListStart == NULL;
 }
 
-extern Entity D_8008BD2C_8C92C;
-
-Entity* func_80001934_2534(s32 arg0) {
+AssetGroup* func_80001934_2534(s32 arg0) {
     if (arg0 != -1) {
-        return &D_80089A6C_8A66C.entities[arg0];
+        return &gameAssets[arg0];
     }
 
     return &D_8008BD2C_8C92C;
 }
-
-typedef struct {
-    u8 padding[0x14];
-    s16 unk14;
-    s16 unk16;
-    u8 padding2[0x20];
-    s16 unk38;
-    s16 unk3A;
-    u8 padding5[0x52];
-    s16 unk8E;
-} func_80001970_2570_arg;
 
 void func_80001970_2570(func_80001970_2570_arg* arg0) {
     arg0->unk14 = -1;
@@ -530,13 +529,13 @@ void func_80002260_2E60(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg
     int new_var;
     s16 var_t0;
     s16 var_a1;
-    Entity* entity;
+    AssetGroup* entity;
 
     s16 local_arg2 = arg2;
     s16 local_arg1 = arg1;
     s16 local_arg4 = arg4;
 
-    entity = &D_80089A6C_8A66C.entities[arg0->index];
+    entity = &gameAssets[arg0->index];
 
     arg0->unk89 &= 0xFD;
     if (arg5) {
@@ -607,15 +606,9 @@ void func_80002260_2E60(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg
     }
 }
 
-s32 func_80002484_3084(func_80002040_2C40_arg*, s16);
-
 void func_80002468_3068(func_80002040_2C40_arg* arg0) {
     func_80002484_3084(arg0, -1);
 }
-
-extern s32 func_8005ECB8_5F8B8(void* arg0, s32 arg1, s32 arg2, void* arg3);
-extern void func_8005E800_5F400(void* arg0, u16 arg1);
-extern u8 D_8009A870_9B470[32];
 
 s32 func_80002484_3084(func_80002040_2C40_arg* arg0, s16 arg1) {
     s8 local_buffer[0x20];
@@ -743,14 +736,6 @@ s32 func_80002BD0_37D0(func_80002040_2C40_arg* arg0) {
 
     return 0x90;
 }
-
-typedef struct {
-    u8 padding[0x24];
-    s32 unk24;
-    s32 unk28;
-    s8 unk2C;
-    s8 unk2D;
-} func_80002C14_3814_arg;
 
 void func_80002C14_3814(func_80002C14_3814_arg* arg0, void* arg1, s32 arg2) {
     func_80019280_19E80_return result;

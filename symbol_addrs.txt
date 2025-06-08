@@ -69,7 +69,7 @@ getNodeOwner = 0x8006A51C;
 setNodeUserData = 0x8006A524;
 getNodeUserData = 0x8006A52C;
 
-D_80089A6C_8A66C = 0x80089A6C; // type:u8 size:0x22BC
+gameAssets = 0x80089A6C; // type:s32 size:0x22BC
 
 initializeGameState = 0x80016EA0;
 gameStateCountdownHandler = 0x80017110;
