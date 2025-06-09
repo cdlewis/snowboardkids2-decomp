@@ -298,6 +298,6 @@ GameState *allocateGameStateMemory(s32 arg0) {
     return temp_a0;
 }
 
-void freeGameStateMemory(s32 *arg0) {
-    decrementNodeRefCount(arg0);
+s32 freeGameStateMemory(s32 *arg0) {
+    return decrementNodeRefCount(arg0);
 }

@@ -82,8 +82,8 @@ typedef struct {
     /* 0x34 */ void* soundSequenceDataStart;
     /* 0x38 */ void* soundSequenceDataEnd;
     /* 0x3C */ s32 soundSequenceDataSize;
-    s32 unk40;
-    Asset* Assets;
+    /* 0x40 */ void* initCallback;
+    /* 0x44 */ Asset* Assets;
     s8 count;
 } AssetGroup;
 

@@ -104,7 +104,7 @@ s32 func_80001904_2504(s16);
 s32 func_80002484_3084(func_80002040_2C40_arg*, s16);
 s32 func_8000CDE0_D9E0(s32);
 s32 func_8000CDFC_D9FC(s32);
-void func_80001A6C_266C(GameState*, void*, void*, s8, s8, s8, s16);
+void initializeGameEntity(GameState*, void*, void*, s8, s8, s8, s16);
 void func_80002220_2E20(func_80002040_2C40_arg*, s16, s16, s8, s16);
 void func_80002468_3068(func_80002040_2C40_arg*);
 void* func_800019B8_25B8(void*, void*, s8, s8, s8, s16);
@@ -350,12 +350,12 @@ void func_8000198C_258C(void* arg0, void* arg1) {
 void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {
     GameState* obj = allocateGameStateMemory(0x160);
     if (obj != NULL) {
-        func_80001A6C_266C(obj, arg0, arg1, arg2, arg3, arg4, arg5);
+        initializeGameEntity(obj, arg0, arg1, arg2, arg3, arg4, arg5);
     }
     return obj;
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80001A6C_266C);
+INCLUDE_ASM("asm/nonmatchings/20F0", initializeGameEntity);
 
 void func_80002014_2C14(func_80002040_2C40_arg* arg0) {
     func_80002040_2C40(arg0);
