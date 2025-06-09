@@ -1,3 +1,6 @@
+#ifndef _MEMORY_ALLOCATOR_H_
+#define _MEMORY_ALLOCATOR_H_
+
 #include "common.h"
 
 typedef struct MemoryAllocatorNode {
@@ -20,3 +23,5 @@ void setNodeUserData(void *, void *);
 void markNodeAsLocked(s32 *);
 s32 getNodeOwner(void *);
 s32 decrementNodeRefCount(s32 *);
+
+#endif

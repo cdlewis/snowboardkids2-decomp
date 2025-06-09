@@ -1,4 +1,5 @@
 #include "common.h"
+#include "memory_allocator.h"
 
 void dmaLoadAndInvalidate(
     void* romStart,
@@ -11,4 +12,4 @@ void dmaLoadAndInvalidate(
     void* bssStart,
     void* bssEnd);
 
-void* dmaQueueRequest(void* arg0, void* arg1, s32 arg2);
+MemoryAllocatorNode* dmaQueueRequest(void* arg0, void* arg1, s32 arg2);

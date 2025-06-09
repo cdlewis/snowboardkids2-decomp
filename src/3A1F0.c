@@ -1,8 +1,5 @@
 #include "3A1F0.h"
 
-#include "common.h"
-#include "memory_allocator.h"
-
 typedef struct {
     s16 command;
     s16 pad;
@@ -482,8 +479,8 @@ void initPiManager() {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B6B4_3C2B4);
 
-void* func_8003B8F0_3C4F0(void* start, void* end) {
-    void* s0;
+MemoryAllocatorNode* queueDmaTransfer(void* start, void* end) {
+    MemoryAllocatorNode* s0;
     u8 stack;
     s32 size;
     size = (s32)end - (s32)start;
@@ -521,10 +518,10 @@ extern s32 gDmaQueueIndex;
 extern OSMesgQueue gDmaMsgQueue;
 extern s32 gPendingDmaCount;
 
-void* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
+MemoryAllocatorNode* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
     u8 flag;
     Entry248C* entry;
-    void* ret;
+    MemoryAllocatorNode* ret;
     s32 a1Val;
     s32 a1;
     (gDmaQueue + gDmaQueueIndex)->size = size;

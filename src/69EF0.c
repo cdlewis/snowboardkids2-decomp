@@ -2,7 +2,6 @@
 
 #include "3A1F0.h"
 #include "gamestate.h"
-#include "memory_allocator.h"
 
 typedef struct {
     u8 padding[0xE];
@@ -52,7 +51,7 @@ typedef struct {
 } D_8009A860_9B460_type;
 extern D_8009A860_9B460_type *D_8009A860_9B460;
 
-extern void *func_8003B8F0_3C4F0(void *, void *);
+extern void *queueDmaTransfer(void *, void *);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
 
@@ -213,11 +212,11 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D7C_6A97C);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069DD4_6A9D4);
 
-void *dmaRequestAndUpdateState(void *start, void *end) {
-    void *s0;
+MemoryAllocatorNode *dmaRequestAndUpdateState(void *start, void *end) {
+    MemoryAllocatorNode *s0;
 
     if (D_8009A864_9B464 == NULL) {
-        s0 = func_8003B8F0_3C4F0(start, end);
+        s0 = queueDmaTransfer(start, end);
         if (getNodeOwner(s0) != 0) {
             if (D_8009A860_9B460->unk18 != 3) {
                 D_8009A860_9B460->unk20 = getNodeUserData(s0);
@@ -229,7 +228,7 @@ void *dmaRequestAndUpdateState(void *start, void *end) {
             }
         }
     } else {
-        s0 = func_8003B8F0_3C4F0(start, end);
+        s0 = queueDmaTransfer(start, end);
         if (getNodeOwner(s0) != 0) {
             if (((u8)(D_8009A864_9B464->unk0E - 3)) >= 2) {
                 D_8009A864_9B464->unk18 = getNodeUserData(s0);
@@ -248,8 +247,8 @@ void *dmaRequestAndUpdateState(void *start, void *end) {
     return s0;
 }
 
-void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
-    void *s0;
+MemoryAllocatorNode *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
+    MemoryAllocatorNode *s0;
 
     if (D_8009A864_9B464 == NULL) {
         s0 = dmaQueueRequest(romStart, romEnd, size);

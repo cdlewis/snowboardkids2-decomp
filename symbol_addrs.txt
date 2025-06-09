@@ -1,3 +1,8 @@
+queueDmaTransfer = 0x8003B8F0;
+loadAssetDataByMode = 0x80001714;
+loadAssetGroupSoundData = 0x80001818;
+loadAssetGroupVertexData = 0x800018AC;
+loadAssetGroupDisplayList = 0x80001868;
 __MusIntStartEffect = 0x80074704;
 func_800725F4_731F4 = 0x800725F4;
 __MusIntFindChannelAndStart = 0x80072540;
