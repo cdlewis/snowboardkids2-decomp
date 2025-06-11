@@ -20,7 +20,7 @@ extern void func_8002F024_2FC24();
 void func_80069CE8_6A8E8(void *);
 void func_8006A838_6B438(void *, s32, s32);
 void func_8006B084_6BC84(void *, void *, void *);
-extern s32 D_8009A870_9B470;
+extern u8 D_8009A870_9B470[];
 extern void func_8002F72C_3032C();
 extern void func_8002F980_30580();
 extern void func_8000FED0_10AD0();
@@ -70,7 +70,6 @@ typedef struct {
     u8 unk60;
 } S0;
 
-void func_80069CC0_6A8C0(void (*func)(func_80063824_64424_arg *));
 void func_8002F5C8_301C8(func_80063824_64424_arg *arg0);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 
@@ -111,7 +110,33 @@ void updateDebugCameraYState(cameraState *arg0) {
     debugEnqueueCallback(8, 7, &func_80068128_68D28, ((void *)((s32)arg0)) + 0xC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002EF3C_2FB3C);
+void func_80069CE8_6A8E8(void *);
+void func_8002EFD8_2FBD8(func_8002EFD8_2FBD8_arg *arg0);
+extern void func_8002F110_2FD10();
+
+typedef struct {
+    void *unk0;
+    Mat3x3 unk4;
+    u8 padding[2];
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
+    s16 unk24;
+    s8 unk26;
+} func_8002EF3C_2FB3C_arg;
+void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
+    GameState *temp = GameStateGet();
+    arg0->unk0 = (void *)func_8000198C_258C(0x3A, temp);
+    memcpy(&arg0->unk4, D_8009A870_9B470, 0x20);
+    arg0->unk18 = 0x200000;
+    arg0->unk1C = 0xFFE00000;
+    arg0->unk20 = 0x80000;
+    arg0->unk24 = 4;
+    arg0->unk26 = 0;
+    createYRotationMatrix(&arg0->unk4, 0x1E00);
+    func_80069CE8_6A8E8(func_8002F110_2FD10);
+    func_80069CC0_6A8C0(func_8002EFD8_2FBD8);
+}
 
 void func_8002EFD8_2FBD8(func_8002EFD8_2FBD8_arg *arg0) {
     func_8000153C_213C(arg0->unk0, (void *)((s32)arg0 + 4));
