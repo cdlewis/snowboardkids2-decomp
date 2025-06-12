@@ -1,3 +1,8 @@
+D_80094990_95590 = 0x80094990; // type:s32 size:0x90
+D_80094900_95500 = 0x80094900; // type:s32 size:0x90
+D_80094870_95470 = 0x80094870; // type:s32 size:0x90
+D_800947E0_953E0 = 0x800947E0; // type:s32 size:0x90
+D_80094A68_95668 = 0x80094A68; // type:s32 size:0xC0
 initializeGameEntity = 0x80001A6C;
 queueDmaTransfer = 0x8003B8F0;
 loadAssetDataByMode = 0x80001714;
