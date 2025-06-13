@@ -1,6 +1,10 @@
 #include "common.h"
 #include "memory_allocator.h"
 
+#define MODE_DMA 0
+#define MODE_QUEUED_DMA 1
+#define MODE_DIRECT_FETCH 2
+
 typedef struct {
     u8 padding[0x24];
     void* unk24;

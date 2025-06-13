@@ -1,3 +1,5 @@
+MAKEFLAGS += -j$(shell nproc)
+
 BASENAME  = snowboardkids2
 
 # Colours

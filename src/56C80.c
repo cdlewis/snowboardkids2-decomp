@@ -39,10 +39,8 @@ extern D_800A2990_A3590_type *D_800A2990_A3590;
 
 extern OSMesgQueue D_800A2CD0_A38D0;
 extern OSMesgQueue D_800A2CF0_A38F0;
-extern s32 D_800937E8_943E8[];
 extern s32 D_800937EC_943EC[];
 extern s32 D_800937F0_943F0[];
-extern s32 D_80093974_94574[];
 extern s32 D_80093978_94578[];
 extern s32 D_8009397C_9457C[];
 extern s32 D_80093B00_94700;
@@ -77,6 +75,18 @@ void func_8005854C_5914C(s32, s32);
 void func_80069CC0_6A8C0(void *);
 void func_80069CD0_6A8D0(void *);
 void func_8006A0EC_6ACEC(s32, s32, s32, s32);
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} D_800937E8_943E8_type;
+extern D_800937E8_943E8_type D_800937E8_943E8[];
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} D_80093974_94574_type;
+extern D_80093974_94574_type D_80093974_94574[];
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
 
@@ -194,25 +204,18 @@ void func_800570E0_57CE0(void) {
 }
 
 void func_80057124_57D24(void) {
-    s32 temp_v0;
-    s32 temp_v0_2;
-    u16 temp_v1;
+    D_800A2990_A3590->unk12 = D_800A2990_A3590->unk10;
 
-    temp_v1 = D_800A2990_A3590->unk10;
-
-    D_800A2990_A3590->unk12 = temp_v1;
-    temp_v0 = ((temp_v1 << 1) + temp_v1);
     func_8006A0EC_6ACEC(
-        D_800937E8_943E8[temp_v0],
-        D_800937EC_943EC[temp_v0],
-        D_800937F0_943F0[temp_v0],
+        D_800937E8_943E8[D_800A2990_A3590->unk12].unk0,
+        D_800937E8_943E8[D_800A2990_A3590->unk12].unk4,
+        D_800937E8_943E8[D_800A2990_A3590->unk12].unk8,
         D_800A2990_A3590->unk8);
 
-    temp_v0_2 = ((D_800A2990_A3590->unk12 << 1) + D_800A2990_A3590->unk12);
     func_8006A0EC_6ACEC(
-        D_80093974_94574[temp_v0_2],
-        D_80093978_94578[temp_v0_2],
-        D_8009397C_9457C[temp_v0_2],
+        D_80093974_94574[D_800A2990_A3590->unk12].unk0,
+        D_80093974_94574[D_800A2990_A3590->unk12].unk4,
+        D_80093974_94574[D_800A2990_A3590->unk12].unk8,
         D_800A2990_A3590->unk4);
 
     func_80069CC0_6A8C0(&func_800571D0_57DD0);
