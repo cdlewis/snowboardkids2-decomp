@@ -354,16 +354,16 @@ void thread_function_4(void *arg) {
     stack.sp10 = 7;
     addViConfig(&stack.sp20, &eventQueue4, 1);
     while (1) {
-        osRecvMesg(&threadSyncQueue, (OSMesg *)(&stack.frameInfo), 1);
+        osRecvMesg(&threadSyncQueue, (OSMesg *)(&stack.frameInfo), OS_MESG_BLOCK);
         frameIndex = stack.frameInfo->unk4C;
         frameBuffer = stack.frameInfo->unk48;
         while ((osViGetCurrentFramebuffer() == frameBuffer) || (osViGetNextFramebuffer() == frameBuffer)) {
-            osRecvMesg(&eventQueue4, &stack.sp30, 1);
+            osRecvMesg(&eventQueue4, &stack.sp30, OS_MESG_BLOCK);
         }
 
-        osSendMesg(&eventQueue1, &stack.sp10, 1);
-        osRecvMesg(&eventQueue3, &stack.sp34, 1);
-        osRecvMesg(&taskCompletionQueue, &stack.sp34, 1);
+        osSendMesg(&eventQueue1, &stack.sp10, OS_MESG_BLOCK);
+        osRecvMesg(&eventQueue3, &stack.sp34, OS_MESG_BLOCK);
+        osRecvMesg(&taskCompletionQueue, &stack.sp34, OS_MESG_BLOCK);
         if (!(stack.frameInfo->unk4E & 1)) {
             continue;
         }
@@ -374,7 +374,7 @@ void thread_function_4(void *arg) {
         }
 
         while ((frameCounter - frameIndex & 0xFFF) >= 0x801) {
-            osRecvMesg(&eventQueue4, &stack.sp30, 1);
+            osRecvMesg(&eventQueue4, &stack.sp30, OS_MESG_BLOCK);
         }
 
         osViSwapBuffer((void *)frameBuffer);

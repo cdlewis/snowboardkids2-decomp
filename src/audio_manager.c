@@ -428,7 +428,7 @@ void processAudioNodeList(void) {
     AudioNode *headPtr;
 
     for (i = 0; i < D_8009B034_9BC34; i++) {
-        osRecvMesg(&gAudioMsgQueue, &message, 0);
+        osRecvMesg(&gAudioMsgQueue, &message, OS_MESG_NOBLOCK);
     }
 
     headPtr = (AudioNode *)&gActiveListHead;

@@ -64,7 +64,7 @@ void mainThreadEntrypoint(void *arg) {
     func_800693C4_69FC4(&func_80056080_56C80, 0xFA);
 
     while (TRUE) {
-        osRecvMesg(&D_800AB1B0_A2520, (OSMesg *)&message, 1);
+        osRecvMesg(&D_800AB1B0_A2520, (OSMesg *)&message, OS_MESG_BLOCK);
         var_s0 = 0;
 
         do {
@@ -85,7 +85,7 @@ void mainThreadEntrypoint(void *arg) {
                 var_s2 = message;
                 var_s0 = 1;
             }
-        } while (osRecvMesg(&D_800AB1B0_A2520, (OSMesg *)&message, 0) != -1);
+        } while (osRecvMesg(&D_800AB1B0_A2520, (OSMesg *)&message, OS_MESG_NOBLOCK) != -1);
 
         if (var_s0 == 0) {
             continue;

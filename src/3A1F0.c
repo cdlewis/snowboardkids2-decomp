@@ -167,7 +167,7 @@ void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[
         }
     }
 
-    osSendMesg(&D_800A1888_A2488, (void*)err, 1);
+    osSendMesg(&D_800A1888_A2488, (void*)err, OS_MESG_BLOCK);
 }
 
 void func_8003AAC4_3B6C4() {
@@ -197,7 +197,7 @@ void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHead
         }
     }
 
-    osSendMesg(&D_800A1888_A2488, (void*)err, 1);
+    osSendMesg(&D_800A1888_A2488, (void*)err, OS_MESG_BLOCK);
 }
 
 void func_8003AB74_3B774() {
@@ -293,7 +293,7 @@ void func_8003B000_3BC00(s32 arg0) {
     temp_a1 = D_8008FE8C_90A8C;
     D_800A1C20_A2820[temp_a1].arg = &D_800AB078_A23E8;
     D_800A1C20_A2820[temp_a1].command = temp_v0;
-    osSendMesg(&D_800A1820_A2420, (OSMesg*)(&D_800A1C20_A2820[temp_a1]), 1);
+    osSendMesg(&D_800A1820_A2420, (OSMesg*)(&D_800A1C20_A2820[temp_a1]), OS_MESG_BLOCK);
     temp_v0 = ((u16)D_8008FE8C_90A8C) + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -336,7 +336,7 @@ void* func_8003B170_3BD70(void) {
 
     sp10 = NULL;
     var_v0 = (void*)-1;
-    if (osRecvMesg(&D_800A1888_A2488, &sp10, 0) == 0) {
+    if (osRecvMesg(&D_800A1888_A2488, &sp10, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         var_v0 = sp10;
     }
@@ -347,7 +347,7 @@ void func_8003B1C0_3BDC0() {
     osSendMesg(
         &D_800A1888_A2488,
         (OSMesg*)osEepromProbe(&mainStack),
-        1);
+        OS_MESG_BLOCK);
 }
 
 void func_8003B1F4_3BDF4(s32 arg0, void* arg1) {
@@ -358,7 +358,7 @@ void func_8003B1F4_3BDF4(s32 arg0, void* arg1) {
     temp_v1 = D_8008FE8C_90A8C;
     D_800A1C20_A2820[temp_v1].arg = arg1;
     D_800A1C20_A2820[temp_v1].command = (arg0 & 0xFF) + 0xE0;
-    osSendMesg(&D_800A1820_A2420, (OSMesg*)&D_800A1C20_A2820[temp_v1], 1);
+    osSendMesg(&D_800A1820_A2420, (OSMesg*)&D_800A1C20_A2820[temp_v1], OS_MESG_BLOCK);
     temp_v0 = (u16)D_8008FE8C_90A8C + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -384,7 +384,7 @@ void func_8003B2DC_3BEDC(s32 arg0, u8* arg1) {
     osSendMesg(
         &D_800A1888_A2488,
         (OSMesg*)osEepromLongRead(&mainStack, a1, arg1, 0x58),
-        1);
+        OS_MESG_BLOCK);
 }
 
 void func_8003B324_3BF24(s32 arg0) {
@@ -444,7 +444,7 @@ void* func_8003B510_3C110(void) {
 
     sp10 = NULL;
     var_v0 = (void*)-1;
-    if (osRecvMesg(&D_800A1888_A2488, &sp10, 0) == 0) {
+    if (osRecvMesg(&D_800A1888_A2488, &sp10, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         var_v0 = sp10;
     }
@@ -455,7 +455,7 @@ void func_8003B560_3C160(u8* arg0) {
     osSendMesg(
         &D_800A1888_A2488,
         (OSMesg*)osEepromLongWrite(&mainStack, 0, arg0, 0x200),
-        1);
+        OS_MESG_BLOCK);
 }
 
 void initPiManager() {
@@ -502,7 +502,7 @@ MemoryAllocatorNode* queueDmaTransfer(void* start, void* end) {
     gDmaQueue[gDmaQueueIndex].unk8 = 0;
 
     gPendingDmaCount++;
-    osSendMesg(&gDmaMsgQueue, (OSMesg)&gDmaQueue[gDmaQueueIndex], 1);
+    osSendMesg(&gDmaMsgQueue, (OSMesg)&gDmaQueue[gDmaQueueIndex], OS_MESG_BLOCK);
     if ((++gDmaQueueIndex) >= 0x5C) {
         gDmaQueueIndex = 0;
     }
@@ -534,7 +534,7 @@ MemoryAllocatorNode* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
         entry->end = romEnd;
         entry->unk8 = 1;
         gPendingDmaCount++;
-        osSendMesg(&gDmaMsgQueue, entry, 1);
+        osSendMesg(&gDmaMsgQueue, entry, OS_MESG_BLOCK);
         gDmaQueueIndex++;
         if (gDmaQueueIndex >= 0x5C) {
             gDmaQueueIndex = 0;

@@ -316,8 +316,8 @@ void *func_80057974_58574(s32 arg0, s32 arg1, s32 arg2) {
     D_800A2D14_A3914 = arg0;
     D_800A2D10_A3910 = arg1;
     D_800A2D38_A3938 = arg2;
-    osSendMesg(&D_800A2CD0_A38D0, (void *)0xB, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+    osSendMesg(&D_800A2CD0_A38D0, (void *)0xB, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, &sp10, OS_MESG_BLOCK);
     return sp10;
 }
 
@@ -414,8 +414,8 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
     temp_v0 = temp_v1->unk24;
     D_800A2D2C_A392C = temp_v1->unk24;
 
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), 1);
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), OS_MESG_BLOCK);
 
     temp_s0 = temp_s0 + ((s32)D_800A2990_A3590);
 
@@ -523,8 +523,8 @@ void *func_800585E4_591E4(void) {
     void *result;
 
     if (D_80093BA5_947A5 != 0) {
-        osSendMesg(&D_800A2CD0_A38D0, 0, 1);
-        osRecvMesg(&D_800A2CF0_A38F0, &result, 1);
+        osSendMesg(&D_800A2CD0_A38D0, 0, OS_MESG_BLOCK);
+        osRecvMesg(&D_800A2CF0_A38F0, &result, OS_MESG_BLOCK);
         return result;
     }
 
