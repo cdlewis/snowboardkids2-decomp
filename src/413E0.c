@@ -1,4 +1,5 @@
 #include "5E590.h"
+#include "69EF0.h"
 #include "common.h"
 #include "gamestate.h"
 
@@ -26,7 +27,12 @@ INCLUDE_ASM("asm/nonmatchings/413E0", func_80040870_41470);
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040948_41548);
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80040974_41574);
+void func_80040974_41574(s32 arg0) {
+    Node* temp_v0 = scheduleTask(&func_800407E0_413E0, 0U, 0U, 0xF0U);
+    if (temp_v0 != NULL) {
+        temp_v0->field_24 = arg0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_800409B4_415B4);
 

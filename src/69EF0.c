@@ -17,22 +17,6 @@ typedef struct {
 } D_8009A864_9B464_type;
 extern D_8009A864_9B464_type *D_8009A864_9B464;
 
-typedef struct Node {
-    /* 0x00 */ struct Node *prev;
-    /* 0x04 */ struct Node *next;
-    /* 0x08 */ struct Node *freeNext;
-    /* 0x0C */ u8 field_C;
-    /* 0x0D */ u8 field_D;
-    /* 0x0E */ u8 field_E;
-    /* 0x0F */ u8 priority;
-    /* 0x10 */ u8 pad10;
-    /* 0x11 */ u8 field_11;
-    /* 0x12 */ u8 pad12[6];
-    /* 0x18 */ u32 field_18;
-    /* 0x1C */ u32 pad1C;
-    /* 0x20 */ void *field_20;
-    /* 0x24 */ u32 field_24;
-} Node;
 
 typedef struct {
     char padding[0x10];
@@ -114,7 +98,7 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698DC_6A4DC);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698EC_6A4EC);
 
-s32 *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) {
+Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) {
     Node *newNode;
     Node *active;
     Node *freeNxt;
@@ -167,7 +151,7 @@ s32 *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) {
             newNode->field_11 = 0;
             newNode->field_18 = 0;
 
-            return (void *)(newNode + 0x1);
+            return (newNode + 0x1);
         }
     }
 
