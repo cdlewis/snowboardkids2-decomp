@@ -1,1 +1,3 @@
-void *load_3ECE40(void);
+#include "memory_allocator.h"
+
+MemoryAllocatorNode *load_3ECE40(void);

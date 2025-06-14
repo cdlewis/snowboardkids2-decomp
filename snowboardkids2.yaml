@@ -157,7 +157,7 @@ segments:
       - [0x42170, asm]
       - [0x46080, asm]
       - [0x4CD70, asm]
-      - [0x51060, asm]
+      - [0x51060, c]
       - [0x52880, asm]
       - [0x56910, asm]
       - [0x56BB0, c, boot]
