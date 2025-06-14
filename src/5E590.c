@@ -61,7 +61,7 @@ s32 func_8005DAAC_5E6AC(s16 groupIndex, s16 pairIndex) {
     return group[pairIndex];
 }
 
-void *func_8005DAD4_5E6D4(void) {
+void *load_3ECE40(void) {
     return dmaRequestAndUpdateStateWithSize(&D_3ECE40, &D_3F2980, 0xA518);
 }
 

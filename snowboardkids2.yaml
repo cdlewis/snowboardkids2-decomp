@@ -153,7 +153,7 @@ segments:
       - [0x3C960, asm]
       - [0x3CD70, asm]
       - [0x3E160, c]
-      - [0x413E0, asm]
+      - [0x413E0, c]
       - [0x42170, asm]
       - [0x46080, asm]
       - [0x4CD70, asm]
