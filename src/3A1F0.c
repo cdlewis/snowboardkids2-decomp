@@ -45,13 +45,13 @@ typedef struct
 {
     void* start;
     void* end;
-    s32 unk8;
+    s32 compressionType;
     s32 size;
-    void* unk10;
-} Entry248C;
-extern Entry248C* gDmaQueue;
-extern Entry248C* D_800A2494_A3094;
-extern Entry248C* D_800A2108_A2D08;
+    void* dramAddr;
+} DmaTransferEntry;
+extern DmaTransferEntry* gDmaQueue;
+extern DmaTransferEntry* D_800A2494_A3094;
+extern DmaTransferEntry* D_800A2108_A2D08;
 
 typedef struct {
     u32 unknown;
@@ -489,7 +489,7 @@ MemoryAllocatorNode* queueDmaTransfer(void* start, void* end) {
 
     s0 = allocateMemoryNode((s32)start, size, &stack);
 
-    gDmaQueue[gDmaQueueIndex].unk10 = s0;
+    gDmaQueue[gDmaQueueIndex].dramAddr = s0;
 
     if (stack != 0) {
         return s0;
@@ -499,7 +499,7 @@ MemoryAllocatorNode* queueDmaTransfer(void* start, void* end) {
 
     gDmaQueue[gDmaQueueIndex].start = start;
     gDmaQueue[gDmaQueueIndex].end = end;
-    gDmaQueue[gDmaQueueIndex].unk8 = 0;
+    gDmaQueue[gDmaQueueIndex].compressionType = 0;
 
     gPendingDmaCount++;
     osSendMesg(&gDmaMsgQueue, (OSMesg)&gDmaQueue[gDmaQueueIndex], OS_MESG_BLOCK);
@@ -520,19 +520,21 @@ extern s32 gPendingDmaCount;
 
 MemoryAllocatorNode* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
     u8 flag;
-    Entry248C* entry;
+    DmaTransferEntry* entry;
     MemoryAllocatorNode* ret;
     s32 a1Val;
     s32 a1;
-    (gDmaQueue + gDmaQueueIndex)->size = size;
+
+    gDmaQueue[gDmaQueueIndex].size = size;
     ret = allocateMemoryNode((s32)romStart, size, &flag);
-    (gDmaQueue + gDmaQueueIndex)->unk10 = ret;
+    gDmaQueue[gDmaQueueIndex].dramAddr = ret;
+
     if (flag == 0) {
         markNodeAsLocked(ret);
-        (gDmaQueue + gDmaQueueIndex)->start = romStart;
-        entry = gDmaQueue + gDmaQueueIndex;
+        gDmaQueue[gDmaQueueIndex].start = romStart;
+        entry = &gDmaQueue[gDmaQueueIndex];
         entry->end = romEnd;
-        entry->unk8 = 1;
+        entry->compressionType = 1;
         gPendingDmaCount++;
         osSendMesg(&gDmaMsgQueue, entry, OS_MESG_BLOCK);
         gDmaQueueIndex++;
