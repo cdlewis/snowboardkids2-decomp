@@ -8,7 +8,7 @@ typedef struct MemoryAllocatorNode {
     /* 0x4 */ struct MemoryAllocatorNode *next;
     /* 0x8 */ s32 ownerID;
     s32 unk_0C;
-    s32 unk10;
+    /* 0x10 */ s32 size;
     s32 unk_14;
     s32 unk_18;
     s32 unk1C;

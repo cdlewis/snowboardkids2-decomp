@@ -1,3 +1,6 @@
+piDmaHandlerThread = 0x8003B6B4;
+gDmaCompressionBuffer = 0x800A2494;
+
 D_80093974_94574 = 0x80093974; // type:s32 size:0x18C
 D_800937C0_943C0 = 0x800937C0; // type:s32 size:0x28
 D_800937E8_943E8 = 0x800937E8; // type:s32 size:0x18C
@@ -74,7 +77,7 @@ allocateGameStateMemory = 0x8006A1C0;
 scheduleTask = 0x800699F4;
 
 gMemoryAllocatorHead = 0x800AB130;
-gMemoryHeapBase = 0x8018F800;
+gMemoryHeapBase = 0x8018F800; // type:s32 size:0x18
 gMemoryHeapEnd = 0x8038F800;
 
 initializeMemoryAllocatorRegion = 0x8006A220;

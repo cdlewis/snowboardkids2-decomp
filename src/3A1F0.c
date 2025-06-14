@@ -6,52 +6,13 @@ typedef struct {
     void* arg;
 } Entry;
 
-extern OSMesgQueue mainStack;
-extern OSMesgQueue D_800A1820_A2420;
-extern OSMesgQueue D_800A1888_A2488;
-extern OSMesgQueue gPiDmaMsgQueue;
-extern u8 D_800AB090_A2400[];
-extern u8 D_8008FE8F_90A8F;
-extern s16 D_8008FE8C_90A8C;
-extern s32 gPendingDmaCount;
-extern Entry D_800A1C20_A2820[];
-extern s16 D_800AB078_A23E8[];
-extern OSMesgQueue D_800A1820_A2420;
-void func_8003AC58_3B858(void*);
-extern s32 gDmaQueueIndex;
-extern s32 gDmaRequestCount;
-extern OSMesg D_800A2128_A2D28[];
-extern OSMesgQueue D_800A2110_A2D10;
-extern OSMesg gPiDmaMsgBuf[];
-extern OSMesgQueue gPiDmaMsgQueue;
-extern OSMesgQueue gDmaMsgQueue;
-extern OSMesgQueue* D_800A2150_A2D50[];
-extern u8 D_800A2168_A2D68[];
-extern OSThread D_800A1DC0_A29C0;
-extern void func_8003B6B4_3C2B4(void* arg);
-extern char piManagerThreadStack[0x8];  // this size seems wrong
-extern u8 D_800A1C98_A2898;
-extern u8 D_8008FE8E_90A8E;
-extern OSPfs controllerPacks[];
-extern u8 D_800AFED0_A7240;
-extern s32 gControllerPackFileCount;
-extern s32 gControllerPackFreeBlockCount;
-extern u32 D_800AB080_A23F0[];
-extern u8 D_800AB094_A2404[];
-extern u8 D_800AB098_A2408[];
-extern OSMesgQueue D_800A18A8_A24A8;
-
-typedef struct
-{
+typedef struct {
     void* start;
     void* end;
     s32 compressionType;
     s32 size;
     void* dramAddr;
 } DmaTransferEntry;
-extern DmaTransferEntry* gDmaQueue;
-extern DmaTransferEntry* D_800A2494_A3094;
-extern DmaTransferEntry* D_800A2108_A2D08;
 
 typedef struct {
     u32 unknown;
@@ -60,6 +21,43 @@ typedef struct {
     u8 gameName[16];
     u8 extName[1];  // maybe wrong
 } controllerPackFileHeader;
+
+extern char piManagerThreadStack[0x8];  // this size seems wrong
+extern DmaTransferEntry* D_800A2108_A2D08;
+extern DmaTransferEntry* gDmaQueue;
+extern Entry D_800A1C20_A2820[];
+extern OSMesg D_800A2128_A2D28[];
+extern OSMesg gPiDmaMsgBuf[];
+extern OSMesgQueue D_800A1820_A2420;
+extern OSMesgQueue D_800A1888_A2488;
+extern OSMesgQueue D_800A18A8_A24A8;
+extern OSMesgQueue D_800A2110_A2D10;
+extern OSMesgQueue gDmaMsgQueue;
+extern OSMesgQueue gPiDmaMsgQueue;
+extern OSMesgQueue mainStack;
+extern OSMesgQueue* D_800A2150_A2D50[];
+extern OSPfs controllerPacks[];
+extern OSThread D_800A1DC0_A29C0;
+extern s16 D_8008FE8C_90A8C;
+extern s16 D_800AB078_A23E8[];
+extern s32 gControllerPackFileCount;
+extern s32 gControllerPackFreeBlockCount;
+extern s32 gDmaQueueIndex;
+extern s32 gDmaRequestCount;
+extern s32 gPendingDmaCount;
+extern u32 D_800AB080_A23F0[];
+extern u8 D_8008FE8E_90A8E;
+extern u8 D_8008FE8F_90A8F;
+extern u8 D_800A1C98_A2898;
+extern u8 D_800A2168_A2D68[];
+extern u8 D_800AB090_A2400[];
+extern u8 D_800AB094_A2404[];
+extern u8 D_800AB098_A2408[];
+extern u8 D_800AFED0_A7240;
+extern u8* gDmaCompressionBuffer;
+
+void piDmaHandlerThread(void*);
+void func_8003AC58_3B858(void*);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
 
@@ -465,37 +463,155 @@ void initPiManager() {
     gDmaRequestCount = 0;
     D_800A2108_A2D08 = allocateMemoryNode(0, 0x168, &flag);
     gDmaQueue = allocateMemoryNode(0, 0x730, &flag);
-    D_800A2494_A3094 = allocateMemoryNode(0, 0x1000, &flag);
+    gDmaCompressionBuffer = allocateMemoryNode(0, 0x1000, &flag);
 
     osCreatePiManager(150, (OSMesgQueue*)D_800A2150_A2D50, (OSMesg*)D_800A2168_A2D68, 200);
     osCreateMesgQueue(&D_800A2110_A2D10, D_800A2128_A2D28, 1);
     osCreateMesgQueue(&gPiDmaMsgQueue, gPiDmaMsgBuf, 1);
     osCreateMesgQueue(&gDmaMsgQueue, (OSMesg*)D_800A2108_A2D08, 90);
 
-    osCreateThread(&D_800A1DC0_A29C0, 7, func_8003B6B4_3C2B4, 0, &piManagerThreadStack + sizeof(piManagerThreadStack), 1);
+    osCreateThread(&D_800A1DC0_A29C0, 7, piDmaHandlerThread, 0, &piManagerThreadStack + sizeof(piManagerThreadStack), 1);
 
     osStartThread(&D_800A1DC0_A29C0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B6B4_3C2B4);
+void piDmaHandlerThread(void* arg __attribute__((unused))) {
+    OSIoMesg dmaMsg;
+    DmaTransferEntry* entry;
+    OSMesg dummyMesg;
+    s32 dstOffset;
+    s32 copySize;
+    s32 size;
+    s32 srcOffset;
+    s32 copyCount;
+    u32 devAddr;
+    u8* dramAddr;
+    u8* dst;
+    u8* src;
+    u8* ptr;
+    u8 byte1;
+    s32 count;
+    s16 new_var;
+
+    while (TRUE) {
+        osRecvMesg(&gDmaMsgQueue, (OSMesg)&entry, OS_MESG_BLOCK);
+
+        dstOffset = 0;
+
+        if (entry->compressionType == 0) {
+            size = entry->size;
+            osInvalDCache(entry->dramAddr, size);
+            devAddr = (u32)entry->start;
+            dramAddr = entry->dramAddr;
+
+            while (size != 0) {
+                copySize = size;
+                if ((u32)size >= 0x1001U) {
+                    copySize = 0x1000;
+                }
+
+                osPiStartDma(&dmaMsg, OS_MESG_PRI_NORMAL, OS_READ, devAddr, dramAddr, copySize, &D_800A2110_A2D10);
+                osRecvMesg(&D_800A2110_A2D10, &dummyMesg, OS_MESG_BLOCK);
+
+                devAddr += copySize;
+                size -= copySize;
+                dramAddr += copySize;
+            }
+        } else {
+            dramAddr = entry->dramAddr;
+            size = entry->end - entry->start;
+            devAddr = (u32)entry->start;
+
+            while (size != 0) {
+                volatile u8 padding[0x10];
+                osInvalDCache(gDmaCompressionBuffer, 0x1000);
+                new_var = 0;
+                copySize = size;
+                if ((u32)size >= 0x1001U) {
+                    copySize = 0x1000;
+                }
+
+                osPiStartDma(&dmaMsg, OS_MESG_PRI_NORMAL, OS_READ, devAddr, gDmaCompressionBuffer, copySize, &D_800A2110_A2D10);
+                osRecvMesg(&D_800A2110_A2D10, &dummyMesg, 1);
+
+                srcOffset = 0;
+                if (copySize > 0) {
+                    dst = (u8*)((u32)dstOffset + (u32)dramAddr);
+
+                    do {
+                        s32 temp_count;
+                        s32 temp_offset;
+
+                        src = gDmaCompressionBuffer + srcOffset;
+                        byte1 = src[0];
+                        count = byte1 & 0xFF;
+
+                        if (count == 0) {
+                            *dst = src[1];
+                            dstOffset++;
+                            dst++;
+                        } else {
+                            temp_offset = byte1 & 0xF;
+                            temp_offset = temp_offset << 8;
+                            temp_offset |= src[1];
+
+                            copyCount = 0;
+                            temp_count = (u32)count >> 4;
+
+                            if (temp_count != 0) {
+                                do {
+                                    ptr = (u8*)(((u32)dstOffset) + ((u32)dramAddr));
+                                    do {
+                                        dst++;
+                                        *ptr = dramAddr[dstOffset - temp_offset];
+                                        dstOffset++;
+                                        copyCount++;
+                                        ptr++;
+                                    } while (copyCount < temp_count);
+                                } while (0);
+                            }
+                        }
+
+                        srcOffset += 2;
+
+                        if ((u32)dstOffset >= entry->size) {
+                            goto END;
+                        }
+
+                    } while (srcOffset < copySize);
+                }
+
+                size -= copySize;
+                devAddr += copySize;
+            }
+        }
+
+    END:
+        unlockNodeWithInterruptDisable(entry->dramAddr);
+
+        if ((u32)entry->compressionType < 2) {
+            gPendingDmaCount--;
+        }
+    }
+}
 
 MemoryAllocatorNode* queueDmaTransfer(void* start, void* end) {
-    MemoryAllocatorNode* s0;
-    u8 stack;
+    MemoryAllocatorNode* allocatedNode;
+    u8 nodeAlreadyExists;
     s32 size;
     size = (s32)end - (s32)start;
 
     gDmaQueue[gDmaQueueIndex].size = size;
 
-    s0 = allocateMemoryNode((s32)start, size, &stack);
+    allocatedNode = allocateMemoryNode((s32)start, size, &nodeAlreadyExists);
 
-    gDmaQueue[gDmaQueueIndex].dramAddr = s0;
+    gDmaQueue[gDmaQueueIndex].dramAddr = allocatedNode;
 
-    if (stack != 0) {
-        return s0;
+    if (nodeAlreadyExists) {
+        return allocatedNode;
     }
 
-    markNodeAsLocked(s0);
+    markNodeAsLocked(allocatedNode);
 
     gDmaQueue[gDmaQueueIndex].start = start;
     gDmaQueue[gDmaQueueIndex].end = end;
@@ -509,14 +625,10 @@ MemoryAllocatorNode* queueDmaTransfer(void* start, void* end) {
 
     gDmaRequestCount++;
 
-    setNodeUserData(s0, (void*)gDmaRequestCount);
+    setNodeUserData(allocatedNode, (void*)gDmaRequestCount);
 
-    return s0;
+    return allocatedNode;
 }
-
-extern s32 gDmaQueueIndex;
-extern OSMesgQueue gDmaMsgQueue;
-extern s32 gPendingDmaCount;
 
 MemoryAllocatorNode* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
     u8 flag;

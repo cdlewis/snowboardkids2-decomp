@@ -5,12 +5,6 @@
 extern MemoryAllocatorNode gMemoryHeapEnd;
 extern s32 D_800AB064_A23D4;
 extern s32 D_800AB12C_A249C;
-extern s32 D_8018F804;
-extern s32 D_8018F80C;
-extern s32 D_8018F810;
-extern s32 D_8018F814;
-extern s32 D_8018F818;
-extern s32 D_8018F808;
 
 void initializeMemoryAllocatorRegion() {
     s32 i;
@@ -39,7 +33,7 @@ MemoryAllocatorNode *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *node
     if (ownerID != 0) {
         for (node = gMemoryAllocatorHead; node != NULL; node = node->next) {
             if (node->ownerID == ownerID) {
-                s32 node_size = node->unk10;
+                s32 node_size = node->size;
                 node->unk_0C++;
                 if (node_size != requestedSize) {
                     return NULL;
@@ -58,26 +52,26 @@ MemoryAllocatorNode *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *node
 
         gMemoryAllocatorHead = &gMemoryHeapBase;
         gMemoryHeapBase.prev = 0;
-        D_8018F80C = 1;
-        D_8018F804 = 0;
-        D_8018F808 = ownerID;
-        D_8018F810 = requestedSize;
-        D_8018F814 = 0;
-        D_8018F818 = -1;
+        gMemoryHeapBase.unk_0C = 1;
+        gMemoryHeapBase.next = NULL;
+        gMemoryHeapBase.ownerID = ownerID;
+        gMemoryHeapBase.size = requestedSize;
+        gMemoryHeapBase.unk_14 = 0;
+        gMemoryHeapBase.unk_18 = -1;
         return (&gMemoryHeapBase) + 1;
     }
 
     for (node = gMemoryAllocatorHead; node->next != 0; node = node->next) {
         MemoryAllocatorNode *next_node;
-        u32 needed_space = requestedSize + node->unk10;
+        u32 needed_space = requestedSize + node->size;
         space_between = ((s32)node->next) - ((s32)node);
-        if (space_between >= requestedSize + node->unk10) {
-            new_node = (MemoryAllocatorNode *)(((s8 *)node) + node->unk10);
+        if (space_between >= requestedSize + node->size) {
+            new_node = (MemoryAllocatorNode *)(((s8 *)node) + node->size);
             new_node->prev = node;
             next_node = node->next;
             new_node->unk_0C = 1;
             new_node->ownerID = ownerID;
-            new_node->unk10 = requestedSize;
+            new_node->size = requestedSize;
             new_node->unk_14 = 0;
             new_node->unk_18 = -1;
             new_node->next = next_node;
@@ -89,13 +83,13 @@ MemoryAllocatorNode *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *node
     }
 
     space_between = (s32)(&gMemoryHeapEnd) - (s32)node;
-    if (space_between >= (requestedSize + node->unk10)) {
-        new_node = (MemoryAllocatorNode *)((s8 *)node + node->unk10);
+    if (space_between >= (requestedSize + node->size)) {
+        new_node = (MemoryAllocatorNode *)((s8 *)node + node->size);
         new_node->prev = node;
         new_node->unk_0C = 1;
         new_node->next = 0;
         new_node->ownerID = ownerID;
-        new_node->unk10 = requestedSize;
+        new_node->size = requestedSize;
         new_node->unk_14 = 0;
         new_node->unk_18 = -1;
         node->next = new_node;
