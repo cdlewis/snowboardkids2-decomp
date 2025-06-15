@@ -122,9 +122,11 @@ void *gPendingMessages = NULL;
 s32 gAudioUnderrunFlag = 1;
 
 // rodata
-const f64 D_8009EA60_9F660 = 4294967296;
-const f64 D_8009EA68_9F668 = 4294967296;
+//const f64 D_8009EA60_9F660 = 4294967296;
+//const f64 D_8009EA68_9F668 = 4294967296;
 
+INCLUDE_ASM("asm/nonmatchings/audio_manager", initAudioManager);
+/*
 void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s32 maxChannels, s32 maxVoices, s32 sampleRate) {
     u32 *new_var;
     u32 i;
@@ -214,7 +216,7 @@ void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s3
     osStartThread(&gAudioManager.thread);
 
     gAudioThreadCreated = 1;
-}
+}*/
 
 void audioManagerThread(void *arg) {
     ViConfig cfg;

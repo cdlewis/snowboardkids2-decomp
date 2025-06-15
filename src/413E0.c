@@ -27,10 +27,10 @@ INCLUDE_ASM("asm/nonmatchings/413E0", func_80040870_41470);
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040948_41548);
 
-void func_80040974_41574(s32 arg0) {
+void func_80040974_41574(void* arg0) {
     Node* temp_v0 = scheduleTask(&func_800407E0_413E0, 0U, 0U, 0xF0U);
     if (temp_v0 != NULL) {
-        temp_v0->field_24 = arg0;
+        temp_v0->unk24 = arg0;
     }
 }
 

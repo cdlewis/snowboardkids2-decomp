@@ -3,19 +3,7 @@
 #include "3A1F0.h"
 #include "gamestate.h"
 
-typedef struct {
-    u8 padding[0xE];
-    u8 unk0E;
-    u8 padding2[0x1];
-    u8 unk10;
-    u8 unk11;
-    u8 padding3[0x4];
-    void *unk18;
-    void *unk1C;
-    void *unk20;
-    s32 unk24;
-} gDMAOverlay_type;
-extern gDMAOverlay_type *gDMAOverlay;
+extern Node *gDMAOverlay;
 
 typedef struct {
     struct D_800A32C0_A3EC0_type *unk0;
@@ -72,6 +60,7 @@ extern D_800A32C0_A3EC0_type *D_800A3274_A3E74;
 extern s32 D_800AB064_A23D4;
 extern s32 D_800AB12C_A249C;
 s32 func_80069D20_6A920();
+void func_80069B04_6A704(void);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
 
@@ -363,16 +352,19 @@ Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
                 }
             }
 
-            newNode->field_C = nodeType;
+            newNode->unkC = nodeType;
             newNode->field_D = identifierFlag;
             newNode->priority = priority;
             newNode->callback = callback;
-            newNode->field_24 = 0;
-            newNode->field_E = 1;
-            newNode->field_11 = 0;
-            newNode->field_18 = 0;
+            newNode->unk24 = 0;
+            newNode->unkE = 1;
+            newNode->unk11 = 0;
+            newNode->unk18 = 0;
 
-            return (newNode + 0x1);
+            // This should just be newNode++. It's possible that
+            // nodes are possbibly being embedded in larger
+            // structs.
+            return ((u8 *)newNode + 0x28);
         }
     }
 
@@ -384,26 +376,78 @@ s16 func_80069AEC_6A6EC(s32 arg0) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069B04_6A704);
+/*
+void func_80069B04_6A704() {
+    for (gDMAOverlay = gTaskScheduler->activeList; gDMAOverlay != 0; gDMAOverlay = gDMAOverlay->next) {
+        switch (gDMAOverlay->unkE) {
+            case 0:
+                break;
+
+            case 1:
+                while (TRUE) {
+                    gDMAOverlay->unk10 = 0;
+                    gDMAOverlay->callback(&gDMAOverlay->payload);
+                    if ((gDMAOverlay->unk10 != 0) && (gDMAOverlay->unkE == 1)) {
+                        continue;
+                    }
+                    break;
+                }
+                break;
+
+            case 2:
+                if (gDMAOverlay->unk24 != NULL) {
+                    gDMAOverlay->unk24(&gDMAOverlay->payload);
+                }
+
+                if (gDMAOverlay->prev == NULL) {
+                    gTaskScheduler->activeList = gDMAOverlay->next;
+                } else {
+                    gDMAOverlay->prev->next = gDMAOverlay->next;
+                }
+
+                if (gDMAOverlay->next != NULL) {
+                    gDMAOverlay->next->prev = gDMAOverlay->prev;
+                }
+                gDMAOverlay->freeNext = gTaskScheduler->freeList;
+                gTaskScheduler->freeList = gDMAOverlay;
+                gTaskScheduler->counters[(u8)gDMAOverlay->unkC]++;
+                break;
+
+            case 3:
+                if (getNodeOwner(gDMAOverlay->unk1C) == 0) {
+                    gDMAOverlay->unkE = 1;
+                }
+                break;
+
+            case 4:
+                if (getNodeOwner(gDMAOverlay->unk1C) == 0) {
+                    gDMAOverlay->unkE = 2;
+                }
+                break;
+        }
+    }
+}
+*/
 
 void func_80069CC0_6A8C0(void *arg0) {
-    gDMAOverlay->unk20 = arg0;
+    gDMAOverlay->callback = arg0;
 }
 
 void func_80069CD0_6A8D0(void *arg0) {
-    gDMAOverlay->unk20 = arg0;
+    gDMAOverlay->callback = arg0;
     gDMAOverlay->unk10 = 1;
 }
 
-void func_80069CE8_6A8E8(s32 arg0) {
+void func_80069CE8_6A8E8(void(arg0)(void *)) {
     gDMAOverlay->unk24 = arg0;
 }
 
 void func_80069CF8_6A8F8(void) {
-    u8 temp = gDMAOverlay->unk0E - 3;
+    u8 temp = gDMAOverlay->unkE - 3;
     if (temp < 2) {
-        gDMAOverlay->unk0E = 4;
+        gDMAOverlay->unkE = 4;
     } else {
-        gDMAOverlay->unk0E = 2;
+        gDMAOverlay->unkE = 2;
     }
 }
 
@@ -435,10 +479,10 @@ MemoryAllocatorNode *dmaRequestAndUpdateState(void *start, void *end) {
     } else {
         s0 = queueDmaTransfer(start, end);
         if (getNodeOwner(s0) != 0) {
-            if (((u8)(gDMAOverlay->unk0E - 3)) >= 2) {
+            if (((u8)(gDMAOverlay->unkE - 3)) >= 2) {
                 gDMAOverlay->unk18 = getNodeUserData(s0);
                 gDMAOverlay->unk1C = s0;
-                gDMAOverlay->unk0E = 3;
+                gDMAOverlay->unkE = 3;
             } else {
                 if (gDMAOverlay->unk18 < getNodeUserData(s0)) {
                     gDMAOverlay->unk18 = getNodeUserData(s0);
@@ -472,10 +516,10 @@ MemoryAllocatorNode *dmaRequestAndUpdateStateWithSize(void *romStart, void *romE
     } else {
         s0 = dmaQueueRequest(romStart, romEnd, size);
         if (getNodeOwner(s0) != NULL) {
-            if (gDMAOverlay->unk0E < 3 || gDMAOverlay->unk0E >= 5) {
+            if (gDMAOverlay->unkE < 3 || gDMAOverlay->unkE >= 5) {
                 gDMAOverlay->unk18 = getNodeUserData(s0);
                 gDMAOverlay->unk1C = s0;
-                gDMAOverlay->unk0E = 3;
+                gDMAOverlay->unkE = 3;
             } else {
                 if (gDMAOverlay->unk18 < getNodeUserData(s0)) {
                     gDMAOverlay->unk18 = getNodeUserData(s0);

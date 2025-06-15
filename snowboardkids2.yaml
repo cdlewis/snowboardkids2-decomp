@@ -678,6 +678,7 @@ segments:
       - [0x9F0C8, .rodata, 3E160]
       - [0x9F398, .rodata, 46080]
       - [0x9F480, rodata, 4CD70]
+      - [0x9F5D8, rodata, 594E0]
       - [0x9F628, .rodata, 69EF0]
       - [0x9F660, .rodata, audio_manager]
       - [0x9F670, .rodata, player]
