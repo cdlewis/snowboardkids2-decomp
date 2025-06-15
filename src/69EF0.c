@@ -18,15 +18,21 @@ typedef struct {
 extern gDMAOverlay_type *gDMAOverlay;
 
 typedef struct {
-    char padding[0x10];
-    void *unk10;
-    s32 unk14;
+    struct D_800A32C0_A3EC0_type *unk0;
+    struct D_800A32C0_A3EC0_type *unk4;
+    struct D_800A32C0_A3EC0_type *unk8;
+    struct D_800A32C0_A3EC0_type *unkC;
+    void (*unk10)();
+    void (*unk14)();
     u8 unk18;
-    char padding5[0x4];
+    u8 unk19;
+    u8 unk1A;
+    u8 unk1B;
+    s32 unk1C;
     void *unk20;
     void *unk24;
     /* 0x28 */ GameState *GameState;
-    char padding3[0x2];
+    s32 unk2C;
     /* 0x30 */ Node *activeList;
     /* 0x34 */ Node *freeList;
     /* 0x38 */ s16 counters[0x9];
@@ -34,8 +40,6 @@ typedef struct {
     s16 unk4C;
 } gTaskScheduler_type;
 extern gTaskScheduler_type *gTaskScheduler;
-
-extern s32 D_800A3274_A3E74;
 
 typedef struct D_800A32C0_A3EC0_type {
     struct D_800A32C0_A3EC0_type *unk0;
@@ -64,6 +68,10 @@ extern D_800A32C0_A3EC0_type *D_800A3270_A3E70;
 extern D_800A32C0_A3EC0_type *D_800A32C0_A3EC0;
 
 extern void *queueDmaTransfer(void *, void *);
+extern D_800A32C0_A3EC0_type *D_800A3274_A3E74;
+extern s32 D_800AB064_A23D4;
+extern s32 D_800AB12C_A249C;
+s32 func_80069D20_6A920();
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
 
@@ -162,9 +170,103 @@ void func_80069470_6A070(u32 arg0, s8 arg1) {
     gTaskScheduler->unk4C++;
 }
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069530_6A130);
+void func_80069530_6A130(void) {
+    D_800A32C0_A3EC0_type *temp_v0;
+    D_800A32C0_A3EC0_type *temp_v0_2;
+    D_800A32C0_A3EC0_type *temp_a0;
 
-void func_800697CC_6A3CC(s32 arg0) {
+    gTaskScheduler = D_800A3274_A3E74;
+    if (D_800A3274_A3E74 != NULL) {
+        do {
+            if (gTaskScheduler->unk18 == 0) {
+                gTaskScheduler->unk18 = 1;
+            }
+
+            gTaskScheduler = gTaskScheduler->unk4;
+        } while (gTaskScheduler != NULL);
+    }
+
+    gTaskScheduler = D_800A3274_A3E74;
+    if (D_800A3274_A3E74 != NULL) {
+        do {
+            switch (gTaskScheduler->unk18) {
+                case 0:
+                    break;
+
+                case 1:
+                loop_9:
+                    gTaskScheduler->unk1B = 0;
+
+                    gTaskScheduler->unk10();
+
+                    if (gTaskScheduler->unk1B != 0) {
+                        if (gTaskScheduler->unk18 == 1) {
+                            goto loop_9;
+                        }
+                    }
+
+                    if (gTaskScheduler->unk18 == 1) {
+                        func_80069B04_6A704();
+                    }
+
+                    break;
+
+                case 2:
+                    if (gTaskScheduler->unk4C == 0) {
+                        func_80069D34_6A934();
+                        func_80069B04_6A704();
+
+                        if (func_80069D20_6A920() == 0) {
+                            gTaskScheduler->unk2C = decrementNodeRefCount((s32 *)gTaskScheduler->unk2C);
+                            gTaskScheduler->GameState = (GameState *)decrementNodeRefCount((s32 *)gTaskScheduler->GameState);
+                            gTaskScheduler->unk1C = D_800AB064_A23D4;
+                            gTaskScheduler->unk18 = 4;
+                        }
+                    }
+                    break;
+
+                case 4:
+                    if (gTaskScheduler->unk1C > 0) {
+                        if (((D_800AB12C_A249C - gTaskScheduler->unk1C) & 0x0FFFFFFF) <= 0x07FFFFFF) {
+                            gTaskScheduler->unk1C = -1;
+                        }
+                        if (gTaskScheduler->unk1C <= 0) {
+                            goto block_20;
+                        }
+                    } else {
+                    block_20:
+                        if (gTaskScheduler->unk14 != NULL) {
+                            gTaskScheduler->unk14();
+                        }
+
+                        if (gTaskScheduler->unkC != 0) {
+                            gTaskScheduler->unkC->unk4C--;
+                        }
+
+                        if (gTaskScheduler->unk4 != NULL) {
+                            gTaskScheduler->unk4->unk0 = gTaskScheduler->unk0;
+                        }
+
+                        gTaskScheduler->unk0->unk4 = gTaskScheduler->unk4;
+                        temp_a0 = D_800A32C0_A3EC0;
+                        D_800A32C0_A3EC0 = gTaskScheduler;
+                        gTaskScheduler->unk8 = temp_a0;
+                    }
+                    break;
+
+                case 3:
+                    if (getNodeOwner(gTaskScheduler->unk24) == 0) {
+                        gTaskScheduler->unk18 = 1;
+                    }
+                    break;
+            }
+
+            gTaskScheduler = gTaskScheduler->unk4;
+        } while (gTaskScheduler != NULL);
+    }
+}
+
+void func_800697CC_6A3CC(void (*arg0)()) {
     if (gTaskScheduler != NULL) {
         gTaskScheduler->unk18 = 2;
         gTaskScheduler->unk14 = arg0;
