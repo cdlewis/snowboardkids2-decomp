@@ -1,3 +1,5 @@
+gDMAOverlay = 0x8009A864;
+gTaskScheduler = 0x8009A860;
 load_3ECE40 = 0x8005DAD4;
 piDmaHandlerThread = 0x8003B6B4;
 gDmaCompressionBuffer = 0x800A2494;

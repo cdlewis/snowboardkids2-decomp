@@ -15,7 +15,7 @@ typedef struct Node {
     /* 0x12 */ u8 pad12[6];
     /* 0x18 */ u32 field_18;
     /* 0x1C */ u32 pad1C;
-    /* 0x20 */ void *field_20;
+    /* 0x20 */ void *callback;
     /* 0x24 */ u32 field_24;
 } Node;
 
