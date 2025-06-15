@@ -17,7 +17,6 @@ typedef struct {
 } D_8009A864_9B464_type;
 extern D_8009A864_9B464_type *D_8009A864_9B464;
 
-
 typedef struct {
     char padding[0x10];
     void *unk10;
@@ -32,8 +31,37 @@ typedef struct {
     /* 0x34 */ Node *freeList;
     /* 0x38 */ s16 counters[0x9];
     s16 unk4A;
+    s16 unk4C;
 } D_8009A860_9B460_type;
 extern D_8009A860_9B460_type *D_8009A860_9B460;
+
+extern s32 D_800A3274_A3E74;
+
+typedef struct D_800A32C0_A3EC0_type {
+    struct D_800A32C0_A3EC0_type *unk0;
+    struct D_800A32C0_A3EC0_type *unk4;
+    struct D_800A32C0_A3EC0_type *unk8;
+    void *unkC;
+    s32 unk10;
+    u8 pad14[4];
+    u8 unk18;
+    u8 unk19;
+    u8 unk1A;
+    u8 pad1B;
+    s32 unk1C;
+    s32 unk20;
+    u8 pad24[4];
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    u8 pad38[0x10];
+    s16 unk48;
+    u16 unk4A;
+    s16 unk4C;
+} D_800A32C0_A3EC0_type;
+extern D_800A32C0_A3EC0_type *D_800A3270_A3E70;
+extern D_800A32C0_A3EC0_type *D_800A32C0_A3EC0;
 
 extern void *queueDmaTransfer(void *, void *);
 
@@ -41,7 +69,54 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800693C4_69FC4);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069470_6A070);
+void func_80069470_6A070(u32 arg0, s8 arg1) {
+    D_800A32C0_A3EC0_type *temp_a2;
+    D_800A32C0_A3EC0_type *var_a3;
+    D_800A32C0_A3EC0_type *temp_v1;
+    D_800A32C0_A3EC0_type *temp_v0;
+
+    temp_a2 = D_800A32C0_A3EC0;
+    var_a3 = &D_800A3270_A3E70;
+    D_800A32C0_A3EC0 = temp_a2->unk8;
+
+    if (D_800A3274_A3E74 != 0) {
+        while (TRUE) {
+            temp_v1 = (D_800A32C0_A3EC0_type *)var_a3->unk4;
+            if ((u8)arg1 < (u8)temp_v1->unk19) {
+                break;
+            }
+            var_a3 = temp_v1;
+            if (temp_v1->unk4 == 0) {
+                break;
+            }
+        }
+    }
+
+    temp_a2->unk0 = var_a3;
+    temp_a2->unk4 = var_a3->unk4;
+    var_a3->unk4 = temp_a2;
+    temp_v0 = temp_a2->unk4;
+
+    if (temp_v0 != 0) {
+        temp_v0->unk0 = temp_a2;
+    }
+
+    temp_a2->unk1A = 0;
+    temp_a2->unk18 = 0;
+    temp_a2->unk19 = arg1;
+    temp_a2->unk10 = arg0;
+    temp_a2->unk28 = 0;
+    temp_a2->unk30 = 0;
+    temp_a2->unk34 = 0;
+    temp_a2->unk2C = 0;
+    temp_a2->unk48 = 0;
+    temp_a2->unk1C = -1;
+    temp_a2->unk20 = 0;
+    temp_a2->unk4C = 0;
+    temp_a2->unk4A = 0;
+    temp_a2->unkC = (void *)D_8009A860_9B460;
+    D_8009A860_9B460->unk4C++;
+}
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069530_6A130);
 
