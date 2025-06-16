@@ -1,15 +1,13 @@
+#include "69EF0.h"
 #include "common.h"
 #include "event_trigger.h"
 #include "gamestate.h"
 
+void ClocktowerTriggerCheck(void *);
+extern u8 D_8008D6C4_8E2C4[];
+
 char ClocktowerLabel[] = "CLOCKTOWER";
 s32 D_8008D7FC_8E3FC = 0;
-
-extern void ClocktowerTriggerCheck(u8 *);
-extern void func_80069CC0_6A8C0(void *);
-
-GameState *GameStateGet();
-extern u8 D_8008D6C4_8E2C4[];
 
 void ClocktowerTriggerInit(EventTrigger *arg0) {
     arg0->unk0 = CLOCKTOWER_EVENT_ID;
@@ -18,10 +16,10 @@ void ClocktowerTriggerInit(EventTrigger *arg0) {
     arg0->unk4 = 0;
     arg0->unk8 = 0;
     arg0->unkC = &ClocktowerLabel;
-    func_80069CC0_6A8C0(&ClocktowerTriggerCheck);
+    setCallback(&ClocktowerTriggerCheck);
 }
 
-void ClocktowerTriggerCheck(u8 *arg0) {
+void ClocktowerTriggerCheck(void *arg0) {
     GameState *state = GameStateGet();
     u32 temp;
     s16 val;

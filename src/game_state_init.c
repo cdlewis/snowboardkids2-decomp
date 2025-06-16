@@ -30,8 +30,6 @@ extern void func_800697CC_6A3CC(void (*func)(void));
 extern void func_800697F4_6A3F4(s32);
 extern void setGameStateHandler(void *);
 extern void func_800698EC_6A4EC(s32, s32, s32, void *, s32, s32, s32, s32);
-extern void func_80069CC0_6A8C0(void *);
-extern void func_80069CE8_6A8E8(void *);
 extern void func_80069D7C_6A97C(s32 a0);
 extern void func_80069DD4_6A9D4(s32 a0, s32 a1);
 extern void n_alSynRemovePlayer(void *player);
@@ -154,14 +152,14 @@ void setupGameStateTransition(s32 arg0) {
     char *sp28;
 
     func_8000056C_116C(arg0, 0, GameStateGet());
-    func_80069CE8_6A8E8(&cleanupTransitionEffect);
+    setCleanupCallback(&cleanupTransitionEffect);
     func_80000460_1060(arg0, &sp10, &sp28);
-    func_80069CC0_6A8C0(&setShortCountdownAndContinue);
+    setCallback(&setShortCountdownAndContinue);
 }
 
 void setShortCountdownAndContinue(void) {
     GameStateGet()->unk429 = 2;
-    func_80069CC0_6A8C0(&invokeTransitionEffect);
+    setCallback(&invokeTransitionEffect);
 }
 
 void invokeTransitionEffect(void) {

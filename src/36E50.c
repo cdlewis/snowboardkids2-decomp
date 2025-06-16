@@ -101,14 +101,13 @@ typedef struct {
 } func_80036880_37480_arg;
 
 s32 func_80035F80_36B80(int);
-void func_80069CE8_6A8E8(void*);
-void func_80036274_36E74(u8*);
-void func_80036424_37024(void);
-void func_80036848_37448(func_80036848_37448_arg*);
+void func_80036274_36E74(void*);
+void func_80036424_37024(void*);
+void func_80036848_37448(void*);
 void func_80036328_36F28(func_80036328_36F28_arg*);
 void func_80036880_37480(func_80036880_37480_arg*);
-void func_80036A68_37668(u8*);
-void func_80036A10_37610(func_80036A10_37610_arg*);
+void func_80036A68_37668(void*);
+void func_80036A10_37610(void*);
 
 extern void* D_45A890;
 extern void* D_45B130;
@@ -122,17 +121,17 @@ extern void func_80036920_37520;
 
 void func_80036250_36E50(s8* arg0) {
     *arg0 = 0;
-    func_80069CC0_6A8C0(&func_80036274_36E74);
+    setCallback(&func_80036274_36E74);
 }
 
-void func_80036274_36E74(u8* arg0) {
+void func_80036274_36E74(void* arg0) {
     func_800698BC_6A4BC_return* temp_v0;
     func_80036274_36E74_large_struct* temp_v0_2;
     func_80036274_36E74_large_struct* temp_v0_3;
 
     temp_v0 = GameStateGet();
     if (temp_v0->unk424 != 0) {
-        if (*arg0 == 0) {
+        if (*((u8*)arg0) == 0) {
             if ((u8)temp_v0->unk425 < 0xAU) {
                 temp_v0_2 = scheduleTask(&func_80036328_36F28, 0, 0, 0x64);
                 if (temp_v0_2 != NULL) {
@@ -144,10 +143,10 @@ void func_80036274_36E74(u8* arg0) {
                     temp_v0_3->unk10 = (u8)temp_v0->unk425;
                 }
             }
-            *arg0 = 1;
+            *(u8*)arg0 = 1;
         }
     } else {
-        *arg0 = 0;
+        *(u8*)arg0 = 0;
     }
 }
 
@@ -162,7 +161,7 @@ void func_80036328_36F28(func_80036328_36F28_arg* arg0) {
     resource = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
     temp_value = func_80035F80_36B80(1);
 
-    func_80069CE8_6A8E8(&func_80036848_37448);
+    setCleanupCallback(&func_80036848_37448);
 
     // Initialize main struct fields
     arg0->unk6E = 0x2CC;
@@ -193,12 +192,13 @@ void func_80036328_36F28(func_80036328_36F28_arg* arg0) {
     arg0->unk60 = 5;
     arg0->unk5E = 0xFF;
 
-    func_80069CC0_6A8C0(&func_80036424_37024);
+    setCallback(&func_80036424_37024);
 }
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036424_37024);
 
-void func_80036848_37448(func_80036848_37448_arg* arg0) {
+void func_80036848_37448(void* untypedArg) {
+    func_80036848_37448_arg* arg0 = (func_80036848_37448_arg*)untypedArg;
     arg0->unk4 = freeGameStateMemory(arg0->unk4);
     arg0->unk58 = freeGameStateMemory(arg0->unk58);
 }
@@ -207,7 +207,7 @@ void func_80036880_37480(func_80036880_37480_arg* arg0) {
     void* resource;
 
     resource = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
-    func_80069CE8_6A8E8(&func_80036A10_37610);
+    setCleanupCallback(&func_80036A10_37610);
     arg0->unk8 = 8;
     arg0->unkA = 0xFF;
     arg0->unk0 = 0;
@@ -221,22 +221,23 @@ void func_80036880_37480(func_80036880_37480_arg* arg0) {
     }
     arg0->unk11 = 0;
     arg0->unk12 = 0;
-    func_80069CC0_6A8C0(&func_80036920_37520);
+    setCallback(&func_80036920_37520);
 }
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036920_37520);
 
-void func_80036A10_37610(func_80036A10_37610_arg* arg0) {
+void func_80036A10_37610(void* untypedArg) {
+    func_80036A10_37610_arg* arg0 = (func_80036A10_37610_arg*)untypedArg;
     arg0->unk4 = freeGameStateMemory(arg0->unk4);
 }
 
 void func_80036A3C_3763C(func_80036A3C_3763C_arg* arg0) {
     arg0->unk0 = 0xA;
     arg0->unk1 = 0;
-    func_80069CC0_6A8C0(&func_80036A68_37668);
+    setCallback(&func_80036A68_37668);
 }
 
-void func_80036A68_37668(u8* arg0) {
+void func_80036A68_37668(void* arg0) {
     s16 temp_v0_2;
     s16 var_v1;
     func_800698BC_6A4BC_return* temp_v0 = GameStateGet();
@@ -249,12 +250,12 @@ void func_80036A68_37668(u8* arg0) {
         }
         if (var_v1 >= 0x821) {
             temp_v0->unk424 = 1;
-            temp_v0->unk425 = (u8)*arg0;
+            temp_v0->unk425 = *(u8*)arg0;
             return;
         }
         if (var_v1 < -0x844) {
             temp_v0->unk424 = 1;
-            temp_v0->unk425 = (u8)(*arg0 + 1);
+            temp_v0->unk425 = *((u8*)arg0) + 1;
         }
     }
 }

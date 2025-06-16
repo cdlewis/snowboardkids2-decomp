@@ -19,7 +19,7 @@ extern void func_8003B5A0_3C1A0();
 extern void func_80057870_58470(s32);
 extern void func_800692F0_69EF0();
 extern void func_800693C4_69FC4(void *, s32);
-extern void func_80069530_6A130();
+extern void runTaskSchedulers();
 extern void func_8006A220_6AE20();
 extern void func_8006A428_6B028();
 extern void func_8006DC40_6E840();
@@ -96,7 +96,7 @@ void mainThreadEntrypoint(void *arg) {
             func_80039B88_3A788();
             D_8009ADE0_9B9E0++;
             func_8006A428_6B028();
-            func_80069530_6A130();
+            runTaskSchedulers();
             func_8003AC38_3B838();
             func_8006E054_6EC54((u16)var_s2);
             continue;

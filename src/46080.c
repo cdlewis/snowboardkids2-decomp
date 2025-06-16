@@ -1,8 +1,8 @@
 #include "5E590.h"
 #include "common.h"
 
-extern void func_80069CD0_6A8D0(void*);
-extern void func_80069CE8_6A8E8(void*);
+extern void setCallbackWithContinue(void*);
+extern void setCleanupCallback(void*);
 extern void func_80049300_49F00();
 extern void func_80049404_4A004();
 
@@ -158,8 +158,8 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049280_49E80);
 
 void func_800492C0_49EC0(MemoryAllocatorNode** arg0) {
     *arg0 = load_3ECE40();
-    func_80069CE8_6A8E8(&func_80049404_4A004);
-    func_80069CD0_6A8D0(&func_80049300_49F00);
+    setCleanupCallback(&func_80049404_4A004);
+    setCallbackWithContinue(&func_80049300_49F00);
 }
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049300_49F00);

@@ -1,3 +1,4 @@
+#include "69EF0.h"
 #include "common.h"
 
 typedef struct
@@ -72,8 +73,6 @@ void func_800582DC_58EDC(s32, s32, s32, s32, s32);
 void func_80058414_59014(s32, s32, s32);
 void func_800584AC_590AC(s32, s32, s32);
 void func_8005854C_5914C(s32, s32);
-void func_80069CC0_6A8C0(void *);
-void func_80069CD0_6A8D0(void *);
 void func_8006A0EC_6ACEC(s32, s32, s32, s32);
 typedef struct {
     s32 unk0;
@@ -196,10 +195,10 @@ void func_800570BC_57CBC() {
     D_800A2990_A3590->unk20 = (s32)((D_800A2990_A3590->unk20 + 1) & 0xFFFFFF);
 }
 
-void func_800570E0_57CE0(void) {
-    func_80069CE8_6A8E8(func_800570E0_57CE0);
+void func_800570E0_57CE0(void* arg) {
+    setCleanupCallback(func_800570E0_57CE0);
     if (D_800A2990_A3590->unk1D != 0) {
-        func_80069CC0_6A8C0(&func_80057124_57D24);
+        setCallback(&func_80057124_57D24);
     }
 }
 
@@ -218,12 +217,12 @@ void func_80057124_57D24(void) {
         D_80093974_94574[D_800A2990_A3590->unk12].unk8,
         D_800A2990_A3590->unk4);
 
-    func_80069CC0_6A8C0(&func_800571D0_57DD0);
+    setCallback(&func_800571D0_57DD0);
 }
 
 void func_800571D0_57DD0() {
     func_800579E8_585E8(D_800A2990_A3590->unk4, *(&D_80093B00_94700 + (D_800A2990_A3590->unk12)));
-    func_80069CC0_6A8C0(&func_80057214_57E14);
+    setCallback(&func_80057214_57E14);
 }
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057214_57E14);
@@ -236,7 +235,7 @@ extern void func_800570E0_57CE0();
 
 void func_80057470_58070(void) {
     if (func_80058638_59238() == NULL) {
-        func_80069CD0_6A8D0(&func_800570E0_57CE0);
+        setCallbackWithContinue(&func_800570E0_57CE0);
     }
 }
 

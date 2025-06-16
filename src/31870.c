@@ -11,7 +11,7 @@ typedef struct {
 } func_80031ABC_326BC_arg;
 
 void func_80002750_3350(s32);
-extern void func_80069CC0_6A8C0(void*);
+extern void setCallback(void*);
 extern void func_80031B30_32730;
 extern s32 D_8009A870_9B470;
 extern void func_80031C4C_3284C;
@@ -86,8 +86,8 @@ void func_80031A0C_3260C(func_80031A0C_3260C_arg* arg0) {
     arg0->unk26 = 0x10;
     arg0->unk28 = 0;
 
-    func_80069CE8_6A8E8(&func_80031C4C_3284C);
-    func_80069CC0_6A8C0(&func_80031ABC_326BC);
+    setCleanupCallback(&func_80031C4C_3284C);
+    setCallback(&func_80031ABC_326BC);
 }
 
 void func_80031ABC_326BC(func_80031ABC_326BC_arg* arg0) {
@@ -99,7 +99,7 @@ void func_80031ABC_326BC(func_80031ABC_326BC_arg* arg0) {
     func_800021B8_2DB8(arg0->unk0, arg0->unk24);
     func_80002750_3350(arg0->unk0);
     if (temp_s1->unk79B != 0) {
-        func_80069CC0_6A8C0(&func_80031B30_32730);
+        setCallback(&func_80031B30_32730);
     }
 }
 

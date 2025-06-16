@@ -2,7 +2,7 @@
 #include "event_trigger.h"
 #include "gamestate.h"
 
-void func_80069CC0_6A8C0(void *);
+void setCallback(void *);
 void WallNewspaperTriggerCheck(u8 *);
 
 u8 WallNewspaperLabel[] = "WALL NEWSPAPER";
@@ -18,7 +18,7 @@ void WallNewspaperTriggerInit(EventTrigger *arg0) {
     arg0->unk8 = 0;
     arg0->unkC = &WallNewspaperLabel;
 
-    func_80069CC0_6A8C0(&WallNewspaperTriggerCheck);
+    setCallback(&WallNewspaperTriggerCheck);
 }
 
 void WallNewspaperTriggerCheck(u8 *arg0) {

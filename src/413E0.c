@@ -3,8 +3,6 @@
 #include "common.h"
 #include "gamestate.h"
 
-void func_80069CD0_6A8D0(void*);
-void func_80069CE8_6A8E8(void*);
 extern void func_8004083C_4143C();
 extern void func_80040948_41548();
 
@@ -17,8 +15,8 @@ void func_800407E0_413E0(func_800407E0_413E0_arg* arg0) {
     GameState* temp_s0 = GameStateGet();
     arg0->unk0 = load_3ECE40();
     arg0->unk4 = (u8*)(temp_s0->unk44 + 0x1380);
-    func_80069CE8_6A8E8(&func_80040948_41548);
-    func_80069CD0_6A8D0(&func_8004083C_4143C);
+    setCleanupCallback(&func_80040948_41548);
+    setCallbackWithContinue(&func_8004083C_4143C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_8004083C_4143C);
@@ -30,7 +28,7 @@ INCLUDE_ASM("asm/nonmatchings/413E0", func_80040948_41548);
 void func_80040974_41574(void* arg0) {
     Node* temp_v0 = scheduleTask(&func_800407E0_413E0, 0U, 0U, 0xF0U);
     if (temp_v0 != NULL) {
-        temp_v0->unk24 = arg0;
+        temp_v0->cleanupCallback = arg0;
     }
 }
 

@@ -59,8 +59,8 @@ extern void *queueDmaTransfer(void *, void *);
 extern D_800A32C0_A3EC0_type *D_800A3274_A3E74;
 extern s32 D_800AB064_A23D4;
 extern s32 D_800AB12C_A249C;
-s32 func_80069D20_6A920();
-void func_80069B04_6A704(void);
+s32 hasActiveTasks();
+void processActiveTasks(void);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
 
@@ -159,7 +159,7 @@ void func_80069470_6A070(u32 arg0, s8 arg1) {
     gTaskScheduler->unk4C++;
 }
 
-void func_80069530_6A130(void) {
+void runTaskSchedulers(void) {
     D_800A32C0_A3EC0_type *temp_v0;
     D_800A32C0_A3EC0_type *temp_v0_2;
     D_800A32C0_A3EC0_type *temp_a0;
@@ -195,7 +195,7 @@ void func_80069530_6A130(void) {
                     }
 
                     if (gTaskScheduler->unk18 == 1) {
-                        func_80069B04_6A704();
+                        processActiveTasks();
                     }
 
                     break;
@@ -203,9 +203,9 @@ void func_80069530_6A130(void) {
                 case 2:
                     if (gTaskScheduler->unk4C == 0) {
                         func_80069D34_6A934();
-                        func_80069B04_6A704();
+                        processActiveTasks();
 
-                        if (func_80069D20_6A920() == 0) {
+                        if (hasActiveTasks() == 0) {
                             gTaskScheduler->unk2C = decrementNodeRefCount((s32 *)gTaskScheduler->unk2C);
                             gTaskScheduler->GameState = (GameState *)decrementNodeRefCount((s32 *)gTaskScheduler->GameState);
                             gTaskScheduler->unk1C = D_800AB064_A23D4;
@@ -356,7 +356,7 @@ Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
             newNode->field_D = identifierFlag;
             newNode->priority = priority;
             newNode->callback = callback;
-            newNode->unk24 = 0;
+            newNode->cleanupCallback = NULL;
             newNode->unkE = 1;
             newNode->unk11 = 0;
             newNode->unk18 = 0;
@@ -371,20 +371,20 @@ Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
     return NULL;
 }
 
-s16 func_80069AEC_6A6EC(s32 arg0) {
+s16 getFreeNodeCount(s32 arg0) {
     return gTaskScheduler->counters[arg0];
 }
 
-void func_80069B04_6A704() {
+void processActiveTasks() {
     for (gDMAOverlay = gTaskScheduler->activeList; gDMAOverlay != 0; gDMAOverlay = gDMAOverlay->next) {
         switch (gDMAOverlay->unkE) {
             case 0:
                 break;
             case 1:
                 while (TRUE) {
-                    gDMAOverlay->unk10 = 0;
+                    gDMAOverlay->continueFlag = 0;
                     gDMAOverlay->callback(&gDMAOverlay->payload);
-                    if ((gDMAOverlay->unk10 != 0) && (gDMAOverlay->unkE == 1)) {
+                    if ((gDMAOverlay->continueFlag != 0) && (gDMAOverlay->unkE == 1)) {
                         continue;
                     }
                     break;
@@ -392,8 +392,8 @@ void func_80069B04_6A704() {
                 break;
 
             case 2:
-                if (gDMAOverlay->unk24 != NULL) {
-                    gDMAOverlay->unk24(&gDMAOverlay->payload);
+                if (gDMAOverlay->cleanupCallback != NULL) {
+                    gDMAOverlay->cleanupCallback(&gDMAOverlay->payload);
                 }
 
                 if (gDMAOverlay->prev == NULL) {
@@ -425,20 +425,20 @@ void func_80069B04_6A704() {
     }
 }
 
-void func_80069CC0_6A8C0(void *arg0) {
-    gDMAOverlay->callback = arg0;
+void setCallback(void(callback)(void *)) {
+    gDMAOverlay->callback = callback;
 }
 
-void func_80069CD0_6A8D0(void *arg0) {
-    gDMAOverlay->callback = arg0;
-    gDMAOverlay->unk10 = 1;
+void setCallbackWithContinue(void(callback)(void *)) {
+    gDMAOverlay->callback = callback;
+    gDMAOverlay->continueFlag = 1;
 }
 
-void func_80069CE8_6A8E8(void(arg0)(void *)) {
-    gDMAOverlay->unk24 = arg0;
+void setCleanupCallback(void(callback)(void *)) {
+    gDMAOverlay->cleanupCallback = callback;
 }
 
-void func_80069CF8_6A8F8(void) {
+void func_80069CF8_6A8F8() {
     u8 temp = gDMAOverlay->unkE - 3;
     if (temp < 2) {
         gDMAOverlay->unkE = 4;
@@ -447,7 +447,7 @@ void func_80069CF8_6A8F8(void) {
     }
 }
 
-s32 func_80069D20_6A920() {
+s32 hasActiveTasks() {
     return gTaskScheduler->activeList != NULL;
 }
 

@@ -8,8 +8,8 @@ INCLUDE_ASM("asm/nonmatchings/7850", func_80006CBC_78BC);
 
 INCLUDE_ASM("asm/nonmatchings/7850", func_80006E44_7A44);
 
-void func_80069CC0_6A8C0(void *);
-void func_80069CE8_6A8E8(void *);
+void setCallback(void *);
+void setCleanupCallback(void *);
 void memcpy(void *, void *, s32);
 
 extern void *D_80088720_89320;
@@ -37,8 +37,8 @@ void func_80006E60_7A60(func_80006E60_7A60_arg *arg0) {
     arg0->unk24 = &D_80088720_89320;
     arg0->unk40 = 0;
     arg0->unk42 = 0;
-    func_80069CE8_6A8E8(&func_80007030_7C30);
-    func_80069CC0_6A8C0(&func_80006EE0_7AE0);
+    setCleanupCallback(&func_80007030_7C30);
+    setCallback(&func_80006EE0_7AE0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/7850", func_80006EE0_7AE0);

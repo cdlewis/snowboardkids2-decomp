@@ -2,7 +2,7 @@
 #include "event_trigger.h"
 #include "gamestate.h"
 
-void func_80069CC0_6A8C0(void*);
+void setCallback(void*);
 
 u8 TrickLabel[] = "TRICK";
 
@@ -17,7 +17,7 @@ void TrickTriggerInit(EventTrigger* arg0) {
     arg0->unk4 = 0;
     arg0->unk8 = 0;
     arg0->unkC = &TrickLabel;
-    func_80069CC0_6A8C0(&TrickTriggerCheck);
+    setCallback(&TrickTriggerCheck);
 }
 
 void TrickTriggerCheck(u8* arg0) {

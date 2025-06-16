@@ -17,13 +17,14 @@ void func_8000153C_213C(s32, void *);
 void func_800021B8_2DB8(s32, s16);
 void func_80002750_3350(s32);
 extern void func_8002F024_2FC24();
-void func_80069CE8_6A8E8(void *);
 void func_8006A838_6B438(void *, s32, s32);
 void func_8006B084_6BC84(void *, void *, void *);
 extern u8 D_8009A870_9B470[];
 extern void func_8002F72C_3032C();
 extern void func_8002F980_30580();
 extern void func_8000FED0_10AD0();
+void func_8002EFD8_2FBD8(void *);
+void func_8002F110_2FD10();
 
 typedef struct {
     u8 padding[0x2C];
@@ -70,7 +71,7 @@ typedef struct {
     u8 unk60;
 } S0;
 
-void func_8002F5C8_301C8(func_80063824_64424_arg *arg0);
+void func_8002F5C8_301C8(void *);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 
 // 100% match but something weird is happening
@@ -110,10 +111,6 @@ void updateDebugCameraYState(cameraState *arg0) {
     debugEnqueueCallback(8, 7, &func_80068128_68D28, ((void *)((s32)arg0)) + 0xC);
 }
 
-void func_80069CE8_6A8E8(void *);
-void func_8002EFD8_2FBD8(func_8002EFD8_2FBD8_arg *arg0);
-extern void func_8002F110_2FD10();
-
 typedef struct {
     void *unk0;
     Mat3x3 unk4;
@@ -134,15 +131,16 @@ void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
     arg0->unk24 = 4;
     arg0->unk26 = 0;
     createYRotationMatrix(&arg0->unk4, 0x1E00);
-    func_80069CE8_6A8E8(func_8002F110_2FD10);
-    func_80069CC0_6A8C0(func_8002EFD8_2FBD8);
+    setCleanupCallback(func_8002F110_2FD10);
+    setCallback(func_8002EFD8_2FBD8);
 }
 
-void func_8002EFD8_2FBD8(func_8002EFD8_2FBD8_arg *arg0) {
+void func_8002EFD8_2FBD8(void *untypedArg0) {
+    func_8002EFD8_2FBD8_arg *arg0 = (func_8002EFD8_2FBD8_arg *)untypedArg0;
     func_8000153C_213C(arg0->unk0, (void *)((s32)arg0 + 4));
     func_800021B8_2DB8(arg0->unk0, arg0->unk24);
     func_80002750_3350(arg0->unk0);
-    func_80069CC0_6A8C0(&func_8002F024_2FC24);
+    setCallback(&func_8002F024_2FC24);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F024_2FC24);
@@ -178,16 +176,17 @@ void func_8002F518_30118(func_80063824_64424_arg *s0) {
     if (s0->unk60 == 4) {
         s0->unk60 = 0;
         s1->unk5C7++;
-        func_80069CC0_6A8C0(func_8002F5C8_301C8);
+        setCallback(func_8002F5C8_301C8);
     }
 
     func_800635CC_641CC(0, s0);
 }
 
-void func_8002F5C8_301C8(func_80063824_64424_arg *arg0) {
+void func_8002F5C8_301C8(void *untypedArg) {
+    func_80063824_64424_arg *arg0 = (func_80063824_64424_arg *)untypedArg;
     volatile u8 pad[0x20];
     if (GameStateGet()->unk5C5 == 1) {
-        func_80069CC0_6A8C0(&func_8002F290_2FE90);
+        setCallback(&func_8002F290_2FE90);
     }
     func_800635CC_641CC(0, arg0);
 }
@@ -213,8 +212,8 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     arg0->unk24 = 0;
     arg0->unk28 = 0;
     arg0->unk2C = 0;
-    func_80069CE8_6A8E8(&func_8002F980_30580);
-    func_80069CC0_6A8C0(&func_8002F72C_3032C);
+    setCleanupCallback(&func_8002F980_30580);
+    setCallback(&func_8002F72C_3032C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F72C_3032C);
@@ -231,7 +230,7 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F9C4_305C4);
 
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
     func_800394BC_3A0BC(arg0, arg0->unk2C);
-    func_80069CC0_6A8C0(&func_8002FA44_30644);
+    setCallback(&func_8002FA44_30644);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA44_30644);

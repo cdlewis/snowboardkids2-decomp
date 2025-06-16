@@ -1,4 +1,4 @@
-void func_80069CC0_6A8C0(void *);
+void setCallback(void *);
 extern void updateDebugCameraYState();
 typedef struct
 {
@@ -31,5 +31,5 @@ void func_8002ED90_2F990(func_8002ED90_2F990_arg *arg0) {
     new_var->unkC = -0x80;
     new_var->unk10 = 0;
     arg0->unk14 = (void *)v0;
-    func_80069CC0_6A8C0(&updateDebugCameraYState);
+    setCallback(&updateDebugCameraYState);
 }

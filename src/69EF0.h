@@ -10,13 +10,13 @@ typedef struct Node {
     /* 0x0D */ u8 field_D;
     /* 0x0E */ u8 unkE;
     /* 0x0F */ u8 priority;
-    /* 0x10 */ u8 unk10;
+    /* 0x10 */ u8 continueFlag;
     /* 0x11 */ u8 unk11;
     /* 0x12 */ u8 pad12[6];
     /* 0x18 */ void *unk18;
     /* 0x1C */ void *unk1C;
     /* 0x20 */ void (*callback)(void *);
-    /* 0x24 */ void (*unk24)(void *);
+    /* 0x24 */ void (*cleanupCallback)(void *);
     /* 0x28 */ void *payload;
 } Node;
 
@@ -28,3 +28,7 @@ MemoryAllocatorNode *dmaRequestAndUpdateState(void *start, void *end);
 GameState *allocateGameStateMemory(s32 arg0);
 
 Node *scheduleTask(void *a0, u8, u8, u8);
+
+void setCallback(void(callback)(void *));
+void setCallbackWithContinue(void(callback)(void *));
+void setCleanupCallback(void(callback)(void *));

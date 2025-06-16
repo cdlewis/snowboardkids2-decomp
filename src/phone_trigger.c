@@ -5,7 +5,7 @@
 void PhoneTriggerCheck(u8 *);
 
 extern GameState *GameStateGet();
-extern void func_80069CC0_6A8C0(void *);
+extern void setCallback(void *);
 extern u8 D_8008D6C4_8E2C4[];
 
 char PhoneLabel[] = "PHONE";
@@ -18,7 +18,7 @@ void PhoneTriggerInit(EventTrigger *arg0) {
     arg0->unk8 = 0;
     arg0->unkC = &PhoneLabel;
 
-    func_80069CC0_6A8C0(&PhoneTriggerCheck);
+    setCallback(&PhoneTriggerCheck);
 }
 
 void PhoneTriggerCheck(u8 *arg0) {

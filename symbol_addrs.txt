@@ -1,3 +1,10 @@
+getFreeNodeCount = 0x80069AEC;
+setCallback = 0x80069CC0;
+setCallbackWithContinue = 0x80069CD0;
+setCleanupCallback = 0x80069CE8;
+hasActiveTasks = 0x80069D20;
+processActiveTasks = 0x80069B04;
+runTaskSchedulers = 0x80069530;
 gDMAOverlay = 0x8009A864;
 gTaskScheduler = 0x8009A860;
 load_3ECE40 = 0x8005DAD4;
