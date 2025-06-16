@@ -375,14 +375,11 @@ s16 func_80069AEC_6A6EC(s32 arg0) {
     return gTaskScheduler->counters[arg0];
 }
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069B04_6A704);
-/*
 void func_80069B04_6A704() {
     for (gDMAOverlay = gTaskScheduler->activeList; gDMAOverlay != 0; gDMAOverlay = gDMAOverlay->next) {
         switch (gDMAOverlay->unkE) {
             case 0:
                 break;
-
             case 1:
                 while (TRUE) {
                     gDMAOverlay->unk10 = 0;
@@ -427,7 +424,6 @@ void func_80069B04_6A704() {
         }
     }
 }
-*/
 
 void func_80069CC0_6A8C0(void *arg0) {
     gDMAOverlay->callback = arg0;
@@ -550,3 +546,5 @@ GameState *allocateGameStateMemory(s32 arg0) {
 s32 freeGameStateMemory(s32 *arg0) {
     return decrementNodeRefCount(arg0);
 }
+
+static const u32 D_8009EA54_padding[3] = {0, 0, 0};
