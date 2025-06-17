@@ -21,11 +21,7 @@ extern void func_80051760_52360();
 extern void func_80051800_52400();
 extern void func_800518AC_524AC();
 extern void func_80051B8C_5278C();
-extern void setCallbackWithContinue(void*);
-extern void setCleanupCallback(void*);
 void func_80067F0C_68B0C(void*, MemoryAllocatorNode*, s32);
-void setCallbackWithContinue(void*);
-void setCleanupCallback(void*);
 
 void func_80050460_51060(MemoryAllocatorNode** node) {
     *node = load_3ECE40();

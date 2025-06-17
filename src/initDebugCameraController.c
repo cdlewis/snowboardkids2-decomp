@@ -1,4 +1,5 @@
-void setCallback(void *);
+#include "69EF0.h"
+
 extern void updateDebugCameraYState();
 typedef struct
 {

@@ -11,7 +11,6 @@ typedef struct {
 } func_80031ABC_326BC_arg;
 
 void func_80002750_3350(s32);
-extern void setCallback(void*);
 extern void func_80031B30_32730;
 extern s32 D_8009A870_9B470;
 extern void func_80031C4C_3284C;

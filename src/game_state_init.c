@@ -28,7 +28,6 @@ extern void func_800574A0_580A0(s32);
 extern void func_80057564_58164(s32 a0);
 extern void func_800697CC_6A3CC(void (*func)(void));
 extern void func_800697F4_6A3F4(s32);
-extern void setGameStateHandler(void *);
 extern void func_800698EC_6A4EC(s32, s32, s32, void *, s32, s32, s32, s32);
 extern void func_80069D7C_6A97C(s32 a0);
 extern void func_80069DD4_6A9D4(s32 a0, s32 a1);

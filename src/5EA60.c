@@ -46,7 +46,6 @@ typedef struct {
 
 extern void func_8005DF10_5EB10(s16, s16, s16, s16*);
 extern void func_8006BDBC_6C9BC(func_8005E800_5F400_arg*, void*, void*);
-extern void memcpy(void*, void*, s32);
 
 void func_8005E800_5F400(func_8005E800_5F400_arg* entity, u16 param_2) {
     s16 stack_data[0x10];

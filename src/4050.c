@@ -56,7 +56,6 @@ extern void func_80069470_6A070(void *, s32);
 void loadOverlay_1DD170();
 void func_8000378C_438C();
 void func_80003C88_4888();
-void setGameStateHandler(void *);
 void func_80003D30_4930();
 void func_80003CC4_48C4();
 extern void *func_800B00C0_9FF70();

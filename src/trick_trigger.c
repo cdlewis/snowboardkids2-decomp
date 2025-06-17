@@ -1,14 +1,12 @@
+#include "69EF0.h"
 #include "common.h"
 #include "event_trigger.h"
 #include "gamestate.h"
 
-void setCallback(void*);
+extern u8 D_8008D6C4_8E2C4[];
+void TrickTriggerCheck(void*);
 
 u8 TrickLabel[] = "TRICK";
-
-extern GameState* GameStateGet();
-extern u8 D_8008D6C4_8E2C4[];
-extern void TrickTriggerCheck(u8*);
 
 void TrickTriggerInit(EventTrigger* arg0) {
     arg0->unk0 = TRICK_EVENT_ID;
@@ -20,7 +18,7 @@ void TrickTriggerInit(EventTrigger* arg0) {
     setCallback(&TrickTriggerCheck);
 }
 
-void TrickTriggerCheck(u8* arg0) {
+void TrickTriggerCheck(void* arg0) {
     s16 temp_v0_2;
     s16 var_v1;
     s32 temp_a1;
@@ -35,13 +33,13 @@ void TrickTriggerCheck(u8* arg0) {
             var_v1 -= 0x2000;
         }
 
-        temp_a1 = *arg0;
+        temp_a1 = *(u8*)arg0;
         val1 = ((s16*)D_8008D6C4_8E2C4)[temp_a1 * 2];
         if (var_v1 < val1) {
             val2 = ((s16*)D_8008D6C4_8E2C4)[temp_a1 * 2 + 1];
             if (val2 < var_v1) {
                 temp_v0->unk424 = 1;
-                temp_v0->unk425 = (u8)*arg0;
+                temp_v0->unk425 = *(u8*)arg0;
             }
         }
     }

@@ -3,9 +3,6 @@
 #include "gamestate.h"
 
 void PhoneTriggerCheck(u8 *);
-
-extern GameState *GameStateGet();
-extern void setCallback(void *);
 extern u8 D_8008D6C4_8E2C4[];
 
 char PhoneLabel[] = "PHONE";

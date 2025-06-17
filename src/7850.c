@@ -2,20 +2,16 @@
 #include "common.h"
 #include "memory_allocator.h"
 
+extern void *D_80088720_89320;
+extern void *func_80006EE0_7AE0;
+extern void *func_80007030_7C30;
+extern u8 D_8009A870_9B470[];
+
 INCLUDE_ASM("asm/nonmatchings/7850", func_80006C50_7850);
 
 INCLUDE_ASM("asm/nonmatchings/7850", func_80006CBC_78BC);
 
 INCLUDE_ASM("asm/nonmatchings/7850", func_80006E44_7A44);
-
-void setCallback(void *);
-void setCleanupCallback(void *);
-void memcpy(void *, void *, s32);
-
-extern void *D_80088720_89320;
-extern void *func_80006EE0_7AE0;
-extern void *func_80007030_7C30;
-extern u8 D_8009A870_9B470[];
 
 typedef struct {
     void *unk0;

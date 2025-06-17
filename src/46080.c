@@ -1,8 +1,7 @@
 #include "5E590.h"
+#include "69EF0.h"
 #include "common.h"
 
-extern void setCallbackWithContinue(void*);
-extern void setCleanupCallback(void*);
 extern void func_80049300_49F00();
 extern void func_80049404_4A004();
 
@@ -156,7 +155,7 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049230_49E30);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049280_49E80);
 
-void func_800492C0_49EC0(MemoryAllocatorNode** arg0) {
+void func_800492C0_49EC0(MemoryAllocatorNode **arg0) {
     *arg0 = load_3ECE40();
     setCleanupCallback(&func_80049404_4A004);
     setCallbackWithContinue(&func_80049300_49F00);
@@ -170,7 +169,19 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049404_4A004);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049430_4A030);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80049794_4A394);
+typedef struct {
+    Node n;
+    s32 padding[4];
+    s32 unk3C;
+} NodeWithPayload;
+
+void func_80049794_4A394(void *payload, s32 arg1) {
+    NodeWithPayload *temp_v0 = (NodeWithPayload *)scheduleTask(&func_800492C0_49EC0, 0, 0, 0xEB);
+    if (temp_v0 != NULL) {
+        memcpy((s32)temp_v0 + 0x10, payload, (void *)0x20);
+        temp_v0->unk3C = arg1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800497FC_4A3FC);
 
