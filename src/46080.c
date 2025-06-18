@@ -45,7 +45,7 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80046298_46E98);
 
 INCLUDE_RODATA("asm/nonmatchings/46080", jtbl_8009E798_9F398);
 
-INCLUDE_RODATA("asm/nonmatchings/46080", pushStartButtonText);
+const char pushStartButtonText[] = "PUSH START BUTTON";
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800462D8_46ED8);
 
@@ -157,7 +157,7 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049230_49E30);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049280_49E80);
 
-void func_800492C0_49EC0(MemoryAllocatorNode **arg0) {
+void func_800492C0_49EC0(void **arg0) {
     *arg0 = load_3ECE40();
     setCleanupCallback(&func_80049404_4A004);
     setCallbackWithContinue(&func_80049300_49F00);
@@ -173,7 +173,9 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049430_4A030);
 
 typedef struct {
     Node n;
-    s32 padding[4];
+    s32 unk2C;
+    s32 unk30;
+    s32 padding[2];
     s32 unk3C;
 } NodeWithPayload;
 
@@ -227,7 +229,15 @@ void func_8004AE58_4BA58(s32 *arg0) {
     *arg0 = freeGameStateMemory(*arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004AE94_4BA94);
+void func_8004AE94_4BA94(s32 arg0) {
+    NodeWithPayload *temp_v0;
+
+    GameStateGet();
+    temp_v0 = (NodeWithPayload *)scheduleTask(&func_8004AA50_4B650, 3, 0, 0xEFU);
+    if (temp_v0 != NULL) {
+        temp_v0->unk30 = arg0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004AED8_4BAD8);
 
