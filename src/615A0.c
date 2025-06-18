@@ -1,5 +1,6 @@
 #include "615A0.h"
 
+#include "19E80.h"
 #include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
@@ -501,7 +502,23 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800677F0_683F0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80067EDC_68ADC);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80067F0C_68B0C);
+typedef struct {
+    u8 padding[0x10];
+    s32 unk10;
+    s32 unk14;
+    s8 unk18;
+    s8 unk19;
+    s8 unk1A;
+} func_80067F0C_68B0C_arg;
+void func_80067F0C_68B0C(func_80067F0C_68B0C_arg* arg0, void* arg1, s32 arg2) {
+    func_80019280_19E80_return sp10;
+
+    func_80019280_19E80(arg1, arg2 & 0xFFFF, &sp10);
+    arg0->unk10 = sp10.unk0;
+    arg0->unk14 = sp10.unk4;
+    arg0->unk18 = sp10.unk18;
+    arg0->unk19 = sp10.unk1A;
+}
 
 void func_80067F5C_68B5C(func_80067F5C_68B5C_arg* arg0, s32 arg1, s32 arg2, s32 arg3) {
     func_80067F5C_68B5C_sp10 sp10;

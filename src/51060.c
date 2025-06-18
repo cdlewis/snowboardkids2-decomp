@@ -21,9 +21,9 @@ extern void func_80051760_52360();
 extern void func_80051800_52400();
 extern void func_800518AC_524AC();
 extern void func_80051B8C_5278C();
-void func_80067F0C_68B0C(void*, MemoryAllocatorNode*, s32);
+void func_80067F0C_68B0C(void*, void*, s32);
 
-void func_80050460_51060(MemoryAllocatorNode** node) {
+void func_80050460_51060(void** node) {
     *node = load_3ECE40();
     setCleanupCallback(&func_800505D8_511D8);
     setCallbackWithContinue(&func_800504A0_510A0);
@@ -147,7 +147,7 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_800516B4_522B4);
 
 typedef struct {
     s32 unk0;
-    MemoryAllocatorNode* unk4;
+    void* unk4;
     s32* unk8;
     s32 unkC;
     s32 unk10;
