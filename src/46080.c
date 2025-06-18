@@ -2,6 +2,8 @@
 #include "69EF0.h"
 #include "common.h"
 
+extern void func_8004AA90_4B690();
+extern void func_8004AE58_4BA58();
 extern void func_80049300_49F00();
 extern void func_80049404_4A004();
 
@@ -205,7 +207,11 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004A96C_4B56C);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004A9A8_4B5A8);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004AA50_4B650);
+void func_8004AA50_4B650(s32 *arg0) {
+    *arg0 = (s32)load_3ECE40();
+    setCleanupCallback(&func_8004AE58_4BA58);
+    setCallbackWithContinue(&func_8004AA90_4B690);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004AA90_4B690);
 
@@ -213,7 +219,13 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004AB50_4B750);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004AD18_4B918);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004AE58_4BA58);
+void func_8004AE58_4BA58(s32 *arg0) {
+    GameState *temp_v0;
+
+    temp_v0 = GameStateGet();
+    temp_v0->PAD_5[0xB] += 1;
+    *arg0 = freeGameStateMemory(*arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004AE94_4BA94);
 
