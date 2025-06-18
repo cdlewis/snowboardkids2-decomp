@@ -33,12 +33,12 @@ extern void *D_40A590;
 extern void *D_40A760;
 extern void *D_40A930;
 
-MemoryAllocatorNode *func_8005D990_5E590(s16 groupIndex, s16 pairIndex) {
+void *func_8005D990_5E590(s16 groupIndex, s16 pairIndex) {
     AssetPair *assetArray = D_80094390_94F90[groupIndex];
     return dmaRequestAndUpdateState(assetArray[pairIndex].start, assetArray[pairIndex].end);
 }
 
-MemoryAllocatorNode *func_8005D9D0_5E5D0(s16 groupIndex, s16 pairIndex) {
+void *func_8005D9D0_5E5D0(s16 groupIndex, s16 pairIndex) {
     AssetWithSize *assetArray = D_80094600_95200[groupIndex];
     return dmaRequestAndUpdateStateWithSize(assetArray[pairIndex].start, assetArray[pairIndex].end, assetArray[pairIndex].size);
 }
@@ -61,23 +61,23 @@ s32 func_8005DAAC_5E6AC(s16 groupIndex, s16 pairIndex) {
     return group[pairIndex];
 }
 
-MemoryAllocatorNode *load_3ECE40(void) {
+void *load_3ECE40(void) {
     return dmaRequestAndUpdateStateWithSize(&D_3ECE40, &D_3F2980, 0xA518);
 }
 
-MemoryAllocatorNode *func_8005DB00_5E700(s32 index) {
+void *func_8005DB00_5E700(s32 index) {
     return dmaRequestAndUpdateStateWithSize(D_80094870_95470[index].start, D_80094870_95470[index].end, D_80094870_95470[index].size);
 }
 
-MemoryAllocatorNode *func_8005DB48_5E748(s16 index) {
+void *func_8005DB48_5E748(s16 index) {
     return dmaRequestAndUpdateState(D_80094900_95500[index].start, D_80094900_95500[index].end);
 }
 
-MemoryAllocatorNode *func_8005DB80_5E780(s16 index) {
+void *func_8005DB80_5E780(s16 index) {
     return dmaRequestAndUpdateStateWithSize(D_80094990_95590[index].start, D_80094990_95590[index].end, D_80094990_95590[index].size);
 }
 
-MemoryAllocatorNode *func_8005DBD0_5E7D0(s16 index) {
+void *func_8005DBD0_5E7D0(s16 index) {
     s16 clamped_index;
 
     if (index == 0x10) {
@@ -96,7 +96,7 @@ void *func_8005DC48_5E848(s16 index) {
     return D_80094B28_95728[index];
 }
 
-MemoryAllocatorNode *func_8005DC60_5E860(s32 index) {
+void *func_8005DC60_5E860(s32 index) {
     void *start;
     void *end;
     s32 size;
@@ -132,7 +132,7 @@ s32 func_8005DD20_5E920(s32 index) {
     return D_80094B70_95770[index].size;
 }
 
-MemoryAllocatorNode *func_8005DD90_5E990(s32 index) {
+void *func_8005DD90_5E990(s32 index) {
     return dmaRequestAndUpdateStateWithSize(D_80094C30_95830[index].start, D_80094C30_95830[index].end, D_80094C30_95830[index].size);
 }
 

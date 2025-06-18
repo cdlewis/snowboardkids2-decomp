@@ -17,7 +17,9 @@ typedef struct MemoryAllocatorNode {
 extern MemoryAllocatorNode *gMemoryAllocatorHead;
 extern MemoryAllocatorNode gMemoryHeapBase;
 
-MemoryAllocatorNode *allocateMemoryNode(s32, u32, u8 *);
+// allocates memory, returning a pointer to the start of the allocated space.
+void *allocateMemoryNode(s32, u32, u8 *);
+
 void *getNodeUserData(void *);
 void setNodeUserData(void *, void *);
 void markNodeAsLocked(s32 *);

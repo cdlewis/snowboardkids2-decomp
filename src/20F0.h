@@ -106,7 +106,7 @@ typedef struct {
 } func_80002B50_3750_arg;
 
 void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5);
-MemoryAllocatorNode* loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode);
-MemoryAllocatorNode* loadAssetGroupSoundData(func_80002040_2C40_arg*);
-MemoryAllocatorNode* loadAssetGroupDisplayList(func_80002040_2C40_arg*);
-MemoryAllocatorNode* loadAssetGroupVertexData(func_80002040_2C40_arg*);
+void* loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode);
+void* loadAssetGroupSoundData(func_80002040_2C40_arg*);
+void* loadAssetGroupDisplayList(func_80002040_2C40_arg*);
+void* loadAssetGroupVertexData(func_80002040_2C40_arg*);

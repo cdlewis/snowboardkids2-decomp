@@ -247,7 +247,7 @@ void func_800016F8_22F8(func_800016E0_22E0_arg* arg0, s32 arg1) {
     arg0->unk110 = (s32)(arg0->unk110 & ~(1 << arg1));
 }
 
-MemoryAllocatorNode* loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
+void* loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
     AssetGroup* group;
     Asset* entity;
 
@@ -293,24 +293,24 @@ s32 func_800017F4_23F4(func_80002B50_3750_arg* arg0) {
     return new_var;
 }
 
-MemoryAllocatorNode* loadAssetGroupSoundData(func_80002040_2C40_arg* arg0) {
+void* loadAssetGroupSoundData(func_80002040_2C40_arg* arg0) {
     s16 idx = arg0->index;
     AssetGroup* entry = &gameAssets[idx];
-    MemoryAllocatorNode* result = NULL;
+    void* allocatedSpaceStart = NULL;
 
     if (entry->soundSequenceDataStart != NULL) {
-        result = dmaRequestAndUpdateStateWithSize(entry->soundSequenceDataStart, entry->soundSequenceDataEnd, entry->soundSequenceDataSize);
+        allocatedSpaceStart = dmaRequestAndUpdateStateWithSize(entry->soundSequenceDataStart, entry->soundSequenceDataEnd, entry->soundSequenceDataSize);
     }
 
-    return result;
+    return allocatedSpaceStart;
 }
 
-MemoryAllocatorNode* loadAssetGroupDisplayList(func_80002040_2C40_arg* arg0) {
+void* loadAssetGroupDisplayList(func_80002040_2C40_arg* arg0) {
     AssetGroup* entity = &gameAssets[arg0->index];
     return dmaRequestAndUpdateState(entity->displayListStart, entity->displayListEnd);
 }
 
-MemoryAllocatorNode* loadAssetGroupVertexData(func_80002040_2C40_arg* arg0) {
+void* loadAssetGroupVertexData(func_80002040_2C40_arg* arg0) {
     AssetGroup* entity = &gameAssets[arg0->index];
     return dmaRequestAndUpdateStateWithSize(entity->vertexDataStart, entity->vertexDataEnd, entity->size);
 }

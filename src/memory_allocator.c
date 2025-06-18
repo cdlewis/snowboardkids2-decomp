@@ -20,7 +20,7 @@ void initializeMemoryAllocatorRegion() {
     } while (i <= 0x1FFFFF);  // 2mb
 }
 
-MemoryAllocatorNode *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {
+void *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {
     s32 space_between;
     s32 needed_space;
     MemoryAllocatorNode *new_node;

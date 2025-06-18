@@ -595,23 +595,23 @@ void piDmaHandlerThread(void* arg __attribute__((unused))) {
     }
 }
 
-MemoryAllocatorNode* queueDmaTransfer(void* start, void* end) {
-    MemoryAllocatorNode* allocatedNode;
+void* queueDmaTransfer(void* start, void* end) {
+    void* dramAddr;
     u8 nodeAlreadyExists;
     s32 size;
     size = (s32)end - (s32)start;
 
     gDmaQueue[gDmaQueueIndex].size = size;
 
-    allocatedNode = allocateMemoryNode((s32)start, size, &nodeAlreadyExists);
+    dramAddr = allocateMemoryNode((s32)start, size, &nodeAlreadyExists);
 
-    gDmaQueue[gDmaQueueIndex].dramAddr = allocatedNode;
+    gDmaQueue[gDmaQueueIndex].dramAddr = dramAddr;
 
     if (nodeAlreadyExists) {
-        return allocatedNode;
+        return dramAddr;
     }
 
-    markNodeAsLocked(allocatedNode);
+    markNodeAsLocked(dramAddr);
 
     gDmaQueue[gDmaQueueIndex].start = start;
     gDmaQueue[gDmaQueueIndex].end = end;
@@ -625,24 +625,24 @@ MemoryAllocatorNode* queueDmaTransfer(void* start, void* end) {
 
     gDmaRequestCount++;
 
-    setNodeUserData(allocatedNode, (void*)gDmaRequestCount);
+    setNodeUserData(dramAddr, (void*)gDmaRequestCount);
 
-    return allocatedNode;
+    return dramAddr;
 }
 
-MemoryAllocatorNode* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
+void* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
     u8 flag;
     DmaTransferEntry* entry;
-    MemoryAllocatorNode* ret;
+    MemoryAllocatorNode* allocatedSpaceStart;
     s32 a1Val;
     s32 a1;
 
     gDmaQueue[gDmaQueueIndex].size = size;
-    ret = allocateMemoryNode((s32)romStart, size, &flag);
-    gDmaQueue[gDmaQueueIndex].dramAddr = ret;
+    allocatedSpaceStart = allocateMemoryNode((s32)romStart, size, &flag);
+    gDmaQueue[gDmaQueueIndex].dramAddr = allocatedSpaceStart;
 
     if (flag == 0) {
-        markNodeAsLocked(ret);
+        markNodeAsLocked(allocatedSpaceStart);
         gDmaQueue[gDmaQueueIndex].start = romStart;
         entry = &gDmaQueue[gDmaQueueIndex];
         entry->end = romEnd;
@@ -658,9 +658,10 @@ MemoryAllocatorNode* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
             a1++;
             gDmaRequestCount = a1;
         }
-        setNodeUserData(ret, (void*)a1);
+        setNodeUserData(allocatedSpaceStart, (void*)a1);
     }
-    return ret;
+
+    return allocatedSpaceStart;
 }
 
 s32 func_8003BB5C_3C75C() {

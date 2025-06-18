@@ -55,7 +55,6 @@ typedef struct D_800A32C0_A3EC0_type {
 extern D_800A32C0_A3EC0_type *D_800A3270_A3E70;
 extern D_800A32C0_A3EC0_type *D_800A32C0_A3EC0;
 
-extern void *queueDmaTransfer(void *, void *);
 extern D_800A32C0_A3EC0_type *D_800A3274_A3E74;
 extern s32 D_800AB064_A23D4;
 extern s32 D_800AB12C_A249C;
@@ -457,69 +456,69 @@ INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D7C_6A97C);
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069DD4_6A9D4);
 
-MemoryAllocatorNode *dmaRequestAndUpdateState(void *start, void *end) {
-    MemoryAllocatorNode *s0;
+void *dmaRequestAndUpdateState(void *start, void *end) {
+    void *allocatedSpaceStart;
 
     if (gDMAOverlay == NULL) {
-        s0 = queueDmaTransfer(start, end);
-        if (getNodeOwner(s0) != 0) {
+        allocatedSpaceStart = queueDmaTransfer(start, end);
+        if (getNodeOwner(allocatedSpaceStart) != 0) {
             if (gTaskScheduler->unk18 != 3) {
-                gTaskScheduler->unk20 = getNodeUserData(s0);
-                gTaskScheduler->unk24 = s0;
+                gTaskScheduler->unk20 = getNodeUserData(allocatedSpaceStart);
+                gTaskScheduler->unk24 = allocatedSpaceStart;
                 gTaskScheduler->unk18 = 3;
-            } else if (gTaskScheduler->unk20 < getNodeUserData(s0)) {
-                gTaskScheduler->unk20 = getNodeUserData(s0);
-                gTaskScheduler->unk24 = s0;
+            } else if (gTaskScheduler->unk20 < getNodeUserData(allocatedSpaceStart)) {
+                gTaskScheduler->unk20 = getNodeUserData(allocatedSpaceStart);
+                gTaskScheduler->unk24 = allocatedSpaceStart;
             }
         }
     } else {
-        s0 = queueDmaTransfer(start, end);
-        if (getNodeOwner(s0) != 0) {
+        allocatedSpaceStart = queueDmaTransfer(start, end);
+        if (getNodeOwner(allocatedSpaceStart) != 0) {
             if (((u8)(gDMAOverlay->unkE - 3)) >= 2) {
-                gDMAOverlay->unk18 = getNodeUserData(s0);
-                gDMAOverlay->unk1C = s0;
+                gDMAOverlay->unk18 = getNodeUserData(allocatedSpaceStart);
+                gDMAOverlay->unk1C = allocatedSpaceStart;
                 gDMAOverlay->unkE = 3;
             } else {
-                if (gDMAOverlay->unk18 < getNodeUserData(s0)) {
-                    gDMAOverlay->unk18 = getNodeUserData(s0);
-                    gDMAOverlay->unk1C = s0;
+                if (gDMAOverlay->unk18 < getNodeUserData(allocatedSpaceStart)) {
+                    gDMAOverlay->unk18 = getNodeUserData(allocatedSpaceStart);
+                    gDMAOverlay->unk1C = allocatedSpaceStart;
                 }
             }
         }
         gDMAOverlay->unk11 = 1;
     }
 
-    return s0;
+    return allocatedSpaceStart;
 }
 
-MemoryAllocatorNode *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
-    MemoryAllocatorNode *s0;
+void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
+    void *allocatedSpaceStart;
 
     if (gDMAOverlay == NULL) {
-        s0 = dmaQueueRequest(romStart, romEnd, size);
-        if (getNodeOwner(s0) != NULL) {
+        allocatedSpaceStart = dmaQueueRequest(romStart, romEnd, size);
+        if (getNodeOwner(allocatedSpaceStart) != NULL) {
             if (gTaskScheduler->unk18 != 3) {
-                gTaskScheduler->unk20 = getNodeUserData(s0);
-                gTaskScheduler->unk24 = s0;
+                gTaskScheduler->unk20 = getNodeUserData(allocatedSpaceStart);
+                gTaskScheduler->unk24 = allocatedSpaceStart;
                 gTaskScheduler->unk18 = 3;
             } else {
-                if (gTaskScheduler->unk20 < getNodeUserData(s0)) {
-                    gTaskScheduler->unk20 = getNodeUserData(s0);
-                    gTaskScheduler->unk24 = s0;
+                if (gTaskScheduler->unk20 < getNodeUserData(allocatedSpaceStart)) {
+                    gTaskScheduler->unk20 = getNodeUserData(allocatedSpaceStart);
+                    gTaskScheduler->unk24 = allocatedSpaceStart;
                 }
             }
         }
     } else {
-        s0 = dmaQueueRequest(romStart, romEnd, size);
-        if (getNodeOwner(s0) != NULL) {
+        allocatedSpaceStart = dmaQueueRequest(romStart, romEnd, size);
+        if (getNodeOwner(allocatedSpaceStart) != NULL) {
             if (gDMAOverlay->unkE < 3 || gDMAOverlay->unkE >= 5) {
-                gDMAOverlay->unk18 = getNodeUserData(s0);
-                gDMAOverlay->unk1C = s0;
+                gDMAOverlay->unk18 = getNodeUserData(allocatedSpaceStart);
+                gDMAOverlay->unk1C = allocatedSpaceStart;
                 gDMAOverlay->unkE = 3;
             } else {
-                if (gDMAOverlay->unk18 < getNodeUserData(s0)) {
-                    gDMAOverlay->unk18 = getNodeUserData(s0);
-                    gDMAOverlay->unk1C = s0;
+                if (gDMAOverlay->unk18 < getNodeUserData(allocatedSpaceStart)) {
+                    gDMAOverlay->unk18 = getNodeUserData(allocatedSpaceStart);
+                    gDMAOverlay->unk1C = allocatedSpaceStart;
                 }
             }
         }
@@ -527,7 +526,7 @@ MemoryAllocatorNode *dmaRequestAndUpdateStateWithSize(void *romStart, void *romE
         gDMAOverlay->unk11 = 1;
     }
 
-    return s0;
+    return allocatedSpaceStart;
 }
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006A0EC_6ACEC);
