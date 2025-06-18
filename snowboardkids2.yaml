@@ -881,7 +881,7 @@ segments:
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB74F0, asm]
+      - [0xB74F0, c]
       - [0xB7DD0, data, B74F0]
 
   - name: _1DA660
