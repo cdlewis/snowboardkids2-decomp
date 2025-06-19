@@ -1,3 +1,5 @@
+D_800BBB90_B7DD0 = 0x800BBB90; // type:s32 rom:0xB7DD0 size:0x122890
+
 getFreeNodeCount = 0x80069AEC;
 setCallback = 0x80069CC0;
 setCallbackWithContinue = 0x80069CD0;
