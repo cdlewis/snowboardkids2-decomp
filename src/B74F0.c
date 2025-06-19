@@ -58,6 +58,16 @@ typedef struct
     s16 unkA6;
 } func_800BB2B0_B74F0_arg;
 
+typedef struct {
+    u8 padding[0x78];
+    s32 unk78;
+    u8 padding2[0x10];
+    s32 unk8C[3];
+    u8 padding3[0xE];
+    s16 unkA6;
+    s16 unkA8;
+} func_800BB71C_B795C_arg;
+
 extern func_80055E68_56A68_result *func_80055E68_56A68(u8);
 extern s32 func_800AFF44_9FE04(void);
 extern s32 D_8009A8A4_9B4A4;
@@ -125,7 +135,21 @@ INCLUDE_ASM("asm/nonmatchings/B74F0", func_800BB468_B76A8);
 
 INCLUDE_ASM("asm/nonmatchings/B74F0", func_800BB658_B7898);
 
-INCLUDE_ASM("asm/nonmatchings/B74F0", func_800BB71C_B795C);
+void func_800BB71C_B795C(func_800BB71C_B795C_arg *arg0) {
+    u8 temp;
+
+    if (GameStateGet()->PAD_6[0x17] == 0) {
+        arg0->unkA8--;
+    }
+
+    if (!arg0->unkA8) {
+        temp = func_800AFF44_9FE04() & 1;
+        arg0->unkA6 = temp + (arg0->unkA6 & 0xFE);
+        memcpy(&arg0->unk8C, &D_800BBB90_B7DD0[arg0->unkA6].unk4, 0xC);
+        func_8006A724_6B324(&arg0->unk78, D_800BBB90_B7DD0[arg0->unkA6].unk0, D_800BBB90_B7DD0[arg0->unkA6].unk2);
+        setCallback((void (*)(void *))&func_800BB468_B76A8);
+    }
+}
 
 void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *arg0) {
     arg0->unk24 = freeGameStateMemory(arg0->unk24);
