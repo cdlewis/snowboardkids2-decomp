@@ -1,4 +1,4 @@
-#include "6B140.h"
+#include "geometry.h"
 
 #include "common.h"
 
@@ -83,7 +83,7 @@ s16 approximateCos(s16 inputAngle) {
     return (coss(inputAngle << 3) << 0x10) >> 0x12;
 }
 
-void createXRotationMatrix(s16 matrix[3][3], s16 angle) {
+void createXRotationMatrix(s16 matrix[3][3], u16 angle) {
     s16 sinVal;
     s16 cosVal;
     sinVal = approximateSin(angle);
@@ -134,17 +134,17 @@ void createZRotationMatrix(s16 matrix[3][3], s16 angle) {
     matrix[new_var2][new_var2] = 0x2000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A724_6B324);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006A724_6B324);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A838_6B438);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006A838_6B438);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006A948_6B548);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006A948_6B548);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006AA5C_6B65C);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006AA5C_6B65C);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006AB64_6B764);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006AB64_6B764);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006AD9C_6B99C);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006AD9C_6B99C);
 
 void func_8006AFDC_6BBDC(func_8006AFDC_6BBDC_arg* arg0, s32 arg1, s32 arg2, s32 arg3) {
     arg0->unk14 = arg1;
@@ -152,29 +152,29 @@ void func_8006AFDC_6BBDC(func_8006AFDC_6BBDC_arg* arg0, s32 arg1, s32 arg2, s32 
     arg0->unk1C = arg3;
 }
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006AFEC_6BBEC);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006AFEC_6BBEC);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006B084_6BC84);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006B084_6BC84);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006B35C_6BF5C);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006B35C_6BF5C);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006B5A8_6C1A8);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006B5A8_6C1A8);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006B7DC_6C3DC);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006B7DC_6C3DC);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006BA10_6C610);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BA10_6C610);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006BC6C_6C86C);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BC6C_6C86C);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006BDBC_6C9BC);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BDBC_6C9BC);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006BE4C_6CA4C);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BE4C_6CA4C);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006BEDC_6CADC);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BEDC_6CADC);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006BFB8_6CBB8);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BFB8_6CBB8);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C130_6CD30);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006C130_6CD30);
 
 void func_8006C2A8_6CEA8(func_8006C2A8_6CEA8_arg0* arg0, func_8006C2A8_6CEA8_arg1* arg1) {
     arg1->unk0 = (s32)((arg0->unk0 & 0xFFFF0000) + (((s32)(arg0->unk2 << 0x10) >> 0x1F) & 0xFFFF));
@@ -216,17 +216,17 @@ s32 approximate_sqrt(u32 input) {
     return quotient;
 }
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C438_6D038);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006C438_6D038);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", distance_2d);
+INCLUDE_ASM("asm/nonmatchings/geometry", distance_2d);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C5E0_6D1E0);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006C5E0_6D1E0);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C654_6D254);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006C654_6D254);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006C8FC_6D4FC);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006C8FC_6D4FC);
 
-INCLUDE_ASM("asm/nonmatchings/6B140", func_8006CF7C_6DB7C);
+INCLUDE_ASM("asm/nonmatchings/geometry", func_8006CF7C_6DB7C);
 
 s16 func_8006D21C_6DE1C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     return func_8006CF7C_6DB7C(arg2 - arg0, arg3 - arg1);

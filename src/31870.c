@@ -1,7 +1,7 @@
 #include "20F0.h"
-#include "6B140.h"
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 
 typedef struct {
     s32 unk0;

@@ -1,9 +1,9 @@
 #include "615A0.h"
 #include "69EF0.h"
-#include "6B140.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 
 void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 void func_8006FD3C_7093C(u16, void *);
