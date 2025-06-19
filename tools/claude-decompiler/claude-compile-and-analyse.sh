@@ -6,11 +6,12 @@ set -e
 
 echo "We got:"
 echo ""
-python3 ../../tools/decomp-permuter/src/objdump.py $1.o | tee base_dump
+python3 objdump_exact.py $1.o | tee base_dump
 echo ""
 
 # this should be unnecessary (target should already be in context window). but
 # if we don't provide it again Claude tends to *try* getting it anyway.
-python3 ../../tools/decomp-permuter/src/objdump.py target.o | tee target_dump
+python3 objdump_exact.py target.o | tee target_dump
 
-python3 dist.py base_dump target_dump
+# Use the object files directly with --stack-diffs to show actual differences
+python3 dist.py target.o $1.o --stack-diffs

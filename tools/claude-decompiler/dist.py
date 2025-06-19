@@ -40,6 +40,15 @@ def read_lines(path: str) -> List[str]:
     with open(path, 'r', encoding='utf-8') as f:
         return [line.strip() for line in f if line.strip()]
 
+def read_object_file(path: str, preserve_offsets: bool = True) -> List[str]:
+    """Read an object file using objdump"""
+    import sys
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from objdump_exact import objdump_file
+    lines = objdump_file(path, preserve_offsets=preserve_offsets)
+    return [line.row for line in lines]
+
 class Line:
     """Class to represent a disassembled instruction line with additional metadata"""
     def __init__(self, row: str, has_symbol: bool = False):
@@ -236,13 +245,21 @@ def score_files(target_lines: List[str], cand_lines: List[str], *, debug_mode: b
 
 def main():
     parser = argparse.ArgumentParser(description="Score the difference between two assembly files.")
-    parser.add_argument("target_file", help="Target assembly text file")
-    parser.add_argument("cand_file", help="Candidate assembly text file")
+    parser.add_argument("target_file", help="Target assembly text file or object file")
+    parser.add_argument("cand_file", help="Candidate assembly text file or object file")
     parser.add_argument("--debug", action="store_true", help="Print debug info")
+    parser.add_argument("--stack-diffs", action="store_true", help="Preserve stack differences (for .o files)")
     args = parser.parse_args()
 
-    target_lines = read_lines(args.target_file)
-    cand_lines = read_lines(args.cand_file)
+    # Check if we're dealing with object files
+    if args.target_file.endswith('.o') and args.cand_file.endswith('.o'):
+        # Use objdump to read object files
+        target_lines = read_object_file(args.target_file, preserve_offsets=args.stack_diffs)
+        cand_lines = read_object_file(args.cand_file, preserve_offsets=args.stack_diffs)
+    else:
+        # Regular text file processing
+        target_lines = read_lines(args.target_file)
+        cand_lines = read_lines(args.cand_file)
 
     score, sha256_hash, match_percentage = score_files(target_lines, cand_lines, debug_mode=args.debug)
     
