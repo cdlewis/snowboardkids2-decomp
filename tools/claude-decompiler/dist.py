@@ -45,9 +45,9 @@ def read_object_file(path: str, preserve_offsets: bool = True) -> List[str]:
     import sys
     import os
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from objdump_exact import objdump_file
-    lines = objdump_file(path, preserve_offsets=preserve_offsets)
-    return [line.row for line in lines]
+    from objdump import objdump
+    lines = objdump(path)
+    return lines
 
 class Line:
     """Class to represent a disassembled instruction line with additional metadata"""
