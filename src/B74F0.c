@@ -82,6 +82,12 @@ typedef struct {
     s16 unkA8;
 } func_800BB71C_B795C_arg;
 
+typedef struct {
+    Node n;
+    u8 padding[0x7A];
+    s16 unkA6;
+} NodeWithPayload;
+
 extern func_80055E68_56A68_result *func_80055E68_56A68(u8);
 extern s32 func_800AFF44_9FE04(void);
 extern s32 D_8009A8A4_9B4A4;
@@ -226,4 +232,34 @@ void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0) {
     arg0->unk28 = freeGameStateMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B74F0", func_800BBA98);
+void func_800BBA98(void) {
+    s32 i;
+    NodeWithPayload *temp;
+
+    temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    if (temp != NULL) {
+        temp->unkA6 = 0;
+    }
+
+    temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    if (temp != NULL) {
+        temp->unkA6 = 2;
+    }
+
+    temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    if (temp != NULL) {
+        temp->unkA6 = 4;
+    }
+
+    temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    if (temp != NULL) {
+        temp->unkA6 = 6;
+    }
+
+    temp = scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    if (temp != NULL) {
+        temp->unkA6 = 8;
+    }
+
+    scheduleTask(&func_800BB808_B7A48, 0, 0, 0xC8);
+}
