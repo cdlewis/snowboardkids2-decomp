@@ -29,7 +29,7 @@ void func_8003F368_3FF68();
 void func_8003FD3C_4093C();
 void func_800574A0_580A0(s32);
 void func_80057564_58164(s32);
-void func_800609A0_615A0(s32);
+void func_800609A0_615A0(s32*);
 void func_800697F4_6A3F4(u8);
 void func_8006983C_6A43C(void*);
 void func_800B99E0(void*);
@@ -52,12 +52,12 @@ void func_8003EDA0_3F9A0(void) {
 }
 
 void func_8003EDF8_3F9F8() {
-    GameState* s0 = GameStateGet();
+    GameState* gs = GameStateGet();
 
-    func_800609A0_615A0((s32)s0 + 0x30);
+    func_800609A0_615A0(&gs->unk30);
 
-    s0->unk44 = (u8*)s0->unk28 + s0->unk28->unk0;
-    s0->unk48 = (u8*)s0->unk28 + s0->unk28->unk4;
+    gs->unk44 = (u8*)gs->unk28 + gs->unk28->unk0;
+    gs->unk48 = (u8*)gs->unk28 + gs->unk28->unk4;
 
     func_8006983C_6A43C(&func_8003EE50_3FA50);
 }
