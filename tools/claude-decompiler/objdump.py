@@ -58,7 +58,17 @@ def process_mips_reloc(reloc_row: str, repl: str, imm: str) -> str:
         return repl
         
     if imm not in ("0", "imm", "addr"):
-        repl += f"+{imm}" if int(imm, 0) > 0 else imm
+        try:
+            imm_val = int(imm, 0)
+            repl += f"+{imm}" if imm_val > 0 else imm
+        except ValueError:
+            # Handle cases where imm might be a hex string without 0x prefix
+            try:
+                imm_val = int(imm, 16)
+                repl += f"+0x{imm}" if imm_val > 0 else f"-0x{imm}"
+            except ValueError:
+                # If still can't parse, just append as-is
+                repl += f"+{imm}"
         
     if any(r in reloc_row for r in ["R_MIPS_LO16", "R_MIPS_LITERAL", "R_MIPS_GPREL16"]):
         return f"%lo({repl})"

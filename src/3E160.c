@@ -3,35 +3,36 @@
 #include "common.h"
 #include "gamestate.h"
 
-void func_80057564_58164(s32);
-extern s32 D_800AFF10_A7280;
-extern void func_80040608_41208();
-GameState* GameStateGet();
-s32 func_80055D34_56934(u8);
-void func_8006983C_6A43C(void*);
-extern s32 D_3FF010;
-extern s32 D_3FF910;
-extern void func_8003EDF8_3F9F8();
-void func_800697F4_6A3F4(u8);
-extern u8 D_800A24A0_A30A0;
-void func_800574A0_580A0(s32);
-extern void func_800404A8_410A8();
-void func_800609A0_615A0(s32);
-void func_8003EE50_3FA50();
-extern void func_80057564_58164(s32);
-extern void func_80040608_41208();
-extern void func_8004F1D4_4FDD4();
-void func_8003FD3C_4093C();
-extern void func_8003FB90_40790(void);
-extern void func_800401A0_40DA0();
-extern void func_8004D9D0_4E5D0();
-s32 func_80055E7C_56A7C();
-s32 func_80055EA4_56AA4();
-void func_800B99E0(void*);
 extern s32 D_34CB50;
 extern s32 D_34F7E0;
+extern s32 D_3FF010;
+extern s32 D_3FF910;
+extern s32 D_800AFF10_A7280;
+extern u8 D_800A24A0_A30A0;
+extern void func_8003EDF8_3F9F8();
 extern void func_8003EEEC_3FAEC();
+extern void func_8003FB90_40790(void);
+extern void func_800401A0_40DA0();
+extern void func_800404A8_410A8();
+extern void func_80040588_41188;
+extern void func_80040608_41208();
+extern void func_8004D9D0_4E5D0();
+extern void func_8004F1D4_4FDD4();
+extern void func_800574A0_580A0(s32);
+extern void func_80057564_58164(s32);
+
+s32 func_80055D34_56934(u8);
+s32 func_80055E7C_56A7C();
+s32 func_80055EA4_56AA4();
+void func_8003EE50_3FA50();
 void func_8003F368_3FF68();
+void func_8003FD3C_4093C();
+void func_800574A0_580A0(s32);
+void func_80057564_58164(s32);
+void func_800609A0_615A0(s32);
+void func_800697F4_6A3F4(u8);
+void func_8006983C_6A43C(void*);
+void func_800B99E0(void*);
 
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);
 
@@ -118,7 +119,7 @@ void func_8003FB00_40700(void) {
         return;
     }
 
-    if (state->unk10->unk176C & 0x100000) {
+    if (state->unk10[1].unkB84 & 0x100000) {
         D_800A24A0_A30A0 = 3;
         func_800574A0_580A0(8);
     } else {
@@ -281,8 +282,6 @@ void func_80040468_41068(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_800404A8_410A8);
 
-extern void func_800574A0_580A0(s32);
-extern void func_80040588_41188;
 void func_80040528_41128(void) {
     GameState* gs;
     s32 new_var;
