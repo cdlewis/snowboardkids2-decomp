@@ -9,11 +9,15 @@ typedef struct {
 } GameStateUnk28;
 
 typedef struct {
-    u8 padding[0xB84];
+    u8 padding[0x434];
+    s32 unk434;
+    s32 unk438;
+    s32 unk43C;
+    u8 padding2[0x744];
     s32 unkB84;
-    u8 padding2[0x3C];
+    u8 padding3[0x3C];
     u8 unkBC4;
-    u8 padding3[0x23];
+    u8 padding4[0x23];
 } GameStateUnk10;
 
 typedef struct {
@@ -38,7 +42,10 @@ typedef struct {
     u8 unk5C;
     u8 unk5D;
     u8 unk5E;
-    u8 PAD_6[0x1A];
+    u8 PAD_6[0x17];
+    u8 unk76;
+    u8 unk77;
+    u8 unk78;
     u8 unk79;
     u8 unk7A;
     s8 unk7B;

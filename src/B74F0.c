@@ -4,17 +4,6 @@
 #include "geometry.h"
 
 typedef struct {
-    u8 padding[0x3C];
-    s32 unk3C;
-    u8 padding2[0x38];
-    s32 unk78;
-    u8 padding3[0x1C];
-    s32 unk98;
-    u8 padding4[0x8];
-    u16 unkA4;
-} func_800BB3B8_B75F8_arg;
-
-typedef struct {
     u8 padding[0x24];
     s32 unk24;
     s32 unk28;
@@ -56,31 +45,27 @@ typedef struct
     void *unk24;
     void *unk28;
     void *unk2C;
-    s8 pad_30[0x2C];
+    s8 pad_30[0xC];
+    s32 unk3C;
+    s8 pad_40[0x10];
+    s8 unk50[0x0C];
     void *unk5C;
     void *unk60;
     void *unk64;
     void *unk68;
     s8 pad_6C[0xC];
-    s16 unk78;
-    s8 pad_7A[0x12];
-    s16 unk8C[6];
+    s32 unk78;
+    s8 pad_7C[0x10];
+    s32 unk8C;
+    s8 pad_90[0x4];
+    s32 unk94;
     s32 unk98;
     s32 unk9C;
     s32 unkA0;
     s16 unkA4;
     s16 unkA6;
-} func_800BB2B0_B74F0_arg;
-
-typedef struct {
-    u8 padding[0x78];
-    s32 unk78;
-    u8 padding2[0x10];
-    s32 unk8C[3];
-    u8 padding3[0xE];
-    s16 unkA6;
     s16 unkA8;
-} func_800BB71C_B795C_arg;
+} TrackHazard;
 
 typedef struct {
     Node n;
@@ -95,16 +80,19 @@ extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);
 extern void func_8006A724_6B324(void *, u16, u16);
 extern void func_8006B084_6BC84(void *, void *, void *);
-extern void func_800BB468_B76A8(void);
-extern void func_8005C60C_5D20C(void *, void *, u8 *);
 extern void func_800BB8B8_B7AF8;
+extern s32 func_8005C60C_5D20C(void *a0, s32 a1, GameStateUnk10 *a2);
+extern void func_800589A0_595A0(GameStateUnk10 *player);
+extern void func_80056B7C_5777C(void *a0, s32 a1);
 
+void func_800BB468_B76A8(TrackHazard *arg0);
+void func_800BB658_B7898(TrackHazard *arg0);
 void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0);
 void func_80063788_64388(s32, void *);
 void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *);
-void func_800BB71C_B795C(func_800BB71C_B795C_arg *);
+void func_800BB71C_B795C(TrackHazard *);
 
-void func_800BB2B0_B74F0(func_800BB2B0_B74F0_arg *arg0) {
+void func_800BB2B0_B74F0(TrackHazard *arg0) {
     GameState *gameState;
     s32 temp;
     u16 var_v1;
@@ -135,7 +123,7 @@ void func_800BB2B0_B74F0(func_800BB2B0_B74F0_arg *arg0) {
     setCallback((void (*)(void *))func_800BB468_B76A8);
 }
 
-void func_800BB3B8_B75F8(func_800BB3B8_B75F8_arg *arg0) {
+void func_800BB3B8_B75F8(TrackHazard *arg0) {
     s32 matrix[8];  // this should be matrix[9] but it causes stack issues
     s32 i;
 
@@ -155,19 +143,78 @@ void func_800BB3B8_B75F8(func_800BB3B8_B75F8_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/B74F0", func_800BB468_B76A8);
+void func_800BB468_B76A8(TrackHazard *arg0) {
+    GameState *gs;
+    s32 sp20;
+    s32 sp24;
+    int temp;
+    s32 sp28;
+    s32 flag;
+    s32 i;
 
-typedef struct {
-    u8 padding[0x50];
-    s32 unk50;
-    u8 padding2[0x48];
-    s32 unk9C;
-    s32 unkA0;
-    s16 unkA4;
-    s16 unkA6;
-    s16 unkA8;
-} func_800BB658_B7898_arg;
-void func_800BB658_B7898(func_800BB658_B7898_arg *arg0) {
+    gs = GameStateGet();
+    flag = 0;
+
+    for (i = 0; i < gs->unk5E; i++) {
+        temp = gs->unk10[i].unk434 - arg0->unk8C;
+        sp20 = temp;
+        sp28 = gs->unk10[i].unk43C - arg0->unk94;
+        sp20 = (0x27FFFFE < (((u32)sp20) + 0x13FFFFF)) ? (0) : (1);
+        sp24 = (0x13FFFFF < sp28) ? (0) : (1);
+        if ((sp20 & sp24) == 0) {
+            continue;
+        }
+
+        if ((s32)0xFF600000 < sp28) {
+            flag = 1;
+            break;
+        }
+    }
+
+    if (flag != 0) {
+        if (gs->unk76 == 0) {
+            if (arg0->unk9C != 0x60000) {
+                arg0->unk9C += 0x20000;
+            }
+
+            if (arg0->unkA4 != (-0x600)) {
+                arg0->unkA4 -= 0x100;
+            }
+        }
+
+        func_800BB3B8_B75F8(arg0);
+
+        if (gs->unk76 == 0) {
+            for (i = 0; i < gs->unk5E; i++) {
+                if (func_8005C60C_5D20C(&arg0->unk50, 0x12A000, &gs->unk10[i]) != 0) {
+                    if (func_8005C60C_5D20C(&arg0->unk50, 0x1E3000, &gs->unk10[i]) != 0) {
+                        func_800589A0_595A0(&gs->unk10[i]);
+                        func_80056B7C_5777C(&arg0->unk50, 0x2A);
+                        setCallback((void (*)(void *))func_800BB658_B7898);
+                    }
+                }
+            }
+        }
+    } else {
+        if (gs->unk76 == 0) {
+            if (arg0->unk9C > 0) {
+                arg0->unk9C += 0xFFFE0000;
+            }
+
+            if (arg0->unk9C < 0) {
+                arg0->unk9C += 0x20000;
+            }
+
+            if (arg0->unkA4 != 0) {
+                arg0->unkA4 += 0x100;
+            }
+        }
+
+        func_800BB3B8_B75F8(arg0);
+    }
+}
+
+void func_800BB658_B7898(TrackHazard *arg0) {
     GameState *gs;
     s32 i;
 
@@ -184,11 +231,11 @@ void func_800BB658_B7898(func_800BB658_B7898_arg *arg0) {
     func_800BB3B8_B75F8(arg0);
 
     for (i = 0; i < gs->unk5E; i++) {
-        func_8005C60C_5D20C(&arg0->unk50, (void *)0x12A000, &gs->unk10[i]);
+        func_8005C60C_5D20C(&arg0->unk50, 0x12A000, &gs->unk10[i]);
     }
 }
 
-void func_800BB71C_B795C(func_800BB71C_B795C_arg *arg0) {
+void func_800BB71C_B795C(TrackHazard *arg0) {
     u8 temp;
 
     if (GameStateGet()->PAD_6[0x17] == 0) {
@@ -256,7 +303,7 @@ void func_800BBA98(void) {
         temp->unkA6 = 6;
     }
 
-    temp = scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
     if (temp != NULL) {
         temp->unkA6 = 8;
     }
