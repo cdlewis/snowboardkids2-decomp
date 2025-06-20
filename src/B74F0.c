@@ -28,6 +28,20 @@ typedef struct {
 } func_80055E68_56A68_result;
 
 typedef struct {
+    Mat3x3 matrix;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
+    void *unk24;
+    void *unk28;
+    s32 unk2C;
+    u8 PAD[0xC];
+    s16 unk3C;
+    s16 unk3E;
+} func_800BB808_B7A48_arg;
+
+typedef struct {
     u16 unk0;
     u16 unk2;
     s32 unk4[3];
@@ -77,7 +91,9 @@ extern void func_8006A724_6B324(void *, u16, u16);
 extern void func_8006B084_6BC84(void *, void *, void *);
 extern void func_800BB468_B76A8(void);
 extern void func_8005C60C_5D20C(void *, void *, u8 *);
+extern void func_800BB8B8_B7AF8;
 
+void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0);
 void func_80063788_64388(s32, void *);
 void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *);
 void func_800BB71C_B795C(func_800BB71C_B795C_arg *);
@@ -187,7 +203,21 @@ void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *arg0) {
     arg0->unk28 = freeGameStateMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B74F0", func_800BB808_B7A48);
+void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
+    GameState *gs = GameStateGet();
+    arg0->unk24 = func_80055DC4_569C4(gs->unk5C);
+    arg0->unk28 = func_80055DF8_569F8(gs->unk5C);
+    arg0->unk2C = 0;
+    createYRotationMatrix(&arg0->matrix, 0x6C0);
+    arg0->unk14 = 0xDD196FEA;
+    arg0->unk18 = 0x0ABD4CA3;
+    arg0->unk1C = 0xE270649E;
+    arg0->unk3C = 0x12C;
+    arg0->unk3E = 0;
+    arg0->unk20 = (s32)(func_80055E68_56A68(gs->unk5C)) + 0xB0;
+    setCleanupCallback((void (*)(void *))&func_800BBA60_B7CA0);
+    setCallback(&func_800BB8B8_B7AF8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B74F0", func_800BB8B8_B7AF8);
 
