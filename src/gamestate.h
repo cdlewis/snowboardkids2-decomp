@@ -10,22 +10,22 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x434];
-    s32 unk434;
+    s32 worldPosX;
     s32 unk438;
-    s32 unk43C;
+    s32 worldPosZ;
     u8 padding2[0x744];
     s32 unkB84;
     u8 padding3[0x3C];
     u8 unkBC4;
     u8 padding4[0x23];
-} GameStateUnk10;
+} Player;
 
 typedef struct {
     /* 0x0 */ ALPlayer* audioPlayer0;
     u8 PAD_0[4];
     /* 0x8 */ ALPlayer* audioPlayer1;
     u8 PAD_1[0x2];
-    GameStateUnk10* unk10;
+    Player* players;
     u8 PAD_NEW_2[0x4];
     void* unk18;
     s32 unk1C;
@@ -39,11 +39,11 @@ typedef struct {
     u8* unk48;
     s32 unk4C;
     u8 PAD_5[0xC];
-    u8 unk5C;
+    u8 memoryPoolId;
     u8 unk5D;
-    u8 unk5E;
+    u8 numPlayers;
     u8 PAD_6[0x17];
-    u8 unk76;
+    u8 gamePaused;
     u8 unk77;
     u8 unk78;
     u8 unk79;

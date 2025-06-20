@@ -46,7 +46,7 @@ void func_8003EDA0_3F9A0(void) {
     GameState* temp_v0;
 
     temp_v0 = GameStateGet();
-    temp_v0->unk30 = func_80055D34_56934(temp_v0->unk5C);
+    temp_v0->unk30 = func_80055D34_56934(temp_v0->memoryPoolId);
     temp_v0->unk28 = dmaRequestAndUpdateStateWithSize(&D_3FF010, &D_3FF910, 0x16E0);
     func_8006983C_6A43C(&func_8003EDF8_3F9F8);
 }
@@ -68,14 +68,14 @@ void func_8003EE50_3FA50(void) {
     s32 offset;
     int new_var;
     new_var = 0;
-    if (gs->unk5E <= new_var) {
+    if (gs->numPlayers <= new_var) {
     } else {
         offset = 0;
         do {
-            func_800B99E0((void*)(((u8*)gs->unk10) + offset));
+            func_800B99E0((void*)(((u8*)gs->players) + offset));
             i++;
             offset += 0xBE8;
-        } while (i < gs->unk5E);
+        } while (i < gs->numPlayers);
     }
     gs->unk18 = dmaRequestAndUpdateStateWithSize(&D_34CB50, &D_34F7E0, 0x5E28);
     gs->unk1C = func_80055E7C_56A7C();
@@ -93,7 +93,7 @@ void func_8003F178_3FD78(void) {
     GameState* state = GameStateGet();
 
     if ((state->unk79 == 0) || (state->unk7A == 0xB)) {
-        s32 ret = func_80055D10_56910(state->unk5C);
+        s32 ret = func_80055D10_56910(state->memoryPoolId);
 
         if (state->unk7A == 0xB) {
             func_800574A0_580A0(0x20);
@@ -119,7 +119,7 @@ void func_8003FB00_40700(void) {
         return;
     }
 
-    if (state->unk10[1].unkB84 & 0x100000) {
+    if (state->players[1].unkB84 & 0x100000) {
         D_800A24A0_A30A0 = 3;
         func_800574A0_580A0(8);
     } else {
@@ -288,7 +288,7 @@ void func_80040528_41128(void) {
     gs = GameStateGet();
     gs->unk4C--;
     if (gs->unk4C == 0) {
-        new_var = gs->unk10->unkBC4 == 0;
+        new_var = gs->players->unkBC4 == 0;
         D_800A24A0_A30A0 = (new_var) ? 3 : 4;
         func_800574A0_580A0(0xA);
         setGameStateHandler(&func_80040588_41188);

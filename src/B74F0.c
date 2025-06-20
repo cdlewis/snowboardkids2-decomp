@@ -81,8 +81,8 @@ extern void *func_80055DF8_569F8(u8);
 extern void func_8006A724_6B324(void *, u16, u16);
 extern void func_8006B084_6BC84(void *, void *, void *);
 extern void func_800BB8B8_B7AF8;
-extern s32 func_8005C60C_5D20C(void *a0, s32 a1, GameStateUnk10 *a2);
-extern void func_800589A0_595A0(GameStateUnk10 *player);
+extern s32 func_8005C60C_5D20C(void *a0, s32 a1, Player *a2);
+extern void func_800589A0_595A0(Player *player);
 extern void func_80056B7C_5777C(void *a0, s32 a1);
 
 void func_800BB468_B76A8(TrackHazard *arg0);
@@ -102,12 +102,12 @@ void func_800BB2B0_B74F0(TrackHazard *arg0) {
     temp = func_800AFF44_9FE04();
 
     arg0->unkA6 += (temp & 1);
-    result = func_80055E68_56A68(gameState->unk5C);
+    result = func_80055E68_56A68(gameState->memoryPoolId);
     arg0->unk20 = &result->unk90;
-    result = func_80055E68_56A68(gameState->unk5C);
+    result = func_80055E68_56A68(gameState->memoryPoolId);
     arg0->unk5C = &result->unkA0;
-    arg0->unk24 = func_80055DC4_569C4(gameState->unk5C);
-    arg0->unk28 = func_80055DF8_569F8(gameState->unk5C);
+    arg0->unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
+    arg0->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
     arg0->unk2C = 0;
     arg0->unk98 = 0;
     arg0->unk9C = 0;
@@ -155,10 +155,10 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
     gs = GameStateGet();
     flag = 0;
 
-    for (i = 0; i < gs->unk5E; i++) {
-        temp = gs->unk10[i].unk434 - arg0->unk8C;
+    for (i = 0; i < gs->numPlayers; i++) {
+        temp = gs->players[i].worldPosX - arg0->unk8C;
         sp20 = temp;
-        sp28 = gs->unk10[i].unk43C - arg0->unk94;
+        sp28 = gs->players[i].worldPosZ - arg0->unk94;
         sp20 = (0x27FFFFE < (((u32)sp20) + 0x13FFFFF)) ? (0) : (1);
         sp24 = (0x13FFFFF < sp28) ? (0) : (1);
         if ((sp20 & sp24) == 0) {
@@ -172,7 +172,7 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
     }
 
     if (flag != 0) {
-        if (gs->unk76 == 0) {
+        if (gs->gamePaused == 0) {
             if (arg0->unk9C != 0x60000) {
                 arg0->unk9C += 0x20000;
             }
@@ -184,11 +184,11 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
 
         func_800BB3B8_B75F8(arg0);
 
-        if (gs->unk76 == 0) {
-            for (i = 0; i < gs->unk5E; i++) {
-                if (func_8005C60C_5D20C(&arg0->unk50, 0x12A000, &gs->unk10[i]) != 0) {
-                    if (func_8005C60C_5D20C(&arg0->unk50, 0x1E3000, &gs->unk10[i]) != 0) {
-                        func_800589A0_595A0(&gs->unk10[i]);
+        if (gs->gamePaused == 0) {
+            for (i = 0; i < gs->numPlayers; i++) {
+                if (func_8005C60C_5D20C(&arg0->unk50, 0x12A000, &gs->players[i]) != 0) {
+                    if (func_8005C60C_5D20C(&arg0->unk50, 0x1E3000, &gs->players[i]) != 0) {
+                        func_800589A0_595A0(&gs->players[i]);
                         func_80056B7C_5777C(&arg0->unk50, 0x2A);
                         setCallback((void (*)(void *))func_800BB658_B7898);
                     }
@@ -196,7 +196,7 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
             }
         }
     } else {
-        if (gs->unk76 == 0) {
+        if (gs->gamePaused == 0) {
             if (arg0->unk9C > 0) {
                 arg0->unk9C += 0xFFFE0000;
             }
@@ -230,8 +230,8 @@ void func_800BB658_B7898(TrackHazard *arg0) {
     arg0->unkA4 = 0;
     func_800BB3B8_B75F8(arg0);
 
-    for (i = 0; i < gs->unk5E; i++) {
-        func_8005C60C_5D20C(&arg0->unk50, 0x12A000, &gs->unk10[i]);
+    for (i = 0; i < gs->numPlayers; i++) {
+        func_8005C60C_5D20C(&arg0->unk50, 0x12A000, &gs->players[i]);
     }
 }
 
@@ -258,8 +258,8 @@ void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *arg0) {
 
 void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
     GameState *gs = GameStateGet();
-    arg0->unk24 = func_80055DC4_569C4(gs->unk5C);
-    arg0->unk28 = func_80055DF8_569F8(gs->unk5C);
+    arg0->unk24 = func_80055DC4_569C4(gs->memoryPoolId);
+    arg0->unk28 = func_80055DF8_569F8(gs->memoryPoolId);
     arg0->unk2C = 0;
     createYRotationMatrix(&arg0->matrix, 0x6C0);
     arg0->unk14 = 0xDD196FEA;
@@ -267,7 +267,7 @@ void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
     arg0->unk1C = 0xE270649E;
     arg0->unk3C = 0x12C;
     arg0->unk3E = 0;
-    arg0->unk20 = (s32)(func_80055E68_56A68(gs->unk5C)) + 0xB0;
+    arg0->unk20 = (s32)(func_80055E68_56A68(gs->memoryPoolId)) + 0xB0;
     setCleanupCallback((void (*)(void *))&func_800BBA60_B7CA0);
     setCallback(&func_800BB8B8_B7AF8);
 }
