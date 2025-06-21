@@ -147,7 +147,6 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
     GameState *gs;
     s32 sp20;
     s32 sp24;
-    int temp;
     s32 sp28;
     s32 flag;
     s32 i;
@@ -156,12 +155,9 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
     flag = 0;
 
     for (i = 0; i < gs->numPlayers; i++) {
-        temp = gs->players[i].worldPosX - arg0->unk8C;
-        sp20 = temp;
+        sp20 = gs->players[i].worldPosX - arg0->unk8C;
         sp28 = gs->players[i].worldPosZ - arg0->unk94;
-        sp20 = (0x27FFFFE < (((u32)sp20) + 0x13FFFFF)) ? (0) : (1);
-        sp24 = (0x13FFFFF < sp28) ? (0) : (1);
-        if ((sp20 & sp24) == 0) {
+        if (((0x27FFFFE >= ((u32)sp20) + 0x13FFFFF) & (0x13FFFFF >= sp28)) == 0) {
             continue;
         }
 
