@@ -78,7 +78,7 @@ extern s32 func_800AFF44_9FE04(void);
 extern s32 D_8009A8A4_9B4A4;
 extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);
-extern void func_8006A724_6B324(void *, u16, u16);
+extern void createCombinedRotationMatrix(void *, u16, u16);
 extern void func_8006B084_6BC84(void *, void *, void *);
 extern void func_800BB8B8_B7AF8;
 extern s32 func_8005C60C_5D20C(void *a0, s32 a1, Player *a2);
@@ -116,7 +116,7 @@ void func_800BB2B0_B74F0(TrackHazard *arg0) {
     arg0->unk64 = arg0->unk28;
     arg0->unk68 = arg0->unk2C;
     memcpy(&arg0->unk8C, &D_800BBB90_B7DD0[arg0->unkA6].unk4, 0xC);
-    func_8006A724_6B324(&arg0->unk78, D_800BBB90_B7DD0[arg0->unkA6].unk0, D_800BBB90_B7DD0[arg0->unkA6].unk2);
+    createCombinedRotationMatrix(&arg0->unk78, D_800BBB90_B7DD0[arg0->unkA6].unk0, D_800BBB90_B7DD0[arg0->unkA6].unk2);
     arg0->unkA4 = 0;
 
     setCleanupCallback((void (*)(void *))func_800BB7D0_B7A10);
@@ -242,7 +242,7 @@ void func_800BB71C_B795C(TrackHazard *arg0) {
         temp = func_800AFF44_9FE04() & 1;
         arg0->unkA6 = temp + (arg0->unkA6 & 0xFE);
         memcpy(&arg0->unk8C, &D_800BBB90_B7DD0[arg0->unkA6].unk4, 0xC);
-        func_8006A724_6B324(&arg0->unk78, D_800BBB90_B7DD0[arg0->unkA6].unk0, D_800BBB90_B7DD0[arg0->unkA6].unk2);
+        createCombinedRotationMatrix(&arg0->unk78, D_800BBB90_B7DD0[arg0->unkA6].unk0, D_800BBB90_B7DD0[arg0->unkA6].unk2);
         setCallback((void (*)(void *))&func_800BB468_B76A8);
     }
 }

@@ -17,7 +17,7 @@ void func_8000153C_213C(s32, void *);
 void func_800021B8_2DB8(s32, s16);
 void func_80002750_3350(s32);
 extern void func_8002F024_2FC24();
-void func_8006A838_6B438(void *, s32, s32);
+void createRotationMatrixYX(void *, s32, s32);
 void func_8006B084_6BC84(void *, void *, void *);
 extern u8 D_8009A870_9B470[];
 extern void func_8002F72C_3032C();
@@ -204,7 +204,7 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     memcpy(temp_s3, &D_8009A870_9B470, 0x20);
     memcpy(&sp30, temp_s3, 0x20);
     memcpy(new_var, &sp30, 0x20);
-    func_8006A838_6B438(&sp10, 0x1000, 0x800);
+    createRotationMatrixYX(&sp10, 0x1000, 0x800);
     createZRotationMatrix((s16(*)[3])(&sp30), 0x1F00);
     func_8006B084_6BC84(&sp10, &sp30, temp_s3);
     arg0->unk60 = 0;
