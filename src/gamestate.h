@@ -33,8 +33,13 @@ typedef struct {
     u8 PAD_2[0x4];
     GameStateUnk28* unk28;
     u8 PAD_3[0x4];
-    s32 unk30;
-    u8 PAD_4[0x10];
+    // Start Embedded GameData
+    u16* gameDataStart;
+    u16* gameDataSection1Data;
+    u16* gameDataSection2Data;
+    u16* gameDataSection3Data;
+    u16 gameDataFinalValue;
+    // End Embedded Gamedata
     u8* unk44;
     u8* unk48;
     s32 unk4C;

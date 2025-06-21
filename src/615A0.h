@@ -20,3 +20,13 @@ typedef struct {
 } func_80063824_64424_arg;
 
 void func_800635CC_641CC(s32 arg0, func_80063824_64424_arg* arg1);
+
+typedef struct {
+    u16* dataStart;
+    u16* section1Data;
+    u16* section2Data;
+    u16* section3Data;
+    u16 finalValue;
+} GameDataLayout;
+
+void parseGameDataLayout(GameDataLayout* gameData);

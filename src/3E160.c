@@ -1,3 +1,5 @@
+#include "56910.h"
+#include "615A0.h"
 #include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
@@ -21,7 +23,6 @@ extern void func_8004F1D4_4FDD4();
 extern void func_800574A0_580A0(s32);
 extern void func_80057564_58164(s32);
 
-s32 func_80055D34_56934(u8);
 s32 func_80055E7C_56A7C();
 s32 func_80055EA4_56AA4();
 void func_8003EE50_3FA50();
@@ -29,7 +30,6 @@ void func_8003F368_3FF68();
 void func_8003FD3C_4093C();
 void func_800574A0_580A0(s32);
 void func_80057564_58164(s32);
-void func_800609A0_615A0(s32*);
 void func_800697F4_6A3F4(u8);
 void func_8006983C_6A43C(void*);
 void func_800B99E0(void*);
@@ -46,7 +46,7 @@ void func_8003EDA0_3F9A0(void) {
     GameState* temp_v0;
 
     temp_v0 = GameStateGet();
-    temp_v0->unk30 = func_80055D34_56934(temp_v0->memoryPoolId);
+    temp_v0->gameDataStart = func_80055D34_56934(temp_v0->memoryPoolId);
     temp_v0->unk28 = dmaRequestAndUpdateStateWithSize(&D_3FF010, &D_3FF910, 0x16E0);
     func_8006983C_6A43C(&func_8003EDF8_3F9F8);
 }
@@ -54,7 +54,7 @@ void func_8003EDA0_3F9A0(void) {
 void func_8003EDF8_3F9F8() {
     GameState* gs = GameStateGet();
 
-    func_800609A0_615A0(&gs->unk30);
+    parseGameDataLayout(&gs->gameDataStart);
 
     gs->unk44 = (u8*)gs->unk28 + gs->unk28->unk0;
     gs->unk48 = (u8*)gs->unk28 + gs->unk28->unk4;

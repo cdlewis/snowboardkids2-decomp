@@ -139,28 +139,25 @@ typedef struct {
     s32 unk30;
 } func_80066444_67044_arg1;
 
-void func_800609A0_615A0(u32* arg0) {
-    u16 temp;
-    u32 addr;
-    int new_var;
+void parseGameDataLayout(GameDataLayout* gameData) {
+    u16* parser;
+    u16 section1Count, section2Count, configValue;
 
-    addr = arg0[0];
-    temp = *((u16*)addr);
-    new_var = temp * 6;
-    addr += 2;
-    arg0[1] = addr;
+    parser = gameData->dataStart;
+    section1Count = parser[0];
+    parser = parser + 1;
+    gameData->section1Data = parser;
 
-    addr += new_var;
-    temp = *((u16*)addr);
-    addr += 2;
-    arg0[2] = addr;
+    parser = parser + section1Count * 3;
+    section2Count = parser[0];
+    parser = parser + 1;
+    gameData->section2Data = parser;
 
-    addr += temp * 8;
-    temp = *((u16*)addr);
-    addr += 2;
-    arg0[3] = addr;
-
-    *((u16*)(((u8*)arg0) + 0x10)) = temp;
+    parser = parser + section2Count * 4;
+    configValue = parser[0];
+    parser = parser + 1;
+    gameData->section3Data = parser;
+    gameData->finalValue = configValue;
 }
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800609E8_615E8);
