@@ -10,31 +10,6 @@
 
 USE_OVERLAY(_9FDF0)
 
-void setGameStateHandler(void*);
-s32* func_80069854_6A454(s32);
-extern s32 D_215D70;
-extern s32 D_216290;
-extern void func_80068060_68C60();
-extern void func_80066474_67074();
-void func_800697CC_6A3CC(void*);
-s32 func_80069810_6A410();
-extern void func_800680C4_68CC4();
-extern void func_80065DD8_669D8();
-void func_800680F0_68CF0(ALPlayer*);
-void func_8006318C_63D8C(void*);
-extern s32* gRegionAllocPtr;
-s32 func_80070140_70D40(void*);
-extern void func_800659E4_665E4;
-void func_80063A94_64694(void*);
-void func_800648EC_654EC();
-s32 func_80070140_70D40(void*);
-extern void func_800638C0_644C0();
-extern void func_8006395C_6455C();
-extern void func_80065150_65D50();
-extern void func_800653E0_65FE0();
-extern void func_80065670_66270();
-extern void func_800670D4_67CD4();
-
 typedef struct {
     u8 padding[0x20];
     s32* unk20;
@@ -43,16 +18,6 @@ typedef struct {
     u8 padding2[0x3];
     s8 unk37;
 } func_80065900_66500_arg1;
-
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    u8 padding[0x18];
-    struct {
-        u8 padding[0xC];
-        void* unkC;
-    }* unk20;
-} func_80063728_64328_arg;
 
 typedef struct {
     u8 padding[0x10];
@@ -82,55 +47,19 @@ typedef struct {
     u8 unk15A;
 } D_800AB068_A23D8_arg;
 
-extern D_800AB068_A23D8_arg* D_800AB068_A23D8;
-
 typedef struct {
-    u8 padding[0x20];
-    struct {
-        u8 padding[0x8];
-        s32 unk8;
-    }* unk20;
-} func_80064E34_65A34_arg;
-
-typedef struct {
-    u8 padding[0x20];
-    struct {
-        u8 padding[0x8];
-        s32 unk8;
-    }* unk20;
-} func_800636C8_642C8_arg;
-
-typedef struct {
-    u8 padding[0x14];
+    u8 padding[0x10];
+    s32 unk10;
     s32 unk14;
-    u8 padding2[0x8];
-    struct {
-        u8 padding[0xC];
-        s32 unkC;
-    }* unk20;
-} func_8006411C_64D1C_arg;
-
-typedef struct {
-    u8 padding[0x30];
-    s32 unk30;
-} func_80065DA8_669A8_arg;
+    s8 unk18;
+    s8 unk19;
+    s8 unk1A;
+} func_80067F0C_68B0C_arg;
 
 typedef struct {
     s16 unk0;
     u8 _pad[0x22];
 } func_80062C98_63898_arg;
-
-void func_80062CF0_638F0();
-
-typedef struct {
-    u8 padding[0x20];
-    struct {
-        s32 padding;
-        s32 unk4;
-        u8 padding2[0x4];
-        s32 unkC;
-    }* unk20;
-} func_800630A4_63CA4_arg;
 
 typedef struct {
     u8 padding[0x1C];
@@ -138,6 +67,31 @@ typedef struct {
     u8 padding2[0x10];
     s32 unk30;
 } func_80066444_67044_arg1;
+
+extern D_800AB068_A23D8_arg* D_800AB068_A23D8;
+extern s32 D_215D70;
+extern s32 D_216290;
+extern s32* gRegionAllocPtr;
+extern void func_800638C0_644C0();
+extern void func_8006395C_6455C();
+extern void func_80065150_65D50();
+extern void func_800653E0_65FE0();
+extern void func_80065670_66270();
+extern void func_800659E4_665E4;
+extern void func_80065DD8_669D8();
+extern void func_80066474_67074();
+extern void func_800670D4_67CD4();
+extern void func_80068060_68C60();
+extern void func_800680C4_68CC4();
+s32 func_80069810_6A410();
+s32 func_80070140_70D40(void*);
+s32* func_80069854_6A454(s32);
+void func_80062CF0_638F0();
+void func_8006318C_63D8C(void*);
+void func_80063A94_64694(void*);
+void func_800648EC_654EC();
+void func_800680F0_68CF0(ALPlayer*);
+void func_800697CC_6A3CC(void*);
 
 void parseGameDataLayout(GameDataLayout* gameData) {
     u16* parser;
@@ -200,7 +154,7 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80062CD0_638D0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80062CF0_638F0);
 
-void func_8006300C_63C0C(func_80063824_64424_arg* arg0) {
+void func_8006300C_63C0C(DisplayListObject* arg0) {
     s32* temp_v1;
 
     func_80062CF0_638F0();
@@ -212,7 +166,7 @@ void func_8006300C_63C0C(func_80063824_64424_arg* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063058_63C58);
 
-void func_800630A4_63CA4(func_800630A4_63CA4_arg* arg0) {
+void func_800630A4_63CA4(DisplayListObject* arg0) {
     s32* temp_v1;
 
     func_80062CF0_638F0();
@@ -226,7 +180,7 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800630F0_63CF0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_8006318C_63D8C);
 
-void func_800634E8_640E8(func_800630A4_63CA4_arg* arg0) {
+void func_800634E8_640E8(DisplayListObject* arg0) {
     s32* temp_v1;
 
     func_8006318C_63D8C(arg0);
@@ -243,7 +197,7 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80063580_64180);
 void func_80063534_64134();
 void func_80063580_64180();
 
-void func_800635CC_641CC(s32 arg0, func_80063824_64424_arg* arg1) {
+void func_800635CC_641CC(s32 arg0, DisplayListObject* arg1) {
     arg1->unk30 = 0;
     if (arg1->unk20->unk4 != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &func_800634E8_640E8, arg1);
@@ -256,7 +210,7 @@ void func_800635CC_641CC(s32 arg0, func_80063824_64424_arg* arg1) {
     }
 }
 
-void func_80063668_64268(func_80063824_64424_arg* arg0) {
+void func_80063668_64268(DisplayListObject* arg0) {
     s32* temp_v1;
 
     if (func_80070140_70D40((void*)((s32)arg0 + 0x14)) == NULL) {
@@ -268,7 +222,7 @@ void func_80063668_64268(func_80063824_64424_arg* arg0) {
     }
 }
 
-void func_800636C8_642C8(func_800636C8_642C8_arg* arg0) {
+void func_800636C8_642C8(DisplayListObject* arg0) {
     s32* temp_v1;
 
     if (func_80070140_70D40((void*)(s32)arg0 + 0x14) == 0) {
@@ -280,7 +234,7 @@ void func_800636C8_642C8(func_800636C8_642C8_arg* arg0) {
     }
 }
 
-void func_80063728_64328(func_80063728_64328_arg* arg0) {
+void func_80063728_64328(DisplayListObject* arg0) {
     s32* temp_v1;
 
     if (func_80070140_70D40((void*)((s32)arg0 + 0x14)) == NULL) {
@@ -318,7 +272,7 @@ void func_80063788_64388(s32 arg0, func_80063788_64388_arg* arg1) {
     }
 }
 
-void buildDisplayListSegment(func_80063824_64424_arg* arg0) {
+void buildDisplayListSegment(DisplayListObject* arg0) {
     s32* temp_a0;
     s32 v1;
 
@@ -347,19 +301,7 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800638C0_644C0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_8006395C_6455C);
 
-typedef struct {
-    u8 padding[0x20];
-    struct {
-        u8 : 0x4;
-        s32 unk4;
-        s32 unk8;
-        s32 unkC;
-    }* unk20;
-    u8 padding2[0xC];
-    s32 unk30;
-} func_800639F8_645F8_arg;
-
-void func_800639F8_645F8(s32 arg0, func_800639F8_645F8_arg* arg1) {
+void func_800639F8_645F8(s32 arg0, DisplayListObject* arg1) {
     arg1->unk30 = 0;
     if (arg1->unk20->unk4 != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &buildDisplayListSegment, arg1);
@@ -378,7 +320,7 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_8006405C_64C5C);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800640BC_64CBC);
 
-void func_8006411C_64D1C(func_8006411C_64D1C_arg* arg0) {
+void func_8006411C_64D1C(DisplayListObject* arg0) {
     s32* temp_v1;
 
     if (func_80070140_70D40((void*)(s32)arg0 + 0x14) == 0) {
@@ -408,7 +350,7 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800648EC_654EC);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80064CF4_658F4);
 
-void func_80064E34_65A34(func_80064E34_65A34_arg* arg0) {
+void func_80064E34_65A34(DisplayListObject* arg0) {
     s32* temp_a1;
     func_800648EC_654EC();
 
@@ -487,7 +429,7 @@ void func_80065900_66500(s32 arg0, func_80065900_66500_arg1* arg1, s32 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800659E4_665E4);
 
-void func_80065DA8_669A8(s32 arg0, func_80065DA8_669A8_arg* arg1) {
+void func_80065DA8_669A8(s32 arg0, DisplayListObject* arg1) {
     arg1->unk30 = 0;
     debugEnqueueCallback(arg0 & 0xFFFF, 0, &func_800659E4_665E4, arg1);
 }
@@ -521,14 +463,6 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800677F0_683F0);
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80067EDC_68ADC);
 
-typedef struct {
-    u8 padding[0x10];
-    s32 unk10;
-    s32 unk14;
-    s8 unk18;
-    s8 unk19;
-    s8 unk1A;
-} func_80067F0C_68B0C_arg;
 void func_80067F0C_68B0C(func_80067F0C_68B0C_arg* arg0, void* arg1, s32 arg2) {
     func_80019280_19E80_return sp10;
 

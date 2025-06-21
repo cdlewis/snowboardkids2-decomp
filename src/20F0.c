@@ -591,7 +591,7 @@ s32 func_80002484_3084(func_80002040_2C40_arg* arg0, s16 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_80002750_3350);
 
-void func_80002B50_3750(func_80002B50_3750_arg* arg0, func_80063824_64424_arg* arg1) {
+void func_80002B50_3750(func_80002B50_3750_arg* arg0, DisplayListObject* arg1) {
     if ((arg0 != NULL) && (arg0->unk88 != 0) && (arg0->unk3F != 0)) {
         func_800635CC_641CC(arg0->unk10->unk16, arg1);
     }

@@ -155,7 +155,7 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F36C_2FF6C);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F3E4_2FFE4);
 
-void func_8002F518_30118(func_80063824_64424_arg *s0) {
+void func_8002F518_30118(DisplayListObject *s0) {
     volatile u8 padding[0x20];
     u32 new_var;
     GameState *s1 = GameStateGet();
@@ -183,7 +183,7 @@ void func_8002F518_30118(func_80063824_64424_arg *s0) {
 }
 
 void func_8002F5C8_301C8(void *untypedArg) {
-    func_80063824_64424_arg *arg0 = (func_80063824_64424_arg *)untypedArg;
+    DisplayListObject *arg0 = (DisplayListObject *)untypedArg;
     volatile u8 pad[0x20];
     if (GameStateGet()->unk5C5 == 1) {
         setCallback(&func_8002F290_2FE90);

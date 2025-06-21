@@ -1,7 +1,9 @@
 #include "common.h"
 
 typedef struct {
-    u8 padding[0x20];
+    s32 unk0;
+    s32 unk4;
+    u8 padding[0x18];
     struct {
         u8 padding[0x4];
         s32 unk4;
@@ -17,9 +19,9 @@ typedef struct {
     u32 unk50;
     u8 padding5[0xC];
     u8 unk60;
-} func_80063824_64424_arg;
+} DisplayListObject;
 
-void func_800635CC_641CC(s32 arg0, func_80063824_64424_arg* arg1);
+void func_800635CC_641CC(s32 arg0, DisplayListObject* arg1);
 
 typedef struct {
     u16* dataStart;
