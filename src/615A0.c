@@ -294,7 +294,29 @@ void func_80063728_64328(func_80063728_64328_arg* arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_80063788_64388);
+typedef struct {
+    u8 padding[0x20];
+    struct {
+        s32 unk0;
+        s32 unk4;
+        s32 unk8;
+        s32 unkC;
+    }* unk20;
+    u8 padding2[0xC];
+    s32 unk30;
+} func_80063788_64388_arg;
+void func_80063788_64388(s32 arg0, func_80063788_64388_arg* arg1) {
+    arg1->unk30 = 0;
+    if (arg1->unk20->unk4 != 0) {
+        debugEnqueueCallback(arg0, 1, &func_80063668_64268, arg1);
+    }
+    if (arg1->unk20->unk8 != 0) {
+        debugEnqueueCallback(arg0, 3, &func_800636C8_642C8, arg1);
+    }
+    if (arg1->unk20->unkC != 0) {
+        debugEnqueueCallback(arg0, 5, &func_80063728_64328, arg1);
+    }
+}
 
 void buildDisplayListSegment(func_80063824_64424_arg* arg0) {
     s32* temp_a0;
