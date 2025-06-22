@@ -248,18 +248,7 @@ void func_80063728_64328(DisplayListObject* arg0) {
     }
 }
 
-typedef struct {
-    u8 padding[0x20];
-    struct {
-        s32 unk0;
-        s32 unk4;
-        s32 unk8;
-        s32 unkC;
-    }* unk20;
-    u8 padding2[0xC];
-    s32 unk30;
-} func_80063788_64388_arg;
-void func_80063788_64388(s32 arg0, func_80063788_64388_arg* arg1) {
+void func_80063788_64388(s32 arg0, DisplayListObject* arg1) {
     arg1->unk30 = 0;
     if (arg1->unk20->unk4 != 0) {
         debugEnqueueCallback(arg0, 1, &func_80063668_64268, arg1);

@@ -86,7 +86,7 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F504_70104);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F550_70150);
 
-void *func_8006F580_70180(s32 size) {
+void *arenaAlloc16(s32 size) {
     void *result;
     u32 alignedSize = (size + 0xF) & ~0xF;
     u32 *cur = (u32 *)D_800A3564_A4164;

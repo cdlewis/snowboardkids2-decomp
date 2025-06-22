@@ -1,3 +1,4 @@
+arenaAlloc16 = 0x8006F580;
 parseGameDataLayout = 0x800609A0;
 D_80091250_91E50 = 0x80091250; // type:s32 size:0xC0
 D_800BBB90_B7DD0 = 0x800BBB90; // type:s32 rom:0xB7DD0 size:0x122890
