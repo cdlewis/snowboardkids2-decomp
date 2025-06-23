@@ -69,9 +69,13 @@ typedef struct {
 } func_80066444_67044_arg1;
 
 extern D_800AB068_A23D8_arg* D_800AB068_A23D8;
+extern Gfx* gRegionAllocPtr;
+extern s16 D_800AB060_A23D0;
 extern s32 D_215D70;
 extern s32 D_216290;
-extern Gfx* gRegionAllocPtr;
+extern s32 D_800A2D40_A3940;
+extern s32 D_800A2D44_A3944;
+extern s32 D_800A2D48_A3948;
 extern void func_800638C0_644C0();
 extern void func_8006395C_6455C();
 extern void func_80065150_65D50();
@@ -83,15 +87,18 @@ extern void func_80066474_67074();
 extern void func_800670D4_67CD4();
 extern void func_80068060_68C60();
 extern void func_800680C4_68CC4();
+extern void guLookAtReflect(Mtx* m, LookAt* l, float xEye, float yEye, float zEye, float xAt, float yAt, float zAt, float xUp, float yUp, float zUp);
+
 s32 func_80069810_6A410();
 s32 func_80070140_70D40(void*);
 s32* func_80069854_6A454(s32);
 void func_80062CF0_638F0();
-void func_8006318C_63D8C(void*);
+void func_8006318C_63D8C(DisplayListObject*);
 void func_80063A94_64694(void*);
 void func_800648EC_654EC();
 void func_800680F0_68CF0(ALPlayer*);
 void func_800697CC_6A3CC(void*);
+void* func_8006C130_6CD30(void*, LookAt*);
 
 void parseGameDataLayout(GameDataLayout* gameData) {
     u16* parser;
@@ -168,7 +175,81 @@ void func_800630A4_63CA4(DisplayListObject* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800630F0_63CF0);
 
-INCLUDE_ASM("asm/nonmatchings/615A0", func_8006318C_63D8C);
+void func_8006318C_63D8C(DisplayListObject* arg0) {
+    Mtx sp30;
+    f32 sp70;
+    f32 sp74;
+    f32 sp78;
+    f32 sp7C;
+    f32 sp80;
+    f32 sp84;
+    LookAt* temp_v0;
+
+    if (arg0->unk30 == NULL) {
+        arg0->unk30 = (s32)arenaAlloc16(0x40);
+        if (arg0->unk30 == NULL) {
+            return;
+        }
+        func_8006C130_6CD30(arg0, (LookAt*)arg0->unk30);
+    }
+
+    if (arg0->unk20->unk0 & 1) {
+        temp_v0 = (LookAt*)arenaAlloc16(0x20);
+        if (temp_v0 == NULL) {
+            return;
+        }
+
+        matrixToEulerAngles((s32*)(D_800AB068_A23D8) + 0x48, (s32*)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
+        guLookAtReflect(&sp30, temp_v0, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
+        gSPLookAt(gRegionAllocPtr++, temp_v0);
+    }
+
+    if (D_800AB060_A23D0 != 3) {
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+
+        D_800AB060_A23D0 = 3;
+
+        if (arg0->unk24 != 0) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        }
+
+        if (arg0->unk28 != 0) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        }
+
+        if (arg0->unk2C != 0) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        }
+
+        D_800A2D40_A3940 = arg0->unk24;
+        D_800A2D44_A3944 = arg0->unk28;
+        D_800A2D48_A3948 = arg0->unk2C;
+    } else {
+        if (arg0->unk24 != D_800A2D40_A3940) {
+            if (arg0->unk24 != 0) {
+                gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+            }
+            D_800A2D40_A3940 = arg0->unk24;
+        }
+
+        if (arg0->unk28 != D_800A2D44_A3944) {
+            if (arg0->unk28 != 0) {
+                gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+            }
+            D_800A2D44_A3944 = arg0->unk28;
+        }
+
+        if (arg0->unk2C != D_800A2D48_A3948) {
+            if (arg0->unk2C != 0) {
+                gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+            }
+            D_800A2D48_A3948 = arg0->unk2C;
+        }
+    }
+
+    gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+}
 
 void func_800634E8_640E8(DisplayListObject* arg0) {
     func_8006318C_63D8C(arg0);
@@ -410,7 +491,7 @@ void func_80067F5C_68B5C(func_80067F5C_68B5C_arg* arg0, s32 arg1, s32 arg2, s32 
 void func_80067FB0_68BB0(void) {
     void** temp_s0;
 
-    temp_s0 = func_80069854_6A454(4);
+    temp_s0 = (void**)func_80069854_6A454(4);
     LOAD_OVERLAY(_9FDF0)
     *temp_s0 = dmaRequestAndUpdateStateWithSize(&D_215D70, &D_216290, 0x918);
     setGameStateHandler(&func_80068060_68C60);

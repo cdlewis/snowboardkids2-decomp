@@ -4,13 +4,16 @@ typedef struct {
     s32 unk0;
     s32 unk4;
     u8 padding[0x18];
-    struct {
-        u8 padding[0x4];
+    struct
+    {
+        s32 unk0;
         s32 unk4;
         s32 unk8;
         s32 unkC;
     }* unk20;
-    u8 padding2[0xA];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
     s32 unk30;
     u8 padding3[0x7];
     u8 unk3B;
