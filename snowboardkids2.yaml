@@ -40,7 +40,7 @@ options:
 
   symbol_name_format: $VRAM_$ROM
   migrate_rodata_to_functions: True
-  gfx_ucode: f3dex
+  gfx_ucode: f3dex2
 
   string_encoding: ASCII
   data_string_encoding: ASCII

@@ -136,7 +136,7 @@ $(BUILD_DIR)/lib/libmus.a: $(LIBMUS)
 	@mkdir -p $$(dirname $@)
 	@cp $< $@
 
-LIBULTRA_FLAGS = VERSION=J TARGET=libgultra_rom COMPARE=0 MODERN_LD=1
+LIBULTRA_FLAGS = VERSION=J TARGET=libgultra_rom COMPARE=0 MODERN_LD=1 GBIDEFINE="DF3DEX_GBI_2=1"
 $(LIBULTRA):
 	$(LIBULTRA_FLAGS) $(MAKE) -C lib/ultralib setup
 	$(LIBULTRA_FLAGS) $(MAKE) -C lib/ultralib

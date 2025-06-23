@@ -71,7 +71,7 @@ typedef struct {
 extern D_800AB068_A23D8_arg* D_800AB068_A23D8;
 extern s32 D_215D70;
 extern s32 D_216290;
-extern s32* gRegionAllocPtr;
+extern Gfx* gRegionAllocPtr;
 extern void func_800638C0_644C0();
 extern void func_8006395C_6455C();
 extern void func_80065150_65D50();
@@ -155,25 +155,15 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_80062CD0_638D0);
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80062CF0_638F0);
 
 void func_8006300C_63C0C(DisplayListObject* arg0) {
-    s32* temp_v1;
-
     func_80062CF0_638F0();
-    temp_v1 = gRegionAllocPtr;
-    temp_v1[0] = 0xDE000000;
-    gRegionAllocPtr = temp_v1 + 2;
-    temp_v1[1] = (s32)arg0->unk20->unk4;
+    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk4);
 }
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063058_63C58);
 
 void func_800630A4_63CA4(DisplayListObject* arg0) {
-    s32* temp_v1;
-
     func_80062CF0_638F0();
-    temp_v1 = gRegionAllocPtr;
-    temp_v1[0] = 0xDE000000;
-    gRegionAllocPtr = temp_v1 + 2;
-    temp_v1[1] = (s32)arg0->unk20->unkC;
+    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unkC);
 }
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800630F0_63CF0);
@@ -181,13 +171,8 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800630F0_63CF0);
 INCLUDE_ASM("asm/nonmatchings/615A0", func_8006318C_63D8C);
 
 void func_800634E8_640E8(DisplayListObject* arg0) {
-    s32* temp_v1;
-
     func_8006318C_63D8C(arg0);
-    temp_v1 = gRegionAllocPtr;
-    temp_v1[0] = 0xDE000000;
-    gRegionAllocPtr = temp_v1 + 2;
-    temp_v1[1] = (s32)arg0->unk20->unk4;
+    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk4);
 }
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80063534_64134);
@@ -211,26 +196,16 @@ void func_800635CC_641CC(s32 arg0, DisplayListObject* arg1) {
 }
 
 void func_80063668_64268(DisplayListObject* arg0) {
-    s32* temp_v1;
-
     if (func_80070140_70D40((void*)((s32)arg0 + 0x14)) == NULL) {
         func_8006318C_63D8C(arg0);
-        temp_v1 = gRegionAllocPtr;
-        temp_v1[0] = 0xDE000000;
-        gRegionAllocPtr = temp_v1 + 2;
-        temp_v1[1] = (s32)arg0->unk20->unk4;
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk4);
     }
 }
 
 void func_800636C8_642C8(DisplayListObject* arg0) {
-    s32* temp_v1;
-
     if (func_80070140_70D40((void*)(s32)arg0 + 0x14) == 0) {
         func_8006318C_63D8C(arg0);
-        temp_v1 = gRegionAllocPtr;
-        temp_v1[0] = (s32)gsSPDisplayList(0);
-        gRegionAllocPtr = temp_v1 + 2;
-        temp_v1[1] = (s32)arg0->unk20->unk8;
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk8);
     }
 }
 
@@ -239,12 +214,7 @@ void func_80063728_64328(DisplayListObject* arg0) {
 
     if (func_80070140_70D40((void*)((s32)arg0 + 0x14)) == NULL) {
         func_8006318C_63D8C(arg0);
-
-        temp_v1 = gRegionAllocPtr;
-        temp_v1[0] = (s32)gsSPDisplayList(0);
-
-        gRegionAllocPtr = (void*)temp_v1 + 8;
-        temp_v1[1] = (s32)arg0->unk20->unkC;
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unkC);
     }
 }
 
@@ -262,27 +232,14 @@ void func_80063788_64388(s32 arg0, DisplayListObject* arg1) {
 }
 
 void buildDisplayListSegment(DisplayListObject* arg0) {
-    s32* temp_a0;
-    s32 v1;
-
     if (func_80070140_70D40((void*)((s32)arg0) + 0x14) == 0) {
         func_8006318C_63D8C(arg0);
-        temp_a0 = gRegionAllocPtr;
-        gRegionAllocPtr = temp_a0 + 2;
 
-        temp_a0[0x0] = (s32)gsDPPipeSync();
-        gRegionAllocPtr = temp_a0 + 0x4;
-        temp_a0[0x1] = (s32)gsDPNoOp();
+        gDPPipeSync(gRegionAllocPtr++);
 
-        temp_a0[0x2] = (s32)gsDPSetEnvColor(0, 0, 0, 0);
+        gDPSetColor(gRegionAllocPtr++, 0xFB, arg0->unk3B | ~0xFF);
 
-        v1 = arg0->unk3B;
-
-        temp_a0[0x4] = (s32)gsSPDisplayList(0x0);
-        v1 = v1 | (~0xFF);
-        temp_a0[0x3] = v1;
-        gRegionAllocPtr = temp_a0 + 0x6;
-        temp_a0[0x5] = (s32)arg0->unk20->unk4;
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk4);
     }
 }
 
@@ -310,14 +267,9 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_8006405C_64C5C);
 INCLUDE_ASM("asm/nonmatchings/615A0", func_800640BC_64CBC);
 
 void func_8006411C_64D1C(DisplayListObject* arg0) {
-    s32* temp_v1;
-
     if (func_80070140_70D40((void*)(s32)arg0 + 0x14) == 0) {
         func_80063A94_64694(arg0);
-        temp_v1 = gRegionAllocPtr;
-        temp_v1[0] = (s32)gsSPDisplayList(0x0);
-        gRegionAllocPtr = temp_v1 + 2;
-        temp_v1[1] = (s32)arg0->unk20->unkC;
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unkC);
     }
 }
 
@@ -340,30 +292,13 @@ INCLUDE_ASM("asm/nonmatchings/615A0", func_800648EC_654EC);
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80064CF4_658F4);
 
 void func_80064E34_65A34(DisplayListObject* arg0) {
-    s32* temp_a1;
     func_800648EC_654EC();
 
-    temp_a1 = gRegionAllocPtr;
-    temp_a1[0x0] = (s32)gsSPDisplayList(0x0);
+    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk8);
 
-    gRegionAllocPtr = temp_a1 + 0x2;
-    temp_a1[0x1] = arg0->unk20->unk8;
+    gSPLightColor(gRegionAllocPtr++, LIGHT_1, D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8);
 
-    gRegionAllocPtr = temp_a1 + 0x4;
-    temp_a1[0x2] = (s32)gsMoveWd(0xA, 0, 0);
-    temp_a1[0x3] = D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8;
-
-    gRegionAllocPtr = temp_a1 + 0x6;
-    temp_a1[0x4] = (s32)gsMoveWd(0xA, 0x4, 0);
-    temp_a1[0x5] = D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8;
-
-    gRegionAllocPtr = temp_a1 + 0x8;
-    temp_a1[0x6] = (s32)gsMoveWd(0xA, 0x18, 0);
-    temp_a1[0x7] = D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8;
-
-    gRegionAllocPtr = temp_a1 + 0xA;
-    temp_a1[0x8] = (s32)gsMoveWd(0xA, 0x1C, 0);
-    temp_a1[0x9] = D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8;
+    gSPLightColor(gRegionAllocPtr++, LIGHT_2, D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8);
 }
 
 INCLUDE_ASM("asm/nonmatchings/615A0", func_80064F74_65B74);
