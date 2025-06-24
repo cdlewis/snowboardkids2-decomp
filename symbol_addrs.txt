@@ -1,3 +1,10 @@
+initializeOverlaySystem = 0x80067FB0;
+loadAssetMetadataByIndex = 0x80067F5C;
+loadAssetMetadata = 0x80067F0C;
+enqueueMultiPartDisplayList = 0x80065900;
+enqueueDisplayListWithFrustumCull = 0x80063788;
+enqueueDisplayListObject = 0x800635CC;
+
 arenaAlloc16 = 0x8006F580;
 parseGameDataLayout = 0x800609A0;
 D_80091250_91E50 = 0x80091250; // type:s32 size:0xC0

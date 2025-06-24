@@ -1,5 +1,6 @@
 #include "69EF0.h"
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 
@@ -88,7 +89,6 @@ extern void func_80056B7C_5777C(void *a0, s32 a1);
 void func_800BB468_B76A8(TrackHazard *arg0);
 void func_800BB658_B7898(TrackHazard *arg0);
 void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0);
-void func_80063788_64388(s32, void *);
 void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *);
 void func_800BB71C_B795C(TrackHazard *);
 
@@ -138,8 +138,8 @@ void func_800BB3B8_B75F8(TrackHazard *arg0) {
     func_8006B084_6BC84(&matrix[0], arg0, &arg0->unk3C);
 
     for (i = 0; i < 4; i++) {
-        func_80063788_64388(i, arg0);
-        func_80063788_64388(i, &arg0->unk3C);
+        enqueueDisplayListWithFrustumCull(i, arg0);
+        enqueueDisplayListWithFrustumCull(i, &arg0->unk3C);
     }
 }
 

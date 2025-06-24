@@ -2,8 +2,8 @@
 
 #include "19E80.h"
 #include "5EA60.h"
-#include "615A0.h"
 #include "69EF0.h"
+#include "displaylist.h"
 
 typedef struct {
     u8 padding[0x24];
@@ -394,7 +394,7 @@ void* func_80002040_2C40(func_80002040_2C40_arg* arg0) {
 
 void func_80002170_2D70(func_80002B50_3750_arg* arg0, s16 arg1) {
     if (arg1 < arg0->unkE) {
-        func_800635CC_641CC(arg0->unk10->unk16, (void*)arg0->unk0 + (arg1 * 0x3C));
+        enqueueDisplayListObject(arg0->unk10->unk16, (void*)arg0->unk0 + (arg1 * 0x3C));
     }
 }
 
@@ -593,7 +593,7 @@ INCLUDE_ASM("asm/nonmatchings/20F0", func_80002750_3350);
 
 void func_80002B50_3750(func_80002B50_3750_arg* arg0, DisplayListObject* arg1) {
     if ((arg0 != NULL) && (arg0->unk88 != 0) && (arg0->unk3F != 0)) {
-        func_800635CC_641CC(arg0->unk10->unk16, arg1);
+        enqueueDisplayListObject(arg0->unk10->unk16, arg1);
     }
 }
 

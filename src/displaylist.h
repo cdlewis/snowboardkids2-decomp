@@ -24,7 +24,7 @@ typedef struct {
     u8 unk60;
 } DisplayListObject;
 
-void func_800635CC_641CC(s32 arg0, DisplayListObject* arg1);
+void enqueueDisplayListObject(s32 arg0, DisplayListObject* arg1);
 
 typedef struct {
     u16* dataStart;
@@ -35,3 +35,17 @@ typedef struct {
 } GameDataLayout;
 
 void parseGameDataLayout(GameDataLayout* gameData);
+
+void initializeOverlaySystem();
+
+typedef struct {
+    u8 padding[0x10];
+    s32 unk10;
+    s32 unk14;
+    s8 unk18;
+    s8 unk19;
+    s8 unk1A;
+} loadAssetMetadata_arg;
+void loadAssetMetadata(loadAssetMetadata_arg*, void*, s32);
+
+void enqueueDisplayListWithFrustumCull(s32, DisplayListObject*);

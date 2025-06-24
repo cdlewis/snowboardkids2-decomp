@@ -1,7 +1,7 @@
-#include "615A0.h"
 #include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 
@@ -179,7 +179,7 @@ void func_8002F518_30118(DisplayListObject *s0) {
         setCallback(func_8002F5C8_301C8);
     }
 
-    func_800635CC_641CC(0, s0);
+    enqueueDisplayListObject(0, s0);
 }
 
 void func_8002F5C8_301C8(void *untypedArg) {
@@ -188,7 +188,7 @@ void func_8002F5C8_301C8(void *untypedArg) {
     if (GameStateGet()->unk5C5 == 1) {
         setCallback(&func_8002F290_2FE90);
     }
-    func_800635CC_641CC(0, arg0);
+    enqueueDisplayListObject(0, arg0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F614_30214);

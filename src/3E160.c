@@ -1,8 +1,8 @@
 #include "56910.h"
-#include "615A0.h"
 #include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 
 extern s32 D_34CB50;

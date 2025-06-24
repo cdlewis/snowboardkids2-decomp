@@ -1,5 +1,6 @@
 #include "PRinternal/viint.h"
 #include "common.h"
+#include "displaylist.h"
 
 typedef struct
 {
@@ -32,7 +33,6 @@ extern u16 D_8009ADE0_9B9E0;
 extern void D_800A32D0_A3ED0;
 extern s8 D_800AFCE2_A7052;
 extern void func_80056080_56C80;
-extern void func_80067FB0_68BB0(void *, s32);
 
 void mainThreadEntrypoint(void *arg) {
     OSMesg D_800A32E0_A3EE0;
@@ -60,7 +60,7 @@ void mainThreadEntrypoint(void *arg) {
 
     func_800705D0_711D0(&D_800A32D0_A3ED0, &D_800AB1B0_A2520, 2);
     new_var = 0x64;
-    func_800693C4_69FC4(&func_80067FB0_68BB0, new_var);
+    func_800693C4_69FC4(&initializeOverlaySystem, new_var);
     func_800693C4_69FC4(&func_80056080_56C80, 0xFA);
 
     while (TRUE) {

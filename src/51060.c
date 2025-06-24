@@ -1,5 +1,6 @@
 #include "5E590.h"
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 
 extern s32 func_800AFF44_9FE04();
@@ -21,7 +22,6 @@ extern void func_80051760_52360();
 extern void func_80051800_52400();
 extern void func_800518AC_524AC();
 extern void func_80051B8C_5278C();
-void func_80067F0C_68B0C(void*, void*, s32);
 
 void func_80050460_51060(void** node) {
     *node = load_3ECE40();
@@ -159,7 +159,7 @@ void func_800516F4_522F4(func_800516F4_522F4_arg* arg0) {
     arg0->unk4 = load_3ECE40();
     arg0->unk8 = &D_80090EC0_91AC0;
     arg0->unk22 = 0xFF;
-    func_80067F0C_68B0C(&arg0->unk8, arg0->unk4, 0x6A);
+    loadAssetMetadata(&arg0->unk8, arg0->unk4, 0x6A);
     setCleanupCallback(&func_80051800_52400);
     setCallbackWithContinue(&func_80051760_52360);
 }
