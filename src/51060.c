@@ -3,7 +3,18 @@
 #include "displaylist.h"
 #include "gamestate.h"
 
-extern void func_800504A0_510A0();
+typedef struct {
+    void* unk0;
+    u8* unk4;
+    u8 padding[0x16];
+    u8 unk1E;
+    u8 padding2[0x10];
+    s32 unk30;
+    s32 unk34;
+    s32 unk44;
+} func_800504A0_510A0_arg;
+
+void func_800504A0_510A0(func_800504A0_510A0_arg*);
 extern void func_800505D8_511D8();
 extern void func_80050740_51340();
 extern void func_80050864_51464();
@@ -22,6 +33,7 @@ extern void func_80051B8C_5278C();
 extern s32 func_800AFF44_9FE04();
 extern s32* D_80090EC0_91AC0;
 void func_80050BD4_517D4(s32*);
+void func_80050504_51104();
 
 void func_80050460_51060(void** node) {
     *node = load_3ECE40();
@@ -29,7 +41,14 @@ void func_80050460_51060(void** node) {
     setCallbackWithContinue(&func_800504A0_510A0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_800504A0_510A0);
+void func_800504A0_510A0(func_800504A0_510A0_arg* arg0) {
+    GameState* gs = GameStateGet();
+    loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk30);
+    arg0->unk1E = 0xE0;
+    arg0->unk4 = &gs->unk44[0xFC0];
+    arg0->unk34 = 0;
+    setCallbackWithContinue(&func_80050504_51104);
+}
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050504_51104);
 
