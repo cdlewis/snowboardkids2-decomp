@@ -1,4 +1,5 @@
 #include "5E590.h"
+#include "69EF0.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -30,6 +31,55 @@ typedef struct {
     s32 unk34;
 } func_80050504_51104_arg;
 
+typedef struct {
+    MemoryAllocatorNode* unk0;
+    void* unk4;
+    u8 padding[0x16];
+    s8 unk1E;
+    u8 padding2[0x2];
+    void* unk24;
+    u8 padding3[0x16];
+    s8 unk3E;
+    u8 padding4[0x10];
+    s16 unk50;
+    s16 unk52;
+} func_800506B4_512B4_arg;
+
+typedef struct {
+    s32 unk0;
+    MemoryAllocatorNode* unk4;
+    s16 unk8;
+    s32 unkC;
+    s32 unk10;
+} func_80050F18_51B18_arg;
+
+typedef struct {
+    s32 unk0;
+    void* unk4;
+    s32* unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 padding[0xE];
+    u8 unk22;
+} func_800516F4_522F4_arg;
+
+typedef struct {
+    u8 padding[0xC0];
+    MemoryAllocatorNode* unkC0;
+} func_8005186C_5246C_arg;
+
+typedef struct {
+    Node n;
+    s32 unk2C;
+    s32 unk30;
+} NodeWithPayload;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} func_80050604_51204_arg;
+
 void func_800504A0_510A0(func_800504A0_510A0_arg*);
 extern void func_800505D8_511D8();
 extern void func_80050740_51340();
@@ -56,7 +106,7 @@ void func_80069CF8_6A8F8();
 void func_80050460_51060(void** node) {
     *node = load_3ECE40();
     setCleanupCallback(&func_800505D8_511D8);
-    setCallbackWithContinue(&func_800504A0_510A0);
+    setCallbackWithContinue((void (*)(void*))&func_800504A0_510A0);
 }
 
 void func_800504A0_510A0(func_800504A0_510A0_arg* arg0) {
@@ -90,23 +140,21 @@ void func_80050504_51104(func_80050504_51104_arg* arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_800505D8_511D8);
+void func_800505D8_511D8(s32* arg0) {
+    *arg0 = freeGameStateMemory(*arg0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050604_51204);
+void func_80050604_51204(s32 arg0, func_80050604_51204_arg* arg1, s32 arg2) {
+    NodeWithPayload* task = (NodeWithPayload*)scheduleTask(&func_80050460_51060, 2, 0, 0xDC);
+    if (task != NULL) {
+        memcpy(&task->n.freeNext, arg0, 0xC);
+        task->unk30 = arg2;
+        task->n.cleanupCallback = (void*)(arg1->unk0 / 2);
+        task->n.payload = (void*)(arg1->unk4 / 2);
+        task->unk2C = ((s32)arg1->unk8 / 2);
+    }
+}
 
-typedef struct {
-    MemoryAllocatorNode* unk0;
-    void* unk4;
-    u8 padding[0x16];
-    s8 unk1E;
-    u8 padding2[0x2];
-    void* unk24;
-    u8 padding3[0x16];
-    s8 unk3E;
-    u8 padding4[0x10];
-    s16 unk50;
-    s16 unk52;
-} func_800506B4_512B4_arg;
 void func_800506B4_512B4(func_800506B4_512B4_arg* arg0) {
     GameState* temp_s1 = GameStateGet();
     arg0->unk0 = load_3ECE40();
@@ -127,7 +175,7 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_80050890_51490);
 
 void func_8005098C_5158C(MemoryAllocatorNode** node) {
     *node = load_3ECE40();
-    setCleanupCallback(&func_80050BD4_517D4);
+    setCleanupCallback((void (*)(void*))&func_80050BD4_517D4);
     setCallbackWithContinue(&func_800509CC_515CC);
 }
 
@@ -157,13 +205,6 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_80050EA0_51AA0);
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050ECC_51ACC);
 
-typedef struct {
-    s32 unk0;
-    MemoryAllocatorNode* unk4;
-    s16 unk8;
-    s32 unkC;
-    s32 unk10;
-} func_80050F18_51B18_arg;
 void func_80050F18_51B18(func_80050F18_51B18_arg* arg0) {
     arg0->unk4 = load_3ECE40();
     arg0->unk8 = 0x45;
@@ -204,15 +245,6 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_80051688_52288);
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_800516B4_522B4);
 
-typedef struct {
-    s32 unk0;
-    void* unk4;
-    s32* unk8;
-    s32 unkC;
-    s32 unk10;
-    u8 padding[0xE];
-    u8 unk22;
-} func_800516F4_522F4_arg;
 void func_800516F4_522F4(func_800516F4_522F4_arg* arg0) {
     GameStateGet();
     arg0->unk4 = load_3ECE40();
@@ -229,10 +261,6 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_80051800_52400);
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_8005182C_5242C);
 
-typedef struct {
-    u8 padding[0xC0];
-    MemoryAllocatorNode* unkC0;
-} func_8005186C_5246C_arg;
 void func_8005186C_5246C(func_8005186C_5246C_arg* arg0) {
     arg0->unkC0 = load_3ECE40();
     setCleanupCallback(&func_80051B8C_5278C);
