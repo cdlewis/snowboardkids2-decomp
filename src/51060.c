@@ -14,6 +14,22 @@ typedef struct {
     s32 unk44;
 } func_800504A0_510A0_arg;
 
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 padding[0xA];
+    s8 unk1E;
+    s32 padding2;
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    s32 padding3;
+    s32 unk34;
+} func_80050504_51104_arg;
+
 void func_800504A0_510A0(func_800504A0_510A0_arg*);
 extern void func_800505D8_511D8();
 extern void func_80050740_51340();
@@ -34,6 +50,8 @@ extern s32 func_800AFF44_9FE04();
 extern s32* D_80090EC0_91AC0;
 void func_80050BD4_517D4(s32*);
 void func_80050504_51104();
+void func_800677C0_683C0(s32, void*);
+void func_80069CF8_6A8F8();
 
 void func_80050460_51060(void** node) {
     *node = load_3ECE40();
@@ -50,7 +68,27 @@ void func_800504A0_510A0(func_800504A0_510A0_arg* arg0) {
     setCallbackWithContinue(&func_80050504_51104);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050504_51104);
+void func_80050504_51104(func_80050504_51104_arg* arg0) {
+    GameState* gs;
+    s32 i;
+    gs = GameStateGet();
+    i = 0;
+    if (gs->PAD_6[0x17] == 0) {
+        arg0->unk4 = (s32)(gs->unk44 + ((arg0->unk34 << 6) + 0xFC0));
+        arg0->unk34 = arg0->unk34 + 1;
+        if (arg0->unk34 == 4) {
+            func_80069CF8_6A8F8();
+            return;
+        }
+        arg0->unk1E = arg0->unk1E - 0x30;
+        arg0->unk8 = arg0->unk8 + arg0->unk24;
+        arg0->unkC = arg0->unkC + arg0->unk28;
+        arg0->unk10 = arg0->unk10 + arg0->unk2C;
+    }
+    for (i = 0; i < 4; i++) {
+        func_800677C0_683C0(i, &arg0->unk4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_800505D8_511D8);
 
