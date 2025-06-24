@@ -3,15 +3,11 @@
 #include "displaylist.h"
 #include "gamestate.h"
 
-extern s32 func_800AFF44_9FE04();
-extern s32 func_800AFF44_9FE04();
-extern s32* D_80090EC0_91AC0;
 extern void func_800504A0_510A0();
 extern void func_800505D8_511D8();
 extern void func_80050740_51340();
 extern void func_80050864_51464();
 extern void func_800509CC_515CC();
-extern void func_80050BD4_517D4();
 extern void func_80050DB0_519B0();
 extern void func_80050EA0_51AA0();
 extern void func_80050F64_51B64();
@@ -22,6 +18,10 @@ extern void func_80051760_52360();
 extern void func_80051800_52400();
 extern void func_800518AC_524AC();
 extern void func_80051B8C_5278C();
+
+extern s32 func_800AFF44_9FE04();
+extern s32* D_80090EC0_91AC0;
+void func_80050BD4_517D4(s32*);
 
 void func_80050460_51060(void** node) {
     *node = load_3ECE40();
@@ -78,7 +78,9 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_800509CC_515CC);
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050AA8_516A8);
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050BD4_517D4);
+void func_80050BD4_517D4(s32* arg0) {
+    *arg0 = freeGameStateMemory(*arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050C00_51800);
 
