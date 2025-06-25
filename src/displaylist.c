@@ -84,12 +84,14 @@ s32 func_80069810_6A410();
 s32 func_80070140_70D40(void*);
 s32* func_80069854_6A454(s32);
 void func_80062CF0_638F0();
-void func_8006318C_63D8C(DisplayListObject*);
+void setupDisplayListMatrix(DisplayListObject*);
 void func_80063A94_64694(void*);
 void func_800648EC_654EC();
 void func_800680F0_68CF0(ALPlayer*);
 void func_800697CC_6A3CC(void*);
 void* func_8006C130_6CD30(void*, LookAt*);
+void func_80063534_64134();
+void func_80063580_64180();
 
 void parseGameDataLayout(GameDataLayout* gameData) {
     u16* parser;
@@ -166,7 +168,7 @@ void func_800630A4_63CA4(DisplayListObject* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800630F0_63CF0);
 
-void func_8006318C_63D8C(DisplayListObject* arg0) {
+void setupDisplayListMatrix(DisplayListObject* arg0) {
     Mtx sp30;
     f32 sp70;
     f32 sp74;
@@ -243,16 +245,13 @@ void func_8006318C_63D8C(DisplayListObject* arg0) {
 }
 
 void func_800634E8_640E8(DisplayListObject* arg0) {
-    func_8006318C_63D8C(arg0);
+    setupDisplayListMatrix(arg0);
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk4);
 }
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063534_64134);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063580_64180);
-
-void func_80063534_64134();
-void func_80063580_64180();
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject* arg1) {
     arg1->unk30 = 0;
@@ -269,14 +268,14 @@ void enqueueDisplayListObject(s32 arg0, DisplayListObject* arg1) {
 
 void func_80063668_64268(DisplayListObject* arg0) {
     if (func_80070140_70D40((void*)((s32)arg0 + 0x14)) == NULL) {
-        func_8006318C_63D8C(arg0);
+        setupDisplayListMatrix(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk4);
     }
 }
 
 void func_800636C8_642C8(DisplayListObject* arg0) {
     if (func_80070140_70D40((void*)(s32)arg0 + 0x14) == 0) {
-        func_8006318C_63D8C(arg0);
+        setupDisplayListMatrix(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk8);
     }
 }
@@ -285,7 +284,7 @@ void func_80063728_64328(DisplayListObject* arg0) {
     s32* temp_v1;
 
     if (func_80070140_70D40((void*)((s32)arg0 + 0x14)) == NULL) {
-        func_8006318C_63D8C(arg0);
+        setupDisplayListMatrix(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unkC);
     }
 }
@@ -305,7 +304,7 @@ void enqueueDisplayListWithFrustumCull(s32 arg0, DisplayListObject* arg1) {
 
 void buildDisplayListSegment(DisplayListObject* arg0) {
     if (func_80070140_70D40((void*)((s32)arg0) + 0x14) == 0) {
-        func_8006318C_63D8C(arg0);
+        setupDisplayListMatrix(arg0);
 
         gDPPipeSync(gRegionAllocPtr++);
 

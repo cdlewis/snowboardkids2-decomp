@@ -4,6 +4,7 @@ loadAssetMetadata = 0x80067F0C;
 enqueueMultiPartDisplayList = 0x80065900;
 enqueueDisplayListWithFrustumCull = 0x80063788;
 enqueueDisplayListObject = 0x800635CC;
+setupDisplayListMatrix = 0x8006318C;
 
 arenaAlloc16 = 0x8006F580;
 parseGameDataLayout = 0x800609A0;

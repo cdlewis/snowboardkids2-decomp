@@ -3,3 +3,7 @@ compiler_command = "tools/gcc_kmc/gcc -Iinclude -Ilib/ultralib/include -c -O2 -m
 assembler_command = "mips-linux-gnu-as -EB -march=vr4300 -mtune=vr4300 -Iinclude"
 
 compiler_type = "gcc"
+
+[preserve_macros]
+"g[DS]P.*" = "void"
+"gs[DS]P.*" = "void"

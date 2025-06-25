@@ -49,3 +49,5 @@ typedef struct {
 void loadAssetMetadata(loadAssetMetadata_arg*, void*, s32);
 
 void enqueueDisplayListWithFrustumCull(s32, DisplayListObject*);
+
+void buildDisplayListSegment(DisplayListObject*);
