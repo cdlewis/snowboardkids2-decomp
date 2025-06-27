@@ -4,4 +4,6 @@
 #include "macro.h"
 #include "ultra64.h"
 
+void *memcpy(void *, const void *, size_t);
+
 #endif

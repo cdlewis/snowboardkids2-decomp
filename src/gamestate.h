@@ -91,8 +91,8 @@ typedef struct {
     u8 PAD_11[3];
     s8 unk42E;
     u8 PAD_12[0x158];
-    s32 unk588;
-    s32 unk58C;
+    s32* unk588;
+    s32* unk58C;
     u16 unk590;
     u8 PAD_13[0x21];
     u8 unk5B3;

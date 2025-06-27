@@ -71,9 +71,9 @@ typedef struct {
 
 typedef struct {
     char padding;
-    s32 unk4;
+    s32* unk4;
     char padding2[78];
-    s32 unk58;
+    s32* unk58;
 } func_80036848_37448_arg;
 
 typedef struct {
@@ -83,7 +83,7 @@ typedef struct {
 
 typedef struct {
     char padding[4];
-    s32 unk4;
+    s32* unk4;
 } func_80036A10_37610_arg;
 
 typedef struct {
@@ -115,8 +115,7 @@ extern void* D_45B130;
 extern void func_80058220_58E20(u16, void*);
 extern void D_8008FAC0_906C0;
 extern s16 D_8008FD10_90910[];
-extern char D_8008FD1C_9091C[];
-extern s32 freeGameStateMemory(s32);
+extern s8 D_8008FD1C_9091C[];
 extern void func_80036920_37520;
 
 void func_80036250_36E50(s8* arg0) {
@@ -199,8 +198,8 @@ INCLUDE_ASM("asm/nonmatchings/36E50", func_80036424_37024);
 
 void func_80036848_37448(void* untypedArg) {
     func_80036848_37448_arg* arg0 = (func_80036848_37448_arg*)untypedArg;
-    arg0->unk4 = freeGameStateMemory(arg0->unk4);
-    arg0->unk58 = freeGameStateMemory(arg0->unk58);
+    arg0->unk4 = (s32*)freeGameStateMemory(arg0->unk4);
+    arg0->unk58 = (s32*)freeGameStateMemory(arg0->unk58);
 }
 
 void func_80036880_37480(func_80036880_37480_arg* arg0) {
@@ -228,7 +227,7 @@ INCLUDE_ASM("asm/nonmatchings/36E50", func_80036920_37520);
 
 void func_80036A10_37610(void* untypedArg) {
     func_80036A10_37610_arg* arg0 = (func_80036A10_37610_arg*)untypedArg;
-    arg0->unk4 = freeGameStateMemory(arg0->unk4);
+    arg0->unk4 = (s32*)freeGameStateMemory(arg0->unk4);
 }
 
 void func_80036A3C_3763C(func_80036A3C_3763C_arg* arg0) {

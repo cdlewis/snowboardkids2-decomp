@@ -22,6 +22,7 @@ extern void func_8004D9D0_4E5D0();
 extern void func_8004F1D4_4FDD4();
 extern void func_800574A0_580A0(s32);
 extern void func_80057564_58164(s32);
+extern s32 func_80055D10_56910(u8);
 
 s32 func_80055E7C_56A7C();
 s32 func_80055EA4_56AA4();

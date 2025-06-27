@@ -51,6 +51,8 @@ typedef struct {
     s32 unk3C;
 } func_8006C2A8_6CEA8_arg1;
 
+s32 atan2Fixed(s32, s32);
+
 s16 approximateSin(s16 inputAngle) {
     u16 temp_a0;
     inputAngle = inputAngle & 0x1FFF;

@@ -213,6 +213,13 @@ void __MusIntInitialiseChannel(channel_t *cp);
 u32 __MusIntStartEffect(channel_t *cp, s32 number, s32 volume, s32 pan, s32 priority);
 ALMicroTime __MusIntMain(void *node);
 void __MusIntRemapPtrs(void *addr, void *offset, s32 count);
+void MusHandleUnPause(musHandle);
+s32 func_800744EC_750EC(song_t *, s32);
+void MusPtrBankInitialize(u8 *, u8 *);
+void __MusIntFifoOpen(s32);
+void __MusIntMemSet(u8 *, s32, s32);
+u32 func_800725F4_731F4(s32, u8, u8, u8, s32);
+u8 __MusIntRandom(u8);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
     cp->pvolume = NULL;

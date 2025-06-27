@@ -231,7 +231,7 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_800572B0_57EB0);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800573F8_57FF8);
 
-extern void func_800570E0_57CE0();
+extern void func_800570E0_57CE0(void* arg);
 
 void func_80057470_58070(void) {
     if (func_80058638_59238() == NULL) {

@@ -92,6 +92,7 @@ void func_800697CC_6A3CC(void*);
 void* func_8006C130_6CD30(void*, LookAt*);
 void func_80063534_64134();
 void func_80063580_64180();
+void matrixToEulerAngles();
 
 void parseGameDataLayout(GameDataLayout* gameData) {
     u16* parser;

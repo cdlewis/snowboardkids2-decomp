@@ -1,3 +1,4 @@
+#include "20F0.h"
 #include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
@@ -28,7 +29,7 @@ void func_8002F110_2FD10();
 
 typedef struct {
     u8 padding[0x2C];
-    s32 unk2C;
+    s32 *unk2C;
 } func_8002FA70_30670_arg;
 
 typedef struct {
@@ -123,7 +124,7 @@ typedef struct {
 } func_8002EF3C_2FB3C_arg;
 void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
     GameState *temp = GameStateGet();
-    arg0->unk0 = (void *)func_8000198C_258C(0x3A, temp);
+    arg0->unk0 = func_8000198C_258C(0x3A, temp);
     memcpy(&arg0->unk4, D_8009A870_9B470, 0x20);
     arg0->unk18 = 0x200000;
     arg0->unk1C = 0xFFE00000;
@@ -236,7 +237,7 @@ void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA44_30644);
 
 void func_8002FA70_30670(func_8002FA70_30670_arg *arg0) {
-    arg0->unk2C = freeGameStateMemory(arg0->unk2C);
+    arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA9C_3069C);

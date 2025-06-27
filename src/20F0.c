@@ -100,10 +100,9 @@ s32 func_80001904_2504(s16);
 s32 func_80002484_3084(func_80002040_2C40_arg*, s16);
 s32 func_8000CDE0_D9E0(s32);
 s32 func_8000CDFC_D9FC(s32);
-void initializeGameEntity(GameState*, void*, void*, s8, s8, s8, s16);
+void initializeGameEntity(GameState*, s32, void*, s8, s8, s8, s16);
 void func_80002220_2E20(func_80002040_2C40_arg*, s16, s16, s8, s16);
 void func_80002468_3068(func_80002040_2C40_arg*);
-void* func_800019B8_25B8(void*, void*, s8, s8, s8, s16);
 void* func_80002040_2C40(func_80002040_2C40_arg* arg0);
 void* func_80009F5C_AB5C(s32);
 
@@ -139,9 +138,13 @@ u8 func_80001534_2134(func_80001534_2134_arg* arg0) {
     return arg0->unk96;
 }
 
-void func_8000153C_213C(s32 arg0, s32 arg1) {
+typedef struct {
+    u8 padding[0x18];
+    /* 0x18 */ s32 start;
+} func_8000153C_213C_arg;
+void func_8000153C_213C(func_8000153C_213C_arg* arg0, void* arg1) {
     if (arg0 != 0) {
-        memcpy(arg0 + 0x18, arg1, 0x20);
+        memcpy(&arg0->start, arg1, 0x20);
     }
 }
 
@@ -339,11 +342,11 @@ void func_80001970_2570(func_80001970_2570_arg* arg0) {
     arg0->unk8E = -1;
 }
 
-void func_8000198C_258C(void* arg0, void* arg1) {
-    func_800019B8_25B8(arg0, arg1, 0, -1, -1, -1);
+void* func_8000198C_258C(s32 arg0, void* arg1) {
+    return func_800019B8_25B8(arg0, arg1, 0, -1, -1, -1);
 }
 
-void* func_800019B8_25B8(void* arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {
+void* func_800019B8_25B8(s32 arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {
     GameState* obj = allocateGameStateMemory(0x160);
     if (obj != NULL) {
         initializeGameEntity(obj, arg0, arg1, arg2, arg3, arg4, arg5);

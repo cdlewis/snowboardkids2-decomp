@@ -6,7 +6,7 @@
 
 typedef struct {
     void* unk0;
-    u8* unk4;
+    loadAssetMetadata_arg* unk4;
     u8 padding[0x16];
     u8 unk1E;
     u8 padding2[0x10];
@@ -56,7 +56,7 @@ typedef struct {
 typedef struct {
     s32 unk0;
     void* unk4;
-    s32* unk8;
+    loadAssetMetadata_arg* unk8;
     s32 unkC;
     s32 unk10;
     u8 padding[0xE];
@@ -98,7 +98,7 @@ extern void func_80051B8C_5278C();
 
 extern s32 func_800AFF44_9FE04();
 extern s32* D_80090EC0_91AC0;
-void func_80050BD4_517D4(s32*);
+void func_80050BD4_517D4(s32**);
 void func_80050504_51104();
 void func_800677C0_683C0(s32, void*);
 void func_80069CF8_6A8F8();
@@ -140,14 +140,14 @@ void func_80050504_51104(func_80050504_51104_arg* arg0) {
     }
 }
 
-void func_800505D8_511D8(s32* arg0) {
-    *arg0 = freeGameStateMemory(*arg0);
+void func_800505D8_511D8(s32** arg0) {
+    *arg0 = (s32*)freeGameStateMemory(*arg0);
 }
 
-void func_80050604_51204(s32 arg0, func_80050604_51204_arg* arg1, s32 arg2) {
+void func_80050604_51204(void* arg0, func_80050604_51204_arg* arg1, s32 arg2) {
     NodeWithPayload* task = (NodeWithPayload*)scheduleTask(&func_80050460_51060, 2, 0, 0xDC);
     if (task != NULL) {
-        memcpy(&task->n.freeNext, arg0, 0xC);
+        memcpy((void*)&task->n.freeNext, arg0, 0xC);
         task->unk30 = arg2;
         task->n.cleanupCallback = (void*)(arg1->unk0 / 2);
         task->n.payload = (void*)(arg1->unk4 / 2);
@@ -183,8 +183,8 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_800509CC_515CC);
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050AA8_516A8);
 
-void func_80050BD4_517D4(s32* arg0) {
-    *arg0 = freeGameStateMemory(*arg0);
+void func_80050BD4_517D4(s32** arg0) {
+    *arg0 = (s32*)freeGameStateMemory(*arg0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050C00_51800);

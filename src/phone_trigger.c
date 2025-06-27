@@ -1,3 +1,4 @@
+#include "69EF0.h"
 #include "common.h"
 #include "event_trigger.h"
 #include "gamestate.h"
@@ -15,7 +16,7 @@ void PhoneTriggerInit(EventTrigger *arg0) {
     arg0->unk8 = 0;
     arg0->unkC = &PhoneLabel;
 
-    setCallback(&PhoneTriggerCheck);
+    setCallback((void (*)(void *))&PhoneTriggerCheck);
 }
 
 void PhoneTriggerCheck(u8 *arg0) {

@@ -1,5 +1,7 @@
 #include "3A1F0.h"
 
+#include "memory_allocator.h"
+
 typedef struct {
     s16 command;
     s16 pad;
@@ -587,7 +589,7 @@ void piDmaHandlerThread(void* arg __attribute__((unused))) {
         }
 
     END:
-        unlockNodeWithInterruptDisable(entry->dramAddr);
+        unlockNodeWithInterruptDisable((s32*)entry->dramAddr);
 
         if ((u32)entry->compressionType < 2) {
             gPendingDmaCount--;

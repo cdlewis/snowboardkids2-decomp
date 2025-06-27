@@ -60,6 +60,7 @@ extern s32 D_800AB064_A23D4;
 extern s32 D_800AB12C_A249C;
 s32 hasActiveTasks();
 void processActiveTasks(void);
+void func_80069D34_6A934();
 
 INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
 

@@ -6,16 +6,16 @@ void func_8006FC70_70870(u16, u16, s8 *, s8 *);
 
 typedef struct {
     char padding[44];
-    s32 unk2C;
-    s32 unk30;
+    s32 *unk2C;
+    s32 *unk30;
 } func_80000BF4_17F4_arg;
 
 typedef struct {
     char padding[0x2C];
-    s32 unk2C;
-    s32 unk30;
+    s32 *unk2C;
+    s32 *unk30;
     char padding2[0x10];
-    s32 unk44;
+    s32 *unk44;
 } func_80001114_1D14_arg;
 
 typedef struct
@@ -128,8 +128,8 @@ INCLUDE_ASM("asm/nonmatchings/main", __rmonPanic);
 INCLUDE_ASM("asm/nonmatchings/main", rmonmisc_text_010C);
 
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *arg0) {
-    arg0->unk30 = freeGameStateMemory(arg0->unk30);
-    arg0->unk2C = freeGameStateMemory(arg0->unk2C);
+    arg0->unk30 = (s32 *)freeGameStateMemory(arg0->unk30);
+    arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000C2C_182C);
@@ -145,8 +145,8 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000DC0_19C0);
 INCLUDE_ASM("asm/nonmatchings/main", func_80000E84_1A84);
 
 void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0) {
-    arg0->unk30 = freeGameStateMemory(arg0->unk30);
-    arg0->unk2C = freeGameStateMemory(arg0->unk2C);
+    arg0->unk30 = (s32 *)freeGameStateMemory(arg0->unk30);
+    arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000F4C_1B4C);
@@ -154,9 +154,9 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000F4C_1B4C);
 INCLUDE_ASM("asm/nonmatchings/main", func_80001040_1C40);
 
 void func_80001114_1D14(func_80001114_1D14_arg *arg0) {
-    arg0->unk44 = freeGameStateMemory(arg0->unk44);
-    arg0->unk30 = freeGameStateMemory(arg0->unk30);
-    arg0->unk2C = freeGameStateMemory(arg0->unk2C);
+    arg0->unk44 = (s32 *)freeGameStateMemory(arg0->unk44);
+    arg0->unk30 = (s32 *)freeGameStateMemory(arg0->unk30);
+    arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80001158_1D58);

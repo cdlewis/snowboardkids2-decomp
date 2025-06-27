@@ -182,7 +182,7 @@ typedef struct {
 void func_80049794_4A394(void *payload, s32 arg1) {
     NodeWithPayload *temp_v0 = (NodeWithPayload *)scheduleTask(&func_800492C0_49EC0, 0, 0, 0xEB);
     if (temp_v0 != NULL) {
-        memcpy((s32)temp_v0 + 0x10, payload, (void *)0x20);
+        memcpy((void *)((s32)temp_v0 + 0x10), payload, 0x20);
         temp_v0->unk3C = arg1;
     }
 }
@@ -221,12 +221,12 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004AB50_4B750);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004AD18_4B918);
 
-void func_8004AE58_4BA58(s32 *arg0) {
+void func_8004AE58_4BA58(s32 **arg0) {
     GameState *temp_v0;
 
     temp_v0 = GameStateGet();
     temp_v0->PAD_5[0xB] += 1;
-    *arg0 = freeGameStateMemory(*arg0);
+    *arg0 = (s32 *)freeGameStateMemory(*arg0);
 }
 
 void func_8004AE94_4BA94(s32 arg0) {

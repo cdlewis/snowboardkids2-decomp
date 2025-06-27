@@ -32,3 +32,5 @@ Node *scheduleTask(void *a0, u8, u8, u8);
 void setCallback(void(callback)(void *));
 void setCallbackWithContinue(void(callback)(void *));
 void setCleanupCallback(void(callback)(void *));
+
+s32 freeGameStateMemory(s32 *);
