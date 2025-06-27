@@ -1,13 +1,29 @@
 #include "common.h"
 #include "displaylist.h"
 
+void func_80004920_5520();
+void func_80005094_5C94();
+void func_800634E8_640E8(s32);
+void func_80063534_64134(s32);
+void func_80063580_64180(s32);
+void func_800638C0_644C0(s32);
+
 INCLUDE_ASM("asm/nonmatchings/5520", func_80004920_5520);
 
-INCLUDE_ASM("asm/nonmatchings/5520", func_80004F74_5B74);
+void func_80004F74_5B74(s32 arg0) {
+    func_80004920_5520();
+    func_800634E8_640E8(arg0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/5520", func_80004FA0_5BA0);
+void func_80004FA0_5BA0(s32 arg0) {
+    func_80004920_5520();
+    func_80063534_64134(arg0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/5520", func_80004FCC_5BCC);
+void func_80004FCC_5BCC(s32 arg0) {
+    func_80004920_5520();
+    func_80063580_64180(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/5520", func_80004FF8_5BF8);
 
@@ -18,7 +34,10 @@ void func_800056E8_62E8(DisplayListObject* arg0) {
     buildDisplayListSegment(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/5520", func_80005714_6314);
+void func_80005714_6314(s32 arg0) {
+    func_80005094_5C94();
+    func_800638C0_644C0(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/5520", func_80005740_6340);
 
