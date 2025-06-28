@@ -3,13 +3,24 @@
 #include "common.h"
 #include "gamestate.h"
 
-extern void func_8004083C_4143C();
-extern void func_80040948_41548();
-
 typedef struct {
     void* unk0;
     void* unk4;
 } func_800407E0_413E0_arg;
+
+typedef struct {
+    u8 padding[0x8];
+    s16 unk8;
+    s16 padding2;
+    s16 unkC;
+    s16 unkE;
+} func_80040E00_41A00_arg;
+
+extern void func_800688D4_694D4(s32, s16, s32, void*, s32, s32);
+extern s32 D_800AB064_A23D4;
+extern char pushStartButtonText[];
+extern void func_8004083C_4143C();
+extern void func_80040948_41548();
 
 void func_800407E0_413E0(func_800407E0_413E0_arg* arg0) {
     GameState* temp_s0 = GameStateGet();
@@ -40,7 +51,11 @@ INCLUDE_ASM("asm/nonmatchings/413E0", func_80040D48_41948);
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040D80_41980);
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80040E00_41A00);
+void func_80040E00_41A00(func_80040E00_41A00_arg* arg0) {
+    if (D_800AB064_A23D4 & 8) {
+        func_800688D4_694D4(-0x44, arg0->unk8, 0, &pushStartButtonText, (s32)arg0->unkC, (s32)arg0->unkE);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040E4C_41A4C);
 
