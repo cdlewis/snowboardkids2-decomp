@@ -1,4 +1,4 @@
-![progress](https://img.shields.io/badge/progress-16.07%25-blue)
+![progress](https://img.shields.io/badge/progress-16.12%25-blue)
 
 # Snowboard Kids 2
 
@@ -50,3 +50,7 @@ If everything works correctly you should see:
 ```bash
 build/snowboardkids2.z64: OK
 ```
+
+Acknowledgements
+================
+This project wouldn’t be possible without the collective knowledge, tools, and support of the broader decompilation community. Huge thanks to contributors of other N64 decomp projects, the teams behind [decomp.dev](https://decomp.dev/) and [decomp.me](https://decomp.me/), and the incredibly helpful discussions happening on Discord. These resources have been invaluable for solving problems, speeding up setup, and staying motivated throughout the process.

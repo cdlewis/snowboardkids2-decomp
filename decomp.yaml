@@ -1,0 +1,17 @@
+name: Snowboard Kids 2
+repo: https://github.com/cdlewis/snowboardkids2-decomp
+platform: n64
+build_system: make
+versions:
+  - name: usa
+    fullname: usa
+    sha1: 5ce896fd64276948bc2b8cccd8cd51c25a9f32aa
+    paths:
+      target: "snowboardkids2.z64"
+      build_dir: "build"
+      map: "snowboardkids2.map"
+      compiled_target: "build/snowboardkids2.z64"
+      elf: "build/snowboardkids2.elf"
+      expected_dir: "expected/"
+      asm: "asm"
+      nonmatchings: "asm/nonmatchings"

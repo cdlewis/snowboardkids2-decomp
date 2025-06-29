@@ -58,9 +58,13 @@ jobs:
       run: PATH="$(pwd)/.venv/bin:$PATH" make extract
       working-directory: main
 
+    # Verify project builds
+
     - name: Run make
       run: PATH="$(pwd)/.venv/bin:$PATH" make
       working-directory: main
+
+    # Update README badge
 
     - name: Update progress
       run: PATH="$(pwd)/.venv/bin:$PATH" python3 tools/progress.py --badge
@@ -78,3 +82,15 @@ jobs:
         git commit -m "Update file via GitHub Actions" || echo "No changes to commit"
         git push origin HEAD:${{ github.ref_name }}
       working-directory: main
+
+    # Decomp.dev reporting
+
+    - name: Generate objdiff report
+      run: PATH="$(pwd)/.venv/bin:$PATH" python3 -m mapfile_parser objdiff_report snowboardkids2.map report.json
+      working-directory: main
+
+    - name: Upload progress report artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: us_report
+        path: main/report.json
