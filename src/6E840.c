@@ -3,28 +3,23 @@
 #include "common.h"
 #include "memory_allocator.h"
 
-extern u32 __additional_scanline_0;
-extern s32 gRegionAllocEnd;
-extern void **gLinearArenaRegions;
-extern s32 gRegionAllocPtr;
-extern u16 D_800A3410_A4010;
-extern u16 D_800A3412_A4012;
-extern u16 D_800A8A9A_9FE0A;
-extern u16 D_800AB478_A27E8;
-extern void *D_800A3588_A4188[];
-void *LinearAlloc(size_t size);
-extern func_8006FDA0_709A0_arg *D_800A3370_A3F70;
-extern void *gArenaBasePtr;
-extern void *gLinearAllocPtr;
-extern void *gLinearAllocEnd;
-extern s32 D_800A3548_A4148[];
-extern s32 D_800A3550_A4150[];
-extern s32 D_800AB12C_A249C;
-extern void *D_800A3564_A4164;
-extern u32 D_800A3568_A4168;
-extern void *gLinearArenaBuffer;
-void func_8006DEE4_6EAE4();
-extern u8 D_800A356C_A416C;
+typedef struct Node {
+    struct Node *next;
+    void *unk4;
+    void *unk8;
+    u8 padding[0x3];
+    u8 unkF;
+} Node;
+
+typedef struct {
+    u8 data[0x10];
+} CallbackSlot;
+
+typedef struct
+{
+    u8 data[0x18];
+    Node *unk18;
+} CallbackData;
 
 typedef struct {
     u8 padding[0xBC];
@@ -59,6 +54,29 @@ typedef struct
     u8 padding2[0x104];
     f32 unk1D0;
 } func_8006F9BC_705BC_arg;
+
+extern CallbackSlot *D_800A3588_A4188[];
+extern u32 __additional_scanline_0;
+extern s32 gRegionAllocEnd;
+extern void **gLinearArenaRegions;
+extern s32 gRegionAllocPtr;
+extern u16 D_800A3410_A4010;
+extern u16 D_800A3412_A4012;
+extern u16 D_800A8A9A_9FE0A;
+extern u16 D_800AB478_A27E8;
+void *LinearAlloc(size_t size);
+extern func_8006FDA0_709A0_arg *D_800A3370_A3F70;
+extern void *gArenaBasePtr;
+extern void *gLinearAllocPtr;
+extern void *gLinearAllocEnd;
+extern s32 D_800A3548_A4148[];
+extern s32 D_800A3550_A4150[];
+extern s32 D_800AB12C_A249C;
+extern void *D_800A3564_A4164;
+extern u32 D_800A3568_A4168;
+extern void *gLinearArenaBuffer;
+void func_8006DEE4_6EAE4();
+extern u8 D_800A356C_A416C;
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
 
@@ -132,9 +150,9 @@ void *linearAlloc(size_t size) {
     return base;
 }
 
-void advanceLinearAlloc(s32 arg0) {
+void *advanceLinearAlloc(s32 arg0) {
     // ensure next allocation will be aligned (0x8 boundary)
-    linearAlloc((arg0 + 7) & ~7);
+    return linearAlloc((arg0 + 7) & ~7);
 }
 
 void initLinearArenaRegions() {
@@ -249,21 +267,17 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FEF8_70AF8);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", n_alSynRemovePlayer);
 
-void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3) {
-    void *temp_s0;
-    void *block;
-    void *ptr;
-
-    temp_s0 = D_800A3588_A4188[index];
-    if (temp_s0 != NULL) {
-        block = linearAlloc(0x10);
+void debugEnqueueCallback(u16 index, u8 slotIndex, void *callbackFn, void *callbackData) {
+    CallbackSlot *manager = D_800A3588_A4188[index];
+    if (manager != NULL) {
+        Node *block = (Node *)linearAlloc(0x10);
         if (block != NULL) {
-            ptr = (u8 *)temp_s0 + (arg1 << 4);
-            *(void **)block = *(void **)((u8 *)ptr + 0x18);
-            *(void **)((u8 *)block + 4) = arg2;
-            *(void **)((u8 *)block + 8) = arg3;
-            *(((u8 *)block) + 0xF) = arg1;
-            *(void **)((u8 *)ptr + 0x18) = block;
+            CallbackData *slot = (CallbackData *)&manager[slotIndex];
+            block->next = slot->unk18;
+            block->unk4 = callbackFn;
+            block->unk8 = callbackData;
+            block->unkF = slotIndex;
+            slot->unk18 = block;
         }
     }
 }

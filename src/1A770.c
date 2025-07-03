@@ -1,0 +1,65 @@
+#include "common.h"
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019B70_1A770);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019BBC_1A7BC);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019BF0_1A7F0);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019C7C_1A87C);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019CB4_1A8B4);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019CD0_1A8D0);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019D24_1A924);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019D50_1A950);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019D84_1A984);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019DC4_1A9C4);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019E18_1AA18);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019E60_1AA60);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019EA8_1AAA8);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019EFC_1AAFC);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019F30_1AB30);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_80019F60_1AB60);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A070_1AC70);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A0B4_1ACB4);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A0F4_1ACF4);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A110_1AD10);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A3D8_1AFD8);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A434_1B034);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A478_1B078);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AC30_1B830);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AC70_1B870);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001ACC8_1B8C8);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AD80_1B980);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AD9C_1B99C);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001ADFC_1B9FC);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AE80_1BA80);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AF18_1BB18);
+
+INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AF80_1BB80);

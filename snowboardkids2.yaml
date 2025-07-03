@@ -118,7 +118,7 @@ segments:
       - [0x1A110, asm]
       - [0x1A570, c, clocktower_trigger]
       - [0x1A680, c, trick_trigger]
-      - [0x1A770, asm]
+      - [0x1A770, c]
       - [0x1BBA0, c]
       - [0x1C9C0, asm]
       - [0x1D410, asm]
