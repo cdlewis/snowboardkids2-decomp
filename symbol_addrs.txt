@@ -1,3 +1,12 @@
+gTextClipAndOffsetData = 0x800AFCD4; // type:s16 size:0x6
+gFontDisplayListSetup = 0x8009A820;
+gFontTextureData = 0x800A2D60;
+gFontPaletteBase = 0x800A2D64;
+gCurrentPaletteId = 0x800A2D68;
+gGraphicsMode = 0x800AB060;
+gDefaultFontPalette = 0x800AB258;
+gTextureEnabled = 0x800AFCE0;
+
 initializeOverlaySystem = 0x80067FB0;
 loadAssetMetadataByIndex = 0x80067F5C;
 loadAssetMetadata = 0x80067F0C;

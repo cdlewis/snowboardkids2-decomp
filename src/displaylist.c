@@ -61,7 +61,7 @@ typedef struct {
 
 extern D_800AB068_A23D8_arg* D_800AB068_A23D8;
 extern Gfx* gRegionAllocPtr;
-extern s16 D_800AB060_A23D0;
+extern s16 gGraphicsMode;
 extern s32 D_215D70;
 extern s32 D_216290;
 extern s32 D_800A2D40_A3940;
@@ -198,11 +198,11 @@ void setupDisplayListMatrix(DisplayListObject* arg0) {
         gSPLookAt(gRegionAllocPtr++, temp_v0);
     }
 
-    if (D_800AB060_A23D0 != 3) {
+    if (gGraphicsMode != 3) {
         gDPPipeSync(gRegionAllocPtr++);
         gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
 
-        D_800AB060_A23D0 = 3;
+        gGraphicsMode = 3;
 
         if (arg0->unk24 != 0) {
             gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
