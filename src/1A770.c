@@ -1,4 +1,9 @@
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
+
+void func_800697CC_6A3CC(void*);
+s32 func_80069810_6A410();
+extern void func_8001A0F4_1ACF4;
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_80019B70_1A770);
 
@@ -34,7 +39,12 @@ INCLUDE_ASM("asm/nonmatchings/1A770", func_80019F60_1AB60);
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A070_1AC70);
 
-INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A0B4_1ACB4);
+void func_8001A0B4_1ACB4(void) {
+    if ((func_80069810_6A410() << 0x10) != 0) {
+        D_800AFE8C_A71FC->unk23 = 0;
+        func_800697CC_6A3CC(&func_8001A0F4_1ACF4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A0F4_1ACF4);
 
