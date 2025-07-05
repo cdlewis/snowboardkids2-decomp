@@ -11,7 +11,7 @@ void func_8006FD3C_7093C(u16, void *);
 void func_8006FF90_70B90(s32, s32, void *, void *);
 extern s32 D_800AB054_A23C4;
 extern s32 D_800AFF14_A7284;
-extern void func_80068128_68D28();
+extern void renderTextPalette();
 extern void func_8002FA44_30644();
 extern void func_8002F290_2FE90();
 void func_8000153C_213C(s32, void *);
@@ -108,8 +108,8 @@ void updateDebugCameraYState(cameraState *arg0) {
     arg0->cameraYString = cameraYString;
     arg0->cameraYRotationString = cameraYRotation;
 
-    debugEnqueueCallback(8, 7, &func_80068128_68D28, arg0);
-    debugEnqueueCallback(8, 7, &func_80068128_68D28, ((void *)((s32)arg0)) + 0xC);
+    debugEnqueueCallback(8, 7, &renderTextPalette, arg0);
+    debugEnqueueCallback(8, 7, &renderTextPalette, ((void *)((s32)arg0)) + 0xC);
 }
 
 typedef struct {

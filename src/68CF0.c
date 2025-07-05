@@ -1,3 +1,5 @@
+#include "68CF0.h"
+
 #include "19E80.h"
 #include "6E840.h"
 #include "common.h"
@@ -13,7 +15,7 @@ void func_800680F0_68CF0(void* arg0) {
     gFontPaletteBase = sp10.unk4;
 }
 
-INCLUDE_ASM("asm/nonmatchings/68CF0", func_80068128_68D28);
+INCLUDE_ASM("asm/nonmatchings/68CF0", renderTextPalette);
 
 typedef struct {
     u16 x;
@@ -22,9 +24,9 @@ typedef struct {
     u8* string;
 } TextData;
 
-extern void func_80068128_68D28(TextData*);
+extern void renderTextPalette(TextData*);
 
-void func_800688D4_694D4(s16 x, s16 y, s16 palette, u8* target_string, s32 arg4, s32 arg5) {
+void enqueueTextRender(s16 x, s16 y, s16 palette, u8* target_string, s32 arg4, s32 arg5) {
     s32 required_size;
     s32 length = 0;
     u8* string_block;
@@ -58,9 +60,9 @@ void func_800688D4_694D4(s16 x, s16 y, s16 palette, u8* target_string, s32 arg4,
             string_meta_block->y = y;
             string_meta_block->palette = palette;
             string_meta_block->string = string_block;
-            debugEnqueueCallback(arg4, arg5, &func_80068128_68D28, string_meta_block);
+            debugEnqueueCallback(arg4, arg5, &renderTextPalette, string_meta_block);
         }
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/68CF0", func_800689C0_695C0);
+INCLUDE_ASM("asm/nonmatchings/68CF0", renderTextColored);
