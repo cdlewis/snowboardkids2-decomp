@@ -2,10 +2,28 @@
 #include "69EF0.h"
 #include "common.h"
 
+typedef struct {
+    u8 padding0[0x8];
+    s32 unk8;
+    u8 padding2[0x18];
+    s16 unk24;
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 padding[2];
+    s32 unk3C;
+} func_8004A9A8_4B5A8_node;
+
 extern void func_8004AA90_4B690();
-extern void func_8004AE58_4BA58();
 extern void func_80049300_49F00();
 extern void func_80049404_4A004();
+
+extern s32 D_3F6670;
+extern s32 D_3F6950;
+
+void func_8004AE58_4BA58(s32 **);
+void func_8004A634_4B234(void *);
+void func_8004A96C_4B56C(s32 **);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80045480_46080);
 
@@ -197,7 +215,11 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049C70_4A870);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049CA8_4A8A8);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004A5E0_4B1E0);
+void func_8004A5E0_4B1E0(void **arg0) {
+    *arg0 = dmaRequestAndUpdateStateWithSize(&D_3F6670, &D_3F6950, 0x388);
+    setCleanupCallback((void (*)(void *))&func_8004A96C_4B56C);
+    setCallbackWithContinue(&func_8004A634_4B234);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004A634_4B234);
 
@@ -205,13 +227,33 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004A6D4_4B2D4);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004A850_4B450);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004A96C_4B56C);
+void func_8004A96C_4B56C(s32 **arg0) {
+    GameState *temp_v0;
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004A9A8_4B5A8);
+    temp_v0 = GameStateGet();
+    temp_v0->PAD_5[0xB] += 1;
+    *arg0 = (s32 *)freeGameStateMemory(*arg0);
+}
+
+void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2) {
+    GameState *gs;
+    func_8004A9A8_4B5A8_node *node;
+
+    gs = GameStateGet();
+    if (gs->PAD_5[0xB] != 0) {
+        node = (func_8004A9A8_4B5A8_node *)scheduleTask(&func_8004A5E0_4B1E0, 3U, 0U, 0xEFU);
+        if (node != NULL) {
+            gs->PAD_5[0xB] -= 1;
+            memcpy(&node->unk8, arg0, 0xC);
+            memcpy(&node->unk2C, arg2, 0xC);
+            node->unk24 = arg1;
+        }
+    }
+}
 
 void func_8004AA50_4B650(s32 *arg0) {
     *arg0 = (s32)load_3ECE40();
-    setCleanupCallback(&func_8004AE58_4BA58);
+    setCleanupCallback((void (*)(void *))func_8004AE58_4BA58);
     setCallbackWithContinue(&func_8004AA90_4B690);
 }
 
