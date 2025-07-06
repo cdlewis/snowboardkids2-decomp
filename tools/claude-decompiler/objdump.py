@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+
+"""
+objdump.py is a Python script that processes MIPS object files and displays their disassembled assembly code in a clean, normalized format.
+
+Basic Usage: `./objdump.py file.o`
+"""
+
 import re
 import subprocess
 import sys

@@ -7,3 +7,4 @@ compiler_type = "gcc"
 [preserve_macros]
 "g[DS]P.*" = "void"
 "gs[DS]P.*" = "void"
+"G_.*" = "void"

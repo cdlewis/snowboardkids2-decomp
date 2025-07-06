@@ -4,17 +4,17 @@
 #include "common.h"
 
 typedef struct {
-    u32 data_offset;
-    u16 index_offset;
-    u16 field1;
-    u16 field2;
+    /* 0x00 */ u32 data_offset;
+    /* 0x04 */ u16 index_offset;
+    /* 0x06 */ u16 field1;
+    /* 0x08 */ u16 field2;
     u8 padding[6];
 } TableEntry_19E80;
 
 typedef struct {
-    u8 header[4];
-    u32 index_table_offset;
-    TableEntry_19E80 entries[1];
+    /* 0x00 */ u8 header[4];
+    /* 0x04 */ u32 index_table_offset;
+    /* 0x08 */ TableEntry_19E80 entries[1];
 } DataTable_19E80;
 
 typedef struct {

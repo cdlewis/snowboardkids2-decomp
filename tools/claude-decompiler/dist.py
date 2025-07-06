@@ -40,6 +40,56 @@ def read_lines(path: str) -> List[str]:
     with open(path, 'r', encoding='utf-8') as f:
         return [line.strip() for line in f if line.strip()]
 
+def read_assertions(path: str) -> Optional[List[str]]:
+    """Read assertions file if it exists. Returns list of line addresses/numbers."""
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            assertions = []
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                assertions.append(line)
+            return assertions if assertions else None
+    except FileNotFoundError:
+        return None
+
+def check_assertions(target_lines: List[str], base_lines: List[str], assertions: List[str]) -> bool:
+    """Check if assertion lines from target appear in the correct positions in base."""
+    failed = False
+    for hex_line_num in assertions:
+        # Convert line number to 0-based index
+        try:
+            target_pos = int(hex_line_num) - 1  # Convert to 0-based index
+        except ValueError:
+            print(f"FAILED: Invalid line number '{hex_line_num}'")
+            failed = True
+            continue
+        
+        # Check if position is valid in target
+        if target_pos < 0 or target_pos >= len(target_lines):
+            print(f"FAILED: Assertion line {hex_line_num} beyond target file length")
+            failed = True
+            continue
+            
+        target_instruction = target_lines[target_pos].strip()
+        
+        # Check if the same line appears at the same position in base
+        if target_pos >= len(base_lines):
+            print(f"FAILED: Assertion line {hex_line_num} - base file too short")
+            failed = True
+        elif base_lines[target_pos].strip() != target_instruction:
+            print(f"FAILED: Assertion line {hex_line_num} instruction mismatch")
+            print(f"  Expected: {target_instruction}")
+            print(f"  Got:      {base_lines[target_pos].strip()}")
+            failed = True
+    
+    if failed:
+        print("ASSERTIONS FAILED")
+    else:
+        print("ASSERTIONS PASSED", len(assertions))
+    return not failed
+
 def read_object_file(path: str, preserve_offsets: bool = True) -> List[str]:
     """Read an object file using objdump"""
     import sys
@@ -260,6 +310,11 @@ def main():
         # Regular text file processing
         target_lines = read_lines(args.target_file)
         cand_lines = read_lines(args.cand_file)
+
+    # Check for assertions file
+    assertions = read_assertions("assertions")
+    if assertions:
+        check_assertions(target_lines, cand_lines, assertions)
 
     score, sha256_hash, match_percentage = score_files(target_lines, cand_lines, debug_mode=args.debug)
     

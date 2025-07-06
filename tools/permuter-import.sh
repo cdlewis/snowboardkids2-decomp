@@ -32,4 +32,3 @@ fi
 
 # Run the import scripts with the found path
 ./tools/decomp-permuter/import.py src/temp.c "$ASM_PATH"
-./tools/claude-decompiler/import.sh

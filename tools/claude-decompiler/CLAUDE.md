@@ -16,12 +16,8 @@ Repeat the following steps:
 
 ## Tools
 
-* ./claude-target.sh: dumps the assembly code from the target object (the object that we're trying to create matching code for).
+* ./objdump.py target.o: dumps the assembly code from the target object (the object that we're trying to create matching code for).
 * claude-compile-and-analyse.sh $file_to_compile.c: takes a .c file, compiles it, and diffs the resulting object code against the target assembly.
-
-## Project Structure
-
-* You might also find it useful to consider the attempts in output-{diff}-x folders. These are messy / brute force but you might get some ideas from them.
 
 ## Coding Guidelines
 
@@ -39,3 +35,7 @@ Repeat the following steps:
 * Prefer direct variable assignments over compound expressions
 * Use temporary variables instead of complex nested expressions
 * Avoid relying on operator precedence - use parentheses to be explicit
+
+## Decompiling Tips
+* Think about what the function is *doing* within the game. What is its purpose? Ensure code is logically structured to fulfill that purpose. This is the surest strategy for finding a 100% match.
+* Focus on control flow differences over register or stack differences. Register and stack are easy to fix later.
