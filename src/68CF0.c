@@ -8,11 +8,11 @@ extern s32 gFontTextureData;
 extern s32 gFontPaletteBase;
 
 void func_800680F0_68CF0(void* arg0) {
-    func_80019280_19E80_return sp10;
+    OutputStruct_19E80 result;
 
-    func_80019280_19E80(arg0, 0, &sp10);
-    gFontTextureData = (s32)sp10.unk0;
-    gFontPaletteBase = sp10.unk4;
+    func_80019280_19E80(arg0, 0, &result);
+    gFontTextureData = (s32)result.data_ptr;
+    gFontPaletteBase = (s32)result.index_ptr;
 }
 
 INCLUDE_ASM("asm/nonmatchings/68CF0", renderTextPalette);

@@ -7,8 +7,8 @@
 
 typedef struct {
     u8 padding[0x24];
-    s32 unk24;
-    s32 unk28;
+    /* 0x24 */ u8* data_ptr;
+    /* 0x28 */ TableEntry_19E80* index_ptr;
     s8 unk2C;
     s8 unk2D;
 } func_80002C14_3814_arg;
@@ -628,11 +628,11 @@ s32 func_80002BD0_37D0(func_80002040_2C40_arg* arg0) {
 }
 
 void func_80002C14_3814(func_80002C14_3814_arg* arg0, void* arg1, s32 arg2) {
-    func_80019280_19E80_return result;
-    func_80019280_19E80(arg1, arg2 & 0xFFFF, &result);
+    OutputStruct_19E80 result;
+    func_80019280_19E80(arg1, (s16)arg2, &result);
 
-    arg0->unk24 = result.unk0;
-    arg0->unk28 = result.unk4;
-    arg0->unk2C = result.unk18;
-    arg0->unk2D = result.unk1A;
+    arg0->data_ptr = result.data_ptr;
+    arg0->index_ptr = result.index_ptr;
+    arg0->unk2C = result.field1;
+    arg0->unk2D = result.field2;
 }

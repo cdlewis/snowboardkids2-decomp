@@ -21,20 +21,11 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x10];
-    s32 unk10;
-    s32 unk14;
+    u8* data_ptr;
+    TableEntry_19E80* index_ptr;
     s8 unk18;
     u8 unk19;
 } loadAssetMetadataByIndex_arg;
-
-typedef struct {
-    s32 sp10;
-    s32 sp14;
-    u16 sp18;
-    u16 sp1A;
-} loadAssetMetadataByIndex_sp10;
-
-void func_800192CC_19ECC(s32, s32, s32, loadAssetMetadataByIndex_sp10*);
 
 typedef struct {
     u8 padding[0x148];
@@ -460,23 +451,23 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_800677F0_683F0);
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80067EDC_68ADC);
 
 void loadAssetMetadata(loadAssetMetadata_arg* arg0, void* arg1, s32 arg2) {
-    func_80019280_19E80_return sp10;
+    OutputStruct_19E80 result;
 
-    func_80019280_19E80(arg1, arg2 & 0xFFFF, &sp10);
-    arg0->unk10 = sp10.unk0;
-    arg0->unk14 = sp10.unk4;
-    arg0->unk18 = sp10.unk18;
-    arg0->unk19 = sp10.unk1A;
+    func_80019280_19E80(arg1, (s16)arg2, &result);
+    arg0->data_ptr = result.data_ptr;
+    arg0->index_ptr = result.index_ptr;
+    arg0->unk18 = result.field1;
+    arg0->unk19 = result.field2;
 }
 
-void loadAssetMetadataByIndex(loadAssetMetadataByIndex_arg* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    loadAssetMetadataByIndex_sp10 sp10;
+void loadAssetMetadataByIndex(loadAssetMetadataByIndex_arg* arg0, DataTable_19E80* table, s32 entry_index, s32 sub_index) {
+    OutputStruct_19E80 result;
 
-    func_800192CC_19ECC(arg1, arg2 & 0xFFFF, arg3 & 0xFF, &sp10);
-    arg0->unk10 = sp10.sp10;
-    arg0->unk14 = sp10.sp14;
-    arg0->unk18 = sp10.sp18;
-    arg0->unk19 = sp10.sp1A;
+    func_800192CC_19ECC(table, (u16)entry_index, (u8)sub_index, &result);
+    arg0->data_ptr = result.data_ptr;
+    arg0->index_ptr = result.index_ptr;
+    arg0->unk18 = result.field1;
+    arg0->unk19 = result.field2;
 }
 
 void initializeOverlaySystem(void) {

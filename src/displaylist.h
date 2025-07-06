@@ -1,3 +1,4 @@
+#include "19E80.h"
 #include "common.h"
 
 typedef struct {
@@ -40,8 +41,8 @@ void initializeOverlaySystem();
 
 typedef struct {
     u8 padding[0x10];
-    s32 unk10;
-    s32 unk14;
+    u8* data_ptr;
+    TableEntry_19E80* index_ptr;
     s8 unk18;
     s8 unk19;
     s8 unk1A;
