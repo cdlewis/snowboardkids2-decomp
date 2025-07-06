@@ -1,6 +1,6 @@
 #include "19E80.h"
 
-void func_80019280_19E80(DataTable_19E80 *arg0, u16 arg1, OutputStruct_19E80 *arg2) {
+void getTableEntryByU16Index(DataTable_19E80 *arg0, u16 arg1, OutputStruct_19E80 *arg2) {
     u16 index_offset;
     TableEntry_19E80 *entry_ptr;
     TableEntry_19E80 *index_table;
@@ -16,7 +16,7 @@ void func_80019280_19E80(DataTable_19E80 *arg0, u16 arg1, OutputStruct_19E80 *ar
     arg2->field2 = entry_ptr->field2;
 }
 
-void func_800192CC_19ECC(DataTable_19E80 *table, u32 entry_index, u8 sub_index, OutputStruct_19E80 *output) {
+void getTableEntryByIndex(DataTable_19E80 *table, u32 entry_index, u8 sub_index, OutputStruct_19E80 *output) {
     TableEntry_19E80 *entry_base;
     TableEntry_19E80 *index_ptr;
 

@@ -1,3 +1,5 @@
+getTableEntryByU16Index = 0x80019280;
+getTableEntryByIndex = 0x800192CC;
 renderTextPalette = 0x80068128;
 renderTextColored = 0x800689C0;
 enqueueTextRender = 0x800688D4;

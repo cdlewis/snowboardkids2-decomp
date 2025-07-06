@@ -629,7 +629,7 @@ s32 func_80002BD0_37D0(func_80002040_2C40_arg* arg0) {
 
 void func_80002C14_3814(func_80002C14_3814_arg* arg0, void* arg1, s32 arg2) {
     OutputStruct_19E80 result;
-    func_80019280_19E80(arg1, (s16)arg2, &result);
+    getTableEntryByU16Index(arg1, (s16)arg2, &result);
 
     arg0->data_ptr = result.data_ptr;
     arg0->index_ptr = result.index_ptr;

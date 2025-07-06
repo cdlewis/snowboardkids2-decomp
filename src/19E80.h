@@ -24,8 +24,8 @@ typedef struct {
     /* 0x10 */ u16 field2;
 } OutputStruct_19E80;
 
-void func_80019280_19E80(DataTable_19E80 *, u16, OutputStruct_19E80 *);
+void getTableEntryByU16Index(DataTable_19E80 *, u16, OutputStruct_19E80 *);
 
-void func_800192CC_19ECC(DataTable_19E80 *table, u32 entry_index, u8 sub_index, OutputStruct_19E80 *output);
+void getTableEntryByIndex(DataTable_19E80 *table, u32 entry_index, u8 sub_index, OutputStruct_19E80 *output);
 
 #endif

@@ -453,7 +453,7 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80067EDC_68ADC);
 void loadAssetMetadata(loadAssetMetadata_arg* arg0, void* arg1, s32 arg2) {
     OutputStruct_19E80 result;
 
-    func_80019280_19E80(arg1, (s16)arg2, &result);
+    getTableEntryByU16Index(arg1, (s16)arg2, &result);
     arg0->data_ptr = result.data_ptr;
     arg0->index_ptr = result.index_ptr;
     arg0->unk18 = result.field1;
@@ -463,7 +463,7 @@ void loadAssetMetadata(loadAssetMetadata_arg* arg0, void* arg1, s32 arg2) {
 void loadAssetMetadataByIndex(loadAssetMetadataByIndex_arg* arg0, DataTable_19E80* table, s32 entry_index, s32 sub_index) {
     OutputStruct_19E80 result;
 
-    func_800192CC_19ECC(table, (u16)entry_index, (u8)sub_index, &result);
+    getTableEntryByIndex(table, (u16)entry_index, (u8)sub_index, &result);
     arg0->data_ptr = result.data_ptr;
     arg0->index_ptr = result.index_ptr;
     arg0->unk18 = result.field1;
