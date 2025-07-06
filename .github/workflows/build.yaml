@@ -86,7 +86,7 @@ jobs:
     # Decomp.dev reporting
 
     - name: Generate objdiff report
-      run: PATH="$(pwd)/.venv/bin:$PATH" python3 -m mapfile_parser objdiff_report snowboardkids2.map report.json
+      run: PATH="$(pwd)/.venv/bin:$PATH" python3 -m mapfile_parser objdiff_report report.json
       working-directory: main
 
     - name: Upload progress report artifact
