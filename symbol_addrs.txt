@@ -4,7 +4,7 @@ renderTextPalette = 0x80068128;
 renderTextColored = 0x800689C0;
 enqueueTextRender = 0x800688D4;
 
-gTextClipAndOffsetData = 0x800AFCD4; // type:s16 size:0x6
+gTextClipAndOffsetData = 0x800AFCD4; // type:s16 size:0xC
 gFontDisplayListSetup = 0x8009A820;
 gFontTextureData = 0x800A2D60;
 gFontPaletteBase = 0x800A2D64;
