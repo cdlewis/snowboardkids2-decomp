@@ -1,5 +1,5 @@
-#include "69EF0.h"
 #include "common.h"
+#include "task_scheduler.h"
 
 typedef struct
 {
@@ -195,7 +195,7 @@ void func_800570BC_57CBC() {
     D_800A2990_A3590->unk20 = (s32)((D_800A2990_A3590->unk20 + 1) & 0xFFFFFF);
 }
 
-void func_800570E0_57CE0(void* arg) {
+void func_800570E0_57CE0(void *arg) {
     setCleanupCallback(func_800570E0_57CE0);
     if (D_800A2990_A3590->unk1D != 0) {
         setCallback(&func_80057124_57D24);
@@ -231,7 +231,7 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_800572B0_57EB0);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800573F8_57FF8);
 
-extern void func_800570E0_57CE0(void* arg);
+extern void func_800570E0_57CE0(void *arg);
 
 void func_80057470_58070(void) {
     if (func_80058638_59238() == NULL) {

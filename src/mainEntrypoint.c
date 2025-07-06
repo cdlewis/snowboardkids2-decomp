@@ -1,9 +1,9 @@
 #include "3A1F0.h"
-#include "69EF0.h"
 #include "PRinternal/viint.h"
 #include "common.h"
 #include "displaylist.h"
 #include "memory_allocator.h"
+#include "task_scheduler.h"
 #include "thread_manager.h"
 
 extern OSMesg mainMessageQueueBuffer[32];

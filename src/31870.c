@@ -1,8 +1,8 @@
 #include "20F0.h"
-#include "69EF0.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "task_scheduler.h"
 
 typedef struct {
     s32 unk0;

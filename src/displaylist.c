@@ -1,12 +1,12 @@
 #include "displaylist.h"
 
 #include "19E80.h"
-#include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 #include "gbi.h"
 #include "overlay.h"
+#include "task_scheduler.h"
 
 USE_OVERLAY(_9FDF0)
 

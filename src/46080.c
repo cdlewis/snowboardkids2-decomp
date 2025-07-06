@@ -1,6 +1,6 @@
 #include "5E590.h"
-#include "69EF0.h"
 #include "common.h"
+#include "task_scheduler.h"
 
 typedef struct {
     u8 padding0[0x8];

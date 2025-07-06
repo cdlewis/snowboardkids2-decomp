@@ -1,7 +1,7 @@
-#include "69EF0.h"
 #include "common.h"
 #include "event_trigger.h"
 #include "gamestate.h"
+#include "task_scheduler.h"
 
 void WallNewspaperTriggerCheck(void *);
 extern u8 D_8008D6C4_8E2C4[];

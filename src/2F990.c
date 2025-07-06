@@ -1,10 +1,10 @@
 #include "20F0.h"
-#include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "task_scheduler.h"
 
 void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 void func_8006FD3C_7093C(u16, void *);

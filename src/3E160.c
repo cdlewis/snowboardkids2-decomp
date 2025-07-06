@@ -1,9 +1,9 @@
 #include "56910.h"
-#include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "task_scheduler.h"
 
 extern s32 D_34CB50;
 extern s32 D_34F7E0;

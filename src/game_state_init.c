@@ -1,7 +1,7 @@
-#include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
+#include "task_scheduler.h"
 
 extern s32 D_419440;
 extern s32 D_4196E0;

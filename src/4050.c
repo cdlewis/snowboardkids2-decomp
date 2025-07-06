@@ -1,8 +1,8 @@
-#include "69EF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 #include "overlay.h"
+#include "task_scheduler.h"
 
 USE_OVERLAY(_1DD170)
 

@@ -1,4 +1,4 @@
-#include "69EF0.h"
+#include "task_scheduler.h"
 
 #include "3A1F0.h"
 #include "gamestate.h"
@@ -62,7 +62,7 @@ s32 hasActiveTasks();
 void processActiveTasks(void);
 void func_80069D34_6A934();
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_800692F0_69EF0);
+INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800692F0_69EF0);
 
 void func_800693C4_69FC4(s32 arg0, s8 arg1) {
     D_800A32C0_A3EC0_type *temp_a2;
@@ -262,7 +262,7 @@ void func_800697CC_6A3CC(void (*arg0)()) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_800697F4_6A3F4);
+INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800697F4_6A3F4);
 
 s16 func_80069810_6A410(void) {
     s16 temp_v0;
@@ -277,7 +277,7 @@ void setGameStateHandler(void *arg0) {
     gTaskScheduler->unk10 = arg0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006983C_6A43C);
+INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_8006983C_6A43C);
 
 GameState *func_80069854_6A454(s32 arg0) {
     u8 *node_exists;
@@ -302,11 +302,11 @@ GameState *GameStateGet() {
     return gTaskScheduler->GameState;
 }
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698CC_6A4CC);
+INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800698CC_6A4CC);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698DC_6A4DC);
+INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800698DC_6A4DC);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_800698EC_6A4EC);
+INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800698EC_6A4EC);
 
 Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) {
     Node *newNode;
@@ -451,11 +451,11 @@ s32 hasActiveTasks() {
     return gTaskScheduler->activeList != NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D34_6A934);
+INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_80069D34_6A934);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069D7C_6A97C);
+INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_80069D7C_6A97C);
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_80069DD4_6A9D4);
+INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_80069DD4_6A9D4);
 
 void *dmaRequestAndUpdateState(void *start, void *end) {
     void *allocatedSpaceStart;
@@ -530,7 +530,7 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
     return allocatedSpaceStart;
 }
 
-INCLUDE_ASM("asm/nonmatchings/69EF0", func_8006A0EC_6ACEC);
+INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_8006A0EC_6ACEC);
 
 GameState *allocateGameStateMemory(s32 arg0) {
     u8 *exists;

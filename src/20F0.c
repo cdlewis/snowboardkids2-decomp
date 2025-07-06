@@ -2,8 +2,8 @@
 
 #include "19E80.h"
 #include "5EA60.h"
-#include "69EF0.h"
 #include "displaylist.h"
+#include "task_scheduler.h"
 
 typedef struct {
     u8 padding[0x24];

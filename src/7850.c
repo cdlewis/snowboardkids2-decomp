@@ -1,7 +1,7 @@
 #include "20F0.h"
-#include "69EF0.h"
 #include "common.h"
 #include "memory_allocator.h"
+#include "task_scheduler.h"
 
 extern void *D_80088720_89320;
 extern void *func_80006EE0_7AE0;
