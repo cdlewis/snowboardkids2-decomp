@@ -8,3 +8,7 @@ struct viConfig_s {
     u16 frameCounter;
     u16 maxFrames;
 };
+
+void initialize_video_and_threads(s32 viMode);
+
+void addViConfig(ViConfig *config, OSMesgQueue *messageQueue, s32 frameCount);

@@ -34,3 +34,5 @@ void setCallbackWithContinue(void(callback)(void *));
 void setCleanupCallback(void(callback)(void *));
 
 s32 freeGameStateMemory(s32 *);
+
+void runTaskSchedulers(void);

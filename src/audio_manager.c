@@ -1,6 +1,6 @@
-#include "70DB0.h"
 #include "common.h"
 #include "sched.h"
+#include "thread_manager.h"
 #include "ucode.h"
 
 typedef struct
@@ -122,8 +122,8 @@ void *gPendingMessages = NULL;
 s32 gAudioUnderrunFlag = 1;
 
 // rodata
-//const f64 D_8009EA60_9F660 = 4294967296;
-//const f64 D_8009EA68_9F668 = 4294967296;
+// const f64 D_8009EA60_9F660 = 4294967296;
+// const f64 D_8009EA68_9F668 = 4294967296;
 
 INCLUDE_ASM("asm/nonmatchings/audio_manager", initAudioManager);
 /*

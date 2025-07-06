@@ -26,5 +26,7 @@ void markNodeAsLocked(s32 *);
 s32 getNodeOwner(void *);
 s32 decrementNodeRefCount(s32 *);
 void unlockNodeWithInterruptDisable(s32 *);
+void initializeMemoryAllocatorRegion(void);
+void cleanupUnusedNodes(void);
 
 #endif
