@@ -173,7 +173,7 @@ segments:
       - [0x69EF0, c, task_scheduler]
       - [0x6AE20, c, memory_allocator]
       - [0x6B140, c, geometry]
-      - [0x6DE50, asm]
+      - [0x6DE50, c]
       - [0x6E640, c, mainEntrypoint]
       - [0x6E840, c]
       - [0x70DB0, c, thread_manager]
