@@ -1,5 +1,6 @@
 #include "common.h"
 
+void func_8006D4B8_6E0B8(s32, s16, s16, s16, s32, u8, u8, u8, u8, u8, u8, u8, u8);
 void func_8006D820_6E420(void);
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
@@ -89,6 +90,8 @@ void func_8006D250_6DE50(func_8006D250_6DE50_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/6DE50", func_8006D4B8_6E0B8);
 
-INCLUDE_ASM("asm/nonmatchings/6DE50", func_8006D7B0_6E3B0);
+void func_8006D7B0_6E3B0(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
+    func_8006D4B8_6E0B8(arg0, arg1, arg2, arg3, (s32)arg4, arg5, arg6, 0, 0xFF, 0, arg7, arg8, arg9);
+}
 
 INCLUDE_ASM("asm/nonmatchings/6DE50", func_8006D820_6E420);
