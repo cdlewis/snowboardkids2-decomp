@@ -75,7 +75,7 @@ typedef struct {
 } func_80031A0C_3260C_arg;
 
 void func_80031A0C_3260C(func_80031A0C_3260C_arg* arg0) {
-    arg0->unk0 = func_800019B8_25B8(0x3A, &GameStateGet()->audioPlayer2, 0, -1, 0, 0x12);
+    arg0->unk0 = func_800019B8_25B8(0x3A, &((GameState*)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
 
     memcpy(&arg0->unk4, &D_8009A870_9B470, 0x20);
 
@@ -96,7 +96,7 @@ void func_80031A0C_3260C(func_80031A0C_3260C_arg* arg0) {
 void func_80031ABC_326BC(func_80031ABC_326BC_arg* arg0) {
     GameState* temp_s1;
 
-    temp_s1 = GameStateGet();
+    temp_s1 = (GameState*)getCurrentAllocation();
     func_8000153C_213C(arg0->unk0, &arg0->unk4);
     func_8000160C_220C(arg0->unk0, 1);
     func_800021B8_2DB8(arg0->unk0, arg0->unk24);

@@ -23,7 +23,7 @@ extern void func_8004083C_4143C();
 extern void func_80040948_41548();
 
 void func_800407E0_413E0(func_800407E0_413E0_arg* arg0) {
-    GameState* temp_s0 = GameStateGet();
+    GameState* temp_s0 = (GameState*)getCurrentAllocation();
     arg0->unk0 = load_3ECE40();
     arg0->unk4 = (u8*)(temp_s0->unk44 + 0x1380);
     setCleanupCallback(&func_80040948_41548);

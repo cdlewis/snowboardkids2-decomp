@@ -230,7 +230,7 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004A850_4B450);
 void func_8004A96C_4B56C(s32 **arg0) {
     GameState *temp_v0;
 
-    temp_v0 = GameStateGet();
+    temp_v0 = (GameState *)getCurrentAllocation();
     temp_v0->PAD_5[0xB] += 1;
     *arg0 = (s32 *)freeGameStateMemory(*arg0);
 }
@@ -239,7 +239,7 @@ void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2) {
     GameState *gs;
     func_8004A9A8_4B5A8_node *node;
 
-    gs = GameStateGet();
+    gs = (GameState *)getCurrentAllocation();
     if (gs->PAD_5[0xB] != 0) {
         node = (func_8004A9A8_4B5A8_node *)scheduleTask(&func_8004A5E0_4B1E0, 3U, 0U, 0xEFU);
         if (node != NULL) {
@@ -266,7 +266,7 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004AD18_4B918);
 void func_8004AE58_4BA58(s32 **arg0) {
     GameState *temp_v0;
 
-    temp_v0 = GameStateGet();
+    temp_v0 = (GameState *)getCurrentAllocation();
     temp_v0->PAD_5[0xB] += 1;
     *arg0 = (s32 *)freeGameStateMemory(*arg0);
 }
@@ -274,7 +274,7 @@ void func_8004AE58_4BA58(s32 **arg0) {
 void func_8004AE94_4BA94(s32 arg0) {
     NodeWithPayload *temp_v0;
 
-    GameStateGet();
+    (GameState *)getCurrentAllocation();
     temp_v0 = (NodeWithPayload *)scheduleTask(&func_8004AA50_4B650, 3, 0, 0xEFU);
     if (temp_v0 != NULL) {
         temp_v0->unk30 = arg0;

@@ -110,7 +110,7 @@ void func_80050460_51060(void** node) {
 }
 
 void func_800504A0_510A0(func_800504A0_510A0_arg* arg0) {
-    GameState* gs = GameStateGet();
+    GameState* gs = (GameState*)getCurrentAllocation();
     loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk30);
     arg0->unk1E = 0xE0;
     arg0->unk4 = &gs->unk44[0xFC0];
@@ -121,7 +121,7 @@ void func_800504A0_510A0(func_800504A0_510A0_arg* arg0) {
 void func_80050504_51104(func_80050504_51104_arg* arg0) {
     GameState* gs;
     s32 i;
-    gs = GameStateGet();
+    gs = (GameState*)getCurrentAllocation();
     i = 0;
     if (gs->PAD_6[0x17] == 0) {
         arg0->unk4 = (s32)(gs->unk44 + ((arg0->unk34 << 6) + 0xFC0));
@@ -156,7 +156,7 @@ void func_80050604_51204(void* arg0, func_80050604_51204_arg* arg1, s32 arg2) {
 }
 
 void func_800506B4_512B4(func_800506B4_512B4_arg* arg0) {
-    GameState* temp_s1 = GameStateGet();
+    GameState* temp_s1 = (GameState*)getCurrentAllocation();
     arg0->unk0 = load_3ECE40();
     arg0->unk4 = (void*)(temp_s1->unk44 + ((arg0->unk52 << 6) + 0x1080));
     arg0->unk1E = (u8)((func_800AFF44_9FE04() & 0x1F) + 0x70);
@@ -220,7 +220,7 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_80050FE0_51BE0);
 INCLUDE_ASM("asm/nonmatchings/51060", func_8005100C_51C0C);
 
 void func_800510A4_51CA4(func_800506B4_512B4_arg* arg0) {
-    GameState* temp_s1 = GameStateGet();
+    GameState* temp_s1 = (GameState*)getCurrentAllocation();
     arg0->unk0 = load_3ECE40();
     arg0->unk4 = (u8*)(temp_s1->unk44 + 0x1340);
     arg0->unk1E = (u8)((func_800AFF44_9FE04() & 0x1F) + 0x70);
@@ -246,7 +246,7 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_80051688_52288);
 INCLUDE_ASM("asm/nonmatchings/51060", func_800516B4_522B4);
 
 void func_800516F4_522F4(func_800516F4_522F4_arg* arg0) {
-    GameStateGet();
+    (GameState*)getCurrentAllocation();
     arg0->unk4 = load_3ECE40();
     arg0->unk8 = &D_80090EC0_91AC0;
     arg0->unk22 = 0xFF;

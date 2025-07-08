@@ -73,7 +73,7 @@ extern void guLookAtReflect(Mtx* m, LookAt* l, float xEye, float yEye, float zEy
 
 s32 func_80069810_6A410();
 s32 func_80070140_70D40(void*);
-s32* func_80069854_6A454(s32);
+s32* allocateTaskMemory(s32);
 void func_80062CF0_638F0();
 void setupDisplayListMatrix(DisplayListObject*);
 void func_80063A94_64694(void*);
@@ -473,14 +473,14 @@ void loadAssetMetadataByIndex(loadAssetMetadataByIndex_arg* arg0, DataTable_19E8
 void initializeOverlaySystem(void) {
     void** temp_s0;
 
-    temp_s0 = (void**)func_80069854_6A454(4);
+    temp_s0 = (void**)allocateTaskMemory(4);
     LOAD_OVERLAY(_9FDF0)
     *temp_s0 = dmaRequestAndUpdateStateWithSize(&D_215D70, &D_216290, 0x918);
     setGameStateHandler(&func_80068060_68C60);
 }
 
 void func_80068060_68C60(void) {
-    func_800680F0_68CF0(GameStateGet()->audioPlayer0);
+    func_800680F0_68CF0(((GameState*)getCurrentAllocation())->audioPlayer0);
     func_800697CC_6A3CC(&func_800680C4_68CC4);
 }
 

@@ -28,7 +28,6 @@ extern s16 D_8008BF9E_8CB9E;
 extern void func_800697F4_6A3F4(s32);
 extern void func_800693C4_69FC4(void *, s32);
 extern void func_80014480_15080();
-extern GameState *GameStateGet();
 extern void func_800697CC_6A3CC(void (*func)(void));
 extern void n_alSynRemovePlayer(void *player);
 extern s16 D_800AB070_A23E0;
@@ -40,8 +39,8 @@ typedef struct
     s8 unk3;
     char padding[0xDE];
     s16 unkE2;
-} func_80069854_6A454_return;
-extern func_80069854_6A454_return *func_80069854_6A454(s32);
+} allocateTaskMemory_return;
+extern allocateTaskMemory_return *allocateTaskMemory(s32);
 extern void func_800698EC_6A4EC(s32, s32, s32, s32, s32, s32, s32, s32);
 extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 extern void func_8006F994_70594(void *, s32, s32, s32, s32, s32, s32);
@@ -88,9 +87,9 @@ void func_80003508_4108() {
     u8 temp[0x20];
 
     struct {
-        func_80069854_6A454_return *s1;
+        allocateTaskMemory_return *s1;
     } s;
-    s.s1 = func_80069854_6A454(0x17E8);
+    s.s1 = allocateTaskMemory(0x17E8);
     s.s1->unk2 = 0;
     s.s1->unk0 = 0;
     s.s1->unk3 = 0;
@@ -118,7 +117,7 @@ void func_80003508_4108() {
     func_8006FDA0_709A0(s0, 0xFF, 0);
     func_8006FDA0_709A0(s0, 0, 8);
 
-    s.s1 = (func_80069854_6A454_return *)(((u8 *)s.s1) + 0x3B8);
+    s.s1 = (allocateTaskMemory_return *)(((u8 *)s.s1) + 0x3B8);
     func_8006FAA4_706A4(s.s1, 0, 3, 8, 0);
     func_8006F9BC_705BC(s.s1, f20, f20);
     func_8006FEF8_70AF8(s.s1, 1);
@@ -136,7 +135,7 @@ INCLUDE_ASM("asm/nonmatchings/4050", func_80003898_4498);
 void func_80003C34_4834(void) {
     GameState *temp_v0;
 
-    temp_v0 = GameStateGet();
+    temp_v0 = (GameState *)getCurrentAllocation();
     if (temp_v0->unk17E0 != 0) {
         n_alSynRemovePlayer(&temp_v0->audioPlayer5);
         n_alSynRemovePlayer(&temp_v0->audioPlayer3);

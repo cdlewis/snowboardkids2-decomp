@@ -20,7 +20,7 @@ void ClocktowerTriggerInit(EventTrigger *arg0) {
 }
 
 void ClocktowerTriggerCheck(void *arg0) {
-    GameState *state = GameStateGet();
+    GameState *state = (GameState *)getCurrentAllocation();
     u32 temp;
     s16 val;
     u8 index;

@@ -100,7 +100,7 @@ void *func_8005DC60_5E860(s32 index) {
     void *start;
     void *end;
     s32 size;
-    u8 val = GameStateGet()->unk7A;
+    u8 val = ((GameState *)getCurrentAllocation())->unk7A;
 
     if (val == 1) {
         return dmaRequestAndUpdateStateWithSize(&D_40A450, &D_40A590, 0x250);
@@ -114,7 +114,7 @@ void *func_8005DC60_5E860(s32 index) {
 }
 
 s32 func_8005DD20_5E920(s32 index) {
-    GameState *state = GameStateGet();
+    GameState *state = (GameState *)getCurrentAllocation();
     u8 val = state->unk7A;
 
     if (val == 1) {

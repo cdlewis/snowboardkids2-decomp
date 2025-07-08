@@ -13,7 +13,6 @@ typedef struct {
 } D_800A8D14_A0084_type;
 
 extern D_800A8D14_A0084_type* D_800A8D14_A0084;
-extern GameState* GameStateGet();
 extern s32 func_8003BB5C_3C75C(void);
 extern void func_8001B020_1BC20;
 extern void func_8001B3B8_1BFB8(void);
@@ -36,7 +35,7 @@ void loadOverlay_1BBA0(void) {
 INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001B020_1BC20);
 
 void func_8001B368_1BF68(void) {
-    GameState* state = GameStateGet();
+    GameState* state = (GameState*)getCurrentAllocation();
     if (state->unk5B3 != 0) {
         return;
     }
@@ -62,7 +61,7 @@ void func_8001BBE8_1C7E8(void) {
     void* var_a0;
     GameState* temp_s0;
 
-    temp_s0 = GameStateGet();
+    temp_s0 = (GameState*)getCurrentAllocation();
     if (func_8006FE10_70A10(0) == 0) {
         n_alSynRemovePlayer(&temp_s0->audioPlayer0);
         n_alSynRemovePlayer(&temp_s0->audioPlayer2);

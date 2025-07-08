@@ -1,3 +1,4 @@
+allocateTaskMemory = 0x80069854;
 getTableEntryByU16Index = 0x80019280;
 getTableEntryByIndex = 0x800192CC;
 renderTextPalette = 0x80068128;
@@ -233,7 +234,7 @@ ClocktowerTriggerCheck = 0x800199B8;
 WallNewspaperTriggerInit = 0x80019420;
 WallNewspaperTriggerCheck = 0x80019468;
 createXRotationMatrix = 0x8006A5CC;
-GameStateGet = 0x800698BC;
+getCurrentAllocation = 0x800698BC;
 PhoneTriggerInit = 0x80019320;
 PhoneTriggerCheck = 0x80019368;
 createZRotationMatrix = 0x8006A6B0;

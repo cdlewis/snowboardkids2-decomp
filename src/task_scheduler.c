@@ -19,7 +19,7 @@ typedef struct {
     s32 unk1C;
     void *unk20;
     void *unk24;
-    /* 0x28 */ GameState *GameState;
+    /* 0x28 */ void *allocatedState;
     s32 unk2C;
     /* 0x30 */ Node *activeList;
     /* 0x34 */ Node *freeList;
@@ -207,7 +207,7 @@ void runTaskSchedulers(void) {
 
                         if (hasActiveTasks() == 0) {
                             gTaskScheduler->unk2C = decrementNodeRefCount((s32 *)gTaskScheduler->unk2C);
-                            gTaskScheduler->GameState = (GameState *)decrementNodeRefCount((s32 *)gTaskScheduler->GameState);
+                            gTaskScheduler->allocatedState = (void *)decrementNodeRefCount((s32 *)gTaskScheduler->allocatedState);
                             gTaskScheduler->unk1C = D_800AB064_A23D4;
                             gTaskScheduler->unk18 = 4;
                         }
@@ -279,27 +279,27 @@ void setGameStateHandler(void *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_8006983C_6A43C);
 
-GameState *func_80069854_6A454(s32 arg0) {
+void *allocateTaskMemory(s32 size) {
     u8 *node_exists;
     u32 temp_a0;
-    GameState *temp_v0;
+    void *temp_v0;
     s8 *var_v1;
 
-    temp_v0 = allocateMemoryNode(0, arg0, &node_exists);
-    gTaskScheduler->GameState = temp_v0;
-    if (arg0 != 0) {
+    temp_v0 = allocateMemoryNode(0, size, &node_exists);
+    gTaskScheduler->allocatedState = temp_v0;
+    if (size != 0) {
         var_v1 = (s8 *)temp_v0;
-        temp_a0 = ((s32)arg0 + (s32)var_v1);
+        temp_a0 = (size + (s32)var_v1);
         do {
             *var_v1 = 0;
             var_v1 += 1;
         } while ((u32)var_v1 < (u32)temp_a0);
     }
-    return gTaskScheduler->GameState;
+    return gTaskScheduler->allocatedState;
 }
 
-GameState *GameStateGet() {
-    return gTaskScheduler->GameState;
+void *getCurrentAllocation() {
+    return gTaskScheduler->allocatedState;
 }
 
 INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800698CC_6A4CC);

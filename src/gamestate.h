@@ -109,6 +109,4 @@ typedef struct {
     s8 unk17E0;
 } GameState;
 
-GameState* GameStateGet();
-
 #endif

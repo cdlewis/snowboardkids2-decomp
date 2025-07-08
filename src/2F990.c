@@ -84,7 +84,7 @@ void updateDebugCameraYState(cameraState *arg0) {
     u64 pad;
     char *cameraYRotation;
     char *cameraYString;
-    GameState *temp_s0 = GameStateGet();
+    GameState *temp_s0 = (GameState *)getCurrentAllocation();
     if (D_800AB054_A23C4 & 0x10) {
         arg0->cameraRotation++;
     } else if (D_800AB054_A23C4 & 0x20) {
@@ -123,7 +123,7 @@ typedef struct {
     s8 unk26;
 } func_8002EF3C_2FB3C_arg;
 void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
-    GameState *temp = GameStateGet();
+    GameState *temp = (GameState *)getCurrentAllocation();
     arg0->unk0 = func_8000198C_258C(0x3A, temp);
     memcpy(&arg0->unk4, D_8009A870_9B470, 0x20);
     arg0->unk18 = 0x200000;
@@ -159,7 +159,7 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F3E4_2FFE4);
 void func_8002F518_30118(DisplayListObject *s0) {
     volatile u8 padding[0x20];
     u32 new_var;
-    GameState *s1 = GameStateGet();
+    GameState *s1 = (GameState *)getCurrentAllocation();
     u32 offset;
     new_var = s1->unk5C6;
 
@@ -186,7 +186,7 @@ void func_8002F518_30118(DisplayListObject *s0) {
 void func_8002F5C8_301C8(void *untypedArg) {
     DisplayListObject *arg0 = (DisplayListObject *)untypedArg;
     volatile u8 pad[0x20];
-    if (GameStateGet()->unk5C5 == 1) {
+    if (((GameState *)getCurrentAllocation())->unk5C5 == 1) {
         setCallback(&func_8002F290_2FE90);
     }
     enqueueDisplayListObject(0, arg0);
@@ -199,7 +199,7 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     u8 sp30[0x20];
     u8(*new_var)[0x20];
     void *temp_s3;
-    GameStateGet();
+    (GameState *)getCurrentAllocation();
     new_var = &sp10;
     temp_s3 = ((void *)((s32)arg0)) + 0x3C;
     memcpy(temp_s3, &D_8009A870_9B470, 0x20);
@@ -285,7 +285,7 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_800308C4_314C4);
 INCLUDE_ASM("asm/nonmatchings/2F990", func_800308FC_314FC);
 
 void func_80030974_31574(void *arg0) {
-    GameState *state = GameStateGet();
+    GameState *state = (GameState *)getCurrentAllocation();
     s8 index = state->unk5C8;
 
     if (state->unk5CA[index] >= 0x80 || state->unk5C9 == 0) {

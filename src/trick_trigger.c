@@ -25,7 +25,7 @@ void TrickTriggerCheck(void* arg0) {
     GameState* temp_v0;
     s32 val1, val2;
 
-    temp_v0 = GameStateGet();
+    temp_v0 = (GameState*)getCurrentAllocation();
     if (temp_v0->unk3F8 > 0x800000) {
         temp_v0_2 = temp_v0->unk3F4;
         var_v1 = temp_v0_2;

@@ -27,7 +27,7 @@ void WallNewspaperTriggerCheck(void *arg0) {
     s32 val1;
     s32 val2;
 
-    temp_v0 = GameStateGet();
+    temp_v0 = (GameState *)getCurrentAllocation();
     if (temp_v0->unk3F8 > 0x760000) {
         temp_v0_2 = temp_v0->unk3F4;
         var_v1 = temp_v0_2;

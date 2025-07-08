@@ -98,7 +98,7 @@ void func_800BB2B0_B74F0(TrackHazard *arg0) {
     u16 var_v1;
     func_80055E68_56A68_result *result;
 
-    gameState = GameStateGet();
+    gameState = (GameState *)getCurrentAllocation();
     temp = func_800AFF44_9FE04();
 
     arg0->unkA6 += (temp & 1);
@@ -151,7 +151,7 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
     s32 flag;
     s32 i;
 
-    gs = GameStateGet();
+    gs = (GameState *)getCurrentAllocation();
     flag = 0;
 
     for (i = 0; i < gs->numPlayers; i++) {
@@ -214,7 +214,7 @@ void func_800BB658_B7898(TrackHazard *arg0) {
     GameState *gs;
     s32 i;
 
-    gs = GameStateGet();
+    gs = (GameState *)getCurrentAllocation();
     if (arg0->unk9C != 0xFFF00000) {
         if (gs->PAD_6[0x17] == 0) {
             arg0->unk9C = arg0->unk9C - 0x8000;
@@ -234,7 +234,7 @@ void func_800BB658_B7898(TrackHazard *arg0) {
 void func_800BB71C_B795C(TrackHazard *arg0) {
     u8 temp;
 
-    if (GameStateGet()->PAD_6[0x17] == 0) {
+    if (((GameState *)getCurrentAllocation())->PAD_6[0x17] == 0) {
         arg0->unkA8--;
     }
 
@@ -253,7 +253,7 @@ void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *arg0) {
 }
 
 void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
-    GameState *gs = GameStateGet();
+    GameState *gs = (GameState *)getCurrentAllocation();
     arg0->unk24 = func_80055DC4_569C4(gs->memoryPoolId);
     arg0->unk28 = func_80055DF8_569F8(gs->memoryPoolId);
     arg0->unk2C = 0;
