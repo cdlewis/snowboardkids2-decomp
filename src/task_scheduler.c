@@ -10,11 +10,11 @@ typedef struct {
     u8 padding[0xFC];  // probably the max possible payload
 } NodeWithPayload;
 
-typedef struct {
-    struct D_800A32C0_A3EC0_type *unk0;
-    struct D_800A32C0_A3EC0_type *unk4;
-    struct D_800A32C0_A3EC0_type *unk8;
-    struct D_800A32C0_A3EC0_type *unkC;
+typedef struct gTaskScheduler_type {
+    struct gTaskScheduler_type *unk0;
+    struct gTaskScheduler_type *unk4;
+    struct gTaskScheduler_type *unk8;
+    struct gTaskScheduler_type *unkC;
     void (*unk10)();
     void (*unk14)();
     u8 unk18;
@@ -35,32 +35,9 @@ typedef struct {
 } gTaskScheduler_type;
 extern gTaskScheduler_type *gTaskScheduler;
 
-typedef struct D_800A32C0_A3EC0_type {
-    struct D_800A32C0_A3EC0_type *unk0;
-    struct D_800A32C0_A3EC0_type *unk4;
-    struct D_800A32C0_A3EC0_type *unk8;
-    void *unkC;
-    s32 unk10;
-    u8 pad14[4];
-    u8 unk18;
-    u8 unk19;
-    u8 unk1A;
-    u8 pad1B;
-    s32 unk1C;
-    s32 unk20;
-    u8 pad24[4];
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    u8 pad38[0x10];
-    s16 unk48;
-    u16 unk4A;
-    s16 unk4C;
-} D_800A32C0_A3EC0_type;
-extern D_800A32C0_A3EC0_type *D_800A3270_A3E70;
-extern D_800A32C0_A3EC0_type *D_800A32C0_A3EC0;
-extern D_800A32C0_A3EC0_type *D_800A3274_A3E74;
+extern gTaskScheduler_type *D_800A3270_A3E70;
+extern gTaskScheduler_type *D_800A32C0_A3EC0;
+extern gTaskScheduler_type *D_800A3274_A3E74;
 extern s32 D_800AB064_A23D4;
 extern s32 D_800AB12C_A249C;
 extern void *func_8003BB68_3C768(void);
@@ -71,10 +48,10 @@ void terminateAllTasks();
 
 INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800692F0_69EF0);
 
-void func_800693C4_69FC4(s32 arg0, s8 arg1) {
-    D_800A32C0_A3EC0_type *temp_a2;
-    D_800A32C0_A3EC0_type *temp_v1;
-    D_800A32C0_A3EC0_type *var_a3;
+void func_800693C4_69FC4(void (*arg0)(), s8 arg1) {
+    gTaskScheduler_type *temp_a2;
+    gTaskScheduler_type *temp_v1;
+    gTaskScheduler_type *var_a3;
     temp_a2 = D_800A32C0_A3EC0;
     var_a3 = &D_800A3270_A3E70;
     D_800A32C0_A3EC0 = temp_a2->unk8;
@@ -105,11 +82,11 @@ void func_800693C4_69FC4(s32 arg0, s8 arg1) {
     temp_a2->unk10 = arg0;
     temp_a2->unk18 = 0;
     temp_a2->unk19 = arg1;
-    temp_a2->unk28 = 0;
-    temp_a2->unk30 = 0;
-    temp_a2->unk34 = 0;
-    temp_a2->unk2C = 0;
-    temp_a2->unk48 = 0;
+    temp_a2->allocatedState = 0;
+    temp_a2->activeList = 0;
+    temp_a2->freeList = 0;
+    temp_a2->nodes = 0;
+    temp_a2->total = 0;
     temp_a2->unk1C = -1;
     temp_a2->unk20 = 0;
     temp_a2->unkC = 0;
@@ -117,11 +94,11 @@ void func_800693C4_69FC4(s32 arg0, s8 arg1) {
     temp_a2->unk4A = 0;
 }
 
-void func_80069470_6A070(u32 arg0, s8 arg1) {
-    D_800A32C0_A3EC0_type *temp_a2;
-    D_800A32C0_A3EC0_type *var_a3;
-    D_800A32C0_A3EC0_type *temp_v1;
-    D_800A32C0_A3EC0_type *temp_v0;
+void func_80069470_6A070(void (*arg0)(), s8 arg1) {
+    gTaskScheduler_type *temp_a2;
+    gTaskScheduler_type *var_a3;
+    gTaskScheduler_type *temp_v1;
+    gTaskScheduler_type *temp_v0;
 
     temp_a2 = D_800A32C0_A3EC0;
     var_a3 = &D_800A3270_A3E70;
@@ -129,7 +106,7 @@ void func_80069470_6A070(u32 arg0, s8 arg1) {
 
     if (D_800A3274_A3E74 != 0) {
         while (TRUE) {
-            temp_v1 = (D_800A32C0_A3EC0_type *)var_a3->unk4;
+            temp_v1 = (gTaskScheduler_type *)var_a3->unk4;
             if ((u8)arg1 < (u8)temp_v1->unk19) {
                 break;
             }
@@ -153,23 +130,23 @@ void func_80069470_6A070(u32 arg0, s8 arg1) {
     temp_a2->unk18 = 0;
     temp_a2->unk19 = arg1;
     temp_a2->unk10 = arg0;
-    temp_a2->unk28 = 0;
-    temp_a2->unk30 = 0;
-    temp_a2->unk34 = 0;
-    temp_a2->unk2C = 0;
-    temp_a2->unk48 = 0;
+    temp_a2->allocatedState = 0;
+    temp_a2->activeList = 0;
+    temp_a2->freeList = 0;
+    temp_a2->nodes = 0;
+    temp_a2->total = 0;
     temp_a2->unk1C = -1;
     temp_a2->unk20 = 0;
     temp_a2->unk4C = 0;
     temp_a2->unk4A = 0;
-    temp_a2->unkC = (void *)gTaskScheduler;
+    temp_a2->unkC = (gTaskScheduler_type *)gTaskScheduler;
     gTaskScheduler->unk4C++;
 }
 
 void runTaskSchedulers(void) {
-    D_800A32C0_A3EC0_type *temp_v0;
-    D_800A32C0_A3EC0_type *temp_v0_2;
-    D_800A32C0_A3EC0_type *temp_a0;
+    gTaskScheduler_type *temp_v0;
+    gTaskScheduler_type *temp_v0_2;
+    gTaskScheduler_type *temp_a0;
 
     gTaskScheduler = D_800A3274_A3E74;
     if (D_800A3274_A3E74 != NULL) {
