@@ -486,7 +486,19 @@ INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_80069D34_6A934);
 
 INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_80069D7C_6A97C);
 
-INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_80069DD4_6A9D4);
+void terminateTasksByType(s32 arg0, s32 arg1) {
+    Node *i;
+
+    for (i = gTaskScheduler->activeList; i != NULL; i = i->next) {
+        if (i->unkC == (u8)arg0 && i->field_D == (u8)arg1) {
+            if ((u32)(i->unkE - 3) < 2) {
+                i->unkE = 4;
+            } else {
+                i->unkE = 2;
+            }
+        }
+    }
+}
 
 void *dmaRequestAndUpdateState(void *start, void *end) {
     void *allocatedSpaceStart;
