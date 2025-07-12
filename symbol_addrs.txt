@@ -1,3 +1,4 @@
+terminateAllTasks = 0x80069D34;
 terminateTasksByType = 0x80069D7C;
 terminateTasksByTypeAndID = 0x80069DD4;
 loadDataSegment = 0x8006A0EC;

@@ -67,7 +67,7 @@ extern void *func_8003BB68_3C768(void);
 
 s32 hasActiveTasks();
 void processActiveTasks(void);
-void func_80069D34_6A934();
+void terminateAllTasks();
 
 INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800692F0_69EF0);
 
@@ -209,7 +209,7 @@ void runTaskSchedulers(void) {
 
                 case 2:
                     if (gTaskScheduler->unk4C == 0) {
-                        func_80069D34_6A934();
+                        terminateAllTasks();
                         processActiveTasks();
 
                         if (hasActiveTasks() == 0) {
@@ -482,7 +482,17 @@ s32 hasActiveTasks() {
     return gTaskScheduler->activeList != NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_80069D34_6A934);
+void terminateAllTasks(void) {
+    Node *i;
+
+    for (i = gTaskScheduler->activeList; i != NULL; i = i->next) {
+        if ((u32)(i->unkE - 3) < 2) {
+            i->unkE = 4;
+        } else {
+            i->unkE = 2;
+        }
+    }
+}
 
 void terminateTasksByType(s32 taskType) {
     Node *i;
