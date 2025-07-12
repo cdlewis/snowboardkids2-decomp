@@ -33,7 +33,6 @@ extern void func_80069D7C_6A97C(s32 a0);
 extern void func_80069DD4_6A9D4(s32 a0, s32 a1);
 extern void n_alSynRemovePlayer(void *player);
 extern void PhoneTriggerInit;
-GameState *allocateTaskMemory(s32 arg0);
 s32 func_8003BB5C_3C75C();
 
 void cleanupTransitionEffect();
@@ -49,7 +48,7 @@ void initializeGameState(s32 arg0, s32 arg1, s32 arg2) {
     int var_s1;
     GameState *temp_s0;
     volatile u8 padding[0x20];
-    temp_s0 = allocateTaskMemory(0x430);
+    temp_s0 = (GameState *)allocateTaskMemory(0x430);
     func_800574A0_580A0(4);
     temp_s0->unk3E8 = 0;
     temp_s0->unk428 = 0;

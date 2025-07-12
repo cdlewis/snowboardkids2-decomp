@@ -20,10 +20,11 @@ typedef struct {
     void *unk20;
     void *unk24;
     /* 0x28 */ void *allocatedState;
-    s32 unk2C;
+    /* 0x2C */ Node *nodes;
     /* 0x30 */ Node *activeList;
     /* 0x34 */ Node *freeList;
-    /* 0x38 */ s16 counters[0x9];
+    /* 0x38 */ s16 counters[8];
+    /* 0x48 */ s16 total;
     s16 unk4A;
     s16 unk4C;
 } gTaskScheduler_type;
@@ -206,7 +207,7 @@ void runTaskSchedulers(void) {
                         processActiveTasks();
 
                         if (hasActiveTasks() == 0) {
-                            gTaskScheduler->unk2C = decrementNodeRefCount((s32 *)gTaskScheduler->unk2C);
+                            gTaskScheduler->nodes = (Node *)decrementNodeRefCount((s32 *)gTaskScheduler->nodes);
                             gTaskScheduler->allocatedState = (void *)decrementNodeRefCount((s32 *)gTaskScheduler->allocatedState);
                             gTaskScheduler->unk1C = D_800AB064_A23D4;
                             gTaskScheduler->unk18 = 4;

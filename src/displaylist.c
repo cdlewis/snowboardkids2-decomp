@@ -73,7 +73,6 @@ extern void guLookAtReflect(Mtx* m, LookAt* l, float xEye, float yEye, float zEy
 
 s32 func_80069810_6A410();
 s32 func_80070140_70D40(void*);
-s32* allocateTaskMemory(s32);
 void func_80062CF0_638F0();
 void setupDisplayListMatrix(DisplayListObject*);
 void func_80063A94_64694(void*);

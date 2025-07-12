@@ -40,7 +40,6 @@ typedef struct
     char padding[0xDE];
     s16 unkE2;
 } allocateTaskMemory_return;
-extern allocateTaskMemory_return *allocateTaskMemory(s32);
 extern void func_800698EC_6A4EC(s32, s32, s32, s32, s32, s32, s32, s32);
 extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 extern void func_8006F994_70594(void *, s32, s32, s32, s32, s32, s32);
@@ -89,7 +88,7 @@ void func_80003508_4108() {
     struct {
         allocateTaskMemory_return *s1;
     } s;
-    s.s1 = allocateTaskMemory(0x17E8);
+    s.s1 = (allocateTaskMemory_return *)allocateTaskMemory(0x17E8);
     s.s1->unk2 = 0;
     s.s1->unk0 = 0;
     s.s1->unk3 = 0;
