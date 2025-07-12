@@ -309,9 +309,13 @@ void *getCurrentAllocation() {
     return gTaskScheduler->allocatedState;
 }
 
-INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800698CC_6A4CC);
+func_800698CC_6A4CC(s8 value) {
+    gTaskScheduler->unk1A = value;
+}
 
-INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800698DC_6A4DC);
+u8 func_800698DC_6A4DC(void) {
+    return gTaskScheduler->unk1A;
+}
 
 void initTaskScheduler(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5, s32 arg6, s32 arg7) {
     s16 i;
