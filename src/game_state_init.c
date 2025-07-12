@@ -28,7 +28,6 @@ extern void func_800574A0_580A0(s32);
 extern void func_80057564_58164(s32 a0);
 extern void func_800697CC_6A3CC(void (*func)(void));
 extern void func_800697F4_6A3F4(s32);
-extern void func_800698EC_6A4EC(s32, s32, s32, void *, s32, s32, s32, s32);
 extern void func_80069D7C_6A97C(s32 a0);
 extern void func_80069DD4_6A9D4(s32 a0, s32 a1);
 extern void n_alSynRemovePlayer(void *player);
@@ -65,7 +64,7 @@ void initializeGameState(s32 arg0, s32 arg1, s32 arg2) {
     do {
         temp_s0->unk3FE = (s16)(D_8008D6B0_8E2B0 - (((s32)((((short)D_8008D6B0_8E2B0) / 10) << 0x10)) >> 0xF));
         temp_s0->unk403 = 0xFF;
-        func_800698EC_6A4EC(0x30, 0xA, 0x14, 0, 0, 0, 0, 0);
+        initTaskScheduler(0x30, 0xA, 0x14, 0, 0, 0, 0, 0);
         func_80027CA0_288A0(temp_s0, 0, 0xA, 0);
         func_80027CA0_288A0(((void *)((s32)temp_s0)) + 0x1D8, 8, 0xF, 1);
         scheduleTask(&func_80017350_17F50, 0, 0, 0x5A);

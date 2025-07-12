@@ -6,6 +6,11 @@
 extern Node *gDMAOverlay;
 
 typedef struct {
+    /* 0x00 */ Node n;
+    u8 padding[0xFC];  // probably the max possible payload
+} NodeWithPayload;
+
+typedef struct {
     struct D_800A32C0_A3EC0_type *unk0;
     struct D_800A32C0_A3EC0_type *unk4;
     struct D_800A32C0_A3EC0_type *unk8;
@@ -20,7 +25,7 @@ typedef struct {
     void *unk20;
     void *unk24;
     /* 0x28 */ void *allocatedState;
-    /* 0x2C */ Node *nodes;
+    /* 0x2C */ NodeWithPayload *nodes;
     /* 0x30 */ Node *activeList;
     /* 0x34 */ Node *freeList;
     /* 0x38 */ s16 counters[8];
@@ -307,7 +312,31 @@ INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800698CC_6A4CC);
 
 INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800698DC_6A4DC);
 
-INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800698EC_6A4EC);
+void initTaskScheduler(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5, s32 arg6, s32 arg7) {
+    s16 i;
+    u8 nodeExists;
+
+    gTaskScheduler->total = arg7 + (arg6 + (arg5 + ((((arg0 + arg1) + arg2) + arg3) + arg4)));
+    gTaskScheduler->counters[0] = arg0;
+    gTaskScheduler->counters[2] = arg2;
+    gTaskScheduler->counters[1] = arg1;
+    gTaskScheduler->counters[3] = arg3;
+    gTaskScheduler->counters[4] = arg4;
+    gTaskScheduler->counters[5] = arg5;
+    gTaskScheduler->counters[6] = arg6;
+    gTaskScheduler->counters[7] = arg7;
+
+    gTaskScheduler->nodes = allocateMemoryNode(0, gTaskScheduler->total * sizeof(NodeWithPayload), &nodeExists);
+
+    gTaskScheduler->nodes = gTaskScheduler->nodes;
+    gTaskScheduler->activeList = NULL;
+    gTaskScheduler->freeList = NULL;
+
+    for (i = 0; i < gTaskScheduler->total; i++) {
+        gTaskScheduler->nodes[i].n.freeNext = gTaskScheduler->freeList;
+        gTaskScheduler->freeList = &gTaskScheduler->nodes[i];
+    }
+}
 
 Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) {
     Node *newNode;

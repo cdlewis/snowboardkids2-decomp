@@ -11,7 +11,6 @@ void func_800697CC_6A3CC(void*);
 s32 func_80069810_6A410();
 extern void func_8001A0F4_1ACF4;
 void func_80027CA0_288A0(void*, s32, s32, s32);
-void func_800698EC_6A4EC(s32, s32, s32, s32, s32, s32, s32, s32);
 void func_8006FDA0_709A0(s32, s32, s32);
 extern void func_80019CD0_1A8D0;
 extern void func_8001AF18_1BB18;
@@ -81,7 +80,7 @@ INCLUDE_ASM("asm/nonmatchings/1A770", func_8001ADFC_1B9FC);
 
 void func_8001AE80_1BA80(void) {
     func_8001AE80_1BA80_task_memory* temp_s0 = (func_8001AE80_1BA80_task_memory*)allocateTaskMemory(0x1E0);
-    func_800698EC_6A4EC(0x14, 0, 0, 0, 0, 0, 0, 0);
+    initTaskScheduler(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->unk1D8 = 0;
     func_80027CA0_288A0(temp_s0, 0, 0xA, 0);
     func_8006FDA0_709A0(0, 0, 8);
