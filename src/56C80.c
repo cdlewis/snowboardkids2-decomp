@@ -4,8 +4,8 @@
 typedef struct
 {
     s32 padding;
-    s32 unk4;
-    s32 unk8;
+    void *unk4;
+    void *unk8;
     u8 padding2[0x4];
     s16 unk10;
     u16 unk12;
@@ -45,8 +45,8 @@ extern s32 D_800937F0_943F0[];
 extern s32 D_80093978_94578[];
 extern s32 D_8009397C_9457C[];
 extern s32 D_80093B00_94700;
-extern s32 D_800A2D10_A3910;
-extern s32 D_800A2D14_A3914;
+extern void *D_800A2D10_A3910;
+extern void *D_800A2D14_A3914;
 extern s32 D_800A2D18_A3918;
 extern s32 D_800A2D1C_A391C;
 extern s32 D_800A2D20_A3920;
@@ -63,7 +63,7 @@ extern void func_80057214_57E14();
 void *func_80058638_59238();
 void func_800570BC_57CBC();
 void func_80057124_57D24();
-void func_800579E8_585E8(s32, s32);
+void func_800579E8_585E8(void *, s32);
 void func_80057B70_58770(s32, s32, s32, s32, s32, s32, s32);
 void func_80057CE4_588E4(s32, s32, s32, s32, s32, s32);
 void func_80057E18_58A18(s32, s32, s32, s32, s32);
@@ -73,7 +73,6 @@ void func_800582DC_58EDC(s32, s32, s32, s32, s32);
 void func_80058414_59014(s32, s32, s32);
 void func_800584AC_590AC(s32, s32, s32);
 void func_8005854C_5914C(s32, s32);
-void func_8006A0EC_6ACEC(s32, s32, s32, s32);
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -205,13 +204,13 @@ void func_800570E0_57CE0(void *arg) {
 void func_80057124_57D24(void) {
     D_800A2990_A3590->unk12 = D_800A2990_A3590->unk10;
 
-    func_8006A0EC_6ACEC(
+    loadDataSegment(
         D_800937E8_943E8[D_800A2990_A3590->unk12].unk0,
         D_800937E8_943E8[D_800A2990_A3590->unk12].unk4,
         D_800937E8_943E8[D_800A2990_A3590->unk12].unk8,
         D_800A2990_A3590->unk8);
 
-    func_8006A0EC_6ACEC(
+    loadDataSegment(
         D_80093974_94574[D_800A2990_A3590->unk12].unk0,
         D_80093974_94574[D_800A2990_A3590->unk12].unk4,
         D_80093974_94574[D_800A2990_A3590->unk12].unk8,
@@ -309,7 +308,7 @@ void func_80057928_58528(s32 arg0, s32 arg1) {
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
 }
 
-void *func_80057974_58574(s32 arg0, s32 arg1, s32 arg2) {
+void *func_80057974_58574(void *arg0, void *arg1, s32 arg2) {
     void *sp10;
 
     D_800A2D14_A3914 = arg0;
@@ -322,7 +321,7 @@ void *func_80057974_58574(s32 arg0, s32 arg1, s32 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800579CC_585CC);
 
-void func_800579E8_585E8(s32 arg0, s32 arg1) {
+void func_800579E8_585E8(void *arg0, s32 arg1) {
     void *message;
 
     D_800A2D14_A3914 = arg0;

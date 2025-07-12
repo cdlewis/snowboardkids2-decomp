@@ -60,10 +60,11 @@ typedef struct D_800A32C0_A3EC0_type {
 } D_800A32C0_A3EC0_type;
 extern D_800A32C0_A3EC0_type *D_800A3270_A3E70;
 extern D_800A32C0_A3EC0_type *D_800A32C0_A3EC0;
-
 extern D_800A32C0_A3EC0_type *D_800A3274_A3E74;
 extern s32 D_800AB064_A23D4;
 extern s32 D_800AB12C_A249C;
+extern void *func_8003BB68_3C768(void);
+
 s32 hasActiveTasks();
 void processActiveTasks(void);
 void func_80069D34_6A934();
@@ -560,7 +561,26 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
     return allocatedSpaceStart;
 }
 
-INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_8006A0EC_6ACEC);
+void *loadDataSegment(s32 arg0, s32 arg1, s32 arg2, void *arg3) {
+    void *var_s0;
+
+    var_s0 = arg3;
+    if (gDMAOverlay != NULL) {
+        var_s0 = func_8003BB68_3C768();
+        if (getNodeOwner(var_s0) != 0) {
+            if ((u32)(gDMAOverlay->unkE - 3) >= 2U) {
+                gDMAOverlay->unk18 = getNodeUserData(var_s0);
+                gDMAOverlay->unk1C = var_s0;
+                gDMAOverlay->unkE = 3;
+            } else if ((u32)gDMAOverlay->unk18 < getNodeUserData(var_s0)) {
+                gDMAOverlay->unk18 = getNodeUserData(var_s0);
+                gDMAOverlay->unk1C = var_s0;
+            }
+        }
+        gDMAOverlay->unk11 = 1;
+    }
+    return var_s0;
+}
 
 GameState *allocateGameStateMemory(s32 arg0) {
     u8 *exists;

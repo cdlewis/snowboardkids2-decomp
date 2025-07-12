@@ -41,3 +41,4 @@ void *getCurrentAllocation();
 void *allocateTaskMemory(s32 size);
 
 void initTaskScheduler(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5, s32 arg6, s32 arg7);
+void *loadDataSegment(s32 arg0, s32 arg1, s32 arg2, void *arg3);
