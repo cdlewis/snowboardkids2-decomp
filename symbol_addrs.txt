@@ -1,4 +1,5 @@
-terminateTasksByType = 0x80069DD4;
+terminateTasksByType = 0x80069D7C;
+terminateTasksByTypeAndID = 0x80069DD4;
 loadDataSegment = 0x8006A0EC;
 initTaskScheduler = 0x800698EC;
 allocateTaskMemory = 0x80069854;

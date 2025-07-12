@@ -484,13 +484,25 @@ s32 hasActiveTasks() {
 
 INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_80069D34_6A934);
 
-INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_80069D7C_6A97C);
-
-void terminateTasksByType(s32 arg0, s32 arg1) {
+void terminateTasksByType(s32 taskType) {
     Node *i;
 
     for (i = gTaskScheduler->activeList; i != NULL; i = i->next) {
-        if (i->unkC == (u8)arg0 && i->field_D == (u8)arg1) {
+        if (i->unkC == (u8)taskType) {
+            if ((u32)(i->unkE - 3) < 2) {
+                i->unkE = 4;
+            } else {
+                i->unkE = 2;
+            }
+        }
+    }
+}
+
+void terminateTasksByTypeAndID(s32 taskType, s32 taskID) {
+    Node *i;
+
+    for (i = gTaskScheduler->activeList; i != NULL; i = i->next) {
+        if (i->unkC == (u8)taskType && i->field_D == (u8)taskID) {
             if ((u32)(i->unkE - 3) < 2) {
                 i->unkE = 4;
             } else {

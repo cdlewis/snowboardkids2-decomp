@@ -28,7 +28,6 @@ extern void func_800574A0_580A0(s32);
 extern void func_80057564_58164(s32 a0);
 extern void func_800697CC_6A3CC(void (*func)(void));
 extern void func_800697F4_6A3F4(s32);
-extern void func_80069D7C_6A97C(s32 a0);
 extern void n_alSynRemovePlayer(void *player);
 extern void PhoneTriggerInit;
 s32 func_8003BB5C_3C75C();
@@ -109,9 +108,9 @@ void gameStateCleanupHandler(void) {
     u8 val = gs->unk42E;
     if (val != 0) {
         if (val == 2) {
-            terminateTasksByType(2, 1);
+            terminateTasksByTypeAndID(2, 1);
         } else {
-            func_80069D7C_6A97C(2);
+            terminateTasksByType(2);
         }
         gs->unk42E = 0;
     }
