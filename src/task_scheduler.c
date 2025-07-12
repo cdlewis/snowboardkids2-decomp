@@ -246,7 +246,14 @@ void func_800697CC_6A3CC(void (*arg0)()) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800697F4_6A3F4);
+void func_800697F4_6A3F4(s16 arg0) {
+    gTaskScheduler_type *temp_v0;
+
+    temp_v0 = gTaskScheduler->unkC;
+    if (temp_v0 != NULL) {
+        temp_v0->unk4A = arg0;
+    }
+}
 
 s16 func_80069810_6A410(void) {
     s16 temp_v0;
