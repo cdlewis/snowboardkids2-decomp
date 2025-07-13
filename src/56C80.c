@@ -29,8 +29,7 @@ typedef struct {
     s32 unk20;
     s32 unk24[0xF];
     s32 padding;
-    s16 unk64;
-    u8 padding7[0x1D];
+    s16 unk64[0x10];
     s32 renderQueueCount;
     RenderQueueItem renderQueue[32];
     s32 unk408;
@@ -440,35 +439,28 @@ void func_80058138_58D38(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
-    s32 sp10;
-    s32 temp_s0;
-    s32 *new_var;
     GraphicsManager *temp_v1;
+    s32 message;
+    s32 *new_var2;
     s32 temp_v0;
-    void *temp_ptr;
 
     temp_v1 = D_800A2990_A3590;
     D_800A2D1C_A391C = arg0;
     D_800A2D24_A3924 = 0x80;
-    new_var = &temp_v1->unk20;
     D_800A2D28_A3928 = 0x80;
-    temp_v0 = *new_var;
 
-    temp_s0 = arg1 << 2;
+    new_var2 = &temp_v1->unk20;
+    temp_v0 = *new_var2;
     D_800A2D20_A3920 = temp_v1->unk20;
-    temp_ptr = (void *)temp_v1;
-    temp_v1 = (GraphicsManager *)((temp_s0) + (s32)temp_ptr);
+    temp_v0 = temp_v1->unk24[arg1];
     D_800A2D38_A3938 = arg2;
-    temp_v0 = temp_v1->unk24[0];
-    D_800A2D2C_A392C = temp_v1->unk24[0];
+    D_800A2D2C_A392C = temp_v0;
 
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), OS_MESG_BLOCK);
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, 1);
+    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)&message, 1);
 
-    temp_s0 = temp_s0 + ((s32)D_800A2990_A3590);
-
-    ((GraphicsManager *)temp_s0)->unk24[0] = sp10;
-    ((GraphicsManager *)(arg1 + (s16 *)D_800A2990_A3590))->unk64 = arg0;
+    D_800A2990_A3590->unk24[arg1] = message;
+    D_800A2990_A3590->unk64[arg1] = arg0;
 
     func_800570BC_57CBC();
 }
