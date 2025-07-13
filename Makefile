@@ -112,6 +112,9 @@ diff-sxs:
 format:
 	clang-format -i -style=file $(C_FILES)
 
+tidy:
+	clang-tidy -p . --fix --fix-errors --fix-notes $(C_FILES) -- $(CC_CHECK_FLAGS) $(IINC) $(MIPS_BUILTIN_DEFS)
+
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
 	@printf "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
 	@$(LD) $(LD_FLAGS) $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) -o $@
