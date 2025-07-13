@@ -1,3 +1,4 @@
+#include "1A770.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
@@ -19,7 +20,6 @@ extern void func_80017350_17F50;
 extern void func_80018800_19400;
 extern void func_80018A90_19690;
 extern void func_80018CB0_198B0;
-extern void func_80019B70_1A770;
 extern void func_80027CA0_288A0(void *, s32, s32, s32);
 extern void func_80028480_29080;
 extern void func_80036250_36E50;

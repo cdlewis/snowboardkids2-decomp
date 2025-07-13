@@ -1,3 +1,6 @@
+#include "1A770.h"
+
+#include "20F0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "task_scheduler.h"
@@ -14,8 +17,14 @@ void func_80027CA0_288A0(void*, s32, s32, s32);
 void func_8006FDA0_709A0(s32, s32, s32);
 extern void func_80019CD0_1A8D0;
 extern void func_8001AF18_1BB18;
+extern void func_80019BBC_1A7BC;
+extern void func_80019CB4_1A8B4;
 
-INCLUDE_ASM("asm/nonmatchings/1A770", func_80019B70_1A770);
+void func_80019B70_1A770(func_80019B70_1A770_arg* arg0) {
+    arg0->unk20 = func_8000198C_258C(0x13, getCurrentAllocation());
+    setCleanupCallback(&func_80019CB4_1A8B4);
+    setCallback(&func_80019BBC_1A7BC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_80019BBC_1A7BC);
 
