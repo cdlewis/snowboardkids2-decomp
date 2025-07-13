@@ -14,7 +14,7 @@ jobs:
     - name: Install system packages
       run: |
         sudo apt-get update
-        sudo apt-get install -y libdbus-1-dev gobject-introspection libgirepository1.0-dev libcups2-dev binutils-mips-linux-gnu
+        sudo apt-get install -y clang-format libdbus-1-dev gobject-introspection libgirepository1.0-dev libcups2-dev binutils-mips-linux-gnu
     
     - name: Set up Python 3.11
       uses: actions/setup-python@v5
@@ -64,10 +64,12 @@ jobs:
       run: PATH="$(pwd)/.venv/bin:$PATH" make
       working-directory: main
 
-    # Update README badge
-
-    - name: Update progress
+    - name: Update progress badge
       run: PATH="$(pwd)/.venv/bin:$PATH" python3 tools/progress.py --badge
+      working-directory: main
+
+    - name: Ensure correct formatting
+      run: PATH="$(pwd)/.venv/bin:$PATH" make format
       working-directory: main
 
     - name: Configure Git user
@@ -79,7 +81,7 @@ jobs:
     - name: Commit changes
       run: |
         git add README.md
-        git commit -m "Update file via GitHub Actions" || echo "No changes to commit"
+        git commit -m "Update progress badge and formatting || echo "No changes to commit"
         git push origin HEAD:${{ github.ref_name }}
       working-directory: main
 
