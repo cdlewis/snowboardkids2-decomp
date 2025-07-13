@@ -21,9 +21,9 @@ extern void func_80049404_4A004();
 extern s32 D_3F6670;
 extern s32 D_3F6950;
 
-void func_8004AE58_4BA58(s32 ** /*arg0*/);
+void func_8004AE58_4BA58(s32 **);
 void func_8004A634_4B234(void *);
-void func_8004A96C_4B56C(s32 ** /*arg0*/);
+void func_8004A96C_4B56C(s32 **);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80045480_46080);
 
@@ -217,7 +217,7 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049CA8_4A8A8);
 
 void func_8004A5E0_4B1E0(void **arg0) {
     *arg0 = dmaRequestAndUpdateStateWithSize(&D_3F6670, &D_3F6950, 0x388);
-    setCleanupCallback((void (*)(void *)) & func_8004A96C_4B56C);
+    setCleanupCallback((void (*)(void *))&func_8004A96C_4B56C);
     setCallbackWithContinue(&func_8004A634_4B234);
 }
 

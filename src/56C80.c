@@ -62,16 +62,16 @@ extern void func_80057214_57E14();
 void *func_80058638_59238();
 void func_800570BC_57CBC();
 void func_80057124_57D24();
-void func_800579E8_585E8(void * /*arg0*/, s32 /*arg1*/);
+void func_800579E8_585E8(void *, s32);
 void func_80057B70_58770(s32, s32, s32, s32, s32, s32, s32);
 void func_80057CE4_588E4(s32, s32, s32, s32, s32, s32);
 void func_80057E18_58A18(s32, s32, s32, s32, s32);
 void func_80057F48_58B48(s32, s32, s32, s32);
 void func_80058064_58C64(s32, s32, s32, s32);
 void func_800582DC_58EDC(s32, s32, s32, s32, s32);
-void func_80058414_59014(s32 /*arg0*/, s32 /*arg1*/, s32 /*arg2*/);
+void func_80058414_59014(s32, s32, s32);
 void func_800584AC_590AC(s32, s32, s32);
-void func_8005854C_5914C(s32 /*arg0*/, s32 /*arg1*/);
+void func_8005854C_5914C(s32, s32);
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -230,6 +230,8 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_80057214_57E14);
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800572B0_57EB0);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800573F8_57FF8);
+
+extern void func_800570E0_57CE0(void *arg);
 
 void func_80057470_58070(void) {
     if (func_80058638_59238() == NULL) {
@@ -473,7 +475,7 @@ void func_800583F8_58FF8(s32 arg0, s32 arg1, s32 arg2) {
 void func_80058414_59014(s32 arg0, s32 arg1, s32 arg2) {
     void *sp10;
     s32 *new_var;
-
+    s32 new_var2;
     D_800A2D1C_A391C = arg0;
     D_800A2D24_A3924 = arg1;
     D_800A2D28_A3928 = 0x80;
@@ -497,7 +499,7 @@ void func_80058530_59130(s32 arg0, s32 arg1) {
 }
 
 void func_8005854C_5914C(s32 arg0, s32 arg1) {
-
+    s32 new_var2;
     s32 *new_var;
     void *sp10;
 

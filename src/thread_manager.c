@@ -2,10 +2,10 @@
 
 #include "common.h"
 
-void thread_function_1(void * /*arg*/);
-void thread_function_2(void * /*arg*/);
-void thread_function_3(void * /*arg*/);
-void thread_function_4(void * /*arg*/);
+void thread_function_1(void *);
+void thread_function_2(void *);
+void thread_function_3(void *);
+void thread_function_4(void *);
 
 typedef struct {
     char padding[61];
@@ -252,7 +252,7 @@ void thread_function_2(void *arg) {
                         status_flags |= 8;
                         osSpTaskYield();
                     } else {
-                        = osSetIntMask(OS_IM_NONE);
+                        s32 mask = osSetIntMask(OS_IM_NONE);
                         osWritebackDCacheAll();
                         osSetIntMask(mask);
                         osSpTaskStart(pending_task);
@@ -266,7 +266,7 @@ void thread_function_2(void *arg) {
 
                     if (status_flags & 4) {
                         if (D_8009B020_9BC20 == 0) {
-                            = osSetIntMask(OS_IM_NONE);
+                            s32 mask = osSetIntMask(OS_IM_NONE);
                             osWritebackDCacheAll();
                             osSetIntMask(mask);
                             osSpTaskStart(current_task);
@@ -376,7 +376,7 @@ void thread_function_4(void *arg) {
             osRecvMesg(&eventQueue4, &stack.sp30, OS_MESG_BLOCK);
         }
 
-        osViSwapBuffer(frameBuffer);
+        osViSwapBuffer((void *)frameBuffer);
         if ((!(delayCounter & 0xFF)) || (frameDelay != 0)) {
             continue;
         }

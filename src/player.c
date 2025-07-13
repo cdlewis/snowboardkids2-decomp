@@ -186,7 +186,12 @@ extern s32 mus_vsyncs_per_second;
 extern channel_t *mus_channels;
 extern s32 max_channels;
 extern s32 mus_songfxchange_flag;
-
+extern s32 mus_vsyncs_per_second;
+extern channel_t *mus_channels;
+extern s32 max_channels;
+extern s32 mus_songfxchange_flag;
+extern ALGlobals __libmus_alglobals;
+extern ALVoice *mus_voices;
 extern LIBMUScb_marker marker_callback;
 extern s32 mus_last_fxtype;
 extern s32 mus_current_handle;
@@ -552,8 +557,7 @@ u8 *Fprint(channel_t *cp, u8 *ptr) {
 }
 
 u8 *Fgoto(channel_t *cp, u8 *ptr) {
-    int off;
-    int off1;
+    int off, off1;
 
     off1 = *ptr++ << 8;
     off1 += *ptr++;
@@ -600,15 +604,14 @@ u8 *Fvolume(channel_t *cp, u8 *ptr) {
 }
 
 u8 *Fstartfx(channel_t *cp, u8 *ptr) {
-
+    s32 i;
     s32 number;
     channel_t *sp;
     u32 new_handle;
 
     number = *(ptr++);
-    if (number >= 0x80) {
+    if (number >= 0x80)
         number = ((number & 0x7f) << 8) + (*(ptr++));
-    }
 
     new_handle = func_800725F4_731F4(number, cp->volume, cp->pan, 0, cp->priority++);
     cp->priority--;
@@ -657,7 +660,7 @@ u8 *Fchangefx(channel_t *cp, u8 *ptr) {
 
 s32 MusInitialize(musConfig *config) {
     ALVoiceConfig vc;
-
+    s32 i;
     ALSynConfig audioConfig;
     AudioParams audioParams;
 
@@ -737,18 +740,16 @@ s32 MusInitialize(musConfig *config) {
 }
 
 void MusSetMasterVolume(u32 flags, u32 volume) {
-    if (flags & MUSFLAG_EFFECTS) {
+    if (flags & MUSFLAG_EFFECTS)
         mus_master_volume_effects = volume;
-    }
-    if (flags & MUSFLAG_SONGS) {
+    if (flags & MUSFLAG_SONGS)
         mus_master_volume_songs = volume;
-    }
 }
 
 musHandle __MusIntStartSong(void *addr, int marker) {
     song_t *song;
     s32 num_channels;
-
+    s32 i;
     s32 channel_index;
     channel_t *cp;
     musHandle handle;
@@ -784,7 +785,7 @@ musHandle __MusIntStartSong(void *addr, int marker) {
 }
 
 u32 __MusIntFindChannelAndStart(s32 number) {
-
+    s32 i;
     s32 priority;
     s32 current_priority;
     channel_t *cp;
@@ -929,10 +930,8 @@ void __MusIntProcessContinuousPitchBend(channel_t *cp) {
                 if (work_pb > 127) {
                     cp->cont_pb_repeat_count = ((int)(work_pb & 0x7f) * 256);
                     cp->cont_pb_repeat_count += (int)*(cp->ppitchbend++) + 2;
-                } else {
-                    c
-                }
-                p->cont_pb_repeat_count = (int)work_pb + 2;
+                } else
+                    cp->cont_pb_repeat_count = (int)work_pb + 2;
             } else {
                 cp->pitchbend = ((f32)work_pb) - 64.0;
 
@@ -948,9 +947,8 @@ void __MusIntProcessContinuousPitchBend(channel_t *cp) {
 f32 __MusIntPowerOf2(f32 x) {
     f32 x2;
 
-    if (x == 0) {
+    if (x == 0)
         return 1;
-    }
 
     if (x > 0) {
         x2 = x * x;
@@ -1038,6 +1036,7 @@ void __MusIntMemMove(u8 *arg0, u8 *arg1, s32 arg2) {
 
 void __MusIntRemapPtrs(void *addr, void *offset, s32 count) {
     u32 *dest, add;
+    s32 i;
 
     dest = (unsigned long *)addr;
     add = (unsigned long)offset;
@@ -1067,7 +1066,7 @@ u32 __MusIntStartEffect(channel_t *cp, s32 number, s32 volume, s32 pan, s32 prio
 }
 
 void __MusIntHandleSetFlag(u32 handle, u32 clear, u32 set) {
-
+    s32 i;
     channel_t *cp;
 
     for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {

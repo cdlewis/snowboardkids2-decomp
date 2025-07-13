@@ -29,6 +29,7 @@ typedef struct {
 } func_80036274_36E74_large_struct;
 extern func_80036274_36E74_large_struct *getCurrentAllocation();
 s32 func_8006C590_6D190(u32, u32);
+extern s32 D_800AFF10_A7280;
 
 typedef struct {
     char padding[52];

@@ -99,6 +99,7 @@ void func_8005E800_5F400(func_8005E800_5F400_arg *entity, u16 param_2) {
         u16 idx;
         s32 source_val;
         s32 dest_val;
+        s32 result;
 
         /* First interpolation */
         idx = entity->animation_data[4];

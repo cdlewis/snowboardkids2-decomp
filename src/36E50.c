@@ -101,13 +101,13 @@ typedef struct {
 } func_80036880_37480_arg;
 
 s32 func_80035F80_36B80(int);
-void func_80036274_36E74(void * /*arg0*/);
+void func_80036274_36E74(void *);
 void func_80036424_37024(void *);
-void func_80036848_37448(void * /*untypedArg*/);
-void func_80036328_36F28(func_80036328_36F28_arg * /*arg0*/);
-void func_80036880_37480(func_80036880_37480_arg * /*arg0*/);
-void func_80036A68_37668(void * /*arg0*/);
-void func_80036A10_37610(void * /*untypedArg*/);
+void func_80036848_37448(void *);
+void func_80036328_36F28(func_80036328_36F28_arg *);
+void func_80036880_37480(func_80036880_37480_arg *);
+void func_80036A68_37668(void *);
+void func_80036A10_37610(void *);
 
 extern void *D_45A890;
 extern void *D_45B130;

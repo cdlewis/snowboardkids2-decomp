@@ -29,7 +29,8 @@ s32 func_80055EA4_56AA4();
 void func_8003EE50_3FA50();
 void func_8003F368_3FF68();
 void func_8003FD3C_4093C();
-
+void func_800574A0_580A0(s32);
+void func_80057564_58164(s32);
 void func_800697F4_6A3F4(u8);
 void func_8006983C_6A43C(void *);
 void func_800B99E0(void *);
@@ -186,6 +187,8 @@ void func_8003FD84_40984(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FDD4_409D4);
 
+void func_800574A0_580A0(s32);
+void setGameStateHandler(void *);
 extern void func_8003FF78_40B78;
 
 void func_8003FF14_40B14(void) {
@@ -203,7 +206,7 @@ void func_8003FF14_40B14(void) {
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FF78_40B78);
 
 void func_8003FFC0_40BC0() {
-
+    s32 temp_v1;
     GameState *temp_v0;
 
     temp_v0 = (GameState *)getCurrentAllocation();
@@ -219,7 +222,7 @@ void func_8003FFC0_40BC0() {
 INCLUDE_ASM("asm/nonmatchings/3E160", func_80040010_40C10);
 
 void func_8004013C_40D3C(void) {
-
+    s32 temp_v0_2;
     GameState *temp_v0;
 
     temp_v0 = (GameState *)getCurrentAllocation();
@@ -265,7 +268,7 @@ void func_80040420_41020(void) {
 }
 
 void func_80040468_41068(void) {
-
+    s32 temp_v1;
     GameState *temp_v0;
 
     temp_v0 = (GameState *)getCurrentAllocation();

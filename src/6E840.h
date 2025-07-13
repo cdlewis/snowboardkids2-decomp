@@ -13,4 +13,4 @@ void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 
 void *arenaAlloc16(s32 size);
 
-void *advanceLinearAlloc(s32 arg0);
+void *advanceLinearAlloc(s32 size);
