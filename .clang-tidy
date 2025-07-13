@@ -1,9 +1,0 @@
-Checks: 'readability-*,-readability-magic-numbers,-readability-uppercase-literal-suffix,-readability-non-const-parameter,-readability-else-after-return,-readability-redundant-control-flow,-readability-identifier-length,clang-diagnostic-*,clang-analyzer-*,-clang-analyzer-security.insecureAPI.*,-clang-analyzer-deadcode.DeadStores,-clang-analyzer-core.uninitialized.ArraySubscript,-clang-analyzer-core.UndefinedBinaryOperatorResult,bugprone*,-bugprone-macro-parentheses,-bugprone-reserved-identifier,-bugprone-narrowing-conversions,-bugprone-too-small-loop-variable,-bugprone-integer-division,-bugprone-sizeof-expression,-bugprone-suspicious-include,-modernize-deprecated-headers,-modernize-use-nullptr,-modernize-use-bool-literals,-modernize-use-default-member-init,-modernize-loop-convert,-modernize-use-auto,-modernize-redundant-void-arg,-modernize-use-override,-modernize-pass-by-value,-modernize-return-braced-init-list,-modernize-use-nodiscard,-modernize-use-trailing-return-type,-modernize-concat-nested-namespaces,-modernize-use-emplace,-modernize-make-unique,-modernize-make-shared,-modernize-raw-string-literal,-modernize-replace-random-shuffle,-modernize-use-transparent-functors,-modernize-use-uncaught-exceptions,-modernize-use-using,-modernize-shrink-to-fit,-modernize-avoid-bind,-modernize-replace-auto-ptr,-modernize-use-noexcept,-bugprone-branch-clone,-bugprone-signed-char-misuse,performance*,portability*,diagnostic-*,analyzer-*,misc*,-misc-no-recursion,-misc-include-cleaner'
-WarningsAsErrors: ''
-HeaderFilterRegex: '^(src)\/.*\.h$'
-FormatStyle: 'file'
-CheckOptions:
-  - key: readability-inconsistent-declaration-parameter-name.Strict
-    value: true
-  - key: readability-named-param.IgnoreFailedSplit
-    value: false
