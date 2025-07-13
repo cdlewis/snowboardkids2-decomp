@@ -10,17 +10,17 @@ typedef struct {
     s16 unk1D8;
 } func_8001AE80_1BA80_task_memory;
 
-void func_800697CC_6A3CC(void*);
+void func_800697CC_6A3CC(void *);
 s32 func_80069810_6A410();
 extern void func_8001A0F4_1ACF4;
-void func_80027CA0_288A0(void*, s32, s32, s32);
+void func_80027CA0_288A0(void *, s32, s32, s32);
 void func_8006FDA0_709A0(s32, s32, s32);
 extern void func_80019CD0_1A8D0;
 extern void func_8001AF18_1BB18;
 extern void func_80019BBC_1A7BC;
 extern void func_80019CB4_1A8B4;
 
-void func_80019B70_1A770(func_80019B70_1A770_arg* arg0) {
+void func_80019B70_1A770(func_80019B70_1A770_arg *arg0) {
     arg0->unk20 = func_8000198C_258C(0x13, getCurrentAllocation());
     setCleanupCallback(&func_80019CB4_1A8B4);
     setCallback(&func_80019BBC_1A7BC);
@@ -88,7 +88,7 @@ INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AD9C_1B99C);
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001ADFC_1B9FC);
 
 void func_8001AE80_1BA80(void) {
-    func_8001AE80_1BA80_task_memory* temp_s0 = (func_8001AE80_1BA80_task_memory*)allocateTaskMemory(0x1E0);
+    func_8001AE80_1BA80_task_memory *temp_s0 = (func_8001AE80_1BA80_task_memory *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->unk1D8 = 0;
     func_80027CA0_288A0(temp_s0, 0, 0xA, 0);

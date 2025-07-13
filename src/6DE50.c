@@ -81,7 +81,25 @@ void func_8006D250_6DE50(func_8006D250_6DE50_arg *arg0) {
         gDPPipeSync(gRegionAllocPtr++);
         gDPSetCycleType(gRegionAllocPtr++, G_CYC_1CYCLE);
         gDPSetEnvColor(gRegionAllocPtr++, arg0->red, arg0->green, arg0->blue, 0xFF);
-        gDPSetCombineLERP(gRegionAllocPtr++, 1, 0, ENVIRONMENT, 0, 1, 0, ENVIRONMENT, 0, 1, 0, ENVIRONMENT, 0, 1, 0, ENVIRONMENT, 0);
+        gDPSetCombineLERP(
+            gRegionAllocPtr++,
+            1,
+            0,
+            ENVIRONMENT,
+            0,
+            1,
+            0,
+            ENVIRONMENT,
+            0,
+            1,
+            0,
+            ENVIRONMENT,
+            0,
+            1,
+            0,
+            ENVIRONMENT,
+            0
+        );
         gDPSetRenderMode(gRegionAllocPtr++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     }
 
@@ -90,7 +108,18 @@ void func_8006D250_6DE50(func_8006D250_6DE50_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/6DE50", func_8006D4B8_6E0B8);
 
-void func_8006D7B0_6E3B0(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
+void func_8006D7B0_6E3B0(
+    s32 arg0,
+    s16 arg1,
+    s16 arg2,
+    s16 arg3,
+    s16 arg4,
+    u8 arg5,
+    u8 arg6,
+    u8 arg7,
+    u8 arg8,
+    u8 arg9
+) {
     func_8006D4B8_6E0B8(arg0, arg1, arg2, arg3, (s32)arg4, arg5, arg6, 0, 0xFF, 0, arg7, arg8, arg9);
 }
 

@@ -2,17 +2,21 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    void* start;
-    void* end;
+    void *start;
+    void *end;
     s32 size;
 } Asset;
 extern Asset D_80091250_91E50[];
-extern void* D_80091590_92190[];
+extern void *D_80091590_92190[];
 
 INCLUDE_ASM("asm/nonmatchings/56910", func_80055D10_56910);
 
-void* func_80055D34_56934(s32 index) {
-    return dmaRequestAndUpdateStateWithSize(D_80091250_91E50[index].start, D_80091250_91E50[index].end, D_80091250_91E50[index].size);
+void *func_80055D34_56934(s32 index) {
+    return dmaRequestAndUpdateStateWithSize(
+        D_80091250_91E50[index].start,
+        D_80091250_91E50[index].end,
+        D_80091250_91E50[index].size
+    );
 }
 
 INCLUDE_ASM("asm/nonmatchings/56910", func_80055D7C_5697C);
@@ -25,7 +29,7 @@ INCLUDE_ASM("asm/nonmatchings/56910", func_80055E40_56A40);
 
 INCLUDE_ASM("asm/nonmatchings/56910", func_80055E54_56A54);
 
-void* func_80055E68_56A68(s32 index) {
+void *func_80055E68_56A68(s32 index) {
     return D_80091590_92190[index];
 }
 

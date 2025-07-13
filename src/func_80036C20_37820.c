@@ -2,15 +2,13 @@
 
 extern s32 D_800AFF10_A7280;
 
-typedef struct
-{
+typedef struct {
     char padding[1032];
     s32 unk408;
     char padding2[4];
     s32 unk410;
 } func_80036274_36E74_large_struct_item;
-typedef struct
-{
+typedef struct {
     func_80036274_36E74_large_struct_item *entries[4];
     u8 unk10;
     u8 padding1[106];
@@ -33,8 +31,7 @@ extern func_80036274_36E74_large_struct *getCurrentAllocation();
 s32 func_8006C590_6D190(u32, u32);
 extern s32 D_800AFF10_A7280;
 
-typedef struct
-{
+typedef struct {
     char padding[52];
     s32 unk34;
     char padding2[2];

@@ -2,15 +2,15 @@
 
 #include "common.h"
 
-void* func_8005DE60_5EA60(void*);
-u16* func_8005DE6C_5EA6C(void* base, s16 tableIndex, s16 subIndex);
+void *func_8005DE60_5EA60(void *);
+u16 *func_8005DE6C_5EA6C(void *base, s16 tableIndex, s16 subIndex);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE60_5EA60);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE6C_5EA6C);
 
-void func_8005DE98_5EA98(void* arg0, s32 arg1, s32 arg2, func_8005DE98_5EA98_arg* arg3) {
-    void* result;
+void func_8005DE98_5EA98(void *arg0, s32 arg1, s32 arg2, func_8005DE98_5EA98_arg *arg3) {
+    void *result;
     s16 s_arg1;
     s16 s_arg2;
 
@@ -23,7 +23,7 @@ void func_8005DE98_5EA98(void* arg0, s32 arg1, s32 arg2, func_8005DE98_5EA98_arg
     result = func_8005DE6C_5EA6C(arg0, s_arg1, s_arg2);
     arg3->unk40 = result;
 
-    arg3->unk48 = *(u16*)result + 0x8000;
+    arg3->unk48 = *(u16 *)result + 0x8000;
 }
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DF10_5EB10);
@@ -38,21 +38,26 @@ typedef struct {
     /* 0x20 */ s32 prev_position[3];
     /* 0x2C */ s32 unknown[2];
     /* 0x34 */ s32 interpolated[3];
-    /* 0x40 */ s16* animation_data;
-    /* 0x44 */ s16* frame_data;
+    /* 0x40 */ s16 *animation_data;
+    /* 0x44 */ s16 *frame_data;
     /* 0x48 */ u16 flags;
     /* 0x4A */ u16 counter;
 } func_8005E800_5F400_arg;
 
-extern void func_8005DF10_5EB10(s16, s16, s16, s16*);
-extern void func_8006BDBC_6C9BC(func_8005E800_5F400_arg*, void*, void*);
+extern void func_8005DF10_5EB10(s16, s16, s16, s16 *);
+extern void func_8006BDBC_6C9BC(func_8005E800_5F400_arg *, void *, void *);
 
-void func_8005E800_5F400(func_8005E800_5F400_arg* entity, u16 param_2) {
+void func_8005E800_5F400(func_8005E800_5F400_arg *entity, u16 param_2) {
     s16 stack_data[0x10];
 
     if (entity->flags & 0x8000) {
         entity->flags &= 0x7FFF;
-        func_8005DF10_5EB10(entity->animation_data[1], entity->animation_data[2], entity->animation_data[3], entity->values);
+        func_8005DF10_5EB10(
+            entity->animation_data[1],
+            entity->animation_data[2],
+            entity->animation_data[3],
+            entity->values
+        );
         {
             u16 idx;
             s16 temp_val;
@@ -133,16 +138,15 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005ECB8_5F8B8);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005EFC4_5FBC4);
 
-extern u16* func_8005DE6C_5EA6C(void* base, s16 tableIndex, s16 subIndex);
-typedef struct
-{
+extern u16 *func_8005DE6C_5EA6C(void *base, s16 tableIndex, s16 subIndex);
+typedef struct {
     u8 padding[0x40];
     s16 unk40;
     s16 padding2;
     s16 unk44;
 } func_8005F2FC_5FEFC_arg;
-void func_8005F2FC_5FEFC(s16 arg0, s16 arg1, s16 arg2, func_8005F2FC_5FEFC_arg* arg3) {
-    func_8005F2FC_5FEFC_arg* new_var2;
+void func_8005F2FC_5FEFC(s16 arg0, s16 arg1, s16 arg2, func_8005F2FC_5FEFC_arg *arg3) {
+    func_8005F2FC_5FEFC_arg *new_var2;
     u16 new_var;
 
     arg3->unk44 = 0;
@@ -172,25 +176,25 @@ typedef struct {
     u16 index;
 } func_80060950_61550_target;
 
-s32 func_80060950_61550(func_80060950_61550_arg* data, s16 index) {
+s32 func_80060950_61550(func_80060950_61550_arg *data, s16 index) {
     s32 baseOffset;
     s32 targetOffset;
-    func_80060950_61550_target* target;
+    func_80060950_61550_target *target;
     s32 indexValue;
-    func_80060950_61550_arg* baseData;
+    func_80060950_61550_arg *baseData;
 
     targetOffset = data->offsetTable[index + 1];
-    target = (func_80060950_61550_target*)(((s8*)data) + targetOffset);
+    target = (func_80060950_61550_target *)(((s8 *)data) + targetOffset);
     baseOffset = data->baseOffset;
     indexValue = target->index;
-    baseData = (func_80060950_61550_arg*)(((s8*)data) + baseOffset);
-    return (s32)(((s8*)baseData) + (indexValue << 1));
+    baseData = (func_80060950_61550_arg *)(((s8 *)data) + baseOffset);
+    return (s32)(((s8 *)baseData) + (indexValue << 1));
 }
 
-s32 func_8006097C_6157C(func_8006097C_6157C_arg* table, s32 index) {
+s32 func_8006097C_6157C(func_8006097C_6157C_arg *table, s32 index) {
     s32 adjusted_index = (index << 16) >> 14;
-    func_8006097C_6157C_arg_item* entry = (func_8006097C_6157C_arg_item*)((s8*)table + adjusted_index);
-    u16* data_ptr = (u16*)((s8*)table + entry->unk8);
+    func_8006097C_6157C_arg_item *entry = (func_8006097C_6157C_arg_item *)((s8 *)table + adjusted_index);
+    u16 *data_ptr = (u16 *)((s8 *)table + entry->unk8);
 
     return *data_ptr;
 }

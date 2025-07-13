@@ -30,8 +30,7 @@ typedef struct {
     /* 0x14 */ s32 *drum_table;
 } song_t;
 
-typedef struct
-{
+typedef struct {
     u8 header_name[16];
     u32 flags;
     u32 wbk_name[3];
@@ -206,7 +205,14 @@ fx_t *D_800A64F4_A70F4;
 s32 *D_800A64F8_A70F8;
 ALHeap audio_heap;
 
-void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s32 maxChannels, s32 maxVoices, s32 sampleRate);
+void initAudioManager(
+    ALSynConfig *config,
+    OSId id,
+    AudioParams *audioParams,
+    s32 maxChannels,
+    s32 maxVoices,
+    s32 sampleRate
+);
 f32 __MusIntPowerOf2(f32 x);
 void MusSetMasterVolume(u32 flags, u32 volume);
 void __MusIntInitialiseChannel(channel_t *cp);
@@ -702,7 +708,14 @@ s32 MusInitialize(musConfig *config) {
     audioParams.syn_rsp_cmds = config->syn_retraceCount;
 
     mus_last_fxtype = AL_FX_BIGROOM;
-    initAudioManager(&audioConfig, config->thread_priority, &audioParams, config->syn_dma_buf_size, (s32)config->diskrom_handle, mus_vsyncs_per_second);
+    initAudioManager(
+        &audioConfig,
+        config->thread_priority,
+        &audioParams,
+        config->syn_dma_buf_size,
+        (s32)config->diskrom_handle,
+        mus_vsyncs_per_second
+    );
 
     MusSetMasterVolume(3, 0x7fff);
 
@@ -869,7 +882,7 @@ void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset) {
         cp->port_base = frequency;
     }
 
-    frequency += offset + cp->bendrange;  // pitchbend_precalc?
+    frequency += offset + cp->bendrange; // pitchbend_precalc?
 
     if (frequency == cp->old_frequency) {
         return;
@@ -939,11 +952,19 @@ f32 __MusIntPowerOf2(f32 x) {
 
     if (x > 0) {
         x2 = x * x;
-        return (1 + (x * .693147180559945) + (x2 * .240226506959101) + (x2 * x * 5.55041086648216E-02) + (x2 * x2 * 9.61812910762848E-03) + (x2 * x2 * x * 1.33335581464284E-03) + (x2 * x2 * x2 * 1.54035303933816E-04));
+        return (
+            1 + (x * .693147180559945) + (x2 * .240226506959101) + (x2 * x * 5.55041086648216E-02) +
+            (x2 * x2 * 9.61812910762848E-03) + (x2 * x2 * x * 1.33335581464284E-03) +
+            (x2 * x2 * x2 * 1.54035303933816E-04)
+        );
     } else {
         x = -x;
         x2 = x * x;
-        return (1 / (1 + (x * .693147180559945) + (x2 * .240226506959101) + (x2 * x * 5.55041086648216E-02) + (x2 * x2 * 9.61812910762848E-03) + (x2 * x2 * x * 1.33335581464284E-03) + (x2 * x2 * x2 * 1.54035303933816E-04)));
+        return (
+            1 / (1 + (x * .693147180559945) + (x2 * .240226506959101) + (x2 * x * 5.55041086648216E-02) +
+                 (x2 * x2 * 9.61812910762848E-03) + (x2 * x2 * x * 1.33335581464284E-03) +
+                 (x2 * x2 * x2 * 1.54035303933816E-04))
+        );
     }
 }
 

@@ -1,8 +1,7 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-typedef struct
-{
+typedef struct {
     s32 padding;
     void *unk4;
     void *unk8;
@@ -208,13 +207,15 @@ void func_80057124_57D24(void) {
         D_800937E8_943E8[D_800A2990_A3590->unk12].unk0,
         D_800937E8_943E8[D_800A2990_A3590->unk12].unk4,
         D_800937E8_943E8[D_800A2990_A3590->unk12].unk8,
-        D_800A2990_A3590->unk8);
+        D_800A2990_A3590->unk8
+    );
 
     loadDataSegment(
         D_80093974_94574[D_800A2990_A3590->unk12].unk0,
         D_80093974_94574[D_800A2990_A3590->unk12].unk4,
         D_80093974_94574[D_800A2990_A3590->unk12].unk8,
-        D_800A2990_A3590->unk4);
+        D_800A2990_A3590->unk4
+    );
 
     setCallback(&func_800571D0_57DD0);
 }

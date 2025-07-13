@@ -15,10 +15,10 @@ void func_80002750_3350(s32);
 extern void func_80031B30_32730;
 extern s32 D_8009A870_9B470;
 extern void func_80031C4C_3284C;
-void func_80031ABC_326BC(func_80031ABC_326BC_arg* arg0);
+void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 func_800021B8_2DB8(s32, s16);
 func_8000160C_220C(s32, s32);
-func_8000153C_213C(s32, s32*);
+func_8000153C_213C(s32, s32 *);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80030C70_31870);
 
@@ -63,7 +63,7 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80031944_32544);
 INCLUDE_ASM("asm/nonmatchings/31870", func_800319C8_325C8);
 
 typedef struct {
-    void* unk0;
+    void *unk0;
     s32 unk4;
     u8 padding[0x10];
     s32 unk18;
@@ -74,8 +74,8 @@ typedef struct {
     s8 unk28;
 } func_80031A0C_3260C_arg;
 
-void func_80031A0C_3260C(func_80031A0C_3260C_arg* arg0) {
-    arg0->unk0 = func_800019B8_25B8(0x3A, &((GameState*)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
+void func_80031A0C_3260C(func_80031A0C_3260C_arg *arg0) {
+    arg0->unk0 = func_800019B8_25B8(0x3A, &((GameState *)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
 
     memcpy(&arg0->unk4, &D_8009A870_9B470, 0x20);
 
@@ -83,20 +83,20 @@ void func_80031A0C_3260C(func_80031A0C_3260C_arg* arg0) {
     arg0->unk1C = 0xFFE00000;
     arg0->unk20 = 0;
 
-    createYRotationMatrix((Mat3x3*)&arg0->unk4, 0x200);
+    createYRotationMatrix((Mat3x3 *)&arg0->unk4, 0x200);
 
     arg0->unk24 = 0x10;
     arg0->unk26 = 0x10;
     arg0->unk28 = 0;
 
     setCleanupCallback(&func_80031C4C_3284C);
-    setCallback((void (*)(void*))&func_80031ABC_326BC);
+    setCallback((void (*)(void *))&func_80031ABC_326BC);
 }
 
-void func_80031ABC_326BC(func_80031ABC_326BC_arg* arg0) {
-    GameState* temp_s1;
+void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0) {
+    GameState *temp_s1;
 
-    temp_s1 = (GameState*)getCurrentAllocation();
+    temp_s1 = (GameState *)getCurrentAllocation();
     func_8000153C_213C(arg0->unk0, &arg0->unk4);
     func_8000160C_220C(arg0->unk0, 1);
     func_800021B8_2DB8(arg0->unk0, arg0->unk24);

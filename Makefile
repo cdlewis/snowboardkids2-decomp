@@ -109,6 +109,9 @@ diff-line:
 diff-sxs:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
+format:
+	clang-format -i -style=file $(C_FILES)
+
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
 	@printf "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
 	@$(LD) $(LD_FLAGS) $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) -o $@

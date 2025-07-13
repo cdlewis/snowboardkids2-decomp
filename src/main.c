@@ -18,8 +18,7 @@ typedef struct {
     s32 *unk44;
 } func_80001114_1D14_arg;
 
-typedef struct
-{
+typedef struct {
     u8 unk0;
     char padding[0x33];
     u8 unk34;
@@ -31,13 +30,11 @@ typedef struct
     u8 unk3A;
 } D_800891A8_89DA8_entry;
 extern D_800891A8_89DA8_entry *D_800891A8_89DA8[];
-typedef struct
-{
+typedef struct {
     char padding[0xD5];
     s32 unkDA;
 } func_80000460_1060_arg0_unk0;
-typedef struct
-{
+typedef struct {
     func_80000460_1060_arg0_unk0 *unk0;
     char padding[0x80];
     s16 unk84;

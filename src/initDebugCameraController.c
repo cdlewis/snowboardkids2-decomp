@@ -1,8 +1,7 @@
 #include "task_scheduler.h"
 
 extern void updateDebugCameraYState();
-typedef struct
-{
+typedef struct {
     s16 unk0;
     s16 unk2;
     s16 unk4;

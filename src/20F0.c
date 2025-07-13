@@ -7,8 +7,8 @@
 
 typedef struct {
     u8 padding[0x24];
-    /* 0x24 */ u8* data_ptr;
-    /* 0x28 */ TableEntry_19E80* index_ptr;
+    /* 0x24 */ u8 *data_ptr;
+    /* 0x28 */ TableEntry_19E80 *index_ptr;
     s8 unk2C;
     s8 unk2D;
 } func_80002C14_3814_arg;
@@ -37,7 +37,7 @@ typedef struct {
     u8 padding3[0x8];
     s8 unk94;
     u8 padding2[0x4];
-    func_80001688_2288_arg_9C* unk9C;
+    func_80001688_2288_arg_9C *unk9C;
 } func_80001688_2288_arg;
 
 typedef struct {
@@ -87,54 +87,54 @@ typedef struct {
     s16 unk8E;
 } func_80001970_2570_arg;
 
-extern OSThread* __osActiveQueue_0;
+extern OSThread *__osActiveQueue_0;
 extern AssetGroup gameAssets[];
 extern s32 D_80089768_8A368;
 extern AssetGroup D_8008BD2C_8C92C;
-extern s32 func_8005ECB8_5F8B8(void* arg0, s32 arg1, s32 arg2, void* arg3);
-extern void func_8005E800_5F400(void* arg0, u16 arg1);
+extern s32 func_8005ECB8_5F8B8(void *arg0, s32 arg1, s32 arg2, void *arg3);
+extern void func_8005E800_5F400(void *arg0, u16 arg1);
 extern u8 D_8009A870_9B470[32];
 
-s32 func_800018F4_24F4(func_80002040_2C40_arg*);
+s32 func_800018F4_24F4(func_80002040_2C40_arg *);
 s32 func_80001904_2504(s16);
-s32 func_80002484_3084(func_80002040_2C40_arg*, s16);
+s32 func_80002484_3084(func_80002040_2C40_arg *, s16);
 s32 func_8000CDE0_D9E0(s32);
 s32 func_8000CDFC_D9FC(s32);
-void initializeGameEntity(GameState*, s32, void*, s8, s8, s8, s16);
-void func_80002220_2E20(func_80002040_2C40_arg*, s16, s16, s8, s16);
-void func_80002468_3068(func_80002040_2C40_arg*);
-void* func_80002040_2C40(func_80002040_2C40_arg* arg0);
-void* func_80009F5C_AB5C(s32);
+void initializeGameEntity(GameState *, s32, void *, s8, s8, s8, s16);
+void func_80002220_2E20(func_80002040_2C40_arg *, s16, s16, s8, s16);
+void func_80002468_3068(func_80002040_2C40_arg *);
+void *func_80002040_2C40(func_80002040_2C40_arg *arg0);
+void *func_80009F5C_AB5C(s32);
 
-void func_800014F0_20F0(func_800014F0_20F0_arg* arg0) {
+void func_800014F0_20F0(func_800014F0_20F0_arg *arg0) {
     arg0->unk3C = 1;
 }
 
-void func_800014FC_20FC(func_800014FC_20FC_arg* arg0, s32 arg1) {
+void func_800014FC_20FC(func_800014FC_20FC_arg *arg0, s32 arg1) {
     arg0->unk158 = arg1;
 }
 
-void func_80001504_2104(func_8000150C_210C_arg* arg0) {
+void func_80001504_2104(func_8000150C_210C_arg *arg0) {
     arg0->unk15C = 0;
 }
 
-void func_8000150C_210C(func_8000150C_210C_arg* arg0) {
+void func_8000150C_210C(func_8000150C_210C_arg *arg0) {
     arg0->unk15C = 1;
 }
 
-void func_80001518_2118(func_80001534_2134_arg* arg0) {
+void func_80001518_2118(func_80001534_2134_arg *arg0) {
     arg0->unk97 = 1;
 }
 
-void func_80001524_2124(func_80001534_2134_arg* arg0) {
+void func_80001524_2124(func_80001534_2134_arg *arg0) {
     arg0->unk97 = 0;
 }
 
-void func_8000152C_212C(func_80001534_2134_arg* arg0, s8 arg1) {
+void func_8000152C_212C(func_80001534_2134_arg *arg0, s8 arg1) {
     arg0->unk96 = arg1;
 }
 
-u8 func_80001534_2134(func_80001534_2134_arg* arg0) {
+u8 func_80001534_2134(func_80001534_2134_arg *arg0) {
     return arg0->unk96;
 }
 
@@ -142,13 +142,13 @@ typedef struct {
     u8 padding[0x18];
     /* 0x18 */ s32 start;
 } func_8000153C_213C_arg;
-void func_8000153C_213C(func_8000153C_213C_arg* arg0, void* arg1) {
+void func_8000153C_213C(func_8000153C_213C_arg *arg0, void *arg1) {
     if (arg0 != 0) {
         memcpy(&arg0->start, arg1, 0x20);
     }
 }
 
-OSThread* __osGetActiveQueue(void) {
+OSThread *__osGetActiveQueue(void) {
     return __osActiveQueue_0;
 }
 
@@ -164,11 +164,11 @@ s8 func_800015A0_21A0(s16 arg0) {
     return gameAssets[arg0].unk20;
 }
 
-void func_800015CC_21CC(func_800015CC_21CC_arg* arg0, s8 arg1) {
+void func_800015CC_21CC(func_800015CC_21CC_arg *arg0, s8 arg1) {
     arg0->unk3D = arg1;
 }
 
-s8 func_800015D4_21D4(func_800015CC_21CC_arg* arg0) {
+s8 func_800015D4_21D4(func_800015CC_21CC_arg *arg0) {
     return arg0->unk3D;
 }
 
@@ -188,15 +188,15 @@ s32 func_800015F4_21F4(void) {
     return 6;
 }
 
-void func_800015FC_21FC(func_800015FC_21FC_arg* arg0, s8 arg1) {
+void func_800015FC_21FC(func_800015FC_21FC_arg *arg0, s8 arg1) {
     arg0->unk88 = arg1;
 }
 
-void func_80001604_2204(func_80001604_2204_arg* arg0, s8 arg1) {
+void func_80001604_2204(func_80001604_2204_arg *arg0, s8 arg1) {
     arg0->unk3F = arg1;
 }
 
-void func_8000160C_220C(func_80001630_2230_arg* arg0, s8 arg1) {
+void func_8000160C_220C(func_80001630_2230_arg *arg0, s8 arg1) {
     if (arg0->unk4C != -1) {
         arg0->unk4E = arg1;
     }
@@ -206,28 +206,28 @@ s32 func_80001624_2224(void) {
     return D_80089768_8A368;
 }
 
-void func_80001630_2230(func_80001630_2230_arg* arg0, s8 arg1) {
+void func_80001630_2230(func_80001630_2230_arg *arg0, s8 arg1) {
     arg0->unk4F = arg1;
 }
 
-s16 func_80001638_2238(func_80001688_2288_arg* arg0) {
+s16 func_80001638_2238(func_80001688_2288_arg *arg0) {
     return arg0->unk8A;
 }
 
-void func_80001640_2240(func_80001688_2288_arg* arg0) {
+void func_80001640_2240(func_80001688_2288_arg *arg0) {
     arg0->unk89 |= 1;
 }
 
-void func_80001650_2250(func_80001688_2288_arg* arg0) {
+void func_80001650_2250(func_80001688_2288_arg *arg0) {
     arg0->unk89 &= 0xFE;
 }
 
-s8 func_80001660_2260(func_80001688_2288_arg* arg0) {
+s8 func_80001660_2260(func_80001688_2288_arg *arg0) {
     return arg0->unk94;
 }
 
-s8 func_80001668_2268(func_80001688_2288_arg* arg0) {
-    func_80001688_2288_arg_9C* temp_v0;
+s8 func_80001668_2268(func_80001688_2288_arg *arg0) {
+    func_80001688_2288_arg_9C *temp_v0;
 
     temp_v0 = arg0->unk9C;
     if (temp_v0 != NULL) {
@@ -236,23 +236,23 @@ s8 func_80001668_2268(func_80001688_2288_arg* arg0) {
     return 0;
 }
 
-void func_80001688_2288(func_80001688_2288_arg* arg0, s8 arg1) {
+void func_80001688_2288(func_80001688_2288_arg *arg0, s8 arg1) {
     if (arg1 < func_80001668_2268(arg0)) {
         arg0->unk94 = arg1;
     }
 }
 
-void func_800016E0_22E0(func_800016E0_22E0_arg* arg0, s32 arg1) {
+void func_800016E0_22E0(func_800016E0_22E0_arg *arg0, s32 arg1) {
     arg0->unk110 = (s32)(arg0->unk110 | (1 << arg1));
 }
 
-void func_800016F8_22F8(func_800016E0_22E0_arg* arg0, s32 arg1) {
+void func_800016F8_22F8(func_800016E0_22E0_arg *arg0, s32 arg1) {
     arg0->unk110 = (s32)(arg0->unk110 & ~(1 << arg1));
 }
 
-void* loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
-    AssetGroup* group;
-    Asset* entity;
+void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
+    AssetGroup *group;
+    Asset *entity;
 
     group = &gameAssets[groupIndex];
     if (group->Assets == NULL) {
@@ -283,7 +283,7 @@ void* loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
     }
 }
 
-s32 func_800017F4_23F4(func_80002B50_3750_arg* arg0) {
+s32 func_800017F4_23F4(func_80002B50_3750_arg *arg0) {
     s32 new_var;
     int new_var2 = 0;
     s32 var_v0 = 0;
@@ -296,29 +296,33 @@ s32 func_800017F4_23F4(func_80002B50_3750_arg* arg0) {
     return new_var;
 }
 
-void* loadAssetGroupSoundData(func_80002040_2C40_arg* arg0) {
+void *loadAssetGroupSoundData(func_80002040_2C40_arg *arg0) {
     s16 idx = arg0->index;
-    AssetGroup* entry = &gameAssets[idx];
-    void* allocatedSpaceStart = NULL;
+    AssetGroup *entry = &gameAssets[idx];
+    void *allocatedSpaceStart = NULL;
 
     if (entry->soundSequenceDataStart != NULL) {
-        allocatedSpaceStart = dmaRequestAndUpdateStateWithSize(entry->soundSequenceDataStart, entry->soundSequenceDataEnd, entry->soundSequenceDataSize);
+        allocatedSpaceStart = dmaRequestAndUpdateStateWithSize(
+            entry->soundSequenceDataStart,
+            entry->soundSequenceDataEnd,
+            entry->soundSequenceDataSize
+        );
     }
 
     return allocatedSpaceStart;
 }
 
-void* loadAssetGroupDisplayList(func_80002040_2C40_arg* arg0) {
-    AssetGroup* entity = &gameAssets[arg0->index];
+void *loadAssetGroupDisplayList(func_80002040_2C40_arg *arg0) {
+    AssetGroup *entity = &gameAssets[arg0->index];
     return dmaRequestAndUpdateState(entity->displayListStart, entity->displayListEnd);
 }
 
-void* loadAssetGroupVertexData(func_80002040_2C40_arg* arg0) {
-    AssetGroup* entity = &gameAssets[arg0->index];
+void *loadAssetGroupVertexData(func_80002040_2C40_arg *arg0) {
+    AssetGroup *entity = &gameAssets[arg0->index];
     return dmaRequestAndUpdateStateWithSize(entity->vertexDataStart, entity->vertexDataEnd, entity->size);
 }
 
-s32 func_800018F4_24F4(func_80002040_2C40_arg* arg0) {
+s32 func_800018F4_24F4(func_80002040_2C40_arg *arg0) {
     return arg0->unk0->unk3E0 != 0;
 }
 
@@ -326,7 +330,7 @@ s32 func_80001904_2504(s16 arg0) {
     return gameAssets[arg0].displayListStart == NULL;
 }
 
-AssetGroup* func_80001934_2534(s32 arg0) {
+AssetGroup *func_80001934_2534(s32 arg0) {
     if (arg0 != -1) {
         return &gameAssets[arg0];
     }
@@ -334,7 +338,7 @@ AssetGroup* func_80001934_2534(s32 arg0) {
     return &D_8008BD2C_8C92C;
 }
 
-void func_80001970_2570(func_80001970_2570_arg* arg0) {
+void func_80001970_2570(func_80001970_2570_arg *arg0) {
     arg0->unk14 = -1;
     arg0->unk16 = -1;
     arg0->unk3A = -1;
@@ -342,12 +346,12 @@ void func_80001970_2570(func_80001970_2570_arg* arg0) {
     arg0->unk8E = -1;
 }
 
-void* func_8000198C_258C(s32 arg0, void* arg1) {
+void *func_8000198C_258C(s32 arg0, void *arg1) {
     return func_800019B8_25B8(arg0, arg1, 0, -1, -1, -1);
 }
 
-void* func_800019B8_25B8(s32 arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {
-    GameState* obj = allocateGameStateMemory(0x160);
+void *func_800019B8_25B8(s32 arg0, void *arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {
+    GameState *obj = allocateGameStateMemory(0x160);
     if (obj != NULL) {
         initializeGameEntity(obj, arg0, arg1, arg2, arg3, arg4, arg5);
     }
@@ -356,70 +360,70 @@ void* func_800019B8_25B8(s32 arg0, void* arg1, s8 arg2, s8 arg3, s8 arg4, s16 ar
 
 INCLUDE_ASM("asm/nonmatchings/20F0", initializeGameEntity);
 
-void func_80002014_2C14(func_80002040_2C40_arg* arg0) {
+void func_80002014_2C14(func_80002040_2C40_arg *arg0) {
     func_80002040_2C40(arg0);
     freeGameStateMemory(arg0);
 }
 
-void* func_80002040_2C40(func_80002040_2C40_arg* arg0) {
-    func_80002040_2C40_arg_unk98* temp_s0;
-    func_80002040_2C40_arg_unk0* temp_s0_2;
-    void* new_var;
-    func_80002040_2C40_arg_unk0* temp_s0_3;
+void *func_80002040_2C40(func_80002040_2C40_arg *arg0) {
+    func_80002040_2C40_arg_unk98 *temp_s0;
+    func_80002040_2C40_arg_unk0 *temp_s0_2;
+    void *new_var;
+    func_80002040_2C40_arg_unk0 *temp_s0_3;
     if (arg0 == 0) {
         return 0;
     }
     arg0->unk3C = 1;
-    arg0->unk120 = (void*)freeGameStateMemory(arg0->unk120);
-    arg0->unk11C = (void*)freeGameStateMemory(arg0->unk11C);
+    arg0->unk120 = (void *)freeGameStateMemory(arg0->unk120);
+    arg0->unk11C = (void *)freeGameStateMemory(arg0->unk11C);
     arg0->unk118 = func_8000CDFC_D9FC(arg0->unk118);
     arg0->unk114 = func_8000CDE0_D9E0(arg0->unk114);
     func_80009F5C_AB5C(((s32)arg0) + 0xA4);
     temp_s0 = arg0->unk98;
-    temp_s0->unk24 = (void*)freeGameStateMemory(temp_s0->unk24);
-    temp_s0->unk28 = (void*)freeGameStateMemory(temp_s0->unk28);
-    new_var = (void*)freeGameStateMemory(arg0->unk98);
+    temp_s0->unk24 = (void *)freeGameStateMemory(temp_s0->unk24);
+    temp_s0->unk28 = (void *)freeGameStateMemory(temp_s0->unk28);
+    new_var = (void *)freeGameStateMemory(arg0->unk98);
     temp_s0_2 = arg0->unk0;
     arg0->unk98 = new_var;
-    temp_s0_2->unk420 = (void*)freeGameStateMemory(temp_s0_2->unk420);
-    temp_s0_2->unk424 = (void*)freeGameStateMemory(temp_s0_2->unk424);
+    temp_s0_2->unk420 = (void *)freeGameStateMemory(temp_s0_2->unk420);
+    temp_s0_2->unk424 = (void *)freeGameStateMemory(temp_s0_2->unk424);
     temp_s0_3 = arg0->unk0;
-    temp_s0_3->unk3E4 = (void*)freeGameStateMemory(temp_s0_3->unk3E4);
-    temp_s0_3->unk3E8 = (void*)freeGameStateMemory(temp_s0_3->unk3E8);
-    temp_s0_3->unk3EC = (void*)freeGameStateMemory(temp_s0_3->unk3EC);
-    arg0->unk4 = (void*)freeGameStateMemory(arg0->unk4);
-    arg0->unk8 = (void*)freeGameStateMemory(arg0->unk8);
-    arg0->unk0->unk24 = (void*)freeGameStateMemory(arg0->unk0->unk24);
-    arg0->unk0->unk28 = (void*)freeGameStateMemory(arg0->unk0->unk28);
-    arg0->unk0 = (void*)freeGameStateMemory(arg0->unk0);
+    temp_s0_3->unk3E4 = (void *)freeGameStateMemory(temp_s0_3->unk3E4);
+    temp_s0_3->unk3E8 = (void *)freeGameStateMemory(temp_s0_3->unk3E8);
+    temp_s0_3->unk3EC = (void *)freeGameStateMemory(temp_s0_3->unk3EC);
+    arg0->unk4 = (void *)freeGameStateMemory(arg0->unk4);
+    arg0->unk8 = (void *)freeGameStateMemory(arg0->unk8);
+    arg0->unk0->unk24 = (void *)freeGameStateMemory(arg0->unk0->unk24);
+    arg0->unk0->unk28 = (void *)freeGameStateMemory(arg0->unk0->unk28);
+    arg0->unk0 = (void *)freeGameStateMemory(arg0->unk0);
     return arg0;
 }
 
-void func_80002170_2D70(func_80002B50_3750_arg* arg0, s16 arg1) {
+void func_80002170_2D70(func_80002B50_3750_arg *arg0, s16 arg1) {
     if (arg1 < arg0->unkE) {
-        enqueueDisplayListObject(arg0->unk10->unk16, (void*)arg0->unk0 + (arg1 * 0x3C));
+        enqueueDisplayListObject(arg0->unk10->unk16, (void *)arg0->unk0 + (arg1 * 0x3C));
     }
 }
 
-void func_800021B8_2DB8(func_80002040_2C40_arg* arg0, s16 arg1) {
+void func_800021B8_2DB8(func_80002040_2C40_arg *arg0, s16 arg1) {
     func_80002220_2E20(arg0, arg1, -1, -1, -1);
 }
 
-void func_800021E8_2DE8(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3) {
+void func_800021E8_2DE8(func_80002040_2C40_arg *arg0, s16 arg1, s16 arg2, s8 arg3) {
     func_80002220_2E20(arg0, arg1, arg2, arg3, -1);
 }
 
-void func_80002260_2E60(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5);
+void func_80002260_2E60(func_80002040_2C40_arg *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5);
 
-void func_80002220_2E20(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
+void func_80002220_2E20(func_80002040_2C40_arg *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
     func_80002260_2E60(arg0, arg1, arg2, arg3, (s32)arg4, 1);
 }
 
-void func_80002260_2E60(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5) {
+void func_80002260_2E60(func_80002040_2C40_arg *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5) {
     int new_var;
     s16 var_t0;
     s16 var_a1;
-    AssetGroup* entity;
+    AssetGroup *entity;
 
     s16 local_arg2 = arg2;
     s16 local_arg1 = arg1;
@@ -496,11 +500,11 @@ void func_80002260_2E60(func_80002040_2C40_arg* arg0, s16 arg1, s16 arg2, s8 arg
     }
 }
 
-void func_80002468_3068(func_80002040_2C40_arg* arg0) {
+void func_80002468_3068(func_80002040_2C40_arg *arg0) {
     func_80002484_3084(arg0, -1);
 }
 
-s32 func_80002484_3084(func_80002040_2C40_arg* arg0, s16 arg1) {
+s32 func_80002484_3084(func_80002040_2C40_arg *arg0, s16 arg1) {
     s8 local_buffer[0x20];
     s32 s3;
     s32 i;
@@ -594,13 +598,13 @@ s32 func_80002484_3084(func_80002040_2C40_arg* arg0, s16 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/20F0", func_80002750_3350);
 
-void func_80002B50_3750(func_80002B50_3750_arg* arg0, DisplayListObject* arg1) {
+void func_80002B50_3750(func_80002B50_3750_arg *arg0, DisplayListObject *arg1) {
     if ((arg0 != NULL) && (arg0->unk88 != 0) && (arg0->unk3F != 0)) {
         enqueueDisplayListObject(arg0->unk10->unk16, arg1);
     }
 }
 
-s32 func_80002B8C_378C(func_80002040_2C40_arg* arg0) {
+s32 func_80002B8C_378C(func_80002040_2C40_arg *arg0) {
     s32 new_var;
     if (func_80001904_2504(arg0->index) == 0) {
         return 0;
@@ -613,7 +617,7 @@ s32 func_80002B8C_378C(func_80002040_2C40_arg* arg0) {
     return new_var;
 }
 
-s32 func_80002BD0_37D0(func_80002040_2C40_arg* arg0) {
+s32 func_80002BD0_37D0(func_80002040_2C40_arg *arg0) {
     u32 index = arg0->index;
     if (func_80001904_2504(index) == 0) {
         return 8;
@@ -627,7 +631,7 @@ s32 func_80002BD0_37D0(func_80002040_2C40_arg* arg0) {
     return 0x90;
 }
 
-void func_80002C14_3814(func_80002C14_3814_arg* arg0, void* arg1, s32 arg2) {
+void func_80002C14_3814(func_80002C14_3814_arg *arg0, void *arg1, s32 arg2) {
     OutputStruct_19E80 result;
     getTableEntryByU16Index(arg1, (s16)arg2, &result);
 

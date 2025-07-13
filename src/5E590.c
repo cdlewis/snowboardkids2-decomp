@@ -40,14 +40,22 @@ void *func_8005D990_5E590(s16 groupIndex, s16 pairIndex) {
 
 void *func_8005D9D0_5E5D0(s16 groupIndex, s16 pairIndex) {
     AssetWithSize *assetArray = D_80094600_95200[groupIndex];
-    return dmaRequestAndUpdateStateWithSize(assetArray[pairIndex].start, assetArray[pairIndex].end, assetArray[pairIndex].size);
+    return dmaRequestAndUpdateStateWithSize(
+        assetArray[pairIndex].start,
+        assetArray[pairIndex].end,
+        assetArray[pairIndex].size
+    );
 }
 
 MemoryAllocatorNode *func_8005DA20_5E620(s16 index) {
     if (index == 0xA) {
         return NULL;
     } else {
-        return dmaRequestAndUpdateStateWithSize(D_800947E0_953E0[index].start, D_800947E0_953E0[index].end, D_800947E0_953E0[index].size);
+        return dmaRequestAndUpdateStateWithSize(
+            D_800947E0_953E0[index].start,
+            D_800947E0_953E0[index].end,
+            D_800947E0_953E0[index].size
+        );
     }
 }
 
@@ -66,7 +74,11 @@ void *load_3ECE40(void) {
 }
 
 void *func_8005DB00_5E700(s32 index) {
-    return dmaRequestAndUpdateStateWithSize(D_80094870_95470[index].start, D_80094870_95470[index].end, D_80094870_95470[index].size);
+    return dmaRequestAndUpdateStateWithSize(
+        D_80094870_95470[index].start,
+        D_80094870_95470[index].end,
+        D_80094870_95470[index].size
+    );
 }
 
 void *func_8005DB48_5E748(s16 index) {
@@ -74,7 +86,11 @@ void *func_8005DB48_5E748(s16 index) {
 }
 
 void *func_8005DB80_5E780(s16 index) {
-    return dmaRequestAndUpdateStateWithSize(D_80094990_95590[index].start, D_80094990_95590[index].end, D_80094990_95590[index].size);
+    return dmaRequestAndUpdateStateWithSize(
+        D_80094990_95590[index].start,
+        D_80094990_95590[index].end,
+        D_80094990_95590[index].size
+    );
 }
 
 void *func_8005DBD0_5E7D0(s16 index) {
@@ -89,7 +105,11 @@ void *func_8005DBD0_5E7D0(s16 index) {
         clamped_index = 0;
     }
 
-    return dmaRequestAndUpdateStateWithSize(D_80094A68_95668[clamped_index].start, D_80094A68_95668[clamped_index].end, D_80094A68_95668[clamped_index].size);
+    return dmaRequestAndUpdateStateWithSize(
+        D_80094A68_95668[clamped_index].start,
+        D_80094A68_95668[clamped_index].end,
+        D_80094A68_95668[clamped_index].size
+    );
 }
 
 void *func_8005DC48_5E848(s16 index) {
@@ -109,7 +129,11 @@ void *func_8005DC60_5E860(s32 index) {
     } else if (val == 3) {
         return dmaRequestAndUpdateStateWithSize(&D_40A760, &D_40A930, 0x270);
     } else {
-        return dmaRequestAndUpdateStateWithSize(D_80094B70_95770[index].start, D_80094B70_95770[index].end, D_80094B70_95770[index].size);
+        return dmaRequestAndUpdateStateWithSize(
+            D_80094B70_95770[index].start,
+            D_80094B70_95770[index].end,
+            D_80094B70_95770[index].size
+        );
     }
 }
 
@@ -133,7 +157,11 @@ s32 func_8005DD20_5E920(s32 index) {
 }
 
 void *func_8005DD90_5E990(s32 index) {
-    return dmaRequestAndUpdateStateWithSize(D_80094C30_95830[index].start, D_80094C30_95830[index].end, D_80094C30_95830[index].size);
+    return dmaRequestAndUpdateStateWithSize(
+        D_80094C30_95830[index].start,
+        D_80094C30_95830[index].end,
+        D_80094C30_95830[index].size
+    );
 }
 
 MemoryAllocatorNode *func_8005DDD8_5E9D8(s16 groupIndex, s16 entityIndex) {

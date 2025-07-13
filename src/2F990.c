@@ -53,8 +53,7 @@ typedef struct {
     u8 padding[0x2C];
     s32 unk2C;
 } func_8002FA1C_3061C_arg;
-typedef struct
-{
+typedef struct {
     u8 padding[0x8];
     char *cameraYString;
     u8 padding2[0x8];

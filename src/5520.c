@@ -29,7 +29,7 @@ INCLUDE_ASM("asm/nonmatchings/5520", func_80004FF8_5BF8);
 
 INCLUDE_ASM("asm/nonmatchings/5520", func_80005094_5C94);
 
-void func_800056E8_62E8(DisplayListObject* arg0) {
+void func_800056E8_62E8(DisplayListObject *arg0) {
     func_80005094_5C94();
     buildDisplayListSegment(arg0);
 }

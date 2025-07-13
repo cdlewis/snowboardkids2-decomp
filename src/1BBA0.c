@@ -12,7 +12,7 @@ typedef struct {
     u8 unk10;
 } D_800A8D14_A0084_type;
 
-extern D_800A8D14_A0084_type* D_800A8D14_A0084;
+extern D_800A8D14_A0084_type *D_800A8D14_A0084;
 extern s32 func_8003BB5C_3C75C(void);
 extern void func_8001B020_1BC20;
 extern void func_8001B3B8_1BFB8(void);
@@ -21,7 +21,7 @@ extern void func_8001BC78_1C878();
 extern void func_8001BCC0_1C8C0();
 extern void func_800697CC_6A3CC(void (*func)(void));
 extern void func_800B00C0_9FF70;
-extern void n_alSynRemovePlayer(void* player);
+extern void n_alSynRemovePlayer(void *player);
 
 s32 func_8006FE10_70A10(s32);
 s32 func_8006FE10_70A10(s32);
@@ -35,7 +35,7 @@ void loadOverlay_1BBA0(void) {
 INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001B020_1BC20);
 
 void func_8001B368_1BF68(void) {
-    GameState* state = (GameState*)getCurrentAllocation();
+    GameState *state = (GameState *)getCurrentAllocation();
     if (state->unk5B3 != 0) {
         return;
     }
@@ -58,17 +58,17 @@ void func_8001B3B8_1BFB8() {
 INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001B3E8_1BFE8);
 
 void func_8001BBE8_1C7E8(void) {
-    void* var_a0;
-    GameState* temp_s0;
+    void *var_a0;
+    GameState *temp_s0;
 
-    temp_s0 = (GameState*)getCurrentAllocation();
+    temp_s0 = (GameState *)getCurrentAllocation();
     if (func_8006FE10_70A10(0) == 0) {
         n_alSynRemovePlayer(&temp_s0->audioPlayer0);
         n_alSynRemovePlayer(&temp_s0->audioPlayer2);
         n_alSynRemovePlayer(&temp_s0->audioPlayer4);
         osViExtendVStart(0);
-        temp_s0->unk588 = (s32*)freeGameStateMemory(temp_s0->unk588);
-        temp_s0->unk58C = (s32*)freeGameStateMemory(temp_s0->unk58C);
+        temp_s0->unk588 = (s32 *)freeGameStateMemory(temp_s0->unk588);
+        temp_s0->unk58C = (s32 *)freeGameStateMemory(temp_s0->unk58C);
         if (temp_s0->unk590 != 0) {
             var_a0 = &func_8001BCC0_1C8C0;
         } else {
@@ -94,7 +94,7 @@ void func_8001BCC0_1C8C0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001BCDC_1C8DC);
 
-void func_8001BD74_1C974(s8* a0) {
+void func_8001BD74_1C974(s8 *a0) {
     if (*a0 == 3) {
         *a0 = 2;
     } else if (*a0 == 8) {

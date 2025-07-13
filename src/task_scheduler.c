@@ -7,7 +7,7 @@ extern Node *gDMAOverlay;
 
 typedef struct {
     /* 0x00 */ Node n;
-    u8 padding[0xFC];  // probably the max possible payload
+    u8 padding[0xFC]; // probably the max possible payload
 } NodeWithPayload;
 
 typedef struct gTaskScheduler_type {
@@ -229,7 +229,8 @@ void runTaskSchedulers(void) {
 
                         if (hasActiveTasks() == 0) {
                             gTaskScheduler->nodes = (Node *)decrementNodeRefCount((s32 *)gTaskScheduler->nodes);
-                            gTaskScheduler->allocatedState = (void *)decrementNodeRefCount((s32 *)gTaskScheduler->allocatedState);
+                            gTaskScheduler->allocatedState =
+                                (void *)decrementNodeRefCount((s32 *)gTaskScheduler->allocatedState);
                             gTaskScheduler->unk1C = D_800AB064_A23D4;
                             gTaskScheduler->unk18 = 4;
                         }
@@ -657,4 +658,4 @@ s32 freeGameStateMemory(s32 *arg0) {
     return decrementNodeRefCount(arg0);
 }
 
-static const u32 D_8009EA54_padding[3] = {0, 0, 0};
+static const u32 D_8009EA54_padding[3] = { 0, 0, 0 };

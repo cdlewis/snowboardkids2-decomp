@@ -21,7 +21,7 @@ typedef struct {
 typedef struct {
     s16 unk0;
     s16 unk2;
-    void* unk4;
+    void *unk4;
     s16 unk8;
     s16 unkA;
     s16 unkC;
@@ -51,7 +51,7 @@ typedef struct {
 
 typedef struct {
     char padding[64];
-    void* unk40;
+    void *unk40;
 } func_800371CC_37DCC_arg;
 
 typedef struct {
@@ -71,9 +71,9 @@ typedef struct {
 
 typedef struct {
     char padding;
-    s32* unk4;
+    s32 *unk4;
     char padding2[78];
-    s32* unk58;
+    s32 *unk58;
 } func_80036848_37448_arg;
 
 typedef struct {
@@ -83,13 +83,13 @@ typedef struct {
 
 typedef struct {
     char padding[4];
-    s32* unk4;
+    s32 *unk4;
 } func_80036A10_37610_arg;
 
 typedef struct {
     u16 unk0;
     u16 unk2;
-    void* unk4;
+    void *unk4;
     u16 unk8;
     u16 unkA;
     u8 unkC;
@@ -101,36 +101,36 @@ typedef struct {
 } func_80036880_37480_arg;
 
 s32 func_80035F80_36B80(int);
-void func_80036274_36E74(void*);
-void func_80036424_37024(void*);
-void func_80036848_37448(void*);
-void func_80036328_36F28(func_80036328_36F28_arg*);
-void func_80036880_37480(func_80036880_37480_arg*);
-void func_80036A68_37668(void*);
-void func_80036A10_37610(void*);
+void func_80036274_36E74(void *);
+void func_80036424_37024(void *);
+void func_80036848_37448(void *);
+void func_80036328_36F28(func_80036328_36F28_arg *);
+void func_80036880_37480(func_80036880_37480_arg *);
+void func_80036A68_37668(void *);
+void func_80036A10_37610(void *);
 
-extern void* D_45A890;
-extern void* D_45B130;
+extern void *D_45A890;
+extern void *D_45B130;
 
-extern void func_80058220_58E20(u16, void*);
+extern void func_80058220_58E20(u16, void *);
 extern void D_8008FAC0_906C0;
 extern s16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
 extern void func_80036920_37520;
 
-void func_80036250_36E50(s8* arg0) {
+void func_80036250_36E50(s8 *arg0) {
     *arg0 = 0;
     setCallback(&func_80036274_36E74);
 }
 
-void func_80036274_36E74(void* arg0) {
-    func_800698BC_6A4BC_return* temp_v0;
-    func_80036274_36E74_large_struct* temp_v0_2;
-    func_80036274_36E74_large_struct* temp_v0_3;
+void func_80036274_36E74(void *arg0) {
+    func_800698BC_6A4BC_return *temp_v0;
+    func_80036274_36E74_large_struct *temp_v0_2;
+    func_80036274_36E74_large_struct *temp_v0_3;
 
-    temp_v0 = (GameState*)getCurrentAllocation();
+    temp_v0 = (GameState *)getCurrentAllocation();
     if (temp_v0->unk424 != 0) {
-        if (*((u8*)arg0) == 0) {
+        if (*((u8 *)arg0) == 0) {
             if ((u8)temp_v0->unk425 < 0xAU) {
                 temp_v0_2 = scheduleTask(&func_80036328_36F28, 0, 0, 0x64);
                 if (temp_v0_2 != NULL) {
@@ -142,20 +142,20 @@ void func_80036274_36E74(void* arg0) {
                     temp_v0_3->unk10 = (u8)temp_v0->unk425;
                 }
             }
-            *(u8*)arg0 = 1;
+            *(u8 *)arg0 = 1;
         }
     } else {
-        *(u8*)arg0 = 0;
+        *(u8 *)arg0 = 0;
     }
 }
 
-void func_80036328_36F28(func_80036328_36F28_arg* arg0) {
-    void* resource;
+void func_80036328_36F28(func_80036328_36F28_arg *arg0) {
+    void *resource;
     s32 temp_value;
     s32 i;
     s16 var_a0;
 
-    func_80036328_36F28_arg_item* var_v1;
+    func_80036328_36F28_arg_item *var_v1;
 
     resource = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
     temp_value = func_80035F80_36B80(1);
@@ -196,14 +196,14 @@ void func_80036328_36F28(func_80036328_36F28_arg* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036424_37024);
 
-void func_80036848_37448(void* untypedArg) {
-    func_80036848_37448_arg* arg0 = (func_80036848_37448_arg*)untypedArg;
-    arg0->unk4 = (s32*)freeGameStateMemory(arg0->unk4);
-    arg0->unk58 = (s32*)freeGameStateMemory(arg0->unk58);
+void func_80036848_37448(void *untypedArg) {
+    func_80036848_37448_arg *arg0 = (func_80036848_37448_arg *)untypedArg;
+    arg0->unk4 = (s32 *)freeGameStateMemory(arg0->unk4);
+    arg0->unk58 = (s32 *)freeGameStateMemory(arg0->unk58);
 }
 
-void func_80036880_37480(func_80036880_37480_arg* arg0) {
-    void* resource;
+void func_80036880_37480(func_80036880_37480_arg *arg0) {
+    void *resource;
 
     resource = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
     setCleanupCallback(&func_80036A10_37610);
@@ -225,21 +225,21 @@ void func_80036880_37480(func_80036880_37480_arg* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036920_37520);
 
-void func_80036A10_37610(void* untypedArg) {
-    func_80036A10_37610_arg* arg0 = (func_80036A10_37610_arg*)untypedArg;
-    arg0->unk4 = (s32*)freeGameStateMemory(arg0->unk4);
+void func_80036A10_37610(void *untypedArg) {
+    func_80036A10_37610_arg *arg0 = (func_80036A10_37610_arg *)untypedArg;
+    arg0->unk4 = (s32 *)freeGameStateMemory(arg0->unk4);
 }
 
-void func_80036A3C_3763C(func_80036A3C_3763C_arg* arg0) {
+void func_80036A3C_3763C(func_80036A3C_3763C_arg *arg0) {
     arg0->unk0 = 0xA;
     arg0->unk1 = 0;
     setCallback(&func_80036A68_37668);
 }
 
-void func_80036A68_37668(void* arg0) {
+void func_80036A68_37668(void *arg0) {
     s16 temp_v0_2;
     s16 var_v1;
-    func_800698BC_6A4BC_return* temp_v0 = (GameState*)getCurrentAllocation();
+    func_800698BC_6A4BC_return *temp_v0 = (GameState *)getCurrentAllocation();
 
     if (temp_v0->unk3F8 > 0x400000) {
         temp_v0_2 = temp_v0->unk3F4;
@@ -249,12 +249,12 @@ void func_80036A68_37668(void* arg0) {
         }
         if (var_v1 >= 0x821) {
             temp_v0->unk424 = 1;
-            temp_v0->unk425 = *(u8*)arg0;
+            temp_v0->unk425 = *(u8 *)arg0;
             return;
         }
         if (var_v1 < -0x844) {
             temp_v0->unk424 = 1;
-            temp_v0->unk425 = *((u8*)arg0) + 1;
+            temp_v0->unk425 = *((u8 *)arg0) + 1;
         }
     }
 }
@@ -267,8 +267,8 @@ INCLUDE_ASM("asm/nonmatchings/36E50", func_80036C20_37820);
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036D54_37954);
 
-void func_800371CC_37DCC(func_800371CC_37DCC_arg* arg0) {
-    func_800698BC_6A4BC_return* temp_v0 = (GameState*)getCurrentAllocation();
+void func_800371CC_37DCC(func_800371CC_37DCC_arg *arg0) {
+    func_800698BC_6A4BC_return *temp_v0 = (GameState *)getCurrentAllocation();
 
     if (temp_v0->unk420 == 3 && temp_v0->unk42D == 8) {
         arg0->unk40 = &D_8008FAC0_906C0;

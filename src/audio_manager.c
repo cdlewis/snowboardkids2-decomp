@@ -3,13 +3,11 @@
 #include "thread_manager.h"
 #include "ucode.h"
 
-typedef struct
-{
+typedef struct {
     void *buf;
     s16 len;
 } AudioBuffer;
-typedef struct
-{
+typedef struct {
     /* 0x00 */ void *outputBuffer;
     /* 0x04 */ s16 frameSizeInSamples;
     s16 _pad6;
@@ -127,14 +125,9 @@ s32 gAudioUnderrunFlag = 1;
 
 INCLUDE_ASM("asm/nonmatchings/audio_manager", initAudioManager);
 /*
-void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s32 maxChannels, s32 maxVoices, s32 sampleRate) {
-    u32 *new_var;
-    u32 i;
-    f64 tempDouble;
-    f32 tempFloat;
-    f32 divResult;
-    OSPiHandle *tempDriveRomHandle;
-    u32 outputRate;
+void initAudioManager(ALSynConfig *config, OSId id, AudioParams *audioParams, s32 maxChannels, s32 maxVoices, s32
+sampleRate) { u32 *new_var; u32 i; f64 tempDouble; f32 tempFloat; f32 divResult; OSPiHandle *tempDriveRomHandle; u32
+outputRate;
 
     gCartRomHandle = osCartRomInit();
     tempDriveRomHandle = osDriveRomInit();
@@ -269,7 +262,8 @@ s32 audioCreateAndScheduleTask(AudioStruct *audioTaskDesc, AudioBuffer *prevBuff
     }
 
     commandBuffer = gAudioCmdBuffers[gAudioCmdBufferToggle];
-    commandBufferEnd = alAudioFrame(commandBuffer, &commandLength, (void *)outputBuffer, audioTaskDesc->frameSizeInSamples);
+    commandBufferEnd =
+        alAudioFrame(commandBuffer, &commandLength, (void *)outputBuffer, audioTaskDesc->frameSizeInSamples);
     if (commandLength == 0) {
         return 0;
     }

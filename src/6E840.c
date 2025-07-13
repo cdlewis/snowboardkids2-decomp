@@ -15,8 +15,7 @@ typedef struct {
     u8 data[0x10];
 } CallbackSlot;
 
-typedef struct
-{
+typedef struct {
     u8 data[0x18];
     Node *unk18;
 } CallbackData;
@@ -46,8 +45,7 @@ typedef struct {
     s8 unkBB;
 } func_8006FE94_70A94_arg;
 
-typedef struct
-{
+typedef struct {
     u8 padding[0xC8];
     s16 unkC8;
     s16 unkCA;

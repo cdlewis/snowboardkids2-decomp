@@ -39,8 +39,7 @@ typedef struct {
 
 extern D_800BBB90_Entry D_800BBB90_B7DD0[];
 
-typedef struct
-{
+typedef struct {
     s8 pad_0[0x20];
     void *unk20;
     void *unk24;
@@ -124,7 +123,7 @@ void func_800BB2B0_B74F0(TrackHazard *arg0) {
 }
 
 void func_800BB3B8_B75F8(TrackHazard *arg0) {
-    s32 matrix[8];  // this should be matrix[9] but it causes stack issues
+    s32 matrix[8]; // this should be matrix[9] but it causes stack issues
     s32 i;
 
     memcpy(&D_8009A8A4_9B4A4, &arg0->unk98, 0xC);
@@ -242,7 +241,11 @@ void func_800BB71C_B795C(TrackHazard *arg0) {
         temp = func_800AFF44_9FE04() & 1;
         arg0->unkA6 = temp + (arg0->unkA6 & 0xFE);
         memcpy(&arg0->unk8C, &D_800BBB90_B7DD0[arg0->unkA6].unk4, 0xC);
-        createCombinedRotationMatrix(&arg0->unk78, D_800BBB90_B7DD0[arg0->unkA6].unk0, D_800BBB90_B7DD0[arg0->unkA6].unk2);
+        createCombinedRotationMatrix(
+            &arg0->unk78,
+            D_800BBB90_B7DD0[arg0->unkA6].unk0,
+            D_800BBB90_B7DD0[arg0->unkA6].unk2
+        );
         setCallback((void (*)(void *))&func_800BB468_B76A8);
     }
 }

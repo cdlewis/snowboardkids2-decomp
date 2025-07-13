@@ -32,8 +32,7 @@ extern void func_800697CC_6A3CC(void (*func)(void));
 extern void n_alSynRemovePlayer(void *player);
 extern s16 D_800AB070_A23E0;
 extern s16 D_800AFEF0_A7260;
-typedef struct
-{
+typedef struct {
     s16 unk0;
     s8 unk2;
     s8 unk3;

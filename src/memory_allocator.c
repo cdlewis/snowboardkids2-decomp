@@ -17,7 +17,7 @@ void initializeMemoryAllocatorRegion() {
         *current_block = 0;
         i += 1;
         current_block += 1;
-    } while (i <= 0x1FFFFF);  // 2mb
+    } while (i <= 0x1FFFFF); // 2mb
 }
 
 void *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {

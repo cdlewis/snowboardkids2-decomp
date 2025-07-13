@@ -1,8 +1,8 @@
 #include "common.h"
 #include "ultra64.h"
 
-void mainThreadEntrypoint(void*);
-void idleThreadEntrypoint(void*);
+void mainThreadEntrypoint(void *);
+void idleThreadEntrypoint(void *);
 extern OSThread idleThread;
 extern OSThread mainThread;
 extern void *mainStack;
@@ -16,10 +16,10 @@ void mainproc(void) {
     osStartThread(&idleThread);
 }
 
-void idleThreadEntrypoint(void* arg /* NULL */) {
+void idleThreadEntrypoint(void *arg /* NULL */) {
     osCreateThread(&mainThread, MAIN_THREAD_ID, mainThreadEntrypoint, arg, &mainStack, 2);
     osStartThread(&mainThread);
     osSetThreadPri(NULL, OS_PRIORITY_IDLE);
 
-    while(TRUE) { }
+    while (TRUE) {}
 }

@@ -5,15 +5,15 @@
 typedef struct {
     s16 command;
     s16 pad;
-    void* arg;
+    void *arg;
 } Entry;
 
 typedef struct {
-    void* start;
-    void* end;
+    void *start;
+    void *end;
     s32 compressionType;
     s32 size;
-    void* dramAddr;
+    void *dramAddr;
 } DmaTransferEntry;
 
 typedef struct {
@@ -21,12 +21,12 @@ typedef struct {
     u32 gameCode;
     u16 companyCode;
     u8 gameName[16];
-    u8 extName[1];  // maybe wrong
+    u8 extName[1]; // maybe wrong
 } controllerPackFileHeader;
 
-extern char piManagerThreadStack[0x8];  // this size seems wrong
-extern DmaTransferEntry* D_800A2108_A2D08;
-extern DmaTransferEntry* gDmaQueue;
+extern char piManagerThreadStack[0x8]; // this size seems wrong
+extern DmaTransferEntry *D_800A2108_A2D08;
+extern DmaTransferEntry *gDmaQueue;
 extern Entry D_800A1C20_A2820[];
 extern OSMesg D_800A2128_A2D28[];
 extern OSMesg gPiDmaMsgBuf[];
@@ -37,7 +37,7 @@ extern OSMesgQueue D_800A2110_A2D10;
 extern OSMesgQueue gDmaMsgQueue;
 extern OSMesgQueue gPiDmaMsgQueue;
 extern OSMesgQueue mainStack;
-extern OSMesgQueue* D_800A2150_A2D50[];
+extern OSMesgQueue *D_800A2150_A2D50[];
 extern OSPfs controllerPacks[];
 extern OSThread D_800A1DC0_A29C0;
 extern s16 D_8008FE8C_90A8C;
@@ -56,10 +56,10 @@ extern u8 D_800AB090_A2400[];
 extern u8 D_800AB094_A2404[];
 extern u8 D_800AB098_A2408[];
 extern u8 D_800AFED0_A7240;
-extern u8* gDmaCompressionBuffer;
+extern u8 *gDmaCompressionBuffer;
 
-void piDmaHandlerThread(void*);
-void func_8003AC58_3B858(void*);
+void piDmaHandlerThread(void *);
+void func_8003AC58_3B858(void *);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
 
@@ -72,7 +72,7 @@ void func_80039B88_3A788(void) {
     if ((D_8008FE8F_90A8F == 0) && (D_800A1C98_A2898 == 0) && (D_8008FE8E_90A8E != 0)) {
         temp_a1 = D_8008FE8C_90A8C;
         D_800A1C20_A2820[temp_a1].command = 0x10;
-        osSendMesg(&D_800A1820_A2420, (OSMesg*)&D_800A1C20_A2820[temp_a1], 1);
+        osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[temp_a1], 1);
         temp_v0 = (u16)D_8008FE8C_90A8C + 1;
         D_8008FE8C_90A8C = temp_v0;
         if (temp_v0 >= 0xF) {
@@ -92,8 +92,8 @@ int func_8003A1E4_3ADE4() {
 }
 
 void initControllerPack(s32 channel) {
-    OSMesgQueue* mainStackLocal;
-    OSPfs* selectedPack;
+    OSMesgQueue *mainStackLocal;
+    OSPfs *selectedPack;
     s32 controllerPortNumber;
     s32 controllerPackStatus;
     mainStackLocal = &mainStack;
@@ -107,7 +107,7 @@ void initControllerPack(s32 channel) {
         controllerPackStatus = osPfsInitPak(mainStackLocal, selectedPack, controllerPortNumber);
     }
 
-    osSendMesg(&D_800A1888_A2488, (OSMesg*)controllerPackStatus, OS_MESG_BLOCK);
+    osSendMesg(&D_800A1888_A2488, (OSMesg *)controllerPackStatus, OS_MESG_BLOCK);
 }
 
 void func_8003A284_3AE84() {
@@ -145,10 +145,10 @@ int func_8003A9E4_3B5E4() {
 }
 
 void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]) {
-    OSPfs* selectedPack;
+    OSPfs *selectedPack;
     s32 controllerID;
     s32 err;
-    controllerPackFileHeader* header;
+    controllerPackFileHeader *header;
     u16 new_var;
     controllerID = arg0 & 0xFFFF;
     new_var = arg1 & 0xFFFF;
@@ -157,7 +157,7 @@ void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[
     err = osPfsInitPak(&mainStack, selectedPack, controllerID);
     if (!err) {
         // some kind of 2D array lookup?
-        header = ((void*)(((controllerID * 0x10) + new_var) * 0x24)) + ((u32)arg2);
+        header = ((void *)(((controllerID * 0x10) + new_var) * 0x24)) + ((u32)arg2);
 
         err = osPfsDeleteFile(selectedPack, header->companyCode, header->gameCode, header->gameName, header->extName);
         if (!err) {
@@ -167,7 +167,7 @@ void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[
         }
     }
 
-    osSendMesg(&D_800A1888_A2488, (void*)err, OS_MESG_BLOCK);
+    osSendMesg(&D_800A1888_A2488, (void *)err, OS_MESG_BLOCK);
 }
 
 void func_8003AAC4_3B6C4() {
@@ -177,8 +177,8 @@ int func_8003AACC_3B6CC() {
     return 0;
 }
 
-void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader* header) {
-    OSPfs* selectedControllerPack;
+void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader *header) {
+    OSPfs *selectedControllerPack;
     s32 err;
 
     selectedControllerPack = &controllerPacks[(u16)selectedPack];
@@ -189,7 +189,8 @@ void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHead
             header->companyCode,
             header->gameCode,
             header->gameName,
-            header->extName);
+            header->extName
+        );
 
         if (!err) {
             header->companyCode = 0;
@@ -197,7 +198,7 @@ void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHead
         }
     }
 
-    osSendMesg(&D_800A1888_A2488, (void*)err, OS_MESG_BLOCK);
+    osSendMesg(&D_800A1888_A2488, (void *)err, OS_MESG_BLOCK);
 }
 
 void func_8003AB74_3B774() {
@@ -226,7 +227,7 @@ void controllerPackReadStatus(s32 arg0) {
         }
     }
 
-    osSendMesg(&D_800A1888_A2488, (OSMesg*)err, OS_MESG_BLOCK);
+    osSendMesg(&D_800A1888_A2488, (OSMesg *)err, OS_MESG_BLOCK);
 }
 
 void func_8003AC30_3B830() {
@@ -248,11 +249,11 @@ void func_8003AF38_3BB38(s32 arg0) {
 }
 
 void func_8003AF6C_3BB6C(void) {
-    u8* var_v1;
-    u8* end;
+    u8 *var_v1;
+    u8 *end;
     u8 a1 = 1;
 
-    var_v1 = (u8*)D_800AB090_A2400;
+    var_v1 = (u8 *)D_800AB090_A2400;
     end = var_v1 + 4;
 
     do {
@@ -266,8 +267,8 @@ void func_8003AF6C_3BB6C(void) {
 void func_8003AFA0_3BBA0(void) {
     s32 var_v1;
     int new_var2;
-    s32* var_a0;
-    s16* var_a1;
+    s32 *var_a0;
+    s16 *var_a1;
     int new_var;
     new_var = 2;
     var_v1 = 0;
@@ -293,7 +294,7 @@ void func_8003B000_3BC00(s32 arg0) {
     temp_a1 = D_8008FE8C_90A8C;
     D_800A1C20_A2820[temp_a1].arg = &D_800AB078_A23E8;
     D_800A1C20_A2820[temp_a1].command = temp_v0;
-    osSendMesg(&D_800A1820_A2420, (OSMesg*)(&D_800A1C20_A2820[temp_a1]), OS_MESG_BLOCK);
+    osSendMesg(&D_800A1820_A2420, (OSMesg *)(&D_800A1C20_A2820[temp_a1]), OS_MESG_BLOCK);
     temp_v0 = ((u16)D_8008FE8C_90A8C) + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -302,12 +303,12 @@ void func_8003B000_3BC00(s32 arg0) {
     D_8008FE8F_90A8F = 1;
 }
 
-void* func_8003B098_3BC98(void) {
-    void* sp10;
-    void* var_v0;
+void *func_8003B098_3BC98(void) {
+    void *sp10;
+    void *var_v0;
 
     sp10 = NULL;
-    var_v0 = (void*)-1;
+    var_v0 = (void *)-1;
     if (osRecvMesg(&D_800A18A8_A24A8, &sp10, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         var_v0 = sp10;
@@ -322,7 +323,7 @@ void func_8003B0E8_3BCE8(void) {
     D_8008FE8F_90A8F = 1;
     temp_a1 = D_8008FE8C_90A8C;
     D_800A1C20_A2820[temp_a1].command = 0xD0;
-    osSendMesg(&D_800A1820_A2420, (OSMesg*)&D_800A1C20_A2820[temp_a1], OS_MESG_BLOCK);
+    osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[temp_a1], OS_MESG_BLOCK);
     temp_v0 = (u16)D_8008FE8C_90A8C + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -330,12 +331,12 @@ void func_8003B0E8_3BCE8(void) {
     }
 }
 
-void* func_8003B170_3BD70(void) {
-    void* sp10;
-    void* var_v0;
+void *func_8003B170_3BD70(void) {
+    void *sp10;
+    void *var_v0;
 
     sp10 = NULL;
-    var_v0 = (void*)-1;
+    var_v0 = (void *)-1;
     if (osRecvMesg(&D_800A1888_A2488, &sp10, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         var_v0 = sp10;
@@ -344,13 +345,10 @@ void* func_8003B170_3BD70(void) {
 }
 
 void func_8003B1C0_3BDC0() {
-    osSendMesg(
-        &D_800A1888_A2488,
-        (OSMesg*)osEepromProbe(&mainStack),
-        OS_MESG_BLOCK);
+    osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromProbe(&mainStack), OS_MESG_BLOCK);
 }
 
-void func_8003B1F4_3BDF4(s32 arg0, void* arg1) {
+void func_8003B1F4_3BDF4(s32 arg0, void *arg1) {
     s16 temp_v0;
     s32 temp_v1;
 
@@ -358,7 +356,7 @@ void func_8003B1F4_3BDF4(s32 arg0, void* arg1) {
     temp_v1 = D_8008FE8C_90A8C;
     D_800A1C20_A2820[temp_v1].arg = arg1;
     D_800A1C20_A2820[temp_v1].command = (arg0 & 0xFF) + 0xE0;
-    osSendMesg(&D_800A1820_A2420, (OSMesg*)&D_800A1C20_A2820[temp_v1], OS_MESG_BLOCK);
+    osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[temp_v1], OS_MESG_BLOCK);
     temp_v0 = (u16)D_8008FE8C_90A8C + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -366,12 +364,12 @@ void func_8003B1F4_3BDF4(s32 arg0, void* arg1) {
     }
 }
 
-void* func_8003B28C_3BE8C(void) {
-    void* sp10;
-    void* var_v0;
+void *func_8003B28C_3BE8C(void) {
+    void *sp10;
+    void *var_v0;
 
     sp10 = NULL;
-    var_v0 = (void*)-1;
+    var_v0 = (void *)-1;
     if (osRecvMesg(&D_800A1888_A2488, &sp10, 0) == 0) {
         D_8008FE8F_90A8F = 0;
         var_v0 = sp10;
@@ -379,12 +377,9 @@ void* func_8003B28C_3BE8C(void) {
     return var_v0;
 }
 
-void func_8003B2DC_3BEDC(s32 arg0, u8* arg1) {
+void func_8003B2DC_3BEDC(s32 arg0, u8 *arg1) {
     u8 a1 = ((arg0 & 0xFF) * 0x10) & 0xF0;
-    osSendMesg(
-        &D_800A1888_A2488,
-        (OSMesg*)osEepromLongRead(&mainStack, a1, arg1, 0x58),
-        OS_MESG_BLOCK);
+    osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromLongRead(&mainStack, a1, arg1, 0x58), OS_MESG_BLOCK);
 }
 
 void func_8003B324_3BF24(s32 arg0) {
@@ -402,12 +397,12 @@ void func_8003B324_3BF24(s32 arg0) {
     }
 }
 
-void* func_8003B3B0_3BFB0(void) {
-    void* sp10;
-    void* var_v0;
+void *func_8003B3B0_3BFB0(void) {
+    void *sp10;
+    void *var_v0;
 
     sp10 = NULL;
-    var_v0 = (void*)-1;
+    var_v0 = (void *)-1;
     if (osRecvMesg(&D_800A1888_A2488, &sp10, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         var_v0 = sp10;
@@ -417,10 +412,10 @@ void* func_8003B3B0_3BFB0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003B400_3C000);
 
-void func_8003B47C_3C07C(void* arg0) {
+void func_8003B47C_3C07C(void *arg0) {
     u32 new_var;
     s16 index;
-    s16* addr;
+    s16 *addr;
 
     index = D_8008FE8C_90A8C;
     new_var = index;
@@ -438,12 +433,12 @@ void func_8003B47C_3C07C(void* arg0) {
     }
 }
 
-void* func_8003B510_3C110(void) {
-    void* sp10;
-    void* var_v0;
+void *func_8003B510_3C110(void) {
+    void *sp10;
+    void *var_v0;
 
     sp10 = NULL;
-    var_v0 = (void*)-1;
+    var_v0 = (void *)-1;
     if (osRecvMesg(&D_800A1888_A2488, &sp10, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         var_v0 = sp10;
@@ -451,11 +446,8 @@ void* func_8003B510_3C110(void) {
     return var_v0;
 }
 
-void func_8003B560_3C160(u8* arg0) {
-    osSendMesg(
-        &D_800A1888_A2488,
-        (OSMesg*)osEepromLongWrite(&mainStack, 0, arg0, 0x200),
-        OS_MESG_BLOCK);
+void func_8003B560_3C160(u8 *arg0) {
+    osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromLongWrite(&mainStack, 0, arg0, 0x200), OS_MESG_BLOCK);
 }
 
 void initPiManager() {
@@ -467,19 +459,26 @@ void initPiManager() {
     gDmaQueue = allocateMemoryNode(0, 0x730, &flag);
     gDmaCompressionBuffer = allocateMemoryNode(0, 0x1000, &flag);
 
-    osCreatePiManager(150, (OSMesgQueue*)D_800A2150_A2D50, (OSMesg*)D_800A2168_A2D68, 200);
+    osCreatePiManager(150, (OSMesgQueue *)D_800A2150_A2D50, (OSMesg *)D_800A2168_A2D68, 200);
     osCreateMesgQueue(&D_800A2110_A2D10, D_800A2128_A2D28, 1);
     osCreateMesgQueue(&gPiDmaMsgQueue, gPiDmaMsgBuf, 1);
-    osCreateMesgQueue(&gDmaMsgQueue, (OSMesg*)D_800A2108_A2D08, 90);
+    osCreateMesgQueue(&gDmaMsgQueue, (OSMesg *)D_800A2108_A2D08, 90);
 
-    osCreateThread(&D_800A1DC0_A29C0, 7, piDmaHandlerThread, 0, &piManagerThreadStack + sizeof(piManagerThreadStack), 1);
+    osCreateThread(
+        &D_800A1DC0_A29C0,
+        7,
+        piDmaHandlerThread,
+        0,
+        &piManagerThreadStack + sizeof(piManagerThreadStack),
+        1
+    );
 
     osStartThread(&D_800A1DC0_A29C0);
 }
 
-void piDmaHandlerThread(void* arg __attribute__((unused))) {
+void piDmaHandlerThread(void *arg __attribute__((unused))) {
     OSIoMesg dmaMsg;
-    DmaTransferEntry* entry;
+    DmaTransferEntry *entry;
     OSMesg dummyMesg;
     s32 dstOffset;
     s32 copySize;
@@ -487,10 +486,10 @@ void piDmaHandlerThread(void* arg __attribute__((unused))) {
     s32 srcOffset;
     s32 copyCount;
     u32 devAddr;
-    u8* dramAddr;
-    u8* dst;
-    u8* src;
-    u8* ptr;
+    u8 *dramAddr;
+    u8 *dst;
+    u8 *src;
+    u8 *ptr;
     u8 byte1;
     s32 count;
     s16 new_var;
@@ -533,12 +532,20 @@ void piDmaHandlerThread(void* arg __attribute__((unused))) {
                     copySize = 0x1000;
                 }
 
-                osPiStartDma(&dmaMsg, OS_MESG_PRI_NORMAL, OS_READ, devAddr, gDmaCompressionBuffer, copySize, &D_800A2110_A2D10);
+                osPiStartDma(
+                    &dmaMsg,
+                    OS_MESG_PRI_NORMAL,
+                    OS_READ,
+                    devAddr,
+                    gDmaCompressionBuffer,
+                    copySize,
+                    &D_800A2110_A2D10
+                );
                 osRecvMesg(&D_800A2110_A2D10, &dummyMesg, 1);
 
                 srcOffset = 0;
                 if (copySize > 0) {
-                    dst = (u8*)((u32)dstOffset + (u32)dramAddr);
+                    dst = (u8 *)((u32)dstOffset + (u32)dramAddr);
 
                     do {
                         s32 temp_count;
@@ -562,7 +569,7 @@ void piDmaHandlerThread(void* arg __attribute__((unused))) {
 
                             if (temp_count != 0) {
                                 do {
-                                    ptr = (u8*)(((u32)dstOffset) + ((u32)dramAddr));
+                                    ptr = (u8 *)(((u32)dstOffset) + ((u32)dramAddr));
                                     do {
                                         dst++;
                                         *ptr = dramAddr[dstOffset - temp_offset];
@@ -589,7 +596,7 @@ void piDmaHandlerThread(void* arg __attribute__((unused))) {
         }
 
     END:
-        unlockNodeWithInterruptDisable((s32*)entry->dramAddr);
+        unlockNodeWithInterruptDisable((s32 *)entry->dramAddr);
 
         if ((u32)entry->compressionType < 2) {
             gPendingDmaCount--;
@@ -597,8 +604,8 @@ void piDmaHandlerThread(void* arg __attribute__((unused))) {
     }
 }
 
-void* queueDmaTransfer(void* start, void* end) {
-    void* dramAddr;
+void *queueDmaTransfer(void *start, void *end) {
+    void *dramAddr;
     u8 nodeAlreadyExists;
     s32 size;
     size = (s32)end - (s32)start;
@@ -627,15 +634,15 @@ void* queueDmaTransfer(void* start, void* end) {
 
     gDmaRequestCount++;
 
-    setNodeUserData(dramAddr, (void*)gDmaRequestCount);
+    setNodeUserData(dramAddr, (void *)gDmaRequestCount);
 
     return dramAddr;
 }
 
-void* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
+void *dmaQueueRequest(void *romStart, void *romEnd, s32 size) {
     u8 flag;
-    DmaTransferEntry* entry;
-    MemoryAllocatorNode* allocatedSpaceStart;
+    DmaTransferEntry *entry;
+    MemoryAllocatorNode *allocatedSpaceStart;
     s32 a1Val;
     s32 a1;
 
@@ -660,7 +667,7 @@ void* dmaQueueRequest(void* romStart, void* romEnd, s32 size) {
             a1++;
             gDmaRequestCount = a1;
         }
-        setNodeUserData(allocatedSpaceStart, (void*)a1);
+        setNodeUserData(allocatedSpaceStart, (void *)a1);
     }
 
     return allocatedSpaceStart;
@@ -676,21 +683,22 @@ void func_8003BC58_3C858() {
 }
 
 void dmaLoadAndInvalidate(
-    void* romStart,
-    void* romEnd,
-    void* ramStart,
-    void* icacheStart,
-    void* icacheEnd,
-    void* dcacheStart,
-    void* dcacheEnd,
-    void* bssStart,
-    void* bssEnd) {
+    void *romStart,
+    void *romEnd,
+    void *ramStart,
+    void *icacheStart,
+    void *icacheEnd,
+    void *dcacheStart,
+    void *dcacheEnd,
+    void *bssStart,
+    void *bssEnd
+) {
     OSIoMesg dmaMessage;
-    void* dummyMessage;
+    void *dummyMessage;
     u32 remainingBytes;
-    void* currentRomOffset;
+    void *currentRomOffset;
     u32 currentChunkSize;
-    void* currentRamDest;
+    void *currentRamDest;
 
     // Zero out BSS or other region if requested
     if (bssEnd != bssStart) {
@@ -713,7 +721,15 @@ void dmaLoadAndInvalidate(
             currentChunkSize = 0x1000;
         }
 
-        osPiStartDma(&dmaMessage, OS_MESG_PRI_NORMAL, OS_READ, (u32)currentRomOffset, currentRamDest, currentChunkSize, &gPiDmaMsgQueue);
+        osPiStartDma(
+            &dmaMessage,
+            OS_MESG_PRI_NORMAL,
+            OS_READ,
+            (u32)currentRomOffset,
+            currentRamDest,
+            currentChunkSize,
+            &gPiDmaMsgQueue
+        );
         osRecvMesg(&gPiDmaMsgQueue, &dummyMessage, OS_MESG_BLOCK);
 
         currentRomOffset += currentChunkSize;

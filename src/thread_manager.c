@@ -30,10 +30,10 @@ typedef struct {
 } eventQueue1_message;
 
 // data
-int vertical_retrace_message[3] = {0x5, 0, 0};
-int sp_task_done_message[3] = {0x6, 0, 0};
-int dp_interrupt_message[3] = {0x8, 0, 0};
-int prenmi_interrupt_message[3] = {0xA, 0, 0};
+int vertical_retrace_message[3] = { 0x5, 0, 0 };
+int sp_task_done_message[3] = { 0x6, 0, 0 };
+int dp_interrupt_message[3] = { 0x8, 0, 0 };
+int prenmi_interrupt_message[3] = { 0xA, 0, 0 };
 int D_8009B020_9BC20 = 0;
 int D_8009B024_9BC24 = 0x1E;
 
@@ -326,7 +326,7 @@ void thread_function_3(void *arg) {
         osSendMesg(&eventQueue1, &stack.eventQueueOneMessage, OS_MESG_BLOCK);
         osRecvMesg(&frameBufferQueue, &frameBufferQueueMessage, OS_MESG_BLOCK);
 
-        temp = stack.message;  // force a copy into v0
+        temp = stack.message; // force a copy into v0
         osSendMesg(temp->messageQueue, temp->message, OS_MESG_BLOCK);
     }
 }
@@ -340,8 +340,7 @@ void thread_function_4(void *arg) {
     s32 delayCounter;
     s16 frameIndex;
     void *frameBuffer;
-    struct
-    {
+    struct {
         s32 sp10;
         FrameInfo *frameInfo;
         s32 temp_a0;

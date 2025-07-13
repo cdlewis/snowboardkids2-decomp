@@ -103,14 +103,11 @@ void createXRotationMatrix(s16 matrix[3][3], u16 angle) {
     matrix[2][2] = cosVal;
 }
 
-void createYRotationMatrix(Mat3x3* matrix, s16 angle) {
+void createYRotationMatrix(Mat3x3 *matrix, s16 angle) {
     s16 sinTheta = approximateSin(angle);
     s16 cosTheta = approximateCos(angle);
 
-    *matrix = (Mat3x3){
-        cosTheta, 0, -sinTheta,
-        0, 0x2000, 0,
-        sinTheta, 0, cosTheta};
+    *matrix = (Mat3x3){ cosTheta, 0, -sinTheta, 0, 0x2000, 0, sinTheta, 0, cosTheta };
 }
 
 void createZRotationMatrix(s16 matrix[3][3], s16 angle) {
@@ -148,7 +145,7 @@ INCLUDE_ASM("asm/nonmatchings/geometry", createRotationMatrixXYZ);
 
 INCLUDE_ASM("asm/nonmatchings/geometry", createRotationMatrixZYX);
 
-void func_8006AFDC_6BBDC(func_8006AFDC_6BBDC_arg* arg0, s32 arg1, s32 arg2, s32 arg3) {
+void func_8006AFDC_6BBDC(func_8006AFDC_6BBDC_arg *arg0, s32 arg1, s32 arg2, s32 arg3) {
     arg0->unk14 = arg1;
     arg0->unk18 = arg2;
     arg0->unk1C = arg3;
@@ -178,7 +175,7 @@ INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BFB8_6CBB8);
 
 INCLUDE_ASM("asm/nonmatchings/geometry", func_8006C130_6CD30);
 
-void func_8006C2A8_6CEA8(func_8006C2A8_6CEA8_arg0* arg0, func_8006C2A8_6CEA8_arg1* arg1) {
+void func_8006C2A8_6CEA8(func_8006C2A8_6CEA8_arg0 *arg0, func_8006C2A8_6CEA8_arg1 *arg1) {
     arg1->unk0 = (s32)((arg0->unk0 & 0xFFFF0000) + (((s32)(arg0->unk2 << 0x10) >> 0x1F) & 0xFFFF));
     arg1->unk4 = (s32)(arg0->unk4 & 0xFFFF0000);
     arg1->unk8 = (s32)((arg0->unk6 & 0xFFFF0000) + (((s32)(arg0->unk8 << 0x10) >> 0x1F) & 0xFFFF));
