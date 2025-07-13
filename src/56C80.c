@@ -2,6 +2,17 @@
 #include "task_scheduler.h"
 
 typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    f32 unk8;
+    u8 data[12];
+    s16 flags;
+    u8 padding[2];
+} RenderQueueItem;
+
+typedef struct {
     s32 padding;
     void *unk4;
     void *unk8;
@@ -10,7 +21,7 @@ typedef struct {
     u16 unk12;
     s16 unk14;
     s16 unk16;
-    s16 unk18;
+    s16 flags;
     s16 unk1A;
     s8 unk1C;
     u8 unk1D;
@@ -19,23 +30,16 @@ typedef struct {
     u8 padding8[0x3C];
     s16 unk64;
     u8 padding7[0x1D];
-    s32 unk84;
-    s16 unk88;
-    s16 unk8A;
-    s16 unk8C;
-    s16 unk8E;
-    f32 unk90;
-    u8 padding9[0xC];
-    s16 unkA0;
-    u8 padding4[0x364];
+    s32 renderQueueCount;
+    RenderQueueItem renderQueue[32];
     s32 unk408;
     u8 padding6[0x100];
-    s8 unk50C[0x8];
-    s32 unk514[8];
+    s8 bufferIds[0x8];
+    s32 bufferFlags[8];
     s32 unk534;
     s32 unk538;
-} D_800A2990_A3590_type;
-extern D_800A2990_A3590_type *D_800A2990_A3590;
+} GraphicsManager;
+extern GraphicsManager *D_800A2990_A3590;
 
 extern OSMesgQueue D_800A2CD0_A38D0;
 extern OSMesgQueue D_800A2CF0_A38F0;
@@ -44,6 +48,8 @@ extern s32 D_800937F0_943F0[];
 extern s32 D_80093978_94578[];
 extern s32 D_8009397C_9457C[];
 extern s32 D_80093B00_94700;
+
+// This seems likely to be one struct
 extern void *D_800A2D10_A3910;
 extern void *D_800A2D14_A3914;
 extern s32 D_800A2D18_A3918;
@@ -54,6 +60,8 @@ extern s32 D_800A2D28_A3928;
 extern s32 D_800A2D2C_A392C;
 extern s32 D_800A2D30_A3930;
 extern s32 D_800A2D38_A3938;
+// End probable struct
+
 extern u8 D_80093B84_94784[];
 extern u8 D_80093BA5_947A5;
 extern u8 D_80093BA6_947A6;
@@ -110,7 +118,7 @@ void func_80056A88_57688(void *arg0, u8 arg1, s32 arg2) {
     id = arg2;
     if (D_800A2990_A3590->unk408 > 0) {
         do {
-            if (D_800A2990_A3590->unk50C[i] == id) {
+            if (D_800A2990_A3590->bufferIds[i] == id) {
                 dst = (void *)((i << 5) + (s32)D_800A2990_A3590 + 0x40C);
                 memcpy(dst, arg0, 0x20);
                 return;
@@ -119,10 +127,10 @@ void func_80056A88_57688(void *arg0, u8 arg1, s32 arg2) {
         } while (i < D_800A2990_A3590->unk408);
     }
     if (D_800A2990_A3590->unk408 < 8) {
-        D_800A2990_A3590->unk50C[D_800A2990_A3590->unk408] = id;
+        D_800A2990_A3590->bufferIds[D_800A2990_A3590->unk408] = id;
         dst = (void *)(((D_800A2990_A3590->unk408) << 5) + (s32)D_800A2990_A3590 + 0x40C);
         memcpy(dst, arg0, 0x20);
-        D_800A2990_A3590->unk514[D_800A2990_A3590->unk408] = arg1;
+        D_800A2990_A3590->bufferFlags[D_800A2990_A3590->unk408] = arg1;
         D_800A2990_A3590->unk408++;
     }
 }
@@ -130,60 +138,34 @@ void func_80056A88_57688(void *arg0, u8 arg1, s32 arg2) {
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056B7C_5777C);
 
 void func_80056C6C_5786C(void *arg0, unsigned int arg1, s16 arg2) {
-    int new_var;
-    char *new_var2;
-    s32 v1;
-    s32 v0;
-    v1 = D_800A2990_A3590->unk84;
-    if (v1 < 0x20) {
-        memcpy((void *)((((char *)D_800A2990_A3590) + (((v1 << 3) - v1) << 2)) + 0x94), arg0, 0xC);
-        v1 = D_800A2990_A3590->unk84;
-        v0 = ((v1 << 3) - v1) << 2;
-        *((s16 *)((((char *)D_800A2990_A3590) + v0) + 0x88)) = arg1;
-        v1 = D_800A2990_A3590->unk84;
-        v0 = ((v1 << 3) - v1) << 2;
-        *((s16 *)((((char *)D_800A2990_A3590) + v0) + 0x8A)) = arg2;
-        v1 = D_800A2990_A3590->unk84;
-        ;
-        new_var = 4;
-        *((s16 *)((((char *)D_800A2990_A3590) + (((v1 << 3) - v1) << 2)) + 0x8C)) = (f32)new_var;
-        v1 = D_800A2990_A3590->unk84;
-        v0 = ((v1 << 3) - v1) << 2;
-        *((s16 *)((((char *)D_800A2990_A3590) + v0) + 0x8E)) = 0;
-        v1 = D_800A2990_A3590->unk84;
-        *((s16 *)(((new_var2 = (char *)D_800A2990_A3590) + (((v1 << 3) - v1) << 2)) + 0xA0)) = 0x80;
-        v0 = D_800A2990_A3590->unk84;
-        D_800A2990_A3590->unk84 = v0 + 1;
+    if (D_800A2990_A3590->renderQueueCount < 0x20) {
+        RenderQueueItem *arrayCopy = D_800A2990_A3590->renderQueue;
+
+        memcpy(arrayCopy[D_800A2990_A3590->renderQueueCount].data, arg0, 0xC);
+
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk0 = arg1;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk2 = arg2;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk4 = 4;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk6 = 0;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].flags = 0x80;
+        D_800A2990_A3590->renderQueueCount++;
     }
 }
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80056D64_57964);
 
 void func_80056E64_57A64(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4) {
-    s32 temp_v1;
-    D_800A2990_A3590_type *new_var2;
-    int new_var4;
-    s32 temp_s2;
-    D_800A2990_A3590_type *new_var3;
-    D_800A2990_A3590_type *new_var;
-    s32 a0;
-    temp_s2 = arg4;
-    temp_v1 = D_800A2990_A3590->unk84;
-    if (temp_v1 < 0x20) {
-        a0 = (s32)((u8 *)D_800A2990_A3590) + ((temp_v1 * 7) * 4);
-        a0 = a0 + 0x94;
-        memcpy((void *)a0, arg0, 0xC);
-        ((D_800A2990_A3590_type *)(((u8 *)D_800A2990_A3590) - (-((D_800A2990_A3590->unk84 * 7) * 4))))->unk88 = arg1;
-        new_var = (D_800A2990_A3590_type *)(((u8 *)D_800A2990_A3590) + ((D_800A2990_A3590->unk84 * 7) * 4));
-        new_var->unk8A = (s16)temp_s2;
-        new_var3 = (D_800A2990_A3590_type *)(((u8 *)D_800A2990_A3590) + ((D_800A2990_A3590->unk84 * 7) * 4));
-        new_var3->unk8C = arg3;
-        new_var2 = D_800A2990_A3590;
-        ((D_800A2990_A3590_type *)(((u8 *)new_var2) - (-((new_var2->unk84 * 7) * 4))))->unk8E = 1;
-        ((D_800A2990_A3590_type *)(((u8 *)new_var2) - (-((new_var2->unk84 * 7) * 4))))->unk90 = arg2;
-        new_var4 = (new_var2->unk84 * 7) * 4;
-        ((D_800A2990_A3590_type *)(((u8 *)new_var2) + new_var4))->unkA0 = 0x80;
-        new_var2->unk84++;
+    RenderQueueItem(*dest)[32];
+    if (D_800A2990_A3590->renderQueueCount < 0x20) {
+        dest = &D_800A2990_A3590->renderQueue;
+        memcpy((*dest)[D_800A2990_A3590->renderQueueCount].data, arg0, 0xC);
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk0 = arg1;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk2 = (s16)arg4;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk4 = arg3;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk6 = 1;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk8 = arg2;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].flags = 0x80;
+        D_800A2990_A3590->renderQueueCount++;
     }
 }
 
@@ -245,29 +227,29 @@ void func_800574E0_580E0(s16 arg0, s8 arg1) {
     D_800A2990_A3590->unk1D = 2;
     D_800A2990_A3590->unk10 = arg0;
     D_800A2990_A3590->unk16 = 0x80;
-    D_800A2990_A3590->unk18 = 0x80;
+    D_800A2990_A3590->flags = 0x80;
     D_800A2990_A3590->unk1A = 0;
     D_800A2990_A3590->unk1C = arg1;
 }
 
 void func_80057514_58114(u32 arg0, s16 arg1, s16 arg2) {
-    D_800A2990_A3590_type *new_var;
+    GraphicsManager *new_var;
     D_800A2990_A3590->unk1D = 2;
     D_800A2990_A3590->unk10 = arg0;
     D_800A2990_A3590->unk16 = 0;
-    D_800A2990_A3590->unk18 = arg1;
+    D_800A2990_A3590->flags = arg1;
     D_800A2990_A3590->unk1A = arg2;
     D_800A2990_A3590->unk1C = D_80093B84_94784[arg0];
 }
 
 void func_80057550_58150(s16 arg0, s16 arg1) {
-    D_800A2990_A3590->unk18 = arg0;
+    D_800A2990_A3590->flags = arg0;
     D_800A2990_A3590->unk1A = arg1;
 }
 
 void func_80057564_58164(int arg0) {
     int var_a0;
-    D_800A2990_A3590_type *new_var;
+    GraphicsManager *new_var;
     var_a0 = arg0;
     if (arg0 < 8) {
         var_a0 = 8;
@@ -356,7 +338,7 @@ void func_80057B1C_5871C(s32 arg0) {
     D_800A2D30_A3930 = arg0;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)6, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
-    D_800A2990_A3590->unk84 = 0;
+    D_800A2990_A3590->renderQueueCount = 0;
     D_800A2990_A3590->unk408 = 0;
 }
 
@@ -394,7 +376,7 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
     s32 sp10;
     s32 temp_s0;
     s32 *new_var;
-    D_800A2990_A3590_type *temp_v1;
+    GraphicsManager *temp_v1;
     s32 temp_v0;
     void *temp_ptr;
 
@@ -408,7 +390,7 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
     temp_s0 = arg1 << 2;
     D_800A2D20_A3920 = temp_v1->unk20;
     temp_ptr = (void *)temp_v1;
-    temp_v1 = (D_800A2990_A3590_type *)((temp_s0) + (s32)temp_ptr);
+    temp_v1 = (GraphicsManager *)((temp_s0) + (s32)temp_ptr);
     D_800A2D38_A3938 = arg2;
     temp_v0 = temp_v1->unk24;
     D_800A2D2C_A392C = temp_v1->unk24;
@@ -418,8 +400,8 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
 
     temp_s0 = temp_s0 + ((s32)D_800A2990_A3590);
 
-    ((D_800A2990_A3590_type *)temp_s0)->unk24 = sp10;
-    ((D_800A2990_A3590_type *)(arg1 + (s16 *)D_800A2990_A3590))->unk64 = arg0;
+    ((GraphicsManager *)temp_s0)->unk24 = sp10;
+    ((GraphicsManager *)(arg1 + (s16 *)D_800A2990_A3590))->unk64 = arg0;
 
     func_800570BC_57CBC();
 }
@@ -428,7 +410,7 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_80058220_58E20);
 
 void func_8005823C_58E3C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     void *message;
-    D_800A2990_A3590_type *new_var;
+    GraphicsManager *new_var;
     s32 *new_var2;
     D_800A2D1C_A391C = arg0;
     D_800A2D24_A3924 = arg1;
