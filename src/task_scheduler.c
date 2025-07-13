@@ -177,7 +177,7 @@ void func_80069470_6A070(void (*arg0)(), s8 arg1) {
     temp_a2->unk20 = 0;
     temp_a2->unk4C = 0;
     temp_a2->unk4A = 0;
-    temp_a2->unkC = (gTaskScheduler_type *)gTaskScheduler;
+    temp_a2->unkC = gTaskScheduler;
     gTaskScheduler->unk4C++;
 }
 

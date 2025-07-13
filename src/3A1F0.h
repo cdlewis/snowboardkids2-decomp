@@ -12,6 +12,6 @@ void dmaLoadAndInvalidate(
     void* bssStart,
     void* bssEnd);
 
-void* dmaQueueRequest(void* arg0, void* arg1, s32 arg2);
+void *dmaQueueRequest(void *romStart, void *romEnd, s32 size);
 void* queueDmaTransfer(void* start, void* end);
 void initPiManager(void);

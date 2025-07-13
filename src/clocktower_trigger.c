@@ -3,7 +3,7 @@
 #include "gamestate.h"
 #include "task_scheduler.h"
 
-void ClocktowerTriggerCheck(void *);
+void ClocktowerTriggerCheck(void * /*arg0*/);
 extern u8 D_8008D6C4_8E2C4[];
 
 char ClocktowerLabel[] = "CLOCKTOWER";

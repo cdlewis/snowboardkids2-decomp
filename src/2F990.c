@@ -24,7 +24,7 @@ extern u8 D_8009A870_9B470[];
 extern void func_8002F72C_3032C();
 extern void func_8002F980_30580();
 extern void func_8000FED0_10AD0();
-void func_8002EFD8_2FBD8(void *);
+void func_8002EFD8_2FBD8(void * /*untypedArg0*/);
 void func_8002F110_2FD10();
 
 typedef struct {
@@ -71,7 +71,7 @@ typedef struct {
     u8 unk60;
 } S0;
 
-void func_8002F5C8_301C8(void *);
+void func_8002F5C8_301C8(void * /*untypedArg*/);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 
 // 100% match but something weird is happening

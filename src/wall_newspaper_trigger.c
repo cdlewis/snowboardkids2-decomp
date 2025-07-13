@@ -3,7 +3,7 @@
 #include "gamestate.h"
 #include "task_scheduler.h"
 
-void WallNewspaperTriggerCheck(void *);
+void WallNewspaperTriggerCheck(void * /*arg0*/);
 extern u8 D_8008D6C4_8E2C4[];
 
 u8 WallNewspaperLabel[] = "WALL NEWSPAPER";

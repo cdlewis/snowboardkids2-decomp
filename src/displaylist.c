@@ -86,7 +86,7 @@ extern void guLookAtReflect(
 s32 func_80069810_6A410();
 s32 func_80070140_70D40(void *);
 void func_80062CF0_638F0();
-void setupDisplayListMatrix(DisplayListObject *);
+void setupDisplayListMatrix(DisplayListObject * /*arg0*/);
 void func_80063A94_64694(void *);
 void func_800648EC_654EC();
 void func_800680F0_68CF0(ALPlayer *);

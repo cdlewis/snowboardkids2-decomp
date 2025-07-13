@@ -102,7 +102,7 @@ s32 func_8000CDE0_D9E0(s32);
 s32 func_8000CDFC_D9FC(s32);
 void initializeGameEntity(GameState *, s32, void *, s8, s8, s8, s16);
 void func_80002220_2E20(func_80002040_2C40_arg *, s16, s16, s8, s16);
-void func_80002468_3068(func_80002040_2C40_arg *);
+void func_80002468_3068(func_80002040_2C40_arg * /*arg0*/);
 void *func_80002040_2C40(func_80002040_2C40_arg *arg0);
 void *func_80009F5C_AB5C(s32);
 
@@ -507,7 +507,7 @@ void func_80002468_3068(func_80002040_2C40_arg *arg0) {
 s32 func_80002484_3084(func_80002040_2C40_arg *arg0, s16 arg1) {
     s8 local_buffer[0x20];
     s32 s3;
-    s32 i;
+
     s32 s4;
     s32 s6;
     s32 s7;
@@ -605,7 +605,7 @@ void func_80002B50_3750(func_80002B50_3750_arg *arg0, DisplayListObject *arg1) {
 }
 
 s32 func_80002B8C_378C(func_80002040_2C40_arg *arg0) {
-    s32 new_var;
+
     if (func_80001904_2504(arg0->index) == 0) {
         return 0;
     }

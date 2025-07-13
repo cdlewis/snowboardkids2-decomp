@@ -58,7 +58,7 @@ extern u8 D_800AB098_A2408[];
 extern u8 D_800AFED0_A7240;
 extern u8 *gDmaCompressionBuffer;
 
-void piDmaHandlerThread(void *);
+void piDmaHandlerThread(void * /*arg*/);
 void func_8003AC58_3B858(void *);
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
@@ -179,7 +179,6 @@ int func_8003AACC_3B6CC() {
 
 void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader *header) {
     OSPfs *selectedControllerPack;
-    s32 err;
 
     selectedControllerPack = &controllerPacks[(u16)selectedPack];
     err = osPfsInitPak(&mainStack, selectedControllerPack, (u16)selectedPack);
@@ -211,7 +210,6 @@ int func_8003AB7C_3B77C() {
 void controllerPackReadStatus(s32 arg0) {
     s32 sp10;
     s32 temp_a2;
-    s32 err;
 
     temp_a2 = arg0 & 0xFFFF;
     err = osPfsInitPak(&mainStack, &controllerPacks[temp_a2], temp_a2);
@@ -289,7 +287,7 @@ void func_8003AFA0_3BBA0(void) {
 
 void func_8003B000_3BC00(s32 arg0) {
     s16 temp_v0;
-    s32 temp_a1;
+
     temp_v0 = arg0 + 0x80;
     temp_a1 = D_8008FE8C_90A8C;
     D_800A1C20_A2820[temp_a1].arg = &D_800AB078_A23E8;
@@ -318,7 +316,6 @@ void *func_8003B098_3BC98(void) {
 
 void func_8003B0E8_3BCE8(void) {
     s16 temp_v0;
-    s32 temp_a1;
 
     D_8008FE8F_90A8F = 1;
     temp_a1 = D_8008FE8C_90A8C;
@@ -350,7 +347,6 @@ void func_8003B1C0_3BDC0() {
 
 void func_8003B1F4_3BDF4(s32 arg0, void *arg1) {
     s16 temp_v0;
-    s32 temp_v1;
 
     D_8008FE8F_90A8F = 1;
     temp_v1 = D_8008FE8C_90A8C;
@@ -384,7 +380,6 @@ void func_8003B2DC_3BEDC(s32 arg0, u8 *arg1) {
 
 void func_8003B324_3BF24(s32 arg0) {
     s16 temp_v0;
-    s32 temp_a1;
 
     D_8008FE8F_90A8F = 1;
     temp_a1 = D_8008FE8C_90A8C;
@@ -607,7 +602,7 @@ void piDmaHandlerThread(void *arg __attribute__((unused))) {
 void *queueDmaTransfer(void *start, void *end) {
     void *dramAddr;
     u8 nodeAlreadyExists;
-    s32 size;
+
     size = (s32)end - (s32)start;
 
     gDmaQueue[gDmaQueueIndex].size = size;

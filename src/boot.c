@@ -2,7 +2,7 @@
 #include "ultra64.h"
 
 void mainThreadEntrypoint(void *);
-void idleThreadEntrypoint(void *);
+void idleThreadEntrypoint(void * /*arg*/);
 extern OSThread idleThread;
 extern OSThread mainThread;
 extern void *mainStack;

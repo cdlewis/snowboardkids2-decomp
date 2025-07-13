@@ -88,8 +88,8 @@ extern void func_80056B7C_5777C(void *a0, s32 a1);
 void func_800BB468_B76A8(TrackHazard *arg0);
 void func_800BB658_B7898(TrackHazard *arg0);
 void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0);
-void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *);
-void func_800BB71C_B795C(TrackHazard *);
+void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg * /*arg0*/);
+void func_800BB71C_B795C(TrackHazard * /*arg0*/);
 
 void func_800BB2B0_B74F0(TrackHazard *arg0) {
     GameState *gameState;
@@ -148,7 +148,6 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
     s32 sp24;
     s32 sp28;
     s32 flag;
-    s32 i;
 
     gs = (GameState *)getCurrentAllocation();
     flag = 0;
@@ -211,7 +210,6 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
 
 void func_800BB658_B7898(TrackHazard *arg0) {
     GameState *gs;
-    s32 i;
 
     gs = (GameState *)getCurrentAllocation();
     if (arg0->unk9C != 0xFFF00000) {
@@ -220,7 +218,7 @@ void func_800BB658_B7898(TrackHazard *arg0) {
         }
     } else {
         arg0->unkA8 = 0x12C;
-        setCallback((void (*)(void *))&func_800BB71C_B795C);
+        setCallback((void (*)(void *)) & func_800BB71C_B795C);
     }
     arg0->unkA4 = 0;
     func_800BB3B8_B75F8(arg0);
@@ -246,7 +244,7 @@ void func_800BB71C_B795C(TrackHazard *arg0) {
             D_800BBB90_B7DD0[arg0->unkA6].unk0,
             D_800BBB90_B7DD0[arg0->unkA6].unk2
         );
-        setCallback((void (*)(void *))&func_800BB468_B76A8);
+        setCallback((void (*)(void *)) & func_800BB468_B76A8);
     }
 }
 
@@ -267,7 +265,7 @@ void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
     arg0->unk3C = 0x12C;
     arg0->unk3E = 0;
     arg0->unk20 = (s32)(func_80055E68_56A68(gs->memoryPoolId)) + 0xB0;
-    setCleanupCallback((void (*)(void *))&func_800BBA60_B7CA0);
+    setCleanupCallback((void (*)(void *)) & func_800BBA60_B7CA0);
     setCallback(&func_800BB8B8_B7AF8);
 }
 
@@ -279,7 +277,7 @@ void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0) {
 }
 
 void func_800BBA98(void) {
-    s32 i;
+
     NodeWithPayload *temp;
 
     temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);

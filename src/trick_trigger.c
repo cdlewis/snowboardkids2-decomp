@@ -4,7 +4,7 @@
 #include "task_scheduler.h"
 
 extern u8 D_8008D6C4_8E2C4[];
-void TrickTriggerCheck(void *);
+void TrickTriggerCheck(void * /*arg0*/);
 
 u8 TrickLabel[] = "TRICK";
 
