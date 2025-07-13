@@ -62,7 +62,7 @@ void initializeGameState(s32 arg0, s32 arg1, s32 arg2) {
     do {
         temp_s0->unk3FE = (s16)(D_8008D6B0_8E2B0 - (((s32)((((short)D_8008D6B0_8E2B0) / 10) << 0x10)) >> 0xF));
         temp_s0->unk403 = 0xFF;
-        initTaskScheduler(0x30, 0xA, 0x14, 0, 0, 0, 0, 0);
+        setupTaskSchedulerNodes(0x30, 0xA, 0x14, 0, 0, 0, 0, 0);
         func_80027CA0_288A0(temp_s0, 0, 0xA, 0);
         func_80027CA0_288A0(((void *)((s32)temp_s0)) + 0x1D8, 8, 0xF, 1);
         scheduleTask(&func_80017350_17F50, 0, 0, 0x5A);

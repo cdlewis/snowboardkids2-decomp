@@ -23,6 +23,7 @@ typedef struct Node {
 void setGameStateHandler(void *arg0);
 
 void *dmaRequestAndUpdateStateWithSize(void *, void *, s32);
+
 void *dmaRequestAndUpdateState(void *start, void *end);
 
 GameState *allocateGameStateMemory(s32 arg0);
@@ -30,7 +31,9 @@ GameState *allocateGameStateMemory(s32 arg0);
 Node *scheduleTask(void *a0, u8, u8, u8);
 
 void setCallback(void(callback)(void *));
+
 void setCallbackWithContinue(void(callback)(void *));
+
 void setCleanupCallback(void(callback)(void *));
 
 s32 freeGameStateMemory(s32 *);
@@ -38,9 +41,21 @@ s32 freeGameStateMemory(s32 *);
 void runTaskSchedulers(void);
 
 void *getCurrentAllocation();
+
 void *allocateTaskMemory(s32 size);
 
-void initTaskScheduler(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5, s32 arg6, s32 arg7);
+void setupTaskSchedulerNodes(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5, s32 arg6, s32 arg7);
+
 void *loadDataSegment(s32 arg0, s32 arg1, s32 arg2, void *arg3);
+
 void terminateTasksByTypeAndID(s32 taskType, s32 taskID);
+
 void terminateTasksByType(s32 taskType);
+
+s32 hasActiveTasks(void);
+
+void processActiveTasks(void);
+
+void terminateAllTasks(void);
+
+void initTaskScheduler(void);

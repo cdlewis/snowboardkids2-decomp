@@ -18,7 +18,6 @@ extern void func_8003AC38_3B838(void);
 extern void func_8003AF6C_3BB6C(void);
 extern void func_80056080_56C80(void);
 extern void func_80057870_58470(s32);
-extern void func_800692F0_69EF0(void);
 extern void func_800693C4_69FC4(void *, s32);
 extern void func_8006DC40_6E840(void);
 extern void func_8006E000_6EC00(u16);
@@ -43,7 +42,7 @@ void mainThreadEntrypoint(void *arg) {
     initializeMemoryAllocatorRegion();
     func_8006DC40_6E840();
     initPiManager();
-    func_800692F0_69EF0();
+    initTaskScheduler();
 
     osCreateMesgQueue(&mainMessageQueue, mainMessageQueueBuffer, 0x20);
 

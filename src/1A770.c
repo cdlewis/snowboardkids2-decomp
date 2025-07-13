@@ -80,7 +80,7 @@ INCLUDE_ASM("asm/nonmatchings/1A770", func_8001ADFC_1B9FC);
 
 void func_8001AE80_1BA80(void) {
     func_8001AE80_1BA80_task_memory* temp_s0 = (func_8001AE80_1BA80_task_memory*)allocateTaskMemory(0x1E0);
-    initTaskScheduler(0x14, 0, 0, 0, 0, 0, 0, 0);
+    setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->unk1D8 = 0;
     func_80027CA0_288A0(temp_s0, 0, 0xA, 0);
     func_8006FDA0_709A0(0, 0, 8);

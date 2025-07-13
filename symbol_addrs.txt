@@ -1,8 +1,11 @@
+D_800A2D70 = 0x800A2D70; // size:0x500
+
 terminateAllTasks = 0x80069D34;
 terminateTasksByType = 0x80069D7C;
 terminateTasksByTypeAndID = 0x80069DD4;
 loadDataSegment = 0x8006A0EC;
-initTaskScheduler = 0x800698EC;
+initTaskScheduler = 0x800692F0;
+setupTaskSchedulerNodes = 0x800698EC;
 allocateTaskMemory = 0x80069854;
 getTableEntryByU16Index = 0x80019280;
 getTableEntryByIndex = 0x800192CC;

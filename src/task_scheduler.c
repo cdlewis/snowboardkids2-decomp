@@ -35,6 +35,21 @@ typedef struct gTaskScheduler_type {
 } gTaskScheduler_type;
 extern gTaskScheduler_type *gTaskScheduler;
 
+typedef struct {
+    /* 0x00 */ s8 padding_00[8];
+    /* 0x08 */ void *unk08;
+    /* 0x0C */ s8 padding_0C[0x18];
+    /* 0x24 */ s32 unk24;
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ s32 unk30;
+    /* 0x34 */ s32 unk34;
+    /* 0x38 */ s16 counters[8];
+    /* 0x48 */ s16 unk48;
+    /* 0x4A */ s8 padding_4A[6];
+} TaskNode;
+
+extern TaskNode D_800A2D70[16];
 extern gTaskScheduler_type *D_800A3270_A3E70;
 extern gTaskScheduler_type *D_800A32C0_A3EC0;
 extern gTaskScheduler_type *D_800A3274_A3E74;
@@ -42,11 +57,34 @@ extern s32 D_800AB064_A23D4;
 extern s32 D_800AB12C_A249C;
 extern void *func_8003BB68_3C768(void);
 
-s32 hasActiveTasks();
-void processActiveTasks(void);
-void terminateAllTasks();
+void initTaskScheduler(void) {
+    s32 i;
+    s32 j;
+    void *prevHead;
 
-INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_800692F0_69EF0);
+    D_800A3274_A3E74 = 0;
+    D_800A3270_A3E70 = 0;
+    gTaskScheduler = NULL;
+    gDMAOverlay = NULL;
+    D_800A32C0_A3EC0 = 0;
+
+    for (i = 0; i < 16; i++) {
+        D_800A2D70[i].unk24 = 0;
+        D_800A2D70[i].unk28 = 0;
+        D_800A2D70[i].unk30 = 0;
+        D_800A2D70[i].unk34 = 0;
+        D_800A2D70[i].unk2C = 0;
+        D_800A2D70[i].unk48 = 0;
+
+        for (j = 0; j < 8; j++) {
+            D_800A2D70[i].counters[j] = 0;
+        }
+
+        prevHead = D_800A32C0_A3EC0;
+        D_800A2D70[i].unk08 = prevHead;
+        D_800A32C0_A3EC0 = &D_800A2D70[i];
+    }
+}
 
 void func_800693C4_69FC4(void (*arg0)(), s8 arg1) {
     gTaskScheduler_type *temp_a2;
@@ -301,7 +339,7 @@ u8 func_800698DC_6A4DC(void) {
     return gTaskScheduler->unk1A;
 }
 
-void initTaskScheduler(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5, s32 arg6, s32 arg7) {
+void setupTaskSchedulerNodes(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5, s32 arg6, s32 arg7) {
     s16 i;
     u8 nodeExists;
 

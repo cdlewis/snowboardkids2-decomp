@@ -91,7 +91,7 @@ void func_80003508_4108() {
     s.s1->unk2 = 0;
     s.s1->unk0 = 0;
     s.s1->unk3 = 0;
-    initTaskScheduler(0x40, 0x30, 4, 4, 4, 0, 0, 0);
+    setupTaskSchedulerNodes(0x40, 0x30, 4, 4, 4, 0, 0, 0);
 
     s0 = ((u8 *)s.s1) + 8;
     func_8006FAA4_706A4(s0, 0, 0, 10, f20);
