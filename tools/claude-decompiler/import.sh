@@ -58,7 +58,7 @@ echo "Created: $created_dir"
 
 # Populate with base / target files
 cp src/temp.c "$created_dir/base.c"
-cat tools/decomp-permuter/prelude.inc "$ASM_PATH" > "$created_dir/target.s"
+cat "${CLAUDE_DIR}/prelude.inc" "$ASM_PATH" > "$created_dir/target.s"
 mips-linux-gnu-as -EB -march=vr4300 -mtune=vr4300 -Iinclude -o "$created_dir/target.o" "$created_dir/target.s"
 echo "Populated with target and base files"
 
