@@ -84,7 +84,7 @@ jobs:
 
     - name: Commit changes
       run: |
-        git add -u
+        git add README.md
         git commit -m "Update progress badge and formatting" || echo "No changes to commit"
         git push origin HEAD:${{ github.ref_name }}
       working-directory: main
