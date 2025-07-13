@@ -13,7 +13,7 @@ typedef struct {
 } RenderQueueItem;
 
 typedef struct {
-    s32 padding;
+    void *unk0;
     void *unk4;
     void *unk8;
     u8 padding2[0x4];
@@ -48,6 +48,10 @@ extern s32 D_800937F0_943F0[];
 extern s32 D_80093978_94578[];
 extern s32 D_8009397C_9457C[];
 extern s32 D_80093B00_94700;
+void func_8006983C_6A43C(void *);
+extern s32 D_6A83F0;
+extern s32 D_6B6410;
+extern void func_8005610C_56D0C;
 
 // This seems likely to be one struct
 extern void *D_800A2D10_A3910;
@@ -93,7 +97,15 @@ typedef struct {
 } D_80093974_94574_type;
 extern D_80093974_94574_type D_80093974_94574[];
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80056080_56C80);
+void func_80056080_56C80(void) {
+    u8 sp10;
+
+    D_800A2990_A3590 = allocateTaskMemory(0x53C);
+    D_800A2990_A3590->unk0 = dmaRequestAndUpdateStateWithSize(&D_6A83F0, &D_6B6410, 0xCFD8);
+    D_800A2990_A3590->unk8 = allocateMemoryNode(0, 0x9000, &sp10);
+    D_800A2990_A3590->unk4 = allocateMemoryNode(0, 0x8000, &sp10);
+    func_8006983C_6A43C(&func_8005610C_56D0C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_8005610C_56D0C);
 
