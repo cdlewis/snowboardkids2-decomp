@@ -1,4 +1,5 @@
 #include "common.h"
+#include "player.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -26,8 +27,8 @@ typedef struct {
     s8 unk1C;
     u8 unk1D;
     s32 unk20;
-    s32 unk24;
-    u8 padding8[0x3C];
+    s32 unk24[0xF];
+    s32 padding;
     s16 unk64;
     u8 padding7[0x1D];
     s32 renderQueueCount;
@@ -48,10 +49,14 @@ extern s32 D_800937F0_943F0[];
 extern s32 D_80093978_94578[];
 extern s32 D_8009397C_9457C[];
 extern s32 D_80093B00_94700;
+extern s32 D_80092E28_93A28;
+extern s32 D_80093308_93F08;
 void func_8006983C_6A43C(void *);
 extern s32 D_6A83F0;
 extern s32 D_6B6410;
-extern void func_8005610C_56D0C;
+extern s32 D_6A83F0;
+extern s32 D_6B6410;
+extern s32 D_6C6300;
 
 // This seems likely to be one struct
 extern void *D_800A2D10_A3910;
@@ -84,6 +89,11 @@ void func_800582DC_58EDC(s32, s32, s32, s32, s32);
 void func_80058414_59014(s32, s32, s32);
 void func_800584AC_590AC(s32, s32, s32);
 void func_8005854C_5914C(s32, s32);
+void func_8005628C_56E8C(void);
+void func_8005610C_56D0C(void);
+void func_800570E0_57CE0(void *arg);
+void func_8005758C_5818C(s32);
+
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -107,7 +117,54 @@ void func_80056080_56C80(void) {
     func_8006983C_6A43C(&func_8005610C_56D0C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_8005610C_56D0C);
+void func_8005610C_56D0C(void) {
+    musConfig config;
+    GraphicsManager *mgr;
+    u16 negativeOne;
+    void *newNode;
+    s32 i;
+    u8 alreadyAllocated;
+
+    setupTaskSchedulerNodes(1, 0, 0, 0, 0, 0, 0, 0);
+    config.control_flag = 0;
+    config.channels = 0x18;
+    config.thread_priority = 5;
+    newNode = allocateMemoryNode(0, 0x37A20, &alreadyAllocated);
+    config.heap = newNode;
+    config.heap_length = 0x37A20;
+    mgr = D_800A2990_A3590;
+    config.fifo_length = 0x40;
+    config.ptr = mgr->unk0;
+    config.wbk = (u8 *)(&D_6C6300);
+    config.sched = &D_80092E28_93A28;
+    config.default_fxbank = &D_80093308_93F08;
+    config.syn_rsp_cmds = 0x5622;
+    config.syn_output_rate = 0x100;
+    config.syn_retraceCount = 0x1000;
+    config.syn_num_dma_bufs = 1;
+    config.syn_dma_buf_size = 0x64;
+    config.diskrom_handle = (OSPiHandle *)0x400;
+    MusInitialize(&config);
+
+    D_80093BA5_947A5 = 1;
+    negativeOne = -1;
+    D_800A2990_A3590->unk1D = 0;
+    D_800A2990_A3590->unk10 = negativeOne;
+    D_800A2990_A3590->unk12 = 0xFFFF;
+    D_800A2990_A3590->unk14 = 0;
+    scheduleTask(func_800570E0_57CE0, 0, 0, 0x64);
+    D_800A2990_A3590->unk20 = 0;
+    for (i = 0xF; i >= 0; i--) {
+        D_800A2990_A3590->unk24[i] = 0;
+    }
+
+    D_800A2990_A3590->unk534 = 0x20;
+    D_800A2990_A3590->renderQueueCount = 0;
+    D_800A2990_A3590->unk408 = 0;
+    D_800A2990_A3590->unk538 = 0xC80;
+    func_8005758C_5818C(i);
+    func_8006983C_6A43C(&func_8005628C_56E8C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_8005628C_56E8C);
 
@@ -224,8 +281,6 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_80057214_57E14);
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800572B0_57EB0);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800573F8_57FF8);
-
-extern void func_800570E0_57CE0(void *arg);
 
 void func_80057470_58070(void) {
     if (func_80058638_59238() == NULL) {
@@ -404,15 +459,15 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
     temp_ptr = (void *)temp_v1;
     temp_v1 = (GraphicsManager *)((temp_s0) + (s32)temp_ptr);
     D_800A2D38_A3938 = arg2;
-    temp_v0 = temp_v1->unk24;
-    D_800A2D2C_A392C = temp_v1->unk24;
+    temp_v0 = temp_v1->unk24[0];
+    D_800A2D2C_A392C = temp_v1->unk24[0];
 
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), OS_MESG_BLOCK);
 
     temp_s0 = temp_s0 + ((s32)D_800A2990_A3590);
 
-    ((GraphicsManager *)temp_s0)->unk24 = sp10;
+    ((GraphicsManager *)temp_s0)->unk24[0] = sp10;
     ((GraphicsManager *)(arg1 + (s16 *)D_800A2990_A3590))->unk64 = arg0;
 
     func_800570BC_57CBC();

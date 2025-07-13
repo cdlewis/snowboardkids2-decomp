@@ -119,8 +119,8 @@ $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/
 $(BUILD_DIR)/src/%.o: src/%.c
 	@mkdir -p $(shell dirname $@)
 	@printf "[$(GREEN)   c    $(NO_COL)]  $<\n"; \
-	$(CC_CHECK) $(CC_CHECK_FLAGS) $(IINC) $(MACROS) -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) -o $@ $<
-	@$(CC) $(CFLAGS) -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) -E $< | $(CC) -x c $(CFLAGS) -fno-asm -I $(dir $*) -c -o $@ -
+	$(CC_CHECK) $(CC_CHECK_FLAGS) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ $<
+	@$(CC) $(CFLAGS) -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -E $< | $(CC) -x c $(CFLAGS) -fno-asm -I $(dir $*) -c -o $@ -
 	$(OBJDUMP_CMD)
 
 $(BUILD_DIR)/%.o: %.s
