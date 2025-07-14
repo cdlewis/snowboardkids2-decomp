@@ -14,30 +14,31 @@ typedef struct {
 } RenderQueueItem;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    u8 padding2[0x4];
-    s16 unk10;
-    u16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 flags;
-    s16 unk1A;
-    s8 unk1C;
-    u8 unk1D;
-    s32 unk20;
-    s32 unk24[0xF];
-    s32 padding;
-    s16 unk64[0x10];
-    s32 renderQueueCount;
-    RenderQueueItem renderQueue[32];
-    s32 unk408;
-    u8 bufferData[8][0x20];
-    s8 bufferIds[0x8];
-    s32 bufferFlags[8];
-    s32 unk534;
-    s32 unk538;
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ void *unk8;
+    /* 0x0C */ u8 padding1[0x4];
+    /* 0x10 */ s16 unk10;
+    /* 0x12 */ u16 unk12;
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ s16 unk16;
+    /* 0x18 */ s16 flags;
+    /* 0x1A */ s16 unk1A;
+    /* 0x1C */ s8 unk1C;
+    /* 0x1D */ u8 unk1D;
+    /* 0x1E */ u8 padding2[0x2];
+    /* 0x20 */ s32 unk20;
+    /* 0x24 */ s32 unk24[0xF];
+    /* 0x60 */ s32 padding3;
+    /* 0x64 */ s16 unk64[0x10];
+    /* 0x84 */ s32 renderQueueCount;
+    /* 0x88 */ RenderQueueItem renderQueue[32];
+    /* 0x408 */ s32 unk408;
+    /* 0x40C */ u8 bufferData[8][0x20];
+    /* 0x50C */ s8 bufferIds[0x8];
+    /* 0x514 */ s32 bufferFlags[8];
+    /* 0x534 */ s32 unk534;
+    /* 0x538 */ s32 unk538;
 } GraphicsManager;
 extern GraphicsManager *D_800A2990_A3590;
 
@@ -421,7 +422,32 @@ void func_80057DF0_589F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 a
     func_80057CE4_588E4(arg0, arg1, arg2, arg3, arg4, 0xC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057E18_58A18);
+void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    s32 new_var;
+    s32 *new_var3;
+    void *sp10;
+
+    D_800A2D2C_A392C = D_800A2990_A3590->unk24[arg3];
+    new_var3 = &D_800A2990_A3590->unk20;
+
+    if (arg1 > 0) {
+        D_800A2D1C_A391C = arg0;
+        D_800A2D24_A3924 = arg1;
+        D_800A2D28_A3928 = 0x80;
+        new_var = *new_var3;
+        D_800A2D38_A3938 = arg4;
+        D_800A2D20_A3920 = new_var + (arg2 << 0x18);
+        osSendMesg(&D_800A2CD0_A38D0, (void *)2, 1);
+        osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+        D_800A2990_A3590->unk24[arg3] = (s32)sp10;
+        D_800A2990_A3590->unk64[arg3] = (s16)arg0;
+        func_800570BC_57CBC(D_800A2990_A3590);
+        return;
+    }
+
+    osSendMesg(&D_800A2CD0_A38D0, (void *)3, 1);
+    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+}
 
 void func_80057F28_58B28(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     func_80057E18_58A18(arg0, arg1, arg2, arg3, 0xC);
