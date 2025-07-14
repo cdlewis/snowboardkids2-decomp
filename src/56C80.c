@@ -33,7 +33,7 @@ typedef struct {
     s32 renderQueueCount;
     RenderQueueItem renderQueue[32];
     s32 unk408;
-    u8 padding6[0x100];
+    u8 bufferData[8][0x20];
     s8 bufferIds[0x8];
     s32 bufferFlags[8];
     s32 unk534;
@@ -176,28 +176,29 @@ void func_80056990_57590(s32 arg0, s32 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_800569A4_575A4);
 
-void func_80056A88_57688(void *arg0, u8 arg1, s32 arg2) {
+void setBufferData(void *source, u8 arg1, s32 arg2) {
     s32 i;
     s8 id;
-    void *dst;
-    volatile u8 padding[0x2];
+    void *bufferPtr;
 
-    i = 0;
+    // Search for existing buffer
     id = arg2;
-    if (D_800A2990_A3590->unk408 > 0) {
-        do {
-            if (D_800A2990_A3590->bufferIds[i] == id) {
-                dst = (void *)((i << 5) + (s32)D_800A2990_A3590 + 0x40C);
-                memcpy(dst, arg0, 0x20);
-                return;
-            }
-            i++;
-        } while (i < D_800A2990_A3590->unk408);
+    for (i = 0; i < D_800A2990_A3590->unk408; i++) {
+        if (D_800A2990_A3590->bufferIds[i] == id) {
+            bufferPtr = (void *)((i << 5) + (s32)D_800A2990_A3590 + 0x40C);
+            memcpy(bufferPtr, source, 0x20);
+            return;
+        }
     }
+
+    // Add new buffer if space available
     if (D_800A2990_A3590->unk408 < 8) {
         D_800A2990_A3590->bufferIds[D_800A2990_A3590->unk408] = id;
-        dst = (void *)(((D_800A2990_A3590->unk408) << 5) + (s32)D_800A2990_A3590 + 0x40C);
-        memcpy(dst, arg0, 0x20);
+
+        bufferPtr = (void *)(((D_800A2990_A3590->unk408) << 5) + (s32)D_800A2990_A3590 + 0x40C);
+
+        memcpy(bufferPtr, source, 0x20);
+
         D_800A2990_A3590->bufferFlags[D_800A2990_A3590->unk408] = arg1;
         D_800A2990_A3590->unk408++;
     }
