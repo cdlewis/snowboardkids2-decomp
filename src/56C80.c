@@ -168,7 +168,21 @@ void func_8005610C_56D0C(void) {
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_8005628C_56E8C);
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80056914_57514);
+void func_80056914_57514(void *source) {
+    if (D_800A2990_A3590->unk408 < 8) {
+        u8(*dest)[0x20];
+
+        D_800A2990_A3590->bufferIds[D_800A2990_A3590->unk408] = -1;
+        dest = &D_800A2990_A3590->bufferData[D_800A2990_A3590->unk408];
+        dest++;
+        dest--;
+
+        memcpy(dest, source, 0x20);
+
+        D_800A2990_A3590->bufferFlags[D_800A2990_A3590->unk408] = 0;
+        D_800A2990_A3590->unk408 += 1;
+    }
+}
 
 void func_80056990_57590(s32 arg0, s32 arg1) {
     D_800A2990_A3590->unk538 = arg1;
