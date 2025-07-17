@@ -189,7 +189,27 @@ void func_80056990_57590(s32 arg0, s32 arg1) {
     D_800A2990_A3590->unk534 = arg0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800569A4_575A4);
+void func_800569A4_575A4(u8 *src_data, s8 search_id) {
+    s32 i;
+    void *bufferPtr;
+
+    for (i = 0; i < D_800A2990_A3590->unk408; i++) {
+        if (D_800A2990_A3590->bufferIds[i] == search_id) {
+            bufferPtr = (void *)((i << 5) + (s32)D_800A2990_A3590 + 0x40C);
+            memcpy(bufferPtr, src_data, 0x20);
+            return;
+        }
+    }
+
+    // write to the next available buffer if there's space
+    if (D_800A2990_A3590->unk408 < 8) {
+        D_800A2990_A3590->bufferIds[D_800A2990_A3590->unk408] = search_id;
+        bufferPtr = (void *)((D_800A2990_A3590->unk408 << 5) + (s32)D_800A2990_A3590 + 0x40C);
+        memcpy(bufferPtr, src_data, 0x20);
+        D_800A2990_A3590->bufferFlags[D_800A2990_A3590->unk408] = 0;
+        D_800A2990_A3590->unk408++;
+    }
+}
 
 void setBufferData(void *source, u8 arg1, s32 arg2) {
     s32 i;
