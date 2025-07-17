@@ -594,7 +594,21 @@ void func_80058490_59090(s32 arg0, s32 arg1) {
     func_80058414_59014(arg0, arg1, 0xC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800584AC_590AC);
+void func_800584AC_590AC(s32 arg0, s32 arg1, s32 arg2) {
+    s32 v0;
+    s32 mesg;
+
+    D_800A2D1C_A391C = arg0;
+    D_800A2D24_A3924 = 0x80;
+    D_800A2D28_A3928 = 0x80;
+    v0 = *(s32 *)((s32)D_800A2990_A3590 + 0x20);
+    D_800A2D38_A3938 = arg2;
+    D_800A2D20_A3920 = v0 + (arg1 << 24);
+
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)&mesg, OS_MESG_BLOCK);
+    func_800570BC_57CBC();
+}
 
 void func_80058530_59130(s32 arg0, s32 arg1) {
     func_800584AC_590AC(arg0, arg1, 0xC);
