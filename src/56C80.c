@@ -1,6 +1,22 @@
 #include "common.h"
+#include "displaylist.h"
 #include "player.h"
 #include "task_scheduler.h"
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    void *unk20;
+    s32 unk24;
+    s32 unk28;
+} GraphicsCommand;
+extern GraphicsCommand D_800A2D10_A3910;
 
 typedef struct {
     s16 unk0;
@@ -57,19 +73,6 @@ extern s32 D_6B6410;
 extern s32 D_6A83F0;
 extern s32 D_6B6410;
 extern s32 D_6C6300;
-
-// This seems likely to be one struct
-extern void *D_800A2D10_A3910;
-extern void *D_800A2D14_A3914;
-extern s32 D_800A2D18_A3918;
-extern s32 D_800A2D1C_A391C;
-extern s32 D_800A2D20_A3920;
-extern s32 D_800A2D24_A3924;
-extern s32 D_800A2D28_A3928;
-extern s32 D_800A2D2C_A392C;
-extern s32 D_800A2D30_A3930;
-extern s32 D_800A2D38_A3938;
-// End probable struct
 
 extern u8 D_80093B84_94784[];
 extern u8 D_80093BA5_947A5;
@@ -364,22 +367,22 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_8005758C_5818C);
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057614_58214);
 
-void func_80057870_58470(s32 arg0) {
+void func_80057870_58470(void *arg0) {
     void *message;
 
     if ((D_80093BA5_947A5 != NULL) && (D_80093BA6_947A6 == NULL)) {
         D_80093BA6_947A6++;
-        D_800A2D30_A3930 = arg0;
+        D_800A2D10_A3910.unk20 = arg0;
         osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xD, OS_MESG_BLOCK);
         osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
     }
 }
 
-void func_800578DC_584DC(s32 arg0, s32 arg1) {
+void func_800578DC_584DC(s32 arg0, void *arg1) {
     void *message;
 
-    D_800A2D2C_A392C = arg0;
-    D_800A2D30_A3930 = arg1;
+    D_800A2D10_A3910.unk1C = arg0;
+    D_800A2D10_A3910.unk20 = arg1;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)7, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
 }
@@ -387,8 +390,8 @@ void func_800578DC_584DC(s32 arg0, s32 arg1) {
 void func_80057928_58528(s32 arg0, s32 arg1) {
     void *message;
 
-    D_800A2D2C_A392C = arg0;
-    D_800A2D24_A3924 = arg1;
+    D_800A2D10_A3910.unk1C = arg0;
+    D_800A2D10_A3910.unk14 = arg1;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xC, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
 }
@@ -396,9 +399,9 @@ void func_80057928_58528(s32 arg0, s32 arg1) {
 void *func_80057974_58574(void *arg0, void *arg1, s32 arg2) {
     void *sp10;
 
-    D_800A2D14_A3914 = arg0;
-    D_800A2D10_A3910 = arg1;
-    D_800A2D38_A3938 = arg2;
+    D_800A2D10_A3910.unk4 = arg0;
+    D_800A2D10_A3910.unk0 = arg1;
+    D_800A2D10_A3910.unk28 = arg2;
     osSendMesg(&D_800A2CD0_A38D0, (void *)0xB, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &sp10, OS_MESG_BLOCK);
     return sp10;
@@ -409,8 +412,8 @@ INCLUDE_ASM("asm/nonmatchings/56C80", func_800579CC_585CC);
 void func_800579E8_585E8(void *arg0, s32 arg1) {
     void *message;
 
-    D_800A2D14_A3914 = arg0;
-    D_800A2D18_A3918 = arg1;
+    D_800A2D10_A3910.unk4 = arg0;
+    D_800A2D10_A3910.unk8 = arg1;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xA, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
 }
@@ -418,7 +421,7 @@ void func_800579E8_585E8(void *arg0, s32 arg1) {
 void *func_80057A34_58634(s32 arg0) {
     void *message;
 
-    D_800A2D2C_A392C = arg0;
+    D_800A2D10_A3910.unk1C = arg0;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)9, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
     return message;
@@ -434,10 +437,10 @@ void *func_80057A7C_5867C(void) {
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057ABC_586BC);
 
-void func_80057B1C_5871C(s32 arg0) {
+void func_80057B1C_5871C(void *arg0) {
     void *message;
 
-    D_800A2D30_A3930 = arg0;
+    D_800A2D10_A3910.unk20 = arg0;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)6, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
     D_800A2990_A3590->renderQueueCount = 0;
@@ -461,16 +464,16 @@ void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 *new_var3;
     void *sp10;
 
-    D_800A2D2C_A392C = D_800A2990_A3590->unk24[arg3];
+    D_800A2D10_A3910.unk1C = D_800A2990_A3590->unk24[arg3];
     new_var3 = &D_800A2990_A3590->unk20;
 
     if (arg1 > 0) {
-        D_800A2D1C_A391C = arg0;
-        D_800A2D24_A3924 = arg1;
-        D_800A2D28_A3928 = 0x80;
+        D_800A2D10_A3910.unkC = arg0;
+        D_800A2D10_A3910.unk14 = arg1;
+        D_800A2D10_A3910.unk18 = 0x80;
         new_var = *new_var3;
-        D_800A2D38_A3938 = arg4;
-        D_800A2D20_A3920 = new_var + (arg2 << 0x18);
+        D_800A2D10_A3910.unk28 = arg4;
+        D_800A2D10_A3910.unk10 = new_var + (arg2 << 0x18);
         osSendMesg(&D_800A2CD0_A38D0, (void *)2, 1);
         osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
         D_800A2990_A3590->unk24[arg3] = (s32)sp10;
@@ -506,16 +509,16 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
     s32 temp_v0;
 
     temp_v1 = D_800A2990_A3590;
-    D_800A2D1C_A391C = arg0;
-    D_800A2D24_A3924 = 0x80;
-    D_800A2D28_A3928 = 0x80;
+    D_800A2D10_A3910.unkC = arg0;
+    D_800A2D10_A3910.unk14 = 0x80;
+    D_800A2D10_A3910.unk18 = 0x80;
 
     new_var2 = &temp_v1->unk20;
     temp_v0 = *new_var2;
-    D_800A2D20_A3920 = temp_v1->unk20;
+    D_800A2D10_A3910.unk10 = temp_v1->unk20;
     temp_v0 = temp_v1->unk24[arg1];
-    D_800A2D38_A3938 = arg2;
-    D_800A2D2C_A392C = temp_v0;
+    D_800A2D10_A3910.unk28 = arg2;
+    D_800A2D10_A3910.unk1C = temp_v0;
 
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, 1);
     osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)&message, 1);
@@ -532,13 +535,13 @@ void func_8005823C_58E3C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     void *message;
     GraphicsManager *new_var;
     s32 *new_var2;
-    D_800A2D1C_A391C = arg0;
-    D_800A2D24_A3924 = arg1;
-    D_800A2D28_A3928 = 0x80;
+    D_800A2D10_A3910.unkC = arg0;
+    D_800A2D10_A3910.unk14 = arg1;
+    D_800A2D10_A3910.unk18 = 0x80;
     new_var = D_800A2990_A3590;
     new_var2 = &new_var->unk20;
-    D_800A2D20_A3920 = (*new_var2) + (arg2 << 0x18);
-    D_800A2D38_A3938 = arg3;
+    D_800A2D10_A3910.unk10 = (*new_var2) + (arg2 << 0x18);
+    D_800A2D10_A3910.unk28 = arg3;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
     func_800570BC_57CBC();
@@ -558,13 +561,13 @@ void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 *new_var;
     void *message;
     s32 new_var2;
-    D_800A2D1C_A391C = arg0;
-    D_800A2D24_A3924 = arg1;
-    D_800A2D28_A3928 = arg2;
+    D_800A2D10_A3910.unkC = arg0;
+    D_800A2D10_A3910.unk14 = arg1;
+    D_800A2D10_A3910.unk18 = arg2;
     new_var = &D_800A2990_A3590->unk20;
     new_var2 = *new_var;
-    D_800A2D38_A3938 = arg3;
-    D_800A2D20_A3920 = new_var2;
+    D_800A2D10_A3910.unk28 = arg3;
+    D_800A2D10_A3910.unk10 = new_var2;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
     func_800570BC_57CBC();
@@ -578,13 +581,13 @@ void func_80058414_59014(s32 arg0, s32 arg1, s32 arg2) {
     void *sp10;
     s32 *new_var;
     s32 new_var2;
-    D_800A2D1C_A391C = arg0;
-    D_800A2D24_A3924 = arg1;
-    D_800A2D28_A3928 = 0x80;
+    D_800A2D10_A3910.unkC = arg0;
+    D_800A2D10_A3910.unk14 = arg1;
+    D_800A2D10_A3910.unk18 = 0x80;
     new_var = &D_800A2990_A3590->unk20;
     new_var2 = *new_var;
-    D_800A2D38_A3938 = arg2;
-    D_800A2D20_A3920 = new_var2;
+    D_800A2D10_A3910.unk28 = arg2;
+    D_800A2D10_A3910.unk10 = new_var2;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     func_800570BC_57CBC();
@@ -598,12 +601,12 @@ void func_800584AC_590AC(s32 arg0, s32 arg1, s32 arg2) {
     s32 v0;
     s32 mesg;
 
-    D_800A2D1C_A391C = arg0;
-    D_800A2D24_A3924 = 0x80;
-    D_800A2D28_A3928 = 0x80;
+    D_800A2D10_A3910.unkC = arg0;
+    D_800A2D10_A3910.unk14 = 0x80;
+    D_800A2D10_A3910.unk18 = 0x80;
     v0 = *(s32 *)((s32)D_800A2990_A3590 + 0x20);
-    D_800A2D38_A3938 = arg2;
-    D_800A2D20_A3920 = v0 + (arg1 << 24);
+    D_800A2D10_A3910.unk28 = arg2;
+    D_800A2D10_A3910.unk10 = v0 + (arg1 << 24);
 
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)&mesg, OS_MESG_BLOCK);
@@ -619,12 +622,12 @@ void func_8005854C_5914C(s32 arg0, s32 arg1) {
     s32 *new_var;
     void *sp10;
 
-    D_800A2D1C_A391C = arg0;
-    D_800A2D24_A3924 = 0x80;
-    D_800A2D28_A3928 = 0x80;
+    D_800A2D10_A3910.unkC = arg0;
+    D_800A2D10_A3910.unk14 = 0x80;
+    D_800A2D10_A3910.unk18 = 0x80;
     new_var2 = *(new_var = &D_800A2990_A3590->unk20);
-    D_800A2D38_A3938 = arg1;
-    D_800A2D20_A3920 = new_var2;
+    D_800A2D10_A3910.unk28 = arg1;
+    D_800A2D10_A3910.unk10 = new_var2;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     func_800570BC_57CBC();
