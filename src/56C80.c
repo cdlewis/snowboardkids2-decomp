@@ -529,7 +529,9 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
     func_800570BC_57CBC();
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80058220_58E20);
+void func_80058220_58E20(s32 arg0, s32 arg1) {
+    func_80058154_58D54(arg0, arg1, 0xC);
+}
 
 void func_8005823C_58E3C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     void *message;
