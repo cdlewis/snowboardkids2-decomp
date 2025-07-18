@@ -496,7 +496,21 @@ void func_80058048_58C48(s32 arg0, s32 arg1, s32 arg2) {
     func_80057F48_58B48(arg0, arg1, arg2, 0xC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80058064_58C64);
+void func_80058064_58C64(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    void *message;
+
+    D_800A2D10_A3910.unkC = arg0;
+    D_800A2D10_A3910.unk14 = 0x80;
+    D_800A2D10_A3910.unk18 = 0x80;
+    D_800A2D10_A3910.unk10 = D_800A2990_A3590->unk20 + (arg1 << 0x18);
+    D_800A2D10_A3910.unk1C = D_800A2990_A3590->unk24[arg2];
+    D_800A2D10_A3910.unk28 = arg3;
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, OS_MESG_BLOCK);
+    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    D_800A2990_A3590->unk24[arg2] = (s32)message;
+    D_800A2990_A3590->unk64[arg2] = (s16)arg0;
+    func_800570BC_57CBC();
+}
 
 void func_80058138_58D38(s32 arg0, s32 arg1, s32 arg2) {
     func_80058064_58C64(arg0, arg1, arg2, 0xC);
