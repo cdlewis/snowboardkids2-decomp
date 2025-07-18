@@ -13,7 +13,7 @@ typedef struct {
     s32 unk18;
     s32 unk1C;
     void *unk20;
-    s32 unk24;
+    f32 unk24;
     s32 unk28;
 } GraphicsCommand;
 extern GraphicsCommand D_800A2D10_A3910;
@@ -83,7 +83,7 @@ void *func_80058638_59238();
 void func_800570BC_57CBC();
 void func_80057124_57D24();
 void func_800579E8_585E8(void *, s32);
-void func_80057B70_58770(s32, s32, s32, s32, s32, s32, s32);
+void func_80057B70_58770(s32, s32, s32, f32, s32, s32, s32);
 void func_80057CE4_588E4(s32, s32, s32, s32, s32, s32);
 void func_80057E18_58A18(s32, s32, s32, s32, s32);
 void func_80057F48_58B48(s32, s32, s32, s32);
@@ -447,9 +447,36 @@ void func_80057B1C_5871C(void *arg0) {
     D_800A2990_A3590->unk408 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057B70_58770);
+void func_80057B70_58770(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+    void *message;
 
-void func_80057CB4_588B4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    D_800A2D10_A3910.unk1C = D_800A2990_A3590->unk24[arg5];
+    if (arg1 > 0) {
+        D_800A2D10_A3910.unk18 = arg2;
+        D_800A2D10_A3910.unk14 = arg1;
+        D_800A2D10_A3910.unk24 = arg3;
+        D_800A2D10_A3910.unk28 = arg6;
+
+        if (D_800A2990_A3590->unk24[arg5] == 0 || D_800A2990_A3590->unk64[arg5] != arg0) {
+            D_800A2D10_A3910.unkC = arg0;
+            D_800A2D10_A3910.unk10 = D_800A2990_A3590->unk20 + (arg4 << 0x18);
+            osSendMesg(&D_800A2CD0_A38D0, (void *)4, 1);
+            osRecvMesg(&D_800A2CF0_A38F0, &message, 1);
+            D_800A2990_A3590->unk24[arg5] = (s32)message;
+            D_800A2990_A3590->unk64[arg5] = (s16)arg0;
+            func_800570BC_57CBC();
+            return;
+        }
+
+        osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)5, OS_MESG_BLOCK);
+        osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    } else {
+        osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)3, OS_MESG_BLOCK);
+        osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    }
+}
+
+void func_80057CB4_588B4(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 arg5) {
     func_80057B70_58770(arg0, arg1, arg2, arg3, arg4, arg5, 0xC);
 }
 
