@@ -74,11 +74,15 @@ extern s32 D_6A83F0;
 extern s32 D_6B6410;
 extern s32 D_6C6300;
 
+extern void *D_800A2CE8_A38E8;
+extern void *D_800A2D08_A3908;
 extern u8 D_80093B84_94784[];
 extern u8 D_80093BA5_947A5;
 extern u8 D_80093BA6_947A6;
+extern OSThread D_800A2998_A3598;
 extern void func_800571D0_57DD0();
 extern void func_80057214_57E14();
+extern void func_80057614_58214(void *);
 void *func_80058638_59238();
 void func_800570BC_57CBC();
 void func_80057124_57D24();
@@ -95,7 +99,7 @@ void func_8005854C_5914C(s32, s32);
 void func_8005628C_56E8C(void);
 void func_8005610C_56D0C(void);
 void func_800570E0_57CE0(void *arg);
-void func_8005758C_5818C(s32);
+void func_8005758C_5818C(void);
 
 typedef struct {
     s32 unk0;
@@ -165,7 +169,7 @@ void func_8005610C_56D0C(void) {
     D_800A2990_A3590->renderQueueCount = 0;
     D_800A2990_A3590->unk408 = 0;
     D_800A2990_A3590->unk538 = 0xC80;
-    func_8005758C_5818C(i);
+    func_8005758C_5818C();
     func_8006983C_6A43C(&func_8005628C_56E8C);
 }
 
@@ -363,7 +367,14 @@ void func_80057564_58164(int arg0) {
     (new_var = D_800A2990_A3590)->unk14 = var_a0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_8005758C_5818C);
+void func_8005758C_5818C() {
+    OSMesgQueue *queue = &D_800A2CD0_A38D0;
+    osCreateMesgQueue(queue, &D_800A2CE8_A38E8, OS_MESG_BLOCK);
+    queue = &D_800A2CF0_A38F0;
+    osCreateMesgQueue(queue, &D_800A2D08_A3908, OS_MESG_BLOCK);
+    osCreateThread(&D_800A2998_A3598, 0xB, func_80057614_58214, 0, &D_800A2CD0_A38D0, 6);
+    osStartThread(&D_800A2998_A3598);
+}
 
 INCLUDE_ASM("asm/nonmatchings/56C80", func_80057614_58214);
 
