@@ -330,7 +330,14 @@ void func_80057470_58070(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800574A0_580A0);
+void func_800574A0_580A0(s32 arg0) {
+    D_800A2990_A3590->unk1D = 2;
+    D_800A2990_A3590->unk10 = arg0;
+    D_800A2990_A3590->unk16 = 0x80;
+    D_800A2990_A3590->flags = 0x80;
+    D_800A2990_A3590->unk1A = 0;
+    D_800A2990_A3590->unk1C = (s8)D_80093B84_94784[arg0];
+}
 
 void func_800574E0_580E0(s16 arg0, s8 arg1) {
     D_800A2990_A3590->unk1D = 2;
