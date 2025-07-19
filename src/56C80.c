@@ -268,7 +268,21 @@ void func_80056C6C_5786C(void *arg0, unsigned int arg1, s16 arg2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80056D64_57964);
+void func_80056D64_57964(void *arg0, s16 arg1, s16 arg2, s16 arg3) {
+    RenderQueueItem *renderQueue;
+    s32 index = D_800A2990_A3590->renderQueueCount;
+    if (index < 0x20) {
+        renderQueue = D_800A2990_A3590->renderQueue;
+        memcpy(renderQueue[index].data, arg0, 0xC);
+        index = arg1;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk0 = index;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk2 = arg3;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk4 = arg2;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk6 = 0;
+        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].flags = 0x80;
+        D_800A2990_A3590->renderQueueCount += 1;
+    }
+}
 
 void func_80056E64_57A64(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4) {
     RenderQueueItem(*dest)[32];
