@@ -529,7 +529,16 @@ void *func_80057A7C_5867C(void) {
     return message;
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057ABC_586BC);
+void func_80057ABC_586BC(s32 arg0, s32 arg1) {
+    void *temp;
+    OSMesg *message;
+
+    temp = D_800A2990_A3590->unk24[arg0];
+    D_800A2D10_A3910.unk20 = arg1;
+    D_800A2D10_A3910.unk1C = temp;
+    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)7, 1);
+    osRecvMesg(&D_800A2CF0_A38F0, &message, 1);
+}
 
 void func_80057B1C_5871C(s32 arg0) {
     void *message;
