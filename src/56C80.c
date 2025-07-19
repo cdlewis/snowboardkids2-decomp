@@ -104,6 +104,7 @@ void func_8005758C_5818C(void);
 void func_800578DC_584DC(s32, s32);
 void *func_80057A34_58634(s32);
 void func_80057470_58070(void);
+void *func_80057974_58574(void *arg0, void *arg1, s32 arg2);
 
 typedef struct {
     s32 unk0;
@@ -438,7 +439,9 @@ void *func_80057974_58574(void *arg0, void *arg1, s32 arg2) {
     return sp10;
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_800579CC_585CC);
+void *func_800579CC_585CC(void *arg0, void *arg1) {
+    return func_80057974_58574(arg0, arg1, 0);
+}
 
 void func_800579E8_585E8(void *arg0, s32 arg1) {
     void *message;
