@@ -111,6 +111,16 @@ class Line:
         # Simple heuristic to detect if line contains a symbol reference
         return ".text" in row or ".data" in row or ".rodata" in row
 
+def normalize_jumptable_references(line: str) -> str:
+    """Normalize jump table references to .rodata for consistent comparison"""
+    # Pattern to match jump table references like jtbl_8009E998_9F598
+    jtbl_pattern = r'jtbl_[0-9A-Fa-f]+_[0-9A-Fa-f]+'
+    
+    # Replace jump table references with .rodata
+    normalized = re.sub(jtbl_pattern, '.rodata', line)
+    return normalized
+
+
 def field_matches_any_symbol(field: str, arch: MipsArchitecture) -> bool:
     """Matches symbols pattern from the permuter's scorer function"""
     if arch.name == "mips":
@@ -119,9 +129,13 @@ def field_matches_any_symbol(field: str, arch: MipsArchitecture) -> bool:
 
 def score_files(target_lines: List[str], cand_lines: List[str], *, debug_mode: bool = False) -> Tuple[int, str, float]:
     """Score the differences between target and candidate assembly lines using the permuter's algorithm"""
+    # Normalize jump table references before creating Line objects
+    normalized_target_lines = [normalize_jumptable_references(line) for line in target_lines]
+    normalized_cand_lines = [normalize_jumptable_references(line) for line in cand_lines]
+    
     # Create Line objects
-    target_seq = [Line(line) for line in target_lines]
-    cand_seq = [Line(line) for line in cand_lines]
+    target_seq = [Line(line) for line in normalized_target_lines]
+    cand_seq = [Line(line) for line in normalized_cand_lines]
     
     # Use MIPS architecture for this project
     arch = MipsArchitecture()

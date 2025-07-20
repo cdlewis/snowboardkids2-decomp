@@ -105,6 +105,16 @@ def process_reloc(reloc_row: str, prev_line: str) -> Optional[str]:
         raise Exception(f"unknown relocation type: {reloc_row}")
 
 
+def normalize_jumptable_references(line: str) -> str:
+    """Normalize jump table references to .rodata for consistent comparison"""
+    # Pattern to match jump table references like jtbl_8009E998_9F598
+    jtbl_pattern = r'jtbl_[0-9A-Fa-f]+_[0-9A-Fa-f]+'
+    
+    # Replace jump table references with .rodata
+    normalized = re.sub(jtbl_pattern, '.rodata', line)
+    return normalized
+
+
 def convert_numbers_to_hex(line: str) -> str:
     """Convert decimal numbers to hex, avoiding variable names and other text"""
     forbidden_chars = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_")
@@ -161,6 +171,9 @@ def process_objdump_lines(lines: List[str]) -> List[str]:
         # Convert decimal numbers to hex (but preserve stack/register differences)
         if mnemonic not in BRANCH_INSTRUCTIONS:
             line = convert_numbers_to_hex(line)
+        
+        # Normalize jump table references to .rodata for consistent comparison
+        line = normalize_jumptable_references(line)
             
         output_lines.append(line)
     

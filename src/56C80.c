@@ -15,6 +15,8 @@ typedef struct {
     s32 unk20;
     f32 unk24;
     s32 unk28;
+    s32 unk2C;
+    s32 unk30;
 } GraphicsCommand;
 extern GraphicsCommand D_800A2D10_A3910;
 
@@ -84,6 +86,7 @@ extern OSThread D_800A2998_A3598;
 extern void func_800571D0_57DD0();
 extern void func_80057214_57E14();
 extern void func_80057614_58214(void *);
+
 void *func_80058638_59238();
 void func_800570BC_57CBC();
 void func_80057124_57D24();
@@ -108,6 +111,17 @@ void *func_80057974_58574(void *arg0, void *arg1, s32 arg2);
 void func_800572B0_57EB0(void *arg);
 void func_80057928_58528(void *, s32);
 void func_800573F8_57FF8(void);
+void *func_800725F4_731F4(s32, s32, s32, s32, s32);
+void func_80072814_73414(s32, s32);
+void *func_800728E0_734E0(s32);
+void *func_80072960_73560(void *, s32);
+void *func_80072A14_73614(void *);
+void func_80072A6C_7366C(void *, s32);
+void func_80072ACC_736CC(void *, s32);
+void func_80072B3C_7373C(void *, f32);
+void func_80072C38_73838(void *, s32);
+void func_80072CC0_738C0(void *, s32);
+void *func_80072CDC_738DC(void *, void *);
 
 typedef struct {
     s32 unk0;
@@ -489,7 +503,103 @@ void func_8005758C_5818C() {
     osStartThread(&D_800A2998_A3598);
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_80057614_58214);
+void func_80057614_58214(void *arg0) {
+    void *message;
+    void *result;
+
+    while (TRUE) {
+        osRecvMesg(&D_800A2CD0_A38D0, &message, 1);
+        if ((u32)message < 0xF) {
+            switch ((s32)message) {
+                case 0:
+                    result = func_800728E0_734E0(3);
+                    break;
+                case 1:
+                    result = func_800725F4_731F4(
+                        D_800A2D10_A3910.unkC,
+                        D_800A2D10_A3910.unk14,
+                        D_800A2D10_A3910.unk18,
+                        0,
+                        D_800A2D10_A3910.unk10
+                    );
+                    if (D_800A2D10_A3910.unk28 != 0) {
+                        func_80072C38_73838(result, D_800A2D10_A3910.unk28);
+                    }
+                    break;
+                case 2:
+                    func_80072960_73560(D_800A2D10_A3910.unk1C, 0);
+                    result = func_800725F4_731F4(
+                        D_800A2D10_A3910.unkC,
+                        D_800A2D10_A3910.unk14,
+                        D_800A2D10_A3910.unk18,
+                        0,
+                        D_800A2D10_A3910.unk10
+                    );
+                    if (D_800A2D10_A3910.unk28 != 0) {
+                        func_80072C38_73838(result, D_800A2D10_A3910.unk28);
+                    }
+                    break;
+                case 3:
+                    result = func_80072960_73560(D_800A2D10_A3910.unk1C, 0);
+                    break;
+                case 4:
+                    func_80072960_73560(D_800A2D10_A3910.unk1C, 0);
+                    result = func_800725F4_731F4(
+                        D_800A2D10_A3910.unkC,
+                        D_800A2D10_A3910.unk14,
+                        D_800A2D10_A3910.unk18,
+                        0,
+                        D_800A2D10_A3910.unk10
+                    );
+                    func_80072B3C_7373C(result, D_800A2D10_A3910.unk24);
+                    if (D_800A2D10_A3910.unk28 != 0) {
+                        func_80072C38_73838(result, D_800A2D10_A3910.unk28);
+                    }
+                    break;
+                case 5:
+                    func_80072A6C_7366C(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk14);
+                    func_80072ACC_736CC(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk18);
+                    func_80072B3C_7373C(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk24);
+                    if (D_800A2D10_A3910.unk28 != 0) {
+                        func_80072C38_73838(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk28);
+                    }
+                    break;
+                case 6:
+                    func_80072814_73414(1, D_800A2D10_A3910.unk20);
+                    break;
+                case 7:
+                    result = func_80072960_73560(D_800A2D10_A3910.unk1C, (s32)D_800A2D10_A3910.unk20);
+                    break;
+                case 8:
+                    result = func_800728E0_734E0(1);
+                    break;
+                case 9:
+                    result = func_80072A14_73614(D_800A2D10_A3910.unk1C);
+                    break;
+                case 10:
+                    func_80072CC0_738C0(D_800A2D10_A3910.unk4, D_800A2D10_A3910.unk8);
+                    break;
+                case 11:
+                    result = func_80072CDC_738DC(D_800A2D10_A3910.unk4, D_800A2D10_A3910.unk0);
+                    if (D_800A2D10_A3910.unk28 != 0) {
+                        func_80072C38_73838(result, D_800A2D10_A3910.unk28);
+                    }
+                    break;
+                case 12:
+                    func_80072A6C_7366C(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk14);
+                    break;
+                case 13:
+                    func_80072814_73414(3, D_800A2D10_A3910.unk20);
+                    break;
+                case 14:
+                    result = func_800728E0_734E0(2);
+                    break;
+            }
+        }
+
+        osSendMesg(&D_800A2CF0_A38F0, result, OS_MESG_BLOCK);
+    }
+}
 
 void func_80057870_58470(s32 arg0) {
     void *message;
