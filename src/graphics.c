@@ -59,7 +59,7 @@ typedef struct {
     /* 0x534 */ s32 unk534;
     /* 0x538 */ s32 unk538;
 } GraphicsManager;
-extern GraphicsManager *D_800A2990_A3590;
+extern GraphicsManager *gGraphicsManager;
 
 extern OSMesgQueue D_800A2CD0_A38D0;
 extern OSMesgQueue D_800A2CF0_A38F0;
@@ -139,10 +139,10 @@ extern D_80093974_94574_type D_80093974_94574[];
 void func_80056080_56C80(void) {
     u8 sp10;
 
-    D_800A2990_A3590 = allocateTaskMemory(0x53C);
-    D_800A2990_A3590->unk0 = dmaRequestAndUpdateStateWithSize(&D_6A83F0, &D_6B6410, 0xCFD8);
-    D_800A2990_A3590->unk8 = allocateMemoryNode(0, 0x9000, &sp10);
-    D_800A2990_A3590->unk4 = allocateMemoryNode(0, 0x8000, &sp10);
+    gGraphicsManager = allocateTaskMemory(0x53C);
+    gGraphicsManager->unk0 = dmaRequestAndUpdateStateWithSize(&D_6A83F0, &D_6B6410, 0xCFD8);
+    gGraphicsManager->unk8 = allocateMemoryNode(0, 0x9000, &sp10);
+    gGraphicsManager->unk4 = allocateMemoryNode(0, 0x8000, &sp10);
     func_8006983C_6A43C(&func_8005610C_56D0C);
 }
 
@@ -161,7 +161,7 @@ void func_8005610C_56D0C(void) {
     newNode = allocateMemoryNode(0, 0x37A20, &alreadyAllocated);
     config.heap = newNode;
     config.heap_length = 0x37A20;
-    mgr = D_800A2990_A3590;
+    mgr = gGraphicsManager;
     config.fifo_length = 0x40;
     config.ptr = mgr->unk0;
     config.wbk = (u8 *)(&D_6C6300);
@@ -177,66 +177,66 @@ void func_8005610C_56D0C(void) {
 
     D_80093BA5_947A5 = 1;
     negativeOne = -1;
-    D_800A2990_A3590->unk1D = 0;
-    D_800A2990_A3590->unk10 = negativeOne;
-    D_800A2990_A3590->unk12 = 0xFFFF;
-    D_800A2990_A3590->unk14 = 0;
+    gGraphicsManager->unk1D = 0;
+    gGraphicsManager->unk10 = negativeOne;
+    gGraphicsManager->unk12 = 0xFFFF;
+    gGraphicsManager->unk14 = 0;
     scheduleTask(func_800570E0_57CE0, 0, 0, 0x64);
-    D_800A2990_A3590->unk20 = 0;
+    gGraphicsManager->unk20 = 0;
     for (i = 0xF; i >= 0; i--) {
-        D_800A2990_A3590->unk24[i] = 0;
+        gGraphicsManager->unk24[i] = 0;
     }
 
-    D_800A2990_A3590->unk534 = 0x20;
-    D_800A2990_A3590->renderQueueCount = 0;
-    D_800A2990_A3590->unk408 = 0;
-    D_800A2990_A3590->unk538 = 0xC80;
+    gGraphicsManager->unk534 = 0x20;
+    gGraphicsManager->renderQueueCount = 0;
+    gGraphicsManager->unk408 = 0;
+    gGraphicsManager->unk538 = 0xC80;
     func_8005758C_5818C();
     func_8006983C_6A43C(&func_8005628C_56E8C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/56C80", func_8005628C_56E8C);
+INCLUDE_ASM("asm/nonmatchings/graphics", func_8005628C_56E8C);
 
 void func_80056914_57514(void *source) {
-    if (D_800A2990_A3590->unk408 < 8) {
+    if (gGraphicsManager->unk408 < 8) {
         u8(*dest)[0x20];
 
-        D_800A2990_A3590->bufferIds[D_800A2990_A3590->unk408] = -1;
-        dest = &D_800A2990_A3590->bufferData[D_800A2990_A3590->unk408];
+        gGraphicsManager->bufferIds[gGraphicsManager->unk408] = -1;
+        dest = &gGraphicsManager->bufferData[gGraphicsManager->unk408];
         dest++;
         dest--;
 
         memcpy(dest, source, 0x20);
 
-        D_800A2990_A3590->bufferFlags[D_800A2990_A3590->unk408] = 0;
-        D_800A2990_A3590->unk408 += 1;
+        gGraphicsManager->bufferFlags[gGraphicsManager->unk408] = 0;
+        gGraphicsManager->unk408 += 1;
     }
 }
 
 void func_80056990_57590(s32 arg0, s32 arg1) {
-    D_800A2990_A3590->unk538 = arg1;
-    D_800A2990_A3590->unk534 = arg0;
+    gGraphicsManager->unk538 = arg1;
+    gGraphicsManager->unk534 = arg0;
 }
 
 void func_800569A4_575A4(u8 *src_data, s8 search_id) {
     s32 i;
     void *bufferPtr;
 
-    for (i = 0; i < D_800A2990_A3590->unk408; i++) {
-        if (D_800A2990_A3590->bufferIds[i] == search_id) {
-            bufferPtr = (void *)((i << 5) + (s32)D_800A2990_A3590 + 0x40C);
+    for (i = 0; i < gGraphicsManager->unk408; i++) {
+        if (gGraphicsManager->bufferIds[i] == search_id) {
+            bufferPtr = (void *)((i << 5) + (s32)gGraphicsManager + 0x40C);
             memcpy(bufferPtr, src_data, 0x20);
             return;
         }
     }
 
     // write to the next available buffer if there's space
-    if (D_800A2990_A3590->unk408 < 8) {
-        D_800A2990_A3590->bufferIds[D_800A2990_A3590->unk408] = search_id;
-        bufferPtr = (void *)((D_800A2990_A3590->unk408 << 5) + (s32)D_800A2990_A3590 + 0x40C);
+    if (gGraphicsManager->unk408 < 8) {
+        gGraphicsManager->bufferIds[gGraphicsManager->unk408] = search_id;
+        bufferPtr = (void *)((gGraphicsManager->unk408 << 5) + (s32)gGraphicsManager + 0x40C);
         memcpy(bufferPtr, src_data, 0x20);
-        D_800A2990_A3590->bufferFlags[D_800A2990_A3590->unk408] = 0;
-        D_800A2990_A3590->unk408++;
+        gGraphicsManager->bufferFlags[gGraphicsManager->unk408] = 0;
+        gGraphicsManager->unk408++;
     }
 }
 
@@ -247,136 +247,136 @@ void setBufferData(void *source, u8 arg1, s32 arg2) {
 
     // Search for existing buffer
     id = arg2;
-    for (i = 0; i < D_800A2990_A3590->unk408; i++) {
-        if (D_800A2990_A3590->bufferIds[i] == id) {
-            bufferPtr = (void *)((i << 5) + (s32)D_800A2990_A3590 + 0x40C);
+    for (i = 0; i < gGraphicsManager->unk408; i++) {
+        if (gGraphicsManager->bufferIds[i] == id) {
+            bufferPtr = (void *)((i << 5) + (s32)gGraphicsManager + 0x40C);
             memcpy(bufferPtr, source, 0x20);
             return;
         }
     }
 
     // Add new buffer if space available
-    if (D_800A2990_A3590->unk408 < 8) {
-        D_800A2990_A3590->bufferIds[D_800A2990_A3590->unk408] = id;
+    if (gGraphicsManager->unk408 < 8) {
+        gGraphicsManager->bufferIds[gGraphicsManager->unk408] = id;
 
-        bufferPtr = (void *)(((D_800A2990_A3590->unk408) << 5) + (s32)D_800A2990_A3590 + 0x40C);
+        bufferPtr = (void *)(((gGraphicsManager->unk408) << 5) + (s32)gGraphicsManager + 0x40C);
 
         memcpy(bufferPtr, source, 0x20);
 
-        D_800A2990_A3590->bufferFlags[D_800A2990_A3590->unk408] = arg1;
-        D_800A2990_A3590->unk408++;
+        gGraphicsManager->bufferFlags[gGraphicsManager->unk408] = arg1;
+        gGraphicsManager->unk408++;
     }
 }
 
 void func_80056B7C_5777C(void *arg0, s16 arg1) {
-    s32 index = D_800A2990_A3590->renderQueueCount;
+    s32 index = gGraphicsManager->renderQueueCount;
     if (index < 0x20) {
-        RenderQueueItem *renderQueue = D_800A2990_A3590->renderQueue;
+        RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
         memcpy(renderQueue[index].data, arg0, 0xC);
         index = arg1;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk0 = index;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk2 = -1;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk4 = 4;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk6 = 0;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].flags = 0x80;
-        D_800A2990_A3590->renderQueueCount++;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = index;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = -1;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = 4;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 0;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
+        gGraphicsManager->renderQueueCount++;
     }
 }
 
 void func_80056C6C_5786C(void *arg0, unsigned int arg1, s16 arg2) {
-    if (D_800A2990_A3590->renderQueueCount < 0x20) {
-        RenderQueueItem *arrayCopy = D_800A2990_A3590->renderQueue;
+    if (gGraphicsManager->renderQueueCount < 0x20) {
+        RenderQueueItem *arrayCopy = gGraphicsManager->renderQueue;
 
-        memcpy(arrayCopy[D_800A2990_A3590->renderQueueCount].data, arg0, 0xC);
+        memcpy(arrayCopy[gGraphicsManager->renderQueueCount].data, arg0, 0xC);
 
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk0 = arg1;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk2 = arg2;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk4 = 4;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk6 = 0;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].flags = 0x80;
-        D_800A2990_A3590->renderQueueCount++;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = arg1;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = arg2;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = 4;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 0;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
+        gGraphicsManager->renderQueueCount++;
     }
 }
 
 void func_80056D64_57964(void *arg0, s16 arg1, s16 arg2, s16 arg3) {
     RenderQueueItem *renderQueue;
-    s32 index = D_800A2990_A3590->renderQueueCount;
+    s32 index = gGraphicsManager->renderQueueCount;
     if (index < 0x20) {
-        renderQueue = D_800A2990_A3590->renderQueue;
+        renderQueue = gGraphicsManager->renderQueue;
         memcpy(renderQueue[index].data, arg0, 0xC);
         index = arg1;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk0 = index;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk2 = arg3;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk4 = arg2;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk6 = 0;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].flags = 0x80;
-        D_800A2990_A3590->renderQueueCount += 1;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = index;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = arg3;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = arg2;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 0;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
+        gGraphicsManager->renderQueueCount += 1;
     }
 }
 
 void func_80056E64_57A64(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4) {
     RenderQueueItem(*dest)[32];
-    if (D_800A2990_A3590->renderQueueCount < 0x20) {
-        dest = &D_800A2990_A3590->renderQueue;
-        memcpy((*dest)[D_800A2990_A3590->renderQueueCount].data, arg0, 0xC);
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk0 = arg1;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk2 = (s16)arg4;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk4 = arg3;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk6 = 1;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk8 = arg2;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].flags = 0x80;
-        D_800A2990_A3590->renderQueueCount++;
+    if (gGraphicsManager->renderQueueCount < 0x20) {
+        dest = &gGraphicsManager->renderQueue;
+        memcpy((*dest)[gGraphicsManager->renderQueueCount].data, arg0, 0xC);
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = arg1;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = (s16)arg4;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = arg3;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 1;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk8 = arg2;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
+        gGraphicsManager->renderQueueCount++;
     }
 }
 
 void func_80056F8C_57B8C(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4, s32 arg5) {
-    s32 index = D_800A2990_A3590->renderQueueCount;
+    s32 index = gGraphicsManager->renderQueueCount;
     if (index < 0x20) {
-        RenderQueueItem *renderQueue = D_800A2990_A3590->renderQueue;
+        RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
         memcpy(renderQueue[index].data, arg0, 0xC);
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk0 = arg1;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk2 = (s16)arg4;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk4 = arg3;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk6 = 1;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].unk8 = arg2;
-        D_800A2990_A3590->renderQueue[D_800A2990_A3590->renderQueueCount].flags = (s16)arg5;
-        D_800A2990_A3590->renderQueueCount++;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = arg1;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = (s16)arg4;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = arg3;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 1;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk8 = arg2;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = (s16)arg5;
+        gGraphicsManager->renderQueueCount++;
     }
 }
 
 void func_800570BC_57CBC() {
-    D_800A2990_A3590->unk20 = (s32)((D_800A2990_A3590->unk20 + 1) & 0xFFFFFF);
+    gGraphicsManager->unk20 = (s32)((gGraphicsManager->unk20 + 1) & 0xFFFFFF);
 }
 
 void func_800570E0_57CE0(void *arg) {
     setCleanupCallback(func_800570E0_57CE0);
-    if (D_800A2990_A3590->unk1D != 0) {
+    if (gGraphicsManager->unk1D != 0) {
         setCallback(&func_80057124_57D24);
     }
 }
 
 void func_80057124_57D24(void) {
-    D_800A2990_A3590->unk12 = D_800A2990_A3590->unk10;
+    gGraphicsManager->unk12 = gGraphicsManager->unk10;
 
     loadDataSegment(
-        D_800937E8_943E8[D_800A2990_A3590->unk12].unk0,
-        D_800937E8_943E8[D_800A2990_A3590->unk12].unk4,
-        D_800937E8_943E8[D_800A2990_A3590->unk12].unk8,
-        D_800A2990_A3590->unk8
+        D_800937E8_943E8[gGraphicsManager->unk12].unk0,
+        D_800937E8_943E8[gGraphicsManager->unk12].unk4,
+        D_800937E8_943E8[gGraphicsManager->unk12].unk8,
+        gGraphicsManager->unk8
     );
 
     loadDataSegment(
-        D_80093974_94574[D_800A2990_A3590->unk12].unk0,
-        D_80093974_94574[D_800A2990_A3590->unk12].unk4,
-        D_80093974_94574[D_800A2990_A3590->unk12].unk8,
-        D_800A2990_A3590->unk4
+        D_80093974_94574[gGraphicsManager->unk12].unk0,
+        D_80093974_94574[gGraphicsManager->unk12].unk4,
+        D_80093974_94574[gGraphicsManager->unk12].unk8,
+        gGraphicsManager->unk4
     );
 
     setCallback(&func_800571D0_57DD0);
 }
 
 void func_800571D0_57DD0() {
-    func_800579E8_585E8(D_800A2990_A3590->unk4, *(&D_80093B00_94700 + (D_800A2990_A3590->unk12)));
+    func_800579E8_585E8(gGraphicsManager->unk4, *(&D_80093B00_94700 + (gGraphicsManager->unk12)));
     setCallback(&func_80057214_57E14);
 }
 
@@ -384,17 +384,17 @@ void func_80057214_57E14(void) {
     s16 temp_a1;
     void *temp_v0;
 
-    if ((u16)D_800A2990_A3590->unk10 != D_800A2990_A3590->unk12) {
+    if ((u16)gGraphicsManager->unk10 != gGraphicsManager->unk12) {
         setCallbackWithContinue((void (*)(void *))func_800570E0_57CE0);
-    } else if (D_800A2990_A3590->unk1D == 2) {
-        temp_v0 = func_80057974_58574(D_800A2990_A3590->unk4, D_800A2990_A3590->unk8, (u8)D_800A2990_A3590->unk1C);
-        D_800A2990_A3590->unkC = temp_v0;
+    } else if (gGraphicsManager->unk1D == 2) {
+        temp_v0 = func_80057974_58574(gGraphicsManager->unk4, gGraphicsManager->unk8, (u8)gGraphicsManager->unk1C);
+        gGraphicsManager->unkC = temp_v0;
         if (temp_v0 != 0) {
-            temp_a1 = D_800A2990_A3590->unk16;
+            temp_a1 = gGraphicsManager->unk16;
             if (temp_a1 != 0x80) {
                 func_80057928_58528(temp_v0, temp_a1);
             }
-            D_800A2990_A3590->unk1E = 0;
+            gGraphicsManager->unk1E = 0;
             setCallbackWithContinue((void (*)(void *))func_800572B0_57EB0);
         }
     }
@@ -403,44 +403,44 @@ void func_80057214_57E14(void) {
 void func_800572B0_57EB0(void *arg) {
     s16 temp_a1;
 
-    temp_a1 = D_800A2990_A3590->flags;
-    if (D_800A2990_A3590->unk16 != temp_a1) {
-        if ((u16)D_800A2990_A3590->unk1A != 0) {
-            D_800A2990_A3590->unk16 = D_800A2990_A3590->unk16 +
-                                      ((s32)(temp_a1 - D_800A2990_A3590->unk16) / (s32)(u16)D_800A2990_A3590->unk1A);
-            func_80057928_58528(D_800A2990_A3590->unkC, (s32)D_800A2990_A3590->unk16);
-            D_800A2990_A3590->unk1A = (u16)D_800A2990_A3590->unk1A - 1;
+    temp_a1 = gGraphicsManager->flags;
+    if (gGraphicsManager->unk16 != temp_a1) {
+        if ((u16)gGraphicsManager->unk1A != 0) {
+            gGraphicsManager->unk16 = gGraphicsManager->unk16 +
+                                      ((s32)(temp_a1 - gGraphicsManager->unk16) / (s32)(u16)gGraphicsManager->unk1A);
+            func_80057928_58528(gGraphicsManager->unkC, (s32)gGraphicsManager->unk16);
+            gGraphicsManager->unk1A = (u16)gGraphicsManager->unk1A - 1;
         } else {
-            D_800A2990_A3590->unk16 = temp_a1;
-            func_80057928_58528(D_800A2990_A3590->unkC, (s32)temp_a1);
+            gGraphicsManager->unk16 = temp_a1;
+            func_80057928_58528(gGraphicsManager->unkC, (s32)temp_a1);
         }
     }
 
-    if ((u16)D_800A2990_A3590->unk10 != D_800A2990_A3590->unk12) {
-        D_800A2990_A3590->unk1E = 1;
-        func_800578DC_584DC(D_800A2990_A3590->unkC, 8);
+    if ((u16)gGraphicsManager->unk10 != gGraphicsManager->unk12) {
+        gGraphicsManager->unk1E = 1;
+        func_800578DC_584DC(gGraphicsManager->unkC, 8);
         setCallbackWithContinue((void (*)(void *))func_800573F8_57FF8);
     } else {
-        if (D_800A2990_A3590->unk1D == 0) {
-            D_800A2990_A3590->unk1E = 1;
-            func_800578DC_584DC(D_800A2990_A3590->unkC, (s32)(u16)D_800A2990_A3590->unk14);
+        if (gGraphicsManager->unk1D == 0) {
+            gGraphicsManager->unk1E = 1;
+            func_800578DC_584DC(gGraphicsManager->unkC, (s32)(u16)gGraphicsManager->unk14);
             setCallbackWithContinue((void (*)(void *))func_800573F8_57FF8);
         }
-        if (func_80057A34_58634(D_800A2990_A3590->unkC) == NULL) {
-            D_800A2990_A3590->unk1D = 0;
+        if (func_80057A34_58634(gGraphicsManager->unkC) == NULL) {
+            gGraphicsManager->unk1D = 0;
             setCallbackWithContinue((void (*)(void *))func_80057470_58070);
         }
     }
 }
 
 void func_800573F8_57FF8(void) {
-    if (func_80057A34_58634(D_800A2990_A3590->unkC) == 0) {
+    if (func_80057A34_58634(gGraphicsManager->unkC) == 0) {
         setCallbackWithContinue((void (*)(void *))&func_80057470_58070);
         return;
     }
-    if ((D_800A2990_A3590->unk1D != 0) && (D_800A2990_A3590->unk1E == 0)) {
-        D_800A2990_A3590->unk1E = 1;
-        func_800578DC_584DC(D_800A2990_A3590->unkC, 8);
+    if ((gGraphicsManager->unk1D != 0) && (gGraphicsManager->unk1E == 0)) {
+        gGraphicsManager->unk1E = 1;
+        func_800578DC_584DC(gGraphicsManager->unkC, 8);
     }
 }
 
@@ -451,36 +451,36 @@ void func_80057470_58070(void) {
 }
 
 void func_800574A0_580A0(s32 arg0) {
-    D_800A2990_A3590->unk1D = 2;
-    D_800A2990_A3590->unk10 = arg0;
-    D_800A2990_A3590->unk16 = 0x80;
-    D_800A2990_A3590->flags = 0x80;
-    D_800A2990_A3590->unk1A = 0;
-    D_800A2990_A3590->unk1C = (s8)D_80093B84_94784[arg0];
+    gGraphicsManager->unk1D = 2;
+    gGraphicsManager->unk10 = arg0;
+    gGraphicsManager->unk16 = 0x80;
+    gGraphicsManager->flags = 0x80;
+    gGraphicsManager->unk1A = 0;
+    gGraphicsManager->unk1C = (s8)D_80093B84_94784[arg0];
 }
 
 void func_800574E0_580E0(s16 arg0, s8 arg1) {
-    D_800A2990_A3590->unk1D = 2;
-    D_800A2990_A3590->unk10 = arg0;
-    D_800A2990_A3590->unk16 = 0x80;
-    D_800A2990_A3590->flags = 0x80;
-    D_800A2990_A3590->unk1A = 0;
-    D_800A2990_A3590->unk1C = arg1;
+    gGraphicsManager->unk1D = 2;
+    gGraphicsManager->unk10 = arg0;
+    gGraphicsManager->unk16 = 0x80;
+    gGraphicsManager->flags = 0x80;
+    gGraphicsManager->unk1A = 0;
+    gGraphicsManager->unk1C = arg1;
 }
 
 void func_80057514_58114(u32 arg0, s16 arg1, s16 arg2) {
     GraphicsManager *new_var;
-    D_800A2990_A3590->unk1D = 2;
-    D_800A2990_A3590->unk10 = arg0;
-    D_800A2990_A3590->unk16 = 0;
-    D_800A2990_A3590->flags = arg1;
-    D_800A2990_A3590->unk1A = arg2;
-    D_800A2990_A3590->unk1C = D_80093B84_94784[arg0];
+    gGraphicsManager->unk1D = 2;
+    gGraphicsManager->unk10 = arg0;
+    gGraphicsManager->unk16 = 0;
+    gGraphicsManager->flags = arg1;
+    gGraphicsManager->unk1A = arg2;
+    gGraphicsManager->unk1C = D_80093B84_94784[arg0];
 }
 
 void func_80057550_58150(s16 arg0, s16 arg1) {
-    D_800A2990_A3590->flags = arg0;
-    D_800A2990_A3590->unk1A = arg1;
+    gGraphicsManager->flags = arg0;
+    gGraphicsManager->unk1A = arg1;
 }
 
 void func_80057564_58164(int arg0) {
@@ -490,8 +490,8 @@ void func_80057564_58164(int arg0) {
     if (arg0 < 8) {
         var_a0 = 8;
     }
-    D_800A2990_A3590->unk1D = 0;
-    (new_var = D_800A2990_A3590)->unk14 = var_a0;
+    gGraphicsManager->unk1D = 0;
+    (new_var = gGraphicsManager)->unk14 = var_a0;
 }
 
 void func_8005758C_5818C() {
@@ -675,7 +675,7 @@ void func_80057ABC_586BC(s32 arg0, s32 arg1) {
     void *temp;
     OSMesg *message;
 
-    temp = D_800A2990_A3590->unk24[arg0];
+    temp = gGraphicsManager->unk24[arg0];
     D_800A2D10_A3910.unk20 = arg1;
     D_800A2D10_A3910.unk1C = temp;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)7, 1);
@@ -688,27 +688,27 @@ void func_80057B1C_5871C(s32 arg0) {
     D_800A2D10_A3910.unk20 = arg0;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)6, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
-    D_800A2990_A3590->renderQueueCount = 0;
-    D_800A2990_A3590->unk408 = 0;
+    gGraphicsManager->renderQueueCount = 0;
+    gGraphicsManager->unk408 = 0;
 }
 
 void func_80057B70_58770(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 arg5, s32 arg6) {
     void *message;
 
-    D_800A2D10_A3910.unk1C = D_800A2990_A3590->unk24[arg5];
+    D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg5];
     if (arg1 > 0) {
         D_800A2D10_A3910.unk18 = arg2;
         D_800A2D10_A3910.unk14 = arg1;
         D_800A2D10_A3910.unk24 = arg3;
         D_800A2D10_A3910.unk28 = arg6;
 
-        if (D_800A2990_A3590->unk24[arg5] == 0 || D_800A2990_A3590->unk64[arg5] != arg0) {
+        if (gGraphicsManager->unk24[arg5] == 0 || gGraphicsManager->unk64[arg5] != arg0) {
             D_800A2D10_A3910.unkC = arg0;
-            D_800A2D10_A3910.unk10 = D_800A2990_A3590->unk20 + (arg4 << 0x18);
+            D_800A2D10_A3910.unk10 = gGraphicsManager->unk20 + (arg4 << 0x18);
             osSendMesg(&D_800A2CD0_A38D0, (void *)4, 1);
             osRecvMesg(&D_800A2CF0_A38F0, &message, 1);
-            D_800A2990_A3590->unk24[arg5] = message;
-            D_800A2990_A3590->unk64[arg5] = (s16)arg0;
+            gGraphicsManager->unk24[arg5] = message;
+            gGraphicsManager->unk64[arg5] = (s16)arg0;
             func_800570BC_57CBC();
             return;
         }
@@ -728,17 +728,17 @@ void func_80057CB4_588B4(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 a
 void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     void *message;
 
-    D_800A2D10_A3910.unk1C = D_800A2990_A3590->unk24[arg4];
+    D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg4];
     if (arg1 > 0) {
         D_800A2D10_A3910.unkC = arg0;
         D_800A2D10_A3910.unk14 = arg1;
         D_800A2D10_A3910.unk18 = arg2;
         D_800A2D10_A3910.unk28 = arg5;
-        D_800A2D10_A3910.unk10 = D_800A2990_A3590->unk20 + (arg3 << 0x18);
+        D_800A2D10_A3910.unk10 = gGraphicsManager->unk20 + (arg3 << 0x18);
         osSendMesg(&D_800A2CD0_A38D0, (void *)2, OS_MESG_BLOCK);
         osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
-        D_800A2990_A3590->unk24[arg4] = message;
-        D_800A2990_A3590->unk64[arg4] = (s16)arg0;
+        gGraphicsManager->unk24[arg4] = message;
+        gGraphicsManager->unk64[arg4] = (s16)arg0;
         func_800570BC_57CBC();
         return;
     }
@@ -755,8 +755,8 @@ void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 *new_var3;
     void *sp10;
 
-    D_800A2D10_A3910.unk1C = D_800A2990_A3590->unk24[arg3];
-    new_var3 = &D_800A2990_A3590->unk20;
+    D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg3];
+    new_var3 = &gGraphicsManager->unk20;
 
     if (arg1 > 0) {
         D_800A2D10_A3910.unkC = arg0;
@@ -767,8 +767,8 @@ void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
         D_800A2D10_A3910.unk10 = new_var + (arg2 << 0x18);
         osSendMesg(&D_800A2CD0_A38D0, (void *)2, 1);
         osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
-        D_800A2990_A3590->unk24[arg3] = sp10;
-        D_800A2990_A3590->unk64[arg3] = (s16)arg0;
+        gGraphicsManager->unk24[arg3] = sp10;
+        gGraphicsManager->unk64[arg3] = (s16)arg0;
         func_800570BC_57CBC();
         return;
     }
@@ -784,17 +784,17 @@ void func_80057F28_58B28(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 void func_80057F48_58B48(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     void *message;
 
-    D_800A2D10_A3910.unk1C = D_800A2990_A3590->unk24[arg2];
+    D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg2];
     if (arg1 > 0) {
         D_800A2D10_A3910.unkC = arg0;
         D_800A2D10_A3910.unk14 = arg1;
         D_800A2D10_A3910.unk18 = 0x80;
-        D_800A2D10_A3910.unk10 = D_800A2990_A3590->unk20;
+        D_800A2D10_A3910.unk10 = gGraphicsManager->unk20;
         D_800A2D10_A3910.unk28 = arg3;
         osSendMesg(&D_800A2CD0_A38D0, (void *)2, OS_MESG_BLOCK);
         osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
-        D_800A2990_A3590->unk24[arg2] = message;
-        D_800A2990_A3590->unk64[arg2] = (s16)arg0;
+        gGraphicsManager->unk24[arg2] = message;
+        gGraphicsManager->unk64[arg2] = (s16)arg0;
         func_800570BC_57CBC();
         return;
     }
@@ -812,13 +812,13 @@ void func_80058064_58C64(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     D_800A2D10_A3910.unkC = arg0;
     D_800A2D10_A3910.unk14 = 0x80;
     D_800A2D10_A3910.unk18 = 0x80;
-    D_800A2D10_A3910.unk10 = D_800A2990_A3590->unk20 + (arg1 << 0x18);
-    D_800A2D10_A3910.unk1C = D_800A2990_A3590->unk24[arg2];
+    D_800A2D10_A3910.unk10 = gGraphicsManager->unk20 + (arg1 << 0x18);
+    D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg2];
     D_800A2D10_A3910.unk28 = arg3;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
-    D_800A2990_A3590->unk24[arg2] = message;
-    D_800A2990_A3590->unk64[arg2] = (s16)arg0;
+    gGraphicsManager->unk24[arg2] = message;
+    gGraphicsManager->unk64[arg2] = (s16)arg0;
     func_800570BC_57CBC();
 }
 
@@ -832,7 +832,7 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
     s32 *new_var2;
     void *temp_v0;
 
-    temp_v1 = D_800A2990_A3590;
+    temp_v1 = gGraphicsManager;
     D_800A2D10_A3910.unkC = arg0;
     D_800A2D10_A3910.unk14 = 0x80;
     D_800A2D10_A3910.unk18 = 0x80;
@@ -847,8 +847,8 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, 1);
     osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)&message, 1);
 
-    D_800A2990_A3590->unk24[arg1] = message;
-    D_800A2990_A3590->unk64[arg1] = arg0;
+    gGraphicsManager->unk24[arg1] = message;
+    gGraphicsManager->unk64[arg1] = arg0;
 
     func_800570BC_57CBC();
 }
@@ -864,7 +864,7 @@ void func_8005823C_58E3C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     D_800A2D10_A3910.unkC = arg0;
     D_800A2D10_A3910.unk14 = arg1;
     D_800A2D10_A3910.unk18 = 0x80;
-    new_var = D_800A2990_A3590;
+    new_var = gGraphicsManager;
     new_var2 = &new_var->unk20;
     D_800A2D10_A3910.unk10 = (*new_var2) + (arg2 << 0x18);
     D_800A2D10_A3910.unk28 = arg3;
@@ -883,7 +883,7 @@ void func_800582DC_58EDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     D_800A2D10_A3910.unkC = arg0;
     D_800A2D10_A3910.unk14 = arg1;
     D_800A2D10_A3910.unk18 = arg2;
-    D_800A2D10_A3910.unk10 = D_800A2990_A3590->unk20 + (arg3 << 0x18);
+    D_800A2D10_A3910.unk10 = gGraphicsManager->unk20 + (arg3 << 0x18);
     D_800A2D10_A3910.unk28 = arg4;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
@@ -901,7 +901,7 @@ void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     D_800A2D10_A3910.unkC = arg0;
     D_800A2D10_A3910.unk14 = arg1;
     D_800A2D10_A3910.unk18 = arg2;
-    new_var = &D_800A2990_A3590->unk20;
+    new_var = &gGraphicsManager->unk20;
     new_var2 = *new_var;
     D_800A2D10_A3910.unk28 = arg3;
     D_800A2D10_A3910.unk10 = new_var2;
@@ -921,7 +921,7 @@ void func_80058414_59014(s32 arg0, s32 arg1, s32 arg2) {
     D_800A2D10_A3910.unkC = arg0;
     D_800A2D10_A3910.unk14 = arg1;
     D_800A2D10_A3910.unk18 = 0x80;
-    new_var = &D_800A2990_A3590->unk20;
+    new_var = &gGraphicsManager->unk20;
     new_var2 = *new_var;
     D_800A2D10_A3910.unk28 = arg2;
     D_800A2D10_A3910.unk10 = new_var2;
@@ -941,7 +941,7 @@ void func_800584AC_590AC(s32 arg0, s32 arg1, s32 arg2) {
     D_800A2D10_A3910.unkC = arg0;
     D_800A2D10_A3910.unk14 = 0x80;
     D_800A2D10_A3910.unk18 = 0x80;
-    v0 = *(s32 *)((s32)D_800A2990_A3590 + 0x20);
+    v0 = *(s32 *)((s32)gGraphicsManager + 0x20);
     D_800A2D10_A3910.unk28 = arg2;
     D_800A2D10_A3910.unk10 = v0 + (arg1 << 24);
 
@@ -962,7 +962,7 @@ void func_8005854C_5914C(s32 arg0, s32 arg1) {
     D_800A2D10_A3910.unkC = arg0;
     D_800A2D10_A3910.unk14 = 0x80;
     D_800A2D10_A3910.unk18 = 0x80;
-    new_var2 = *(new_var = &D_800A2990_A3590->unk20);
+    new_var2 = *(new_var = &gGraphicsManager->unk20);
     D_800A2D10_A3910.unk28 = arg1;
     D_800A2D10_A3910.unk10 = new_var2;
     osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
