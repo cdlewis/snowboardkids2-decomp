@@ -677,14 +677,14 @@ s32 func_8003BB5C_3C75C() {
     return gPendingDmaCount;
 }
 
-s32 *func_8003BB68_3C768(void *arg0, void *arg1, s32 arg2, s32 *arg3) {
-    (&gDmaQueue[gDmaQueueIndex])->size = arg2;
-    (&gDmaQueue[gDmaQueueIndex])->dramAddr = arg3;
+s32 *queueDmaTransferToBuffer(void *romStart, void *romEnd, s32 size, s32 *dramAddr) {
+    (&gDmaQueue[gDmaQueueIndex])->size = size;
+    (&gDmaQueue[gDmaQueueIndex])->dramAddr = dramAddr;
 
-    markNodeAsLocked(arg3);
+    markNodeAsLocked(dramAddr);
 
-    (&gDmaQueue[gDmaQueueIndex])->start = arg0;
-    (&gDmaQueue[gDmaQueueIndex])->end = arg1;
+    (&gDmaQueue[gDmaQueueIndex])->start = romStart;
+    (&gDmaQueue[gDmaQueueIndex])->end = romEnd;
     (&gDmaQueue[gDmaQueueIndex])->compressionType = 2;
 
     osSendMesg(&gDmaMsgQueue, &gDmaQueue[gDmaQueueIndex], 1);
@@ -694,9 +694,9 @@ s32 *func_8003BB68_3C768(void *arg0, void *arg1, s32 arg2, s32 *arg3) {
     }
     gDmaRequestCount++;
 
-    setNodeUserData(arg3, (void *)gDmaRequestCount);
+    setNodeUserData(dramAddr, (void *)gDmaRequestCount);
 
-    return arg3;
+    return dramAddr;
 }
 
 void func_8003BC58_3C858() {

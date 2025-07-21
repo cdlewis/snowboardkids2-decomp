@@ -124,17 +124,12 @@ void func_80072CC0_738C0(void *, s32);
 void *func_80072CDC_738DC(void *, void *);
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} D_800937E8_943E8_type;
-extern D_800937E8_943E8_type D_800937E8_943E8[];
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} D_80093974_94574_type;
-extern D_80093974_94574_type D_80093974_94574[];
+    void *start;
+    void *end;
+    s32 size;
+} GraphicsDataSegment;
+extern GraphicsDataSegment D_800937E8_943E8[];
+extern GraphicsDataSegment D_80093974_94574[];
 
 void func_80056080_56C80(void) {
     u8 sp10;
@@ -359,16 +354,16 @@ void func_80057124_57D24(void) {
     gGraphicsManager->unk12 = gGraphicsManager->unk10;
 
     loadDataSegment(
-        D_800937E8_943E8[gGraphicsManager->unk12].unk0,
-        D_800937E8_943E8[gGraphicsManager->unk12].unk4,
-        D_800937E8_943E8[gGraphicsManager->unk12].unk8,
+        D_800937E8_943E8[gGraphicsManager->unk12].start,
+        D_800937E8_943E8[gGraphicsManager->unk12].end,
+        D_800937E8_943E8[gGraphicsManager->unk12].size,
         gGraphicsManager->unk8
     );
 
     loadDataSegment(
-        D_80093974_94574[gGraphicsManager->unk12].unk0,
-        D_80093974_94574[gGraphicsManager->unk12].unk4,
-        D_80093974_94574[gGraphicsManager->unk12].unk8,
+        D_80093974_94574[gGraphicsManager->unk12].start,
+        D_80093974_94574[gGraphicsManager->unk12].end,
+        D_80093974_94574[gGraphicsManager->unk12].size,
         gGraphicsManager->unk4
     );
 

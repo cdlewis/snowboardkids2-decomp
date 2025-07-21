@@ -46,7 +46,7 @@ void *allocateTaskMemory(s32 size);
 
 void setupTaskSchedulerNodes(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5, s32 arg6, s32 arg7);
 
-void *loadDataSegment(s32 arg0, s32 arg1, s32 arg2, void *arg3);
+void *loadDataSegment(void *start, void *end, s32 size, void *dramAddr);
 
 void terminateTasksByTypeAndID(s32 taskType, s32 taskID);
 

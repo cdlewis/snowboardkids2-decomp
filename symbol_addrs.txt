@@ -1,3 +1,5 @@
+queueDmaTransferToBuffer = 0x8003BB68;
+
 gfxResultQueue = 0x800A2CF0;
 gfxTaskQueue = 0x800A2CD0;
 

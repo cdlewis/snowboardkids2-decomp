@@ -55,7 +55,6 @@ extern gTaskScheduler_type *D_800A32C0_A3EC0;
 extern gTaskScheduler_type *D_800A3274_A3E74;
 extern s32 D_800AB064_A23D4;
 extern s32 D_800AB12C_A249C;
-extern void *func_8003BB68_3C768(void);
 
 void initTaskScheduler(void) {
     s32 i;
@@ -622,12 +621,10 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
     return allocatedSpaceStart;
 }
 
-void *loadDataSegment(s32 arg0, s32 arg1, s32 arg2, void *arg3) {
-    void *var_s0;
-
-    var_s0 = arg3;
+void *loadDataSegment(void* start, void* end, s32 size, void *dramAddr) {
+    void *var_s0 = dramAddr;
     if (gDMAOverlay != NULL) {
-        var_s0 = func_8003BB68_3C768();
+        var_s0 = queueDmaTransferToBuffer(start, end, size, dramAddr);
         if (getNodeOwner(var_s0) != 0) {
             if ((u32)(gDMAOverlay->unkE - 3) >= 2U) {
                 gDMAOverlay->unk18 = getNodeUserData(var_s0);
