@@ -677,7 +677,27 @@ s32 func_8003BB5C_3C75C() {
     return gPendingDmaCount;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003BB68_3C768);
+s32 *func_8003BB68_3C768(void *arg0, void *arg1, s32 arg2, s32 *arg3) {
+    (&gDmaQueue[gDmaQueueIndex])->size = arg2;
+    (&gDmaQueue[gDmaQueueIndex])->dramAddr = arg3;
+
+    markNodeAsLocked(arg3);
+
+    (&gDmaQueue[gDmaQueueIndex])->start = arg0;
+    (&gDmaQueue[gDmaQueueIndex])->end = arg1;
+    (&gDmaQueue[gDmaQueueIndex])->compressionType = 2;
+
+    osSendMesg(&gDmaMsgQueue, &gDmaQueue[gDmaQueueIndex], 1);
+
+    if (++gDmaQueueIndex >= 0x5C) {
+        gDmaQueueIndex = 0;
+    }
+    gDmaRequestCount++;
+
+    setNodeUserData(arg3, (void *)gDmaRequestCount);
+
+    return arg3;
+}
 
 void func_8003BC58_3C858() {
 }
