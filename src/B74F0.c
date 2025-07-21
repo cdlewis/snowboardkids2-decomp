@@ -73,6 +73,15 @@ typedef struct {
     s16 unkA6;
 } NodeWithPayload;
 
+typedef struct {
+    u8 padding[0x14];
+    u8 padding2[0xC];
+    s32 unk20;
+    u8 padding3[0x18];
+    u16 unk3C;
+    s16 unk3E;
+} func_800BB8B8_B7AF8_arg;
+
 extern func_80055E68_56A68_result *func_80055E68_56A68(u8);
 extern s32 func_800AFF44_9FE04(void);
 extern s32 D_8009A8A4_9B4A4;
@@ -80,7 +89,6 @@ extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);
 extern void createCombinedRotationMatrix(void *, u16, u16);
 extern void func_8006B084_6BC84(void *, void *, void *);
-extern void func_800BB8B8_B7AF8;
 extern s32 func_8005C60C_5D20C(void *a0, s32 a1, Player *a2);
 extern void func_800589A0_595A0(Player *player);
 extern void func_80056B7C_5777C(void *a0, s32 a1);
@@ -90,6 +98,8 @@ void func_800BB658_B7898(TrackHazard *arg0);
 void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0);
 void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *);
 void func_800BB71C_B795C(TrackHazard *);
+void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0);
+void func_800547E0_553E0(s32, s32);
 
 void func_800BB2B0_B74F0(TrackHazard *arg0) {
     GameState *gameState;
@@ -268,10 +278,65 @@ void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
     arg0->unk3E = 0;
     arg0->unk20 = (s32)(func_80055E68_56A68(gs->memoryPoolId)) + 0xB0;
     setCleanupCallback((void (*)(void *))&func_800BBA60_B7CA0);
-    setCallback(&func_800BB8B8_B7AF8);
+    setCallback((void (*)(void *))&func_800BB8B8_B7AF8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B74F0", func_800BB8B8_B7AF8);
+void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
+    GameState *gameState;
+    s16 state;
+    s32 i;
+    u8 numPlayers;
+    s32 randVal;
+
+    gameState = getCurrentAllocation();
+    state = arg0->unk3E;
+
+    switch (state) {
+        case 0:
+            if (gameState->gamePaused == 0) {
+                arg0->unk3C--;
+                if ((arg0->unk3C << 16) == 0) {
+                    arg0->unk3E++;
+                }
+            }
+            break;
+        case 1:
+            if (gameState->gamePaused == 0) {
+                numPlayers = gameState->numPlayers;
+
+                for (i = 0; i < numPlayers; i++) {
+                    if ((u32)gameState->players[i].unkB94 - 0x60 < 6) {
+                        arg0->unk20 = (s32)func_80055E68_56A68(gameState->memoryPoolId) + 0xC0;
+                        randVal = (u8)func_800AFF44_9FE04();
+                        randVal = randVal - 0x60;
+                        i = randVal << 1;
+                        i = i + randVal;
+                        i = i + 0x6C0;
+                        func_800547E0_553E0(i, (((u8)func_800AFF44_9FE04()) << 12) | 0x100000);
+                        func_80056B7C_5777C((void *)((u8 *)arg0 + 0x14), 0x23);
+                        arg0->unk3C = 0x18;
+                        arg0->unk3E++;
+                        break;
+                    }
+                }
+            }
+            break;
+        case 2:
+            if (gameState->gamePaused == 0) {
+                arg0->unk3C--;
+                if ((arg0->unk3C << 16) == 0) {
+                    arg0->unk3E = 0;
+                    arg0->unk20 = (s32)func_80055E68_56A68(gameState->memoryPoolId) + 0xB0;
+                    arg0->unk3C = 0x14;
+                }
+            }
+            break;
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, arg0);
+    }
+}
 
 void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0) {
     arg0->unk24 = (s32 *)freeGameStateMemory(arg0->unk24);
