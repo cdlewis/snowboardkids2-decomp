@@ -1,3 +1,6 @@
+gfxResultQueue = 0x800A2CF0;
+gfxTaskQueue = 0x800A2CD0;
+
 gGraphicsManager = 0x800A2990;
 
 D_800A2D10_A3910 = 0x800A2D10; // size:0x30

@@ -61,8 +61,8 @@ typedef struct {
 } GraphicsManager;
 extern GraphicsManager *gGraphicsManager;
 
-extern OSMesgQueue D_800A2CD0_A38D0;
-extern OSMesgQueue D_800A2CF0_A38F0;
+extern OSMesgQueue gfxTaskQueue;
+extern OSMesgQueue gfxResultQueue;
 extern s32 D_800937EC_943EC[];
 extern s32 D_800937F0_943F0[];
 extern s32 D_80093978_94578[];
@@ -495,11 +495,11 @@ void func_80057564_58164(int arg0) {
 }
 
 void func_8005758C_5818C() {
-    OSMesgQueue *queue = &D_800A2CD0_A38D0;
+    OSMesgQueue *queue = &gfxTaskQueue;
     osCreateMesgQueue(queue, &D_800A2CE8_A38E8, OS_MESG_BLOCK);
-    queue = &D_800A2CF0_A38F0;
+    queue = &gfxResultQueue;
     osCreateMesgQueue(queue, &D_800A2D08_A3908, OS_MESG_BLOCK);
-    osCreateThread(&D_800A2998_A3598, 0xB, func_80057614_58214, 0, &D_800A2CD0_A38D0, 6);
+    osCreateThread(&D_800A2998_A3598, 0xB, func_80057614_58214, 0, &gfxTaskQueue, 6);
     osStartThread(&D_800A2998_A3598);
 }
 
@@ -508,7 +508,7 @@ void func_80057614_58214(void *arg0) {
     void *result;
 
     while (TRUE) {
-        osRecvMesg(&D_800A2CD0_A38D0, &message, 1);
+        osRecvMesg(&gfxTaskQueue, &message, 1);
         if ((u32)message < 0xF) {
             switch ((s32)message) {
                 case 0:
@@ -597,7 +597,7 @@ void func_80057614_58214(void *arg0) {
             }
         }
 
-        osSendMesg(&D_800A2CF0_A38F0, result, OS_MESG_BLOCK);
+        osSendMesg(&gfxResultQueue, result, OS_MESG_BLOCK);
     }
 }
 
@@ -607,8 +607,8 @@ void func_80057870_58470(s32 arg0) {
     if ((D_80093BA5_947A5 != NULL) && (D_80093BA6_947A6 == NULL)) {
         D_80093BA6_947A6++;
         D_800A2D10_A3910.unk20 = arg0;
-        osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xD, OS_MESG_BLOCK);
-        osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+        osSendMesg(&gfxTaskQueue, (OSMesg *)0xD, OS_MESG_BLOCK);
+        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     }
 }
 
@@ -617,8 +617,8 @@ void func_800578DC_584DC(void *arg0, s32 arg1) {
 
     D_800A2D10_A3910.unk1C = arg0;
     D_800A2D10_A3910.unk20 = arg1;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)7, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)7, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
 
 void func_80057928_58528(void *arg0, s32 arg1) {
@@ -626,8 +626,8 @@ void func_80057928_58528(void *arg0, s32 arg1) {
 
     D_800A2D10_A3910.unk1C = arg0;
     D_800A2D10_A3910.unk14 = arg1;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xC, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)0xC, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
 
 void *func_80057974_58574(void *arg0, void *arg1, s32 arg2) {
@@ -636,8 +636,8 @@ void *func_80057974_58574(void *arg0, void *arg1, s32 arg2) {
     D_800A2D10_A3910.unk4 = arg0;
     D_800A2D10_A3910.unk0 = arg1;
     D_800A2D10_A3910.unk28 = arg2;
-    osSendMesg(&D_800A2CD0_A38D0, (void *)0xB, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &sp10, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (void *)0xB, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &sp10, OS_MESG_BLOCK);
     return sp10;
 }
 
@@ -650,24 +650,24 @@ void func_800579E8_585E8(void *arg0, s32 arg1) {
 
     D_800A2D10_A3910.unk4 = arg0;
     D_800A2D10_A3910.unk8 = arg1;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xA, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)0xA, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
 
 void *func_80057A34_58634(void *arg0) {
     void *message;
 
     D_800A2D10_A3910.unk1C = arg0;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)9, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)9, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     return message;
 }
 
 void *func_80057A7C_5867C(void) {
     void *message;
 
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)8, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)8, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     return message;
 }
 
@@ -678,16 +678,16 @@ void func_80057ABC_586BC(s32 arg0, s32 arg1) {
     temp = gGraphicsManager->unk24[arg0];
     D_800A2D10_A3910.unk20 = arg1;
     D_800A2D10_A3910.unk1C = temp;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)7, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, 1);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)7, 1);
+    osRecvMesg(&gfxResultQueue, &message, 1);
 }
 
 void func_80057B1C_5871C(s32 arg0) {
     void *message;
 
     D_800A2D10_A3910.unk20 = arg0;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)6, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)6, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     gGraphicsManager->renderQueueCount = 0;
     gGraphicsManager->unk408 = 0;
 }
@@ -705,19 +705,19 @@ void func_80057B70_58770(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 a
         if (gGraphicsManager->unk24[arg5] == 0 || gGraphicsManager->unk64[arg5] != arg0) {
             D_800A2D10_A3910.unkC = arg0;
             D_800A2D10_A3910.unk10 = gGraphicsManager->unk20 + (arg4 << 0x18);
-            osSendMesg(&D_800A2CD0_A38D0, (void *)4, 1);
-            osRecvMesg(&D_800A2CF0_A38F0, &message, 1);
+            osSendMesg(&gfxTaskQueue, (void *)4, 1);
+            osRecvMesg(&gfxResultQueue, &message, 1);
             gGraphicsManager->unk24[arg5] = message;
             gGraphicsManager->unk64[arg5] = (s16)arg0;
             func_800570BC_57CBC();
             return;
         }
 
-        osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)5, OS_MESG_BLOCK);
-        osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+        osSendMesg(&gfxTaskQueue, (OSMesg *)5, OS_MESG_BLOCK);
+        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     } else {
-        osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)3, OS_MESG_BLOCK);
-        osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+        osSendMesg(&gfxTaskQueue, (OSMesg *)3, OS_MESG_BLOCK);
+        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     }
 }
 
@@ -735,15 +735,15 @@ void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 a
         D_800A2D10_A3910.unk18 = arg2;
         D_800A2D10_A3910.unk28 = arg5;
         D_800A2D10_A3910.unk10 = gGraphicsManager->unk20 + (arg3 << 0x18);
-        osSendMesg(&D_800A2CD0_A38D0, (void *)2, OS_MESG_BLOCK);
-        osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+        osSendMesg(&gfxTaskQueue, (void *)2, OS_MESG_BLOCK);
+        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
         gGraphicsManager->unk24[arg4] = message;
         gGraphicsManager->unk64[arg4] = (s16)arg0;
         func_800570BC_57CBC();
         return;
     }
-    osSendMesg(&D_800A2CD0_A38D0, (void *)3, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (void *)3, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
 
 void func_80057DF0_589F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
@@ -765,16 +765,16 @@ void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
         new_var = *new_var3;
         D_800A2D10_A3910.unk28 = arg4;
         D_800A2D10_A3910.unk10 = new_var + (arg2 << 0x18);
-        osSendMesg(&D_800A2CD0_A38D0, (void *)2, 1);
-        osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+        osSendMesg(&gfxTaskQueue, (void *)2, 1);
+        osRecvMesg(&gfxResultQueue, &sp10, 1);
         gGraphicsManager->unk24[arg3] = sp10;
         gGraphicsManager->unk64[arg3] = (s16)arg0;
         func_800570BC_57CBC();
         return;
     }
 
-    osSendMesg(&D_800A2CD0_A38D0, (void *)3, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, &sp10, 1);
+    osSendMesg(&gfxTaskQueue, (void *)3, 1);
+    osRecvMesg(&gfxResultQueue, &sp10, 1);
 }
 
 void func_80057F28_58B28(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -791,15 +791,15 @@ void func_80057F48_58B48(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         D_800A2D10_A3910.unk18 = 0x80;
         D_800A2D10_A3910.unk10 = gGraphicsManager->unk20;
         D_800A2D10_A3910.unk28 = arg3;
-        osSendMesg(&D_800A2CD0_A38D0, (void *)2, OS_MESG_BLOCK);
-        osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+        osSendMesg(&gfxTaskQueue, (void *)2, OS_MESG_BLOCK);
+        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
         gGraphicsManager->unk24[arg2] = message;
         gGraphicsManager->unk64[arg2] = (s16)arg0;
         func_800570BC_57CBC();
         return;
     }
-    osSendMesg(&D_800A2CD0_A38D0, (void *)3, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (void *)3, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
 
 void func_80058048_58C48(s32 arg0, s32 arg1, s32 arg2) {
@@ -815,8 +815,8 @@ void func_80058064_58C64(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     D_800A2D10_A3910.unk10 = gGraphicsManager->unk20 + (arg1 << 0x18);
     D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg2];
     D_800A2D10_A3910.unk28 = arg3;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)2, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     gGraphicsManager->unk24[arg2] = message;
     gGraphicsManager->unk64[arg2] = (s16)arg0;
     func_800570BC_57CBC();
@@ -844,8 +844,8 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
     D_800A2D10_A3910.unk28 = arg2;
     D_800A2D10_A3910.unk1C = temp_v0;
 
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)2, 1);
-    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)&message, 1);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)2, 1);
+    osRecvMesg(&gfxResultQueue, (OSMesg *)&message, 1);
 
     gGraphicsManager->unk24[arg1] = message;
     gGraphicsManager->unk64[arg1] = arg0;
@@ -868,8 +868,8 @@ void func_8005823C_58E3C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     new_var2 = &new_var->unk20;
     D_800A2D10_A3910.unk10 = (*new_var2) + (arg2 << 0x18);
     D_800A2D10_A3910.unk28 = arg3;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     func_800570BC_57CBC();
 }
 
@@ -885,8 +885,8 @@ void func_800582DC_58EDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     D_800A2D10_A3910.unk18 = arg2;
     D_800A2D10_A3910.unk10 = gGraphicsManager->unk20 + (arg3 << 0x18);
     D_800A2D10_A3910.unk28 = arg4;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     func_800570BC_57CBC();
 }
 
@@ -905,8 +905,8 @@ void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     new_var2 = *new_var;
     D_800A2D10_A3910.unk28 = arg3;
     D_800A2D10_A3910.unk10 = new_var2;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     func_800570BC_57CBC();
 }
 
@@ -925,8 +925,8 @@ void func_80058414_59014(s32 arg0, s32 arg1, s32 arg2) {
     new_var2 = *new_var;
     D_800A2D10_A3910.unk28 = arg2;
     D_800A2D10_A3910.unk10 = new_var2;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     func_800570BC_57CBC();
 }
 
@@ -945,8 +945,8 @@ void func_800584AC_590AC(s32 arg0, s32 arg1, s32 arg2) {
     D_800A2D10_A3910.unk28 = arg2;
     D_800A2D10_A3910.unk10 = v0 + (arg1 << 24);
 
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)&mesg, OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, (OSMesg *)&mesg, OS_MESG_BLOCK);
     func_800570BC_57CBC();
 }
 
@@ -965,8 +965,8 @@ void func_8005854C_5914C(s32 arg0, s32 arg1) {
     new_var2 = *(new_var = &gGraphicsManager->unk20);
     D_800A2D10_A3910.unk28 = arg1;
     D_800A2D10_A3910.unk10 = new_var2;
-    osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&D_800A2CF0_A38F0, (OSMesg *)(&sp10), OS_MESG_BLOCK);
+    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     func_800570BC_57CBC();
 }
 
@@ -978,8 +978,8 @@ void *func_800585E4_591E4(void) {
     void *result;
 
     if (D_80093BA5_947A5 != 0) {
-        osSendMesg(&D_800A2CD0_A38D0, 0, OS_MESG_BLOCK);
-        osRecvMesg(&D_800A2CF0_A38F0, &result, OS_MESG_BLOCK);
+        osSendMesg(&gfxTaskQueue, 0, OS_MESG_BLOCK);
+        osRecvMesg(&gfxResultQueue, &result, OS_MESG_BLOCK);
         return result;
     }
 
@@ -990,8 +990,8 @@ void *func_80058638_59238() {
     void *message;
 
     if (D_80093BA5_947A5 != NULL) {
-        osSendMesg(&D_800A2CD0_A38D0, (OSMesg *)0xE, OS_MESG_BLOCK);
-        osRecvMesg(&D_800A2CF0_A38F0, &message, OS_MESG_BLOCK);
+        osSendMesg(&gfxTaskQueue, (OSMesg *)0xE, OS_MESG_BLOCK);
+        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 
         return message;
     }
