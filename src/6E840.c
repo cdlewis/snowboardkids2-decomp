@@ -75,6 +75,7 @@ extern u32 D_800A3568_A4168;
 extern void *gLinearArenaBuffer;
 void func_8006DEE4_6EAE4();
 extern u8 D_800A356C_A416C;
+extern void *D_800A355C_A415C[];
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
 
@@ -100,7 +101,11 @@ void osViExtendVStart(u32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F504_70104);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F550_70150);
+void func_8006F550_70150(s32 arg0) {
+    void *temp_v0 = D_800A355C_A415C[arg0];
+    D_800A3564_A4164 = temp_v0;
+    D_800A3568_A4168 = (s32)temp_v0 + 0x18000;
+}
 
 void *arenaAlloc16(s32 size) {
     void *result;
