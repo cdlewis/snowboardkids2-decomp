@@ -69,7 +69,71 @@ extern D_800A8D14_A0084_type *D_800A8D14_A0084;
 void piDmaHandlerThread(void *);
 void func_8003AC58_3B858(void *);
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800395F0_3A1F0);
+void func_8003AFA0_3BBA0();
+extern OSContStatus D_8009F660_A0260;
+extern OSThread D_8009F670_A0270;
+extern s32 D_800A1838_A2438;
+extern OSMesgQueue D_800A1868_A2468;
+extern s32 D_800A1880_A2480;
+extern s32 D_800A18A0_A24A0;
+extern s32 D_800A18C0_A24C0;
+extern s32 D_800A8D10_A0080;
+extern u8 gConnectedControllerMask;
+extern s8 D_800AFCE2_A7052;
+extern void func_800397CC_3A3CC;
+
+typedef struct {
+    s16 unk0;
+    u8 unk2;
+    u8 unk3;
+    u8 padding[0x2];
+} D_800A1C08_A2808_arg;
+extern D_800A1C08_A2808_arg D_800A1C08_A2808[];
+
+void func_800395F0_3A1F0(void) {
+    s32 result;
+    s32 i;
+    u8 controller_status;
+
+    osCreateMesgQueue(&mainStack, (OSMesg)&D_800A8D10_A0080, 1);
+    osCreateMesgQueue(&D_800A1820_A2420, (OSMesg)&D_800A1838_A2438, 0xC);
+    osCreateMesgQueue(&D_800A1868_A2468, (OSMesg)&D_800A1880_A2480, 1);
+    osCreateMesgQueue(&D_800A1888_A2488, (OSMesg)&D_800A18A0_A24A0, 1);
+    osCreateMesgQueue(&D_800A18A8_A24A8, (OSMesg)&D_800A18C0_A24C0, 1);
+    osSetEventMesg(5, &mainStack, (OSMesg)1);
+
+    for (i = 0; i < 4; i++) {
+        result = osContInit(&mainStack, &D_8008FE8E_90A8E, &D_8009F660_A0260);
+        gConnectedControllerMask = 0;
+        if (result == 0) {
+            controller_status = D_8008FE8E_90A8E;
+
+            // Find the first disconnected controller, if any
+            for (i = 0; i < 4; i++) {
+                if (!((controller_status >> i) & 1)) {
+                    break;
+                }
+                gConnectedControllerMask |= (1 << i);
+            }
+
+            for (i = 0; i < 4; i++) {
+                D_800A1C08_A2808[i].unk0 = 0;
+                D_800A1C08_A2808[i].unk2 = 0;
+                D_800A1C08_A2808[i].unk3 = 0;
+            }
+
+            D_800A1C98_A2898 = 0;
+            func_8003AFA0_3BBA0();
+            D_800AFCE2_A7052 = 1;
+            osCreateThread(&D_8009F670_A0270, 6, &func_800397CC_3A3CC, 0, &D_800A1820_A2420, 3);
+            osStartThread(&D_8009F670_A0270);
+            return;
+        }
+
+        D_800A1C98_A2898 = 0;
+        D_800AFCE2_A7052 = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800397CC_3A3CC);
 

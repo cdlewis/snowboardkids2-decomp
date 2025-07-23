@@ -1,3 +1,6 @@
+gConnectedControllerMask = 0x800A9018;
+D_800A1C08_A2808 = 0x800A1C08; // size:0x4
+
 queueDmaTransferToBuffer = 0x8003BB68;
 
 gfxResultQueue = 0x800A2CF0;
