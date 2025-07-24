@@ -53,17 +53,49 @@ typedef struct {
     f32 unk1D0;
 } func_8006F9BC_705BC_arg;
 
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s8 unk14;
+    s8 padding;
+    u16 unk16;
+} D_800A3370_A3F70_type;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s16 unk8;
+    s16 unkA;
+} ViewportStruct;
+
+extern D_800A3370_A3F70_type D_800A3370_A3F70;
+extern ViewportStruct D_800A3410_A4010;
+extern s8 D_800A3429_A4029;
+extern s8 D_800A342A_A402A;
+extern s8 D_800A342B_A402B;
+extern s8 D_800A342C_A402C;
+extern s8 D_800A342D_A402D;
+extern s8 D_800A342E_A402E;
+extern s8 D_800A342F_A402F;
+extern s8 D_800A3431_A4031;
+extern s32 D_800A35C8_A41C8[];
+extern s16 D_800A8A9A_9FE0A;
+extern s16 D_800AB478_A27E8;
+
+void func_8006F6F4_702F4(void);
+void func_8006FA58_70658(D_800A3370_A3F70_type *);
+extern ViewportStruct D_800A3410_A4010;
 extern CallbackSlot *D_800A3588_A4188[];
 extern u32 __additional_scanline_0;
 extern s32 gRegionAllocEnd;
 extern void **gLinearArenaRegions;
 extern s32 gRegionAllocPtr;
-extern u16 D_800A3410_A4010;
-extern u16 D_800A3412_A4012;
-extern u16 D_800A8A9A_9FE0A;
-extern u16 D_800AB478_A27E8;
 void *LinearAlloc(size_t size);
-extern func_8006FDA0_709A0_arg *D_800A3370_A3F70;
 extern void *gArenaBasePtr;
 extern void *gLinearAllocPtr;
 extern void *gLinearAllocEnd;
@@ -190,11 +222,49 @@ s32 func_8006F6D8_702D8(void) {
 }
 
 void func_8006F6F4_702F4() {
-    D_800A3410_A4010 = D_800AB478_A27E8;
-    D_800A3412_A4012 = D_800A8A9A_9FE0A;
+    D_800A3410_A4010.unk0 = D_800AB478_A27E8;
+    D_800A3410_A4010.unk2 = D_800A8A9A_9FE0A;
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F718_70318);
+void func_8006F718_70318(void) {
+    s32 i;
+    s32 *ptr;
+
+    D_800A3370_A3F70.unk0 = 0;
+    D_800A3370_A3F70.unk16 = 0xFFFF;
+    D_800A3410_A4010.unk4 = -0xA0;
+    D_800A3410_A4010.unk6 = -0x78;
+    D_800A3410_A4010.unk8 = 0xA0;
+    D_800A3370_A3F70.unk4 = 0;
+    D_800A3370_A3F70.unk8 = 0;
+    D_800A3370_A3F70.unkC = 0;
+    D_800A3370_A3F70.unk10 = 0;
+    D_800A3370_A3F70.unk14 = 0;
+    D_800A3410_A4010.unk0 = 0;
+    D_800A3410_A4010.unk2 = 0;
+    D_800A3410_A4010.unkA = 0x78;
+    D_800A342C_A402C = 0;
+    D_800A342D_A402D = 0;
+    D_800A342E_A402E = 0;
+    D_800A342F_A402F = 0;
+    D_800A3431_A4031 = 0;
+    D_800AB478_A27E8 = 0;
+    D_800A8A9A_9FE0A = 0;
+    D_800A3429_A4029 = 0;
+    D_800A342A_A402A = 0;
+    D_800A342B_A402B = 0;
+    func_8006FA58_70658(&D_800A3370_A3F70);
+    resetLinearAllocator();
+    func_8006F6F4_702F4();
+
+    i = 0x10;
+    ptr = &D_800A35C8_A41C8[0];
+    do {
+        *ptr = 0;
+        i--;
+        ptr--;
+    } while (i >= 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F82C_7042C);
 
