@@ -58,10 +58,12 @@ typedef struct {
     s32 unk4;
     s32 unk8;
     s32 unkC;
-    s32 unk10;
+    /* 0x10 */ void *next;
     s8 unk14;
     s8 padding;
     u16 unk16;
+    u8 padding2[0xC2];
+    /* 0xDA */ u16 id;
 } D_800A3370_A3F70_type;
 
 typedef struct {
@@ -252,7 +254,7 @@ void func_8006F718_70318(void) {
     D_800A3370_A3F70.unk4 = 0;
     D_800A3370_A3F70.unk8 = 0;
     D_800A3370_A3F70.unkC = 0;
-    D_800A3370_A3F70.unk10 = 0;
+    D_800A3370_A3F70.next = NULL;
     D_800A3370_A3F70.unk14 = 0;
     D_800A3410_A4010.unk0 = 0;
     D_800A3410_A4010.unk2 = 0;
@@ -377,7 +379,30 @@ void debugEnqueueCallback(u16 index, u8 slotIndex, void *callbackFn, void *callb
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8007001C_70C1C);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_80070094_70C94);
+void func_80070094_70C94(u16 id, u8 listIndex, void *data1, void *data2) {
+    D_800A3370_A3F70_type *mgr;
+    Node *newNode;
+    u8 *listPtr;
+    Node *oldHead;
+
+    mgr = &D_800A3370_A3F70;
+
+    while (mgr != NULL) {
+        if (mgr->id == id) {
+            newNode = (Node *)linearAlloc(0x10);
+            if (newNode != NULL) {
+                listPtr = (u8 *)mgr + (listIndex << 4);
+                oldHead = *(Node **)(listPtr + 0x18);
+                newNode->unk4 = data1;
+                newNode->unk8 = data2;
+                newNode->unkF = listIndex;
+                newNode->next = oldHead;
+                *(Node **)(listPtr + 0x18) = newNode;
+            }
+        }
+        mgr = mgr->next;
+    }
+}
 
 s32 func_80070140_70D40(func_80070140_70D40_arg *arg0) {
     if (D_800AB068_A23D8->unk134 - arg0->unk0 + 0x0FEA0000 > 0x1FD40000) {
