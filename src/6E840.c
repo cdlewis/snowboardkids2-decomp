@@ -73,6 +73,20 @@ typedef struct {
     s16 unkA;
 } ViewportStruct;
 
+typedef struct {
+    u8 padding[0x134];
+    u32 unk134;
+    u32 unk138;
+    u32 unk13C;
+} D_800AB068_A23D8_type;
+extern D_800AB068_A23D8_type *D_800AB068_A23D8;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} func_80070140_70D40_arg;
+
 extern D_800A3370_A3F70_type D_800A3370_A3F70;
 extern ViewportStruct D_800A3410_A4010;
 extern s8 D_800A3429_A4029;
@@ -365,4 +379,17 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8007001C_70C1C);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_80070094_70C94);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_80070140_70D40);
+s32 func_80070140_70D40(func_80070140_70D40_arg *arg0) {
+    if (D_800AB068_A23D8->unk134 - arg0->unk0 + 0x0FEA0000 > 0x1FD40000) {
+        return 1;
+    }
+
+    if (D_800AB068_A23D8->unk138 - arg0->unk4 + 0x0FEA0000 > 0x1FD40000) {
+        return 1;
+    }
+
+    // compiler nonsense
+    if (((!arg0) && (!arg0)) && (!arg0)) {}
+
+    return D_800AB068_A23D8->unk13C - arg0->unk8 + 0x0FEA0000 > 0x1FD40000;
+}
