@@ -6,27 +6,6 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
-void func_8006FD3C_7093C(u16, void *);
-void func_8006FF90_70B90(s32, s32, void *, void *);
-extern s32 D_800AB054_A23C4;
-extern s32 D_800AFF14_A7284;
-extern void renderTextPalette();
-extern void func_8002FA44_30644();
-extern void func_8002F290_2FE90();
-void func_8000153C_213C(s32, void *);
-void func_800021B8_2DB8(s32, s16);
-void func_80002750_3350(s32);
-extern void func_8002F024_2FC24();
-void createRotationMatrixYX(void *, s32, s32);
-void func_8006B084_6BC84(void *, void *, void *);
-extern u8 D_8009A870_9B470[];
-extern void func_8002F72C_3032C();
-extern void func_8002F980_30580();
-extern void func_8000FED0_10AD0();
-void func_8002EFD8_2FBD8(void *);
-void func_8002F110_2FD10();
-
 typedef struct {
     u8 padding[0x2C];
     s32 *unk2C;
@@ -73,6 +52,30 @@ typedef struct {
 
 void func_8002F5C8_301C8(void *);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
+void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
+void func_8006FD3C_7093C(u16, void *);
+void func_8006FF90_70B90(s32, s32, void *, void *);
+extern s32 D_800AB054_A23C4;
+extern s32 D_800AFF14_A7284;
+extern void renderTextPalette();
+extern void func_8002FA44_30644();
+extern void func_8002F290_2FE90();
+void func_8000153C_213C(s32, void *);
+void func_800021B8_2DB8(s32, s16);
+void func_80002750_3350(s32);
+extern void func_8002F024_2FC24();
+void createRotationMatrixYX(void *, s32, s32);
+void func_8006B084_6BC84(void *, void *, void *);
+extern u8 D_8009A870_9B470[];
+extern void func_8002F72C_3032C();
+extern void func_8002F980_30580();
+extern void func_8000FED0_10AD0();
+void func_8002EFD8_2FBD8(void *);
+void func_8002F110_2FD10(void *);
+extern s32 D_42F1D0;
+extern s32 D_43A000;
+extern void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
+extern void func_8002FA70_30670(func_8002FA70_30670_arg *);
 
 // 100% match but something weird is happening
 // #include "initDebugCameraController.c"
@@ -132,7 +135,7 @@ void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
     arg0->unk26 = 0;
     createYRotationMatrix(&arg0->unk4, 0x1E00);
     setCleanupCallback(func_8002F110_2FD10);
-    setCallback(func_8002EFD8_2FBD8);
+    setCallback((void (*)(void *))func_8002EFD8_2FBD8);
 }
 
 void func_8002EFD8_2FBD8(void *untypedArg0) {
@@ -226,11 +229,15 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F948_30548);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F980_30580);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F9C4_305C4);
+void func_8002F9C4_305C4(func_8002FA70_30670_arg *arg0) {
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&D_42F1D0, &D_43A000, 0x14410);
+    setCleanupCallback((void (*)(void *))&func_8002FA70_30670);
+    setCallback((void (*)(void *))&func_8002FA1C_3061C);
+}
 
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
     func_800394BC_3A0BC(arg0, arg0->unk2C);
-    setCallback(&func_8002FA44_30644);
+    setCallback((void (*)(void *))&func_8002FA44_30644);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA44_30644);
