@@ -76,10 +76,38 @@ extern s32 D_42F1D0;
 extern s32 D_43A000;
 extern void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 extern void func_8002FA70_30670(func_8002FA70_30670_arg *);
+void updateDebugCameraYState(cameraState *arg0);
 
-// 100% match but something weird is happening
-// #include "initDebugCameraController.c"
-INCLUDE_ASM("asm/nonmatchings/2F990", initDebugCameraController);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    void *unk8;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    u8 padding[0x2];
+    void *unk14;
+    s32 unk18;
+    s16 unk1C;
+    s16 unk1E;
+    u8 padding2[0x1D];
+    s16 unk3E;
+} func_8002ED90_2F990_arg;
+void initDebugCameraController(func_8002ED90_2F990_arg *arg0) {
+    arg0->unk18 = 0;
+    arg0->unk1C = 0;
+    arg0->unk0 = -0x80;
+    arg0->unk2 = -0x58;
+    arg0->unk8 = &arg0->unk3E;
+    arg0->unkE = -0x50;
+    arg0->unk4 = 0;
+    arg0->unkC = -0x80;
+    arg0->unk10 = 0;
+    arg0->unk14 = &arg0->unk1E;
+
+    setCallback((void (*)(void *))&updateDebugCameraYState);
+}
 
 void updateDebugCameraYState(cameraState *arg0) {
     s32 sp20[8];
