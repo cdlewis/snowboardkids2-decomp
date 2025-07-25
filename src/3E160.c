@@ -29,6 +29,8 @@ extern void func_8003EFDC_3FBDC(void);
 extern void func_8004E6F8_4F2F8(void);
 extern void func_800BB2B0(void);
 extern void func_8003FF78_40B78(void);
+extern void func_80048860_49460(Player *);
+extern void func_8003F178_3FD78(void);
 
 void func_800574A0_580A0(s32);
 void func_80040F6C_41B6C(s32, s32, s32, void *, s32, s32);
@@ -122,7 +124,34 @@ void func_8003EEEC_3FAEC(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003EFDC_3FBDC);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003F0AC_3FCAC);
+void func_8003F0AC_3FCAC(void) {
+    s32 temp_a0;
+    s32 i;
+    GameState *temp_v0;
+
+    temp_v0 = (GameState *)getCurrentAllocation();
+    temp_a0 = temp_v0->unk4C;
+    if (temp_v0->unk4C == 0) {
+        if (temp_v0->unk79 == 1) {
+            temp_v0->unk79 = 0;
+
+            if (temp_v0->unk7A < 0xA) {
+                for (i = 0; i < temp_v0->PAD_6[0]; i++) {
+                    func_80048860_49460(&temp_v0->players[i]);
+                    temp_v0->unk79++;
+                }
+            }
+
+            if (temp_v0->unk7A == 0xB) {
+                temp_v0->unk79 = 1;
+            }
+
+            setGameStateHandler(&func_8003F178_3FD78);
+        }
+    } else {
+        temp_v0->unk4C = temp_a0 - 1;
+    }
+}
 
 void func_8003F178_3FD78(void) {
     GameState *state = (GameState *)getCurrentAllocation();
