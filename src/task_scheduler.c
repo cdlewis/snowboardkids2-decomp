@@ -312,7 +312,10 @@ void setGameStateHandler(void *arg0) {
     gActiveScheduler->unk10 = arg0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_8006983C_6A43C);
+void func_8006983C_6A43C(void (*arg0)()) {
+    gActiveScheduler->unk10 = arg0;
+    gActiveScheduler->unk1B = 1;
+}
 
 void *allocateTaskMemory(s32 size) {
     u8 *node_exists;
