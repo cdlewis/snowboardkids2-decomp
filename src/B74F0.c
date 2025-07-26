@@ -1,7 +1,9 @@
+#include "56910.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -9,13 +11,6 @@ typedef struct {
     s32 *unk24;
     s32 *unk28;
 } func_800BBA60_B7CA0_arg;
-
-typedef struct {
-    u8 padding[0x90];
-    s32 unk90;
-    s32 padding2[3];
-    s32 unkA0;
-} func_80055E68_56A68_result;
 
 typedef struct {
     Mat3x3 matrix;
@@ -82,7 +77,6 @@ typedef struct {
     s16 unk3E;
 } func_800BB8B8_B7AF8_arg;
 
-extern func_80055E68_56A68_result *func_80055E68_56A68(u8);
 extern s32 func_800AFF44_9FE04(void);
 extern s32 D_8009A8A4_9B4A4;
 extern void *func_80055DC4_569C4(u8);
@@ -91,7 +85,6 @@ extern void createCombinedRotationMatrix(void *, u16, u16);
 extern void func_8006B084_6BC84(void *, void *, void *);
 extern s32 func_8005C60C_5D20C(void *a0, s32 a1, Player *a2);
 extern void func_800589A0_595A0(Player *player);
-extern void func_80056B7C_5777C(void *a0, s32 a1);
 
 void func_800BB468_B76A8(TrackHazard *arg0);
 void func_800BB658_B7898(TrackHazard *arg0);

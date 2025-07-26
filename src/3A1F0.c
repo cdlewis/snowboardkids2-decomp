@@ -305,7 +305,7 @@ void controllerPackReadStatus(s32 arg0) {
 void func_8003AC30_3B830() {
 }
 
-void func_8003AC38_3B838() {
+void func_8003AC38_3B838(void) {
     func_8003AC58_3B858(D_800AB078_A23E8);
 }
 
@@ -772,7 +772,7 @@ void *dmaQueueRequest(void *romStart, void *romEnd, s32 size) {
     return allocatedSpaceStart;
 }
 
-s32 func_8003BB5C_3C75C() {
+s32 func_8003BB5C_3C75C(void) {
     return gPendingDmaCount;
 }
 

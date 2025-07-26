@@ -92,7 +92,6 @@ extern AssetGroup gameAssets[];
 extern s32 D_80089768_8A368;
 extern AssetGroup D_8008BD2C_8C92C;
 extern s32 func_8005ECB8_5F8B8(void *arg0, s32 arg1, s32 arg2, void *arg3);
-extern void func_8005E800_5F400(void *arg0, u16 arg1);
 extern u8 D_8009A870_9B470[32];
 
 s32 func_800018F4_24F4(func_80002040_2C40_arg *);

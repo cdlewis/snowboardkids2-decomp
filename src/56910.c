@@ -1,3 +1,4 @@
+#include "56910.h"
 #include "common.h"
 #include "task_scheduler.h"
 
@@ -7,7 +8,7 @@ typedef struct {
     s32 size;
 } Asset;
 extern Asset D_80091250_91E50[];
-extern void *D_80091590_92190[];
+extern func_80055E68_56A68_result *D_80091590_92190[];
 
 INCLUDE_ASM("asm/nonmatchings/56910", func_80055D10_56910);
 
@@ -29,7 +30,7 @@ INCLUDE_ASM("asm/nonmatchings/56910", func_80055E40_56A40);
 
 INCLUDE_ASM("asm/nonmatchings/56910", func_80055E54_56A54);
 
-void *func_80055E68_56A68(s32 index) {
+func_80055E68_56A68_result *func_80055E68_56A68(s32 index) {
     return D_80091590_92190[index];
 }
 

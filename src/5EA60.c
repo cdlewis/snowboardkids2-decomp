@@ -32,17 +32,7 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E22C_5EE2C);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E500_5F100);
 
-typedef struct {
-    /* 0x00 */ s16 values[0xA];
-    /* 0x14 */ s32 position[3];
-    /* 0x20 */ s32 prev_position[3];
-    /* 0x2C */ s32 unknown[2];
-    /* 0x34 */ s32 interpolated[3];
-    /* 0x40 */ s16 *animation_data;
-    /* 0x44 */ s16 *frame_data;
-    /* 0x48 */ u16 flags;
-    /* 0x4A */ u16 counter;
-} func_8005E800_5F400_arg;
+
 
 extern void func_8005DF10_5EB10(s16, s16, s16, s16 *);
 extern void func_8006BDBC_6C9BC(func_8005E800_5F400_arg *, void *, void *);

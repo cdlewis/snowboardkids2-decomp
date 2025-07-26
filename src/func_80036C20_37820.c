@@ -1,33 +1,8 @@
 #include "common.h"
+#include "task_scheduler.h"
 
 extern s32 D_800AFF10_A7280;
 
-typedef struct {
-    char padding[1032];
-    s32 unk408;
-    char padding2[4];
-    s32 unk410;
-} func_80036274_36E74_large_struct_item;
-typedef struct {
-    func_80036274_36E74_large_struct_item *entries[4];
-    u8 unk10;
-    u8 padding1[106];
-    u8 unk73;
-    char padding[911];
-    u8 unk403;
-    char padding5[14];
-    s32 numEntries;
-    u8 unk420;
-    u8 unk421;
-    u8 unk422;
-    char padding4[1];
-    u8 unk424;
-    u8 unk425;
-    char padding2[4];
-    u8 status;
-    u8 unk42D;
-} func_80036274_36E74_large_struct;
-extern func_80036274_36E74_large_struct *getCurrentAllocation();
 s32 func_8006C590_6D190(u32, u32);
 extern s32 D_800AFF10_A7280;
 

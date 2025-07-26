@@ -83,9 +83,6 @@ extern u8 D_80093B84_94784[];
 extern u8 D_80093BA5_947A5;
 extern u8 D_80093BA6_947A6;
 extern OSThread D_800A2998_A3598;
-extern void func_800571D0_57DD0();
-extern void func_80057214_57E14();
-extern void func_80057614_58214(void *);
 
 void *func_80058638_59238();
 void func_800570BC_57CBC();
@@ -122,6 +119,9 @@ void func_80072B3C_7373C(void *, f32);
 void func_80072C38_73838(void *, s32);
 void func_80072CC0_738C0(void *, s32);
 void *func_80072CDC_738DC(void *, void *);
+void func_80057614_58214(void *);
+void func_80057214_57E14(void);
+void func_800571D0_57DD0(void(callback)(void *));
 
 typedef struct {
     void *start;
@@ -367,12 +367,12 @@ void func_80057124_57D24(void) {
         gGraphicsManager->unk4
     );
 
-    setCallback(&func_800571D0_57DD0);
+    setCallback((void (*)(void *))&func_800571D0_57DD0);
 }
 
-void func_800571D0_57DD0() {
+void func_800571D0_57DD0(void(callback)(void *)) {
     func_800579E8_585E8(gGraphicsManager->unk4, *(&D_80093B00_94700 + (gGraphicsManager->unk12)));
-    setCallback(&func_80057214_57E14);
+    setCallback((void (*)(void *))&func_80057214_57E14);
 }
 
 void func_80057214_57E14(void) {
@@ -478,7 +478,7 @@ void func_80057550_58150(s16 arg0, s16 arg1) {
     gGraphicsManager->unk1A = arg1;
 }
 
-void func_80057564_58164(int arg0) {
+void func_80057564_58164(s32 arg0) {
     int var_a0;
     GraphicsManager *new_var;
     var_a0 = arg0;

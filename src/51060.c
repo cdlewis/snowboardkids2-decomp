@@ -81,7 +81,8 @@ typedef struct {
 } func_80050604_51204_arg;
 
 void func_800504A0_510A0(func_800504A0_510A0_arg *);
-extern void func_800505D8_511D8();
+void func_800505D8_511D8(s32 **arg0);
+
 extern void func_80050740_51340();
 extern void func_80050864_51464();
 extern void func_800509CC_515CC();
@@ -105,7 +106,7 @@ void func_80069CF8_6A8F8();
 
 void func_80050460_51060(void **node) {
     *node = load_3ECE40();
-    setCleanupCallback(&func_800505D8_511D8);
+    setCleanupCallback((void (*)(void *))&func_800505D8_511D8);
     setCallbackWithContinue((void (*)(void *))&func_800504A0_510A0);
 }
 

@@ -58,17 +58,16 @@ extern s32 D_216290;
 extern s32 D_800A2D40_A3940;
 extern s32 D_800A2D44_A3944;
 extern s32 D_800A2D48_A3948;
-extern void func_800638C0_644C0();
-extern void func_8006395C_6455C();
-extern void func_80065150_65D50();
-extern void func_800653E0_65FE0();
-extern void func_80065670_66270();
-extern void func_800659E4_665E4;
-extern void func_80065DD8_669D8();
-extern void func_80066474_67074();
-extern void func_800670D4_67CD4();
-extern void func_80068060_68C60();
-extern void func_800680C4_68CC4();
+extern void func_800638C0_644C0(void);
+extern void func_8006395C_6455C(void);
+extern void func_80065150_65D50(void);
+extern void func_800653E0_65FE0(void);
+extern void func_80065670_66270(void);
+extern void func_800659E4_665E4(void);
+extern void func_80065DD8_669D8(void);
+extern void func_80066474_67074(void);
+extern void func_800670D4_67CD4(void);
+extern void func_800680C4_68CC4(void);
 extern void guLookAtReflect(
     Mtx *m,
     LookAt *l,
@@ -94,6 +93,7 @@ void *func_8006C130_6CD30(void *, LookAt *);
 void func_80063534_64134();
 void func_80063580_64180();
 void matrixToEulerAngles();
+void func_80068060_68C60(void);
 
 void parseGameDataLayout(GameDataLayout *gameData) {
     u16 *parser;

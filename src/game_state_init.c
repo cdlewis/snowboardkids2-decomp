@@ -1,7 +1,11 @@
 #include "1A770.h"
+#include "3A1F0.h"
 #include "6E840.h"
+#include "clocktrigger_tower.h"
 #include "common.h"
 #include "gamestate.h"
+#include "graphics.h"
+#include "main.h"
 #include "task_scheduler.h"
 
 extern s32 D_419440;
@@ -11,9 +15,6 @@ extern s32 D_45B130;
 extern u16 D_8008D6B0_8E2B0;
 extern u8 D_800A8CC8_A0038;
 extern void *func_80035F80_36B80(s32);
-extern void ClocktowerTriggerInit();
-extern void func_80000460_1060(s32, void *, void *);
-extern void func_8000056C_116C(s32, s32, GameState *);
 extern void func_80000710_1310();
 extern void func_80000760_1360();
 extern void func_80017350_17F50;
@@ -24,19 +25,15 @@ extern void func_80027CA0_288A0(void *, s32, s32, s32);
 extern void func_80028480_29080;
 extern void func_80036250_36E50;
 extern void func_80036A3C_3763C;
-extern void func_800574A0_580A0(s32);
-extern void func_80057564_58164(s32 a0);
-extern void func_800697F4_6A3F4(s32);
 extern void n_alSynRemovePlayer(void *player);
 extern void PhoneTriggerInit;
-s32 func_8003BB5C_3C75C();
 
 void cleanupTransitionEffect();
 void gameStateCleanupHandler();
 void gameStateCountdownHandler(void);
 void invokeTransitionEffect();
 void setShortCountdownAndContinue();
-void setupGameStateTransition(s32);
+void setupGameStateTransition(func_80000460_1060_arg0 *);
 void transitionToMainMenu(void);
 void transitionToNextGameMode(void);
 
@@ -141,7 +138,7 @@ void transitionToMainMenu(void) {
     func_800697F4_6A3F4(0xFF);
 }
 
-void setupGameStateTransition(s32 arg0) {
+void setupGameStateTransition(func_80000460_1060_arg0 *arg0) {
     char *sp10[5];
     char *sp28;
 

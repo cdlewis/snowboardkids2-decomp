@@ -83,7 +83,6 @@ extern ALGlobals __libmus_alglobals;
 extern AudioNode *D_800A6468_A7068;
 extern AudioNode *gActiveListHead;
 extern AudioNode *gAudioNodePool;
-extern int loadAudioDataWithCache(s32, s32);
 extern OSIoMesg *gAudioDmaMessages;
 extern OSMesgQueue gAudioMsgQueue;
 extern OSPiHandle *gCartRomHandle;
@@ -98,8 +97,10 @@ extern u32 gMinAudioFrameSize;
 extern u8 gDriveRomInitialized;
 extern void **gAudioMsgBuffer;
 extern void addViConfig(ViConfig *, OSMesgQueue *, s32);
-extern void handleAudioUnderrun(void *);
-extern void processAudioNodeList(void);
+
+s32 loadAudioDataWithCache(s32, s32);
+void handleAudioUnderrun(void *);
+void processAudioNodeList(void);
 s32 audioCreateAndScheduleTask(AudioStruct *, AudioBuffer *);
 void *initAudioDriveAndGetLoader(void *arg0);
 void audioManagerThread(void *);
@@ -303,7 +304,7 @@ void handleAudioUnderrun(void *arg0) {
     }
 }
 
-int loadAudioDataWithCache(s32 romAddr, s32 requestSize) {
+s32 loadAudioDataWithCache(s32 romAddr, s32 requestSize) {
     AudioNode *previousNode;
     s16 alignmentOffset;
     AudioNode *currentNode;

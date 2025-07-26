@@ -3,6 +3,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 extern s32 D_34CB50;
@@ -13,25 +14,23 @@ extern s32 D_800B0334;
 extern s32 D_800B7B7C;
 extern s32 D_800AFF10_A7280;
 extern u8 D_800A24A0_A30A0;
-extern void func_8003EDF8_3F9F8(void);
-extern void func_8003EEEC_3FAEC(void);
-extern void func_8003FB90_40790(void);
-extern void func_800401A0_40DA0(void);
 extern void func_800404A8_410A8(void);
 extern void func_80040588_41188(void);
 extern void func_80040608_41208(void);
 extern void func_8004D9D0_4E5D0(void);
 extern void func_8004F1D4_4FDD4(void);
-extern void func_800574A0_580A0(s32);
-extern void func_80057564_58164(s32);
 extern s32 func_80055D10_56910(u8);
 extern void func_8003EFDC_3FBDC(void);
 extern void func_8004E6F8_4F2F8(void);
 extern void func_800BB2B0(void);
 extern void func_8003FF78_40B78(void);
 extern void func_80048860_49460(Player *);
-extern void func_8003F178_3FD78(void);
 
+void func_8003EDF8_3F9F8(void);
+void func_8003EEEC_3FAEC(void);
+void func_8003FB90_40790(void);
+void func_800401A0_40DA0(void);
+void func_8003F178_3FD78(void);
 void func_800574A0_580A0(s32);
 void func_80040F6C_41B6C(s32, s32, s32, void *, s32, s32);
 void func_800497FC_4A3FC(u8);
@@ -44,7 +43,6 @@ void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
 void func_800574A0_580A0(s32);
 void func_80057564_58164(s32);
-void func_800697F4_6A3F4(u8);
 void func_8006983C_6A43C(void *);
 void func_800B99E0(void *);
 

@@ -1,3 +1,4 @@
+#include "3A1F0.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
@@ -13,18 +14,16 @@ typedef struct {
 } D_800A8D14_A0084_type;
 
 extern D_800A8D14_A0084_type *D_800A8D14_A0084;
-extern s32 func_8003BB5C_3C75C(void);
 extern void func_8001B020_1BC20;
-extern void func_8001B3B8_1BFB8(void);
 extern void func_8001B3E8_1BFE8();
-extern void func_8001BC78_1C878();
-extern void func_8001BCC0_1C8C0();
 extern void func_800B00C0_9FF70;
 extern void n_alSynRemovePlayer(void *player);
 
 s32 func_8006FE10_70A10(s32);
 s32 func_8006FE10_70A10(s32);
-void func_800697F4_6A3F4(s32);
+void func_8001BCC0_1C8C0(void);
+void func_8001BC78_1C878(void);
+void func_8001B3B8_1BFB8(void);
 
 void loadOverlay_1BBA0(void) {
     LOAD_OVERLAY(_1DA660)

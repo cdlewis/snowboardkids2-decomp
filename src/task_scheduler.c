@@ -91,7 +91,7 @@ void initTaskScheduler(void) {
     }
 }
 
-void func_800693C4_69FC4(void (*arg0)(), s8 arg1) {
+void func_800693C4_69FC4(void (*arg0)(), s32 arg1) {
     gActiveScheduler_type *temp_a2;
     gActiveScheduler_type *temp_v1;
     gActiveScheduler_type *var_a3;
@@ -290,7 +290,7 @@ void terminateSchedulerWithCallback(void (*arg0)()) {
     }
 }
 
-void func_800697F4_6A3F4(s16 arg0) {
+void func_800697F4_6A3F4(s32 arg0) {
     gActiveScheduler_type *temp_v0;
 
     temp_v0 = gActiveScheduler->unkC;

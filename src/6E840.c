@@ -21,13 +21,6 @@ typedef struct {
 } CallbackData;
 
 typedef struct {
-    u8 padding[0xBC];
-    s8 unkBC;
-    s8 unkBD;
-    s8 unkBE;
-} func_8006FE28_70A28_arg;
-
-typedef struct {
     u8 padding[0xB8];
     s8 unkB8;
 } func_8006FEBC_70ABC_arg;
@@ -44,14 +37,6 @@ typedef struct {
     s8 unkBA;
     s8 unkBB;
 } func_8006FE94_70A94_arg;
-
-typedef struct {
-    u8 padding[0xC8];
-    s16 unkC8;
-    s16 unkCA;
-    u8 padding2[0x104];
-    f32 unk1D0;
-} func_8006F9BC_705BC_arg;
 
 typedef struct {
     s32 unk0;

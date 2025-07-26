@@ -74,8 +74,8 @@ void func_8002EFD8_2FBD8(void *);
 void func_8002F110_2FD10(void *);
 extern s32 D_42F1D0;
 extern s32 D_43A000;
-extern void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
-extern void func_8002FA70_30670(func_8002FA70_30670_arg *);
+void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
+void func_8002FA70_30670(func_8002FA70_30670_arg *);
 void updateDebugCameraYState(cameraState *arg0);
 
 typedef struct {

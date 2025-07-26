@@ -1,5 +1,6 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -112,9 +113,8 @@ void func_80036A10_37610(void *);
 extern void *D_45A890;
 extern void *D_45B130;
 
-extern void func_80058220_58E20(u16, void *);
 extern void D_8008FAC0_906C0;
-extern s16 D_8008FD10_90910[];
+extern u16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
 extern void func_80036920_37520;
 

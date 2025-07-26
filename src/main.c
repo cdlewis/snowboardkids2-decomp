@@ -1,3 +1,5 @@
+#include "main.h"
+
 #include "common.h"
 #include "task_scheduler.h"
 
@@ -30,15 +32,6 @@ typedef struct {
     u8 unk3A;
 } D_800891A8_89DA8_entry;
 extern D_800891A8_89DA8_entry *D_800891A8_89DA8[];
-typedef struct {
-    char padding[0xD5];
-    s32 unkDA;
-} func_80000460_1060_arg0_unk0;
-typedef struct {
-    func_80000460_1060_arg0_unk0 *unk0;
-    char padding[0x80];
-    s16 unk84;
-} func_80000460_1060_arg0;
 
 typedef struct {
     char padding[0x87];

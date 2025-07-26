@@ -25,8 +25,6 @@ extern s16 D_8008BF9A_8CB9A;
 extern s32 D_8008BF9C_8CB9C;
 extern s16 D_8008BF9E_8CB9E;
 
-extern void func_800697F4_6A3F4(s32);
-extern void func_800693C4_69FC4(void *, s32);
 extern void func_80014480_15080();
 extern void n_alSynRemovePlayer(void *player);
 extern s16 D_800AB070_A23E0;
@@ -40,13 +38,10 @@ typedef struct {
 } allocateTaskMemory_return;
 extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 extern void func_8006F994_70594(void *, s32, s32, s32, s32, s32, s32);
-extern void func_8006F9BC_705BC(void *, f32, f32);
 extern void func_8006FA0C_7060C(void *, f32, f32, f32, f32);
 extern void func_8006FAA4_706A4(void *, s32, s32, s32, s32);
 extern void func_8006FD3C_7093C(u16, void *);
-extern void func_8006FE28_70A28(void *, s32, s32, s32);
 extern void func_8006FEF8_70AF8(void *, s32);
-extern void func_80069470_6A070(void *, s32);
 
 void loadOverlay_1DD170();
 void func_8000378C_438C();
