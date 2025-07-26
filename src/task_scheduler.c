@@ -3,6 +3,12 @@
 #include "3A1F0.h"
 #include "gamestate.h"
 
+#define SCHEDULER_STATE_INACTIVE 0
+#define SCHEDULER_STATE_RUNNING 1
+#define SCHEDULER_STATE_TERMINATING 2
+#define SCHEDULER_STATE_DMA_PENDING 3
+#define SCHEDULER_STATE_CLEANUP 4
+
 extern Node *gDMAOverlay;
 
 typedef struct {
@@ -10,20 +16,20 @@ typedef struct {
     u8 padding[0xFC]; // probably the max possible payload
 } NodeWithPayload;
 
-typedef struct gTaskScheduler_type {
-    struct gTaskScheduler_type *unk0;
-    struct gTaskScheduler_type *unk4;
-    struct gTaskScheduler_type *unk8;
-    struct gTaskScheduler_type *unkC;
+typedef struct gActiveScheduler_type {
+    /* 0x0 */ struct gActiveScheduler_type *prev;
+    /* 0x4 */ struct gActiveScheduler_type *next;
+    struct gActiveScheduler_type *unk8;
+    struct gActiveScheduler_type *unkC;
     void (*unk10)();
     void (*unk14)();
-    u8 unk18;
+    u8 schedulerState;
     u8 unk19;
     u8 unk1A;
     u8 unk1B;
     s32 unk1C;
-    void *unk20;
-    void *unk24;
+    /* 0x20 */ void *latestDmaSequenceNumber;
+    /* 0x24 */ void *latestDmaNode;
     /* 0x28 */ void *allocatedState;
     /* 0x2C */ NodeWithPayload *nodes;
     /* 0x30 */ Node *activeList;
@@ -32,8 +38,8 @@ typedef struct gTaskScheduler_type {
     /* 0x48 */ s16 total;
     s16 unk4A;
     s16 unk4C;
-} gTaskScheduler_type;
-extern gTaskScheduler_type *gTaskScheduler;
+} gActiveScheduler_type;
+extern gActiveScheduler_type *gActiveScheduler;
 
 typedef struct {
     /* 0x00 */ s8 padding_00[8];
@@ -49,10 +55,10 @@ typedef struct {
     /* 0x4A */ s8 padding_4A[6];
 } TaskNode;
 
-extern TaskNode D_800A2D70[16];
-extern gTaskScheduler_type *D_800A3270_A3E70;
-extern gTaskScheduler_type *D_800A32C0_A3EC0;
-extern gTaskScheduler_type *D_800A3274_A3E74;
+extern TaskNode gSchedulerPool[16];
+extern gActiveScheduler_type *gSchedulerListSentinel;
+extern gActiveScheduler_type *gFreeSchedulerList;
+extern gActiveScheduler_type *gActiveSchedulerList;
 extern s32 D_800AB064_A23D4;
 extern s32 D_800AB12C_A249C;
 
@@ -61,44 +67,44 @@ void initTaskScheduler(void) {
     s32 j;
     void *prevHead;
 
-    D_800A3274_A3E74 = 0;
-    D_800A3270_A3E70 = 0;
-    gTaskScheduler = NULL;
+    gActiveSchedulerList = 0;
+    gSchedulerListSentinel = 0;
+    gActiveScheduler = NULL;
     gDMAOverlay = NULL;
-    D_800A32C0_A3EC0 = 0;
+    gFreeSchedulerList = 0;
 
     for (i = 0; i < 16; i++) {
-        D_800A2D70[i].unk24 = 0;
-        D_800A2D70[i].unk28 = 0;
-        D_800A2D70[i].unk30 = 0;
-        D_800A2D70[i].unk34 = 0;
-        D_800A2D70[i].unk2C = 0;
-        D_800A2D70[i].unk48 = 0;
+        gSchedulerPool[i].unk24 = 0;
+        gSchedulerPool[i].unk28 = 0;
+        gSchedulerPool[i].unk30 = 0;
+        gSchedulerPool[i].unk34 = 0;
+        gSchedulerPool[i].unk2C = 0;
+        gSchedulerPool[i].unk48 = 0;
 
         for (j = 0; j < 8; j++) {
-            D_800A2D70[i].counters[j] = 0;
+            gSchedulerPool[i].counters[j] = 0;
         }
 
-        prevHead = D_800A32C0_A3EC0;
-        D_800A2D70[i].unk08 = prevHead;
-        D_800A32C0_A3EC0 = &D_800A2D70[i];
+        prevHead = gFreeSchedulerList;
+        gSchedulerPool[i].unk08 = prevHead;
+        gFreeSchedulerList = &gSchedulerPool[i];
     }
 }
 
 void func_800693C4_69FC4(void (*arg0)(), s8 arg1) {
-    gTaskScheduler_type *temp_a2;
-    gTaskScheduler_type *temp_v1;
-    gTaskScheduler_type *var_a3;
-    temp_a2 = D_800A32C0_A3EC0;
-    var_a3 = &D_800A3270_A3E70;
-    D_800A32C0_A3EC0 = temp_a2->unk8;
+    gActiveScheduler_type *temp_a2;
+    gActiveScheduler_type *temp_v1;
+    gActiveScheduler_type *var_a3;
+    temp_a2 = gFreeSchedulerList;
+    var_a3 = &gSchedulerListSentinel;
+    gFreeSchedulerList = temp_a2->unk8;
 
-    if (D_800A3274_A3E74 != 0) {
+    if (gActiveSchedulerList != 0) {
         while (TRUE) {
-            temp_v1 = var_a3->unk4;
+            temp_v1 = var_a3->next;
             if ((u8)arg1 >= (u8)temp_v1->unk19) {
                 var_a3 = temp_v1;
-                if (temp_v1->unk4 != 0) {
+                if (temp_v1->next != NULL) {
                     continue;
                 }
             }
@@ -107,17 +113,17 @@ void func_800693C4_69FC4(void (*arg0)(), s8 arg1) {
         }
     }
 
-    temp_a2->unk0 = var_a3;
-    temp_a2->unk4 = var_a3->unk4;
-    var_a3->unk4 = temp_a2;
+    temp_a2->prev = var_a3;
+    temp_a2->next = var_a3->next;
+    var_a3->next = temp_a2;
 
-    if (temp_a2->unk4 != 0) {
-        temp_a2->unk4->unk0 = temp_a2;
+    if (temp_a2->next != NULL) {
+        temp_a2->next->prev = temp_a2;
     }
 
     temp_a2->unk1A = 0;
     temp_a2->unk10 = arg0;
-    temp_a2->unk18 = 0;
+    temp_a2->schedulerState = SCHEDULER_STATE_INACTIVE;
     temp_a2->unk19 = arg1;
     temp_a2->allocatedState = 0;
     temp_a2->activeList = 0;
@@ -125,46 +131,46 @@ void func_800693C4_69FC4(void (*arg0)(), s8 arg1) {
     temp_a2->nodes = 0;
     temp_a2->total = 0;
     temp_a2->unk1C = -1;
-    temp_a2->unk20 = 0;
+    temp_a2->latestDmaSequenceNumber = 0;
     temp_a2->unkC = 0;
     temp_a2->unk4C = 0;
     temp_a2->unk4A = 0;
 }
 
 void func_80069470_6A070(void (*arg0)(), s8 arg1) {
-    gTaskScheduler_type *temp_a2;
-    gTaskScheduler_type *var_a3;
-    gTaskScheduler_type *temp_v1;
-    gTaskScheduler_type *temp_v0;
+    gActiveScheduler_type *temp_a2;
+    gActiveScheduler_type *var_a3;
+    gActiveScheduler_type *temp_v1;
+    gActiveScheduler_type *temp_v0;
 
-    temp_a2 = D_800A32C0_A3EC0;
-    var_a3 = &D_800A3270_A3E70;
-    D_800A32C0_A3EC0 = temp_a2->unk8;
+    temp_a2 = gFreeSchedulerList;
+    var_a3 = &gSchedulerListSentinel;
+    gFreeSchedulerList = temp_a2->unk8;
 
-    if (D_800A3274_A3E74 != 0) {
+    if (gActiveSchedulerList != 0) {
         while (TRUE) {
-            temp_v1 = (gTaskScheduler_type *)var_a3->unk4;
+            temp_v1 = (gActiveScheduler_type *)var_a3->next;
             if ((u8)arg1 < (u8)temp_v1->unk19) {
                 break;
             }
             var_a3 = temp_v1;
-            if (temp_v1->unk4 == 0) {
+            if (temp_v1->next == NULL) {
                 break;
             }
         }
     }
 
-    temp_a2->unk0 = var_a3;
-    temp_a2->unk4 = var_a3->unk4;
-    var_a3->unk4 = temp_a2;
-    temp_v0 = temp_a2->unk4;
+    temp_a2->prev = var_a3;
+    temp_a2->next = var_a3->next;
+    var_a3->next = temp_a2;
+    temp_v0 = temp_a2->next;
 
     if (temp_v0 != 0) {
-        temp_v0->unk0 = temp_a2;
+        temp_v0->prev = temp_a2;
     }
 
     temp_a2->unk1A = 0;
-    temp_a2->unk18 = 0;
+    temp_a2->schedulerState = SCHEDULER_STATE_INACTIVE;
     temp_a2->unk19 = arg1;
     temp_a2->unk10 = arg0;
     temp_a2->allocatedState = 0;
@@ -173,121 +179,121 @@ void func_80069470_6A070(void (*arg0)(), s8 arg1) {
     temp_a2->nodes = 0;
     temp_a2->total = 0;
     temp_a2->unk1C = -1;
-    temp_a2->unk20 = 0;
+    temp_a2->latestDmaSequenceNumber = 0;
     temp_a2->unk4C = 0;
     temp_a2->unk4A = 0;
-    temp_a2->unkC = (gTaskScheduler_type *)gTaskScheduler;
-    gTaskScheduler->unk4C++;
+    temp_a2->unkC = (gActiveScheduler_type *)gActiveScheduler;
+    gActiveScheduler->unk4C++;
 }
 
 void runTaskSchedulers(void) {
-    gTaskScheduler_type *temp_v0;
-    gTaskScheduler_type *temp_v0_2;
-    gTaskScheduler_type *temp_a0;
+    gActiveScheduler_type *temp_v0;
+    gActiveScheduler_type *temp_v0_2;
+    gActiveScheduler_type *temp_a0;
 
-    gTaskScheduler = D_800A3274_A3E74;
-    if (D_800A3274_A3E74 != NULL) {
+    gActiveScheduler = gActiveSchedulerList;
+    if (gActiveSchedulerList != NULL) {
         do {
-            if (gTaskScheduler->unk18 == 0) {
-                gTaskScheduler->unk18 = 1;
+            if (gActiveScheduler->schedulerState == SCHEDULER_STATE_INACTIVE) {
+                gActiveScheduler->schedulerState = SCHEDULER_STATE_RUNNING;
             }
 
-            gTaskScheduler = gTaskScheduler->unk4;
-        } while (gTaskScheduler != NULL);
+            gActiveScheduler = gActiveScheduler->next;
+        } while (gActiveScheduler != NULL);
     }
 
-    gTaskScheduler = D_800A3274_A3E74;
-    if (D_800A3274_A3E74 != NULL) {
+    gActiveScheduler = gActiveSchedulerList;
+    if (gActiveSchedulerList != NULL) {
         do {
-            switch (gTaskScheduler->unk18) {
-                case 0:
+            switch (gActiveScheduler->schedulerState) {
+                case SCHEDULER_STATE_INACTIVE:
                     break;
 
-                case 1:
+                case SCHEDULER_STATE_RUNNING:
                 loop_9:
-                    gTaskScheduler->unk1B = 0;
+                    gActiveScheduler->unk1B = 0;
 
-                    gTaskScheduler->unk10();
+                    gActiveScheduler->unk10();
 
-                    if (gTaskScheduler->unk1B != 0) {
-                        if (gTaskScheduler->unk18 == 1) {
+                    if (gActiveScheduler->unk1B != 0) {
+                        if (gActiveScheduler->schedulerState == SCHEDULER_STATE_RUNNING) {
                             goto loop_9;
                         }
                     }
 
-                    if (gTaskScheduler->unk18 == 1) {
+                    if (gActiveScheduler->schedulerState == SCHEDULER_STATE_RUNNING) {
                         processActiveTasks();
                     }
 
                     break;
 
-                case 2:
-                    if (gTaskScheduler->unk4C == 0) {
+                case SCHEDULER_STATE_TERMINATING:
+                    if (gActiveScheduler->unk4C == 0) {
                         terminateAllTasks();
                         processActiveTasks();
 
                         if (hasActiveTasks() == 0) {
-                            gTaskScheduler->nodes = (Node *)decrementNodeRefCount((s32 *)gTaskScheduler->nodes);
-                            gTaskScheduler->allocatedState =
-                                (void *)decrementNodeRefCount((s32 *)gTaskScheduler->allocatedState);
-                            gTaskScheduler->unk1C = D_800AB064_A23D4;
-                            gTaskScheduler->unk18 = 4;
+                            gActiveScheduler->nodes = (Node *)decrementNodeRefCount((s32 *)gActiveScheduler->nodes);
+                            gActiveScheduler->allocatedState =
+                                (void *)decrementNodeRefCount((s32 *)gActiveScheduler->allocatedState);
+                            gActiveScheduler->unk1C = D_800AB064_A23D4;
+                            gActiveScheduler->schedulerState = SCHEDULER_STATE_CLEANUP;
                         }
                     }
                     break;
 
-                case 4:
-                    if (gTaskScheduler->unk1C > 0) {
-                        if (((D_800AB12C_A249C - gTaskScheduler->unk1C) & 0x0FFFFFFF) <= 0x07FFFFFF) {
-                            gTaskScheduler->unk1C = -1;
+                case SCHEDULER_STATE_CLEANUP:
+                    if (gActiveScheduler->unk1C > 0) {
+                        if (((D_800AB12C_A249C - gActiveScheduler->unk1C) & 0x0FFFFFFF) <= 0x07FFFFFF) {
+                            gActiveScheduler->unk1C = -1;
                         }
-                        if (gTaskScheduler->unk1C <= 0) {
+                        if (gActiveScheduler->unk1C <= 0) {
                             goto block_20;
                         }
                     } else {
                     block_20:
-                        if (gTaskScheduler->unk14 != NULL) {
-                            gTaskScheduler->unk14();
+                        if (gActiveScheduler->unk14 != NULL) {
+                            gActiveScheduler->unk14();
                         }
 
-                        if (gTaskScheduler->unkC != 0) {
-                            gTaskScheduler->unkC->unk4C--;
+                        if (gActiveScheduler->unkC != 0) {
+                            gActiveScheduler->unkC->unk4C--;
                         }
 
-                        if (gTaskScheduler->unk4 != NULL) {
-                            gTaskScheduler->unk4->unk0 = gTaskScheduler->unk0;
+                        if (gActiveScheduler->next != NULL) {
+                            gActiveScheduler->next->prev = gActiveScheduler->prev;
                         }
 
-                        gTaskScheduler->unk0->unk4 = gTaskScheduler->unk4;
-                        temp_a0 = D_800A32C0_A3EC0;
-                        D_800A32C0_A3EC0 = gTaskScheduler;
-                        gTaskScheduler->unk8 = temp_a0;
+                        gActiveScheduler->prev->next = gActiveScheduler->next;
+                        temp_a0 = gFreeSchedulerList;
+                        gFreeSchedulerList = gActiveScheduler;
+                        gActiveScheduler->unk8 = temp_a0;
                     }
                     break;
 
-                case 3:
-                    if (getNodeOwner(gTaskScheduler->unk24) == 0) {
-                        gTaskScheduler->unk18 = 1;
+                case SCHEDULER_STATE_DMA_PENDING:
+                    if (getNodeOwner(gActiveScheduler->latestDmaNode) == NULL) {
+                        gActiveScheduler->schedulerState = SCHEDULER_STATE_RUNNING;
                     }
                     break;
             }
 
-            gTaskScheduler = gTaskScheduler->unk4;
-        } while (gTaskScheduler != NULL);
+            gActiveScheduler = gActiveScheduler->next;
+        } while (gActiveScheduler != NULL);
     }
 }
 
-void func_800697CC_6A3CC(void (*arg0)()) {
-    if (gTaskScheduler != NULL) {
-        gTaskScheduler->unk18 = 2;
-        gTaskScheduler->unk14 = arg0;
+void terminateSchedulerWithCallback(void (*arg0)()) {
+    if (gActiveScheduler != NULL) {
+        gActiveScheduler->schedulerState = SCHEDULER_STATE_TERMINATING;
+        gActiveScheduler->unk14 = arg0;
     }
 }
 
 void func_800697F4_6A3F4(s16 arg0) {
-    gTaskScheduler_type *temp_v0;
+    gActiveScheduler_type *temp_v0;
 
-    temp_v0 = gTaskScheduler->unkC;
+    temp_v0 = gActiveScheduler->unkC;
     if (temp_v0 != NULL) {
         temp_v0->unk4A = arg0;
     }
@@ -296,14 +302,14 @@ void func_800697F4_6A3F4(s16 arg0) {
 s16 func_80069810_6A410(void) {
     s16 temp_v0;
 
-    temp_v0 = gTaskScheduler->unk4A;
-    gTaskScheduler->unk4A = 0;
+    temp_v0 = gActiveScheduler->unk4A;
+    gActiveScheduler->unk4A = 0;
 
     return temp_v0;
 }
 
 void setGameStateHandler(void *arg0) {
-    gTaskScheduler->unk10 = arg0;
+    gActiveScheduler->unk10 = arg0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/task_scheduler", func_8006983C_6A43C);
@@ -315,7 +321,7 @@ void *allocateTaskMemory(s32 size) {
     s8 *var_v1;
 
     temp_v0 = allocateMemoryNode(0, size, &node_exists);
-    gTaskScheduler->allocatedState = temp_v0;
+    gActiveScheduler->allocatedState = temp_v0;
     if (size != 0) {
         var_v1 = (s8 *)temp_v0;
         temp_a0 = (size + (s32)var_v1);
@@ -324,44 +330,44 @@ void *allocateTaskMemory(s32 size) {
             var_v1 += 1;
         } while ((u32)var_v1 < (u32)temp_a0);
     }
-    return gTaskScheduler->allocatedState;
+    return gActiveScheduler->allocatedState;
 }
 
 void *getCurrentAllocation() {
-    return gTaskScheduler->allocatedState;
+    return gActiveScheduler->allocatedState;
 }
 
 func_800698CC_6A4CC(s8 value) {
-    gTaskScheduler->unk1A = value;
+    gActiveScheduler->unk1A = value;
 }
 
 u8 func_800698DC_6A4DC(void) {
-    return gTaskScheduler->unk1A;
+    return gActiveScheduler->unk1A;
 }
 
 void setupTaskSchedulerNodes(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5, s32 arg6, s32 arg7) {
     s16 i;
     u8 nodeExists;
 
-    gTaskScheduler->total = arg7 + (arg6 + (arg5 + ((((arg0 + arg1) + arg2) + arg3) + arg4)));
-    gTaskScheduler->counters[0] = arg0;
-    gTaskScheduler->counters[2] = arg2;
-    gTaskScheduler->counters[1] = arg1;
-    gTaskScheduler->counters[3] = arg3;
-    gTaskScheduler->counters[4] = arg4;
-    gTaskScheduler->counters[5] = arg5;
-    gTaskScheduler->counters[6] = arg6;
-    gTaskScheduler->counters[7] = arg7;
+    gActiveScheduler->total = arg7 + (arg6 + (arg5 + ((((arg0 + arg1) + arg2) + arg3) + arg4)));
+    gActiveScheduler->counters[0] = arg0;
+    gActiveScheduler->counters[2] = arg2;
+    gActiveScheduler->counters[1] = arg1;
+    gActiveScheduler->counters[3] = arg3;
+    gActiveScheduler->counters[4] = arg4;
+    gActiveScheduler->counters[5] = arg5;
+    gActiveScheduler->counters[6] = arg6;
+    gActiveScheduler->counters[7] = arg7;
 
-    gTaskScheduler->nodes = allocateMemoryNode(0, gTaskScheduler->total * sizeof(NodeWithPayload), &nodeExists);
+    gActiveScheduler->nodes = allocateMemoryNode(0, gActiveScheduler->total * sizeof(NodeWithPayload), &nodeExists);
 
-    gTaskScheduler->nodes = gTaskScheduler->nodes;
-    gTaskScheduler->activeList = NULL;
-    gTaskScheduler->freeList = NULL;
+    gActiveScheduler->nodes = gActiveScheduler->nodes;
+    gActiveScheduler->activeList = NULL;
+    gActiveScheduler->freeList = NULL;
 
-    for (i = 0; i < gTaskScheduler->total; i++) {
-        gTaskScheduler->nodes[i].n.freeNext = gTaskScheduler->freeList;
-        gTaskScheduler->freeList = &gTaskScheduler->nodes[i];
+    for (i = 0; i < gActiveScheduler->total; i++) {
+        gActiveScheduler->nodes[i].n.freeNext = gActiveScheduler->freeList;
+        gActiveScheduler->freeList = &gActiveScheduler->nodes[i];
     }
 }
 
@@ -369,23 +375,23 @@ Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
     Node *newNode;
     Node *active;
     Node *freeNxt;
-    gTaskScheduler_type *g = gTaskScheduler;
+    gActiveScheduler_type *g = gActiveScheduler;
     s16 *countPtr;
     Node *temp;
 
-    if (gTaskScheduler) {
+    if (gActiveScheduler) {
         if (g->counters[nodeType]) {
             g->counters[nodeType]--;
 
-            newNode = gTaskScheduler->freeList;
-            active = gTaskScheduler->activeList;
+            newNode = gActiveScheduler->freeList;
+            active = gActiveScheduler->activeList;
             freeNxt = newNode->freeNext;
-            gTaskScheduler->freeList = freeNxt;
+            gActiveScheduler->freeList = freeNxt;
 
             if (active == NULL) {
                 newNode->next = NULL;
                 newNode->prev = NULL;
-                gTaskScheduler->activeList = newNode;
+                gActiveScheduler->activeList = newNode;
             } else if (priority < active->priority) {
                 newNode->next = active;
                 newNode->prev = NULL;
@@ -429,11 +435,11 @@ Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
 }
 
 s16 getFreeNodeCount(s32 arg0) {
-    return gTaskScheduler->counters[arg0];
+    return gActiveScheduler->counters[arg0];
 }
 
 void processActiveTasks() {
-    for (gDMAOverlay = gTaskScheduler->activeList; gDMAOverlay != 0; gDMAOverlay = gDMAOverlay->next) {
+    for (gDMAOverlay = gActiveScheduler->activeList; gDMAOverlay != 0; gDMAOverlay = gDMAOverlay->next) {
         switch (gDMAOverlay->unkE) {
             case 0:
                 break;
@@ -454,7 +460,7 @@ void processActiveTasks() {
                 }
 
                 if (gDMAOverlay->prev == NULL) {
-                    gTaskScheduler->activeList = gDMAOverlay->next;
+                    gActiveScheduler->activeList = gDMAOverlay->next;
                 } else {
                     gDMAOverlay->prev->next = gDMAOverlay->next;
                 }
@@ -462,9 +468,9 @@ void processActiveTasks() {
                 if (gDMAOverlay->next != NULL) {
                     gDMAOverlay->next->prev = gDMAOverlay->prev;
                 }
-                gDMAOverlay->freeNext = gTaskScheduler->freeList;
-                gTaskScheduler->freeList = gDMAOverlay;
-                gTaskScheduler->counters[(u8)gDMAOverlay->unkC]++;
+                gDMAOverlay->freeNext = gActiveScheduler->freeList;
+                gActiveScheduler->freeList = gDMAOverlay;
+                gActiveScheduler->counters[(u8)gDMAOverlay->unkC]++;
                 break;
 
             case 3:
@@ -505,13 +511,13 @@ void func_80069CF8_6A8F8() {
 }
 
 s32 hasActiveTasks() {
-    return gTaskScheduler->activeList != NULL;
+    return gActiveScheduler->activeList != NULL;
 }
 
 void terminateAllTasks(void) {
     Node *i;
 
-    for (i = gTaskScheduler->activeList; i != NULL; i = i->next) {
+    for (i = gActiveScheduler->activeList; i != NULL; i = i->next) {
         if ((u32)(i->unkE - 3) < 2) {
             i->unkE = 4;
         } else {
@@ -523,7 +529,7 @@ void terminateAllTasks(void) {
 void terminateTasksByType(s32 taskType) {
     Node *i;
 
-    for (i = gTaskScheduler->activeList; i != NULL; i = i->next) {
+    for (i = gActiveScheduler->activeList; i != NULL; i = i->next) {
         if (i->unkC == (u8)taskType) {
             if ((u32)(i->unkE - 3) < 2) {
                 i->unkE = 4;
@@ -537,7 +543,7 @@ void terminateTasksByType(s32 taskType) {
 void terminateTasksByTypeAndID(s32 taskType, s32 taskID) {
     Node *i;
 
-    for (i = gTaskScheduler->activeList; i != NULL; i = i->next) {
+    for (i = gActiveScheduler->activeList; i != NULL; i = i->next) {
         if (i->unkC == (u8)taskType && i->field_D == (u8)taskID) {
             if ((u32)(i->unkE - 3) < 2) {
                 i->unkE = 4;
@@ -554,25 +560,25 @@ void *dmaRequestAndUpdateState(void *start, void *end) {
     if (gDMAOverlay == NULL) {
         allocatedSpaceStart = queueDmaTransfer(start, end);
         if (getNodeOwner(allocatedSpaceStart) != 0) {
-            if (gTaskScheduler->unk18 != 3) {
-                gTaskScheduler->unk20 = getNodeUserData(allocatedSpaceStart);
-                gTaskScheduler->unk24 = allocatedSpaceStart;
-                gTaskScheduler->unk18 = 3;
-            } else if (gTaskScheduler->unk20 < getNodeUserData(allocatedSpaceStart)) {
-                gTaskScheduler->unk20 = getNodeUserData(allocatedSpaceStart);
-                gTaskScheduler->unk24 = allocatedSpaceStart;
+            if (gActiveScheduler->schedulerState != SCHEDULER_STATE_DMA_PENDING) {
+                gActiveScheduler->latestDmaSequenceNumber = getNodeSequenceNumber(allocatedSpaceStart);
+                gActiveScheduler->latestDmaNode = allocatedSpaceStart;
+                gActiveScheduler->schedulerState = SCHEDULER_STATE_DMA_PENDING;
+            } else if (gActiveScheduler->latestDmaSequenceNumber < getNodeSequenceNumber(allocatedSpaceStart)) {
+                gActiveScheduler->latestDmaSequenceNumber = getNodeSequenceNumber(allocatedSpaceStart);
+                gActiveScheduler->latestDmaNode = allocatedSpaceStart;
             }
         }
     } else {
         allocatedSpaceStart = queueDmaTransfer(start, end);
         if (getNodeOwner(allocatedSpaceStart) != 0) {
             if (((u8)(gDMAOverlay->unkE - 3)) >= 2) {
-                gDMAOverlay->unk18 = getNodeUserData(allocatedSpaceStart);
+                gDMAOverlay->unk18 = getNodeSequenceNumber(allocatedSpaceStart);
                 gDMAOverlay->unk1C = allocatedSpaceStart;
                 gDMAOverlay->unkE = 3;
             } else {
-                if (gDMAOverlay->unk18 < getNodeUserData(allocatedSpaceStart)) {
-                    gDMAOverlay->unk18 = getNodeUserData(allocatedSpaceStart);
+                if (gDMAOverlay->unk18 < getNodeSequenceNumber(allocatedSpaceStart)) {
+                    gDMAOverlay->unk18 = getNodeSequenceNumber(allocatedSpaceStart);
                     gDMAOverlay->unk1C = allocatedSpaceStart;
                 }
             }
@@ -589,14 +595,14 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
     if (gDMAOverlay == NULL) {
         allocatedSpaceStart = dmaQueueRequest(romStart, romEnd, size);
         if (getNodeOwner(allocatedSpaceStart) != NULL) {
-            if (gTaskScheduler->unk18 != 3) {
-                gTaskScheduler->unk20 = getNodeUserData(allocatedSpaceStart);
-                gTaskScheduler->unk24 = allocatedSpaceStart;
-                gTaskScheduler->unk18 = 3;
+            if (gActiveScheduler->schedulerState != SCHEDULER_STATE_DMA_PENDING) {
+                gActiveScheduler->latestDmaSequenceNumber = getNodeSequenceNumber(allocatedSpaceStart);
+                gActiveScheduler->latestDmaNode = allocatedSpaceStart;
+                gActiveScheduler->schedulerState = SCHEDULER_STATE_DMA_PENDING;
             } else {
-                if (gTaskScheduler->unk20 < getNodeUserData(allocatedSpaceStart)) {
-                    gTaskScheduler->unk20 = getNodeUserData(allocatedSpaceStart);
-                    gTaskScheduler->unk24 = allocatedSpaceStart;
+                if (gActiveScheduler->latestDmaSequenceNumber < getNodeSequenceNumber(allocatedSpaceStart)) {
+                    gActiveScheduler->latestDmaSequenceNumber = getNodeSequenceNumber(allocatedSpaceStart);
+                    gActiveScheduler->latestDmaNode = allocatedSpaceStart;
                 }
             }
         }
@@ -604,12 +610,12 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
         allocatedSpaceStart = dmaQueueRequest(romStart, romEnd, size);
         if (getNodeOwner(allocatedSpaceStart) != NULL) {
             if (gDMAOverlay->unkE < 3 || gDMAOverlay->unkE >= 5) {
-                gDMAOverlay->unk18 = getNodeUserData(allocatedSpaceStart);
+                gDMAOverlay->unk18 = getNodeSequenceNumber(allocatedSpaceStart);
                 gDMAOverlay->unk1C = allocatedSpaceStart;
                 gDMAOverlay->unkE = 3;
             } else {
-                if (gDMAOverlay->unk18 < getNodeUserData(allocatedSpaceStart)) {
-                    gDMAOverlay->unk18 = getNodeUserData(allocatedSpaceStart);
+                if (gDMAOverlay->unk18 < getNodeSequenceNumber(allocatedSpaceStart)) {
+                    gDMAOverlay->unk18 = getNodeSequenceNumber(allocatedSpaceStart);
                     gDMAOverlay->unk1C = allocatedSpaceStart;
                 }
             }
@@ -621,17 +627,17 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
     return allocatedSpaceStart;
 }
 
-void *loadDataSegment(void* start, void* end, s32 size, void *dramAddr) {
+void *loadDataSegment(void *start, void *end, s32 size, void *dramAddr) {
     void *var_s0 = dramAddr;
     if (gDMAOverlay != NULL) {
         var_s0 = queueDmaTransferToBuffer(start, end, size, dramAddr);
         if (getNodeOwner(var_s0) != 0) {
             if ((u32)(gDMAOverlay->unkE - 3) >= 2U) {
-                gDMAOverlay->unk18 = getNodeUserData(var_s0);
+                gDMAOverlay->unk18 = getNodeSequenceNumber(var_s0);
                 gDMAOverlay->unk1C = var_s0;
                 gDMAOverlay->unkE = 3;
-            } else if ((u32)gDMAOverlay->unk18 < getNodeUserData(var_s0)) {
-                gDMAOverlay->unk18 = getNodeUserData(var_s0);
+            } else if ((u32)gDMAOverlay->unk18 < getNodeSequenceNumber(var_s0)) {
+                gDMAOverlay->unk18 = getNodeSequenceNumber(var_s0);
                 gDMAOverlay->unk1C = var_s0;
             }
         }

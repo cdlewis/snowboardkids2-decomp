@@ -733,7 +733,7 @@ void *queueDmaTransfer(void *start, void *end) {
 
     gDmaRequestCount++;
 
-    setNodeUserData(dramAddr, (void *)gDmaRequestCount);
+    setNodeSequenceNumber(dramAddr, (void *)gDmaRequestCount);
 
     return dramAddr;
 }
@@ -766,7 +766,7 @@ void *dmaQueueRequest(void *romStart, void *romEnd, s32 size) {
             a1++;
             gDmaRequestCount = a1;
         }
-        setNodeUserData(allocatedSpaceStart, (void *)a1);
+        setNodeSequenceNumber(allocatedSpaceStart, (void *)a1);
     }
 
     return allocatedSpaceStart;
@@ -793,7 +793,7 @@ s32 *queueDmaTransferToBuffer(void *romStart, void *romEnd, s32 size, s32 *dramA
     }
     gDmaRequestCount++;
 
-    setNodeUserData(dramAddr, (void *)gDmaRequestCount);
+    setNodeSequenceNumber(dramAddr, (void *)gDmaRequestCount);
 
     return dramAddr;
 }

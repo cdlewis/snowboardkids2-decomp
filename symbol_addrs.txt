@@ -1,3 +1,7 @@
+gSchedulerListSentinel = 0x800A3270;
+gFreeSchedulerList = 0x800A32C0;
+gActiveSchedulerList = 0x800A3274;
+terminateSchedulerWithCallback = 0x800697CC; 
 D_800A3370_A3F70 = 0x800A3370; // size:0x18
 D_800A3410_A4010 = 0x800A3410; // size:0xC
 
@@ -15,7 +19,7 @@ D_800A2D10_A3910 = 0x800A2D10; // size:0x30
 
 setBufferData = 0x80056A88;
 
-D_800A2D70 = 0x800A2D70; // size:0x500
+gSchedulerPool = 0x800A2D70; // size:0x500
 
 terminateAllTasks = 0x80069D34;
 terminateTasksByType = 0x80069D7C;
@@ -60,7 +64,7 @@ hasActiveTasks = 0x80069D20;
 processActiveTasks = 0x80069B04;
 runTaskSchedulers = 0x80069530;
 gDMAOverlay = 0x8009A864;
-gTaskScheduler = 0x8009A860;
+gActiveScheduler = 0x8009A860;
 load_3ECE40 = 0x8005DAD4;
 piDmaHandlerThread = 0x8003B6B4;
 gDmaCompressionBuffer = 0x800A2494;
@@ -151,7 +155,7 @@ cleanupUnusedNodes = 0x8006A428;
 markNodeAsLocked = 0x8006A4DC;
 unlockNodeWithInterruptDisable = 0x8006A4E8;
 getNodeOwner = 0x8006A51C;
-setNodeUserData = 0x8006A524;
+setNodeSequenceNumber = 0x8006A524;
 getNodeUserData = 0x8006A52C;
 
 gameAssets = 0x80089A6C; // type:s32 size:0x22BC

@@ -59,3 +59,5 @@ void processActiveTasks(void);
 void terminateAllTasks(void);
 
 void initTaskScheduler(void);
+
+void terminateSchedulerWithCallback(void (*arg0)());

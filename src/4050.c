@@ -28,7 +28,6 @@ extern s16 D_8008BF9E_8CB9E;
 extern void func_800697F4_6A3F4(s32);
 extern void func_800693C4_69FC4(void *, s32);
 extern void func_80014480_15080();
-extern void func_800697CC_6A3CC(void (*func)(void));
 extern void n_alSynRemovePlayer(void *player);
 extern s16 D_800AB070_A23E0;
 extern s16 D_800AFEF0_A7260;
@@ -137,7 +136,7 @@ void func_80003C34_4834(void) {
         n_alSynRemovePlayer(&temp_v0->audioPlayer5);
         n_alSynRemovePlayer(&temp_v0->audioPlayer3);
         n_alSynRemovePlayer(&temp_v0->audioPlayer1);
-        func_800697CC_6A3CC(&func_80003C88_4888);
+        terminateSchedulerWithCallback(&func_80003C88_4888);
     }
 }
 

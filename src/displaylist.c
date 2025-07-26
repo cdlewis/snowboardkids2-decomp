@@ -90,7 +90,6 @@ void setupDisplayListMatrix(DisplayListObject *);
 void func_80063A94_64694(void *);
 void func_800648EC_654EC();
 void func_800680F0_68CF0(ALPlayer *);
-void func_800697CC_6A3CC(void *);
 void *func_8006C130_6CD30(void *, LookAt *);
 void func_80063534_64134();
 void func_80063580_64180();
@@ -505,12 +504,12 @@ void initializeOverlaySystem(void) {
 
 void func_80068060_68C60(void) {
     func_800680F0_68CF0(((GameState *)getCurrentAllocation())->audioPlayer0);
-    func_800697CC_6A3CC(&func_800680C4_68CC4);
+    terminateSchedulerWithCallback(&func_800680C4_68CC4);
 }
 
 void func_80068090_68C90(void) {
     if ((func_80069810_6A410() << 0x10) != 0) {
-        func_800697CC_6A3CC(&func_800680C4_68CC4);
+        terminateSchedulerWithCallback(&func_800680C4_68CC4);
     }
 }
 

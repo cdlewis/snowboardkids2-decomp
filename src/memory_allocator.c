@@ -154,10 +154,10 @@ s32 getNodeOwner(void *arg0) {
     return (s32)(*((void **)((u8 *)arg0 - 0xC)));
 }
 
-void setNodeUserData(void *arg0, void *arg1) {
+void setNodeSequenceNumber(void *arg0, void *arg1) {
     *((void **)((u8 *)arg0 - 4)) = arg1;
 }
 
-void *getNodeUserData(void *arg0) {
+void *getNodeSequenceNumber(void *arg0) {
     return *((void **)((u8 *)arg0 - 4));
 }

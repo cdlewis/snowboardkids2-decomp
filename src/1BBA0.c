@@ -19,7 +19,6 @@ extern void func_8001B3B8_1BFB8(void);
 extern void func_8001B3E8_1BFE8();
 extern void func_8001BC78_1C878();
 extern void func_8001BCC0_1C8C0();
-extern void func_800697CC_6A3CC(void (*func)(void));
 extern void func_800B00C0_9FF70;
 extern void n_alSynRemovePlayer(void *player);
 
@@ -74,7 +73,7 @@ void func_8001BBE8_1C7E8(void) {
         } else {
             var_a0 = &func_8001BC78_1C878;
         }
-        func_800697CC_6A3CC(var_a0);
+        terminateSchedulerWithCallback(var_a0);
     }
 }
 

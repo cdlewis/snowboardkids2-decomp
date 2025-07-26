@@ -20,8 +20,8 @@ extern MemoryAllocatorNode gMemoryHeapBase;
 // allocates memory, returning a pointer to the start of the allocated space.
 void *allocateMemoryNode(s32, u32, u8 *);
 
-void *getNodeUserData(void *);
-void setNodeUserData(void *, void *);
+void *getNodeSequenceNumber(void *);
+void setNodeSequenceNumber(void *, void *);
 void markNodeAsLocked(s32 *);
 s32 getNodeOwner(void *);
 s32 decrementNodeRefCount(s32 *);

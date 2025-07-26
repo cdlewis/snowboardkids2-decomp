@@ -10,7 +10,6 @@ typedef struct {
     s16 unk1D8;
 } func_8001AE80_1BA80_task_memory;
 
-void func_800697CC_6A3CC(void *);
 s32 func_80069810_6A410();
 extern void func_8001A0F4_1ACF4;
 void func_80027CA0_288A0(void *, s32, s32, s32);
@@ -61,7 +60,7 @@ INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A070_1AC70);
 void func_8001A0B4_1ACB4(void) {
     if ((func_80069810_6A410() << 0x10) != 0) {
         D_800AFE8C_A71FC->unk23 = 0;
-        func_800697CC_6A3CC(&func_8001A0F4_1ACF4);
+        terminateSchedulerWithCallback(&func_8001A0F4_1ACF4);
     }
 }
 

@@ -26,7 +26,6 @@ extern void func_80036250_36E50;
 extern void func_80036A3C_3763C;
 extern void func_800574A0_580A0(s32);
 extern void func_80057564_58164(s32 a0);
-extern void func_800697CC_6A3CC(void (*func)(void));
 extern void func_800697F4_6A3F4(s32);
 extern void n_alSynRemovePlayer(void *player);
 extern void PhoneTriggerInit;
@@ -125,11 +124,11 @@ void gameStateCleanupHandler(void) {
         gs->unk3E0 = (void *)freeGameStateMemory((void *)gs->unk3E0);
 
         if (gs->unk427 == 0xFF) {
-            func_800697CC_6A3CC(transitionToMainMenu);
+            terminateSchedulerWithCallback(transitionToMainMenu);
         } else {
             u8 tmp = gs->unk425 + 1;
             D_800A8CC8_A0038 = tmp;
-            func_800697CC_6A3CC(transitionToNextGameMode);
+            terminateSchedulerWithCallback(transitionToNextGameMode);
         }
     }
 }
