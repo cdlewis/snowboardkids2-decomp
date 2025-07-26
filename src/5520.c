@@ -1,6 +1,21 @@
 #include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
+#include "task_scheduler.h"
+
+typedef struct {
+    u8 padding[0x28];
+    s32 unk28;
+    s32 unk2C;
+    u8 padding2[0x34];
+    s32 unk64;
+    s32 unk68;
+    u8 padding3[0x4C];
+    s32 unkB8;
+    s32 unkBC;
+    u8 padding4[0x10];
+    s32 unkD0;
+} func_80005D30_6930_arg;
 
 typedef struct {
     u8 padding[0x20];
@@ -96,6 +111,13 @@ INCLUDE_ASM("asm/nonmatchings/5520", func_80005808_6408);
 
 INCLUDE_ASM("asm/nonmatchings/5520", func_8000595C_655C);
 
-INCLUDE_ASM("asm/nonmatchings/5520", func_80005D30_6930);
-
+void func_80005D30_6930(func_80005D30_6930_arg *arg0) {
+    arg0->unkD0 = freeGameStateMemory((s32 *)arg0->unkD0);
+    arg0->unkB8 = freeGameStateMemory((s32 *)arg0->unkB8);
+    arg0->unkBC = freeGameStateMemory((s32 *)arg0->unkBC);
+    arg0->unk28 = freeGameStateMemory((s32 *)arg0->unk28);
+    arg0->unk2C = freeGameStateMemory((s32 *)arg0->unk2C);
+    arg0->unk64 = freeGameStateMemory((s32 *)arg0->unk64);
+    arg0->unk68 = freeGameStateMemory((s32 *)arg0->unk68);
+}
 INCLUDE_RODATA("asm/nonmatchings/5520", jtbl_8009DD38_9E938);
