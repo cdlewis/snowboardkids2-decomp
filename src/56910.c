@@ -84,30 +84,30 @@ func_80055E68_56A68_result *func_80055E68_56A68(s32 index) {
     return D_80091590_92190[index];
 }
 
-void *func_80055E7C_56A7C(void) {
+void *loadAsset_B7E70(void) {
     return dmaRequestAndUpdateState(&D_B7E70, &D_B9C40);
 }
 
-void *func_80055EA4_56AA4(void) {
+void *loadAsset_216290(void) {
     return dmaRequestAndUpdateStateWithSize(&D_216290, &D_218F00, 0x5740);
 }
 
-void *func_80055ED0_56AD0(void) {
+void *loadAsset_34CB50(void) {
     return dmaRequestAndUpdateStateWithSize(&D_34CB50, &D_34F7E0, 0x5E28);
 }
 
-void *func_80055EFC_56AFC(void) {
+void *loadAsset_34F9A0(void) {
     return dmaRequestAndUpdateStateWithSize(&D_34F9A0, &D_350140, 0xE08);
 }
 
-void *func_80055F28_56B28(void) {
+void *loadAsset_350140(void) {
     return dmaRequestAndUpdateStateWithSize(&D_350140, &D_3505F0, 0x868);
 }
 
-void *func_80055F54_56B54(void) {
+void *loadAsset_3505F0(void) {
     return dmaRequestAndUpdateStateWithSize(&D_3505F0, &D_350C70, 0xA88);
 }
 
-void *func_80055F80_56B80(void) {
+void *loadAsset_34F7E0(void) {
     return dmaRequestAndUpdateStateWithSize(&D_34F7E0, &D_34F9A0, 0x438);
 }

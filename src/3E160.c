@@ -36,8 +36,6 @@ void func_80040F6C_41B6C(s32, s32, s32, void *, s32, s32);
 void func_800497FC_4A3FC(u8);
 void func_80049CA8_4A8A8(u8, u8);
 void func_8005011C_50D1C(void);
-s32 func_80055E7C_56A7C(void);
-s32 func_80055EA4_56AA4(void);
 void func_8003EE50_3FA50(void);
 void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
@@ -90,8 +88,8 @@ void func_8003EE50_3FA50(void) {
         } while (i < gs->numPlayers);
     }
     gs->unk18 = dmaRequestAndUpdateStateWithSize(&D_34CB50, &D_34F7E0, 0x5E28);
-    gs->unk1C = func_80055E7C_56A7C();
-    gs->unk20 = func_80055EA4_56AA4();
+    gs->unk1C = loadAsset_B7E70();
+    gs->unk20 = loadAsset_216290();
     func_8006983C_6A43C(&func_8003EEEC_3FAEC);
 }
 

@@ -30,8 +30,8 @@ typedef struct {
     Player *players;
     u8 PAD_NEW_2[0x4];
     void *unk18;
-    s32 unk1C;
-    s32 unk20;
+    void *unk1C;
+    void *unk20;
     u8 PAD_2[0x4];
     GameStateUnk28 *unk28;
     u8 PAD_3[0x4];
