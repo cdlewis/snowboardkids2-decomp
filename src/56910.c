@@ -2,21 +2,6 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-typedef struct {
-    void *start;
-    void *end;
-    s32 size;
-} Asset;
-
-typedef struct {
-    void *start;
-    void *end;
-} AssetWithoutSize;
-
-typedef struct {
-    u8 padding[0x2C];
-} D_80090F90_91B90_item;
-
 extern s32 D_216290;
 extern s32 D_218F00;
 extern s32 D_34CB50;
@@ -40,8 +25,8 @@ extern AssetWithoutSize D_800913D0_91FD0[];
 extern func_80055E68_56A68_result *D_80091590_92190[];
 extern D_80090F90_91B90_item D_80090F90_91B90[];
 
-D_80090F90_91B90_item *func_80055D10_56910(s32 arg0) {
-    return &D_80090F90_91B90[arg0];
+D_80090F90_91B90_item *func_80055D10_56910(s32 index) {
+    return &D_80090F90_91B90[index];
 }
 
 void *func_80055D34_56934(s32 index) {
@@ -60,15 +45,15 @@ void *func_80055D7C_5697C(s32 index) {
     );
 }
 
-void func_80055DC4_569C4(s32 arg0) {
-    dmaRequestAndUpdateState(D_800913D0_91FD0[arg0].start, D_800913D0_91FD0[arg0].end);
+void *func_80055DC4_569C4(s32 index) {
+    return dmaRequestAndUpdateState(D_800913D0_91FD0[index].start, D_800913D0_91FD0[index].end);
 }
 
-void *func_80055DF8_569F8(s32 arg0) {
+void *func_80055DF8_569F8(s32 index) {
     return dmaRequestAndUpdateStateWithSize(
-        D_80091450_92050[arg0].start,
-        D_80091450_92050[arg0].end,
-        D_80091450_92050[arg0].size
+        D_80091450_92050[index].start,
+        D_80091450_92050[index].end,
+        D_80091450_92050[index].size
     );
 }
 

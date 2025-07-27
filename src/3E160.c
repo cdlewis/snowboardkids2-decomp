@@ -19,7 +19,6 @@ extern void func_80040588_41188(void);
 extern void func_80040608_41208(void);
 extern void func_8004D9D0_4E5D0(void);
 extern void func_8004F1D4_4FDD4(void);
-extern s32 func_80055D10_56910(u8);
 extern void func_8003EFDC_3FBDC(void);
 extern void func_8004E6F8_4F2F8(void);
 extern void func_800BB2B0(void);
@@ -153,7 +152,7 @@ void func_8003F178_3FD78(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     if ((state->unk79 == 0) || (state->unk7A == 0xB)) {
-        s32 ret = func_80055D10_56910(state->memoryPoolId);
+        void *ret = func_80055D10_56910(state->memoryPoolId);
 
         if (state->unk7A == 0xB) {
             func_800574A0_580A0(0x20);

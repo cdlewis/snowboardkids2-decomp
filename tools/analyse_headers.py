@@ -20,6 +20,7 @@ from pathlib import Path
 FunctionDef = namedtuple('FunctionDef', ['name', 'file', 'line', 'signature', 'is_static'])
 ExternDecl = namedtuple('ExternDecl', ['name', 'file', 'line', 'signature'])
 HeaderDecl = namedtuple('HeaderDecl', ['name', 'file', 'line', 'signature'])
+FunctionDecl = namedtuple('FunctionDecl', ['name', 'file', 'line', 'signature'])
 
 class CProjectAnalyzer:
     def __init__(self, project_dir):
@@ -28,6 +29,7 @@ class CProjectAnalyzer:
         self.extern_declarations = defaultdict(list)  # func_name -> [ExternDecl]
         self.header_declarations = defaultdict(list)  # func_name -> [HeaderDecl]
         self.file_includes = defaultdict(set)  # file -> set of included headers
+        self.c_file_declarations = defaultdict(list)  # func_name -> [FunctionDecl] (declarations in .c files)
         
         # Regex patterns
         self.func_def_pattern = re.compile(
@@ -46,8 +48,16 @@ class CProjectAnalyzer:
             r'^(?!.*static\s+)(\w+(?:\s*\*)*)\s+(\w+)\s*\([^)]*\)\s*;',
             re.MULTILINE
         )
+        self.c_func_decl_pattern = re.compile(
+            r'^(?!.*extern\s+)(?!.*static\s+)(\w+(?:\s*\*)*)\s+(\w+)\s*\([^)]*\)\s*;',
+            re.MULTILINE
+        )
         self.include_pattern = re.compile(
             r'#include\s+[<"]([^>"]+)[>"]'
+        )
+        self.include_asm_pattern = re.compile(
+            r'INCLUDE_ASM\s*\([^,]+,\s*(\w+)\s*\)',
+            re.MULTILINE
         )
     
     def extract_function_name_from_signature(self, signature):
@@ -119,6 +129,19 @@ class CProjectAnalyzer:
                                         is_static=False
                                     )
         
+        # Find INCLUDE_ASM definitions
+        for match in self.include_asm_pattern.finditer(content):
+            func_name = match.group(1)
+            line_num = content[:match.start()].count('\n') + 1
+            # Add as a function definition
+            self.function_definitions[func_name] = FunctionDef(
+                name=func_name,
+                file=str(filepath),
+                line=line_num,
+                signature=f"INCLUDE_ASM(..., {func_name})",
+                is_static=False
+            )
+        
         # Find extern declarations
         for match in self.extern_pattern.finditer(content):
             extern_decl = match.group(1).strip()
@@ -130,6 +153,19 @@ class CProjectAnalyzer:
                     file=str(filepath),
                     line=line_num,
                     signature=extern_decl
+                ))
+        
+        # Find function declarations (non-extern) in C files
+        for match in self.c_func_decl_pattern.finditer(content):
+            func_signature = match.group(0)
+            func_name = self.extract_function_name_from_signature(func_signature)
+            if func_name and func_name not in ['if', 'while', 'for', 'switch', 'sizeof']:
+                line_num = content[:match.start()].count('\n') + 1
+                self.c_file_declarations[func_name].append(FunctionDecl(
+                    name=func_name,
+                    file=str(filepath),
+                    line=line_num,
+                    signature=func_signature
                 ))
     
     def analyze_header_file(self, filepath):
@@ -206,6 +242,18 @@ class CProjectAnalyzer:
         # Find functions that need proper headers
         issues = []
         
+        # Check for function declarations without definitions in C files
+        for func_name, c_decls in self.c_file_declarations.items():
+            # Check if this function has a definition in the same file
+            for c_decl in c_decls:
+                # Check if there's a definition in the same file
+                if func_name not in self.function_definitions or self.function_definitions[func_name].file != c_decl.file:
+                    issues.append({
+                        'type': 'declaration_without_definition',
+                        'function': func_name,
+                        'declaration': c_decl
+                    })
+        
         for func_name, extern_decls in self.extern_declarations.items():
             # Check if this function is defined somewhere
             if func_name in self.function_definitions:
@@ -215,15 +263,18 @@ class CProjectAnalyzer:
                 has_header_decl = func_name in self.header_declarations
                 
                 if not has_header_decl:
-                    # Function is defined but not in any header, and used via extern
-                    suggested_header = self.suggest_header_file(func_name, definition.file)
-                    issues.append({
-                        'type': 'missing_header_declaration',
-                        'function': func_name,
-                        'definition': definition,
-                        'extern_uses': extern_decls,
-                        'suggested_header': suggested_header
-                    })
+                    # Check if all extern uses are in the same file as the definition
+                    extern_files = set(decl.file for decl in extern_decls)
+                    if not (len(extern_files) == 1 and definition.file in extern_files):
+                        # Function is defined but not in any header, and used via extern in other files
+                        suggested_header = self.suggest_header_file(func_name, definition.file)
+                        issues.append({
+                            'type': 'missing_header_declaration',
+                            'function': func_name,
+                            'definition': definition,
+                            'extern_uses': extern_decls,
+                            'suggested_header': suggested_header
+                        })
                 else:
                     # Function has header declaration, check if extern users include it
                     header_files = [decl.file for decl in self.header_declarations[func_name]]
@@ -269,7 +320,11 @@ class CProjectAnalyzer:
                     for extern_decl in issue['extern_uses']:
                         print(f"     - {extern_decl.file}:{extern_decl.line}")
                     print(f"   RECOMMENDATION: Add declaration to {issue['suggested_header']}")
-                    print(f"   Add this line: {definition.signature.replace('{', ';')}")
+                    if "INCLUDE_ASM" in definition.signature:
+                        # Don't suggest adding INCLUDE_ASM to header
+                        print(f"   Add appropriate function declaration for {func}")
+                    else:
+                        print(f"   Add this line: {definition.signature.replace('{', ';')}")
                 
                 elif issue['type'] == 'missing_include':
                     func = issue['function']
@@ -278,6 +333,14 @@ class CProjectAnalyzer:
                     print(f"   File with extern: {extern_use.file}:{extern_use.line}")
                     print(f"   Available in headers: {', '.join(issue['available_headers'])}")
                     print(f"   RECOMMENDATION: Add #include for appropriate header")
+                
+                elif issue['type'] == 'declaration_without_definition':
+                    func = issue['function']
+                    declaration = issue['declaration']
+                    print(f"   Function: {func}")
+                    print(f"   Declaration in: {declaration.file}:{declaration.line}")
+                    print(f"   Declaration: {declaration.signature}")
+                    print(f"   RECOMMENDATION: Either add function definition or move declaration to header file")
         
         else:
             print(f"\n✅ No issues found! All functions are properly declared in headers.")
