@@ -7,7 +7,9 @@ typedef struct {
     void *end;
     s32 size;
 } Asset;
+
 extern Asset D_80091250_91E50[];
+extern Asset D_80091310_91F10[];
 extern func_80055E68_56A68_result *D_80091590_92190[];
 
 INCLUDE_ASM("asm/nonmatchings/56910", func_80055D10_56910);
@@ -20,7 +22,13 @@ void *func_80055D34_56934(s32 index) {
     );
 }
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055D7C_5697C);
+void *func_80055D7C_5697C(s32 index) {
+    return dmaRequestAndUpdateStateWithSize(
+        D_80091310_91F10[index].start,
+        D_80091310_91F10[index].end,
+        D_80091310_91F10[index].size
+    );
+}
 
 INCLUDE_ASM("asm/nonmatchings/56910", func_80055DC4_569C4);
 
