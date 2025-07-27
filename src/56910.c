@@ -8,11 +8,41 @@ typedef struct {
     s32 size;
 } Asset;
 
+typedef struct {
+    void *start;
+    void *end;
+} AssetWithoutSize;
+
+typedef struct {
+    u8 padding[0x2C];
+} D_80090F90_91B90_item;
+
+extern s32 D_216290;
+extern s32 D_218F00;
+extern s32 D_34CB50;
+extern s32 D_34F7E0;
+extern s32 D_34F7E0;
+extern s32 D_34F9A0;
+extern s32 D_34F9A0;
+extern s32 D_350140;
+extern s32 D_350140;
+extern s32 D_3505F0;
+extern s32 D_3505F0;
+extern s32 D_350C70;
+extern s32 D_B7E70;
+extern s32 D_B9C40;
+extern s32 D_80091550_92150[];
+extern s32 D_80091510_92110[];
 extern Asset D_80091250_91E50[];
 extern Asset D_80091310_91F10[];
+extern Asset D_80091450_92050[];
+extern AssetWithoutSize D_800913D0_91FD0[];
 extern func_80055E68_56A68_result *D_80091590_92190[];
+extern D_80090F90_91B90_item D_80090F90_91B90[];
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055D10_56910);
+D_80090F90_91B90_item *func_80055D10_56910(s32 arg0) {
+    return &D_80090F90_91B90[arg0];
+}
 
 void *func_80055D34_56934(s32 index) {
     return dmaRequestAndUpdateStateWithSize(
@@ -30,28 +60,54 @@ void *func_80055D7C_5697C(s32 index) {
     );
 }
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055DC4_569C4);
+void func_80055DC4_569C4(s32 arg0) {
+    dmaRequestAndUpdateState(D_800913D0_91FD0[arg0].start, D_800913D0_91FD0[arg0].end);
+}
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055DF8_569F8);
+void *func_80055DF8_569F8(s32 arg0) {
+    return dmaRequestAndUpdateStateWithSize(
+        D_80091450_92050[arg0].start,
+        D_80091450_92050[arg0].end,
+        D_80091450_92050[arg0].size
+    );
+}
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055E40_56A40);
+s32 func_80055E40_56A40(s32 arg0) {
+    return D_80091510_92110[arg0];
+}
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055E54_56A54);
+s32 func_80055E54_56A54(s32 arg0) {
+    return D_80091550_92150[arg0];
+}
 
 func_80055E68_56A68_result *func_80055E68_56A68(s32 index) {
     return D_80091590_92190[index];
 }
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055E7C_56A7C);
+void *func_80055E7C_56A7C(void) {
+    return dmaRequestAndUpdateState(&D_B7E70, &D_B9C40);
+}
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055EA4_56AA4);
+void *func_80055EA4_56AA4(void) {
+    return dmaRequestAndUpdateStateWithSize(&D_216290, &D_218F00, 0x5740);
+}
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055ED0_56AD0);
+void *func_80055ED0_56AD0(void) {
+    return dmaRequestAndUpdateStateWithSize(&D_34CB50, &D_34F7E0, 0x5E28);
+}
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055EFC_56AFC);
+void *func_80055EFC_56AFC(void) {
+    return dmaRequestAndUpdateStateWithSize(&D_34F9A0, &D_350140, 0xE08);
+}
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055F28_56B28);
+void *func_80055F28_56B28(void) {
+    return dmaRequestAndUpdateStateWithSize(&D_350140, &D_3505F0, 0x868);
+}
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055F54_56B54);
+void *func_80055F54_56B54(void) {
+    return dmaRequestAndUpdateStateWithSize(&D_3505F0, &D_350C70, 0xA88);
+}
 
-INCLUDE_ASM("asm/nonmatchings/56910", func_80055F80_56B80);
+void *func_80055F80_56B80(void) {
+    return dmaRequestAndUpdateStateWithSize(&D_34F7E0, &D_34F9A0, 0x438);
+}

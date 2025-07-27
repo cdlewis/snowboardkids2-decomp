@@ -1,4 +1,6 @@
+D_80091450_92050 = 0x80091450; // size:0xC0
 D_80091310_91F10 = 0x80091310; // size:0xC0
+D_800913D0_91FD0 = 0x800913D0; // size:0x80
 
 gSchedulerListSentinel = 0x800A3270;
 gFreeSchedulerList = 0x800A32C0;
