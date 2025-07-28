@@ -167,6 +167,8 @@ class CProjectAnalyzer:
                     line=line_num,
                     signature=func_signature
                 ))
+        
+        
     
     def analyze_header_file(self, filepath):
         """Analyze a header file for function declarations"""
@@ -242,17 +244,22 @@ class CProjectAnalyzer:
         # Find functions that need proper headers
         issues = []
         
-        # Check for function declarations without definitions in C files
+        # Check for function declarations in C files that have definitions elsewhere
+        # These should be moved to header files
         for func_name, c_decls in self.c_file_declarations.items():
-            # Check if this function has a definition in the same file
-            for c_decl in c_decls:
-                # Check if there's a definition in the same file
-                if func_name not in self.function_definitions or self.function_definitions[func_name].file != c_decl.file:
-                    issues.append({
-                        'type': 'declaration_without_definition',
-                        'function': func_name,
-                        'declaration': c_decl
-                    })
+            # Only flag if this function HAS a definition somewhere (including INCLUDE_ASM)
+            if func_name in self.function_definitions:
+                definition = self.function_definitions[func_name]
+                # Check each declaration
+                for c_decl in c_decls:
+                    # If declaration is in a different file than the definition, it should be in a header
+                    if c_decl.file != definition.file:
+                        issues.append({
+                            'type': 'declaration_should_be_in_header',
+                            'function': func_name,
+                            'declaration': c_decl,
+                            'definition': definition
+                        })
         
         for func_name, extern_decls in self.extern_declarations.items():
             # Check if this function is defined somewhere
@@ -334,13 +341,14 @@ class CProjectAnalyzer:
                     print(f"   Available in headers: {', '.join(issue['available_headers'])}")
                     print(f"   RECOMMENDATION: Add #include for appropriate header")
                 
-                elif issue['type'] == 'declaration_without_definition':
+                elif issue['type'] == 'declaration_should_be_in_header':
                     func = issue['function']
                     declaration = issue['declaration']
+                    definition = issue['definition']
                     print(f"   Function: {func}")
                     print(f"   Declaration in: {declaration.file}:{declaration.line}")
-                    print(f"   Declaration: {declaration.signature}")
-                    print(f"   RECOMMENDATION: Either add function definition or move declaration to header file")
+                    print(f"   Definition in: {definition.file}:{definition.line}")
+                    print(f"   RECOMMENDATION: Move declaration to appropriate header file")
         
         else:
             print(f"\n✅ No issues found! All functions are properly declared in headers.")

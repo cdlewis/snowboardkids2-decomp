@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "68CF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
@@ -22,7 +23,7 @@ typedef struct {
 } func_8002F658_30258_arg;
 
 typedef struct {
-    s32 unk0;
+    func_80002040_2C40_arg *unk0;
     s32 unk4;
     u8 padding[0x1B];
     s16 unk24;
@@ -52,20 +53,13 @@ typedef struct {
 
 void func_8002F5C8_301C8(void *);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
-void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
-void func_8006FD3C_7093C(u16, void *);
 void func_8006FF90_70B90(s32, s32, void *, void *);
 extern s32 D_800AB054_A23C4;
 extern s32 D_800AFF14_A7284;
 extern void renderTextPalette();
 extern void func_8002FA44_30644();
 extern void func_8002F290_2FE90();
-void func_8000153C_213C(s32, void *);
-void func_800021B8_2DB8(s32, s16);
-void func_80002750_3350(s32);
 extern void func_8002F024_2FC24();
-void createRotationMatrixYX(void *, s32, s32);
-void func_8006B084_6BC84(void *, void *, void *);
 extern u8 D_8009A870_9B470[];
 extern void func_8002F72C_3032C();
 extern void func_8002F980_30580();

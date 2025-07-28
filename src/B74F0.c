@@ -79,8 +79,6 @@ typedef struct {
 
 extern s32 func_800AFF44_9FE04(void);
 extern s32 D_8009A8A4_9B4A4;
-extern void createCombinedRotationMatrix(void *, u16, u16);
-extern void func_8006B084_6BC84(void *, void *, void *);
 extern s32 func_8005C60C_5D20C(void *a0, s32 a1, Player *a2);
 extern void func_800589A0_595A0(Player *player);
 

@@ -1,3 +1,5 @@
+#include "audio_manager.h"
+
 #include "common.h"
 #include "sched.h"
 #include "thread_manager.h"
@@ -105,12 +107,6 @@ s32 audioCreateAndScheduleTask(AudioStruct *, AudioBuffer *);
 void *initAudioDriveAndGetLoader(void *arg0);
 void audioManagerThread(void *);
 void sendMessageToEventQueue2(OSMesg);
-
-typedef struct AudioParams_s {
-    u32 syn_output_rate;
-    s32 sample_rate;
-    s32 syn_rsp_cmds;
-} AudioParams;
 
 // data
 u32 gCurrentFrame = 0;

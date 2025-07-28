@@ -15,3 +15,7 @@ typedef struct {
 void func_80000460_1060(func_80000460_1060_arg0 *arg0, s8 *arg1, s8 *arg2);
 
 void func_8000056C_116C(func_80000460_1060_arg0 *, s32, GameState *);
+
+void func_80000760_1360(void);
+
+void func_80000710_1310(void);

@@ -1,5 +1,4 @@
 #include "5EA60.h"
-
 #include "common.h"
 
 void *func_8005DE60_5EA60(void *);
@@ -32,10 +31,7 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E22C_5EE2C);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E500_5F100);
 
-
-
 extern void func_8005DF10_5EB10(s16, s16, s16, s16 *);
-extern void func_8006BDBC_6C9BC(func_8005E800_5F400_arg *, void *, void *);
 
 void func_8005E800_5F400(func_8005E800_5F400_arg *entity, u16 param_2) {
     s16 stack_data[0x10];

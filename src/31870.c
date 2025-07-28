@@ -5,20 +5,16 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    s32 unk0;
+    func_80002040_2C40_arg *unk0;
     s32 unk4;
     u8 padding[0x1B];
     s16 unk24;
 } func_80031ABC_326BC_arg;
 
-void func_80002750_3350(s32);
 extern void func_80031B30_32730;
 extern s32 D_8009A870_9B470;
 extern void func_80031C4C_3284C;
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
-func_800021B8_2DB8(s32, s16);
-func_8000160C_220C(s32, s32);
-func_8000153C_213C(s32, s32 *);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80030C70_31870);
 

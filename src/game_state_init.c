@@ -15,8 +15,6 @@ extern s32 D_45B130;
 extern u16 D_8008D6B0_8E2B0;
 extern u8 D_800A8CC8_A0038;
 extern void *func_80035F80_36B80(s32);
-extern void func_80000710_1310();
-extern void func_80000760_1360();
 extern void func_80017350_17F50;
 extern void func_80018800_19400;
 extern void func_80018A90_19690;
@@ -25,7 +23,6 @@ extern void func_80027CA0_288A0(void *, s32, s32, s32);
 extern void func_80028480_29080;
 extern void func_80036250_36E50;
 extern void func_80036A3C_3763C;
-extern void n_alSynRemovePlayer(void *player);
 extern void PhoneTriggerInit;
 
 void cleanupTransitionEffect();

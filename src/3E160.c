@@ -1,3 +1,4 @@
+#include "46080.h"
 #include "56910.h"
 #include "6E840.h"
 #include "common.h"
@@ -23,7 +24,6 @@ extern void func_8003EFDC_3FBDC(void);
 extern void func_8004E6F8_4F2F8(void);
 extern void func_800BB2B0(void);
 extern void func_8003FF78_40B78(void);
-extern void func_80048860_49460(Player *);
 
 void func_8003EDF8_3F9F8(void);
 void func_8003EEEC_3FAEC(void);

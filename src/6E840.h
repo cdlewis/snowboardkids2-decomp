@@ -37,3 +37,19 @@ typedef struct {
 } func_8006F9BC_705BC_arg;
 
 void func_8006F9BC_705BC(func_8006F9BC_705BC_arg *arg0, f32 arg1, f32 arg2);
+
+void func_8006E054_6EC54(u16);
+
+void func_8006DC40_6E840(void);
+
+void func_8006FEF8_70AF8(void *, s32);
+
+void func_8006FD3C_7093C(u16, void *);
+
+void func_8006FAA4_706A4(void *, s32, s32, s32, s32);
+
+void func_8006FA0C_7060C(void *, f32, f32, f32, f32);
+
+void func_8006F994_70594(void *, s32, s32, s32, s32, s32, s32);
+
+void n_alSynRemovePlayer(void *player);

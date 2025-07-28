@@ -17,7 +17,6 @@ extern D_800A8D14_A0084_type *D_800A8D14_A0084;
 extern void func_8001B020_1BC20;
 extern void func_8001B3E8_1BFE8();
 extern void func_800B00C0_9FF70;
-extern void n_alSynRemovePlayer(void *player);
 
 s32 func_8006FE10_70A10(s32);
 s32 func_8006FE10_70A10(s32);

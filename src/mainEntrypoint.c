@@ -13,9 +13,6 @@ extern OSMesgQueue mainMessageQueue;
 extern u16 D_8009ADE0_9B9E0;
 extern u8 D_800AFCE2_A7052;
 extern void D_800A32D0_A3ED0;
-extern void func_80039C34_3A834(void);
-extern void func_8006DC40_6E840(void);
-extern void func_8006E054_6EC54(u16);
 
 void mainThreadEntrypoint(void *arg) {
     u16 message;

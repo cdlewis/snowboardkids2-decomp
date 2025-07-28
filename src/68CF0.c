@@ -17,15 +17,6 @@ void func_800680F0_68CF0(void *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/68CF0", renderTextPalette);
 
-typedef struct {
-    u16 x;
-    u16 y;
-    u16 palette;
-    u8 *string;
-} TextData;
-
-extern void renderTextPalette(TextData *);
-
 void enqueueTextRender(s16 x, s16 y, s16 palette, u8 *target_string, s32 arg4, s32 arg5) {
     s32 required_size;
     s32 length = 0;

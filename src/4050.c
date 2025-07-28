@@ -1,6 +1,7 @@
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -26,7 +27,6 @@ extern s32 D_8008BF9C_8CB9C;
 extern s16 D_8008BF9E_8CB9E;
 
 extern void func_80014480_15080();
-extern void n_alSynRemovePlayer(void *player);
 extern s16 D_800AB070_A23E0;
 extern s16 D_800AFEF0_A7260;
 typedef struct {
@@ -36,12 +36,6 @@ typedef struct {
     char padding[0xDE];
     s16 unkE2;
 } allocateTaskMemory_return;
-extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
-extern void func_8006F994_70594(void *, s32, s32, s32, s32, s32, s32);
-extern void func_8006FA0C_7060C(void *, f32, f32, f32, f32);
-extern void func_8006FAA4_706A4(void *, s32, s32, s32, s32);
-extern void func_8006FD3C_7093C(u16, void *);
-extern void func_8006FEF8_70AF8(void *, s32);
 
 void loadOverlay_1DD170();
 void func_8000378C_438C();

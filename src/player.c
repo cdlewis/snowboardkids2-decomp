@@ -1,4 +1,5 @@
 #include "player.h"
+#include "audio_manager.h"
 #include "common.h"
 
 #define FORNEXT_DEPTH 4
@@ -8,12 +9,6 @@
 
 typedef unsigned long musHandle;
 typedef void (*LIBMUScb_marker)(musHandle, int);
-
-typedef struct AudioParams_s {
-    u32 syn_output_rate;
-    s32 sample_rate;
-    s32 syn_rsp_cmds;
-} AudioParams;
 
 typedef struct {
     u16 wave;
@@ -186,14 +181,6 @@ fx_t *D_800A64F4_A70F4;
 s32 *D_800A64F8_A70F8;
 ALHeap audio_heap;
 
-void initAudioManager(
-    ALSynConfig *config,
-    OSId id,
-    AudioParams *audioParams,
-    s32 maxChannels,
-    s32 maxVoices,
-    s32 sampleRate
-);
 f32 __MusIntPowerOf2(f32 x);
 void MusSetMasterVolume(u32 flags, u32 volume);
 void __MusIntInitialiseChannel(channel_t *cp);
