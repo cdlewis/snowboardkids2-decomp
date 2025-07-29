@@ -1,7 +1,7 @@
 #include "common.h"
+#include "mainEntrypoint.h"
 #include "ultra64.h"
 
-void mainThreadEntrypoint(void *);
 void idleThreadEntrypoint(void *);
 extern OSThread idleThread;
 extern OSThread mainThread;

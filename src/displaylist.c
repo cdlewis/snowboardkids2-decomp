@@ -1,10 +1,12 @@
 #include "displaylist.h"
 
 #include "19E80.h"
+#include "68CF0.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 #include "gbi.h"
+#include "geometry.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -87,12 +89,10 @@ s32 func_80070140_70D40(void *);
 void func_80062CF0_638F0();
 void setupDisplayListMatrix(DisplayListObject *);
 void func_80063A94_64694(void *);
-void func_800648EC_654EC();
-void func_800680F0_68CF0(ALPlayer *);
+void func_800648EC_654EC(void);
 void *func_8006C130_6CD30(void *, LookAt *);
-void func_80063534_64134();
-void func_80063580_64180();
-void matrixToEulerAngles();
+void func_80063534_64134(void);
+void func_80063580_64180(void);
 void func_80068060_68C60(void);
 
 void parseGameDataLayout(GameDataLayout *gameData) {

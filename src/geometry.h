@@ -36,3 +36,5 @@ void createCombinedRotationMatrix(void *, u16, u16);
 void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 
 void createRotationMatrixYX(void *, s32, s32);
+
+void matrixToEulerAngles(s32 *, s32 *, f32 *, f32 *, f32 *, f32 *, f32 *, f32 *);

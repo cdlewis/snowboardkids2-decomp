@@ -1,3 +1,4 @@
+#include "mainEntrypoint.h"
 #include "3A1F0.h"
 #include "6E840.h"
 #include "PRinternal/viint.h"
