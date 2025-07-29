@@ -14,16 +14,22 @@ typedef struct {
     s32 unk3C;
 } func_8004A9A8_4B5A8_node;
 
-extern void func_8004AA90_4B690();
-extern void func_80049300_49F00();
-extern void func_80049404_4A004();
+extern void func_8004BCFC_4C8FC(void *);
+extern void func_8004C0D0_4CCD0(void *);
+extern void func_8004AF2C_4BB2C(void *);
+extern void func_8004B264_4BE64(void *);
 
 extern s32 D_3F6670;
 extern s32 D_3F6950;
+extern s32 D_3F3EF0;
+extern s32 D_3F58E0;
 
 void func_8004AE58_4BA58(s32 **);
 void func_8004A634_4B234(void *);
 void func_8004A96C_4B56C(s32 **);
+extern void func_8004AA90_4B690(void *);
+extern void func_80049300_49F00(void *);
+extern void func_80049404_4A004(void *);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80045480_46080);
 
@@ -281,7 +287,11 @@ void func_8004AE94_4BA94(s32 arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004AED8_4BAD8);
+void func_8004AED8_4BAD8(void **arg0) {
+    *arg0 = dmaRequestAndUpdateStateWithSize(&D_3F3EF0, &D_3F58E0, 0x2608);
+    setCleanupCallback(&func_8004B264_4BE64);
+    setCallbackWithContinue(&func_8004AF2C_4BB2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004AF2C_4BB2C);
 
@@ -317,7 +327,11 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004BC20_4C820);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004BC5C_4C85C);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004BCBC_4C8BC);
+void func_8004BCBC_4C8BC(MemoryAllocatorNode **arg0) {
+    *arg0 = load_3ECE40();
+    setCleanupCallback(&func_8004C0D0_4CCD0);
+    setCallbackWithContinue(&func_8004BCFC_4C8FC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004BCFC_4C8FC);
 
