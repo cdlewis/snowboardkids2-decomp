@@ -142,7 +142,7 @@ void func_80003CC4_48C4() {
         D_8008BF9C_8CB9C = 1;
     }
     func_80003450_4050(D_8008BF9A_8CB9A, D_8008BF9E_8CB9E);
-    func_80069470_6A070(&loadOverlay_1DD170, 0x64);
+    createTaskQueue(&loadOverlay_1DD170, 0x64);
     setGameStateHandler(&func_80003D30_4930);
 }
 

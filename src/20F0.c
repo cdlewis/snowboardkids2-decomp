@@ -136,8 +136,8 @@ u8 func_80001534_2134(func_80001534_2134_arg *arg0) {
     return arg0->unk96;
 }
 
-void func_8000153C_213C(func_80002040_2C40_arg *arg0, void *arg1) {
-    if (arg0 != 0) {
+void func_8000153C_213C(func_80002040_2C40_arg *arg0, func_8000153C_213C_arg1 *arg1) {
+    if (arg0 != NULL) {
         memcpy(&arg0->unk18, arg1, 0x20);
     }
 }

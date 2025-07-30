@@ -137,7 +137,7 @@ void func_800693C4_69FC4(void (*arg0)(), s32 arg1) {
     temp_a2->unk4A = 0;
 }
 
-void func_80069470_6A070(void (*arg0)(), s8 arg1) {
+void createTaskQueue(void (*arg0)(), s32 arg1) {
     gActiveScheduler_type *temp_a2;
     gActiveScheduler_type *var_a3;
     gActiveScheduler_type *temp_v1;
@@ -147,7 +147,7 @@ void func_80069470_6A070(void (*arg0)(), s8 arg1) {
     var_a3 = &gSchedulerListSentinel;
     gFreeSchedulerList = temp_a2->unk8;
 
-    if (gActiveSchedulerList != 0) {
+    if (gActiveSchedulerList != NULL) {
         while (TRUE) {
             temp_v1 = (gActiveScheduler_type *)var_a3->next;
             if ((u8)arg1 < (u8)temp_v1->unk19) {

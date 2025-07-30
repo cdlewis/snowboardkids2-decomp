@@ -62,7 +62,7 @@ void initTaskScheduler(void);
 
 void terminateSchedulerWithCallback(void (*arg0)());
 
-void func_80069470_6A070(void (*arg0)(), s8 arg1);
+void createTaskQueue(void (*arg0)(), s32 arg1);
 
 void func_800693C4_69FC4(void (*arg0)(), s32 arg1);
 

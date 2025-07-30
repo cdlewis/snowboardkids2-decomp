@@ -124,4 +124,12 @@ void func_80002750_3350(func_80002040_2C40_arg *);
 
 void func_8000160C_220C(func_80002040_2C40_arg *arg0, s8 arg1);
 
-void func_8000153C_213C(func_80002040_2C40_arg *arg0, void *arg1);
+typedef struct {
+    u8 padding[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    func_80002040_2C40_arg *unk20;
+} func_8000153C_213C_arg1;
+
+void func_8000153C_213C(func_80002040_2C40_arg *arg0, func_8000153C_213C_arg1 *arg1);

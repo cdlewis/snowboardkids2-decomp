@@ -56,7 +56,6 @@ void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 void func_8006FF90_70B90(s32, s32, void *, void *);
 extern s32 D_800AB054_A23C4;
 extern s32 D_800AFF14_A7284;
-extern void renderTextPalette();
 extern void func_8002FA44_30644();
 extern void func_8002F290_2FE90();
 extern void func_8002F024_2FC24();
