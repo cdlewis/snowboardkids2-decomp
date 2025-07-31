@@ -69,6 +69,8 @@ void func_80019EA8_1AAA8(void);
 void func_80003450_4050(u8, s32);
 void func_80019F30_1AB30(void);
 void func_8001AF80_1BB80(void);
+s32 func_8003BB5C_3C75C();
+void func_8001A434_1B034(void);
 
 void func_80019B70_1A770(func_80019B70_1A770_arg *arg0) {
     arg0->unk20 = func_8000198C_258C(0x13, getCurrentAllocation());
@@ -244,7 +246,19 @@ void func_8001A0F4_1ACF4(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A110_1AD10);
 
-INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A3D8_1AFD8);
+void func_8001A3D8_1AFD8(void) {
+    GameState *temp_v0;
+
+    temp_v0 = (GameState *)getCurrentAllocation();
+    if (temp_v0->unk77C != 0U) {
+        temp_v0->unk77C--;
+        return;
+    }
+    if (func_8003BB5C_3C75C() == 0) {
+        func_8006FDA0_709A0(0, 0, 0x10);
+        setGameStateHandler(&func_8001A434_1B034);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A434_1B034);
 
