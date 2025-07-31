@@ -199,6 +199,9 @@ class CProjectAnalyzer:
         for filepath in self.project_dir.rglob('*'):
             if filepath.is_file():
                 if self.is_c_file(filepath):
+                    # Skip temp.c file
+                    if filepath.name == 'temp.c' and filepath.parent.name == 'src':
+                        continue
                     c_files.append(filepath)
                 elif self.is_header_file(filepath):
                     h_files.append(filepath)

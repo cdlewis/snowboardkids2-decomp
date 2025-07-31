@@ -1,10 +1,10 @@
 #include "main.h"
 
+#include "6E840.h"
 #include "common.h"
 #include "task_scheduler.h"
 
 void *func_80009F5C_AB5C(s32);
-void func_8006FC70_70870(u16, u16, s8 *, s8 *);
 
 typedef struct {
     char padding[44];

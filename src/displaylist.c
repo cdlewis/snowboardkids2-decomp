@@ -60,7 +60,6 @@ extern s32 D_216290;
 extern s32 D_800A2D40_A3940;
 extern s32 D_800A2D44_A3944;
 extern s32 D_800A2D48_A3948;
-extern void func_800638C0_644C0(void);
 extern void func_8006395C_6455C(void);
 extern void func_80065150_65D50(void);
 extern void func_800653E0_65FE0(void);
@@ -84,15 +83,11 @@ extern void guLookAtReflect(
     float zUp
 );
 
-s32 func_80069810_6A410();
-s32 func_80070140_70D40(void *);
 void func_80062CF0_638F0();
 void setupDisplayListMatrix(DisplayListObject *);
 void func_80063A94_64694(void *);
 void func_800648EC_654EC(void);
 void *func_8006C130_6CD30(void *, LookAt *);
-void func_80063534_64134(void);
-void func_80063580_64180(void);
 void func_80068060_68C60(void);
 
 void parseGameDataLayout(GameDataLayout *gameData) {

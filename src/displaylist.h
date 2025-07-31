@@ -51,3 +51,11 @@ void loadAssetMetadata(loadAssetMetadata_arg *, void *, s32);
 void enqueueDisplayListWithFrustumCull(s32, DisplayListObject *);
 
 void buildDisplayListSegment(DisplayListObject *);
+
+void func_800638C0_644C0(s32);
+
+void func_80063580_64180(s32);
+
+void func_80063534_64134(s32);
+
+void func_800634E8_640E8(DisplayListObject *arg0);

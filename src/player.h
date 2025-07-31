@@ -21,3 +21,15 @@ typedef struct {
 } musConfig;
 
 s32 MusInitialize(musConfig *config);
+
+void func_80072CC0_738C0(void *, s32);
+
+void func_80072C38_73838(void *, s32);
+
+void func_80072B3C_7373C(void *, f32);
+
+void func_80072ACC_736CC(void *, s32);
+
+void func_80072A6C_7366C(void *, s32);
+
+void func_80072814_73414(s32, s32);

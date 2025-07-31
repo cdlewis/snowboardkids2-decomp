@@ -67,3 +67,7 @@ void createTaskQueue(void (*arg0)(), s32 arg1);
 void func_800693C4_69FC4(void (*arg0)(), s32 arg1);
 
 void func_800697F4_6A3F4(s32 arg0);
+
+s16 func_80069810_6A410(void);
+
+void func_8006983C_6A43C(void (*arg0)());

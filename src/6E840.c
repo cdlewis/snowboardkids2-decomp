@@ -68,12 +68,6 @@ typedef struct {
 } D_800AB068_A23D8_type;
 extern D_800AB068_A23D8_type *D_800AB068_A23D8;
 
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} func_80070140_70D40_arg;
-
 extern D_800A3370_A3F70_type D_800A3370_A3F70;
 extern ViewportStruct D_800A3410_A4010;
 extern s8 D_800A3429_A4029;

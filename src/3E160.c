@@ -39,8 +39,6 @@ void func_8003EE50_3FA50(void);
 void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
 void func_800574A0_580A0(s32);
-void func_80057564_58164(s32);
-void func_8006983C_6A43C(void *);
 void func_800B99E0(void *);
 
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);

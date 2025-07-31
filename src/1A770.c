@@ -1,6 +1,8 @@
 #include "1A770.h"
 
 #include "20F0.h"
+#include "3A1F0.h"
+#include "3E160.h"
 #include "4050.h"
 #include "68CF0.h"
 #include "6E840.h"
@@ -43,7 +45,6 @@ extern void func_8001E590_1F190(void);
 extern void func_80019E18_1AA18(void);
 extern void func_8001A0F4_1ACF4(void);
 extern void func_800226F0_232F0(void);
-extern void func_8003D560_3E160(void);
 extern void func_80038090_38C90(void);
 extern void func_80015254_15E54(void);
 extern u8 *D_800A8D14_A0084;
@@ -52,24 +53,18 @@ void func_8001A0B4_1ACB4(void);
 void func_8001A070_1AC70(void);
 void func_80019F60_1AB60(void);
 void func_80019EFC_1AAFC(void);
-s16 func_80069810_6A410(void);
 void func_80019DC4_1A9C4(void);
 void func_80027CA0_288A0(void *, s32, s32, s32);
 void func_80019C7C_1A87C(func_8000153C_213C_arg1 *arg0);
 void func_80002468_3068(func_80002040_2C40_arg *);
-void func_80002014_2C14(func_80002040_2C40_arg *);
 void func_80019D24_1A924(TextData *arg0);
 void func_80019D84_1A984(void);
 void func_800154A8_160A8(void *, s32);
-void func_800697F4_6A3F4(s32);
 void func_800574A0_580A0(s32);
-s32 func_8006FE10_70A10(s32);
 void func_80019E60_1AA60(void);
 void func_80019EA8_1AAA8(void);
-void func_80003450_4050(u8, s32);
 void func_80019F30_1AB30(void);
 void func_8001AF80_1BB80(void);
-s32 func_8003BB5C_3C75C();
 void func_8001A434_1B034(void);
 
 void func_80019B70_1A770(func_80019B70_1A770_arg *arg0) {

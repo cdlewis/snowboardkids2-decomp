@@ -55,3 +55,13 @@ void func_8006F994_70594(void *, s32, s32, s32, s32, s32, s32);
 void n_alSynRemovePlayer(void *player);
 
 s32 func_8006FE10_70A10(s32);
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} func_80070140_70D40_arg;
+
+s32 func_80070140_70D40(func_80070140_70D40_arg *arg0);
+
+void func_8006FC70_70870(u16, u16, s8 *, s8 *);
