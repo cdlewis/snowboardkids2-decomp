@@ -4,9 +4,6 @@
 
 USE_OVERLAY(_1DC260)
 
-INCLUDE_ASM("asm/nonmatchings/4A40", func_80003E40_4A40);
-
-void func_80003E40_4A40(void *);
 s32 func_8000B6B8_C2B8(s32);
 s32 func_80035F80_36B80(s32);
 void func_80057514_58114(u32 arg0, s16 arg1, s16 arg2);
@@ -66,10 +63,63 @@ typedef struct {
     void *unk9B8[6];
     u8 padding11[0x41C];
     void *unkDEC;
-    u8 padding12[0x50];
-    s16 unkE40;
-    s16 unkE42;
+    u8 padding12[0x52];
+    u8 unkE42;
+    u8 unkE43;
+    u8 unkE44;
+    u8 unkE45;
+    u8 unkE46;
+    u8 unkE47;
+    u8 unkE48;
+    u8 unkE49;
+    u8 unkE4A;
+    u8 unkE4B;
+    u8 unkE4C;
+    u8 unkE4D;
+    u8 unkE4E;
+    u8 unkE4F;
+    u8 unkE50;
+    u8 unkE51;
+    u8 unkE52;
+    u8 unkE53;
+    u8 unkE54;
+    u8 unkE55;
+    u8 unkE56;
+    u8 unkE57;
+    s8 unkE58;
+    u8 unkE59;
+    u8 unkE5A;
+    u8 unkE5B;
+    u8 unkE5C;
+    u8 unkE5D;
+    u8 unkE5E;
 } func_80003EE0_4AE0_task_memory;
+
+void func_8006FC70_70870(u16, u16, u8 *, u8 *);
+void func_80003E40_4A40(func_80003EE0_4AE0_task_memory *arg0) {
+    arg0->unkE48 = 0;
+    arg0->unkE49 = 0x7F;
+    arg0->unkE44 = 0xE0;
+    arg0->unkE46 = 0xA0;
+    arg0->unkE45 = 0xE0;
+    arg0->unkE4C = 0x32;
+    arg0->unkE4D = 0x32;
+    arg0->unkE4E = 0x32;
+    arg0->unkE58 = -0x7F;
+    arg0->unkE54 = 0x65;
+    arg0->unkE55 = 0x65;
+    arg0->unkE56 = 0x65;
+    arg0->unkE5C = 0x80;
+    arg0->unkE5E = 0xA0;
+    arg0->unkE4A = 0x7F;
+    arg0->unkE50 = 0x7F;
+    arg0->unkE51 = 0x7F;
+    arg0->unkE52 = 0;
+    arg0->unkE59 = 0x7F;
+    arg0->unkE5A = 0;
+    arg0->unkE5D = 0x90;
+    func_8006FC70_70870(arg0->unk842, 3, &arg0->unkE44, &arg0->unkE5C);
+}
 
 void func_80003EE0_4AE0(void) {
     s32 buffer[8];
@@ -82,8 +132,8 @@ void func_80003EE0_4AE0(void) {
 
     taskMemory->unk940 = -0x90;
     taskMemory->unk942 = 0x68;
-    taskMemory->unkE40 = 0;
-    taskMemory->unkE42 = 0;
+    *(s16*)((u8*)taskMemory + 0xe40) = 0;
+    *(s16*)((u8*)taskMemory + 0xe42) = 0;
     taskMemory->unk0 = 0;
     taskMemory->unk2 = 0;
     taskMemory->unk944 = 0;

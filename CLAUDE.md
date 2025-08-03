@@ -18,6 +18,11 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 * `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>` 
 
+## Coding Tips
+
+* Do not use unions in structs unless explicitly told to
+* DO not do pointer arithmatic (outside of ++) unless explicitly told to
+
 ## Tasks
 
 ### Decompile assembly to C code
