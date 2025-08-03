@@ -1,19 +1,15 @@
 #include "56910.h"
 #include "common.h"
+#include "overlay.h"
 #include "task_scheduler.h"
 
-extern s32 D_216290;
-extern s32 D_218F00;
-extern s32 D_34CB50;
-extern s32 D_34F7E0;
-extern s32 D_34F7E0;
-extern s32 D_34F9A0;
-extern s32 D_34F9A0;
-extern s32 D_350140;
-extern s32 D_350140;
-extern s32 D_3505F0;
-extern s32 D_3505F0;
-extern s32 D_350C70;
+USE_ASSET(_216290);
+USE_ASSET(_34F7E0);
+USE_ASSET(_34CB50);
+USE_ASSET(_34F9A0);
+USE_ASSET(_350140);
+USE_ASSET(_3505F0);
+
 extern s32 D_B7E70;
 extern s32 D_B9C40;
 extern s32 D_80091550_92150[];
@@ -74,25 +70,25 @@ void *loadAsset_B7E70(void) {
 }
 
 void *loadAsset_216290(void) {
-    return dmaRequestAndUpdateStateWithSize(&D_216290, &D_218F00, 0x5740);
+    return dmaRequestAndUpdateStateWithSize(&_216290_ROM_START, &_216290_ROM_END, 0x5740);
 }
 
 void *loadAsset_34CB50(void) {
-    return dmaRequestAndUpdateStateWithSize(&D_34CB50, &D_34F7E0, 0x5E28);
+    return dmaRequestAndUpdateStateWithSize(&_34CB50_ROM_START, &_34CB50_ROM_END, 0x5E28);
 }
 
 void *loadAsset_34F9A0(void) {
-    return dmaRequestAndUpdateStateWithSize(&D_34F9A0, &D_350140, 0xE08);
+    return dmaRequestAndUpdateStateWithSize(&_34F9A0_ROM_START, &_34F9A0_ROM_END, 0xE08);
 }
 
 void *loadAsset_350140(void) {
-    return dmaRequestAndUpdateStateWithSize(&D_350140, &D_3505F0, 0x868);
+    return dmaRequestAndUpdateStateWithSize(&_350140_ROM_START, &_350140_ROM_END, 0x868);
 }
 
 void *loadAsset_3505F0(void) {
-    return dmaRequestAndUpdateStateWithSize(&D_3505F0, &D_350C70, 0xA88);
+    return dmaRequestAndUpdateStateWithSize(&_3505F0_ROM_START, &_3505F0_ROM_END, 0xA88);
 }
 
 void *loadAsset_34F7E0(void) {
-    return dmaRequestAndUpdateStateWithSize(&D_34F7E0, &D_34F9A0, 0x438);
+    return dmaRequestAndUpdateStateWithSize(&_34F7E0_ROM_START, &_34F7E0_ROM_END, 0x438);
 }

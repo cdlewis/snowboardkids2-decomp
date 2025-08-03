@@ -437,7 +437,7 @@ segments:
       - [0x91A70, data]
       - [0x91AC0, data]
       - [0x91B60, data]
-      - [0x91B90, data, 91B90]
+      - [0x91B90, data, 56910]
       - [0x91FD0, data]
       - [0x92050, data]
       - [0x943C0, data, 56C80]
@@ -949,6 +949,40 @@ segments:
       - { start: 0x1E7F60, type: bss, vram: 0x800BAEB0, name: 1DD170 }
 
   - [0x1E7F60, bin]
+
+  - name: _216290
+    type: bin
+    vram: 0
+    start: 0x216290
+
+  - [0x218F00, bin]
+
+  - name: _34CB50
+    type: bin
+    vram: 0
+    start: 0x34CB50
+
+  - name: _34F7E0
+    type: bin
+    vram: 0
+    start: 0x34F7E0
+  
+  - name: _34F9A0
+    type: bin
+    vram: 0
+    start: 0x34F9A0
+
+  - name: _350140
+    type: bin
+    vram: 0
+    start: 0x350140
+
+  - name: _3505F0
+    type: bin
+    vram: 0
+    start: 0x3505F0
+
+  - [0x350C70, bin]
 
   - name: _49BA20
     type: bin
