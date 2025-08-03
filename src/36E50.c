@@ -101,7 +101,7 @@ typedef struct {
     u8 unk12;
 } func_80036880_37480_arg;
 
-s32 func_80035F80_36B80(int);
+s32 func_80035F80_36B80(s32);
 void func_80036274_36E74(void *);
 void func_80036424_37024(void *);
 void func_80036848_37448(void *);

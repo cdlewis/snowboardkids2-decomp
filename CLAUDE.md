@@ -14,6 +14,10 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 * `assets` binary asset blobs extracted from the rom
 * `include` common headers included in all C and/or assembly code
 
+## Tools
+
+* `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>` 
+
 ## Tasks
 
 ### Decompile assembly to C code

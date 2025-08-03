@@ -1,3 +1,4 @@
+D_8008BFA0_8CBA0 = 0x8008BFA0; // size:0x50
 createTaskQueue = 0x80069470;
 
 loadAsset_B7E70 = 0x80055E7C;
