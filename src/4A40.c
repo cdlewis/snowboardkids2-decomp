@@ -4,6 +4,15 @@
 
 USE_OVERLAY(_1DC260)
 
+USE_ASSET(_49BA20);
+USE_ASSET(_619E10);
+USE_ASSET(_621390);
+USE_ASSET(_6280F0);
+USE_ASSET(_62F2F0);
+USE_ASSET(_635AB0);
+USE_ASSET(_63C9F0);
+USE_ASSET(_67E860)
+
 s32 func_8000B6B8_C2B8(s32);
 s32 func_80035F80_36B80(s32);
 void func_80057514_58114(u32 arg0, s16 arg1, s16 arg2);
@@ -16,19 +25,21 @@ void func_8006FD3C_7093C(u16, void *);
 void func_8006FDA0_709A0(void *arg0, u8 arg1, u8 arg2);
 void func_8006FE28_70A28(void *arg0, s8 arg1, s8 arg2, s8 arg3);
 void func_8006FEF8_70AF8(void *, s32);
-extern s32 D_1DC260;
-extern s32 D_1DD170;
-extern s32 D_49BA20;
-extern s32 D_49BC40;
-extern s32 D_67E860;
-extern s32 D_67FB80;
 
 typedef struct {
     void *start;
     void *end;
     s32 size;
-} D_8008BFA0_8CBA0_placeholder;
-extern D_8008BFA0_8CBA0_placeholder D_8008BFA0_8CBA0[];
+} asset;
+
+static asset D_8008BFA0_8CBA0[6] = {
+    { &_619E10_ROM_START, &_619E10_ROM_END, 0x9578 },
+    { &_621390_ROM_START, &_621390_ROM_END, 0x9578 },
+    { &_6280F0_ROM_START, &_6280F0_ROM_END, 0x9578 },
+    { &_62F2F0_ROM_START, &_62F2F0_ROM_END, 0x9578 },
+    { &_635AB0_ROM_START, &_635AB0_ROM_END, 0x9578 },
+    { &_63C9F0_ROM_START, &_63C9F0_ROM_END, 0x9578 }
+};
 
 typedef struct {
     u8 padding[0x1D8];
@@ -132,8 +143,8 @@ void func_80003EE0_4AE0(void) {
 
     taskMemory->unk940 = -0x90;
     taskMemory->unk942 = 0x68;
-    *(s16*)((u8*)taskMemory + 0xe40) = 0;
-    *(s16*)((u8*)taskMemory + 0xe42) = 0;
+    *(s16 *)((u8 *)taskMemory + 0xe40) = 0;
+    *(s16 *)((u8 *)taskMemory + 0xe42) = 0;
     taskMemory->unk0 = 0;
     taskMemory->unk2 = 0;
     taskMemory->unk944 = 0;
@@ -143,8 +154,8 @@ void func_80003EE0_4AE0(void) {
     taskMemory->unk964 = func_8000B6B8_C2B8(1);
 
     taskMemory->unk968 = func_8000B6B8_C2B8(3);
-    taskMemory->unkDEC = dmaRequestAndUpdateStateWithSize(&D_67E860, &D_67FB80, 0x2448);
-    taskMemory->unk95C = dmaRequestAndUpdateStateWithSize(&D_49BA20, &D_49BC40, 0x2B0);
+    taskMemory->unkDEC = dmaRequestAndUpdateStateWithSize(&_67E860_ROM_START, &_67E860_ROM_END, 0x2448);
+    taskMemory->unk95C = dmaRequestAndUpdateStateWithSize(&_49BA20_ROM_START, &_49BA20_ROM_END, 0x2B0);
 
     for (i = 0; i < 6; i++) {
         taskMemory->unk9B8[i] = dmaRequestAndUpdateStateWithSize(

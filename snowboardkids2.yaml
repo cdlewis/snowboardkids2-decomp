@@ -379,7 +379,7 @@ segments:
       - [0x8C980, data]
       - [0x8CA90, data]
       - [0x8CB90, data, 4050]
-      - [0x8CBA0, data, 4A40]
+      - [0x8CBA0, .data, 4A40]
       - [0x8CBF0, data]
       - [0x8CD80, data]
       - [0x8CD90, data]
@@ -948,6 +948,52 @@ segments:
       - [0x1E7F00, rodata]
       - { start: 0x1E7F60, type: bss, vram: 0x800BAEB0, name: 1DD170 }
 
-  - [0x1E7F60, bin, trailer]
+  - [0x1E7F60, bin]
+
+  - name: _49BA20
+    type: bin
+    vram: 0
+    start: 0x49BA20
+
+  - [0x49BC40, bin]
+
+  - name: _619E10
+    type: bin
+    vram: 0
+    start: 0x619E10
+
+  - name: _621390
+    type: bin
+    vram: 0
+    start: 0x621390
+
+  - name: _6280F0
+    type: bin
+    vram: 0
+    start: 0x6280F0
+
+  - name: _62F2F0
+    type: bin
+    vram: 0
+    start: 0x62F2F0
+
+  - name: _635AB0
+    type: bin
+    vram: 0
+    start: 0x635AB0
+
+  - name: _63C9F0
+    type: bin
+    vram: 0
+    start: 0x63C9F0
+
+  - [0x6448D0, bin]
+
+  - name: _67E860
+    type: bin
+    vram: 0
+    start: 0x67E860
+
+  - [0x67FB80, bin, trailer]
 
   - [0x1000000]

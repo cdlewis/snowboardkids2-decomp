@@ -24,3 +24,5 @@ BinPackParameters: false
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 PenaltyBreakBeforeFirstCallParameter: 0
+AlignArrayOfStructures: Left
+ExperimentalAutoDetectBinPacking: false
