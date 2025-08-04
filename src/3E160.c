@@ -5,12 +5,12 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "graphics.h"
+#include "overlay.h"
 #include "task_scheduler.h"
 
-extern s32 D_34CB50;
-extern s32 D_34F7E0;
-extern s32 D_3FF010;
-extern s32 D_3FF910;
+USE_ASSET(_34CB50);
+USE_ASSET(_3FF010);
+
 extern s32 D_800B0334;
 extern s32 D_800B7B7C;
 extern s32 D_800AFF10_A7280;
@@ -54,7 +54,7 @@ void func_8003EDA0_3F9A0(void) {
 
     temp_v0 = (GameState *)getCurrentAllocation();
     temp_v0->gameDataStart = func_80055D34_56934(temp_v0->memoryPoolId);
-    temp_v0->unk28 = dmaRequestAndUpdateStateWithSize(&D_3FF010, &D_3FF910, 0x16E0);
+    temp_v0->unk28 = dmaRequestAndUpdateStateWithSize(&_3FF010_ROM_START, &_3FF010_ROM_END, 0x16E0);
     func_8006983C_6A43C(&func_8003EDF8_3F9F8);
 }
 
@@ -84,7 +84,7 @@ void func_8003EE50_3FA50(void) {
             offset += 0xBE8;
         } while (i < gs->numPlayers);
     }
-    gs->unk18 = dmaRequestAndUpdateStateWithSize(&D_34CB50, &D_34F7E0, 0x5E28);
+    gs->unk18 = dmaRequestAndUpdateStateWithSize(&_34CB50_ROM_START, &_34CB50_ROM_END, 0x5E28);
     gs->unk1C = loadAsset_B7E70();
     gs->unk20 = loadAsset_216290();
     func_8006983C_6A43C(&func_8003EEEC_3FAEC);

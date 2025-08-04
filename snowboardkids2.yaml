@@ -1027,6 +1027,13 @@ segments:
 
   - [0x3F2980, bin]
 
+  - name: _3FF010
+    type: bin
+    vram: 0
+    start: 0x3FF010
+
+  - [0x3FF910, bin]
+
   - name: _40A450
     type: bin
     vram: 0
