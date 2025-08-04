@@ -6,12 +6,12 @@
 #include "gamestate.h"
 #include "graphics.h"
 #include "main.h"
+#include "overlay.h"
 #include "task_scheduler.h"
 
-extern s32 D_419440;
-extern s32 D_4196E0;
-extern s32 D_45A890;
-extern s32 D_45B130;
+USE_ASSET(_419440);
+USE_ASSET(_45A890);
+
 extern u16 D_8008D6B0_8E2B0;
 extern u8 D_800A8CC8_A0038;
 extern void *func_80035F80_36B80(s32);
@@ -75,8 +75,8 @@ void initializeGameState(s32 arg0, s32 arg1, s32 arg2) {
     scheduleTask(&ClocktowerTriggerInit, 0, 0, 0x64);
     scheduleTask(&func_80036A3C_3763C, 0, 0, 0x64);
     scheduleTask(&func_80036250_36E50, 0, 0, 0x64);
-    temp_s0->unk3E4 = dmaRequestAndUpdateState(&D_419440, &D_4196E0);
-    temp_s0->unk3DC = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
+    temp_s0->unk3E4 = dmaRequestAndUpdateState(&_419440_ROM_START, &_419440_ROM_END);
+    temp_s0->unk3DC = dmaRequestAndUpdateStateWithSize(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
     temp_s0->unk3E0 = func_80035F80_36B80(1);
     func_8006FDA0_709A0(NULL, 0xFF, 0);
     setGameStateHandler(&gameStateCountdownHandler);

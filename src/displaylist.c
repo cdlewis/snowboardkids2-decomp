@@ -10,7 +10,8 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 
-USE_OVERLAY(_9FDF0)
+USE_OVERLAY(_9FDF0);
+USE_ASSET(_215D70);
 
 typedef struct {
     u8 padding[0x20];
@@ -55,8 +56,6 @@ typedef struct {
 extern D_800AB068_A23D8_arg *D_800AB068_A23D8;
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
-extern s32 D_215D70;
-extern s32 D_216290;
 extern s32 D_800A2D40_A3940;
 extern s32 D_800A2D44_A3944;
 extern s32 D_800A2D48_A3948;
@@ -493,7 +492,7 @@ void initializeOverlaySystem(void) {
 
     temp_s0 = (void **)allocateTaskMemory(4);
     LOAD_OVERLAY(_9FDF0)
-    *temp_s0 = dmaRequestAndUpdateStateWithSize(&D_215D70, &D_216290, 0x918);
+    *temp_s0 = dmaRequestAndUpdateStateWithSize(&_215D70_ROM_START, &_215D70_ROM_END, 0x918);
     setGameStateHandler(&func_80068060_68C60);
 }
 
