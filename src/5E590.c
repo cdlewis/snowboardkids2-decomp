@@ -1,6 +1,12 @@
 #include "20F0.h"
 #include "common.h"
+#include "overlay.h"
 #include "task_scheduler.h"
+
+USE_ASSET(_3ECE40);
+USE_ASSET(_40A450);
+USE_ASSET(_40A590);
+USE_ASSET(_40A760);
 
 typedef struct {
     void *start;
@@ -26,12 +32,6 @@ extern AssetWithSize D_80094B70_95770[];
 extern AssetWithSize D_80094C30_95830[];
 extern s32 *D_80094780_95380[];
 extern s32 *D_800947B0_953B0[];
-extern void *D_3ECE40;
-extern void *D_3F2980;
-extern void *D_40A450;
-extern void *D_40A590;
-extern void *D_40A760;
-extern void *D_40A930;
 
 void *func_8005D990_5E590(s16 groupIndex, s16 pairIndex) {
     AssetPair *assetArray = D_80094390_94F90[groupIndex];
@@ -70,7 +70,7 @@ s32 func_8005DAAC_5E6AC(s16 groupIndex, s16 pairIndex) {
 }
 
 void *load_3ECE40(void) {
-    return dmaRequestAndUpdateStateWithSize(&D_3ECE40, &D_3F2980, 0xA518);
+    return dmaRequestAndUpdateStateWithSize(&_3ECE40_ROM_START, &_3ECE40_ROM_END, 0xA518);
 }
 
 void *func_8005DB00_5E700(s32 index) {
@@ -123,11 +123,11 @@ void *func_8005DC60_5E860(s32 index) {
     u8 val = ((GameState *)getCurrentAllocation())->unk7A;
 
     if (val == 1) {
-        return dmaRequestAndUpdateStateWithSize(&D_40A450, &D_40A590, 0x250);
+        return dmaRequestAndUpdateStateWithSize(&_40A450_ROM_START, &_40A450_ROM_END, 0x250);
     } else if (val == 2) {
-        return dmaRequestAndUpdateStateWithSize(&D_40A590, &D_40A760, 0x260);
+        return dmaRequestAndUpdateStateWithSize(&_40A590_ROM_START, &_40A590_ROM_END, 0x260);
     } else if (val == 3) {
-        return dmaRequestAndUpdateStateWithSize(&D_40A760, &D_40A930, 0x270);
+        return dmaRequestAndUpdateStateWithSize(&_40A760_ROM_START, &_40A760_ROM_END, 0x270);
     } else {
         return dmaRequestAndUpdateStateWithSize(
             D_80094B70_95770[index].start,

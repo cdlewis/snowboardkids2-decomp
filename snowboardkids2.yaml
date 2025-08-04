@@ -238,7 +238,7 @@ segments:
       - [0x7BAE0, lib, libgultra_rom, viswapbuf]
       - [0x7BB30, lib, libgultra_rom, viblack]
       - [0x7BB90, lib, libgultra_rom, controller]
-      - [0x7BEA0, lib, libgultra_rom, conteeplongwrite] 
+      - [0x7BEA0, lib, libgultra_rom, conteeplongwrite]
       - [0x7BF90, lib, libgultra_rom, conteeplongread]
       - [0x7C000, lib, libgultra_rom, epidma]
       - [0x7C0A0, lib, libgultra_rom, driverominit]
@@ -709,12 +709,48 @@ segments:
 
       - { start: 0x9FDF0, type: bss, vram: 0x8009F1F0, name: A02E0 }
       # - { type: lib, vram: 0x800A64C0, name: libmus, object: player, section: .bss }
-      - { type: lib, vram: 0x800A6530, name: libgultra_rom, object: sptask, section: .bss }
-      - { type: lib, vram: 0x800A6570, name: libgultra_rom, object: motor, section: .bss }
-      - { type: lib, vram: 0x800A6670, name: libgultra_rom, object: pimgr, section: .bss }
-      - { type: lib, vram: 0x800A7840, name: libgultra_rom, object: vimgr, section: .bss }
-      - { type: lib, vram: 0x800A8A60, name: libgultra_rom, object: siacs, section: .bss }
-      - { type: lib, vram: 0x800A8A70, name: libgultra_rom, object: piacs, section: .bss }
+      - {
+          type: lib,
+          vram: 0x800A6530,
+          name: libgultra_rom,
+          object: sptask,
+          section: .bss,
+        }
+      - {
+          type: lib,
+          vram: 0x800A6570,
+          name: libgultra_rom,
+          object: motor,
+          section: .bss,
+        }
+      - {
+          type: lib,
+          vram: 0x800A6670,
+          name: libgultra_rom,
+          object: pimgr,
+          section: .bss,
+        }
+      - {
+          type: lib,
+          vram: 0x800A7840,
+          name: libgultra_rom,
+          object: vimgr,
+          section: .bss,
+        }
+      - {
+          type: lib,
+          vram: 0x800A8A60,
+          name: libgultra_rom,
+          object: siacs,
+          section: .bss,
+        }
+      - {
+          type: lib,
+          vram: 0x800A8A70,
+          name: libgultra_rom,
+          object: piacs,
+          section: .bss,
+        }
       - { type: bss, vram: 0x800A8A80, name: A8A80 }
 
   - name: _9FDF0
@@ -966,7 +1002,7 @@ segments:
     type: bin
     vram: 0
     start: 0x34F7E0
-  
+
   - name: _34F9A0
     type: bin
     vram: 0
@@ -983,6 +1019,30 @@ segments:
     start: 0x3505F0
 
   - [0x350C70, bin]
+
+  - name: _3ECE40
+    type: bin
+    vram: 0
+    start: 0x3ECE40
+
+  - [0x3F2980, bin]
+
+  - name: _40A450
+    type: bin
+    vram: 0
+    start: 0x40A450
+
+  - name: _40A590
+    type: bin
+    vram: 0
+    start: 0x40A590
+
+  - name: _40A760
+    type: bin
+    vram: 0
+    start: 0x40A760
+
+  - [0x40A930, bin]
 
   - name: _49BA20
     type: bin
