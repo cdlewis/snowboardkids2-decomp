@@ -403,8 +403,7 @@ segments:
       - [0x8E3E0, data]
       - [0x8E3F0, .data, "clocktower_trigger"]
       - [0x8E400, .data, "trick_trigger"]
-      - [0x8E410, data]
-      - [0x8E420, data]
+      - [0x8E410, .data, "unused_triggers"]
       - [0x8E4E0, data]
       - [0x8E5B0, data]
       - [0x8E5C0, data]
@@ -416,7 +415,7 @@ segments:
       - [0x8FB70, data]
       - [0x8FC70, data]
       - [0x8FD50, data]
-      - [0x90410, data] # 36E50
+      - [0x90410, data, 36E50]
       - [0x90470, data]
       - [0x905F0, data]
       - [0x90930, data]
@@ -434,7 +433,7 @@ segments:
       - [0x91A20, data]
       - [0x91A40, data]
       - [0x91A60, data]
-      - [0x91A70, data]
+      - [0x91A70, data, 51060]
       - [0x91AC0, data]
       - [0x91B60, data]
       - [0x91B90, data, 56910]
@@ -1028,7 +1027,7 @@ segments:
     type: bin
     vram: 0
     start: 0x266C50
-  
+
   - [0x274E20, bin]
 
   - name: _27A780
@@ -1042,49 +1041,49 @@ segments:
     type: bin
     vram: 0
     start: 0x290D70
-  
+
   - [0x29DF80, bin]
 
   - name: _2A2810
     type: bin
     vram: 0
     start: 0x2A2810
-  
+
   - [0x2B0500, bin]
 
   - name: _2B45F0
     type: bin
     vram: 0
     start: 0x2B45F0
-  
+
   - [0x2C8310, bin]
 
   - name: _2CD790
     type: bin
     vram: 0
     start: 0x2CD790
-  
+
   - [0x2DFA30, bin]
 
   - name: _2E6CC0
     type: bin
     vram: 0
     start: 0x2E6CC0
-  
+
   - [0x2F6620, bin]
 
   - name: _2FC440
     type: bin
     vram: 0
     start: 0x2FC440
-  
+
   - [0x30B250, bin]
 
   - name: _30F9D0
     type: bin
     vram: 0
     start: 0x30F9D0
-  
+
   - [0x322130, bin]
 
   - name: _325260

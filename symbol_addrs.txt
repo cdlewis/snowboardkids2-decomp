@@ -1,3 +1,14 @@
+PaintShopLabel = 0x8008D810;
+InformationLabel = 0x8008D824;
+ShootCrossLabel = 0x8008D838;
+ChrSelectLabel = 0x8008D84C;
+BoardShopLabel = 0x8008D860;
+TrickGameLabel = 0x8008D874;
+SaveLoadLabel= 0x8008D888;
+RankingLabel = 0x8008D89C;
+SpeedCrossLabel = 0x8008D8B0;
+SendenLabel = 0x8008D8C4;
+
 D_8008BFA0_8CBA0 = 0x8008BFA0; // size:0x50
 createTaskQueue = 0x80069470;
 
