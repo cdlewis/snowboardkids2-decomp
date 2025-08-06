@@ -4,6 +4,10 @@
 #include "common.h"
 
 typedef struct {
+    u8 pading[0x1D8];
+} GameStateUnk4;
+
+typedef struct {
     s32 unk0;
     s32 unk4;
 } GameStateUnk28;
@@ -24,11 +28,11 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ ALPlayer *audioPlayer0;
-    u8 PAD_0[4];
-    /* 0x8 */ ALPlayer *audioPlayer1;
-    u8 PAD_1[0x2];
+    GameStateUnk4 *unk4;
+    GameStateUnk4 *unk8;
+    GameStateUnk4 *unkC;
     Player *players;
-    u8 PAD_NEW_2[0x4];
+    void *unk14;
     void *unk18;
     void *unk1C;
     void *unk20;

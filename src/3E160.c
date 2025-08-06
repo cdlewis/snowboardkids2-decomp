@@ -24,7 +24,14 @@ extern void func_8003EFDC_3FBDC(void);
 extern void func_8004E6F8_4F2F8(void);
 extern void func_800BB2B0(void);
 extern void func_8003FF78_40B78(void);
+extern s8 D_800AFCE2_A7052;
 
+void func_8003AF6C_3BB6C();
+void func_80057B1C_5871C(s32);
+s32 func_8006FE10_70A10(s32);
+void func_8006FE94_70A94(s32, s32, s32, s32);
+void func_800B9AE0(Player*);
+void func_800407B4_413B4(void);
 void func_8003EDF8_3F9F8(void);
 void func_8003EEEC_3FAEC(void);
 void func_8003FB90_40790(void);
@@ -349,7 +356,56 @@ void func_80040528_41128(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_80040588_41188);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_80040608_41208);
+void func_80040608_41208(void) {
+    GameState *gameState;
+    s32 i;
+    s32 playerOffset;
+
+    gameState = getCurrentAllocation();
+
+    if (func_8006FE10_70A10(0) != 0) {
+        return;
+    }
+
+    func_8006FE94_70A94(0, 0, 0, 0);
+    terminateAllTasks();
+
+    for (i = 0; i < gameState->unk5D; i++) {
+        n_alSynRemovePlayer(gameState->unk4 + i);
+    }
+
+    for (i = 0; i < gameState->unk5D; i++) {
+        n_alSynRemovePlayer(gameState->unk8 + i);
+    }
+
+    for (i = 0; i < gameState->unk5D; i++) {
+        n_alSynRemovePlayer(gameState->unkC + i);
+    }
+
+    for (i = 0; i < gameState->numPlayers; i++) {
+        func_800B9AE0(gameState->players + i);
+    }
+
+    n_alSynRemovePlayer(gameState->audioPlayer0);
+
+    freeGameStateMemory((s32 *)gameState->players);
+    freeGameStateMemory((s32 *)gameState->audioPlayer0);
+    freeGameStateMemory((s32 *)gameState->unk4);
+    freeGameStateMemory((s32 *)gameState->unk8);
+    freeGameStateMemory((s32 *)gameState->unkC);
+    freeGameStateMemory((s32 *)gameState->gameDataStart);
+    freeGameStateMemory((s32 *)gameState->unk18);
+    freeGameStateMemory((s32 *)gameState->unk1C);
+    freeGameStateMemory((s32 *)gameState->unk20);
+    freeGameStateMemory((s32 *)gameState->unk28);
+    freeGameStateMemory((s32 *)gameState->unk14);
+
+    osViExtendVStart(0);
+    func_80057B1C_5871C(0x14);
+    terminateSchedulerWithCallback(&func_800407B4_413B4);
+    D_800AFCE2_A7052 = 1;
+    func_8003AF6C_3BB6C();
+}
 
 void func_800407B4_413B4(void) {
     func_800697F4_6A3F4(D_800A24A0_A30A0);
