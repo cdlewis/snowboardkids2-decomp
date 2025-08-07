@@ -53,7 +53,8 @@ typedef struct {
     u8 memoryPoolId;
     u8 unk5D;
     u8 numPlayers;
-    u8 PAD_6[0x17];
+    u8 unk5F;
+    u8 PAD_6[0x16];
     u8 gamePaused;
     u8 unk77;
     u8 unk78;

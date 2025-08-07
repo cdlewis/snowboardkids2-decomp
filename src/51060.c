@@ -124,7 +124,7 @@ void func_80050504_51104(func_80050504_51104_arg *arg0) {
     s32 i;
     gs = (GameState *)getCurrentAllocation();
     i = 0;
-    if (gs->PAD_6[0x17] == 0) {
+    if (gs->PAD_6[0x16] == 0) {
         arg0->unk4 = (s32)(gs->unk44 + ((arg0->unk34 << 6) + 0xFC0));
         arg0->unk34 = arg0->unk34 + 1;
         if (arg0->unk34 == 4) {
