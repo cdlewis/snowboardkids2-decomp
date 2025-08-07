@@ -25,7 +25,12 @@ extern void func_8004E6F8_4F2F8(void);
 extern void func_800BB2B0(void);
 extern void func_8003FF78_40B78(void);
 extern s8 D_800AFCE2_A7052;
+extern s32 D_80090460_91060[];
+extern s32 D_800904A0_910A0[];
+extern s32 D_800904E0_910E0[];
 
+void func_8002ED40_2F940(s32);
+void func_80040420_41020(void);
 void func_8003AF6C_3BB6C();
 void func_80057B1C_5871C(s32);
 s32 func_8006FE10_70A10(s32);
@@ -316,7 +321,48 @@ void func_800401E8_40DE8(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_80040238_40E38);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_80040304_40F04);
+void func_80040304_40F04(void) {
+    GameState *gameState;
+    Player *player;
+
+    gameState = (GameState *)getCurrentAllocation();
+    gameState->unk4C--;
+
+    if (gameState->unk4C != 0) {
+        return;
+    }
+
+    player = gameState->players;
+    gameState->unk7C = 1;
+
+    switch (player->unkBC4) {
+        case 0:
+            func_8002ED40_2F940(player->unkB6C);
+            func_8002ED40_2F940(D_80090460_91060[gameState->memoryPoolId]);
+            break;
+
+        case 1:
+            func_8002ED40_2F940(player->unkB6C);
+            func_8002ED40_2F940(D_800904A0_910A0[gameState->memoryPoolId]);
+            break;
+
+        case 2:
+            func_8002ED40_2F940(player->unkB6C);
+            func_8002ED40_2F940(D_800904E0_910E0[gameState->memoryPoolId]);
+            break;
+
+        case 3:
+            player->unkB6C = 0;
+            break;
+
+        default:
+            break;
+    }
+
+    scheduleTask(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
+    func_800574A0_580A0(0xA);
+    setGameStateHandler(&func_80040420_41020);
+}
 
 void func_80040420_41020(void) {
     if (D_800AFF10_A7280[0] & 0x8000) {
@@ -339,7 +385,21 @@ void func_80040468_41068(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_800404A8_410A8);
+void func_800404A8_410A8(void) {
+    s32 i;
+    s32 *var_a0;
+    GameState *temp_v0;
+
+    temp_v0 = (GameState *)getCurrentAllocation();
+    for (i = 0; i < temp_v0->unk5F; i++) {
+        if (D_800AFF10_A7280[i] & 0x8000) {
+            func_8006FDA0_709A0(0, 0xFF, 0x10);
+            func_80057564_58164(0x3C);
+            setGameStateHandler(&func_80040608_41208);
+            return;
+        }
+    }
+}
 
 void func_80040528_41128(void) {
     GameState *gs;
