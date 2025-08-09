@@ -4,7 +4,35 @@
 #include "common.h"
 #include "task_scheduler.h"
 
+typedef struct {
+    u8 padding[0x16];
+    s16 unk16;
+    u8 padding2[0xC];
+} SubEntry;
+
+typedef struct {
+    SubEntry *sub_entries;
+    u32 param1;
+    u32 color1;
+    u32 color2;
+    char name[8];
+    u32 addr1;
+    u32 addr2;
+    u32 addr3;
+    u32 addr4;
+    u32 size;
+    void *ptr1;
+    u32 param2;
+    void *ptr2;
+    u32 param3;
+} DataEntry; // Total: 60 bytes
+extern DataEntry D_800891D4_89DD4[];
+
 void *func_80009F5C_AB5C(s32);
+void func_80000DA4_19A4(s32 arg0);
+
+extern void func_80000CAC_18AC(void*);
+extern void func_80009E68_AA68(void *, s16);
 
 typedef struct {
     char padding[44];
@@ -117,7 +145,21 @@ void func_80000BF4_17F4(func_80000BF4_17F4_arg *arg0) {
     arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000C2C_182C);
+typedef struct {
+    struct {
+        u8 padding[0x84];
+        s16 unk84;
+    } *unk0;
+    s8 unk4;
+    s32 unk8;
+} func_80000C2C_182C_arg;
+void func_80000C2C_182C(func_80000C2C_182C_arg *arg0) {
+    DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
+    SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
+    setCleanupCallback((void (*)(void *))&func_80000DA4_19A4);
+    func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
+    setCallback(&func_80000CAC_18AC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000CAC_18AC);
 
