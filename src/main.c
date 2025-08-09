@@ -110,12 +110,7 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000968_1568);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_800009A0_15A0);
 
-// connected to __rmonPanic via L80000AE0_16E0
 INCLUDE_ASM("asm/nonmatchings/main", func_80000A68_1668);
-
-INCLUDE_ASM("asm/nonmatchings/main", __rmonPanic);
-
-INCLUDE_ASM("asm/nonmatchings/main", rmonmisc_text_010C);
 
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *arg0) {
     arg0->unk30 = (s32 *)freeGameStateMemory(arg0->unk30);
