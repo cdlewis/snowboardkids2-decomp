@@ -154,7 +154,7 @@ void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
     arg0->unk20 = 0x80000;
     arg0->unk24 = 4;
     arg0->unk26 = 0;
-    createYRotationMatrix(&arg0->unk4, 0x1E00);
+    createYRotationMatrix((s16(*)[3])&arg0->unk4, 0x1E00);
     setCleanupCallback(func_8002F110_2FD10);
     setCallback((void (*)(void *))func_8002EFD8_2FBD8);
 }

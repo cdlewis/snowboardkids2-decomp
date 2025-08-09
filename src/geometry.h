@@ -23,7 +23,7 @@ typedef struct {
     s16 m[9];
 } Mat3x3;
 
-void createYRotationMatrix(Mat3x3 *matrix, s16 angle);
+void createYRotationMatrix(s16 matrix[3][3], s16 angle);
 void createZRotationMatrix(s16 matrix[3][3], s16 angle);
 void createXRotationMatrix(s16 matrix[3][3], u16 angle);
 

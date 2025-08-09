@@ -79,7 +79,7 @@ void func_80031A0C_3260C(func_80031A0C_3260C_arg *arg0) {
     arg0->unk1C = 0xFFE00000;
     arg0->unk20 = 0;
 
-    createYRotationMatrix((Mat3x3 *)&arg0->unk4, 0x200);
+    createYRotationMatrix((s16(*)[3])&arg0->unk4, 0x200);
 
     arg0->unk24 = 0x10;
     arg0->unk26 = 0x10;

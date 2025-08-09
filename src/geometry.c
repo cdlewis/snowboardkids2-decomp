@@ -103,11 +103,19 @@ void createXRotationMatrix(s16 matrix[3][3], u16 angle) {
     matrix[2][2] = cosVal;
 }
 
-void createYRotationMatrix(Mat3x3 *matrix, s16 angle) {
+void createYRotationMatrix(s16 matrix[3][3], s16 angle) {
     s16 sinTheta = approximateSin(angle);
     s16 cosTheta = approximateCos(angle);
 
-    *matrix = (Mat3x3){ cosTheta, 0, -sinTheta, 0, 0x2000, 0, sinTheta, 0, cosTheta };
+    matrix[0][0] = cosTheta;
+    matrix[0][1] = 0;
+    matrix[0][2] = -sinTheta;
+    matrix[1][0] = 0;
+    matrix[1][1] = 0x2000;
+    matrix[1][2] = 0;
+    matrix[2][0] = sinTheta;
+    matrix[2][1] = 0;
+    matrix[2][2] = cosTheta;
 }
 
 void createZRotationMatrix(s16 matrix[3][3], s16 angle) {
