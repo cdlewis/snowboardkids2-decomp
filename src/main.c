@@ -19,9 +19,16 @@ typedef struct {
 } SubEntry;
 
 typedef struct {
-    u8 padding[0x14];
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
     s32 unk14;
-    u8 padding2[0xC];
+    s16 unk18;
+    s16 unk1A;
+    s32 unk1C;
+    s32 unk20;
 } SubEntryVariant;
 
 typedef struct {
@@ -41,16 +48,6 @@ typedef struct {
     u32 param3;
 } DataEntry; // Total: 60 bytes
 extern DataEntry D_800891D4_89DD4[];
-
-void *func_80009F5C_AB5C(s32);
-void func_80000DA4_19A4(s32 arg0);
-void func_80001264_1E64(s32 arg0);
-void func_800011DC_1DDC(void *);
-
-extern void func_80004FF8_5BF8(u16, void *);
-extern void func_80000CAC_18AC(void *);
-extern void func_80009E68_AA68(void *, s16);
-extern void func_800007C4_13C4(void *, void *);
 
 typedef struct {
     char padding[44];
@@ -114,6 +111,19 @@ typedef struct {
     u16 unk52;
     s16 unk54;
 } func_80000C2C_182C_arg;
+
+void *func_80009F5C_AB5C(s32);
+void func_80000DA4_19A4(s32 arg0);
+void func_80001264_1E64(s32 arg0);
+void func_800011DC_1DDC(void *);
+void func_80000CAC_18AC(func_80000C2C_182C_arg *);
+void func_80009F90_AB90(void *, s32, s16, s32);
+void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32); /* extern */
+
+extern void func_8000A030_AC30(void *, s32);
+extern void func_80004FF8_5BF8(u16, void *);
+extern void func_80009E68_AA68(void *, s16);
+extern void func_800007C4_13C4(void *, void *);
 
 void func_80000450_1050(func_80000450_1050_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;
@@ -265,10 +275,41 @@ void func_80000C2C_182C(func_80000C2C_182C_arg *arg0) {
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
     setCleanupCallback((void (*)(void *))&func_80000DA4_19A4);
     func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
-    setCallback(&func_80000CAC_18AC);
+    setCallback((void (*)(void *))&func_80000CAC_18AC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000CAC_18AC);
+void func_80000CAC_18AC(func_80000C2C_182C_arg *arg0) {
+    DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
+    SubEntryVariant *subEntry = (SubEntryVariant *)&entry->sub_entries[arg0->unk4];
+
+    if (arg0->unk0->unk86 != 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    switch (arg0->unk5) {
+        case 0:
+            func_80009F90_AB90(&arg0->unk8, 0x10000, subEntry->unk1A, -1);
+            arg0->unk5 = 1;
+            break;
+        case 1:
+            func_8000A030_AC30(&arg0->unk8, 0x10000);
+            break;
+    }
+
+    if (arg0->unk0->unk87 != 0) {
+        func_8000A13C_AD3C(
+            &arg0->unk8,
+            arg0->unk0->ptr->unk16,
+            subEntry->unk8,
+            subEntry->unkC,
+            subEntry->unk10,
+            subEntry->unk1C,
+            subEntry->unk1C,
+            0,
+            0
+        );
+    }
+}
 
 void func_80000DA4_19A4(s32 arg0) {
     func_80009F5C_AB5C(arg0 + 8);
