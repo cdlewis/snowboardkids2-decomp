@@ -6,9 +6,16 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    u8 padding[0x16];
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s16 unk14;
     s16 unk16;
-    u8 padding2[0xC];
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
 } SubEntry;
 
 typedef struct {
@@ -40,6 +47,7 @@ void func_80000DA4_19A4(s32 arg0);
 void func_80001264_1E64(s32 arg0);
 void func_800011DC_1DDC(void *);
 
+extern void func_80004FF8_5BF8(u16, void *);
 extern void func_80000CAC_18AC(void *);
 extern void func_80009E68_AA68(void *, s16);
 extern void func_800007C4_13C4(void *, void *);
@@ -78,15 +86,31 @@ typedef struct {
 
 typedef struct {
     struct {
-        u8 padding[0x84];
+        struct {
+            u8 padding[0x14];
+            s16 unk14;
+            u16 unk16;
+        } *ptr;
+        u8 padding2[0x80];
         s16 unk84;
         s8 unk86;
+        s8 unk87;
     } *unk0;
     s8 unk4;
     s32 unk8;
-    u8 padding[0x38];
+    u8 padding2[0x10];
+    s32 unk1C;
+    s32 unk20;
+    s32 unk24;
+    u8 padding[0x1C];
     u16 unk44;
-    u8 padding2[0xE];
+    u16 unk46;
+    u16 unk48;
+    u16 unk4A;
+    s16 unk4C;
+    s16 unk4E;
+    u16 unk50;
+    u16 unk52;
     s16 unk54;
 } func_80000C2C_182C_arg;
 
@@ -209,7 +233,29 @@ void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000F4C_1B4C);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80001040_1C40);
+void func_80001040_1C40(func_80000C2C_182C_arg *arg0) {
+    DataEntry *entry;
+    SubEntry *subEntry;
+
+    entry = &D_800891D4_89DD4[arg0->unk0->unk84];
+    subEntry = &entry->sub_entries[arg0->unk4];
+
+    if (arg0->unk0->unk86 != 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    arg0->unk4C = arg0->unk4C + arg0->unk50;
+    arg0->unk4E = arg0->unk4E + arg0->unk52;
+    arg0->unk4C = (u8)arg0->unk4C;
+    arg0->unk4E = (u8)arg0->unk4E;
+    arg0->unk1C = subEntry->unk8;
+    arg0->unk20 = subEntry->unkC;
+    arg0->unk24 = subEntry->unk10;
+
+    if (arg0->unk0->unk87 != 0) {
+        func_80004FF8_5BF8(arg0->unk0->ptr->unk16, &arg0->unk8);
+    }
+}
 
 void func_80001114_1D14(func_80001114_1D14_arg *arg0) {
     arg0->unk44 = (s32 *)freeGameStateMemory(arg0->unk44);
