@@ -30,8 +30,10 @@ extern DataEntry D_800891D4_89DD4[];
 
 void *func_80009F5C_AB5C(s32);
 void func_80000DA4_19A4(s32 arg0);
+void func_80001264_1E64(s32 arg0);
+void func_800011DC_1DDC(void *);
 
-extern void func_80000CAC_18AC(void*);
+extern void func_80000CAC_18AC(void *);
 extern void func_80009E68_AA68(void *, s16);
 
 typedef struct {
@@ -65,6 +67,17 @@ typedef struct {
     char padding[0x87];
     char unk87;
 } func_80000450_1050_arg;
+
+typedef struct {
+    struct {
+        u8 padding[0x84];
+        s16 unk84;
+    } *unk0;
+    s8 unk4;
+    s32 unk8;
+    u8 padding[0x48];
+    s16 unk54;
+} func_80000C2C_182C_arg;
 
 void func_80000450_1050(func_80000450_1050_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;
@@ -145,14 +158,6 @@ void func_80000BF4_17F4(func_80000BF4_17F4_arg *arg0) {
     arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
 }
 
-typedef struct {
-    struct {
-        u8 padding[0x84];
-        s16 unk84;
-    } *unk0;
-    s8 unk4;
-    s32 unk8;
-} func_80000C2C_182C_arg;
 void func_80000C2C_182C(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
@@ -186,7 +191,14 @@ void func_80001114_1D14(func_80001114_1D14_arg *arg0) {
     arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80001158_1D58);
+void func_80001158_1D58(func_80000C2C_182C_arg *arg0) {
+    DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
+    SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
+    setCleanupCallback((void (*)(void *))&func_80001264_1E64);
+    func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
+    arg0->unk54 = 0;
+    setCallback(&func_800011DC_1DDC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/main", func_800011DC_1DDC);
 
