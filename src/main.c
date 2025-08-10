@@ -317,7 +317,19 @@ void func_80000DA4_19A4(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000DC0_19C0);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000E84_1A84);
+void func_80000E84_1A84(func_80000C2C_182C_arg *arg0) {
+    DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
+    SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
+
+    if (arg0->unk0->unk86 != 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    arg0->unk1C = subEntry->unk8;
+    arg0->unk20 = subEntry->unkC;
+    arg0->unk24 = subEntry->unk10;
+    func_800007C4_13C4(arg0->unk0, &arg0->unk8);
+}
 
 void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0) {
     arg0->unk30 = (s32 *)freeGameStateMemory(arg0->unk30);
