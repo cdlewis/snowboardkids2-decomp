@@ -2,6 +2,7 @@
 
 #include "6E840.h"
 #include "common.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -9,6 +10,12 @@ typedef struct {
     s16 unk16;
     u8 padding2[0xC];
 } SubEntry;
+
+typedef struct {
+    u8 padding[0x14];
+    s32 unk14;
+    u8 padding2[0xC];
+} SubEntryVariant;
 
 typedef struct {
     SubEntry *sub_entries;
@@ -35,6 +42,7 @@ void func_800011DC_1DDC(void *);
 
 extern void func_80000CAC_18AC(void *);
 extern void func_80009E68_AA68(void *, s16);
+extern void func_800007C4_13C4(void *, void *);
 
 typedef struct {
     char padding[44];
@@ -72,10 +80,13 @@ typedef struct {
     struct {
         u8 padding[0x84];
         s16 unk84;
+        s8 unk86;
     } *unk0;
     s8 unk4;
     s32 unk8;
-    u8 padding[0x48];
+    u8 padding[0x38];
+    u16 unk44;
+    u8 padding2[0xE];
     s16 unk54;
 } func_80000C2C_182C_arg;
 
@@ -145,7 +156,22 @@ INCLUDE_ASM("asm/nonmatchings/main", func_800007C4_13C4);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_800007F0_13F0);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_800008D0_14D0);
+void func_800008D0_14D0(func_80000C2C_182C_arg *arg0) {
+    u16 temp;
+    DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
+    SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
+
+    if (arg0->unk0->unk86 != 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    temp = ((SubEntryVariant *)subEntry)->unk14;
+    temp = arg0->unk44 + temp;
+    arg0->unk44 = temp;
+
+    createYRotationMatrix(&arg0->unk8, temp);
+    func_800007C4_13C4(arg0->unk0, &arg0->unk8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000968_1568);
 

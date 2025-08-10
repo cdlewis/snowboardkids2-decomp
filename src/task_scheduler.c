@@ -504,7 +504,7 @@ void setCleanupCallback(void(callback)(void *)) {
     gDMAOverlay->cleanupCallback = callback;
 }
 
-void func_80069CF8_6A8F8() {
+void func_80069CF8_6A8F8(void) {
     u8 temp = gDMAOverlay->unkE - 3;
     if (temp < 2) {
         gDMAOverlay->unkE = 4;

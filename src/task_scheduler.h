@@ -71,3 +71,5 @@ void func_800697F4_6A3F4(s32 arg0);
 s16 func_80069810_6A410(void);
 
 void func_8006983C_6A43C(void (*arg0)());
+
+void func_80069CF8_6A8F8(void);

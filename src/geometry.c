@@ -103,7 +103,7 @@ void createXRotationMatrix(s16 matrix[3][3], u16 angle) {
     matrix[2][2] = cosVal;
 }
 
-void createYRotationMatrix(s16 matrix[3][3], s16 angle) {
+void createYRotationMatrix(s16 matrix[3][3], u16 angle) {
     s16 sinTheta = approximateSin(angle);
     s16 cosTheta = approximateCos(angle);
 
