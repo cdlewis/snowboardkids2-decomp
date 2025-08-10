@@ -115,9 +115,9 @@ typedef struct {
     s32 unk60;
 } func_80000C2C_182C_arg;
 
-void *func_80009F5C_AB5C(s32);
-void func_80000DA4_19A4(s32 arg0);
-void func_80001264_1E64(s32 arg0);
+void *func_80009F5C_AB5C(func_80000C2C_182C_arg *arg0);
+void func_80000DA4_19A4(func_80000C2C_182C_arg *arg0);
+void func_80001264_1E64(func_80000C2C_182C_arg *arg0);
 void func_800011DC_1DDC(void *);
 void func_80000CAC_18AC(func_80000C2C_182C_arg *);
 void func_80009F90_AB90(void *, s32, s16, s32);
@@ -314,8 +314,8 @@ void func_80000CAC_18AC(func_80000C2C_182C_arg *arg0) {
     }
 }
 
-void func_80000DA4_19A4(s32 arg0) {
-    func_80009F5C_AB5C(arg0 + 8);
+void func_80000DA4_19A4(func_80000C2C_182C_arg *arg0) {
+    func_80009F5C_AB5C(&arg0->unk8);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000DC0_19C0);
@@ -382,8 +382,8 @@ void func_80001158_1D58(func_80000C2C_182C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/main", func_800011DC_1DDC);
 
-void func_80001264_1E64(s32 arg0) {
-    func_80009F5C_AB5C(arg0 + 8);
+void func_80001264_1E64(func_80000C2C_182C_arg *arg0) {
+    func_80009F5C_AB5C(&arg0->unk8);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80001280_1E80);
@@ -427,6 +427,6 @@ void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0) {
     }
 }
 
-void func_800014C8_20C8(s32 arg0) {
-    func_80009F5C_AB5C(arg0 + 8);
+void func_800014C8_20C8(func_80000C2C_182C_arg *arg0) {
+    func_80009F5C_AB5C(&arg0->unk8);
 }
