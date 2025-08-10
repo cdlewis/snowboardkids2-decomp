@@ -97,6 +97,7 @@ typedef struct {
         s8 unk87;
     } *unk0;
     s8 unk4;
+    s8 unk5;
     s32 unk8;
     u8 padding2[0x10];
     s32 unk1C;
@@ -201,7 +202,58 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000968_1568);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_800009A0_15A0);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000A68_1668);
+void func_80000A68_1668(func_80000C2C_182C_arg *arg0) {
+    s16 yRotMatrix[3][3];
+    s16 padding2[3];
+    s16 zRotMatrix[3][3];
+    s16 padding[3];
+    DataEntry *entry;
+    SubEntry *subEntry;
+
+    entry = &D_800891D4_89DD4[arg0->unk0->unk84];
+    subEntry = &entry->sub_entries[arg0->unk4];
+    if (arg0->unk0->unk86 != 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    switch (arg0->unk5) {
+        case 0:
+            arg0->unk44 += subEntry->unk18;
+            if (subEntry->unk18 > 0) {
+                if ((s16)arg0->unk44 > subEntry->unk1C) {
+                    arg0->unk5 = 1;
+                }
+            } else {
+                if ((s16)arg0->unk44 < -subEntry->unk1C) {
+                    arg0->unk5 = 1;
+                }
+            }
+            break;
+
+        case 1:
+            arg0->unk44 -= subEntry->unk18;
+            if (subEntry->unk18 > 0) {
+                if ((s16)arg0->unk44 < -subEntry->unk1C) {
+                    arg0->unk5 = 0;
+                }
+            } else {
+                if ((s16)arg0->unk44 > subEntry->unk1C) {
+                    arg0->unk5 = 0;
+                }
+            }
+            break;
+    }
+
+    createYRotationMatrix(yRotMatrix, subEntry->unk16);
+    createZRotationMatrix(zRotMatrix, arg0->unk44);
+    func_8006B084_6BC84(zRotMatrix, yRotMatrix, &arg0->unk8);
+
+    arg0->unk1C = subEntry->unk8;
+    arg0->unk20 = subEntry->unkC;
+    arg0->unk24 = subEntry->unk10;
+
+    func_800007C4_13C4(arg0->unk0, &arg0->unk8);
+}
 
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *arg0) {
     arg0->unk30 = (s32 *)freeGameStateMemory(arg0->unk30);

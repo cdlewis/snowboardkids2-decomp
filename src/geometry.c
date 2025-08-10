@@ -118,7 +118,7 @@ void createYRotationMatrix(s16 matrix[3][3], u16 angle) {
     matrix[2][2] = cosTheta;
 }
 
-void createZRotationMatrix(s16 matrix[3][3], s16 angle) {
+void createZRotationMatrix(s16 matrix[3][3], u16 angle) {
     s16 new_var;
     int new_var2;
     int new_var3;
