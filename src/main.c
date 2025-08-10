@@ -109,7 +109,10 @@ typedef struct {
     s16 unk4E;
     u16 unk50;
     u16 unk52;
-    s16 unk54;
+    s32 unk54;
+    s32 unk58;
+    s32 unk5C;
+    s32 unk60;
 } func_80000C2C_182C_arg;
 
 void *func_80009F5C_AB5C(s32);
@@ -120,7 +123,7 @@ void func_80000CAC_18AC(func_80000C2C_182C_arg *);
 void func_80009F90_AB90(void *, s32, s16, s32);
 void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32); /* extern */
 
-extern void func_8000A030_AC30(void *, s32);
+extern s32 func_8000A030_AC30(void *, s32);
 extern void func_80004FF8_5BF8(u16, void *);
 extern void func_80009E68_AA68(void *, s16);
 extern void func_800007C4_13C4(void *, void *);
@@ -373,7 +376,7 @@ void func_80001158_1D58(func_80000C2C_182C_arg *arg0) {
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
     setCleanupCallback((void (*)(void *))&func_80001264_1E64);
     func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
-    arg0->unk54 = 0;
+    *(s16 *)&arg0->unk54 = 0;
     setCallback(&func_800011DC_1DDC);
 }
 
@@ -385,7 +388,44 @@ void func_80001264_1E64(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80001280_1E80);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_800013B8_1FB8);
+void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0) {
+    DataEntry *entry;
+    SubEntryVariant *subEntry;
+
+    entry = &D_800891D4_89DD4[arg0->unk0->unk84];
+    subEntry = (SubEntryVariant *)&entry->sub_entries[arg0->unk4];
+
+    if (arg0->unk0->unk86 != 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    switch (arg0->unk5) {
+        case 0:
+            func_80009F90_AB90(&arg0->unk8, 0x10000, subEntry->unk1A, -1);
+            arg0->unk5 = 1;
+            break;
+        case 1:
+            if (func_8000A030_AC30(&arg0->unk8, 0x10000) != 0) {
+                func_80069CF8_6A8F8();
+                return;
+            }
+            break;
+    }
+
+    if (arg0->unk0->unk87 != 0) {
+        func_8000A13C_AD3C(
+            &arg0->unk8,
+            arg0->unk0->ptr->unk16,
+            arg0->unk54,
+            arg0->unk58,
+            arg0->unk5C,
+            arg0->unk60,
+            arg0->unk60,
+            0,
+            0
+        );
+    }
+}
 
 void func_800014C8_20C8(s32 arg0) {
     func_80009F5C_AB5C(arg0 + 8);
