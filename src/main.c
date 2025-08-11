@@ -115,6 +115,8 @@ typedef struct {
     s32 unk60;
 } func_80000C2C_182C_arg;
 
+s32 D_800894F0_8A0F0[];
+
 void *func_80009F5C_AB5C(func_80000C2C_182C_arg *arg0);
 void func_80000DA4_19A4(func_80000C2C_182C_arg *arg0);
 void func_80001264_1E64(func_80000C2C_182C_arg *arg0);
@@ -127,6 +129,11 @@ extern s32 func_8000A030_AC30(void *, s32);
 extern void func_80004FF8_5BF8(u16, void *);
 extern void func_80009E68_AA68(void *, s16);
 extern void func_800007C4_13C4(void *, void *);
+extern s32 D_8009A870_9B470;
+extern void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
+extern void func_800014C8_20C8(func_80000C2C_182C_arg *arg0);
+extern void transformVector(s16 *, s16 *, void *);
+extern s32 func_800AFF44_9FE04(void); 
 
 void func_80000450_1050(func_80000450_1050_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;
@@ -386,7 +393,36 @@ void func_80001264_1E64(func_80000C2C_182C_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80001280_1E80);
+void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
+    volatile s32 sp10;
+    volatile s32 sp14;
+    volatile s32 sp18;
+    volatile s32 sp1C;
+    volatile s32 sp20[8];
+    DataEntry *entry;
+    SubEntry *subEntry;
+
+    entry = &D_800891D4_89DD4[arg0->unk0->unk84];
+    subEntry = &entry->sub_entries[arg0->unk4];
+
+    memcpy(&sp20, &D_8009A870_9B470, 0x20);
+    setCleanupCallback((void (*)(void *))&func_800014C8_20C8);
+    func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
+
+    sp10 = ((func_800AFF44_9FE04() & 0x1F) - 0x10) << 0x10;
+    sp14 = ((func_800AFF44_9FE04() & 1) - 4) << 0x10;
+    sp18 = 0;
+
+    createYRotationMatrix(&sp20, 0x1D83);
+    transformVector(&sp10, &sp20, &arg0->unk54);
+
+    arg0->unk54 = arg0->unk54 + subEntry->unk8;
+    arg0->unk58 = arg0->unk58 + subEntry->unkC;
+    arg0->unk5C = arg0->unk5C + subEntry->unk10;
+    arg0->unk60 = D_800894F0_8A0F0[func_800AFF44_9FE04() & 3];
+
+    setCallback((void (*)(void *))&func_800013B8_1FB8);
+}
 
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry;
