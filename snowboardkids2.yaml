@@ -749,7 +749,7 @@ segments:
         }
       - { type: bss, vram: 0x800A8A80, name: A8A80 }
 
-  - name: _9FDF0
+  - name: rand
     type: code
     vram: 0x800AFF30
     start: 0x9FDF0
@@ -757,9 +757,9 @@ segments:
     overlay: true
     bss_size: 0x10
     subsegments:
-      - [0x9FDF0, asm]
-      - [0x9FE70, data, 9FDF0]
-      - { type: bss, vram: 0x800B00B0, name: 9FDF0 }
+      - [0x9FDF0, c, rand]
+      - [0x9FE70, .data, rand]
+      - { type: bss, vram: 0x800B00B0, name: rand }
 
   - name: _9FF70
     type: code

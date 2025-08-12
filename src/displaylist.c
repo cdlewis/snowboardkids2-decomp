@@ -10,7 +10,7 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 
-USE_OVERLAY(_9FDF0);
+USE_OVERLAY(rand);
 USE_ASSET(_215D70);
 
 typedef struct {
@@ -491,7 +491,7 @@ void initializeOverlaySystem(void) {
     void **temp_s0;
 
     temp_s0 = (void **)allocateTaskMemory(4);
-    LOAD_OVERLAY(_9FDF0)
+    LOAD_OVERLAY(rand)
     *temp_s0 = dmaRequestAndUpdateStateWithSize(&_215D70_ROM_START, &_215D70_ROM_END, 0x918);
     setGameStateHandler(&func_80068060_68C60);
 }

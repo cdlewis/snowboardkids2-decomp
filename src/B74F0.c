@@ -77,7 +77,7 @@ typedef struct {
     s16 unk3E;
 } func_800BB8B8_B7AF8_arg;
 
-extern s32 func_800AFF44_9FE04(void);
+extern s32 randA(void);
 extern s32 D_8009A8A4_9B4A4;
 extern s32 func_8005C60C_5D20C(void *a0, s32 a1, Player *a2);
 extern void func_800589A0_595A0(Player *player);
@@ -97,7 +97,7 @@ void func_800BB2B0_B74F0(TrackHazard *arg0) {
     func_80055E68_56A68_result *result;
 
     gameState = (GameState *)getCurrentAllocation();
-    temp = func_800AFF44_9FE04();
+    temp = randA();
 
     arg0->unkA6 += (temp & 1);
     result = func_80055E68_56A68(gameState->memoryPoolId);
@@ -237,7 +237,7 @@ void func_800BB71C_B795C(TrackHazard *arg0) {
     }
 
     if (!arg0->unkA8) {
-        temp = func_800AFF44_9FE04() & 1;
+        temp = randA() & 1;
         arg0->unkA6 = temp + (arg0->unkA6 & 0xFE);
         memcpy(&arg0->unk8C, &D_800BBB90_B7DD0[arg0->unkA6].unk4, 0xC);
         createCombinedRotationMatrix(
@@ -259,7 +259,7 @@ void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(gs->memoryPoolId);
     arg0->unk28 = func_80055DF8_569F8(gs->memoryPoolId);
     arg0->unk2C = 0;
-    createYRotationMatrix((s16(*)[3])&arg0->matrix, 0x6C0);
+    createYRotationMatrix((s16(*)[3]) & arg0->matrix, 0x6C0);
     arg0->unk14 = 0xDD196FEA;
     arg0->unk18 = 0x0ABD4CA3;
     arg0->unk1C = 0xE270649E;
@@ -296,12 +296,12 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
                 for (i = 0; i < numPlayers; i++) {
                     if ((u32)gameState->players[i].unkB94 - 0x60 < 6) {
                         arg0->unk20 = (s32)func_80055E68_56A68(gameState->memoryPoolId) + 0xC0;
-                        randVal = (u8)func_800AFF44_9FE04();
+                        randVal = (u8)randA();
                         randVal = randVal - 0x60;
                         i = randVal << 1;
                         i = i + randVal;
                         i = i + 0x6C0;
-                        func_800547E0_553E0(i, (((u8)func_800AFF44_9FE04()) << 12) | 0x100000);
+                        func_800547E0_553E0(i, (((u8)randA()) << 12) | 0x100000);
                         func_80056B7C_5777C((void *)((u8 *)arg0 + 0x14), 0x23);
                         arg0->unk3C = 0x18;
                         arg0->unk3E++;

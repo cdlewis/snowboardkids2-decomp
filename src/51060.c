@@ -97,7 +97,7 @@ extern void func_80051800_52400();
 extern void func_800518AC_524AC();
 extern void func_80051B8C_5278C();
 
-extern s32 func_800AFF44_9FE04();
+extern s32 randA();
 extern s32 *D_80090EC0_91AC0;
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104();
@@ -160,7 +160,7 @@ void func_800506B4_512B4(func_800506B4_512B4_arg *arg0) {
     GameState *temp_s1 = (GameState *)getCurrentAllocation();
     arg0->unk0 = load_3ECE40();
     arg0->unk4 = (void *)(temp_s1->unk44 + ((arg0->unk52 << 6) + 0x1080));
-    arg0->unk1E = (u8)((func_800AFF44_9FE04() & 0x1F) + 0x70);
+    arg0->unk1E = (u8)((randA() & 0x1F) + 0x70);
     arg0->unk50 = 0;
     arg0->unk24 = (void *)arg0->unk4;
     arg0->unk3E = (u8)arg0->unk1E;
@@ -224,7 +224,7 @@ void func_800510A4_51CA4(func_800506B4_512B4_arg *arg0) {
     GameState *temp_s1 = (GameState *)getCurrentAllocation();
     arg0->unk0 = load_3ECE40();
     arg0->unk4 = (u8 *)(temp_s1->unk44 + 0x1340);
-    arg0->unk1E = (u8)((func_800AFF44_9FE04() & 0x1F) + 0x70);
+    arg0->unk1E = (u8)((randA() & 0x1F) + 0x70);
     arg0->unk50 = 0;
     arg0->unk24 = (u8 *)arg0->unk4;
     arg0->unk3E = (u8)arg0->unk1E;

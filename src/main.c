@@ -133,7 +133,7 @@ extern s32 D_8009A870_9B470;
 extern void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 extern void func_800014C8_20C8(func_80000C2C_182C_arg *arg0);
 extern void transformVector(s16 *, s16 *, void *);
-extern s32 func_800AFF44_9FE04(void); 
+extern s32 randA(void);
 
 void func_80000450_1050(func_80000450_1050_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;
@@ -409,8 +409,8 @@ void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
     setCleanupCallback((void (*)(void *))&func_800014C8_20C8);
     func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
 
-    sp10 = ((func_800AFF44_9FE04() & 0x1F) - 0x10) << 0x10;
-    sp14 = ((func_800AFF44_9FE04() & 1) - 4) << 0x10;
+    sp10 = ((randA() & 0x1F) - 0x10) << 0x10;
+    sp14 = ((randA() & 1) - 4) << 0x10;
     sp18 = 0;
 
     createYRotationMatrix(&sp20, 0x1D83);
@@ -419,7 +419,7 @@ void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
     arg0->unk54 = arg0->unk54 + subEntry->unk8;
     arg0->unk58 = arg0->unk58 + subEntry->unkC;
     arg0->unk5C = arg0->unk5C + subEntry->unk10;
-    arg0->unk60 = D_800894F0_8A0F0[func_800AFF44_9FE04() & 3];
+    arg0->unk60 = D_800894F0_8A0F0[randA() & 3];
 
     setCallback((void (*)(void *))&func_800013B8_1FB8);
 }
