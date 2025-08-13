@@ -5,16 +5,16 @@
 
 typedef struct {
     u8 padding[0x28];
-    s32 unk28;
-    s32 unk2C;
+    void *unk28;
+    void *unk2C;
     u8 padding2[0x34];
-    s32 unk64;
-    s32 unk68;
+    void *unk64;
+    void *unk68;
     u8 padding3[0x4C];
-    s32 unkB8;
-    s32 unkBC;
+    void *unkB8;
+    void *unkBC;
     u8 padding4[0x10];
-    s32 unkD0;
+    void *unkD0;
 } func_80005D30_6930_arg;
 
 typedef struct {
@@ -108,12 +108,12 @@ INCLUDE_ASM("asm/nonmatchings/5520", func_80005808_6408);
 INCLUDE_ASM("asm/nonmatchings/5520", func_8000595C_655C);
 
 void func_80005D30_6930(func_80005D30_6930_arg *arg0) {
-    arg0->unkD0 = freeNodeMemory((s32 *)arg0->unkD0);
-    arg0->unkB8 = freeNodeMemory((s32 *)arg0->unkB8);
-    arg0->unkBC = freeNodeMemory((s32 *)arg0->unkBC);
-    arg0->unk28 = freeNodeMemory((s32 *)arg0->unk28);
-    arg0->unk2C = freeNodeMemory((s32 *)arg0->unk2C);
-    arg0->unk64 = freeNodeMemory((s32 *)arg0->unk64);
-    arg0->unk68 = freeNodeMemory((s32 *)arg0->unk68);
+    arg0->unkD0 = freeNodeMemory(arg0->unkD0);
+    arg0->unkB8 = freeNodeMemory(arg0->unkB8);
+    arg0->unkBC = freeNodeMemory(arg0->unkBC);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+    arg0->unk64 = freeNodeMemory(arg0->unk64);
+    arg0->unk68 = freeNodeMemory(arg0->unk68);
 }
 INCLUDE_RODATA("asm/nonmatchings/5520", jtbl_8009DD38_9E938);

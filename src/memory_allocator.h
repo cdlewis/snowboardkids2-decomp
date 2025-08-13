@@ -24,7 +24,7 @@ void *getNodeSequenceNumber(void *);
 void setNodeSequenceNumber(void *, void *);
 void markNodeAsLocked(s32 *);
 s32 getNodeOwner(void *);
-s32 decrementNodeRefCount(void *node);
+void *decrementNodeRefCount(void *node);
 void unlockNodeWithInterruptDisable(s32 *);
 void initializeMemoryAllocatorRegion(void);
 void cleanupUnusedNodes(void);

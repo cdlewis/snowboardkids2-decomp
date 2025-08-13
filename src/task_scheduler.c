@@ -661,8 +661,8 @@ void *allocateNodeMemory(s32 size) {
     return temp_a0;
 }
 
-s32 freeNodeMemory(s32 *arg0) {
-    return decrementNodeRefCount(arg0);
+void *freeNodeMemory(void *node) {
+    return decrementNodeRefCount(node);
 }
 
 static const u32 D_8009EA54_padding[3] = { 0, 0, 0 };

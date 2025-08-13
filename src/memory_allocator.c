@@ -99,18 +99,18 @@ void *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {
     return NULL;
 }
 
-s32 decrementNodeRefCount(void *allocatedMemory) {
+void *decrementNodeRefCount(void *allocatedMemory) {
     MemoryAllocatorNode *node;
 
     if (allocatedMemory == NULL) {
-        return 0;
+        return NULL;
     }
 
     node = ((MemoryAllocatorNode *)allocatedMemory) - 1;
     node->refCount--;
     node->cleanupTimestamp = gFrameCounter;
 
-    return 0;
+    return NULL;
 }
 
 void cleanupUnusedNodes() {

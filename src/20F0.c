@@ -367,28 +367,28 @@ void *func_80002040_2C40(func_80002040_2C40_arg *arg0) {
         return 0;
     }
     arg0->unk3C = 1;
-    arg0->unk120 = (void *)freeNodeMemory(arg0->unk120);
-    arg0->unk11C = (void *)freeNodeMemory(arg0->unk11C);
+    arg0->unk120 = freeNodeMemory(arg0->unk120);
+    arg0->unk11C = freeNodeMemory(arg0->unk11C);
     arg0->unk118 = func_8000CDFC_D9FC(arg0->unk118);
     arg0->unk114 = func_8000CDE0_D9E0(arg0->unk114);
     func_80009F5C_AB5C(((s32)arg0) + 0xA4);
     temp_s0 = arg0->unk98;
-    temp_s0->unk24 = (void *)freeNodeMemory(temp_s0->unk24);
-    temp_s0->unk28 = (void *)freeNodeMemory(temp_s0->unk28);
-    new_var = (void *)freeNodeMemory(arg0->unk98);
+    temp_s0->unk24 = freeNodeMemory(temp_s0->unk24);
+    temp_s0->unk28 = freeNodeMemory(temp_s0->unk28);
+    new_var = freeNodeMemory(arg0->unk98);
     temp_s0_2 = arg0->unk0;
     arg0->unk98 = new_var;
-    temp_s0_2->unk420 = (void *)freeNodeMemory(temp_s0_2->unk420);
-    temp_s0_2->unk424 = (void *)freeNodeMemory(temp_s0_2->unk424);
+    temp_s0_2->unk420 = freeNodeMemory(temp_s0_2->unk420);
+    temp_s0_2->unk424 = freeNodeMemory(temp_s0_2->unk424);
     temp_s0_3 = arg0->unk0;
-    temp_s0_3->unk3E4 = (void *)freeNodeMemory(temp_s0_3->unk3E4);
-    temp_s0_3->unk3E8 = (void *)freeNodeMemory(temp_s0_3->unk3E8);
-    temp_s0_3->unk3EC = (void *)freeNodeMemory(temp_s0_3->unk3EC);
-    arg0->unk4 = (void *)freeNodeMemory(arg0->unk4);
-    arg0->unk8 = (void *)freeNodeMemory(arg0->unk8);
-    arg0->unk0->unk24 = (void *)freeNodeMemory(arg0->unk0->unk24);
-    arg0->unk0->unk28 = (void *)freeNodeMemory(arg0->unk0->unk28);
-    arg0->unk0 = (void *)freeNodeMemory(arg0->unk0);
+    temp_s0_3->unk3E4 = freeNodeMemory(temp_s0_3->unk3E4);
+    temp_s0_3->unk3E8 = freeNodeMemory(temp_s0_3->unk3E8);
+    temp_s0_3->unk3EC = freeNodeMemory(temp_s0_3->unk3EC);
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    arg0->unk8 = freeNodeMemory(arg0->unk8);
+    arg0->unk0->unk24 = freeNodeMemory(arg0->unk0->unk24);
+    arg0->unk0->unk28 = freeNodeMemory(arg0->unk0->unk28);
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
     return arg0;
 }
 

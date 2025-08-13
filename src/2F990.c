@@ -264,7 +264,7 @@ void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA44_30644);
 
 void func_8002FA70_30670(func_8002FA70_30670_arg *arg0) {
-    arg0->unk2C = (s32 *)freeNodeMemory(arg0->unk2C);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA9C_3069C);

@@ -62,8 +62,8 @@ void func_8001BBE8_1C7E8(void) {
         n_alSynRemovePlayer(&temp_s0->audioPlayer2);
         n_alSynRemovePlayer(&temp_s0->audioPlayer4);
         osViExtendVStart(0);
-        temp_s0->unk588 = (s32 *)freeNodeMemory(temp_s0->unk588);
-        temp_s0->unk58C = (s32 *)freeNodeMemory(temp_s0->unk58C);
+        temp_s0->unk588 = freeNodeMemory(temp_s0->unk588);
+        temp_s0->unk58C = freeNodeMemory(temp_s0->unk58C);
         if (temp_s0->unk590 != 0) {
             var_a0 = &func_8001BCC0_1C8C0;
         } else {

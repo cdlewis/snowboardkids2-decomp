@@ -453,17 +453,17 @@ void func_80040608_41208(void) {
 
     n_alSynRemovePlayer(gameState->audioPlayer0);
 
-    freeNodeMemory((s32 *)gameState->players);
-    freeNodeMemory((s32 *)gameState->audioPlayer0);
-    freeNodeMemory((s32 *)gameState->unk4);
-    freeNodeMemory((s32 *)gameState->unk8);
-    freeNodeMemory((s32 *)gameState->unkC);
-    freeNodeMemory((s32 *)gameState->gameDataStart);
-    freeNodeMemory((s32 *)gameState->unk18);
-    freeNodeMemory((s32 *)gameState->unk1C);
-    freeNodeMemory((s32 *)gameState->unk20);
-    freeNodeMemory((s32 *)gameState->unk28);
-    freeNodeMemory((s32 *)gameState->unk14);
+    freeNodeMemory(gameState->players);
+    freeNodeMemory(gameState->audioPlayer0);
+    freeNodeMemory(gameState->unk4);
+    freeNodeMemory(gameState->unk8);
+    freeNodeMemory(gameState->unkC);
+    freeNodeMemory(gameState->gameDataStart);
+    freeNodeMemory(gameState->unk18);
+    freeNodeMemory(gameState->unk1C);
+    freeNodeMemory(gameState->unk20);
+    freeNodeMemory(gameState->unk28);
+    freeNodeMemory(gameState->unk14);
 
     osViExtendVStart(0);
     func_80057B1C_5871C(0x14);

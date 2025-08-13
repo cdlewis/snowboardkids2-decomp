@@ -198,8 +198,8 @@ INCLUDE_ASM("asm/nonmatchings/36E50", func_80036424_37024);
 
 void func_80036848_37448(void *untypedArg) {
     func_80036848_37448_arg *arg0 = (func_80036848_37448_arg *)untypedArg;
-    arg0->unk4 = (s32 *)freeNodeMemory(arg0->unk4);
-    arg0->unk58 = (s32 *)freeNodeMemory(arg0->unk58);
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    arg0->unk58 = freeNodeMemory(arg0->unk58);
 }
 
 void func_80036880_37480(func_80036880_37480_arg *arg0) {
@@ -227,7 +227,7 @@ INCLUDE_ASM("asm/nonmatchings/36E50", func_80036920_37520);
 
 void func_80036A10_37610(void *untypedArg) {
     func_80036A10_37610_arg *arg0 = (func_80036A10_37610_arg *)untypedArg;
-    arg0->unk4 = (s32 *)freeNodeMemory(arg0->unk4);
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
 void func_80036A3C_3763C(func_80036A3C_3763C_arg *arg0) {
