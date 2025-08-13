@@ -12,3 +12,5 @@ struct viConfig_s {
 void initialize_video_and_threads(s32 viMode);
 
 void addViConfig(ViConfig *config, OSMesgQueue *messageQueue, s32 frameCount);
+
+void sendMessageToEventQueue2(OSMesg message);

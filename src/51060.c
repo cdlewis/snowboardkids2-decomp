@@ -2,7 +2,9 @@
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "rand.h"
 #include "task_scheduler.h"
+
 
 typedef struct {
     void *unk0;
@@ -97,12 +99,9 @@ extern void func_80051800_52400();
 extern void func_800518AC_524AC();
 extern void func_80051B8C_5278C();
 
-extern s32 randA();
 extern s32 *D_80090EC0_91AC0;
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104();
-void func_800677C0_683C0(s32, void *);
-void func_80069CF8_6A8F8();
 
 void func_80050460_51060(void **node) {
     *node = load_3ECE40();

@@ -59,3 +59,11 @@ void func_80063580_64180(s32);
 void func_80063534_64134(s32);
 
 void func_800634E8_640E8(DisplayListObject *arg0);
+
+typedef struct {
+    u8 padding[0x1C];
+    s32 unk1C;
+    u8 padding2[0x10];
+    s32 unk30;
+} func_80066444_67044_arg1;
+void func_800677C0_683C0(s32 arg0, func_80066444_67044_arg1 *arg1);

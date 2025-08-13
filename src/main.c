@@ -1,8 +1,10 @@
 #include "main.h"
 
+#include "4050.h"
 #include "6E840.h"
 #include "common.h"
 #include "geometry.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -126,14 +128,11 @@ void func_80009F90_AB90(void *, s32, s16, s32);
 void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32); /* extern */
 
 extern s32 func_8000A030_AC30(void *, s32);
-extern void func_80004FF8_5BF8(u16, void *);
 extern void func_80009E68_AA68(void *, s16);
 extern void func_800007C4_13C4(void *, void *);
 extern s32 D_8009A870_9B470;
 extern void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 extern void func_800014C8_20C8(func_80000C2C_182C_arg *arg0);
-extern void transformVector(s16 *, s16 *, void *);
-extern s32 randA(void);
 
 void func_80000450_1050(func_80000450_1050_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;

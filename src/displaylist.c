@@ -46,13 +46,6 @@ typedef struct {
     u8 _pad[0x22];
 } func_80062C98_63898_arg;
 
-typedef struct {
-    u8 padding[0x1C];
-    s32 unk1C;
-    u8 padding2[0x10];
-    s32 unk30;
-} func_80066444_67044_arg1;
-
 extern D_800AB068_A23D8_arg *D_800AB068_A23D8;
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;

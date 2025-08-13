@@ -1,3 +1,5 @@
+#include "3A1F0.h"
+#include "413E0.h"
 #include "46080.h"
 #include "56910.h"
 #include "6E840.h"
@@ -31,10 +33,6 @@ extern s32 D_800904E0_910E0[];
 
 void func_8002ED40_2F940(s32);
 void func_80040420_41020(void);
-void func_8003AF6C_3BB6C();
-void func_80057B1C_5871C(s32);
-s32 func_8006FE10_70A10(s32);
-void func_8006FE94_70A94(s32, s32, s32, s32);
 void func_800B9AE0(Player *);
 void func_800407B4_413B4(void);
 void func_8003EDF8_3F9F8(void);
@@ -42,15 +40,10 @@ void func_8003EEEC_3FAEC(void);
 void func_8003FB90_40790(void);
 void func_800401A0_40DA0(void);
 void func_8003F178_3FD78(void);
-void func_800574A0_580A0(s32);
-void func_80040F6C_41B6C(s32, s32, s32, void *, s32, s32);
-void func_800497FC_4A3FC(u8);
-void func_80049CA8_4A8A8(u8, u8);
 void func_8005011C_50D1C(void);
 void func_8003EE50_3FA50(void);
 void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
-void func_800574A0_580A0(s32);
 void func_800B99E0(void *);
 
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);

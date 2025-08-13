@@ -100,7 +100,6 @@ s32 func_8000CDE0_D9E0(s32);
 s32 func_8000CDFC_D9FC(s32);
 void initializeGameEntity(GameState *, s32, void *, s8, s8, s8, s16);
 void func_80002220_2E20(func_80002040_2C40_arg *, s16, s16, s8, s16);
-void func_80002468_3068(func_80002040_2C40_arg *);
 void *func_80002040_2C40(func_80002040_2C40_arg *arg0);
 void *func_80009F5C_AB5C(s32);
 

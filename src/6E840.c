@@ -31,14 +31,6 @@ typedef struct {
 } func_8006FEE8_70AE8_arg;
 
 typedef struct {
-    u8 padding[0xB8];
-    s8 unkB8;
-    s8 unkB9;
-    s8 unkBA;
-    s8 unkBB;
-} func_8006FE94_70A94_arg;
-
-typedef struct {
     s32 unk0;
     s32 unk4;
     s32 unk8;

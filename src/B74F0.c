@@ -4,6 +4,7 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -77,7 +78,6 @@ typedef struct {
     s16 unk3E;
 } func_800BB8B8_B7AF8_arg;
 
-extern s32 randA(void);
 extern s32 D_8009A8A4_9B4A4;
 extern s32 func_8005C60C_5D20C(void *a0, s32 a1, Player *a2);
 extern void func_800589A0_595A0(Player *player);

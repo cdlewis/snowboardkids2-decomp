@@ -8,6 +8,7 @@
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -56,11 +57,9 @@ void func_80019EFC_1AAFC(void);
 void func_80019DC4_1A9C4(void);
 void func_80027CA0_288A0(void *, s32, s32, s32);
 void func_80019C7C_1A87C(func_8000153C_213C_arg1 *arg0);
-void func_80002468_3068(func_80002040_2C40_arg *);
 void func_80019D24_1A924(TextData *arg0);
 void func_80019D84_1A984(void);
 void func_800154A8_160A8(void *, s32);
-void func_800574A0_580A0(s32);
 void func_80019E60_1AA60(void);
 void func_80019EA8_1AAA8(void);
 void func_80019F30_1AB30(void);

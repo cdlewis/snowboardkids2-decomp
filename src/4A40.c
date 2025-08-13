@@ -1,4 +1,7 @@
+#include "6E840.h"
 #include "common.h"
+#include "geometry.h"
+#include "graphics.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -15,16 +18,6 @@ USE_ASSET(_67E860)
 
 s32 func_8000B6B8_C2B8(s32);
 s32 func_80035F80_36B80(s32);
-void func_80057514_58114(u32 arg0, s16 arg1, s16 arg2);
-void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
-void func_8006F994_70594(void *, s32, s32, s32, s32, s32, s32);
-void func_8006F9BC_705BC(void *arg0, f32 arg1, f32 arg2);
-void func_8006FA0C_7060C(void *, f32, f32, f32, f32);
-void func_8006FAA4_706A4(void *, s32, s32, s32, s32);
-void func_8006FD3C_7093C(u16, void *);
-void func_8006FDA0_709A0(void *arg0, u8 arg1, u8 arg2);
-void func_8006FE28_70A28(void *arg0, s8 arg1, s8 arg2, s8 arg3);
-void func_8006FEF8_70AF8(void *, s32);
 
 typedef struct {
     void *start;
@@ -41,10 +34,6 @@ static asset D_8008BFA0_8CBA0[6] = {
     { &_63C9F0_ROM_START, &_63C9F0_ROM_END, 0x9578 }
 };
 
-typedef struct {
-    u8 padding[0x1D8];
-} unknownStruct;
-
 void func_80004368_4F68(void);
 
 typedef struct {
@@ -52,10 +41,10 @@ typedef struct {
     u8 padding[1];
     s16 unk2;
     s32 unk4;
-    unknownStruct unk8;
-    unknownStruct unk1E0;
-    unknownStruct unk3B8;
-    unknownStruct unk590;
+    func_8006F9BC_705BC_arg unk8;
+    func_8006F9BC_705BC_arg unk1E0;
+    func_8006F9BC_705BC_arg unk3B8;
+    func_8006F9BC_705BC_arg unk590;
     void *unk768;
     u8 padding6[0xD6];
     s16 unk842;
@@ -106,7 +95,6 @@ typedef struct {
     u8 unkE5E;
 } func_80003EE0_4AE0_task_memory;
 
-void func_8006FC70_70870(u16, u16, u8 *, u8 *);
 void func_80003E40_4A40(func_80003EE0_4AE0_task_memory *arg0) {
     arg0->unkE48 = 0;
     arg0->unkE49 = 0x7F;

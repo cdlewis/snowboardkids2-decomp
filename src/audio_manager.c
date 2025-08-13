@@ -106,7 +106,6 @@ void processAudioNodeList(void);
 s32 audioCreateAndScheduleTask(AudioStruct *, AudioBuffer *);
 void *initAudioDriveAndGetLoader(void *arg0);
 void audioManagerThread(void *);
-void sendMessageToEventQueue2(OSMesg);
 
 // data
 u32 gCurrentFrame = 0;

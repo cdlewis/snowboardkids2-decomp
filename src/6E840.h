@@ -34,6 +34,7 @@ typedef struct {
     s16 unkCA;
     u8 padding2[0x104];
     f32 unk1D0;
+    s32 unk1D4;
 } func_8006F9BC_705BC_arg;
 
 void func_8006F9BC_705BC(func_8006F9BC_705BC_arg *arg0, f32 arg1, f32 arg2);
@@ -65,3 +66,13 @@ typedef struct {
 s32 func_80070140_70D40(func_80070140_70D40_arg *arg0);
 
 void func_8006FC70_70870(u16, u16, s8 *, s8 *);
+
+typedef struct {
+    u8 padding[0xB8];
+    s8 unkB8;
+    s8 unkB9;
+    s8 unkBA;
+    s8 unkBB;
+} func_8006FE94_70A94_arg;
+
+void func_8006FE94_70A94(func_8006FE94_70A94_arg *arg0, s8 arg1, s8 arg2, s8 arg3);

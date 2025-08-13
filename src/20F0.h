@@ -135,3 +135,5 @@ typedef struct {
 void func_8000153C_213C(func_80002040_2C40_arg *arg0, func_8000153C_213C_arg1 *arg1);
 
 void func_80002014_2C14(func_80002040_2C40_arg *arg0);
+
+void func_80002468_3068(func_80002040_2C40_arg *);
