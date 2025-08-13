@@ -424,7 +424,7 @@ Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
             newNode->callback = callback;
             newNode->cleanupCallback = NULL;
             newNode->unkE = 1;
-            newNode->unk11 = 0;
+            newNode->hasAllocatedMemory = FALSE;
             newNode->unk18 = 0;
 
             // This should just be newNode++. It's possible that
@@ -586,7 +586,7 @@ void *dmaRequestAndUpdateState(void *start, void *end) {
                 }
             }
         }
-        gDMAOverlay->unk11 = 1;
+        gDMAOverlay->hasAllocatedMemory = TRUE;
     }
 
     return allocatedSpaceStart;
@@ -624,7 +624,7 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
             }
         }
 
-        gDMAOverlay->unk11 = 1;
+        gDMAOverlay->hasAllocatedMemory = TRUE;
     }
 
     return allocatedSpaceStart;
@@ -644,19 +644,20 @@ void *loadDataSegment(void *start, void *end, s32 size, void *dramAddr) {
                 gDMAOverlay->unk1C = var_s0;
             }
         }
-        gDMAOverlay->unk11 = 1;
+        gDMAOverlay->hasAllocatedMemory = TRUE;
     }
     return var_s0;
 }
 
-GameState *allocateGameStateMemory(s32 arg0) {
+void *allocateNodeMemory(s32 size) {
     u8 *exists;
-    GameState *temp_a0;
+    void *temp_a0;
 
-    temp_a0 = allocateMemoryNode(0, arg0, &exists);
+    temp_a0 = allocateMemoryNode(0, size, &exists);
     if (gDMAOverlay != NULL) {
-        gDMAOverlay->unk11 = 1;
+        gDMAOverlay->hasAllocatedMemory = TRUE;
     }
+
     return temp_a0;
 }
 

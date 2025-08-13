@@ -345,7 +345,7 @@ void *func_8000198C_258C(s32 arg0, void *arg1) {
 }
 
 void *func_800019B8_25B8(s32 arg0, void *arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {
-    GameState *obj = allocateGameStateMemory(0x160);
+    GameState *obj = allocateNodeMemory(0x160);
     if (obj != NULL) {
         initializeGameEntity(obj, arg0, arg1, arg2, arg3, arg4, arg5);
     }

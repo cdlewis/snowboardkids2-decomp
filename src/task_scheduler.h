@@ -11,7 +11,7 @@ typedef struct Node {
     /* 0x0E */ u8 unkE;
     /* 0x0F */ u8 priority;
     /* 0x10 */ u8 continueFlag;
-    /* 0x11 */ u8 unk11;
+    /* 0x11 */ u8 hasAllocatedMemory;
     /* 0x12 */ u8 pad12[6];
     /* 0x18 */ void *unk18;
     /* 0x1C */ void *unk1C;
@@ -26,7 +26,7 @@ void *dmaRequestAndUpdateStateWithSize(void *, void *, s32);
 
 void *dmaRequestAndUpdateState(void *start, void *end);
 
-GameState *allocateGameStateMemory(s32 arg0);
+void *allocateNodeMemory(s32 size);
 
 Node *scheduleTask(void *a0, u8, u8, u8);
 

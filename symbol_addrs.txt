@@ -187,7 +187,7 @@ gMinAudioFrameSize = 0x800A646C;
 gAudioCmdBufferToggle = 0x8009B038;
 setGameStateHandler = 0x8006982C;
 freeGameStateMemory = 0x8006A200;
-allocateGameStateMemory = 0x8006A1C0;
+allocateNodeMemory = 0x8006A1C0;
 scheduleTask = 0x800699F4;
 
 gMemoryAllocatorHead = 0x800AB130;
