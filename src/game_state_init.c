@@ -113,9 +113,9 @@ void gameStateCleanupHandler(void) {
         n_alSynRemovePlayer(gs);
         n_alSynRemovePlayer((void *)((u8 *)gs + 0x1D8));
 
-        gs->unk3E4 = (void *)freeGameStateMemory((void *)gs->unk3E4);
-        gs->unk3DC = (void *)freeGameStateMemory((void *)gs->unk3DC);
-        gs->unk3E0 = (void *)freeGameStateMemory((void *)gs->unk3E0);
+        gs->unk3E4 = (void *)freeNodeMemory((void *)gs->unk3E4);
+        gs->unk3DC = (void *)freeNodeMemory((void *)gs->unk3DC);
+        gs->unk3E0 = (void *)freeNodeMemory((void *)gs->unk3E0);
 
         if (gs->unk427 == 0xFF) {
             terminateSchedulerWithCallback(transitionToMainMenu);

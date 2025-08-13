@@ -1,3 +1,6 @@
+gBufferedFrameCounter = 0x800AB12C;
+gFrameCounter = 0x800AB064;
+
 getRand = 0x800AFF94; // type:func rom:0x9FE54
 randA = 0x800AFF44;
 randB = 0x800AFF6C; // type:func rom:0x9FE2C
@@ -186,7 +189,7 @@ gAudioBufferSize = 0x800A6470;
 gMinAudioFrameSize = 0x800A646C;
 gAudioCmdBufferToggle = 0x8009B038;
 setGameStateHandler = 0x8006982C;
-freeGameStateMemory = 0x8006A200;
+freeNodeMemory = 0x8006A200;
 allocateNodeMemory = 0x8006A1C0;
 scheduleTask = 0x800699F4;
 

@@ -4,13 +4,13 @@
 #include "common.h"
 
 typedef struct MemoryAllocatorNode {
-    /* 0x0 */ struct MemoryAllocatorNode *prev;
-    /* 0x4 */ struct MemoryAllocatorNode *next;
-    /* 0x8 */ s32 ownerID;
-    s32 unk_0C;
+    /* 0x00 */ struct MemoryAllocatorNode *prev;
+    /* 0x04 */ struct MemoryAllocatorNode *next;
+    /* 0x08 */ s32 ownerID;
+    /* 0x0C */ s32 refCount;
     /* 0x10 */ s32 size;
     s32 unk_14;
-    s32 unk_18;
+    /* 0x18 */ s32 cleanupTimestamp;
     s32 unk1C;
 } MemoryAllocatorNode;
 
@@ -24,7 +24,7 @@ void *getNodeSequenceNumber(void *);
 void setNodeSequenceNumber(void *, void *);
 void markNodeAsLocked(s32 *);
 s32 getNodeOwner(void *);
-s32 decrementNodeRefCount(s32 *);
+s32 decrementNodeRefCount(void *node);
 void unlockNodeWithInterruptDisable(s32 *);
 void initializeMemoryAllocatorRegion(void);
 void cleanupUnusedNodes(void);

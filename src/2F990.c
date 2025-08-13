@@ -154,7 +154,7 @@ void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
     arg0->unk20 = 0x80000;
     arg0->unk24 = 4;
     arg0->unk26 = 0;
-    createYRotationMatrix((s16(*)[3])&arg0->unk4, 0x1E00);
+    createYRotationMatrix((s16(*)[3]) & arg0->unk4, 0x1E00);
     setCleanupCallback(func_8002F110_2FD10);
     setCallback((void (*)(void *))func_8002EFD8_2FBD8);
 }
@@ -264,7 +264,7 @@ void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA44_30644);
 
 void func_8002FA70_30670(func_8002FA70_30670_arg *arg0) {
-    arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
+    arg0->unk2C = (s32 *)freeNodeMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA9C_3069C);

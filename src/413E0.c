@@ -17,7 +17,7 @@ typedef struct {
     s16 unkE;
 } func_80040E00_41A00_arg;
 
-extern s32 D_800AB064_A23D4;
+extern s32 gFrameCounter;
 extern char pushStartButtonText[];
 extern void func_8004083C_4143C();
 extern void func_80040948_41548();
@@ -52,7 +52,7 @@ INCLUDE_ASM("asm/nonmatchings/413E0", func_80040D48_41948);
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040D80_41980);
 
 void func_80040E00_41A00(func_80040E00_41A00_arg *arg0) {
-    if (D_800AB064_A23D4 & 8) {
+    if (gFrameCounter & 8) {
         enqueueTextRender(-0x44, arg0->unk8, 0, &pushStartButtonText, (s32)arg0->unkC, (s32)arg0->unkE);
     }
 }

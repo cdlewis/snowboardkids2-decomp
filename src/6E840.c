@@ -96,7 +96,7 @@ extern void *gLinearAllocPtr;
 extern void *gLinearAllocEnd;
 extern s32 D_800A3548_A4148[];
 extern s32 D_800A3550_A4150[];
-extern s32 D_800AB12C_A249C;
+extern s32 gBufferedFrameCounter;
 extern void *D_800A3564_A4164;
 extern u32 D_800A3568_A4168;
 extern void *gLinearArenaBuffer;
@@ -112,7 +112,7 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DEE4_6EAE4);
 void func_8006E000_6EC00(s32 arg0) {
     s32 temp_a0 = arg0 & 0xF;
     D_800A3548_A4148[temp_a0] = 0;
-    D_800AB12C_A249C = D_800A3550_A4150[temp_a0];
+    gBufferedFrameCounter = D_800A3550_A4150[temp_a0];
 }
 
 void func_8006E02C_6EC2C(void) {

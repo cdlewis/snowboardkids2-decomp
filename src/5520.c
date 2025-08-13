@@ -108,12 +108,12 @@ INCLUDE_ASM("asm/nonmatchings/5520", func_80005808_6408);
 INCLUDE_ASM("asm/nonmatchings/5520", func_8000595C_655C);
 
 void func_80005D30_6930(func_80005D30_6930_arg *arg0) {
-    arg0->unkD0 = freeGameStateMemory((s32 *)arg0->unkD0);
-    arg0->unkB8 = freeGameStateMemory((s32 *)arg0->unkB8);
-    arg0->unkBC = freeGameStateMemory((s32 *)arg0->unkBC);
-    arg0->unk28 = freeGameStateMemory((s32 *)arg0->unk28);
-    arg0->unk2C = freeGameStateMemory((s32 *)arg0->unk2C);
-    arg0->unk64 = freeGameStateMemory((s32 *)arg0->unk64);
-    arg0->unk68 = freeGameStateMemory((s32 *)arg0->unk68);
+    arg0->unkD0 = freeNodeMemory((s32 *)arg0->unkD0);
+    arg0->unkB8 = freeNodeMemory((s32 *)arg0->unkB8);
+    arg0->unkBC = freeNodeMemory((s32 *)arg0->unkBC);
+    arg0->unk28 = freeNodeMemory((s32 *)arg0->unk28);
+    arg0->unk2C = freeNodeMemory((s32 *)arg0->unk2C);
+    arg0->unk64 = freeNodeMemory((s32 *)arg0->unk64);
+    arg0->unk68 = freeNodeMemory((s32 *)arg0->unk68);
 }
 INCLUDE_RODATA("asm/nonmatchings/5520", jtbl_8009DD38_9E938);

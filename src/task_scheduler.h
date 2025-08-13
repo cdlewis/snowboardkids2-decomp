@@ -36,7 +36,7 @@ void setCallbackWithContinue(void(callback)(void *));
 
 void setCleanupCallback(void(callback)(void *));
 
-s32 freeGameStateMemory(s32 *);
+s32 freeNodeMemory(s32 *);
 
 void runTaskSchedulers(void);
 

@@ -3,8 +3,8 @@
 #include "common.h"
 
 extern MemoryAllocatorNode gMemoryHeapEnd;
-extern s32 D_800AB064_A23D4;
-extern s32 D_800AB12C_A249C;
+extern s32 gFrameCounter;
+extern s32 gBufferedFrameCounter;
 
 void initializeMemoryAllocatorRegion() {
     s32 i;
@@ -34,7 +34,7 @@ void *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {
         for (node = gMemoryAllocatorHead; node != NULL; node = node->next) {
             if (node->ownerID == ownerID) {
                 s32 node_size = node->size;
-                node->unk_0C++;
+                node->refCount++;
                 if (node_size != requestedSize) {
                     return NULL;
                 }
@@ -52,12 +52,12 @@ void *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {
 
         gMemoryAllocatorHead = &gMemoryHeapBase;
         gMemoryHeapBase.prev = 0;
-        gMemoryHeapBase.unk_0C = 1;
+        gMemoryHeapBase.refCount = 1;
         gMemoryHeapBase.next = NULL;
         gMemoryHeapBase.ownerID = ownerID;
         gMemoryHeapBase.size = requestedSize;
         gMemoryHeapBase.unk_14 = 0;
-        gMemoryHeapBase.unk_18 = -1;
+        gMemoryHeapBase.cleanupTimestamp = -1;
         return (&gMemoryHeapBase) + 1;
     }
 
@@ -69,11 +69,11 @@ void *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {
             new_node = (MemoryAllocatorNode *)(((s8 *)node) + node->size);
             new_node->prev = node;
             next_node = node->next;
-            new_node->unk_0C = 1;
+            new_node->refCount = 1;
             new_node->ownerID = ownerID;
             new_node->size = requestedSize;
             new_node->unk_14 = 0;
-            new_node->unk_18 = -1;
+            new_node->cleanupTimestamp = -1;
             new_node->next = next_node;
             node->next = new_node;
             next_node = new_node->next;
@@ -86,12 +86,12 @@ void *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {
     if (space_between >= (requestedSize + node->size)) {
         new_node = (MemoryAllocatorNode *)((s8 *)node + node->size);
         new_node->prev = node;
-        new_node->unk_0C = 1;
+        new_node->refCount = 1;
         new_node->next = 0;
         new_node->ownerID = ownerID;
         new_node->size = requestedSize;
         new_node->unk_14 = 0;
-        new_node->unk_18 = -1;
+        new_node->cleanupTimestamp = -1;
         node->next = new_node;
         return ++new_node;
     }
@@ -99,12 +99,17 @@ void *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {
     return NULL;
 }
 
-s32 decrementNodeRefCount(s32 *arg0) {
-    if (arg0 == NULL) {
+s32 decrementNodeRefCount(void *allocatedMemory) {
+    MemoryAllocatorNode *node;
+
+    if (allocatedMemory == NULL) {
         return 0;
     }
-    arg0[-5]--;
-    arg0[-2] = D_800AB064_A23D4;
+
+    node = ((MemoryAllocatorNode *)allocatedMemory) - 1;
+    node->refCount--;
+    node->cleanupTimestamp = gFrameCounter;
+
     return 0;
 }
 
@@ -116,15 +121,15 @@ void cleanupUnusedNodes() {
         return;
     }
 
-    globalVal = D_800AB12C_A249C;
+    globalVal = gBufferedFrameCounter;
 
     while (curr != 0) {
-        s32 diff = (globalVal - curr->unk_18) & 0x0FFFFFFF;
+        s32 diff = (globalVal - curr->cleanupTimestamp) & 0x0FFFFFFF;
         if (diff <= 0x07FFFFFF) {
-            curr->unk_18 = -1;
+            curr->cleanupTimestamp = -1;
         }
 
-        if (((curr->unk_0C == 0) && (curr->unk_14 == 0)) && (curr->unk_18 < 0)) {
+        if ((curr->refCount == 0 && curr->unk_14 == 0) && (curr->cleanupTimestamp < 0)) {
             MemoryAllocatorNode *prev;
             MemoryAllocatorNode *next;
             if (curr->prev != 0) {

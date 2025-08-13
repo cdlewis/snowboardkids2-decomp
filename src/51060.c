@@ -142,7 +142,7 @@ void func_80050504_51104(func_80050504_51104_arg *arg0) {
 }
 
 void func_800505D8_511D8(s32 **arg0) {
-    *arg0 = (s32 *)freeGameStateMemory(*arg0);
+    *arg0 = (s32 *)freeNodeMemory(*arg0);
 }
 
 void func_80050604_51204(void *arg0, func_80050604_51204_arg *arg1, s32 arg2) {
@@ -185,7 +185,7 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_800509CC_515CC);
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050AA8_516A8);
 
 void func_80050BD4_517D4(s32 **arg0) {
-    *arg0 = (s32 *)freeGameStateMemory(*arg0);
+    *arg0 = (s32 *)freeNodeMemory(*arg0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050C00_51800);

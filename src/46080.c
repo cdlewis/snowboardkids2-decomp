@@ -238,7 +238,7 @@ void func_8004A96C_4B56C(s32 **arg0) {
 
     temp_v0 = (GameState *)getCurrentAllocation();
     temp_v0->PAD_5[0xB] += 1;
-    *arg0 = (s32 *)freeGameStateMemory(*arg0);
+    *arg0 = (s32 *)freeNodeMemory(*arg0);
 }
 
 void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2) {
@@ -274,7 +274,7 @@ void func_8004AE58_4BA58(s32 **arg0) {
 
     temp_v0 = (GameState *)getCurrentAllocation();
     temp_v0->PAD_5[0xB] += 1;
-    *arg0 = (s32 *)freeGameStateMemory(*arg0);
+    *arg0 = (s32 *)freeNodeMemory(*arg0);
 }
 
 void func_8004AE94_4BA94(s32 arg0) {

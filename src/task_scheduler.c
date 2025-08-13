@@ -59,8 +59,8 @@ extern TaskNode gSchedulerPool[16];
 extern gActiveScheduler_type *gSchedulerListSentinel;
 extern gActiveScheduler_type *gFreeSchedulerList;
 extern gActiveScheduler_type *gActiveSchedulerList;
-extern s32 D_800AB064_A23D4;
-extern s32 D_800AB12C_A249C;
+extern s32 gFrameCounter;
+extern s32 gBufferedFrameCounter;
 
 void initTaskScheduler(void) {
     s32 i;
@@ -236,7 +236,7 @@ void runTaskSchedulers(void) {
                             gActiveScheduler->nodes = (Node *)decrementNodeRefCount((s32 *)gActiveScheduler->nodes);
                             gActiveScheduler->allocatedState =
                                 (void *)decrementNodeRefCount((s32 *)gActiveScheduler->allocatedState);
-                            gActiveScheduler->unk1C = D_800AB064_A23D4;
+                            gActiveScheduler->unk1C = gFrameCounter;
                             gActiveScheduler->schedulerState = SCHEDULER_STATE_CLEANUP;
                         }
                     }
@@ -244,7 +244,7 @@ void runTaskSchedulers(void) {
 
                 case SCHEDULER_STATE_CLEANUP:
                     if (gActiveScheduler->unk1C > 0) {
-                        if (((D_800AB12C_A249C - gActiveScheduler->unk1C) & 0x0FFFFFFF) <= 0x07FFFFFF) {
+                        if (((gBufferedFrameCounter - gActiveScheduler->unk1C) & 0x0FFFFFFF) <= 0x07FFFFFF) {
                             gActiveScheduler->unk1C = -1;
                         }
                         if (gActiveScheduler->unk1C <= 0) {
@@ -661,7 +661,7 @@ void *allocateNodeMemory(s32 size) {
     return temp_a0;
 }
 
-s32 freeGameStateMemory(s32 *arg0) {
+s32 freeNodeMemory(s32 *arg0) {
     return decrementNodeRefCount(arg0);
 }
 

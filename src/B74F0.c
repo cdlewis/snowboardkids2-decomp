@@ -250,8 +250,8 @@ void func_800BB71C_B795C(TrackHazard *arg0) {
 }
 
 void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *arg0) {
-    arg0->unk24 = (s32 *)freeGameStateMemory(arg0->unk24);
-    arg0->unk28 = (s32 *)freeGameStateMemory(arg0->unk28);
+    arg0->unk24 = (s32 *)freeNodeMemory(arg0->unk24);
+    arg0->unk28 = (s32 *)freeNodeMemory(arg0->unk28);
 }
 
 void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
@@ -328,8 +328,8 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
 }
 
 void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0) {
-    arg0->unk24 = (s32 *)freeGameStateMemory(arg0->unk24);
-    arg0->unk28 = (s32 *)freeGameStateMemory(arg0->unk28);
+    arg0->unk24 = (s32 *)freeNodeMemory(arg0->unk24);
+    arg0->unk28 = (s32 *)freeNodeMemory(arg0->unk28);
 }
 
 void func_800BBA98(void) {

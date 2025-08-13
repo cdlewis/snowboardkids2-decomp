@@ -276,8 +276,8 @@ void func_80000A68_1668(func_80000C2C_182C_arg *arg0) {
 }
 
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *arg0) {
-    arg0->unk30 = (s32 *)freeGameStateMemory(arg0->unk30);
-    arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
+    arg0->unk30 = (s32 *)freeNodeMemory(arg0->unk30);
+    arg0->unk2C = (s32 *)freeNodeMemory(arg0->unk2C);
 }
 
 void func_80000C2C_182C(func_80000C2C_182C_arg *arg0) {
@@ -342,8 +342,8 @@ void func_80000E84_1A84(func_80000C2C_182C_arg *arg0) {
 }
 
 void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0) {
-    arg0->unk30 = (s32 *)freeGameStateMemory(arg0->unk30);
-    arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
+    arg0->unk30 = (s32 *)freeNodeMemory(arg0->unk30);
+    arg0->unk2C = (s32 *)freeNodeMemory(arg0->unk2C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000F4C_1B4C);
@@ -373,9 +373,9 @@ void func_80001040_1C40(func_80000C2C_182C_arg *arg0) {
 }
 
 void func_80001114_1D14(func_80001114_1D14_arg *arg0) {
-    arg0->unk44 = (s32 *)freeGameStateMemory(arg0->unk44);
-    arg0->unk30 = (s32 *)freeGameStateMemory(arg0->unk30);
-    arg0->unk2C = (s32 *)freeGameStateMemory(arg0->unk2C);
+    arg0->unk44 = (s32 *)freeNodeMemory(arg0->unk44);
+    arg0->unk30 = (s32 *)freeNodeMemory(arg0->unk30);
+    arg0->unk2C = (s32 *)freeNodeMemory(arg0->unk2C);
 }
 
 void func_80001158_1D58(func_80000C2C_182C_arg *arg0) {
