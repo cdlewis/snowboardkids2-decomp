@@ -6,7 +6,7 @@
 extern void *D_80088720_89320;
 extern void *func_80006EE0_7AE0;
 extern void *func_80007030_7C30;
-extern u8 D_8009A870_9B470[];
+extern u8 identityMatrix[];
 
 INCLUDE_ASM("asm/nonmatchings/7850", func_80006C50_7850);
 
@@ -27,7 +27,7 @@ typedef struct {
 } func_80006E60_7A60_arg;
 
 void func_80006E60_7A60(func_80006E60_7A60_arg *arg0) {
-    memcpy(arg0->unk4, D_8009A870_9B470, 0x20);
+    memcpy(arg0->unk4, identityMatrix, 0x20);
     arg0->unk28 = loadAssetGroupDisplayList(arg0->unk0);
     arg0->unk2C = loadAssetGroupVertexData(arg0->unk0);
     arg0->unk30 = 0;

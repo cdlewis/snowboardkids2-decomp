@@ -91,7 +91,7 @@ extern OSThread *__osActiveQueue_0;
 extern AssetGroup gameAssets[];
 extern s32 D_80089768_8A368;
 extern AssetGroup D_8008BD2C_8C92C;
-extern u8 D_8009A870_9B470[32];
+extern u8 identityMatrix[32];
 
 s32 func_800018F4_24F4(func_80002040_2C40_arg *);
 s32 func_80001904_2504(s16);
@@ -507,7 +507,7 @@ s32 func_80002484_3084(func_80002040_2C40_arg *arg0, s16 arg1) {
     s16 s5 = arg1;
     s16 temp;
 
-    memcpy(&local_buffer, &D_8009A870_9B470, sizeof(local_buffer));
+    memcpy(&local_buffer, &identityMatrix, sizeof(local_buffer));
 
     s7 = 0;
     s4 = 0;

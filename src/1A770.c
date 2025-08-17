@@ -39,7 +39,7 @@ extern void func_8001AF18_1BB18(void);
 extern void func_80019BBC_1A7BC(void);
 extern void func_80019CB4_1A8B4(func_8000153C_213C_arg1 *);
 extern void func_80019BF0_1A7F0(func_8000153C_213C_arg1 *);
-extern s32 D_8009A870_9B470;
+extern s32 identityMatrix;
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 D_800A8CC8_A0038;
 extern void func_8001E590_1F190(void);
@@ -80,7 +80,7 @@ void func_80019BBC_1A7BC(void) {
 
 void func_80019BF0_1A7F0(func_8000153C_213C_arg1 *arg0) {
     getCurrentAllocation();
-    memcpy(arg0, &D_8009A870_9B470, 0x20);
+    memcpy(arg0, &identityMatrix, 0x20);
     arg0->unk14 = 0x830000;
     arg0->unk18 = 0x340000;
     arg0->unk1C = 0xFF7D0000;

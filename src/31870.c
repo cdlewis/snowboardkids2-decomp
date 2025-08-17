@@ -12,7 +12,7 @@ typedef struct {
 } func_80031ABC_326BC_arg;
 
 extern void func_80031B30_32730;
-extern s32 D_8009A870_9B470;
+extern s32 identityMatrix;
 extern void func_80031C4C_3284C;
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 
@@ -73,13 +73,13 @@ typedef struct {
 void func_80031A0C_3260C(func_80031A0C_3260C_arg *arg0) {
     arg0->unk0 = func_800019B8_25B8(0x3A, &((GameState *)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
 
-    memcpy(&arg0->unk4, &D_8009A870_9B470, 0x20);
+    memcpy(&arg0->unk4, &identityMatrix, 0x20);
 
     arg0->unk18 = 0xFFE70000;
     arg0->unk1C = 0xFFE00000;
     arg0->unk20 = 0;
 
-    createYRotationMatrix((s16(*)[3])&arg0->unk4, 0x200);
+    createYRotationMatrix((s16(*)[3]) & arg0->unk4, 0x200);
 
     arg0->unk24 = 0x10;
     arg0->unk26 = 0x10;

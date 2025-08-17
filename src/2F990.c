@@ -59,7 +59,7 @@ extern s32 D_800AFF14_A7284;
 extern void func_8002FA44_30644();
 extern void func_8002F290_2FE90();
 extern void func_8002F024_2FC24();
-extern u8 D_8009A870_9B470[];
+extern u8 identityMatrix[];
 extern void func_8002F72C_3032C();
 extern void func_8002F980_30580();
 extern void func_8000FED0_10AD0();
@@ -148,7 +148,7 @@ typedef struct {
 void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
     GameState *temp = (GameState *)getCurrentAllocation();
     arg0->unk0 = func_8000198C_258C(0x3A, temp);
-    memcpy(&arg0->unk4, D_8009A870_9B470, 0x20);
+    memcpy(&arg0->unk4, identityMatrix, 0x20);
     arg0->unk18 = 0x200000;
     arg0->unk1C = 0xFFE00000;
     arg0->unk20 = 0x80000;
@@ -225,7 +225,7 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     (GameState *)getCurrentAllocation();
     new_var = &sp10;
     temp_s3 = ((void *)((s32)arg0)) + 0x3C;
-    memcpy(temp_s3, &D_8009A870_9B470, 0x20);
+    memcpy(temp_s3, &identityMatrix, 0x20);
     memcpy(&sp30, temp_s3, 0x20);
     memcpy(new_var, &sp30, 0x20);
     createRotationMatrixYX(&sp10, 0x1000, 0x800);

@@ -130,7 +130,7 @@ void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32); /* exte
 extern s32 func_8000A030_AC30(void *, s32);
 extern void func_80009E68_AA68(void *, s16);
 extern void func_800007C4_13C4(void *, void *);
-extern s32 D_8009A870_9B470;
+extern s32 identityMatrix;
 extern void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 extern void func_800014C8_20C8(func_80000C2C_182C_arg *arg0);
 
@@ -404,7 +404,7 @@ void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
     entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     subEntry = &entry->sub_entries[arg0->unk4];
 
-    memcpy(&sp20, &D_8009A870_9B470, 0x20);
+    memcpy(&sp20, &identityMatrix, 0x20);
     setCleanupCallback((void (*)(void *))&func_800014C8_20C8);
     func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
 
