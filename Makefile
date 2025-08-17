@@ -72,11 +72,17 @@ LD_SCRIPT = $(BASENAME).ld
 LINKER_SCRIPTS := linker_scripts/hardware_regs.ld linker_scripts/libultra_syms.ld
 LD_FLAGS := -T $(LD_SCRIPT) -T undefined_syms_auto.txt -Map snowboardkids2.map --no-check-sections $(foreach sym,$(UNDEFINED_SYMS),-u $(sym)) -Lbuild/lib -lmus -lgultra_rom
 
+ifeq ($(NON_MATCHING),1)
+MACROS += -DNON_MATCHING
+endif
+
 # Targets
 
 default: all
 
 all: dirs verify
+
+nonmatching: dirs no_verify
 
 dirs:
 	$(foreach dir,$(ASM_DIRS) $(BIN_DIRS),$(shell mkdir -p $(BUILD_DIR)/$(dir)))

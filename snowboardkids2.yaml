@@ -1392,6 +1392,13 @@ segments:
 
   - [0x6448D0, bin]
 
+  - name: _646850
+    type: bin
+    vram: 0
+    start: 0x646850
+
+  - [0x646910, bin]
+
   - name: _663440
     type: bin
     vram: 0
