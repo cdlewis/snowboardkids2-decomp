@@ -61,8 +61,13 @@ typedef struct {
     s16 unk56;
 } func_8000CB94_D794_arg;
 
+typedef struct {
+    void *unk0;
+    void *unk4;
+} func_8000CC84_D884_arg;
+
 void func_8000CB94_D794(func_8000CB94_D794_arg *arg0);
-void func_8000CC84_D884(void);
+void func_8000CC84_D884(func_8000CC84_D884_arg *);
 void func_80067EDC_68ADC(u16, void *);
 
 void func_8000CAF0_D6F0(func_8000CAF0_D6F0_arg *arg0) {
@@ -107,7 +112,10 @@ void func_8000CB94_D794(func_8000CB94_D794_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/D6F0", func_8000CC84_D884);
+void func_8000CC84_D884(func_8000CC84_D884_arg *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/D6F0", func_8000CCBC_D8BC);
 
