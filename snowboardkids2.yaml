@@ -86,7 +86,7 @@ segments:
       - [0x76B0, asm]
       - [0x7850, c]
       - [0x7C70, asm]
-      - [0x7F80, asm]
+      - [0x7F80, c]
       - [0x8700, asm]
       - [0x8A40, asm]
       - [0x8DC0, asm]
@@ -1287,7 +1287,10 @@ segments:
     vram: 0
     start: 0x49B420
 
-  - [0x49B500, bin]
+  - name: _49B500
+    type: bin
+    vram: 0
+    start: 0x49B500
 
   - name: _49BA20
     type: bin
@@ -1405,6 +1408,13 @@ segments:
     start: 0x646850
 
   - [0x646910, bin]
+
+  - name: _646CD0
+    type: bin
+    vram: 0
+    start: 0x646CD0
+
+  - [0x646DF0, bin]
 
   - name: _647F90
     type: bin
