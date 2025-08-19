@@ -150,10 +150,18 @@ void func_8000CCBC_D8BC(void *arg0, void *arg1, func_8000CCBC_D8BC_arg2 *arg2, s
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/D6F0", func_8000CD88_D988);
+void func_8000CD88_D988(void) {
+    dmaRequestAndUpdateStateWithSize(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
+}
 
-INCLUDE_ASM("asm/nonmatchings/D6F0", func_8000CDB4_D9B4);
+void func_8000CDB4_D9B4(void) {
+    dmaRequestAndUpdateStateWithSize(&_49B420_ROM_START, &_49B420_ROM_END, 0x240);
+}
 
-INCLUDE_ASM("asm/nonmatchings/D6F0", func_8000CDE0_D9E0);
+void func_8000CDE0_D9E0(void *node) {
+    freeNodeMemory(node);
+}
 
-INCLUDE_ASM("asm/nonmatchings/D6F0", func_8000CDFC_D9FC);
+void func_8000CDFC_D9FC(void *node) {
+    freeNodeMemory(node);
+}
