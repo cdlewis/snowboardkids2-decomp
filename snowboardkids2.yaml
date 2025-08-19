@@ -982,6 +982,11 @@ segments:
 
   - [0x1E7F60, bin]
 
+  - name: _1E9C40
+    type: bin
+    vram: 0
+    start: 0x1E9C40
+
   - name: _1EA200
     type: bin
     vram: 0
@@ -994,14 +999,35 @@ segments:
     vram: 0
     start: 0x1EACD0
 
-  - [0x1EAEF0, bin]
+  - name: _1EAEF0
+    type: bin
+    vram: 0
+    start: 0x1EAEF0
 
   - name: _1EC940
     type: bin
     vram: 0
     start: 0x1EC940
 
-  - [0x1ECAD0, bin]
+  - name: _1ECAD0
+    type: bin
+    vram: 0
+    start: 0x1ECAD0
+
+  - name: _1ED370
+    type: bin
+    vram: 0
+    start: 0x1ED370
+
+  - name: _1ED5F0
+    type: bin
+    vram: 0
+    start: 0x1ED5F0
+
+  - name: _1ED740
+    type: bin
+    vram: 0
+    start: 0x1ED740
 
   - name: _1ED890
     type: bin
