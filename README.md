@@ -1,4 +1,4 @@
-![progress](https://img.shields.io/badge/progress-19.08%25-blue)
+![progress](https://img.shields.io/badge/progress-19.24%25-blue)
 
 # Snowboard Kids 2
 
