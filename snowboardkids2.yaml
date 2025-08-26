@@ -49,6 +49,7 @@ options:
   libultra_symbols: True
   hardware_regs: True
   hasm_in_src_path: True
+  disassemble_all: True
 
 segments:
   - name: header
@@ -326,6 +327,7 @@ segments:
       - [0x84E20, hasm, ../lib/libkmc/mmuldi3]
       - [0x851F0, textbin, rspboot]
       - [0x852C0, textbin, aspMain]
+      - [0x85AC0, textbin, gspS2DEX_maybe]
       - [0x879A0, textbin, gspF3DEX_fifoText]
       - [0x88D30, data, 8A40]
       - [0x891D0, data, 5520]
@@ -969,7 +971,7 @@ segments:
       - [0x1DF8B0, asm]
       - [0x1DFAA0, asm]
       - [0x1E1BA0, asm]
-      - [0x1E2070, asm]
+      - [0x1E2070, c]
       - [0x1E25B0, asm]
       - [0x1E2890, asm]
       - [0x1E2BE0, asm]
@@ -1084,7 +1086,15 @@ segments:
     vram: 0
     start: 0x214FC0
 
-  - [0x215120, bin]
+  - name: _215120
+    type: bin
+    vram: 0
+    start: 0x215120
+
+  - name: _2151D0
+    type: bin
+    vram: 0
+    start: 0x2151D0
 
   - name: _215280
     type: bin
@@ -1454,7 +1464,20 @@ segments:
     vram: 0
     start: 0x663440
 
-  - [0x6636F0, bin]
+  - name: _6636F0
+    type: bin
+    vram: 0
+    start: 0x6636F0
+
+  - name: _6637B0
+    type: bin
+    vram: 0
+    start: 0x6637B0
+
+  - name: _663BE0
+    type: bin
+    vram: 0
+    start: 0x663BE0
 
   - name: _663C90
     type: bin
