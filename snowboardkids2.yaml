@@ -1519,6 +1519,81 @@ segments:
     vram: 0
     start: 0x67E860
 
-  - [0x67FB80, bin, trailer]
+  - name: _67FB80
+    type: bin
+    vram: 0
+    start: 0x67FB80
+
+  - name: _684630
+    type: bin
+    vram: 0
+    start: 0x684630
+
+  - name: _6848B0
+    type: bin
+    vram: 0
+    start: 0x6848B0
+
+  - name: _686740
+    type: bin
+    vram: 0
+    start: 0x686740
+
+  - name: _686D40
+    type: bin
+    vram: 0
+    start: 0x686D40
+
+  - name: _687070
+    type: bin
+    vram: 0
+    start: 0x687070
+
+  - name: _6884D0
+    type: bin
+    vram: 0
+    start: 0x6884D0
+
+  - name: _688950
+    type: bin
+    vram: 0
+    start: 0x688950
+
+  - name: _688C40
+    type: bin
+    vram: 0
+    start: 0x688C40
+
+  - name: _688F30
+    type: bin
+    vram: 0
+    start: 0x688F30
+
+  - name: _689220
+    type: bin
+    vram: 0
+    start: 0x689220
+
+  - name: _689460
+    type: bin
+    vram: 0
+    start: 0x689460
+
+  - name: _6897C0
+    type: bin
+    vram: 0
+    start: 0x6897C0
+
+  - name: _68B4A0
+    type: bin
+    vram: 0
+    start: 0x68B4A0
+
+  - name: _68D260
+    type: bin
+    vram: 0
+    start: 0x68D260
+
+  - [0x68F7F0, bin, trailer]
 
   - [0x1000000]
