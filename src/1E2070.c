@@ -1,4 +1,5 @@
 #include "common.h"
+#include "displaylist.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -45,12 +46,75 @@ void func_800B5318_1E23C8(func_800B5318_1E23C8_arg *);
 extern s32 D_80089510_8A110;
 extern s32 D_80089520;
 extern void func_80004FF8_5BF8(u16, void *);
+extern void func_80067EDC_68ADC(s32, void *);
 
 INCLUDE_ASM("asm/nonmatchings/1E2070", func_800B4FC0_1E2070);
 
-INCLUDE_ASM("asm/nonmatchings/1E2070", func_800B50E4_1E2194);
+typedef struct {
+    struct {
+        u8 padding[0x2C];
+        s32 unk2C;
+        s32 unk30;
+        s32 unk34;
+    } *unk0;
+    DataTable_19E80 *unk4;
+    loadAssetMetadataByIndex_arg assetMetadata;
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    u8 *unk38;
+    TableEntry_19E80 *unk3C;
+    u8 unk40;
+    u8 unk41;
+    u8 unk42;
+    u8 padding43;
+    s32 unk44;
+    s32 unk48;
+    s32 unk4C;
+    s32 unk50;
+    s32 unk54;
+    s32 unk58;
+    s32 unk5C;
+    s16 unk60;
+    s16 unk62;
+} func_800B50E4_1E2194_arg;
 
-INCLUDE_ASM("asm/nonmatchings/1E2070", func_800B5210_1E22C0);
+void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *arg0) {
+    s16 temp_v0;
+
+    loadAssetMetadataByIndex(&arg0->assetMetadata, arg0->unk4, arg0->unk60, arg0->unk62);
+    arg0->unk38 = arg0->assetMetadata.data_ptr;
+    arg0->unk3C = arg0->assetMetadata.index_ptr;
+    arg0->unk40 = arg0->assetMetadata.unk18;
+    arg0->unk41 = arg0->assetMetadata.unk19;
+    arg0->assetMetadata.unk4 = arg0->unk48 + arg0->unk0->unk2C;
+    arg0->assetMetadata.unk8 = arg0->unk4C + arg0->unk0->unk30;
+    arg0->assetMetadata.unkC = arg0->unk50 + arg0->unk0->unk34;
+    arg0->unk2C = arg0->unk54 + arg0->unk0->unk2C;
+    arg0->unk30 = arg0->unk58 + arg0->unk0->unk30;
+    arg0->unk34 = arg0->unk5C + arg0->unk0->unk34;
+
+    func_80067EDC_68ADC(0, &arg0->assetMetadata);
+    func_80067EDC_68ADC(0, &arg0->unk28);
+
+    arg0->assetMetadata.unk1A -= 0x14;
+    arg0->unk42 -= 0x14;
+    temp_v0 = ++arg0->unk60;
+
+    if (temp_v0 == 8) {
+        func_80069CF8_6A8F8();
+    }
+}
+
+typedef struct {
+    s32 unk0;
+    void *unk4;
+} func_800B5210_1E22C0_arg;
+void func_800B5210_1E22C0(func_800B5210_1E22C0_arg *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2070", func_800B523C_1E22EC);
 

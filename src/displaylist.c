@@ -23,14 +23,6 @@ typedef struct {
 } enqueueMultiPartDisplayList_arg1;
 
 typedef struct {
-    u8 padding[0x10];
-    u8 *data_ptr;
-    TableEntry_19E80 *index_ptr;
-    s8 unk18;
-    u8 unk19;
-} loadAssetMetadataByIndex_arg;
-
-typedef struct {
     u8 padding[0x148];
     u8 unk148;
     u8 unk149;

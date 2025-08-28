@@ -67,3 +67,22 @@ typedef struct {
     s32 unk30;
 } func_80066444_67044_arg1;
 void func_800677C0_683C0(s32 arg0, func_80066444_67044_arg1 *arg1);
+
+typedef struct {
+    u8 padding0[4];
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    /* 0x10 */ u8 *data_ptr;
+    /* 0x14 */ TableEntry_19E80 *index_ptr;
+    s8 unk18;
+    u8 unk19;
+    u8 unk1A;
+} loadAssetMetadataByIndex_arg;
+
+void loadAssetMetadataByIndex(
+    loadAssetMetadataByIndex_arg *arg0,
+    DataTable_19E80 *table,
+    s32 entry_index,
+    s32 sub_index
+);
