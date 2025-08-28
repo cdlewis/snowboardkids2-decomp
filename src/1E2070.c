@@ -47,6 +47,7 @@ extern s32 D_80089510_8A110;
 extern s32 D_80089520;
 extern void func_80004FF8_5BF8(u16, void *);
 extern void func_80067EDC_68ADC(s32, void *);
+extern void func_800B4FC0_1E2070(void);
 
 INCLUDE_ASM("asm/nonmatchings/1E2070", func_800B4FC0_1E2070);
 
@@ -116,7 +117,18 @@ void func_800B5210_1E22C0(func_800B5210_1E22C0_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E2070", func_800B523C_1E22EC);
+typedef struct {
+    Node n;
+    u8 padding[0x36];
+    s16 unk62;
+} func_800B523C_1E22EC_task;
+void func_800B523C_1E22EC(void *arg0, s16 arg1) {
+    func_800B523C_1E22EC_task *task = (func_800B523C_1E22EC_task *)scheduleTask(&func_800B4FC0_1E2070, 1, 0, 0x64);
+    if (task != NULL) {
+        task->n.prev = arg0;
+        task->unk62 = arg1;
+    }
+}
 
 void func_800B5290_1E2340(s16 arg0, void *arg1, s16 arg2, s16 arg3) {
     func_800B5290_1E2340_task *task = (func_800B5290_1E2340_task *)scheduleTask(&func_800B5318_1E23C8, 1, 0, 0);
