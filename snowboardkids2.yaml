@@ -961,7 +961,7 @@ segments:
     overlay: true
     exclusive_ram_id: 800B00C0
     subsegments:
-      - [0x1DD170, asm]
+      - [0x1DD170, c]
       - [0x1DD8C0, asm]
       - [0x1DD970, asm]
       - [0x1DDAF0, asm]
@@ -978,7 +978,8 @@ segments:
       - [0x1E36C0, asm]
       - [0x1E60D0, asm]
       - [0x1E64A0, asm]
-      - [0x1E6D20, data] # 1E6D30 has some interesting text
+      - [0x1E6D20, data, 1DD170] # 1E6D30 has some interesting text
+      - [0x1E7670, data]
       - [0x1E7DC0, .data, 1E2070]
       - [0x1E7E30, data]
       - [0x1E7F00, rodata]
