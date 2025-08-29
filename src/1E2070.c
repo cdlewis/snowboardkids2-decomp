@@ -5,9 +5,15 @@
 
 USE_ASSET(_215120);
 USE_ASSET(_2151D0);
+USE_ASSET(_646DF0);
 USE_ASSET(_6636F0);
 USE_ASSET(_6637B0);
 USE_ASSET(_663BE0);
+
+typedef struct {
+    s32 unk0;
+    void *unk4;
+} func_800B5210_1E22C0_arg;
 
 typedef struct {
     u8 padding[0x20];
@@ -39,17 +45,9 @@ typedef struct {
     s16 unk58;
 } func_800B5290_1E2340_task;
 
-void func_800B5438_1E24E8(func_800B5318_1E23C8_arg *);
-void func_800B54B4_1E2564(func_800B5318_1E23C8_arg *);
-void func_800B5318_1E23C8(func_800B5318_1E23C8_arg *);
-
-extern s32 D_80089510_8A110;
-extern s32 D_80089520;
-extern void func_80004FF8_5BF8(u16, void *);
-extern void func_80067EDC_68ADC(s32, void *);
-extern void func_800B4FC0_1E2070(void);
-
-INCLUDE_ASM("asm/nonmatchings/1E2070", func_800B4FC0_1E2070);
+typedef struct Vec3i {
+    s32 x, y, z;
+} Vec3i;
 
 typedef struct {
     struct {
@@ -82,6 +80,75 @@ typedef struct {
     s16 unk62;
 } func_800B50E4_1E2194_arg;
 
+typedef struct {
+    struct {
+        s32 unk0;
+        u8 pad[0x28];
+        s32 unk2C;
+        s32 unk30;
+        s32 unk34;
+    } *unk0;
+    void *unk4;
+    s32 *unk8;
+    char pad[0x16];
+    u8 unk22;
+    char pad2[5];
+    s32 *unk28;
+    char pad3[0x16];
+    u8 unk42;
+    char pad4[5];
+    Vec3i unk48[2];
+    u16 unk60;
+    u16 unk62;
+} func_800B4FC0_1E2070_arg;
+
+void func_800B5438_1E24E8(func_800B5318_1E23C8_arg *);
+void func_800B54B4_1E2564(func_800B5318_1E23C8_arg *);
+void func_800B5318_1E23C8(func_800B5318_1E23C8_arg *);
+void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *);
+void func_800B5210_1E22C0(func_800B5210_1E22C0_arg *);
+void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *);
+
+extern void transformVector(s16 *, s32, void *);
+extern s32 D_80089510_8A110;
+extern s32 D_80089520;
+extern void func_80004FF8_5BF8(u16, void *);
+extern void func_80067EDC_68ADC(s32, void *);
+
+u32 D_800BAD10_1E7DC0[] = { 0xFFE80018, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180018, 0x00000000,
+                            0x07F0FFF0, 0xFFFFFFFF, 0x0018FFE8, 0x00000000, 0x07F007F0, 0xFFFFFFFF,
+                            0xFFE8FFE8, 0x00000000, 0xFFF007F0, 0xFFFFFFFF, 0x00040000, 0x00000000,
+                            0x000D0000, 0xFFFC0000, 0x00000000, 0x000D0000 };
+
+s32 D_800BAD68_1E7E18[2][3] = {
+    { 0xFFFC0000, 0x00000000, 0xFFF30000 },
+    { 0x00040000, 0x00000000, 0xFFF30000 }
+};
+
+void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *arg0) {
+    s32 i;
+
+    arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_646DF0_ROM_START, &_646DF0_ROM_END, 0x1188);
+    arg0->unk8 = &D_800BAD10_1E7DC0;
+    arg0->unk22 = 0xFF;
+
+    arg0->unk28 = arg0->unk8;
+    arg0->unk42 = arg0->unk22;
+
+    for (i = 0; i < 2; i++) {
+        transformVector(D_800BAD68_1E7E18[i], arg0->unk0->unk0 + 0x3C0, (u8 *)arg0 + (i * 12 + 72));
+        arg0->unk48[i].x -= arg0->unk0->unk2C;
+        arg0->unk48[i].y -= arg0->unk0->unk30;
+        arg0->unk48[i].z -= arg0->unk0->unk34;
+    }
+
+    arg0->unk60 = 0;
+    arg0->unk62 = arg0->unk62;
+
+    setCleanupCallback((void (*)(void *))&func_800B5210_1E22C0);
+    setCallbackWithContinue((void (*)(void *))&func_800B50E4_1E2194);
+}
+
 void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *arg0) {
     s16 temp_v0;
 
@@ -109,10 +176,6 @@ void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *arg0) {
     }
 }
 
-typedef struct {
-    s32 unk0;
-    void *unk4;
-} func_800B5210_1E22C0_arg;
 void func_800B5210_1E22C0(func_800B5210_1E22C0_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }

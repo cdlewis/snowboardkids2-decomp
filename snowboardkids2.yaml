@@ -979,6 +979,8 @@ segments:
       - [0x1E60D0, asm]
       - [0x1E64A0, asm]
       - [0x1E6D20, data] # 1E6D30 has some interesting text
+      - [0x1E7DC0, .data, 1E2070]
+      - [0x1E7E30, data]
       - [0x1E7F00, rodata]
       - { start: 0x1E7F60, type: bss, vram: 0x800BAEB0, name: 1DD170 }
 
@@ -1450,7 +1452,12 @@ segments:
     vram: 0
     start: 0x646CD0
 
-  - [0x646DF0, bin]
+  - name: _646DF0
+    type: bin
+    vram: 0
+    start: 0x646DF0
+
+  - [0x647740, bin]
 
   - name: _647F90
     type: bin

@@ -123,3 +123,5 @@ echo "Populated with target and base files"
 ln -sf "${CLAUDE_DIR}"/* "$created_dir/"
 ln -sf "${CLAUDE_CONFIG}" "$created_dir/"
 echo "Linked claude decompiler files and .claude config into $created_dir"
+
+cd "$created_dir"
