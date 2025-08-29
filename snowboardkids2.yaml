@@ -984,7 +984,41 @@ segments:
       - [0x1E7F00, rodata]
       - { start: 0x1E7F60, type: bss, vram: 0x800BAEB0, name: 1DD170 }
 
-  - [0x1E7F60, bin]
+  # This appears to be dead code. Possibly an overlay
+  - name: _1E7F60
+    type: bin
+    vram: 0
+    start: 0x1E7F60
+
+  - name: _1E8900
+    type: bin
+    vram: 0
+    start: 0x1E8900
+
+  - name: _1E8A90
+    type: bin
+    vram: 0
+    start: 0x1E8A90
+
+  - name: _1E8E60
+    type: bin
+    vram: 0
+    start: 0x1E8E60
+
+  - name: _1E9300
+    type: bin
+    vram: 0
+    start: 0x1E9300
+
+  - name: _1E9490
+    type: bin
+    vram: 0
+    start: 0x1E9490
+
+  - name: _1E9790
+    type: bin
+    vram: 0
+    start: 0x1E9790
 
   - name: _1E9C40
     type: bin
@@ -996,7 +1030,10 @@ segments:
     vram: 0
     start: 0x1EA200
 
-  - [0x1EA480, bin]
+  - name: _1EA480
+    type: bin
+    vram: 0
+    start: 0x1EA480
 
   - name: _1EACD0
     type: bin
@@ -1048,7 +1085,20 @@ segments:
     vram: 0
     start: 0x1EDB30
 
-  - [0x1EDCF0, bin]
+  - name: _1EDCF0
+    type: bin
+    vram: 0
+    start: 0x1EDCF0
+
+  - name: _1EDEE0
+    type: bin
+    vram: 0
+    start: 0x1EDEE0
+
+  - name: _1EE140
+    type: bin
+    vram: 0
+    start: 0x1EE140
 
   - name: _1EE410
     type: bin
@@ -1183,7 +1233,15 @@ segments:
     vram: 0
     start: 0x27A780
 
-  - [0x28BA90, bin]
+  - name: _28BA90
+    type: bin
+    vram: 0
+    start: 0x28BA90
+
+  - name: _28FF50
+    type: bin
+    vram: 0
+    start: 0x28FF50
 
   - name: _290D70
     type: bin
