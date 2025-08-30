@@ -415,6 +415,7 @@ typedef struct {
 extern D_800BA576_1E7626_item D_800BA576_1E7626[];
 extern u16 D_800BA5B8_1E7668;
 extern D_800BA574_1E7624_item D_800BA574_1E7624[];
+extern u8 D_800BA5B9_1E7669;
 
 void func_800B00F4_1DD1A4(s32 arg0, s32 arg1) {
     func_800B00C0_1DD170(arg0 & 0xFF, arg1 & 0xFF);
@@ -476,7 +477,27 @@ s32 func_800B0228_1DD2D8(u8 nextIndex, s16 skipValue) {
     return nextIndex & 0xFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B02B4_1DD364);
+s32 func_800B02B4_1DD364(s32 arg0, s32 arg1) {
+    s16 temp_v1;
+    s32 var_a0;
+    s32 var_v0;
+
+    var_a0 = arg0 - 1;
+    if ((var_a0 & 0xFF) == 0xFF) {
+        var_a0 = D_800BA5B9_1E7669 - 1;
+        var_v0 = arg1 << 0x10;
+    }
+
+    temp_v1 = (s16)arg1;
+    if (temp_v1 != -1 && D_800BA576_1E7626[var_a0 & 0xFF].unk0 == temp_v1) {
+        var_a0 -= 1;
+        if ((var_a0 & 0xFF) == 0xFF) {
+            var_a0 = D_800BA5B9_1E7669 - 1;
+        }
+    }
+
+    return var_a0 & 0xFF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B0328_1DD3D8);
 
