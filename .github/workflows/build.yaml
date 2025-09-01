@@ -86,7 +86,7 @@ jobs:
     # Decomp.dev reporting
 
     - name: Generate objdiff report
-      run: PATH="$(pwd)/.venv/bin:$PATH" python3 -m mapfile_parser objdiff_report report.json
+      run: PATH="$(pwd)/.venv/bin:$PATH" python3 tools/decomp_dev_report.py
       working-directory: main
 
     - name: Upload progress report artifact
