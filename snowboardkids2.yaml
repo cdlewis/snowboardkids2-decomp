@@ -20,10 +20,6 @@ options:
   use_legacy_include_asm: False
   mips_abi_float_regs: o32
 
-  asm_function_macro: glabel
-  asm_jtbl_label_macro: jlabel
-  asm_data_macro: dlabel
-
   section_order: [".text", ".data", ".rodata", ".bss"]
   auto_link_sections: [".data", ".rodata", ".bss"]
 
@@ -663,7 +659,7 @@ segments:
       - [0x9E9E0, rodata, E090]
       - [0x9EA90, rodata, E770]
       - [0x9EAB0, rodata]
-      - [0x9EB50, rodata]
+      - [0x9EB50, .rodata, 1A770]
       - [0x9EC60, .rodata, 1BBA0]
       - [0x9EC90, rodata, 1C9C0]
       - [0x9ECE0, rodata, 1D520]
@@ -673,7 +669,8 @@ segments:
       - [0x9F050, .rodata, 2F990]
       - [0x9F090, .rodata, 36E50]
       - [0x9F0C8, .rodata, 3E160]
-      - [0x9F398, .rodata, 46080]
+      - [0x9F398, .rodata, 413E0]
+      - [0x9F3C0, .rodata, 46080]
       - [0x9F480, rodata, 4CD70]
       - [0x9F598, .rodata, graphics]
       - [0x9F5D8, rodata, 594E0]

@@ -1,107 +1,104 @@
-# Display Processor Command Registers / Rasterizer Interface
+# This file is used by modern gas.
+# Defines the expected assembly macros
 
-.set DPC_START_REG, 0xA4100000
+# Evaluate this file only once in case it's included more than once
+.ifndef _MACRO_INC_GUARD
+.internal _MACRO_INC_GUARD
+.set _MACRO_INC_GUARD, 1
 
-.set leoBootID, 0x800001A0
-
-.set D_A4620000, 0xA4620000
-
-.set osAppNmiBuffer, 0x8000031C;
-
-.set D_80000000, 0x80000000
-.set D_80000002, 0x80000002
-.set D_80000004, 0x80000004
-.set D_80000008, 0x80000008
-.set D_8000000C, 0x8000000C
-.set D_80000010, 0x80000010
-
-# Assembly Macros
-
-.set K0BASE, 0x80000000
-.set K1BASE, 0xA0000000
-
-.set SI_DRAM_ADDR_REG, 0xA4800000
-
-.set SI_STATUS_REG, 0xA4800018
-.set SI_PIF_ADDR_RD64B_REG, 0xA4800004
-.set SI_PIF_ADDR_WR64B_REG, 0xA4800010
-
-.set PI_STATUS_REG, 0xA4600010
-.set PI_BSD_DOM1_LAT_REG, 0xA4600014;
-.set PI_BSD_DOM1_PWD_REG, 0xA4600018;
-.set PI_BSD_DOM1_PGS_REG, 0xA460001C;
-.set PI_BSD_DOM1_RLS_REG, 0xA4600020;
-.set PI_BSD_DOM2_LAT_REG, 0xA4600024;
-.set PI_BSD_DOM2_LWD_REG, 0xA4600028;
-.set PI_BSD_DOM2_PGS_REG, 0xA460002C;
-.set PI_BSD_DOM2_RLS_REG, 0xA4600030;
-.set PI_DRAM_ADDR_REG, 0xa4600000;
-.set PI_CART_ADDR_REG, 0xa4600004;
-.set PI_RD_LEN_REG, 0xa4600008;
-.set PI_WR_LEN_REG, 0xa460000c;
-
-.set osRomBase, 0x80000308;
-.set osResetType, 0x8000030C;
-
-.set VI_STATUS_REG, 0xA4400000;
-.set VI_DRAM_ADDR_REG, 0xA4400004;
-.set VI_WIDTH_REG, 0xA4400008;
-.set VI_INTR_REG, 0xA440000C;
-.set VI_CURRENT_REG, 0xA4400010;
-.set VI_BURST_REG, 0xA4400014;
-.set VI_V_SYNC_REG, 0xA4400018;
-.set VI_H_SYNC_REG, 0xA440001C;
-.set VI_LEAP_REG, 0xA4400020;
-.set VI_H_START_REG, 0xA4400024;
-.set VI_V_START_REG, 0xA4400028;
-.set VI_V_BURST_REG, 0xA440002C;
-.set VI_X_SCALE_REG, 0xA4400030;
-.set VI_Y_SCALE_REG, 0xA4400034;
-
-.set D_A4800000, 0xA4800000;
-
-.set SP_MEM_ADDR_REG, 0xA4040000;
-.set SP_DRAM_ADDR_REG, 0xA4040004;
-.set SP_RD_LEN_REG, 0xA4040008;
-.set SP_WR_LEN_REG, 0xA404000C;
-.set SP_STATUS_REG, 0xA4040010;
-.set SP_DMA_FULL_REG, 0xA4040014;
-.set SP_DMA_BUSY_REG, 0xA4040018;
-.set SP_SEMAPHORE_REG, 0xA404001C;
-
-.set D_A4080000, 0xA4080000
-
-.set AI_DRAM_ADDR_REG, 0xA4500000;
-.set AI_LEN_REG, 0xA4500004;
-.set AI_CONTROL_REG, 0xA4500008;
-.set AI_STATUS_REG, 0xA450000C;
-.set AI_DACRATE_REG, 0xA4500010;
-.set AI_BITRATE_REG, 0xA4500014;
-
-.set MI_MODE_REG, 0xA4300000;
-.set MI_VERSION_REG, 0xA4300004;
-.set MI_INTR_REG, 0xA4300008;
-.set MI_INTR_MASK_REG, 0xA430000C;
-
-.macro glabel label
-    .global \label
+# A function symbol.
+.macro glabel label, visibility=global
+    .\visibility \label
     .type \label, @function
     \label:
+        .ent \label
 .endm
 
-.macro .word32 x
-    .word \x
+# The end of a function symbol.
+.macro endlabel label
+    .size \label, . - \label
+    .end \label
 .endm
 
-.macro jlabel label
-    .global \label
+# An alternative entry to a function.
+.macro alabel label, visibility=global
+    .\visibility \label
+    .type \label, @function
+    \label:
+        .aent \label
+.endm
+
+# A label referenced by an error handler table.
+.macro ehlabel label, visibility=global
+    .\visibility \label
     \label:
 .endm
 
-.macro dlabel label
-    .global \label
+
+# A label referenced by a jumptable.
+.macro jlabel label, visibility=global
+    .\visibility \label
     \label:
 .endm
+
+
+# A data symbol.
+.macro dlabel label, visibility=global
+    .\visibility \label
+    .type \label, @object
+    \label:
+.endm
+
+# End of a data symbol.
+.macro enddlabel label
+    .size \label, . - \label
+.endm
+
+
+# Label to signal the symbol haven't been matched yet.
+.macro nonmatching label, size=1
+    .global \label\().NON_MATCHING
+    .type \label\().NON_MATCHING, @object
+    .size \label\().NON_MATCHING, \size
+    \label\().NON_MATCHING:
+.endm
+
+# COP0 register aliases
+
+.set Index,         $0
+.set Random,        $1
+.set EntryLo0,      $2
+.set EntryLo1,      $3
+.set Context,       $4
+.set PageMask,      $5
+.set Wired,         $6
+.set Reserved07,    $7
+.set BadVaddr,      $8
+.set Count,         $9
+.set EntryHi,       $10
+.set Compare,       $11
+.set Status,        $12
+.set Cause,         $13
+.set EPC,           $14
+.set PRevID,        $15
+.set Config,        $16
+.set LLAddr,        $17
+.set WatchLo,       $18
+.set WatchHi,       $19
+.set XContext,      $20
+.set Reserved21,    $21
+.set Reserved22,    $22
+.set Reserved23,    $23
+.set Reserved24,    $24
+.set Reserved25,    $25
+.set PErr,          $26
+.set CacheErr,      $27
+.set TagLo,         $28
+.set TagHi,         $29
+.set ErrorEPC,      $30
+.set Reserved31,    $31
+
+# Float register aliases
 
 .set $fv0,          $f0
 .set $fv0f,         $f1
@@ -135,3 +132,5 @@
 .set $fs4f,         $f29
 .set $fs5,          $f30
 .set $fs5f,         $f31
+
+.endif

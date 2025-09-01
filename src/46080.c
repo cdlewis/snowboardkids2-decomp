@@ -67,10 +67,6 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80046244_46E44);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80046298_46E98);
 
-INCLUDE_RODATA("asm/nonmatchings/46080", jtbl_8009E798_9F398);
-
-const char pushStartButtonText[] = "PUSH START BUTTON";
-
 INCLUDE_ASM("asm/nonmatchings/46080", func_800462D8_46ED8);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800463F4_46FF4);
