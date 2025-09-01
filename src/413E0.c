@@ -18,7 +18,6 @@ typedef struct {
 } func_80040E00_41A00_arg;
 
 extern s32 gFrameCounter;
-extern char pushStartButtonText[];
 extern void func_8004083C_4143C();
 extern void func_80040948_41548();
 
@@ -50,6 +49,8 @@ INCLUDE_ASM("asm/nonmatchings/413E0", func_80040B4C_4174C);
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040D48_41948);
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040D80_41980);
+
+const char pushStartButtonText[] = "PUSH START BUTTON";
 
 void func_80040E00_41A00(func_80040E00_41A00_arg *arg0) {
     if (gFrameCounter & 8) {
