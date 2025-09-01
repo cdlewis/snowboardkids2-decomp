@@ -48,10 +48,17 @@ def getProgressFromMapFile(mapFile: mapfile_parser.MapFile, asmPath: Path, alias
                 if func.size is not None:
                     funcSize = func.size
 
+                # Check if the function has an assembly file in asm/nonmatchings/
+                funcAsmPath = asmPath / "nonmatchings" / originalFilePath.stem / f"{func.name}.s"
+                
                 if wholeFileIsUndecomped:
                     totalStats.undecompedSize += funcSize
                     progressPerFolder[folder].undecompedSize += funcSize
                 elif mapFile.findSymbolByName(funcNonMatching) is not None:
+                    totalStats.undecompedSize += funcSize
+                    progressPerFolder[folder].undecompedSize += funcSize
+                elif funcAsmPath.exists():
+                    # Function uses INCLUDE_ASM - count as undecomped
                     totalStats.undecompedSize += funcSize
                     progressPerFolder[folder].undecompedSize += funcSize
                 else:
