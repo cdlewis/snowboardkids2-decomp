@@ -47,9 +47,6 @@ options:
   hasm_in_src_path: True
   disassemble_all: True
 
-  # Disable pending resolution of https://github.com/ethteck/splat/issues/475
-  asm_nonmatching_label_macro: ""
-
 segments:
   - name: header
     type: header
