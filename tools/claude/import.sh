@@ -115,7 +115,7 @@ else
     # Use temp.c as before
     cp src/temp.c "$created_dir/base.c"
 fi
-cat "${CLAUDE_DIR}/prelude.inc" "$ASM_PATH" > "$created_dir/target.s"
+cat "${CLAUDE_DIR}/prelude.inc" "${CLAUDE_DIR}/../../include/macro.inc" "$ASM_PATH" > "$created_dir/target.s"
 mips-linux-gnu-as -EB -march=vr4300 -mtune=vr4300 -Iinclude -o "$created_dir/target.o" "$created_dir/target.s"
 echo "Populated with target and base files"
 
