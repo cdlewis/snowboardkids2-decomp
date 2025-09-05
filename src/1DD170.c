@@ -399,7 +399,9 @@ typedef struct {
     s8 unk6;
     s8 unk7;
     s32 unk8;
-    u8 padding[0x1C];
+    u8 padding1[0x10];
+    s32 (*unk1C)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s32, s32 arg3, s32 arg4, s8 arg5);
+    u8 padding[0x8];
     s16 (*unk28)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s8);
 } D_800BA570_1E7620_item_unk0;
 
@@ -408,11 +410,6 @@ typedef struct {
     s32 unk4;
 } D_800BA570_1E7620_item;
 extern D_800BA570_1E7620_item D_800BA570_1E7620[];
-
-D_800BA570_1E7620_item_unk0 *func_800B00C0_1DD170(s32 arg0, s32 arg1) {
-    D_800BA570_1E7620_item_unk0 *temp = D_800BA570_1E7620[(u8)arg0].unk0;
-    return &temp[(u8)arg1];
-}
 
 typedef struct {
     s16 unk0;
@@ -429,6 +426,11 @@ extern u16 D_800BA5B8_1E7668;
 extern D_800BA574_1E7624_item D_800BA574_1E7624[];
 extern u8 D_800BA5B9_1E7669;
 void func_800BB47C(s32, s32, s32, s32, s32, s32);
+
+D_800BA570_1E7620_item_unk0 *func_800B00C0_1DD170(s32 arg0, s32 arg1) {
+    D_800BA570_1E7620_item_unk0 *temp = D_800BA570_1E7620[(u8)arg0].unk0;
+    return &temp[(u8)arg1];
+}
 
 void func_800B00F4_1DD1A4(s32 arg0, s32 arg1) {
     func_800B00C0_1DD170(arg0 & 0xFF, arg1 & 0xFF);
@@ -514,7 +516,34 @@ s32 func_800B02B4_1DD364(s32 arg0, s32 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B0328_1DD3D8);
 
-INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B043C_1DD4EC);
+s32 func_800B043C_1DD4EC(
+    func_800B06FC_1DD7AC_arg0 *arg0,
+    func_800B06FC_1DD7AC_arg1 *arg1,
+    s32 arg2,
+    s32 arg3,
+    s32 arg4,
+    s8 arg5
+) {
+    s32 check;
+    D_800BA570_1E7620_item_unk0 *temp_v0;
+    func_800B06FC_1DD7AC_arg1 *ptr;
+
+    check = 1;
+    temp_v0 = func_800B00C0_1DD170(arg0->unk3E, arg0->unk3F);
+
+    if (temp_v0->unk1C) {
+        ptr = &arg1[arg5];
+        if (ptr->unkF0 == 0) {
+            check = D_800BA576_1E7626[arg0->unk3E].unk0 != 1;
+        }
+
+        if (check) {
+            return temp_v0->unk1C(arg0, arg1, arg2, arg3, arg4, arg5);
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B0534_1DD5E4);
 
