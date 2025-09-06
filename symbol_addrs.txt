@@ -1,3 +1,8 @@
+
+D_800BA570_1E7620 = 0x800BA570; // type:s32 size:0x48 rom:0x1E7620
+
+D_800B9C70_1E6D20 = 0x800B9C70; // type:s32 size:0x900 rom:0x1E6D20
+
 identityMatrix = 0x8009A870; // type:s16 size:0x20
 
 gBufferedFrameCounter = 0x800AB12C;

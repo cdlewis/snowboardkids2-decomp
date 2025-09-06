@@ -1,13 +1,25 @@
 #include "common.h"
 
 typedef struct {
-    char identifier[8];
-    char description[16];
-    void *func1;
-    void *func2;
-    void *func3;
-    void *func4;
-    void *func5;
+    u8 padding[0x3E];
+    u8 unk3E;
+    u8 unk3F;
+} func_800B06FC_1DD7AC_arg0;
+
+typedef struct {
+    u8 padding[0xF0];
+    s32 unkF0;
+} func_800B06FC_1DD7AC_arg1;
+
+typedef struct {
+    /* 0x00 */ s8 identifier[0x7];
+    /* 0x07 */ s8 unk7;
+    /* 0x08 */ s8 description[0x10];
+    /* 0x18 */ s32 (*func1)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s32, s32 arg3, s32 arg4, s8 arg5);
+    /* 0x1C */ s32 (*func2)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s32, s32 arg3, s32 arg4, s8 arg5);
+    /* 0x20 */ void *func3;
+    /* 0x24 */ s32 (*func4)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s8);
+    /* 0x28 */ s16 (*func5)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s8);
 } CommandEntry;
 
 extern struct {
@@ -383,52 +395,18 @@ struct {
 */
 
 typedef struct {
-    u8 padding[0x3E];
-    u8 unk3E;
-    u8 unk3F;
-} func_800B06FC_1DD7AC_arg0;
-
-typedef struct {
-    u8 padding[0xF0];
-    s32 unkF0;
-} func_800B06FC_1DD7AC_arg1;
-
-typedef struct {
-    s32 unk0;
+    CommandEntry *unk0;
     s16 unk4;
-    s8 unk6;
-    s8 unk7;
-    s32 unk8;
-    u8 padding1[0x10];
-    s32 (*unk1C)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s32, s32 arg3, s32 arg4, s8 arg5);
-    u8 padding[0x8];
-    s16 (*unk28)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s8);
-} D_800BA570_1E7620_item_unk0;
-
-typedef struct {
-    D_800BA570_1E7620_item_unk0 *unk0;
-    s32 unk4;
+    s16 unk6;
 } D_800BA570_1E7620_item;
 extern D_800BA570_1E7620_item D_800BA570_1E7620[];
 
-typedef struct {
-    s16 unk0;
-    u8 padding[0x6];
-} D_800BA574_1E7624_item;
-
-typedef struct {
-    s16 unk0;
-    u8 padding[0x6];
-} D_800BA576_1E7626_item;
-
-extern D_800BA576_1E7626_item D_800BA576_1E7626[];
 extern u16 D_800BA5B8_1E7668;
-extern D_800BA574_1E7624_item D_800BA574_1E7624[];
 extern u8 D_800BA5B9_1E7669;
 void func_800BB47C(s32, s32, s32, s32, s32, s32);
 
-D_800BA570_1E7620_item_unk0 *func_800B00C0_1DD170(s32 arg0, s32 arg1) {
-    D_800BA570_1E7620_item_unk0 *temp = D_800BA570_1E7620[(u8)arg0].unk0;
+CommandEntry *func_800B00C0_1DD170(s32 arg0, s32 arg1) {
+    CommandEntry *temp = D_800BA570_1E7620[(u8)arg0].unk0;
     return &temp[(u8)arg1];
 }
 
@@ -444,19 +422,19 @@ void *func_800B0138_1DD1E8(u8 a0, u8 a1) {
     if ((a0 == 0xFF) | (a1 == 0xFF)) {
         return &D_800B9C70_1E6D20;
     }
-    return &func_800B00C0_1DD170(a0, a1)->unk8;
+    return &func_800B00C0_1DD170(a0, a1)->description;
 }
 
 u8 func_800B0184_1DD234(u8 index, s32 value) {
     s32 inc = value + 1;
-    s16 lim = D_800BA574_1E7624[index].unk0;
+    s16 lim = D_800BA570_1E7620[index].unk4;
     u8 test = inc;
     s32 res = (test < lim) ? inc : 0;
     return res;
 }
 
 s32 func_800B01B4_1DD264(s32 arg0, s32 arg1) {
-    s16 temp_v1 = D_800BA574_1E7624[arg0 & 0xFF].unk0;
+    s16 temp_v1 = D_800BA570_1E7620[arg0 & 0xFF].unk4;
     u8 var_a1 = arg1 - 1;
     if ((var_a1 & 0xFF) >= temp_v1) {
         var_a1 = temp_v1 - 1;
@@ -465,7 +443,7 @@ s32 func_800B01B4_1DD264(s32 arg0, s32 arg1) {
 }
 
 s32 func_800B01F0_1DD2A0(s32 arg0, u8 arg1) {
-    s16 temp_v1 = D_800BA574_1E7624[arg0 & 0xFF].unk0;
+    s16 temp_v1 = D_800BA570_1E7620[arg0 & 0xFF].unk4;
     u8 var_a1 = arg1;
 
     if ((var_a1 & 0xFF) >= temp_v1) {
@@ -481,7 +459,7 @@ s32 func_800B0228_1DD2D8(u8 nextIndex, s16 skipValue) {
     }
 
     if (skipValue != -1) {
-        while (D_800BA576_1E7626[nextIndex & 0xFF].unk0 == skipValue) {
+        while (D_800BA570_1E7620[nextIndex & 0xFF].unk6 == skipValue) {
             nextIndex++;
             if ((nextIndex & 0xFF) >= D_800BA5B8_1E7668) {
                 nextIndex = 0;
@@ -504,7 +482,7 @@ s32 func_800B02B4_1DD364(s32 arg0, s32 arg1) {
     }
 
     temp_v1 = (s16)arg1;
-    if (temp_v1 != -1 && D_800BA576_1E7626[var_a0 & 0xFF].unk0 == temp_v1) {
+    if (temp_v1 != -1 && D_800BA570_1E7620[var_a0 & 0xFF].unk6 == temp_v1) {
         var_a0 -= 1;
         if ((var_a0 & 0xFF) == 0xFF) {
             var_a0 = D_800BA5B9_1E7669 - 1;
@@ -525,20 +503,20 @@ s32 func_800B043C_1DD4EC(
     s8 arg5
 ) {
     s32 check;
-    D_800BA570_1E7620_item_unk0 *temp_v0;
+    CommandEntry *temp_v0;
     func_800B06FC_1DD7AC_arg1 *ptr;
 
     check = 1;
     temp_v0 = func_800B00C0_1DD170(arg0->unk3E, arg0->unk3F);
 
-    if (temp_v0->unk1C) {
+    if (temp_v0->func2) {
         ptr = &arg1[arg5];
         if (ptr->unkF0 == 0) {
-            check = D_800BA576_1E7626[arg0->unk3E].unk0 != 1;
+            check = D_800BA570_1E7620[arg0->unk3E].unk6 != 1;
         }
 
         if (check) {
-            return temp_v0->unk1C(arg0, arg1, arg2, arg3, arg4, arg5);
+            return temp_v0->func2(arg0, arg1, arg2, arg3, arg4, arg5);
         }
     }
 
@@ -552,12 +530,12 @@ INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B0628_1DD6D8);
 s16 func_800B06FC_1DD7AC(func_800B06FC_1DD7AC_arg0 *arg0, func_800B06FC_1DD7AC_arg1 *arg1, s8 arg2) {
     s32 var_s2 = 1;
     s16 (*temp_v1)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s8) =
-        func_800B00C0_1DD170(arg0->unk3E, arg0->unk3F)->unk28;
+        func_800B00C0_1DD170(arg0->unk3E, arg0->unk3F)->func5;
 
     if (temp_v1 != 0) {
         func_800B06FC_1DD7AC_arg1 *temp = &arg1[arg2];
         if (temp->unkF0 == 0) {
-            var_s2 = (D_800BA576_1E7626[arg0->unk3E].unk0 != 1);
+            var_s2 = (D_800BA570_1E7620[arg0->unk3E].unk6 != 1);
         }
 
         if (var_s2 != 0) {
@@ -573,5 +551,5 @@ void func_800B07BC_1DD86C(s32 arg0) {
 }
 
 s16 func_800B07F0_1DD8A0(s32 arg0) {
-    return D_800BA576_1E7626[arg0 & 0xFF].unk0;
+    return D_800BA570_1E7620[arg0 & 0xFF].unk6;
 }
