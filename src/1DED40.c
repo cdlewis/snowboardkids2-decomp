@@ -50,8 +50,9 @@ INCLUDE_ASM("asm/nonmatchings/1DED40", func_800B20A8_1DF158);
 void noop_1DF160(void) {
 }
 
-s32 func_800B20B8_1DF168(void) {
+s32 returnZero_1DF168(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DED40", func_800B20C0_1DF170);
+void noop_1DF170(void) {
+}

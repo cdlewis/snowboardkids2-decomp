@@ -21,5 +21,5 @@ void func_800B1FAC_1DF05C(void);
 void func_800B2010_1DF0C0(void);
 void func_800B20A8_1DF158(void);
 void noop_1DF160(void);
-s32 func_800B20B8_1DF168(void);
-void func_800B20C0_1DF170(void);
+s32 returnZero_1DF168(void);
+void noop_1DF170(void);
