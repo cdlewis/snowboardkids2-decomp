@@ -1,7 +1,7 @@
 #include "common.h"
 
 void noop_1DF310(void);
-void func_800B2268_1DF318(void);
+s32 returnZero_1DF318(void);
 void func_800B2270_1DF320(void);
 void noop_1DF32C(void);
 void func_800B2284_1DF334(void);

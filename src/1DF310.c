@@ -3,7 +3,9 @@
 void noop_1DF310(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B2268_1DF318);
+s32 returnZero_1DF318(void) {
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B2270_1DF320);
 

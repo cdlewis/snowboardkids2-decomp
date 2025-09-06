@@ -37,7 +37,7 @@ struct {
     "               ",
     {
         { "INTRK \0", '\1', "INIT TRACK     \0", (void *)&noop_1DF160, (void *)&returnZero_1DF168, (void *)&noop_1DF170, NULL, NULL },
-        { "SYSDP \0", '\1', "SYS DISP       \0", (void *)&noop_1DF310, (void *)&func_800B2268_1DF318, (void *)&func_800B2270_1DF320, NULL, NULL },
+        { "SYSDP \0", '\1', "SYS DISP       \0", (void *)&noop_1DF310, (void *)&returnZero_1DF318, (void *)&func_800B2270_1DF320, NULL, NULL },
         { "SYSFI \0", '\1', "SYS FADE IN    \0", (void *)&noop_1DF32C, (void *)&func_800B2284_1DF334, (void *)&func_800B228C_1DF33C, NULL, (void *)&func_800B22E8_1DF398 },
         { "SYSFO \0", '\1', "SYS FADE OUT   \0", (void *)&noop_1DF3A0, (void *)&func_800B22F8_1DF3A8, (void *)&func_800B2300_1DF3B0, NULL, (void *)&func_800B235C_1DF40C },
         { "SYSFL \0", '\1', "SYS FLASH      \0", (void *)&noop_1DF414, (void *)&func_800B236C_1DF41C, (void *)&func_800B2374_1DF424, (void *)&func_800B2404_1DF4B4, (void *)&func_800B24E0_1DF590 },

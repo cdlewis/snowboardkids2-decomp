@@ -1,3 +1,5 @@
+returnZero_1DF318 = 0x800B2268;
+
 noop_1DF8B = 0x800B2800;
 noop_1DF9E4 = 0x800B2934;
 
