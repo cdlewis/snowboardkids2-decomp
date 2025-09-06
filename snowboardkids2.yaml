@@ -959,7 +959,7 @@ segments:
     exclusive_ram_id: 800B00C0
     subsegments:
       - [0x1DD170, c]
-      - [0x1DD8C0, asm]
+      - [0x1DD8C0, c]
       - [0x1DD970, c]
       - [0x1DDAF0, c]
       - [0x1DED40, c]

@@ -82,9 +82,9 @@ struct {
         { "EFRKT \0", '\1', "EFFECT ROCKET  \0", (void *)&noop_1DEE54, (void *)&func_800B1DAC_1DEE5C, (void *)&func_800B1DB4_1DEE64, NULL, (void *)&func_800B1DF4_1DEEA4 },
         { "EFMLT \0", '\1', "EFFECT MLIGHT  \0", (void *)&noop_1DEEAC, (void *)&func_800B1E04_1DEEB4, (void *)&func_800B1E0C_1DEEBC, NULL, (void *)&func_800B20A8_1DF158 },
         { "EFTRK \0", '\1', "EFFECT TRICK   \0", (void *)&noop_1DF04C, (void *)&func_800B1FA4_1DF054, (void *)&func_800B1FAC_1DF05C, (void *)&func_800B2010_1DF0C0, (void *)&func_800B20A8_1DF158 },
-        { "BGMP  \0", '\1', "BGM PLAY       \0", (void *)&func_800B0810_1DD8C0, (void *)&func_800B0818_1DD8C8, (void *)&func_800B0820_1DD8D0, NULL, NULL },
-        { "BGMFO \0", '\1', "BGM FADE OUT   \0", (void *)&func_800B0848_1DD8F8, (void *)&func_800B0850_1DD900, (void *)&func_800B0858_1DD908, NULL, NULL },
-        { "BGMVL \0", '\1', "BGM VOLUME     \0", (void *)&func_800B0884_1DD934, (void *)&func_800B088C_1DD93C, (void *)&func_800B0894_1DD944, NULL, NULL },
+        { "BGMP  \0", '\1', "BGM PLAY       \0", (void *)&noop_1DD8C0, (void *)&func_800B0818_1DD8C8, (void *)&func_800B0820_1DD8D0, NULL, NULL },
+        { "BGMFO \0", '\1', "BGM FADE OUT   \0", (void *)&noop_1DD8F8, (void *)&func_800B0850_1DD900, (void *)&func_800B0858_1DD908, NULL, NULL },
+        { "BGMVL \0", '\1', "BGM VOLUME     \0", (void *)&noop_1DD934, (void *)&func_800B088C_1DD93C, (void *)&func_800B0894_1DD944, NULL, NULL },
         { "EF2PL \0", '\1', "EFFECT2 DISP   \0", NULL, NULL, NULL, NULL, NULL },
         { "S2WP  \0", '\1', "SYS2 WIPE      \0", (void *)&func_800B2800_1DF8B0, (void *)&func_800B2808_1DF8B8, (void *)&func_800B2810_1DF8C0, NULL, (void *)&func_800B292C_1DF9DC },
         { "S2WT  \0", '\1', "SYS2 WAIT      \0", (void *)&func_800B2934_1DF9E4, (void *)&func_800B293C_1DF9EC, (void *)&func_800B2944_1DF9F4, NULL, NULL }
