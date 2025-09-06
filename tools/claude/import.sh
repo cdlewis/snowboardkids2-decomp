@@ -82,8 +82,8 @@ else
         FUNC_NAME="${FUNC_NAME}.s"
     fi
 
-    # Find the file in asm/nonmatchings
-    ASM_PATH=$(find asm/nonmatchings -name "$FUNC_NAME" -type f | head -1)
+    # Find the file in asm/nonmatchings or asm/matchings
+    ASM_PATH=$(find asm/nonmatchings asm/matchings -name "$FUNC_NAME" -type f 2>/dev/null | head -1)
 
     if [ -z "$ASM_PATH" ]; then
         echo "Error: Could not find assembly file for function: $FUNC_NAME"
