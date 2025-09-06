@@ -31,7 +31,7 @@ typedef struct {
 
 // clang-format off
 struct {
-    char header[16];
+    s8 header[16];
     CommandEntry entries[52];
 } D_800B9C70_1E6D20 = {
     "               ",
@@ -130,8 +130,9 @@ u8 func_800B0114_1DD1C4(s32 arg0, s32 arg1) {
 
 void *func_800B0138_1DD1E8(u8 a0, u8 a1) {
     if ((a0 == 0xFF) | (a1 == 0xFF)) {
-        return &D_800B9C70_1E6D20;
+        return &D_800B9C70_1E6D20.header;
     }
+
     return &func_800B00C0_1DD170(a0, a1)->description;
 }
 
@@ -146,9 +147,11 @@ u8 func_800B0184_1DD234(u8 index, s32 value) {
 s32 func_800B01B4_1DD264(s32 arg0, s32 arg1) {
     s16 temp_v1 = D_800BA570_1E7620[arg0 & 0xFF].unk4;
     u8 var_a1 = arg1 - 1;
+
     if ((var_a1 & 0xFF) >= temp_v1) {
         var_a1 = temp_v1 - 1;
     }
+
     return var_a1 & 0xFF;
 }
 
@@ -156,10 +159,11 @@ s32 func_800B01F0_1DD2A0(s32 arg0, u8 arg1) {
     s16 temp_v1 = D_800BA570_1E7620[arg0 & 0xFF].unk4;
     u8 var_a1 = arg1;
 
-    if ((var_a1 & 0xFF) >= temp_v1) {
+    if (arg1 >= temp_v1) {
         var_a1 = temp_v1 - 1;
     }
-    return var_a1 & 0xFF;
+
+    return var_a1;
 }
 
 s32 func_800B0228_1DD2D8(u8 nextIndex, s16 skipValue) {
