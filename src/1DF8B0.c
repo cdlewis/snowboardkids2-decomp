@@ -3,15 +3,21 @@
 void noop_1DF8B(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF8B0", func_800B2808_1DF8B8);
+s32 returnZero_1DF8B8(void) {
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DF8B0", func_800B2810_1DF8C0);
 
-INCLUDE_ASM("asm/nonmatchings/1DF8B0", func_800B292C_1DF9DC);
+s32 returnZero_1DF9DC(void) {
+    return 0;
+}
 
 void noop_1DF9E4(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF8B0", func_800B293C_1DF9EC);
+s32 returnZero_1DF9EC(void) {
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DF8B0", func_800B2944_1DF9F4);
