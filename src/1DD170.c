@@ -86,8 +86,8 @@ struct {
         { "BGMFO \0", '\1', "BGM FADE OUT   \0", (void *)&noop_1DD8F8, (void *)&func_800B0850_1DD900, (void *)&func_800B0858_1DD908, NULL, NULL },
         { "BGMVL \0", '\1', "BGM VOLUME     \0", (void *)&noop_1DD934, (void *)&func_800B088C_1DD93C, (void *)&func_800B0894_1DD944, NULL, NULL },
         { "EF2PL \0", '\1', "EFFECT2 DISP   \0", NULL, NULL, NULL, NULL, NULL },
-        { "S2WP  \0", '\1', "SYS2 WIPE      \0", (void *)&func_800B2800_1DF8B0, (void *)&func_800B2808_1DF8B8, (void *)&func_800B2810_1DF8C0, NULL, (void *)&func_800B292C_1DF9DC },
-        { "S2WT  \0", '\1', "SYS2 WAIT      \0", (void *)&func_800B2934_1DF9E4, (void *)&func_800B293C_1DF9EC, (void *)&func_800B2944_1DF9F4, NULL, NULL }
+        { "S2WP  \0", '\1', "SYS2 WIPE      \0", (void *)&noop_1DF8B, (void *)&func_800B2808_1DF8B8, (void *)&func_800B2810_1DF8C0, NULL, (void *)&func_800B292C_1DF9DC },
+        { "S2WT  \0", '\1', "SYS2 WAIT      \0", (void *)&noop_1DF9E4, (void *)&func_800B293C_1DF9EC, (void *)&func_800B2944_1DF9F4, NULL, NULL }
     }
 };
 // clang-format on
