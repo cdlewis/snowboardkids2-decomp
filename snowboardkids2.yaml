@@ -962,7 +962,7 @@ segments:
       - [0x1DD8C0, asm]
       - [0x1DD970, asm]
       - [0x1DDAF0, asm]
-      - [0x1DED40, asm]
+      - [0x1DED40, c]
       - [0x1DF180, asm]
       - [0x1DF310, asm]
       - [0x1DF8B0, asm]
