@@ -1,3 +1,20 @@
+func_800B00C0_9FF70 = 0x800B00C0; // rom:0x9FF70
+getCommandEntry = 0x800B00C0; // type:func rom:0x1DD170
+getCommandEntryMasked = 0x800B00F4; // rom:0x1DD1A4
+getCommandUnk7Field = 0x800B0114; 
+getCommandDescription = 0x800B0138; 
+incrementCommandIndexWithWrap = 0x800B0184;
+decrementCommandIndexClamped = 0x800B01B4; 
+clampCommandIndex = 0x800B01F0; 
+getNextCategorySkipping = 0x800B0228;
+getPrevCategorySkipping = 0x800B02B4;
+executeCommandFunc2 = 0x800B043C; 
+executeCommandFunc5 = 0x800B06FC;
+getCategorySkipValue = 0x800B07F0; // rom:0x1DD8A0
+
+commandCategories = 0x800BA570; // type:s32 size:0x48 rom:0x1E7620
+commandTable = 0x800B9C70; // type:s32 size:0x900 rom:0x1E6D20
+
 returnZero_1DF8B8 = 0x800B2808;
 returnZero_1DF9DC = 0x800B292C;
 returnZero_1DF9EC = 0x800B293C;
@@ -145,9 +162,6 @@ noop_1DEEAC = 0x800B1DFC;
 noop_1DF04C = 0x800B1F9C;
 noop_1DF160 = 0x800B20B0;
 
-D_800BA570_1E7620 = 0x800BA570; // type:s32 size:0x48 rom:0x1E7620
-
-D_800B9C70_1E6D20 = 0x800B9C70; // type:s32 size:0x900 rom:0x1E6D20
 
 identityMatrix = 0x8009A870; // type:s16 size:0x20
 

@@ -64,29 +64,29 @@ typedef struct {
     u8 padding[0x3E];
     u8 unk3E;
     u8 unk3F;
-} func_800B06FC_1DD7AC_arg0;
+} executeCommandFunc5_arg0;
 
 typedef struct {
     u8 padding[0xF0];
     s32 unkF0;
-} func_800B06FC_1DD7AC_arg1;
+} executeCommandFunc5_arg1;
 
 typedef struct {
     /* 0x00 */ s8 identifier[0x7];
     /* 0x07 */ s8 unk7;
     /* 0x08 */ s8 description[0x10];
-    /* 0x18 */ s32 (*func1)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s32, s32 arg3, s32 arg4, s8 arg5);
-    /* 0x1C */ s32 (*func2)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s32, s32 arg3, s32 arg4, s8 arg5);
+    /* 0x18 */ s32 (*func1)(executeCommandFunc5_arg0 *, executeCommandFunc5_arg1 *, s32, s32 arg3, s32 arg4, s8 arg5);
+    /* 0x1C */ s32 (*func2)(executeCommandFunc5_arg0 *, executeCommandFunc5_arg1 *, s32, s32 arg3, s32 arg4, s8 arg5);
     /* 0x20 */ void *func3;
-    /* 0x24 */ s32 (*func4)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s8);
-    /* 0x28 */ s16 (*func5)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s8);
+    /* 0x24 */ s32 (*func4)(executeCommandFunc5_arg0 *, executeCommandFunc5_arg1 *, s8);
+    /* 0x28 */ s16 (*func5)(executeCommandFunc5_arg0 *, executeCommandFunc5_arg1 *, s8);
 } CommandEntry;
 
 // clang-format off
 struct {
     s8 header[16];
     CommandEntry entries[52];
-} D_800B9C70_1E6D20 = {
+} commandTable = {
     "               ",
     {
         { "INTRK \0", '\1', "INIT TRACK     \0", (void *)&noop_1DF160, (void *)&returnZero_1DF168, (void *)&noop_1DF170, NULL, NULL },
@@ -150,16 +150,16 @@ struct {
     CommandEntry *unk0;
     s16 unk4;
     s16 unk6;
-} D_800BA570_1E7620[9] = {
-    { &D_800B9C70_1E6D20.entries[COMMAND_INIT_TRACK],   0x01, 0 },
-    { &D_800B9C70_1E6D20.entries[COMMAND_SYS_DISP],     0x09, 0 },
-    { &D_800B9C70_1E6D20.entries[COMMAND_CHR_POSITION], 0x18, 1 },
-    { &D_800B9C70_1E6D20.entries[COMMAND_CAMERA_RESET], 0x04, 0 },
-    { &D_800B9C70_1E6D20.entries[COMMAND_SE_PLAY],      0x03, 0 },
-    { &D_800B9C70_1E6D20.entries[COMMAND_EFFECT_DISP],  0x05, 1 },
-    { &D_800B9C70_1E6D20.entries[COMMAND_BGM_PLAY],     0x03, 0 },
-    { &D_800B9C70_1E6D20.entries[COMMAND_EFFECT2_DISP], 0x01, 0 },
-    { &D_800B9C70_1E6D20.entries[COMMAND_SYS2_WIPE],    0x02, 1 } 
+} commandCategories[9] = {
+    { &commandTable.entries[COMMAND_INIT_TRACK],   0x01, 0 },
+    { &commandTable.entries[COMMAND_SYS_DISP],     0x09, 0 },
+    { &commandTable.entries[COMMAND_CHR_POSITION], 0x18, 1 },
+    { &commandTable.entries[COMMAND_CAMERA_RESET], 0x04, 0 },
+    { &commandTable.entries[COMMAND_SE_PLAY],      0x03, 0 },
+    { &commandTable.entries[COMMAND_EFFECT_DISP],  0x05, 1 },
+    { &commandTable.entries[COMMAND_BGM_PLAY],     0x03, 0 },
+    { &commandTable.entries[COMMAND_EFFECT2_DISP], 0x01, 0 },
+    { &commandTable.entries[COMMAND_SYS2_WIPE],    0x02, 1 } 
 };
 // clang-format on
 
@@ -168,38 +168,38 @@ u8 D_800BA5B9_1E7669 = 9;
 
 void func_800BB47C(s32, s32, s32, s32, s32, s32);
 
-CommandEntry *func_800B00C0_1DD170(s32 arg0, s32 arg1) {
-    CommandEntry *temp = D_800BA570_1E7620[(u8)arg0].unk0;
+CommandEntry *getCommandEntry(s32 arg0, s32 arg1) {
+    CommandEntry *temp = commandCategories[(u8)arg0].unk0;
     return &temp[(u8)arg1];
 }
 
-CommandEntry *func_800B00F4_1DD1A4(s32 arg0, s32 arg1) {
-    CommandEntry *temp = func_800B00C0_1DD170(arg0 & 0xFF, arg1 & 0xFF);
+CommandEntry *getCommandEntryMasked(s32 arg0, s32 arg1) {
+    CommandEntry *temp = getCommandEntry(arg0 & 0xFF, arg1 & 0xFF);
     return temp;
 }
 
-u8 func_800B0114_1DD1C4(s32 arg0, s32 arg1) {
-    return func_800B00C0_1DD170(arg0 & 0xFF, arg1 & 0xFF)->unk7;
+u8 getCommandUnk7Field(s32 arg0, s32 arg1) {
+    return getCommandEntry(arg0 & 0xFF, arg1 & 0xFF)->unk7;
 }
 
-void *func_800B0138_1DD1E8(u8 a0, u8 a1) {
+void *getCommandDescription(u8 a0, u8 a1) {
     if (a0 == 0xFF || a1 == 0xFF) {
-        return &D_800B9C70_1E6D20.header;
+        return &commandTable.header;
     }
 
-    return &func_800B00C0_1DD170(a0, a1)->description;
+    return &getCommandEntry(a0, a1)->description;
 }
 
-u8 func_800B0184_1DD234(u8 index, s32 value) {
+u8 incrementCommandIndexWithWrap(u8 index, s32 value) {
     s32 inc = value + 1;
-    s16 lim = D_800BA570_1E7620[index].unk4;
+    s16 lim = commandCategories[index].unk4;
     u8 test = inc;
     s32 res = (test < lim) ? inc : 0;
     return res;
 }
 
-s32 func_800B01B4_1DD264(s32 arg0, s32 arg1) {
-    s16 temp_v1 = D_800BA570_1E7620[arg0 & 0xFF].unk4;
+s32 decrementCommandIndexClamped(s32 arg0, s32 arg1) {
+    s16 temp_v1 = commandCategories[arg0 & 0xFF].unk4;
     u8 var_a1 = arg1 - 1;
 
     if ((var_a1 & 0xFF) >= temp_v1) {
@@ -209,8 +209,8 @@ s32 func_800B01B4_1DD264(s32 arg0, s32 arg1) {
     return var_a1 & 0xFF;
 }
 
-s32 func_800B01F0_1DD2A0(s32 arg0, u8 arg1) {
-    s16 temp_v1 = D_800BA570_1E7620[arg0 & 0xFF].unk4;
+s32 clampCommandIndex(s32 arg0, u8 arg1) {
+    s16 temp_v1 = commandCategories[arg0 & 0xFF].unk4;
     u8 var_a1 = arg1;
 
     if (arg1 >= temp_v1) {
@@ -220,7 +220,7 @@ s32 func_800B01F0_1DD2A0(s32 arg0, u8 arg1) {
     return var_a1;
 }
 
-s32 func_800B0228_1DD2D8(u8 nextIndex, s16 skipValue) {
+s32 getNextCategorySkipping(u8 nextIndex, s16 skipValue) {
     u16 limit = *(u16 *)&D_800BA5B8_1E7668;
 
     nextIndex++;
@@ -229,7 +229,7 @@ s32 func_800B0228_1DD2D8(u8 nextIndex, s16 skipValue) {
     }
 
     if (skipValue != -1) {
-        while (D_800BA570_1E7620[nextIndex].unk6 == skipValue) {
+        while (commandCategories[nextIndex].unk6 == skipValue) {
             nextIndex++;
             if (nextIndex >= limit) {
                 nextIndex = 0;
@@ -240,7 +240,7 @@ s32 func_800B0228_1DD2D8(u8 nextIndex, s16 skipValue) {
     return nextIndex;
 }
 
-s32 func_800B02B4_1DD364(s32 arg0, s32 arg1) {
+s32 getPrevCategorySkipping(s32 arg0, s32 arg1) {
     s16 temp_v1;
     s32 var_a0;
     s32 var_v0;
@@ -252,7 +252,7 @@ s32 func_800B02B4_1DD364(s32 arg0, s32 arg1) {
     }
 
     temp_v1 = (s16)arg1;
-    if (temp_v1 != -1 && D_800BA570_1E7620[var_a0 & 0xFF].unk6 == temp_v1) {
+    if (temp_v1 != -1 && commandCategories[var_a0 & 0xFF].unk6 == temp_v1) {
         var_a0 -= 1;
         if ((var_a0 & 0xFF) == 0xFF) {
             var_a0 = D_800BA5B9_1E7669 - 1;
@@ -264,9 +264,9 @@ s32 func_800B02B4_1DD364(s32 arg0, s32 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B0328_1DD3D8);
 
-s32 func_800B043C_1DD4EC(
-    func_800B06FC_1DD7AC_arg0 *arg0,
-    func_800B06FC_1DD7AC_arg1 *arg1,
+s32 executeCommandFunc2(
+    executeCommandFunc5_arg0 *arg0,
+    executeCommandFunc5_arg1 *arg1,
     s32 arg2,
     s32 arg3,
     s32 arg4,
@@ -274,15 +274,15 @@ s32 func_800B043C_1DD4EC(
 ) {
     s32 check;
     CommandEntry *temp_v0;
-    func_800B06FC_1DD7AC_arg1 *ptr;
+    executeCommandFunc5_arg1 *ptr;
 
     check = 1;
-    temp_v0 = func_800B00C0_1DD170(arg0->unk3E, arg0->unk3F);
+    temp_v0 = getCommandEntry(arg0->unk3E, arg0->unk3F);
 
     if (temp_v0->func2) {
         ptr = &arg1[arg5];
         if (ptr->unkF0 == 0) {
-            check = D_800BA570_1E7620[arg0->unk3E].unk6 != 1;
+            check = commandCategories[arg0->unk3E].unk6 != 1;
         }
 
         if (check) {
@@ -297,15 +297,15 @@ INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B0534_1DD5E4);
 
 INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B0628_1DD6D8);
 
-s16 func_800B06FC_1DD7AC(func_800B06FC_1DD7AC_arg0 *arg0, func_800B06FC_1DD7AC_arg1 *arg1, s8 arg2) {
+s16 executeCommandFunc5(executeCommandFunc5_arg0 *arg0, executeCommandFunc5_arg1 *arg1, s8 arg2) {
     s32 var_s2 = 1;
-    s16 (*temp_v1)(func_800B06FC_1DD7AC_arg0 *, func_800B06FC_1DD7AC_arg1 *, s8) =
-        func_800B00C0_1DD170(arg0->unk3E, arg0->unk3F)->func5;
+    s16 (*temp_v1)(executeCommandFunc5_arg0 *, executeCommandFunc5_arg1 *, s8) =
+        getCommandEntry(arg0->unk3E, arg0->unk3F)->func5;
 
     if (temp_v1 != 0) {
-        func_800B06FC_1DD7AC_arg1 *temp = &arg1[arg2];
+        executeCommandFunc5_arg1 *temp = &arg1[arg2];
         if (temp->unkF0 == 0) {
-            var_s2 = (D_800BA570_1E7620[arg0->unk3E].unk6 != 1);
+            var_s2 = (commandCategories[arg0->unk3E].unk6 != 1);
         }
 
         if (var_s2 != 0) {
@@ -320,6 +320,6 @@ void func_800B07BC_1DD86C(s32 arg0) {
     func_800BB47C(arg0, 2, 0x14, 0x11, 8, 0x20);
 }
 
-s16 func_800B07F0_1DD8A0(s32 arg0) {
-    return D_800BA570_1E7620[arg0 & 0xFF].unk6;
+s16 getCategorySkipValue(s32 arg0) {
+    return commandCategories[arg0 & 0xFF].unk6;
 }
