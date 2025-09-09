@@ -1,3 +1,6 @@
+resetScriptState = 0x800B386C; // rom:0x1E091C
+initializeCutsceneCommand = 0x800B0328; // rom:0x1DD3D8
+
 func_800B00C0_9FF70 = 0x800B00C0; // rom:0x9FF70
 getCommandEntry = 0x800B00C0; // type:func rom:0x1DD170
 getCommandEntryMasked = 0x800B00F4; // rom:0x1DD1A4

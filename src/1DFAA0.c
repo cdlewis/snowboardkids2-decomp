@@ -70,7 +70,7 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3790_1E0840);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B384C_1E08FC);
 
-void func_800B386C_1E091C(s8 *arg0) {
+void resetScriptState(u8 *arg0) {
     s32 i;
 
     for (i = 0x37; i >= 0; i--) {

@@ -5,6 +5,7 @@
 #include "1DF180.h"
 #include "1DF310.h"
 #include "1DF8B0.h"
+#include "1DFAA0.h"
 #include "common.h"
 
 #define COMMAND_INIT_TRACK 0
@@ -61,25 +62,25 @@
 #define COMMAND_SYS2_WAIT 51
 
 typedef struct {
-    u8 padding[0x3E];
-    u8 unk3E;
-    u8 unk3F;
-} executeCommandFunc5_arg0;
+    u8 scriptState[0x3E];
+    u8 commandCategory;
+    u8 commandIndex;
+} CurrentCommand;
 
 typedef struct {
     u8 padding[0xF0];
-    s32 unkF0;
-} executeCommandFunc5_arg1;
+    s32 isActive;
+} CommandData;
 
 typedef struct {
     /* 0x00 */ s8 identifier[0x7];
     /* 0x07 */ s8 unk7;
     /* 0x08 */ s8 description[0x10];
-    /* 0x18 */ s32 (*func1)(executeCommandFunc5_arg0 *, executeCommandFunc5_arg1 *, s32, s32 arg3, s32 arg4, s8 arg5);
-    /* 0x1C */ s32 (*func2)(executeCommandFunc5_arg0 *, executeCommandFunc5_arg1 *, s32, s32 arg3, s32 arg4, s8 arg5);
+    /* 0x18 */ void (*func1)(CurrentCommand *, CommandData *, s8);
+    /* 0x1C */ s32 (*func2)(CurrentCommand *, CommandData *, s32, s32 arg3, s32 arg4, s8 arg5);
     /* 0x20 */ void *func3;
-    /* 0x24 */ s32 (*func4)(executeCommandFunc5_arg0 *, executeCommandFunc5_arg1 *, s8);
-    /* 0x28 */ s16 (*func5)(executeCommandFunc5_arg0 *, executeCommandFunc5_arg1 *, s8);
+    /* 0x24 */ s32 (*func4)(CurrentCommand *, CommandData *, s8);
+    /* 0x28 */ s16 (*func5)(CurrentCommand *, CommandData *, s8);
 } CommandEntry;
 
 // clang-format off
@@ -262,11 +263,43 @@ s32 getPrevCategorySkipping(s32 arg0, s32 arg1) {
     return var_a0 & 0xFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B0328_1DD3D8);
+void initializeCutsceneCommand(
+    CurrentCommand *currentCommand,
+    CommandData *commandData,
+    u8 commandCategory,
+    u8 commandIndex,
+    u8 frameIndex
+) {
+    s32 shouldRun;
+    s32 temp;
+    void (*handler)(CurrentCommand *, CommandData *, s8);
+    s32 *temp2;
+
+    shouldRun = TRUE;
+
+    if ((commandCategory != 0 || commandIndex != 0) == 0 || currentCommand->commandCategory != commandCategory ||
+        currentCommand->commandIndex != commandIndex) {
+        resetScriptState(currentCommand->scriptState);
+        currentCommand->commandCategory = commandCategory;
+        currentCommand->commandIndex = commandIndex;
+
+        handler = getCommandEntry(commandCategory, commandIndex & 0xFF)->func1;
+        if (handler) {
+            // basically: !arg1[arg4].isActive
+            if ((*(temp2 = &commandData[(s8)frameIndex].isActive)) == FALSE) {
+                shouldRun = shouldRun & (-(commandCategories[commandCategory].unk6 != 1));
+            }
+
+            if (shouldRun) {
+                handler(currentCommand, commandData, frameIndex);
+            }
+        }
+    }
+}
 
 s32 executeCommandFunc2(
-    executeCommandFunc5_arg0 *arg0,
-    executeCommandFunc5_arg1 *arg1,
+    CurrentCommand *arg0,
+    CommandData *arg1,
     s32 arg2,
     s32 arg3,
     s32 arg4,
@@ -274,15 +307,15 @@ s32 executeCommandFunc2(
 ) {
     s32 check;
     CommandEntry *temp_v0;
-    executeCommandFunc5_arg1 *ptr;
+    CommandData *ptr;
 
     check = 1;
-    temp_v0 = getCommandEntry(arg0->unk3E, arg0->unk3F);
+    temp_v0 = getCommandEntry(arg0->commandCategory, arg0->commandIndex);
 
     if (temp_v0->func2) {
         ptr = &arg1[arg5];
-        if (ptr->unkF0 == 0) {
-            check = commandCategories[arg0->unk3E].unk6 != 1;
+        if (ptr->isActive == 0) {
+            check = commandCategories[arg0->commandCategory].unk6 != 1;
         }
 
         if (check) {
@@ -297,15 +330,15 @@ INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B0534_1DD5E4);
 
 INCLUDE_ASM("asm/nonmatchings/1DD170", func_800B0628_1DD6D8);
 
-s16 executeCommandFunc5(executeCommandFunc5_arg0 *arg0, executeCommandFunc5_arg1 *arg1, s8 arg2) {
+s16 executeCommandFunc5(CurrentCommand *arg0, CommandData *arg1, s8 arg2) {
     s32 var_s2 = 1;
-    s16 (*temp_v1)(executeCommandFunc5_arg0 *, executeCommandFunc5_arg1 *, s8) =
-        getCommandEntry(arg0->unk3E, arg0->unk3F)->func5;
+    s16 (*temp_v1)(CurrentCommand *, CommandData *, s8) =
+        getCommandEntry(arg0->commandCategory, arg0->commandIndex)->func5;
 
     if (temp_v1 != 0) {
-        executeCommandFunc5_arg1 *temp = &arg1[arg2];
-        if (temp->unkF0 == 0) {
-            var_s2 = (commandCategories[arg0->unk3E].unk6 != 1);
+        CommandData *temp = &arg1[arg2];
+        if (temp->isActive == 0) {
+            var_s2 = (commandCategories[arg0->commandCategory].unk6 != 1);
         }
 
         if (var_s2 != 0) {
