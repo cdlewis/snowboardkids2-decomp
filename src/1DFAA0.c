@@ -1,4 +1,17 @@
-#include "common.h"
+#include "1DFAA0.h"
+
+typedef struct {
+    u8 padding0[0xC];
+    u16 current_index;
+    u8 padding1[0x32];
+} StateHeader;
+
+typedef struct {
+    u8 data[0xF8];
+    u16 next_index;
+} StateEntry;
+
+extern StateHeader *D_800BAEBC_1E7F6C;
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B29F0_1DFAA0);
 
@@ -68,7 +81,17 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3734_1E07E4);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3790_1E0840);
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B384C_1E08FC);
+u16 func_800B384C_1E08FC(void) {
+    u16 index;
+    StateEntry *entry;
+
+    index = D_800BAEBC_1E7F6C->current_index;
+
+    entry = (StateEntry *)&D_800BAEBC_1E7F6C[index];
+    D_800BAEBC_1E7F6C->current_index = entry->next_index;
+
+    return index;
+}
 
 void resetScriptState(u8 *arg0) {
     s32 i;
