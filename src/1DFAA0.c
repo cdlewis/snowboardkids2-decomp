@@ -3,23 +3,44 @@
 typedef struct {
     u8 padding0[0xC];
     u16 current_index;
-    u8 padding1[0x32];
-} StateHeader;
-
-typedef struct {
-    u8 data[0xF8];
+    u8 padding1[0x2A];
     u16 next_index;
+    u8 padding2[0x6];
 } StateEntry;
 
-extern StateHeader *D_800BAEBC_1E7F6C;
+extern StateEntry *D_800BAEBC_1E7F6C;
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B29F0_1DFAA0);
+typedef struct {
+    u8 padding[0xFF7];
+    s8 unkFF7;
+} func_800B29F0_1DFAA0_arg;
+void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0) {
+    arg0->unkFF7 = 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B29FC_1DFAAC);
+extern s32 D_800AB050_A23C0;
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2A24_1DFAD4);
+void func_800B29FC_1DFAAC(func_800B29F0_1DFAA0_arg *arg0) {
+    if (arg0->unkFF7 != 0 && (D_800AB050_A23C0 & 0x8000)) {
+        arg0->unkFF7 = 0;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2A50_1DFB00);
+typedef struct {
+    u8 padding[0xEC];
+    s8 unkEC;
+    u8 padding2[0x0];
+    s32 unkF4;
+} func_800B2A24_1DFAD4_arg;
+void func_800B2A24_1DFAD4(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
+    func_800B2A24_1DFAD4_arg *new_var = arg0 + arg1;
+    new_var->unkEC = 1;
+}
+
+void func_800B2A50_1DFB00(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
+    func_800B2A24_1DFAD4_arg *new_var = arg0 + arg1;
+    new_var->unkEC = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2A78_1DFB28);
 
@@ -82,13 +103,10 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3734_1E07E4);
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3790_1E0840);
 
 u16 func_800B384C_1E08FC(void) {
-    u16 index;
-    StateEntry *entry;
+    u16 index = D_800BAEBC_1E7F6C->current_index;
+    StateEntry *currentEntry = &D_800BAEBC_1E7F6C[index];
 
-    index = D_800BAEBC_1E7F6C->current_index;
-
-    entry = (StateEntry *)&D_800BAEBC_1E7F6C[index];
-    D_800BAEBC_1E7F6C->current_index = entry->next_index;
+    D_800BAEBC_1E7F6C->current_index = currentEntry[3].next_index;
 
     return index;
 }
