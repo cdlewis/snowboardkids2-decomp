@@ -1,4 +1,24 @@
 #include "1DFAA0.h"
+#include "task_scheduler.h"
+
+typedef struct {
+    void* start;
+    void* end;
+    u32 size;
+    u32 padding;
+} D_800BA960_1E7A10_node;
+extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
+
+void func_800B477C_1E182C(void);
+
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+    s16 unk2;
+    s32 unk4;
+    u8 padding[0xDC];
+    s16 unkE4;
+} TaskData;
 
 typedef struct {
     u8 padding0[0xC];
@@ -161,12 +181,52 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B4534_1E15E4);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B462C_1E16DC);
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B4680_1E1730);
+void* func_800B4680_1E1730(s8 arg0) {
+    D_800BA960_1E7A10_node* node;
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B46E0);
+    if (arg0 < 0x10) {
+        node = &D_800BA960_1E7A10[arg0];
+        if (D_800BA960_1E7A10[arg0].start != NULL) {
+            return dmaRequestAndUpdateStateWithSize(node->start, node->end, node->size);
+        }
+    }
+    
+    return NULL;
+}
+
+void func_800B46E0(s32 arg0, s8 arg1, s16 arg2) {
+    TaskData *task;
+
+    if (arg2 == 0) {
+        return;
+    }
+
+    if (arg1 >= 0x10) {
+        return;
+    }
+
+    if (D_800BA960_1E7A10[arg1].start == NULL) {
+        return;
+    }
+
+    task = (TaskData *)scheduleTask(&func_800B477C_1E182C, 1, 0, 0x64);
+    if (task != NULL) {
+        task->unk0 = 0;
+        task->unk1 = arg1;
+        task->unk2 = arg2;
+        task->unk4 = arg0;
+        task->unkE4 = 0xFF;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B477C_1E182C);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B4914_1E19C4);
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B4ACC_1E1B7C);
+typedef struct {
+    u8 padding[0x8];
+    void *unk8;
+} func_800B4ACC_1E1B7C_arg;
+void func_800B4ACC_1E1B7C(func_800B4ACC_1E1B7C_arg *arg0) {
+    freeNodeMemory(arg0->unk8);
+}
