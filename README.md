@@ -1,4 +1,4 @@
-![progress](https://img.shields.io/badge/progress-19.39%25-blue)
+![progress](https://decomp.dev/cdlewis/snowboardkids2-decomp/us.svg?mode=shield&label=progress)
 
 # Snowboard Kids 2
 

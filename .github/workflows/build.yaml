@@ -2,7 +2,7 @@ name: build
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -10,87 +10,65 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libdbus-1-dev gobject-introspection libgirepository1.0-dev libcups2-dev binutils-mips-linux-gnu
 
-    - name: Install system packages
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libdbus-1-dev gobject-introspection libgirepository1.0-dev libcups2-dev binutils-mips-linux-gnu
-    
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-    - name: Checkout this repo
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        path: main
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: main
 
-    - name: Checkout baserom
-      uses: actions/checkout@v4
-      with:
-        repository: cdlewis/snowboardkids2-private
-        token: ${{ secrets.PRIVATE_REPO_ACCESS }}
-        path: baserom
+      - name: Checkout baserom
+        uses: actions/checkout@v4
+        with:
+          repository: cdlewis/snowboardkids2-private
+          token: ${{ secrets.PRIVATE_REPO_ACCESS }}
+          path: baserom
 
-    - name: Decrypt baserom
-      run: gpg --quiet --batch --yes --decrypt --passphrase "$BASEROM_KEY" --output snowboardkids2.z64 snowboardkids2.z64.gpg
-      env:
-        BASEROM_KEY: ${{ secrets.BASEROM_KEY }}
-      working-directory: baserom
+      - name: Decrypt baserom
+        run: gpg --quiet --batch --yes --decrypt --passphrase "$BASEROM_KEY" --output snowboardkids2.z64 snowboardkids2.z64.gpg
+        env:
+          BASEROM_KEY: ${{ secrets.BASEROM_KEY }}
+        working-directory: baserom
 
-    - name: Copy decrypted rom to main repo
-      run: cp baserom/snowboardkids2.z64 main/
+      - name: Copy decrypted rom to main repo
+        run: cp baserom/snowboardkids2.z64 main/
 
-    - name: Install C deps
-      run: make setup
-      working-directory: main
+      - name: Install C deps
+        run: make setup
+        working-directory: main
 
-    - name: Install Python deps
-      run: |
-        python3 -m venv .venv
-        .venv/bin/pip install -U pip
-        .venv/bin/pip install -r requirements.txt
-      working-directory: main
+      - name: Install Python deps
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -U pip
+          .venv/bin/pip install -r requirements.txt
+        working-directory: main
 
-    - name: Run make extract
-      run: PATH="$(pwd)/.venv/bin:$PATH" make extract
-      working-directory: main
+      - name: Run make extract
+        run: PATH="$(pwd)/.venv/bin:$PATH" make extract
+        working-directory: main
 
-    # Verify project builds
+      # Verify project builds
 
-    - name: Run make
-      run: PATH="$(pwd)/.venv/bin:$PATH" make
-      working-directory: main
+      - name: Run make
+        run: PATH="$(pwd)/.venv/bin:$PATH" make
+        working-directory: main
 
-    # Update README badge
+      - name: Generate objdiff report
+        run: PATH="$(pwd)/.venv/bin:$PATH" python3 -m mapfile_parser objdiff_report
+        working-directory: main
 
-    - name: Update progress
-      run: PATH="$(pwd)/.venv/bin:$PATH" python3 tools/progress.py --badge
-      working-directory: main
-
-    - name: Configure Git user
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-      working-directory: main
-
-    - name: Commit changes
-      run: |
-        git add README.md
-        git commit -m "Update file via GitHub Actions" || echo "No changes to commit"
-        git push origin HEAD:${{ github.ref_name }}
-      working-directory: main
-
-    # Decomp.dev reporting
-
-    - name: Generate objdiff report
-      run: PATH="$(pwd)/.venv/bin:$PATH" python3 tools/decomp_dev_report.py
-      working-directory: main
-
-    - name: Upload progress report artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: us_report
-        path: main/report.json
+      - name: Upload progress report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: us_report
+          path: main/report.json
