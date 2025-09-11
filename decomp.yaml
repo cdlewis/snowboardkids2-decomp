@@ -19,5 +19,5 @@ tools:
   mapfile_parser:
     progress_report:
       output: report.json
-      check_asm_paths: False
+      check_asm_paths: True
       report_data: True
