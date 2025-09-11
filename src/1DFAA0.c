@@ -2,8 +2,8 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    void* start;
-    void* end;
+    void *start;
+    void *end;
     u32 size;
     u32 padding;
 } D_800BA960_1E7A10_node;
@@ -22,10 +22,13 @@ typedef struct {
 
 typedef struct {
     u8 padding0[0xC];
-    u16 current_index;
+    /* 0xC */ u16 current_index;
     u8 padding1[0x2A];
-    u16 next_index;
-    u8 padding2[0x6];
+    /* 0x38 */ u16 next_index;
+    u8 padding2[0x2];
+    s16 unk3C;
+    s8 unk3E;
+    s8 unk3F;
 } StateEntry;
 
 extern StateEntry *D_800BAEBC_1E7F6C;
@@ -139,7 +142,20 @@ void resetScriptState(u8 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B388C_1E093C);
+void func_800B388C_1E093C(s32 arg0) {
+    StateEntry *temp;
+
+    resetScriptState(D_800BAEBC_1E7F6C[arg0 + 3].padding0);
+
+    temp = (D_800BAEBC_1E7F6C + arg0 + 3);
+    temp->unk3C = 0;
+
+    temp = D_800BAEBC_1E7F6C + arg0 + 3;
+    temp->unk3E = 0;
+
+    temp = D_800BAEBC_1E7F6C + arg0 + 3;
+    temp->unk3F = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B38E4);
 
@@ -181,8 +197,8 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B4534_1E15E4);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B462C_1E16DC);
 
-void* func_800B4680_1E1730(s8 arg0) {
-    D_800BA960_1E7A10_node* node;
+void *func_800B4680_1E1730(s8 arg0) {
+    D_800BA960_1E7A10_node *node;
 
     if (arg0 < 0x10) {
         node = &D_800BA960_1E7A10[arg0];
@@ -190,7 +206,7 @@ void* func_800B4680_1E1730(s8 arg0) {
             return dmaRequestAndUpdateStateWithSize(node->start, node->end, node->size);
         }
     }
-    
+
     return NULL;
 }
 
