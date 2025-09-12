@@ -5,7 +5,11 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "overlay.h"
 #include "task_scheduler.h"
+
+USE_ASSET(_419C60);
+USE_ASSET(_42F1D0);
 
 typedef struct {
     u8 padding[0x2C];
@@ -51,6 +55,13 @@ typedef struct {
     u8 unk60;
 } S0;
 
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+} func_800308FC_314FC_arg;
+
 void func_8002F5C8_301C8(void *);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 void func_8006FF90_70B90(s32, s32, void *, void *);
@@ -65,11 +76,12 @@ extern void func_8002F980_30580();
 extern void func_8000FED0_10AD0();
 void func_8002EFD8_2FBD8(void *);
 void func_8002F110_2FD10(void *);
-extern s32 D_42F1D0;
-extern s32 D_43A000;
+
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 void func_8002FA70_30670(func_8002FA70_30670_arg *);
 void updateDebugCameraYState(cameraState *arg0);
+void func_80030974_31574(void*);
+void func_800309D4_315D4(void);
 
 typedef struct {
     s16 unk0;
@@ -251,7 +263,7 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F948_30548);
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F980_30580);
 
 void func_8002F9C4_305C4(func_8002FA70_30670_arg *arg0) {
-    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&D_42F1D0, &D_43A000, 0x14410);
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_42F1D0_ROM_START, &_42F1D0_ROM_END, 0x14410);
     setCleanupCallback((void (*)(void *))&func_8002FA70_30670);
     setCallback((void (*)(void *))&func_8002FA1C_3061C);
 }
@@ -309,7 +321,18 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_80030764_31364);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_800308C4_314C4);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_800308FC_314FC);
+void func_800308FC_314FC(func_800308FC_314FC_arg *arg0) {
+    void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+
+    setCleanupCallback((void (*)(void *))&func_800309D4_315D4);
+
+    arg0->unk0 = -0x2C;
+    arg0->unk2 = -0x18;
+    arg0->unk4 = temp_s1;
+    arg0->unk8 = 5;
+
+    setCallback((void (*)(void *))&func_80030974_31574);
+}
 
 void func_80030974_31574(void *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
