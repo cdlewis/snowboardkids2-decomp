@@ -1374,7 +1374,12 @@ segments:
     vram: 0
     start: 0x419C60
 
-  - [0x41A1D0, bin]
+  - name: _41A1D0
+    type: bin
+    vram: 0
+    start: 0x41A1D0
+
+  - [0x41AD80, bin]
 
   - name: _42F1D0
     type: bin

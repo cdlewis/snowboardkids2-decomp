@@ -10,6 +10,7 @@
 
 USE_ASSET(_419C60);
 USE_ASSET(_42F1D0);
+USE_ASSET(_41A1D0);
 
 typedef struct {
     u8 padding[0x2C];
@@ -80,8 +81,10 @@ void func_8002F110_2FD10(void *);
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 void func_8002FA70_30670(func_8002FA70_30670_arg *);
 void updateDebugCameraYState(cameraState *arg0);
-void func_80030974_31574(void*);
+void func_80030974_31574(void *);
 void func_800309D4_315D4(void);
+void func_80030238_30E38(void);
+void func_80030280_30E80(void);
 
 typedef struct {
     s16 unk0;
@@ -297,7 +300,18 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8003006C_30C6C);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030194_30D94);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_800301C0_30DC0);
+void func_800301C0_30DC0(func_800308FC_314FC_arg *arg0) {
+    void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+
+    setCleanupCallback((void (*)(void *))&func_80030280_30E80);
+
+    arg0->unk0 = -0x2C;
+    arg0->unk2 = -0x14;
+    arg0->unk8 = 0xD;
+    arg0->unk4 = temp_s1;
+
+    setCallback((void (*)(void *))&func_80030238_30E38);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030238_30E38);
 
