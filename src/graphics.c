@@ -83,9 +83,9 @@ extern u8 D_80093BA5_947A5;
 extern u8 D_80093BA6_947A6;
 extern OSThread D_800A2998_A3598;
 
-void *func_80058638_59238();
-void func_800570BC_57CBC();
-void func_80057124_57D24();
+void *func_80058638_59238(void);
+void func_800570BC_57CBC(void);
+void func_80057124_57D24(void);
 void func_800579E8_585E8(void *, s32);
 void func_80057B70_58770(s32, s32, s32, f32, s32, s32, s32);
 void func_80057CE4_588E4(s32, s32, s32, s32, s32, s32);
@@ -332,7 +332,7 @@ void func_80056F8C_57B8C(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4, s32
     }
 }
 
-void func_800570BC_57CBC() {
+void func_800570BC_57CBC(void) {
     gGraphicsManager->unk20 = (s32)((gGraphicsManager->unk20 + 1) & 0xFFFFFF);
 }
 
@@ -482,7 +482,7 @@ void func_80057564_58164(s32 arg0) {
     (new_var = gGraphicsManager)->unk14 = var_a0;
 }
 
-void func_8005758C_5818C() {
+void func_8005758C_5818C(void) {
     OSMesgQueue *queue = &gfxTaskQueue;
     osCreateMesgQueue(queue, &D_800A2CE8_A38E8, OS_MESG_BLOCK);
     queue = &gfxResultQueue;
@@ -974,7 +974,7 @@ void *func_800585E4_591E4(void) {
     return 0;
 }
 
-void *func_80058638_59238() {
+void *func_80058638_59238(void) {
     void *message;
 
     if (D_80093BA5_947A5 != NULL) {

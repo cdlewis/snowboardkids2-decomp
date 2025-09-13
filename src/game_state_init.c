@@ -25,11 +25,11 @@ extern void func_80036250_36E50;
 extern void func_80036A3C_3763C;
 extern void PhoneTriggerInit;
 
-void cleanupTransitionEffect();
-void gameStateCleanupHandler();
+void cleanupTransitionEffect(void);
+void gameStateCleanupHandler(void);
 void gameStateCountdownHandler(void);
-void invokeTransitionEffect();
-void setShortCountdownAndContinue();
+void invokeTransitionEffect(void);
+void setShortCountdownAndContinue(void);
 void setupGameStateTransition(func_80000460_1060_arg0 *);
 void transitionToMainMenu(void);
 void transitionToNextGameMode(void);

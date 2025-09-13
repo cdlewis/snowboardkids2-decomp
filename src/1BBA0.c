@@ -14,9 +14,9 @@ typedef struct {
 } D_800A8D14_A0084_type;
 
 extern D_800A8D14_A0084_type *D_800A8D14_A0084;
-extern void func_8001B020_1BC20;
-extern void func_8001B3E8_1BFE8();
-extern void func_800B00C0_9FF70;
+extern void func_8001B020_1BC20(void);
+extern void func_8001B3E8_1BFE8(void);
+extern void func_800B00C0_9FF70(void);
 
 void func_8001BCC0_1C8C0(void);
 void func_8001BC78_1C878(void);
@@ -44,7 +44,7 @@ void func_8001B368_1BF68(void) {
     setGameStateHandler(func_8001B3B8_1BFB8);
 }
 
-void func_8001B3B8_1BFB8() {
+void func_8001B3B8_1BFB8(void) {
     if (!func_8006FE10_70A10(0)) {
         setGameStateHandler(&func_8001B3E8_1BFE8);
     }

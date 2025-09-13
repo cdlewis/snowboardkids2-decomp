@@ -74,8 +74,6 @@ extern s32 D_800A35C8_A41C8[];
 extern s16 D_800A8A9A_9FE0A;
 extern s16 D_800AB478_A27E8;
 
-void func_8006F6F4_702F4(void);
-void func_8006FA58_70658(D_800A3370_A3F70_type *);
 extern ViewportStruct D_800A3410_A4010;
 extern CallbackSlot *D_800A3588_A4188[];
 extern u32 __additional_scanline_0;
@@ -92,10 +90,13 @@ extern s32 gBufferedFrameCounter;
 extern void *D_800A3564_A4164;
 extern u32 D_800A3568_A4168;
 extern void *gLinearArenaBuffer;
-void func_8006DEE4_6EAE4();
 extern u8 D_800A356C_A416C;
 extern void *D_800A355C_A415C[];
 extern void *D_800A3560_A4160;
+
+void func_8006F6F4_702F4(void);
+void func_8006FA58_70658(D_800A3370_A3F70_type *);
+void func_8006DEE4_6EAE4(void);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
 
@@ -147,7 +148,7 @@ void *arenaAlloc16(s32 size) {
     return result;
 }
 
-void func_8006F5C0_701C0() {
+void func_8006F5C0_701C0(void) {
     void *result;
     u8 *nodeExists;
 
@@ -183,7 +184,7 @@ void *advanceLinearAlloc(s32 arg0) {
     return linearAlloc((arg0 + 7) & ~7);
 }
 
-void initLinearArenaRegions() {
+void initLinearArenaRegions(void) {
     s32 temp;
     void *result;
     u8 *nodeExists;
@@ -208,7 +209,7 @@ s32 func_8006F6D8_702D8(void) {
     return (u32)(gRegionAllocEnd - gRegionAllocPtr) < 0x1AE1U;
 }
 
-void func_8006F6F4_702F4() {
+void func_8006F6F4_702F4(void) {
     D_800A3410_A4010.unk0 = D_800AB478_A27E8;
     D_800A3410_A4010.unk2 = D_800A8A9A_9FE0A;
 }

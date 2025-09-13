@@ -26,7 +26,7 @@ extern s16 D_8008BF9A_8CB9A;
 extern s32 D_8008BF9C_8CB9C;
 extern s16 D_8008BF9E_8CB9E;
 
-extern void func_80014480_15080();
+extern void func_80014480_15080(void);
 extern s16 D_800AB070_A23E0;
 extern s16 D_800AFEF0_A7260;
 typedef struct {
@@ -37,13 +37,13 @@ typedef struct {
     s16 unkE2;
 } allocateTaskMemory_return;
 
-void loadOverlay_1DD170();
-void func_8000378C_438C();
-void func_80003C88_4888();
-void func_80003D30_4930();
-void func_80003CC4_48C4();
-extern void *func_800B00C0_9FF70();
-void func_80003508_4108();
+void loadOverlay_1DD170(void);
+void func_8000378C_438C(void);
+void func_80003C88_4888(void);
+void func_80003D30_4930(void);
+void func_80003CC4_48C4(void);
+extern void *func_800B00C0_9FF70(void);
+void func_80003508_4108(void);
 
 void func_80003450_4050(s16 arg0, s16 arg1) {
     D_800AB070_A23E0 = arg0;
@@ -65,7 +65,7 @@ void loadOverlay_1DD170(void) {
     setGameStateHandler(&func_80003508_4108);
 }
 
-void func_80003508_4108() {
+void func_80003508_4108(void) {
     u8 *new_var3;
     void *s0;
     f32 f20 = 1.0f;
@@ -129,15 +129,15 @@ void func_80003C34_4834(void) {
     }
 }
 
-void func_80003C88_4888() {
+void func_80003C88_4888(void) {
     func_800697F4_6A3F4(1);
 }
 
-void func_80003CA4_48A4() {
+void func_80003CA4_48A4(void) {
     setGameStateHandler(&func_80003CC4_48C4);
 }
 
-void func_80003CC4_48C4() {
+void func_80003CC4_48C4(void) {
     if ((D_8008BF98_8CB98 == 5) && (D_8008BF9C_8CB9C == 0)) {
         D_8008BF9C_8CB9C = 1;
     }

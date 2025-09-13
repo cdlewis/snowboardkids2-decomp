@@ -69,7 +69,7 @@ extern D_800A8D14_A0084_type *D_800A8D14_A0084;
 void piDmaHandlerThread(void *);
 void func_8003AC58_3B858(void *);
 
-void func_8003AFA0_3BBA0();
+void func_8003AFA0_3BBA0(void);
 extern OSContStatus D_8009F660_A0260;
 extern OSThread D_8009F670_A0270;
 extern s32 D_800A1838_A2438;
@@ -156,10 +156,10 @@ void func_80039B88_3A788(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_80039C34_3A834);
 
-void func_8003A1DC_3ADDC() {
+void func_8003A1DC_3ADDC(void) {
 }
 
-int func_8003A1E4_3ADE4() {
+int func_8003A1E4_3ADE4(void) {
     return 0;
 }
 
@@ -182,37 +182,37 @@ void initControllerPack(s32 channel) {
     osSendMesg(&D_800A1888_A2488, (OSMesg *)controllerPackStatus, OS_MESG_BLOCK);
 }
 
-void func_8003A284_3AE84() {
+void func_8003A284_3AE84(void) {
 }
 
-int func_8003A28C_3AE8C() {
+int func_8003A28C_3AE8C(void) {
     return 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A294_3AE94);
 
-void func_8003A51C_3B11C() {
+void func_8003A51C_3B11C(void) {
 }
 
-int func_8003A524_3B124() {
+int func_8003A524_3B124(void) {
     return 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A52C_3B12C);
 
-void func_8003A854_3B454() {
+void func_8003A854_3B454(void) {
 }
 
-int func_8003A85C_3B45C() {
+int func_8003A85C_3B45C(void) {
     return 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A864_3B464);
 
-void func_8003A9DC_3B5DC() {
+void func_8003A9DC_3B5DC(void) {
 }
 
-int func_8003A9E4_3B5E4() {
+int func_8003A9E4_3B5E4(void) {
     return 0;
 }
 
@@ -242,10 +242,10 @@ void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[
     osSendMesg(&D_800A1888_A2488, (void *)err, OS_MESG_BLOCK);
 }
 
-void func_8003AAC4_3B6C4() {
+void func_8003AAC4_3B6C4(void) {
 }
 
-int func_8003AACC_3B6CC() {
+int func_8003AACC_3B6CC(void) {
     return 0;
 }
 
@@ -273,10 +273,10 @@ void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHead
     osSendMesg(&D_800A1888_A2488, (void *)err, OS_MESG_BLOCK);
 }
 
-void func_8003AB74_3B774() {
+void func_8003AB74_3B774(void) {
 }
 
-int func_8003AB7C_3B77C() {
+int func_8003AB7C_3B77C(void) {
     return 0;
 }
 
@@ -302,7 +302,7 @@ void controllerPackReadStatus(s32 arg0) {
     osSendMesg(&D_800A1888_A2488, (OSMesg *)err, OS_MESG_BLOCK);
 }
 
-void func_8003AC30_3B830() {
+void func_8003AC30_3B830(void) {
 }
 
 void func_8003AC38_3B838(void) {
@@ -416,7 +416,7 @@ void *func_8003B170_3BD70(void) {
     return var_v0;
 }
 
-void func_8003B1C0_3BDC0() {
+void func_8003B1C0_3BDC0(void) {
     osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromProbe(&mainStack), OS_MESG_BLOCK);
 }
 
@@ -549,7 +549,7 @@ void func_8003B560_3C160(u8 *arg0) {
     osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromLongWrite(&mainStack, 0, arg0, 0x200), OS_MESG_BLOCK);
 }
 
-void initPiManager() {
+void initPiManager(void) {
     u8 flag;
 
     gDmaQueueIndex = 0;
@@ -798,7 +798,7 @@ s32 *queueDmaTransferToBuffer(void *romStart, void *romEnd, s32 size, s32 *dramA
     return dramAddr;
 }
 
-void func_8003BC58_3C858() {
+void func_8003BC58_3C858(void) {
 }
 
 void dmaLoadAndInvalidate(

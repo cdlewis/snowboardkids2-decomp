@@ -64,7 +64,7 @@ typedef struct {
     s16 unk8;
 } func_800308FC_314FC_arg;
 
-extern void func_8000FED0_10AD0();
+extern void func_8000FED0_10AD0(void);
 extern s32 D_800AB054_A23C4;
 extern s32 D_800AFF14_A7284;
 extern u8 identityMatrix[];

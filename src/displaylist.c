@@ -67,7 +67,7 @@ extern void guLookAtReflect(
     float zUp
 );
 
-void func_80062CF0_638F0();
+void func_80062CF0_638F0(void);
 void setupDisplayListMatrix(DisplayListObject *);
 void func_80063A94_64694(void *);
 void func_800648EC_654EC(void);

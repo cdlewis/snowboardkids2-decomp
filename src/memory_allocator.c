@@ -6,7 +6,7 @@ extern MemoryAllocatorNode gMemoryHeapEnd;
 extern s32 gFrameCounter;
 extern s32 gBufferedFrameCounter;
 
-void initializeMemoryAllocatorRegion() {
+void initializeMemoryAllocatorRegion(void) {
     s32 i;
     u8 *current_block;
 
@@ -113,7 +113,7 @@ void *decrementNodeRefCount(void *allocatedMemory) {
     return NULL;
 }
 
-void cleanupUnusedNodes() {
+void cleanupUnusedNodes(void) {
     s32 globalVal;
 
     MemoryAllocatorNode *curr = gMemoryAllocatorHead;

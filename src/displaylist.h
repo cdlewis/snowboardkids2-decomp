@@ -36,7 +36,7 @@ typedef struct {
 
 void parseGameDataLayout(GameDataLayout *gameData);
 
-void initializeOverlaySystem();
+void initializeOverlaySystem(void);
 
 typedef struct {
     u8 padding[0x10];

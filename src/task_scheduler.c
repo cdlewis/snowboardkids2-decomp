@@ -21,8 +21,8 @@ typedef struct gActiveScheduler_type {
     /* 0x4 */ struct gActiveScheduler_type *next;
     struct gActiveScheduler_type *unk8;
     struct gActiveScheduler_type *unkC;
-    void (*unk10)();
-    void (*unk14)();
+    void (*unk10)(void);
+    void (*unk14)(void);
     u8 schedulerState;
     u8 unk19;
     u8 unk1A;
@@ -91,7 +91,7 @@ void initTaskScheduler(void) {
     }
 }
 
-void func_800693C4_69FC4(void (*arg0)(), s32 arg1) {
+void func_800693C4_69FC4(void (*arg0)(void), s32 arg1) {
     gActiveScheduler_type *temp_a2;
     gActiveScheduler_type *temp_v1;
     gActiveScheduler_type *var_a3;
@@ -137,7 +137,7 @@ void func_800693C4_69FC4(void (*arg0)(), s32 arg1) {
     temp_a2->unk4A = 0;
 }
 
-void createTaskQueue(void (*arg0)(), s32 arg1) {
+void createTaskQueue(void (*arg0)(void), s32 arg1) {
     gActiveScheduler_type *temp_a2;
     gActiveScheduler_type *var_a3;
     gActiveScheduler_type *temp_v1;
@@ -283,7 +283,7 @@ void runTaskSchedulers(void) {
     }
 }
 
-void terminateSchedulerWithCallback(void (*arg0)()) {
+void terminateSchedulerWithCallback(void (*arg0)(void)) {
     if (gActiveScheduler != NULL) {
         gActiveScheduler->schedulerState = SCHEDULER_STATE_TERMINATING;
         gActiveScheduler->unk14 = arg0;
@@ -312,7 +312,7 @@ void setGameStateHandler(void *arg0) {
     gActiveScheduler->unk10 = arg0;
 }
 
-void func_8006983C_6A43C(void (*arg0)()) {
+void func_8006983C_6A43C(void (*arg0)(void)) {
     gActiveScheduler->unk10 = arg0;
     gActiveScheduler->unk1B = 1;
 }
@@ -336,7 +336,7 @@ void *allocateTaskMemory(s32 size) {
     return gActiveScheduler->allocatedState;
 }
 
-void *getCurrentAllocation() {
+void *getCurrentAllocation(void) {
     return gActiveScheduler->allocatedState;
 }
 
@@ -441,7 +441,7 @@ s16 getFreeNodeCount(s32 arg0) {
     return gActiveScheduler->counters[arg0];
 }
 
-void processActiveTasks() {
+void processActiveTasks(void) {
     for (gDMAOverlay = gActiveScheduler->activeList; gDMAOverlay != 0; gDMAOverlay = gDMAOverlay->next) {
         switch (gDMAOverlay->unkE) {
             case 0:
@@ -513,7 +513,7 @@ void func_80069CF8_6A8F8(void) {
     }
 }
 
-s32 hasActiveTasks() {
+s32 hasActiveTasks(void) {
     return gActiveScheduler->activeList != NULL;
 }
 

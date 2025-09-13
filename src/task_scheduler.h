@@ -30,17 +30,17 @@ void *allocateNodeMemory(s32 size);
 
 Node *scheduleTask(void *a0, u8, u8, u8);
 
-void setCallback(void* callback);
+void setCallback(void *callback);
 
-void setCallbackWithContinue(void* callback);
+void setCallbackWithContinue(void *callback);
 
-void setCleanupCallback(void* callback);
+void setCleanupCallback(void *callback);
 
 void *freeNodeMemory(void *);
 
 void runTaskSchedulers(void);
 
-void *getCurrentAllocation();
+void *getCurrentAllocation(void);
 
 void *allocateTaskMemory(s32 size);
 
@@ -60,16 +60,16 @@ void terminateAllTasks(void);
 
 void initTaskScheduler(void);
 
-void terminateSchedulerWithCallback(void (*arg0)());
+void terminateSchedulerWithCallback(void (*arg0)(void));
 
-void createTaskQueue(void (*arg0)(), s32 arg1);
+void createTaskQueue(void (*arg0)(void), s32 arg1);
 
-void func_800693C4_69FC4(void (*arg0)(), s32 arg1);
+void func_800693C4_69FC4(void (*arg0)(void), s32 arg1);
 
 void func_800697F4_6A3F4(s32 arg0);
 
 s16 func_80069810_6A410(void);
 
-void func_8006983C_6A43C(void (*arg0)());
+void func_8006983C_6A43C(void (*arg0)(void));
 
 void func_80069CF8_6A8F8(void);

@@ -84,23 +84,23 @@ typedef struct {
 void func_800504A0_510A0(func_800504A0_510A0_arg *);
 void func_800505D8_511D8(s32 **arg0);
 
-extern void func_80050740_51340();
-extern void func_80050864_51464();
-extern void func_800509CC_515CC();
-extern void func_80050DB0_519B0();
-extern void func_80050EA0_51AA0();
-extern void func_80050F64_51B64();
-extern void func_80050FE0_51BE0();
-extern void func_80051124_51D24();
-extern void func_80051250_51E50();
-extern void func_80051760_52360();
-extern void func_80051800_52400();
-extern void func_800518AC_524AC();
-extern void func_80051B8C_5278C();
+void func_80050740_51340(void);
+void func_80050864_51464(void);
+void func_800509CC_515CC(void);
+void func_80050DB0_519B0(void);
+void func_80050EA0_51AA0(void);
+void func_80050F64_51B64(void);
+void func_80050FE0_51BE0(void);
+void func_80051124_51D24(void);
+void func_80051250_51E50(void);
+void func_80051760_52360(void);
+void func_80051800_52400(void);
+void func_800518AC_524AC(void);
+void func_80051B8C_5278C(void);
 
 extern s32 *D_80090EC0_91AC0;
 void func_80050BD4_517D4(s32 **);
-void func_80050504_51104();
+void func_80050504_51104(func_80050504_51104_arg *);
 
 void func_80050460_51060(void **node) {
     *node = load_3ECE40();
