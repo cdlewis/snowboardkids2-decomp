@@ -11,6 +11,7 @@
 USE_ASSET(_419C60);
 USE_ASSET(_42F1D0);
 USE_ASSET(_41A1D0);
+USE_ASSET(_4237C0);
 
 typedef struct {
     u8 padding[0x2C];
@@ -63,18 +64,21 @@ typedef struct {
     s16 unk8;
 } func_800308FC_314FC_arg;
 
+extern void func_8000FED0_10AD0();
+extern s32 D_800AB054_A23C4;
+extern s32 D_800AFF14_A7284;
+extern u8 identityMatrix[];
+
+void func_8002FB40_30740(void);
+void func_8002FCA8_308A8(void);
 void func_8002F5C8_301C8(void *);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 void func_8006FF90_70B90(s32, s32, void *, void *);
-extern s32 D_800AB054_A23C4;
-extern s32 D_800AFF14_A7284;
-extern void func_8002FA44_30644();
-extern void func_8002F290_2FE90();
-extern void func_8002F024_2FC24();
-extern u8 identityMatrix[];
-extern void func_8002F72C_3032C();
-extern void func_8002F980_30580();
-extern void func_8000FED0_10AD0();
+void func_8002FA44_30644(void);
+void func_8002F290_2FE90(void);
+void func_8002F024_2FC24(void);
+void func_8002F72C_3032C(void);
+void func_8002F980_30580(void);
 void func_8002EFD8_2FBD8(void *);
 void func_8002F110_2FD10(void *);
 
@@ -179,7 +183,7 @@ void func_8002EFD8_2FBD8(void *untypedArg0) {
     func_8000153C_213C(arg0->unk0, (void *)((s32)arg0 + 4));
     func_800021B8_2DB8(arg0->unk0, arg0->unk24);
     func_80002750_3350(arg0->unk0);
-    setCallback(&func_8002F024_2FC24);
+    setCallback((void (*)(void *))&func_8002F024_2FC24);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F024_2FC24);
@@ -225,7 +229,7 @@ void func_8002F5C8_301C8(void *untypedArg) {
     DisplayListObject *arg0 = (DisplayListObject *)untypedArg;
     volatile u8 pad[0x20];
     if (((GameState *)getCurrentAllocation())->unk5C5 == 1) {
-        setCallback(&func_8002F290_2FE90);
+        setCallback((void (*)(void *))&func_8002F290_2FE90);
     }
     enqueueDisplayListObject(0, arg0);
 }
@@ -251,8 +255,8 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     arg0->unk24 = 0;
     arg0->unk28 = 0;
     arg0->unk2C = 0;
-    setCleanupCallback(&func_8002F980_30580);
-    setCallback(&func_8002F72C_3032C);
+    setCleanupCallback((void (*)(void *))&func_8002F980_30580);
+    setCallback((void (*)(void *))&func_8002F72C_3032C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F72C_3032C);
@@ -282,7 +286,43 @@ void func_8002FA70_30670(func_8002FA70_30670_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA9C_3069C);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s8 unkC;
+    s8 unkD;
+    s8 unkE;
+    s8 unkF;
+} func_8002FA9C_3069C_item;
+
+typedef struct {
+    func_8002FA9C_3069C_item items[2];
+    s8 unk20;
+} func_8002FA9C_3069C_arg;
+
+void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0) {
+    s32 i;
+    void *asset = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+
+    setCleanupCallback((void (*)(void *))&func_8002FCA8_308A8);
+
+    for (i = 0; i < 2; i++) {
+        arg0->items[i].unk0 = -0x40 + i * 0x60;
+        arg0->items[i].unk2 = -0x18;
+        arg0->items[i].unk8 = i;
+        arg0->items[i].unk4 = asset;
+        arg0->items[i].unkA = 0xFF;
+        arg0->items[i].unkD = 0;
+        arg0->items[i].unkC = 0;
+    }
+
+    arg0->unk20 = 0;
+
+    setCallback((void (*)(void *))&func_8002FB40_30740);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FB40_30740);
 

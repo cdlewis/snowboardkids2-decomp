@@ -1381,6 +1381,13 @@ segments:
 
   - [0x41AD80, bin]
 
+  - name: _4237C0
+    type: bin
+    vram: 0
+    start: 0x4237C0
+
+  - [0x426EF0, bin]
+
   - name: _42F1D0
     type: bin
     vram: 0

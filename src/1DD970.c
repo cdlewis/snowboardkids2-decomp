@@ -38,7 +38,11 @@ s32 returnZero_1DDAAC(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DD970", func_800B0A04_1DDAB4);
+void func_800B6130_1E31E0(s32, s16, s16);
+
+void func_800B0A04_1DDAB4(func_800B0A04_1DDAB4_arg0 *arg0, func_800B0A04_1DDAB4_arg1 *arg1) {
+    func_800B6130_1E31E0(arg1->unkC, arg0->unk0, arg0->unk2);
+}
 
 s32 returnZero_1DDADC(void) {
     return 0;
