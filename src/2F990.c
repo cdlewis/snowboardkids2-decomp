@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "56910.h"
 #include "68CF0.h"
 #include "6E840.h"
 #include "common.h"
@@ -12,6 +13,29 @@ USE_ASSET(_419C60);
 USE_ASSET(_42F1D0);
 USE_ASSET(_41A1D0);
 USE_ASSET(_4237C0);
+
+typedef struct {
+    short unk00;
+    short unk02;
+    short unk04;
+    short unk06;
+    void *unk08;
+} SubStruct;
+
+typedef struct {
+    void *unk00;
+    short unk04;
+    short unk06;
+    void *unk08;
+    short unk0C;
+    short unk0E;
+    SubStruct substruct[3];
+    short unk34;
+    short unk36;
+    char unk38;
+    char unk39;
+    char unk3A;
+} Struct_80030694;
 
 typedef struct {
     u8 padding[0x2C];
@@ -64,31 +88,16 @@ typedef struct {
     s16 unk8;
 } func_800308FC_314FC_arg;
 
-extern void func_8000FED0_10AD0(void);
-extern s32 D_800AB054_A23C4;
-extern s32 D_800AFF14_A7284;
-extern u8 identityMatrix[];
-
-void func_8002FB40_30740(void);
-void func_8002FCA8_308A8(void);
-void func_8002F5C8_301C8(void *);
-void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
-void func_8006FF90_70B90(s32, s32, void *, void *);
-void func_8002FA44_30644(void);
-void func_8002F290_2FE90(void);
-void func_8002F024_2FC24(void);
-void func_8002F72C_3032C(void);
-void func_8002F980_30580(void);
-void func_8002EFD8_2FBD8(void *);
-void func_8002F110_2FD10(void *);
-
-void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
-void func_8002FA70_30670(func_8002FA70_30670_arg *);
-void updateDebugCameraYState(cameraState *arg0);
-void func_80030974_31574(void *);
-void func_800309D4_315D4(void);
-void func_80030238_30E38(void);
-void func_80030280_30E80(void);
+typedef struct {
+    void *unk0;
+    Mat3x3 unk4;
+    u8 padding[2];
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
+    s16 unk24;
+    s8 unk26;
+} func_8002EF3C_2FB3C_arg;
 
 typedef struct {
     s16 unk0;
@@ -106,6 +115,34 @@ typedef struct {
     u8 padding2[0x1D];
     s16 unk3E;
 } func_8002ED90_2F990_arg;
+
+extern void func_8000FED0_10AD0(void);
+extern s32 D_800AB054_A23C4;
+extern s32 D_800AFF14_A7284;
+extern u8 identityMatrix[];
+
+void func_8002EFD8_2FBD8(void *);
+void func_8002F024_2FC24(void);
+void func_8002F110_2FD10(void *);
+void func_8002F290_2FE90(void);
+void func_8002F5C8_301C8(void *);
+void func_8002F72C_3032C(void);
+void func_8002F980_30580(void);
+void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
+void func_8002FA44_30644(void);
+void func_8002FA70_30670(func_8002FA70_30670_arg *);
+void func_8002FB40_30740(void);
+void func_8002FCA8_308A8(void);
+void func_80030238_30E38(void);
+void func_80030280_30E80(void);
+void func_80030764_31364(void);
+void func_800308C4_314C4(void);
+void func_80030974_31574(void *);
+void func_800309D4_315D4(void);
+void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
+void func_8006FF90_70B90(s32, s32, void *, void *);
+void updateDebugCameraYState(cameraState *arg0);
+
 void initDebugCameraController(func_8002ED90_2F990_arg *arg0) {
     arg0->unk18 = 0;
     arg0->unk1C = 0;
@@ -124,9 +161,10 @@ void initDebugCameraController(func_8002ED90_2F990_arg *arg0) {
 void updateDebugCameraYState(cameraState *arg0) {
     s32 sp20[8];
     u64 pad;
-    char *cameraYRotation;
-    char *cameraYString;
+    s8 *cameraYRotation;
+    s8 *cameraYString;
     GameState *temp_s0 = (GameState *)getCurrentAllocation();
+
     if (D_800AB054_A23C4 & 0x10) {
         arg0->cameraRotation++;
     } else if (D_800AB054_A23C4 & 0x20) {
@@ -154,16 +192,6 @@ void updateDebugCameraYState(cameraState *arg0) {
     debugEnqueueCallback(8, 7, &renderTextPalette, ((void *)((s32)arg0)) + 0xC);
 }
 
-typedef struct {
-    void *unk0;
-    Mat3x3 unk4;
-    u8 padding[2];
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s16 unk24;
-    s8 unk26;
-} func_8002EF3C_2FB3C_arg;
 void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
     GameState *temp = (GameState *)getCurrentAllocation();
     arg0->unk0 = func_8000198C_258C(0x3A, temp);
@@ -369,7 +397,32 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_80030540_31140);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030668_31268);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030694_31294);
+void func_80030694_31294(Struct_80030694 *arg0) {
+    void *var1;
+    void *var2;
+    s32 i;
+
+    getCurrentAllocation();
+    arg0->unk00 = loadAsset_34F7E0();
+    var2 = dmaRequestAndUpdateStateWithSize(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    setCleanupCallback(func_800308C4_314C4);
+
+    arg0->unk34 = -0x24;
+    arg0->unk04 = -0x24;
+    arg0->unk06 = 0x1C;
+    arg0->unk36 = 0;
+    arg0->unk08 = var2;
+    arg0->unk0C = 4;
+
+    for (i = 0; i < 3; i++) {
+        arg0->substruct[i].unk02 = 0x1C + (i * 8);
+        arg0->substruct[i].unk00 = 0xC;
+        arg0->substruct[i].unk08 = (void *)((char *)arg0 + 0x38 + (i * 3));
+        arg0->substruct[i].unk04 = 0;
+    }
+
+    setCallback(func_80030764_31364);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030764_31364);
 

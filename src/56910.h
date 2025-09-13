@@ -4,7 +4,7 @@ typedef struct {
     void *start;
     void *end;
     s32 size;
-} Asset;
+} Asset_56910;
 
 typedef struct {
     void *start;
