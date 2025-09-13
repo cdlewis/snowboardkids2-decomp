@@ -30,11 +30,11 @@ void *allocateNodeMemory(s32 size);
 
 Node *scheduleTask(void *a0, u8, u8, u8);
 
-void setCallback(void(callback)(void *));
+void setCallback(void* callback);
 
-void setCallbackWithContinue(void(callback)(void *));
+void setCallbackWithContinue(void* callback);
 
-void setCleanupCallback(void(callback)(void *));
+void setCleanupCallback(void* callback);
 
 void *freeNodeMemory(void *);
 

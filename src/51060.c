@@ -104,8 +104,8 @@ void func_80050504_51104();
 
 void func_80050460_51060(void **node) {
     *node = load_3ECE40();
-    setCleanupCallback((void (*)(void *))&func_800505D8_511D8);
-    setCallbackWithContinue((void (*)(void *))&func_800504A0_510A0);
+    setCleanupCallback(&func_800505D8_511D8);
+    setCallbackWithContinue(&func_800504A0_510A0);
 }
 
 void func_800504A0_510A0(func_800504A0_510A0_arg *arg0) {
@@ -174,7 +174,7 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_80050890_51490);
 
 void func_8005098C_5158C(MemoryAllocatorNode **node) {
     *node = load_3ECE40();
-    setCleanupCallback((void (*)(void *))&func_80050BD4_517D4);
+    setCleanupCallback(&func_80050BD4_517D4);
     setCallbackWithContinue(&func_800509CC_515CC);
 }
 

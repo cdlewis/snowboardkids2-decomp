@@ -360,12 +360,12 @@ void func_80057124_57D24(void) {
         gGraphicsManager->unk4
     );
 
-    setCallback((void (*)(void *))&func_800571D0_57DD0);
+    setCallback(&func_800571D0_57DD0);
 }
 
 void func_800571D0_57DD0(void(callback)(void *)) {
     func_800579E8_585E8(gGraphicsManager->unk4, *(&D_80093B00_94700 + (gGraphicsManager->unk12)));
-    setCallback((void (*)(void *))&func_80057214_57E14);
+    setCallback(&func_80057214_57E14);
 }
 
 void func_80057214_57E14(void) {
@@ -373,7 +373,7 @@ void func_80057214_57E14(void) {
     void *temp_v0;
 
     if ((u16)gGraphicsManager->unk10 != gGraphicsManager->unk12) {
-        setCallbackWithContinue((void (*)(void *))func_800570E0_57CE0);
+        setCallbackWithContinue(func_800570E0_57CE0);
     } else if (gGraphicsManager->unk1D == 2) {
         temp_v0 = func_80057974_58574(gGraphicsManager->unk4, gGraphicsManager->unk8, (u8)gGraphicsManager->unk1C);
         gGraphicsManager->unkC = temp_v0;
@@ -383,7 +383,7 @@ void func_80057214_57E14(void) {
                 func_80057928_58528(temp_v0, temp_a1);
             }
             gGraphicsManager->unk1E = 0;
-            setCallbackWithContinue((void (*)(void *))func_800572B0_57EB0);
+            setCallbackWithContinue(func_800572B0_57EB0);
         }
     }
 }
@@ -407,23 +407,23 @@ void func_800572B0_57EB0(void *arg) {
     if ((u16)gGraphicsManager->unk10 != gGraphicsManager->unk12) {
         gGraphicsManager->unk1E = 1;
         func_800578DC_584DC(gGraphicsManager->unkC, 8);
-        setCallbackWithContinue((void (*)(void *))func_800573F8_57FF8);
+        setCallbackWithContinue(func_800573F8_57FF8);
     } else {
         if (gGraphicsManager->unk1D == 0) {
             gGraphicsManager->unk1E = 1;
             func_800578DC_584DC(gGraphicsManager->unkC, (s32)(u16)gGraphicsManager->unk14);
-            setCallbackWithContinue((void (*)(void *))func_800573F8_57FF8);
+            setCallbackWithContinue(func_800573F8_57FF8);
         }
         if (func_80057A34_58634(gGraphicsManager->unkC) == NULL) {
             gGraphicsManager->unk1D = 0;
-            setCallbackWithContinue((void (*)(void *))func_80057470_58070);
+            setCallbackWithContinue(func_80057470_58070);
         }
     }
 }
 
 void func_800573F8_57FF8(void) {
     if (func_80057A34_58634(gGraphicsManager->unkC) == 0) {
-        setCallbackWithContinue((void (*)(void *))&func_80057470_58070);
+        setCallbackWithContinue(&func_80057470_58070);
         return;
     }
     if ((gGraphicsManager->unk1D != 0) && (gGraphicsManager->unk1E == 0)) {

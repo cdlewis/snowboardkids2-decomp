@@ -101,8 +101,8 @@ void func_8000CAF0_D6F0(func_8000CAF0_D6F0_arg *arg0) {
     arg0->unk54 = 0;
     arg0->unk28 = (s32)arg0->unk8;
     arg0->unk42 = (u8)arg0->unk22;
-    setCleanupCallback((void (*)(void *))&func_8000CC84_D884);
-    setCallbackWithContinue((void (*)(void *))&func_8000CB94_D794);
+    setCleanupCallback(&func_8000CC84_D884);
+    setCallbackWithContinue(&func_8000CB94_D794);
 }
 
 void func_8000CB94_D794(func_8000CB94_D794_arg *arg0) {

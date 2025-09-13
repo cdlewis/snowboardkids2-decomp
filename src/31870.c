@@ -86,7 +86,7 @@ void func_80031A0C_3260C(func_80031A0C_3260C_arg *arg0) {
     arg0->unk28 = 0;
 
     setCleanupCallback(&func_80031C4C_3284C);
-    setCallback((void (*)(void *))&func_80031ABC_326BC);
+    setCallback(&func_80031ABC_326BC);
 }
 
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0) {

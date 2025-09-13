@@ -491,16 +491,16 @@ void processActiveTasks() {
     }
 }
 
-void setCallback(void(callback)(void *)) {
+void setCallback(void *callback) {
     gDMAOverlay->callback = callback;
 }
 
-void setCallbackWithContinue(void(callback)(void *)) {
+void setCallbackWithContinue(void *callback) {
     gDMAOverlay->callback = callback;
     gDMAOverlay->continueFlag = 1;
 }
 
-void setCleanupCallback(void(callback)(void *)) {
+void setCleanupCallback(void *callback) {
     gDMAOverlay->cleanupCallback = callback;
 }
 

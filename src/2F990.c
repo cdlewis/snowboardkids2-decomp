@@ -118,7 +118,7 @@ void initDebugCameraController(func_8002ED90_2F990_arg *arg0) {
     arg0->unk10 = 0;
     arg0->unk14 = &arg0->unk1E;
 
-    setCallback((void (*)(void *))&updateDebugCameraYState);
+    setCallback(&updateDebugCameraYState);
 }
 
 void updateDebugCameraYState(cameraState *arg0) {
@@ -175,7 +175,7 @@ void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
     arg0->unk26 = 0;
     createYRotationMatrix((s16(*)[3]) & arg0->unk4, 0x1E00);
     setCleanupCallback(func_8002F110_2FD10);
-    setCallback((void (*)(void *))func_8002EFD8_2FBD8);
+    setCallback(func_8002EFD8_2FBD8);
 }
 
 void func_8002EFD8_2FBD8(void *untypedArg0) {
@@ -183,7 +183,7 @@ void func_8002EFD8_2FBD8(void *untypedArg0) {
     func_8000153C_213C(arg0->unk0, (void *)((s32)arg0 + 4));
     func_800021B8_2DB8(arg0->unk0, arg0->unk24);
     func_80002750_3350(arg0->unk0);
-    setCallback((void (*)(void *))&func_8002F024_2FC24);
+    setCallback(&func_8002F024_2FC24);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F024_2FC24);
@@ -229,7 +229,7 @@ void func_8002F5C8_301C8(void *untypedArg) {
     DisplayListObject *arg0 = (DisplayListObject *)untypedArg;
     volatile u8 pad[0x20];
     if (((GameState *)getCurrentAllocation())->unk5C5 == 1) {
-        setCallback((void (*)(void *))&func_8002F290_2FE90);
+        setCallback(&func_8002F290_2FE90);
     }
     enqueueDisplayListObject(0, arg0);
 }
@@ -255,8 +255,8 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     arg0->unk24 = 0;
     arg0->unk28 = 0;
     arg0->unk2C = 0;
-    setCleanupCallback((void (*)(void *))&func_8002F980_30580);
-    setCallback((void (*)(void *))&func_8002F72C_3032C);
+    setCleanupCallback(&func_8002F980_30580);
+    setCallback(&func_8002F72C_3032C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F72C_3032C);
@@ -271,13 +271,13 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F980_30580);
 
 void func_8002F9C4_305C4(func_8002FA70_30670_arg *arg0) {
     arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_42F1D0_ROM_START, &_42F1D0_ROM_END, 0x14410);
-    setCleanupCallback((void (*)(void *))&func_8002FA70_30670);
-    setCallback((void (*)(void *))&func_8002FA1C_3061C);
+    setCleanupCallback(&func_8002FA70_30670);
+    setCallback(&func_8002FA1C_3061C);
 }
 
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
     func_800394BC_3A0BC(arg0, arg0->unk2C);
-    setCallback((void (*)(void *))&func_8002FA44_30644);
+    setCallback(&func_8002FA44_30644);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA44_30644);
@@ -307,7 +307,7 @@ void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0) {
     s32 i;
     void *asset = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
 
-    setCleanupCallback((void (*)(void *))&func_8002FCA8_308A8);
+    setCleanupCallback(&func_8002FCA8_308A8);
 
     for (i = 0; i < 2; i++) {
         arg0->items[i].unk0 = -0x40 + i * 0x60;
@@ -321,7 +321,7 @@ void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0) {
 
     arg0->unk20 = 0;
 
-    setCallback((void (*)(void *))&func_8002FB40_30740);
+    setCallback(&func_8002FB40_30740);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FB40_30740);
@@ -343,14 +343,14 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_80030194_30D94);
 void func_800301C0_30DC0(func_800308FC_314FC_arg *arg0) {
     void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
 
-    setCleanupCallback((void (*)(void *))&func_80030280_30E80);
+    setCleanupCallback(&func_80030280_30E80);
 
     arg0->unk0 = -0x2C;
     arg0->unk2 = -0x14;
     arg0->unk8 = 0xD;
     arg0->unk4 = temp_s1;
 
-    setCallback((void (*)(void *))&func_80030238_30E38);
+    setCallback(&func_80030238_30E38);
 }
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030238_30E38);
@@ -378,14 +378,14 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_800308C4_314C4);
 void func_800308FC_314FC(func_800308FC_314FC_arg *arg0) {
     void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
 
-    setCleanupCallback((void (*)(void *))&func_800309D4_315D4);
+    setCleanupCallback(&func_800309D4_315D4);
 
     arg0->unk0 = -0x2C;
     arg0->unk2 = -0x18;
     arg0->unk4 = temp_s1;
     arg0->unk8 = 5;
 
-    setCallback((void (*)(void *))&func_80030974_31574);
+    setCallback(&func_80030974_31574);
 }
 
 void func_80030974_31574(void *arg0) {

@@ -219,7 +219,7 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049CA8_4A8A8);
 
 void func_8004A5E0_4B1E0(void **arg0) {
     *arg0 = dmaRequestAndUpdateStateWithSize(&D_3F6670, &D_3F6950, 0x388);
-    setCleanupCallback((void (*)(void *))&func_8004A96C_4B56C);
+    setCleanupCallback(&func_8004A96C_4B56C);
     setCallbackWithContinue(&func_8004A634_4B234);
 }
 
@@ -255,7 +255,7 @@ void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2) {
 
 void func_8004AA50_4B650(s32 *arg0) {
     *arg0 = (s32)load_3ECE40();
-    setCleanupCallback((void (*)(void *))func_8004AE58_4BA58);
+    setCleanupCallback(func_8004AE58_4BA58);
     setCallbackWithContinue(&func_8004AA90_4B690);
 }
 

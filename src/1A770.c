@@ -68,13 +68,13 @@ void func_8001A434_1B034(void);
 
 void func_80019B70_1A770(func_80019B70_1A770_arg *arg0) {
     arg0->unk20 = func_8000198C_258C(0x13, getCurrentAllocation());
-    setCleanupCallback((void (*)(void *))&func_80019CB4_1A8B4);
-    setCallback((void (*)(void *))&func_80019BBC_1A7BC);
+    setCleanupCallback(&func_80019CB4_1A8B4);
+    setCallback(&func_80019BBC_1A7BC);
 }
 
 void func_80019BBC_1A7BC(void) {
     if (((GameState *)getCurrentAllocation())->unk429 == 0) {
-        setCallback((void (*)(void *))&func_80019BF0_1A7F0);
+        setCallback(&func_80019BF0_1A7F0);
     }
 }
 
@@ -87,8 +87,8 @@ void func_80019BF0_1A7F0(func_8000153C_213C_arg1 *arg0) {
     func_8000153C_213C(arg0->unk20, arg0);
     func_800021B8_2DB8(arg0->unk20, 0);
     func_80002750_3350(arg0->unk20);
-    setCleanupCallback((void (*)(void *))&func_80019CB4_1A8B4);
-    setCallback((void (*)(void *))&func_80019C7C_1A87C);
+    setCleanupCallback(&func_80019CB4_1A8B4);
+    setCallback(&func_80019C7C_1A87C);
 }
 
 void func_80019C7C_1A87C(func_8000153C_213C_arg1 *arg0) {
@@ -106,7 +106,7 @@ void func_80019CD0_1A8D0(func_80019CD0_1A8D0_arg *arg0) {
     arg0->unk2 = 0;
     arg0->unk4 = 0;
     arg0->unk8 = &D_8008D7FC_8E3FC[D_800A8CC8_A0038];
-    setCallback((void (*)(void *))&func_80019D24_1A924);
+    setCallback(&func_80019D24_1A924);
 }
 
 void func_80019D24_1A924(TextData *arg0) {

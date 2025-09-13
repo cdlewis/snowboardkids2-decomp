@@ -65,7 +65,7 @@ typedef struct {
     s16 unk16;
 } func_80007380_7F80_arg;
 void func_80007380_7F80(func_80007380_7F80_arg *arg0) {
-    setCleanupCallback((void (*)(void *))&func_80007558_8158);
+    setCleanupCallback(&func_80007558_8158);
     arg0->unk8 = 0;
     arg0->unk6 = 0;
     arg0->unk4 = 0;
@@ -75,7 +75,7 @@ void func_80007380_7F80(func_80007380_7F80_arg *arg0) {
     arg0->unk14 = 0;
     arg0->unk12 = 0;
     arg0->unk10 = 0;
-    setCallback((void (*)(void *))&func_800073E0_7FE0);
+    setCallback(&func_800073E0_7FE0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/7F80", func_800073E0_7FE0);
@@ -86,7 +86,7 @@ void func_80007558_8158(void) {
 INCLUDE_ASM("asm/nonmatchings/7F80", func_80007560_8160);
 
 void func_800078C4_84C4(func_800078C4_84C4_arg *arg0) {
-    setCleanupCallback((void (*)(void *))&func_80007ABC_86BC);
+    setCleanupCallback(&func_80007ABC_86BC);
     arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_646CD0_ROM_START, &_646CD0_ROM_END, 0xE8);
     arg0->unk44 = dmaRequestAndUpdateStateWithSize(&_49B500_ROM_START, &_49B500_ROM_END, 0xC00);
     if (arg0->unk0->unkC == 0x3E) {
@@ -94,7 +94,7 @@ void func_800078C4_84C4(func_800078C4_84C4_arg *arg0) {
     } else {
         arg0->unk40 = 1;
     }
-    setCallback((void (*)(void *))&func_80007958_8558);
+    setCallback(&func_80007958_8558);
 }
 
 INCLUDE_ASM("asm/nonmatchings/7F80", func_80007958_8558);

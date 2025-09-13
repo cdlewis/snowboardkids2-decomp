@@ -16,7 +16,7 @@ void PhoneTriggerInit(EventTrigger *arg0) {
     arg0->unk8 = 0;
     arg0->unkC = &PhoneLabel;
 
-    setCallback((void (*)(void *))&PhoneTriggerCheck);
+    setCallback(&PhoneTriggerCheck);
 }
 
 void PhoneTriggerCheck(u8 *arg0) {
