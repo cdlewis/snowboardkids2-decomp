@@ -58,9 +58,9 @@ void func_8001BBE8_1C7E8(void) {
 
     temp_s0 = (GameState *)getCurrentAllocation();
     if (func_8006FE10_70A10(0) == 0) {
-        n_alSynRemovePlayer(&temp_s0->audioPlayer0);
-        n_alSynRemovePlayer(&temp_s0->audioPlayer2);
-        n_alSynRemovePlayer(&temp_s0->audioPlayer4);
+        unlinkNode(&temp_s0->audioPlayer0);
+        unlinkNode(&temp_s0->audioPlayer2);
+        unlinkNode(&temp_s0->audioPlayer4);
         osViExtendVStart(0);
         temp_s0->unk588 = freeNodeMemory(temp_s0->unk588);
         temp_s0->unk58C = freeNodeMemory(temp_s0->unk58C);

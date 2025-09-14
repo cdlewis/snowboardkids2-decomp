@@ -7,6 +7,19 @@ typedef struct {
     s8 unkC1;
 } func_8006FDA0_709A0_arg;
 
+typedef struct Node_70B00 {
+    /* 0x00 */ struct Node_70B00 *next;
+    /* 0x04 */ struct Node_70B00 *prev;
+    /* 0x08 */ struct Node_70B00 *list2_next;
+    /* 0x0C */ struct Node_70B00 *list2_prev;
+    /* 0x10 */ struct Node_70B00 *list3_next;
+    s8 unk14;
+    s8 unk15;
+    /* 0x16 */ u16 slot_index;
+    u8 padding2[0xC2];
+    /* 0xDA */ u16 id;
+} Node_70B00;
+
 void func_8006FDA0_709A0(func_8006FDA0_709A0_arg *arg0, u8 arg1, u8 arg2);
 
 void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
@@ -53,7 +66,7 @@ void func_8006FA0C_7060C(void *, f32, f32, f32, f32);
 
 void func_8006F994_70594(void *, s32, s32, s32, s32, s32, s32);
 
-void n_alSynRemovePlayer(void *player);
+void unlinkNode(Node_70B00 *player);
 
 s32 func_8006FE10_70A10(s32);
 

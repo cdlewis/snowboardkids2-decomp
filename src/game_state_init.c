@@ -110,8 +110,8 @@ void gameStateCleanupHandler(void) {
 
     if (gs->unk427 != 0) {
         func_80057564_58164(10);
-        n_alSynRemovePlayer(gs);
-        n_alSynRemovePlayer((void *)((u8 *)gs + 0x1D8));
+        unlinkNode(gs);
+        unlinkNode((void *)((u8 *)gs + 0x1D8));
 
         gs->unk3E4 = freeNodeMemory((void *)gs->unk3E4);
         gs->unk3DC = freeNodeMemory((void *)gs->unk3DC);

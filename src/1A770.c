@@ -301,7 +301,7 @@ void func_8001AF18_1BB18(void) {
         }
     } while (0);
     if (temp_v0->unk1D8 >= 0x3CU) {
-        n_alSynRemovePlayer(temp_v0);
+        unlinkNode(temp_v0);
         terminateSchedulerWithCallback(&func_8001AF80_1BB80);
     }
 }

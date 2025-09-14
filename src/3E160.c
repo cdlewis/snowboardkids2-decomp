@@ -436,22 +436,22 @@ void func_80040608_41208(void) {
     terminateAllTasks();
 
     for (i = 0; i < gameState->unk5D; i++) {
-        n_alSynRemovePlayer(gameState->unk4 + i);
+        unlinkNode(gameState->unk4 + i);
     }
 
     for (i = 0; i < gameState->unk5D; i++) {
-        n_alSynRemovePlayer(gameState->unk8 + i);
+        unlinkNode(gameState->unk8 + i);
     }
 
     for (i = 0; i < gameState->unk5D; i++) {
-        n_alSynRemovePlayer(gameState->unkC + i);
+        unlinkNode(gameState->unkC + i);
     }
 
     for (i = 0; i < gameState->numPlayers; i++) {
         func_800B9AE0(gameState->players + i);
     }
 
-    n_alSynRemovePlayer(gameState->audioPlayer0);
+    unlinkNode(gameState->audioPlayer0);
 
     freeNodeMemory(gameState->players);
     freeNodeMemory(gameState->audioPlayer0);

@@ -23,19 +23,6 @@ typedef struct {
 } func_8006FEBC_70ABC_arg;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    /* 0x10 */ void *next;
-    s8 unk14;
-    s8 padding;
-    u16 unk16;
-    u8 padding2[0xC2];
-    /* 0xDA */ u16 id;
-} D_800A3370_A3F70_type;
-
-typedef struct {
     s16 unk0;
     s16 unk2;
     s16 unk4;
@@ -50,9 +37,9 @@ typedef struct {
     u32 unk138;
     u32 unk13C;
 } D_800AB068_A23D8_type;
-extern D_800AB068_A23D8_type *D_800AB068_A23D8;
 
-extern D_800A3370_A3F70_type D_800A3370_A3F70;
+extern D_800AB068_A23D8_type *D_800AB068_A23D8;
+extern Node_70B00 D_800A3370_A3F70;
 extern ViewportStruct D_800A3410_A4010;
 extern s8 D_800A3429_A4029;
 extern s8 D_800A342A_A402A;
@@ -72,7 +59,6 @@ extern u32 __additional_scanline_0;
 extern s32 gRegionAllocEnd;
 extern void **gLinearArenaRegions;
 extern s32 gRegionAllocPtr;
-void *LinearAlloc(size_t size);
 extern void *gArenaBasePtr;
 extern void *gLinearAllocPtr;
 extern void *gLinearAllocEnd;
@@ -86,8 +72,9 @@ extern u8 D_800A356C_A416C;
 extern void *D_800A355C_A415C[];
 extern void *D_800A3560_A4160;
 
+void *LinearAlloc(size_t size);
 void func_8006F6F4_702F4(void);
-void func_8006FA58_70658(D_800A3370_A3F70_type *);
+void func_8006FA58_70658(Node_70B00 *);
 void func_8006DEE4_6EAE4(void);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
@@ -210,15 +197,15 @@ void func_8006F718_70318(void) {
     s32 i;
     s32 *ptr;
 
-    D_800A3370_A3F70.unk0 = 0;
-    D_800A3370_A3F70.unk16 = 0xFFFF;
+    D_800A3370_A3F70.next = NULL;
+    D_800A3370_A3F70.slot_index = 0xFFFF;
     D_800A3410_A4010.unk4 = -0xA0;
     D_800A3410_A4010.unk6 = -0x78;
     D_800A3410_A4010.unk8 = 0xA0;
-    D_800A3370_A3F70.unk4 = 0;
-    D_800A3370_A3F70.unk8 = 0;
-    D_800A3370_A3F70.unkC = 0;
-    D_800A3370_A3F70.next = NULL;
+    D_800A3370_A3F70.prev = NULL;
+    D_800A3370_A3F70.list2_next = NULL;
+    D_800A3370_A3F70.list2_prev = NULL;
+    D_800A3370_A3F70.list3_next = NULL;
     D_800A3370_A3F70.unk14 = 0;
     D_800A3410_A4010.unk0 = 0;
     D_800A3410_A4010.unk2 = 0;
@@ -324,7 +311,34 @@ void func_8006FEE8_70AE8(func_8006FEBC_70ABC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FEF8_70AF8);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", n_alSynRemovePlayer);
+void unlinkNode(Node_70B00 *node) {
+    Node_70B00 *current;
+    Node_70B00 *next;
+
+    current = &D_800A3370_A3F70;
+    D_800A3588_A4188[node->slot_index] = NULL;
+
+    next = D_800A3370_A3F70.list2_next;
+    while (next != 0) {
+        if (current->next == node) {
+            current->next = node->next;
+        }
+
+        current = current->list2_next;
+        next = current->list2_next;
+    }
+
+    if (node->list2_next != 0) {
+        node->list2_next->prev = node->prev;
+    }
+
+    node->prev->list2_next = node->list2_next;
+    if (node->list3_next != 0) {
+        node->list3_next->list2_prev = node->list2_prev;
+    }
+
+    node->list2_prev->list3_next = node->list3_next;
+}
 
 void debugEnqueueCallback(u16 index, u8 slotIndex, void *arg2, void *arg3) {
     Item_A4188 *manager;
@@ -348,7 +362,7 @@ void debugEnqueueCallback(u16 index, u8 slotIndex, void *arg2, void *arg3) {
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8007001C_70C1C);
 
 void func_80070094_70C94(u16 id, u8 listIndex, void *data1, void *data2) {
-    D_800A3370_A3F70_type *mgr;
+    Node_70B00 *mgr;
     Node *newNode;
     u8 *listPtr;
     Node *oldHead;
@@ -368,7 +382,7 @@ void func_80070094_70C94(u16 id, u8 listIndex, void *data1, void *data2) {
                 *(Node **)(listPtr + 0x18) = newNode;
             }
         }
-        mgr = mgr->next;
+        mgr = mgr->list3_next;
     }
 }
 
