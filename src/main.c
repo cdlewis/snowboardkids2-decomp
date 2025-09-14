@@ -75,8 +75,9 @@ typedef struct {
     u8 unk38;
     u8 unk39;
     u8 unk3A;
+    s8 unk3B;
 } D_800891A8_89DA8_entry;
-extern D_800891A8_89DA8_entry *D_800891A8_89DA8[];
+extern D_800891A8_89DA8_entry D_800891A8_89DA8[];
 
 typedef struct {
     char padding[0x87];
@@ -152,7 +153,8 @@ void func_80000460_1060(func_80000460_1060_arg0 *arg0, s8 *arg1, s8 *arg2) {
     s32 new_var;
     D_800891A8_89DA8_entry *temp_a2;
     s16 index;
-    temp_a2 = (D_800891A8_89DA8_entry *)((s32)D_800891A8_89DA8 + arg0->unk84 * 0x3C);
+
+    temp_a2 = &D_800891A8_89DA8[arg0->unk84];
     new_var3 = temp_a2->unk34 + temp_a2->unk35;
     temp_v0 = new_var3;
     temp_a0 = temp_a2->unk36;
