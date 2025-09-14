@@ -1,3 +1,6 @@
+#ifndef _GEOMETRY_H_
+#define _GEOMETRY_H_
+
 #include "common.h"
 
 typedef struct {
@@ -11,13 +14,6 @@ typedef struct {
     /* 0x48 */ u16 flags;
     /* 0x4A */ u16 counter;
 } func_8005E800_5F400_arg;
-
-typedef struct {
-    u8 padding[0x40];
-    void *unk40;
-    void *unk44;
-    s16 unk48;
-} func_8005DE98_5EA98_arg;
 
 typedef struct {
     s16 m[9];
@@ -40,3 +36,5 @@ void createRotationMatrixYX(void *, s32, s32);
 void matrixToEulerAngles(s32 *, s32 *, f32 *, f32 *, f32 *, f32 *, f32 *, f32 *);
 
 void transformVector(s16 *, s16 *, void *);
+
+#endif

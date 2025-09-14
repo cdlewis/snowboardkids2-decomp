@@ -12,7 +12,7 @@ typedef struct {
 
 s32 func_8006097C_6157C(func_8006097C_6157C_arg *, s32);
 
-void func_8005DE98_5EA98(void *, s32, s32, func_8005DE98_5EA98_arg *);
+void func_8005DE98_5EA98(void *, s32, s32, func_8005E800_5F400_arg *);
 
 void func_8005E800_5F400(func_8005E800_5F400_arg *entity, u16 param_2);
 

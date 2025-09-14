@@ -8,21 +8,21 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE60_5EA60);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE6C_5EA6C);
 
-void func_8005DE98_5EA98(void *arg0, s32 arg1, s32 arg2, func_8005DE98_5EA98_arg *arg3) {
+void func_8005DE98_5EA98(void *arg0, s32 arg1, s32 arg2, func_8005E800_5F400_arg *arg3) {
     void *result;
     s16 s_arg1;
     s16 s_arg2;
 
     result = func_8005DE60_5EA60(arg0);
-    arg3->unk44 = result;
+    arg3->frame_data = result;
 
     s_arg1 = (s16)(arg1 << 16 >> 16);
     s_arg2 = (s16)(arg2 << 16 >> 16);
 
     result = func_8005DE6C_5EA6C(arg0, s_arg1, s_arg2);
-    arg3->unk40 = result;
+    arg3->animation_data = result;
 
-    arg3->unk48 = *(u16 *)result + 0x8000;
+    arg3->flags = *(u16 *)result + 0x8000;
 }
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DF10_5EB10);

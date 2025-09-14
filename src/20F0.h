@@ -1,3 +1,4 @@
+#include "5EA60.h"
 #include "common.h"
 #include "memory_allocator.h"
 
@@ -70,11 +71,6 @@ typedef struct {
 } func_80002040_2C40_arg_unk0;
 
 typedef struct {
-    s32 unk0;
-    u8 padding[0x48];
-} func_80002040_2C40_arg_unk4;
-
-typedef struct {
     u8 padding[0x24];
     void *unk24;
     void *unk28;
@@ -82,7 +78,7 @@ typedef struct {
 
 typedef struct {
     func_80002040_2C40_arg_unk0 *unk0;
-    func_80002040_2C40_arg_unk4 *unk4;
+    func_8005E800_5F400_arg *unk4;
     void *unk8;
     /* 0xC */ s16 index;
     u8 paddingA[0x06];

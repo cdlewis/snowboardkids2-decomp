@@ -18,6 +18,8 @@ typedef struct Node_70B00 {
     /* 0x16 */ u16 slot_index;
     u8 padding2[0xC2];
     /* 0xDA */ u16 id;
+    u8 padding3[0xFC];
+    u16 unk1D8;
 } Node_70B00;
 
 void func_8006FDA0_709A0(func_8006FDA0_709A0_arg *arg0, u8 arg1, u8 arg2);
