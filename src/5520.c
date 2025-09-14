@@ -1,3 +1,4 @@
+#include "5520.h"
 #include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
@@ -52,27 +53,19 @@ void func_80004FCC_5BCC(s32 arg0) {
     func_80063580_64180(arg0);
 }
 
-typedef struct {
-    u8 padding[0x20];
-    struct {
-        s32 unk0;
-        s32 unk4;
-        s32 unk8;
-        s32 unkC;
-    } *unk20;
-    u8 padding2[0xC];
-    s32 unk30;
-} func_80004FF8_5BF8_arg1;
-void func_80004FF8_5BF8(s32 arg0, func_80004FF8_5BF8_arg1 *arg1) {
+void func_80004FF8_5BF8(u16 arg0, func_80004FF8_5BF8_arg1 *arg1) {
     arg1->unk30 = 0;
+
     if (arg1->unk20->unk4 != 0) {
-        debugEnqueueCallback((s16)arg0, 1, &func_80004F74_5B74, arg1);
+        debugEnqueueCallback(arg0, 1, &func_80004F74_5B74, arg1);
     }
+
     if (arg1->unk20->unk8 != 0) {
-        debugEnqueueCallback((s16)arg0, 3, &func_80004FA0_5BA0, arg1);
+        debugEnqueueCallback(arg0, 3, &func_80004FA0_5BA0, arg1);
     }
+
     if (arg1->unk20->unkC != 0) {
-        debugEnqueueCallback((s16)arg0, 5, &func_80004FCC_5BCC, arg1);
+        debugEnqueueCallback(arg0, 5, &func_80004FCC_5BCC, arg1);
     }
 }
 

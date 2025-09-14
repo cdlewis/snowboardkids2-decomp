@@ -1,6 +1,7 @@
 #include "main.h"
 
 #include "4050.h"
+#include "5520.h"
 #include "6E840.h"
 #include "common.h"
 #include "geometry.h"
@@ -112,7 +113,7 @@ typedef struct {
     } *unk0;
     s8 unk4;
     s8 unk5;
-    s32 unk8;
+    func_80004FF8_5BF8_arg1 *unk8;
     u8 padding2[0x10];
     s32 unk1C;
     s32 unk20;

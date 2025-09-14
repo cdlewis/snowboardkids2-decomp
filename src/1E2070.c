@@ -1,3 +1,4 @@
+#include "5520.h"
 #include "common.h"
 #include "displaylist.h"
 #include "overlay.h"
@@ -112,7 +113,6 @@ void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *);
 extern void transformVector(s16 *, s32, void *);
 extern s32 D_80089510_8A110;
 extern s32 D_80089520;
-extern void func_80004FF8_5BF8(u16, void *);
 extern void func_80067EDC_68ADC(s32, void *);
 
 u32 D_800BAD10_1E7DC0[] = { 0xFFE80018, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180018, 0x00000000,
