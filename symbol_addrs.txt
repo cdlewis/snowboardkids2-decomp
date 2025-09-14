@@ -1,3 +1,4 @@
+initializeCutsceneSystem = 0x800B38E4; // rom:0x1E0994
 resetScriptState = 0x800B386C; // rom:0x1E091C
 initializeCutsceneCommand = 0x800B0328; // rom:0x1DD3D8
 
@@ -442,7 +443,6 @@ func_800BB504 = 0x800BB504; // type:func rom:0xACF84
 func_800B0930 = 0x800B0930; // type:func rom:0x1DCAD0
 func_800B3360 = 0x800B3360; // type:func rom:0x1E0410
 func_800B9020 = 0x800B9020; // type:func rom:0x1E60D0
-func_800B38E4 = 0x800B38E4; // type:func rom:0x1E0994
 func_800B3570 = 0x800B3570; // type:func rom:0x1DFAA0
 func_800BC0FC = 0x800BC0FC; // type:func rom:0xAEFA0
 func_800B99E0 = 0x800B99E0; // type:func rom:0xA9890

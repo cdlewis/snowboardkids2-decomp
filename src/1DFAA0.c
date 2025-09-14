@@ -157,7 +157,7 @@ void func_800B388C_1E093C(s32 arg0) {
     temp->unk3F = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B38E4);
+INCLUDE_ASM("asm/nonmatchings/1DFAA0", initializeCutsceneSystem);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3B40);
 
