@@ -66,8 +66,22 @@ typedef struct {
 } func_80001114_1D14_arg;
 
 typedef struct {
+    s32 unk0;
+    s32 unk4;
+    u8 padding[0x1C];
+} D_800891A8_89DA8_entry_2C;
+
+typedef struct {
     u8 unk0;
-    char padding[0x33];
+    s32 unk4;
+    /* 0x8 */ void *asset1Start;
+    /* 0xC */ void *asset1End;
+    /* 0x10 */ void *asset2Start;
+    /* 0x14 */ void *asset2End;
+    /* 0x18 */ s32 asset2Size;
+    u8 padding[0x10];
+    D_800891A8_89DA8_entry_2C *unk2C;
+    s32 unk30;
     u8 unk34;
     u8 unk35;
     u8 unk36;
@@ -75,7 +89,7 @@ typedef struct {
     u8 unk38;
     u8 unk39;
     u8 unk3A;
-    s8 unk3B;
+    u8 unk3B;
 } D_800891A8_89DA8_entry;
 extern D_800891A8_89DA8_entry D_800891A8_89DA8[];
 
@@ -103,7 +117,11 @@ typedef struct {
     s32 unk1C;
     s32 unk20;
     s32 unk24;
-    u8 padding[0x1C];
+    s32 unk28;
+    void *unk2C;
+    void *unk30;
+    s32 unk34;
+    u8 padding[0xC];
     u16 unk44;
     u16 unk46;
     u16 unk48;
@@ -127,13 +145,15 @@ void func_800011DC_1DDC(void *);
 void func_80000CAC_18AC(func_80000C2C_182C_arg *);
 void func_80009F90_AB90(void *, s32, s16, s32);
 void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32); /* extern */
+void func_80000A68_1668(func_80000C2C_182C_arg *);
+void func_80000BF4_17F4(func_80000BF4_17F4_arg *);
+void func_800007C4_13C4(void *, void *);
+void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
+void func_800014C8_20C8(func_80000C2C_182C_arg *arg0);
 
 extern s32 func_8000A030_AC30(void *, s32);
 extern void func_80009E68_AA68(void *, s16);
-extern void func_800007C4_13C4(void *, void *);
 extern s32 identityMatrix;
-extern void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
-extern void func_800014C8_20C8(func_80000C2C_182C_arg *arg0);
 
 void func_80000450_1050(func_80000450_1050_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;
@@ -221,7 +241,25 @@ void func_800008D0_14D0(func_80000C2C_182C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000968_1568);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_800009A0_15A0);
+void func_800009A0_15A0(func_80000C2C_182C_arg *arg0) {
+    D_800891A8_89DA8_entry *temp_s0;
+    D_800891A8_89DA8_entry_2C *temp_s2;
+
+    temp_s0 = &D_800891A8_89DA8[arg0->unk0->unk84];
+    temp_s2 = &temp_s0->unk2C[arg0->unk4];
+
+    setCleanupCallback(&func_80000BF4_17F4);
+
+    memcpy(&arg0->unk8, &identityMatrix, 0x20);
+
+    arg0->unk2C = dmaRequestAndUpdateState(temp_s0->asset1Start, temp_s0->asset1End);
+    arg0->unk30 = dmaRequestAndUpdateStateWithSize(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
+    arg0->unk34 = 0;
+    arg0->unk28 = temp_s2->unk4;
+    arg0->unk44 = 0;
+
+    setCallback(&func_80000A68_1668);
+}
 
 void func_80000A68_1668(func_80000C2C_182C_arg *arg0) {
     s16 yRotMatrix[3][3];
