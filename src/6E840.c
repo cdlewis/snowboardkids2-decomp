@@ -12,23 +12,15 @@ typedef struct Node {
 } Node;
 
 typedef struct {
-    u8 data[0x10];
-} CallbackSlot;
-
-typedef struct {
-    u8 data[0x18];
-    Node *unk18;
-} CallbackData;
+    u8 padding[0x8];
+    Node *unk8;
+    s32 unkC;
+} Item_A4188;
 
 typedef struct {
     u8 padding[0xB8];
     s8 unkB8;
 } func_8006FEBC_70ABC_arg;
-
-typedef struct {
-    u8 padding[0xB8];
-    s8 unkB8;
-} func_8006FEE8_70AE8_arg;
 
 typedef struct {
     s32 unk0;
@@ -75,7 +67,7 @@ extern s16 D_800A8A9A_9FE0A;
 extern s16 D_800AB478_A27E8;
 
 extern ViewportStruct D_800A3410_A4010;
-extern CallbackSlot *D_800A3588_A4188[];
+extern Item_A4188 *D_800A3588_A4188[];
 extern u32 __additional_scanline_0;
 extern s32 gRegionAllocEnd;
 extern void **gLinearArenaRegions;
@@ -326,7 +318,7 @@ void func_8006FEBC_70ABC(func_8006FEBC_70ABC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FED8_70AD8);
 
-void func_8006FEE8_70AE8(func_8006FEE8_70AE8_arg *arg0) {
+void func_8006FEE8_70AE8(func_8006FEBC_70ABC_arg *arg0) {
     arg0->unkB8 = (u8)(arg0->unkB8 & 0xFD);
 }
 
@@ -334,17 +326,21 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FEF8_70AF8);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", n_alSynRemovePlayer);
 
-void debugEnqueueCallback(u16 index, u8 slotIndex, void *callbackFn, void *callbackData) {
-    CallbackSlot *manager = D_800A3588_A4188[index];
+void debugEnqueueCallback(u16 index, u8 slotIndex, void *arg2, void *arg3) {
+    Item_A4188 *manager;
+    Node *block;
+    Item_A4188 *slot;
+
+    manager = D_800A3588_A4188[index];
     if (manager != NULL) {
-        Node *block = (Node *)linearAlloc(0x10);
+        block = (Node *)linearAlloc(0x10);
         if (block != NULL) {
-            CallbackData *slot = (CallbackData *)&manager[slotIndex];
-            block->next = slot->unk18;
-            block->unk4 = callbackFn;
-            block->unk8 = callbackData;
+            slot = &manager[slotIndex];
+            block->next = slot[1].unk8;
+            block->unk4 = arg2;
+            block->unk8 = arg3;
             block->unkF = slotIndex;
-            slot->unk18 = block;
+            slot[1].unk8 = block;
         }
     }
 }
