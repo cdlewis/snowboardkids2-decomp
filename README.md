@@ -1,4 +1,4 @@
-![progress](https://decomp.dev/cdlewis/snowboardkids2-decomp/us.svg?mode=shield&label=progress)
+[![progress](https://decomp.dev/cdlewis/snowboardkids2-decomp/us.svg?mode=shield&label=progress)](https://decomp.dev/cdlewis/snowboardkids2-decomp)
 
 # Snowboard Kids 2
 
