@@ -17,28 +17,6 @@ typedef struct {
 } func_800B5210_1E22C0_arg;
 
 typedef struct {
-    u8 padding[0x20];
-    s32 unk20;
-    void *unk24;
-    void *unk28;
-    s32 unk2C;
-    u8 padding2[0xC];
-    void *unk3C;
-    s32 unk40;
-    s16 unk44;
-    s16 unk46;
-    s16 unk48;
-    s16 unk4A;
-    s16 unk4C;
-    s16 unk4E;
-    s16 unk50;
-    s16 unk52;
-    s16 unk54;
-    s16 unk56;
-    s16 unk58;
-} func_800B5318_1E23C8_arg;
-
-typedef struct {
     Node n;
     u8 padding[0x28];
     s16 unk54;
@@ -103,16 +81,16 @@ typedef struct {
     u16 unk62;
 } func_800B4FC0_1E2070_arg;
 
-void func_800B5438_1E24E8(func_800B5318_1E23C8_arg *);
-void func_800B54B4_1E2564(func_800B5318_1E23C8_arg *);
-void func_800B5318_1E23C8(func_800B5318_1E23C8_arg *);
+void func_800B5438_1E24E8(func_80004FF8_5BF8_arg1 *);
+void func_800B54B4_1E2564(func_80004FF8_5BF8_arg1 *);
+void func_800B5318_1E23C8(func_80004FF8_5BF8_arg1 *);
 void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *);
 void func_800B5210_1E22C0(func_800B5210_1E22C0_arg *);
 void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *);
 
 extern void transformVector(s16 *, s32, void *);
-extern s32 D_80089510_8A110;
-extern s32 D_80089520;
+extern func_80004FF8_5BF8_arg1_unk20 D_80089510_8A110;
+extern func_80004FF8_5BF8_arg1_unk20 D_80089520;
 extern void func_80067EDC_68ADC(s32, void *);
 
 u32 D_800BAD10_1E7DC0[] = { 0xFFE80018, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180018, 0x00000000,
@@ -203,25 +181,25 @@ void func_800B5290_1E2340(s16 arg0, void *arg1, s16 arg2, s16 arg3) {
     }
 }
 
-void func_800B5318_1E23C8(func_800B5318_1E23C8_arg *arg0) {
+void func_800B5318_1E23C8(func_80004FF8_5BF8_arg1 *arg0) {
     setCleanupCallback(&func_800B54B4_1E2564);
 
     if (arg0->unk58 == 0) {
         arg0->unk24 = dmaRequestAndUpdateState(&_215120_ROM_START, &_215120_ROM_END);
         arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
         arg0->unk2C = 0;
-        arg0->unk20 = (s32)&D_80089510_8A110;
+        arg0->unk20 = &D_80089510_8A110;
         arg0->unk50 = 0;
     } else if (arg0->unk58 != 1) {
         arg0->unk24 = dmaRequestAndUpdateState(&_215120_ROM_START, &_215120_ROM_END);
         arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
         arg0->unk2C = 0;
-        arg0->unk20 = (s32)&D_80089510_8A110;
+        arg0->unk20 = &D_80089510_8A110;
         arg0->unk50 = 0;
     } else {
         arg0->unk24 = dmaRequestAndUpdateState(&_2151D0_ROM_START, &_2151D0_ROM_END);
         arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_663BE0_ROM_START, &_663BE0_ROM_END, 0x200);
-        arg0->unk20 = (s32)&D_80089520;
+        arg0->unk20 = &D_80089520;
         arg0->unk2C = 0;
         arg0->unk50 = 1;
     }
@@ -237,7 +215,7 @@ void func_800B5318_1E23C8(func_800B5318_1E23C8_arg *arg0) {
     setCallback(&func_800B5438_1E24E8);
 }
 
-void func_800B5438_1E24E8(func_800B5318_1E23C8_arg *arg0) {
+void func_800B5438_1E24E8(func_80004FF8_5BF8_arg1 *arg0) {
     if (arg0->unk56 == 0) {
         func_80069CF8_6A8F8();
     }
@@ -254,7 +232,7 @@ void func_800B5438_1E24E8(func_800B5318_1E23C8_arg *arg0) {
     arg0->unk56--;
 }
 
-void func_800B54B4_1E2564(func_800B5318_1E23C8_arg *arg0) {
+void func_800B54B4_1E2564(func_80004FF8_5BF8_arg1 *arg0) {
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk24 = freeNodeMemory(arg0->unk24);
