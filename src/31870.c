@@ -6,7 +6,7 @@
 
 typedef struct {
     func_80002040_2C40_arg *unk0;
-    s32 unk4;
+    func_8000153C_213C_arg1 *unk4;
     u8 padding[0x1B];
     s16 unk24;
 } func_80031ABC_326BC_arg;

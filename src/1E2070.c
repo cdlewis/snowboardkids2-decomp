@@ -68,11 +68,11 @@ typedef struct {
         s32 unk34;
     } *unk0;
     void *unk4;
-    s32 *unk8;
+    u32 (*unk8)[22];
     char pad[0x16];
     u8 unk22;
     char pad2[5];
-    s32 *unk28;
+    u32 (*unk28)[22];
     char pad3[0x16];
     u8 unk42;
     char pad4[5];
@@ -114,7 +114,9 @@ void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *arg0) {
     arg0->unk42 = arg0->unk22;
 
     for (i = 0; i < 2; i++) {
-        transformVector(D_800BAD68_1E7E18[i], arg0->unk0->unk0 + 0x3C0, (u8 *)arg0 + (i * 12 + 72));
+        // vector is different size (32 vs 16 bit) because that helped
+        // the data segment to match.
+        transformVector((s16 *)D_800BAD68_1E7E18[i], arg0->unk0->unk0 + 0x3C0, (u8 *)arg0 + (i * 12 + 72));
         arg0->unk48[i].x -= arg0->unk0->unk2C;
         arg0->unk48[i].y -= arg0->unk0->unk30;
         arg0->unk48[i].z -= arg0->unk0->unk34;
