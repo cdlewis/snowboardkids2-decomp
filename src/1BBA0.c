@@ -54,21 +54,24 @@ INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001B3E8_1BFE8);
 
 void func_8001BBE8_1C7E8(void) {
     void *var_a0;
-    GameState *temp_s0;
+    Node_70B00 *temp_s0 = (Node_70B00 *)getCurrentAllocation();
 
-    temp_s0 = (GameState *)getCurrentAllocation();
     if (func_8006FE10_70A10(0) == 0) {
-        unlinkNode(&temp_s0->audioPlayer0);
-        unlinkNode(&temp_s0->audioPlayer2);
-        unlinkNode(&temp_s0->audioPlayer4);
+        unlinkNode(&temp_s0[0]);
+        unlinkNode(&temp_s0[1]);
+        unlinkNode(&temp_s0[2]);
+
         osViExtendVStart(0);
-        temp_s0->unk588 = freeNodeMemory(temp_s0->unk588);
-        temp_s0->unk58C = freeNodeMemory(temp_s0->unk58C);
-        if (temp_s0->unk590 != 0) {
+
+        temp_s0[3].unk0.next = freeNodeMemory(temp_s0[3].unk0.next);
+        temp_s0[3].prev = freeNodeMemory(temp_s0[3].prev);
+
+        if (temp_s0[3].unk8.callback_selector != 0) {
             var_a0 = &func_8001BCC0_1C8C0;
         } else {
             var_a0 = &func_8001BC78_1C878;
         }
+
         terminateSchedulerWithCallback(var_a0);
     }
 }

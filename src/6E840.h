@@ -8,9 +8,15 @@ typedef struct {
 } func_8006FDA0_709A0_arg;
 
 typedef struct Node_70B00 {
-    /* 0x00 */ struct Node_70B00 *next;
+    /* 0x00 */ union {
+        struct Node_70B00 *next;
+        u16 callback_selector;
+    } unk0;
     /* 0x04 */ struct Node_70B00 *prev;
-    /* 0x08 */ struct Node_70B00 *list2_next;
+    /* 0x08 */ union {
+        struct Node_70B00 *list2_next;
+        u16 callback_selector;
+    } unk8;
     /* 0x0C */ struct Node_70B00 *list2_prev;
     /* 0x10 */ struct Node_70B00 *list3_next;
     s8 unk14;
@@ -19,7 +25,6 @@ typedef struct Node_70B00 {
     u8 padding2[0xC2];
     /* 0xDA */ u16 id;
     u8 padding3[0xFC];
-    u16 unk1D8;
 } Node_70B00;
 
 void func_8006FDA0_709A0(func_8006FDA0_709A0_arg *arg0, u8 arg1, u8 arg2);

@@ -289,13 +289,16 @@ void func_8001AE80_1BA80(void) {
 
 void func_8001AF18_1BB18(void) {
     Node_70B00 *temp_v0 = (Node_70B00 *)getCurrentAllocation();
-    temp_v0->unk1D8++;
+
+    temp_v0[1].unk0.callback_selector++;
+
     do {
         if (D_800AFF10_A7280 & 0x8000) {
-            temp_v0->unk1D8 = 0x3CU;
+            temp_v0[1].unk0.callback_selector = 0x3C;
         }
     } while (0);
-    if (temp_v0->unk1D8 >= 0x3CU) {
+
+    if (temp_v0[1].unk0.callback_selector >= 0x3C) {
         unlinkNode(temp_v0);
         terminateSchedulerWithCallback(&func_8001AF80_1BB80);
     }

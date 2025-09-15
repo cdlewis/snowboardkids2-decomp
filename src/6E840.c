@@ -197,13 +197,13 @@ void func_8006F718_70318(void) {
     s32 i;
     s32 *ptr;
 
-    D_800A3370_A3F70.next = NULL;
+    D_800A3370_A3F70.unk0.next = NULL;
     D_800A3370_A3F70.slot_index = 0xFFFF;
     D_800A3410_A4010.unk4 = -0xA0;
     D_800A3410_A4010.unk6 = -0x78;
     D_800A3410_A4010.unk8 = 0xA0;
     D_800A3370_A3F70.prev = NULL;
-    D_800A3370_A3F70.list2_next = NULL;
+    D_800A3370_A3F70.unk8.list2_next = NULL;
     D_800A3370_A3F70.list2_prev = NULL;
     D_800A3370_A3F70.list3_next = NULL;
     D_800A3370_A3F70.unk14 = 0;
@@ -318,21 +318,21 @@ void unlinkNode(Node_70B00 *node) {
     current = &D_800A3370_A3F70;
     D_800A3588_A4188[node->slot_index] = NULL;
 
-    next = D_800A3370_A3F70.list2_next;
+    next = D_800A3370_A3F70.unk8.list2_next;
     while (next != 0) {
-        if (current->next == node) {
-            current->next = node->next;
+        if (current->unk0.next == node) {
+            current->unk0.next = node->unk0.next;
         }
 
-        current = current->list2_next;
-        next = current->list2_next;
+        current = current->unk8.list2_next;
+        next = current->unk8.list2_next;
     }
 
-    if (node->list2_next != 0) {
-        node->list2_next->prev = node->prev;
+    if (node->unk8.list2_next != 0) {
+        node->unk8.list2_next->prev = node->prev;
     }
 
-    node->prev->list2_next = node->list2_next;
+    node->prev->unk8.list2_next = node->unk8.list2_next;
     if (node->list3_next != 0) {
         node->list3_next->list2_prev = node->list2_prev;
     }
