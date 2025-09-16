@@ -57,9 +57,7 @@ char thread_d_stack[0x180];
 s16 frameCounter;
 s16 frameDelay;
 
-// I'm not convinced this is **. A single pointer would
-// make more sense.
-ViConfig **currentViConfig;
+ViConfig *currentViConfig;
 
 OSMesgQueue viEventQueue;
 OSMesgQueue eventQueue1;
@@ -177,7 +175,7 @@ void addViConfig(ViConfig *config, OSMesgQueue *messageQueue, s32 frameCount) {
     nextIntMask = osSetIntMask(SR_IE);
 
     if (currentViConfig != NULL) {
-        *currentViConfig = config;
+        currentViConfig->prevConfig = config;
     }
     prevConfig = currentViConfig;
     config->prevConfig = NULL;
@@ -192,24 +190,20 @@ void addViConfig(ViConfig *config, OSMesgQueue *messageQueue, s32 frameCount) {
 
 void removeViConfig(ViConfig *configs) {
     u32 previousInterruptMask;
-    ViConfig **temp;
 
     previousInterruptMask = osSetIntMask(SR_IE);
-    temp = configs->prevConfig;
 
     // If there was a previous config, update its next pointer
-    if (temp != NULL) {
-        // Highly questionable pointer arithmatic
-        *(temp + 1) = configs->nextConfig;
+    if (configs->prevConfig != NULL) {
+        configs->prevConfig->nextConfig = configs->nextConfig;
     } else {
         // If this was the first node, update the global pointer
         currentViConfig = configs->nextConfig;
     }
 
     // If there was a next config, set it to the previous one
-    temp = configs->nextConfig;
-    if (temp != NULL) {
-        *temp = configs->prevConfig;
+    if (configs->nextConfig != NULL) {
+        configs->nextConfig->prevConfig = configs->prevConfig;
     }
     osSetIntMask(previousInterruptMask);
 }
