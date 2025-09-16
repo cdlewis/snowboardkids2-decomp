@@ -69,7 +69,10 @@ typedef struct {
 typedef struct {
     s32 unk0;
     s32 unk4;
-    u8 padding[0x1C];
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 padding[0x10];
 } D_800891A8_89DA8_entry_2C;
 
 typedef struct {
@@ -151,6 +154,8 @@ void func_80000BF4_17F4(func_80000BF4_17F4_arg *);
 void func_800007C4_13C4(void *, void *);
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 void func_800014C8_20C8(func_80000C2C_182C_arg *arg0);
+void func_800008D0_14D0(func_80000C2C_182C_arg *arg0);
+s32 func_80000968_1568(void);
 
 extern s32 func_8000A030_AC30(void *, s32);
 extern void func_80009E68_AA68(void *, s16);
@@ -221,7 +226,24 @@ INCLUDE_ASM("asm/nonmatchings/main", func_80000760_1360);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_800007C4_13C4);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_800007F0_13F0);
+void func_800007F0_13F0(func_80000C2C_182C_arg *arg0) {
+    D_800891A8_89DA8_entry *temp_s0 = &D_800891A8_89DA8[arg0->unk0->unk84];
+    D_800891A8_89DA8_entry_2C *temp_s2 = &temp_s0->unk2C[arg0->unk4];
+
+    setCleanupCallback(&func_80000968_1568);
+    memcpy(&arg0->unk8, &identityMatrix, 0x20U);
+
+    arg0->unk2C = dmaRequestAndUpdateState(temp_s0->asset1Start, temp_s0->asset1End);
+    arg0->unk30 = dmaRequestAndUpdateStateWithSize(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
+    arg0->unk34 = 0;
+    arg0->unk28 = temp_s2->unk4;
+    arg0->unk1C = temp_s2->unk8;
+    arg0->unk20 = temp_s2->unkC;
+    arg0->unk24 = temp_s2->unk10;
+    arg0->unk44 = 0;
+
+    setCallback(&func_800008D0_14D0);
+}
 
 void func_800008D0_14D0(func_80000C2C_182C_arg *arg0) {
     u16 temp;
