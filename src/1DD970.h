@@ -42,7 +42,7 @@ void func_800B0920_1DD9D0(func_800B0920_1DD9D0_arg0 *arg0, func_800B0920_1DD9D0_
 s32 returnZero_1DDA4C(void);
 void noop_1DDA54(void);
 s32 returnZero_1DDA5C(void);
-void func_800B09B4_1DDA64(void);
+void func_800B09B4_1DDA64(func_800B0A04_1DDAB4_arg0 *arg0, func_800B0A04_1DDAB4_arg1 *arg1);
 void noop_1DDAA4(void);
 s32 returnZero_1DDAAC(void);
 void func_800B0A04_1DDAB4(func_800B0A04_1DDAB4_arg0 *arg0, func_800B0A04_1DDAB4_arg1 *arg1);
