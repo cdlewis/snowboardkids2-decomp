@@ -2,7 +2,10 @@
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "overlay.h"
 #include "task_scheduler.h"
+
+USE_ASSET(_41A1D0);
 
 typedef struct {
     func_80002040_2C40_arg *unk0;
@@ -11,10 +14,20 @@ typedef struct {
     s16 unk24;
 } func_80031ABC_326BC_arg;
 
-extern void func_80031B30_32730;
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+} func_80032244_32E44_arg;
+
 extern s32 identityMatrix;
-extern void func_80031C4C_3284C;
+
+void func_80031C4C_3284C(void);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
+void func_80031B30_32730(void);
+void func_800322BC_32EBC(void);
+void func_80032304_32F04(void);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80030C70_31870);
 
@@ -132,7 +145,15 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80032170_32D70);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032218_32E18);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032244_32E44);
+void func_80032244_32E44(func_80032244_32E44_arg *arg0) {
+    void *asset = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    setCleanupCallback(&func_80032304_32F04);
+    arg0->unk0 = -0x2C;
+    arg0->unk2 = -0x14;
+    arg0->unk8 = 0xD;
+    arg0->unk4 = asset;
+    setCallback(&func_800322BC_32EBC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_800322BC_32EBC);
 
