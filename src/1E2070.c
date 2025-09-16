@@ -1,6 +1,7 @@
 #include "5520.h"
 #include "common.h"
 #include "displaylist.h"
+#include "geometry.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -88,10 +89,8 @@ void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *);
 void func_800B5210_1E22C0(func_800B5210_1E22C0_arg *);
 void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *);
 
-extern void transformVector(s16 *, s32, void *);
 extern func_80004FF8_5BF8_arg1_unk20 D_80089510_8A110;
 extern func_80004FF8_5BF8_arg1_unk20 D_80089520;
-extern void func_80067EDC_68ADC(s32, void *);
 
 u32 D_800BAD10_1E7DC0[] = { 0xFFE80018, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180018, 0x00000000,
                             0x07F0FFF0, 0xFFFFFFFF, 0x0018FFE8, 0x00000000, 0x07F007F0, 0xFFFFFFFF,
@@ -116,7 +115,7 @@ void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *arg0) {
     for (i = 0; i < 2; i++) {
         // vector is different size (32 vs 16 bit) because that helped
         // the data segment to match.
-        transformVector((s16 *)D_800BAD68_1E7E18[i], arg0->unk0->unk0 + 0x3C0, (u8 *)arg0 + (i * 12 + 72));
+        transformVector((s16 *)D_800BAD68_1E7E18[i], (s16 *)(arg0->unk0->unk0 + 0x3C0), (u8 *)arg0 + (i * 12 + 72));
         arg0->unk48[i].x -= arg0->unk0->unk2C;
         arg0->unk48[i].y -= arg0->unk0->unk30;
         arg0->unk48[i].z -= arg0->unk0->unk34;

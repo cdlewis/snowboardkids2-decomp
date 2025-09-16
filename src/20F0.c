@@ -2,6 +2,7 @@
 
 #include "19E80.h"
 #include "5E590.h"
+#include "D6F0.h"
 #include "displaylist.h"
 #include "graphics.h"
 #include "overlay.h"
@@ -138,8 +139,8 @@ typedef struct {
     u8 unkA4[0x4C];
     u8 asset2TransformationMatrix[0x20];
     u32 unk110;
-    u32 unk114;
-    u32 unk118;
+    void *unk114;
+    void *unk118;
     void *soundData;
     void *unk120;
     void *unk124;
@@ -171,8 +172,6 @@ extern s32 D_80089768_8A368;
 extern AssetGroup D_8008BD2C_8C92C;
 extern u8 identityMatrix[32];
 extern void func_80009E68_AA68(void *param, s16 value);
-extern u32 func_8000CD88_D988(void);
-extern u32 func_8000CDB4_D9B4(void);
 extern u32 D_8008BD38_8C938;
 
 s32 func_800018F4_24F4(func_80002040_2C40_arg *);

@@ -86,3 +86,5 @@ void loadAssetMetadataByIndex(
     s32 entry_index,
     s32 sub_index
 );
+
+void func_80067EDC_68ADC(u16, void *);
