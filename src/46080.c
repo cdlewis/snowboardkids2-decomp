@@ -1,6 +1,10 @@
 #include "5E590.h"
 #include "common.h"
+#include "overlay.h"
 #include "task_scheduler.h"
+
+USE_ASSET(_3F6670);
+USE_ASSET(_3F3EF0);
 
 typedef struct {
     u8 padding0[0x8];
@@ -19,8 +23,6 @@ extern void func_8004C0D0_4CCD0(void *);
 extern void func_8004AF2C_4BB2C(void *);
 extern void func_8004B264_4BE64(void *);
 
-extern s32 D_3F6670;
-extern s32 D_3F6950;
 extern s32 D_3F3EF0;
 extern s32 D_3F58E0;
 
@@ -218,7 +220,7 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049C70_4A870);
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049CA8_4A8A8);
 
 void func_8004A5E0_4B1E0(void **arg0) {
-    *arg0 = dmaRequestAndUpdateStateWithSize(&D_3F6670, &D_3F6950, 0x388);
+    *arg0 = dmaRequestAndUpdateStateWithSize(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     setCleanupCallback(&func_8004A96C_4B56C);
     setCallbackWithContinue(&func_8004A634_4B234);
 }
@@ -284,7 +286,7 @@ void func_8004AE94_4BA94(s32 arg0) {
 }
 
 void func_8004AED8_4BAD8(void **arg0) {
-    *arg0 = dmaRequestAndUpdateStateWithSize(&D_3F3EF0, &D_3F58E0, 0x2608);
+    *arg0 = dmaRequestAndUpdateStateWithSize(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
     setCleanupCallback(&func_8004B264_4BE64);
     setCallbackWithContinue(&func_8004AF2C_4BB2C);
 }

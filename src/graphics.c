@@ -2,6 +2,9 @@
 #include "displaylist.h"
 #include "player.h"
 #include "task_scheduler.h"
+#include "overlay.h"
+
+USE_ASSET(_6A83F0);
 
 typedef struct {
     void *unk0;
@@ -70,10 +73,6 @@ extern s32 D_8009397C_9457C[];
 extern s32 D_80093B00_94700;
 extern s32 D_80092E28_93A28;
 extern s32 D_80093308_93F08;
-extern s32 D_6A83F0;
-extern s32 D_6B6410;
-extern s32 D_6A83F0;
-extern s32 D_6B6410;
 extern s32 D_6C6300;
 
 extern void *D_800A2CE8_A38E8;
@@ -128,7 +127,7 @@ void func_80056080_56C80(void) {
     u8 sp10;
 
     gGraphicsManager = allocateTaskMemory(0x53C);
-    gGraphicsManager->unk0 = dmaRequestAndUpdateStateWithSize(&D_6A83F0, &D_6B6410, 0xCFD8);
+    gGraphicsManager->unk0 = dmaRequestAndUpdateStateWithSize(&_6A83F0_ROM_START, &_6A83F0_ROM_END, 0xCFD8);
     gGraphicsManager->unk8 = allocateMemoryNode(0, 0x9000, &sp10);
     gGraphicsManager->unk4 = allocateMemoryNode(0, 0x8000, &sp10);
     func_8006983C_6A43C(&func_8005610C_56D0C);

@@ -2,6 +2,9 @@
 #include "common.h"
 #include "graphics.h"
 #include "task_scheduler.h"
+#include "overlay.h"
+
+USE_ASSET(_45A890);
 
 typedef struct {
     u8 padding0[16];
@@ -110,9 +113,6 @@ void func_80036880_37480(func_80036880_37480_arg *);
 void func_80036A68_37668(void *);
 void func_80036A10_37610(void *);
 
-extern void *D_45A890;
-extern void *D_45B130;
-
 extern void D_8008FAC0_906C0;
 extern u16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
@@ -157,7 +157,7 @@ void func_80036328_36F28(func_80036328_36F28_arg *arg0) {
 
     func_80036328_36F28_arg_item *var_v1;
 
-    resource = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
+    resource = dmaRequestAndUpdateStateWithSize(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
     temp_value = func_80035F80_36B80(1);
 
     setCleanupCallback(&func_80036848_37448);
@@ -205,7 +205,7 @@ void func_80036848_37448(void *untypedArg) {
 void func_80036880_37480(func_80036880_37480_arg *arg0) {
     void *resource;
 
-    resource = dmaRequestAndUpdateStateWithSize(&D_45A890, &D_45B130, 0x3108);
+    resource = dmaRequestAndUpdateStateWithSize(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
     setCleanupCallback(&func_80036A10_37610);
     arg0->unk8 = 8;
     arg0->unkA = 0xFF;
