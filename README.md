@@ -2,7 +2,7 @@ Snowboard Kids 2
 [![Build](https://github.com/cdlewis/snowboardkids2-decomp/actions/workflows/build.yaml/badge.svg)](https://github.com/cdlewis/snowboardkids2-decomp/actions/workflows/build.yaml)
 [![Code](https://decomp.dev/cdlewis/snowboardkids2-decomp/us.svg?mode=shield&measure=code&label=Code)](https://decomp.dev/cdlewis/snowboardkids2-decomp)
 [![Data](https://decomp.dev/cdlewis/snowboardkids2-decomp/us.svg?mode=shield&measure=data&label=Data)](https://decomp.dev/cdlewis/snowboardkids2-decomp)
-[![Chat](https://img.shields.io/discord/601153657966428193?color=%237289DA&logo=discord&logoColor=%23FFFFFF)](discord.gg/DuYH3Fh)
+[![Chat](https://img.shields.io/discord/601153657966428193?color=%237289DA&logo=discord&logoColor=%23FFFFFF)](https://discord.gg/DuYH3Fh)
 =============
 
 ![box art](Snowboard_Kids_2_cover.jpg)
