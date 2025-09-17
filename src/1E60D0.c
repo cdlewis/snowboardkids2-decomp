@@ -1,3 +1,4 @@
+#include "6E840.h"
 #include "common.h"
 #include "overlay.h"
 #include "task_scheduler.h"
@@ -45,6 +46,18 @@ typedef struct {
     s32 unk4;
 } func_800B9264_1E6314_input;
 
+typedef struct {
+    u8 padding[0x8];
+    union {
+        s32 word;
+        s16 halfword;
+    } unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 padding2[0x10];
+    s8 unk24;
+} func_800B9180_1E6230_arg;
+
 extern s8 D_800BADE0_1E7E90[];
 
 void func_800B90B0_1E6160(void **);
@@ -52,6 +65,7 @@ void func_800B90B0_1E6160(void **);
 extern void func_800B91E4_1E6294(void);
 extern void func_800B9264_1E6314(func_800B9264_1E6314_input **);
 extern void func_800B9290_1E6340(void);
+extern void func_80011924_12524(void);
 
 void func_800B9020(func_800B9020_arg *arg0) {
     func_800B9020_arg_task *temp_v0;
@@ -101,7 +115,29 @@ void func_800B90DC_1E618C(func_800B90DC_1E618C_arg *arg0) {
     setCallback(&func_800B91E4_1E6294);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E60D0", func_800B9180_1E6230);
+void func_800B9180_1E6230(func_800B9180_1E6230_arg *arg0) {
+    s32 value;
+    s32 new_var;
+
+    value = arg0->unk8.word;
+    if (value <= 0) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    value -= 0xA0000;
+    new_var = value;
+    arg0->unk8.word = value;
+    if (value < 0) {
+        arg0->unk8.word = 0;
+    }
+
+    value = (s16)arg0->unk8.halfword;
+    new_var = value;
+    arg0->unk24 = (s8)new_var;
+
+    debugEnqueueCallback(1, 0, &func_80011924_12524, &arg0->unk10);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E60D0", func_800B91E4_1E6294);
 
