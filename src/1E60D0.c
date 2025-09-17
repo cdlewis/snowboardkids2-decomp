@@ -1,0 +1,120 @@
+#include "common.h"
+#include "overlay.h"
+#include "task_scheduler.h"
+
+USE_ASSET(_646910);
+
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+    s8 unk2;
+    s8 unk3;
+} func_800B9020_arg;
+
+typedef struct {
+    void *unk0;
+} func_800B9020_arg_task;
+
+typedef struct {
+    u8 padding[0x4];
+    s32 unk4;
+    s32 unk8;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s16 unk12;
+    s32 unk14;
+    s16 unk18;
+    s16 unk1A;
+    s16 unk1C;
+    s16 unk1E;
+    s16 unk20;
+    s8 unk22;
+    s8 unk23;
+    s8 unk24;
+} func_800B90DC_1E618C_arg;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+} func_800B93CC_1E647C_arg;
+
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+    s32 unk4;
+} func_800B9264_1E6314_input;
+
+extern s8 D_800BADE0_1E7E90[];
+
+void func_800B90B0_1E6160(void **);
+
+extern void func_800B91E4_1E6294(void);
+extern void func_800B9264_1E6314(func_800B9264_1E6314_input **);
+extern void func_800B9290_1E6340(void);
+
+void func_800B9020(func_800B9020_arg *arg0) {
+    func_800B9020_arg_task *temp_v0;
+
+    arg0->unk0 = 0;
+    arg0->unk1 = 0;
+    arg0->unk2 = 3;
+    arg0->unk3 = 0;
+    temp_v0 = (func_800B9020_arg_task *)scheduleTask(&func_800B9290_1E6340, 0, 0, 0);
+    if (temp_v0 != NULL) {
+        temp_v0->unk0 = arg0;
+    }
+}
+
+void func_800B9074_1E6124(void **arg0) {
+    *arg0 = dmaRequestAndUpdateStateWithSize(&_646910_ROM_START, &_646910_ROM_END, 0x658);
+}
+
+void func_800B90B0_1E6160(void **arg0) {
+    *arg0 = freeNodeMemory(*arg0);
+}
+
+void func_800B90DC_1E618C(func_800B90DC_1E618C_arg *arg0) {
+    s8 new_var2;
+    s32 temp;
+
+    setCleanupCallback(&func_800B9264_1E6314);
+    func_800B9074_1E6124(&arg0->unk4);
+
+    arg0->unk12 = 0;
+    temp = arg0->unkC - 1;
+    arg0->unk10 = temp << 5;
+    arg0->unk14 = arg0->unk4;
+
+    new_var2 = D_800BADE0_1E7E90[arg0->unkC];
+
+    arg0->unk1C = 0x400;
+    arg0->unk1A = 0x400;
+    arg0->unk1E = 0;
+    arg0->unk20 = 0xFF;
+    arg0->unk22 = 0;
+    arg0->unk23 = 0;
+    arg0->unk24 = 0;
+    arg0->unk8 = 0;
+    arg0->unk18 = new_var2;
+
+    setCallback(&func_800B91E4_1E6294);
+}
+
+INCLUDE_ASM("asm/nonmatchings/1E60D0", func_800B9180_1E6230);
+
+INCLUDE_ASM("asm/nonmatchings/1E60D0", func_800B91E4_1E6294);
+
+void func_800B9264_1E6314(func_800B9264_1E6314_input **arg0) {
+    func_800B9264_1E6314_input *temp_v1 = *arg0;
+    temp_v1->unk1--;
+    func_800B90B0_1E6160(arg0 + 1);
+}
+
+INCLUDE_ASM("asm/nonmatchings/1E60D0", func_800B9290_1E6340);
+
+INCLUDE_ASM("asm/nonmatchings/1E60D0", func_800B92D4_1E6384);
+
+void func_800B93CC_1E647C(func_800B93CC_1E647C_arg *arg0) {
+    func_800B90B0_1E6160(&arg0->unk4);
+}
