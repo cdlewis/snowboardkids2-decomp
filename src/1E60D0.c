@@ -47,7 +47,12 @@ typedef struct {
 } func_800B9264_1E6314_input;
 
 typedef struct {
-    u8 padding[0x8];
+    struct {
+        s16 unk0;
+        s8 unk2;
+        s8 unk3;
+    } *unk0;
+    u8 padding[0x4];
     union {
         s32 word;
         s16 halfword;
@@ -61,8 +66,9 @@ typedef struct {
 extern s8 D_800BADE0_1E7E90[];
 
 void func_800B90B0_1E6160(void **);
+void func_800B91E4_1E6294(func_800B9180_1E6230_arg *);
+void func_800B9180_1E6230(func_800B9180_1E6230_arg *);
 
-extern void func_800B91E4_1E6294(void);
 extern void func_800B9264_1E6314(func_800B9264_1E6314_input **);
 extern void func_800B9290_1E6340(void);
 extern void func_80011924_12524(void);
@@ -139,7 +145,24 @@ void func_800B9180_1E6230(func_800B9180_1E6230_arg *arg0) {
     debugEnqueueCallback(1, 0, &func_80011924_12524, &arg0->unk10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E60D0", func_800B91E4_1E6294);
+void func_800B91E4_1E6294(func_800B9180_1E6230_arg *arg0) {
+    s32 temp_v0;
+
+    if (arg0->unk0->unk3 == 1) {
+        setCallback(&func_800B9180_1E6230);
+    }
+
+    temp_v0 = arg0->unk8.word + 0xA0000;
+    arg0->unk8.word = temp_v0;
+    if (temp_v0 > 0xFF0000) {
+        arg0->unk8.word = 0xFF0000;
+    }
+
+    temp_v0 = arg0->unk8.halfword;
+    arg0->unk24 = (s8)temp_v0;
+
+    debugEnqueueCallback(1, 0, &func_80011924_12524, &arg0->unk10);
+}
 
 void func_800B9264_1E6314(func_800B9264_1E6314_input **arg0) {
     func_800B9264_1E6314_input *temp_v1 = *arg0;
