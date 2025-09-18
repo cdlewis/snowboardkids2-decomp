@@ -47,11 +47,13 @@ typedef struct {
 } func_800B9264_1E6314_input;
 
 typedef struct {
-    struct {
-        s16 unk0;
-        s8 unk2;
-        s8 unk3;
-    } *unk0;
+    s8 unk0;
+    s8 unk1;
+    s8 unk2;
+    s8 unk3;
+} func_800B9180_1E6230_arg_unk0;
+typedef struct {
+    func_800B9180_1E6230_arg_unk0 *unk0;
     u8 padding[0x4];
     union {
         s32 word;
@@ -63,14 +65,30 @@ typedef struct {
     s8 unk24;
 } func_800B9180_1E6230_arg;
 
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s16 unk8;
+} func_800B9290_1E6340_arg;
+
+typedef struct {
+    void *unk0;
+    s32 unk4;
+    s32 unk8;
+    s16 unkC;
+} func_800B92D4_1E6384_task;
+
 extern s8 D_800BADE0_1E7E90[];
 
 void func_800B90B0_1E6160(void **);
 void func_800B91E4_1E6294(func_800B9180_1E6230_arg *);
 void func_800B9180_1E6230(func_800B9180_1E6230_arg *);
+void func_800B92D4_1E6384(func_800B9180_1E6230_arg *);
+void func_800B93CC_1E647C(func_800B93CC_1E647C_arg *);
+void func_800B9290_1E6340(func_800B9290_1E6340_arg *);
 
+extern void func_80069CF8_6A8F8(void);
 extern void func_800B9264_1E6314(func_800B9264_1E6314_input **);
-extern void func_800B9290_1E6340(void);
 extern void func_80011924_12524(void);
 
 void func_800B9020(func_800B9020_arg *arg0) {
@@ -170,9 +188,50 @@ void func_800B9264_1E6314(func_800B9264_1E6314_input **arg0) {
     func_800B90B0_1E6160(arg0 + 1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E60D0", func_800B9290_1E6340);
+void func_800B9290_1E6340(func_800B9290_1E6340_arg *arg0) {
+    func_800B9074_1E6124(&arg0->unk4);
+    arg0->unk8 = 0;
+    setCleanupCallback(&func_800B93CC_1E647C);
+    setCallback(&func_800B92D4_1E6384);
+}
 
-INCLUDE_ASM("asm/nonmatchings/1E60D0", func_800B92D4_1E6384);
+void func_800B92D4_1E6384(func_800B9180_1E6230_arg *arg0) {
+    func_800B9180_1E6230_arg_unk0 *unk0;
+    func_800B92D4_1E6384_task *temp_v0;
+
+    unk0 = arg0->unk0;
+    if (unk0->unk2 == 0) {
+        if (arg0->unk8.halfword == 0) {
+            unk0->unk3 = 1;
+
+            if (arg0->unk0->unk1 != 0) {
+                return;
+            }
+            arg0->unk0->unk0 = 1;
+            func_80069CF8_6A8F8();
+            return;
+        } else {
+            arg0->unk8.halfword--;
+        }
+    } else if (arg0->unk8.halfword == 0) {
+        temp_v0 = (func_800B92D4_1E6384_task *)scheduleTask(&func_800B90DC_1E618C, 0, 0, 0);
+        if (temp_v0 != 0) {
+            temp_v0->unk0 = (void *)arg0->unk0;
+            temp_v0->unkC = (s16)(3 - ((s8)((u8)arg0->unk0->unk2)));
+            arg0->unk0->unk1++;
+        }
+
+        arg0->unk0->unk2--;
+
+        if (arg0->unk0->unk2 == 0) {
+            arg0->unk8.halfword = 0x78;
+        } else {
+            arg0->unk8.halfword = 0x14;
+        }
+    } else {
+        arg0->unk8.halfword--;
+    }
+}
 
 void func_800B93CC_1E647C(func_800B93CC_1E647C_arg *arg0) {
     func_800B90B0_1E6160(&arg0->unk4);
