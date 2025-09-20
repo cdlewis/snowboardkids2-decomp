@@ -1,4 +1,4 @@
--r tools/splat/requirements.txt
+splat64[mips]>=0.35.0,<1.0.0
 
 # tools/progress.py deps
 mapfile_parser>=2.9.4

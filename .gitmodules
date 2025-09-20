@@ -1,6 +1,3 @@
-[submodule "tools/splat"]
-	path = tools/splat
-	url = git@github.com:ethteck/splat.git
 [submodule "tools/findcode"]
 	path = tools/findcode
 	url = git@github.com:cdlewis/findcode.git

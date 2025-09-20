@@ -37,7 +37,7 @@ LD = $(CROSS)ld
 OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy
 PYTHON = python3
-SPLAT = $(TOOLS_DIR)/splat/split.py
+SPLAT = $(PYTHON) -m splat split
 N64CRC = $(TOOLS_DIR)/n64crc.py
 CPP := $(CROSS)cpp
 ICONV := iconv --from-code=UTF-8 --to-code=Shift-JIS
@@ -95,7 +95,7 @@ no_verify: $(TARGET).z64
 	@$(PYTHON) $(N64CRC) $(TARGET).z64
 
 extract:
-	$(PYTHON) $(SPLAT) $(BASENAME).yaml
+	$(SPLAT) $(BASENAME).yaml
 
 clean:
 	rm -rf asm
