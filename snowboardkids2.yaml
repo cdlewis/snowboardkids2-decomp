@@ -658,7 +658,6 @@ segments:
       - [0x9E9C0, rodata, DC90]
       - [0x9E9E0, rodata, E090]
       - [0x9EA90, rodata, E770]
-      - [0x9EAB0, rodata]
       - [0x9EB50, .rodata, 1A770]
       - [0x9EC60, .rodata, 1BBA0]
       - [0x9EC90, rodata, 1C9C0]
@@ -936,7 +935,8 @@ segments:
     subsegments:
       - [0x1DB7A0, asm]
       - [0x1DC080, data]
-      - [0x1DC0B0, rodata]
+      - [0x1DC0B0, rodata, 1DB7A0]
+      - [0x1DC0D0, rodata]
 
   - name: _1DC260
     type: code
@@ -981,7 +981,7 @@ segments:
       - [0x1E7670, data]
       - [0x1E7DC0, .data, 1E2070]
       - [0x1E7E30, data]
-      - [0x1E7F00, rodata]
+      - [0x1E7F00, rodata, 1E36C0]
       - { start: 0x1E7F60, type: bss, vram: 0x800BAEB0, name: 1DD170 }
 
   # This appears to be dead code. Possibly an overlay
