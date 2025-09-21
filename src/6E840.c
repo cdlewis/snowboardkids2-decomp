@@ -340,7 +340,7 @@ void unlinkNode(Node_70B00 *node) {
     node->list2_prev->list3_next = node->list3_next;
 }
 
-void debugEnqueueCallback(u16 index, u8 slotIndex, void *arg2, void *arg3) {
+void debugEnqueueCallback(u16 index, u8 slotIndex, void *callback, void *callbackData) {
     Item_A4188 *manager;
     Node *block;
     Item_A4188 *slot;
@@ -351,8 +351,8 @@ void debugEnqueueCallback(u16 index, u8 slotIndex, void *arg2, void *arg3) {
         if (block != NULL) {
             slot = &manager[slotIndex];
             block->next = slot[1].unk8;
-            block->unk4 = arg2;
-            block->unk8 = arg3;
+            block->unk4 = callback;
+            block->unk8 = callbackData;
             block->unkF = slotIndex;
             slot[1].unk8 = block;
         }
