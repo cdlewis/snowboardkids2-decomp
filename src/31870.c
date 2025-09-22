@@ -71,9 +71,23 @@ typedef struct {
     s8 unk10;
 } func_80032F90_33B90_arg;
 
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    u8 padding[0x80];
+    u8 unk84;
+} func_80032EDC_33ADC_arg;
+
+typedef struct {
+    u8 padding[0x79C];
+    u8 unk79C;
+} func_80032EDC_33ADC_asset;
+
 extern void func_80012004_12C04(void);
 extern void func_80035408_36008(void);
-s32 func_80035F80_36B80(s32);
+extern s32 func_80035F80_36B80(s32);
+extern void func_80069CF8_6A8F8(void);
+extern void func_800136E0_142E0(void);
 
 void func_80031C4C_3284C(void);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
@@ -235,7 +249,22 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80032DE8_339E8);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032EA4_33AA4);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032EDC_33ADC);
+void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0) {
+    func_80032EDC_33ADC_asset *temp_v0 = (func_80032EDC_33ADC_asset *)getCurrentAllocation();
+
+    arg0->unk84++;
+    if (temp_v0->unk79C == 1) {
+        arg0->unk2 = arg0->unk2 - 0x14;
+    } else {
+        arg0->unk2 = arg0->unk2 + 0x14;
+    }
+
+    debugEnqueueCallback(8, 0, &func_800136E0_142E0, arg0);
+
+    if (arg0->unk84 == 4) {
+        func_80069CF8_6A8F8();
+    }
+}
 
 void func_80032F64_33B64(func_80032244_32E44_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
