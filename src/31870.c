@@ -8,6 +8,7 @@
 
 USE_ASSET(_419C60);
 USE_ASSET(_41A1D0);
+USE_ASSET(_4547D0);
 
 typedef struct {
     u8 padding[0x7A4];
@@ -83,6 +84,30 @@ typedef struct {
     u8 unk79C;
 } func_80032EDC_33ADC_asset;
 
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s8 unk12;
+    s8 unk13;
+    s8 unk14;
+    u8 padding[0x6F];
+    s8 unk84;
+} func_80032DE8_339E8_arg;
+
+typedef struct {
+    u8 padding[0x788];
+    u8 unk788[0x14];
+    u8 unk79C;
+    u8 padding2[0x3];
+    u8 unk7A0;
+} func_80032DE8_339E8_asset;
+
 extern void func_80012004_12C04(void);
 extern void func_80035408_36008(void);
 extern s32 func_80035F80_36B80(s32);
@@ -98,6 +123,9 @@ void func_8003316C_33D6C(func_800330B4_33CB4_arg *arg0);
 void func_800331CC_33DCC(func_800330B4_33CB4_arg *arg0);
 void func_80033014_33C14(func_80033014_33C14_arg *arg0);
 void func_80033088_33C88(func_80033088_33C88_arg *arg0);
+void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0);
+void func_80032EA4_33AA4(void *);
+void func_80032F64_33B64(func_80032244_32E44_arg *);
 
 extern s32 D_8008F18C_8FD8C;
 extern s32 D_8008F200_8FE00[];
@@ -245,9 +273,38 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80032CB4_338B4);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032DBC_339BC);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032DE8_339E8);
+void func_80032DE8_339E8(func_80032DE8_339E8_arg *arg0) {
+    void *asset;
+    func_80032DE8_339E8_asset *temp_s0 = getCurrentAllocation();
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032EA4_33AA4);
+    asset = dmaRequestAndUpdateStateWithSize(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+
+    arg0->unk0 = 0x60;
+    arg0->unk8 = temp_s0->unk788[temp_s0->unk7A0];
+    arg0->unkA = 0x400;
+    arg0->unkC = 0x400;
+    arg0->unkE = 0;
+    arg0->unk10 = 0x80;
+    arg0->unk13 = 0;
+    arg0->unk12 = 0;
+    arg0->unk14 = 0;
+    arg0->unk4 = asset;
+    arg0->unk84 = 0;
+
+    if (temp_s0->unk79C != 1) {
+        arg0->unk2 = 0x3F;
+    } else {
+        arg0->unk2 = -0x39;
+    }
+
+    setCleanupCallback(&func_80032F64_33B64);
+    setCallback(&func_80032EA4_33AA4);
+}
+
+void func_80032EA4_33AA4(void *arg0) {
+    debugEnqueueCallback(8, 0, &func_800136E0_142E0, arg0);
+    setCallback(&func_80032EDC_33ADC);
+}
 
 void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0) {
     func_80032EDC_33ADC_asset *temp_v0 = (func_80032EDC_33ADC_asset *)getCurrentAllocation();

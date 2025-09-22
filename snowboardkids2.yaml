@@ -1411,6 +1411,13 @@ segments:
 
   - [0x43A000, bin]
 
+  - name: _4547D0
+    type: bin
+    vram: 0
+    start: 0x4547D0
+
+  - [0x458E30, bin]
+
   - name: _45A890
     type: bin
     vram: 0
