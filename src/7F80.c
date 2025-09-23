@@ -1,15 +1,12 @@
+#include "20F0.h"
 #include "6E840.h"
 #include "common.h"
+#include "geometry.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_49B500);
 USE_ASSET(_646CD0);
-
-typedef struct {
-    u8 padding[0x3F];
-    s8 unk3F;
-} func_80001604_2204_arg;
 
 typedef struct {
     s32 unk0;
@@ -45,9 +42,6 @@ void func_80007958_8558(void);
 void func_80007ABC_86BC(func_800078C4_84C4_arg *);
 void func_800073E0_7FE0(void);
 void func_80007558_8158(void);
-void func_80001604_2204(func_80001604_2204_arg *arg0, s8 arg1);
-void func_80069CF8_6A8F8(void);
-void scaleMatrix(void *, s32, s32, s32);
 extern void func_80007560_8160(void);
 extern u8 identityMatrix[];
 

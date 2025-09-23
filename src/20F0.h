@@ -139,3 +139,10 @@ void func_8000153C_213C(func_80002040_2C40_arg *arg0, func_8000153C_213C_arg1 *a
 void func_80002014_2C14(func_80002040_2C40_arg *arg0);
 
 void func_80002468_3068(func_80002040_2C40_arg *);
+
+typedef struct {
+    u8 padding[0x3F];
+    s8 unk3F;
+} func_80001604_2204_arg;
+
+void func_80001604_2204(func_80001604_2204_arg *arg0, s8 arg1);

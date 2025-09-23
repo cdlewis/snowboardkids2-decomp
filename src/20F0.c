@@ -72,11 +72,6 @@ typedef struct {
 } func_800015FC_21FC_arg;
 
 typedef struct {
-    u8 padding[0x3F];
-    s8 unk3F;
-} func_80001604_2204_arg;
-
-typedef struct {
     u8 padding[0x110];
     s32 unk110;
 } func_800016E0_22E0_arg;

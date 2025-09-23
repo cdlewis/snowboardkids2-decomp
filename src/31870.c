@@ -135,7 +135,6 @@ typedef struct {
 extern void func_80012004_12C04(void);
 extern void func_80035408_36008(void);
 extern s32 func_80035F80_36B80(s32);
-extern void func_80069CF8_6A8F8(void);
 extern void func_800136E0_142E0(void);
 
 void func_80031C4C_3284C(void);

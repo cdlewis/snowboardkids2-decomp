@@ -87,7 +87,6 @@ void func_800B92D4_1E6384(func_800B9180_1E6230_arg *);
 void func_800B93CC_1E647C(func_800B93CC_1E647C_arg *);
 void func_800B9290_1E6340(func_800B9290_1E6340_arg *);
 
-extern void func_80069CF8_6A8F8(void);
 extern void func_800B9264_1E6314(func_800B9264_1E6314_input **);
 extern void func_80011924_12524(void);
 
