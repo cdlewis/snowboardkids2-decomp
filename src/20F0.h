@@ -107,8 +107,8 @@ typedef struct {
     s8 unk95;
     func_80002040_2C40_arg_unk98 *unk98;
     u8 padding3[0x78];
-    s32 unk114;
-    s32 unk118;
+    void *unk114;
+    void *unk118;
     void *unk11C;
     void *unk120;
 } func_80002040_2C40_arg;

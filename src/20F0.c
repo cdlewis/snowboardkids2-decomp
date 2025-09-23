@@ -172,8 +172,6 @@ extern u32 D_8008BD38_8C938;
 s32 func_800018F4_24F4(func_80002040_2C40_arg *);
 s32 func_80001904_2504(s16);
 s32 func_80002484_3084(func_80002040_2C40_arg *, s16);
-s32 func_8000CDE0_D9E0(s32);
-s32 func_8000CDFC_D9FC(s32);
 void initializeGameEntity(GameEntity *, s32, void *, s8, s8, s8, s16);
 void func_80002220_2E20(func_80002040_2C40_arg *, s16, s16, s8, s16);
 void *func_80002040_2C40(func_80002040_2C40_arg *arg0);
