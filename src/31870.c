@@ -65,7 +65,7 @@ typedef struct {
 typedef struct {
     s16 unk0;
     s16 unk2;
-    s32 *unk4;
+    void *unk4;
     s32 unk8;
     s16 unkC;
     s16 unkE;
@@ -107,6 +107,30 @@ typedef struct {
     u8 padding2[0x3];
     u8 unk7A0;
 } func_80032DE8_339E8_asset;
+
+typedef struct {
+    u8 padding[0x24];
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+} func_800319C8_325C8_arg;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    u8 padding[0x14];
+} func_80032CB4_338B4_arg_item;
+
+typedef struct {
+    func_80032CB4_338B4_arg_item substruct[4];
+    u8 padding2[0x24];
+    u8 unk84;
+} func_80032CB4_338B4_arg;
+
+typedef struct {
+    u8 padding[0x77C];
+    s16 unk77C;
+} func_80032CB4_338B4_asset;
 
 extern void func_80012004_12C04(void);
 extern void func_80035408_36008(void);
@@ -173,7 +197,11 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80031818_32418);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031944_32544);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_800319C8_325C8);
+void func_800319C8_325C8(func_800319C8_325C8_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+}
 
 void func_80031A0C_3260C(func_80031A0C_3260C_arg *arg0) {
     arg0->unk0 = func_800019B8_25B8(0x3A, &((GameState *)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
@@ -269,9 +297,37 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80032B0C_3370C);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032BCC_337CC);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032CB4_338B4);
+void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0) {
+    func_80032CB4_338B4_asset *s4;
+    func_80032CB4_338B4_arg_item *ptr;
+    u8 a1;
+    s32 i;
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032DBC_339BC);
+    s4 = (func_80032CB4_338B4_asset *)getCurrentAllocation();
+
+    ptr = &arg0->substruct[0];
+    for (i = 0; i < 4; i++) {
+        if (i >= (4 - arg0->unk84)) {
+            ptr[i].unk2 -= 0x14;
+            if (i != 0) {
+                a1 = arg0->unk84 & 0xFF;
+                if (arg0->substruct[4 - a1].unk2 == arg0->substruct[3 - a1].unk2) {
+                    arg0->unk84++;
+                }
+            }
+        }
+        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &ptr[i]);
+    }
+
+    if (arg0->substruct[0].unk2 < (-0x88)) {
+        s4->unk77C = 1;
+        func_80069CF8_6A8F8();
+    }
+}
+
+void func_80032DBC_339BC(func_80032F90_33B90_arg *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 void func_80032DE8_339E8(func_80032DE8_339E8_arg *arg0) {
     void *asset;
