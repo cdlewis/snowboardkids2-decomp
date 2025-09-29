@@ -2,12 +2,6 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    s32 unk0;
-    s16 unk4;
-    u8 padding[0x32];
-} func_800B34B0_1E0560_result;
-
-typedef struct {
     s8 data[0x38];
     s32 unk38;
     s16 unk3C;
@@ -32,9 +26,19 @@ typedef struct {
 } TaskData;
 
 typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s16 unk8;
+} StateEntryItem;
+
+typedef struct {
     u8 padding0[0xC];
     /* 0xC */ u16 current_index;
-    u8 padding1[0x2A];
+    u8 padding[0x12];
+    StateEntryItem items[2];
+    s32 unk34;
     /* 0x38 */ u16 next_index;
     u8 padding2[0x2];
     s16 unk3C;
@@ -55,7 +59,7 @@ extern u8 D_800BAEB0_1E7F60;
 extern s8 D_800BAEB4_1E7F64;
 extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
 
-func_800B34B0_1E0560_result *func_800B34B0_1E0560(u8);
+StateEntryItem *func_800B34B0_1E0560(u8);
 s32 func_800B3C7C_1E0D2C(u8, u16);
 s32 func_800B3D24_1E0DD4(u8, u16);
 D_800BAEC8_1E7F78_item *func_800B3F48_1E0FF8(u16);
