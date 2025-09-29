@@ -2,14 +2,25 @@
 #include "task_scheduler.h"
 
 typedef struct {
+    s32 unk0;
+    s16 unk4;
+    u8 padding[0x32];
+} func_800B34B0_1E0560_result;
+
+typedef struct {
+    s8 data[0x38];
+    s32 unk38;
+    s16 unk3C;
+    u8 unk3E;
+    u8 unk3F;
+} D_800BAEC8_1E7F78_item;
+
+typedef struct {
     void *start;
     void *end;
     u32 size;
     u32 padding;
 } D_800BA960_1E7A10_node;
-extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
-
-void func_800B477C_1E182C(void);
 
 typedef struct {
     s8 unk0;
@@ -31,17 +42,30 @@ typedef struct {
     s8 unk3F;
 } StateEntry;
 
-extern StateEntry *D_800BAEBC_1E7F6C;
-
 typedef struct {
     u8 padding[0xFF7];
     s8 unkFF7;
 } func_800B29F0_1DFAA0_arg;
+
+extern StateEntry *D_800BAEBC_1E7F6C;
+extern s32 D_800AB050_A23C0;
+extern D_800BAEC8_1E7F78_item D_800BAEC8_1E7F78[];
+extern u8 D_800BAF06_1E7FB6;
+extern u8 D_800BAEB0_1E7F60;
+extern s8 D_800BAEB4_1E7F64;
+extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
+
+func_800B34B0_1E0560_result *func_800B34B0_1E0560(u8);
+s32 func_800B3C7C_1E0D2C(u8, u16);
+s32 func_800B3D24_1E0DD4(u8, u16);
+D_800BAEC8_1E7F78_item *func_800B3F48_1E0FF8(u16);
+void func_800B477C_1E182C(void);
+
+extern s32 getCategorySkipValue(u8);
+
 void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0) {
     arg0->unkFF7 = 1;
 }
-
-extern s32 D_800AB050_A23C0;
 
 void func_800B29FC_1DFAAC(func_800B29F0_1DFAA0_arg *arg0) {
     if (arg0->unkFF7 != 0 && (D_800AB050_A23C0 & 0x8000)) {
@@ -193,7 +217,32 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B4378_1E1428);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B44A8_1E1558);
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B4534_1E15E4);
+void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
+    s32 temp_s0;
+    D_800BAEC8_1E7F78_item *dest;
+    D_800BAEC8_1E7F78_item *new_var;
+    s32 i;
+
+    new_var = D_800BAEC8_1E7F78;
+    temp_s0 = (-((~func_800B34B0_1E0560(arg0)->unk4) != 0)) | 1;
+
+    if (D_800BAEB0_1E7F60 != 0 && getCategorySkipValue(D_800BAF06_1E7FB6) != temp_s0) {
+        s32 var_a0 = func_800B3C7C_1E0D2C(arg0, arg1);
+        if ((var_a0 & 0xFFFF) == 0xFFFF) {
+            var_a0 = func_800B3D24_1E0DD4(arg0, arg1);
+        }
+
+        dest = func_800B3F48_1E0FF8(var_a0);
+        for (i = 0; i < 0x38; i++) {
+            dest->data[i] = new_var->data[i];
+        }
+
+        dest->unk3E = new_var->unk3E;
+        dest->unk3F = new_var->unk3F;
+
+        D_800BAEB4_1E7F64 = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B462C_1E16DC);
 
