@@ -43,7 +43,7 @@ extern void func_800226F0_232F0(void);
 extern void func_80038090_38C90(void);
 extern void func_80015254_15E54(void);
 extern u8 *D_800A8D14_A0084;
-extern s32 D_800AFF10_A7280;
+extern s32 gControllerInputs[4];
 
 void func_8001A0B4_1ACB4(void);
 void func_8001A070_1AC70(void);
@@ -293,7 +293,7 @@ void func_8001AF18_1BB18(void) {
     temp_v0[1].unk0.callback_selector++;
 
     do {
-        if (D_800AFF10_A7280 & 0x8000) {
+        if (gControllerInputs[0] & A_BUTTON) {
             temp_v0[1].unk0.callback_selector = 0x3C;
         }
     } while (0);

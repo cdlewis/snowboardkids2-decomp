@@ -15,7 +15,7 @@ USE_ASSET(_3FF010);
 
 extern s32 D_800B0334;
 extern s32 D_800B7B7C;
-extern s32 D_800AFF10_A7280[];
+extern s32 gControllerInputs[4];
 extern u8 D_800A24A0_A30A0;
 extern void func_800404A8_410A8(void);
 extern void func_80040588_41188(void);
@@ -227,7 +227,7 @@ void func_8003FCD8_408D8(void) {
 }
 
 void func_8003FD3C_4093C(void) {
-    if (D_800AFF10_A7280[0] & 0x8000) {
+    if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         func_80057564_58164(0x3C);
         setGameStateHandler(&func_80040608_41208);
@@ -294,7 +294,7 @@ void func_8004013C_40D3C(void) {
 }
 
 void func_800401A0_40DA0(void) {
-    if (D_800AFF10_A7280[0] & 0x8000) {
+    if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
         setGameStateHandler(func_80040608_41208);
@@ -358,7 +358,7 @@ void func_80040304_40F04(void) {
 }
 
 void func_80040420_41020(void) {
-    if (D_800AFF10_A7280[0] & 0x8000) {
+    if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
         setGameStateHandler(&func_80040608_41208);
@@ -385,7 +385,7 @@ void func_800404A8_410A8(void) {
 
     temp_v0 = (GameState *)getCurrentAllocation();
     for (i = 0; i < temp_v0->unk5F; i++) {
-        if (D_800AFF10_A7280[i] & 0x8000) {
+        if (gControllerInputs[i] & A_BUTTON) {
             func_8006FDA0_709A0(0, 0xFF, 0x10);
             func_80057564_58164(0x3C);
             setGameStateHandler(&func_80040608_41208);
@@ -412,7 +412,7 @@ void func_80040588_41188(void) {
     GameState *temp_v0 = (GameState *)getCurrentAllocation();
 
     for (i = 0; i < (s32)temp_v0->unk5F; i++) {
-        if (D_800AFF10_A7280[i] & 0x8000) {
+        if (gControllerInputs[i] & A_BUTTON) {
             func_8006FDA0_709A0(0, 0xFF, 0x10);
             func_80057564_58164(0x3C);
             setGameStateHandler(&func_80040608_41208);

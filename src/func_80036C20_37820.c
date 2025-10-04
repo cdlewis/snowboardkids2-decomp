@@ -1,10 +1,10 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-extern s32 D_800AFF10_A7280;
+extern s32 gControllerInputs;
 
 s32 func_8006C590_6D190(u32, u32);
-extern s32 D_800AFF10_A7280;
+extern s32 gControllerInputs[4];
 
 typedef struct {
     char padding[52];
@@ -34,7 +34,7 @@ s32 func_80036C20_37820(func_80036C20_37820_arg *arg0) {
             s32 dist = func_8006C590_6D190(dx, dy);
             distances[i] = dist;
 
-            if ((dist <= 0x37FFFF) && (D_800AFF10_A7280 & 0x8000)) {
+            if ((dist <= 0x37FFFF) && (gControllerInputs & 0x8000)) {
                 temp_v0->status = 0x11;
             }
         }

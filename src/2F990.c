@@ -118,7 +118,7 @@ typedef struct {
 
 extern void func_8000FED0_10AD0(void);
 extern s32 D_800AB054_A23C4;
-extern s32 D_800AFF14_A7284;
+extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];
 
 void func_8002EFD8_2FBD8(void *);
@@ -173,9 +173,9 @@ void updateDebugCameraYState(cameraState *arg0) {
     do {
         arg0->cameraRotation = arg0->cameraRotation & 0x1FFF;
     } while (0);
-    if (D_800AFF14_A7284 & 0x800) {
+    if (gControllerInputs[1] & U_JPAD) {
         arg0->cameraY--;
-    } else if (D_800AFF14_A7284 & 0x400) {
+    } else if (gControllerInputs[1] & D_JPAD) {
         arg0->cameraY++;
     }
     func_8006BEDC_6CADC(&sp20, 0, arg0->cameraY << 0x10, 0x600000, 0, (s32)((s16)arg0->cameraRotation), 0);
