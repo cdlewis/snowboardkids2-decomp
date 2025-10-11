@@ -1,5 +1,6 @@
 #include "3A1F0.h"
 
+#include "EepromSaveData_type.h"
 #include "memory_allocator.h"
 
 typedef struct {
@@ -23,13 +24,6 @@ typedef struct {
     u8 gameName[16];
     u8 extName[1]; // maybe wrong
 } controllerPackFileHeader;
-
-typedef struct {
-    u8 data[8];
-    u32 checksum;
-    u8 remaining[0x58 - 8 - 4];
-    u8 unk10;
-} D_800A8D14_A0084_type;
 
 extern char piManagerThreadStack[0x8]; // this size seems wrong
 extern DmaTransferEntry *D_800A2108_A2D08;
@@ -64,7 +58,6 @@ extern u8 D_800AB094_A2404[];
 extern u8 D_800AB098_A2408[];
 extern u8 D_800AFED0_A7240;
 extern u8 *gDmaCompressionBuffer;
-extern D_800A8D14_A0084_type *D_800A8D14_A0084;
 
 void piDmaHandlerThread(void *);
 void func_8003AC58_3B858(void *);
@@ -490,12 +483,12 @@ void func_8003B400_3C000(s32 arg0) {
     s32 temp;
     s32 counter;
     s32 ret;
-    ptr = D_800A8D14_A0084->data;
+    ptr = EepromSaveData->header_data;
     new_var2 = 4;
     limit = 0x58;
     sum = 0;
 
-    D_800A8D14_A0084->checksum = 0;
+    EepromSaveData->checksum = 0;
 
     for (counter = 0; counter < limit; counter++) {
         temp = *ptr;
@@ -506,8 +499,8 @@ void func_8003B400_3C000(s32 arg0) {
     ret = (u8)arg0;
     ret = ret << new_var2;
     counter = ret;
-    D_800A8D14_A0084->checksum = sum;
-    ret = osEepromLongWrite(&mainStack, counter & 0xF0, D_800A8D14_A0084, limit);
+    EepromSaveData->checksum = sum;
+    ret = osEepromLongWrite(&mainStack, counter & 0xF0, EepromSaveData, limit);
     osSendMesg(&D_800A1888_A2488, (OSMesg)ret, 1);
 }
 

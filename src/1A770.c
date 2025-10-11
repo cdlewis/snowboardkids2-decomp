@@ -7,6 +7,7 @@
 #include "68CF0.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "EepromSaveData_type.h"
 #include "common.h"
 #include "graphics.h"
 #include "task_scheduler.h"
@@ -42,7 +43,6 @@ extern void func_8001A0F4_1ACF4(void);
 extern void func_800226F0_232F0(void);
 extern void func_80038090_38C90(void);
 extern void func_80015254_15E54(void);
-extern u8 *D_800A8D14_A0084;
 extern s32 gControllerInputs[4];
 
 void func_8001A0B4_1ACB4(void);
@@ -173,9 +173,7 @@ void func_80019F30_1AB30(void) {
 void func_80019F60_1AB60(void) {
     s16 saveOperationResult;
     D_800AFE8C_A71FC_type *gameStatePtr;
-    u8 *saveDataPtr;
     u8 saveSlotIndex;
-    u8 *saveSlotPtr;
 
     saveOperationResult = func_80069810_6A410();
 
@@ -185,18 +183,16 @@ void func_80019F60_1AB60(void) {
 
     if (saveOperationResult >= 3) {
         if (saveOperationResult == 5 || saveOperationResult >= 7) {
-            saveDataPtr = D_800A8D14_A0084;
             saveSlotIndex = D_800AFE8C_A71FC->saveSlotIndex;
-            saveDataPtr = D_800A8D14_A0084 + saveSlotIndex;
-            saveDataPtr[0x10] = 1;
+            do {
+                EepromSaveData->save_slot_status[saveSlotIndex] = 1;
+            } while (0);
             func_80038090_38C90();
         } else {
             gameStatePtr = D_800AFE8C_A71FC;
-            saveDataPtr = D_800A8D14_A0084;
             saveSlotIndex = gameStatePtr->saveSlotIndex;
-            saveSlotPtr = saveDataPtr + saveSlotIndex;
-            if (saveSlotPtr[0x10] != 1) {
-                saveSlotPtr[0x10] = 4;
+            if (EepromSaveData->save_slot_status[saveSlotIndex] != 1) {
+                EepromSaveData->save_slot_status[saveSlotIndex] = 4;
             }
         }
     }

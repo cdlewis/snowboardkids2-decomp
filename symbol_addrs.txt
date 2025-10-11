@@ -1,3 +1,4 @@
+EepromSaveData = 0x800A8D14;
 gControllerInputs = 0x800AFF10; // type:s32 size:0x10
 
 initializeCutsceneSystem = 0x800B38E4; // rom:0x1E0994
