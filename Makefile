@@ -165,6 +165,17 @@ $(TARGET).bin: $(TARGET).elf
 $(TARGET).z64: $(TARGET).bin
 	@cp $< $@
 
+$(BUILD_DIR)/src/%_annotated.s: src/%.c
+	@mkdir -p $(shell dirname $@)
+	@printf "[$(CYAN) annot  $(NO_COL)]  Generating annotated assembly for $<\n"
+	@# Compile with debug info to temporary object file
+	@$(CC) $(CFLAGS) -g -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -c -o $(BUILD_DIR)/src/$*_temp.o $<
+	@# Generate disassembly with line numbers
+	@$(OBJDUMP) -d --line-numbers --reloc --source $(BUILD_DIR)/src/$*_temp.o > $@
+	@# Clean up temp file
+	@rm -f $(BUILD_DIR)/src/$*_temp.o
+	@echo "    Generated: $@"
+
 setup:
 	$(MAKE) -C tools
 

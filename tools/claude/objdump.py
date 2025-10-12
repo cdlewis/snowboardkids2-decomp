@@ -4,6 +4,7 @@
 objdump.py is a Python script that processes MIPS object files and displays their disassembled assembly code in a clean, normalized format.
 
 Basic Usage: `./objdump.py file.o`
+With line numbers: `./objdump.py file_annotated.s --from-dump`
 """
 
 import re
@@ -17,11 +18,14 @@ SKIP_LINES = 1
 RE_INT = re.compile(r"-?[0-9]+")
 RE_COMMENT = re.compile(r"<.*?>")
 RE_SPREL = re.compile(r"(?<=,)([0-9]+|0x[0-9a-f]+)\((sp|s8)\)")
+RE_SOURCE_LINE = re.compile(r"^[a-zA-Z0-9_/\.\-]+\.[ch]:\d+")  # Matches "src/temp.c:336"
+RE_ASM_LINE = re.compile(r"^\s*([0-9a-f]+):\s+([0-9a-f]+)\s+(.+)$")  # Matches " 794:    2402001e     li    v0,30"
+RE_RELOC_LINE = re.compile(r"^\s+([0-9a-f]+):\s+(R_MIPS_\S+)\s+(.+)$")  # Matches "            7a0: R_MIPS_26    setGameStateHandler"
 
 # MIPS objdump settings
 OBJDUMP_EXECUTABLES = [
     "mips-linux-gnu-objdump",
-    "mips64-linux-gnu-objdump", 
+    "mips64-linux-gnu-objdump",
     "mips64-elf-objdump",
 ]
 OBJDUMP_ARGS = ["-drz", "-m", "mips:4300"]
@@ -133,23 +137,100 @@ def convert_numbers_to_hex(line: str) -> str:
     return RE_INT.sub(replace_func, line)
 
 
+def process_annotated_dump_lines(lines: List[str], include_source: bool = True) -> List[str]:
+    """Process objdump output that includes line numbers and source code."""
+    output_lines = []
+    current_source_file = None
+
+    i = 0
+    while i < len(lines):
+        line = lines[i].rstrip()
+        i += 1
+
+        # Skip empty lines and header lines
+        if not line or "file format" in line or "Disassembly of section" in line:
+            continue
+
+        # Check if this is a source file:line marker
+        source_match = RE_SOURCE_LINE.match(line)
+        if source_match:
+            current_source_file = line
+            if include_source:
+                output_lines.append(f"# {line}")
+            continue
+
+        # Check if this is a function label (ends with :>)
+        if line.endswith(">:") or (">:" in line and "<" in line):
+            continue
+
+        # Check if this is a source code line (indented, no hex address)
+        if line.startswith("        ") and not RE_ASM_LINE.match(line) and not RE_RELOC_LINE.match(line):
+            # This is source code - optionally include as comment
+            if include_source:
+                output_lines.append(f"# {line.strip()}")
+            continue
+
+        # Check if this is a relocation line
+        reloc_match = RE_RELOC_LINE.match(line)
+        if reloc_match:
+            # Process relocation and apply to previous instruction
+            if output_lines and not output_lines[-1].startswith("#"):
+                modified_line = process_reloc(line, output_lines[-1])
+                if modified_line:
+                    output_lines[-1] = modified_line
+            continue
+
+        # Check if this is an assembly instruction line
+        asm_match = RE_ASM_LINE.match(line)
+        if asm_match:
+            addr, hexcode, instruction = asm_match.groups()
+
+            # Remove comments from instruction
+            instruction = RE_COMMENT.sub("", instruction).strip()
+
+            # Parse mnemonic and arguments
+            if "\t" in instruction:
+                mnemonic, args = instruction.split("\t", 1)
+            else:
+                parts = instruction.split(None, 1)
+                mnemonic = parts[0].strip()
+                args = parts[1].strip() if len(parts) > 1 else ""
+
+            formatted = f"{mnemonic}\t{args}".replace("\t", " " * 4) if args else mnemonic
+
+            # Convert decimal numbers to hex (but preserve branch targets)
+            if mnemonic not in BRANCH_INSTRUCTIONS:
+                formatted = convert_numbers_to_hex(formatted)
+
+            # Normalize jump table references
+            formatted = normalize_jumptable_references(formatted)
+
+            output_lines.append(formatted)
+
+    # Remove trailing nops
+    while output_lines and output_lines[-1].startswith("nop"):
+        output_lines.pop()
+
+    return output_lines
+
+
 def process_objdump_lines(lines: List[str]) -> List[str]:
     output_lines = []
-    
+
     for i, line in enumerate(lines):
         if i < SKIP_LINES:
             continue
-            
+
         line = line.rstrip()
         if ">:" in line or not line:
             continue
-            
+
         # Remove comments and extract instruction part
         line = RE_COMMENT.sub("", line).rstrip()
         line = "\t".join(line.split("\t")[2:])  # Remove address and hex bytes
         if not line:
             continue
-            
+
         # Parse mnemonic and arguments
         if "\t" in line:
             mnemonic, args = line.split("\t", 1)
@@ -157,9 +238,9 @@ def process_objdump_lines(lines: List[str]) -> List[str]:
             parts = line.split(" ", 1)
             mnemonic = parts[0].strip()
             args = parts[1].strip() if len(parts) > 1 else ""
-            
+
         line = f"{mnemonic}\t{args}".replace("\t", " " * 4) if args else mnemonic
-        
+
         # Handle relocations
         if "R_MIPS_" in line:
             if output_lines:
@@ -167,20 +248,20 @@ def process_objdump_lines(lines: List[str]) -> List[str]:
                 if modified_line:
                     output_lines[-1] = modified_line
             continue
-            
+
         # Convert decimal numbers to hex (but preserve stack/register differences)
         if mnemonic not in BRANCH_INSTRUCTIONS:
             line = convert_numbers_to_hex(line)
-        
+
         # Normalize jump table references to .rodata for consistent comparison
         line = normalize_jumptable_references(line)
-            
+
         output_lines.append(line)
-    
+
     # Remove trailing nops
     while output_lines and output_lines[-1].startswith("nop"):
         output_lines.pop()
-        
+
     return output_lines
 
 
@@ -192,15 +273,43 @@ def objdump(filename: str) -> List[str]:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} file.o", file=sys.stderr)
-        sys.exit(1)
-        
-    filename = sys.argv[1]
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Process MIPS object files and display disassembled assembly code"
+    )
+    parser.add_argument("file", help="Object file (.o) or annotated dump file (.s)")
+    parser.add_argument(
+        "--from-dump",
+        action="store_true",
+        help="Process an already-dumped file with line numbers (from objdump --line-numbers --source)"
+    )
+    parser.add_argument(
+        "--no-source",
+        action="store_true",
+        help="When processing annotated dumps, exclude source file:line and source code comments"
+    )
+
+    args = parser.parse_args()
+
     try:
-        lines = objdump(filename)
-        for line in lines:
+        if args.from_dump:
+            # Process an annotated dump file
+            with open(args.file, 'r') as f:
+                lines = f.readlines()
+            output_lines = process_annotated_dump_lines(lines, include_source=not args.no_source)
+        else:
+            # Process a .o file with objdump
+            output_lines = objdump(args.file)
+
+        for line in output_lines:
             print(line)
+
+    except FileNotFoundError:
+        print(f"Error: File '{args.file}' not found", file=sys.stderr)
+        sys.exit(1)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
