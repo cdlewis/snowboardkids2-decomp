@@ -114,11 +114,16 @@ typedef struct {
     u8 unk5CA[0];
     u8 PAD_15[0x1B2];
     s16 unk77C;
-    u8 PAD_16[0x1D];
+    u8 PAD_16[0x6];
+    u8 unk784[4];
+    u8 PAD_16B[0x10];
+    u8 unk798;
+    u8 PAD_16C[2];
     u8 unk79B;
-    u8 PAD_18[0x5];
+    u8 unk79C;
+    u8 PAD_17[4];
     s8 unk7A1;
-    u8 PAD_17[0x103E];
+    u8 PAD_18[0x103E];
     s8 unk17E0;
 } GameState;
 

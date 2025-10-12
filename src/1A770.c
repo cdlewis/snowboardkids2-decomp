@@ -9,6 +9,7 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "gamestate.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
@@ -285,7 +286,26 @@ u8 func_8001AD9C_1B99C(void) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1A770", func_8001ADFC_1B9FC);
+void func_8001ADFC_1B9FC(void) {
+    GameState *gameState;
+    s32 delta;
+    s32 i;
+    s8 val = 1;
+
+    gameState = getCurrentAllocation();
+    delta = ((gameState->unk79C ^ 1) != 0) ? -val : 0;
+    delta = delta | 1;
+
+    for (i = 0; i < 4; i++) {
+        gameState->unk784[i] += delta | 1;
+        val = gameState->unk784[i];
+        if (val < 0) {
+            gameState->unk784[i] = gameState->unk798 - 1;
+        } else if (val == gameState->unk798) {
+            gameState->unk784[i] = 0;
+        }
+    }
+}
 
 void func_8001AE80_1BA80(void) {
     func_8001AE80_1BA80_task_memory *temp_s0 = (func_8001AE80_1BA80_task_memory *)allocateTaskMemory(0x1E0);
