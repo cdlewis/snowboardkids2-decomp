@@ -155,6 +155,8 @@ extern void func_80035408_36008(void);
 extern s32 func_80035F80_36B80(s32);
 extern void func_800136E0_142E0(void);
 
+void func_800317D4_323D4(void);
+void func_800313A4_31FA4(void);
 void func_800315C0_321C0(void);
 void func_80031C4C_3284C(void);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
@@ -193,7 +195,38 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80031138_31D38);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031248_31E48);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031288_31E88);
+void func_80031288_31E88(func_80031510_32110_arg *arg0) {
+    s16 matrixA[3][3];
+    volatile u8 padding[0x2];
+    s16 *pMatrixB;
+    s16 *pMatrixA;
+    s16 matrixB[3][3];
+    u8 temp_s0;
+    void *temp_s3;
+    volatile u8 padding2[0x8];
+
+    pMatrixB = &matrixB[0][0];
+    pMatrixA = &matrixA[0][0];
+
+    getCurrentAllocation();
+    temp_s3 = &arg0->unk3C;
+    memcpy(temp_s3, &identityMatrix, 0x20);
+    memcpy(pMatrixB, temp_s3, 0x20);
+    memcpy(pMatrixA, pMatrixB, 0x20);
+    createRotationMatrixYX(pMatrixA, 0x1000, 0x800);
+    createZRotationMatrix(pMatrixB, 0x1F00);
+    func_8006B084_6BC84(pMatrixA, pMatrixB, temp_s3);
+    arg0->unk50 = 0x600000;
+    arg0->unk58 = 0xFFF80000;
+    temp_s0 = EepromSaveData->character_or_settings[0];
+    memcpy(arg0, temp_s3, 0x20);
+    arg0->unk20 = loadAssetByIndex_95728(0);
+    arg0->unk24 = loadAssetByIndex_95500(0);
+    arg0->unk28 = loadAssetByIndex_95590(0);
+    arg0->unk2C = loadAssetByIndex_95668(temp_s0 - 1);
+    setCleanupCallback(&func_800317D4_323D4);
+    setCallback(&func_800313A4_31FA4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_800313A4_31FA4);
 
