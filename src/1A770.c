@@ -269,7 +269,21 @@ INCLUDE_ASM("asm/nonmatchings/1A770", func_8001ACC8_1B8C8);
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AD80_1B980);
 
-INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AD9C_1B99C);
+u8 func_8001AD9C_1B99C(void) {
+    GameState *state;
+    u8 result;
+    s32 i;
+
+    state = getCurrentAllocation();
+    result = 0;
+    for (i = 0; i < 3; i++) {
+        if (EepromSaveData->character_or_settings[state->unk7A1 * 3 + i] != 0) {
+            result++;
+        }
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001ADFC_1B9FC);
 
