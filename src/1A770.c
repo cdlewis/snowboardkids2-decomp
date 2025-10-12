@@ -44,13 +44,13 @@ extern void func_800226F0_232F0(void);
 extern void func_80038090_38C90(void);
 extern void func_80015254_15E54(void);
 extern s32 gControllerInputs[4];
+extern void func_80027CA0_288A0(void *, s32, s32, s32);
 
 void func_8001A0B4_1ACB4(void);
 void func_8001A070_1AC70(void);
 void func_80019F60_1AB60(void);
 void func_80019EFC_1AAFC(void);
 void func_80019DC4_1A9C4(void);
-void func_80027CA0_288A0(void *, s32, s32, s32);
 void func_80019C7C_1A87C(func_8000153C_213C_arg1 *arg0);
 void func_80019D24_1A924(TextData *arg0);
 void func_80019D84_1A984(void);

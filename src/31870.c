@@ -13,17 +13,29 @@ USE_ASSET(_41A1D0);
 USE_ASSET(_4547D0);
 
 typedef struct {
-    u8 padding[0x20];
+    u8 padding[0xDA];
+    u16 unkDA;
+} func_80030C70_31870_allocated_memory;
+
+typedef struct {
+    func_80030C70_31870_allocated_memory *unk0;
+    s32 unk4;
+    u8 padding[0x18];
     void *unk20;
     void *unk24;
     void *unk28;
     void *unk2C;
-    u8 padding2[0xC];
+    void *unk30;
+    u8 padding2[0x8];
     s32 unk3C;
-    u8 padding3[0x10];
+    u8 unk40[0x10];
     s32 unk50;
     s32 unk54;
     s32 unk58;
+    s32 unk5C;
+    s16 unk60;
+    s16 unk62;
+    s8 unk64;
 } func_80031510_32110_arg;
 
 typedef struct {
@@ -117,13 +129,18 @@ typedef struct {
 } func_80032DE8_339E8_arg;
 
 typedef struct {
-    u8 padding[0x788];
+    u8 padding[0x780];
+    s16 unk780;
+    s16 unk782;
+    s32 unk784;
     u8 unk788[20];
     u8 unk79C;
     u8 unk79D;
     u8 unk79E;
     u8 unk79F;
     u8 unk7A0;
+    s8 unk7A1;
+    u8 unk7A2;
 } func_80032DE8_339E8_asset;
 
 typedef struct {
@@ -154,6 +171,7 @@ extern void func_80012004_12C04(void);
 extern void func_80035408_36008(void);
 extern s32 func_80035F80_36B80(s32);
 extern void func_800136E0_142E0(void);
+extern void func_80027CA0_288A0(void *, s32, s32, s32);
 
 void func_800317D4_323D4(void);
 void func_800313A4_31FA4(void);
@@ -179,7 +197,64 @@ extern u16 D_8008F20A_8FE0A[];
 extern u16 D_8008F20C_8FE0C;
 extern s32 identityMatrix;
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80030C70_31870);
+void func_80030F6C_31B6C(void);
+void func_80030E54_31A54(void);
+void func_80030C70_31870(func_80031510_32110_arg *arg0) {
+    s32 sp20[8];
+    s16 matrixA[3][3];
+    volatile u8 padding[0x4];
+    s16 matrixB[3][3];
+    volatile u8 padding2[0x8];
+
+    u8 temp_s0;
+    s32 temp_s0_2;
+    u8 temp_s2;
+    void *temp_s3;
+    func_80032DE8_339E8_asset *asset;
+    func_80030C70_31870_allocated_memory *temp_v0;
+    s16 *pMatrixB;
+
+    pMatrixB = &matrixB[0][0];
+
+    asset = getCurrentAllocation();
+    temp_v0 = allocateNodeMemory(0x1D8);
+    arg0->unk0 = temp_v0;
+    func_80027CA0_288A0(temp_v0, 1, 0xB, 0);
+    arg0->unk60 = -0x34;
+    arg0->unk62 = 0x34;
+    asset->unk780 = (u16)arg0->unk60;
+    asset->unk782 = (u16)arg0->unk62;
+
+    func_8006F994_70594(arg0->unk0, 0, 0, -0x98, arg0->unk60, 0x97, arg0->unk62);
+    func_8006BEDC_6CADC(sp20, 0, 0, 0x580000, 0, 0, 0);
+    func_8006FD3C_7093C(arg0->unk0->unkDA, sp20);
+
+    temp_s3 = &arg0->unk40;
+    memcpy(temp_s3, &identityMatrix, 0x20);
+    memcpy(pMatrixB, temp_s3, 0x20);
+    memcpy(&matrixA, pMatrixB, 0x20);
+
+    createRotationMatrixYX(&matrixA, 0x1000, 0x800);
+    createZRotationMatrix(pMatrixB, 0x1F00);
+
+    func_8006B084_6BC84(&matrixA, pMatrixB, temp_s3);
+
+    arg0->unk5C = 0xFFF80000;
+    temp_s0 = asset->unk7A2 + (asset->unk7A1 * 3);
+    temp_s2 = EepromSaveData->character_or_settings[temp_s0 & 0xFF];
+
+    memcpy(&arg0->unk4, temp_s3, 0x20);
+
+    temp_s0 = temp_s0 & 0xFF;
+    arg0->unk24 = loadAssetByIndex_95728(temp_s0);
+    arg0->unk28 = loadAssetByIndex_95500(temp_s0);
+    arg0->unk2C = loadAssetByIndex_95590(temp_s0);
+    arg0->unk30 = loadAssetByIndex_95668(temp_s2 - 1);
+
+    setCleanupCallback(&func_80030F6C_31B6C);
+    arg0->unk64 = 0xC;
+    setCallback(&func_80030E54_31A54);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80030E54_31A54);
 
