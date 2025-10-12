@@ -1,5 +1,7 @@
 #include "20F0.h"
+#include "5E590.h"
 #include "6E840.h"
+#include "EepromSaveData_type.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
@@ -102,9 +104,11 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x788];
-    u8 unk788[0x14];
+    u8 unk788[20];
     u8 unk79C;
-    u8 padding2[0x3];
+    u8 unk79D;
+    u8 unk79E;
+    u8 padding2;
     u8 unk7A0;
 } func_80032DE8_339E8_asset;
 
@@ -180,7 +184,44 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_800313DC_31FDC);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031458_32058);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031510_32110);
+extern void func_800315C0_321C0(void);
+
+typedef struct {
+    u8 padding[0x20];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 padding2[0x10];
+    s32 unk3C;
+    u8 padding3[0xC];
+    s32 unk50;
+} func_80031510_32110_arg;
+
+void func_80031510_32110(func_80031510_32110_arg *arg0) {
+    u8 assetIndex;
+    u8 temp_v1;
+    func_80032DE8_339E8_asset *state;
+
+    state = getCurrentAllocation();
+
+    if (state->unk79C == 0) {
+        arg0->unk50 = 0xFFA00000;
+    } else {
+        arg0->unk50 = 0x600000;
+    }
+
+    assetIndex = EepromSaveData->character_or_settings[state->unk79E];
+
+    memcpy(arg0, (u8 *)arg0 + 0x3C, 0x20);
+
+    arg0->unk20 = loadAssetByIndex_95728(state->unk79E);
+    arg0->unk24 = loadAssetByIndex_95500(state->unk79E);
+    arg0->unk28 = loadAssetByIndex_95590(state->unk79E);
+    arg0->unk2C = loadAssetByIndex_95668(assetIndex - 1);
+
+    setCallback(&func_800315C0_321C0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_800315C0_321C0);
 
