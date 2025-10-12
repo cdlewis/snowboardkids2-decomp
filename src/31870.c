@@ -13,6 +13,20 @@ USE_ASSET(_41A1D0);
 USE_ASSET(_4547D0);
 
 typedef struct {
+    u8 padding[0x20];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 padding2[0xC];
+    s32 unk3C;
+    u8 padding3[0x10];
+    s32 unk50;
+    s32 unk54;
+    s32 unk58;
+} func_80031510_32110_arg;
+
+typedef struct {
     u8 padding[0x7A4];
     u8 unk7A4;
 } func_8003316C_33D6C_alloc;
@@ -108,7 +122,7 @@ typedef struct {
     u8 unk79C;
     u8 unk79D;
     u8 unk79E;
-    u8 padding2;
+    u8 unk79F;
     u8 unk7A0;
 } func_80032DE8_339E8_asset;
 
@@ -141,6 +155,7 @@ extern void func_80035408_36008(void);
 extern s32 func_80035F80_36B80(s32);
 extern void func_800136E0_142E0(void);
 
+void func_800315C0_321C0(void);
 void func_80031C4C_3284C(void);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 void func_80031B30_32730(void);
@@ -153,6 +168,8 @@ void func_80033088_33C88(func_80033088_33C88_arg *arg0);
 void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0);
 void func_80032EA4_33AA4(void *);
 void func_80032F64_33B64(func_80032244_32E44_arg *);
+void func_800319C8_325C8(func_800319C8_325C8_arg *arg0);
+void func_80031944_32544(void);
 
 extern s32 D_8008F18C_8FD8C;
 extern s32 D_8008F200_8FE00[];
@@ -183,20 +200,6 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_800313A4_31FA4);
 INCLUDE_ASM("asm/nonmatchings/31870", func_800313DC_31FDC);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031458_32058);
-
-extern void func_800315C0_321C0(void);
-
-typedef struct {
-    u8 padding[0x20];
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 padding2[0x10];
-    s32 unk3C;
-    u8 padding3[0xC];
-    s32 unk50;
-} func_80031510_32110_arg;
 
 void func_80031510_32110(func_80031510_32110_arg *arg0) {
     u8 assetIndex;
@@ -233,7 +236,45 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80031758_32358);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_800317D4_323D4);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031818_32418);
+void func_80031818_32418(func_80031510_32110_arg *arg0) {
+    func_80032DE8_339E8_asset *state;
+    s16 matrixB[3][3];
+    u8 padding[4];
+    s16 matrixA[3][3];
+    u8 temp_v0;
+    u8 temp_s1;
+    s16 *pMatrixB;
+    s16 *pMatrixA;
+    volatile u8 padding2[0x8];
+
+    state = getCurrentAllocation();
+
+    memcpy(&arg0->unk3C, &identityMatrix, 0x20);
+
+    pMatrixA = &matrixA[0][0];
+    memcpy(pMatrixA, &arg0->unk3C, 0x20);
+
+    pMatrixB = &matrixB[0][0];
+    memcpy(pMatrixB, pMatrixA, 0x20);
+
+    createRotationMatrixYX(pMatrixB, 0x1000, 0x800);
+    createZRotationMatrix(pMatrixA, 0x1F00);
+    func_8006B084_6BC84(pMatrixB, pMatrixA, &arg0->unk3C);
+
+    arg0->unk58 = 0xFFF80000;
+    memcpy(arg0, &arg0->unk3C, 0x20U);
+
+    temp_v0 = state->unk79F;
+    temp_s1 = EepromSaveData->character_or_settings[temp_v0];
+
+    arg0->unk20 = loadAssetByIndex_95728(temp_v0);
+    arg0->unk24 = loadAssetByIndex_95500(temp_v0);
+    arg0->unk28 = loadAssetByIndex_95590(temp_v0);
+    arg0->unk2C = loadAssetByIndex_95668(temp_s1 - 1);
+
+    setCleanupCallback(&func_800319C8_325C8);
+    setCallbackWithContinue(&func_80031944_32544);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031944_32544);
 
