@@ -1,3 +1,4 @@
+#include "2DD40.h"
 #include "3A1F0.h"
 #include "413E0.h"
 #include "46080.h"
@@ -31,7 +32,6 @@ extern s32 D_80090460_91060[];
 extern s32 D_800904A0_910A0[];
 extern s32 D_800904E0_910E0[];
 
-void func_8002ED40_2F940(s32);
 void func_80040420_41020(void);
 void func_800B9AE0(Player *);
 void func_800407B4_413B4(void);

@@ -128,7 +128,7 @@ segments:
       - [0x22D30, asm]
       - [0x232F0, asm]
       - [0x24A30, asm]
-      - [0x288A0, asm]
+      - [0x288A0, c]
       - [0x29200, asm]
       - [0x297B0, asm]
       - [0x2AF90, asm]

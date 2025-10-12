@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "288A0.h"
 #include "5E590.h"
 #include "6E840.h"
 #include "EepromSaveData_type.h"
@@ -171,7 +172,6 @@ extern void func_80012004_12C04(void);
 extern void func_80035408_36008(void);
 extern s32 func_80035F80_36B80(s32);
 extern void func_800136E0_142E0(void);
-extern void func_80027CA0_288A0(void *, s32, s32, s32);
 
 void func_800317D4_323D4(void);
 void func_800313A4_31FA4(void);

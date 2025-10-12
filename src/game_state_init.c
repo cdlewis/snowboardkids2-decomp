@@ -1,4 +1,5 @@
 #include "1A770.h"
+#include "288A0.h"
 #include "3A1F0.h"
 #include "6E840.h"
 #include "clocktrigger_tower.h"
@@ -19,7 +20,6 @@ extern void func_80017350_17F50;
 extern void func_80018800_19400;
 extern void func_80018A90_19690;
 extern void func_80018CB0_198B0;
-extern void func_80027CA0_288A0(void *, s32, s32, s32);
 extern void func_80028480_29080;
 extern void func_80036250_36E50;
 extern void func_80036A3C_3763C;

@@ -1,5 +1,4 @@
-#include "common.h"
-
+#include "2DD40.h"
 #include "D_800AFE8C_A71FC_type.h"
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D140_2DD40);
