@@ -1,3 +1,5 @@
+#include "1DD170.h"
+
 #include "1DD8C0.h"
 #include "1DD970.h"
 #include "1DDAF0.h"
@@ -297,14 +299,7 @@ void initializeCutsceneCommand(
     }
 }
 
-s32 executeCommandFunc2(
-    CurrentCommand *arg0,
-    CommandData *arg1,
-    s32 arg2,
-    s32 arg3,
-    s32 arg4,
-    s8 arg5
-) {
+s32 executeCommandFunc2(CurrentCommand *arg0, CommandData *arg1, s32 arg2, s32 arg3, s32 arg4, s8 arg5) {
     s32 check;
     CommandEntry *temp_v0;
     CommandData *ptr;
@@ -353,6 +348,6 @@ void func_800B07BC_1DD86C(s32 arg0) {
     func_800BB47C(arg0, 2, 0x14, 0x11, 8, 0x20);
 }
 
-s16 getCategorySkipValue(s32 arg0) {
-    return commandCategories[arg0 & 0xFF].unk6;
+s32 getCategorySkipValue(u8 arg0) {
+    return commandCategories[arg0].unk6;
 }

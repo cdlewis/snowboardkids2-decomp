@@ -1,4 +1,5 @@
 #include "1DFAA0.h"
+#include "1DD170.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -60,12 +61,9 @@ extern s8 D_800BAEB4_1E7F64;
 extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
 
 StateEntryItem *func_800B34B0_1E0560(u8);
-s32 func_800B3C7C_1E0D2C(u8, u16);
 s32 func_800B3D24_1E0DD4(u8, u16);
 D_800BAEC8_1E7F78_item *func_800B3F48_1E0FF8(u16);
 void func_800B477C_1E182C(void);
-
-extern s32 getCategorySkipValue(u8);
 
 void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0) {
     arg0->unkFF7 = 1;
@@ -191,7 +189,31 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3B40);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3B68_1E0C18);
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3C7C_1E0D2C);
+s32 func_800B3C7C_1E0D2C(u8 a0, u16 a1) {
+    StateEntry *base;
+    StateEntry *temp;
+    u16 current;
+
+    base = D_800BAEBC_1E7F6C;
+    current = base->items[a0].unk0;
+
+    while (current != 0xFFFF) {
+        temp = func_800B3F48_1E0FF8(current);
+        if (a1 < (u16)temp->unk3C) {
+            return 0xFFFF;
+        }
+
+        temp = func_800B3F48_1E0FF8(current);
+        if ((u16)temp->unk3C == a1) {
+            return current;
+        }
+
+        temp = func_800B3F48_1E0FF8(current);
+        current = temp->next_index;
+    }
+
+    return 0xFFFF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3D24_1E0DD4);
 
