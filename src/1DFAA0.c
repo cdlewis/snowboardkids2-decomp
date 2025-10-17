@@ -37,7 +37,9 @@ typedef struct {
 typedef struct {
     u8 padding0[0xC];
     /* 0xC */ u16 current_index;
-    u8 padding[0x12];
+    u8 padding[0x5];
+    /* 0x13 */ u8 unk13;
+    u8 padding3[0xC];
     StateEntryItem items[2];
     s32 unk34;
     /* 0x38 */ u16 next_index;
@@ -119,7 +121,9 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3440_1E04F0);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3450_1E0500);
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3460_1E0510);
+u8 func_800B3460_1E0510(void) {
+    return D_800BAEBC_1E7F6C->unk13;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3470_1E0520);
 
