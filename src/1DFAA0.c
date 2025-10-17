@@ -3,14 +3,6 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    s8 data[0x38];
-    s32 unk38;
-    s16 unk3C;
-    u8 unk3E;
-    u8 unk3F;
-} D_800BAEC8_1E7F78_item;
-
-typedef struct {
     void *start;
     void *end;
     u32 size;
@@ -56,7 +48,7 @@ typedef struct {
 
 extern StateEntry *D_800BAEBC_1E7F6C;
 extern s32 D_800AB050_A23C0;
-extern D_800BAEC8_1E7F78_item D_800BAEC8_1E7F78[];
+extern StateEntry D_800BAEC8_1E7F78[];
 extern u8 D_800BAF06_1E7FB6;
 extern u8 D_800BAEB0_1E7F60;
 extern s8 D_800BAEB4_1E7F64;
@@ -64,7 +56,7 @@ extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
 
 StateEntryItem *func_800B34B0_1E0560(u8);
 s32 func_800B3D24_1E0DD4(u8, u16);
-D_800BAEC8_1E7F78_item *func_800B3F48_1E0FF8(u16);
+StateEntry *func_800B3F48_1E0FF8(u16);
 void func_800B477C_1E182C(void);
 
 void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0) {
@@ -223,7 +215,9 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3D24_1E0DD4);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3E58_1E0F08);
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3F48_1E0FF8);
+StateEntry *func_800B3F48_1E0FF8(u16 arg0) {
+    return &D_800BAEBC_1E7F6C[arg0 + 3];
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3F64_1E1014);
 
@@ -249,8 +243,8 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B44A8_1E1558);
 
 void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
     s32 temp_s0;
-    D_800BAEC8_1E7F78_item *dest;
-    D_800BAEC8_1E7F78_item *new_var;
+    StateEntry *dest;
+    StateEntry *new_var;
     s32 i;
 
     new_var = D_800BAEC8_1E7F78;
@@ -264,7 +258,7 @@ void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
 
         dest = func_800B3F48_1E0FF8(var_a0);
         for (i = 0; i < 0x38; i++) {
-            dest->data[i] = new_var->data[i];
+            dest->padding0[i] = new_var->padding0[i];
         }
 
         dest->unk3E = new_var->unk3E;
