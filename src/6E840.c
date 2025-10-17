@@ -235,7 +235,7 @@ void func_8006F718_70318(void) {
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F82C_7042C);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F994_70594);
+INCLUDE_ASM("asm/nonmatchings/6E840", setModelCameraTransform);
 
 void func_8006F9BC_705BC(func_8006F9BC_705BC_arg *arg0, f32 arg1, f32 arg2) {
     arg0->unk1D0 = arg2;

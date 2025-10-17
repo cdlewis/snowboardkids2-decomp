@@ -122,7 +122,7 @@ void *func_8000198C_258C(s32 arg0, void *arg1);
 
 void func_800021B8_2DB8(func_80002040_2C40_arg *arg0, s16 arg1);
 
-void func_80002750_3350(func_80002040_2C40_arg *);
+void updateModelGeometry(func_80002040_2C40_arg *);
 
 void func_8000160C_220C(func_80002040_2C40_arg *arg0, s8 arg1);
 
@@ -132,13 +132,13 @@ typedef struct {
     s32 unk18;
     s32 unk1C;
     func_80002040_2C40_arg *unk20;
-} func_8000153C_213C_arg1;
+} applyTransformToModel_arg1;
 
-void func_8000153C_213C(func_80002040_2C40_arg *arg0, func_8000153C_213C_arg1 *arg1);
+void applyTransformToModel(func_80002040_2C40_arg *arg0, applyTransformToModel_arg1 *arg1);
 
 void func_80002014_2C14(func_80002040_2C40_arg *arg0);
 
-void func_80002468_3068(func_80002040_2C40_arg *);
+void clearModelRotation(func_80002040_2C40_arg *);
 
 typedef struct {
     u8 padding[0x3F];
@@ -146,3 +146,12 @@ typedef struct {
 } func_80001604_2204_arg;
 
 void func_80001604_2204(func_80001604_2204_arg *arg0, s8 arg1);
+
+typedef struct {
+    u8 padding[0x88];
+    s8 unk88;
+} setModelVisibility_arg;
+
+void setModelVisibility(setModelVisibility_arg *arg0, s8 arg1);
+
+s32 setModelRotation(func_80002040_2C40_arg *, s16);

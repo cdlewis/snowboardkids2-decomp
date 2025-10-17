@@ -67,11 +67,6 @@ typedef struct {
 } func_800015CC_21CC_arg;
 
 typedef struct {
-    u8 padding[0x88];
-    s8 unk88;
-} func_800015FC_21FC_arg;
-
-typedef struct {
     u8 padding[0x110];
     s32 unk110;
 } func_800016E0_22E0_arg;
@@ -171,7 +166,7 @@ extern u32 D_8008BD38_8C938;
 
 s32 func_800018F4_24F4(func_80002040_2C40_arg *);
 s32 func_80001904_2504(s16);
-s32 func_80002484_3084(func_80002040_2C40_arg *, s16);
+s32 setModelRotation(func_80002040_2C40_arg *, s16);
 void initializeGameEntity(GameEntity *, s32, void *, s8, s8, s8, s16);
 void func_80002220_2E20(func_80002040_2C40_arg *, s16, s16, s8, s16);
 void *func_80002040_2C40(func_80002040_2C40_arg *arg0);
@@ -209,7 +204,7 @@ u8 func_80001534_2134(func_80001534_2134_arg *arg0) {
     return arg0->unk96;
 }
 
-void func_8000153C_213C(func_80002040_2C40_arg *arg0, func_8000153C_213C_arg1 *arg1) {
+void applyTransformToModel(func_80002040_2C40_arg *arg0, applyTransformToModel_arg1 *arg1) {
     if (arg0 != NULL) {
         memcpy(&arg0->unk18, arg1, 0x20);
     }
@@ -255,7 +250,7 @@ s32 func_800015F4_21F4(void) {
     return 6;
 }
 
-void func_800015FC_21FC(func_800015FC_21FC_arg *arg0, s8 arg1) {
+void setModelVisibility(setModelVisibility_arg *arg0, s8 arg1) {
     arg0->unk88 = arg1;
 }
 
@@ -729,16 +724,16 @@ void func_80002260_2E60(func_80002040_2C40_arg *arg0, s16 arg1, s16 arg2, s8 arg
                 }
             }
 
-            func_80002468_3068(arg0);
+            clearModelRotation(arg0);
         }
     }
 }
 
-void func_80002468_3068(func_80002040_2C40_arg *arg0) {
-    func_80002484_3084(arg0, -1);
+void clearModelRotation(func_80002040_2C40_arg *arg0) {
+    setModelRotation(arg0, -1);
 }
 
-s32 func_80002484_3084(func_80002040_2C40_arg *arg0, s16 arg1) {
+s32 setModelRotation(func_80002040_2C40_arg *arg0, s16 arg1) {
     s8 local_buffer[0x20];
     s32 s3;
     s32 i;
@@ -830,7 +825,7 @@ s32 func_80002484_3084(func_80002040_2C40_arg *arg0, s16 arg1) {
     return s7;
 }
 
-INCLUDE_ASM("asm/nonmatchings/20F0", func_80002750_3350);
+INCLUDE_ASM("asm/nonmatchings/20F0", updateModelGeometry);
 
 void func_80002B50_3750(func_80002B50_3750_arg *arg0, DisplayListObject *arg1) {
     if ((arg0 != NULL) && (arg0->unk88 != 0) && (arg0->unk3F != 0)) {

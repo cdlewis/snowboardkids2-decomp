@@ -1,3 +1,21 @@
+setModelCameraTransform = 0x8006F994; // rom:0x70594
+setModelRenderMode = 0x80000450; // rom:0x1050
+clearModelRotation = 0x80002468; // rom:0x3068
+setModelRotation = 0x80002484; // rom:0x3084
+updateModelGeometry = 0x80002750; // rom:0x3350
+setModelVisibility = 0x800015FC; // rom:0x21FC
+applyTransformToModel = 0x8000153C; // rom:0x213C
+setupSlotTransform = 0x800B6760; // rom:0x1E3810
+finalizeAnimationLoop = 0x800B5C18; // rom:0x1E2CC8
+advanceSceneManager = 0x800B6590; // rom:0x1E3640
+syncModelFromSlot = 0x800B8E38; // rom:0x1E5EE8
+updateSlotData = 0x800B0628; // rom:0x1DD6D8
+initializeSlotState = 0x800B0534; // rom:0x1DD5E4
+getStateEntry = 0x800B3F48; // rom:0x1E0FF8
+findEventAtFrame = 0x800B3C7C; // rom:0x1E0D2C
+getCutsceneSlotCount = 0x800B3460; // rom:0x1E0510
+processCutsceneFrame = 0x800B305C;
+
 EepromSaveData = 0x800A8D14;
 gControllerInputs = 0x800AFF10; // type:s32 size:0x10
 

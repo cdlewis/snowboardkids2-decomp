@@ -71,7 +71,7 @@ void func_8006FAA4_706A4(void *, s32, s32, s32, s32);
 
 void func_8006FA0C_7060C(void *, f32, f32, f32, f32);
 
-void func_8006F994_70594(void *, s32, s32, s32, s32, s32, s32);
+void setModelCameraTransform(void *, s32, s32, s32, s32, s32, s32);
 
 void unlinkNode(Node_70B00 *player);
 

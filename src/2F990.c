@@ -208,9 +208,9 @@ void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
 
 void func_8002EFD8_2FBD8(void *untypedArg0) {
     func_8002EFD8_2FBD8_arg *arg0 = (func_8002EFD8_2FBD8_arg *)untypedArg0;
-    func_8000153C_213C(arg0->unk0, (void *)((s32)arg0 + 4));
+    applyTransformToModel(arg0->unk0, (void *)((s32)arg0 + 4));
     func_800021B8_2DB8(arg0->unk0, arg0->unk24);
-    func_80002750_3350(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
     setCallback(&func_8002F024_2FC24);
 }
 

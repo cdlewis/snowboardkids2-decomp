@@ -155,23 +155,23 @@ void func_80003EE0_4AE0(void) {
 
     func_8006FAA4_706A4(&taskMemory->unk8, 0, 0, 0xB, 0);
     func_8006F9BC_705BC(&taskMemory->unk8, 1.0f, 1.0f);
-    func_8006F994_70594(&taskMemory->unk8, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    setModelCameraTransform(&taskMemory->unk8, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_8006FEF8_70AF8(&taskMemory->unk8, 1);
     func_8006FAA4_706A4(&taskMemory->unk1E0, 0, 1, 0xC, 0);
     func_8006F9BC_705BC(&taskMemory->unk1E0, 1.0f, 1.0f);
     func_8006FEF8_70AF8(&taskMemory->unk1E0, 1);
-    func_8006F994_70594(&taskMemory->unk1E0, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    setModelCameraTransform(&taskMemory->unk1E0, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_8006FAA4_706A4(&taskMemory->unk3B8, 0, 2, 0xB, 0);
     func_8006F9BC_705BC(&taskMemory->unk3B8, 1.0f, 1.0f);
     func_8006FEF8_70AF8(&taskMemory->unk3B8, 1);
-    func_8006F994_70594(&taskMemory->unk3B8, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    setModelCameraTransform(&taskMemory->unk3B8, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_8006FAA4_706A4(&taskMemory->unk590, 0, 3, 0xB, 0);
     func_8006F9BC_705BC(&taskMemory->unk590, 1.0f, 1.0f);
-    func_8006F994_70594(&taskMemory->unk590, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    setModelCameraTransform(&taskMemory->unk590, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_8006FEF8_70AF8(&taskMemory->unk590, 1);
     func_8006FAA4_706A4(&taskMemory->unk768, 0, 4, 0xD, 1);
     func_8006F9BC_705BC(&taskMemory->unk768, 1.0f, 1.0f);
-    func_8006F994_70594(&taskMemory->unk768, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    setModelCameraTransform(&taskMemory->unk768, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_8006FEF8_70AF8(&taskMemory->unk768, 1);
     func_8006FA0C_7060C(&taskMemory->unk768, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     func_8006BEDC_6CADC(buffer, 0, 0, 0x01400000, 0, 0, 0);

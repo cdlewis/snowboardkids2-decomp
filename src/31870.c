@@ -46,7 +46,7 @@ typedef struct {
 
 typedef struct {
     func_80002040_2C40_arg *unk0;
-    func_8000153C_213C_arg1 *unk4;
+    applyTransformToModel_arg1 *unk4;
     u8 padding[0x1B];
     s16 unk24;
 } func_80031ABC_326BC_arg;
@@ -225,7 +225,7 @@ void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     asset->unk780 = (u16)arg0->unk60;
     asset->unk782 = (u16)arg0->unk62;
 
-    func_8006F994_70594(arg0->unk0, 0, 0, -0x98, arg0->unk60, 0x97, arg0->unk62);
+    setModelCameraTransform(arg0->unk0, 0, 0, -0x98, arg0->unk60, 0x97, arg0->unk62);
     func_8006BEDC_6CADC(sp20, 0, 0, 0x580000, 0, 0, 0);
     func_8006FD3C_7093C(arg0->unk0->unkDA, sp20);
 
@@ -415,10 +415,10 @@ void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0) {
     GameState *temp_s1;
 
     temp_s1 = (GameState *)getCurrentAllocation();
-    func_8000153C_213C(arg0->unk0, &arg0->unk4);
+    applyTransformToModel(arg0->unk0, &arg0->unk4);
     func_8000160C_220C(arg0->unk0, 1);
     func_800021B8_2DB8(arg0->unk0, arg0->unk24);
-    func_80002750_3350(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
     if (temp_s1->unk79B != 0) {
         setCallback(&func_80031B30_32730);
     }

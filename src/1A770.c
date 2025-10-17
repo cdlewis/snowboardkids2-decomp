@@ -33,8 +33,8 @@ typedef struct {
 extern void func_8001A0F4_1ACF4(void);
 extern void func_8001AF18_1BB18(void);
 extern void func_80019BBC_1A7BC(void);
-extern void func_80019CB4_1A8B4(func_8000153C_213C_arg1 *);
-extern void func_80019BF0_1A7F0(func_8000153C_213C_arg1 *);
+extern void func_80019CB4_1A8B4(applyTransformToModel_arg1 *);
+extern void func_80019BF0_1A7F0(applyTransformToModel_arg1 *);
 extern s32 identityMatrix;
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 D_800A8CC8_A0038;
@@ -52,7 +52,7 @@ void func_8001A070_1AC70(void);
 void func_80019F60_1AB60(void);
 void func_80019EFC_1AAFC(void);
 void func_80019DC4_1A9C4(void);
-void func_80019C7C_1A87C(func_8000153C_213C_arg1 *arg0);
+void func_80019C7C_1A87C(applyTransformToModel_arg1 *arg0);
 void func_80019D24_1A924(TextData *arg0);
 void func_80019D84_1A984(void);
 void func_800154A8_160A8(void *, s32);
@@ -74,26 +74,26 @@ void func_80019BBC_1A7BC(void) {
     }
 }
 
-void func_80019BF0_1A7F0(func_8000153C_213C_arg1 *arg0) {
+void func_80019BF0_1A7F0(applyTransformToModel_arg1 *arg0) {
     getCurrentAllocation();
     memcpy(arg0, &identityMatrix, 0x20);
     arg0->unk14 = 0x830000;
     arg0->unk18 = 0x340000;
     arg0->unk1C = 0xFF7D0000;
-    func_8000153C_213C(arg0->unk20, arg0);
+    applyTransformToModel(arg0->unk20, arg0);
     func_800021B8_2DB8(arg0->unk20, 0);
-    func_80002750_3350(arg0->unk20);
+    updateModelGeometry(arg0->unk20);
     setCleanupCallback(&func_80019CB4_1A8B4);
     setCallback(&func_80019C7C_1A87C);
 }
 
-void func_80019C7C_1A87C(func_8000153C_213C_arg1 *arg0) {
+void func_80019C7C_1A87C(applyTransformToModel_arg1 *arg0) {
     getCurrentAllocation();
-    func_80002468_3068(arg0->unk20);
-    func_80002750_3350(arg0->unk20);
+    clearModelRotation(arg0->unk20);
+    updateModelGeometry(arg0->unk20);
 }
 
-void func_80019CB4_1A8B4(func_8000153C_213C_arg1 *arg0) {
+void func_80019CB4_1A8B4(applyTransformToModel_arg1 *arg0) {
     func_80002014_2C14(arg0->unk20);
 }
 

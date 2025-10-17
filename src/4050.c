@@ -84,7 +84,7 @@ void func_80003508_4108(void) {
     func_8006FAA4_706A4(s0, 0, 0, 10, f20);
     func_8006F9BC_705BC(s0, f20, f20);
     func_8006FEF8_70AF8(s0, 1);
-    func_8006F994_70594(s0, 0, 0, -160, -120, 159, 119);
+    setModelCameraTransform(s0, 0, 0, -160, -120, 159, 119);
     func_8006FA0C_7060C(s0, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     func_8006BEDC_6CADC(temp, 0, 0, 0x01000000, 0, 0, 0);
 
@@ -97,7 +97,7 @@ void func_80003508_4108(void) {
     func_8006F9BC_705BC(s0, f20, f20);
 
     func_8006FEF8_70AF8(s0, 1);
-    func_8006F994_70594(s0, 0, 0, -160, -120, 159, 119);
+    setModelCameraTransform(s0, 0, 0, -160, -120, 159, 119);
     func_8006FE28_70A28(s0, 0, 0, 0);
     func_8006FDA0_709A0(s0, 0xFF, 0);
     func_8006FDA0_709A0(s0, 0, 8);
@@ -106,7 +106,7 @@ void func_80003508_4108(void) {
     func_8006FAA4_706A4(s.s1, 0, 3, 8, 0);
     func_8006F9BC_705BC(s.s1, f20, f20);
     func_8006FEF8_70AF8(s.s1, 1);
-    func_8006F994_70594(s.s1, 0, 0, -160, -120, 159, 119);
+    setModelCameraTransform(s.s1, 0, 0, -160, -120, 159, 119);
     func_8006FE28_70A28(s.s1, 0, 0, 0);
     func_8006FDA0_709A0(s.s1, 0xFF, 0);
     func_8006FDA0_709A0(s.s1, 0, 8);

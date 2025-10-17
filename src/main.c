@@ -98,11 +98,6 @@ typedef struct {
 extern D_800891A8_89DA8_entry D_800891A8_89DA8[];
 
 typedef struct {
-    char padding[0x87];
-    char unk87;
-} func_80000450_1050_arg;
-
-typedef struct {
     struct {
         struct {
             u8 padding[0x14];
@@ -161,7 +156,7 @@ extern s32 func_8000A030_AC30(void *, s32);
 extern void func_80009E68_AA68(void *, s16);
 extern s32 identityMatrix;
 
-void func_80000450_1050(func_80000450_1050_arg *arg0, s8 arg1) {
+void setModelRenderMode(setModelRenderMode_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;
 }
 
