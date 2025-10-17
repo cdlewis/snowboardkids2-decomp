@@ -1,5 +1,6 @@
 #include "1DFAA0.h"
 #include "1DD170.h"
+#include "6E840.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -46,6 +47,50 @@ typedef struct {
     s8 unkFF7;
 } func_800B29F0_1DFAA0_arg;
 
+typedef struct {
+    u8 padding[0x16];
+    u16 unk16;
+} UIResource;
+
+typedef struct {
+    s32 unk00;
+    void *unk04;
+    u8 pad08[0x86];
+    s16 angle;
+    u8 pad90[0x18];
+} RaceUISlotData;
+
+typedef struct {
+    u8 padding[0x48];
+    void *model;
+    RaceUISlotData slotData;
+} RaceUISlot;
+
+typedef struct {
+    /* 0x0 */ UIResource *uiResource;
+    /* 0x4 */ s8 pad4[0x8];
+    /* 0xC */ void *raceManager;
+    /* 0x10 */ s8 pad10[0x3C];
+    /* 0x4C */ void *unk4C;
+    /* 0x50 */ s8 pad50[0x48];
+    /* 0x98 */ u16 currentFrame;
+    /* 0x9A */ u16 maxFrame;
+    /* 0x9C */ u16 endFrame;
+    /* 0x9E */ s8 pad9E[0x2];
+    /* 0xA0 */ s8 debugText[0x8];
+    /* 0xA8 */ RaceUISlot slots[16];
+    /* 0xFE8 */ void *textRenderer;
+    /* 0xFEC */ s8 padFEC[0x8];
+    /* 0xFF4 */ s8 showDebugInfo;
+    /* 0xFF5 */ s8 enableTransparency;
+    /* 0xFF6 */ s8 unused_FF6;
+    /* 0xFF7 */ s8 skipAnimation;
+    /* 0xFF8 */ s8 padFF8[0x220];
+    /* 0x1218 */ void *shadowModel;
+    /* 0x121C */ void *reflectionModel;
+    /* 0x1220 */ s32 animationTimer;
+} RaceUIManager;
+
 extern StateEntry *D_800BAEBC_1E7F6C;
 extern s32 D_800AB050_A23C0;
 extern StateEntry D_800BAEC8_1E7F78[];
@@ -53,7 +98,24 @@ extern u8 D_800BAF06_1E7FB6;
 extern u8 D_800BAEB0_1E7F60;
 extern s8 D_800BAEB4_1E7F64;
 extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
+extern s8 D_800BAE00_1E7EB0[];
 
+extern s32 func_800B0534_1DD5E4(void *, void *, s32 slot);
+extern s32 func_800B0628_1DD6D8(void *, s32 slot);
+extern s32 func_800B8E38_1E5EE8(void *, void *);
+extern s32 func_800B6590_1E3640(void *);
+extern s32 func_800B5C18_1E2CC8(void *);
+extern s32 func_800B6760_1E3810(void *);
+extern s32 func_8000153C_213C(void *, void *);
+extern s32 func_800015FC_21FC(void *, s32 visible);
+extern s32 func_80002750_3350(void *);
+extern s32 func_80002484_3084(void *, s32 angle);
+extern s32 func_80002468_3068(void *);
+extern s32 func_80000450_1050(void *, s32 mode);
+extern void *renderTextPalette(void);
+
+u8 func_800B3460_1E0510(void);
+s32 func_800B3C7C_1E0D2C(u8 a0, u16 a1);
 StateEntryItem *func_800B34B0_1E0560(u8);
 s32 func_800B3D24_1E0DD4(u8, u16);
 StateEntry *func_800B3F48_1E0FF8(u16);
@@ -101,7 +163,104 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2E48_1DFEF8);
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2F2C);
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B305C);
+s32 func_800B305C(RaceUIManager *uiManager) {
+    s32 slotIndex;
+    RaceUISlot *currentModel;
+    s32 i;
+    RaceUISlotData *slotData;
+    s16 xOffset;
+    s32 zScale;
+    StateEntry *stateEntry;
+    s32 shouldInit;
+    u16 temp;
+    s32 animTimer;
+    u16 frameResult;
+    u8 tempByte;
+
+    if (uiManager->showDebugInfo) {
+        sprintf(uiManager->debugText, D_800BAE00_1E7EB0, uiManager->currentFrame);
+        debugEnqueueCallback(uiManager->uiResource->unk16, 6, &renderTextPalette, &uiManager->textRenderer);
+    }
+
+    while (uiManager->currentFrame <= uiManager->maxFrame && !uiManager->skipAnimation) {
+        for (i = 0, slotIndex = 0; i < func_800B3460_1E0510(); i++) {
+            currentModel = uiManager->slots[i].model;
+            slotData = &uiManager->slots[i].slotData;
+
+            frameResult = func_800B3C7C_1E0D2C(i, uiManager->currentFrame);
+            if ((frameResult & 0xFFFF) != 0xFFFF) {
+                stateEntry = func_800B3F48_1E0FF8(frameResult);
+                shouldInit = 1;
+
+                if (uiManager->currentFrame < uiManager->maxFrame) {
+                    tempByte = stateEntry->unk3E - 4;
+
+                    if (tempByte < 2) {
+                        shouldInit = 0;
+                    } else {
+                        temp = *(u16 *)&stateEntry->unk3E;
+                        if (temp == 0x801) {
+                            temp = 0;
+                            shouldInit = temp;
+                        }
+                    }
+                }
+
+                if (shouldInit) {
+                    func_800B0534_1DD5E4(stateEntry, uiManager, slotIndex >> 24);
+                }
+            }
+
+            func_800B0628_1DD6D8(uiManager, slotIndex >> 24);
+            func_800B8E38_1E5EE8(slotData, currentModel);
+
+            slotIndex += 0x1000000;
+        }
+
+        uiManager->currentFrame++;
+        func_800B6590_1E3640(uiManager->raceManager);
+    }
+
+    func_800B5C18_1E2CC8(uiManager->raceManager);
+
+    if (!uiManager->skipAnimation) {
+        uiManager->maxFrame++;
+    }
+
+    for (i = 0; i < func_800B3460_1E0510(); i++) {
+        currentModel = uiManager->slots[i].model;
+        slotData = &uiManager->slots[i].slotData;
+
+        if (currentModel) {
+            func_800B6760_1E3810(slotData);
+            func_8000153C_213C(currentModel, &slotData->unk04);
+            if (uiManager->enableTransparency) {
+                func_800015FC_21FC(currentModel, 1);
+            } else {
+                func_800015FC_21FC(currentModel, 0);
+            }
+
+            func_80002750_3350(currentModel);
+
+            if (slotData->angle != 0) {
+                func_80002484_3084(currentModel, slotData->angle);
+            } else {
+                func_80002468_3068(currentModel);
+            }
+        }
+    }
+
+    animTimer = uiManager->animationTimer;
+    xOffset = -((animTimer * 120) >> 16);
+    zScale = (animTimer * 119) >> 16;
+
+    func_80000450_1050(uiManager->pad10, uiManager->enableTransparency);
+    func_8006F994_70594(uiManager->uiResource, 0, 0, -0xA0, xOffset, 0x9F, zScale);
+    func_8006F994_70594(uiManager->shadowModel, 0, 0, -0xA0, xOffset, 0x9F, zScale);
+    func_8006F994_70594(uiManager->reflectionModel, 0, 0, -0xA0, xOffset, 0x9F, zScale);
+
+    return (uiManager->currentFrame <= uiManager->endFrame) ? 1 : 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B3360);
 
