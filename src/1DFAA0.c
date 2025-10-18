@@ -143,7 +143,16 @@ void func_800B2A50_1DFB00(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
     new_var->unkEC = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2A78_1DFB28);
+typedef struct {
+    char header[0xA8];
+    struct {
+        char data[0xF4];
+    } entries[0];
+} func_800B2A78_1DFB28_arg;
+
+void *func_800B2A78_1DFB28(func_800B2A78_1DFB28_arg *a0, short a1) {
+    return &a0->entries[a1];
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2AA0);
 
