@@ -1,3 +1,5 @@
+#pragma once
+
 #include "common.h"
 
 typedef struct Node_70B00 {
