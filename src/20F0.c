@@ -164,12 +164,12 @@ extern u8 identityMatrix[32];
 extern void func_80009E68_AA68(void *param, s16 value);
 extern u32 D_8008BD38_8C938;
 
-s32 func_800018F4_24F4(func_80002040_2C40_arg *);
+s32 func_800018F4_24F4(SceneModel *);
 s32 func_80001904_2504(s16);
-s32 setModelRotation(func_80002040_2C40_arg *, s16);
+s32 setModelRotation(SceneModel *, s16);
 void initializeGameEntity(GameEntity *, s32, void *, s8, s8, s8, s16);
-void func_80002220_2E20(func_80002040_2C40_arg *, s16, s16, s8, s16);
-void *func_80002040_2C40(func_80002040_2C40_arg *arg0);
+void func_80002220_2E20(SceneModel *, s16, s16, s8, s16);
+void *func_80002040_2C40(SceneModel *arg0);
 void *func_80009F5C_AB5C(s32);
 
 void func_800014F0_20F0(func_800014F0_20F0_arg *arg0) {
@@ -204,7 +204,7 @@ u8 func_80001534_2134(func_80001534_2134_arg *arg0) {
     return arg0->unk96;
 }
 
-void applyTransformToModel(func_80002040_2C40_arg *arg0, applyTransformToModel_arg1 *arg1) {
+void applyTransformToModel(SceneModel *arg0, applyTransformToModel_arg1 *arg1) {
     if (arg0 != NULL) {
         memcpy(&arg0->unk18, arg1, 0x20);
     }
@@ -258,7 +258,7 @@ void func_80001604_2204(func_80001604_2204_arg *arg0, s8 arg1) {
     arg0->unk3F = arg1;
 }
 
-void func_8000160C_220C(func_80002040_2C40_arg *arg0, s8 arg1) {
+void func_8000160C_220C(SceneModel *arg0, s8 arg1) {
     if (arg0->unk4C != -1) {
         arg0->unk4E = arg1;
     }
@@ -358,7 +358,7 @@ s32 func_800017F4_23F4(func_80002B50_3750_arg *arg0) {
     return new_var;
 }
 
-void *loadAssetGroupSoundData(func_80002040_2C40_arg *arg0) {
+void *loadAssetGroupSoundData(SceneModel *arg0) {
     s16 idx = arg0->index;
     AssetGroup *entry = &gameAssets[idx];
     void *allocatedSpaceStart = NULL;
@@ -374,17 +374,17 @@ void *loadAssetGroupSoundData(func_80002040_2C40_arg *arg0) {
     return allocatedSpaceStart;
 }
 
-void *loadAssetGroupDisplayList(func_80002040_2C40_arg *arg0) {
+void *loadAssetGroupDisplayList(SceneModel *arg0) {
     AssetGroup *entity = &gameAssets[arg0->index];
     return dmaRequestAndUpdateState(entity->displayListStart, entity->displayListEnd);
 }
 
-void *loadAssetGroupVertexData(func_80002040_2C40_arg *arg0) {
+void *loadAssetGroupVertexData(SceneModel *arg0) {
     AssetGroup *entity = &gameAssets[arg0->index];
     return dmaRequestAndUpdateStateWithSize(entity->vertexDataStart, entity->vertexDataEnd, entity->size);
 }
 
-s32 func_800018F4_24F4(func_80002040_2C40_arg *arg0) {
+s32 func_800018F4_24F4(SceneModel *arg0) {
     return arg0->unk0->unk3E0 != 0;
 }
 
@@ -589,16 +589,16 @@ void initializeGameEntity(
 INCLUDE_ASM("asm/nonmatchings/20F0", initializeGameEntity);
 #endif
 
-void func_80002014_2C14(func_80002040_2C40_arg *arg0) {
+void func_80002014_2C14(SceneModel *arg0) {
     func_80002040_2C40(arg0);
     freeNodeMemory(arg0);
 }
 
-void *func_80002040_2C40(func_80002040_2C40_arg *arg0) {
-    func_80002040_2C40_arg_unk98 *temp_s0;
-    func_80002040_2C40_arg_unk0 *temp_s0_2;
+void *func_80002040_2C40(SceneModel *arg0) {
+    SceneModel_unk98 *temp_s0;
+    SceneModel_unk0 *temp_s0_2;
     void *new_var;
-    func_80002040_2C40_arg_unk0 *temp_s0_3;
+    SceneModel_unk0 *temp_s0_3;
     if (arg0 == 0) {
         return 0;
     }
@@ -634,21 +634,21 @@ void func_80002170_2D70(func_80002B50_3750_arg *arg0, s16 arg1) {
     }
 }
 
-void func_800021B8_2DB8(func_80002040_2C40_arg *arg0, s16 arg1) {
+void func_800021B8_2DB8(SceneModel *arg0, s16 arg1) {
     func_80002220_2E20(arg0, arg1, -1, -1, -1);
 }
 
-void func_800021E8_2DE8(func_80002040_2C40_arg *arg0, s16 arg1, s16 arg2, s8 arg3) {
+void func_800021E8_2DE8(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3) {
     func_80002220_2E20(arg0, arg1, arg2, arg3, -1);
 }
 
-void func_80002260_2E60(func_80002040_2C40_arg *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5);
+void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5);
 
-void func_80002220_2E20(func_80002040_2C40_arg *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
+void func_80002220_2E20(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
     func_80002260_2E60(arg0, arg1, arg2, arg3, (s32)arg4, 1);
 }
 
-void func_80002260_2E60(func_80002040_2C40_arg *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5) {
+void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5) {
     int new_var;
     s16 var_t0;
     s16 var_a1;
@@ -729,11 +729,11 @@ void func_80002260_2E60(func_80002040_2C40_arg *arg0, s16 arg1, s16 arg2, s8 arg
     }
 }
 
-void clearModelRotation(func_80002040_2C40_arg *arg0) {
+void clearModelRotation(SceneModel *arg0) {
     setModelRotation(arg0, -1);
 }
 
-s32 setModelRotation(func_80002040_2C40_arg *arg0, s16 arg1) {
+s32 setModelRotation(SceneModel *arg0, s16 arg1) {
     s8 local_buffer[0x20];
     s32 s3;
     s32 i;
@@ -833,7 +833,7 @@ void func_80002B50_3750(func_80002B50_3750_arg *arg0, DisplayListObject *arg1) {
     }
 }
 
-s32 func_80002B8C_378C(func_80002040_2C40_arg *arg0) {
+s32 func_80002B8C_378C(SceneModel *arg0) {
     s32 new_var;
     if (func_80001904_2504(arg0->index) == 0) {
         return 0;
@@ -846,7 +846,7 @@ s32 func_80002B8C_378C(func_80002040_2C40_arg *arg0) {
     return new_var;
 }
 
-s32 func_80002BD0_37D0(func_80002040_2C40_arg *arg0) {
+s32 func_80002BD0_37D0(SceneModel *arg0) {
     u32 index = arg0->index;
     if (func_80001904_2504(index) == 0) {
         return 8;

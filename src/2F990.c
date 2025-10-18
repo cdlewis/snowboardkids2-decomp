@@ -53,7 +53,7 @@ typedef struct {
 } func_8002F658_30258_arg;
 
 typedef struct {
-    func_80002040_2C40_arg *unk0;
+    SceneModel *unk0;
     s32 unk4;
     u8 padding[0x1B];
     s16 unk24;

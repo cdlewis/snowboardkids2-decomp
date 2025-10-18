@@ -65,7 +65,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x48];
-    void *model;
+    SceneModel *model;
     CutsceneSlotData slotData;
 } CutsceneSlot;
 
@@ -73,9 +73,7 @@ typedef struct {
     /* 0x0 */ UIResource *uiResource;
     /* 0x4 */ s8 pad4[0x8];
     /* 0xC */ void *sceneContext;
-    /* 0x10 */ s8 pad10[0x3C];
-    /* 0x4C */ void *unk4C;
-    /* 0x50 */ s8 pad50[0x48];
+    /* 0x10 */ setModelRenderMode_arg unk10;
     /* 0x98 */ u16 currentFrame;
     /* 0x9A */ u16 maxFrame;
     /* 0x9C */ u16 endFrame;
@@ -170,7 +168,7 @@ INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2F2C);
 
 s32 processCutsceneFrame(CutsceneManager *uiManager) {
     s32 slotIndex;
-    CutsceneSlot *currentModel;
+    SceneModel *currentModel;
     s32 i;
     CutsceneSlotData *slotData;
     s16 xOffset;
@@ -259,7 +257,7 @@ s32 processCutsceneFrame(CutsceneManager *uiManager) {
     xOffset = -((animTimer * 120) >> 16);
     zScale = (animTimer * 119) >> 16;
 
-    setModelRenderMode(uiManager->pad10, uiManager->enableTransparency);
+    setModelRenderMode(&uiManager->unk10, uiManager->enableTransparency);
     setModelCameraTransform(uiManager->uiResource, 0, 0, -0xA0, xOffset, 0x9F, zScale);
     setModelCameraTransform(uiManager->shadowModel, 0, 0, -0xA0, xOffset, 0x9F, zScale);
     setModelCameraTransform(uiManager->reflectionModel, 0, 0, -0xA0, xOffset, 0x9F, zScale);

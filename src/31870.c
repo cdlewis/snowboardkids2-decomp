@@ -45,7 +45,7 @@ typedef struct {
 } func_8003316C_33D6C_alloc;
 
 typedef struct {
-    func_80002040_2C40_arg *unk0;
+    SceneModel *unk0;
     applyTransformToModel_arg1 *unk4;
     u8 padding[0x1B];
     s16 unk24;

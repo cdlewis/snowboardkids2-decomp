@@ -68,16 +68,16 @@ typedef struct {
     u8 padding3[0x2D];
     void *unk420;
     void *unk424;
-} func_80002040_2C40_arg_unk0;
+} SceneModel_unk0;
 
 typedef struct {
     u8 padding[0x24];
     void *unk24;
     void *unk28;
-} func_80002040_2C40_arg_unk98;
+} SceneModel_unk98;
 
 typedef struct {
-    func_80002040_2C40_arg_unk0 *unk0;
+    SceneModel_unk0 *unk0;
     func_8005E800_5F400_arg *unk4;
     void *unk8;
     /* 0xC */ s16 index;
@@ -105,40 +105,40 @@ typedef struct {
     s32 unk90;
     s8 unk94;
     s8 unk95;
-    func_80002040_2C40_arg_unk98 *unk98;
+    SceneModel_unk98 *unk98;
     u8 padding3[0x78];
     void *unk114;
     void *unk118;
     void *unk11C;
     void *unk120;
-} func_80002040_2C40_arg;
+} SceneModel;
 
 void *func_800019B8_25B8(s32 arg0, void *arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5);
 void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode);
-void *loadAssetGroupSoundData(func_80002040_2C40_arg *);
-void *loadAssetGroupDisplayList(func_80002040_2C40_arg *);
-void *loadAssetGroupVertexData(func_80002040_2C40_arg *);
+void *loadAssetGroupSoundData(SceneModel *);
+void *loadAssetGroupDisplayList(SceneModel *);
+void *loadAssetGroupVertexData(SceneModel *);
 void *func_8000198C_258C(s32 arg0, void *arg1);
 
-void func_800021B8_2DB8(func_80002040_2C40_arg *arg0, s16 arg1);
+void func_800021B8_2DB8(SceneModel *arg0, s16 arg1);
 
-void updateModelGeometry(func_80002040_2C40_arg *);
+void updateModelGeometry(SceneModel *);
 
-void func_8000160C_220C(func_80002040_2C40_arg *arg0, s8 arg1);
+void func_8000160C_220C(SceneModel *arg0, s8 arg1);
 
 typedef struct {
     u8 padding[0x14];
     s32 unk14;
     s32 unk18;
     s32 unk1C;
-    func_80002040_2C40_arg *unk20;
+    SceneModel *unk20;
 } applyTransformToModel_arg1;
 
-void applyTransformToModel(func_80002040_2C40_arg *arg0, applyTransformToModel_arg1 *arg1);
+void applyTransformToModel(SceneModel *arg0, applyTransformToModel_arg1 *arg1);
 
-void func_80002014_2C14(func_80002040_2C40_arg *arg0);
+void func_80002014_2C14(SceneModel *arg0);
 
-void clearModelRotation(func_80002040_2C40_arg *);
+void clearModelRotation(SceneModel *);
 
 typedef struct {
     u8 padding[0x3F];
@@ -154,4 +154,4 @@ typedef struct {
 
 void setModelVisibility(setModelVisibility_arg *arg0, s8 arg1);
 
-s32 setModelRotation(func_80002040_2C40_arg *, s16);
+s32 setModelRotation(SceneModel *, s16);
