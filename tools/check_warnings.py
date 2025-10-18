@@ -7,6 +7,7 @@ This allows us to prevent new warnings while gradually fixing existing ones.
 import sys
 import re
 import argparse
+import os
 
 # Maximum allowed warnings (update this as you fix warnings)
 MAX_WARNINGS = 62
@@ -17,6 +18,10 @@ def count_warnings(log_file):
 
     warning_count = 0
     warnings = []
+
+    # If log file doesn't exist, no files were compiled, so no warnings
+    if not os.path.exists(log_file):
+        return 0, []
 
     with open(log_file, 'r') as f:
         for line in f:
