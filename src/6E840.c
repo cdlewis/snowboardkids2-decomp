@@ -275,8 +275,8 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FDC8_709C8);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FE10_70A10);
 
-void func_8006FE28_70A28(func_8006FE28_70A28_arg *arg0, s8 arg1, s8 arg2, s8 arg3) {
-    func_8006FE28_70A28_arg *var_a0;
+void func_8006FE28_70A28(Node_70B00 *arg0, s8 arg1, s8 arg2, s8 arg3) {
+    Node_70B00 *var_a0;
 
     var_a0 = arg0;
     if (var_a0 == NULL) {

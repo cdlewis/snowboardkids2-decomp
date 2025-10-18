@@ -17,7 +17,10 @@ typedef struct Node_70B00 {
     s8 unk14;
     s8 unk15;
     /* 0x16 */ u16 slot_index;
-    u8 padding2[0xA7];
+    u8 padding2[0xA4];
+    u8 unkBC;
+    u8 unkBD;
+    u8 unkBE;
     u8 unkBF;
     u8 unkC0;
     u8 unkC1;
@@ -38,14 +41,7 @@ void func_8006E02C_6EC2C(void);
 
 void func_8006E000_6EC00(s32 arg0);
 
-typedef struct {
-    u8 padding[0xBC];
-    s8 unkBC;
-    s8 unkBD;
-    s8 unkBE;
-} func_8006FE28_70A28_arg;
-
-void func_8006FE28_70A28(func_8006FE28_70A28_arg *arg0, s8 arg1, s8 arg2, s8 arg3);
+void func_8006FE28_70A28(Node_70B00 *arg0, s8 arg1, s8 arg2, s8 arg3);
 
 typedef struct {
     u8 padding[0xC8];

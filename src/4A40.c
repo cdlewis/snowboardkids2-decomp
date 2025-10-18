@@ -41,7 +41,7 @@ typedef struct {
     u8 padding[1];
     s16 unk2;
     s32 unk4;
-    func_8006F9BC_705BC_arg unk8;
+    Node_70B00 unk8;
     func_8006F9BC_705BC_arg unk1E0;
     func_8006F9BC_705BC_arg unk3B8;
     func_8006F9BC_705BC_arg unk590;
