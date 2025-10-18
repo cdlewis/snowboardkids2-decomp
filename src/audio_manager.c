@@ -191,8 +191,8 @@ void initAudioManager(
         gAudioManager.audioInfo[i]->data = (s16 *)alHeapDBAlloc(0, 0, config->heap, 1, sizeof(s32) * D_800A6474_A7074);
     }
 
-    osCreateMesgQueue(&gAudioManager.audioFrameMsgQ, &gAudioManager.audioFrameMsgBuf, 8);
-    osCreateMesgQueue(&gAudioManager.audioReplyMsgQ, &gAudioManager.audioReplyMsgBuf, 8);
+    osCreateMesgQueue(&gAudioManager.audioFrameMsgQ, (OSMesg *)&gAudioManager.audioFrameMsgBuf, 8);
+    osCreateMesgQueue(&gAudioManager.audioReplyMsgQ, (OSMesg *)&gAudioManager.audioReplyMsgBuf, 8);
     osCreateMesgQueue(&gAudioMsgQueue, (OSMesg *)gAudioMsgBuffer, maxChannels * 2);
 
     if (!gAudioThreadCreated) {
