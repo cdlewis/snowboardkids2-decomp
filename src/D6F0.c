@@ -37,20 +37,12 @@ typedef struct {
 typedef struct {
     unk0_node *unk0;
     void *unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s8 unk20;
-    s8 unk21;
-    s8 unk22;
+    /* 0x8 */ loadAssetMetadata_arg unk8;
     s32 unk24;
     s32 unk28;
     u8 padding2[0xC];
-    s32 unk38;
-    s32 unk3C;
+    u8 *unk38;
+    void *unk3C;
     s8 unk40;
     s8 unk41;
     s8 unk42;
@@ -108,10 +100,10 @@ void func_8000CAF0_D6F0(func_8000CAF0_D6F0_arg *arg0) {
 void func_8000CB94_D794(func_8000CB94_D794_arg *arg0) {
     loadAssetMetadata(&arg0->unk8, arg0->unk0, arg0->unk54);
 
-    arg0->unk38 = arg0->unk18;
-    arg0->unk3C = arg0->unk1C;
-    arg0->unk40 = arg0->unk20;
-    arg0->unk41 = arg0->unk21;
+    arg0->unk38 = arg0->unk8.data_ptr;
+    arg0->unk3C = arg0->unk8.index_ptr;
+    arg0->unk40 = arg0->unk8.unk18;
+    arg0->unk41 = arg0->unk8.unk19;
 
     func_80067EDC_68ADC(0, &arg0->unk8);
     func_80067EDC_68ADC(0, &arg0->unk28);

@@ -1,8 +1,8 @@
 #include "common.h"
 #include "displaylist.h"
+#include "overlay.h"
 #include "player.h"
 #include "task_scheduler.h"
-#include "overlay.h"
 
 USE_ASSET(_6A83F0);
 
@@ -660,7 +660,7 @@ void *func_80057A7C_5867C(void) {
 
 void func_80057ABC_586BC(s32 arg0, s32 arg1) {
     void *temp;
-    OSMesg *message;
+    OSMesg message;
 
     temp = gGraphicsManager->unk24[arg0];
     D_800A2D10_A3910.unk20 = arg1;

@@ -81,7 +81,7 @@ typedef struct {
     /* 0x06C */ f32 pitchbend_precalc;
     /* 0x070 */ f32 pitchbend;
     /* 0x074 */ song_t *song_addr;
-    /* 0x078 */ ptr_bank_t *sample_bank;
+    /* 0x078 */ fx_header_t *sample_bank;
     /* 0x07C */ u8 *pbase;
     /* 0x080 */ drum_t *pdrums;
     /* 0x084 */ u8 *ppitchbendbase;
@@ -945,7 +945,7 @@ void __MusIntInitialiseChannel(channel_t *cp) {
     u8 *work_ptr;
     u32 i;
     s16 tempo;
-    ptr_bank_t *bank;
+    fx_header_t *bank;
 
     old_playing = cp->playing;
 

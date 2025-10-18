@@ -28,7 +28,7 @@ void *dmaRequestAndUpdateState(void *start, void *end);
 
 void *allocateNodeMemory(s32 size);
 
-Node *scheduleTask(void *a0, u8, u8, u8);
+void *scheduleTask(void *a0, u8, u8, u8);
 
 void setCallback(void *callback);
 

@@ -40,8 +40,8 @@ void initializeOverlaySystem(void);
 
 typedef struct {
     u8 padding[0x10];
-    u8 *data_ptr;
-    TableEntry_19E80 *index_ptr;
+    /* 0x10 */ u8 *data_ptr;
+    /* 0x14 */ TableEntry_19E80 *index_ptr;
     s8 unk18;
     s8 unk19;
     s8 unk1A;

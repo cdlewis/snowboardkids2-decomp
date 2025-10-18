@@ -136,8 +136,8 @@ void transitionToMainMenu(void) {
 }
 
 void setupGameStateTransition(func_80000460_1060_arg0 *arg0) {
-    char *sp10[5];
-    char *sp28;
+    s8 *sp10[5];
+    s8 sp28;
 
     func_8000056C_116C(arg0, 0, getCurrentAllocation());
     setCleanupCallback(&cleanupTransitionEffect);

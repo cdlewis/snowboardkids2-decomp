@@ -88,7 +88,7 @@ segments:
       - [0x8A40, asm]
       - [0x8DC0, asm]
       - [0x90D0, asm]
-      - [0x90F0, asm]
+      - [0x90F0, c]
       - [0xB040, asm]
       - [0xC570, asm]
       - [0xC870, asm]

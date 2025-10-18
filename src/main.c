@@ -3,6 +3,7 @@
 #include "4050.h"
 #include "5520.h"
 #include "6E840.h"
+#include "90F0.h"
 #include "common.h"
 #include "geometry.h"
 #include "rand.h"
@@ -111,7 +112,7 @@ typedef struct {
     } *unk0;
     s8 unk4;
     s8 unk5;
-    func_80004FF8_5BF8_arg1 *unk8;
+    func_80009F5C_AB5C_arg *unk8;
     u8 padding2[0x10];
     s32 unk1C;
     s32 unk20;
@@ -135,9 +136,13 @@ typedef struct {
     s32 unk60;
 } func_80000C2C_182C_arg;
 
+typedef struct {
+    u8 padding[0x8];
+    func_80009F5C_AB5C_arg *unk8;
+} func_800014C8_20C8_arg;
+
 s32 D_800894F0_8A0F0[];
 
-void *func_80009F5C_AB5C(func_80000C2C_182C_arg *arg0);
 void func_80000DA4_19A4(func_80000C2C_182C_arg *arg0);
 void func_80001264_1E64(func_80000C2C_182C_arg *arg0);
 void func_800011DC_1DDC(void *);
@@ -148,7 +153,7 @@ void func_80000A68_1668(func_80000C2C_182C_arg *);
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *);
 void func_800007C4_13C4(void *, void *);
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
-void func_800014C8_20C8(func_80000C2C_182C_arg *arg0);
+void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
 void func_800008D0_14D0(func_80000C2C_182C_arg *arg0);
 s32 func_80000968_1568(void);
 
@@ -462,7 +467,7 @@ void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
     entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     subEntry = &entry->sub_entries[arg0->unk4];
 
-    memcpy(&sp20, &identityMatrix, 0x20);
+    memcpy((void *)&sp20, &identityMatrix, 0x20);
     setCleanupCallback(&func_800014C8_20C8);
     func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
 
@@ -470,8 +475,8 @@ void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
     sp14 = ((randA() & 1) - 4) << 0x10;
     sp18 = 0;
 
-    createYRotationMatrix(&sp20, 0x1D83);
-    transformVector(&sp10, &sp20, &arg0->unk54);
+    createYRotationMatrix((s16(*)[3])sp20, 0x1D83);
+    transformVector((s16 *)&sp10, (s16 *)&sp20, &arg0->unk54);
 
     arg0->unk54 = arg0->unk54 + subEntry->unk8;
     arg0->unk58 = arg0->unk58 + subEntry->unkC;
@@ -520,6 +525,6 @@ void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0) {
     }
 }
 
-void func_800014C8_20C8(func_80000C2C_182C_arg *arg0) {
+void func_800014C8_20C8(func_800014C8_20C8_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk8);
 }

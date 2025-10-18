@@ -45,7 +45,7 @@ typedef struct {
     func_8006F9BC_705BC_arg unk1E0;
     func_8006F9BC_705BC_arg unk3B8;
     func_8006F9BC_705BC_arg unk590;
-    void *unk768;
+    func_8006F9BC_705BC_arg *unk768;
     u8 padding6[0xD6];
     s16 unk842;
     u8 padding7[0xFC];

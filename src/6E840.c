@@ -100,10 +100,10 @@ void osViExtendVStart(u32 arg0) {
 }
 
 void func_8006F504_70104(void) {
-    s32 sp10;
+    u8 exists;
 
-    D_800A355C_A415C[0] = allocateMemoryNode(0, 0x18000, &sp10);
-    D_800A3560_A4160 = allocateMemoryNode(0, 0x18000, &sp10);
+    D_800A355C_A415C[0] = allocateMemoryNode(0, 0x18000, &exists);
+    D_800A3560_A4160 = allocateMemoryNode(0, 0x18000, &exists);
 }
 
 void func_8006F550_70150(s32 arg0) {
@@ -129,7 +129,7 @@ void *arenaAlloc16(s32 size) {
 
 void func_8006F5C0_701C0(void) {
     void *result;
-    u8 *nodeExists;
+    u8 nodeExists;
 
     result = allocateMemoryNode(0, 0x10000, &nodeExists);
     gArenaBasePtr = result;
@@ -166,7 +166,7 @@ void *advanceLinearAlloc(s32 arg0) {
 void initLinearArenaRegions(void) {
     s32 temp;
     void *result;
-    u8 *nodeExists;
+    u8 nodeExists;
 
     result = allocateMemoryNode(0, 0x10000, &nodeExists);
     gLinearArenaRegions = result;
@@ -256,8 +256,8 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FC70_70870);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FD3C_7093C);
 
-void func_8006FDA0_709A0(func_8006FDA0_709A0_arg *arg0, u8 arg1, u8 arg2) {
-    func_8006FDA0_709A0_arg *var_a0;
+void func_8006FDA0_709A0(Node_70B00 *arg0, u8 arg1, u8 arg2) {
+    Node_70B00 *var_a0;
 
     var_a0 = arg0;
     if (var_a0 == NULL) {

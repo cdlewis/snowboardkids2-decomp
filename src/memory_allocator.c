@@ -11,7 +11,7 @@ void initializeMemoryAllocatorRegion(void) {
     u8 *current_block;
 
     gMemoryAllocatorHead = NULL;
-    current_block = &gMemoryHeapBase;
+    current_block = (u8*)&gMemoryHeapBase;
     i = 0;
     do {
         *current_block = 0;

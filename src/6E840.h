@@ -1,12 +1,5 @@
 #include "common.h"
 
-typedef struct {
-    u8 padding[0xBF];
-    s8 unkBF;
-    s8 unkC0;
-    s8 unkC1;
-} func_8006FDA0_709A0_arg;
-
 typedef struct Node_70B00 {
     /* 0x00 */ union {
         struct Node_70B00 *next;
@@ -22,12 +15,16 @@ typedef struct Node_70B00 {
     s8 unk14;
     s8 unk15;
     /* 0x16 */ u16 slot_index;
-    u8 padding2[0xC2];
+    u8 padding2[0xA7];
+    u8 unkBF;
+    u8 unkC0;
+    u8 unkC1;
+    u8 padding3[0x18];
     /* 0xDA */ u16 id;
-    u8 padding3[0xFC];
+    u8 padding4[0xFC];
 } Node_70B00;
 
-void func_8006FDA0_709A0(func_8006FDA0_709A0_arg *arg0, u8 arg1, u8 arg2);
+void func_8006FDA0_709A0(Node_70B00 *arg0, u8 arg1, u8 arg2);
 
 void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 

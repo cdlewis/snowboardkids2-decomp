@@ -16,10 +16,24 @@ typedef struct {
     u8 padding[0xFC]; // probably the max possible payload
 } NodeWithPayload;
 
+typedef struct TaskNode {
+    /* 0x00 */ s8 padding_00[8];
+    /* 0x08 */ void *unk08;
+    /* 0x0C */ s8 padding_0C[0x18];
+    /* 0x24 */ s32 unk24;
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ s32 unk30;
+    /* 0x34 */ s32 unk34;
+    /* 0x38 */ s16 counters[8];
+    /* 0x48 */ s16 unk48;
+    /* 0x4A */ s8 padding_4A[6];
+} TaskNode;
+
 typedef struct gActiveScheduler_type {
     /* 0x0 */ struct gActiveScheduler_type *prev;
     /* 0x4 */ struct gActiveScheduler_type *next;
-    struct gActiveScheduler_type *unk8;
+    TaskNode *unk8;
     struct gActiveScheduler_type *unkC;
     void (*unk10)(void);
     void (*unk14)(void);
@@ -41,23 +55,9 @@ typedef struct gActiveScheduler_type {
 } gActiveScheduler_type;
 extern gActiveScheduler_type *gActiveScheduler;
 
-typedef struct {
-    /* 0x00 */ s8 padding_00[8];
-    /* 0x08 */ void *unk08;
-    /* 0x0C */ s8 padding_0C[0x18];
-    /* 0x24 */ s32 unk24;
-    /* 0x28 */ s32 unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ s32 unk30;
-    /* 0x34 */ s32 unk34;
-    /* 0x38 */ s16 counters[8];
-    /* 0x48 */ s16 unk48;
-    /* 0x4A */ s8 padding_4A[6];
-} TaskNode;
-
 extern TaskNode gSchedulerPool[16];
-extern gActiveScheduler_type *gSchedulerListSentinel;
-extern gActiveScheduler_type *gFreeSchedulerList;
+extern gActiveScheduler_type gSchedulerListSentinel;
+extern TaskNode *gFreeSchedulerList;
 extern gActiveScheduler_type *gActiveSchedulerList;
 extern s32 gFrameCounter;
 extern s32 gBufferedFrameCounter;
@@ -67,11 +67,11 @@ void initTaskScheduler(void) {
     s32 j;
     void *prevHead;
 
-    gActiveSchedulerList = 0;
-    gSchedulerListSentinel = 0;
+    gActiveSchedulerList = NULL;
+    gSchedulerListSentinel.prev = NULL;
     gActiveScheduler = NULL;
     gDMAOverlay = NULL;
-    gFreeSchedulerList = 0;
+    gFreeSchedulerList = NULL;
 
     for (i = 0; i < 16; i++) {
         gSchedulerPool[i].unk24 = 0;
@@ -95,7 +95,7 @@ void func_800693C4_69FC4(void (*arg0)(void), s32 arg1) {
     gActiveScheduler_type *temp_a2;
     gActiveScheduler_type *temp_v1;
     gActiveScheduler_type *var_a3;
-    temp_a2 = gFreeSchedulerList;
+    temp_a2 = (gActiveScheduler_type *)gFreeSchedulerList;
     var_a3 = &gSchedulerListSentinel;
     gFreeSchedulerList = temp_a2->unk8;
 
@@ -143,7 +143,7 @@ void createTaskQueue(void (*arg0)(void), s32 arg1) {
     gActiveScheduler_type *temp_v1;
     gActiveScheduler_type *temp_v0;
 
-    temp_a2 = gFreeSchedulerList;
+    temp_a2 = (gActiveScheduler_type *)gFreeSchedulerList;
     var_a3 = &gSchedulerListSentinel;
     gFreeSchedulerList = temp_a2->unk8;
 
@@ -189,7 +189,7 @@ void createTaskQueue(void (*arg0)(void), s32 arg1) {
 void runTaskSchedulers(void) {
     gActiveScheduler_type *temp_v0;
     gActiveScheduler_type *temp_v0_2;
-    gActiveScheduler_type *temp_a0;
+    TaskNode *temp_a0;
 
     gActiveScheduler = gActiveSchedulerList;
     if (gActiveSchedulerList != NULL) {
@@ -233,7 +233,8 @@ void runTaskSchedulers(void) {
                         processActiveTasks();
 
                         if (hasActiveTasks() == 0) {
-                            gActiveScheduler->nodes = (Node *)decrementNodeRefCount((s32 *)gActiveScheduler->nodes);
+                            gActiveScheduler->nodes =
+                                (NodeWithPayload *)decrementNodeRefCount((s32 *)gActiveScheduler->nodes);
                             gActiveScheduler->allocatedState =
                                 (void *)decrementNodeRefCount((s32 *)gActiveScheduler->allocatedState);
                             gActiveScheduler->unk1C = gFrameCounter;
@@ -266,7 +267,7 @@ void runTaskSchedulers(void) {
 
                         gActiveScheduler->prev->next = gActiveScheduler->next;
                         temp_a0 = gFreeSchedulerList;
-                        gFreeSchedulerList = gActiveScheduler;
+                        gFreeSchedulerList = (TaskNode *)gActiveScheduler;
                         gActiveScheduler->unk8 = temp_a0;
                     }
                     break;
@@ -318,7 +319,7 @@ void func_8006983C_6A43C(void (*arg0)(void)) {
 }
 
 void *allocateTaskMemory(s32 size) {
-    u8 *node_exists;
+    u8 node_exists;
     u32 temp_a0;
     void *temp_v0;
     s8 *var_v1;
@@ -340,7 +341,7 @@ void *getCurrentAllocation(void) {
     return gActiveScheduler->allocatedState;
 }
 
-func_800698CC_6A4CC(s8 value) {
+void func_800698CC_6A4CC(s8 value) {
     gActiveScheduler->unk1A = value;
 }
 
@@ -370,11 +371,11 @@ void setupTaskSchedulerNodes(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s
 
     for (i = 0; i < gActiveScheduler->total; i++) {
         gActiveScheduler->nodes[i].n.freeNext = gActiveScheduler->freeList;
-        gActiveScheduler->freeList = &gActiveScheduler->nodes[i];
+        gActiveScheduler->freeList = (Node *)&gActiveScheduler->nodes[i];
     }
 }
 
-Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) {
+void *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) {
     Node *newNode;
     Node *active;
     Node *freeNxt;
@@ -430,7 +431,7 @@ Node *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
             // This should just be newNode++. It's possible that
             // nodes are possbibly being embedded in larger
             // structs.
-            return ((u8 *)newNode + 0x28);
+            return (void *)((u8 *)newNode + 0x28);
         }
     }
 
@@ -650,7 +651,7 @@ void *loadDataSegment(void *start, void *end, s32 size, void *dramAddr) {
 }
 
 void *allocateNodeMemory(s32 size) {
-    u8 *exists;
+    u8 exists;
     void *temp_a0;
 
     temp_a0 = allocateMemoryNode(0, size, &exists);
