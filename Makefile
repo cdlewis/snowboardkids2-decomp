@@ -20,6 +20,7 @@ ASM_DIRS  = asm asm/data
 BIN_DIRS  = assets
 TOOLS_DIR = tools
 SRC_DIRS  = src
+BUILD_LOG = $(BUILD_DIR)/build.log
 
 # Files
 
@@ -54,7 +55,7 @@ CFLAGS := $(ABIFLAG) -mno-abicalls -nostdinc -fno-PIC -G 0 -Wa,-force-n64align -
 IINC := -I include -I lib/ultralib/include -I lib/ultralib/include/PR -I lib/libmus/include/PR -I lib/libmus/src -I lib/f3dex2/PR
 
 MIPS_BUILTIN_DEFS := -D_MIPS_ISA_MIPS2=2 -D_MIPS_ISA=_MIPS_ISA_MIPS2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZPTR=32
-CC_CHECK_FLAGS    := -MMD -MP -fno-builtin -fsyntax-only -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1 -Werror=implicit-function-declaration -Werror=strict-prototypes 
+CC_CHECK_FLAGS    := -MMD -MP -fno-builtin -fsyntax-only -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1 -Werror=implicit-function-declaration -Werror=strict-prototypes -Wincompatible-pointer-types 
 
 TARGET = $(BUILD_DIR)/$(BASENAME)
 
@@ -86,13 +87,16 @@ nonmatching: dirs no_verify
 
 dirs:
 	$(foreach dir,$(ASM_DIRS) $(BIN_DIRS),$(shell mkdir -p $(BUILD_DIR)/$(dir)))
+	@rm -f $(BUILD_LOG)
 
 verify: $(TARGET).z64
 	@shasum --check $(BASENAME).sha1
+	@$(PYTHON) $(TOOLS_DIR)/check_warnings.py $(BUILD_LOG)
 
 no_verify: $(TARGET).z64
 	@echo "Skipping SHA1SUM check, updating CRC"
 	@$(PYTHON) $(N64CRC) $(TARGET).z64
+	@$(PYTHON) $(TOOLS_DIR)/check_warnings.py $(BUILD_LOG)
 
 extract:
 	$(SPLAT) $(BASENAME).yaml
@@ -102,6 +106,14 @@ clean:
 	rm -rf assets
 	rm -rf build
 	rm -f *auto.txt
+
+check-warnings:
+	@if [ -f $(BUILD_LOG) ]; then \
+		$(PYTHON) $(TOOLS_DIR)/check_warnings.py $(BUILD_LOG) --show-all; \
+	else \
+		echo "No build log found. Run 'make' first."; \
+		exit 1; \
+	fi
 
 clean-ultralib:
 	rm -r lib/ultralib/build
@@ -125,7 +137,7 @@ $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/
 $(BUILD_DIR)/src/%.o: src/%.c
 	@mkdir -p $(shell dirname $@)
 	@printf "[$(GREEN)   c    $(NO_COL)]  $<\n"; \
-	$(CC_CHECK) $(CC_CHECK_FLAGS) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ $<
+	$(CC_CHECK) $(CC_CHECK_FLAGS) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ $< 2>&1 | tee -a $(BUILD_LOG)
 	@$(CC) $(CFLAGS) -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -E $< | $(CC) -x c $(CFLAGS) -fno-asm -I $(dir $*) -c -o $@ -
 	$(OBJDUMP_CMD)
 
@@ -181,7 +193,7 @@ setup:
 
 ### Settings
 .SECONDARY:
-.PHONY: all clean default updatediff
+.PHONY: all clean default updatediff check-warnings
 SHELL = /bin/bash -e -o pipefail
 
 # Print target for debugging
