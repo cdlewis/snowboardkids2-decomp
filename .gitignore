@@ -24,3 +24,4 @@ src/temp.c
 astemp_*
 **/.claude/settings.local.json
 report.json
+build.log

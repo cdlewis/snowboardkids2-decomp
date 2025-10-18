@@ -97,7 +97,8 @@ typedef struct {
     s32 unk48;
     s16 unk4C;
     s8 unk4E;
-    u8 padding2[0x3A];
+    u8 padding2[0x39];
+    s8 unk88;
     s8 unk89;
     s16 unk8A;
     s16 unk8C;
@@ -147,11 +148,6 @@ typedef struct {
 
 void func_80001604_2204(func_80001604_2204_arg *arg0, s8 arg1);
 
-typedef struct {
-    u8 padding[0x88];
-    s8 unk88;
-} setModelVisibility_arg;
-
-void setModelVisibility(setModelVisibility_arg *arg0, s8 arg1);
+void setModelVisibility(SceneModel *, s8);
 
 s32 setModelRotation(SceneModel *, s16);

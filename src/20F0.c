@@ -250,7 +250,7 @@ s32 func_800015F4_21F4(void) {
     return 6;
 }
 
-void setModelVisibility(setModelVisibility_arg *arg0, s8 arg1) {
+void setModelVisibility(SceneModel *arg0, s8 arg1) {
     arg0->unk88 = arg1;
 }
 
