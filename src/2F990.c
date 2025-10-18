@@ -116,6 +116,13 @@ typedef struct {
     s16 unk3E;
 } func_8002ED90_2F990_arg;
 
+typedef struct {
+    u8 padding[0x50];
+    s32 unk50;
+    u8 padding2[0xC];
+    u8 unk60;
+} func_8002F518_30118_arg;
+
 extern void func_8000FED0_10AD0(void);
 extern s32 D_800AB054_A23C4;
 extern s32 gControllerInputs[4];
@@ -226,7 +233,7 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F36C_2FF6C);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F3E4_2FFE4);
 
-void func_8002F518_30118(DisplayListObject *s0) {
+void func_8002F518_30118(func_8002F518_30118_arg *s0) {
     volatile u8 padding[0x20];
     u32 new_var;
     GameState *s1 = (GameState *)getCurrentAllocation();

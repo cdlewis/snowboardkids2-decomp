@@ -41,8 +41,8 @@ typedef struct {
 extern D_800AB068_A23D8_arg *D_800AB068_A23D8;
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
-extern s32 D_800A2D40_A3940;
-extern s32 D_800A2D44_A3944;
+extern void *D_800A2D40_A3940;
+extern void *D_800A2D44_A3944;
 extern s32 D_800A2D48_A3948;
 extern void func_8006395C_6455C(void);
 extern void func_80065150_65D50(void);

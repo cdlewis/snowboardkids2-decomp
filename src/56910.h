@@ -1,4 +1,5 @@
 #include "common.h"
+#include "displaylist.h"
 
 typedef struct {
     void *start;
@@ -17,9 +18,9 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x90];
-    s32 unk90;
-    s32 padding2[3];
-    s32 unkA0;
+    DisplayListObject_unk20 unk90;
+    DisplayListObject_unk20 unkA0;
+    DisplayListObject unkB0;
 } func_80055E68_56A68_result;
 
 func_80055E68_56A68_result *func_80055E68_56A68(s32);

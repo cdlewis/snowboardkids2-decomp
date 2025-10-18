@@ -18,7 +18,7 @@ typedef struct {
     s32 unk14;
     s32 unk18;
     s32 unk1C;
-    s32 unk20;
+    DisplayListObject *unk20;
     void *unk24;
     void *unk28;
     s32 unk2C;
@@ -36,20 +36,8 @@ typedef struct {
 extern D_800BBB90_Entry D_800BBB90_B7DD0[];
 
 typedef struct {
-    s8 pad_0[0x20];
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    s8 pad_30[0xC];
-    s32 unk3C;
-    s8 pad_40[0x10];
-    s8 unk50[0x0C];
-    void *unk5C;
-    void *unk60;
-    void *unk64;
-    void *unk68;
-    s8 pad_6C[0xC];
+    /* 0x00 */ DisplayListObject node1;
+    /* 0x3C */ DisplayListObject node2;
     s32 unk78;
     s8 pad_7C[0x10];
     s32 unk8C;
@@ -70,10 +58,7 @@ typedef struct {
 } NodeWithPayload;
 
 typedef struct {
-    u8 padding[0x14];
-    u8 padding2[0xC];
-    s32 unk20;
-    u8 padding3[0x18];
+    /* 0x0 */ DisplayListObject node;
     u16 unk3C;
     s16 unk3E;
 } func_800BB8B8_B7AF8_arg;
@@ -101,18 +86,18 @@ void func_800BB2B0_B74F0(TrackHazard *arg0) {
 
     arg0->unkA6 += (temp & 1);
     result = func_80055E68_56A68(gameState->memoryPoolId);
-    arg0->unk20 = &result->unk90;
+    arg0->node1.unk20 = &result->unk90;
     result = func_80055E68_56A68(gameState->memoryPoolId);
-    arg0->unk5C = &result->unkA0;
-    arg0->unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
-    arg0->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
-    arg0->unk2C = 0;
+    arg0->node2.unk20 = &result->unkA0;
+    arg0->node1.unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
+    arg0->node1.unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
+    arg0->node1.unk2C = 0;
     arg0->unk98 = 0;
     arg0->unk9C = 0;
     arg0->unkA0 = 0;
-    arg0->unk60 = arg0->unk24;
-    arg0->unk64 = arg0->unk28;
-    arg0->unk68 = arg0->unk2C;
+    arg0->node2.unk24 = arg0->node1.unk24;
+    arg0->node2.unk28 = arg0->node1.unk28;
+    arg0->node2.unk2C = arg0->node1.unk2C;
     memcpy(&arg0->unk8C, &D_800BBB90_B7DD0[arg0->unkA6].unk4, 0xC);
     createCombinedRotationMatrix(&arg0->unk78, D_800BBB90_B7DD0[arg0->unkA6].unk0, D_800BBB90_B7DD0[arg0->unkA6].unk2);
     arg0->unkA4 = 0;
@@ -127,17 +112,17 @@ void func_800BB3B8_B75F8(TrackHazard *arg0) {
 
     memcpy(&D_8009A8A4_9B4A4, &arg0->unk98, 0xC);
     func_8006B084_6BC84(&D_8009A8A4_9B4A4 - 5, &arg0->unk78, arg0);
-    createXRotationMatrix(&matrix, arg0->unkA4);
+    createXRotationMatrix((s16(*)[3])matrix, arg0->unkA4);
 
     matrix[6] = 0x3b333;
     matrix[5] = 0;
     matrix[7] = 0x170000;
 
-    func_8006B084_6BC84(&matrix[0], arg0, &arg0->unk3C);
+    func_8006B084_6BC84(&matrix[0], arg0, &arg0->node2);
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, arg0);
-        enqueueDisplayListWithFrustumCull(i, &arg0->unk3C);
+        enqueueDisplayListWithFrustumCull(i, &arg0->node1);
+        enqueueDisplayListWithFrustumCull(i, &arg0->node2);
     }
 }
 
@@ -180,10 +165,10 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
 
         if (gs->gamePaused == 0) {
             for (i = 0; i < gs->numPlayers; i++) {
-                if (func_8005C60C_5D20C(&arg0->unk50, 0x12A000, &gs->players[i]) != 0) {
-                    if (func_8005C60C_5D20C(&arg0->unk50, 0x1E3000, &gs->players[i]) != 0) {
+                if (func_8005C60C_5D20C(&arg0->node2.unk10.unk4, 0x12A000, &gs->players[i]) != 0) {
+                    if (func_8005C60C_5D20C(&arg0->node2.unk10.unk4, 0x1E3000, &gs->players[i]) != 0) {
                         func_800589A0_595A0(&gs->players[i]);
-                        func_80056B7C_5777C(&arg0->unk50, 0x2A);
+                        func_80056B7C_5777C(&arg0->node2.unk10.unk4, 0x2A);
                         setCallback(func_800BB658_B7898);
                     }
                 }
@@ -225,7 +210,7 @@ void func_800BB658_B7898(TrackHazard *arg0) {
     func_800BB3B8_B75F8(arg0);
 
     for (i = 0; i < gs->numPlayers; i++) {
-        func_8005C60C_5D20C(&arg0->unk50, 0x12A000, &gs->players[i]);
+        func_8005C60C_5D20C(&arg0->node2.unk10.unk4, 0x12A000, &gs->players[i]);
     }
 }
 
@@ -265,7 +250,7 @@ void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
     arg0->unk1C = 0xE270649E;
     arg0->unk3C = 0x12C;
     arg0->unk3E = 0;
-    arg0->unk20 = (s32)(func_80055E68_56A68(gs->memoryPoolId)) + 0xB0;
+    arg0->unk20 = &func_80055E68_56A68(gs->memoryPoolId)->unkB0;
     setCleanupCallback(&func_800BBA60_B7CA0);
     setCallback(&func_800BB8B8_B7AF8);
 }
@@ -295,7 +280,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
 
                 for (i = 0; i < numPlayers; i++) {
                     if ((u32)gameState->players[i].unkB94 - 0x60 < 6) {
-                        arg0->unk20 = (s32)func_80055E68_56A68(gameState->memoryPoolId) + 0xC0;
+                        arg0->node.unk20 = &func_80055E68_56A68(gameState->memoryPoolId)->unkB0.unk10;
                         randVal = (u8)randA();
                         randVal = randVal - 0x60;
                         i = randVal << 1;
@@ -315,7 +300,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
                 arg0->unk3C--;
                 if ((arg0->unk3C << 16) == 0) {
                     arg0->unk3E = 0;
-                    arg0->unk20 = (s32)func_80055E68_56A68(gameState->memoryPoolId) + 0xB0;
+                    arg0->node.unk20 = &func_80055E68_56A68(gameState->memoryPoolId)->unkB0.unk0;
                     arg0->unk3C = 0x14;
                 }
             }
@@ -323,7 +308,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, arg0);
+        enqueueDisplayListWithFrustumCull(i, &arg0->node);
     }
 }
 
