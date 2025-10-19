@@ -85,7 +85,7 @@ typedef struct {
 
 s32 func_80070140_70D40(func_80070140_70D40_arg *arg0);
 
-void func_8006FC70_70870(u16, u16, s8 *, s8 *);
+void func_8006FC70_70870(u16, u16, u8 *, u8 *);
 
 typedef struct {
     u8 padding[0xB8];

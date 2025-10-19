@@ -42,13 +42,10 @@ typedef struct {
     s16 unk2;
     s32 unk4;
     Node_70B00 unk8;
-    func_8006F9BC_705BC_arg unk1E0;
-    func_8006F9BC_705BC_arg unk3B8;
-    func_8006F9BC_705BC_arg unk590;
-    func_8006F9BC_705BC_arg *unk768;
-    u8 padding6[0xD6];
-    s16 unk842;
-    u8 padding7[0xFC];
+    Node_70B00 unk1E0;
+    Node_70B00 unk3B8;
+    Node_70B00 unk590;
+    Node_70B00 unk768;
     s16 unk940;
     s16 unk942;
     s16 unk944;
@@ -117,7 +114,7 @@ void func_80003E40_4A40(func_80003EE0_4AE0_task_memory *arg0) {
     arg0->unkE59 = 0x7F;
     arg0->unkE5A = 0;
     arg0->unkE5D = 0x90;
-    func_8006FC70_70870(arg0->unk842, 3, &arg0->unkE44, &arg0->unkE5C);
+    func_8006FC70_70870(arg0->unk768.id, 3, &arg0->unkE44, &arg0->unkE5C);
 }
 
 void func_80003EE0_4AE0(void) {
@@ -175,7 +172,7 @@ void func_80003EE0_4AE0(void) {
     func_8006FEF8_70AF8(&taskMemory->unk768, 1);
     func_8006FA0C_7060C(&taskMemory->unk768, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     func_8006BEDC_6CADC(buffer, 0, 0, 0x01400000, 0, 0, 0);
-    func_8006FD3C_7093C(taskMemory->unk842, buffer);
+    func_8006FD3C_7093C(taskMemory->unk768.id, buffer);
     func_8006FE28_70A28(&taskMemory->unk8, 0, 0, 0);
     func_8006FDA0_709A0(&taskMemory->unk8, 0, 0);
     func_8006FDA0_709A0(&taskMemory->unk1E0, 0, 0);
