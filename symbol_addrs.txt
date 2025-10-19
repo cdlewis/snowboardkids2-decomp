@@ -1,3 +1,4 @@
+D_800AB078_A23E8 = 0x800AB078; // size:0x24
 D_8008BF90_8CB90 = 0x8008BF90; // size:0x10
 setModelCameraTransform = 0x8006F994; // rom:0x70594
 setModelRenderMode = 0x80000450; // rom:0x1050

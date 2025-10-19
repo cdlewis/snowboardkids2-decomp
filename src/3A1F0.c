@@ -25,6 +25,14 @@ typedef struct {
     u8 extName[1]; // maybe wrong
 } controllerPackFileHeader;
 
+typedef struct {
+    s16 unk0[4];
+    u32 unk8[4];
+    u8 unk18[4];
+    u8 unk1C[4];
+    u8 unk20[4];
+} D_800AB078_A23E8_type;
+
 extern char piManagerThreadStack[0x8]; // this size seems wrong
 extern DmaTransferEntry *D_800A2108_A2D08;
 extern DmaTransferEntry *gDmaQueue;
@@ -42,7 +50,7 @@ extern OSMesgQueue *D_800A2150_A2D50[];
 extern OSPfs controllerPacks[];
 extern OSThread D_800A1DC0_A29C0;
 extern s16 D_8008FE8C_90A8C;
-extern s16 D_800AB078_A23E8[];
+extern D_800AB078_A23E8_type D_800AB078_A23E8;
 extern s32 gControllerPackFileCount;
 extern s32 gControllerPackFreeBlockCount;
 extern s32 gDmaQueueIndex;
@@ -60,7 +68,7 @@ extern u8 D_800AFED0_A7240;
 extern u8 *gDmaCompressionBuffer;
 
 void piDmaHandlerThread(void *);
-void func_8003AC58_3B858(void *);
+void func_8003AC58_3B858(D_800AB078_A23E8_type *);
 
 void func_8003AFA0_3BBA0(void);
 extern OSContStatus D_8009F660_A0260;
@@ -299,7 +307,7 @@ void func_8003AC30_3B830(void) {
 }
 
 void func_8003AC38_3B838(void) {
-    func_8003AC58_3B858(D_800AB078_A23E8);
+    func_8003AC58_3B858(&D_800AB078_A23E8);
 }
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003AC58_3B858);
@@ -309,7 +317,7 @@ void func_8003AF38_3BB38(s32 arg0) {
     temp_v1 = arg0 & 0xFFFF;
 
     if (((s32)D_800AFED0_A7240 >> temp_v1) & 1) {
-        D_800AB078_A23E8[temp_v1] = 1;
+        D_800AB078_A23E8.unk0[temp_v1] = 1;
     }
 }
 
@@ -317,8 +325,9 @@ void func_8003AF6C_3BB6C(void) {
     u8 *var_v1;
     u8 *end;
     u8 a1 = 1;
+    s32 i;
 
-    var_v1 = (u8 *)D_800AB090_A2400;
+    var_v1 = (u8 *)D_800AB078_A23E8.unk18;
     end = var_v1 + 4;
 
     do {
@@ -330,26 +339,15 @@ void func_8003AF6C_3BB6C(void) {
 }
 
 void func_8003AFA0_3BBA0(void) {
-    s32 var_v1;
-    int new_var2;
-    s32 *var_a0;
-    s16 *var_a1;
-    int new_var;
-    new_var = 2;
-    var_v1 = 0;
-    new_var2 = 1;
-    var_a1 = D_800AB080_A23F0 - new_var;
-    var_a0 = D_800AB080_A23F0;
-    do {
-        D_800AB090_A2400[var_v1] = 0;
-        *var_a0 = new_var2;
-        *var_a1 = 0;
-        var_a1++;
-        D_800AB094_A2404[var_v1] = 0;
-        D_800AB098_A2408[var_v1] = 0;
-        var_v1++;
-        var_a0++;
-    } while (var_v1 < 4);
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        D_800AB078_A23E8.unk18[i] = 0;
+        D_800AB078_A23E8.unk8[i] = 1;
+        D_800AB078_A23E8.unk0[i] = 0;
+        D_800AB078_A23E8.unk1C[i] = 0;
+        D_800AB078_A23E8.unk20[i] = 0;
+    }
 }
 
 void func_8003B000_3BC00(s32 arg0) {
