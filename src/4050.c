@@ -7,24 +7,29 @@
 
 USE_OVERLAY(_1DD170)
 
-/*
-s8 D_8008BF90_8CB90 = 0;
-s8 D_8008BF92_8CB92 = 0;
-s16 D_8008BF94_8CB94 = 0;
-s8 D_8008BF98_8CB98 = 0;
-s8 D_8008BF9A_8CB9A = 0;
-s8 D_8008BF9C_8CB9C = 0;
-s8 D_8008BF9E_8CB9E = 2;
-*/
+typedef union {
+    struct {
+        s16 lower;
+        s16 upper;
+    } half;
+    s32 full;
+} CompositeInt;
 
-// not actually extern, see above;
-extern s16 D_8008BF90_8CB90;
-extern s16 D_8008BF92_8CB92;
-extern s16 D_8008BF94_8CB94;
-extern s32 D_8008BF98_8CB98;
-extern s16 D_8008BF9A_8CB9A;
-extern s32 D_8008BF9C_8CB9C;
-extern s16 D_8008BF9E_8CB9E;
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    CompositeInt unk8;
+    CompositeInt unkC;
+} D_8008BF90_8CB90_type;
+
+D_8008BF90_8CB90_type D_8008BF90_8CB90 = { .unk0 = 0,
+                                           .unk2 = 0,
+                                           .unk4 = 0,
+                                           .unk6 = 0,
+                                           .unk8 = { .half = { .lower = 0, .upper = 0 } },
+                                           .unkC = { .half = { .lower = 0, .upper = 2 } } };
 
 extern void func_80014480_15080(void);
 extern s16 D_800AB070_A23E0;
@@ -59,9 +64,9 @@ s32 __udiv_w_sdiv(void) {
 }
 
 void func_8000346C_406C(s16 arg0, s16 arg1, s16 arg2) {
-    D_8008BF90_8CB90 = arg0;
-    D_8008BF92_8CB92 = arg1;
-    D_8008BF94_8CB94 = arg2;
+    D_8008BF90_8CB90.unk0 = arg0;
+    D_8008BF90_8CB90.unk2 = arg1;
+    D_8008BF90_8CB90.unk4 = arg2;
 }
 
 void loadOverlay_1DD170(void) {
@@ -143,10 +148,10 @@ void func_80003CA4_48A4(void) {
 }
 
 void func_80003CC4_48C4(void) {
-    if ((D_8008BF98_8CB98 == 5) && (D_8008BF9C_8CB9C == 0)) {
-        D_8008BF9C_8CB9C = 1;
+    if ((D_8008BF90_8CB90.unk8.full == 5) && (D_8008BF90_8CB90.unkC.full == 0)) {
+        D_8008BF90_8CB90.unkC.full = 1;
     }
-    func_80003450_4050(D_8008BF9A_8CB9A, D_8008BF9E_8CB9E);
+    func_80003450_4050(D_8008BF90_8CB90.unk8.half.upper, D_8008BF90_8CB90.unkC.half.upper);
     createTaskQueue(&loadOverlay_1DD170, 0x64);
     setGameStateHandler(&func_80003D30_4930);
 }

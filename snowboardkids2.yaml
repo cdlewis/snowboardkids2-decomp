@@ -373,7 +373,7 @@ segments:
       - [0x8A140, data, 20F0]
       - [0x8C980, data, 3870]
       - [0x8CA90, data, 3B80]
-      - [0x8CB90, data, 4050]
+      - [0x8CB90, .data, 4050]
       - [0x8CBA0, .data, 4A40]
       - [0x8CBF0, data]
       - [0x8CD80, data]
