@@ -1,3 +1,4 @@
+#include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 
@@ -12,7 +13,7 @@ typedef struct {
     s16 unk84;
 } func_80000460_1060_arg0;
 
-void func_80000460_1060(func_80000460_1060_arg0 *arg0, s8 *arg1, s8 *arg2);
+void func_80000460_1060(func_80000460_1060_arg0 *arg0, ColorData *arg1, ColorData *arg2);
 
 void func_8000056C_116C(func_80000460_1060_arg0 *, s32, GameState *);
 

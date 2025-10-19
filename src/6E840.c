@@ -252,7 +252,39 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FAA4_706A4);
 void func_8006FC68_70868(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FC70_70870);
+void func_8006FC70_70870(u16 searchId, u16 colorCount, ColorData *srcColors, ColorData *finalColor) {
+    Node_70B00 *node;
+    s32 i;
+    Node_70B00_ColorData *dst;
+
+    node = D_800A3370_A3F70.unk8.list2_next;
+
+    if (node == NULL) {
+        return;
+    }
+
+    while (node != NULL) {
+        if (node->id == (u16)searchId) {
+            dst = &node->unk148[0];
+            for (i = 0; i < (u16)colorCount; i++) {
+                node->unk148[i].unk148 = node->unk148[i].unk14C = srcColors[i].r;
+                node->unk148[i].unk149 = node->unk148[i].unk14D = srcColors[i].g;
+                node->unk148[i].unk14A = node->unk148[i].unk14E = srcColors[i].b;
+                node->unk148[i].unk150 = srcColors[i].r2;
+                node->unk148[i].unk151 = srcColors[i].g2;
+                node->unk148[i].unk152 = srcColors[i].b2;
+            }
+
+            node->unk148[i].unk148 = node->unk148[i].unk14C = finalColor[0].r;
+            node->unk148[i].unk149 = node->unk148[i].unk14D = finalColor[0].g;
+            node->unk148[i].unk14A = node->unk148[i].unk14E = finalColor[0].b;
+
+            node->unk140 = colorCount;
+        }
+
+        node = node->unk8.list2_next;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FD3C_7093C);
 

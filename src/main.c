@@ -2,7 +2,6 @@
 
 #include "4050.h"
 #include "5520.h"
-#include "6E840.h"
 #include "90F0.h"
 #include "common.h"
 #include "geometry.h"
@@ -169,7 +168,7 @@ s32 osVoiceCheckWord(u8 *data) {
     return 0xE;
 }
 
-void func_80000460_1060(func_80000460_1060_arg0 *arg0, s8 *arg1, s8 *arg2) {
+void func_80000460_1060(func_80000460_1060_arg0 *arg0, ColorData *arg1, ColorData *arg2) {
     s32 temp_v0;
     s32 temp_v0_2;
     int new_var3;
@@ -193,28 +192,28 @@ void func_80000460_1060(func_80000460_1060_arg0 *arg0, s8 *arg1, s8 *arg2) {
     if (var_a1 < 0) {
         var_a1 += 3;
     }
-    arg1[0x4] = 0;
-    arg1[0x5] = 0x7F;
-    arg1[0x6] = 0x7F;
-    arg1[0x0] = temp_a2->unk34;
-    arg1[0x1] = temp_a2->unk35;
+    arg1[0].r2 = 0;
+    arg1[0].g2 = 0x7F;
+    arg1[0].b2 = 0x7F;
+    arg1[0].r = temp_a2->unk34;
+    arg1[0].g = temp_a2->unk35;
     temp_v0_2 = var_a1 >> 2;
-    arg1[0x2] = temp_a2->unk36;
-    arg1[0x8] = temp_v0_2;
-    arg1[0x9] = temp_v0_2;
-    arg1[0xA] = temp_v0_2;
-    arg1[0xC] = 0x7F;
-    arg1[0xD] = 0x7F;
-    arg1[0xE] = 0;
-    arg1[0x14] = -0x7F;
-    arg1[0x15] = 0x7F;
-    arg1[0x16] = 0;
-    arg1[0x10] = temp_t1;
-    arg1[0x11] = temp_t1;
-    arg1[0x12] = temp_t1;
-    arg2[0x0] = temp_a2->unk38;
-    arg2[0x1] = temp_a2->unk39;
-    arg2[0x2] = temp_a2->unk3A;
+    arg1[0].b = temp_a2->unk36;
+    arg1[1].r = temp_v0_2;
+    arg1[1].g = temp_v0_2;
+    arg1[1].b = temp_v0_2;
+    arg1[1].r2 = 0x7F;
+    arg1[1].g2 = 0x7F;
+    arg1[1].b2 = 0;
+    arg1[2].r2 = -0x7F;
+    arg1[2].g2 = 0x7F;
+    arg1[2].b2 = 0;
+    arg1[2].r = temp_t1;
+    arg1[2].g = temp_t1;
+    arg1[2].b = temp_t1;
+    arg2[0].r = temp_a2->unk38;
+    arg2[0].g = temp_a2->unk39;
+    arg2[0].b = temp_a2->unk3A;
     func_8006FC70_70870(arg0->unk0->unkDA, 3, arg1, arg2);
 }
 

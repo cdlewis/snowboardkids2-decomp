@@ -1,11 +1,12 @@
 #include "288A0.h"
+#include "6E840.h"
 
 extern s32 func_8006FE48_70A48(u16, s32, s32, s32, s32, s32);
 extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 extern void func_8006FD3C_7093C(u16, void *);
 
-extern s8 D_8008DEF0_8EAF0;
-extern s8 D_8008DEF8_8EAF8;
+extern ColorData D_8008DEF0_8EAF0;
+extern ColorData D_8008DEF8_8EAF8;
 
 void func_80027CA0_288A0(Node_70B00 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     s8 sp20[0x20];

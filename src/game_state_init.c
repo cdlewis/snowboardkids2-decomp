@@ -163,12 +163,12 @@ void transitionToMainMenu(void) {
 }
 
 void setupGameStateTransition(func_80000460_1060_arg0 *arg0) {
-    s8 *sp10[5];
-    s8 sp28;
+    ColorData sp10[3];
+    ColorData sp28;
 
     func_8000056C_116C(arg0, 0, getCurrentAllocation());
     setCleanupCallback(&cleanupTransitionEffect);
-    func_80000460_1060(arg0, &sp10, &sp28);
+    func_80000460_1060(arg0, &sp10[0], &sp28);
     setCallback(&setShortCountdownAndContinue);
 }
 
