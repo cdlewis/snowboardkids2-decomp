@@ -37,6 +37,8 @@ typedef struct {
     Node_70B00 unk8;
     Node_70B00 unk1E0;
     Node_70B00 unk3B8;
+    u8 padding[0x1250];
+    s8 unk17E0;
 } allocateTaskMemory_return;
 
 void loadOverlay_1DD170(void);
@@ -121,12 +123,12 @@ INCLUDE_ASM("asm/nonmatchings/4050", func_8000378C_438C);
 INCLUDE_ASM("asm/nonmatchings/4050", func_80003898_4498);
 
 void func_80003C34_4834(void) {
-    GameState *temp_v0;
+    allocateTaskMemory_return *temp_v0;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
+    temp_v0 = (allocateTaskMemory_return *)getCurrentAllocation();
     if (temp_v0->unk17E0 != 0) {
-        unlinkNode(&temp_v0->audioPlayer5);
-        unlinkNode(&temp_v0->audioPlayer3);
+        unlinkNode(&temp_v0->unk3B8);
+        unlinkNode(&temp_v0->unk1E0);
         unlinkNode(&temp_v0->unk8);
         terminateSchedulerWithCallback(&func_80003C88_4888);
     }

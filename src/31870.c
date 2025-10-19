@@ -14,12 +14,7 @@ USE_ASSET(_41A1D0);
 USE_ASSET(_4547D0);
 
 typedef struct {
-    u8 padding[0xDA];
-    u16 unkDA;
-} func_80030C70_31870_allocated_memory;
-
-typedef struct {
-    func_80030C70_31870_allocated_memory *unk0;
+    Node_70B00 *unk0;
     s32 unk4;
     u8 padding[0x18];
     void *unk20;
@@ -211,7 +206,7 @@ void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     u8 temp_s2;
     void *temp_s3;
     func_80032DE8_339E8_asset *asset;
-    func_80030C70_31870_allocated_memory *temp_v0;
+    Node_70B00 *temp_v0;
     s16 *pMatrixB;
 
     pMatrixB = &matrixB[0][0];
@@ -227,7 +222,7 @@ void func_80030C70_31870(func_80031510_32110_arg *arg0) {
 
     setModelCameraTransform(arg0->unk0, 0, 0, -0x98, arg0->unk60, 0x97, arg0->unk62);
     func_8006BEDC_6CADC(sp20, 0, 0, 0x580000, 0, 0, 0);
-    func_8006FD3C_7093C(arg0->unk0->unkDA, sp20);
+    func_8006FD3C_7093C(arg0->unk0->id, sp20);
 
     temp_s3 = &arg0->unk40;
     memcpy(temp_s3, &identityMatrix, 0x20);
@@ -235,7 +230,7 @@ void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     memcpy(&matrixA, pMatrixB, 0x20);
 
     createRotationMatrixYX(&matrixA, 0x1000, 0x800);
-    createZRotationMatrix(pMatrixB, 0x1F00);
+    createZRotationMatrix((s16(*)[3])pMatrixB, 0x1F00);
 
     func_8006B084_6BC84(&matrixA, pMatrixB, temp_s3);
 
@@ -289,7 +284,7 @@ void func_80031288_31E88(func_80031510_32110_arg *arg0) {
     memcpy(pMatrixB, temp_s3, 0x20);
     memcpy(pMatrixA, pMatrixB, 0x20);
     createRotationMatrixYX(pMatrixA, 0x1000, 0x800);
-    createZRotationMatrix(pMatrixB, 0x1F00);
+    createZRotationMatrix((s16(*)[3])pMatrixB, 0x1F00);
     func_8006B084_6BC84(pMatrixA, pMatrixB, temp_s3);
     arg0->unk50 = 0x600000;
     arg0->unk58 = 0xFFF80000;
@@ -366,7 +361,7 @@ void func_80031818_32418(func_80031510_32110_arg *arg0) {
     memcpy(pMatrixB, pMatrixA, 0x20);
 
     createRotationMatrixYX(pMatrixB, 0x1000, 0x800);
-    createZRotationMatrix(pMatrixA, 0x1F00);
+    createZRotationMatrix((s16(*)[3])pMatrixA, 0x1F00);
     func_8006B084_6BC84(pMatrixB, pMatrixA, &arg0->unk3C);
 
     arg0->unk58 = 0xFFF80000;
