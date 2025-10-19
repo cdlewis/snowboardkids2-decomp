@@ -112,7 +112,7 @@ typedef struct {
     } *unk0;
     s8 unk4;
     s8 unk5;
-    func_80009F5C_AB5C_arg *unk8;
+    func_80004FF8_5BF8_arg1 *unk8;
     u8 padding2[0x10];
     s32 unk1C;
     s32 unk20;
@@ -138,7 +138,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x8];
-    func_80009F5C_AB5C_arg *unk8;
+    func_80004FF8_5BF8_arg1 *unk8;
 } func_800014C8_20C8_arg;
 
 s32 D_800894F0_8A0F0[];

@@ -1,9 +1,7 @@
+#include "90F0.h"
+
 #include "common.h"
 #include "task_scheduler.h"
-
-typedef struct {
-
-} func_80009F5C_AB5C_arg;
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_800084F0_90F0);
 
@@ -37,9 +35,9 @@ INCLUDE_ASM("asm/nonmatchings/90F0", func_80009E68_AA68);
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80009EF8_AAF8);
 
-void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0) {
+void func_80009F5C_AB5C(func_80004FF8_5BF8_arg1 **arg0) {
     if (arg0 != NULL) {
-        *arg0 = (func_80009F5C_AB5C_arg *)freeNodeMemory(*arg0);
+        *arg0 = (func_80004FF8_5BF8_arg1 *)freeNodeMemory(*arg0);
     }
 }
 

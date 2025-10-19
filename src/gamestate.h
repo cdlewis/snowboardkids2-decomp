@@ -1,11 +1,8 @@
 #ifndef _GAMESTATE_H_
 #define _GAMESTATE_H_
 
+#include "6E840.h"
 #include "common.h"
-
-typedef struct {
-    u8 pading[0x1D8];
-} GameStateUnk4;
 
 typedef struct {
     s32 unk0;
@@ -29,10 +26,10 @@ typedef struct {
 } Player;
 
 typedef struct {
-    /* 0x0 */ ALPlayer *audioPlayer0;
-    GameStateUnk4 *unk4;
-    GameStateUnk4 *unk8;
-    GameStateUnk4 *unkC;
+    /* 0x0 */ Node_70B00 *audioPlayer0;
+    Node_70B00 *unk4;
+    Node_70B00 *unk8;
+    Node_70B00 *unkC;
     Player *players;
     void *unk14;
     void *unk18;

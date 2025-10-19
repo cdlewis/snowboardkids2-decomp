@@ -24,9 +24,14 @@ typedef struct Node_70B00 {
     u8 unkBF;
     u8 unkC0;
     u8 unkC1;
-    u8 padding3[0x18];
+    u8 padding8[0x6];
+    s16 unkC8;
+    s16 unkCA;
+    u8 padding3[0xE];
     /* 0xDA */ u16 id;
-    u8 padding4[0xFC];
+    u8 padding4[0xF4];
+    f32 unk1D0;
+    u8 padding5[0x2];
 } Node_70B00;
 
 void func_8006FDA0_709A0(Node_70B00 *arg0, u8 arg1, u8 arg2);
@@ -52,7 +57,7 @@ typedef struct {
     s32 unk1D4;
 } func_8006F9BC_705BC_arg;
 
-void func_8006F9BC_705BC(func_8006F9BC_705BC_arg *arg0, f32 arg1, f32 arg2);
+void func_8006F9BC_705BC(Node_70B00 *arg0, f32 arg1, f32 arg2);
 
 void func_8006E054_6EC54(u16);
 

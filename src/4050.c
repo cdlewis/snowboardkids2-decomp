@@ -33,8 +33,10 @@ typedef struct {
     s16 unk0;
     s8 unk2;
     s8 unk3;
-    char padding[0xDE];
-    s16 unkE2;
+    s32 unk4;
+    Node_70B00 unk8;
+    Node_70B00 unk1E0;
+    Node_70B00 unk3B8;
 } allocateTaskMemory_return;
 
 void loadOverlay_1DD170(void);
@@ -66,8 +68,9 @@ void loadOverlay_1DD170(void) {
 }
 
 void func_80003508_4108(void) {
-    u8 *new_var3;
-    void *s0;
+    Node_70B00 *new_var3;
+    Node_70B00 *s0;
+    Node_70B00 *s1;
     f32 f20 = 1.0f;
     u8 temp[0x20];
 
@@ -80,7 +83,7 @@ void func_80003508_4108(void) {
     s.s1->unk3 = 0;
     setupTaskSchedulerNodes(0x40, 0x30, 4, 4, 4, 0, 0, 0);
 
-    s0 = ((u8 *)s.s1) + 8;
+    s0 = &s.s1->unk8;
     func_8006FAA4_706A4(s0, 0, 0, 10, f20);
     func_8006F9BC_705BC(s0, f20, f20);
     func_8006FEF8_70AF8(s0, 1);
@@ -88,8 +91,8 @@ void func_80003508_4108(void) {
     func_8006FA0C_7060C(s0, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     func_8006BEDC_6CADC(temp, 0, 0, 0x01000000, 0, 0, 0);
 
-    new_var3 = ((u8 *)s.s1) + 0x1E0;
-    func_8006FD3C_7093C(s.s1->unkE2, temp);
+    new_var3 = &s.s1->unk1E0;
+    func_8006FD3C_7093C(s.s1->unk8.id, temp);
     func_8006FDA0_709A0(NULL, 0, 0);
 
     s0 = new_var3;
@@ -102,14 +105,14 @@ void func_80003508_4108(void) {
     func_8006FDA0_709A0(s0, 0xFF, 0);
     func_8006FDA0_709A0(s0, 0, 8);
 
-    s.s1 = (allocateTaskMemory_return *)(((u8 *)s.s1) + 0x3B8);
-    func_8006FAA4_706A4(s.s1, 0, 3, 8, 0);
-    func_8006F9BC_705BC(s.s1, f20, f20);
-    func_8006FEF8_70AF8(s.s1, 1);
-    setModelCameraTransform(s.s1, 0, 0, -160, -120, 159, 119);
-    func_8006FE28_70A28(s.s1, 0, 0, 0);
-    func_8006FDA0_709A0(s.s1, 0xFF, 0);
-    func_8006FDA0_709A0(s.s1, 0, 8);
+    s1 = &s.s1->unk3B8;
+    func_8006FAA4_706A4(s1, 0, 3, 8, 0);
+    func_8006F9BC_705BC(s1, f20, f20);
+    func_8006FEF8_70AF8(s1, 1);
+    setModelCameraTransform(s1, 0, 0, -160, -120, 159, 119);
+    func_8006FE28_70A28(s1, 0, 0, 0);
+    func_8006FDA0_709A0(s1, 0xFF, 0);
+    func_8006FDA0_709A0(s1, 0, 8);
     setGameStateHandler(func_8000378C_438C);
 }
 
