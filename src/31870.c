@@ -1,6 +1,7 @@
 #include "20F0.h"
 #include "288A0.h"
 #include "5E590.h"
+#include "68CF0.h"
 #include "6E840.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
@@ -12,6 +13,41 @@
 USE_ASSET(_419C60);
 USE_ASSET(_41A1D0);
 USE_ASSET(_4547D0);
+
+extern u16 D_8008F150_8FD50[];
+extern s8 D_8009E480_9F080;
+extern void func_80032708_33308(void);
+
+typedef struct {
+    u8 padding[0x77C];
+    u16 unk77C;
+    u8 padding2[0x6];
+    u8 unk784[4];
+    u8 unk788[17];
+    u8 unk799;
+    u8 unk79A;
+    u8 unk79B;
+} func_800329A8_335A8_allocation;
+
+typedef struct {
+    u8 padding[0xC];
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s8 unk12;
+    s8 unk13;
+    u8 padding2[0x4];
+} func_800329A8_335A8_arg_item;
+
+typedef struct {
+    func_800329A8_335A8_arg_item unk0[4];
+    u8 padding2[0x18];
+    s16 unk78;
+    s16 unk7A;
+    u8 padding3[0x8];
+    s8 unk84[4];
+    u8 unk88;
+} func_800329A8_335A8_arg;
 
 typedef struct {
     Node_70B00 *unk0;
@@ -475,7 +511,45 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80032628_33228);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032708_33308);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_800329A8_335A8);
+void func_800329A8_335A8(func_800329A8_335A8_arg *arg0) {
+    func_800329A8_335A8_allocation *state;
+    s32 i;
+    u8 temp;
+    s16 temp2;
+
+    state = getCurrentAllocation();
+
+    for (i = 0; i < 4; i++) {
+        arg0->unk0[i].unkC = 0x400;
+        arg0->unk84[i] = 0;
+        temp2 = 0xFF;
+
+        if (state->unk799 == i) {
+            arg0->unk0[i].unk10 = 0xFF;
+            arg0->unk0[i].unk13 = 0;
+            if (state->unk79B == 0x14) {
+                if ((state->unk77C & 1) != 0) {
+                    __asm__ volatile("" ::: "memory");
+                    arg0->unk0[i].unk13 = temp2;
+                }
+            }
+        } else {
+            arg0->unk0[i].unk10 = 0x80;
+        }
+
+        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &arg0->unk0[i]);
+    }
+
+    temp = state->unk784[state->unk799];
+    temp = state->unk788[temp];
+
+    sprintf(&arg0->unk88, &D_8009E480_9F080, D_8008F150_8FD50[temp]);
+    arg0->unk7A = state->unk799 * 0x28 - 0x2A;
+    debugEnqueueCallback(8, 7, &renderTextPalette, &arg0->unk78);
+    if (state->unk79B < 0x14) {
+        setCallback(&func_80032708_33308);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032B0C_3370C);
 
