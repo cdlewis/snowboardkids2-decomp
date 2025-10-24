@@ -176,7 +176,7 @@ CommandEntry *getCommandEntry(s32 arg0, s32 arg1) {
     return &temp[(u8)arg1];
 }
 
-CommandEntry *getCommandEntryMasked(s32 arg0, s32 arg1) {
+CommandEntry *getCommandEntryMasked(u8 arg0, u8 arg1) {
     CommandEntry *temp = getCommandEntry(arg0 & 0xFF, arg1 & 0xFF);
     return temp;
 }

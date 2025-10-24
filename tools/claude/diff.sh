@@ -7,4 +7,4 @@ if [ ! -f "$O_FILE" ]; then
     exit 1
 fi
 
-diff -u --suppress-common-lines "$O_FILE" target_object_dump.s
+diff -u --suppress-common-lines "$O_FILE" target_object_dump.s 2>/dev/null

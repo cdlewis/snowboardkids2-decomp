@@ -819,7 +819,7 @@ segments:
     exclusive_ram_id: 800BB2B0
     overlay: true
     subsegments:
-      - [0xAEFA0, asm]
+      - [0xAEFA0, c]
       - [0xB04E0, data, AEFA0]
 
   - name: _B07A0
