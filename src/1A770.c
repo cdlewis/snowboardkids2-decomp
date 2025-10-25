@@ -46,7 +46,10 @@ extern void func_80038090_38C90(void);
 extern void func_80015254_15E54(void);
 extern s32 gControllerInputs[4];
 extern void func_80027CA0_288A0(void *, s32, s32, s32);
+extern void func_8001A478_1B078(void);
+extern void func_80032330_32F30(void);
 
+s32 func_8006FE10_70A10(s32);
 void func_8001A0B4_1ACB4(void);
 void func_8001A070_1AC70(void);
 void func_80019F60_1AB60(void);
@@ -246,7 +249,12 @@ void func_8001A3D8_1AFD8(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A434_1B034);
+void func_8001A434_1B034(void) {
+    if (func_8006FE10_70A10(0) == 0) {
+        scheduleTask(&func_80032330_32F30, 0, 0, 0x5A);
+        setGameStateHandler(&func_8001A478_1B078);
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/1A770", D_8009DF50_9EB50);
 
