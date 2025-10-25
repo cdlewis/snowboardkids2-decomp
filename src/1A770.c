@@ -37,7 +37,8 @@ typedef struct {
     void *unk770;
     void *unk774;
     void *unk778;
-    u8 padding[0x1E];
+    u16 unk77C;
+    u8 padding[0x1C];
     u8 unk79A;
 } allocation_1B8C8;
 
@@ -77,6 +78,7 @@ void func_80019EA8_1AAA8(void);
 void func_80019F30_1AB30(void);
 void func_8001AF80_1BB80(void);
 void func_8001A434_1B034(void);
+void func_8001AC70_1B870(void);
 
 void func_80019B70_1A770(func_80019B70_1A770_arg *arg0) {
     arg0->unk20 = func_8000198C_258C(0x13, getCurrentAllocation());
@@ -283,7 +285,15 @@ INCLUDE_RODATA("asm/nonmatchings/1A770", jtbl_8009DFC0_9EBC0);
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A478_1B078);
 
-INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AC30_1B830);
+void func_8001AC30_1B830(void) {
+    u16 temp_v1;
+    allocation_1B8C8 *temp_v0 = (allocation_1B8C8 *)getCurrentAllocation();
+    temp_v1 = temp_v0->unk77C - 1;
+    temp_v0->unk77C = temp_v1;
+    if (!(temp_v1 & 0xFFFF)) {
+        setGameStateHandler(&func_8001AC70_1B870);
+    }
+}
 
 void func_8001AC70_1B870(void) {
     u8 temp_v1 = ((allocation_1B8C8 *)getCurrentAllocation())->unk79A;
