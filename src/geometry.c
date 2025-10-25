@@ -181,7 +181,48 @@ INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BEDC_6CADC);
 
 INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BFB8_6CBB8);
 
-INCLUDE_ASM("asm/nonmatchings/geometry", func_8006C130_6CD30);
+typedef struct {
+    s16 unk0;
+    u16 unk2;
+    s16 unk4;
+    s16 unk6;
+    u16 unk8;
+    s16 unkA;
+    s16 unkC;
+    u16 unkE;
+    s16 unk10;
+    s32 unk14;
+    u16 unk18;
+    u16 unk1A;
+    s32 unk1C;
+} LookAtData;
+
+void func_8006C130_6CD30(LookAtData *arg0, LookAt *arg1) {
+    s32 *dst;
+    s16 temp16;
+
+    dst = (s32 *)arg1;
+
+    dst[0] = (((s32)arg0->unk0 << 1) & 0xFFFF0000) + ((-(s32)((u32)arg0->unk2 >> 15)) & 0xFFFF);
+    dst[1] = ((s32)arg0->unk4 << 1) & 0xFFFF0000;
+    dst[2] = (((s32)arg0->unk6 << 1) & 0xFFFF0000) + ((-(s32)((u32)arg0->unk8 >> 15)) & 0xFFFF);
+    dst[3] = ((s32)arg0->unkA << 1) & 0xFFFF0000;
+    dst[4] = (((s32)arg0->unkC << 1) & 0xFFFF0000) + ((-(s32)((u32)arg0->unkE >> 15)) & 0xFFFF);
+    dst[5] = ((s32)arg0->unk10 << 1) & 0xFFFF0000;
+    dst[6] = (arg0->unk14 & 0xFFFF0000) + arg0->unk18;
+    dst[7] = (arg0->unk1C & 0xFFFF0000) + 1;
+    temp16 = arg0->unk2;
+    dst[8] = (((s32)arg0->unk0 << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
+    dst[9] = ((s32)arg0->unk4 << 17) & 0xFFFF0000;
+    temp16 = arg0->unk8;
+    dst[10] = (((s32)arg0->unk6 << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
+    dst[11] = ((s32)arg0->unkA << 17) & 0xFFFF0000;
+    temp16 = arg0->unkE;
+    dst[12] = (((s32)arg0->unkC << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
+    dst[13] = ((s32)arg0->unk10 << 17) & 0xFFFF0000;
+    dst[14] = (arg0->unk14 << 16) + arg0->unk1A;
+    dst[15] = arg0->unk1C << 16;
+}
 
 void func_8006C2A8_6CEA8(func_8006C2A8_6CEA8_arg0 *arg0, func_8006C2A8_6CEA8_arg1 *arg1) {
     arg1->unk0 = (s32)((arg0->unk0 & 0xFFFF0000) + (((s32)(arg0->unk2 << 0x10) >> 0x1F) & 0xFFFF));
