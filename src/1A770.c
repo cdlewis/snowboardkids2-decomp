@@ -30,6 +30,20 @@ typedef struct {
     D_8008D7FC_8E3FC_item *unk8;
 } func_80019CD0_1A8D0_arg;
 
+typedef struct {
+    Node_70B00 unk0;
+    Node_70B00 unk1D8;
+    Node_70B00 unk3B0;
+    Node_70B00 unk588;
+    s32 *unk760;
+    void *unk764;
+    void *unk768;
+    void *unk76C;
+    void *unk770;
+    void *unk774;
+    void *unk778;
+} allocation_1B8C8;
+
 extern void func_8001A0F4_1ACF4(void);
 extern void func_8001AF18_1BB18(void);
 extern void func_80019BBC_1A7BC(void);
@@ -49,6 +63,7 @@ extern void func_80027CA0_288A0(void *, s32, s32, s32);
 extern void func_8001A478_1B078(void);
 extern void func_80032330_32F30(void);
 
+void func_8001AD80_1B980(void);
 s32 func_8006FE10_70A10(s32);
 void func_8001A0B4_1ACB4(void);
 void func_8001A070_1AC70(void);
@@ -274,7 +289,23 @@ INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AC30_1B830);
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AC70_1B870);
 
-INCLUDE_ASM("asm/nonmatchings/1A770", func_8001ACC8_1B8C8);
+void func_8001ACC8_1B8C8(void) {
+    allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)getCurrentAllocation();
+    if (func_8006FE10_70A10(0) == 0) {
+        unlinkNode(&temp_s0->unk0);
+        unlinkNode(&temp_s0->unk1D8);
+        unlinkNode(&temp_s0->unk3B0);
+        unlinkNode(&temp_s0->unk588);
+        temp_s0->unk760 = freeNodeMemory(temp_s0->unk760);
+        temp_s0->unk764 = freeNodeMemory(temp_s0->unk764);
+        temp_s0->unk768 = freeNodeMemory(temp_s0->unk768);
+        temp_s0->unk76C = freeNodeMemory(temp_s0->unk76C);
+        temp_s0->unk770 = freeNodeMemory(temp_s0->unk770);
+        temp_s0->unk774 = freeNodeMemory(temp_s0->unk774);
+        temp_s0->unk778 = freeNodeMemory(temp_s0->unk778);
+        terminateSchedulerWithCallback(&func_8001AD80_1B980);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AD80_1B980);
 
