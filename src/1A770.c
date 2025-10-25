@@ -14,11 +14,6 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    u8 padding[0x1D8];
-    s16 unk1D8;
-} func_8001AE80_1BA80_task_memory;
-
-typedef struct {
     u8 padding[0x14];
 } D_8008D7FC_8E3FC_item;
 
@@ -42,6 +37,8 @@ typedef struct {
     void *unk770;
     void *unk774;
     void *unk778;
+    u8 padding[0x1E];
+    u8 unk79A;
 } allocation_1B8C8;
 
 extern void func_8001A0F4_1ACF4(void);
@@ -63,6 +60,7 @@ extern void func_80027CA0_288A0(void *, s32, s32, s32);
 extern void func_8001A478_1B078(void);
 extern void func_80032330_32F30(void);
 
+void func_8001ACC8_1B8C8(void);
 void func_8001AD80_1B980(void);
 s32 func_8006FE10_70A10(s32);
 void func_8001A0B4_1ACB4(void);
@@ -287,7 +285,20 @@ INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A478_1B078);
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AC30_1B830);
 
-INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AC70_1B870);
+void func_8001AC70_1B870(void) {
+    u8 temp_v1 = ((allocation_1B8C8 *)getCurrentAllocation())->unk79A;
+
+    if (temp_v1 != 0) {
+        if (temp_v1 == 2) {
+            func_8006FDA0_709A0(NULL, 0xFF, 0xA);
+
+        } else {
+            func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+        }
+
+        setGameStateHandler(&func_8001ACC8_1B8C8);
+    }
+}
 
 void func_8001ACC8_1B8C8(void) {
     allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)getCurrentAllocation();
@@ -307,7 +318,9 @@ void func_8001ACC8_1B8C8(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1A770", func_8001AD80_1B980);
+void func_8001AD80_1B980(void) {
+    func_800697F4_6A3F4(1);
+}
 
 u8 func_8001AD9C_1B99C(void) {
     GameState *state;
@@ -347,9 +360,9 @@ void func_8001ADFC_1B9FC(void) {
 }
 
 void func_8001AE80_1BA80(void) {
-    func_8001AE80_1BA80_task_memory *temp_s0 = (func_8001AE80_1BA80_task_memory *)allocateTaskMemory(0x1E0);
+    allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    temp_s0->unk1D8 = 0;
+    temp_s0->unk1D8.unk0.callback_selector = 0;
     func_80027CA0_288A0(temp_s0, 0, 0xA, 0);
     func_8006FDA0_709A0(0, 0, 8);
     scheduleTask(&func_80019CD0_1A8D0, 0U, 0U, 0x5AU);
