@@ -13,28 +13,30 @@ USE_ASSET(_419C60);
 USE_ASSET(_42F1D0);
 USE_ASSET(_41A1D0);
 USE_ASSET(_4237C0);
+USE_ASSET(_3F6670)
+USE_ASSET(_3F6950)
 
 typedef struct {
-    short unk00;
-    short unk02;
-    short unk04;
-    short unk06;
+    s16 unk00;
+    s16 unk02;
+    s16 unk04;
+    s16 unk06;
     void *unk08;
 } SubStruct;
 
 typedef struct {
     void *unk00;
-    short unk04;
-    short unk06;
+    s16 unk04;
+    s16 unk06;
     void *unk08;
-    short unk0C;
-    short unk0E;
+    s16 unk0C;
+    s16 unk0E;
     SubStruct substruct[3];
-    short unk34;
-    short unk36;
-    char unk38;
-    char unk39;
-    char unk3A;
+    s16 unk34;
+    s16 unk36;
+    s8 unk38;
+    s8 unk39;
+    s8 unk3A;
 } Struct_80030694;
 
 typedef struct {
@@ -123,11 +125,22 @@ typedef struct {
     u8 unk60;
 } func_8002F518_30118_arg;
 
+typedef struct {
+    func_800308FC_314FC_arg items[7];
+    s16 unk54;
+    s16 unk56;
+    void *unk58;
+    s16 unk5C;
+    s8 unk5E;
+} func_800302AC_30EAC_arg;
+
 extern void func_8000FED0_10AD0(void);
 extern s32 D_800AB054_A23C4;
 extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];
 
+void func_80030378_30F78(void);
+void func_80030480_31080(void);
 void func_8002EFD8_2FBD8(void *);
 void func_8002F024_2FC24(void);
 void func_8002F110_2FD10(void *);
@@ -392,7 +405,28 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_80030238_30E38);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030280_30E80);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_800302AC_30EAC);
+void func_800302AC_30EAC(func_800302AC_30EAC_arg *arg0) {
+    void *asset2;
+    void *asset1;
+    s32 i;
+    s32 *new_var;
+
+    asset1 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    asset2 = dmaRequestAndUpdateStateWithSize(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    setCleanupCallback(&func_80030480_31080);
+    for (i = 0; i < 7; i++) {
+        arg0->items[i].unk0 = 0x48 + (i * 8);
+        arg0->items[i].unk2 = 0x58;
+        arg0->items[i].unk4 = asset1;
+    }
+
+    arg0->unk54 = 0x38;
+    arg0->unk56 = 0x58;
+    arg0->unk5C = 0;
+    arg0->unk5E = 0;
+    arg0->unk58 = asset2;
+    setCallback(&func_80030378_30F78);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030378_30F78);
 

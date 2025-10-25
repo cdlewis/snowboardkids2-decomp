@@ -1352,7 +1352,12 @@ segments:
     vram: 0
     start: 0x3F6670
 
-  - [0x3F6950, bin]
+  - name: _3F6950
+    type: bin
+    vram: 0
+    start: 0x3F6950
+
+  - [0x3F6BB0, bin]
 
   - name: _3FF010
     type: bin
