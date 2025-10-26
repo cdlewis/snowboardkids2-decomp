@@ -3,12 +3,35 @@
 #include "memory_allocator.h"
 #include "task_scheduler.h"
 
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    u8 padding[0x4C];
+    s32 unk54;
+    s32 unk58;
+} func_80006C50_7850_arg;
+
 extern void *D_80088720_89320;
 extern void *func_80006EE0_7AE0;
 extern void *func_80007030_7C30;
 extern u8 identityMatrix[];
 
-INCLUDE_ASM("asm/nonmatchings/7850", func_80006C50_7850);
+void func_80009E68_AA68(s32 *, s32);
+void func_80009F90_AB90(s32 *, s32, s32, s32);
+extern void func_80006CBC_78BC(void);
+extern void func_80006E44_7A44(void);
+
+void func_80006C50_7850(func_80006C50_7850_arg *arg0) {
+    s32 *temp_s0;
+
+    temp_s0 = &arg0->unk4;
+    arg0->unk54 = 0xC80000;
+    arg0->unk58 = 0x80000;
+    func_80009E68_AA68(temp_s0, 7);
+    func_80009F90_AB90(temp_s0, 0x10000, 0, -1);
+    setCleanupCallback(&func_80006E44_7A44);
+    setCallback(&func_80006CBC_78BC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/7850", func_80006CBC_78BC);
 
