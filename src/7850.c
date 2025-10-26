@@ -11,15 +11,21 @@ typedef struct {
     s32 unk58;
 } func_80006C50_7850_arg;
 
-extern void *D_80088720_89320;
-extern void *func_80006EE0_7AE0;
-extern void *func_80007030_7C30;
-extern u8 identityMatrix[];
+typedef struct {
+    u8 padding[0x28];
+    void *unk28;
+    void *unk2C;
+} func_80007030_7C30_arg;
 
+void func_80007030_7C30(func_80007030_7C30_arg *);
 void func_80009E68_AA68(s32 *, s32);
 void func_80009F90_AB90(s32 *, s32, s32, s32);
+
 extern void func_80006CBC_78BC(void);
 extern void func_80006E44_7A44(void);
+extern void *D_80088720_89320;
+extern void *func_80006EE0_7AE0(void);
+extern u8 identityMatrix[];
 
 void func_80006C50_7850(func_80006C50_7850_arg *arg0) {
     s32 *temp_s0;
@@ -63,4 +69,7 @@ void func_80006E60_7A60(func_80006E60_7A60_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/7850", func_80006EE0_7AE0);
 
-INCLUDE_ASM("asm/nonmatchings/7850", func_80007030_7C30);
+void func_80007030_7C30(func_80007030_7C30_arg *arg0) {
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+}
