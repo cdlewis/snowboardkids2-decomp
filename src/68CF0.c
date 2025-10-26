@@ -7,7 +7,7 @@
 extern s32 gFontTextureData;
 extern s32 gFontPaletteBase;
 
-void func_800680F0_68CF0(ALPlayer *arg0) {
+void func_800680F0_68CF0(Node_70B00 *arg0) {
     OutputStruct_19E80 result;
 
     getTableEntryByU16Index(arg0, 0, &result);

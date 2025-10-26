@@ -98,7 +98,7 @@ void func_80051800_52400(void);
 void func_800518AC_524AC(void);
 void func_80051B8C_5278C(void);
 
-extern s32 *D_80090EC0_91AC0;
+extern loadAssetMetadata_arg D_80090EC0_91AC0;
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104(func_80050504_51104_arg *);
 
@@ -122,7 +122,7 @@ void func_80050504_51104(func_80050504_51104_arg *arg0) {
     s32 i;
     gs = (GameState *)getCurrentAllocation();
     i = 0;
-    if (gs->PAD_6[0x16] == 0) {
+    if (gs->gamePaused == 0) {
         arg0->unk4 = (s32)(gs->unk44 + ((arg0->unk34 << 6) + 0xFC0));
         arg0->unk34 = arg0->unk34 + 1;
         if (arg0->unk34 == 4) {

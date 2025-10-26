@@ -196,7 +196,7 @@ void func_800BB658_B7898(TrackHazard *arg0) {
 
     gs = (GameState *)getCurrentAllocation();
     if (arg0->unk9C != 0xFFF00000) {
-        if (gs->PAD_6[0x16] == 0) {
+        if (gs->gamePaused == FALSE) {
             arg0->unk9C = arg0->unk9C - 0x8000;
         }
     } else {
@@ -214,7 +214,7 @@ void func_800BB658_B7898(TrackHazard *arg0) {
 void func_800BB71C_B795C(TrackHazard *arg0) {
     u8 temp;
 
-    if (((GameState *)getCurrentAllocation())->PAD_6[0x16] == 0) {
+    if (((GameState *)getCurrentAllocation())->gamePaused == FALSE) {
         arg0->unkA8--;
     }
 
