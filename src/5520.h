@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "geometry.h"
 
 typedef struct {
     s32 unk0;
@@ -10,7 +11,7 @@ typedef struct {
 } func_80004FF8_5BF8_arg1_unk20;
 
 typedef struct {
-    u8 padding[0x20];
+    Mat3x3Padded unk0;
     func_80004FF8_5BF8_arg1_unk20 *unk20;
     void *unk24;
     void *unk28;

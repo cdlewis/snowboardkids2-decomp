@@ -19,8 +19,16 @@ typedef struct {
     s16 m[9];
 } Mat3x3;
 
-void createYRotationMatrix(s16 matrix[3][3], u16 angle);
-void createZRotationMatrix(s16 matrix[3][3], u16 angle);
+// Matrices always seem to be copied into size 0x20 buffers :/
+typedef struct {
+    s16 m[3][3];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+} Mat3x3Padded;
+
+void createYRotationMatrix(Mat3x3Padded *, u16 angle);
+void createZRotationMatrix(Mat3x3Padded *, u16 angle);
 void createXRotationMatrix(s16 matrix[3][3], u16 angle);
 
 void func_8006BDBC_6C9BC(func_8005E800_5F400_arg *, void *, void *);
@@ -31,7 +39,7 @@ void createCombinedRotationMatrix(void *, u16, u16);
 
 void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 
-void createRotationMatrixYX(Mat3x3 *matrix, s16 angleY, s16 angleX);
+void createRotationMatrixYX(Mat3x3Padded *matrix, s16 angleY, s16 angleX);
 
 void matrixToEulerAngles(s32 *, s32 *, f32 *, f32 *, f32 *, f32 *, f32 *, f32 *);
 

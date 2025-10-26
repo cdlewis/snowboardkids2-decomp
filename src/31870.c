@@ -102,11 +102,7 @@ typedef struct {
 
 typedef struct {
     void *unk0;
-    s32 unk4;
-    u8 padding[0x10];
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
+    Mat3x3Padded unk4;
     s16 unk24;
     s16 unk26;
     s8 unk28;
@@ -232,10 +228,8 @@ void func_80030F6C_31B6C(void);
 void func_80030E54_31A54(void);
 void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     s32 sp20[8];
-    Mat3x3 matrixA;
-    volatile u8 padding[0x4];
-    Mat3x3 matrixB;
-    volatile u8 padding2[0x8];
+    Mat3x3Padded matrixA;
+    Mat3x3Padded matrixB;
 
     u8 temp_s0;
     s32 temp_s0_2;
@@ -243,7 +237,7 @@ void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     void *temp_s3;
     func_80032DE8_339E8_asset *asset;
     Node_70B00 *temp_v0;
-    Mat3x3 *pMatrixB;
+    Mat3x3Padded *pMatrixB;
 
     pMatrixB = &matrixB;
 
@@ -266,7 +260,7 @@ void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     memcpy(&matrixA, pMatrixB, 0x20);
 
     createRotationMatrixYX(&matrixA, 0x1000, 0x800);
-    createZRotationMatrix((s16(*)[3])pMatrixB, 0x1F00);
+    createZRotationMatrix(pMatrixB, 0x1F00);
 
     func_8006B084_6BC84(&matrixA, pMatrixB, temp_s3);
 
@@ -302,14 +296,12 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80031138_31D38);
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031248_31E48);
 
 void func_80031288_31E88(func_80031510_32110_arg *arg0) {
-    Mat3x3 matrixA;
-    volatile u8 padding[0x2];
-    Mat3x3 *pMatrixB;
-    Mat3x3 *pMatrixA;
-    Mat3x3 matrixB;
+    Mat3x3Padded matrixA;
+    Mat3x3Padded *pMatrixB;
+    Mat3x3Padded *pMatrixA;
+    Mat3x3Padded matrixB;
     u8 temp_s0;
     void *temp_s3;
-    volatile u8 padding2[0x8];
 
     pMatrixB = &matrixB;
     pMatrixA = &matrixA;
@@ -320,7 +312,7 @@ void func_80031288_31E88(func_80031510_32110_arg *arg0) {
     memcpy(pMatrixB, temp_s3, 0x20);
     memcpy(pMatrixA, pMatrixB, 0x20);
     createRotationMatrixYX(pMatrixA, 0x1000, 0x800);
-    createZRotationMatrix((s16(*)[3])pMatrixB, 0x1F00);
+    createZRotationMatrix(pMatrixB, 0x1F00);
     func_8006B084_6BC84(pMatrixA, pMatrixB, temp_s3);
     arg0->unk50 = 0x600000;
     arg0->unk58 = 0xFFF80000;
@@ -377,27 +369,25 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_800317D4_323D4);
 
 void func_80031818_32418(func_80031510_32110_arg *arg0) {
     func_80032DE8_339E8_asset *state;
-    Mat3x3 matrixB;
-    u8 padding[4];
-    Mat3x3 matrixA;
+    Mat3x3Padded matrixB;
+    Mat3x3Padded matrixA;
     u8 temp_v0;
     u8 temp_s1;
-    Mat3x3 *pMatrixB;
-    Mat3x3 *pMatrixA;
-    volatile u8 padding2[0x8];
+    Mat3x3Padded *pMatrixB;
+    Mat3x3Padded *pMatrixA;
 
     state = getCurrentAllocation();
 
-    memcpy(&arg0->unk3C, &identityMatrix, 0x20);
+    memcpy(&arg0->unk3C, &identityMatrix, sizeof(Mat3x3Padded));
 
     pMatrixA = &matrixA;
-    memcpy(pMatrixA, &arg0->unk3C, 0x20);
+    memcpy(pMatrixA, &arg0->unk3C, sizeof(Mat3x3Padded));
 
     pMatrixB = &matrixB;
-    memcpy(pMatrixB, pMatrixA, 0x20);
+    memcpy(pMatrixB, pMatrixA, sizeof(Mat3x3Padded));
 
     createRotationMatrixYX(pMatrixB, 0x1000, 0x800);
-    createZRotationMatrix((s16(*)[3])pMatrixA, 0x1F00);
+    createZRotationMatrix(pMatrixA, 0x1F00);
     func_8006B084_6BC84(pMatrixB, pMatrixA, &arg0->unk3C);
 
     arg0->unk58 = 0xFFF80000;
@@ -426,13 +416,13 @@ void func_800319C8_325C8(func_800319C8_325C8_arg *arg0) {
 void func_80031A0C_3260C(func_80031A0C_3260C_arg *arg0) {
     arg0->unk0 = func_800019B8_25B8(0x3A, &((GameState *)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
 
-    memcpy(&arg0->unk4, &identityMatrix, 0x20);
+    memcpy(&arg0->unk4, &identityMatrix, sizeof(Mat3x3Padded));
 
-    arg0->unk18 = 0xFFE70000;
-    arg0->unk1C = 0xFFE00000;
-    arg0->unk20 = 0;
+    arg0->unk4.unk14 = 0xFFE70000;
+    arg0->unk4.unk18 = 0xFFE00000;
+    arg0->unk4.unk1C = 0;
 
-    createYRotationMatrix((s16(*)[3]) & arg0->unk4, 0x200);
+    createYRotationMatrix(&arg0->unk4, 0x200);
 
     arg0->unk24 = 0x10;
     arg0->unk26 = 0x10;

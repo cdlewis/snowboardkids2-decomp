@@ -111,11 +111,7 @@ typedef struct {
     } *unk0;
     s8 unk4;
     s8 unk5;
-    func_80004FF8_5BF8_arg1 *unk8;
-    u8 padding2[0x10];
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
+    Mat3x3Padded unk8;
     s32 unk28;
     void *unk2C;
     void *unk30;
@@ -140,9 +136,14 @@ typedef struct {
     func_80004FF8_5BF8_arg1 *unk8;
 } func_800014C8_20C8_arg;
 
+typedef struct {
+    u8 padding[0x8];
+    void *unk8;
+} func_80000DA4_19A4_arg;
+
 s32 D_800894F0_8A0F0[];
 
-void func_80000DA4_19A4(func_80000C2C_182C_arg *arg0);
+void func_80000DA4_19A4(func_80000DA4_19A4_arg *arg0);
 void func_80001264_1E64(func_80000C2C_182C_arg *arg0);
 void func_800011DC_1DDC(void *);
 void func_80000CAC_18AC(func_80000C2C_182C_arg *);
@@ -230,15 +231,15 @@ void func_800007F0_13F0(func_80000C2C_182C_arg *arg0) {
     D_800891A8_89DA8_entry_2C *temp_s2 = &temp_s0->unk2C[arg0->unk4];
 
     setCleanupCallback(&func_80000968_1568);
-    memcpy(&arg0->unk8, &identityMatrix, 0x20U);
+    memcpy(&arg0->unk8, &identityMatrix, sizeof(Mat3x3Padded));
 
     arg0->unk2C = dmaRequestAndUpdateState(temp_s0->asset1Start, temp_s0->asset1End);
     arg0->unk30 = dmaRequestAndUpdateStateWithSize(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
     arg0->unk34 = 0;
     arg0->unk28 = temp_s2->unk4;
-    arg0->unk1C = temp_s2->unk8;
-    arg0->unk20 = temp_s2->unkC;
-    arg0->unk24 = temp_s2->unk10;
+    arg0->unk8.unk14 = temp_s2->unk8;
+    arg0->unk8.unk18 = temp_s2->unkC;
+    arg0->unk8.unk1C = temp_s2->unk10;
     arg0->unk44 = 0;
 
     setCallback(&func_800008D0_14D0);
@@ -284,10 +285,8 @@ void func_800009A0_15A0(func_80000C2C_182C_arg *arg0) {
 }
 
 void func_80000A68_1668(func_80000C2C_182C_arg *arg0) {
-    s16 yRotMatrix[3][3];
-    s16 padding2[3];
-    s16 zRotMatrix[3][3];
-    s16 padding[3];
+    Mat3x3Padded yRotMatrix;
+    Mat3x3Padded zRotMatrix;
     DataEntry *entry;
     SubEntry *subEntry;
 
@@ -325,13 +324,13 @@ void func_80000A68_1668(func_80000C2C_182C_arg *arg0) {
             break;
     }
 
-    createYRotationMatrix(yRotMatrix, subEntry->unk16);
-    createZRotationMatrix(zRotMatrix, arg0->unk44);
-    func_8006B084_6BC84(zRotMatrix, yRotMatrix, &arg0->unk8);
+    createYRotationMatrix(&yRotMatrix, subEntry->unk16);
+    createZRotationMatrix(&zRotMatrix, arg0->unk44);
+    func_8006B084_6BC84(&zRotMatrix, &yRotMatrix, &arg0->unk8);
 
-    arg0->unk1C = subEntry->unk8;
-    arg0->unk20 = subEntry->unkC;
-    arg0->unk24 = subEntry->unk10;
+    arg0->unk8.unk14 = subEntry->unk8;
+    arg0->unk8.unk18 = subEntry->unkC;
+    arg0->unk8.unk1C = subEntry->unk10;
 
     func_800007C4_13C4(arg0->unk0, &arg0->unk8);
 }
@@ -382,8 +381,8 @@ void func_80000CAC_18AC(func_80000C2C_182C_arg *arg0) {
     }
 }
 
-void func_80000DA4_19A4(func_80000C2C_182C_arg *arg0) {
-    func_80009F5C_AB5C(&arg0->unk8);
+void func_80000DA4_19A4(func_80000DA4_19A4_arg *arg0) {
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000DC0_19C0);
@@ -396,9 +395,9 @@ void func_80000E84_1A84(func_80000C2C_182C_arg *arg0) {
         func_80069CF8_6A8F8();
     }
 
-    arg0->unk1C = subEntry->unk8;
-    arg0->unk20 = subEntry->unkC;
-    arg0->unk24 = subEntry->unk10;
+    arg0->unk8.unk14 = subEntry->unk8;
+    arg0->unk8.unk18 = subEntry->unkC;
+    arg0->unk8.unk1C = subEntry->unk10;
     func_800007C4_13C4(arg0->unk0, &arg0->unk8);
 }
 
@@ -424,9 +423,9 @@ void func_80001040_1C40(func_80000C2C_182C_arg *arg0) {
     arg0->unk4E = arg0->unk4E + arg0->unk52;
     arg0->unk4C = (u8)arg0->unk4C;
     arg0->unk4E = (u8)arg0->unk4E;
-    arg0->unk1C = subEntry->unk8;
-    arg0->unk20 = subEntry->unkC;
-    arg0->unk24 = subEntry->unk10;
+    arg0->unk8.unk14 = subEntry->unk8;
+    arg0->unk8.unk18 = subEntry->unkC;
+    arg0->unk8.unk1C = subEntry->unk10;
 
     if (arg0->unk0->unk87 != 0) {
         func_80004FF8_5BF8(arg0->unk0->ptr->unk16, &arg0->unk8);
@@ -451,7 +450,7 @@ void func_80001158_1D58(func_80000C2C_182C_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/main", func_800011DC_1DDC);
 
 void func_80001264_1E64(func_80000C2C_182C_arg *arg0) {
-    func_80009F5C_AB5C(&arg0->unk8);
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
 }
 
 void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
@@ -459,14 +458,14 @@ void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
     volatile s32 sp14;
     volatile s32 sp18;
     volatile s32 sp1C;
-    volatile s32 sp20[8];
+    Mat3x3Padded sp20;
     DataEntry *entry;
     SubEntry *subEntry;
 
     entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     subEntry = &entry->sub_entries[arg0->unk4];
 
-    memcpy((void *)&sp20, &identityMatrix, 0x20);
+    memcpy(&sp20, &identityMatrix, sizeof(Mat3x3Padded));
     setCleanupCallback(&func_800014C8_20C8);
     func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
 
@@ -474,7 +473,7 @@ void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
     sp14 = ((randA() & 1) - 4) << 0x10;
     sp18 = 0;
 
-    createYRotationMatrix((s16(*)[3])sp20, 0x1D83);
+    createYRotationMatrix(&sp20, 0x1D83);
     transformVector((s16 *)&sp10, (s16 *)&sp20, &arg0->unk54);
 
     arg0->unk54 = arg0->unk54 + subEntry->unk8;
@@ -525,5 +524,5 @@ void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0) {
 }
 
 void func_800014C8_20C8(func_800014C8_20C8_arg *arg0) {
-    func_80009F5C_AB5C(&arg0->unk8);
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
 }

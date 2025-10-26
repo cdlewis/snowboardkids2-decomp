@@ -14,10 +14,7 @@ typedef struct {
 } func_800BBA60_B7CA0_arg;
 
 typedef struct {
-    Mat3x3 matrix;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
+    Mat3x3Padded matrix;
     DisplayListObject *unk20;
     void *unk24;
     void *unk28;
@@ -244,10 +241,10 @@ void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(gs->memoryPoolId);
     arg0->unk28 = func_80055DF8_569F8(gs->memoryPoolId);
     arg0->unk2C = 0;
-    createYRotationMatrix((s16(*)[3]) & arg0->matrix, 0x6C0);
-    arg0->unk14 = 0xDD196FEA;
-    arg0->unk18 = 0x0ABD4CA3;
-    arg0->unk1C = 0xE270649E;
+    createYRotationMatrix(&arg0->matrix, 0x6C0);
+    arg0->matrix.unk14 = 0xDD196FEA;
+    arg0->matrix.unk18 = 0x0ABD4CA3;
+    arg0->matrix.unk1C = 0xE270649E;
     arg0->unk3C = 0x12C;
     arg0->unk3E = 0;
     arg0->unk20 = &func_80055E68_56A68(gs->memoryPoolId)->unkB0;
