@@ -20,6 +20,7 @@ snowboardkids2.map
 nonmatchings
 __pycache__
 src/temp.c
+src/claude
 .push_secrets
 astemp_*
 **/.claude/settings.local.json
