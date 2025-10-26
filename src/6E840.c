@@ -243,7 +243,9 @@ void func_8006F9BC_705BC(Node_70B00 *arg0, f32 arg1, f32 arg2) {
     arg0->unkCA = (s16)(arg2 * 480.0f);
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FA0C_7060C);
+void func_8006FA0C_7060C(Node_70B00 *arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
+    guPerspective(&arg0->perspectiveMatrix, &arg0->perspNorm, arg1, arg2, arg3, arg4, 1.0f);
+}
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FA58_70658);
 

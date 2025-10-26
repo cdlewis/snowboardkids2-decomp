@@ -41,9 +41,11 @@ typedef struct Node_70B00 {
     u8 padding8[0x6];
     s16 unkC8;
     s16 unkCA;
-    u8 padding3[0xE];
+    u8 padding6[0xC];
+    /* 0xD8 */ u16 perspNorm;
     /* 0xDA */ u16 id;
-    u8 padding4[0x64];
+    /* 0xE0 */ Mtx perspectiveMatrix;
+    u8 padding4[0x20];
     u16 unk140;
     u8 padding140[6];
     Node_70B00_ColorData unk148[1];
@@ -88,7 +90,7 @@ void func_8006FD3C_7093C(u16, void *);
 
 void func_8006FAA4_706A4(void *, s32, s32, s32, s32);
 
-void func_8006FA0C_7060C(void *, f32, f32, f32, f32);
+void func_8006FA0C_7060C(Node_70B00 *, f32, f32, f32, f32);
 
 void setModelCameraTransform(void *, s32, s32, s32, s32, s32, s32);
 
