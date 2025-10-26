@@ -15,7 +15,7 @@ USE_ASSET(_41A1D0);
 USE_ASSET(_4547D0);
 
 extern u16 D_8008F150_8FD50[];
-extern s8 D_8009E480_9F080;
+extern const char D_8009E480_9F080;
 extern void func_80032708_33308(void);
 
 typedef struct {
@@ -46,7 +46,7 @@ typedef struct {
     s16 unk7A;
     u8 padding3[0x8];
     s8 unk84[4];
-    u8 unk88;
+    char unk88;
 } func_800329A8_335A8_arg;
 
 typedef struct {
@@ -232,9 +232,9 @@ void func_80030F6C_31B6C(void);
 void func_80030E54_31A54(void);
 void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     s32 sp20[8];
-    s16 matrixA[3][3];
+    Mat3x3 matrixA;
     volatile u8 padding[0x4];
-    s16 matrixB[3][3];
+    Mat3x3 matrixB;
     volatile u8 padding2[0x8];
 
     u8 temp_s0;
@@ -243,9 +243,9 @@ void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     void *temp_s3;
     func_80032DE8_339E8_asset *asset;
     Node_70B00 *temp_v0;
-    s16 *pMatrixB;
+    Mat3x3 *pMatrixB;
 
-    pMatrixB = &matrixB[0][0];
+    pMatrixB = &matrixB;
 
     asset = getCurrentAllocation();
     temp_v0 = allocateNodeMemory(0x1D8);
@@ -302,17 +302,17 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80031138_31D38);
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031248_31E48);
 
 void func_80031288_31E88(func_80031510_32110_arg *arg0) {
-    s16 matrixA[3][3];
+    Mat3x3 matrixA;
     volatile u8 padding[0x2];
-    s16 *pMatrixB;
-    s16 *pMatrixA;
-    s16 matrixB[3][3];
+    Mat3x3 *pMatrixB;
+    Mat3x3 *pMatrixA;
+    Mat3x3 matrixB;
     u8 temp_s0;
     void *temp_s3;
     volatile u8 padding2[0x8];
 
-    pMatrixB = &matrixB[0][0];
-    pMatrixA = &matrixA[0][0];
+    pMatrixB = &matrixB;
+    pMatrixA = &matrixA;
 
     getCurrentAllocation();
     temp_s3 = &arg0->unk3C;
@@ -377,23 +377,23 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_800317D4_323D4);
 
 void func_80031818_32418(func_80031510_32110_arg *arg0) {
     func_80032DE8_339E8_asset *state;
-    s16 matrixB[3][3];
+    Mat3x3 matrixB;
     u8 padding[4];
-    s16 matrixA[3][3];
+    Mat3x3 matrixA;
     u8 temp_v0;
     u8 temp_s1;
-    s16 *pMatrixB;
-    s16 *pMatrixA;
+    Mat3x3 *pMatrixB;
+    Mat3x3 *pMatrixA;
     volatile u8 padding2[0x8];
 
     state = getCurrentAllocation();
 
     memcpy(&arg0->unk3C, &identityMatrix, 0x20);
 
-    pMatrixA = &matrixA[0][0];
+    pMatrixA = &matrixA;
     memcpy(pMatrixA, &arg0->unk3C, 0x20);
 
-    pMatrixB = &matrixB[0][0];
+    pMatrixB = &matrixB;
     memcpy(pMatrixB, pMatrixA, 0x20);
 
     createRotationMatrixYX(pMatrixB, 0x1000, 0x800);

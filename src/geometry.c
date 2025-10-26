@@ -53,7 +53,7 @@ typedef struct {
 
 s32 atan2Fixed(s32, s32);
 
-s16 approximateSin(s16 inputAngle) {
+s32 approximateSin(s16 inputAngle) {
     u16 temp_a0;
     inputAngle = inputAngle & 0x1FFF;
     temp_a0 = inputAngle;
@@ -69,7 +69,7 @@ s16 approximateSin(s16 inputAngle) {
     return (sins(inputAngle << 3) << 0x10) >> 0x12;
 }
 
-s16 approximateCos(s16 inputAngle) {
+s32 approximateCos(s16 inputAngle) {
     u16 temp_a0;
     inputAngle = inputAngle & 0x1FFF;
     temp_a0 = inputAngle;
@@ -143,7 +143,47 @@ void createZRotationMatrix(s16 matrix[3][3], u16 angle) {
 
 INCLUDE_ASM("asm/nonmatchings/geometry", createCombinedRotationMatrix);
 
-INCLUDE_ASM("asm/nonmatchings/geometry", createRotationMatrixYX);
+void createRotationMatrixYX(Mat3x3 *matrix, s16 angleY, s16 angleX) {
+    s32 sinX = approximateSin(angleX);
+    s32 cosX = approximateCos(angleX);
+    s32 sinY = approximateSin(angleY);
+    s32 cosY = approximateCos(angleY);
+    s32 negSinY = -sinY;
+    s32 negSinX = -sinX;
+    s32 temp1 = negSinY * negSinX;
+    s32 temp2;
+    s32 temp3;
+    s32 temp4;
+
+    matrix->m[0] = cosY;
+    if (temp1 < 0) {
+        temp1 += 0x1FFF;
+    }
+
+    temp2 = negSinY * cosX;
+    matrix->m[1] = temp1 >> 13;
+    if (temp2 < 0) {
+        temp2 += 0x1FFF;
+    }
+
+    temp3 = cosY * negSinX;
+    matrix->m[2] = temp2 >> 13;
+    matrix->m[3] = 0;
+    matrix->m[4] = cosX;
+    matrix->m[5] = sinX;
+    matrix->m[6] = sinY;
+    if (temp3 < 0) {
+        temp3 += 0x1FFF;
+    }
+
+    temp4 = cosY * cosX;
+    matrix->m[7] = temp3 >> 13;
+    if (temp4 < 0) {
+        temp4 += 0x1FFF;
+    }
+
+    matrix->m[8] = temp4 >> 13;
+}
 
 INCLUDE_ASM("asm/nonmatchings/geometry", createRotationMatrixXZ);
 
