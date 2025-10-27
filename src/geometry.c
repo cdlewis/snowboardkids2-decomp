@@ -133,7 +133,7 @@ void createZRotationMatrix(Mat3x3Padded *matrix, u16 angle) {
     new_var3 = 0;
     new_var2 = 2;
     matrix->m[0][new_var2] = 0;
-    matrix->m[0, 1][0] = -sinVal;
+    matrix->m[1][0] = -sinVal;
     matrix->m[1][1] = new_var;
     matrix->m[1][new_var2] = 0;
     matrix->m[new_var2][0] = 0;

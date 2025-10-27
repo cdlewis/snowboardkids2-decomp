@@ -58,7 +58,7 @@ void func_8003EDA0_3F9A0(void) {
     GameState *temp_v0;
 
     temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v0->gameDataStart = func_80055D34_56934(temp_v0->memoryPoolId);
+    temp_v0->gameData.dataStart = func_80055D34_56934(temp_v0->memoryPoolId);
     temp_v0->unk28 = dmaRequestAndUpdateStateWithSize(&_3FF010_ROM_START, &_3FF010_ROM_END, 0x16E0);
     func_8006983C_6A43C(&func_8003EDF8_3F9F8);
 }
@@ -66,7 +66,7 @@ void func_8003EDA0_3F9A0(void) {
 void func_8003EDF8_3F9F8(void) {
     GameState *gs = (GameState *)getCurrentAllocation();
 
-    parseGameDataLayout(&gs->gameDataStart);
+    parseGameDataLayout(&gs->gameData);
 
     gs->unk44 = (u8 *)gs->unk28 + gs->unk28->unk0;
     gs->unk48 = (u8 *)gs->unk28 + gs->unk28->unk4;
@@ -458,7 +458,7 @@ void func_80040608_41208(void) {
     freeNodeMemory(gameState->unk4);
     freeNodeMemory(gameState->unk8);
     freeNodeMemory(gameState->unkC);
-    freeNodeMemory(gameState->gameDataStart);
+    freeNodeMemory(gameState->gameData.dataStart);
     freeNodeMemory(gameState->unk18);
     freeNodeMemory(gameState->unk1C);
     freeNodeMemory(gameState->unk20);

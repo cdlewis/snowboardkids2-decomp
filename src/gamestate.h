@@ -3,6 +3,7 @@
 
 #include "6E840.h"
 #include "common.h"
+#include "displaylist.h"
 
 typedef struct {
     s32 unk0;
@@ -38,13 +39,7 @@ typedef struct {
     u8 PAD_2[0x4];
     GameStateUnk28 *unk28;
     u8 PAD_3[0x4];
-    // Start Embedded GameData
-    u16 *gameDataStart;
-    u16 *gameDataSection1Data;
-    u16 *gameDataSection2Data;
-    u16 *gameDataSection3Data;
-    u16 gameDataFinalValue;
-    // End Embedded Gamedata
+    /* 0x30 */ GameDataLayout gameData;
     u8 *unk44;
     u8 *unk48;
     s32 unk4C;

@@ -278,7 +278,7 @@ void func_8004AE58_4BA58(s32 **arg0) {
 void func_8004AE94_4BA94(s32 arg0) {
     NodeWithPayload *temp_v0;
 
-    (GameState *)getCurrentAllocation();
+    getCurrentAllocation();
     temp_v0 = (NodeWithPayload *)scheduleTask(&func_8004AA50_4B650, 3, 0, 0xEFU);
     if (temp_v0 != NULL) {
         temp_v0->unk30 = arg0;

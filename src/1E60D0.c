@@ -18,13 +18,13 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x4];
-    s32 unk4;
+    void *unk4;
     s32 unk8;
     s16 unkC;
     s16 unkE;
     s16 unk10;
     s16 unk12;
-    s32 unk14;
+    void *unk14;
     s16 unk18;
     s16 unk1A;
     s16 unk1C;
@@ -37,7 +37,7 @@ typedef struct {
 
 typedef struct {
     s32 unk0;
-    s32 unk4;
+    void *unk4;
 } func_800B93CC_1E647C_arg;
 
 typedef struct {
@@ -67,7 +67,7 @@ typedef struct {
 
 typedef struct {
     s32 unk0;
-    s32 unk4;
+    void *unk4;
     s16 unk8;
 } func_800B9290_1E6340_arg;
 
@@ -86,8 +86,8 @@ void func_800B9180_1E6230(func_800B9180_1E6230_arg *);
 void func_800B92D4_1E6384(func_800B9180_1E6230_arg *);
 void func_800B93CC_1E647C(func_800B93CC_1E647C_arg *);
 void func_800B9290_1E6340(func_800B9290_1E6340_arg *);
+void func_800B9264_1E6314(func_800B9264_1E6314_input **);
 
-extern void func_800B9264_1E6314(func_800B9264_1E6314_input **);
 extern void func_80011924_12524(void);
 
 void func_800B9020(func_800B9020_arg *arg0) {

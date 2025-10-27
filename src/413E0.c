@@ -54,7 +54,7 @@ const char pushStartButtonText[] = "PUSH START BUTTON";
 
 void func_80040E00_41A00(func_80040E00_41A00_arg *arg0) {
     if (gFrameCounter & 8) {
-        enqueueTextRender(-0x44, arg0->unk8, 0, &pushStartButtonText, (s32)arg0->unkC, (s32)arg0->unkE);
+        enqueueTextRender(-0x44, arg0->unk8, 0, (u8 *)&pushStartButtonText, (s32)arg0->unkC, (s32)arg0->unkE);
     }
 }
 

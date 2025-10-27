@@ -17,4 +17,4 @@ void *loadAssetByIndex_95500(s16 index);
 void *loadAssetByIndex_95590(s16 index);
 void *loadAssetByIndex_95668(s16 index);
 void *loadAssetByIndex_95728(s16 index);
-MemoryAllocatorNode *loadAssetByIndex_953E0(s16 index);
+void *loadAssetByIndex_953E0(s16 index);

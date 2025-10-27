@@ -145,8 +145,8 @@ void cleanupUnusedNodes(void) {
     }
 }
 
-void markNodeAsLocked(s32 *arg0) {
-    arg0[-0x3] = 1;
+void markNodeAsLocked(void *arg0) {
+    ((s32*)arg0)[-0x3] = 1;
 }
 
 void unlockNodeWithInterruptDisable(s32 *arg0) {

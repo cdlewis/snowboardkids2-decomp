@@ -47,7 +47,7 @@ void *loadAssetByIndex_95200(s16 groupIndex, s16 pairIndex) {
     );
 }
 
-MemoryAllocatorNode *loadAssetByIndex_953E0(s16 index) {
+void *loadAssetByIndex_953E0(s16 index) {
     if (index == 0xA) {
         return NULL;
     } else {

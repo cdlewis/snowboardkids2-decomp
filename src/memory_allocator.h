@@ -22,7 +22,7 @@ void *allocateMemoryNode(s32, u32, u8 *);
 
 void *getNodeSequenceNumber(void *);
 void setNodeSequenceNumber(void *, void *);
-void markNodeAsLocked(s32 *);
+void markNodeAsLocked(void *);
 s32 getNodeOwner(void *);
 void *decrementNodeRefCount(void *node);
 void unlockNodeWithInterruptDisable(s32 *);
