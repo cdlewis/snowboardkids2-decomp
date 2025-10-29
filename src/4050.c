@@ -37,22 +37,31 @@ extern s16 D_800AFEF0_A7260;
 typedef struct {
     s16 unk0;
     s8 unk2;
-    s8 unk3;
+    u8 unk3;
     s32 unk4;
     Node_70B00 unk8;
     Node_70B00 unk1E0;
     Node_70B00 unk3B8;
-    u8 padding[0x1250];
+    u8 padding1[0x20];
+    u8 unk5B0;
+    u8 padding[0x122F];
     s8 unk17E0;
 } allocateTaskMemory_return;
 
+void func_80057564_58164(s16);
+void func_80003C34_4834(void);
+void func_80003898_4498(void);
+s16 func_800B3360(s16, s16);
+void func_800B9020(void *);
 void loadOverlay_1DD170(void);
 void func_8000378C_438C(void);
 void func_80003C88_4888(void);
 void func_80003D30_4930(void);
 void func_80003CC4_48C4(void);
-extern void *func_800B00C0_9FF70(void);
 void func_80003508_4108(void);
+
+extern void *func_800B00C0_9FF70(void);
+extern void initializeCutsceneSystem(void *); /* extern */
 
 void func_80003450_4050(s16 arg0, s16 arg1) {
     D_800AB070_A23E0 = arg0;
@@ -123,7 +132,32 @@ void func_80003508_4108(void) {
     setGameStateHandler(func_8000378C_438C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4050", func_8000378C_438C);
+void func_8000378C_438C(void) {
+    allocateTaskMemory_return *temp_s0 = (allocateTaskMemory_return *)getCurrentAllocation();
+
+    if (temp_s0->unk0 >= func_800B3360(D_800AB070_A23E0, D_800AFEF0_A7260) || temp_s0->unk3 != 0) {
+        if (D_800AB070_A23E0 == 0xB && D_800AFEF0_A7260 == 1) {
+            func_8006FDA0_709A0(&temp_s0->unk1E0, 0, 0);
+            func_800B9020(&temp_s0->unk17E0);
+            setGameStateHandler(&func_80003C34_4834);
+
+            return;
+        }
+
+        func_80057564_58164(2);
+        unlinkNode(&temp_s0->unk3B8);
+        unlinkNode(&temp_s0->unk1E0);
+        unlinkNode(&temp_s0->unk8);
+        terminateSchedulerWithCallback(&func_80003C88_4888);
+
+        return;
+    }
+
+    func_8000346C_406C(D_800AB070_A23E0, D_800AFEF0_A7260, temp_s0->unk0);
+    temp_s0->unk0++;
+    initializeCutsceneSystem(&temp_s0->unk5B0);
+    setGameStateHandler(&func_80003898_4498);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4050", func_80003898_4498);
 
