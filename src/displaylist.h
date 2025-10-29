@@ -36,14 +36,18 @@ void parseGameDataLayout(GameDataLayout *gameData);
 
 void initializeOverlaySystem(void);
 
-typedef struct {
-    u8 padding[0x10];
+typedef struct loadAssetMetadata_arg {
+    struct loadAssetMetadata_arg *unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
     /* 0x10 */ u8 *data_ptr;
     /* 0x14 */ TableEntry_19E80 *index_ptr;
     s8 unk18;
     s8 unk19;
-    s8 unk1A;
+    u8 unk1A;
 } loadAssetMetadata_arg;
+
 void loadAssetMetadata(loadAssetMetadata_arg *, void *, s32);
 
 void enqueueDisplayListWithFrustumCull(s32, DisplayListObject *);

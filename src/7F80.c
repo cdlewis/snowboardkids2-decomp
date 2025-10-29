@@ -14,15 +14,7 @@ typedef struct {
 } func_800078C4_84C4_arg_unk44;
 
 typedef struct {
-    struct {
-        u8 padding[0xC];
-        s16 unkC;
-        u8 padding2[0x8];
-        s32 unk18;
-        u8 padding3[0x20];
-        s8 unk3C;
-        s8 unk3D;
-    } *unk0;
+    func_80001604_2204_arg *unk0;
     void *unk4;
 
     u8 padding[0xC];

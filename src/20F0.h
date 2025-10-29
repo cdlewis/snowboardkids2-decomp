@@ -142,7 +142,14 @@ void func_80002014_2C14(SceneModel *arg0);
 void clearModelRotation(SceneModel *);
 
 typedef struct {
-    u8 padding[0x3F];
+    u8 padding[0xC];
+    s16 unkC;
+    u8 padding2[0x8];
+    s32 unk18;
+    u8 padding3[0x20];
+    s8 unk3C;
+    s8 unk3D;
+    s8 unk3E;
     s8 unk3F;
 } func_80001604_2204_arg;
 

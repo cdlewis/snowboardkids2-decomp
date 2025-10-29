@@ -498,7 +498,7 @@ void func_8003B400_3C000(s32 arg0) {
     ret = ret << new_var2;
     counter = ret;
     EepromSaveData->checksum = sum;
-    ret = osEepromLongWrite(&mainStack, counter & 0xF0, EepromSaveData, limit);
+    ret = osEepromLongWrite(&mainStack, counter & 0xF0, (u8 *)EepromSaveData, limit);
     osSendMesg(&D_800A1888_A2488, (OSMesg)ret, 1);
 }
 

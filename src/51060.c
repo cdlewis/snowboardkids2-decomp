@@ -7,9 +7,7 @@
 
 typedef struct {
     void *unk0;
-    loadAssetMetadata_arg *unk4;
-    u8 padding[0x16];
-    u8 unk1E;
+    loadAssetMetadata_arg unk4;
     u8 padding2[0x10];
     s32 unk30;
     s32 unk34;
@@ -18,12 +16,7 @@ typedef struct {
 
 typedef struct {
     s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    u8 padding[0xA];
-    s8 unk1E;
+    loadAssetMetadata_arg unk4;
     s32 padding2;
     s32 unk24;
     s32 unk28;
@@ -57,11 +50,7 @@ typedef struct {
 typedef struct {
     s32 unk0;
     void *unk4;
-    loadAssetMetadata_arg *unk8;
-    s32 unkC;
-    s32 unk10;
-    u8 padding[0xE];
-    u8 unk22;
+    loadAssetMetadata_arg unk8;
 } func_800516F4_522F4_arg;
 
 typedef struct {
@@ -111,8 +100,8 @@ void func_80050460_51060(void **node) {
 void func_800504A0_510A0(func_800504A0_510A0_arg *arg0) {
     GameState *gs = (GameState *)getCurrentAllocation();
     loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk30);
-    arg0->unk1E = 0xE0;
-    arg0->unk4 = &gs->unk44[0xFC0];
+    arg0->unk4.unk1A = 0xE0;
+    arg0->unk4.unk0 = &gs->unk44[0xFC0];
     arg0->unk34 = 0;
     setCallbackWithContinue(&func_80050504_51104);
 }
@@ -122,18 +111,20 @@ void func_80050504_51104(func_80050504_51104_arg *arg0) {
     s32 i;
     gs = (GameState *)getCurrentAllocation();
     i = 0;
+
     if (gs->gamePaused == 0) {
-        arg0->unk4 = (s32)(gs->unk44 + ((arg0->unk34 << 6) + 0xFC0));
+        arg0->unk4.unk0 = (void *)(gs->unk44 + ((arg0->unk34 << 6) + 0xFC0));
         arg0->unk34 = arg0->unk34 + 1;
         if (arg0->unk34 == 4) {
             func_80069CF8_6A8F8();
             return;
         }
-        arg0->unk1E = arg0->unk1E - 0x30;
-        arg0->unk8 = arg0->unk8 + arg0->unk24;
-        arg0->unkC = arg0->unkC + arg0->unk28;
-        arg0->unk10 = arg0->unk10 + arg0->unk2C;
+        arg0->unk4.unk1A = arg0->unk4.unk1A - 0x30;
+        arg0->unk4.unk4 += arg0->unk24;
+        arg0->unk4.unk8 += arg0->unk28;
+        arg0->unk4.unkC += arg0->unk2C;
     }
+
     for (i = 0; i < 4; i++) {
         func_800677C0_683C0(i, &arg0->unk4);
     }
@@ -245,10 +236,10 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_80051688_52288);
 INCLUDE_ASM("asm/nonmatchings/51060", func_800516B4_522B4);
 
 void func_800516F4_522F4(func_800516F4_522F4_arg *arg0) {
-    (GameState *)getCurrentAllocation();
+    getCurrentAllocation();
     arg0->unk4 = load_3ECE40();
-    arg0->unk8 = &D_80090EC0_91AC0;
-    arg0->unk22 = 0xFF;
+    arg0->unk8.unk0 = &D_80090EC0_91AC0;
+    arg0->unk8.unk1A = 0xFF;
     loadAssetMetadata(&arg0->unk8, arg0->unk4, 0x6A);
     setCleanupCallback(&func_80051800_52400);
     setCallbackWithContinue(&func_80051760_52360);

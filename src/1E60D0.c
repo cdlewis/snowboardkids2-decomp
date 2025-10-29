@@ -36,15 +36,15 @@ typedef struct {
 } func_800B90DC_1E618C_arg;
 
 typedef struct {
-    s32 unk0;
-    void *unk4;
-} func_800B93CC_1E647C_arg;
-
-typedef struct {
     s8 unk0;
     s8 unk1;
     s32 unk4;
 } func_800B9264_1E6314_input;
+
+typedef struct {
+    s32 unk0;
+    func_800B9264_1E6314_input *unk4;
+} func_800B93CC_1E647C_arg;
 
 typedef struct {
     s8 unk0;
@@ -80,7 +80,7 @@ typedef struct {
 
 extern s8 D_800BADE0_1E7E90[];
 
-void func_800B90B0_1E6160(void **);
+void func_800B90B0_1E6160(func_800B9264_1E6314_input **);
 void func_800B91E4_1E6294(func_800B9180_1E6230_arg *);
 void func_800B9180_1E6230(func_800B9180_1E6230_arg *);
 void func_800B92D4_1E6384(func_800B9180_1E6230_arg *);
@@ -107,7 +107,7 @@ void func_800B9074_1E6124(void **arg0) {
     *arg0 = dmaRequestAndUpdateStateWithSize(&_646910_ROM_START, &_646910_ROM_END, 0x658);
 }
 
-void func_800B90B0_1E6160(void **arg0) {
+void func_800B90B0_1E6160(func_800B9264_1E6314_input **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 

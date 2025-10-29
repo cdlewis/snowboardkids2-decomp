@@ -177,8 +177,8 @@ void initDebugCameraController(func_8002ED90_2F990_arg *arg0) {
 void updateDebugCameraYState(cameraState *arg0) {
     s32 sp20[8];
     u64 pad;
-    s8 *cameraYRotation;
-    s8 *cameraYString;
+    char *cameraYRotation;
+    char *cameraYString;
     GameState *temp_s0 = (GameState *)getCurrentAllocation();
 
     if (D_800AB054_A23C4 & 0x10) {
@@ -285,7 +285,8 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     Mat3x3Padded sp30;
     Mat3x3Padded *new_var;
     void *temp_s3;
-    (GameState *)getCurrentAllocation();
+
+    getCurrentAllocation();
     new_var = &sp10;
     temp_s3 = ((void *)((s32)arg0)) + 0x3C;
     memcpy(temp_s3, &identityMatrix, sizeof(Mat3x3Padded));

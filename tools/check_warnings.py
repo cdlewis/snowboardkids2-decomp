@@ -10,7 +10,7 @@ import argparse
 import os
 
 # Maximum allowed warnings (update this as you fix warnings)
-MAX_WARNINGS = 17
+MAX_WARNINGS = 12
 
 def count_warnings(log_file):
     """Count incompatible-pointer-types warnings in build output."""

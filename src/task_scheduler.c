@@ -640,7 +640,7 @@ void *loadDataSegment(void *start, void *end, s32 size, void *dramAddr) {
                 gDMAOverlay->unk18 = getNodeSequenceNumber(var_s0);
                 gDMAOverlay->unk1C = var_s0;
                 gDMAOverlay->unkE = 3;
-            } else if ((u32)gDMAOverlay->unk18 < getNodeSequenceNumber(var_s0)) {
+            } else if ((u32)gDMAOverlay->unk18 < (u32)getNodeSequenceNumber(var_s0)) {
                 gDMAOverlay->unk18 = getNodeSequenceNumber(var_s0);
                 gDMAOverlay->unk1C = var_s0;
             }
