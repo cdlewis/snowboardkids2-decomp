@@ -653,8 +653,8 @@ s32 MusInitialize(musConfig *config) {
     mus_voices = (ALVoice *)alHeapDBAlloc(0, 0, &audio_heap, 1, max_channels * (sizeof(ALVoice)));
     mus_channels = (channel_t *)alHeapDBAlloc(0, 0, &audio_heap, 1, max_channels * (sizeof(channel_t)));
     __MusIntFifoOpen(config->fifo_length);
-    __MusIntMemSet(mus_voices, 0, max_channels * (sizeof(ALVoice)));
-    __MusIntMemSet(mus_channels, 0, max_channels * (sizeof(channel_t)));
+    __MusIntMemSet((u8 *)mus_voices, 0, max_channels * (sizeof(ALVoice)));
+    __MusIntMemSet((u8 *)mus_channels, 0, max_channels * (sizeof(channel_t)));
 
     if (config->ptr) {
         MusPtrBankInitialize(config->ptr, config->wbk);

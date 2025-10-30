@@ -101,7 +101,7 @@ void func_800504A0_510A0(func_800504A0_510A0_arg *arg0) {
     GameState *gs = (GameState *)getCurrentAllocation();
     loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk30);
     arg0->unk4.unk1A = 0xE0;
-    arg0->unk4.unk0 = &gs->unk44[0xFC0];
+    arg0->unk4.unk0 = &gs->unk44->unkFC0->asset;
     arg0->unk34 = 0;
     setCallbackWithContinue(&func_80050504_51104);
 }
@@ -113,7 +113,11 @@ void func_80050504_51104(func_80050504_51104_arg *arg0) {
     i = 0;
 
     if (gs->gamePaused == 0) {
-        arg0->unk4.unk0 = (void *)(gs->unk44 + ((arg0->unk34 << 6) + 0xFC0));
+        GameStateUnk44 *base;
+
+        base = gs->unk44;
+        arg0->unk4.unk0 = &base->unkFC0[arg0->unk34].asset;
+
         arg0->unk34 = arg0->unk34 + 1;
         if (arg0->unk34 == 4) {
             func_80069CF8_6A8F8();
@@ -148,10 +152,10 @@ void func_80050604_51204(void *arg0, func_80050604_51204_arg *arg1, s32 arg2) {
 void func_800506B4_512B4(func_800506B4_512B4_arg *arg0) {
     GameState *temp_s1 = (GameState *)getCurrentAllocation();
     arg0->unk0 = load_3ECE40();
-    arg0->unk4 = (void *)(temp_s1->unk44 + ((arg0->unk52 << 6) + 0x1080));
+    arg0->unk4 = &temp_s1->unk44->unk1080[arg0->unk52];
     arg0->unk1E = (u8)((randA() & 0x1F) + 0x70);
     arg0->unk50 = 0;
-    arg0->unk24 = (void *)arg0->unk4;
+    arg0->unk24 = arg0->unk4;
     arg0->unk3E = (u8)arg0->unk1E;
     setCleanupCallback(&func_80050864_51464);
     setCallbackWithContinue(&func_80050740_51340);
@@ -212,7 +216,7 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_8005100C_51C0C);
 void func_800510A4_51CA4(func_800506B4_512B4_arg *arg0) {
     GameState *temp_s1 = (GameState *)getCurrentAllocation();
     arg0->unk0 = load_3ECE40();
-    arg0->unk4 = (u8 *)(temp_s1->unk44 + 0x1340);
+    arg0->unk4 = &temp_s1->unk44->unk1340;
     arg0->unk1E = (u8)((randA() & 0x1F) + 0x70);
     arg0->unk50 = 0;
     arg0->unk24 = (u8 *)arg0->unk4;

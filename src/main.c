@@ -141,7 +141,7 @@ typedef struct {
     void *unk8;
 } func_80000DA4_19A4_arg;
 
-s32 D_800894F0_8A0F0[];
+s32 D_800894F0_8A0F0[8];
 
 void func_80000DA4_19A4(func_80000DA4_19A4_arg *arg0);
 void func_80001264_1E64(func_80000C2C_182C_arg *arg0);

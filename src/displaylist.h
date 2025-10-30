@@ -68,7 +68,7 @@ typedef struct {
     u8 padding2[0x10];
     s32 unk30;
 } func_80066444_67044_arg1;
-void func_800677C0_683C0(s32 arg0, func_80066444_67044_arg1 *arg1);
+void func_800677C0_683C0(s32 arg0, loadAssetMetadata_arg *arg1);
 
 typedef struct {
     u8 padding0[4];

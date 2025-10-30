@@ -6,6 +6,21 @@
 #include "displaylist.h"
 
 typedef struct {
+    loadAssetMetadata_arg asset;
+    u8 padding[0x24];
+} GameStateUnk44_Item;
+
+typedef struct {
+    u8 padding[0xFC0];
+    GameStateUnk44_Item unkFC0[3];
+    GameStateUnk44_Item unk1080[3];
+    u8 padding2[0x1FF];
+    s32 unk1340;
+    u8 padding4[0x3C];
+    s32 unk1380;
+} GameStateUnk44;
+
+typedef struct {
     s32 unk0;
     s32 unk4;
 } GameStateUnk28;
@@ -40,7 +55,7 @@ typedef struct {
     GameStateUnk28 *unk28;
     u8 PAD_3[0x4];
     /* 0x30 */ GameDataLayout gameData;
-    u8 *unk44;
+    GameStateUnk44 *unk44;
     u8 *unk48;
     s32 unk4C;
     u8 PAD_5[0xC];

@@ -438,8 +438,8 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_800670A4_67CA4);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800670D4_67CD4);
 
-void func_800677C0_683C0(s32 arg0, func_80066444_67044_arg1 *arg1) {
-    arg1->unk1C = 0;
+void func_800677C0_683C0(s32 arg0, loadAssetMetadata_arg *arg1) {
+    (arg1 + 1)->unk0 = 0;
     debugEnqueueCallback(arg0 & 0xFFFF, 6, &func_800670D4_67CD4, arg1);
 }
 
