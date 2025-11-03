@@ -1,13 +1,8 @@
+#include "36BE0.h"
 #include "common.h"
 #include "task_scheduler.h"
 
 extern float __cosf(float);
-
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-} Vec3i;
 
 typedef struct {
     u8 pad[0x120];

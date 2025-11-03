@@ -81,18 +81,26 @@ fi
 
 # Run the import scripts with the found path
 echo "Importing..."
-./tools/decomp-permuter/import.py src/temp.c "$ASM_PATH"
+IMPORT_OUTPUT=$(./tools/decomp-permuter/import.py src/temp.c "$ASM_PATH" 2>&1)
+IMPORT_EXIT_CODE=$?
 
-if [ $? -ne 0 ]; then
+echo "$IMPORT_OUTPUT"
+
+if [ $IMPORT_EXIT_CODE -ne 0 ]; then
     echo "Error: Import failed"
     exit 1
 fi
 
-# Extract just the function name (without .s extension) from the ASM_PATH
-FUNC_BASE=$(basename "$ASM_PATH" .s)
+# Extract the actual directory from the import output
+# Look for "Done. Imported into <directory>" in the output
+PERMUTER_DIR=$(echo "$IMPORT_OUTPUT" | grep -oP "Done\. Imported into \K.*$")
 
-# The permuter directory is created at nonmatchings/<function_name>
-PERMUTER_DIR="nonmatchings/$FUNC_BASE"
+if [ -z "$PERMUTER_DIR" ]; then
+    echo "Error: Could not determine permuter directory from import output"
+    exit 1
+fi
+
+echo "Permuter directory: $PERMUTER_DIR"
 
 # Set up interrupt handling for permuter run
 INTERRUPTED=0

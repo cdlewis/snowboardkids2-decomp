@@ -1,3 +1,4 @@
+#include "36BE0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "graphics.h"
@@ -5,6 +6,17 @@
 #include "task_scheduler.h"
 
 USE_ASSET(_45A890);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s32 unk4;
+    s16 unk8;
+    u8 padding[0x6];
+    u8 unk10;
+    u8 unk11;
+    u8 unk12;
+} func_80036920_37520_arg;
 
 typedef struct {
     u8 padding0[16];
@@ -59,17 +71,17 @@ typedef struct {
 } func_800371CC_37DCC_arg;
 
 typedef struct {
-    char padding[1012];
+    u8 padding[1012];
     s16 unk3F4;
     s32 unk3F8;
-    char padding2[7];
+    u8 padding2[7];
     u8 unk403;
-    char padding3[28];
+    u8 padding3[28];
     u8 unk420;
-    char padding5[3];
+    u8 padding5[3];
     u8 unk424;
     u8 unk425;
-    char padding4[7];
+    u8 padding4[7];
     u8 unk42D;
 } func_800698BC_6A4BC_return;
 
@@ -112,11 +124,17 @@ void func_80036328_36F28(func_80036328_36F28_arg *);
 void func_80036880_37480(func_80036880_37480_arg *);
 void func_80036A68_37668(void *);
 void func_80036A10_37610(void *);
-
+void func_80069CF8_6A8F8(void);
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+} D_8008F810_90410_item;
+extern D_8008F810_90410_item D_8008F810_90410[0x18];
+extern s32 func_80012004_12C04;
 extern void D_8008FAC0_906C0;
 extern u16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
-extern void func_80036920_37520;
+void func_80036920_37520(func_80036920_37520_arg *arg0);
 
 void func_80036250_36E50(s8 *arg0) {
     *arg0 = 0;
@@ -223,7 +241,41 @@ void func_80036880_37480(func_80036880_37480_arg *arg0) {
     setCallback(&func_80036920_37520);
 }
 
-INCLUDE_ASM("asm/nonmatchings/36E50", func_80036920_37520);
+void func_80036920_37520(func_80036920_37520_arg *arg0) {
+    Vec3i sp10;
+    s32 sp20;
+    s32 sp24;
+    s32 temp_sp20;
+    s32 temp_sp24;
+    func_800698BC_6A4BC_return *temp_v0;
+    s32 temp_val;
+
+    temp_v0 = getCurrentAllocation();
+    sp10.x = (s32)D_8008F810_90410[arg0->unk10].unk0;
+    temp_val = D_8008F810_90410[arg0->unk10].unk4;
+    sp10.y = 0x4B0000;
+    sp10.z = temp_val;
+
+    func_80035FE0_36BE0(&sp20, &sp24, &sp10);
+
+    arg0->unk0 = (s16)(sp20 - 0xA0);
+    arg0->unk2 = (s16)(sp24 - 0x78);
+
+    arg0->unk12 = (arg0->unk12 + 1) & 7;
+    if (arg0->unk12 == 0) {
+        volatile u8 padding[0x2];
+        arg0->unk11 = (arg0->unk11 + 1) & 3;
+    }
+
+    arg0->unk8 = (s16)(arg0->unk11 + 8);
+
+    if (temp_v0->unk424 == 0) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    debugEnqueueCallback(8, 7, &func_80012004_12C04, arg0);
+}
 
 void func_80036A10_37610(void *untypedArg) {
     func_80036A10_37610_arg *arg0 = (func_80036A10_37610_arg *)untypedArg;
