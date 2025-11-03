@@ -1,0 +1,136 @@
+#!/bin/bash
+
+# Check if argument is provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <function_name_or_path_or_scratch_id>"
+    exit 1
+fi
+
+ARG="$1"
+
+# Check if the argument is a decomp.me scratch ID (numeric or alphanumeric with 5+ chars)
+# Scratch IDs are typically 5-6 alphanumeric characters
+if [[ "$ARG" =~ ^[0-9]+$ ]] || [[ "$ARG" =~ ^[a-zA-Z0-9]+$ && ${#ARG} -ge 5 && ${#ARG} -le 10 ]]; then
+    echo "Detected scratch ID: $ARG"
+    echo "Fetching from decomp.me API..."
+
+    # Fetch the scratch data from decomp.me API
+    SCRATCH_DATA=$(curl -s "https://decomp.me/api/scratch/$ARG")
+
+    if [ $? -ne 0 ] || [ -z "$SCRATCH_DATA" ]; then
+        echo "Error: Failed to fetch scratch data from decomp.me"
+        exit 1
+    fi
+
+    # Check if we got an error response
+    if echo "$SCRATCH_DATA" | grep -q '"error"'; then
+        echo "Error: Scratch not found or API error"
+        echo "$SCRATCH_DATA"
+        exit 1
+    fi
+
+    # Extract diff_label and source_code from JSON response
+    DIFF_LABEL=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('diff_label', ''))" 2>/dev/null)
+    SOURCE_CODE=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('source_code', ''))" 2>/dev/null)
+
+    if [ -z "$DIFF_LABEL" ] || [ -z "$SOURCE_CODE" ]; then
+        echo "Error: Could not extract diff_label or source_code from API response"
+        exit 1
+    fi
+
+    echo "Found function: $DIFF_LABEL"
+
+    # Use diff_label as the function name for ASM lookup
+    FUNC_NAME="$DIFF_LABEL"
+    USE_SCRATCH_SOURCE=true
+else
+    # Regular function name or path handling
+    FUNC_NAME="$ARG"
+    USE_SCRATCH_SOURCE=false
+fi
+
+# Check if the argument is already a full path
+if [[ "$FUNC_NAME" == *.s ]]; then
+    # It's already a path
+    ASM_PATH="$FUNC_NAME"
+else
+    # It's just a function name, search for it
+    # Add .s extension if not present
+    if [[ "$FUNC_NAME" != *.s ]]; then
+        FUNC_NAME="${FUNC_NAME}.s"
+    fi
+
+    # Find the file in asm/nonmatchings or asm/matchings
+    ASM_PATH=$(find asm/nonmatchings asm/matchings -name "$FUNC_NAME" -type f 2>/dev/null | head -1)
+
+    if [ -z "$ASM_PATH" ]; then
+        echo "Error: Could not find assembly file for function: $FUNC_NAME"
+        exit 1
+    fi
+
+    echo "Found: $ASM_PATH"
+fi
+
+# Prepare source code for import
+if [ "$USE_SCRATCH_SOURCE" = true ]; then
+    # Write the source code from the scratch to src/temp.c
+    echo '#include "common.h"' > src/temp.c
+    echo "$SOURCE_CODE" >> src/temp.c
+    echo "Using source code from decomp.me scratch"
+fi
+
+# Run the import scripts with the found path
+echo "Importing..."
+./tools/decomp-permuter/import.py src/temp.c "$ASM_PATH"
+
+if [ $? -ne 0 ]; then
+    echo "Error: Import failed"
+    exit 1
+fi
+
+# Extract just the function name (without .s extension) from the ASM_PATH
+FUNC_BASE=$(basename "$ASM_PATH" .s)
+
+# The permuter directory is created at nonmatchings/<function_name>
+PERMUTER_DIR="nonmatchings/$FUNC_BASE"
+
+# Set up interrupt handling for permuter run
+INTERRUPTED=0
+trap 'INTERRUPTED=1' INT
+
+# Extract identifier for notification
+if [ "$USE_SCRATCH_SOURCE" = true ]; then
+    # Use the diff label from the scratch as identifier
+    IDENTIFIER="$DIFF_LABEL"
+else
+    IDENTIFIER="${ASM_PATH#nonmatchings/}"
+    IDENTIFIER="${IDENTIFIER%/}"
+fi
+START_TIME=$(date +%s)
+
+# Run the permuter
+echo "Running permuter..."
+python3 tools/decomp-permuter/permuter.py \
+  -j 16 \
+  --best-only \
+  --stop-on-zero \
+  --stack-diffs \
+  --algorithm levenshtein "$PERMUTER_DIR"
+
+PERMUTER_EXIT_CODE=$?
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
+# Send push notification if successful and took more than 60 seconds
+if [ $INTERRUPTED -eq 0 ] && [ $PERMUTER_EXIT_CODE -eq 0 ] && [ "$DURATION" -gt 60 ]; then
+  if [ -f .push_secrets ]; then
+    source .push_secrets
+    curl -s \
+      --form-string "token=$PUSH_TOKEN" \
+      --form-string "user=$PUSH_USER" \
+      --form-string "message=Matched $IDENTIFIER" \
+      https://api.pushover.net/1/messages.json
+  fi
+fi
+
+exit $PERMUTER_EXIT_CODE
