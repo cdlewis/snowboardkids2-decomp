@@ -140,7 +140,7 @@ segments:
       - [0x33E00, asm]
       - [0x33FE0, asm]
       - [0x36B80, asm]
-      - [0x36BE0, asm]
+      - [0x36BE0, c]
       - [0x36E50, c, 36E50]
       - [0x37E70, asm]
       - [0x38310, asm]

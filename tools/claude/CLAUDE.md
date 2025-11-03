@@ -29,7 +29,7 @@ Repeat the following steps:
 - VARIABLE DECLARATIONS MUST APPEAR AT THE START OF THE FUNCTION.
 - Never add comments to code.
 - Where appropriate, generate structs to match the expected input arguments.
-- Never use #include statements.
+- The only permitted #include is common.h
 - Keep variable declarations simple and at the top of functions
 - Avoid complex initializers and inline variable declarations
 - Use simple arithmetic operations instead of compound ones
