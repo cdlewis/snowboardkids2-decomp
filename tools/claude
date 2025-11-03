@@ -5,7 +5,7 @@
 # as part of setting up the build directory.
 
 ARG="$1"
-CLAUDE_DIR="$(pwd)/tools/claude"
+CLAUDE_DIR="$(pwd)/tools/claude-decomp-env"
 CLAUDE_CONFIG="$(pwd)/.claude"
 
 create_unique_dir() {
