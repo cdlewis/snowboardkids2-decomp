@@ -5,6 +5,8 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 
+extern s32 gControllerInputs;
+
 USE_ASSET(_45A890);
 
 typedef struct {
@@ -19,18 +21,27 @@ typedef struct {
 } func_80036920_37520_arg;
 
 typedef struct {
-    u8 padding0[16];
+    u8 padding0[0x10];
     u8 unk10;
-    u8 padding1[98];
+    u8 padding1[0x62];
     u8 unk73;
-    char padding[911];
+    u8 padding2[0x38F];
     u8 unk403;
-    char padding3[28];
+    u8 padding3[0x4];
+    s32 unk408[1];
+    u8 padding4[0x4];
+    s32 unk410[1];
+    u8 padding5[0x8];
+    s32 numEntries;
     u8 unk420;
-    char padding4[3];
+    u8 unk421;
+    u8 unk422;
+    u8 padding6[0x1];
     u8 unk424;
     u8 unk425;
-    char padding2[7];
+    u8 padding7[0x4];
+    u8 unk42A;
+    u8 padding8[0x2];
     u8 unk42D;
 } func_80036274_36E74_large_struct;
 
@@ -116,6 +127,13 @@ typedef struct {
     u8 unk12;
 } func_80036880_37480_arg;
 
+typedef struct {
+    u8 padding0[0x34];
+    s32 unk34;
+    u8 padding1[0x4];
+    s32 unk3C;
+} func_80036C20_37820_arg;
+
 s32 func_80035F80_36B80(s32);
 void func_80036274_36E74(void *);
 void func_80036424_37024(void *);
@@ -135,6 +153,7 @@ extern void D_8008FAC0_906C0;
 extern u16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
 void func_80036920_37520(func_80036920_37520_arg *arg0);
+extern s32 distance_2d(s32, s32);
 
 void func_80036250_36E50(s8 *arg0) {
     *arg0 = 0;
@@ -313,9 +332,55 @@ void func_80036A68_37668(void *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036AF8_376F8);
 
-INCLUDE_ASM("asm/nonmatchings/36E50", func_80036C20_37820);
-// 93% match
-// #include "func_80036C20_37820"
+s32 func_80036C20_37820(func_80036C20_37820_arg *arg0) {
+    func_80036274_36E74_large_struct *allocation;
+    struct {
+        s32 distances[1];
+        s32 maxDistance;
+    } data;
+    s32 i;
+    s32 dx;
+    s32 dy;
+
+    allocation = (func_80036274_36E74_large_struct *)getCurrentAllocation();
+    if (allocation->numEntries == 0) {
+        return 0;
+    }
+
+    if (allocation->unk421 == 1) {
+        return 0;
+    }
+
+    if (allocation->unk422 == 1) {
+        return 0;
+    }
+
+    data.maxDistance = 0x01000000;
+    if (allocation->unk42A == 0) {
+        for (i = 0; i < allocation->numEntries; i++) {
+            dx = allocation->unk408[i] - arg0->unk34;
+            dy = allocation->unk410[i] - arg0->unk3C;
+            dx = distance_2d(dx, dy);
+            data.distances[i] = dx;
+
+            if (dx <= 0x37FFFF) {
+                if (gControllerInputs & A_BUTTON) {
+                    allocation->unk42A = 0x11;
+                }
+            }
+        }
+    }
+
+    if (allocation->unk42A != 0x11) {
+        return 0;
+    }
+
+    if (data.distances[0] < data.maxDistance) {
+        return 1;
+    }
+
+    return 2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036D54_37954);
 
