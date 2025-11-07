@@ -1,4 +1,14 @@
 #include "1DF310.h"
+#include "1DFAA0.h"
+#include "task_scheduler.h"
+
+typedef struct {
+    func_800B29F0_1DFAA0_arg *unk0;
+    u8 padding[0xA];
+    s16 unkE;
+} func_800B25A0_1DF650_task;
+
+extern void func_8000D244_DE44(void);
 
 void noop_1DF310(void) {
 }
@@ -6,7 +16,6 @@ void noop_1DF310(void) {
 s32 returnZero_1DF318(void) {
     return 0;
 }
-
 
 void func_800B2270_1DF320(u8 *arg0, func_800B2270_1DF320_arg *arg1) {
     arg1->unkFF5 = (u8)*arg0;
@@ -80,7 +89,14 @@ s32 returnZero_1DF648(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B25A0_1DF650);
+void func_800B25A0_1DF650(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1) {
+    func_800B25A0_1DF650_task *temp_v0 = scheduleTask(&func_8000D244_DE44, 1, 0, 0x64);
+    if (temp_v0 != NULL) {
+        func_800B29F0_1DFAA0(arg1);
+        temp_v0->unk0 = arg1;
+        temp_v0->unkE = (u16)*arg0;
+    }
+}
 
 void noop_1DF6BC(void) {
 }

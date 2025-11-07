@@ -1,3 +1,6 @@
+#pragma once
+
+#include "1DFAA0.h"
 #include "common.h"
 
 typedef struct {
@@ -29,7 +32,7 @@ s32 returnZero_1DF5CC(void);
 void func_800B2524_1DF5D4(void);
 void noop_1DF640(void);
 s32 returnZero_1DF648(void);
-void func_800B25A0_1DF650(void);
+void func_800B25A0_1DF650(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1);
 void noop_1DF6BC(void);
 s32 returnZero_1DF6C4(void);
 void func_800B261C_1DF6CC(void);

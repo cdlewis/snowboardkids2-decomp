@@ -46,11 +46,6 @@ typedef struct {
 } StateEntry;
 
 typedef struct {
-    u8 padding[0xFF7];
-    s8 unkFF7;
-} func_800B29F0_1DFAA0_arg;
-
-typedef struct {
     u8 padding[0x16];
     u16 unk16;
 } UIResource;
