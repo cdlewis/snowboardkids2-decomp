@@ -9,6 +9,12 @@
 #include "task_scheduler.h"
 
 typedef struct {
+    u8 padding[0x2C];
+    void *unk2C;
+    void *unk30;
+} func_80000968_1568_arg;
+
+typedef struct {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -178,7 +184,7 @@ void func_800007C4_13C4(void *, void *);
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
 void func_800008D0_14D0(func_80000C2C_182C_arg *arg0);
-s32 func_80000968_1568(void);
+void func_80000968_1568(func_80000968_1568_arg *arg0);
 void func_80000E84_1A84(func_80000C2C_182C_arg *arg0);
 void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0);
 
@@ -287,7 +293,10 @@ void func_800008D0_14D0(func_80000C2C_182C_arg *arg0) {
     func_800007C4_13C4(arg0->unk0, &arg0->unk8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000968_1568);
+void func_80000968_1568(func_80000968_1568_arg *arg0) {
+    arg0->unk30 = freeNodeMemory(arg0->unk30);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+}
 
 void func_800009A0_15A0(func_80000C2C_182C_arg *arg0) {
     D_800891A8_89DA8_entry *temp_s0;
