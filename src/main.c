@@ -191,6 +191,7 @@ void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0);
 extern s32 func_8000A030_AC30(void *, s32);
 extern void func_80009E68_AA68(void *, s16);
 extern s32 identityMatrix;
+extern void func_800630F0_63CF0(u16, void *);
 
 void setModelRenderMode(setModelRenderMode_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;
@@ -253,7 +254,16 @@ INCLUDE_ASM("asm/nonmatchings/main", func_8000056C_116C);
 
 INCLUDE_ASM("asm/nonmatchings/main", func_80000710_1310);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000760_1360);
+void func_80000760_1360(func_80000760_1360_arg *arg0) {
+    if (arg0->unk87 != 0) {
+        if (arg0->unkC.unk24 != 0) {
+            enqueueDisplayListObject(arg0->unk0->unk16, &arg0->unkC);
+        }
+        if (arg0->unk6C != 0) {
+            func_800630F0_63CF0(arg0->unk0->unk16, &arg0->unk48);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/main", func_800007C4_13C4);
 

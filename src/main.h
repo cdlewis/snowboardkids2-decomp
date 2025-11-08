@@ -17,7 +17,21 @@ void func_80000460_1060(func_80000460_1060_arg0 *arg0, ColorData *arg1, ColorDat
 
 void func_8000056C_116C(func_80000460_1060_arg0 *, s32, GameState *);
 
-void func_80000760_1360(void);
+typedef struct {
+    struct {
+        u8 padding[0x16];
+        u16 unk16;
+    } *unk0;
+    u8 padding[0x8];
+    DisplayListObject unkC;
+    s32 unk48;
+    u8 padding4[0x20];
+    s32 unk6C;
+    u8 padding5[0x17];
+    s8 unk87;
+} func_80000760_1360_arg;
+
+void func_80000760_1360(func_80000760_1360_arg *);
 
 void func_80000710_1310(s32 *);
 
