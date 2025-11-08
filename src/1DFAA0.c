@@ -90,8 +90,8 @@ typedef struct {
 typedef struct {
     u8 padding[0xC];
     s32 unkC;
-    s32 unk10;
-    u8 padding3[0xA4];
+    func_80000710_1310_arg unk10;
+    u8 padding3[0x20];
     s32 unkB8;
     u8 padding2[0x34];
     SceneModel *unkF0;
@@ -132,7 +132,7 @@ void func_800B29FC_1DFAAC(func_800B29F0_1DFAA0_arg *arg0) {
     }
 }
 
-s32 func_800B2A24_1DFAD4(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
+void func_800B2A24_1DFAD4(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
     arg0->items[arg1].unk44 = 1;
 }
 

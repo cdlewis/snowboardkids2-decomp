@@ -107,7 +107,7 @@ s32 returnZero_1DF6C4(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B261C_1DF6CC);
 
-func_800B2700_1DF7B0(func_800B2A24_1DFAD4_arg *arg0, s8 arg1) {
+void func_800B2700_1DF7B0(func_800B2A24_1DFAD4_arg *arg0, s8 arg1) {
     func_800B2A24_1DFAD4_arg_item *temp_a0;
     s32 temp_v1;
     s32 temp_a0_val;

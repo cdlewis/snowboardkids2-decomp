@@ -252,7 +252,13 @@ void func_80000460_1060(func_80000460_1060_arg0 *arg0, ColorData *arg1, ColorDat
 
 INCLUDE_ASM("asm/nonmatchings/main", func_8000056C_116C);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000710_1310);
+void func_80000710_1310(func_80000710_1310_arg *arg0) {
+    if (arg0->unk4 != 0) {
+        arg0->unk8 = freeNodeMemory(arg0->unk8);
+        arg0->unk4 = freeNodeMemory(arg0->unk4);
+    }
+    arg0->unk86 = 1;
+}
 
 void func_80000760_1360(func_80000760_1360_arg *arg0) {
     if (arg0->unk87 != 0) {

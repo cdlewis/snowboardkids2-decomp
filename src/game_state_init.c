@@ -25,7 +25,7 @@ extern void func_80036250_36E50;
 extern void func_80036A3C_3763C;
 extern void PhoneTriggerInit;
 
-void cleanupTransitionEffect(s32 *);
+void cleanupTransitionEffect(func_80000710_1310_arg *);
 void gameStateCleanupHandler(void);
 void gameStateCountdownHandler(void);
 void invokeTransitionEffect(func_80000760_1360_arg *);
@@ -181,6 +181,6 @@ void invokeTransitionEffect(func_80000760_1360_arg *arg0) {
     func_80000760_1360(arg0);
 }
 
-void cleanupTransitionEffect(s32 *arg0) {
+void cleanupTransitionEffect(func_80000710_1310_arg *arg0) {
     func_80000710_1310(arg0);
 }

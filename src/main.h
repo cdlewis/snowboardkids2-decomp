@@ -33,7 +33,15 @@ typedef struct {
 
 void func_80000760_1360(func_80000760_1360_arg *);
 
-void func_80000710_1310(s32 *);
+typedef struct {
+    s32 unk0;
+    void *unk4;
+    void *unk8;
+    u8 padding[0x7A];
+    s8 unk86;
+} func_80000710_1310_arg;
+
+void func_80000710_1310(func_80000710_1310_arg *);
 
 typedef struct {
     char padding[0x87];

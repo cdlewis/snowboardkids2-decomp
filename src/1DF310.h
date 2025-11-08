@@ -36,7 +36,7 @@ void func_800B25A0_1DF650(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1);
 void noop_1DF6BC(void);
 s32 returnZero_1DF6C4(void);
 void func_800B261C_1DF6CC(void);
-func_800B2700_1DF7B0(func_800B2A24_1DFAD4_arg *arg0, s8 arg1);
+void func_800B2700_1DF7B0(func_800B2A24_1DFAD4_arg *arg0, s8 arg1);
 s32 returnZero_1DF834(void);
 void noop_1DF83C(void);
 s32 returnZero_1DF844(void);
