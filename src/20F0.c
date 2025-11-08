@@ -589,9 +589,9 @@ void initializeGameEntity(
 INCLUDE_ASM("asm/nonmatchings/20F0", initializeGameEntity);
 #endif
 
-void func_80002014_2C14(SceneModel *arg0) {
+SceneModel *func_80002014_2C14(SceneModel *arg0) {
     func_80002040_2C40(arg0);
-    freeNodeMemory(arg0);
+    return (SceneModel *)freeNodeMemory(arg0);
 }
 
 void *func_80002040_2C40(SceneModel *arg0) {

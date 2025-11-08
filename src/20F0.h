@@ -137,7 +137,7 @@ typedef struct {
 
 void applyTransformToModel(SceneModel *arg0, applyTransformToModel_arg1 *arg1);
 
-void func_80002014_2C14(SceneModel *arg0);
+SceneModel *func_80002014_2C14(SceneModel *arg0);
 
 void clearModelRotation(SceneModel *);
 

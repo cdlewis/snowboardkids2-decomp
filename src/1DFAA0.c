@@ -87,6 +87,16 @@ typedef struct {
     /* 0x1220 */ s32 cameraAnimationTimer;
 } CutsceneManager;
 
+typedef struct {
+    u8 padding[0xC];
+    s32 unkC;
+    s32 unk10;
+    u8 padding3[0xA4];
+    s32 unkB8;
+    u8 padding2[0x34];
+    SceneModel *unkF0;
+} func_800B2C78_arg;
+
 extern StateEntry *D_800BAEBC_1E7F6C;
 extern s32 D_800AB050_A23C0;
 extern StateEntry D_800BAEC8_1E7F78[];
@@ -102,6 +112,8 @@ extern s32 syncModelFromSlot(void *, void *);
 extern s32 advanceSceneManager(void *);
 extern s32 finalizeAnimationLoop(void *);
 extern s32 setupSlotTransform(void *);
+extern void func_800B5BFC_1E2CAC(s32);
+extern void n_alSeqpDelete(s32 *);
 
 u8 getCutsceneSlotCount(void);
 s32 findEventAtFrame(u8 a0, u16 a1);
@@ -134,7 +146,21 @@ func_800B2A24_1DFAD4_arg_item *func_800B2A78_1DFB28(func_800B2A24_1DFAD4_arg *ar
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2AA0);
 
-INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2C78);
+void func_800B2C78(func_800B2C78_arg *arg0) {
+    s32 i;
+
+    n_alSeqpDelete(&arg0[16].unkB8);
+
+    func_800B5BFC_1E2CAC(arg0->unkC);
+
+    for (i = 0; i < (getCutsceneSlotCount() & 0xFF); i++) {
+        if (arg0[i].unkF0 != 0) {
+            arg0[i].unkF0 = func_80002014_2C14(arg0[i].unkF0);
+        }
+    }
+
+    func_80000710_1310(&arg0->unk10);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2D04);
 

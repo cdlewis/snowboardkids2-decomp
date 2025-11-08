@@ -19,7 +19,7 @@ void func_8000056C_116C(func_80000460_1060_arg0 *, s32, GameState *);
 
 void func_80000760_1360(void);
 
-void func_80000710_1310(void);
+void func_80000710_1310(s32 *);
 
 typedef struct {
     char padding[0x87];
