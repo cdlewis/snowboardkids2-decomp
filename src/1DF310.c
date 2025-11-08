@@ -107,7 +107,27 @@ s32 returnZero_1DF6C4(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B261C_1DF6CC);
 
-INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B2700_1DF7B0);
+func_800B2700_1DF7B0(func_800B2A24_1DFAD4_arg *arg0, s8 arg1) {
+    func_800B2A24_1DFAD4_arg_item *temp_a0;
+    s32 temp_v1;
+    s32 temp_a0_val;
+
+    temp_a0 = func_800B2A78_1DFB28(arg0, arg1);
+    temp_v1 = arg0->unk1220 + temp_a0->unk4;
+    arg0->unk1220 = temp_v1;
+
+    if (temp_a0->unk4 > 0) {
+        if (temp_a0->unk0 < temp_v1) {
+            arg0->unk1220 = temp_a0->unk0;
+            func_800B2A50_1DFB00(arg0, arg1);
+        }
+    } else {
+        if (temp_v1 < temp_a0->unk0) {
+            arg0->unk1220 = temp_a0->unk0;
+            func_800B2A50_1DFB00(arg0, arg1);
+        }
+    }
+}
 
 s32 returnZero_1DF834(void) {
     return 0;

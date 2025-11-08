@@ -120,31 +120,16 @@ void func_800B29FC_1DFAAC(func_800B29F0_1DFAA0_arg *arg0) {
     }
 }
 
-typedef struct {
-    u8 padding[0xEC];
-    s8 unkEC;
-    u8 padding2[0x0];
-    s32 unkF4;
-} func_800B2A24_1DFAD4_arg;
-void func_800B2A24_1DFAD4(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
-    func_800B2A24_1DFAD4_arg *new_var = arg0 + arg1;
-    new_var->unkEC = 1;
+s32 func_800B2A24_1DFAD4(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
+    arg0->items[arg1].unk44 = 1;
 }
 
 void func_800B2A50_1DFB00(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
-    func_800B2A24_1DFAD4_arg *new_var = arg0 + arg1;
-    new_var->unkEC = 0;
+    arg0->items[arg1].unk44 = 0;
 }
 
-typedef struct {
-    char header[0xA8];
-    struct {
-        char data[0xF4];
-    } entries[0];
-} func_800B2A78_1DFB28_arg;
-
-void *func_800B2A78_1DFB28(func_800B2A78_1DFB28_arg *a0, short a1) {
-    return &a0->entries[a1];
+func_800B2A24_1DFAD4_arg_item *func_800B2A78_1DFB28(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
+    return &arg0->items[arg1];
 }
 
 INCLUDE_ASM("asm/nonmatchings/1DFAA0", func_800B2AA0);
