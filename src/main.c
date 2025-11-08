@@ -141,6 +141,29 @@ typedef struct {
     void *unk8;
 } func_80000DA4_19A4_arg;
 
+typedef struct {
+    u8 padding[0x84];
+    s16 unk84;
+} func_80000DC0_19C0_arg_unk0;
+
+typedef struct {
+    func_80000DC0_19C0_arg_unk0 *unk0;
+    s8 unk4;
+    u8 padding[3];
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
+    s32 unk24;
+    s32 unk28;
+    void *unk2C;
+    void *unk30;
+    s32 unk34;
+} func_80000DC0_19C0_arg;
+
 s32 D_800894F0_8A0F0[8];
 
 void func_80000DA4_19A4(func_80000DA4_19A4_arg *arg0);
@@ -156,6 +179,8 @@ void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
 void func_800008D0_14D0(func_80000C2C_182C_arg *arg0);
 s32 func_80000968_1568(void);
+void func_80000E84_1A84(func_80000C2C_182C_arg *arg0);
+void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0);
 
 extern s32 func_8000A030_AC30(void *, s32);
 extern void func_80009E68_AA68(void *, s16);
@@ -385,7 +410,28 @@ void func_80000DA4_19A4(func_80000DA4_19A4_arg *arg0) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000DC0_19C0);
+void func_80000DC0_19C0(func_80000DC0_19C0_arg *arg0) {
+    D_800891A8_89DA8_entry *var_s0;
+    D_800891A8_89DA8_entry_2C *var_s2;
+    s16 temp;
+    s8 temp2;
+
+    temp = arg0->unk0->unk84;
+    temp2 = arg0->unk4;
+    var_s0 = &D_800891A8_89DA8[temp];
+    var_s2 = &var_s0->unk2C[temp2];
+
+    setCleanupCallback(func_80000F14_1B14);
+
+    memcpy(&arg0->unk8, &identityMatrix, 0x20);
+
+    arg0->unk2C = dmaRequestAndUpdateState(var_s0->asset1Start, var_s0->asset1End);
+    arg0->unk30 = dmaRequestAndUpdateStateWithSize(var_s0->asset2Start, var_s0->asset2End, var_s0->asset2Size);
+    arg0->unk34 = 0;
+    arg0->unk28 = var_s2->unk4;
+
+    setCallback(func_80000E84_1A84);
+}
 
 void func_80000E84_1A84(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];

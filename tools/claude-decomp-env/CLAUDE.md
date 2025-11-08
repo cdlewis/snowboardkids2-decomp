@@ -24,19 +24,22 @@ Repeat the following steps:
 ## Coding Guidelines
 
 - Always use array and struct access. Do not introduce manual pointer arithmatic.
-- Favour struct or array accesses. Avoid pointer arithamtic whenever possible.
+- Where appropriate, generate structs to match the expected input arguments, return values, etc.
+- Before adding a new type definition, search in the codebase if this struct already exists and reuse them whenever possible.
 - Favour `for` loops over `do` or `while` loops.
 - VARIABLE DECLARATIONS MUST APPEAR AT THE START OF THE FUNCTION.
 - Never add comments to code.
-- Where appropriate, generate structs to match the expected input arguments.
 - The only permitted #include is common.h
-- Keep variable declarations simple and at the top of functions
-- Avoid complex initializers and inline variable declarations
-- Use simple arithmetic operations instead of compound ones
-- Be explicit with type casts when working with different sized data
-- Prefer direct variable assignments over compound expressions
 - Use temporary variables instead of complex nested expressions
-- Avoid relying on operator precedence - use parentheses to be explicit
+
+A literal decompilation of the code often produces strange artefacts. Account for and avoid these common pitfalls:
+- Control flow often becomes overly complicated:
+  - `if { do { } while () }` should just be `while {}`
+  - `i = 0; if { do { i++ } while () }` should just be `for {}`
+  - `goto X` is likely just a loop or conditional
+- Arithmatic is often converted to shifts:
+  - `x >> 2` should just be `x / 4`
+  - `x << 2` should just be `x * 4`
 
 ## Decompiling Tips
 
