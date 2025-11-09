@@ -1,3 +1,4 @@
+cross2d = 0x800609E8;
 isPlayerInRangeAndPull = 0x8005C60C;
 isObjectCulled = 0x80070140;
 D_8008F810_90410 = 0x8008F810; // size:0x60

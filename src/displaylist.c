@@ -56,15 +56,15 @@ extern void func_800680C4_68CC4(void);
 extern void guLookAtReflect(
     Mtx *m,
     LookAt *l,
-    float xEye,
-    float yEye,
-    float zEye,
-    float xAt,
-    float yAt,
-    float zAt,
-    float xUp,
-    float yUp,
-    float zUp
+    f32 xEye,
+    f32 yEye,
+    f32 zEye,
+    f32 xAt,
+    f32 yAt,
+    f32 zAt,
+    f32 xUp,
+    f32 yUp,
+    f32 zUp
 );
 
 void func_80062CF0_638F0(void);
@@ -95,7 +95,16 @@ void parseGameDataLayout(GameDataLayout *gameData) {
     gameData->finalValue = configValue;
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800609E8_615E8);
+// cross2d calculates the cross product of two 2d vectors
+s64 cross2d(s32 x0, s32 y0, s32 x1, s32 y1, s32 x2, s32 y2) {
+    s64 product1;
+    s64 product2;
+
+    product1 = (s64)(x2 - x1) * (y0 - y1);
+    product2 = (s64)(y2 - y1) * (x0 - x1);
+
+    return product1 - product2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80060A3C_6163C);
 
