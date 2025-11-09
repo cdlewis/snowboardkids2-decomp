@@ -3,19 +3,32 @@
 #include "gamestate.h"
 
 typedef struct {
-    char padding[0xD5];
-    s32 unkDA;
-} func_80000460_1060_arg0_unk0;
-
-typedef struct {
-    func_80000460_1060_arg0_unk0 *unk0;
-    char padding[0x80];
+    struct {
+        s8 padding[0xD5];
+        s32 unkDA;
+    } *unk0;
+    void *unk4;
+    void *unk8;
+    f32 unkC[8];
+    s32 unk2C;
+    void *unk30;
+    void *unk34;
+    void *unk38;
+    s8 pad3C[12];
+    float unk48[8];
+    s32 unk68;
+    void *unk6C;
+    void *unk70;
+    void *unk74;
+    s8 pad78[12];
     s16 unk84;
-} func_80000460_1060_arg0;
+    u8 unk86;
+    u8 unk87;
+} func_8000056C_116C_arg;
 
-void func_80000460_1060(func_80000460_1060_arg0 *arg0, ColorData *arg1, ColorData *arg2);
+void func_80000460_1060(func_8000056C_116C_arg *arg0, ColorData *arg1, ColorData *arg2);
 
-void func_8000056C_116C(func_80000460_1060_arg0 *, s32, GameState *);
+s32 func_8000056C_116C(func_8000056C_116C_arg *entity, s16 index, void *arg2);
 
 typedef struct {
     struct {

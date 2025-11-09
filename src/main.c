@@ -73,7 +73,7 @@ typedef struct {
 } func_80001114_1D14_arg;
 
 typedef struct {
-    s32 unk0;
+    void *unk0;
     s32 unk4;
     s32 unk8;
     s32 unkC;
@@ -89,9 +89,13 @@ typedef struct {
     /* 0x10 */ void *asset2Start;
     /* 0x14 */ void *asset2End;
     /* 0x18 */ s32 asset2Size;
-    u8 padding[0x10];
+    s32 unk1C;
+    s32 unk20;
+    s32 unk24;
+    s32 unk28;
     D_800891A8_89DA8_entry_2C *unk2C;
-    s32 unk30;
+    s16 unk30;
+    u16 unk32;
     u8 unk34;
     u8 unk35;
     u8 unk36;
@@ -190,8 +194,8 @@ void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0);
 
 extern s32 func_8000A030_AC30(void *, s32);
 extern void func_80009E68_AA68(void *, s16);
-extern s32 identityMatrix;
 extern void func_800630F0_63CF0(u16, void *);
+extern s32 identityMatrix[];
 
 void setModelRenderMode(setModelRenderMode_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;
@@ -201,7 +205,7 @@ s32 osVoiceCheckWord(u8 *data) {
     return 0xE;
 }
 
-void func_80000460_1060(func_80000460_1060_arg0 *arg0, ColorData *arg1, ColorData *arg2) {
+void func_80000460_1060(func_8000056C_116C_arg *arg0, ColorData *arg1, ColorData *arg2) {
     s32 temp_v0;
     s32 temp_v0_2;
     int new_var3;
@@ -250,7 +254,72 @@ void func_80000460_1060(func_80000460_1060_arg0 *arg0, ColorData *arg1, ColorDat
     func_8006FC70_70870(arg0->unk0->unkDA, 3, arg1, arg2);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_8000056C_116C);
+typedef struct {
+    void *unk0;
+    u8 unk4;
+    u8 unk5;
+} func_8000056C_116C_task;
+
+s32 func_8000056C_116C(func_8000056C_116C_arg *entity, s16 index, void *arg2) {
+    D_800891A8_89DA8_entry *entry;
+    s32 i;
+
+    entity->unk84 = index;
+    entity->unk87 = 1;
+    entry = &D_800891A8_89DA8[index];
+    entity->unk0 = arg2;
+    entity->unk86 = 0;
+
+    if (entry->unk32 == 0xFFFF) {
+        entity->unk4 = dmaRequestAndUpdateState(entry->asset1Start, entry->asset1End);
+        entity->unk8 = dmaRequestAndUpdateStateWithSize(entry->asset2Start, entry->asset2End, entry->asset2Size);
+
+        memcpy(&entity->unkC, &identityMatrix, 0x20);
+
+        entity->unk38 = 0;
+        entity->unk30 = entity->unk4;
+        entity->unk34 = entity->unk8;
+        entity->unk2C = entry->unk1C;
+
+        if (entry->unk24 != 0) {
+            memcpy(&entity->unk48, identityMatrix, 0x20);
+            entity->unk6C = entity->unk4;
+            entity->unk70 = entity->unk8;
+            entity->unk68 = entry->unk24;
+        } else {
+            entity->unk68 = 0;
+            entity->unk70 = 0;
+            entity->unk6C = 0;
+        }
+
+        entity->unk74 = 0;
+
+        for (i = 0; i < entry->unk30; i++) {
+            func_8000056C_116C_task *task = scheduleTask((entry->unk2C + i)->unk0, 0, 0, 0xC8);
+            if (task != NULL) {
+                task->unk0 = entity;
+                task->unk4 = i;
+                task->unk5 = 0;
+            }
+        }
+
+    } else {
+        entity->unk4 = 0;
+        entity->unk8 = 0;
+        entity->unk30 = 0;
+        entity->unk34 = 0;
+        entity->unk38 = 0;
+        entity->unk2C = 0;
+        entity->unk6C = 0;
+        entity->unk70 = 0;
+        entity->unk68 = 0;
+        entity->unk74 = 0;
+
+        return 1;
+    }
+
+    return 0;
+}
 
 void func_80000710_1310(func_80000710_1310_arg *arg0) {
     if (arg0->unk4 != 0) {

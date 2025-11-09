@@ -30,7 +30,7 @@ void gameStateCleanupHandler(void);
 void gameStateCountdownHandler(void);
 void invokeTransitionEffect(func_80000760_1360_arg *);
 void setShortCountdownAndContinue(void);
-void setupGameStateTransition(func_80000460_1060_arg0 *);
+void setupGameStateTransition(func_8000056C_116C_arg *);
 void transitionToMainMenu(void);
 void transitionToNextGameMode(void);
 
@@ -162,7 +162,7 @@ void transitionToMainMenu(void) {
     func_800697F4_6A3F4(0xFF);
 }
 
-void setupGameStateTransition(func_80000460_1060_arg0 *arg0) {
+void setupGameStateTransition(func_8000056C_116C_arg *arg0) {
     ColorData sp10[3];
     ColorData sp28;
 

@@ -127,4 +127,4 @@ echo "Linked claude decompiler files and .claude config into $created_dir"
 cd "$created_dir"
 
 # Start Claude with the decompilation prompt
-claude "follow instructions in claude.md. use thinking"
+claude "decompile ${FUNC_NAME%.s}. use thinking"

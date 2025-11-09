@@ -33,6 +33,7 @@ Repeat the following steps:
 - Use temporary variables instead of complex nested expressions
 
 A literal decompilation of the code often produces strange artefacts. Account for and avoid these common pitfalls:
+
 - Control flow often becomes overly complicated:
   - `if { do { } while () }` should just be `while {}`
   - `i = 0; if { do { i++ } while () }` should just be `for {}`
@@ -40,6 +41,16 @@ A literal decompilation of the code often produces strange artefacts. Account fo
 - Arithmatic is often converted to shifts:
   - `x >> 2` should just be `x / 4`
   - `x << 2` should just be `x * 4`
+- Explicit returns in assembly might actually be fall-through returns:
+  ```c
+  if (condition) {
+      // main work
+  } else {
+      // alternative path
+      return X;  // explicit return only here
+  }
+  return Y;  // fall-through from if-branch
+  ```
 
 ## Decompiling Tips
 
