@@ -33,9 +33,9 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x134];
-    u32 unk134;
-    u32 unk138;
-    u32 unk13C;
+    u32 cameraX;
+    u32 cameraY;
+    u32 cameraZ;
 } D_800AB068_A23D8_type;
 
 extern D_800AB068_A23D8_type *D_800AB068_A23D8;
@@ -420,17 +420,17 @@ void func_80070094_70C94(u16 id, u8 listIndex, void *data1, void *data2) {
     }
 }
 
-s32 func_80070140_70D40(func_80070140_70D40_arg *arg0) {
-    if (D_800AB068_A23D8->unk134 - arg0->unk0 + 0x0FEA0000 > 0x1FD40000) {
-        return 1;
+s32 isObjectCulled(objectPosition *arg0) {
+    if (D_800AB068_A23D8->cameraX - arg0->X + 0x0FEA0000 > 0x1FD40000) {
+        return TRUE;
     }
 
-    if (D_800AB068_A23D8->unk138 - arg0->unk4 + 0x0FEA0000 > 0x1FD40000) {
-        return 1;
+    if (D_800AB068_A23D8->cameraY - arg0->Y + 0x0FEA0000 > 0x1FD40000) {
+        return TRUE;
     }
 
     // compiler nonsense
     if (((!arg0) && (!arg0)) && (!arg0)) {}
 
-    return D_800AB068_A23D8->unk13C - arg0->unk8 + 0x0FEA0000 > 0x1FD40000;
+    return D_800AB068_A23D8->cameraZ - arg0->Z + 0x0FEA0000 > 0x1FD40000;
 }

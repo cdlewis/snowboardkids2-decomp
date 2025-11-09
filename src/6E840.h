@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "displaylist.h"
 
 typedef struct {
     u8 unk148;
@@ -98,13 +99,7 @@ void unlinkNode(Node_70B00 *player);
 
 s32 func_8006FE10_70A10(s32);
 
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} func_80070140_70D40_arg;
-
-s32 func_80070140_70D40(func_80070140_70D40_arg *arg0);
+s32 isObjectCulled(objectPosition *arg0);
 
 typedef struct {
     u8 padding[0xB8];

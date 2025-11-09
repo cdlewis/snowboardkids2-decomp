@@ -15,7 +15,7 @@ typedef struct {
 
 typedef struct {
     Mat3x3Padded matrix;
-    DisplayListObject *unk20;
+    DisplayLists *unk20;
     void *unk24;
     void *unk28;
     s32 unk2C;
@@ -61,7 +61,7 @@ typedef struct {
 } func_800BB8B8_B7AF8_arg;
 
 extern s32 D_8009A8A4_9B4A4;
-extern s32 func_8005C60C_5D20C(void *a0, s32 a1, Player *a2);
+extern s32 isPlayerInRangeAndPull(void *a0, s32 a1, Player *a2);
 extern void func_800589A0_595A0(Player *player);
 
 void func_800BB468_B76A8(TrackHazard *arg0);
@@ -147,7 +147,7 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
         }
     }
 
-    if (flag != 0) {
+    if (flag) {
         if (gs->gamePaused == 0) {
             if (arg0->unk9C != 0x60000) {
                 arg0->unk9C += 0x20000;
@@ -162,17 +162,17 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
 
         if (gs->gamePaused == 0) {
             for (i = 0; i < gs->numPlayers; i++) {
-                if (func_8005C60C_5D20C(&arg0->node2.unk10.unk4, 0x12A000, &gs->players[i]) != 0) {
-                    if (func_8005C60C_5D20C(&arg0->node2.unk10.unk4, 0x1E3000, &gs->players[i]) != 0) {
+                if (isPlayerInRangeAndPull(&arg0->node2.unk10.position, 0x12A000, &gs->players[i]) != 0) {
+                    if (isPlayerInRangeAndPull(&arg0->node2.unk10.position, 0x1E3000, &gs->players[i]) != 0) {
                         func_800589A0_595A0(&gs->players[i]);
-                        func_80056B7C_5777C(&arg0->node2.unk10.unk4, 0x2A);
+                        func_80056B7C_5777C(&arg0->node2.unk10.position, 0x2A);
                         setCallback(func_800BB658_B7898);
                     }
                 }
             }
         }
     } else {
-        if (gs->gamePaused == 0) {
+        if (!gs->gamePaused) {
             if (arg0->unk9C > 0) {
                 arg0->unk9C += 0xFFFE0000;
             }
@@ -207,7 +207,7 @@ void func_800BB658_B7898(TrackHazard *arg0) {
     func_800BB3B8_B75F8(arg0);
 
     for (i = 0; i < gs->numPlayers; i++) {
-        func_8005C60C_5D20C(&arg0->node2.unk10.unk4, 0x12A000, &gs->players[i]);
+        isPlayerInRangeAndPull(&arg0->node2.unk10.position, 0x12A000, &gs->players[i]);
     }
 }
 
@@ -264,7 +264,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
 
     switch (state) {
         case 0:
-            if (gameState->gamePaused == 0) {
+            if (!gameState->gamePaused) {
                 arg0->unk3C--;
                 if ((arg0->unk3C << 16) == 0) {
                     arg0->unk3E++;
@@ -277,14 +277,14 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
 
                 for (i = 0; i < numPlayers; i++) {
                     if ((u32)gameState->players[i].unkB94 - 0x60 < 6) {
-                        arg0->node.unk20 = &func_80055E68_56A68(gameState->memoryPoolId)->unkB0.unk10;
+                        arg0->node.unk20 = &func_80055E68_56A68(gameState->memoryPoolId)->unkC0;
                         randVal = (u8)randA();
                         randVal = randVal - 0x60;
                         i = randVal << 1;
                         i = i + randVal;
                         i = i + 0x6C0;
                         func_800547E0_553E0(i, (((u8)randA()) << 12) | 0x100000);
-                        func_80056B7C_5777C((void *)((u8 *)arg0 + 0x14), 0x23);
+                        func_80056B7C_5777C(&arg0->node.unk10.position, 0x23);
                         arg0->unk3C = 0x18;
                         arg0->unk3E++;
                         break;
@@ -297,7 +297,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
                 arg0->unk3C--;
                 if ((arg0->unk3C << 16) == 0) {
                     arg0->unk3E = 0;
-                    arg0->node.unk20 = &func_80055E68_56A68(gameState->memoryPoolId)->unkB0.unk0;
+                    arg0->node.unk20 = &func_80055E68_56A68(gameState->memoryPoolId)->unkB0;
                     arg0->unk3C = 0x14;
                 }
             }

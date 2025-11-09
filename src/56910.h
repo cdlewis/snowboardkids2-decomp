@@ -18,9 +18,10 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x90];
-    DisplayListObject_unk20 unk90;
-    DisplayListObject_unk20 unkA0;
-    DisplayListObject unkB0;
+    DisplayLists unk90;
+    DisplayLists unkA0;
+    DisplayLists unkB0;
+    DisplayLists unkC0;
 } func_80055E68_56A68_result;
 
 func_80055E68_56A68_result *func_80055E68_56A68(s32);

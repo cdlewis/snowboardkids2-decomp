@@ -4,16 +4,27 @@
 #include "common.h"
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-} DisplayListObject_unk20;
+    s32 X;
+    s32 Y;
+    s32 Z;
+} objectPosition;
 
 typedef struct {
-    DisplayListObject_unk20 unk0;
-    DisplayListObject_unk20 unk10;
-    DisplayListObject_unk20 *unk20;
+    s32 unk0;
+    /* 0x4 */ objectPosition position;
+} DisplayListObject_unk10;
+
+typedef struct {
+    u32 flags;
+    Gfx *opaqueDisplayList;
+    Gfx *transparentDisplayList;
+    Gfx *overlayDisplayList;
+} DisplayLists;
+
+typedef struct {
+    DisplayLists unk0;
+    DisplayListObject_unk10 unk10;
+    DisplayLists *unk20;
     void *unk24;
     void *unk28;
     s32 unk2C;

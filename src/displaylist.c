@@ -137,14 +137,14 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062CF0_638F0);
 
 void func_8006300C_63C0C(DisplayListObject *arg0) {
     func_80062CF0_638F0();
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk4);
+    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
 }
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063058_63C58);
 
 void func_800630A4_63CA4(DisplayListObject *arg0) {
     func_80062CF0_638F0();
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unkC);
+    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
 }
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800630F0_63CF0);
@@ -167,7 +167,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
         func_8006C130_6CD30(arg0, (LookAt *)arg0->unk30);
     }
 
-    if (arg0->unk20->unk0 & 1) {
+    if (arg0->unk20->flags & 1) {
         temp_v0 = (LookAt *)arenaAlloc16(0x20);
         if (temp_v0 == NULL) {
             return;
@@ -227,7 +227,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
 
 void func_800634E8_640E8(DisplayListObject *arg0) {
     setupDisplayListMatrix(arg0);
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk4);
+    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
 }
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063534_64134);
@@ -236,62 +236,62 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063580_64180);
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
-    if (arg1->unk20->unk4 != 0) {
+    if (arg1->unk20->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &func_800634E8_640E8, arg1);
     }
-    if (arg1->unk20->unk8 != 0) {
+    if (arg1->unk20->transparentDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 3, &func_80063534_64134, arg1);
     }
-    if (arg1->unk20->unkC != 0) {
+    if (arg1->unk20->overlayDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_80063580_64180, arg1);
     }
 }
 
 void func_80063668_64268(DisplayListObject *arg0) {
-    if (func_80070140_70D40((void *)((s32)arg0 + 0x14)) == NULL) {
+    if (!isObjectCulled(&arg0->unk10.position)) {
         setupDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk4);
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
     }
 }
 
 void func_800636C8_642C8(DisplayListObject *arg0) {
-    if (func_80070140_70D40((void *)(s32)arg0 + 0x14) == 0) {
+    if (!isObjectCulled(&arg0->unk10.position)) {
         setupDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk8);
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
     }
 }
 
 void func_80063728_64328(DisplayListObject *arg0) {
     s32 *temp_v1;
 
-    if (func_80070140_70D40((void *)((s32)arg0 + 0x14)) == NULL) {
+    if (!isObjectCulled(&arg0->unk10.position)) {
         setupDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unkC);
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
     }
 }
 
 void enqueueDisplayListWithFrustumCull(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
-    if (arg1->unk20->unk4 != 0) {
+    if (arg1->unk20->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0, 1, &func_80063668_64268, arg1);
     }
-    if (arg1->unk20->unk8 != 0) {
+    if (arg1->unk20->transparentDisplayList != NULL) {
         debugEnqueueCallback(arg0, 3, &func_800636C8_642C8, arg1);
     }
-    if (arg1->unk20->unkC != 0) {
+    if (arg1->unk20->overlayDisplayList != NULL) {
         debugEnqueueCallback(arg0, 5, &func_80063728_64328, arg1);
     }
 }
 
 void buildDisplayListSegment(DisplayListObject *arg0) {
-    if (func_80070140_70D40((void *)((s32)arg0) + 0x14) == 0) {
+    if (!isObjectCulled(&arg0->unk10.position)) {
         setupDisplayListMatrix(arg0);
 
         gDPPipeSync(gRegionAllocPtr++);
 
         gDPSetColor(gRegionAllocPtr++, 0xFB, arg0->unk3B | ~0xFF);
 
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk4);
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
     }
 }
 
@@ -301,13 +301,13 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_8006395C_6455C);
 
 void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
-    if (arg1->unk20->unk4 != 0) {
+    if (arg1->unk20->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &buildDisplayListSegment, arg1);
     }
-    if (arg1->unk20->unk8 != 0) {
+    if (arg1->unk20->transparentDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 3, &func_800638C0_644C0, arg1);
     }
-    if (arg1->unk20->unkC != 0) {
+    if (arg1->unk20->overlayDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_8006395C_6455C, arg1);
     }
 }
@@ -319,9 +319,9 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_8006405C_64C5C);
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800640BC_64CBC);
 
 void func_8006411C_64D1C(DisplayListObject *arg0) {
-    if (func_80070140_70D40((void *)(s32)arg0 + 0x14) == 0) {
+    if (!isObjectCulled(&arg0->unk10.position)) {
         func_80063A94_64694(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unkC);
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
     }
 }
 
@@ -346,7 +346,7 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80064CF4_658F4);
 void func_80064E34_65A34(DisplayListObject *arg0) {
     func_800648EC_654EC();
 
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->unk8);
+    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
 
     gSPLightColor(
         gRegionAllocPtr++,
