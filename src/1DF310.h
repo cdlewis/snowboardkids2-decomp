@@ -44,7 +44,10 @@ void func_800B2404_1DF4B4(void);
 s32 returnZero_1DF590(void);
 void noop_1DF598(void);
 s32 returnZero_1DF5A0(void);
-void func_800B24F8_1DF5A8(void);
+typedef struct {
+    s8 unk0;
+} func_800B24F8_1DF5A8_arg;
+void func_800B24F8_1DF5A8(func_800B24F8_1DF5A8_arg *arg0);
 void noop_1DF5C4(void);
 s32 returnZero_1DF5CC(void);
 typedef struct {
