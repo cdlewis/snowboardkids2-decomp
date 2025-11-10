@@ -15,6 +15,12 @@ typedef struct {
     s8 unk2;
 } func_800B228C_1DF33C_arg;
 
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+    u8 unk2;
+} func_800B2300_1DF3B0_arg;
+
 void noop_1DF310(void);
 s32 returnZero_1DF318(void);
 void func_800B2270_1DF320(u8 *arg0, func_800B2270_1DF320_arg *arg1);
@@ -24,7 +30,7 @@ void func_800B228C_1DF33C(func_800B228C_1DF33C_arg *arg0, Node_70B00 *arg1);
 s32 returnZero_1DF398(void);
 void noop_1DF3A0(void);
 s32 returnZero_1DF3A8(void);
-void func_800B2300_1DF3B0(void);
+void func_800B2300_1DF3B0(func_800B2300_1DF3B0_arg *, Node_70B00 *);
 s32 returnZero_1DF40C(void);
 void noop_1DF414(void);
 s32 returnZero_1DF41C(void);

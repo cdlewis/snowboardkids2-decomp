@@ -47,7 +47,13 @@ s32 returnZero_1DF3A8(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B2300_1DF3B0);
+void func_800B2300_1DF3B0(func_800B2300_1DF3B0_arg *arg0, Node_70B00 *arg1) {
+    u8 temp_a1;
+
+    temp_a1 = D_800BA5C0_1E7670[arg0->unk2];
+    func_8006FE28_70A28(arg1->unk0.next, temp_a1, temp_a1, temp_a1);
+    func_8006FDA0_709A0(arg1->unk0.next, 0xFF, arg0->unk1);
+}
 
 s32 returnZero_1DF40C(void) {
     return 0;
