@@ -1,6 +1,7 @@
 #pragma once
 
 #include "1DFAA0.h"
+#include "6E840.h"
 #include "common.h"
 
 typedef struct {
@@ -8,12 +9,18 @@ typedef struct {
     u8 unkFF5;
 } func_800B2270_1DF320_arg;
 
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+    s8 unk2;
+} func_800B228C_1DF33C_arg;
+
 void noop_1DF310(void);
 s32 returnZero_1DF318(void);
 void func_800B2270_1DF320(u8 *arg0, func_800B2270_1DF320_arg *arg1);
 void noop_1DF32C(void);
 s32 returnZero_1DF334(void);
-void func_800B228C_1DF33C(void);
+void func_800B228C_1DF33C(func_800B228C_1DF33C_arg *arg0, Node_70B00 *arg1);
 s32 returnZero_1DF398(void);
 void noop_1DF3A0(void);
 s32 returnZero_1DF3A8(void);

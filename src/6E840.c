@@ -309,7 +309,7 @@ INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FDC8_709C8);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FE10_70A10);
 
-void func_8006FE28_70A28(Node_70B00 *arg0, s8 arg1, s8 arg2, s8 arg3) {
+void func_8006FE28_70A28(Node_70B00 *arg0, u8 arg1, u8 arg2, u8 arg3) {
     Node_70B00 *var_a0;
 
     var_a0 = arg0;
@@ -320,6 +320,7 @@ void func_8006FE28_70A28(Node_70B00 *arg0, s8 arg1, s8 arg2, s8 arg3) {
     var_a0->unkBD = arg2;
     var_a0->unkBE = arg3;
 }
+
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FE48_70A48);
 
 void func_8006FE94_70A94(func_8006FE94_70A94_arg *arg0, s8 arg1, s8 arg2, s8 arg3) {

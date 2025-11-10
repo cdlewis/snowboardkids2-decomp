@@ -2,6 +2,8 @@
 #include "1DFAA0.h"
 #include "task_scheduler.h"
 
+extern u8 D_800BA5C0_1E7670[];
+
 typedef struct {
     func_800B29F0_1DFAA0_arg *unk0;
     u8 padding[0xA];
@@ -28,7 +30,11 @@ s32 returnZero_1DF334(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B228C_1DF33C);
+void func_800B228C_1DF33C(func_800B228C_1DF33C_arg *arg0, Node_70B00 *arg1) {
+    u8 temp_a1 = D_800BA5C0_1E7670[arg0->unk2];
+    func_8006FE28_70A28(arg1->unk0.next, temp_a1, temp_a1, temp_a1);
+    func_8006FDA0_709A0(arg1->unk0.next, 0, arg0->unk1);
+}
 
 s32 returnZero_1DF398(void) {
     return 0;

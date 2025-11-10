@@ -68,7 +68,7 @@ void func_8006E02C_6EC2C(void);
 
 void func_8006E000_6EC00(s32 arg0);
 
-void func_8006FE28_70A28(Node_70B00 *arg0, s8 arg1, s8 arg2, s8 arg3);
+void func_8006FE28_70A28(Node_70B00 *arg0, u8 arg1, u8 arg2, u8 arg3);
 
 typedef struct {
     u8 padding[0xC8];
