@@ -71,5 +71,14 @@ void func_800B2700_1DF7B0(func_800B2A24_1DFAD4_arg *arg0, s8 arg1);
 s32 returnZero_1DF834(void);
 void noop_1DF83C(void);
 s32 returnZero_1DF844(void);
-void func_800B279C_1DF84C(void);
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+    s8 unk2;
+    s8 unk3;
+    s8 unk4;
+    s8 unk5;
+    s8 unk6;
+} func_800B279C_1DF84C_arg;
+void func_800B279C_1DF84C(func_800B279C_1DF84C_arg *arg0, Node_70B00 *arg1);
 s32 returnZero_1DF89C(void);

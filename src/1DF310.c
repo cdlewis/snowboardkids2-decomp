@@ -1,5 +1,6 @@
 #include "1DF310.h"
 #include "1DFAA0.h"
+#include "6E840.h"
 #include "task_scheduler.h"
 
 extern void func_8000C2BC_CEBC(s32 *, u8, u8, u8);
@@ -178,7 +179,10 @@ s32 returnZero_1DF844(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B279C_1DF84C);
+void func_800B279C_1DF84C(func_800B279C_1DF84C_arg *arg0, Node_70B00 *arg1) {
+    func_8006FE28_70A28(arg1->unk0.next, arg0->unk4, arg0->unk5, arg0->unk6);
+    func_8006FDA0_709A0(arg1->unk0.next, arg0->unk3, arg0->unk1);
+}
 
 s32 returnZero_1DF89C(void) {
     return 0;
