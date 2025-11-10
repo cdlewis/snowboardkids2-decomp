@@ -47,7 +47,17 @@ s32 returnZero_1DF5A0(void);
 void func_800B24F8_1DF5A8(void);
 void noop_1DF5C4(void);
 s32 returnZero_1DF5CC(void);
-void func_800B2524_1DF5D4(void);
+typedef struct {
+    u8 unk0;
+    u8 unk1;
+    u8 unk2;
+} func_800B2524_1DF5D4_arg0;
+
+typedef struct {
+    u8 padding[0xFF8];
+    s32 unkFF8;
+} func_800B2524_1DF5D4_arg1;
+void func_800B2524_1DF5D4(func_800B2524_1DF5D4_arg0 *arg0, func_800B2524_1DF5D4_arg1 *arg1);
 void noop_1DF640(void);
 s32 returnZero_1DF648(void);
 void func_800B25A0_1DF650(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1);

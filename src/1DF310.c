@@ -2,6 +2,7 @@
 #include "1DFAA0.h"
 #include "task_scheduler.h"
 
+extern void func_8000C2BC_CEBC(s32*, u8, u8, u8);
 extern u8 D_800BA5C0_1E7670[];
 
 typedef struct {
@@ -99,7 +100,9 @@ s32 returnZero_1DF5CC(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B2524_1DF5D4);
+void func_800B2524_1DF5D4(func_800B2524_1DF5D4_arg0 *arg0, func_800B2524_1DF5D4_arg1 *arg1) {
+    func_8000C2BC_CEBC(&arg1->unkFF8, arg0->unk0, arg0->unk1, arg0->unk2);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B2550_1DF600);
 
