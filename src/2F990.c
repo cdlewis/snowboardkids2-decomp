@@ -131,7 +131,7 @@ typedef struct {
 } func_800302AC_30EAC_arg;
 
 extern void func_8000FED0_10AD0(void);
-extern s32 D_800AB054_A23C4;
+extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];
 
@@ -181,9 +181,9 @@ void updateDebugCameraYState(cameraState *arg0) {
     char *cameraYString;
     GameState *temp_s0 = (GameState *)getCurrentAllocation();
 
-    if (D_800AB054_A23C4 & 0x10) {
+    if (gButtonsPressed[1] & R_TRIG) {
         arg0->cameraRotation++;
-    } else if (D_800AB054_A23C4 & 0x20) {
+    } else if (gButtonsPressed[1] & L_TRIG) {
         arg0->cameraRotation--;
     }
     do {

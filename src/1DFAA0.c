@@ -98,7 +98,7 @@ typedef struct {
 } func_800B2C78_arg;
 
 extern StateEntry *D_800BAEBC_1E7F6C;
-extern s32 D_800AB050_A23C0;
+extern s32 gButtonsPressed[];
 extern StateEntry D_800BAEC8_1E7F78[];
 extern u8 D_800BAF06_1E7FB6;
 extern u8 D_800BAEB0_1E7F60;
@@ -127,7 +127,7 @@ void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0) {
 }
 
 void func_800B29FC_1DFAAC(func_800B29F0_1DFAA0_arg *arg0) {
-    if (arg0->unkFF7 != 0 && (D_800AB050_A23C0 & 0x8000)) {
+    if (arg0->unkFF7 != 0 && (gButtonsPressed[0] & A_BUTTON)) {
         arg0->unkFF7 = 0;
     }
 }

@@ -4,12 +4,18 @@
 
 extern void func_8000C2BC_CEBC(s32 *, u8, u8, u8);
 extern u8 D_800BA5C0_1E7670[];
+extern s32 gButtonsPressed[];
 
 typedef struct {
     func_800B29F0_1DFAA0_arg *unk0;
     u8 padding[0xA];
     s16 unkE;
 } func_800B25A0_1DF650_task;
+
+typedef struct {
+    u8 padding[0xFF7];
+    /* 0xFF7 */ s8 unkFF7;
+} func_800B2550_1DF600_arg;
 
 extern void func_8000D244_DE44(void);
 
@@ -106,7 +112,13 @@ void func_800B2524_1DF5D4(func_800B2524_1DF5D4_arg0 *arg0, func_800B2524_1DF5D4_
     func_8000C2BC_CEBC(&arg1->unkFF8, arg0->unk0, arg0->unk1, arg0->unk2);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B2550_1DF600);
+void func_800B2550_1DF600(func_800B2550_1DF600_arg **arg0) {
+    func_800B2550_1DF600_arg *temp_a0 = *arg0;
+    if ((temp_a0->unkFF7 != 0) && (gButtonsPressed[0] & A_BUTTON)) {
+        temp_a0->unkFF7 = 0;
+        func_80069CF8_6A8F8();
+    }
+}
 
 void noop_1DF640(void) {
 }

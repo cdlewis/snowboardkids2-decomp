@@ -1,3 +1,4 @@
+gButtonsPressed = 0x800AB050; // size:0x10
 cross2d = 0x800609E8;
 isPlayerInRangeAndPull = 0x8005C60C;
 isObjectCulled = 0x80070140;
