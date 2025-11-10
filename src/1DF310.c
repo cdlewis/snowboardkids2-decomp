@@ -78,10 +78,10 @@ void func_800B2374_1DF424(func_800B2A24_1DFAD4_arg_item *arg0, func_800B2A24_1DF
     func_800B2A24_1DFAD4_arg_item *temp_v0;
 
     temp_v0 = func_800B2A78_1DFB28(arg1, arg2);
-    temp_v0->unk0.half.lower = arg0->unk0.half.lower;
-    temp_v0->unkA = 0xFF;
-    memcpy(&temp_v0->unk0.half.upper, &arg0->unk0.half.upper, 4);
-    memcpy(&temp_v0->unk4.half.upper, &arg0->unk4.half.upper, 4);
+    temp_v0->unk0.One.unk0 = arg0->unk0.One.unk0;
+    temp_v0->unk0.One.unkA = 0xFF;
+    memcpy(&temp_v0->unk0.One.unk2[0], &arg0->unk0.One.unk2[0], 4);
+    memcpy(&temp_v0->unk0.One.unk2[1], &arg0->unk0.One.unk2[1], 4);
     func_800B2A24_1DFAD4(arg1, arg2);
 }
 
@@ -152,17 +152,17 @@ void func_800B2700_1DF7B0(func_800B2A24_1DFAD4_arg *arg0, s8 arg1) {
     s32 temp_a0_val;
 
     temp_a0 = func_800B2A78_1DFB28(arg0, arg1);
-    temp_v1 = arg0->unk1220 + temp_a0->unk4.full;
+    temp_v1 = arg0->unk1220 + temp_a0->unk0.Two.unk4;
     arg0->unk1220 = temp_v1;
 
-    if (temp_a0->unk4.full > 0) {
-        if (temp_a0->unk0.full < temp_v1) {
-            arg0->unk1220 = temp_a0->unk0.full;
+    if (temp_a0->unk0.Two.unk4 > 0) {
+        if (temp_a0->unk0.Two.unk0 < temp_v1) {
+            arg0->unk1220 = temp_a0->unk0.Two.unk0;
             func_800B2A50_1DFB00(arg0, arg1);
         }
     } else {
-        if (temp_v1 < temp_a0->unk0.full) {
-            arg0->unk1220 = temp_a0->unk0.full;
+        if (temp_v1 < temp_a0->unk0.Two.unk0) {
+            arg0->unk1220 = temp_a0->unk0.Two.unk0;
             func_800B2A50_1DFB00(arg0, arg1);
         }
     }

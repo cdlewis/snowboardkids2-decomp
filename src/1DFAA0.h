@@ -2,20 +2,28 @@
 
 #include "common.h"
 
-typedef union {
-    struct {
-        s16 lower;
-        s16 upper;
-    } half;
-    s32 full;
-} CompositeInt;
+typedef struct {
+    u8 unk0;
+    u8 unk1;
+    u8 unk2;
+    u8 unk3;
+} PackedData;
 
 typedef struct {
-    CompositeInt unk0;
-    CompositeInt unk4;
-    u8 padding5[0x2];
-    u8 unkA;
-    u8 padding[0x35];
+    union {
+        struct {
+            s16 unk0;
+            PackedData unk2[2];
+            u8 unkA;
+        } One;
+        struct {
+            s32 unk0;
+            s32 unk4;
+            s16 unk8;
+            s8 unkA;
+        } Two;
+    } unk0;
+    u8 padding[0x34];
     s8 unk40;
     u8 padding2[0x3];
     s8 unk44;

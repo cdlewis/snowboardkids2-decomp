@@ -34,11 +34,6 @@ void func_800B2300_1DF3B0(func_800B2300_1DF3B0_arg *, Node_70B00 *);
 s32 returnZero_1DF40C(void);
 void noop_1DF414(void);
 s32 returnZero_1DF41C(void);
-typedef struct {
-    CompositeInt unk0;
-    CompositeInt unk4;
-} func_800B2374_1DF424_arg;
-
 void func_800B2374_1DF424(func_800B2A24_1DFAD4_arg_item *arg0, func_800B2A24_1DFAD4_arg *arg1, s8 arg2);
 void func_800B2404_1DF4B4(void);
 s32 returnZero_1DF590(void);
