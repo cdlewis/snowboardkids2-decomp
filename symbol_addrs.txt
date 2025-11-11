@@ -431,7 +431,7 @@ gPendingDmaCount = 0x8008FEA0;
 buildDisplayListSegment = 0x80063824;
 
 loadOverlay_1BBA0 = 0x8001AFA0;
-loadOverlay_1DD170 = 0x80003488;
+loadCutsceneOverlay = 0x80003488;
 gLinearArenaBuffer = 0x800A3584;
 initLinearArenaRegions = 0x8006F668;
 gRegionAllocEnd = 0x800A3558;

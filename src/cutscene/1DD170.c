@@ -321,9 +321,9 @@ s32 executeCommandFunc2(CurrentCommand *arg0, CommandData *arg1, s32 arg2, s32 a
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DD170", initializeSlotState);
+INCLUDE_ASM("asm/nonmatchings/cutscene/1DD170", initializeSlotState);
 
-INCLUDE_ASM("asm/nonmatchings/1DD170", updateSlotData);
+INCLUDE_ASM("asm/nonmatchings/cutscene/1DD170", updateSlotData);
 
 s16 executeCommandFunc5(CurrentCommand *arg0, CommandData *arg1, s8 arg2) {
     s32 var_s2 = 1;

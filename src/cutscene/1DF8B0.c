@@ -12,7 +12,7 @@ s32 returnZero_1DF8B8(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF8B0", func_800B2810_1DF8C0);
+INCLUDE_ASM("asm/nonmatchings/cutscene/1DF8B0", func_800B2810_1DF8C0);
 
 s32 returnZero_1DF9DC(void) {
     return 0;

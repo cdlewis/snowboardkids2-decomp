@@ -952,7 +952,7 @@ segments:
       - [0x1DD080, data]
       - [0x1DD150, rodata, 1DC900]
 
-  - name: _1DD170
+  - name: cutscene
     type: code
     vram: 0x800B00C0
     start: 0x1DD170
@@ -960,15 +960,15 @@ segments:
     overlay: true
     exclusive_ram_id: 800B00C0
     subsegments:
-      - [0x1DD170, c]
-      - [0x1DD8C0, c]
-      - [0x1DD970, c]
-      - [0x1DDAF0, c]
-      - [0x1DED40, c]
-      - [0x1DF180, c]
-      - [0x1DF310, c]
-      - [0x1DF8B0, c]
-      - [0x1DFAA0, c]
+      - [0x1DD170, c, cutscene/1DD170]
+      - [0x1DD8C0, c, cutscene/1DD8C0]
+      - [0x1DD970, c, cutscene/1DD970]
+      - [0x1DDAF0, c, cutscene/1DDAF0]
+      - [0x1DED40, c, cutscene/1DED40]
+      - [0x1DF180, c, cutscene/1DF180]
+      - [0x1DF310, c, cutscene/1DF310]
+      - [0x1DF8B0, c, cutscene/1DF8B0]
+      - [0x1DFAA0, c, cutscene/1DFAA0]
       - [0x1E1BA0, asm]
       - [0x1E2070, c]
       - [0x1E25B0, asm]
@@ -977,7 +977,7 @@ segments:
       - [0x1E36C0, asm]
       - [0x1E60D0, c]
       - [0x1E64A0, asm]
-      - [0x1E6D20, .data, 1DD170]
+      - [0x1E6D20, .data, cutscene/1DD170]
       - [0x1E7670, data]
       - [0x1E7DC0, .data, 1E2070]
       - [0x1E7E30, data]

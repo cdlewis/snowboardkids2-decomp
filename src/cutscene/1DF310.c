@@ -85,7 +85,7 @@ void func_800B2374_1DF424(func_800B2A24_1DFAD4_arg_item *arg0, func_800B2A24_1DF
     func_800B2A24_1DFAD4(arg1, arg2);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B2404_1DF4B4);
+INCLUDE_ASM("asm/nonmatchings/cutscene/1DF310", func_800B2404_1DF4B4);
 
 s32 returnZero_1DF590(void) {
     return 0;
@@ -144,7 +144,7 @@ s32 returnZero_1DF6C4(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DF310", func_800B261C_1DF6CC);
+INCLUDE_ASM("asm/nonmatchings/cutscene/1DF310", func_800B261C_1DF6CC);
 
 void func_800B2700_1DF7B0(func_800B2A24_1DFAD4_arg *arg0, s8 arg1) {
     func_800B2A24_1DFAD4_arg_item *temp_a0;

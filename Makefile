@@ -19,7 +19,7 @@ BUILD_DIR = build
 ASM_DIRS  = asm asm/data
 BIN_DIRS  = assets
 TOOLS_DIR = tools
-SRC_DIRS  = src
+SRC_DIRS  = src src/cutscene
 BUILD_LOG = $(BUILD_DIR)/build.log
 
 # Files

@@ -5,7 +5,7 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 
-USE_OVERLAY(_1DD170)
+USE_OVERLAY(cutscene)
 
 typedef union {
     struct {
@@ -53,7 +53,7 @@ void func_80003C34_4834(void);
 void func_80003898_4498(void);
 s16 func_800B3360(s16, s16);
 void func_800B9020(void *);
-void loadOverlay_1DD170(void);
+void loadCutsceneOverlay(void);
 void func_8000378C_438C(void);
 void func_80003C88_4888(void);
 void func_80003D30_4930(void);
@@ -78,8 +78,8 @@ void func_8000346C_406C(s16 arg0, s16 arg1, s16 arg2) {
     D_8008BF90_8CB90.unk4 = arg2;
 }
 
-void loadOverlay_1DD170(void) {
-    LOAD_OVERLAY(_1DD170)
+void loadCutsceneOverlay(void) {
+    LOAD_OVERLAY(cutscene)
     setGameStateHandler(&func_80003508_4108);
 }
 
@@ -186,7 +186,7 @@ void func_80003CC4_48C4(void) {
         D_8008BF90_8CB90.unkC.full = 1;
     }
     func_80003450_4050(D_8008BF90_8CB90.unk8.half.upper, D_8008BF90_8CB90.unkC.half.upper);
-    createTaskQueue(&loadOverlay_1DD170, 0x64);
+    createTaskQueue(&loadCutsceneOverlay, 0x64);
     setGameStateHandler(&func_80003D30_4930);
 }
 
