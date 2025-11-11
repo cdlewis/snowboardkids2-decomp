@@ -1,4 +1,4 @@
-#include "1DF310.h"
+#include "cutscene/cutscene_sys.h"
 #include "1DFAA0.h"
 #include "6E840.h"
 #include "task_scheduler.h"
@@ -11,7 +11,7 @@ typedef struct {
     func_800B29F0_1DFAA0_arg *unk0;
     u8 padding[0xA];
     s16 unkE;
-} func_800B25A0_1DF650_task;
+} cutsceneSysWait_exec_task;
 
 typedef struct {
     u8 padding[0xFF7];
@@ -20,42 +20,42 @@ typedef struct {
 
 extern void func_8000D244_DE44(void);
 
-void noop_1DF310(void) {
+void cutsceneSysDisp_init(void) {
 }
 
-s32 returnZero_1DF318(void) {
+s32 cutsceneSysDisp_validate(void) {
     return 0;
 }
 
-void func_800B2270_1DF320(u8 *arg0, func_800B2270_1DF320_arg *arg1) {
+void cutsceneSysDisp_exec(u8 *arg0, cutsceneSysDisp_exec_arg *arg1) {
     arg1->unkFF5 = (u8)*arg0;
 }
 
-void noop_1DF32C(void) {
+void cutsceneSysFadeIn_init(void) {
 }
 
-s32 returnZero_1DF334(void) {
+s32 cutsceneSysFadeIn_validate(void) {
     return 0;
 }
 
-void func_800B228C_1DF33C(func_800B228C_1DF33C_arg *arg0, Node_70B00 *arg1) {
+void cutsceneSysFadeIn_exec(cutsceneSysFadeIn_exec_arg *arg0, Node_70B00 *arg1) {
     u8 temp_a1 = D_800BA5C0_1E7670[arg0->unk2];
     func_8006FE28_70A28(arg1->unk0.next, temp_a1, temp_a1, temp_a1);
     func_8006FDA0_709A0(arg1->unk0.next, 0, arg0->unk1);
 }
 
-s32 returnZero_1DF398(void) {
+s32 cutsceneSysFadeIn_isDone(void) {
     return 0;
 }
 
-void noop_1DF3A0(void) {
+void cutsceneSysFadeOut_init(void) {
 }
 
-s32 returnZero_1DF3A8(void) {
+s32 cutsceneSysFadeOut_validate(void) {
     return 0;
 }
 
-void func_800B2300_1DF3B0(func_800B2300_1DF3B0_arg *arg0, Node_70B00 *arg1) {
+void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *arg0, Node_70B00 *arg1) {
     u8 temp_a1;
 
     temp_a1 = D_800BA5C0_1E7670[arg0->unk2];
@@ -63,18 +63,18 @@ void func_800B2300_1DF3B0(func_800B2300_1DF3B0_arg *arg0, Node_70B00 *arg1) {
     func_8006FDA0_709A0(arg1->unk0.next, 0xFF, arg0->unk1);
 }
 
-s32 returnZero_1DF40C(void) {
+s32 cutsceneSysFadeOut_isDone(void) {
     return 0;
 }
 
-void noop_1DF414(void) {
+void cutsceneSysFlash_init(void) {
 }
 
-s32 returnZero_1DF41C(void) {
+s32 cutsceneSysFlash_validate(void) {
     return 0;
 }
 
-void func_800B2374_1DF424(func_800B2A24_1DFAD4_arg_item *arg0, func_800B2A24_1DFAD4_arg *arg1, s8 arg2) {
+void cutsceneSysFlash_setup(func_800B2A24_1DFAD4_arg_item *arg0, func_800B2A24_1DFAD4_arg *arg1, s8 arg2) {
     func_800B2A24_1DFAD4_arg_item *temp_v0;
 
     temp_v0 = func_800B2A78_1DFB28(arg1, arg2);
@@ -85,7 +85,7 @@ void func_800B2374_1DF424(func_800B2A24_1DFAD4_arg_item *arg0, func_800B2A24_1DF
     func_800B2A24_1DFAD4(arg1, arg2);
 }
 
-void func_800B2404_1DF4B4(func_800B2A24_1DFAD4_arg *a0, s8 a1) {
+void cutsceneSysFlash_update(func_800B2A24_1DFAD4_arg *a0, s8 a1) {
     func_800B2A24_1DFAD4_arg_item *s0;
     s32 s1 = 0xFF;
     s32 temp;
@@ -104,7 +104,7 @@ void func_800B2404_1DF4B4(func_800B2A24_1DFAD4_arg *a0, s8 a1) {
 
         if (s0->unk0.One.unkA != 0) {
             s0->unk0.One.unkA = 0;
-            check_ptr = (u16*)&s0->unk0.One.unk2[1];
+            check_ptr = (u16 *)&s0->unk0.One.unk2[1];
             if (*check_ptr == 0) {
                 s1 = -(s0->unk0.Two.unk8 != 0);
             }
@@ -120,29 +120,29 @@ void func_800B2404_1DF4B4(func_800B2A24_1DFAD4_arg *a0, s8 a1) {
     }
 }
 
-s32 returnZero_1DF590(void) {
+s32 cutsceneSysFlash_isDone(void) {
     return 0;
 }
 
-void noop_1DF598(void) {
+void cutsceneSysIntMode_init(void) {
 }
 
-s32 returnZero_1DF5A0(void) {
+s32 cutsceneSysIntMode_validate(void) {
     return 0;
 }
 
-void func_800B24F8_1DF5A8(func_800B24F8_1DF5A8_arg *arg0) {
+void cutsceneSysIntMode_exec(cutsceneSysIntMode_exec_arg *arg0) {
     osViExtendVStart(arg0->unk0);
 }
 
-void noop_1DF5C4(void) {
+void cutsceneSysWipeColor_init(void) {
 }
 
-s32 returnZero_1DF5CC(void) {
+s32 cutsceneSysWipeColor_validate(void) {
     return 0;
 }
 
-void func_800B2524_1DF5D4(func_800B2524_1DF5D4_arg0 *arg0, func_800B2524_1DF5D4_arg1 *arg1) {
+void cutsceneSysWipeColor_exec(cutsceneSysWipeColor_exec_arg0 *arg0, cutsceneSysWipeColor_exec_arg1 *arg1) {
     func_8000C2BC_CEBC(&arg1->unkFF8, arg0->unk0, arg0->unk1, arg0->unk2);
 }
 
@@ -154,15 +154,15 @@ void func_800B2550_1DF600(func_800B2550_1DF600_arg **arg0) {
     }
 }
 
-void noop_1DF640(void) {
+void cutsceneSysWait_init(void) {
 }
 
-s32 returnZero_1DF648(void) {
+s32 cutsceneSysWait_validate(void) {
     return 0;
 }
 
-void func_800B25A0_1DF650(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1) {
-    func_800B25A0_1DF650_task *temp_v0 = scheduleTask(&func_8000D244_DE44, 1, 0, 0x64);
+void cutsceneSysWait_exec(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1) {
+    cutsceneSysWait_exec_task *temp_v0 = scheduleTask(&func_8000D244_DE44, 1, 0, 0x64);
     if (temp_v0 != NULL) {
         func_800B29F0_1DFAA0(arg1);
         temp_v0->unk0 = arg1;
@@ -170,16 +170,16 @@ void func_800B25A0_1DF650(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1) {
     }
 }
 
-void noop_1DF6BC(void) {
+void cutsceneSysCurtain_init(void) {
 }
 
-s32 returnZero_1DF6C4(void) {
+s32 cutsceneSysCurtain_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DF310", func_800B261C_1DF6CC);
+INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_sys", cutsceneSysCurtain_exec);
 
-void func_800B2700_1DF7B0(func_800B2A24_1DFAD4_arg *arg0, s8 arg1) {
+void cutsceneSysCurtain_update(func_800B2A24_1DFAD4_arg *arg0, s8 arg1) {
     func_800B2A24_1DFAD4_arg_item *temp_a0;
     s32 temp_v1;
     s32 temp_a0_val;
@@ -201,22 +201,22 @@ void func_800B2700_1DF7B0(func_800B2A24_1DFAD4_arg *arg0, s8 arg1) {
     }
 }
 
-s32 returnZero_1DF834(void) {
+s32 cutsceneSysCurtain_isDone(void) {
     return 0;
 }
 
-void noop_1DF83C(void) {
+void cutsceneSysFilter_init(void) {
 }
 
-s32 returnZero_1DF844(void) {
+s32 cutsceneSysFilter_validate(void) {
     return 0;
 }
 
-void func_800B279C_1DF84C(func_800B279C_1DF84C_arg *arg0, Node_70B00 *arg1) {
+void cutsceneSysFilter_exec(cutsceneSysFilter_exec_arg *arg0, Node_70B00 *arg1) {
     func_8006FE28_70A28(arg1->unk0.next, arg0->unk4, arg0->unk5, arg0->unk6);
     func_8006FDA0_709A0(arg1->unk0.next, arg0->unk3, arg0->unk1);
 }
 
-s32 returnZero_1DF89C(void) {
+s32 cutsceneSysFilter_isDone(void) {
     return 0;
 }
