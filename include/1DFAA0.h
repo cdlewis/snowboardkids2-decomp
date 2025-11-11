@@ -1,5 +1,6 @@
 #pragma once
 
+#include "6E840.h"
 #include "common.h"
 
 typedef struct {
@@ -19,7 +20,8 @@ typedef struct {
         struct {
             s32 unk0;
             s32 unk4;
-            s16 unk8;
+            u8 unk8;
+            u8 unk9;
             s8 unkA;
         } Two;
     } unk0;
@@ -34,8 +36,8 @@ typedef struct {
 } func_800B2A24_1DFAD4_arg_item;
 
 typedef struct {
-    s16 unk0;
-    u8 header[0xA6];
+    Node_70B00 *unk0;
+    u8 header[0xA4];
     func_800B2A24_1DFAD4_arg_item items[18];
     u8 padding[0x50];
     s32 unk1220;

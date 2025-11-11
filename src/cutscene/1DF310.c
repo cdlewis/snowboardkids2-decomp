@@ -85,7 +85,40 @@ void func_800B2374_1DF424(func_800B2A24_1DFAD4_arg_item *arg0, func_800B2A24_1DF
     func_800B2A24_1DFAD4(arg1, arg2);
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DF310", func_800B2404_1DF4B4);
+void func_800B2404_1DF4B4(func_800B2A24_1DFAD4_arg *a0, s8 a1) {
+    func_800B2A24_1DFAD4_arg_item *s0;
+    s32 s1 = 0xFF;
+    s32 temp;
+    u16 *check_ptr;
+
+    s0 = func_800B2A78_1DFB28(a0, a1);
+
+    if (s0->unk0.One.unk0 > 0) {
+        temp = s0->unk0.One.unkA & 1;
+        func_8006FE28_70A28(
+            a0->unk0,
+            s0->unk0.One.unk2[temp].unk0,
+            s0->unk0.One.unk2[temp].unk1,
+            s0->unk0.One.unk2[temp].unk2
+        );
+
+        if (s0->unk0.One.unkA != 0) {
+            s0->unk0.One.unkA = 0;
+            check_ptr = (u16*)&s0->unk0.One.unk2[1];
+            if (*check_ptr == 0) {
+                s1 = -(s0->unk0.Two.unk8 != 0);
+            }
+        } else {
+            s0->unk0.One.unkA = s1;
+        }
+
+        func_8006FDA0_709A0(a0->unk0, s1 & 0xFF, 0);
+        s0->unk0.One.unk0--;
+    } else {
+        func_8006FDA0_709A0(a0->unk0, 0, 0);
+        func_800B2A50_1DFB00(a0, a1);
+    }
+}
 
 s32 returnZero_1DF590(void) {
     return 0;

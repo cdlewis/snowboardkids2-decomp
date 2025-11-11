@@ -35,7 +35,7 @@ s32 returnZero_1DF40C(void);
 void noop_1DF414(void);
 s32 returnZero_1DF41C(void);
 void func_800B2374_1DF424(func_800B2A24_1DFAD4_arg_item *arg0, func_800B2A24_1DFAD4_arg *arg1, s8 arg2);
-void func_800B2404_1DF4B4(void);
+void func_800B2404_1DF4B4(func_800B2A24_1DFAD4_arg *a0, s8 a1);
 s32 returnZero_1DF590(void);
 void noop_1DF598(void);
 s32 returnZero_1DF5A0(void);
