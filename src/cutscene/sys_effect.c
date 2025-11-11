@@ -1,78 +1,78 @@
 #include "cutscene/sys_effect.h"
 
-void noop_1DED40(void) {
+void cutsceneEffectDisp_init(void) {
 }
 
-s32 returnZero_1DED48(void) {
+s32 cutsceneEffectDisp_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", func_800B1CA0_1DED50);
+INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectDisp_exec);
 
-s32 returnZero_1DEDF4(void) {
+s32 cutsceneEffectDisp_isDone(void) {
     return 0;
 }
 
-void noop_1DEDFC(void) {
+void cutsceneEffectFan_init(void) {
 }
 
-s32 returnZero_1DEE04(void) {
+s32 cutsceneEffectFan_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", func_800B1D5C_1DEE0C);
+INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectFan_exec);
 
-s32 returnZero_1DEE4C(void) {
+s32 cutsceneEffectFan_isDone(void) {
     return 0;
 }
 
-void noop_1DEE54(void) {
+void cutsceneEffectRocket_init(void) {
 }
 
-s32 returnZero_1DEE5C(void) {
+s32 cutsceneEffectRocket_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", func_800B1DB4_1DEE64);
+INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectRocket_exec);
 
-s32 returnZero_1DEEA4(void) {
+s32 cutsceneEffectRocket_isDone(void) {
     return 0;
 }
 
-void noop_1DEEAC(void) {
+void cutsceneEffectMLight_init(void) {
 }
 
-s32 returnZero_1DEEB4(void) {
+s32 cutsceneEffectMLight_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", func_800B1E0C_1DEEBC);
+INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectMLight_exec);
 
-s32 returnZero_1DF044(void) {
+s32 cutsceneEffectMLight_isDone(void) {
     return 0;
 }
 
-void noop_1DF04C(void) {
+void cutsceneEffectTrick_init(void) {
 }
 
-s32 returnZero_1DF054(void) {
+s32 cutsceneEffectTrick_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", func_800B1FAC_1DF05C);
+INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectTrick_exec);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", func_800B2010_1DF0C0);
+INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectTrick_update);
 
-s32 returnZero_1DF158(void) {
+s32 cutsceneEffectTrick_isDone(void) {
     return 0;
 }
 
-void noop_1DF160(void) {
+void cutsceneInitTrack_init(void) {
 }
 
-s32 returnZero_1DF168(void) {
+s32 cutsceneInitTrack_validate(void) {
     return 0;
 }
 
-void noop_1DF170(void) {
+void cutsceneInitTrack_exec(void) {
 }

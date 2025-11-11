@@ -1,3 +1,9 @@
+cutsceneEffectTrick_update = 0x800B2010; // rom:0x1DF0C0 
+cutsceneEffectTrick_exec = 0x800B1FAC; // rom:0x1DF05C
+cutsceneEffectMLight_exec = 0x800B1E0C; // rom:0x1DEEBC
+cutsceneEffectRocket_exec = 0x800B1DB4; // rom:0x1DEE64
+cutsceneEffectFan_exec = 0x800B1D5C; // rom:0x1DEE0C
+cutsceneEffectDisp_exec = 0x800B1CA0; // rom:0x1DED50
 cutsceneChrFace_exec = 0x800b15a0; // rom:0x1DE650
 cutsceneChrKageDisp_exec = 0x800B1C28; // rom:0x1DECD8
 cutsceneChrTurn3_exec = 0x800B1B80; // rom:0x1DEC30
@@ -90,16 +96,16 @@ returnZero_1DD8C8 = 0x800B0818;
 returnZero_1DD900 = 0x800B0850;
 returnZero_1DD93C = 0x800B088C;
 
-returnZero_1DED48 = 0x800B1C98;
-returnZero_1DEDF4 = 0x800B1D44;
-returnZero_1DEE04 = 0x800B1D54;
-returnZero_1DEE4C = 0x800B1D9C;
-returnZero_1DEE5C = 0x800B1DAC;
-returnZero_1DEEA4 = 0x800B1DF4;
-returnZero_1DEEB4 = 0x800B1E04;
-returnZero_1DF044 = 0x800B1F94;
-returnZero_1DF054 = 0x800B1FA4;
-returnZero_1DF158 = 0x800B20A8;
+cutsceneEffectDisp_validate = 0x800B1C98;
+cutsceneEffectDisp_isDone = 0x800B1D44;
+cutsceneEffectFan_validate = 0x800B1D54;
+cutsceneEffectFan_isDone = 0x800B1D9C;
+cutsceneEffectRocket_validate = 0x800B1DAC;
+cutsceneEffectRocket_isDone = 0x800B1DF4;
+cutsceneEffectMLight_validate = 0x800B1E04;
+cutsceneEffectMLight_isDone = 0x800B1F94;
+cutsceneEffectTrick_validate = 0x800B1FA4;
+cutsceneEffectTrick_isDone = 0x800B20A8;
 
 returnZero_1DF1D0 = 0x800B2120;
 returnZero_1DF244 = 0x800B2194;
@@ -219,14 +225,14 @@ cutsceneSysWait_init = 0x800B2590;
 cutsceneSysCurtain_init = 0x800B260C;
 cutsceneSysFilter_init = 0x800B278C;
 
-noop_1DF170 = 0x800B20C0;
-returnZero_1DF168 = 0x800B20B8;
-noop_1DED40 = 0x800B1C90;
-noop_1DEDFC = 0x800B1D4C;
-noop_1DEE54 = 0x800B1DA4;
-noop_1DEEAC = 0x800B1DFC;
-noop_1DF04C = 0x800B1F9C;
-noop_1DF160 = 0x800B20B0;
+cutsceneInitTrack_exec = 0x800B20C0;
+cutsceneInitTrack_validate = 0x800B20B8;
+cutsceneEffectDisp_init = 0x800B1C90;
+cutsceneEffectFan_init = 0x800B1D4C;
+cutsceneEffectRocket_init = 0x800B1DA4;
+cutsceneEffectMLight_init = 0x800B1DFC;
+cutsceneEffectTrick_init = 0x800B1F9C;
+cutsceneInitTrack_init = 0x800B20B0;
 
 
 identityMatrix = 0x8009A870; // type:s16 size:0x20
