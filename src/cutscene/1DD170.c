@@ -2,13 +2,13 @@
 
 #include "1DD8C0.h"
 #include "1DD970.h"
-#include "1DED40.h"
 #include "1DF180.h"
 #include "1DF8B0.h"
 #include "1DFAA0.h"
 #include "common.h"
 #include "cutscene/cutscene_chr.h"
 #include "cutscene/cutscene_sys.h"
+#include "cutscene/sys_effect.h"
 
 #define COMMAND_INIT_TRACK 0
 #define COMMAND_SYS_DISP 1

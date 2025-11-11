@@ -964,7 +964,7 @@ segments:
       - [0x1DD8C0, c, cutscene/1DD8C0]
       - [0x1DD970, c, cutscene/1DD970]
       - [0x1DDAF0, c, cutscene/cutscene_chr]
-      - [0x1DED40, c, cutscene/1DED40]
+      - [0x1DED40, c, cutscene/sys_effect]
       - [0x1DF180, c, cutscene/1DF180]
       - [0x1DF310, c, cutscene/cutscene_sys]
       - [0x1DF8B0, c, cutscene/1DF8B0]
