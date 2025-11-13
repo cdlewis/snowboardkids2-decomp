@@ -24,6 +24,12 @@ typedef struct {
             u8 unk9;
             s8 unkA;
         } Two;
+        struct {
+            s32 unk0;
+            s32 unk4;
+            s16 unk8;
+            s8 unkA;
+        } CurtainPayload;
     } unk0;
     u8 padding[0x34];
     s8 unk40;

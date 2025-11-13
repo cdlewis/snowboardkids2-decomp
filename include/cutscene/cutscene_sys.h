@@ -61,7 +61,11 @@ s32 cutsceneSysWait_validate(void);
 void cutsceneSysWait_exec(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1);
 void cutsceneSysCurtain_init(void);
 s32 cutsceneSysCurtain_validate(void);
-void cutsceneSysCurtain_exec(void);
+typedef struct {
+    s32 unk0;
+    u16 unk4;
+} CurtainParams;
+void cutsceneSysCurtain_exec(CurtainParams *params, func_800B2A24_1DFAD4_arg *sys, s8 idx);
 void cutsceneSysCurtain_update(func_800B2A24_1DFAD4_arg *arg0, s8 arg1);
 s32 cutsceneSysCurtain_isDone(void);
 void cutsceneSysFilter_init(void);

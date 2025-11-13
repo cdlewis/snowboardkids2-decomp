@@ -177,7 +177,26 @@ s32 cutsceneSysCurtain_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_sys", cutsceneSysCurtain_exec);
+void cutsceneSysCurtain_exec(CurtainParams *params, func_800B2A24_1DFAD4_arg *sys, s8 idx) {
+    func_800B2A24_1DFAD4_arg_item *item;
+
+    item = func_800B2A78_1DFB28(sys, idx);
+
+    item->unk0.CurtainPayload.unk0 = (params->unk0 << 16) / 100;
+
+    if (params->unk4) {
+        item->unk0.CurtainPayload.unk4 = (item->unk0.CurtainPayload.unk0 - sys->unk1220) / params->unk4;
+        item->unk0.CurtainPayload.unk8 = params->unk4;
+
+        if (item->unk0.CurtainPayload.unk4 != 0) {
+            func_800B2A24_1DFAD4(sys, idx);
+        } else {
+            sys->unk1220 = item->unk0.CurtainPayload.unk0;
+        }
+    } else {
+        sys->unk1220 = item->unk0.CurtainPayload.unk0;
+    }
+}
 
 void cutsceneSysCurtain_update(func_800B2A24_1DFAD4_arg *arg0, s8 arg1) {
     func_800B2A24_1DFAD4_arg_item *temp_a0;
