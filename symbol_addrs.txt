@@ -1,3 +1,5 @@
+cutsceneSys2Wait_exec = 0x800B2944; // rom:0x1DF9F4
+cutsceneSys2Wipe_exec = 0x800B2810; // rom:0x1DF8C0
 cutsceneEffectTrick_update = 0x800B2010; // rom:0x1DF0C0 
 cutsceneEffectTrick_exec = 0x800B1FAC; // rom:0x1DF05C
 cutsceneEffectMLight_exec = 0x800B1E0C; // rom:0x1DEEBC
@@ -88,9 +90,9 @@ getCategorySkipValue = 0x800B07F0; // rom:0x1DD8A0
 commandCategories = 0x800BA570; // type:s32 size:0x48 rom:0x1E7620
 commandTable = 0x800B9C70; // type:s32 size:0x900 rom:0x1E6D20
 
-returnZero_1DF8B8 = 0x800B2808;
-returnZero_1DF9DC = 0x800B292C;
-returnZero_1DF9EC = 0x800B293C;
+cutsceneSys2Wipe_validate = 0x800B2808;
+cutsceneSys2Wipe_isDone = 0x800B292C;
+cutsceneSys2Wait_validate = 0x800B293C;
 
 returnZero_1DD8C8 = 0x800B0818;
 returnZero_1DD900 = 0x800B0850;
@@ -174,8 +176,8 @@ cutsceneSysFilter_validate = 0x800B2794;
 cutsceneSysFilter_isDone = 0x800B27EC;
 cutsceneSysDisp_validate = 0x800B2268;
 
-noop_1DF8B = 0x800B2800;
-noop_1DF9E4 = 0x800B2934;
+cutsceneSys2Wipe_init = 0x800B2800;
+cutsceneSys2Wait_init = 0x800B2934;
 
 noop_1DD8C0 = 0x800B0810;
 noop_1DD8F8 = 0x800B0848;
