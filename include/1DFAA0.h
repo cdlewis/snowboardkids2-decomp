@@ -116,7 +116,8 @@ typedef struct {
     /* 0x00 */ u8 padding[0x42];
     /* 0x42 */ u8 unk42;
     /* 0x43 */ u8 unk43;
-    /* 0x44 */ u8 padding2[0x4];
+    /* 0x44 */ u8 unk44;
+    /* 0x44 */ u8 padding2[0x3];
     /* 0x48 */ SceneModel *model;
     /* 0x4C */ CutsceneSlotData slotData;
 } CutsceneSlot; /* Total size: 0xF4 */
