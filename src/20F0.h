@@ -1,3 +1,5 @@
+#pragma once
+
 #include "5EA60.h"
 #include "common.h"
 #include "memory_allocator.h"

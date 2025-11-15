@@ -80,7 +80,7 @@ typedef struct {
     /* 0x08 */ s8 description[0x10];
     /* 0x18 */ void (*init)(CurrentCommand *, CommandData *, s8);
     /* 0x1C */ s32 (*validate)(CurrentCommand *, CommandData *, s32, s32 arg3, s32 arg4, s8 arg5);
-    /* 0x20 */ void *exec;
+    /* 0x20 */ void (*exec)(StateEntry *, CutsceneManager *, s8);
     /* 0x24 */ s32 (*update)(CurrentCommand *, CommandData *, s8);
     /* 0x28 */ s16 (*isDone)(CurrentCommand *, CommandData *, s8);
 } CommandEntry;
@@ -321,7 +321,34 @@ s32 executeValidateCommand(CurrentCommand *arg0, CommandData *arg1, s32 arg2, s3
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DD170", initializeSlotState);
+s32 initializeSlotState(StateEntry *state, CutsceneManager *cutsceneManager, s8 index) {
+    s32 didRun;
+    CommandEntry *commandEntry;
+    CutsceneSlot *activeSlot;
+    s32 shouldExecute;
+
+    activeSlot = &cutsceneManager->slots[index];
+    didRun = FALSE;
+    shouldExecute = 1;
+    commandEntry = getCommandEntry(state->unk3E, state->unk3F);
+
+    if (commandEntry->exec != NULL) {
+        activeSlot->unk42 = state->unk3E;
+        activeSlot->unk43 = state->unk3F;
+
+        if (!cutsceneManager->slots[index].model) {
+            shouldExecute = commandCategories[state->unk3E].unk6 != 1;
+        }
+
+        if (shouldExecute) {
+            commandEntry->exec(state, cutsceneManager, index);
+        }
+
+        didRun = TRUE;
+    }
+
+    return didRun;
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DD170", updateSlotData);
 
