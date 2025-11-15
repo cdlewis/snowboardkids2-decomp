@@ -1,4 +1,10 @@
+#include "1DFAA0.h"
 #include "common.h"
+
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+} cutsceneEffectTrick_exec_arg;
 
 void cutsceneEffectDisp_init(void);
 s32 cutsceneEffectDisp_validate(void);
@@ -17,7 +23,7 @@ s32 cutsceneEffectMLight_validate(void);
 void cutsceneEffectMLight_exec(void);
 void cutsceneEffectTrick_init(void);
 s32 cutsceneEffectTrick_validate(void);
-void cutsceneEffectTrick_exec(void);
+void cutsceneEffectTrick_exec(cutsceneEffectTrick_exec_arg *arg0, func_800B2A24_1DFAD4_arg *arg1, s8 arg2);
 void cutsceneEffectTrick_update(void);
 s32 cutsceneEffectTrick_isDone(void);
 void cutsceneInitTrack_init(void);

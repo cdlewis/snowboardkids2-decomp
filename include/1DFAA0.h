@@ -30,6 +30,10 @@ typedef struct {
             s16 unk8;
             s8 unkA;
         } CurtainPayload;
+        struct {
+            s16 unk0;
+            s16 unk2;
+        } TrickPayload;
     } unk0;
     u8 padding[0x34];
     s8 unk40;
