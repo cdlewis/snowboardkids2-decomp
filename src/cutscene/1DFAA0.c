@@ -106,7 +106,7 @@ extern s8 D_800BAEB4_1E7F64;
 extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
 extern s8 D_800BAE00_1E7EB0[];
 
-extern s32 initializeSlotState(void *, void *, s32 slot);
+extern s32 initializeSlotState(StateEntry *, CutsceneManager *, s32);
 extern s32 updateSlotData(void *, s32 slot);
 extern s32 syncModelFromSlot(void *, void *);
 extern s32 advanceSceneManager(void *);

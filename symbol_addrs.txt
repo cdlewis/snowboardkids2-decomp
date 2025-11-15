@@ -83,8 +83,8 @@ decrementCommandIndexClamped = 0x800B01B4;
 clampCommandIndex = 0x800B01F0; 
 getNextCategorySkipping = 0x800B0228;
 getPrevCategorySkipping = 0x800B02B4;
-executeCommandFunc2 = 0x800B043C; 
-executeCommandFunc5 = 0x800B06FC;
+executeValidateCommand = 0x800B043C;
+executeIsDoneCommand = 0x800B06FC;
 getCategorySkipValue = 0x800B07F0; // rom:0x1DD8A0
 
 commandCategories = 0x800BA570; // type:s32 size:0x48 rom:0x1E7620

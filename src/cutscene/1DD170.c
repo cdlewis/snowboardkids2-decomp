@@ -78,11 +78,11 @@ typedef struct {
     /* 0x00 */ s8 identifier[0x7];
     /* 0x07 */ s8 unk7;
     /* 0x08 */ s8 description[0x10];
-    /* 0x18 */ void (*func1)(CurrentCommand *, CommandData *, s8);
-    /* 0x1C */ s32 (*func2)(CurrentCommand *, CommandData *, s32, s32 arg3, s32 arg4, s8 arg5);
-    /* 0x20 */ void *func3;
-    /* 0x24 */ s32 (*func4)(CurrentCommand *, CommandData *, s8);
-    /* 0x28 */ s16 (*func5)(CurrentCommand *, CommandData *, s8);
+    /* 0x18 */ void (*init)(CurrentCommand *, CommandData *, s8);
+    /* 0x1C */ s32 (*validate)(CurrentCommand *, CommandData *, s32, s32 arg3, s32 arg4, s8 arg5);
+    /* 0x20 */ void *exec;
+    /* 0x24 */ s32 (*update)(CurrentCommand *, CommandData *, s8);
+    /* 0x28 */ s16 (*isDone)(CurrentCommand *, CommandData *, s8);
 } CommandEntry;
 
 // clang-format off
@@ -285,7 +285,7 @@ void initializeCutsceneCommand(
         currentCommand->commandCategory = commandCategory;
         currentCommand->commandIndex = commandIndex;
 
-        handler = getCommandEntry(commandCategory, commandIndex & 0xFF)->func1;
+        handler = getCommandEntry(commandCategory, commandIndex & 0xFF)->init;
         if (handler) {
             // basically: !arg1[arg4].isActive
             if ((*(temp2 = &commandData[(s8)frameIndex].isActive)) == FALSE) {
@@ -299,7 +299,7 @@ void initializeCutsceneCommand(
     }
 }
 
-s32 executeCommandFunc2(CurrentCommand *arg0, CommandData *arg1, s32 arg2, s32 arg3, s32 arg4, s8 arg5) {
+s32 executeValidateCommand(CurrentCommand *arg0, CommandData *arg1, s32 arg2, s32 arg3, s32 arg4, s8 arg5) {
     s32 check;
     CommandEntry *temp_v0;
     CommandData *ptr;
@@ -307,14 +307,14 @@ s32 executeCommandFunc2(CurrentCommand *arg0, CommandData *arg1, s32 arg2, s32 a
     check = 1;
     temp_v0 = getCommandEntry(arg0->commandCategory, arg0->commandIndex);
 
-    if (temp_v0->func2) {
+    if (temp_v0->validate) {
         ptr = &arg1[arg5];
         if (ptr->isActive == 0) {
             check = commandCategories[arg0->commandCategory].unk6 != 1;
         }
 
         if (check) {
-            return temp_v0->func2(arg0, arg1, arg2, arg3, arg4, arg5);
+            return temp_v0->validate(arg0, arg1, arg2, arg3, arg4, arg5);
         }
     }
 
@@ -325,10 +325,10 @@ INCLUDE_ASM("asm/nonmatchings/cutscene/1DD170", initializeSlotState);
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DD170", updateSlotData);
 
-s16 executeCommandFunc5(CurrentCommand *arg0, CommandData *arg1, s8 arg2) {
+s16 executeIsDoneCommand(CurrentCommand *arg0, CommandData *arg1, s8 arg2) {
     s32 var_s2 = 1;
     s16 (*temp_v1)(CurrentCommand *, CommandData *, s8) =
-        getCommandEntry(arg0->commandCategory, arg0->commandIndex)->func5;
+        getCommandEntry(arg0->commandCategory, arg0->commandIndex)->isDone;
 
     if (temp_v1 != 0) {
         CommandData *temp = &arg1[arg2];
