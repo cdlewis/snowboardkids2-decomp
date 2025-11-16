@@ -1,4 +1,4 @@
-#include "1DF180.h"
+#include "cutscene/cutscene_sound.h"
 
 extern s32 gControllerInputs[4];
 
@@ -22,14 +22,14 @@ void func_800B20D0_1DF180(void) {
     }
 }
 
-void noop_1DF1C8(void) {
+void cutsceneSePlay_init(void) {
 }
 
-s32 returnZero_1DF1D0(void) {
+s32 cutsceneSePlay_validate(void) {
     return 0;
 }
 
-void func_800B2128_1DF1D8(func_800B2128_1DF1D8_arg *arg0) {
+void cutsceneSePlay_exec(cutsceneSePlay_exec_arg *arg0) {
     s16 temp_a3;
 
     temp_a3 = arg0->unk4;
@@ -41,14 +41,14 @@ void func_800B2128_1DF1D8(func_800B2128_1DF1D8_arg *arg0) {
     func_800B57F0_1E28A0(arg0->unk0, arg0->unk2, arg0->unkA, temp_a3, (s32)arg0->unk8, (s32)arg0->unk6);
 }
 
-void noop_1DF23C(void) {
+void cutsceneSe3dPlay_init(void) {
 }
 
-s32 returnZero_1DF244(void) {
+s32 cutsceneSe3dPlay_validate(void) {
     return 0;
 }
 
-void func_800B219C_1DF24C(func_800B2128_1DF1D8_arg *arg0, func_800B219C_1DF24C_arg1_item *arg1, s8 arg2) {
+void cutsceneSe3dPlay_exec(cutsceneSePlay_exec_arg *arg0, cutsceneSe3dPlay_exec_arg1_item *arg1, s8 arg2) {
     s32 *new_var;
     s32 temp_t0;
     new_var = &arg1[arg2].unkF0;
@@ -61,13 +61,13 @@ void func_800B219C_1DF24C(func_800B2128_1DF1D8_arg *arg0, func_800B219C_1DF24C_a
     func_800B598C_1E2A3C(arg0->unk0, arg0->unk2, arg0->unk4, arg0->unk8, (s32)arg0->unk6, temp_t0);
 }
 
-void noop_1DF2D0(void) {
+void cutsceneSeStop_init(void) {
 }
 
-s32 returnZero_1DF2D8(void) {
+s32 cutsceneSeStop_validate(void) {
     return 0;
 }
 
-void func_800B2230_1DF2E0(func_800B2128_1DF1D8_arg *arg0) {
+void cutsceneSeStop_exec(cutsceneSePlay_exec_arg *arg0) {
     func_80057ABC_586BC(arg0->unk2, arg0->unk0);
 }

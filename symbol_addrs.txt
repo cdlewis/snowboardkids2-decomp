@@ -1,3 +1,6 @@
+cutsceneSeStop_exec = 0x800B2230; // rom:0x1DF2E0
+cutsceneSe3dPlay_exec = 0x800B219C; // rom:0x1DF24C
+cutsceneSePlay_exec = 0x800B2128; // rom:0x1DF1D8
 cutsceneCameraRotate_exec = 0x800B0A04; // rom:0x1DDAB4
 cutsceneCameraShake_exec = 0x800B09B4; // rom:0x1DDA64
 cutsceneCameraMove_exec = 0x800B0920; // rom:0x1DD9D0
@@ -113,9 +116,9 @@ cutsceneEffectMLight_isDone = 0x800B1F94;
 cutsceneEffectTrick_validate = 0x800B1FA4;
 cutsceneEffectTrick_isDone = 0x800B20A8;
 
-returnZero_1DF1D0 = 0x800B2120;
-returnZero_1DF244 = 0x800B2194;
-returnZero_1DF2D8 = 0x800B2228;
+cutsceneSePlay_validate = 0x800B2120;
+cutsceneSe3dPlay_validate = 0x800B2194;
+cutsceneSeStop_validate = 0x800B2228;
 
 cutsceneCameraReset_validate = 0x800B08C8;
 cutsceneCameraMove_validate = 0x800B0918;
@@ -187,9 +190,9 @@ noop_1DD8C0 = 0x800B0810;
 noop_1DD8F8 = 0x800B0848;
 noop_1DD934 = 0x800B0884;
 
-noop_1DF1C8 = 0x800B2118;
-noop_1DF23C = 0x800B218C;
-noop_1DF2D0 = 0x800B2220;
+cutsceneSePlay_init = 0x800B2118;
+cutsceneSe3dPlay_init = 0x800B218C;
+cutsceneSeStop_init = 0x800B2220;
 
 cutsceneCameraReset_init = 0x800B08C0;
 cutsceneCameraMove_init = 0x800B0910;
