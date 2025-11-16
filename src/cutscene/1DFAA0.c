@@ -36,7 +36,7 @@ extern void n_alSeqpDelete(s32 *);
 
 u8 getCutsceneSlotCount(void);
 s32 findEventAtFrame(u8 a0, u16 a1);
-StateEntryItem *func_800B34B0_1E0560(u8);
+StateEntryItem *func_800B34B0_1E0560(s32);
 s32 func_800B3D24_1E0DD4(u8, u16);
 StateEntry *getStateEntry(u16);
 void func_800B477C_1E182C(void);
@@ -212,7 +212,9 @@ INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3490_1E0540);
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B34A0_1E0550);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B34B0_1E0560);
+StateEntryItem *func_800B34B0_1E0560(s32 arg0) {
+    return &D_800BAEBC_1E7F6C->items[arg0];
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B34D0_1E0580);
 
@@ -333,14 +335,15 @@ void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
     StateEntry *dest;
     StateEntry *new_var;
     s32 i;
+    u8 masked_arg0 = arg0 & 0xFF;
 
     new_var = D_800BAEC8_1E7F78;
-    temp_s0 = (-((~func_800B34B0_1E0560(arg0)->unk4) != 0)) | 1;
+    temp_s0 = (-((~func_800B34B0_1E0560(masked_arg0)->unk4) != 0)) | 1;
 
     if (D_800BAEB0_1E7F60 != 0 && getCategorySkipValue(D_800BAF06_1E7FB6) != temp_s0) {
-        s32 var_a0 = findEventAtFrame(arg0, arg1);
+        s32 var_a0 = findEventAtFrame(masked_arg0, arg1);
         if ((var_a0 & 0xFFFF) == 0xFFFF) {
-            var_a0 = func_800B3D24_1E0DD4(arg0, arg1);
+            var_a0 = func_800B3D24_1E0DD4(masked_arg0, arg1);
         }
 
         dest = getStateEntry(var_a0);
