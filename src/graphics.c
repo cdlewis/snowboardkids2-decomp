@@ -73,7 +73,8 @@ extern s32 D_8009397C_9457C[];
 extern s32 D_80093B00_94700;
 extern s32 D_80092E28_93A28;
 extern s32 D_80093308_93F08;
-extern s32 D_6C6300;
+
+USE_ASSET(wavetables);
 
 extern void *D_800A2CE8_A38E8;
 extern void *D_800A2D08_A3908;
@@ -151,7 +152,7 @@ void func_8005610C_56D0C(void) {
     mgr = gGraphicsManager;
     config.fifo_length = 0x40;
     config.ptr = mgr->unk0;
-    config.wbk = (u8 *)(&D_6C6300);
+    config.wbk = (u8 *)&wavetables_ROM_START;
     config.sched = &D_80092E28_93A28;
     config.default_fxbank = &D_80093308_93F08;
     config.syn_rsp_cmds = 0x5622;

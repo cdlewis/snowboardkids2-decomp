@@ -1816,6 +1816,11 @@ segments:
     vram: 0
     start: 0x6C03F0
 
-  - [0x6C6300, bin]
+  - name: wavetables
+    type: databin
+    vram: 0
+    start: 0x6C6300
+
+  - [0xE0CAD0, bin]
 
   - [0x1000000]
