@@ -1,10 +1,10 @@
 #include "1DD170.h"
 
 #include "1DD8C0.h"
-#include "1DD970.h"
 #include "1DF180.h"
 #include "1DFAA0.h"
 #include "common.h"
+#include "cutscene/cutscene_camera.h"
 #include "cutscene/cutscene_chr.h"
 #include "cutscene/cutscene_sys.h"
 #include "cutscene/cutscene_sys2.h"
@@ -126,10 +126,11 @@ struct {
         { "CHRP2 \0", '\1', "CHR POSITION2  \0", (void *)&cutsceneChrPosition2_init, (void *)&cutsceneChrPosition2_validate, (void *)&cutsceneChrPosition2_exec, NULL,                                (void *)&cutsceneChrPosition2_isDone },
         { "CHRT3 \0", '\1', "CHR TURN3      \0", (void *)&cutsceneChrTurn3_init,     (void *)&cutsceneChrTurn3_validate,     (void *)&cutsceneChrTurn3_exec,     NULL,                                (void *)&cutsceneChrTurn3_isDone },
         { "CHRDP \0", '\1', "CHR KAGEDISP   \0", (void *)&cutsceneChrKageDisp_init,  (void *)&cutsceneChrKageDisp_validate,  (void *)&cutsceneChrKageDisp_exec,  NULL,                                NULL },
-        { "CAMRS \0", '\1', "CAMERA RESET   \0", (void *)&noop_1DD970,               (void *)&returnZero_1DD978,             (void *)&func_800B08D0_1DD980,      NULL,                                NULL },
-        { "CAMMV \0", '\1', "CAMERA MOVE    \0", (void *)&noop_1DD9C0,               (void *)&returnZero_1DD9C8,             (void *)&func_800B0920_1DD9D0,      NULL,                                (void *)&returnZero_1DDA4C },
-        { "CAMJI \0", '\1', "CAMERA JISHIN  \0", (void *)&noop_1DDA54,               (void *)&returnZero_1DDA5C,             (void *)&func_800B09B4_1DDA64,      NULL,                                NULL },
-        { "CAMRT \0", '\1', "CAMERA ROTATE  \0", (void *)&noop_1DDAA4,               (void *)&returnZero_1DDAAC,             (void *)&func_800B0A04_1DDAB4,      NULL,                                (void *)&returnZero_1DDADC },
+        { "CAMRS \0", '\1', "CAMERA RESET   \0", (void *)&cutsceneCameraReset_init,  (void *)&cutsceneCameraReset_validate,  (void *)&cutsceneCameraReset_exec,  NULL,                                NULL },
+        { "CAMMV \0", '\1', "CAMERA MOVE    \0", (void *)&cutsceneCameraMove_init,   (void *)&cutsceneCameraMove_validate,   (void *)&cutsceneCameraMove_exec,   NULL,                                (void *)&cutsceneCameraMove_isDone },
+        // Note: jishin (地震) probably refers to shaking the camera
+        { "CAMJI \0", '\1', "CAMERA JISHIN  \0", (void *)&cutsceneCameraShake_init,  (void *)&cutsceneCameraShake_validate,  (void *)&cutsceneCameraShake_exec, NULL,                                NULL },
+        { "CAMRT \0", '\1', "CAMERA ROTATE  \0", (void *)&cutsceneCameraRotate_init, (void *)&cutsceneCameraRotate_validate, (void *)&cutsceneCameraRotate_exec, NULL,                                (void *)&cutsceneCameraRotate_isDone },
         { "SEP   \0", '\1', "SE PLAY        \0", (void *)&noop_1DF1C8,               (void *)&returnZero_1DF1D0,             (void *)&func_800B2128_1DF1D8,      NULL,                                NULL },
         { "SEP3D \0", '\1', "SE3D PLAY      \0", (void *)&noop_1DF23C,               (void *)&returnZero_1DF244,             (void *)&func_800B219C_1DF24C,      NULL,                                NULL },
         { "SEST  \0", '\1', "SE STOP        \0", (void *)&noop_1DF2D0,               (void *)&returnZero_1DF2D8,             (void *)&func_800B2230_1DF2E0,      NULL,                                NULL },

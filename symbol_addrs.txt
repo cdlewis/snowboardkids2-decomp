@@ -1,3 +1,7 @@
+cutsceneCameraRotate_exec = 0x800B0A04; // rom:0x1DDAB4
+cutsceneCameraShake_exec = 0x800B09B4; // rom:0x1DDA64
+cutsceneCameraMove_exec = 0x800B0920; // rom:0x1DD9D0
+cutsceneCameraReset_exec = 0x800B08D0; // rom:0x1DD980
 cutsceneSys2Wait_exec = 0x800B2944; // rom:0x1DF9F4
 cutsceneSys2Wipe_exec = 0x800B2810; // rom:0x1DF8C0
 cutsceneEffectTrick_update = 0x800B2010; // rom:0x1DF0C0 
@@ -113,12 +117,12 @@ returnZero_1DF1D0 = 0x800B2120;
 returnZero_1DF244 = 0x800B2194;
 returnZero_1DF2D8 = 0x800B2228;
 
-returnZero_1DD978 = 0x800B08C8;
-returnZero_1DD9C8 = 0x800B0918;
-returnZero_1DDA4C = 0x800B099C;
-returnZero_1DDA5C = 0x800B09AC;
-returnZero_1DDAAC = 0x800B09FC;
-returnZero_1DDADC = 0x800B0A2C;
+cutsceneCameraReset_validate = 0x800B08C8;
+cutsceneCameraMove_validate = 0x800B0918;
+cutsceneCameraMove_isDone = 0x800B099C;
+cutsceneCameraShake_validate = 0x800B09AC;
+cutsceneCameraRotate_validate = 0x800B09FC;
+cutsceneCameraRotate_isDone = 0x800B0A2C;
 
 cutsceneChrPosition_validate = 0x800B0A48;
 cutsceneChrPosition_isDone = 0x800B0B08;
@@ -187,10 +191,10 @@ noop_1DF1C8 = 0x800B2118;
 noop_1DF23C = 0x800B218C;
 noop_1DF2D0 = 0x800B2220;
 
-noop_1DD970 = 0x800B08C0;
-noop_1DD9C0 = 0x800B0910;
-noop_1DDA54 = 0x800B09A4;
-noop_1DDAA4 = 0x800B09F4;
+cutsceneCameraReset_init = 0x800B08C0;
+cutsceneCameraMove_init = 0x800B0910;
+cutsceneCameraShake_init = 0x800B09A4;
+cutsceneCameraRotate_init = 0x800B09F4;
 
 cutsceneChrPosition_init = 0x800B0A40;
 cutsceneChrMove_init = 0x800B0B10;
