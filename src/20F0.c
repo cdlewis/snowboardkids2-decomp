@@ -31,21 +31,6 @@ typedef struct {
 } func_800014F0_20F0_arg;
 
 typedef struct {
-    u8 padding[0x13];
-    s8 unk13;
-} func_80001688_2288_arg_9C;
-
-typedef struct {
-    u8 padding[0x89];
-    s8 unk89;
-    s16 unk8A;
-    u8 padding3[0x8];
-    s8 unk94;
-    u8 padding2[0x4];
-    func_80001688_2288_arg_9C *unk9C;
-} func_80001688_2288_arg;
-
-typedef struct {
     u8 padding[0x158];
     s32 unk158;
 } func_800014FC_20FC_arg;
@@ -288,7 +273,7 @@ s8 func_80001660_2260(func_80001688_2288_arg *arg0) {
     return arg0->unk94;
 }
 
-s8 func_80001668_2268(func_80001688_2288_arg *arg0) {
+s8 func_80001668_2268(SceneModel *arg0) {
     func_80001688_2288_arg_9C *temp_v0;
 
     temp_v0 = arg0->unk9C;
@@ -298,7 +283,7 @@ s8 func_80001668_2268(func_80001688_2288_arg *arg0) {
     return 0;
 }
 
-void func_80001688_2288(func_80001688_2288_arg *arg0, s8 arg1) {
+void func_80001688_2288(SceneModel *arg0, s8 arg1) {
     if (arg1 < func_80001668_2268(arg0)) {
         arg0->unk94 = arg1;
     }

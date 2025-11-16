@@ -45,6 +45,21 @@ typedef struct {
 } AssetGroup;
 
 typedef struct {
+    u8 padding[0x13];
+    s8 unk13;
+} func_80001688_2288_arg_9C;
+
+typedef struct {
+    u8 padding[0x89];
+    s8 unk89;
+    s16 unk8A;
+    u8 padding3[0x8];
+    s8 unk94;
+    u8 padding2[0x4];
+    func_80001688_2288_arg_9C *unk9C;
+} func_80001688_2288_arg;
+
+typedef struct {
     s32 unk0;
     u8 padding[0x9];
     s16 unkE;
@@ -109,7 +124,8 @@ typedef struct {
     s8 unk94;
     s8 unk95;
     SceneModel_unk98 *unk98;
-    u8 padding3[0x78];
+    func_80001688_2288_arg_9C *unk9C;
+    u8 padding3[0x74];
     void *unk114;
     void *unk118;
     void *unk11C;
@@ -160,3 +176,5 @@ void func_80001604_2204(func_80001604_2204_arg *arg0, s8 arg1);
 void setModelVisibility(SceneModel *, s8);
 
 s32 setModelRotation(SceneModel *, s16);
+
+void func_80001688_2288(SceneModel *arg0, s8 arg1);

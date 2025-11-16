@@ -1,4 +1,6 @@
 #include "cutscene/cutscene_chr.h"
+#include "1DFAA0.h"
+#include "20F0.h"
 
 void cutsceneChrPosition_init(void) {
 }
@@ -182,7 +184,12 @@ s32 cutsceneChrFace_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrFace_exec);
+void cutsceneChrFace_exec(s8 *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlot *slot = &arg1->slots[arg2];
+    do {
+        func_80001688_2288(slot->model, *arg0);
+    } while (0);
+}
 
 void cutsceneChrAnime2_init(void) {
 }
