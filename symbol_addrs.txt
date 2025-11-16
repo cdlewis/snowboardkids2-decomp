@@ -1,3 +1,6 @@
+cutsceneBgmVolume_exec = 0x800B0894; // rom:0x1DD944
+cutsceneBgmFadeOut_exec = 0x800B0858; // rom:0x1DD908
+cutsceneBgmPlay_exec = 0x800B0820; // rom:0x1DD8D0
 cutsceneSeStop_exec = 0x800B2230; // rom:0x1DF2E0
 cutsceneSe3dPlay_exec = 0x800B219C; // rom:0x1DF24C
 cutsceneSePlay_exec = 0x800B2128; // rom:0x1DF1D8
@@ -101,9 +104,9 @@ cutsceneSys2Wipe_validate = 0x800B2808;
 cutsceneSys2Wipe_isDone = 0x800B292C;
 cutsceneSys2Wait_validate = 0x800B293C;
 
-returnZero_1DD8C8 = 0x800B0818;
-returnZero_1DD900 = 0x800B0850;
-returnZero_1DD93C = 0x800B088C;
+cutsceneBgmPlay_validate = 0x800B0818;
+cutsceneBgmFadeOut_validate = 0x800B0850;
+cutsceneBgmVolume_validate = 0x800B088C;
 
 cutsceneEffectDisp_validate = 0x800B1C98;
 cutsceneEffectDisp_isDone = 0x800B1D44;
@@ -186,9 +189,9 @@ cutsceneSysDisp_validate = 0x800B2268;
 cutsceneSys2Wipe_init = 0x800B2800;
 cutsceneSys2Wait_init = 0x800B2934;
 
-noop_1DD8C0 = 0x800B0810;
-noop_1DD8F8 = 0x800B0848;
-noop_1DD934 = 0x800B0884;
+cutsceneBgmPlay_init = 0x800B0810;
+cutsceneBgmFadeOut_init = 0x800B0848;
+cutsceneBgmVolume_init = 0x800B0884;
 
 cutsceneSePlay_init = 0x800B2118;
 cutsceneSe3dPlay_init = 0x800B218C;

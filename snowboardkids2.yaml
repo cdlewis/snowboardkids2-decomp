@@ -961,7 +961,7 @@ segments:
     exclusive_ram_id: 800B00C0
     subsegments:
       - [0x1DD170, c, cutscene/1DD170]
-      - [0x1DD8C0, c, cutscene/1DD8C0]
+      - [0x1DD8C0, c, cutscene/cutscene_bgm]
       - [0x1DD970, c, cutscene/cutscene_camera]
       - [0x1DDAF0, c, cutscene/cutscene_chr]
       - [0x1DED40, c, cutscene/sys_effect]

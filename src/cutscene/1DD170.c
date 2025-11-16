@@ -1,8 +1,8 @@
 #include "1DD170.h"
 
-#include "1DD8C0.h"
 #include "1DFAA0.h"
 #include "common.h"
+#include "cutscene/cutscene_bgm.h"
 #include "cutscene/cutscene_camera.h"
 #include "cutscene/cutscene_chr.h"
 #include "cutscene/cutscene_sound.h"
@@ -139,9 +139,9 @@ struct {
         { "EFRKT \0", '\1', "EFFECT ROCKET  \0", (void *)&cutsceneEffectRocket_init, (void *)&cutsceneEffectRocket_validate, (void *)&cutsceneEffectRocket_exec, NULL,                                (void *)&cutsceneEffectRocket_isDone },
         { "EFMLT \0", '\1', "EFFECT MLIGHT  \0", (void *)&cutsceneEffectMLight_init, (void *)&cutsceneEffectMLight_validate, (void *)&cutsceneEffectMLight_exec, NULL,                                (void *)&cutsceneEffectTrick_isDone  },
         { "EFTRK \0", '\1', "EFFECT TRICK   \0", (void *)&cutsceneEffectTrick_init,  (void *)&cutsceneEffectTrick_validate,  (void *)&cutsceneEffectTrick_exec,  (void *)&cutsceneEffectTrick_update, (void *)&cutsceneEffectTrick_isDone  },
-        { "BGMP  \0", '\1', "BGM PLAY       \0", (void *)&noop_1DD8C0,               (void *)&returnZero_1DD8C8,             (void *)&func_800B0820_1DD8D0,      NULL,                                NULL                                 },
-        { "BGMFO \0", '\1', "BGM FADE OUT   \0", (void *)&noop_1DD8F8,               (void *)&returnZero_1DD900,             (void *)&func_800B0858_1DD908,      NULL,                                NULL                                 },
-        { "BGMVL \0", '\1', "BGM VOLUME     \0", (void *)&noop_1DD934,               (void *)&returnZero_1DD93C,             (void *)&func_800B0894_1DD944,      NULL,                                NULL                                 },
+        { "BGMP  \0", '\1', "BGM PLAY       \0", (void *)&cutsceneBgmPlay_init,      (void *)&cutsceneBgmPlay_validate,      (void *)&cutsceneBgmPlay_exec,      NULL,                                NULL                                 },
+        { "BGMFO \0", '\1', "BGM FADE OUT   \0", (void *)&cutsceneBgmFadeOut_init,   (void *)&cutsceneBgmFadeOut_validate,   (void *)&cutsceneBgmFadeOut_exec,   NULL,                                NULL                                 },
+        { "BGMVL \0", '\1', "BGM VOLUME     \0", (void *)&cutsceneBgmVolume_init,    (void *)&cutsceneBgmVolume_validate,    (void *)&cutsceneBgmVolume_exec,    NULL,                                NULL                                 },
         { "EF2PL \0", '\1', "EFFECT2 DISP   \0", NULL,                               NULL,                                   NULL,                               NULL,                                NULL                                 },
         { "S2WP  \0", '\1', "SYS2 WIPE      \0", (void *)&cutsceneSys2Wipe_init,     (void *)&cutsceneSys2Wipe_validate,     (void *)&cutsceneSys2Wipe_exec,     NULL,                                (void *)&cutsceneSys2Wipe_isDone     },
         { "S2WT  \0", '\1', "SYS2 WAIT      \0", (void *)&cutsceneSys2Wait_init,     (void *)&cutsceneSys2Wait_validate,     (void *)&cutsceneSys2Wait_exec,     NULL,                                NULL                                 }
