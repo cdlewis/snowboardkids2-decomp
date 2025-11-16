@@ -153,7 +153,6 @@ s32 func_800018F4_24F4(SceneModel *);
 s32 func_80001904_2504(s16);
 s32 setModelRotation(SceneModel *, s16);
 void initializeGameEntity(GameEntity *, s32, void *, s8, s8, s8, s16);
-void func_80002220_2E20(SceneModel *, s16, s16, s8, s16);
 void *func_80002040_2C40(SceneModel *arg0);
 void *func_80009F5C_AB5C(s32);
 
