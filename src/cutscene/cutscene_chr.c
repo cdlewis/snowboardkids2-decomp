@@ -2,6 +2,9 @@
 #include "1DFAA0.h"
 #include "20F0.h"
 
+void func_800021E8_2DE8(SceneModel *, s16, s16, s32);
+void func_800B788C_1E493C(CutsceneSlotData *, s32, s32, s32);
+
 void cutsceneChrPosition_init(void) {
 }
 
@@ -136,7 +139,12 @@ s32 cutsceneChrHop_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrHop_exec);
+void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *a0, CutsceneManager *a1, s8 a2) {
+    CutsceneSlot *s1 = &a1->slots[a2];
+
+    func_800B788C_1E493C(&s1->slotData, a0->unk0, a0->unk4, a0->unk8);
+    func_800021E8_2DE8(s1->model, a0->unkC, a0->unkE, 1);
+}
 
 void cutsceneChrBack_init(void) {
 }

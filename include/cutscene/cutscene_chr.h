@@ -1,6 +1,14 @@
 #include "1DFAA0.h"
 #include "common.h"
 
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s16 unkC;
+    s16 unkE;
+} cutsceneChrHop_exec_arg;
+
 void cutsceneChrPosition_init(void);
 s32 cutsceneChrPosition_validate(void);
 void cutsceneChrPosition_exec(void);
@@ -43,7 +51,7 @@ void cutsceneChrRotate_exec(void);
 s32 cutsceneChrRotate_isDone(void);
 void cutsceneChrHop_init(void);
 s32 cutsceneChrHop_validate(void);
-void cutsceneChrHop_exec(void);
+void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *a0, CutsceneManager *a1, s8 a2);
 void cutsceneChrBack_init(void);
 s32 cutsceneChrBack_validate(void);
 void cutsceneChrBack_exec(void);
