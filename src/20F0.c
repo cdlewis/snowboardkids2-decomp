@@ -173,11 +173,11 @@ void func_8000150C_210C(func_8000150C_210C_arg *arg0) {
     arg0->unk15C = 1;
 }
 
-void func_80001518_2118(func_80001534_2134_arg *arg0) {
+void func_80001518_2118(SceneModel *arg0) {
     arg0->unk97 = 1;
 }
 
-void func_80001524_2124(func_80001534_2134_arg *arg0) {
+void func_80001524_2124(SceneModel *arg0) {
     arg0->unk97 = 0;
 }
 

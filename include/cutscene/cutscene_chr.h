@@ -97,4 +97,8 @@ void cutsceneChrTurn3_exec(void);
 s32 cutsceneChrTurn3_isDone(void);
 void cutsceneChrKageDisp_init(void);
 s32 cutsceneChrKageDisp_validate(void);
-void cutsceneChrKageDisp_exec(void);
+typedef struct {
+    s16 unk0;
+} cutsceneChrKageDisp_exec_arg;
+
+void cutsceneChrKageDisp_exec(cutsceneChrKageDisp_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);

@@ -123,6 +123,8 @@ typedef struct {
     s32 unk90;
     s8 unk94;
     s8 unk95;
+    s8 unk96;
+    s8 unk97;
     SceneModel_unk98 *unk98;
     func_80001688_2288_arg_9C *unk9C;
     u8 padding3[0x74];
@@ -178,3 +180,9 @@ void setModelVisibility(SceneModel *, s8);
 s32 setModelRotation(SceneModel *, s16);
 
 void func_80001688_2288(SceneModel *arg0, s8 arg1);
+
+void func_80001518_2118(SceneModel *arg0);
+
+void func_80001524_2124(SceneModel *arg0);
+
+void func_800021E8_2DE8(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3);
