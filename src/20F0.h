@@ -127,7 +127,8 @@ typedef struct {
     s8 unk97;
     SceneModel_unk98 *unk98;
     func_80001688_2288_arg_9C *unk9C;
-    u8 padding3[0x74];
+    u8 padding3[0x70];
+    s32 unk110;
     void *unk114;
     void *unk118;
     void *unk11C;
@@ -192,3 +193,7 @@ void func_80002220_2E20(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4)
 void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5);
 
 void func_800015CC_21CC(SceneModel *arg0, s8 arg1);
+
+void func_800016E0_22E0(SceneModel *arg0, s32 arg1);
+
+void func_800016F8_22F8(SceneModel *arg0, s32 arg1);

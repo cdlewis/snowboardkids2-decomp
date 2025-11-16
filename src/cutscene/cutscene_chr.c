@@ -254,7 +254,15 @@ s32 cutsceneChrModelDisp_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrModelDisp_exec);
+void cutsceneChrModelDisp_exec(cutsceneChrModelDisp_exec_arg *arg0, CutsceneManager *cutsceneManager, s8 index) {
+    CutsceneSlot *slot = &cutsceneManager->slots[index];
+
+    if (arg0->unk2 != 0) {
+        func_800016E0_22E0(slot->model, arg0->unk1);
+    } else {
+        func_800016F8_22F8(slot->model, arg0->unk1);
+    }
+}
 
 void cutsceneChrMoveSight_init(void) {
 }
