@@ -26,7 +26,7 @@ s32 cutsceneChrDisp_validate(void);
 void cutsceneChrDisp_exec(void);
 void cutsceneChrItem_init(void);
 s32 cutsceneChrItem_validate(void);
-void cutsceneChrItem_exec(void);
+void cutsceneChrItem_exec(s8 *a0, CutsceneManager *arg1, s8 arg2);
 void cutsceneChrTurn_init(void);
 s32 cutsceneChrTurn_validate(void);
 void cutsceneChrTurn_exec(void);

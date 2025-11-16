@@ -60,7 +60,10 @@ s32 cutsceneChrItem_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrItem_exec);
+void cutsceneChrItem_exec(s8 *a0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlot *slot = &arg1->slots[arg2];
+    func_8000160C_220C(slot->model, a0[1]);
+}
 
 void cutsceneChrTurn_init(void) {
 }
