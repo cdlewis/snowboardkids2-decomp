@@ -107,9 +107,11 @@ typedef struct {
 typedef struct {
     s32 unk00;
     void *unk04;
-    u8 pad08[0x86];
-    s16 angle;
-    u8 pad90[0x18];
+    u8 padding[0x35];
+    s8 unk3D;
+    u8 padding2[0x50];
+    /* 0x8E */ s16 angle;
+    u8 padding3[0x18];
 } CutsceneSlotData;
 
 typedef struct {
@@ -154,3 +156,5 @@ void func_800B2A50_1DFB00(func_800B2A24_1DFAD4_arg *arg0, s16 arg1);
 func_800B2A24_1DFAD4_arg_item *func_800B2A78_1DFB28(func_800B2A24_1DFAD4_arg *arg0, s16 arg1);
 
 void func_800B2A24_1DFAD4(func_800B2A24_1DFAD4_arg *arg0, s16 arg1);
+
+StateEntryItem *func_800B34B0_1E0560(s32);

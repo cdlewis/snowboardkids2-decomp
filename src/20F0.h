@@ -188,3 +188,7 @@ void func_80001524_2124(SceneModel *arg0);
 void func_800021E8_2DE8(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3);
 
 void func_80002220_2E20(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4);
+
+void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5);
+
+void func_800015CC_21CC(SceneModel *arg0, s8 arg1);

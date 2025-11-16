@@ -3,8 +3,8 @@
 #include "20F0.h"
 
 void func_800B788C_1E493C(CutsceneSlotData *, s32, s32, s32);
-StateEntryItem *func_800B34B0_1E0560(s8);
-void func_800B75C4_1E4674(CutsceneSlotData *, SceneModel *, s16, s16, s32, s32); /* extern */
+void func_800B75C4_1E4674(CutsceneSlotData *, SceneModel *, s16, s16, s32, s32);
+void func_800B6FA4_1E4054(CutsceneSlotData *, SceneModel *, s32, s32, s32, s32, s32);
 
 void cutsceneChrPosition_init(void) {
 }
@@ -223,7 +223,25 @@ s32 cutsceneChrMove3_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrMove3_exec);
+void cutsceneChrMove3_exec(cutsceneChrMove3_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlot *currentSlot = &arg1->slots[arg2];
+
+    func_800B34B0_1E0560(arg2);
+
+    func_800B6FA4_1E4054(
+        &currentSlot->slotData,
+        currentSlot->model,
+        arg0->unk0,
+        arg0->unk4,
+        arg0->unk8,
+        arg0->unkE,
+        arg0->unkC
+    );
+
+    func_80002260_2E60(currentSlot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1, arg0->unk16);
+
+    func_800015CC_21CC(currentSlot->model, arg0->unk12);
+}
 
 s32 cutsceneChrMove3_isDone(void) {
     return 0;

@@ -36,7 +36,6 @@ extern void n_alSeqpDelete(s32 *);
 
 u8 getCutsceneSlotCount(void);
 s32 findEventAtFrame(u8 a0, u16 a1);
-StateEntryItem *func_800B34B0_1E0560(s32);
 s32 func_800B3D24_1E0DD4(u8, u16);
 StateEntry *getStateEntry(u16);
 void func_800B477C_1E182C(void);

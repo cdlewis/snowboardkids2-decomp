@@ -210,7 +210,7 @@ s8 func_800015A0_21A0(s16 arg0) {
     return gameAssets[arg0].numAssets;
 }
 
-void func_800015CC_21CC(func_800015CC_21CC_arg *arg0, s8 arg1) {
+void func_800015CC_21CC(SceneModel *arg0, s8 arg1) {
     arg0->unk3D = arg1;
 }
 
@@ -625,8 +625,6 @@ void func_800021B8_2DB8(SceneModel *arg0, s16 arg1) {
 void func_800021E8_2DE8(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3) {
     func_80002220_2E20(arg0, arg1, arg2, arg3, -1);
 }
-
-void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5);
 
 void func_80002220_2E20(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
     func_80002260_2E60(arg0, arg1, arg2, arg3, (s32)arg4, 1);
