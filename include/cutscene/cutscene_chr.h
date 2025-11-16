@@ -37,6 +37,20 @@ typedef struct {
     s16 unk2;
 } cutsceneChrModelDisp_exec_arg;
 
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s8 unk12;
+    s8 unk13;
+    s16 unk14;
+    s32 unk18;
+    s32 unk1C;
+} cutsceneChrMoveSight_exec_arg;
+
 void cutsceneChrPosition_init(void);
 s32 cutsceneChrPosition_validate(void);
 void cutsceneChrPosition_exec(void);
@@ -108,7 +122,7 @@ s32 cutsceneChrModelDisp_validate(void);
 void cutsceneChrModelDisp_exec(cutsceneChrModelDisp_exec_arg *arg0, CutsceneManager *cutsceneManager, s8 index);
 void cutsceneChrMoveSight_init(void);
 s32 cutsceneChrMoveSight_validate(void);
-void cutsceneChrMoveSight_exec(void);
+void cutsceneChrMoveSight_exec(cutsceneChrMoveSight_exec_arg* arg0, CutsceneManager* arg1, s8 arg2);
 s32 cutsceneChrMoveSight_isDone(void);
 void cutsceneChrAlpha_init(void);
 s32 cutsceneChrAlpha_validate(void);

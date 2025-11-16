@@ -2,9 +2,10 @@
 #include "1DFAA0.h"
 #include "20F0.h"
 
-void func_800B788C_1E493C(CutsceneSlotData *, s32, s32, s32);
-void func_800B75C4_1E4674(CutsceneSlotData *, SceneModel *, s16, s16, s32, s32);
-void func_800B6FA4_1E4054(CutsceneSlotData *, SceneModel *, s32, s32, s32, s32, s32);
+extern void func_800B788C_1E493C(CutsceneSlotData *, s32, s32, s32);
+extern void func_800B75C4_1E4674(CutsceneSlotData *, SceneModel *, s16, s16, s32, s32);
+extern void func_800B6FA4_1E4054(CutsceneSlotData *, SceneModel *, s32, s32, s32, s32, s32);
+extern void func_800B7B70_1E4C20(CutsceneSlotData *, s32 *, s16, s32, s32);
 
 void cutsceneChrPosition_init(void) {
 }
@@ -271,7 +272,22 @@ s32 cutsceneChrMoveSight_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrMoveSight_exec);
+void cutsceneChrMoveSight_exec(cutsceneChrMoveSight_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    s32 stackData[3];
+    CutsceneSlot *slot;
+
+    stackData[0] = arg0->unk0;
+    stackData[1] = arg0->unk4;
+    stackData[2] = arg0->unk8;
+
+    slot = &arg1->slots[arg2];
+
+    func_800B7B70_1E4C20(&slot->slotData, (s32 *)&stackData, arg0->unkE, arg0->unk18, arg0->unk1C);
+
+    func_800021E8_2DE8(slot->model, arg0->unk10, arg0->unk14, arg0->unk13);
+
+    func_800015CC_21CC(slot->model, arg0->unk12);
+}
 
 s32 cutsceneChrMoveSight_isDone(void) {
     return 0;
