@@ -102,6 +102,14 @@ typedef struct {
     s16 unk4;
 } cutsceneChrZoom_exec_arg;
 
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s16 unk8;
+} cutsceneChrRotate_exec_arg;
+
 void cutsceneChrPosition_init(void);
 s32 cutsceneChrPosition_validate(void);
 void cutsceneChrPosition_exec(cutsceneChrPosition_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
@@ -140,7 +148,7 @@ s32 cutsceneChrTurn2_validate(void);
 void cutsceneChrTurn2_exec(void);
 void cutsceneChrRotate_init(void);
 s32 cutsceneChrRotate_validate(void);
-void cutsceneChrRotate_exec(void);
+void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 s32 cutsceneChrRotate_isDone(void);
 void cutsceneChrHop_init(void);
 s32 cutsceneChrHop_validate(void);
