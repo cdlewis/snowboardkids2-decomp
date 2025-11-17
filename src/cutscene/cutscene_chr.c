@@ -36,6 +36,7 @@ extern void func_800B77C4_1E4874(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
 extern void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
 extern void func_800B7620_1E46D0(CutsceneSlotData *arg0, s16 arg1, s16 arg2, s16 arg3);
 extern void func_800B7914_1E49C4(CutsceneSlotData *, s32, s32, s32, s16);
+extern void func_800B7A60_1E4B10(CutsceneSlotData *, SceneModel *, s32, s32, s32, s16);
 
 void cutsceneChrPosition_init(void) {
 }
@@ -359,7 +360,26 @@ s32 cutsceneChrUpDown_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrUpDown_exec);
+void cutsceneChrUpDown_exec(cutsceneChrUpDown_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlot *slot;
+
+    slot = &arg1->slots[arg2];
+
+    func_800B34B0_1E0560(arg2);
+
+    func_800B7A60_1E4B10(
+        &slot->slotData,
+        slot->model,
+        arg0->unk0,
+        arg0->unk4,
+        arg0->unk8,
+        arg0->unkE
+    );
+
+    func_80002260_2E60(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1, arg0->unk16);
+
+    func_800015CC_21CC(slot->model, arg0->unk12);
+}
 
 s32 cutsceneChrUpDown_isDone(void) {
     return 0;
