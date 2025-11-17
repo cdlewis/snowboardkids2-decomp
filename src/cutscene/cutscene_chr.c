@@ -19,6 +19,9 @@ extern s32 func_800B6CD8_1E3D88(
     s32 arg7,
     s32 arg8
 );
+extern void func_800B7760_1E4810(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
+extern void func_800B77C4_1E4874(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
+extern void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
 
 void cutsceneChrPosition_init(void) {
 }
@@ -208,7 +211,17 @@ s32 cutsceneChrZoom_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrZoom_exec);
+void cutsceneChrZoom_exec(cutsceneChrZoom_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlotData *slotData;
+    s32 value;
+
+    slotData = &arg1->slots[arg2].slotData;
+    value = (arg0->unk0 << 16) / 100;
+
+    func_800B7760_1E4810(slotData, value, arg0->unk4);
+    func_800B77C4_1E4874(slotData, value, arg0->unk4);
+    func_800B7828_1E48D8(slotData, value, arg0->unk4);
+}
 
 s32 cutsceneChrZoom_isDone(void) {
     return 0;
