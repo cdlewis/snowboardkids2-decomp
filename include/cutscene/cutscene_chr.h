@@ -98,6 +98,13 @@ typedef struct {
 } cutsceneChrAnime_exec_arg;
 
 typedef struct {
+    s16 unk0;
+    s8 unk2;
+    s8 unk3;
+    s16 unk4;
+} cutsceneChrAnime2_exec_arg;
+
+typedef struct {
     s32 unk0;
     s16 unk4;
 } cutsceneChrZoom_exec_arg;
@@ -195,7 +202,7 @@ s32 cutsceneChrFace_validate(void);
 void cutsceneChrFace_exec(s8 *arg0, CutsceneManager *arg1, s8 arg2);
 void cutsceneChrAnime2_init(void);
 s32 cutsceneChrAnime2_validate(void);
-void cutsceneChrAnime2_exec(void);
+void cutsceneChrAnime2_exec(cutsceneChrAnime2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 s32 cutsceneChrAnime2_isDone(void);
 void cutsceneChrMove3_init(void);
 s32 cutsceneChrMove3_validate(void);

@@ -406,7 +406,14 @@ s32 cutsceneChrAnime2_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrAnime2_exec);
+void cutsceneChrAnime2_exec(cutsceneChrAnime2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlot *slot;
+
+    slot = &arg1->slots[arg2];
+    slot->slotData.unk0.Two = 1;
+    func_80002260_2E60(slot->model, arg0->unk0, arg0->unk4, arg0->unk3, -1, -1);
+    func_800015CC_21CC(slot->model, arg0->unk2);
+}
 
 s32 cutsceneChrAnime2_isDone(void) {
     return 0;
