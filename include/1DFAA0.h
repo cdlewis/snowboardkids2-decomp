@@ -105,9 +105,12 @@ typedef struct {
 } UIResource;
 
 typedef struct {
-    s32 unk00;
-    void *unk04;
-    u8 padding[0x35];
+    union {
+        s32 One;
+        s8 Two;
+    } unk0;
+    applyTransformToModel_arg1 unk04;
+    u8 padding[0x15];
     s8 unk3D;
     u8 padding2[0x50];
     /* 0x8E */ s16 angle;

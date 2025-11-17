@@ -6,6 +6,8 @@ extern void func_800B788C_1E493C(CutsceneSlotData *, s32, s32, s32);
 extern void func_800B75C4_1E4674(CutsceneSlotData *, SceneModel *, s16, s16, s32, s32);
 extern void func_800B6FA4_1E4054(CutsceneSlotData *, SceneModel *, s32, s32, s32, s32, s32);
 extern void func_800B7B70_1E4C20(CutsceneSlotData *, s32 *, s16, s32, s32);
+extern void func_800B6BDC_1E3C8C(CutsceneSlotData *, s32, s32, s32, s16);
+extern s32 setupSlotTransform(CutsceneSlotData *);
 extern s32 func_800B6CD8_1E3D88(
     CutsceneSlotData *arg0,
     SceneModel *arg1,
@@ -25,7 +27,21 @@ s32 cutsceneChrPosition_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrPosition_exec);
+void cutsceneChrPosition_exec(cutsceneChrPosition_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlot *slot;
+    CutsceneSlotData *slotData;
+    s16 temp;
+
+    temp = arg0->unkC;
+    slot = &arg1->slots[arg2];
+    slotData = &slot->slotData;
+
+    func_800B6BDC_1E3C8C(slotData, arg0->unk0, arg0->unk4, arg0->unk8, temp);
+    setupSlotTransform(slotData);
+    applyTransformToModel(slot->model, &slot->slotData.unk04);
+    func_80002260_2E60(slot->model, arg0->unkE, arg0->unk12, arg0->unk11, -1, arg0->unk14);
+    func_800015CC_21CC(slot->model, arg0->unk10);
+}
 
 s32 cutsceneChrPosition_isDone(void) {
     return 0;
@@ -90,7 +106,12 @@ s32 cutsceneChrAnime_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrAnime_exec);
+void cutsceneChrAnime_exec(cutsceneChrAnime_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlot *slot = &arg1->slots[arg2];
+    slot->slotData.unk0.Two = 0;
+    func_80002260_2E60(slot->model, arg0->unk0, arg0->unk4, arg0->unk3, -1, -1);
+    func_800015CC_21CC(slot->model, arg0->unk2);
+}
 
 s32 cutsceneChrAnime_isDone(void) {
     return 0;

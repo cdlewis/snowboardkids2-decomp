@@ -43,6 +43,18 @@ typedef struct {
     s32 unk8;
     s16 unkC;
     s16 unkE;
+    s8 unk10;
+    s8 unk11;
+    s16 unk12;
+    s8 unk14;
+} cutsceneChrPosition_exec_arg;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s16 unkC;
+    s16 unkE;
     s16 unk10;
     s8 unk12;
     s8 unk13;
@@ -64,9 +76,16 @@ typedef struct {
     s32 unk1C;
 } cutsceneChrMoveSight_exec_arg;
 
+typedef struct {
+    s16 unk0;
+    s8 unk2;
+    s8 unk3;
+    s16 unk4;
+} cutsceneChrAnime_exec_arg;
+
 void cutsceneChrPosition_init(void);
 s32 cutsceneChrPosition_validate(void);
-void cutsceneChrPosition_exec(void);
+void cutsceneChrPosition_exec(cutsceneChrPosition_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 s32 cutsceneChrPosition_isDone(void);
 void cutsceneChrMove_init(void);
 s32 cutsceneChrMove_validate(void);
@@ -74,7 +93,7 @@ void cutsceneChrMove_exec(cutsceneChrMove_exec_arg *arg0, CutsceneManager *arg1,
 s32 cutsceneChrMove_isDone(void);
 void cutsceneChrAnime_init(void);
 s32 cutsceneChrAnime_validate(void);
-void cutsceneChrAnime_exec(void);
+void cutsceneChrAnime_exec(cutsceneChrAnime_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 s32 cutsceneChrAnime_isDone(void);
 void cutsceneChrDisp_init(void);
 s32 cutsceneChrDisp_validate(void);
