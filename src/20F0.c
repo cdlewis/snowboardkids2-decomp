@@ -213,11 +213,11 @@ s8 func_800015D4_21D4(func_800015CC_21CC_arg *arg0) {
     return arg0->unk3D;
 }
 
-s32 func_800015DC_21DC(void) {
+s32 func_800015DC_21DC(s16 arg0) {
     return 0x98;
 }
 
-s32 func_800015E4_21E4(void) {
+s32 func_800015E4_21E4(s16 arg0) {
     return 0x9B;
 }
 

@@ -8,32 +8,38 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 ## Project Structure
 
-* `src` decompiled (or partially decompiled) C code
-* `asm` unmatched asm code extracted from the rom
-* `lib` library code such as Ultralib which we call and link against
-* `assets` binary asset blobs extracted from the rom
-* `include` common headers included in all C and/or assembly code
+- `src` decompiled (or partially decompiled) C code
+- `include` headers for decompiled C code
+- `asm` unmatched asm code extracted from the rom. Each file contains a separate function.
+- `lib` library code such as Ultralib which we call and link against
+- `assets` binary asset blobs extracted from the rom
+- `include` common headers included in all C and/or assembly code
 
 ## Tools
 
-* `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>` 
-
-## Coding Tips
-
-* Do not use unions in structs unless explicitly told to
-* DO not do pointer arithmatic (outside of ++) unless explicitly told to
+- `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>`
+- `./tools/claude <function name>` spin up a decompilation environment for a given function.
 
 ## Tasks
 
 ### Decompile assembly to C code
 
-You may be given raw assembly and asked to decompile it to C code.
+You may be given a function and asked to decompile it to C code.
 
-Analyse the assembly code carefully. Keep in mind The compiler is GCC 2.7.2. The following compiler flags are being used: -O2 -mips3. We follow the C89 standard. Keep in mind that variable declarations are generally limited to the beginning of blocks or functions.
+First we need to spin up a decomp environment for the function, run:
 
-Use the entire project's to find the best possible match, this includes:
+```
+./tools/claude <function name>
+```
 
-* How the function is called in existing C code (src or lib folders)
-* How the function calls existing C code
-* How the function is called in assembly code (asm folder)
-* How the function calls existing assembly code
+Move to the directory created by the script. This will be `nonmatchings/<function name>-<number (optional)>`.
+
+Use the tools in this directory to match the function.
+
+Once you have a matching function, update the C code to use it. The C code will be importing an assembly file, something along the lines of `INCLUDE_ASM/asm/nonmatchings/<function name>`. Replace this with the actual C code.
+
+If the function is defined in a heaer file (located in include/), this will also need to be updated.
+
+Update the rest of the project to fix any build issues.
+
+Run `make clean && make extract && make` to verify the project builds and matches.
