@@ -19,6 +19,18 @@ extern s32 func_800B6CD8_1E3D88(
     s32 arg7,
     s32 arg8
 );
+extern void func_800B7128_1E41D8(
+    CutsceneSlotData *arg0,
+    SceneModel *arg1,
+    s32 arg2,
+    s32 arg3,
+    s32 arg4,
+    s16 arg5,
+    s16 arg6,
+    s16 arg7,
+    s8 arg8,
+    s8 arg9
+);
 extern void func_800B7760_1E4810(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
 extern void func_800B77C4_1E4874(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
 extern void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
@@ -234,7 +246,28 @@ s32 cutsceneChrBoardMove_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrBoardMove_exec);
+void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlot *slot = &arg1->slots[arg2];
+
+    func_800B34B0_1E0560(arg2);
+
+    func_800B7128_1E41D8(
+        &slot->slotData,
+        slot->model,
+        arg0->unk0,
+        arg0->unk4,
+        arg0->unk8,
+        arg0->unkE,
+        arg0->unkC,
+        arg0->unk10,
+        arg0->unk16,
+        arg0->unk17
+    );
+
+    func_80002220_2E20(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1);
+
+    func_800015CC_21CC(slot->model, arg0->unk12);
+}
 
 s32 cutsceneChrBoardMove_isDone(void) {
     return 0;

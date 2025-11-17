@@ -133,7 +133,7 @@ void cutsceneChrZoom_exec(cutsceneChrZoom_exec_arg *arg0, CutsceneManager *arg1,
 s32 cutsceneChrZoom_isDone(void);
 void cutsceneChrBoardMove_init(void);
 s32 cutsceneChrBoardMove_validate(void);
-void cutsceneChrBoardMove_exec(void);
+void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 s32 cutsceneChrBoardMove_isDone(void);
 void cutsceneChrTurn2_init(void);
 s32 cutsceneChrTurn2_validate(void);
