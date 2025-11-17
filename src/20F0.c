@@ -233,7 +233,7 @@ void setModelVisibility(SceneModel *arg0, s8 arg1) {
     arg0->unk88 = arg1;
 }
 
-void func_80001604_2204(func_80001604_2204_arg *arg0, s8 arg1) {
+void func_80001604_2204(SceneModel *arg0, s8 arg1) {
     arg0->unk3F = arg1;
 }
 

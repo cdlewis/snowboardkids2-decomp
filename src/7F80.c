@@ -14,18 +14,16 @@ typedef struct {
 } func_800078C4_84C4_arg_unk44;
 
 typedef struct {
-    func_80001604_2204_arg *unk0;
+    SceneModel *unk0;
     void *unk4;
-
-    u8 padding[0xC];
+    s32 unk8;
+    s32 unkC;
+    u8 padding[0x4];
     s32 unk14;
-
     u8 padding2[0x1C];
-
     s32 unk34;
     s32 *unk38;
     s32 unk3C;
-
     s32 unk40;
     func_800078C4_84C4_arg_unk44 *unk44;
 } func_800078C4_84C4_arg;
@@ -202,7 +200,7 @@ void func_800078C4_84C4(func_800078C4_84C4_arg *arg0) {
     setCleanupCallback(&func_80007ABC_86BC);
     arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_646CD0_ROM_START, &_646CD0_ROM_END, 0xE8);
     arg0->unk44 = dmaRequestAndUpdateStateWithSize(&_49B500_ROM_START, &_49B500_ROM_END, 0xC00);
-    if (arg0->unk0->unkC == 0x3E) {
+    if (arg0->unk0->index == 0x3E) {
         arg0->unk40 = 0;
     } else {
         arg0->unk40 = 1;

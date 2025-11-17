@@ -97,7 +97,7 @@ void cutsceneChrAnime_exec(cutsceneChrAnime_exec_arg *arg0, CutsceneManager *arg
 s32 cutsceneChrAnime_isDone(void);
 void cutsceneChrDisp_init(void);
 s32 cutsceneChrDisp_validate(void);
-void cutsceneChrDisp_exec(void);
+void cutsceneChrDisp_exec(s8 *a0, CutsceneManager *arg1, s8 arg2);
 void cutsceneChrItem_init(void);
 s32 cutsceneChrItem_validate(void);
 void cutsceneChrItem_exec(s8 *a0, CutsceneManager *arg1, s8 arg2);

@@ -74,7 +74,11 @@ typedef struct {
 } func_80002B50_3750_arg;
 
 typedef struct {
-    u8 padding[0x24];
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    u8 padding[0x14];
     void *unk24;
     void *unk28;
     u8 padding2[0x3B4];
@@ -162,19 +166,7 @@ SceneModel *func_80002014_2C14(SceneModel *arg0);
 
 void clearModelRotation(SceneModel *);
 
-typedef struct {
-    u8 padding[0xC];
-    s16 unkC;
-    u8 padding2[0x8];
-    s32 unk18;
-    u8 padding3[0x20];
-    s8 unk3C;
-    s8 unk3D;
-    s8 unk3E;
-    s8 unk3F;
-} func_80001604_2204_arg;
-
-void func_80001604_2204(func_80001604_2204_arg *arg0, s8 arg1);
+void func_80001604_2204(SceneModel *arg0, s8 arg1);
 
 void setModelVisibility(SceneModel *, s8);
 
