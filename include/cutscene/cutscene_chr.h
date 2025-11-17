@@ -2,6 +2,14 @@
 #include "common.h"
 
 typedef struct {
+    u8 unk0;
+    u8 unk1;
+    u8 unk2;
+    u8 unk3;
+    u16 unk4;
+} cutsceneChrAlpha_exec_arg;
+
+typedef struct {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -213,11 +221,11 @@ s32 cutsceneChrModelDisp_validate(void);
 void cutsceneChrModelDisp_exec(cutsceneChrModelDisp_exec_arg *arg0, CutsceneManager *cutsceneManager, s8 index);
 void cutsceneChrMoveSight_init(void);
 s32 cutsceneChrMoveSight_validate(void);
-void cutsceneChrMoveSight_exec(cutsceneChrMoveSight_exec_arg* arg0, CutsceneManager* arg1, s8 arg2);
+void cutsceneChrMoveSight_exec(cutsceneChrMoveSight_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 s32 cutsceneChrMoveSight_isDone(void);
 void cutsceneChrAlpha_init(void);
 s32 cutsceneChrAlpha_validate(void);
-void cutsceneChrAlpha_exec(void);
+void cutsceneChrAlpha_exec(cutsceneChrAlpha_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 void cutsceneChrAlpha_update(void);
 s32 cutsceneChrAlpha_isDone(void);
 void cutsceneChrPosition2_init(void);

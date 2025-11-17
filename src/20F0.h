@@ -193,3 +193,7 @@ void func_800016F8_22F8(SceneModel *arg0, s32 arg1);
 s32 func_800015DC_21DC(s16);
 
 s32 func_800015E4_21E4(s16);
+
+u8 func_80001534_2134(SceneModel *arg0);
+
+void func_8000152C_212C(SceneModel *arg0, u8 arg1);

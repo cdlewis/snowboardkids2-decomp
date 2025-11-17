@@ -41,12 +41,6 @@ typedef struct {
 } func_8000150C_210C_arg;
 
 typedef struct {
-    u8 padding[0x96];
-    u8 unk96;
-    s8 unk97;
-} func_80001534_2134_arg;
-
-typedef struct {
     u8 padding[0x3D];
     s8 unk3D;
 } func_800015CC_21CC_arg;
@@ -175,11 +169,11 @@ void func_80001524_2124(SceneModel *arg0) {
     arg0->unk97 = 0;
 }
 
-void func_8000152C_212C(func_80001534_2134_arg *arg0, s8 arg1) {
+void func_8000152C_212C(SceneModel *arg0, u8 arg1) {
     arg0->unk96 = arg1;
 }
 
-u8 func_80001534_2134(func_80001534_2134_arg *arg0) {
+u8 func_80001534_2134(SceneModel *arg0) {
     return arg0->unk96;
 }
 

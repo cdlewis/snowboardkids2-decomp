@@ -36,8 +36,18 @@ typedef struct {
             s16 unk0;
             s16 unk2;
         } TrickPayload;
+        struct {
+            s16 unk0;
+            u8 padding[0xE];
+            s32 unk10;
+            s32 unk14;
+            s32 unk18;
+            s32 unk1C;
+            s32 unk20;
+            s32 unk24;
+        } ChrPayload;
     } unk0;
-    u8 padding[0x34];
+    u8 padding[0x18];
     s8 unk40;
     u8 padding2[0x3];
     s8 unk44;
@@ -118,11 +128,19 @@ typedef struct {
 } CutsceneSlotData;
 
 typedef struct {
-    /* 0x00 */ u8 padding[0x42];
+    /* 0x00 */ s16 unk0;
+    u8 padding[0xE];
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
+    s32 unk24;
+    /* 0x28 */ u8 padding2[0x1A];
     /* 0x42 */ u8 unk42;
     /* 0x43 */ u8 unk43;
     /* 0x44 */ u8 unk44;
-    /* 0x44 */ u8 padding2[0x3];
+    /* 0x44 */ u8 padding3[0x3];
     /* 0x48 */ SceneModel *model;
     /* 0x4C */ CutsceneSlotData slotData;
 } CutsceneSlot; /* Total size: 0xF4 */
