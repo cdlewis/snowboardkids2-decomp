@@ -357,7 +357,35 @@ INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4320_1E13D0);
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4378_1E1428);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B44A8_1E1558);
+void func_800B44A8_1E1558(u8 arg0, u16 arg1) {
+    u16 eventId;
+    StateEntry *src;
+    StateEntry *dst;
+    u8 *srcBytes;
+    u8 *dstBytes;
+    s32 i;
+    u8 temp;
+
+    eventId = findEventAtFrame(arg0, arg1);
+
+    // Copy the current entry to D_800BAEC8_1E7F78
+    if (eventId != 0xFFFF) {
+        src = getStateEntry(eventId);
+        dst = &D_800BAEC8_1E7F78[0];
+        srcBytes = (u8 *)src;
+        dstBytes = (u8 *)dst;
+
+        for (i = 0; i < 0x38; i++) {
+            dstBytes[i] = srcBytes[i];
+        }
+
+        dst->unk3E = src->unk3E;
+        temp = src->unk3F;
+        D_800BAEB0_1E7F60 = 1;
+        D_800BAEB4_1E7F64 = 0;
+        dst->unk3F = temp;
+    }
+}
 
 void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
     s32 temp_s0;
