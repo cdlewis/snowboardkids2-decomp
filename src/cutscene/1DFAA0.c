@@ -415,7 +415,17 @@ void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B462C_1E16DC);
+void func_800B462C_1E16DC(u8 arg0, u16 arg1, s32 arg2) {
+    u16 result;
+    StateEntry *entry;
+
+    result = func_800B3B68_1E0C18(arg0, arg1, 0);
+
+    if (result != 0xFFFF) {
+        entry = getStateEntry(result);
+        entry->unk3C += arg2;
+    }
+}
 
 void *func_800B4680_1E1730(s8 arg0) {
     D_800BA960_1E7A10_node *node;
