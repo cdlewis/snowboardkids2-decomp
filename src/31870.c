@@ -217,7 +217,7 @@ extern void func_80031138_31D38(void);
 void func_800317D4_323D4(void);
 void func_800313A4_31FA4(void);
 void func_800315C0_321C0(void);
-void func_80031C4C_3284C(void);
+void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 void func_80031B30_32730(void);
 void func_800322BC_32EBC(void);
@@ -466,7 +466,9 @@ void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031B30_32730);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031C4C_3284C);
+void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0) {
+    func_80002014_2C14(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031C68_32868);
 
