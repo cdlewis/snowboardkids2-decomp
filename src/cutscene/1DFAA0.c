@@ -17,6 +17,7 @@ typedef struct {
 } func_800B2C78_arg;
 
 extern StateEntry *D_800BAEBC_1E7F6C;
+extern s32 D_800BAEB8_1E7F68;
 extern s32 gButtonsPressed[];
 extern StateEntry D_800BAEC8_1E7F78[];
 extern u8 D_800BAF06_1E7FB6;
@@ -352,7 +353,9 @@ u16 func_800B4258_1E1308(u8 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4288_1E1338);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4294_1E1344);
+u8 *func_800B4294_1E1344(void) {
+    return &D_800BAEBC_1E7F6C->padding0[D_800BAEB8_1E7F68] - 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B42B0_1E1360);
 

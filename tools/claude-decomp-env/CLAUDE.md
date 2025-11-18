@@ -26,6 +26,7 @@ Repeat the following steps:
 - When analysing type errors or conflicts, look to the code in src/ and include/ for guidance. These types work and are used elsewhere in the project. Types in the function you're trying to match could be wrong or misleading. Similarly, any extensions or changes to existing types need to be compatible with the rest of the codebase so exercise caution when making such changes.
 - Always use array and struct access. Do not introduce manual pointer arithmatic.
 - If you need to cast between pointer types, STOP - you're solving the wrong problem. Fix the struct layout instead.
+- If you need to cast a pointer to an integer type (e.g., `(s32)ptr`), STOP - check if the struct either has a suitable field (or array of fields) that you can use instead.
 - Look at what memory offset the assembly is accessing and map it directly to struct fields - don't introduce intermediate types.
 - Where appropriate, generate structs to match the expected input arguments, return values, etc.
 - Before adding a new type definition, search in the codebase if this struct already exists and reuse them whenever possible.
