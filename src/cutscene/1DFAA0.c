@@ -277,7 +277,11 @@ void func_800B388C_1E093C(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", initializeCutsceneSystem);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3B40);
+void func_800B3B40(void) {
+    if (D_800BAEBC_1E7F6C != NULL) {
+        freeNodeMemory(D_800BAEBC_1E7F6C);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3B68_1E0C18);
 
