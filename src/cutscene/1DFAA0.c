@@ -38,6 +38,7 @@ u8 getCutsceneSlotCount(void);
 s32 findEventAtFrame(u8 a0, u16 a1);
 s32 func_800B3D24_1E0DD4(u8, u16);
 StateEntry *getStateEntry(u16);
+u16 func_800B3B68_1E0C18(u8, u16, s32);
 void func_800B477C_1E182C(void);
 
 void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0) {
@@ -327,7 +328,14 @@ INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3FFC_1E10AC);
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B41E0_1E1290);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4258_1E1308);
+u16 func_800B4258_1E1308(u8 arg0) {
+    u16 temp;
+    StateEntry *entry;
+
+    temp = func_800B3B68_1E0C18(arg0, 0x8000, 1);
+    entry = getStateEntry(temp);
+    return entry->unk3C;
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4288_1E1338);
 
