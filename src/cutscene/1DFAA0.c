@@ -359,7 +359,15 @@ u8 *func_800B4294_1E1344(void) {
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B42B0_1E1360);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B42E8_1E1398);
+u16 func_800B42E8_1E1398(u16 arg0) {
+    if (D_800BAEB4_1E7F64 == 0) {
+        return arg0;
+    }
+    if (D_800BAEB2_1E7F62 == -1) {
+        return arg0;
+    }
+    return D_800BAEB2_1E7F62;
+}
 
 void func_800B4320_1E13D0(void) {
     s16 temp_v0;
