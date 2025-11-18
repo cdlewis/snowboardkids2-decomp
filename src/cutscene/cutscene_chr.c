@@ -497,7 +497,7 @@ s32 cutsceneChrAlpha_validate(void) {
 }
 
 void cutsceneChrAlpha_exec(cutsceneChrAlpha_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    func_800B2A24_1DFAD4_arg_item *slot;
+    CutsceneSlot *slot;
     CutsceneSlot *currentSlot;
     u8 currentAlpha;
 

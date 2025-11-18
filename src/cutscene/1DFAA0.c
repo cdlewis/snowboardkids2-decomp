@@ -50,16 +50,16 @@ void func_800B29FC_1DFAAC(func_800B29F0_1DFAA0_arg *arg0) {
     }
 }
 
-void func_800B2A24_1DFAD4(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
-    arg0->items[arg1].unk44 = 1;
+void func_800B2A24_1DFAD4(CutsceneManager *arg0, s16 arg1) {
+    arg0->slots[arg1].unk44 = 1;
 }
 
-void func_800B2A50_1DFB00(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
-    arg0->items[arg1].unk44 = 0;
+void func_800B2A50_1DFB00(CutsceneManager *arg0, s16 arg1) {
+    arg0->slots[arg1].unk44 = 0;
 }
 
-func_800B2A24_1DFAD4_arg_item *func_800B2A78_1DFB28(func_800B2A24_1DFAD4_arg *arg0, s16 arg1) {
-    return &arg0->items[arg1];
+CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1) {
+    return &arg0->slots[arg1];
 }
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B2AA0);
@@ -106,7 +106,7 @@ s32 processCutsceneFrame(CutsceneManager *uiManager) {
 
     if (uiManager->showDebugInfo) {
         sprintf(uiManager->debugText, D_800BAE00_1E7EB0, uiManager->currentFrame);
-        debugEnqueueCallback(uiManager->uiResource->unk16, 6, &renderTextPalette, &uiManager->textRenderer);
+        debugEnqueueCallback(uiManager->uiResource->slot_index, 6, &renderTextPalette, &uiManager->textRenderer);
     }
 
     while (uiManager->currentFrame <= uiManager->maxFrame && !uiManager->skipAnimation) {

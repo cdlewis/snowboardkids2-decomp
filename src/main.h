@@ -59,8 +59,10 @@ typedef struct {
 void func_80000710_1310(func_80000710_1310_arg *);
 
 typedef struct {
-    char padding[0x87];
-    char unk87;
+    u8 padding[0x6];
+    u16 unk6;
+    s8 padding2[0x7F];
+    s8 unk87;
 } setModelRenderMode_arg;
 
 void setModelRenderMode(setModelRenderMode_arg *arg0, s8 arg1);

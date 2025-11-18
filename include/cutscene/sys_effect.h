@@ -23,7 +23,7 @@ s32 cutsceneEffectMLight_validate(void);
 void cutsceneEffectMLight_exec(void);
 void cutsceneEffectTrick_init(void);
 s32 cutsceneEffectTrick_validate(void);
-void cutsceneEffectTrick_exec(cutsceneEffectTrick_exec_arg *arg0, func_800B2A24_1DFAD4_arg *arg1, s8 arg2);
+void cutsceneEffectTrick_exec(cutsceneEffectTrick_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 void cutsceneEffectTrick_update(void);
 s32 cutsceneEffectTrick_isDone(void);
 void cutsceneInitTrack_init(void);
