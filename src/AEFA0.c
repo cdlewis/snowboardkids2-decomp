@@ -23,9 +23,15 @@ typedef struct {
     s32 unk08;
 } Vec3;
 
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+} func_800BB74C_AF43C_arg;
+
 extern void rotateVectorY(Vec3 *, s32, void *);
 extern void func_800BB45C_AF14C(void);
 extern void func_800BB5B0_AF2A0(void);
+extern void func_800BB778_AF468(void);
 
 extern void *D_800BC7F0_B04E0;
 extern Vec3 D_800BCAA0_B0790;
@@ -80,7 +86,11 @@ INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB620_AF310);
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB6F4_AF3E4);
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB74C_AF43C);
+void func_800BB74C_AF43C(func_800BB74C_AF43C_arg *arg0) {
+    arg0->unk0 = 0;
+    arg0->unk2 = 0x14;
+    setCallback(func_800BB778_AF468);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB778_AF468);
 

@@ -42,4 +42,4 @@ If the function is defined in a heaer file (located in include/), this will also
 
 Update the rest of the project to fix any build issues.
 
-Run `make clean && make extract && make` to verify the project builds and matches.
+Run `make clean && make extract && make -j1` to verify the project builds and matches.
