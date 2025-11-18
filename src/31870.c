@@ -203,10 +203,16 @@ typedef struct {
     s16 unk77C;
 } func_80032CB4_338B4_asset;
 
+typedef struct {
+    u8 unk0[4];
+    u8 unk4;
+} func_80031100_31D00_arg;
+
 extern void func_80012004_12C04(void);
 extern void func_80035408_36008(void);
 extern s32 func_80035F80_36B80(s32);
 extern void func_800136E0_142E0(void);
+extern void func_80031138_31D38(void);
 
 void func_800317D4_323D4(void);
 void func_800313A4_31FA4(void);
@@ -297,7 +303,12 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80030F6C_31B6C);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80030FBC_31BBC);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031100_31D00);
+void func_80031100_31D00(func_80031100_31D00_arg* arg0) {
+    arg0->unk4--;
+    if (arg0->unk4 == 0) {
+        setCallback(func_80031138_31D38);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031138_31D38);
 
