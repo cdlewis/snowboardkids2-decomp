@@ -17,6 +17,7 @@ USE_ASSET(_4547D0);
 extern u16 D_8008F150_8FD50[];
 extern const char D_8009E480_9F080;
 extern void func_80032708_33308(void);
+extern void func_80038420_39020(void);
 
 typedef struct {
     u8 padding[0x77C];
@@ -453,7 +454,9 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80031C68_32868);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031CC0_328C0);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031CE8_328E8);
+void func_80031CE8_328E8(void *arg0) {
+    debugEnqueueCallback(9, 0, &func_80038420_39020, arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031D14_32914);
 
