@@ -137,6 +137,13 @@ typedef struct {
 } func_80032EDC_33ADC_arg;
 
 typedef struct {
+    char padding;
+    void *unk4;
+    char padding2[78];
+    void *unk58;
+} func_80032504_33104_arg;
+
+typedef struct {
     u8 padding[0x79C];
     u8 unk79C;
 } func_80032EDC_33ADC_asset;
@@ -496,7 +503,10 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80032330_32F30);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_800323FC_32FFC);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032504_33104);
+void func_80032504_33104(func_80032504_33104_arg *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    arg0->unk58 = freeNodeMemory(arg0->unk58);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_8003253C_3313C);
 
