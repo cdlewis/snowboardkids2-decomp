@@ -10,9 +10,9 @@ typedef struct {
     u8 padding[0xC];
     s32 unkC;
     func_80000710_1310_arg unk10;
-    u8 padding3[0x20];
+    u8 padding2[0x20];
     s32 unkB8;
-    u8 padding2[0x34];
+    u8 padding3[0x34];
     SceneModel *unkF0;
 } func_800B2C78_arg;
 
@@ -80,7 +80,15 @@ void func_800B2C78(func_800B2C78_arg *arg0) {
     func_80000710_1310(&arg0->unk10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B2D04);
+void func_800B2D04(func_800B2C78_arg *arg0) {
+    s32 i;
+
+    for (i = 0; i < getCutsceneSlotCount(); i++) {
+        if (arg0[i].unkF0 != NULL) {
+            setModelVisibility(arg0[i].unkF0, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B2D68_1DFE18);
 
