@@ -227,7 +227,9 @@ INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B34D0_1E0580);
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B34E0_1E0590);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B34F0);
+u8 func_800B34F0(void) {
+    return D_800BAEBC_1E7F6C->padding3[0x8];
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3500_1E05B0);
 
