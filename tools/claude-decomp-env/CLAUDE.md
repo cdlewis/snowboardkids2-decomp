@@ -35,6 +35,16 @@ Repeat the following steps:
 - The only permitted #include is common.h
 - Use temporary variables instead of complex nested expressions
 
+Never use pointer casts or manual offset arithmetic to access struct members. When decompiling a function that accesses a struct field:
+
+1. **First**, identify the exact offset being accessed in the assembly
+2. **Second**, check if a field exists at that offset in the struct definition
+3. **If the field doesn't exist**:
+  - Update the struct definition to add the proper field at that offset
+  - Adjust padding arrays as needed to maintain correct offsets
+  - Verify all offset comments in the struct remain accurate
+4. **Then** write the C code using the proper field name
+
 A literal decompilation of the code often produces strange artefacts. Account for and avoid these common pitfalls:
 
 - Control flow often becomes overly complicated:

@@ -21,7 +21,9 @@ extern s32 gButtonsPressed[];
 extern StateEntry D_800BAEC8_1E7F78[];
 extern u8 D_800BAF06_1E7FB6;
 extern u8 D_800BAEB0_1E7F60;
+extern s16 D_800BAEB2_1E7F62;
 extern s8 D_800BAEB4_1E7F64;
+extern s16 D_800BAEC0_1E7F70;
 extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
 extern s8 D_800BAE00_1E7EB0[];
 
@@ -40,6 +42,7 @@ s32 func_800B3D24_1E0DD4(u8, u16);
 StateEntry *getStateEntry(u16);
 u16 func_800B3B68_1E0C18(u8, u16, s32);
 void func_800B477C_1E182C(void);
+void func_800B4534_1E15E4(s32, s32);
 
 void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0) {
     arg0->unkFF7 = 1;
@@ -353,7 +356,25 @@ INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B42B0_1E1360);
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B42E8_1E1398);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4320_1E13D0);
+void func_800B4320_1E13D0(void) {
+    s16 temp_v0;
+    s16 temp_v0_2;
+    u8 masked_arg0;
+    u16 masked_arg1;
+
+    if (D_800BAEB4_1E7F64 != 0) {
+        temp_v0 = D_800BAEC0_1E7F70;
+        if (temp_v0 != -1) {
+            temp_v0_2 = D_800BAEB2_1E7F62;
+            if (temp_v0_2 != -1) {
+                masked_arg0 = temp_v0;
+                masked_arg1 = temp_v0_2;
+                func_800B4534_1E15E4(masked_arg0, masked_arg1);
+            }
+        }
+    }
+    D_800BAEB4_1E7F64 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4378_1E1428);
 
