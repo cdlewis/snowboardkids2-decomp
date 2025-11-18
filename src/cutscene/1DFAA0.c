@@ -91,7 +91,15 @@ void func_800B2D04(func_800B2C78_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B2D68_1DFE18);
+void func_800B2D68_1DFE18(func_800B2C78_arg *arg0) {
+    s32 i;
+
+    for (i = 0; i < getCutsceneSlotCount(); i++) {
+        if (arg0[i].unkF0 != NULL) {
+            setModelVisibility(arg0[i].unkF0, 1);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B2DCC_1DFE7C);
 
