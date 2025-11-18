@@ -217,7 +217,9 @@ INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3430_1E04E0);
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3440_1E04F0);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3450_1E0500);
+u8 func_800B3450_1E0500(void) {
+    return D_800BAEBC_1E7F6C->unk12;
+}
 
 u8 getCutsceneSlotCount(void) {
     return D_800BAEBC_1E7F6C->unk13;

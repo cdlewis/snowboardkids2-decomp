@@ -97,7 +97,8 @@ typedef struct {
 typedef struct {
     u8 padding0[0xC];
     /* 0xC */ u16 current_index;
-    u8 padding[0x5];
+    u8 padding[0x4];
+    /* 0x12 */ u8 unk12;
     /* 0x13 */ u8 unk13;
     u8 padding3[0xC];
     StateEntryItem items[2];
