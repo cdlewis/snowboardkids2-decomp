@@ -503,7 +503,14 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_800320E4_32CE4);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032170_32D70);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032218_32E18);
+typedef struct {
+    void *unk0;
+    void *unk4;
+} func_80032218_32E18_arg;
+
+void func_80032218_32E18(func_80032218_32E18_arg *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 void func_80032244_32E44(func_80032244_32E44_arg *arg0) {
     void *asset = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
