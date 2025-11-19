@@ -478,7 +478,9 @@ void func_80031CE8_328E8(void *arg0) {
     debugEnqueueCallback(9, 0, &func_80038420_39020, arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031D14_32914);
+void func_80031D14_32914(func_80031510_32110_arg *arg0) {
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031D40_32940);
 
