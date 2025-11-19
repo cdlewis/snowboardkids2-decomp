@@ -244,7 +244,9 @@ s16 func_800B3490_1E0540(void) {
     return D_800BAEBC_1E7F6C->unk18;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B34A0_1E0550);
+void func_800B34A0_1E0550(s16 arg0) {
+    D_800BAEBC_1E7F6C->unk18 = arg0;
+}
 
 StateEntryItem *func_800B34B0_1E0560(s32 arg0) {
     return &D_800BAEBC_1E7F6C->items[arg0];
