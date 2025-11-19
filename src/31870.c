@@ -209,6 +209,10 @@ typedef struct {
 } func_80031100_31D00_arg;
 
 typedef struct {
+    Node_70B00 *unk0;
+} func_80031248_31E48_arg;
+
+typedef struct {
     u8 padding[0x2C];
     s32 unk2C;
 } func_8002FA1C_3061C_arg;
@@ -319,7 +323,10 @@ void func_80031100_31D00(func_80031100_31D00_arg* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031138_31D38);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031248_31E48);
+void func_80031248_31E48(func_80031248_31E48_arg *arg0) {
+    arg0->unk0->prev = freeNodeMemory(arg0->unk0->prev);
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+}
 
 void func_80031288_31E88(func_80031510_32110_arg *arg0) {
     Mat3x3Padded matrixA;
