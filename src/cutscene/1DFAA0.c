@@ -212,7 +212,9 @@ s32 processCutsceneFrame(CutsceneManager *uiManager) {
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3360);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3420_1E04D0);
+void *func_800B3420_1E04D0(void) {
+    return &D_800BAEBC_1E7F6C->padding0[4];
+}
 
 void *func_800B3430_1E04E0(void) {
     return &D_800BAEBC_1E7F6C->padding0[8];
