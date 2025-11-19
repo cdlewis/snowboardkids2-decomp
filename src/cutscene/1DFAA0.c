@@ -359,7 +359,9 @@ u16 func_800B4258_1E1308(u8 arg0) {
     return entry->unk3C;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4288_1E1338);
+StateEntry *func_800B4288_1E1338(void) {
+    return D_800BAEBC_1E7F6C;
+}
 
 u8 *func_800B4294_1E1344(void) {
     return &D_800BAEBC_1E7F6C->padding0[D_800BAEB8_1E7F68] - 1;

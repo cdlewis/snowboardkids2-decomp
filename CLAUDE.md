@@ -40,6 +40,8 @@ Once you have a matching function, update the C code to use it. The C code will 
 
 If the function is defined in a header file (located in include/), this will also need to be updated.
 
+If you previously needed to define any extern functions. Check if they are already used in the file now or could be included via a header. Delete any redundent extern functions and fix any type issues that might arise from including the correct function definition.
+
 Update the rest of the project to fix any build issues.
 
 **IMPORTANT - Verification Requirements:**
@@ -47,18 +49,22 @@ Update the rest of the project to fix any build issues.
 1. **NEVER declare success based only on local environment matching.** Matching in the nonmatchings directory does NOT guarantee the full project matches.
 
 2. **ALWAYS verify the complete build** by running:
+
    ```
    make clean && make extract && make
    shasum -c snowboardkids2.sha1
    ```
 
 3. **SUCCESS CRITERIA**: The ONLY acceptable success condition is:
+
    ```
    build/snowboardkids2.z64: OK
    ```
+
    If this check fails, the decompilation is NOT complete, even if individual functions appear to match.
 
 4. **When modifying struct definitions:**
+
    - Search the entire codebase for other references to the same struct
    - Check if other functions access fields at nearby offsets
    - Verify ALL affected functions still match after struct changes
