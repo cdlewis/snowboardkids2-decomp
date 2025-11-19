@@ -224,7 +224,7 @@ extern void func_800136E0_142E0(void);
 extern void func_80031138_31D38(void);
 extern void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 
-void func_800317D4_323D4(void);
+void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void func_800313A4_31FA4(void);
 void func_800315C0_321C0(void);
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
@@ -398,7 +398,11 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_800316AC_322AC);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031758_32358);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_800317D4_323D4);
+void func_800317D4_323D4(func_80031510_32110_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+}
 
 void func_80031818_32418(func_80031510_32110_arg *arg0) {
     func_80032DE8_339E8_asset *state;
