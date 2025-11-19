@@ -38,8 +38,33 @@ Use the tools in this directory to match the function.
 
 Once you have a matching function, update the C code to use it. The C code will be importing an assembly file, something along the lines of `INCLUDE_ASM/asm/nonmatchings/<function name>`. Replace this with the actual C code.
 
-If the function is defined in a heaer file (located in include/), this will also need to be updated.
+If the function is defined in a header file (located in include/), this will also need to be updated.
 
 Update the rest of the project to fix any build issues.
 
-Run `make clean && make extract && make -j1` to verify the project builds and matches.
+**IMPORTANT - Verification Requirements:**
+
+1. **NEVER declare success based only on local environment matching.** Matching in the nonmatchings directory does NOT guarantee the full project matches.
+
+2. **ALWAYS verify the complete build** by running:
+   ```
+   make clean && make extract && make
+   shasum -c snowboardkids2.sha1
+   ```
+
+3. **SUCCESS CRITERIA**: The ONLY acceptable success condition is:
+   ```
+   build/snowboardkids2.z64: OK
+   ```
+   If this check fails, the decompilation is NOT complete, even if individual functions appear to match.
+
+4. **When modifying struct definitions:**
+   - Search the entire codebase for other references to the same struct
+   - Check if other functions access fields at nearby offsets
+   - Verify ALL affected functions still match after struct changes
+   - Example: If you add a field at offset 0x14, search for all functions accessing that struct and verify they still compile to the correct offsets
+
+5. **If the checksum fails after your changes:**
+   - Use `python3 tools/asm-differ/diff.py --no-pager <function>` to check ALL functions in the modified file(s)
+   - Look for functions that access the same structs you modified
+   - Fix any mismatches before declaring success
