@@ -486,7 +486,14 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80031D40_32940);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031DE4_329E4);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031F68_32B68);
+typedef struct {
+    void *unk0;
+    void *unk4;
+} func_80031F68_32B68_arg;
+
+void func_80031F68_32B68(func_80031F68_32B68_arg *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031F94_32B94);
 
