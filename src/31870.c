@@ -226,6 +226,7 @@ extern void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 
 void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void func_800313A4_31FA4(void);
+void func_800313DC_31FDC(void);
 void func_800315C0_321C0(void);
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
@@ -359,7 +360,14 @@ void func_80031288_31E88(func_80031510_32110_arg *arg0) {
     setCallback(&func_800313A4_31FA4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_800313A4_31FA4);
+void func_800313A4_31FA4(void) {
+    func_80032DE8_339E8_asset *allocation;
+
+    allocation = getCurrentAllocation();
+    if (allocation->unk788[19] == 1) {
+        setCallbackWithContinue(func_800313DC_31FDC);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_800313DC_31FDC);
 
