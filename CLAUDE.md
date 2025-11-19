@@ -40,9 +40,21 @@ Once you have a matching function, update the C code to use it. The C code will 
 
 If the function is defined in a header file (located in include/), this will also need to be updated.
 
-If you previously needed to define any extern functions. Check if they are already used in the file now or could be included via a header. Delete any redundent extern functions and fix any type issues that might arise from including the correct function definition.
-
 Update the rest of the project to fix any build issues.
+
+**Clean up redundant extern declarations:**
+
+After adding your decompiled function, check for any redundant extern declarations:
+
+1. **Search for existing declarations**: For each extern function you used, search the codebase to see if it's already declared in a header file:
+   - Use `grep -r "void functionName" include/` to search headers
+   - Use `grep -r "void functionName" src/*.h` to search source headers
+
+2. **Remove redundant externs**: If a function is already declared in an included header file, remove your extern declaration to avoid duplication
+
+3. **Verify the build still works** after removing redundant externs
+
+Example: If you added `extern void setCallback(void *);` but `task_scheduler.h` (which is already included) declares it, remove your extern declaration.
 
 **IMPORTANT - Verification Requirements:**
 
