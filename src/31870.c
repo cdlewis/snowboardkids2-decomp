@@ -221,7 +221,7 @@ void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 void func_80031B30_32730(void);
 void func_800322BC_32EBC(void);
-void func_80032304_32F04(void);
+void func_80032304_32F04(func_80032244_32E44_arg *arg0);
 void func_8003316C_33D6C(func_800330B4_33CB4_arg *arg0);
 void func_800331CC_33DCC(func_800330B4_33CB4_arg *arg0);
 void func_80033014_33C14(func_80033014_33C14_arg *arg0);
@@ -510,7 +510,9 @@ void func_80032244_32E44(func_80032244_32E44_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_800322BC_32EBC);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032304_32F04);
+void func_80032304_32F04(func_80032244_32E44_arg *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032330_32F30);
 
