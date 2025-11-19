@@ -155,32 +155,7 @@ def main():
     folder_path = sys.argv[1]
     scores = score_folder(folder_path)
 
-    # Display results
-    print("=" * 120)
-    print("TOP 10 SIMPLEST FUNCTIONS (Lowest Complexity)")
-    print("=" * 120)
-
-    for i, score in enumerate(scores[:10], 1):
-        print(f"{i:2d}. {score}")
-
-    print("\n" + "=" * 120)
     print(f"SIMPLEST FUNCTION: {scores[0].name}")
-    print("=" * 120)
-    print(f"File: {scores[0].file_path}")
-    print(f"Total Complexity Score: {scores[0].total_score:.1f}")
-    print(f"\nBreakdown:")
-    print(f"  Instructions:     {scores[0].instruction_count:3d} × 1.0 = {scores[0].instruction_count * 1.0:6.1f}")
-    print(f"  Branches:         {scores[0].branch_count:3d} × 3.0 = {scores[0].branch_count * 3.0:6.1f}")
-    print(f"  Jumps:            {scores[0].jump_count:3d} × 2.0 = {scores[0].jump_count * 2.0:6.1f}")
-    print(f"  Labels:           {scores[0].label_count:3d} × 2.0 = {scores[0].label_count * 2.0:6.1f}")
-    print(f"  Stack Size:       {scores[0].stack_size:3d} × 0.1 = {scores[0].stack_size * 0.1:6.1f}")
-    print("=" * 120)
-
-    # Also show the most complex for comparison
-    print(f"\nMOST COMPLEX FUNCTION: {scores[-1].name}")
-    print(f"Total Complexity Score: {scores[-1].total_score:.1f}")
-    print("=" * 120)
-
 
 if __name__ == '__main__':
     main()

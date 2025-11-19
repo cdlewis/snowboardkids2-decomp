@@ -256,7 +256,9 @@ s16 func_800B34D0_1E0580(void) {
     return D_800BAEBC_1E7F6C->unk1A;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B34E0_1E0590);
+void func_800B34E0_1E0590(s16 arg0) {
+    D_800BAEBC_1E7F6C->unk1A = arg0;
+}
 
 u8 func_800B34F0(void) {
     return D_800BAEBC_1E7F6C->unk1C;
