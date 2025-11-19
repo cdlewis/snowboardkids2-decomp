@@ -102,7 +102,8 @@ typedef struct {
     /* 0x12 */ u8 unk12;
     /* 0x13 */ u8 unk13;
     /* 0x14 */ u16 unk14;
-    u8 padding3[0x4];
+    /* 0x16 */ s16 unk16;
+    /* 0x18 */ s16 unk18;
     /* 0x1A */ s16 unk1A;
     /* 0x1C */ u8 unk1C;
     u8 padding4[0x3];

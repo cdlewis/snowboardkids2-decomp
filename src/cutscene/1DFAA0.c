@@ -238,7 +238,9 @@ u16 func_800B3470_1E0520(void) {
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3480_1E0530);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3490_1E0540);
+s16 func_800B3490_1E0540(void) {
+    return D_800BAEBC_1E7F6C->unk18;
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B34A0_1E0550);
 
