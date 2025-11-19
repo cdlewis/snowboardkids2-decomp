@@ -32,6 +32,7 @@ extern void rotateVectorY(Vec3 *, s32, void *);
 extern void func_800BB45C_AF14C(void);
 extern void func_800BB5B0_AF2A0(void);
 extern void func_800BB778_AF468(void);
+extern void func_800BBEAC_AFB9C(void);
 extern void func_800BC750_B0440(void);
 
 extern void *D_800BC7F0_B04E0;
@@ -107,7 +108,10 @@ INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBCE8_AF9D8);
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBD14_AFA04);
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBE84_AFB74);
+void func_800BBE84_AFB74(s16* arg0) {
+    *arg0 = 0xB4;
+    setCallback(func_800BBEAC_AFB9C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBEAC_AFB9C);
 
