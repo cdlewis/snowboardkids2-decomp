@@ -208,11 +208,17 @@ typedef struct {
     u8 unk4;
 } func_80031100_31D00_arg;
 
+typedef struct {
+    u8 padding[0x2C];
+    s32 unk2C;
+} func_8002FA1C_3061C_arg;
+
 extern void func_80012004_12C04(void);
 extern void func_80035408_36008(void);
 extern s32 func_80035F80_36B80(s32);
 extern void func_800136E0_142E0(void);
 extern void func_80031138_31D38(void);
+extern void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 
 void func_800317D4_323D4(void);
 void func_800313A4_31FA4(void);
@@ -231,6 +237,7 @@ void func_80032EA4_33AA4(void *);
 void func_80032F64_33B64(func_80032244_32E44_arg *);
 void func_800319C8_325C8(func_800319C8_325C8_arg *arg0);
 void func_80031944_32544(void);
+void func_80031CE8_328E8(void *arg0);
 
 extern s32 D_8008F18C_8FD8C;
 extern s32 D_8008F200_8FE00[];
@@ -472,7 +479,10 @@ void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031C68_32868);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031CC0_328C0);
+void func_80031CC0_328C0(func_8002FA1C_3061C_arg *arg0) {
+    func_800394BC_3A0BC(arg0, arg0->unk2C);
+    setCallback(&func_80031CE8_328E8);
+}
 
 void func_80031CE8_328E8(void *arg0) {
     debugEnqueueCallback(9, 0, &func_80038420_39020, arg0);
