@@ -187,7 +187,9 @@ def main():
         print("Error: All functions are marked as difficult!", file=sys.stderr)
         sys.exit(1)
 
-    print(f"SIMPLEST FUNCTION: {filtered_scores[0].name}")
+    simplest = filtered_scores[0]
+    print(f"SIMPLEST FUNCTION: {simplest.name}")
+    print(f"{simplest}")
 
 if __name__ == '__main__':
     main()

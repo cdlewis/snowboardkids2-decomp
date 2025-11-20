@@ -25,11 +25,11 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 ### Decompile directory to C code
 
-You may be given a directory containing assembly files. 
+You may be given a directory containing assembly files.
 
 1. Use the score_functions.py tool to find the easiest function. Start with this one.
 2. Follow the instructions in the `Decompile assembly to C code` of this document.
-3. If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name>` and return to step (1). If you cannot get a perfect match after several attempts, add the function name to `tools/difficult_functions` (function names should be separated by newlines) and return to step (1). By adding the function name to difficult_functions it will no longer be considered by the score_functions.py tool.
+3. If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name>` and return to step (1). If you cannot get a perfect match after several attempts, add the function name to `tools/difficult_functions` (function names should be separated by newlines) and return to step (1). By adding the function name to difficult_functions it will no longer be considered by the score_functions.py tool. You should also revert any changes you've made adding the function to the C file. We do not want to save incomplete matches.
 
 ### Decompile assembly to C code
 
@@ -54,6 +54,7 @@ Update the rest of the project to fix any build issues.
 After adding your decompiled function, check for any redundant extern declarations:
 
 1. **Search for existing declarations**: For each extern function you used, search the codebase to see if it's already declared in a header file:
+
    - Use `grep -r "void functionName" include/` to search headers
    - Use `grep -r "void functionName" src/*.h` to search source headers
 
