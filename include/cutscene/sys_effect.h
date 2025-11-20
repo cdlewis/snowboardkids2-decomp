@@ -6,13 +6,17 @@ typedef struct {
     u16 unk2;
 } cutsceneEffectTrick_exec_arg;
 
+typedef struct {
+    s16 unk0;
+} cutsceneEffectFan_exec_arg;
+
 void cutsceneEffectDisp_init(void);
 s32 cutsceneEffectDisp_validate(void);
 void cutsceneEffectDisp_exec(void);
 s32 cutsceneEffectDisp_isDone(void);
 void cutsceneEffectFan_init(void);
 s32 cutsceneEffectFan_validate(void);
-void cutsceneEffectFan_exec(void);
+void cutsceneEffectFan_exec(cutsceneEffectFan_exec_arg *arg0, CutsceneSlot *arg1, s8 arg2);
 s32 cutsceneEffectFan_isDone(void);
 void cutsceneEffectRocket_init(void);
 s32 cutsceneEffectRocket_validate(void);

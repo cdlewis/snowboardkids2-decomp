@@ -20,7 +20,11 @@ s32 cutsceneEffectFan_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectFan_exec);
+extern void func_800B4F60_1E2010(s32, s16);
+
+void cutsceneEffectFan_exec(cutsceneEffectFan_exec_arg *arg0, CutsceneSlot *arg1, s8 arg2) {
+    func_800B4F60_1E2010(arg1[arg2].slotData.unkA4, arg0->unk0);
+}
 
 s32 cutsceneEffectFan_isDone(void) {
     return 0;

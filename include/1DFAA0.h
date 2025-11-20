@@ -131,7 +131,8 @@ typedef struct {
     s8 unk3D;
     u8 padding2[0x50];
     /* 0x8E */ s16 angle;
-    u8 padding3[0x18];
+    u8 padding3[0x14];
+    /* 0xA4 */ s32 unkA4;
 } CutsceneSlotData;
 
 typedef struct {
