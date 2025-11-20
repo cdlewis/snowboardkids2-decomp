@@ -395,7 +395,28 @@ INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3F64_1E1014);
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3FFC_1E10AC);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B41E0_1E1290);
+u16 func_800B41E0_1E1290(void) {
+    u16 max_value;
+    u16 slot;
+    u16 index;
+    StateEntry *entry;
+    u16 value;
+
+    max_value = 0;
+    slot = 0;
+
+    while (slot < getCutsceneSlotCount()) {
+        index = func_800B3B68_1E0C18(slot, 0x8000, 1);
+        entry = getStateEntry(index);
+        value = entry->unk3C;
+        if (max_value < value) {
+            max_value = value;
+        }
+        slot++;
+    }
+
+    return max_value;
+}
 
 u16 func_800B4258_1E1308(u8 arg0) {
     u16 temp;
