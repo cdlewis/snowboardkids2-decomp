@@ -36,6 +36,7 @@ extern s32 finalizeAnimationLoop(void *);
 extern s32 setupSlotTransform(void *);
 extern void func_800B5BFC_1E2CAC(s32);
 extern void n_alSeqpDelete(s32 *);
+extern void func_800084E0_90E0(StateEntry *, s32, s32);
 
 u8 getCutsceneSlotCount(void);
 s32 findEventAtFrame(u8 a0, u16 a1);
@@ -270,7 +271,10 @@ void func_800B3500_1E05B0(u8 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3510_1E05C0);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3540_1E05F0);
+s32 func_800B3540_1E05F0(void) {
+    func_800084E0_90E0(D_800BAEBC_1E7F6C, D_800BAEB8_1E7F68, 0);
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3570);
 
