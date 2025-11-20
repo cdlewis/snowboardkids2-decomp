@@ -37,7 +37,11 @@ s32 cutsceneEffectRocket_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectRocket_exec);
+extern void func_8000BBE0_C7E0(s32, s16);
+
+void cutsceneEffectRocket_exec(cutsceneEffectRocket_exec_arg *arg0, CutsceneSlot *arg1, s8 arg2) {
+    func_8000BBE0_C7E0(arg1[arg2].slotData.unkA4, arg0->unk0);
+}
 
 s32 cutsceneEffectRocket_isDone(void) {
     return 0;
