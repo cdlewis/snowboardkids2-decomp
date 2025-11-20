@@ -282,7 +282,34 @@ s32 func_800B3540_1E05F0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3570);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B36C0);
+s32 func_800B36C0(void *arg0) {
+    s32 result;
+    s32 *src;
+    s32 *arg0_int;
+
+    arg0_int = (s32 *)arg0;
+    src = (s32 *)D_800BAEBC_1E7F6C;
+
+    result = 1;
+
+    if (src[1] != arg0_int[1]) {
+        goto skip_copy;
+    }
+
+    if (src[2] != arg0_int[2]) {
+        goto skip_copy;
+    }
+
+    memcpy(D_800BAEBC_1E7F6C, arg0, 0x78C0);
+    goto done;
+
+skip_copy:
+    result = 0;
+
+done:
+    freeNodeMemory(arg0);
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3734_1E07E4);
 
