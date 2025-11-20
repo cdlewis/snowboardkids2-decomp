@@ -146,6 +146,23 @@ def score_folder(folder_path: str) -> List[FunctionScore]:
     return scores
 
 
+def load_difficult_functions(difficult_file: str) -> set:
+    """Load the list of difficult functions to exclude."""
+    difficult_functions = set()
+
+    if os.path.exists(difficult_file):
+        try:
+            with open(difficult_file, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line:  # Skip empty lines
+                        difficult_functions.add(line)
+        except Exception as e:
+            print(f"Warning: Could not read {difficult_file}: {e}", file=sys.stderr)
+
+    return difficult_functions
+
+
 def main():
     if len(sys.argv) != 2:
         print("Usage: python3 tools/score_functions.py <folder_path>")
@@ -155,7 +172,22 @@ def main():
     folder_path = sys.argv[1]
     scores = score_folder(folder_path)
 
-    print(f"SIMPLEST FUNCTION: {scores[0].name}")
+    # Load difficult functions to exclude
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    difficult_file = os.path.join(script_dir, 'difficult_functions')
+    difficult_functions = load_difficult_functions(difficult_file)
+
+    if difficult_functions:
+        print(f"Excluding {len(difficult_functions)} difficult function(s)\n")
+
+    # Filter out difficult functions
+    filtered_scores = [s for s in scores if s.name not in difficult_functions]
+
+    if not filtered_scores:
+        print("Error: All functions are marked as difficult!", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"SIMPLEST FUNCTION: {filtered_scores[0].name}")
 
 if __name__ == '__main__':
     main()
