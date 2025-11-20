@@ -387,7 +387,19 @@ u8 *func_800B4294_1E1344(void) {
     return &D_800BAEBC_1E7F6C->padding0[D_800BAEB8_1E7F68] - 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B42B0_1E1360);
+u16 func_800B42B0_1E1360(u16 arg0) {
+    u16 var_a1;
+    s16 temp_v1;
+
+    if (D_800BAEB4_1E7F64 != 0) {
+        temp_v1 = D_800BAEC0_1E7F70;
+        if (temp_v1 != -1) {
+            var_a1 = temp_v1;
+            return var_a1;
+        }
+    }
+    return arg0;
+}
 
 u16 func_800B42E8_1E1398(u16 arg0) {
     if (D_800BAEB4_1E7F64 == 0) {

@@ -19,8 +19,17 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 - `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>`
 - `./tools/claude <function name>` spin up a decompilation environment for a given function.
+- `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory
 
 ## Tasks
+
+### Decompile directory to C code
+
+You may be given a directory containing assembly files. 
+
+1. Use the score_functions.py tool to find the easiest function. Start with this one.
+2. Follow the instructions in the `Decompile assembly to C code` of this document.
+3. If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name>` and return to step (1). If you cannot get a perfect match after several attempts, add the function name to `tools/difficult_functions` (function names should be separated by newlines) and return to step (1). By adding the function name to difficult_functions it will no longer be considered by the score_functions.py tool.
 
 ### Decompile assembly to C code
 
@@ -41,8 +50,6 @@ Once you have a matching function, update the C code to use it. The C code will 
 If the function is defined in a header file (located in include/), this will also need to be updated.
 
 Update the rest of the project to fix any build issues.
-
-**Clean up redundant extern declarations:**
 
 After adding your decompiled function, check for any redundant extern declarations:
 
