@@ -440,7 +440,12 @@ void func_80049794_4A394(void *payload, s32 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800497FC_4A3FC);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80049BFC_4A7FC);
+void func_80049BFC_4A7FC(void) {
+    GameState* allocation = (GameState*)getCurrentAllocation();
+    if (allocation->unk7A == 0) {
+        scheduleTask(&func_80046298_46E98, 0, 0, 0xD3);
+    }
+}
 
 void func_80049C38_4A838(s32 arg0) {
     void (*func_ptr)(s32) = (void(*)(s32))func_80047E7C_48A7C;
