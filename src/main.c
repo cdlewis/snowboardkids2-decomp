@@ -4,6 +4,7 @@
 #include "5520.h"
 #include "90F0.h"
 #include "common.h"
+#include "displaylist.h"
 #include "geometry.h"
 #include "rand.h"
 #include "task_scheduler.h"
@@ -184,7 +185,18 @@ void func_80009F90_AB90(void *, s32, s16, s32);
 void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32); /* extern */
 void func_80000A68_1668(func_80000C2C_182C_arg *);
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *);
-void func_800007C4_13C4(void *, void *);
+typedef struct {
+    u8 _pad[0x16];
+    u16 unk16;
+} func_800007C4_13C4_SubStruct;
+
+typedef struct {
+    func_800007C4_13C4_SubStruct* unk0;
+    u8 _pad[0x83];
+    s8 unk87;
+} func_800007C4_13C4_arg;
+
+void func_800007C4_13C4(func_800007C4_13C4_arg* arg0, void* arg1);
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
 void func_800008D0_14D0(func_80000C2C_182C_arg *arg0);
@@ -340,7 +352,11 @@ void func_80000760_1360(func_80000760_1360_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_800007C4_13C4);
+void func_800007C4_13C4(func_800007C4_13C4_arg* arg0, void* arg1) {
+    if (arg0->unk87 != 0) {
+        enqueueDisplayListObject(arg0->unk0->unk16, arg1);
+    }
+}
 
 void func_800007F0_13F0(func_80000C2C_182C_arg *arg0) {
     D_800891A8_89DA8_entry *temp_s0 = &D_800891A8_89DA8[arg0->unk0->unk84];
