@@ -338,7 +338,9 @@ void func_8006FEBC_70ABC(func_8006FEBC_70ABC_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FED8_70AD8);
+void func_8006FED8_70AD8(func_8006FEBC_70ABC_arg *arg0) {
+    arg0->unkB8 = (u8)(arg0->unkB8 | 0x2);
+}
 
 void func_8006FEE8_70AE8(func_8006FEBC_70ABC_arg *arg0) {
     arg0->unkB8 = (u8)(arg0->unkB8 & 0xFD);
