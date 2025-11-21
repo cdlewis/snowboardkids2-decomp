@@ -1,10 +1,11 @@
 #include "5EA60.h"
 #include "common.h"
 
-void *func_8005DE60_5EA60(void *);
 u16 *func_8005DE6C_5EA6C(void *base, s16 tableIndex, s16 subIndex);
 
-INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE60_5EA60);
+void *func_8005DE60_5EA60(void *arg0) {
+    return (void *)((s8 *)arg0 + *(s32 *)((s8 *)arg0 + 4));
+}
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DE6C_5EA6C);
 
