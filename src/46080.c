@@ -523,17 +523,28 @@ void func_8004B264_4BE64(func_8004B264_4BE64_arg* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B2A0_4BEA0);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B36C_4BF6C);
+typedef struct {
+    void* unk0;
+} func_8004B36C_4BF6C_arg;
+
+typedef struct {
+    void* unk0;
+} func_8004B758_4C358_arg;
+
+extern void func_8004B3B0_4BFB0(void);
+extern void func_8004B758_4C358(func_8004B758_4C358_arg*);
+
+void func_8004B36C_4BF6C(func_8004B36C_4BF6C_arg* arg0) {
+    arg0->unk0 = loadAssetByIndex_95470(9);
+    setCleanupCallback(&func_8004B758_4C358);
+    setCallbackWithContinue(&func_8004B3B0_4BFB0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B3B0_4BFB0);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B4CC_4C0CC);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B648_4C248);
-
-typedef struct {
-    void* unk0;
-} func_8004B758_4C358_arg;
 
 void func_8004B758_4C358(func_8004B758_4C358_arg* arg0) {
     u8* allocation;
