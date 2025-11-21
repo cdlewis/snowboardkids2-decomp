@@ -263,7 +263,21 @@ void func_80048834_49434(Struct_func_80048834_49434* arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80048860_49460);
+typedef struct {
+    u8 padding[0xA4];
+    void *unkA4;
+} Struct_func_80048860_49460_task;
+
+extern void func_80048310_48F10(void);
+
+void func_80048860_49460(Player *arg0) {
+    Struct_func_80048860_49460_task *task;
+
+    task = (Struct_func_80048860_49460_task *)scheduleTask(&func_80048310_48F10, 0, 0, 0xD4);
+    if (task != NULL) {
+        task->unkA4 = arg0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800488A0_494A0);
 
