@@ -3,7 +3,9 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_800084F0_90F0);
+s32 func_800084F0_90F0(void) {
+    return 10;
+}
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_800084F8_90F8);
 

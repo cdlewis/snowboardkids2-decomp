@@ -19,13 +19,13 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 - `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>`
 - `./tools/claude <function name>` spin up a decompilation environment for a given function.
-- `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory
+- `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
 
 ## Tasks
 
 ### Decompile directory to C code
 
-You may be given a directory containing assembly files.
+You may be given a directory containing assembly files either in its own directory or its subdirectories.
 
 1. Use the score_functions.py tool to find the easiest function. Start with this one.
 2. Follow the instructions in the `Decompile assembly to C code` of this document.
@@ -71,7 +71,7 @@ Example: If you added `extern void setCallback(void *);` but `task_scheduler.h` 
 2. **ALWAYS verify the complete build** by running:
 
    ```
-   make clean && make extract && make
+   make clean && make extract && make -j1
    shasum -c snowboardkids2.sha1
    ```
 

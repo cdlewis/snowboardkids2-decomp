@@ -78,8 +78,11 @@ def analyze_function(file_path: str) -> FunctionScore:
     # Jump table pattern (e.g., jtbl_8009E1D8_9EDD8)
     jumptable_pattern = r'^jtbl_[0-9A-Fa-f_]+$'
 
-    # Skip jump tables - return None to indicate this should be filtered
-    if re.match(jumptable_pattern, func_name):
+    # Data pattern (e.g., D_8009E48C_9F08C)
+    data_pattern = r'^D_[0-9A-Fa-f_]+$'
+
+    # Skip jump tables and data - return None to indicate this should be filtered
+    if re.match(jumptable_pattern, func_name) or re.match(data_pattern, func_name):
         return None
 
     score = FunctionScore(name=func_name, file_path=file_path)
@@ -126,14 +129,14 @@ def analyze_function(file_path: str) -> FunctionScore:
 
 
 def score_folder(folder_path: str) -> List[FunctionScore]:
-    """Score all assembly functions in a folder."""
+    """Score all assembly functions in a folder and its subdirectories."""
 
     if not os.path.isdir(folder_path):
         print(f"Error: '{folder_path}' is not a valid directory", file=sys.stderr)
         sys.exit(1)
 
-    # Find all .s files
-    asm_files = list(Path(folder_path).glob('*.s'))
+    # Find all .s files recursively
+    asm_files = list(Path(folder_path).glob('**/*.s'))
 
     if not asm_files:
         print(f"Error: No .s files found in '{folder_path}'", file=sys.stderr)
