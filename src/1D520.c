@@ -2,12 +2,17 @@
 #include "task_scheduler.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "6E840.h"
+#include "EepromSaveData_type.h"
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 
 extern void func_8001CD90_1D990(void);
 extern void func_8003B1F4_3BDF4(s32 arg0, void *arg1);
 extern void *func_8003B28C_3BE8C(void);
+extern u8 D_8008D9B0_8E5B0[8];
+
+void func_8001DE84_1EA84(void);
+void func_8001DEA0_1EAA0(void);
 
 void func_8001CD58_1D958(void) {
     void *allocation = getCurrentAllocation();
@@ -18,7 +23,42 @@ void func_8001CD58_1D958(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001CD90_1D990);
 
-INCLUDE_ASM("asm/nonmatchings/1D520", func_8001DD54_1E954);
+void func_8001DD54_1E954(void) {
+    u8 *allocation = (u8 *)getCurrentAllocation();
+    s32 i;
+
+    if (func_8006FE10_70A10(0) != 0) {
+        return;
+    }
+
+    unlinkNode((Node_70B00 *)allocation);
+
+    *(u32 *)&allocation[0xAA8] = (u32)freeNodeMemory((void *)*(u32 *)&allocation[0xAA8]);
+    *(u32 *)&allocation[0xAAC] = (u32)freeNodeMemory((void *)*(u32 *)&allocation[0xAAC]);
+    *(u32 *)&allocation[0xAB0] = (u32)freeNodeMemory((void *)*(u32 *)&allocation[0xAB0]);
+    *(u32 *)&allocation[0xAB4] = (u32)freeNodeMemory((void *)*(u32 *)&allocation[0xAB4]);
+    *(u32 *)&allocation[0xAB8] = (u32)freeNodeMemory((void *)*(u32 *)&allocation[0xAB8]);
+
+    if (allocation[0xAC9] == 0) {
+        for (i = 0; i < 3; i++) {
+            unlinkNode((Node_70B00 *)&allocation[0x1D8 + (i * 0x1D8)]);
+        }
+
+        for (i = 0; i < 8; i++) {
+            EepromSaveData->header_data[i] = D_8008D9B0_8E5B0[i];
+        }
+    } else {
+        for (i = 0; i < 4; i++) {
+            unlinkNode((Node_70B00 *)&allocation[0x1D8 + (i * 0x1D8)]);
+        }
+    }
+
+    if (*(u16 *)&allocation[0xAC4] == 1) {
+        terminateSchedulerWithCallback(func_8001DE84_1EA84);
+    } else {
+        terminateSchedulerWithCallback(func_8001DEA0_1EAA0);
+    }
+}
 
 void func_8001DE84_1EA84(void) {
     func_800697F4_6A3F4(1);
