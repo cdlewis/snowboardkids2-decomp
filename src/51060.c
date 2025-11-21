@@ -70,11 +70,15 @@ typedef struct {
     s32 unk8;
 } func_80050604_51204_arg;
 
+typedef struct {
+    void *unk0;
+} func_80050864_51464_arg;
+
 void func_800504A0_510A0(func_800504A0_510A0_arg *);
 void func_800505D8_511D8(s32 **arg0);
 
 void func_80050740_51340(void);
-void func_80050864_51464(void);
+void func_80050864_51464(func_80050864_51464_arg *);
 void func_800509CC_515CC(void);
 void func_80050DB0_519B0(void);
 void func_80050EA0_51AA0(void **);
@@ -164,7 +168,9 @@ void func_800506B4_512B4(func_800506B4_512B4_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050740_51340);
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050864_51464);
+void func_80050864_51464(func_80050864_51464_arg *arg0) {
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050890_51490);
 
