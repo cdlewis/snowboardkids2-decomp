@@ -33,6 +33,12 @@ typedef struct {
     void* unk4;
 } func_800BC340_B0030_arg;
 
+typedef struct {
+    u8 _pad[0x24];
+    void* unk24;
+    void* unk28;
+} func_800BBC2C_AF91C_arg;
+
 extern void rotateVectorY(Vec3 *, s32, void *);
 extern void func_800BB45C_AF14C(void **);
 extern void func_800BB5B0_AF2A0(void);
@@ -108,7 +114,10 @@ INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB8E8_AF5D8);
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB9A4_AF694);
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBC2C_AF91C);
+void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBC64_AF954);
 
