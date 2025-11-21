@@ -145,7 +145,7 @@ void func_8002F5C8_301C8(void *);
 void func_8002F72C_3032C(void);
 void func_8002F980_30580(void);
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
-void func_8002FA44_30644(void);
+void func_8002FA44_30644(void *);
 void func_8002FA70_30670(func_8002FA70_30670_arg *);
 void func_8002FB40_30740(void);
 void func_8002FCA8_308A8(void);
@@ -156,6 +156,7 @@ void func_800308C4_314C4(void);
 void func_80030974_31574(void *);
 void func_800309D4_315D4(func_800308FC_314FC_arg *);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
+void func_80038420_39020(void);
 void func_8006FF90_70B90(s32, s32, void *, void *);
 void updateDebugCameraYState(cameraState *arg0);
 
@@ -327,7 +328,9 @@ void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
     setCallback(&func_8002FA44_30644);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FA44_30644);
+void func_8002FA44_30644(void* arg0) {
+    debugEnqueueCallback(1, 0, func_80038420_39020, arg0);
+}
 
 void func_8002FA70_30670(func_8002FA70_30670_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
