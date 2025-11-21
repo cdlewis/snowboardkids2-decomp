@@ -365,7 +365,7 @@ typedef struct {
     s16 unk14;
 } func_80049280_49E80_Task;
 
-void func_80049280_49E80(s16 arg0) {
+void func_80049280_49E80(s32 arg0) {
     func_80049280_49E80_Task *task = (func_80049280_49E80_Task *)scheduleTask(&func_80048E34_49A34, 0, 0, 0xEA);
     if (task != NULL) {
         task->unk14 = arg0;
@@ -410,7 +410,17 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049BFC_4A7FC);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049C38_4A838);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80049C70_4A870);
+void func_80049C70_4A870(s32 arg0) {
+    GameState* allocation;
+    u8 check;
+
+    allocation = (GameState*)getCurrentAllocation();
+    check = allocation->unk84;
+    if (check != 0) {
+        return;
+    }
+    func_80049280_49E80(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049CA8_4A8A8);
 

@@ -72,7 +72,9 @@ typedef struct {
     u8 unk7A;
     s8 unk7B;
     s8 unk7C;
-    u8 PAD_7[0x5D];
+    u8 PAD_7[0x7];
+    /* 0x84 */ u8 unk84;
+    u8 PAD_7B[0x55];
     u16 unkDA;
     u8 PAD_8[0xF9];
     /* 0x1D8 */ ALPlayer *audioPlayer2;
