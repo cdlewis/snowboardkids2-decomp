@@ -19,7 +19,19 @@ typedef struct {
 
 extern s32 gFrameCounter;
 extern void* freeNodeMemory(void*);
-void func_8004083C_4143C(void);
+extern void func_80040870_41470(void);
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    u8 _pad2[0x10];
+    s32 unk38;
+} func_8004083C_4143C_arg;
+
+typedef struct {
+    u8 _pad[0xBDE];
+    u8 unkBDE;
+} func_8004083C_4143C_struct24;
 
 typedef struct {
     void *unk0;
@@ -31,6 +43,7 @@ typedef struct {
     void* unk28;
 } func_80040D48_41948_arg;
 
+void func_8004083C_4143C(func_8004083C_4143C_arg *arg0);
 void func_80040948_41548(func_80040948_41548_arg *arg0);
 
 void func_800407E0_413E0(func_800407E0_413E0_arg *arg0) {
@@ -41,7 +54,15 @@ void func_800407E0_413E0(func_800407E0_413E0_arg *arg0) {
     setCallbackWithContinue(&func_8004083C_4143C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_8004083C_4143C);
+void func_8004083C_4143C(func_8004083C_4143C_arg *arg0) {
+    func_8004083C_4143C_struct24 *temp;
+
+    temp = (func_8004083C_4143C_struct24 *)arg0->unk24;
+    if (temp->unkBDE != 0) {
+        arg0->unk38 = 6;
+        setCallback(func_80040870_41470);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040870_41470);
 
