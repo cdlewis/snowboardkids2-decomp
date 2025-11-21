@@ -156,7 +156,7 @@ void func_8002FA70_30670(func_8002FA70_30670_arg *);
 void func_8002FB40_30740(void);
 void func_8002FCA8_308A8(func_8002FF28_30B28_arg* arg0);
 void func_80030238_30E38(void);
-void func_80030280_30E80(void);
+void func_80030280_30E80(func_8002FF28_30B28_arg* arg0);
 void func_80030764_31364(void);
 void func_800308C4_314C4(void);
 void func_80030974_31574(void *);
@@ -417,7 +417,9 @@ void func_800301C0_30DC0(func_800308FC_314FC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030238_30E38);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030280_30E80);
+void func_80030280_30E80(func_8002FF28_30B28_arg* arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 void func_800302AC_30EAC(func_800302AC_30EAC_arg *arg0) {
     void *asset2;
