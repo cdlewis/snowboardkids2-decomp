@@ -334,7 +334,12 @@ void func_8002F860_30460(DisplayListObject* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F88C_3048C);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F948_30548);
+void func_8002F948_30548(void) {
+    GameState *state = (GameState *)getCurrentAllocation();
+    if (state->unk5C5 != 2) {
+        setCallbackWithContinue(func_8002F72C_3032C);
+    }
+}
 
 void func_8002F980_30580(func_8002F658_30258_arg *arg0) {
     arg0->unk24 = (s32)freeNodeMemory((void *)arg0->unk24);
