@@ -464,7 +464,12 @@ void func_800677C0_683C0(s32 arg0, loadAssetMetadata_arg *arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800677F0_683F0);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80067EDC_68ADC);
+extern void func_800677F0_683F0(void);
+
+void func_80067EDC_68ADC(u16 arg0, loadAssetMetadata_arg *arg1) {
+    (arg1 + 1)->unk0 = 0;
+    debugEnqueueCallback(arg0, 6, &func_800677F0_683F0, arg1);
+}
 
 void loadAssetMetadata(loadAssetMetadata_arg *arg0, void *arg1, s32 arg2) {
     OutputStruct_19E80 result;
