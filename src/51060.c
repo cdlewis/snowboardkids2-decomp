@@ -89,7 +89,7 @@ void func_80051250_51E50(func_800506B4_512B4_arg *);
 void func_80051760_52360(void);
 void func_80051800_52400(func_800516F4_522F4_arg *);
 void func_800518AC_524AC(void);
-void func_80051B8C_5278C(void);
+void func_80051B8C_5278C(func_8005186C_5246C_arg *);
 
 extern loadAssetMetadata_arg D_80090EC0_91AC0;
 extern void* freeNodeMemory(void*);
@@ -280,7 +280,9 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_800518AC_524AC);
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80051978_52578);
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80051B8C_5278C);
+void func_80051B8C_5278C(func_8005186C_5246C_arg *arg0) {
+    arg0->unkC0 = freeNodeMemory(arg0->unkC0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80051BB8_527B8);
 
