@@ -163,7 +163,10 @@ INCLUDE_ASM("asm/nonmatchings/4A40", func_80004368_4F68);
 
 INCLUDE_ASM("asm/nonmatchings/4A40", func_80004454_5054);
 
-INCLUDE_ASM("asm/nonmatchings/4A40", func_8000454C_514C);
+void func_8000454C_514C(void) {
+    getCurrentAllocation();
+    func_800697F4_6A3F4(1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4A40", func_80004570_5170);
 
