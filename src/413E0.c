@@ -18,11 +18,18 @@ typedef struct {
 } func_80040E00_41A00_arg;
 
 extern s32 gFrameCounter;
+extern void* freeNodeMemory(void*);
 void func_8004083C_4143C(void);
 
 typedef struct {
     void *unk0;
 } func_80040948_41548_arg;
+
+typedef struct {
+    u8 _pad[0x24];
+    void* unk24;
+    void* unk28;
+} func_80040D48_41948_arg;
 
 void func_80040948_41548(func_80040948_41548_arg *arg0);
 
@@ -53,7 +60,10 @@ INCLUDE_ASM("asm/nonmatchings/413E0", func_800409B4_415B4);
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040B4C_4174C);
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80040D48_41948);
+void func_80040D48_41948(func_80040D48_41948_arg* arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+}
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040D80_41980);
 
