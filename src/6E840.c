@@ -344,7 +344,9 @@ void func_8006FEE8_70AE8(func_8006FEBC_70ABC_arg *arg0) {
     arg0->unkB8 = (u8)(arg0->unkB8 & 0xFD);
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FEF8_70AF8);
+void func_8006FEF8_70AF8(Node_70B00 *arg0, u16 arg1) {
+    arg0->id = arg1;
+}
 
 void unlinkNode(Node_70B00 *node) {
     Node_70B00 *current;

@@ -85,7 +85,7 @@ void func_8006E054_6EC54(u16);
 
 void func_8006DC40_6E840(void);
 
-void func_8006FEF8_70AF8(void *, s32);
+void func_8006FEF8_70AF8(Node_70B00 *, u16);
 
 void func_8006FD3C_7093C(u16, void *);
 
