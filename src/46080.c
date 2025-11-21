@@ -410,7 +410,17 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004B4CC_4C0CC);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B648_4C248);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B758_4C358);
+typedef struct {
+    void* unk0;
+} func_8004B758_4C358_arg;
+
+void func_8004B758_4C358(func_8004B758_4C358_arg* arg0) {
+    u8* allocation;
+
+    allocation = (u8*)getCurrentAllocation();
+    allocation[0x5B]++;
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B794_4C394);
 
