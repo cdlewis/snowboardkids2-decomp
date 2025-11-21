@@ -19,7 +19,12 @@ typedef struct {
 
 extern s32 gFrameCounter;
 void func_8004083C_4143C(void);
-void func_80040948_41548(void);
+
+typedef struct {
+    void *unk0;
+} func_80040948_41548_arg;
+
+void func_80040948_41548(func_80040948_41548_arg *arg0);
 
 void func_800407E0_413E0(func_800407E0_413E0_arg *arg0) {
     GameState *temp_s0 = (GameState *)getCurrentAllocation();
@@ -33,7 +38,9 @@ INCLUDE_ASM("asm/nonmatchings/413E0", func_8004083C_4143C);
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040870_41470);
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80040948_41548);
+void func_80040948_41548(func_80040948_41548_arg *arg0) {
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+}
 
 void func_80040974_41574(void *arg0) {
     Node *temp_v0 = scheduleTask(&func_800407E0_413E0, 0U, 0U, 0xF0U);
