@@ -67,7 +67,8 @@ typedef struct {
     /* 0x030 */ f32 freqoffset;
     /* 0x034 */ u8 *ppitchbend;
     /* 0x038 */ u8 *pvolume;
-    u8 padding03[0x8];
+    u8 padding03[0x4];
+    /* 0x040 */ s32 unk40;
     /* 0x044 */ s32 handle;
     /* 0x048 */ s32 priority;
     /* 0x04C */ f32 last_note;
@@ -87,7 +88,7 @@ typedef struct {
     /* 0x084 */ u8 *ppitchbendbase;
     /* 0x088 */ u8 *pvolumebase;
     /* 0x08C */ f32 distort;
-    u8 padding05[0x4];
+    /* 0x090 */ s32 unk90;
     /* 0x094 */ s16 temscale;
     s16 unk96;
     /* 0x098 */ s16 channel_tempo;
@@ -135,7 +136,8 @@ typedef struct {
     /* 0x0D2 */ u8 env_trigger_off;
     /* 0x0D3 */ u8 trigger_off;
     /* 0x0D4 */ s8 wobble_amount;
-    u8 padding15[0x2];
+    /* 0x0D5 */ u8 unkD5;
+    /* 0x0D6 */ u8 unkD6;
     /* 0x0D7 */ u8 for_stack_count;
     /* 0x0D8 */ f32 vib_precalc;
     /* 0x0DC */ u8 *for_stack[FORNEXT_DEPTH];
@@ -870,13 +872,13 @@ INCLUDE_ASM("asm/nonmatchings/player", func_80073A3C_7463C);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073AA4_746A4);
 
-void func_80073C98_74898(void *arg0) {
-    s32 temp = ((s32 *)arg0)[0x40 / 4];
-    u8 val = ((u8 *)arg0)[0xB9];
+void func_80073C98_74898(channel_t *cp) {
+    s32 temp = cp->unk40;
+    u8 val = cp->pan;
 
-    ((u8 *)arg0)[0xD5] = 0;
-    ((s32 *)arg0)[0x90 / 4] = temp;
-    ((u8 *)arg0)[0xD6] = val & 0x40;
+    cp->unkD5 = 0;
+    cp->unk90 = temp;
+    cp->unkD6 = val & 0x40;
 }
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073CB4_748B4);
