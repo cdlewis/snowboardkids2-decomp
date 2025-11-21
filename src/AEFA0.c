@@ -123,7 +123,11 @@ INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBF4C_AFC3C);
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBFC8_AFCB8);
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC0D0_AFDC0);
+extern void *freeNodeMemory(void *);
+
+void func_800BC0D0_AFDC0(void **arg0) {
+    *arg0 = freeNodeMemory(*arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC0FC);
 
