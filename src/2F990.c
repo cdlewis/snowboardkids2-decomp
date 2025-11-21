@@ -135,6 +135,13 @@ typedef struct {
     void* unk4;
 } func_8002FF28_30B28_arg;
 
+typedef struct {
+    u8 _pad[0x4];
+    void* unk4;
+    u8 _pad2[0x30];
+    void* unk38;
+} func_80030B70_31770_arg;
+
 extern void func_8000FED0_10AD0(void);
 extern void* freeNodeMemory(void*);
 extern s32 gButtonsPressed[];
@@ -526,7 +533,10 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_80030A00_31600);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030AEC_316EC);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030B70_31770);
+void func_80030B70_31770(func_80030B70_31770_arg *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    arg0->unk38 = freeNodeMemory(arg0->unk38);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030BA8_317A8);
 
