@@ -4,6 +4,7 @@
 #include "geometry.h"
 #include "overlay.h"
 #include "task_scheduler.h"
+#include "19E80.h"
 
 USE_ASSET(_49B500);
 USE_ASSET(_646CD0);
@@ -16,9 +17,7 @@ typedef struct {
 typedef struct {
     SceneModel *unk0;
     void *unk4;
-    s32 unk8;
-    s32 unkC;
-    u8 padding[0x4];
+    OutputStruct_19E80 unk8;
     s32 unk14;
     u8 padding2[0x1C];
     s32 unk34;
@@ -41,7 +40,8 @@ typedef struct {
     s32 unk38;
 } func_80007560_8160_arg;
 
-void func_80007958_8558(void);
+void func_80007958_8558(func_800078C4_84C4_arg *);
+void func_8000799C_859C(func_800078C4_84C4_arg *);
 void func_80007ABC_86BC(func_800078C4_84C4_arg *);
 void func_800073E0_7FE0(void);
 void func_80007558_8158(void);
@@ -208,7 +208,11 @@ void func_800078C4_84C4(func_800078C4_84C4_arg *arg0) {
     setCallback(&func_80007958_8558);
 }
 
-INCLUDE_ASM("asm/nonmatchings/7F80", func_80007958_8558);
+void func_80007958_8558(func_800078C4_84C4_arg *arg0) {
+    getTableEntryByU16Index(arg0->unk4, arg0->unk40 != 0, &arg0->unk8);
+    arg0->unk3C = 0;
+    setCallback(&func_8000799C_859C);
+}
 
 void func_8000799C_859C(func_800078C4_84C4_arg *arg0) {
     u8 sp10[0x20];
