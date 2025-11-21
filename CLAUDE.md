@@ -23,7 +23,7 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 ## Code Quality Standards
 
-### Struct Usage - CRITICAL
+### Struct Usage
 
 **NEVER use pointer arithmetic with manual offsets.** Always define and use proper structs.
 
@@ -110,7 +110,7 @@ Use the tools in this directory to match the function.
 
 Once you have a matching function, update the C code to use it. The C code will be importing an assembly file, something along the lines of `INCLUDE_ASM/asm/nonmatchings/<function name>`. Replace this with the actual C code.
 
-If the function is defined in a header file (located in include/), this will also need to be updated.
+If the function is defined in a header file (located in include/), this will also need to be updated. These other usages may teach you about the correct type of your function arguments or return types. DO NOT JUST MAKE EVERYTHING void*!.
 
 Update the rest of the project to fix any build issues.
 
