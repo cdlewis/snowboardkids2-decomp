@@ -295,7 +295,11 @@ void func_8002F5C8_301C8(void *untypedArg) {
     enqueueDisplayListObject(0, arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F614_30214);
+void func_8002F614_30214(func_8002F658_30258_arg *arg0) {
+    arg0->unk24 = (s32)freeNodeMemory((void *)arg0->unk24);
+    arg0->unk28 = (s32)freeNodeMemory((void *)arg0->unk28);
+    arg0->unk2C = (s32)freeNodeMemory((void *)arg0->unk2C);
+}
 
 void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     Mat3x3Padded sp10;
