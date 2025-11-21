@@ -112,7 +112,7 @@ void func_800BBCE8_AF9D8(void **arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBD14_AFA04);
 
-void func_800BBE84_AFB74(s16* arg0) {
+void func_800BBE84_AFB74(s16 *arg0) {
     *arg0 = 0xB4;
     setCallback(func_800BBEAC_AFB9C);
 }
@@ -122,8 +122,6 @@ INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBEAC_AFB9C);
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBF4C_AFC3C);
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBFC8_AFCB8);
-
-extern void *freeNodeMemory(void *);
 
 void func_800BC0D0_AFDC0(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
