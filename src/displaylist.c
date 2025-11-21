@@ -116,7 +116,9 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80061D6C_6296C);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800620D0_62CD0);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062254_62E54);
+s16 func_80062254_62E54(void* arg0, u16 arg1) {
+    return *(s16*)((u8*)*(void**)((u8*)arg0 + 0xC) + arg1 * 36 + 0xA);
+}
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);
 
