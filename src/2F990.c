@@ -166,7 +166,7 @@ void func_8002FCA8_308A8(func_8002FF28_30B28_arg* arg0);
 void func_80030238_30E38(void);
 void func_80030280_30E80(func_8002FF28_30B28_arg* arg0);
 void func_80030764_31364(void);
-void func_800308C4_314C4(void);
+void func_800308C4_314C4(Struct_80030694 *arg0);
 void func_80030974_31574(void *);
 void func_800309D4_315D4(func_800308FC_314FC_arg *);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
@@ -501,7 +501,10 @@ void func_80030694_31294(Struct_80030694 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030764_31364);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_800308C4_314C4);
+void func_800308C4_314C4(Struct_80030694 *arg0) {
+    arg0->unk00 = freeNodeMemory(arg0->unk00);
+    arg0->unk08 = freeNodeMemory(arg0->unk08);
+}
 
 void func_800308FC_314FC(func_800308FC_314FC_arg *arg0) {
     void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
