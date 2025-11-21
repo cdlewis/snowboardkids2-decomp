@@ -23,7 +23,6 @@ typedef struct {
 extern void func_8004BCFC_4C8FC(void *);
 extern void func_8004C0D0_4CCD0(void *);
 extern void func_8004AF2C_4BB2C(void *);
-extern void func_8004B264_4BE64(void *);
 extern void* freeNodeMemory(void*);
 
 extern s32 D_3F3EF0;
@@ -41,6 +40,12 @@ typedef struct {
 } Struct_func_80049404_4A004;
 
 void func_80049404_4A004(Struct_func_80049404_4A004* arg0);
+
+typedef struct {
+    void* unk0;
+} func_8004B264_4BE64_arg;
+
+void func_8004B264_4BE64(func_8004B264_4BE64_arg* arg0);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80045480_46080);
 
@@ -382,7 +387,13 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004AFF8_4BBF8);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B130_4BD30);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B264_4BE64);
+void func_8004B264_4BE64(func_8004B264_4BE64_arg* arg0) {
+    u8* allocation;
+
+    allocation = (u8*)getCurrentAllocation();
+    allocation[0x5B]++;
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B2A0_4BEA0);
 
