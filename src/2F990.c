@@ -157,7 +157,7 @@ void func_8002F290_2FE90(void);
 void func_8002F5C8_301C8(void *);
 void func_8002F72C_3032C(void);
 void func_8002F88C_3048C(void);
-void func_8002F980_30580(void);
+void func_8002F980_30580(func_8002F658_30258_arg *);
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 void func_8002FA44_30644(void *);
 void func_8002FA70_30670(func_8002FA70_30670_arg *);
@@ -332,7 +332,11 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F88C_3048C);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F948_30548);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F980_30580);
+void func_8002F980_30580(func_8002F658_30258_arg *arg0) {
+    arg0->unk24 = (s32)freeNodeMemory((void *)arg0->unk24);
+    arg0->unk28 = (s32)freeNodeMemory((void *)arg0->unk28);
+    arg0->unk2C = (s32)freeNodeMemory((void *)arg0->unk2C);
+}
 
 void func_8002F9C4_305C4(func_8002FA70_30670_arg *arg0) {
     arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_42F1D0_ROM_START, &_42F1D0_ROM_END, 0x14410);
