@@ -397,7 +397,9 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FF54_30B54);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8003006C_30C6C);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030194_30D94);
+void func_80030194_30D94(func_8002FF28_30B28_arg* arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 void func_800301C0_30DC0(func_800308FC_314FC_arg *arg0) {
     void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
