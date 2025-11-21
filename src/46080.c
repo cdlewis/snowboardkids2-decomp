@@ -72,7 +72,19 @@ void func_80045768_46368(func_80045768_46368_arg* arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800457A0_463A0);
+extern void func_80045480_46080(void);
+
+typedef struct {
+    u8 _pad[0xB4];
+    s16 unkB4;
+} ScheduledTask;
+
+void func_800457A0_463A0(s16 arg0) {
+    ScheduledTask *task = scheduleTask(func_80045480_46080, 0, 0, 0xD2);
+    if (task != NULL) {
+        task->unkB4 = arg0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800457E0_463E0);
 
