@@ -307,7 +307,7 @@ void func_8006FDA0_709A0(Node_70B00 *arg0, u8 arg1, u8 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FDC8_709C8);
 
-u8 func_8006FE10_70A10(Node_70B00 *arg0) {
+s32 func_8006FE10_70A10(Node_70B00 *arg0) {
     if (arg0 == NULL) {
         arg0 = &D_800A3370_A3F70;
     }
