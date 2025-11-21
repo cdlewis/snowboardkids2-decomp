@@ -832,7 +832,19 @@ void MusHandlePause(s32 arg0) {
     func_80073058_73C58(&locals.byte_at_10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", MusHandleUnPause);
+void MusHandleUnPause(musHandle arg0) {
+    struct {
+        u8 byte_at_10;
+        u8 pad[3];
+        musHandle word_at_14;
+    } locals;
+    volatile musHandle* prevent_opt;
+
+    prevent_opt = &locals.word_at_14;
+    *prevent_opt = arg0;
+    locals.byte_at_10 = 1;
+    func_80073058_73C58(&locals.byte_at_10);
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", MusSetFxType);
 
