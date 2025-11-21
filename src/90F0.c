@@ -90,7 +90,14 @@ INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A030_AC30);
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A13C_AD3C);
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A190_AD90);
+extern void func_8000A1E4_ADE4(s32, s32, s32, s32, s32, s32, s32, s16, u8, u8);
+
+void func_8000A190_AD90(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8, u8 arg9) {
+    s32 pad[2];
+
+    pad[0] = 0;
+    func_8000A1E4_ADE4(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+}
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A1E4_ADE4);
 
