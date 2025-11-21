@@ -236,7 +236,19 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80047A64_48664);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80047AA8_486A8);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80047E7C_48A7C);
+extern void func_80047750_48350(void);
+
+typedef struct {
+    u8 _pad[0x14];
+    s16 unk14;
+} func_80047E7C_48A7C_ScheduledTask;
+
+void func_80047E7C_48A7C(s16 arg0) {
+    func_80047E7C_48A7C_ScheduledTask *result = scheduleTask(func_80047750_48350, 0, 0, 0xD3);
+    if (result != NULL) {
+        result->unk14 = arg0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80047EBC_48ABC);
 
