@@ -149,7 +149,7 @@ extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];
 
 void func_80030378_30F78(void);
-void func_80030480_31080(void);
+void func_80030480_31080(func_800302AC_30EAC_arg* arg0);
 void func_8002EFD8_2FBD8(void *);
 void func_8002F024_2FC24(void);
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
@@ -457,7 +457,10 @@ void func_800302AC_30EAC(func_800302AC_30EAC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030378_30F78);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030480_31080);
+void func_80030480_31080(func_800302AC_30EAC_arg* arg0) {
+    arg0->items[0].unk4 = freeNodeMemory(arg0->items[0].unk4);
+    arg0->unk58 = freeNodeMemory(arg0->unk58);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_800304B8_310B8);
 
