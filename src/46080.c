@@ -284,7 +284,21 @@ void func_800482D0_48ED0(void *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80048310_48F10);
+typedef struct {
+    void* unk0;
+} Struct_func_80048834_49434;
+
+extern void *loadAsset_34CB50(void);
+extern void setCleanupCallback(void *);
+extern void setCallbackWithContinue(void *);
+extern void func_80048350_48F50(void);
+extern void func_80048834_49434(Struct_func_80048834_49434* arg0);
+
+void func_80048310_48F10(Struct_func_80048834_49434 *arg0) {
+    arg0->unk0 = loadAsset_34CB50();
+    setCleanupCallback(&func_80048834_49434);
+    setCallbackWithContinue(&func_80048350_48F50);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048350_48F50);
 
@@ -294,10 +308,6 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80048540_49140);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048720_49320);
 
-typedef struct {
-    void* unk0;
-} Struct_func_80048834_49434;
-
 void func_80048834_49434(Struct_func_80048834_49434* arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
@@ -306,8 +316,6 @@ typedef struct {
     u8 padding[0xA4];
     void *unkA4;
 } Struct_func_80048860_49460_task;
-
-extern void func_80048310_48F10(void);
 
 void func_80048860_49460(Player *arg0) {
     Struct_func_80048860_49460_task *task;
