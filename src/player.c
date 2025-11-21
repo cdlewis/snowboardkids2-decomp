@@ -193,7 +193,7 @@ void MusHandleUnPause(musHandle);
 s32 func_800744EC_750EC(song_t *, s32);
 void MusPtrBankInitialize(u8 *, u8 *);
 void __MusIntFifoOpen(s32);
-void __MusIntMemSet(u8 *, s32, s32);
+void __MusIntMemSet(void *, unsigned char, int);
 u32 func_800725F4_731F4(s32, u8, u8, u8, s32);
 u8 __MusIntRandom(u8);
 
@@ -1045,7 +1045,14 @@ void __MusIntInitialiseChannel(channel_t *cp) {
 
 INCLUDE_ASM("asm/nonmatchings/player", func_800744EC_750EC);
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntMemSet);
+void __MusIntMemSet(void *dest, unsigned char value, int length) {
+    unsigned char *a;
+
+    a = dest;
+    while (length--) {
+        *a++ = value;
+    }
+}
 
 void __MusIntMemMove(u8 *arg0, u8 *arg1, s32 arg2) {
     while (--arg2 != -1) {
