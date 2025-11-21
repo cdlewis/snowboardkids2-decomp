@@ -59,6 +59,7 @@ extern void func_800659E4_665E4(void);
 extern void func_80065DD8_669D8(void);
 extern void func_80066474_67074(void);
 extern void func_800670D4_67CD4(void);
+extern void func_80014480_15080(void);
 extern void func_800680C4_68CC4(void);
 extern void guLookAtReflect(
     Mtx *m,
@@ -510,4 +511,6 @@ void func_80068090_68C90(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800680C4_68CC4);
+void func_800680C4_68CC4(void) {
+    func_800693C4_69FC4(&func_80014480_15080, 0xC8);
+}
