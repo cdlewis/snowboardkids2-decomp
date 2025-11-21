@@ -23,6 +23,7 @@ typedef struct {
 extern void func_8004BCFC_4C8FC(void *);
 extern void func_8004AF2C_4BB2C(void *);
 extern void* freeNodeMemory(void*);
+extern void func_80048E34_49A34(void);
 
 typedef struct {
     void* unk0;
@@ -321,7 +322,17 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_800491CC_49DCC);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049230_49E30);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80049280_49E80);
+typedef struct {
+    u8 _pad[0x14];
+    s16 unk14;
+} func_80049280_49E80_Task;
+
+void func_80049280_49E80(s16 arg0) {
+    func_80049280_49E80_Task *task = (func_80049280_49E80_Task *)scheduleTask(&func_80048E34_49A34, 0, 0, 0xEA);
+    if (task != NULL) {
+        task->unk14 = arg0;
+    }
+}
 
 void func_800492C0_49EC0(void **arg0) {
     *arg0 = load_3ECE40();
