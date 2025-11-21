@@ -26,6 +26,7 @@ extern void func_8004AF2C_4BB2C(void *);
 extern void* freeNodeMemory(void*);
 extern void func_80048E34_49A34(void);
 extern void func_800462D8_46ED8(void);
+extern void func_8004B834_4C434(void);
 
 typedef struct {
     void* unk0;
@@ -523,17 +524,23 @@ void func_8004B758_4C358(func_8004B758_4C358_arg* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B794_4C394);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B7F4_4C3F4);
+typedef struct {
+    void* unk0;
+} func_8004BC20_4C820_arg;
+
+void func_8004BC20_4C820(func_8004BC20_4C820_arg* arg0);
+
+void func_8004B7F4_4C3F4(MemoryAllocatorNode **arg0) {
+    *arg0 = load_3ECE40();
+    setCleanupCallback(&func_8004BC20_4C820);
+    setCallbackWithContinue(&func_8004B834_4C434);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B834_4C434);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B990_4C590);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004BB0C_4C70C);
-
-typedef struct {
-    void* unk0;
-} func_8004BC20_4C820_arg;
 
 void func_8004BC20_4C820(func_8004BC20_4C820_arg* arg0) {
     u8* allocation = (u8*)getCurrentAllocation();
