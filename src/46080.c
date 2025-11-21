@@ -32,7 +32,12 @@ void func_8004A634_4B234(void *);
 void func_8004A96C_4B56C(s32 **);
 extern void func_8004AA90_4B690(void *);
 extern void func_80049300_49F00(void *);
-extern void func_80049404_4A004(void *);
+
+typedef struct {
+    void* unk0;
+} Struct_func_80049404_4A004;
+
+void func_80049404_4A004(Struct_func_80049404_4A004* arg0);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80045480_46080);
 
@@ -196,7 +201,9 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80049300_49F00);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004934C_49F4C);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80049404_4A004);
+void func_80049404_4A004(Struct_func_80049404_4A004* arg0) {
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049430_4A030);
 
