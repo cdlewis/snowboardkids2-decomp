@@ -20,9 +20,16 @@ INCLUDE_ASM("asm/nonmatchings/90F0", func_80008D18_9918);
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80009548_A148);
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_80009D58_A958);
-
+extern void func_80008514_9114(void *);
 extern void func_80008D18_9918(void);
+
+void func_80009D58_A958(u16 arg0, Node *arg1) {
+    arg1->unk18 = NULL;
+    arg1->unk1C = NULL;
+    arg1->callback = NULL;
+    arg1->cleanupCallback = NULL;
+    debugEnqueueCallback(arg0, 4, &func_80008514_9114, arg1);
+}
 
 void func_80009D94_A994(u16 arg0, Node *arg1) {
     arg1->unk18 = NULL;
