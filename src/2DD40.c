@@ -25,7 +25,9 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002E8B4_2F4B4);
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002EBB0_2F7B0);
 
-INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002ED30_2F930);
+s32 func_8002ED30_2F930(void) {
+    return D_800AFE8C_A71FC->padding;
+}
 
 void func_8002ED40_2F940(s32 a0) {
     s32 new_var = 0x98967F;
