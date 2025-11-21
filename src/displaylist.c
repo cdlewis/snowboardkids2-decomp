@@ -261,7 +261,17 @@ void func_80063534_64134(s32 arg0) {
     gRegionAllocPtr = dl + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063580_64180);
+void func_80063580_64180(s32 arg0) {
+    DisplayListObject *obj = (DisplayListObject *)arg0;
+    Gfx *dl;
+
+    setupDisplayListMatrix(obj);
+
+    dl = gRegionAllocPtr;
+    dl->words.w0 = 0xDE000000;
+    dl->words.w1 = (u32)obj->unk20->overlayDisplayList;
+    gRegionAllocPtr = dl + 1;
+}
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
