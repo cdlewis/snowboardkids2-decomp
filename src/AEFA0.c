@@ -40,11 +40,14 @@ typedef struct {
 } func_800BBC2C_AF91C_arg;
 
 extern void rotateVectorY(Vec3 *, s32, void *);
+extern void *func_80055D7C_5697C(s32);
 extern void func_800BB45C_AF14C(void **);
 extern void func_800BB5B0_AF2A0(void);
 extern void func_800BB778_AF468(void);
 extern void func_800BBEAC_AFB9C(void);
 extern void func_800BBF4C_AFC3C(void);
+extern void func_800BC184_AFE74(void);
+extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
 extern void func_800BC750_B0440(void);
 extern void* freeNodeMemory(void*);
 
@@ -155,7 +158,12 @@ void func_800BC0FC(s16 arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC13C_AFE2C);
+void func_800BC13C_AFE2C(func_800BC340_B0030_arg *arg0) {
+    arg0->unk4 = func_80055D7C_5697C(9);
+    arg0->unk0 = 0;
+    setCleanupCallback(func_800BC340_B0030);
+    setCallback(func_800BC184_AFE74);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC184_AFE74);
 
