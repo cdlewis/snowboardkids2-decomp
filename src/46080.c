@@ -243,7 +243,21 @@ void func_800482A4_48EA4(Struct_func_800482A4_48EA4* arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800482D0_48ED0);
+typedef struct {
+    u8 padding[0x64];
+    void *unk64;
+} Struct_func_800482D0_48ED0_task;
+
+extern void func_80047EBC_48ABC(void);
+
+void func_800482D0_48ED0(void *arg0) {
+    Struct_func_800482D0_48ED0_task *task;
+
+    task = (Struct_func_800482D0_48ED0_task *)scheduleTask(func_80047EBC_48ABC, 0, 0, 0xD4);
+    if (task != NULL) {
+        task->unk64 = arg0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048310_48F10);
 
