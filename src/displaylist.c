@@ -159,7 +159,10 @@ void func_8006300C_63C0C(DisplayListObject *arg0) {
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063058_63C58);
+void func_80063058_63C58(DisplayListObject *arg0) {
+    func_80062CF0_638F0();
+    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
+}
 
 void func_800630A4_63CA4(DisplayListObject *arg0) {
     func_80062CF0_638F0();
