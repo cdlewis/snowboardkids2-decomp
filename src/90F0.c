@@ -71,4 +71,8 @@ INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A190_AD90);
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A1E4_ADE4);
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A410_B010);
+u16 func_8000A410_B010(func_8000A410_B010_arg *arg0) {
+    OutputStruct_19E80 output;
+    getTableEntryByU16Index(arg0->table, arg0->index, &output);
+    return output.field1;
+}
