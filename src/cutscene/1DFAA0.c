@@ -128,7 +128,7 @@ s32 processCutsceneFrame(CutsceneManager *uiManager) {
     u8 tempByte;
 
     if (uiManager->showDebugInfo) {
-        sprintf(uiManager->debugText, D_800BAE00_1E7EB0, uiManager->currentFrame);
+        sprintf((char *)uiManager->debugText, (const char *)D_800BAE00_1E7EB0, uiManager->currentFrame);
         debugEnqueueCallback(uiManager->uiResource->slot_index, 6, &renderTextPalette, &uiManager->textRenderer);
     }
 

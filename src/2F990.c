@@ -132,24 +132,24 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x4];
-    void* unk4;
+    void *unk4;
 } func_8002FF28_30B28_arg;
 
 typedef struct {
     u8 _pad[0x4];
-    void* unk4;
+    void *unk4;
     u8 _pad2[0x30];
-    void* unk38;
+    void *unk38;
 } func_80030B70_31770_arg;
 
 extern void func_8000FED0_10AD0(void);
-extern void* freeNodeMemory(void*);
+extern void *freeNodeMemory(void *);
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];
 
 void func_80030378_30F78(void);
-void func_80030480_31080(func_800302AC_30EAC_arg* arg0);
+void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
 void func_8002EFD8_2FBD8(void *);
 void func_8002F024_2FC24(void);
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
@@ -162,9 +162,9 @@ void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 void func_8002FA44_30644(void *);
 void func_8002FA70_30670(func_8002FA70_30670_arg *);
 void func_8002FB40_30740(void);
-void func_8002FCA8_308A8(func_8002FF28_30B28_arg* arg0);
+void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0);
 void func_80030238_30E38(void);
-void func_80030280_30E80(func_8002FF28_30B28_arg* arg0);
+void func_80030280_30E80(func_8002FF28_30B28_arg *arg0);
 void func_80030764_31364(void);
 void func_800308C4_314C4(Struct_80030694 *arg0);
 void func_80030974_31574(void *);
@@ -327,7 +327,7 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F72C_3032C);
 
-void func_8002F860_30460(DisplayListObject* arg0) {
+void func_8002F860_30460(DisplayListObject *arg0) {
     enqueueDisplayListObject(0, arg0);
     setCallback(func_8002F88C_3048C);
 }
@@ -358,7 +358,7 @@ void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
     setCallback(&func_8002FA44_30644);
 }
 
-void func_8002FA44_30644(void* arg0) {
+void func_8002FA44_30644(void *arg0) {
     debugEnqueueCallback(1, 0, func_80038420_39020, arg0);
 }
 
@@ -406,7 +406,7 @@ void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FB40_30740);
 
-void func_8002FCA8_308A8(func_8002FF28_30B28_arg* arg0) {
+void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
@@ -414,7 +414,7 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FCD4_308D4);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FDFC_309FC);
 
-void func_8002FF28_30B28(func_8002FF28_30B28_arg* arg0) {
+void func_8002FF28_30B28(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
@@ -422,7 +422,7 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FF54_30B54);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8003006C_30C6C);
 
-void func_80030194_30D94(func_8002FF28_30B28_arg* arg0) {
+void func_80030194_30D94(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
@@ -441,7 +441,7 @@ void func_800301C0_30DC0(func_800308FC_314FC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030238_30E38);
 
-void func_80030280_30E80(func_8002FF28_30B28_arg* arg0) {
+void func_80030280_30E80(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
@@ -470,7 +470,7 @@ void func_800302AC_30EAC(func_800302AC_30EAC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030378_30F78);
 
-void func_80030480_31080(func_800302AC_30EAC_arg* arg0) {
+void func_80030480_31080(func_800302AC_30EAC_arg *arg0) {
     arg0->items[0].unk4 = freeNodeMemory(arg0->items[0].unk4);
     arg0->unk58 = freeNodeMemory(arg0->unk58);
 }

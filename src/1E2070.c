@@ -39,7 +39,7 @@ typedef struct {
     DataTable_19E80 *unk4;
     loadAssetMetadataByIndex_arg assetMetadata;
     s32 unk24;
-    s32 unk28;
+    loadAssetMetadata_arg *unk28;
     s32 unk2C;
     s32 unk30;
     s32 unk34;

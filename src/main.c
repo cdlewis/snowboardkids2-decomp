@@ -110,16 +110,18 @@ extern D_800891A8_89DA8_entry D_800891A8_89DA8[];
 
 typedef struct {
     struct {
-        struct {
-            u8 padding[0x14];
-            s16 unk14;
-            u16 unk16;
-        } *ptr;
-        u8 padding2[0x80];
-        s16 unk84;
-        s8 unk86;
-        s8 unk87;
-    } *unk0;
+        u8 padding[0x14];
+        s16 unk14;
+        u16 unk16;
+    } *ptr;
+    u8 padding2[0x80];
+    s16 unk84;
+    s8 unk86;
+    s8 unk87;
+} func_80000C2C_182C_arg_unk0;
+
+typedef struct {
+    func_80000C2C_182C_arg_unk0 *unk0;
     s8 unk4;
     s8 unk5;
     Mat3x3Padded unk8;
@@ -190,13 +192,7 @@ typedef struct {
     u16 unk16;
 } func_800007C4_13C4_SubStruct;
 
-typedef struct {
-    func_800007C4_13C4_SubStruct* unk0;
-    u8 _pad[0x83];
-    s8 unk87;
-} func_800007C4_13C4_arg;
-
-void func_800007C4_13C4(func_800007C4_13C4_arg* arg0, void* arg1);
+void func_800007C4_13C4(func_80000C2C_182C_arg_unk0 *arg0, void *arg1);
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
 void func_800008D0_14D0(func_80000C2C_182C_arg *arg0);
@@ -352,9 +348,9 @@ void func_80000760_1360(func_80000760_1360_arg *arg0) {
     }
 }
 
-void func_800007C4_13C4(func_800007C4_13C4_arg* arg0, void* arg1) {
+void func_800007C4_13C4(func_80000C2C_182C_arg_unk0 *arg0, void *arg1) {
     if (arg0->unk87 != 0) {
-        enqueueDisplayListObject(arg0->unk0->unk16, arg1);
+        enqueueDisplayListObject(arg0->ptr->unk16, arg1);
     }
 }
 
