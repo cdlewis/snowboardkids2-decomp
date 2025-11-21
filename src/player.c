@@ -870,7 +870,14 @@ INCLUDE_ASM("asm/nonmatchings/player", func_80073A3C_7463C);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073AA4_746A4);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073C98_74898);
+void func_80073C98_74898(void *arg0) {
+    s32 temp = ((s32 *)arg0)[0x40 / 4];
+    u8 val = ((u8 *)arg0)[0xB9];
+
+    ((u8 *)arg0)[0xD5] = 0;
+    ((s32 *)arg0)[0x90 / 4] = temp;
+    ((u8 *)arg0)[0xD6] = val & 0x40;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073CB4_748B4);
 
