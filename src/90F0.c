@@ -3,11 +3,15 @@
 #include "common.h"
 #include "task_scheduler.h"
 
+extern s16 D_8008C930_8D530[][10];
+
 s32 func_800084F0_90F0(void) {
     return 10;
 }
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_800084F8_90F8);
+s16 func_800084F8_90F8(s32 arg0) {
+    return D_8008C930_8D530[arg0][0];
+}
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80008514_9114);
 
