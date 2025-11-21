@@ -804,7 +804,9 @@ INCLUDE_ASM("asm/nonmatchings/player", func_80072BAC_737AC);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072C38_73838);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072CC0_738C0);
+void func_80072CC0_738C0(void *pbank, void *wbank) {
+    MusPtrBankInitialize(pbank, wbank);
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072CDC_738DC);
 

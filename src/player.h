@@ -22,7 +22,7 @@ typedef struct {
 
 s32 MusInitialize(musConfig *config);
 
-void func_80072CC0_738C0(void *, s32);
+void func_80072CC0_738C0(void *pbank, void *wbank);
 
 void func_80072C38_73838(void *, s32);
 

@@ -9,7 +9,7 @@ USE_ASSET(_6A83F0);
 typedef struct {
     void *unk0;
     void *unk4;
-    s32 unk8;
+    void *unk8;
     s32 unkC;
     s32 unk10;
     s32 unk14;
@@ -86,7 +86,7 @@ extern OSThread D_800A2998_A3598;
 void *func_80058638_59238(void);
 void func_800570BC_57CBC(void);
 void func_80057124_57D24(void);
-void func_800579E8_585E8(void *, s32);
+void func_800579E8_585E8(void *, void *);
 void func_80057B70_58770(s32, s32, s32, f32, s32, s32, s32);
 void func_80057CE4_588E4(s32, s32, s32, s32, s32, s32);
 void func_80057E18_58A18(s32, s32, s32, s32, s32);
@@ -364,7 +364,7 @@ void func_80057124_57D24(void) {
 }
 
 void func_800571D0_57DD0(void(callback)(void *)) {
-    func_800579E8_585E8(gGraphicsManager->unk4, *(&D_80093B00_94700 + (gGraphicsManager->unk12)));
+    func_800579E8_585E8(gGraphicsManager->unk4, (void *)*(&D_80093B00_94700 + (gGraphicsManager->unk12)));
     setCallback(&func_80057214_57E14);
 }
 
@@ -633,7 +633,7 @@ void *func_800579CC_585CC(void *arg0, void *arg1) {
     return func_80057974_58574(arg0, arg1, 0);
 }
 
-void func_800579E8_585E8(void *arg0, s32 arg1) {
+void func_800579E8_585E8(void *arg0, void *arg1) {
     void *message;
 
     D_800A2D10_A3910.unk4 = arg0;
