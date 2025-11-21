@@ -77,7 +77,7 @@ void func_80050740_51340(void);
 void func_80050864_51464(void);
 void func_800509CC_515CC(void);
 void func_80050DB0_519B0(void);
-void func_80050EA0_51AA0(void);
+void func_80050EA0_51AA0(void **);
 void func_80050F64_51B64(void);
 void func_80050FE0_51BE0(void);
 void func_80051124_51D24(void);
@@ -195,7 +195,9 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_80050DB0_519B0);
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050E08_51A08);
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050EA0_51AA0);
+void func_80050EA0_51AA0(void **arg0) {
+    *arg0 = freeNodeMemory(*arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050ECC_51ACC);
 
