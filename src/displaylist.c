@@ -453,7 +453,12 @@ void func_80066AC0_676C0(s32 arg0, func_80066444_67044_arg1 *arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80066AF0_676F0);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800670A4_67CA4);
+extern void func_80066AF0_676F0(void);
+
+void func_800670A4_67CA4(u16 arg0, func_80066444_67044_arg1 *arg1) {
+    arg1->unk1C = 0;
+    debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80066AF0_676F0, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800670D4_67CD4);
 
