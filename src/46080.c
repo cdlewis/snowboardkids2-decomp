@@ -442,7 +442,17 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_800497FC_4A3FC);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049BFC_4A7FC);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80049C38_4A838);
+void func_80049C38_4A838(s32 arg0) {
+    void (*func_ptr)(s32) = (void(*)(s32))func_80047E7C_48A7C;
+    GameState* allocation;
+    u8 check;
+
+    allocation = (GameState*)getCurrentAllocation();
+    check = allocation->unk83;
+    if (check == 0) {
+        func_ptr(arg0);
+    }
+}
 
 void func_80049C70_4A870(s32 arg0) {
     GameState* allocation;
