@@ -29,7 +29,7 @@ typedef struct {
 } func_800BB74C_AF43C_arg;
 
 extern void rotateVectorY(Vec3 *, s32, void *);
-extern void func_800BB45C_AF14C(void);
+extern void func_800BB45C_AF14C(void **);
 extern void func_800BB5B0_AF2A0(void);
 extern void func_800BB778_AF468(void);
 extern void func_800BBEAC_AFB9C(void);
@@ -78,7 +78,9 @@ void func_800BB388_AF078(func_800BB388_AF078_arg *entity) {
     setCallbackWithContinue(func_800BB5B0_AF2A0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB45C_AF14C);
+void func_800BB45C_AF14C(void **arg0) {
+    *arg0 = freeNodeMemory(*arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB488_AF178);
 
