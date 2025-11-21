@@ -816,7 +816,7 @@ INCLUDE_ASM("asm/nonmatchings/player", func_80072D64_73964);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072DBC_739BC);
 
-extern void func_80073058_73C58(u8*);
+extern int func_80073058_73C58(u8*);
 
 void MusHandlePause(s32 arg0) {
     struct {
@@ -846,7 +846,21 @@ void MusHandleUnPause(musHandle arg0) {
     func_80073058_73C58(&locals.byte_at_10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", MusSetFxType);
+int MusSetFxType(int fxtype) {
+    struct {
+        u8 byte_at_10;
+        u8 pad[3];
+        s32 word_at_14;
+    } locals;
+    volatile s32* prevent_opt;
+
+    prevent_opt = &locals.word_at_14;
+    *prevent_opt = fxtype;
+    mus_last_fxtype = fxtype;
+    locals.byte_at_10 = 2;
+
+    return func_80073058_73C58(&locals.byte_at_10);
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072E94_73A94);
 
