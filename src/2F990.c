@@ -149,6 +149,7 @@ void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
 void func_8002F290_2FE90(void);
 void func_8002F5C8_301C8(void *);
 void func_8002F72C_3032C(void);
+void func_8002F88C_3048C(void);
 void func_8002F980_30580(void);
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 void func_8002FA44_30644(void *);
@@ -315,7 +316,10 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F72C_3032C);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F860_30460);
+void func_8002F860_30460(DisplayListObject* arg0) {
+    enqueueDisplayListObject(0, arg0);
+    setCallback(func_8002F88C_3048C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F88C_3048C);
 
