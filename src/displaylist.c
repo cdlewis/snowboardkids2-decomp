@@ -249,7 +249,17 @@ void func_800634E8_640E8(DisplayListObject *arg0) {
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063534_64134);
+void func_80063534_64134(s32 arg0) {
+    DisplayListObject *obj = (DisplayListObject *)arg0;
+    Gfx *dl;
+
+    setupDisplayListMatrix(obj);
+
+    dl = gRegionAllocPtr;
+    dl->words.w0 = 0xDE000000;
+    dl->words.w1 = (u32)obj->unk20->transparentDisplayList;
+    gRegionAllocPtr = dl + 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063580_64180);
 
