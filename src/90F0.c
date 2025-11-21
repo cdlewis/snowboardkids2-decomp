@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "task_scheduler.h"
+#include "6E840.h"
 
 extern s16 D_8008C930_8D530[][10];
 
@@ -21,7 +22,15 @@ INCLUDE_ASM("asm/nonmatchings/90F0", func_80009548_A148);
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80009D58_A958);
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_80009D94_A994);
+extern void func_80008D18_9918(void);
+
+void func_80009D94_A994(u16 arg0, Node *arg1) {
+    arg1->unk18 = NULL;
+    arg1->unk1C = NULL;
+    arg1->callback = NULL;
+    arg1->cleanupCallback = NULL;
+    debugEnqueueCallback(arg0, 4, &func_80008D18_9918, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80009DD0_A9D0);
 
