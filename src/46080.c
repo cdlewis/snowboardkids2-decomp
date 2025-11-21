@@ -4,6 +4,7 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 #include "gamestate.h"
+#include "56910.h"
 
 USE_ASSET(_3F6670);
 USE_ASSET(_3F3EF0);
@@ -24,6 +25,7 @@ extern void func_8004BCFC_4C8FC(void *);
 extern void func_8004AF2C_4BB2C(void *);
 extern void* freeNodeMemory(void*);
 extern void func_80048E34_49A34(void);
+extern void func_800462D8_46ED8(void);
 
 typedef struct {
     void* unk0;
@@ -132,7 +134,17 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80045CC8_468C8);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80046244_46E44);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80046298_46E98);
+typedef struct {
+    void* unk0;
+} Struct_func_8004657C_4717C;
+
+void func_8004657C_4717C(Struct_func_8004657C_4717C* arg0);
+
+void func_80046298_46E98(Struct_func_8004657C_4717C* arg0) {
+    arg0->unk0 = loadAsset_34CB50();
+    setCleanupCallback(func_8004657C_4717C);
+    setCallback(func_800462D8_46ED8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800462D8_46ED8);
 
@@ -141,10 +153,6 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_800463F4_46FF4);
 INCLUDE_ASM("asm/nonmatchings/46080", func_80046464_47064);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800464F4_470F4);
-
-typedef struct {
-    void* unk0;
-} Struct_func_8004657C_4717C;
 
 void func_8004657C_4717C(Struct_func_8004657C_4717C* arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
