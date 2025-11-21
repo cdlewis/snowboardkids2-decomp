@@ -1,9 +1,17 @@
 #include "common.h"
 #include "task_scheduler.h"
+#include "D_800AFE8C_A71FC_type.h"
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 
-INCLUDE_ASM("asm/nonmatchings/1D520", func_8001CD58_1D958);
+extern void func_8001CD90_1D990(void);
+
+void func_8001CD58_1D958(void) {
+    void *allocation = getCurrentAllocation();
+    u8 value = ((u8 *)D_800AFE8C_A71FC)[0x1E];
+    ((u8 *)allocation)[0xAC8] = value;
+    setGameStateHandler(func_8001CD90_1D990);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001CD90_1D990);
 
