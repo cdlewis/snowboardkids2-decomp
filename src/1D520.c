@@ -1,6 +1,7 @@
 #include "common.h"
 #include "task_scheduler.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "6E840.h"
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 
@@ -25,7 +26,28 @@ void func_8001DEA0_1EAA0(void) {
     func_800697F4_6A3F4(0xFE);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1D520", func_8001DEBC_1EABC);
+void func_8001DEBC_1EABC(void) {
+    u16 *allocation = (u16 *)getCurrentAllocation();
+    u16 counter = allocation[0xAC4 / 2];
+    u16 temp;
+
+    if (counter < 15) {
+        if (counter & 1) {
+            allocation[0xAC0 / 2] = allocation[0xAC2 / 2] - 2;
+        } else {
+            allocation[0xAC0 / 2] = allocation[0xAC2 / 2] + 2;
+        }
+        counter = allocation[0xAC4 / 2];
+    }
+
+    temp = ((counter + 1) & 0xFFFF) % 25U;
+    allocation[0xAC4 / 2] = temp;
+    temp &= 0xFFFF;
+
+    if (temp == 15) {
+        allocation[0xAC0 / 2] = allocation[0xAC2 / 2];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001DF5C_1EB5C);
 
