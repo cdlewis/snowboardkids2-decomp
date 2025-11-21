@@ -99,7 +99,7 @@ void func_8003EEEC_3FAEC(void) {
     GameState *temp_v0;
 
     temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v0->PAD_6[0] = 0;
+    temp_v0->unk60 = 0;
 
     scheduleTask(&D_800B0334, 0, 0, 1);
     scheduleTask(&D_800B7B7C, 0, 0, 0x64);

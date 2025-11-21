@@ -3,6 +3,7 @@
 #include "displaylist.h"
 #include "overlay.h"
 #include "task_scheduler.h"
+#include "gamestate.h"
 
 USE_ASSET(_3F6670);
 USE_ASSET(_3F3EF0);
@@ -33,6 +34,7 @@ void func_8004A634_4B234(void *);
 void func_8004A96C_4B56C(s32 **);
 extern void func_8004AA90_4B690(void *);
 extern void func_80049300_49F00(void *);
+extern void func_800458AC_464AC(void);
 
 typedef struct {
     void* unk0;
@@ -54,7 +56,11 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_800457A0_463A0);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800457E0_463E0);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80045878_46478);
+void func_80045878_46478(void) {
+    GameState* gs = (GameState*)getCurrentAllocation();
+    gs->unk60 -= 1;
+    setCallbackWithContinue(&func_800458AC_464AC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800458AC_464AC);
 
