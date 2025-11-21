@@ -1,5 +1,6 @@
 #include "5E590.h"
 #include "common.h"
+#include "displaylist.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -99,7 +100,13 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80046708_47308);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004674C_4734C);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80046CB4_478B4);
+void func_8004674C_4734C(DisplayListObject*);
+extern void func_8006300C_63C0C(DisplayListObject*);
+
+void func_80046CB4_478B4(DisplayListObject* arg0) {
+    func_8004674C_4734C(arg0);
+    func_8006300C_63C0C(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80046CE0_478E0);
 
