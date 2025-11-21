@@ -21,6 +21,69 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 - `./tools/claude <function name>` spin up a decompilation environment for a given function.
 - `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
 
+## Code Quality Standards
+
+### Struct Usage - CRITICAL
+
+**NEVER use pointer arithmetic with manual offsets.** Always define and use proper structs.
+
+**BAD - Pointer Arithmetic:**
+```c
+s16 func(void* arg0, u16 arg1) {
+    return *(s16*)((u8*)*(void**)((u8*)arg0 + 0xC) + arg1 * 36 + 0xA);
+}
+```
+
+**GOOD - Proper Structs:**
+```c
+typedef struct {
+    s16 unk0;
+    u8 _pad[0x8];
+    s16 unkA;
+    u8 _pad2[0x18];
+} ArrayElement;  // Total size: 0x24 (36 bytes)
+
+typedef struct {
+    u8 _pad[0xC];
+    ArrayElement *unkC;
+} FunctionArg;
+
+s16 func(FunctionArg* arg0, u16 arg1) {
+    return arg0->unkC[arg1].unkA;
+}
+```
+
+### Struct Definition Guidelines
+
+When you see pointer arithmetic patterns like `*(type*)((u8*)ptr + offset)`:
+
+1. **Identify the access pattern:**
+   - What offset is being accessed? (e.g., `0xC` means field at offset 12)
+   - Is it accessing an array element? (e.g., `arg1 * 36` means 36-byte elements)
+   - What field within the element? (e.g., `+ 0xA` means field at offset 10)
+
+2. **Create appropriate structs:**
+   - Define the element struct with correct size and field offsets
+   - Define the container struct with pointer at correct offset
+   - Use meaningful names or `unk[Offset]` naming convention
+
+3. **Verify struct sizes:**
+   - Calculate total size to ensure it matches the multiplier in pointer arithmetic
+   - Example: `arg1 * 36` means struct must be exactly 36 (0x24) bytes
+
+4. **Always verify after changes:**
+   - Build the project: `make clean && make extract && make -j1`
+   - Check the ROM matches: `shasum -c snowboardkids2.sha1`
+   - Use diff.py to verify function assembly matches exactly
+
+### When Decompiling
+
+If you write code with pointer arithmetic:
+- **STOP immediately**
+- Create proper struct definitions first
+- Then write the function using struct access
+- This applies even if the pointer arithmetic "works" - it's always wrong in a decompilation project
+
 ## Tasks
 
 ### Decompile directory to C code
@@ -94,3 +157,15 @@ Example: If you added `extern void setCallback(void *);` but `task_scheduler.h` 
    - Use `python3 tools/asm-differ/diff.py --no-pager <function>` to check ALL functions in the modified file(s)
    - Look for functions that access the same structs you modified
    - Fix any mismatches before declaring success
+
+## Self-Review Checklist
+
+Before declaring a decompilation complete, verify:
+
+- [ ] No pointer arithmetic with manual offset calculations
+- [ ] All struct field accesses use `->` or `.` operators
+- [ ] No `void*` parameters that should be typed structs
+- [ ] Struct sizes match the assembly access patterns
+- [ ] `make clean && make extract && make -j1` succeeds
+- [ ] `shasum -c snowboardkids2.sha1` shows `OK`
+- [ ] `diff.py --no-pager <function>` shows perfect match (score 0)
