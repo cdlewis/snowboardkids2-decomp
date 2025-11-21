@@ -130,7 +130,13 @@ typedef struct {
     s8 unk5E;
 } func_800302AC_30EAC_arg;
 
+typedef struct {
+    u8 _pad[0x4];
+    void* unk4;
+} func_8002FF28_30B28_arg;
+
 extern void func_8000FED0_10AD0(void);
+extern void* freeNodeMemory(void*);
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];
@@ -148,7 +154,7 @@ void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 void func_8002FA44_30644(void *);
 void func_8002FA70_30670(func_8002FA70_30670_arg *);
 void func_8002FB40_30740(void);
-void func_8002FCA8_308A8(void);
+void func_8002FCA8_308A8(func_8002FF28_30B28_arg* arg0);
 void func_80030238_30E38(void);
 void func_80030280_30E80(void);
 void func_80030764_31364(void);
@@ -376,18 +382,13 @@ void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FB40_30740);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FCA8_308A8);
+void func_8002FCA8_308A8(func_8002FF28_30B28_arg* arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FCD4_308D4);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FDFC_309FC);
-
-typedef struct {
-    u8 _pad[0x4];
-    void* unk4;
-} func_8002FF28_30B28_arg;
-
-extern void* freeNodeMemory(void*);
 
 void func_8002FF28_30B28(func_8002FF28_30B28_arg* arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
