@@ -9,7 +9,9 @@ INCLUDE_ASM("asm/nonmatchings/1D520", func_8001CD90_1D990);
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001DD54_1E954);
 
-INCLUDE_ASM("asm/nonmatchings/1D520", func_8001DE84_1EA84);
+void func_8001DE84_1EA84(void) {
+    func_800697F4_6A3F4(1);
+}
 
 void func_8001DEA0_1EAA0(void) {
     func_800697F4_6A3F4(0xFE);
