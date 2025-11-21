@@ -108,7 +108,12 @@ void func_80046CB4_478B4(DisplayListObject* arg0) {
     func_8006300C_63C0C(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80046CE0_478E0);
+extern void func_80063058_63C58(DisplayListObject*);
+
+void func_80046CE0_478E0(DisplayListObject* arg0) {
+    func_8004674C_4734C(arg0);
+    func_80063058_63C58(arg0);
+}
 
 extern void func_800630A4_63CA4(DisplayListObject*);
 
