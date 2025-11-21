@@ -44,6 +44,7 @@ extern void func_800BB45C_AF14C(void **);
 extern void func_800BB5B0_AF2A0(void);
 extern void func_800BB778_AF468(void);
 extern void func_800BBEAC_AFB9C(void);
+extern void func_800BBF4C_AFC3C(void);
 extern void func_800BC750_B0440(void);
 extern void* freeNodeMemory(void*);
 
@@ -142,7 +143,17 @@ void func_800BC0D0_AFDC0(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC0FC);
+typedef struct {
+    u8 _pad[0x24];
+    s16 unk24;
+} func_800BC0FC_Task;
+
+void func_800BC0FC(s16 arg0) {
+    func_800BC0FC_Task* task = (func_800BC0FC_Task*)scheduleTask(func_800BBF4C_AFC3C, 0, 0, 0xC8);
+    if (task != NULL) {
+        task->unk24 = arg0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC13C_AFE2C);
 
