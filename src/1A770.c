@@ -63,7 +63,6 @@ extern void func_80032330_32F30(void);
 
 void func_8001ACC8_1B8C8(void);
 void func_8001AD80_1B980(void);
-s32 func_8006FE10_70A10(s32);
 void func_8001A0B4_1ACB4(void);
 void func_8001A070_1AC70(void);
 void func_80019F60_1AB60(void);

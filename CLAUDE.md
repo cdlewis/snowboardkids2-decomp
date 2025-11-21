@@ -10,7 +10,8 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 - `src` decompiled (or partially decompiled) C code
 - `include` headers for decompiled C code
-- `asm` unmatched asm code extracted from the rom. Each file contains a separate function.
+- `asm/nonmatchings` unmatched asm code extracted from the rom. Each file contains a separate function.
+- `asm/matchings` decompiled assembly code for already matched C functions. We keep this around as it's sometimes convenient to inspect.
 - `lib` library code such as Ultralib which we call and link against
 - `assets` binary asset blobs extracted from the rom
 - `include` common headers included in all C and/or assembly code
@@ -28,6 +29,7 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 **NEVER use pointer arithmetic with manual offsets.** Always define and use proper structs.
 
 **BAD - Pointer Arithmetic:**
+
 ```c
 s16 func(void* arg0, u16 arg1) {
     return *(s16*)((u8*)*(void**)((u8*)arg0 + 0xC) + arg1 * 36 + 0xA);
@@ -35,6 +37,7 @@ s16 func(void* arg0, u16 arg1) {
 ```
 
 **GOOD - Proper Structs:**
+
 ```c
 typedef struct {
     s16 unk0;
@@ -58,16 +61,19 @@ s16 func(FunctionArg* arg0, u16 arg1) {
 When you see pointer arithmetic patterns like `*(type*)((u8*)ptr + offset)`:
 
 1. **Identify the access pattern:**
+
    - What offset is being accessed? (e.g., `0xC` means field at offset 12)
    - Is it accessing an array element? (e.g., `arg1 * 36` means 36-byte elements)
    - What field within the element? (e.g., `+ 0xA` means field at offset 10)
 
 2. **Create appropriate structs:**
+
    - Define the element struct with correct size and field offsets
    - Define the container struct with pointer at correct offset
    - Use meaningful names or `unk[Offset]` naming convention
 
 3. **Verify struct sizes:**
+
    - Calculate total size to ensure it matches the multiplier in pointer arithmetic
    - Example: `arg1 * 36` means struct must be exactly 36 (0x24) bytes
 
@@ -79,6 +85,7 @@ When you see pointer arithmetic patterns like `*(type*)((u8*)ptr + offset)`:
 ### When Decompiling
 
 If you write code with pointer arithmetic:
+
 - **STOP immediately**
 - Create proper struct definitions first
 - Then write the function using struct access
@@ -110,7 +117,7 @@ Use the tools in this directory to match the function.
 
 Once you have a matching function, update the C code to use it. The C code will be importing an assembly file, something along the lines of `INCLUDE_ASM/asm/nonmatchings/<function name>`. Replace this with the actual C code.
 
-If the function is defined in a header file (located in include/), this will also need to be updated. These other usages may teach you about the correct type of your function arguments or return types. DO NOT JUST MAKE EVERYTHING void*!.
+If the function is defined in a header file (located in include/), this will also need to be updated. These other usages may teach you about the correct type of your function arguments or return types. DO NOT JUST MAKE EVERYTHING void\*!.
 
 Update the rest of the project to fix any build issues.
 

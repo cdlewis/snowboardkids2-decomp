@@ -97,7 +97,7 @@ void setModelCameraTransform(void *, s32, s32, s32, s32, s32, s32);
 
 void unlinkNode(Node_70B00 *player);
 
-s32 func_8006FE10_70A10(s32);
+u8 func_8006FE10_70A10(Node_70B00 *);
 
 s32 isObjectCulled(objectPosition *arg0);
 

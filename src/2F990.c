@@ -139,7 +139,7 @@ void func_80030378_30F78(void);
 void func_80030480_31080(void);
 void func_8002EFD8_2FBD8(void *);
 void func_8002F024_2FC24(void);
-void func_8002F110_2FD10(void *);
+void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
 void func_8002F290_2FE90(void);
 void func_8002F5C8_301C8(void *);
 void func_8002F72C_3032C(void);
@@ -232,7 +232,9 @@ void func_8002EFD8_2FBD8(void *untypedArg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F024_2FC24);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F110_2FD10);
+void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *arg0) {
+    func_80002014_2C14(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F12C_2FD2C);
 
