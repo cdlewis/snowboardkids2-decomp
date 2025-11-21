@@ -1,3 +1,7 @@
 func_800B3734_1E07E4
 func_800B2DCC_1DFE7C
 func_800B3F64_1E1014
+cutsceneEffectDisp_exec
+cutsceneEffectMLight_exec
+cutsceneEffectTrick_update
+func_8001E3E8_1EFE8

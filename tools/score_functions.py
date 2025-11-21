@@ -75,6 +75,13 @@ def analyze_function(file_path: str) -> FunctionScore:
     filename = os.path.basename(file_path)
     func_name = filename.replace('.s', '')
 
+    # Jump table pattern (e.g., jtbl_8009E1D8_9EDD8)
+    jumptable_pattern = r'^jtbl_[0-9A-Fa-f_]+$'
+
+    # Skip jump tables - return None to indicate this should be filtered
+    if re.match(jumptable_pattern, func_name):
+        return None
+
     score = FunctionScore(name=func_name, file_path=file_path)
 
     try:
@@ -138,7 +145,8 @@ def score_folder(folder_path: str) -> List[FunctionScore]:
     scores = []
     for asm_file in asm_files:
         score = analyze_function(str(asm_file))
-        scores.append(score)
+        if score is not None:  # Skip jump tables
+            scores.append(score)
 
     # Sort by complexity (lowest first)
     scores.sort(key=lambda s: s.total_score)
