@@ -37,7 +37,9 @@ void func_80009E38_AA38(void *arg0) {
     ((u8*)arg0)[6] |= 2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_80009E48_AA48);
+void func_80009E48_AA48(void *arg0) {
+    ((u8*)arg0)[6] &= 0xFD;
+}
 
 s32 func_80009E58_AA58(void *arg0) {
     u8 val;
