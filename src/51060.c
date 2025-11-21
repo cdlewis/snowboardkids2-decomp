@@ -257,7 +257,14 @@ void func_80051688_52288(func_80051688_52288_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_800516B4_522B4);
+void func_80051348_51F48(void);
+
+void func_800516B4_522B4(void *arg0) {
+    void *result = scheduleTask(&func_80051348_51F48, 2, 0, 0xDD);
+    if (result != NULL) {
+        *(void **)result = arg0;
+    }
+}
 
 void func_800516F4_522F4(func_800516F4_522F4_arg *arg0) {
     getCurrentAllocation();
