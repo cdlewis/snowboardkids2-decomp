@@ -965,7 +965,14 @@ INCLUDE_ASM("asm/nonmatchings/player", __MusIntMain);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_8007335C_73F5C);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073738_74338);
+void func_80073738_74338(channel_t *cp, int x) {
+    if (cp->playing) {
+        alSynStopVoice(&__libmus_alglobals.drvr, mus_voices + x);
+    }
+    cp->playing = 1;
+    alSynStartVoice(&__libmus_alglobals.drvr, mus_voices + x, cp->pending);
+    cp->pending = NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_800737C4_743C4);
 
