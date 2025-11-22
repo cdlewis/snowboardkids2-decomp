@@ -480,12 +480,33 @@ typedef struct {
     void *unk0;
 } Struct_func_800482A4_48EA4;
 
-extern void func_80047EFC_48AFC(void);
+extern void func_80047F90_48B90(void);
 extern void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *);
 
 typedef struct {
     void *unk0;
 } Struct_func_80047EBC_48ABC;
+
+typedef struct {
+    u8 _pad0[0x44];
+    s32 unk44;
+} AllocationType_46080;
+
+typedef struct {
+    loadAssetMetadata_arg asset;
+    u8 _pad1C[0x4];
+} AssetMetadata_46080;
+
+typedef struct {
+    void *unk0;
+    AssetMetadata_46080 unk4;
+    AssetMetadata_46080 unk24;
+    AssetMetadata_46080 unk44;
+    u8 _pad64[0x6];
+    s16 unk6A;
+} Struct_func_80047EFC_48AFC;
+
+extern void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
 
 void func_80047EBC_48ABC(Struct_func_80047EBC_48ABC *arg0) {
     arg0->unk0 = loadAsset_34CB50();
@@ -493,7 +514,20 @@ void func_80047EBC_48ABC(Struct_func_80047EBC_48ABC *arg0) {
     setCallbackWithContinue(&func_80047EFC_48AFC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80047EFC_48AFC);
+void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *arg0) {
+    AllocationType_46080 *alloc;
+
+    alloc = (AllocationType_46080 *)getCurrentAllocation();
+    loadAssetMetadata(&arg0->unk4.asset, arg0->unk0, 2);
+    loadAssetMetadata(&arg0->unk24.asset, arg0->unk0, 3);
+    loadAssetMetadata(&arg0->unk44.asset, arg0->unk0, 4);
+
+    arg0->unk4.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0xC0);
+    arg0->unk24.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0x100);
+    arg0->unk44.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0x140);
+    arg0->unk6A = 0;
+    setCallbackWithContinue(&func_80047F90_48B90);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80047F90_48B90);
 
