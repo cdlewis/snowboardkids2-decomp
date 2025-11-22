@@ -67,12 +67,15 @@ typedef struct {
     void *unk2C;
 } func_8002FA1C_3061C_arg;
 typedef struct {
-    u8 padding[0x8];
-    char *cameraYString;
-    u8 padding2[0x8];
-    char *cameraYRotationString;
-    s32 cameraY;
-    s16 cameraRotation;
+    /* 0x00 */ u8 padding[0x8];
+    /* 0x08 */ char *cameraYString;
+    /* 0x0C */ u8 padding2[0x8];
+    /* 0x14 */ char *cameraYRotationString;
+    /* 0x18 */ s32 cameraY;
+    /* 0x1C */ s16 cameraRotation;
+    /* 0x1E */ char unk1E;
+    u8 padding3[0x1F];
+    /* 0x3E */ char unk3E;
 } cameraState;
 
 typedef struct {
@@ -221,9 +224,9 @@ void updateDebugCameraYState(cameraState *arg0) {
     func_8006BEDC_6CADC(&sp20, 0, arg0->cameraY << 0x10, 0x600000, 0, (s32)((s16)arg0->cameraRotation), 0);
     func_8006FD3C_7093C(temp_s0->unkDA, &sp20);
 
-    cameraYString = ((char *)((s32)arg0)) + 0x3E;
+    cameraYString = &arg0->unk3E;
     sprintf(cameraYString, "CAMERA Y = %d", arg0->cameraY);
-    cameraYRotation = ((char *)((s32)arg0)) + 0x1E;
+    cameraYRotation = &arg0->unk1E;
     sprintf(cameraYRotation, "CAMERA RX = %X", (s16)arg0->cameraRotation);
     arg0->cameraYString = cameraYString;
     arg0->cameraYRotationString = cameraYRotation;

@@ -431,7 +431,7 @@ void *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
             // This should just be newNode++. It's possible that
             // nodes are possbibly being embedded in larger
             // structs.
-            return (void *)((u8 *)newNode + 0x28);
+            return &newNode->payload;
         }
     }
 

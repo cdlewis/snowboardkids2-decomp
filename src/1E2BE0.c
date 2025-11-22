@@ -124,8 +124,16 @@ void func_800B5EC4_1E2F74(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2, s
     arg0->unk5E = 0;
 }
 
-void func_800B5F20_1E2FD0(void *arg0, void *arg1) {
-    *(s32 *)((u8 *)arg0 + 0x34) = *(s32 *)((u8 *)arg1 + 0x2C);
+typedef struct {
+    u8 padding[0x34];
+    s32 unk34;
+} func_800B5F20_1E2FD0_arg0;
+typedef struct {
+    u8 padding[0x2C];
+    s32 unk2C;
+} func_800B5F20_1E2FD0_arg1;
+void func_800B5F20_1E2FD0(func_800B5F20_1E2FD0_arg0 *arg0, func_800B5F20_1E2FD0_arg1 *arg1) {
+    arg0->unk34 = arg1->unk2C;
 }
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5F2C_1E2FDC);

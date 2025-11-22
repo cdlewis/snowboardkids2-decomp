@@ -62,18 +62,21 @@ typedef struct {
 
 typedef struct {
     struct {
-        s32 unk0;
-        u8 pad[0x28];
+        struct {
+            u8 padding[0x3C0];
+            s16 unk3C0;
+        } *unk0;
+        u8 padding[0x28];
         s32 unk2C;
         s32 unk30;
         s32 unk34;
     } *unk0;
     void *unk4;
-    u32 (*unk8)[22];
+    s32 *unk8;
     char pad[0x16];
     u8 unk22;
     char pad2[5];
-    u32 (*unk28)[22];
+    s32 *unk28;
     char pad3[0x16];
     u8 unk42;
     char pad4[5];
@@ -106,7 +109,7 @@ void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *arg0) {
     s32 i;
 
     arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_646DF0_ROM_START, &_646DF0_ROM_END, 0x1188);
-    arg0->unk8 = &D_800BAD10_1E7DC0;
+    arg0->unk8 = (s32 *)&D_800BAD10_1E7DC0;
     arg0->unk22 = 0xFF;
 
     arg0->unk28 = arg0->unk8;
@@ -115,7 +118,7 @@ void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *arg0) {
     for (i = 0; i < 2; i++) {
         // vector is different size (32 vs 16 bit) because that helped
         // the data segment to match.
-        transformVector((s16 *)D_800BAD68_1E7E18[i], (s16 *)(arg0->unk0->unk0 + 0x3C0), (u8 *)arg0 + (i * 12 + 72));
+        transformVector((s16 *)D_800BAD68_1E7E18[i], &arg0->unk0->unk0->unk3C0, &arg0->unk48[i]);
         arg0->unk48[i].x -= arg0->unk0->unk2C;
         arg0->unk48[i].y -= arg0->unk0->unk30;
         arg0->unk48[i].z -= arg0->unk0->unk34;

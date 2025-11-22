@@ -4,8 +4,6 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
-
 extern void func_8001CD90_1D990(void);
 extern void func_8003B1F4_3BDF4(s32 arg0, void *arg1);
 extern void *func_8003B28C_3BE8C(void);
@@ -13,6 +11,25 @@ extern u8 D_8008D9B0_8E5B0[8];
 
 void func_8001DE84_1EA84(void);
 void func_8001DEA0_1EAA0(void);
+
+typedef struct {
+    Node_70B00 unk0;
+    Node_70B00 unk1D8[4];
+    u8 padding0[0x170];
+    Node_70B00 *unkAA8;
+    Node_70B00 *unkAAC;
+    Node_70B00 *unkAB0;
+    Node_70B00 *unkAB4;
+    Node_70B00 *unkAB8;
+    u8 padding2[0x8];
+    u16 unkAC4;
+    u8 padding5[0x2];
+    u8 unkAC8;
+    u8 unkAC9;
+    u8 padding3[0x8];
+} allocation_1D520;
+
+INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 
 void func_8001CD58_1D958(void) {
     void *allocation = getCurrentAllocation();
@@ -24,24 +41,26 @@ void func_8001CD58_1D958(void) {
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001CD90_1D990);
 
 void func_8001DD54_1E954(void) {
-    u8 *allocation = (u8 *)getCurrentAllocation();
+    allocation_1D520 *allocation;
     s32 i;
+
+    allocation = (allocation_1D520 *)getCurrentAllocation();
 
     if (func_8006FE10_70A10(0) != 0) {
         return;
     }
 
-    unlinkNode((Node_70B00 *)allocation);
+    unlinkNode(&allocation->unk0);
 
-    *(u32 *)&allocation[0xAA8] = (u32)freeNodeMemory((void *)*(u32 *)&allocation[0xAA8]);
-    *(u32 *)&allocation[0xAAC] = (u32)freeNodeMemory((void *)*(u32 *)&allocation[0xAAC]);
-    *(u32 *)&allocation[0xAB0] = (u32)freeNodeMemory((void *)*(u32 *)&allocation[0xAB0]);
-    *(u32 *)&allocation[0xAB4] = (u32)freeNodeMemory((void *)*(u32 *)&allocation[0xAB4]);
-    *(u32 *)&allocation[0xAB8] = (u32)freeNodeMemory((void *)*(u32 *)&allocation[0xAB8]);
+    allocation->unkAA8 = freeNodeMemory(allocation->unkAA8);
+    allocation->unkAAC = freeNodeMemory(allocation->unkAAC);
+    allocation->unkAB0 = freeNodeMemory(allocation->unkAB0);
+    allocation->unkAB4 = freeNodeMemory(allocation->unkAB4);
+    allocation->unkAB8 = freeNodeMemory(allocation->unkAB8);
 
-    if (allocation[0xAC9] == 0) {
+    if (allocation->unkAC9 == 0) {
         for (i = 0; i < 3; i++) {
-            unlinkNode((Node_70B00 *)&allocation[0x1D8 + (i * 0x1D8)]);
+            unlinkNode(&allocation->unk1D8[i]);
         }
 
         for (i = 0; i < 8; i++) {
@@ -49,11 +68,11 @@ void func_8001DD54_1E954(void) {
         }
     } else {
         for (i = 0; i < 4; i++) {
-            unlinkNode((Node_70B00 *)&allocation[0x1D8 + (i * 0x1D8)]);
+            unlinkNode(&allocation->unk1D8[i]);
         }
     }
 
-    if (*(u16 *)&allocation[0xAC4] == 1) {
+    if (allocation->unkAC4 == 1) {
         terminateSchedulerWithCallback(func_8001DE84_1EA84);
     } else {
         terminateSchedulerWithCallback(func_8001DEA0_1EAA0);
@@ -97,7 +116,7 @@ INCLUDE_ASM("asm/nonmatchings/1D520", func_8001E104_1ED04);
 
 void func_8001E320_1EF20(void) {
     u8 sp10[0x60];
-    void *allocation;
+    allocation_1D520 *allocation;
     void *result;
     s32 retryCount;
     u32 checksum;
@@ -105,14 +124,14 @@ void func_8001E320_1EF20(void) {
     u8 *ptr;
     s32 limit;
 
-    allocation = getCurrentAllocation();
-    *(u16 *)((u8 *)allocation + 0xAC4) = 0;
+    allocation = (allocation_1D520 *)getCurrentAllocation();
+    allocation->unkAC4 = 0;
 
     checksum = 0;
     retryCount = 0;
 
     while (retryCount < 3) {
-        func_8003B1F4_3BDF4(*(u8 *)((u8 *)allocation + 0xAC8), sp10);
+        func_8003B1F4_3BDF4(allocation->unkAC8, sp10);
 
         do {
             result = func_8003B28C_3BE8C();
@@ -139,12 +158,12 @@ void func_8001E320_1EF20(void) {
         }
 
         if (checksum == expectedChecksum) {
-            *(u16 *)((u8 *)allocation + 0xAC4) = 0;
+            allocation->unkAC4 = 0;
             return;
         }
     }
 
-    *(u16 *)((u8 *)allocation + 0xAC4) = 1;
+    allocation->unkAC4 = 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001E3E8_1EFE8);

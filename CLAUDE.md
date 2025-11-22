@@ -22,6 +22,7 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 - `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>`
 - `./tools/claude <function name>` spin up a decompilation environment for a given function.
 - `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
+- `python3 tools/check_pointer_arithmetic.py <file or directory>` detect pointer arithmetic with casts that should be replaced with struct field access. Use `--strict` to fail on violations.
 
 ## Code Quality Standards
 

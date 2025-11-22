@@ -23,11 +23,13 @@ typedef struct {
 } enqueueMultiPartDisplayList_arg1;
 
 typedef struct {
-    u8 padding[0x148];
+    u8 padding[0x120];
+    s32 unk120;
+    u8 padding2[0x24];
     u8 unk148;
     u8 unk149;
     u8 unk14A;
-    u8 padding2[0xD];
+    u8 padding3[0xD];
     u8 unk158;
     u8 unk159;
     u8 unk15A;
@@ -197,7 +199,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
             return;
         }
 
-        matrixToEulerAngles((s32 *)(D_800AB068_A23D8) + 0x48, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
+        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
         guLookAtReflect(&sp30, temp_v0, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
         gSPLookAt(gRegionAllocPtr++, temp_v0);
     }
