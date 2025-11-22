@@ -1,13 +1,29 @@
 #include "common.h"
 
 extern s16 D_800BAD0E_1E7DBE;
+extern s16 D_800BAA60_1E7B10[];
 extern void func_80057ABC_586BC(s32, s32);
 
 s16 func_800B4AF0_1E1BA0(void) {
     return D_800BAD0E_1E7DBE;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4AFC_1E1BAC);
+s16 func_800B4AFC_1E1BAC(s16 arg0) {
+    s16 temp_v1;
+    s16 temp_v0;
+    s16 index;
+
+    temp_v1 = D_800BAD0E_1E7DBE;
+    temp_v0 = arg0;
+
+    if (temp_v0 < temp_v1) {
+        index = arg0;
+    } else {
+        index = 0;
+    }
+
+    return D_800BAA60_1E7B10[index];
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4B30_1E1BE0);
 
