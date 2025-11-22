@@ -17,7 +17,9 @@ typedef struct {
 } D_80090F90_91B90_item;
 
 typedef struct {
-    u8 padding[0x90];
+    u8 padding[0x40];
+    DisplayLists unk40;
+    u8 padding2[0x50 - 0x10];
     DisplayLists unk90;
     DisplayLists unkA0;
     DisplayLists unkB0;

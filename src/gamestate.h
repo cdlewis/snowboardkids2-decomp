@@ -38,7 +38,8 @@ typedef struct {
     u16 unkB94;
     u8 padding4[0x2E];
     u8 unkBC4;
-    u8 padding5[0x23];
+    u8 unkBC5;
+    u8 padding5[0x22];
 } Player;
 
 typedef struct {
@@ -65,7 +66,9 @@ typedef struct {
     u8 numPlayers;
     u8 unk5F;
     u8 unk60;
-    u8 PAD_6[0x15];
+    u8 PAD_6[0x13];
+    u8 unk74;
+    u8 PAD_6B[0x1];
     u8 gamePaused;
     u8 unk77;
     u8 unk78;
