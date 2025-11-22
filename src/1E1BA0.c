@@ -1,4 +1,6 @@
+#include "20F0.h"
 #include "common.h"
+#include "task_scheduler.h"
 
 extern s16 D_800BAD0E_1E7DBE;
 extern s16 D_800BAA60_1E7B10[];
@@ -48,6 +50,9 @@ INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4D74_1E1E24);
 
 INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4E7C_1E1F2C);
 
-INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4F28_1E1FD8);
+void func_800B4F28_1E1FD8(SceneModel_unk98 *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4F60_1E2010);
