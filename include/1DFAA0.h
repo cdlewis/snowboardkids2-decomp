@@ -127,7 +127,9 @@ typedef struct {
         s8 Two;
     } unk0;
     applyTransformToModel_arg1 unk04;
-    u8 padding[0x14];
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ s32 unk2C;
+    u8 padding[0xC];
     /* 0x3C */ s32 unk3C;
     /* 0x40 */ s32 unk40;
     /* 0x44 */ s32 unk44;
@@ -139,7 +141,8 @@ typedef struct {
     /* 0x86 */ s16 unk86;
     u8 _pad88[0x6];
     /* 0x8E */ s16 angle;
-    u8 padding3[0x14];
+    u8 padding3[0x10];
+    /* 0xA0 */ s32 unkA0;
     /* 0xA4 */ s32 unkA4;
 } CutsceneSlotData;
 

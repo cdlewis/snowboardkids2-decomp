@@ -97,21 +97,21 @@ void func_80019BF0_1A7F0(applyTransformToModel_arg1 *arg0) {
     arg0->unk14 = 0x830000;
     arg0->unk18 = 0x340000;
     arg0->unk1C = 0xFF7D0000;
-    applyTransformToModel(arg0->unk20, arg0);
-    func_800021B8_2DB8(arg0->unk20, 0);
-    updateModelGeometry(arg0->unk20);
+    applyTransformToModel(arg0->unk20_u.unk20, arg0);
+    func_800021B8_2DB8(arg0->unk20_u.unk20, 0);
+    updateModelGeometry(arg0->unk20_u.unk20);
     setCleanupCallback(&func_80019CB4_1A8B4);
     setCallback(&func_80019C7C_1A87C);
 }
 
 void func_80019C7C_1A87C(applyTransformToModel_arg1 *arg0) {
     getCurrentAllocation();
-    clearModelRotation(arg0->unk20);
-    updateModelGeometry(arg0->unk20);
+    clearModelRotation(arg0->unk20_u.unk20);
+    updateModelGeometry(arg0->unk20_u.unk20);
 }
 
 void func_80019CB4_1A8B4(applyTransformToModel_arg1 *arg0) {
-    func_80002014_2C14(arg0->unk20);
+    func_80002014_2C14(arg0->unk20_u.unk20);
 }
 
 void func_80019CD0_1A8D0(func_80019CD0_1A8D0_arg *arg0) {

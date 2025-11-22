@@ -157,7 +157,10 @@ typedef struct {
     s32 unk14;
     s32 unk18;
     s32 unk1C;
-    SceneModel *unk20;
+    union {
+        SceneModel *unk20;
+        s32 unk20_s32;
+    } unk20_u;
 } applyTransformToModel_arg1;
 
 void applyTransformToModel(SceneModel *arg0, applyTransformToModel_arg1 *arg1);
