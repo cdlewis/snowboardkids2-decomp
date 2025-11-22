@@ -343,7 +343,12 @@ void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063A94_64694);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_8006405C_64C5C);
+void func_8006405C_64C5C(DisplayListObject *arg0) {
+    if (!isObjectCulled(&arg0->unk10.position)) {
+        func_80063A94_64694(arg0);
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
+    }
+}
 
 void func_800640BC_64CBC(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->unk10.position)) {
