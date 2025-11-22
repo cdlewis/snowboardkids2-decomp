@@ -294,6 +294,28 @@ s32 func_800B8D34_1E5DE4(CutsceneSlotData *arg0) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B8DA8_1E5E58);
+s32 func_800B8DA8_1E5E58(CutsceneSlotData *arg0) {
+    arg0->unk04.unk20_u.unk20_s32 += arg0->unk3C;
+    arg0->unk28 += arg0->unk40;
+    arg0->unk2C += arg0->unk44;
+
+    if (arg0->unk40 < 0) {
+        if (arg0->unk28 < 0) {
+            arg0->unk40 = 0;
+            arg0->unk28 = 0;
+            arg0->unkA0 = 0;
+        }
+    }
+
+    arg0->unk40 += arg0->unkA0;
+
+    if (arg0->unk84 == 0) {
+        arg0->unk0.bytes[0] = 0;
+    } else {
+        arg0->unk84--;
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", syncModelFromSlot);
