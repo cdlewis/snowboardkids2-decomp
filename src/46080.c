@@ -273,17 +273,36 @@ void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800465A8_471A8);
-
-INCLUDE_ASM("asm/nonmatchings/46080", func_80046628_47228);
-
 typedef struct {
     u8 _pad[0x24];
     void *unk24;
     void *unk28;
-    u8 _pad2[0x10];
+    void *unk2C;
+    u8 _pad2[0xC];
     void *unk3C;
+    u8 _pad3[0x4];
+    s16 unk44;
+    s16 unk46;
+    s16 unk48;
 } func_80046708_47308_arg;
+
+extern s32 identityMatrix[];
+void func_80046628_47228(void);
+void func_80046708_47308(func_80046708_47308_arg *arg0);
+
+void func_800465A8_471A8(func_80046708_47308_arg *arg0) {
+    arg0->unk24 = func_80055DC4_569C4(arg0->unk48);
+    arg0->unk28 = func_80055DF8_569F8(arg0->unk48);
+    arg0->unk2C = NULL;
+    memcpy(arg0, identityMatrix, 0x20);
+    arg0->unk3C = func_80055D7C_5697C(arg0->unk48);
+    arg0->unk44 = 0;
+    arg0->unk46 = 0;
+    setCleanupCallback(&func_80046708_47308);
+    setCallback(&func_80046628_47228);
+}
+
+INCLUDE_ASM("asm/nonmatchings/46080", func_80046628_47228);
 
 void func_80046708_47308(func_80046708_47308_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
