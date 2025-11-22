@@ -6,6 +6,7 @@ Usage:
     python3 tools/score_functions.py <folder_path>
     python3 tools/score_functions.py asm/nonmatchings/displaylist
     python3 tools/score_functions.py --exhaustive asm/
+    python3 tools/score_functions.py --score-func func_800B6544_1E35F4 asm/
 """
 
 import sys
@@ -285,8 +286,6 @@ def score_folder(folder_path: str, exhaustive: bool = False) -> List[FunctionSco
         print(f"Error: No .s files found in '{folder_path}'", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Analyzing {len(asm_files)} file(s) in {folder_path}...\n")
-
     # Score each function
     scores = []
     for asm_file in asm_files:
@@ -299,9 +298,6 @@ def score_folder(folder_path: str, exhaustive: bool = False) -> List[FunctionSco
             score = analyze_function(str(asm_file))
             if score is not None:  # Skip jump tables
                 scores.append(score)
-
-    if exhaustive:
-        print(f"Found {len(scores)} function(s)\n")
 
     # Sort by complexity (lowest first)
     scores.sort(key=lambda s: s.total_score)
@@ -334,6 +330,7 @@ def main():
 Examples:
   python3 tools/score_functions.py asm/nonmatchings/displaylist
   python3 tools/score_functions.py --exhaustive asm/
+  python3 tools/score_functions.py --score-func func_800B6544_1E35F4 asm/
         """
     )
     parser.add_argument(
@@ -345,8 +342,32 @@ Examples:
         action='store_true',
         help='Parse multi-function .s files (e.g., asm/1DCF60.s) and score each function individually. Ignores difficult_functions file.'
     )
+    parser.add_argument(
+        '--score-func',
+        metavar='FUNCTION_NAME',
+        help='Search for and score a specific function by name (e.g., func_800B6544_1E35F4)'
+    )
 
     args = parser.parse_args()
+
+    # If --score-func is specified, search for that specific function
+    if args.score_func:
+        scores = score_folder(args.folder_path, exhaustive=True)  # Always use exhaustive mode for specific function search
+
+        # Find the matching function
+        matching_scores = [s for s in scores if s.name == args.score_func]
+
+        if not matching_scores:
+            print(f"Error: Function '{args.score_func}' not found in '{args.folder_path}'", file=sys.stderr)
+            sys.exit(1)
+
+        if len(matching_scores) > 1:
+            print(f"Warning: Found {len(matching_scores)} occurrences of '{args.score_func}'", file=sys.stderr)
+            sys.exit(1)
+
+        print(matching_scores[0].total_score)
+
+        sys.exit(0)
 
     scores = score_folder(args.folder_path, exhaustive=args.exhaustive)
 
