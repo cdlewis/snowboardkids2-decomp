@@ -78,7 +78,7 @@ typedef struct {
     /* 0x05C */ f32 env_decay_calc;
     /* 0x060 */ f32 env_release_calc;
     /* 0x064 */ s32 env_speed_calc;
-    /* 0x068 */ s32 vibrato;
+    /* 0x068 */ f32 vibrato;
     /* 0x06C */ f32 pitchbend_precalc;
     /* 0x070 */ f32 pitchbend;
     /* 0x074 */ song_t *song_addr;
@@ -960,7 +960,17 @@ INCLUDE_ASM("asm/nonmatchings/player", func_80073CB4_748B4);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073D6C_7496C);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073DC4_749C4);
+f32 func_80073DC4_749C4(channel_t *cp) {
+    s32 temp;
+
+    temp = cp->count - cp->vib_delay;
+
+    if (temp > 0) {
+        cp->vibrato = sinf((f32)temp * cp->vib_precalc) * cp->vib_amount;
+    }
+
+    return cp->vibrato;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073E20_74A20);
 
