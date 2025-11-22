@@ -819,7 +819,21 @@ musHandle func_80072CDC_738DC(fx_header_t *arg0, void *arg1) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072D20_73920);
+musHandle func_80072D20_73920(fx_header_t *arg0, s32 arg1) {
+    musHandle result;
+
+    if (arg0 != NULL) {
+        s32 temp = (s32)arg0->ptr_addr;
+        if (temp < 0) {
+            libmus_fxheader_single = arg0;
+        }
+    }
+
+    result = __MusIntFindChannelAndStart(arg1);
+    libmus_fxheader_single = libmus_fxheader_current;
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072D64_73964);
 
