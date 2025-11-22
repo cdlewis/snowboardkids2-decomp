@@ -1,4 +1,5 @@
 #include "5E590.h"
+#include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -47,6 +48,8 @@ typedef struct {
     s16 unk8;
     s32 unkC;
     s32 unk10;
+    u16 unk14;
+    s16 unk16;
 } func_80050F18_51B18_arg;
 
 typedef struct {
@@ -127,7 +130,7 @@ void func_800509CC_515CC(void);
 void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
 void func_80050E08_51A08(void);
 void func_80050EA0_51AA0(void **);
-void func_80050F64_51B64(void);
+void func_80050F64_51B64(func_80050F18_51B18_arg *);
 void func_80050FE0_51BE0(func_80050F18_51B18_arg *);
 void func_80051124_51D24(void);
 void func_80051250_51E50(func_800506B4_512B4_arg *);
@@ -137,6 +140,9 @@ void func_800518AC_524AC(void);
 void func_80051B8C_5278C(func_8005186C_5246C_arg *);
 
 extern loadAssetMetadata_arg D_80090EC0_91AC0;
+
+extern void func_80010240_10E40(void);
+extern void func_80010924_11524(void);
 
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104(func_80050504_51104_arg *);
@@ -298,7 +304,20 @@ void func_80050F18_51B18(func_80050F18_51B18_arg *arg0) {
     setCallbackWithContinue(&func_80050F64_51B64);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050F64_51B64);
+void func_80050F64_51B64(func_80050F18_51B18_arg *arg0) {
+    arg0->unk8 = (arg0->unk10 >> 1) + 0x45;
+    arg0->unk10 = arg0->unk10 + 1;
+
+    if (arg0->unk10 == 0x10) {
+        func_80069CF8_6A8F8();
+    }
+
+    if (arg0->unk16 == 0) {
+        debugEnqueueCallback(arg0->unk14, 1, func_80010240_10E40, arg0);
+    } else {
+        debugEnqueueCallback(arg0->unk14, 1, func_80010924_11524, arg0);
+    }
+}
 
 void func_80050FE0_51BE0(func_80050F18_51B18_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
