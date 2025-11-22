@@ -5,6 +5,7 @@
 #include "6E840.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 #include "overlay.h"
@@ -21,6 +22,7 @@ extern s32 D_4547D0;
 extern void func_80032708_33308(void);
 extern void func_80038420_39020(void);
 extern void func_8000FED0_10AD0(void);
+extern void func_8006FED8_70AD8(void *);
 
 typedef struct {
     u8 padding[0x77C];
@@ -257,7 +259,8 @@ extern u16 D_8008F20C_8FE0C;
 extern s32 identityMatrix;
 
 void func_80030F6C_31B6C(func_80031510_32110_arg *arg0);
-void func_80030E54_31A54(void);
+void func_80030EAC_31AAC(void);
+void func_80030E54_31A54(func_80031510_32110_arg *arg0);
 void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     s32 sp20[8];
     Mat3x3Padded matrixA;
@@ -313,7 +316,16 @@ void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     setCallback(&func_80030E54_31A54);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80030E54_31A54);
+void func_80030E54_31A54(func_80031510_32110_arg *arg0) {
+    u8 temp;
+    arg0->unk64--;
+    temp = arg0->unk64;
+    if (temp == 0) {
+        setCallback(&func_80030EAC_31AAC);
+    }
+    func_8006FED8_70AD8(arg0->unk0);
+    enqueueDisplayListObject(1, (DisplayListObject *)&arg0->unk4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80030EAC_31AAC);
 
