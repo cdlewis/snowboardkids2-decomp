@@ -52,6 +52,14 @@ typedef struct {
 } fx_header_t;
 
 typedef struct {
+    u8 command;
+    u8 padding1;
+    u8 padding2;
+    u8 padding3;
+    u32 data;
+} fifo_t;
+
+typedef struct {
     /* 0x000 */ s32 flags;
     /* 0x004 */ u8 *pdata;
     /* 0x008 */ void *pending;
@@ -192,6 +200,7 @@ u32 __MusIntStartEffect(channel_t *cp, s32 number, s32 volume, s32 pan, s32 prio
 ALMicroTime __MusIntMain(void *node);
 void __MusIntRemapPtrs(void *addr, void *offset, s32 count);
 void MusHandleUnPause(musHandle);
+void __MusIntFifoProcessCommand(fifo_t *command);
 s32 func_800744EC_750EC(song_t *, s32);
 void MusPtrBankInitialize(u8 *, u8 *);
 void __MusIntFifoOpen(s32);
@@ -970,7 +979,15 @@ void __MusIntFifoOpen(s32 commands) {
     D_800A6520_A7120 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072F54_73B54);
+void func_80072F54_73B54(void) {
+    while (D_800A6520_A7120 != D_800A6524_A7124) {
+        __MusIntFifoProcessCommand(&((fifo_t *)D_800A652C_A712C)[D_800A6520_A7120]);
+        D_800A6520_A7120++;
+        if (D_800A6520_A7120 == D_800A6528_A7128) {
+            D_800A6520_A7120 = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntFifoProcessCommand);
 
