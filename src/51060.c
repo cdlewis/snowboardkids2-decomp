@@ -79,6 +79,15 @@ typedef struct {
     void *unk0;
 } func_80050864_51464_arg;
 
+typedef struct {
+    u8 padding[0xC4];
+    void *unkC4;
+    u8 padding2[0xC];
+    u8 unkD4;
+    u8 padding3;
+    u8 unkD6;
+} func_80051BB8_527B8_task;
+
 void func_800504A0_510A0(func_800504A0_510A0_arg *);
 void func_800505D8_511D8(s32 **arg0);
 
@@ -303,6 +312,13 @@ void func_80051B8C_5278C(func_8005186C_5246C_arg *arg0) {
     arg0->unkC0 = freeNodeMemory(arg0->unkC0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80051BB8_527B8);
+void func_80051BB8_527B8(void *arg0) {
+    func_80051BB8_527B8_task *task = (func_80051BB8_527B8_task *)scheduleTask(&func_8005186C_5246C, 2, 0, 0xE7);
+    if (task != NULL) {
+        task->unkC4 = arg0;
+        task->unkD4 = 0x12;
+        task->unkD6 = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80051C08_52808);
