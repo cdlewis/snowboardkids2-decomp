@@ -165,7 +165,7 @@ typedef struct {
 
 extern ALGlobals __libmus_alglobals;
 extern ALVoice *mus_voices;
-extern s32 ChangeCustomEffect(u8);
+extern s32 ChangeCustomEffect(s32);
 extern ALMicroTime mus_next_frame_time;
 extern fx_header_t *libmus_fxheader_current;
 extern fx_header_t *libmus_fxheader_single;
@@ -201,6 +201,7 @@ ALMicroTime __MusIntMain(void *node);
 void __MusIntRemapPtrs(void *addr, void *offset, s32 count);
 void MusHandleUnPause(musHandle);
 void __MusIntFifoProcessCommand(fifo_t *command);
+void __MusIntHandleSetFlag(u32 handle, u32 clear, u32 set);
 s32 func_800744EC_750EC(song_t *, s32);
 void MusPtrBankInitialize(u8 *, u8 *);
 void __MusIntFifoOpen(s32);
@@ -989,7 +990,19 @@ void func_80072F54_73B54(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntFifoProcessCommand);
+void __MusIntFifoProcessCommand(fifo_t *command) {
+    switch (command->command) {
+        case 0:
+            __MusIntHandleSetFlag(command->data, -2, 1);
+            break;
+        case 1:
+            __MusIntHandleSetFlag(command->data, -2, 0);
+            break;
+        case 2:
+            ChangeCustomEffect(command->data);
+            break;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073058_73C58);
 
