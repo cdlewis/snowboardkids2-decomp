@@ -803,7 +803,21 @@ void func_80072CC0_738C0(void *pbank, void *wbank) {
     MusPtrBankInitialize(pbank, wbank);
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072CDC_738DC);
+musHandle func_80072CDC_738DC(fx_header_t *arg0, void *arg1) {
+    musHandle result;
+
+    if (arg0 != NULL) {
+        s32 temp = (s32)arg0->ptr_addr;
+        if (temp < 0) {
+            libmus_fxheader_single = arg0;
+        }
+    }
+
+    result = ((musHandle(*)(void *))__MusIntStartSong)(arg1);
+    libmus_fxheader_single = libmus_fxheader_current;
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072D20_73920);
 
