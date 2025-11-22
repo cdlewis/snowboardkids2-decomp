@@ -5,6 +5,8 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
+extern u8 D_80090E70_91A70[];
+
 typedef struct {
     void *unk0;
     loadAssetMetadata_arg unk4;
@@ -387,4 +389,22 @@ void func_80051BB8_527B8(void *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80051C08_52808);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuninitialized"
+void func_80051C08_52808(void *arg0, s32 arg1) {
+    s32 temp_s0;
+    func_80051BB8_527B8_task *task;
+
+    temp_s0 = D_80090E70_91A70[arg1];
+    if (temp_s0 == 0xFF) {
+        temp_s0 = 0xD;
+    }
+
+    task = (func_80051BB8_527B8_task *)scheduleTask(&func_8005186C_5246C, 2, 0, 0xE7);
+    if (task != NULL) {
+        task->unkC4 = arg0;
+        task->unkD4 = temp_s0;
+        task->unkD6 = 1;
+    }
+}
+#pragma GCC diagnostic pop
