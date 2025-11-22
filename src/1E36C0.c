@@ -134,7 +134,16 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7620_1E46D0);
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7760_1E4810);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B77C4_1E4874);
+void func_800B77C4_1E4874(CutsceneSlotData *arg0, s32 arg1, s16 arg2) {
+    if (arg2 > 0) {
+        arg0->unk64 = arg1;
+        arg0->unk70 = (arg1 - arg0->unk58) / arg2;
+    } else {
+        arg0->unk58 = arg1;
+        arg0->unk64 = arg1;
+        arg0->unk70 = 0;
+    }
+}
 
 void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2) {
     s32 delta;
