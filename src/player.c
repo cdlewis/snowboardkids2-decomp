@@ -67,13 +67,13 @@ typedef struct {
     /* 0x030 */ f32 freqoffset;
     /* 0x034 */ u8 *ppitchbend;
     /* 0x038 */ u8 *pvolume;
-    u8 padding03[0x4];
+    /* 0x03C */ s32 unk3C;
     /* 0x040 */ s32 unk40;
     /* 0x044 */ s32 handle;
     /* 0x048 */ s32 priority;
     /* 0x04C */ f32 last_note;
     /* 0x050 */ float port_base;
-    u8 padding04[0x4];
+    /* 0x054 */ s32 unk54;
     /* 0x058 */ f32 env_attack_calc;
     /* 0x05C */ f32 env_decay_calc;
     /* 0x060 */ f32 env_release_calc;
@@ -90,7 +90,7 @@ typedef struct {
     /* 0x08C */ f32 distort;
     /* 0x090 */ s32 unk90;
     /* 0x094 */ s16 temscale;
-    s16 unk96;
+    /* 0x096 */ u16 unk96;
     /* 0x098 */ s16 channel_tempo;
     /* 0x09A */ s16 volscale;
     /* 0x09C */ u16 old_volume;
@@ -102,8 +102,8 @@ typedef struct {
     /* 0x0A8 */ s16 fixed_length;
     /* 0x0AA */ s16 wave;
     /* 0x0AC */ s16 panscale;
-    /* 0x0AE */ s16 cutoff;
-    /* 0x0B0 */ s16 endit;
+    /* 0x0AE */ u16 cutoff;
+    /* 0x0B0 */ u16 endit;
     /* 0x0B2 */ u8 vib_delay;
     /* 0x0B3 */ u8 ignore;
     /* 0x0B4 */ u8 port;
@@ -117,7 +117,9 @@ typedef struct {
     /* 0x0BC */ u8 env_init_vol;
     /* 0x0BD */ u8 env_max_vol;
     /* 0x0BE */ u8 env_sustain_vol;
-    u8 padding10[0x3];
+    /* 0x0BF */ u8 unkBF;
+    /* 0x0C0 */ u8 unkC0;
+    /* 0x0C1 */ u8 unkC1;
     /* 0x0C2 */ u8 env_attack_speed;
     /* 0x0C3 */ u8 env_decay_speed;
     /* 0x0C4 */ u8 env_release_speed;
