@@ -1,6 +1,8 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5B30_1E2BE0);
+void func_800B5B30_1E2BE0(void *arg0, u8 arg1) {
+    *(u8 *)((u8 *)arg0 + 0x71) = arg1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5B38_1E2BE8);
 
