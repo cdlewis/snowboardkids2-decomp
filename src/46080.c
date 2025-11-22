@@ -207,6 +207,9 @@ void func_80046244_46E44(s16 arg0, s16 arg1) {
 
 typedef struct {
     void *unk0;
+    loadAssetMetadata_arg unk4;
+    u8 _pad[0x4];
+    u16 unk24;
 } Struct_func_8004657C_4717C;
 
 void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0);
@@ -219,7 +222,23 @@ void func_80046298_46E98(Struct_func_8004657C_4717C *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800462D8_46ED8);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800463F4_46FF4);
+extern void func_80066444_67044(s32, func_80066444_67044_arg1 *);
+
+void func_800463F4_46FF4(Struct_func_8004657C_4717C *arg0) {
+    s32 i;
+    u16 counter;
+
+    counter = arg0->unk24 + 1;
+    arg0->unk24 = counter & 0xF;
+
+    if ((counter & 0x7) != 0) {
+        loadAssetMetadata(&arg0->unk4, arg0->unk0, (counter & 0xF) >> 3);
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80046464_47064);
 
