@@ -63,7 +63,26 @@ s32 func_800B96B4_1E6764(func_800B9680_1E6730_arg *arg0) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B9708_1E67B8);
+s32 func_800B9708_1E67B8(func_800B9680_1E6730_arg *arg0) {
+    s32 temp_a1;
+    s32 temp_v0;
+    s32 result;
+
+    temp_a1 = arg0->unk74;
+    temp_v0 = ((0x10000 - temp_a1) >> 8) * (arg0->unk7C >> 8);
+    result = 3;
+
+    if (temp_v0 != 0) {
+        arg0->unk74 = temp_a1 + temp_v0;
+    } else {
+        arg0->unk74 = 0x10000;
+        result = 4;
+    }
+
+    func_800B9440_1E64F0(arg0);
+
+    return result;
+}
 
 void *func_800B9774_1E6824(cutsceneSys2Wait_exec_asset *arg0) {
     void *result;
