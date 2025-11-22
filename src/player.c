@@ -180,6 +180,10 @@ u32 __muscontrol_flag;
 fx_t *D_800A64F4_A70F4;
 s32 *D_800A64F8_A70F8;
 ALHeap audio_heap;
+s32 D_800A6520_A7120;
+s32 D_800A6524_A7124;
+s32 D_800A6528_A7128;
+void *D_800A652C_A712C;
 
 f32 __MusIntPowerOf2(f32 x);
 void MusSetMasterVolume(u32 flags, u32 volume);
@@ -935,7 +939,21 @@ void func_80072E94_73A94(int onoff) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntFifoOpen);
+void __MusIntFifoOpen(s32 commands) {
+    void *temp;
+
+    if (commands < 0x40) {
+        commands = 0x40;
+    } else if (commands >= 0x401) {
+        commands = 0x400;
+    }
+
+    temp = alHeapDBAlloc(0, 0, &audio_heap, 1, commands * 8);
+    D_800A652C_A712C = temp;
+    D_800A6528_A7128 = commands;
+    D_800A6524_A7124 = 0;
+    D_800A6520_A7120 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072F54_73B54);
 
