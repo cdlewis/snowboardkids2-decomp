@@ -320,7 +320,21 @@ void func_8006FDA0_709A0(Node_70B00 *arg0, u8 arg1, u8 arg2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FDC8_709C8);
+void func_8006FDC8_709C8(u16 arg0, u8 arg1, u8 arg2) {
+    Node_70B00 *node;
+
+    node = &D_800A3370_A3F70;
+    while (node != NULL) {
+        if (node->slot_index == arg0) {
+            node->unkC0 = arg1;
+            node->unkC1 = arg2;
+            if (!(arg2 & 0xFF)) {
+                node->unkBF = arg1;
+            }
+        }
+        node = node->list3_next;
+    }
+}
 
 s32 func_8006FE10_70A10(Node_70B00 *arg0) {
     if (arg0 == NULL) {
