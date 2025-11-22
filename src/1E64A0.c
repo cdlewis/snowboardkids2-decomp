@@ -1,4 +1,5 @@
 #include "common.h"
+#include "task_scheduler.h"
 
 extern void func_800B9440_1E64F0(void *);
 extern void func_800585C8_591C8(s32);
@@ -8,6 +9,14 @@ typedef struct {
     s32 unk7C;
     s32 unk80;
 } func_800B9680_1E6730_arg;
+
+typedef struct {
+    u8 _pad0[0x8];
+    void *unk8;
+    void *unkC;
+    u8 _pad1[0x90];
+    void *unkA0;
+} func_800B9C20_1E6CD0_arg;
 
 INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B93F0_1E64A0);
 
@@ -35,4 +44,8 @@ INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B993C_1E69EC);
 
 INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B99A0_1E6A50);
 
-INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B9C20_1E6CD0);
+void func_800B9C20_1E6CD0(func_800B9C20_1E6CD0_arg *arg0) {
+    arg0->unkA0 = freeNodeMemory(arg0->unkA0);
+    arg0->unk8 = freeNodeMemory(arg0->unk8);
+    arg0->unkC = freeNodeMemory(arg0->unkC);
+}

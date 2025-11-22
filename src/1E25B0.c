@@ -3,10 +3,10 @@
 
 typedef struct {
     u8 _pad0[0x24];
-    void* unk24;
-    void* unk28;
+    void *unk24;
+    void *unk28;
     u8 _pad2C[0x10];
-    void* unk3C;
+    void *unk3C;
 } func_800B5794_1E2844_arg;
 
 INCLUDE_ASM("asm/nonmatchings/1E25B0", func_800B5500_1E25B0);
