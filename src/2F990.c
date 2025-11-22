@@ -67,9 +67,14 @@ typedef struct {
     void *unk2C;
 } func_8002FA1C_3061C_arg;
 typedef struct {
-    /* 0x00 */ u8 padding[0x8];
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
     /* 0x08 */ char *cameraYString;
-    /* 0x0C */ u8 padding2[0x8];
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
     /* 0x14 */ char *cameraYRotationString;
     /* 0x18 */ s32 cameraY;
     /* 0x1C */ s16 cameraRotation;
@@ -100,23 +105,6 @@ typedef struct {
     s16 unk24;
     s8 unk26;
 } func_8002EF3C_2FB3C_arg;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    void *unk8;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u8 padding[0x2];
-    void *unk14;
-    s32 unk18;
-    s16 unk1C;
-    s16 unk1E;
-    u8 padding2[0x1D];
-    s16 unk3E;
-} func_8002ED90_2F990_arg;
 
 typedef struct {
     u8 padding[0x50];
@@ -186,17 +174,17 @@ void func_80038420_39020(void);
 void func_8006FF90_70B90(s32, s32, void *, void *);
 void updateDebugCameraYState(cameraState *arg0);
 
-void initDebugCameraController(func_8002ED90_2F990_arg *arg0) {
-    arg0->unk18 = 0;
-    arg0->unk1C = 0;
+void initDebugCameraController(cameraState *arg0) {
+    arg0->cameraY = 0;
+    arg0->cameraRotation = 0;
     arg0->unk0 = -0x80;
     arg0->unk2 = -0x58;
-    arg0->unk8 = &arg0->unk3E;
+    arg0->cameraYString = &arg0->unk3E;
     arg0->unkE = -0x50;
     arg0->unk4 = 0;
     arg0->unkC = -0x80;
     arg0->unk10 = 0;
-    arg0->unk14 = &arg0->unk1E;
+    arg0->cameraYRotationString = &arg0->unk1E;
 
     setCallback(&updateDebugCameraYState);
 }
