@@ -1,3 +1,4 @@
+#include "19E80.h"
 #include "56910.h"
 #include "5E590.h"
 #include "common.h"
@@ -41,9 +42,18 @@ void func_8004AE58_4BA58(s32 **);
 void func_8004A634_4B234(void *);
 void func_8004A96C_4B56C(s32 **);
 extern void func_8004AA90_4B690(void *);
-extern void func_80049300_49F00(void *);
 extern void func_800458AC_464AC(void);
 extern void func_800457E0_463E0(void);
+
+typedef struct {
+    DataTable_19E80 *unk0;
+    OutputStruct_19E80 unk4;
+    u8 _pad[0x38 - 0x4 - sizeof(OutputStruct_19E80)];
+    s32 unk38;
+    s32 unk3C;
+} func_80049300_49F00_arg;
+
+void func_80049300_49F00(func_80049300_49F00_arg *arg0);
 
 typedef struct {
     void *unk0;
@@ -421,7 +431,21 @@ void func_800492C0_49EC0(void **arg0) {
     setCallbackWithContinue(&func_80049300_49F00);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80049300_49F00);
+extern void func_8004934C_49F4C(void);
+
+void func_80049300_49F00(func_80049300_49F00_arg *arg0) {
+    u16 index;
+
+    if (arg0->unk3C == 0) {
+        index = 0x33;
+    } else {
+        index = 0x34;
+    }
+
+    getTableEntryByU16Index(arg0->unk0, index, &arg0->unk4);
+    arg0->unk38 = 0;
+    setCallbackWithContinue(&func_8004934C_49F4C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004934C_49F4C);
 
