@@ -39,7 +39,7 @@ typedef struct {
 } D_800AB068_A23D8_type;
 
 extern D_800AB068_A23D8_type *D_800AB068_A23D8;
-extern Node_70B00 D_800A3370_A3F70;
+
 extern ViewportStruct D_800A3410_A4010;
 extern s8 D_800A3429_A4029;
 extern s8 D_800A342A_A402A;
@@ -53,7 +53,6 @@ extern s32 D_800A35C8_A41C8[];
 extern s16 D_800A8A9A_9FE0A;
 extern s16 D_800AB478_A27E8;
 
-extern ViewportStruct D_800A3410_A4010;
 extern Item_A4188 *D_800A3588_A4188[];
 extern u32 __additional_scanline_0;
 extern s32 gRegionAllocEnd;

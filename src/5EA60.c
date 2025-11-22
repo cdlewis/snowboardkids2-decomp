@@ -125,7 +125,6 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005ECB8_5F8B8);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005EFC4_5FBC4);
 
-extern u16 *func_8005DE6C_5EA6C(void *base, s16 tableIndex, s16 subIndex);
 typedef struct {
     u8 padding[0x40];
     s16 unk40;

@@ -142,7 +142,7 @@ void func_80036328_36F28(func_80036328_36F28_arg *);
 void func_80036880_37480(func_80036880_37480_arg *);
 void func_80036A68_37668(void *);
 void func_80036A10_37610(void *);
-void func_80069CF8_6A8F8(void);
+
 typedef struct {
     s32 unk0;
     s32 unk4;

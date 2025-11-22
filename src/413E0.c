@@ -18,7 +18,7 @@ typedef struct {
 } func_80040E00_41A00_arg;
 
 extern s32 gFrameCounter;
-extern void* freeNodeMemory(void*);
+
 extern void func_80040870_41470(void);
 
 typedef struct {

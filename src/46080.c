@@ -23,7 +23,7 @@ typedef struct {
 
 extern void func_8004BCFC_4C8FC(void *);
 extern void func_8004AF2C_4BB2C(void *);
-extern void* freeNodeMemory(void*);
+
 extern void func_80048E34_49A34(void);
 extern void func_800462D8_46ED8(void);
 extern void func_8004B834_4C434(void);
@@ -297,9 +297,6 @@ typedef struct {
     void* unk0;
 } Struct_func_800482A4_48EA4;
 
-extern void *loadAsset_34CB50(void);
-extern void setCleanupCallback(void *);
-extern void setCallbackWithContinue(void *);
 extern void func_80047EFC_48AFC(void);
 extern void func_800482A4_48EA4(Struct_func_800482A4_48EA4*);
 

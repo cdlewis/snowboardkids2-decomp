@@ -3,7 +3,6 @@
 
 extern s32 func_8006FE48_70A48(u16, s32, s32, s32, s32, s32);
 extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
-extern void func_8006FD3C_7093C(u16, void *);
 
 extern ColorData D_8008DEF0_8EAF0;
 extern ColorData D_8008DEF8_8EAF8;

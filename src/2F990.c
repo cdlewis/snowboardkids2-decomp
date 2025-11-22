@@ -143,7 +143,7 @@ typedef struct {
 } func_80030B70_31770_arg;
 
 extern void func_8000FED0_10AD0(void);
-extern void *freeNodeMemory(void *);
+
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];

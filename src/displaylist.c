@@ -61,19 +61,6 @@ extern void func_80066474_67074(void);
 extern void func_800670D4_67CD4(void);
 extern void func_80014480_15080(void);
 extern void func_800680C4_68CC4(void);
-extern void guLookAtReflect(
-    Mtx *m,
-    LookAt *l,
-    f32 xEye,
-    f32 yEye,
-    f32 zEye,
-    f32 xAt,
-    f32 yAt,
-    f32 zAt,
-    f32 xUp,
-    f32 yUp,
-    f32 zUp
-);
 
 void func_80062CF0_638F0(void);
 void setupDisplayListMatrix(DisplayListObject *);

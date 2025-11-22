@@ -97,7 +97,7 @@ void func_800518AC_524AC(void);
 void func_80051B8C_5278C(func_8005186C_5246C_arg *);
 
 extern loadAssetMetadata_arg D_80090EC0_91AC0;
-extern void* freeNodeMemory(void*);
+
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104(func_80050504_51104_arg *);
 

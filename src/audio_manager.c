@@ -83,7 +83,6 @@ extern u32 gMaxVoices;
 extern u32 gMinAudioFrameSize;
 extern u8 gDriveRomInitialized;
 extern void **gAudioMsgBuffer;
-extern void addViConfig(ViConfig *, OSMesgQueue *, s32);
 
 s32 loadAudioDataWithCache(s32, s32);
 void handleAudioUnderrun(void *);

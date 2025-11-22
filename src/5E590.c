@@ -28,7 +28,7 @@ extern AssetWithSize D_80094870_95470[];
 extern AssetWithSize D_80094990_95590[];
 extern AssetWithSize D_80094A68_95668[];
 extern AssetWithSize D_80094B70_95770[];
-extern AssetWithSize D_80094B70_95770[];
+
 extern AssetWithSize D_80094C30_95830[];
 extern s32 *D_80094780_95380[];
 extern s32 *D_800947B0_953B0[];

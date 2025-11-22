@@ -49,7 +49,6 @@ extern void func_800BBF4C_AFC3C(void);
 extern void func_800BC184_AFE74(void);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
 extern void func_800BC750_B0440(void);
-extern void* freeNodeMemory(void*);
 
 extern void *D_800BC7F0_B04E0;
 extern Vec3 D_800BCAA0_B0790;

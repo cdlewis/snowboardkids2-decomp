@@ -164,12 +164,7 @@ extern s32 mus_vsyncs_per_second;
 extern channel_t *mus_channels;
 extern s32 max_channels;
 extern s32 mus_songfxchange_flag;
-extern s32 mus_vsyncs_per_second;
-extern channel_t *mus_channels;
-extern s32 max_channels;
-extern s32 mus_songfxchange_flag;
-extern ALGlobals __libmus_alglobals;
-extern ALVoice *mus_voices;
+
 extern LIBMUScb_marker marker_callback;
 extern s32 mus_last_fxtype;
 extern s32 mus_current_handle;

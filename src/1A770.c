@@ -52,7 +52,7 @@ extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 D_800A8CC8_A0038;
 extern void func_8001E590_1F190(void);
 extern void func_80019E18_1AA18(void);
-extern void func_8001A0F4_1ACF4(void);
+
 extern void func_800226F0_232F0(void);
 extern void func_80038090_38C90(void);
 extern void func_80015254_15E54(void);
