@@ -237,7 +237,7 @@ void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void func_800313A4_31FA4(void);
 void func_800313DC_31FDC(func_80031510_32110_arg *arg0);
 void func_80031458_32058(void);
-void func_800315C0_321C0(void);
+void func_800315C0_321C0(func_80031510_32110_arg *arg0);
 void func_800316AC_322AC(void);
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
@@ -443,7 +443,29 @@ void func_80031510_32110(func_80031510_32110_arg *arg0) {
     setCallback(&func_800315C0_321C0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_800315C0_321C0);
+void func_800315C0_321C0(func_80031510_32110_arg *arg0) {
+    func_80032DE8_339E8_asset *allocation;
+    s32 temp;
+
+    allocation = (func_80032DE8_339E8_asset *)getCurrentAllocation();
+
+    if (allocation->unk79C == 1) {
+        temp = 0xFFF00000;
+    } else {
+        temp = 0x100000;
+    }
+
+    arg0->unk50 += temp;
+
+    memcpy(arg0, (u8 *)arg0 + 0x3C, 0x20);
+
+    if (arg0->unk50 == 0) {
+        allocation->unk79D--;
+        setCallback(&func_80031458_32058);
+    }
+
+    enqueueDisplayListObject(0, (DisplayListObject *)arg0);
+}
 
 void func_8003165C_3225C(func_800319C8_325C8_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
