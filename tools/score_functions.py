@@ -5,11 +5,13 @@ Score assembly functions by complexity and find the simplest one to decompile.
 Usage:
     python3 tools/score_functions.py <folder_path>
     python3 tools/score_functions.py asm/nonmatchings/displaylist
+    python3 tools/score_functions.py --exhaustive asm/
 """
 
 import sys
 import os
 import re
+import argparse
 from pathlib import Path
 from dataclasses import dataclass
 from typing import List, Tuple
@@ -47,6 +49,136 @@ class FunctionScore:
             f"Stack: {self.stack_size:4d}"
         )
 
+    def to_simple_format(self) -> str:
+        """Return a simple parseable format without column names."""
+        return (
+            f"{self.name} | {self.total_score:.1f} | "
+            f"{self.instruction_count} | {self.branch_count} | "
+            f"{self.jump_count} | {self.label_count} | {self.stack_size}"
+        )
+
+
+def parse_multi_function_file(file_path: str) -> List[FunctionScore]:
+    """Parse a file containing multiple functions and return a list of scores."""
+    scores = []
+
+    try:
+        with open(file_path, 'r') as f:
+            content = f.read()
+
+        # Find all function blocks using glabel/endlabel markers
+        # Pattern: glabel <function_name> ... endlabel <function_name>
+        glabel_pattern = r'glabel\s+(\S+)'
+
+        # Find all glabel occurrences
+        glabels = list(re.finditer(glabel_pattern, content))
+
+        if len(glabels) == 0:
+            # No glabels found, use standard analysis (extracts name from filename)
+            score = analyze_function(file_path)
+            return [score] if score is not None else []
+
+        # One or more functions found - parse each one
+        for i, match in enumerate(glabels):
+            func_name = match.group(1)
+            start_pos = match.start()
+
+            # Find the end of this function (next glabel or end of file)
+            if i + 1 < len(glabels):
+                end_pos = glabels[i + 1].start()
+            else:
+                end_pos = len(content)
+
+            # Extract function content
+            func_content = content[start_pos:end_pos]
+
+            # Analyze this function
+            score = analyze_function_content(func_name, func_content, file_path)
+            if score is not None:
+                scores.append(score)
+
+    except Exception as e:
+        print(f"Error parsing multi-function file {file_path}: {e}", file=sys.stderr)
+
+    return scores
+
+
+def analyze_function_content(func_name: str, content: str, file_path: str) -> FunctionScore:
+    """Analyze function content and return complexity metrics."""
+
+    # Branch instructions (conditional)
+    branch_patterns = [
+        r'\b(beq|bne|bnez|beqz|blez|bgtz|bltz|bgez|blt|bgt|ble|bge|bltzal|bgezal)\b'
+    ]
+
+    # Jump instructions
+    jump_patterns = [
+        r'\bjal\b',  # Function calls
+        r'\bj\b'     # Unconditional jumps (not jr - that's return)
+    ]
+
+    # Local label pattern (e.g., .L800095A8_A1A8:)
+    label_pattern = r'^\s*\.L[0-9A-Fa-f_]+:'
+
+    # Instruction pattern (lines with actual assembly)
+    instruction_pattern = r'/\*\s*[0-9A-Fa-f]+\s+[0-9A-Fa-f]+\s+[0-9A-Fa-f]+\s*\*/'
+
+    # Stack allocation pattern (addiu $sp, $sp, -0xNN)
+    stack_pattern = r'addiu\s+\$sp,\s*\$sp,\s*-0x([0-9A-Fa-f]+)'
+
+    # Jump table pattern (e.g., jtbl_8009E1D8_9EDD8)
+    jumptable_pattern = r'^jtbl_[0-9A-Fa-f_]+$'
+
+    # Data pattern (e.g., D_8009E48C_9F08C)
+    data_pattern = r'^D_[0-9A-Fa-f_]+$'
+
+    # Skip non-code sections (data, bss, rodata, header)
+    # These typically have .data, .bss, .rodata suffixes or are named "header"
+    if (re.match(jumptable_pattern, func_name) or
+        re.match(data_pattern, func_name) or
+        func_name.endswith('.data') or
+        func_name.endswith('.bss') or
+        func_name.endswith('.rodata') or
+        func_name == 'header'):
+        return None
+
+    score = FunctionScore(name=func_name, file_path=file_path)
+
+    for line in content.split('\n'):
+        line = line.strip()
+
+        # Skip empty lines, glabel, endlabel, and comments
+        if not line or line.startswith('glabel') or line.startswith('endlabel') or line.startswith('nonmatching'):
+            continue
+
+        # Count local labels
+        if re.match(label_pattern, line):
+            score.label_count += 1
+            continue
+
+        # Count instructions
+        if re.search(instruction_pattern, line):
+            score.instruction_count += 1
+
+            # Check for branches
+            for pattern in branch_patterns:
+                if re.search(pattern, line):
+                    score.branch_count += 1
+                    break
+
+            # Check for jumps
+            for pattern in jump_patterns:
+                if re.search(pattern, line):
+                    score.jump_count += 1
+                    break
+
+            # Check for stack allocation
+            stack_match = re.search(stack_pattern, line)
+            if stack_match:
+                score.stack_size = int(stack_match.group(1), 16)
+
+    return score
+
 
 def analyze_function(file_path: str) -> FunctionScore:
     """Analyze an assembly file and return complexity metrics."""
@@ -81,8 +213,14 @@ def analyze_function(file_path: str) -> FunctionScore:
     # Data pattern (e.g., D_8009E48C_9F08C)
     data_pattern = r'^D_[0-9A-Fa-f_]+$'
 
-    # Skip jump tables and data - return None to indicate this should be filtered
-    if re.match(jumptable_pattern, func_name) or re.match(data_pattern, func_name):
+    # Skip non-code sections (data, bss, rodata, header)
+    # These typically have .data, .bss, .rodata suffixes or are named "header"
+    if (re.match(jumptable_pattern, func_name) or
+        re.match(data_pattern, func_name) or
+        func_name.endswith('.data') or
+        func_name.endswith('.bss') or
+        func_name.endswith('.rodata') or
+        func_name == 'header'):
         return None
 
     score = FunctionScore(name=func_name, file_path=file_path)
@@ -128,8 +266,13 @@ def analyze_function(file_path: str) -> FunctionScore:
     return score
 
 
-def score_folder(folder_path: str) -> List[FunctionScore]:
-    """Score all assembly functions in a folder and its subdirectories."""
+def score_folder(folder_path: str, exhaustive: bool = False) -> List[FunctionScore]:
+    """Score all assembly functions in a folder and its subdirectories.
+
+    Args:
+        folder_path: Path to the folder to scan
+        exhaustive: If True, parse multi-function .s files individually
+    """
 
     if not os.path.isdir(folder_path):
         print(f"Error: '{folder_path}' is not a valid directory", file=sys.stderr)
@@ -142,14 +285,23 @@ def score_folder(folder_path: str) -> List[FunctionScore]:
         print(f"Error: No .s files found in '{folder_path}'", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Analyzing {len(asm_files)} functions in {folder_path}...\n")
+    print(f"Analyzing {len(asm_files)} file(s) in {folder_path}...\n")
 
     # Score each function
     scores = []
     for asm_file in asm_files:
-        score = analyze_function(str(asm_file))
-        if score is not None:  # Skip jump tables
-            scores.append(score)
+        if exhaustive:
+            # Parse multi-function files
+            file_scores = parse_multi_function_file(str(asm_file))
+            scores.extend(file_scores)
+        else:
+            # Original behavior - one function per file
+            score = analyze_function(str(asm_file))
+            if score is not None:  # Skip jump tables
+                scores.append(score)
+
+    if exhaustive:
+        print(f"Found {len(scores)} function(s)\n")
 
     # Sort by complexity (lowest first)
     scores.sort(key=lambda s: s.total_score)
@@ -175,28 +327,53 @@ def load_difficult_functions(difficult_file: str) -> set:
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python3 tools/score_functions.py <folder_path>")
-        print("Example: python3 tools/score_functions.py asm/nonmatchings/displaylist")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Score assembly functions by complexity and find the simplest one to decompile.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python3 tools/score_functions.py asm/nonmatchings/displaylist
+  python3 tools/score_functions.py --exhaustive asm/
+        """
+    )
+    parser.add_argument(
+        'folder_path',
+        help='Path to folder containing .s assembly files'
+    )
+    parser.add_argument(
+        '--exhaustive',
+        action='store_true',
+        help='Parse multi-function .s files (e.g., asm/1DCF60.s) and score each function individually. Ignores difficult_functions file.'
+    )
 
-    folder_path = sys.argv[1]
-    scores = score_folder(folder_path)
+    args = parser.parse_args()
 
-    # Load difficult functions to exclude
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    difficult_file = os.path.join(script_dir, 'difficult_functions')
-    difficult_functions = load_difficult_functions(difficult_file)
+    scores = score_folder(args.folder_path, exhaustive=args.exhaustive)
 
-    if difficult_functions:
-        print(f"Excluding {len(difficult_functions)} difficult function(s)\n")
+    # Load difficult functions to exclude (only in non-exhaustive mode)
+    difficult_functions = set()
+    if not args.exhaustive:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        difficult_file = os.path.join(script_dir, 'difficult_functions')
+        difficult_functions = load_difficult_functions(difficult_file)
 
-    # Filter out difficult functions
-    filtered_scores = [s for s in scores if s.name not in difficult_functions]
+        if difficult_functions:
+            print(f"Excluding {len(difficult_functions)} difficult function(s)\n")
+
+    # Filter out difficult functions and data sections (functions with 0 instructions)
+    filtered_scores = [s for s in scores
+                      if s.name not in difficult_functions and s.instruction_count > 0]
 
     if not filtered_scores:
-        print("Error: All functions are marked as difficult!", file=sys.stderr)
+        print("Error: All functions are marked as difficult or are data sections!", file=sys.stderr)
         sys.exit(1)
+
+    # In exhaustive mode, list all functions
+    if args.exhaustive:
+        print("ALL FUNCTIONS (sorted by complexity):\n")
+        for score in filtered_scores:
+            print(score.to_simple_format())
+        print(f"\n{'='*80}\n")
 
     simplest = filtered_scores[0]
     print(f"SIMPLEST FUNCTION: {simplest.name}")
