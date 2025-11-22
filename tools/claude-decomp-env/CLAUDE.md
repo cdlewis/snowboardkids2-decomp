@@ -36,10 +36,19 @@ Repeat the following steps:
 - The only permitted #include is common.h
 - Use temporary variables instead of complex nested expressions
 
-Never use pointer casts or manual offset arithmetic to access struct members. Examples of this include:
+🚨 CRITICAL: NEVER USE POINTER CASTS OR OFFSET ARITHMETIC 🚨
+THIS IS THE #1 RULE. VIOLATING THIS RULE MEANS AUTOMATIC FAILURE. Examples of this include:
 
 - `return *(u8 *)(arg0 + 0xC1);`
+- `*(s32*)((u8*)arg0 + 0x34) = value;`
+- `*(u8*)(arg0 + 0xC1);`
+- `*((s16*)ptr + 2);`
 
+When you see assembly accessing an offset:
+
+- STOP - Do NOT write pointer arithmetic
+- FIND or CREATE a struct with a field at that exact offset
+- USE the struct field directly
 Instead, when decompiling a function that accesses a struct field:
 
 1. **First**, identify the exact offset being accessed in the assembly

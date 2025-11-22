@@ -44,10 +44,18 @@ s32 cutsceneCameraShake_validate(void) {
     return 0;
 }
 
-extern void func_800B6180_1E3230(s32, s32, s16);
+typedef struct {
+    u8 _pad[0x68];
+    s32 unk68;
+    s16 unk6C;
+    u8 _pad2[2];
+    u8 unk70;
+} func_800B6180_1E3230_arg0;
+
+extern void func_800B6180_1E3230(func_800B6180_1E3230_arg0 *, s32, s16);
 
 void cutsceneCameraShake_exec(cutsceneCameraRotate_exec_arg0 *arg0, cutsceneCameraRotate_exec_arg1 *arg1) {
-    func_800B6180_1E3230(arg1->unkC, arg0->unk0 * 0xA3D7, arg0->unk2);
+    func_800B6180_1E3230((func_800B6180_1E3230_arg0 *)arg1->unkC, arg0->unk0 * 0xA3D7, arg0->unk2);
 }
 
 void cutsceneCameraRotate_init(void) {

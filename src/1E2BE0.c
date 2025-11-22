@@ -34,7 +34,19 @@ INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B60DC_1E318C);
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6130_1E31E0);
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6180_1E3230);
+typedef struct {
+    u8 _pad[0x68];
+    s32 unk68;
+    s16 unk6C;
+    u8 _pad2[2];
+    u8 unk70;
+} func_800B6180_1E3230_arg0;
+
+void func_800B6180_1E3230(func_800B6180_1E3230_arg0 *arg0, s32 arg1, s16 arg2) {
+    arg0->unk70 = 0;
+    arg0->unk68 = arg1;
+    arg0->unk6C = arg2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6190_1E3240);
 
