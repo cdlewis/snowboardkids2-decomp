@@ -39,6 +39,18 @@ typedef struct {
     void *unk28;
 } func_800BBC2C_AF91C_arg;
 
+typedef struct {
+    void *unk0;
+    void *unk4;
+    s8 unk8[0x4];
+    s32 unkC;
+    s8 unk10[0xE];
+    u8 unk1E;
+    s8 unk1F[0x5];
+    s32 unk24;
+    s16 unk28;
+} func_800BBC64_AF954_arg;
+
 extern void rotateVectorY(Vec3 *, s32, void *);
 extern void *func_80055D7C_5697C(s32);
 extern void func_80069CF8_6A8F8(void);
@@ -48,6 +60,8 @@ extern void func_800BB488_AF178(func_800BB388_AF078_arg *);
 extern void func_800BB5B0_AF2A0(void);
 extern void func_800BB778_AF468(void);
 extern void func_800BBEAC_AFB9C(void);
+extern void func_800BBCE8_AF9D8(void **);
+extern void func_800BBD14_AFA04(void);
 extern void func_800BBF4C_AFC3C(void);
 extern void func_800BC184_AFE74(void);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
@@ -55,6 +69,8 @@ extern void func_800BC750_B0440(void);
 
 extern void *D_800BC7F0_B04E0;
 extern Vec3 D_800BCAA0_B0790;
+extern void *D_800BC8C8_B05B8;
+extern s8 D_800BC908_B05F8[12];
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB2B0_AEFA0);
 
@@ -134,7 +150,19 @@ void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBC64_AF954);
+void func_800BBC64_AF954(func_800BBC64_AF954_arg *arg0) {
+    s32 temp_v1;
+
+    arg0->unk0 = func_80055D7C_5697C(9);
+    arg0->unk4 = &D_800BC8C8_B05B8;
+    arg0->unk1E = 0xFF;
+    memcpy(&arg0->unk8, &D_800BC908_B05F8, 12);
+    temp_v1 = arg0->unkC + arg0->unk24;
+    arg0->unk28 = 0xB4;
+    arg0->unkC = temp_v1;
+    setCleanupCallback(func_800BBCE8_AF9D8);
+    setCallbackWithContinue(func_800BBD14_AFA04);
+}
 
 void func_800BBCE8_AF9D8(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
