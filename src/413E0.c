@@ -19,8 +19,10 @@ typedef struct {
 
 extern s32 gFrameCounter;
 
+extern void *func_80055D7C_5697C(s32);
 extern void func_80040870_41470(void);
-extern void func_80041010_41C10(void);
+extern void func_8004106C_41C6C(void);
+void func_800413E0_41FE0(func_800407E0_413E0_arg *arg0);
 
 typedef struct {
     u8 _pad[0x24];
@@ -106,7 +108,22 @@ void func_80040F34_41B34(func_800407E0_413E0_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040F6C_41B6C);
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80041010_41C10);
+typedef struct {
+    void *unk0;
+    void *unk4;
+    u8 _pad[0x12];
+    s16 unk1A;
+} func_80041010_41C10_arg;
+
+void func_80041010_41C10(func_80041010_41C10_arg *arg0) {
+    s16 temp;
+
+    arg0->unk0 = func_80055D7C_5697C(0xB);
+    temp = arg0->unk1A;
+    arg0->unk4 = allocateNodeMemory((temp * 7) * 8);
+    setCleanupCallback(&func_800413E0_41FE0);
+    setCallbackWithContinue(&func_8004106C_41C6C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_8004106C_41C6C);
 
