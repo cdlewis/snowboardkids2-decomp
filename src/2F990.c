@@ -15,6 +15,7 @@ USE_ASSET(_41A1D0);
 USE_ASSET(_4237C0);
 USE_ASSET(_3F6670)
 USE_ASSET(_3F6950)
+USE_ASSET(_3F6BB0)
 
 typedef struct {
     s16 unk00;
@@ -142,6 +143,11 @@ typedef struct {
     void *unk38;
 } func_80030B70_31770_arg;
 
+typedef struct {
+    u8 _pad[0x4];
+    void *unk4;
+} func_80030668_31268_arg;
+
 extern void func_8000FED0_10AD0(void);
 
 extern s32 gButtonsPressed[];
@@ -150,6 +156,7 @@ extern u8 identityMatrix[];
 
 void func_80030378_30F78(void);
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
+void func_80030540_31140(void);
 void func_8002EFD8_2FBD8(void *);
 void func_8002F024_2FC24(void);
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
@@ -481,14 +488,33 @@ void func_80030480_31080(func_800302AC_30EAC_arg *arg0) {
     arg0->unk58 = freeNodeMemory(arg0->unk58);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_800304B8_310B8);
+void func_80030668_31268(func_80030668_31268_arg *);
+
+void func_800304B8_310B8(func_800308FC_314FC_arg *arg0) {
+    void *temp_s1;
+    s32 i;
+    s32 temp_a1;
+    s16 temp_v1;
+
+    temp_s1 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    setCleanupCallback(func_80030668_31268);
+
+    i = 0;
+    temp_a1 = 0x38;
+    temp_v1 = -0x1C;
+
+    do {
+        arg0[i].unk0 = temp_v1;
+        arg0[i].unk2 = temp_a1;
+        arg0[i].unk4 = temp_s1;
+        i++;
+        temp_v1 += 8;
+    } while (i < 6);
+
+    setCallback(func_80030540_31140);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030540_31140);
-
-typedef struct {
-    u8 _pad[0x4];
-    void *unk4;
-} func_80030668_31268_arg;
 
 void func_80030668_31268(func_80030668_31268_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
