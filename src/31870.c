@@ -16,6 +16,8 @@ USE_ASSET(_4547D0);
 
 extern u16 D_8008F150_8FD50[];
 extern const char D_8009E480_9F080;
+extern s32 D_4488E0;
+extern s32 D_4547D0;
 extern void func_80032708_33308(void);
 extern void func_80038420_39020(void);
 extern void func_8000FED0_10AD0(void);
@@ -215,7 +217,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x2C];
-    s32 unk2C;
+    void *unk2C;
 } func_8002FA1C_3061C_arg;
 
 extern void func_80012004_12C04(void);
@@ -233,6 +235,8 @@ void func_800316AC_322AC(void);
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 void func_80031B30_32730(void);
+void func_80031CC0_328C0(func_8002FA1C_3061C_arg *arg0);
+void func_80031D14_32914(func_80031510_32110_arg *arg0);
 void func_800322BC_32EBC(void *arg0);
 void func_80032304_32F04(func_80032244_32E44_arg *arg0);
 void func_8003316C_33D6C(func_800330B4_33CB4_arg *arg0);
@@ -508,10 +512,14 @@ void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0) {
     func_80002014_2C14(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031C68_32868);
+void func_80031C68_32868(func_8002FA1C_3061C_arg *arg0) {
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&D_4488E0, &D_4547D0, 0x14410);
+    setCleanupCallback(&func_80031D14_32914);
+    setCallback(&func_80031CC0_328C0);
+}
 
 void func_80031CC0_328C0(func_8002FA1C_3061C_arg *arg0) {
-    func_800394BC_3A0BC(arg0, arg0->unk2C);
+    func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
     setCallback(&func_80031CE8_328E8);
 }
 

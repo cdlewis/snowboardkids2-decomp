@@ -63,7 +63,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x2C];
-    s32 unk2C;
+    void *unk2C;
 } func_8002FA1C_3061C_arg;
 typedef struct {
     u8 padding[0x8];
@@ -354,7 +354,7 @@ void func_8002F9C4_305C4(func_8002FA70_30670_arg *arg0) {
 }
 
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
-    func_800394BC_3A0BC(arg0, arg0->unk2C);
+    func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
     setCallback(&func_8002FA44_30644);
 }
 
