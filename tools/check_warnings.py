@@ -9,7 +9,7 @@ import re
 import argparse
 import os
 
-# Maximum allowed warnings (update this as you fix warnings)
+# NEVER UPDATE MAX_WARNINGS VALUE UNLESS YOU'RE DECREASING IT
 MAX_WARNINGS = 12
 
 def count_warnings(log_file):
