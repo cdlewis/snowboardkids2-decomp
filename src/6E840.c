@@ -303,7 +303,18 @@ void func_8006FC70_70870(u16 searchId, u16 colorCount, ColorData *srcColors, Col
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FD3C_7093C);
+void func_8006FD3C_7093C(u16 arg0, void *arg1) {
+    Node_70B00 *node;
+
+    node = D_800A3370_A3F70.unk8.list2_next;
+
+    while (node != NULL) {
+        if (node->id == arg0) {
+            memcpy(node->padding4, arg1, 0x20);
+        }
+        node = node->unk8.list2_next;
+    }
+}
 
 void func_8006FDA0_709A0(Node_70B00 *arg0, u8 arg1, u8 arg2) {
     Node_70B00 *var_a0;
