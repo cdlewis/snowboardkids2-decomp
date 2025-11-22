@@ -454,7 +454,20 @@ void func_8003165C_3225C(func_800319C8_325C8_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_800316AC_322AC);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031758_32358);
+void func_80031758_32358(func_80031510_32110_arg *arg0) {
+    func_800329A8_335A8_allocation *allocation;
+
+    allocation = getCurrentAllocation();
+    arg0->unk50 += 0x100000;
+    memcpy(arg0, &arg0->unk3C, 0x20);
+
+    if (arg0->unk50 == 0x600000) {
+        allocation->unk79A = 1;
+        func_80069CF8_6A8F8();
+    } else {
+        enqueueDisplayListObject(0, (DisplayListObject *)arg0);
+    }
+}
 
 void func_800317D4_323D4(func_80031510_32110_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
