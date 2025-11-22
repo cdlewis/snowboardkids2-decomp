@@ -1,6 +1,10 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/1E2890", func_800B57E0_1E2890);
+extern u8 D_800BAF08_1E7FB8;
+
+void func_800B57E0_1E2890(void) {
+    D_800BAF08_1E7FB8 = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2890", func_800B57F0_1E28A0);
 
