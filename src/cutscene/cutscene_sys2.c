@@ -8,7 +8,7 @@ extern void func_8000C2B4_CEB4(void *, s32);
 
 void func_800B29F0_1DFAA0(void *);
 
-extern void func_800B993C_1E69EC(void);
+extern void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *);
 
 void cutsceneSys2Wipe_init(void) {
 }

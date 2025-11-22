@@ -1,9 +1,16 @@
 #include "common.h"
+#include "cutscene/cutscene_sys2.h"
 #include "task_scheduler.h"
 
 extern void func_800B9440_1E64F0(void *);
 extern void func_800585C8_591C8(s32);
 extern void *func_8000B714_C314(void *, s16, s16);
+extern void *func_80009EF8_AAF8(s32);
+extern void *func_80035F80_36B80(s32);
+extern void *func_8000B6B8_C2B8(s32);
+extern void func_800B99A0_1E6A50(void);
+
+void func_800B9C20_1E6CD0(cutsceneSys2Wait_exec_asset *arg0);
 
 typedef struct {
     u8 _pad[0x74];
@@ -12,25 +19,6 @@ typedef struct {
     s32 unk7C;
     s32 unk80;
 } func_800B9680_1E6730_arg;
-
-typedef struct {
-    u8 _pad0[0x8];
-    void *unk8;
-    void *unkC;
-    u8 _pad1[0x90];
-    void *unkA0;
-} func_800B9C20_1E6CD0_arg;
-
-typedef struct {
-    u8 _pad0[0xC];
-    void *unkC;
-    u8 _pad1[0x74];
-    s16 unk84;
-    s16 unk86;
-    s16 unk88;
-    u8 _pad2[0x6];
-    void *unk90;
-} func_800B9774_1E6824_arg;
 
 s32 func_800B93F0_1E64A0(s32 arg0) {
     s32 result;
@@ -77,7 +65,7 @@ s32 func_800B96B4_1E6764(func_800B9680_1E6730_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B9708_1E67B8);
 
-void *func_800B9774_1E6824(func_800B9774_1E6824_arg *arg0) {
+void *func_800B9774_1E6824(cutsceneSys2Wait_exec_asset *arg0) {
     void *result;
 
     result = func_8000B714_C314(arg0->unkC, arg0->unk86, arg0->unk88);
@@ -94,11 +82,19 @@ void *func_800B9774_1E6824(func_800B9774_1E6824_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B97C8_1E6878);
 
-INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B993C_1E69EC);
+void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *arg0) {
+    arg0->unk84 = 0;
+    arg0->unk88 = 0;
+    arg0->unk8 = func_80009EF8_AAF8(0);
+    arg0->unkA0 = func_80035F80_36B80(1);
+    arg0->unkC = func_8000B6B8_C2B8(0);
+    setCleanupCallback(&func_800B9C20_1E6CD0);
+    setCallback(&func_800B99A0_1E6A50);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B99A0_1E6A50);
 
-void func_800B9C20_1E6CD0(func_800B9C20_1E6CD0_arg *arg0) {
+void func_800B9C20_1E6CD0(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->unkA0 = freeNodeMemory(arg0->unkA0);
     arg0->unk8 = freeNodeMemory(arg0->unk8);
     arg0->unkC = freeNodeMemory(arg0->unkC);

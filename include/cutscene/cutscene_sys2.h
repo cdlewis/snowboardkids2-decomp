@@ -37,11 +37,18 @@ typedef struct {
 typedef struct {
     void *unk0;
     s32 unk4;
-    u8 padding[0x8];
+    void *unk8;
+    void *unkC;
     s16 unk10;
     s16 unk12;
-    u8 padding2[0x72];
+    u8 padding2[0x70];
+    s16 unk84;
     s16 unk86;
+    s16 unk88;
+    u8 padding3[0x6];
+    void *unk90;
+    u8 padding4[0xC];
+    void *unkA0;
 } cutsceneSys2Wait_exec_asset;
 
 void cutsceneSys2Wipe_init(void);
