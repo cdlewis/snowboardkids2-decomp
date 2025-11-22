@@ -7,6 +7,7 @@ Usage:
     python3 tools/score_functions.py asm/nonmatchings/displaylist
     python3 tools/score_functions.py --exhaustive asm/
     python3 tools/score_functions.py --score-func func_800B6544_1E35F4 asm/
+    python3 tools/score_functions.py --min-score 100 --max-score 200 asm/
 """
 
 import sys
@@ -331,6 +332,8 @@ Examples:
   python3 tools/score_functions.py asm/nonmatchings/displaylist
   python3 tools/score_functions.py --exhaustive asm/
   python3 tools/score_functions.py --score-func func_800B6544_1E35F4 asm/
+  python3 tools/score_functions.py --min-score 100 --max-score 200 asm/
+  python3 tools/score_functions.py --exhaustive --min-score 50 asm/
         """
     )
     parser.add_argument(
@@ -346,6 +349,18 @@ Examples:
         '--score-func',
         metavar='FUNCTION_NAME',
         help='Search for and score a specific function by name (e.g., func_800B6544_1E35F4)'
+    )
+    parser.add_argument(
+        '--min-score',
+        type=float,
+        metavar='MIN',
+        help='Only show functions with complexity score >= MIN'
+    )
+    parser.add_argument(
+        '--max-score',
+        type=float,
+        metavar='MAX',
+        help='Only show functions with complexity score <= MAX'
     )
 
     args = parser.parse_args()
@@ -384,6 +399,12 @@ Examples:
     # Filter out difficult functions and data sections (functions with 0 instructions)
     filtered_scores = [s for s in scores
                       if s.name not in difficult_functions and s.instruction_count > 0]
+
+    # Apply score range filters if specified
+    if args.min_score is not None:
+        filtered_scores = [s for s in filtered_scores if s.total_score >= args.min_score]
+    if args.max_score is not None:
+        filtered_scores = [s for s in filtered_scores if s.total_score <= args.max_score]
 
     if not filtered_scores:
         print("Error: All functions are marked as difficult or are data sections!", file=sys.stderr)
