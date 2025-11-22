@@ -58,7 +58,8 @@ typedef struct {
     GameStateUnk44 *unk44;
     u8 *unk48;
     s32 unk4C;
-    u8 PAD_5[0xC];
+    u8 PAD_5[0xB];
+    u8 unk5B;
     u8 memoryPoolId;
     u8 unk5D;
     u8 numPlayers;

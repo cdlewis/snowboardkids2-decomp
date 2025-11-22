@@ -599,10 +599,10 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004AFF8_4BBF8);
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B130_4BD30);
 
 void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0) {
-    u8 *allocation;
+    GameState *allocation;
 
-    allocation = (u8 *)getCurrentAllocation();
-    allocation[0x5B]++;
+    allocation = (GameState *)getCurrentAllocation();
+    allocation->unk5B++;
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
@@ -632,10 +632,10 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004B4CC_4C0CC);
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B648_4C248);
 
 void func_8004B758_4C358(func_8004B758_4C358_arg *arg0) {
-    u8 *allocation;
+    GameState *allocation;
 
-    allocation = (u8 *)getCurrentAllocation();
-    allocation[0x5B]++;
+    allocation = (GameState *)getCurrentAllocation();
+    allocation->unk5B++;
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
@@ -660,12 +660,28 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004B990_4C590);
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004BB0C_4C70C);
 
 void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0) {
-    u8 *allocation = (u8 *)getCurrentAllocation();
-    allocation[0x5B]++;
+    GameState *allocation = (GameState *)getCurrentAllocation();
+    allocation->unk5B++;
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004BC5C_4C85C);
+typedef struct {
+    u8 pad[0x24];
+    s32 unk24;
+} func_8004BC5C_4C85C_Task;
+
+void func_8004BC5C_4C85C(s32 arg0) {
+    GameState *allocation;
+    func_8004BC5C_4C85C_Task *task;
+
+    allocation = (GameState *)getCurrentAllocation();
+    task = (func_8004BC5C_4C85C_Task *)scheduleTask(func_8004B7F4_4C3F4, 3, 0, 0xEF);
+
+    if (task != NULL) {
+        task->unk24 = arg0;
+        allocation->unk5B -= 1;
+    }
+}
 
 void func_8004BCBC_4C8BC(MemoryAllocatorNode **arg0) {
     *arg0 = load_3ECE40();
@@ -680,8 +696,8 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004BE40_4CA40);
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004BFBC_4CBBC);
 
 void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0) {
-    u8 *allocation = (u8 *)getCurrentAllocation();
-    allocation[0x5B]++;
+    GameState *allocation = (GameState *)getCurrentAllocation();
+    allocation->unk5B++;
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
