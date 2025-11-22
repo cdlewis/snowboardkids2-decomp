@@ -6,7 +6,9 @@ extern void func_800585C8_591C8(s32);
 extern void *func_8000B714_C314(void *, s16, s16);
 
 typedef struct {
-    u8 _pad[0x7C];
+    u8 _pad[0x74];
+    s32 unk74;
+    u8 _pad2[0x4];
     s32 unk7C;
     s32 unk80;
 } func_800B9680_1E6730_arg;
@@ -44,7 +46,20 @@ s32 func_800B9680_1E6730(func_800B9680_1E6730_arg *arg0) {
     return 2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B96B4_1E6764);
+s32 func_800B96B4_1E6764(func_800B9680_1E6730_arg *arg0) {
+    s32 result = 2;
+
+    arg0->unk74 += arg0->unk80;
+
+    if (arg0->unk74 > 0x18000) {
+        arg0->unk74 = 0x18000;
+        result = 3;
+    }
+
+    func_800B9440_1E64F0(arg0);
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B9708_1E67B8);
 
