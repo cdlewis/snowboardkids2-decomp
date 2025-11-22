@@ -1,7 +1,6 @@
 #include "288A0.h"
 #include "6E840.h"
 
-extern s32 func_8006FE48_70A48(u16, s32, s32, s32, s32, s32);
 extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 
 extern ColorData D_8008DEF0_8EAF0;

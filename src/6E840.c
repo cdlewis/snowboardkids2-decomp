@@ -341,7 +341,22 @@ void func_8006FE28_70A28(Node_70B00 *arg0, u8 arg1, u8 arg2, u8 arg3) {
     var_a0->unkBE = arg3;
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FE48_70A48);
+void func_8006FE48_70A48(u16 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5) {
+    Node_70B00 *node;
+
+    node = D_800A3370_A3F70.unk8.list2_next;
+
+    while (node != NULL) {
+        if (node->id == arg0) {
+            node->unk1C8 = arg1;
+            node->unk1CA = arg2;
+            node->unk1CC = arg3;
+            node->unk1CD = arg4;
+            node->unk1CE = arg5;
+        }
+        node = node->unk8.list2_next;
+    }
+}
 
 void func_8006FE94_70A94(func_8006FE94_70A94_arg *arg0, s8 arg1, s8 arg2, s8 arg3) {
     if (arg0 != NULL) {

@@ -58,7 +58,13 @@ typedef struct Node_70B00 {
     u16 unk140;
     u8 padding140[6];
     Node_70B00_ColorData unk148[1];
-    u8 padding150[0x75];
+    u8 padding158[0x70];
+    s16 unk1C8;
+    s16 unk1CA;
+    u8 unk1CC;
+    u8 unk1CD;
+    u8 unk1CE;
+    u8 padding1CF;
     f32 unk1D0;
     u8 padding5[0x2];
 } Node_70B00;
@@ -77,6 +83,8 @@ void func_8006E02C_6EC2C(void);
 void func_8006E000_6EC00(s32 arg0);
 
 void func_8006FE28_70A28(Node_70B00 *arg0, u8 arg1, u8 arg2, u8 arg3);
+
+void func_8006FE48_70A48(u16 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5);
 
 typedef struct {
     u8 padding[0xC8];
