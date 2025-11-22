@@ -197,7 +197,7 @@ void MusPtrBankInitialize(u8 *, u8 *);
 void __MusIntFifoOpen(s32);
 void __MusIntMemSet(void *, unsigned char, int);
 u32 func_800725F4_731F4(s32, s32, s32, s32, s32);
-u8 __MusIntRandom(u8);
+s32 __MusIntRandom(s32);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
     cp->pvolume = NULL;
@@ -1100,7 +1100,22 @@ f32 __MusIntPowerOf2(f32 x) {
 
 INCLUDE_ASM("asm/nonmatchings/player", MusPtrBankInitialize);
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntRandom);
+s32 __MusIntRandom(s32 range) {
+    s32 temp;
+    s32 x;
+    f32 f;
+
+    for (x = 0; x < 8; x++) {
+        temp = mus_random_seed & 0x48000000;
+        mus_random_seed = mus_random_seed << 1;
+        if (temp == 0x48000000 || temp == 0x08000000) {
+            mus_random_seed = mus_random_seed | 1;
+        }
+    }
+    f = (f32)(mus_random_seed) / (1 << 16);
+    f /= (1 << 16);
+    return (s32)((f32)(range)*f);
+}
 
 void __MusIntInitialiseChannel(channel_t *cp) {
     u8 old_playing;
