@@ -5,6 +5,8 @@
 extern s16 D_800BAD0E_1E7DBE;
 extern s16 D_800BAA60_1E7B10[];
 extern void func_80057ABC_586BC(s32, s32);
+extern void func_80058360_58F60(s32, s32, s32, s32);
+extern void func_80057DF0_589F0(s32, s32, s32, s32, s32);
 
 s16 func_800B4AF0_1E1BA0(void) {
     return D_800BAD0E_1E7DBE;
@@ -27,7 +29,17 @@ s16 func_800B4AFC_1E1BAC(s16 arg0) {
     return D_800BAA60_1E7B10[index];
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4B30_1E1BE0);
+void func_800B4B30_1E1BE0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
+    s16 temp;
+
+    if (arg3 <= 0) {
+        temp = func_800B4AFC_1E1BAC(arg0);
+        func_80058360_58F60(temp, arg1, arg2 + 0x80, 0);
+    } else {
+        temp = func_800B4AFC_1E1BAC(arg0);
+        func_80057DF0_589F0(temp, arg1, arg2 + 0x80, 0, arg3);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4BDC_1E1C8C);
 
