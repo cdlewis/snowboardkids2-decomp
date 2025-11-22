@@ -62,9 +62,9 @@ typedef struct {
     void *unk9B8[6];
     u8 padding11[0x41C];
     void *unkDEC;
-    u8 padding12[0x52];
-    u8 unkE42;
-    u8 unkE43;
+    u8 padding12[0x50];
+    s16 unkE40;
+    s16 unkE42;
     ColorData unkE44[3];
 } func_80003EE0_4AE0_task_memory;
 
@@ -111,8 +111,8 @@ void func_80003EE0_4AE0(void) {
 
     taskMemory->unk940 = -0x90;
     taskMemory->unk942 = 0x68;
-    *(s16 *)((u8 *)taskMemory + 0xe40) = 0;
-    *(s16 *)((u8 *)taskMemory + 0xe42) = 0;
+    taskMemory->unkE40 = 0;
+    taskMemory->unkE42 = 0;
     taskMemory->unk0 = 0;
     taskMemory->unk2 = 0;
     taskMemory->unk944 = 0;

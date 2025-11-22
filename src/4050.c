@@ -5,7 +5,7 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 
-USE_OVERLAY(cutscene)
+USE_OVERLAY(cutscene);
 
 typedef union {
     struct {
