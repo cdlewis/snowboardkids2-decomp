@@ -20,10 +20,13 @@ extern u16 D_8008F150_8FD50[];
 extern const char D_8009E480_9F080;
 extern s32 D_4488E0;
 extern s32 D_4547D0;
+extern u8 D_4237C0[];
+extern u8 D_426EF0[];
 extern void func_80032708_33308(void);
 extern void func_80038420_39020(void);
 extern void func_8000FED0_10AD0(void);
 extern void func_8006FED8_70AD8(void *);
+extern void func_80032020_32C20(void);
 
 typedef struct {
     u8 padding[0x77C];
@@ -559,14 +562,40 @@ void func_80031F68_32B68(func_80031F68_32B68_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031F94_32B94);
-
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032020_32C20);
-
 typedef struct {
     void *unk0;
     void *unk4;
 } func_800320B8_32CB8_arg;
+
+void func_800320B8_32CB8(func_800320B8_32CB8_arg *arg0);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s8 unkC;
+    s8 unkD;
+} func_80031F94_32B94_arg;
+
+void func_80031F94_32B94(func_80031F94_32B94_arg *arg0) {
+    void *temp_s1;
+
+    getCurrentAllocation();
+    temp_s1 = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    setCleanupCallback(&func_800320B8_32CB8);
+    arg0->unk0 = -0x1C;
+    arg0->unk2 = -0x18;
+    arg0->unk8 = 0x1D;
+    arg0->unkA = 0xFF;
+    arg0->unkC = 0;
+    arg0->unkD = 0;
+    arg0->unk4 = temp_s1;
+    setCallback(&func_80032020_32C20);
+}
+
+INCLUDE_ASM("asm/nonmatchings/31870", func_80032020_32C20);
 
 void func_800320B8_32CB8(func_800320B8_32CB8_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
