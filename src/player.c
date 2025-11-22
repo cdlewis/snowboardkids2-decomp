@@ -790,7 +790,29 @@ INCLUDE_ASM("asm/nonmatchings/player", func_800728E0_734E0);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072960_73560);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072A14_73614);
+void *func_80072A14_73614(musHandle arg0) {
+    s32 i;
+    channel_t *channel;
+    s32 count;
+
+    if (!arg0) {
+        return 0;
+    }
+
+    i = 0;
+    channel = mus_channels;
+    count = 0;
+
+    while (i < max_channels) {
+        i++;
+        if (channel->handle == arg0) {
+            count++;
+        }
+        channel++;
+    }
+
+    return (void *)count;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072A6C_7366C);
 
