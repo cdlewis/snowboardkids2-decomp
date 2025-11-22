@@ -128,10 +128,10 @@ typedef struct {
     u8 unk1C;
 } func_80041518_42118_Node;
 
-void func_80041518_42118(void* arg0) {
-    func_80041518_42118_Node* task;
+void func_80041518_42118(void *arg0) {
+    func_80041518_42118_Node *task;
 
-    task = (func_80041518_42118_Node*)scheduleTask(&func_80041010_41C10, 0, 0, 0xF0);
+    task = (func_80041518_42118_Node *)scheduleTask(&func_80041010_41C10, 0, 0, 0xF0);
 
     if (task != NULL) {
         task->unk18 = 0;

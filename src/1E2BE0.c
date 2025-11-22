@@ -1,28 +1,6 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-void func_800B5B30_1E2BE0(void *arg0, u8 arg1) {
-    *(u8 *)((u8 *)arg0 + 0x71) = arg1;
-}
-
-extern void func_800B5B7C_1E2C2C(void *, u16);
-
-void *func_800B5B38_1E2BE8(u16 arg0) {
-    void *temp = allocateNodeMemory(0x74);
-    func_800B5B7C_1E2C2C(temp, arg0);
-    return temp;
-}
-
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5B7C_1E2C2C);
-
-void func_800B5BFC_1E2CAC(void *arg0) {
-    freeNodeMemory(arg0);
-}
-
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", finalizeAnimationLoop);
-
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5CFC_1E2DAC);
-
 typedef struct {
     u8 _pad[0x20];
     s16 unk20;
@@ -50,9 +28,67 @@ typedef struct {
     s16 unk5E;
     s16 unk60;
     s16 unk62;
-    u8 _pad6[0xC];
+    s32 unk64;
+    s32 unk68;
+    s16 unk6C;
+    s16 unk6E;
     u8 unk70;
+    u8 unk71;
 } func_800B5E64_1E2F14_arg0;
+
+void func_800B5B30_1E2BE0(func_800B5E64_1E2F14_arg0 *arg0, u8 arg1) {
+    arg0->unk71 = arg1;
+}
+
+void func_800B5B7C_1E2C2C(func_800B5E64_1E2F14_arg0 *, u16);
+
+void *func_800B5B38_1E2BE8(u16 arg0) {
+    func_800B5E64_1E2F14_arg0 *temp = allocateNodeMemory(0x74);
+    func_800B5B7C_1E2C2C(temp, arg0);
+    return temp;
+}
+
+void func_800B5B7C_1E2C2C(func_800B5E64_1E2F14_arg0 *arg0, u16 arg1) {
+    arg0->unk20 = 0;
+    arg0->unk22 = 0;
+    arg0->unk24 = 0;
+    arg0->unk26 = 0;
+    arg0->unk28 = 0;
+    arg0->unk2A = 0;
+    arg0->unk2C = 0;
+    arg0->unk2E = 0;
+    arg0->unk30 = 0;
+    arg0->unk32 = 0;
+    arg0->unk34 = 0;
+    arg0->unk38 = 0;
+    arg0->unk3C = 0;
+    arg0->unk40 = 0;
+    arg0->unk44 = 0;
+    arg0->unk48 = 0;
+    arg0->unk4C = 0;
+    arg0->unk50 = 0;
+    arg0->unk54 = 0;
+    arg0->unk58 = 0;
+    arg0->unk5A = 0;
+    arg0->unk5C = 0;
+    arg0->unk5E = 0;
+    arg0->unk60 = 0;
+    arg0->unk62 = 0;
+    arg0->unk64 = 0;
+    arg0->unk68 = 0;
+    arg0->unk6C = 0;
+    arg0->unk6E = arg1;
+    arg0->unk70 = 0;
+    arg0->unk71 = 0;
+}
+
+void func_800B5BFC_1E2CAC(void *arg0) {
+    freeNodeMemory(arg0);
+}
+
+INCLUDE_ASM("asm/nonmatchings/1E2BE0", finalizeAnimationLoop);
+
+INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5CFC_1E2DAC);
 
 void func_800B5E64_1E2F14(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4) {
     arg0->unk20 = arg1;
@@ -120,8 +156,9 @@ typedef struct {
     u8 _pad[0x68];
     s32 unk68;
     s16 unk6C;
-    u8 _pad2[2];
+    s16 unk6E;
     u8 unk70;
+    u8 unk71;
 } func_800B6180_1E3230_arg0;
 
 void func_800B6180_1E3230(func_800B6180_1E3230_arg0 *arg0, s32 arg1, s16 arg2) {
@@ -132,6 +169,6 @@ void func_800B6180_1E3230(func_800B6180_1E3230_arg0 *arg0, s32 arg1, s16 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6190_1E3240);
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6544_1E35F4);
+INCLUDE_ASM("asm/matchings/1E2BE0", func_800B6544_1E35F4);
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", advanceSceneManager);
