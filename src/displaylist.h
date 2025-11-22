@@ -65,7 +65,7 @@ void enqueueDisplayListWithFrustumCull(s32, DisplayListObject *);
 
 void buildDisplayListSegment(DisplayListObject *);
 
-void func_800638C0_644C0(s32);
+void func_800638C0_644C0(DisplayListObject *);
 
 void func_80063580_64180(s32);
 

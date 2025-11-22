@@ -79,7 +79,7 @@ void func_800056E8_62E8(DisplayListObject *arg0) {
 
 void func_80005714_6314(s32 arg0) {
     func_80005094_5C94();
-    func_800638C0_644C0(arg0);
+    func_800638C0_644C0((DisplayListObject *)arg0);
 }
 
 void func_80005740_6340(s32 arg0) {

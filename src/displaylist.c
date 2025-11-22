@@ -323,7 +323,26 @@ void buildDisplayListSegment(DisplayListObject *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800638C0_644C0);
+void func_800638C0_644C0(DisplayListObject *arg0) {
+    Gfx *dl;
+
+    if (!isObjectCulled(&arg0->unk10.position)) {
+        setupDisplayListMatrix(arg0);
+
+        dl = gRegionAllocPtr;
+        gRegionAllocPtr += 1;
+        dl->words.w0 = 0xE7000000;
+        dl->words.w1 = 0;
+
+        gRegionAllocPtr += 1;
+        dl[1].words.w0 = 0xFB000000;
+        dl[1].words.w1 = arg0->unk3B | 0xFFFFFF00;
+
+        gRegionAllocPtr += 1;
+        dl[2].words.w0 = 0xDE000000;
+        dl[2].words.w1 = (u32)arg0->unk20->transparentDisplayList;
+    }
+}
 
 void func_8006395C_6455C(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->unk10.position)) {
