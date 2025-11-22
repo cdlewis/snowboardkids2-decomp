@@ -15,8 +15,8 @@ extern s32 func_800B6CD8_1E3D88(
     s32 arg2,
     s32 arg3,
     s32 arg4,
-    s32 arg5,
-    s32 arg6,
+    s16 arg5,
+    s16 arg6,
     s32 arg7,
     s32 arg8
 );

@@ -38,6 +38,7 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6AB8_1E3B68);
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6B6C_1E3C1C);
 
 extern void func_800B6C04_1E3CB4(CutsceneSlotData *, s32, s32, s32, s16, s16, s16);
+extern s32 func_800B6CD8_1E3D88(CutsceneSlotData *, SceneModel *, s32, s32, s32, s16, s16, s32, s32);
 
 void func_800B6BDC_1E3C8C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4) {
     func_800B6C04_1E3CB4(arg0, arg1, arg2, arg3, arg4, 0, 0);
@@ -45,7 +46,9 @@ void func_800B6BDC_1E3C8C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, 
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6C04_1E3CB4);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6C8C_1E3D3C);
+s32 func_800B6C8C_1E3D3C(CutsceneSlotData *arg0, SceneModel *arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
+    return func_800B6CD8_1E3D88(arg0, arg1, arg2, arg3, arg4, arg5, arg6, 0, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6CD8_1E3D88);
 
