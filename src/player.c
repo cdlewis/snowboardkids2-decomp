@@ -879,7 +879,22 @@ musHandle func_80072D64_73964(fx_header_t *arg0, s32 arg1, s32 arg2, s32 arg3, s
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072DBC_739BC);
+fx_header_t *func_80072DBC_739BC(s32 handle) {
+    s32 i;
+    channel_t *sp;
+
+    if (handle == 0) {
+        return NULL;
+    }
+
+    for (i = 0, sp = mus_channels; i < max_channels; i++, sp++) {
+        if (sp->handle == handle) {
+            return sp->sample_bank;
+        }
+    }
+
+    return NULL;
+}
 
 extern int func_80073058_73C58(u8 *);
 
