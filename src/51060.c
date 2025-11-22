@@ -88,13 +88,27 @@ typedef struct {
     u8 unkD6;
 } func_80051BB8_527B8_task;
 
+typedef struct {
+    u8 padding[0x12C0];
+    void *unk12C0;
+} GameStateUnk44_Ext;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    u8 padding[0x1C];
+    s32 unk24;
+    s32 unk28;
+} func_80050DB0_519B0_arg;
+
 void func_800504A0_510A0(func_800504A0_510A0_arg *);
 void func_800505D8_511D8(s32 **arg0);
 
 void func_80050740_51340(void);
 void func_80050864_51464(func_80050864_51464_arg *);
 void func_800509CC_515CC(void);
-void func_80050DB0_519B0(void);
+void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
+void func_80050E08_51A08(void);
 void func_80050EA0_51AA0(void **);
 void func_80050F64_51B64(void);
 void func_80050FE0_51BE0(func_80050F18_51B18_arg *);
@@ -212,7 +226,21 @@ void func_80050D70_51970(MemoryAllocatorNode **node) {
     setCallbackWithContinue(&func_80050DB0_519B0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050DB0_519B0);
+void func_80050DB0_519B0(func_80050DB0_519B0_arg *arg0) {
+    GameState *allocation;
+    void *temp;
+
+    allocation = getCurrentAllocation();
+    temp = &((GameStateUnk44_Ext *)allocation->unk44)->unk12C0;
+
+    arg0->unk24 = 0x40;
+    arg0->unk4 = temp;
+    arg0->unk28 = 0;
+
+    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, arg0->unk24);
+
+    setCallbackWithContinue(&func_80050E08_51A08);
+}
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050E08_51A08);
 
