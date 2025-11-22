@@ -7,7 +7,7 @@ typedef struct {
     void *unk00;
     void *unk04;
     s8 unk08[0x16];
-    s8 unk1E;
+    u8 unk1E;
     s8 unk1F[0x11];
     s8 unk30[0x0C];
     s16 unk3C;
@@ -41,7 +41,10 @@ typedef struct {
 
 extern void rotateVectorY(Vec3 *, s32, void *);
 extern void *func_80055D7C_5697C(s32);
+extern void func_80069CF8_6A8F8(void);
+extern void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *);
 extern void func_800BB45C_AF14C(void **);
+extern void func_800BB488_AF178(func_800BB388_AF078_arg *);
 extern void func_800BB5B0_AF2A0(void);
 extern void func_800BB778_AF468(void);
 extern void func_800BBEAC_AFB9C(void);
@@ -103,7 +106,16 @@ INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB5B0_AF2A0);
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB620_AF310);
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB6F4_AF3E4);
+void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *arg0) {
+    arg0->unk1E -= 0x10;
+
+    if (arg0->unk1E == 0) {
+        func_80069CF8_6A8F8();
+    } else {
+        func_800BB488_AF178(arg0);
+        func_800BB2B0_AEFA0(arg0);
+    }
+}
 
 void func_800BB74C_AF43C(func_800BB74C_AF43C_arg *arg0) {
     arg0->unk0 = 0;
