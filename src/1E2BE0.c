@@ -5,7 +5,13 @@ void func_800B5B30_1E2BE0(void *arg0, u8 arg1) {
     *(u8 *)((u8 *)arg0 + 0x71) = arg1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5B38_1E2BE8);
+extern void func_800B5B7C_1E2C2C(void *, u16);
+
+void *func_800B5B38_1E2BE8(u16 arg0) {
+    void *temp = allocateNodeMemory(0x74);
+    func_800B5B7C_1E2C2C(temp, arg0);
+    return temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5B7C_1E2C2C);
 
