@@ -26,7 +26,6 @@ extern void func_80032708_33308(void);
 extern void func_80038420_39020(void);
 extern void func_8000FED0_10AD0(void);
 extern void func_8006FED8_70AD8(void *);
-extern void func_80032020_32C20(void);
 
 typedef struct {
     u8 padding[0x77C];
@@ -694,6 +693,17 @@ typedef struct {
     s8 unkD;
 } func_80031F94_32B94_arg;
 
+typedef struct {
+    u8 _pad[0x77C];
+    u16 unk77C;
+    u8 _pad2[0x1D];
+    u8 unk79B;
+    u8 _pad3[0x5];
+    s8 unk7A1;
+} func_80032020_32C20_allocation;
+
+void func_80032020_32C20(func_80031F94_32B94_arg *arg0);
+
 void func_80031F94_32B94(func_80031F94_32B94_arg *arg0) {
     void *temp_s1;
 
@@ -710,7 +720,29 @@ void func_80031F94_32B94(func_80031F94_32B94_arg *arg0) {
     setCallback(&func_80032020_32C20);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032020_32C20);
+void func_80032020_32C20(func_80031F94_32B94_arg *arg0) {
+    func_80032020_32C20_allocation *allocation;
+    u8 temp;
+
+    allocation = getCurrentAllocation();
+
+    if (allocation->unk79B < 0xF) {
+        if (allocation->unk79B != 3) {
+            arg0->unk8 = allocation->unk7A1 + 0x1D;
+
+            if (allocation->unk79B == 4) {
+                if (allocation->unk77C & 1) {
+                    temp = 0xFF;
+                    arg0->unkD = temp;
+                } else {
+                    arg0->unkD = 0;
+                }
+            }
+
+            debugEnqueueCallback(8, 0, func_80012004_12C04, arg0);
+        }
+    }
+}
 
 void func_800320B8_32CB8(func_800320B8_32CB8_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
