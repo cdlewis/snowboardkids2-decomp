@@ -138,7 +138,27 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B77C4_1E4874);
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7828_1E48D8);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B788C_1E493C);
+extern s32 approximateSin(s16);
+extern s32 approximateCos(s16);
+
+void func_800B788C_1E493C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3) {
+    s32 sinResult;
+    s32 cosResult;
+    s32 scaledArg1;
+
+    arg0->unk0.bytes[0] = 7;
+
+    sinResult = approximateSin(arg0->unk78);
+    scaledArg1 = arg1 >> 8;
+    arg0->unk3C = (scaledArg1 * (sinResult >> 4));
+
+    arg0->unk40 = arg2;
+
+    cosResult = approximateCos(arg0->unk78);
+    arg0->unk44 = (scaledArg1 * (cosResult >> 4));
+
+    arg0->unkA0 = arg3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7914_1E49C4);
 
