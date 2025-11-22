@@ -20,7 +20,9 @@ typedef struct {
 typedef struct PoolEntry {
     struct PoolEntry* next;
     void* unk4;
-    u8 _pad[8];
+    void* unk8;
+    u8 _padC[3];
+    u8 unkF;
 } PoolEntry;
 
 typedef struct Node_70B00 {

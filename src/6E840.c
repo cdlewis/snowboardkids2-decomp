@@ -447,7 +447,20 @@ void debugEnqueueCallback(u16 index, u8 slotIndex, void *callback, void *callbac
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8007001C_70C1C);
+void func_8007001C_70C1C(Node_70B00 *arg0, u8 arg1, void *arg2, void *arg3) {
+    PoolEntry *entry;
+    PoolEntry *prev;
+
+    entry = (PoolEntry *)linearAlloc(0x10);
+    if (entry != NULL) {
+        prev = arg0->pool[arg1].next;
+        entry->unk4 = arg2;
+        entry->unk8 = arg3;
+        entry->unkF = arg1;
+        entry->next = prev;
+        arg0->pool[arg1].next = entry;
+    }
+}
 
 void func_80070094_70C94(u16 id, u8 listIndex, void *data1, void *data2) {
     Node_70B00 *mgr;
