@@ -37,14 +37,46 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6AB8_1E3B68);
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6B6C_1E3C1C);
 
-extern void func_800B6C04_1E3CB4(CutsceneSlotData *, s32, s32, s32, s16, s16, s16);
 extern s32 func_800B6CD8_1E3D88(CutsceneSlotData *, SceneModel *, s32, s32, s32, s16, s16, s32, s32);
+extern void func_800B6AB8_1E3B68(CutsceneSlotData *, s32);
+
+void func_800B6C04_1E3CB4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6);
 
 void func_800B6BDC_1E3C8C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4) {
     func_800B6C04_1E3CB4(arg0, arg1, arg2, arg3, arg4, 0, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6C04_1E3CB4);
+void func_800B6C04_1E3CB4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6) {
+    s16 temp_v0;
+
+    temp_v0 = arg4 & 0x1FFF;
+
+    arg0->unk04.unk20_u.unk20_s32 = arg1;
+    arg0->unk30 = arg1;
+    arg0->unk0.bytes[0] = 0;
+    arg0->unk28 = arg2;
+    arg0->unk2C = arg3;
+    arg0->unk34 = arg2;
+    arg0->unk38 = arg3;
+    arg0->unk3C = 0;
+    arg0->unk40 = 0;
+    arg0->unk44 = 0;
+    arg0->unk6C = 0;
+    arg0->unk70 = 0;
+    arg0->unk74 = 0;
+    arg0->unk7C = 0;
+    arg0->unk84 = 0;
+    arg0->unk86 = 0;
+    arg0->unk0.bytes[1] = 0;
+    arg0->unk88 = 0;
+    arg0->angle = 0;
+    arg0->unk78 = temp_v0;
+    arg0->unk7A = temp_v0;
+    arg0->unk80 = arg5;
+    arg0->unk82 = arg6;
+
+    func_800B6AB8_1E3B68(arg0, 0);
+}
 
 s32 func_800B6C8C_1E3D3C(CutsceneSlotData *arg0, SceneModel *arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
     return func_800B6CD8_1E3D88(arg0, arg1, arg2, arg3, arg4, arg5, arg6, 0, 1);
