@@ -836,7 +836,32 @@ INCLUDE_ASM("asm/nonmatchings/player", func_80072B3C_7373C);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072BAC_737AC);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072C38_73838);
+s32 func_80072C38_73838(void *arg0, s32 arg1) {
+    s32 count;
+    s32 i;
+    channel_t *cp;
+
+    if (arg0 == NULL) {
+        return 0;
+    }
+
+    if (arg1 < 0) {
+        arg1 = 0;
+    } else if (arg1 >= 0x80) {
+        arg1 = 0x7F;
+    }
+
+    count = 0;
+    for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
+        if ((void *)cp->handle == arg0) {
+            count++;
+            cp->padding11 = arg1;
+            cp->old_reverb = 0xFF;
+        }
+    }
+
+    return count;
+}
 
 void func_80072CC0_738C0(void *pbank, void *wbank) {
     MusPtrBankInitialize(pbank, wbank);

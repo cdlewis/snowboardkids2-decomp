@@ -24,7 +24,7 @@ s32 MusInitialize(musConfig *config);
 
 void func_80072CC0_738C0(void *pbank, void *wbank);
 
-void func_80072C38_73838(void *, s32);
+s32 func_80072C38_73838(void *, s32);
 
 void func_80072B3C_7373C(void *, f32);
 
