@@ -4,6 +4,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "overlay.h"
 #include "rand.h"
 #include "task_scheduler.h"
@@ -37,6 +38,10 @@ extern void func_80065DA8_669A8(s32, DisplayListObject *);
 extern void rotateVectorY(void *, s32, void *);
 
 extern s32 D_80090E20_91A20;
+extern s32 D_80090BC8_917C8[3];
+
+extern void transformVector2(void *matrix, void *vector, s32 *output);
+extern void func_80047330_47F30(void);
 
 typedef struct {
     void *unk0;
@@ -419,7 +424,41 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004711C_47D1C);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800471D0_47DD0);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004728C_47E8C);
+typedef struct {
+    u8 _pad[0xC];
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    u8 _pad2[0x44];
+    u8 unk5C;
+} AllocationStruct;
+
+typedef struct {
+    u8 _pad[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    u8 _pad2[0x1C];
+    s32 unk3C;
+} TaskStruct;
+
+void func_8004728C_47E8C(TaskStruct *arg0) {
+    s32 vec[3];
+    AllocationStruct *alloc;
+    void *matrix;
+
+    alloc = (AllocationStruct *)getCurrentAllocation();
+    createYRotationMatrix(arg0, 0x1000);
+    matrix = func_80055D10_56910(alloc->unk5C);
+    transformVector2(D_80090BC8_917C8, arg0, vec);
+
+    arg0->unk14 = ((AllocationStruct *)matrix)->unkC + vec[0];
+    arg0->unk18 = ((AllocationStruct *)matrix)->unk10 + vec[1];
+    arg0->unk1C = ((AllocationStruct *)matrix)->unk14 + vec[2];
+    arg0->unk3C = 0x32;
+
+    setCallbackWithContinue(func_80047330_47F30);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80047330_47F30);
 
