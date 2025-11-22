@@ -422,7 +422,26 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80048F0C_49B0C);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049104_49D04);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800491CC_49DCC);
+typedef struct {
+    u8 _pad[0x84];
+} func_800491CC_49DCC_Element;
+
+typedef struct {
+    u8 _pad[0x8];
+    func_800491CC_49DCC_Element *unk8;
+    u8 _pad2[0xA];
+    s16 unk16;
+} func_800491CC_49DCC_arg;
+
+extern void func_80048AE8_496E8(func_800491CC_49DCC_Element *arg0, func_800491CC_49DCC_arg *arg1);
+
+void func_800491CC_49DCC(func_800491CC_49DCC_arg *arg0) {
+    s32 i;
+
+    for (i = 0; i < arg0->unk16; i++) {
+        func_80048AE8_496E8(&arg0->unk8[i], arg0);
+    }
+}
 
 typedef struct {
     void *unk0;
