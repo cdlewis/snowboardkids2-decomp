@@ -256,7 +256,7 @@ void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0);
 void func_80032EA4_33AA4(void *);
 void func_80032F64_33B64(func_80032244_32E44_arg *);
 void func_800319C8_325C8(func_800319C8_325C8_arg *arg0);
-void func_80031944_32544(void);
+void func_80031944_32544(func_80031510_32110_arg *arg0);
 void func_80031CE8_328E8(void *arg0);
 void func_80031DE4_329E4(void);
 
@@ -536,7 +536,33 @@ void func_80031818_32418(func_80031510_32110_arg *arg0) {
     setCallbackWithContinue(&func_80031944_32544);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031944_32544);
+void func_80031944_32544(func_80031510_32110_arg *arg0) {
+    s32 pad[8];
+    GameState *state;
+    s32 offset;
+    s32 compareValue;
+    s32 temp;
+
+    state = getCurrentAllocation();
+
+    offset = 0x100000;
+    compareValue = 0x600000;
+
+    if (state->unk79C == 1) {
+        offset = 0xFFF00000;
+        compareValue = 0xFFA00000;
+    }
+
+    temp = arg0->unk50 + offset;
+    arg0->unk50 = temp;
+    memcpy(arg0, &arg0->unk3C, 0x20);
+
+    enqueueDisplayListObject(0, arg0);
+
+    if (arg0->unk50 == compareValue) {
+        func_80069CF8_6A8F8();
+    }
+}
 
 void func_800319C8_325C8(func_800319C8_325C8_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
