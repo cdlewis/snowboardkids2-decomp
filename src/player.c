@@ -190,7 +190,7 @@ s32 func_800744EC_750EC(song_t *, s32);
 void MusPtrBankInitialize(u8 *, u8 *);
 void __MusIntFifoOpen(s32);
 void __MusIntMemSet(void *, unsigned char, int);
-u32 func_800725F4_731F4(s32, u8, u8, u8, s32);
+u32 func_800725F4_731F4(s32, s32, s32, s32, s32);
 u8 __MusIntRandom(u8);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
@@ -836,7 +836,20 @@ musHandle func_80072D20_73920(fx_header_t *arg0, s32 arg1) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072D64_73964);
+musHandle func_80072D64_73964(fx_header_t *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    musHandle result;
+
+    if (arg0 != NULL) {
+        if ((s32)arg0->ptr_addr < 0) {
+            libmus_fxheader_single = arg0;
+        }
+    }
+
+    result = func_800725F4_731F4(arg1, arg2, arg3, arg4, arg5);
+    libmus_fxheader_single = libmus_fxheader_current;
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072DBC_739BC);
 
