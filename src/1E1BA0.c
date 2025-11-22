@@ -1,5 +1,7 @@
 #include "20F0.h"
 #include "common.h"
+#include "displaylist.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 extern s16 D_800BAD0E_1E7DBE;
@@ -58,9 +60,7 @@ void func_800B4CB0_1E1D60(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4CD0_1E1D80);
 
-INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4D74_1E1E24);
-
-extern void func_80069CF8_6A8F8(void);
+extern Mat3x3Padded D_8009A8B0_9B4B0;
 
 typedef struct {
     u8 _pad0[0x18];
@@ -71,6 +71,61 @@ typedef struct {
     u8 _pad80[0x2];
     u16 unk82;
 } func_800B4E7C_Struct;
+
+void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0);
+
+typedef struct {
+    u8 _pad0[0x3C];
+    u8 unk3C[0x3C];
+    void **unk78;
+    s32 unk7C;
+    u16 unk80;
+    u16 unk82;
+    s16 unk84;
+    s16 unk86;
+} func_800B4D74_1E1E24_arg;
+
+void func_800B4D74_1E1E24(func_800B4D74_1E1E24_arg *arg0) {
+    Mat3x3Padded sp10;
+    void *temp_v0;
+    s16 temp_v0_2;
+    s16 temp_a0;
+
+    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
+
+    temp_v0 = (void *)((u8 *)(*arg0->unk78) + 0x3C0);
+
+    func_8006B084_6BC84(&D_8009A8B0_9B4B0, temp_v0, arg0);
+
+    scaleMatrix((Mat3x3Padded *)arg0, arg0->unk84, arg0->unk84, arg0->unk84);
+
+    temp_v0_2 = arg0->unk82 + 0x300;
+    arg0->unk82 = temp_v0_2;
+
+    createZRotationMatrix(&sp10, temp_v0_2);
+
+    sp10.unk18 = 0xBB333;
+    sp10.unk14 = 0;
+    sp10.unk1C = 0xFFEA0000;
+
+    func_8006B084_6BC84(&sp10, arg0, &arg0->unk3C);
+
+    enqueueDisplayListObject(0, (DisplayListObject *)arg0);
+    enqueueDisplayListObject(0, (DisplayListObject *)&arg0->unk3C);
+
+    if (arg0->unk86 != 0) {
+        arg0->unk86--;
+        temp_a0 = arg0->unk84;
+        if (temp_a0 != 0x2000) {
+            arg0->unk84 = temp_a0 + 0x200;
+        }
+    } else {
+        arg0->unk7C = 0x40000;
+        setCallback(&func_800B4E7C_1E1F2C);
+    }
+}
+
+extern void func_80069CF8_6A8F8(void);
 
 void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0) {
     Mat3x3Padded matrix;
