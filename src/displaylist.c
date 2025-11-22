@@ -404,7 +404,21 @@ void func_8006411C_64D1C(DisplayListObject *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_8006417C_64D7C);
+void func_8006417C_64D7C(u16 arg0, DisplayListObject *arg1) {
+    arg1->unk30 = 0;
+
+    if (arg1->unk20->opaqueDisplayList != NULL) {
+        debugEnqueueCallback(arg0, 1, &func_8006405C_64C5C, arg1);
+    }
+
+    if (arg1->unk20->transparentDisplayList != NULL) {
+        debugEnqueueCallback(arg0, 3, &func_800640BC_64CBC, arg1);
+    }
+
+    if (arg1->unk20->overlayDisplayList != NULL) {
+        debugEnqueueCallback(arg0, 5, &func_8006411C_64D1C, arg1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80064218_64E18);
 
