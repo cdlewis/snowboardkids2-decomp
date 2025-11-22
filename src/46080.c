@@ -55,7 +55,6 @@ extern s32 D_3F58E0;
 void func_8004AE58_4BA58(s32 **);
 void func_8004A96C_4B56C(s32 **);
 extern void func_8004AA90_4B690(void *);
-extern void func_800457E0_463E0(void);
 extern void func_8004A6D4_4B2D4(void);
 
 typedef struct {
@@ -141,7 +140,48 @@ void func_800457A0_463A0(s16 arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800457E0_463E0);
+typedef struct {
+    u8 _pad[0x30];
+    u8 unk30[0x2C];
+    u8 unk5C;
+} GameState_46080;
+
+typedef struct {
+    u8 _pad[0x14];
+    s32 unk14[3];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 _pad3[0x10];
+    s32 unk40;
+} func_800457E0_463E0_arg;
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_8004592C_4652C_arg;
+
+extern u16 func_800625A4_631A4(void *, void *);
+void func_80045878_46478(void);
+void func_8004592C_4652C(func_8004592C_4652C_arg *);
+
+void func_800457E0_463E0(func_800457E0_463E0_arg *arg0) {
+    u16 rotation;
+    GameState_46080 *allocation;
+
+    allocation = (GameState_46080 *)getCurrentAllocation();
+    rotation = func_800625A4_631A4(&allocation->unk30, &arg0->unk14);
+    createYRotationMatrix((Mat3x3Padded *)arg0, rotation);
+    arg0->unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x30);
+    arg0->unk24 = func_80055DC4_569C4(allocation->unk5C);
+    arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
+    arg0->unk2C = NULL;
+    arg0->unk40 = 1;
+    setCleanupCallback(func_8004592C_4652C);
+    setCallback(func_80045878_46478);
+}
 
 typedef struct {
     u8 _pad[0x20];
@@ -187,12 +227,6 @@ void func_800458AC_464AC(func_800458AC_464AC_arg *arg0) {
 
     enqueueDisplayListObject(arg0->unk3C, (DisplayListObject *)arg0);
 }
-
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_8004592C_4652C_arg;
 
 void func_8004592C_4652C(func_8004592C_4652C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
