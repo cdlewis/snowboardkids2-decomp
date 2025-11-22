@@ -13,6 +13,7 @@
 
 USE_ASSET(_419C60);
 USE_ASSET(_41A1D0);
+USE_ASSET(_4237C0);
 USE_ASSET(_4547D0);
 
 extern u16 D_8008F150_8FD50[];
@@ -239,6 +240,8 @@ void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 void func_80031B30_32730(void);
 void func_80031CC0_328C0(func_8002FA1C_3061C_arg *arg0);
 void func_80031D14_32914(func_80031510_32110_arg *arg0);
+void func_80032170_32D70(void);
+void func_80032218_32E18(void *);
 void func_800322BC_32EBC(void *arg0);
 void func_80032304_32F04(func_80032244_32E44_arg *arg0);
 void func_8003316C_33D6C(func_800330B4_33CB4_arg *arg0);
@@ -569,7 +572,31 @@ void func_800320B8_32CB8(func_800320B8_32CB8_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_800320E4_32CE4);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s8 unkC;
+    s8 unkD;
+} func_800320E4_32CE4_arg;
+
+void func_800320E4_32CE4(func_800320E4_32CE4_arg *arg0) {
+    void *temp_s1;
+
+    getCurrentAllocation();
+    temp_s1 = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    setCleanupCallback(&func_80032218_32E18);
+    arg0->unk0 = -8;
+    arg0->unk2 = 8;
+    arg0->unk8 = 0x24;
+    arg0->unkA = 0xFF;
+    arg0->unkC = 0;
+    arg0->unkD = 0;
+    arg0->unk4 = temp_s1;
+    setCallback(&func_80032170_32D70);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032170_32D70);
 
@@ -578,8 +605,9 @@ typedef struct {
     void *unk4;
 } func_80032218_32E18_arg;
 
-void func_80032218_32E18(func_80032218_32E18_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_80032218_32E18(void *arg0) {
+    func_80032218_32E18_arg *temp = arg0;
+    temp->unk4 = freeNodeMemory(temp->unk4);
 }
 
 void func_80032244_32E44(func_80032244_32E44_arg *arg0) {
