@@ -65,10 +65,13 @@ extern void func_800BB778_AF468(void);
 extern void func_800BBEAC_AFB9C(void);
 extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(void);
-extern void func_800BC184_AFE74(void);
+extern void func_8006BFB8_6CBB8(void *, void *);
+extern void func_800BC184_AFE74(void **);
+extern void func_800BC220_AFF10(void);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
 extern void func_800BC750_B0440(void);
 
+extern s32 D_8009A8A4_9B4A4;
 extern void *D_800BC7F0_B04E0;
 extern Vec3 D_800BCAA0_B0790;
 extern void *D_800BC8C8_B05B8;
@@ -76,6 +79,7 @@ extern s8 D_800BC908_B05F8[12];
 extern void *D_800BC920_B0610;
 extern void *D_800BC960_B0650;
 extern s16 D_800BC9DC_B06CC[];
+extern s32 D_800BCA00_B06F0;
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB2B0_AEFA0);
 
@@ -245,7 +249,26 @@ void func_800BC13C_AFE2C(func_800BC340_B0030_arg *arg0) {
     setCallback(func_800BC184_AFE74);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC184_AFE74);
+void func_800BC184_AFE74(void **arg0) {
+    s32 i;
+    s32 *global_buffer;
+    s32 *src_ptr;
+
+    *arg0 = allocateNodeMemory(0x200);
+
+    i = 0;
+    global_buffer = &D_8009A8A4_9B4A4;
+    src_ptr = &D_800BCA00_B06F0;
+
+    while (i < 8) {
+        memcpy(global_buffer, src_ptr, 0xC);
+        func_8006BFB8_6CBB8(global_buffer - 5, (void *)((u8 *)*arg0 + (i << 6)));
+        src_ptr = (s32 *)((u8 *)src_ptr + 0xC);
+        i++;
+    }
+
+    setCallback(func_800BC220_AFF10);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC220_AFF10);
 
