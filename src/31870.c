@@ -235,7 +235,8 @@ extern void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 
 void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void func_800313A4_31FA4(void);
-void func_800313DC_31FDC(void);
+void func_800313DC_31FDC(func_80031510_32110_arg *arg0);
+void func_80031458_32058(void);
 void func_800315C0_321C0(void);
 void func_800316AC_322AC(void);
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
@@ -398,7 +399,22 @@ void func_800313A4_31FA4(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_800313DC_31FDC);
+void func_800313DC_31FDC(func_80031510_32110_arg *arg0) {
+    func_80032DE8_339E8_asset *allocation;
+
+    allocation = getCurrentAllocation();
+
+    arg0->unk50 += 0xFFF00000;
+
+    memcpy(arg0, (u8 *)arg0 + 0x3C, 0x20);
+
+    if (arg0->unk50 == 0) {
+        allocation->unk788[19] = 0xC;
+        setCallbackWithContinue(&func_80031458_32058);
+    }
+
+    enqueueDisplayListObject(0, (DisplayListObject *)arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80031458_32058);
 
