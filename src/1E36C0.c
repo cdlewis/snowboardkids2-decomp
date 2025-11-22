@@ -1,6 +1,16 @@
 #include "common.h"
 #include "cutscene/cutscene_sys2.h"
 
+typedef struct {
+    u8 pad[0x54];
+    s32 unk54;
+    s32 unk58;
+    s32 unk5C;
+    s32 unk60;
+    s32 unk64;
+    s32 unk68;
+} unk_func_800B68F4_1E39A4;
+
 s16 func_800B6610_1E36C0(cutsceneSys2Wait_exec_asset *arg0) {
     return arg0->unk86;
 }
@@ -11,7 +21,14 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B66B4_1E3764);
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", setupSlotTransform);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B68F4_1E39A4);
+void func_800B68F4_1E39A4(unk_func_800B68F4_1E39A4 *arg0, s32 arg1, s32 arg2, s32 arg3) {
+    arg0->unk60 = arg1;
+    arg0->unk54 = arg1;
+    arg0->unk64 = arg2;
+    arg0->unk58 = arg2;
+    arg0->unk68 = arg3;
+    arg0->unk5C = arg3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6910_1E39C0);
 
