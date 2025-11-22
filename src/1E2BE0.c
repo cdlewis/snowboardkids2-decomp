@@ -18,7 +18,9 @@ INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5E64_1E2F14);
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5EC4_1E2F74);
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5F20_1E2FD0);
+void func_800B5F20_1E2FD0(void *arg0, void *arg1) {
+    *(s32 *)((u8 *)arg0 + 0x34) = *(s32 *)((u8 *)arg1 + 0x2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5F2C_1E2FDC);
 
