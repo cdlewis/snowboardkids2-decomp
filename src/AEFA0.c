@@ -62,7 +62,6 @@ extern void func_800BB778_AF468(void);
 extern void func_800BBEAC_AFB9C(void);
 extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(void);
-extern void func_800BBF4C_AFC3C(void);
 extern void func_800BC184_AFE74(void);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
 extern void func_800BC750_B0440(void);
@@ -71,6 +70,9 @@ extern void *D_800BC7F0_B04E0;
 extern Vec3 D_800BCAA0_B0790;
 extern void *D_800BC8C8_B05B8;
 extern s8 D_800BC908_B05F8[12];
+extern void *D_800BC920_B0610;
+extern void *D_800BC960_B0650;
+extern s16 D_800BC9DC_B06CC[];
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB2B0_AEFA0);
 
@@ -177,7 +179,30 @@ void func_800BBE84_AFB74(s16 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBEAC_AFB9C);
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBF4C_AFC3C);
+typedef struct {
+    void *unk0;
+    void *unk4;
+    s8 pad[0x1C];
+    s16 unk24;
+} func_800BBF4C_AFC3C_arg;
+
+extern void func_800BC0D0_AFDC0(void **);
+extern void func_800BBFC8_AFCB8(void);
+
+void func_800BBF4C_AFC3C(func_800BBF4C_AFC3C_arg *arg0) {
+    s16 index;
+
+    arg0->unk0 = func_80055D7C_5697C(9);
+    arg0->unk4 = &D_800BC920_B0610;
+
+    index = arg0->unk24;
+    if (D_800BC9DC_B06CC[index] == 7) {
+        arg0->unk4 = &D_800BC960_B0650;
+    }
+
+    setCleanupCallback(func_800BC0D0_AFDC0);
+    setCallback(func_800BBFC8_AFCB8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBFC8_AFCB8);
 
