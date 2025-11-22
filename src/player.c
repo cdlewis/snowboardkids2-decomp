@@ -885,7 +885,17 @@ int MusSetFxType(int fxtype) {
     return func_80073058_73C58(&locals.byte_at_10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072E94_73A94);
+void func_80072E94_73A94(int onoff) {
+    int changed = 1;
+
+    if (onoff == 0) {
+        changed = MusSetFxType(mus_last_fxtype);
+    }
+
+    if (changed) {
+        mus_songfxchange_flag = onoff;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntFifoOpen);
 
