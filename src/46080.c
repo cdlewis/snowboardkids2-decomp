@@ -5,6 +5,7 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "overlay.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_3F6670);
@@ -33,6 +34,9 @@ extern u8 func_800698DC_6A4DC(void);
 extern void func_8004562C_4622C(void);
 extern void func_800630F0_63CF0(s32, void *);
 extern void func_80065DA8_669A8(s32, DisplayListObject *);
+extern void rotateVectorY(void *, s32, void *);
+
+extern s32 D_80090E20_91A20;
 
 typedef struct {
     void *unk0;
@@ -44,10 +48,10 @@ extern s32 D_3F3EF0;
 extern s32 D_3F58E0;
 
 void func_8004AE58_4BA58(s32 **);
-void func_8004A634_4B234(void *);
 void func_8004A96C_4B56C(s32 **);
 extern void func_8004AA90_4B690(void *);
 extern void func_800457E0_463E0(void);
+extern void func_8004A6D4_4B2D4(void);
 
 typedef struct {
     DataTable_19E80 *unk0;
@@ -753,13 +757,48 @@ void func_80049C70_4A870(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80049CA8_4A8A8);
 
+typedef struct {
+    void *unk0;
+    void *unk4;
+    u8 _pad[0x1E];
+    s16 unk26;
+    u8 _pad2[0x4];
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+} func_8004A634_4B234_arg;
+
+void func_8004A634_4B234(func_8004A634_4B234_arg *arg0);
+
 void func_8004A5E0_4B1E0(void **arg0) {
     *arg0 = dmaRequestAndUpdateStateWithSize(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     setCleanupCallback(&func_8004A96C_4B56C);
     setCallbackWithContinue(&func_8004A634_4B234);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004A634_4B234);
+void func_8004A634_4B234(func_8004A634_4B234_arg *arg0) {
+    s32 rotatedVector[3];
+    GameState *allocation;
+    void *temp;
+    u8 randomValue;
+
+    allocation = (GameState *)getCurrentAllocation();
+    arg0->unk26 = 0;
+
+    temp = (void *)((s32)allocation->unk44 + 0x80);
+    arg0->unk4 = temp;
+
+    loadAssetMetadata((void *)((s32)arg0 + 4), arg0->unk0, arg0->unk26);
+
+    randomValue = randA();
+    rotateVectorY(&D_80090E20_91A20, (randomValue & 0xFF) << 5, &rotatedVector);
+
+    arg0->unk2C += rotatedVector[0];
+    arg0->unk30 += rotatedVector[1];
+    arg0->unk34 += rotatedVector[2];
+
+    setCallbackWithContinue(func_8004A6D4_4B2D4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004A6D4_4B2D4);
 
