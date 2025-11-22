@@ -258,6 +258,7 @@ void func_80032F64_33B64(func_80032244_32E44_arg *);
 void func_800319C8_325C8(func_800319C8_325C8_arg *arg0);
 void func_80031944_32544(void);
 void func_80031CE8_328E8(void *arg0);
+void func_80031DE4_329E4(void);
 
 extern s32 D_8008F18C_8FD8C;
 extern s32 D_8008F200_8FE00[];
@@ -600,14 +601,51 @@ void func_80031D14_32914(func_80031510_32110_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031D40_32940);
-
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031DE4_329E4);
-
 typedef struct {
     void *unk0;
     void *unk4;
 } func_80031F68_32B68_arg;
+
+void func_80031F68_32B68(func_80031F68_32B68_arg *arg0);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s8 unkC;
+    s8 unkD;
+    s16 unkE;
+} func_80031D40_32940_arg_element;
+
+typedef struct {
+    func_80031D40_32940_arg_element unk0[2];
+    u8 unk20;
+} func_80031D40_32940_arg;
+
+void func_80031D40_32940(func_80031D40_32940_arg *arg0) {
+    s32 i;
+    void *temp_s0;
+
+    temp_s0 = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    setCleanupCallback(&func_80031F68_32B68);
+
+    for (i = 0; i < 2; i++) {
+        arg0->unk0[i].unk0 = i * 0x50 + -0x30;
+        arg0->unk0[i].unk2 = -0x18;
+        arg0->unk0[i].unk8 = i;
+        arg0->unk0[i].unk4 = temp_s0;
+        arg0->unk0[i].unkA = 0xFF;
+        arg0->unk0[i].unkD = 0;
+        arg0->unk0[i].unkC = 0;
+    }
+
+    arg0->unk20 = 0;
+    setCallback(&func_80031DE4_329E4);
+}
+
+INCLUDE_ASM("asm/nonmatchings/31870", func_80031DE4_329E4);
 
 void func_80031F68_32B68(func_80031F68_32B68_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
