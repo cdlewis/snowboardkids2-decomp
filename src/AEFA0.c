@@ -35,6 +35,16 @@ typedef struct {
 } func_800BC340_B0030_arg;
 
 typedef struct {
+    u8 pad[0x76];
+    u8 unk76;
+} Allocation;
+
+typedef struct {
+    u8 pad[0x24];
+    s32 unk24;
+} Task;
+
+typedef struct {
     u8 _pad[0x24];
     void *unk24;
     void *unk28;
@@ -62,7 +72,8 @@ extern void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
 extern void func_800BB620_AF310(void);
 extern void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
 extern void func_800BB778_AF468(void);
-extern void func_800BBEAC_AFB9C(void);
+extern void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
+extern void func_800BBEAC_AFB9C(s16 *);
 extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(void);
 extern void func_8006BFB8_6CBB8(void *, void *);
@@ -197,7 +208,32 @@ void func_800BBE84_AFB74(s16 *arg0) {
     setCallback(func_800BBEAC_AFB9C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBEAC_AFB9C);
+void func_800BBEAC_AFB9C(s16 *arg0) {
+    Allocation *allocation;
+    Task *task;
+    u8 rand;
+    s32 value;
+
+    allocation = (Allocation *)getCurrentAllocation();
+    if (allocation->unk76 != 0) {
+        return;
+    }
+
+    *arg0 -= 1;
+    if (*arg0 != 0) {
+        return;
+    }
+
+    task = (Task *)scheduleTask(func_800BBC64_AF954, 0, 0, 0xC8);
+    if (task != NULL) {
+        rand = randA() & 0xFF;
+        value = (rand * 5) << 13;
+        task->unk24 = value;
+    }
+
+    rand = randA() & 0x1F;
+    *arg0 = rand + 0xB4;
+}
 
 typedef struct {
     void *unk0;
