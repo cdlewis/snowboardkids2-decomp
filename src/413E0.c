@@ -54,9 +54,10 @@ typedef struct {
 typedef struct {
     void *unk0;
     void *unk4;
-    u8 _pad[2];
+    s16 unk8;
     s16 unkA;
-    u8 _pad2[4];
+    s16 unkC;
+    s16 unkE;
     s16 unk10;
     s16 unk12;
 } func_80040D80_41980_arg;
@@ -134,7 +135,25 @@ void func_80040F34_41B34(func_800407E0_413E0_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80040F6C_41B6C);
+extern u8 gConnectedControllerMask;
+
+void func_80040F6C_41B6C(s32 arg0, s16 arg1, u8 arg2, u8 arg3, s16 arg4, s16 arg5) {
+    func_80040D80_41980_arg *task;
+
+    if (((s16)arg0 == 0) || !(gConnectedControllerMask & 1)) {
+        task = (func_80040D80_41980_arg *)scheduleTask(&func_80040D80_41980, arg2, arg3, 0xC8);
+        if (task != NULL) {
+            if (gConnectedControllerMask & 1) {
+                task->unkA = 0;
+            } else {
+                task->unkA = 1;
+            }
+            task->unk8 = arg1;
+            task->unkC = arg4;
+            task->unkE = arg5;
+        }
+    }
+}
 
 typedef struct {
     void *unk0;

@@ -150,7 +150,7 @@ extern loadAssetMetadata_arg D_80090EC0_91AC0;
 
 extern void func_80010240_10E40(void);
 extern void func_80010924_11524(void);
-extern void func_80066444_67044(s32, void*);
+extern void func_80066444_67044(s32, void *);
 
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104(func_80050504_51104_arg *);
@@ -289,8 +289,8 @@ void func_80050DB0_519B0(func_80050DB0_519B0_arg *arg0) {
     setCallbackWithContinue(&func_80050E08_51A08);
 }
 
-void func_80050E08_51A08(func_80050DB0_519B0_arg* arg0) {
-    GameState* alloc;
+void func_80050E08_51A08(func_80050DB0_519B0_arg *arg0) {
+    GameState *alloc;
     s32 i;
 
     alloc = getCurrentAllocation();
