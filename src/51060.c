@@ -135,7 +135,7 @@ void func_80050740_51340(void);
 void func_80050864_51464(func_80050864_51464_arg *);
 void func_800509CC_515CC(void);
 void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
-void func_80050E08_51A08(void);
+void func_80050E08_51A08(func_80050DB0_519B0_arg *);
 void func_80050EA0_51AA0(void **);
 void func_80050F64_51B64(func_80050F18_51B18_arg *);
 void func_80050FE0_51BE0(func_80050F18_51B18_arg *);
@@ -150,6 +150,7 @@ extern loadAssetMetadata_arg D_80090EC0_91AC0;
 
 extern void func_80010240_10E40(void);
 extern void func_80010924_11524(void);
+extern void func_80066444_67044(s32, void*);
 
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104(func_80050504_51104_arg *);
@@ -288,7 +289,25 @@ void func_80050DB0_519B0(func_80050DB0_519B0_arg *arg0) {
     setCallbackWithContinue(&func_80050E08_51A08);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050E08_51A08);
+void func_80050E08_51A08(func_80050DB0_519B0_arg* arg0) {
+    GameState* alloc;
+    s32 i;
+
+    alloc = getCurrentAllocation();
+    if (alloc->gamePaused == 0) {
+        if ((arg0->unk28 & 1) == 0) {
+            loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, arg0->unk24 + (arg0->unk28 >> 1));
+        }
+        arg0->unk28++;
+        if (arg0->unk28 >= 0xA) {
+            func_80069CF8_6A8F8();
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, &arg0->unk4);
+    }
+}
 
 void func_80050EA0_51AA0(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
