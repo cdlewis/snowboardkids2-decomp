@@ -717,7 +717,18 @@ void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004C10C_4CD0C);
+void func_8004C10C_4CD0C(void *arg0) {
+    GameState *allocation;
+    Node *task;
+
+    allocation = (GameState *)getCurrentAllocation();
+    task = (Node *)scheduleTask((void *)func_8004BCBC_4C8BC, 3, 0, 0xEF);
+
+    if (task != NULL) {
+        task->cleanupCallback = (void (*)(void *))arg0;
+        allocation->unk5B--;
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/46080", D_8009E868_9F468);
 
