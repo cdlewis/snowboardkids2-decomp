@@ -813,7 +813,7 @@ musHandle func_80072CDC_738DC(fx_header_t *arg0, void *arg1) {
         }
     }
 
-    result = ((musHandle(*)(void *))__MusIntStartSong)(arg1);
+    result = ((s32(*)(void *))__MusIntStartSong)(arg1);
     libmus_fxheader_single = libmus_fxheader_current;
 
     return result;
