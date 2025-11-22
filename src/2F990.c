@@ -52,7 +52,7 @@ typedef struct {
     s32 unk28;
     s32 unk2C;
     u8 padding2[0x30];
-    s8 unk60;
+    u8 unk60;
 } func_8002F658_30258_arg;
 
 typedef struct {
@@ -162,6 +162,7 @@ void func_8002EFD8_2FBD8(void *);
 void func_8002F024_2FC24(void);
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
 void func_8002F290_2FE90(void);
+void func_8002F3E4_2FFE4(void);
 void func_8002F5C8_301C8(void *);
 void func_8002F72C_3032C(void);
 void func_8002F88C_3048C(void);
@@ -263,7 +264,22 @@ INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F12C_2FD2C);
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F290_2FE90);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F36C_2FF6C);
+void func_8002F36C_2FF6C(func_8002F658_30258_arg *arg0) {
+    volatile u8 padding[0x20];
+
+    getCurrentAllocation();
+    if (arg0->unk60 != 0) {
+        arg0->unk24 = (s32)freeNodeMemory((void *)arg0->unk24);
+        arg0->unk28 = (s32)freeNodeMemory((void *)arg0->unk28);
+        arg0->unk2C = (s32)freeNodeMemory((void *)arg0->unk2C);
+        if (arg0->unk60 != 0) {
+            goto end;
+        }
+    }
+    enqueueDisplayListObject(0, arg0);
+end:
+    setCallback(&func_8002F3E4_2FFE4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F3E4_2FFE4);
 
