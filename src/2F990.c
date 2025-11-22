@@ -149,6 +149,7 @@ typedef struct {
 } func_80030668_31268_arg;
 
 extern void func_8000FED0_10AD0(void);
+extern void func_80035408_36008(void);
 
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
@@ -582,7 +583,24 @@ void func_800309D4_315D4(func_800308FC_314FC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_80030A00_31600);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030AEC_316EC);
+void func_80030AEC_316EC(void *arg0) {
+    GameState *alloc;
+    s32 i;
+    void *ptr;
+
+    alloc = (GameState *)getCurrentAllocation();
+
+    if (alloc->unk5D8 != 0) {
+        i = 0;
+        ptr = arg0;
+        do {
+            debugEnqueueCallback(8, 0, &func_8000FED0_10AD0, ptr);
+            debugEnqueueCallback(8, 1, &func_80035408_36008, (u8 *)arg0 + 0x30);
+            i++;
+            ptr = (u8 *)ptr + 0xC;
+        } while (i < 4);
+    }
+}
 
 void func_80030B70_31770(func_80030B70_31770_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
