@@ -55,4 +55,23 @@ void func_800B4F28_1E1FD8(SceneModel_unk98 *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4F60_1E2010);
+typedef struct {
+    u8 padding[0x78];
+    s32 unk78;
+    u8 padding2[4];
+    s16 unk80;
+    u8 padding3[4];
+    s16 unk86;
+} func_800B4F60_1E2010_task;
+
+extern void func_800B4CD0_1E1D80(void *);
+
+void func_800B4F60_1E2010(s32 arg0, s16 arg1) {
+    func_800B4F60_1E2010_task *task = (func_800B4F60_1E2010_task *)scheduleTask(&func_800B4CD0_1E1D80, 1, 0, 0x64);
+
+    if (task != NULL) {
+        task->unk78 = arg0;
+        task->unk80 = 0;
+        task->unk86 = arg1;
+    }
+}
