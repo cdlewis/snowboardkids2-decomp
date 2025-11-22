@@ -73,8 +73,8 @@ extern void *D_800A3560_A4160;
 
 void *LinearAlloc(size_t size);
 void func_8006F6F4_702F4(void);
-void func_8006FA58_70658(Node_70B00 *);
 void func_8006DEE4_6EAE4(void);
+void func_8006FA58_70658(Node_70B00 *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
 
@@ -246,7 +246,23 @@ void func_8006FA0C_7060C(Node_70B00 *arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
     guPerspective(&arg0->perspectiveMatrix, &arg0->perspNorm, arg1, arg2, arg3, arg4, 1.0f);
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FA58_70658);
+void func_8006FA58_70658(Node_70B00 *arg0) {
+    s32 i;
+
+    i = 7;
+    while (i >= 0) {
+        arg0->pool[i].unk4 = NULL;
+        i--;
+    }
+
+    i = 1;
+    while (i < 8) {
+        arg0->pool[i - 1].next = &arg0->pool[i];
+        i++;
+    }
+
+    arg0->unk88 = NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FAA4_706A4);
 

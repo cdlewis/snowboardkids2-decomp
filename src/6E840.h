@@ -17,6 +17,12 @@ typedef struct {
     u8 unk152;
     u8 padding[0x5];
 } Node_70B00_ColorData;
+typedef struct PoolEntry {
+    struct PoolEntry* next;
+    void* unk4;
+    u8 _pad[8];
+} PoolEntry;
+
 typedef struct Node_70B00 {
     /* 0x00 */ union {
         struct Node_70B00 *next;
@@ -32,7 +38,9 @@ typedef struct Node_70B00 {
     s8 unk14;
     s8 unk15;
     /* 0x16 */ u16 slot_index;
-    u8 padding2[0xA4];
+    /* 0x18 */ PoolEntry pool[7];
+    /* 0x88 */ void* unk88;
+    u8 padding2[0x30];
     u8 unkBC;
     u8 unkBD;
     u8 unkBE;
