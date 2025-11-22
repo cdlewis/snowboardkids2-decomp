@@ -32,7 +32,21 @@ typedef struct {
     void *unk90;
 } func_800B9774_1E6824_arg;
 
-INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B93F0_1E64A0);
+s32 func_800B93F0_1E64A0(s32 arg0) {
+    s32 result;
+
+    if (arg0 == 0) {
+        arg0 = 1;
+    }
+
+    result = 0x4000000 / arg0;
+
+    if (result >= 0x4000) {
+        result = 0x4000;
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B9440_1E64F0);
 
