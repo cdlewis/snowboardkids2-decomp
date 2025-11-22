@@ -95,7 +95,19 @@ INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6088_1E3138);
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B60DC_1E318C);
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6130_1E31E0);
+void func_800B6130_1E31E0(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2) {
+    if ((arg1 == 0) || (arg2 == 0)) {
+        arg0->unk70 = 0;
+        arg0->unk2A = 0;
+        arg0->unk2E = 0;
+        arg0->unk32 = 0;
+    } else {
+        arg0->unk70 = 1;
+        arg0->unk2A = arg1;
+        arg0->unk2E = arg2;
+        arg0->unk32 = arg2;
+    }
+}
 
 typedef struct {
     u8 _pad[0x68];
