@@ -1,3 +1,4 @@
+#include "1DFAA0.h"
 #include "common.h"
 #include "cutscene/cutscene_sys2.h"
 
@@ -36,7 +37,11 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6AB8_1E3B68);
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6B6C_1E3C1C);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6BDC_1E3C8C);
+extern void func_800B6C04_1E3CB4(CutsceneSlotData *, s32, s32, s32, s16, s16, s16);
+
+void func_800B6BDC_1E3C8C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4) {
+    func_800B6C04_1E3CB4(arg0, arg1, arg2, arg3, arg4, 0, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6C04_1E3CB4);
 
