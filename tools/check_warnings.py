@@ -50,9 +50,8 @@ def main():
     print(f"Maximum allowed: {args.max}")
 
     if count > args.max:
-        print(f"\n❌ FAILED: Found {count - args.max} more warning(s) than allowed!")
+        print(f"\n❌ BUILD FAILED: Found {count - args.max} more warning(s) than allowed!")
         print(f"\nPlease fix the new incompatible pointer type warnings.")
-        print(f"Or if you've fixed warnings, update MAX_WARNINGS in tools/check_warnings.py")
         if args.show_all:
             print(f"\nAll warnings:")
             for w in warnings:

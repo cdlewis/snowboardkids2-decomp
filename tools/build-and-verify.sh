@@ -1,0 +1,1 @@
+make clean && make extract && make -j1 || (echo "BUILD HAS FAILED. Claude, you should treat this as a build failure. Adding new warnings or accepting a non-matching checksum count as failures." && false)

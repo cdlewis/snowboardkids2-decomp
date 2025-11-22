@@ -18,6 +18,7 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 ## Tools
 
+- `./tools/build-and-verify.sh` build the project and verify that it matches the target.
 - `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>`
 - `./tools/claude <function name>` spin up a decompilation environment for a given function.
 - `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
@@ -76,11 +77,6 @@ When you see pointer arithmetic patterns like `*(type*)((u8*)ptr + offset)`:
 
    - Calculate total size to ensure it matches the multiplier in pointer arithmetic
    - Example: `arg1 * 36` means struct must be exactly 36 (0x24) bytes
-
-4. **Always verify after changes:**
-   - Build the project: `make clean && make extract && make -j1`
-   - Check the ROM matches: `shasum -c snowboardkids2.sha1`
-   - Use diff.py to verify function assembly matches exactly
 
 ### When Decompiling
 
@@ -141,8 +137,7 @@ Example: If you added `extern void setCallback(void *);` but `task_scheduler.h` 
 2. **ALWAYS verify the complete build** by running:
 
    ```
-   make clean && make extract && make -j1
-   shasum -c snowboardkids2.sha1
+   ./tools/build-and-verify.sh
    ```
 
 3. **SUCCESS CRITERIA**: The ONLY acceptable success condition is:
@@ -173,6 +168,4 @@ Before declaring a decompilation complete, verify:
 - [ ] All struct field accesses use `->` or `.` operators
 - [ ] No `void*` parameters that should be typed structs
 - [ ] Struct sizes match the assembly access patterns
-- [ ] `make clean && make extract && make -j1` succeeds
-- [ ] `shasum -c snowboardkids2.sha1` shows `OK`
-- [ ] `diff.py --no-pager <function>` shows perfect match (score 0)
+- [ ] `./tools/build-and-verify.sh` succeeds
