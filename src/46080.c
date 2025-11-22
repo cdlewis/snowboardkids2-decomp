@@ -154,7 +154,21 @@ void func_80045C84_46884(func_80045C84_46884_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80045CC8_468C8);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80046244_46E44);
+extern void func_800459A4_465A4(void);
+
+typedef struct {
+    u8 _pad[0x14];
+    s16 unk14;
+    s16 unk16;
+} func_80046244_46E44_Task;
+
+void func_80046244_46E44(s16 arg0, s16 arg1) {
+    func_80046244_46E44_Task *task = (func_80046244_46E44_Task *)scheduleTask(func_800459A4_465A4, 0, 0, 0xD3);
+    if (task != NULL) {
+        task->unk14 = arg0;
+        task->unk16 = arg1;
+    }
+}
 
 typedef struct {
     void *unk0;
