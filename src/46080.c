@@ -8,6 +8,7 @@
 #include "task_scheduler.h"
 
 USE_ASSET(_3F6670);
+USE_ASSET(_3F6950);
 USE_ASSET(_3F3EF0);
 
 typedef struct {
@@ -380,18 +381,44 @@ void func_80047718_48318(func_80047718_48318_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80047750_48350);
-
-INCLUDE_ASM("asm/nonmatchings/46080", func_800477E4_483E4);
-
-INCLUDE_ASM("asm/nonmatchings/46080", func_800478FC_484FC);
+extern void func_800477E4_483E4(void);
+extern void *D_80090BD4_917D4[];
+extern void *D_80090BD8_917D8[];
+extern s32 D_80090BDC_917DC[];
 
 typedef struct {
     void *unk0;
     u8 _pad[0x8];
     void *unkC;
     void *unk10;
+    s16 unk14;
 } func_80047A64_48664_arg;
+
+void func_80047A64_48664(func_80047A64_48664_arg *arg0);
+
+void func_80047750_48350(func_80047A64_48664_arg *arg0) {
+    s16 index;
+    s32 arrayOffset;
+
+    arg0->unkC = dmaRequestAndUpdateStateWithSize(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
+
+    index = arg0->unk14;
+    arrayOffset = index * 3;
+
+    arg0->unk10 = dmaRequestAndUpdateStateWithSize(
+        D_80090BD4_917D4[arrayOffset],
+        D_80090BD8_917D8[arrayOffset],
+        D_80090BDC_917DC[arrayOffset]
+    );
+
+    arg0->unk0 = 0;
+    setCleanupCallback(func_80047A64_48664);
+    setCallback(func_800477E4_483E4);
+}
+
+INCLUDE_ASM("asm/nonmatchings/46080", func_800477E4_483E4);
+
+INCLUDE_ASM("asm/nonmatchings/46080", func_800478FC_484FC);
 
 void func_80047A64_48664(func_80047A64_48664_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
@@ -400,8 +427,6 @@ void func_80047A64_48664(func_80047A64_48664_arg *arg0) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80047AA8_486A8);
-
-extern void func_80047750_48350(void);
 
 typedef struct {
     u8 _pad[0x14];
