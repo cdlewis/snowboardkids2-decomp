@@ -73,6 +73,8 @@ void func_80063534_64134(s32);
 
 void func_800634E8_640E8(DisplayListObject *arg0);
 
+void func_800630F0_63CF0(s32, void *);
+
 typedef struct {
     u8 padding[0x1C];
     s32 unk1C;

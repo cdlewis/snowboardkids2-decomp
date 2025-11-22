@@ -155,7 +155,21 @@ void func_800630A4_63CA4(DisplayListObject *arg0) {
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800630F0_63CF0);
+void func_800630F0_63CF0(s32 arg0, void *arg1) {
+    ((DisplayListObject *)arg1)->unk30 = 0;
+
+    if (((DisplayListObject *)arg1)->unk20->opaqueDisplayList != NULL) {
+        debugEnqueueCallback(arg0, 1, func_8006300C_63C0C, arg1);
+    }
+
+    if (((DisplayListObject *)arg1)->unk20->transparentDisplayList != NULL) {
+        debugEnqueueCallback(arg0, 3, func_80063058_63C58, arg1);
+    }
+
+    if (((DisplayListObject *)arg1)->unk20->overlayDisplayList != NULL) {
+        debugEnqueueCallback(arg0, 5, func_800630A4_63CA4, arg1);
+    }
+}
 
 void setupDisplayListMatrix(DisplayListObject *arg0) {
     Mtx sp30;

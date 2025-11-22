@@ -202,7 +202,6 @@ void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0);
 
 extern s32 func_8000A030_AC30(void *, s32);
 extern void func_80009E68_AA68(void *, s16);
-extern void func_800630F0_63CF0(u16, void *);
 extern s32 identityMatrix[];
 
 void setModelRenderMode(setModelRenderMode_arg *arg0, s8 arg1) {

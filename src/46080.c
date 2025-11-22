@@ -33,7 +33,6 @@ extern void func_800462D8_46ED8(void);
 extern void func_8004B834_4C434(void);
 extern u8 func_800698DC_6A4DC(void);
 extern void func_8004562C_4622C(void);
-extern void func_800630F0_63CF0(s32, void *);
 extern void func_80065DA8_669A8(s32, DisplayListObject *);
 extern void rotateVectorY(void *, s32, void *);
 
