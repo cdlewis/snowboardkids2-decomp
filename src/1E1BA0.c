@@ -60,7 +60,40 @@ INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4CD0_1E1D80);
 
 INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4D74_1E1E24);
 
-INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4E7C_1E1F2C);
+extern void func_80069CF8_6A8F8(void);
+
+typedef struct {
+    u8 _pad0[0x18];
+    s32 unk18;
+    u8 _pad1C[0x20];
+    u8 unk3C[0x40];
+    s32 unk7C;
+    u8 _pad80[0x2];
+    u16 unk82;
+} func_800B4E7C_Struct;
+
+void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0) {
+    Mat3x3Padded matrix;
+    s32 temp_v0;
+
+    temp_v0 = arg0->unk7C - 0x8000;
+    arg0->unk7C = temp_v0;
+
+    if ((s32)0xFFF80000 >= temp_v0) {
+        func_80069CF8_6A8F8();
+    }
+
+    arg0->unk18 += arg0->unk7C;
+    createZRotationMatrix(&matrix, arg0->unk82);
+
+    matrix.unk18 = 0xBB333;
+    matrix.unk14 = 0;
+    matrix.unk1C = 0xFFEA0000;
+
+    func_8006B084_6BC84(&matrix, (DisplayListObject *)arg0, (DisplayListObject *)&arg0->unk3C);
+    enqueueDisplayListObject(0, (DisplayListObject *)arg0);
+    enqueueDisplayListObject(0, (DisplayListObject *)&arg0->unk3C);
+}
 
 void func_800B4F28_1E1FD8(SceneModel_unk98 *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
