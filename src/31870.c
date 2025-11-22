@@ -229,6 +229,7 @@ void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void func_800313A4_31FA4(void);
 void func_800313DC_31FDC(void);
 void func_800315C0_321C0(void);
+void func_800316AC_322AC(void);
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 void func_80031B30_32730(void);
@@ -401,7 +402,12 @@ void func_80031510_32110(func_80031510_32110_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_800315C0_321C0);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_8003165C_3225C);
+void func_8003165C_3225C(func_800319C8_325C8_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+    setCallback(&func_800316AC_322AC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_800316AC_322AC);
 
