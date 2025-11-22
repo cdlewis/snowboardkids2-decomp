@@ -136,7 +136,19 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7760_1E4810);
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B77C4_1E4874);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7828_1E48D8);
+void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2) {
+    s32 delta;
+
+    if (arg2 > 0) {
+        delta = arg1 - arg0->unk5C;
+        arg0->unk68 = arg1;
+        arg0->unk74 = delta / arg2;
+    } else {
+        arg0->unk5C = arg1;
+        arg0->unk68 = arg1;
+        arg0->unk74 = 0;
+    }
+}
 
 extern s32 approximateSin(s16);
 extern s32 approximateCos(s16);
