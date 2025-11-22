@@ -59,9 +59,7 @@ if [[ "$ARG" =~ ^[0-9]+$ ]] || [[ "$ARG" =~ ^[a-zA-Z0-9]+$ && ${#ARG} -ge 5 && $
         echo "Error: Could not extract diff_label or source_code from API response"
         exit 1
     fi
-    
-    echo "Found function: $DIFF_LABEL"
-    
+   
     # Use diff_label as the function name for ASM lookup
     FUNC_NAME="$DIFF_LABEL"
     USE_SCRATCH_SOURCE=true
@@ -90,7 +88,6 @@ else
         exit 1
     fi
 
-    echo "Found: $ASM_PATH"
 fi
 
 # Setup working directory
@@ -103,7 +100,6 @@ else
     DIR_NAME="$1"
 fi
 created_dir=$(create_unique_dir "$DIR_NAME")
-echo "Created: $created_dir"
 
 # Populate with base / target files
 if [ "$USE_SCRATCH_SOURCE" = true ]; then
@@ -117,14 +113,17 @@ else
 fi
 cat "${CLAUDE_DIR}/prelude.inc" "${CLAUDE_DIR}/../../include/macro.inc" "$ASM_PATH" > "$created_dir/target.s"
 mips-linux-gnu-as -EB -march=vr4300 -mtune=vr4300 -Iinclude -o "$created_dir/target.o" "$created_dir/target.s"
-echo "Populated with target and base files"
 
 # Add claude decomp helpers
 ln -sf "${CLAUDE_DIR}"/* "$created_dir/"
 ln -sf "${CLAUDE_CONFIG}" "$created_dir/"
-echo "Linked claude decompiler files and .claude config into $created_dir"
 
-cd "$created_dir"
-
-# Start Claude with the decompilation prompt
-claude "decompile ${FUNC_NAME%.s}. use thinking"
+if command -v claude &> /dev/null; then
+    cd "$created_dir"
+    claude "decompile ${FUNC_NAME%.s}. use thinking"
+else
+    echo "Success! Please navigate to the created directory and start your decompilation work:"
+    echo ""
+    echo "  cd $created_dir"
+    echo ""
+fi
