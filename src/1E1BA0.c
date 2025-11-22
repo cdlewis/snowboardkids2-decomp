@@ -1,6 +1,10 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4AF0_1E1BA0);
+extern s16 D_800BAD0E_1E7DBE;
+
+s16 func_800B4AF0_1E1BA0(void) {
+    return D_800BAD0E_1E7DBE;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4AFC_1E1BAC);
 
