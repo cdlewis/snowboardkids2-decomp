@@ -169,6 +169,6 @@ void func_800B6180_1E3230(func_800B6180_1E3230_arg0 *arg0, s32 arg1, s16 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6190_1E3240);
 
-INCLUDE_ASM("asm/matchings/1E2BE0", func_800B6544_1E35F4);
+INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6544_1E35F4);
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", advanceSceneManager);
