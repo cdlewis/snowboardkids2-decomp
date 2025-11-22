@@ -35,19 +35,19 @@ typedef struct {
     s16 unk2E;
     s16 unk30;
     s16 unk32;
-    u8 _pad2[4];
+    s32 unk34;
     s32 unk38;
     s32 unk3C;
-    u8 _pad3[4];
+    s32 unk40;
     s32 unk44;
     s32 unk48;
     s32 unk4C;
     s32 unk50;
     s32 unk54;
-    u8 _pad4[2];
+    s16 unk58;
     s16 unk5A;
     s16 unk5C;
-    u8 _pad5[2];
+    s16 unk5E;
     s16 unk60;
     s16 unk62;
     u8 _pad6[0xC];
@@ -79,7 +79,14 @@ void func_800B5E64_1E2F14(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2, s
     arg0->unk48 = arg4;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5EC4_1E2F74);
+void func_800B5EC4_1E2F74(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    func_800B5E64_1E2F14(arg0, arg1, arg2, arg3, arg4);
+    arg0->unk34 = arg5;
+    arg0->unk40 = arg5;
+    arg0->unk4C = 0;
+    arg0->unk58 = 0;
+    arg0->unk5E = 0;
+}
 
 void func_800B5F20_1E2FD0(void *arg0, void *arg1) {
     *(s32 *)((u8 *)arg0 + 0x34) = *(s32 *)((u8 *)arg1 + 0x2C);
