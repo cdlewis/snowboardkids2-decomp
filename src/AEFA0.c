@@ -15,6 +15,7 @@ typedef struct {
     s16 unk40;
     s16 unk42;
     s16 unk44;
+    u8 unk46;
 } func_800BB388_AF078_arg;
 
 typedef struct {
@@ -56,8 +57,10 @@ extern void *func_80055D7C_5697C(s32);
 extern void func_80069CF8_6A8F8(void);
 extern void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *);
 extern void func_800BB45C_AF14C(void **);
-extern void func_800BB488_AF178(func_800BB388_AF078_arg *);
-extern void func_800BB5B0_AF2A0(void);
+extern s32 func_800BB488_AF178(func_800BB388_AF078_arg *);
+extern void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
+extern void func_800BB620_AF310(void);
+extern void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
 extern void func_800BB778_AF468(void);
 extern void func_800BBEAC_AFB9C(void);
 extern void func_800BBCE8_AF9D8(void **);
@@ -120,7 +123,20 @@ void func_800BB45C_AF14C(void **arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB488_AF178);
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB5B0_AF2A0);
+void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *arg0) {
+    arg0->unk1E += 0x10;
+
+    if (arg0->unk1E == 0xE0) {
+        arg0->unk46 = 1;
+        setCallback(func_800BB620_AF310);
+    }
+
+    if (func_800BB488_AF178(arg0)) {
+        setCallback(func_800BB6F4_AF3E4);
+    }
+
+    func_800BB2B0_AEFA0(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB620_AF310);
 
