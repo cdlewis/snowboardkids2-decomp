@@ -30,8 +30,9 @@ extern void func_80048E34_49A34(void);
 extern void func_800462D8_46ED8(void);
 extern void func_8004B834_4C434(void);
 extern u8 func_800698DC_6A4DC(void);
-extern void func_800455BC_461BC(void);
 extern void func_8004562C_4622C(void);
+extern void func_800630F0_63CF0(s32, void *);
+extern void func_80065DA8_669A8(s32, DisplayListObject *);
 
 typedef struct {
     void *unk0;
@@ -73,6 +74,14 @@ void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0);
 INCLUDE_ASM("asm/nonmatchings/46080", func_80045480_46080);
 
 typedef struct {
+    u8 _pad[0x3C];
+    u8 unk3C[0x20];
+    s32 unk5C;
+} func_800455BC_461BC_arg;
+
+void func_800455BC_461BC(func_800455BC_461BC_arg *arg0);
+
+typedef struct {
     u8 _pad[0xB4];
     s16 unkB4;
 } ScheduledTask;
@@ -87,7 +96,19 @@ void func_80045564_46164(ScheduledTask *arg0) {
     setCallbackWithContinue(func_800455BC_461BC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800455BC_461BC);
+void func_800455BC_461BC(func_800455BC_461BC_arg *arg0) {
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        func_800630F0_63CF0(i, arg0);
+    }
+
+    if (arg0->unk5C != 0) {
+        for (i = 0; i < 4; i++) {
+            func_80065DA8_669A8(i + 4, (DisplayListObject *)&arg0->unk3C);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004562C_4622C);
 

@@ -1,0 +1,795 @@
+[[0;32m   as   [0m]  asm/10AD0.s
+[[0;32m   as   [0m]  asm/15080.s
+[[0;32m   as   [0m]  asm/15690.s
+[[0;32m   as   [0m]  asm/160E0.s
+[[0;32m   as   [0m]  asm/16FA0.s
+[[0;32m   as   [0m]  asm/17F50.s
+[[0;32m   as   [0m]  asm/19400.s
+[[0;32m   as   [0m]  asm/198B0.s
+[[0;32m   as   [0m]  asm/199C0.s
+[[0;32m   as   [0m]  asm/19AB0.s
+[[0;32m   as   [0m]  asm/1A110.s
+[[0;32m   as   [0m]  asm/1C9C0.s
+[[0;32m   as   [0m]  asm/1D410.s
+[[0;32m   as   [0m]  asm/1DA660.s
+[[0;32m   as   [0m]  asm/1DB7A0.s
+[[0;32m   as   [0m]  asm/1DC260.s
+[[0;32m   as   [0m]  asm/1DC480.s
+[[0;32m   as   [0m]  asm/1DC900.s
+[[0;32m   as   [0m]  asm/1DCF60.s
+[[0;32m   as   [0m]  asm/1F070.s
+[[0;32m   as   [0m]  asm/1F190.s
+[[0;32m   as   [0m]  asm/202A0.s
+[[0;32m   as   [0m]  asm/227D0.s
+[[0;32m   as   [0m]  asm/22920.s
+[[0;32m   as   [0m]  asm/22D30.s
+[[0;32m   as   [0m]  asm/232F0.s
+[[0;32m   as   [0m]  asm/24A30.s
+[[0;32m   as   [0m]  asm/29200.s
+[[0;32m   as   [0m]  asm/297B0.s
+[[0;32m   as   [0m]  asm/2C8F0.s
+[[0;32m   as   [0m]  asm/2AF90.s
+[[0;32m   as   [0m]  asm/2D4C0.s
+[[0;32m   as   [0m]  asm/33E00.s
+[[0;32m   as   [0m]  asm/33FE0.s
+[[0;32m   as   [0m]  asm/36B80.s
+[[0;32m   as   [0m]  asm/37E70.s
+[[0;32m   as   [0m]  asm/38310.s
+[[0;32m   as   [0m]  asm/3870.s
+[[0;32m   as   [0m]  asm/38BE0.s
+[[0;32m   as   [0m]  asm/38C90.s
+[[0;32m   as   [0m]  asm/3B80.s
+[[0;32m   as   [0m]  asm/3C960.s
+[[0;32m   as   [0m]  asm/3CD70.s
+[[0;32m   as   [0m]  asm/42170.s
+[[0;32m   as   [0m]  asm/4CD70.s
+[[0;32m   as   [0m]  asm/52880.s
+[[0;32m   as   [0m]  asm/59290.s
+[[0;32m   as   [0m]  asm/594E0.s
+[[0;32m   as   [0m]  asm/5AA90.s
+[[0;32m   as   [0m]  asm/5DBC0.s
+[[0;32m   as   [0m]  asm/69B0.s
+[[0;32m   as   [0m]  asm/6DD0.s
+[[0;32m   as   [0m]  asm/76B0.s
+[[0;32m   as   [0m]  asm/7C70.s
+[[0;32m   as   [0m]  asm/8700.s
+[[0;32m   as   [0m]  asm/8A40.s
+[[0;32m   as   [0m]  asm/8DC0.s
+[[0;32m   as   [0m]  asm/90D0.s
+[[0;32m   as   [0m]  asm/9FF70.s
+[[0;32m   as   [0m]  asm/A9A40.s
+[[0;32m   as   [0m]  asm/AB160.s
+[[0;32m   as   [0m]  asm/ABAE0.s
+[[0;32m   as   [0m]  asm/ACD30.s
+[[0;32m   as   [0m]  asm/AD670.s
+[[0;32m   as   [0m]  asm/B040.s
+[[0;32m   as   [0m]  asm/B07A0.s
+[[0;32m   as   [0m]  asm/B2030.s
+[[0;32m   as   [0m]  asm/B2750.s
+[[0;32m   as   [0m]  asm/B2870.s
+[[0;32m   as   [0m]  asm/B4240.s
+[[0;32m   as   [0m]  asm/B4BB0.s
+[[0;32m   as   [0m]  asm/B54C0.s
+[[0;32m   as   [0m]  asm/B5B90.s
+[[0;32m   as   [0m]  asm/C570.s
+[[0;32m   as   [0m]  asm/C870.s
+[[0;32m   as   [0m]  asm/CBA0.s
+[[0;32m   as   [0m]  asm/DA20.s
+[[0;32m   as   [0m]  asm/data/1C9C0.rodata.s
+[[0;32m   as   [0m]  asm/data/1DB6E0.data.s
+[[0;32m   as   [0m]  asm/data/1DB7A0.rodata.s
+[[0;32m   as   [0m]  asm/data/1DC080.data.s
+[[0;32m   as   [0m]  asm/data/1DC0D0.rodata.s
+[[0;32m   as   [0m]  asm/data/1DC900.rodata.s
+[[0;32m   as   [0m]  asm/data/1DD080.data.s
+[[0;32m   as   [0m]  asm/data/1DD170.bss.s
+[[0;32m   as   [0m]  asm/data/1E7670.data.s
+[[0;32m   as   [0m]  asm/data/1E7E30.data.s
+[[0;32m   as   [0m]  asm/data/202A0.rodata.s
+[[0;32m   as   [0m]  asm/data/20F0.data.s
+[[0;32m   as   [0m]  asm/data/2AF90.rodata.s
+[[0;32m   as   [0m]  asm/data/36E50.data.s
+[[0;32m   as   [0m]  asm/data/3870.data.s
+[[0;32m   as   [0m]  asm/data/3B80.data.s
+[[0;32m   as   [0m]  asm/data/3E160.data.s
+[[0;32m   as   [0m]  asm/data/4CD70.rodata.s
+[[0;32m   as   [0m]  asm/data/51060.data.s
+[[0;32m   as   [0m]  asm/data/5520.data.s
+[[0;32m   as   [0m]  asm/data/56910.data.s
+[[0;32m   as   [0m]  asm/data/56C80.data.s
+[[0;32m   as   [0m]  asm/data/594E0.rodata.s
+[[0;32m   as   [0m]  asm/data/5E590.data.s
+[[0;32m   as   [0m]  asm/data/69B0.data.s
+[[0;32m   as   [0m]  asm/data/8700.rodata.s
+[[0;32m   as   [0m]  asm/data/89210.data.s
+[[0;32m   as   [0m]  asm/data/89220.data.s
+[[0;32m   as   [0m]  asm/data/89230.data.s
+[[0;32m   as   [0m]  asm/data/892B0.data.s
+[[0;32m   as   [0m]  asm/data/892C0.data.s
+[[0;32m   as   [0m]  asm/data/892D0.data.s
+[[0;32m   as   [0m]  asm/data/892E0.data.s
+[[0;32m   as   [0m]  asm/data/892F0.data.s
+[[0;32m   as   [0m]  asm/data/89300.data.s
+[[0;32m   as   [0m]  asm/data/89310.data.s
+[[0;32m   as   [0m]  asm/data/89320.data.s
+[[0;32m   as   [0m]  asm/data/89330.data.s
+[[0;32m   as   [0m]  asm/data/89340.data.s
+[[0;32m   as   [0m]  asm/data/89350.data.s
+[[0;32m   as   [0m]  asm/data/89370.data.s
+[[0;32m   as   [0m]  asm/data/893D0.data.s
+[[0;32m   as   [0m]  asm/data/89430.data.s
+[[0;32m   as   [0m]  asm/data/89490.data.s
+[[0;32m   as   [0m]  asm/data/894F0.data.s
+[[0;32m   as   [0m]  asm/data/89540.data.s
+[[0;32m   as   [0m]  asm/data/89590.data.s
+[[0;32m   as   [0m]  asm/data/895E0.data.s
+[[0;32m   as   [0m]  asm/data/89630.data.s
+[[0;32m   as   [0m]  asm/data/89680.data.s
+[[0;32m   as   [0m]  asm/data/896D0.data.s
+[[0;32m   as   [0m]  asm/data/89720.data.s
+[[0;32m   as   [0m]  asm/data/89770.data.s
+[[0;32m   as   [0m]  asm/data/897C0.data.s
+[[0;32m   as   [0m]  asm/data/89810.data.s
+[[0;32m   as   [0m]  asm/data/89860.data.s
+[[0;32m   as   [0m]  asm/data/898B0.data.s
+[[0;32m   as   [0m]  asm/data/89900.data.s
+[[0;32m   as   [0m]  asm/data/89950.data.s
+[[0;32m   as   [0m]  asm/data/899F0.data.s
+[[0;32m   as   [0m]  asm/data/899A0.data.s
+[[0;32m   as   [0m]  asm/data/89A20.data.s
+[[0;32m   as   [0m]  asm/data/89A40.data.s
+[[0;32m   as   [0m]  asm/data/89A60.data.s
+[[0;32m   as   [0m]  asm/data/89A80.data.s
+[[0;32m   as   [0m]  asm/data/8A110.data.s
+[[0;32m   as   [0m]  asm/data/8A40.data.s
+[[0;32m   as   [0m]  asm/data/8A40.rodata.s
+[[0;32m   as   [0m]  asm/data/8CBF0.data.s
+[[0;32m   as   [0m]  asm/data/8CD80.data.s
+[[0;32m   as   [0m]  asm/data/8CD90.data.s
+[[0;32m   as   [0m]  asm/data/8CE00.data.s
+[[0;32m   as   [0m]  asm/data/8CE70.data.s
+[[0;32m   as   [0m]  asm/data/8D080.data.s
+[[0;32m   as   [0m]  asm/data/8D120.data.s
+[[0;32m   as   [0m]  asm/data/8D7F0.data.s
+[[0;32m   as   [0m]  asm/data/8D840.data.s
+[[0;32m   as   [0m]  asm/data/8D890.data.s
+[[0;32m   as   [0m]  asm/data/8D8E0.data.s
+[[0;32m   as   [0m]  asm/data/8D8F0.data.s
+[[0;32m   as   [0m]  asm/data/8D900.data.s
+[[0;32m   as   [0m]  asm/data/8D9D0.data.s
+[[0;32m   as   [0m]  asm/data/8DAD0.data.s
+[[0;32m   as   [0m]  asm/data/8DD50.data.s
+[[0;32m   as   [0m]  asm/data/8E020.data.s
+[[0;32m   as   [0m]  asm/data/8E360.data.s
+[[0;32m   as   [0m]  asm/data/8E3E0.data.s
+[[0;32m   as   [0m]  asm/data/8E4E0.data.s
+[[0;32m   as   [0m]  asm/data/8E5B0.data.s
+[[0;32m   as   [0m]  asm/data/8E5C0.data.s
+[[0;32m   as   [0m]  asm/data/8E5D0.data.s
+[[0;32m   as   [0m]  asm/data/8E8C0.data.s
+[[0;32m   as   [0m]  asm/data/8E8D0.data.s
+[[0;32m   as   [0m]  asm/data/8EB00.data.s
+[[0;32m   as   [0m]  asm/data/8F710.data.s
+[[0;32m   as   [0m]  asm/data/8FB70.data.s
+[[0;32m   as   [0m]  asm/data/8FC70.data.s
+[[0;32m   as   [0m]  asm/data/8FD50.data.s
+[[0;32m   as   [0m]  asm/data/90470.data.s
+[[0;32m   as   [0m]  asm/data/905F0.data.s
+[[0;32m   as   [0m]  asm/data/90930.data.s
+[[0;32m   as   [0m]  asm/data/90AA0.data.s
+[[0;32m   as   [0m]  asm/data/90AB0.data.s
+[[0;32m   as   [0m]  asm/data/90AF0.data.s
+[[0;32m   as   [0m]  asm/data/90E80.data.s
+[[0;32m   as   [0m]  asm/data/90ED0.data.s
+[[0;32m   as   [0m]  asm/data/910A0.data.s
+[[0;32m   as   [0m]  asm/data/910E0.data.s
+[[0;32m   as   [0m]  asm/data/91380.data.s
+[[0;32m   as   [0m]  asm/data/916F0.data.s
+[[0;32m   as   [0m]  asm/data/919B0.data.s
+[[0;32m   as   [0m]  asm/data/91A20.data.s
+[[0;32m   as   [0m]  asm/data/91A40.data.s
+[[0;32m   as   [0m]  asm/data/91A60.data.s
+[[0;32m   as   [0m]  asm/data/91AC0.data.s
+[[0;32m   as   [0m]  asm/data/91B60.data.s
+[[0;32m   as   [0m]  asm/data/91FD0.data.s
+[[0;32m   as   [0m]  asm/data/92050.data.s
+[[0;32m   as   [0m]  asm/data/94700.data.s
+[[0;32m   as   [0m]  asm/data/947B0.data.s
+[[0;32m   as   [0m]  asm/data/94B90.data.s
+[[0;32m   as   [0m]  asm/data/94D10.data.s
+[[0;32m   as   [0m]  asm/data/94D80.data.s
+[[0;32m   as   [0m]  asm/data/958C0.data.s
+[[0;32m   as   [0m]  asm/data/958D0.data.s
+[[0;32m   as   [0m]  asm/data/958E0.data.s
+[[0;32m   as   [0m]  asm/data/959A0.data.s
+[[0;32m   as   [0m]  asm/data/959B0.data.s
+[[0;32m   as   [0m]  asm/data/959C0.data.s
+[[0;32m   as   [0m]  asm/data/959D0.data.s
+[[0;32m   as   [0m]  asm/data/959E0.data.s
+[[0;32m   as   [0m]  asm/data/959F0.data.s
+[[0;32m   as   [0m]  asm/data/95A10.data.s
+[[0;32m   as   [0m]  asm/data/95A00.data.s
+[[0;32m   as   [0m]  asm/data/95A20.data.s
+[[0;32m   as   [0m]  asm/data/95AD0.data.s
+[[0;32m   as   [0m]  asm/data/95AE0.data.s
+[[0;32m   as   [0m]  asm/data/95AF0.data.s
+[[0;32m   as   [0m]  asm/data/95B10.data.s
+[[0;32m   as   [0m]  asm/data/95BB0.data.s
+[[0;32m   as   [0m]  asm/data/95BC0.data.s
+[[0;32m   as   [0m]  asm/data/95BD0.data.s
+[[0;32m   as   [0m]  asm/data/95BF0.data.s
+[[0;32m   as   [0m]  asm/data/95C90.data.s
+[[0;32m   as   [0m]  asm/data/95CB0.data.s
+[[0;32m   as   [0m]  asm/data/95CC0.data.s
+[[0;32m   as   [0m]  asm/data/95D90.data.s
+[[0;32m   as   [0m]  asm/data/95DA0.data.s
+[[0;32m   as   [0m]  asm/data/95DB0.data.s
+[[0;32m   as   [0m]  asm/data/95E50.data.s
+[[0;32m   as   [0m]  asm/data/95E70.data.s
+[[0;32m   as   [0m]  asm/data/95F40.data.s
+[[0;32m   as   [0m]  asm/data/95F60.data.s
+[[0;32m   as   [0m]  asm/data/95F90.data.s
+[[0;32m   as   [0m]  asm/data/95FA0.data.s
+[[0;32m   as   [0m]  asm/data/95FB0.data.s
+[[0;32m   as   [0m]  asm/data/96040.data.s
+[[0;32m   as   [0m]  asm/data/96060.data.s
+[[0;32m   as   [0m]  asm/data/96090.data.s
+[[0;32m   as   [0m]  asm/data/960B0.data.s
+[[0;32m   as   [0m]  asm/data/961D0.data.s
+[[0;32m   as   [0m]  asm/data/961F0.data.s
+[[0;32m   as   [0m]  asm/data/96200.data.s
+[[0;32m   as   [0m]  asm/data/96210.data.s
+[[0;32m   as   [0m]  asm/data/962B0.data.s
+[[0;32m   as   [0m]  asm/data/962C0.data.s
+[[0;32m   as   [0m]  asm/data/96370.data.s
+[[0;32m   as   [0m]  asm/data/96380.data.s
+[[0;32m   as   [0m]  asm/data/96390.data.s
+[[0;32m   as   [0m]  asm/data/96430.data.s
+[[0;32m   as   [0m]  asm/data/96440.data.s
+[[0;32m   as   [0m]  asm/data/96450.data.s
+[[0;32m   as   [0m]  asm/data/96460.data.s
+[[0;32m   as   [0m]  asm/data/96470.data.s
+[[0;32m   as   [0m]  asm/data/96480.data.s
+[[0;32m   as   [0m]  asm/data/96520.data.s
+[[0;32m   as   [0m]  asm/data/96530.data.s
+[[0;32m   as   [0m]  asm/data/96540.data.s
+[[0;32m   as   [0m]  asm/data/96550.data.s
+[[0;32m   as   [0m]  asm/data/965F0.data.s
+[[0;32m   as   [0m]  asm/data/96600.data.s
+[[0;32m   as   [0m]  asm/data/96610.data.s
+[[0;32m   as   [0m]  asm/data/966A0.data.s
+[[0;32m   as   [0m]  asm/data/967A0.data.s
+[[0;32m   as   [0m]  asm/data/968A0.data.s
+[[0;32m   as   [0m]  asm/data/969A0.data.s
+[[0;32m   as   [0m]  asm/data/96BA0.data.s
+[[0;32m   as   [0m]  asm/data/96AA0.data.s
+[[0;32m   as   [0m]  asm/data/96CA0.data.s
+[[0;32m   as   [0m]  asm/data/96DA0.data.s
+[[0;32m   as   [0m]  asm/data/96EA0.data.s
+[[0;32m   as   [0m]  asm/data/96FA0.data.s
+[[0;32m   as   [0m]  asm/data/970A0.data.s
+[[0;32m   as   [0m]  asm/data/971A0.data.s
+[[0;32m   as   [0m]  asm/data/972A0.data.s
+[[0;32m   as   [0m]  asm/data/973A0.data.s
+[[0;32m   as   [0m]  asm/data/974A0.data.s
+[[0;32m   as   [0m]  asm/data/975A0.data.s
+[[0;32m   as   [0m]  asm/data/976A0.data.s
+[[0;32m   as   [0m]  asm/data/977A0.data.s
+[[0;32m   as   [0m]  asm/data/979A0.data.s
+[[0;32m   as   [0m]  asm/data/978A0.data.s
+[[0;32m   as   [0m]  asm/data/97AA0.data.s
+[[0;32m   as   [0m]  asm/data/97BA0.data.s
+[[0;32m   as   [0m]  asm/data/97CA0.data.s
+[[0;32m   as   [0m]  asm/data/97DA0.data.s
+[[0;32m   as   [0m]  asm/data/97EA0.data.s
+[[0;32m   as   [0m]  asm/data/97FA0.data.s
+[[0;32m   as   [0m]  asm/data/980A0.data.s
+[[0;32m   as   [0m]  asm/data/981A0.data.s
+[[0;32m   as   [0m]  asm/data/982A0.data.s
+[[0;32m   as   [0m]  asm/data/983A0.data.s
+[[0;32m   as   [0m]  asm/data/984A0.data.s
+[[0;32m   as   [0m]  asm/data/985A0.data.s
+[[0;32m   as   [0m]  asm/data/986A0.data.s
+[[0;32m   as   [0m]  asm/data/987A0.data.s
+[[0;32m   as   [0m]  asm/data/988A0.data.s
+[[0;32m   as   [0m]  asm/data/989A0.data.s
+[[0;32m   as   [0m]  asm/data/98AA0.data.s
+[[0;32m   as   [0m]  asm/data/98BA0.data.s
+[[0;32m   as   [0m]  asm/data/98CA0.data.s
+[[0;32m   as   [0m]  asm/data/98DA0.data.s
+[[0;32m   as   [0m]  asm/data/98EA0.data.s
+[[0;32m   as   [0m]  asm/data/98FA0.data.s
+[[0;32m   as   [0m]  asm/data/990A0.data.s
+[[0;32m   as   [0m]  asm/data/991A0.data.s
+[[0;32m   as   [0m]  asm/data/992A0.data.s
+[[0;32m   as   [0m]  asm/data/993A0.data.s
+[[0;32m   as   [0m]  asm/data/994A0.data.s
+[[0;32m   as   [0m]  asm/data/995A0.data.s
+[[0;32m   as   [0m]  asm/data/996A0.data.s
+[[0;32m   as   [0m]  asm/data/997A0.data.s
+[[0;32m   as   [0m]  asm/data/998A0.data.s
+[[0;32m   as   [0m]  asm/data/999A0.data.s
+[[0;32m   as   [0m]  asm/data/99AA0.data.s
+[[0;32m   as   [0m]  asm/data/99BA0.data.s
+[[0;32m   as   [0m]  asm/data/99CA0.data.s
+[[0;32m   as   [0m]  asm/data/99DA0.data.s
+[[0;32m   as   [0m]  asm/data/99EA0.data.s
+[[0;32m   as   [0m]  asm/data/99FA0.data.s
+[[0;32m   as   [0m]  asm/data/9A0A0.data.s
+[[0;32m   as   [0m]  asm/data/9A1A0.data.s
+[[0;32m   as   [0m]  asm/data/9A2A0.data.s
+[[0;32m   as   [0m]  asm/data/9A3A0.data.s
+[[0;32m   as   [0m]  asm/data/9A4A0.data.s
+[[0;32m   as   [0m]  asm/data/9A5A0.data.s
+[[0;32m   as   [0m]  asm/data/9A6A0.data.s
+[[0;32m   as   [0m]  asm/data/9A7A0.data.s
+[[0;32m   as   [0m]  asm/data/9A8A0.data.s
+[[0;32m   as   [0m]  asm/data/9A9A0.data.s
+[[0;32m   as   [0m]  asm/data/9AAA0.data.s
+[[0;32m   as   [0m]  asm/data/9ABA0.data.s
+[[0;32m   as   [0m]  asm/data/9ACA0.data.s
+[[0;32m   as   [0m]  asm/data/9ADA0.data.s
+[[0;32m   as   [0m]  asm/data/9AFA0.data.s
+[[0;32m   as   [0m]  asm/data/9AEA0.data.s
+[[0;32m   as   [0m]  asm/data/9AFD0.data.s
+[[0;32m   as   [0m]  asm/data/9B150.data.s
+[[0;32m   as   [0m]  asm/data/9B160.data.s
+[[0;32m   as   [0m]  asm/data/9B170.data.s
+[[0;32m   as   [0m]  asm/data/9B180.data.s
+[[0;32m   as   [0m]  asm/data/9B190.data.s
+[[0;32m   as   [0m]  asm/data/9B1A0.data.s
+[[0;32m   as   [0m]  asm/data/9B1B0.data.s
+[[0;32m   as   [0m]  asm/data/9B1C0.data.s
+[[0;32m   as   [0m]  asm/data/9B1D0.data.s
+[[0;32m   as   [0m]  asm/data/9B1E0.data.s
+[[0;32m   as   [0m]  asm/data/9B1F0.data.s
+[[0;32m   as   [0m]  asm/data/9B200.data.s
+[[0;32m   as   [0m]  asm/data/9B210.data.s
+[[0;32m   as   [0m]  asm/data/9B220.data.s
+[[0;32m   as   [0m]  asm/data/9B230.data.s
+[[0;32m   as   [0m]  asm/data/9B240.data.s
+[[0;32m   as   [0m]  asm/data/9B250.data.s
+[[0;32m   as   [0m]  asm/data/9B260.data.s
+[[0;32m   as   [0m]  asm/data/9B270.data.s
+[[0;32m   as   [0m]  asm/data/9B280.data.s
+[[0;32m   as   [0m]  asm/data/9B290.data.s
+[[0;32m   as   [0m]  asm/data/9B2A0.data.s
+[[0;32m   as   [0m]  asm/data/9B2B0.data.s
+[[0;32m   as   [0m]  asm/data/9B2C0.data.s
+[[0;32m   as   [0m]  asm/data/9B2E0.data.s
+[[0;32m   as   [0m]  asm/data/9B300.data.s
+[[0;32m   as   [0m]  asm/data/9B310.data.s
+[[0;32m   as   [0m]  asm/data/9B320.data.s
+[[0;32m   as   [0m]  asm/data/9B330.data.s
+[[0;32m   as   [0m]  asm/data/9B340.data.s
+[[0;32m   as   [0m]  asm/data/9B350.data.s
+[[0;32m   as   [0m]  asm/data/9B370.data.s
+[[0;32m   as   [0m]  asm/data/9B380.data.s
+[[0;32m   as   [0m]  asm/data/9B3D0.data.s
+[[0;32m   as   [0m]  asm/data/9B420.data.s
+[[0;32m   as   [0m]  asm/data/9B460.data.s
+[[0;32m   as   [0m]  asm/data/9B470.data.s
+[[0;32m   as   [0m]  asm/data/9B490.data.s
+[[0;32m   as   [0m]  asm/data/9B4D0.data.s
+[[0;32m   as   [0m]  asm/data/9B9E0.data.s
+[[0;32m   as   [0m]  asm/data/9B9F0.data.s
+[[0;32m   as   [0m]  asm/data/9BAD0.data.s
+[[0;32m   as   [0m]  asm/data/9C9C0.data.s
+[[0;32m   as   [0m]  asm/data/9E640.rodata.s
+[[0;32m   as   [0m]  asm/data/9FF70.rodata.s
+[[0;32m   as   [0m]  asm/data/A02E0.bss.s
+[[0;32m   as   [0m]  asm/data/A8A80.bss.s
+[[0;32m   as   [0m]  asm/data/AA8E0.data.s
+[[0;32m   as   [0m]  asm/data/AB160.data.s
+[[0;32m   as   [0m]  asm/data/ACC70.data.s
+[[0;32m   as   [0m]  asm/data/ACD30.data.s
+[[0;32m   as   [0m]  asm/data/AD670.data.s
+[[0;32m   as   [0m]  asm/data/AD670.rodata.s
+[[0;32m   as   [0m]  asm/data/AEFA0.data.s
+[[0;32m   as   [0m]  asm/data/aspMainData.s
+[[0;32m   as   [0m]  asm/data/aspMain.s
+[[0;32m   as   [0m]  asm/data/B07A0.data.s
+[[0;32m   as   [0m]  asm/data/B2530.data.s
+[[0;32m   as   [0m]  asm/data/B2870.data.s
+[[0;32m   as   [0m]  asm/data/B2870.rodata.s
+[[0;32m   as   [0m]  asm/data/B4B20.data.s
+[[0;32m   as   [0m]  asm/data/B4BB0.data.s
+[[0;32m   as   [0m]  asm/data/B54C0.data.s
+[[0;32m   as   [0m]  asm/data/B5B90.data.s
+[[0;32m   as   [0m]  asm/data/B74F0.data.s
+[[0;32m   as   [0m]  asm/data/B5B90.rodata.s
+[[0;32m   as   [0m]  asm/data/B7E70.data.s
+[[0;32m   as   [0m]  asm/data/B9C40.data.s
+[[0;32m   as   [0m]  asm/data/C570.data.s
+[[0;32m   as   [0m]  asm/data/DC90.rodata.s
+[[0;32m   as   [0m]  asm/data/E090.rodata.s
+[[0;32m   as   [0m]  asm/data/E770.rodata.s
+[[0;32m   as   [0m]  asm/data/gspF3DEX_fifoData.s
+[[0;32m   as   [0m]  asm/data/gspF3DEX_fifoText.s
+[[0;32m   as   [0m]  asm/data/gspS2DEX_fifoData.s
+[[0;32m   as   [0m]  asm/data/gspS2DEX_maybe.s
+[[0;32m   as   [0m]  asm/data/main.data.s
+[[0;32m   as   [0m]  asm/data/player.data.s
+[[0;32m   as   [0m]  asm/data/rand.bss.s
+[[0;32m   as   [0m]  asm/data/rspboot.s
+[[0;32m   as   [0m]  asm/data/wavetables.s
+[[0;32m   as   [0m]  asm/DC90.s
+[[0;32m   as   [0m]  asm/E090.s
+[[0;32m   as   [0m]  asm/E770.s
+[[0;35m linker [0m]  assets/_1E7F60.bin
+[[0;35m linker [0m]  assets/_1E8900.bin
+[[0;35m linker [0m]  assets/_1E8A90.bin
+[[0;35m linker [0m]  assets/_1E8E60.bin
+[[0;35m linker [0m]  assets/_1E9300.bin
+[[0;32m   as   [0m]  asm/header.s
+[[0;35m linker [0m]  assets/_1E9490.bin
+[[0;35m linker [0m]  assets/_1E9790.bin
+[[0;35m linker [0m]  assets/_1E9C40.bin
+[[0;35m linker [0m]  assets/_1EA200.bin
+[[0;35m linker [0m]  assets/_1EA480.bin
+[[0;35m linker [0m]  assets/_1EACD0.bin
+[[0;35m linker [0m]  assets/_1EAEF0.bin
+[[0;35m linker [0m]  assets/_1EC940.bin
+[[0;35m linker [0m]  assets/_1ECAD0.bin
+[[0;35m linker [0m]  assets/_1ED370.bin
+[[0;35m linker [0m]  assets/_1ED5F0.bin
+[[0;35m linker [0m]  assets/_1ED740.bin
+[[0;35m linker [0m]  assets/_1ED890.bin
+[[0;35m linker [0m]  assets/_1ED9E0.bin
+[[0;35m linker [0m]  assets/_1EDCF0.bin
+[[0;35m linker [0m]  assets/_1EDB30.bin
+[[0;35m linker [0m]  assets/_1EDEE0.bin
+[[0;35m linker [0m]  assets/_1EE140.bin
+[[0;35m linker [0m]  assets/_1EE410.bin
+[[0;35m linker [0m]  assets/_1EE7D0.bin
+[[0;35m linker [0m]  assets/1EEC10.bin
+[[0;35m linker [0m]  assets/_1FBE00.bin
+[[0;35m linker [0m]  assets/1FBF30.bin
+[[0;35m linker [0m]  assets/_1FC700.bin
+[[0;35m linker [0m]  assets/1FC9A0.bin
+[[0;35m linker [0m]  assets/_1FCBA0.bin
+[[0;35m linker [0m]  assets/1FCE20.bin
+[[0;35m linker [0m]  assets/_214FC0.bin
+[[0;35m linker [0m]  assets/_215120.bin
+[[0;35m linker [0m]  assets/_2151D0.bin
+[[0;35m linker [0m]  assets/_215280.bin
+[[0;35m linker [0m]  assets/_215360.bin
+[[0;35m linker [0m]  assets/_215440.bin
+[[0;35m linker [0m]  assets/_215550.bin
+[[0;35m linker [0m]  assets/_215700.bin
+[[0;35m linker [0m]  assets/_2158B0.bin
+[[0;35m linker [0m]  assets/_215A60.bin
+[[0;35m linker [0m]  assets/_215D70.bin
+[[0;35m linker [0m]  assets/_216290.bin
+[[0;35m linker [0m]  assets/_218F00.bin
+[[0;35m linker [0m]  assets/224420.bin
+[[0;35m linker [0m]  assets/_228400.bin
+[[0;35m linker [0m]  assets/23CB80.bin
+[[0;35m linker [0m]  assets/_2415B0.bin
+[[0;35m linker [0m]  assets/24D6C0.bin
+[[0;35m linker [0m]  assets/_252E80.bin
+[[0;35m linker [0m]  assets/261530.bin
+[[0;35m linker [0m]  assets/_266C50.bin
+[[0;35m linker [0m]  assets/274E20.bin
+[[0;35m linker [0m]  assets/_27A780.bin
+[[0;35m linker [0m]  assets/_28BA90.bin
+[[0;35m linker [0m]  assets/_28FF50.bin
+[[0;35m linker [0m]  assets/_290D70.bin
+[[0;35m linker [0m]  assets/29DF80.bin
+[[0;35m linker [0m]  assets/_2A2810.bin
+[[0;35m linker [0m]  assets/2B0500.bin
+[[0;35m linker [0m]  assets/_2B45F0.bin
+[[0;35m linker [0m]  assets/2C8310.bin
+[[0;35m linker [0m]  assets/_2CD790.bin
+[[0;35m linker [0m]  assets/2DFA30.bin
+[[0;35m linker [0m]  assets/_2E6CC0.bin
+[[0;35m linker [0m]  assets/2F6620.bin
+[[0;35m linker [0m]  assets/_2FC440.bin
+[[0;35m linker [0m]  assets/30B250.bin
+[[0;35m linker [0m]  assets/_30F9D0.bin
+[[0;35m linker [0m]  assets/322130.bin
+[[0;35m linker [0m]  assets/_325260.bin
+[[0;35m linker [0m]  assets/3375E0.bin
+[[0;35m linker [0m]  assets/_33A710.bin
+[[0;35m linker [0m]  assets/3471A0.bin
+[[0;35m linker [0m]  assets/_34CB50.bin
+[[0;35m linker [0m]  assets/_34F7E0.bin
+[[0;35m linker [0m]  assets/_34F9A0.bin
+[[0;35m linker [0m]  assets/_350140.bin
+[[0;35m linker [0m]  assets/_3505F0.bin
+[[0;35m linker [0m]  assets/350C70.bin
+[[0;35m linker [0m]  assets/_3ECE40.bin
+[[0;35m linker [0m]  assets/3F2980.bin
+[[0;35m linker [0m]  assets/_3F3EF0.bin
+[[0;35m linker [0m]  assets/3F58E0.bin
+[[0;35m linker [0m]  assets/_3F6670.bin
+[[0;35m linker [0m]  assets/_3F6950.bin
+[[0;35m linker [0m]  assets/3F6BB0.bin
+[[0;35m linker [0m]  assets/_3FF010.bin
+[[0;35m linker [0m]  assets/3FF910.bin
+[[0;35m linker [0m]  assets/_40A450.bin
+[[0;35m linker [0m]  assets/_40A590.bin
+[[0;35m linker [0m]  assets/_40A760.bin
+[[0;35m linker [0m]  assets/40A930.bin
+[[0;35m linker [0m]  assets/_419440.bin
+[[0;35m linker [0m]  assets/4196E0.bin
+[[0;35m linker [0m]  assets/_419C60.bin
+[[0;35m linker [0m]  assets/_41A1D0.bin
+[[0;35m linker [0m]  assets/41AD80.bin
+[[0;35m linker [0m]  assets/_4237C0.bin
+[[0;35m linker [0m]  assets/426EF0.bin
+[[0;35m linker [0m]  assets/_42F1D0.bin
+[[0;35m linker [0m]  assets/43A000.bin
+[[0;35m linker [0m]  assets/_4547D0.bin
+[[0;35m linker [0m]  assets/458E30.bin
+[[0;35m linker [0m]  assets/_45A890.bin
+[[0;35m linker [0m]  assets/45B130.bin
+[[0;35m linker [0m]  assets/_49B420.bin
+[[0;35m linker [0m]  assets/_49B500.bin
+[[0;35m linker [0m]  assets/_49BA20.bin
+[[0;35m linker [0m]  assets/49BC40.bin
+[[0;35m linker [0m]  assets/_4A0E80.bin
+[[0;35m linker [0m]  assets/4A1160.bin
+[[0;35m linker [0m]  assets/_4A2980.bin
+[[0;35m linker [0m]  assets/4A2BC0.bin
+[[0;35m linker [0m]  assets/_4A3E80.bin
+[[0;35m linker [0m]  assets/_4A5840.bin
+[[0;35m linker [0m]  assets/4A4260.bin
+[[0;35m linker [0m]  assets/_4A5A30.bin
+[[0;35m linker [0m]  assets/_4A5C20.bin
+[[0;35m linker [0m]  assets/4A5E10.bin
+[[0;35m linker [0m]  assets/_4A6B60.bin
+[[0;35m linker [0m]  assets/_4A7070.bin
+[[0;35m linker [0m]  assets/4A73F0.bin
+[[0;35m linker [0m]  assets/_4CAD30.bin
+[[0;35m linker [0m]  assets/4CB1E0.bin
+[[0;35m linker [0m]  assets/_4CCA00.bin
+[[0;35m linker [0m]  assets/4CCE20.bin
+[[0;35m linker [0m]  assets/_4CD980.bin
+[[0;35m linker [0m]  assets/4CDCB0.bin
+[[0;35m linker [0m]  assets/_607BF0.bin
+[[0;35m linker [0m]  assets/_6099A0.bin
+[[0;35m linker [0m]  assets/_60B690.bin
+[[0;35m linker [0m]  assets/_60D380.bin
+[[0;35m linker [0m]  assets/_60F070.bin
+[[0;35m linker [0m]  assets/_610D60.bin
+[[0;35m linker [0m]  assets/_612A50.bin
+[[0;35m linker [0m]  assets/_614740.bin
+[[0;35m linker [0m]  assets/_616430.bin
+[[0;35m linker [0m]  assets/_618120.bin
+[[0;35m linker [0m]  assets/_619E10.bin
+[[0;35m linker [0m]  assets/_621390.bin
+[[0;35m linker [0m]  assets/_6280F0.bin
+[[0;35m linker [0m]  assets/_62F2F0.bin
+[[0;35m linker [0m]  assets/_635AB0.bin
+[[0;35m linker [0m]  assets/_63C9F0.bin
+[[0;35m linker [0m]  assets/6448D0.bin
+[[0;35m linker [0m]  assets/_6462A0.bin
+[[0;35m linker [0m]  assets/_646850.bin
+[[0;35m linker [0m]  assets/_646910.bin
+[[0;35m linker [0m]  assets/_646CD0.bin
+[[0;35m linker [0m]  assets/_646DF0.bin
+[[0;35m linker [0m]  assets/_647740.bin
+[[0;35m linker [0m]  assets/647930.bin
+[[0;35m linker [0m]  assets/_647F90.bin
+[[0;35m linker [0m]  assets/_6489F0.bin
+[[0;35m linker [0m]  assets/_648B50.bin
+[[0;35m linker [0m]  assets/648C60.bin
+[[0;35m linker [0m]  assets/_663330.bin
+[[0;35m linker [0m]  assets/_6633B0.bin
+[[0;35m linker [0m]  assets/_663440.bin
+[[0;35m linker [0m]  assets/_6636F0.bin
+[[0;35m linker [0m]  assets/_6637B0.bin
+[[0;35m linker [0m]  assets/_663BE0.bin
+[[0;35m linker [0m]  assets/_663C90.bin
+[[0;35m linker [0m]  assets/_663DB0.bin
+[[0;35m linker [0m]  assets/_663EE0.bin
+[[0;35m linker [0m]  assets/_664140.bin
+[[0;35m linker [0m]  assets/_664400.bin
+[[0;35m linker [0m]  assets/_664660.bin
+[[0;35m linker [0m]  assets/_6648C0.bin
+[[0;35m linker [0m]  assets/_67E860.bin
+[[0;35m linker [0m]  assets/_67FB80.bin
+[[0;35m linker [0m]  assets/_684630.bin
+[[0;35m linker [0m]  assets/_6848B0.bin
+[[0;35m linker [0m]  assets/_686740.bin
+[[0;35m linker [0m]  assets/_686D40.bin
+[[0;35m linker [0m]  assets/_687070.bin
+[[0;35m linker [0m]  assets/_6884D0.bin
+[[0;35m linker [0m]  assets/_688950.bin
+[[0;35m linker [0m]  assets/_688C40.bin
+[[0;35m linker [0m]  assets/_688F30.bin
+[[0;35m linker [0m]  assets/_689220.bin
+[[0;35m linker [0m]  assets/_689460.bin
+[[0;35m linker [0m]  assets/_6897C0.bin
+[[0;35m linker [0m]  assets/_68B4A0.bin
+[[0;35m linker [0m]  assets/_68D260.bin
+[[0;35m linker [0m]  assets/68F7F0.bin
+[[0;35m linker [0m]  assets/_6A83F0.bin
+[[0;35m linker [0m]  assets/_6B6410.bin
+[[0;35m linker [0m]  assets/_6BA350.bin
+[[0;35m linker [0m]  assets/_6C03F0.bin
+[[0;35m linker [0m]  assets/boot.bin
+[[0;35m linker [0m]  assets/E0CAD0.bin
+[[0;32m   as   [0m]  lib/libkmc/mmuldi3.s
+[[0;32m   c    [0m]  src/19E80.c
+[[0;32m   c    [0m]  src/1A770.c
+[[0;32m   c    [0m]  src/1BBA0.c
+[[0;32m   c    [0m]  src/1D520.c
+[[0;32m   c    [0m]  src/1E1BA0.c
+[[0;32m   c    [0m]  src/1E2070.c
+[[0;32m   c    [0m]  src/1E25B0.c
+[[0;32m   c    [0m]  src/1E2890.c
+[[0;32m   c    [0m]  src/1E2BE0.c
+[[0;32m   c    [0m]  src/1E36C0.c
+[[0;32m   c    [0m]  src/1E60D0.c
+[[0;32m   c    [0m]  src/1E64A0.c
+[[0;32m   c    [0m]  src/20F0.c
+[[0;32m   c    [0m]  src/288A0.c
+[[0;32m   c    [0m]  src/2DD40.c
+[1msrc/1E2070.c:146:28: [0m[0;1;35mwarning: [0m[1mincompatible pointer types passing 'loadAssetMetadataByIndex_arg *' to parameter of type 'loadAssetMetadata_arg *' (aka 'struct loadAssetMetadata_arg *') [-Wincompatible-pointer-types][0m
+  146 |     func_80067EDC_68ADC([0;32m0[0m, &arg0->assetMetadata);[0m
+      | [0;1;32m                           ^~~~~~~~~~~~~~~~~~~~
+[0m[1msrc/displaylist.h:103:54: [0m[0;1;36mnote: [0mpassing argument to parameter here[0m
+  103 | [0;34mvoid[0m func_80067EDC_68ADC(u16, loadAssetMetadata_arg *);[0m
+      | [0;1;32m                                                     ^
+[0m[1msrc/1E2070.c:147:28: [0m[0;1;35mwarning: [0m[1mincompatible pointer types passing 'loadAssetMetadata_arg **' (aka 'struct loadAssetMetadata_arg **') to parameter of type 'loadAssetMetadata_arg *' (aka 'struct loadAssetMetadata_arg *'); remove & [-Wincompatible-pointer-types][0m
+  147 |     func_80067EDC_68ADC([0;32m0[0m, &arg0->unk28);[0m
+      | [0;1;32m                           ^~~~~~~~~~~~
+[0m[1msrc/displaylist.h:103:54: [0m[0;1;36mnote: [0mpassing argument to parameter here[0m
+  103 | [0;34mvoid[0m func_80067EDC_68ADC(u16, loadAssetMetadata_arg *);[0m
+      | [0;1;32m                                                     ^
+[0m2 warnings generated.
+[1msrc/1E25B0.c:38:1: [0m[0;1;35mwarning: [0m[1mnon-void function does not return a value [-Wreturn-type][0m
+   38 | }[0m
+      | [0;1;32m^
+[0m1 warning generated.
+[1msrc/20F0.c:391:30: [0m[0;1;35mwarning: [0m[1mincompatible pointer types passing 'GameState *' to parameter of type 'GameEntity *' [-Wincompatible-pointer-types][0m
+  391 |         initializeGameEntity(obj, arg0, arg1, arg2, arg3, arg4, arg5);[0m
+      | [0;1;32m                             ^~~
+[0m[1msrc/20F0.c:144:39: [0m[0;1;36mnote: [0mpassing argument to parameter here[0m
+  144 | [0;34mvoid[0m initializeGameEntity(GameEntity *, s32, [0;34mvoid[0m *, s8, s8, s8, s16);[0m
+      | [0;1;32m                                      ^
+[0m[1msrc/20F0.c:548:49: [0m[0;1;35mwarning: [0m[1mincompatible pointer types passing 'GameEntity *' to parameter of type 'SceneModel *' [-Wincompatible-pointer-types][0m
+  548 |     entity->soundData = loadAssetGroupSoundData(entity);[0m
+      | [0;1;32m                                                ^~~~~~
+[0m[1msrc/20F0.c:334:43: [0m[0;1;36mnote: [0mpassing argument to parameter 'arg0' here[0m
+  334 | [0;34mvoid[0m *loadAssetGroupSoundData(SceneModel *arg0) {[0m
+      | [0;1;32m                                          ^
+[0m2 warnings generated.
+[[0;32m   c    [0m]  src/2F990.c
+[[0;32m   c    [0m]  src/31870.c
+[[0;32m   c    [0m]  src/36BE0.c
+[[0;32m   c    [0m]  src/36E50.c
+[[0;32m   c    [0m]  src/3A1F0.c
+[[0;32m   c    [0m]  src/3E160.c
+[[0;32m   c    [0m]  src/4050.c
+[[0;32m   c    [0m]  src/413E0.c
+[1msrc/2F990.c:293:33: [0m[0;1;35mwarning: [0m[1mincompatible pointer types passing 'func_8002F518_30118_arg *' to parameter of type 'DisplayListObject *' [-Wincompatible-pointer-types][0m
+  293 |     enqueueDisplayListObject([0;32m0[0m, s0);[0m
+      | [0;1;32m                                ^~
+[0m[1msrc/displaylist.h:36:60: [0m[0;1;36mnote: [0mpassing argument to parameter 'arg1' here[0m
+   36 | [0;34mvoid[0m enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1);[0m
+      | [0;1;32m                                                           ^
+[0m1 warning generated.
+[[0;32m   c    [0m]  src/46080.c
+[1msrc/31870.c:534:39: [0m[0;1;35mwarning: [0m[1mincompatible pointer types passing 'applyTransformToModel_arg1 **' to parameter of type 'applyTransformToModel_arg1 *'; remove & [-Wincompatible-pointer-types][0m
+  534 |     applyTransformToModel(arg0->unk0, &arg0->unk4);[0m
+      | [0;1;32m                                      ^~~~~~~~~~~
+[0m[1msrc/20F0.h:166:74: [0m[0;1;36mnote: [0mpassing argument to parameter 'arg1' here[0m
+  166 | [0;34mvoid[0m applyTransformToModel(SceneModel *arg0, applyTransformToModel_arg1 *arg1);[0m
+      | [0;1;32m                                                                         ^
+[0m[[0;32m   c    [0m]  src/4A40.c
+1 warning generated.
+[1msrc/3E160.c:71:15: [0m[0;1;35mwarning: [0m[1mincompatible pointer types assigning to 'GameStateUnk44 *' from 'u8 *' (aka 'unsigned char *') [-Wincompatible-pointer-types][0m
+   71 |     gs->unk44 = (u8 *)gs->unk28 + gs->unk28->unk0;[0m
+      | [0;1;32m              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[[0;32m   c    [0m]  src/51060.c
+1 warning generated.
+[[0;32m   c    [0m]  src/5520.c
+[[0;32m   c    [0m]  src/56910.c
+[1msrc/46080.c:108:40: [0m[0;1;35mwarning: [0m[1mincompatible pointer types passing 'u8 (*)[32]' (aka 'unsigned char (*)[32]') to parameter of type 'DisplayListObject *' [-Wincompatible-pointer-types][0m
+  108 |             func_80065DA8_669A8(i + [0;32m4[0m, &arg0->unk3C);[0m
+      | [0;1;32m                                       ^~~~~~~~~~~~
+[0m[1msrc/46080.c:35:56: [0m[0;1;36mnote: [0mpassing argument to parameter here[0m
+   35 | [0;34mextern[0m [0;34mvoid[0m func_80065DA8_669A8(s32, DisplayListObject*);[0m
+      | [0;1;32m                                                       ^
+[0m[1msrc/46080.c:772:5: [0m[0;1;35mwarning: [0m[1marray index 11 is past the end of the array (that has type 'u8[11]' (aka 'unsigned char[11]')) [-Warray-bounds][0m
+  772 |     temp_v0->PAD_5[[0;32m0xB[0m] += [0;32m1[0m;[0m
+      | [0;1;32m    ^              ~~~
+[0m[1msrc/gamestate.h:62:5: [0m[0;1;36mnote: [0marray 'PAD_5' declared here[0m
+   62 |     u8 PAD_5[[0;32m0xB[0m];[0m
+      | [0;1;32m    ^
+[0m[1msrc/46080.c:781:9: [0m[0;1;35mwarning: [0m[1marray index 11 is past the end of the array (that has type 'u8[11]' (aka 'unsigned char[11]')) [-Warray-bounds][0m
+  781 |     [0;34mif[0m (gs->PAD_5[[0;32m0xB[0m] != [0;32m0[0m) {[0m
+      | [0;1;32m        ^         ~~~
+[0m[1msrc/gamestate.h:62:5: [0m[0;1;36mnote: [0marray 'PAD_5' declared here[0m
+   62 |     u8 PAD_5[[0;32m0xB[0m];[0m
+      | [0;1;32m    ^
+[0m[1msrc/46080.c:784:13: [0m[0;1;35mwarning: [0m[1marray index 11 is past the end of the array (that has type 'u8[11]' (aka 'unsigned char[11]')) [-Warray-bounds][0m
+  784 |             gs->PAD_5[[0;32m0xB[0m] -= [0;32m1[0m;[0m
+      | [0;1;32m            ^         ~~~
+[0m[1msrc/gamestate.h:62:5: [0m[0;1;36mnote: [0marray 'PAD_5' declared here[0m
+   62 |     u8 PAD_5[[0;32m0xB[0m];[0m
+      | [0;1;32m    ^
+[0m[1msrc/46080.c:808:5: [0m[0;1;35mwarning: [0m[1marray index 11 is past the end of the array (that has type 'u8[11]' (aka 'unsigned char[11]')) [-Warray-bounds][0m
+  808 |     temp_v0->PAD_5[[0;32m0xB[0m] += [0;32m1[0m;[0m
+      | [0;1;32m    ^              ~~~
+[0m[1msrc/gamestate.h:62:5: [0m[0;1;36mnote: [0marray 'PAD_5' declared here[0m
+   62 |     u8 PAD_5[[0;32m0xB[0m];[0m
+      | [0;1;32m    ^
+[0m5 warnings generated.
+[[0;32m   c    [0m]  src/5E590.c
+[[0;32m   c    [0m]  src/5EA60.c
+[[0;32m   c    [0m]  src/68CF0.c
+[[0;32m   c    [0m]  src/6DE50.c
+[[0;32m   c    [0m]  src/6E840.c
+[[0;32m   c    [0m]  src/7850.c
+[[0;32m   c    [0m]  src/7F80.c
+[[0;32m   c    [0m]  src/90F0.c
+[1msrc/68CF0.c:13:29: [0m[0;1;35mwarning: [0m[1mincompatible pointer types passing 'Node_70B00 *' (aka 'struct Node_70B00 *') to parameter of type 'DataTable_19E80 *' [-Wincompatible-pointer-types][0m
+   13 |     getTableEntryByU16Index(arg0, [0;32m0[0m, &result);[0m
+      | [0;1;32m                            ^~~~
+[0m[1msrc/19E80.h:27:47: [0m[0;1;36mnote: [0mpassing argument to parameter here[0m
+   27 | [0;34mvoid[0m getTableEntryByU16Index(DataTable_19E80 *, u16, OutputStruct_19E80 *);[0m
+      | [0;1;32m                                              ^
+[0m1 warning generated.
+[[0;32m   c    [0m]  src/AEFA0.c
+[[0;32m   c    [0m]  src/audio_manager.c
+[[0;32m   c    [0m]  src/B74F0.c
+[[0;32m   c    [0m]  src/boot.c
+[[0;32m   c    [0m]  src/clocktower_trigger.c
+[[0;32m   c    [0m]  src/cutscene/1DD170.c
+[[0;32m   c    [0m]  src/cutscene/1DFAA0.c
+[[0;32m   c    [0m]  src/cutscene/cutscene_bgm.c
+[[0;32m   c    [0m]  src/cutscene/cutscene_camera.c
+[[0;32m   c    [0m]  src/cutscene/cutscene_chr.c
+[[0;32m   c    [0m]  src/cutscene/cutscene_sound.c
+[[0;32m   c    [0m]  src/cutscene/cutscene_sys2.c
+[[0;32m   c    [0m]  src/cutscene/cutscene_sys.c
+[[0;32m   c    [0m]  src/cutscene/sys_effect.c
+[[0;32m   c    [0m]  src/D6F0.c
+[[0;32m   c    [0m]  src/displaylist.c
+[[0;32m   as   [0m]  src/entrypoint/entrypoint.s
+[[0;32m   c    [0m]  src/game_state_init.c
+[[0;32m   c    [0m]  src/geometry.c
+[[0;32m   c    [0m]  src/graphics.c
+[[0;32m   c    [0m]  src/mainEntrypoint.c
+[[0;32m   c    [0m]  src/main.c
+[[0;32m   c    [0m]  src/memory_allocator.c
+[[0;32m   c    [0m]  src/phone_trigger.c
+[[0;32m   c    [0m]  src/player.c
+[[0;32m   c    [0m]  src/rand.c
+[[0;32m   c    [0m]  src/task_scheduler.c
+[[0;32m   c    [0m]  src/thread_manager.c
+[1msrc/main.c:583:52: [0m[0;1;35mwarning: [0m[1mincompatible pointer types passing 'Mat3x3Padded *' to parameter of type 'func_80004FF8_5BF8_arg1 *' [-Wincompatible-pointer-types][0m
+  583 |         func_80004FF8_5BF8(arg0->unk0->ptr->unk16, &arg0->unk8);[0m
+      | [0;1;32m                                                   ^~~~~~~~~~~
+[0m[1msrc/5520.h:36:60: [0m[0;1;36mnote: [0mpassing argument to parameter 'arg1' here[0m
+   36 | [0;34mvoid[0m func_80004FF8_5BF8(u16 arg0, func_80004FF8_5BF8_arg1 *arg1);[0m
+      | [0;1;32m                                                           ^
+[0m1 warning generated.
+[[0;32m   c    [0m]  src/trick_trigger.c
+[1msrc/rand.c:32:24: [0m[0;1;35mwarning: [0m[1mmultiple unsequenced modifications to 'gRandIndexA' [-Wunsequenced][0m
+   32 |     gRandIndexA = (u8)(++gRandIndexA);[0m
+      | [0;1;32m                ~      ^
+[0m[1msrc/rand.c:37:24: [0m[0;1;35mwarning: [0m[1mmultiple unsequenced modifications to 'gRandIndexB' [-Wunsequenced][0m
+   37 |     gRandIndexB = (u8)(++gRandIndexB);[0m
+      | [0;1;32m                ~      ^
+[0m2 warnings generated.
+[[0;32m   c    [0m]  src/unused_triggers.c
+[[0;32m   c    [0m]  src/wall_newspaper_trigger.c
+[[0;35m linker [0m]  Linking build/snowboardkids2.elf
+[[0;36m objcpy [0m]  build/snowboardkids2.elf
+build/snowboardkids2.z64: OK
+
+======================================================================
+Incompatible Pointer Types Check
+======================================================================
+Warnings found: 10
+Maximum allowed: 9
+
+❌ BUILD FAILED: Found 1 more warning(s) than allowed!
+
+Please fix the new incompatible pointer type warnings.
+make: *** [Makefile:94: verify] Error 1
