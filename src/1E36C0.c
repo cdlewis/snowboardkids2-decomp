@@ -18,7 +18,46 @@ s16 func_800B6610_1E36C0(cutsceneSys2Wait_exec_asset *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6618_1E36C8);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B66B4_1E3764);
+extern u8 identityMatrix[];
+
+void func_800B66B4_1E3764(CutsceneSlotData *arg0) {
+    memcpy(&arg0->unk04, identityMatrix, 0x20);
+
+    arg0->unk0.bytes[0] = 0;
+    arg0->unk04.unk20_u.unk20_s32 = 0;
+    arg0->unk28 = 0;
+    arg0->unk2C = 0;
+    arg0->unk30 = 0;
+    arg0->unk34 = 0;
+    arg0->unk38 = 0;
+    arg0->unk3C = 0;
+    arg0->unk40 = 0;
+    arg0->unk44 = 0;
+
+    arg0->unk54 = 0x10000;
+    arg0->unk58 = 0x10000;
+    arg0->unk5C = 0x10000;
+    arg0->unk60 = 0x10000;
+    arg0->unk64 = 0x10000;
+    arg0->unk68 = 0x10000;
+
+    arg0->unk6C = 0;
+    arg0->unk70 = 0;
+    arg0->unk74 = 0;
+
+    arg0->unk78 = 0;
+    arg0->unk7A = 0;
+    arg0->unk7C = 0;
+    arg0->unk84 = 0;
+    arg0->unk86 = 0;
+    arg0->unk80 = 0;
+    arg0->unk82 = 0;
+
+    arg0->unk0.bytes[1] = 0;
+
+    arg0->unk88 = 0;
+    arg0->angle = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", setupSlotTransform);
 
