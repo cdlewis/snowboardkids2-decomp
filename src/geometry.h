@@ -45,6 +45,6 @@ void matrixToEulerAngles(s32 *, s32 *, f32 *, f32 *, f32 *, f32 *, f32 *, f32 *)
 
 void transformVector(s16 *, s16 *, void *);
 
-void scaleMatrix(void *, s32, s32, s32);
+void scaleMatrix(Mat3x3Padded *matrix, s16 scaleX, s16 scaleY, s16 scaleZ);
 
 #endif

@@ -199,7 +199,33 @@ void func_8006AFDC_6BBDC(func_8006AFDC_6BBDC_arg *arg0, s32 arg1, s32 arg2, s32 
     arg0->unk1C = arg3;
 }
 
-INCLUDE_ASM("asm/nonmatchings/geometry", scaleMatrix);
+void scaleMatrix(Mat3x3Padded *matrix, s16 scaleX, s16 scaleY, s16 scaleZ) {
+    s32 i;
+    s32 temp1;
+    s32 temp2;
+
+    for (i = 0; i < 3; i++) {
+        temp1 = matrix->m[i][0] * scaleX;
+        if (temp1 < 0) {
+            temp1 += 0x1FFF;
+        }
+
+        temp2 = matrix->m[i][1] * scaleY;
+        matrix->m[i][0] = temp1 >> 13;
+
+        if (temp2 < 0) {
+            temp2 += 0x1FFF;
+        }
+
+        temp1 = matrix->m[i][2] * scaleZ;
+        matrix->m[i][1] = temp2 >> 13;
+
+        if (temp1 < 0) {
+            temp1 += 0x1FFF;
+        }
+        matrix->m[i][2] = temp1 >> 13;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/geometry", func_8006B084_6BC84);
 

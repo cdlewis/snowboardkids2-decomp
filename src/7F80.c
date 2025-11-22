@@ -18,8 +18,7 @@ typedef struct {
     SceneModel *unk0;
     void *unk4;
     OutputStruct_19E80 unk8;
-    s32 unk14;
-    u8 padding2[0x1C];
+    Mat3x3Padded unk14;
     s32 unk34;
     s32 *unk38;
     s32 unk3C;
