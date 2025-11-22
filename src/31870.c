@@ -17,13 +17,11 @@ USE_ASSET(_4237C0);
 USE_ASSET(_4547D0);
 USE_ASSET(_3F6950);
 USE_ASSET(_3F6670);
+USE_ASSET(_4488E0);
+USE_ASSET(_4237C0);
 
 extern u16 D_8008F150_8FD50[];
 extern const char D_8009E480_9F080;
-extern s32 D_4488E0;
-extern s32 D_4547D0;
-extern u8 D_4237C0[];
-extern u8 D_426EF0[];
 extern void func_80032708_33308(void);
 extern void func_80038420_39020(void);
 extern void func_8000FED0_10AD0(void);
@@ -629,7 +627,7 @@ void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0) {
 }
 
 void func_80031C68_32868(func_8002FA1C_3061C_arg *arg0) {
-    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&D_4488E0, &D_4547D0, 0x14410);
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
     setCleanupCallback(&func_80031D14_32914);
     setCallback(&func_80031CC0_328C0);
 }
@@ -674,7 +672,7 @@ void func_80031D40_32940(func_80031D40_32940_arg *arg0) {
     s32 i;
     void *temp_s0;
 
-    temp_s0 = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    temp_s0 = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(&func_80031F68_32B68);
 
     for (i = 0; i < 2; i++) {
@@ -730,7 +728,7 @@ void func_80031F94_32B94(func_80031F94_32B94_arg *arg0) {
     void *temp_s1;
 
     getCurrentAllocation();
-    temp_s1 = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    temp_s1 = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(&func_800320B8_32CB8);
     arg0->unk0 = -0x1C;
     arg0->unk2 = -0x18;
