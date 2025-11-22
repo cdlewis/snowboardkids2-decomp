@@ -18,6 +18,8 @@ USE_ASSET(_67E860)
 
 s32 func_8000B6B8_C2B8(s32);
 s32 func_80035F80_36B80(s32);
+extern void func_80002040_2C40(void *);
+extern void *freeNodeMemory(void *);
 
 typedef struct {
     void *start;
@@ -65,6 +67,12 @@ typedef struct {
     u8 unkE43;
     ColorData unkE44[3];
 } func_80003EE0_4AE0_task_memory;
+
+typedef struct {
+    void *unk0;
+    u8 _pad[0x6];
+    s16 unkA;
+} StructUnk800048D0;
 
 void func_80003E40_4A40(func_80003EE0_4AE0_task_memory *arg0) {
     arg0->unkE44[0].r2 = 0;
@@ -174,4 +182,10 @@ INCLUDE_ASM("asm/nonmatchings/4A40", func_8000464C_524C);
 
 INCLUDE_ASM("asm/nonmatchings/4A40", func_800047A0_53A0);
 
-INCLUDE_ASM("asm/nonmatchings/4A40", func_800048D0_54D0);
+void func_800048D0_54D0(StructUnk800048D0 *arg0) {
+    getCurrentAllocation();
+    if (arg0->unkA == 0) {
+        func_80002040_2C40(arg0->unk0);
+    }
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+}
