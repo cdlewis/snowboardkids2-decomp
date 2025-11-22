@@ -1,4 +1,5 @@
 #include "common.h"
+#include "task_scheduler.h"
 
 void func_800B5B30_1E2BE0(void *arg0, u8 arg1) {
     *(u8 *)((u8 *)arg0 + 0x71) = arg1;
@@ -8,7 +9,9 @@ INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5B38_1E2BE8);
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5B7C_1E2C2C);
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5BFC_1E2CAC);
+void func_800B5BFC_1E2CAC(void *arg0) {
+    freeNodeMemory(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", finalizeAnimationLoop);
 

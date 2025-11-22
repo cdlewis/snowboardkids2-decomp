@@ -8,7 +8,7 @@
 
 typedef struct {
     u8 padding[0xC];
-    s32 unkC;
+    void *unkC;
     func_80000710_1310_arg unk10;
     u8 padding2[0x20];
     s32 unkB8;
@@ -34,7 +34,7 @@ extern s32 syncModelFromSlot(void *, void *);
 extern s32 advanceSceneManager(void *);
 extern s32 finalizeAnimationLoop(void *);
 extern s32 setupSlotTransform(void *);
-extern void func_800B5BFC_1E2CAC(s32);
+extern void func_800B5BFC_1E2CAC(void *);
 extern void n_alSeqpDelete(s32 *);
 extern void func_800084D8_90D8(StateEntry *, s32, s32);
 extern void func_800084E0_90E0(StateEntry *, s32, s32);
