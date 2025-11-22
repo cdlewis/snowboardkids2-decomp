@@ -248,7 +248,14 @@ void func_80050EA0_51AA0(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050ECC_51ACC);
+void func_80050ECC_51ACC(void *arg0) {
+    Node *task;
+
+    task = scheduleTask(&func_80050D70_51970, 2, 0, 0xFA);
+    if (task != NULL) {
+        memcpy(&task->freeNext, arg0, 0xC);
+    }
+}
 
 void func_80050F18_51B18(func_80050F18_51B18_arg *arg0) {
     arg0->unk4 = load_3ECE40();
