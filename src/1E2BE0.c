@@ -32,11 +32,11 @@ typedef struct {
     s32 unk68;
     s16 unk6C;
     s16 unk6E;
-    u8 unk70;
-    u8 unk71;
+    s8 unk70;
+    s8 unk71;
 } func_800B5E64_1E2F14_arg0;
 
-void func_800B5B30_1E2BE0(func_800B5E64_1E2F14_arg0 *arg0, u8 arg1) {
+void func_800B5B30_1E2BE0(func_800B5E64_1E2F14_arg0 *arg0, s8 arg1) {
     arg0->unk71 = arg1;
 }
 
@@ -201,4 +201,28 @@ INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6190_1E3240);
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6544_1E35F4);
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", advanceSceneManager);
+extern s16 func_800B6190_1E3240(func_800B5E64_1E2F14_arg0 *);
+extern s16 func_800B6544_1E35F4(func_800B5E64_1E2F14_arg0 *);
+
+s16 advanceSceneManager(func_800B5E64_1E2F14_arg0 *arg0) {
+    s16 result = 0;
+    s8 temp;
+
+    if (arg0->unk71 == 1) {
+        arg0->unk44 = 0x166666;
+        arg0->unk38 = 0x166666;
+    }
+
+    temp = arg0->unk70;
+
+    if (temp != 1) {
+        if (temp >= 2) {
+        } else if (temp == 0) {
+            result = func_800B6190_1E3240(arg0);
+        }
+    } else {
+        result = func_800B6544_1E35F4(arg0);
+    }
+
+    return result;
+}

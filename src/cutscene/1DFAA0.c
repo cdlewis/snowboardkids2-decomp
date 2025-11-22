@@ -31,7 +31,7 @@ extern s8 D_800BAE00_1E7EB0[];
 extern s32 initializeSlotState(StateEntry *, CutsceneManager *, s32);
 extern s32 updateSlotData(void *, s32 slot);
 extern s32 syncModelFromSlot(void *, void *);
-extern s32 advanceSceneManager(void *);
+extern s16 advanceSceneManager(void *);
 extern s32 finalizeAnimationLoop(void *);
 extern s32 setupSlotTransform(void *);
 extern void func_800B5BFC_1E2CAC(void *);
