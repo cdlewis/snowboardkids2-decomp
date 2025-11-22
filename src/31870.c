@@ -252,7 +252,7 @@ extern u16 D_8008F20A_8FE0A[];
 extern u16 D_8008F20C_8FE0C;
 extern s32 identityMatrix;
 
-void func_80030F6C_31B6C(void);
+void func_80030F6C_31B6C(func_80031510_32110_arg *arg0);
 void func_80030E54_31A54(void);
 void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     s32 sp20[8];
@@ -313,7 +313,12 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80030E54_31A54);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80030EAC_31AAC);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80030F6C_31B6C);
+void func_80030F6C_31B6C(func_80031510_32110_arg *arg0) {
+    arg0->unk0 = (Node_70B00 *)freeNodeMemory(arg0->unk0);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+    arg0->unk30 = freeNodeMemory(arg0->unk30);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80030FBC_31BBC);
 
