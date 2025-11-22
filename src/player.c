@@ -126,9 +126,10 @@ typedef struct {
     u8 padding11;
     /* 0x0C8 */ u8 old_reverb;
     u8 padding12;
-    /* 0x0CA */ s8 wobble_on_speed;
-    /* 0x0CB */ s8 wobble_off_speed;
-    u8 padding13[0x2];
+    /* 0x0CA */ u8 wobble_on_speed;
+    /* 0x0CB */ u8 wobble_off_speed;
+    /* 0x0CC */ u8 wobble_count;
+    /* 0x0CD */ s8 wobble_current;
     /* 0x0CE */ u8 velocity_on;
     /* 0x0CF */ u8 default_velocity;
     /* 0x0D0 */ u8 sweep_speed;
@@ -958,7 +959,19 @@ void func_80073C98_74898(channel_t *cp) {
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073CB4_748B4);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073D6C_7496C);
+f32 func_80073D6C_7496C(channel_t *cp) {
+    cp->wobble_count--;
+    if ((u8)cp->wobble_count == 0) {
+        if (cp->wobble_current == 0) {
+            cp->wobble_current = cp->wobble_amount;
+            cp->wobble_count = cp->wobble_on_speed;
+        } else {
+            cp->wobble_count = cp->wobble_off_speed;
+            cp->wobble_current = 0;
+        }
+    }
+    return (f32)cp->wobble_current;
+}
 
 f32 func_80073DC4_749C4(channel_t *cp) {
     s32 temp;
