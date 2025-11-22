@@ -111,7 +111,7 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80061D6C_6296C);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800620D0_62CD0);
 
-s16 func_80062254_62E54(func_80062254_62E54_arg* arg0, u16 arg1) {
+s16 func_80062254_62E54(func_80062254_62E54_arg *arg0, u16 arg1) {
     return arg0->unkC[arg1].unkA;
 }
 

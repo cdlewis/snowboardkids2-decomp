@@ -1,8 +1,8 @@
+#include "6E840.h"
+#include "D_800AFE8C_A71FC_type.h"
+#include "EepromSaveData_type.h"
 #include "common.h"
 #include "task_scheduler.h"
-#include "D_800AFE8C_A71FC_type.h"
-#include "6E840.h"
-#include "EepromSaveData_type.h"
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 

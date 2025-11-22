@@ -11,7 +11,7 @@ void initializeMemoryAllocatorRegion(void) {
     u8 *current_block;
 
     gMemoryAllocatorHead = NULL;
-    current_block = (u8*)&gMemoryHeapBase;
+    current_block = (u8 *)&gMemoryHeapBase;
     i = 0;
     do {
         *current_block = 0;
@@ -146,7 +146,7 @@ void cleanupUnusedNodes(void) {
 }
 
 void markNodeAsLocked(void *arg0) {
-    ((s32*)arg0)[-0x3] = 1;
+    ((s32 *)arg0)[-0x3] = 1;
 }
 
 void unlockNodeWithInterruptDisable(s32 *arg0) {

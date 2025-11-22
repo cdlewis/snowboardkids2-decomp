@@ -1,8 +1,8 @@
 #include "90F0.h"
 
+#include "6E840.h"
 #include "common.h"
 #include "task_scheduler.h"
-#include "6E840.h"
 
 extern s16 D_8008C930_8D530[][10];
 
@@ -49,28 +49,28 @@ void func_80009DD0_A9D0(u16 arg0, Node *arg1) {
 }
 
 void func_80009E0C_AA0C(void *arg0) {
-    ((u8*)arg0)[6] |= 1;
+    ((u8 *)arg0)[6] |= 1;
 }
 
 void func_80009E1C_AA1C(void *arg0) {
-    ((u8*)arg0)[6] &= 0xFE;
+    ((u8 *)arg0)[6] &= 0xFE;
 }
 
 s32 func_80009E2C_AA2C(void *arg0) {
-    return ((u8*)arg0)[6] & 1;
+    return ((u8 *)arg0)[6] & 1;
 }
 
 void func_80009E38_AA38(void *arg0) {
-    ((u8*)arg0)[6] |= 2;
+    ((u8 *)arg0)[6] |= 2;
 }
 
 void func_80009E48_AA48(void *arg0) {
-    ((u8*)arg0)[6] &= 0xFD;
+    ((u8 *)arg0)[6] &= 0xFD;
 }
 
 s32 func_80009E58_AA58(void *arg0) {
     u8 val;
-    val = ((u8*)arg0)[6] & 2;
+    val = ((u8 *)arg0)[6] & 2;
     return val != 0;
 }
 
@@ -92,7 +92,18 @@ INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A13C_AD3C);
 
 extern void func_8000A1E4_ADE4(s32, s32, s32, s32, s32, s32, s32, s16, u8, u8);
 
-void func_8000A190_AD90(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8, u8 arg9) {
+void func_8000A190_AD90(
+    s32 arg0,
+    s32 arg1,
+    s32 arg2,
+    s32 arg3,
+    s32 arg4,
+    s32 arg5,
+    s32 arg6,
+    s16 arg7,
+    u8 arg8,
+    u8 arg9
+) {
     s32 pad[2];
 
     pad[0] = 0;

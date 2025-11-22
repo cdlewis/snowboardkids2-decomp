@@ -315,7 +315,7 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80030F6C_31B6C);
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80030FBC_31BBC);
 
-void func_80031100_31D00(func_80031100_31D00_arg* arg0) {
+void func_80031100_31D00(func_80031100_31D00_arg *arg0) {
     arg0->unk4--;
     if (arg0->unk4 == 0) {
         setCallback(func_80031138_31D38);

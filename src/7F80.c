@@ -1,10 +1,10 @@
+#include "19E80.h"
 #include "20F0.h"
 #include "6E840.h"
 #include "common.h"
 #include "geometry.h"
 #include "overlay.h"
 #include "task_scheduler.h"
-#include "19E80.h"
 
 USE_ASSET(_49B500);
 USE_ASSET(_646CD0);

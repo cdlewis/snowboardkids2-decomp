@@ -29,14 +29,14 @@ typedef struct {
 } func_800BB74C_AF43C_arg;
 
 typedef struct {
-    void* unk0;
-    void* unk4;
+    void *unk0;
+    void *unk4;
 } func_800BC340_B0030_arg;
 
 typedef struct {
     u8 _pad[0x24];
-    void* unk24;
-    void* unk28;
+    void *unk24;
+    void *unk28;
 } func_800BBC2C_AF91C_arg;
 
 extern void rotateVectorY(Vec3 *, s32, void *);
@@ -151,7 +151,7 @@ typedef struct {
 } func_800BC0FC_Task;
 
 void func_800BC0FC(s16 arg0) {
-    func_800BC0FC_Task* task = (func_800BC0FC_Task*)scheduleTask(func_800BBF4C_AFC3C, 0, 0, 0xC8);
+    func_800BC0FC_Task *task = (func_800BC0FC_Task *)scheduleTask(func_800BBF4C_AFC3C, 0, 0, 0xC8);
     if (task != NULL) {
         task->unk24 = arg0;
     }
