@@ -561,7 +561,7 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_800677F0_683F0);
 
 extern void func_800677F0_683F0(void);
 
-void func_80067EDC_68ADC(u16 arg0, loadAssetMetadata_arg *arg1) {
+void func_80067EDC_68ADC(s32 arg0, loadAssetMetadata_arg *arg1) {
     (arg1 + 1)->unk0 = 0;
     debugEnqueueCallback(arg0, 6, &func_800677F0_683F0, arg1);
 }

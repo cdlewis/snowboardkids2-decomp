@@ -143,8 +143,8 @@ void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *arg0) {
     arg0->unk30 = arg0->unk58 + arg0->unk0->unk30;
     arg0->unk34 = arg0->unk5C + arg0->unk0->unk34;
 
-    func_80067EDC_68ADC(0, &arg0->assetMetadata);
-    func_80067EDC_68ADC(0, &arg0->unk28);
+    func_80067EDC_68ADC(0, (loadAssetMetadata_arg *)&arg0->assetMetadata);
+    func_80067EDC_68ADC(0, (loadAssetMetadata_arg *)&arg0->unk28);
 
     arg0->assetMetadata.unk1A -= 0x14;
     arg0->unk42 -= 0x14;

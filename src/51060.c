@@ -3,10 +3,12 @@
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
 extern u8 D_80090E70_91A70[];
+extern s16 D_80090EB0_91AB0[];
 
 typedef struct {
     void *unk0;
@@ -53,7 +55,12 @@ typedef struct {
 } func_80050F18_51B18_arg;
 
 typedef struct {
-    s32 unk0;
+    u8 padding[0x164];
+    s16 unk164[3];
+} func_800516F4_522F4_arg_unk0;
+
+typedef struct {
+    func_800516F4_522F4_arg_unk0 *unk0;
     void *unk4;
     loadAssetMetadata_arg unk8;
 } func_800516F4_522F4_arg;
@@ -134,7 +141,7 @@ void func_80050F64_51B64(func_80050F18_51B18_arg *);
 void func_80050FE0_51BE0(func_80050F18_51B18_arg *);
 void func_80051124_51D24(void);
 void func_80051250_51E50(func_800506B4_512B4_arg *);
-void func_80051760_52360(void);
+void func_80051760_52360(func_800516F4_522F4_arg *);
 void func_80051800_52400(func_800516F4_522F4_arg *);
 void func_800518AC_524AC(void);
 void func_80051B8C_5278C(func_8005186C_5246C_arg *);
@@ -372,7 +379,24 @@ void func_800516F4_522F4(func_800516F4_522F4_arg *arg0) {
     setCallbackWithContinue(&func_80051760_52360);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80051760_52360);
+void func_80051760_52360(func_800516F4_522F4_arg *arg0) {
+    s32 i;
+    GameState *gs;
+
+    gs = (GameState *)getCurrentAllocation();
+    transformVector((s16 *)&D_80090EB0_91AB0, (s16 *)&arg0->unk0->unk164, &arg0->unk8.unk4);
+
+    for (i = 0; i < 4; i++) {
+        func_80067EDC_68ADC(i, &arg0->unk8);
+    }
+
+    if (gs->gamePaused == 0) {
+        arg0->unk8.unk1A -= 0x10;
+        if ((u8)arg0->unk8.unk1A < 0x40) {
+            func_80069CF8_6A8F8();
+        }
+    }
+}
 
 void func_80051800_52400(func_800516F4_522F4_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
