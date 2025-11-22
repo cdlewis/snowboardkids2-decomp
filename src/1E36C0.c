@@ -1,6 +1,9 @@
 #include "common.h"
+#include "cutscene/cutscene_sys2.h"
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6610_1E36C0);
+s16 func_800B6610_1E36C0(cutsceneSys2Wait_exec_asset *arg0) {
+    return arg0->unk86;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6618_1E36C8);
 
