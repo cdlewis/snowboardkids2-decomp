@@ -51,7 +51,6 @@ extern s16 gGraphicsMode;
 extern void *D_800A2D40_A3940;
 extern void *D_800A2D44_A3944;
 extern s32 D_800A2D48_A3948;
-extern void func_8006395C_6455C(void);
 extern void func_80065150_65D50(void);
 extern void func_800653E0_65FE0(void);
 extern void func_80065670_66270(void);
@@ -326,7 +325,15 @@ void buildDisplayListSegment(DisplayListObject *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800638C0_644C0);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_8006395C_6455C);
+void func_8006395C_6455C(DisplayListObject *arg0) {
+    if (!isObjectCulled(&arg0->unk10.position)) {
+        setupDisplayListMatrix(arg0);
+
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPSetColor(gRegionAllocPtr++, 0xFB, arg0->unk3B | ~0xFF);
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
+    }
+}
 
 void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;

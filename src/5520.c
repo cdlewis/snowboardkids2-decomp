@@ -35,7 +35,7 @@ void func_80005714_6314(s32 arg0);
 void func_80005740_6340(s32 arg0);
 void func_80004920_5520(void);
 void func_80005094_5C94(void);
-void func_8006395C_6455C(s32 arg0);
+void func_8006395C_6455C(DisplayListObject *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/5520", func_80004920_5520);
 
@@ -84,7 +84,7 @@ void func_80005714_6314(s32 arg0) {
 
 void func_80005740_6340(s32 arg0) {
     func_80005094_5C94();
-    func_8006395C_6455C(arg0);
+    func_8006395C_6455C((DisplayListObject *)arg0);
 }
 
 void func_8000576C_636C(s32 arg0, func_8000576C_636C_arg *arg1) {
