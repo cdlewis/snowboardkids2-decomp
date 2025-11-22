@@ -17,7 +17,61 @@ INCLUDE_ASM("asm/nonmatchings/1E2BE0", finalizeAnimationLoop);
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5CFC_1E2DAC);
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5E64_1E2F14);
+typedef struct {
+    u8 _pad[0x20];
+    s16 unk20;
+    s16 unk22;
+    s16 unk24;
+    s16 unk26;
+    s16 unk28;
+    s16 unk2A;
+    s16 unk2C;
+    s16 unk2E;
+    s16 unk30;
+    s16 unk32;
+    u8 _pad2[4];
+    s32 unk38;
+    s32 unk3C;
+    u8 _pad3[4];
+    s32 unk44;
+    s32 unk48;
+    s32 unk4C;
+    s32 unk50;
+    s32 unk54;
+    u8 _pad4[2];
+    s16 unk5A;
+    s16 unk5C;
+    u8 _pad5[2];
+    s16 unk60;
+    s16 unk62;
+    u8 _pad6[0xC];
+    u8 unk70;
+} func_800B5E64_1E2F14_arg0;
+
+void func_800B5E64_1E2F14(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4) {
+    arg0->unk20 = arg1;
+    arg0->unk22 = arg2;
+    arg0->unk24 = arg1;
+    arg0->unk26 = arg2;
+    arg0->unk28 = 0;
+    arg0->unk2A = 0;
+    arg0->unk2C = 0;
+    arg0->unk2E = 0;
+    arg0->unk30 = 0;
+    arg0->unk32 = 0;
+    arg0->unk38 = arg3;
+    arg0->unk44 = arg3;
+    arg0->unk4C = 0;
+    arg0->unk50 = 0;
+    arg0->unk54 = 0;
+    arg0->unk5A = 0;
+    arg0->unk5C = 0;
+    arg0->unk60 = 0;
+    arg0->unk62 = 0;
+    arg0->unk70 = 0;
+    arg0->unk3C = arg4;
+    arg0->unk48 = arg4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5EC4_1E2F74);
 
