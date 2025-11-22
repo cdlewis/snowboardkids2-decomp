@@ -94,6 +94,21 @@ typedef struct {
 } GameStateUnk44_Ext;
 
 typedef struct {
+    u8 unk0[0x4];
+    void *unk4;
+    u8 unk8[0x16];
+    u8 unk1E;
+    u8 unk1F[0x5];
+    s16 unk24;
+    u8 unk26[0x2];
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    void *unk34;
+    s16 unk38;
+} func_80050C00_51800_Task;
+
+typedef struct {
     void *unk0;
     void *unk4;
     u8 padding[0x1C];
@@ -216,7 +231,23 @@ void func_80050BD4_517D4(s32 **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050C00_51800);
+void func_80050C00_51800(void *arg0) {
+    GameState *allocation;
+    func_80050C00_51800_Task *task;
+
+    allocation = (GameState *)getCurrentAllocation();
+    task = (func_80050C00_51800_Task *)scheduleTask(&func_8005098C_5158C, 2, 0, 0xEA);
+    if (task != NULL) {
+        task->unk24 = 0x35;
+        task->unk34 = arg0;
+        task->unk1E = 0xFF;
+        task->unk28 = 0;
+        task->unk2C = 0;
+        task->unk30 = 0;
+        task->unk38 = 0;
+        task->unk4 = &allocation->unk44->unkFC0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80050C80_51880);
 
