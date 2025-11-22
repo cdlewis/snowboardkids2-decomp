@@ -26,7 +26,6 @@ extern void func_8004F1D4_4FDD4(void);
 extern void func_8003EFDC_3FBDC(void);
 extern void func_8004E6F8_4F2F8(void);
 extern void func_800BB2B0(void);
-extern void func_8003FF78_40B78(void);
 extern s8 D_800AFCE2_A7052;
 extern s32 D_80090460_91060[];
 extern s32 D_800904A0_910A0[];
@@ -44,6 +43,7 @@ void func_8005011C_50D1C(void);
 void func_8003EE50_3FA50(void);
 void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
+void func_8003FF78_40B78(void);
 void func_800B99E0(void *);
 
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);
@@ -260,7 +260,13 @@ void func_8003FF14_40B14(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FF78_40B78);
+void func_8003FF78_40B78(void) {
+    if (gControllerInputs[0] & 0x8000) {
+        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        func_80057564_58164(0x3C);
+        setGameStateHandler(&func_80040608_41208);
+    }
+}
 
 void func_8003FFC0_40BC0(void) {
     s32 temp_v1;
