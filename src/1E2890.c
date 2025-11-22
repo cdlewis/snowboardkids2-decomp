@@ -7,6 +7,7 @@ extern void func_800B58D0_1E2980(void);
 extern void *scheduleTask(void *, u8, u8, u8);
 
 void func_800B5984_1E2A34(void);
+void func_800B5A34_1E2AE4(void);
 void func_800B5A6C_1E2B1C(void);
 void func_800B5B20_1E2BD0(void);
 void func_800B5898_1E2948(void);
@@ -46,7 +47,27 @@ INCLUDE_ASM("asm/nonmatchings/1E2890", func_800B58D0_1E2980);
 void func_800B5984_1E2A34(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E2890", func_800B598C_1E2A3C);
+void func_800B598C_1E2A3C(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5) {
+    s16 *result;
+    s16 temp_arg4;
+
+    temp_arg4 = arg4;
+    if (arg4 <= 0) {
+        temp_arg4 = 1;
+    }
+
+    result = scheduleTask(func_800B5A34_1E2AE4, 0, 0, 0);
+
+    if (result != NULL) {
+        result[0] = arg0;
+        result[1] = arg1;
+        result[2] = arg2;
+        result[3] = arg3;
+        result[4] = temp_arg4;
+        result[5] = 0;
+        *(s32 *)&result[6] = arg5;
+    }
+}
 
 void func_800B5A34_1E2AE4(void) {
     setCleanupCallback(func_800B5B20_1E2BD0);
