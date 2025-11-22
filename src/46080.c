@@ -210,6 +210,8 @@ typedef struct {
     loadAssetMetadata_arg unk4;
     u8 _pad[0x4];
     u16 unk24;
+    u8 _pad2[0x2];
+    s32 unk28;
 } Struct_func_8004657C_4717C;
 
 void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0);
@@ -242,7 +244,30 @@ void func_800463F4_46FF4(Struct_func_8004657C_4717C *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80046464_47064);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800464F4_470F4);
+void func_800464F4_470F4(Struct_func_8004657C_4717C *arg0) {
+    s32 temp_v0;
+    s32 temp_v1;
+    s32 temp_a0;
+    s32 temp_a1;
+    s32 temp_a2;
+
+    temp_v0 = arg0->unk4.unk4 + 0x27D76;
+    temp_v1 = arg0->unk4.unkC + 0x44DDE;
+    temp_a0 = arg0->unk28 + 0xFFFE8000;
+    temp_a1 = arg0->unk4.unk8 + temp_a0;
+    temp_a2 = 0x2C150614 < temp_a1;
+
+    arg0->unk4.unk4 = temp_v0;
+    arg0->unk4.unkC = temp_v1;
+    arg0->unk28 = temp_a0;
+    arg0->unk4.unk8 = temp_a1;
+
+    if (temp_a2 == 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    func_800463F4_46FF4(arg0);
+}
 
 void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
