@@ -60,6 +60,8 @@ extern void func_80066474_67074(void);
 extern void func_800670D4_67CD4(void);
 extern void func_80014480_15080(void);
 extern void func_800680C4_68CC4(void);
+extern void func_80064CF4_658F4(void);
+extern void func_80064F74_65B74(void);
 
 void func_80062CF0_638F0(void);
 void setupDisplayListMatrix(DisplayListObject *);
@@ -456,7 +458,21 @@ void func_80064E34_65A34(DisplayListObject *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80064F74_65B74);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800650B4_65CB4);
+void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1) {
+    arg1->unk30 = 0;
+
+    if (arg1->unk20->opaqueDisplayList != NULL) {
+        debugEnqueueCallback(arg0, 1, &func_80064CF4_658F4, arg1);
+    }
+
+    if (arg1->unk20->transparentDisplayList != NULL) {
+        debugEnqueueCallback(arg0, 3, &func_80064E34_65A34, arg1);
+    }
+
+    if (arg1->unk20->overlayDisplayList != NULL) {
+        debugEnqueueCallback(arg0, 5, &func_80064F74_65B74, arg1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80065150_65D50);
 
