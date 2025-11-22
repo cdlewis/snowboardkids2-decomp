@@ -639,7 +639,23 @@ void func_8004B758_4C358(func_8004B758_4C358_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B794_4C394);
+typedef struct {
+    u8 pad[0x24];
+    void *unk24;
+} func_8004B794_4C394_Task;
+
+void func_8004B794_4C394(void *arg0) {
+    GameState *allocation;
+    func_8004B794_4C394_Task *task;
+
+    allocation = getCurrentAllocation();
+    task = (func_8004B794_4C394_Task *)scheduleTask(&func_8004B36C_4BF6C, 3, 0, 0xEF);
+
+    if (task != NULL) {
+        task->unk24 = arg0;
+        allocation->unk5B -= 1;
+    }
+}
 
 typedef struct {
     void *unk0;
