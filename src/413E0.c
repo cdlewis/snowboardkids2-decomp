@@ -20,6 +20,7 @@ typedef struct {
 extern s32 gFrameCounter;
 
 extern void func_80040870_41470(void);
+extern void func_80041010_41C10(void);
 
 typedef struct {
     u8 _pad[0x24];
@@ -118,4 +119,24 @@ void func_800413E0_41FE0(func_800407E0_413E0_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80041418_42018);
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80041518_42118);
+typedef struct {
+    u8 _pad[0x8];
+    void *freeNext;
+    u8 _pad2[0xC];
+    s16 unk18;
+    s16 unk1A;
+    u8 unk1C;
+} func_80041518_42118_Node;
+
+void func_80041518_42118(void* arg0) {
+    func_80041518_42118_Node* task;
+
+    task = (func_80041518_42118_Node*)scheduleTask(&func_80041010_41C10, 0, 0, 0xF0);
+
+    if (task != NULL) {
+        task->unk18 = 0;
+        task->freeNext = arg0;
+        task->unk1A = 0x64;
+        task->unk1C = 0;
+    }
+}
