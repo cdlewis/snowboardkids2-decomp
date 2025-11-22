@@ -22,6 +22,11 @@ extern s32 gFrameCounter;
 extern void *func_80055D7C_5697C(s32);
 extern void func_80040870_41470(void);
 extern void func_8004106C_41C6C(void);
+extern void *func_80035F80_36B80(s32);
+extern void *loadAsset_34F7E0(void);
+void func_80040E00_41A00(func_80040E00_41A00_arg *);
+void func_80040E4C_41A4C(void);
+void func_80040F34_41B34(func_800407E0_413E0_arg *);
 void func_800413E0_41FE0(func_800407E0_413E0_arg *arg0);
 
 typedef struct {
@@ -45,6 +50,16 @@ typedef struct {
     void *unk24;
     void *unk28;
 } func_80040D48_41948_arg;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    u8 _pad[2];
+    s16 unkA;
+    u8 _pad2[4];
+    s16 unk10;
+    s16 unk12;
+} func_80040D80_41980_arg;
 
 void func_8004083C_4143C(func_8004083C_4143C_arg *arg0);
 void func_80040948_41548(func_80040948_41548_arg *arg0);
@@ -89,7 +104,20 @@ void func_80040D48_41948(func_80040D48_41948_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80040D80_41980);
+void func_80040D80_41980(func_80040D80_41980_arg *arg0) {
+    if (arg0->unkA == 0) {
+        arg0->unk0 = NULL;
+        arg0->unk4 = NULL;
+        setCallback(&func_80040E00_41A00);
+    } else {
+        arg0->unk4 = func_80035F80_36B80(1);
+        arg0->unk0 = loadAsset_34F7E0();
+        arg0->unk10 = 0x80;
+        arg0->unk12 = -8;
+        setCallback(&func_80040E4C_41A4C);
+    }
+    setCleanupCallback(&func_80040F34_41B34);
+}
 
 const char pushStartButtonText[] = "PUSH START BUTTON";
 
