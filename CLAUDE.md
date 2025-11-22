@@ -170,3 +170,19 @@ Before declaring a decompilation complete, verify:
 - [ ] No `void*` parameters that should be typed structs
 - [ ] Struct sizes match the assembly access patterns
 - [ ] `./tools/build-and-verify.sh` succeeds
+
+## Decompilation tips
+
+### Assets
+
+Typically small 5-6 length symbols (e.g. D_4237C0) are asset addresses. Another strong hint that they are assets if if they are passed to `dmaRequestAndUpdateStateWithSize`.
+
+Use `USE_ASSET(symbol)` to load symbols, for example D_4237C0 and dmaRequestAndUpdateStateWithSize would become:
+
+```
+USE_ASSET(_4237C0);
+
+dmaRequestAndUpdateStateWithSize(_4237C0_ROM_START, _4237C0_ROM_END);
+```
+
+Failure to handle assets properly will almost certainly guarantee a mismatch.
