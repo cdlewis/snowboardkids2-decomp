@@ -132,7 +132,17 @@ INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5F2C_1E2FDC);
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5FB0_1E3060);
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6034_1E30E4);
+void func_800B6034_1E30E4(func_800B5E64_1E2F14_arg0 *arg0, s32 arg1, s16 arg2) {
+    s32 quotient;
+
+    quotient = (arg1 - arg0->unk34) / arg2;
+
+    arg0->unk70 = 0;
+    arg0->unk40 = arg1;
+    arg0->unk58 = arg2;
+    arg0->unk5E = arg2;
+    arg0->unk4C = quotient;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6088_1E3138);
 
