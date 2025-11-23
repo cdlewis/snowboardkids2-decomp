@@ -317,39 +317,36 @@ done:
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3734_1E07E4);
 
+typedef struct {
+    u8 _pad0[0x4];
+    s32 unk4;
+    s32 unk8;
+} SaveDataBuffer;
+
 s32 func_800B3790_1E0840(void) {
-    void *allocated;
+    SaveDataBuffer *buffer;
     s32 result;
-    void *temp_a0;
-    StateEntry **temp_a1;
-    StateEntry *temp_v1;
+    SaveDataBuffer *compareData;
+    StateEntry **ptr;
 
-    allocated = allocateNodeMemory(D_800BAEB8_1E7F68);
-    temp_v1 = (StateEntry*)D_800BAEB8_1E7F68;
-    temp_a1 = &D_800BA93C_1E79EC;
-    D_800BA95C_1E7A0C = (StateEntry*)allocated;
-    *temp_a1 = temp_v1;
+    buffer = allocateNodeMemory(D_800BAEB8_1E7F68);
+    ptr = &D_800BA93C_1E79EC;
+    D_800BA95C_1E7A0C = (StateEntry *)buffer;
+    *ptr = (StateEntry *)D_800BAEB8_1E7F68;
+    func_8003A284_3AE84(0, ptr);
 
-    func_8003A284_3AE84(0, temp_a1);
-
-    while (1) {
+    do {
         result = func_8003A28C_3AE8C();
-        if (result != -1) {
-            break;
-        }
-    }
+    } while (result == -1);
 
     if (result == 0) {
-        temp_a0 = D_800BAEBC_1E7F6C;
-        if (((s32*)temp_a0)[1] == ((s32*)allocated)[1]) {
-            if (((s32*)temp_a0)[2] == ((s32*)allocated)[2]) {
-                memcpy(temp_a0, allocated, 0x78C0);
-            }
+        compareData = (SaveDataBuffer *)D_800BAEBC_1E7F6C;
+        if (compareData->unk4 == buffer->unk4 && compareData->unk8 == buffer->unk8) {
+            memcpy(D_800BAEBC_1E7F6C, buffer, 0x78C0);
         }
     }
 
-    freeNodeMemory(allocated);
-
+    freeNodeMemory(buffer);
     return result;
 }
 
