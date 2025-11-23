@@ -457,7 +457,35 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_80046D38_47938);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80046DCC_479CC);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80046F44_47B44);
+typedef struct {
+    u8 _pad[0x3C];
+    u8 unk3C[0x3C];
+    u8 unk78[0x3C];
+    s16 unkB4;
+} func_80046F44_47B44_arg;
+
+void func_80046F44_47B44(func_80046F44_47B44_arg *arg0) {
+    GameState_46080 *allocation;
+    s32 i;
+    s16 rotation;
+
+    allocation = (GameState_46080 *)getCurrentAllocation();
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->unk3C);
+    }
+
+    if (allocation->unk5C == 4) {
+        rotation = arg0->unkB4 + 0x80;
+        arg0->unkB4 = rotation;
+        createYRotationMatrix((Mat3x3Padded *)&arg0->unk78, rotation);
+
+        for (i = 0; i < 4; i++) {
+            enqueueDisplayListObject(i, (DisplayListObject *)&arg0->unk78);
+        }
+    }
+}
 
 typedef struct {
     u8 _pad[0x24];
