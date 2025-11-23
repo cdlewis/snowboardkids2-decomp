@@ -316,7 +316,10 @@ def load_difficult_functions(difficult_file: str) -> set:
                 for line in f:
                     line = line.strip()
                     if line:  # Skip empty lines
-                        difficult_functions.add(line)
+                        # Extract only the first value (function name)
+                        # Some lines may have additional data like attempt counts
+                        func_name = line.split()[0]
+                        difficult_functions.add(func_name)
         except Exception as e:
             print(f"Warning: Could not read {difficult_file}: {e}", file=sys.stderr)
 

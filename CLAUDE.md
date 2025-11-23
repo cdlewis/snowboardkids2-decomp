@@ -96,7 +96,7 @@ You may be given a directory containing assembly files either in its own directo
 
 1. Use `python3 tools/score_functions.py asm/nonmatchings/` tool to find the easiest function. Start with that one.
 2. Follow the instructions in the `Decompile assembly to C code` of this document.
-3. If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name> <attempts>` and return to step (1). If you cannot get a perfect match after several attempts, add the function name to `tools/difficult_functions` along with the number of attempts (function names should be separated by newlines). This should be in the form `<function name> <number of attempts to match>\n`. By adding the function name to difficult_functions. You should also revert any changes you've made adding the function to the C file (we do not want to save incomplete matches).
+3. If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name> <attempts>` and return to step (1). If you cannot get a perfect match after several attempts, add the function name to `tools/difficult_functions` along with the number of attempts and best match percentage (function names should be separated by newlines). This should be in the form `<function name> <number of attempts to match> <best match percentage>\n`. By adding the function name to difficult_functions. You should also revert any changes you've made adding the function to the C file (we do not want to save incomplete matches).
 4. You are done. Do not attemp to find the next closest match.
 
 ### Decompile assembly to C code
@@ -111,7 +111,7 @@ First we need to spin up a decomp environment for the function, run:
 
 Move to the directory created by the script. This will be `nonmatchings/<function name>-<number (optional)>`.
 
-Use the tools in this directory to match the function.
+Use the tools in this directory to match the function. You may need to make several attempts. Each attempt should be in a new file (base_1.c, base_2.c, ... base_n.c, etc). It's okay to give up if you're unable to match after _10_ attempts.
 
 Once you have a matching function, update the C code to use it. The C code will be importing an assembly file, something along the lines of `INCLUDE_ASM/asm/nonmatchings/<function name>`. Replace this with the actual C code.
 

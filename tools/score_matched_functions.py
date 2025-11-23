@@ -140,10 +140,7 @@ def main():
         print(f"No commits found since {commit_hash}", file=sys.stderr)
         sys.exit(0)
 
-    print(f"Analyzing {len(commits)} commit(s) since {commit_hash}...\n", file=sys.stderr)
-
     # Cache all scores to avoid re-scanning for each function
-    print("Loading all function scores...", file=sys.stderr)
     asm_dir = Path(__file__).parent.parent / 'asm'
     all_scores = score_folder(str(asm_dir), exhaustive=True)
     score_map = {s.name: s.total_score for s in all_scores}
@@ -162,15 +159,11 @@ def main():
         for func_name in potential_funcs:
             if func_name in score_map:
                 found_functions[func_name] = score_map[func_name]
-                print(f"Found: {func_name} (from commit {commit_hash})", file=sys.stderr)
 
     # Print results sorted by score
     if not found_functions:
         print("\nNo valid functions found in matching commits.", file=sys.stderr)
         sys.exit(0)
-
-    print(f"\n{'='*80}", file=sys.stderr)
-    print(f"Found {len(found_functions)} function(s) with valid scores:\n", file=sys.stderr)
 
     # Sort by score (ascending - simplest first)
     sorted_functions = sorted(found_functions.items(), key=lambda x: x[1])
