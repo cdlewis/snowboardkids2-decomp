@@ -1,5 +1,6 @@
 #include "5E590.h"
 #include "common.h"
+#include "displaylist.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
@@ -65,7 +66,6 @@ typedef struct {
 extern void rotateVectorY(Vec3 *, s32, void *);
 extern void *func_80055D7C_5697C(s32);
 extern void func_80069CF8_6A8F8(void);
-extern void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *);
 extern void func_800BB45C_AF14C(void **);
 extern s32 func_800BB488_AF178(func_800BB388_AF078_arg *);
 extern void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
@@ -82,9 +82,15 @@ extern void func_800BC220_AFF10(void);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
 extern void func_800BC750_B0440(void);
 
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+} AnimationData;
+
 extern s32 D_8009A8A4_9B4A4;
 extern void *D_800BC7F0_B04E0;
 extern Vec3 D_800BCAA0_B0790;
+extern AnimationData D_800BC830_B0520[];
 extern void *D_800BC8C8_B05B8;
 extern s8 D_800BC908_B05F8[12];
 extern void *D_800BC920_B0610;
@@ -92,7 +98,28 @@ extern void *D_800BC960_B0650;
 extern s16 D_800BC9DC_B06CC[];
 extern s32 D_800BCA00_B06F0;
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB2B0_AEFA0);
+void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *arg0) {
+    s32 i;
+
+    arg0->unk40--;
+
+    if (arg0->unk40 == 0) {
+        loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk04, arg0->unk00, D_800BC830_B0520[arg0->unk44].unk1);
+
+        arg0->unk40 = D_800BC830_B0520[arg0->unk44].unk0;
+        arg0->unk44++;
+
+        if (D_800BC830_B0520[arg0->unk44].unk0 == 0) {
+            arg0->unk44 = 0;
+        }
+    }
+
+    memcpy(&arg0->unk08, &arg0->unk1F[5], 0xC);
+
+    for (i = 0; i < 4; i++) {
+        func_800677C0_683C0(i, (loadAssetMetadata_arg *)&arg0->unk04);
+    }
+}
 
 void func_800BB388_AF078(func_800BB388_AF078_arg *entity) {
     Vec3 vector;
