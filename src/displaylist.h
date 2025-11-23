@@ -29,7 +29,9 @@ typedef struct {
     void *unk28;
     s32 unk2C;
     s32 unk30;
-    u8 padding3[0x7];
+    u8 padding3[0x3];
+    u8 unk37;
+    u8 padding4[0x3];
     u8 unk3B;
 } DisplayListObject;
 
