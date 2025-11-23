@@ -96,7 +96,7 @@ typedef struct {
     /* 0x084 */ u8 *ppitchbendbase;
     /* 0x088 */ u8 *pvolumebase;
     /* 0x08C */ f32 distort;
-    /* 0x090 */ s32 unk90;
+    /* 0x090 */ u32 sweep_frame;
     /* 0x094 */ s16 temscale;
     /* 0x096 */ u16 unk96;
     /* 0x098 */ s16 channel_tempo;
@@ -147,8 +147,8 @@ typedef struct {
     /* 0x0D2 */ u8 env_trigger_off;
     /* 0x0D3 */ u8 trigger_off;
     /* 0x0D4 */ s8 wobble_amount;
-    /* 0x0D5 */ u8 unkD5;
-    /* 0x0D6 */ u8 unkD6;
+    /* 0x0D5 */ u8 sweep_timer;
+    /* 0x0D6 */ u8 sweep_dir;
     /* 0x0D7 */ u8 for_stack_count;
     /* 0x0D8 */ f32 vib_precalc;
     /* 0x0DC */ u8 *for_stack[FORNEXT_DEPTH];
@@ -1084,12 +1084,44 @@ void func_80073C98_74898(channel_t *cp) {
     s32 temp = cp->unk40;
     u8 val = cp->pan;
 
-    cp->unkD5 = 0;
-    cp->unk90 = temp;
-    cp->unkD6 = val & 0x40;
+    cp->sweep_timer = 0;
+    cp->sweep_frame = temp;
+    cp->sweep_dir = val & 0x40;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073CB4_748B4);
+void func_80073CB4_748B4(channel_t *cp) {
+    u32 calc;
+
+    do {
+        calc = cp->sweep_timer + cp->sweep_speed;
+        cp->sweep_frame += 0x100;
+
+        if (calc < 0x40) {
+            cp->sweep_timer = calc;
+        } else {
+            cp->sweep_timer = calc & 0x3F;
+            calc >>= 6;
+
+            if (cp->sweep_dir == 0) {
+                u8 pan = cp->pan + calc;
+
+                cp->pan = pan;
+                if (pan >= 0x80) {
+                    cp->pan = 0x7F;
+                    cp->sweep_dir = 1;
+                }
+            } else {
+                u8 pan = cp->pan - calc;
+
+                cp->pan = pan;
+                if ((pan >= 0x80) || (pan == 0)) {
+                    cp->pan = 0;
+                    cp->sweep_dir = 0;
+                }
+            }
+        }
+    } while ((u32)cp->sweep_frame < (u32)cp->channel_frame);
+}
 
 f32 func_80073D6C_7496C(channel_t *cp) {
     cp->wobble_count--;
