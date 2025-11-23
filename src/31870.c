@@ -22,12 +22,15 @@ USE_ASSET(_4237C0);
 
 extern u16 D_8008F150_8FD50[];
 extern const char D_8009E480_9F080;
+extern u8 D_4547D0[];
+extern u8 D_458E30[];
 extern void func_80032708_33308(void);
 extern void func_80038420_39020(void);
 extern void func_8000FED0_10AD0(void);
 extern void func_8006FED8_70AD8(void *);
 
 void func_800323FC_32FFC(void);
+void func_80032628_33228(void);
 
 typedef struct {
     s16 unk0;
@@ -206,6 +209,33 @@ typedef struct {
 } func_80032DE8_339E8_asset;
 
 typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s8 unk12;
+    s8 unk13;
+    s8 unk14;
+    u8 padding[0x3];
+} func_8003253C_3313C_arg_item;
+
+typedef struct {
+    func_8003253C_3313C_arg_item unk0[4];
+    u8 padding2[0x18];
+    s16 unk78;
+    s16 unk7A;
+    s16 unk7C;
+    u8 padding3[0x2];
+    void *unk80;
+    s8 unk84[4];
+    void *unk88;
+} func_8003253C_3313C_arg;
+
+typedef struct {
     u8 padding[0x24];
     void *unk24;
     void *unk28;
@@ -272,6 +302,7 @@ void func_80033088_33C88(func_80033088_33C88_arg *arg0);
 void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0);
 void func_80032EA4_33AA4(void *);
 void func_80032F64_33B64(func_80032244_32E44_arg *);
+void func_80032DBC_339BC(func_80032F90_33B90_arg *arg0);
 void func_800319C8_325C8(func_800319C8_325C8_arg *arg0);
 void func_80031944_32544(func_80031510_32110_arg *arg0);
 void func_80031CE8_328E8(void *arg0);
@@ -885,7 +916,42 @@ void func_80032504_33104(func_80032504_33104_arg *arg0) {
     arg0->unk58 = freeNodeMemory(arg0->unk58);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_8003253C_3313C);
+void func_8003253C_3313C(func_8003253C_3313C_arg *arg0) {
+    func_80032DE8_339E8_asset *state;
+    void *asset;
+    s32 i;
+    u8 temp;
+
+    state = getCurrentAllocation();
+    asset = dmaRequestAndUpdateStateWithSize(D_4547D0, D_458E30, 0x9488);
+
+    for (i = 0; i < 4; i++) {
+        arg0->unk0[i].unk0 = 0x60;
+        arg0->unk0[i].unk2 = -0x91;
+
+        temp = state->unk784[i];
+        temp = state->unk788[temp];
+
+        arg0->unk0[i].unk8 = temp;
+        arg0->unk0[i].unkA = 0x400;
+        arg0->unk0[i].unkC = 0x400;
+        arg0->unk0[i].unkE = 0;
+        arg0->unk0[i].unk10 = 0xFF;
+        arg0->unk0[i].unk13 = 0;
+        arg0->unk0[i].unk12 = 0;
+        arg0->unk0[i].unk14 = 0;
+        arg0->unk0[i].unk4 = asset;
+        arg0->unk84[i] = 0;
+    }
+
+    arg0->unk78 = 0x58;
+    arg0->unk7A = -0x2A;
+    arg0->unk7C = 0;
+    arg0->unk80 = &arg0->unk88;
+
+    setCleanupCallback(&func_80032DBC_339BC);
+    setCallback(&func_80032628_33228);
+}
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032628_33228);
 
