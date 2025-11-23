@@ -18,6 +18,8 @@ typedef struct {
 
 extern StateEntry *D_800BAEBC_1E7F6C;
 extern s32 D_800BAEB8_1E7F68;
+extern StateEntry *D_800BA93C_1E79EC;
+extern StateEntry *D_800BA95C_1E7A0C;
 extern s32 gButtonsPressed[];
 extern StateEntry D_800BAEC8_1E7F78[];
 extern u8 D_800BAF06_1E7FB6;
@@ -38,6 +40,8 @@ extern void func_800B5BFC_1E2CAC(void *);
 extern void n_alSeqpDelete(s32 *);
 extern void func_800084D8_90D8(StateEntry *, s32, s32);
 extern void func_800084E0_90E0(StateEntry *, s32, s32);
+extern s32 func_8003A284_3AE84(s32, StateEntry **);
+extern s32 func_8003A28C_3AE8C(void);
 
 u8 getCutsceneSlotCount(void);
 s32 findEventAtFrame(u8 a0, u16 a1);
@@ -313,7 +317,41 @@ done:
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3734_1E07E4);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3790_1E0840);
+s32 func_800B3790_1E0840(void) {
+    void *allocated;
+    s32 result;
+    void *temp_a0;
+    StateEntry **temp_a1;
+    StateEntry *temp_v1;
+
+    allocated = allocateNodeMemory(D_800BAEB8_1E7F68);
+    temp_v1 = (StateEntry*)D_800BAEB8_1E7F68;
+    temp_a1 = &D_800BA93C_1E79EC;
+    D_800BA95C_1E7A0C = (StateEntry*)allocated;
+    *temp_a1 = temp_v1;
+
+    func_8003A284_3AE84(0, temp_a1);
+
+    while (1) {
+        result = func_8003A28C_3AE8C();
+        if (result != -1) {
+            break;
+        }
+    }
+
+    if (result == 0) {
+        temp_a0 = D_800BAEBC_1E7F6C;
+        if (((s32*)temp_a0)[1] == ((s32*)allocated)[1]) {
+            if (((s32*)temp_a0)[2] == ((s32*)allocated)[2]) {
+                memcpy(temp_a0, allocated, 0x78C0);
+            }
+        }
+    }
+
+    freeNodeMemory(allocated);
+
+    return result;
+}
 
 u16 func_800B384C_1E08FC(void) {
     u16 index = D_800BAEBC_1E7F6C->current_index;
