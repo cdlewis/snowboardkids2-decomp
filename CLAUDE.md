@@ -21,7 +21,7 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 - `./tools/build-and-verify.sh` build the project and verify that it matches the target.
 - `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>`
 - `./tools/claude <function name>` spin up a decompilation environment for a given function.
-- `python3 tools/score_functions.py --min-score 75 --max-score 100 <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
+- `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
 - `python3 tools/check_pointer_arithmetic.py <file or directory>` detect pointer arithmetic with casts that should be replaced with struct field access. Use `--strict` to fail on violations.
 
 ## Code Quality Standards
@@ -94,9 +94,9 @@ If you write code with pointer arithmetic:
 
 You may be given a directory containing assembly files either in its own directory or its subdirectories.
 
-1. Use `python3 tools/score_functions.py --min-score 75 --max-score 100 asm/nonmatchings/` tool to find the easiest function. Start with that one.
+1. Use `python3 tools/score_functions.py asm/nonmatchings/` tool to find the easiest function. Start with that one.
 2. Follow the instructions in the `Decompile assembly to C code` of this document.
-3. If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name>` and return to step (1). If you cannot get a perfect match after several attempts, add the function name to `tools/difficult_functions` (function names should be separated by newlines) and return to step (1). By adding the function name to difficult_functions. You should also revert any changes you've made adding the function to the C file (we do not want to save incomplete matches).
+3. If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name> <attempts>` and return to step (1). If you cannot get a perfect match after several attempts, add the function name to `tools/difficult_functions` along with the number of attempts (function names should be separated by newlines). This should be in the form `<function name> <number of attempts to match>\n`. By adding the function name to difficult_functions. You should also revert any changes you've made adding the function to the C file (we do not want to save incomplete matches).
 4. You are done. Do not attemp to find the next closest match.
 
 ### Decompile assembly to C code
