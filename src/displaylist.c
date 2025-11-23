@@ -432,7 +432,32 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_800643AC_64FAC);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80064628_65228);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800646C8_652C8);
+void func_800646C8_652C8(DisplayListObject *arg0) {
+    DisplayListObject *elements;
+    s32 i;
+    u32 *temp;
+    s32 v0;
+    u8 pad[0x48];
+
+    func_80064218_64E18(arg0);
+
+    v0 = arg0->unk37;
+    if (v0 > 0) {
+        elements = arg0;
+        i = 0;
+        do {
+            if (elements[i].unk20->transparentDisplayList != NULL) {
+                func_800643AC_64FAC(arg0, i);
+                temp = (u32 *)gRegionAllocPtr;
+                temp[0] = 0xDE000000;
+                temp[1] = (u32)elements[i].unk20->transparentDisplayList;
+                gRegionAllocPtr = (void *)(temp + 2);
+            }
+            i++;
+            v0 = arg0->unk37;
+        } while (i < v0);
+    }
+}
 
 void func_80064768_65368(DisplayListObject *arg0) {
     DisplayListObject *elements;
