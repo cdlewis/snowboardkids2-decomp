@@ -11,10 +11,16 @@ typedef struct {
 } GameStateUnk44_Item;
 
 typedef struct {
-    u8 padding[0xFC0];
+    u8 data[0x180];
+} GameStateUnk44Unk2C0;
+
+typedef struct {
+    u8 padding[0x2C0];
+    GameStateUnk44Unk2C0 unk2C0[8];
+    u8 padding2[0x100];
     GameStateUnk44_Item unkFC0[3];
     GameStateUnk44_Item unk1080[3];
-    u8 padding2[0x1FF];
+    u8 padding3[0x1FF];
     s32 unk1340;
     u8 padding4[0x3C];
     s32 unk1380;

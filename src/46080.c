@@ -78,12 +78,15 @@ extern void func_8004A6D4_4B2D4(void);
 typedef struct {
     DataTable_19E80 *unk0;
     OutputStruct_19E80 unk4;
-    u8 _pad[0x38 - 0x4 - sizeof(OutputStruct_19E80)];
+    u8 _pad[0x30 - 0x4 - sizeof(OutputStruct_19E80)];
+    s32 unk30;
+    GameStateUnk44Unk2C0 *unk34;
     s32 unk38;
     s32 unk3C;
 } func_80049300_49F00_arg;
 
 void func_80049300_49F00(func_80049300_49F00_arg *arg0);
+void func_8004934C_49F4C(func_80049300_49F00_arg *arg0);
 
 typedef struct {
     void *unk0;
@@ -870,8 +873,6 @@ void func_800492C0_49EC0(void **arg0) {
     setCallbackWithContinue(&func_80049300_49F00);
 }
 
-extern void func_8004934C_49F4C(void);
-
 void func_80049300_49F00(func_80049300_49F00_arg *arg0) {
     u16 index;
 
@@ -886,7 +887,30 @@ void func_80049300_49F00(func_80049300_49F00_arg *arg0) {
     setCallbackWithContinue(&func_8004934C_49F4C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004934C_49F4C);
+extern void func_80049430_4A030(func_80049300_49F00_arg *arg0);
+
+void func_8004934C_49F4C(func_80049300_49F00_arg *arg0) {
+    GameState *allocation = (GameState *)getCurrentAllocation();
+    GameStateUnk44Unk2C0 *entry;
+    s32 i;
+
+    if (arg0->unk38 == 8) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    entry = &allocation->unk44->unk2C0[arg0->unk38];
+    arg0->unk30 = 0;
+    arg0->unk34 = entry;
+
+    for (i = 0; i < 4; i++) {
+        debugEnqueueCallback(i, 1, &func_80049430_4A030, arg0);
+    }
+
+    if (allocation->gamePaused == 0) {
+        arg0->unk38++;
+    }
+}
 
 void func_80049404_4A004(Struct_func_80049404_4A004 *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
