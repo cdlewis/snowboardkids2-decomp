@@ -26,7 +26,23 @@ typedef struct {
 } func_8004A9A8_4B5A8_node;
 
 extern void func_8004BCFC_4C8FC(void *);
-extern void func_8004AF2C_4BB2C(void *);
+extern void func_8004AFF8_4BBF8(void *);
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    u8 _pad[0x1C];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    u8 _pad2[0x2];
+    s16 unk32;
+    u8 _pad3[0x2];
+    s16 unk36;
+    s16 unk38;
+} func_8004AF2C_4BB2C_arg;
+
+extern void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
 
 extern void func_80048E34_49A34(void);
 extern void func_800462D8_46ED8(void);
@@ -35,6 +51,7 @@ extern u8 func_800698DC_6A4DC(void);
 extern void func_8004562C_4622C(void);
 extern void func_80065DA8_669A8(s32, DisplayListObject *);
 extern void rotateVectorY(void *, s32, void *);
+extern void func_80056B7C_5777C(void *, s32);
 
 extern s32 D_80090E20_91A20;
 extern s32 D_80090BC8_917C8[3];
@@ -971,7 +988,32 @@ void func_8004AED8_4BAD8(void **arg0) {
     setCallbackWithContinue(&func_8004AF2C_4BB2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004AF2C_4BB2C);
+void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *arg0) {
+    GameState *allocation;
+    s32 rotatedVector[3];
+    u8 randomValue;
+
+    allocation = (GameState *)getCurrentAllocation();
+
+    if (arg0->unk38 == 0) {
+        arg0->unk32 = arg0->unk36;
+    } else {
+        arg0->unk32 = arg0->unk36 + 7;
+    }
+
+    arg0->unk4 = (void *)((s32)allocation->unk44 + 0xF80);
+    loadAssetMetadata((void *)((s32)arg0 + 4), arg0->unk0, arg0->unk32);
+
+    randomValue = randA();
+    rotateVectorY(&D_80090E20_91A20, (randomValue & 0xFF) << 5, &rotatedVector);
+
+    arg0->unk24 += rotatedVector[0];
+    arg0->unk28 += rotatedVector[1];
+    arg0->unk2C += rotatedVector[2];
+
+    func_80056B7C_5777C((void *)((s32)arg0 + 8), 0x17);
+    setCallbackWithContinue(&func_8004AFF8_4BBF8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004AFF8_4BBF8);
 
