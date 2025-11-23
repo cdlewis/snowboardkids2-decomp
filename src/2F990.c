@@ -139,12 +139,26 @@ typedef struct {
     void *unk4;
 } func_80030668_31268_arg;
 
+typedef struct {
+    func_800308FC_314FC_arg items[4];
+    s16 unk30;
+    s16 unk32;
+    void *unk34;
+    void *unk38;
+    s16 unk3C;
+    s16 unk3E;
+    s8 unk40;
+} func_80030A00_31600_arg;
+
 extern void func_8000FED0_10AD0(void);
 extern void func_80035408_36008(void);
 
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];
+extern u8 D_419C60[];
+extern u8 D_41A1D0[];
+extern s32 D_8008F110_8FD10;
 
 void func_80030378_30F78(void);
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
@@ -169,6 +183,9 @@ void func_80030764_31364(void);
 void func_800308C4_314C4(Struct_80030694 *arg0);
 void func_80030974_31574(void *);
 void func_800309D4_315D4(func_800308FC_314FC_arg *);
+void func_80030AEC_316EC(void *);
+void func_80030B70_31770(func_80030B70_31770_arg *);
+void *func_80035F80_36B80(s32);
 void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 void func_80038420_39020(void);
 void func_8006FF90_70B90(s32, s32, void *, void *);
@@ -588,7 +605,32 @@ void func_800309D4_315D4(func_800308FC_314FC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030A00_31600);
+void func_80030A00_31600(func_80030A00_31600_arg *arg0) {
+    void *temp_s1;
+    void *temp_s2;
+    s32 i;
+
+    temp_s1 = dmaRequestAndUpdateStateWithSize(D_419C60, D_41A1D0, 0x1548);
+    temp_s2 = func_80035F80_36B80(1);
+    setCleanupCallback(&func_80030B70_31770);
+
+    for (i = 0; i < 4; i++) {
+        arg0->items[i].unk0 = (i & 1) * 0x80 - 0x80;
+        arg0->items[i].unk2 = (i / 2) * 0x10 - 0x66;
+        arg0->items[i].unk4 = temp_s1;
+        arg0->items[i].unk8 = i;
+    }
+
+    arg0->unk30 = -0x68;
+    arg0->unk32 = -0x60;
+    arg0->unk34 = &D_8008F110_8FD10;
+    arg0->unk38 = temp_s2;
+    arg0->unk3C = 0xFF;
+    arg0->unk3E = 0xFF;
+    arg0->unk40 = 5;
+
+    setCallback(&func_80030AEC_316EC);
+}
 
 void func_80030AEC_316EC(void *arg0) {
     GameState *alloc;
