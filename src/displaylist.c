@@ -430,7 +430,25 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80064218_64E18);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800643AC_64FAC);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80064628_65228);
+void func_80064628_65228(DisplayListObject *arg0) {
+    s32 i;
+    DisplayListObject *temp_s0;
+    u32 *temp_v1;
+    volatile u8 padding[0x40];
+
+    func_80064218_64E18(arg0);
+
+    for (i = 0; i < arg0->unk37; i++) {
+        temp_s0 = (DisplayListObject *)((u8 *)arg0 + i * 0x3C);
+        if (temp_s0->unk20->opaqueDisplayList != NULL) {
+            func_800643AC_64FAC(arg0, i);
+            temp_v1 = (u32 *)gRegionAllocPtr;
+            temp_v1[0] = 0xDE000000;
+            temp_v1[1] = (u32)temp_s0->unk20->opaqueDisplayList;
+            gRegionAllocPtr = (Gfx *)(temp_v1 + 2);
+        }
+    }
+}
 
 void func_800646C8_652C8(DisplayListObject *arg0) {
     DisplayListObject *elements;
