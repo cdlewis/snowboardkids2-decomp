@@ -46,13 +46,10 @@ typedef struct {
 } func_8002FA70_30670_arg;
 
 typedef struct {
-    u8 padding[0x20];
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    u8 padding2[0x30];
-    u8 unk60;
+    DisplayListObject displayList;
+    Mat3x3Padded transform;
+    s32 translationStep;
+    u8 updateCounter;
 } func_8002F658_30258_arg;
 
 typedef struct {
@@ -170,7 +167,8 @@ void func_8002F290_2FE90(void);
 void func_8002F3E4_2FFE4(void);
 void func_8002F5C8_301C8(void *);
 void func_8002F72C_3032C(void);
-void func_8002F88C_3048C(void);
+void func_8002F88C_3048C(func_8002F658_30258_arg *arg0);
+void func_8002F948_30548(void);
 void func_8002F980_30580(func_8002F658_30258_arg *);
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 void func_8002FA44_30644(void *);
@@ -276,15 +274,15 @@ void func_8002F36C_2FF6C(func_8002F658_30258_arg *arg0) {
     volatile u8 padding[0x20];
 
     getCurrentAllocation();
-    if (arg0->unk60 != 0) {
-        arg0->unk24 = (s32)freeNodeMemory((void *)arg0->unk24);
-        arg0->unk28 = (s32)freeNodeMemory((void *)arg0->unk28);
-        arg0->unk2C = (s32)freeNodeMemory((void *)arg0->unk2C);
-        if (arg0->unk60 != 0) {
+    if (arg0->updateCounter != 0) {
+        arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
+        arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
+        arg0->displayList.unk2C = (s32)freeNodeMemory((void *)arg0->displayList.unk2C);
+        if (arg0->updateCounter != 0) {
             goto end;
         }
     }
-    enqueueDisplayListObject(0, arg0);
+    enqueueDisplayListObject(0, &arg0->displayList);
 end:
     setCallback(&func_8002F3E4_2FFE4);
 }
@@ -328,31 +326,31 @@ void func_8002F5C8_301C8(void *untypedArg) {
 }
 
 void func_8002F614_30214(func_8002F658_30258_arg *arg0) {
-    arg0->unk24 = (s32)freeNodeMemory((void *)arg0->unk24);
-    arg0->unk28 = (s32)freeNodeMemory((void *)arg0->unk28);
-    arg0->unk2C = (s32)freeNodeMemory((void *)arg0->unk2C);
+    arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
+    arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
+    arg0->displayList.unk2C = (s32)freeNodeMemory((void *)arg0->displayList.unk2C);
 }
 
 void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     Mat3x3Padded sp10;
     Mat3x3Padded sp30;
     Mat3x3Padded *new_var;
-    void *temp_s3;
+    Mat3x3Padded *matrix;
 
     getCurrentAllocation();
     new_var = &sp10;
-    temp_s3 = ((void *)((s32)arg0)) + 0x3C;
-    memcpy(temp_s3, &identityMatrix, sizeof(Mat3x3Padded));
-    memcpy(&sp30, temp_s3, sizeof(Mat3x3Padded));
+    matrix = &arg0->transform;
+    memcpy(matrix, &identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(&sp30, matrix, sizeof(Mat3x3Padded));
     memcpy(new_var, &sp30, sizeof(Mat3x3Padded));
     createRotationMatrixYX(&sp10, 0x1000, 0x800);
     createZRotationMatrix(&sp30, 0x1F00);
-    func_8006B084_6BC84(&sp10, &sp30, temp_s3);
-    arg0->unk60 = 0;
-    arg0->unk20 = 0;
-    arg0->unk24 = 0;
-    arg0->unk28 = 0;
-    arg0->unk2C = 0;
+    func_8006B084_6BC84(&sp10, &sp30, matrix);
+    arg0->updateCounter = 0;
+    arg0->displayList.unk20 = NULL;
+    arg0->displayList.unk24 = NULL;
+    arg0->displayList.unk28 = NULL;
+    arg0->displayList.unk2C = 0;
     setCleanupCallback(&func_8002F980_30580);
     setCallback(&func_8002F72C_3032C);
 }
@@ -364,7 +362,24 @@ void func_8002F860_30460(DisplayListObject *arg0) {
     setCallback(func_8002F88C_3048C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F88C_3048C);
+void func_8002F88C_3048C(func_8002F658_30258_arg *arg0) {
+    GameState *state = (GameState *)getCurrentAllocation();
+
+    arg0->transform.unk14 += arg0->translationStep;
+    memcpy(arg0, &arg0->transform, sizeof(Mat3x3Padded));
+
+    arg0->updateCounter++;
+    if (arg0->updateCounter == 4) {
+        state->unk5C7++;
+        arg0->updateCounter = 0;
+        arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
+        arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
+        arg0->displayList.unk2C = (s32)freeNodeMemory((void *)arg0->displayList.unk2C);
+        setCallbackWithContinue(func_8002F948_30548);
+    } else {
+        enqueueDisplayListObject(0, &arg0->displayList);
+    }
+}
 
 void func_8002F948_30548(void) {
     GameState *state = (GameState *)getCurrentAllocation();
@@ -374,9 +389,9 @@ void func_8002F948_30548(void) {
 }
 
 void func_8002F980_30580(func_8002F658_30258_arg *arg0) {
-    arg0->unk24 = (s32)freeNodeMemory((void *)arg0->unk24);
-    arg0->unk28 = (s32)freeNodeMemory((void *)arg0->unk28);
-    arg0->unk2C = (s32)freeNodeMemory((void *)arg0->unk2C);
+    arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
+    arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
+    arg0->displayList.unk2C = (s32)freeNodeMemory((void *)arg0->displayList.unk2C);
 }
 
 void func_8002F9C4_305C4(func_8002FA70_30670_arg *arg0) {

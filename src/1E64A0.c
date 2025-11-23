@@ -9,6 +9,8 @@ extern void *func_80009EF8_AAF8(s32);
 extern void *func_80035F80_36B80(s32);
 extern void *func_8000B6B8_C2B8(s32);
 extern void func_800B99A0_1E6A50(void);
+extern u16 D_800BADF0_1E7EA0[];
+extern u16 D_800BADF2_1E7EA2[];
 
 void func_800B9C20_1E6CD0(cutsceneSys2Wait_exec_asset *arg0);
 

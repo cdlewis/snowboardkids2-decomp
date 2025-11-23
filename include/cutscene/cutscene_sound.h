@@ -1,4 +1,5 @@
 #include "common.h"
+#include "1DFAA0.h"
 
 typedef struct {
     s16 unk0;
@@ -11,7 +12,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0xF0];
-    s32 unkF0;
+    CutsceneSlotData *unkF0;
 } cutsceneSe3dPlay_exec_arg1_item;
 
 void cutsceneSePlay_init(void);

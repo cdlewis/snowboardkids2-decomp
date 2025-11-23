@@ -1,3 +1,4 @@
+#include "1DFAA0.h"
 #include "20F0.h"
 #include "common.h"
 #include "displaylist.h"
@@ -9,6 +10,8 @@ extern s16 D_800BAA60_1E7B10[];
 extern void func_80057ABC_586BC(s32, s32);
 extern void func_80058360_58F60(s32, s32, s32, s32);
 extern void func_80057DF0_589F0(s32, s32, s32, s32, s32);
+extern void func_80056B7C_5777C(void *, s16);
+extern void func_80056D64_57964(void *, s16, s16, s16);
 
 s16 func_800B4AF0_1E1BA0(void) {
     return D_800BAD0E_1E7DBE;
@@ -43,7 +46,29 @@ void func_800B4B30_1E1BE0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4BDC_1E1C8C);
+void func_800B4BDC_1E1C8C(s16 arg0, s16 arg1, s16 arg2, CutsceneSlotData *arg3) {
+    s32 buffer[3];
+    s16 duration;
+    s16 soundId;
+
+    if (arg3 != NULL) {
+        memcpy(buffer, &arg3->unk2C, 0xC);
+    } else {
+        buffer[0] = 0;
+        buffer[1] = 0;
+        buffer[2] = 0;
+    }
+
+    duration = arg2;
+    if (duration <= 0) {
+        soundId = func_800B4AFC_1E1BAC(arg0);
+        func_80056B7C_5777C(buffer, soundId);
+        return;
+    }
+
+    soundId = func_800B4AFC_1E1BAC(arg0);
+    func_80056D64_57964(buffer, soundId, 0, duration);
+}
 
 extern void func_80058220_58E20(s32, s32);
 

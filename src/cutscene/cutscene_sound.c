@@ -6,8 +6,8 @@ extern void func_800B4C80_1E1D30(void);
 extern void func_800B4CB0_1E1D60(void);
 extern void func_800B4B30_1E1BE0(s16, s16, s16, s16);
 extern void func_800B57F0_1E28A0(s16, s16, s16, s16, s16, s16);
-extern void func_800B4BDC_1E1C8C(s16, s16, s16, s32);
-extern void func_800B598C_1E2A3C(s16, s16, s16, s16, s32, s32);
+extern void func_800B4BDC_1E1C8C(s16, s16, s16, CutsceneSlotData *);
+extern void func_800B598C_1E2A3C(s16, s16, s16, s16, s16, CutsceneSlotData *);
 extern void func_80057ABC_586BC(s16, s16);
 
 void func_800B20D0_1DF180(void) {
@@ -49,16 +49,18 @@ s32 cutsceneSe3dPlay_validate(void) {
 }
 
 void cutsceneSe3dPlay_exec(cutsceneSePlay_exec_arg *arg0, cutsceneSe3dPlay_exec_arg1_item *arg1, s8 arg2) {
-    s32 *new_var;
-    s32 temp_t0;
-    new_var = &arg1[arg2].unkF0;
-    temp_t0 = *new_var;
+    CutsceneSlotData **slotPtr;
+    CutsceneSlotData *slotData;
+
+    slotPtr = &arg1[arg2].unkF0;
+    slotData = *slotPtr;
 
     if (arg0->unk4 == 1) {
-        func_800B4BDC_1E1C8C(arg0->unk0, arg0->unk2, arg0->unk8, temp_t0);
+        func_800B4BDC_1E1C8C(arg0->unk0, arg0->unk2, arg0->unk8, slotData);
         return;
     }
-    func_800B598C_1E2A3C(arg0->unk0, arg0->unk2, arg0->unk4, arg0->unk8, (s32)arg0->unk6, temp_t0);
+
+    func_800B598C_1E2A3C(arg0->unk0, arg0->unk2, arg0->unk4, arg0->unk8, arg0->unk6, slotData);
 }
 
 void cutsceneSeStop_init(void) {

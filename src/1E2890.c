@@ -1,3 +1,4 @@
+#include "1DFAA0.h"
 #include "common.h"
 
 extern u8 D_800BAF08_1E7FB8;
@@ -47,7 +48,7 @@ INCLUDE_ASM("asm/nonmatchings/1E2890", func_800B58D0_1E2980);
 void func_800B5984_1E2A34(void) {
 }
 
-void func_800B598C_1E2A3C(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5) {
+void func_800B598C_1E2A3C(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, CutsceneSlotData *arg5) {
     s16 *result;
     s16 temp_arg4;
 
@@ -65,7 +66,7 @@ void func_800B598C_1E2A3C(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 
         result[3] = arg3;
         result[4] = temp_arg4;
         result[5] = 0;
-        *(s32 *)&result[6] = arg5;
+        *(CutsceneSlotData **)&result[6] = arg5;
     }
 }
 

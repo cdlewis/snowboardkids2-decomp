@@ -194,7 +194,9 @@ typedef struct {
 } func_80032DE8_339E8_arg;
 
 typedef struct {
-    u8 padding[0x780];
+    u8 padding[0x77C];
+    s16 unk77C;
+    u8 padding2[0x2];
     s16 unk780;
     s16 unk782;
     u8 unk784[4];
@@ -316,7 +318,7 @@ extern s32 identityMatrix;
 
 void func_80032504_33104(func_80032504_33104_arg *arg0);
 void func_80030F6C_31B6C(func_80031510_32110_arg *arg0);
-void func_80030EAC_31AAC(void);
+void func_80030EAC_31AAC(func_80031510_32110_arg *arg0);
 void func_80030E54_31A54(func_80031510_32110_arg *arg0);
 void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     s32 sp20[8];
@@ -384,7 +386,25 @@ void func_80030E54_31A54(func_80031510_32110_arg *arg0) {
     enqueueDisplayListObject(1, (DisplayListObject *)&arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80030EAC_31AAC);
+void func_80030EAC_31AAC(func_80031510_32110_arg *arg0) {
+    func_80032DE8_339E8_asset *allocation = getCurrentAllocation();
+
+    arg0->unk60++;
+    arg0->unk62--;
+    allocation->unk780 = arg0->unk60;
+    allocation->unk782 = arg0->unk62;
+
+    setModelCameraTransform(arg0->unk0, 0, 0, -0x98, arg0->unk60, 0x97, arg0->unk62);
+
+    if (arg0->unk60 == 0) {
+        allocation->unk77C = 1;
+        unlinkNode(arg0->unk0);
+        func_80069CF8_6A8F8();
+    } else {
+        func_8006FED8_70AD8(arg0->unk0);
+        enqueueDisplayListObject(1, (DisplayListObject *)&arg0->unk4);
+    }
+}
 
 void func_80030F6C_31B6C(func_80031510_32110_arg *arg0) {
     arg0->unk0 = (Node_70B00 *)freeNodeMemory(arg0->unk0);
