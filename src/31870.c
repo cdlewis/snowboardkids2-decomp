@@ -281,7 +281,6 @@ extern s32 func_80035F80_36B80(s32);
 extern void func_800136E0_142E0(void);
 extern void func_80031138_31D38(void);
 extern void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
-extern void func_80032BCC_337CC(void);
 
 void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void func_800313A4_31FA4(void);
@@ -1054,8 +1053,10 @@ typedef struct {
 typedef struct {
     func_80032B0C_3370C_arg_element elements[4];
     u8 padding[0x24];
-    s8 unk84[4];
+    u8 unk84[4];
 } func_80032B0C_3370C_arg;
+
+void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0);
 
 void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0) {
     func_80032DE8_339E8_asset *allocation;
@@ -1085,7 +1086,43 @@ void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0) {
     setCallback(&func_80032BCC_337CC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032BCC_337CC);
+void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0) {
+    func_80032DE8_339E8_asset *allocation;
+    s32 i;
+    func_80032B0C_3370C_arg_element *ptr;
+
+    allocation = getCurrentAllocation();
+    i = 0;
+    ptr = arg0->elements;
+
+    while (i < 4) {
+        arg0->unk84[i]++;
+
+        if (allocation->unk79C == 1) {
+            ptr[i].unk2 -= 10;
+        } else {
+            ptr[i].unk2 += 10;
+        }
+
+        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &ptr[i]);
+        i++;
+    }
+
+    if (arg0->unk84[0] == 4) {
+        u8 *clearPtr;
+        allocation->unk788[19] = 0x10;
+        i = 3;
+        clearPtr = (u8 *)arg0 + 3;
+
+        do {
+            clearPtr[0x84] = 0;
+            i--;
+            clearPtr--;
+        } while (i >= 0);
+
+        setCallback(&func_80032708_33308);
+    }
+}
 
 void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0) {
     func_80032CB4_338B4_asset *s4;
