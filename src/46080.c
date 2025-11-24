@@ -61,9 +61,30 @@ extern s32 D_80090BBC_917BC[3];
 extern s32 D_80090B98_91798[];
 
 extern void transformVector2(void *matrix, void *vector, s32 *output);
-extern void func_80047330_47F30(void);
 extern void func_80069CF8_6A8F8(void);
 extern void func_800474B4_480B4(void);
+
+typedef struct {
+    u8 _pad0[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    u8 _pad20[0x1C];
+    s32 unk3C;
+} FunctionArg_80047330;
+
+typedef struct {
+    u8 pad1[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    u8 pad2[0x1C];
+    s32 unk3C;
+    s32 unk40;
+} func_800473F4_47FF4_arg;
+
+void func_80047330_47F30(FunctionArg_80047330 *arg0);
+void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
 
 typedef struct {
     void *unk0;
@@ -666,17 +687,34 @@ void func_8004728C_47E8C(TaskStruct *arg0) {
     setCallbackWithContinue(func_80047330_47F30);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80047330_47F30);
-
 typedef struct {
-    u8 pad1[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    u8 pad2[0x1C];
-    s32 unk3C;
-    s32 unk40;
-} func_800473F4_47FF4_arg;
+    u8 _pad0[0x76];
+    u8 unk76;
+} AllocationData;
+
+void func_80047330_47F30(FunctionArg_80047330 *arg0) {
+    AllocationData *allocation = getCurrentAllocation();
+    s32 i;
+    s32 tempVec[3];
+
+    if (allocation->unk76 == 0) {
+        transformVector2(D_80090BA4_917A4, arg0, tempVec);
+        arg0->unk14 += tempVec[0];
+        arg0->unk18 += tempVec[1];
+        arg0->unk1C += tempVec[2];
+
+        if (arg0->unk3C != 0) {
+            arg0->unk3C--;
+        } else {
+            arg0->unk3C = 0x2C;
+            setCallback(&func_800473F4_47FF4);
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 typedef struct {
     u8 pad[0x76];
