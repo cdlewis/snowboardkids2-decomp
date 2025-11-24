@@ -4,15 +4,26 @@
 extern s8 D_800BAF08_1E7FB8;
 extern void setCleanupCallback(void *);
 extern void setCallback(void *);
-extern void func_800B58D0_1E2980(void);
 extern void *scheduleTask(void *, u8, u8, u8);
 extern void func_80069CF8_6A8F8(void);
+extern void func_800B4B30_1E1BE0(s16, s16, s16, s16);
 extern void func_800B4BDC_1E1C8C(s16, s16, s16, CutsceneSlotData *);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+} func_800B58D0_1E2980_arg;
 
 void func_800B5984_1E2A34(void);
 void func_800B5A34_1E2AE4(void);
 void func_800B5B20_1E2BD0(void);
 void func_800B5898_1E2948(void);
+void func_800B58D0_1E2980(func_800B58D0_1E2980_arg *arg0);
 
 typedef struct {
     s16 unk0;
@@ -56,7 +67,19 @@ void func_800B5898_1E2948(void) {
     setCallback(func_800B58D0_1E2980);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E2890", func_800B58D0_1E2980);
+void func_800B58D0_1E2980(func_800B58D0_1E2980_arg *arg0) {
+    if (arg0->unk6 == 0 || D_800BAF08_1E7FB8 != 0) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    if ((arg0->unkC % arg0->unkA) == 0) {
+        func_800B4B30_1E1BE0(arg0->unk0, arg0->unk2, arg0->unk4, arg0->unk8);
+        arg0->unk6--;
+    }
+
+    arg0->unkC++;
+}
 
 void func_800B5984_1E2A34(void) {
 }
