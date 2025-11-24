@@ -60,7 +60,6 @@ extern s32 D_80090B98_91798[];
 
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern void func_80047330_47F30(void);
-extern void func_800471D0_47DD0(void);
 extern void func_80069CF8_6A8F8(void);
 
 typedef struct {
@@ -570,6 +569,8 @@ typedef struct {
     s32 unk3C;
 } func_8004711C_47D1C_arg;
 
+void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0);
+
 void func_8004711C_47D1C(func_8004711C_47D1C_arg *arg0) {
     s32 vec[3];
     s32 i;
@@ -596,16 +597,7 @@ void func_8004711C_47D1C(func_8004711C_47D1C_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800471D0_47DD0);
-
-typedef struct {
-    u8 _pad[0xC];
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    u8 _pad2[0x44];
-    u8 unk5C;
-} AllocationStruct;
+extern s32 D_80090BA4_917A4[3];
 
 typedef struct {
     u8 _pad[0x14];
@@ -615,6 +607,43 @@ typedef struct {
     u8 _pad2[0x1C];
     s32 unk3C;
 } TaskStruct;
+
+void func_8004728C_47E8C(TaskStruct *);
+
+void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0) {
+    Allocation_47D1C *allocation;
+    s32 stackVec[3];
+    s32 i;
+
+    allocation = (Allocation_47D1C *)getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        transformVector2(D_80090BA4_917A4, arg0, stackVec);
+
+        arg0->displayListObject.unk10.position.X += stackVec[0];
+        arg0->displayListObject.unk10.position.Y += stackVec[1];
+        arg0->displayListObject.unk10.position.Z += stackVec[2];
+
+        if (arg0->unk3C != 0) {
+            arg0->unk3C -= 1;
+        } else {
+            setCallback(&func_8004728C_47E8C);
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
+
+typedef struct {
+    u8 _pad[0xC];
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    u8 _pad2[0x44];
+    u8 unk5C;
+} AllocationStruct;
 
 void func_8004728C_47E8C(TaskStruct *arg0) {
     s32 vec[3];
