@@ -55,11 +55,13 @@ extern void func_80056B7C_5777C(void *, s32);
 
 extern s32 D_80090E20_91A20;
 extern s32 D_80090BC8_917C8[3];
+extern s32 D_80090BBC_917BC[3];
 extern s32 D_80090B98_91798[];
 
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern void func_80047330_47F30(void);
 extern void func_800471D0_47DD0(void);
+extern void func_80069CF8_6A8F8(void);
 
 typedef struct {
     void *unk0;
@@ -585,7 +587,42 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_800474B4_480B4);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80047590_48190);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80047660_48260);
+typedef struct {
+    u8 pad0[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    u8 pad20[0x1C];
+    s32 unk3C;
+} func_80047660_48260_arg;
+
+void func_80047660_48260(func_80047660_48260_arg *arg0) {
+    GameState *alloc;
+    s32 stackBuffer[3];
+    s32 i;
+
+    alloc = (GameState *)getCurrentAllocation();
+
+    if (alloc->gamePaused == 0) {
+        transformVector2(D_80090BBC_917BC, arg0, stackBuffer);
+
+        arg0->unk14 += stackBuffer[0];
+        arg0->unk18 += stackBuffer[1];
+        arg0->unk1C += stackBuffer[2];
+
+        if (arg0->unk3C != 0) {
+            arg0->unk3C--;
+        } else {
+            func_80069CF8_6A8F8();
+        }
+
+        i = 0;
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 typedef struct {
     u8 _pad[0x24];
