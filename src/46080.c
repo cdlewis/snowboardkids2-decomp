@@ -475,6 +475,34 @@ void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
+typedef union {
+    s16 halfword;
+    struct {
+        u8 high;
+        u8 low;
+    } bytes;
+} HalfwordBytes;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+} Struct_unk20;
+
+typedef struct {
+    u8 _pad[0x20];
+    Struct_unk20 *unk20;
+    u8 _pad2[0xC];
+    s32 unk30;
+    u8 _pad3[0x10];
+    HalfwordBytes unk44;
+    HalfwordBytes unk46;
+    s16 unk48;
+    s16 unk4A;
+    s16 unk4C;
+} func_80046628_47228_arg;
+
 typedef struct {
     u8 _pad[0x24];
     void *unk24;
@@ -483,13 +511,13 @@ typedef struct {
     u8 _pad2[0xC];
     void *unk3C;
     u8 _pad3[0x4];
-    s16 unk44;
-    s16 unk46;
+    HalfwordBytes unk44;
+    HalfwordBytes unk46;
     s16 unk48;
 } func_80046708_47308_arg;
 
 extern s32 identityMatrix[];
-void func_80046628_47228(void);
+void func_80046628_47228(func_80046628_47228_arg *);
 void func_80046708_47308(func_80046708_47308_arg *arg0);
 
 void func_800465A8_471A8(func_80046708_47308_arg *arg0) {
@@ -498,13 +526,46 @@ void func_800465A8_471A8(func_80046708_47308_arg *arg0) {
     arg0->unk2C = NULL;
     memcpy(arg0, identityMatrix, 0x20);
     arg0->unk3C = func_80055D7C_5697C(arg0->unk48);
-    arg0->unk44 = 0;
-    arg0->unk46 = 0;
+    arg0->unk44.halfword = 0;
+    arg0->unk46.halfword = 0;
     setCleanupCallback(&func_80046708_47308);
     setCallback(&func_80046628_47228);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80046628_47228);
+extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
+extern void func_80046CB4_478B4(DisplayListObject *);
+extern void func_80046CE0_478E0(DisplayListObject *);
+extern void func_80046D0C_4790C(DisplayListObject *);
+
+void func_80046628_47228(func_80046628_47228_arg *arg0) {
+    u8 byte_45;
+    u8 byte_47;
+    s32 i;
+
+    arg0->unk44.halfword = arg0->unk44.halfword + arg0->unk4A;
+    byte_45 = arg0->unk44.bytes.low;
+
+    arg0->unk46.halfword = arg0->unk46.halfword + arg0->unk4C;
+    byte_47 = arg0->unk46.bytes.low;
+
+    arg0->unk30 = 0;
+    arg0->unk44.halfword = byte_45;
+    arg0->unk46.halfword = byte_47;
+
+    for (i = 0; i < 4; i++) {
+        if (arg0->unk20->unk4 != NULL) {
+            debugEnqueueCallback(i, 1, &func_80046CB4_478B4, arg0);
+        }
+
+        if (arg0->unk20->unk8 != NULL) {
+            debugEnqueueCallback(i, 3, &func_80046CE0_478E0, arg0);
+        }
+
+        if (arg0->unk20->unkC != NULL) {
+            debugEnqueueCallback(i, 5, &func_80046D0C_4790C, arg0);
+        }
+    }
+}
 
 void func_80046708_47308(func_80046708_47308_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
