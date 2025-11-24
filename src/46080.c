@@ -59,10 +59,10 @@ extern s32 D_80090E20_91A20;
 extern s32 D_80090BC8_917C8[3];
 extern s32 D_80090BBC_917BC[3];
 extern s32 D_80090B98_91798[];
+extern s32 D_80090BB0_917B0;
 
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern void func_80069CF8_6A8F8(void);
-extern void func_800474B4_480B4(void);
 
 typedef struct {
     u8 _pad0[0x14];
@@ -85,6 +85,8 @@ typedef struct {
 
 void func_80047330_47F30(FunctionArg_80047330 *arg0);
 void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
+void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0);
+void func_80047590_48190(void);
 
 typedef struct {
     void *unk0;
@@ -812,7 +814,41 @@ void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0) {
     } while (i < 4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800474B4_480B4);
+typedef struct {
+    u8 pad0[0x76];
+    u8 unk76;
+} Allocation_800474B4;
+
+void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0) {
+    Allocation_800474B4 *allocation;
+    s32 vector[3];
+    s32 i;
+    s32 rotation;
+    u16 angle;
+
+    allocation = getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        rotation = arg0->unk40;
+        angle = rotation + 0x1080;
+        arg0->unk40 = rotation + 0x80;
+        createYRotationMatrix((Mat3x3Padded *)arg0, angle);
+        transformVector2(&D_80090BB0_917B0, arg0, vector);
+
+        arg0->unk14 += vector[0];
+        arg0->unk18 += vector[1];
+        arg0->unk1C += vector[2];
+
+        if (arg0->unk40 == 0x1080) {
+            arg0->unk3C = 0x2C;
+            setCallback(&func_80047590_48190);
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80047590_48190);
 
