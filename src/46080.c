@@ -102,7 +102,75 @@ typedef struct {
 
 void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80045480_46080);
+extern s32 identityMatrix[];
+extern void *D_80094DD0_959D0;
+extern s32 func_80055E40_56A40(s16);
+extern s32 func_80055E54_56A54(s16);
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_80045768_46368_arg;
+
+void func_80045768_46368(func_80045768_46368_arg *);
+
+typedef struct {
+    u8 _pad[0xB4];
+    s16 unkB4;
+} ScheduledTask;
+
+void func_80045564_46164(ScheduledTask *);
+
+typedef struct {
+    u8 _pad0[0x20];
+    s32 unk20;
+    void *unk24;
+    void *unk28;
+    s32 unk2C;
+    u8 _pad30[0xC];
+    u8 _pad3C[0x20];
+    s32 unk5C;
+    void *unk60;
+    void *unk64;
+    s32 unk68;
+    u8 _pad6C[0xC];
+    u8 _pad78[0x20];
+    void *unk98;
+    void *unk9C;
+    void *unkA0;
+    s32 unkA4;
+    u8 _padA8[0xC];
+    s16 unkB4;
+} func_80045480_46080_arg;
+
+void func_80045480_46080(func_80045480_46080_arg *arg0) {
+    void *identity = identityMatrix;
+
+    memcpy(arg0, identity, 0x20);
+
+    arg0->unk20 = func_80055E40_56A40(arg0->unkB4);
+    arg0->unk24 = func_80055DC4_569C4(arg0->unkB4);
+    arg0->unk28 = func_80055DF8_569F8(arg0->unkB4);
+    arg0->unk2C = 0;
+
+    memcpy((u8 *)arg0 + 0x3C, identity, 0x20);
+
+    arg0->unk5C = func_80055E54_56A54(arg0->unkB4);
+    arg0->unk68 = 0;
+    arg0->unk60 = arg0->unk24;
+    arg0->unk64 = arg0->unk28;
+
+    memcpy((u8 *)arg0 + 0x78, identity, 0x20);
+
+    arg0->unk98 = &D_80094DD0_959D0;
+    arg0->unkA4 = 0;
+    arg0->unk9C = arg0->unk24;
+    arg0->unkA0 = arg0->unk28;
+
+    setCleanupCallback(&func_80045768_46368);
+    setCallback(&func_80045564_46164);
+}
 
 typedef struct {
     u8 _pad[0x3C];
@@ -111,11 +179,6 @@ typedef struct {
 } func_800455BC_461BC_arg;
 
 void func_800455BC_461BC(func_800455BC_461BC_arg *arg0);
-
-typedef struct {
-    u8 _pad[0xB4];
-    s16 unkB4;
-} ScheduledTask;
 
 void func_80045564_46164(ScheduledTask *arg0) {
     if (arg0->unkB4 == 1) {
@@ -143,18 +206,10 @@ void func_800455BC_461BC(func_800455BC_461BC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004562C_4622C);
 
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_80045768_46368_arg;
-
 void func_80045768_46368(func_80045768_46368_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
-
-extern void func_80045480_46080(void);
 
 void func_800457A0_463A0(s16 arg0) {
     ScheduledTask *task = scheduleTask(func_80045480_46080, 0, 0, 0xD2);
