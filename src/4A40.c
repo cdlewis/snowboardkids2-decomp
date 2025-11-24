@@ -37,6 +37,13 @@ static asset D_8008BFA0_8CBA0[6] = {
 };
 
 void func_80004368_4F68(void);
+extern void func_80004454_5054(void);
+extern void func_800B02E0(void *);
+extern void func_800B0760(void *);
+extern void func_800B00C0_9FF70(void *);
+extern void func_800B0930(void *);
+extern void func_800B016C(void *);
+void func_80004570_5170(void *);
 
 typedef struct {
     s8 unk0;
@@ -167,7 +174,35 @@ void func_80003EE0_4AE0(void) {
     setGameStateHandler(&func_80004368_4F68);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4A40", func_80004368_4F68);
+void func_80004368_4F68(void) {
+    func_80003EE0_4AE0_task_memory *state;
+
+    state = (func_80003EE0_4AE0_task_memory *)getCurrentAllocation();
+
+    if (state->unk2 == 0x1C98) {
+        state->unk2 = 0x1C98;
+        func_80057564_58164(4);
+        func_8006FDA0_709A0(&state->unk8, 0xFF, 0x1E);
+        func_8006FDA0_709A0(&state->unk1E0, 0xFF, 0x1E);
+        func_8006FDA0_709A0(&state->unk3B8, 0xFF, 0x1E);
+        func_8006FDA0_709A0(&state->unk590, 0xFF, 0x1E);
+        func_8006FDA0_709A0(&state->unk768, 0xFF, 0x1E);
+        setGameStateHandler(func_80004454_5054);
+    }
+
+    if (state->unk0 == 0) {
+        func_800B02E0(state);
+        func_800B0760(state);
+        func_800B00C0_9FF70(state);
+        state->unk0 = 1;
+    }
+
+    func_800B0930(state);
+    func_800B016C(state);
+    func_80004570_5170(state);
+
+    state->unk2 = (u16)state->unk2 + 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/4A40", func_80004454_5054);
 
