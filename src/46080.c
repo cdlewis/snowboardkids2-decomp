@@ -86,7 +86,27 @@ typedef struct {
 void func_80047330_47F30(FunctionArg_80047330 *arg0);
 void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
 void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0);
-void func_80047590_48190(void);
+
+typedef struct {
+    u8 _pad0[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    u8 _pad20[0x1C];
+    s32 unk3C;
+} func_80047590_48190_arg;
+
+typedef struct {
+    u8 pad0[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    u8 pad20[0x1C];
+    s32 unk3C;
+} func_80047660_48260_arg;
+
+void func_80047590_48190(func_80047590_48190_arg *arg0);
+void func_80047660_48260(func_80047660_48260_arg *arg0);
 
 typedef struct {
     void *unk0;
@@ -850,16 +870,33 @@ void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80047590_48190);
+void func_80047590_48190(func_80047590_48190_arg *arg0) {
+    Allocation_47D1C *allocation;
+    s32 vec[3];
+    s32 i;
 
-typedef struct {
-    u8 pad0[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    u8 pad20[0x1C];
-    s32 unk3C;
-} func_80047660_48260_arg;
+    allocation = (Allocation_47D1C *)getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        createYRotationMatrix((Mat3x3Padded *)arg0, 0);
+        transformVector2(D_80090B98_91798, arg0, vec);
+
+        arg0->unk14 += vec[0];
+        arg0->unk18 += vec[1];
+        arg0->unk1C += vec[2];
+
+        if (arg0->unk3C != 0) {
+            arg0->unk3C -= 1;
+        } else {
+            arg0->unk3C = 0x32;
+            setCallback(&func_80047660_48260);
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 void func_80047660_48260(func_80047660_48260_arg *arg0) {
     GameState *alloc;
