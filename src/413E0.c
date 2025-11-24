@@ -18,14 +18,16 @@ typedef struct {
 } func_80040E00_41A00_arg;
 
 extern s32 gFrameCounter;
+extern s32 D_800907F8_913F8;
 
 extern void *func_80055D7C_5697C(s32);
 extern void func_80040870_41470(void);
 extern void func_8004106C_41C6C(void);
 extern void *func_80035F80_36B80(s32);
 extern void *loadAsset_34F7E0(void);
+extern void func_80035260_35E60(s32, s32, s16, s16, u8, u8, u8, u8, u8);
+extern void func_8006D4B8_6E0B8(s32, s16, s16, s16, s32, u8, u8, u8, u8, u8, u8, u8, u8);
 void func_80040E00_41A00(func_80040E00_41A00_arg *);
-void func_80040E4C_41A4C(void);
 void func_80040F34_41B34(func_800407E0_413E0_arg *);
 void func_800413E0_41FE0(func_800407E0_413E0_arg *arg0);
 
@@ -52,15 +54,37 @@ typedef struct {
 } func_80040D48_41948_arg;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
+    u8 high;
+    u8 low;
+} Bytes;
+
+typedef union {
+    s16 asS16;
+    Bytes asBytes;
+} S16OrBytes;
+
+typedef union {
+    s16 asS16;
+    Bytes asBytes;
+} S16OrBytesC;
+
+typedef union {
+    s16 asS16;
+    Bytes asBytes;
+} S16OrBytesE;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
     s16 unk8;
     s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
+    S16OrBytesC unkC;
+    S16OrBytesE unkE;
+    S16OrBytes unk10;
     s16 unk12;
 } func_80040D80_41980_arg;
+
+void func_80040E4C_41A4C(func_80040D80_41980_arg *);
 
 void func_8004083C_4143C(func_8004083C_4143C_arg *arg0);
 void func_80040948_41548(func_80040948_41548_arg *arg0);
@@ -111,9 +135,9 @@ void func_80040D80_41980(func_80040D80_41980_arg *arg0) {
         arg0->unk4 = NULL;
         setCallback(&func_80040E00_41A00);
     } else {
-        arg0->unk4 = func_80035F80_36B80(1);
-        arg0->unk0 = loadAsset_34F7E0();
-        arg0->unk10 = 0x80;
+        arg0->unk4 = (s32)func_80035F80_36B80(1);
+        arg0->unk0 = (s32)loadAsset_34F7E0();
+        arg0->unk10.asS16 = 0x80;
         arg0->unk12 = -8;
         setCallback(&func_80040E4C_41A4C);
     }
@@ -128,7 +152,45 @@ void func_80040E00_41A00(func_80040E00_41A00_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80040E4C_41A4C);
+void func_80040E4C_41A4C(func_80040D80_41980_arg *arg0) {
+    func_80035260_35E60(
+        arg0->unk4,
+        (s32)&D_800907F8_913F8,
+        -0x68,
+        arg0->unk8,
+        0xFF,
+        0xFF,
+        0,
+        arg0->unkC.asBytes.low,
+        arg0->unkE.asBytes.low
+    );
+
+    arg0->unk10.asS16 += arg0->unk12;
+
+    if (arg0->unk10.asS16 == 0x20) {
+        arg0->unk12 = 8;
+    }
+
+    if (arg0->unk10.asS16 == 0x80) {
+        arg0->unk12 = -8;
+    }
+
+    func_8006D4B8_6E0B8(
+        arg0->unk0,
+        -0x68,
+        arg0->unk8,
+        0xD,
+        2,
+        0,
+        arg0->unk10.asBytes.low,
+        0xFF,
+        0,
+        0,
+        0xC0,
+        arg0->unkC.asBytes.low,
+        arg0->unkE.asBytes.low
+    );
+}
 
 void func_80040F34_41B34(func_800407E0_413E0_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
@@ -149,8 +211,8 @@ void func_80040F6C_41B6C(s32 arg0, s16 arg1, u8 arg2, u8 arg3, s16 arg4, s16 arg
                 task->unkA = 1;
             }
             task->unk8 = arg1;
-            task->unkC = arg4;
-            task->unkE = arg5;
+            task->unkC.asS16 = arg4;
+            task->unkE.asS16 = arg5;
         }
     }
 }
