@@ -38,6 +38,8 @@ extern void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
 extern void func_800B7620_1E46D0(CutsceneSlotData *arg0, s16 arg1, s16 arg2, s16 arg3);
 extern void func_800B7914_1E49C4(CutsceneSlotData *, s32, s32, s32, s16);
 extern void func_800B7A60_1E4B10(CutsceneSlotData *, SceneModel *, s32, s32, s32, s16);
+extern StateEntryItem *func_800B34B0_1E0560(s32);
+extern s32 func_800B734C_1E43FC(CutsceneSlotData *, SceneModel *, s16);
 
 void cutsceneChrPosition_init(void) {
 }
@@ -167,7 +169,32 @@ s32 cutsceneChrTurn_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrTurn_exec);
+void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlot *slot;
+    cutsceneChrTurn_exec_arg *temp_arg0;
+    s16 animId;
+    u16 temp_s0;
+    s32 result;
+
+    temp_arg0 = arg0;
+    animId = -1;
+    slot = &arg1->slots[arg2];
+
+    temp_s0 = func_800B34B0_1E0560(arg2)->unk4;
+
+    result = func_800B734C_1E43FC(&slot->slotData, slot->model, temp_arg0->unk0);
+
+    switch (result) {
+        case 1:
+            animId = func_800015DC_21DC(temp_s0);
+            break;
+        case 2:
+            animId = func_800015E4_21E4(temp_s0);
+            break;
+    }
+
+    func_80002220_2E20(slot->model, temp_arg0->unk2, temp_arg0->unk4, -1, animId);
+}
 
 void cutsceneChrMove2_init(void) {
 }

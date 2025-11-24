@@ -183,9 +183,16 @@ void cutsceneChrDisp_exec(s8 *a0, CutsceneManager *arg1, s8 arg2);
 void cutsceneChrItem_init(void);
 s32 cutsceneChrItem_validate(void);
 void cutsceneChrItem_exec(s8 *a0, CutsceneManager *arg1, s8 arg2);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+} cutsceneChrTurn_exec_arg;
+
 void cutsceneChrTurn_init(void);
 s32 cutsceneChrTurn_validate(void);
-void cutsceneChrTurn_exec(void);
+void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 void cutsceneChrMove2_init(void);
 s32 cutsceneChrMove2_validate(void);
 void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
