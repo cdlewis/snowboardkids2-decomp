@@ -44,7 +44,9 @@ typedef struct {
 
 extern void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
 
-extern void func_80048E34_49A34(void);
+extern void *D_80090CEC_918EC[];
+extern void *D_80090CF0_918F0[];
+extern s32 D_80090CF4_918F4[];
 extern void func_800462D8_46ED8(void);
 extern void func_8004B834_4C434(void);
 extern u8 func_800698DC_6A4DC(void);
@@ -979,7 +981,63 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004899C_4959C);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048AE8_496E8);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80048E34_49A34);
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+    u8 _pad[0x4];
+    s16 unk14;
+    u8 _pad2[0x2];
+    u8 unk18;
+    u8 _pad3[0x3];
+    u8 unk1C;
+    u8 _pad4[0x3];
+    u8 unk20;
+    u8 _pad5[0x3];
+    u8 unk24;
+} func_80048E34_49A34_arg;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+} func_80049230_49E30_arg;
+
+void func_80049104_49D04(void);
+void func_80049230_49E30(func_80049230_49E30_arg *);
+
+void func_80048E34_49A34(func_80048E34_49A34_arg *arg0) {
+    s32 i;
+    s32 index;
+    func_80048E34_49A34_arg *ptr;
+
+    arg0->unk0 = loadAsset_B7E70();
+    arg0->unk4 = loadAsset_216290();
+
+    index = arg0->unk14 * 3;
+
+    arg0->unkC =
+        dmaRequestAndUpdateStateWithSize(D_80090CEC_918EC[index], D_80090CF0_918F0[index], D_80090CF4_918F4[index]);
+    arg0->unk8 = NULL;
+
+    setCleanupCallback(&func_80049230_49E30);
+
+    i = 0;
+loop:
+    ptr = (func_80048E34_49A34_arg *)((u8 *)arg0 + i);
+    ptr->unk18 = randA() & 3;
+    ptr->unk1C = randA() & 3;
+    ptr->unk20 = randA();
+    ptr->unk24 = randA();
+    i++;
+    if (i < 4) {
+        goto loop;
+    }
+
+    setCallback(&func_80049104_49D04);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048F0C_49B0C);
 
@@ -1005,13 +1063,6 @@ void func_800491CC_49DCC(func_800491CC_49DCC_arg *arg0) {
         func_80048AE8_496E8(&arg0->unk8[i], arg0);
     }
 }
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-} func_80049230_49E30_arg;
 
 void func_80049230_49E30(func_80049230_49E30_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
