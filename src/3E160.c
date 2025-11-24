@@ -26,6 +26,11 @@ extern void func_8004F1D4_4FDD4(void);
 extern void func_8003EFDC_3FBDC(void);
 extern void func_8004E6F8_4F2F8(void);
 extern void func_800BB2B0(void);
+extern void func_8004D8E4_4E4E4(void);
+extern void func_800574A0_580A0(s32);
+extern void func_8004E6A4_4F2A4(s32, s32);
+extern void func_8004F194_4FD94(s32);
+extern void terminateTasksByTypeAndID(s32, s32);
 extern s8 D_800AFCE2_A7052;
 extern s32 D_80090460_91060[];
 extern s32 D_800904A0_910A0[];
@@ -45,6 +50,7 @@ void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
 void func_8003FF78_40B78(void);
 void func_800B99E0(void *);
+void func_80040304_40F04(void);
 
 INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);
 
@@ -343,7 +349,35 @@ void func_800401E8_40DE8(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_80040238_40E38);
+void func_80040238_40E38(void) {
+    GameState *allocation;
+    s32 counter;
+
+    allocation = (GameState *)getCurrentAllocation();
+    counter = allocation->unk4C;
+
+    if (counter == 0) {
+        scheduleTask((void *)func_8004D8E4_4E4E4, 1, 0, 0xE6);
+        allocation->unk4C = 0xB4;
+
+        if (((u8 *)allocation->players)[0xBC4] == 0) {
+            D_800A24A0_A30A0 = 3;
+            func_800574A0_580A0(8);
+            func_8004E6A4_4F2A4(0, 0);
+            func_8004F194_4FD94(0x78);
+            terminateTasksByTypeAndID(0, 1);
+        } else {
+            D_800A24A0_A30A0 = 4;
+            func_800574A0_580A0(9);
+            terminateTasksByTypeAndID(0, 1);
+        }
+
+        allocation->unk7B = 1;
+        setGameStateHandler((void *)func_80040304_40F04);
+    } else {
+        allocation->unk4C = counter - 1;
+    }
+}
 
 void func_80040304_40F04(void) {
     GameState *gameState;
