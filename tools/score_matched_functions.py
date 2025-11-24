@@ -73,34 +73,25 @@ def should_process_commit(message: str) -> bool:
     return True
 
 
-def extract_potential_functions(message: str) -> List[str]:
+def extract_potential_functions(message: str, score_map: dict) -> List[str]:
     """Extract potential function names from commit message.
 
-    Function names typically match patterns like:
-    - func_80032330_32F30
-    - __MusIntFifoProcessCommand
+    Checks every word in the message against the score_map to find actual functions.
+    This handles commits with multiple space-separated function names.
     """
     # Split message into words
     words = message.split()
 
-    # Common function name patterns
-    patterns = [
-        r'^func_[0-9A-Fa-f]+_[0-9A-Fa-f]+$',  # func_80032330_32F30
-        r'^[a-zA-Z_][a-zA-Z0-9_]*$',           # Standard C identifiers
-    ]
-
-    potential_functions = []
+    found_functions = []
     for word in words:
         # Remove common punctuation
-        cleaned = word.strip('.,;:!?')
+        cleaned = word.strip('.,;:!?()')
 
-        # Check if it matches any function pattern
-        for pattern in patterns:
-            if re.match(pattern, cleaned):
-                potential_functions.append(cleaned)
-                break
+        # Check if this word is an actual function in the codebase
+        if cleaned in score_map:
+            found_functions.append(cleaned)
 
-    return potential_functions
+    return found_functions
 
 
 def score_function(func_name: str) -> Optional[float]:
@@ -153,12 +144,11 @@ def main():
         if not should_process_commit(message):
             continue
 
-        # Extract potential function names
-        potential_funcs = extract_potential_functions(message)
+        # Extract function names by checking each word against score_map
+        potential_funcs = extract_potential_functions(message, score_map)
 
         for func_name in potential_funcs:
-            if func_name in score_map:
-                found_functions[func_name] = score_map[func_name]
+            found_functions[func_name] = score_map[func_name]
 
     # Print results sorted by score
     if not found_functions:
