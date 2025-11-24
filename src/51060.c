@@ -128,6 +128,21 @@ typedef struct {
     s32 unk28;
 } func_80050DB0_519B0_arg;
 
+typedef struct {
+    loadAssetMetadata_arg unk0;
+    u8 _pad2[0x4];
+} func_800518AC_524AC_element;
+
+typedef struct {
+    func_800518AC_524AC_element elements[6];
+    void *unkC0;
+    u8 _padC4[0x4];
+    u8 unkC8[0xC];
+    s8 unkD4;
+    u8 unkD5;
+    u8 unkD6;
+} func_800518AC_524AC_arg;
+
 void func_800504A0_510A0(func_800504A0_510A0_arg *);
 void func_800505D8_511D8(s32 **arg0);
 
@@ -143,17 +158,20 @@ void func_80051124_51D24(void);
 void func_80051250_51E50(func_800506B4_512B4_arg *);
 void func_80051760_52360(func_800516F4_522F4_arg *);
 void func_80051800_52400(func_800516F4_522F4_arg *);
-void func_800518AC_524AC(void);
+void func_800518AC_524AC(func_800518AC_524AC_arg *);
 void func_80051B8C_5278C(func_8005186C_5246C_arg *);
-
-extern loadAssetMetadata_arg D_80090EC0_91AC0;
+void func_80050BD4_517D4(s32 **);
+void func_80050504_51104(func_80050504_51104_arg *);
 
 extern void func_80010240_10E40(void);
 extern void func_80010924_11524(void);
 extern void func_80066444_67044(s32, void *);
+extern void func_80051978_52578(void);
 
-void func_80050BD4_517D4(s32 **);
-void func_80050504_51104(func_80050504_51104_arg *);
+extern loadAssetMetadata_arg D_80090EC0_91AC0;
+extern loadAssetMetadata_arg D_80090F00_91B00;
+extern void *D_80090F40_91B40;
+extern void *D_80090F4C_91B4C;
 
 void func_80050460_51060(void **node) {
     *node = load_3ECE40();
@@ -434,7 +452,25 @@ void func_8005186C_5246C(func_8005186C_5246C_arg *arg0) {
     setCallbackWithContinue(&func_800518AC_524AC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_800518AC_524AC);
+void func_800518AC_524AC(func_800518AC_524AC_arg *arg0) {
+    s32 i;
+
+    for (i = 0; i < 6; i++) {
+        loadAssetMetadata(&arg0->elements[i].unk0, arg0->unkC0, arg0->unkD4);
+        arg0->elements[i].unk0.unk0 = &D_80090F00_91B00;
+
+        if (arg0->unkD6 == 0) {
+            memcpy(&arg0->unkC8, &D_80090F40_91B40, 0xC);
+            arg0->elements[i].unk0.unk1A = 0x90;
+        } else {
+            memcpy(&arg0->unkC8, &D_80090F4C_91B4C, 0xC);
+            arg0->elements[i].unk0.unk1A = 0xF0;
+        }
+    }
+
+    arg0->unkD5 = 0;
+    setCallbackWithContinue(&func_80051978_52578);
+}
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80051978_52578);
 
