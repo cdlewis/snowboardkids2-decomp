@@ -13,7 +13,10 @@ typedef struct {
 } AssetWithoutSize;
 
 typedef struct {
-    u8 padding[0x2C];
+    s32 unk0;
+    s32 unk4;
+    u16 unk8;
+    u8 padding[0x2C - 0xA];
 } D_80090F90_91B90_item;
 
 typedef struct {

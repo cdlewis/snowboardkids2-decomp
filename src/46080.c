@@ -664,17 +664,54 @@ void func_80046FEC_47BEC(func_80046FEC_47BEC_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80047024_47C24);
+typedef struct {
+    DisplayListObject displayListObject;
+    s32 unk3C;
+} func_8004711C_47D1C_arg;
+
+extern s32 D_80090B8C_9178C[3];
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_80047718_48318_arg;
+
+void func_80047718_48318(func_80047718_48318_arg *);
+void func_8004711C_47D1C(func_8004711C_47D1C_arg *);
+
+void func_80047024_47C24(func_8004711C_47D1C_arg *arg0) {
+    s32 spStack[3];
+    GameState_46080 *temp_s0;
+    u16 temp_s2;
+    D_80090F90_91B90_item *temp_s3;
+
+    temp_s0 = (GameState_46080 *)getCurrentAllocation();
+    temp_s2 = func_800625A4_631A4(&temp_s0->unk30, spStack) + 0x800;
+    temp_s3 = func_80055D10_56910(temp_s0->unk5C);
+
+    arg0->displayListObject.unk20 = (void *)((u32)func_80055E68_56A68(temp_s0->unk5C) + 0x10);
+    arg0->displayListObject.unk24 = func_80055DC4_569C4(temp_s0->unk5C);
+    arg0->displayListObject.unk28 = func_80055DF8_569F8(temp_s0->unk5C);
+    arg0->displayListObject.unk2C = 0;
+
+    createYRotationMatrix((Mat3x3Padded *)arg0, temp_s2 + temp_s3->unk8);
+    arg0->displayListObject.unk10.position.Y = spStack[1];
+
+    transformVector2(&D_80090B8C_9178C, arg0, spStack);
+
+    arg0->displayListObject.unk10.position.X = temp_s3->unk0 + spStack[0];
+    arg0->displayListObject.unk10.position.Z = temp_s3->unk4 + spStack[2];
+    arg0->unk3C = 0x30;
+
+    setCleanupCallback(&func_80047718_48318);
+    setCallbackWithContinue(&func_8004711C_47D1C);
+}
 
 typedef struct {
     u8 _pad[0x76];
     u8 unk76;
 } Allocation_47D1C;
-
-typedef struct {
-    DisplayListObject displayListObject;
-    s32 unk3C;
-} func_8004711C_47D1C_arg;
 
 void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0);
 
@@ -925,12 +962,6 @@ void func_80047660_48260(func_80047660_48260_arg *arg0) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
     }
 }
-
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_80047718_48318_arg;
 
 void func_80047718_48318(func_80047718_48318_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
