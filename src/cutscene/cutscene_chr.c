@@ -311,7 +311,33 @@ s32 cutsceneChrTurn2_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrTurn2_exec);
+extern s32 func_800B7450_1E4500(CutsceneSlotData *, SceneModel *, s16, s16, s32);
+
+void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlot *slot;
+    u16 temp_s3;
+    s32 animId;
+    s32 result;
+
+    slot = &arg1->slots[arg2];
+
+    temp_s3 = func_800B34B0_1E0560(arg2)->unk4;
+
+    animId = -1;
+
+    result = func_800B7450_1E4500(&slot->slotData, slot->model, arg0->unk0, arg0->unk8, arg0->unk6);
+
+    switch (result) {
+        case 1:
+            animId = func_800015DC_21DC(temp_s3);
+            break;
+        case 2:
+            animId = func_800015E4_21E4(temp_s3);
+            break;
+    }
+
+    func_80002220_2E20(slot->model, arg0->unk2, arg0->unk4, -1, animId);
+}
 
 void cutsceneChrRotate_init(void) {
 }

@@ -123,6 +123,14 @@ typedef struct {
     s16 unk4;
     s16 unk6;
     s16 unk8;
+} cutsceneChrTurn2_exec_arg;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s16 unk8;
 } cutsceneChrRotate_exec_arg;
 
 typedef struct {
@@ -207,7 +215,7 @@ void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager 
 s32 cutsceneChrBoardMove_isDone(void);
 void cutsceneChrTurn2_init(void);
 s32 cutsceneChrTurn2_validate(void);
-void cutsceneChrTurn2_exec(void);
+void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 void cutsceneChrRotate_init(void);
 s32 cutsceneChrRotate_validate(void);
 void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
