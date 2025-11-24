@@ -50,6 +50,9 @@ StateEntry *getStateEntry(u16);
 u16 func_800B3B68_1E0C18(u8, u16, s32);
 void func_800B477C_1E182C(void);
 void func_800B4534_1E15E4(s32, s32);
+void func_800B7760_1E4810(void *, s32, s32);
+void func_800B77C4_1E4874(void *, s32, s32);
+void func_800B7828_1E48D8(void *, s32, s32);
 
 void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0) {
     arg0->unkFF7 = 1;
@@ -113,7 +116,40 @@ void func_800B2D68_1DFE18(func_800B2C78_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B2DCC_1DFE7C);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B2E48_1DFEF8);
+void func_800B2E48_1DFEF8(func_800B2C78_arg *arg0) {
+    s32 i;
+    func_800B2C78_arg *currentSlot;
+    s32 slotOffset;
+    void *model;
+    s32 temp_offset;
+    u8 *slotDataA8;
+    u8 *transformPtr;
+
+    i = 0;
+    currentSlot = arg0;
+    slotOffset = 0;
+
+    while (i < (getCutsceneSlotCount() & 0xFF)) {
+        func_800B34B0_1E0560(i);
+        model = currentSlot->unkF0;
+
+        if (model != NULL) {
+            temp_offset = slotOffset + 0xA8;
+            slotDataA8 = (u8 *)arg0 + temp_offset;
+            transformPtr = slotDataA8 + 0x4C;
+
+            func_800B7760_1E4810(transformPtr, 0x10000, 0);
+            func_800B77C4_1E4874(transformPtr, 0x10000, 0);
+            func_800B7828_1E48D8(transformPtr, 0x10000, 0);
+            setupSlotTransform(transformPtr);
+            applyTransformToModel(model, (applyTransformToModel_arg1 *)(slotDataA8 + 0x50));
+        }
+
+        currentSlot = (func_800B2C78_arg *)((u8 *)currentSlot + 0xF4);
+        slotOffset += 0xF4;
+        i++;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B2F2C);
 
