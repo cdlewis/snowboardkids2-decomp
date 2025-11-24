@@ -1,3 +1,4 @@
+#include "36BE0.h"
 #include "5E590.h"
 #include "6E840.h"
 #include "common.h"
@@ -249,7 +250,50 @@ void func_80050864_51464(func_80050864_51464_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050890_51490);
+void func_80050890_51490(void *arg0, void *arg1, Vec3i *arg2, s16 arg3, s32 arg4) {
+    void *task;
+    s32 temp_v0;
+    s32 temp_v0_2;
+    s32 temp_v0_3;
+    u32 temp_v1;
+    u32 temp_v1_2;
+    u32 temp_v1_3;
+    u8 temp_v0_4;
+
+    if (D_80090E70_91A70[arg4] == 0xFF) {
+        return;
+    }
+
+    task = scheduleTask(&func_800506B4_512B4, 2, 0, 0xDD);
+    if (task == NULL) {
+        return;
+    }
+
+    memcpy((u8 *)task + 0x8, arg0, 0xC);
+    memcpy((u8 *)task + 0x28, arg1, 0xC);
+
+    temp_v0_4 = D_80090E70_91A70[arg4];
+    *(s16 *)((u8 *)task + 0x52) = arg3;
+    *(s16 *)((u8 *)task + 0x54) = temp_v0_4;
+
+    temp_v0 = arg2->x;
+    temp_v1 = (u32)temp_v0 >> 31;
+    temp_v0 += temp_v1;
+    temp_v0 >>= 1;
+    *(s32 *)((u8 *)task + 0x44) = temp_v0;
+
+    temp_v0_2 = arg2->y;
+    temp_v1_2 = (u32)temp_v0_2 >> 31;
+    temp_v0_2 += temp_v1_2;
+    temp_v0_2 >>= 1;
+    *(s32 *)((u8 *)task + 0x48) = temp_v0_2;
+
+    temp_v0_3 = arg2->z;
+    temp_v1_3 = (u32)temp_v0_3 >> 31;
+    temp_v0_3 += temp_v1_3;
+    temp_v0_3 >>= 1;
+    *(s32 *)((u8 *)task + 0x4C) = temp_v0_3;
+}
 
 void func_8005098C_5158C(MemoryAllocatorNode **node) {
     *node = load_3ECE40();
