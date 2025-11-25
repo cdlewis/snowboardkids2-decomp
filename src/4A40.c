@@ -79,11 +79,23 @@ typedef struct {
 
 extern s32 D_8008BFF4_8CBF4;
 extern s32 D_8008BFF0_8CBF0;
+extern s32 D_8008BFF8_8CBF8;
+extern s32 D_8008BFFC_8CBFC;
+extern s32 D_8008C000_8CC00;
+extern s16 D_8008C006_8CC06;
+extern s16 D_8008C00A_8CC0A;
+extern u8 identityMatrix[];
+void initializeGameEntity(void *, s32, void *, s8, s8, s8, s16);
 
 typedef struct {
     s16 unk0;
     s16 unk2;
-    u8 _pad[0xC];
+    u8 unk4;
+    s8 unk5;
+    u16 unk6;
+    u8 _pad[0x2];
+    s16 unkA;
+    s32 unkC;
 } D_8008C00C_entry; // size 0x10
 
 extern D_8008C00C_entry D_8008C00C_8CC0C[];
@@ -92,9 +104,19 @@ typedef struct {
     SceneModel *unk0;
     s16 unk4;
     s16 unk6;
-    u8 _pad[0x2];
+    u8 unk8;
+    s8 unk9;
     s16 unkA;
 } StructUnk800048D0;
+
+typedef struct {
+    u8 padding[0x2C];
+    s32 unk2C;
+    s32 unk30;
+} SceneModel30;
+
+void func_800047A0_53A0(StructUnk800048D0 *arg0);
+void func_800048D0_54D0(StructUnk800048D0 *arg0);
 
 void func_80003E40_4A40(func_80003EE0_4AE0_task_memory *arg0) {
     arg0->unkE44[0].r2 = 0;
@@ -255,7 +277,48 @@ void func_8000454C_514C(void) {
 
 INCLUDE_ASM("asm/nonmatchings/4A40", func_80004570_5170);
 
-INCLUDE_ASM("asm/nonmatchings/4A40", func_8000464C_524C);
+void func_8000464C_524C(StructUnk800048D0 *arg0) {
+    s32 buffer[8];
+    func_80003EE0_4AE0_task_memory *taskMemory;
+    D_8008C00C_entry *entry;
+    s16 scale;
+
+    taskMemory = getCurrentAllocation();
+    entry = &D_8008C00C_8CC0C[arg0->unk6];
+    arg0->unkA = 0;
+    arg0->unk4 = 0;
+
+    arg0->unk0 = allocateNodeMemory(0x160);
+
+    initializeGameEntity(arg0->unk0, entry->unk0, &taskMemory->unk768, arg0->unk9, -1, -1, -1);
+
+    memcpy((void *)((u8 *)arg0->unk0 + 0x18), identityMatrix, 0x20);
+
+    createYRotationMatrix((Mat3x3Padded *)((u8 *)arg0->unk0 + 0x18), entry->unk6);
+
+    scale = entry->unkA;
+    scaleMatrix((Mat3x3Padded *)((u8 *)arg0->unk0 + 0x18), scale, scale, scale);
+
+    ((SceneModel30 *)arg0->unk0)->unk2C = D_8008BFF0_8CBF0;
+    ((SceneModel30 *)arg0->unk0)->unk30 += entry->unkC;
+
+    func_800015CC_21CC(arg0->unk0, entry->unk5);
+
+    func_8006BEDC_6CADC(
+        buffer,
+        D_8008BFF8_8CBF8,
+        D_8008BFFC_8CBFC,
+        D_8008C000_8CC00,
+        0,
+        D_8008C006_8CC06,
+        D_8008C00A_8CC0A
+    );
+
+    func_8006FD3C_7093C(taskMemory->unk768.id, buffer);
+
+    setCleanupCallback(func_800048D0_54D0);
+    setCallback(func_800047A0_53A0);
+}
 
 void func_800047A0_53A0(StructUnk800048D0 *arg0) {
     D_8008C00C_entry *entry;
