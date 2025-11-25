@@ -30,6 +30,8 @@ extern void func_800574A0_580A0(s32);
 extern void func_8004E6A4_4F2A4(s32, s32);
 extern void func_8004F194_4FD94(s32);
 extern void terminateTasksByTypeAndID(s32, s32);
+extern void func_8002ED40_2F940(s32);
+extern void func_8004F820_50420(void);
 extern s8 D_800AFCE2_A7052;
 extern s32 D_80090460_91060[];
 extern s32 D_800904A0_910A0[];
@@ -50,6 +52,8 @@ void func_8003EE50_3FA50(void);
 void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
 void func_8003FF78_40B78(void);
+void func_8003FCD8_408D8(void);
+void func_8003FD84_40984(void);
 void func_800B99E0(void *);
 void func_80040304_40F04(void);
 void func_8003D0C8_3DCC8(void);
@@ -272,7 +276,41 @@ void func_8003FB90_40790(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FBE0_407E0);
+void func_8003FBE0_407E0(void) {
+    GameState *state;
+    s32 counter;
+
+    state = (GameState *)getCurrentAllocation();
+    counter = state->unk4C;
+
+    if (counter == 0) {
+        state->unk4C = 0xB4;
+
+        if (state->unk7D == 0) {
+            terminateTasksByTypeAndID(0, 1);
+            D_800A24A0_A30A0 = 5;
+
+            if (state->unk7E != 0) {
+                D_800A24A0_A30A0 = 9;
+            }
+
+            func_800574A0_580A0(8);
+            func_8004F194_4FD94(0x78);
+            func_8004E6A4_4F2A4(0, 0);
+            state->unk7B = 1;
+            scheduleTask(&func_8004F820_50420, 1, 0, 0xE6);
+            func_8002ED40_2F940(0x1388);
+            setGameStateHandler(&func_8003FCD8_408D8);
+        } else {
+            D_800A24A0_A30A0 = 6;
+            func_800574A0_580A0(9);
+            state->unk7B = 1;
+            setGameStateHandler(&func_8003FD84_40984);
+        }
+    } else {
+        state->unk4C = counter - 1;
+    }
+}
 
 void func_8003FCD8_408D8(void) {
     s32 temp_v0_2;

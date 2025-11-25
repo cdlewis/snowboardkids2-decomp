@@ -82,7 +82,9 @@ typedef struct {
     u8 unk7A;
     s8 unk7B;
     s8 unk7C;
-    u8 PAD_7[0x6];
+    u8 unk7D;
+    u8 unk7E;
+    u8 PAD_7[0x4];
     /* 0x83 */ u8 unk83;
     /* 0x84 */ u8 unk84;
     u8 PAD_7B[0x55];
