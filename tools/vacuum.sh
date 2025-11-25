@@ -35,7 +35,15 @@ while true; do
     break
   fi
 
-  output=$(claude -p "decompile the simplest function in asm/nonmatchings/" 2>&1)
+  # Find the simplest function using score_functions.py
+  simplest_func=$(python3 tools/score_functions.py asm/nonmatchings/ 2>&1)
+
+  if [[ -z "$simplest_func" ]] || echo "$simplest_func" | grep -q "^Error:"; then
+    echo "$simplest_func"
+    break
+  fi
+
+  output=$(claude -p "decompile the function $simplest_func" 2>&1)
   exit_code=$?
   echo "$output"
 

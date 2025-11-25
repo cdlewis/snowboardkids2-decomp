@@ -426,7 +426,8 @@ Examples:
         difficult_file = os.path.join(script_dir, 'difficult_functions')
         difficult_functions = load_difficult_functions(difficult_file)
 
-        if difficult_functions:
+        # Only print exclusion message in verbose modes
+        if difficult_functions and (args.exhaustive or args.min_score is not None or args.max_score is not None):
             print(f"Excluding {len(difficult_functions)} difficult function(s)\n")
 
     # Filter out difficult functions and data sections (functions with 0 instructions)
@@ -451,8 +452,13 @@ Examples:
         print(f"\n{'='*80}\n")
 
     simplest = filtered_scores[0]
-    print(f"SIMPLEST FUNCTION: {simplest.name}")
-    print(f"{simplest}")
+
+    # Simple mode: just print the function name if no special flags
+    if not args.exhaustive and args.min_score is None and args.max_score is None:
+        print(simplest.name)
+    else:
+        print(f"SIMPLEST FUNCTION: {simplest.name}")
+        print(f"{simplest}")
 
 if __name__ == '__main__':
     main()

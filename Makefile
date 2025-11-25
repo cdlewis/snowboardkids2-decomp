@@ -2,6 +2,12 @@ MAKEFLAGS += -j$(shell nproc)
 
 BASENAME  = snowboardkids2
 
+ifndef QUIET
+  PRINTF = @printf
+else
+  PRINTF = @true
+endif
+
 # Colours
 
 NO_COL  := \033[0m
@@ -92,7 +98,7 @@ dirs:
 verify: $(TARGET).z64
 	@shasum --check $(BASENAME).sha1
 	@$(PYTHON) $(TOOLS_DIR)/check_warnings.py $(BUILD_LOG)
-	@echo "Reminder to Claude: make caches things, you need to run `./tools/build-and-verify.sh` instead."
+	@if [ -z "$$BUILD_AND_VERIFY" ]; then echo "Reminder to Claude: make caches things, you need to run ./tools/build-and-verify.sh instead."; fi
 
 no_verify: $(TARGET).z64
 	@echo "Skipping SHA1SUM check, updating CRC"
@@ -135,19 +141,19 @@ tidy:
 	clang-tidy --fix $(C_FILES) -- -Isrc $(IINC) $(MACROS)
 
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
-	@printf "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
+	$(PRINTF) "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
 	@$(LD) $(LD_FLAGS) $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) -o $@
 
 $(BUILD_DIR)/src/%.o: src/%.c
 	@mkdir -p $(shell dirname $@)
-	@printf "[$(GREEN)   c    $(NO_COL)]  $<\n"; \
+	$(PRINTF) "[$(GREEN)   c    $(NO_COL)]  $<\n"; \
 	$(CC_CHECK) $(CC_CHECK_FLAGS) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ $< 2>&1 | tee -a $(BUILD_LOG)
 	@$(CC) $(CFLAGS) -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -E $< | $(CC) -x c $(CFLAGS) -fno-asm -I $(dir $*) -c -o $@ -
 	$(OBJDUMP_CMD)
 
 $(BUILD_DIR)/%.o: %.s
 	@mkdir -p $(shell dirname $@)
-	@printf "[$(GREEN)   as   $(NO_COL)]  $<\n"; \
+	$(PRINTF) "[$(GREEN)   as   $(NO_COL)]  $<\n"; \
 	cpp -P -I include -I $(BUILD_DIR)/$(dir $*) $< | \
 		$(ICONV) | \
 		$(AS) $(ASFLAGS) -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) -o $@
@@ -171,11 +177,11 @@ $(LIBMUS):
 	$(LIBMUS_FLAGS) $(MAKE) -C lib/libmus
 
 $(BUILD_DIR)/%.o: %.bin
-	@printf "[$(PINK) linker $(NO_COL)]  $<\n"
+	$(PRINTF) "[$(PINK) linker $(NO_COL)]  $<\n"
 	@$(LD) -r -b binary -o $(BUILD_DIR)/$(basename $<).o $<
 
 $(TARGET).bin: $(TARGET).elf
-	@printf "[$(CYAN) objcpy $(NO_COL)]  $<\n"
+	$(PRINTF) "[$(CYAN) objcpy $(NO_COL)]  $<\n"
 	@$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
 
 $(TARGET).z64: $(TARGET).bin
@@ -183,7 +189,7 @@ $(TARGET).z64: $(TARGET).bin
 
 $(BUILD_DIR)/src/%_annotated.s: src/%.c
 	@mkdir -p $(shell dirname $@)
-	@printf "[$(CYAN) annot  $(NO_COL)]  Generating annotated assembly for $<\n"
+	$(PRINTF) "[$(CYAN) annot  $(NO_COL)]  Generating annotated assembly for $<\n"
 	@# Compile with debug info to temporary object file
 	@$(CC) $(CFLAGS) -g -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -c -o $(BUILD_DIR)/src/$*_temp.o $<
 	@# Generate disassembly with line numbers
