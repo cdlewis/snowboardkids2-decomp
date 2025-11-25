@@ -13,6 +13,8 @@ These should be replaced with proper struct field access.
 import sys
 import os
 import argparse
+import subprocess
+from datetime import datetime
 from pycparser import c_parser, c_ast, parse_file
 from pycparser.plyparser import ParseError
 
@@ -208,9 +210,34 @@ def check_directory(directory, exclude_dirs=None, verbose=False):
     return all_violations
 
 
+def get_git_blame_timestamp(filename, line_number):
+    """Get the timestamp when a specific line was introduced using git blame."""
+    try:
+        result = subprocess.run(
+            ['git', 'blame', '-L', f'{line_number},{line_number}', '--porcelain', filename],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if result.returncode != 0:
+            return None
+
+        # Parse porcelain output to get author-time
+        for line in result.stdout.split('\n'):
+            if line.startswith('author-time '):
+                timestamp = int(line.split(' ')[1])
+                return datetime.fromtimestamp(timestamp)
+        return None
+    except (subprocess.TimeoutExpired, subprocess.SubprocessError, ValueError):
+        return None
+
+
 def format_violation(filename, violation):
     """Format a violation for display."""
-    return f"{filename}:{violation['line']}:{violation.get('column', 0)}: " \
+    timestamp_str = ""
+    if 'timestamp' in violation and violation['timestamp']:
+        timestamp_str = f" [{violation['timestamp'].strftime('%Y-%m-%d')}]"
+    return f"{filename}:{violation['line']}:{violation.get('column', 0)}:{timestamp_str} " \
            f"pointer arithmetic with cast: ({violation['type']})ptr + offset"
 
 
@@ -265,15 +292,35 @@ Examples:
         print("✅ No violations found!")
         return 0
 
+    # Add git blame timestamps to violations
+    if args.verbose:
+        print("Fetching git blame timestamps...", file=sys.stderr)
+
+    all_violations_flat = []
+    for filepath, violations in all_violations.items():
+        for violation in violations:
+            violation['timestamp'] = get_git_blame_timestamp(filepath, violation['line'])
+            all_violations_flat.append((filepath, violation))
+
+    # Sort by timestamp (oldest first), violations without timestamps go last
+    def sort_key(item):
+        filepath, violation = item
+        ts = violation.get('timestamp')
+        if ts is None:
+            return (1, datetime.max, filepath, violation['line'])
+        return (0, ts, filepath, violation['line'])
+
+    all_violations_flat.sort(key=sort_key)
+
     # Print violations
     print(f"\n{'='*70}")
     print("Pointer Arithmetic Check")
     print(f"{'='*70}")
-    print(f"Found {total_violations} violation(s) in {len(all_violations)} file(s):\n")
+    print(f"Found {total_violations} violation(s) in {len(all_violations)} file(s):")
+    print("(sorted by when introduced, oldest first)\n")
 
-    for filepath in sorted(all_violations.keys()):
-        for violation in all_violations[filepath]:
-            print(format_violation(filepath, violation))
+    for filepath, violation in all_violations_flat:
+        print(format_violation(filepath, violation))
 
     print(f"\n{'='*70}")
     print("These patterns should be replaced with proper struct field access.")

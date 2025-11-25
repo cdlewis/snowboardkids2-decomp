@@ -1548,40 +1548,44 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x4];
-    u8 _pad4[0x4];
-    func_8004AD18_4B918_CopyData unk8;
-    u8 _pad14[0x22];
-    s16 unk36;
+    func_80066444_67044_arg1 unk4;
 } func_8004AD18_4B918_arg;
 
 extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
 extern void func_80050ECC_51ACC(void *arg0);
 extern void func_80058924_59524(void *arg0);
 
+typedef struct {
+    u8 padding[0x5B];
+    u8 unk5B;
+    u8 padding2[0x1A];
+    u8 unk76;
+} allocation_46080;
+
 void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0) {
     func_8004AD18_4B918_CopyData sp10;
     func_8004AD18_4B918_CopyData *s0;
-    func_8004AD18_4B918_CopyData *s2;
+    func_80066444_67044_arg1_unk4 *s2;
     void *s3;
     s32 i;
-    GameState *alloc;
+    allocation_46080 *alloc;
 
-    alloc = (GameState *)getCurrentAllocation();
+    alloc = (allocation_46080 *)getCurrentAllocation();
 
-    if (alloc->gamePaused == 0) {
+    if (alloc->unk76 == 0) {
         if (alloc->unk5B < 10) {
-            if (arg0->unk36 < 0x1194) {
-                if (arg0->unk36 >= 0x1F) {
-                    arg0->unk36 = 0x1E;
+            if (arg0->unk4.unk36 < 0x1194) {
+                if (arg0->unk4.unk36 >= 0x1F) {
+                    arg0->unk4.unk36 = 0x1E;
                 }
             }
         }
-        arg0->unk36--;
+        arg0->unk4.unk36--;
     }
 
-    s2 = &arg0->unk8;
+    s2 = &arg0->unk4.unk4;
 
-    if (arg0->unk36 == 0) {
+    if (arg0->unk4.unk36 == 0) {
         func_80069CF8_6A8F8();
     }
 
@@ -1597,13 +1601,13 @@ void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0) {
         func_80069CF8_6A8F8();
     } else {
         i = 0;
-        if (arg0->unk36 < 0x1F) {
+        if (arg0->unk4.unk36 < 0x1F) {
             if ((gFrameCounter & 1) == 0) {
                 return;
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)((u8 *)arg0 + 4));
+            func_80066444_67044(i, &arg0->unk4);
         }
     }
 }
@@ -1695,17 +1699,8 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004B3B0_4BFB0);
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B4CC_4C0CC);
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} func_8004B648_4C248_CopyData;
-
-typedef struct {
     u8 _pad0[0x4];
-    u8 _pad4[0x4];
-    func_8004B648_4C248_CopyData unk8;
-    u8 _pad14[0x22];
-    s16 unk36;
+    func_80066444_67044_arg1 unk4;
 } func_8004B648_4C248_arg;
 
 extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
@@ -1713,19 +1708,19 @@ extern void func_80050ECC_51ACC(void *arg0);
 extern void func_80058924_59524(void *arg0);
 
 void func_8004B648_4C248(func_8004B648_4C248_arg *arg0) {
-    func_8004B648_4C248_CopyData sp10;
-    func_8004B648_4C248_CopyData *s0;
-    func_8004B648_4C248_CopyData *s2;
+    func_8004AD18_4B918_CopyData sp10;
+    func_8004AD18_4B918_CopyData *s0;
+    func_80066444_67044_arg1_unk4 *s2;
     void *s3;
     s32 i;
 
     if (((GameState *)getCurrentAllocation())->gamePaused == 0) {
-        arg0->unk36--;
+        arg0->unk4.unk36--;
     }
 
-    s2 = &arg0->unk8;
+    s2 = &arg0->unk4.unk4;
 
-    if (arg0->unk36 == 0) {
+    if (arg0->unk4.unk36 == 0) {
         func_80069CF8_6A8F8();
     }
 
@@ -1740,14 +1735,14 @@ void func_8004B648_4C248(func_8004B648_4C248_arg *arg0) {
         func_80058924_59524(s3);
         func_80069CF8_6A8F8();
     } else {
-        if (arg0->unk36 < 0x1F) {
+        if (arg0->unk4.unk36 < 0x1F) {
             i = 0;
             if ((gFrameCounter & 1) == 0) {
                 return;
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)((u8 *)arg0 + 4));
+            func_80066444_67044(i, &arg0->unk4);
         }
     }
 }
@@ -1796,29 +1791,26 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004B990_4C590);
 
 typedef struct {
     u8 _pad0[0x4];
-    u8 _pad4[0x4];
-    func_8004B648_4C248_CopyData unk8;
-    u8 _pad14[0x22];
-    s16 unk36;
+    func_80066444_67044_arg1 unk4;
     s16 unk38;
 } func_8004BB0C_4C70C_arg;
 
 void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
-    func_8004B648_4C248_CopyData sp10;
-    func_8004B648_4C248_CopyData *s0;
-    func_8004B648_4C248_CopyData *s2;
+    func_8004AD18_4B918_CopyData sp10;
+    func_8004AD18_4B918_CopyData *s0;
+    func_80066444_67044_arg1_unk4 *s2;
     void *s3;
     s32 i;
 
     if (((GameState *)getCurrentAllocation())->gamePaused == 0) {
-        arg0->unk36--;
+        arg0->unk4.unk36--;
     }
 
-    if (arg0->unk36 == 0) {
+    if (arg0->unk4.unk36 == 0) {
         func_80069CF8_6A8F8();
     }
 
-    s2 = &arg0->unk8;
+    s2 = &arg0->unk4.unk4;
     s3 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
     s0 = &sp10;
 
@@ -1830,14 +1822,14 @@ void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
         func_80058924_59524(s3);
         func_80069CF8_6A8F8();
     } else {
-        if (arg0->unk36 < 0x1F) {
+        if (arg0->unk4.unk36 < 0x1F) {
             i = 0;
             if ((gFrameCounter & 1) == 0) {
                 return;
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->_pad4);
+            func_80066444_67044(i, &arg0->unk4);
         }
     }
 }
@@ -1876,22 +1868,28 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004BCFC_4C8FC);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004BE40_4CA40);
 
-void func_8004BFBC_4CBBC(func_8004BB0C_4C70C_arg *arg0) {
-    func_8004B648_4C248_CopyData sp10;
-    func_8004B648_4C248_CopyData *s0;
-    func_8004B648_4C248_CopyData *s2;
+typedef struct {
+    u8 _pad0[0x4];
+    func_80066444_67044_arg1 unk4;
+    s16 unk38;
+} func_8004BFBC_4CBBC_arg;
+
+void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0) {
+    func_8004AD18_4B918_CopyData sp10;
+    func_8004AD18_4B918_CopyData *s0;
+    func_80066444_67044_arg1_unk4 *s2;
     void *s3;
     s32 i;
 
     if (((GameState *)getCurrentAllocation())->gamePaused == 0) {
-        arg0->unk36--;
+        arg0->unk4.unk36--;
     }
 
-    if (arg0->unk36 == 0) {
+    if (arg0->unk4.unk36 == 0) {
         func_80069CF8_6A8F8();
     }
 
-    s2 = &arg0->unk8;
+    s2 = &arg0->unk4.unk4;
     s3 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
     s0 = &sp10;
 
@@ -1903,14 +1901,14 @@ void func_8004BFBC_4CBBC(func_8004BB0C_4C70C_arg *arg0) {
         func_80058924_59524(s3);
         func_80069CF8_6A8F8();
     } else {
-        if (arg0->unk36 < 0x1F) {
+        if (arg0->unk4.unk36 < 0x1F) {
             i = 0;
             if ((gFrameCounter & 1) == 0) {
                 return;
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->_pad4);
+            func_80066444_67044(i, &arg0->unk4);
         }
     }
 }

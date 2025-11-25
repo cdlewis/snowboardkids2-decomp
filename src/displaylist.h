@@ -78,11 +78,21 @@ void func_800634E8_640E8(DisplayListObject *arg0);
 void func_800630F0_63CF0(s32, void *);
 
 typedef struct {
-    u8 padding[0x1C];
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} func_80066444_67044_arg1_unk4;
+
+typedef struct {
+    s32 unk0;
+    func_80066444_67044_arg1_unk4 unk4;
+    u8 padding[0xC];
     s32 unk1C;
     u8 padding2[0x10];
-    s32 unk30;
+    s16 unk30;
+    s16 unk36;
 } func_80066444_67044_arg1;
+
 void func_800677C0_683C0(s32 arg0, loadAssetMetadata_arg *arg1);
 
 typedef struct {
