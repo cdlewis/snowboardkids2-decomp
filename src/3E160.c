@@ -33,6 +33,8 @@ extern void terminateTasksByTypeAndID(s32, s32);
 extern void func_8002ED40_2F940(s32);
 extern void func_8004FF60_50B60(s32);
 extern void func_8004F820_50420(void);
+extern void func_8004EDCC_4F9CC(s32);
+extern s32 getFreeNodeCount(s32);
 extern s8 D_800AFCE2_A7052;
 extern s32 D_80090460_91060[];
 extern s32 D_800904A0_910A0[];
@@ -55,6 +57,8 @@ void func_8003FD3C_4093C(void);
 void func_8003FF78_40B78(void);
 void func_8003FCD8_408D8(void);
 void func_8003FD84_40984(void);
+void func_8003FF14_40B14(void);
+void func_8003FFC0_40BC0(void);
 void func_800B99E0(void *);
 void func_80040304_40F04(void);
 void func_8003D0C8_3DCC8(void);
@@ -350,7 +354,59 @@ void func_8003FD84_40984(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003FDD4_409D4);
+void func_8003FDD4_409D4(void) {
+    GameState *state;
+    s32 score;
+    u8 unk5AValue;
+
+    state = (GameState *)getCurrentAllocation();
+
+    if (state->unk4C != 0) {
+        state->unk4C = state->unk4C - 1;
+        return;
+    }
+
+    if (getFreeNodeCount(4) != 0x1E) {
+        return;
+    }
+
+    if (state->unk7D == 0) {
+        terminateTasksByTypeAndID(0, 1);
+        func_8004EDCC_4F9CC(1);
+
+        unk5AValue = state->unk5A;
+        score = unk5AValue * 300;
+
+        if (unk5AValue == 0x14) {
+            D_800A24A0_A30A0 = 5;
+            func_800574A0_580A0(8);
+
+            if (state->players->unkBD3 == 0xA) {
+                D_800A24A0_A30A0 = 7;
+                score += 0x4E20;
+            } else {
+                score += 0x2710;
+            }
+
+            func_8004F194_4FD94(0x78);
+            func_8004E6A4_4F2A4(0, 0);
+        } else {
+            D_800A24A0_A30A0 = 6;
+            func_800574A0_580A0(9);
+        }
+
+        state->unk7B = 1;
+        func_8002ED40_2F940(score);
+        setGameStateHandler(&func_8003FF14_40B14);
+    } else {
+        D_800A24A0_A30A0 = 6;
+        func_800574A0_580A0(9);
+        state->unk7B = 1;
+        setGameStateHandler(&func_8003FFC0_40BC0);
+    }
+
+    state->unk4C = 0xB4;
+}
 
 void func_8003FF14_40B14(void) {
     GameState *gs = (GameState *)getCurrentAllocation();

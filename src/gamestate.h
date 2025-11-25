@@ -46,7 +46,9 @@ typedef struct {
     u8 padding4[0x2E];
     u8 unkBC4;
     u8 unkBC5;
-    u8 padding5[0x22];
+    u8 padding5a[0xD];
+    u8 unkBD3;
+    u8 padding5b[0x14];
 } Player;
 
 typedef struct {
@@ -66,7 +68,8 @@ typedef struct {
     GameStateUnk44 *unk44;
     u8 *unk48;
     s32 unk4C;
-    u8 PAD_5[0xB];
+    u8 PAD_5[0xA];
+    u8 unk5A;
     u8 unk5B;
     u8 memoryPoolId;
     u8 unk5D;
