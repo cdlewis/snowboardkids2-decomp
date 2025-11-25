@@ -30,8 +30,6 @@ void func_80002FD4_3BD4(func_80002FD4_3BD4_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/3B80", func_80003000_3C00);
-
 typedef struct {
     void *unk0;
     void *unk4;
@@ -55,6 +53,28 @@ typedef struct {
     u8 unkC4;
     u8 unkC5;
 } func_800033AC_3FAC_arg;
+
+void func_800030B4_3CB4(func_800033AC_3FAC_arg *arg0);
+
+void func_80003000_3C00(void *arg0, u8 arg1, void *arg2, u8 arg3, void *arg4) {
+    func_800033AC_3FAC_arg *task;
+
+    task = scheduleTask(func_800030B4_3CB4, 3, 0, 0);
+    if (task != NULL) {
+        task->unk0 = arg0;
+        task->unkC4 = arg3;
+        task->unk8 = arg4;
+        task->unkC5 = 0;
+    }
+
+    task = scheduleTask(func_800030B4_3CB4, 3, 0, 0);
+    if (task != NULL) {
+        task->unk0 = arg0;
+        task->unkC4 = arg1;
+        task->unk8 = arg2;
+        task->unkC5 = 0;
+    }
+}
 
 extern func_800033AC_3FAC_TableEntry D_8008BF70_8CB70[];
 extern void func_80003184_3D84(void *);
