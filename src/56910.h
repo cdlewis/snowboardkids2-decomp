@@ -16,7 +16,11 @@ typedef struct {
     s32 unk0;
     s32 unk4;
     u16 unk8;
-    u8 padding[0x2C - 0xA];
+    u8 padding[2];
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    u8 padding2[0x2C - 0x18];
 } D_80090F90_91B90_item;
 
 typedef struct {

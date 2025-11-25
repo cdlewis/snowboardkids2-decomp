@@ -60,6 +60,7 @@ extern s32 D_80090BC8_917C8[3];
 extern s32 D_80090BBC_917BC[3];
 extern s32 D_80090B98_91798[];
 extern s32 D_80090BB0_917B0;
+extern s32 D_80090B80_91780;
 
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern void func_80069CF8_6A8F8(void);
@@ -622,14 +623,89 @@ void func_80046D0C_4790C(DisplayListObject *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80046D38_47938);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80046DCC_479CC);
-
 typedef struct {
     u8 _pad[0x3C];
     u8 unk3C[0x3C];
     u8 unk78[0x3C];
     s16 unkB4;
 } func_80046F44_47B44_arg;
+
+void func_80046F44_47B44(func_80046F44_47B44_arg *arg0);
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_80046FEC_47BEC_arg_fwd;
+
+void func_80046FEC_47BEC(func_80046FEC_47BEC_arg_fwd *arg0);
+
+typedef struct {
+    u8 unk0[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 _pad2[0xC];
+    u8 unk3C[0x14];
+    s32 unk50;
+    s32 unk54;
+    s32 unk58;
+    void *unk5C;
+    u8 _pad3[0x18];
+    u8 unk78[0x18];
+    s32 unk90;
+    u8 _pad4[4];
+    void *unk98;
+} func_80046DCC_479CC_arg;
+
+void func_80046DCC_479CC(func_80046DCC_479CC_arg *arg0) {
+    s32 sp10[3];
+    GameState_46080 *allocation;
+    D_80090F90_91B90_item *s1;
+    u16 rotation;
+    func_80055E68_56A68_result *displayLists;
+
+    allocation = (GameState_46080 *)getCurrentAllocation();
+    rotation = func_800625A4_631A4(&allocation->unk30, sp10) + 0x800;
+    s1 = func_80055D10_56910(allocation->unk5C);
+
+    arg0->unk20 = func_80055E68_56A68(allocation->unk5C);
+    arg0->unk24 = func_80055DC4_569C4(allocation->unk5C);
+    arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
+    arg0->unk2C = NULL;
+
+    createYRotationMatrix((Mat3x3Padded *)arg0, (u16)(rotation + s1->unk8));
+
+    arg0->unk18 = sp10[1];
+    transformVector2(&D_80090B80_91780, arg0, sp10);
+
+    arg0->unk14 = s1->unk0 + sp10[0];
+    arg0->unk1C = s1->unk4 + sp10[2];
+
+    memcpy(arg0->unk3C, arg0, 0x3C);
+
+    displayLists = func_80055E68_56A68(allocation->unk5C);
+    arg0->unk5C = (void *)((u32)displayLists + 0x20);
+    createYRotationMatrix((Mat3x3Padded *)arg0->unk3C, 0x1000);
+
+    arg0->unk50 = s1->unkC;
+    arg0->unk54 = s1->unk10;
+    arg0->unk58 = s1->unk14;
+
+    if (allocation->unk5C == 4) {
+        memcpy(arg0->unk78, arg0, 0x3C);
+        displayLists = func_80055E68_56A68(allocation->unk5C);
+        arg0->unk98 = (void *)((u32)displayLists + 0x90);
+        arg0->unk90 = arg0->unk90 + 0xAB0000;
+    }
+
+    setCleanupCallback(func_80046FEC_47BEC);
+    setCallback(func_80046F44_47B44);
+}
 
 void func_80046F44_47B44(func_80046F44_47B44_arg *arg0) {
     GameState_46080 *allocation;
@@ -654,13 +730,7 @@ void func_80046F44_47B44(func_80046F44_47B44_arg *arg0) {
     }
 }
 
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_80046FEC_47BEC_arg;
-
-void func_80046FEC_47BEC(func_80046FEC_47BEC_arg *arg0) {
+void func_80046FEC_47BEC(func_80046FEC_47BEC_arg_fwd *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
