@@ -7,11 +7,13 @@ extern void func_80009F90_AB90(void *, s32, s32, s32);
 extern void setCleanupCallback(void *);
 extern void setCallback(void *);
 extern u8 randA(void);
+extern void *scheduleTask(void *, u8, u8, u8);
 
 typedef struct {
     s32 unk0;
     s32 unk4;
-    u8 _pad8[0x4C];
+    u8 _pad8[0x48];
+    s32 unk50;
     s16 unk54;
     s8 unk56;
 } func_80007130_7D30_arg;
@@ -25,10 +27,36 @@ typedef struct {
     func_80007100_7D00_inner *unk0;
 } func_80007100_7D00_arg;
 
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+} func_80007070_7C70_arg;
+
 void func_800071E4_7DE4(void *);
 void func_80007360_7F60(func_80007130_7D30_arg *);
+void func_80007100_7D00(func_80007100_7D00_arg *);
+void func_80007130_7D30(func_80007130_7D30_arg *);
+void func_8000714C_7D4C(func_80007130_7D30_arg *);
 
-INCLUDE_ASM("asm/nonmatchings/7C70", func_80007070_7C70);
+void func_80007070_7C70(func_80007070_7C70_arg *arg0) {
+    s32 i;
+    func_80007130_7D30_arg *task;
+    s32 temp;
+
+    func_80009E68_AA68(&arg0->unk4, 5);
+
+    for (i = 0; i < 12; i++) {
+        task = scheduleTask(func_8000714C_7D4C, 0, 0, 0);
+        if (task != NULL) {
+            temp = arg0->unk0;
+            task->unk50 = i;
+            task->unk0 = temp;
+        }
+    }
+
+    setCleanupCallback(func_80007130_7D30);
+    setCallback(func_80007100_7D00);
+}
 
 void func_80007100_7D00(func_80007100_7D00_arg *arg0) {
     if (arg0->unk0->unk3C == 1) {
