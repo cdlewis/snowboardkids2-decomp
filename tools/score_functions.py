@@ -14,9 +14,39 @@ import sys
 import os
 import re
 import argparse
+import numpy as np
 from pathlib import Path
 from dataclasses import dataclass
 from typing import List, Tuple
+
+
+def decompilation_difficulty_score(instructions, branches, jumps, labels, stack_size):
+    """
+    Standalone function to calculate decompilation difficulty
+
+    Returns a score between 0 (easy) and 1 (hard)
+    """
+    # Scaler parameters (pre-computed from training)
+    means = np.array([np.float64(28.721649484536083), np.float64(1.3402061855670102), np.float64(2.3642611683848798), np.float64(1.570446735395189), np.float64(26.22680412371134)])
+    stds = np.array([np.float64(19.969087244768257), np.float64(1.728395942718884), np.float64(2.137368646032297), np.float64(2.0011215428587708), np.float64(20.65832590761592)])
+
+    # Model parameters (pre-computed from training)
+    coefficients = np.array([np.float64(2.2790675803686304), np.float64(-0.25313660661778536), np.float64(-0.8839420309994798), np.float64(0.43529157800569374), np.float64(-0.12493433527118618)])
+    intercept = -0.6103335818191822
+
+    # Create feature vector
+    features = np.array([instructions, branches, jumps, labels, stack_size])
+
+    # Standardize features
+    features_scaled = (features - means) / stds
+
+    # Calculate logit
+    logit = np.dot(features_scaled, coefficients) + intercept
+
+    # Convert to probability using sigmoid
+    difficulty = 1 / (1 + np.exp(-logit))
+
+    return difficulty
 
 
 @dataclass
@@ -32,18 +62,18 @@ class FunctionScore:
 
     @property
     def total_score(self) -> float:
-        """Calculate total complexity score."""
-        return (
-            self.instruction_count * 1.0 +
-            self.branch_count * 3.0 +
-            self.jump_count * 2.0 +
-            self.label_count * 2.0 +
-            self.stack_size * 0.1
+        """Calculate decompilation difficulty score using ML model (0=easy, 1=hard)."""
+        return decompilation_difficulty_score(
+            self.instruction_count,
+            self.branch_count,
+            self.jump_count,
+            self.label_count,
+            self.stack_size
         )
 
     def __str__(self) -> str:
         return (
-            f"{self.name:50s} | Score: {self.total_score:7.1f} | "
+            f"{self.name:50s} | Difficulty: {self.total_score:5.3f} | "
             f"Instructions: {self.instruction_count:3d} | "
             f"Branches: {self.branch_count:2d} | "
             f"Jumps: {self.jump_count:2d} | "
@@ -54,7 +84,7 @@ class FunctionScore:
     def to_simple_format(self) -> str:
         """Return a simple parseable format without column names."""
         return (
-            f"{self.name} | {self.total_score:.1f} | "
+            f"{self.name} | {self.total_score:.3f} | "
             f"{self.instruction_count} | {self.branch_count} | "
             f"{self.jump_count} | {self.label_count} | {self.stack_size}"
         )
