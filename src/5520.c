@@ -186,4 +186,3 @@ void func_80005D30_6930(func_80005808_6408_arg *arg0) {
     arg0->unk64 = freeNodeMemory(arg0->unk64);
     arg0->unk68 = freeNodeMemory(arg0->unk68);
 }
-INCLUDE_RODATA("asm/nonmatchings/5520", jtbl_8009DD38_9E938);
