@@ -1,5 +1,6 @@
 #include "20F0.h"
 #include "56910.h"
+#include "5E590.h"
 #include "68CF0.h"
 #include "6E840.h"
 #include "common.h"
@@ -104,10 +105,16 @@ typedef struct {
 } func_8002EF3C_2FB3C_arg;
 
 typedef struct {
-    u8 padding[0x50];
+    u8 padding[0x20];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 padding2[0x20];
     s32 unk50;
-    u8 padding2[0xC];
+    u8 padding3[0xC];
     u8 unk60;
+    s8 unk61;
 } func_8002F518_30118_arg;
 
 typedef struct {
@@ -164,7 +171,8 @@ void func_8002EFD8_2FBD8(void *);
 void func_8002F024_2FC24(void);
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
 void func_8002F290_2FE90(void);
-void func_8002F3E4_2FFE4(void);
+void func_8002F3E4_2FFE4(func_8002F518_30118_arg *);
+void func_8002F518_30118(func_8002F518_30118_arg *);
 void func_8002F5C8_301C8(void *);
 void func_8002F72C_3032C(void);
 void func_8002F88C_3048C(func_8002F658_30258_arg *arg0);
@@ -287,7 +295,41 @@ end:
     setCallback(&func_8002F3E4_2FFE4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F3E4_2FFE4);
+void func_8002F3E4_2FFE4(func_8002F518_30118_arg *arg0) {
+    volatile u8 padding[0x20];
+    GameState *state = (GameState *)getCurrentAllocation();
+    s8 s0;
+    s8 s1;
+
+    if (arg0->unk60 == 1) {
+        if (state->unk5C6 == 2) {
+            arg0->unk61 = state->unk5C8 + 1;
+            if (arg0->unk61 == state->unk5C9) {
+                arg0->unk61 = 0;
+            }
+        } else {
+            arg0->unk61 = state->unk5C8 - 1;
+            if (arg0->unk61 < 0) {
+                arg0->unk61 = state->unk5C9 - 1;
+            }
+        }
+
+        s0 = state->unk5CA[arg0->unk61] & 0x1F;
+        s1 = s0;
+
+        memcpy(arg0, (void *)((s32)arg0 + 0x3C), 0x20);
+
+        arg0->unk20 = loadAssetByIndex_95728(s1);
+        arg0->unk24 = loadAssetByIndex_95500(s1);
+        arg0->unk28 = loadAssetByIndex_95590(s1);
+        arg0->unk2C = loadAssetByIndex_95668(s0 / 3);
+        arg0->unk60 = 0;
+    } else {
+        enqueueDisplayListObject(0, (DisplayListObject *)arg0);
+    }
+
+    setCallback(&func_8002F518_30118);
+}
 
 void func_8002F518_30118(func_8002F518_30118_arg *s0) {
     volatile u8 padding[0x20];
