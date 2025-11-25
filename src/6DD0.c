@@ -1,5 +1,5 @@
-#include "common.h"
 #include "90F0.h"
+#include "common.h"
 
 typedef struct {
     u8 _pad[0x4];
@@ -18,7 +18,9 @@ INCLUDE_ASM("asm/nonmatchings/6DD0", func_800063B4_6FB4);
 
 INCLUDE_ASM("asm/nonmatchings/6DD0", func_80006458_7058);
 
-INCLUDE_ASM("asm/nonmatchings/6DD0", func_80006924_7524);
+void func_80006924_7524(func_80006398_6F98_arg *arg0) {
+    func_80009F5C_AB5C(&arg0->unk4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/6DD0", func_80006940_7540);
 
