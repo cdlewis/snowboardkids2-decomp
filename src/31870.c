@@ -131,11 +131,11 @@ typedef struct {
 } func_800330B4_33CB4_arg;
 
 typedef struct {
-    void *unk0;
+    SceneModel *unk0;
     Mat3x3Padded unk4;
     s16 unk24;
-    s16 unk26;
-    s8 unk28;
+    u16 unk26;
+    u8 unk28;
 } func_80031A0C_3260C_arg;
 
 typedef struct {
@@ -293,7 +293,7 @@ void func_80031758_32358(func_80031510_32110_arg *arg0);
 void func_800316AC_322AC(void);
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
-void func_80031B30_32730(void);
+void func_80031B30_32730(func_80031A0C_3260C_arg *arg0);
 void func_80031CC0_328C0(func_8002FA1C_3061C_arg *arg0);
 void func_80031D14_32914(func_80031510_32110_arg *arg0);
 void func_80032218_32E18(void *);
@@ -312,6 +312,8 @@ void func_80031944_32544(func_80031510_32110_arg *arg0);
 void func_80031CE8_328E8(void *arg0);
 void func_80031DE4_329E4(void);
 
+extern u16 D_8008F16C_8FD6C[];
+extern u16 D_8008F16E_8FD6E[];
 extern s32 D_8008F18C_8FD8C;
 extern s32 D_8008F200_8FE00[];
 extern u16 D_8008F20A_8FE0A[];
@@ -696,7 +698,59 @@ void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031B30_32730);
+typedef struct {
+    u8 padding[0x1D8];
+    void *audioPlayer2;
+    u8 padding2[0x5A2];
+    u16 unk77E;
+    u8 padding3[0x23];
+    u8 unk7A3;
+} func_80031B30_allocation;
+
+void func_80031B30_32730(func_80031A0C_3260C_arg *arg0) {
+    func_80031B30_allocation *allocation;
+    s32 result;
+    s32 state;
+    u16 counter;
+    volatile u8 pad[8];
+
+    allocation = (func_80031B30_allocation *)getCurrentAllocation();
+    state = arg0->unk28;
+
+    if (state != 2) {
+        result = clearModelRotation(arg0->unk0);
+        state = arg0->unk28;
+
+        if (state == 1) {
+            if (result != NULL) {
+                counter = arg0->unk24 + 1;
+                arg0->unk24 = counter;
+
+                if (arg0->unk26 < counter) {
+                    arg0->unk28 = 0;
+                    arg0->unk24 = 0x10;
+                }
+
+                func_800021B8_2DB8(arg0->unk0, arg0->unk24);
+                state = arg0->unk28;
+            }
+        }
+    }
+
+    if (state != 1 || allocation->unk7A3 != 0) {
+        if (allocation->unk77E != 0) {
+            arg0->unk24 = D_8008F16C_8FD6C[allocation->unk77E * 2];
+            arg0->unk26 = D_8008F16E_8FD6E[allocation->unk77E * 2];
+            func_800021B8_2DB8(arg0->unk0, arg0->unk24);
+            allocation->unk77E = 0;
+            arg0->unk28 = 1;
+            allocation->unk7A3 = 0;
+        }
+    }
+
+    func_8006FED8_70AD8(&allocation->audioPlayer2);
+    updateModelGeometry(arg0->unk0);
+}
 
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0) {
     func_80002014_2C14(arg0->unk0);

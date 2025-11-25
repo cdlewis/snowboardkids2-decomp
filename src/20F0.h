@@ -170,7 +170,7 @@ void applyTransformToModel(SceneModel *arg0, applyTransformToModel_arg1 *arg1);
 
 SceneModel *func_80002014_2C14(SceneModel *arg0);
 
-void clearModelRotation(SceneModel *);
+s32 clearModelRotation(SceneModel *);
 
 void func_80001604_2204(SceneModel *arg0, s8 arg1);
 

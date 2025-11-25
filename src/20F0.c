@@ -700,8 +700,8 @@ void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg
     }
 }
 
-void clearModelRotation(SceneModel *arg0) {
-    setModelRotation(arg0, -1);
+s32 clearModelRotation(SceneModel *arg0) {
+    return setModelRotation(arg0, -1);
 }
 
 s32 setModelRotation(SceneModel *arg0, s16 arg1) {
