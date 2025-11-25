@@ -1,3 +1,4 @@
+#include "20F0.h"
 #include "6E840.h"
 #include "common.h"
 #include "geometry.h"
@@ -76,9 +77,22 @@ typedef struct {
     ColorData unkE44[3];
 } func_80003EE0_4AE0_task_memory;
 
+extern s32 D_8008BFF4_8CBF4;
+extern s32 D_8008BFF0_8CBF0;
+
 typedef struct {
-    void *unk0;
-    u8 _pad[0x6];
+    s16 unk0;
+    s16 unk2;
+    u8 _pad[0xC];
+} D_8008C00C_entry; // size 0x10
+
+extern D_8008C00C_entry D_8008C00C_8CC0C[];
+
+typedef struct {
+    SceneModel *unk0;
+    s16 unk4;
+    s16 unk6;
+    u8 _pad[0x2];
     s16 unkA;
 } StructUnk800048D0;
 
@@ -243,7 +257,45 @@ INCLUDE_ASM("asm/nonmatchings/4A40", func_80004570_5170);
 
 INCLUDE_ASM("asm/nonmatchings/4A40", func_8000464C_524C);
 
-INCLUDE_ASM("asm/nonmatchings/4A40", func_800047A0_53A0);
+void func_800047A0_53A0(StructUnk800048D0 *arg0) {
+    D_8008C00C_entry *entry;
+
+    getCurrentAllocation();
+
+    entry = &D_8008C00C_8CC0C[arg0->unk6];
+
+    switch (arg0->unk4) {
+        case 0:
+            func_800021B8_2DB8(arg0->unk0, entry->unk2);
+            arg0->unk4 = 1;
+            break;
+        case 1:
+            if (entry->unk0 == 0x73) {
+                func_800015CC_21CC(arg0->unk0, 3);
+                arg0->unk4 = 2;
+            }
+            clearModelRotation(arg0->unk0);
+            break;
+        case 2:
+            if (entry->unk0 == 0x73) {
+                func_800015CC_21CC(arg0->unk0, 8);
+            }
+            clearModelRotation(arg0->unk0);
+            break;
+        default:
+            break;
+    }
+
+    arg0->unk0->unk2C -= D_8008BFF4_8CBF4;
+
+    if (arg0->unk0->unk2C < -D_8008BFF0_8CBF0) {
+        func_80002040_2C40(arg0->unk0);
+        arg0->unkA = 1;
+        func_80069CF8_6A8F8();
+    } else {
+        updateModelGeometry(arg0->unk0);
+    }
+}
 
 void func_800048D0_54D0(StructUnk800048D0 *arg0) {
     getCurrentAllocation();

@@ -81,7 +81,8 @@ typedef struct {
     u8 padding[0x14];
     void *unk24;
     void *unk28;
-    u8 padding2[0x3B4];
+    s32 unk2C;
+    u8 padding2[0x3B0];
     s32 unk3E0;
     void *unk3E4;
     void *unk3E8;
@@ -106,7 +107,9 @@ typedef struct {
     s16 unk14;
     s16 unk16;
     s32 unk18;
-    u8 padding[0x1B];
+    u8 padding[0x10];
+    s32 unk2C;
+    u8 padding1B[0x8];
     s16 unk38;
     s16 unk3A;
     s8 unk3C;
