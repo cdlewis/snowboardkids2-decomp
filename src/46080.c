@@ -1658,7 +1658,53 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004B834_4C434);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B990_4C590);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004BB0C_4C70C);
+typedef struct {
+    u8 _pad0[0x4];
+    u8 _pad4[0x4];
+    func_8004B648_4C248_CopyData unk8;
+    u8 _pad14[0x22];
+    s16 unk36;
+    s16 unk38;
+} func_8004BB0C_4C70C_arg;
+
+void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
+    func_8004B648_4C248_CopyData sp10;
+    func_8004B648_4C248_CopyData *s0;
+    func_8004B648_4C248_CopyData *s2;
+    void *s3;
+    s32 i;
+
+    if (((GameState *)getCurrentAllocation())->gamePaused == 0) {
+        arg0->unk36--;
+    }
+
+    if (arg0->unk36 == 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    s2 = &arg0->unk8;
+    s3 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
+    s0 = &sp10;
+
+    if (s3 != NULL) {
+        memcpy(s0, s2, 0xC);
+        sp10.unk4 = sp10.unk4 + 0xA0000;
+        func_80050ECC_51ACC(s0);
+        func_80056B7C_5777C(s0, 0xD);
+        func_80058924_59524(s3);
+        func_80069CF8_6A8F8();
+    } else {
+        if (arg0->unk36 < 0x1F) {
+            i = 0;
+            if ((gFrameCounter & 1) == 0) {
+                return;
+            }
+        }
+        for (i = 0; i < 4; i++) {
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->_pad4);
+        }
+    }
+}
 
 void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
