@@ -63,6 +63,7 @@ extern s32 D_80090BB0_917B0;
 
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern void func_80069CF8_6A8F8(void);
+extern s32 gFrameCounter;
 
 typedef struct {
     u8 _pad0[0x14];
@@ -1557,7 +1558,63 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004B3B0_4BFB0);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B4CC_4C0CC);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B648_4C248);
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} func_8004B648_4C248_CopyData;
+
+typedef struct {
+    u8 _pad0[0x4];
+    u8 _pad4[0x4];
+    func_8004B648_4C248_CopyData unk8;
+    u8 _pad14[0x22];
+    s16 unk36;
+} func_8004B648_4C248_arg;
+
+extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
+extern void func_80050ECC_51ACC(void *arg0);
+extern void func_80058924_59524(void *arg0);
+
+void func_8004B648_4C248(func_8004B648_4C248_arg *arg0) {
+    func_8004B648_4C248_CopyData sp10;
+    func_8004B648_4C248_CopyData *s0;
+    func_8004B648_4C248_CopyData *s2;
+    void *s3;
+    s32 i;
+
+    if (((GameState *)getCurrentAllocation())->gamePaused == 0) {
+        arg0->unk36--;
+    }
+
+    s2 = &arg0->unk8;
+
+    if (arg0->unk36 == 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    s3 = func_8005B24C_5BE4C(s2, -1, 0xA0000);
+    s0 = &sp10;
+
+    if (s3 != NULL) {
+        memcpy(s0, s2, 0xC);
+        sp10.unk4 = sp10.unk4 + 0xA0000;
+        func_80050ECC_51ACC(s0);
+        func_80056B7C_5777C(s0, 0xD);
+        func_80058924_59524(s3);
+        func_80069CF8_6A8F8();
+    } else {
+        if (arg0->unk36 < 0x1F) {
+            i = 0;
+            if ((gFrameCounter & 1) == 0) {
+                return;
+            }
+        }
+        for (i = 0; i < 4; i++) {
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)((u8 *)arg0 + 4));
+        }
+    }
+}
 
 void func_8004B758_4C358(func_8004B758_4C358_arg *arg0) {
     GameState *allocation;
