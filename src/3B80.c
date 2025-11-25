@@ -1,4 +1,5 @@
 #include "common.h"
+#include "task_scheduler.h"
 
 typedef struct {
     u8 padding[0xFF5];
@@ -11,8 +12,17 @@ typedef struct {
 } func_80002FD4_3BD4_arg;
 
 extern void func_80000760_1360(void *);
+void func_80002FD4_3BD4(func_80002FD4_3BD4_arg *arg0);
 
-INCLUDE_ASM("asm/nonmatchings/3B80", func_80002F80_3B80);
+void func_80002F80_3B80(void *arg0, void *arg1) {
+    func_80002FD4_3BD4_arg *task;
+
+    task = scheduleTask(func_80002FD4_3BD4, 2, 0, 0xF0);
+    if (task != NULL) {
+        task->unk0 = arg0;
+        task->unk4 = arg1;
+    }
+}
 
 void func_80002FD4_3BD4(func_80002FD4_3BD4_arg *arg0) {
     if (arg0->unk0->unkFF5 != 0) {
