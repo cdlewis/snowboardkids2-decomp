@@ -16,8 +16,8 @@ USE_ASSET(_635AB0);
 USE_ASSET(_63C9F0);
 USE_ASSET(_67E860)
 
-s32 func_8000B6B8_C2B8(s32);
-s32 func_80035F80_36B80(s32);
+void *func_8000B6B8_C2B8(s32);
+void *func_80035F80_36B80(s32);
 extern void func_80002040_2C40(void *);
 extern void *freeNodeMemory(void *);
 
@@ -37,7 +37,8 @@ static asset D_8008BFA0_8CBA0[6] = {
 };
 
 void func_80004368_4F68(void);
-extern void func_80004454_5054(void);
+void func_80004454_5054(void);
+void func_8000454C_514C(void);
 extern void func_800B02E0(void *);
 extern void func_800B0760(void *);
 extern void func_800B00C0_9FF70(void *);
@@ -62,9 +63,9 @@ typedef struct {
     s8 unk94C;
     u8 padding8[0xF];
     void *unk95C;
-    s32 unk960;
-    s32 unk964;
-    s32 unk968;
+    void *unk960;
+    void *unk964;
+    void *unk968;
     u8 padding9[0x4C];
     void *unk9B8[6];
     u8 padding11[0x41C];
@@ -204,7 +205,34 @@ void func_80004368_4F68(void) {
     state->unk2 = (u16)state->unk2 + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/4A40", func_80004454_5054);
+void func_80004454_5054(void) {
+    func_80003EE0_4AE0_task_memory *state;
+    s32 i;
+
+    state = (func_80003EE0_4AE0_task_memory *)getCurrentAllocation();
+
+    if (state->unk2 == 0x1CB8) {
+        unlinkNode(&state->unk768);
+        unlinkNode(&state->unk590);
+        unlinkNode(&state->unk3B8);
+        unlinkNode(&state->unk1E0);
+        unlinkNode(&state->unk8);
+        state->unk95C = freeNodeMemory(state->unk95C);
+        state->unk968 = freeNodeMemory(state->unk968);
+        state->unk964 = freeNodeMemory(state->unk964);
+        state->unk960 = freeNodeMemory(state->unk960);
+        state->unkDEC = freeNodeMemory(state->unkDEC);
+        for (i = 0; i < 6; i++) {
+            state->unk9B8[i] = freeNodeMemory(state->unk9B8[i]);
+        }
+        terminateSchedulerWithCallback(func_8000454C_514C);
+    } else {
+        func_800B0930(state);
+        func_800B016C(state);
+        func_80004570_5170(state);
+        state->unk2 = (u16)state->unk2 + 1;
+    }
+}
 
 void func_8000454C_514C(void) {
     getCurrentAllocation();
