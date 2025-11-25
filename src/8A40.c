@@ -8,7 +8,7 @@ INCLUDE_ASM("asm/nonmatchings/8A40", func_800080B8_8CB8);
 
 extern void setCleanupCallback(void *);
 extern void setCallback(void *);
-extern void func_800081B0_8DB0(void);
+void func_800081B0_8DB0(void);
 extern void func_8000811C_8D1C(void);
 
 void func_800080F0_8CF0(void) {
@@ -18,7 +18,8 @@ void func_800080F0_8CF0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/8A40", func_8000811C_8D1C);
 
-INCLUDE_ASM("asm/nonmatchings/8A40", func_800081B0_8DB0);
+void func_800081B0_8DB0(void) {
+}
 
 INCLUDE_RODATA("asm/nonmatchings/8A40", jtbl_8009DD88_9E988);
 
