@@ -32,27 +32,58 @@ void func_80002FD4_3BD4(func_80002FD4_3BD4_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/3B80", func_80003000_3C00);
 
-INCLUDE_ASM("asm/nonmatchings/3B80", func_800030B4_3CB4);
-
-INCLUDE_ASM("asm/nonmatchings/3B80", func_80003184_3D84);
-
 typedef struct {
     void *unk0;
+    void *unk4;
+    s32 unk8;
+} AssetEntry;
+
+typedef struct {
+    AssetEntry *unk0;
     u8 _pad4[0x4];
     u8 unk8;
     u8 _pad9[0x3];
-} func_800033AC_3FAC_TableEntry; // size 0xC
+} func_800033AC_3FAC_TableEntry;
 
 typedef struct {
     void *unk0;
     void **unk4;
     void *unk8;
-    u8 _padC[0xB8];
+    void *unkC;
+    void *unk10;
+    u8 _pad14[0xB0];
     u8 unkC4;
     u8 unkC5;
 } func_800033AC_3FAC_arg;
 
 extern func_800033AC_3FAC_TableEntry D_8008BF70_8CB70[];
+extern void func_80003184_3D84(void *);
+void func_800033AC_3FAC(func_800033AC_3FAC_arg *arg0);
+
+void func_800030B4_3CB4(func_800033AC_3FAC_arg *arg0) {
+    func_800033AC_3FAC_TableEntry *entry;
+    AssetEntry *assetList;
+    s32 i;
+
+    entry = &D_8008BF70_8CB70[arg0->unkC4];
+    assetList = entry->unk0;
+
+    setCleanupCallback(func_800033AC_3FAC);
+    i = 0;
+
+    arg0->unk10 = NULL;
+    arg0->unkC = NULL;
+
+    arg0->unk4 = allocateNodeMemory(entry->unk8 * 4);
+
+    for (i = 0; i < entry->unk8; i++) {
+        arg0->unk4[i] = dmaRequestAndUpdateStateWithSize(assetList[i].unk0, assetList[i].unk4, assetList[i].unk8);
+    }
+
+    setCallback(func_80003184_3D84);
+}
+
+INCLUDE_ASM("asm/nonmatchings/3B80", func_80003184_3D84);
 
 void func_800033AC_3FAC(func_800033AC_3FAC_arg *arg0) {
     func_800033AC_3FAC_TableEntry *entry;
