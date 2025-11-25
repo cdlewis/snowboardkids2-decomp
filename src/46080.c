@@ -1540,7 +1540,73 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004AA90_4B690);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004AB50_4B750);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004AD18_4B918);
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} func_8004AD18_4B918_CopyData;
+
+typedef struct {
+    u8 _pad0[0x4];
+    u8 _pad4[0x4];
+    func_8004AD18_4B918_CopyData unk8;
+    u8 _pad14[0x22];
+    s16 unk36;
+} func_8004AD18_4B918_arg;
+
+extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
+extern void func_80050ECC_51ACC(void *arg0);
+extern void func_80058924_59524(void *arg0);
+
+void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0) {
+    func_8004AD18_4B918_CopyData sp10;
+    func_8004AD18_4B918_CopyData *s0;
+    func_8004AD18_4B918_CopyData *s2;
+    void *s3;
+    s32 i;
+    GameState *alloc;
+
+    alloc = (GameState *)getCurrentAllocation();
+
+    if (alloc->gamePaused == 0) {
+        if (alloc->unk5B < 10) {
+            if (arg0->unk36 < 0x1194) {
+                if (arg0->unk36 >= 0x1F) {
+                    arg0->unk36 = 0x1E;
+                }
+            }
+        }
+        arg0->unk36--;
+    }
+
+    s2 = &arg0->unk8;
+
+    if (arg0->unk36 == 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    s3 = func_8005B24C_5BE4C(s2, -1, 0xA0000);
+    s0 = &sp10;
+
+    if (s3 != NULL) {
+        memcpy(s0, s2, 0xC);
+        sp10.unk4 = sp10.unk4 + 0xA0000;
+        func_80050ECC_51ACC(s0);
+        func_80056B7C_5777C(s0, 0xD);
+        func_80058924_59524(s3);
+        func_80069CF8_6A8F8();
+    } else {
+        i = 0;
+        if (arg0->unk36 < 0x1F) {
+            if ((gFrameCounter & 1) == 0) {
+                return;
+            }
+        }
+        for (i = 0; i < 4; i++) {
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)((u8 *)arg0 + 4));
+        }
+    }
+}
 
 void func_8004AE58_4BA58(s32 **arg0) {
     GameState *temp_v0;
