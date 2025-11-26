@@ -32,6 +32,22 @@ typedef struct {
 } func_80050504_51104_arg;
 
 typedef struct {
+    loadAssetMetadata_arg lam;
+    u8 padding[0x4];
+} AssetWrapper;
+
+typedef struct {
+    MemoryAllocatorNode *unk0;
+    AssetWrapper assets[2];
+    s32 unk44;
+    s32 unk48;
+    s32 unk4C;
+    s16 unk50;
+    s16 unk52;
+    s16 unk54;
+} func_80050740_51340_arg;
+
+typedef struct {
     MemoryAllocatorNode *unk0;
     void *unk4;
     u8 padding[0x16];
@@ -154,7 +170,7 @@ typedef struct {
 void func_800504A0_510A0(func_800504A0_510A0_arg *);
 void func_800505D8_511D8(s32 **arg0);
 
-void func_80050740_51340(void);
+void func_80050740_51340(func_80050740_51340_arg *);
 void func_80050864_51464(func_80050864_51464_arg *);
 void func_800509CC_515CC(void);
 void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
@@ -251,7 +267,38 @@ void func_800506B4_512B4(func_800506B4_512B4_arg *arg0) {
     setCallbackWithContinue(&func_80050740_51340);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050740_51340);
+void func_80050740_51340(func_80050740_51340_arg *arg0) {
+    GameState *gs;
+    s32 i;
+
+    gs = (GameState *)getCurrentAllocation();
+    loadAssetMetadata(&arg0->assets[0].lam, arg0->unk0, arg0->unk54 + arg0->unk50);
+
+    arg0->assets[1].lam.data_ptr = arg0->assets[0].lam.data_ptr;
+    arg0->assets[1].lam.index_ptr = arg0->assets[0].lam.index_ptr;
+    arg0->assets[1].lam.unk18 = arg0->assets[0].lam.unk18;
+    arg0->assets[1].lam.unk19 = arg0->assets[0].lam.unk19;
+
+    for (i = 0; i < 4; i++) {
+        func_80067EDC_68ADC(i, &arg0->assets[0].lam);
+        func_80067EDC_68ADC(i, &arg0->assets[1].lam);
+    }
+
+    if (gs->gamePaused == 0) {
+        if (arg0->unk50 != 0) {
+            for (i = 0; i < 2; i++) {
+                arg0->assets[i].lam.unk4 += arg0->unk44;
+                arg0->assets[i].lam.unk8 += arg0->unk48;
+                arg0->assets[i].lam.unkC += arg0->unk4C;
+            }
+        }
+
+        arg0->unk50++;
+        if ((s16)arg0->unk50 == 5) {
+            func_80069CF8_6A8F8();
+        }
+    }
+}
 
 void func_80050864_51464(func_80050864_51464_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
