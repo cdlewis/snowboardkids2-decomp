@@ -88,9 +88,9 @@ INCLUDE_ASM("asm/nonmatchings/90F0", func_80009F90_AB90);
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A030_AC30);
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A13C_AD3C);
-
 extern void func_8000A1E4_ADE4(s32, s32, s32, s32, s32, s32, s32, s16, u8, u8);
+
+INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A13C_AD3C);
 
 void func_8000A190_AD90(
     s32 arg0,

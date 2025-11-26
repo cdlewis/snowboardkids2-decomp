@@ -101,7 +101,13 @@ extern void *D_80090CF0_918F0[];
 extern s32 D_80090CF4_918F4[];
 extern u8 D_80090CA8_918A8[][5];
 extern void func_800462D8_46ED8(void);
-void func_8004B990_4C590(func_8004B834_4C434_arg *);
+typedef struct {
+    s32 unk0;
+    func_80066444_67044_arg1 unk4;
+    s16 unk38;
+} func_8004B990_4C590_arg;
+
+void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
 extern u8 func_800698DC_6A4DC(void);
 extern void func_8004562C_4622C(void);
 extern void func_80065DA8_669A8(s32, DisplayListObject *);
@@ -2198,7 +2204,65 @@ void func_8004B834_4C434(func_8004B834_4C434_arg *arg0) {
 
 extern void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B990_4C590);
+typedef struct {
+    s32 sp18;
+    s32 sp1C;
+    s32 sp20;
+} func_8004B990_4C590_StackLocals;
+
+void func_8004B990_4C590(func_8004B990_4C590_arg *arg0) {
+    func_8004B990_4C590_StackLocals sp;
+    GameState_46080 *alloc;
+    void *s0;
+    func_80066444_67044_arg1_unk4 *s2;
+    void *temp_s0;
+    s32 i;
+
+    alloc = (GameState_46080 *)getCurrentAllocation();
+
+    if (alloc->unk76 != 0) {
+        s0 = NULL;
+    } else {
+        s0 = &alloc->unk30;
+        s2 = &arg0->unk4.unk4;
+
+        arg0->unk4.unk28 -= 0x6000;
+        arg0->unk4.unk4.unk0 += arg0->unk4.unk24;
+        arg0->unk4.unk4.unk4 += arg0->unk4.unk28;
+        arg0->unk4.unk4.unk8 += arg0->unk4.unk2C;
+
+        arg0->unk4.unk30 = func_80060A3C_6163C(s0, arg0->unk4.unk30, s2);
+
+        func_80060CDC_618DC(s0, arg0->unk4.unk30, s2, 0x100000, &sp.sp18);
+
+        arg0->unk4.unk4.unk0 += sp.sp18;
+        arg0->unk4.unk4.unk8 += sp.sp20;
+
+        sp.sp1C = func_80061A64_62664(s0, arg0->unk4.unk30, s2);
+
+        temp_s0 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
+
+        if (temp_s0 != NULL) {
+            func_80050ECC_51ACC(s2);
+            func_80056B7C_5777C(s2, 0xD);
+            func_80058924_59524(temp_s0);
+            func_80069CF8_6A8F8();
+            return;
+        }
+
+        if (arg0->unk4.unk4.unk4 < sp.sp1C) {
+            arg0->unk4.unk4.unk4 = sp.sp1C;
+            arg0->unk4.unk36 = 0x96;
+            setCallback(&func_8004BB0C_4C70C);
+        }
+
+        s0 = NULL;
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, &arg0->unk4);
+    }
+}
 
 void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
     func_8004AD18_4B918_CopyData sp10;

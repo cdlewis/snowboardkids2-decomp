@@ -88,7 +88,10 @@ typedef struct {
     func_80066444_67044_arg1_unk4 unk4;
     u8 padding[0xC];
     s32 unk1C;
-    u8 padding2[0x10];
+    u8 padding2[0x4];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
     s16 unk30;
     s16 unk36;
 } func_80066444_67044_arg1;

@@ -96,9 +96,11 @@ dirs:
 	@rm -f $(BUILD_LOG)
 
 verify: $(TARGET).z64
-	@shasum --check $(BASENAME).sha1
-	@$(PYTHON) $(TOOLS_DIR)/check_warnings.py $(BUILD_LOG)
-	@if [ -z "$$BUILD_AND_VERIFY" ]; then echo "Reminder to Claude: make caches things, you need to run ./tools/build-and-verify.sh instead."; fi
+	@status=0; \
+	shasum --check $(BASENAME).sha1 || status=$$?; \
+	$(PYTHON) $(TOOLS_DIR)/check_warnings.py $(BUILD_LOG) || status=$$?; \
+	if [ -z "$$BUILD_AND_VERIFY" ]; then echo "Reminder to Claude: make caches things, you need to run ./tools/build-and-verify.sh instead."; fi; \
+	exit $$status
 
 no_verify: $(TARGET).z64
 	@echo "Skipping SHA1SUM check, updating CRC"
