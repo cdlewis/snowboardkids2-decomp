@@ -5,6 +5,7 @@
 
 extern s32 func_8000A030_AC30(void *, s32);
 extern void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32);
+extern void func_8000A1E4_ADE4(void *, u16, s32, s32, s32, s32, s32, s32, s32, s32, s16);
 
 typedef struct {
     u8 _pad[0xC];
@@ -85,7 +86,49 @@ void func_800061D0_6DD0(func_80006398_6F98_arg *arg0) {
     setCallback(func_8000629C_6E9C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/6DD0", func_8000629C_6E9C);
+void func_8000629C_6E9C(func_80006398_6F98_arg *arg0) {
+    func_80006940_inner *inner;
+    s16 temp;
+    s16 newTemp;
+    void *ptr;
+
+    if (arg0->unk0->unk3C == 1) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    temp = arg0->unk68;
+    if (temp < 0) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    newTemp = temp - 1;
+    ptr = &arg0->unk4;
+    arg0->unk68 = newTemp;
+    func_8000A030_AC30(ptr, 0x10000);
+
+    inner = arg0->unk0;
+    if (inner->unk88 != 0) {
+        if (inner->unk3F != 0) {
+            func_8000A1E4_ADE4(
+                ptr,
+                inner->unk10->unk16,
+                arg0->unk50 + arg0->unk5C,
+                arg0->unk54 + arg0->unk60,
+                arg0->unk58 + arg0->unk64,
+                0x18000,
+                0x18000,
+                0,
+                0,
+                0xFF,
+                arg0->unk6A
+            );
+        }
+    }
+
+    arg0->unk60 = arg0->unk60 + 0xFFFEB852;
+}
 
 void func_80006398_6F98(func_80006398_6F98_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk4);
