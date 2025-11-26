@@ -1340,10 +1340,10 @@ typedef struct {
     s16 unkAC;
 } func_80048350_48F50_arg;
 
-extern void func_8004841C_4901C(void);
 extern void func_80048834_49434(Struct_func_80048834_49434 *arg0);
 
 void func_80048350_48F50(func_80048350_48F50_arg *arg0);
+void func_8004841C_4901C(func_80048350_48F50_arg *arg0);
 
 void func_80048310_48F10(Struct_func_80048834_49434 *arg0) {
     arg0->unk0 = loadAsset_34CB50();
@@ -1378,10 +1378,6 @@ void func_80048350_48F50(func_80048350_48F50_arg *arg0) {
     setCallbackWithContinue(&func_8004841C_4901C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004841C_4901C);
-
-INCLUDE_ASM("asm/nonmatchings/46080", func_80048540_49140);
-
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -1392,6 +1388,50 @@ typedef struct {
 } Element_80048720;
 
 extern void func_800670A4_67CA4(u8, func_80066444_67044_arg1 *);
+extern void func_80048540_49140(void);
+
+void func_8004841C_4901C(func_80048350_48F50_arg *arg0) {
+    Allocation_47D1C *allocation;
+    s32 heightOffset;
+    s32 sinVal;
+    s32 j;
+    s32 i;
+    Element_80048720 *elem;
+
+    allocation = (Allocation_47D1C *)getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        arg0->unkAC += 0x40;
+        if ((s16)arg0->unkAC == 0x800) {
+            arg0->unkA8 = 0;
+            setCallback(&func_80048540_49140);
+        }
+    }
+
+    sinVal = approximateSin(arg0->unkAC);
+    heightOffset = ((0x2000 - sinVal) << 10) + 0x200000;
+    j = 0;
+    elem = (Element_80048720 *)arg0;
+
+loop:
+    elem->unk8 = arg0->unkA4->worldPosX;
+    elem->unkC = arg0->unkA4->worldPosY + heightOffset;
+    elem->unk10 = arg0->unkA4->worldPosZ;
+    j += 1;
+    elem += 1;
+    if (j < 5)
+        goto loop;
+
+    for (i = 0; i < 2; i++) {
+        func_80066444_67044(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+    }
+
+    for (i = 2; i < 5; i++) {
+        func_800670A4_67CA4(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+    }
+}
+
+INCLUDE_ASM("asm/nonmatchings/46080", func_80048540_49140);
 
 void func_80048720_49320(func_80048350_48F50_arg *arg0) {
     Allocation_47D1C *allocation;
