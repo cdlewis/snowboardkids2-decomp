@@ -110,7 +110,7 @@ typedef struct {
     StateEntryItem items[2];
     s32 unk34;
     /* 0x38 */ u16 next_index;
-    u8 padding2[0x2];
+    /* 0x3A */ u16 prev_index;
     s16 unk3C;
     u8 unk3E;
     u8 unk3F;

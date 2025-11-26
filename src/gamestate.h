@@ -34,7 +34,7 @@ typedef struct {
 typedef struct {
     u8 padding[0x434];
     s32 worldPosX;
-    s32 unk438;
+    s32 worldPosY;
     s32 worldPosZ;
     u8 padding2[0x72C];
     s32 unkB6C;
@@ -43,12 +43,18 @@ typedef struct {
     s32 unkB84;
     u8 padding3[0xC];
     u16 unkB94;
-    u8 padding4[0x2E];
+    u8 padding4[0x22];
+    u8 unkBB8;
+    u8 padding4b[0xB];
     u8 unkBC4;
     u8 unkBC5;
-    u8 padding5a[0xD];
+    u8 padding5a[0xC];
+    u8 unkBD2;
     u8 unkBD3;
-    u8 padding5b[0x14];
+    u8 unkBD4;
+    u8 padding5b[0x3];
+    u8 unkBD8;
+    u8 padding5c[0xF];
 } Player;
 
 typedef struct {

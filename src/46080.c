@@ -42,32 +42,38 @@ typedef struct {
     s16 unk38;
 } func_8004AF2C_4BB2C_arg;
 
-extern void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
+typedef struct {
+    u8 _pad0[0x4C];
+    s32 unk4C;
+    s32 unk50;
+    s32 unk54;
+    u8 _pad58[0x3F4];
+    s32 unk44C;
+    s32 unk450;
+    s32 unk454;
+    u8 _pad458[0x63C];
+    u16 unkA94;
+    u8 _padA96[0xFE];
+    u16 unkB94;
+    u8 _padB96[0x22];
+    u8 unkBB8;
+} func_8004B834_Player;
 
-extern void *D_80090CEC_918EC[];
-extern void *D_80090CF0_918F0[];
-extern s32 D_80090CF4_918F4[];
-extern void func_800462D8_46ED8(void);
-extern void func_8004B834_4C434(void);
-extern u8 func_800698DC_6A4DC(void);
-extern void func_8004562C_4622C(void);
-extern void func_80065DA8_669A8(s32, DisplayListObject *);
-extern void rotateVectorY(void *, s32, void *);
-extern void func_80056B7C_5777C(void *, s32);
-
-extern s32 D_80090E20_91A20;
-extern s32 D_80090BC8_917C8[3];
-extern s32 D_80090BBC_917BC[3];
-extern s32 D_80090B98_91798[];
-extern s32 D_80090BB0_917B0;
-extern s32 D_80090B80_91780;
-
-extern void transformVector2(void *matrix, void *vector, s32 *output);
-extern void func_80069CF8_6A8F8(void);
-extern s32 gFrameCounter;
-extern u16 D_8009ADE0_9B9E0;
-extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
-extern void func_80059A48_5A648(void *, s32);
+typedef struct {
+    void *unk0;
+    void *unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 _pad14[0x10];
+    func_8004B834_Player *unk24;
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    s16 unk34;
+    s16 unk36;
+    s16 unk38;
+} func_8004B834_4C434_arg;
 
 typedef struct {
     u8 _pad0[0x14];
@@ -88,9 +94,44 @@ typedef struct {
     s32 unk40;
 } func_800473F4_47FF4_arg;
 
+extern void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
+
+extern void *D_80090CEC_918EC[];
+extern void *D_80090CF0_918F0[];
+extern s32 D_80090CF4_918F4[];
+extern u8 D_80090CA8_918A8[][5];
+extern void func_800462D8_46ED8(void);
+void func_8004B990_4C590(func_8004B834_4C434_arg *);
+extern u8 func_800698DC_6A4DC(void);
+extern void func_8004562C_4622C(void);
+extern void func_80065DA8_669A8(s32, DisplayListObject *);
+extern void rotateVectorY(void *, s32, void *);
+extern void func_80056B7C_5777C(void *, s32);
+
+extern s32 D_80090E20_91A20;
+extern s32 D_80090E40_91A40;
+extern s32 D_80090BC8_917C8[3];
+extern s32 D_80090BBC_917BC[3];
+extern s32 D_80090B98_91798[];
+extern s32 D_80090BB0_917B0;
+extern s32 D_80090B80_91780;
+
+extern void transformVector2(void *matrix, void *vector, s32 *output);
+extern void func_80069CF8_6A8F8(void);
+extern s32 gFrameCounter;
+extern u16 D_8009ADE0_9B9E0;
+extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
+extern void func_80059A48_5A648(void *, s32);
+
 void func_80047330_47F30(FunctionArg_80047330 *arg0);
 void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
 void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0);
+
+typedef struct {
+    u8 _pad0[0x4];
+    func_80066444_67044_arg1 unk4;
+    s16 unk38;
+} func_8004BB0C_4C70C_arg;
 
 typedef struct {
     u8 _pad0[0x14];
@@ -1105,7 +1146,6 @@ typedef struct {
     void *unk0;
 } Struct_func_800482A4_48EA4;
 
-extern void func_80047F90_48B90(void);
 extern void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *);
 
 typedef struct {
@@ -1123,15 +1163,29 @@ typedef struct {
 } AssetMetadata_46080;
 
 typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 _pad14[0xC];
+} Element_80047F90;
+
+extern s32 approximateSin(s16 angle);
+extern void func_800480A8_48CA8(void);
+
+typedef struct {
     void *unk0;
     AssetMetadata_46080 unk4;
     AssetMetadata_46080 unk24;
     AssetMetadata_46080 unk44;
-    u8 _pad64[0x6];
+    Player *unk64;
+    s16 unk68;
     s16 unk6A;
 } Struct_func_80047EFC_48AFC;
 
 extern void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
+void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
 
 void func_80047EBC_48ABC(Struct_func_80047EBC_48ABC *arg0) {
     arg0->unk0 = loadAsset_34CB50();
@@ -1154,7 +1208,55 @@ void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *arg0) {
     setCallbackWithContinue(&func_80047F90_48B90);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80047F90_48B90);
+void func_80047F90_48B90(Struct_func_80047EFC_48AFC *arg0) {
+    GameState *allocation;
+    s32 heightOffset;
+    s32 sinVal;
+    s32 i;
+    s32 j;
+    s16 temp;
+    s32 offset;
+    Element_80047F90 *elem;
+
+    allocation = (GameState *)getCurrentAllocation();
+
+    if (allocation->gamePaused == 0) {
+        temp = arg0->unk6A + 0x40;
+        arg0->unk6A = temp;
+        if (temp == 0x800) {
+            arg0->unk68 = 0x1E;
+            loadAssetMetadata(&arg0->unk44.asset, arg0->unk0, 5);
+            setCallback(&func_800480A8_48CA8);
+        }
+    }
+
+    sinVal = approximateSin(arg0->unk6A);
+    heightOffset = ((0x2000 - sinVal) << 10) + 0x190000;
+    i = 0;
+    elem = (Element_80047F90 *)arg0;
+
+loop:
+    elem->unk8 = arg0->unk64->worldPosX;
+    elem->unkC = arg0->unk64->worldPosY + heightOffset;
+    elem->unk10 = arg0->unk64->worldPosZ;
+    i += 1;
+    elem += 1;
+    if (i < 3)
+        goto loop;
+
+    i = 0;
+    j = 0;
+    do {
+        offset = 4;
+        do {
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)((s32)arg0 + offset));
+            j++;
+            offset += 0x20;
+        } while (j < 3);
+        i++;
+        j = 0;
+    } while (i < 4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800480A8_48CA8);
 
@@ -1185,7 +1287,8 @@ typedef struct {
 typedef struct {
     void *unk0;
     AssetMetadata_46080 elements[5];
-    u8 _pad[0x6];
+    Player *unkA4;
+    s16 unkA8;
     s16 unkAA;
     s16 unkAC;
 } func_80048350_48F50_arg;
@@ -1232,7 +1335,56 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004841C_4901C);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048540_49140);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80048720_49320);
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 _pad14[0xC];
+} Element_80048720;
+
+extern void func_800670A4_67CA4(u8, func_80066444_67044_arg1 *);
+
+void func_80048720_49320(func_80048350_48F50_arg *arg0) {
+    Allocation_47D1C *allocation;
+    s32 heightOffset;
+    s32 sinVal;
+    s32 j;
+    s32 i;
+    Element_80048720 *elem;
+
+    allocation = (Allocation_47D1C *)getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        arg0->unkAC -= 0x40;
+        if (arg0->unkAC == 0) {
+            func_80069CF8_6A8F8();
+        }
+    }
+
+    sinVal = approximateSin(arg0->unkAC);
+    heightOffset = ((0x2000 - sinVal) << 10) + 0x200000;
+    j = 0;
+    elem = (Element_80048720 *)arg0;
+
+loop:
+    elem->unk8 = arg0->unkA4->worldPosX;
+    elem->unkC = arg0->unkA4->worldPosY + heightOffset;
+    elem->unk10 = arg0->unkA4->worldPosZ;
+    j += 1;
+    elem += 1;
+    if (j < 5)
+        goto loop;
+
+    for (i = 0; i < 2; i++) {
+        func_80066444_67044(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+    }
+
+    for (i = 2; i < 5; i++) {
+        func_800670A4_67CA4(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+    }
+}
 
 void func_80048834_49434(Struct_func_80048834_49434 *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
@@ -1252,12 +1404,6 @@ void func_80048860_49460(Player *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800488A0_494A0);
-
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004899C_4959C);
-
-INCLUDE_ASM("asm/nonmatchings/46080", func_80048AE8_496E8);
-
 typedef struct {
     void *unk0;
     void *unk4;
@@ -1274,6 +1420,47 @@ typedef struct {
     u8 _pad5[0x3];
     u8 unk24;
 } func_80048E34_49A34_arg;
+
+s32 func_800488A0_494A0(Player *arg0, u8 *arg1) {
+    s32 i;
+    s32 randVal;
+    u8 index;
+    func_80048E34_49A34_arg *element;
+
+    randVal = getRand(*(arg1 + arg0->unkBC4 + 0x24)) & 0xFF;
+    index = arg0->unkBC4;
+
+    for (i = 0; i < 5; i++) {
+        if (D_80090CA8_918A8[index][i] >= randVal) {
+            break;
+        }
+    }
+
+    element = (func_80048E34_49A34_arg *)(arg1 + index);
+
+    switch (element->unk1C) {
+        case 0:
+            element->unk24 = element->unk24 + 1;
+            break;
+        case 1:
+            element->unk24 = element->unk24 - 1;
+            break;
+        case 2:
+            element->unk24 = element->unk24 + 3;
+            break;
+        case 3:
+            element->unk24 = element->unk24 - 3;
+            break;
+        default:
+            return i + 1;
+    }
+
+    return i + 1;
+}
+
+INCLUDE_ASM("asm/nonmatchings/46080", func_8004899C_4959C);
+
+INCLUDE_ASM("asm/nonmatchings/46080", func_80048AE8_496E8);
 
 typedef struct {
     void *unk0;
@@ -1712,7 +1899,66 @@ void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004AFF8_4BBF8);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B130_4BD30);
+typedef struct {
+    void *unk0;
+    void *unk4;
+    u8 _pad[0x28];
+    s16 unk30;
+    u8 _pad2[0x2];
+    s16 unk34;
+    s16 unk36;
+    s16 unk38;
+} func_8004B130_arg;
+
+void func_8004B130_4BD30(func_8004B130_arg *arg0) {
+    allocation_46080 *allocation;
+    Player *player;
+    s32 i;
+
+    allocation = (allocation_46080 *)getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        arg0->unk34--;
+    }
+
+    if (arg0->unk34 == 0) {
+        if (arg0->unk38 == 1) {
+            if (arg0->unk36 == 7) {
+                allocation->unk5B--;
+            }
+        }
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    player = (Player *)func_8005B24C_5BE4C((void *)&arg0->unk4 + 4, -1, 0x100000);
+
+    if (player != NULL) {
+        if (arg0->unk38 == 0) {
+            u16 val = (u16)arg0->unk36;
+            u8 tmp = player->unkBD8 | 1;
+            player->unkBD3 = 3;
+            player->unkBD2 = (u8)val;
+            player->unkBD8 = tmp;
+        } else {
+            player->unkBD4 = (u8)arg0->unk36;
+            player->unkBD8 |= 2;
+        }
+        func_80056B7C_5777C((void *)&arg0->unk4 + 4, 8);
+        func_80069CF8_6A8F8();
+    }
+
+    if (arg0->unk34 < 0x1F) {
+        i = 0;
+        if ((gFrameCounter & 1) == 0) {
+            return;
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+    }
+}
 
 void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0) {
     GameState *allocation;
@@ -1822,21 +2068,59 @@ typedef struct {
 
 void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0);
 
+void func_8004B834_4C434(func_8004B834_4C434_arg *);
+
 void func_8004B7F4_4C3F4(MemoryAllocatorNode **arg0) {
     *arg0 = load_3ECE40();
     setCleanupCallback(&func_8004BC20_4C820);
     setCallbackWithContinue(&func_8004B834_4C434);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B834_4C434);
+void func_8004B834_4C434(func_8004B834_4C434_arg *arg0) {
+    GameState *allocation;
+    u8 randomValue;
+    s32 rotationAngle;
+    u8 randomValue3;
+    u8 randomValue4;
+    s32 *addr;
+    s32 pad[4];
+
+    allocation = (GameState *)getCurrentAllocation();
+    arg0->unk4 = (void *)((s32)allocation->unk44 + 0x1400);
+
+    randomValue = randA();
+    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, (randomValue % 3) + 0x6B);
+
+    memcpy(&arg0->unk8, (void *)((s32)arg0->unk24 + 0x4C), 0xC);
+
+    arg0->unkC = arg0->unkC + (s32)0xFFF10000;
+
+    arg0->unk34 = arg0->unk24->unkB94;
+    arg0->unk38 = arg0->unk24->unkBB8;
+
+    randomValue = randA();
+    rotationAngle = ((randomValue & 0xFF) << 5) + arg0->unk24->unkA94;
+
+    randomValue3 = randA();
+    addr = &D_80090E40_91A40;
+    *addr = (randomValue3 & 0xFF) * 7 * 256;
+    rotateVectorY(addr - 2, (s16)rotationAngle, &arg0->unk28);
+
+    arg0->unk28 = arg0->unk28 + arg0->unk24->unk44C;
+
+    randomValue4 = randA();
+    arg0->unk2C = arg0->unk2C + (arg0->unk24->unk450 + (((randomValue4 & 0xFF) * 5) << 9));
+    arg0->unk30 = arg0->unk30 + arg0->unk24->unk454;
+
+    setCallbackWithContinue(&func_8004B990_4C590);
+}
+
+extern u16 func_80060A3C_6163C(void *, u16, void *);
+extern void func_80060CDC_618DC(void *, u16, void *, s32, s32 *);
+extern s32 func_80061A64_62664(void *, u16, void *);
+extern void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *);
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B990_4C590);
-
-typedef struct {
-    u8 _pad0[0x4];
-    func_80066444_67044_arg1 unk4;
-    s16 unk38;
-} func_8004BB0C_4C70C_arg;
 
 void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
     func_8004AD18_4B918_CopyData sp10;

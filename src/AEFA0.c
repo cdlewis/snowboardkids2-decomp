@@ -9,8 +9,13 @@ typedef struct {
     void *unk04;
     s8 unk08[0x16];
     u8 unk1E;
-    s8 unk1F[0x11];
-    s8 unk30[0x0C];
+    s8 unk1F[0x5];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    s32 unk38;
     s16 unk3C;
     s16 unk3E;
     s16 unk40;
@@ -34,6 +39,11 @@ typedef struct {
     void *unk0;
     void *unk4;
 } func_800BC340_B0030_arg;
+
+typedef struct {
+    u8 pad[0x30];
+    void *unk30;
+} AllocationUnk30;
 
 typedef struct {
     u8 pad[0x76];
@@ -67,8 +77,10 @@ extern void rotateVectorY(Vec3 *, s32, void *);
 extern void *func_80055D7C_5697C(s32);
 extern void func_80069CF8_6A8F8(void);
 extern void func_800BB45C_AF14C(void **);
-extern s32 func_800BB488_AF178(func_800BB388_AF078_arg *);
 extern void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
+extern u16 func_80060A3C_6163C(void *, u16, void *);
+extern void func_80060CDC_618DC(void *, u16, void *, s32, s32 *);
+extern s32 func_8005CFC0_5DBC0(void *, u16, void *, s32);
 extern void func_800BB620_AF310(void);
 extern void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
 extern void func_800BB778_AF468(void);
@@ -114,7 +126,7 @@ void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *arg0) {
         }
     }
 
-    memcpy(&arg0->unk08, &arg0->unk1F[5], 0xC);
+    memcpy(&arg0->unk08, &arg0->unk24, 0xC);
 
     for (i = 0; i < 4; i++) {
         func_800677C0_683C0(i, (loadAssetMetadata_arg *)&arg0->unk04);
@@ -163,7 +175,56 @@ void func_800BB45C_AF14C(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB488_AF178);
+s32 func_800BB488_AF178(func_800BB388_AF078_arg *arg0) {
+    s32 sp18[3];
+    AllocationUnk30 *allocation;
+    void *allocationUnk30;
+    s32 *argPos;
+    s32 result;
+    u16 temp;
+
+    result = 0;
+    allocation = (AllocationUnk30 *)getCurrentAllocation();
+
+    if (((u8 *)allocation)[0x76] == 0) {
+        allocationUnk30 = &allocation->unk30;
+
+        arg0->unk24 = arg0->unk24 + arg0->unk30;
+        arg0->unk2C = arg0->unk2C + arg0->unk38;
+
+        argPos = &arg0->unk24;
+
+        temp = func_80060A3C_6163C(allocationUnk30, arg0->unk3E, argPos);
+        arg0->unk3E = temp;
+
+        func_80060CDC_618DC(allocationUnk30, temp, argPos, 0x80000, sp18);
+
+        arg0->unk28 = func_8005CFC0_5DBC0(allocationUnk30, arg0->unk3E, argPos, 0x100000) + 0x180000;
+
+        if (arg0->unk3C == 0) {
+            result = (arg0->unk3E != 0x1A);
+        } else {
+            u16 v = arg0->unk3E;
+            if ((u16)(v - 0x58) >= 2) {
+                result = 1;
+            }
+        }
+
+        if (sp18[0] != 0) {
+            result = 1;
+        } else if (sp18[2] != 0) {
+            result = 1;
+        }
+
+        if (arg0->unk42 == 0) {
+            result = 1;
+        } else {
+            arg0->unk42 = arg0->unk42 - 1;
+        }
+    }
+
+    return result;
+}
 
 void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *arg0) {
     arg0->unk1E += 0x10;
