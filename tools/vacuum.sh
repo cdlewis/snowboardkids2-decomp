@@ -43,7 +43,7 @@ while true; do
     break
   fi
 
-  output=$(claude --model sonnet -p "decompile the function $simplest_func" 2>&1)
+  output=$(claude -p "decompile the function $simplest_func" 2>&1)
   exit_code=$?
   echo "$output"
 
