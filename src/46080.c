@@ -100,6 +100,8 @@ extern void *D_80090CEC_918EC[];
 extern void *D_80090CF0_918F0[];
 extern s32 D_80090CF4_918F4[];
 extern u8 D_80090CA8_918A8[][5];
+extern u8 D_80090CE0_918E0[];
+extern u8 D_80090CBC_918BC[][9];
 typedef struct {
     s32 unk0;
     func_80066444_67044_arg1 unk4;
@@ -1545,7 +1547,59 @@ s32 func_800488A0_494A0(Player *arg0, u8 *arg1) {
     return i + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004899C_4959C);
+typedef struct {
+    u8 padding[0x18];
+    u8 unk18;
+    u8 _pad[0x7];
+    u8 unk20;
+} func_8004899C_arg1_element;
+
+s32 func_8004899C_4959C(Player *arg0, u8 *arg1) {
+    s32 i;
+    s32 randVal;
+    u8 index;
+    func_8004899C_arg1_element *element;
+
+    if (arg0->unkB84 & 0x1000000) {
+        randVal = randB() & 0xFF;
+        for (i = 0; i < 9; i++) {
+            if (D_80090CE0_918E0[i] >= randVal) {
+                break;
+            }
+        }
+        return i + 1;
+    }
+
+    randVal = getRand(*(arg1 + arg0->unkBC4 + 0x20)) & 0xFF;
+    index = arg0->unkBC4;
+
+    for (i = 0; i < 9; i++) {
+        if (D_80090CBC_918BC[index][i] >= randVal) {
+            break;
+        }
+    }
+
+    element = (func_8004899C_arg1_element *)(arg1 + index);
+
+    switch (element->unk18) {
+        case 0:
+            element->unk20 = element->unk20 + 1;
+            break;
+        case 1:
+            element->unk20 = element->unk20 - 1;
+            break;
+        case 2:
+            element->unk20 = element->unk20 + 3;
+            break;
+        case 3:
+            element->unk20 = element->unk20 - 3;
+            break;
+        default:
+            return i + 1;
+    }
+
+    return i + 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048AE8_496E8);
 
