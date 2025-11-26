@@ -64,6 +64,24 @@ typedef struct {
     u8 padding[0x2C];
     void *unk2C;
 } func_8002FA1C_3061C_arg;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s8 unkC;
+    u8 unkD;
+    s8 unkE;
+    s8 unkF;
+} func_8002FA9C_3069C_item;
+
+typedef struct {
+    func_8002FA9C_3069C_item items[2];
+    s8 unk20;
+} func_8002FA9C_3069C_arg;
+
 typedef struct {
     s16 unk0;
     s16 unk2;
@@ -191,7 +209,7 @@ void func_8002F980_30580(func_8002F658_30258_arg *);
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 void func_8002FA44_30644(void *);
 void func_8002FA70_30670(func_8002FA70_30670_arg *);
-void func_8002FB40_30740(void);
+void func_8002FB40_30740(func_8002FA9C_3069C_arg *);
 void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0);
 void func_80030238_30E38(void *arg0);
 void func_80030280_30E80(func_8002FF28_30B28_arg *arg0);
@@ -465,23 +483,6 @@ void func_8002FA70_30670(func_8002FA70_30670_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s8 unkC;
-    u8 unkD;
-    s8 unkE;
-    s8 unkF;
-} func_8002FA9C_3069C_item;
-
-typedef struct {
-    func_8002FA9C_3069C_item items[2];
-    s8 unk20;
-} func_8002FA9C_3069C_arg;
-
 void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0) {
     s32 i;
     void *asset = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
@@ -503,7 +504,57 @@ void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0) {
     setCallback(&func_8002FB40_30740);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FB40_30740);
+void func_8002FB40_30740(func_8002FA9C_3069C_arg *arg0) {
+    GameState *state = getCurrentAllocation();
+    s32 i;
+
+    if (state->unk5C5 > 0 && state->unk5C5 < 4) {
+        if (state->unk5C5 == 1) {
+            arg0->unk20++;
+            if (state->unk5C9 >= 3) {
+                if ((u8)(arg0->unk20) < 0x11) {
+                    arg0->items[0].unkA -= 8;
+                    arg0->items[1].unkA -= 8;
+                } else {
+                    arg0->items[0].unkA += 8;
+                    arg0->items[1].unkA += 8;
+                }
+            } else if (state->unk5C9 == 2) {
+                if ((u8)(arg0->unk20) < 0x11) {
+                    if (state->unk5C8 == 1) {
+                        arg0->items[1].unkA = 0xFF;
+                        arg0->items[0].unkA -= 8;
+                    } else {
+                        arg0->items[0].unkA = 0xFF;
+                        arg0->items[1].unkA -= 8;
+                    }
+                } else {
+                    if (state->unk5C8 == 1) {
+                        arg0->items[1].unkA = 0xFF;
+                        arg0->items[0].unkA += 8;
+                    } else {
+                        arg0->items[0].unkA = 0xFF;
+                        arg0->items[1].unkA += 8;
+                    }
+                }
+            } else {
+                arg0->unk20 = 0;
+                arg0->items[0].unkA = 0xFF;
+                arg0->items[1].unkA = 0xFF;
+            }
+        } else {
+            arg0->unk20 = 0;
+            arg0->items[0].unkA = 0xFF;
+            arg0->items[1].unkA = 0xFF;
+        }
+
+        arg0->unk20 &= 0x1F;
+
+        for (i = 0; i < 2; i++) {
+            debugEnqueueCallback(8, 0, &func_80012004_12C04, &arg0->items[i]);
+        }
+    }
+}
 
 void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
