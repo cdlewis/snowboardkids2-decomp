@@ -107,18 +107,25 @@ typedef struct {
 } GameStateUnk44_Ext;
 
 typedef struct {
-    u8 unk0[0x4];
-    void *unk4;
-    u8 unk8[0x16];
-    u8 unk1E;
-    u8 unk1F[0x5];
-    s16 unk24;
-    u8 unk26[0x2];
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    void *unk34;
-    s16 unk38;
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ s32 unk8;
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ s32 unk10;
+    /* 0x14 */ u8 *unk14;
+    /* 0x18 */ void *unk18;
+    /* 0x1C */ s8 unk1C;
+    /* 0x1D */ s8 unk1D;
+    /* 0x1E */ u8 unk1E;
+    /* 0x1F */ u8 padding_1F;
+    /* 0x20 */ u8 padding_20[0x4];
+    /* 0x24 */ s16 unk24;
+    /* 0x26 */ u16 unk26;
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ s32 unk30;
+    /* 0x34 */ void *unk34;
+    /* 0x38 */ s16 unk38;
 } func_80050C00_51800_Task;
 
 typedef struct {
@@ -303,7 +310,43 @@ void func_8005098C_5158C(MemoryAllocatorNode **node) {
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_800509CC_515CC);
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050AA8_516A8);
+void func_80050AA8_516A8(func_80050C00_51800_Task *arg0) {
+    GameState *gs;
+    s32 i;
+    s16 temp;
+
+    gs = (GameState *)getCurrentAllocation();
+
+    if (gs->gamePaused == 0) {
+        temp = arg0->unk26;
+
+        if (temp % 3 == 0) {
+            loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, arg0->unk24 + (temp >> 2));
+        }
+
+        arg0->unk26++;
+        if ((s16)arg0->unk26 >= 0xF) {
+            func_80069CF8_6A8F8();
+        }
+
+        arg0->unk8 += arg0->unk28;
+        arg0->unkC += arg0->unk2C;
+        arg0->unk10 += arg0->unk30;
+    }
+
+    i = 0;
+    if (arg0->unk1E == 0xFF) {
+        do {
+            func_80066444_67044(i, &arg0->unk4);
+            i++;
+        } while (i < 4);
+    } else {
+        do {
+            func_800677C0_683C0(i, (loadAssetMetadata_arg *)&arg0->unk4);
+            i++;
+        } while (i < 4);
+    }
+}
 
 void func_80050BD4_517D4(s32 **arg0) {
     *arg0 = freeNodeMemory(*arg0);
