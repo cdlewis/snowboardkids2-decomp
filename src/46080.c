@@ -100,7 +100,6 @@ extern void *D_80090CEC_918EC[];
 extern void *D_80090CF0_918F0[];
 extern s32 D_80090CF4_918F4[];
 extern u8 D_80090CA8_918A8[][5];
-extern void func_800462D8_46ED8(void);
 typedef struct {
     s32 unk0;
     func_80066444_67044_arg1 unk4;
@@ -493,6 +492,7 @@ typedef struct {
 } Struct_func_8004657C_4717C;
 
 void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0);
+void func_800462D8_46ED8(Struct_func_8004657C_4717C *);
 
 void func_80046298_46E98(Struct_func_8004657C_4717C *arg0) {
     arg0->unk0 = loadAsset_34CB50();
@@ -500,7 +500,46 @@ void func_80046298_46E98(Struct_func_8004657C_4717C *arg0) {
     setCallback(func_800462D8_46ED8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800462D8_46ED8);
+extern void func_80046464_47064(Struct_func_8004657C_4717C *);
+void func_800463F4_46FF4(Struct_func_8004657C_4717C *);
+
+void func_800462D8_46ED8(Struct_func_8004657C_4717C *arg0) {
+    GameState *state = (GameState *)getCurrentAllocation();
+
+    loadAssetMetadata(&arg0->unk4, arg0->unk0, 0);
+    arg0->unk4.unk0 = (loadAssetMetadata_arg *)((u8 *)state->unk44 + 0x40);
+
+    switch (state->memoryPoolId) {
+        case 0:
+            memcpy(&arg0->unk4.unk4, state->unk48 + 0x24, 0xC);
+            setCallback(func_80046464_47064);
+            break;
+        case 6:
+            memcpy(&arg0->unk4.unk4, state->unk48 + 0x1C8, 0xC);
+            setCallback(func_800463F4_46FF4);
+            break;
+        case 1:
+            memcpy(&arg0->unk4.unk4, state->unk48 + 0x1EC, 0xC);
+            setCallback(func_800463F4_46FF4);
+            break;
+        case 2:
+            memcpy(&arg0->unk4.unk4, state->unk48 + 0x1F8, 0xC);
+            setCallback(func_800463F4_46FF4);
+            break;
+        case 5:
+            memcpy(&arg0->unk4.unk4, state->unk48 + 0x204, 0xC);
+            setCallback(func_800463F4_46FF4);
+            break;
+        case 8:
+            memcpy(&arg0->unk4.unk4, state->unk48 + 0x234, 0xC);
+            setCallback(func_800463F4_46FF4);
+            break;
+        case 9:
+            memcpy(&arg0->unk4.unk4, state->unk48 + 0x240, 0xC);
+            setCallback(func_800463F4_46FF4);
+            break;
+    }
+}
 
 extern void func_80066444_67044(s32, func_80066444_67044_arg1 *);
 
