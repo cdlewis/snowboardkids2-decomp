@@ -6,25 +6,41 @@ extern void func_8002A2D0_2AED0(void *);
 extern void func_8002EBB0_2F7B0(void *);
 extern void func_8002BEF4_2CAF4(void *);
 
+extern void func_8000A49C_B09C(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
+extern s32 getFreeNodeCount(s32);
+
 typedef struct Func2E024Arg Func2E024Arg;
 struct Func2E024Arg {
-    /* 0x00 */ u8 pad0[0x18];
+    /* 0x00 */ s32 unk0;
+    /* 0x04 */ u8 pad0[0x14];
     /* 0x18 */ s32 unk18;
     /* 0x1C */ u8 pad1[0x4];
     /* 0x20 */ s32 unk20;
-    /* 0x24 */ u8 pad2[0x3E];
-    /* 0x62 */ u8 unk62;
-    /* 0x63 */ u8 pad3[0x51];
+    /* 0x24 */ u8 pad2[0x1C];
+    /* 0x40 */ s32 unk40;
+    /* 0x44 */ u8 pad3[0xC];
+    /* 0x50 */ s16 unk50;
+    /* 0x52 */ u8 pad3b[0xC];
+    /* 0x5E */ u8 unk5E;
+    /* 0x5F */ u8 pad4[0x3];
+    /* 0x62 */ s8 unk62;
+    /* 0x63 */ u8 pad5[0x1];
+    /* 0x64 */ s32 unk64;
+    /* 0x68 */ u8 pad6[0x3C];
+    /* 0xA4 */ s32 unkA4;
+    /* 0xA8 */ u8 pad7[0xC];
     /* 0xB4 */ s16 unkB4;
-    /* 0xB6 */ u8 pad4[0x8];
+    /* 0xB6 */ u8 pad8[0x8];
     /* 0xBE */ s16 unkBE;
-    /* 0xC0 */ u8 pad5[0x2];
+    /* 0xC0 */ u8 pad9[0x2];
     /* 0xC2 */ u8 unkC2;
-    /* 0xC3 */ u8 pad6[0x3];
+    /* 0xC3 */ u8 pad10[0x3];
     /* 0xC6 */ s8 unkC6;
-    /* 0xC7 */ u8 pad7[0x1];
+    /* 0xC7 */ u8 pad11[0x1];
     /* 0xC8 */ void (*unkC8)(Func2E024Arg *);
-    /* 0xCC */ u8 pad8[0x9];
+    /* 0xCC */ s16 unkCC;
+    /* 0xCE */ s16 unkCE;
+    /* 0xD0 */ u8 pad12[0x5];
     /* 0xD5 */ u8 unkD5;
 };
 
@@ -32,7 +48,63 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D140_2DD40);
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D46C_2E06C);
 
-INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D668_2E268);
+void func_8002D668_2E268(Func2E024Arg *arg0) {
+    GameState *allocation;
+    s32 i;
+    Func2E024Arg *ptr;
+    s32 val;
+
+    allocation = getCurrentAllocation();
+
+    for (i = 0; i < arg0->unkD5; i++) {
+        ptr = (Func2E024Arg *)((u8 *)arg0 + i * 0x64);
+        val = ptr->unk5E;
+
+        if (val < 0) {
+            goto cont;
+        }
+
+        if (val >= 2) {
+            if (val >= 4) {
+                goto cont;
+            }
+            goto case23;
+        }
+
+        if (ptr->unk62 == 0) {
+            goto cont;
+        }
+        if (i == 0) {
+            arg0->unk50 = 0x12;
+            arg0->unk5E = 2;
+            goto cont;
+        }
+        arg0->unkB4 = 0x1F;
+        arg0->unkC2 = 3;
+        goto cont;
+
+    case23:
+        ptr->unk62 = 0;
+        if (getFreeNodeCount(2) == 0x14) {
+            func_8000A49C_B09C(arg0->unk0, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+            func_8000A49C_B09C(arg0->unk64, 0, 0x24, -1, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
+        }
+
+    cont:
+        func_8002A2D0_2AED0(ptr);
+        ((s32 *)allocation)[0x102 + i] = ptr->unk18;
+        ((s32 *)allocation)[0x104 + i] = ptr->unk20;
+    }
+
+    if (allocation->unk42A == 0x11) {
+        allocation->unk42E = 1;
+        arg0->unkCC = 1;
+        arg0->unkCE = 1;
+        func_8002EBB0_2F7B0(arg0);
+        arg0->unkC8 = func_8002D668_2E268;
+        setCallback(func_8002BEF4_2CAF4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D814_2E414);
 
