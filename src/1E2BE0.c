@@ -1,4 +1,5 @@
 #include "common.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -35,6 +36,10 @@ typedef struct {
     s8 unk70;
     s8 unk71;
 } func_800B5E64_1E2F14_arg0;
+
+extern Mat3x3Padded D_8009A890_9B490;
+
+extern void func_80056914_57514(void *);
 
 void func_800B5B30_1E2BE0(func_800B5E64_1E2F14_arg0 *arg0, s8 arg1) {
     arg0->unk71 = arg1;
@@ -86,7 +91,73 @@ void func_800B5BFC_1E2CAC(void *arg0) {
     freeNodeMemory(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", finalizeAnimationLoop);
+typedef struct {
+    u8 _pad[0x20];
+    s16 unk20;
+    s16 unk22;
+    s16 unk24;
+    s16 unk26;
+    s16 unk28;
+    s16 unk2A;
+    s16 unk2C;
+    s16 unk2E;
+    s16 unk30;
+    s16 unk32;
+    s32 unk34;
+    s32 unk38;
+    s32 unk3C;
+    s32 unk40;
+    s32 unk44;
+    s32 unk48;
+    s32 unk4C;
+    s32 unk50;
+    s32 unk54;
+    s16 unk58;
+    s16 unk5A;
+    s16 unk5C;
+    s16 unk5E;
+    s16 unk60;
+    s16 unk62;
+    s32 unk64;
+    s32 unk68;
+    s16 unk6C;
+    s16 unk6E;
+    s8 unk70;
+    s8 unk71;
+} AnimationLoopArg;
+
+void finalizeAnimationLoop(AnimationLoopArg *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    Mat3x3Padded sp50;
+    Mat3x3Padded sp70;
+    Mat3x3Padded *temp_s0;
+
+    D_8009A890_9B490.unk14 = arg0->unk34;
+    D_8009A890_9B490.unk18 = arg0->unk38 + arg0->unk64;
+    D_8009A890_9B490.unk1C = arg0->unk3C;
+
+    createYRotationMatrix(&sp70, arg0->unk22);
+
+    sp70.unk14 = 0;
+    sp70.unk18 = 0;
+    sp70.unk1C = 0;
+
+    func_8006B084_6BC84(&D_8009A890_9B490, &sp70, &sp30);
+
+    createXRotationMatrix(sp50.m, arg0->unk20);
+
+    sp50.unk14 = 0;
+    sp50.unk18 = 0;
+    sp50.unk1C = 0;
+
+    func_8006B084_6BC84(&sp50, &sp30, &sp10);
+
+    temp_s0 = &sp10;
+    memcpy(arg0, temp_s0, 0x20);
+    func_80056914_57514(temp_s0);
+    func_8006FD3C_7093C(arg0->unk6E, temp_s0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5CFC_1E2DAC);
 
