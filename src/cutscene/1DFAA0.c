@@ -426,7 +426,52 @@ void func_800B3B40(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3B68_1E0C18);
+u16 func_800B3B68_1E0C18(u8 arg0, u16 arg1, s32 arg2) {
+    StateEntry *entry;
+    u16 current;
+    u16 next;
+    u16 nextMasked;
+    u16 arg1Masked;
+    s32 arg2Copy;
+    u16 ffff;
+
+    current = D_800BAEBC_1E7F6C->items[arg0].unk0;
+    arg2Copy = arg2;
+
+    entry = getStateEntry(current);
+    next = entry->next_index;
+
+    if ((u16)next != 0xFFFF) {
+        arg1Masked = arg1;
+        ffff = 0xFFFF;
+        do {
+            entry = getStateEntry(current);
+            nextMasked = next;
+            if ((u16)entry->unk3C == arg1Masked) {
+                if ((arg2Copy & 0xFF) != 0) {
+                    return 0xFFFF;
+                }
+            }
+
+            entry = getStateEntry(nextMasked);
+            if (arg1Masked < (u16)entry->unk3C) {
+                break;
+            }
+            current = next;
+            entry = getStateEntry(nextMasked);
+            next = entry->next_index;
+        } while (next != ffff);
+    }
+
+    if ((arg2Copy & 0xFF) == 0) {
+        entry = getStateEntry(current);
+        if ((u16)entry->unk3C != arg1) {
+            return 0xFFFF;
+        }
+    }
+
+    return current;
+}
 
 s32 findEventAtFrame(u8 a0, u16 a1) {
     StateEntry *base;
