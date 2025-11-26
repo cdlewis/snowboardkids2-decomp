@@ -273,7 +273,57 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B8874_1E5924);
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B8AC4_1E5B74);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B8C3C_1E5CEC);
+void func_800B8C3C_1E5CEC(CutsceneSlotData *arg0) {
+    s32 temp;
+
+    // First section: unk54 with velocity unk6C and max unk60
+    temp = arg0->unk6C;
+    if (temp > 0) {
+        arg0->unk54 += temp;
+        if (arg0->unk54 > arg0->unk60) {
+            arg0->unk54 = arg0->unk60;
+            arg0->unk6C = 0;
+        }
+    } else if (temp < 0) {
+        arg0->unk54 += temp;
+        if (arg0->unk54 < arg0->unk60) {
+            arg0->unk54 = arg0->unk60;
+            arg0->unk6C = 0;
+        }
+    }
+
+    // Second section: unk58 with velocity unk70 and max unk64
+    temp = arg0->unk70;
+    if (temp > 0) {
+        arg0->unk58 += temp;
+        if (arg0->unk58 > arg0->unk64) {
+            arg0->unk58 = arg0->unk64;
+            arg0->unk70 = 0;
+        }
+    } else if (temp < 0) {
+        arg0->unk58 += temp;
+        if (arg0->unk58 < arg0->unk64) {
+            arg0->unk58 = arg0->unk64;
+            arg0->unk70 = 0;
+        }
+    }
+
+    // Third section: unk5C with velocity unk74 and max unk68
+    temp = arg0->unk74;
+    if (temp > 0) {
+        arg0->unk5C += temp;
+        if (arg0->unk5C > arg0->unk68) {
+            arg0->unk5C = arg0->unk68;
+            arg0->unk74 = 0;
+        }
+    } else if (temp < 0) {
+        arg0->unk5C += temp;
+        if (arg0->unk5C < arg0->unk68) {
+            arg0->unk5C = arg0->unk68;
+            arg0->unk74 = 0;
+        }
+    }
+}
 
 s32 func_800B8D34_1E5DE4(CutsceneSlotData *arg0) {
     arg0->unk04.unk20_u.unk20_s32 += arg0->unk3C;
