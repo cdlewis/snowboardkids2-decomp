@@ -121,7 +121,18 @@ void func_80006924_7524(func_80006398_6F98_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/6DD0", func_80006940_7540);
+void func_80006940_7540(func_80006398_6F98_arg *arg0) {
+    func_80006940_inner *inner = arg0->unk0;
+
+    if (inner->unkC == 0x4F) {
+        func_80009E68_AA68(&arg0->unk4, 6);
+    } else {
+        func_80009E68_AA68(&arg0->unk4, 3);
+    }
+    func_80009F90_AB90(&arg0->unk4, 0x10000, 0, -1);
+    setCleanupCallback(func_80006A88_7688);
+    setCallback(func_800069B4_75B4);
+}
 
 void func_800069B4_75B4(func_80006398_6F98_arg *arg0) {
     s8 unused[2];
