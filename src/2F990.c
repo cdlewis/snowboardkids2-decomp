@@ -95,7 +95,15 @@ typedef struct {
     s16 unk2;
     void *unk4;
     s16 unk8;
+    s8 unkA;
+    s8 unkB;
 } func_800308FC_314FC_arg;
+
+typedef struct {
+    func_800308FC_314FC_arg items[6];
+    u8 unk48[0x18];
+    char unk60[8];
+} func_80030540_31140_arg;
 
 typedef struct {
     void *unk0;
@@ -168,7 +176,7 @@ extern s16 D_8008F0B2_8FCB2[];
 
 void func_80030378_30F78(void);
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
-void func_80030540_31140(void);
+void func_80030540_31140(func_80030540_31140_arg *arg0);
 void func_8002EFD8_2FBD8(void *);
 void func_8002F024_2FC24(void);
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
@@ -628,7 +636,59 @@ void func_800304B8_310B8(func_800308FC_314FC_arg *arg0) {
     setCallback(func_80030540_31140);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030540_31140);
+extern s32 D_8008F070_8FC70[];
+extern void func_80010240_10E40(void);
+extern s32 *D_800AFE8C_A71FC;
+
+void func_80030540_31140(func_80030540_31140_arg *arg0) {
+    GameState *state = (GameState *)getCurrentAllocation();
+    s32 i;
+    u8 itemValue;
+    s32 tableValue;
+    func_800308FC_314FC_arg *item;
+    s8 value;
+    s32 space;
+
+    if (state->unk5C5 == 0x14) {
+        return;
+    }
+
+    itemValue = state->unk5CA[state->unk5C8];
+
+    if (itemValue >= 0x80) {
+        return;
+    }
+
+    tableValue = D_8008F070_8FC70[itemValue & 0x1F];
+
+    value = 1;
+    if (*D_800AFE8C_A71FC < tableValue) {
+        i = 5;
+        do {
+            arg0->items[i].unkA = value;
+        } while (--i >= 0);
+    } else {
+        value = 2;
+        i = 5;
+        do {
+            arg0->items[i].unkA = value;
+        } while (--i >= 0);
+    }
+
+    sprintf(arg0->unk60, "%6d", tableValue);
+
+    i = 0;
+    space = ' ';
+    item = &arg0->items[0];
+    do {
+        char c = arg0->unk60[i];
+        if (c != space) {
+            item->unk8 = c - '0';
+            debugEnqueueCallback(8, 0, &func_80010240_10E40, item);
+        }
+        item++;
+    } while (++i < 6);
+}
 
 void func_80030668_31268(func_80030668_31268_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
