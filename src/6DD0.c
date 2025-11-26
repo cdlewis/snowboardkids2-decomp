@@ -1,10 +1,30 @@
 #include "90F0.h"
 #include "common.h"
 #include "rand.h"
+#include "task_scheduler.h"
+
+extern s32 func_8000A030_AC30(void *, s32);
+extern void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32);
 
 typedef struct {
     u8 _pad[0xC];
     s16 unkC;
+    u8 _pad2[0x2];
+    struct {
+        u8 padding[0x16];
+        u16 unk16;
+    } *unk10;
+    u8 _pad3[0x18];
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    u8 _pad4[0x4];
+    s8 unk3C;
+    s8 unk3D;
+    s8 unk3E;
+    s8 unk3F;
+    u8 _pad5[0x48];
+    s8 unk88;
 } func_80006940_inner;
 
 typedef struct {
@@ -34,8 +54,6 @@ typedef struct {
 
 extern void func_80009E68_AA68(void *, s32);
 extern void func_80009F90_AB90(void *, s32, s32, s32);
-extern void setCleanupCallback(void *);
-extern void setCallback(void *);
 void func_80006A88_7688(func_80006398_6F98_arg *);
 void func_800069B4_75B4(func_80006398_6F98_arg *);
 void func_80006398_6F98(func_80006398_6F98_arg *);
@@ -105,7 +123,42 @@ void func_80006924_7524(func_80006398_6F98_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/6DD0", func_80006940_7540);
 
-INCLUDE_ASM("asm/nonmatchings/6DD0", func_800069B4_75B4);
+void func_800069B4_75B4(func_80006398_6F98_arg *arg0) {
+    s8 unused[2];
+    func_80006940_inner *inner;
+    func_80006940_inner *a0_inner;
+    s32 s3;
+    s32 s4;
+    s32 s2;
+
+    do {
+        unused[0] = 1;
+    } while (0);
+
+    do {
+        unused[1] = -1;
+    } while (0);
+
+    inner = arg0->unk0;
+
+    if (inner->unk3C == 1) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    s3 = inner->unk2C;
+    s4 = inner->unk30;
+    s2 = inner->unk34;
+
+    func_8000A030_AC30(&arg0->unk4, 0x10000);
+
+    a0_inner = arg0->unk0;
+    if (a0_inner->unk88 != 0) {
+        if (a0_inner->unk3F != 0) {
+            func_8000A13C_AD3C(&arg0->unk4, a0_inner->unk10->unk16, s3, s4, s2, 0x10000, 0x10000, 0, 0);
+        }
+    }
+}
 
 void func_80006A88_7688(func_80006398_6F98_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk4);
