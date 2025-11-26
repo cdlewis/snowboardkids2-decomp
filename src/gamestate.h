@@ -141,8 +141,9 @@ typedef struct {
     u8 PAD_13B[0x11];
     u8 unk5B3;
     u8 PAD_14[0x4];
-    u8 unk5B8[9];
-    u8 PAD_14B[0x4];
+    u8 unk5B8[8];
+    u16 unk5C0;
+    u8 PAD_14B[0x3];
     u8 unk5C5;
     u8 unk5C6;
     u8 unk5C7;

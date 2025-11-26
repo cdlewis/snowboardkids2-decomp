@@ -156,6 +156,7 @@ typedef struct {
 
 extern void func_8000FED0_10AD0(void);
 extern void func_80035408_36008(void);
+extern void func_80012004_12C04(void);
 
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
@@ -163,6 +164,7 @@ extern u8 identityMatrix[];
 extern u8 D_419C60[];
 extern u8 D_41A1D0[];
 extern s32 D_8008F110_8FD10;
+extern s16 D_8008F0B2_8FCB2[];
 
 void func_80030378_30F78(void);
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
@@ -462,7 +464,7 @@ typedef struct {
     s16 unk8;
     s16 unkA;
     s8 unkC;
-    s8 unkD;
+    u8 unkD;
     s8 unkE;
     s8 unkF;
 } func_8002FA9C_3069C_item;
@@ -509,7 +511,37 @@ void func_8002FF28_30B28(func_8002FF28_30B28_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FF54_30B54);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8003006C_30C6C);
+void func_8003006C_30C6C(func_8002FA9C_3069C_item *arg0) {
+    GameState *state = (GameState *)getCurrentAllocation();
+    u8 itemValue;
+
+    itemValue = state->unk5CA[state->unk5C8];
+
+    if (itemValue >= 0x80) {
+        return;
+    }
+
+    if (state->unk5C5 != 0 && state->unk5C5 != 2) {
+        if (itemValue < 9) {
+            arg0->unk0 = 0x12;
+            arg0->unk8 = ((itemValue & 0x1F) % 3) + 0x24;
+        } else {
+            s16 tableVal = D_8008F0B2_8FCB2[itemValue];
+            arg0->unk8 = 0x35;
+            arg0->unk0 = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
+        }
+
+        if (state->unk5C5 == 3) {
+            if (state->unk5C0 & 1) {
+                arg0->unkD = 0xFF;
+            } else {
+                arg0->unkD = 0;
+            }
+        }
+
+        debugEnqueueCallback(8, 0, &func_80012004_12C04, arg0);
+    }
+}
 
 void func_80030194_30D94(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
