@@ -65,6 +65,9 @@ extern s32 D_80090B80_91780;
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern void func_80069CF8_6A8F8(void);
 extern s32 gFrameCounter;
+extern u16 D_8009ADE0_9B9E0;
+extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
+extern void func_80059A48_5A648(void *, s32);
 
 typedef struct {
     u8 _pad0[0x14];
@@ -1504,7 +1507,52 @@ void func_8004A634_4B234(func_8004A634_4B234_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004A6D4_4B2D4);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004A850_4B450);
+typedef struct {
+    void *unk0;
+    loadAssetMetadata_arg unk4;
+    u8 _pad20[0x6];
+    s16 unk26;
+    s16 unk28;
+} func_8004A850_4B450_arg;
+
+void func_8004A850_4B450(func_8004A850_4B450_arg *arg0) {
+    GameState *allocation;
+    void *s2;
+    void *s0;
+    s32 i;
+
+    allocation = (GameState *)getCurrentAllocation();
+    if (allocation->gamePaused == 0) {
+        arg0->unk28--;
+    }
+
+    if (arg0->unk28 == 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    s2 = (void *)((s32)arg0 + 8);
+    s0 = func_8005B24C_5BE4C(s2, -1, 0x100000);
+
+    if (s0 != NULL) {
+        func_80056B7C_5777C(s2, 7);
+        func_80059A48_5A648(s0, 100);
+        func_80069CF8_6A8F8();
+    }
+
+    if (D_8009ADE0_9B9E0 & 1) {
+        arg0->unk26++;
+        if ((s16)arg0->unk26 >= 6) {
+            arg0->unk26 = 0;
+        }
+        loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk26);
+    }
+
+    if ((s16)arg0->unk28 >= 0x1F || (gFrameCounter & 1)) {
+        for (i = 0; i < 4; i++) {
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        }
+    }
+}
 
 void func_8004A96C_4B56C(s32 **arg0) {
     GameState *temp_v0;
@@ -1551,7 +1599,6 @@ typedef struct {
     func_80066444_67044_arg1 unk4;
 } func_8004AD18_4B918_arg;
 
-extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
 extern void func_80050ECC_51ACC(void *arg0);
 extern void func_80058924_59524(void *arg0);
 
@@ -1702,10 +1749,6 @@ typedef struct {
     u8 _pad0[0x4];
     func_80066444_67044_arg1 unk4;
 } func_8004B648_4C248_arg;
-
-extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
-extern void func_80050ECC_51ACC(void *arg0);
-extern void func_80058924_59524(void *arg0);
 
 void func_8004B648_4C248(func_8004B648_4C248_arg *arg0) {
     func_8004AD18_4B918_CopyData sp10;
