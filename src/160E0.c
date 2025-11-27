@@ -1,5 +1,7 @@
+#include "3A1F0.h"
 #include "6E840.h"
 #include "common.h"
+#include "gamestate.h"
 #include "task_scheduler.h"
 
 extern void func_80058220_58E20(s32, s32);
@@ -25,7 +27,21 @@ void func_80015960_16560(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_800159AC_165AC);
+void func_800159AC_165AC(void) {
+    GameState *state = (GameState *)getCurrentAllocation();
+    u16 *counter = (u16 *)&state->audioPlayer5;
+
+    (*counter)++;
+
+    if (*counter >= 3) {
+        *counter = 2;
+        if (func_8003BB5C_3C75C() == 0) {
+            *counter = 0;
+            func_8006FDA0_709A0(NULL, 0, 0x10);
+            setGameStateHandler(func_80015960_16560);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_80015A18_16618);
 
