@@ -1,4 +1,6 @@
+#include "5E590.h"
 #include "common.h"
+#include "task_scheduler.h"
 
 s32 func_80052418_53018(s32, s32);
 s32 func_80052A24_53624(s32, s32);
@@ -150,7 +152,19 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80055650_56250);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80055820_56420);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80055864_56464);
+typedef struct {
+    u8 padding[0x20];
+    void *unk20;
+} func_80055864_56464_arg;
+
+extern void func_800523EC_52FEC(void);
+extern void func_800558A4_564A4(void);
+
+void func_80055864_56464(func_80055864_56464_arg *arg0) {
+    arg0->unk20 = load_3ECE40();
+    setCleanupCallback(func_800523EC_52FEC);
+    setCallbackWithContinue(func_800558A4_564A4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_800558A4_564A4);
 
