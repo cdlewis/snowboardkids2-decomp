@@ -3,6 +3,7 @@
 #include "task_scheduler.h"
 
 extern void func_8001E5EC_1F1EC(void);
+extern void func_8001EB4C_1F74C(void);
 extern void func_8001F33C_1FF3C(void);
 extern void func_8001F358_1FF58(void);
 
@@ -36,7 +37,11 @@ INCLUDE_ASM("asm/nonmatchings/1F190", func_8001E5EC_1F1EC);
 
 INCLUDE_ASM("asm/nonmatchings/1F190", func_8001EAB0_1F6B0);
 
-INCLUDE_ASM("asm/nonmatchings/1F190", func_8001EB1C_1F71C);
+void func_8001EB1C_1F71C(void) {
+    if (func_8006FE10_70A10(0) == 0) {
+        setGameStateHandler(func_8001EB4C_1F74C);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1F190", func_8001EB4C_1F74C);
 
