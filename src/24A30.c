@@ -1,10 +1,18 @@
 #include "common.h"
 
 typedef struct {
+    u8 padding[0x24];
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+} func_8002494C_arg;
+
+typedef struct {
     u8 padding[0x2C];
     void *unk2C;
 } func_80027A28_28628_arg;
 
+extern void *freeNodeMemory(void *);
 extern void func_800394BC_3A0BC(void *, s32);
 extern void setCallback(void *);
 
@@ -26,7 +34,11 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80024644_25244);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024810_25410);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_8002494C_2554C);
+void func_8002494C_2554C(func_8002494C_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024990_25590);
 
