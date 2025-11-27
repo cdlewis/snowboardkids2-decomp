@@ -20,6 +20,7 @@ extern void func_80044018_44C18(void);
 extern void func_80043E24_44A24(void);
 extern void func_80042638_43238(void);
 extern void func_8004247C_4307C(void);
+extern void *freeNodeMemory(void *);
 
 typedef struct {
     s16 matrix[3][3]; /* 0x00 */
@@ -371,7 +372,18 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_80044DB0_459B0);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044EC4_45AC4);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80045010_45C10);
+typedef struct {
+    void *unk0;   /* 0x00 */
+    u8 pad4[0x8]; /* 0x04 */
+    void *unkC;   /* 0x0C */
+    void *unk10;  /* 0x10 */
+} Func45010Arg;
+
+void func_80045010_45C10(Func45010Arg *arg0) {
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+    arg0->unkC = freeNodeMemory(arg0->unkC);
+    arg0->unk10 = freeNodeMemory(arg0->unk10);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80045054_45C54);
 
