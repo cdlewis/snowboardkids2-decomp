@@ -105,3 +105,11 @@ func_800B734C_1E43FC 19 81.7%
 func_8004562C_4622C 10 94.975%
 func_8004AFF8_4BBF8 14 95.3%
 func_80028480_29080 20 97.8%
+func_80049CA8_4A8A8 10 98.6%
+func_800397CC_3A3CC 18 94.7% // interesting rumble pack / save pack check
+func_80003898_4498 10 97.2% // 12-case switch generates jump table rodata, integration causes address shifts
+func_800B97C8_1E6878 13 75.2%
+func_80005E54_6A54 19 91
+func_800BB778_AF468 15 87.7%
+func_8004AB50_4B750 11 97.6%
+func_8002FDFC_309FC 11 99.8%
