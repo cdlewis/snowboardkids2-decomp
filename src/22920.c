@@ -3,7 +3,19 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80021D20_22920);
+typedef struct {
+    s16 unk0;
+    u8 unk2;
+} TaskData_22920;
+
+void func_80021D50_22950(void);
+
+void func_80021D20_22920(void) {
+    TaskData_22920 *data = allocateTaskMemory(4);
+    data->unk0 = 0;
+    data->unk2 = 0;
+    func_8006983C_6A43C(func_80021D50_22950);
+}
 
 extern void func_80022130_22D30(void);
 void func_80021D88_22988(void);
