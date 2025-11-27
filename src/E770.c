@@ -128,7 +128,10 @@ void func_8000EC98_F898(void) {
     func_8000DCD8_E8D8(s0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000ED88_F988);
+void func_8000ED88_F988(void) {
+    D_8008CE40_8DA40 = 5;
+    func_800697F4_6A3F4(1);
+}
 
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEB0_9EAB0);
 
