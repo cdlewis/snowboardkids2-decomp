@@ -72,7 +72,11 @@ void func_8000B684_C284(func_8000B510_C110_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B6A0_C2A0);
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B6AC_C2AC);
+extern s32 D_8008CC30_8D830;
+
+s32 func_8000B6AC_C2AC(void) {
+    return D_8008CC30_8D830;
+}
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B6B8_C2B8);
 
