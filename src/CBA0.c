@@ -1,7 +1,12 @@
 #include "6E840.h"
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000BFA0_CBA0);
+extern Gfx *gRegionAllocPtr;
+extern u8 D_8016A000[];
+
+void func_8000BFA0_CBA0(void *arg0) {
+    gDPSetColorImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_8016A000);
+}
 
 INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000BFD0_CBD0);
 
@@ -14,8 +19,6 @@ typedef struct {
 void func_8000C208_CE08(Func8000C208Arg *arg0) {
     debugEnqueueCallback(arg0->unk0->slot_index, 7, func_8000BFD0_CBD0, arg0);
 }
-
-extern void func_8000BFA0_CBA0(void *);
 
 void func_8000C238_CE38(Func8000C208Arg *arg0) {
     debugEnqueueCallback(arg0->unk0->slot_index, 0, func_8000BFA0_CBA0, arg0);
