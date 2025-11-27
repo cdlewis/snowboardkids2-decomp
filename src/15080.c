@@ -1,16 +1,21 @@
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "EepromSaveData_type.h"
 #include "common.h"
+#include "memory_allocator.h"
 #include "task_scheduler.h"
 
 extern void func_800145E0_151E0(void);
 extern void func_8001474C_1534C(void);
 extern void func_80014808_15408(void);
 extern void func_80014900_15500(void);
+extern void func_80014958_15558(void);
 extern void func_80014990_15590(void);
 extern void func_80015A18_16618(void);
 extern void func_8000D7F8_E3F8(void);
+extern u8 D_800AB47A_A27EA;
 
+void func_800144DC_150DC(void);
 void func_8001489C_1549C(void);
 void func_80014690_15290(void);
 void func_80014660_15260(void);
@@ -24,7 +29,15 @@ typedef struct {
     u8 pad;
 } TaskData_1512C;
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_80014480_15080);
+void func_80014480_15080(void) {
+    u8 allocation;
+
+    D_800AFE8C_A71FC = allocateMemoryNode(0, 0x28, &allocation);
+    EepromSaveData = allocateMemoryNode(0, 0x5C, &allocation);
+    D_800AB47A_A27EA = 0;
+    func_80014958_15558();
+    func_8006983C_6A43C(func_800144DC_150DC);
+}
 
 void func_800144DC_150DC(void) {
     TaskData_1512C *data = allocateTaskMemory(4);
