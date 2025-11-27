@@ -3,7 +3,8 @@
 typedef struct {
     s32 padding;
     u8 unk4;
-    char padding2[0x2];
+    u8 unk5;
+    char padding2[0x1];
     u8 saveSlotIndex;
     u8 unk8;
     u8 unk9;
