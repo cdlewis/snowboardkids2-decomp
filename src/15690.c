@@ -157,7 +157,11 @@ void func_800151E4_15DE4(void) {
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80015218_15E18);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_8001523C_15E3C);
+extern u8 D_8009F200_9FE00;
+
+u8 func_8001523C_15E3C(void) {
+    return D_8009F200_9FE00;
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80015248_15E48);
 
