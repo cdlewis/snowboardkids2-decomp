@@ -1,10 +1,22 @@
 #include "common.h"
 
+extern void *freeNodeMemory(void *);
+
+typedef struct {
+    u8 pad[0x8];
+    void *unk8;
+    u8 pad2[0xC];
+    void *unk18;
+} func_80037874_38474_arg;
+
 INCLUDE_ASM("asm/nonmatchings/38310", func_80037710_38310);
 
 INCLUDE_ASM("asm/nonmatchings/38310", func_800377FC_383FC);
 
-INCLUDE_ASM("asm/nonmatchings/38310", func_80037874_38474);
+void func_80037874_38474(func_80037874_38474_arg *arg0) {
+    arg0->unk8 = freeNodeMemory(arg0->unk8);
+    arg0->unk18 = freeNodeMemory(arg0->unk18);
+}
 
 INCLUDE_ASM("asm/nonmatchings/38310", func_800378AC_384AC);
 
