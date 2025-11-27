@@ -1,4 +1,5 @@
 #include "common.h"
+#include "task_scheduler.h"
 
 INCLUDE_ASM("asm/nonmatchings/19AB0", func_80018EB0_19AB0);
 
@@ -8,7 +9,9 @@ INCLUDE_ASM("asm/nonmatchings/19AB0", func_80019078_19C78);
 
 INCLUDE_ASM("asm/nonmatchings/19AB0", func_800191B4_19DB4);
 
-INCLUDE_ASM("asm/nonmatchings/19AB0", func_80019220_19E20);
+void func_80019220_19E20(void) {
+    func_800697F4_6A3F4(0xFF);
+}
 
 INCLUDE_ASM("asm/nonmatchings/19AB0", func_8001923C_19E3C);
 
