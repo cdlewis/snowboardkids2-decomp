@@ -27,6 +27,12 @@ typedef struct {
     u32 unkC;
 } Struct_func_8004D3A4;
 
+typedef struct {
+    void *unk0;
+    u8 pad4[0x4];
+    void *unk8;
+} Struct_func_8004FF28;
+
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C254_4CE54);
@@ -311,7 +317,10 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FD30_50930);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FDD0_509D0);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FF28_50B28);
+void func_8004FF28_50B28(Struct_func_8004FF28 *arg0) {
+    arg0->unk8 = freeNodeMemory(arg0->unk8);
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FF60_50B60);
 
