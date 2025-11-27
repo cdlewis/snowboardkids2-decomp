@@ -13,6 +13,12 @@ typedef struct {
     /* 0x0A */ s16 unkA;
 } Func358FCStruct;
 
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ void *unk8;
+} Func34574Arg;
+
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_800333E0_33FE0);
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033458_34058);
@@ -23,7 +29,12 @@ INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033688_34288);
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033800_34400);
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033974_34574);
+extern void *freeNodeMemory(void *);
+
+void func_80033974_34574(Func34574Arg *arg0) {
+    arg0->unk8 = freeNodeMemory(arg0->unk8);
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_800339AC_345AC);
 
