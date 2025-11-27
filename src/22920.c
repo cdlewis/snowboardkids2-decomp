@@ -1,3 +1,4 @@
+#include "3E160.h"
 #include "common.h"
 #include "graphics.h"
 #include "task_scheduler.h"
@@ -105,7 +106,12 @@ void func_80022018_22C18(void) {
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80022048_22C48);
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_8002207C_22C7C);
+void func_800220AC_22CAC(void);
+
+void func_8002207C_22C7C(void) {
+    createTaskQueue(func_8003D560_3E160, 100);
+    setGameStateHandler(func_800220AC_22CAC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_800220AC_22CAC);
 
