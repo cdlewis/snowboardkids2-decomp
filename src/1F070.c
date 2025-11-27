@@ -4,11 +4,14 @@
 #include "task_scheduler.h"
 
 extern void func_80019CD0_1A8D0(void);
-extern void func_8001E508_1F108(void);
+extern s32 gControllerInputs;
+
+void func_8001E508_1F108(void);
+void func_8001E570_1F170(void);
 
 typedef struct {
     Node_70B00 unk0;
-    s16 unk1D8;
+    u16 unk1D8;
 } func_8001E470_1F070_allocation;
 
 void func_8001E470_1F070(void) {
@@ -21,7 +24,21 @@ void func_8001E470_1F070(void) {
     setGameStateHandler(&func_8001E508_1F108);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1F070", func_8001E508_1F108);
+void func_8001E508_1F108(void) {
+    func_8001E470_1F070_allocation *allocation = (func_8001E470_1F070_allocation *)getCurrentAllocation();
+
+    allocation->unk1D8 = allocation->unk1D8 + 1;
+    __asm__ volatile("" ::: "memory");
+
+    if (gControllerInputs & 0x8000) {
+        allocation->unk1D8 = 60;
+    }
+
+    if (!(allocation->unk1D8 < 60)) {
+        unlinkNode(&allocation->unk0);
+        terminateSchedulerWithCallback(&func_8001E570_1F170);
+    }
+}
 
 void func_8001E570_1F170(void) {
     func_800697F4_6A3F4(1);
