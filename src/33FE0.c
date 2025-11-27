@@ -3,7 +3,6 @@
 #include "task_scheduler.h"
 
 extern void *func_80035F80_36B80(s32);
-extern void func_80035074_35C74(void);
 extern void func_80034D58_35958(void);
 
 typedef struct {
@@ -18,6 +17,8 @@ typedef struct {
     /* 0x04 */ void *unk4;
     /* 0x08 */ void *unk8;
 } Func34574Arg;
+
+void func_80035074_35C74(Func358FCStruct *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_800333E0_33FE0);
 
@@ -96,7 +97,10 @@ void func_80034CFC_358FC(Func358FCStruct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034D58_35958);
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80035074_35C74);
+void func_80035074_35C74(Func358FCStruct *arg0) {
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_800350AC_35CAC);
 
