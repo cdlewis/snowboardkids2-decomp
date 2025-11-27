@@ -22,7 +22,10 @@ void func_800168BC_174BC(void);
 void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0);
 
 typedef struct {
-    u8 data[0x20];
+    u8 padding[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
 } TransformData;
 
 extern TransformData D_8008D5C4_8E1C4[];
@@ -176,7 +179,33 @@ void func_80016B68_17768(Struct16B68 *arg0) {
     func_800021B8_2DB8(arg0->unk0, (s16)arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016C28_17828);
+void func_80016C28_17828(Struct16B68 *arg0) {
+    s32 clearResult;
+
+    getCurrentAllocation();
+    clearResult = clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    switch (arg0->unk32) {
+        case 0:
+            if (clearResult != 0) {
+                func_800021B8_2DB8(arg0->unk0, 9);
+                arg0->unk32 = 1;
+            }
+            break;
+        case 1: {
+            s32 temp = arg0->unk24;
+            s32 div = temp / 100;
+            temp = temp + div * 9;
+            arg0->unk24 = temp;
+            arg0->unk4.unk18 = arg0->unk4.unk18 + temp;
+            applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->unk4);
+            if (arg0->unk4.unk18 > 0x57FFFF) {
+                func_80069CF8_6A8F8();
+            }
+        } break;
+    }
+}
 
 void func_80016D0C_1790C(Struct16B68 *arg0) {
     s32 clearResult;
