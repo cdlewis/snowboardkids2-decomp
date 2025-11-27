@@ -1,3 +1,4 @@
+#include "6E840.h"
 #include "common.h"
 
 INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000BFA0_CBA0);
@@ -26,7 +27,9 @@ INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C334_CF34);
 
 INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C440_D040);
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", n_alSeqpDelete);
+void n_alSeqpDelete(Node_70B00 *arg0) {
+    unlinkNode(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C5AC_D1AC);
 
