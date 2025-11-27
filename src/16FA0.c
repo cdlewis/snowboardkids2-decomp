@@ -193,7 +193,24 @@ void func_80016D0C_1790C(Struct16B68 *arg0) {
     func_800021B8_2DB8(arg0->unk0, (s16)arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016DE0_179E0);
+void func_80016DE0_179E0(Struct16B68 *arg0) {
+    s32 clearResult;
+
+    clearResult = clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    if (clearResult != 0 && arg0->unk2C == 8) {
+        arg0->unk2C++;
+        func_800021B8_2DB8(arg0->unk0, (s16)arg0->unk2C);
+    }
+
+    if (arg0->unk31 != 0) {
+        arg0->unk31--;
+        if (arg0->unk31 == 0) {
+            func_80001688_2288(arg0->unk0, 2);
+        }
+    }
+}
 
 void func_80016E70_17A70(Struct16B68 *arg0) {
     arg0->unk0 = func_80002014_2C14(arg0->unk0);
