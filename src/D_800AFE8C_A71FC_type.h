@@ -10,6 +10,8 @@ typedef struct {
     u8 unk9;
     u8 padding3[0x19];
     u8 errorFlag;
+    u8 unk24;
+    u8 unk25;
 } D_800AFE8C_A71FC_type;
 
 extern D_800AFE8C_A71FC_type *D_800AFE8C_A71FC;
