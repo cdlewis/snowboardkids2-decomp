@@ -21,29 +21,6 @@ from typing import List, Tuple
 
 
 def decompilation_difficulty_score(instructions, branches, jumps, labels):
-    """
-    Final optimized decompilation difficulty scorer
-    - Removed stack_size (zero contribution)
-    - Based on 502 functions with known outcomes
-    - Performance: 79.8% AUC-ROC
-
-    Parameters:
-    -----------
-    instructions : int - Number of instructions in the function
-    branches : int - Number of conditional branches
-    jumps : int - Number of jump instructions
-    labels : int - Number of labels
-
-    Returns:
-    --------
-    float : Difficulty score between 0 (easy) and 1 (hard)
-
-    Example:
-    --------
-    >>> score = decompilation_difficulty_score(50, 2, 1, 2)
-    >>> print(f"Difficulty: {score:.1%}")
-    Difficulty: 89.2%
-    """
     # Standardization parameters (from training)
     means = np.array([np.float64(34.27065527065527), np.float64(1.6666666666666667), np.float64(3.1880341880341883), np.float64(1.98005698005698)])
     stds = np.array([np.float64(24.763225638334454), np.float64(2.047860394102145), np.float64(3.200600790997309), np.float64(2.3803926026229827)])
