@@ -1,5 +1,14 @@
 #include "common.h"
 
+extern void *getCurrentAllocation(void);
+extern void func_8000056C_116C(s32, s32, void *);
+extern void setCleanupCallback(void *);
+extern void func_80000460_1060(s32, void *, void *);
+extern void setCallback(void *);
+
+void func_800168BC_174BC(void);
+void func_800168D8_174D8(void);
+
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_800163A0_16FA0);
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_800163CC_16FCC);
@@ -20,7 +29,17 @@ INCLUDE_ASM("asm/nonmatchings/16FA0", func_800167B0_173B0);
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016834_17434);
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016860_17460);
+void func_80016860_17460(s32 arg0) {
+    s32 sp28;
+    s32 sp10[6];
+    void *alloc;
+
+    alloc = getCurrentAllocation();
+    func_8000056C_116C(arg0, 2, (u8 *)alloc + 0x1D8);
+    setCleanupCallback(func_800168D8_174D8);
+    func_80000460_1060(arg0, sp10, &sp28);
+    setCallback(func_800168BC_174BC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_800168BC_174BC);
 
