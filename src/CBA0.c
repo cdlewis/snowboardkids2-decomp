@@ -15,7 +15,11 @@ void func_8000C208_CE08(Func8000C208Arg *arg0) {
     debugEnqueueCallback(arg0->unk0->slot_index, 7, func_8000BFD0_CBD0, arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C238_CE38);
+extern void func_8000BFA0_CBA0(void *);
+
+void func_8000C238_CE38(Func8000C208Arg *arg0) {
+    debugEnqueueCallback(arg0->unk0->slot_index, 0, func_8000BFA0_CBA0, arg0);
+}
 
 typedef struct {
     u8 pad[0x210];
