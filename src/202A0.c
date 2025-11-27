@@ -80,7 +80,12 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_8002109C_21C9C);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_800210C8_21CC8);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_8002115C_21D5C);
+void func_80021184_21D84(void);
+
+void func_8002115C_21D5C(Func800216ACArg *arg0) {
+    func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
+    setCallback(&func_80021184_21D84);
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80021184_21D84);
 
