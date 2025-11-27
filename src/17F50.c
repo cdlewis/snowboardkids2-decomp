@@ -1,4 +1,5 @@
 #include "common.h"
+#include "task_scheduler.h"
 
 INCLUDE_ASM("asm/nonmatchings/17F50", func_80017350_17F50);
 
@@ -21,7 +22,16 @@ INCLUDE_ASM("asm/nonmatchings/17F50", func_80018474_19074);
 
 INCLUDE_ASM("asm/nonmatchings/17F50", func_80018580_19180);
 
-INCLUDE_ASM("asm/nonmatchings/17F50", func_80018798_19398);
+void func_800187DC_193DC(void);
+
+void func_80018798_19398(void) {
+    GameState *state = (GameState *)getCurrentAllocation();
+
+    if (func_8006FE10_70A10(0) == 0) {
+        state->unk427 = 0xFF;
+        setCallbackWithContinue(&func_800187DC_193DC);
+    }
+}
 
 void func_800187DC_193DC(void) {
 }
