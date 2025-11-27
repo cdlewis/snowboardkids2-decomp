@@ -5,12 +5,24 @@
 extern void func_80015248_15E48(s32);
 extern void func_80014D78_15978(void);
 extern void func_80015064_15C64(void);
+extern void func_80015218_15E18(void);
+extern void func_80014C94_15894(void);
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014A90_15690);
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014AEC_156EC);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014B1C_1571C);
+void func_80014B1C_1571C(void) {
+    s16 result = func_80069810_6A410();
+
+    if (result != 0) {
+        if (result == 0xFE) {
+            terminateSchedulerWithCallback(func_80015218_15E18);
+        } else {
+            setGameStateHandler(func_80014C94_15894);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014B70_15770);
 
