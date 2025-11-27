@@ -1,4 +1,10 @@
+#include "90F0.h"
 #include "common.h"
+
+typedef struct {
+    u8 _pad[0x20];
+    func_80009F5C_AB5C_arg *unk20;
+} func_8000B510_C110_arg;
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000A440_B040);
 
@@ -42,7 +48,9 @@ INCLUDE_ASM("asm/nonmatchings/B040", func_8000B38C_BF8C);
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B400_C000);
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B510_C110);
+void func_8000B510_C110(func_8000B510_C110_arg *arg0) {
+    func_80009F5C_AB5C(&arg0->unk20);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B52C_C12C);
 
