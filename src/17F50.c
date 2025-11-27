@@ -19,7 +19,19 @@ INCLUDE_ASM("asm/nonmatchings/17F50", func_80017FE8_18BE8);
 
 INCLUDE_ASM("asm/nonmatchings/17F50", func_80018148_18D48);
 
-INCLUDE_ASM("asm/nonmatchings/17F50", func_8001829C_18E9C);
+extern u8 D_800A8CC8_A0038;
+
+void func_800182F4_18EF4(void);
+
+void func_8001829C_18E9C(void) {
+    GameState *state = (GameState *)getCurrentAllocation();
+
+    if (func_8006FE10_70A10(0) == 0) {
+        D_800A8CC8_A0038 = state->unk425;
+        state->unk427 = state->unk425 + 1;
+        setCallback(&func_800182F4_18EF4);
+    }
+}
 
 void func_800182F4_18EF4(void) {
 }
