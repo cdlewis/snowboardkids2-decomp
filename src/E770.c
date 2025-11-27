@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "4050.h"
 #include "6E840.h"
 #include "common.h"
 #include "graphics.h"
@@ -24,7 +25,9 @@ typedef struct {
     void *unkC;
     s16 unk10;
     s16 unk12;
-    u8 pad14[0x4];
+    u8 pad14[0x2];
+    u8 unk16;
+    u8 pad17;
     void *unk18;
     u8 pad1C[0x4];
     Node_70B00 unk20;
@@ -97,7 +100,28 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000E240_EE40);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E2AC_EEAC);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000E4CC_F0CC);
+typedef struct FD98_struct FD98_struct;
+extern void func_8000FD98_10998(FD98_struct *);
+
+void func_8000E4CC_F0CC(E770_struct *arg0) {
+    s16 temp = arg0->unk12;
+
+    if (temp == 0) {
+        if (arg0->unk1 == 5) {
+            func_8000E154_ED54(arg0);
+            func_80003450_4050(0, 2);
+            createTaskQueue(loadCutsceneOverlay, 0x64);
+            arg0->unk16 = 1;
+            arg0->unk0 = 7;
+        } else {
+            scheduleTask(func_8000FD98_10998, 0, 0, 0);
+            arg0->unk3 = 0;
+            arg0->unk0 = 4;
+        }
+    } else {
+        arg0->unk12 = temp - 1;
+    }
+}
 
 void func_8000E56C_F16C(E770_struct *arg0) {
     if (arg0->unk3 != 0) {
@@ -148,7 +172,6 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000E6E0_F2E0);
 extern s16 func_80069810_6A410(void);
 extern void func_8000E240_EE40(E770_struct *);
 extern void func_8000E2AC_EEAC(E770_struct *);
-extern void func_8000E4CC_F0CC(E770_struct *);
 extern void func_8000DCD8_E8D8(E770_struct *);
 
 void func_8000EC98_F898(void) {
@@ -306,7 +329,7 @@ s32 func_8000FD50_10950(E770_struct *arg0) {
     return 0;
 }
 
-typedef struct {
+struct FD98_struct {
     s8 unk0;
     s8 unk1;
     s8 unk2;
@@ -316,7 +339,7 @@ typedef struct {
     s32 unkC;
     s32 unk10;
     s32 unk14;
-} FD98_struct;
+};
 
 extern void func_8000FEA0_10AA0(void);
 extern void func_8000FE00_10A00(E770_struct *);
