@@ -8,7 +8,9 @@ extern void *freeNodeMemory(void *);
 
 typedef struct {
     s8 unk0;
-    u8 pad1[0x7];
+    u8 pad1[0x2];
+    s8 unk3;
+    u8 pad4[0x4];
     void *unk8;
     void *unkC;
     u8 pad10[0x2];
@@ -61,7 +63,15 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000E2AC_EEAC);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E4CC_F0CC);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000E56C_F16C);
+extern void func_8000DBE0_E7E0(E770_struct *);
+
+void func_8000E56C_F16C(E770_struct *arg0) {
+    if (arg0->unk3 != 0) {
+        terminateTasksByType(1);
+        func_8000DBE0_E7E0(arg0);
+        arg0->unk0 = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E5B0_F1B0);
 
@@ -85,7 +95,6 @@ extern void func_8000E1D0_EDD0(E770_struct *);
 extern void func_8000E240_EE40(E770_struct *);
 extern void func_8000E2AC_EEAC(E770_struct *);
 extern void func_8000E4CC_F0CC(E770_struct *);
-extern void func_8000E56C_F16C(E770_struct *);
 extern void func_8000E5B0_F1B0(E770_struct *);
 extern s32 func_8000E614_F214(E770_struct *);
 extern void func_8000DCD8_E8D8(E770_struct *);
@@ -204,8 +213,6 @@ INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF34_9EB34);
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000EDB0_F9B0);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000EE88_FA88);
-
-extern void func_8000DBE0_E7E0(void *);
 
 void func_8000F4BC_100BC(E770_struct *arg0) {
     void *alloc = getCurrentAllocation();
