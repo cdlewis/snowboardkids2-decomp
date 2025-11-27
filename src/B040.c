@@ -42,13 +42,31 @@ typedef struct {
 
 extern void func_80009E68_AA68(void *, s32);
 extern void func_80009F90_AB90(void *, s32, s32, s32);
-extern void func_8000A49C_B09C(s32, s32, s32, s32, void *, s32, s8, s32, s32, s32);
+extern void func_8000A510_B110(s32, s16, s16, s16, void *, s32, s8, u8, u8, s16);
+
+void func_8000A49C_B09C(s32, s16, s16, s16, void *, s32, s8, u8, u8, s16);
 
 void func_8000A440_B040(s32 arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s32 arg5, s8 arg6) {
     func_8000A49C_B09C(arg0, arg1, arg2, arg3, arg4, arg5, arg6, 0, 0, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000A49C_B09C);
+void func_8000A49C_B09C(
+    s32 arg0,
+    s16 arg1,
+    s16 arg2,
+    s16 arg3,
+    void *arg4,
+    s32 arg5,
+    s8 arg6,
+    u8 arg7,
+    u8 arg8,
+    s16 arg9
+) {
+    volatile s32 pad;
+    volatile s32 pad2;
+    *((s32 *)&pad2 - 1) = 0;
+    func_8000A510_B110(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000A510_B110);
 
