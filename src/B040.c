@@ -32,7 +32,9 @@ INCLUDE_ASM("asm/nonmatchings/B040", func_8000AD24_B924);
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000AD88_B988);
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B028_BC28);
+void func_8000B028_BC28(func_8000B510_C110_arg *arg0) {
+    func_80009F5C_AB5C(&arg0->unk20);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B044_BC44);
 
