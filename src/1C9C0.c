@@ -1,3 +1,4 @@
+#include "3A1F0.h"
 #include "6E840.h"
 #include "common.h"
 #include "graphics.h"
@@ -8,6 +9,7 @@ extern void func_8001C28C_1CE8C(void);
 extern void func_800308FC_314FC(void);
 
 void func_8001C7E8_1D3E8(void);
+void func_8001C144_1CD44(void);
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x1D8];
@@ -19,7 +21,9 @@ typedef struct {
     /* 0x594 */ void *unk594;
     /* 0x598 */ void *unk598;
     /* 0x59C */ void *unk59C;
-    /* 0x5A0 */ u8 pad5A0[0x29];
+    /* 0x5A0 */ u8 pad5A0[0x20];
+    /* 0x5C0 */ u16 unk5C0;
+    /* 0x5C2 */ u8 pad5C2[0x7];
     /* 0x5C9 */ u8 unk5C9;
     /* 0x5CA */ u8 pad5CA[0xC];
     /* 0x5D6 */ u8 unk5D6;
@@ -27,7 +31,23 @@ typedef struct {
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001BDC0_1C9C0);
 
-INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C0D8_1CCD8);
+void func_8001C0D8_1CCD8(void) {
+    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+
+    allocation->unk5C0++;
+    if (allocation->unk5C0 < 3) {
+        return;
+    }
+
+    allocation->unk5C0 = 2;
+    if (func_8003BB5C_3C75C() != 0) {
+        return;
+    }
+
+    allocation->unk5C0 = 0;
+    func_8006FDA0_709A0(0, 0, 0xE);
+    setGameStateHandler(func_8001C144_1CD44);
+}
 
 void func_8001C144_1CD44(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
