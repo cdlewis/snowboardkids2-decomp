@@ -47,7 +47,14 @@ INCLUDE_ASM("asm/nonmatchings/E090", func_8000D6C0_E2C0);
 
 INCLUDE_ASM("asm/nonmatchings/E090", func_8000D6F8_E2F8);
 
-INCLUDE_ASM("asm/nonmatchings/E090", func_8000D750_E350);
+void func_8000D750_E350(E090_struct *arg0) {
+    arg0->unk2--;
+    if (arg0->unk2 == 15) {
+        func_8000D490_E090(arg0);
+    } else if (arg0->unk2 == 0) {
+        arg0->unk0 = 7;
+    }
+}
 
 void func_8000D7A0_E3A0(E090_struct *arg0) {
     arg0->unk1E0 = freeNodeMemory(arg0->unk1E0);
