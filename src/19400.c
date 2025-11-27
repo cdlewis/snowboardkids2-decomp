@@ -3,7 +3,6 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-extern void func_80018858_19458(void);
 extern void func_80001640_2240(SceneModel *arg0);
 extern void func_80001650_2250(SceneModel *arg0);
 extern void func_80018904_19504(void *arg0);
@@ -13,13 +12,18 @@ typedef struct {
     applyTransformToModel_arg1 unk3B0;
     u8 padding2[0x2C];
     u8 unk400;
+    u8 padding3[0x28];
+    u8 unk429;
 } func_80018898_19498_state;
 
 typedef struct {
     SceneModel *unk0;
     u8 unk4;
+    u8 unk5;
 } func_80018898_19498_arg;
 
+void func_80018858_19458(func_80018898_19498_arg *arg0);
+void func_80018898_19498(func_80018898_19498_arg *arg0);
 void func_80018A5C_1965C(func_80018898_19498_arg *arg0);
 
 void func_80018800_19400(void **arg0) {
@@ -30,7 +34,14 @@ void func_80018800_19400(void **arg0) {
     setCallback(&func_80018858_19458);
 }
 
-INCLUDE_ASM("asm/nonmatchings/19400", func_80018858_19458);
+void func_80018858_19458(func_80018898_19498_arg *arg0) {
+    func_80018898_19498_state *allocation = (func_80018898_19498_state *)getCurrentAllocation();
+
+    if (allocation->unk429 == 0) {
+        arg0->unk5 = 0;
+        setCallback(&func_80018898_19498);
+    }
+}
 
 void func_80018898_19498(func_80018898_19498_arg *arg0) {
     func_80018898_19498_state *state = (func_80018898_19498_state *)getCurrentAllocation();
