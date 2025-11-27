@@ -100,7 +100,23 @@ void func_8000E56C_F16C(E770_struct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E5B0_F1B0);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000E614_F214);
+extern void func_8000ED88_F988(void);
+
+s32 func_8000E614_F214(E770_struct *arg0) {
+    s16 temp;
+
+    if (arg0->unk12 == 8) {
+        func_80057564_58164(8);
+    }
+    temp = arg0->unk12;
+    if (temp == 0) {
+        func_8000E154_ED54(arg0);
+        terminateSchedulerWithCallback(func_8000ED88_F988);
+        return 1;
+    }
+    arg0->unk12 = temp - 1;
+    return 0;
+}
 
 extern s16 D_8008CE40_8DA40;
 extern void func_8000E6E0_F2E0(void);
@@ -120,7 +136,6 @@ extern void func_8000E240_EE40(E770_struct *);
 extern void func_8000E2AC_EEAC(E770_struct *);
 extern void func_8000E4CC_F0CC(E770_struct *);
 extern void func_8000E5B0_F1B0(E770_struct *);
-extern s32 func_8000E614_F214(E770_struct *);
 extern void func_8000DCD8_E8D8(E770_struct *);
 
 void func_8000EC98_F898(void) {
