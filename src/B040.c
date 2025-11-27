@@ -76,14 +76,44 @@ typedef struct {
     u8 unk18[1];
 } func_8000A834_B434_arg;
 
-void *func_8000A834_B434(func_8000A834_B434_arg *arg0, s16 arg1) {
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+} func_8000A834_B434_ret;
+
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ s16 unk4;
+    /* 0x06 */ u8 _pad6[2];
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ u8 unkA;
+    /* 0x0B */ u8 _padB[1];
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ s32 unk10;
+    /* 0x14 */ s32 unk14;
+    /* 0x18 */ s32 unk18;
+    /* 0x1C */ s16 unk1C;
+    /* 0x1E */ s16 unk1E;
+    /* 0x20 */ void *unk20;
+} func_8000A8B8_arg;
+
+extern s32 func_8000A030_AC30(void *, s32);
+extern void func_8000A13C_AD3C(void *, s32, s32, s32, s32, s32, s32, s16, u8);
+
+func_8000A834_B434_ret *func_8000A834_B434(func_8000A834_B434_arg *arg0, s16 arg1) {
     if (arg1 != 0 && arg0->unk0 != NULL) {
         return arg0->unk0;
     }
-    return &arg0->unk18;
+    return (func_8000A834_B434_ret *)&arg0->unk18;
 }
 
-void func_8000A8B8_B4B8(void);
+void func_8000A8B8_B4B8(func_8000A8B8_arg *);
 void func_8000A988_B588(func_8000B510_C110_arg *);
 
 void func_8000A854_B454(func_8000B510_C110_arg *arg0) {
@@ -93,7 +123,37 @@ void func_8000A854_B454(func_8000B510_C110_arg *arg0) {
     setCallback(func_8000A8B8_B4B8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000A8B8_B4B8);
+void func_8000A8B8_B4B8(func_8000A8B8_arg *arg0) {
+    func_8000A834_B434_ret *temp;
+    void *ptr;
+    s32 x, y, z;
+    s16 a1;
+
+    ptr = &arg0->unk20;
+
+    if (arg0->unk8 == 0) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    if (func_8000A030_AC30(ptr, 0x10000) == 2) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    temp = func_8000A834_B434(arg0->unk0, arg0->unk1E);
+
+    x = temp->unk14 + arg0->unk10;
+    y = temp->unk18 + arg0->unk14;
+    z = temp->unk1C + arg0->unk18;
+    a1 = arg0->unk4;
+
+    func_8000A13C_AD3C(ptr, a1, x, y, z, arg0->unkC, arg0->unkC, arg0->unk1C, arg0->unkA);
+
+    if (arg0->unk8 > 0) {
+        arg0->unk8 = arg0->unk8 - 1;
+    }
+}
 
 void func_8000A988_B588(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk20);
