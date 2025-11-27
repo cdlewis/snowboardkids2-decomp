@@ -839,7 +839,85 @@ void func_800B46E0(s32 arg0, s8 arg1, s16 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B477C_1E182C);
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4914_1E19C4);
+extern void func_80069CF8_6A8F8(void);
+extern void func_80011924_12524(void);
+
+typedef struct {
+    void *start;
+    void *end;
+    u32 size;
+    s8 unkC;
+} FadeNode;
+
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+    s16 unk2;
+    s16 unk4;
+    u16 unk6;
+    void *unk8;
+    u8 unkC[0x90];
+    u8 unk9C[0x18];
+    u8 unkB4[0x18];
+    u8 unkCC[0x18];
+    s16 unkE4;
+} FadeTaskData;
+
+void func_800B4914_1E19C4(FadeTaskData *arg0) {
+    FadeNode *node;
+    s32 offset;
+    u8 *ptr;
+    s32 i;
+
+    node = (FadeNode *)&D_800BA960_1E7A10[arg0->unk1];
+
+    switch (arg0->unk0) {
+        case 0:
+            arg0->unkE4 += 10;
+            if ((s16)arg0->unkE4 >= 0xFF) {
+                arg0->unkE4 = 0xFF;
+                arg0->unk0 = 1;
+            }
+            break;
+        case 1:
+            arg0->unk2--;
+            if ((s16)arg0->unk2 < 0) {
+                arg0->unk0 = 2;
+            }
+            break;
+        case 2:
+            arg0->unkE4 -= 10;
+            if ((s16)arg0->unkE4 <= 0) {
+                func_80069CF8_6A8F8();
+                return;
+            }
+            break;
+    }
+
+    switch (node->unkC) {
+        case 0:
+            arg0->unk9C[0x14] = (u8)arg0->unkE4;
+            debugEnqueueCallback(arg0->unk6, 0, &func_80011924_12524, &arg0->unk9C);
+            break;
+        case 1:
+            arg0->unk9C[0x14] = (u8)arg0->unkE4;
+            debugEnqueueCallback(arg0->unk6, 0, &func_80011924_12524, &arg0->unk9C);
+            arg0->unkB4[0x14] = (u8)arg0->unkE4;
+            debugEnqueueCallback(arg0->unk6, 0, &func_80011924_12524, &arg0->unkB4);
+            break;
+    }
+
+    i = 0;
+    offset = 0xC;
+    ptr = (u8 *)arg0;
+    do {
+        ptr[0x20] = (u8)arg0->unkE4;
+        debugEnqueueCallback(arg0->unk6, 0, &func_80011924_12524, (u8 *)arg0 + offset);
+        offset += 0x18;
+        ptr += 0x18;
+        i++;
+    } while (i < 6);
+}
 
 typedef struct {
     u8 padding[0x8];
