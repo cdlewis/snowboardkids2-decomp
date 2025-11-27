@@ -6,6 +6,8 @@
 extern s32 approximateSin(s16);
 extern s32 approximateCos(s16);
 extern s32 isqrt64(s64 val);
+extern s16 atan2Fixed(s32, s32);
+extern u8 D_800A8CC8_A0038;
 
 typedef struct {
     s16 matrix0[9];
@@ -24,6 +26,8 @@ typedef struct {
     s16 unk48;
     u8 pad4A[0x2];
     s32 unk4C;
+    s32 unk50;
+    s32 unk54;
 } Func80018474Arg;
 
 void func_80017384_17F84(void);
@@ -43,11 +47,53 @@ INCLUDE_ASM("asm/nonmatchings/17F50", func_800175E0_181E0);
 
 INCLUDE_ASM("asm/nonmatchings/17F50", func_80017FE8_18BE8);
 
-INCLUDE_ASM("asm/nonmatchings/17F50", func_80018148_18D48);
-
-extern u8 D_800A8CC8_A0038;
-
 void func_800182F4_18EF4(void);
+
+void func_80018148_18D48(Func80018474Arg *arg0) {
+    GameState *state;
+    Mat3x3Padded localMatrix;
+    s32 velocity;
+    s32 temp;
+    s16 angle;
+
+    state = getCurrentAllocation();
+
+    velocity = arg0->unk54;
+    if (velocity < 0) {
+        velocity += 0x1F;
+    }
+    velocity >>= 9;
+
+    temp = approximateSin(arg0->unk44) * velocity;
+    if (temp < 0) {
+        temp += 0x1FFF;
+    }
+    arg0->unk34 = arg0->unk34 + ((temp >> 13) << 4);
+
+    temp = approximateCos(arg0->unk44) * velocity;
+    if (temp < 0) {
+        temp += 0x1FFF;
+    }
+    arg0->unk3C = arg0->unk3C + ((temp >> 13) << 4);
+
+    angle = atan2Fixed(arg0->unk34, arg0->unk3C);
+
+    createYRotationMatrix((Mat3x3Padded *)&arg0->matrix20, (u16)angle);
+    createYRotationMatrix((Mat3x3Padded *)arg0, (u16)(arg0->unk44 - angle));
+
+    func_8006B084_6BC84(arg0, &arg0->matrix20, &localMatrix);
+
+    memcpy(&state->unk3B0, &localMatrix, 0x20);
+
+    state->unk3EC = arg0->unk34;
+    state->unk3F0 = arg0->unk3C;
+
+    if (func_8006FE10_70A10(0) == 0) {
+        D_800A8CC8_A0038 = state->unk425;
+        state->unk427 = state->unk425 + 1;
+        setCallback(&func_800182F4_18EF4);
+    }
+}
 
 void func_8001829C_18E9C(void) {
     GameState *state = (GameState *)getCurrentAllocation();
