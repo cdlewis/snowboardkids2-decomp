@@ -10,6 +10,7 @@ extern void func_8001489C_1549C(void);
 extern void func_80014900_15500(void);
 extern void func_80014990_15590(void);
 extern void func_80014660_15260(void);
+extern void func_8001457C_1517C(void);
 
 typedef struct {
     s16 unk0;
@@ -19,7 +20,14 @@ typedef struct {
 
 INCLUDE_ASM("asm/nonmatchings/15080", func_80014480_15080);
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_800144DC_150DC);
+void func_800144DC_150DC(void) {
+    TaskData_1512C *data = allocateTaskMemory(4);
+    func_8006FDA0_709A0(NULL, 0, 0);
+    data->unk0 = 0;
+    data->unk2 = 0;
+    func_80014990_15590();
+    func_8006983C_6A43C(func_8001457C_1517C);
+}
 
 void func_8001452C_1512C(void) {
     TaskData_1512C *data = allocateTaskMemory(4);
