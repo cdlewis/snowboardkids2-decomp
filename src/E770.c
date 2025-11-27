@@ -32,7 +32,7 @@ typedef struct {
     void *unkC;
     s16 unk10;
     s16 unk12;
-    u8 pad14[0x2];
+    s16 unk14;
     u8 unk16;
     u8 pad17;
     void *unk18;
@@ -90,7 +90,10 @@ void *func_8000DC44_E844(E770_struct *arg0, s32 arg1) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000DC88_E888);
+void func_8000DC88_E888(E770_struct *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
+    func_800021E8_2DE8(arg0->unk624, arg1, arg2, arg3);
+    arg0->unk14 = arg4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DCD8_E8D8);
 
@@ -107,7 +110,6 @@ void func_8000E154_ED54(E770_struct *arg0) {
 }
 
 extern void func_800394BC_3A0BC(void *, s32);
-extern void func_8000DC88_E888(E770_struct *, s16, s16, s8, s16);
 
 void func_8000E1D0_EDD0(E770_struct *arg0) {
     func_800394BC_3A0BC(&arg0->pad5C8, (s32)arg0->unk5C4);
