@@ -3,7 +3,8 @@
 #include "task_scheduler.h"
 
 extern void *freeNodeMemory(void *);
-extern void func_8000DB4C_E74C(void);
+
+void func_8000DB4C_E74C(void);
 
 typedef struct {
     u8 pad[0x8];
@@ -49,4 +50,6 @@ INCLUDE_ASM("asm/nonmatchings/E090", func_8000D818_E418);
 
 INCLUDE_ASM("asm/nonmatchings/E090", func_8000D974_E574);
 
-INCLUDE_ASM("asm/nonmatchings/E090", func_8000DB4C_E74C);
+void func_8000DB4C_E74C(void) {
+    func_800697F4_6A3F4(1);
+}
