@@ -63,13 +63,24 @@ void func_80014BA0_157A0(void) {
 }
 
 void func_80014C3C_1583C(void);
+void func_80014CF8_158F8(void);
 
 void func_80014C0C_1580C(void) {
     createTaskQueue(func_80021BD0_227D0, 0x96);
     setGameStateHandler(func_80014C3C_1583C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014C3C_1583C);
+void func_80014C3C_1583C(void) {
+    s16 result = func_80069810_6A410();
+
+    if (result != 0) {
+        if (result == 0xFF) {
+            setGameStateHandler(func_80014B70_15770);
+        } else if (result == 1) {
+            setGameStateHandler(func_80014CF8_158F8);
+        }
+    }
+}
 
 void func_80014C94_15894(void) {
     createTaskQueue(func_80033200_33E00, 0x96);
