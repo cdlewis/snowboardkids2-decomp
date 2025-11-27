@@ -56,4 +56,9 @@ void func_80018798_19398(void) {
 void func_800187DC_193DC(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/17F50", abs);
+s32 abs(s32 n) {
+    if (n < 0) {
+        n = -n;
+    }
+    return n;
+}
