@@ -3,12 +3,12 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-extern void func_80015248_15E48(s32);
 extern void func_8003D560_3E160(void);
 extern void func_80015218_15E18(void);
 extern void func_80033200_33E00(void);
 void func_80014CC4_158C4(void);
 extern void func_800150DC_15CDC(void);
+void func_80015248_15E48(s32);
 extern void func_80021BD0_227D0(void);
 extern void func_80018EB0_19AB0(void);
 extern void func_8001C920_1D520(void);
@@ -163,7 +163,9 @@ u8 func_8001523C_15E3C(void) {
     return D_8009F200_9FE00;
 }
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80015248_15E48);
+void func_80015248_15E48(s32 arg0) {
+    D_8009F200_9FE00 = arg0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80015254_15E54);
 
