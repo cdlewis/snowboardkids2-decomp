@@ -66,10 +66,6 @@ void func_8006FEBC_70ABC(s32);
 void func_8004013C_40D3C(void);
 void func_800401E8_40DE8(void);
 
-INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E4C8_9F0C8);
-
-INCLUDE_RODATA("asm/nonmatchings/3E160", jtbl_8009E5E8_9F1E8);
-
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003D560_3E160);
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003E4F0_3F0F0);

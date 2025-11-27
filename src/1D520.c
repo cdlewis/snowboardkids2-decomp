@@ -167,5 +167,3 @@ void func_8001E320_1EF20(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001E3E8_1EFE8);
-
-INCLUDE_RODATA("asm/nonmatchings/1D520", jtbl_8009E1D8_9EDD8);
