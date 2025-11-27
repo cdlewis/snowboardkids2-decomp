@@ -1,4 +1,5 @@
 #include "4050.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "task_scheduler.h"
 
@@ -7,6 +8,7 @@ extern void func_80014D78_15978(void);
 extern void func_80015064_15C64(void);
 extern void func_80015218_15E18(void);
 extern void func_80014C94_15894(void);
+extern void func_800150DC_15CDC(void);
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014A90_15690);
 
@@ -76,7 +78,11 @@ void func_80015028_15C28(void) {
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80015064_15C64);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80015098_15C98);
+void func_80015098_15C98(void) {
+    func_80003450_4050(D_800AFE8C_A71FC->errorFlag, 2);
+    createTaskQueue(&loadCutsceneOverlay, 0x64);
+    setGameStateHandler(func_800150DC_15CDC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_800150DC_15CDC);
 
