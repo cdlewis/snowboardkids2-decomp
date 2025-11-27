@@ -549,7 +549,54 @@ s16 func_8000B770_C370(u16 *arg0) {
     return maxCount;
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B7FC_C3FC);
+s16 func_8000B7FC_C3FC(u16 *arg0) {
+    s16 i;
+    s16 count;
+    s16 max;
+    u16 val;
+    u16 tmp;
+
+    i = 0;
+    count = 0;
+    val = arg0[0];
+    max = 0;
+    if (val != 0xFFFF) {
+        do {
+            val = arg0[i];
+            switch (val) {
+                case 0xFFFC:
+                    i++;
+                    break;
+                case 0xFFFB:
+                    count += 4;
+                    break;
+                case 0xFFFD:
+                    count = 0;
+                    break;
+                case 0xFFFE:
+                    count += 4;
+                    break;
+                default:
+                    tmp = arg0[i] >> 12;
+                    if (tmp == 0) {
+                        count += 0xC;
+                    } else {
+                        count += tmp;
+                    }
+                    break;
+            }
+
+            if (count > max) {
+                max = count;
+            }
+
+            i++;
+            val = arg0[i];
+        } while (val != 0xFFFF);
+    }
+
+    return max;
+}
 
 s32 func_8000B8D8_C4D8(u16 *arg0) {
     s16 i = 0;
