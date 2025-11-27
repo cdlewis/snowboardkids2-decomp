@@ -10,9 +10,8 @@ typedef struct {
 extern u8 D_800A8CC8_A0038;
 extern void (*D_8008D78C_8E38C[])(void);
 extern s16 D_8009F220_9FE20;
-extern void func_80018E80_19A80(void);
-
 void func_80018E2C_19A2C(void);
+void func_80018E80_19A80(void);
 
 void func_80018DC0_199C0(void) {
     task_mem_199C0 *mem;
@@ -41,4 +40,6 @@ void func_80018E2C_19A2C(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/199C0", func_80018E80_19A80);
+void func_80018E80_19A80(void) {
+    func_800697F4_6A3F4(D_8009F220_9FE20);
+}
