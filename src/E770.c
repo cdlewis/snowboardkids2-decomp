@@ -16,6 +16,13 @@ typedef struct {
 extern ArrayElement_8 D_8008CEA0_8DAA0[];
 
 typedef struct {
+    void *ptr;
+    s32 count;
+} LookupEntry;
+
+extern LookupEntry D_8008CE9C_8DA9C[];
+
+typedef struct {
     s8 unk0;
     s8 unk1;
     s8 unk2;
@@ -66,7 +73,22 @@ s32 func_8000DC18_E818(E770_struct *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000DC44_E844);
+void *func_8000DC44_E844(E770_struct *arg0, s32 arg1) {
+    void *result;
+    s8 temp;
+    LookupEntry *entry;
+
+    result = NULL;
+    temp = arg0->unk2;
+
+    if (temp < 2) {
+        entry = &D_8008CE9C_8DA9C[temp];
+        if (arg1 < entry->count) {
+            result = (u8 *)entry->ptr + arg1 * 8;
+        }
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DC88_E888);
 
