@@ -1,10 +1,14 @@
+#include "20F0.h"
 #include "common.h"
 #include "geometry.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 extern void func_8002AE80_2BA80(void *);
 extern void func_8002B248_2BE48(void *);
 extern void func_8002A2D0_2AED0(void *);
+extern void func_8002A290_2AE90(void *);
+extern void func_80029954_2A554(void);
 
 typedef struct {
     /* 0x00 */ void *model;
@@ -21,6 +25,20 @@ typedef struct {
     /* 0x000 */ u8 pad0[0x42A];
     /* 0x42A */ u8 unk42A;
 } AllocationData;
+
+typedef struct {
+    /* 0x00 */ SceneModel *model;
+    /* 0x04 */ Mat3x3Padded matrix;
+    /* 0x24 */ u8 pad24[0x8];
+    /* 0x2C */ u16 rotation;
+    /* 0x2E */ u8 pad2E[0x2C];
+    /* 0x5A */ s16 unk5A;
+    /* 0x5C */ u8 pad5C[0x2];
+    /* 0x5E */ u8 unk5E;
+    /* 0x5F */ u8 pad5F[0x2];
+    /* 0x61 */ u8 unk61;
+    /* 0x62 */ u8 unk62;
+} Func297D8Arg;
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_80028BB0_297B0);
 
@@ -52,7 +70,16 @@ INCLUDE_ASM("asm/nonmatchings/297B0", func_80029680_2A280);
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_80029724_2A324);
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_800297D8_2A3D8);
+void func_800297D8_2A3D8(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = (randB() & 0x1F) + 0x14;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    func_80001688_2288(arg0->model, 4);
+    func_8002A290_2AE90(arg0);
+    setCallback(func_80029954_2A554);
+}
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_80029840_2A440);
 
