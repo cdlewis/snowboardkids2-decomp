@@ -1,4 +1,22 @@
+#include "56910.h"
 #include "common.h"
+#include "graphics.h"
+#include "task_scheduler.h"
+
+extern void *D_8009A6C0_9B2C0;
+extern void func_800419AC_425AC(void *);
+extern void func_80041810_42410(void *);
+
+typedef struct {
+    u8 pad0[0x20];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    s32 unk2C;
+    u8 pad30[0xC];
+    void *unk3C;
+    s32 unk40;
+} Func4179CArg;
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041570_42170);
 
@@ -10,7 +28,17 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_80041724_42324);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_8004175C_4235C);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_8004179C_4239C);
+void func_8004179C_4239C(Func4179CArg *arg0) {
+    getCurrentAllocation();
+    arg0->unk20 = &D_8009A6C0_9B2C0;
+    arg0->unk24 = loadAsset_B7E70();
+    arg0->unk28 = loadAsset_216290();
+    arg0->unk2C = 0;
+    arg0->unk40 = 0x400;
+    func_80056B7C_5777C((u8 *)arg0->unk3C + 0x434, 0x13);
+    setCleanupCallback(func_800419AC_425AC);
+    setCallbackWithContinue(func_80041810_42410);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041810_42410);
 
