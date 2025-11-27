@@ -6,6 +6,7 @@
 
 extern void *D_8009A6B0_9B2B0;
 extern void *D_8009A6C0_9B2C0;
+extern void *D_8009A6D0_9B2D0;
 extern void *D_8009A6E0_9B2E0;
 extern void *D_8009A760_9B360;
 extern void func_800419AC_425AC(void *);
@@ -62,6 +63,21 @@ typedef struct {
     u8 pad30[0x16]; /* 0x30 */
     s16 unk46;      /* 0x46 */
 } Func43DC0State;
+
+typedef struct {
+    u8 pad0[0x20];    /* 0x00 */
+    void *unk20;      /* 0x20 */
+    void *unk24;      /* 0x24 */
+    void *unk28;      /* 0x28 */
+    s32 unk2C;        /* 0x2C */
+    u8 pad30[0x10];   /* 0x30 */
+    s16 matrix[3][3]; /* 0x40 - just the 9 s16 values (0x12 bytes) */
+    u8 pad52[2];      /* 0x52 - padding to 0x54 */
+    s32 unk54;        /* 0x54 */
+    s32 unk58;        /* 0x58 */
+    s32 unk5C;        /* 0x5C */
+    s32 unk60;        /* 0x60 */
+} Func41F38State;
 
 void func_80041570_42170(Func41570State *arg0) {
     getCurrentAllocation();
@@ -120,7 +136,23 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_80041E10_42A10);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041EA4_42AA4);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041F38_42B38);
+void func_80041FB4_42BB4(void);
+void func_80042070_42C70(void);
+
+void func_80041F38_42B38(Func41F38State *arg0) {
+    getCurrentAllocation();
+    arg0->unk20 = &D_8009A6D0_9B2D0;
+    arg0->unk24 = loadAsset_B7E70();
+    arg0->unk28 = loadAsset_216290();
+    arg0->unk2C = 0;
+    createYRotationMatrix((Mat3x3Padded *)arg0->matrix, 0xF800);
+    arg0->unk54 = 0;
+    arg0->unk58 = 0;
+    arg0->unk5C = 0;
+    arg0->unk60 = 1;
+    setCleanupCallback(func_80042070_42C70);
+    setCallbackWithContinue(func_80041FB4_42BB4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041FB4_42BB4);
 
