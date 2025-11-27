@@ -10,7 +10,11 @@ INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005CFDC_5DBDC);
 
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005CFFC_5DBFC);
 
-INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D020_5DC20);
+extern s32 func_80062274_62E74(void *, u16);
+
+s32 func_8005D020_5DC20(void *arg0, u16 arg1) {
+    return func_80062274_62E74(arg0, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D03C_5DC3C);
 
