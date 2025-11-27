@@ -1,10 +1,16 @@
 #include "90F0.h"
 #include "common.h"
+#include "task_scheduler.h"
 
 typedef struct {
-    u8 _pad[0x20];
+    u8 _pad0[0x6];
+    s16 unk6;
+    u8 _pad8[0x18];
     func_80009F5C_AB5C_arg *unk20;
 } func_8000B510_C110_arg;
+
+extern void func_80009E68_AA68(void *, s32);
+extern void func_80009F90_AB90(void *, s32, s32, s32);
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000A440_B040);
 
@@ -30,7 +36,15 @@ void func_8000AD08_B908(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk20);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000AD24_B924);
+void func_8000AD88_B988(void);
+void func_8000B028_BC28(func_8000B510_C110_arg *);
+
+void func_8000AD24_B924(func_8000B510_C110_arg *arg0) {
+    func_80009E68_AA68(&arg0->unk20, 0);
+    func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    setCleanupCallback(func_8000B028_BC28);
+    setCallback(func_8000AD88_B988);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000AD88_B988);
 
