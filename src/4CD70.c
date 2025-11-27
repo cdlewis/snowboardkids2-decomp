@@ -1,5 +1,20 @@
 #include "common.h"
 
+extern void setCleanupCallback(void *);
+extern void setCallback(void *);
+extern void *loadAsset_34CB50(void);
+extern void func_8004D3E4_4DFE4(void *);
+extern void func_8004D464_4E064(void *);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    u16 unk8;
+    u16 unkA;
+    u32 unkC;
+} Struct_func_8004D3A4;
+
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C254_4CE54);
@@ -48,7 +63,11 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D338_4DF38);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D364_4DF64);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D3A4_4DFA4);
+void func_8004D3A4_4DFA4(Struct_func_8004D3A4 *arg0) {
+    arg0->unk4 = loadAsset_34CB50();
+    setCleanupCallback(func_8004D464_4E064);
+    setCallback(func_8004D3E4_4DFE4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D3E4_4DFE4);
 
