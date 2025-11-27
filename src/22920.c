@@ -1,4 +1,5 @@
 #include "common.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021D20_22920);
@@ -6,6 +7,7 @@ INCLUDE_ASM("asm/nonmatchings/22920", func_80021D20_22920);
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021D50_22950);
 
 void func_80021DE8_229E8(void);
+void func_80021EFC_22AFC(void);
 void func_80022108_22D08(void);
 
 void func_80021D88_22988(void) {
@@ -27,7 +29,18 @@ INCLUDE_ASM("asm/nonmatchings/22920", func_80021E18_22A18);
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021E6C_22A6C);
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80021E9C_22A9C);
+void func_80021E9C_22A9C(void) {
+    s16 result;
+
+    result = func_80069810_6A410();
+
+    if (result == 0xFF) {
+        func_80057564_58164(0x14);
+        terminateSchedulerWithCallback(func_80022108_22D08);
+    } else if (result == 1) {
+        setGameStateHandler(func_80021EFC_22AFC);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021EFC_22AFC);
 
