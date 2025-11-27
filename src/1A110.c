@@ -8,7 +8,23 @@ INCLUDE_ASM("asm/nonmatchings/1A110", func_80019510_1A110);
 
 INCLUDE_ASM("asm/nonmatchings/1A110", func_8001960C_1A20C);
 
-INCLUDE_ASM("asm/nonmatchings/1A110", func_8001974C_1A34C);
+s32 func_8001974C_1A34C(s32 arg0, s32 arg1, s32 arg2) {
+    GameState *state;
+    s32 dx;
+    s32 dy;
+    s32 dist;
+    s32 threshold;
+
+    state = (GameState *)getCurrentAllocation();
+    dx = arg0 - state->unk408[arg2];
+    dy = arg1 - state->unk410[arg2];
+    dist = distance_2d(dx, dy);
+    threshold = state->unk3FE + state->unk418[arg2];
+    if (dist < (threshold << 16)) {
+        return arg2 + 1;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1A110", func_800197D8_1A3D8);
 
