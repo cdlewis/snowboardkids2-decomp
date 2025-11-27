@@ -35,6 +35,11 @@ typedef struct {
     s32 count_offset;
 } Table_B934;
 
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+} Table2DRow;
+
 extern void func_80009E68_AA68(void *, s32);
 extern void func_80009F90_AB90(void *, s32, s32, s32);
 extern void func_8000A49C_B09C(s32, s32, s32, s32, void *, s32, s8, s32, s32, s32);
@@ -198,7 +203,22 @@ void *func_8000B6B8_C2B8(s16 arg0) {
     return dmaRequestAndUpdateStateWithSize(entry->romStart, entry->romEnd, entry->size);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B714_C314);
+void *func_8000B714_C314(Table_B934 *arg0, s32 arg1, s32 arg2) {
+    s32 count;
+    Table2DRow *row;
+    s32 *subarray;
+
+    count = *(s32 *)(arg0->count_offset + (s32)arg0);
+    if (arg1 >= count) {
+        return NULL;
+    }
+    row = (Table2DRow *)(arg0->array_offset + arg1 * 8 + (s32)arg0);
+    if (arg2 >= row->unk4) {
+        return NULL;
+    }
+    subarray = (s32 *)(row->unk0 + (s32)arg0);
+    return (void *)(subarray[arg2] + (s32)arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B770_C370);
 
