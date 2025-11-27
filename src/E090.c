@@ -2,8 +2,16 @@
 #include "common.h"
 #include "task_scheduler.h"
 
+extern u32 D_67AB10;
+extern u32 D_67BEB0;
+extern u32 D_67BEB0_copy;
+extern u32 D_67DB80;
+extern u32 D_67DB80_copy;
+extern u32 D_67E860;
+
 extern void *freeNodeMemory(void *);
 extern void func_800394BC_3A0BC(void *, s32);
+extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 
 typedef struct {
     s16 unk0;
@@ -150,13 +158,37 @@ void func_8000D7A0_E3A0(E090_struct *arg0) {
     terminateSchedulerWithCallback(func_8000DB4C_E74C);
 }
 
-extern void func_8000D818_E418(void);
+void func_8000D818_E418(void);
+void func_8000D974_E574(void);
 
 void func_8000D7F8_E3F8(void) {
     setGameStateHandler(func_8000D818_E418);
 }
 
-INCLUDE_ASM("asm/nonmatchings/E090", func_8000D818_E418);
+void func_8000D818_E418(void) {
+    E090_struct *temp_s0;
+    Node_70B00 *s1;
+    u8 sp20[0x20];
+
+    temp_s0 = (E090_struct *)allocateTaskMemory(0x2F0);
+    temp_s0->unk0 = 0;
+    temp_s0->unk2 = 0;
+    temp_s0->unk1 = 0;
+    temp_s0->unk1E0 = dmaRequestAndUpdateStateWithSize(&D_67AB10, &D_67BEB0, 0x6350);
+    temp_s0->unk1E4 = dmaRequestAndUpdateStateWithSize(&D_67BEB0_copy, &D_67DB80, 0x4320);
+    temp_s0->unk1E8 = dmaRequestAndUpdateStateWithSize(&D_67DB80_copy, &D_67E860, 0x1A68);
+
+    s1 = &temp_s0->unk8;
+    func_8006FAA4_706A4(s1, 0, 0, 10, 0);
+    func_8006F9BC_705BC(s1, 1.0f, 1.0f);
+    setModelCameraTransform(s1, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    func_8006FEF8_70AF8(s1, 1);
+    func_8006BEDC_6CADC(&sp20, 0, 0, 0x01000000, 0, 0, 0);
+    func_8006FD3C_7093C(temp_s0->unk8.id, &sp20);
+    func_8006FE28_70A28(s1, 0, 0, 0);
+    func_8006FDA0_709A0(s1, 0xFF, 0);
+    setGameStateHandler(func_8000D974_E574);
+}
 
 extern void func_80038420_39020(void);
 extern void func_80011924_12524(void);
