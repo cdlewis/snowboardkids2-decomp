@@ -6,7 +6,7 @@
 #include "task_scheduler.h"
 
 extern void func_800145E0_151E0(void);
-extern void func_8001474C_1534C(void);
+extern void func_8003D560_3E160(void);
 extern void func_80014808_15408(void);
 extern void func_80014900_15500(void);
 extern void func_80014958_15558(void);
@@ -22,6 +22,8 @@ void func_80014660_15260(void);
 void func_800145AC_151AC(void);
 void func_8001457C_1517C(void);
 void func_800148CC_154CC(void);
+void func_8001474C_1534C(void);
+void func_8001478C_1538C(void);
 
 typedef struct {
     s16 unk0;
@@ -108,7 +110,11 @@ void func_80014690_15290(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_8001474C_1534C);
+void func_8001474C_1534C(void) {
+    D_800AFE8C_A71FC->unk4 = 2;
+    createTaskQueue(func_8003D560_3E160, 100);
+    setGameStateHandler(func_8001478C_1538C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/15080", func_8001478C_1538C);
 
