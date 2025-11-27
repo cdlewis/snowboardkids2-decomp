@@ -470,7 +470,66 @@ void func_8000F564_10164(FD98_struct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000F690_10290);
+void func_8000F690_10290(FD98_struct *arg0) {
+    s32 inputs;
+    s8 temp2;
+    s8 newVal;
+
+    inputs = gControllerInputs;
+
+    if (inputs & 0x80200) {
+        s8 temp = arg0->unk2;
+        if (!temp) {
+            newVal = 8;
+        } else if (temp == 9) {
+            newVal = 17;
+        } else {
+            newVal = temp - 1;
+        }
+        arg0->unk2 = newVal;
+        func_800585C8_591C8(0x2B);
+        return;
+    }
+
+    if (inputs & 0x40100) {
+        s8 temp = arg0->unk2;
+        if (temp == 8) {
+            arg0->unk2 = 0;
+        } else if (temp == 17) {
+            arg0->unk2 = 9;
+        } else {
+            arg0->unk2 = temp + 1;
+        }
+        func_800585C8_591C8(0x2B);
+        return;
+    }
+
+    if (inputs & 0x10800) {
+        u8 val = arg0->unk2;
+        temp2 = val - 9;
+        if ((u8)temp2 < 9u) {
+            arg0->unk2 = temp2;
+        } else {
+            arg0->unk3 = val + 9;
+            arg0->unk1 = 1;
+            arg0->unk4 = arg0->unk2;
+        }
+        func_800585C8_591C8(0x2B);
+        return;
+    }
+
+    if (inputs & 0x20400) {
+        u8 val = arg0->unk2;
+        if (val < 9u) {
+            arg0->unk2 = val + 9;
+        } else {
+            arg0->unk3 = val;
+            arg0->unk1 = 1;
+            arg0->unk4 = arg0->unk2 - 9;
+        }
+        func_800585C8_591C8(0x2B);
+    }
+}
 
 void func_8000F7B0_103B0(FD98_struct *arg0) {
     s32 inputs;
@@ -573,7 +632,6 @@ void func_8000FA90_10690(FD98_struct *arg0) {
 
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF6C_9EB6C);
 
-extern void func_8000F690_10290(FD98_struct *);
 extern void func_8000F884_10484(FD98_struct *);
 
 void func_8000FBBC_107BC(FD98_struct *arg0) {
