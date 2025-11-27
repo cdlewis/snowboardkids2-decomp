@@ -70,9 +70,12 @@ void func_8000B684_C284(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk20);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B6A0_C2A0);
-
+extern s32 D_8008CC2C_8D82C;
 extern s32 D_8008CC30_8D830;
+
+s32 func_8000B6A0_C2A0(void) {
+    return D_8008CC2C_8D82C;
+}
 
 s32 func_8000B6AC_C2AC(void) {
     return D_8008CC30_8D830;
