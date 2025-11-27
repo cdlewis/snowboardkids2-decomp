@@ -1,10 +1,51 @@
+#include "6E840.h"
 #include "common.h"
+#include "graphics.h"
+#include "task_scheduler.h"
+
+extern void func_8001C7E8_1D3E8(void);
+extern void func_8001C1E0_1CDE0(void);
+extern void func_8001C28C_1CE8C(void);
+extern void func_800308FC_314FC(void);
+
+typedef struct {
+    /* 0x000 */ u8 pad0[0x1D8];
+    /* 0x1D8 */ u8 pad1D8[0x1D8];
+    /* 0x3B0 */ u8 pad3B0[0x1D8];
+    /* 0x588 */ void *unk588;
+    /* 0x58C */ void *unk58C;
+    /* 0x590 */ void *unk590;
+    /* 0x594 */ void *unk594;
+    /* 0x598 */ void *unk598;
+    /* 0x59C */ void *unk59C;
+    /* 0x5A0 */ u8 pad5A0[0x29];
+    /* 0x5C9 */ u8 unk5C9;
+    /* 0x5CA */ u8 pad5CA[0xC];
+    /* 0x5D6 */ u8 unk5D6;
+} Allocation_1C9C0;
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001BDC0_1C9C0);
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C0D8_1CCD8);
 
-INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C144_1CD44);
+void func_8001C144_1CD44(void) {
+    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+
+    if (func_8006FE10_70A10(NULL) != 0) {
+        return;
+    }
+
+    if (allocation->unk5C9 != 0) {
+        allocation->unk5D6 = 1;
+        func_80058220_58E20(0xEA, 1);
+        setGameStateHandler(func_8001C1E0_1CDE0);
+    } else {
+        allocation->unk5D6 = 3;
+        func_80058220_58E20(0xEE, 1);
+        setGameStateHandler(func_8001C28C_1CE8C);
+        scheduleTask(func_800308FC_314FC, 0, 0, 0x5A);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C1E0_1CDE0);
 
@@ -14,6 +55,25 @@ INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C2FC_1CEFC);
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C6E4_1D2E4);
 
-INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C744_1D344);
+void func_8001C744_1D344(void) {
+    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+
+    if (func_8006FE10_70A10(NULL) != 0) {
+        return;
+    }
+
+    unlinkNode((Node_70B00 *)allocation);
+    unlinkNode((Node_70B00 *)&allocation->pad1D8);
+    unlinkNode((Node_70B00 *)&allocation->pad3B0);
+
+    allocation->unk588 = freeNodeMemory(allocation->unk588);
+    allocation->unk58C = freeNodeMemory(allocation->unk58C);
+    allocation->unk590 = freeNodeMemory(allocation->unk590);
+    allocation->unk594 = freeNodeMemory(allocation->unk594);
+    allocation->unk598 = freeNodeMemory(allocation->unk598);
+    allocation->unk59C = freeNodeMemory(allocation->unk59C);
+
+    terminateSchedulerWithCallback(func_8001C7E8_1D3E8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C7E8_1D3E8);
