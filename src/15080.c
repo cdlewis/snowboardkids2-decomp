@@ -128,7 +128,19 @@ INCLUDE_ASM("asm/nonmatchings/15080", func_8001478C_1538C);
 
 INCLUDE_ASM("asm/nonmatchings/15080", func_80014808_15408);
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_80014854_15454);
+void func_80014854_15454(void) {
+    s16 result = func_80069810_6A410();
+
+    if (result == 0) {
+        return;
+    }
+
+    if (result == 1) {
+        setGameStateHandler(func_80014808_15408);
+    } else {
+        setGameStateHandler(func_80014660_15260);
+    }
+}
 
 extern void func_80037270_37E70(void);
 
