@@ -15,7 +15,7 @@ void func_80021BD0_227D0(void) {
 }
 
 void func_80021C58_22858(void);
-extern void func_80021D00_22900(void);
+void func_80021D00_22900(void);
 
 void func_80021C00_22800(void) {
     s16 result = func_80069810_6A410();
@@ -51,4 +51,6 @@ void func_80021CE4_228E4(void) {
     func_800697F4_6A3F4(1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/227D0", func_80021D00_22900);
+void func_80021D00_22900(void) {
+    func_800697F4_6A3F4(0xFF);
+}
