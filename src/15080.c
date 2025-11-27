@@ -6,7 +6,6 @@
 #include "task_scheduler.h"
 
 extern void func_8003D560_3E160(void);
-extern void func_80014958_15558(void);
 extern void func_80014990_15590(void);
 extern void func_80015A18_16618(void);
 extern void func_8000D7F8_E3F8(void);
@@ -29,6 +28,7 @@ void func_80014620_15220(void);
 void func_80014900_15500(void);
 void func_80014808_15408(void);
 void func_80014854_15454(void);
+void func_80014958_15558(void);
 
 typedef struct {
     s16 unk0;
@@ -173,6 +173,11 @@ void func_80014900_15500(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_80014958_15558);
+void func_80014958_15558(void) {
+    D_800AFE8C_A71FC->unk1F = 0;
+    D_800AFE8C_A71FC->unk20 = 0;
+    D_800AFE8C_A71FC->unk21 = 0;
+    D_800AFE8C_A71FC->unk22 = 3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/15080", func_80014990_15590);

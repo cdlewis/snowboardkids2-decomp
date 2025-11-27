@@ -8,7 +8,11 @@ typedef struct {
     u8 saveSlotIndex;
     u8 unk8;
     u8 unk9;
-    u8 padding3[0x19];
+    u8 padding3[0x15];
+    u8 unk1F;
+    u8 unk20;
+    u8 unk21;
+    u8 unk22;
     u8 errorFlag;
     u8 unk24;
     u8 unk25;
