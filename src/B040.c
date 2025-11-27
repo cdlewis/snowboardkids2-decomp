@@ -191,7 +191,23 @@ void func_8000B028_BC28(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk20);
 }
 
-void func_8000B0A8_BCA8(void);
+typedef struct {
+    /* 0x00 */ func_8000A834_B434_arg *unk0;
+    /* 0x04 */ s16 unk4;
+    /* 0x06 */ u8 _pad6[4];
+    /* 0x0A */ u8 unkA;
+    /* 0x0B */ s8 unkB;
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ s32 unk10;
+    /* 0x14 */ s32 unk14;
+    /* 0x18 */ s32 unk18;
+    /* 0x1C */ u16 unk1C;
+    /* 0x1E */ s16 unk1E;
+    /* 0x20 */ u8 unk20[0x4C];
+    /* 0x6C */ s32 unk6C;
+} func_8000B0A8_arg;
+
+void func_8000B0A8_BCA8(func_8000B0A8_arg *);
 void func_8000B1B0_BDB0(func_8000B510_C110_arg *);
 
 void func_8000B044_BC44(func_8000B510_C110_arg *arg0) {
@@ -201,7 +217,43 @@ void func_8000B044_BC44(func_8000B510_C110_arg *arg0) {
     setCallback(func_8000B0A8_BCA8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B0A8_BCA8);
+void func_8000B0A8_BCA8(func_8000B0A8_arg *arg0) {
+    func_8000A834_B434_ret *temp;
+    void *ptr;
+    s32 x, y, z;
+    s16 a1;
+
+    arg0->unk1C -= 0x155;
+
+    switch (arg0->unkB) {
+        case 0:
+            arg0->unk6C += 0x4CCC;
+            if (arg0->unk6C > 0x10000) {
+                arg0->unkB = 1;
+            }
+            break;
+        case 1: {
+            s32 val = arg0->unk6C;
+            s32 decrement = (-val >> 8) * 76;
+            val += decrement;
+            arg0->unk6C = val;
+            if (val <= 0) {
+                func_80069CF8_6A8F8();
+                return;
+            }
+        } break;
+    }
+
+    ptr = &arg0->unk20;
+    temp = func_8000A834_B434(arg0->unk0, arg0->unk1E);
+
+    x = temp->unk14 + arg0->unk10;
+    y = temp->unk18 + arg0->unk14;
+    z = temp->unk1C + arg0->unk18;
+    a1 = arg0->unk4;
+
+    func_8000A13C_AD3C(ptr, a1, x, y, z, arg0->unk6C, arg0->unk6C, (s16)arg0->unk1C, arg0->unkA);
+}
 
 void func_8000B1B0_BDB0(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk20);
