@@ -5,7 +5,11 @@
 extern void func_80058220_58E20(s32, s32);
 extern void func_800156AC_162AC(void);
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_800154E0_160E0);
+extern u8 D_8009F210_9FE10;
+
+void func_800154E0_160E0(void) {
+    func_800697F4_6A3F4(D_8009F210_9FE10);
+}
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_80015504_16104);
 
