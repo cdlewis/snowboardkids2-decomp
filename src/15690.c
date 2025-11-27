@@ -66,7 +66,13 @@ INCLUDE_ASM("asm/nonmatchings/15690", func_80014D78_15978);
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014DA8_159A8);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014F60_15B60);
+extern void func_80014FA4_15BA4(void);
+
+void func_80014F60_15B60(void) {
+    func_80003450_4050(D_800AFE8C_A71FC->saveSlotIndex, 1);
+    createTaskQueue(loadCutsceneOverlay, 0x64);
+    setGameStateHandler(func_80014FA4_15BA4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014FA4_15BA4);
 
