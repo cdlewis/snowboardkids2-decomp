@@ -8,6 +8,8 @@
 
 extern void func_80001640_2240(SceneModel *arg0);
 extern void func_80001650_2250(SceneModel *arg0);
+extern void func_80056914_57514(void *);
+extern s32 abs(s32);
 
 extern u8 identityMatrix[];
 
@@ -166,7 +168,43 @@ void func_80018A90_19690(func_80018A90_19690_arg *arg0) {
     setCallback(&func_80018B90_19790);
 }
 
-INCLUDE_ASM("asm/nonmatchings/19400", func_80018B90_19790);
+void func_80018B90_19790(func_80018A90_19690_arg *arg0) {
+    GameState *allocation;
+    s16 temp;
+    s16 currentAngle;
+    s16 diff;
+    Mat3x3Padded sp20;
+    Mat3x3Padded sp40;
+
+    allocation = (GameState *)getCurrentAllocation();
+
+    temp = allocation->unk3F4;
+    if (temp >= 0x1001) {
+        temp -= 0x2000;
+    }
+    currentAngle = temp;
+
+    diff = abs(currentAngle - arg0->unk32);
+
+    if (diff >= 0x100) {
+        if (currentAngle < arg0->unk32) {
+            arg0->unk32 = temp + 0x100;
+        } else {
+            arg0->unk32 = temp - 0x100;
+        }
+    }
+
+    if (arg0->unk32 >= 0x660) {
+        arg0->unk32 = 0x65F;
+    } else if (arg0->unk32 < -0x65F) {
+        arg0->unk32 = -0x65F;
+    }
+
+    func_8006BEDC_6CADC(&sp20, arg0->unk20, arg0->unk24, arg0->unk28, arg0->unk2C, arg0->unk30, arg0->unk32);
+    func_8006B084_6BC84(arg0, &sp20, &sp40);
+    func_80056914_57514(&sp40);
+    func_8006FD3C_7093C(allocation->unkDA, &sp40);
+}
 
 void func_80018C9C_1989C(void) {
 }
