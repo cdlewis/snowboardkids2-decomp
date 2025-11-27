@@ -6,10 +6,22 @@
 extern void *func_80035F80_36B80(s32);
 extern void *func_8000B6B8_C2B8(s32);
 
-extern void func_8000D2C8_DEC8(void);
+extern void func_80069CF8_6A8F8(void);
+extern void func_80035260_35E60(s32, s32, s16, s16, u8, u8, u8, u8, u8);
+extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 
 typedef struct {
-    /* 0x00 */ void *unk0;
+    u8 high;
+    u8 low;
+} DC90Bytes;
+
+typedef union {
+    s16 asS16;
+    DC90Bytes asBytes;
+} DC90S16OrBytes;
+
+typedef struct {
+    /* 0x00 */ u8 *unk0;
     /* 0x04 */ void *unk4;
     /* 0x08 */ void *unk8;
     /* 0x0C */ s16 unkC;
@@ -18,26 +30,30 @@ typedef struct {
     /* 0x12 */ u8 pad12[0x2];
     /* 0x14 */ s16 unk14;
     /* 0x16 */ s16 unk16;
-    /* 0x18 */ u8 pad18[0x4];
+    /* 0x18 */ s32 unk18;
     /* 0x1C */ void *unk1C;
-    /* 0x20 */ s16 unk20;
-    /* 0x22 */ s16 unk22;
+    /* 0x20 */ DC90S16OrBytes unk20;
+    /* 0x22 */ DC90S16OrBytes unk22;
     /* 0x24 */ u8 unk24;
     /* 0x25 */ u8 pad25[0x3];
     /* 0x28 */ void *unk28;
-    /* 0x2C */ u8 pad2C[0x8];
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ s32 unk30;
     /* 0x34 */ s32 unk34;
     /* 0x38 */ s32 unk38;
     /* 0x3C */ s16 unk3C;
     /* 0x3E */ s16 unk3E;
 } DC90TaskStruct;
 
+extern s32 func_8000D144_DD44(DC90TaskStruct *arg0);
+
+void func_8000D2C8_DEC8(DC90TaskStruct *arg0);
 void func_8000D448_E048(DC90TaskStruct *arg0);
 
 void func_8000D090_DC90(DC90TaskStruct *arg0) {
     void *temp = arg0->unk28;
-    arg0->unk20 = 0xFF;
-    arg0->unk22 = 0xFF;
+    arg0->unk20.asS16 = 0xFF;
+    arg0->unk22.asS16 = 0xFF;
     arg0->unk14 = 0;
     arg0->unk16 = 0;
     arg0->unk24 = 0;
@@ -110,7 +126,70 @@ void func_8000D244_DE44(DC90TaskStruct *arg0) {
     setCallback(&func_8000D2C8_DEC8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/DC90", func_8000D2C8_DEC8);
+void func_8000D2C8_DEC8(DC90TaskStruct *arg0) {
+    s32 result = 0;
+    s32 flag = 0;
+
+    switch (arg0->unkC) {
+        case 0:
+            func_8000D090_DC90(arg0);
+            break;
+        case 1:
+            func_8000D0BC_DCBC(arg0);
+            break;
+        case 2:
+            func_8000D100_DD00(arg0);
+            break;
+        case 3:
+            result = func_8000D144_DD44(arg0);
+            flag = 1;
+            break;
+        case 4:
+            func_8000D1BC_DDBC(arg0);
+            break;
+        case 5:
+            func_8000D200_DE00(arg0);
+            break;
+        case 6:
+            arg0->unk0[0xFF7] = 0;
+            func_80069CF8_6A8F8();
+            return;
+    }
+
+    arg0->unk2C = -(arg0->unk34 << 3);
+    arg0->unk30 = -(arg0->unk38 << 3);
+
+    if (result != 0) {
+        s16 temp16;
+        arg0->unk14 = arg0->unk2C;
+        temp16 = arg0->unk30;
+        arg0->unk16 = temp16;
+        func_80035260_35E60(
+            (s32)arg0->unk1C,
+            arg0->unk18,
+            arg0->unk14,
+            temp16,
+            arg0->unk20.asBytes.low,
+            arg0->unk22.asBytes.low,
+            arg0->unk24,
+            1,
+            0
+        );
+    }
+
+    func_8006D7B0_6E3B0(
+        (s32)arg0->unk4,
+        (s16)(arg0->unk2C),
+        (s16)(arg0->unk30),
+        (s16)(arg0->unk34),
+        (s16)(arg0->unk38),
+        flag,
+        (u8)arg0->unk3C,
+        (u8)arg0->unk3E,
+        1,
+        0
+    );
+}
 
 void func_8000D448_E048(DC90TaskStruct *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
