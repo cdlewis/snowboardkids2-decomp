@@ -5,6 +5,7 @@
 #include "task_scheduler.h"
 
 extern void *freeNodeMemory(void *);
+extern s16 D_8008CE40_8DA40;
 
 typedef struct {
     s32 value;
@@ -21,7 +22,7 @@ typedef struct {
     u8 pad4[0x4];
     void *unk8;
     void *unkC;
-    u8 pad10[0x2];
+    s16 unk10;
     s16 unk12;
     u8 pad14[0x4];
     void *unk18;
@@ -37,7 +38,11 @@ typedef struct {
     SceneModel *unk624;
 } E770_struct;
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000DB70_E770);
+void func_8000DB70_E770(E770_struct *arg0, s16 arg1) {
+    D_8008CE40_8DA40 = arg1;
+    arg0->unk10 = 0x28;
+    func_80057514_58114(arg1, 0x80, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DBA8_E7A8);
 
@@ -118,7 +123,6 @@ s32 func_8000E614_F214(E770_struct *arg0) {
     return 0;
 }
 
-extern s16 D_8008CE40_8DA40;
 extern void func_8000E6E0_F2E0(void);
 
 void func_8000E680_F280(void) {
