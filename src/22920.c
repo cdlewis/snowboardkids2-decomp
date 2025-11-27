@@ -35,7 +35,21 @@ void func_80021D88_22988(void) {
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021DE8_229E8);
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80021E18_22A18);
+void func_80022018_22C18(void);
+
+void func_80021E18_22A18(void) {
+    s16 result;
+
+    result = func_80069810_6A410();
+
+    if (result != 0) {
+        if (result == 0xFE) {
+            terminateSchedulerWithCallback(func_80022108_22D08);
+        } else {
+            setGameStateHandler(func_80022018_22C18);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021E6C_22A6C);
 
