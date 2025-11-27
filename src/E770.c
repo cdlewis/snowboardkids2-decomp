@@ -122,7 +122,19 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000E240_EE40);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E2AC_EEAC);
 
-typedef struct FD98_struct FD98_struct;
+typedef struct FD98_struct {
+    s8 unk0;
+    s8 unk1;
+    s8 unk2;
+    u8 unk3;
+    u8 unk4;
+    u8 pad5[0x3];
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+} FD98_struct;
+
 extern void func_8000FD98_10998(FD98_struct *);
 
 void func_8000E4CC_F0CC(E770_struct *arg0) {
@@ -331,7 +343,80 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000FA90_10690);
 
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF6C_9EB6C);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000FBBC_107BC);
+extern s32 gControllerInputs;
+extern void func_8000F564_10164(FD98_struct *);
+extern void func_8000F690_10290(FD98_struct *);
+extern void func_8000F7B0_103B0(FD98_struct *);
+extern void func_8000F884_10484(FD98_struct *);
+extern void func_8000FA90_10690(FD98_struct *);
+
+void func_8000FBBC_107BC(FD98_struct *arg0) {
+    FD98_struct *alloc;
+    s32 inputs;
+    s8 temp;
+    u8 newVal;
+    s32 sound;
+
+    alloc = getCurrentAllocation();
+    inputs = gControllerInputs;
+
+    if (inputs & 0x4000) {
+        func_8000DC88_E888((E770_struct *)alloc, 0x90, 0x90, -1, -1);
+        sound = 0x2E;
+        arg0->unk0 = 3;
+        goto play_sound;
+    }
+
+    temp = arg0->unk1;
+    if (temp == 0) {
+        goto do_switch;
+    }
+    if (temp == 1) {
+        goto button_check;
+    }
+    return;
+
+do_switch:
+    switch (alloc->unk1) {
+        case 0:
+            func_8000F564_10164(arg0);
+            break;
+        case 1:
+            func_8000F690_10290(arg0);
+            break;
+        case 2:
+            func_8000F7B0_103B0(arg0);
+            break;
+        case 3:
+            func_8000F884_10484(arg0);
+            break;
+        case 4:
+            func_8000FA90_10690(arg0);
+            break;
+    }
+    return;
+
+button_check:
+    if (inputs & 0x8000) {
+        arg0->unk0 = 3;
+        func_8000DC88_E888((E770_struct *)alloc, 0x90, 0x90, -1, -1);
+        sound = 0x2E;
+        goto play_sound;
+    }
+    if (inputs & 0x10800) {
+        newVal = arg0->unk3;
+        goto set_2b;
+    }
+    if (inputs & 0x20400) {
+        newVal = arg0->unk4;
+    set_2b:
+        sound = 0x2B;
+        arg0->unk1 = 0;
+        arg0->unk2 = newVal;
+    play_sound:
+        func_800585C8_591C8(sound);
+    }
+}
 
 void func_8000FD1C_1091C(E770_struct *arg0) {
     void *alloc = getCurrentAllocation();
@@ -351,18 +436,6 @@ s32 func_8000FD50_10950(E770_struct *arg0) {
     return 0;
 }
 
-struct FD98_struct {
-    s8 unk0;
-    s8 unk1;
-    s8 unk2;
-    s8 unk3;
-    u8 pad4[0x4];
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-};
-
 extern void func_8000FEA0_10AA0(void);
 extern void func_8000FE00_10A00(E770_struct *);
 
@@ -380,7 +453,6 @@ void func_8000FD98_10998(FD98_struct *arg0) {
 }
 
 extern void func_8000F4F0_100F0(E770_struct *);
-extern void func_8000FBBC_107BC(E770_struct *);
 extern void func_8000EE88_FA88(E770_struct *);
 
 void func_8000FE00_10A00(E770_struct *arg0) {
@@ -393,7 +465,7 @@ void func_8000FE00_10A00(E770_struct *arg0) {
             func_8000F4F0_100F0(arg0);
             break;
         case 2:
-            func_8000FBBC_107BC(arg0);
+            func_8000FBBC_107BC((FD98_struct *)arg0);
             break;
         case 3:
             func_8000FD1C_1091C(arg0);
