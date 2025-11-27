@@ -259,7 +259,24 @@ void func_8000B1B0_BDB0(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk20);
 }
 
-void func_8000B230_BE30(void);
+typedef struct {
+    /* 0x00 */ func_8000A834_B434_arg *unk0;
+    /* 0x04 */ s16 unk4;
+    /* 0x06 */ u8 _pad6[2];
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ u8 unkA;
+    /* 0x0B */ s8 unkB;
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ s32 unk10;
+    /* 0x14 */ s32 unk14;
+    /* 0x18 */ s32 unk18;
+    /* 0x1C */ s16 unk1C;
+    /* 0x1E */ s16 unk1E;
+    /* 0x20 */ u8 unk20[0x4C];
+    /* 0x6C */ s32 unk6C;
+} func_8000B230_arg;
+
+void func_8000B230_BE30(func_8000B230_arg *);
 void func_8000B370_BF70(func_8000B510_C110_arg *);
 
 void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0) {
@@ -269,7 +286,54 @@ void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0) {
     setCallback(func_8000B230_BE30);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B230_BE30);
+void func_8000B230_BE30(func_8000B230_arg *arg0) {
+    func_8000A834_B434_ret *temp;
+    void *ptr;
+    s32 x, y, z;
+    s16 a1;
+
+    switch (arg0->unkB) {
+        case 0:
+            arg0->unk6C -= 0x51EB;
+            if (0x66666 < (arg0->unk6C < 0 ? -arg0->unk6C : arg0->unk6C)) {
+                arg0->unkB = 1;
+            }
+            break;
+        case 1: {
+            s16 cnt = arg0->unk8;
+            if (cnt == 0) {
+                arg0->unkB = 2;
+            } else {
+                arg0->unk8 = cnt - 1;
+            }
+            break;
+        }
+        case 2: {
+            s32 decrement = -arg0->unkC;
+            s32 val = arg0->unkC;
+            if (decrement < 0) {
+                decrement += 3;
+            }
+            decrement >>= 2;
+            val += decrement;
+            arg0->unkC = val;
+            if (decrement == 0) {
+                func_80069CF8_6A8F8();
+                return;
+            }
+        } break;
+    }
+
+    ptr = &arg0->unk20;
+    temp = func_8000A834_B434(arg0->unk0, arg0->unk1E);
+
+    x = temp->unk14 + arg0->unk10;
+    y = temp->unk18 + arg0->unk14 + arg0->unk6C;
+    z = temp->unk1C + arg0->unk18;
+    a1 = arg0->unk4;
+
+    func_8000A13C_AD3C(ptr, a1, x, y, z, arg0->unkC, arg0->unkC, arg0->unk1C, arg0->unkA);
+}
 
 void func_8000B370_BF70(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk20);
