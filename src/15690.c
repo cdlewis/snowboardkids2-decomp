@@ -26,7 +26,22 @@ void func_80014B1C_1571C(void) {
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014B70_15770);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014BA0_157A0);
+extern void func_80014C0C_1580C(void);
+
+void func_80014BA0_157A0(void) {
+    s16 result;
+
+    getCurrentAllocation();
+    result = func_80069810_6A410();
+
+    if (result != 0) {
+        if (result == 0x44 || result == 0xFF) {
+            setGameStateHandler(func_80014C0C_1580C);
+        } else {
+            terminateSchedulerWithCallback(func_80015218_15E18);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014C0C_1580C);
 
