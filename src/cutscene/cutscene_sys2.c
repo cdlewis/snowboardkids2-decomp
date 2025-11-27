@@ -1,7 +1,7 @@
 #include "cutscene/cutscene_sys2.h"
 #include "task_scheduler.h"
 
-extern void func_8000C268_CE68(void *);
+extern void func_8000C268_CE68(void *); // Func8000C268Arg * - matrix data
 extern void func_8000C2CC_CECC(void *, s32, s16);
 extern void func_8000C334_CF34(void *, Vec3 *, s16);
 extern void func_8000C2B4_CEB4(void *, s32);
