@@ -1,6 +1,7 @@
 #include "3A1F0.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "EepromSaveData_type.h"
 #include "common.h"
 #include "gamestate.h"
 #include "graphics.h"
@@ -268,6 +269,24 @@ INCLUDE_ASM("asm/nonmatchings/160E0", func_80015DF4_169F4);
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_80016070_16C70);
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_80016150_16D50);
+void func_80016150_16D50(void) {
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        EepromSaveData->save_slot_status[i] = 1;
+        EepromSaveData->save_slot_data[i] = 1;
+    }
+
+    EepromSaveData->setting_4E = 1;
+    EepromSaveData->setting_4F = 1;
+    EepromSaveData->setting_50 = 0;
+
+    for (i = 0; i < 9; i++) {
+        EepromSaveData->character_or_settings[i] = i + 1;
+    }
+
+    EepromSaveData->setting_4B = 0xD;
+    EepromSaveData->setting_4C = 0xF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_800161F4_16DF4);
