@@ -6,8 +6,11 @@ INCLUDE_ASM("asm/nonmatchings/22920", func_80021D20_22920);
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021D50_22950);
 
+extern void func_800226F0_232F0(void);
+
 void func_80021DE8_229E8(void);
 void func_80021EFC_22AFC(void);
+void func_80021FB8_22BB8(void);
 void func_80022108_22D08(void);
 
 void func_80021D88_22988(void) {
@@ -46,7 +49,11 @@ INCLUDE_ASM("asm/nonmatchings/22920", func_80021EFC_22AFC);
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021F2C_22B2C);
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80021F80_22B80);
+void func_80021F80_22B80(void) {
+    func_800574A0_580A0(2);
+    createTaskQueue(func_800226F0_232F0, 100);
+    setGameStateHandler(func_80021FB8_22BB8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021FB8_22BB8);
 
