@@ -25,6 +25,16 @@ typedef struct {
     s32 size;
 } DmaEntry;
 
+typedef struct {
+    u8 _pad0[0x6];
+    s16 unk6;
+} ArrayElement_B934; // size 0x8
+
+typedef struct {
+    s32 array_offset;
+    s32 count_offset;
+} Table_B934;
+
 extern void func_80009E68_AA68(void *, s32);
 extern void func_80009F90_AB90(void *, s32, s32, s32);
 
@@ -193,4 +203,14 @@ INCLUDE_ASM("asm/nonmatchings/B040", func_8000B7FC_C3FC);
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B8D8_C4D8);
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B934_C534);
+s16 func_8000B934_C534(Table_B934 *arg0, s32 arg1) {
+    s32 count;
+    ArrayElement_B934 *elem;
+
+    count = *(s32 *)(arg0->count_offset + (s32)arg0);
+    if (arg1 >= count) {
+        return 0;
+    }
+    elem = (ArrayElement_B934 *)(arg0->array_offset + arg1 * 8 + (s32)arg0);
+    return elem->unk6;
+}
