@@ -1,6 +1,8 @@
 #include "20F0.h"
 #include "6E840.h"
 #include "common.h"
+#include "graphics.h"
+#include "task_scheduler.h"
 
 extern void *freeNodeMemory(void *);
 
@@ -63,12 +65,19 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000E5B0_F1B0);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E614_F214);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000E680_F280);
+extern s16 D_8008CE40_8DA40;
+extern void func_8000E6E0_F2E0(void);
+
+void func_8000E680_F280(void) {
+    allocateTaskMemory(0xCC0);
+    D_8008CE40_8DA40 = 5;
+    setupTaskSchedulerNodes(0x40, 4, 0, 0, 0, 0, 0, 0);
+    func_800585C8_591C8(0xD0);
+    setGameStateHandler(func_8000E6E0_F2E0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E6E0_F2E0);
 
-extern void *getCurrentAllocation(void);
-extern void setGameStateHandler(void *);
 extern s16 func_80069810_6A410(void);
 extern void func_8000E1D0_EDD0(E770_struct *);
 extern void func_8000E240_EE40(E770_struct *);
@@ -77,7 +86,6 @@ extern void func_8000E4CC_F0CC(E770_struct *);
 extern void func_8000E56C_F16C(E770_struct *);
 extern void func_8000E5B0_F1B0(E770_struct *);
 extern s32 func_8000E614_F214(E770_struct *);
-extern void func_8000E6E0_F2E0(void);
 extern void func_8000DCD8_E8D8(E770_struct *);
 
 void func_8000EC98_F898(void) {
