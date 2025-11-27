@@ -7,7 +7,7 @@ extern void func_80015248_15E48(s32);
 extern void func_8003D560_3E160(void);
 extern void func_80015218_15E18(void);
 extern void func_80033200_33E00(void);
-extern void func_80014CC4_158C4(void);
+void func_80014CC4_158C4(void);
 extern void func_800150DC_15CDC(void);
 extern void func_80021BD0_227D0(void);
 extern void func_80018EB0_19AB0(void);
@@ -75,7 +75,11 @@ void func_80014C94_15894(void) {
     setGameStateHandler(func_80014CC4_158C4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014CC4_158C4);
+void func_80014CC4_158C4(void) {
+    if ((func_80069810_6A410() << 16) != 0) {
+        setGameStateHandler(func_80014B70_15770);
+    }
+}
 
 void func_80014D3C_1593C(void);
 void func_80014D78_15978(void);
