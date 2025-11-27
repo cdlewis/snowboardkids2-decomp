@@ -1,7 +1,9 @@
+#include "6E840.h"
 #include "common.h"
 #include "task_scheduler.h"
 
 extern void func_800376EC_382EC(void);
+extern void func_800373E0_37FE0(void);
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x1D8];
@@ -11,7 +13,11 @@ typedef struct {
 
 INCLUDE_ASM("asm/nonmatchings/37E70", func_80037270_37E70);
 
-INCLUDE_ASM("asm/nonmatchings/37E70", func_800373B0_37FB0);
+void func_800373B0_37FB0(void) {
+    if (func_8006FE10_70A10(0) == 0) {
+        setGameStateHandler(func_800373E0_37FE0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/37E70", func_800373E0_37FE0);
 
