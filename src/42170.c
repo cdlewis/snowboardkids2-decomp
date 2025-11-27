@@ -1,11 +1,27 @@
 #include "56910.h"
 #include "common.h"
+#include "geometry.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
+extern void *D_8009A6B0_9B2B0;
 extern void *D_8009A6C0_9B2C0;
 extern void func_800419AC_425AC(void *);
 extern void func_80041810_42410(void *);
+extern void func_80041724_42324(void);
+extern void func_800415E8_421E8(void);
+
+typedef struct {
+    s16 matrix[3][3]; /* 0x00 */
+    u8 pad12[0xE];    /* 0x12 */
+    void *unk20;      /* 0x20 */
+    void *unk24;      /* 0x24 */
+    void *unk28;      /* 0x28 */
+    s32 unk2C;        /* 0x2C */
+    u8 pad30[0x10];   /* 0x30 */
+    s32 unk40;        /* 0x40 */
+    s32 unk44;        /* 0x44 */
+} Func41570State;
 
 typedef struct {
     u8 pad0[0x20];
@@ -18,7 +34,18 @@ typedef struct {
     s32 unk40;
 } Func4179CArg;
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041570_42170);
+void func_80041570_42170(Func41570State *arg0) {
+    getCurrentAllocation();
+    createXRotationMatrix(arg0->matrix, 0x800);
+    arg0->unk20 = &D_8009A6B0_9B2B0;
+    arg0->unk24 = loadAsset_B7E70();
+    arg0->unk28 = loadAsset_216290();
+    arg0->unk40 = 0x2000;
+    arg0->unk2C = 0;
+    arg0->unk44 = 1;
+    setCleanupCallback(func_80041724_42324);
+    setCallbackWithContinue(func_800415E8_421E8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800415E8_421E8);
 
