@@ -13,4 +13,6 @@ void func_800226B0_232B0(void) {
     func_800697F4_6A3F4(1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/22D30", func_800226CC_232CC);
+void func_800226CC_232CC(void) {
+    func_800697F4_6A3F4(0xFF);
+}
