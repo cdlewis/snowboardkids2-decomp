@@ -12,9 +12,14 @@ typedef struct {
     void *unk2C;
 } func_80027A28_28628_arg;
 
+typedef struct {
+    void *unk0;
+} func_80025280_25E80_arg;
+
 extern void *freeNodeMemory(void *);
 extern void func_800394BC_3A0BC(void *, s32);
 extern void setCallback(void *);
+extern void *func_80002014_2C14(void *);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
 
@@ -70,7 +75,9 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80025130_25D30);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800251AC_25DAC);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80025280_25E80);
+void *func_80025280_25E80(func_80025280_25E80_arg *arg0) {
+    return func_80002014_2C14(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_8002529C_25E9C);
 
