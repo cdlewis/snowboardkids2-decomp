@@ -125,7 +125,13 @@ void func_8001474C_1534C(void) {
     setGameStateHandler(func_8001478C_1538C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_8001478C_1538C);
+void func_8001478C_1538C(void) {
+    if ((func_80069810_6A410() << 16) != 0) {
+        D_800AFE8C_A71FC->unk5 = (D_800AFE8C_A71FC->unk5 + 1) % 3;
+        D_800AFE8C_A71FC->unk5 |= 0xF0;
+        setGameStateHandler(func_80014660_15260);
+    }
+}
 
 void func_80014808_15408(void) {
     D_800AFE8C_A71FC->unk4 = 0;
