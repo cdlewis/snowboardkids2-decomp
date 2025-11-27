@@ -331,7 +331,20 @@ void func_8000F4BC_100BC(E770_struct *arg0) {
     func_8000DBE0_E7E0(alloc);
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000F4F0_100F0);
+void func_8000F4F0_100F0(E770_struct *arg0) {
+    E770_struct *alloc = getCurrentAllocation();
+    s16 temp;
+
+    temp = alloc->unk12;
+    if (temp == 0) {
+        if (alloc->unk624->unk16 == 0x15B) {
+            func_8000DC88_E888(alloc, 0x15C, 0x90, 1, -1);
+        }
+        arg0->unk0 = 2;
+    } else {
+        alloc->unk12 = temp - 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000F564_10164);
 
@@ -454,7 +467,6 @@ void func_8000FD98_10998(FD98_struct *arg0) {
     setCallback(func_8000FE00_10A00);
 }
 
-extern void func_8000F4F0_100F0(E770_struct *);
 extern void func_8000EE88_FA88(E770_struct *);
 
 void func_8000FE00_10A00(E770_struct *arg0) {
