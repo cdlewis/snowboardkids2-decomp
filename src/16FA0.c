@@ -7,8 +7,18 @@ extern void func_80000460_1060(s32, void *, void *);
 extern void setCallback(void *);
 extern void func_80000760_1360(void);
 
+typedef struct {
+    s32 unk0;
+    void *unk4;
+    void *unk8;
+    u8 padding[0x7A];
+    s8 unk86;
+} func_80000710_1310_arg_16FA0;
+
+extern void func_80000710_1310(func_80000710_1310_arg_16FA0 *);
+
 void func_800168BC_174BC(void);
-void func_800168D8_174D8(void);
+void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_800163A0_16FA0);
 
@@ -46,7 +56,9 @@ void func_800168BC_174BC(void) {
     func_80000760_1360();
 }
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_800168D8_174D8);
+void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0) {
+    func_80000710_1310(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_800168F4_174F4);
 
