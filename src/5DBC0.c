@@ -1,6 +1,10 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005CFC0_5DBC0);
+extern s32 func_80061A64_62664(void *, u16, void *);
+
+s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, void *arg2, s32 arg3) {
+    return func_80061A64_62664(arg0, arg1, arg2);
+}
 
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005CFDC_5DBDC);
 
