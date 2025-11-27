@@ -54,7 +54,9 @@ typedef struct {
     u8 unkBD4;
     u8 padding5b[0x3];
     u8 unkBD8;
-    u8 padding5c[0xF];
+    u8 padding5c[0xD];
+    u8 unkBE6;
+    u8 unkBE7;
 } Player;
 
 typedef struct {

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "gamestate.h"
 
 extern s32 func_80061A64_62664(void *, u16, void *);
 extern s32 func_80061D6C_6296C(void *, u16, void *, s32);
@@ -29,7 +30,10 @@ INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D48C_5E08C);
 
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D61C_5E21C);
 
-INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D804_5E404);
+void func_8005D804_5E404(Player *arg0, u8 arg1, u8 arg2) {
+    arg0->unkBE6 = arg1;
+    arg0->unkBE7 = arg2;
+}
 
 void func_8005D810_5E410(void) {
 }
