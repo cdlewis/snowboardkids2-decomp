@@ -1,10 +1,32 @@
+#include "3A1F0.h"
 #include "6E840.h"
 #include "common.h"
 #include "task_scheduler.h"
 
+typedef struct {
+    u8 pad[0x18A0];
+    u16 unk18A0;
+} Allocation232F0;
+
+extern void func_80022CEC_238EC(void);
+
 INCLUDE_ASM("asm/nonmatchings/232F0", func_800226F0_232F0);
 
-INCLUDE_ASM("asm/nonmatchings/232F0", func_80022C80_23880);
+void func_80022C80_23880(void) {
+    Allocation232F0 *alloc = (Allocation232F0 *)getCurrentAllocation();
+
+    alloc->unk18A0++;
+    if ((u16)alloc->unk18A0 < 3) {
+        return;
+    }
+    alloc->unk18A0 = 2;
+    if (func_8003BB5C_3C75C() != 0) {
+        return;
+    }
+    alloc->unk18A0 = 0;
+    func_8006FDA0_709A0(NULL, 0, 10);
+    setGameStateHandler(func_80022CEC_238EC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/232F0", func_80022CEC_238EC);
 
