@@ -1,4 +1,26 @@
+#include "20F0.h"
+#include "6E840.h"
 #include "common.h"
+
+extern void *freeNodeMemory(void *);
+
+typedef struct {
+    u8 pad0[0x8];
+    void *unk8;
+    void *unkC;
+    u8 pad10[0x8];
+    void *unk18;
+    u8 pad1C[0x4];
+    Node_70B00 unk20;
+    Node_70B00 unk1F8;
+    Node_70B00 unk3D0;
+    u8 pad5A8[0x1C];
+    void *unk5C4;
+    u8 pad5C8[0x2C];
+    void *unk5F4;
+    u8 pad5F8[0x2C];
+    SceneModel *unk624;
+} E770_struct;
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DB70_E770);
 
@@ -14,7 +36,17 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000DC88_E888);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DCD8_E8D8);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000E154_ED54);
+void func_8000E154_ED54(E770_struct *arg0) {
+    func_80002014_2C14(arg0->unk624);
+    arg0->unk18 = freeNodeMemory(arg0->unk18);
+    arg0->unkC = freeNodeMemory(arg0->unkC);
+    arg0->unk8 = freeNodeMemory(arg0->unk8);
+    arg0->unk5C4 = freeNodeMemory(arg0->unk5C4);
+    arg0->unk5F4 = freeNodeMemory(arg0->unk5F4);
+    unlinkNode(&arg0->unk3D0);
+    unlinkNode(&arg0->unk20);
+    unlinkNode(&arg0->unk1F8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E1D0_EDD0);
 
