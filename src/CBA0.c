@@ -1,5 +1,6 @@
 #include "6E840.h"
 #include "common.h"
+#include "task_scheduler.h"
 
 extern Gfx *gRegionAllocPtr;
 extern u8 D_8016A000[];
@@ -97,7 +98,48 @@ void func_8000C2CC_CECC(Func8000C2CCArg *arg0, s32 arg1, s16 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C334_CF34);
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C440_D040);
+extern void func_8000C5AC_D1AC(void *);
+
+typedef struct {
+    Node_70B00 base;
+    ColorData unk1D8;
+    ColorData unk1E0;
+    u8 pad1E8[0x28];
+    s32 unk210;
+    u8 pad214[0x4];
+    u8 unk218;
+} Func8000C440Arg;
+
+void func_8000C440_D040(Func8000C440Arg *arg0, u16 arg1, u8 arg2, u16 arg3, u8 arg4, u16 arg5, u16 arg6) {
+    void *task;
+    s32 pad[8];
+
+    func_8006FAA4_706A4(arg0, 0, arg1, arg2, 1);
+    func_8006F9BC_705BC(&arg0->base, 1.0f, 1.0f);
+    func_8006FEF8_70AF8(&arg0->base, arg3);
+    setModelCameraTransform(arg0, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    func_8006FA0C_7060C(&arg0->base, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+
+    arg0->unk1D8.r2 = 0;
+    arg0->unk1D8.g2 = 0x7F;
+    arg0->unk1D8.b2 = 0x7F;
+    arg0->unk1D8.r = 0;
+    arg0->unk1D8.g = 0;
+    arg0->unk1D8.b = 0;
+    arg0->unk1E0.r = 0;
+    arg0->unk1E0.g = 0;
+    arg0->unk1E0.b = 0;
+
+    func_8006FC70_70870(arg0->base.id, 1, &arg0->unk1D8, &arg0->unk1E0);
+
+    arg0->unk210 = 0;
+    arg0->unk218 = arg4;
+
+    task = scheduleTask(func_8000C5AC_D1AC, arg5, arg6, 0);
+    if (task != NULL) {
+        *(Func8000C440Arg **)task = arg0;
+    }
+}
 
 void n_alSeqpDelete(Node_70B00 *arg0) {
     unlinkNode(arg0);
