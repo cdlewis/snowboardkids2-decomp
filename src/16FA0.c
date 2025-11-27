@@ -143,4 +143,6 @@ INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016D0C_1790C);
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016DE0_179E0);
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016E70_17A70);
+void func_80016E70_17A70(Struct16B68 *arg0) {
+    arg0->unk0 = func_80002014_2C14(arg0->unk0);
+}
