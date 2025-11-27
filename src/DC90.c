@@ -7,7 +7,6 @@ extern void *func_80035F80_36B80(s32);
 extern void *func_8000B6B8_C2B8(s32);
 
 extern void func_8000D2C8_DEC8(void);
-extern void func_8000D448_E048(void);
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -24,6 +23,8 @@ typedef struct {
     /* 0x3C */ s16 unk3C;
     /* 0x3E */ s16 unk3E;
 } DC90TaskStruct;
+
+void func_8000D448_E048(DC90TaskStruct *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/DC90", func_8000D090_DC90);
 
@@ -54,4 +55,8 @@ void func_8000D244_DE44(DC90TaskStruct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/DC90", func_8000D2C8_DEC8);
 
-INCLUDE_ASM("asm/nonmatchings/DC90", func_8000D448_E048);
+void func_8000D448_E048(DC90TaskStruct *arg0) {
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    arg0->unk8 = freeNodeMemory(arg0->unk8);
+}
