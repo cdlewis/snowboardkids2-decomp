@@ -4,8 +4,8 @@
 #include "task_scheduler.h"
 
 extern void func_80015248_15E48(s32);
-extern void func_80014D78_15978(void);
 extern void func_80015064_15C64(void);
+extern void func_8003D560_3E160(void);
 extern void func_80015218_15E18(void);
 extern void func_80014C94_15894(void);
 extern void func_800150DC_15CDC(void);
@@ -54,6 +54,7 @@ INCLUDE_ASM("asm/nonmatchings/15690", func_80014C94_15894);
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014CC4_158C4);
 
 void func_80014D3C_1593C(void);
+void func_80014D78_15978(void);
 
 void func_80014CF8_158F8(void) {
     func_80003450_4050(D_800AFE8C_A71FC->saveSlotIndex, 0);
@@ -68,7 +69,12 @@ void func_80014D3C_1593C(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014D78_15978);
+void func_80014DA8_159A8(void);
+
+void func_80014D78_15978(void) {
+    createTaskQueue(func_8003D560_3E160, 100);
+    setGameStateHandler(func_80014DA8_159A8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014DA8_159A8);
 
