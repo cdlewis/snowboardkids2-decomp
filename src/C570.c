@@ -1,14 +1,35 @@
 #include "common.h"
 
+extern u32 D_1FB8B0;
+extern u32 D_1FBE00;
+extern u32 D_4CA440;
+extern u32 D_4CAD30;
+extern void *D_80088670_89270;
 extern void *freeNodeMemory(void *);
 extern void func_80069CF8_6A8F8(void);
 extern void enqueueDisplayListObject(s32 arg0, void *arg1);
+extern void setCleanupCallback(void *);
+extern void setCallbackWithContinue(void *);
+extern void *dmaRequestAndUpdateState(void *, void *);
+extern void *dmaRequestAndUpdateStateWithSize(void *, void *, s32);
+extern void func_8000BA08_C608(void *);
 
-typedef struct {
-    u8 _pad[0x24];
+typedef struct func_8000BBA8_C7A8_arg func_8000BBA8_C7A8_arg;
+void func_8000BBA8_C7A8(func_8000BBA8_C7A8_arg *arg0);
+
+struct func_8000BBA8_C7A8_arg {
+    u8 _pad0[0x20];
+    void *unk20;
     void *unk24;
     void *unk28;
-} func_8000BBA8_C7A8_arg;
+    s32 unk2C;
+    u8 _pad30[0x30];
+    void *unk60;
+    void *unk64;
+    s32 unk68;
+    u8 _pad6C[0x16];
+    s16 unk82;
+};
 
 typedef struct {
     u8 _pad0[0x18];
@@ -17,7 +38,18 @@ typedef struct {
     s32 unk7C;
 } func_8000BB48_C748_arg;
 
-INCLUDE_ASM("asm/nonmatchings/C570", func_8000B970_C570);
+void func_8000B970_C570(func_8000BBA8_C7A8_arg *arg0) {
+    arg0->unk20 = &D_80088670_89270;
+    arg0->unk24 = dmaRequestAndUpdateState(&D_1FB8B0, &D_1FBE00);
+    arg0->unk28 = dmaRequestAndUpdateStateWithSize(&D_4CA440, &D_4CAD30, 0xE90);
+    arg0->unk2C = 0;
+    arg0->unk68 = 0;
+    arg0->unk82 = 0x200;
+    arg0->unk60 = arg0->unk24;
+    arg0->unk64 = arg0->unk28;
+    setCleanupCallback(&func_8000BBA8_C7A8);
+    setCallbackWithContinue(&func_8000BA08_C608);
+}
 
 INCLUDE_ASM("asm/nonmatchings/C570", func_8000BA08_C608);
 
