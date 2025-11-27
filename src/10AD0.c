@@ -26,4 +26,13 @@ INCLUDE_ASM("asm/nonmatchings/10AD0", func_800136E0_142E0);
 
 INCLUDE_ASM("asm/nonmatchings/10AD0", func_80013EA0_14AA0);
 
-INCLUDE_ASM("asm/nonmatchings/10AD0", func_80014440_15040);
+extern u16 gDefaultFontPalette[];
+
+void func_80014440_15040(void) {
+    s32 i;
+
+    gDefaultFontPalette[0] = 0;
+    for (i = 1; i < 256; i++) {
+        gDefaultFontPalette[i] = 0xFFFF;
+    }
+}
