@@ -2,6 +2,7 @@
 #include "common.h"
 #include "task_scheduler.h"
 
+extern void func_8001E5EC_1F1EC(void);
 extern void func_8001F33C_1FF3C(void);
 extern void func_8001F358_1FF58(void);
 
@@ -25,7 +26,11 @@ typedef struct {
 
 INCLUDE_ASM("asm/nonmatchings/1F190", func_8001E590_1F190);
 
-INCLUDE_ASM("asm/nonmatchings/1F190", func_8001E5C0_1F1C0);
+void func_8001E5C0_1F1C0(void) {
+    Allocation_1F190 *allocation = allocateTaskMemory(0xB48);
+    allocation->unkB45 = 0;
+    setGameStateHandler(func_8001E5EC_1F1EC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1F190", func_8001E5EC_1F1EC);
 
