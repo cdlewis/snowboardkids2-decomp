@@ -28,7 +28,11 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80024414_25014);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024518_25118);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024600_25200);
+void func_80024600_25200(func_8002494C_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024644_25244);
 
