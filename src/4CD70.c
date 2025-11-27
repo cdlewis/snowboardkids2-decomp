@@ -5,6 +5,10 @@ extern void setCallback(void *);
 extern void *loadAsset_34CB50(void);
 extern void func_8004D3E4_4DFE4(void *);
 extern void func_8004D464_4E064(void *);
+extern u8 randA(void);
+extern void func_8004E2D8_4EED8(void);
+extern void func_8004E410_4F010(void);
+extern void func_8004E614_4F214(void);
 
 typedef struct {
     s16 unk0;
@@ -119,7 +123,59 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E0BC_4ECBC);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E0F4_4ECF4);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E134_4ED34);
+typedef struct {
+    u8 pad0[0x4];
+    void *unk4;
+    u8 pad8[0x2];
+    u8 unkA;
+    u8 padB[0x7];
+    s16 unk12;
+    s16 unk14;
+    s16 unk16;
+    s16 unk18;
+    s16 unk1A;
+    s16 unk1C;
+    s16 unk1E;
+} Struct_func_8004E134;
+
+void func_8004E134_4ED34(Struct_func_8004E134 *arg0) {
+    u8 temp;
+
+    arg0->unk4 = loadAsset_34CB50();
+    temp = randA();
+
+    switch (temp & 1) {
+        case 0:
+            arg0->unk12 = ((randA() & 0xFF) - 0x80) << 4;
+            arg0->unk14 = -0x780;
+            arg0->unk16 = randA() & 0xF;
+            arg0->unk1C = (randA() & 0xFF) << 4;
+            if (randA() & 1) {
+                arg0->unk1A = (randA() & 7) | 0x40;
+            } else {
+                arg0->unk1A = (randA() & 7) | 0x20;
+            }
+            setCallback(func_8004E410_4F010);
+            break;
+        case 1:
+            arg0->unk12 = ((randA() & 0xFF) - 0x80) << 4;
+            arg0->unk14 = -0x780;
+            if (randA() & 1) {
+                arg0->unk1A = (randA() & 7) + 0x3C;
+            } else {
+                arg0->unk1A = (randA() & 7) + 0x22;
+            }
+            arg0->unk1C = (randA() & 1) - 1;
+            arg0->unk18 = (-((randA() & 0xFF) << 3)) & 0xF;
+            arg0->unk1E = randA() & 0xF;
+            __asm__ volatile("" ::: "memory");
+            setCallback(func_8004E2D8_4EED8);
+            break;
+    }
+
+    arg0->unkA = (randA() & 0xFF) % 5 + 12;
+    setCleanupCallback(func_8004E614_4F214);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E2D8_4EED8);
 
