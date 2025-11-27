@@ -4,7 +4,6 @@
 #include "task_scheduler.h"
 
 extern void func_80015248_15E48(s32);
-extern void func_80015064_15C64(void);
 extern void func_8003D560_3E160(void);
 extern void func_80015218_15E18(void);
 extern void func_80033200_33E00(void);
@@ -113,13 +112,19 @@ void func_80014F60_15B60(void) {
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014FA4_15BA4);
 
+void func_80015064_15C64(void);
+
 void func_80015028_15C28(void) {
     func_80003450_4050(0xA, 2);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
     setGameStateHandler(func_80015064_15C64);
 }
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80015064_15C64);
+void func_80015064_15C64(void) {
+    if ((func_80069810_6A410() << 16) != 0) {
+        setGameStateHandler(func_80014B70_15770);
+    }
+}
 
 void func_80015098_15C98(void) {
     func_80003450_4050(D_800AFE8C_A71FC->errorFlag, 2);
