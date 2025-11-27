@@ -7,11 +7,13 @@
 
 extern void func_8003D560_3E160(void);
 extern void func_80014808_15408(void);
-extern void func_80014900_15500(void);
 extern void func_80014958_15558(void);
 extern void func_80014990_15590(void);
 extern void func_80015A18_16618(void);
 extern void func_8000D7F8_E3F8(void);
+extern void func_80021D20_22920(void);
+extern void func_80014A90_15690(void);
+extern void *__udiv_w_sdiv(void);
 extern u8 D_800AB47A_A27EA;
 
 void func_800144DC_150DC(void);
@@ -25,6 +27,7 @@ void func_8001474C_1534C(void);
 void func_8001478C_1538C(void);
 void func_800145E0_151E0(void);
 void func_80014620_15220(void);
+void func_80014900_15500(void);
 
 typedef struct {
     s16 unk0;
@@ -140,7 +143,17 @@ void func_800148CC_154CC(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_80014900_15500);
+void func_80014900_15500(void) {
+    u8 val = D_800AFE8C_A71FC->unk4;
+
+    if (val == 0xFF) {
+        func_800693C4_69FC4(__udiv_w_sdiv(), 0xC8);
+    } else if (val == 0) {
+        func_800693C4_69FC4(func_80014A90_15690, 0xC8);
+    } else {
+        func_800693C4_69FC4(func_80021D20_22920, 0xC8);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/15080", func_80014958_15558);
 
