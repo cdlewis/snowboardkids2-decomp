@@ -1,8 +1,18 @@
 #include "20F0.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "task_scheduler.h"
 
-INCLUDE_ASM("asm/nonmatchings/19400", func_80018800_19400);
+extern void func_80018A5C_1965C(void);
+extern void func_80018858_19458(void);
+
+void func_80018800_19400(void **arg0) {
+    void *allocation = getCurrentAllocation();
+
+    *arg0 = func_8000198C_258C(D_800AFE8C_A71FC->unk9 + 0x50, allocation);
+    setCleanupCallback(&func_80018A5C_1965C);
+    setCallback(&func_80018858_19458);
+}
 
 INCLUDE_ASM("asm/nonmatchings/19400", func_80018858_19458);
 
