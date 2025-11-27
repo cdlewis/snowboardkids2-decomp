@@ -262,7 +262,17 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004EA54_4F654);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004EAF0_4F6F0);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004EB90_4F790);
+typedef struct {
+    u8 pad0[0x4];
+    void *unk4;
+    u8 pad8[0x10];
+    void *unk18;
+} Struct_func_8004EB90;
+
+void func_8004EB90_4F790(Struct_func_8004EB90 *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    arg0->unk18 = freeNodeMemory(arg0->unk18);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004EBC8_4F7C8);
 
