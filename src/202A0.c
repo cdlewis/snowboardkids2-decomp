@@ -8,6 +8,7 @@ extern void func_800215DC_221DC(void *arg0);
 extern s32 func_8006FED8_70AD8(void *arg0);
 extern void func_800394BC_3A0BC(void *, s32);
 extern void setCallback(void *);
+extern void *freeNodeMemory(void *);
 
 typedef struct {
     u8 _pad0[0xB2F];
@@ -36,6 +37,15 @@ typedef struct {
     u8 padding[0x2C];
     void *unk2C;
 } Func800216ACArg;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    u8 _pad8[0x2C];
+    void *unk34;
+    u8 _pad38[0x1C];
+    void *unk54;
+} Func80021B88Arg;
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001F6A0_202A0);
 
@@ -175,4 +185,8 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_800218AC_224AC);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80021A20_22620);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80021B88_22788);
+void func_80021B88_22788(Func80021B88Arg *arg0) {
+    arg0->unk34 = freeNodeMemory(arg0->unk34);
+    arg0->unk54 = freeNodeMemory(arg0->unk54);
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
