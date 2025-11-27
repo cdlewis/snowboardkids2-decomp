@@ -17,7 +17,10 @@ void func_80023D74_24974(void) {
     func_800697F4_6A3F4(1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/232F0", func_80023DA0_249A0);
+void func_80023DA0_249A0(void) {
+    func_8006FDA0_709A0(NULL, 0, 0);
+    func_800697F4_6A3F4(0xFF);
+}
 
 INCLUDE_ASM("asm/nonmatchings/232F0", func_80023DCC_249CC);
 
