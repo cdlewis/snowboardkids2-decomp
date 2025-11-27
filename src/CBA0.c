@@ -13,7 +13,14 @@ INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C268_CE68);
 
 INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C278_CE78);
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C28C_CE8C);
+typedef struct {
+    u8 pad[0x1E4];
+    u8 unk1E4[0xC];
+} Func8000C28CArg;
+
+void func_8000C28C_CE8C(Func8000C28CArg *arg0, void *arg1) {
+    memcpy(arg0->unk1E4, arg1, 0xC);
+}
 
 typedef struct {
     u8 pad[0x204];
