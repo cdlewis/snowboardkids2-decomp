@@ -6,8 +6,14 @@
 
 extern s32 gControllerInputs;
 
-extern void func_8001C1E0_1CDE0(void);
 extern void func_800308FC_314FC(void);
+extern void func_800304B8_310B8(void);
+extern void func_80030694_31294(void);
+extern void func_80030A00_31600(void);
+extern void func_8002FA9C_3069C(void);
+
+void func_8001C1E0_1CDE0(void);
+void func_8001C2FC_1CEFC(void);
 
 void func_8001C7E8_1D3E8(void);
 void func_8001C744_1D344(void);
@@ -26,7 +32,9 @@ typedef struct {
     /* 0x59C */ void *unk59C;
     /* 0x5A0 */ u8 pad5A0[0x20];
     /* 0x5C0 */ u16 unk5C0;
-    /* 0x5C2 */ u8 pad5C2[0x7];
+    /* 0x5C2 */ u8 pad5C2[0x3];
+    /* 0x5C5 */ u8 unk5C5;
+    /* 0x5C6 */ u8 pad5C6[0x3];
     /* 0x5C9 */ u8 unk5C9;
     /* 0x5CA */ u8 pad5CA[0xC];
     /* 0x5D6 */ u8 unk5D6;
@@ -71,7 +79,24 @@ void func_8001C144_1CD44(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C1E0_1CDE0);
+void func_8001C1E0_1CDE0(void) {
+    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+
+    if (allocation->unk5D6 != 0) {
+        return;
+    }
+
+    allocation->unk5C5 = 0x14;
+    scheduleTask(func_800304B8_310B8, 1, 0, 0x5A);
+    scheduleTask(func_80030694_31294, 1, 0, 0x5A);
+    scheduleTask(func_80030A00_31600, 0, 0, 0x5A);
+
+    if (allocation->unk5C9 >= 2) {
+        scheduleTask(func_8002FA9C_3069C, 1, 0, 0x5A);
+    }
+
+    setGameStateHandler(func_8001C2FC_1CEFC);
+}
 
 void func_8001C28C_1CE8C(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
