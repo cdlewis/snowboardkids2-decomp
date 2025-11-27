@@ -3,7 +3,7 @@
 #include "6E840.h"
 #include "task_scheduler.h"
 
-extern void func_8000C2BC_CEBC(s32 *, u8, u8, u8);
+extern void func_8000C2BC_CEBC(void *, u8, u8, u8);
 extern u8 D_800BA5C0_1E7670[];
 extern s32 gButtonsPressed[];
 
