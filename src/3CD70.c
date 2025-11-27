@@ -1,4 +1,5 @@
 #include "common.h"
+#include "task_scheduler.h"
 
 INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003C170_3CD70);
 
@@ -6,7 +7,17 @@ INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003C2BC_3CEBC);
 
 INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003CEC4_3DAC4);
 
-INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003CF0C_3DB0C);
+void func_8003CF40_3DB40(void);
+
+typedef struct {
+    s16 unk0;
+} func_8003CF0C_arg;
+
+void func_8003CF0C_3DB0C(func_8003CF0C_arg *arg0) {
+    getCurrentAllocation();
+    arg0->unk0 = 0;
+    setCallbackWithContinue(func_8003CF40_3DB40);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003CF40_3DB40);
 
