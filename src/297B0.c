@@ -118,7 +118,15 @@ void func_8002989C_2A49C(Func297D8Arg *arg0) {
     setCallback(func_80029954_2A554);
 }
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_800298F8_2A4F8);
+void func_800298F8_2A4F8(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = (randB() & 0x1F) + 0x14;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    func_8002A290_2AE90(arg0);
+    setCallback(func_80029954_2A554);
+}
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_80029954_2A554);
 
