@@ -4,7 +4,7 @@
 
 extern void func_8001E5EC_1F1EC(void);
 extern void func_8001EB4C_1F74C(void);
-extern void func_8001F33C_1FF3C(void);
+void func_8001F33C_1FF3C(void);
 void func_8001F358_1FF58(void);
 
 typedef struct {
@@ -78,7 +78,9 @@ void func_8001F25C_1FE5C(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1F190", func_8001F33C_1FF3C);
+void func_8001F33C_1FF3C(void) {
+    func_800697F4_6A3F4(1);
+}
 
 void func_8001F358_1FF58(void) {
     func_800697F4_6A3F4(0xFF);
