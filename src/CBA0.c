@@ -18,7 +18,9 @@ void func_8000C268_CE68(Func8000C268Arg *arg0) {
     arg0->unk210 |= 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C278_CE78);
+void func_8000C278_CE78(Func8000C268Arg *arg0) {
+    arg0->unk210 &= ~1;
+}
 
 typedef struct {
     u8 pad[0x1E4];
