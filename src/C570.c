@@ -13,6 +13,8 @@ extern void setCallbackWithContinue(void *);
 extern void *dmaRequestAndUpdateState(void *, void *);
 extern void *dmaRequestAndUpdateStateWithSize(void *, void *, s32);
 extern void func_8000BA08_C608(void *);
+extern void *scheduleTask(void *, u8, u8, u8);
+void func_8000BC10_C810(void *arg0, s16 arg1, u8 arg2, u8 arg3, u8 arg4);
 
 typedef struct func_8000BBA8_C7A8_arg func_8000BBA8_C7A8_arg;
 void func_8000BBA8_C7A8(func_8000BBA8_C7A8_arg *arg0);
@@ -37,6 +39,15 @@ typedef struct {
     u8 _pad1[0x60];
     s32 unk7C;
 } func_8000BB48_C748_arg;
+
+typedef struct {
+    u8 _pad0[0x78];
+    void *unk78;
+    u8 _pad7C[0x4];
+    s16 unk80;
+    u8 _pad82[0x2];
+    s16 unk84;
+} func_8000BC10_C810_task;
 
 void func_8000B970_C570(func_8000BBA8_C7A8_arg *arg0) {
     arg0->unk20 = &D_80088670_89270;
@@ -68,10 +79,17 @@ void func_8000BBA8_C7A8(func_8000BBA8_C7A8_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-extern void func_8000BC10_C810(void *, s16, u8, u8, s32);
-
 void func_8000BBE0_C7E0(void *arg0, s16 arg1) {
     func_8000BC10_C810(arg0, arg1, 1, 0, 100);
 }
 
-INCLUDE_ASM("asm/nonmatchings/C570", func_8000BC10_C810);
+void func_8000BC10_C810(void *arg0, s16 arg1, u8 arg2, u8 arg3, u8 arg4) {
+    func_8000BC10_C810_task *task;
+
+    task = (func_8000BC10_C810_task *)scheduleTask(&func_8000B970_C570, arg2, arg3, arg4);
+    if (task != NULL) {
+        task->unk78 = arg0;
+        task->unk80 = 0;
+        task->unk84 = arg1;
+    }
+}
