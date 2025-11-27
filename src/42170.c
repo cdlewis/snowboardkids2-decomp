@@ -174,7 +174,7 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_80041E10_42A10);
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041EA4_42AA4);
 
 void func_80041FB4_42BB4(void);
-void func_80042070_42C70(void);
+void func_80042070_42C70(Func41F38State *);
 
 void func_80041F38_42B38(Func41F38State *arg0) {
     getCurrentAllocation();
@@ -193,7 +193,10 @@ void func_80041F38_42B38(Func41F38State *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041FB4_42BB4);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042070_42C70);
+void func_80042070_42C70(Func41F38State *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800420A8_42CA8);
 
