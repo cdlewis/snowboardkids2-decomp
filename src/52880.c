@@ -118,7 +118,24 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80054658_55258);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_800547E0_553E0);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80054880_55480);
+typedef struct {
+    u8 padding[0x20];
+    void *unk20;
+    u8 padding2[0x1E];
+    u16 unk42;
+    u8 padding3[0x8];
+    u16 unk4C;
+} func_80054880_55480_arg;
+
+extern void func_800523EC_52FEC(void);
+extern void func_800548C8_554C8(void);
+
+void func_80054880_55480(func_80054880_55480_arg *arg0) {
+    arg0->unk4C = arg0->unk42;
+    arg0->unk20 = load_3ECE40();
+    setCleanupCallback(func_800523EC_52FEC);
+    setCallbackWithContinue(func_800548C8_554C8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_800548C8_554C8);
 
