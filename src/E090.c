@@ -3,12 +3,40 @@
 #include "task_scheduler.h"
 
 extern void *freeNodeMemory(void *);
+extern void func_800394BC_3A0BC(void *, s32);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 pad6;
+} E090_DataEntry;
+
+extern E090_DataEntry D_8008CE10_8DA10[];
 
 void func_8000DB4C_E74C(void);
 
 typedef struct {
-    u8 unk0[0x18];
+    s16 unk0;
+    s16 unk2;
+    s32 unk4;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s8 unk12;
+    s8 unk13;
+    s8 unk14;
+    u8 pad15[3];
 } E090_InnerStruct;
+
+typedef struct {
+    u8 pad0[0x10];
+    s16 unk10;
+    s16 unk12;
+    u8 pad14[0x18];
+} E090_SubStruct;
 
 typedef struct {
     s8 unk0;
@@ -19,8 +47,8 @@ typedef struct {
     void *unk1E0;
     void *unk1E4;
     void *unk1E8;
-    u8 unk1EC[0x2C];
-    u8 unk218[0x2C];
+    E090_SubStruct unk1EC;
+    E090_SubStruct unk218;
     E090_InnerStruct unk244[6];
     s32 unk2D4[6];
 } E090_struct;
@@ -44,7 +72,34 @@ void func_8000D4D4_E0D4(E090_struct *arg0) {
     func_8006FDA0_709A0(&arg0->unk8, 0, 0xF);
 }
 
-INCLUDE_ASM("asm/nonmatchings/E090", func_8000D518_E118);
+void func_8000D518_E118(E090_struct *arg0) {
+    s32 i;
+
+    func_800394BC_3A0BC(&arg0->unk1EC, (s32)arg0->unk1E0);
+    func_800394BC_3A0BC(&arg0->unk218, (s32)arg0->unk1E4);
+
+    arg0->unk1EC.unk10 = 0;
+    arg0->unk1EC.unk12 = 0;
+    arg0->unk218.unk10 = 0;
+    arg0->unk218.unk12 = 0;
+
+    for (i = 0; i < 6; i++) {
+        arg0->unk244[i].unk0 = D_8008CE10_8DA10[i].unk0;
+        arg0->unk244[i].unk2 = D_8008CE10_8DA10[i].unk2;
+        arg0->unk244[i].unk4 = (s32)arg0->unk1E8;
+        arg0->unk244[i].unk8 = D_8008CE10_8DA10[i].unk4;
+        arg0->unk244[i].unkA = 0x400;
+        arg0->unk244[i].unkC = 0x400;
+        arg0->unk244[i].unkE = 0;
+        arg0->unk244[i].unk10 = 0xFF;
+        arg0->unk244[i].unk12 = 0;
+        arg0->unk244[i].unk13 = 0;
+        arg0->unk244[i].unk14 = 0;
+        arg0->unk2D4[i] = 0;
+    }
+
+    arg0->unk0 = 1;
+}
 
 void func_8000D5F0_E1F0(E090_struct *arg0) {
     func_8000D4D4_E0D4(arg0);
@@ -142,18 +197,18 @@ void func_8000D974_E574(void) {
 
     state = arg0->unk0;
     if (state == 2) {
-        debugEnqueueCallback(0, 4, func_80038420_39020, arg0->unk1EC);
+        debugEnqueueCallback(0, 4, func_80038420_39020, &arg0->unk1EC);
     } else if (state >= 2) {
         if (state < 7) {
             if (state >= 4) {
-                debugEnqueueCallback(0, 4, func_80038420_39020, arg0->unk218);
+                debugEnqueueCallback(0, 4, func_80038420_39020, &arg0->unk218);
 
                 for (i = 0; i < arg0->unk1; i++) {
                     arg0->unk2D4[i] += 0x330000;
                     if (arg0->unk2D4[i] > 0xFFFFFF) {
                         arg0->unk2D4[i] = 0xFF0000;
                     }
-                    arg0->unk244[i].unk0[0x14] = (s8)(arg0->unk2D4[i] >> 16);
+                    arg0->unk244[i].unk14 = (s8)(arg0->unk2D4[i] >> 16);
                     debugEnqueueCallback(0, 3, func_80011924_12524, &arg0->unk244[i]);
                 }
             }
