@@ -232,7 +232,7 @@ void createRotationMatrixYX(Mat3x3Padded *matrix, s16 angleY, s16 angleX) {
     matrix->m[2][2] = temp4 >> 13;
 }
 
-void createRotationMatrixXZ(Mat3x3Padded *matrix, s16 angleX, s16 angleZ) {
+void createRotationMatrixXZ(Mat3x3Padded *matrix, u16 angleX, u16 angleZ) {
     s32 sinX = approximateSin(angleX);
     s32 cosX = approximateCos(angleX);
     s32 sinZ = approximateSin(angleZ);
