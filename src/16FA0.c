@@ -24,13 +24,23 @@ void func_800168BC_174BC(void);
 void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0);
 
 typedef struct {
-    SceneModel *unk0; // 0x00
-    u8 _pad4[0x24];   // 0x04 - padding
-    u16 *unk28;       // 0x28 - pointer to u16 animation data
-    u16 unk2C;        // 0x2C - current animation state
+    u8 data[0x20];
+} TransformData;
+
+extern TransformData D_8008D5C4_8E1C4[];
+
+typedef struct {
+    SceneModel *unk0;   // 0x00
+    TransformData unk4; // 0x04 - 0x20 bytes of transform data
+    u8 _pad24[0x4];     // 0x24
+    u16 *unk28;         // 0x28 - pointer to u16 animation data
+    u16 unk2C;          // 0x2C - current animation state
+    u8 _pad2E;          // 0x2E
+    u8 unk2F;           // 0x2F - index into transform array
 } Struct16B68;
 
 void func_80016C28_17828(Struct16B68 *arg0);
+void func_80016A00_17600(Struct16B68 *arg0);
 
 typedef struct {
     u8 padding[0x2];
@@ -104,7 +114,16 @@ void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_800168F4_174F4);
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016964_17564);
+void func_80016964_17564(Struct16B68 *arg0) {
+    getCurrentAllocation();
+    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&D_8008D5C4_8E1C4[arg0->unk2F]);
+    memcpy(&arg0->unk4, &D_8008D5C4_8E1C4[arg0->unk2F], 0x20);
+    arg0->unk2C = *arg0->unk28;
+    arg0->unk28 = arg0->unk28 + 1;
+    func_800021B8_2DB8(arg0->unk0, arg0->unk2C);
+    updateModelGeometry(arg0->unk0);
+    setCallback(func_80016A00_17600);
+}
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016A00_17600);
 
