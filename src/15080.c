@@ -6,11 +6,13 @@
 extern void func_800145E0_151E0(void);
 extern void func_8001474C_1534C(void);
 extern void func_80014808_15408(void);
-extern void func_8001489C_1549C(void);
 extern void func_80014900_15500(void);
 extern void func_80014990_15590(void);
 extern void func_80014660_15260(void);
 extern void func_8001457C_1517C(void);
+extern void func_800148CC_154CC(void);
+
+void func_8001489C_1549C(void);
 
 typedef struct {
     s16 unk0;
@@ -82,7 +84,12 @@ INCLUDE_ASM("asm/nonmatchings/15080", func_80014808_15408);
 
 INCLUDE_ASM("asm/nonmatchings/15080", func_80014854_15454);
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_8001489C_1549C);
+extern void func_80037270_37E70(void);
+
+void func_8001489C_1549C(void) {
+    createTaskQueue(func_80037270_37E70, 0x64);
+    setGameStateHandler(func_800148CC_154CC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/15080", func_800148CC_154CC);
 
