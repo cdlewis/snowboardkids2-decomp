@@ -1,7 +1,15 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-INCLUDE_ASM("asm/nonmatchings/17F50", func_80017350_17F50);
+void func_80017384_17F84(void);
+
+void func_80017350_17F50(void) {
+    GameState *state = (GameState *)getCurrentAllocation();
+
+    if (state->unk429 == 0) {
+        setCallback(&func_80017384_17F84);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/17F50", func_80017384_17F84);
 
