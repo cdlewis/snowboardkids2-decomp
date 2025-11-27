@@ -149,7 +149,11 @@ INCLUDE_ASM("asm/nonmatchings/15690", func_8001514C_15D4C);
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_800151A4_15DA4);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_800151E4_15DE4);
+void func_800151E4_15DE4(void) {
+    if ((func_80069810_6A410() << 16) != 0) {
+        terminateSchedulerWithCallback(func_80015218_15E18);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80015218_15E18);
 
