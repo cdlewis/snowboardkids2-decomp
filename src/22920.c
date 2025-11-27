@@ -109,14 +109,19 @@ void func_80021F80_22B80(void) {
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021FB8_22BB8);
 
 extern void func_80033200_33E00(void);
-extern void func_80022048_22C48(void);
+
+void func_80022048_22C48(void);
 
 void func_80022018_22C18(void) {
     createTaskQueue(func_80033200_33E00, 0x96);
     setGameStateHandler(func_80022048_22C48);
 }
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80022048_22C48);
+void func_80022048_22C48(void) {
+    if ((func_80069810_6A410() << 16) != 0) {
+        setGameStateHandler(func_80021E6C_22A6C);
+    }
+}
 
 void func_800220AC_22CAC(void);
 
