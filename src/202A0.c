@@ -144,7 +144,9 @@ void func_8002144C_2204C(Func8002144CArg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_8002152C_2212C);
+void func_8002152C_2212C(Func8002144CArg *arg0) {
+    func_80002014_2C14(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80021548_22148);
 
