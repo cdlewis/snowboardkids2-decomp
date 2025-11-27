@@ -4,7 +4,14 @@
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021D20_22920);
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80021D50_22950);
+extern void func_80022130_22D30(void);
+void func_80021D88_22988(void);
+
+void func_80021D50_22950(void) {
+    func_800574A0_580A0(2);
+    createTaskQueue(func_80022130_22D30, 100);
+    setGameStateHandler(func_80021D88_22988);
+}
 
 extern void func_800226F0_232F0(void);
 
