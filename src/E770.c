@@ -23,6 +23,25 @@ typedef struct {
 extern LookupEntry D_8008CE9C_8DA9C[];
 
 typedef struct {
+    u8 unk0;
+    u8 unk1;
+    u8 pad[5];
+    s8 unk7;
+    u8 pad2[4];
+} TableElement_F9B0;
+
+typedef struct {
+    TableElement_F9B0 *elements;
+    s32 unk4;
+} D_8008D348_Entry;
+
+extern D_8008D348_Entry D_8008D348_8DF48[];
+extern u8 func_80037FE0_38BE0(u8);
+extern u8 func_80038000_38C00(u8);
+extern u8 func_80038058_38C58(u8);
+extern u8 func_80038070_38C70(void);
+
+typedef struct {
     s8 unk0;
     s8 unk1;
     s8 unk2;
@@ -331,7 +350,40 @@ INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF30_9EB30);
 
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF34_9EB34);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000EDB0_F9B0);
+u8 func_8000EDB0_F9B0(u8 arg0) {
+    E770_struct *alloc;
+    s8 idx;
+    TableElement_F9B0 *entry;
+    s8 unk7;
+    u8 arg0_masked;
+
+    alloc = getCurrentAllocation();
+    idx = alloc->unk1;
+    arg0_masked = arg0;
+    entry = &D_8008D348_8DF48[idx].elements[arg0_masked];
+
+    switch (idx) {
+        case 1:
+            return func_80038058_38C58(arg0) & 0xFF;
+        case 2:
+            return func_80038000_38C00(arg0) & 0xFF;
+        case 3:
+            unk7 = entry->unk7;
+            if (unk7 == -1) {
+                return 1;
+            }
+            if (unk7 == -2) {
+                return func_80038070_38C70() & 0xFF;
+            }
+            return func_80037FE0_38BE0(unk7 & 0xFF) & 0xFF;
+        case 0:
+        case 4:
+            return func_80037FE0_38BE0(arg0) & 0xFF;
+        case 5:
+            return func_80038070_38C70() & 0xFF;
+    }
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000EE88_FA88);
 
