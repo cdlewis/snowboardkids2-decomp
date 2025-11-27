@@ -15,6 +15,8 @@ void func_80018DC0_199C0(void);
 void func_800191B4_19DB4(void);
 void func_8001923C_19E3C(void);
 void func_80019258_19E58(void);
+void func_80019D50_1A950(void);
+void func_80019220_19E20(void);
 
 typedef struct {
     s16 unk0;
@@ -45,7 +47,45 @@ void func_80018EB0_19AB0(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/19AB0", func_80018F50_19B50);
+void func_80018F50_19B50(void) {
+    TaskAllocation *allocation;
+    s16 result;
+    u8 gameState;
+
+    allocation = (TaskAllocation *)getCurrentAllocation();
+    result = func_80069810_6A410();
+
+    if (result == 0) {
+        return;
+    }
+
+    if (result == 0xFF) {
+        terminateSchedulerWithCallback(func_80019220_19E20);
+        return;
+    }
+
+    gameState = D_800A8CC8_A0038;
+    if (gameState == 3 || gameState == 9 || gameState == 6) {
+        allocation->unk4 = D_800AFE8C_A71FC->saveSlotIndex;
+
+        if (D_800A8CC8_A0038 == 3) {
+            D_800AFE8C_A71FC->saveSlotIndex = 0xD;
+        } else if (D_800A8CC8_A0038 == 9) {
+            D_800AFE8C_A71FC->saveSlotIndex = 0xC;
+        } else {
+            D_800AFE8C_A71FC->saveSlotIndex = 0xE;
+        }
+
+        createTaskQueue(func_80019D50_1A950, 100);
+    } else {
+        createTaskQueue(func_80018DC0_199C0, 100);
+        if (D_800A8CC8_A0038 == 7) {
+            func_800585C8_591C8(0x22);
+        }
+    }
+
+    setGameStateHandler(func_80019078_19C78);
+}
 
 void func_80019078_19C78(void) {
     TaskAllocation *allocation;
