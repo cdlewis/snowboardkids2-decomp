@@ -244,4 +244,18 @@ void func_80015248_15E48(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80015254_15E54);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_800154A8_160A8);
+void func_800154A8_160A8(s8 *arg0, u16 arg1) {
+    s32 end;
+    s32 ptr;
+
+    if (arg1 == 0) {
+        return;
+    }
+
+    ptr = (s32)arg0;
+    end = arg1 + ptr;
+    do {
+        *(s8 *)ptr = 0;
+        ptr++;
+    } while (ptr < end);
+}
