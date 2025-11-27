@@ -66,7 +66,13 @@ void func_80021E9C_22A9C(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80021EFC_22AFC);
+extern void func_8001E5C0_1F1C0(void);
+void func_80021F2C_22B2C(void);
+
+void func_80021EFC_22AFC(void) {
+    createTaskQueue(func_8001E5C0_1F1C0, 100);
+    setGameStateHandler(func_80021F2C_22B2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021F2C_22B2C);
 
