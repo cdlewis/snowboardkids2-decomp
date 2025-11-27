@@ -286,4 +286,7 @@ void func_8000FE00_10A00(E770_struct *arg0) {
     func_8000EE88_FA88(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000FEA0_10AA0);
+void func_8000FEA0_10AA0(void) {
+    E770_struct *alloc = getCurrentAllocation();
+    alloc->unk3 = 1;
+}
