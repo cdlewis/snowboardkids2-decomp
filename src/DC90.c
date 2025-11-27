@@ -57,7 +57,17 @@ void func_8000D0BC_DCBC(DC90TaskStruct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/DC90", func_8000D100_DD00);
+void func_8000D100_DD00(DC90TaskStruct *arg0) {
+    s16 temp;
+    s16 temp2;
+
+    if (++arg0->unk38 >= 6) {
+        arg0->unkC = 3;
+    }
+
+    temp2 = temp = arg0->unk3C;
+    arg0->unk3C = (temp < 0x41) ? 0x40 : temp2 - 0x10;
+}
 
 INCLUDE_ASM("asm/nonmatchings/DC90", func_8000D144_DD44);
 
