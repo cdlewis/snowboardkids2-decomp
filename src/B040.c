@@ -12,6 +12,12 @@ typedef struct {
     s16 unk70;
 } func_8000B510_C110_arg;
 
+typedef struct {
+    void *romStart;
+    void *romEnd;
+    s32 size;
+} DmaEntry;
+
 extern void func_80009E68_AA68(void *, s32);
 extern void func_80009F90_AB90(void *, s32, s32, s32);
 
@@ -129,10 +135,10 @@ void func_8000B684_C284(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk20);
 }
 
-extern s32 D_8008CC2C_8D82C;
+extern DmaEntry *D_8008CC2C_8D82C;
 extern s32 D_8008CC30_8D830;
 
-s32 func_8000B6A0_C2A0(void) {
+DmaEntry *func_8000B6A0_C2A0(void) {
     return D_8008CC2C_8D82C;
 }
 
@@ -140,7 +146,15 @@ s32 func_8000B6AC_C2AC(void) {
     return D_8008CC30_8D830;
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B6B8_C2B8);
+void *func_8000B6B8_C2B8(s16 arg0) {
+    DmaEntry *entry;
+
+    if (arg0 >= func_8000B6AC_C2AC()) {
+        return 0;
+    }
+    entry = &func_8000B6A0_C2A0()[arg0];
+    return dmaRequestAndUpdateStateWithSize(entry->romStart, entry->romEnd, entry->size);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B714_C314);
 
