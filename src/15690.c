@@ -13,6 +13,7 @@ extern void func_800150DC_15CDC(void);
 extern void func_80021BD0_227D0(void);
 extern void func_80018EB0_19AB0(void);
 extern void func_8001C920_1D520(void);
+extern void func_80003EE0_4AE0(void);
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014A90_15690);
 
@@ -128,7 +129,12 @@ void func_80015098_15C98(void) {
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_800150DC_15CDC);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_8001511C_15D1C);
+void func_8001514C_15D4C(void);
+
+void func_8001511C_15D1C(void) {
+    createTaskQueue(func_80003EE0_4AE0, 0x64);
+    setGameStateHandler(func_8001514C_15D4C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_8001514C_15D4C);
 
