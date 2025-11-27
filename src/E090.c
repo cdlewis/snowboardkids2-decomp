@@ -39,7 +39,11 @@ void func_8000D7A0_E3A0(E090_struct *arg0) {
     terminateSchedulerWithCallback(func_8000DB4C_E74C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/E090", func_8000D7F8_E3F8);
+extern void func_8000D818_E418(void);
+
+void func_8000D7F8_E3F8(void) {
+    setGameStateHandler(func_8000D818_E418);
+}
 
 INCLUDE_ASM("asm/nonmatchings/E090", func_8000D818_E418);
 
