@@ -295,7 +295,10 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FBE8_507E8);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FC34_50834);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FCB8_508B8);
+void func_8004FCB8_508B8(Struct_func_8004F04C *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    arg0->unkC = freeNodeMemory(arg0->unkC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FCF0_508F0);
 
