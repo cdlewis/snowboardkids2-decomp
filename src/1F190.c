@@ -1,9 +1,11 @@
+#include "3A1F0.h"
 #include "6E840.h"
 #include "common.h"
 #include "task_scheduler.h"
 
 extern void func_8001E5EC_1F1EC(void);
 extern void func_8001EB4C_1F74C(void);
+void func_8001EB1C_1F71C(void);
 void func_8001F33C_1FF3C(void);
 void func_8001F358_1FF58(void);
 
@@ -19,7 +21,9 @@ typedef struct {
     void *unkB18;      // 0xB18
     void *unkB1C;      // 0xB1C
     void *unkB20;      // 0xB20
-    u8 padB24[0x9];    // 0xB24
+    u8 padB24[0x4];    // 0xB24
+    u16 unkB28;        // 0xB28
+    u8 padB2A[0x3];    // 0xB2A
     u8 unkB2D;         // 0xB2D
     u8 padB2E[0x17];   // 0xB2E
     u8 unkB45;         // 0xB45
@@ -39,7 +43,23 @@ void func_8001E5C0_1F1C0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1F190", func_8001E5EC_1F1EC);
 
-INCLUDE_ASM("asm/nonmatchings/1F190", func_8001EAB0_1F6B0);
+void func_8001EAB0_1F6B0(void) {
+    Allocation_1F190 *allocation = (Allocation_1F190 *)getCurrentAllocation();
+
+    allocation->unkB28++;
+    if (allocation->unkB28 < 3) {
+        return;
+    }
+
+    allocation->unkB28 = 2;
+    if (func_8003BB5C_3C75C() != 0) {
+        return;
+    }
+
+    allocation->unkB28 = 0;
+    func_8006FDA0_709A0(0, 0, 0xE);
+    setGameStateHandler(func_8001EB1C_1F71C);
+}
 
 void func_8001EB1C_1F71C(void) {
     if (func_8006FE10_70A10(0) == 0) {
