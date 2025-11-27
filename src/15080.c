@@ -70,7 +70,12 @@ void func_800145AC_151AC(void) {
 
 INCLUDE_ASM("asm/nonmatchings/15080", func_800145E0_151E0);
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_80014620_15220);
+void func_80014620_15220(void) {
+    if ((func_80069810_6A410() << 16) != 0) {
+        D_800AFE8C_A71FC->unk4 = 0;
+        setGameStateHandler(func_80014660_15260);
+    }
+}
 
 void func_80014660_15260(void) {
     createTaskQueue(func_80015A18_16618, 0x64);
