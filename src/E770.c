@@ -306,7 +306,33 @@ s32 func_8000FD50_10950(E770_struct *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000FD98_10998);
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+    s8 unk2;
+    s8 unk3;
+    u8 pad4[0x4];
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+} FD98_struct;
+
+extern void func_8000FEA0_10AA0(void);
+extern void func_8000FE00_10A00(E770_struct *);
+
+void func_8000FD98_10998(FD98_struct *arg0) {
+    getCurrentAllocation();
+    setCleanupCallback(func_8000FEA0_10AA0);
+    arg0->unk10 = 0x780000;
+    arg0->unk14 = 0x0F0000;
+    arg0->unk8 = 0xFF0000;
+    arg0->unk0 = 0;
+    arg0->unk1 = 0;
+    arg0->unk2 = 0;
+    arg0->unkC = 0xFFF10000;
+    setCallback(func_8000FE00_10A00);
+}
 
 extern void func_8000F4F0_100F0(E770_struct *);
 extern void func_8000FBBC_107BC(E770_struct *);
