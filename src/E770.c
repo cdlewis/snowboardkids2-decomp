@@ -7,8 +7,16 @@
 extern void *freeNodeMemory(void *);
 
 typedef struct {
+    s32 value;
+    void *ptr;
+} ArrayElement_8;
+
+extern ArrayElement_8 D_8008CEA0_8DAA0[];
+
+typedef struct {
     s8 unk0;
-    u8 pad1[0x2];
+    s8 unk1;
+    s8 unk2;
     s8 unk3;
     u8 pad4[0x4];
     void *unk8;
@@ -35,7 +43,14 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000DBA8_E7A8);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DBE0_E7E0);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000DC18_E818);
+s32 func_8000DC18_E818(E770_struct *arg0) {
+    s8 temp = arg0->unk2;
+
+    if (temp < 2) {
+        return D_8008CEA0_8DAA0[temp].value;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DC44_E844);
 
