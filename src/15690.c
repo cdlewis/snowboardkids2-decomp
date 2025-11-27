@@ -4,8 +4,9 @@
 #include "task_scheduler.h"
 
 extern void func_8003D560_3E160(void);
-extern void func_80015218_15E18(void);
 extern void func_80033200_33E00(void);
+extern void func_8001452C_1512C(void);
+void func_80015218_15E18(void);
 void func_80014CC4_158C4(void);
 extern void func_800150DC_15CDC(void);
 void func_80015248_15E48(s32);
@@ -155,7 +156,9 @@ void func_800151E4_15DE4(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80015218_15E18);
+void func_80015218_15E18(void) {
+    func_800693C4_69FC4(func_8001452C_1512C, 0xC8);
+}
 
 extern u8 D_8009F200_9FE00;
 
