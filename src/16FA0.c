@@ -30,7 +30,7 @@ typedef struct {
 } TransformData;
 
 extern TransformData D_8008D5C4_8E1C4[];
-extern u16 *D_8008D534_8E134;
+extern u16 *D_8008D534_8E134[2];
 
 typedef struct {
     SceneModel *unk0;   // 0x00
@@ -47,6 +47,8 @@ typedef struct {
 
 void func_80016C28_17828(Struct16B68 *arg0);
 void func_80016A00_17600(Struct16B68 *arg0);
+void func_80016B68_17768(Struct16B68 *arg0);
+void func_80016D0C_1790C(Struct16B68 *arg0);
 void func_80016DE0_179E0(Struct16B68 *arg0);
 void func_80016964_17564(Struct16B68 *arg0);
 void func_80016E70_17A70(Struct16B68 *arg0);
@@ -177,7 +179,7 @@ void func_800168F4_174F4(Struct16B68 *arg0) {
     arg0->unk32 = 0;
     arg0->unk24 = temp;
     arg0->unk2E = 0;
-    temp = (s32)D_8008D534_8E134;
+    temp = (s32)D_8008D534_8E134[0];
     arg0->unk31 = 0;
     arg0->unk28 = (u16 *)temp;
     setCallback(func_80016964_17564);
@@ -194,7 +196,59 @@ void func_80016964_17564(Struct16B68 *arg0) {
     setCallback(func_80016A00_17600);
 }
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016A00_17600);
+void func_80016A00_17600(Struct16B68 *arg0) {
+    GameState *alloc;
+    s32 clearResult;
+    u16 animValue;
+
+    alloc = (GameState *)getCurrentAllocation();
+    clearResult = clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    if (clearResult != 0) {
+        animValue = *arg0->unk28;
+        arg0->unk28 = arg0->unk28 + 1;
+
+        if ((u16)animValue == 0xFFFF) {
+            arg0->unk2E = (arg0->unk2E + 1) & 1;
+            arg0->unk28 = D_8008D534_8E134[arg0->unk2E];
+            animValue = *arg0->unk28;
+            arg0->unk28 = arg0->unk28 + 1;
+
+            if (arg0->unk2E == 1) {
+                if (alloc->unk3C1 != 0) {
+                    alloc->unk3C1 = 1;
+                }
+
+                if (arg0->unk2F != 5) {
+                    if (arg0->unk2F != 4) {
+                        func_80001688_2288(arg0->unk0, 0);
+                    } else {
+                        func_80001688_2288(arg0->unk0, 4);
+                    }
+                }
+            } else {
+                func_80001688_2288(arg0->unk0, -1);
+            }
+        }
+
+        arg0->unk2C = animValue;
+        func_800021B8_2DB8(arg0->unk0, (s16)animValue);
+    }
+
+    if (arg0->unk2F == 6) {
+        if (alloc->unk3C0 == 0xF0) {
+            setCallback(func_80016B68_17768);
+            return;
+        }
+    }
+
+    if (arg0->unk2F == 5) {
+        if (alloc->unk3BF == 0xF0) {
+            setCallback(func_80016D0C_1790C);
+        }
+    }
+}
 
 void func_80016B68_17768(Struct16B68 *arg0) {
     s32 clearResult;

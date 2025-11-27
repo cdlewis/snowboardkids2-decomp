@@ -111,7 +111,9 @@ typedef struct {
     /* 0x3BB */ u8 unk3BB;
     /* 0x3BC */ u8 unk3BC;
     /* 0x3BD */ u8 unk3BD;
-    u8 PAD_C[0x3];
+    /* 0x3BE */ u8 unk3BE;
+    /* 0x3BF */ u8 unk3BF;
+    /* 0x3C0 */ u8 unk3C0;
     /* 0x3C1 */ u8 unk3C1;
     u8 PAD_C2[0xE];
     s32 unk3D0;
