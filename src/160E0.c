@@ -2,10 +2,14 @@
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 extern void func_80058220_58E20(s32, s32);
 extern void func_800156AC_162AC(void);
+
+extern void func_8003B47C_3C07C(void *);
+extern void *func_8003B510_3C110(void);
 
 extern u8 D_8009F210_9FE10;
 
@@ -15,7 +19,29 @@ void func_800154E0_160E0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_80015504_16104);
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_8001563C_1623C);
+void func_8001563C_1623C(void) {
+    u8 buffer[0x200];
+    s32 i;
+    s32 result;
+
+    for (i = 0x1FF; i >= 0; i--) {
+        buffer[i] = 0;
+    }
+
+    func_8003B47C_3C07C(buffer);
+
+    do {
+        result = (s32)func_8003B510_3C110();
+    } while (result == -1);
+
+    if (result == 0) {
+        func_800585C8_591C8(0x2C);
+    } else {
+        func_800585C8_591C8(0x2B);
+    }
+
+    setGameStateHandler(func_800156AC_162AC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_800156AC_162AC);
 
