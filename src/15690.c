@@ -137,7 +137,12 @@ void func_80014D78_15978(void) {
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014DA8_159A8);
 
-extern void func_80014FA4_15BA4(void);
+extern u8 D_800A8CC9_A0039;
+
+void func_80014FA4_15BA4(void);
+void func_80015028_15C28(void);
+void func_8001511C_15D1C(void);
+void func_80015098_15C98(void);
 
 void func_80014F60_15B60(void) {
     func_80003450_4050(D_800AFE8C_A71FC->saveSlotIndex, 1);
@@ -145,7 +150,23 @@ void func_80014F60_15B60(void) {
     setGameStateHandler(func_80014FA4_15BA4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014FA4_15BA4);
+void func_80014FA4_15BA4(void) {
+    void *handler;
+
+    if ((func_80069810_6A410() << 16) != 0) {
+        if (D_800A8CC9_A0039 != 0) {
+            handler = func_80015028_15C28;
+        } else if (D_800AFE8C_A71FC->saveSlotIndex == 0xB) {
+            handler = func_8001511C_15D1C;
+        } else {
+            handler = func_80014B70_15770;
+            if (D_800AFE8C_A71FC->errorFlag != 0) {
+                handler = func_80015098_15C98;
+            }
+        }
+        setGameStateHandler(handler);
+    }
+}
 
 void func_80015064_15C64(void);
 
