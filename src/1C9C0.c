@@ -3,10 +3,11 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern void func_8001C7E8_1D3E8(void);
 extern void func_8001C1E0_1CDE0(void);
 extern void func_8001C28C_1CE8C(void);
 extern void func_800308FC_314FC(void);
+
+void func_8001C7E8_1D3E8(void);
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x1D8];
@@ -76,4 +77,6 @@ void func_8001C744_1D344(void) {
     terminateSchedulerWithCallback(func_8001C7E8_1D3E8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C7E8_1D3E8);
+void func_8001C7E8_1D3E8(void) {
+    func_800697F4_6A3F4(1);
+}
