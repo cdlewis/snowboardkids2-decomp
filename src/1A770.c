@@ -270,18 +270,6 @@ void func_8001A434_1B034(void) {
     }
 }
 
-INCLUDE_RODATA("asm/nonmatchings/1A770", D_8009DF50_9EB50);
-
-INCLUDE_RODATA("asm/nonmatchings/1A770", D_8009DF6C_9EB6C);
-
-INCLUDE_RODATA("asm/nonmatchings/1A770", jtbl_8009DF78_9EB78);
-
-INCLUDE_RODATA("asm/nonmatchings/1A770", jtbl_8009DF90_9EB90);
-
-INCLUDE_RODATA("asm/nonmatchings/1A770", jtbl_8009DFA8_9EBA8);
-
-INCLUDE_RODATA("asm/nonmatchings/1A770", jtbl_8009DFC0_9EBC0);
-
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A478_1B078);
 
 void func_8001AC30_1B830(void) {

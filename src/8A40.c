@@ -81,7 +81,3 @@ void func_8000811C_8D1C(func_800080B8_8CB8_arg *arg0) {
 
 void func_800081B0_8DB0(void) {
 }
-
-INCLUDE_RODATA("asm/nonmatchings/8A40", jtbl_8009DD88_9E988);
-
-INCLUDE_RODATA("asm/nonmatchings/8A40", jtbl_8009DDA8_9E9A8);
