@@ -107,7 +107,13 @@ void func_8000E56C_F16C(E770_struct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000E5B0_F1B0);
+void func_8000E5B0_F1B0(E770_struct *arg0) {
+    func_800585C8_591C8(0xDB);
+    func_8006FDA0_709A0(NULL, 0xFF, 10);
+    func_8000DC88_E888(arg0, 0x15A, 0x15B, 1, -1);
+    arg0->unk12 = 10;
+    arg0->unk0 = 6;
+}
 
 extern void func_8000ED88_F988(void);
 
@@ -143,7 +149,6 @@ extern s16 func_80069810_6A410(void);
 extern void func_8000E240_EE40(E770_struct *);
 extern void func_8000E2AC_EEAC(E770_struct *);
 extern void func_8000E4CC_F0CC(E770_struct *);
-extern void func_8000E5B0_F1B0(E770_struct *);
 extern void func_8000DCD8_E8D8(E770_struct *);
 
 void func_8000EC98_F898(void) {
