@@ -7,7 +7,6 @@
 extern void func_8002AE80_2BA80(void *);
 extern void func_8002B248_2BE48(void *);
 extern void func_8002A2D0_2AED0(void *);
-extern void func_8002A290_2AE90(void *);
 extern void func_80029954_2A554(void);
 
 typedef struct {
@@ -39,6 +38,15 @@ typedef struct {
     /* 0x61 */ u8 unk61;
     /* 0x62 */ u8 unk62;
 } Func297D8Arg;
+
+typedef struct {
+    /* 0x00 */ SceneModel *unk0;
+    /* 0x04 */ applyTransformToModel_arg1 unk4;
+    /* 0x28 */ u8 pad28[0x28];
+    /* 0x50 */ s16 unk50;
+} func_8002A290_2AE90_arg;
+
+void func_8002A290_2AE90(void *);
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_80028BB0_297B0);
 
@@ -133,6 +141,11 @@ void func_8002A200_2AE00(Func8002A200Arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A290_2AE90);
+void func_8002A290_2AE90(void *untypedArg0) {
+    func_8002A290_2AE90_arg *arg0 = (func_8002A290_2AE90_arg *)untypedArg0;
+    applyTransformToModel(arg0->unk0, &arg0->unk4);
+    func_800021B8_2DB8(arg0->unk0, arg0->unk50);
+    updateModelGeometry(arg0->unk0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A2D0_2AED0);
