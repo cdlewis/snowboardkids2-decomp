@@ -52,7 +52,15 @@ void func_8000B028_BC28(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk20);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B044_BC44);
+void func_8000B0A8_BCA8(void);
+void func_8000B1B0_BDB0(func_8000B510_C110_arg *);
+
+void func_8000B044_BC44(func_8000B510_C110_arg *arg0) {
+    func_80009E68_AA68(&arg0->unk20, 0);
+    func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    setCleanupCallback(func_8000B1B0_BDB0);
+    setCallback(func_8000B0A8_BCA8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B0A8_BCA8);
 
