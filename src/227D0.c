@@ -4,10 +4,10 @@
 
 extern void func_800226F0_232F0(void);
 extern void func_8001E5C0_1F1C0(void);
-extern void func_80021CE4_228E4(void);
 
 void func_80021C90_22890(void);
 void func_80021C00_22800(void);
+void func_80021CE4_228E4(void);
 
 void func_80021BD0_227D0(void) {
     createTaskQueue(&func_8001E5C0_1F1C0, 100);
@@ -47,6 +47,8 @@ void func_80021C90_22890(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/227D0", func_80021CE4_228E4);
+void func_80021CE4_228E4(void) {
+    func_800697F4_6A3F4(1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/227D0", func_80021D00_22900);
