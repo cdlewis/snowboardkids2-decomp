@@ -317,7 +317,37 @@ void func_800432D8_43ED8(Func432D8Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80043310_43F10);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80043374_43F74);
+extern void *D_8009A730_9B330;
+extern void func_800433EC_43FEC(void);
+void func_8004367C_4427C(Func432D8Arg *);
+
+typedef struct {
+    u8 pad0[0x20];  /* 0x00 */
+    void *unk20;    /* 0x20 */
+    void *unk24;    /* 0x24 */
+    void *unk28;    /* 0x28 */
+    s32 unk2C;      /* 0x2C */
+    u8 pad30[0x30]; /* 0x30 */
+    void *unk60;    /* 0x60 */
+    void *unk64;    /* 0x64 */
+    s32 unk68;      /* 0x68 */
+    u8 pad6C[0x16]; /* 0x6C */
+    s16 unk82;      /* 0x82 */
+} Func43374State;
+
+void func_80043374_43F74(Func43374State *arg0) {
+    getCurrentAllocation();
+    arg0->unk20 = &D_8009A730_9B330;
+    arg0->unk24 = loadAsset_B7E70();
+    arg0->unk28 = loadAsset_216290();
+    arg0->unk2C = 0;
+    arg0->unk68 = 0;
+    arg0->unk82 = 0x200;
+    arg0->unk60 = arg0->unk24;
+    arg0->unk64 = arg0->unk28;
+    setCleanupCallback(func_8004367C_4427C);
+    setCallbackWithContinue(func_800433EC_43FEC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800433EC_43FEC);
 
