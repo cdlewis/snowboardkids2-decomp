@@ -12,7 +12,6 @@ extern void *D_8009A6F0_9B2F0;
 extern void *D_8009A760_9B360;
 extern void func_800419AC_425AC(void *);
 extern void func_80041810_42410(void *);
-extern void func_80041724_42324(void);
 extern void func_800415E8_421E8(void);
 extern void func_80042308_42F08(void);
 extern void func_80042160_42D60(void);
@@ -95,6 +94,8 @@ typedef struct {
     s16 unk46;      /* 0x46 */
 } Func42410State;
 
+void func_80041724_42324(Func41570State *);
+
 void func_80041570_42170(Func41570State *arg0) {
     getCurrentAllocation();
     createXRotationMatrix(arg0->matrix, 0x800);
@@ -112,7 +113,10 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_800415E8_421E8);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_8004168C_4228C);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041724_42324);
+void func_80041724_42324(Func41570State *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_8004175C_4235C);
 
