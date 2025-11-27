@@ -90,7 +90,19 @@ void func_8001C28C_1CE8C(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C2FC_1CEFC);
 
-INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C6E4_1D2E4);
+void func_8001C6E4_1D2E4(void) {
+    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+
+    allocation->unk5C0--;
+    if (allocation->unk5C0 == 0) {
+        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        setGameStateHandler(func_8001C744_1D344);
+    }
+
+    if (allocation->unk5D6 != 0) {
+        allocation->unk5D6 = 0;
+    }
+}
 
 void func_8001C744_1D344(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
