@@ -37,10 +37,13 @@ typedef struct {
     u16 unk2C;          // 0x2C - current animation state
     u8 _pad2E;          // 0x2E
     u8 unk2F;           // 0x2F - index into transform array
+    u8 _pad30;          // 0x30
+    u8 unk31;           // 0x31
 } Struct16B68;
 
 void func_80016C28_17828(Struct16B68 *arg0);
 void func_80016A00_17600(Struct16B68 *arg0);
+void func_80016DE0_179E0(Struct16B68 *arg0);
 
 typedef struct {
     u8 padding[0x2];
@@ -158,7 +161,37 @@ void func_80016B68_17768(Struct16B68 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016C28_17828);
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016D0C_1790C);
+void func_80016D0C_1790C(Struct16B68 *arg0) {
+    s32 clearResult;
+    u16 animValue;
+
+    getCurrentAllocation();
+    clearResult = clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    if (clearResult == 0) {
+        return;
+    }
+
+    if (arg0->unk2C == 4) {
+        arg0->unk2C = 8;
+        arg0->unk31 = 0x11;
+        func_800021B8_2DB8(arg0->unk0, 8);
+        setCallback(func_80016DE0_179E0);
+        return;
+    }
+
+    animValue = *arg0->unk28;
+    if ((u16)animValue != 0xFFFF) {
+        arg0->unk2C = animValue;
+        arg0->unk28 += 1;
+    } else {
+        arg0->unk2C = 8;
+        arg0->unk31 = 0x11;
+        setCallback(func_80016DE0_179E0);
+    }
+    func_800021B8_2DB8(arg0->unk0, (s16)arg0->unk2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016DE0_179E0);
 
