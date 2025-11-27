@@ -10,6 +10,7 @@ extern void func_8002A2D0_2AED0(void *);
 extern void func_80029954_2A554(void);
 extern void func_80028C08_29808(void);
 extern void func_80028DF0_299F0(void);
+extern void func_8002A154_2AD54(void);
 
 typedef struct {
     /* 0x00 */ void *model;
@@ -164,7 +165,14 @@ INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A044_2AC44);
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A0DC_2ACDC);
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A108_2AD08);
+void func_8002A108_2AD08(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    func_8002A290_2AE90(arg0);
+    setCallback(func_8002A154_2AD54);
+}
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A154_2AD54);
 
