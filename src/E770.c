@@ -44,7 +44,10 @@ void func_8000DB70_E770(E770_struct *arg0, s16 arg1) {
     func_80057514_58114(arg1, 0x80, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000DBA8_E7A8);
+void func_8000DBA8_E7A8(E770_struct *arg0) {
+    func_8006FDA0_709A0(&arg0->unk1F8, 0xFF, 10);
+    arg0->unk12 = 10;
+}
 
 void func_8000DBE0_E7E0(E770_struct *arg0) {
     func_8006FDA0_709A0(&arg0->unk1F8, 0, 10);
@@ -279,8 +282,6 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000FA90_10690);
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF6C_9EB6C);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000FBBC_107BC);
-
-extern void func_8000DBA8_E7A8(void *);
 
 void func_8000FD1C_1091C(E770_struct *arg0) {
     void *alloc = getCurrentAllocation();
