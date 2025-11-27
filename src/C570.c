@@ -1,18 +1,26 @@
 #include "common.h"
+#include "geometry.h"
 
 extern u32 D_1FB8B0;
 extern u32 D_1FBE00;
 extern u32 D_4CA440;
 extern u32 D_4CAD30;
 extern void *D_80088670_89270;
+extern void *D_80088680_89280;
+extern void *D_80088690_89290;
+extern Mat3x3Padded D_8009A8B0_9B4B0;
+extern s32 D_8009A8A4_9B4A4;
+extern s32 D_8009A8A8_9B4A8;
+extern s32 D_8009A8AC_9B4AC;
+extern s32 gFrameCounter;
 extern void *freeNodeMemory(void *);
 extern void func_80069CF8_6A8F8(void);
 extern void enqueueDisplayListObject(s32 arg0, void *arg1);
 extern void setCleanupCallback(void *);
 extern void setCallbackWithContinue(void *);
+extern void setCallback(void *);
 extern void *dmaRequestAndUpdateState(void *, void *);
 extern void *dmaRequestAndUpdateStateWithSize(void *, void *, s32);
-extern void func_8000BA08_C608(void *);
 extern void *scheduleTask(void *, u8, u8, u8);
 void func_8000BC10_C810(void *arg0, s16 arg1, u8 arg2, u8 arg3, u8 arg4);
 
@@ -41,6 +49,28 @@ typedef struct {
 } func_8000BB48_C748_arg;
 
 typedef struct {
+    Mat3x3Padded matrix; /* 0x00 - 0x1F */
+    void *unk20;         /* 0x20 */
+    void *unk24;         /* 0x24 */
+    void *unk28;         /* 0x28 */
+    s32 unk2C;           /* 0x2C */
+    s32 unk30;           /* 0x30 */
+    s32 unk34;           /* 0x34 */
+    s32 unk38;           /* 0x38 */
+    u8 unk3C[0x20];      /* 0x3C - 0x5B (second display list object) */
+    void *unk5C;         /* 0x5C - display list pointer */
+    u8 pad60[0x18];      /* 0x60 - 0x77 */
+    void **unk78;        /* 0x78 */
+    s32 unk7C;           /* 0x7C */
+    u16 unk80;           /* 0x80 */
+    s16 unk82;           /* 0x82 */
+    s16 unk84;           /* 0x84 */
+} func_8000BA08_arg;
+
+void func_8000BB48_C748(func_8000BB48_C748_arg *arg0);
+void func_8000BA08_C608(func_8000BA08_arg *arg0);
+
+typedef struct {
     u8 _pad0[0x78];
     void *unk78;
     u8 _pad7C[0x4];
@@ -62,7 +92,46 @@ void func_8000B970_C570(func_8000BBA8_C7A8_arg *arg0) {
     setCallbackWithContinue(&func_8000BA08_C608);
 }
 
-INCLUDE_ASM("asm/nonmatchings/C570", func_8000BA08_C608);
+void func_8000BA08_C608(func_8000BA08_arg *arg0) {
+    s32 pad[8];
+    void *temp_v0;
+    s32 *ptr;
+
+    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
+    temp_v0 = (void *)((u8 *)(*arg0->unk78) + 0x3C0);
+    func_8006B084_6BC84(&D_8009A8B0_9B4B0, temp_v0, arg0);
+    scaleMatrix(&arg0->matrix, arg0->unk82, arg0->unk82, arg0->unk82);
+
+    ptr = &D_8009A8A4_9B4A4;
+    *ptr = 0;
+    D_8009A8A8_9B4A8 = 0x9CCCC;
+    D_8009A8AC_9B4AC = 0xFFE44CCD;
+
+    func_8006B084_6BC84(ptr - 5, arg0, &arg0->unk3C);
+
+    if (gFrameCounter & 1) {
+        arg0->unk5C = &D_80088680_89280;
+    } else {
+        arg0->unk5C = &D_80088690_89290;
+    }
+
+    enqueueDisplayListObject(0, arg0);
+
+    if (arg0->unk82 == 0x2000) {
+        enqueueDisplayListObject(0, &arg0->unk3C);
+    }
+
+    if (arg0->unk84 != 0) {
+        if (arg0->unk82 == 0x2000) {
+            arg0->unk84--;
+        } else {
+            arg0->unk82 = arg0->unk82 + 0x200;
+        }
+    } else {
+        arg0->unk7C = 0x40000;
+        setCallback(&func_8000BB48_C748);
+    }
+}
 
 void func_8000BB48_C748(func_8000BB48_C748_arg *arg0) {
     s32 pad[8];
