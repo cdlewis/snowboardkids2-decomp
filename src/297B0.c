@@ -1,4 +1,26 @@
 #include "common.h"
+#include "geometry.h"
+#include "task_scheduler.h"
+
+extern void func_8002AE80_2BA80(void *);
+extern void func_8002B248_2BE48(void *);
+extern void func_8002A2D0_2AED0(void *);
+
+typedef struct {
+    /* 0x00 */ void *model;
+    /* 0x04 */ Mat3x3Padded matrix;
+    /* 0x24 */ u8 pad24[0xC];
+    /* 0x30 */ u16 rotation;
+    /* 0x32 */ u8 pad32[0xA];
+    /* 0x3C */ void *callback;
+    /* 0x40 */ u8 pad40[0x1E];
+    /* 0x5E */ u8 state;
+} Func8002A200Arg;
+
+typedef struct {
+    /* 0x000 */ u8 pad0[0x42A];
+    /* 0x42A */ u8 unk42A;
+} AllocationData;
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_80028BB0_297B0);
 
@@ -63,7 +85,26 @@ INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A154_2AD54);
 void func_8002A1F8_2ADF8(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A200_2AE00);
+void func_8002A200_2AE00(Func8002A200Arg *arg0) {
+    AllocationData *alloc = getCurrentAllocation();
+
+    switch (arg0->state) {
+        case 0x14:
+            func_8002AE80_2BA80(arg0);
+            createYRotationMatrix(&arg0->matrix, arg0->rotation);
+            break;
+        case 0x15:
+            func_8002B248_2BE48(arg0);
+            createYRotationMatrix(&arg0->matrix, arg0->rotation);
+            break;
+    }
+
+    func_8002A2D0_2AED0(arg0);
+
+    if (alloc->unk42A == 0) {
+        setCallback(arg0->callback);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A290_2AE90);
 
