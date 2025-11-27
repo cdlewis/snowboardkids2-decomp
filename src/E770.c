@@ -216,6 +216,35 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000FD50_10950);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000FD98_10998);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000FE00_10A00);
+extern void func_8000F4BC_100BC(E770_struct *);
+extern void func_8000F4F0_100F0(E770_struct *);
+extern void func_8000FBBC_107BC(E770_struct *);
+extern void func_8000FD1C_1091C(E770_struct *);
+extern s32 func_8000FD50_10950(E770_struct *);
+extern void func_8000EE88_FA88(E770_struct *);
+
+void func_8000FE00_10A00(E770_struct *arg0) {
+    getCurrentAllocation();
+    switch (arg0->unk0) {
+        case 0:
+            func_8000F4BC_100BC(arg0);
+            break;
+        case 1:
+            func_8000F4F0_100F0(arg0);
+            break;
+        case 2:
+            func_8000FBBC_107BC(arg0);
+            break;
+        case 3:
+            func_8000FD1C_1091C(arg0);
+            break;
+        case 4:
+            if (func_8000FD50_10950(arg0)) {
+                return;
+            }
+            break;
+    }
+    func_8000EE88_FA88(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000FEA0_10AA0);
