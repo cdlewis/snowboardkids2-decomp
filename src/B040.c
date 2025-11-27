@@ -2,14 +2,21 @@
 #include "common.h"
 #include "task_scheduler.h"
 
+typedef union {
+    s16 unk70;
+    u8 unk70_u8;
+} func_8000B510_C110_arg_unk70;
+
 typedef struct {
     u8 _pad0[0x6];
     s16 unk6;
-    u8 _pad8[0x18];
+    u8 _pad8[0x4];
+    s32 unkC;
+    u8 _pad10[0x10];
     func_80009F5C_AB5C_arg *unk20;
     u8 _pad24[0x48];
     s32 unk6C;
-    s16 unk70;
+    func_8000B510_C110_arg_unk70 unk70;
 } func_8000B510_C110_arg;
 
 typedef struct {
@@ -120,7 +127,18 @@ void func_8000B370_BF70(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk20);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B38C_BF8C);
+void func_8000B400_C000(void);
+void func_8000B510_C110(func_8000B510_C110_arg *);
+
+void func_8000B38C_BF8C(func_8000B510_C110_arg *arg0) {
+    func_80009E68_AA68(&arg0->unk20, 0);
+    func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    arg0->unkC = 0;
+    arg0->unk6C = 0;
+    arg0->unk70.unk70_u8 = 0xFF;
+    setCleanupCallback(func_8000B510_C110);
+    setCallback(func_8000B400_C000);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B400_C000);
 
@@ -136,7 +154,7 @@ void func_8000B52C_C12C(func_8000B510_C110_arg *arg0) {
     func_80009E68_AA68(&arg0->unk20, 0);
     func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
     arg0->unk6C = 0;
-    arg0->unk70 = 0;
+    arg0->unk70.unk70 = 0;
     setCallback(func_8000B598_C198);
 }
 
