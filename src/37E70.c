@@ -2,8 +2,8 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-extern void func_800376EC_382EC(void);
 extern void func_800373E0_37FE0(void);
+void func_800376EC_382EC(void);
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x1D8];
@@ -34,4 +34,6 @@ void func_80037688_38288(void) {
     terminateSchedulerWithCallback(func_800376EC_382EC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/37E70", func_800376EC_382EC);
+void func_800376EC_382EC(void) {
+    func_800697F4_6A3F4(1);
+}
