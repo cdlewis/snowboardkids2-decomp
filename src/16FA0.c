@@ -2,9 +2,7 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-extern void *getCurrentAllocation(void);
 extern void func_8000056C_116C(s32, s32, void *);
-extern void setCleanupCallback(void *);
 extern void func_80000460_1060(s32, void *, void *);
 extern void func_80000760_1360(void);
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
@@ -28,22 +26,26 @@ typedef struct {
 } TransformData;
 
 extern TransformData D_8008D5C4_8E1C4[];
+extern u16 *D_8008D534_8E134;
 
 typedef struct {
     SceneModel *unk0;   // 0x00
     TransformData unk4; // 0x04 - 0x20 bytes of transform data
-    u8 _pad24[0x4];     // 0x24
+    s32 unk24;          // 0x24
     u16 *unk28;         // 0x28 - pointer to u16 animation data
     u16 unk2C;          // 0x2C - current animation state
-    u8 _pad2E;          // 0x2E
+    u8 unk2E;           // 0x2E
     u8 unk2F;           // 0x2F - index into transform array
     u8 _pad30;          // 0x30
     u8 unk31;           // 0x31
+    u8 unk32;           // 0x32
 } Struct16B68;
 
 void func_80016C28_17828(Struct16B68 *arg0);
 void func_80016A00_17600(Struct16B68 *arg0);
 void func_80016DE0_179E0(Struct16B68 *arg0);
+void func_80016964_17564(Struct16B68 *arg0);
+void func_80016E70_17A70(Struct16B68 *arg0);
 
 typedef struct {
     u8 padding[0x2];
@@ -115,7 +117,22 @@ void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0) {
     func_80000710_1310(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_800168F4_174F4);
+void func_800168F4_174F4(Struct16B68 *arg0) {
+    void *alloc;
+    s32 temp;
+
+    alloc = getCurrentAllocation();
+    arg0->unk0 = func_8000198C_258C(arg0->unk2F + 0x32, (u8 *)alloc + 0x1D8);
+    setCleanupCallback(func_80016E70_17A70);
+    temp = 0x8000;
+    arg0->unk32 = 0;
+    arg0->unk24 = temp;
+    arg0->unk2E = 0;
+    temp = (s32)D_8008D534_8E134;
+    arg0->unk31 = 0;
+    arg0->unk28 = (u16 *)temp;
+    setCallback(func_80016964_17564);
+}
 
 void func_80016964_17564(Struct16B68 *arg0) {
     getCurrentAllocation();
