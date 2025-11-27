@@ -1,4 +1,17 @@
+#include "56910.h"
 #include "common.h"
+#include "task_scheduler.h"
+
+extern void *func_80035F80_36B80(s32);
+extern void func_80035074_35C74(void);
+extern void func_80034D58_35958(void);
+
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ s16 unkA;
+} Func358FCStruct;
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_800333E0_33FE0);
 
@@ -54,7 +67,18 @@ INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034BD8_357D8);
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034CD0_358D0);
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034CFC_358FC);
+void func_80034CFC_358FC(Func358FCStruct *arg0) {
+    Func358FCStruct *temp_s0;
+
+    temp_s0 = arg0;
+    getCurrentAllocation();
+    temp_s0->unk0 = loadAsset_34F7E0();
+    temp_s0->unk4 = func_80035F80_36B80(1);
+    setCleanupCallback(func_80035074_35C74);
+    temp_s0->unk8 = 0;
+    temp_s0->unkA = 0;
+    setCallback(func_80034D58_35958);
+}
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034D58_35958);
 
