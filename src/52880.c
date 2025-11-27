@@ -10,6 +10,15 @@ s32 func_80053DF0_549F0(s32, s32);
 s32 func_80054470_55070(s32, s32);
 s32 func_80055820_56420(s32, s32);
 
+typedef struct {
+    u8 padding[0x20];
+    void *unk20;
+    u8 padding2[0x1E];
+    u16 unk42;
+    u8 padding3[0x8];
+    u16 unk4C;
+} Struct_52880;
+
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051C80_52880);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051DEC_529EC);
@@ -38,7 +47,15 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80052758_53358);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80052A24_53624);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80052A68_53668);
+void func_800523EC_52FEC(void);
+void func_80052AB0_536B0(void);
+
+void func_80052A68_53668(Struct_52880 *arg0) {
+    arg0->unk4C = arg0->unk42;
+    arg0->unk20 = load_3ECE40();
+    setCleanupCallback(func_800523EC_52FEC);
+    setCallbackWithContinue(func_80052AB0_536B0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80052AB0_536B0);
 
@@ -118,19 +135,9 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80054658_55258);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_800547E0_553E0);
 
-typedef struct {
-    u8 padding[0x20];
-    void *unk20;
-    u8 padding2[0x1E];
-    u16 unk42;
-    u8 padding3[0x8];
-    u16 unk4C;
-} func_80054880_55480_arg;
-
-extern void func_800523EC_52FEC(void);
 extern void func_800548C8_554C8(void);
 
-void func_80054880_55480(func_80054880_55480_arg *arg0) {
+void func_80054880_55480(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
@@ -171,7 +178,7 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_800553D4_55FD4);
 
 extern void func_80055460_56060(void);
 
-void func_80055418_56018(func_80054880_55480_arg *arg0) {
+void func_80055418_56018(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
@@ -193,7 +200,6 @@ typedef struct {
     void *unk20;
 } func_80055864_56464_arg;
 
-extern void func_800523EC_52FEC(void);
 extern void func_800558A4_564A4(void);
 
 void func_80055864_56464(func_80055864_56464_arg *arg0) {
