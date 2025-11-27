@@ -5,7 +5,8 @@
 extern void *freeNodeMemory(void *);
 
 typedef struct {
-    u8 pad0[0x8];
+    s8 unk0;
+    u8 pad1[0x7];
     void *unk8;
     void *unkC;
     u8 pad10[0x8];
@@ -66,7 +67,56 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000E680_F280);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E6E0_F2E0);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000EC98_F898);
+extern void *getCurrentAllocation(void);
+extern void setGameStateHandler(void *);
+extern s16 func_80069810_6A410(void);
+extern void func_8000E1D0_EDD0(E770_struct *);
+extern void func_8000E240_EE40(E770_struct *);
+extern void func_8000E2AC_EEAC(E770_struct *);
+extern void func_8000E4CC_F0CC(E770_struct *);
+extern void func_8000E56C_F16C(E770_struct *);
+extern void func_8000E5B0_F1B0(E770_struct *);
+extern s32 func_8000E614_F214(E770_struct *);
+extern void func_8000E6E0_F2E0(void);
+extern void func_8000DCD8_E8D8(E770_struct *);
+
+void func_8000EC98_F898(void) {
+    E770_struct *s0;
+
+    s0 = getCurrentAllocation();
+    switch (s0->unk0) {
+        case 0:
+            func_8000E1D0_EDD0(s0);
+            break;
+        case 1:
+            func_8000E240_EE40(s0);
+            break;
+        case 2:
+            func_8000E2AC_EEAC(s0);
+            break;
+        case 3:
+            func_8000E4CC_F0CC(s0);
+            break;
+        case 4:
+            func_8000E56C_F16C(s0);
+            break;
+        case 5:
+        default:
+            func_8000E5B0_F1B0(s0);
+            break;
+        case 6:
+            if (func_8000E614_F214(s0)) {
+                return;
+            }
+            break;
+        case 7:
+            if ((s16)func_80069810_6A410()) {
+                setGameStateHandler(func_8000E6E0_F2E0);
+            }
+            return;
+    }
+    func_8000DCD8_E8D8(s0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000ED88_F988);
 
