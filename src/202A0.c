@@ -1,5 +1,6 @@
 #include "20F0.h"
 #include "common.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 extern void func_80021548_22148(u8 arg0, void *arg1);
@@ -93,7 +94,29 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_80021238_21E38);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80021270_21E70);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_800213C8_21FC8);
+typedef struct {
+    u8 _pad0[0x7];
+    u8 unk7;
+} D_800AFE8C_type_202A0;
+
+extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
+
+void func_8002144C_2204C(Func8002144CArg *arg0);
+
+void func_800213C8_21FC8(Func8002144CArg *arg0) {
+    Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
+
+    if (allocation->unkB45 != 0) {
+        if (D_800AFE8C_A71FC->unk7 == 0xC) {
+            scaleMatrix((Mat3x3Padded *)&arg0->unk4, 0x1000, 0x1000, 0x1000);
+        }
+    }
+
+    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->unk4);
+    func_800021B8_2DB8(arg0->unk0, arg0->unk4.unk20);
+    updateModelGeometry(arg0->unk0);
+    setCallback(&func_8002144C_2204C);
+}
 
 void func_8002144C_2204C(Func8002144CArg *arg0) {
     Allocation_202A0 *allocation;
