@@ -4,11 +4,14 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
+extern s32 gControllerInputs;
+
 extern void func_8001C1E0_1CDE0(void);
-extern void func_8001C28C_1CE8C(void);
 extern void func_800308FC_314FC(void);
 
 void func_8001C7E8_1D3E8(void);
+void func_8001C744_1D344(void);
+void func_8001C28C_1CE8C(void);
 void func_8001C144_1CD44(void);
 
 typedef struct {
@@ -70,7 +73,20 @@ void func_8001C144_1CD44(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C1E0_1CDE0);
 
-INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C28C_1CE8C);
+void func_8001C28C_1CE8C(void) {
+    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+
+    if (allocation->unk5D6 != 0) {
+        return;
+    }
+
+    if (gControllerInputs & 0xD000) {
+        func_80058220_58E20(0xED, 1);
+        allocation->unk5D6 = 2;
+        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        setGameStateHandler(func_8001C744_1D344);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C2FC_1CEFC);
 
