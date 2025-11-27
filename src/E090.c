@@ -7,7 +7,10 @@ extern void *freeNodeMemory(void *);
 void func_8000DB4C_E74C(void);
 
 typedef struct {
-    u8 pad[0x8];
+    u8 unk0;
+    u8 pad1;
+    s16 unk2;
+    u8 pad4[0x4];
     Node_70B00 unk8;
     void *unk1E0;
     void *unk1E4;
@@ -30,7 +33,11 @@ INCLUDE_ASM("asm/nonmatchings/E090", func_8000D5F0_E1F0);
 
 INCLUDE_ASM("asm/nonmatchings/E090", func_8000D624_E224);
 
-INCLUDE_ASM("asm/nonmatchings/E090", func_8000D68C_E28C);
+void func_8000D68C_E28C(E090_struct *arg0) {
+    func_8000D4D4_E0D4(arg0);
+    arg0->unk2 = 100;
+    arg0->unk0 = 4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/E090", func_8000D6C0_E2C0);
 
