@@ -49,7 +49,11 @@ void func_8001457C_1517C(void) {
     setGameStateHandler(func_800145AC_151AC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_800145AC_151AC);
+void func_800145AC_151AC(void) {
+    if ((func_80069810_6A410() << 16) != 0) {
+        setGameStateHandler(func_800145E0_151E0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/15080", func_800145E0_151E0);
 
