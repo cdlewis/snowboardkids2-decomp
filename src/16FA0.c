@@ -6,6 +6,7 @@ extern void func_8000056C_116C(s32, s32, void *);
 extern void func_80000460_1060(s32, void *, void *);
 extern void func_80000760_1360(void);
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
+extern void func_8000FED0_10AD0(void);
 extern void func_80038420_39020(void);
 
 typedef struct {
@@ -102,9 +103,9 @@ typedef struct {
     s16 unk8;
     u8 unkA;
     u8 unkB;
-    s8 unkC;
-    s8 unkD;
-    s8 unkE;
+    u8 unkC;
+    u8 unkD;
+    u8 unkE;
 } Struct16728;
 
 void func_800167B0_173B0(Struct16728 *);
@@ -124,7 +125,22 @@ void func_80016728_17328(Struct16728 *arg0) {
     setCallback(func_800167B0_173B0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_800167B0_173B0);
+void func_800167B0_173B0(Struct16728 *arg0) {
+    if (arg0->unkC == 0) {
+        arg0->unkD++;
+        if ((arg0->unkD & 1) == 0) {
+            arg0->unkE = (arg0->unkE + 1) & 1;
+            arg0->unk8 = arg0->unkE + 7;
+        }
+        if (arg0->unkD == 0x10) {
+            arg0->unkD = 0;
+            arg0->unkC = 0x1E;
+        }
+    } else {
+        arg0->unkC--;
+    }
+    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, arg0);
+}
 
 void func_80016834_17434(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
