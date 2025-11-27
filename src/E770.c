@@ -152,7 +152,138 @@ void func_8000E240_EE40(E770_struct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000E2AC_EEAC);
+extern s32 gControllerInputs;
+
+void func_8000E2AC_EEAC(E770_struct *arg0) {
+    s32 inputs;
+    u8 selection;
+    s8 sel_signed;
+    s32 sound;
+    s32 sel2;
+
+    inputs = gControllerInputs;
+    selection = arg0->unk1;
+
+    // B button - exit
+    if (inputs & 0x4000) {
+        arg0->unk0 = 5;
+        return;
+    }
+
+    // A button - confirm
+    if (inputs & 0x8000) {
+        func_8000DBA8_E7A8(arg0);
+        if (arg0->unk1 == 5) {
+            func_80057564_58164(10);
+            func_8006FDA0_709A0(0, 0xFF, 10);
+        }
+        func_8000DC88_E888(arg0, 0x15A, 0x15B, 1, 0x14);
+        sound = 0xD3;
+        arg0->unk0 = 3;
+        goto play_sound;
+    }
+
+    // Left / D-pad left (0x80200)
+    if (inputs & 0x80200) {
+        sel_signed = (s8)selection;
+        if (sel_signed <= 0) {
+            goto check_bounds;
+        }
+        if (sel_signed < 3) {
+            arg0->unk1 = selection - 1;
+            goto check_bounds;
+        }
+        if (sel_signed >= 6) {
+            goto check_bounds;
+        }
+        if (sel_signed < 4) {
+            goto check_bounds;
+        }
+        arg0->unk1 = selection - 1;
+        goto check_bounds;
+    }
+
+    // Right / D-pad right (0x40100)
+    if (inputs & 0x40100) {
+        sel_signed = (s8)selection;
+        if (sel_signed < 0) {
+            goto set_zero;
+        }
+        if (sel_signed < 2) {
+            arg0->unk1 = selection + 1;
+            goto check_bounds;
+        }
+        if (sel_signed >= 5) {
+            goto check_bounds;
+        }
+        if (sel_signed < 3) {
+            goto check_bounds;
+        }
+        arg0->unk1 = selection + 1;
+        goto check_bounds;
+    }
+
+    // Up / D-pad up (0x10800)
+    if (inputs & 0x10800) {
+        sel_signed = (s8)selection;
+        if (sel_signed >= 6) {
+            goto check_bounds;
+        }
+        if (sel_signed < 3) {
+            goto check_bounds;
+        }
+        arg0->unk1 = selection - 2;
+        if (arg0->unk2 == 0) {
+            goto check_bounds;
+        }
+        arg0->unk1 = selection - 3;
+        goto check_bounds;
+    }
+
+    // Down / D-pad down (0x20400)
+    if (!(inputs & 0x20400)) {
+        goto check_bounds;
+    }
+    sel_signed = (s8)selection;
+    if (sel_signed == 0) {
+        goto add_three;
+    }
+    if (sel_signed < 0) {
+        goto check_bounds;
+    }
+    if (sel_signed >= 3) {
+        goto check_bounds;
+    }
+    if (arg0->unk2 != 0) {
+        goto add_three;
+    }
+    arg0->unk1 = selection - 1;
+
+add_three:
+    arg0->unk1 = arg0->unk1 + 3;
+
+check_bounds:
+    if (arg0->unk1 >= 0) {
+        goto check_max;
+    }
+
+set_zero:
+    arg0->unk1 = 0;
+
+check_max:
+    sel2 = arg0->unk1;
+    if (func_8000DC18_E818(arg0) - 1 < sel2) {
+        arg0->unk1 = func_8000DC18_E818(arg0) - 1;
+    }
+
+    if (arg0->unk1 == (s8)selection) {
+        return;
+    }
+    sound = 0x2B;
+
+play_sound:
+    func_800585C8_591C8(sound);
+}
 
 typedef struct FD98_struct {
     s8 unk0;
@@ -236,7 +367,6 @@ void func_8000E680_F280(void) {
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E6E0_F2E0);
 
 extern s16 func_80069810_6A410(void);
-extern void func_8000E2AC_EEAC(E770_struct *);
 extern void func_8000DCD8_E8D8(E770_struct *);
 
 void func_8000EC98_F898(void) {
@@ -407,8 +537,6 @@ void func_8000F4F0_100F0(E770_struct *arg0) {
         alloc->unk12 = temp - 1;
     }
 }
-
-extern s32 gControllerInputs;
 
 void func_8000F564_10164(FD98_struct *arg0) {
     s32 inputs;
