@@ -5,6 +5,7 @@ extern void func_8000056C_116C(s32, s32, void *);
 extern void setCleanupCallback(void *);
 extern void func_80000460_1060(s32, void *, void *);
 extern void setCallback(void *);
+extern void func_80000760_1360(void);
 
 void func_800168BC_174BC(void);
 void func_800168D8_174D8(void);
@@ -41,7 +42,9 @@ void func_80016860_17460(s32 arg0) {
     setCallback(func_800168BC_174BC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_800168BC_174BC);
+void func_800168BC_174BC(void) {
+    func_80000760_1360();
+}
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_800168D8_174D8);
 
