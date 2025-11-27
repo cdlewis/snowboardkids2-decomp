@@ -8,7 +8,7 @@ void func_8000DB4C_E74C(void);
 
 typedef struct {
     u8 unk0;
-    u8 pad1;
+    u8 unk1;
     s16 unk2;
     u8 pad4[0x4];
     Node_70B00 unk8;
@@ -51,7 +51,13 @@ void func_8000D68C_E28C(E090_struct *arg0) {
     arg0->unk0 = 4;
 }
 
-INCLUDE_ASM("asm/nonmatchings/E090", func_8000D6C0_E2C0);
+void func_8000D6C0_E2C0(E090_struct *arg0) {
+    arg0->unk2--;
+    if (arg0->unk2 == 0x50) {
+        arg0->unk0 = 5;
+        arg0->unk1++;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/E090", func_8000D6F8_E2F8);
 
