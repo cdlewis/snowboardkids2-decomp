@@ -1,14 +1,18 @@
+#include "6E840.h"
 #include "common.h"
-#include "src/task_scheduler.h"
+#include "task_scheduler.h"
 
 extern void func_80027CA0_288A0(void *, s32, s32, s32);
 extern void func_80019CD0_1A8D0(void);
-void func_8001C898_1D498(void);
+extern s32 gControllerInputs;
 
 typedef struct {
-    u8 pad[0x1D8];
-    s16 unk1D8;
+    Node_70B00 unk0;
+    u16 unk1D8;
 } func_8001C810_allocation;
+
+void func_8001C898_1D498(void);
+void func_8001C900_1D500(void);
 
 void func_8001C810_1D410(void) {
     func_8001C810_allocation *temp_s0 = (func_8001C810_allocation *)allocateTaskMemory(0x1E0);
@@ -19,7 +23,21 @@ void func_8001C810_1D410(void) {
     setGameStateHandler(&func_8001C898_1D498);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1D410", func_8001C898_1D498);
+void func_8001C898_1D498(void) {
+    func_8001C810_allocation *allocation = (func_8001C810_allocation *)getCurrentAllocation();
+
+    allocation->unk1D8 = allocation->unk1D8 + 1;
+    __asm__ volatile("" ::: "memory");
+
+    if (gControllerInputs & 0x8000) {
+        allocation->unk1D8 = 60;
+    }
+
+    if (!(allocation->unk1D8 < 60)) {
+        unlinkNode(&allocation->unk0);
+        terminateSchedulerWithCallback(&func_8001C900_1D500);
+    }
+}
 
 void func_8001C900_1D500(void) {
     func_800697F4_6A3F4(1);
