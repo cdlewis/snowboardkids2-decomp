@@ -11,7 +11,9 @@ typedef struct {
     u8 pad1[0x7];
     void *unk8;
     void *unkC;
-    u8 pad10[0x8];
+    u8 pad10[0x2];
+    s16 unk12;
+    u8 pad14[0x4];
     void *unk18;
     u8 pad1C[0x4];
     Node_70B00 unk20;
@@ -232,13 +234,22 @@ void func_8000FD1C_1091C(E770_struct *arg0) {
     arg0->unk0 = 4;
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000FD50_10950);
+s32 func_8000FD50_10950(E770_struct *arg0) {
+    E770_struct *alloc = getCurrentAllocation();
+    s16 temp = alloc->unk12;
+
+    if (temp == 0) {
+        func_80069CF8_6A8F8();
+        return 1;
+    }
+    alloc->unk12 = temp - 1;
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000FD98_10998);
 
 extern void func_8000F4F0_100F0(E770_struct *);
 extern void func_8000FBBC_107BC(E770_struct *);
-extern s32 func_8000FD50_10950(E770_struct *);
 extern void func_8000EE88_FA88(E770_struct *);
 
 void func_8000FE00_10A00(E770_struct *arg0) {
