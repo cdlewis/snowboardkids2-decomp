@@ -1,5 +1,7 @@
 #include "20F0.h"
+#include "5E590.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "EepromSaveData_type.h"
 #include "common.h"
 #include "task_scheduler.h"
 
@@ -25,13 +27,35 @@ typedef struct {
     u8 unk28;
 } func_80025130_25D30_arg;
 
+typedef struct {
+    u8 padding[0x20];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 padding2[0x72];
+    u8 unkA2;
+} func_80024220_24E20_arg;
+
 extern void func_800394BC_3A0BC(void *, s32);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
 
+void func_80024048_24C48(void *);
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024048_24C48);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024220_24E20);
+void func_80024220_24E20(func_80024220_24E20_arg *arg0) {
+    u8 charIndex;
+
+    charIndex = EepromSaveData->character_or_settings[arg0->unkA2] - 1;
+
+    arg0->unk20 = loadAssetByIndex_95728(arg0->unkA2);
+    arg0->unk24 = loadAssetByIndex_95500(arg0->unkA2);
+    arg0->unk28 = loadAssetByIndex_95590(arg0->unkA2);
+    arg0->unk2C = loadAssetByIndex_95668(charIndex);
+
+    setCallback(func_80024048_24C48);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024298_24E98);
 
