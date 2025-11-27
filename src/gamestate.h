@@ -104,10 +104,14 @@ typedef struct {
     u8 PAD_9[0x4];
     /* 0x1E0 */ ALPlayer *audioPlayer3;
     u8 PAD_A[0x1CA];
-    /* 0x3B0 */ ALPlayer *audioPlayer4;
-    u8 PAD_B[0x4];
-    /* 0x3B8 */ ALPlayer *audioPlayer5;
-    u8 PAD_C[0x14];
+    /* 0x3B0 */ void *unk3B0;
+    /* 0x3B4 */ void *unk3B4;
+    /* 0x3B8 */ u16 unk3B8;
+    /* 0x3BA */ u8 unk3BA;
+    /* 0x3BB */ u8 unk3BB;
+    /* 0x3BC */ u8 unk3BC;
+    /* 0x3BD */ u8 unk3BD;
+    u8 PAD_C[0x12];
     s32 unk3D0;
     s32 unk3D4;
     s32 unk3D8;

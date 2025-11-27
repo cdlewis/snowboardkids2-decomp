@@ -1,5 +1,6 @@
 #include "3A1F0.h"
 #include "6E840.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "gamestate.h"
 #include "graphics.h"
@@ -17,7 +18,51 @@ void func_800154E0_160E0(void) {
     func_800697F4_6A3F4(D_8009F210_9FE10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_80015504_16104);
+void func_80015504_16104(void) {
+    GameState *state;
+    u8 unk3BB;
+    u8 unk3BD;
+
+    state = getCurrentAllocation();
+
+    if (func_8006FE10_70A10(0) != 0) {
+        return;
+    }
+
+    func_8006FDA0_709A0(0, 0, 0);
+    D_8009F210_9FE10 = 1;
+
+    unk3BB = state->unk3BB;
+
+    if (unk3BB == 3) {
+        D_800AFE8C_A71FC->unk4 = 0xFF;
+    } else {
+        unk3BD = state->unk3BD;
+        if (unk3BD == 1) {
+            D_800AFE8C_A71FC->unk4 = unk3BB;
+            D_800AFE8C_A71FC->saveSlotIndex = 0;
+        } else if (unk3BB == 1) {
+            D_8009F210_9FE10 = 2;
+        } else {
+            D_8009F210_9FE10 = 3;
+            D_800AFE8C_A71FC->unk4 = 0xFE;
+        }
+    }
+
+    if (state->unk3B8 == 0x384) {
+        D_800AFE8C_A71FC->unk4 = 0;
+        D_800AFE8C_A71FC->saveSlotIndex = 0;
+        D_8009F210_9FE10 = 4;
+    }
+
+    unlinkNode((Node_70B00 *)state);
+    unlinkNode((Node_70B00 *)&state->audioPlayer2);
+
+    state->unk3B0 = freeNodeMemory(state->unk3B0);
+    state->unk3B4 = freeNodeMemory(state->unk3B4);
+
+    terminateSchedulerWithCallback(func_800154E0_160E0);
+}
 
 void func_8001563C_1623C(void) {
     u8 buffer[0x200];
@@ -55,14 +100,13 @@ void func_80015960_16560(void) {
 
 void func_800159AC_165AC(void) {
     GameState *state = (GameState *)getCurrentAllocation();
-    u16 *counter = (u16 *)&state->audioPlayer5;
 
-    (*counter)++;
+    state->unk3B8++;
 
-    if (*counter >= 3) {
-        *counter = 2;
+    if (state->unk3B8 >= 3) {
+        state->unk3B8 = 2;
         if (func_8003BB5C_3C75C() == 0) {
-            *counter = 0;
+            state->unk3B8 = 0;
             func_8006FDA0_709A0(NULL, 0, 0x10);
             setGameStateHandler(func_80015960_16560);
         }
