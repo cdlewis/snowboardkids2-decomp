@@ -34,6 +34,7 @@ void func_80021EFC_22AFC(void);
 void func_80021FB8_22BB8(void);
 void func_80022108_22D08(void);
 void func_80021E18_22A18(void);
+void func_8002207C_22C7C(void);
 
 void func_80021D88_22988(void) {
     s16 result;
@@ -106,7 +107,20 @@ void func_80021F80_22B80(void) {
     setGameStateHandler(func_80021FB8_22BB8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80021FB8_22BB8);
+void func_80021FB8_22BB8(void) {
+    s16 result;
+
+    result = func_80069810_6A410();
+
+    if (result != 0) {
+        if (result == 1) {
+            func_80057564_58164(0x10);
+            setGameStateHandler(func_8002207C_22C7C);
+        } else if (result == 0xFF) {
+            setGameStateHandler(func_80021EFC_22AFC);
+        }
+    }
+}
 
 extern void func_80033200_33E00(void);
 
