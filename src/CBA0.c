@@ -77,7 +77,23 @@ void func_8000C2BC_CEBC(Func8000C2BCArg *arg0, u8 arg1, u8 arg2, u8 arg3) {
     arg0->unk216 = arg3;
 }
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C2CC_CECC);
+typedef struct {
+    u8 pad[0x204];
+    s32 unk204;
+    s32 unk208;
+    s16 unk20C;
+} Func8000C2CCArg;
+
+void func_8000C2CC_CECC(Func8000C2CCArg *arg0, s32 arg1, s16 arg2) {
+    if (arg2 == 0) {
+        arg0->unk20C = 0;
+        arg0->unk208 = 0;
+        arg0->unk204 = arg1;
+    } else {
+        arg0->unk20C = arg2;
+        arg0->unk208 = (arg1 - arg0->unk204) / arg2;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C334_CF34);
 
