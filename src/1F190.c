@@ -25,7 +25,11 @@ typedef struct {
     u8 unkB45;         // 0xB45
 } Allocation_1F190;
 
-INCLUDE_ASM("asm/nonmatchings/1F190", func_8001E590_1F190);
+void func_8001E590_1F190(void) {
+    Allocation_1F190 *allocation = allocateTaskMemory(0xB48);
+    allocation->unkB45 = 1;
+    setGameStateHandler(func_8001E5EC_1F1EC);
+}
 
 void func_8001E5C0_1F1C0(void) {
     Allocation_1F190 *allocation = allocateTaskMemory(0xB48);
