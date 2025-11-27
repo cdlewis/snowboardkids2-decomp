@@ -46,7 +46,10 @@ void func_8000DB70_E770(E770_struct *arg0, s16 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DBA8_E7A8);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000DBE0_E7E0);
+void func_8000DBE0_E7E0(E770_struct *arg0) {
+    func_8006FDA0_709A0(&arg0->unk1F8, 0, 10);
+    arg0->unk12 = 10;
+}
 
 s32 func_8000DC18_E818(E770_struct *arg0) {
     s8 temp = arg0->unk2;
@@ -92,8 +95,6 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000E240_EE40);
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E2AC_EEAC);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E4CC_F0CC);
-
-extern void func_8000DBE0_E7E0(E770_struct *);
 
 void func_8000E56C_F16C(E770_struct *arg0) {
     if (arg0->unk3 != 0) {
