@@ -12,10 +12,16 @@ extern void func_80014CC4_158C4(void);
 extern void func_800150DC_15CDC(void);
 extern void func_80021BD0_227D0(void);
 extern void func_80018EB0_19AB0(void);
+extern void func_8001C920_1D520(void);
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014A90_15690);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014AEC_156EC);
+void func_80014B1C_1571C(void);
+
+void func_80014AEC_156EC(void) {
+    createTaskQueue(func_8001C920_1D520, 0x96);
+    setGameStateHandler(func_80014B1C_1571C);
+}
 
 void func_80014C94_15894(void);
 
