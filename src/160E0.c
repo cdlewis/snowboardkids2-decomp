@@ -1,4 +1,9 @@
+#include "6E840.h"
 #include "common.h"
+#include "task_scheduler.h"
+
+extern void func_80058220_58E20(s32, s32);
+extern void func_800156AC_162AC(void);
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_800154E0_160E0);
 
@@ -8,7 +13,13 @@ INCLUDE_ASM("asm/nonmatchings/160E0", func_8001563C_1623C);
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_800156AC_162AC);
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_80015960_16560);
+void func_80015960_16560(void) {
+    if (func_8006FE10_70A10(0) == 0) {
+        func_8006FE28_70A28(0, 0, 0, 0);
+        func_80058220_58E20(0x135, 0);
+        setGameStateHandler(func_800156AC_162AC);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_800159AC_165AC);
 
