@@ -1,5 +1,6 @@
 #include "4050.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "EepromSaveData_type.h"
 #include "common.h"
 #include "task_scheduler.h"
 
@@ -180,7 +181,17 @@ void func_8001511C_15D1C(void) {
     setGameStateHandler(func_8001514C_15D4C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_8001514C_15D4C);
+void func_800151A4_15DA4(void);
+
+void func_8001514C_15D4C(void) {
+    if ((func_80069810_6A410() << 16) != 0) {
+        if (D_800AFE8C_A71FC->errorFlag == 8) {
+            D_800AFE8C_A71FC->errorFlag = 0;
+            EepromSaveData->unk51 = 1;
+        }
+        setGameStateHandler(func_800151A4_15DA4);
+    }
+}
 
 void func_800151E4_15DE4(void);
 

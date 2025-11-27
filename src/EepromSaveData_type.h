@@ -14,7 +14,8 @@ typedef struct {
     /* 0x4E */ u8 setting_4E;
     /* 0x4F */ u8 setting_4F;
     /* 0x50 */ u8 setting_50;
-    /* 0x51 */ u8 padding_51[7];
+    /* 0x51 */ u8 unk51;
+    /* 0x52 */ u8 padding_52[6];
 } EepromSaveData_type;
 
 extern EepromSaveData_type *EepromSaveData;

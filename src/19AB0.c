@@ -24,7 +24,7 @@ void func_800191B4_19DB4(void) {
     TaskAllocation *allocation = (TaskAllocation *)getCurrentAllocation();
 
     if (func_80069810_6A410() != 0) {
-        EepromSaveData->padding_51[0] = 0;
+        EepromSaveData->unk51 = 0;
         allocation->unk2 = 1;
         D_800A8A98_9FE08 = 1;
         createTaskQueue(initializeGameState, 100);
