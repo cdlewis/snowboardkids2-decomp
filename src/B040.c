@@ -397,7 +397,37 @@ void *func_8000B714_C314(Table_B934 *arg0, s32 arg1, s32 arg2) {
     return (void *)(subarray[arg2] + (s32)arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000B770_C370);
+s16 func_8000B770_C370(u16 *arg0) {
+    s16 i = 0;
+    s16 count = 0;
+    u16 val;
+    s16 maxCount;
+
+    val = arg0[0];
+    maxCount = 0;
+    if (val != 0xFFFF) {
+        do {
+            val = arg0[i];
+            if (val != 0xFFFC) {
+                if (val == 0xFFFD) {
+                    count = 0;
+                } else {
+                    count++;
+                }
+            } else {
+                i++;
+            }
+
+            if ((s16)count > (s16)maxCount) {
+                maxCount = count;
+            }
+
+            i++;
+        } while (arg0[i] != 0xFFFF);
+    }
+
+    return maxCount;
+}
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000B7FC_C3FC);
 
