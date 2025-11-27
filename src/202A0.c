@@ -1,4 +1,33 @@
+#include "20F0.h"
 #include "common.h"
+#include "task_scheduler.h"
+
+extern void func_80021548_22148(u8 arg0, void *arg1);
+extern void func_800215DC_221DC(void *arg0);
+extern s32 func_8006FED8_70AD8(void *arg0);
+
+typedef struct {
+    u8 _pad0[0xB2F];
+    u8 unkB2F;
+    u8 _padB30[0x15];
+    u8 unkB45;
+    u8 _padB46;
+    u8 unkB47;
+} Allocation_202A0;
+
+typedef struct {
+    u8 padding[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    s16 unk20;
+    s16 unk22;
+} TransformData_202A0;
+
+typedef struct {
+    SceneModel *unk0;
+    TransformData_202A0 unk4;
+} Func8002144CArg;
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001F6A0_202A0);
 
@@ -54,7 +83,31 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_80021270_21E70);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_800213C8_21FC8);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_8002144C_2204C);
+void func_8002144C_2204C(Func8002144CArg *arg0) {
+    Allocation_202A0 *allocation;
+    s32 temp;
+    u16 unk24;
+
+    allocation = (Allocation_202A0 *)getCurrentAllocation();
+    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->unk4);
+    temp = clearModelRotation(arg0->unk0);
+    func_8006FED8_70AD8(allocation);
+    updateModelGeometry(arg0->unk0);
+
+    if (allocation->unkB45 != 0) {
+        if (allocation->unkB47 != 0) {
+            func_80021548_22148(allocation->unkB47, arg0);
+        } else if (temp != 0 && allocation->unkB2F == 8) {
+            func_800215DC_221DC(arg0);
+        }
+    } else if (temp != 0) {
+        unk24 = arg0->unk4.unk20;
+        if (unk24 == 0xD) {
+            arg0->unk4.unk20 = unk24 + 1;
+            func_800021B8_2DB8(arg0->unk0, unk24 + 1);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8002152C_2212C);
 
