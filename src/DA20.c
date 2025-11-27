@@ -1,4 +1,5 @@
 #include "common.h"
+#include "displaylist.h"
 #include "overlay.h"
 #include "rand.h"
 #include "task_scheduler.h"
@@ -6,9 +7,34 @@
 USE_ASSET(_647F90);
 
 extern void *D_8008CDD0_8D9D0;
+extern void func_80069CF8_6A8F8(void);
 
-void func_8000CEA4_DAA4(void *);
 void func_8000CFA0_DBA0(void **);
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+} DA20_PositionNode;
+
+typedef struct {
+    void *unk0;
+    loadAssetMetadata_arg unk4;
+    u8 padding[4];
+    loadAssetMetadata_arg unk24;
+    u8 padding2[4];
+    s32 unk44;
+    s32 unk48;
+    s32 unk4C;
+    s16 unk50;
+} func_8000CEA4_DAA4_arg;
+
+void func_8000CEA4_DAA4(func_8000CEA4_DAA4_arg *);
 
 typedef struct {
     void *unk0;
@@ -53,7 +79,34 @@ void func_8000CE20_DA20(func_8000CE20_DA20_arg *arg0) {
     setCallbackWithContinue(&func_8000CEA4_DAA4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/DA20", func_8000CEA4_DAA4);
+void func_8000CEA4_DAA4(func_8000CEA4_DAA4_arg *arg0) {
+    s32 i;
+    loadAssetMetadata_arg *unk4_ptr = &arg0->unk4;
+
+    loadAssetMetadata(unk4_ptr, arg0->unk0, arg0->unk50 / 4);
+
+    arg0->unk24.data_ptr = arg0->unk4.data_ptr;
+    arg0->unk24.index_ptr = arg0->unk4.index_ptr;
+    arg0->unk24.unk18 = arg0->unk4.unk18;
+    arg0->unk24.unk19 = arg0->unk4.unk19;
+
+    func_80067EDC_68ADC(0, unk4_ptr);
+    func_80067EDC_68ADC(0, &arg0->unk24);
+
+    if (arg0->unk50 != 0) {
+        DA20_PositionNode *node = (DA20_PositionNode *)arg0;
+        for (i = 0; i < 2; i++) {
+            node[i].unk8 += arg0->unk44;
+            node[i].unkC += arg0->unk48;
+            node[i].unk10 += arg0->unk4C;
+        }
+    }
+
+    arg0->unk50++;
+    if (arg0->unk50 == 20) {
+        func_80069CF8_6A8F8();
+    }
+}
 
 void func_8000CFA0_DBA0(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
