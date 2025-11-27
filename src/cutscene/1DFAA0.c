@@ -47,7 +47,7 @@ extern s32 finalizeAnimationLoop(void *);
 extern s32 setupSlotTransform(void *);
 extern void func_800B5BFC_1E2CAC(void *);
 extern void n_alSeqpDelete(s32 *);
-extern void func_800084D8_90D8(StateEntry *, s32, s32);
+extern s32 func_800084D8_90D8(StateEntry *, s32, s32);
 extern void func_800084E0_90E0(StateEntry *, s32, s32);
 extern s32 func_8003A284_3AE84(s32, StateEntry **);
 extern s32 func_8003A28C_3AE8C(void);
