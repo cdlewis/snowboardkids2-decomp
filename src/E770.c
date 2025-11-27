@@ -216,7 +216,13 @@ INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF6C_9EB6C);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000FBBC_107BC);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000FD1C_1091C);
+extern void func_8000DBA8_E7A8(void *);
+
+void func_8000FD1C_1091C(E770_struct *arg0) {
+    void *alloc = getCurrentAllocation();
+    func_8000DBA8_E7A8(alloc);
+    arg0->unk0 = 4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000FD50_10950);
 
@@ -224,7 +230,6 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000FD98_10998);
 
 extern void func_8000F4F0_100F0(E770_struct *);
 extern void func_8000FBBC_107BC(E770_struct *);
-extern void func_8000FD1C_1091C(E770_struct *);
 extern s32 func_8000FD50_10950(E770_struct *);
 extern void func_8000EE88_FA88(E770_struct *);
 
