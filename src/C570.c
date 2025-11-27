@@ -19,6 +19,10 @@ void func_8000BBA8_C7A8(func_8000BBA8_C7A8_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/C570", func_8000BBE0_C7E0);
+extern void func_8000BC10_C810(void *, s16, u8, u8, s32);
+
+void func_8000BBE0_C7E0(void *arg0, s16 arg1) {
+    func_8000BC10_C810(arg0, arg1, 1, 0, 100);
+}
 
 INCLUDE_ASM("asm/nonmatchings/C570", func_8000BC10_C810);
