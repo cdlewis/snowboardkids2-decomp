@@ -29,7 +29,11 @@ void func_8000D4D4_E0D4(E090_struct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/E090", func_8000D518_E118);
 
-INCLUDE_ASM("asm/nonmatchings/E090", func_8000D5F0_E1F0);
+void func_8000D5F0_E1F0(E090_struct *arg0) {
+    func_8000D4D4_E0D4(arg0);
+    arg0->unk2 = 100;
+    arg0->unk0 = 2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/E090", func_8000D624_E224);
 
