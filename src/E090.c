@@ -35,7 +35,15 @@ void func_8000D5F0_E1F0(E090_struct *arg0) {
     arg0->unk0 = 2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/E090", func_8000D624_E224);
+void func_8000D624_E224(E090_struct *arg0) {
+    arg0->unk2--;
+    if (arg0->unk2 == 15) {
+        func_8000D490_E090(arg0);
+    } else if (arg0->unk2 == 0) {
+        func_8000D4D4_E0D4(arg0);
+        arg0->unk0 = 3;
+    }
+}
 
 void func_8000D68C_E28C(E090_struct *arg0) {
     func_8000D4D4_E0D4(arg0);
