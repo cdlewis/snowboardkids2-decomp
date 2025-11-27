@@ -15,7 +15,15 @@ typedef struct {
     /* 0x0C */ s16 unkC;
     /* 0x0E */ s16 unkE;
     /* 0x10 */ s16 unk10;
-    /* 0x12 */ u8 pad12[0x16];
+    /* 0x12 */ u8 pad12[0x2];
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ s16 unk16;
+    /* 0x18 */ u8 pad18[0x4];
+    /* 0x1C */ void *unk1C;
+    /* 0x20 */ s16 unk20;
+    /* 0x22 */ s16 unk22;
+    /* 0x24 */ u8 unk24;
+    /* 0x25 */ u8 pad25[0x3];
     /* 0x28 */ void *unk28;
     /* 0x2C */ u8 pad2C[0x8];
     /* 0x34 */ s32 unk34;
@@ -26,7 +34,16 @@ typedef struct {
 
 void func_8000D448_E048(DC90TaskStruct *arg0);
 
-INCLUDE_ASM("asm/nonmatchings/DC90", func_8000D090_DC90);
+void func_8000D090_DC90(DC90TaskStruct *arg0) {
+    void *temp = arg0->unk28;
+    arg0->unk20 = 0xFF;
+    arg0->unk22 = 0xFF;
+    arg0->unk14 = 0;
+    arg0->unk16 = 0;
+    arg0->unk24 = 0;
+    arg0->unkC = 1;
+    arg0->unk1C = temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/DC90", func_8000D0BC_DCBC);
 
