@@ -1,5 +1,13 @@
 #include "common.h"
 
+s32 func_80052418_53018(s32, s32);
+s32 func_80052A24_53624(s32, s32);
+s32 func_80053078_53C78(s32, s32);
+s32 func_800537B0_543B0(s32, s32);
+s32 func_80053DF0_549F0(s32, s32);
+s32 func_80054470_55070(s32, s32);
+s32 func_80055820_56420(s32, s32);
+
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051C80_52880);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051DEC_529EC);
@@ -78,7 +86,25 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80054144_54D44);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80054470_55070);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_800544B4_550B4);
+s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
+    switch (arg0) {
+        case 0:
+            return func_80052418_53018(arg1, arg2);
+        case 1:
+            return func_80052A24_53624(arg1, arg2);
+        case 2:
+            return func_80053078_53C78(arg1, arg2);
+        case 3:
+            return func_800537B0_543B0(arg1, arg2);
+        case 4:
+            return func_80053DF0_549F0(arg1, arg2);
+        case 5:
+            return func_80054470_55070(arg1, arg2);
+        case 6:
+            return func_80055820_56420(arg1, arg2);
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80054568_55168);
 
