@@ -14,11 +14,13 @@ void func_80021D50_22950(void) {
 }
 
 extern void func_800226F0_232F0(void);
+extern void func_8001C920_1D520(void);
 
 void func_80021DE8_229E8(void);
 void func_80021EFC_22AFC(void);
 void func_80021FB8_22BB8(void);
 void func_80022108_22D08(void);
+void func_80021E18_22A18(void);
 
 void func_80021D88_22988(void) {
     s16 result;
@@ -33,7 +35,10 @@ void func_80021D88_22988(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80021DE8_229E8);
+void func_80021DE8_229E8(void) {
+    createTaskQueue(func_8001C920_1D520, 100);
+    setGameStateHandler(func_80021E18_22A18);
+}
 
 void func_80022018_22C18(void);
 
