@@ -15,7 +15,25 @@ extern void func_80018EB0_19AB0(void);
 extern void func_8001C920_1D520(void);
 extern void func_80003EE0_4AE0(void);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014A90_15690);
+typedef struct {
+    s16 unk0;
+    u8 unk2;
+} TaskData_15690;
+
+extern u8 D_800AB1C8_A2538;
+
+void func_80014AEC_156EC(void);
+
+void func_80014A90_15690(void) {
+    TaskData_15690 *data = allocateTaskMemory(4);
+    data->unk2 = 0;
+    data->unk0 = 0;
+    D_800AB1C8_A2538 = 0;
+    D_800AFE8C_A71FC->unk8 = 1;
+    D_800AFE8C_A71FC->unk9 = 0;
+    func_80015248_15E48(0);
+    func_8006983C_6A43C(func_80014AEC_156EC);
+}
 
 void func_80014B1C_1571C(void);
 
