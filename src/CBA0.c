@@ -32,4 +32,24 @@ INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C5AC_D1AC);
 
 INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C7A4_D3A4);
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000CA80_D680);
+extern void *freeNodeMemory(void *);
+
+typedef struct {
+    u8 pad0[0x28];
+    void *unk28;
+    void *unk2C;
+    void *unk30;
+    u8 pad34[0x30];
+    void *unk64;
+    void *unk68;
+    void *unk6C;
+} Func8000CA80Arg;
+
+void func_8000CA80_D680(Func8000CA80Arg *arg0) {
+    arg0->unk30 = freeNodeMemory(arg0->unk30);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk6C = freeNodeMemory(arg0->unk6C);
+    arg0->unk68 = freeNodeMemory(arg0->unk68);
+    arg0->unk64 = freeNodeMemory(arg0->unk64);
+}
