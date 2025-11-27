@@ -1,6 +1,15 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/8DC0", func_800081C0_8DC0);
+extern void setCleanupCallback(void *);
+extern void setCallback(void *);
+
+void func_800081EC_8DEC(void);
+void func_80008308_8F08(void);
+
+void func_800081C0_8DC0(void) {
+    setCleanupCallback(func_80008308_8F08);
+    setCallback(func_800081EC_8DEC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/8DC0", func_800081EC_8DEC);
 
