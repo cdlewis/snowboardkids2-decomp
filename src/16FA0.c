@@ -1,10 +1,11 @@
+#include "20F0.h"
 #include "common.h"
+#include "task_scheduler.h"
 
 extern void *getCurrentAllocation(void);
 extern void func_8000056C_116C(s32, s32, void *);
 extern void setCleanupCallback(void *);
 extern void func_80000460_1060(s32, void *, void *);
-extern void setCallback(void *);
 extern void func_80000760_1360(void);
 
 typedef struct {
@@ -19,6 +20,15 @@ extern void func_80000710_1310(func_80000710_1310_arg_16FA0 *);
 
 void func_800168BC_174BC(void);
 void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0);
+
+typedef struct {
+    SceneModel *unk0; // 0x00
+    u8 _pad4[0x24];   // 0x04 - padding
+    u16 *unk28;       // 0x28 - pointer to u16 animation data
+    u16 unk2C;        // 0x2C - current animation state
+} Struct16B68;
+
+void func_80016C28_17828(Struct16B68 *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_800163A0_16FA0);
 
@@ -66,7 +76,34 @@ INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016964_17564);
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016A00_17600);
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016B68_17768);
+void func_80016B68_17768(Struct16B68 *arg0) {
+    s32 clearResult;
+    u16 animValue;
+
+    getCurrentAllocation();
+    clearResult = clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    if (clearResult == 0) {
+        return;
+    }
+
+    if (arg0->unk2C == 4) {
+        func_800021B8_2DB8(arg0->unk0, 8);
+        setCallback(func_80016C28_17828);
+        return;
+    }
+
+    animValue = *arg0->unk28;
+    if ((u16)animValue != 0xFFFF) {
+        arg0->unk2C = animValue;
+        arg0->unk28 += 1;
+    } else {
+        arg0->unk2C = 8;
+        setCallback(func_80016C28_17828);
+    }
+    func_800021B8_2DB8(arg0->unk0, (s16)arg0->unk2C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016C28_17828);
 
