@@ -38,8 +38,11 @@ typedef struct {
 } Struct163F8;
 
 extern void func_800394BC_3A0BC(void *, s32);
+extern u8 D_414CF0[];
+extern u8 D_418520[];
 
 void func_800163CC_16FCC(Struct163F8 *);
+void func_800163A0_16FA0(void);
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_800163A0_16FA0);
 
@@ -51,7 +54,11 @@ void func_800163F8_16FF8(Struct163F8 *arg0) {
     setCallback(func_800163CC_16FCC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016434_17034);
+void func_80016434_17034(Struct163F8 *arg0) {
+    arg0->unk38 = (s32)dmaRequestAndUpdateStateWithSize(D_414CF0, D_418520, 0x7B50);
+    setCleanupCallback(func_800163A0_16FA0);
+    setCallback(func_800163F8_16FF8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016488_17088);
 
