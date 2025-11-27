@@ -139,7 +139,22 @@ void func_8000D6C0_E2C0(E090_struct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/E090", func_8000D6F8_E2F8);
+void func_8000D6F8_E2F8(E090_struct *arg0) {
+    s16 temp = arg0->unk2 - 0x29;
+    arg0->unk2--;
+    switch (temp) {
+        case 11:
+        case 17:
+        case 23:
+        case 29:
+        case 35:
+            arg0->unk1++;
+            break;
+        case 0:
+            arg0->unk0 = 6;
+            break;
+    }
+}
 
 void func_8000D750_E350(E090_struct *arg0) {
     arg0->unk2--;
