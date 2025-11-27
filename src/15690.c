@@ -1,4 +1,10 @@
+#include "4050.h"
 #include "common.h"
+#include "task_scheduler.h"
+
+extern void func_80015248_15E48(s32);
+extern void func_80014D78_15978(void);
+extern void func_80015064_15C64(void);
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014A90_15690);
 
@@ -20,7 +26,12 @@ INCLUDE_ASM("asm/nonmatchings/15690", func_80014CC4_158C4);
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014CF8_158F8);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014D3C_1593C);
+void func_80014D3C_1593C(void) {
+    if ((func_80069810_6A410() << 16) != 0) {
+        func_80015248_15E48(3);
+        setGameStateHandler(func_80014D78_15978);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014D78_15978);
 
@@ -30,7 +41,11 @@ INCLUDE_ASM("asm/nonmatchings/15690", func_80014F60_15B60);
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80014FA4_15BA4);
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80015028_15C28);
+void func_80015028_15C28(void) {
+    func_80003450_4050(0xA, 2);
+    createTaskQueue(&loadCutsceneOverlay, 0x64);
+    setGameStateHandler(func_80015064_15C64);
+}
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80015064_15C64);
 
