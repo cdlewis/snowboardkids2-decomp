@@ -1,4 +1,7 @@
+#include "20F0.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
+#include "task_scheduler.h"
 
 typedef struct {
     u8 padding[0x24];
@@ -16,10 +19,13 @@ typedef struct {
     void *unk0;
 } func_80025280_25E80_arg;
 
-extern void *freeNodeMemory(void *);
+typedef struct {
+    SceneModel *unk0;
+    applyTransformToModel_arg1 unk4;
+    u8 unk28;
+} func_80025130_25D30_arg;
+
 extern void func_800394BC_3A0BC(void *, s32);
-extern void setCallback(void *);
-extern void *func_80002014_2C14(void *);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
 
@@ -73,7 +79,25 @@ void func_80025058_25C58(func_80025280_25E80_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025074_25C74);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80025130_25D30);
+void func_800251AC_25DAC(void);
+
+void func_80025130_25D30(func_80025130_25D30_arg *arg0) {
+    u8 *base;
+
+    getCurrentAllocation();
+
+    applyTransformToModel(arg0->unk0, &arg0->unk4);
+
+    base = (u8 *)D_800AFE8C_A71FC;
+    if (*(base + arg0->unk28 + 9) == 7) {
+        func_800021B8_2DB8(arg0->unk0, 4);
+    } else {
+        func_800021B8_2DB8(arg0->unk0, 0x90);
+    }
+
+    updateModelGeometry(arg0->unk0);
+    setCallback(&func_800251AC_25DAC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800251AC_25DAC);
 
