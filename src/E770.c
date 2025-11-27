@@ -412,7 +412,44 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000F564_10164);
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000F690_10290);
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000F7B0_103B0);
+extern s32 gControllerInputs;
+
+void func_8000F7B0_103B0(FD98_struct *arg0) {
+    s32 inputs;
+
+    inputs = gControllerInputs;
+
+    if (inputs & 0x80200) {
+        if (arg0->unk2 == 0) {
+            arg0->unk2 = 8;
+        } else {
+            arg0->unk2 = arg0->unk2 - 1;
+        }
+        func_800585C8_591C8(0x2B);
+        return;
+    }
+
+    if (inputs & 0x40100) {
+        if (arg0->unk2 == 8) {
+            arg0->unk2 = 0;
+        } else {
+            arg0->unk2 = arg0->unk2 + 1;
+        }
+        func_800585C8_591C8(0x2B);
+        return;
+    }
+
+    if (inputs & 0x10800) {
+        goto set_values;
+    }
+    if (inputs & 0x20400) {
+    set_values:
+        arg0->unk3 = arg0->unk2;
+        arg0->unk4 = arg0->unk2;
+        arg0->unk1 = 1;
+        func_800585C8_591C8(0x2B);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000F884_10484);
 
@@ -420,10 +457,8 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000FA90_10690);
 
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF6C_9EB6C);
 
-extern s32 gControllerInputs;
 extern void func_8000F564_10164(FD98_struct *);
 extern void func_8000F690_10290(FD98_struct *);
-extern void func_8000F7B0_103B0(FD98_struct *);
 extern void func_8000F884_10484(FD98_struct *);
 extern void func_8000FA90_10690(FD98_struct *);
 
