@@ -1,10 +1,25 @@
 #include "common.h"
+#include "task_scheduler.h"
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021D20_22920);
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021D50_22950);
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80021D88_22988);
+void func_80021DE8_229E8(void);
+void func_80022108_22D08(void);
+
+void func_80021D88_22988(void) {
+    s16 result;
+
+    getCurrentAllocation();
+    result = func_80069810_6A410();
+
+    if (result == 1) {
+        setGameStateHandler(func_80021DE8_229E8);
+    } else if (result == 0xFF) {
+        terminateSchedulerWithCallback(func_80022108_22D08);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_80021DE8_229E8);
 
