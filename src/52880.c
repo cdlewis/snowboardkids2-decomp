@@ -67,7 +67,15 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80052DB4_539B4);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80053078_53C78);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_800530BC_53CBC);
+void func_80053784_54384(void);
+void func_80053104_53D04(void);
+
+void func_800530BC_53CBC(Struct_52880 *arg0) {
+    arg0->unk4C = arg0->unk42;
+    arg0->unk20 = load_3ECE40();
+    setCleanupCallback(func_80053784_54384);
+    setCallbackWithContinue(func_80053104_53D04);
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80053104_53D04);
 
