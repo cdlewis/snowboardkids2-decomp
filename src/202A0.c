@@ -5,6 +5,8 @@
 extern void func_80021548_22148(u8 arg0, void *arg1);
 extern void func_800215DC_221DC(void *arg0);
 extern s32 func_8006FED8_70AD8(void *arg0);
+extern void func_800394BC_3A0BC(void *, s32);
+extern void setCallback(void *);
 
 typedef struct {
     u8 _pad0[0xB2F];
@@ -28,6 +30,11 @@ typedef struct {
     SceneModel *unk0;
     TransformData_202A0 unk4;
 } Func8002144CArg;
+
+typedef struct {
+    u8 padding[0x2C];
+    void *unk2C;
+} Func800216ACArg;
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001F6A0_202A0);
 
@@ -117,7 +124,12 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_800215DC_221DC);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80021658_22258);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_800216AC_222AC);
+void func_800216D4_222D4(void);
+
+void func_800216AC_222AC(Func800216ACArg *arg0) {
+    func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
+    setCallback(&func_800216D4_222D4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_800216D4_222D4);
 
