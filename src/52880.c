@@ -31,7 +31,8 @@ typedef struct {
     u16 unk42;
     u8 padding3[0x2];
     u16 unk46;
-    u8 padding4[0x4];
+    u8 padding4[0x2];
+    s16 unk4A;
     u16 unk4C;
     u8 unk4E;
 } Struct_52880;
@@ -226,7 +227,15 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80053990_54590);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80053B38_54738);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80053DF0_549F0);
+s32 func_80053DF0_549F0(s32 arg0, s32 arg1) {
+    Struct_52880 *task;
+
+    task = scheduleTask(func_800537F4_543F4, (arg0 + 4) & 0xFF, 0, 0x6F);
+    if (task != NULL) {
+        task->unk42 = arg0;
+        task->unk4A = arg1;
+    }
+}
 
 void func_80053E90_54A90(Struct_52880 *arg0);
 
