@@ -27,3 +27,6 @@ astemp_*
 report.json
 build.log
 tools/vacuum.log
+
+base_1_object_dump.s
+target_object_dump.s
