@@ -124,16 +124,20 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x14];                /* 0x00 */
-    u8 unk14[0xC];                 /* 0x14 - copied to unkB44 */
+    u8 unk14[0x4];                 /* 0x14 - first 4 bytes of 12-byte copy source */
+    s32 unk18;                     /* 0x18 */
+    u8 unk1C[0x4];                 /* 0x1C - last 4 bytes of 12-byte copy source */
     u8 _pad20[0x94];               /* 0x20 */
     Func44BBCPointerTarget *unkB4; /* 0xB4 */
-    u8 _padB8[0xC];                /* 0xB8 */
+    u8 _padB8[0x4];                /* 0xB8 */
+    s32 unkBC;                     /* 0xBC */
+    u8 _padC0[0x4];                /* 0xC0 */
     u16 unkC4;                     /* 0xC4 - counter */
     u16 unkC6;                     /* 0xC6 - value copied to unkB74 */
 } Func44BBCArg;
 
 void func_80044578_45178(Func44BBCArg *);
-extern void func_80044C38_45838(void);
+void func_80044C38_45838(Func44BBCArg *);
 
 typedef struct {
     u8 _pad0[0x9F0];
@@ -626,14 +630,27 @@ void func_80044BBC_457BC(Func44BBCArg *arg0) {
         if ((s16)arg0->unkC4 == 0) {
             setCallback(func_80044C38_45838);
         }
-        memcpy(&arg0->unkB4->unkB44, arg0->unk14, 0xC);
+        memcpy(&arg0->unkB4->unkB44, &arg0->unk14, 0xC);
         arg0->unkB4->unkB74 = arg0->unkC6;
     }
 
     func_80044578_45178(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044C38_45838);
+void func_80044C38_45838(Func44BBCArg *arg0) {
+    Func43CA4GameState *gameState = (Func43CA4GameState *)getCurrentAllocation();
+    s32 pad[4];
+
+    if (gameState->unk76 == 0) {
+        arg0->unkBC -= 0x8000;
+        if (arg0->unkBC < (s32)0xFFF00000) {
+            func_80069CF8_6A8F8();
+        }
+        arg0->unk18 += arg0->unkBC;
+    }
+
+    func_80044578_45178(arg0);
+}
 
 void func_80044CA4_458A4(Func432D8Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
