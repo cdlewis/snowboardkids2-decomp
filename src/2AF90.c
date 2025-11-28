@@ -1,11 +1,80 @@
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 extern s16 func_8006D21C_6DE1C(s32, s32, s32, s32);
 extern s32 distance_2d(s32, s32);
+extern s32 func_8002A4AC_2B0AC(void *, u8);
+extern s32 func_8002A7CC_2B3CC(void *);
 
-INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002A390_2AF90);
+s32 func_8002ACFC_2B8FC(s32, s32, s16);
+
+typedef struct {
+    /* 0x00 */ void *model;
+    /* 0x04 */ Mat3x3Padded matrix;
+    /* 0x24 */ u8 pad24[0xA];
+    /* 0x2E */ s16 unk2E;
+    /* 0x30 */ u8 pad30[0x20];
+    /* 0x50 */ u16 unk50;
+    /* 0x52 */ u8 pad52[0x2];
+    /* 0x54 */ u16 unk54;
+    /* 0x56 */ u8 pad56[0x7];
+    /* 0x5D */ u8 unk5D;
+    /* 0x5E */ u8 unk5E;
+    /* 0x5F */ u8 pad5F[0x2];
+    /* 0x61 */ u8 unk61;
+} Func8002A390Arg;
+
+s32 func_8002A390_2AF90(Func8002A390Arg *arg0) {
+    GameState *state;
+    s32 stateVal;
+
+    state = getCurrentAllocation();
+    stateVal = arg0->unk5E;
+
+    switch (stateVal) {
+        case 0:
+            if (func_8002A4AC_2B0AC(&arg0->matrix, arg0->unk5D) != 0) {
+                return 1;
+            }
+            if (((u8 *)state->unk420)[1] != 0) {
+                return 0;
+            }
+            if (func_8002ACFC_2B8FC(arg0->matrix.unk14, arg0->matrix.unk1C, arg0->unk2E) == 0) {
+                return 0;
+            }
+            arg0->unk54 = arg0->unk50;
+            if (arg0->unk5D == 5) {
+                arg0->unk50 = 0x21;
+            } else {
+                arg0->unk50 = 0;
+            }
+            arg0->unk61 = arg0->unk5E;
+            arg0->unk5E = 0x44;
+            break;
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            if (func_8002A7CC_2B3CC(arg0) == 0) {
+                return 0;
+            }
+            arg0->unk61 = arg0->unk5E;
+            arg0->unk5E = 0;
+            break;
+        case 0x44:
+            if (func_8002A7CC_2B3CC(arg0) == 0) {
+                return 0;
+            }
+            arg0->unk61 = arg0->unk5E;
+            arg0->unk5E = 0;
+            arg0->unk50 = arg0->unk54;
+            break;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002A4AC_2B0AC);
 
