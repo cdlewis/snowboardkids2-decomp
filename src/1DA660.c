@@ -96,7 +96,14 @@ INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0EEC_1DB48C);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0F18_1DB4B8);
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0F88_1DB528);
+void func_800B0F88_1DB528(void *arg0) {
+    GameState *state = getCurrentAllocation();
+    if (state->unk59A[0] == 2) {
+        debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    } else {
+        func_80069CF8_6A8F8();
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0FE0_1DB580);
 
