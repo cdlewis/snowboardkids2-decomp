@@ -443,6 +443,8 @@ void func_8004F9E8_505E8(Struct_func_8004F04C *arg0) {
 extern char D_8009E924_9F524[];
 void func_8004FCB8_508B8(Struct_func_8004F04C *arg0);
 void func_8004FB64_50764(void);
+void func_8004FAB4_506B4(void *);
+void func_8004FC34_50834(void);
 
 typedef struct {
     s16 unk0;
@@ -475,7 +477,13 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FAB4_506B4);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FB64_50764);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FBE8_507E8);
+void func_8004FBE8_507E8(Struct_func_8004FA20 *arg0) {
+    arg0->unk1E--;
+    if (arg0->unk1E == 0) {
+        setCallback(func_8004FC34_50834);
+    }
+    func_8004FAB4_506B4(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FC34_50834);
 
