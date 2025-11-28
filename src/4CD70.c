@@ -17,6 +17,7 @@ extern void func_8004E2D8_4EED8(void);
 extern void func_8004E410_4F010(void);
 extern void func_8000FED0_10AD0(void);
 extern void func_80058530_59130(s32, s32);
+extern void func_8004D544_4E144(void);
 
 typedef struct {
     s16 unk0;
@@ -261,7 +262,22 @@ void func_8004D858_4E458(Struct_func_8004F04C *arg0) {
     arg0->unkC = freeNodeMemory(arg0->unkC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D890_4E490);
+typedef struct {
+    u8 pad0[0x18];
+    void *unk18;
+    u8 pad1C[0xC];
+    s16 unk28;
+} func_8004D890_task;
+
+void func_8004D890_4E490(s32 arg0, void *arg1) {
+    func_8004D890_task *task;
+
+    task = scheduleTask(func_8004D544_4E144, 0, 0, 0xE6);
+    if (task != NULL) {
+        task->unk28 = (s16)arg0;
+        task->unk18 = arg1;
+    }
+}
 
 void func_8004D8E4_4E4E4(Struct_func_8004D8E4 *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
