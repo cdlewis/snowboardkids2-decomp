@@ -6,7 +6,9 @@
 extern void func_800394BC_3A0BC(void *, s32);
 extern void func_8000FED0_10AD0(void);
 extern void func_800630F0_63CF0(s32, void *);
-void func_800B0DF8_1DB398(void);
+extern void debugEnqueueCallback(u16, u8, void *, void *);
+extern void func_80038420_39020(void);
+void func_800B0DF8_1DB398(void *);
 void func_800B0638_1DABD8(void);
 
 typedef struct {
@@ -99,7 +101,9 @@ void func_800B0DD0_1DB370(func_800B0DD0_arg *arg0) {
     setCallback(&func_800B0DF8_1DB398);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0DF8_1DB398);
+void func_800B0DF8_1DB398(void *arg0) {
+    debugEnqueueCallback(9, 0, func_80038420_39020, arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0E24_1DB3C4);
 
