@@ -70,6 +70,14 @@ typedef struct {
 void func_8004D954_4E554(Struct_func_8004D8E4 *arg0);
 void func_8004D98C_4E58C(Struct_func_8004F04C *arg0);
 
+typedef struct {
+    u8 pad0[0x2A];
+    u16 unk2A;
+} Struct_func_8004D784;
+
+void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
+extern void func_8004D63C_4E23C(void *);
+
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C254_4CE54);
@@ -175,7 +183,13 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D63C_4E23C);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D6FC_4E2FC);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D784_4E384);
+void func_8004D784_4E384(Struct_func_8004D784 *arg0) {
+    arg0->unk2A--;
+    if ((s16)arg0->unk2A == 0) {
+        setCallback(func_8004D7D0_4E3D0);
+    }
+    func_8004D63C_4E23C(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D7D0_4E3D0);
 
