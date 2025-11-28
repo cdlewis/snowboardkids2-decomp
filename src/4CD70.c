@@ -495,13 +495,30 @@ void func_8004E614_4F214(Struct_func_8004E134 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_8004E640_4F240(void *);
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E640_4F240);
-
 typedef struct {
     s16 unk0;
     s16 unk2;
 } func_8004E6A4_task;
+
+typedef struct {
+    u8 pad0[0xC];
+    s16 unkC;
+    s16 unkE;
+} func_8004E640_task;
+
+extern u16 D_8009ADE0_9B9E0;
+
+void func_8004E640_4F240(func_8004E6A4_task *arg0) {
+    func_8004E640_task *task;
+
+    if (D_8009ADE0_9B9E0 & 1) {
+        task = scheduleTask(func_8004E134_4ED34, 2, 0, 0xE6);
+        if (task != NULL) {
+            task->unkC = arg0->unk0;
+            task->unkE = arg0->unk2;
+        }
+    }
+}
 
 void func_8004E6A4_4F2A4(s16 arg0, s16 arg1) {
     func_8004E6A4_task *task;
