@@ -1,5 +1,14 @@
 #include "common.h"
 
+extern void func_800394BC_3A0BC(void *, s32);
+extern void setCallback(void *);
+void func_800B0DF8_1DB398(void);
+
+typedef struct {
+    u8 _pad0[0x2C];
+    s32 unk2C;
+} func_800B0DD0_arg;
+
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0218_1DA7B8);
@@ -32,7 +41,10 @@ INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0D4C_1DB2EC);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0D78_1DB318);
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0DD0_1DB370);
+void func_800B0DD0_1DB370(func_800B0DD0_arg *arg0) {
+    func_800394BC_3A0BC(arg0, arg0->unk2C);
+    setCallback(&func_800B0DF8_1DB398);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0DF8_1DB398);
 
