@@ -116,6 +116,26 @@ typedef struct {
 } Func43CA4GameState;
 
 typedef struct {
+    u8 _pad0[0xB44];
+    u8 unkB44[0xC];   /* 0xB44 */
+    u8 _padB50[0x24]; /* 0xB50 */
+    s16 unkB74;       /* 0xB74 */
+} Func44BBCPointerTarget;
+
+typedef struct {
+    u8 _pad0[0x14];                /* 0x00 */
+    u8 unk14[0xC];                 /* 0x14 - copied to unkB44 */
+    u8 _pad20[0x94];               /* 0x20 */
+    Func44BBCPointerTarget *unkB4; /* 0xB4 */
+    u8 _padB8[0xC];                /* 0xB8 */
+    u16 unkC4;                     /* 0xC4 - counter */
+    u16 unkC6;                     /* 0xC6 - value copied to unkB74 */
+} Func44BBCArg;
+
+void func_80044578_45178(Func44BBCArg *);
+extern void func_80044C38_45838(void);
+
+typedef struct {
     u8 _pad0[0x9F0];
     s16 unk9F0[3];
 } Func43CA4Unk28;
@@ -597,7 +617,21 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_80044990_45590);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044AB8_456B8);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044BBC_457BC);
+void func_80044BBC_457BC(Func44BBCArg *arg0) {
+    Func43CA4GameState *gameState = (Func43CA4GameState *)getCurrentAllocation();
+    s32 pad[4];
+
+    if (gameState->unk76 == 0) {
+        arg0->unkC4--;
+        if ((s16)arg0->unkC4 == 0) {
+            setCallback(func_80044C38_45838);
+        }
+        memcpy(&arg0->unkB4->unkB44, arg0->unk14, 0xC);
+        arg0->unkB4->unkB74 = arg0->unkC6;
+    }
+
+    func_80044578_45178(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044C38_45838);
 
