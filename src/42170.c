@@ -675,7 +675,11 @@ typedef struct {
     void *unk60;    /* 0x60 */
     void *unk64;    /* 0x64 */
     s32 unk68;      /* 0x68 */
-    u8 pad6C[0x18]; /* 0x6C */
+    u8 pad6C[0xC];  /* 0x6C */
+    Player *unk78;  /* 0x78 */
+    u8 pad7C[0x4];  /* 0x7C */
+    s16 unk80;      /* 0x80 */
+    u8 pad82[0x2];  /* 0x82 */
     s16 unk84;      /* 0x84 */
 } Func43018State;
 
@@ -703,7 +707,19 @@ void func_800432D8_43ED8(Func432D8Arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80043310_43F10);
+void *func_80043310_43F10(Player *arg0) {
+    Func43018State *task;
+
+    task = (Func43018State *)scheduleTask(func_80043018_43C18, 0, 0, 0xC8);
+    if (task != NULL) {
+        task->unk78 = arg0;
+        task->unk80 = 0;
+        if (arg0->unkB84 & 2) {
+            task->unk80 = 0x1000;
+        }
+    }
+    return task;
+}
 
 extern void *D_8009A730_9B330;
 extern void func_800433EC_43FEC(void);
