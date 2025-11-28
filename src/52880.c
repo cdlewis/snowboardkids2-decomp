@@ -11,12 +11,24 @@ s32 func_80054470_55070(s32, s32);
 s32 func_80055820_56420(s32, s32);
 
 typedef struct {
-    u8 padding[0x20];
+    u8 pad[0xB84];
+    u32 unkB84;
+} Struct_B548_Result;
+
+extern void *getCurrentAllocation(void);
+extern Struct_B548_Result *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
+extern void func_80058A68_59668(void *arg0);
+
+typedef struct {
+    u8 padding[0x4];
+    u8 unk4;
+    u8 padding1[0x1B];
     void *unk20;
     u8 padding2[0x1E];
     u16 unk42;
     u8 padding3[0x8];
     u16 unk4C;
+    u8 unk4E;
 } Struct_52880;
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051C80_52880);
@@ -259,7 +271,18 @@ void func_80055864_56464(func_80055864_56464_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_800558A4_564A4);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80055900_56500);
+void func_80055900_56500(Struct_52880 *arg0) {
+    Struct_B548_Result *result;
+
+    getCurrentAllocation();
+    result = func_8005B548_5C148(&arg0->unk4, arg0->unk42, 0x80000);
+    if (result != NULL) {
+        if ((result->unkB84 & 0x1000) == 0) {
+            func_80058A68_59668(result);
+            arg0->unk4E++;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80055964_56564);
 
