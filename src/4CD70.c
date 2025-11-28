@@ -578,24 +578,45 @@ void func_8004EA28_4F628(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004EA54_4F654);
-
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004EAF0_4F6F0);
-
 typedef struct {
-    u8 pad0[0x4];
+    s16 unk0;
+    s16 unk2;
     void *unk4;
-    u8 pad8[0x10];
+    s16 unk8;
+    u8 padA[0x2];
+    s16 unkC;
+    s16 unkE;
+    void *unk10;
+    s16 unk14;
+    u8 pad16[0x2];
     void *unk18;
     void *unk1C;
 } Struct_func_8004EB90;
+
+extern void func_8004EAF0_4F6F0(void);
+void func_8004EB90_4F790(Struct_func_8004EB90 *arg0);
+
+void func_8004EA54_4F654(Struct_func_8004EB90 *arg0) {
+    getCurrentAllocation();
+    arg0->unk4 = loadAsset_34F9A0();
+    arg0->unk8 = 2;
+    arg0->unk0 = -0x88;
+    arg0->unk2 = -0x60;
+    arg0->unk14 = 3;
+    arg0->unkC = -0x84;
+    arg0->unkE = -0x54;
+    arg0->unk10 = arg0->unk4;
+    arg0->unk18 = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    setCleanupCallback(func_8004EB90_4F790);
+    setCallback(func_8004EAF0_4F6F0);
+}
+
+INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004EAF0_4F6F0);
 
 void func_8004EB90_4F790(Struct_func_8004EB90 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unk18 = freeNodeMemory(arg0->unk18);
 }
-
-void func_8004EA54_4F654(Struct_func_8004EB90 *);
 
 void func_8004EBC8_4F7C8(void *arg0) {
     Struct_func_8004EB90 *task;
