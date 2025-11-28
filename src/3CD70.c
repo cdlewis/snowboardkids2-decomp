@@ -21,7 +21,9 @@ void func_8003CF0C_3DB0C(func_8003CF0C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003CF40_3DB40);
 
-INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003D0C8_3DCC8);
+void func_8003D0C8_3DCC8(void) {
+    scheduleTask(func_8003CF0C_3DB0C, 1, 0, 0xF0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003D0F4_3DCF4);
 
