@@ -1,9 +1,13 @@
 #include "56910.h"
 #include "common.h"
 #include "displaylist.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 extern s32 gFrameCounter;
+
+extern void func_800BC768_AEB28(void *);
+extern void func_800BC984_AED44(void *);
 
 typedef struct {
     u8 _pad[0x80];
@@ -15,6 +19,22 @@ typedef struct {
     DisplayListObject node1;
     DisplayListObject node2;
 } func_800BB368_AD728_arg;
+
+typedef struct {
+    /* 0x00 */ Mat3x3Padded node1;
+    /* 0x20 */ void *unk20;
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 pad30[0xC];
+    /* 0x3C */ Mat3x3Padded node2;
+    /* 0x5C */ void *unk5C;
+    /* 0x60 */ void *unk60;
+    /* 0x64 */ void *unk64;
+    /* 0x68 */ s32 unk68;
+    /* 0x6C */ u8 pad6C[0xC];
+    /* 0x78 */ s32 unk78;
+} func_800BC6C4_AEA84_arg;
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB2B0_AD670);
 
@@ -101,7 +121,25 @@ INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC528_AE8E8);
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC550_AE910);
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC6C4_AEA84);
+void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
+    void *temp;
+
+    arg0->unk24 = func_80055DC4_569C4(8);
+    arg0->unk28 = func_80055DF8_569F8(8);
+    arg0->unk2C = 0;
+    temp = func_80055E68_56A68(8);
+    arg0->unk20 = (void *)((u32)temp + 0xA0);
+    arg0->unk68 = 0;
+    arg0->unk60 = arg0->unk24;
+    arg0->unk64 = arg0->unk28;
+    temp = func_80055E68_56A68(8);
+    arg0->unk5C = (void *)((u32)temp + 0xB0);
+    createYRotationMatrix(&arg0->node1, 0x1BEC);
+    createYRotationMatrix(&arg0->node2, 0x1BEC);
+    arg0->unk78 = 0;
+    setCleanupCallback(&func_800BC984_AED44);
+    setCallback(&func_800BC768_AEB28);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC768_AEB28);
 
