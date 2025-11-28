@@ -1,12 +1,17 @@
 #include "common.h"
 #include "task_scheduler.h"
 
+typedef void (*FuncPtr)(void *);
+
 typedef struct {
     u8 _pad0[0x450];
     s32 unk450;
-    u8 _pad454[0x76B];
+    u8 _pad454[0x76A];
+    u8 unkBBE;
     u8 unkBBF;
 } func_800BC4AC_arg;
+
+extern FuncPtr D_800BCA5C_B1F4C[];
 
 extern void func_800B02AC(func_800BC4AC_arg *);
 extern s32 func_8005D308_5DF08(func_800BC4AC_arg *, s32);
@@ -26,7 +31,9 @@ INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BBA54_B0F44);
 
 INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC008_B14F8);
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC0A8_B1598);
+void func_800BC0A8_B1598(func_800BC4AC_arg *arg0) {
+    D_800BCA5C_B1F4C[arg0->unkBBE](arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC0D8_B15C8);
 
