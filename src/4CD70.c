@@ -110,6 +110,7 @@ typedef struct {
 } Struct_func_8004D784;
 
 void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
+void func_8004D784_4E384(Struct_func_8004D784 *arg0);
 extern void func_8004D63C_4E23C(void *);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
@@ -263,7 +264,19 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D544_4E144);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D63C_4E23C);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D6FC_4E2FC);
+void func_8004D6FC_4E2FC(Struct_func_8004D784 *arg0) {
+    s32 sinVal;
+    s16 angle;
+
+    angle = arg0->unk2C + 0x80;
+    arg0->unk2C = angle;
+    sinVal = approximateSin(angle);
+    arg0->unk0 = (0x2000 - sinVal) / 20 - 0x30;
+    if (arg0->unk2C == 0x800) {
+        setCallback(func_8004D784_4E384);
+    }
+    func_8004D63C_4E23C(arg0);
+}
 
 void func_8004D784_4E384(Struct_func_8004D784 *arg0) {
     arg0->unk2A--;
