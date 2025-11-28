@@ -23,11 +23,21 @@ void func_800BB9F0_AB8A0(func_800BB9F0_AB8A0_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AB160", func_800BBA28_AB8D8);
+extern void setCallback(void *);
+extern void func_800BBA54_AB904(void);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+} func_800BBA28_AB8D8_arg;
+
+void func_800BBA28_AB8D8(func_800BBA28_AB8D8_arg *arg0) {
+    arg0->unk0 = 0;
+    arg0->unk2 = 0x14;
+    setCallback(func_800BBA54_AB904);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AB160", func_800BBA54_AB904);
-
-extern void setCallback(void *);
 extern void func_800BBB1C_AB9CC(void);
 
 void func_800BBAF8_AB9A8(s16 *arg0) {
