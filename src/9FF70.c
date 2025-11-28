@@ -16,6 +16,11 @@ typedef struct {
     void *unk2C;
 } func_800B9AE0_arg;
 
+extern s32 func_800B2C18_A2AC8(void *);
+extern void func_800B2DDC_A2C8C(void *);
+extern void func_800B3784_A3634(void *);
+extern void func_800B2B3C_A29EC(void *);
+
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B00C0_9FF70);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B00D4_9FF84);
@@ -82,7 +87,15 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2C18_A2AC8);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2DDC_A2C8C);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2E38_A2CE8);
+s32 func_800B2E38_A2CE8(void *arg0) {
+    if (func_800B2C18_A2AC8(arg0) != 0) {
+        return 1;
+    }
+    func_800B2DDC_A2C8C(arg0);
+    func_800B3784_A3634(arg0);
+    func_800B2B3C_A29EC(arg0);
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2E80_A2D30);
 
