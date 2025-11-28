@@ -372,4 +372,8 @@ u8 func_80027C60_28860(u8 arg0) {
     return D_8008DD8D_8E98D[arg0 * 3];
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027C7C_2887C);
+extern u8 D_8008DD8E_8E98E[];
+
+u8 func_80027C7C_2887C(u8 arg0) {
+    return D_8008DD8E_8E98E[arg0 * 3];
+}
