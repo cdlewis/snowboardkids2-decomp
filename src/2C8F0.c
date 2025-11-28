@@ -1,3 +1,4 @@
+#include "20F0.h"
 #include "common.h"
 #include "geometry.h"
 #include "task_scheduler.h"
@@ -8,13 +9,20 @@ extern void func_8002C570_2D170(void *);
 extern void func_8002A2D0_2AED0(void *);
 
 typedef struct {
-    u8 pad[0xD4];
-    u8 unkD4;
-} func_8002BE44_arg;
+    /* 0x00 */ SceneModel *unk0;
+    /* 0x04 */ u8 pad4[0x60];
+} Elem2C8F0; // size 0x64
+
+typedef struct {
+    /* 0x00 */ Elem2C8F0 elems[2];
+    /* 0xC8 */ u8 padC8[0xC];
+    /* 0xD4 */ u8 unkD4;
+    /* 0xD5 */ u8 unkD5;
+} Struct2C8F0;
 
 INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BCF0_2C8F0);
 
-void func_8002BE44_2CA44(func_8002BE44_arg *arg0) {
+void func_8002BE44_2CA44(Struct2C8F0 *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
     if (allocation->unk429 == 0) {
@@ -25,7 +33,13 @@ void func_8002BE44_2CA44(func_8002BE44_arg *arg0) {
 void func_8002BE8C_2CA8C(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BE94_2CA94);
+void func_8002BE94_2CA94(Struct2C8F0 *arg0) {
+    s32 i;
+
+    for (i = 0; i < arg0->unkD5; i++) {
+        arg0->elems[i].unk0 = func_80002014_2C14(arg0->elems[i].unk0);
+    }
+}
 
 typedef struct {
     /* 0x00 */ void *unk0;
