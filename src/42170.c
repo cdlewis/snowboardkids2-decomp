@@ -67,6 +67,7 @@ typedef struct {
     s16 unk40;      /* 0x40 */
     s16 unk42;      /* 0x42 */
     s16 unk44;      /* 0x44 */
+    s16 unk46;      /* 0x46 */
 } Func420E8State;
 
 void func_80042308_42F08(Func420E8State *);
@@ -365,7 +366,16 @@ void func_80042308_42F08(Func420E8State *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042340_42F40);
+Func420E8State *func_80042340_42F40(void *arg0) {
+    Func420E8State *task;
+
+    task = (Func420E8State *)scheduleTask(func_800420E8_42CE8, 0, 0, 0xC8);
+    if (task != NULL) {
+        memcpy(task->unk14, arg0, 0xC);
+        task->unk46 = -1;
+    }
+    return task;
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800423A4_42FA4);
 
