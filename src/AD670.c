@@ -8,6 +8,7 @@ extern s32 gFrameCounter;
 
 extern void func_800BC768_AEB28(void *);
 extern void func_800BC984_AED44(void *);
+extern void *freeNodeMemory(void *);
 
 typedef struct {
     u8 _pad[0x80];
@@ -87,7 +88,19 @@ INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB664_ADA24);
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB6C0_ADA80);
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB718_ADAD8);
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+    u8 _pad2[0x10];
+    void *unk3C;
+} func_800BB718_ADAD8_arg;
+
+void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->unk3C = freeNodeMemory(arg0->unk3C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB75C_ADB1C);
 
