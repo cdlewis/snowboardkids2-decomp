@@ -1,10 +1,21 @@
 #include "common.h"
 
+typedef void (*FuncPtr)(void *);
+
+extern FuncPtr D_800BC454_ACC84[];
+
+typedef struct {
+    u8 pad[0xBBE];
+    u8 unkBBE;
+} Arg0Struct;
+
 INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BB2B0_ABAE0);
 
 INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BB754_ABF84);
 
-INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BB9E8_AC218);
+void func_800BB9E8_AC218(Arg0Struct *arg0) {
+    D_800BC454_ACC84[arg0->unkBBE](arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BBA18_AC248);
 
