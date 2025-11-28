@@ -3,6 +3,8 @@
 #include "graphics.h"
 
 extern s32 func_80044050_44C50(void);
+extern u16 D_80094044_94C44[];
+extern void func_80056D64_57964(void *, u16, s16, s16);
 
 void func_800588E0_594E0(Player *arg0, s16 arg1, void *arg2) {
     if (arg0->unkAC2 != 0) {
@@ -169,7 +171,12 @@ INCLUDE_ASM("asm/nonmatchings/594E0", func_80059CE0_5A8E0);
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_80059D30_5A930);
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_80059DB8_5A9B8);
+void func_80059DB8_5A9B8(Player *arg0) {
+    u8 index = arg0->unkBB9;
+    if (index < 9) {
+        func_80056D64_57964(&arg0->worldPosX, D_80094044_94C44[index], 5, arg0->unkBB8 + 4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_80059DFC_5A9FC);
 
