@@ -122,6 +122,7 @@ extern s32 identityMatrix[];
 
 void func_80024D40_25940(func_80024C8C_2588C_arg *);
 void func_80024DCC_259CC(func_80024C8C_2588C_arg *);
+void func_80024FEC_25BEC(func_80024C8C_2588C_arg *);
 
 void func_80024BA0_257A0(func_80024C8C_2588C_arg *arg0) {
     Mat3x3Padded localMatrix;
@@ -184,7 +185,30 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80024DCC_259CC);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024E58_25A58);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024F48_25B48);
+void func_80024F48_25B48(func_80024C8C_2588C_arg *arg0) {
+    u8 *base;
+    s32 unk24;
+    s32 adjustment;
+    u8 *ptr;
+
+    base = (u8 *)getCurrentAllocation();
+
+    unk24 = arg0->unk4.unk20_u.unk20_s32;
+
+    adjustment = (-(0 < unk24) & 0xFFF00000) | 0x100000;
+
+    arg0->unk4.unk14 = arg0->unk4.unk14 + adjustment;
+
+    applyTransformToModel(arg0->unk0, &arg0->unk4);
+    clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    if (arg0->unk4.unk14 == 0) {
+        ptr = base + arg0->unk28;
+        ptr[0x18C4]++;
+        setCallbackWithContinue(func_80024FEC_25BEC);
+    }
+}
 
 void func_80024FEC_25BEC(func_80024C8C_2588C_arg *arg0) {
     u16 *base;
