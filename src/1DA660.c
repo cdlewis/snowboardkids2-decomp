@@ -1,9 +1,10 @@
 #include "20F0.h"
+#include "6E840.h"
 #include "common.h"
+#include "task_scheduler.h"
 
 extern void func_800394BC_3A0BC(void *, s32);
-extern void setCallback(void *);
-extern void *getCurrentAllocation(void);
+extern void func_8000FED0_10AD0(void);
 extern void func_800630F0_63CF0(s32, void *);
 void func_800B0DF8_1DB398(void);
 void func_800B0638_1DABD8(void);
@@ -82,7 +83,14 @@ INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0DF8_1DB398);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0E24_1DB3C4);
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0E94_1DB434);
+void func_800B0E94_1DB434(void *arg0) {
+    GameState *state = getCurrentAllocation();
+    if (state->unk59A[0] == 3) {
+        debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    } else {
+        func_80069CF8_6A8F8();
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0EEC_1DB48C);
 
