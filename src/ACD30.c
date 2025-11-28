@@ -1,5 +1,7 @@
 #include "56910.h"
 #include "common.h"
+#include "displaylist.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -62,7 +64,13 @@ INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB690_AD110);
 
 INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BBA50);
 
-void func_800BBB14_AD594(void);
+typedef struct {
+    /* 0x00 */ Mat3x3Padded matrix;
+    /* 0x20 */ u8 _pad20[0x1C];
+    /* 0x3C */ u16 unk3C;
+} AD594Arg;
+
+void func_800BBB14_AD594(AD594Arg *arg0);
 void func_800BBB70_AD5F0(AD510Arg *arg0);
 
 void func_800BBA90_AD510(AD510Arg *arg0) {
@@ -82,7 +90,16 @@ void func_800BBA90_AD510(AD510Arg *arg0) {
     setCallback(func_800BBB14_AD594);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BBB14_AD594);
+void func_800BBB14_AD594(AD594Arg *arg0) {
+    s32 i;
+
+    arg0->unk3C -= 0x20;
+    createYRotationMatrix(&arg0->matrix, arg0->unk3C);
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 void func_800BBB70_AD5F0(AD510Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
