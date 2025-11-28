@@ -256,7 +256,32 @@ void func_8004D464_4E064(Struct_func_8004D3A4 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D490_4E090);
+extern u8 D_80090E60_91A60[];
+
+void func_8004D490_4E090(u32 arg0, s32 arg1) {
+    Struct_func_8004D3A4 *task;
+
+    task = scheduleTask(func_8004D3A4_4DFA4, 0, 1, 0xE6);
+    if (task != NULL) {
+        task->unkC = arg0;
+        task->unk8 = D_80090E60_91A60[arg1];
+
+        switch (arg1) {
+            case 0:
+                func_80058530_59130(0x118, 6);
+                break;
+            case 1:
+                func_80058530_59130(0x119, 6);
+                break;
+            case 2:
+                func_80058530_59130(0x11A, 6);
+                break;
+            case 3:
+                func_80058530_59130(0x134, 6);
+                break;
+        }
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E884_9F484);
 
