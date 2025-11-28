@@ -133,7 +133,27 @@ void func_800206B4_212B4(Func800206B4Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020708_21308);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_800208AC_214AC);
+typedef struct {
+    u8 _pad[0xC];
+} Func800208ACArg;
+
+extern void func_80020924_21524(void);
+
+void func_800208AC_214AC(Func800208ACArg *arg0) {
+    Allocation_202A0 *allocation;
+    s32 i;
+
+    allocation = (Allocation_202A0 *)getCurrentAllocation();
+    i = 0;
+
+    if (allocation->unkB2F == 1) {
+        setCallbackWithContinue(&func_80020924_21524);
+    } else {
+        for (i = 0; i < 2; i++) {
+            debugEnqueueCallback(8, 7, func_8000FED0_10AD0, &arg0[i]);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020924_21524);
 
