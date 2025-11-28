@@ -21,7 +21,7 @@ typedef struct {
 } func_800BB7D0_arg;
 
 extern void func_800BB890_B5190(void);
-extern void func_800BBB18_B5418(void *);
+void func_800BBB18_B5418(func_800BB814_B5114_arg *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB2B0_B4BB0);
 
@@ -51,4 +51,7 @@ INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB890_B5190);
 
 INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BBA34_B5334);
 
-INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BBB18_B5418);
+void func_800BBB18_B5418(func_800BB814_B5114_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+}
