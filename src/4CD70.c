@@ -1,4 +1,5 @@
 #include "56910.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "gamestate.h"
 #include "task_scheduler.h"
@@ -324,7 +325,40 @@ void func_8004DEC0_4EAC0(Struct_func_8004DCC4 *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004DEF8_4EAF8);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x6];
+    void *unk10;
+    s32 unk14;
+    Player *unk18;
+} Struct_func_8004DEF8;
+
+void func_8004DFA0_4EBA0(void);
+void func_8004E0BC_4ECBC(Struct_func_8004DCC4 *);
+
+void func_8004DEF8_4EAF8(Struct_func_8004DEF8 *arg0) {
+    D_800AFE8C_A71FC_type *global;
+
+    getCurrentAllocation();
+    arg0->unk14 = 0;
+    arg0->unk4 = loadAsset_34CB50();
+    func_8004D9B8_4E5B8((Struct_func_8004D9B8 *)arg0);
+    global = D_800AFE8C_A71FC;
+    arg0->unk8 = 0x16;
+    arg0->unk0 = 0;
+
+    if (global->unk9[arg0->unk18->unkBB8 + 0x11] < 10) {
+        arg0->unk0 = -4;
+    }
+
+    arg0->unk2 = 0x10;
+    arg0->unk10 = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    setCleanupCallback(func_8004E0BC_4ECBC);
+    setCallback(func_8004DFA0_4EBA0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004DFA0_4EBA0);
 
