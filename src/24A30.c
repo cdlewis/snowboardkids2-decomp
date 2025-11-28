@@ -3,6 +3,7 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "gamestate.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -53,6 +54,7 @@ typedef struct {
 typedef struct {
     void *unk0;
     void *unk4;
+    s16 unk8;
 } func_80025FFC_26BFC_arg;
 
 typedef struct {
@@ -66,6 +68,8 @@ typedef struct {
 } func_800253E0_25FE0_arg;
 
 extern void func_800394BC_3A0BC(void *, s32);
+extern void func_8000FED0_10AD0(void);
+extern void debugEnqueueCallback(u16, u8, void *, void *);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
 
@@ -287,7 +291,14 @@ void func_8002712C_27D2C(func_80025FFC_26BFC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80027158_27D58);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_800271E4_27DE4);
+void func_800271E4_27DE4(func_80025FFC_26BFC_arg *arg0) {
+    GameState *state = getCurrentAllocation();
+
+    if (state->unk1898[0] == 3) {
+        arg0->unk8 = state->unk18A8 + 0x16;
+        debugEnqueueCallback(0xC, 0, func_8000FED0_10AD0, arg0);
+    }
+}
 
 void func_8002723C_27E3C(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
