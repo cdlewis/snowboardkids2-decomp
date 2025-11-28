@@ -35,10 +35,16 @@ typedef struct {
     u8 unk4E;
 } Struct_52880;
 
+typedef struct {
+    u8 padding[0x44];
+    void *unk44;
+} Alloc_52880;
+
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051C80_52880);
 
 void func_800523EC_52FEC(Struct_52880 *arg0);
-void func_80051E34_52A34(void);
+void func_80051E34_52A34(Struct_52880 *arg0);
+void func_80051FC4_52BC4(void);
 
 void func_80051DEC_529EC(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
@@ -47,7 +53,16 @@ void func_80051DEC_529EC(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80051E34_52A34);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80051E34_52A34);
+void func_80051E34_52A34(Struct_52880 *arg0) {
+    Alloc_52880 *alloc = getCurrentAllocation();
+    void *ptr;
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 2);
+    ptr = alloc->unk44;
+    arg0->unk4E = 0;
+    arg0->unk46 = 0;
+    arg0->unk0 = ptr;
+    setCallbackWithContinue(func_80051FC4_52BC4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051E90_52A90);
 
@@ -254,11 +269,6 @@ void func_80055418_56018(Struct_52880 *arg0) {
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_80055460_56060);
 }
-
-typedef struct {
-    u8 padding[0x44];
-    void *unk44;
-} Alloc_52880;
 
 extern void func_800554FC_560FC(void);
 
