@@ -1928,7 +1928,7 @@ typedef struct {
 } func_8004AD18_4B918_arg;
 
 extern void func_80050ECC_51ACC(void *arg0);
-extern void func_80058924_59524(void *arg0);
+extern void func_80058924_59524(Player *arg0);
 
 typedef struct {
     u8 padding[0x5B];
