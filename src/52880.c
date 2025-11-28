@@ -179,7 +179,7 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80053B38_54738);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80053DF0_549F0);
 
-void func_80053E90_54A90(void);
+void func_80053E90_54A90(Struct_52880 *arg0);
 
 void func_80053E48_54A48(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
@@ -188,7 +188,18 @@ void func_80053E48_54A48(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80053E90_54A90);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80053E90_54A90);
+extern void func_80053FE0_54BE0(void);
+
+void func_80053E90_54A90(Struct_52880 *arg0) {
+    Alloc_52880 *alloc = getCurrentAllocation();
+    void *ptr;
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 7);
+    ptr = alloc->unk44;
+    arg0->unk4E = 0;
+    arg0->unk46 = 0;
+    arg0->unk0 = ptr;
+    setCallbackWithContinue(func_80053FE0_54BE0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80053EEC_54AEC);
 
