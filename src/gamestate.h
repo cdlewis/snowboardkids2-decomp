@@ -48,7 +48,8 @@ typedef struct {
     u8 padding4b[0xB];
     u8 unkBC4;
     u8 unkBC5;
-    u8 padding5a[0xC];
+    u8 unkBC6;
+    u8 padding5a[0xB];
     u8 unkBD2;
     u8 unkBD3;
     u8 unkBD4;
