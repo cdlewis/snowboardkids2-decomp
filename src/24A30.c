@@ -3,7 +3,12 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "overlay.h"
 #include "task_scheduler.h"
+
+USE_ASSET(_458E30);
+
+extern u8 D_459310[];
 
 typedef struct {
     u8 padding[0x24];
@@ -217,7 +222,14 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_800277F4_283F4);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800279A8_285A8);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_800279D4_285D4);
+void func_80027AAC_286AC(void);
+void func_80027A28_28628(func_80027A28_28628_arg *arg0);
+
+void func_800279D4_285D4(func_80027A28_28628_arg *arg0) {
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_458E30_ROM_START, D_459310, 0xAE0);
+    setCleanupCallback(func_80027AAC_286AC);
+    setCallback(func_80027A28_28628);
+}
 
 void func_80027A50_28650(void);
 
