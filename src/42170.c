@@ -9,6 +9,7 @@ extern void *D_8009A6C0_9B2C0;
 extern void *D_8009A6D0_9B2D0;
 extern void *D_8009A6E0_9B2E0;
 extern void *D_8009A6F0_9B2F0;
+extern void *D_8009A700_9B300;
 extern void *D_8009A760_9B360;
 extern void func_80041810_42410(void *);
 extern void func_800415E8_421E8(void);
@@ -254,19 +255,51 @@ void func_80042638_43238(Func42410State *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80042670_43270);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800426B0_432B0);
+typedef struct {
+    u8 pad0[0x20];  /* 0x00 */
+    void *unk20;    /* 0x20 */
+    void *unk24;    /* 0x24 */
+    void *unk28;    /* 0x28 */
+    s32 unk2C;      /* 0x2C */
+    u8 pad30[0x14]; /* 0x30 */
+    s32 unk44;      /* 0x44 */
+    s32 unk48;      /* 0x48 */
+    s32 unk4C;      /* 0x4C */
+    s32 unk50;      /* 0x50 */
+} Func426B0State;
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_8004273C_4333C);
-
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042820_43420);
-
-INCLUDE_ASM("asm/nonmatchings/42170", func_8004290C_4350C);
+void func_8004273C_4333C(void *);
 
 typedef struct {
     u8 pad0[0x24];
     void *unk24;
     void *unk28;
 } Func429C4Arg;
+
+void func_800429C4_435C4(Func429C4Arg *);
+
+void func_800426B0_432B0(Func426B0State *arg0) {
+    if (arg0->unk44 == 0) {
+        getCurrentAllocation();
+        arg0->unk20 = &D_8009A700_9B300;
+        arg0->unk24 = loadAsset_B7E70();
+        arg0->unk28 = loadAsset_216290();
+        arg0->unk48 = 0x400;
+        arg0->unk2C = 0;
+        arg0->unk4C = 0x100000;
+        arg0->unk50 = 0;
+        setCleanupCallback(func_800429C4_435C4);
+        setCallbackWithContinue(func_8004273C_4333C);
+    } else {
+        arg0->unk44 = arg0->unk44 - 1;
+    }
+}
+
+INCLUDE_ASM("asm/nonmatchings/42170", func_8004273C_4333C);
+
+INCLUDE_ASM("asm/nonmatchings/42170", func_80042820_43420);
+
+INCLUDE_ASM("asm/nonmatchings/42170", func_8004290C_4350C);
 
 void func_800429C4_435C4(Func429C4Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
