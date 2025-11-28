@@ -231,4 +231,11 @@ void func_80059DFC_5A9FC(Player *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_80059E40_5AA40);
+extern u16 D_8009406C_94C6C[];
+
+void func_80059E40_5AA40(Player *arg0) {
+    u8 index = arg0->unkBB9;
+    if (index < 9) {
+        func_80056D64_57964(&arg0->worldPosX, D_8009406C_94C6C[index], 5, arg0->unkBB8 + 4);
+    }
+}
