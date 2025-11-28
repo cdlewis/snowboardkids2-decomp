@@ -4,7 +4,6 @@ extern void setCleanupCallback(void *);
 extern void setCallback(void *);
 extern void *loadAsset_34CB50(void);
 extern void func_8004D3E4_4DFE4(void *);
-extern void func_8004D464_4E064(void *);
 extern u8 randA(void);
 extern void func_8004E2D8_4EED8(void);
 extern void func_8004E410_4F010(void);
@@ -39,6 +38,8 @@ typedef struct {
     u16 unkA;
     u32 unkC;
 } Struct_func_8004D3A4;
+
+void func_8004D464_4E064(Struct_func_8004D3A4 *);
 
 typedef struct {
     void *unk0;
@@ -142,7 +143,9 @@ void func_8004D3A4_4DFA4(Struct_func_8004D3A4 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D3E4_4DFE4);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D464_4E064);
+void func_8004D464_4E064(Struct_func_8004D3A4 *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D490_4E090);
 
