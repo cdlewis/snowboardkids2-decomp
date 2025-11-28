@@ -3,6 +3,7 @@
 typedef void (*FuncPtr)(void *);
 
 extern FuncPtr D_800BC454_ACC84[];
+extern FuncPtr D_800BC460_ACC90[];
 
 typedef struct {
     u8 pad[0xBBE];
@@ -23,7 +24,9 @@ INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BBAB8_AC2E8);
 
 INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BBD98_AC5C8);
 
-INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BBE1C_AC64C);
+void func_800BBE1C_AC64C(Arg0Struct *arg0) {
+    D_800BC460_ACC90[arg0->unkBBE](arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BBE4C_AC67C);
 
