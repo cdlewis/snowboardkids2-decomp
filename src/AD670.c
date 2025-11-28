@@ -88,7 +88,45 @@ void func_800BB45C_AD81C(func_800BB45C_AD81C_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB494_AD854);
+typedef struct {
+    /* 0x00 */ u8 _pad0[0x20];
+    /* 0x20 */ void *unk20;
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 _pad30[0xC];
+    /* 0x3C */ void *unk3C;
+    /* 0x40 */ u8 _pad40[0x4];
+    /* 0x44 */ s16 unk44;
+    /* 0x46 */ s16 unk46;
+    /* 0x48 */ s16 unk48;
+    /* 0x4A */ s16 unk4A;
+    /* 0x4C */ s16 unk4C;
+    /* 0x4E */ u8 _pad4E[0x2];
+    /* 0x50 */ s16 unk50;
+} func_800BB494_AD854_arg;
+
+extern void *D_800955B0;
+extern void func_800BB5FC_AD9BC(func_800BB494_AD854_arg *);
+
+typedef struct func_800BB718_ADAD8_arg func_800BB718_ADAD8_arg;
+void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *);
+
+void func_800BB494_AD854(func_800BB494_AD854_arg *arg0) {
+    arg0->unk24 = func_80055DC4_569C4(8);
+    arg0->unk28 = func_80055DF8_569F8(8);
+    arg0->unk2C = 0;
+    arg0->unk3C = func_80055D7C_5697C(8);
+    arg0->unk20 = &D_800955B0;
+    arg0->unk4C = 0;
+    arg0->unk48 = 8;
+    arg0->unk4A = 0;
+    arg0->unk44 = 0;
+    arg0->unk46 = 0;
+    arg0->unk50 = 0;
+    setCleanupCallback(&func_800BB718_ADAD8);
+    setCallback(&func_800BB5FC_AD9BC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB51C_AD8DC);
 
@@ -138,13 +176,13 @@ void func_800BB6C0_ADA80(func_800BB664_arg *arg0) {
     func_800BB51C_AD8DC(arg0);
 }
 
-typedef struct {
+struct func_800BB718_ADAD8_arg {
     u8 _pad[0x24];
     void *unk24;
     void *unk28;
     u8 _pad2[0x10];
     void *unk3C;
-} func_800BB718_ADAD8_arg;
+};
 
 void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
