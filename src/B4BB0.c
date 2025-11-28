@@ -12,6 +12,14 @@ typedef struct {
     s16 unk4C;
 } func_800BB814_B5114_arg;
 
+typedef struct {
+    u8 _pad[0x3C];
+    void *unk3C;
+    void *unk40;
+    u8 _pad2[0x10];
+    void *unk54;
+} func_800BB7D0_arg;
+
 extern void func_800BB890_B5190(void);
 extern void func_800BBB18_B5418(void *);
 
@@ -21,7 +29,11 @@ INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB3D8_B4CD8);
 
 INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB488_B4D88);
 
-INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB7D0_B50D0);
+void func_800BB7D0_B50D0(func_800BB7D0_arg *arg0) {
+    arg0->unk3C = freeNodeMemory(arg0->unk3C);
+    arg0->unk40 = freeNodeMemory(arg0->unk40);
+    arg0->unk54 = freeNodeMemory(arg0->unk54);
+}
 
 void func_800BB814_B5114(func_800BB814_B5114_arg *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
