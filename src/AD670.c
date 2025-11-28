@@ -36,7 +36,47 @@ typedef struct {
     /* 0x78 */ s32 unk78;
 } func_800BC6C4_AEA84_arg;
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB2B0_AD670);
+typedef struct {
+    /* 0x00 */ Mat3x3Padded node1;
+    /* 0x20 */ u8 _pad20[4];
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 _pad30[0xC];
+    /* 0x3C */ Mat3x3Padded node2;
+    /* 0x5C */ u8 _pad5C[4];
+    /* 0x60 */ void *unk60;
+    /* 0x64 */ void *unk64;
+    /* 0x68 */ s32 unk68;
+} func_800BB2B0_AD670_arg;
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_800BB45C_AD81C_arg;
+
+void func_800BB368_AD728(func_800BB368_AD728_arg *);
+void func_800BB45C_AD81C(func_800BB45C_AD81C_arg *);
+
+void func_800BB2B0_AD670(func_800BB2B0_AD670_arg *arg0) {
+    arg0->unk24 = func_80055DC4_569C4(8);
+    arg0->unk28 = func_80055DF8_569F8(8);
+    arg0->unk2C = 0;
+    createYRotationMatrix(&arg0->node1, 0x98A);
+    arg0->node1.unk14 = 0x130F588E;
+    arg0->node1.unk18 = 0x03930000;
+    arg0->node1.unk1C = 0x0DB72F2C;
+    arg0->unk68 = 0;
+    arg0->unk60 = arg0->unk24;
+    arg0->unk64 = arg0->unk28;
+    createYRotationMatrix(&arg0->node2, 0);
+    arg0->node2.unk14 = 0;
+    arg0->node2.unk18 = 0x30000000;
+    arg0->node2.unk1C = 0x30458CB2;
+    setCleanupCallback(&func_800BB45C_AD81C);
+    setCallback(&func_800BB368_AD728);
+}
 
 void func_800BB368_AD728(func_800BB368_AD728_arg *arg0) {
     Allocation_AD728 *allocation;
@@ -74,12 +114,6 @@ void func_800BB368_AD728(func_800BB368_AD728_arg *arg0) {
         enqueueDisplayListWithFrustumCull(i, &arg0->node2);
     }
 }
-
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_800BB45C_AD81C_arg;
 
 void func_800BC984_AED44(func_800BB45C_AD81C_arg *);
 
