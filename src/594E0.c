@@ -4,6 +4,7 @@
 
 extern s32 func_80044050_44C50(void);
 extern u16 D_80093FCC_94BCC[];
+extern u16 D_80093FF4_94BF4[];
 extern u16 D_80094008_94C08[];
 extern u16 D_80094044_94C44[];
 extern u16 D_80094058_94C58[];
@@ -175,7 +176,14 @@ void func_80059BD4_5A7D4(Player *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_80059C24_5A824);
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_80059C90_5A890);
+void func_80059C90_5A890(Player *arg0) {
+    u8 index = arg0->unkBB9;
+    if (index < 9) {
+        if (arg0->unkB88 == 0) {
+            func_80056D64_57964(&arg0->worldPosX, D_80093FF4_94BF4[index], 5, arg0->unkBB8 + 4);
+        }
+    }
+}
 
 void func_80059CE0_5A8E0(Player *arg0) {
     u8 index = arg0->unkBB9;
