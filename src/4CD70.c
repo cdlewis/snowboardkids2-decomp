@@ -694,7 +694,7 @@ typedef struct {
     s16 unkC;
 } Struct_func_8004F084;
 
-void func_8004F104_4FD04(void);
+void func_8004F104_4FD04(Struct_func_8004F084 *);
 void func_8004F168_4FD68(Struct_func_8004F04C *);
 
 void func_8004F084_4FC84(Struct_func_8004F084 *arg0) {
@@ -711,7 +711,17 @@ void func_8004F084_4FC84(Struct_func_8004F084 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004F104_4FD04);
+void func_8004F104_4FD04(Struct_func_8004F084 *arg0) {
+    if (arg0->unkC == 0) {
+        arg0->unkC = 1;
+        if ((u16)arg0->unk8 != 0x22) {
+            arg0->unk8 = arg0->unk8 + 1;
+        }
+    } else {
+        arg0->unkC = arg0->unkC - 1;
+    }
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+}
 
 void func_8004F168_4FD68(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
