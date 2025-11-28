@@ -3,7 +3,24 @@
 
 INCLUDE_ASM("asm/nonmatchings/38C90", func_80038090_38C90);
 
-INCLUDE_ASM("asm/nonmatchings/38C90", func_80038340_38F40);
+s32 func_80038340_38F40(s32 arg0) {
+    s32 result = 1;
+    s32 i = 0;
+    u8 *base;
+    s32 pad[2];
+
+    if (arg0 > 0) {
+        base = (u8 *)EepromSaveData;
+        do {
+            if ((base + i)[0x30] == 0) {
+                result = 0;
+                goto done;
+            }
+        } while (++i < arg0);
+    }
+done:
+    return result;
+}
 
 s32 func_80038388_38F88(u8 arg0) {
     s32 result = 1;
