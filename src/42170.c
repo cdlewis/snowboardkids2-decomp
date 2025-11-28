@@ -10,6 +10,8 @@ extern void *D_8009A6D0_9B2D0;
 extern void *D_8009A6E0_9B2E0;
 extern void *D_8009A6F0_9B2F0;
 extern void *D_8009A700_9B300;
+extern void *D_8009A710_9B310;
+extern void *D_8009A720_9B320;
 extern void *D_8009A760_9B360;
 extern void func_80041810_42410(void *);
 extern void func_800415E8_421E8(void);
@@ -359,17 +361,49 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_80042F58_43B58);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80042FC0_43BC0);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80043018_43C18);
-
-INCLUDE_ASM("asm/nonmatchings/42170", func_8004309C_43C9C);
-
-INCLUDE_ASM("asm/nonmatchings/42170", func_8004320C_43E0C);
+extern void func_8004309C_43C9C(void);
 
 typedef struct {
     u8 pad0[0x24];
     void *unk24;
     void *unk28;
 } Func432D8Arg;
+
+void func_800432D8_43ED8(Func432D8Arg *);
+
+typedef struct {
+    u8 pad0[0x20];  /* 0x00 */
+    void *unk20;    /* 0x20 */
+    void *unk24;    /* 0x24 */
+    void *unk28;    /* 0x28 */
+    s32 unk2C;      /* 0x2C */
+    u8 pad30[0x2C]; /* 0x30 */
+    void *unk5C;    /* 0x5C */
+    void *unk60;    /* 0x60 */
+    void *unk64;    /* 0x64 */
+    s32 unk68;      /* 0x68 */
+    u8 pad6C[0x18]; /* 0x6C */
+    s16 unk84;      /* 0x84 */
+} Func43018State;
+
+void func_80043018_43C18(Func43018State *arg0) {
+    getCurrentAllocation();
+    arg0->unk20 = &D_8009A710_9B310;
+    arg0->unk24 = loadAsset_B7E70();
+    arg0->unk28 = loadAsset_216290();
+    arg0->unk5C = &D_8009A720_9B320;
+    arg0->unk2C = 0;
+    arg0->unk68 = 0;
+    arg0->unk84 = 0x200;
+    arg0->unk60 = arg0->unk24;
+    arg0->unk64 = arg0->unk28;
+    setCleanupCallback(func_800432D8_43ED8);
+    setCallbackWithContinue(func_8004309C_43C9C);
+}
+
+INCLUDE_ASM("asm/nonmatchings/42170", func_8004309C_43C9C);
+
+INCLUDE_ASM("asm/nonmatchings/42170", func_8004320C_43E0C);
 
 void func_800432D8_43ED8(Func432D8Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
