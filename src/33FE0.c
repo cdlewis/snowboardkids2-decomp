@@ -33,6 +33,19 @@ typedef struct {
 } Func349B8Arg;
 
 typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ s16 unkA;
+    /* 0x0C */ u8 unkC;
+    /* 0x0D */ u8 unkD;
+    /* 0x0E */ u8 padE[2];
+    /* 0x10 */ u8 unk10;
+    /* 0x11 */ u8 unk11;
+} Func350ACArg;
+
+typedef struct {
     /* 0x00 */ void *unk0;
     /* 0x04 */ void *unk4;
     /* 0x08 */ s32 unk8;
@@ -58,6 +71,8 @@ void func_8003365C_3425C(Func34574Arg *arg0);
 void func_80034A30_35630(void *arg0);
 void func_80034A94_35694(Func34574Arg *arg0);
 void func_80035408_36008(void);
+void func_8003513C_35D3C(Func350ACArg *arg0);
+void func_80035234_35E34(Func34574Arg *arg0);
 
 void func_800333E0_33FE0(Func33FE0Arg *arg0) {
     void *allocation;
@@ -210,7 +225,24 @@ void func_80035074_35C74(Func358FCStruct *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_800350AC_35CAC);
+void func_800350AC_35CAC(Func350ACArg *arg0) {
+    void *temp_s1;
+
+    temp_s1 = dmaRequestAndUpdateStateWithSize(D_459310, D_459E00, 0x2278);
+    setCleanupCallback(func_80035234_35E34);
+
+    arg0->unk0 = -0x52;
+    arg0->unk2 = -0x14;
+    arg0->unk8 = 0xA;
+    arg0->unk10 = 0;
+    arg0->unk11 = 0;
+    arg0->unk4 = temp_s1;
+    arg0->unkA = 0xFF;
+    arg0->unkD = 0;
+    arg0->unkC = 0;
+
+    setCallback(func_8003513C_35D3C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_8003513C_35D3C);
 
