@@ -376,7 +376,14 @@ void func_8004E0BC_4ECBC(Struct_func_8004DCC4 *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E0F4_4ECF4);
+void func_8004E0F4_4ECF4(Player *arg0) {
+    Node *task;
+
+    task = scheduleTask(func_8004DEF8_4EAF8, 1, 0, 0xE6);
+    if (task != NULL) {
+        task->unk18 = arg0;
+    }
+}
 
 typedef struct {
     u8 pad0[0x4];
