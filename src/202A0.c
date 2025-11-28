@@ -8,6 +8,7 @@ extern void func_80021548_22148(u8 arg0, void *arg1);
 extern void func_800215DC_221DC(void *arg0);
 extern s32 func_8006FED8_70AD8(void *arg0);
 extern void func_800394BC_3A0BC(void *, s32);
+extern void *freeNodeMemory(void *);
 
 USE_ASSET(_458E30);
 
@@ -65,6 +66,11 @@ typedef struct {
     u8 _pad30[0x4];
     void *unk34;
 } Func80021238Arg;
+
+typedef struct {
+    u8 _pad0[0x8];
+    void *unk8;
+} Func80021880Arg;
 
 typedef struct {
     void *unk0;
@@ -243,7 +249,9 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_80021778_22378);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80021810_22410);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80021880_22480);
+void func_80021880_22480(Func80021880Arg *arg0) {
+    arg0->unk8 = freeNodeMemory(arg0->unk8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_800218AC_224AC);
 
