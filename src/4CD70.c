@@ -103,8 +103,10 @@ void func_8004D954_4E554(Struct_func_8004D8E4 *arg0);
 void func_8004D98C_4E58C(Struct_func_8004F04C *arg0);
 
 typedef struct {
-    u8 pad0[0x2A];
+    s16 unk0;
+    u8 pad2[0x28];
     u16 unk2A;
+    s16 unk2C;
 } Struct_func_8004D784;
 
 void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
@@ -271,7 +273,19 @@ void func_8004D784_4E384(Struct_func_8004D784 *arg0) {
     func_8004D63C_4E23C(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D7D0_4E3D0);
+void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0) {
+    s32 sinVal;
+    s16 angle;
+
+    angle = arg0->unk2C + 0x80;
+    arg0->unk2C = angle;
+    sinVal = approximateSin(angle);
+    arg0->unk0 = -((0x2000 - sinVal) / 20) - 0x30;
+    if (arg0->unk2C == 0x1000) {
+        func_80069CF8_6A8F8();
+    }
+    func_8004D63C_4E23C(arg0);
+}
 
 void func_8004D858_4E458(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
