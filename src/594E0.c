@@ -1,5 +1,6 @@
 #include "common.h"
 #include "gamestate.h"
+#include "graphics.h"
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_800588E0_594E0);
 
@@ -87,7 +88,14 @@ INCLUDE_ASM("asm/nonmatchings/594E0", func_80058C10_59810);
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_80058C64_59864);
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_80058CC4_598C4);
+s32 func_80058CC4_598C4(Player *arg0) {
+    if (arg0->unkBA4 == 0) {
+        arg0->unkBA4 = 0x96;
+        func_80056B7C_5777C(&arg0->worldPosX, 0x48);
+        return 1;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_80058CFC_598FC);
 
