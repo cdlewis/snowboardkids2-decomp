@@ -6,8 +6,14 @@ typedef struct {
     /* 0xC */ u8 unknown_0C[4];
     /* 0x10 */ u8 save_slot_status[16];
     /* 0x20 */ u8 save_slot_data[16];
-    /* 0x30 */ u8 character_or_settings[19];
-    /* 0x43 */ u8 setting_43[8];
+    /* 0x30 */ u8 character_or_settings[18];
+    union {
+        /* 0x42 */ u8 setting_42[9];
+        struct {
+            /* 0x42 */ u8 character_or_settings_18;
+            /* 0x43 */ u8 setting_43[8];
+        } s;
+    } u;
     /* 0x4B */ u8 setting_4B[3];
     /* 0x4E */ u8 setting_4E;
     /* 0x4F */ u8 setting_4F;

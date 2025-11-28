@@ -5,7 +5,26 @@ INCLUDE_ASM("asm/nonmatchings/38C90", func_80038090_38C90);
 
 INCLUDE_ASM("asm/nonmatchings/38C90", func_80038340_38F40);
 
-INCLUDE_ASM("asm/nonmatchings/38C90", func_80038388_38F88);
+s32 func_80038388_38F88(u8 arg0) {
+    s32 result = 1;
+    s32 i = 0;
+    u8 val = arg0;
+
+    do {
+        u8 curr = EepromSaveData->u.setting_42[i];
+        if (curr == 0) {
+            EepromSaveData->u.setting_42[i] = arg0;
+            break;
+        }
+        if (curr == val) {
+            result = 0;
+            break;
+        }
+        i++;
+    } while (i < 9);
+
+    return result;
+}
 
 void func_800383D8_38FD8(u8 arg0) {
     s32 i;
