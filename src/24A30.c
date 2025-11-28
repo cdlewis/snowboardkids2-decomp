@@ -12,6 +12,9 @@ USE_ASSET(_458E30);
 
 extern u8 D_459310[];
 
+extern u8 D_4237C0[];
+extern u8 D_426EF0[];
+
 typedef struct {
     u8 padding[0x24];
     void *unk24;
@@ -51,7 +54,8 @@ typedef struct {
 } func_80024220_24E20_arg;
 
 typedef struct {
-    void *unk0;
+    s16 unk0;
+    s16 unk2;
     void *unk4;
     s16 unk8;
 } func_80025FFC_26BFC_arg;
@@ -318,7 +322,24 @@ void func_8002712C_27D2C(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027158_27D58);
+void func_800271E4_27DE4(func_80025FFC_26BFC_arg *);
+void func_8002723C_27E3C(func_80025FFC_26BFC_arg *);
+
+void func_80027158_27D58(func_80025FFC_26BFC_arg *arg0) {
+    GameState *state;
+    void *dmaResult;
+
+    state = getCurrentAllocation();
+    dmaResult = dmaRequestAndUpdateStateWithSize(D_4237C0, D_426EF0, 0x8A08);
+    setCleanupCallback(func_8002723C_27E3C);
+
+    arg0->unk0 = -0x20;
+    arg0->unk2 = 8;
+    arg0->unk8 = state->unk18A8 + 0x16;
+    arg0->unk4 = dmaResult;
+
+    setCallback(func_800271E4_27DE4);
+}
 
 void func_800271E4_27DE4(func_80025FFC_26BFC_arg *arg0) {
     GameState *state = getCurrentAllocation();
