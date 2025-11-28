@@ -286,7 +286,47 @@ void func_800BBB90(s16 arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BBC28_ADFE8);
+extern s32 D_800BCA30_AEDF0[][3];
+
+extern void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *);
+extern void func_800BBCFC_AE0BC(void *);
+
+typedef struct {
+    /* 0x00 */ u8 _pad0[0x14];
+    /* 0x14 */ s32 position[3];
+    /* 0x20 */ u8 _pad20[4];
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 _pad30[0xC];
+    /* 0x3C */ Mat3x3Padded mat;
+    /* 0x5C */ u8 _pad5C[4];
+    /* 0x60 */ void *unk60;
+    /* 0x64 */ void *unk64;
+    /* 0x68 */ s32 unk68;
+    /* 0x6C */ u8 _pad6C[0xC];
+    /* 0x78 */ s16 unk78;
+    /* 0x7A */ u8 _pad7A[2];
+    /* 0x7C */ u8 unk7C;
+} func_800BBC28_arg;
+
+void func_800BBC28_ADFE8(func_800BBC28_arg *arg0) {
+    arg0->unk24 = func_80055DC4_569C4(8);
+    arg0->unk28 = func_80055DF8_569F8(8);
+    arg0->unk2C = 0;
+    memcpy(&arg0->position, &D_800BCA30_AEDF0[arg0->unk7C], 0xC);
+    arg0->unk68 = 0;
+    arg0->position[1] += 0x100000;
+    arg0->unk60 = arg0->unk24;
+    arg0->unk64 = arg0->unk28;
+    createYRotationMatrix(&arg0->mat, 0);
+    arg0->unk78 = 0x2000;
+    arg0->mat.unk14 = arg0->position[0];
+    arg0->mat.unk18 = arg0->position[1] + 0x180000;
+    arg0->mat.unk1C = arg0->position[2];
+    setCleanupCallback(&func_800BBEA0_AE260);
+    setCallback(&func_800BBCFC_AE0BC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BBCFC_AE0BC);
 
@@ -294,8 +334,6 @@ void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
-
-extern void func_800BBC28_ADFE8(void);
 
 void func_800BBED8(void) {
     s32 i;
