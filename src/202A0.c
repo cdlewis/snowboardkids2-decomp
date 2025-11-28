@@ -5,7 +5,6 @@
 #include "task_scheduler.h"
 
 extern void func_80021548_22148(u8 arg0, void *arg1);
-extern void func_800215DC_221DC(void *arg0);
 extern s32 func_8006FED8_70AD8(void *arg0);
 extern void func_800394BC_3A0BC(void *, s32);
 extern void *freeNodeMemory(void *);
@@ -198,6 +197,7 @@ typedef struct {
 extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
 
 void func_8002144C_2204C(Func8002144CArg *arg0);
+void func_800215DC_221DC(Func8002144CArg *arg0);
 
 void func_800213C8_21FC8(Func8002144CArg *arg0) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
@@ -246,7 +246,25 @@ void func_8002152C_2212C(Func8002144CArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80021548_22148);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_800215DC_221DC);
+void func_800215DC_221DC(Func8002144CArg *arg0) {
+    u16 unk24;
+
+    getCurrentAllocation();
+
+    if (D_800AFE8C_A71FC->unk7 == 0xD) {
+        unk24 = arg0->unk4.unk20;
+        if (unk24 == 0xD) {
+            arg0->unk4.unk20 = unk24 + 1;
+            func_800021B8_2DB8(arg0->unk0, (s16)(unk24 + 1));
+        }
+    } else if (D_800AFE8C_A71FC->unk7 == 0xE) {
+        unk24 = arg0->unk4.unk20;
+        if (unk24 == 1) {
+            arg0->unk4.unk20 = 2;
+            func_800021B8_2DB8(arg0->unk0, 2);
+        }
+    }
+}
 
 void func_8002174C_2234C(Func800216ACArg *arg0);
 void func_800216AC_222AC(Func800216ACArg *arg0);
