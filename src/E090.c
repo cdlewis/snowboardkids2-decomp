@@ -1,13 +1,11 @@
 #include "6E840.h"
 #include "common.h"
+#include "overlay.h"
 #include "task_scheduler.h"
 
-extern u32 D_67AB10;
-extern u32 D_67BEB0;
-extern u32 D_67BEB0_copy;
-extern u32 D_67DB80;
-extern u32 D_67DB80_copy;
-extern u32 D_67E860;
+USE_ASSET(_67AB10);
+USE_ASSET(_67BEB0);
+USE_ASSET(_67DB80);
 
 extern void *freeNodeMemory(void *);
 extern void func_800394BC_3A0BC(void *, s32);
@@ -189,9 +187,9 @@ void func_8000D818_E418(void) {
     temp_s0->unk0 = 0;
     temp_s0->unk2 = 0;
     temp_s0->unk1 = 0;
-    temp_s0->unk1E0 = dmaRequestAndUpdateStateWithSize(&D_67AB10, &D_67BEB0, 0x6350);
-    temp_s0->unk1E4 = dmaRequestAndUpdateStateWithSize(&D_67BEB0_copy, &D_67DB80, 0x4320);
-    temp_s0->unk1E8 = dmaRequestAndUpdateStateWithSize(&D_67DB80_copy, &D_67E860, 0x1A68);
+    temp_s0->unk1E0 = dmaRequestAndUpdateStateWithSize(&_67AB10_ROM_START, &_67AB10_ROM_END, 0x6350);
+    temp_s0->unk1E4 = dmaRequestAndUpdateStateWithSize(&_67BEB0_ROM_START, &_67BEB0_ROM_END, 0x4320);
+    temp_s0->unk1E8 = dmaRequestAndUpdateStateWithSize(&_67DB80_ROM_START, &_67DB80_ROM_END, 0x1A68);
 
     s1 = &temp_s0->unk8;
     func_8006FAA4_706A4(s1, 0, 0, 10, 0);

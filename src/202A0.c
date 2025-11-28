@@ -19,14 +19,10 @@ extern void func_8006FD3C_7093C(u16, void *);
 extern void func_8001FFE4_20BE4(void);
 
 USE_ASSET(_458E30);
-
-extern u8 D_459310[];
-extern u8 D_459E00[];
-extern u32 *D_43A000;
-extern u32 *D_43F050;
-extern u8 D_4488E0[];
-extern u8 D_41A1D0[];
-extern u8 D_41AD80[];
+USE_ASSET(_43A000);
+USE_ASSET(_43F050);
+USE_ASSET(_459310);
+USE_ASSET(_41A1D0);
 
 typedef struct {
     u8 _pad0[0xB2F];
@@ -230,7 +226,7 @@ void func_80020B18_21718(Func800206B4Arg *arg0);
 
 void func_800206B4_212B4(Func800206B4Arg *arg0) {
     s32 pad[4];
-    arg0->unkF8 = dmaRequestAndUpdateStateWithSize(&D_43A000, &D_43F050, 0xB198);
+    arg0->unkF8 = dmaRequestAndUpdateStateWithSize(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
     setCleanupCallback(&func_80020B18_21718);
     setCallback(&func_80020708_21308);
 }
@@ -292,7 +288,7 @@ void func_80021054_21C54(void *arg0);
 void func_8002109C_21C9C(Func8002109CArg *arg0);
 
 void func_80020FDC_21BDC(Func80020FDCArg *arg0) {
-    void *temp_s1 = dmaRequestAndUpdateStateWithSize(D_41A1D0, D_41AD80, 0x1B48);
+    void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
 
     setCleanupCallback(&func_8002109C_21C9C);
 
@@ -323,8 +319,8 @@ void func_80021238_21E38(Func80021238Arg *arg0);
 void func_800210C8_21CC8(Func80021238Arg *arg0) {
     void *temp_s1;
 
-    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&D_43F050, D_4488E0, 0x14010);
-    temp_s1 = dmaRequestAndUpdateStateWithSize(D_459310, D_459E00, 0x2278);
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_43F050_ROM_START, &_43F050_ROM_END, 0x14010);
+    temp_s1 = dmaRequestAndUpdateStateWithSize(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
     setCleanupCallback(&func_80021238_21E38);
 
     arg0->unk30 = 0x40;
@@ -447,7 +443,7 @@ void func_800216AC_222AC(Func800216ACArg *arg0);
 void func_800216D4_222D4(Func800216ACArg *arg0);
 
 void func_80021658_22258(Func800216ACArg *arg0) {
-    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_458E30_ROM_START, D_459310, 0xAE0);
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
     setCleanupCallback(&func_8002174C_2234C);
     setCallback(&func_800216AC_222AC);
 }

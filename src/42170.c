@@ -4,7 +4,10 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "overlay.h"
 #include "task_scheduler.h"
+
+USE_ASSET(_3F3EF0);
 
 extern void *D_8009A6B0_9B2B0;
 extern void *D_8009A6C0_9B2C0;
@@ -1323,8 +1326,6 @@ void func_80044CDC_458DC(void *arg0) {
     }
 }
 
-extern u32 D_3F3EF0;
-extern u32 D_3F58E0;
 extern void *D_80090AB8_916B8[];
 extern void *D_80090ABC_916BC[];
 extern s32 D_80090AC0_916C0[];
@@ -1344,7 +1345,7 @@ void func_80045010_45C10(Func45010Arg *);
 void func_80044D1C_4591C(Func44D1CArg *arg0) {
     s16 idx;
 
-    arg0->unkC = dmaRequestAndUpdateStateWithSize(&D_3F3EF0, &D_3F58E0, 0x2608);
+    arg0->unkC = dmaRequestAndUpdateStateWithSize(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
     idx = arg0->unk14;
     arg0->unk10 = dmaRequestAndUpdateStateWithSize(
         D_80090AB8_916B8[idx * 3],

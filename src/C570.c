@@ -1,10 +1,10 @@
 #include "common.h"
 #include "geometry.h"
+#include "overlay.h"
 
-extern u32 D_1FB8B0;
-extern u32 D_1FBE00;
-extern u32 D_4CA440;
-extern u32 D_4CAD30;
+USE_ASSET(_1FB8B0);
+USE_ASSET(_4CA440);
+
 extern void *D_80088670_89270;
 extern void *D_80088680_89280;
 extern void *D_80088690_89290;
@@ -81,8 +81,8 @@ typedef struct {
 
 void func_8000B970_C570(func_8000BBA8_C7A8_arg *arg0) {
     arg0->unk20 = &D_80088670_89270;
-    arg0->unk24 = dmaRequestAndUpdateState(&D_1FB8B0, &D_1FBE00);
-    arg0->unk28 = dmaRequestAndUpdateStateWithSize(&D_4CA440, &D_4CAD30, 0xE90);
+    arg0->unk24 = dmaRequestAndUpdateState(&_1FB8B0_ROM_START, &_1FB8B0_ROM_END);
+    arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_4CA440_ROM_START, &_4CA440_ROM_END, 0xE90);
     arg0->unk2C = 0;
     arg0->unk68 = 0;
     arg0->unk82 = 0x200;

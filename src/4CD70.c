@@ -6,12 +6,12 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "gamestate.h"
+#include "overlay.h"
 #include "task_scheduler.h"
 
-extern u32 D_3F3940;
-extern u32 D_3F3D10;
-extern u32 D_3F6950;
-extern u32 D_3F6BB0;
+USE_ASSET(_3F3940);
+USE_ASSET(_3F6950);
+USE_ASSET(_3F3EF0);
 
 extern void *loadAsset_34CB50(void);
 extern u8 randA(void);
@@ -362,7 +362,7 @@ void func_8004D8E4_4E4E4(Struct_func_8004D8E4 *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
     arg0->unkC = allocation->players;
-    arg0->unk4 = dmaRequestAndUpdateStateWithSize(&D_3F3940, &D_3F3D10, 0x888);
+    arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_3F3940_ROM_START, &_3F3940_ROM_END, 0x888);
     arg0->unk0 = -0x48;
     arg0->unk2 = -0x38;
     setCleanupCallback(&func_8004D98C_4E58C);
@@ -422,7 +422,7 @@ void func_8004DCFC_4E8FC(Struct_func_8004DCFC *arg0) {
     arg0->unk4 = loadAsset_34CB50();
     func_8004D9B8_4E5B8((Struct_func_8004D9B8 *)arg0);
     arg0->unk8 = 0x15;
-    arg0->unk10 = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unk10 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
 
     switch (allocation->unk7A) {
         case 5:
@@ -485,7 +485,7 @@ void func_8004DEF8_4EAF8(Struct_func_8004DEF8 *arg0) {
     }
 
     arg0->unk2 = 0x10;
-    arg0->unk10 = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unk10 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     setCleanupCallback(func_8004E0BC_4ECBC);
     setCallback(func_8004DFA0_4EBA0);
 }
@@ -751,7 +751,7 @@ void func_8004EA54_4F654(Struct_func_8004EB90 *arg0) {
     arg0->unkC = -0x84;
     arg0->unkE = -0x54;
     arg0->unk10 = arg0->unk4;
-    arg0->unk18 = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unk18 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     setCleanupCallback(func_8004EB90_4F790);
     setCallback(func_8004EAF0_4F6F0);
 }
@@ -796,7 +796,7 @@ void func_8004EC08_4F808(Struct_func_8004FF28 *arg0) {
         arg0->unk6 = -0x38;
     }
     arg0->unk10 = 0;
-    arg0->unk0 = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unk0 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     setCleanupCallback(func_8004ED94_4F994);
     setCallback(func_8004ECA4_4F8A4);
 }
@@ -832,7 +832,7 @@ void func_8004EE24_4FA24(Struct_func_8004F04C *arg0) {
     } else {
         arg0->unk10 = 0x1194;
     }
-    arg0->unkC = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unkC = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     arg0->unk4 = loadAsset_34CB50();
     arg0->unk8 = 0x23;
     arg0->unk0 = 0x68;
@@ -926,7 +926,7 @@ void func_8004F1D4_4FDD4(Struct_func_8004F1D4 *arg0) {
     arg0->unk4 = loadAsset_34CB50();
     func_8004D9B8_4E5B8((Struct_func_8004D9B8 *)arg0);
     arg0->unk8 = 0x24;
-    arg0->unk10 = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unk10 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     if (allocation->unk7A == 4) {
         arg0->unk0 = 0xC;
         arg0->unk2 = -0x3C;
@@ -961,7 +961,7 @@ void func_8004F69C_5029C(Struct_func_8004F04C *arg0);
 
 void func_8004F424_50024(Struct_func_8004F424 *arg0) {
     arg0->unk10 = 0x4293C;
-    arg0->unkC = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unkC = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     arg0->unk4 = loadAsset_34CB50();
     arg0->unk8 = 0x23;
     arg0->unk0 = 0x68;
@@ -977,9 +977,6 @@ void func_8004F69C_5029C(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unkC = freeNodeMemory(arg0->unkC);
 }
-
-extern s32 D_3F3EF0;
-extern s32 D_3F58E0;
 
 void func_8004F760_50360(void);
 void func_8004F7F4_503F4(Struct_func_8004F04C *arg0);
@@ -1006,7 +1003,7 @@ void func_8004F6D4_502D4(Struct_func_8004F6D4 *arg0) {
     arg0->unk0 = -0x10;
     arg0->unk2 = -0x60;
     arg0->unkC = (void *)((u8 *)base + index * 3048);
-    arg0->unk4 = dmaRequestAndUpdateStateWithSize(&D_3F3EF0, &D_3F58E0, 0x2608);
+    arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
     setCallbackWithContinue(func_8004F760_50360);
     setCleanupCallback(func_8004F7F4_503F4);
 }
@@ -1021,7 +1018,7 @@ void func_8004F898_50498(Struct_func_8004F04C *);
 void func_8004F9E8_505E8(Struct_func_8004F04C *);
 
 void func_8004F820_50420(Struct_func_8004F04C *arg0) {
-    arg0->unkC = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unkC = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     arg0->unk4 = loadAsset_34CB50();
     arg0->unk8 = 0x23;
     arg0->unk0 = -0x4C;
@@ -1064,7 +1061,7 @@ void func_8004FA20_50620(Struct_func_8004FA20 *arg0) {
     arg0->unk4 = loadAsset_3505F0();
     arg0->unk2 = -0x20;
     arg0->unk8 = 2;
-    arg0->unkC = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unkC = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     sprintf(arg0->unk10, D_8009E924_9F524, arg0->unk18);
     arg0->unk20 = 0;
     arg0->unk1E = 0x1E;
@@ -1141,7 +1138,7 @@ void func_8004FD30_50930(Struct_func_8004FF28 *arg0) {
         arg0->unk6 = -0x30;
     }
     arg0->unk10 = 0;
-    arg0->unk0 = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unk0 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     setCleanupCallback(func_8004FF28_50B28);
     setCallback(func_8004FDD0_509D0);
 }
