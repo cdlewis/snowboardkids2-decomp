@@ -28,6 +28,14 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
+    u8 padding[0x14];
+    s32 unk18;
+    u8 padding2[0xC];
+    u8 unk28;
+} func_80024C8C_2588C_arg;
+
+typedef struct {
+    SceneModel *unk0;
     applyTransformToModel_arg1 unk4;
     u8 unk28;
 } func_80025130_25D30_arg;
@@ -93,9 +101,35 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80024990_25590);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024AAC_256AC);
 
+void func_80024BA0_257A0(func_80024C8C_2588C_arg *);
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024BA0_257A0);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024C8C_2588C);
+void func_80024D40_25940(func_80024C8C_2588C_arg *);
+void func_80024DCC_259CC(func_80024C8C_2588C_arg *);
+
+void func_80024C8C_2588C(func_80024C8C_2588C_arg *arg0) {
+    u16 *base;
+    u16 val;
+
+    base = (u16 *)getCurrentAllocation();
+
+    clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    val = *(base + arg0->unk28 + (0x1898 / 2));
+
+    if (val == 0x10) {
+        func_80002014_2C14(arg0->unk0);
+        setCallback(func_80024DCC_259CC);
+    } else if (val == 0) {
+        arg0->unk18 = 0xFFEA0000;
+        func_80002014_2C14(arg0->unk0);
+        setCallback(func_80024D40_25940);
+    } else if (val == 0x11) {
+        arg0->unk18 = 0xFFEA0000;
+        setCallback(func_80024BA0_257A0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024D40_25940);
 
