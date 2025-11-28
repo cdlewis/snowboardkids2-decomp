@@ -19,11 +19,18 @@ typedef struct {
     /* 0x0A */ char pad[6];
 } func_800B07A0_1DBE80_arg; // size 0x10
 
+typedef struct {
+    /* 0x000 */ u8 pad0[0x1E2];
+    /* 0x1E2 */ u16 unk1E2;
+} Allocation_1DB7A0;
+
 extern void *freeNodeMemory(void *);
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0(void);
+extern s16 D_800B09B8_1DC098[];
+extern s16 D_800B09BA_1DC09A[];
 
-void func_800B0804_1DBEE4(void *);
+void func_800B0804_1DBEE4(func_800B07A0_1DBE80_arg *);
 
 INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B00C0_1DB7A0);
 
@@ -92,7 +99,16 @@ void func_800B07A0_1DBE80(func_800B07A0_1DBE80_arg *arg0) {
     setCallback(func_800B0804_1DBEE4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B0804_1DBEE4);
+void func_800B0804_1DBEE4(func_800B07A0_1DBE80_arg *arg0) {
+    s32 pad[2];
+    Allocation_1DB7A0 *allocation = getCurrentAllocation();
+
+    arg0->unk0 = D_800B09B8_1DC098[allocation->unk1E2 * 2];
+    arg0->unk2 = D_800B09BA_1DC09A[allocation->unk1E2 * 2];
+    arg0->unk8 = allocation->unk1E2 + 2;
+
+    debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
+}
 
 void func_800B087C_1DBF5C(func_800B07A0_1DBE80_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
