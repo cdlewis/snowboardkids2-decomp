@@ -9,6 +9,12 @@ typedef struct {
     void *unk10;
 } ACD30Struct;
 
+extern u8 D_4060A0[];
+extern u8 D_4062B0[];
+
+void func_800BB4B8_ACF38(ACD30Struct *arg0);
+void func_800BB310_ACD90(void);
+
 typedef struct {
     u8 _pad[0x24];
     s32 unk24;
@@ -30,7 +36,13 @@ typedef struct {
     s32 unk2C;
 } AD510Arg;
 
-INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB2B0_ACD30);
+void func_800BB2B0_ACD30(ACD30Struct *arg0) {
+    arg0->unkC = loadAsset_34F9A0();
+    arg0->unk10 = dmaRequestAndUpdateStateWithSize(D_4060A0, D_4062B0, 0x160);
+    arg0->unk0 = NULL;
+    setCleanupCallback(func_800BB4B8_ACF38);
+    setCallback(func_800BB310_ACD90);
+}
 
 INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB310_ACD90);
 
