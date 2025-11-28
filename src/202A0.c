@@ -14,8 +14,10 @@ extern void func_8000FED0_10AD0(void);
 USE_ASSET(_458E30);
 
 extern u8 D_459310[];
+extern u8 D_459E00[];
 extern u32 *D_43A000;
 extern u32 *D_43F050;
+extern u8 D_4488E0[];
 extern u8 D_41A1D0[];
 extern u8 D_41AD80[];
 
@@ -66,8 +68,10 @@ typedef struct {
 typedef struct {
     u8 _pad0[0x2C];
     void *unk2C;
-    u8 _pad30[0x4];
+    s16 unk30;
+    s16 unk32;
     void *unk34;
+    s16 unk38;
 } Func80021238Arg;
 
 typedef struct {
@@ -214,11 +218,26 @@ void func_8002109C_21C9C(Func8002109CArg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_800210C8_21CC8);
-
 void func_80021184_21D84(void);
+void func_8002115C_21D5C(Func80021238Arg *arg0);
+void func_80021238_21E38(Func80021238Arg *arg0);
 
-void func_8002115C_21D5C(Func800216ACArg *arg0) {
+void func_800210C8_21CC8(Func80021238Arg *arg0) {
+    void *temp_s1;
+
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&D_43F050, D_4488E0, 0x14010);
+    temp_s1 = dmaRequestAndUpdateStateWithSize(D_459310, D_459E00, 0x2278);
+    setCleanupCallback(&func_80021238_21E38);
+
+    arg0->unk30 = 0x40;
+    arg0->unk32 = 0x40;
+    arg0->unk34 = temp_s1;
+    arg0->unk38 = 0x13;
+
+    setCallback(&func_8002115C_21D5C);
+}
+
+void func_8002115C_21D5C(Func80021238Arg *arg0) {
     func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
     setCallback(&func_80021184_21D84);
 }
