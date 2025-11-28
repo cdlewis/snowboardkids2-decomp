@@ -632,8 +632,6 @@ mainStack = 0x800AF490;
 
 osViModeTable = 0x8009BE70; // defined:true
 
-func_800B02AC = 0x800B02AC; // type:func
-
 entrypoint = 0x80000400;
 gMainThreadStackTop = 0x800AB020;
 bootproc = 0x80055FB0;

@@ -19,7 +19,7 @@ extern FuncPtr D_800BCA44_B1F34[];
 extern FuncPtr D_800BCA5C_B1F4C[];
 
 extern void func_800B00D4_9FF84(func_800BC4AC_arg *, s32);
-extern void func_800B02AC(func_800BC4AC_arg *);
+extern void func_800B02AC_A015C(func_800BC4AC_arg *);
 extern s32 func_8005D308_5DF08(func_800BC4AC_arg *, s32);
 extern void func_8005D180_5DD80(func_800BC4AC_arg *, s32);
 
@@ -45,7 +45,7 @@ s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
     arg0->unk44C -= arg0->unk44C / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
-    func_800B02AC(arg0);
+    func_800B02AC_A015C(arg0);
 
     if (arg0->unkB84 & 0x400000) {
         func_8005D180_5DD80(arg0, 2);
@@ -66,7 +66,7 @@ s32 func_800BC008_B14F8(func_800BC4AC_arg *arg0) {
     arg0->unk44C -= arg0->unk44C / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
-    func_800B02AC(arg0);
+    func_800B02AC_A015C(arg0);
 
     if (arg0->unkB84 & 0x400000) {
         func_8005D180_5DD80(arg0, 2);
@@ -91,7 +91,7 @@ s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
     getCurrentAllocation();
 
     arg0->unk450 += -0x8000;
-    func_800B02AC(arg0);
+    func_800B02AC_A015C(arg0);
 
     if (arg0->unkBBF == 0) {
         if (func_8005D308_5DF08(arg0, 6) != 0) {

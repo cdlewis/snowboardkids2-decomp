@@ -898,7 +898,7 @@ segments:
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB54C0, asm]
+      - [0xB54C0, c]
       - [0xB5B40, data, B54C0]
 
   - name: _B5B90

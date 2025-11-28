@@ -18,7 +18,7 @@ typedef struct {
 extern FuncPtr D_800BCB5C_B411C[];
 extern FuncPtr D_800BCB74_B4134[];
 extern void func_800B00D4_9FF84(Arg0Struct *, s32);
-extern void func_800B02AC(Arg0Struct *);
+extern void func_800B02AC_A015C(Arg0Struct *);
 extern void func_800BBE68_B3428(Arg0Struct *);
 
 INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB2B0_B2870);
@@ -41,7 +41,7 @@ s32 func_800BB89C_B2E5C(Arg0Struct *arg0) {
     arg0->unk44C -= arg0->unk44C / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
-    func_800B02AC(arg0);
+    func_800B02AC_A015C(arg0);
 
     return 0;
 }
@@ -58,7 +58,7 @@ s32 func_800BBEBC_B347C(Arg0Struct *arg0) {
     arg0->unk44C -= arg0->unk44C / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
-    func_800B02AC(arg0);
+    func_800B02AC_A015C(arg0);
     return 0;
 }
 
