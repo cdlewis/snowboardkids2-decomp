@@ -1,5 +1,6 @@
 #include "20F0.h"
 #include "6E840.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
@@ -29,6 +30,7 @@ typedef struct {
     u16 unk24;
     s16 unk26;
     u8 unk28;
+    u8 unk29;
 } func_800B08FC_arg;
 
 typedef struct {
@@ -68,7 +70,8 @@ typedef struct {
 
 void func_800B0DF8_1DB398(void *);
 void func_800B05DC_1DAB7C(func_800B08FC_arg *);
-void func_800B0638_1DABD8(void);
+void func_800B0638_1DABD8(func_800B08FC_arg *);
+void func_800B0720_1DACC0(func_800B08FC_arg *);
 void func_800B0E94_1DB434(void *);
 void func_800B0EEC_1DB48C(func_800B0FE0_arg *);
 void func_800B0F88_1DB528(void *);
@@ -101,7 +104,41 @@ void func_800B05DC_1DAB7C(func_800B08FC_arg *arg0) {
     setCallback(func_800B0638_1DABD8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0638_1DABD8);
+void func_800B0638_1DABD8(func_800B08FC_arg *arg0) {
+    GameState *allocation;
+    s32 i;
+    D_800AFE8C_A71FC_type *ptr;
+    s32 pad[2];
+    s32 count;
+
+    allocation = getCurrentAllocation();
+
+    if (arg0->unk28 != 2) {
+        applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->_pad4);
+        clearModelRotation(arg0->unk0);
+        updateModelGeometry(arg0->unk0);
+    }
+
+    if (arg0->unk28 == 0) {
+        ptr = D_800AFE8C_A71FC;
+        count = ptr->unk8;
+        if (count > 0) {
+            i = 0;
+            do {
+                if (ptr->unk9[i] == arg0->unk24) {
+                    u8 state = allocation->unk59A[i];
+                    if (state == 1 || state == 3) {
+                        arg0->unk29 = 0;
+                        setCallback(func_800B0720_1DACC0);
+                        return;
+                    }
+                }
+                ptr = D_800AFE8C_A71FC;
+                i++;
+            } while (i < ptr->unk8);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0720_1DACC0);
 
