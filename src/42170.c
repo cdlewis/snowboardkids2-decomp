@@ -195,7 +195,19 @@ void func_80041724_42324(Func41570State *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_8004175C_4235C);
+typedef struct {
+    u8 _pad0[0x3C];
+    void *unk3C;
+} Func4175CTask;
+
+void func_8004175C_4235C(void *arg0) {
+    Func4175CTask *task;
+
+    task = (Func4175CTask *)scheduleTask(&func_80041570_42170, 0, 0, 0xC8);
+    if (task != NULL) {
+        task->unk3C = arg0;
+    }
+}
 
 void func_8004179C_4239C(Func4179CArg *arg0) {
     getCurrentAllocation();
