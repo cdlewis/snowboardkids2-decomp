@@ -23,7 +23,9 @@ typedef struct {
 } func_8002494C_arg;
 
 typedef struct {
-    u8 padding[0x2C];
+    u16 unk0;
+    u16 unk2;
+    u8 padding[0x28];
     void *unk2C;
 } func_80027A28_28628_arg;
 
@@ -82,6 +84,7 @@ typedef struct {
 extern void func_800394BC_3A0BC(void *, s32);
 extern void func_8000FED0_10AD0(void);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
+extern void func_80038420_39020(void);
 extern s32 identityMatrix[];
 extern void func_800650B4_65CB4(u8, void *);
 
@@ -486,14 +489,20 @@ void func_800279D4_285D4(func_80027A28_28628_arg *arg0) {
     setCallback(func_80027A28_28628);
 }
 
-void func_80027A50_28650(void);
+void func_80027A50_28650(func_80027A28_28628_arg *arg0);
 
 void func_80027A28_28628(func_80027A28_28628_arg *arg0) {
     func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
-    setCallback(&func_80027A50_28650);
+    setCallback(func_80027A50_28650);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027A50_28650);
+void func_80027A50_28650(func_80027A28_28628_arg *arg0) {
+    arg0->unk0++;
+    arg0->unk2++;
+    arg0->unk0 &= 0x3FF;
+    arg0->unk2 &= 0x3FF;
+    debugEnqueueCallback(7, 0, func_80038420_39020, arg0);
+}
 
 void func_80027AAC_286AC(func_80027A28_28628_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
