@@ -23,14 +23,16 @@ typedef struct {
     s32 unk44;
     s32 unk48;
     s32 unk4C;
-    u8 _pad50[0x4];
+    s16 unk50;
+    s16 unk52;
     u16 rotation;
-    u16 _pad56;
+    s16 unk56;
     s16 unk58;
     s16 unk5A;
 } B4240FuncArg;
 
 void func_800BB320_B42B0(B4240FuncArg *);
+void func_800BB454_B43E4(B4240FuncArg *);
 void func_800BB63C_B45CC(B4240FuncArg *);
 void func_800BB89C_B482C(B4240FuncArg *);
 
@@ -89,4 +91,13 @@ void func_800BBAFC_B4A8C(B4240Struct *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B4240", func_800BBB34);
+void func_800BBB34(void) {
+    s32 i;
+
+    for (i = 0; i < 6; i++) {
+        B4240FuncArg *task = scheduleTask(func_800BB454_B43E4, 0, 0, 0x32);
+        if (task != NULL) {
+            task->unk50 = i;
+        }
+    }
+}
