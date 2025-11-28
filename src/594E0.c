@@ -31,7 +31,14 @@ void func_800589A0_595A0(Player *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_800589CC_595CC);
+void func_800589CC_595CC(Player *arg0, void *arg1) {
+    if (arg0->unkAC2 < 0x31) {
+        if (!(arg0->unkB88 & 0x71F)) {
+            arg0->unkAC2 = 0x31;
+            memcpy(arg0->unkAC8, arg1, 0xC);
+        }
+    }
+}
 
 void func_80058A10_59610(Player *arg0) {
     if (arg0->unkAC2 < 0x33) {
