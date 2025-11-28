@@ -7,13 +7,16 @@ typedef struct {
     u8 unkBBE;
 } Arg0Struct;
 
+extern FuncPtr D_800BCB5C_B411C[];
 extern FuncPtr D_800BCB74_B4134[];
 
 INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB2B0_B2870);
 
 INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB66C_B2C2C);
 
-INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB86C_B2E2C);
+void func_800BB86C_B2E2C(Arg0Struct *arg0) {
+    D_800BCB5C_B411C[arg0->unkBBE](arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB89C_B2E5C);
 
