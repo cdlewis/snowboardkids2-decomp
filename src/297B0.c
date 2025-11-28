@@ -1,6 +1,7 @@
 #include "20F0.h"
 #include "common.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
@@ -39,7 +40,8 @@ typedef struct {
     /* 0x2C */ u16 rotation;
     /* 0x2E */ u8 pad2E[0x2C];
     /* 0x5A */ s16 unk5A;
-    /* 0x5C */ u8 pad5C[0x2];
+    /* 0x5C */ u8 unk5C;
+    /* 0x5D */ u8 pad5D;
     /* 0x5E */ u8 unk5E;
     /* 0x5F */ u8 pad5F[0x2];
     /* 0x61 */ u8 unk61;
@@ -215,7 +217,11 @@ INCLUDE_ASM("asm/nonmatchings/297B0", func_80029EA8_2AAA8);
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A044_2AC44);
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A0DC_2ACDC);
+extern u16 D_8008E590_8F190[];
+
+void func_8002A0DC_2ACDC(Func297D8Arg *arg0) {
+    func_800585C8_591C8(D_8008E590_8F190[arg0->unk5C]);
+}
 
 void func_8002A108_2AD08(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
