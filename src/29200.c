@@ -47,4 +47,6 @@ void func_80028AEC_296EC(Func80028AECArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/29200", func_80028B44_29744);
 
-INCLUDE_ASM("asm/nonmatchings/29200", func_80028B80_29780);
+void func_80028B80_29780(Func80028AECArg *arg0) {
+    arg0->model = func_80002014_2C14(arg0->model);
+}
