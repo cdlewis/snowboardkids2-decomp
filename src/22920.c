@@ -126,6 +126,7 @@ void func_80021FB8_22BB8(void) {
 extern void func_80033200_33E00(void);
 
 void func_80022048_22C48(void);
+void func_800220AC_22CAC(void);
 
 void func_80022018_22C18(void) {
     createTaskQueue(func_80033200_33E00, 0x96);
@@ -138,14 +139,25 @@ void func_80022048_22C48(void) {
     }
 }
 
-void func_800220AC_22CAC(void);
-
 void func_8002207C_22C7C(void) {
     createTaskQueue(func_8003D560_3E160, 100);
     setGameStateHandler(func_800220AC_22CAC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_800220AC_22CAC);
+void func_800220AC_22CAC(void) {
+    s16 result;
+
+    result = func_80069810_6A410();
+
+    if (result != 0) {
+        func_8006FDA0_709A0(0, 0, 0);
+        if (result == 1) {
+            setGameStateHandler(func_8002207C_22C7C);
+        } else {
+            setGameStateHandler(func_80021E6C_22A6C);
+        }
+    }
+}
 
 void func_80022108_22D08(void) {
     func_800693C4_69FC4(func_8001452C_1512C, 0xC8);
