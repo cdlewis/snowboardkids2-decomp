@@ -3,7 +3,6 @@
 #include "displaylist.h"
 #include "task_scheduler.h"
 
-s32 func_80052418_53018(s32, s32);
 s32 func_80052A24_53624(s32, s32);
 s32 func_80053078_53C78(s32, s32);
 s32 func_800537B0_543B0(s32, s32);
@@ -76,7 +75,14 @@ void func_800523EC_52FEC(Struct_52880 *arg0) {
     arg0->unk20 = freeNodeMemory(arg0->unk20);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80052418_53018);
+s32 func_80052418_53018(s32 arg0, s32 arg1) {
+    Struct_52880 *task;
+
+    task = scheduleTask(func_80051DEC_529EC, (arg0 + 4) & 0xFF, 0, 0x6E);
+    if (task != NULL) {
+        task->unk42 = arg0;
+    }
+}
 
 void func_800524A4_530A4(Struct_52880 *arg0);
 extern void func_800525F4_531F4(void);
