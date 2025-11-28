@@ -152,7 +152,42 @@ void func_8002494C_2554C(func_8002494C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024990_25590);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024AAC_256AC);
+void func_80024BA0_257A0(func_80024C8C_2588C_arg *);
+
+void func_80024AAC_256AC(func_80024C8C_2588C_arg *arg0) {
+    Mat3x3Padded localMatrix;
+    Mat3x3Padded *localPtr;
+    u8 *base;
+    Mat3x3Padded *matrix;
+    u16 rotation;
+    u8 *ptr;
+    u8 index;
+
+    base = (u8 *)getCurrentAllocation();
+
+    localPtr = &localMatrix;
+    memcpy(localPtr, identityMatrix, sizeof(Mat3x3Padded));
+
+    matrix = (Mat3x3Padded *)&arg0->unk4;
+    rotation = *(u16 *)(base + arg0->unk28 * 2 + 0x1880);
+    createYRotationMatrix(matrix, 0x2000 - rotation);
+
+    func_8006B084_6BC84(matrix, base + (arg0->unk28 * 32 + 0x17F8), localPtr);
+
+    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)localPtr);
+
+    ptr = (u8 *)D_800AFE8C_A71FC;
+    index = arg0->unk28;
+    ptr = ptr + index;
+    if (ptr[9] == 7) {
+        func_800021B8_2DB8(arg0->unk0, 4);
+    } else {
+        func_800021B8_2DB8(arg0->unk0, 0x90);
+    }
+
+    updateModelGeometry(arg0->unk0);
+    setCallback(func_80024BA0_257A0);
+}
 
 void func_80024D40_25940(func_80024C8C_2588C_arg *);
 void func_80024DCC_259CC(func_80024C8C_2588C_arg *);
