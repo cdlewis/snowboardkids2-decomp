@@ -167,7 +167,16 @@ void func_800BC4F0_AE8B0(func_800BC4F0_AE8B0_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC528_AE8E8);
+typedef struct {
+    s16 unk0;
+} func_800BC528_AE8E8_arg;
+
+extern void func_800BC550_AE910(void);
+
+void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0) {
+    arg0->unk0 = 0xF0;
+    setCallback(&func_800BC550_AE910);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC550_AE910);
 
