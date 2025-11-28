@@ -106,7 +106,7 @@ void func_80020528_21128(Func80020528Arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8002055C_2115C);
 
 void func_80020708_21308(void);
-void func_80020B18_21718(void);
+void func_80020B18_21718(Func800206B4Arg *arg0);
 
 void func_800206B4_212B4(Func800206B4Arg *arg0) {
     s32 pad[4];
@@ -123,7 +123,9 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_80020924_21524);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020A00_21600);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80020B18_21718);
+void func_80020B18_21718(Func800206B4Arg *arg0) {
+    arg0->unkF8 = freeNodeMemory(arg0->unkF8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020B44_21744);
 
