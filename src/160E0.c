@@ -285,8 +285,8 @@ void func_80016150_16D50(void) {
         EepromSaveData->character_or_settings[i] = i + 1;
     }
 
-    EepromSaveData->setting_4B = 0xD;
-    EepromSaveData->setting_4C = 0xF;
+    EepromSaveData->setting_4B[0] = 0xD;
+    EepromSaveData->setting_4B[1] = 0xF;
 }
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_800161F4_16DF4);

@@ -8,9 +8,7 @@ typedef struct {
     /* 0x20 */ u8 save_slot_data[16];
     /* 0x30 */ u8 character_or_settings[19];
     /* 0x43 */ u8 setting_43[8];
-    /* 0x4B */ u8 setting_4B;
-    /* 0x4C */ u8 setting_4C;
-    /* 0x4D */ u8 setting_4D;
+    /* 0x4B */ u8 setting_4B[3];
     /* 0x4E */ u8 setting_4E;
     /* 0x4F */ u8 setting_4F;
     /* 0x50 */ u8 setting_50;
