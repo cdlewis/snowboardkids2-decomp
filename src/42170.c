@@ -166,10 +166,30 @@ typedef struct {
     s16 unk42;
 } Func43CA4Arg;
 
+typedef struct {
+    s32 unk0;              /* 0x00 */
+    s32 unk4;              /* 0x04 */
+    s32 unk8;              /* 0x08 */
+    s32 unkC;              /* 0x0C */
+    u8 _pad10[0x14];       /* 0x10 */
+    Func43CA4Unk28 *unk24; /* 0x24 */
+    u8 _pad28[0x4];        /* 0x28 */
+    s16 unk2C[3];          /* 0x2C */
+    u8 _pad32[0x6];        /* 0x32 */
+    s32 unk38;             /* 0x38 */
+    u8 _pad3C[0x4];        /* 0x3C */
+    s16 unk40;             /* 0x40 */
+    s16 unk42;             /* 0x42 */
+    u8 _pad44[0x8];        /* 0x44 */
+    s32 unk4C;             /* 0x4C */
+} Func4393CArg;
+
 void func_80043CA4_448A4(Func43CA4Arg *);
+void func_800439F4_445F4(Func4393CArg *);
 
 extern s32 D_80090964_91564;
 extern s32 D_80090974_91574;
+extern s32 D_8009093C_9153C;
 extern s32 func_80043718_44318(void *, void *);
 extern void func_80066444_67044(s32, void *);
 
@@ -567,7 +587,31 @@ void func_80043860_44460(void **arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800438A0_444A0);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_8004393C_4453C);
+void func_8004393C_4453C(Func4393CArg *arg0) {
+    Func43CA4GameState *gameState;
+    s32 i;
+
+    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    if (gameState->unk76 == 0) {
+        if (func_80043718_44318(arg0, &D_8009093C_9153C) != 0) {
+            arg0->unk38 = 0;
+            arg0->unk40 = 0;
+            arg0->unk42 = 1;
+            setCallback(func_800439F4_445F4);
+        }
+    }
+
+    transformVector(arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk8);
+
+    if (arg0->unk4C != 0) {
+        arg0->unk4C = 0;
+        func_80056B7C_5777C(&arg0->unk8, 0x12);
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, &arg0->unk4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800439F4_445F4);
 
