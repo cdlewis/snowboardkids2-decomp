@@ -11,6 +11,13 @@ extern void *freeNodeMemory(void *);
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0(void);
 extern void func_80038420_39020(void);
+extern u8 identityMatrix[];
+extern u16 func_80060A3C_6163C(void *, u16, void *);
+extern u16 func_80062B1C_6371C(void *, u16, void *, void *);
+extern s16 func_8006D21C_6DE1C(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void computeLookAtMatrix(void *, void *, void *);
+extern void func_8006FD3C_7093C(u16, void *);
+extern void func_8001FFE4_20BE4(void);
 
 USE_ASSET(_458E30);
 
@@ -119,13 +126,40 @@ typedef struct {
     u16 unk72;
 } Func8001FE64Arg;
 
+typedef struct {
+    u8 _pad0[0x48A];
+    u16 unk48A;
+} Allocation_8001FEB4;
+
+typedef struct {
+    s32 unk0;
+    u8 _pad4[0x4];
+    s32 unk8;
+    u8 _padC[0xC];
+    u8 unk18[0x3A];
+    u16 unk52;
+    u8 _pad54[0x2];
+    u16 unk56;
+    u8 _pad58[0x2];
+    u16 unk5A;
+    u8 _pad5C[0x4];
+    s32 unk60;
+    u8 _pad64[0x12];
+    u8 unk76;
+} Func8001FEB4Arg;
+
+typedef struct {
+    u8 data[0x1C];
+    volatile s32 unk1C;
+} Mat2WithTemp;
+
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001F6A0_202A0);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001F7C8_203C8);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FA00_20600);
 
-extern void func_8001FEB4_20AB4(void);
+void func_8001FEB4_20AB4(Func8001FEB4Arg *arg0);
 
 void func_8001FE64_20A64(Func8001FE64Arg *arg0) {
     getCurrentAllocation();
@@ -137,7 +171,49 @@ void func_8001FE64_20A64(Func8001FE64Arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FEB4_20AB4);
+void func_8001FEB4_20AB4(Func8001FEB4Arg *arg0) {
+    Allocation_8001FEB4 *allocation;
+    u8 mat1[0x20];
+    Mat2WithTemp mat2;
+    u8 mat3[0x20];
+    s32 pos1[4];
+    s32 pos2[4];
+    u16 temp;
+    u16 unk56;
+    void *unk18;
+
+    allocation = (Allocation_8001FEB4 *)getCurrentAllocation();
+    memcpy(mat1, identityMatrix, 0x20);
+
+    unk18 = arg0->unk18;
+    temp = func_80060A3C_6163C(unk18, arg0->unk52, arg0);
+    arg0->unk52 = temp;
+
+    func_80062B1C_6371C(unk18, temp, pos1, pos2);
+
+    arg0->unk5A = (func_8006D21C_6DE1C(pos2[0], pos2[2], arg0->unk0, arg0->unk8) - 0x1000) & 0x1FFF;
+
+    unk56 = (arg0->unk56 + 0x1000) & 0x1FFF;
+    arg0->unk56 = unk56;
+
+    if (((arg0->unk5A - unk56) & 0x1FFF) >= 0x1001) {
+        arg0->unk76 = 1;
+    } else {
+        arg0->unk76 = 0;
+    }
+
+    computeLookAtMatrix((u8 *)arg0 + 0xC, arg0, mat3);
+
+    memcpy(&mat2, identityMatrix, 0x20);
+
+    mat2.unk1C = arg0->unk60;
+
+    func_8006B084_6BC84(&mat2, mat3, mat1);
+
+    func_8006FD3C_7093C(allocation->unk48A, mat1);
+
+    setCallback(&func_8001FFE4_20BE4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FFE4_20BE4);
 
