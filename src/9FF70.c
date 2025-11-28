@@ -1,4 +1,20 @@
 #include "common.h"
+#include "task_scheduler.h"
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+    void *unk10;
+    void *unk14;
+    void *unk18;
+    void *unk1C;
+    void *unk20;
+    void *unk24;
+    u8 pad[0x4];
+    void *unk2C;
+} func_800B9AE0_arg;
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B00C0_9FF70);
 
@@ -230,4 +246,18 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B98CC_A977C);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B99E0);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B9AE0);
+void func_800B9AE0(func_800B9AE0_arg *arg0) {
+    s32 pad[8];
+
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    arg0->unk8 = freeNodeMemory(arg0->unk8);
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+    arg0->unk20 = freeNodeMemory(arg0->unk20);
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unkC = freeNodeMemory(arg0->unkC);
+    arg0->unk10 = freeNodeMemory(arg0->unk10);
+    arg0->unk14 = freeNodeMemory(arg0->unk14);
+    arg0->unk18 = freeNodeMemory(arg0->unk18);
+    arg0->unk1C = freeNodeMemory(arg0->unk1C);
+    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+}
