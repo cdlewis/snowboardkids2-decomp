@@ -394,7 +394,14 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_800554FC_560FC);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80055650_56250);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80055820_56420);
+s32 func_80055820_56420(s32 arg0, s32 arg1) {
+    Struct_52880 *task;
+
+    task = scheduleTask(func_80055418_56018, (arg0 + 4) & 0xFF, 0, 0x6F);
+    if (task != NULL) {
+        task->unk42 = arg0;
+    }
+}
 
 typedef struct {
     u8 padding[0x20];
