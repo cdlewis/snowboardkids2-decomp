@@ -3,6 +3,7 @@
 
 extern void *getCurrentAllocation(void);
 extern u16 func_80060A3C_6163C(void *, u16, void *);
+extern s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3);
 
 typedef struct ListNode_5AA90 {
     /* 0x00 */ struct ListNode_5AA90 *next;
@@ -24,7 +25,23 @@ INCLUDE_ASM("asm/nonmatchings/5AA90", func_80059ED0_5AAD0);
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005A26C_5AE6C);
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005A930_5B530);
+void func_8005A930_5B530(Player *arg0) {
+    void *allocation;
+    void *sp0;
+    void *sp1;
+    u16 temp;
+    s32 result;
+
+    allocation = getCurrentAllocation();
+    sp0 = (void *)((u8 *)allocation + 0x30);
+    sp1 = (void *)&arg0->worldPosX;
+    temp = func_80059E90_5AA90(arg0, sp0, arg0->unkB94, sp1);
+    arg0->unkB94 = temp;
+    result = func_8005D020_5DC20(sp0, temp, sp1, 0x200000);
+    if (result < arg0->worldPosY) {
+        arg0->worldPosY = result;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005A9A8_5B5A8);
 
