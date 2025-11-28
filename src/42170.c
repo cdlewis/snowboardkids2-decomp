@@ -1,5 +1,6 @@
 #include "56910.h"
 #include "common.h"
+#include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "task_scheduler.h"
@@ -41,6 +42,15 @@ typedef struct {
     void *unk3C;
     s32 unk40;
 } Func4179CArg;
+
+typedef struct {
+    u8 pad0[0x14];  /* 0x00 */
+    s32 posX;       /* 0x14 */
+    s32 posY;       /* 0x18 */
+    s32 posZ;       /* 0x1C */
+    u8 pad20[0x1C]; /* 0x20 */
+    Player *unk3C;  /* 0x3C */
+} Func41A60Arg;
 
 void func_800419AC_425AC(Func4179CArg *);
 
@@ -177,7 +187,12 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_800419E4_425E4);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041A24_42624);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041A60_42660);
+void func_80041A60_42660(Func41A60Arg *arg0) {
+    arg0->posX = arg0->unk3C->worldPosX;
+    arg0->posY = arg0->unk3C->worldPosY;
+    arg0->posZ = arg0->unk3C->worldPosZ;
+    func_80063534_64134((s32)arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041A9C_4269C);
 
