@@ -1,6 +1,9 @@
 #include "common.h"
+#include "overlay.h"
+#include "task_scheduler.h"
 
-extern void *freeNodeMemory(void *);
+USE_ASSET(_4237C0);
+USE_ASSET(_426EF0);
 
 typedef struct {
     u8 pad[0x8];
@@ -27,6 +30,17 @@ typedef struct {
     u8 pad0[0x4];
     void *unk4;
 } func_80037FB0_38BB0_arg;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 padE[2];
+} func_80037E78_38A78_entry;
 
 INCLUDE_ASM("asm/nonmatchings/38310", func_80037710_38310);
 
@@ -55,7 +69,36 @@ void func_80037E40_38A40(func_80037E40_38A40_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/38310", func_80037E78_38A78);
+void func_80037F14_38B14(void *);
+void func_80037FB0_38BB0(func_80037FB0_38BB0_arg *arg0);
+
+void func_80037E78_38A78(func_80037E78_38A78_entry *arg0) {
+    void *allocation;
+    s32 i;
+    s32 minus32;
+    s32 val;
+
+    getCurrentAllocation();
+    allocation = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    setCleanupCallback(func_80037FB0_38BB0);
+
+    i = 0;
+    minus32 = -32;
+    val = 8;
+    do {
+        arg0[i].unk0 = val;
+        arg0[i].unk2 = minus32;
+        arg0[i].unk4 = allocation;
+        arg0[i].unk8 = i;
+        arg0[i].unkA = 0;
+        arg0[i].unkD = 0;
+        arg0[i].unkC = 0;
+        i++;
+        val += 0x78;
+    } while (i < 2);
+
+    setCallback(func_80037F14_38B14);
+}
 
 INCLUDE_ASM("asm/nonmatchings/38310", func_80037F14_38B14);
 
