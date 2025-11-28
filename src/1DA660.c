@@ -8,17 +8,13 @@ extern void func_8000FED0_10AD0(void);
 extern void func_800630F0_63CF0(s32, void *);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern void func_80038420_39020(void);
+extern u8 D_41A1D0[];
 extern u8 D_41AD80[];
 extern u8 D_422C60[];
-void func_800B0DF8_1DB398(void *);
-void func_800B0638_1DABD8(void);
-
 typedef struct {
     u8 _pad0[0x2C];
     s32 unk2C;
 } func_800B0DD0_arg;
-
-void func_800B0DD0_1DB370(func_800B0DD0_arg *);
 
 typedef struct {
     SceneModel *unk0;
@@ -39,9 +35,22 @@ typedef struct {
 } func_800B0D4C_arg;
 
 typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+} func_800B0F18_arg;
+
+typedef struct {
     u8 _pad0[0x4];
     void *unk4;
 } func_800B0FE0_arg;
+
+void func_800B0DF8_1DB398(void *);
+void func_800B0638_1DABD8(void);
+void func_800B0F88_1DB528(void *);
+void func_800B0FE0_1DB580(func_800B0FE0_arg *);
+void func_800B0DD0_1DB370(func_800B0DD0_arg *);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
 
@@ -128,7 +137,17 @@ void func_800B0EEC_1DB48C(func_800B0FE0_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0F18_1DB4B8);
+void func_800B0F18_1DB4B8(func_800B0F18_arg *arg0) {
+    void *temp;
+    getCurrentAllocation();
+    temp = dmaRequestAndUpdateStateWithSize(D_41A1D0, D_41AD80, 0x1B48);
+    arg0->unk0 = -76;
+    arg0->unk2 = -8;
+    arg0->unk8 = 12;
+    arg0->unk4 = temp;
+    setCleanupCallback(func_800B0FE0_1DB580);
+    setCallbackWithContinue(func_800B0F88_1DB528);
+}
 
 void func_800B0F88_1DB528(void *arg0) {
     GameState *state = getCurrentAllocation();
