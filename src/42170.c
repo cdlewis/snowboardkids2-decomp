@@ -209,7 +209,14 @@ void func_800419AC_425AC(Func4179CArg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800419E4_425E4);
+void func_800419E4_425E4(void *arg0) {
+    Func4179CArg *task;
+
+    task = scheduleTask(&func_8004179C_4239C, 0, 0, 0x63);
+    if (task != NULL) {
+        task->unk3C = arg0;
+    }
+}
 
 void func_80041A24_42624(Func41A60Arg *arg0) {
     arg0->posX = arg0->unk3C->worldPosX;
