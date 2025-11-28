@@ -98,6 +98,30 @@ typedef struct {
 
 void func_80041724_42324(Func41570State *);
 
+typedef struct {
+    u8 _pad0[0x76];
+    u8 unk76;
+} Func43CA4GameState;
+
+typedef struct {
+    u8 _pad0[0x9F0];
+    s16 unk9F0[3];
+} Func43CA4Unk28;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    u8 _pad10[0x18];
+    Func43CA4Unk28 *unk28;
+    s16 unk2C[3];
+} Func43CA4Arg;
+
+extern s32 D_80090974_91574;
+extern s32 func_80043718_44318(void *, void *);
+extern void func_80066444_67044(s32, void *);
+
 void func_80041570_42170(Func41570State *arg0) {
     getCurrentAllocation();
     createXRotationMatrix(arg0->matrix, 0x800);
@@ -420,7 +444,23 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_80043AB4_446B4);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80043C00_44800);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80043CA4_448A4);
+void func_80043CA4_448A4(Func43CA4Arg *arg0) {
+    Func43CA4GameState *gameState;
+    s32 i;
+
+    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    if (gameState->unk76 == 0) {
+        if (func_80043718_44318(arg0, &D_80090974_91574) != 0) {
+            func_80069CF8_6A8F8();
+        }
+    }
+
+    transformVector(arg0->unk2C, arg0->unk28->unk9F0, &arg0->unk8);
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, &arg0->unk4);
+    }
+}
 
 void func_80043D30_44930(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
