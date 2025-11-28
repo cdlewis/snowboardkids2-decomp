@@ -76,7 +76,16 @@ void func_800BB368_AD728(func_800BB368_AD728_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB45C_AD81C);
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_800BB45C_AD81C_arg;
+
+void func_800BB45C_AD81C(func_800BB45C_AD81C_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB494_AD854);
 
