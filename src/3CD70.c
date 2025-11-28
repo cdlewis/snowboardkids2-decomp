@@ -16,6 +16,7 @@ void func_8003CEC4_3DAC4(u8 arg0) {
 }
 
 void func_8003CF40_3DB40(void);
+void func_8003D0F4_3DCF4(void);
 
 typedef struct {
     s16 unk0;
@@ -37,4 +38,9 @@ INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003D0F4_3DCF4);
 
 INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003D210_3DE10);
 
-INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003D51C_3E11C);
+void func_8003D51C_3E11C(u8 arg0) {
+    Node *task = scheduleTask(func_8003D0F4_3DCF4, 0, 2, 0xF0);
+    if (task != NULL) {
+        *(u8 *)((u8 *)task + 0x26) = arg0;
+    }
+}
