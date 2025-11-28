@@ -199,7 +199,8 @@ typedef struct {
     s16 unk42;             /* 0x42 */
     u8 _pad44[0x2];        /* 0x44 */
     s16 unk46;             /* 0x46 */
-    u8 _pad48[0x4];        /* 0x48 */
+    s16 unk48;             /* 0x48 */
+    u8 _pad4A[0x2];        /* 0x4A */
     s32 unk4C;             /* 0x4C */
 } Func4393CArg;
 
@@ -210,6 +211,7 @@ extern s32 D_80090964_91564;
 extern s32 D_80090974_91574;
 extern s32 D_8009093C_9153C;
 extern s32 D_80090AAC_916AC;
+extern s8 D_80090950_91550;
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern s32 func_80043718_44318(void *, void *);
 extern void func_80066444_67044(s32, void *);
@@ -805,6 +807,8 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_800437C4_443C4);
 void func_80043D30_44930(void **);
 void func_8004393C_4453C(Func4393CArg *);
 void func_800438A0_444A0(Func4393CArg *);
+extern void func_800437C4_443C4(void *, void *);
+extern void func_80043AB4_446B4(Func4393CArg *);
 
 void func_80043860_44460(void **arg0) {
     *arg0 = load_3ECE40();
@@ -865,7 +869,29 @@ void func_8004393C_4453C(Func4393CArg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800439F4_445F4);
+void func_800439F4_445F4(Func4393CArg *arg0) {
+    Func43CA4GameState *gameState;
+    s32 i;
+
+    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    if (gameState->unk76 == 0) {
+        func_800437C4_443C4(arg0, &D_80090950_91550);
+        arg0->unk38 = arg0->unk38 + 0x8000;
+        arg0->unk30 = arg0->unk30 + arg0->unk38;
+        if (arg0->unk30 > 0x600000) {
+            arg0->unk48 = 0;
+            arg0->unk40 = 0;
+            arg0->unk42 = 1;
+            setCallback(func_80043AB4_446B4);
+        }
+    }
+
+    transformVector((s16 *)&arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk8);
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, &arg0->unk4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80043AB4_446B4);
 
