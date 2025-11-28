@@ -28,6 +28,7 @@ void func_80021D50_22950(void) {
 
 extern void func_800226F0_232F0(void);
 extern void func_8001C920_1D520(void);
+extern void func_8001452C_1512C(void);
 
 void func_80021DE8_229E8(void);
 void func_80021EFC_22AFC(void);
@@ -146,4 +147,6 @@ void func_8002207C_22C7C(void) {
 
 INCLUDE_ASM("asm/nonmatchings/22920", func_800220AC_22CAC);
 
-INCLUDE_ASM("asm/nonmatchings/22920", func_80022108_22D08);
+void func_80022108_22D08(void) {
+    func_800693C4_69FC4(func_8001452C_1512C, 0xC8);
+}
