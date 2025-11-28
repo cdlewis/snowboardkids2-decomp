@@ -26,7 +26,8 @@ typedef struct {
     u8 unk4;
     u8 padding1[0x1B];
     void *unk20;
-    u8 padding2[0x1E];
+    u8 padding2[0x1C];
+    u16 unk40;
     u16 unk42;
     u8 padding3[0x2];
     u16 unk46;
@@ -256,7 +257,8 @@ void func_80054568_55168(Struct_52880 *arg0) {
     }
 }
 
-extern void func_800545F8_551F8(void);
+void func_800545F8_551F8(Struct_52880 *arg0);
+extern void func_80054658_55258(void);
 
 void func_800545B0_551B0(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
@@ -265,7 +267,19 @@ void func_800545B0_551B0(Struct_52880 *arg0) {
     setCallbackWithContinue(func_800545F8_551F8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_800545F8_551F8);
+void func_800545F8_551F8(Struct_52880 *arg0) {
+    Alloc_52880 *alloc;
+    void *ptr;
+    s32 pad[4];
+
+    alloc = getCurrentAllocation();
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 6);
+    ptr = alloc->unk44;
+    arg0->unk40 = 0x65;
+    arg0->unk4E = 0;
+    arg0->unk0 = ptr;
+    setCallbackWithContinue(func_80054658_55258);
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80054658_55258);
 
