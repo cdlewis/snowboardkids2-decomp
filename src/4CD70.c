@@ -10,6 +10,20 @@ extern void func_8004E2D8_4EED8(void);
 extern void func_8004E410_4F010(void);
 extern void func_8004E614_4F214(void);
 extern void *freeNodeMemory(void *);
+extern void func_80058530_59130(s32, s32);
+
+void func_8004D19C_4DD9C(void);
+void func_8004D338_4DF38(void);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x6];
+    s32 unk10;
+    s32 unk14;
+} Struct_func_8004D134;
 
 typedef struct {
     u8 pad0[0x4];
@@ -98,7 +112,16 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CEC4_4DAC4);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D0D0_4DCD0);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D134_4DD34);
+void func_8004D134_4DD34(Struct_func_8004D134 *arg0) {
+    arg0->unk4 = loadAsset_34CB50();
+    arg0->unk8 = 0xD;
+    func_80058530_59130(0x11B, 6);
+    arg0->unk10 = 0x2D;
+    arg0->unk14 = 0;
+    arg0->unk2 = -8;
+    setCleanupCallback(func_8004D338_4DF38);
+    setCallback(func_8004D19C_4DD9C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D19C_4DD9C);
 
