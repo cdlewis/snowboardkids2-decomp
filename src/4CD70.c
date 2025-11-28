@@ -1,7 +1,10 @@
 #include "56910.h"
 #include "common.h"
+#include "gamestate.h"
 #include "task_scheduler.h"
 
+extern u32 D_3F3940;
+extern u32 D_3F3D10;
 extern u32 D_3F6950;
 extern u32 D_3F6BB0;
 
@@ -55,6 +58,17 @@ typedef struct {
     u8 pad8[0x4];
     void *unkC;
 } Struct_func_8004F04C;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    u8 pad8[0x4];
+    void *unkC;
+} Struct_func_8004D8E4;
+
+void func_8004D954_4E554(Struct_func_8004D8E4 *arg0);
+void func_8004D98C_4E58C(Struct_func_8004F04C *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
 
@@ -172,7 +186,16 @@ void func_8004D858_4E458(Struct_func_8004F04C *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D890_4E490);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D8E4_4E4E4);
+void func_8004D8E4_4E4E4(Struct_func_8004D8E4 *arg0) {
+    GameState *allocation = (GameState *)getCurrentAllocation();
+
+    arg0->unkC = allocation->players;
+    arg0->unk4 = dmaRequestAndUpdateStateWithSize(&D_3F3940, &D_3F3D10, 0x888);
+    arg0->unk0 = -0x48;
+    arg0->unk2 = -0x38;
+    setCleanupCallback(&func_8004D98C_4E58C);
+    setCallback(&func_8004D954_4E554);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D954_4E554);
 
