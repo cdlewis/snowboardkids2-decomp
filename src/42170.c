@@ -78,17 +78,18 @@ typedef struct {
 void func_80042308_42F08(Func420E8State *);
 
 typedef struct {
-    u8 pad0[0x18];  /* 0x00 */
-    s32 unk18;      /* 0x18 - corresponds to DisplayListObject.unk10.position.Y */
-    u8 pad1C[0x4];  /* 0x1C */
-    void *unk20;    /* 0x20 */
-    void *unk24;    /* 0x24 */
-    void *unk28;    /* 0x28 */
-    s32 unk2C;      /* 0x2C */
-    u8 pad30[0x10]; /* 0x30 */
-    s32 unk40;      /* 0x40 */
-    u8 pad44[0x2];  /* 0x44 */
-    s16 unk46;      /* 0x46 */
+    u8 pad0[0x18]; /* 0x00 */
+    s32 unk18;     /* 0x18 - corresponds to DisplayListObject.unk10.position.Y */
+    u8 pad1C[0x4]; /* 0x1C */
+    void *unk20;   /* 0x20 */
+    void *unk24;   /* 0x24 */
+    void *unk28;   /* 0x28 */
+    s32 unk2C;     /* 0x2C */
+    u8 pad30[0xC]; /* 0x30 */
+    void *unk3C;   /* 0x3C */
+    s32 unk40;     /* 0x40 */
+    s16 unk44;     /* 0x44 */
+    s16 unk46;     /* 0x46 */
 } Func43DC0State;
 
 void func_80044018_44C18(Func43DC0State *);
@@ -921,7 +922,19 @@ void func_80044018_44C18(Func43DC0State *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044050_44C50);
+void *func_80044050_44C50(Player *arg0) {
+    Func43DC0State *task;
+
+    task = scheduleTask(func_80043DC0_449C0, 0, 0, 0xC8);
+    if (task != NULL) {
+        task->unk3C = arg0;
+        task->unk44 = 0;
+        if (arg0->unkB84 & 2) {
+            task->unk44 = 0x1000;
+        }
+    }
+    return task;
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800440B4_44CB4);
 
