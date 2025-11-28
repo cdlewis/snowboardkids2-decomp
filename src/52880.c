@@ -142,7 +142,14 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80052C00_53800);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80052DB4_539B4);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80053078_53C78);
+s32 func_80053078_53C78(s32 arg0, s32 arg1) {
+    Struct_52880 *task;
+
+    task = scheduleTask(func_80052A68_53668, (arg0 + 4) & 0xFF, 0, 0x6F);
+    if (task != NULL) {
+        task->unk42 = arg0;
+    }
+}
 
 void func_80053784_54384(Struct_52880 *arg0);
 void func_80053104_53D04(Struct_52880 *arg0);
