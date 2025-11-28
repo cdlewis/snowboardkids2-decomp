@@ -4,9 +4,12 @@
 
 USE_ASSET(_426EF0);
 USE_ASSET(_42F1D0);
+USE_ASSET(_41A1D0);
 
 extern u8 D_426EF0[];
 extern u8 D_42F1D0[];
+extern u8 D_41A1D0[];
+extern u8 D_41AD80[];
 
 typedef struct {
     /* 0x00 */ s16 unk0;
@@ -73,7 +76,20 @@ void func_800B087C_1DBF5C(func_800B07A0_1DBE80_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B08A8_1DBF88);
+void func_800B0920_1DC000(void *);
+void func_800B0968_1DC048(func_800B07A0_1DBE80_arg *);
+
+void func_800B08A8_1DBF88(func_800B07A0_1DBE80_arg *arg0) {
+    void *temp;
+
+    temp = dmaRequestAndUpdateStateWithSize(D_41A1D0, D_41AD80, 0x1B48);
+    setCleanupCallback(func_800B0968_1DC048);
+    arg0->unk0 = -0x2C;
+    arg0->unk2 = -0x14;
+    arg0->unk8 = 0xD;
+    arg0->unk4 = temp;
+    setCallback(func_800B0920_1DC000);
+}
 
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0(void);
