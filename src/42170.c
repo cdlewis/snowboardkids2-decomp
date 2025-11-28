@@ -158,6 +158,8 @@ void func_80044C38_45838(Func44BBCArg *);
 typedef struct {
     u8 _pad0[0x9F0];
     s16 unk9F0[3];
+    u8 _pad9F6[0x1D9];
+    u8 unkBCF;
 } Func43CA4Unk28;
 
 typedef struct {
@@ -557,7 +559,61 @@ void func_80042C98_43898(Func42C98Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80042D54_43954);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042E40_43A40);
+typedef struct {
+    void *unk0;            /* 0x00 */
+    s32 unk4;              /* 0x04 */
+    s32 unk8;              /* 0x08 */
+    s32 unkC;              /* 0x0C */
+    u8 *unk10;             /* 0x10 */
+    void *unk14;           /* 0x14 */
+    s8 unk18;              /* 0x18 */
+    s8 unk19;              /* 0x19 */
+    u8 unk1A;              /* 0x1A */
+    u8 _pad1B[0x1];        /* 0x1B */
+    u8 _pad1C[0x2];        /* 0x1C */
+    u8 unk1E;              /* 0x1E */
+    u8 _pad1F[0x1];        /* 0x1F */
+    void *unk20;           /* 0x20 */
+    void *unk24;           /* 0x24 */
+    Func43CA4Unk28 *unk28; /* 0x28 */
+    s16 unk2C[3];          /* 0x2C - 0x32 */
+    u8 _pad32[0xA];        /* 0x32 - 0x3C */
+    s16 unk3C;             /* 0x3C */
+    u8 _pad3E[0x2];        /* 0x3E */
+    u16 unk40;             /* 0x40 */
+    u8 unk42;              /* 0x42 */
+} Func42E40Arg;
+
+extern void rotateVectorY(void *, s32, void *);
+
+void func_80042E40_43A40(Func42E40Arg *arg0) {
+    Func43CA4GameState *gameState;
+    s32 i;
+    s32 pad;
+    s32 rotated[3];
+
+    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    if (gameState->unk76 == 0) {
+        func_80042A6C_4366C(arg0);
+        arg0->unk40 += 0x100;
+        rotateVectorY(arg0->unk2C, (s16)arg0->unk40, rotated);
+        transformVector((s16 *)rotated, arg0->unk28->unk9F0, &arg0->unk8);
+        if (arg0->unk42 != 0) {
+            arg0->unk42 = 0;
+            func_80056B7C_5777C(&arg0->unk8, 0x1A);
+        }
+        if (arg0->unk3C != 0) {
+            arg0->unk3C--;
+        } else if (arg0->unk1E == 0x40) {
+            arg0->unk28->unkBCF--;
+            func_80069CF8_6A8F8();
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_800677C0_683C0(i, (loadAssetMetadata_arg *)&arg0->unk4);
+    }
+}
 
 void func_80042F2C_43B2C(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
