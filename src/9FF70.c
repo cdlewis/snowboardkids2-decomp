@@ -1,3 +1,4 @@
+#include "5E590.h"
 #include "common.h"
 #include "task_scheduler.h"
 
@@ -12,14 +13,33 @@ typedef struct {
     void *unk1C;
     void *unk20;
     void *unk24;
-    u8 pad[0x4];
+    u8 _pad28[0x4];
     void *unk2C;
+    u8 _pad30[0xB89];
+    u8 unkBB9;
+    u8 unkBBA;
+    u8 unkBBB;
+    u8 unkBBC;
+    u8 _padBBD[0xA];
+    u8 unkBC7;
+    u8 _padBC8[0x1B];
+    u8 unkBE3;
+    u8 unkBE4;
 } func_800B9AE0_arg;
 
 extern s32 func_800B2C18_A2AC8(void *);
 extern void func_800B2DDC_A2C8C(void *);
 extern void func_800B3784_A3634(void *);
 extern void func_800B2B3C_A29EC(void *);
+extern void *func_8005DE04_5EA04(s16 arg0, s16 arg1);
+extern void *func_8005DE30_5EA30(s16 arg0, s16 arg1);
+extern void *func_8005DC60_5E860(s32 arg0);
+extern void *loadAssetByIndex_5E990(s32 arg0);
+
+typedef struct {
+    u8 _pad0[0x5C];
+    u8 unk5C;
+} func_800B99E0_alloc;
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B00C0_9FF70);
 
@@ -293,7 +313,42 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B9500_A93B0);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B98CC_A977C);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B99E0);
+void func_800B99E0(func_800B9AE0_arg *arg0) {
+    func_800B99E0_alloc *alloc;
+    u8 v0;
+    u8 v1;
+
+    alloc = getCurrentAllocation();
+    arg0->unk4 = loadAssetByIndex_94F90(arg0->unkBB9, arg0->unkBBA);
+    arg0->unk8 = loadAssetByIndex_95200(arg0->unkBB9, arg0->unkBBA);
+    arg0->unk0 = loadAssetByIndex_953E0(arg0->unkBB9);
+
+    v0 = arg0->unkBB9;
+    if (v0 < 6) {
+        arg0->unk20 = func_8005DE04_5EA04(arg0->unkBB9, arg0->unkBBA);
+        arg0->unk24 = func_8005DE30_5EA30(arg0->unkBB9, arg0->unkBBA);
+    }
+
+    arg0->unkC = loadAssetByIndex_95500(arg0->unkBBB);
+    arg0->unk10 = loadAssetByIndex_95590(arg0->unkBBB);
+
+    v1 = arg0->unkBBB;
+    if (v1 < 9) {
+        arg0->unk14 = loadAssetByIndex_95668(arg0->unkBBC);
+    } else {
+        arg0->unk14 = NULL;
+    }
+
+    arg0->unk18 = load_3ECE40();
+
+    if (arg0->unkBC7 != 0) {
+        arg0->unk1C = func_8005DC60_5E860(alloc->unk5C);
+    }
+
+    if (arg0->unkBE3 != 0) {
+        arg0->unk2C = loadAssetByIndex_5E990(arg0->unkBE4);
+    }
+}
 
 void func_800B9AE0(func_800B9AE0_arg *arg0) {
     s32 pad[8];
