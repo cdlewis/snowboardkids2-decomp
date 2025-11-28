@@ -54,10 +54,13 @@ typedef struct {
 } Struct_func_8004FF28;
 
 typedef struct {
-    u8 pad0[0x4];
+    s16 unk0;
+    s16 unk2;
     void *unk4;
-    u8 pad8[0x4];
+    s16 unk8;
+    u8 padA[0x2];
     void *unkC;
+    s16 unk10;
 } Struct_func_8004F04C;
 
 typedef struct {
@@ -470,7 +473,19 @@ void func_8004F7F4_503F4(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004F820_50420);
+void func_8004F898_50498(Struct_func_8004F04C *);
+void func_8004F9E8_505E8(Struct_func_8004F04C *);
+
+void func_8004F820_50420(Struct_func_8004F04C *arg0) {
+    arg0->unkC = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    arg0->unk4 = loadAsset_34CB50();
+    arg0->unk8 = 0x23;
+    arg0->unk0 = -0x4C;
+    arg0->unk2 = -0x30;
+    arg0->unk10 = 0;
+    setCleanupCallback(func_8004F9E8_505E8);
+    setCallback(func_8004F898_50498);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004F898_50498);
 
