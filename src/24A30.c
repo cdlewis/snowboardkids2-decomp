@@ -70,9 +70,20 @@ typedef struct {
     u8 unk53;
 } func_800253E0_25FE0_arg;
 
+typedef struct {
+    u8 pad0[0x3C];
+    Mat3x3Padded unk3C;
+    Mat3x3Padded unk5C;
+    Mat3x3Padded unk7C;
+    u8 pad9C[0x5];
+    u8 unkA1;
+} func_80024518_arg;
+
 extern void func_800394BC_3A0BC(void *, s32);
 extern void func_8000FED0_10AD0(void);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
+extern s32 identityMatrix[];
+extern void func_800650B4_65CB4(u8, void *);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
 
@@ -96,7 +107,32 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80024298_24E98);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024414_25014);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024518_25118);
+void func_80024518_25118(func_80024518_arg *arg0) {
+    Mat3x3Padded localMatrix;
+    Mat3x3Padded *localPtr;
+    GameState *base;
+    u16 rotation;
+    u16 val;
+
+    base = (GameState *)getCurrentAllocation();
+
+    localPtr = &localMatrix;
+    memcpy(localPtr, identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(&localMatrix.unk14, &arg0->unk5C.unk14, 0xC);
+
+    rotation = base->unk1888[arg0->unkA1];
+    createYRotationMatrix(&arg0->unk5C, rotation);
+
+    func_8006B084_6BC84(&arg0->unk3C, &arg0->unk5C, localPtr);
+    func_8006B084_6BC84(localPtr, &arg0->unk7C, arg0);
+
+    func_800650B4_65CB4(arg0->unkA1, arg0);
+
+    val = base->unk1898[arg0->unkA1];
+    if (val != 4 && val != 9) {
+        setCallback(func_80024048_24C48);
+    }
+}
 
 void func_80024600_25200(func_8002494C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
@@ -117,8 +153,6 @@ void func_8002494C_2554C(func_8002494C_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024990_25590);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024AAC_256AC);
-
-extern s32 identityMatrix[];
 
 void func_80024D40_25940(func_80024C8C_2588C_arg *);
 void func_80024DCC_259CC(func_80024C8C_2588C_arg *);
