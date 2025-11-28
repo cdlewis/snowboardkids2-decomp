@@ -112,6 +112,8 @@ typedef struct {
 void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
 void func_8004D784_4E384(Struct_func_8004D784 *arg0);
 extern void func_8004D63C_4E23C(void *);
+extern void func_8003BD60_3C960(char *, s16, s16, s16, void *, u16, u16);
+extern char D_8009E8A8_9F4A8[];
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
 
@@ -724,10 +726,10 @@ typedef struct {
     s16 unk14;
     u8 pad16[0x2];
     void *unk18;
-    void *unk1C;
+    Player *unk1C;
 } Struct_func_8004EB90;
 
-extern void func_8004EAF0_4F6F0(void);
+void func_8004EAF0_4F6F0(Struct_func_8004EB90 *arg0);
 void func_8004EB90_4F790(Struct_func_8004EB90 *arg0);
 
 void func_8004EA54_4F654(Struct_func_8004EB90 *arg0) {
@@ -745,7 +747,14 @@ void func_8004EA54_4F654(Struct_func_8004EB90 *arg0) {
     setCallback(func_8004EAF0_4F6F0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004EAF0_4F6F0);
+void func_8004EAF0_4F6F0(Struct_func_8004EB90 *arg0) {
+    char buf[16];
+
+    sprintf(buf, D_8009E8A8_9F4A8, arg0->unk1C->unkBD3);
+    func_8003BD60_3C960(buf, -0x70, -0x54, 0xFF, arg0->unk18, arg0->unk1C->unkBB8 + 8, 0);
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->unkC);
+}
 
 void func_8004EB90_4F790(Struct_func_8004EB90 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
