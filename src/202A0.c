@@ -4,7 +4,6 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 
-extern void func_80021548_22148(u8 arg0, void *arg1);
 extern s32 func_8006FED8_70AD8(void *arg0);
 extern void func_800394BC_3A0BC(void *, s32);
 extern void *freeNodeMemory(void *);
@@ -357,8 +356,12 @@ typedef struct {
 
 extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
 
+extern u16 D_8008DAC0_8E6C0[];
+extern u16 D_8008DAC8_8E6C8[];
+
 void func_8002144C_2204C(Func8002144CArg *arg0);
 void func_800215DC_221DC(Func8002144CArg *arg0);
+void func_80021548_22148(u8 arg0, Func8002144CArg *arg1);
 
 void func_800213C8_21FC8(Func8002144CArg *arg0) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
@@ -405,7 +408,19 @@ void func_8002152C_2212C(Func8002144CArg *arg0) {
     func_80002014_2C14(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80021548_22148);
+void func_80021548_22148(u8 arg0, Func8002144CArg *arg1) {
+    Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
+
+    allocation->unkB47 = 0;
+
+    if (arg0 == 2) {
+        arg1->unk4.unk20 = D_8008DAC0_8E6C0[D_800AFE8C_A71FC->unk7];
+    } else {
+        arg1->unk4.unk20 = D_8008DAC8_8E6C8[D_800AFE8C_A71FC->unk7];
+    }
+
+    func_800021B8_2DB8(arg1->unk0, arg1->unk4.unk20);
+}
 
 void func_800215DC_221DC(Func8002144CArg *arg0) {
     u16 unk24;

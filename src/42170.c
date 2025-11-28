@@ -20,7 +20,6 @@ extern void func_800415E8_421E8(void);
 extern void func_80042160_42D60(void);
 extern void func_80043E24_44A24(void);
 extern void func_800440B4_44CB4(void *);
-extern void func_80044684_45284(void);
 extern void func_800639F8_645F8(s32, DisplayListObject *);
 
 typedef struct {
@@ -154,7 +153,11 @@ typedef struct {
     s32 unk14;                     /* 0x14 */
     s32 unk18;                     /* 0x18 */
     s32 unk1C;                     /* 0x1C */
-    u8 _pad20[0x1C];               /* 0x20 */
+    void *unk20;                   /* 0x20 */
+    void *unk24;                   /* 0x24 */
+    void *unk28;                   /* 0x28 */
+    s32 unk2C;                     /* 0x2C */
+    u8 _pad30[0xC];                /* 0x30 */
     DisplayListObject unk3C;       /* 0x3C */
     DisplayListObject unk78;       /* 0x78 */
     Func44BBCPointerTarget *unkB4; /* 0xB4 */
@@ -163,11 +166,13 @@ typedef struct {
     u8 _padC0[0x4];                /* 0xC0 */
     s16 unkC4;                     /* 0xC4 - counter */
     u16 unkC6;                     /* 0xC6 - value copied to unkB74 */
-    u8 _padC8[0x2];                /* 0xC8 */
+    u16 unkC8;                     /* 0xC8 */
     u16 unkCA;                     /* 0xCA */
 } Func44BBCArg;
 
 void func_80044578_45178(Func44BBCArg *);
+void func_80044684_45284(Func44BBCArg *);
+void func_800447D4_453D4(Func44BBCArg *);
 void func_80044888_45488(Func44BBCArg *);
 void func_80044C38_45838(Func44BBCArg *);
 
@@ -219,9 +224,11 @@ void func_800439F4_445F4(Func4393CArg *);
 extern s32 D_80090964_91564;
 extern s32 D_80090974_91574;
 extern s32 D_8009093C_9153C;
+extern s32 D_80090AA0_916A0;
 extern s32 D_80090AAC_916AC;
 extern s8 D_80090950_91550;
 extern void transformVector2(void *matrix, void *vector, s32 *output);
+extern u16 func_800625A4_631A4(void *, void *);
 extern s32 func_80043718_44318(void *, void *);
 extern void func_80066444_67044(s32, void *);
 extern s32 approximateSin(s16);
