@@ -18,7 +18,7 @@ typedef struct {
 
 extern void *getCurrentAllocation(void);
 extern Struct_B548_Result *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
-extern void func_80058A68_59668(void *arg0);
+extern void func_80058A68_59668(Player *arg0);
 extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
 
 typedef struct {
@@ -376,7 +376,7 @@ void func_80055900_56500(Struct_52880 *arg0) {
     result = func_8005B548_5C148(&arg0->unk4, arg0->unk42, 0x80000);
     if (result != NULL) {
         if ((result->unkB84 & 0x1000) == 0) {
-            func_80058A68_59668(result);
+            func_80058A68_59668((Player *)result);
             arg0->unk4E++;
         }
     }
