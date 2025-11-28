@@ -22,8 +22,6 @@ USE_ASSET(_4237C0);
 
 extern u16 D_8008F150_8FD50[];
 extern const char D_8009E480_9F080;
-extern u8 D_4547D0[];
-extern u8 D_458E30[];
 extern void func_80032708_33308(void);
 extern void func_80038420_39020(void);
 extern void func_8000FED0_10AD0(void);
@@ -1022,7 +1020,7 @@ void func_8003253C_3313C(func_8003253C_3313C_arg *arg0) {
     u8 temp;
 
     state = getCurrentAllocation();
-    asset = dmaRequestAndUpdateStateWithSize(D_4547D0, D_458E30, 0x9488);
+    asset = dmaRequestAndUpdateStateWithSize(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
 
     for (i = 0; i < 4; i++) {
         arg0->unk0[i].unk0 = 0x60;

@@ -1387,6 +1387,13 @@ segments:
 
   - [0x3FF910, bin]
 
+  - name: _4060A0
+    type: bin
+    vram: 0
+    start: 0x4060A0
+
+  - [0x4062B0, bin]
+
   - name: _40A450
     type: bin
     vram: 0
