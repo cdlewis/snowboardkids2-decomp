@@ -465,9 +465,18 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E640_4F240);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E6A4_4F2A4);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E6F8_4F2F8);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x2];
+} Element_8004E6F8; // size 0xC
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E794_4F394);
+typedef struct {
+    Element_8004E6F8 elements[3]; // offset 0x0, size 0x24
+    void *unk24;                  // offset 0x24
+} Struct_func_8004E6F8;
 
 typedef struct {
     u8 pad0[0x4];
@@ -475,6 +484,39 @@ typedef struct {
     u8 pad8[0x1C];
     void *unk24;
 } Struct_func_8004E884;
+
+void func_8004E794_4F394(Struct_func_8004E6F8 *);
+void func_8004E884_4F484(Struct_func_8004E884 *);
+
+void func_8004E6F8_4F2F8(Struct_func_8004E6F8 *arg0) {
+    s32 i;
+    s16 unk0val;
+    s32 x;
+
+    getCurrentAllocation();
+    arg0->unk24 = loadAsset_34F7E0();
+    arg0->elements[0].unk4 = loadAsset_34CB50();
+
+    i = 0;
+    unk0val = -0x1C;
+    x = -0xC;
+    do {
+        arg0->elements[i].unk0 = unk0val;
+        arg0->elements[i].unk2 = x;
+        arg0->elements[i].unk4 = arg0->elements[0].unk4;
+        x += 8;
+        i++;
+    } while (i < 3);
+
+    arg0->elements[0].unk8 = 0x1B;
+    arg0->elements[1].unk8 = 0x1C;
+    arg0->elements[2].unk8 = 0x1D;
+
+    setCleanupCallback(func_8004E884_4F484);
+    setCallback(func_8004E794_4F394);
+}
+
+INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E794_4F394);
 
 void func_8004E884_4F484(Struct_func_8004E884 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
