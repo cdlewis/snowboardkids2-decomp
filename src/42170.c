@@ -22,7 +22,6 @@ extern void func_80043E24_44A24(void);
 extern void func_8004247C_4307C(void);
 extern void func_800440B4_44CB4(void *);
 extern void func_80044684_45284(void);
-extern void func_80044D1C_4591C(void);
 extern void func_80069CF8_6A8F8(void);
 extern void func_800639F8_645F8(s32, DisplayListObject *);
 
@@ -893,18 +892,49 @@ void func_80044CDC_458DC(void *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044D1C_4591C);
+extern u32 D_3F3EF0;
+extern u32 D_3F58E0;
+extern void *D_80090AB8_916B8[];
+extern void *D_80090ABC_916BC[];
+extern s32 D_80090AC0_916C0[];
+extern void func_80044DB0_459B0(void);
+
+typedef struct {
+    void *unk0;    /* 0x00 */
+    u8 _pad4[0x8]; /* 0x04 */
+    void *unkC;    /* 0x0C */
+    void *unk10;   /* 0x10 */
+    s16 unk14;     /* 0x14 */
+} Func44D1CArg;
+
+typedef struct Func45010Arg Func45010Arg;
+void func_80045010_45C10(Func45010Arg *);
+
+void func_80044D1C_4591C(Func44D1CArg *arg0) {
+    s16 idx;
+
+    arg0->unkC = dmaRequestAndUpdateStateWithSize(&D_3F3EF0, &D_3F58E0, 0x2608);
+    idx = arg0->unk14;
+    arg0->unk10 = dmaRequestAndUpdateStateWithSize(
+        D_80090AB8_916B8[idx * 3],
+        D_80090ABC_916BC[idx * 3],
+        D_80090AC0_916C0[idx * 3]
+    );
+    arg0->unk0 = NULL;
+    setCleanupCallback(func_80045010_45C10);
+    setCallback(func_80044DB0_459B0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044DB0_459B0);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044EC4_45AC4);
 
-typedef struct {
+struct Func45010Arg {
     void *unk0;   /* 0x00 */
     u8 pad4[0x8]; /* 0x04 */
     void *unkC;   /* 0x0C */
     void *unk10;  /* 0x10 */
-} Func45010Arg;
+};
 
 void func_80045010_45C10(Func45010Arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
