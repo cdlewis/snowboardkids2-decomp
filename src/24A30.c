@@ -4,6 +4,7 @@
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -29,9 +30,7 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    u8 padding[0x14];
-    s32 unk18;
-    u8 padding2[0xC];
+    applyTransformToModel_arg1 unk4;
     u8 unk28;
 } func_80024C8C_2588C_arg;
 
@@ -115,11 +114,41 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80024990_25590);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024AAC_256AC);
 
-void func_80024BA0_257A0(func_80024C8C_2588C_arg *);
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024BA0_257A0);
+extern s32 identityMatrix[];
 
 void func_80024D40_25940(func_80024C8C_2588C_arg *);
 void func_80024DCC_259CC(func_80024C8C_2588C_arg *);
+
+void func_80024BA0_257A0(func_80024C8C_2588C_arg *arg0) {
+    Mat3x3Padded localMatrix;
+    Mat3x3Padded *localPtr;
+    u8 *base;
+    Mat3x3Padded *matrix;
+    u16 rotation;
+    u16 val;
+
+    base = (u8 *)getCurrentAllocation();
+
+    localPtr = &localMatrix;
+    memcpy(localPtr, identityMatrix, sizeof(Mat3x3Padded));
+
+    matrix = (Mat3x3Padded *)&arg0->unk4;
+    rotation = *(u16 *)(base + arg0->unk28 * 2 + 0x1880);
+    createYRotationMatrix(matrix, 0x2000 - rotation);
+
+    func_8006B084_6BC84(matrix, base + (arg0->unk28 * 32 + 0x17F8), localPtr);
+
+    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)localPtr);
+
+    clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    val = *(u16 *)(base + arg0->unk28 * 2 + 0x1898);
+    if (val == 0x10) {
+        func_80002014_2C14(arg0->unk0);
+        setCallback(func_80024DCC_259CC);
+    }
+}
 
 void func_80024C8C_2588C(func_80024C8C_2588C_arg *arg0) {
     u16 *base;
@@ -136,11 +165,11 @@ void func_80024C8C_2588C(func_80024C8C_2588C_arg *arg0) {
         func_80002014_2C14(arg0->unk0);
         setCallback(func_80024DCC_259CC);
     } else if (val == 0) {
-        arg0->unk18 = 0xFFEA0000;
+        arg0->unk4.unk14 = 0xFFEA0000;
         func_80002014_2C14(arg0->unk0);
         setCallback(func_80024D40_25940);
     } else if (val == 0x11) {
-        arg0->unk18 = 0xFFEA0000;
+        arg0->unk4.unk14 = 0xFFEA0000;
         setCallback(func_80024BA0_257A0);
     }
 }
