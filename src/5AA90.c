@@ -1,6 +1,8 @@
 #include "common.h"
+#include "gamestate.h"
 
 extern void *getCurrentAllocation(void);
+extern u16 func_80060A3C_6163C(void *, u16, void *);
 
 typedef struct ListNode_5AA90 {
     /* 0x00 */ struct ListNode_5AA90 *next;
@@ -11,7 +13,12 @@ typedef struct {
     /* 0x2C */ ListNode_5AA90 *list;
 } Allocation5AA90;
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_80059E90_5AA90);
+u16 func_80059E90_5AA90(Player *arg0, void *arg1, u16 arg2, void *arg3) {
+    if (!(arg0->unkB84 & 0x100)) {
+        return func_80060A3C_6163C(arg1, arg2, arg3);
+    }
+    return arg0->unkB94;
+}
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_80059ED0_5AAD0);
 
