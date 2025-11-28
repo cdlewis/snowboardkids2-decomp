@@ -7,7 +7,6 @@
 
 extern void func_8002AE80_2BA80(void *);
 extern void func_8002B248_2BE48(void *);
-extern void func_8002A2D0_2AED0(void *);
 extern void func_80029954_2A554(void);
 extern void func_80028C08_29808(void);
 extern void func_80028DF0_299F0(void);
@@ -78,7 +77,24 @@ typedef struct {
     /* 0x50 */ s16 unk50;
 } func_8002A290_2AE90_arg;
 
+typedef struct {
+    /* 0x00 */ SceneModel *model;
+    /* 0x04 */ u8 unk4[0x20];
+    /* 0x24 */ u8 pad24[0x13];
+    /* 0x37 */ u8 unk37;
+    /* 0x38 */ u8 pad38[0x18];
+    /* 0x50 */ s16 unk50;
+    /* 0x52 */ s16 unk52;
+    /* 0x54 */ u8 pad54[0x4];
+    /* 0x58 */ u16 unk58;
+    /* 0x5A */ u8 pad5A[0x4];
+    /* 0x5E */ u8 unk5E;
+    /* 0x5F */ u8 pad5F[0x3];
+    /* 0x62 */ s8 unk62;
+} Func8002A2D0Arg;
+
 void func_8002A290_2AE90(void *);
+void func_8002A2D0_2AED0(void *);
 
 void func_80028BB0_297B0(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
@@ -382,4 +398,36 @@ void func_8002A290_2AE90(void *untypedArg0) {
     updateModelGeometry(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A2D0_2AED0);
+void func_8002A2D0_2AED0(void *untypedArg0) {
+    Func8002A2D0Arg *arg0 = (Func8002A2D0Arg *)untypedArg0;
+    s32 result;
+
+    getCurrentAllocation();
+    applyTransformToModel(arg0->model, (applyTransformToModel_arg1 *)&arg0->unk4);
+
+    if (arg0->unk50 != arg0->unk52) {
+        arg0->unk52 = arg0->unk50;
+        func_800021B8_2DB8(arg0->model, arg0->unk50);
+        arg0->unk62 = 0;
+    }
+
+    if (arg0->unk62 != -1) {
+        result = clearModelRotation(arg0->model);
+    } else {
+        result = 0;
+    }
+
+    if (result != 0) {
+        arg0->unk37 = 1;
+        arg0->unk62 = (arg0->unk62 & 0x7F) + 1;
+        if (arg0->unk50 == 0x98) {
+            if (arg0->unk5E == 2) {
+                arg0->unk50 = 0x90;
+            } else {
+                arg0->unk50 = arg0->unk58;
+            }
+        }
+    }
+
+    updateModelGeometry(arg0->model);
+}
