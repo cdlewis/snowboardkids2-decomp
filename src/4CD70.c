@@ -1,6 +1,8 @@
+#include "19E80.h"
 #include "56910.h"
 #include "5E590.h"
 #include "68CF0.h"
+#include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "gamestate.h"
@@ -12,7 +14,6 @@ extern u32 D_3F6950;
 extern u32 D_3F6BB0;
 
 extern void *loadAsset_34CB50(void);
-extern void func_8004D3E4_4DFE4(void *);
 extern u8 randA(void);
 extern void func_8004E2D8_4EED8(void);
 extern void func_8004E410_4F010(void);
@@ -53,6 +54,7 @@ typedef struct {
     u32 unkC;
 } Struct_func_8004D3A4;
 
+void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
 void func_8004D464_4E064(Struct_func_8004D3A4 *);
 
 typedef struct {
@@ -252,7 +254,14 @@ void func_8004D3A4_4DFA4(Struct_func_8004D3A4 *arg0) {
     setCallback(func_8004D3E4_4DFE4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D3E4_4DFE4);
+void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *arg0) {
+    OutputStruct_19E80 output;
+
+    getTableEntryByU16Index(arg0->unk4, arg0->unk8, &output);
+    arg0->unk0 = -output.field1 / 2;
+    arg0->unk2 = -output.field2 / 2;
+    debugEnqueueCallback((u16)(arg0->unkC + 8), 6, func_8000FED0_10AD0, arg0);
+}
 
 void func_8004D464_4E064(Struct_func_8004D3A4 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
