@@ -1,6 +1,7 @@
 #include "5E590.h"
 #include "common.h"
 #include "displaylist.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 s32 func_80052A24_53624(s32, s32);
@@ -23,23 +24,29 @@ extern s32 func_800BB504(void *, s32);
 
 typedef struct {
     void *unk0;
-    u8 unk4;
-    u8 padding1[0x1B];
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    u8 padding1[0x10];
     void *unk20;
-    u8 padding2[0x1C];
-    u16 unk40;
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    u8 padding2[0x10];
+    s16 unk40;
     u16 unk42;
-    u8 padding3[0x2];
+    s16 unk44;
     u16 unk46;
-    u8 padding4[0x2];
+    s16 unk48;
     s16 unk4A;
     u16 unk4C;
-    u8 unk4E;
+    s8 unk4E;
 } Struct_52880;
 
 typedef struct {
     u8 padding[0x44];
     void *unk44;
+    void *unk48;
 } Alloc_52880;
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051C80_52880);
@@ -445,7 +452,7 @@ typedef struct {
 } func_80055864_56464_arg;
 
 void func_800558A4_564A4(Struct_52880 *arg0);
-extern void func_80055964_56564(void);
+void func_80055964_56564(Struct_52880 *arg0);
 
 void func_80055864_56464(func_80055864_56464_arg *arg0) {
     arg0->unk20 = load_3ECE40();
@@ -477,7 +484,51 @@ void func_80055900_56500(Struct_52880 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80055964_56564);
+extern void rotateVectorY(void *, s32, void *);
+extern void func_80050ECC_51ACC(void *arg0);
+extern void func_80069CF8_6A8F8(void);
+extern void func_80066444_67044(s32, void *);
+extern void func_80055A84_56684(void);
+
+void func_80055964_56564(Struct_52880 *arg0) {
+    Alloc_52880 *alloc;
+    s32 localVec[3];
+    s32 i;
+    s32 *s0;
+
+    alloc = getCurrentAllocation();
+
+    if (arg0->unk4A == 0) {
+        rotateVectorY((u8 *)alloc->unk48 + 0x210, arg0->unk44, localVec);
+    } else {
+        rotateVectorY((u8 *)alloc->unk48 + 0x21C, arg0->unk44, localVec);
+    }
+
+    rotateVectorY((u8 *)alloc->unk48 + 0x228, arg0->unk44, &arg0->unk24);
+
+    arg0->unk4 += localVec[0];
+    arg0->unk8 += localVec[1];
+    arg0->unkC += localVec[2];
+    s0 = &arg0->unk4;
+    arg0->unk40 = 60;
+    arg0->unk48 = 45;
+
+    func_80056B7C_5777C(s0, 16);
+    setCallback(func_80055A84_56684);
+    func_80055900_56500(arg0);
+
+    if (arg0->unk4E != 0) {
+        func_80050ECC_51ACC(s0);
+        func_80056B7C_5777C(s0, 13);
+        func_80069CF8_6A8F8();
+    }
+    i = 0;
+
+    do {
+        func_80066444_67044(i, arg0);
+        i++;
+    } while (i < 4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80055A84_56684);
 
