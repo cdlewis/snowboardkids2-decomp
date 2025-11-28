@@ -80,6 +80,26 @@ typedef struct {
 } Func80021880Arg;
 
 typedef struct {
+    u8 high;
+    u8 low;
+} Func80021810Bytes;
+
+typedef union {
+    s16 asS16;
+    Func80021810Bytes asBytes;
+} Func80021810S16OrBytes;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    void *unk8;
+    Func80021810S16OrBytes unkC;
+    Func80021810S16OrBytes unkE;
+    u8 unk10;
+} Func80021810Arg;
+
+typedef struct {
     void *unk0;
     void *unk4;
     u8 _pad8[0x98];
@@ -352,7 +372,25 @@ void func_8002174C_2234C(Func800216ACArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80021778_22378);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80021810_22410);
+extern void func_80035260_35E60(s32, s32, s16, s16, u8, u8, u8, u8, u8);
+
+void func_80021810_22410(Func80021810Arg *arg0) {
+    Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
+
+    if (allocation->unkB2F == 8) {
+        func_80035260_35E60(
+            (s32)arg0->unk8,
+            (s32)arg0->unk4,
+            arg0->unk0,
+            arg0->unk2,
+            arg0->unkC.asBytes.low,
+            arg0->unkE.asBytes.low,
+            arg0->unk10,
+            0xB,
+            1
+        );
+    }
+}
 
 void func_80021880_22480(Func80021880Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
