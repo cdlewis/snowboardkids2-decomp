@@ -73,6 +73,17 @@ typedef struct {
 } func_800253E0_25FE0_arg;
 
 typedef struct {
+    u8 pad0[0x34];
+    u8 unk34;
+    u8 unk35;
+    u8 unk36;
+    u8 pad37;
+    u8 unk38;
+    u8 unk39;
+    u8 unk3A;
+} func_80027BC8_arg;
+
+typedef struct {
     u8 pad0[0x3C];
     Mat3x3Padded unk3C;
     Mat3x3Padded unk5C;
@@ -591,7 +602,37 @@ void func_80027B9C_2879C(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027BC8_287C8);
+void func_80027BC8_287C8(func_80027BC8_arg *arg0, u8 arg1) {
+    u8 *allocation;
+    u8 byte;
+    u8 val;
+
+    allocation = getCurrentAllocation();
+    allocation += arg1;
+    byte = allocation[0x18C8];
+
+    if (byte == 1) {
+        val = 0x50;
+        arg0->unk34 = val;
+        arg0->unk35 = val;
+        arg0->unk36 = val;
+    } else if (byte == 0) {
+        val = 0xFF;
+        arg0->unk34 = val;
+        arg0->unk35 = val;
+        arg0->unk36 = val;
+        val = 0x80;
+    } else {
+        val = 0xFF;
+        arg0->unk34 = val;
+        arg0->unk35 = val;
+        arg0->unk36 = val;
+    }
+
+    arg0->unk38 = val;
+    arg0->unk39 = val;
+    arg0->unk3A = val;
+}
 
 extern u8 D_8008DD8C_8E98C[];
 
