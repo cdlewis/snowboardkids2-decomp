@@ -32,7 +32,9 @@ typedef struct {
 } GameStateUnk28;
 
 typedef struct {
-    u8 padding[0x434];
+    u8 padding[0x3F8];
+    s32 unk3F8;
+    u8 padding1[0x38];
     s32 worldPosX;
     s32 worldPosY;
     s32 worldPosZ;

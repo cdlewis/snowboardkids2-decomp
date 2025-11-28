@@ -22,7 +22,6 @@ extern void func_80043E24_44A24(void);
 extern void func_8004247C_4307C(void);
 extern void func_800440B4_44CB4(void *);
 extern void func_80044684_45284(void);
-extern void func_80069CF8_6A8F8(void);
 extern void func_800639F8_645F8(s32, DisplayListObject *);
 
 typedef struct {
@@ -95,13 +94,14 @@ typedef struct {
 void func_80044018_44C18(Func43DC0State *);
 
 typedef struct {
-    u8 pad0[0x20];    /* 0x00 */
+    u8 pad0[0x14];    /* 0x00 */
+    u8 unk14[0xC];    /* 0x14 */
     void *unk20;      /* 0x20 */
     void *unk24;      /* 0x24 */
     void *unk28;      /* 0x28 */
     s32 unk2C;        /* 0x2C */
     u8 pad30[0x0C];   /* 0x30 */
-    void *unk3C;      /* 0x3C */
+    Player *unk3C;    /* 0x3C */
     s16 matrix[3][3]; /* 0x40 - just the 9 s16 values (0x12 bytes) */
     u8 pad52[2];      /* 0x52 - padding to 0x54 */
     s32 unk54;        /* 0x54 */
@@ -332,7 +332,8 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_80041E10_42A10);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041EA4_42AA4);
 
-void func_80041FB4_42BB4(void);
+extern void func_80041EA4_42AA4(s32 *arg0);
+void func_80041FB4_42BB4(Func41F38State *);
 void func_80042070_42C70(Func41F38State *);
 
 void func_80041F38_42B38(Func41F38State *arg0) {
@@ -350,7 +351,29 @@ void func_80041F38_42B38(Func41F38State *arg0) {
     setCallbackWithContinue(func_80041FB4_42BB4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041FB4_42BB4);
+void func_80041FB4_42BB4(Func41F38State *arg0) {
+    s32 pos[3];
+    s32 i;
+
+    func_8006B084_6BC84(arg0->matrix, &arg0->unk3C->unk3F8, arg0);
+
+    if ((arg0->unk3C->unkB88 & 0x80) == 0) {
+        pos[0] = arg0->unk3C->worldPosX;
+        pos[1] = arg0->unk3C->worldPosY + 0x100000;
+        pos[2] = arg0->unk3C->worldPosZ;
+        func_80041EA4_42AA4(pos);
+        func_80069CF8_6A8F8();
+    }
+
+    if (arg0->unk60 != 0) {
+        arg0->unk60 = 0;
+        func_80056B7C_5777C(&arg0->unk14, 0x12);
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 void func_80042070_42C70(Func41F38State *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
