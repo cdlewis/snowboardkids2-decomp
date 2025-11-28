@@ -75,6 +75,18 @@ typedef struct {
     void *unk4;
     s16 unk8;
     u8 padA[0x2];
+    s16 unkC;
+    s16 unkE;
+    void *unk10;
+    s16 unk14;
+} Struct_func_8004FFB8;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x2];
     Player *unkC;
     s32 unk10;
 } Struct_func_8004D8E4;
@@ -607,7 +619,37 @@ void func_8004FF28_50B28(Struct_func_8004FF28 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FF60_50B60);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FFB8_50BB8);
+void func_80050098_50C98(Struct_func_8004FFB8 *);
+void func_800500F0_50CF0(Struct_func_8004F04C *);
+
+void func_8004FFB8_50BB8(Struct_func_8004FFB8 *arg0) {
+    GameState *allocation = (GameState *)getCurrentAllocation();
+
+    switch (allocation->unk7A) {
+        case 4:
+            arg0->unk4 = loadAsset_350140();
+            arg0->unk8 = 0;
+            arg0->unk14 = 1;
+            break;
+        case 5:
+            arg0->unk4 = loadAsset_34F9A0();
+            arg0->unk8 = 4;
+            arg0->unk14 = 5;
+            break;
+        case 6:
+            arg0->unk4 = loadAsset_3505F0();
+            arg0->unk8 = 0;
+            arg0->unk14 = 1;
+            break;
+    }
+    arg0->unk10 = arg0->unk4;
+    arg0->unk0 = -0x88;
+    arg0->unk2 = 0x40;
+    arg0->unkC = -0x88;
+    arg0->unkE = 0x40;
+    setCallbackWithContinue(func_80050098_50C98);
+    setCleanupCallback(func_800500F0_50CF0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_80050098_50C98);
 
