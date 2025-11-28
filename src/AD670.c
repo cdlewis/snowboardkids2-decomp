@@ -91,10 +91,14 @@ INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB718_ADAD8);
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB75C_ADB1C);
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BBB0C_ADECC);
-
 extern void func_800BB75C_ADB1C(void *);
+extern void func_8006300C_63C0C(void *);
 extern void func_80063058_63C58(DisplayListObject *);
+
+void func_800BBB0C_ADECC(void *arg0) {
+    func_800BB75C_ADB1C(arg0);
+    func_8006300C_63C0C(arg0);
+}
 
 void func_800BBB38_ADEF8(void *arg0) {
     func_800BB75C_ADB1C(arg0);
