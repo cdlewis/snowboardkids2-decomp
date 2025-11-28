@@ -76,6 +76,7 @@ typedef struct {
     s16 unk8;
     u8 padA[0x2];
     Player *unkC;
+    s32 unk10;
 } Struct_func_8004D8E4;
 
 void func_8004D954_4E554(Struct_func_8004D8E4 *arg0);
@@ -91,7 +92,10 @@ extern void func_8004D63C_4E23C(void *);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C254_4CE54);
+void func_8004C254_4CE54(Struct_func_8004D8E4 *arg0) {
+    arg0->unk8 = arg0->unkC->unkBC4;
+    debugEnqueueCallback((u16)(arg0->unk10 + 8), 0, func_8000FED0_10AD0, arg0);
+}
 
 void func_8004C294_4CE94(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
