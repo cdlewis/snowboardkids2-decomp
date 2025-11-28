@@ -38,8 +38,11 @@ typedef struct {
     s32 worldPosZ;
     u8 padding2[0x682];
     s16 unkAC2;
-    u8 padding2b[0x4];
-    u8 unkAC8[0xC];
+    s16 unkAC4;
+    u8 padding2b[0x2];
+    s32 unkAC8;
+    s32 unkACC;
+    s32 unkAD0;
     u8 padding2c[0x98];
     s32 unkB6C;
     s32 unkB70;
