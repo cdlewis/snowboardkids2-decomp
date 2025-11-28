@@ -657,8 +657,6 @@ void func_80042F2C_43B2C(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042F58_43B58);
-
 typedef struct {
     u8 _pad0[0x24]; /* 0x00 */
     void *unk24;    /* 0x24 */
@@ -668,6 +666,18 @@ typedef struct {
     u8 _pad3C[0x7]; /* 0x3C */
     u8 unk43;       /* 0x43 */
 } Func42FC0TaskMem;
+
+void func_80042F58_43B58(void *arg0, void *arg1, s16 arg2) {
+    Func42FC0TaskMem *task;
+
+    task = (Func42FC0TaskMem *)scheduleTask(func_80042B64_43764, 0, 0, 0xDC);
+    if (task != NULL) {
+        task->unk24 = arg0;
+        task->unk28 = arg1;
+        task->unk3A = arg2;
+        task->unk43 = 0;
+    }
+}
 
 Func42FC0TaskMem *func_80042FC0_43BC0(void *arg0) {
     Func42FC0TaskMem *task;
