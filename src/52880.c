@@ -18,6 +18,7 @@ typedef struct {
 extern void *getCurrentAllocation(void);
 extern Struct_B548_Result *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
 extern void func_80058A68_59668(void *arg0);
+extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
 
 typedef struct {
     u8 padding[0x4];
@@ -177,7 +178,12 @@ s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80054568_55168);
+void func_80054568_55168(Struct_52880 *arg0) {
+    getCurrentAllocation();
+    if (func_8005C250_5CE50(&arg0->unk4, arg0->unk42, 0xC0000)) {
+        arg0->unk4E++;
+    }
+}
 
 extern void func_800545F8_551F8(void);
 
