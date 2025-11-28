@@ -705,7 +705,18 @@ void func_8004ED94_4F994(Struct_func_8004FF28 *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004EDCC_4F9CC);
+void func_8004EDCC_4F9CC(s16 arg0) {
+    Struct_func_8004FF28 *task;
+
+    if (arg0 == 0) {
+        task = scheduleTask(func_8004EC08_4F808, 0, 1, 0xE6);
+    } else {
+        task = scheduleTask(func_8004EC08_4F808, 1, 1, 0xE6);
+    }
+    if (task != NULL) {
+        task->unk14 = arg0;
+    }
+}
 
 void func_8004EEB4_4FAB4(void *);
 void func_8004F04C_4FC4C(Struct_func_8004F04C *);
