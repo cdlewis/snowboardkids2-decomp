@@ -4,6 +4,7 @@
 
 extern void *func_80035F80_36B80(s32);
 extern void func_80034D58_35958(void);
+extern void debugEnqueueCallback(u16, u8, void *, void *);
 
 extern u8 D_459310[];
 extern u8 D_459E00[];
@@ -41,11 +42,21 @@ typedef struct {
     /* 0x00 */ Func33FE0Entry entries[13];
 } Func33FE0Arg;
 
+typedef struct {
+    /* 0x00 */ u8 pad0[0x8];
+    /* 0x08 */ void *unk8;
+    /* 0x0C */ u8 padC[0x8];
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ u8 pad16[0x6];
+    /* 0x1C */ u8 unk1C;
+} Func34ADCArg;
+
 void func_80035074_35C74(Func358FCStruct *arg0);
 void func_80033458_34058(void);
 void func_8003365C_3425C(Func34574Arg *arg0);
 void func_80034A30_35630(void);
 void func_80034A94_35694(Func34574Arg *arg0);
+void func_80035408_36008(void);
 
 void func_800333E0_33FE0(Func33FE0Arg *arg0) {
     void *allocation;
@@ -88,7 +99,30 @@ void func_80033E08_34A08(Func34574Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033E40_34A40);
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033EDC_34ADC);
+void func_80033EDC_34ADC(Func34ADCArg *arg0) {
+    u8 *allocation;
+    u16 temp;
+
+    allocation = getCurrentAllocation();
+
+    if (arg0->unk1C == allocation[0xAC8]) {
+        goto check_ac6;
+    }
+    if (arg0->unk1C != 3) {
+        arg0->unk14 = 0x60;
+        goto end;
+    }
+check_ac6:
+    temp = *(u16 *)(allocation + 0xAC6);
+    if (temp < 0x32) {
+        arg0->unk14 = 0xFF;
+        goto end;
+    }
+    arg0->unk14 = 0x60;
+
+end:
+    debugEnqueueCallback(arg0->unk1C + 9, 0, func_80035408_36008, &arg0->unk8);
+}
 
 void func_80033F50_34B50(Func34574Arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
