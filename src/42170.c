@@ -705,7 +705,9 @@ extern void func_800433EC_43FEC(void);
 void func_8004367C_4427C(Func432D8Arg *);
 
 typedef struct {
-    u8 pad0[0x20];  /* 0x00 */
+    u8 pad0[0x18];  /* 0x00 */
+    s32 unk18;      /* 0x18 */
+    u8 pad1C[0x4];  /* 0x1C */
     void *unk20;    /* 0x20 */
     void *unk24;    /* 0x24 */
     void *unk28;    /* 0x28 */
@@ -714,7 +716,9 @@ typedef struct {
     void *unk60;    /* 0x60 */
     void *unk64;    /* 0x64 */
     s32 unk68;      /* 0x68 */
-    u8 pad6C[0x16]; /* 0x6C */
+    u8 pad6C[0x10]; /* 0x6C */
+    s32 unk7C;      /* 0x7C */
+    u8 pad80[0x2];  /* 0x80 */
     s16 unk82;      /* 0x82 */
 } Func43374State;
 
@@ -734,7 +738,24 @@ void func_80043374_43F74(Func43374State *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800433EC_43FEC);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800435F0_441F0);
+void func_800435F0_441F0(Func43374State *arg0) {
+    GameState *gameState;
+    s32 i;
+    s32 pad[7];
+
+    gameState = (GameState *)getCurrentAllocation();
+    if (gameState->gamePaused == 0) {
+        arg0->unk7C -= 0x8000;
+        if (arg0->unk7C <= (s32)0xFFF80000) {
+            func_80069CF8_6A8F8();
+        }
+        arg0->unk18 += arg0->unk7C;
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 void func_8004367C_4427C(Func432D8Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
