@@ -5,6 +5,7 @@
 extern void *func_80035F80_36B80(s32);
 extern void func_80034D58_35958(void);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
+extern void func_8000FED0_10AD0(void);
 
 extern u8 D_459310[];
 extern u8 D_459E00[];
@@ -54,7 +55,7 @@ typedef struct {
 void func_80035074_35C74(Func358FCStruct *arg0);
 void func_80033458_34058(void);
 void func_8003365C_3425C(Func34574Arg *arg0);
-void func_80034A30_35630(void);
+void func_80034A30_35630(void *arg0);
 void func_80034A94_35694(Func34574Arg *arg0);
 void func_80035408_36008(void);
 
@@ -165,7 +166,17 @@ void func_800349B8_355B8(Func349B8Arg *arg0) {
     setCallback(&func_80034A30_35630);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034A30_35630);
+void func_80034A30_35630(void *arg0) {
+    u8 *allocation;
+    u16 val;
+
+    allocation = getCurrentAllocation();
+    val = *(u16 *)(allocation + 0xAC6);
+
+    if (val == 3 || val == 0x3C || val == 0x17) {
+        debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
+    }
+}
 
 void func_80034A94_35694(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
