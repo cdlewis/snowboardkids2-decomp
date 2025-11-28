@@ -336,7 +336,11 @@ void func_80027B9C_2879C(func_80025FFC_26BFC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80027BC8_287C8);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027C44_28844);
+extern u8 D_8008DD8C_8E98C[];
+
+u8 func_80027C44_28844(u8 arg0) {
+    return D_8008DD8C_8E98C[arg0 * 3];
+}
 
 extern u8 D_8008DD8D_8E98D[];
 
