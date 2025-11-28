@@ -13,8 +13,10 @@ typedef struct {
     s32 unk2C;
 } func_800BB2B0_B2750_arg;
 
+extern void *freeNodeMemory(void *);
+
 void func_800BB334_B27D4(void);
-void func_800BB390_B2830(void);
+void func_800BB390_B2830(func_800BB2B0_B2750_arg *arg0);
 
 void func_800BB2B0_B2750(func_800BB2B0_B2750_arg *arg0) {
     GameState *allocation;
@@ -35,4 +37,7 @@ void func_800BB2B0_B2750(func_800BB2B0_B2750_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/B2750", func_800BB334_B27D4);
 
-INCLUDE_ASM("asm/nonmatchings/B2750", func_800BB390_B2830);
+void func_800BB390_B2830(func_800BB2B0_B2750_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+}
