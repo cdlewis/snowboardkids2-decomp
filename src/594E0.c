@@ -2,7 +2,16 @@
 #include "gamestate.h"
 #include "graphics.h"
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_800588E0_594E0);
+void func_800588E0_594E0(Player *arg0, s16 arg1, void *arg2) {
+    if (arg0->unkAC2 != 0) {
+        return;
+    }
+    if (arg0->unkB88 & ~0x80) {
+        return;
+    }
+    arg0->unkAC2 = arg1;
+    memcpy(arg0->unkAC8, arg2, 0xC);
+}
 
 void func_80058924_59524(Player *arg0) {
     if (arg0->unkAC2 < 3) {
