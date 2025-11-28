@@ -34,6 +34,7 @@ typedef struct {
     /* 0x68 */ s32 unk68;
     /* 0x6C */ u8 pad6C[0xC];
     /* 0x78 */ s32 unk78;
+    /* 0x7C */ u8 unk7C;
 } func_800BC6C4_AEA84_arg;
 
 typedef struct {
@@ -366,4 +367,16 @@ void func_800BC984_AED44(func_800BB45C_AD81C_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC9BC);
+void func_800BC9BC(void) {
+    func_800BC6C4_AEA84_arg *task;
+
+    task = (func_800BC6C4_AEA84_arg *)scheduleTask(func_800BC6C4_AEA84, 0, 0, 0xC8);
+    if (task != NULL) {
+        task->unk7C = 0;
+    }
+
+    task = (func_800BC6C4_AEA84_arg *)scheduleTask(func_800BC6C4_AEA84, 0, 0, 0xC8);
+    if (task != NULL) {
+        task->unk7C = 1;
+    }
+}
