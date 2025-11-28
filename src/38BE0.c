@@ -11,4 +11,6 @@ u8 func_80038058_38C58(u8 arg0) {
     return EepromSaveData->character_or_settings[arg0];
 }
 
-INCLUDE_ASM("asm/nonmatchings/38BE0", func_80038070_38C70);
+s32 func_80038070_38C70(void) {
+    return EepromSaveData->save_slot_status[11] == 1;
+}
