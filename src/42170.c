@@ -194,7 +194,12 @@ void func_80041A60_42660(Func41A60Arg *arg0) {
     func_80063534_64134((s32)arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041A9C_4269C);
+void func_80041A9C_4269C(Func41A60Arg *arg0) {
+    arg0->posX = arg0->unk3C->worldPosX;
+    arg0->posY = arg0->unk3C->worldPosY;
+    arg0->posZ = arg0->unk3C->worldPosZ;
+    func_80063580_64180((s32)arg0);
+}
 
 typedef struct {
     u8 pad0[0xD8];
