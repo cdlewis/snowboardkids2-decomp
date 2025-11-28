@@ -17,12 +17,41 @@ typedef struct {
 
 extern u8 D_8008DCC0_8E8C0[];
 
+extern void D_800B0690(void);
+extern void D_800B07A0(void);
+extern void func_800B00C0_9FF70(void *);
+
+void func_800223CC_22FCC(void);
 void func_800226B0_232B0(void);
 void func_800226CC_232CC(void);
 
 INCLUDE_ASM("asm/nonmatchings/22D30", func_80022130_22D30);
 
-INCLUDE_ASM("asm/nonmatchings/22D30", func_80022304_22F04);
+void func_80022304_22F04(void) {
+    Struct22D30 *s0;
+    s32 result;
+    u8 *task;
+    u16 temp;
+
+    s0 = (Struct22D30 *)getCurrentAllocation();
+    result = func_8006FE10_70A10(&s0->node);
+
+    if (result == 0) {
+        s0->unk1E0 = 0;
+        setGameStateHandler(&func_800223CC_22FCC);
+        scheduleTask(&D_800B0690, 0, 0, 0x5A);
+        scheduleTask(&D_800B07A0, 0, 0, 0x5A);
+    } else {
+        temp = s0->unk1E0;
+        if (temp < 4) {
+            if (result == (0xC - (temp * 2))) {
+                task = (u8 *)scheduleTask(&func_800B00C0_9FF70, 0, 0, 0x5A);
+                task[0x2B] = (u8)s0->unk1E0;
+                s0->unk1E0 = s0->unk1E0 + 1;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/22D30", func_800223CC_22FCC);
 
