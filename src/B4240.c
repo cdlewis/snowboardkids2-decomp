@@ -1,4 +1,6 @@
 #include "common.h"
+#include "displaylist.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 extern u8 randA(void);
@@ -15,20 +17,34 @@ typedef struct {
 } B4240AllocationStruct;
 
 typedef struct {
-    u8 _pad0[0x48];
+    DisplayListObject node;
+    s32 unk3C;
+    s32 unk40;
+    s32 unk44;
     s32 unk48;
     s32 unk4C;
-    u8 _pad2[0x8];
+    u8 _pad50[0x4];
+    u16 rotation;
+    u16 _pad56;
     s16 unk58;
     s16 unk5A;
 } B4240FuncArg;
 
-void func_800BB2B0_B4240(B4240FuncArg *);
 void func_800BB320_B42B0(B4240FuncArg *);
 void func_800BB63C_B45CC(B4240FuncArg *);
 void func_800BB89C_B482C(B4240FuncArg *);
 
-INCLUDE_ASM("asm/nonmatchings/B4240", func_800BB2B0_B4240);
+void func_800BB2B0_B4240(B4240FuncArg *arg0) {
+    s32 i;
+
+    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->rotation);
+    memcpy(&arg0->node.unk10.position.X, &arg0->unk3C, 0xC);
+    arg0->node.unk10.position.Y += arg0->unk48;
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, &arg0->node);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/B4240", func_800BB320_B42B0);
 
