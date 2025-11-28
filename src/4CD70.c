@@ -749,7 +749,10 @@ void func_8004FFB8_50BB8(Struct_func_8004FFB8 *arg0) {
     setCleanupCallback(func_800500F0_50CF0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_80050098_50C98);
+void func_80050098_50C98(Struct_func_8004FFB8 *arg0) {
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->unkC);
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+}
 
 void func_800500F0_50CF0(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
