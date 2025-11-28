@@ -406,7 +406,16 @@ Func420E8State *func_80042340_42F40(void *arg0) {
     return task;
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800423A4_42FA4);
+Func420E8State *func_800423A4_42FA4(void *arg0, s32 arg1) {
+    Func420E8State *task;
+
+    task = (Func420E8State *)scheduleTask(&func_800420E8_42CE8, 0, 0, 0xC8);
+    if (task != NULL) {
+        memcpy(task->unk14, arg0, 0xC);
+        task->unk46 = arg1;
+    }
+    return task;
+}
 
 void func_80042638_43238(Func42410State *);
 
