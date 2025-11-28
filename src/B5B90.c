@@ -7,7 +7,6 @@ extern u8 D_40E870[];
 
 extern void *func_80035F80_36B80(s32);
 extern void func_800BB320_B5C00(void *);
-extern void func_800BB9E0_B62C0(void *);
 
 typedef struct {
     void *unk0;
@@ -15,6 +14,8 @@ typedef struct {
     void *unk8;
     s16 unkC;
 } func_800BB2B0_B5B90_state;
+
+void func_800BB9E0_B62C0(func_800BB2B0_B5B90_state *arg0);
 
 void func_800BB2B0_B5B90(func_800BB2B0_B5B90_state *arg0) {
     getCurrentAllocation();
@@ -40,4 +41,8 @@ INCLUDE_ASM("asm/nonmatchings/B5B90", func_800BB87C_B615C);
 
 INCLUDE_ASM("asm/nonmatchings/B5B90", func_800BB928_B6208);
 
-INCLUDE_ASM("asm/nonmatchings/B5B90", func_800BB9E0_B62C0);
+void func_800BB9E0_B62C0(func_800BB2B0_B5B90_state *arg0) {
+    arg0->unk0 = freeNodeMemory(arg0->unk0);
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    arg0->unk8 = freeNodeMemory(arg0->unk8);
+}
