@@ -27,6 +27,12 @@ INCLUDE_ASM("asm/nonmatchings/AB160", func_800BBA28_AB8D8);
 
 INCLUDE_ASM("asm/nonmatchings/AB160", func_800BBA54_AB904);
 
-INCLUDE_ASM("asm/nonmatchings/AB160", func_800BBAF8_AB9A8);
+extern void setCallback(void *);
+extern void func_800BBB1C_AB9CC(void);
+
+void func_800BBAF8_AB9A8(s16 *arg0) {
+    *arg0 = 0;
+    setCallback(func_800BBB1C_AB9CC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AB160", func_800BBB1C_AB9CC);
