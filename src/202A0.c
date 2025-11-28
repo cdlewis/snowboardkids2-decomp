@@ -458,7 +458,32 @@ void func_8002174C_2234C(Func800216ACArg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80021778_22378);
+extern void *D_8008DC2C_8E82C[];
+extern void *func_80035F80_36B80(s32);
+
+void func_80021810_22410(Func80021810Arg *arg0);
+void func_80021880_22480(Func80021880Arg *arg0);
+
+void func_80021778_22378(Func80021810Arg *arg0) {
+    void *temp_s1;
+    D_800AFE8C_type_202A0 *temp_v1;
+    s32 idx;
+
+    temp_s1 = func_80035F80_36B80(1);
+    setCleanupCallback(&func_80021880_22480);
+
+    arg0->unk10 = 5;
+    temp_v1 = D_800AFE8C_A71FC;
+    arg0->unk0 = -0x50;
+    arg0->unk2 = -0x10;
+    arg0->unkC.asS16 = 0xFF;
+    arg0->unkE.asS16 = 0xFF;
+    arg0->unk8 = temp_s1;
+    idx = temp_v1->unk7 - 0xC;
+    arg0->unk4 = D_8008DC2C_8E82C[idx];
+
+    setCallback(&func_80021810_22410);
+}
 
 extern void func_80035260_35E60(s32, s32, s16, s16, u8, u8, u8, u8, u8);
 
