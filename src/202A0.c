@@ -1,6 +1,7 @@
 #include "20F0.h"
 #include "common.h"
 #include "geometry.h"
+#include "overlay.h"
 #include "task_scheduler.h"
 
 extern void func_80021548_22148(u8 arg0, void *arg1);
@@ -8,6 +9,9 @@ extern void func_800215DC_221DC(void *arg0);
 extern s32 func_8006FED8_70AD8(void *arg0);
 extern void func_800394BC_3A0BC(void *, s32);
 
+USE_ASSET(_458E30);
+
+extern u8 D_459310[];
 extern u32 *D_43A000;
 extern u32 *D_43F050;
 
@@ -206,7 +210,14 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_80021548_22148);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_800215DC_221DC);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80021658_22258);
+void func_8002174C_2234C(void);
+void func_800216AC_222AC(Func800216ACArg *arg0);
+
+void func_80021658_22258(Func800216ACArg *arg0) {
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_458E30_ROM_START, D_459310, 0xAE0);
+    setCleanupCallback(&func_8002174C_2234C);
+    setCallback(&func_800216AC_222AC);
+}
 
 void func_800216D4_222D4(void);
 
