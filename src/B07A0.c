@@ -4,9 +4,13 @@
 typedef void (*FuncPtr)(void *);
 
 typedef struct {
-    u8 _pad0[0x450];
+    u8 _pad0[0x44C];
+    s32 unk44C;
     s32 unk450;
-    u8 _pad454[0x76A];
+    s32 unk454;
+    u8 _pad458[0x72C];
+    s32 unkB84;
+    u8 _padB88[0x36];
     u8 unkBBE;
     u8 unkBBF;
 } func_800BC4AC_arg;
@@ -14,6 +18,7 @@ typedef struct {
 extern FuncPtr D_800BCA44_B1F34[];
 extern FuncPtr D_800BCA5C_B1F4C[];
 
+extern void func_800B00D4_9FF84(func_800BC4AC_arg *, s32);
 extern void func_800B02AC(func_800BC4AC_arg *);
 extern s32 func_8005D308_5DF08(func_800BC4AC_arg *, s32);
 extern void func_8005D180_5DD80(func_800BC4AC_arg *, s32);
@@ -28,7 +33,28 @@ void func_800BB8E0_B0DD0(func_800BC4AC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BB910_B0E00);
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BB998_B0E88);
+s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
+    s32 pad[3];
+    GameState *gameState = getCurrentAllocation();
+
+    if (gameState->unk79 == 0) {
+        func_800B00D4_9FF84(arg0, 1);
+        return 1;
+    }
+
+    arg0->unk44C -= arg0->unk44C / 8;
+    arg0->unk454 -= arg0->unk454 / 8;
+    arg0->unk450 += -0x8000;
+    func_800B02AC(arg0);
+
+    if (arg0->unkB84 & 0x400000) {
+        func_8005D180_5DD80(arg0, 2);
+    } else {
+        func_8005D180_5DD80(arg0, 0);
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BBA54_B0F44);
 
