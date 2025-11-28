@@ -9,6 +9,8 @@ extern void func_800215DC_221DC(void *arg0);
 extern s32 func_8006FED8_70AD8(void *arg0);
 extern void func_800394BC_3A0BC(void *, s32);
 extern void *freeNodeMemory(void *);
+extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
+extern void func_8000FED0_10AD0(void);
 
 USE_ASSET(_458E30);
 
@@ -138,7 +140,13 @@ void func_80020FA4_21BA4(Func80020FA4Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020FDC_21BDC);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80021054_21C54);
+void func_80021054_21C54(void *arg0) {
+    Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
+
+    if (allocation->unkB2F == 2) {
+        debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
+    }
+}
 
 typedef struct {
     void *unk0;
