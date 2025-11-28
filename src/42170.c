@@ -185,7 +185,12 @@ void func_800419AC_425AC(Func4179CArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800419E4_425E4);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041A24_42624);
+void func_80041A24_42624(Func41A60Arg *arg0) {
+    arg0->posX = arg0->unk3C->worldPosX;
+    arg0->posY = arg0->unk3C->worldPosY;
+    arg0->posZ = arg0->unk3C->worldPosZ;
+    func_800634E8_640E8((DisplayListObject *)arg0);
+}
 
 void func_80041A60_42660(Func41A60Arg *arg0) {
     arg0->posX = arg0->unk3C->worldPosX;
