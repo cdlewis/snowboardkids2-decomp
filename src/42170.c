@@ -1,5 +1,6 @@
 #include "56910.h"
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
@@ -22,6 +23,8 @@ extern void func_8004247C_4307C(void);
 extern void func_800440B4_44CB4(void *);
 extern void func_80044684_45284(void);
 extern void func_80044D1C_4591C(void);
+extern void func_80069CF8_6A8F8(void);
+extern void func_800639F8_645F8(s32, DisplayListObject *);
 
 typedef struct {
     s16 matrix[3][3]; /* 0x00 */
@@ -58,17 +61,19 @@ typedef struct {
 void func_800419AC_425AC(Func4179CArg *);
 
 typedef struct {
-    u8 pad0[0x14];  /* 0x00 */
-    u8 unk14[0xC];  /* 0x14 */
-    void *unk20;    /* 0x20 */
-    void *unk24;    /* 0x24 */
-    void *unk28;    /* 0x28 */
-    s32 unk2C;      /* 0x2C */
-    u8 pad30[0x10]; /* 0x30 */
-    s16 unk40;      /* 0x40 */
-    s16 unk42;      /* 0x42 */
-    s16 unk44;      /* 0x44 */
-    s16 unk46;      /* 0x46 */
+    u8 pad0[0x14]; /* 0x00 */
+    u8 unk14[0xC]; /* 0x14 */
+    void *unk20;   /* 0x20 */
+    void *unk24;   /* 0x24 */
+    void *unk28;   /* 0x28 */
+    s32 unk2C;     /* 0x2C */
+    u8 pad30[0xB]; /* 0x30 */
+    u8 unk3B;      /* 0x3B */
+    u8 pad3C[0x4]; /* 0x3C */
+    s16 unk40;     /* 0x40 */
+    u16 unk42;     /* 0x42 */
+    s16 unk44;     /* 0x44 */
+    s16 unk46;     /* 0x46 */
 } Func420E8State;
 
 void func_80042308_42F08(Func420E8State *);
@@ -360,7 +365,30 @@ void func_800420E8_42CE8(Func420E8State *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80042160_42D60);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042254_42E54);
+void func_80042254_42E54(Func420E8State *arg0) {
+    Func43CA4GameState *gameState;
+    s32 i;
+    s32 pad[3];
+
+    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    if (gameState->unk76 == 0) {
+        arg0->unk44 -= 0x18;
+    }
+
+    if (arg0->unk44 < 0x18) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    arg0->unk42 += 0x300;
+    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->unk42);
+    scaleMatrix((Mat3x3Padded *)arg0, arg0->unk40, arg0->unk40, arg0->unk40);
+    arg0->unk3B = (u8)arg0->unk44;
+
+    for (i = 0; i < 4; i++) {
+        func_800639F8_645F8(i, (DisplayListObject *)arg0);
+    }
+}
 
 void func_80042308_42F08(Func420E8State *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
