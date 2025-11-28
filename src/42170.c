@@ -133,19 +133,20 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x14];                /* 0x00 */
-    u8 unk14[0x4];                 /* 0x14 - first 4 bytes of 12-byte copy source */
+    s32 unk14;                     /* 0x14 */
     s32 unk18;                     /* 0x18 */
-    u8 unk1C[0x4];                 /* 0x1C - last 4 bytes of 12-byte copy source */
+    s32 unk1C;                     /* 0x1C */
     u8 _pad20[0x94];               /* 0x20 */
     Func44BBCPointerTarget *unkB4; /* 0xB4 */
     u8 _padB8[0x4];                /* 0xB8 */
     s32 unkBC;                     /* 0xBC */
     u8 _padC0[0x4];                /* 0xC0 */
-    u16 unkC4;                     /* 0xC4 - counter */
+    s16 unkC4;                     /* 0xC4 - counter */
     u16 unkC6;                     /* 0xC6 - value copied to unkB74 */
 } Func44BBCArg;
 
 void func_80044578_45178(Func44BBCArg *);
+void func_80044888_45488(Func44BBCArg *);
 void func_80044C38_45838(Func44BBCArg *);
 
 typedef struct {
@@ -190,6 +191,8 @@ void func_800439F4_445F4(Func4393CArg *);
 extern s32 D_80090964_91564;
 extern s32 D_80090974_91574;
 extern s32 D_8009093C_9153C;
+extern s32 D_80090AAC_916AC;
+extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern s32 func_80043718_44318(void *, void *);
 extern void func_80066444_67044(s32, void *);
 
@@ -704,7 +707,27 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_80044578_45178);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044684_45284);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800447D4_453D4);
+void func_800447D4_453D4(Func44BBCArg *arg0) {
+    Func43CA4GameState *gameState;
+    s32 output[3];
+
+    gameState = getCurrentAllocation();
+    if (gameState->unk76 == 0) {
+        transformVector2(&D_80090AAC_916AC, arg0, output);
+        arg0->unk14 = arg0->unk14 + output[0];
+        arg0->unk1C = arg0->unk1C + output[2];
+        memcpy(&arg0->unkB4->unkB44, &arg0->unk14, 0xC);
+        arg0->unkB4->unkB74 = arg0->unkC6;
+        if (arg0->unkC4 != 0) {
+            arg0->unkC4 = arg0->unkC4 - 1;
+        } else {
+            arg0->unkC4 = 0xB4;
+            setCallback(func_80044888_45488);
+        }
+    }
+
+    func_80044578_45178(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044888_45488);
 
@@ -718,7 +741,7 @@ void func_80044BBC_457BC(Func44BBCArg *arg0) {
 
     if (gameState->unk76 == 0) {
         arg0->unkC4--;
-        if ((s16)arg0->unkC4 == 0) {
+        if (arg0->unkC4 == 0) {
             setCallback(func_80044C38_45838);
         }
         memcpy(&arg0->unkB4->unkB44, &arg0->unk14, 0xC);
