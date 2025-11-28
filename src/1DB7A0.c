@@ -19,6 +19,8 @@ typedef struct {
 } func_800B07A0_1DBE80_arg;
 
 extern void *freeNodeMemory(void *);
+extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
+extern void func_8000FED0_10AD0(void);
 
 void func_800B0804_1DBEE4(void *);
 
@@ -38,7 +40,7 @@ void func_800B0664_1DBD44(func_800B07A0_1DBE80_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_800B070C_1DBDEC(void *);
+void func_800B070C_1DBDEC(func_800B07A0_1DBE80_arg *);
 void func_800B0774_1DBE54(func_800B07A0_1DBE80_arg *);
 
 void func_800B0690_1DBD70(func_800B07A0_1DBE80_arg *arg0) {
@@ -54,7 +56,18 @@ void func_800B0690_1DBD70(func_800B07A0_1DBE80_arg *arg0) {
     setCallback(func_800B070C_1DBDEC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B070C_1DBDEC);
+void func_800B070C_1DBDEC(func_800B07A0_1DBE80_arg *arg0) {
+    GameState *allocation = getCurrentAllocation();
+
+    if (allocation->unk1E6 == 10) {
+        arg0->unk0 = -80;
+        arg0->unk8 = 7;
+    } else {
+        arg0->unk0 = -96;
+        arg0->unk8 = 6;
+    }
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+}
 
 void func_800B0774_1DBE54(func_800B07A0_1DBE80_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
@@ -90,9 +103,6 @@ void func_800B08A8_1DBF88(func_800B07A0_1DBE80_arg *arg0) {
     arg0->unk4 = temp;
     setCallback(func_800B0920_1DC000);
 }
-
-extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
-extern void func_8000FED0_10AD0(void);
 
 void func_800B0920_1DC000(void *arg0) {
     GameState *allocation = getCurrentAllocation();
