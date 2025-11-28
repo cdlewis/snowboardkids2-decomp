@@ -1,5 +1,16 @@
 #include "common.h"
 
+extern void *getCurrentAllocation(void);
+
+typedef struct ListNode_5AA90 {
+    /* 0x00 */ struct ListNode_5AA90 *next;
+} ListNode_5AA90;
+
+typedef struct {
+    u8 _pad[0x2C];
+    /* 0x2C */ ListNode_5AA90 *list;
+} Allocation5AA90;
+
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_80059E90_5AA90);
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_80059ED0_5AAD0);
@@ -36,7 +47,11 @@ INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005C454_5D054);
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", isPlayerInRangeAndPull);
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005C838_5D438);
+void func_8005C838_5D438(ListNode_5AA90 *arg0) {
+    Allocation5AA90 *alloc = (Allocation5AA90 *)getCurrentAllocation();
+    arg0->next = alloc->list;
+    alloc->list = arg0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005C868_5D468);
 
