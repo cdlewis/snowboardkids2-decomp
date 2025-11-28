@@ -1,4 +1,6 @@
 #include "common.h"
+#include "displaylist.h"
+#include "geometry.h"
 
 extern void *freeNodeMemory(void *);
 
@@ -8,7 +10,26 @@ typedef struct {
     void *unk28;
 } func_800BB9F0_AB8A0_arg;
 
-INCLUDE_ASM("asm/nonmatchings/AB160", func_800BB2B0);
+typedef struct {
+    /* 0x00 */ Mat3x3Padded matrix;
+    /* 0x20 */ u8 _pad20[0x1C];
+    /* 0x3C */ s32 targetPosition[3];
+    /* 0x48 */ s32 velocityY;
+    /* 0x4C */ u8 _pad4C[0x8];
+    /* 0x54 */ u16 rotationAngle;
+} func_800BB2B0_arg;
+
+void func_800BB2B0(func_800BB2B0_arg *arg0) {
+    s32 i;
+
+    createYRotationMatrix(&arg0->matrix, arg0->rotationAngle);
+    memcpy(&arg0->matrix.unk14, arg0->targetPosition, 0xC);
+    arg0->matrix.unk18 += arg0->velocityY;
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/AB160", func_800BB320_AB1D0);
 
