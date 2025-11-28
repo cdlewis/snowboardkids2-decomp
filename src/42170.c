@@ -912,7 +912,16 @@ void func_80043D30_44930(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80043D5C_4495C);
+void func_80043D5C_4495C(void *arg0, void *arg1, s16 arg2) {
+    void *task;
+
+    task = scheduleTask(func_80043860_44460, 0, 0, 0xDC);
+    if (task != NULL) {
+        *((void **)((u8 *)task + 0x24)) = arg0;
+        *((void **)((u8 *)task + 0x28)) = arg1;
+        *((s16 *)((u8 *)task + 0x42)) = arg2;
+    }
+}
 
 void func_80043DC0_449C0(Func43DC0State *arg0) {
     getCurrentAllocation();
