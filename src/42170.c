@@ -153,13 +153,17 @@ typedef struct {
     s32 unk14;                     /* 0x14 */
     s32 unk18;                     /* 0x18 */
     s32 unk1C;                     /* 0x1C */
-    u8 _pad20[0x94];               /* 0x20 */
+    u8 _pad20[0x1C];               /* 0x20 */
+    DisplayListObject unk3C;       /* 0x3C */
+    DisplayListObject unk78;       /* 0x78 */
     Func44BBCPointerTarget *unkB4; /* 0xB4 */
     u8 _padB8[0x4];                /* 0xB8 */
     s32 unkBC;                     /* 0xBC */
     u8 _padC0[0x4];                /* 0xC0 */
     s16 unkC4;                     /* 0xC4 - counter */
     u16 unkC6;                     /* 0xC6 - value copied to unkB74 */
+    u8 _padC8[0x2];                /* 0xC8 */
+    u16 unkCA;                     /* 0xCA */
 } Func44BBCArg;
 
 void func_80044578_45178(Func44BBCArg *);
@@ -219,6 +223,7 @@ extern s8 D_80090950_91550;
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern s32 func_80043718_44318(void *, void *);
 extern void func_80066444_67044(s32, void *);
+extern s32 approximateSin(s16);
 
 void func_80041570_42170(Func41570State *arg0) {
     getCurrentAllocation();
@@ -1133,7 +1138,34 @@ void func_80044538_45138(s16 arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044578_45178);
+void func_80044578_45178(Func44BBCArg *arg0) {
+    Mat3x3Padded matrix;
+    s32 sinVal;
+    s32 i;
+
+    arg0->unkCA = arg0->unkCA + 0x100;
+    sinVal = approximateSin((s16)arg0->unkCA);
+    createZRotationMatrix(&matrix, (sinVal >> 5) & 0xFFFF);
+
+    matrix.unk14 = 0xFFF7490A;
+    matrix.unk18 = 0xFFF98007;
+    matrix.unk1C = 0xCB326;
+    func_8006B084_6BC84(&matrix, arg0, &arg0->unk3C);
+
+    sinVal = approximateSin(arg0->unkCA);
+    createZRotationMatrix(&matrix, (-(sinVal >> 5)) & 0xFFFF);
+
+    matrix.unk14 = 0x8B6F6;
+    matrix.unk18 = 0xFFF98007;
+    matrix.unk1C = 0xCB326;
+    func_8006B084_6BC84(&matrix, arg0, &arg0->unk78);
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, &arg0->unk3C);
+        enqueueDisplayListWithFrustumCull(i, &arg0->unk78);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044684_45284);
 
