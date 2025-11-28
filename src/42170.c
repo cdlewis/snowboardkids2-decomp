@@ -19,6 +19,7 @@ extern void func_800415E8_421E8(void);
 extern void func_80042160_42D60(void);
 extern void func_80043E24_44A24(void);
 extern void func_8004247C_4307C(void);
+extern void func_800440B4_44CB4(void *);
 
 typedef struct {
     s16 matrix[3][3]; /* 0x00 */
@@ -96,6 +97,11 @@ typedef struct {
     s32 unk5C;        /* 0x5C */
     s32 unk60;        /* 0x60 */
 } Func41F38State;
+
+typedef struct {
+    u8 _pad0[0x3C]; /* 0x00 */
+    s16 unk3C;      /* 0x3C */
+} Func44538TaskMem;
 
 typedef struct {
     u8 pad0[0x20]; /* 0x00 */
@@ -630,7 +636,12 @@ void func_80044500_45100(Func432D8Arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044538_45138);
+void func_80044538_45138(s16 arg0) {
+    Func44538TaskMem *task = (Func44538TaskMem *)scheduleTask(func_800440B4_44CB4, 0, 0, 0x32);
+    if (task != NULL) {
+        task->unk3C = arg0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044578_45178);
 
