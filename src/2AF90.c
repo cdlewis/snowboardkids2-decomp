@@ -1,4 +1,9 @@
 #include "common.h"
+#include "gamestate.h"
+#include "task_scheduler.h"
+
+extern s16 func_8006D21C_6DE1C(s32, s32, s32, s32);
+extern s32 distance_2d(s32, s32);
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002A390_2AF90);
 
@@ -6,7 +11,20 @@ INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002A4AC_2B0AC);
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002A7CC_2B3CC);
 
-INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002ACFC_2B8FC);
+s32 func_8002ACFC_2B8FC(s32 arg0, s32 arg1, s16 arg2) {
+    GameState *state;
+    s16 angle;
+
+    state = getCurrentAllocation();
+    angle = func_8006D21C_6DE1C(state->unk3EC, state->unk3F0, arg0, arg1);
+
+    if (arg2 - 0x238 < angle && angle < arg2 + 0x238) {
+        if (distance_2d(state->unk3EC - arg0, state->unk3F0 - arg1) <= 0x280000) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002ADB4_2B9B4);
 
