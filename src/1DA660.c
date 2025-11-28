@@ -21,6 +21,12 @@ typedef struct {
     u8 unk28;
 } func_800B08FC_arg;
 
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_800B1104_arg;
+
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0218_1DA7B8);
@@ -114,4 +120,7 @@ void func_800B10D4_1DB674(void *arg0) {
     func_800630F0_63CF0(0, arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B1104_1DB6A4);
+void func_800B1104_1DB6A4(func_800B1104_arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+}
