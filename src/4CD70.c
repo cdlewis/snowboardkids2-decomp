@@ -8,7 +8,6 @@ extern void func_8004D464_4E064(void *);
 extern u8 randA(void);
 extern void func_8004E2D8_4EED8(void);
 extern void func_8004E410_4F010(void);
-extern void func_8004E614_4F214(void);
 extern void *freeNodeMemory(void *);
 extern void func_80058530_59130(s32, s32);
 
@@ -216,6 +215,8 @@ typedef struct {
     s16 unk1E;
 } Struct_func_8004E134;
 
+void func_8004E614_4F214(Struct_func_8004E134 *arg0);
+
 void func_8004E134_4ED34(Struct_func_8004E134 *arg0) {
     u8 temp;
 
@@ -263,7 +264,9 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E4EC_4F0EC);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E580_4F180);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E614_4F214);
+void func_8004E614_4F214(Struct_func_8004E134 *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E640_4F240);
 
