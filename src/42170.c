@@ -607,16 +607,18 @@ void func_80042670_43270(Player *arg0) {
 }
 
 typedef struct {
-    u8 pad0[0x20];  /* 0x00 */
-    void *unk20;    /* 0x20 */
-    void *unk24;    /* 0x24 */
-    void *unk28;    /* 0x28 */
-    s32 unk2C;      /* 0x2C */
-    u8 pad30[0x14]; /* 0x30 */
-    s32 unk44;      /* 0x44 */
-    s32 unk48;      /* 0x48 */
-    s32 unk4C;      /* 0x4C */
-    s32 unk50;      /* 0x50 */
+    u8 pad0[0x20]; /* 0x00 */
+    void *unk20;   /* 0x20 */
+    void *unk24;   /* 0x24 */
+    void *unk28;   /* 0x28 */
+    s32 unk2C;     /* 0x2C */
+    u8 pad30[0xC]; /* 0x30 */
+    void *unk3C;   /* 0x3C */
+    void *unk40;   /* 0x40 */
+    s32 unk44;     /* 0x44 */
+    s32 unk48;     /* 0x48 */
+    s32 unk4C;     /* 0x4C */
+    s32 unk50;     /* 0x50 */
 } Func426B0State;
 
 void func_8004273C_4333C(void *);
@@ -657,7 +659,17 @@ void func_800429C4_435C4(Func429C4Arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800429FC_435FC);
+Func426B0State *func_800429FC_435FC(void *arg0, void *arg1, s16 arg2) {
+    Func426B0State *task;
+
+    task = (Func426B0State *)scheduleTask(func_800426B0_432B0, 0, 0, 0xC8);
+    if (task != NULL) {
+        task->unk3C = arg0;
+        task->unk40 = arg1;
+        task->unk44 = arg2;
+    }
+    return task;
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80042A6C_4366C);
 
