@@ -5,6 +5,9 @@
 extern void *func_80035F80_36B80(s32);
 extern void func_80034D58_35958(void);
 
+extern u8 D_459310[];
+extern u8 D_459E00[];
+
 typedef struct {
     /* 0x00 */ void *unk0;
     /* 0x04 */ void *unk4;
@@ -18,9 +21,35 @@ typedef struct {
     /* 0x08 */ void *unk8;
 } Func34574Arg;
 
-void func_80035074_35C74(Func358FCStruct *arg0);
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ s32 unk8;
+    /* 0x0C */ s32 unkC;
+} Func33FE0Entry; // size 0x10
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_800333E0_33FE0);
+typedef struct {
+    /* 0x00 */ Func33FE0Entry entries[13];
+} Func33FE0Arg;
+
+void func_80035074_35C74(Func358FCStruct *arg0);
+void func_80033458_34058(void);
+void func_8003365C_3425C(Func34574Arg *arg0);
+
+void func_800333E0_33FE0(Func33FE0Arg *arg0) {
+    void *allocation;
+    s32 i;
+
+    getCurrentAllocation();
+    allocation = dmaRequestAndUpdateStateWithSize(D_459310, D_459E00, 0x2278);
+    setCleanupCallback(func_8003365C_3425C);
+
+    for (i = 12; i >= 0; i--) {
+        arg0->entries[i].unk4 = allocation;
+    }
+
+    setCallback(func_80033458_34058);
+}
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033458_34058);
 
