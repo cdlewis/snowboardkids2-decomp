@@ -1,6 +1,7 @@
 #include "20F0.h"
 #include "6E840.h"
 #include "common.h"
+#include "gamestate.h"
 #include "task_scheduler.h"
 
 extern void func_800394BC_3A0BC(void *, s32);
@@ -18,7 +19,8 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    u8 _pad4[0x22];
+    u8 _pad4[0x20];
+    u16 unk24;
     s16 unk26;
     u8 unk28;
 } func_800B08FC_arg;
@@ -47,6 +49,7 @@ typedef struct {
 } func_800B0FE0_arg;
 
 void func_800B0DF8_1DB398(void *);
+void func_800B05DC_1DAB7C(func_800B08FC_arg *);
 void func_800B0638_1DABD8(void);
 void func_800B0E94_1DB434(void *);
 void func_800B0EEC_1DB48C(func_800B0FE0_arg *);
@@ -60,7 +63,14 @@ INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0218_1DA7B8);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0368_1DA908);
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0598_1DAB38);
+void func_800B0598_1DAB38(func_800B08FC_arg *arg0) {
+    GameState *allocation = getCurrentAllocation();
+
+    if (arg0->unk24 == 6) {
+        allocation->unk5B3 = 0;
+    }
+    setCallback(func_800B05DC_1DAB7C);
+}
 
 void func_800B05DC_1DAB7C(func_800B08FC_arg *arg0) {
     applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->_pad4);
