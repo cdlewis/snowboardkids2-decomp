@@ -63,7 +63,7 @@ INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB690_AD110);
 INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BBA50);
 
 void func_800BBB14_AD594(void);
-void func_800BBB70_AD5F0(void);
+void func_800BBB70_AD5F0(AD510Arg *arg0);
 
 void func_800BBA90_AD510(AD510Arg *arg0) {
     AD510Allocation *allocation;
@@ -84,4 +84,7 @@ void func_800BBA90_AD510(AD510Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BBB14_AD594);
 
-INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BBB70_AD5F0);
+void func_800BBB70_AD5F0(AD510Arg *arg0) {
+    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->unk28 = freeNodeMemory(arg0->unk28);
+}
