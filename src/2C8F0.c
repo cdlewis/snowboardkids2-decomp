@@ -1,7 +1,11 @@
 #include "common.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 extern void *D_8008EBF0_8F7F0[];
+extern void func_8002BFEC_2CBEC(void *);
+extern void func_8002C570_2D170(void *);
+extern void func_8002A2D0_2AED0(void *);
 
 typedef struct {
     u8 pad[0xD4];
@@ -23,7 +27,47 @@ void func_8002BE8C_2CA8C(void) {
 
 INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BE94_2CA94);
 
-INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BEF4_2CAF4);
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ Mat3x3Padded unk4;
+    /* 0x24 */ u8 pad24[0xC];
+    /* 0x30 */ u16 unk30;
+    /* 0x32 */ u8 pad32[0x96];
+    /* 0xC8 */ void *unkC8;
+    /* 0xCC */ u8 padCC[0x7];
+    /* 0xD3 */ u8 unkD3;
+} Func8002BEF4Arg;
+
+void func_8002BEF4_2CAF4(Func8002BEF4Arg *arg0) {
+    GameState *allocation;
+    s32 i;
+    Func8002BEF4Arg *ptr;
+
+    allocation = (GameState *)getCurrentAllocation();
+
+    switch (arg0->unkD3) {
+        case 0:
+            func_8002BFEC_2CBEC(arg0);
+            for (i = 0; i < allocation->unk41C; i++) {
+                ptr = (Func8002BEF4Arg *)((u8 *)arg0 + i * 0x64);
+                createYRotationMatrix(&ptr->unk4, ptr->unk30);
+                func_8002A2D0_2AED0(ptr);
+            }
+            break;
+        case 1:
+            func_8002C570_2D170(arg0);
+            for (i = 0; i < allocation->unk41C; i++) {
+                ptr = (Func8002BEF4Arg *)((u8 *)arg0 + i * 0x64);
+                createYRotationMatrix(&ptr->unk4, ptr->unk30);
+                func_8002A2D0_2AED0(ptr);
+            }
+            break;
+    }
+
+    if (allocation->unk42A == 0) {
+        setCallback(arg0->unkC8);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BFEC_2CBEC);
 

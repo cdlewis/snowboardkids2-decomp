@@ -141,7 +141,9 @@ typedef struct {
     u8 PAD_0A_1[0x4];
     s32 unk408[2];
     s32 unk410[2];
-    s16 unk418[6];
+    s16 unk418[2];
+    s32 unk41C;
+    s16 unk420[2];
     u8 unk424;
     s8 unk425;
     u8 unk426;
