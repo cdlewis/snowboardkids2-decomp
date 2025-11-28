@@ -155,7 +155,7 @@ typedef struct {
 
 extern void *load_3ECE40(void);
 void func_80041B18_42718(void);
-void func_80041DE4_429E4(void);
+void func_80041DE4_429E4(Func41AD8Arg *);
 
 void func_80041AD8_426D8(Func41AD8Arg *arg0) {
     arg0->unkD8 = load_3ECE40();
@@ -167,7 +167,9 @@ INCLUDE_ASM("asm/nonmatchings/42170", func_80041B18_42718);
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041C28_42828);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041DE4_429E4);
+void func_80041DE4_429E4(Func41AD8Arg *arg0) {
+    arg0->unkD8 = freeNodeMemory(arg0->unkD8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80041E10_42A10);
 
