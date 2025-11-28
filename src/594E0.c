@@ -2,6 +2,8 @@
 #include "gamestate.h"
 #include "graphics.h"
 
+extern s32 func_80044050_44C50(void);
+
 void func_800588E0_594E0(Player *arg0, s16 arg1, void *arg2) {
     if (arg0->unkAC2 != 0) {
         return;
@@ -115,7 +117,17 @@ void func_80058B94_59794(Player *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_80058BB0_597B0);
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_80058C10_59810);
+s32 func_80058C10_59810(Player *arg0) {
+    if (arg0->unkBD1 != 0) {
+        return 0;
+    }
+    if (func_80044050_44C50() == 0) {
+        return 0;
+    }
+    arg0->unkBD1 = 1;
+    arg0->unkBA6 = 300;
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_80058C64_59864);
 
