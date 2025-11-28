@@ -196,7 +196,14 @@ void func_8004D338_4DF38(Struct_func_8004D134 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D364_4DF64);
+void func_8004D364_4DF64(s32 arg0) {
+    Struct_func_8004D134 *task;
+
+    task = scheduleTask(func_8004D134_4DD34, 0, 0, 0xE6);
+    if (task != NULL) {
+        task->unkC = arg0;
+    }
+}
 
 void func_8004D3A4_4DFA4(Struct_func_8004D3A4 *arg0) {
     arg0->unk4 = loadAsset_34CB50();
