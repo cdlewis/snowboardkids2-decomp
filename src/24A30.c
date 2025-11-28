@@ -507,7 +507,23 @@ void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80026FF4_27BF4);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_800270B8_27CB8);
+void func_800270B8_27CB8(u8 *arg0) {
+    s32 i;
+    s32 pad[2];
+    u8 *ptr;
+    s32 count;
+
+    count = D_800AFE8C_A71FC->unk8;
+    if (count > 0) {
+        i = 0;
+        ptr = arg0;
+        do {
+            debugEnqueueCallback((u16)(i + 0xC), 0, func_8000FED0_10AD0, ptr);
+            i++;
+            ptr += 0xC;
+        } while (i < D_800AFE8C_A71FC->unk8);
+    }
+}
 
 void func_8002712C_27D2C(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
