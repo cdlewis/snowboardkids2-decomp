@@ -139,7 +139,21 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80024E58_25A58);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024F48_25B48);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024FEC_25BEC);
+void func_80024FEC_25BEC(func_80024C8C_2588C_arg *arg0) {
+    u16 *base;
+    u16 val;
+
+    base = (u16 *)getCurrentAllocation();
+
+    clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    val = *(base + arg0->unk28 + (0x1898 / 2));
+
+    if (val != 0x10) {
+        setCallback(func_80024C8C_2588C);
+    }
+}
 
 void func_80025058_25C58(func_80025280_25E80_arg *arg0) {
     func_80002014_2C14(arg0->unk0);
