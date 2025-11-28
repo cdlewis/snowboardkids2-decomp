@@ -261,7 +261,29 @@ void func_800BBB64_ADF24(void *arg0) {
     func_800630A4_63CA4(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BBB90);
+typedef struct {
+    /* 0x00 */ Mat3x3Padded mat;
+    /* 0x20 */ u8 _pad20[0x5C];
+} func_800BBB90_task;
+
+void func_800BBB90(s16 arg0) {
+    func_800BBB90_task *task;
+
+    task = scheduleTask(func_800BB494_AD854, 0, 0, 0xD2);
+    if (task != NULL) {
+        if (arg0 == 0) {
+            createYRotationMatrix(&task->mat, 0x98A);
+            task->mat.unk14 = 0x130F588E;
+            task->mat.unk18 = 0x03930000;
+            task->mat.unk1C = 0x0DB72F2C;
+        } else {
+            createYRotationMatrix(&task->mat, 0);
+            task->mat.unk14 = 0;
+            task->mat.unk18 = 0x30000000;
+            task->mat.unk1C = 0x30458CB2;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BBC28_ADFE8);
 
