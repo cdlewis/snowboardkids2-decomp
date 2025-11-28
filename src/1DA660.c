@@ -2,6 +2,7 @@
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 extern void func_800394BC_3A0BC(void *, s32);
@@ -12,6 +13,11 @@ extern void func_80038420_39020(void);
 extern u8 D_41A1D0[];
 extern u8 D_41AD80[];
 extern u8 D_422C60[];
+extern u8 D_1DC0D0[];
+extern u8 D_1DC260[];
+extern u8 D_4237C0[];
+extern u8 identityMatrix[];
+extern void *D_800B1140_1DB6E0;
 typedef struct {
     u8 _pad0[0x2C];
     s32 unk2C;
@@ -48,6 +54,18 @@ typedef struct {
     void *unk4;
 } func_800B0FE0_arg;
 
+typedef struct {
+    s16 m[9];
+    s16 _pad;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    s32 unk2C;
+} func_800B100C_arg;
+
 void func_800B0DF8_1DB398(void *);
 void func_800B05DC_1DAB7C(func_800B08FC_arg *);
 void func_800B0638_1DABD8(void);
@@ -56,6 +74,8 @@ void func_800B0EEC_1DB48C(func_800B0FE0_arg *);
 void func_800B0F88_1DB528(void *);
 void func_800B0FE0_1DB580(func_800B0FE0_arg *);
 void func_800B0DD0_1DB370(func_800B0DD0_arg *);
+void func_800B10D4_1DB674(void *);
+void func_800B1104_1DB6A4(func_800B1104_arg *);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
 
@@ -184,7 +204,26 @@ void func_800B0FE0_1DB580(func_800B0FE0_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B100C_1DB5AC);
+void func_800B100C_1DB5AC(func_800B100C_arg *arg0) {
+    void *temp1;
+    void *temp2;
+
+    temp1 = dmaRequestAndUpdateState(D_1DC0D0, D_1DC260);
+    temp2 = dmaRequestAndUpdateState(D_422C60, D_4237C0);
+    setCleanupCallback(func_800B1104_1DB6A4);
+
+    memcpy(arg0, identityMatrix, 0x20);
+    arg0->unk20 = &D_800B1140_1DB6E0;
+    arg0->unk14 = 0x2C0000;
+    arg0->unk1C = (s32)0xFF9F0000;
+    arg0->unk24 = temp1;
+    arg0->unk28 = temp2;
+    arg0->unk2C = 0;
+    arg0->unk18 = (s32)0xFFF40000;
+
+    createZRotationMatrix((Mat3x3Padded *)arg0, 0x1F50);
+    setCallback(func_800B10D4_1DB674);
+}
 
 void func_800B10D4_1DB674(void *arg0) {
     getCurrentAllocation();
