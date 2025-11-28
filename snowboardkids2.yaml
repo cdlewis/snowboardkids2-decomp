@@ -774,10 +774,10 @@ segments:
     exclusive_ram_id: 800B00C0
     overlay: true
     subsegments:
-      - [0x9FF70, asm]
-      - [0xA9A40, asm]
+      - [0x9FF70, c]
+      - [0xA9A40, c]
       - [0xAA8E0, data]
-      - [0xAAEB0, rodata, 9FF70]
+      - [0xAAEB0, .rodata, 9FF70]
 
   - name: _AB160
     type: code
