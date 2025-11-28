@@ -47,7 +47,7 @@ typedef struct {
     /* 0x4C */ u8 pad4C[0xE];
     /* 0x5A */ s16 unk5A;
     /* 0x5C */ u8 unk5C;
-    /* 0x5D */ u8 pad5D;
+    /* 0x5D */ u8 unk5D;
     /* 0x5E */ u8 unk5E;
     /* 0x5F */ u8 pad5F[0x2];
     /* 0x61 */ u8 unk61;
@@ -243,7 +243,27 @@ void func_80029E58_2AA58(Func297D8Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_80029EA8_2AAA8);
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A044_2AC44);
+extern u16 D_8008E568_8F168[];
+extern u16 D_8008E57C_8F17C[];
+
+void func_8002A044_2AC44(Func297D8Arg *arg0) {
+    arg0->unk5A = 0;
+
+    switch (arg0->unk5D) {
+        case 0xB:
+            func_800585C8_591C8(0xB2);
+            break;
+        case 0xC:
+            func_800585C8_591C8(0x112);
+            break;
+        case 0xD:
+            func_800585C8_591C8(D_8008E568_8F168[arg0->unk5C]);
+            break;
+        case 0xE:
+            func_800585C8_591C8(D_8008E57C_8F17C[arg0->unk5C]);
+            break;
+    }
+}
 
 extern u16 D_8008E590_8F190[];
 
