@@ -21,7 +21,7 @@ typedef struct {
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051C80_52880);
 
-void func_800523EC_52FEC(void);
+void func_800523EC_52FEC(Struct_52880 *arg0);
 void func_80051E34_52A34(void);
 
 void func_80051DEC_529EC(Struct_52880 *arg0) {
@@ -39,7 +39,9 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80051FC4_52BC4);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80052128_52D28);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_800523EC_52FEC);
+void func_800523EC_52FEC(Struct_52880 *arg0) {
+    arg0->unk20 = freeNodeMemory(arg0->unk20);
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80052418_53018);
 
