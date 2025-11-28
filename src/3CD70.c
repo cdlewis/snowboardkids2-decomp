@@ -1,11 +1,19 @@
 #include "common.h"
 #include "task_scheduler.h"
 
+void func_8003C170_3CD70(void);
+
 INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003C170_3CD70);
 
 INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003C2BC_3CEBC);
 
-INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003CEC4_3DAC4);
+void func_8003CEC4_3DAC4(u8 arg0) {
+    Node *node = scheduleTask(func_8003C170_3CD70, 1, 0, 0xD2);
+    if (node != NULL) {
+        node->unkC = arg0;
+        node->field_D = arg0;
+    }
+}
 
 void func_8003CF40_3DB40(void);
 
