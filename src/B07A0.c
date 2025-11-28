@@ -1,4 +1,16 @@
 #include "common.h"
+#include "task_scheduler.h"
+
+typedef struct {
+    u8 _pad0[0x450];
+    s32 unk450;
+    u8 _pad454[0x76B];
+    u8 unkBBF;
+} func_800BC4AC_arg;
+
+extern void func_800B02AC(func_800BC4AC_arg *);
+extern s32 func_8005D308_5DF08(func_800BC4AC_arg *, s32);
+extern void func_8005D180_5DD80(func_800BC4AC_arg *, s32);
 
 INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BB2B0_B07A0);
 
@@ -20,7 +32,25 @@ INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC0D8_B15C8);
 
 INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC3B8_B18A8);
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC4AC_B199C);
+s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
+    s32 pad[3];
+
+    getCurrentAllocation();
+
+    arg0->unk450 += -0x8000;
+    func_800B02AC(arg0);
+
+    if (arg0->unkBBF == 0) {
+        if (func_8005D308_5DF08(arg0, 6) != 0) {
+            arg0->unkBBF = arg0->unkBBF + 1;
+        }
+        return 0;
+    }
+
+    func_8005D180_5DD80(arg0, 7);
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC520_B1A10);
 
