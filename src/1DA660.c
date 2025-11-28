@@ -48,6 +48,8 @@ typedef struct {
 
 void func_800B0DF8_1DB398(void *);
 void func_800B0638_1DABD8(void);
+void func_800B0E94_1DB434(void *);
+void func_800B0EEC_1DB48C(func_800B0FE0_arg *);
 void func_800B0F88_1DB528(void *);
 void func_800B0FE0_1DB580(func_800B0FE0_arg *);
 void func_800B0DD0_1DB370(func_800B0DD0_arg *);
@@ -122,7 +124,17 @@ void func_800B0DF8_1DB398(void *arg0) {
     debugEnqueueCallback(9, 0, func_80038420_39020, arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0E24_1DB3C4);
+void func_800B0E24_1DB3C4(func_800B0F18_arg *arg0) {
+    void *temp;
+    getCurrentAllocation();
+    temp = dmaRequestAndUpdateStateWithSize(D_41A1D0, D_41AD80, 0x1B48);
+    arg0->unk0 = -44;
+    arg0->unk2 = -20;
+    arg0->unk8 = 13;
+    arg0->unk4 = temp;
+    setCleanupCallback(func_800B0EEC_1DB48C);
+    setCallbackWithContinue(func_800B0E94_1DB434);
+}
 
 void func_800B0E94_1DB434(void *arg0) {
     GameState *state = getCurrentAllocation();
