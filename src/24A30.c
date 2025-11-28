@@ -531,7 +531,25 @@ void func_8002723C_27E3C(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027268_27E68);
+void func_8002764C_2824C(func_80025FFC_26BFC_arg *arg0);
+void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0);
+
+void func_80027268_27E68(func_80025FFC_26BFC_arg *arg0) {
+    void *dmaResult;
+    s32 loopCount;
+    s32 i;
+
+    dmaResult = dmaRequestAndUpdateStateWithSize(D_4237C0, D_426EF0, 0x8A08);
+
+    loopCount = (D_800AFE8C_A71FC->unk8 == 2) ? 3 : 2;
+
+    for (i = 0; i < loopCount; i++) {
+        arg0[i].unk4 = dmaResult;
+    }
+
+    setCleanupCallback(func_8002764C_2824C);
+    setCallback(func_800272FC_27EFC);
+}
 
 void func_80027348_27F48(void);
 
