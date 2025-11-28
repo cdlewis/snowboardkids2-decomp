@@ -23,12 +23,14 @@ typedef struct {
     s16 unk2;
     void *unk4;
     s16 unk8;
-    u8 padA[0x6];
+    u8 padA[0x2];
+    s32 unkC;
     s32 unk10;
     s32 unk14;
 } Struct_func_8004D134;
 
 void func_8004D19C_4DD9C(void);
+void func_8004D298_4DE98(void);
 void func_8004D338_4DF38(Struct_func_8004D134 *arg0);
 
 typedef struct {
@@ -180,7 +182,13 @@ void func_8004D134_4DD34(Struct_func_8004D134 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D19C_4DD9C);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D23C_4DE3C);
+void func_8004D23C_4DE3C(Struct_func_8004D134 *arg0) {
+    arg0->unk10--;
+    if (arg0->unk10 == 0) {
+        setCallback(func_8004D298_4DE98);
+    }
+    debugEnqueueCallback((u16)(arg0->unkC + 8), 6, func_8000FED0_10AD0, arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D298_4DE98);
 
