@@ -1,5 +1,6 @@
 #include "56910.h"
 #include "5E590.h"
+#include "68CF0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "gamestate.h"
@@ -142,7 +143,20 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C728_4D328);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C928_4D528);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C9E8_4D5E8);
+typedef struct {
+    u8 pad0[0x30];
+    TextData unk30;
+    u8 unk3C;
+    u8 pad3D[0x7];
+    Player *unk44;
+    s32 unk48;
+} Struct_func_8004C9E8;
+
+void func_8004C9E8_4D5E8(Struct_func_8004C9E8 *arg0) {
+    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_8000FED0_10AD0, arg0);
+    arg0->unk3C = arg0->unk44->unkBC5 + 0x31;
+    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, renderTextPalette, &arg0->unk30);
+}
 
 void func_8004CA58_4D658(Struct_func_8004DCC4 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
