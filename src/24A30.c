@@ -81,6 +81,20 @@ typedef struct {
     u8 unkA1;
 } func_80024518_arg;
 
+typedef struct {
+    u8 pad0[0x20];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 pad30[0xC];
+    Mat3x3Padded unk3C;
+    Mat3x3Padded unk5C;
+    Mat3x3Padded unk7C;
+    u8 pad9C[0x5];
+    u8 unkA1;
+} func_80024644_arg;
+
 extern void func_800394BC_3A0BC(void *, s32);
 extern void func_8000FED0_10AD0(void);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
@@ -143,7 +157,63 @@ void func_80024600_25200(func_8002494C_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024644_25244);
+void func_80024810_25410(func_80024644_arg *);
+void func_8002494C_2554C(func_8002494C_arg *);
+
+void func_80024644_25244(func_80024644_arg *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    Mat3x3Padded sp50;
+    u8 *base;
+    Mat3x3Padded *unk5CPtr;
+    Mat3x3Padded *unk3CPtr;
+    Mat3x3Padded *sp50Ptr;
+    Mat3x3Padded *sp30Ptr;
+    Mat3x3Padded *sp10Ptr;
+    Mat3x3Padded *unk7CPtr;
+    u8 charIndex;
+    u8 assetIndex;
+    u8 paletteIndex;
+    u32 offset;
+
+    base = (u8 *)getCurrentAllocation();
+
+    sp50Ptr = &sp50;
+    memcpy(sp50Ptr, identityMatrix, 0x20);
+    unk5CPtr = &arg0->unk5C;
+    memcpy(unk5CPtr, sp50Ptr, 0x20);
+    unk3CPtr = &arg0->unk3C;
+    memcpy(unk3CPtr, unk5CPtr, 0x20);
+    sp30Ptr = &sp30;
+    memcpy(sp30Ptr, unk3CPtr, 0x20);
+    sp10Ptr = &sp10;
+    memcpy(sp10Ptr, sp30Ptr, 0x20);
+
+    offset = arg0->unkA1 << 5;
+    unk7CPtr = &arg0->unk7C;
+    memcpy(unk7CPtr, (void *)(offset + (u32)base + 0x17F8), 0x20);
+
+    createRotationMatrixYX(sp10Ptr, 0x1000, 0x800);
+    createZRotationMatrix(sp30Ptr, 0x1F00);
+    func_8006B084_6BC84(sp10Ptr, sp30Ptr, unk3CPtr);
+
+    createYRotationMatrix(unk5CPtr, *(u16 *)(base + arg0->unkA1 * 2 + 0x1888));
+    func_8006B084_6BC84(unk3CPtr, unk5CPtr, sp50Ptr);
+    func_8006B084_6BC84(sp50Ptr, unk7CPtr, arg0);
+
+    charIndex = *(base + arg0->unkA1 + 0x18AC);
+    assetIndex = *(base + arg0->unkA1 + 0x18B4);
+    assetIndex = assetIndex + charIndex * 3;
+    paletteIndex = EepromSaveData->character_or_settings[assetIndex] - 1;
+
+    arg0->unk20 = loadAssetByIndex_95728(assetIndex);
+    arg0->unk24 = loadAssetByIndex_95500(assetIndex);
+    arg0->unk28 = loadAssetByIndex_95590(assetIndex);
+    arg0->unk2C = loadAssetByIndex_95668(paletteIndex);
+
+    setCleanupCallback(func_8002494C_2554C);
+    setCallbackWithContinue(func_80024810_25410);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024810_25410);
 
