@@ -8,6 +8,8 @@ extern void func_8000FED0_10AD0(void);
 extern void func_800630F0_63CF0(s32, void *);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern void func_80038420_39020(void);
+extern u8 D_41AD80[];
+extern u8 D_422C60[];
 void func_800B0DF8_1DB398(void *);
 void func_800B0638_1DABD8(void);
 
@@ -15,6 +17,8 @@ typedef struct {
     u8 _pad0[0x2C];
     s32 unk2C;
 } func_800B0DD0_arg;
+
+void func_800B0DD0_1DB370(func_800B0DD0_arg *);
 
 typedef struct {
     SceneModel *unk0;
@@ -94,7 +98,11 @@ void func_800B0D4C_1DB2EC(func_800B0D4C_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0D78_1DB318);
+void func_800B0D78_1DB318(func_800B0D4C_arg *arg0) {
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(D_41AD80, D_422C60, 0x13FF0);
+    setCleanupCallback(func_800B0D4C_1DB2EC);
+    setCallback(func_800B0DD0_1DB370);
+}
 
 void func_800B0DD0_1DB370(func_800B0DD0_arg *arg0) {
     func_800394BC_3A0BC(arg0, arg0->unk2C);
