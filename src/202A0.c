@@ -86,13 +86,28 @@ typedef struct {
     void *unkF8;
 } Func800206B4Arg;
 
+typedef struct {
+    u8 _pad0[0x72];
+    u16 unk72;
+} Func8001FE64Arg;
+
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001F6A0_202A0);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001F7C8_203C8);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FA00_20600);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FE64_20A64);
+extern void func_8001FEB4_20AB4(void);
+
+void func_8001FE64_20A64(Func8001FE64Arg *arg0) {
+    getCurrentAllocation();
+
+    arg0->unk72++;
+    if (arg0->unk72 == 150) {
+        arg0->unk72 = 0;
+        setCallback(&func_8001FEB4_20AB4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FEB4_20AB4);
 
