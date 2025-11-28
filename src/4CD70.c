@@ -772,7 +772,12 @@ void func_8004FCB8_508B8(Struct_func_8004F04C *arg0) {
     arg0->unkC = freeNodeMemory(arg0->unkC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FCF0_508F0);
+void func_8004FCF0_508F0(s32 arg0) {
+    Struct_func_8004FA20 *task = (Struct_func_8004FA20 *)scheduleTask(func_8004FA20_50620, 0, 0, 0xE6);
+    if (task != NULL) {
+        task->unk18 = arg0;
+    }
+}
 
 void func_8004FDD0_509D0(void);
 void func_8004FF28_50B28(Struct_func_8004FF28 *);
