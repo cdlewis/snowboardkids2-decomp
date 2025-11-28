@@ -19,6 +19,7 @@ extern u8 D_1DC260[];
 extern u8 D_4237C0[];
 extern u8 identityMatrix[];
 extern void *D_800B1140_1DB6E0;
+extern char D_800B115C_1DB6FC[];
 typedef struct {
     u8 _pad0[0x2C];
     s32 unk2C;
@@ -57,6 +58,22 @@ typedef struct {
 } func_800B0FE0_arg;
 
 typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s16 unk8;
+    u8 _padA[2];
+    char *unkC;
+    s16 unk10;
+    s16 unk12;
+    s16 unk14;
+    u8 _pad16[2];
+    char *unk18;
+    char unk1C[16];
+} func_800B0BEC_arg;
+
+typedef struct {
     s16 m[9];
     s16 _pad;
     s32 unk14;
@@ -79,6 +96,7 @@ void func_800B0FE0_1DB580(func_800B0FE0_arg *);
 void func_800B0DD0_1DB370(func_800B0DD0_arg *);
 void func_800B10D4_1DB674(void *);
 void func_800B1104_1DB6A4(func_800B1104_arg *);
+void func_800B0C54_1DB1F4(func_800B0BEC_arg *);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
 
@@ -168,7 +186,19 @@ void func_800B0BC0_1DB160(func_800B0FE0_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0BEC_1DB18C);
+void func_800B0BEC_1DB18C(func_800B0BEC_arg *arg0) {
+    arg0->unk0 = -7;
+    arg0->unk2 = -7;
+    arg0->unk4 = -120;
+    arg0->unk6 = -104;
+    arg0->unkC = arg0->unk1C;
+    arg0->unk8 = 0;
+    arg0->unk14 = 0;
+    arg0->unk18 = D_800B115C_1DB6FC;
+    arg0->unk10 = arg0->unk0;
+    arg0->unk12 = arg0->unk2;
+    setCallback(func_800B0C54_1DB1F4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0C54_1DB1F4);
 
