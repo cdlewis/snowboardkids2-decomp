@@ -44,7 +44,19 @@ typedef struct {
 
 INCLUDE_ASM("asm/nonmatchings/38310", func_80037710_38310);
 
-INCLUDE_ASM("asm/nonmatchings/38310", func_800377FC_383FC);
+extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
+extern void func_80035408_36008(void);
+extern void func_80012004_12C04(void);
+
+void func_800377FC_383FC(u8 *arg0) {
+    s32 i;
+
+    debugEnqueueCallback(8, 0, func_80035408_36008, arg0);
+
+    for (i = 0; i < 2; i++) {
+        debugEnqueueCallback(8, 0, func_80012004_12C04, arg0 + 0x14 + i * 0x10);
+    }
+}
 
 void func_80037874_38474(func_80037874_38474_arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
