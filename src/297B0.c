@@ -16,6 +16,7 @@ extern void func_800291CC_29DCC(void);
 extern void func_80029EA8_2AAA8(void);
 extern void func_80029C90_2A890(void);
 extern void func_80029AA4_2A6A4(void);
+extern void func_8002900C_29C0C(void);
 
 typedef struct {
     /* 0x00 */ void *model;
@@ -38,7 +39,11 @@ typedef struct {
     /* 0x04 */ Mat3x3Padded matrix;
     /* 0x24 */ u8 pad24[0x8];
     /* 0x2C */ u16 rotation;
-    /* 0x2E */ u8 pad2E[0x2C];
+    /* 0x2E */ u8 pad2E[0x12];
+    /* 0x40 */ s32 unk40;
+    /* 0x44 */ s32 unk44;
+    /* 0x48 */ s32 unk48;
+    /* 0x4C */ u8 pad4C[0xE];
     /* 0x5A */ s16 unk5A;
     /* 0x5C */ u8 unk5C;
     /* 0x5D */ u8 pad5D;
@@ -81,7 +86,18 @@ void func_80028D90_29990(Func297D8Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_80028DF0_299F0);
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_80028FAC_29BAC);
+void func_80028FAC_29BAC(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    func_8002A290_2AE90(arg0);
+    arg0->unk48 = 0;
+    arg0->unk40 = 0;
+    arg0->unk44 = 0x280000;
+    setCallback(func_8002900C_29C0C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/297B0", func_8002900C_29C0C);
 
