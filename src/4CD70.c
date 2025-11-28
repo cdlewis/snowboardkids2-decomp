@@ -1,4 +1,5 @@
 #include "56910.h"
+#include "5E590.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "gamestate.h"
@@ -457,7 +458,55 @@ void func_8004E884_4F484(Struct_func_8004E884 *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E8BC_4F4BC);
+typedef struct {
+    u8 pad0[0x10];
+    void *unk10;
+} Struct_func_8004E8BC_alloc;
+
+typedef struct {
+    u8 pad0[0x17C3];
+    u8 unk17C3;
+} Struct_func_8004E8BC_unk10_target;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+} Struct_func_8004E8BC_element;
+
+typedef struct {
+    Struct_func_8004E8BC_element elements[10];
+    s16 unk78;
+    s16 unk7A;
+    s16 unk7C;
+} Struct_func_8004E8BC;
+
+void func_8004E940_4F540(void *);
+void func_8004EA28_4F628(Struct_func_8004F04C *);
+
+void func_8004E8BC_4F4BC(Struct_func_8004E8BC *arg0) {
+    Struct_func_8004E8BC_alloc *allocation = (Struct_func_8004E8BC_alloc *)getCurrentAllocation();
+    s32 i;
+    u8 val;
+    void *p;
+
+    val = ((Struct_func_8004E8BC_unk10_target *)allocation->unk10)->unk17C3;
+    arg0->unk7C = 0;
+    arg0->unk7A = val;
+    arg0->elements[0].unk4 = loadAssetByIndex_95470(arg0->unk78);
+
+    for (i = 0; i < 10; i++) {
+        p = arg0->elements[0].unk4;
+        arg0->elements[i].unk8 = 0;
+        arg0->elements[i].unk2 = 0x58;
+        arg0->elements[i].unk4 = p;
+    }
+
+    setCleanupCallback(func_8004EA28_4F628);
+    setCallback(func_8004E940_4F540);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E940_4F540);
 
