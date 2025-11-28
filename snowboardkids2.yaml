@@ -786,7 +786,7 @@ segments:
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xAB160, asm]
+      - [0xAB160, c]
       - [0xABA70, data, AB160]
 
   - name: _ABAE0
@@ -796,8 +796,8 @@ segments:
     exclusive_ram_id: 800BB2B0
     overlay: true
     subsegments:
-      - [0xABAE0, asm]
-      - [0xACC70, data, ACC70]
+      - [0xABAE0, c]
+      - [0xACC70, data, ABAE0]
 
   - name: _ACD30
     type: code
@@ -806,7 +806,7 @@ segments:
     exclusive_ram_id: 800BB2B0
     overlay: true
     subsegments:
-      - [0xACD30, asm]
+      - [0xACD30, c]
       - [0xAD630, data, ACD30]
 
   - name: _AD670
@@ -816,9 +816,9 @@ segments:
     exclusive_ram_id: 800BB2B0
     overlay: true
     subsegments:
-      - [0xAD670, asm]
+      - [0xAD670, c]
       - [0xAEDF0, data, AD670]
-      - [0xAEF80, rodata, AD670]
+      - [0xAEF80, .rodata, AD670]
 
   - name: _AEFA0
     type: code
@@ -837,7 +837,7 @@ segments:
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB07A0, asm]
+      - [0xB07A0, c]
       - [0xB1EE0, data, B07A0]
 
   - name: _B2030
@@ -847,7 +847,7 @@ segments:
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB2030, asm]
+      - [0xB2030, c]
       - [0xB2530, data, B2530]
 
   - name: _B2750
@@ -857,7 +857,7 @@ segments:
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB2750, asm]
+      - [0xB2750, c]
       # no data
 
   - name: _B2870
@@ -867,9 +867,9 @@ segments:
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB2870, asm]
+      - [0xB2870, c]
       - [0xB40E0, data, B2870]
-      - [0xB4220, rodata, B2870]
+      - [0xB4220, .rodata, B2870]
 
   - name: _B4240
     type: code
@@ -878,7 +878,7 @@ segments:
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB4240, asm]
+      - [0xB4240, c]
       - [0xB4B20, data, B4B20]
 
   - name: _B4BB0
@@ -888,7 +888,7 @@ segments:
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB4BB0, asm]
+      - [0xB4BB0, c]
       - [0xB5450, data, B4BB0]
 
   - name: _B54C0
@@ -908,9 +908,9 @@ segments:
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB5B90, asm]
+      - [0xB5B90, c]
       - [0xB6310, data, B5B90]
-      - [0xB74B0, rodata, B5B90]
+      - [0xB74B0, .rodata, B5B90]
 
   - name: _B74F0
     type: code
@@ -931,7 +931,7 @@ segments:
     overlay: true
     exclusive_ram_id: 800B00C0
     subsegments:
-      - [0x1DA660, asm]
+      - [0x1DA660, c]
       - [0x1DB6E0, data]
 
   - name: _1DB7A0
@@ -941,9 +941,9 @@ segments:
     overlay: true
     exclusive_ram_id: 800B00C0
     subsegments:
-      - [0x1DB7A0, asm]
+      - [0x1DB7A0, c]
       - [0x1DC080, data]
-      - [0x1DC0B0, rodata, 1DB7A0]
+      - [0x1DC0B0, .rodata, 1DB7A0]
       - [0x1DC0D0, rodata]
 
   - name: _1DC260
@@ -953,12 +953,12 @@ segments:
     overlay: true
     exclusive_ram_id: 800B00C0
     subsegments:
-      - [0x1DC260, asm]
-      - [0x1DC480, asm]
-      - [0x1DC900, asm]
-      - [0x1DCF60, asm]
+      - [0x1DC260, c]
+      - [0x1DC480, c]
+      - [0x1DC900, c]
+      - [0x1DCF60, c]
       - [0x1DD080, data]
-      - [0x1DD150, rodata, 1DC900]
+      - [0x1DD150, .rodata, 1DC900]
 
   - name: cutscene
     type: code
