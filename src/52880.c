@@ -20,6 +20,7 @@ extern void *getCurrentAllocation(void);
 extern Struct_B548_Result *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
 extern void func_80058A68_59668(Player *arg0);
 extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
+extern s32 func_800BB504(void *, s32);
 
 typedef struct {
     void *unk0;
@@ -361,7 +362,11 @@ void func_80055460_56060(Struct_52880 *arg0) {
     setCallbackWithContinue(func_800554FC_560FC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_800554BC_560BC);
+void func_800554BC_560BC(Struct_52880 *arg0) {
+    if (func_800BB504(&arg0->unk4, 0x80000)) {
+        arg0->unk4E++;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_800554FC_560FC);
 
