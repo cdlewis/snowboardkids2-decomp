@@ -272,7 +272,18 @@ void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BBED8);
+extern void func_800BBC28_ADFE8(void);
+
+void func_800BBED8(void) {
+    s32 i;
+
+    for (i = 0; i < 7; i++) {
+        Node *task = scheduleTask(func_800BBC28_ADFE8, 0, 0, 0x32);
+        if (task != NULL) {
+            *(u8 *)((u8 *)task + 0x7C) = i;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BBF28_AE2E8);
 
