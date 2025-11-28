@@ -112,7 +112,9 @@ void func_800B0E94_1DB434(void *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0EEC_1DB48C);
+void func_800B0EEC_1DB48C(func_800B0FE0_arg *arg0) {
+    arg0->unk4 = freeNodeMemory(arg0->unk4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0F18_1DB4B8);
 
