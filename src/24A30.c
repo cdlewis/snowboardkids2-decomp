@@ -60,6 +60,11 @@ typedef struct {
     u8 unk24;
 } func_800272FC_27EFC_arg;
 
+typedef struct {
+    u8 padding[0x53];
+    u8 unk53;
+} func_800253E0_25FE0_arg;
+
 extern void func_800394BC_3A0BC(void *, s32);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
@@ -194,7 +199,13 @@ void *func_80025280_25E80(func_80025280_25E80_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_8002529C_25E9C);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_800253E0_25FE0);
+void func_80025418_26018(void *);
+
+void func_800253E0_25FE0(func_800253E0_25FE0_arg *arg0) {
+    if (--arg0->unk53 == 0) {
+        setCallback(func_80025418_26018);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025418_26018);
 
