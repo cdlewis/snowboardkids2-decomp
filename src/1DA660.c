@@ -1,13 +1,21 @@
+#include "20F0.h"
 #include "common.h"
 
 extern void func_800394BC_3A0BC(void *, s32);
 extern void setCallback(void *);
 void func_800B0DF8_1DB398(void);
+void func_800B0638_1DABD8(void);
 
 typedef struct {
     u8 _pad0[0x2C];
     s32 unk2C;
 } func_800B0DD0_arg;
+
+typedef struct {
+    SceneModel *unk0;
+    u8 _pad4[0x22];
+    s16 unk26;
+} func_800B08FC_arg;
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
 
@@ -23,7 +31,19 @@ INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0638_1DABD8);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0720_1DACC0);
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B08FC_1DAE9C);
+void func_800B08FC_1DAE9C(func_800B08FC_arg *arg0) {
+    s32 result;
+
+    result = clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    if (result != 0) {
+        arg0->unk26 = 0;
+        func_800021B8_2DB8(arg0->unk0, 0);
+        func_80001688_2288(arg0->unk0, -1);
+        setCallback(func_800B0638_1DABD8);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0964_1DAF04);
 
