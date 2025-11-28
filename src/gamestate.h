@@ -119,7 +119,9 @@ typedef struct {
     /* 0x1D8 */ ALPlayer *audioPlayer2;
     u8 PAD_9[0x4];
     /* 0x1E0 */ ALPlayer *audioPlayer3;
-    u8 PAD_A[0x1CA];
+    u8 PAD_A[0x2];
+    /* 0x1E6 */ u8 unk1E6;
+    u8 PAD_A2[0x1C9];
     /* 0x3B0 */ void *unk3B0;
     /* 0x3B4 */ void *unk3B4;
     /* 0x3B8 */ u16 unk3B8;

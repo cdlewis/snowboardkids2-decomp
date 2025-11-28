@@ -56,6 +56,15 @@ void func_800B087C_1DBF5C(func_800B07A0_1DBE80_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B08A8_1DBF88);
 
-INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B0920_1DC000);
+extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
+extern void func_8000FED0_10AD0(void);
+
+void func_800B0920_1DC000(void *arg0) {
+    GameState *allocation = getCurrentAllocation();
+
+    if (allocation->unk1E6 == 2) {
+        debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B0968_1DC048);
