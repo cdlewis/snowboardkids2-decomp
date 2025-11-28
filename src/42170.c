@@ -87,7 +87,8 @@ typedef struct {
     void *unk24;      /* 0x24 */
     void *unk28;      /* 0x28 */
     s32 unk2C;        /* 0x2C */
-    u8 pad30[0x10];   /* 0x30 */
+    u8 pad30[0x0C];   /* 0x30 */
+    void *unk3C;      /* 0x3C */
     s16 matrix[3][3]; /* 0x40 - just the 9 s16 values (0x12 bytes) */
     u8 pad52[2];      /* 0x52 - padding to 0x54 */
     s32 unk54;        /* 0x54 */
@@ -283,7 +284,14 @@ void func_80042070_42C70(Func41F38State *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800420A8_42CA8);
+void func_800420A8_42CA8(void *arg0) {
+    Func41F38State *task;
+
+    task = scheduleTask(&func_80041F38_42B38, 0, 0, 0xC8);
+    if (task != NULL) {
+        task->unk3C = arg0;
+    }
+}
 
 void func_800420E8_42CE8(Func420E8State *arg0) {
     getCurrentAllocation();
