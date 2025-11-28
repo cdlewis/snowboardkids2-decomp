@@ -1,5 +1,6 @@
 #include "5E590.h"
 #include "common.h"
+#include "displaylist.h"
 #include "task_scheduler.h"
 
 s32 func_80052418_53018(s32, s32);
@@ -21,13 +22,15 @@ extern void func_80058A68_59668(void *arg0);
 extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
 
 typedef struct {
-    u8 padding[0x4];
+    void *unk0;
     u8 unk4;
     u8 padding1[0x1B];
     void *unk20;
     u8 padding2[0x1E];
     u16 unk42;
-    u8 padding3[0x8];
+    u8 padding3[0x2];
+    u16 unk46;
+    u8 padding4[0x4];
     u16 unk4C;
     u8 unk4E;
 } Struct_52880;
@@ -243,7 +246,7 @@ void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_800553D4_55FD4);
 
-extern void func_80055460_56060(void);
+void func_80055460_56060(Struct_52880 *arg0);
 
 void func_80055418_56018(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
@@ -252,7 +255,23 @@ void func_80055418_56018(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80055460_56060);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80055460_56060);
+typedef struct {
+    u8 padding[0x44];
+    void *unk44;
+} Alloc_52880;
+
+extern void func_800554FC_560FC(void);
+
+void func_80055460_56060(Struct_52880 *arg0) {
+    Alloc_52880 *alloc = getCurrentAllocation();
+    void *ptr;
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 0x6E);
+    ptr = alloc->unk44;
+    arg0->unk4E = 0;
+    arg0->unk46 = 0;
+    arg0->unk0 = ptr;
+    setCallbackWithContinue(func_800554FC_560FC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_800554BC_560BC);
 
