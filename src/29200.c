@@ -3,14 +3,16 @@
 #include "task_scheduler.h"
 
 extern void *func_80002014_2C14(void *);
-extern void func_80028B44_29744(void *);
 extern void func_800288D4_294D4(void *);
+extern void func_80028744_29344(void *);
 
 typedef struct {
     void *model;
     u8 pad4[0x56];
     s16 unk5A;
 } Func80028AECArg;
+
+void func_80028B44_29744(Func80028AECArg *arg0);
 
 typedef struct {
     u8 pad0[0x422];
@@ -45,7 +47,13 @@ void func_80028AEC_296EC(Func80028AECArg *arg0) {
     setCallback(func_80028B44_29744);
 }
 
-INCLUDE_ASM("asm/nonmatchings/29200", func_80028B44_29744);
+void func_80028B44_29744(Func80028AECArg *arg0) {
+    arg0->unk5A--;
+    if (arg0->unk5A == 0) {
+        arg0->unk5A = 0;
+        setCallback(func_80028744_29344);
+    }
+}
 
 void func_80028B80_29780(Func80028AECArg *arg0) {
     arg0->model = func_80002014_2C14(arg0->model);
