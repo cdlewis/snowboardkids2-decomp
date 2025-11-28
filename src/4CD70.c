@@ -1,13 +1,15 @@
+#include "56910.h"
 #include "common.h"
+#include "task_scheduler.h"
 
-extern void setCleanupCallback(void *);
-extern void setCallback(void *);
+extern u32 D_3F6950;
+extern u32 D_3F6BB0;
+
 extern void *loadAsset_34CB50(void);
 extern void func_8004D3E4_4DFE4(void *);
 extern u8 randA(void);
 extern void func_8004E2D8_4EED8(void);
 extern void func_8004E410_4F010(void);
-extern void *freeNodeMemory(void *);
 extern void func_80058530_59130(s32, s32);
 
 typedef struct {
@@ -401,7 +403,36 @@ void func_8004F9E8_505E8(Struct_func_8004F04C *arg0) {
     arg0->unkC = freeNodeMemory(arg0->unkC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FA20_50620);
+extern char D_8009E924_9F524[];
+void func_8004FCB8_508B8(Struct_func_8004F04C *arg0);
+void func_8004FB64_50764(void);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x2];
+    void *unkC;
+    char unk10[8];
+    s32 unk18;
+    u8 pad1C[0x2];
+    s16 unk1E;
+    s16 unk20;
+} Struct_func_8004FA20;
+
+void func_8004FA20_50620(Struct_func_8004FA20 *arg0) {
+    getCurrentAllocation();
+    arg0->unk4 = loadAsset_3505F0();
+    arg0->unk2 = -0x20;
+    arg0->unk8 = 2;
+    arg0->unkC = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    sprintf(arg0->unk10, D_8009E924_9F524, arg0->unk18);
+    arg0->unk20 = 0;
+    arg0->unk1E = 0x1E;
+    setCleanupCallback(func_8004FCB8_508B8);
+    setCallback(func_8004FB64_50764);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FAB4_506B4);
 
