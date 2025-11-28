@@ -24,8 +24,10 @@ extern void func_80044684_45284(void);
 extern void func_800639F8_645F8(s32, DisplayListObject *);
 
 typedef struct {
-    s16 matrix[3][3]; /* 0x00 */
-    u8 pad12[0xE];    /* 0x12 */
+    s16 matrix[3][3]; /* 0x00 (0x12 bytes: 9 * 2), offset 0x0E is matrix[2][1] */
+    u8 pad12[0x6];    /* 0x12 */
+    s32 unk18;        /* 0x18 */
+    u8 pad1C[0x4];    /* 0x1C */
     void *unk20;      /* 0x20 */
     void *unk24;      /* 0x24 */
     void *unk28;      /* 0x28 */
@@ -239,7 +241,26 @@ void func_80041570_42170(Func41570State *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800415E8_421E8);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_8004168C_4228C);
+void func_8004168C_4228C(Func41570State *arg0) {
+    Func43CA4GameState *allocation;
+    s32 i;
+
+    allocation = (Func43CA4GameState *)getCurrentAllocation();
+    if (allocation->unk76 == 0) {
+        arg0->unk40 -= 0x200;
+    }
+
+    if (arg0->unk40 == 0x200) {
+        func_80069CF8_6A8F8();
+    }
+
+    arg0->matrix[2][1] = -arg0->unk40;
+    arg0->unk18 += 0xFFFF0000;
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 void func_80041724_42324(Func41570State *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
