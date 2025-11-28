@@ -96,7 +96,32 @@ INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB5FC_AD9BC);
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB664_ADA24);
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB6C0_ADA80);
+typedef struct {
+    u8 pad[0x50];
+    s16 unk50;
+} func_800BB6C0_ADA80_arg;
+
+typedef struct {
+    u8 pad[0x76];
+    u8 unk76;
+} Allocation_ADA80;
+
+extern void func_80069CF8_6A8F8(void);
+extern void func_800BB51C_AD8DC(func_800BB6C0_ADA80_arg *);
+
+void func_800BB6C0_ADA80(func_800BB6C0_ADA80_arg *arg0) {
+    Allocation_ADA80 *allocation = getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        arg0->unk50 -= 0x10;
+    }
+
+    if (arg0->unk50 == 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    func_800BB51C_AD8DC(arg0);
+}
 
 typedef struct {
     u8 _pad[0x24];
