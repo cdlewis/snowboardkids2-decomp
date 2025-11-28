@@ -13,7 +13,13 @@ INCLUDE_ASM("asm/nonmatchings/594E0", func_800589CC_595CC);
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_80058A10_59610);
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_80058A3C_5963C);
+void func_80058A3C_5963C(Player *arg0) {
+    if (arg0->unkAC2 < 0x34) {
+        if (!(arg0->unkB88 & 0x4BC)) {
+            arg0->unkAC2 = 0x34;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_80058A68_59668);
 
