@@ -478,7 +478,46 @@ void func_80042B64_43764(void **arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80042BA4_437A4);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042C98_43898);
+typedef struct {
+    u8 _pad0[0x4];              /* 0x00 - 0x04 */
+    loadAssetMetadata_arg unk4; /* 0x04 - 0x20 (unk4.unk4 is at 0x08) */
+    u8 _pad20[0x4];             /* 0x20 - 0x24 */
+    Func43CA4Unk28 *unk24;      /* 0x24 - 0x28 */
+    u8 _pad28[0x4];             /* 0x28 - 0x2C */
+    s16 unk2C[2];               /* 0x2C - 0x30 (4 bytes) */
+    s32 unk30;                  /* 0x30 - 0x34 */
+    u8 _pad34[0xE];             /* 0x34 - 0x42 */
+    u8 unk42;                   /* 0x42 */
+} Func42C98Arg;
+
+extern void func_80042D54_43954(void *);
+extern void func_80042A6C_4366C(void *);
+
+void func_80042C98_43898(Func42C98Arg *arg0) {
+    Func43CA4GameState *gameState;
+    s32 i;
+
+    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    if (gameState->unk76 == 0) {
+        arg0->unk30 += 0x10000;
+        if (arg0->unk30 > 0x2FFFFF) {
+            setCallback(func_80042D54_43954);
+        }
+
+        transformVector(arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk4.unk4);
+
+        if (arg0->unk42 != 0) {
+            arg0->unk42 = 0;
+            func_80056B7C_5777C(&arg0->unk4.unk4, 0x1A);
+        }
+
+        func_80042A6C_4366C(arg0);
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_800677C0_683C0(i, &arg0->unk4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80042D54_43954);
 
