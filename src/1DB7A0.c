@@ -16,7 +16,8 @@ typedef struct {
     /* 0x02 */ s16 unk2;
     /* 0x04 */ void *unk4;
     /* 0x08 */ s16 unk8;
-} func_800B07A0_1DBE80_arg;
+    /* 0x0A */ char pad[6];
+} func_800B07A0_1DBE80_arg; // size 0x10
 
 extern void *freeNodeMemory(void *);
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
@@ -34,7 +35,15 @@ void func_800B0520_1DBC00(func_800B07A0_1DBE80_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B054C_1DBC2C);
 
-INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B0610_1DBCF0);
+extern void func_80012004_12C04(void);
+
+void func_800B0610_1DBCF0(func_800B07A0_1DBE80_arg *arg0) {
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        debugEnqueueCallback(8, 0, func_80012004_12C04, &arg0[i]);
+    }
+}
 
 void func_800B0664_1DBD44(func_800B07A0_1DBE80_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
