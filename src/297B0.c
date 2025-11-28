@@ -11,7 +11,8 @@ extern void func_8002A2D0_2AED0(void *);
 extern void func_80029954_2A554(void);
 extern void func_80028C08_29808(void);
 extern void func_80028DF0_299F0(void);
-extern void func_8002A154_2AD54(void);
+extern s32 func_8002A390_2AF90(void *);
+extern void func_80028AEC_296EC(void *);
 extern void func_800291CC_29DCC(void);
 extern void func_80029EA8_2AAA8(void);
 extern void func_80029C90_2A890(void);
@@ -19,19 +20,34 @@ extern void func_80029AA4_2A6A4(void);
 extern void func_8002900C_29C0C(void);
 extern void func_80029360_29F60(void);
 
-typedef struct {
+typedef struct Func8002A154Arg Func8002A154Arg;
+void func_8002A154_2AD54(Func8002A154Arg *);
+void func_8002A200_2AE00(Func8002A154Arg *);
+
+struct Func8002A154Arg {
     /* 0x00 */ void *model;
     /* 0x04 */ Mat3x3Padded matrix;
     /* 0x24 */ u8 pad24[0xC];
     /* 0x30 */ u16 rotation;
     /* 0x32 */ u8 pad32[0xA];
     /* 0x3C */ void *callback;
-    /* 0x40 */ u8 pad40[0x1E];
+    /* 0x40 */ u8 pad40[0x10];
+    /* 0x50 */ u16 unk50;
+    /* 0x52 */ u8 pad52[0x4];
+    /* 0x56 */ u16 unk56;
+    /* 0x58 */ u8 pad58[0x6];
     /* 0x5E */ u8 state;
-} Func8002A200Arg;
+    /* 0x5F */ u8 unk5F;
+};
+
+typedef Func8002A154Arg Func8002A200Arg;
 
 typedef struct {
-    /* 0x000 */ u8 pad0[0x42A];
+    /* 0x000 */ u8 pad0[0x408];
+    /* 0x408 */ s32 unk408;
+    /* 0x40C */ u8 pad40C[0x4];
+    /* 0x410 */ s32 unk410;
+    /* 0x414 */ u8 pad414[0x16];
     /* 0x42A */ u8 unk42A;
 } AllocationData;
 
@@ -280,7 +296,31 @@ void func_8002A108_2AD08(Func297D8Arg *arg0) {
     setCallback(func_8002A154_2AD54);
 }
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_8002A154_2AD54);
+void func_8002A154_2AD54(Func8002A154Arg *arg0) {
+    u16 savedUnk50;
+    u8 savedState;
+    AllocationData *alloc = getCurrentAllocation();
+
+    if (func_8002A390_2AF90(arg0) != 0) {
+        setCallback(func_80028AEC_296EC);
+    }
+
+    func_8002A2D0_2AED0(arg0);
+
+    alloc->unk408 = arg0->matrix.unk14;
+    alloc->unk410 = arg0->matrix.unk1C;
+
+    if (alloc->unk42A == 0x11) {
+        savedUnk50 = arg0->unk50;
+        savedState = arg0->state;
+        arg0->state = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = func_8002A154_2AD54;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedState;
+        setCallback(func_8002A200_2AE00);
+    }
+}
 
 void func_8002A1F8_2ADF8(void) {
 }
