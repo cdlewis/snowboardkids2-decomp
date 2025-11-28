@@ -55,6 +55,11 @@ typedef struct {
     void *unk4;
 } func_80025FFC_26BFC_arg;
 
+typedef struct {
+    u8 padding[0x24];
+    u8 unk24;
+} func_800272FC_27EFC_arg;
+
 extern void func_800394BC_3A0BC(void *, s32);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
@@ -279,7 +284,15 @@ void func_8002723C_27E3C(func_80025FFC_26BFC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80027268_27E68);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_800272FC_27EFC);
+void func_80027348_27F48(void);
+
+void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0) {
+    GameState *state = (GameState *)getCurrentAllocation();
+
+    if (state->unk1898[arg0->unk24] == 0x1A) {
+        setCallbackWithContinue(func_80027348_27F48);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80027348_27F48);
 
