@@ -271,7 +271,51 @@ void func_8004DCC4_4E8C4(Struct_func_8004DCC4 *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004DCFC_4E8FC);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x6];
+    void *unk10;
+    s32 unk14;
+} Struct_func_8004DCFC;
+
+void func_8004DDD0_4E9D0(void);
+void func_8004DEC0_4EAC0(Struct_func_8004DCC4 *);
+
+void func_8004DCFC_4E8FC(Struct_func_8004DCFC *arg0) {
+    GameState *allocation = (GameState *)getCurrentAllocation();
+
+    arg0->unk14 = 0;
+    arg0->unk4 = loadAsset_34CB50();
+    func_8004D9B8_4E5B8((Struct_func_8004D9B8 *)arg0);
+    arg0->unk8 = 0x15;
+    arg0->unk10 = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+
+    switch (allocation->unk7A) {
+        case 5:
+            arg0->unk0 = 0x10;
+            arg0->unk2 = 8;
+            break;
+        case 6:
+            arg0->unk0 = 0x10;
+            arg0->unk2 = 8;
+            break;
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        default:
+            arg0->unk0 = 0x10;
+            arg0->unk2 = -0x10;
+            break;
+    }
+
+    setCleanupCallback(func_8004DEC0_4EAC0);
+    setCallback(func_8004DDD0_4E9D0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004DDD0_4E9D0);
 
