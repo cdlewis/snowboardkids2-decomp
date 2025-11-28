@@ -16,6 +16,8 @@ USE_ASSET(_458E30);
 extern u8 D_459310[];
 extern u32 *D_43A000;
 extern u32 *D_43F050;
+extern u8 D_41A1D0[];
+extern u8 D_41AD80[];
 
 typedef struct {
     u8 _pad0[0xB2F];
@@ -172,7 +174,33 @@ void func_80020FA4_21BA4(Func80020FA4Arg *arg0) {
     arg0->unkA0 = freeNodeMemory(arg0->unkA0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80020FDC_21BDC);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+} Func80020FDCArg;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+} Func8002109CArg;
+
+void func_80021054_21C54(void *arg0);
+void func_8002109C_21C9C(Func8002109CArg *arg0);
+
+void func_80020FDC_21BDC(Func80020FDCArg *arg0) {
+    void *temp_s1 = dmaRequestAndUpdateStateWithSize(D_41A1D0, D_41AD80, 0x1B48);
+
+    setCleanupCallback(&func_8002109C_21C9C);
+
+    arg0->unk0 = -0x2C;
+    arg0->unk2 = 4;
+    arg0->unk8 = 0xD;
+    arg0->unk4 = temp_s1;
+
+    setCallback(&func_80021054_21C54);
+}
 
 void func_80021054_21C54(void *arg0) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
@@ -181,11 +209,6 @@ void func_80021054_21C54(void *arg0) {
         debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
     }
 }
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-} Func8002109CArg;
 
 void func_8002109C_21C9C(Func8002109CArg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
