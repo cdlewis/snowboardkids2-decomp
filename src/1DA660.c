@@ -17,6 +17,7 @@ typedef struct {
     SceneModel *unk0;
     u8 _pad4[0x22];
     s16 unk26;
+    u8 unk28;
 } func_800B08FC_arg;
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
@@ -27,7 +28,14 @@ INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0368_1DA908);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0598_1DAB38);
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B05DC_1DAB7C);
+void func_800B05DC_1DAB7C(func_800B08FC_arg *arg0) {
+    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->_pad4);
+    if (arg0->unk28 != 2) {
+        func_800021B8_2DB8(arg0->unk0, arg0->unk26);
+        updateModelGeometry(arg0->unk0);
+    }
+    setCallback(func_800B0638_1DABD8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0638_1DABD8);
 
