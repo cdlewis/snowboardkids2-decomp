@@ -3,6 +3,8 @@
 
 extern void func_800394BC_3A0BC(void *, s32);
 extern void setCallback(void *);
+extern void *getCurrentAllocation(void);
+extern void func_800630F0_63CF0(s32, void *);
 void func_800B0DF8_1DB398(void);
 void func_800B0638_1DABD8(void);
 
@@ -82,6 +84,9 @@ INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0FE0_1DB580);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B100C_1DB5AC);
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B10D4_1DB674);
+void func_800B10D4_1DB674(void *arg0) {
+    getCurrentAllocation();
+    func_800630F0_63CF0(0, arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B1104_1DB6A4);
