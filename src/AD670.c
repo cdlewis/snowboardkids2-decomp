@@ -106,11 +106,22 @@ typedef struct {
     /* 0x50 */ s16 unk50;
 } func_800BB494_AD854_arg;
 
+typedef struct {
+    u8 pad[0x50];
+    s16 unk50;
+    s16 unk52;
+} func_800BB664_arg;
+
+typedef struct {
+    u8 pad[0x76];
+    u8 unk76;
+} Allocation_ADA24;
+
 extern void *D_800955B0;
-extern void func_800BB5FC_AD9BC(func_800BB494_AD854_arg *);
 
 typedef struct func_800BB718_ADAD8_arg func_800BB718_ADAD8_arg;
 void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *);
+void func_800BB5FC_AD9BC(func_800BB664_arg *);
 
 void func_800BB494_AD854(func_800BB494_AD854_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(8);
@@ -130,21 +141,24 @@ void func_800BB494_AD854(func_800BB494_AD854_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB51C_AD8DC);
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB5FC_AD9BC);
-
-typedef struct {
-    u8 pad[0x50];
-    s16 unk50;
-    s16 unk52;
-} func_800BB664_arg;
-
-typedef struct {
-    u8 pad[0x76];
-    u8 unk76;
-} Allocation_ADA24;
-
 extern void func_800BB6C0_ADA80(func_800BB664_arg *);
 extern void func_800BB51C_AD8DC(func_800BB664_arg *);
+void func_800BB664_ADA24(func_800BB664_arg *);
+
+void func_800BB5FC_AD9BC(func_800BB664_arg *arg0) {
+    Allocation_ADA24 *allocation = getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        arg0->unk50 += 0x10;
+    }
+
+    if (arg0->unk50 == 0xC0) {
+        setCallback(&func_800BB664_ADA24);
+        arg0->unk52 = 0x40;
+    }
+
+    func_800BB51C_AD8DC(arg0);
+}
 
 void func_800BB664_ADA24(func_800BB664_arg *arg0) {
     Allocation_ADA24 *allocation = getCurrentAllocation();
