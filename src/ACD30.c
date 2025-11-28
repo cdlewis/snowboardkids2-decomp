@@ -1,7 +1,6 @@
+#include "56910.h"
 #include "common.h"
-
-extern void *getCurrentAllocation(void);
-extern void *freeNodeMemory(void *);
+#include "task_scheduler.h"
 
 typedef struct {
     void *unk0;
@@ -14,6 +13,22 @@ typedef struct {
     u8 _pad[0x24];
     s32 unk24;
 } ACD30AllocationStruct;
+
+typedef struct {
+    u8 _pad[0x5C];
+    u8 unk5C;
+} AD510Allocation;
+
+typedef struct {
+    u8 _pad[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    s32 unk2C;
+} AD510Arg;
 
 INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB2B0_ACD30);
 
@@ -35,7 +50,25 @@ INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB690_AD110);
 
 INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BBA50);
 
-INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BBA90_AD510);
+void func_800BBB14_AD594(void);
+void func_800BBB70_AD5F0(void);
+
+void func_800BBA90_AD510(AD510Arg *arg0) {
+    AD510Allocation *allocation;
+    func_80055E68_56A68_result *result;
+
+    allocation = (AD510Allocation *)getCurrentAllocation();
+    result = func_80055E68_56A68(allocation->unk5C);
+    arg0->unk20 = (void *)((u32)result + 0x90);
+    arg0->unk24 = func_80055DC4_569C4(0xD);
+    arg0->unk28 = func_80055DF8_569F8(0xD);
+    arg0->unk14 = 0x25990000;
+    arg0->unk18 = 0x1A2B0000;
+    arg0->unk2C = 0;
+    arg0->unk1C = 0xF7A30000;
+    setCleanupCallback(func_800BBB70_AD5F0);
+    setCallback(func_800BBB14_AD594);
+}
 
 INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BBB14_AD594);
 
