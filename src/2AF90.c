@@ -14,7 +14,19 @@ INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002AE80_2BA80);
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B248_2BE48);
 
-INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B4B8_2C0B8);
+s16 func_8002B4B8_2C0B8(u16 arg0, u16 arg1) {
+    s16 diff;
+
+    arg0 &= 0x1FFF;
+    arg1 &= 0x1FFF;
+    diff = (arg1 - arg0) & 0x1FFF;
+
+    if (diff >= 0x1001) {
+        diff |= 0xE000;
+    }
+
+    return diff;
+}
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B4E4_2C0E4);
 
