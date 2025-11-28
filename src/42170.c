@@ -97,15 +97,16 @@ typedef struct {
 } Func41F38State;
 
 typedef struct {
-    u8 pad0[0x20];  /* 0x00 */
-    void *unk20;    /* 0x20 */
-    void *unk24;    /* 0x24 */
-    void *unk28;    /* 0x28 */
-    s32 unk2C;      /* 0x2C */
-    u8 pad30[0x10]; /* 0x30 */
-    s32 unk40;      /* 0x40 */
-    u8 pad44[2];    /* 0x44 */
-    s16 unk46;      /* 0x46 */
+    u8 pad0[0x20]; /* 0x00 */
+    void *unk20;   /* 0x20 */
+    void *unk24;   /* 0x24 */
+    void *unk28;   /* 0x28 */
+    s32 unk2C;     /* 0x2C */
+    u8 pad30[0xC]; /* 0x30 */
+    void *unk3C;   /* 0x3C */
+    s32 unk40;     /* 0x40 */
+    u8 pad44[2];   /* 0x44 */
+    s16 unk46;     /* 0x46 */
 } Func42410State;
 
 void func_80041724_42324(Func41570State *);
@@ -334,7 +335,14 @@ void func_80042638_43238(Func42410State *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042670_43270);
+void func_80042670_43270(void *arg0) {
+    Func42410State *task;
+
+    task = (Func42410State *)scheduleTask(func_80042410_43010, 0, 0, 0xC8);
+    if (task != NULL) {
+        task->unk3C = arg0;
+    }
+}
 
 typedef struct {
     u8 pad0[0x20];  /* 0x00 */
