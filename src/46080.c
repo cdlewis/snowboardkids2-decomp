@@ -128,7 +128,7 @@ extern void func_80069CF8_6A8F8(void);
 extern s32 gFrameCounter;
 extern u16 D_8009ADE0_9B9E0;
 extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
-extern void func_80059A48_5A648(void *, s32);
+extern void func_80059A48_5A648(Player *, s32);
 
 void func_80047330_47F30(FunctionArg_80047330 *arg0);
 void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);

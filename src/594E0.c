@@ -167,7 +167,21 @@ INCLUDE_ASM("asm/nonmatchings/594E0", func_80059394_59F94);
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_800597C0_5A3C0);
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_80059A48_5A648);
+void func_80059A48_5A648(Player *arg0, s32 arg1) {
+    if (arg0->unkBC6 != 0) {
+        return;
+    }
+
+    arg0->unkB6C += arg1;
+
+    if (arg0->unkB6C > 99999) {
+        arg0->unkB6C = 99999;
+    }
+
+    if (arg0->unkB6C < 0) {
+        arg0->unkB6C = 0;
+    }
+}
 
 void func_80059A88_5A688(Player *arg0, s32 arg1) {
     if (arg0->unkBC6 != 0) {
