@@ -36,12 +36,15 @@ typedef struct {
     s32 worldPosX;
     s32 worldPosY;
     s32 worldPosZ;
-    u8 padding2[0x72C];
+    u8 padding2[0x682];
+    s16 unkAC2;
+    u8 padding2b[0xA8];
     s32 unkB6C;
     s32 unkB70;
     u8 padding6[0x10];
     s32 unkB84;
-    u8 padding3[0xC];
+    s32 unkB88;
+    u8 padding3[0x8];
     u16 unkB94;
     u8 padding4[0x22];
     u8 unkBB8;
