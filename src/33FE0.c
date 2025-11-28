@@ -65,6 +65,30 @@ typedef struct {
     /* 0x1C */ u8 unk1C;
 } Func34ADCArg;
 
+typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ u8 pad4[0x4];
+    /* 0x08 */ void *unk8;
+    /* 0x0C */ s16 unkC;
+    /* 0x0E */ s16 unkE;
+    /* 0x10 */ u8 unk10;
+    /* 0x11 */ u8 pad11[0x3];
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ s16 unk16;
+    /* 0x18 */ u8 pad18[0x4];
+    /* 0x1C */ void *unk1C;
+    /* 0x20 */ s16 unk20;
+    /* 0x22 */ s16 unk22;
+    /* 0x24 */ u8 unk24;
+} Func343FCArg;
+
+typedef struct {
+    /* 0x000 */ u8 pad0[0xABE];
+    /* 0xABE */ u16 unkABE;
+    /* 0xAC0 */ u16 unkAC0;
+} AllocationStruct;
+
 void func_80035074_35C74(Func358FCStruct *arg0);
 void func_80033458_34058(void);
 void func_8003365C_3425C(Func34574Arg *arg0);
@@ -73,6 +97,8 @@ void func_80034A94_35694(Func34574Arg *arg0);
 void func_80035408_36008(void);
 void func_8003513C_35D3C(Func350ACArg *arg0);
 void func_80035234_35E34(Func34574Arg *arg0);
+void func_80034640_35240(Func34574Arg *arg0);
+void func_800344A8_350A8(void *);
 
 void func_800333E0_33FE0(Func33FE0Arg *arg0) {
     void *allocation;
@@ -152,7 +178,33 @@ void func_800343D0_34FD0(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_800343FC_34FFC);
+void func_800343FC_34FFC(Func343FCArg *arg0) {
+    AllocationStruct *allocation;
+    void *temp_s1;
+    s16 temp_abe;
+    s16 temp_ac0;
+
+    allocation = getCurrentAllocation();
+    temp_s1 = func_80035F80_36B80(1);
+    setCleanupCallback(func_80034640_35240);
+
+    arg0->unk0 = -0x78;
+    arg0->unk2 = -0x60;
+    arg0->unk8 = temp_s1;
+    arg0->unkC = 0xFF;
+    arg0->unk10 = 0;
+    arg0->unkE = 0xFF;
+    temp_abe = allocation->unkABE + 0xA;
+    arg0->unk14 = temp_abe;
+    temp_ac0 = allocation->unkAC0 + 0xA;
+    arg0->unk1C = temp_s1;
+    arg0->unk20 = 0xFF;
+    arg0->unk24 = 4;
+    arg0->unk22 = 0xFF;
+    arg0->unk16 = temp_ac0;
+
+    setCallback(func_800344A8_350A8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_800344A8_350A8);
 
