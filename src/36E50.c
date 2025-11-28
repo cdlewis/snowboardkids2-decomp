@@ -389,7 +389,7 @@ void func_800371CC_37DCC(func_800371CC_37DCC_arg *arg0) {
 
     if (temp_v0->unk420 == 3 && temp_v0->unk42D == 8) {
         arg0->unk40 = &D_8008FAC0_906C0;
-        func_80058220_58E20(D_8008FD10_90910[D_800AFE8C_A71FC->unk9], 0);
-        temp_v0->unk403 = D_8008FD1C_9091C[D_800AFE8C_A71FC->unk9];
+        func_80058220_58E20(D_8008FD10_90910[D_800AFE8C_A71FC->unk9[0]], 0);
+        temp_v0->unk403 = D_8008FD1C_9091C[D_800AFE8C_A71FC->unk9[0]];
     }
 }

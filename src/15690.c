@@ -31,7 +31,7 @@ void func_80014A90_15690(void) {
     data->unk0 = 0;
     D_800AB1C8_A2538 = 0;
     D_800AFE8C_A71FC->unk8 = 1;
-    D_800AFE8C_A71FC->unk9 = 0;
+    D_800AFE8C_A71FC->unk9[0] = 0;
     func_80015248_15E48(0);
     func_8006983C_6A43C(func_80014AEC_156EC);
 }

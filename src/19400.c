@@ -40,7 +40,7 @@ void func_80018A5C_1965C(func_80018898_19498_arg *arg0);
 void func_80018800_19400(void **arg0) {
     void *allocation = getCurrentAllocation();
 
-    *arg0 = func_8000198C_258C(D_800AFE8C_A71FC->unk9 + 0x50, allocation);
+    *arg0 = func_8000198C_258C(D_800AFE8C_A71FC->unk9[0] + 0x50, allocation);
     setCleanupCallback(&func_80018A5C_1965C);
     setCallback(&func_80018858_19458);
 }
