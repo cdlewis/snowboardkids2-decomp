@@ -28,7 +28,7 @@ extern void func_800BB2B0(void);
 extern void func_8004D8E4_4E4E4(void);
 extern void func_800574A0_580A0(s32);
 extern void func_8004E6A4_4F2A4(s32, s32);
-extern void func_8004F194_4FD94(s32);
+extern void func_8004F194_4FD94(s16);
 extern void terminateTasksByTypeAndID(s32, s32);
 extern void func_8002ED40_2F940(s32);
 extern void func_8004FF60_50B60(s32);
