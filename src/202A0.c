@@ -10,6 +10,7 @@ extern void func_800394BC_3A0BC(void *, s32);
 extern void *freeNodeMemory(void *);
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0(void);
+extern void func_80038420_39020(void);
 
 USE_ASSET(_458E30);
 
@@ -45,7 +46,9 @@ typedef struct {
 } Func8002144CArg;
 
 typedef struct {
-    u8 padding[0x2C];
+    u16 unk0;
+    u16 unk2;
+    u8 _pad4[0x28];
     void *unk2C;
 } Func800216ACArg;
 
@@ -350,6 +353,7 @@ void func_800215DC_221DC(Func8002144CArg *arg0) {
 
 void func_8002174C_2234C(Func800216ACArg *arg0);
 void func_800216AC_222AC(Func800216ACArg *arg0);
+void func_800216D4_222D4(Func800216ACArg *arg0);
 
 void func_80021658_22258(Func800216ACArg *arg0) {
     arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_458E30_ROM_START, D_459310, 0xAE0);
@@ -357,14 +361,22 @@ void func_80021658_22258(Func800216ACArg *arg0) {
     setCallback(&func_800216AC_222AC);
 }
 
-void func_800216D4_222D4(void);
-
 void func_800216AC_222AC(Func800216ACArg *arg0) {
     func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
     setCallback(&func_800216D4_222D4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_800216D4_222D4);
+void func_800216D4_222D4(Func800216ACArg *arg0) {
+    Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
+
+    if (allocation->unkB2F == 8) {
+        arg0->unk0++;
+        arg0->unk2++;
+        arg0->unk0 &= 0x3FF;
+        arg0->unk2 &= 0x3FF;
+        debugEnqueueCallback(0xB, 0, func_80038420_39020, arg0);
+    }
+}
 
 void func_8002174C_2234C(Func800216ACArg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
