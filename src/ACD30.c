@@ -38,6 +38,11 @@ typedef struct {
     s32 unk2C;
 } AD510Arg;
 
+typedef struct {
+    u8 _pad[0x14];
+    s16 unk14;
+} ACD30Task;
+
 void func_800BB2B0_ACD30(ACD30Struct *arg0) {
     arg0->unkC = loadAsset_34F9A0();
     arg0->unk10 = dmaRequestAndUpdateStateWithSize(D_4060A0, D_4062B0, 0x160);
@@ -62,7 +67,14 @@ INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB504);
 
 INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB690_AD110);
 
-INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BBA50);
+void func_800BBA50(s16 arg0) {
+    ACD30Task *task;
+
+    task = (ACD30Task *)scheduleTask(func_800BB2B0_ACD30, 0, 0, 0x32);
+    if (task != NULL) {
+        task->unk14 = arg0;
+    }
+}
 
 typedef struct {
     /* 0x00 */ Mat3x3Padded matrix;
