@@ -834,7 +834,38 @@ void func_8004F69C_5029C(Struct_func_8004F04C *arg0) {
     arg0->unkC = freeNodeMemory(arg0->unkC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004F6D4_502D4);
+extern s32 D_3F3EF0;
+extern s32 D_3F58E0;
+
+void func_8004F760_50360(void);
+void func_8004F7F4_503F4(Struct_func_8004F04C *arg0);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    u8 pad8[0x4];
+    void *unkC;
+    s32 unk10;
+} Struct_func_8004F6D4;
+
+typedef struct {
+    u8 pad0[0x10];
+    void *unk10;
+} AllocationStruct_8004F6D4;
+
+void func_8004F6D4_502D4(Struct_func_8004F6D4 *arg0) {
+    AllocationStruct_8004F6D4 *alloc = getCurrentAllocation();
+    s32 index = arg0->unk10;
+    void *base = alloc->unk10;
+
+    arg0->unk0 = -0x10;
+    arg0->unk2 = -0x60;
+    arg0->unkC = (void *)((u8 *)base + index * 3048);
+    arg0->unk4 = dmaRequestAndUpdateStateWithSize(&D_3F3EF0, &D_3F58E0, 0x2608);
+    setCallbackWithContinue(func_8004F760_50360);
+    setCleanupCallback(func_8004F7F4_503F4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004F760_50360);
 
