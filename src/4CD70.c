@@ -686,7 +686,27 @@ void func_8004FCB8_508B8(Struct_func_8004F04C *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FCF0_508F0);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FD30_50930);
+void func_8004FDD0_509D0(void);
+void func_8004FF28_50B28(Struct_func_8004FF28 *);
+
+void func_8004FD30_50930(Struct_func_8004FF28 *arg0) {
+    GameState *allocation = (GameState *)getCurrentAllocation();
+
+    arg0->unk12 = allocation->players->unkB70;
+    arg0->unk8 = loadAsset_3505F0();
+    arg0->unkC = 3;
+    if (arg0->unk14 == 0) {
+        arg0->unk4 = -0x10;
+        arg0->unk6 = -0x60;
+    } else {
+        arg0->unk4 = -0x48;
+        arg0->unk6 = -0x30;
+    }
+    arg0->unk10 = 0;
+    arg0->unk0 = dmaRequestAndUpdateStateWithSize(&D_3F6950, &D_3F6BB0, 0x508);
+    setCleanupCallback(func_8004FF28_50B28);
+    setCallback(func_8004FDD0_509D0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FDD0_509D0);
 
