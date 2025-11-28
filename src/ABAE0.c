@@ -47,7 +47,18 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BBAB8_AC2E8);
 
-INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BBD98_AC5C8);
+s32 func_800BBD98_AC5C8(Arg0Struct *arg0) {
+    s32 pad[3];
+    getCurrentAllocation();
+
+    arg0->unk44C -= arg0->unk44C / 8;
+    arg0->unk454 -= arg0->unk454 / 8;
+    arg0->unk450 += -0x8000;
+    func_800B02AC(arg0);
+    func_8005D180_5DD80(arg0, 0);
+
+    return 0;
+}
 
 void func_800BBE1C_AC64C(Arg0Struct *arg0) {
     D_800BC460_ACC90[arg0->unkBBE](arg0);
