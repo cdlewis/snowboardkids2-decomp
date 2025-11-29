@@ -49,6 +49,9 @@ extern func_800B23AC_callback D_800BAB04_AA9B4[];
 typedef void (*func_800B65C8_callback)(void *);
 extern func_800B65C8_callback D_800BAC10_AAAC0[];
 
+typedef void (*func_800B1FCC_callback)(void *);
+extern func_800B1FCC_callback D_800BAAF4_AA9A4[];
+
 typedef struct {
     u8 _pad0[0x5C];
     u8 unk5C;
@@ -107,7 +110,9 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B1DA0_A1C50);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B1F60_A1E10);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B1FCC_A1E7C);
+void func_800B1FCC_A1E7C(func_800B00D4_arg *arg0) {
+    D_800BAAF4_AA9A4[arg0->unkBBF](arg0);
+}
 
 typedef struct {
     u8 _pad0[0xB8C];
