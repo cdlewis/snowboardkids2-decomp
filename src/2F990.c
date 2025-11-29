@@ -189,6 +189,7 @@ extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];
 extern s32 D_8008F110_8FD10;
 extern s16 D_8008F0B2_8FCB2[];
+extern s16 D_8008F0C6_8FCC6[];
 
 void func_80030378_30F78(void);
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
@@ -560,7 +561,61 @@ void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FCD4_308D4);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FDFC_309FC);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s8 unkC;
+    u8 unkD;
+    s8 unkE;
+    s8 unkF;
+} func_8002FDFC_309FC_arg;
+
+typedef struct {
+    u8 padding[0x5C0];
+    u16 unk5C0;
+    u8 padding2[0x3];
+    u8 unk5C5;
+    u8 unk5C6;
+    u8 unk5C7;
+    s8 unk5C8;
+    u8 unk5C9;
+    u8 unk5CA[0];
+} GameStateSub;
+
+void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *arg0) {
+    GameStateSub *state;
+    s32 pad;
+    u8 itemValue;
+    state = (GameStateSub *)getCurrentAllocation();
+    itemValue = state->unk5CA[state->unk5C8];
+    if (itemValue < 0x80) {
+        if ((state->unk5C5 != 0) && (state->unk5C5 != 2)) {
+            u8 masked = itemValue & 0x1F;
+            itemValue = (u8)masked;
+            if (itemValue < 9) {
+                arg0->unk0 = -0x30;
+                arg0->unk8 = (masked / 3) + 0x1D;
+            } else {
+                s16 tableVal = D_8008F0B2_8FCB2[masked];
+                s16 tableVal2 = D_8008F0C6_8FCC6[masked];
+                arg0->unk8 = masked + 0x23;
+                arg0->unk0 = (((0x120 - ((s16)(tableVal + 0x18))) / 2) - tableVal2) - 0x96;
+            }
+            if (state->unk5C5 == 3) {
+                if (state->unk5C0 & 1) {
+                    arg0->unkD = 0xFF;
+                } else {
+                    arg0->unkD = 0;
+                }
+            }
+            itemValue = 0;
+            debugEnqueueCallback(8, itemValue, &func_80012004_12C04, arg0);
+        }
+    }
+}
 
 void func_8002FF28_30B28(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
