@@ -99,7 +99,8 @@ typedef struct {
     Mat3x3Padded unk3C;
     Mat3x3Padded unk5C;
     Mat3x3Padded unk7C;
-    u8 pad9C[0x5];
+    s32 unk9C;
+    u8 padA0;
     u8 unkA1;
 } func_80024518_arg;
 
@@ -144,7 +145,39 @@ void func_80024220_24E20(func_80024220_24E20_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024298_24E98);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024414_25014);
+void func_80024518_25118(func_80024518_arg *);
+
+void func_80024414_25014(func_80024518_arg *arg0) {
+    Mat3x3Padded sp10;
+    u8 *base;
+    Mat3x3Padded *localPtr;
+    s32 adjustment;
+    u16 rotation;
+
+    base = (u8 *)getCurrentAllocation();
+
+    localPtr = &sp10;
+
+    adjustment = (-(0 < arg0->unk9C) & 0xFFF00000) | 0x100000;
+
+    memcpy(localPtr, identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
+
+    arg0->unk7C.unk14 = arg0->unk7C.unk14 + adjustment;
+
+    rotation = *(u16 *)(base + arg0->unkA1 * 2 + 0x1888);
+    createYRotationMatrix(&arg0->unk5C, rotation);
+
+    func_8006B084_6BC84(&arg0->unk3C, &arg0->unk5C, localPtr);
+    func_8006B084_6BC84(localPtr, &arg0->unk7C, arg0);
+
+    func_800650B4_65CB4(arg0->unkA1, arg0);
+
+    if (arg0->unk7C.unk14 == 0) {
+        *(base + arg0->unkA1 + 0x18C4) = *(base + arg0->unkA1 + 0x18C4) + 1;
+        setCallbackWithContinue(func_80024518_25118);
+    }
+}
 
 void func_80024518_25118(func_80024518_arg *arg0) {
     Mat3x3Padded localMatrix;
