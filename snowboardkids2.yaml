@@ -1423,7 +1423,10 @@ segments:
     vram: 0
     start: 0x419440
 
-  - [0x4196E0, bin]
+  - name: _4196E0
+    type: bin
+    vram: 0
+    start: 0x_4196E0
 
   - name: _419C60
     type: bin
