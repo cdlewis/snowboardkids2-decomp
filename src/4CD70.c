@@ -21,6 +21,7 @@ extern void func_80058530_59130(s32, s32);
 extern s32 approximateSin(s16);
 extern void func_80069CF8_6A8F8(void);
 extern void func_80010240_10E40(void);
+extern void func_800105B0_111B0(void);
 extern void func_80010924_11524(void);
 extern void func_8005100C_51C0C(s32, s32, s32, s32, s32);
 
@@ -131,6 +132,7 @@ void func_8004D784_4E384(Struct_func_8004D784 *arg0);
 void func_8004D6FC_4E2FC(Struct_func_8004D784 *arg0);
 void func_8004D858_4E458(Struct_func_8004F04C *arg0);
 extern void func_8003BD60_3C960(char *, s16, s16, s16, void *, s16, s16);
+static const char D_8009E880_9F480[] = "%5d";
 extern char D_8009E8A8_9F4A8[];
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
@@ -216,7 +218,44 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CA90_4D690);
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CBF0_4D7F0);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CCC4_4D8C4);
+typedef struct {
+    u8 pad0[0x8];
+    s16 unk8;
+    u8 padA[0x6];
+    s16 unk10;
+    u8 pad12[0x2];
+    s16 unk14;
+    u8 pad16[0x2];
+    s16 unk18;
+    u8 pad1A[0x6];
+    char unk20[8];
+    Player *unk28;
+    u16 unk2C;
+    u16 unk2E;
+} Struct_func_8004CCC4;
+
+void func_8004CCC4_4D8C4(Struct_func_8004CCC4 *arg0) {
+    s32 val = arg0->unk28->unkB6C;
+
+    if (val < 100) {
+        arg0->unk18 = 1;
+    } else {
+        arg0->unk18 = 2;
+    }
+
+    sprintf(arg0->unk20, D_8009E880_9F480, arg0->unk28->unkB6C);
+
+    debugEnqueueCallback((u16)(arg0->unk2C + 8), 0, renderTextPalette, &arg0->unk14);
+
+    arg0->unk2E++;
+    if ((s16)arg0->unk2E >= 12) {
+        arg0->unk2E = 0;
+    }
+
+    arg0->unk10 = (s16)arg0->unk2E >> 1;
+
+    debugEnqueueCallback((u16)(arg0->unk2C + 8), 0, func_800105B0_111B0, &arg0->unk8);
+}
 
 typedef struct {
     void *unk0;
