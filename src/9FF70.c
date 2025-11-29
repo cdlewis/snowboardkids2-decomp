@@ -946,7 +946,75 @@ s32 func_800B5CB8_A5B68(func_800B5CB8_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B5D68_A5C18);
+extern s32 func_800420A8_42CA8(void *);
+extern s32 func_8005D8C8_5E4C8(void *);
+
+typedef struct {
+    u8 _pad0[0xBDF];
+    u8 unkBDF;
+    u8 unkBE0;
+    u8 unkBE1;
+} func_800B7B64_arg;
+
+extern void func_800B7B44_A79F4(func_800B7B64_arg *, s32);
+
+typedef struct {
+    u8 _pad0[0x44C];
+    s32 unk44C; // 0x44C
+    s32 unk450; // 0x450
+    s32 unk454; // 0x454
+    u8 _pad458[0x658];
+    s32 unkAB0; // 0xAB0
+    u8 _padAB4[0x4];
+    s32 unkAB8; // 0xAB8
+    u8 _padABC[0xC8];
+    s32 unkB84; // 0xB84
+    s32 unkB88; // 0xB88
+    s32 unkB8C; // 0xB8C
+    u8 _padB90[0x2F];
+    u8 unkBBF; // 0xBBF
+} func_800B5D68_arg;
+
+s32 func_800B5D68_A5C18(func_800B5D68_arg *arg0) {
+    if (arg0->unkBBF == 0) {
+        arg0->unkB8C = 0x78;
+        arg0->unkBBF = arg0->unkBBF + 1;
+    }
+
+    if (arg0->unkBBF == 1) {
+        if (func_800420A8_42CA8(arg0) != 0) {
+            arg0->unkBBF = arg0->unkBBF + 1;
+        }
+    }
+
+    arg0->unkB88 = 0x80;
+    arg0->unk450 = arg0->unk450 - arg0->unkAB8;
+    func_800B40D4_A3F84(arg0);
+
+    if (arg0->unkB84 & 1) {
+        arg0->unk44C = arg0->unk44C - (arg0->unk44C >> 7);
+        arg0->unk454 = arg0->unk454 - (arg0->unk454 >> 7);
+    } else {
+        func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
+    }
+
+    func_800B02AC_A015C(arg0);
+    func_8005D308_5DF08(arg0, 0);
+
+    if (arg0->unkB8C == 0) {
+        arg0->unkB88 = 0;
+        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 4);
+        func_800B00E4_9FF94(arg0);
+        return 0;
+    } else {
+        arg0->unkB8C = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
+        if (arg0->unkB8C < 0) {
+            arg0->unkB8C = 0;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B5E90_A5D40);
 
@@ -1565,13 +1633,6 @@ s32 func_800B7A94_A7944(func_800B7444_arg *arg0) {
     func_8005D308_5DF08(arg0, 4);
     return 0;
 }
-
-typedef struct {
-    u8 _pad0[0xBDF];
-    u8 unkBDF;
-    u8 unkBE0;
-    u8 unkBE1;
-} func_800B7B64_arg;
 
 extern u8 D_800BACBC_AAB6C[];
 
