@@ -22,6 +22,7 @@ extern void func_80041810_42410(void *);
 extern void func_80042160_42D60(void);
 extern void func_80043E24_44A24(void);
 extern void func_800639F8_645F8(s32, DisplayListObject *);
+extern void func_80058B30_59730(Player *);
 
 typedef struct {
     u8 _pad0[0x1F0];   /* 0x00 */
@@ -648,14 +649,17 @@ void func_80042670_43270(Player *arg0) {
 }
 
 typedef struct {
-    u8 pad0[0x20]; /* 0x00 */
+    u8 pad0[0x14]; /* 0x00 */
+    s32 unk14;     /* 0x14 */
+    s32 unk18;     /* 0x18 */
+    s32 unk1C;     /* 0x1C */
     void *unk20;   /* 0x20 */
     void *unk24;   /* 0x24 */
     void *unk28;   /* 0x28 */
     s32 unk2C;     /* 0x2C */
     u8 pad30[0xC]; /* 0x30 */
     void *unk3C;   /* 0x3C */
-    void *unk40;   /* 0x40 */
+    Player *unk40; /* 0x40 */
     s32 unk44;     /* 0x44 */
     s32 unk48;     /* 0x48 */
     s32 unk4C;     /* 0x4C */
@@ -691,7 +695,38 @@ void func_800426B0_432B0(Func426B0State *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_8004273C_4333C);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042820_43420);
+void func_8004290C_4350C(Func426B0State *);
+
+void func_80042820_43420(Func426B0State *arg0) {
+    GameState *gameState;
+    s32 i;
+
+    gameState = getCurrentAllocation();
+    if (gameState->gamePaused == 0) {
+        arg0->unk40->unkBDE |= 4;
+        arg0->unk50 += 0xFFFE0000;
+        arg0->unk4C += arg0->unk50;
+
+        if (arg0->unk4C == 0x220000) {
+            func_80058B30_59730(arg0->unk40);
+            func_80056B7C_5777C(&arg0->unk14, 0x19);
+        }
+
+        if (arg0->unk4C <= 0x10000) {
+            arg0->unk50 = 0x50000;
+            setCallback(func_8004290C_4350C);
+        }
+    }
+
+    memcpy(&arg0->unk14, &arg0->unk40->worldPosX, 0xC);
+    arg0->unk18 += arg0->unk4C;
+
+    i = 0;
+    do {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        i++;
+    } while (i < 4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_8004290C_4350C);
 
@@ -700,7 +735,7 @@ void func_800429C4_435C4(Func429C4Arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-Func426B0State *func_800429FC_435FC(void *arg0, void *arg1, s16 arg2) {
+Func426B0State *func_800429FC_435FC(void *arg0, Player *arg1, s16 arg2) {
     Func426B0State *task;
 
     task = (Func426B0State *)scheduleTask(func_800426B0_432B0, 0, 0, 0xC8);
