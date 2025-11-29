@@ -116,7 +116,26 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B255C_A240C);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B26D0_A2580);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B27FC_A26AC);
+typedef struct {
+    u8 _pad0[0xBAA];
+    s16 unkBAA;
+    s16 unkBAC;
+    s16 unkBAE;
+    u8 _padBB0[0x5];
+    u8 unkBB5;
+    u8 unkBB6;
+    u8 _padBB7[0x1E];
+    u8 unkBD5;
+} func_800B27FC_arg;
+
+void func_800B27FC_A26AC(func_800B27FC_arg *arg0) {
+    arg0->unkBAC = 0;
+    arg0->unkBAA = 0;
+    arg0->unkBAE = 0;
+    arg0->unkBB5 = 0;
+    arg0->unkBD5 = 0;
+    arg0->unkBB6 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2818_A26C8);
 
