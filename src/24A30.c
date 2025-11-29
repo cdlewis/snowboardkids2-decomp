@@ -118,6 +118,22 @@ typedef struct {
     u8 unkA1;
 } func_80024644_arg;
 
+typedef struct {
+    u8 pad0[0x20];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 pad30[0xC];
+    Mat3x3Padded unk3C;
+    Mat3x3Padded unk5C;
+    Mat3x3Padded unk7C;
+    u8 pad9C[4];
+    u8 unkA0;
+    u8 unkA1;
+    u8 unkA2;
+} func_80024048_arg;
+
 extern void func_800394BC_3A0BC(void *, s32);
 extern void func_8000FED0_10AD0(void);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
@@ -127,10 +143,74 @@ extern void func_800650B4_65CB4(u8, void *);
 extern s32 D_8008DD2C_8E92C[];
 extern void func_80069CF8_6A8F8(void);
 
+void func_80024220_24E20(func_80024220_24E20_arg *);
+void func_80024298_24E98(void *);
+void func_80027BC8_287C8(func_80027BC8_arg *, u8);
+
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
 
-void func_80024048_24C48(void *);
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024048_24C48);
+void func_80024048_24C48(func_80024048_arg *arg0) {
+    Mat3x3Padded sp10;
+    u8 *base;
+    u8 prevA0;
+    u8 newA0;
+    u8 charIndex;
+    u8 paletteIndex;
+    u8 assetIndex;
+    u16 rotation;
+    u16 val;
+
+    base = (u8 *)getCurrentAllocation();
+
+    newA0 = *(base + arg0->unkA1 + 0x18C8);
+    prevA0 = arg0->unkA0;
+
+    if (prevA0 != newA0) {
+        arg0->unkA0 = newA0;
+        func_80027BC8_287C8((func_80027BC8_arg *)arg0, arg0->unkA1);
+    }
+
+    charIndex = *(base + arg0->unkA1 + 0x18A8);
+    paletteIndex = *(base + arg0->unkA1 + 0x18B0);
+    assetIndex = paletteIndex + charIndex * 3;
+
+    memcpy(&sp10, identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
+
+    if (*(base + arg0->unkA1 + 0x18D2) == *(base + 0x18CC) - 1) {
+        val = *(u16 *)(base + arg0->unkA1 * 2 + 0x1898);
+        if (val != 1) {
+            rotation = *(u16 *)(base + arg0->unkA1 * 2 + 0x1888);
+            createYRotationMatrix(&arg0->unk5C, rotation);
+            goto after_rotation;
+        }
+    }
+
+    rotation = *(u16 *)(base + arg0->unkA1 * 2 + 0x1880);
+    createYRotationMatrix(&arg0->unk5C, (0x2000 - rotation) & 0xFFFF);
+
+after_rotation:
+    func_8006B084_6BC84(&arg0->unk3C, &arg0->unk5C, &sp10);
+    func_8006B084_6BC84(&sp10, (arg0->unkA1 << 5) + 0x17F8 + base, arg0);
+
+    val = *(u16 *)(base + arg0->unkA1 * 2 + 0x1898);
+    if (val == 4 || val == 9) {
+        arg0->unk24 = freeNodeMemory(arg0->unk24);
+        arg0->unk28 = freeNodeMemory(arg0->unk28);
+        arg0->unk2C = freeNodeMemory(arg0->unk2C);
+        setCallback(func_80024298_24E98);
+    } else {
+        if (assetIndex != arg0->unkA2) {
+            arg0->unkA2 = assetIndex;
+            arg0->unk24 = freeNodeMemory(arg0->unk24);
+            arg0->unk28 = freeNodeMemory(arg0->unk28);
+            arg0->unk2C = freeNodeMemory(arg0->unk2C);
+            setCallback(func_80024220_24E20);
+        } else {
+            func_800650B4_65CB4(arg0->unkA1, arg0);
+        }
+    }
+}
 
 void func_80024220_24E20(func_80024220_24E20_arg *arg0) {
     u8 charIndex;
