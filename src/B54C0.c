@@ -1,8 +1,13 @@
 #include "56910.h"
 #include "common.h"
+#include "displaylist.h"
+#include "geometry.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
-extern void func_800BB350_B5560(void *);
+extern s32 approximateSin(s16);
+extern void createRotationMatrixYZ(s16 *, u16, u16);
+extern void func_8005B730_5C330(void *, s32, s32, s16);
 
 typedef struct {
     u8 _pad[0x24];
@@ -13,7 +18,8 @@ typedef struct {
 void func_800BB420_B5630(func_800BB420_B5630_arg *arg0);
 
 typedef struct {
-    u8 _pad[0x14];
+    s16 matrix[6];
+    u8 _pad[0x8];
     s32 unk14;
     s32 unk18;
     s32 unk1C;
@@ -28,6 +34,8 @@ typedef struct {
     s32 unk44;
     s32 unk48;
 } func_800BB2B0_arg;
+
+void func_800BB350_B5560(func_800BB2B0_arg *arg0);
 
 void func_800BB2B0_B54C0(func_800BB2B0_arg *arg0) {
     s32 pad[3];
@@ -48,7 +56,29 @@ void func_800BB2B0_B54C0(func_800BB2B0_arg *arg0) {
     setCallback(func_800BB350_B5560);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B54C0", func_800BB350_B5560);
+void func_800BB350_B5560(func_800BB2B0_arg *arg0) {
+    s32 i;
+    s32 temp[3];
+    GameState *gameState = getCurrentAllocation();
+
+    if (gameState->gamePaused == 0) {
+        arg0->unk3C += 0x40;
+    }
+
+    createRotationMatrixYZ(arg0->matrix, (u16)(approximateSin(arg0->unk3C) >> 4), 0xF800);
+    transformVector((s16 *)&arg0->unk40, arg0->matrix, temp);
+    func_8005B730_5C330(temp, 0x500000, 0x100000, -0x800);
+
+    if (gameState->gamePaused == 0) {
+        if ((arg0->unk3C & 0xFFF) == 0) {
+            func_80056B7C_5777C(temp, 0x27);
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 void func_800BB420_B5630(func_800BB420_B5630_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
