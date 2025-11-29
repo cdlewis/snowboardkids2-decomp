@@ -63,7 +63,14 @@ typedef struct {
 } func_800B99E0_alloc;
 
 typedef struct {
-    u8 _pad0[0xBBD];
+    u8 _pad0[0xB84];
+    s32 unkB84;
+    u8 _padB88[0x12]; // 0xB88 to 0xB9A
+    s16 unkB9A;
+    u8 _padB9C[0x8]; // 0xB9C to 0xBA4
+    s16 unkBA4;
+    s16 unkBA6;
+    u8 _padBA8[0x15]; // 0xBA8 to 0xBBD
     u8 unkBBD;
     u8 unkBBE;
     u8 unkBBF;
@@ -675,7 +682,19 @@ void func_800B468C_A453C(func_800B00D4_arg *arg0) {
     D_800BAB78_AAA28[arg0->unkBBE](arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B46BC_A456C);
+extern void func_80059D30_5A930(void *);
+
+void func_800B46BC_A456C(func_800B00D4_arg *arg0) {
+    arg0->unkBBD = 2;
+    arg0->unkBBE = 5;
+    arg0->unkBBF = 0;
+    arg0->unkBC0 = 0;
+    arg0->unkB9A = 0;
+    arg0->unkBA6 = 0;
+    arg0->unkBA4 = 0;
+    arg0->unkB84 = arg0->unkB84 & 0xFFFF2FFF;
+    func_80059D30_5A930(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B470C_A45BC);
 
