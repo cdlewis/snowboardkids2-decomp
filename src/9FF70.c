@@ -940,7 +940,46 @@ s32 func_800B6FE8_A6E98(func_800B6FE8_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B7078_A6F28);
+typedef struct {
+    u8 _pad0[0x434];
+    u8 unk434[0xC];    // 0x434 - source for memcpy (12 bytes)
+    u8 _pad440[0xC];   // 0x440 to 0x44C
+    s32 unk44C;        // 0x44C
+    s32 unk450;        // 0x450
+    s32 unk454;        // 0x454
+    u8 _pad458[0x10];  // 0x458 to 0x468
+    s32 unk468;        // 0x468
+    u8 _pad46C[0x4];   // 0x46C to 0x470
+    u8 unk470[0xC];    // 0x470 - destination for memcpy (12 bytes)
+    u8 _pad47C[0x4];   // 0x47C to 0x480
+    s32 unk480;        // 0x480
+    u8 _pad484[0x708]; // 0x484 to 0xB8C
+    s32 unkB8C;        // 0xB8C
+    u8 _padB90[0x2F];  // 0xB90 to 0xBBF
+    u8 unkBBF;         // 0xBBF
+    u8 unkBC0;         // 0xBC0
+} func_800B7078_arg;
+
+s32 func_800B7078_A6F28(func_800B7078_arg *arg0) {
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 = arg0->unk450 - 0x6000;
+    func_800B02AC_A015C(arg0);
+    func_800B40D4_A3F84(arg0);
+    func_8005D308_5DF08(arg0, 3);
+
+    arg0->unkB8C = arg0->unkB8C - 1;
+    if (arg0->unkB8C == 0) {
+        arg0->unkBC0 = 0;
+        arg0->unkBBF = arg0->unkBBF + 1;
+        memcpy(arg0->unk470, arg0->unk434, 0xC);
+        arg0->unk480 = 0;
+        arg0->unk468 = 0x30000;
+        arg0->unkB8C = 0;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B7108_A6FB8);
 
