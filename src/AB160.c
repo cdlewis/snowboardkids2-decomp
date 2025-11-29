@@ -5,6 +5,7 @@
 
 extern u8 randA(void);
 extern void func_800BB454_AB304(void);
+extern void func_80058530_59130(s32, s32);
 
 typedef struct {
     u8 pad[0x24];
@@ -92,11 +93,23 @@ void func_800BBA54_AB904(func_800BBA28_AB8D8_arg *arg0) {
     }
     arg0->unk2 = newValue;
 }
-extern void func_800BBB1C_AB9CC(void);
+void func_800BBB1C_AB9CC(s16 *arg0);
 
 void func_800BBAF8_AB9A8(s16 *arg0) {
     *arg0 = 0;
     setCallback(func_800BBB1C_AB9CC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AB160", func_800BBB1C_AB9CC);
+void func_800BBB1C_AB9CC(s16 *arg0) {
+    GameState *gameState = getCurrentAllocation();
+    s32 i;
+
+    for (i = 0; i < gameState->unk5F; i++) {
+        if (gameState->players[i].unkBC5 == *arg0) {
+            if ((u16)(gameState->players[i].unkB94 - 0x95) < 0xD) {
+                *arg0 = *arg0 + 1;
+                func_80058530_59130(0x4D, 6);
+            }
+        }
+    }
+}
