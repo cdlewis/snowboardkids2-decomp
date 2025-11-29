@@ -241,7 +241,34 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B5478_A5328);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B55B4_A5464);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B58B8_A5768);
+extern void func_800B40D4_A3F84(void *);
+extern void func_8005D180_5DD80(void *, s32);
+extern void func_8005D804_5E404(void *, u8, u8);
+
+typedef struct {
+    u8 _pad0[0x438];
+    s32 unk438;
+    u8 _pad43C[0xB88 - 0x43C];
+    s32 unkB88;
+    s32 unkB8C;
+} func_800B58B8_arg;
+
+s32 func_800B58B8_A5768(func_800B58B8_arg *arg0) {
+    arg0->unkB8C -= 1;
+
+    if (arg0->unkB8C == 0) {
+        arg0->unkB88 = 0;
+        func_800B00E4_9FF94(arg0);
+        return 1;
+    }
+
+    arg0->unkB88 = 8;
+    arg0->unk438 = arg0->unk438 + 0xFFFF0000;
+    func_800B40D4_A3F84(arg0);
+    func_8005D180_5DD80(arg0, 0);
+    func_8005D804_5E404(arg0, 3, 0);
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B5938_A57E8);
 
@@ -286,7 +313,6 @@ extern void func_80055D10_56910(s32 index);
 extern s32 D_800BAC80_AAB30;
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern void func_800B02AC_A015C(void *);
-extern void func_800B40D4_A3F84(void *);
 extern s32 func_8005D308_5DF08(void *, s32);
 
 typedef struct {
@@ -413,7 +439,6 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B73CC_A727C);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B7444_A72F4);
 
-extern void func_8005D180_5DD80(void *, s32);
 extern void func_800BBB90(s16);
 
 typedef struct {
