@@ -769,7 +769,27 @@ void func_80042820_43420(Func426B0State *arg0) {
     } while (i < 4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_8004290C_4350C);
+void func_8004290C_4350C(Func426B0State *arg0) {
+    GameState *gameState;
+    s32 i;
+
+    gameState = getCurrentAllocation();
+    if (gameState->gamePaused == 0) {
+        arg0->unk50 = arg0->unk50 + (-0x8000);
+        arg0->unk4C = arg0->unk4C + arg0->unk50;
+
+        if (arg0->unk4C < (s32)0xFFF00000 && arg0->unk50 < 0) {
+            func_80069CF8_6A8F8();
+        }
+
+        arg0->unk14 = arg0->unk14 + 0x20000;
+        arg0->unk18 = arg0->unk18 + arg0->unk50;
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 void func_800429C4_435C4(Func429C4Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
