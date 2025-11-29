@@ -1141,7 +1141,37 @@ s32 func_800B7078_A6F28(func_800B7078_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B7108_A6FB8);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B71E4_A7094);
+typedef struct {
+    u8 _pad0[0x434];
+    s32 unk434;                // 0x434
+    s32 unk438;                // 0x438
+    s32 unk43C;                // 0x43C
+    u8 _pad440[0xA8E - 0x440]; // 0x440 to 0xA8E
+    s16 unkA8E;                // 0xA8E
+    u8 _padA90[0xB44 - 0xA90]; // 0xA90 to 0xB44
+    s32 unkB44;                // 0xB44
+    s32 unkB48;                // 0xB48
+    s32 unkB4C;                // 0xB4C
+    u8 _padB50[0xB74 - 0xB50]; // 0xB50 to 0xB74
+    u16 unkB74;                // 0xB74
+    u8 _padB76[0xBBF - 0xB76]; // 0xB76 to 0xBBF
+    u8 unkBBF;                 // 0xBBF
+    u8 unkBC0;                 // 0xBC0
+} func_800B71E4_arg;
+
+s32 func_800B71E4_A7094(func_800B71E4_arg *arg0) {
+    arg0->unk434 = arg0->unkB44;
+    arg0->unk438 = arg0->unkB48;
+    arg0->unk43C = arg0->unkB4C;
+    arg0->unkA8E = arg0->unkB74;
+
+    if (func_8005D308_5DF08(arg0, 5) != 0) {
+        arg0->unkBC0 = 0;
+        arg0->unkBBF = arg0->unkBBF + 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B724C_A70FC);
 
