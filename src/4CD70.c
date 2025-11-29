@@ -115,12 +115,12 @@ typedef struct {
     void *unkC;
     char unk10[8];
     s32 unk18;
-    u8 pad1C[0x2];
+    s16 unk1C;
     s16 unk1E;
     s16 unk20;
     u8 pad22[0x2];
     void *unk24;
-    u8 pad28[0x2];
+    u16 unk28;
     u16 unk2A;
     s16 unk2C;
     s16 unk2E;
@@ -130,8 +130,7 @@ void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
 void func_8004D784_4E384(Struct_func_8004D784 *arg0);
 void func_8004D6FC_4E2FC(Struct_func_8004D784 *arg0);
 void func_8004D858_4E458(Struct_func_8004F04C *arg0);
-extern void func_8004D63C_4E23C(void *);
-extern void func_8003BD60_3C960(char *, s16, s16, s16, void *, u16, u16);
+extern void func_8003BD60_3C960(char *, s16, s16, s16, void *, s16, s16);
 extern char D_8009E8A8_9F4A8[];
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
@@ -396,7 +395,24 @@ void func_8004D544_4E144(Struct_func_8004D784 *arg0) {
     setCallback(func_8004D6FC_4E2FC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D63C_4E23C);
+void func_8004D63C_4E23C(Struct_func_8004D784 *arg0) {
+    debugEnqueueCallback((u16)(arg0->unk28 + 8), 6, func_8000FED0_10AD0, arg0);
+
+    if (arg0->unk2E == 0) {
+        func_8003BD60_3C960(
+            arg0->unk10,
+            (s16)(arg0->unk0 + 0x38),
+            arg0->unk2,
+            0xFF,
+            arg0->unkC,
+            (s16)(arg0->unk28 + 8),
+            6
+        );
+    } else {
+        arg0->unk1C = arg0->unk0 + 0x38;
+        debugEnqueueCallback((u16)(arg0->unk28 + 8), 6, renderTextPalette, &arg0->unk1C);
+    }
+}
 
 void func_8004D6FC_4E2FC(Struct_func_8004D784 *arg0) {
     s32 sinVal;
