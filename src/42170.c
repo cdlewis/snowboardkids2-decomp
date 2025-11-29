@@ -813,7 +813,35 @@ Func426B0State *func_800429FC_435FC(void *arg0, Player *arg1, s16 arg2) {
 INCLUDE_ASM("asm/nonmatchings/42170", func_80042A6C_4366C);
 
 void func_80042F2C_43B2C(void **);
-void func_80042BA4_437A4(void);
+extern void func_80042A6C_4366C(void *);
+
+typedef struct {
+    void *unk0;            /* 0x00 */
+    void *unk4;            /* 0x04 */
+    s32 unk8;              /* 0x08 */
+    u8 _padC[0x12];        /* 0x0C */
+    u8 unk1E;              /* 0x1E */
+    u8 _pad1F[0x1];        /* 0x1F */
+    void *unk20;           /* 0x20 */
+    void *unk24;           /* 0x24 */
+    Func43CA4Unk28 *unk28; /* 0x28 */
+    s32 unk2C;             /* 0x2C */
+    s32 unk30;             /* 0x30 */
+    s32 unk34;             /* 0x34 */
+    s16 unk38;             /* 0x38 */
+    s16 unk3A;             /* 0x3A */
+    s16 unk3C;             /* 0x3C */
+    s16 unk3E;             /* 0x3E */
+    s16 unk40;             /* 0x40 */
+    u8 unk42;              /* 0x42 */
+    u8 unk43;              /* 0x43 */
+} Func42BA4Arg;
+
+void func_80042BA4_437A4(Func42BA4Arg *);
+struct Func42C98Arg;
+struct Func42E40Arg;
+void func_80042C98_43898(struct Func42C98Arg *);
+void func_80042E40_43A40(struct Func42E40Arg *);
 
 void func_80042B64_43764(void **arg0) {
     *arg0 = load_3ECE40();
@@ -821,9 +849,50 @@ void func_80042B64_43764(void **arg0) {
     setCallbackWithContinue(func_80042BA4_437A4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042BA4_437A4);
+void func_80042BA4_437A4(Func42BA4Arg *arg0) {
+    Func43CA4GameState *gameState;
+    s16 temp;
+    void *ptr;
 
-typedef struct {
+    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    temp = arg0->unk3A;
+
+    if (temp == 0) {
+        arg0->unk3A = 1;
+        arg0->unk3E = 0;
+        arg0->unk1E = 0;
+        ptr = gameState->unk44;
+        arg0->unk30 = 0x200000;
+        arg0->unk2C = 0;
+        arg0->unk34 = 0;
+        arg0->unk38 = 0;
+        arg0->unk42 = 1;
+        arg0->unk4 = (void *)((u8 *)ptr + 0xF00);
+        func_80042A6C_4366C(arg0);
+
+        if (arg0->unk43 != 0) {
+            arg0->unk28->unkBCF++;
+
+            if (arg0->unk28->unkBBB == 0xC) {
+                arg0->unk3C = 0x1E;
+            } else {
+                arg0->unk3C = 0x12C;
+            }
+
+            arg0->unk2C = 0x140000;
+            arg0->unk30 = 0x190000;
+            setCallbackWithContinue(func_80042E40_43A40);
+        } else {
+            setCallbackWithContinue(func_80042C98_43898);
+        }
+    } else {
+        if (gameState->unk76 == 0) {
+            arg0->unk3A = temp - 1;
+        }
+    }
+}
+
+struct Func42C98Arg {
     u8 _pad0[0x4];              /* 0x00 - 0x04 */
     loadAssetMetadata_arg unk4; /* 0x04 - 0x20 (unk4.unk4 is at 0x08) */
     u8 _pad20[0x4];             /* 0x20 - 0x24 */
@@ -833,15 +902,12 @@ typedef struct {
     s32 unk30;                  /* 0x30 - 0x34 */
     u8 _pad34[0xE];             /* 0x34 - 0x42 */
     u8 unk42;                   /* 0x42 */
-} Func42C98Arg;
+};
 
-extern void func_80042A6C_4366C(void *);
 typedef struct Func42D54Arg Func42D54Arg;
-typedef struct Func42E40Arg Func42E40Arg;
 void func_80042D54_43954(Func42D54Arg *);
-void func_80042E40_43A40(Func42E40Arg *);
 
-void func_80042C98_43898(Func42C98Arg *arg0) {
+void func_80042C98_43898(struct Func42C98Arg *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
 
@@ -944,7 +1010,7 @@ struct Func42E40Arg {
 
 extern void rotateVectorY(void *, s32, void *);
 
-void func_80042E40_43A40(Func42E40Arg *arg0) {
+void func_80042E40_43A40(struct Func42E40Arg *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
     s32 pad;
