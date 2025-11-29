@@ -5,9 +5,24 @@ typedef void (*FuncPtr)(void *);
 
 extern FuncPtr D_800BC454_ACC84[];
 extern FuncPtr D_800BC460_ACC90[];
+extern u8 D_800BACC8_AAB78;
+extern u8 D_800BACC9_AAB79;
+extern u8 D_800BACCA_AAB7A;
+extern u8 D_800BACCC_AAB7C;
+extern u8 D_800BACCD_AAB7D;
+extern u8 D_800BACCE_AAB7E;
 
 typedef struct {
-    u8 pad[0x434];
+    u8 pad[0x38];
+    u8 unk38[0x6C - 0x38];
+    u8 unk6C;
+    u8 unk6D;
+    u8 unk6E;
+    u8 pad6F[1];
+    u8 unk70;
+    u8 unk71;
+    u8 unk72;
+    u8 pad73[0x434 - 0x73];
     s32 unk434;
     s32 unk438;
     s32 unk43C;
@@ -24,7 +39,9 @@ typedef struct {
     s32 unkB88;
     u8 padB8C[0xB94 - 0xB8C];
     u16 unkB94;
-    u8 padB96[0xBBD - 0xB96];
+    u8 padB96[0xBB7 - 0xB96];
+    u8 unkBB7;
+    u8 padBB8[0xBBD - 0xBB8];
     u8 unkBBD;
     u8 unkBBE;
     u8 unkBBF;
@@ -44,6 +61,9 @@ extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern void func_80060CDC_618DC(void *arg0, u16 arg1, void *arg2, s32 arg3, s32 *arg4);
 extern void func_8005C868_5D468(void *arg0);
 extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
+extern void func_80064808_65408(s32, void *, u8);
+extern void enqueueMultiPartDisplayList(s32, void *, u8);
+extern void func_800BC0E8_AC918(Arg0Struct *);
 
 INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BB2B0_ABAE0);
 
@@ -147,6 +167,32 @@ void func_800BBFEC_AC81C(Arg0Struct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BC0E8_AC918);
 
-INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BC23C_ACA6C);
+void func_800BC23C_ACA6C(Arg0Struct *arg0) {
+    s32 i;
+    s32 index;
+    s32 pad[36];
+
+    getCurrentAllocation();
+    func_800BC0E8_AC918(arg0);
+
+    index = arg0->unkBCC >> 4;
+
+    if (index == 0) {
+        for (i = 0; i < 4; i++) {
+            func_80064808_65408(i, &arg0->unk38, arg0->unkBB7);
+        }
+    } else {
+        arg0->unk6C = *(&D_800BACC8_AAB78 + index * 8);
+        arg0->unk6D = *(&D_800BACC9_AAB79 + index * 8);
+        arg0->unk6E = *(&D_800BACCA_AAB7A + index * 8);
+        arg0->unk70 = *(&D_800BACCC_AAB7C + index * 8);
+        arg0->unk71 = *(&D_800BACCD_AAB7D + index * 8);
+        arg0->unk72 = *(&D_800BACCE_AAB7E + index * 8);
+
+        for (i = 0; i < 4; i++) {
+            enqueueMultiPartDisplayList(i, &arg0->unk38, arg0->unkBB7);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BC330_ACB60);
