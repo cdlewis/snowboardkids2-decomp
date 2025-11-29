@@ -11,7 +11,6 @@ extern void func_80028C08_29808(void);
 extern void func_80028DF0_299F0(void);
 extern s32 func_8002A390_2AF90(void *);
 extern void func_80028AEC_296EC(void *);
-extern void func_800291CC_29DCC(void);
 extern void func_80029EA8_2AAA8(void);
 extern void func_80029AA4_2A6A4(void);
 extern void func_8002900C_29C0C(void);
@@ -73,6 +72,8 @@ typedef struct {
     /* 0x61 */ u8 unk61;
     /* 0x62 */ s8 unk62;
 } Func297D8Arg;
+
+void func_800291CC_29DCC(Func297D8Arg *);
 
 typedef struct {
     /* 0x00 */ SceneModel *unk0;
@@ -153,7 +154,52 @@ void func_8002917C_29D7C(Func297D8Arg *arg0) {
     setCallback(func_800291CC_29DCC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_800291CC_29DCC);
+void func_800291CC_29DCC(Func297D8Arg *arg0) {
+    AllocationData *alloc;
+    s32 setCallbackFlag;
+    u8 temp;
+
+    alloc = getCurrentAllocation();
+    setCallbackFlag = 0;
+
+    if (arg0->unk5E == 7) {
+        if (arg0->unk62 != 0) {
+            arg0->unk5E = 0;
+            arg0->unk62 = 0;
+            arg0->unk50 = arg0->unk58;
+        }
+    } else {
+        if (func_8002A390_2AF90(arg0) != 0) {
+            setCallback(func_80028AEC_296EC);
+            setCallbackFlag = 1;
+        } else if (arg0->unk5E == 0) {
+            arg0->unk5A++;
+            if (arg0->unk5A == 0x78) {
+                temp = arg0->unk5E;
+                arg0->unk5E = 7;
+                arg0->unk5A = 0;
+                arg0->unk50 = 0x16;
+                arg0->unk61 = temp;
+            }
+        }
+    }
+
+    func_8002A2D0_2AED0(arg0);
+
+    alloc->unk408 = arg0->matrix.unk14;
+    alloc->unk410 = arg0->matrix.unk1C;
+
+    if ((alloc->unk42A == 0x11) && (setCallbackFlag ^ 1)) {
+        u16 savedUnk50 = arg0->unk50;
+        u8 savedUnk5E = arg0->unk5E;
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = func_800291CC_29DCC;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(func_8002A200_2AE00);
+    }
+}
 
 void func_80029300_29F00(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
