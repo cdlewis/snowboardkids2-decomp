@@ -952,7 +952,72 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B5E90_A5D40);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B5FC4_A5E74);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6194_A6044);
+extern u8 randA(void);
+extern void func_80050C00_51800(void *);
+extern s32 func_8005D8C8_5E4C8(void *);
+extern s16 atan2Fixed(s32, s32);
+
+typedef struct {
+    u8 _pad0[0x44C];
+    s32 unk44C; // 0x44C
+    s32 unk450; // 0x450
+    s32 unk454; // 0x454
+    u8 _pad458[0xA94 - 0x458];
+    s16 unkA94; // 0xA94
+    u8 _padA96[0xB84 - 0xA96];
+    s32 unkB84; // 0xB84
+    s32 unkB88; // 0xB88
+    s32 unkB8C; // 0xB8C
+    u8 _padB90[0xBBF - 0xB90];
+    u8 unkBBF; // 0xBBF
+} func_800B6194_arg;
+
+s32 func_800B6194_A6044(func_800B6194_arg *arg0) {
+    s16 angle;
+
+    if (arg0->unkBBF == 0) {
+        arg0->unkB8C = 0x1E;
+        arg0->unkBBF = arg0->unkBBF + 1;
+    }
+
+    arg0->unkB84 = arg0->unkB84 | 0x60;
+    arg0->unk450 = arg0->unk450 - 0x6000;
+    arg0->unkB88 = 0x202;
+
+    if (arg0->unkB84 & 1) {
+        arg0->unk44C = arg0->unk44C - (arg0->unk44C >> 5);
+        arg0->unk454 = arg0->unk454 - (arg0->unk454 >> 5);
+    } else {
+        func_800B42A8_A4158(arg0, 0x100, 0x100, 0x100);
+    }
+
+    angle = atan2Fixed(-arg0->unk44C, -arg0->unk454);
+    arg0->unkA94 = angle;
+
+    if (arg0->unkB84 & 2) {
+        arg0->unkA94 = angle + 0x1000;
+    }
+
+    func_800B40D4_A3F84(arg0);
+    func_800B02AC_A015C(arg0);
+    func_8005D180_5DD80(arg0, 0xC);
+
+    if (arg0->unkB8C == 0) {
+        func_800B00D4_9FF84((func_800B00D4_arg *)arg0, 2);
+    } else {
+        arg0->unkB8C = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
+        if (arg0->unkB8C < 0) {
+            arg0->unkB8C = 0;
+        }
+    }
+
+    if (randA() & 1) {
+        func_80050C00_51800(arg0);
+    }
+
+    func_8005D804_5E404(arg0, 3, 0);
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B62E4_A6194);
 
