@@ -4,7 +4,28 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    s32 unk0;
+    u8 _pad[0x16];
+    u16 unk16;
+} func_80006CBC_unk10;
+
+typedef struct {
+    u8 _pad[0x10];
+    func_80006CBC_unk10 *unk10;
+    u8 _pad2[0x18];
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    u8 _pad4[0x4];
+    s8 unk3C;
+    s8 unk3D;
+    u8 _pad5;
+    s8 unk3F;
+    u8 _pad6[0x48];
+    s8 unk88;
+} func_80006CBC_inner;
+
+typedef struct {
+    func_80006CBC_inner *unk0;
     s32 unk4;
     u8 padding[0x4C];
     s32 unk54;
@@ -20,9 +41,12 @@ typedef struct {
 void func_80007030_7C30(func_80007030_7C30_arg *);
 void func_80009E68_AA68(s32 *, s32);
 void func_80009F90_AB90(s32 *, s32, s32, s32);
+void func_80069CF8_6A8F8(void);
+s32 func_8000A030_AC30(void *, s32);
+void func_8000A190_AD90(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);
 
 extern void func_80009F5C_AB5C(s32 *);
-extern void func_80006CBC_78BC(void);
+void func_80006CBC_78BC(func_80006C50_7850_arg *);
 extern void func_80006E44_7A44(func_80006C50_7850_arg *);
 extern void *D_80088720_89320;
 extern void *func_80006EE0_7AE0(void);

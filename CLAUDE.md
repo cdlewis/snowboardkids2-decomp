@@ -30,6 +30,8 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 You may be given a function and asked to decompile it to C code.
 
+#### Step 1
+
 First we need to spin up a decomp environment for the function, run:
 
 ```
@@ -40,67 +42,34 @@ Move to the directory created by the script. This will be `nonmatchings/<functio
 
 Use the tools in this directory to match the function. You may need to make several attempts. Each attempt should be in a new file (base*1.c, base_2.c, ... base_n.c, etc). It's okay to give up if you're unable to match after \_10* attempts.
 
-Once you have a matching function, update the C code to use it. The C code will be importing an assembly file, something along the lines of `INCLUDE_ASM/asm/nonmatchings/<function name>`. Replace this with the actual C code.
+#### Step 2a (unable to match, log and revert changes)
 
-If the function is defined in a header file (located in include/), this will also need to be updated. These other usages may teach you about the correct type of your function arguments or return types. DO NOT JUST MAKE EVERYTHING void\*!.
+If you cannot get a perfect match after 10 attempts, add the function name to `tools/difficult_functions` along with the number of attempts and best match percentage (function names should be separated by newlines). This should be in the form `\n<function name> <number of attempts to match> <best match percentage>\n`. By adding the function name to difficult_functions. You must also revert any changes you've made adding the function to the C file or other project files (we do not want to save incomplete matches).
 
-Update the rest of the project to fix any build issues.
+#### Step 2b (successful match, integrate changes into project)
 
-After adding your decompiled function, check for any redundant extern declarations:
+If you are able to match the function, update the C code to use it. The C code will be importing an assembly file, something along the lines of `INCLUDE_ASM/asm/nonmatchings/<function name>`. Replace this with the actual C code.
 
-1. **Search for existing declarations**: For each extern function you used, search the codebase to see if it's already declared in a header file:
+- Update the rest of the project to fix any build issues.
+- If the function is defined in a header file (located in include/), this will also need to be updated. These other usages may teach you about the correct type of your function arguments or return types. DO NOT JUST MAKE EVERYTHING void\*!.
+- Make sure to search for any existing function / struct declarations in the project (under src/ and include/). We do not want duplicate or redundent declarations.
 
-   - Use `grep -r "void functionName" include/` to search headers
-   - Use `grep -r "void functionName" src/*.h` to search source headers
+Verify that the project still builds successfully by running `./tools/build-and-verify.sh`. If this check fails, the decompilation is NOT complete, even if individual functions appear to match.
 
-2. **Remove redundant externs**: If a function is already declared in an included header file, remove your extern declaration to avoid duplication
+- If the checksum fails after your changes, use `python3 tools/asm-differ/diff.py --no-pager <function>` to check ALL functions in the modified file(s). Look for functions that access the same structs you modified. Fix any mismatches before declaring success.
+- If you are unable to fix the build issues the match should be marked with all changes reverted and the function name added to tools/difficult_functions in line with the instructions in step 2a.
 
-3. **Verify the build still works** after removing redundant externs
+#### Step 3: Commit
 
-Example: If you added `extern void setCallback(void *);` but `task_scheduler.h` (which is already included) declares it, remove your extern declaration.
+If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name> <attempts>`.
 
-**IMPORTANT - Verification Requirements:**
+If you were not able to get a perfect matching decompilation, commit your changes to tools/difficult_functions.
 
-1. **NEVER declare success based only on local environment matching.** Matching in the nonmatchings directory does NOT guarantee the full project matches.
+You are done. Do not attemp to find the next closest match.
 
-2. **ALWAYS verify the complete build** by running:
+## Validation Checklist
 
-   ```
-   ./tools/build-and-verify.sh
-   ```
-
-3. **SUCCESS CRITERIA**: The ONLY acceptable success condition is:
-
-   ```
-   build/snowboardkids2.z64: OK
-   ```
-
-   If this check fails, the decompilation is NOT complete, even if individual functions appear to match.
-
-4. **When modifying struct definitions:**
-
-   - Search the entire codebase for other references to the same struct
-   - Check if other functions access fields at nearby offsets
-   - Verify ALL affected functions still match after struct changes
-   - Example: If you add a field at offset 0x14, search for all functions accessing that struct and verify they still compile to the correct offsets
-
-5. **If the checksum fails after your changes:**
-   - Use `python3 tools/asm-differ/diff.py --no-pager <function>` to check ALL functions in the modified file(s)
-   - Look for functions that access the same structs you modified
-   - Fix any mismatches before declaring success
-
-### Decompile directory to C code
-
-You may be given a directory containing assembly files either in its own directory or its subdirectories.
-
-1. Use `python3 tools/score_functions.py asm/nonmatchings/` tool to find the easiest function. Start with that one.
-2. Follow the instructions in the `Decompile assembly to C code` of this document.
-3. If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name> <attempts>` and return to step (1). If you cannot get a perfect match after several attempts, add the function name to `tools/difficult_functions` along with the number of attempts and best match percentage (function names should be separated by newlines). This should be in the form `\n<function name> <number of attempts to match> <best match percentage>\n`. By adding the function name to difficult_functions. You should also revert any changes you've made adding the function to the C file (we do not want to save incomplete matches).
-4. You are done. Do not attemp to find the next closest match.
-
-### Self-Review Checklist
-
-Before declaring a decompilation complete, verify:
+Before declaring any changes to C code complete (including decompiling functions), verify:
 
 - [ ] No pointer arithmetic with manual offset calculations
 - [ ] All struct field accesses use `->` or `.` operators
@@ -110,39 +79,7 @@ Before declaring a decompilation complete, verify:
 
 ## Code Quality Standards
 
-### Struct Usage
-
-**NEVER use pointer arithmetic with manual offsets.** Always define and use proper structs.
-
-**BAD - Pointer Arithmetic:**
-
-```c
-s16 func(void* arg0, u16 arg1) {
-    return *(s16*)((u8*)*(void**)((u8*)arg0 + 0xC) + arg1 * 36 + 0xA);
-}
-```
-
-**GOOD - Proper Structs:**
-
-```c
-typedef struct {
-    s16 unk0;
-    u8 _pad[0x8];
-    s16 unkA;
-    u8 _pad2[0x18];
-} ArrayElement;  // Total size: 0x24 (36 bytes)
-
-typedef struct {
-    u8 _pad[0xC];
-    ArrayElement *unkC;
-} FunctionArg;
-
-s16 func(FunctionArg* arg0, u16 arg1) {
-    return arg0->unkC[arg1].unkA;
-}
-```
-
-### Struct Definition Guidelines
+### Avoid Pointer Arithmetic
 
 When you see pointer arithmetic patterns like `*(type*)((u8*)ptr + offset)`:
 
@@ -163,14 +100,29 @@ When you see pointer arithmetic patterns like `*(type*)((u8*)ptr + offset)`:
    - Calculate total size to ensure it matches the multiplier in pointer arithmetic
    - Example: `arg1 * 36` means struct must be exactly 36 (0x24) bytes
 
-### When Decompiling
+### Struct Modification and Extension
 
-If you write code with pointer arithmetic:
+When modifying struct definitions:
 
-- **STOP immediately**
-- Create proper struct definitions first
-- Then write the function using struct access
-- This applies even if the pointer arithmetic "works" - it's always wrong in a decompilation project
+- Search the entire codebase for other references to the same struct
+- Check if other functions access fields at nearby offsets
+- Verify ALL affected functions still match after struct changes
+- Example: If you add a field at offset 0x14, search for all functions accessing that struct and verify they still compile to the correct offsets
+
+### Avoid Redundent Declarations
+
+After adding your decompiled function, check for any redundant extern declarations:
+
+1. **Search for existing declarations**: For each extern function you used, search the codebase to see if it's already declared in a header file:
+
+   - Use `grep -r "void functionName" include/` to search headers
+   - Use `grep -r "void functionName" src/*.h` to search source headers
+
+2. **Remove redundant externs**: If a function is already declared in an included header file, remove your extern declaration to avoid duplication
+
+3. **Verify the build still works** after removing redundant externs
+
+Example: If you added `extern void setCallback(void *);` but `task_scheduler.h` (which is already included) declares it, remove your extern declaration.
 
 ## Decompilation tips
 
