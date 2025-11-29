@@ -42,11 +42,20 @@ typedef struct {
     u8 padE[2];
 } func_80037E78_38A78_entry;
 
+typedef struct {
+    u8 pad[0x1E2];
+    u16 unk1E2;
+    u8 pad2[0x4];
+    u8 unk1E8[4];
+    u8 unk1EC;
+} func_80037F14_alloc;
+
 INCLUDE_ASM("asm/nonmatchings/38310", func_80037710_38310);
 
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_80035408_36008(void);
 extern void func_80012004_12C04(void);
+extern void func_80012FA8_13BA8(void);
 
 void func_800377FC_383FC(u8 *arg0) {
     s32 i;
@@ -81,7 +90,7 @@ void func_80037E40_38A40(func_80037E40_38A40_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80037F14_38B14(void *);
+void func_80037F14_38B14(func_80037E78_38A78_entry *);
 void func_80037FB0_38BB0(func_80037FB0_38BB0_arg *arg0);
 
 void func_80037E78_38A78(func_80037E78_38A78_entry *arg0) {
@@ -112,7 +121,22 @@ void func_80037E78_38A78(func_80037E78_38A78_entry *arg0) {
     setCallback(func_80037F14_38B14);
 }
 
-INCLUDE_ASM("asm/nonmatchings/38310", func_80037F14_38B14);
+void func_80037F14_38B14(func_80037E78_38A78_entry *arg0) {
+    func_80037F14_alloc *alloc = getCurrentAllocation();
+    s32 i;
+
+    for (i = 0; i < 2; i++) {
+        if (alloc->unk1E2 != 0) {
+            continue;
+        }
+        if (alloc->unk1EC >= 3) {
+            continue;
+        }
+        arg0[i].unk2 = (alloc->unk1EC * 32) - 32;
+        arg0[i].unkA = alloc->unk1E8[alloc->unk1EC];
+        debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0[i]);
+    }
+}
 
 void func_80037FB0_38BB0(func_80037FB0_38BB0_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
