@@ -62,7 +62,13 @@ void func_800B00D4_9FF84(func_800B00D4_arg *arg0, s32 arg1) {
     arg0->unkBC0 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B00E4_9FF94);
+void func_800B00E4_9FF94(void *arg) {
+    func_800B00D4_arg *arg0 = arg;
+    arg0->unkBBD = 1;
+    arg0->unkBBE = 0;
+    arg0->unkBBF = 0;
+    arg0->unkBC0 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B00FC_9FFAC);
 
@@ -307,7 +313,6 @@ typedef struct {
 } func_800B6FE8_arg;
 
 extern s32 D_800BAC80_AAB30;
-extern void func_800B00E4_9FF94(func_800B6FE8_arg *);
 
 s32 func_800B6FE8_A6E98(func_800B6FE8_arg *arg0) {
     GameState *gameState = getCurrentAllocation();
