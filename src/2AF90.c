@@ -1,12 +1,15 @@
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 extern s16 func_8006D21C_6DE1C(s32, s32, s32, s32);
 extern s32 distance_2d(s32, s32);
 extern s32 func_8002A4AC_2B0AC(void *, u8);
 extern s32 func_8002A7CC_2B3CC(void *);
+extern u16 D_8008E768_8F368[];
+extern u16 D_8008E75C_8F35C[];
 
 s32 func_8002ACFC_2B8FC(s32, s32, s16);
 
@@ -15,11 +18,15 @@ typedef struct {
     /* 0x04 */ Mat3x3Padded matrix;
     /* 0x24 */ u8 pad24[0xA];
     /* 0x2E */ s16 unk2E;
-    /* 0x30 */ u8 pad30[0x20];
+    /* 0x30 */ u8 pad30[0x7];
+    /* 0x37 */ u8 unk37;
+    /* 0x38 */ u8 pad38[0x14];
+    /* 0x4C */ u16 *unk4C;
     /* 0x50 */ u16 unk50;
     /* 0x52 */ u8 pad52[0x2];
     /* 0x54 */ u16 unk54;
-    /* 0x56 */ u8 pad56[0x7];
+    /* 0x56 */ u8 pad56[0x6];
+    /* 0x5C */ u8 unk5C;
     /* 0x5D */ u8 unk5D;
     /* 0x5E */ u8 unk5E;
     /* 0x5F */ u8 pad5F[0x2];
@@ -115,7 +122,34 @@ s16 func_8002B4B8_2C0B8(u16 arg0, u16 arg1) {
     return diff;
 }
 
-INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B4E4_2C0E4);
+#ifdef __sgi
+#pragma reorder_frequency
+#endif
+
+void func_8002B4E4_2C0E4(Func8002A390Arg *arg0) {
+    u16 val;
+
+    if (arg0->unk5C == 4) {
+        if (arg0->unk5D == 5) {
+            arg0->unk4C = D_8008E768_8F368;
+            val = arg0->unk4C[0];
+            arg0->unk37 = 0;
+            arg0->unk50 = val;
+            arg0->unk4C += 1;
+            func_80058220_58E20(0xBE, 1);
+        }
+    }
+    if (arg0->unk5C == 3) {
+        if (arg0->unk5D == 8) {
+            arg0->unk4C = D_8008E75C_8F35C;
+            val = arg0->unk4C[0];
+            arg0->unk37 = 0;
+            arg0->unk50 = val;
+            arg0->unk4C += 1;
+            func_80058220_58E20(0xAA, 1);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B598_2C198);
 
