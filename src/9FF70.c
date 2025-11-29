@@ -100,8 +100,6 @@ void func_800B00E4_9FF94(void *arg) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B00FC_9FFAC);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B02AC_A015C);
-
 typedef struct {
     u8 _pad0[0x434];
     s32 unk434;
@@ -112,6 +110,16 @@ typedef struct {
     s32 unk450;
     s32 unk454;
 } func_800B0300_arg;
+
+extern void func_8005D03C_5DC3C(void *);
+
+void func_800B02AC_A015C(void *arg) {
+    func_800B0300_arg *arg0 = arg;
+    func_8005D03C_5DC3C(arg0);
+    arg0->unk434 = arg0->unk434 + arg0->unk44C;
+    arg0->unk438 = arg0->unk438 + arg0->unk450;
+    arg0->unk43C = arg0->unk43C + arg0->unk454;
+}
 
 void func_800B0300_A01B0(func_800B0300_arg *arg0) {
     arg0->unk434 = arg0->unk434 + arg0->unk44C;
@@ -828,7 +836,6 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6890_A6740);
 extern void func_80055D10_56910(s32 index);
 extern s32 D_800BAC80_AAB30;
 extern void transformVector2(void *matrix, void *vector, s32 *output);
-extern void func_800B02AC_A015C(void *);
 
 typedef struct {
     u8 _pad0[0x44C];
