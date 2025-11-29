@@ -396,21 +396,13 @@ void func_8004D544_4E144(Struct_func_8004D784 *arg0) {
 }
 
 void func_8004D63C_4E23C(Struct_func_8004D784 *arg0) {
-    debugEnqueueCallback((u16)(arg0->unk28 + 8), 6, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(arg0->unk28 + 8, 6, func_8000FED0_10AD0, arg0);
 
     if (arg0->unk2E == 0) {
-        func_8003BD60_3C960(
-            arg0->unk10,
-            (s16)(arg0->unk0 + 0x38),
-            arg0->unk2,
-            0xFF,
-            arg0->unkC,
-            (s16)(arg0->unk28 + 8),
-            6
-        );
+        func_8003BD60_3C960(arg0->unk10, arg0->unk0 + 0x38, arg0->unk2, 0xFF, arg0->unkC, arg0->unk28 + 8, 6);
     } else {
         arg0->unk1C = arg0->unk0 + 0x38;
-        debugEnqueueCallback((u16)(arg0->unk28 + 8), 6, renderTextPalette, &arg0->unk1C);
+        debugEnqueueCallback(arg0->unk28 + 8, 6, renderTextPalette, &arg0->unk1C);
     }
 }
 
