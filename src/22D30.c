@@ -1,15 +1,23 @@
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
+#include "graphics.h"
 #include "task_scheduler.h"
+
+extern volatile s32 gControllerInputs;
 
 typedef struct {
     Node_70B00 node;
     void *unk1D8;
     void *unk1DC;
     s16 unk1E0;
-    u8 unk1E2;
-    u8 unk1E3;
+    union {
+        u16 unk1E2;
+        struct {
+            u8 unk1E2_hi;
+            u8 unk1E3;
+        } bytes;
+    } unk1E2_union;
     u8 unk1E4;
     u8 unk1E5;
     u8 unk1E6;
@@ -22,6 +30,7 @@ extern void D_800B07A0(void);
 extern void func_800B00C0_9FF70(void *);
 
 void func_800223CC_22FCC(void);
+void func_800225C8_231C8(void);
 void func_800226B0_232B0(void);
 void func_800226CC_232CC(void);
 
@@ -53,7 +62,78 @@ void func_80022304_22F04(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/22D30", func_800223CC_22FCC);
+void func_800223CC_22FCC(void) {
+    Struct22D30 *s0;
+    s32 inputs;
+
+    s0 = (Struct22D30 *)getCurrentAllocation();
+
+    switch (s0->unk1E6) {
+        case 0:
+            inputs = gControllerInputs;
+            if (inputs & 0x4000) {
+                func_800585C8_591C8(0x2E);
+                s0->unk1E6 = 0xA;
+            } else {
+                if (inputs & 0x40100) {
+                    if (s0->unk1E2_union.unk1E2 < (s0->unk1E4 - 1)) {
+                        s0->unk1E2_union.unk1E2 = s0->unk1E2_union.unk1E2 + 1;
+                        func_80058220_58E20(0x2B, 0);
+                        break;
+                    }
+                }
+                if (gControllerInputs & 0x80200) {
+                    if (s0->unk1E2_union.unk1E2 != 0) {
+                        s0->unk1E2_union.unk1E2 = s0->unk1E2_union.unk1E2 - 1;
+                        func_80058220_58E20(0x2B, 0);
+                        break;
+                    }
+                }
+                if (gControllerInputs & 0x8000) {
+                    s0->unk1E6 = 1;
+                    s0->unk1E0 = 0;
+                    func_80058220_58E20(0x2C, 0);
+                }
+            }
+            break;
+        case 1:
+            s0->unk1E0 = s0->unk1E0 + 1;
+            if ((u16)s0->unk1E0 == 0x11) {
+                s0->unk1E0 = 0;
+                s0->unk1E6 = 2;
+            }
+            break;
+        case 2:
+            inputs = gControllerInputs;
+            if (inputs & 0x4000) {
+                goto common_exit;
+            } else if (inputs & 0x8000) {
+                s0->unk1E5 = 1;
+                func_80058220_58E20(0x2D, 0);
+            }
+            break;
+        case 0xA:
+            inputs = gControllerInputs;
+            if (inputs & 0x4000) {
+            common_exit:
+                func_800585C8_591C8(0x2E);
+                s0->unk1E6 = 0;
+            } else if (inputs & 0x8000) {
+                s0->unk1E5 = 0x63;
+            }
+            break;
+    }
+
+    if (s0->unk1E5 != 0) {
+        func_80057564_58164(0xA);
+        if (s0->unk1E5 == 0x63) {
+            func_8006FDA0_709A0((Node_70B00 *)s0, 0xFF, 8);
+        } else {
+            func_8006FDA0_709A0((Node_70B00 *)s0, 0xFF, 0x10);
+        }
+        setGameStateHandler(&func_800225C8_231C8);
+    }
+}
 
 void func_800225C8_231C8(void) {
     Struct22D30 *s0;
@@ -67,7 +147,7 @@ void func_800225C8_231C8(void) {
         s0->unk1DC = freeNodeMemory(s0->unk1DC);
         if (s0->unk1E5 == 1) {
             terminateSchedulerWithCallback(func_800226B0_232B0);
-            D_800AFE8C_A71FC->unk8 = s0->unk1E3 + 1;
+            D_800AFE8C_A71FC->unk8 = s0->unk1E2_union.bytes.unk1E3 + 1;
             for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
                 D_800AFE8C_A71FC->unk9[i] = D_8008DCC0_8E8C0[i];
             }
