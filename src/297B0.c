@@ -14,7 +14,6 @@ extern s32 func_8002A390_2AF90(void *);
 extern void func_80028AEC_296EC(void *);
 extern void func_800291CC_29DCC(void);
 extern void func_80029EA8_2AAA8(void);
-extern void func_80029C90_2A890(void);
 extern void func_80029AA4_2A6A4(void);
 extern void func_8002900C_29C0C(void);
 extern void func_80029360_29F60(void);
@@ -60,14 +59,17 @@ typedef struct {
     /* 0x40 */ s32 unk40;
     /* 0x44 */ s32 unk44;
     /* 0x48 */ s32 unk48;
-    /* 0x4C */ u8 pad4C[0xE];
+    /* 0x4C */ u8 pad4C[0x4];
+    /* 0x50 */ u16 unk50;
+    /* 0x52 */ u8 pad52[0x6];
+    /* 0x58 */ u16 unk58;
     /* 0x5A */ s16 unk5A;
     /* 0x5C */ u8 unk5C;
     /* 0x5D */ u8 unk5D;
     /* 0x5E */ u8 unk5E;
     /* 0x5F */ u8 pad5F[0x2];
     /* 0x61 */ u8 unk61;
-    /* 0x62 */ u8 unk62;
+    /* 0x62 */ s8 unk62;
 } Func297D8Arg;
 
 typedef struct {
@@ -95,6 +97,8 @@ typedef struct {
 
 void func_8002A290_2AE90(void *);
 void func_8002A2D0_2AED0(void *);
+void func_80029C90_2A890(Func297D8Arg *);
+void func_8002A0DC_2ACDC(Func297D8Arg *);
 
 void func_80028BB0_297B0(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
@@ -290,7 +294,63 @@ void func_80029C40_2A840(Func297D8Arg *arg0) {
     setCallback(func_80029C90_2A890);
 }
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_80029C90_2A890);
+void func_80029C90_2A890(Func297D8Arg *arg0) {
+    AllocationData *alloc = getCurrentAllocation();
+
+    switch (arg0->unk5E) {
+        case 1:
+            if (arg0->unk62 != 0) {
+                arg0->unk5E = 2;
+                arg0->unk50 = arg0->unk50 + 1;
+                if (arg0->unk5C == 5) {
+                    func_800585C8_591C8(0xD6);
+                }
+            }
+            break;
+
+        case 2:
+            arg0->unk5A = arg0->unk5A + 1;
+            if ((s16)arg0->unk5A == 0x5A) {
+                arg0->unk5A = 0;
+                arg0->unk5E = 3;
+                arg0->unk50 = arg0->unk50 + 1;
+            }
+            break;
+
+        case 3:
+            if (arg0->unk62 != 0) {
+                arg0->unk5E = 0;
+                arg0->unk50 = arg0->unk58;
+                func_80001688_2288(arg0->model, -1);
+            }
+            break;
+
+        default:
+            if (func_8002A390_2AF90(arg0) != 0) {
+                setCallback(func_80028AEC_296EC);
+            } else if (arg0->unk5E == 0) {
+                arg0->unk5A = arg0->unk5A + 1;
+                if ((s16)arg0->unk5A == 0x4B) {
+                    arg0->unk5E = 1;
+                    arg0->unk5A = 0;
+                    arg0->unk50 = 0x16;
+                    if (arg0->unk5C >= 6) {
+                        arg0->unk50 = 0xA;
+                    }
+                    if (arg0->unk5C == 5) {
+                        func_80001688_2288(arg0->model, 0);
+                    }
+                } else if ((s16)arg0->unk5A == 0x37) {
+                    func_8002A0DC_2ACDC(arg0);
+                }
+            }
+            break;
+    }
+
+    func_8002A2D0_2AED0(arg0);
+    alloc->unk408 = arg0->matrix.unk14;
+    alloc->unk410 = arg0->matrix.unk1C;
+}
 
 void func_80029E58_2AA58(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
