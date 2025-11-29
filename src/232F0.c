@@ -1,6 +1,7 @@
 #include "3A1F0.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "EepromSaveData_type.h"
 #include "common.h"
 #include "task_scheduler.h"
 
@@ -101,6 +102,22 @@ void func_80023DA0_249A0(void) {
     func_800697F4_6A3F4(0xFF);
 }
 
-INCLUDE_ASM("asm/nonmatchings/232F0", func_80023DCC_249CC);
+s32 func_80023DCC_249CC(u8 arg0) {
+    s32 i;
+    s32 count = 0;
+    s32 limit = 3;
+
+    if (arg0 == 3) {
+        limit = 9;
+    }
+
+    for (i = 0; i < limit; i++) {
+        if (EepromSaveData->character_or_settings[arg0 * 3 + i] != 0) {
+            count++;
+        }
+    }
+
+    return count;
+}
 
 INCLUDE_RODATA("asm/nonmatchings/232F0", D_8009E288_9EE88);
