@@ -256,7 +256,43 @@ s32 func_800B2E38_A2CE8(void *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2E80_A2D30);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2EE4_A2D94);
+typedef struct {
+    u8 _pad0[0xB7C];
+    s16 unkB7C;
+    u8 _padB7E[0xC];
+    s32 unkB8C;
+    u8 _padB90[0x30];
+    u8 unkBC0;
+    u8 _padBC1[0xC];
+    s8 unkBCD;
+    u8 _padBCE[0xC];
+    u8 unkBDA;
+} func_800B2EE4_arg;
+
+extern void func_800B2E80_A2D30(func_800B2EE4_arg *arg0);
+extern void func_800B2818_A26C8(func_800B2EE4_arg *arg0, s8 arg1);
+extern s8 func_8005D818_5E418(func_800B2EE4_arg *arg0);
+
+void func_800B2EE4_A2D94(func_800B2EE4_arg *arg0, s8 arg1) {
+    switch (arg0->unkBC0) {
+        case 0:
+            func_800B2E80_A2D30(arg0);
+            func_800B2818_A26C8(arg0, arg1);
+            break;
+        case 1:
+            if (arg0->unkBDA != 0 || (arg0->unkB7C & 0x8000)) {
+                arg0->unkBC0 = arg0->unkBC0 + 1;
+            }
+            break;
+        case 2:
+            if (arg0->unkBDA != 0 || (!(arg0->unkB7C & 0x8000) && arg0->unkB8C == 0x200)) {
+                arg0->unkBCD = func_8005D818_5E418(arg0);
+            } else if (arg0->unkB7C & 0x8000) {
+                func_8005D818_5E418(arg0);
+            }
+            break;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2FD0_A2E80);
 
