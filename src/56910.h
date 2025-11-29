@@ -1,5 +1,6 @@
 #include "common.h"
 #include "displaylist.h"
+#include "6E840.h"
 
 typedef struct {
     void *start;
@@ -20,7 +21,9 @@ typedef struct {
     s32 unkC;
     s32 unk10;
     s32 unk14;
-    u8 padding2[0x2C - 0x18];
+    ColorData unk18;
+    ColorData unk20;
+    u8 padding2[0x4];
 } D_80090F90_91B90_item;
 
 typedef struct {
