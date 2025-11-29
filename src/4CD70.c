@@ -19,7 +19,6 @@ extern void func_8004E2D8_4EED8(void);
 extern void func_8004E410_4F010(void);
 extern void func_8000FED0_10AD0(void);
 extern void func_80058530_59130(s32, s32);
-extern void func_8004D544_4E144(void);
 extern s32 approximateSin(s16);
 extern void func_80069CF8_6A8F8(void);
 
@@ -107,13 +106,28 @@ void func_8004D98C_4E58C(Struct_func_8004F04C *arg0);
 
 typedef struct {
     s16 unk0;
-    u8 pad2[0x28];
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x2];
+    void *unkC;
+    char unk10[8];
+    s32 unk18;
+    u8 pad1C[0x2];
+    s16 unk1E;
+    s16 unk20;
+    u8 pad22[0x2];
+    void *unk24;
+    u8 pad28[0x2];
     u16 unk2A;
     s16 unk2C;
+    s16 unk2E;
 } Struct_func_8004D784;
 
 void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
 void func_8004D784_4E384(Struct_func_8004D784 *arg0);
+void func_8004D6FC_4E2FC(Struct_func_8004D784 *arg0);
+void func_8004D858_4E458(Struct_func_8004F04C *arg0);
 extern void func_8004D63C_4E23C(void *);
 extern void func_8003BD60_3C960(char *, s16, s16, s16, void *, u16, u16);
 extern char D_8009E8A8_9F4A8[];
@@ -321,7 +335,38 @@ void func_8004D490_4E090(u32 arg0, s32 arg1) {
 
 INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E884_9F484);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D544_4E144);
+extern char D_8009E884_9F484[];
+
+static const char D_8009E88C_9F48C[] = "%4dG";
+
+void func_8004D544_4E144(Struct_func_8004D784 *arg0) {
+    GameState *allocation = (GameState *)getCurrentAllocation();
+
+    if (allocation->unk5F == 1) {
+        arg0->unk2E = 0;
+    } else {
+        arg0->unk2E = 1;
+    }
+    arg0->unk4 = loadAsset_34CB50();
+    if (arg0->unk2E == 0) {
+        arg0->unk2 = -0x20;
+        arg0->unk8 = 0xF;
+        arg0->unkC = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+        sprintf(arg0->unk10, D_8009E884_9F484, arg0->unk18);
+    } else {
+        arg0->unk2 = -0x18;
+        arg0->unk8 = 0x10;
+        arg0->unkC = 0;
+        arg0->unk20 = 4;
+        arg0->unk24 = arg0->unk10;
+        arg0->unk1E = arg0->unk2;
+        sprintf(arg0->unk10, D_8009E88C_9F48C, arg0->unk18);
+    }
+    arg0->unk2C = 0;
+    arg0->unk2A = 0x1E;
+    setCleanupCallback(func_8004D858_4E458);
+    setCallback(func_8004D6FC_4E2FC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D63C_4E23C);
 
