@@ -16,7 +16,6 @@ USE_ASSET(_3F3EF0);
 extern void *loadAsset_34CB50(void);
 extern u8 randA(void);
 extern void func_8004E2D8_4EED8(void);
-extern void func_8004E410_4F010(void);
 extern void func_8000FED0_10AD0(void);
 extern void func_80058530_59130(s32, s32);
 extern s32 approximateSin(s16);
@@ -613,7 +612,7 @@ typedef struct {
     u8 unkA;
     u8 padB;
     s16 unkC;
-    u8 padE[0x2];
+    s16 unkE;
     u16 unk10;
     s16 unk12;
     s16 unk14;
@@ -625,6 +624,9 @@ typedef struct {
 } Struct_func_8004E134;
 
 void func_8004E614_4F214(Struct_func_8004E134 *arg0);
+void func_8004E410_4F010(Struct_func_8004E134 *arg0);
+void func_8004E4EC_4F0EC(Struct_func_8004E134 *arg0);
+void func_8004E580_4F180(Struct_func_8004E134 *arg0);
 
 void func_8004E134_4ED34(Struct_func_8004E134 *arg0) {
     u8 temp;
@@ -667,7 +669,30 @@ void func_8004E134_4ED34(Struct_func_8004E134 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E2D8_4EED8);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E410_4F010);
+void func_8004E410_4F010(Struct_func_8004E134 *arg0) {
+    s32 sinVal;
+
+    arg0->unk14 = arg0->unk14 + arg0->unk1A;
+    arg0->unk1C = (arg0->unk1C + 0x20) & 0x1FFF;
+
+    sinVal = approximateSin(arg0->unk1C);
+
+    arg0->unk12 = arg0->unk12 + (sinVal * (arg0->unk16 + 0x30)) / 8192;
+
+    if (arg0->unk1C == 0 || arg0->unk1C == 0x1000) {
+        arg0->unk16 = randA() & 0xF;
+    }
+
+    if ((s16)arg0->unk14 >= 0x6E1) {
+        func_80069CF8_6A8F8();
+    }
+
+    if (arg0->unkE != 0) {
+        func_8004E580_4F180(arg0);
+    } else {
+        func_8004E4EC_4F0EC(arg0);
+    }
+}
 
 void func_8004E4EC_4F0EC(Struct_func_8004E134 *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
