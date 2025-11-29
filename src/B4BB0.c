@@ -25,7 +25,25 @@ void func_800BBB18_B5418(func_800BB814_B5114_arg *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB2B0_B4BB0);
 
-INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB3D8_B4CD8);
+extern void func_800BB488_B4D88(void);
+
+void func_800BB3D8_B4CD8(s32 *arg0) {
+    GameState *state = (GameState *)getCurrentAllocation();
+    s32 i;
+
+    for (i = 0; i < state->unk5F; i++) {
+        if (state->players[i].unkB94 >= 0x3D) {
+            arg0[0] = 0x1C84A5B9;
+            arg0[1] = 0x0B1F0000;
+            arg0[2] = 0x02C792C4;
+            arg0[3] = 0x1CE44F4D;
+            arg0[4] = 0x0B1F0000;
+            arg0[5] = 0x02E17D96;
+            setCallbackWithContinue(func_800BB488_B4D88);
+            return;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB488_B4D88);
 
