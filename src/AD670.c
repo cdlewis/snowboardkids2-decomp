@@ -352,7 +352,65 @@ INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC084_AE444);
 
 INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC1AC_AE56C);
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC3D0_AE790);
+extern s32 func_8005C250_5CE50(void *, s32, s32);
+extern void func_80042340_42F40(void *);
+extern s16 D_800BCB70_AEF30[];
+extern s16 D_800BCB84_AEF44[];
+
+typedef struct {
+    u8 _pad[0x76];
+    u8 unk76;
+} Allocation_AE790;
+
+typedef struct {
+    u8 _pad0[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    u8 _pad20[0x1C];
+    s32 unk3C;
+    s32 unk40;
+    s32 unk44;
+    s16 unk48;
+    u16 unk4A;
+    u16 unk4C;
+    u8 unk4E;
+} func_800BC3D0_AE790_arg;
+
+void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *arg0) {
+    Allocation_AE790 *allocation;
+    s32 i;
+    void *posPtr;
+
+    allocation = getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        arg0->unk14 += arg0->unk3C;
+        arg0->unk18 += arg0->unk40;
+        arg0->unk1C += arg0->unk44;
+        arg0->unk48--;
+
+        if (arg0->unk48 == 0) {
+            func_80042340_42F40(&arg0->unk14);
+            func_80069CF8_6A8F8();
+        } else {
+            posPtr = &arg0->unk14;
+            if (func_8005C250_5CE50(posPtr, -1, 0x300000)) {
+                func_80042340_42F40(posPtr);
+                func_80069CF8_6A8F8();
+            }
+        }
+
+        arg0->unk4A += D_800BCB70_AEF30[arg0->unk4E];
+        arg0->unk4C += D_800BCB84_AEF44[arg0->unk4E];
+    }
+
+    createCombinedRotationMatrix(arg0, arg0->unk4A, arg0->unk4C);
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 typedef struct {
     u8 _pad[0x24];
