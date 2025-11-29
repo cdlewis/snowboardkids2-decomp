@@ -166,7 +166,33 @@ void func_8004C6F0_4D2F0(Struct_func_8004C6F0 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C728_4D328);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C928_4D528);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x2];
+    s16 unkC;
+    u8 padE[0x2];
+    s16 unk10;
+    u8 pad12[0x2];
+    s16 unk14;
+    u8 pad16[0x2];
+    s16 unk18;
+    u8 pad1A[0xA];
+    s16 unk24;
+    u8 pad26[0x1E];
+    Player *unk44;
+    s32 unk48;
+} Struct_func_8004C928;
+
+void func_8004C928_4D528(Struct_func_8004C928 *arg0) {
+    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_8000FED0_10AD0, arg0);
+    arg0->unk14 = arg0->unk44->unkBC5 + 1;
+    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_80010240_10E40, &arg0->unkC);
+    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_8000FED0_10AD0, &arg0->unk18);
+    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_80010240_10E40, &arg0->unk24);
+}
 
 typedef struct {
     u8 pad0[0x30];
