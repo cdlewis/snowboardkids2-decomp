@@ -36,7 +36,7 @@ typedef struct {
 
 void func_8004D19C_4DD9C(Struct_func_8004D134 *arg0);
 void func_8004D23C_4DE3C(Struct_func_8004D134 *arg0);
-void func_8004D298_4DE98(void);
+void func_8004D298_4DE98(Struct_func_8004D134 *arg0);
 void func_8004D338_4DF38(Struct_func_8004D134 *arg0);
 
 typedef struct {
@@ -246,7 +246,19 @@ void func_8004D23C_4DE3C(Struct_func_8004D134 *arg0) {
     debugEnqueueCallback((u16)(arg0->unkC + 8), 6, func_8000FED0_10AD0, arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D298_4DE98);
+void func_8004D298_4DE98(Struct_func_8004D134 *arg0) {
+    s32 sinVal;
+    s32 temp;
+
+    temp = arg0->unk14 + 0x80;
+    arg0->unk14 = temp;
+    sinVal = approximateSin((s16)temp);
+    arg0->unk0 = -((0x2000 - sinVal) / 20) - 0x38;
+    if (arg0->unk14 == 0x1000) {
+        func_80069CF8_6A8F8();
+    }
+    debugEnqueueCallback((u16)(arg0->unkC + 8), 6, func_8000FED0_10AD0, arg0);
+}
 
 void func_8004D338_4DF38(Struct_func_8004D134 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
