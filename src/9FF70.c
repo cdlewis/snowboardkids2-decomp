@@ -767,7 +767,55 @@ s32 func_800B3608_A34B8(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B36F0_A35A0);
+typedef struct {
+    u8 _pad0[0xB7E];
+    u16 unkB7E;
+    u8 _padB80[0x4];
+    s32 unkB84;
+    u8 _padB88[0x52];
+    u8 unkBDA;
+    u8 _padBDB[0x1];
+    u8 unkBDC;
+} func_800B36F0_arg;
+
+s32 func_800B36F0_A35A0(func_800B36F0_arg *arg0) {
+    u16 temp_a1 = arg0->unkB7E;
+    s32 var_v1;
+
+    if (temp_a1 & 0x8) {
+        var_v1 = 0x17;
+    } else {
+        var_v1 = 0;
+    }
+
+    if (temp_a1 & 0x4) {
+        var_v1 = 0x19;
+    }
+
+    if (temp_a1 & 0x1) {
+        var_v1 = 0x15;
+        if (arg0->unkB84 & 0x2) {
+            var_v1 = 0x13;
+        }
+    }
+
+    if ((arg0->unkB7E & 0x2)) {
+        var_v1 = 0x13;
+        if (arg0->unkB84 & 0x2) {
+            var_v1 = 0x15;
+        }
+    }
+
+    if (arg0->unkBDA != 0) {
+        u8 temp_a1_2 = arg0->unkBDC;
+        if (temp_a1_2 & 0x8) {
+            arg0->unkBDC = temp_a1_2 & 0xF7;
+            var_v1 = 0x15;
+        }
+    }
+
+    return var_v1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B3784_A3634);
 
