@@ -22,7 +22,6 @@ extern void func_80041810_42410(void *);
 extern void func_800415E8_421E8(void);
 extern void func_80042160_42D60(void);
 extern void func_80043E24_44A24(void);
-extern void func_800440B4_44CB4(void *);
 extern void func_800639F8_645F8(s32, DisplayListObject *);
 
 typedef struct {
@@ -1201,7 +1200,46 @@ void *func_80044050_44C50(Player *arg0) {
     return task;
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800440B4_44CB4);
+extern s32 D_80090980_91580[];
+extern s32 D_80090984_91584[];
+extern s32 D_80090988_91588[];
+extern s32 D_80090994_91594[];
+extern s32 D_80090996_91596[];
+
+typedef struct {
+    u8 _pad0[0x5C];
+    u8 unk5C;
+} Func44CB4Allocation;
+
+typedef struct {
+    u8 pad0[0x14]; /* 0x00 */
+    s32 unk14[3];  /* 0x14 */
+    void *unk20;   /* 0x20 */
+    void *unk24;   /* 0x24 */
+    void *unk28;   /* 0x28 */
+    s32 unk2C;     /* 0x2C */
+    u8 pad30[0xC]; /* 0x30 */
+    s16 unk3C;     /* 0x3C */
+} Func44CB4State;
+
+void func_80044500_45100(Func432D8Arg *);
+void func_800441A4_44DA4(Func44CB4State *);
+
+void func_800440B4_44CB4(Func44CB4State *arg0) {
+    Func44CB4Allocation *allocation;
+    s32 offset;
+
+    allocation = getCurrentAllocation();
+    offset = arg0->unk3C * 9;
+    createCombinedRotationMatrix(arg0, *(u16 *)&D_80090994_91594[offset], *(u16 *)&D_80090996_91596[offset]);
+    memcpy(&arg0->unk14, &D_80090988_91588[arg0->unk3C * 9], 0xC);
+    arg0->unk20 = (void *)(D_80090980_91580[arg0->unk3C * 9] + (D_80090984_91584[arg0->unk3C * 9] << 4));
+    arg0->unk24 = func_80055DC4_569C4(allocation->unk5C);
+    arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
+    arg0->unk2C = 0;
+    setCleanupCallback(func_80044500_45100);
+    setCallbackWithContinue(func_800441A4_44DA4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800441A4_44DA4);
 
