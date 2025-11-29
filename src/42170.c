@@ -19,23 +19,33 @@ extern void *D_8009A710_9B310;
 extern void *D_8009A720_9B320;
 extern void *D_8009A760_9B360;
 extern void func_80041810_42410(void *);
-extern void func_800415E8_421E8(void);
 extern void func_80042160_42D60(void);
 extern void func_80043E24_44A24(void);
 extern void func_800639F8_645F8(s32, DisplayListObject *);
 
 typedef struct {
-    s16 matrix[3][3]; /* 0x00 (0x12 bytes: 9 * 2), offset 0x0E is matrix[2][1] */
-    u8 pad12[0x6];    /* 0x12 */
-    s32 unk18;        /* 0x18 */
-    u8 pad1C[0x4];    /* 0x1C */
-    void *unk20;      /* 0x20 */
-    void *unk24;      /* 0x24 */
-    void *unk28;      /* 0x28 */
-    s32 unk2C;        /* 0x2C */
-    u8 pad30[0x10];   /* 0x30 */
-    s32 unk40;        /* 0x40 */
-    s32 unk44;        /* 0x44 */
+    u8 _pad0[0x1F0];   /* 0x00 */
+    s32 pos1F0;        /* 0x1F0 */
+    s32 pos1F4;        /* 0x1F4 */
+    s32 pos1F8;        /* 0x1F8 */
+    u8 _pad1FC[0x98C]; /* 0x1FC */
+    s32 unkB88;        /* 0xB88 */
+} Func41570StateUnk3C;
+
+typedef struct {
+    s16 matrix[3][3];           /* 0x00 (0x12 bytes: 9 * 2), offset 0x0E is matrix[2][1] */
+    u8 pad12[0x2];              /* 0x12 */
+    s32 unk14;                  /* 0x14 */
+    s32 unk18;                  /* 0x18 */
+    s32 unk1C;                  /* 0x1C */
+    void *unk20;                /* 0x20 */
+    void *unk24;                /* 0x24 */
+    void *unk28;                /* 0x28 */
+    s32 unk2C;                  /* 0x2C */
+    u8 pad30[0xC];              /* 0x30 */
+    Func41570StateUnk3C *unk3C; /* 0x3C */
+    s32 unk40;                  /* 0x40 */
+    s32 unk44;                  /* 0x44 */
 } Func41570State;
 
 typedef struct {
@@ -235,6 +245,9 @@ extern s32 func_80043718_44318(void *, void *);
 extern void func_80066444_67044(s32, void *);
 extern s32 approximateSin(s16);
 
+void func_800415E8_421E8(Func41570State *);
+void func_8004168C_4228C(Func41570State *);
+
 void func_80041570_42170(Func41570State *arg0) {
     getCurrentAllocation();
     createXRotationMatrix(arg0->matrix, 0x800);
@@ -248,7 +261,26 @@ void func_80041570_42170(Func41570State *arg0) {
     setCallbackWithContinue(func_800415E8_421E8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800415E8_421E8);
+void func_800415E8_421E8(Func41570State *arg0) {
+    s32 i;
+
+    arg0->unk14 = arg0->unk3C->pos1F0;
+    arg0->unk18 = arg0->unk3C->pos1F4;
+    arg0->unk1C = arg0->unk3C->pos1F8;
+
+    if ((arg0->unk3C->unkB88 & 0x20) == 0) {
+        setCallback(func_8004168C_4228C);
+    }
+
+    if (arg0->unk44 != 0) {
+        arg0->unk44 = 0;
+        func_80056B7C_5777C(&arg0->unk14, 0xE);
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 void func_8004168C_4228C(Func41570State *arg0) {
     Func43CA4GameState *allocation;
