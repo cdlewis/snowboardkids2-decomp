@@ -49,6 +49,9 @@ extern func_800B23AC_callback D_800BAB04_AA9B4[];
 typedef void (*func_800B65C8_callback)(void *);
 extern func_800B65C8_callback D_800BAC10_AAAC0[];
 
+typedef void (*func_800B6610_callback)(void *);
+extern func_800B6610_callback D_800BAC14_AAAC4[];
+
 typedef void (*func_800B1FCC_callback)(void *);
 extern func_800B1FCC_callback D_800BAAF4_AA9A4[];
 
@@ -384,7 +387,9 @@ void func_800B65F8_A64A8(func_800B00D4_arg *arg0) {
     arg0->unkBC0 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6610_A64C0);
+void func_800B6610_A64C0(func_800B00D4_arg *arg0) {
+    D_800BAC14_AAAC4[arg0->unkBBF](arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6640_A64F0);
 
