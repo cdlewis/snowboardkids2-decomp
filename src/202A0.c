@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "EepromSaveData_type.h"
 #include "common.h"
 #include "geometry.h"
 #include "overlay.h"
@@ -76,7 +77,7 @@ typedef struct {
     s16 unk30;
     s16 unk32;
     void *unk34;
-    s16 unk38;
+    u16 unk38;
 } Func80021238Arg;
 
 typedef struct {
@@ -312,7 +313,18 @@ void func_8002109C_21C9C(Func8002109CArg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80021184_21D84(void);
+typedef struct {
+    u8 _pad0[0x4];
+    u8 unk4;
+    u8 _pad5[0x2];
+    u8 unk7;
+} D_800AFE8C_type_202A0;
+
+extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
+extern EepromSaveData_type *EepromSaveData;
+extern u16 D_8009ADE0_9B9E0;
+
+void func_80021184_21D84(Func80021238Arg *arg0);
 void func_8002115C_21D5C(Func80021238Arg *arg0);
 void func_80021238_21E38(Func80021238Arg *arg0);
 
@@ -336,7 +348,26 @@ void func_8002115C_21D5C(Func80021238Arg *arg0) {
     setCallback(&func_80021184_21D84);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80021184_21D84);
+void func_80021184_21D84(Func80021238Arg *arg0) {
+    u16 temp;
+
+    debugEnqueueCallback(0xA, 0, func_80038420_39020, arg0);
+
+    if (D_800AFE8C_A71FC->unk4 == 0) {
+        if (EepromSaveData->save_slot_status[0] == 5) {
+            if ((D_8009ADE0_9B9E0 & 7) == 0) {
+                temp = arg0->unk38 + 1;
+                arg0->unk38 = temp;
+                if (temp < 0x15) {
+                    // continue
+                } else {
+                    arg0->unk38 = 0x13;
+                }
+            }
+            debugEnqueueCallback(8, 7, func_8000FED0_10AD0, &arg0->unk30);
+        }
+    }
+}
 
 void func_80021238_21E38(Func80021238Arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
@@ -344,13 +375,6 @@ void func_80021238_21E38(Func80021238Arg *arg0) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80021270_21E70);
-
-typedef struct {
-    u8 _pad0[0x7];
-    u8 unk7;
-} D_800AFE8C_type_202A0;
-
-extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
 
 extern u16 D_8008DAC0_8E6C0[];
 extern u16 D_8008DAC8_8E6C8[];
