@@ -251,7 +251,6 @@ extern s32 D_80090AAC_916AC;
 extern s8 D_80090950_91550;
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern u16 func_800625A4_631A4(void *, void *);
-extern s32 func_80043718_44318(void *, void *);
 extern void func_80066444_67044(s32, void *);
 extern s32 approximateSin(s16);
 
@@ -1247,7 +1246,30 @@ Func43374State *func_800436B4_442B4(Player *arg0) {
     return task;
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80043718_44318);
+s32 func_80043718_44318(void *arg0_void, void *arg1_void) {
+    Func4393CArg *arg0 = (Func4393CArg *)arg0_void;
+    u8 *arg1 = (u8 *)arg1_void;
+    s8 check;
+
+    arg0->unk42--;
+
+    if ((s16)arg0->unk42 != 0) {
+        return 0;
+    }
+
+    loadAssetMetadata((void *)((s32)arg0 + 4), (void *)arg0->unk0, (s8)arg1[(s16)arg0->unk40 * 2 + 1]);
+
+    arg0->unk42 = (s8)arg1[(s16)arg0->unk40 * 2];
+    arg0->unk40++;
+
+    check = arg1[(s16)arg0->unk40 * 2];
+    if (check != 0) {
+        return 0;
+    }
+
+    arg0->unk40--;
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800437C4_443C4);
 
