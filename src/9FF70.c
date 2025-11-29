@@ -281,7 +281,49 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B67E4_A6694);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6890_A6740);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6D14_A6BC4);
+extern void func_80055D10_56910(s32 index);
+extern s32 D_800BAC80_AAB30;
+extern void transformVector2(void *matrix, void *vector, s32 *output);
+extern void func_800B02AC_A015C(void *);
+extern void func_800B40D4_A3F84(void *);
+extern s32 func_8005D308_5DF08(void *, s32);
+
+typedef struct {
+    u8 _pad0[0x44C];
+    s32 unk44C;
+    u8 _pad450[0x520];
+    s32 unk970;
+    u8 _pad974[0x210];
+    s32 unkB84;
+    u8 _padB88[0x4];
+    s32 unkB8C;
+    u8 _padB90[0x2F];
+    u8 unkBBF;
+} func_800B6D14_arg;
+
+s32 func_800B6D14_A6BC4(func_800B6D14_arg *arg0) {
+    GameState *gameState = getCurrentAllocation();
+
+    func_80055D10_56910(gameState->memoryPoolId);
+    func_800B40D4_A3F84(arg0);
+
+    if (arg0->unkB8C != 0) {
+        arg0->unkB8C = arg0->unkB8C - 1;
+    } else {
+        arg0->unkB8C = 0xB4;
+        arg0->unkBBF = arg0->unkBBF + 1;
+    }
+
+    if (arg0->unkB8C < 0x12) {
+        arg0->unkB84 = arg0->unkB84 | 0x2000;
+        transformVector2(&D_800BAC80_AAB30, &arg0->unk970, &arg0->unk44C);
+    }
+
+    func_800B02AC_A015C(arg0);
+    func_8005D308_5DF08(arg0, 0xD);
+
+    return 0;
+}
 
 typedef struct {
     u8 _pad0[0x44C];
@@ -298,12 +340,7 @@ typedef struct {
     u8 unkBC0;
 } func_800B6DB8_arg;
 
-extern void func_80055D10_56910(s32 index);
 extern s32 D_800BAC8C_AAB3C;
-extern void transformVector2(void *matrix, void *vector, s32 *output);
-extern void func_800B02AC_A015C(void *);
-extern void func_800B40D4_A3F84(void *);
-extern s32 func_8005D308_5DF08(void *, s32);
 extern void func_8006FDC8_709C8(u16 arg0, u8 arg1, u8 arg2);
 
 s32 func_800B6DB8_A6C68(func_800B6DB8_arg *arg0) {
@@ -341,8 +378,6 @@ typedef struct {
     u8 _padB88[0x4];
     s32 unkB8C;
 } func_800B6FE8_arg;
-
-extern s32 D_800BAC80_AAB30;
 
 s32 func_800B6FE8_A6E98(func_800B6FE8_arg *arg0) {
     GameState *gameState = getCurrentAllocation();
