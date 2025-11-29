@@ -176,9 +176,9 @@ typedef struct {
     DisplayListObject unk3C;       /* 0x3C */
     DisplayListObject unk78;       /* 0x78 */
     Func44BBCPointerTarget *unkB4; /* 0xB4 */
-    u8 _padB8[0x4];                /* 0xB8 */
+    u8 unkB8[0x4];                 /* 0xB8 */
     s32 unkBC;                     /* 0xBC */
-    u8 _padC0[0x4];                /* 0xC0 */
+    s32 unkC0;                     /* 0xC0 */
     s16 unkC4;                     /* 0xC4 - counter */
     s16 unkC6;                     /* 0xC6 - value copied to unkB74 */
     u16 unkC8;                     /* 0xC8 */
@@ -1581,7 +1581,49 @@ end:
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044990_45590);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044AB8_456B8);
+void func_80044BBC_457BC(Func44BBCArg *);
+
+void func_80044AB8_456B8(Func44BBCArg *arg0) {
+    Func43CA4GameState *gameState;
+    s32 output[3];
+
+    gameState = getCurrentAllocation();
+    if (gameState->unk76 != 0) {
+        goto end;
+    }
+
+    if (arg0->unkC0 > 0x20000) {
+        goto skip_rotation;
+    }
+
+    {
+        s16 temp = arg0->unkC6;
+        if (temp != 0) {
+            arg0->unkC6 = temp + 0x40;
+        }
+    }
+
+    createCombinedRotationMatrix(arg0, arg0->unkC6, arg0->unkC8);
+
+skip_rotation:
+    transformVector2(arg0->unkB8, arg0, output);
+    arg0->unk14 = arg0->unk14 + output[0];
+    arg0->unk18 = arg0->unk18 + output[1];
+    arg0->unk1C = arg0->unk1C + output[2];
+    memcpy(arg0->unkB4->unkB44, &arg0->unk14, 0xC);
+    arg0->unkB4->unkB74 = arg0->unkC6;
+
+    if (arg0->unkC0 != 0) {
+        arg0->unkC0 = arg0->unkC0 - 0x2000;
+    } else {
+        arg0->unkC4 = 4;
+        arg0->unkB4->unkBCE |= 4;
+        setCallback(func_80044BBC_457BC);
+    }
+
+end:
+    func_80044578_45178(arg0);
+}
 
 void func_80044BBC_457BC(Func44BBCArg *arg0) {
     Func43CA4GameState *gameState = (Func43CA4GameState *)getCurrentAllocation();
