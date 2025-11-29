@@ -2,6 +2,7 @@
 #include "5E590.h"
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
@@ -1449,7 +1450,9 @@ typedef struct {
 } func_800B6DB8_arg;
 
 extern s32 D_800BAC8C_AAB3C;
+extern s32 D_800BAC98_AAB48;
 extern void func_8006FDC8_709C8(u16 arg0, u8 arg1, u8 arg2);
+extern void func_8004D364_4DF64(u8 arg0);
 
 s32 func_800B6DB8_A6C68(func_800B6DB8_arg *arg0) {
     s32 pad[12];
@@ -1474,7 +1477,96 @@ s32 func_800B6DB8_A6C68(func_800B6DB8_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6E5C_A6D0C);
+typedef struct {
+    u8 _pad0[0x434];
+    s32 unk434;
+    s32 unk438;
+    s32 unk43C;
+    s32 unk440;
+    s32 unk444;
+    s32 unk448;
+    s32 unk44C;
+    s32 unk450;
+    s32 unk454;
+    u8 _pad458[0x518];
+    Mat3x3Padded unk970;
+    u8 _pad990[0x104];
+    s16 unkA94;
+    u8 _padA96[0xEE];
+    s32 unkB84;
+    u8 _padB88[0x4];
+    s32 unkB8C;
+    u8 _padB90[0x4];
+    s16 unkB94;
+    u8 _padB96[0x6];
+    s16 unkB9C;
+    u8 _padB9E[0x1A];
+    u8 unkBB8;
+    u8 _padBB9[0x4];
+    u8 unkBBD;
+    u8 unkBBE;
+    u8 unkBBF;
+    u8 unkBC0;
+    u8 _padBC1[0x2];
+    u8 unkBC3;
+    u8 _padBC4[0x1];
+    u8 unkBC5;
+    u8 _padBC6[0x1];
+    u8 unkBC7;
+} func_800B6E5C_arg;
+
+s32 func_800B6E5C_A6D0C(func_800B6E5C_arg *arg0) {
+    s32 sp10[3];
+    s32 pad[8];
+    GameState *gameState;
+    D_80090F90_91B90_item *item;
+
+    gameState = getCurrentAllocation();
+    item = func_80055D10_56910(gameState->memoryPoolId);
+
+    if (arg0->unkBC0 == 0) {
+        arg0->unkA94 = 0x1000;
+        arg0->unkB9C = 0;
+        arg0->unkB94 = 0;
+        arg0->unkB84 = arg0->unkB84 | 0x200;
+        arg0->unkBC0++;
+        arg0->unkBC5++;
+
+        createYRotationMatrix(&arg0->unk970, 0x1000);
+        transformVector2(&D_800BAC98_AAB48, &arg0->unk970, sp10);
+
+        arg0->unk434 = item->unkC + sp10[0];
+        arg0->unk438 = item->unk10 + sp10[1];
+        arg0->unk43C = item->unk14 + sp10[2];
+
+        memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+
+        arg0->unkBC3 = 1;
+        arg0->unkB8C = 0x32;
+
+        func_8006FDC8_709C8(arg0->unkBB8, 0, 0x10);
+
+        if (arg0->unkBC7 == 0) {
+            if (arg0->unkBC5 == gameState->unk74) {
+                func_8004D364_4DF64(arg0->unkBB8);
+            }
+        }
+    }
+
+    func_800B40D4_A3F84(arg0);
+    transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->unk44C);
+    func_800B02AC_A015C(arg0);
+
+    if (arg0->unkB8C != 0) {
+        arg0->unkB8C--;
+    } else {
+        arg0->unkB8C = 0x2C;
+        arg0->unkBBF++;
+    }
+
+    func_8005D308_5DF08(arg0, 0xD);
+    return 0;
+}
 
 typedef struct {
     u8 _pad0[0x44C];
