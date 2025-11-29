@@ -18,6 +18,7 @@ extern void *D_8009A700_9B300;
 extern void *D_8009A710_9B310;
 extern void *D_8009A720_9B320;
 extern void *D_8009A760_9B360;
+extern Mat3x3Padded D_8009A8B0_9B4B0;
 extern void func_80041810_42410(void *);
 extern void func_80042160_42D60(void);
 extern void func_80043E24_44A24(void);
@@ -1077,8 +1078,6 @@ Func42FC0TaskMem *func_80042FC0_43BC0(void *arg0) {
     return task;
 }
 
-extern void func_8004309C_43C9C(void);
-
 typedef struct {
     u8 pad0[0x24];
     void *unk24;
@@ -1103,10 +1102,13 @@ typedef struct {
     u8 pad6C[0xC];  /* 0x6C */
     Player *unk78;  /* 0x78 */
     s32 unk7C;      /* 0x7C */
-    s16 unk80;      /* 0x80 */
+    u16 unk80;      /* 0x80 */
     u16 unk82;      /* 0x82 */
     s16 unk84;      /* 0x84 */
 } Func43018State;
+
+void func_8004309C_43C9C(Func43018State *arg0);
+void func_8004320C_43E0C(Func43018State *arg0);
 
 void func_80043018_43C18(Func43018State *arg0) {
     getCurrentAllocation();
@@ -1123,7 +1125,52 @@ void func_80043018_43C18(Func43018State *arg0) {
     setCallbackWithContinue(func_8004309C_43C9C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_8004309C_43C9C);
+void func_8004309C_43C9C(Func43018State *arg0) {
+    Func43CA4GameState *gameState;
+    s32 i;
+    Mat3x3Padded matrix;
+
+    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
+    func_8006B084_6BC84(&D_8009A8B0_9B4B0, (u8 *)arg0->unk78 + 0x3F8, arg0);
+    scaleMatrix((Mat3x3Padded *)arg0, arg0->unk84, arg0->unk84, arg0->unk84);
+
+    arg0->unk82 += 0x300;
+    createZRotationMatrix(&matrix, arg0->unk82);
+
+    matrix.unk14 = 0;
+    matrix.unk18 = 0xBB333;
+    matrix.unk1C = 0xFFEA0000;
+
+    func_8006B084_6BC84(&matrix, arg0, (u8 *)arg0 + 0x3C);
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)((u8 *)arg0 + 0x3C));
+    }
+
+    if (arg0->unk78->unkB84 & 0x80000) {
+        arg0->unk78->unkB9A = 0;
+    }
+
+    if (arg0->unk78->unkB9A != 0) {
+        if (gameState->unk76 == 0) {
+            arg0->unk78->unkB9A--;
+            if (arg0->unk78->unkB9A == 0) {
+                if (arg0->unk78->unkBBB == 0x10) {
+                    arg0->unk78->unkB9A++;
+                }
+            }
+            if (arg0->unk84 != 0x2000) {
+                arg0->unk84 += 0x200;
+            }
+        }
+    } else {
+        arg0->unk78->unkBD0 = 0;
+        arg0->unk7C = 0x40000;
+        setCallback(func_8004320C_43E0C);
+    }
+}
 
 void func_8004320C_43E0C(Func43018State *arg0) {
     Func43CA4GameState *gameState;
