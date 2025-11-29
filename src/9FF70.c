@@ -827,7 +827,18 @@ void func_800B6610_A64C0(func_800B00D4_arg *arg0) {
     D_800BAC14_AAAC4[arg0->unkBBF](arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6640_A64F0);
+s32 func_800B6640_A64F0(func_800B30B0_arg *arg0) {
+    arg0->unkB8C = 10;
+    arg0->unkB84 = arg0->unkB84 | 0x180;
+
+    if (arg0->unkB84 & 2) {
+        arg0->unkBC0 = 1;
+        arg0->unkB84 = arg0->unkB84 & ~2;
+    }
+
+    arg0->unkBBF = arg0->unkBBF + 1;
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6688_A6538);
 
