@@ -133,6 +133,8 @@ void func_8004D6FC_4E2FC(Struct_func_8004D784 *arg0);
 void func_8004D858_4E458(Struct_func_8004F04C *arg0);
 extern void func_8003BD60_3C960(char *, s16, s16, s16, void *, s16, s16);
 static const char D_8009E880_9F480[] = "%5d";
+extern char D_8009E89C_9F49C[];
+extern char D_8009E8A0_9F4A0[];
 extern char D_8009E8A8_9F4A8[];
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
@@ -998,8 +1000,8 @@ void func_8004EBC8_4F7C8(void *arg0) {
     }
 }
 
-void func_8004ED94_4F994(Struct_func_8004FF28 *arg0);
 void func_8004ECA4_4F8A4(Struct_func_8004FF28 *arg0);
+void func_8004ED94_4F994(Struct_func_8004FF28 *arg0);
 
 void func_8004EC08_4F808(Struct_func_8004FF28 *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
@@ -1020,7 +1022,30 @@ void func_8004EC08_4F808(Struct_func_8004FF28 *arg0) {
     setCallback(func_8004ECA4_4F8A4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004ECA4_4F8A4);
+void func_8004ECA4_4F8A4(Struct_func_8004FF28 *arg0) {
+    char buffer[0x10];
+    GameState *allocation;
+
+    allocation = getCurrentAllocation();
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->unk4);
+
+    if (arg0->unk12 != allocation->unk5A) {
+        arg0->unk10 = 9;
+        arg0->unk12 = allocation->unk5A;
+    }
+
+    if (arg0->unk10 & 1) {
+        sprintf(buffer, D_8009E89C_9F49C, allocation->unk5A);
+    } else {
+        sprintf(buffer, D_8009E8A0_9F4A0, allocation->unk5A);
+    }
+
+    if (arg0->unk10 != 0) {
+        arg0->unk10--;
+    }
+
+    func_8003BD60_3C960(buffer, arg0->unk4 + 0x10, arg0->unk6 + 0x10, 0xFF, arg0->unk0, 8, 1);
+}
 
 void func_8004ED94_4F994(Struct_func_8004FF28 *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
