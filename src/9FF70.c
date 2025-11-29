@@ -153,7 +153,63 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2818_A26C8);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2950_A2800);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2A3C_A28EC);
+extern void func_80059ADC_5A6DC(void *);
+extern void func_800B40D4_A3F84(void *);
+extern void func_800B42A8_A4158(void *, s32, s32, s32);
+extern void func_800B00FC_9FFAC(void *);
+extern s32 func_8005D308_5DF08(void *, s32);
+extern void func_80058CFC_598FC(void *);
+
+typedef struct {
+    u8 _pad0[0x450];
+    s32 unk450;
+    u8 _pad454[0x65C];
+    s32 unkAB0;
+    u8 _padAB4[0x4];
+    s32 unkAB8;
+    u8 _padABC[0xC8];
+    s32 unkB84;
+    u8 _padB88[0x37];
+    u8 unkBBF;
+    u8 unkBC0;
+    u8 _padBC1[0xC];
+    s8 unkBCD;
+} func_800B2A3C_arg;
+
+s32 func_800B2A3C_A28EC(func_800B2A3C_arg *arg0) {
+    s32 pad[16];
+
+    if (arg0->unkB84 & 1) {
+        if (arg0->unkBC0 < 3) {
+            func_800B27FC_A26AC((func_800B27FC_arg *)arg0);
+            if (arg0->unkBCD < 0) {
+                arg0->unkBC0 = 0;
+                arg0->unkBBF = arg0->unkBBF + 1;
+                return 1;
+            } else {
+                arg0->unkBBF = arg0->unkBCD + 6;
+                arg0->unkBC0 = 0;
+                func_80059ADC_5A6DC(arg0);
+                return 1;
+            }
+        } else {
+            func_800B00D4_9FF84((func_800B00D4_arg *)arg0, 1);
+            return 1;
+        }
+    } else {
+        arg0->unk450 = arg0->unk450 - arg0->unkAB8;
+        func_800B40D4_A3F84(arg0);
+        func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
+        func_800B00FC_9FFAC(arg0);
+        arg0->unkBC0 = arg0->unkBC0 - 1;
+        if (arg0->unkBC0 == 0) {
+            func_800B00D4_9FF84((func_800B00D4_arg *)arg0, 0);
+        }
+        func_8005D308_5DF08(arg0, 3);
+        func_80058CFC_598FC(arg0);
+        return 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2B3C_A29EC);
 
@@ -241,7 +297,6 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B5478_A5328);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B55B4_A5464);
 
-extern void func_800B40D4_A3F84(void *);
 extern void func_8005D180_5DD80(void *, s32);
 extern void func_8005D804_5E404(void *, u8, u8);
 
@@ -313,7 +368,6 @@ extern void func_80055D10_56910(s32 index);
 extern s32 D_800BAC80_AAB30;
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern void func_800B02AC_A015C(void *);
-extern s32 func_8005D308_5DF08(void *, s32);
 
 typedef struct {
     u8 _pad0[0x44C];
