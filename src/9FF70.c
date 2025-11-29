@@ -228,7 +228,12 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6488_A6338);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B65C8_A6478);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B65F8_A64A8);
+void func_800B65F8_A64A8(func_800B00D4_arg *arg0) {
+    arg0->unkBBD = 3;
+    arg0->unkBBE = 0;
+    arg0->unkBBF = 0;
+    arg0->unkBC0 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6610_A64C0);
 
