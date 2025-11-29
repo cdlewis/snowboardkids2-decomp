@@ -7,7 +7,6 @@
 
 extern void func_8002AE80_2BA80(void *);
 extern void func_8002B248_2BE48(void *);
-extern void func_80029954_2A554(void);
 extern void func_80028C08_29808(void);
 extern void func_80028DF0_299F0(void);
 extern s32 func_8002A390_2AF90(void *);
@@ -55,19 +54,22 @@ typedef struct {
     /* 0x04 */ Mat3x3Padded matrix;
     /* 0x24 */ u8 pad24[0x8];
     /* 0x2C */ u16 rotation;
-    /* 0x2E */ u8 pad2E[0x12];
+    /* 0x2E */ u8 pad2E[0xE];
+    /* 0x3C */ void *callback;
     /* 0x40 */ s32 unk40;
     /* 0x44 */ s32 unk44;
     /* 0x48 */ s32 unk48;
     /* 0x4C */ u8 pad4C[0x4];
     /* 0x50 */ u16 unk50;
-    /* 0x52 */ u8 pad52[0x6];
+    /* 0x52 */ u8 pad52[0x4];
+    /* 0x56 */ u16 unk56;
     /* 0x58 */ u16 unk58;
     /* 0x5A */ s16 unk5A;
     /* 0x5C */ u8 unk5C;
     /* 0x5D */ u8 unk5D;
     /* 0x5E */ u8 unk5E;
-    /* 0x5F */ u8 pad5F[0x2];
+    /* 0x5F */ u8 unk5F;
+    /* 0x60 */ u8 pad60[0x1];
     /* 0x61 */ u8 unk61;
     /* 0x62 */ s8 unk62;
 } Func297D8Arg;
@@ -99,6 +101,8 @@ void func_8002A290_2AE90(void *);
 void func_8002A2D0_2AED0(void *);
 void func_80029C90_2A890(Func297D8Arg *);
 void func_8002A0DC_2ACDC(Func297D8Arg *);
+void func_80029954_2A554(Func297D8Arg *);
+void func_8002A044_2AC44(Func297D8Arg *);
 
 void func_80028BB0_297B0(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
@@ -270,7 +274,46 @@ void func_800298F8_2A4F8(Func297D8Arg *arg0) {
     setCallback(func_80029954_2A554);
 }
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_80029954_2A554);
+void func_80029954_2A554(Func297D8Arg *arg0) {
+    s32 setCallbackFlag;
+    AllocationData *alloc;
+
+    alloc = getCurrentAllocation();
+    setCallbackFlag = 0;
+
+    if (func_8002A390_2AF90(arg0) != 0) {
+        setCallback(func_80028AEC_296EC);
+        setCallbackFlag = 1;
+    }
+
+    func_8002A2D0_2AED0(arg0);
+
+    alloc->unk408 = arg0->matrix.unk14;
+    alloc->unk410 = arg0->matrix.unk1C;
+
+    if (arg0->unk5A != 0) {
+        arg0->unk5A--;
+        if (arg0->unk5A == 1) {
+            func_8002A044_2AC44(arg0);
+        }
+    }
+
+    if ((alloc->unk42A == 0x11) && (setCallbackFlag ^ 1)) {
+        u16 savedUnk50 = arg0->unk50;
+        u8 savedUnk5E = arg0->unk5E;
+
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = func_80029954_2A554;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(func_8002A200_2AE00);
+    }
+
+    if (arg0->unk5D == 9) {
+        arg0->unk62 = 0;
+    }
+}
 
 void func_80029A54_2A654(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
