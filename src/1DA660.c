@@ -19,6 +19,7 @@ extern void func_8000FED0_10AD0(void);
 extern void func_800630F0_63CF0(s32, void *);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern void func_80038420_39020(void);
+extern void func_800B0218_1DA7B8(void *, u8);
 extern u8 identityMatrix[];
 extern void *D_800B1140_1DB6E0;
 extern char D_800B115C_1DB6FC[];
@@ -76,6 +77,17 @@ typedef struct {
 } func_800B0BEC_arg;
 
 typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 _padE[2];
+} func_800B0980_element;
+
+typedef struct {
     s16 m[9];
     s16 _pad;
     s32 unk14;
@@ -91,6 +103,8 @@ void func_800B0DF8_1DB398(void *);
 void func_800B05DC_1DAB7C(func_800B08FC_arg *);
 void func_800B0638_1DABD8(func_800B08FC_arg *);
 void func_800B0720_1DACC0(func_800B08FC_arg *);
+void func_800B0A54_1DAFF4(void *);
+void func_800B0BC0_1DB160(func_800B0FE0_arg *);
 void func_800B0E94_1DB434(void *);
 void func_800B0EEC_1DB48C(func_800B0FE0_arg *);
 void func_800B0F88_1DB528(void *);
@@ -180,7 +194,25 @@ void func_800B0964_1DAF04(func_800B08FC_arg *arg0) {
     func_80002014_2C14(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0980_1DAF20);
+void func_800B0980_1DAF20(func_800B0980_element *arg0) {
+    s32 i;
+    void *allocation;
+
+    getCurrentAllocation();
+    allocation = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
+
+    for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+        arg0[i].unk4 = allocation;
+        arg0[i].unkA = 0xFF;
+        arg0[i].unkD = 0;
+        arg0[i].unkC = 0;
+        *((u8 *)arg0 + i + 0x40) = 0;
+        func_800B0218_1DA7B8(&arg0[i], i);
+    }
+
+    setCleanupCallback(func_800B0BC0_1DB160);
+    setCallback(func_800B0A54_1DAFF4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0A54_1DAFF4);
 
