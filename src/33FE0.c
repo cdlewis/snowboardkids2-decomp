@@ -1,16 +1,15 @@
 #include "56910.h"
 #include "common.h"
 #include "task_scheduler.h"
+#include "overlay.h"
 
 extern void *func_80035F80_36B80(s32);
 extern void func_80034D58_35958(void);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern void func_8000FED0_10AD0(void);
 
-extern u8 D_459310[];
-extern u8 D_459E00[];
-extern u8 D_41A1D0[];
-extern u8 D_41AD80[];
+USE_ASSET(_459310);
+USE_ASSET(_41A1D0);
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -105,7 +104,7 @@ void func_800333E0_33FE0(Func33FE0Arg *arg0) {
     s32 i;
 
     getCurrentAllocation();
-    allocation = dmaRequestAndUpdateStateWithSize(D_459310, D_459E00, 0x2278);
+    allocation = dmaRequestAndUpdateStateWithSize(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
     setCleanupCallback(func_8003365C_3425C);
 
     for (i = 12; i >= 0; i--) {
@@ -221,7 +220,7 @@ void func_8003498C_3558C(Func34574Arg *arg0) {
 }
 
 void func_800349B8_355B8(Func349B8Arg *arg0) {
-    void *temp_s1 = dmaRequestAndUpdateStateWithSize(D_41A1D0, D_41AD80, 0x1B48);
+    void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
 
     setCleanupCallback(&func_80034A94_35694);
 
@@ -280,7 +279,7 @@ void func_80035074_35C74(Func358FCStruct *arg0) {
 void func_800350AC_35CAC(Func350ACArg *arg0) {
     void *temp_s1;
 
-    temp_s1 = dmaRequestAndUpdateStateWithSize(D_459310, D_459E00, 0x2278);
+    temp_s1 = dmaRequestAndUpdateStateWithSize(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
     setCleanupCallback(func_80035234_35E34);
 
     arg0->unk0 = -0x52;

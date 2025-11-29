@@ -1,6 +1,10 @@
 #include "20F0.h"
 #include "common.h"
+#include "overlay.h"
 #include "task_scheduler.h"
+
+USE_ASSET(_414CF0);
+USE_ASSET(_418520);
 
 extern void func_8000056C_116C(s32, s32, void *);
 extern void func_80000460_1060(s32, void *, void *);
@@ -61,9 +65,6 @@ typedef struct {
 } Struct163F8;
 
 extern void func_800394BC_3A0BC(void *, s32);
-extern u8 D_414CF0[];
-extern u8 D_418520[];
-extern u8 D_419440[];
 
 void func_800163CC_16FCC(Struct163F8 *);
 void func_800163A0_16FA0(Struct163F8 *);
@@ -83,7 +84,7 @@ void func_800163F8_16FF8(Struct163F8 *arg0) {
 }
 
 void func_80016434_17034(Struct163F8 *arg0) {
-    arg0->unk38 = dmaRequestAndUpdateStateWithSize(D_414CF0, D_418520, 0x7B50);
+    arg0->unk38 = dmaRequestAndUpdateStateWithSize(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
     setCleanupCallback(func_800163A0_16FA0);
     setCallback(func_800163F8_16FF8);
 }
@@ -115,7 +116,7 @@ void func_800167B0_173B0(Struct16728 *);
 void func_80016728_17328(Struct16728 *arg0) {
     void *dmaResult;
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(D_418520, D_419440, 0x2238);
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
     setCleanupCallback(func_80016834_17434);
     arg0->unk0 = 0x58;
     arg0->unk2 = 0x30;

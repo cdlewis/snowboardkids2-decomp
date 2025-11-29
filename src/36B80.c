@@ -1,15 +1,14 @@
 #include "common.h"
+#include "overlay.h"
 #include "task_scheduler.h"
 
-extern u8 D_459E00[];
-extern u8 D_45A890[];
-extern u8 D_3F6950[];
-extern u8 D_3F6BB0[];
+USE_ASSET(_3F6950);
+USE_ASSET(_459E00);
 
 void *func_80035F80_36B80(s32 arg0) {
     if ((u8)arg0 != 1) {
-        return dmaRequestAndUpdateStateWithSize(D_3F6950, D_3F6BB0, 0x508);
+        return dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     } else {
-        return dmaRequestAndUpdateStateWithSize(D_459E00, D_45A890, 0x22E8);
+        return dmaRequestAndUpdateStateWithSize(&_459E00_ROM_START, &_459E00_ROM_END, 0x22E8);
     }
 }

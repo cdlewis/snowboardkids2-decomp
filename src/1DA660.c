@@ -5,18 +5,20 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "task_scheduler.h"
+#include "overlay.h"
+
+USE_ASSET(_41A1D0);
+USE_ASSET(_41AD80);
+USE_ASSET(_422C60);
+
+extern u8 D_1DC0D0[];
+extern u8 D_1DC260[];
 
 extern void func_800394BC_3A0BC(void *, s32);
 extern void func_8000FED0_10AD0(void);
 extern void func_800630F0_63CF0(s32, void *);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern void func_80038420_39020(void);
-extern u8 D_41A1D0[];
-extern u8 D_41AD80[];
-extern u8 D_422C60[];
-extern u8 D_1DC0D0[];
-extern u8 D_1DC260[];
-extern u8 D_4237C0[];
 extern u8 identityMatrix[];
 extern void *D_800B1140_1DB6E0;
 extern char D_800B115C_1DB6FC[];
@@ -207,7 +209,7 @@ void func_800B0D4C_1DB2EC(func_800B0D4C_arg *arg0) {
 }
 
 void func_800B0D78_1DB318(func_800B0D4C_arg *arg0) {
-    arg0->unk2C = dmaRequestAndUpdateStateWithSize(D_41AD80, D_422C60, 0x13FF0);
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
     setCleanupCallback(func_800B0D4C_1DB2EC);
     setCallback(func_800B0DD0_1DB370);
 }
@@ -224,7 +226,7 @@ void func_800B0DF8_1DB398(void *arg0) {
 void func_800B0E24_1DB3C4(func_800B0F18_arg *arg0) {
     void *temp;
     getCurrentAllocation();
-    temp = dmaRequestAndUpdateStateWithSize(D_41A1D0, D_41AD80, 0x1B48);
+    temp = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     arg0->unk0 = -44;
     arg0->unk2 = -20;
     arg0->unk8 = 13;
@@ -249,7 +251,7 @@ void func_800B0EEC_1DB48C(func_800B0FE0_arg *arg0) {
 void func_800B0F18_1DB4B8(func_800B0F18_arg *arg0) {
     void *temp;
     getCurrentAllocation();
-    temp = dmaRequestAndUpdateStateWithSize(D_41A1D0, D_41AD80, 0x1B48);
+    temp = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     arg0->unk0 = -76;
     arg0->unk2 = -8;
     arg0->unk8 = 12;
@@ -276,7 +278,7 @@ void func_800B100C_1DB5AC(func_800B100C_arg *arg0) {
     void *temp2;
 
     temp1 = dmaRequestAndUpdateState(D_1DC0D0, D_1DC260);
-    temp2 = dmaRequestAndUpdateState(D_422C60, D_4237C0);
+    temp2 = dmaRequestAndUpdateState(&_422C60_ROM_START, &_422C60_ROM_END);
     setCleanupCallback(func_800B1104_1DB6A4);
 
     memcpy(arg0, identityMatrix, 0x20);

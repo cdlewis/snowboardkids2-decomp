@@ -6,11 +6,6 @@ USE_ASSET(_426EF0);
 USE_ASSET(_42F1D0);
 USE_ASSET(_41A1D0);
 
-extern u8 D_426EF0[];
-extern u8 D_42F1D0[];
-extern u8 D_41A1D0[];
-extern u8 D_41AD80[];
-
 typedef struct {
     /* 0x00 */ s16 unk0;
     /* 0x02 */ s16 unk2;
@@ -63,7 +58,7 @@ void func_800B0690_1DBD70(func_800B07A0_1DBE80_arg *arg0) {
     void *temp;
 
     getCurrentAllocation();
-    temp = dmaRequestAndUpdateStateWithSize(D_426EF0, D_42F1D0, 0xEEE8);
+    temp = dmaRequestAndUpdateStateWithSize(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
     setCleanupCallback(func_800B0774_1DBE54);
     arg0->unk0 = -96;
     arg0->unk2 = -80;
@@ -120,7 +115,7 @@ void func_800B0968_1DC048(func_800B07A0_1DBE80_arg *);
 void func_800B08A8_1DBF88(func_800B07A0_1DBE80_arg *arg0) {
     void *temp;
 
-    temp = dmaRequestAndUpdateStateWithSize(D_41A1D0, D_41AD80, 0x1B48);
+    temp = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     setCleanupCallback(func_800B0968_1DC048);
     arg0->unk0 = -0x2C;
     arg0->unk2 = -0x14;

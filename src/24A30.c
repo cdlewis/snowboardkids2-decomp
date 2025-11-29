@@ -9,11 +9,8 @@
 #include "task_scheduler.h"
 
 USE_ASSET(_458E30);
-
-extern u8 D_459310[];
-
-extern u8 D_4237C0[];
-extern u8 D_426EF0[];
+USE_ASSET(_459310);
+USE_ASSET(_4237C0);
 
 typedef struct {
     u8 padding[0x24];
@@ -537,7 +534,7 @@ void func_80027158_27D58(func_80025FFC_26BFC_arg *arg0) {
     void *dmaResult;
 
     state = getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(D_4237C0, D_426EF0, 0x8A08);
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_8002723C_27E3C);
 
     arg0->unk0 = -0x20;
@@ -569,7 +566,7 @@ void func_80027268_27E68(func_80025FFC_26BFC_arg *arg0) {
     s32 loopCount;
     s32 i;
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(D_4237C0, D_426EF0, 0x8A08);
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
 
     loopCount = (D_800AFE8C_A71FC->unk8 == 2) ? 3 : 2;
 
@@ -613,7 +610,7 @@ void func_80027AAC_286AC(func_80027A28_28628_arg *arg0);
 void func_80027A28_28628(func_80027A28_28628_arg *arg0);
 
 void func_800279D4_285D4(func_80027A28_28628_arg *arg0) {
-    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_458E30_ROM_START, D_459310, 0xAE0);
+    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
     setCleanupCallback(func_80027AAC_286AC);
     setCallback(func_80027A28_28628);
 }
@@ -643,7 +640,7 @@ void func_80027B9C_2879C(func_80025FFC_26BFC_arg *);
 void func_80027AD8_286D8(func_80027AD8_286D8_arg *arg0) {
     void *dmaResult;
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(D_4237C0, D_426EF0, 0x8A08);
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80027B9C_2879C);
 
     arg0->unk8 = 6;

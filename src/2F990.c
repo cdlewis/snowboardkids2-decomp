@@ -14,9 +14,9 @@ USE_ASSET(_419C60);
 USE_ASSET(_42F1D0);
 USE_ASSET(_41A1D0);
 USE_ASSET(_4237C0);
-USE_ASSET(_3F6670)
-USE_ASSET(_3F6950)
-USE_ASSET(_3F6BB0)
+USE_ASSET(_3F6670);
+USE_ASSET(_3F6950);
+USE_ASSET(_3F6BB0);
 
 typedef struct {
     s16 unk00;
@@ -187,8 +187,6 @@ extern void func_80012004_12C04(void);
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];
-extern u8 D_419C60[];
-extern u8 D_41A1D0[];
 extern s32 D_8008F110_8FD10;
 extern s16 D_8008F0B2_8FCB2[];
 
@@ -810,7 +808,7 @@ void func_80030A00_31600(func_80030A00_31600_arg *arg0) {
     void *temp_s2;
     s32 i;
 
-    temp_s1 = dmaRequestAndUpdateStateWithSize(D_419C60, D_41A1D0, 0x1548);
+    temp_s1 = dmaRequestAndUpdateStateWithSize(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
     temp_s2 = func_80035F80_36B80(1);
     setCleanupCallback(&func_80030B70_31770);
 

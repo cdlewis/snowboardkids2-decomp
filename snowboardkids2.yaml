@@ -1358,7 +1358,7 @@ segments:
     type: bin
     vram: 0
     start: 0x3F3940
-  
+
   - [0x3F3D10, bin]
 
   - name: _3F3EF0
@@ -1418,6 +1418,16 @@ segments:
 
   - [0x40E870, bin]
 
+  - name: _414CF0
+    type: bin
+    vram: 0
+    start: 0x414CF0
+
+  - name: _418520
+    type: bin
+    vram: 0
+    start: 0x418520
+
   - name: _419440
     type: bin
     vram: 0
@@ -1438,7 +1448,15 @@ segments:
     vram: 0
     start: 0x41A1D0
 
-  - [0x41AD80, bin]
+  - name: _41AD80
+    type: bin
+    vram: 0
+    start: 0x41AD80
+
+  - name: _422C60
+    type: bin
+    vram: 0
+    start: 0x422C60
 
   - name: _4237C0
     type: bin
@@ -1479,7 +1497,10 @@ segments:
     vram: 0
     start: 0x459310
 
-  - [0x459E00, bin]
+  - name: _459E00
+    type: bin
+    vram: 0
+    start: 0x459E00
 
   - name: _45A890
     type: bin
