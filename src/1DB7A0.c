@@ -11,7 +11,10 @@ typedef struct {
     /* 0x02 */ s16 unk2;
     /* 0x04 */ void *unk4;
     /* 0x08 */ s16 unk8;
-    /* 0x0A */ char pad[6];
+    /* 0x0A */ s16 unkA;
+    /* 0x0C */ u8 unkC;
+    /* 0x0D */ u8 unkD;
+    /* 0x0E */ char pad[2];
 } func_800B07A0_1DBE80_arg; // size 0x10
 
 typedef struct {
@@ -24,8 +27,13 @@ extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0(void);
 extern s16 D_800B09B8_1DC098[];
 extern s16 D_800B09BA_1DC09A[];
+extern s16 D_800B09A8_1DC088[];
+extern void *D_426EF0;
+extern void *D_42F1D0;
 
 void func_800B0804_1DBEE4(func_800B07A0_1DBE80_arg *);
+void func_800B0610_1DBCF0(func_800B07A0_1DBE80_arg *);
+void func_800B0664_1DBD44(func_800B07A0_1DBE80_arg *);
 
 INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B00C0_1DB7A0);
 
@@ -35,7 +43,29 @@ void func_800B0520_1DBC00(func_800B07A0_1DBE80_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DB7A0", func_800B054C_1DBC2C);
+void func_800B054C_1DBC2C(func_800B07A0_1DBE80_arg *arg0) {
+    void *temp;
+    s32 i;
+    s16 v0, v2;
+
+    getCurrentAllocation();
+    temp = dmaRequestAndUpdateStateWithSize(&D_426EF0, &D_42F1D0, 0xEEE8);
+    setCleanupCallback(func_800B0664_1DBD44);
+
+    for (i = 0; i < 4; i++) {
+        v0 = D_800B09A8_1DC088[i * 2];
+        arg0[i].unk0 = v0;
+        v2 = D_800B09A8_1DC088[i * 2 + 1];
+        arg0[i].unk8 = i / 2;
+        arg0[i].unkD = 0;
+        arg0[i].unkC = i & 1;
+        arg0[i].unkA = 0xFF;
+        arg0[i].unk4 = temp;
+        arg0[i].unk2 = v2;
+    }
+
+    setCallback(func_800B0610_1DBCF0);
+}
 
 extern void func_80012004_12C04(void);
 
