@@ -1,16 +1,34 @@
+#include "5E590.h"
 #include "common.h"
 #include "task_scheduler.h"
 
 typedef void (*FuncPtr)(void *);
 
 typedef struct {
-    u8 _pad0[0x44C];
+    void *ptr;     // offset 0 within element
+    u8 _pad[0x38]; // 0x3C - 4 = 0x38
+} Element0x3C;     // Size: 0x3C
+
+typedef struct {
+    u8 _pad0[0x58];
+    Element0x3C elements[12]; // Array at offset 0x58, total size 12 * 0x3C = 0x2D0
+    // Next offset: 0x58 + 0x2D0 = 0x328
+    u8 _pad328[0x44C - 0x328];
     s32 unk44C;
     s32 unk450;
     s32 unk454;
-    u8 _pad458[0x72C];
+    u8 _pad458[0xAE0 - 0x458];
+    s32 unkAE0;
+    u8 _padAE4[0xB2C - 0xAE4];
+    s32 unkB2C;
+    u8 _padB30[0xB84 - 0xB30];
     s32 unkB84;
-    u8 _padB88[0x36];
+    u8 _padB88[0xBB4 - 0xB88];
+    u8 unkBB4;
+    u8 _padBB5[0xBB9 - 0xBB5];
+    u8 unkBB9;
+    u8 unkBBA;
+    u8 _padBBB[0xBBE - 0xBBB];
     u8 unkBBE;
     u8 unkBBF;
 } func_800BC4AC_arg;
@@ -31,7 +49,18 @@ void func_800BB8E0_B0DD0(func_800BC4AC_arg *arg0) {
     D_800BCA44_B1F34[arg0->unkBBE](arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BB910_B0E00);
+void func_800BB910_B0E00(func_800BC4AC_arg *arg0) {
+    s32 i;
+
+    for (i = 0; i < 12; i++) {
+        arg0->elements[i].ptr = (void *)(loadAssetByIndex_953B0(arg0->unkBB9, arg0->unkBBA) + i * 16 + 0xC0);
+    }
+
+    arg0->unkAE0 = 0x100000;
+    arg0->unkB2C = 0x100000;
+    arg0->unkBB4 = 1;
+    arg0->unkB84 = arg0->unkB84 | 0x400000;
+}
 
 s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
     s32 pad[3];
