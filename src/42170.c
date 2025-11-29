@@ -192,8 +192,12 @@ void func_80044C38_45838(Func44BBCArg *);
 typedef struct {
     u8 _pad0[0x9F0];
     s16 unk9F0[3];
-    u8 _pad9F6[0x1D9];
+    u8 _pad9F6[0x1C5];
+    u8 unkBBB;
+    u8 _padBBC[0x13];
     u8 unkBCF;
+    u8 _padBD0[0x9];
+    u8 unkBD9;
 } Func43CA4Unk28;
 
 typedef struct {
@@ -806,8 +810,11 @@ typedef struct {
     u8 unk42;                   /* 0x42 */
 } Func42C98Arg;
 
-extern void func_80042D54_43954(void *);
 extern void func_80042A6C_4366C(void *);
+typedef struct Func42D54Arg Func42D54Arg;
+typedef struct Func42E40Arg Func42E40Arg;
+void func_80042D54_43954(Func42D54Arg *);
+void func_80042E40_43A40(Func42E40Arg *);
 
 void func_80042C98_43898(Func42C98Arg *arg0) {
     Func43CA4GameState *gameState;
@@ -835,9 +842,57 @@ void func_80042C98_43898(Func42C98Arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042D54_43954);
+struct Func42D54Arg {
+    u8 _pad0[0x4];              /* 0x00 */
+    loadAssetMetadata_arg unk4; /* 0x04 - 0x1F */
+    void *unk20;                /* 0x20 */
+    Func43CA4Unk28 *unk24;      /* 0x24 */
+    Func43CA4Unk28 *unk28;      /* 0x28 */
+    s32 unk2C;                  /* 0x2C */
+    s32 unk30;                  /* 0x30 */
+    s32 unk34;                  /* 0x34 */
+    s32 unk38;                  /* 0x38 */
+    s16 unk3C;                  /* 0x3C */
+    u8 _pad3E[0x4];             /* 0x3E */
+    u8 unk42;                   /* 0x42 */
+};
 
-typedef struct {
+void func_80042D54_43954(Func42D54Arg *arg0) {
+    Func43CA4GameState *gameState;
+    s32 i;
+
+    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    if (gameState->unk76 == 0) {
+        func_80042A6C_4366C(arg0);
+        transformVector((s16 *)&arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk4.unk4);
+
+        if (arg0->unk4.unk1A == 0x40) {
+            if (arg0->unk28->unkBD9 != 0) {
+                arg0->unk2C = 0x300000;
+                arg0->unk30 = 0x300000;
+            } else {
+                arg0->unk2C = 0x140000;
+                arg0->unk30 = 0x190000;
+            }
+
+            if (arg0->unk28->unkBBB == 0xC) {
+                arg0->unk3C = 0x1E;
+            } else {
+                arg0->unk3C = 0x12C;
+            }
+
+            arg0->unk28->unkBCF++;
+            arg0->unk42 = 1;
+            setCallback(func_80042E40_43A40);
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_800677C0_683C0(i, &arg0->unk4);
+    }
+}
+
+struct Func42E40Arg {
     void *unk0;            /* 0x00 */
     s32 unk4;              /* 0x04 */
     s32 unk8;              /* 0x08 */
@@ -860,7 +915,7 @@ typedef struct {
     u8 _pad3E[0x2];        /* 0x3E */
     u16 unk40;             /* 0x40 */
     u8 unk42;              /* 0x42 */
-} Func42E40Arg;
+};
 
 extern void rotateVectorY(void *, s32, void *);
 
