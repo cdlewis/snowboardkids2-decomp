@@ -779,7 +779,71 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B3980_A3830);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B3CBC_A3B6C);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B3DF0_A3CA0);
+extern void func_80059CE0_5A8E0(void *);
+extern void func_8005D804_5E404(void *, u8, u8);
+
+typedef struct {
+    u8 _pad0[0x44C];
+    s32 unk44C;
+    s32 unk450;
+    s32 unk454;
+    u8 _pad458[0x688];
+    s32 unkAE0;
+    u8 _padAE4[0xA8];
+    s32 unkB8C;
+    u8 _padB90[0x30];
+    u8 unkBC0;
+} func_800B3DF0_arg;
+
+s32 func_800B3DF0_A3CA0(func_800B3DF0_arg *arg0) {
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 = arg0->unk450 - 0x6000;
+    func_800B40D4_A3F84(arg0);
+    func_800B02AC_A015C(arg0);
+
+    if (arg0->unkAE0 <= 0xDFFFF) {
+        arg0->unkAE0 = arg0->unkAE0 + 0x8000;
+    }
+
+    switch (arg0->unkBC0) {
+        case 0:
+            if (func_8005D308_5DF08(arg0, 0x1B) != 0) {
+                arg0->unkBC0 = arg0->unkBC0 + 1;
+                func_80059CE0_5A8E0(arg0);
+            }
+            break;
+        case 1:
+            if (func_8005D308_5DF08(arg0, 0x1D) != 0) {
+                arg0->unkB8C = 0x14;
+                arg0->unkBC0 = arg0->unkBC0 + 1;
+            }
+            break;
+        case 2:
+            if (arg0->unkB8C != 0) {
+                arg0->unkB8C = arg0->unkB8C - 1;
+            } else {
+                arg0->unkBC0 = arg0->unkBC0 + 1;
+            }
+            break;
+        case 3:
+            if (func_8005D308_5DF08(arg0, 0x1C) == 0) {
+                goto end;
+            }
+            arg0->unkBC0 = arg0->unkBC0 + 1;
+            break;
+        case 4:
+            if (func_8005D308_5DF08(arg0, 0x1D) != 0) {
+                arg0->unkBC0 = 2;
+                arg0->unkB8C = 0x14;
+            }
+            break;
+    }
+
+end:
+    func_8005D804_5E404(arg0, 1, 0);
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B3F2C_A3DDC);
 
@@ -812,8 +876,6 @@ void func_800B46BC_A456C(func_800B00D4_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B470C_A45BC);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B48AC_A475C);
-
-extern void func_8005D804_5E404(void *, u8, u8);
 
 typedef struct {
     u8 _pad0[0x44C];
