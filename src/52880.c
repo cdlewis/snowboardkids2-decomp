@@ -21,6 +21,7 @@ extern Struct_B548_Result *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
 extern void func_80058A68_59668(Player *arg0);
 extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
 extern s32 func_800BB504(void *, s32);
+extern void rotateVectorY(void *, s32, void *);
 
 typedef struct {
     void *unk0;
@@ -367,7 +368,22 @@ void func_800545F8_551F8(Struct_52880 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80054658_55258);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_800547E0_553E0);
+void func_800547E0_553E0(s16 arg0, s32 arg1) {
+    Struct_52880 *task;
+    s32 vec[3];
+
+    task = scheduleTask(func_800545B0_551B0, 0, 0, 0x6F);
+    if (task != NULL) {
+        vec[0] = 0;
+        vec[1] = 0;
+        vec[2] = arg1;
+        rotateVectorY(vec, arg0, &task->velY);
+        task->unk4 = 0xDD12D592;
+        task->unk8 = 0x0B1D4CA3;
+        task->unkC = 0xE27836C1;
+        task->unk42 = -1;
+    }
+}
 
 extern void func_800548C8_554C8(void);
 
@@ -517,7 +533,6 @@ void func_80055900_56500(Struct_52880 *arg0) {
     }
 }
 
-extern void rotateVectorY(void *, s32, void *);
 extern void func_80069CF8_6A8F8(void);
 extern void func_80066444_67044(s32, void *);
 extern void func_80055A84_56684(void);
