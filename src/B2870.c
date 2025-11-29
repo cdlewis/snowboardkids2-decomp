@@ -9,7 +9,8 @@ typedef struct {
     s32 unk44C;
     s32 unk450;
     s32 unk454;
-    u8 pad2[0x646];
+    u8 pad2[0x644];
+    u16 unkA9C;
     u16 unkA9E;
     u8 pad3[0x11E];
     u8 unkBBE;
@@ -19,7 +20,6 @@ extern FuncPtr D_800BCB5C_B411C[];
 extern FuncPtr D_800BCB74_B4134[];
 extern void func_800B00D4_9FF84(Arg0Struct *, s32);
 extern void func_800B02AC_A015C(Arg0Struct *);
-extern void func_800BBE68_B3428(Arg0Struct *);
 
 INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB2B0_B2870);
 
@@ -48,7 +48,27 @@ s32 func_800BB89C_B2E5C(Arg0Struct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB930_B2EF0);
 
-INCLUDE_ASM("asm/nonmatchings/B2870", func_800BBE68_B3428);
+void func_800BBE68_B3428(Arg0Struct *arg0) {
+    s16 val;
+    s16 adj;
+
+    val = arg0->unkA9C;
+    adj = -val;
+
+    if (adj >= 0x1000) {
+        adj -= 0x2000;
+    }
+
+    if (adj > 0x80) {
+        adj = 0x80;
+    }
+
+    if (adj < -0x80) {
+        adj = -0x80;
+    }
+
+    arg0->unkA9C = val + adj;
+}
 
 s32 func_800BBEBC_B347C(Arg0Struct *arg0) {
     s32 pad[3];
