@@ -1,7 +1,7 @@
 #include "56910.h"
 #include "common.h"
-#include "task_scheduler.h"
 #include "overlay.h"
+#include "task_scheduler.h"
 
 extern void *func_80035F80_36B80(s32);
 extern void func_80034D58_35958(void);

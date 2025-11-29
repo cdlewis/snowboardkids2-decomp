@@ -4,8 +4,8 @@
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "task_scheduler.h"
 #include "overlay.h"
+#include "task_scheduler.h"
 
 USE_ASSET(_41A1D0);
 USE_ASSET(_41AD80);
