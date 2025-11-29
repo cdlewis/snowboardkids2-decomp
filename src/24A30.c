@@ -124,6 +124,8 @@ extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern void func_80038420_39020(void);
 extern s32 identityMatrix[];
 extern void func_800650B4_65CB4(u8, void *);
+extern s32 D_8008DD2C_8E92C[];
+extern void func_80069CF8_6A8F8(void);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
 
@@ -429,7 +431,7 @@ void func_80025058_25C58(func_80025280_25E80_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025074_25C74);
 
-void func_800251AC_25DAC(void);
+void func_800251AC_25DAC(func_80025130_25D30_arg *);
 
 void func_80025130_25D30(func_80025130_25D30_arg *arg0) {
     u8 *base;
@@ -449,7 +451,27 @@ void func_80025130_25D30(func_80025130_25D30_arg *arg0) {
     setCallback(&func_800251AC_25DAC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_800251AC_25DAC);
+void func_800251AC_25DAC(func_80025130_25D30_arg *arg0) {
+    u8 *base;
+    s32 target;
+    s32 adj2 = 0x100000;
+    s32 adj1 = 0xFFF00000;
+
+    base = (u8 *)getCurrentAllocation();
+
+    target = D_8008DD2C_8E92C[D_800AFE8C_A71FC->unk8 * 2 + (((base + arg0->unk28)[0x18C0] + 1) & 1)];
+
+    arg0->unk4.unk14 += ((target >> 31) & adj1) | adj2;
+
+    applyTransformToModel(arg0->unk0, &arg0->unk4);
+    clearModelRotation(arg0->unk0);
+    updateModelGeometry(arg0->unk0);
+
+    if (arg0->unk4.unk14 == target) {
+        (base + arg0->unk28)[0x18C4]++;
+        func_80069CF8_6A8F8();
+    }
+}
 
 void *func_80025280_25E80(func_80025280_25E80_arg *arg0) {
     return func_80002014_2C14(arg0->unk0);
