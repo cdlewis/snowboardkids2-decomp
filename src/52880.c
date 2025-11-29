@@ -2,6 +2,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
@@ -45,9 +46,19 @@ typedef struct {
 } Struct_52880;
 
 typedef struct {
-    u8 padding[0x44];
+    u8 padding1[0x950];
+    s16 unk950;
+    u8 padding2[0x242];
+    u16 unkB94;
+    u8 padding3[0x52];
+} Unk10Element_52880;
+
+typedef struct {
+    u8 padding1[0x10];
+    Unk10Element_52880 *unk10;
+    u8 padding2[0x30];
     void *unk44;
-    void *unk48;
+    s16 *unk48;
 } Alloc_52880;
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051C80_52880);
@@ -463,7 +474,7 @@ void func_80055418_56018(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80055460_56060);
 }
 
-extern void func_800554FC_560FC(void);
+void func_800554FC_560FC(Struct_52880 *arg0);
 
 void func_80055460_56060(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
@@ -482,7 +493,43 @@ void func_800554BC_560BC(Struct_52880 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_800554FC_560FC);
+extern void func_80055650_56250(void);
+extern void func_80069CF8_6A8F8(void);
+extern void func_80066444_67044(s32, void *);
+
+void func_800554FC_560FC(Struct_52880 *arg0) {
+    Alloc_52880 *alloc;
+    s16 index;
+    s32 i;
+
+    alloc = getCurrentAllocation();
+
+    index = arg0->unk42;
+    transformVector(alloc->unk48, &alloc->unk10[index].unk950, &arg0->unk4);
+
+    index = arg0->unk42;
+    transformVector(&alloc->unk48[6], &alloc->unk10[index].unk950, &arg0->velY);
+
+    arg0->velY = arg0->unk4 - arg0->velY;
+    arg0->velZ = arg0->unk8 - arg0->velZ;
+    arg0->velX = arg0->unkC - arg0->velX;
+
+    index = arg0->unk42;
+    arg0->unk40 = alloc->unk10[index].unkB94;
+
+    func_80056B7C_5777C(&arg0->unk4, 0x10);
+    setCallback(func_80055650_56250);
+    func_800554BC_560BC(arg0);
+
+    if (arg0->unk4E != 0) {
+        func_80056B7C_5777C(&arg0->unk4, 0x43);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80055650_56250);
 
