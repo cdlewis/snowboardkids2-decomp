@@ -1,5 +1,7 @@
+#include "56910.h"
 #include "5E590.h"
 #include "common.h"
+#include "gamestate.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
@@ -829,11 +831,44 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6640_A64F0);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6688_A6538);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B67E4_A6694);
+typedef struct {
+    u8 _pad0[0x434];
+    s32 unk434;
+    u8 _pad438[0x4];
+    s32 unk43C;
+    u8 _pad440[0xC];
+    s32 unk44C;
+    s32 unk450;
+    s32 unk454;
+    u8 _pad458[0x767];
+    u8 unkBBF;
+    u8 unkBC0;
+} func_800B67E4_arg;
+
+s32 func_800B67E4_A6694(func_800B67E4_arg *arg0) {
+    D_80090F90_91B90_item *item;
+    GameState *gameState = (GameState *)getCurrentAllocation();
+
+    item = func_80055D10_56910(gameState->memoryPoolId);
+
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 = arg0->unk450 - 0x6000;
+    arg0->unk434 = arg0->unk434 + ((item->unk0 - arg0->unk434) >> 2);
+    arg0->unk43C = arg0->unk43C + ((item->unk4 - arg0->unk43C) >> 2);
+    func_800B02AC_A015C(arg0);
+    func_800B40D4_A3F84(arg0);
+
+    if (func_8005D308_5DF08(arg0, 3) != 0) {
+        arg0->unkBC0 = 0;
+        arg0->unkBBF = arg0->unkBBF + 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6890_A6740);
 
-extern void func_80055D10_56910(s32 index);
 extern s32 D_800BAC80_AAB30;
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 
