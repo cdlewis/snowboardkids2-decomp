@@ -23,6 +23,7 @@ extern s32 approximateSin(s16);
 extern void func_80069CF8_6A8F8(void);
 extern void func_80010240_10E40(void);
 extern void func_80010924_11524(void);
+extern void func_8005100C_51C0C(s32, s32, s32, s32, s32);
 
 typedef struct {
     s16 unk0;
@@ -1098,17 +1099,19 @@ void func_8004F69C_5029C(Struct_func_8004F04C *arg0) {
     arg0->unkC = freeNodeMemory(arg0->unkC);
 }
 
-void func_8004F760_50360(void);
 void func_8004F7F4_503F4(Struct_func_8004F04C *arg0);
 
 typedef struct {
     s16 unk0;
     s16 unk2;
     void *unk4;
-    u8 pad8[0x4];
-    void *unkC;
+    s16 unk8;
+    u8 padA[0x2];
+    Player *unkC;
     s32 unk10;
 } Struct_func_8004F6D4;
+
+void func_8004F760_50360(Struct_func_8004F6D4 *arg0);
 
 typedef struct {
     u8 pad0[0x10];
@@ -1122,13 +1125,21 @@ void func_8004F6D4_502D4(Struct_func_8004F6D4 *arg0) {
 
     arg0->unk0 = -0x10;
     arg0->unk2 = -0x60;
-    arg0->unkC = (void *)((u8 *)base + index * 3048);
+    arg0->unkC = (Player *)((u8 *)base + index * 3048);
     arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
     setCallbackWithContinue(func_8004F760_50360);
     setCleanupCallback(func_8004F7F4_503F4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004F760_50360);
+void func_8004F760_50360(Struct_func_8004F6D4 *arg0) {
+    arg0->unk8 = arg0->unkC->unkBD4 + 7;
+    debugEnqueueCallback((u16)(arg0->unk10 + 8), 0, func_8000FED0_10AD0, arg0);
+
+    if (arg0->unkC->unkBD8 & 2) {
+        func_8005100C_51C0C(arg0->unk0 - 8, arg0->unk2 - 8, 1, arg0->unk10 + 8, 0);
+        arg0->unkC->unkBD8 &= ~2;
+    }
+}
 
 void func_8004F7F4_503F4(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
