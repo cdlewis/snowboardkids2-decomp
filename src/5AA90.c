@@ -1,9 +1,12 @@
+#include "56910.h"
 #include "common.h"
 #include "gamestate.h"
 
 extern void *getCurrentAllocation(void);
 extern u16 func_80060A3C_6163C(void *, u16, void *);
 extern s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3);
+extern s16 func_80062254_62E54(void *arg0, u16 arg1);
+extern s32 isqrt64(s64 val);
 
 typedef struct ListNode_5AA90 {
     /* 0x00 */ struct ListNode_5AA90 *next;
@@ -45,7 +48,28 @@ void func_8005A930_5B530(Player *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005A9A8_5B5A8);
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AA9C_5B69C);
+s32 func_8005AA9C_5B69C(Player *arg0) {
+    GameState *allocation;
+    D_80090F90_91B90_item *item;
+    s32 dx, dz;
+    s64 distSq;
+
+    allocation = (GameState *)getCurrentAllocation();
+
+    if (func_80062254_62E54(&allocation->gameData, arg0->unkB94) == 0) {
+        item = func_80055D10_56910(allocation->memoryPoolId);
+
+        dx = arg0->worldPosX - item->unk0;
+        dz = arg0->worldPosZ - item->unk4;
+
+        distSq = (s64)dx * dx + (s64)dz * dz;
+
+        if (!(0x1FFFFF < isqrt64(distSq))) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AB58_5B758);
 
