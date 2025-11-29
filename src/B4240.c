@@ -4,6 +4,17 @@
 #include "task_scheduler.h"
 
 extern u8 randA(void);
+extern void *func_80055E68_56A68(u8);
+extern void *func_80055DC4_569C4(u8);
+extern void *func_80055DF8_569F8(u8);
+extern s32 func_80061A64_62664(void *, u16, void *);
+extern s16 func_8006D21C_6DE1C(s32, s32, s32, s32);
+
+extern s32 D_800BBB90_B4B20[];
+extern s32 D_800BBB94_B4B24[];
+extern s32 D_800BBB98_B4B28[];
+extern s32 D_800BBB9C_B4B2C[];
+extern s32 D_800BBBA0_B4B30[];
 
 typedef struct {
     u8 _pad0[0x24];
@@ -12,7 +23,11 @@ typedef struct {
 } B4240Struct;
 
 typedef struct {
-    u8 _pad0[0x76];
+    u8 _pad0[0x30];
+    void *unk30;
+    u8 _pad34[0x28];
+    u8 unk5C;
+    u8 _pad5D[0x19];
     u8 unk76;
 } B4240AllocationStruct;
 
@@ -33,8 +48,10 @@ typedef struct {
 
 void func_800BB320_B42B0(B4240FuncArg *);
 void func_800BB454_B43E4(B4240FuncArg *);
+void func_800BB598_B4528(B4240FuncArg *);
 void func_800BB63C_B45CC(B4240FuncArg *);
 void func_800BB89C_B482C(B4240FuncArg *);
+void func_800BBAFC_B4A8C(B4240Struct *);
 
 void func_800BB2B0_B4240(B4240FuncArg *arg0) {
     s32 i;
@@ -50,7 +67,41 @@ void func_800BB2B0_B4240(B4240FuncArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/B4240", func_800BB320_B42B0);
 
-INCLUDE_ASM("asm/nonmatchings/B4240", func_800BB454_B43E4);
+void func_800BB454_B43E4(B4240FuncArg *arg0) {
+    B4240AllocationStruct *alloc;
+    void *temp;
+    s32 temp2;
+    s32 temp3;
+    s16 temp4;
+
+    alloc = getCurrentAllocation();
+    temp = func_80055E68_56A68(alloc->unk5C);
+    arg0->node.unk20 = (DisplayLists *)((u8 *)temp + 0x90);
+    arg0->node.unk24 = func_80055DC4_569C4(alloc->unk5C);
+    arg0->node.unk28 = func_80055DF8_569F8(alloc->unk5C);
+    arg0->node.unk2C = 0;
+    arg0->unk52 = 1;
+
+    temp2 = D_800BBB90_B4B20[arg0->unk50 * 5];
+    arg0->unk56 = temp2;
+    temp3 = D_800BBB94_B4B24[arg0->unk50 * 5];
+    arg0->unk3C = temp3;
+    arg0->unk44 = D_800BBB98_B4B28[arg0->unk50 * 5];
+
+    arg0->unk40 = func_80061A64_62664(&alloc->unk30, arg0->unk56, &arg0->unk3C);
+
+    temp4 = arg0->unk50;
+    arg0->rotation =
+        func_8006D21C_6DE1C(D_800BBB9C_B4B2C[temp4 * 5], D_800BBBA0_B4B30[temp4 * 5], arg0->unk3C, arg0->unk44);
+
+    arg0->unk48 = 0;
+    arg0->unk4C = 0;
+
+    arg0->unk58 = ((randA() & 0xFF) >> 1) + 0xA;
+
+    setCleanupCallback(func_800BBAFC_B4A8C);
+    setCallbackWithContinue(func_800BB598_B4528);
+}
 
 void func_800BB598_B4528(B4240FuncArg *arg0) {
     B4240AllocationStruct *alloc;
