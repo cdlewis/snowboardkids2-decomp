@@ -28,6 +28,29 @@ sys.path.insert(0, str(tools_dir))
 from score_functions import score_folder
 
 
+def contains_human_emoji(message: str) -> bool:
+    """Return True if the message contains the 🧑 emoji (any skin tone)."""
+    return re.search(r'\U0001F9D1(?:\U0001F3FB|\U0001F3FC|\U0001F3FD|\U0001F3FE|\U0001F3FF)?', message) is not None
+
+
+def load_difficult_functions() -> set:
+    """Load function names listed in tools/difficult_functions (first token per line)."""
+    diff_path = Path(__file__).parent / 'difficult_functions'
+    difficult = set()
+    if not diff_path.exists():
+        return difficult
+
+    with diff_path.open() as f:
+        for line in f:
+            stripped = line.strip()
+            if not stripped:
+                continue
+            # Lines may have attempt/count data; only take the first token.
+            difficult.add(stripped.split()[0])
+
+    return difficult
+
+
 def get_commits_since(commit_hash: str) -> List[Tuple[str, str]]:
     """Get all commit hashes and messages since the provided commit.
 
@@ -58,16 +81,12 @@ def get_commits_since(commit_hash: str) -> List[Tuple[str, str]]:
 
 
 def should_process_commit(message: str) -> bool:
-    """Check if commit message should be processed.
+    lowered = message.lower()
 
-    Returns True if:
-    - Contains 'match' (case-insensitive)
-    - Does NOT contain 🧑 emoji
-    """
-    if '🧑' in message:
+    if contains_human_emoji(message):
         return False
 
-    if 'match' not in message.lower():
+    if 'match' not in lowered:
         return False
 
     return True
@@ -137,10 +156,15 @@ def main():
     score_map = {s.name: s.total_score for s in all_scores}
     print(f"Loaded {len(score_map)} functions.\n", file=sys.stderr)
 
+    difficult_functions = load_difficult_functions()
+
     # Process commits
     found_functions = {}  # func_name -> score
 
     for commit_hash, message in commits:
+        if contains_human_emoji(message):
+            continue
+
         if not should_process_commit(message):
             continue
 
@@ -148,6 +172,8 @@ def main():
         potential_funcs = extract_potential_functions(message, score_map)
 
         for func_name in potential_funcs:
+            if func_name in difficult_functions:
+                continue
             found_functions[func_name] = score_map[func_name]
 
     # Print results sorted by score
