@@ -223,12 +223,12 @@ typedef struct {
     s32 unkC;              /* 0x0C */
     u8 _pad10[0x14];       /* 0x10 */
     Func43CA4Unk28 *unk24; /* 0x24 */
-    u8 _pad28[0x4];        /* 0x28 */
+    Func43CA4Unk28 *unk28; /* 0x28 */
     s32 unk2C;             /* 0x2C */
     s32 unk30;             /* 0x30 */
     s32 unk34;             /* 0x34 */
     s32 unk38;             /* 0x38 */
-    u8 _pad3C[0x4];        /* 0x3C */
+    s32 unk3C;             /* 0x3C */
     s16 unk40;             /* 0x40 */
     s16 unk42;             /* 0x42 */
     u8 _pad44[0x2];        /* 0x44 */
@@ -244,6 +244,8 @@ void func_800439F4_445F4(Func4393CArg *);
 extern s32 D_80090964_91564;
 extern s32 D_80090974_91574;
 extern s32 D_8009093C_9153C;
+extern s8 D_80090958_91558;
+extern s8 D_8009095C_9155C;
 extern s32 D_80090AA0_916A0;
 extern s32 D_80090AAC_916AC;
 extern s8 D_80090950_91550;
@@ -1187,7 +1189,7 @@ void func_80043D30_44930(void **);
 void func_8004393C_4453C(Func4393CArg *);
 void func_800438A0_444A0(Func4393CArg *);
 extern void func_800437C4_443C4(void *, void *);
-extern void func_80043AB4_446B4(Func4393CArg *);
+void func_80043AB4_446B4(Func4393CArg *);
 
 void func_80043860_44460(void **arg0) {
     *arg0 = load_3ECE40();
@@ -1272,7 +1274,54 @@ void func_800439F4_445F4(Func4393CArg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80043AB4_446B4);
+extern s32 func_80059AC4_5A6C4(Func43CA4Unk28 *);
+extern void func_80059A48_5A648(Func43CA4Unk28 *, s32);
+void func_80043C00_44800(Func43CA4Arg *);
+
+void func_80043AB4_446B4(Func4393CArg *arg0) {
+    Func43CA4GameState *gameState;
+    s32 sinVal;
+    s32 i;
+
+    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    if (gameState->unk76 != 0) {
+        goto transform_and_loop;
+    }
+
+    arg0->unk48 = arg0->unk48 + 0x80;
+    sinVal = approximateSin(arg0->unk48);
+    arg0->unk30 = 0x700000 - (sinVal * 3 << 8);
+
+    if (arg0->unk48 < 0x800) {
+        func_800437C4_443C4(arg0, &D_80090958_91558);
+    } else if (arg0->unk48 == 0x800) {
+        arg0->unk40 = 0;
+        arg0->unk42 = 1;
+        arg0->unk3C = func_80059AC4_5A6C4(arg0->unk28);
+        func_80059A48_5A648(arg0->unk28, -arg0->unk3C);
+        func_800437C4_443C4(arg0, &D_8009095C_9155C);
+    } else {
+        func_800437C4_443C4(arg0, &D_8009095C_9155C);
+    }
+
+    if (arg0->unk48 == 0xC00) {
+        arg0->unk40 = 0;
+        arg0->unk42 = 1;
+        func_80059A48_5A648(arg0->unk24, arg0->unk3C);
+        setCallback(func_80043C00_44800);
+    }
+
+transform_and_loop:
+    transformVector((s16 *)&arg0->unk2C, arg0->unk28->unk9F0, &arg0->unk8);
+
+    if (arg0->unk48 == 0x80) {
+        func_80056B7C_5777C(&arg0->unk8, 0x1C);
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, &arg0->unk4);
+    }
+}
 
 void func_80043C00_44800(Func43CA4Arg *arg0) {
     Func43CA4GameState *gameState;
