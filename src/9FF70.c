@@ -1230,7 +1230,12 @@ typedef struct {
     u16 unkA94; // 0xA94
     u8 _padA96[0xB8C - 0xA96];
     s32 unkB8C; // 0xB8C
-    u8 _padB90[0x2F];
+    u8 _padB90[0xBA0 - 0xB90];
+    u16 unkBA0; // 0xBA0
+    u16 unkBA2; // 0xBA2
+    u8 _padBA4[0xBB8 - 0xBA4];
+    u8 unkBB8; // 0xBB8
+    u8 _padBB9[0xBBF - 0xBB9];
     u8 unkBBF; // 0xBBF
 } func_800B7784_arg;
 
@@ -1254,7 +1259,41 @@ s32 func_800B756C_A741C(func_800B7784_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B75F4_A74A4);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B76BC_A756C);
+typedef struct {
+    u8 _pad0[0x81];
+    u8 unk81; // 0x81
+} func_800B76BC_alloc;
+
+s32 func_800B76BC_A756C(func_800B7784_arg *arg0) {
+    func_800B76BC_alloc *alloc = (func_800B76BC_alloc *)getCurrentAllocation();
+    u16 temp1;
+    u16 temp2;
+
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 = arg0->unk450 - 0x6000;
+    func_800B02AC_A015C(arg0);
+    func_800B40D4_A3F84(arg0);
+    func_8005D180_5DD80(arg0, 0);
+
+    temp1 = arg0->unkBA0;
+    temp2 = arg0->unkBA2;
+    temp1 -= 0x400;
+    arg0->unkBA0 = temp1;
+    arg0->unkA94 = arg0->unkA94 + 0x400;
+    temp2 += 0x400;
+    arg0->unkBA2 = temp2;
+
+    if (arg0->unkBA0 == 0) {
+        arg0->unkB8C = 0x11;
+        arg0->unkBBF = arg0->unkBBF + 1;
+        func_8006FDC8_709C8(arg0->unkBB8, 0xFF, 0x10);
+        alloc->unk81 = alloc->unk81 + 1;
+        func_800BBB90(1);
+    }
+
+    return 0;
+}
 
 typedef struct {
     u8 _pad0[0x80];
