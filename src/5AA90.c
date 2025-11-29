@@ -46,7 +46,43 @@ void func_8005A930_5B530(Player *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005A9A8_5B5A8);
+s32 func_8005A9A8_5B5A8(Player *arg0) {
+    GameState *allocation;
+    D_80090F90_91B90_item *item;
+    s32 dx, dz;
+    s64 distSq;
+
+    allocation = (GameState *)getCurrentAllocation();
+
+    if (allocation->unk63 != 0) {
+        return 0;
+    }
+
+    if (arg0->unkBC5 == allocation->unk74) {
+        return 0;
+    }
+
+    if (func_80062254_62E54(&allocation->gameData, arg0->unkB94) != 0) {
+        return 0;
+    }
+
+    item = func_80055D10_56910(allocation->memoryPoolId);
+
+    dx = arg0->worldPosX - item->unk0;
+    dz = arg0->worldPosZ - item->unk4;
+
+    distSq = (s64)dx * dx + (s64)dz * dz;
+
+    if (0x2FFFFF < isqrt64(distSq)) {
+        return 0;
+    }
+
+    allocation->unk63 = 3;
+    arg0->unkB9C = allocation->unk58;
+    allocation->unk58--;
+
+    return 1;
+}
 
 s32 func_8005AA9C_5B69C(Player *arg0) {
     GameState *allocation;

@@ -53,7 +53,9 @@ typedef struct {
     s32 unkB88;
     u8 padding3[0x8];
     u16 unkB94;
-    u8 padding4[0xE];
+    u8 padding4[0x6];
+    u16 unkB9C;
+    u8 padding4b_2[0x6];
     u16 unkBA4;
     s16 unkBA6;
     u8 padding4a[0x10];
@@ -94,7 +96,8 @@ typedef struct {
     GameStateUnk44 *unk44;
     u8 *unk48;
     s32 unk4C;
-    u8 PAD_5[0xA];
+    u8 PAD_5[0x8];
+    u16 unk58;
     u8 unk5A;
     u8 unk5B;
     u8 memoryPoolId;
@@ -102,7 +105,9 @@ typedef struct {
     u8 numPlayers;
     u8 unk5F;
     u8 unk60;
-    u8 PAD_6[0x13];
+    u8 PAD_6[0x2];
+    u8 unk63;
+    u8 PAD_6B_2[0x10];
     u8 unk74;
     u8 PAD_6B[0x1];
     u8 gamePaused;
