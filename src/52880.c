@@ -1,6 +1,7 @@
 #include "5E590.h"
 #include "common.h"
 #include "displaylist.h"
+#include "gamestate.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
@@ -16,7 +17,6 @@ typedef struct {
     u32 unkB84;
 } Struct_B548_Result;
 
-extern void *getCurrentAllocation(void);
 extern Struct_B548_Result *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
 extern void func_80058A68_59668(Player *arg0);
 extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
@@ -29,17 +29,17 @@ typedef struct {
     s32 unkC;
     u8 padding1[0x10];
     void *unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
+    s32 velY;
+    s32 velZ;
+    s32 velX;
     u8 padding2[0x10];
     s16 unk40;
-    u16 unk42;
+    s16 unk42;
     s16 unk44;
     u16 unk46;
     s16 unk48;
     s16 unk4A;
-    u16 unk4C;
+    s16 unk4C;
     s8 unk4E;
 } Struct_52880;
 
@@ -228,7 +228,40 @@ void func_8005383C_5443C(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80053990_54590);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80053898_54498);
+extern Player *func_8005C454_5D054(void *arg0, s16 arg1, s32 arg2, void *arg3);
+extern void func_80058AEC_596EC(Player *arg0, void *arg1);
+extern void func_80059C24_5A824(Player *arg0);
+extern void func_80050ECC_51ACC(void *arg0);
+
+void func_80053898_54498(Struct_52880 *arg0) {
+    GameState *allocation;
+    Player *player;
+    s32 localVec[4];
+    s32 *s1;
+    u8 temp;
+
+    allocation = (GameState *)getCurrentAllocation();
+    s1 = &arg0->unk4;
+    player = func_8005C454_5D054(s1, arg0->unk42, 0xC0000, localVec);
+    if (player != NULL) {
+        if ((player->unkB84 & 0x1000) == 0) {
+            func_80058AEC_596EC(player, localVec);
+            arg0->unk4E++;
+            if (arg0->unk4C >= 0) {
+                func_80059C24_5A824(&allocation->players[arg0->unk4C]);
+            }
+        } else {
+            arg0->unk42 = player->unkBB8;
+            temp = player->unkBB8;
+            arg0->velY = -arg0->velY;
+            arg0->velZ = -arg0->velZ;
+            arg0->velX = -arg0->velX;
+            arg0->unk4C = temp;
+            func_80050ECC_51ACC(s1);
+            func_80056B7C_5777C(s1, 0x20);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80053990_54590);
 
@@ -485,7 +518,6 @@ void func_80055900_56500(Struct_52880 *arg0) {
 }
 
 extern void rotateVectorY(void *, s32, void *);
-extern void func_80050ECC_51ACC(void *arg0);
 extern void func_80069CF8_6A8F8(void);
 extern void func_80066444_67044(s32, void *);
 extern void func_80055A84_56684(void);
@@ -504,7 +536,7 @@ void func_80055964_56564(Struct_52880 *arg0) {
         rotateVectorY((u8 *)alloc->unk48 + 0x21C, arg0->unk44, localVec);
     }
 
-    rotateVectorY((u8 *)alloc->unk48 + 0x228, arg0->unk44, &arg0->unk24);
+    rotateVectorY((u8 *)alloc->unk48 + 0x228, arg0->unk44, &arg0->velY);
 
     arg0->unk4 += localVec[0];
     arg0->unk8 += localVec[1];
