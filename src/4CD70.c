@@ -22,6 +22,7 @@ extern void func_80058530_59130(s32, s32);
 extern s32 approximateSin(s16);
 extern void func_80069CF8_6A8F8(void);
 extern void func_80010240_10E40(void);
+extern void func_80010924_11524(void);
 
 typedef struct {
     s16 unk0;
@@ -665,7 +666,29 @@ void func_8004E4EC_4F0EC(Struct_func_8004E134 *arg0) {
     debugEnqueueCallback((u16)(arg0->unkC + 8), 0, func_80010240_10E40, arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E580_4F180);
+void func_8004E580_4F180(Struct_func_8004E134 *arg0) {
+    GameState *allocation = (GameState *)getCurrentAllocation();
+    s32 temp;
+    u8 poolId;
+
+    temp = (arg0->unk10 + 1) & 3;
+    arg0->unk10 = temp;
+
+    poolId = allocation->memoryPoolId;
+    if (poolId == 3) {
+        goto set_26;
+    }
+    if (poolId != 8) {
+        arg0->unk8 = temp + 0x17;
+    } else {
+    set_26:
+        arg0->unk8 = temp + 0x26;
+    }
+
+    arg0->unk0 = arg0->unk12 >> 5;
+    arg0->unk2 = arg0->unk14 >> 5;
+    debugEnqueueCallback((u16)(arg0->unkC + 8), 0, func_80010924_11524, arg0);
+}
 
 void func_8004E614_4F214(Struct_func_8004E134 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
