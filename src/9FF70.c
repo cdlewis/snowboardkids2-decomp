@@ -1193,12 +1193,6 @@ s32 func_800B74E4_A7394(func_800B74E4_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B756C_A741C);
-
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B75F4_A74A4);
-
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B76BC_A756C);
-
 typedef struct {
     u8 _pad0[0x44C];
     s32 unk44C; // 0x44C
@@ -1211,6 +1205,28 @@ typedef struct {
     u8 _padB90[0x2F];
     u8 unkBBF; // 0xBBF
 } func_800B7784_arg;
+
+s32 func_800B756C_A741C(func_800B7784_arg *arg0) {
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 = arg0->unk450 - 0x6000;
+    func_800B02AC_A015C(arg0);
+    func_800B40D4_A3F84(arg0);
+    func_8005D180_5DD80(arg0, 0);
+    arg0->unkA94 = arg0->unkA94 + arg0->unkB8C;
+    arg0->unkB8C = arg0->unkB8C + 0x10;
+
+    if (arg0->unkB8C == 0x400) {
+        arg0->unkB8C = 10;
+        arg0->unkBBF = arg0->unkBBF + 1;
+    }
+
+    return 0;
+}
+
+INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B75F4_A74A4);
+
+INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B76BC_A756C);
 
 typedef struct {
     u8 _pad0[0x80];
