@@ -1350,7 +1350,29 @@ s32 func_800B7A30_A78E0(func_800B7A30_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B7A94_A7944);
+s32 func_800B7A94_A7944(func_800B7444_arg *arg0) {
+    if (arg0->unkBC0 == 0) {
+        arg0->unk454 = 0xFFF80000;
+        arg0->unk44C = 0;
+        arg0->unk450 = 0x30000;
+        arg0->unkBC0 = arg0->unkBC0 + 1;
+    }
+
+    arg0->unkB84 = arg0->unkB84 | 0x10000;
+    arg0->unk450 = arg0->unk450 - 0x6000;
+    func_800B02AC_A015C(arg0);
+    func_800B40D4_A3F84(arg0);
+
+    if (arg0->unkB8C != 0) {
+        arg0->unkB8C = arg0->unkB8C - 1;
+    } else {
+        arg0->unkB84 = arg0->unkB84 & 0xFFFFDC7F;
+        func_800B00E4_9FF94(arg0);
+    }
+
+    func_8005D308_5DF08(arg0, 4);
+    return 0;
+}
 
 typedef struct {
     u8 _pad0[0xBDF];
