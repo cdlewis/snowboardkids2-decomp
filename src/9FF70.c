@@ -40,6 +40,9 @@ extern void *loadAssetByIndex_5E990(s32 arg0);
 typedef void (*func_800B3950_callback)(void *);
 extern func_800B3950_callback D_800BAB68_AAA18[];
 
+typedef void (*func_800B468C_callback)(void *);
+extern func_800B468C_callback D_800BAB78_AAA28[];
+
 typedef struct {
     u8 _pad0[0x5C];
     u8 unk5C;
@@ -274,7 +277,9 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B419C_A404C);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B42A8_A4158);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B468C_A453C);
+void func_800B468C_A453C(func_800B00D4_arg *arg0) {
+    D_800BAB78_AAA28[arg0->unkBBE](arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B46BC_A456C);
 
