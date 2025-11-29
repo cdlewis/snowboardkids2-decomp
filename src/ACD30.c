@@ -9,9 +9,12 @@ USE_ASSET(_4060A0);
 
 typedef struct {
     void *unk0;
-    u8 _pad4[0x8];
+    void *unk4;
+    void *unk8;
     void *unkC;
     void *unk10;
+    u8 _pad14[0x2];
+    s16 unk16;
 } ACD30Struct;
 
 void func_800BB4B8_ACF38(ACD30Struct *arg0);
@@ -53,7 +56,22 @@ void func_800BB2B0_ACD30(ACD30Struct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB310_ACD90);
 
-INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB428_ACEA8);
+extern void func_8005BCB8_5C8B8(void *, s32, s32);
+extern void debugEnqueueCallback(u16, u8, void *, void *);
+
+void func_800BB690_AD110(void);
+
+void func_800BB428_ACEA8(ACD30Struct *arg0) {
+    s32 i;
+
+    for (i = 0; i < arg0->unk16; i++) {
+        func_8005BCB8_5C8B8((u8 *)arg0->unk8 + i * 16 + 4, 0x180000, 0x300000);
+    }
+
+    for (i = 0; i < 4; i++) {
+        debugEnqueueCallback((u16)i, 4, func_800BB690_AD110, arg0);
+    }
+}
 
 void func_800BB4B8_ACF38(ACD30Struct *arg0) {
     ACD30AllocationStruct *allocation = (ACD30AllocationStruct *)getCurrentAllocation();
