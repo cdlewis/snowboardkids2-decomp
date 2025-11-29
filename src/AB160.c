@@ -1,8 +1,10 @@
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
+#include "task_scheduler.h"
 
-extern void *freeNodeMemory(void *);
+extern u8 randA(void);
+extern void func_800BB454_AB304(void);
 
 typedef struct {
     u8 pad[0x24];
@@ -44,13 +46,17 @@ void func_800BB9F0_AB8A0(func_800BB9F0_AB8A0_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-extern void setCallback(void *);
-extern void func_800BBA54_AB904(void);
+typedef struct {
+    u8 pad[0x50];
+    u16 unk50;
+} ScheduledTaskWith50;
 
 typedef struct {
-    s16 unk0;
+    u16 unk0;
     s16 unk2;
 } func_800BBA28_AB8D8_arg;
+
+void func_800BBA54_AB904(func_800BBA28_AB8D8_arg *arg0);
 
 void func_800BBA28_AB8D8(func_800BBA28_AB8D8_arg *arg0) {
     arg0->unk0 = 0;
@@ -58,7 +64,34 @@ void func_800BBA28_AB8D8(func_800BBA28_AB8D8_arg *arg0) {
     setCallback(func_800BBA54_AB904);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AB160", func_800BBA54_AB904);
+void func_800BBA54_AB904(func_800BBA28_AB8D8_arg *arg0) {
+    GameState *gameState = getCurrentAllocation();
+    ScheduledTaskWith50 *task;
+    s16 counter;
+    s16 newValue;
+
+    if (gameState->gamePaused) {
+        return;
+    }
+
+    counter = arg0->unk2;
+    if (counter == 0) {
+        task = (ScheduledTaskWith50 *)scheduleTask(func_800BB454_AB304, 0, 0, 0x32);
+        if (task != NULL) {
+            task->unk50 = arg0->unk0;
+        }
+
+        arg0->unk0++;
+        if ((s16)arg0->unk0 == 4) {
+            arg0->unk0 = 0;
+        }
+
+        newValue = (randA() & 0xF) + 0x14;
+    } else {
+        newValue = counter - 1;
+    }
+    arg0->unk2 = newValue;
+}
 extern void func_800BBB1C_AB9CC(void);
 
 void func_800BBAF8_AB9A8(s16 *arg0) {
