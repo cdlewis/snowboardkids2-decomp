@@ -9,6 +9,7 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "overlay.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_419C60);
@@ -309,6 +310,8 @@ void func_800319C8_325C8(func_800319C8_325C8_arg *arg0);
 void func_80031944_32544(func_80031510_32110_arg *arg0);
 void func_80031CE8_328E8(void *arg0);
 void func_80031DE4_329E4(void);
+void func_80031248_31E48(func_80031248_31E48_arg *arg0);
+void func_80031100_31D00(func_80031100_31D00_arg *arg0);
 
 extern u16 D_8008F16C_8FD6C[];
 extern u16 D_8008F16E_8FD6E[];
@@ -415,7 +418,59 @@ void func_80030F6C_31B6C(func_80031510_32110_arg *arg0) {
     arg0->unk30 = freeNodeMemory(arg0->unk30);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80030FBC_31BBC);
+typedef struct {
+    u8 padding[0x780];
+    u16 unk780;
+    u16 unk782;
+} func_80030FBC_31BBC_asset;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+} func_80030FBC_31BBC_arg_item;
+
+typedef struct {
+    func_80030FBC_31BBC_arg_item *unk0;
+    u8 unk4;
+} func_80030FBC_31BBC_arg;
+
+void func_80030FBC_31BBC(func_80030FBC_31BBC_arg *arg0) {
+    func_80030FBC_31BBC_asset *allocation;
+    void *asset;
+    s32 i;
+    int new_var;
+    s32 j;
+    s32 randVal;
+
+    allocation = getCurrentAllocation();
+    asset = dmaRequestAndUpdateStateWithSize(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    arg0->unk0 = allocateNodeMemory(0xF0);
+    setCleanupCallback(func_80031248_31E48);
+
+    i = j = 0;
+    while (i < 0x14) {
+        if (i < 10) {
+            arg0->unk0[j].unk0 = -0x24 + (i * 6);
+            randVal = (randB() & 7) - 10;
+            arg0->unk0[j].unk2 = allocation->unk780 + randVal;
+        } else {
+            arg0->unk0[j].unk0 = -0x60 + (i * 6);
+            arg0->unk0[j].unk2 = allocation->unk782 + (new_var = (randB() & 7) - 10);
+        }
+
+        arg0->unk0[j].unk4 = asset;
+        arg0->unk0[j].unk8 = (randB() & 7) | 0x10;
+
+        i++;
+        j++;
+    }
+
+    arg0->unk4 = 0xC;
+    setCallback(func_80031100_31D00);
+}
 
 void func_80031100_31D00(func_80031100_31D00_arg *arg0) {
     arg0->unk4--;
