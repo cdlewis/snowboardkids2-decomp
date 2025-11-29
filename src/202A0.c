@@ -18,6 +18,7 @@ extern s16 func_8006D21C_6DE1C(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern void computeLookAtMatrix(void *, void *, void *);
 extern void func_8006FD3C_7093C(u16, void *);
 extern void func_8001FFE4_20BE4(void);
+extern void func_8001FA00_20600(void);
 
 USE_ASSET(_458E30);
 USE_ASSET(_43A000);
@@ -145,6 +146,30 @@ typedef struct {
 } Func8001FEB4Arg;
 
 typedef struct {
+    u8 _pad0[0xB2C]; // 0x000-0xB2B
+    s8 unkB2C;       // 0xB2C
+    u8 _padB2D[0x6]; // 0xB2D-0xB32
+    u8 unkB33[12];   // 0xB33
+} Allocation_80020418;
+
+typedef struct {
+    s32 unk0;        // 0x00
+    u8 _pad4[0x4];   // 0x04
+    s32 unk8;        // 0x08
+    u8 _padC[0xC];   // 0x0C
+    u8 unk18[0x3A];  // 0x18
+    u16 unk52;       // 0x52
+    u8 _pad54[0x2];  // 0x54
+    u16 unk56;       // 0x56
+    u8 _pad58[0x2];  // 0x58
+    u16 unk5A;       // 0x5A
+    u8 _pad5C[0x16]; // 0x5C
+    u16 unk72;       // 0x72
+    u16 unk74;       // 0x74
+    u8 unk76;        // 0x76
+} Func80020418Arg;
+
+typedef struct {
     u8 data[0x1C];
     volatile s32 unk1C;
 } Mat2WithTemp;
@@ -213,7 +238,43 @@ void func_8001FEB4_20AB4(Func8001FEB4Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FFE4_20BE4);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80020418_21018);
+void func_80020418_21018(Func80020418Arg *arg0) {
+    Allocation_80020418 *allocation;
+    u8 mat1[0x20];
+    s32 pos1[4];
+    s32 pos2[4];
+    u16 temp;
+    void *unk18;
+
+    allocation = (Allocation_80020418 *)getCurrentAllocation();
+    arg0->unk72++;
+
+    if (arg0->unk72 == 0x5A) {
+        arg0->unk72 = 0;
+        memcpy(mat1, identityMatrix, 0x20);
+
+        unk18 = &arg0->unk18;
+        temp = func_80060A3C_6163C(unk18, arg0->unk52, arg0);
+        arg0->unk52 = temp;
+
+        func_80062B1C_6371C(unk18, temp, pos1, pos2);
+
+        arg0->unk5A = (func_8006D21C_6DE1C(pos1[0], pos1[2], arg0->unk0, arg0->unk8) - 0x1000) & 0x1FFF;
+
+        arg0->unk56 = (arg0->unk56 + 0x1000) & 0x1FFF;
+
+        arg0->unk76 = 0;
+        if (((arg0->unk5A - arg0->unk56) & 0x1FFF) >= 0x1001) {
+            arg0->unk76 = 1;
+        }
+
+        setCallback(&func_8001FA00_20600);
+
+        if (allocation->unkB33[allocation->unkB2C] == 5) {
+            arg0->unk74 = 0x1E0;
+        }
+    }
+}
 
 void func_80020528_21128(Func80020528Arg *arg0) {
     arg0->unk18 = freeNodeMemory(arg0->unk18);
@@ -374,10 +435,59 @@ void func_80021238_21E38(Func80021238Arg *arg0) {
     arg0->unk34 = freeNodeMemory(arg0->unk34);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80021270_21E70);
-
 extern u16 D_8008DAC0_8E6C0[];
+extern u16 D_8008DAB0_8E6B0[];
+extern u16 D_8008DAB8_8E6B8[];
 extern u16 D_8008DAC8_8E6C8[];
+
+void func_8002152C_2212C(Func8002144CArg *arg0);
+void func_800213C8_21FC8(Func8002144CArg *arg0);
+
+void func_80021270_21E70(Func8002144CArg *arg0) {
+    Allocation_202A0 *temp_s2;
+    u16 temp_s3;
+    u16 temp_s0;
+    u16 temp_v1;
+
+    temp_s2 = (Allocation_202A0 *)getCurrentAllocation();
+
+    if (temp_s2->unkB45 != 0) {
+        s32 idx = D_800AFE8C_A71FC->unk7 * 2;
+        temp_v1 = D_8008DAC0_8E6C0[D_800AFE8C_A71FC->unk7];
+        temp_s3 = D_8008DAB0_8E6B0[D_800AFE8C_A71FC->unk7];
+        temp_s0 = D_8008DAB8_8E6B8[D_800AFE8C_A71FC->unk7];
+        arg0->unk4.unk20 = temp_v1;
+    } else {
+        temp_s3 = 0x3A;
+        arg0->unk4.unk20 = 0xD;
+    }
+
+    if (temp_s2->unkB45 == 0) {
+        arg0->unk0 = func_8000198C_258C(temp_s3, temp_s2);
+    } else {
+        arg0->unk0 = func_800019B8_25B8(temp_s3, temp_s2, (s8)temp_s0, -1, -1, -1);
+    }
+
+    memcpy((u8 *)&arg0->unk4, identityMatrix, 0x20);
+
+    if ((temp_s2->unkB45 != 0) && (temp_s3 != 0x3A)) {
+        createYRotationMatrix((Mat3x3Padded *)&arg0->unk4, 0x1E00);
+        arg0->unk4.unk14 = 0x280000;
+    } else {
+        createYRotationMatrix((Mat3x3Padded *)&arg0->unk4, 0x200);
+        if (temp_s2->unkB45 == 0) {
+            arg0->unk4.unk14 = 0xFFD80000;
+        } else {
+            arg0->unk4.unk14 = 0xFFD00000;
+        }
+    }
+
+    arg0->unk4.unk18 = 0xFFD60000;
+    arg0->unk4.unk1C = 0x100000;
+
+    setCleanupCallback(&func_8002152C_2212C);
+    setCallback(&func_800213C8_21FC8);
+}
 
 void func_8002144C_2204C(Func8002144CArg *arg0);
 void func_800215DC_221DC(Func8002144CArg *arg0);
