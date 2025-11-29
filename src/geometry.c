@@ -272,7 +272,56 @@ void createRotationMatrixXZ(Mat3x3Padded *matrix, u16 angleX, u16 angleZ) {
     matrix->m[2][2] = cosZ;
 }
 
-INCLUDE_ASM("asm/nonmatchings/geometry", createRotationMatrixYZ);
+/* createRotationMatrixYZ creates a YZ rotation matrix with the pattern:
+ * [ cosY*cosZ,     sinY,         cosY*(-sinZ)  ]
+ * [ (-sinY)*cosZ,  cosY,         sinY*sinZ     ]
+ * [ cosZ,          0,            cosZ          ]
+ */
+void createRotationMatrixYZ(s16 *matrix, s16 angleY, s16 angleZ) {
+    s32 temp0;
+    s32 temp1;
+    s32 temp2;
+    s32 temp3;
+    s32 sinY;
+    s32 cosY;
+    s32 sinZ;
+    s32 cosZ;
+
+    sinY = approximateSin(angleY);
+    cosY = approximateCos(angleY);
+    sinZ = approximateSin(angleZ);
+    cosZ = approximateCos(angleZ);
+
+    temp0 = cosY * cosZ;
+    if (temp0 < 0) {
+        temp0 += 0x1FFF;
+    }
+    matrix[0] = temp0 >> 13;
+    matrix[1] = sinY;
+
+    temp1 = cosY * -sinZ;
+    if (temp1 < 0) {
+        temp1 += 0x1FFF;
+    }
+    matrix[2] = temp1 >> 13;
+
+    temp2 = -sinY * cosZ;
+    if (temp2 < 0) {
+        temp2 += 0x1FFF;
+    }
+    matrix[3] = temp2 >> 13;
+    matrix[4] = cosY;
+
+    temp3 = -sinY * -sinZ;
+    if (temp3 < 0) {
+        temp3 += 0x1FFF;
+    }
+    matrix[5] = temp3 >> 13;
+
+    matrix[6] = sinZ;
+    matrix[7] = 0;
+    matrix[8] = cosZ;
+}
 
 INCLUDE_ASM("asm/nonmatchings/geometry", createRotationMatrixXYZ);
 
