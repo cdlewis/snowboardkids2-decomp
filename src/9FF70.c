@@ -139,7 +139,58 @@ void func_800B12C0_A1170(func_800B00D4_arg *arg0) {
     D_800BAAD4_AA984[arg0->unkBBE](arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B12F0_A11A0);
+typedef struct {
+    u8 _pad0[0x44C];
+    s32 unk44C;
+    s32 unk450;
+    s32 unk454;
+    u8 _pad458[0x654];
+    s32 unkAAC;
+    u8 _padAB0[0x8];
+    s32 unkAB8;
+    u8 _padABC[0xC2];
+    u16 unkB7E;
+    u8 _padB80[0xC];
+    s32 unkB8C;
+    u8 _padB90[0x2F];
+    u8 unkBBF;
+} func_800B12F0_arg;
+
+extern void func_80058BB0_597B0(func_800B12F0_arg *);
+extern void func_8005D180_5DD80(void *, s32);
+
+s32 func_800B12F0_A11A0(func_800B12F0_arg *arg0) {
+    GameState *alloc = getCurrentAllocation();
+
+    if (alloc->unk79 == 0) {
+        arg0->unkAAC = 0;
+        if (arg0->unkBBF != 0) {
+            if (arg0->unkB8C < 9) {
+                func_80058BB0_597B0(arg0);
+            }
+        }
+        func_800B00E4_9FF94(arg0);
+        return 1;
+    }
+
+    if (alloc->unk7A < 10) {
+        if (arg0->unkBBF == 0) {
+            if (arg0->unkB7E & 0x4000) {
+                arg0->unkB8C = 0;
+                arg0->unkBBF = arg0->unkBBF + 1;
+            }
+        } else {
+            arg0->unkB8C = arg0->unkB8C + 1;
+        }
+    }
+
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 = arg0->unk450 - arg0->unkAB8;
+    func_800B02AC_A015C(arg0);
+    func_8005D180_5DD80(arg0, 0);
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B13D4_A1284);
 
@@ -764,7 +815,6 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B5478_A5328);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B55B4_A5464);
 
-extern void func_8005D180_5DD80(void *, s32);
 extern void func_8005D804_5E404(void *, u8, u8);
 
 typedef struct {
