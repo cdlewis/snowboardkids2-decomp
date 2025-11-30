@@ -1501,7 +1501,54 @@ s32 func_800B58B8_A5768(func_800B58B8_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B5938_A57E8);
+s32 func_800B5938_A57E8(func_800B5234_arg *arg0) {
+    s16 angle;
+    s16 angleDelta;
+
+    if (arg0->unkBBF == 0) {
+        arg0->unkB88 = 0;
+        arg0->unkB8C = 0xF;
+        arg0->unkBBF++;
+        if (arg0->unk450 > 0) {
+            arg0->unk450 = 0;
+        }
+        arg0->unkA8C = 0xFFFF;
+    }
+
+    if (arg0->unkB8C != 0) {
+        arg0->unkB8C--;
+        arg0->unkB84 |= 0x40;
+    }
+
+    angle = func_8005CE98_5DA98(arg0);
+    angleDelta = (angle - arg0->unkA94) & 0x1FFF;
+
+    if (angleDelta >= 0x1001) {
+        angleDelta |= 0xE000;
+    }
+
+    if (angleDelta >= 0x101) {
+        angleDelta = 0x100;
+    }
+
+    if (angleDelta < -0x100) {
+        angleDelta = -0x100;
+    }
+
+    arg0->unkA94 += angleDelta;
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 -= 0x6000;
+
+    func_800B40D4_A3F84(arg0);
+    func_800B02AC_A015C(arg0);
+
+    if (func_8005D308_5DF08(arg0, 0x10) != 0) {
+        func_800B00E4_9FF94(arg0);
+    }
+
+    return 0;
+}
 
 extern s32 func_8004175C_4235C(void *);
 
