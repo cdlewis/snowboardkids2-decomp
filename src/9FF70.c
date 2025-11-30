@@ -922,7 +922,9 @@ typedef struct {
     s32 unk454;
     u8 _pad458[0x688];
     s32 unkAE0;
-    u8 _padAE4[0xA8];
+    u8 _padAE4[0xA0];
+    s32 unkB84;
+    u8 _padB88[0x4];
     s32 unkB8C;
     u8 _padB90[0x30];
     u8 unkBC0;
@@ -978,7 +980,86 @@ end:
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B3F2C_A3DDC);
+s32 func_800B3F2C_A3DDC(func_800B3DF0_arg *arg0) {
+    u32 temp_v0;
+    s32 temp_v1;
+    s32 temp_v0_2;
+    u8 state;
+    s32 temp;
+
+    temp_v0 = arg0->unkB84;
+    temp_v1 = arg0->unk450;
+
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+
+    temp_v0 |= 0x60;
+    temp_v1 += -0x6000;
+
+    arg0->unkB84 = temp_v0;
+    arg0->unk450 = temp_v1;
+
+    func_800B40D4_A3F84(arg0);
+    func_800B02AC_A015C(arg0);
+
+    temp = arg0->unkAE0;
+    if (!(0xDFFFF < temp)) {
+        arg0->unkAE0 = temp + 0x8000;
+    }
+
+    state = arg0->unkBC0;
+
+    switch (state) {
+        case 0:
+            if (func_8005D308_5DF08(arg0, 0x1E)) {
+                temp_v0_2 = arg0->unkBC0;
+                temp_v0_2++;
+                arg0->unkBC0 = temp_v0_2;
+            }
+            break;
+
+        case 1:
+            if (func_8005D308_5DF08(arg0, 0x20)) {
+                temp_v1 = 0x14;
+                temp_v0_2 = arg0->unkBC0;
+                arg0->unkB8C = temp_v1;
+                temp_v0_2++;
+                arg0->unkBC0 = temp_v0_2;
+            }
+            break;
+
+        case 2:
+            temp_v0_2 = arg0->unkB8C;
+            if (temp_v0_2 != 0) {
+                temp_v0_2--;
+                arg0->unkB8C = temp_v0_2;
+            } else {
+                temp_v0_2 = arg0->unkBC0;
+                temp_v0_2++;
+                arg0->unkBC0 = temp_v0_2;
+            }
+            break;
+
+        case 3:
+            if (func_8005D308_5DF08(arg0, 0x1F)) {
+                temp_v0_2 = arg0->unkBC0;
+                temp_v0_2++;
+                arg0->unkBC0 = temp_v0_2;
+            }
+            break;
+
+        case 4:
+            if (func_8005D308_5DF08(arg0, 0x20)) {
+                arg0->unkBC0 = 2;
+                arg0->unkB8C = 0x14;
+            }
+            break;
+    }
+
+    func_8005D804_5E404(arg0, 4, 0);
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B4058_A3F08);
 
