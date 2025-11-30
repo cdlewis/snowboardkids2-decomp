@@ -6,7 +6,6 @@
 extern s32 approximateSin(s16);
 extern s32 approximateCos(s16);
 extern s32 isqrt64(s64 val);
-extern s16 atan2Fixed(s32, s32);
 extern u8 D_800A8CC8_A0038;
 
 typedef struct {

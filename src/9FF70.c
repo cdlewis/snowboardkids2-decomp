@@ -4,6 +4,7 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -1208,7 +1209,6 @@ s32 func_800B4CB8_A4B68(func_800B5234_arg *arg0) {
 extern s32 D_800BABD4_AAA84[3];
 extern void func_80050C80_51880(void *, s32);
 extern s32 distance_3d(s32, s32, s32);
-extern s16 atan2Fixed(s32, s32);
 extern s32 func_8005D8C8_5E4C8(void *);
 
 s32 func_800B4DB8_A4C68(func_800B5234_arg *arg0) {
@@ -1656,7 +1656,6 @@ s32 func_800B5D68_A5C18(func_800B5D68_arg *arg0) {
 extern u8 randA(void);
 extern void func_80050C00_51800(void *);
 extern s32 func_8005D8C8_5E4C8(void *);
-extern s16 atan2Fixed(s32, s32);
 
 typedef struct {
     u8 _pad0[0x44C];

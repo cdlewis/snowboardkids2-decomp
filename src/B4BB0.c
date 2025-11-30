@@ -1,5 +1,7 @@
 #include "56910.h"
 #include "common.h"
+#include "geometry.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -67,7 +69,52 @@ void func_800BB814_B5114(func_800BB814_B5114_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB890_B5190);
 
-INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BBA34_B5334);
+extern u16 D_800BBBA8_B54A8[];
+typedef struct {
+    DisplayListObject unk0;
+    s32 unk3C;
+    s32 unk40;
+    s32 unk44;
+    s32 unk48;
+    s16 unk4C;
+    u16 unk4E;
+} func_800BBA34_B5334_arg;
+
+void func_800BBA34_B5334(func_800BBA34_B5334_arg *arg0) {
+    int new_var;
+    s16 angle;
+    s32 temp_a2;
+    s32 temp_a0;
+    s32 temp_a3;
+    s32 temp_v1;
+    s32 i;
+    s32 temp_a1;
+    s32 temp_v0;
+
+    angle = atan2Fixed(arg0->unk3C, -arg0->unk48);
+
+    createCombinedRotationMatrix(arg0, angle, arg0->unk4E);
+
+    temp_v0 = arg0->unk0.unk10.position.X;
+    temp_a2 = arg0->unk40;
+    temp_a0 = arg0->unk0.unk10.position.Z;
+    temp_a3 = arg0->unk44;
+    temp_a1 = arg0->unk0.unk10.position.Y;
+
+    arg0->unk0.unk10.position.X = temp_v0 + temp_a2;
+    arg0->unk0.unk10.position.Z = temp_a0 + temp_a3;
+    arg0->unk0.unk10.position.Y = temp_a1 + arg0->unk3C;
+
+    if ((arg0->unk3C = arg0->unk3C + 0xFFFE6667) < ((s32)0xFFD00000)) {
+        new_var = randA() & 7;
+        arg0->unk4C = D_800BBBA8_B54A8[new_var];
+        setCallbackWithContinue(func_800BB890_B5190);
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, &arg0->unk0);
+    }
+}
 
 void func_800BBB18_B5418(func_800BB814_B5114_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
