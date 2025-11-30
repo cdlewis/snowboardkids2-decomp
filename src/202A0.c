@@ -14,7 +14,6 @@ extern void func_80038420_39020(void);
 extern u8 identityMatrix[];
 extern u16 func_80060A3C_6163C(void *, u16, void *);
 extern u16 func_80062B1C_6371C(void *, u16, void *, void *);
-extern s16 func_8006D21C_6DE1C(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern void computeLookAtMatrix(void *, void *, void *);
 extern void func_8006FD3C_7093C(u16, void *);
 extern void func_8001FFE4_20BE4(void);

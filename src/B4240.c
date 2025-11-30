@@ -8,7 +8,6 @@ extern void *func_80055E68_56A68(u8);
 extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);
 extern s32 func_80061A64_62664(void *, u16, void *);
-extern s16 func_8006D21C_6DE1C(s32, s32, s32, s32);
 
 extern s32 D_800BBB90_B4B20[];
 extern s32 D_800BBB94_B4B24[];

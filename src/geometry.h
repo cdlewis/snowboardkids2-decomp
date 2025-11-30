@@ -1,5 +1,4 @@
-#ifndef _GEOMETRY_H_
-#define _GEOMETRY_H_
+#pragma once
 
 #include "common.h"
 
@@ -48,4 +47,4 @@ void transformVector(s16 *, s16 *, void *);
 
 void scaleMatrix(Mat3x3Padded *matrix, s16 scaleX, s16 scaleY, s16 scaleZ);
 
-#endif
+s16 func_8006D21C_6DE1C(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
