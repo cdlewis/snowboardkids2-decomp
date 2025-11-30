@@ -1,0 +1,11 @@
+compiler_command = "../../tools/gcc_kmc/gcc -I../../include -I../../include/cutscene -I../../lib/ultralib/include -c -O2 -mips3 -mgp32 -mfp32 -mno-abicalls -G0 -fno-common -fno-builtin -B ../../tools/gcc_kmc/ -DPERMUTER"
+
+assembler_command = "mips-linux-gnu-as -EB -march=vr4300 -mtune=vr4300 --defsym _MACRO_INC_GUARD=1 -I../../include -I../../include/cutscene"
+
+compiler_type = "gcc"
+
+[preserve_macros]
+"g[DS]P.*" = "void"
+"gs[DS]P.*" = "void"
+"G_.*" = "void"
+
