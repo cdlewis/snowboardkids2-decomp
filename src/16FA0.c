@@ -12,6 +12,8 @@ extern void func_80000760_1360(void);
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0(void);
 extern void func_80038420_39020(void);
+extern u8 gConnectedControllerMask;
+extern void func_80012518_13118(void);
 
 typedef struct {
     s32 unk0;
@@ -91,7 +93,48 @@ void func_80016434_17034(Struct163F8 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016488_17088);
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_800165D8_171D8);
+void func_800165D8_171D8(void *arg0) {
+    GameState *state;
+    s32 i;
+    s32 numControllers;
+    s32 temp;
+    s32 unused[2];
+    void *ptr;
+    s32 val1;
+    s32 val2;
+
+    state = (GameState *)getCurrentAllocation();
+
+    if (gConnectedControllerMask != 0) {
+        if (state->unk3BD != 0) {
+            numControllers = 2;
+        } else {
+            numControllers = state->unk3BC;
+        }
+
+        if (numControllers != 0) {
+            i = 0;
+            val1 = 0xFF;
+            val2 = 0x80;
+            do {
+                temp = state->unk3BB;
+                if (i == temp) {
+                    ptr = (u8 *)arg0 + ((i + (state->unk3BD << 2)) << 4);
+                    *(s16 *)((u8 *)ptr + 0xA) = val1;
+                } else {
+                    ptr = (u8 *)arg0 + ((i + (state->unk3BD << 2)) << 4);
+                    *(s16 *)((u8 *)ptr + 0xA) = val2;
+                }
+
+                debugEnqueueCallback(8, 1, func_80012518_13118, (u8 *)arg0 + ((i + (state->unk3BD << 2)) << 4));
+                i++;
+            } while (i < numControllers);
+        }
+    }
+
+    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, (u8 *)arg0 + 0x60);
+    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, (u8 *)arg0 + 0x6C);
+}
 
 void func_800166FC_172FC(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
