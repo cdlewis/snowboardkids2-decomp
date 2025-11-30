@@ -8,6 +8,7 @@
 extern s32 approximateSin(s16);
 extern void createRotationMatrixYZ(s16 *, u16, u16);
 extern void func_8005B730_5C330(void *, s32, s32, s16);
+extern void func_800BB458_B5668(void);
 
 typedef struct {
     u8 _pad[0x24];
@@ -94,14 +95,19 @@ void func_800BB7B8_B59C8(func_800BB420_B5630_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void func_800BB828_B5A38(void *);
-
 typedef struct {
     s16 unk0;
     s16 unk2;
     s16 unk4;
     s16 unk6;
 } func_800BB7F0_B5A00_arg;
+
+typedef struct {
+    u8 pad[0x4C];
+    s16 unk4C;
+} Task;
+
+void func_800BB828_B5A38(func_800BB7F0_B5A00_arg *);
 
 void func_800BB7F0_B5A00(func_800BB7F0_B5A00_arg *arg0) {
     arg0->unk2 = 0x50;
@@ -111,4 +117,37 @@ void func_800BB7F0_B5A00(func_800BB7F0_B5A00_arg *arg0) {
     setCallback(func_800BB828_B5A38);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B54C0", func_800BB828_B5A38);
+void func_800BB828_B5A38(func_800BB7F0_B5A00_arg *arg0) {
+    Task *task;
+    GameState *gameState = getCurrentAllocation();
+
+    if (gameState->gamePaused == 0) {
+        if (arg0->unk2 == 0) {
+            arg0->unk0++;
+            if (arg0->unk0 == 3) {
+                arg0->unk0 = 0;
+            }
+            task = scheduleTask(func_800BB458_B5668, 0, 0, 0x5F);
+            if (task != NULL) {
+                task->unk4C = arg0->unk0;
+            }
+            arg0->unk2 = 0x50;
+        } else {
+            arg0->unk2--;
+        }
+
+        if (arg0->unk6 == 0) {
+            arg0->unk4++;
+            if (arg0->unk4 == 3) {
+                arg0->unk4 = 0;
+            }
+            task = scheduleTask(func_800BB458_B5668, 0, 0, 0x5F);
+            if (task != NULL) {
+                task->unk4C = arg0->unk4 + 3;
+            }
+            arg0->unk6 = 0x50;
+        } else {
+            arg0->unk6--;
+        }
+    }
+}
