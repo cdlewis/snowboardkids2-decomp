@@ -48,7 +48,14 @@ typedef struct {
     u8 padding2c[0x98];
     s32 unkB6C;
     s32 unkB70;
-    u8 padding6[0x10];
+    u8 padding6[0x6];
+    s8 unkB7A;
+    s8 unkB7B;
+    u8 padding6b[0x2];
+    s16 unkB7E;
+    s8 unkB80;
+    s8 unkB81;
+    u8 padding6c[0x2];
     s32 unkB84;
     s32 unkB88;
     u8 padding3[0x8];
@@ -76,7 +83,9 @@ typedef struct {
     u8 unkBD4;
     u8 padding5b[0x3];
     u8 unkBD8;
-    u8 padding5c[0x5];
+    u8 padding5c[0x1];
+    u8 unkBDA;
+    u8 padding5d_2[0x3];
     u8 unkBDE;
     u8 padding5d[0x7];
     u8 unkBE6;
