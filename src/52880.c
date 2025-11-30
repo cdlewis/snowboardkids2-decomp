@@ -55,7 +55,31 @@ typedef struct {
     s16 *unk48;
 } Alloc_52880;
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80051C80_52880);
+extern s32 distance_2d(s32, s32);
+extern s32 distance_3d(s32, s32, s32);
+
+void func_80051C80_52880(s32 *arg0, s32 arg1) {
+    s32 dist;
+
+    dist = distance_2d(arg0[0], arg0[2]);
+
+    if (!(dist >= 0x20000)) {
+        if (dist != 0) {
+            arg0[0] = (s64)((s64)arg0[0] * 0x20000) / dist;
+            arg0[2] = (s64)((s64)arg0[2] * 0x20000) / dist;
+        } else {
+            arg0[2] = 0x20000;
+        }
+    }
+
+    dist = distance_3d(arg0[0], arg0[1], arg0[2]);
+
+    if (dist != 0) {
+        arg0[0] = (s64)((s64)arg0[0] * arg1) / dist;
+        arg0[1] = (s64)((s64)arg0[1] * arg1) / dist;
+        arg0[2] = (s64)((s64)arg0[2] * arg1) / dist;
+    }
+}
 
 void func_800523EC_52FEC(Struct_52880 *arg0);
 void func_80051E34_52A34(Struct_52880 *arg0);
