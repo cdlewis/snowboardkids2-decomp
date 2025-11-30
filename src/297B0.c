@@ -8,7 +8,6 @@
 extern void func_8002AE80_2BA80(void *);
 extern void func_8002B248_2BE48(void *);
 extern void func_80028C08_29808(void);
-extern void func_80028DF0_299F0(void);
 extern s32 func_8002A390_2AF90(void *);
 extern void func_80028AEC_296EC(void *);
 extern void func_80029EA8_2AAA8(void);
@@ -74,6 +73,7 @@ typedef struct {
 
 void func_800291CC_29DCC(Func297D8Arg *);
 void func_80029AA4_2A6A4(Func297D8Arg *);
+void func_80028DF0_299F0(Func297D8Arg *);
 
 typedef struct {
     /* 0x00 */ SceneModel *unk0;
@@ -127,7 +127,74 @@ void func_80028D90_29990(Func297D8Arg *arg0) {
     setCallback(func_80028DF0_299F0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/297B0", func_80028DF0_299F0);
+void func_80028DF0_299F0(Func297D8Arg *arg0) {
+    AllocationData *allocation;
+    s32 shouldSetCallback;
+    u16 savedUnk50;
+    u8 savedUnk5E;
+    u8 currentUnk5E;
+
+    allocation = getCurrentAllocation();
+    shouldSetCallback = 0;
+
+    if (arg0->unk5E == 6) {
+        switch (arg0->unk50) {
+            case 0x18:
+                if (arg0->unk62 != 0) {
+                    arg0->unk50 = 0x19;
+                }
+                break;
+
+            case 0x19:
+                arg0->unk5A++;
+                if (arg0->unk5A == 0x3C) {
+                    arg0->unk5A = 0;
+                    arg0->unk50 = 0x1A;
+                }
+                break;
+
+            case 0x1A:
+                if (arg0->unk62 != 0) {
+                    arg0->unk62 = 0;
+                    arg0->unk5E = 0;
+                    arg0->unk50 = arg0->unk58;
+                }
+                break;
+        }
+    } else {
+        if (func_8002A390_2AF90(arg0) != 0) {
+            setCallback(func_80028AEC_296EC);
+            shouldSetCallback = 1;
+        } else if (arg0->unk5E == 0) {
+            if (arg0->unk5A >= 0) {
+                arg0->unk5A++;
+            }
+            if (arg0->unk5A == 0x55) {
+                currentUnk5E = arg0->unk5E;
+                arg0->unk5A = -1;
+                arg0->unk5E = 6;
+                arg0->unk50 = 0x18;
+                arg0->unk61 = currentUnk5E;
+            }
+        }
+    }
+
+    func_8002A2D0_2AED0(arg0);
+
+    allocation->unk408 = arg0->matrix.unk14;
+    allocation->unk410 = arg0->matrix.unk1C;
+
+    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+        savedUnk50 = arg0->unk50;
+        savedUnk5E = arg0->unk5E;
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = func_80028DF0_299F0;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(func_8002A200_2AE00);
+    }
+}
 
 void func_80028FAC_29BAC(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
