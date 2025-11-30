@@ -1123,8 +1123,6 @@ s32 func_800B4A4C_A48FC(func_800B4A4C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B4B08_A49B8);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B4CB8_A4B68);
-
 typedef struct {
     u8 _pad0[0x434];
     u8 unk434;        // 0x434
@@ -1146,6 +1144,58 @@ typedef struct {
     u8 _padBC1[0xBCC - 0xBC1];
     u8 unkBCC; // 0xBCC
 } func_800B5234_arg;
+
+extern s16 func_8005CE98_5DA98(void *);
+
+s32 func_800B4CB8_A4B68(func_800B5234_arg *arg0) {
+    s16 angle;
+    s16 diff;
+    s16 clampedDiff;
+
+    if (arg0->unkBBF == 0) {
+        arg0->unkB88 = 0;
+        arg0->unkB8C = 0xF;
+        arg0->unkBBF++;
+        if (arg0->unk450 > 0) {
+            arg0->unk450 = 0;
+        }
+    }
+
+    if (arg0->unkB8C != 0) {
+        arg0->unkB8C--;
+        arg0->unkB84 |= 0x40;
+    }
+
+    angle = func_8005CE98_5DA98(arg0);
+    diff = angle - arg0->unkA94;
+    clampedDiff = diff & 0x1FFF;
+
+    if (clampedDiff >= 0x1001) {
+        clampedDiff |= 0xE000;
+    }
+
+    if (clampedDiff > 0x100) {
+        clampedDiff = 0x100;
+    }
+
+    if (clampedDiff < -0x100) {
+        clampedDiff = -0x100;
+    }
+
+    arg0->unkA94 += clampedDiff;
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 -= 0x6000;
+
+    func_800B40D4_A3F84(arg0);
+    func_800B02AC_A015C(arg0);
+
+    if (func_8005D308_5DF08(arg0, 0xB) != 0) {
+        func_800B00E4_9FF94(arg0);
+    }
+
+    return 0;
+}
 
 extern s32 D_800BABD4_AAA84[3];
 extern void func_80050C80_51880(void *, s32);
