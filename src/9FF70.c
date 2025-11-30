@@ -1141,7 +1141,9 @@ typedef struct {
     u8 _padB90[0xBBF - 0xB90];
     u8 unkBBF; // 0xBBF
     u8 unkBC0; // 0xBC0
-    u8 _padBC1[0xBCC - 0xBC1];
+    u8 _padBC1[0xBC9 - 0xBC1];
+    u8 unkBC9; // 0xBC9
+    u8 _padBCA[0xBCC - 0xBCA];
     u8 unkBCC; // 0xBCC
 } func_800B5234_arg;
 
@@ -1257,7 +1259,57 @@ s32 func_800B4DB8_A4C68(func_800B5234_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B4F5C_A4E0C);
+s32 func_800B4F5C_A4E0C(func_800B5234_arg *arg0) {
+    s16 angle;
+
+    if (arg0->unkBBF != 0) {
+        arg0->unkB8C = 0;
+        arg0->unkBBF++;
+    }
+
+    arg0->unkB88 = 7;
+    arg0->unkB84 |= 0x60;
+
+    if (arg0->unk450 > 0) {
+        arg0->unk450 = 0;
+    }
+
+    arg0->unk450 -= 0x6000;
+
+    if (arg0->unkB84 & 1) {
+        arg0->unk44C = arg0->unk44C - (arg0->unk44C >> 5);
+        arg0->unk454 = arg0->unk454 - (arg0->unk454 >> 5);
+    } else {
+        func_800B42A8_A4158(arg0, 0x100, 0x100, 0x100);
+        func_80050C80_51880(arg0, arg0->unkBCC & 0xF);
+    }
+
+    angle = atan2Fixed(-arg0->unk44C, -arg0->unk454);
+    arg0->unkA94 = angle;
+
+    if (arg0->unkB84 & 2) {
+        arg0->unkA94 = angle + 0x1000;
+    }
+
+    func_800B40D4_A3F84(arg0);
+    func_800B02AC_A015C(arg0);
+    func_8005D180_5DD80(arg0, 0xC);
+
+    if (arg0->unkBC9 != 1) {
+        if (!(arg0->unkB84 & 1)) {
+            arg0->unkB8C++;
+            if (arg0->unkB8C >= 0xB) {
+                func_800B00D4_9FF84((func_800B00D4_arg *)arg0, 5);
+                goto skip;
+            }
+        }
+    } else {
+        arg0->unkB8C = 0;
+    }
+skip:
+    func_8005D804_5E404(arg0, 3, 0);
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B50C0_A4F70);
 
