@@ -142,7 +142,21 @@ typedef struct {
 } func_800BB494_AD854_arg;
 
 typedef struct {
-    u8 pad[0x50];
+    u8 unk00[0x20];
+    struct {
+        s32 unk00;
+        s32 unk04;
+        s32 unk08;
+        s32 unk0C;
+    } *unk20;
+    u8 unk24[0xC];
+    s32 unk30;
+    u8 unk34[0x10];
+    u16 unk44;
+    u16 unk46;
+    u16 unk48;
+    u16 unk4A;
+    s32 unk4C;
     s16 unk50;
     s16 unk52;
 } func_800BB664_arg;
@@ -174,10 +188,38 @@ void func_800BB494_AD854(func_800BB494_AD854_arg *arg0) {
     setCallback(&func_800BB5FC_AD9BC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB51C_AD8DC);
+void func_800BBB0C_ADECC(void *);
+void func_800BBB38_ADEF8(void *);
+void func_800BBB64_ADF24(void *);
+
+void func_800BB51C_AD8DC(func_800BB664_arg *arg0) {
+    s32 i;
+
+    arg0->unk44 += arg0->unk48;
+    arg0->unk46 = arg0->unk46 + arg0->unk4A;
+    arg0->unk30 = 0;
+    arg0->unk44 = ((u8 *)&arg0->unk44)[1];
+    arg0->unk46 = ((u8 *)&arg0->unk46)[1];
+    ;
+
+    for (i = 0; i < 4; i++) {
+        if (arg0->unk20->unk04 != 0) {
+            debugEnqueueCallback(i & 0xFFFF, 1, func_800BBB0C_ADECC, arg0);
+        }
+
+        if (arg0->unk20->unk08 != 0) {
+            debugEnqueueCallback(i & 0xFFFF, 3, func_800BBB38_ADEF8, arg0);
+        }
+
+        if (arg0->unk20->unk0C == 0) {
+            continue;
+        }
+
+        debugEnqueueCallback(i & 0xFFFF, 5, func_800BBB64_ADF24, arg0);
+    }
+}
 
 extern void func_800BB6C0_ADA80(func_800BB664_arg *);
-extern void func_800BB51C_AD8DC(func_800BB664_arg *);
 void func_800BB664_ADA24(func_800BB664_arg *);
 
 void func_800BB5FC_AD9BC(func_800BB664_arg *arg0) {
