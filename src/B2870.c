@@ -13,11 +13,7 @@ typedef struct {
     s32 unk44C;
     s32 unk450;
     s32 unk454;
-    u8 pad458[0x10];
-    s32 unk468;
-    u8 pad46C[0x8];
-    s32 unk474;
-    u8 pad478[0x984 - 0x478];
+    u8 pad458[0x984 - 0x458];
     u8 unk984[0xC];
     u8 pad990[0xA8C - 0x990];
     u16 unkA8C;
@@ -27,12 +23,9 @@ typedef struct {
     u8 padAA0[0xB84 - 0xAA0];
     s32 unkB84;
     s32 unkB88;
-    s32 unkB8C;
-    u8 padB90[0xB94 - 0xB90];
+    u8 padB8C[0xB94 - 0xB8C];
     u16 unkB94;
-    u8 padB96[0xBB8 - 0xB96];
-    u8 unkBB8;
-    u8 padBB9[0xBBD - 0xBB9];
+    u8 padB96[0xBBD - 0xB96];
     u8 unkBBD;
     u8 unkBBE;
     u8 unkBBF;
@@ -42,8 +35,6 @@ typedef struct {
     u8 unkBCA;
     u8 padBCB[1];
     u8 unkBCC;
-    u8 padBCD[0xBDB - 0xBCD];
-    u8 unkBDB;
 } Arg0Struct;
 
 extern FuncPtr D_800BCB5C_B411C[];
@@ -54,8 +45,6 @@ extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern void func_80060CDC_618DC(void *arg0, u16 arg1, void *arg2, s32 arg3, s32 *arg4);
 extern void func_8005C868_5D468(void *arg0);
 extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
-extern u8 randA(void);
-extern s32 func_800544B4_550B4(s32, s32, s32);
 
 INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB2B0_B2870);
 
@@ -124,58 +113,7 @@ void func_800BBF40_B3500(Arg0Struct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/B2870", func_800BBF70_B3530);
 
-s32 func_800BC094_B3654(Arg0Struct *arg0) {
-    s32 temp_v0;
-    s32 temp_v1;
-
-    if (arg0->unkBBF == 0) {
-        temp_v0 = arg0->unkB84;
-        arg0->unkBBF++;
-        arg0->unk468 = 0x80000;
-        arg0->unkB8C = 4;
-        if ((temp_v0 & 0x80000) == 0) {
-            temp_v1 = arg0->unkBDB;
-            if (temp_v1 != 0) {
-                arg0->unkBDB = temp_v1 - 1;
-            }
-        }
-    }
-
-    arg0->unkB88 = 0x200;
-    arg0->unk450 -= 0x8000;
-    arg0->unk468 -= 0x8000;
-
-    func_800BBE68_B3428(arg0);
-
-    arg0->unk44C = 0;
-    arg0->unk454 = 0;
-    arg0->unkA9E = (arg0->unkA9E + 0x100) & 0x1FFF;
-
-    if (arg0->unkB8C == 0) {
-        func_800544B4_550B4((randA() & 1) | 2, arg0->unkBB8, 0);
-        arg0->unkB8C = 4;
-    } else {
-        arg0->unkB8C--;
-    }
-
-    func_800B02AC_A015C(arg0);
-
-    arg0->unk474 += arg0->unk468;
-
-    if (arg0->unk474 == 0) {
-        arg0->unkB88 = 0;
-        arg0->unkBBD = 1;
-        arg0->unkBBE = 1;
-        arg0->unkBBF = 0;
-        arg0->unkBC0 = 0;
-        arg0->unk474 = 0;
-        if (arg0->unkBDB == 0) {
-            arg0->unkB84 |= 0x100000;
-        }
-    }
-
-    return 0;
-}
+INCLUDE_ASM("asm/nonmatchings/B2870", func_800BC094_B3654);
 
 INCLUDE_ASM("asm/nonmatchings/B2870", func_800BC1C0_B3780);
 

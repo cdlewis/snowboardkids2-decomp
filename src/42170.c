@@ -18,11 +18,10 @@ extern void *D_8009A700_9B300;
 extern void *D_8009A710_9B310;
 extern void *D_8009A720_9B320;
 extern void *D_8009A760_9B360;
-extern void *D_8009A770_9B370;
 extern Mat3x3Padded D_8009A8B0_9B4B0;
-extern s32 gFrameCounter;
 extern void func_80041810_42410(void *);
 extern void func_80042160_42D60(void);
+extern void func_80043E24_44A24(void);
 extern void func_800639F8_645F8(s32, DisplayListObject *);
 extern void func_80058B30_59730(Player *);
 
@@ -92,31 +91,21 @@ typedef struct {
 void func_80042308_42F08(Func420E8State *);
 
 typedef struct {
-    u8 pad0[0x14];  /* 0x00 */
-    s32 unk14;      /* 0x14 */
-    s32 unk18;      /* 0x18 */
-    s32 unk1C;      /* 0x1C */
-    void *unk20;    /* 0x20 */
-    void *unk24;    /* 0x24 */
-    void *unk28;    /* 0x28 */
-    s32 unk2C;      /* 0x2C */
-    u8 pad30[0xC];  /* 0x30 */
-    Player *unk3C;  /* 0x3C */
-    s32 unk40;      /* 0x40 */
-    s16 unk44;      /* 0x44 */
-    s16 unk46;      /* 0x46 */
+    u8 pad0[0x18]; /* 0x00 */
+    s32 unk18;     /* 0x18 - corresponds to DisplayListObject.unk10.position.Y */
+    u8 pad1C[0x4]; /* 0x1C */
+    void *unk20;   /* 0x20 */
+    void *unk24;   /* 0x24 */
+    void *unk28;   /* 0x28 */
+    s32 unk2C;     /* 0x2C */
+    u8 pad30[0xC]; /* 0x30 */
+    void *unk3C;   /* 0x3C */
+    s32 unk40;     /* 0x40 */
+    s16 unk44;     /* 0x44 */
+    s16 unk46;     /* 0x46 */
 } Func43DC0State;
 
 void func_80044018_44C18(Func43DC0State *);
-void func_80043E24_44A24(Func43DC0State *);
-void func_80043F8C_44B8C(Func43DC0State *);
-
-typedef struct {
-    u8 _pad0[0x44];
-    void *unk44;
-    u8 _pad48[0x2E];
-    u8 unk76;
-} GameStateAlloc;
 
 typedef struct {
     u8 pad0[0x14];    /* 0x00 */
@@ -1534,63 +1523,7 @@ void func_80043DC0_449C0(Func43DC0State *arg0) {
     setCallbackWithContinue(func_80043E24_44A24);
 }
 
-void func_80043E24_44A24(Func43DC0State *arg0) {
-    GameStateAlloc *allocation;
-    Player *player;
-    Player *temp_player;
-    u16 count;
-    s32 i;
-
-    allocation = (GameStateAlloc *)getCurrentAllocation();
-    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk44);
-    func_8006B084_6BC84(&D_8009A8B0_9B4B0, (u8 *)arg0->unk3C + 0x3F8, arg0);
-
-    if (arg0->unk46 == 0x200) {
-        func_80056B7C_5777C(&arg0->unk14, 0x1D);
-    }
-
-    if (arg0->unk46 != 0x2000) {
-        arg0->unk46 += 0x200;
-    }
-
-    scaleMatrix((Mat3x3Padded *)arg0, arg0->unk46, arg0->unk46, arg0->unk46);
-
-    if (gFrameCounter & 4) {
-        arg0->unk20 = &D_8009A760_9B360;
-    } else {
-        arg0->unk20 = &D_8009A770_9B370;
-    }
-
-    i = 0;
-    do {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
-        i++;
-    } while (i < 4);
-
-    player = arg0->unk3C;
-    if (player->unkB84 & 0x80000) {
-        player->unkBA6 = 0;
-    }
-
-    temp_player = arg0->unk3C;
-    count = temp_player->unkBA6;
-    if (count != 0) {
-        if (allocation->unk76 == 0) {
-            temp_player->unkBA6 = count - 1;
-            player = arg0->unk3C;
-            count = player->unkBA6;
-            if (count == 0) {
-                if (player->unkBBB == 0x11) {
-                    player->unkBA6 = count + 1;
-                }
-            }
-        }
-    } else {
-        temp_player->unkBD1 = 0;
-        arg0->unk40 = 0x40000;
-        setCallback(func_80043F8C_44B8C);
-    }
-}
+INCLUDE_ASM("asm/nonmatchings/42170", func_80043E24_44A24);
 
 void func_80043F8C_44B8C(Func43DC0State *arg0) {
     GameState *state;

@@ -13,8 +13,6 @@ USE_ASSET(_422C60);
 
 extern u8 D_1DC0D0[];
 extern u8 D_1DC260[];
-extern s32 gButtonsPressed;
-extern char D_800B11F0_1DB790[];
 
 extern void func_800394BC_3A0BC(void *, s32);
 extern void func_8000FED0_10AD0(void);
@@ -22,7 +20,6 @@ extern void func_800630F0_63CF0(s32, void *);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern void func_80038420_39020(void);
 extern void func_800B0218_1DA7B8(void *, u8);
-extern void renderTextPalette(void *);
 extern u8 identityMatrix[];
 extern void *D_800B1140_1DB6E0;
 extern char D_800B115C_1DB6FC[];
@@ -237,27 +234,7 @@ void func_800B0BEC_1DB18C(func_800B0BEC_arg *arg0) {
     setCallback(func_800B0C54_1DB1F4);
 }
 
-void func_800B0C54_1DB1F4(func_800B0BEC_arg *arg0) {
-    s32 *buttons = &gButtonsPressed;
-
-    if (*buttons & 0x800) {
-        arg0->unk2--;
-    }
-    if (*buttons & 0x400) {
-        arg0->unk2++;
-    }
-    if (*buttons & 0x100) {
-        arg0->unk0++;
-    }
-    if (*buttons & 0x200) {
-        arg0->unk0--;
-    }
-    sprintf(arg0->unk1C, D_800B11F0_1DB790, arg0->unk0 + 7, arg0->unk2 + 7);
-    debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->unk4);
-    arg0->unk10 = arg0->unk0;
-    arg0->unk12 = arg0->unk2;
-    debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->unk10);
-}
+INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0C54_1DB1F4);
 
 void func_800B0D4C_1DB2EC(func_800B0D4C_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);

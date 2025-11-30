@@ -8,9 +8,6 @@ extern s32 gFrameCounter;
 
 extern void func_800BC768_AEB28(void *);
 extern void *freeNodeMemory(void *);
-extern u8 randA(void);
-extern s32 getFreeNodeCount(s32);
-extern void func_800BBF28_AE2E8(void);
 
 typedef struct {
     u8 _pad[0x80];
@@ -430,59 +427,14 @@ typedef struct {
     s16 unk0;
 } func_800BC528_AE8E8_arg;
 
-typedef struct {
-    u8 _pad[0x4E];
-    u8 unk4E;
-} ScheduledTask;
-
-void func_800BC550_AE910(func_800BC528_AE8E8_arg *arg0);
+extern void func_800BC550_AE910(void);
 
 void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0) {
     arg0->unk0 = 0xF0;
     setCallback(&func_800BC550_AE910);
 }
 
-void func_800BC550_AE910(func_800BC528_AE8E8_arg *arg0) {
-    s32 temp;
-    s32 temp2;
-    Allocation_ADA24 *allocation;
-    ScheduledTask *task;
-    s32 randomValue;
-    s32 randomValueShifted;
-
-    allocation = getCurrentAllocation();
-
-    if (allocation->unk76 != 0) {
-        return;
-    }
-
-    arg0->unk0--;
-
-    if (arg0->unk0 == 0x78) {
-        task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
-        if (task != NULL) {
-            task->unk4E = randA() % 3;
-        }
-    }
-
-    if (arg0->unk0 == 0) {
-        if (getFreeNodeCount(0) >= 2) {
-            temp = 2;
-            randomValue = randA() % 3;
-            randomValueShifted = randomValue * temp;
-            temp2 = randomValueShifted + 3;
-            task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
-            if (task != NULL) {
-                task->unk4E = temp2;
-            }
-            task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
-            if (task != NULL) {
-                task->unk4E = randomValueShifted + 4;
-            }
-        }
-        arg0->unk0 = (randA() & 0x1F) + 0xF0;
-    }
-}
+INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC550_AE910);
 
 void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
     void *temp;

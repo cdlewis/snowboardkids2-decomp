@@ -20,8 +20,6 @@ Repeat the following steps:
 - `./objdump.py <base_n>.o`: dumps the assembly code for the specified file. Use this to dump object the target or base_x files for further analysis.
 - `./diff.sh <base_n>.o`: diffs the assembly code for the file against the assembly code for the target file. Use this to identify specific differences between the base_n file and the target file.
 - `./map_asm_to_c.py <base_n.o> <line number>`: Once you've identified the problematic assembly code, use this to map it back to the relevant C code.
-- `./permuter-import.sh <base_n.c>`: If you have a very high match percentage (99%+) but are unable to make progress, permuting may be effective. Permuting involves randomly changing a C file in the hope of reaching a better match percentage.
-- `./permuter-run.sh nonmatchings/<permuter directory>/ <timeout in minutes>`: Run the permuter on the environment created by `permuter-import.sh` with the specified timeout. This will randomly permute the function until a perfect match is achieved or the timeout is reached. If no timeout is specified, the permuter will run for 10 minutes.
 
 ## Coding Guidelines
 
