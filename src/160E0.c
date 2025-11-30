@@ -263,7 +263,71 @@ void func_800159AC_165AC(void) {
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_80015A18_16618);
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_80015CA4_168A4);
+void func_80015CA4_168A4(void) {
+    GameState *state;
+    s32 buttons;
+    u8 state_var;
+
+    state = getCurrentAllocation();
+    state_var = state->unk3BF;
+
+    if (state_var < 5) {
+        switch (state_var) {
+            case 0:
+                if (gButtonsPressed == 0x10) {
+                    state->unk3BF = state->unk3BF + 1;
+                }
+                break;
+
+            case 1:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x10) && (buttons != 0)) {
+                    if (buttons == 0x400) {
+                        state->unk3BF = state->unk3BF + 1;
+                    } else {
+                        state->unk3BF = 0xFF;
+                    }
+                }
+                break;
+
+            case 2:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x400) && (buttons != 0)) {
+                    if (buttons == 0x20) {
+                        state->unk3BF = state->unk3BF + 1;
+                    } else {
+                        state->unk3BF = 0xFF;
+                    }
+                }
+                break;
+
+            case 3:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x20) && (buttons != 0)) {
+                    if (buttons == 0x10000) {
+                        state->unk3BF = state->unk3BF + 1;
+                    } else {
+                        state->unk3BF = 0xFF;
+                    }
+                }
+                break;
+
+            case 4:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x10000) && (buttons != 0)) {
+                    if (buttons == 0x1000) {
+                        func_80016150_16D50();
+                        func_800585C8_591C8(0xDC);
+                        func_800585C8_591C8(0xDC);
+                        state->unk3BF = 0xF0;
+                    } else {
+                        state->unk3BF = 0xFF;
+                    }
+                }
+                break;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_80015DF4_169F4);
 
