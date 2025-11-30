@@ -1122,8 +1122,6 @@ s32 func_800B4A4C_A48FC(func_800B4A4C_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B4B08_A49B8);
-
 typedef struct {
     u8 _pad0[0x434];
     s32 unk434;      // 0x434
@@ -1154,7 +1152,70 @@ typedef struct {
     u8 unkBCC; // 0xBCC
 } func_800B5234_arg;
 
+extern s32 isqrt64(s64 val);
 extern s16 func_8005CE98_5DA98(void *);
+extern void func_80051C08_52808(void *, s32);
+
+typedef struct {
+    u8 _pad0[0xBDF];
+    u8 unkBDF;
+    u8 unkBE0;
+    u8 unkBE1;
+} func_800B7B64_arg;
+
+extern void func_800B7B44_A79F4(func_800B7B64_arg *, s32);
+
+s32 func_800B4B08_A49B8(func_800B5234_arg *arg0) {
+    s64 distSq;
+    s32 dist;
+
+    if (arg0->unkBBF == 0) {
+        arg0->unkB8C = 0x14;
+        arg0->unkBBF++;
+    }
+
+    arg0->unkB84 |= 0x60;
+    arg0->unk450 -= 0x6000;
+    arg0->unkB88 = 1;
+
+    if (arg0->unkB84 & 1) {
+        arg0->unkA8C = -1;
+        arg0->unkB8C = 0xA;
+        arg0->unkBC0 = 0;
+        arg0->unk44C -= (arg0->unk44C >> 5);
+        arg0->unk454 -= (arg0->unk454 >> 5);
+    } else {
+        if (arg0->unkBC0 == 0) {
+            arg0->unkBC0++;
+            func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
+            func_80056B7C_5777C(&arg0->unk434, 0x25);
+            func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
+        }
+        func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
+    }
+
+    func_800B40D4_A3F84(arg0);
+    func_800B02AC_A015C(arg0);
+
+    if (func_8005D308_5DF08(arg0, 0xA) != 0) {
+        if ((arg0->unkB84 & 1) == 0) {
+            if (arg0->unkB8C == 0) {
+                distSq = (s64)arg0->unk44C * arg0->unk44C + (s64)arg0->unk454 * arg0->unk454;
+                dist = isqrt64(distSq);
+
+                if (dist <= 0x1FFFF) {
+                    arg0->unkB88 = 0;
+                    func_800B00D4_9FF84((func_800B00D4_arg *)arg0, 4);
+                }
+            } else {
+                arg0->unkB8C--;
+            }
+        }
+    }
+
+    func_8005D804_5E404(arg0, 3, 0);
+    return 0;
+}
 
 s32 func_800B4CB8_A4B68(func_800B5234_arg *arg0) {
     s16 angle;
@@ -1372,17 +1433,6 @@ s32 func_800B50C0_A4F70(func_800B5234_arg *arg0) {
 
     return 0;
 }
-
-extern void func_80051C08_52808(void *, s32);
-
-typedef struct {
-    u8 _pad0[0xBDF];
-    u8 unkBDF;
-    u8 unkBE0;
-    u8 unkBE1;
-} func_800B7B64_arg;
-
-extern void func_800B7B44_A79F4(func_800B7B64_arg *, s32);
 
 s32 func_800B5234_A50E4(func_800B5234_arg *arg0) {
     if (arg0->unkBBF == 0) {
