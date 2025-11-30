@@ -200,12 +200,15 @@ $(BUILD_DIR)/src/%_annotated.s: src/%.c
 	@rm -f $(BUILD_DIR)/src/$*_temp.o
 	@echo "    Generated: $@"
 
-setup:
+install-hooks:
+	@tools/install-git-hooks.sh
+
+setup: install-hooks
 	$(MAKE) -C tools
 
 ### Settings
 .SECONDARY:
-.PHONY: all clean default updatediff check-warnings
+.PHONY: all clean default updatediff check-warnings install-hooks
 SHELL = /bin/bash -e -o pipefail
 
 # Print target for debugging
