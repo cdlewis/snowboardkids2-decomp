@@ -23,6 +23,9 @@ extern void func_800B0218_1DA7B8(void *, u8);
 extern u8 identityMatrix[];
 extern void *D_800B1140_1DB6E0;
 extern char D_800B115C_1DB6FC[];
+extern s32 gButtonsPressed;
+extern void *renderTextPalette;
+extern char D_800B11F0_1DB790[];
 typedef struct {
     u8 _pad0[0x2C];
     s32 unk2C;
@@ -234,7 +237,31 @@ void func_800B0BEC_1DB18C(func_800B0BEC_arg *arg0) {
     setCallback(func_800B0C54_1DB1F4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0C54_1DB1F4);
+void func_800B0C54_1DB1F4(func_800B0BEC_arg *arg0) {
+    s32 *buttons = &gButtonsPressed;
+
+    if (*buttons & 0x800) {
+        arg0->unk2--;
+    }
+    if (*buttons & 0x400) {
+        arg0->unk2++;
+    }
+    if (*buttons & 0x100) {
+        arg0->unk0++;
+    }
+    if (*buttons & 0x200) {
+        arg0->unk0--;
+    }
+
+    sprintf(arg0->unk1C, D_800B11F0_1DB790, arg0->unk0 + 7, arg0->unk2 + 7);
+
+    debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->unk4);
+
+    arg0->unk10 = arg0->unk0;
+    arg0->unk12 = arg0->unk2;
+
+    debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->unk10);
+}
 
 void func_800B0D4C_1DB2EC(func_800B0D4C_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
