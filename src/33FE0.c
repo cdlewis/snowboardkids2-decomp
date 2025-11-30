@@ -7,6 +7,9 @@ extern void *func_80035F80_36B80(s32);
 extern void func_80034D58_35958(void);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern void func_8000FED0_10AD0(void);
+extern void *getCurrentAllocation(void);
+extern void func_80012004_12C04(void);
+extern s16 D_8008F2C4_8FEC4[];
 
 USE_ASSET(_459310);
 USE_ASSET(_41A1D0);
@@ -86,6 +89,11 @@ typedef struct {
     /* 0x000 */ u8 pad0[0xABE];
     /* 0xABE */ u16 unkABE;
     /* 0xAC0 */ u16 unkAC0;
+    /* 0xAC2 */ u8 padAC2[0x2];
+    /* 0xAC4 */ u16 unkAC4;
+    /* 0xAC6 */ u16 unkAC6;
+    /* 0xAC8 */ u8 padAC8[0xE];
+    /* 0xAD6 */ u8 unkAD6;
 } AllocationStruct;
 
 void func_80035074_35C74(Func358FCStruct *arg0);
@@ -295,7 +303,47 @@ void func_800350AC_35CAC(Func350ACArg *arg0) {
     setCallback(func_8003513C_35D3C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_8003513C_35D3C);
+void func_8003513C_35D3C(Func350ACArg *arg0) {
+    AllocationStruct *allocation;
+    u32 temp;
+
+    allocation = getCurrentAllocation();
+
+    temp = allocation->unkAC6;
+    if ((u32)(temp - 0x33) < 2U) {
+        arg0->unk2 = (allocation->unkAD6 * 3 * 8) - 0x14;
+
+        if (allocation->unkAC6 == 0x34) {
+            if (allocation->unkAC4 & 1) {
+                arg0->unkD = 0xFF;
+            } else {
+                arg0->unkD = 0;
+            }
+        } else {
+            arg0->unkD = 0;
+        }
+
+        debugEnqueueCallback(8, 1, func_80012004_12C04, arg0);
+
+        if (allocation->unkAC6 == 0x33) {
+            arg0->unk11++;
+            arg0->unk11 &= 3;
+            if (arg0->unk11 == 0) {
+                arg0->unk10++;
+                arg0->unk10 &= 3;
+                arg0->unk8 = D_8008F2C4_8FEC4[arg0->unk10];
+            }
+        } else {
+            arg0->unk11 = 0;
+            arg0->unk10 = 0;
+            arg0->unk8 = 0xA;
+        }
+    } else {
+        arg0->unk11 = 0;
+        arg0->unk10 = 0;
+        arg0->unk8 = 0xA;
+    }
+}
 
 void func_80035234_35E34(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
