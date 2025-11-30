@@ -949,7 +949,7 @@ typedef struct {
     s16 unk7C;
 } Struct_func_8004E8BC;
 
-void func_8004E940_4F540(void *);
+void func_8004E940_4F540(Struct_func_8004E8BC *);
 void func_8004EA28_4F628(Struct_func_8004F04C *);
 
 void func_8004E8BC_4F4BC(Struct_func_8004E8BC *arg0) {
@@ -974,7 +974,47 @@ void func_8004E8BC_4F4BC(Struct_func_8004E8BC *arg0) {
     setCallback(func_8004E940_4F540);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E940_4F540);
+void func_8004E940_4F540(Struct_func_8004E8BC *arg0) {
+    Struct_func_8004E8BC_alloc *allocation;
+    s32 i;
+    s16 xPos;
+    s16 currentVal;
+
+    allocation = (Struct_func_8004E8BC_alloc *)getCurrentAllocation();
+    currentVal = arg0->unk7A;
+    i = ((Struct_func_8004E8BC_unk10_target *)allocation->unk10)->unk17C3 - currentVal;
+
+    if (i != 0) {
+        xPos = 0x40;
+        if (i < 0) {
+            arg0->unk7A = currentVal - 1;
+            arg0->unk7C = 0;
+        } else {
+            if (arg0->unk7C == 0) {
+                arg0->unk7A = currentVal + 1;
+                arg0->unk7C = 4;
+            } else {
+                arg0->unk7C--;
+            }
+        }
+        xPos = 0x40;
+    }
+
+    xPos = 0x40;
+
+    for (i = 0; i < 10; i++) {
+        if (i >= arg0->unk7A) {
+            arg0->elements[i].unk8 = 2;
+        } else {
+            arg0->elements[i].unk8 = 0;
+        }
+
+        arg0->elements[i].unk0 = xPos;
+        xPos -= 0x10;
+
+        debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->elements[i]);
+    }
+}
 
 void func_8004EA28_4F628(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
