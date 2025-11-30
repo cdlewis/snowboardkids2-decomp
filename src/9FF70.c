@@ -1125,16 +1125,22 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B4B08_A49B8);
 
 typedef struct {
     u8 _pad0[0x434];
-    u8 unk434;        // 0x434
-    u8 _pad435[0x17]; // 0x435 to 0x44C
-    s32 unk44C;       // 0x44C
-    s32 unk450;       // 0x450
-    s32 unk454;       // 0x454
+    s32 unk434;      // 0x434
+    s32 unk438;      // 0x438
+    s32 unk43C;      // 0x43C
+    u8 _pad440[0xC]; // 0x440 to 0x44C
+    s32 unk44C;      // 0x44C
+    s32 unk450;      // 0x450
+    s32 unk454;      // 0x454
     u8 _pad458[0xA8C - 0x458];
     u16 unkA8C; // 0xA8C
     u8 _padA8E[0xA94 - 0xA8E];
     s16 unkA94; // 0xA94
-    u8 _padA96[0xB84 - 0xA96];
+    u8 _padA96[0xAC4 - 0xA96];
+    u16 unkAC4;      // 0xAC4
+    u8 _padAC6[0x2]; // 0xAC6 to 0xAC8
+    u8 unkAC8[0xC];  // 0xAC8
+    u8 _padAD4[0xB84 - 0xAD4];
     s32 unkB84; // 0xB84
     s32 unkB88; // 0xB88
     s32 unkB8C; // 0xB8C
@@ -1311,7 +1317,61 @@ skip:
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B50C0_A4F70);
+extern void func_80050ECC_51ACC(void *arg0);
+
+s32 func_800B50C0_A4F70(func_800B5234_arg *arg0) {
+    s32 stackVec[3];
+    void **allocation;
+    u16 angle;
+    s32 vel1;
+    s32 vel2;
+
+    allocation = getCurrentAllocation();
+
+    if (arg0->unkBBF == 0) {
+        arg0->unkBBF++;
+        angle = arg0->unkAC4;
+        arg0->unkA94 = angle;
+        rotateVectorY(&arg0->unkAC8, (s16)angle, &arg0->unk44C);
+
+        if (arg0->unkB84 & 2) {
+            arg0->unkA94 += 0x1000;
+        }
+
+        rotateVectorY((u8 *)allocation[0x48 / sizeof(void *)] + 0xE4, arg0->unkA94, stackVec);
+
+        stackVec[0] += arg0->unk434;
+        stackVec[2] += arg0->unk43C;
+        stackVec[1] = arg0->unk438 + 0x140000;
+
+        func_80056B7C_5777C(&arg0->unk434, 0xD);
+        func_80050ECC_51ACC(stackVec);
+    }
+
+    arg0->unkB88 = 1;
+    arg0->unkB84 |= 0x20;
+    arg0->unk450 -= 0x6000;
+
+    vel1 = arg0->unk44C;
+    arg0->unk44C = vel1 - (vel1 >> 6);
+
+    vel2 = arg0->unk454;
+    arg0->unk454 = vel2 - (vel2 >> 6);
+
+    func_800B40D4_A3F84(arg0);
+    func_800B02AC_A015C(arg0);
+
+    if (func_8005D308_5DF08(arg0, 0xE) != 0) {
+        if ((arg0->unkB84 & 1) == 0) {
+            func_800B00D4_9FF84((func_800B00D4_arg *)arg0, 8);
+        }
+    }
+
+    arg0->unkB84 |= 0x10000;
+    func_8005D804_5E404(arg0, 3, 0);
+
+    return 0;
+}
 
 extern void func_80051C08_52808(void *, s32);
 
