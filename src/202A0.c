@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "56910.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "geometry.h"
@@ -173,7 +174,97 @@ typedef struct {
     volatile s32 unk1C;
 } Mat2WithTemp;
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_8001F6A0_202A0);
+typedef struct {
+    s32 unk0;        // 0x00
+    s32 unk4;        // 0x04
+    s32 unk8;        // 0x08
+    s32 unkC;        // 0x0C
+    s32 unk10;       // 0x10
+    s32 unk14;       // 0x14
+    void *unk18;     // 0x18
+    u8 _pad1C[0x10]; // 0x1C
+    void *unk2C;     // 0x2C
+    u8 _pad30[0x20]; // 0x30
+    s16 unk50;       // 0x50
+    s16 unk52;       // 0x52
+    s16 unk54;       // 0x54
+    s16 unk56;       // 0x56
+    u8 _pad58[0x4];  // 0x58
+    s32 unk5C;       // 0x5C
+    s32 unk60;       // 0x60
+    s32 unk64;       // 0x64
+    s32 unk68;       // 0x68
+    u8 _pad6C[0x6];  // 0x6C
+    s16 unk72;       // 0x72
+    s16 unk74;       // 0x74
+} Func8001F6A0Arg;
+
+extern u8 D_8008D9F0_8E5F0[];
+
+void func_8001F7C8_203C8(void);
+void func_80020528_21128(Func80020528Arg *arg0);
+
+void func_8001F6A0_202A0(Func8001F6A0Arg *arg0) {
+    Allocation_80020418 *allocation;
+    s8 temp;
+    u8 charIndex;
+    u8 value;
+    u8 value2;
+
+    allocation = (Allocation_80020418 *)getCurrentAllocation();
+
+    // Read character index from allocation
+    temp = allocation->unkB2C;
+    charIndex = allocation->unkB33[temp];
+    value = D_8008D9F0_8E5F0[charIndex];
+
+    // Initialize arg0 structure
+    arg0->unk8 = 0;
+    arg0->unk4 = 0;
+    arg0->unk0 = 0;
+    arg0->unk56 = 0;
+    arg0->unk52 = value;
+
+    arg0->unk2C = func_8000198C_258C(6, (u8 *)allocation + 0x3B0);
+
+    // Read character index again
+    temp = allocation->unkB2C;
+    charIndex = allocation->unkB33[temp];
+    value2 = D_8008D9F0_8E5F0[charIndex];
+
+    arg0->unk5C = 0x2E000;
+    arg0->unk60 = 0x800000;
+    arg0->unk14 = 0;
+    arg0->unk10 = 0;
+    arg0->unkC = 0;
+    arg0->unk54 = 0;
+    arg0->unk74 = 0;
+    arg0->unk64 = 0xA00000;
+    arg0->unk68 = 0xA00000;
+    arg0->unk50 = value2;
+
+    // Read character index again for conditional
+    temp = allocation->unkB2C;
+    charIndex = allocation->unkB33[temp];
+
+    if (charIndex == 9) {
+        arg0->unk64 += 0xFFB00000;
+    } else {
+        if (charIndex == 5) {
+            arg0->unk74 = 0x1E0;
+        }
+    }
+    arg0->unk72 = 0;
+
+    // Read character index one more time
+    temp = allocation->unkB2C;
+    charIndex = allocation->unkB33[temp];
+
+    arg0->unk18 = func_80055D34_56934(charIndex);
+
+    setCleanupCallback(&func_80020528_21128);
+    setCallback(&func_8001F7C8_203C8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001F7C8_203C8);
 
