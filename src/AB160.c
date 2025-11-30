@@ -4,14 +4,55 @@
 #include "task_scheduler.h"
 
 extern u8 randA(void);
-extern void func_800BB454_AB304(void);
 extern void func_80058530_59130(s32, s32);
+extern void *getCurrentAllocation(void);
+extern void *func_80055E68_56A68(u8);
+extern void *func_80055DC4_569C4(u8);
+extern void *func_80055DF8_569F8(u8);
+extern s32 func_80061A64_62664(void *, u16, void *);
+extern s16 func_8006D21C_6DE1C(s32, s32, s32, s32);
+extern void setCleanupCallback(void *);
+extern void setCallback(void *);
+
+extern s32 D_800BBBC0_ABA70[];
+extern s32 D_800BBBC4_ABA74[];
+extern s32 D_800BBBC8_ABA78[];
+extern s32 D_800BBBCC_ABA7C[];
+extern s32 D_800BBBD0_ABA80[];
+
+extern void func_800BB5BC_AB46C(void);
+extern void func_800BB7D4_AB684(void);
 
 typedef struct {
     u8 pad[0x24];
     void *unk24;
     void *unk28;
 } func_800BB9F0_AB8A0_arg;
+
+void func_800BB9F0_AB8A0(func_800BB9F0_AB8A0_arg *arg0);
+
+typedef struct {
+    u8 pad[0x5C];
+    u8 unk5C;
+} Allocation_AB304;
+
+typedef struct {
+    u8 pad0[0x20];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    s32 unk2C;
+    u8 pad30[0xC];
+    s32 unk3C;
+    s32 unk40;
+    s32 unk44;
+    s32 unk48;
+    s32 unk4C;
+    s16 unk50;
+    s16 unk52;
+    u16 unk54;
+    s16 unk56;
+} TaskArg_AB304;
 
 typedef struct {
     /* 0x00 */ Mat3x3Padded matrix;
@@ -36,7 +77,57 @@ void func_800BB2B0(func_800BB2B0_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/AB160", func_800BB320_AB1D0);
 
-INCLUDE_ASM("asm/nonmatchings/AB160", func_800BB454_AB304);
+void func_800BB454_AB304(TaskArg_AB304 *task) {
+    Allocation_AB304 *allocation;
+    void *temp;
+    s16 index;
+    s32 temp_value;
+    void (*temp_callback)(void);
+
+    allocation = (Allocation_AB304 *)getCurrentAllocation();
+
+    temp = func_80055E68_56A68(allocation->unk5C);
+    task->unk20 = (void *)((u32)temp + 0x90);
+
+    task->unk24 = func_80055DC4_569C4(allocation->unk5C);
+    task->unk28 = func_80055DF8_569F8(allocation->unk5C);
+
+    index = task->unk50;
+
+    task->unk2C = 0;
+    task->unk52 = 1;
+
+    task->unk56 = D_800BBBC0_ABA70[task->unk50 * 5];
+
+    task->unk3C = D_800BBBC4_ABA74[task->unk50 * 5];
+
+    task->unk44 = D_800BBBC8_ABA78[task->unk50 * 5];
+
+    task->unk40 = func_80061A64_62664((u8 *)allocation + 0x30, task->unk56, &task->unk3C);
+
+    index = task->unk50;
+
+    task->unk54 =
+        func_8006D21C_6DE1C(D_800BBBCC_ABA7C[index * 5], D_800BBBD0_ABA80[index * 5], task->unk3C, task->unk44);
+
+    task->unk48 = 0;
+    task->unk4C = 0;
+
+    setCleanupCallback(func_800BB9F0_AB8A0);
+
+    if ((randA() & 0xFF) < 0xB3) {
+        temp_callback = func_800BB5BC_AB46C;
+        task->unk48 = 0;
+        temp_value = 0x40000;
+    } else {
+        temp_value = 0x18000;
+        temp_callback = func_800BB7D4_AB684;
+        task->unk48 = 0;
+    }
+
+    task->unk4C = temp_value;
+    setCallback(temp_callback);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AB160", func_800BB5BC_AB46C);
 
