@@ -1217,7 +1217,6 @@ typedef struct {
     u8 _pad14[0xC];
 } Element_80047F90;
 
-extern s32 approximateSin(s16 angle);
 extern void func_800480A8_48CA8(void);
 
 typedef struct {

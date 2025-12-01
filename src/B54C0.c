@@ -5,7 +5,6 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern s32 approximateSin(s16);
 extern void createRotationMatrixYZ(s16 *, u16, u16);
 extern void func_8005B730_5C330(void *, s32, s32, s16);
 extern void func_800BB458_B5668(void);

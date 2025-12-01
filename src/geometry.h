@@ -50,3 +50,5 @@ void scaleMatrix(Mat3x3Padded *matrix, s16 scaleX, s16 scaleY, s16 scaleZ);
 s16 func_8006D21C_6DE1C(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 s32 atan2Fixed(s32, s32);
+
+s32 approximateSin(s16 inputAngle);

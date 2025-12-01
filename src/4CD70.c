@@ -6,19 +6,18 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "overlay.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_3F3940);
 USE_ASSET(_3F6950);
 USE_ASSET(_3F3EF0);
 
-extern void *loadAsset_34CB50(void);
-extern u8 randA(void);
 extern void func_8004E2D8_4EED8(void);
 extern void func_8000FED0_10AD0(void);
 extern void func_80058530_59130(s32, s32);
-extern s32 approximateSin(s16);
 extern void func_80069CF8_6A8F8(void);
 extern void func_80010240_10E40(void);
 extern void func_800105B0_111B0(void);

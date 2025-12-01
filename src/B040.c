@@ -1,5 +1,6 @@
 #include "90F0.h"
 #include "common.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 typedef union {
@@ -432,7 +433,6 @@ typedef struct {
     /* 0x70 */ s16 unk70;
 } func_8000B598_arg;
 
-extern s32 approximateSin(s16);
 extern void
 func_8000A190_AD90(s32 *ptr, s32 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, s16 arg7, u8 arg8, u8 arg9);
 
