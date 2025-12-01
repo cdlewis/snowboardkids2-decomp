@@ -1463,7 +1463,10 @@ segments:
     vram: 0
     start: 0x4237C0
 
-  - [0x426EF0, bin]
+  - name: _426EF0
+    type: bin
+    vram: 0
+    start: 0x426EF0
 
   - name: _42F1D0
     type: bin
