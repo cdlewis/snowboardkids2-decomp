@@ -28,7 +28,8 @@ typedef struct {
     s32 velY;
     s32 velZ;
     s32 velX;
-    u8 padding2[0x10];
+    u8 padding2[0xC];
+    s32 unk3C;
     s16 unk40;
     s16 unk42;
     s16 unk44;
@@ -291,7 +292,7 @@ void func_800537F4_543F4(Struct_52880 *arg0) {
     setCallbackWithContinue(func_8005383C_5443C);
 }
 
-extern void func_80053990_54590(void);
+void func_80053990_54590(Struct_52880 *arg0);
 
 void func_8005383C_5443C(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
@@ -339,7 +340,65 @@ void func_80053898_54498(Struct_52880 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80053990_54590);
+extern void setCallback(void *);
+extern void func_80042340_42F40(void *);
+extern void func_80069CF8_6A8F8(void);
+extern void func_80066444_67044(s32, void *);
+extern void func_80053B38_54738(void);
+
+void func_80053990_54590(Struct_52880 *arg0) {
+    Alloc_52880 *alloc;
+    s16 playerIdx;
+    void *player;
+    s32 temp_v0;
+    s32 temp_v1;
+    s32 temp_a1;
+    s32 temp_a2;
+    s32 i;
+
+    alloc = getCurrentAllocation();
+
+    if (arg0->unk4A == 0) {
+        playerIdx = arg0->unk42;
+        player = (void *)((u8 *)alloc->unk10 + (playerIdx * 3048) + 0x950);
+        transformVector(alloc->unk48, player, &arg0->unk4);
+        arg0->unk3C = 0x1B8000;
+    } else {
+        playerIdx = arg0->unk42;
+        player = (void *)((u8 *)alloc->unk10 + (playerIdx * 3048) + 0x950);
+        transformVector((void *)((u8 *)alloc->unk48 + 0x18), player, &arg0->unk4);
+        arg0->unk3C = 0x1A8000;
+    }
+
+    playerIdx = arg0->unk42;
+    player = (void *)((u8 *)alloc->unk10 + (playerIdx * 3048) + 0x950);
+    transformVector((void *)((u8 *)alloc->unk48 + 0xC), player, &arg0->velY);
+
+    temp_v0 = arg0->unk4;
+    temp_a2 = arg0->velY;
+    temp_v1 = arg0->unk8;
+    temp_a1 = arg0->velZ;
+    arg0->velY = temp_v0 - temp_a2;
+    arg0->velZ = temp_v1 - temp_a1;
+    arg0->velX = arg0->unkC - arg0->velX;
+
+    playerIdx = arg0->unk42;
+    arg0->unk40 = ((Unk10Element_52880 *)((u8 *)alloc->unk10 + (playerIdx * 3048)))->unkB94;
+    arg0->unk48 = 0xF0;
+
+    func_80056B7C_5777C(&arg0->unk4, 0x10);
+    setCallback(func_80053B38_54738);
+    func_80053898_54498(arg0);
+
+    if (arg0->unk4E != 0) {
+        func_80042340_42F40(&arg0->unk4);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80053B38_54738);
 
