@@ -45,7 +45,9 @@ typedef struct {
     s32 unkAC8;
     s32 unkACC;
     s32 unkAD0;
-    u8 padding2c[0x98];
+    s32 unkAD4[3];
+    s32 unkAE0;
+    u8 padding2c[0x88];
     s32 unkB6C;
     s32 unkB70;
     u8 padding6[0x6];

@@ -17,6 +17,12 @@ typedef struct {
     /* 0x2C */ ListNode_5AA90 *list;
 } Allocation5AA90;
 
+typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+} Vec3s32;
+
 u16 func_80059E90_5AA90(Player *arg0, void *arg1, u16 arg2, void *arg3) {
     if (!(arg0->unkB84 & 0x100)) {
         return func_80060A3C_6163C(arg1, arg2, arg3);
@@ -113,7 +119,35 @@ INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AE8C_5BA8C);
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005B24C_5BE4C);
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005B400_5C000);
+s32 func_8005B400_5C000(Player *arg0, Vec3s32 *arg1, s32 arg2) {
+    Vec3s32 localVec;
+    s32 radius;
+    s32 negRadius;
+    s64 distSq;
+
+    memcpy(&localVec, &arg0->unkAD4, 0xC);
+
+    localVec.x = localVec.x + arg0->worldPosX;
+    localVec.y = localVec.y + arg0->worldPosY;
+    localVec.z = localVec.z + arg0->worldPosZ;
+
+    localVec.x = localVec.x - arg1->x;
+    localVec.y = localVec.y - arg1->y;
+    localVec.z = localVec.z - arg1->z;
+
+    radius = arg0->unkAE0 + arg2;
+    negRadius = -radius;
+
+    if (negRadius < localVec.x && localVec.x < radius && negRadius < localVec.y && localVec.y < radius &&
+        negRadius < localVec.z && localVec.z < radius) {
+        distSq = (s64)localVec.x * localVec.x + (s64)localVec.y * localVec.y + (s64)localVec.z * localVec.z;
+        if (isqrt64(distSq) < radius) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005B548_5C148);
 
