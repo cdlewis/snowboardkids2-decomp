@@ -6,13 +6,14 @@
 #include "task_scheduler.h"
 
 extern void func_8003D560_3E160(void);
-extern void func_80014990_15590(void);
 extern void func_80015A18_16618(void);
 extern void func_8000D7F8_E3F8(void);
 extern void func_80021D20_22920(void);
 extern void func_80014A90_15690(void);
 extern void *__udiv_w_sdiv(void);
 extern u8 D_800AB47A_A27EA;
+
+void func_80014990_15590(void);
 
 void func_800144DC_150DC(void);
 void func_8001489C_1549C(void);
@@ -186,4 +187,32 @@ void func_80014958_15558(void) {
     D_800AFE8C_A71FC->unk22 = 3;
 }
 
-INCLUDE_ASM("asm/nonmatchings/15080", func_80014990_15590);
+void func_80014990_15590(void) {
+    s32 i;
+
+    D_800AFE8C_A71FC->unk4 = 0;
+    D_800AFE8C_A71FC->saveSlotIndex = 0;
+
+    if (D_800AFE8C_A71FC->unk21 == 1) {
+        D_800AFE8C_A71FC->unk9[0x10] = D_800AFE8C_A71FC->unk22;
+    } else {
+        D_800AFE8C_A71FC->unk9[0x10] = 3;
+    }
+
+    D_800AFE8C_A71FC->unk8 = 0;
+    D_800AFE8C_A71FC->padding = 0;
+
+    for (i = 0; i < 4; i++) {
+        D_800AFE8C_A71FC->unk9[i] = 0;
+        D_800AFE8C_A71FC->unk9[i + 4] = 0;
+        D_800AFE8C_A71FC->unk9[i + 0xC] = 0;
+        D_800AFE8C_A71FC->unk9[i + 8] = 0;
+        D_800AFE8C_A71FC->unk9[i + 0x11] = 0;
+    }
+
+    D_800AFE8C_A71FC->unk9[0x15] = 0;
+    D_800AFE8C_A71FC->unk5 = 0;
+    D_800AFE8C_A71FC->errorFlag = 0;
+    D_800AFE8C_A71FC->unk24 = 0;
+    D_800AFE8C_A71FC->unk25 = 0;
+}
