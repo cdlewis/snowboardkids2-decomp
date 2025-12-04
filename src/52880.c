@@ -17,6 +17,8 @@ extern void func_80058A68_59668(Player *arg0);
 extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
 extern s32 func_800BB504(void *, s32);
 extern void rotateVectorY(void *, s32, void *);
+extern void func_80066444_67044(s32, void *);
+extern void func_80052DB4_539B4(void);
 
 typedef struct {
     void *unk0;
@@ -41,11 +43,15 @@ typedef struct {
 } Struct_52880;
 
 typedef struct {
-    u8 padding1[0x950];
+    u8 padding1[0x74];
+    s16 unk74;
+    u8 padding1b[0x8DA];
     s16 unk950;
     u8 padding2[0x242];
     u16 unkB94;
-    u8 padding3[0x52];
+    u8 padding3[0x43];
+    u8 unkBD9;
+    u8 padding4[0xE];
 } Unk10Element_52880;
 
 typedef struct {
@@ -160,6 +166,7 @@ s32 func_80052A24_53624(s32 arg0, s32 arg1) {
 }
 
 void func_80052AB0_536B0(Struct_52880 *arg0);
+void func_80052C00_53800(Struct_52880 *arg0);
 
 void func_80052A68_53668(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
@@ -167,8 +174,6 @@ void func_80052A68_53668(Struct_52880 *arg0) {
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_80052AB0_536B0);
 }
-
-extern void func_80052C00_53800(void);
 
 void func_80052AB0_536B0(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
@@ -229,7 +234,57 @@ void func_80052B0C_5370C(Struct_52880 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80052C00_53800);
+void func_80052C00_53800(Struct_52880 *arg0) {
+    Alloc_52880 *alloc;
+    s16 playerIdx;
+    s32 temp_v0;
+    s32 temp_v1;
+    s32 temp_a1;
+    s32 temp_a2;
+    s32 i;
+
+    alloc = getCurrentAllocation();
+
+    playerIdx = arg0->unk42;
+
+    if (alloc->unk10[playerIdx].unkBD9 == 0) {
+        transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->unk4);
+
+        playerIdx = arg0->unk42;
+        transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->velY);
+    } else {
+        transformVector(&alloc->unk48[48], &alloc->unk10[playerIdx].unk74, &arg0->unk4);
+
+        playerIdx = arg0->unk42;
+        transformVector(&alloc->unk48[54], &alloc->unk10[playerIdx].unk74, &arg0->velY);
+    }
+
+    temp_v0 = arg0->unk4;
+    temp_a2 = arg0->velY;
+    temp_v1 = arg0->unk8;
+    temp_a1 = arg0->velZ;
+    arg0->velY = temp_v0 - temp_a2;
+    arg0->velZ = temp_v1 - temp_a1;
+    arg0->velX = arg0->unkC - arg0->velX;
+
+    playerIdx = arg0->unk42;
+    arg0->unk40 = alloc->unk10[playerIdx].unkB94;
+    arg0->unk48 = 0xF0;
+
+    func_80056B7C_5777C(&arg0->unk4, 0x10);
+    setCallback(func_80052DB4_539B4);
+    func_80052B0C_5370C(arg0);
+
+    if (arg0->unk4E != 0) {
+        func_80050ECC_51ACC(&arg0->unk4);
+        func_80056B7C_5777C(&arg0->unk4, 0xD);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80052DB4_539B4);
 
