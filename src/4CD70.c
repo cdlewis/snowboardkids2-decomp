@@ -149,7 +149,56 @@ void func_8004C294_4CE94(Struct_func_8004F04C *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C2C0_4CEC0);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C46C_4D06C);
+void func_8004C46C_4D06C(void *arg0) {
+    u8 *temp_v0;
+    void *temp_v1;
+    u8 temp_v2;
+    void *callback;
+
+    temp_v0 = *(u8 **)(arg0 + 0x34);
+    temp_v2 = temp_v0[0xBD3];
+    if (temp_v2 != 0) {
+        *(s16 *)(arg0 + 0x20) = temp_v2;
+        debugEnqueueCallback((*(u32 *)(arg0 + 0x38) + 8) & 0xFFFF, 0, func_8000FED0_10AD0, arg0 + 0x18);
+    }
+
+    callback = func_8000FED0_10AD0;
+    temp_v2 = (*(u8 **)(arg0 + 0x34))[0xBD2];
+    *(s16 *)(arg0 + 0x8) = temp_v2;
+    debugEnqueueCallback((*(u32 *)(arg0 + 0x38) + 8) & 0xFFFF, 0, callback, arg0);
+
+    temp_v0 = *(u8 **)(arg0 + 0x34);
+    if ((temp_v0[0xBD8] & 1) != 0) {
+        func_8005100C_51C0C(
+            (s32) * (s16 *)(arg0 + 0x0) - 8,
+            (s32) * (s16 *)(arg0 + 0x2) - 8,
+            0,
+            *(u32 *)(arg0 + 0x38) + 8,
+            0
+        );
+        temp_v1 = *(u8 **)(arg0 + 0x34);
+        temp_v2 = *(u8 *)(temp_v1 + 0xBD8);
+        *(u8 *)(temp_v1 + 0xBD8) = temp_v2 & 0xFE;
+    }
+
+    temp_v2 = (*(u8 **)(arg0 + 0x34))[0xBD4];
+    *(s16 *)(arg0 + 0x14) = temp_v2 + 7;
+    debugEnqueueCallback((*(u32 *)(arg0 + 0x38) + 8) & 0xFFFF, 0, callback, arg0 + 0xC);
+
+    temp_v0 = *(u8 **)(arg0 + 0x34);
+    if ((temp_v0[0xBD8] & 2) != 0) {
+        func_8005100C_51C0C(
+            (s32) * (s16 *)(arg0 + 0xC) - 8,
+            (s32) * (s16 *)(arg0 + 0xE) - 8,
+            1,
+            *(u32 *)(arg0 + 0x38) + 8,
+            0
+        );
+        temp_v1 = *(u8 **)(arg0 + 0x34);
+        temp_v2 = *(u8 *)(temp_v1 + 0xBD8);
+        *(u8 *)(temp_v1 + 0xBD8) = temp_v2 & 0xFD;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C5A8_4D1A8);
 
