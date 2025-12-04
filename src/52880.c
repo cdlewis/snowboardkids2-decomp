@@ -62,6 +62,12 @@ typedef struct {
     s16 *unk48;
 } Alloc_52880;
 
+typedef struct {
+    u8 padding1[0x30];
+    u8 unk30[0x46];
+    u8 unk76;
+} Alloc_55650;
+
 extern s32 distance_2d(s32, s32);
 extern s32 distance_3d(s32, s32, s32);
 
@@ -671,9 +677,14 @@ void func_800554BC_560BC(Struct_52880 *arg0) {
     }
 }
 
-extern void func_80055650_56250(void);
 extern void func_80069CF8_6A8F8(void);
 extern void func_80066444_67044(s32, void *);
+extern void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
+extern s16 func_80060A3C_6163C(void *arg0, u16 arg1, s32 *arg2);
+extern s32 func_80060CDC_618DC(void *arg0, u16 arg1, s32 *arg2, s32 arg3, s32 *arg4);
+extern s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, s32 *arg2, s32 arg3);
+
+void func_80055650_56250(Struct_52880 *arg0);
 
 void func_800554FC_560FC(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
@@ -709,7 +720,70 @@ void func_800554FC_560FC(Struct_52880 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80055650_56250);
+void func_80055650_56250(Struct_52880 *arg0) {
+    s32 sp18[20];
+    Alloc_55650 *s3;
+    s32 *s1;
+    s32 *s0;
+    s16 temp_v0_sh;
+    s32 temp_v0;
+    s32 i;
+
+    s3 = (Alloc_55650 *)getCurrentAllocation();
+
+    if (s3->unk76 != 0) {
+        goto skip_main;
+    }
+
+    s1 = &arg0->unk4;
+    s0 = &arg0->velY;
+
+    func_80050604_51204(s1, s0, 0x6E);
+
+    arg0->velZ += 0xFFFC0000;
+
+    func_80051C80_52880(s0, 0x1D0000);
+
+    memcpy(&sp18[4], s1, 0xC);
+
+    arg0->unk4 += arg0->velY;
+    arg0->unk8 += arg0->velZ;
+    arg0->unkC += arg0->velX;
+
+    temp_v0_sh = func_80060A3C_6163C(&s3->unk30, arg0->unk40, s1);
+
+    arg0->unk40 = temp_v0_sh;
+
+    func_80060CDC_618DC(&s3->unk30, temp_v0_sh & 0xFFFF, s1, 0x80000, sp18);
+
+    if ((sp18[0] != 0) || (sp18[2] != 0)) {
+        arg0->unk4 += sp18[0];
+        arg0->unkC += sp18[2];
+        arg0->unk4E++;
+    }
+
+    temp_v0 = func_8005CFC0_5DBC0(&s3->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+
+    if (arg0->unk8 < (temp_v0 + 0x100000)) {
+        arg0->unk8 = temp_v0 + 0x100000;
+    }
+
+    arg0->velY = arg0->unk4 - sp18[4];
+    arg0->velZ = arg0->unk8 - sp18[5];
+    arg0->velX = arg0->unkC - sp18[6];
+
+    func_800554BC_560BC(arg0);
+
+skip_main:
+    if (arg0->unk4E != 0) {
+        func_80056B7C_5777C(&arg0->unk4, 0x43);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, arg0);
+    }
+}
 
 s32 func_80055820_56420(s32 arg0, s32 arg1) {
     Struct_52880 *task;
