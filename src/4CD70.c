@@ -201,7 +201,61 @@ void func_8004C46C_4D06C(void *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C5A8_4D1A8);
+void func_8004C5A8_4D1A8(void *arg0) {
+    u8 *temp_v0;
+    u8 temp_v2;
+    void *temp_v1;
+    void *callback;
+
+    // First block: handle unk34->BD3
+    temp_v0 = *(u8 **)(arg0 + 0x34);
+    temp_v2 = temp_v0[0xBD3];
+    if (temp_v2 != 0) {
+        *(u8 *)(arg0 + 0x30) = temp_v2 + 0x30;
+        debugEnqueueCallback((*(u32 *)(arg0 + 0x38) + 8) & 0xFFFF, 0, renderTextPalette, arg0 + 0x24);
+    }
+
+    // Second block: handle unk34->BD2
+    callback = func_8000FED0_10AD0;
+    temp_v2 = (*(u8 **)(arg0 + 0x34))[0xBD2];
+    *(s16 *)(arg0 + 0x8) = temp_v2;
+    debugEnqueueCallback((*(u32 *)(arg0 + 0x38) + 8) & 0xFFFF, 0, callback, arg0);
+
+    // Third block: handle BD8 & 1
+    temp_v0 = *(u8 **)(arg0 + 0x34);
+    if ((temp_v0[0xBD8] & 1) != 0) {
+        func_8005100C_51C0C(
+            (s32) * (s16 *)(arg0 + 0x0) - 4,
+            (s32) * (s16 *)(arg0 + 0x2) - 4,
+            0,
+            *(u32 *)(arg0 + 0x38) + 8,
+            1
+        );
+        temp_v1 = *(u8 **)(arg0 + 0x34);
+        temp_v2 = *(u8 *)(temp_v1 + 0xBD8);
+        *(u8 *)(temp_v1 + 0xBD8) = temp_v2 & 0xFE;
+    }
+
+    // Fourth block: handle unk34->BD4
+    temp_v2 = (*(u8 **)(arg0 + 0x34))[0xBD4];
+    *(s16 *)(arg0 + 0x14) = temp_v2 + 7;
+    debugEnqueueCallback((*(u32 *)(arg0 + 0x38) + 8) & 0xFFFF, 0, callback, arg0 + 0xC);
+
+    // Fifth block: handle BD8 & 2
+    temp_v0 = *(u8 **)(arg0 + 0x34);
+    if ((temp_v0[0xBD8] & 2) != 0) {
+        func_8005100C_51C0C(
+            (s32) * (s16 *)(arg0 + 0xC) - 4,
+            (s32) * (s16 *)(arg0 + 0xE) - 4,
+            1,
+            *(u32 *)(arg0 + 0x38) + 8,
+            1
+        );
+        temp_v1 = *(u8 **)(arg0 + 0x34);
+        temp_v2 = *(u8 *)(temp_v1 + 0xBD8);
+        *(u8 *)(temp_v1 + 0xBD8) = temp_v2 & 0xFD;
+    }
+}
 
 typedef struct {
     u8 pad0[0x4];
