@@ -1,9 +1,80 @@
 #include "common.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
-void func_8003C170_3CD70(void);
+extern void func_8003C2BC_3CEBC(void);
+extern void transformVector2(s32 *input, Mat3x3Padded *mtx, s32 *output);
 
-INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003C170_3CD70);
+typedef struct {
+    s32 x;        /* 0x00 */
+    s32 y;        /* 0x04 */
+    s32 z;        /* 0x08 */
+    u8 padC[0x4]; /* 0x0C */
+    s32 unk10;    /* 0x10 */
+    s32 unk14;    /* 0x14 */
+    s32 unk18;    /* 0x18 */
+    s32 unk1C;    /* 0x1C */
+    s32 unk20;    /* 0x20 */
+    s32 unk24;    /* 0x24 */
+} NodeState;
+
+typedef struct {
+    u8 pad0[0x10]; /* 0x00 */
+    u8 *players;   /* 0x10 */
+} Allocation;
+
+void func_8003C170_3CD70(NodeState *arg0) {
+    Allocation *allocation;
+    u8 playerIdx;
+    s32 tempVec[3];
+    s32 outputVec[3];
+    Mat3x3Padded mtx;
+
+    allocation = (Allocation *)getCurrentAllocation();
+
+    // Initialize input vector on stack
+    tempVec[1] = 0;
+    tempVec[0] = 0;
+    tempVec[2] = 0xFFC00000;
+
+    // Get player index from offset 0xC
+    playerIdx = *(u8 *)((u8 *)arg0 + 0xC);
+
+    // Read rotation at offset 0xA94 from players[playerIdx]
+    createYRotationMatrix(&mtx, *(u16 *)(allocation->players + (playerIdx * 0xBE8) + 0xA94));
+
+    // Transform vector
+    transformVector2(tempVec, &mtx, outputVec);
+
+    // Read player index again
+    playerIdx = *(u8 *)((u8 *)arg0 + 0xC);
+
+    // Set position X with transformed vector offset
+    arg0->x = *(s32 *)(allocation->players + (playerIdx * 0xBE8) + 0x434) + outputVec[0];
+
+    // Read player index again
+    playerIdx = *(u8 *)((u8 *)arg0 + 0xC);
+
+    // Set position Y with transformed vector offset
+    arg0->y = *(s32 *)(allocation->players + (playerIdx * 0xBE8) + 0x438) + outputVec[1];
+
+    // Read player index again
+    playerIdx = *(u8 *)((u8 *)arg0 + 0xC);
+
+    // Set position Z with transformed vector offset
+    arg0->z = *(s32 *)(allocation->players + (playerIdx * 0xBE8) + 0x43C) + outputVec[2];
+
+    // Set various node fields
+    arg0->unk10 = 0x600000;
+    arg0->unk1C = 0x20000;
+    arg0->unk18 = 0x2C0000;
+    arg0->unk20 = 0;
+    arg0->unk24 = 0;
+    arg0->unk14 = 0x1E0000;
+
+    // Set callback
+    setCallbackWithContinue(func_8003C2BC_3CEBC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003C2BC_3CEBC);
 
