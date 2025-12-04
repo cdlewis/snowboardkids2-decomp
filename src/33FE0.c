@@ -9,6 +9,7 @@ extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern void func_8000FED0_10AD0(void);
 extern void *getCurrentAllocation(void);
 extern void func_80012004_12C04(void);
+extern void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
 extern s16 D_8008F2C4_8FEC4[];
 
 USE_ASSET(_459310);
@@ -46,6 +47,16 @@ typedef struct {
     /* 0x10 */ u8 unk10;
     /* 0x11 */ u8 unk11;
 } Func350ACArg;
+
+typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ u16 *unk4;
+    /* 0x08 */ void *unk8;
+    /* 0x0C */ u16 unkC;
+    /* 0x0E */ u16 unkE;
+    /* 0x10 */ u8 unk10;
+} Func80035408Arg;
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -101,7 +112,7 @@ void func_80033458_34058(void);
 void func_8003365C_3425C(Func34574Arg *arg0);
 void func_80034A30_35630(void *arg0);
 void func_80034A94_35694(Func34574Arg *arg0);
-void func_80035408_36008(void);
+void func_80035408_36008(Func80035408Arg *arg0);
 void func_8003513C_35D3C(Func350ACArg *arg0);
 void func_80035234_35E34(Func34574Arg *arg0);
 void func_80034640_35240(Func34574Arg *arg0);
@@ -351,7 +362,54 @@ void func_80035234_35E34(Func34574Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80035260_35E60);
 
+#ifdef NON_MATCHING
+void func_80035408_36008(Func80035408Arg *arg0) {
+    u16 *ptr;
+    s16 x;
+    s16 y;
+    u8 a;
+    u16 cmd;
+    s16 sz;
+    s16 unused;
+
+    ptr = arg0->unk4;
+    x = arg0->unk0;
+    y = arg0->unk2;
+    cmd = *ptr;
+    a = arg0->unk10;
+    unused = 0xFFFE;
+
+    if ((cmd & 0xFFFF) != 0xFFFF) {
+        do {
+            if ((cmd & 0xFFFF) == 0xFFFD) {
+                x = arg0->unk0;
+                y += 0x10;
+            } else if ((cmd & 0xFFFF) == 0xFFFE || (cmd & 0xFFFF) == 0xFFFB) {
+                x += 4;
+            } else if ((cmd & 0xFFFF) == 0xFFFC) {
+                ptr++;
+                if (arg0->unk10 == 0) {
+                    a = *ptr;
+                    ptr++;
+                }
+            } else if ((cmd & 0xFFFF) == 0xFFF0) {
+                ptr += 3;
+            } else if ((cmd & 0xFFFF) != 0xFFF1) {
+                sz = cmd >> 12;
+                if (sz == 0) {
+                    sz = 12;
+                }
+                func_80035878_36478(x, y, cmd & 0xFFF, arg0->unkC, arg0->unkE, a, arg0->unk8);
+                x += sz;
+            }
+            ptr++;
+            cmd = *ptr;
+        } while ((cmd & 0xFFFF) != 0xFFFF);
+    }
+}
+#else
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80035408_36008);
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80035548_36148);
 
