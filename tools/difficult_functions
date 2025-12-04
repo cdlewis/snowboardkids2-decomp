@@ -316,4 +316,4 @@ func_8005C454_5D054 20 95.627%
 func_80035DE0_369E0 14 91.598%
 func_8001A110_1AD10 13 81.292%
 func_8004EEB4_4FAB4 20 99.804%
-\nfunc_800B6910_1E39C0 20 could not integrate (matched in decomp env)
+func_800B6910_1E39C0 20 could not integrate (matched in decomp env)
