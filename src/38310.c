@@ -1,3 +1,4 @@
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "overlay.h"
 #include "task_scheduler.h"
@@ -84,6 +85,7 @@ extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_80035408_36008(void);
 extern void func_80012004_12C04(void);
 extern void func_80012FA8_13BA8(void);
+extern void func_80035DE0_369E0(void *, void *, s16, s16, u8, u8, void *, s32);
 
 void func_80037874_38474(func_80037874_38474_arg *);
 void func_800377FC_383FC(u8 *);
@@ -138,7 +140,89 @@ void func_80037874_38474(func_80037874_38474_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/38310", func_800378AC_384AC);
 
-INCLUDE_ASM("asm/nonmatchings/38310", func_80037A64_38664);
+typedef struct {
+    u8 pad0[0xA];
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 unkE;
+    u8 unkF;
+} func_80037A64_Entry10;
+
+typedef union {
+    s16 asShort;
+    u8 asBytes[2];
+} func_80037A64_UnkCUnion;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    u8 pad8[4];
+    func_80037A64_UnkCUnion unkC;
+    u8 unkE;
+    u8 unkF;
+    u8 unk10;
+    u8 unk11;
+    u8 unk12;
+    u8 unk13;
+} func_80037A64_Entry14;
+
+typedef struct {
+    func_80037A64_Entry10 entries10[6];
+    func_80037A64_Entry14 entries14[6];
+    void *unkD8;
+} func_80037A64_Arg0Struct;
+
+void func_80037A64_38664(func_80037A64_Arg0Struct *arg0) {
+    func_80037F14_alloc *alloc;
+    s32 i;
+    u8 temp;
+
+    alloc = getCurrentAllocation();
+
+    for (i = 0; i < 6; i++) {
+        if (i < 2) {
+            temp = D_800AFE8C_A71FC->unk1F;
+        } else if (i < 4) {
+            temp = D_800AFE8C_A71FC->unk20;
+        } else {
+            temp = (D_800AFE8C_A71FC->unk21 + 1) & 1;
+        }
+
+        arg0->entries10[i].unkD = ((temp + (i & 1)) & 1) | 2;
+
+        if (alloc->unk1E2 == 0) {
+            u8 idx;
+            s32 value;
+            idx = alloc->unk1EC;
+            value = temp + (idx << 1);
+            if (value == i) {
+                arg0->entries10[i].unkA = alloc->unk1E8[idx];
+                arg0->entries14[i].unkC.asShort = alloc->unk1E8[alloc->unk1EC];
+            } else {
+                arg0->entries10[i].unkA = 0;
+                arg0->entries14[i].unkC.asShort = 0;
+            }
+        } else {
+            arg0->entries10[i].unkA = 0;
+            arg0->entries14[i].unkC.asShort = 0;
+        }
+
+        debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0->entries10[i]);
+
+        func_80035DE0_369E0(
+            arg0->unkD8,
+            arg0->entries14[i].unk4,
+            arg0->entries14[i].unk0,
+            arg0->entries14[i].unk2,
+            arg0->entries14[i].unkC.asBytes[1],
+            arg0->entries14[i].unk10,
+            (void *)8,
+            1
+        );
+    }
+}
 
 void func_80037BC4_387C4(func_80037BC4_387C4_arg *arg0) {
     arg0->unkD8 = freeNodeMemory(arg0->unkD8);
