@@ -66,6 +66,8 @@ If you are able to get a perfect matching decompilation, commit the change with 
 
 If you were not able to get a perfect matching decompilation, commit your changes to tools/difficult_functions.
 
+Respect any pre-commit hooks that prevent you from committing your change. A failed hook indicates that you have not correctly updates the C code.
+
 You are done. Do not attemp to find the next closest match.
 
 ## Validation Checklist

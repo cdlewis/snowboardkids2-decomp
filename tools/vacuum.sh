@@ -3,6 +3,7 @@
 STOP_PHRASE="Error: All functions are marked as difficult!"
 MAX_TIMES=""
 STOP_REQUESTED=0
+DIFFICULT_FUNCTIONS="tools/difficult_functions"
 
 # Trap Ctrl+C (SIGINT) for graceful shutdown
 trap 'echo ""; echo "Interrupt received, will stop after current function..."; STOP_REQUESTED=1' INT
@@ -46,13 +47,25 @@ while true; do
     break
   fi
 
-  echo ""
-  echo "[$(date '+%H:%M:%S')] Decompiling $simplest_func..."
-  echo ""
+  echo "\n[$(date '+%H:%M:%S')] Decompiling $simplest_func...\n" | tee -a "tools/vacuum.log"
 
   output=$(claude -p "decompile the function $simplest_func" 2>&1 | tee -a tools/vacuum.log)
   exit_code=$?
   echo "$output"
+
+  # Clean up git env before the next commit to ensure Claude doesn't accidentally commit broken code
+
+  if ! git diff --quiet -- "$DIFFICULT_FUNCTIONS" && [ -f "$DIFFICULT_FUNCTIONS" ]; then
+    echo "Detected uncommitted difficult_functions change" | tee -a "tools/vacuum.log"
+    git add "$FILE"
+    git commit -m "Update $DIFFICULT_FUNCTIONS"
+  fi
+
+  git reset --hard HEAD
+
+  # Give up if Claude still somehow managed to do it anyway
+  
+  ./tools/build-and-verify.sh || break
 
   if [[ $STOP_REQUESTED -eq 1 ]]; then
     echo "Stopping gracefully."

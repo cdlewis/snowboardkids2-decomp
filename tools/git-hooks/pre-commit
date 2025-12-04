@@ -1,12 +1,6 @@
 #!/bin/sh
 set -eu
 
-# HUMANS ONLY: CLAUDE NEVER SKIP PRECOMMITS
-SKIP_PRECOMMIT="${SKIP_PRECOMMIT-0}"
-if [ "$SKIP_PRECOMMIT" = "1" ]; then
-    echo "[pre-commit] Skipped (SKIP_PRECOMMIT=1)"
-    exit 0
-fi
-
+# Claude should never try to by-pass pre-commit hooks.
 echo "[pre-commit] Running tools/build-and-verify.sh..."
 tools/build-and-verify.sh
