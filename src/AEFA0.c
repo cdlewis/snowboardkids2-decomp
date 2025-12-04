@@ -64,11 +64,12 @@ typedef struct {
 typedef struct {
     void *unk0;
     void *unk4;
-    s8 unk8[0x4];
+    s32 unk8;
     s32 unkC;
-    s8 unk10[0xE];
+    s32 unk10;
+    u8 pad[0xA];
     u8 unk1E;
-    s8 unk1F[0x5];
+    u8 pad2[0x5];
     s32 unk24;
     s16 unk28;
 } func_800BBC64_AF954_arg;
@@ -87,7 +88,8 @@ extern void func_800BB778_AF468(void);
 extern void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
 extern void func_800BBEAC_AFB9C(s16 *);
 extern void func_800BBCE8_AF9D8(void **);
-extern void func_800BBD14_AFA04(void);
+extern void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
+extern void func_80066444_67044(s32, loadAssetMetadata_arg *);
 extern void func_8006BFB8_6CBB8(void *, void *);
 extern void func_800BC184_AFE74(void **);
 extern void func_800BC220_AFF10(void);
@@ -109,6 +111,9 @@ extern void *D_800BC920_B0610;
 extern void *D_800BC960_B0650;
 extern s16 D_800BC9DC_B06CC[];
 extern s32 D_800BCA00_B06F0;
+extern s32 D_800BC914_B0604;
+extern s32 D_800BC918_B0608;
+extern s32 D_800BC91C_B060C;
 
 void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *arg0) {
     s32 i;
@@ -289,7 +294,32 @@ void func_800BBCE8_AF9D8(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBD14_AFA04);
+void func_800BBD14_AFA04(func_800BBC64_AF954_arg *arg0) {
+    Allocation *allocation;
+    s32 i;
+
+    allocation = getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        *(s16 *)((u8 *)arg0 + 0x28) -= 1;
+
+        if (*(s16 *)((u8 *)arg0 + 0x28) == 0) {
+            func_80069CF8_6A8F8();
+            return;
+        }
+
+        *(s32 *)((u8 *)arg0 + 0x8) += (D_800BC914_B0604 - *(s32 *)((u8 *)arg0 + 0x8)) / *(s16 *)((u8 *)arg0 + 0x28);
+        *(s32 *)((u8 *)arg0 + 0xC) += (D_800BC918_B0608 - (*(s32 *)((u8 *)arg0 + 0xC) + *(s32 *)((u8 *)arg0 + 0x24))) /
+                                      *(s16 *)((u8 *)arg0 + 0x28);
+        *(s32 *)((u8 *)arg0 + 0x10) += (D_800BC91C_B060C - *(s32 *)((u8 *)arg0 + 0x10)) / *(s16 *)((u8 *)arg0 + 0x28);
+    }
+
+    loadAssetMetadata((loadAssetMetadata_arg *)((u8 *)arg0 + 0x4), *(void **)arg0, 5);
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (loadAssetMetadata_arg *)((u8 *)arg0 + 0x4));
+    }
+}
 
 void func_800BBE84_AFB74(s16 *arg0) {
     *arg0 = 0xB4;
