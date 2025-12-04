@@ -19,6 +19,9 @@ extern void computeLookAtMatrix(void *, void *, void *);
 extern void func_8006FD3C_7093C(u16, void *);
 extern void func_8001FFE4_20BE4(void);
 extern void func_8001FA00_20600(void);
+extern void func_8006D7B0_6E3B0(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32);
+extern void func_80035408_36008(void);
+extern void func_80012004_12C04(void);
 
 USE_ASSET(_458E30);
 USE_ASSET(_43A000);
@@ -31,7 +34,7 @@ typedef struct {
     u8 unkB2F;
     u8 _padB30[0x15];
     u8 unkB45;
-    u8 _padB46;
+    u8 unkB46;
     u8 unkB47;
 } Allocation_202A0;
 
@@ -71,6 +74,20 @@ typedef struct {
     u8 _pad38[0x1C];
     void *unk54;
 } Func80021B88Arg;
+
+typedef struct {
+    u8 _pad0[0xA];
+    s16 unkA;
+    u8 _padC[0xE];
+    s16 unk1A;
+    u8 _pad1C[0x10];
+    u8 unk2C[0x14];
+    u8 unk40[0x14];
+    void *unk54;
+    s16 unk58;
+    u8 _pad5A[0x6];
+    u8 unk60;
+} Func80021A20Arg;
 
 typedef struct {
     u8 _pad0[0x2C];
@@ -746,7 +763,50 @@ void func_80021880_22480(Func80021880Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_800218AC_224AC);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80021A20_22620);
+void func_80021A20_22620(Func80021A20Arg *arg0) {
+    Allocation_202A0 *allocation;
+    s32 i;
+    Func80021A20Arg *ptr;
+
+    allocation = getCurrentAllocation();
+
+    if (allocation->unkB2F == 3) {
+        arg0->unk60++;
+        if (arg0->unk60 < 0x11) {
+            arg0->unkA -= 8;
+            arg0->unk1A -= 8;
+        } else {
+            arg0->unkA += 8;
+            arg0->unk1A += 8;
+        }
+
+        if (arg0->unk60 == 0x20) {
+            arg0->unk60 = 0;
+            arg0->unkA = 0xFF;
+            arg0->unk1A = 0xFF;
+        }
+    } else {
+        arg0->unk60 = 0;
+        arg0->unkA = 0xFF;
+        arg0->unk1A = 0xFF;
+    }
+
+    if ((u32)(allocation->unkB2F - 2) < 2) {
+        func_8006D7B0_6E3B0(arg0->unk54, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
+        debugEnqueueCallback(8, 1, func_80035408_36008, &arg0->unk2C);
+
+        i = 0;
+        ptr = arg0;
+        do {
+            debugEnqueueCallback(8, 1, func_80012004_12C04, ptr);
+            i++;
+            ptr = (Func80021A20Arg *)((u8 *)ptr + 0x10);
+        } while (i < 2);
+
+        arg0->unk58 = allocation->unkB46;
+        debugEnqueueCallback(8, 1, func_80035408_36008, &arg0->unk40);
+    }
+}
 
 void func_80021B88_22788(Func80021B88Arg *arg0) {
     arg0->unk34 = freeNodeMemory(arg0->unk34);
