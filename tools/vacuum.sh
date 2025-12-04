@@ -47,7 +47,7 @@ while true; do
     break
   fi
 
-  echo "\n[$(date '+%H:%M:%S')] Decompiling $simplest_func...\n" | tee -a "tools/vacuum.log"
+  echo -e "\n[$(date '+%H:%M:%S')] Decompiling $simplest_func...\n" | tee -a "tools/vacuum.log"
 
   output=$(claude -p "decompile the function $simplest_func" 2>&1 | tee -a tools/vacuum.log)
   exit_code=$?
