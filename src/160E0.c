@@ -331,7 +331,30 @@ void func_80015CA4_168A4(void) {
 
 INCLUDE_ASM("asm/nonmatchings/160E0", func_80015DF4_169F4);
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_80016070_16C70);
+void func_80016070_16C70(void) {
+    s32 i;
+
+    // First loop: initialize save_slot_status and save_slot_data
+    for (i = 0; i < 16; i++) {
+        EepromSaveData->save_slot_status[i] = 1;
+        EepromSaveData->save_slot_data[i] = 1;
+    }
+
+    // Second loop: initialize character_or_settings and related arrays
+    for (i = 0; i < 9; i++) {
+        EepromSaveData->character_or_settings[i] = i + 1;
+        EepromSaveData->character_or_settings[i + 9] = i + 0x11;
+        EepromSaveData->u.setting_42[i] = i + 9;
+    }
+
+    // Set individual bytes
+    EepromSaveData->setting_4B[0] = 0xD;
+    EepromSaveData->setting_4B[1] = 0xE;
+    EepromSaveData->setting_4B[2] = 0xF;
+    EepromSaveData->setting_4E = 1;
+    EepromSaveData->setting_4F = 1;
+    EepromSaveData->setting_50 = 1;
+}
 
 void func_80016150_16D50(void) {
     s32 i;
