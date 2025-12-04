@@ -310,3 +310,4 @@ func_8000605C_6C5C 20 82.629%
 
 func_8002C8C0_2D4C0 20 72.034%
 func_8002E170_2ED70 20 77.504%
+func_800497FC_4A3FC 4 100% // 16-case switch with jump table, rodata integration issues
