@@ -159,7 +159,69 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     func_8006FD3C_7093C(arg0->unk6E, temp_s0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5CFC_1E2DAC);
+extern s32 gControllerInputs[];
+extern s32 gButtonsPressed[];
+extern s8 D_800AB04B;
+extern s8 D_800AB044_A23B4;
+extern u8 D_800AB048_A23B8;
+
+void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
+    s8 mode = arg0->unk71;
+    s32 temp;
+    s32 buttonCheck;
+
+    switch (mode) {
+        case 0:
+            if (gControllerInputs[3] & 0x2000) {
+                arg0->unk34 = 0;
+            } else {
+                temp = arg0->unk34;
+                temp += D_800AB04B << 12;
+                arg0->unk34 = temp;
+            }
+
+            buttonCheck = gButtonsPressed[0];
+
+            if (buttonCheck & 0x10) {
+                temp = arg0->unk38;
+                temp += D_800AB044_A23B4 << 12;
+                arg0->unk38 = temp;
+            } else if (buttonCheck & 0x2000) {
+                temp = arg0->unk3C;
+                temp -= D_800AB044_A23B4 << 12;
+                arg0->unk3C = temp;
+            } else if (buttonCheck & 0x20) {
+                u16 temp_angle = arg0->unk20;
+                temp_angle -= (s8)D_800AB044_A23B4;
+                arg0->unk20 = temp_angle & 0x1FFF;
+            } else {
+                u16 temp_angle = arg0->unk22;
+                temp_angle -= (s8)D_800AB048_A23B8;
+                arg0->unk22 = temp_angle & 0x1FFF;
+            }
+            break;
+
+        case 1:
+            if (gControllerInputs[3] & 0x2000) {
+                arg0->unk34 = 0;
+            } else if (gButtonsPressed[3] & 0x10) {
+                temp = arg0->unk34;
+                temp += D_800AB04B << 16;
+                arg0->unk34 = temp;
+            } else {
+                temp = arg0->unk34;
+                temp += D_800AB04B << 12;
+                arg0->unk34 = temp;
+            }
+
+            if (gButtonsPressed[0] & 0x10) {
+                temp = arg0->unk38;
+                temp += D_800AB044_A23B4 << 12;
+                arg0->unk38 = temp;
+            }
+            break;
+    }
+}
 
 void func_800B5E64_1E2F14(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4) {
     arg0->unk20 = arg1;
