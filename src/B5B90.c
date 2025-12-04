@@ -8,7 +8,11 @@ USE_ASSET(_40E1C0);
 extern void *func_80035F80_36B80(s32);
 extern void func_800BB320_B5C00(void *);
 extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
+extern void func_80035260_35E60(s32, s32, s32, s32, s32, s32, s32, s32, s32);
 extern void func_800BB928_B6208(void);
+extern s32 gControllerInputs;
+extern s8 *D_800BCB94_B7474[];
+extern void func_800585C8_591C8(s32);
 
 typedef struct {
     void *unk0;
@@ -18,14 +22,19 @@ typedef struct {
 } func_800BB2B0_B5B90_state;
 
 typedef struct {
-    void *unk0;
-    u8 pad4[0xC];
+    s32 unk0;
+    s32 unk4;
+    s32 *unk8;
+    s16 unkC;
+    s16 unkE;
     s16 unk10;
     s16 unk12;
     s16 unk14;
     u8 unk16;
     u8 unk17;
 } func_800BB5CC_state;
+
+#define GET_UNK15(arg0) (((u8 *)&(arg0)->unk14)[1])
 
 void func_800BB9E0_B62C0(func_800BB2B0_B5B90_state *arg0);
 
@@ -41,10 +50,9 @@ void func_800BB2B0_B5B90(func_800BB2B0_B5B90_state *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/B5B90", func_800BB320_B5C00);
 
-#define GET_UNK15(arg0) (((u8 *)&(arg0)->unk14)[1])
-
 void func_800BB670_B5F50(func_800BB5CC_state *arg0);
-void func_800BB724_B6004(void);
+void func_800BB724_B6004(func_800BB5CC_state *arg0);
+void func_800BB87C_B615C(func_800BB5CC_state *arg0);
 
 void func_800BB51C_B5DFC(func_800BB5CC_state *arg0) {
     s16 temp_a7;
@@ -136,7 +144,35 @@ void func_800BB670_B5F50(func_800BB5CC_state *arg0) {
     );
 }
 
-INCLUDE_ASM("asm/nonmatchings/B5B90", func_800BB724_B6004);
+void func_800BB724_B6004(func_800BB5CC_state *arg0) {
+    s8 *table_ptr;
+    s32 temp_v1_2;
+    s16 temp_v0;
+    s8 temp_v1_3;
+    s32 s0_var = 6;
+    s32 s1_var = 0xC;
+
+    table_ptr = D_800BCB94_B7474[arg0->unkC];
+    temp_v1_2 = arg0->unk8[table_ptr[arg0->unkE]];
+    func_80035260_35E60(arg0->unk4, (s32)arg0->unk8 + temp_v1_2, -0x68, -0x30, 0xFF, 0xFF, 0, s1_var, s0_var);
+
+    func_8006D7B0_6E3B0(arg0->unk0, -0x68, -0x30, 0xD, s0_var, 1, GET_UNK15(arg0), arg0->unk17, s1_var, s0_var);
+
+    if (gControllerInputs & 0x8000) {
+        temp_v0 = arg0->unkE + 1;
+        arg0->unkE = temp_v0;
+        table_ptr = D_800BCB94_B7474[arg0->unkC];
+        temp_v1_3 = table_ptr[temp_v0];
+        if (temp_v1_3 == -1) {
+            func_800585C8_591C8(0x2D);
+            arg0->unkC = arg0->unkC + 1;
+            setCallback(func_800BB87C_B615C);
+        } else {
+            func_800585C8_591C8(0x2B);
+            setCallback(func_800BB5CC_B5EAC);
+        }
+    }
+}
 
 #define GET_UNK16_AS_S16(arg0) (*(s16 *)&(arg0)->unk16)
 #define SET_UNK16_AS_S16(arg0, val) (*(s16 *)&(arg0)->unk16 = (val))
