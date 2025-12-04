@@ -175,9 +175,6 @@ extern func_800B1FCC_callback D_800BAAF4_AA9A4[];
 typedef void (*func_800B12C0_callback)(void *);
 extern func_800B12C0_callback D_800BAAD4_AA984[];
 
-extern u16 D_800BAB48_AA9F8[];
-extern u16 D_800BAB58_AAA08[];
-
 typedef struct {
     u8 _pad0[0x5C];
     u8 unk5C;
@@ -460,50 +457,7 @@ void func_800B27FC_A26AC(func_800B30B0_arg *arg0) {
     arg0->unkBB6 = 0;
 }
 
-void func_800B2818_A26C8(func_800B30B0_arg *arg0, s8 arg1) {
-    s16 old_bae;
-    s16 new_bae;
-    s8 index;
-
-    index = arg0->unkBB5;
-    arg0->unkBAC = arg0->unkBAC + D_800BAB48_AA9F8[index];
-    arg0->unkBAA = arg0->unkBAA + D_800BAB58_AAA08[arg0->unkBB5];
-
-    old_bae = arg0->unkBAE;
-    new_bae = old_bae;
-
-    if (old_bae == 0) {
-        arg0->unkBAE = new_bae | (1 << arg1);
-        goto end;
-    }
-
-    if (!((old_bae >> arg1) & 1)) {
-        arg0->unkBAC += 100;
-        arg0->unkBAA += 10;
-    }
-
-    arg0->unkBAE |= (1 << arg1);
-
-    if (arg0->unkBAE == 0xFF) {
-        arg0->unkBAC += 1300;
-        arg0->unkBAA += 565;
-        arg0->unkBAE |= 0x100;
-    }
-
-end:
-    arg0->unkBB5++;
-    if (arg0->unkBB5 >= 8) {
-        arg0->unkBB5 = 7;
-    }
-
-    if (arg0->unkBAC >= 10000) {
-        arg0->unkBAC = 9999;
-    }
-
-    if (arg0->unkBAA >= 1000) {
-        arg0->unkBAA = 999;
-    }
-}
+INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2818_A26C8);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2950_A2800);
 
@@ -678,7 +632,7 @@ void func_800B2E80_A2D30(func_800B30B0_arg *arg0) {
     func_8005D810_5E410(arg0);
     func_80056B7C_5777C(&arg0->unk434, 0xB);
 }
-
+extern void func_800B2818_A26C8(func_800B30B0_arg *arg0, s8 arg1);
 extern s8 func_8005D818_5E418(func_800B30B0_arg *arg0);
 
 void func_800B2EE4_A2D94(func_800B30B0_arg *arg0, s8 arg1) {
