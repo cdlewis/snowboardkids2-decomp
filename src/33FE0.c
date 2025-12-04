@@ -11,6 +11,7 @@ extern void *getCurrentAllocation(void);
 extern void func_80012004_12C04(void);
 extern void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
 extern s16 D_8008F2C4_8FEC4[];
+extern u16 D_8009ADE0_9B9E0;
 
 USE_ASSET(_459310);
 USE_ASSET(_41A1D0);
@@ -70,6 +71,21 @@ typedef struct {
 } Func33FE0Arg;
 
 typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ u8 pad4[0xC];
+} Func33800Entry; // size 0x10
+
+typedef struct {
+    /* 0x00 */ Func33800Entry *unk0;
+    /* 0x04 */ u8 unk4;
+    /* 0x05 */ u8 pad5[0x1];
+    /* 0x06 */ u16 unk6;
+    /* 0x08 */ u8 pad8[0x4];
+    /* 0x0C */ u16 unkC;
+} Func33800Arg;
+
+typedef struct {
     /* 0x00 */ u8 pad0[0x8];
     /* 0x08 */ void *unk8;
     /* 0x0C */ u8 padC[0x8];
@@ -100,7 +116,7 @@ typedef struct {
     /* 0x000 */ u8 pad0[0xABE];
     /* 0xABE */ u16 unkABE;
     /* 0xAC0 */ u16 unkAC0;
-    /* 0xAC2 */ u8 padAC2[0x2];
+    /* 0xAC2 */ u16 unkAC2;
     /* 0xAC4 */ u16 unkAC4;
     /* 0xAC6 */ u16 unkAC6;
     /* 0xAC8 */ u8 padAC8[0xE];
@@ -141,7 +157,50 @@ void func_8003365C_3425C(Func34574Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033688_34288);
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033800_34400);
+void func_80033800_34400(Func33800Arg *arg0) {
+    AllocationStruct *allocation;
+    s32 idx;
+    s32 i, j, k;
+    s32 outerOff, outerBase;
+
+    allocation = getCurrentAllocation();
+    outerOff = 0;
+    k = 0;
+    outerBase = 0;
+
+    do {
+        j = 0;
+        i = 0;
+        idx = outerBase;
+
+        do {
+            arg0->unk0[idx + i].unk0 = allocation->unkABE + j;
+            arg0->unk0[idx + i].unk2 = allocation->unkAC0 + outerOff;
+            debugEnqueueCallback(8, 0, func_80012004_12C04, &arg0->unk0[idx + i]);
+            i++;
+            j += 0x10;
+        } while (i < 11);
+
+        outerOff += 0x10;
+        k++;
+        outerBase += 11;
+    } while (k < 5);
+
+    if (allocation->unkAC6 == 8 || allocation->unkAC6 == 0xB) {
+        arg0->unk6 = allocation->unkAC2 + 0x38;
+    } else {
+        arg0->unk6 = allocation->unkAC0 + 0x38;
+    }
+
+    if ((D_8009ADE0_9B9E0 & 7) == 0) {
+        arg0->unkC++;
+        if (arg0->unkC >= 0x15) {
+            arg0->unkC = 0x13;
+        }
+    }
+
+    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, &arg0->unk4);
+}
 
 void func_80033974_34574(Func34574Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
