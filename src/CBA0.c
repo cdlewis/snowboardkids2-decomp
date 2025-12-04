@@ -96,7 +96,41 @@ void func_8000C2CC_CECC(Func8000C2CCArg *arg0, s32 arg1, s16 arg2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C334_CF34);
+typedef struct {
+    u8 pad[0x1E4];
+    s32 unk1E4;
+    s32 unk1E8;
+    s32 unk1EC;
+    s32 unk1F0;
+    s32 unk1F4;
+    s32 unk1F8;
+    s16 unk1FC;
+    s16 unk1FE;
+    s16 unk200;
+} Func8000C334Arg;
+
+void func_8000C334_CF34(Func8000C334Arg *arg0, s32 *arg1, s16 arg2) {
+    s16 temp = arg2;
+
+    if (arg2 == 0) {
+        arg0->unk1FC = 0;
+        arg0->unk1FE = 0;
+        arg0->unk200 = 0;
+        arg0->unk1F0 = 0;
+        arg0->unk1F4 = 0;
+        arg0->unk1F8 = 0;
+        arg0->unk1E4 = arg1[0];
+        arg0->unk1E8 = arg1[1];
+        arg0->unk1EC = arg1[2];
+    } else {
+        arg0->unk1FC = temp;
+        arg0->unk1FE = temp;
+        arg0->unk200 = temp;
+        arg0->unk1F0 = (arg1[0] - arg0->unk1E4) / arg2;
+        arg0->unk1F4 = (arg1[1] - arg0->unk1E8) / arg2;
+        arg0->unk1F8 = (arg1[2] - arg0->unk1EC) / arg2;
+    }
+}
 
 extern void func_8000C5AC_D1AC(void *);
 
