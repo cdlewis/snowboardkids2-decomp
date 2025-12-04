@@ -318,3 +318,5 @@ func_8001A110_1AD10 13 81.292%
 func_8004EEB4_4FAB4 20 99.804%
 func_800B6910_1E39C0 20 could not integrate (matched in decomp env)
 func_80031DE4_329E4 20 80.56%
+
+func_800BC1AC_AE56C 17 97.836%
