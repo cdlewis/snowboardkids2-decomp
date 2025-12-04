@@ -135,6 +135,7 @@ static const char D_8009E880_9F480[] = "%5d";
 extern char D_8009E89C_9F49C[];
 extern char D_8009E8A0_9F4A0[];
 extern char D_8009E8A8_9F4A8[];
+extern char D_8009E928_9F528[];
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
 
@@ -1499,7 +1500,7 @@ void func_8004FCF0_508F0(s32 arg0) {
     }
 }
 
-void func_8004FDD0_509D0(void);
+void func_8004FDD0_509D0(Struct_func_8004FF28 *);
 void func_8004FF28_50B28(Struct_func_8004FF28 *);
 
 void func_8004FD30_50930(Struct_func_8004FF28 *arg0) {
@@ -1521,7 +1522,53 @@ void func_8004FD30_50930(Struct_func_8004FF28 *arg0) {
     setCallback(func_8004FDD0_509D0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FDD0_509D0);
+void func_8004FDD0_509D0(Struct_func_8004FF28 *arg0) {
+    GameState *allocation;
+    s32 strLen;
+    char buf[16];
+    char *ptr;
+    s16 temp;
+    s32 x;
+
+    allocation = (GameState *)getCurrentAllocation();
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->unk4);
+
+    if (arg0->unk12 != allocation->players->unkB70) {
+        arg0->unk10 = 9;
+        arg0->unk12 = allocation->players->unkB70;
+    }
+
+    if (arg0->unk10 & 1) {
+        sprintf(buf, D_8009E8A8_9F4A8, allocation->players->unkB70);
+        strLen = 0;
+        ptr = buf;
+        if (*ptr != 0) {
+            do {
+                ptr++;
+                strLen++;
+            } while (*ptr != 0);
+        }
+    } else {
+        sprintf(buf, D_8009E928_9F528, allocation->players->unkB70);
+        strLen = 0;
+        ptr = buf;
+        if (*ptr != 0) {
+            do {
+                ptr++;
+                strLen++;
+            } while (*ptr != 0);
+        }
+        strLen--;
+    }
+
+    temp = arg0->unk10;
+    if (temp != 0) {
+        arg0->unk10 = temp - 1;
+    }
+
+    x = arg0->unk4 + 0x10;
+    func_8003BD60_3C960(buf, x - (strLen << 2), arg0->unk6 + 8, 0xFF, arg0->unk0, 8, 1);
+}
 
 void func_8004FF28_50B28(Struct_func_8004FF28 *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
