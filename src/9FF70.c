@@ -140,6 +140,11 @@ extern void *func_8005DE30_5EA30(s16 arg0, s16 arg1);
 extern void *func_8005DC60_5E860(s32 arg0);
 extern void *loadAssetByIndex_5E990(s32 arg0);
 extern s32 func_8005D308_5DF08(func_800B30B0_arg *, s32);
+extern void func_80059A48_5A648(func_800B30B0_arg *, s16);
+extern void func_8004D890_4E490(u8, s16);
+extern void func_80058530_59130(s32, s32);
+extern void func_8004FCF0_508F0(s16);
+extern void func_80059A88_5A688(func_800B30B0_arg *, s16);
 
 s32 func_800B2C18_A2AC8(func_800B30B0_arg *);
 void func_800B2B3C_A29EC(func_800B30B0_arg *);
@@ -189,6 +194,8 @@ typedef struct {
     u8 unkBBF;
     u8 unkBC0;
 } func_800B00D4_arg;
+
+void func_800B46BC_A456C(func_800B00D4_arg *);
 
 void func_800B00C0_9FF70(func_800B00D4_arg *arg0, u8 arg1) {
     arg0->unkBBD = arg1;
@@ -495,7 +502,104 @@ s32 func_800B2A3C_A28EC(func_800B30B0_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2B3C_A29EC);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2C18_A2AC8);
+s32 func_800B2C18_A2AC8(func_800B30B0_arg *arg0) {
+    GameState *state;
+    s32 flags;
+    u8 stateUnk7A;
+    s16 var_a0;
+    s16 var_v1;
+    s32 temp_v0;
+
+    state = getCurrentAllocation();
+    flags = arg0->unkB84;
+
+    if (flags & 1) {
+        return 0;
+    }
+
+    if (flags & 0x1000) {
+        func_800B46BC_A456C((func_800B00D4_arg *)arg0);
+        return 1;
+    }
+
+    if (flags & 0x80000) {
+        goto skip_to_end;
+    }
+
+    stateUnk7A = state->unk7A;
+    if (stateUnk7A != 0 && stateUnk7A != 8) {
+        if (!(stateUnk7A == 9 || stateUnk7A == 10)) {
+            arg0->unkBAC = 0;
+        }
+    }
+
+    if (arg0->unkBAC != 0) {
+        func_80059A48_5A648(arg0, arg0->unkBAC);
+        if (arg0->unkBC7 == 0) {
+            func_8004D890_4E490(arg0->unkBB8, arg0->unkBAC);
+
+            var_v1 = arg0->unkBAC;
+            if (var_v1 < 0x96) {
+                var_a0 = 0x11C;
+            } else {
+                var_a0 = 0x11D;
+            }
+
+            if (var_v1 >= 0x12C) {
+                var_a0 = 0x11E;
+            }
+            if (var_v1 >= 0x190) {
+                var_a0 = 0x11F;
+            }
+            if (var_v1 >= 0x1F4) {
+                var_a0 = 0x120;
+            }
+            if (var_v1 >= 0xBB8) {
+                var_a0 = 0x121;
+            }
+
+            func_80058530_59130(var_a0, 6);
+        }
+    }
+
+    if (state->unk7A == 6) {
+        if (arg0->unkBAA != 0) {
+            func_8004FCF0_508F0(arg0->unkBAA);
+            func_80059A88_5A688(arg0, arg0->unkBAA);
+
+            var_v1 = arg0->unkBAA;
+            if (var_v1 < 0xF) {
+                var_a0 = 0x11C;
+            } else {
+                var_a0 = 0x11D;
+            }
+
+            if (var_v1 >= 0x1E) {
+                var_a0 = 0x11E;
+            }
+            if (var_v1 >= 0x37) {
+                var_a0 = 0x11F;
+            }
+            if (var_v1 >= 0x5F) {
+                var_a0 = 0x120;
+            }
+            if (var_v1 >= 0x3E7) {
+                var_a0 = 0x121;
+            }
+
+            func_80058530_59130(var_a0, 6);
+        }
+    }
+
+skip_to_end:
+    if (arg0->unkBAE != 0) {
+        func_80059BD4_5A7D4(arg0);
+        func_8005D804_5E404(arg0, 1, 0xF);
+    }
+
+    func_800B00D4_9FF84(arg0, 3);
+    return 1;
+}
 
 void func_800B2DDC_A2C8C(func_800B30B0_arg *arg0) {
     arg0->unk44C = arg0->unk44C - (arg0->unk44C >> 7);
