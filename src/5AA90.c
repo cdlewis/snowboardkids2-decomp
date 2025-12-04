@@ -8,26 +8,20 @@ extern s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3);
 extern s16 func_80062254_62E54(void *arg0, u16 arg1);
 extern s32 isqrt64(s64 val);
 
+typedef struct ListNode_5AA90 {
+    /* 0x00 */ struct ListNode_5AA90 *next;
+} ListNode_5AA90;
+
+typedef struct {
+    u8 _pad[0x2C];
+    /* 0x2C */ ListNode_5AA90 *list;
+} Allocation5AA90;
+
 typedef struct {
     s32 x;
     s32 y;
     s32 z;
 } Vec3s32;
-
-typedef struct ListNode_5AA90 {
-    /* 0x00 */ struct ListNode_5AA90 *next;
-    /* 0x04 */ Vec3s32 *unk4;
-    /* 0x08 */ Vec3s32 unk8;
-    /* 0x14 */ s32 unk14;
-    /* 0x18 */ u8 unk18;
-} ListNode_5AA90;
-
-typedef struct {
-    u8 _pad[0x10];
-    /* 0x10 */ void *unk10;
-    u8 _pad2[0x18];
-    /* 0x2C */ ListNode_5AA90 *list;
-} Allocation5AA90;
 
 u16 func_80059E90_5AA90(Player *arg0, void *arg1, u16 arg2, void *arg3) {
     if (!(arg0->unkB84 & 0x100)) {
@@ -123,54 +117,7 @@ INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AB58_5B758);
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AE8C_5BA8C);
 
-void *func_8005B24C_5BE4C(Vec3s32 *arg0, s32 arg1, s32 arg2) {
-    Allocation5AA90 *allocation;
-    ListNode_5AA90 *node;
-    Vec3s32 localVec;
-    s32 radius;
-    s32 negRadius;
-    void *result = NULL;
-
-    allocation = (Allocation5AA90 *)getCurrentAllocation();
-    node = allocation->list;
-
-    if (node != NULL) {
-        while (1) {
-            if (arg1 != node->unk18) {
-                s64 distSq;
-
-                memcpy(&localVec, &node->unk8, 0xC);
-
-                localVec.x = localVec.x + node->unk4->x;
-                localVec.y = localVec.y + node->unk4->y;
-                localVec.z = localVec.z + node->unk4->z;
-
-                localVec.x = localVec.x - arg0->x;
-                localVec.y = localVec.y - arg0->y;
-                localVec.z = localVec.z - arg0->z;
-
-                radius = node->unk14 + arg2;
-                negRadius = -radius;
-
-                if (negRadius < localVec.x && localVec.x < radius && negRadius < localVec.y && localVec.y < radius &&
-                    negRadius < localVec.z && localVec.z < radius) {
-                    distSq = (s64)localVec.x * localVec.x + (s64)localVec.y * localVec.y + (s64)localVec.z * localVec.z;
-                    if (isqrt64(distSq) < radius) {
-                        s32 temp = node->unk18;
-                        return (u8 *)allocation->unk10 + (((temp * 3) << 7) - (temp * 3)) * 8;
-                    }
-                }
-            }
-
-            node = node->next;
-            if (node == NULL) {
-                break;
-            }
-        }
-    }
-
-    return result;
-}
+INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005B24C_5BE4C);
 
 s32 func_8005B400_5C000(Player *arg0, Vec3s32 *arg1, s32 arg2) {
     Vec3s32 localVec;
