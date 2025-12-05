@@ -443,3 +443,4 @@ func_8001B020_1BC20 4 87.491%
 func_8000595C_655C 9 87.743%
 func_80032708_33308 16 71.862%
 createRotationMatrixZYX 20 36.611%
+createRotationMatrixXYZ 20 88.113%
