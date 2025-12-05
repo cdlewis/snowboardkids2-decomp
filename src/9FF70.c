@@ -1207,7 +1207,77 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B4058_A3F08);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B40D4_A3F84);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B419C_A404C);
+void func_800B419C_A404C(func_800B30B0_arg *arg0) {
+    s16 temp;
+    s16 value;
+    s32 delta, value2;
+    s32 temp2, delta2, value3;
+    s16 result;
+    s32 pad[5];
+
+    // Handle unkA92
+    temp = arg0->unkA92 & 0x1FFF;
+    arg0->unkA92 = temp;
+    if (!(temp < 0x1001)) {
+        arg0->unkA92 = temp - 0x2000;
+    }
+
+    value = arg0->unkA92;
+    delta = -value, value2 = value;
+    if (!(delta < 0x29)) {
+        delta = 0x28;
+    }
+    if (delta < -0x28) {
+        delta = -0x28;
+    }
+    arg0->unkA92 = value2 + delta;
+
+    // Handle unkA8E
+    temp = arg0->unkA8E & 0x1FFF;
+    arg0->unkA8E = temp;
+    if (!(temp < 0x1001)) {
+        arg0->unkA8E = temp - 0x2000;
+    }
+
+    value = arg0->unkA8E;
+    delta = -value, value2 = value;
+    if (!(delta < 0x29)) {
+        delta = 0x28;
+    }
+    if (delta < -0x28) {
+        delta = -0x28;
+    }
+    arg0->unkA8E = value2 + delta;
+
+    // Handle unkA90
+    temp = arg0->unkA90 & 0x1FFF;
+    arg0->unkA90 = temp;
+    if (!(temp < 0x1001)) {
+        arg0->unkA90 = temp - 0x2000;
+    }
+
+    value = arg0->unkA90;
+    delta = -value, value2 = value;
+    if (!(delta < 0x29)) {
+        delta = 0x28;
+    }
+    if (delta < -0x28) {
+        delta = -0x28;
+    }
+    result = value2 + delta;
+
+    // Handle unk9A4
+    temp2 = arg0->unk9A4;
+    arg0->unkA90 = result;
+    delta2 = -temp2, value3 = temp2;
+    if (!(delta2 < 0x6001)) {
+        delta2 = 0x6000;
+    }
+    if (delta2 < -0x6000) {
+        delta2 = -0x6000;
+    }
+    arg0->unk9A4 = value3 + delta2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B42A8_A4158);
 
