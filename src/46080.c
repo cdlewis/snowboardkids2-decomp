@@ -14,6 +14,15 @@ USE_ASSET(_3F6950);
 USE_ASSET(_3F3EF0);
 
 typedef struct {
+    void *unk0;
+    loadAssetMetadata_arg unk4;
+    u8 _pad[0x4];
+    u16 unk24;
+    u8 _pad2[0x2];
+    s32 unk28;
+} Struct_func_8004657C_4717C;
+
+typedef struct {
     u8 padding0[0x8];
     s32 unk8;
     u8 padding2[0x18];
@@ -133,6 +142,8 @@ extern void func_80059A48_5A648(Player *, s32);
 void func_80047330_47F30(FunctionArg_80047330 *arg0);
 void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
 void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0);
+void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0);
+void func_800462D8_46ED8(Struct_func_8004657C_4717C *);
 
 typedef struct {
     u8 _pad0[0x4];
@@ -306,7 +317,7 @@ void func_80045768_46368(func_80045768_46368_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void func_800457A0_463A0(s16 arg0) {
+void func_800457A0_463A0(s32 arg0) {
     ScheduledTask *task = scheduleTask(func_80045480_46080, 0, 0, 0xD2);
     if (task != NULL) {
         task->unkB4 = arg0;
@@ -473,25 +484,13 @@ void func_80045C84_46884(func_80045C84_46884_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80045CC8_468C8);
 
-void func_80046244_46E44(s16 arg0, s16 arg1) {
+void func_80046244_46E44(s32 arg0, s16 arg1) {
     func_80046244_46E44_Task *task = (func_80046244_46E44_Task *)scheduleTask(func_800459A4_465A4, 0, 0, 0xD3);
     if (task != NULL) {
         task->unk14 = arg0;
         task->unk16 = arg1;
     }
 }
-
-typedef struct {
-    void *unk0;
-    loadAssetMetadata_arg unk4;
-    u8 _pad[0x4];
-    u16 unk24;
-    u8 _pad2[0x2];
-    s32 unk28;
-} Struct_func_8004657C_4717C;
-
-void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0);
-void func_800462D8_46ED8(Struct_func_8004657C_4717C *);
 
 void func_80046298_46E98(Struct_func_8004657C_4717C *arg0) {
     arg0->unk0 = loadAsset_34CB50();
@@ -1751,7 +1750,113 @@ void func_80049794_4A394(void *payload, s32 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800497FC_4A3FC);
+extern void *D_80094DA0_959A0;
+extern void *D_80094DE0_959E0;
+extern void *D_80094DF0_959F0;
+extern void *D_80094E00_95A00;
+extern void *D_80094E10_95A10;
+extern void *D_80094EE0_95AE0;
+extern void *D_80094EF0_95AF0;
+extern void *D_80094FC0_95BC0;
+extern void *D_80094FD0_95BD0;
+extern void *D_800950B0_95CB0;
+extern void *D_80095360_95F60;
+extern void *D_80095370_95F70;
+extern void *D_80095380_95F80;
+extern void *D_80095460_96060;
+extern void *D_80095470_96070;
+extern void *D_80095480_96080;
+extern void *D_800955C0_961C0;
+extern void *D_800955D0_961D0;
+extern void *D_800955E0_961E0;
+extern void *D_80095860_96460;
+extern void *D_80095930_96530;
+
+void func_80046D38_47938(void *, s32, s32, s32, s32, s32);
+
+void func_800497FC_4A3FC(s32 poolId) {
+    s32 temp;
+
+    switch (poolId) {
+        case 0:
+            func_800457A0_463A0(poolId);
+            func_80046D38_47938(&D_80094DA0_959A0, poolId, 0, 4, 0x12, 0);
+            func_80046244_46E44(poolId, 0);
+            break;
+        case 1:
+            func_800457A0_463A0(poolId);
+            func_80046D38_47938(&D_80094DE0_959E0, poolId, 4, 0, 0, 0);
+            temp = 1;
+            func_80046D38_47938(&D_80094DF0_959F0, poolId, 4, 0, temp, 0);
+            func_80046D38_47938(&D_80094E00_95A00, poolId, 4, 0, 0, 0);
+            func_80046D38_47938(&D_80094E10_95A10, poolId, 0, 1, 2, temp);
+            break;
+        case 2:
+            func_800457A0_463A0(poolId);
+            func_80046D38_47938(&D_80094EE0_95AE0, poolId, 0, 4, 0, 0);
+            func_80046D38_47938(&D_80094EF0_95AF0, poolId, 1, 0, 2, 0);
+            break;
+        case 3:
+            func_800457A0_463A0(poolId);
+            func_80046D38_47938(&D_80094FC0_95BC0, poolId, 0, 4, 0, 0);
+            func_80046D38_47938(&D_80094FD0_95BD0, poolId, 1, 0, 2, 0);
+            func_80046244_46E44(poolId, 5);
+            break;
+        case 4:
+            func_800457A0_463A0(poolId);
+            func_80046D38_47938(&D_800950B0_95CB0, poolId, -4, 0, 0, 0);
+            func_80046244_46E44(poolId, 0xA);
+            break;
+        case 5:
+            func_800457A0_463A0(poolId);
+            break;
+        case 6:
+            func_80046D38_47938(&D_80095360_95F60, poolId, 0, 4, 0, 0);
+            func_80046D38_47938(&D_80095370_95F70, poolId, 0, 4, 1, 0);
+            func_80046D38_47938(&D_80095380_95F80, poolId, 4, 0, 2, 0);
+            func_800457A0_463A0(poolId);
+            func_80046244_46E44(poolId, 1);
+            break;
+        case 7:
+            func_80046D38_47938(&D_80095460_96060, poolId, 0, 4, 0, 0);
+            func_80046D38_47938(&D_80095470_96070, poolId, 0, 4, 1, 0);
+            func_80046D38_47938(&D_80095480_96080, poolId, 4, 0, 2, 0);
+            func_800457A0_463A0(poolId);
+            func_80046244_46E44(poolId, 2);
+            break;
+        case 8:
+            func_800457A0_463A0(poolId);
+            func_80046D38_47938(&D_800955C0_961C0, poolId, 4, 0, 1, 0);
+            func_80046D38_47938(&D_800955D0_961D0, poolId, 0, 4, 2, 0);
+            func_80046D38_47938(&D_800955E0_961E0, poolId, 4, 0, 3, 0);
+            break;
+        case 9:
+            func_800457A0_463A0(poolId);
+            func_80046244_46E44(poolId, 0xB);
+            break;
+        case 10:
+            func_800457A0_463A0(poolId);
+            func_80046244_46E44(poolId, 8);
+            break;
+        case 11:
+            func_800457A0_463A0(poolId);
+            func_80046244_46E44(poolId, 9);
+            break;
+        case 12:
+            func_800457A0_463A0(poolId);
+            func_80046D38_47938(&D_80095860_96460, poolId, 0, -4, 0, 0);
+            break;
+        case 13:
+            func_800457A0_463A0(poolId);
+            func_80046D38_47938(&D_80095930_96530, poolId, 0, -4, 0, 0);
+            break;
+        case 14:
+        case 15:
+            func_800457A0_463A0(poolId);
+            func_80046244_46E44(poolId, 7);
+            break;
+    }
+}
 
 void func_80049BFC_4A7FC(void) {
     GameState *allocation = (GameState *)getCurrentAllocation();
