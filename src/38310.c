@@ -12,6 +12,34 @@ typedef struct {
     s16 unk0;
     s16 unk2;
     void *unk4;
+    s16 unk8;
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 padE[2];
+} Entry1;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    void *unk8;
+    s16 unkC;
+    s16 unkE;
+    u8 unk10;
+    u8 pad11[3];
+} Entry2;
+
+typedef struct {
+    Entry1 entries1[4];
+    Entry2 entries2[4];
+    void *unk90;
+} func_80037BFC_387FC_arg;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
     void *unk8;
     s16 unkC;
     s16 unkE;
@@ -81,12 +109,15 @@ typedef struct {
 
 extern void *func_80035F80_36B80(s32);
 extern u8 D_8008FD30_90930[];
-extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
+extern void *D_8008FE54_90A54[];
 extern void func_80035408_36008(void);
 extern void func_80012004_12C04(void);
 extern void func_80012FA8_13BA8(void);
 extern void func_80035DE0_369E0(void *, void *, s16, s16, u8, u8, void *, s32);
+extern void *func_80035F80_36B80(s32);
 
+void func_80037E40_38A40(func_80037E40_38A40_arg *);
+void func_80037D18_38918(void);
 void func_80037874_38474(func_80037874_38474_arg *);
 void func_800377FC_383FC(u8 *);
 
@@ -95,7 +126,7 @@ void func_80037710_38310(func_80037710_38310_arg *arg0) {
     void *s2;
 
     s1 = func_80035F80_36B80(1);
-    s2 = dmaRequestAndUpdateStateWithSize(&_4196E0_ROM_START, &_419C60_ROM_START, 0xBB8);
+    s2 = dmaRequestAndUpdateStateWithSize(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
     setCleanupCallback(func_80037874_38474);
 
     arg0->unk0 = -0x50;
@@ -229,7 +260,53 @@ void func_80037BC4_387C4(func_80037BC4_387C4_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/38310", func_80037BFC_387FC);
+void func_80037BFC_387FC(func_80037BFC_387FC_arg *arg0) {
+    void *allocation;
+    s32 i;
+    s32 minusE0;
+    s16 temp;
+    s16 const1;
+    s16 const2;
+    s16 const3;
+    s16 const4;
+    u8 const5;
+
+    getCurrentAllocation();
+    allocation = dmaRequestAndUpdateStateWithSize(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
+    arg0->unk90 = func_80035F80_36B80(1);
+    setCleanupCallback(func_80037E40_38A40);
+
+    i = 0;
+    const1 = -0x80;
+    const2 = 1;
+    const3 = -0x7C;
+    const4 = 0xFF;
+    const5 = 5;
+    for (i = 0; i < 4; i++) {
+        arg0->entries1[i].unk0 = const1;
+        arg0->entries1[i].unk2 = -0x20 + 0x20 * i;
+        arg0->entries1[i].unk4 = allocation;
+        arg0->entries1[i].unk8 = 0;
+        arg0->entries1[i].unkA = 0;
+        arg0->entries1[i].unkC = 0;
+        arg0->entries1[i].unkD = const2;
+
+        arg0->entries2[i].unk0 = const3;
+        arg0->entries2[i].unk2 = arg0->entries1[i].unk2;
+        arg0->entries2[i].unk4 = D_8008FE54_90A54[i];
+        arg0->entries2[i].unk8 = arg0->unk90;
+        arg0->entries2[i].unkC = 0;
+        arg0->entries2[i].unkE = const4;
+        arg0->entries2[i].unk10 = const5;
+    }
+
+    arg0->entries1[3].unk0 = -0x44;
+    arg0->entries1[3].unk2 = 0x48;
+    arg0->entries2[3].unk0 = -0x40;
+    arg0->entries2[3].unk2 = arg0->entries1[3].unk2 + 2;
+
+    setCallback(func_80037D18_38918);
+}
 
 INCLUDE_ASM("asm/nonmatchings/38310", func_80037D18_38918);
 
