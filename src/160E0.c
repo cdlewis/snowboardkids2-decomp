@@ -15,6 +15,7 @@ void func_80015CA4_168A4(void);
 void func_80015DF4_169F4(void);
 void func_80016070_16C70(void);
 void func_80016150_16D50(void);
+extern void func_800585C8_591C8(s32);
 
 void func_800156AC_162AC(void);
 
@@ -329,7 +330,135 @@ void func_80015CA4_168A4(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_80015DF4_169F4);
+void func_80015DF4_169F4(void) {
+    GameState *state;
+    u8 cheatState;
+    s32 buttons;
+    s32 temp_v1;
+
+    state = getCurrentAllocation();
+    cheatState = state->unk3C0;
+
+    if (cheatState < 0xA) {
+        switch (cheatState) {
+            case 0:
+                temp_v1 = gButtonsPressed;
+                if (temp_v1 == 0x2000) {
+                    state->unk3C0++;
+                }
+                break;
+
+            case 1:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x2000) && (buttons != 0)) {
+                    if (buttons != 0x4000) {
+                        state->unk3C0 = 0xFF;
+                    } else {
+                        state->unk3C0++;
+                    }
+                }
+                break;
+
+            case 2:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x4000) && (buttons != 0)) {
+                    if (buttons != 0x8) {
+                        state->unk3C0 = 0xFF;
+                    } else {
+                        state->unk3C0++;
+                    }
+                }
+                break;
+
+            case 3:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x8) && (buttons != 0)) {
+                    if (buttons != 0x400) {
+                        state->unk3C0 = 0xFF;
+                    } else {
+                        state->unk3C0++;
+                    }
+                }
+                break;
+
+            case 4:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x400) && (buttons != 0)) {
+                    if (buttons != 0x80000) {
+                        state->unk3C0 = 0xFF;
+                    } else {
+                        state->unk3C0++;
+                    }
+                }
+                break;
+
+            case 5:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x80000) && (buttons != 0)) {
+                    if (buttons != 0x40000) {
+                        state->unk3C0 = 0xFF;
+                    } else {
+                        state->unk3C0++;
+                    }
+                }
+                break;
+
+            case 6:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x40000) && (buttons != 0)) {
+                    if (buttons != 0x800) {
+                        state->unk3C0 = 0xFF;
+                    } else {
+                        state->unk3C0++;
+                    }
+                }
+                break;
+
+            case 7:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x800) && (buttons != 0)) {
+                    if (buttons != 0x10) {
+                        state->unk3C0 = 0xFF;
+                    } else {
+                        state->unk3C0++;
+                    }
+                }
+                break;
+
+            case 8:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x10) && (buttons != 0)) {
+                    if (buttons != 0x2000) {
+                        state->unk3C0 = 0xFF;
+                    } else {
+                        state->unk3C0++;
+                    }
+                }
+                break;
+
+            case 9:
+                buttons = gButtonsPressed;
+                if ((buttons != 0x2000) && (buttons != 0)) {
+                    if (buttons == 0x8000) {
+                        func_80016070_16C70();
+                        func_800585C8_591C8(0x110);
+                        func_800585C8_591C8(0x110);
+                        func_800585C8_591C8(0x110);
+                        func_800585C8_591C8(0x110);
+                        state->unk3C0 = 0xF0;
+                    } else {
+                        state->unk3C0 = 0xFF;
+                    }
+                }
+                break;
+        }
+    }
+
+    cheatState = state->unk3C0;
+    if (cheatState == 0xFF) {
+        state->unk3C0 = 0xFF;
+    }
+}
 
 void func_80016070_16C70(void) {
     s32 i;
