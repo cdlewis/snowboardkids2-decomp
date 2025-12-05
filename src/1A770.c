@@ -54,7 +54,7 @@ extern void func_8001E590_1F190(void);
 extern void func_80019E18_1AA18(void);
 
 extern void func_800226F0_232F0(void);
-extern void func_80038090_38C90(void);
+extern void func_80038090_38C90(s16);
 extern void func_80015254_15E54(void);
 extern s32 gControllerInputs[4];
 extern void func_80027CA0_288A0(void *, s32, s32, s32);
@@ -205,7 +205,7 @@ void func_80019F60_1AB60(void) {
             do {
                 EepromSaveData->save_slot_status[saveSlotIndex] = 1;
             } while (0);
-            func_80038090_38C90();
+            func_80038090_38C90(saveOperationResult);
         } else {
             gameStatePtr = D_800AFE8C_A71FC;
             saveSlotIndex = gameStatePtr->saveSlotIndex;
