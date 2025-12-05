@@ -7,6 +7,10 @@ extern s32 approximateSin(s16);
 extern s32 approximateCos(s16);
 extern s32 isqrt64(s64 val);
 extern u8 D_800A8CC8_A0038;
+extern s16 identityMatrix[9];
+extern u8 func_8001523C_15E3C(void);
+extern void func_800182FC_18EFC(void);
+extern void func_80018580_19180(void);
 
 typedef struct {
     s16 matrix0[9];
@@ -21,15 +25,18 @@ typedef struct {
     s32 unk3C;
     u8 pad40[0x4];
     u16 unk44;
-    u8 pad46[0x2];
+    s16 unk46;
     s16 unk48;
     u8 pad4A[0x2];
     s32 unk4C;
-    s32 unk50;
+    s16 unk50;
     s32 unk54;
+    u8 pad58[0x2];
+    u8 unk5A;
+    u8 unk5B;
 } Func80018474Arg;
 
-void func_80017384_17F84(void);
+void func_80017384_17F84(Func80018474Arg *arg0);
 void func_800175E0_181E0(void);
 
 void func_80017350_17F50(void) {
@@ -40,7 +47,87 @@ void func_80017350_17F50(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/17F50", func_80017384_17F84);
+void func_80017384_17F84(Func80018474Arg *arg0) {
+    GameState *state;
+    s32 temp;
+    s32 x, y;
+    u8 mode;
+
+    state = getCurrentAllocation();
+    state->unk400 = 4;
+
+    if (D_800A8CC8_A0038 != 0) {
+        state->unk425 = D_800A8CC8_A0038 - 1;
+        setCallbackWithContinue(&func_800182FC_18EFC);
+        return;
+    }
+
+    memcpy(&arg0->matrix20, identityMatrix, 0x20);
+    memcpy(&arg0->matrix0, identityMatrix, 0x20);
+
+    mode = func_8001523C_15E3C();
+
+    if (mode == 3) {
+        arg0->unk34 = 0xFFE60000;
+        arg0->unk3C = 0xFF9C0000;
+        arg0->unk48 = atan2Fixed(arg0->unk34, arg0->unk3C);
+
+        x = arg0->unk34;
+        y = arg0->unk3C;
+        arg0->unk4C = isqrt64((s64)x * x + (s64)y * y);
+
+        arg0->unk46 = 0;
+        arg0->unk44 = 0;
+        state->unk400 = 0;
+    } else {
+        mode = func_8001523C_15E3C();
+        if (mode == 1) {
+            arg0->unk48 = 0x14B0;
+            arg0->unk4C = 0x650000;
+            arg0->unk46 = 0x1800;
+            arg0->unk44 = 0x1800;
+        } else {
+            arg0->unk48 = 0x0B50;
+            arg0->unk4C = 0x650000;
+            arg0->unk46 = 0x0800;
+            arg0->unk44 = 0x0800;
+        }
+
+        temp = approximateSin(arg0->unk48);
+        temp = temp * -(arg0->unk4C >> 8);
+        if (temp < 0) {
+            temp += 0x1FFF;
+        }
+        arg0->unk34 = (temp >> 13) << 8;
+
+        temp = approximateCos(arg0->unk48);
+        temp = temp * -(arg0->unk4C >> 8);
+        if (temp < 0) {
+            temp += 0x1FFF;
+        }
+        arg0->unk3C = (temp >> 13) << 8;
+    }
+
+    state->unk3EC = arg0->unk34;
+    state->unk3F0 = arg0->unk3C;
+    state->unk3F4 = arg0->unk48;
+    state->unk3F8 = arg0->unk4C;
+    state->unk3FC = arg0->unk44 & 0x1FFF;
+
+    arg0->unk50 = 0;
+    arg0->unk5B = 8;
+    arg0->unk5A = 8;
+
+    createYRotationMatrix((Mat3x3Padded *)&arg0->matrix0, arg0->unk44);
+    createYRotationMatrix((Mat3x3Padded *)&arg0->matrix20, arg0->unk48);
+
+    mode = func_8001523C_15E3C();
+    if (mode == 3) {
+        setCallback(&func_800175E0_181E0);
+    } else {
+        setCallback(&func_80018580_19180);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/17F50", func_800175E0_181E0);
 

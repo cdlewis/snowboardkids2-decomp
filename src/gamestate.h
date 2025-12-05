@@ -172,7 +172,8 @@ typedef struct {
     s32 unk3F8;
     u16 unk3FC;
     s16 unk3FE;
-    u8 PAD_E[0x3];
+    u8 unk400;
+    u8 PAD_E[0x2];
     u8 unk403;
     u8 PAD_0A_1[0x4];
     s32 unk408[2];
