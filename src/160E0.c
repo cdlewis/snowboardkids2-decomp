@@ -505,4 +505,61 @@ void func_80016150_16D50(void) {
     EepromSaveData->setting_4B[1] = 0xF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_800161F4_16DF4);
+void func_800161F4_16DF4(void) {
+    s32 i;
+
+    // Zero header_data (8 bytes)
+    for (i = 0; i < 8; i++) {
+        EepromSaveData->header_data[i] = 0;
+    }
+
+    // Zero checksum and unknown_0C
+    EepromSaveData->checksum = 0;
+    *(u32 *)&EepromSaveData->unknown_0C = 0;
+
+    // Zero save_slot_status and save_slot_data (16 bytes each)
+    for (i = 0; i < 16; i++) {
+        EepromSaveData->save_slot_status[i] = 0;
+        EepromSaveData->save_slot_data[i] = 0;
+    }
+
+    // Set first save_slot_status to 5
+    EepromSaveData->save_slot_status[0] = 5;
+
+    // Set first 3 pairs of save_slot_data to 5
+    for (i = 0; i < 3; i++) {
+        EepromSaveData->save_slot_data[i] = 5;
+        EepromSaveData->save_slot_data[i + 4] = 5;
+    }
+
+    // Zero character_or_settings (18 bytes)
+    for (i = 0; i < 18; i++) {
+        EepromSaveData->character_or_settings[i] = 0;
+    }
+
+    // Set specific character_or_settings values
+    EepromSaveData->character_or_settings[0] = 1;
+    EepromSaveData->character_or_settings[3] = 2;
+    EepromSaveData->character_or_settings[6] = 3;
+
+    // Zero setting_42 (9 bytes)
+    for (i = 0; i < 9; i++) {
+        EepromSaveData->u.setting_42[i] = 0;
+    }
+
+    // Zero setting_4B (3 bytes)
+    for (i = 0; i < 3; i++) {
+        EepromSaveData->setting_4B[i] = 0;
+    }
+
+    // Zero individual settings
+    EepromSaveData->setting_4E = 0;
+    EepromSaveData->setting_4F = 0;
+    EepromSaveData->setting_50 = 0;
+    EepromSaveData->unk51 = 0;
+
+    // Zero padding
+    for (i = 0; i < 8; i++) {
+        EepromSaveData->padding_52[i] = 0;
+    }
+}
