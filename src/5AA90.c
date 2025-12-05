@@ -8,20 +8,26 @@ extern s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3);
 extern s16 func_80062254_62E54(void *arg0, u16 arg1);
 extern s32 isqrt64(s64 val);
 
-typedef struct ListNode_5AA90 {
-    /* 0x00 */ struct ListNode_5AA90 *next;
-} ListNode_5AA90;
-
-typedef struct {
-    u8 _pad[0x2C];
-    /* 0x2C */ ListNode_5AA90 *list;
-} Allocation5AA90;
-
 typedef struct {
     s32 x;
     s32 y;
     s32 z;
 } Vec3s32;
+
+typedef struct ListNode_5AA90 {
+    /* 0x00 */ struct ListNode_5AA90 *next;
+    /* 0x04 */ Vec3s32 *posPtr;
+    /* 0x08 */ Vec3s32 localPos;
+    /* 0x14 */ s32 radius;
+    /* 0x18 */ u8 id;
+} ListNode_5AA90;
+
+typedef struct {
+    u8 _pad[0x10];
+    /* 0x10 */ void *dataArray;
+    u8 _pad2[0x18];
+    /* 0x2C */ ListNode_5AA90 *list;
+} Allocation5AA90;
 
 u16 func_80059E90_5AA90(Player *arg0, void *arg1, u16 arg2, void *arg3) {
     if (!(arg0->unkB84 & 0x100)) {
@@ -117,7 +123,47 @@ INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AB58_5B758);
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AE8C_5BA8C);
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005B24C_5BE4C);
+void *func_8005B24C_5BE4C(Vec3s32 *arg0, s32 arg1, s32 arg2) {
+    Vec3s32 pos;
+    s32 combinedRadius;
+    Allocation5AA90 *allocation;
+    ListNode_5AA90 *node;
+
+    allocation = getCurrentAllocation();
+    node = allocation->list;
+
+    for (; node != NULL; node = node->next) {
+        if (arg1 == node->id) {
+            continue;
+        }
+
+        memcpy(&pos, &node->localPos, 0xC);
+
+        pos.x += node->posPtr->x;
+        pos.y += node->posPtr->y;
+        pos.z += node->posPtr->z;
+
+        pos.x -= arg0->x;
+        pos.y -= arg0->y;
+        pos.z -= arg0->z;
+
+        combinedRadius = node->radius + arg2;
+
+        if (-combinedRadius < pos.x && pos.x < combinedRadius && -combinedRadius < pos.y && pos.y < combinedRadius &&
+            -combinedRadius < pos.z && pos.z < combinedRadius) {
+            s32 dist;
+
+            dist = isqrt64((s64)pos.x * pos.x + (s64)pos.y * pos.y + (s64)pos.z * pos.z);
+
+            if (dist < combinedRadius) {
+                u8 index = node->id;
+                return (u8 *)allocation->dataArray + ((index * 3 * 128) - (index * 3)) * 8;
+            }
+        }
+    }
+
+    return NULL;
+}
 
 s32 func_8005B400_5C000(Player *arg0, Vec3s32 *arg1, s32 arg2) {
     Vec3s32 localVec;
