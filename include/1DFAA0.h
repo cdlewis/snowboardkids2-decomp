@@ -74,7 +74,8 @@ typedef struct {
     void *start;
     void *end;
     u32 size;
-    u32 padding;
+    s8 unkC;
+    u8 padding[3];
 } D_800BA960_1E7A10_node;
 
 typedef struct {

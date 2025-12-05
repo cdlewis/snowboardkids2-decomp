@@ -57,7 +57,7 @@ s32 findEventAtFrame(u8 a0, u16 a1);
 s32 func_800B3D24_1E0DD4(u8, u16);
 StateEntry *getStateEntry(u16);
 u16 func_800B3B68_1E0C18(u8, u16, s32);
-void func_800B477C_1E182C(void);
+void func_800B477C_1E182C(void *);
 void func_800B4534_1E15E4(s32, s32);
 void func_800B7760_1E4810(void *, s32, s32);
 void func_800B77C4_1E4874(void *, s32, s32);
@@ -837,8 +837,6 @@ void func_800B46E0(s32 arg0, s8 arg1, s16 arg2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B477C_1E182C);
-
 extern void func_80069CF8_6A8F8(void);
 extern void func_80011924_12524(void);
 
@@ -848,6 +846,108 @@ typedef struct {
     u32 size;
     s8 unkC;
 } FadeNode;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    u8 unk12;
+    u8 unk13;
+    u8 unk14;
+} SubStruct;
+
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+    s16 unk2;
+    s32 unk4;
+    void *unk8;
+    SubStruct unkC[6];
+    SubStruct unk9C;
+    SubStruct unkB4;
+    u8 unkCC[0x18];
+    s16 unkE4;
+} FadeTaskData2;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-non-prototype"
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
+extern void func_800B4914_1E19C4();
+extern void func_800B4ACC_1E1B7C();
+#pragma clang diagnostic pop
+
+void func_800B477C_1E182C(void *varg0) {
+    FadeTaskData2 *arg0 = (FadeTaskData2 *)varg0;
+    FadeNode *node;
+    s32 i;
+
+    node = (FadeNode *)&D_800BA960_1E7A10[arg0->unk1];
+    arg0->unk8 = dmaRequestAndUpdateStateWithSize(node->start, node->end, node->size);
+
+    for (i = 0; i < 6; i++) {
+        arg0->unkC[i].unk0 = 0;
+        arg0->unkC[i].unk2 = -0x50 + (i * 0x10);
+        arg0->unkC[i].unk4 = arg0->unk8;
+        arg0->unkC[i].unk8 = i;
+        arg0->unkC[i].unkC = 0x400;
+        arg0->unkC[i].unkA = 0x400;
+        arg0->unkC[i].unkE = 0;
+        arg0->unkC[i].unk10 = 0xFF;
+        arg0->unkC[i].unk12 = 0;
+        arg0->unkC[i].unk13 = 0;
+        arg0->unkC[i].unk14 = 0;
+    }
+
+    switch (node->unkC) {
+        case 0:
+            arg0->unk9C.unk0 = 0;
+            arg0->unk9C.unk2 = -0x20;
+            arg0->unk9C.unk8 = 6;
+            arg0->unk9C.unkC = 0x400;
+            arg0->unk9C.unkA = 0x400;
+            arg0->unk9C.unkE = 0;
+            arg0->unk9C.unk10 = 0xFF;
+            arg0->unk9C.unk12 = 0;
+            arg0->unk9C.unk13 = 0;
+            arg0->unk9C.unk14 = 0;
+            arg0->unk9C.unk4 = arg0->unk8;
+            break;
+        case 1:
+            arg0->unk9C.unk0 = 0;
+            arg0->unk9C.unk2 = -0x28;
+            arg0->unk9C.unk8 = 6;
+            arg0->unk9C.unkC = 0x400;
+            arg0->unk9C.unkA = 0x400;
+            arg0->unk9C.unkE = 0;
+            arg0->unk9C.unk10 = 0xFF;
+            arg0->unk9C.unk12 = 0;
+            arg0->unk9C.unk13 = 0;
+            arg0->unk9C.unk14 = 0;
+            arg0->unk9C.unk4 = arg0->unk8;
+
+            arg0->unkB4.unk0 = 0;
+            arg0->unkB4.unk2 = -0x16;
+            arg0->unkB4.unk8 = 7;
+            arg0->unkB4.unkC = 0x400;
+            arg0->unkB4.unkA = 0x400;
+            arg0->unkB4.unkE = 0;
+            arg0->unkB4.unk10 = 0xFF;
+            arg0->unkB4.unk12 = 0;
+            arg0->unkB4.unk13 = 0;
+            arg0->unkB4.unk14 = 0;
+            arg0->unkB4.unk4 = arg0->unk8;
+            break;
+    }
+
+    arg0->unkE4 = 0;
+    setCleanupCallback((void (*)(void *))func_800B4ACC_1E1B7C);
+    setCallback((void (*)(void *))func_800B4914_1E19C4);
+}
 
 typedef struct {
     s8 unk0;
