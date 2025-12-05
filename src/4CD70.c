@@ -11,18 +11,38 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
+#define SECONDS_TO_TICKS(s) ((s) * 30)
+
 USE_ASSET(_3F3940);
 USE_ASSET(_3F6950);
 USE_ASSET(_3F3EF0);
 
-extern void func_8004E2D8_4EED8(void);
-extern void func_8000FED0_10AD0(void);
-extern void func_80058530_59130(s32, s32);
-extern void func_80069CF8_6A8F8(void);
-extern void func_80010240_10E40(void);
-extern void func_800105B0_111B0(void);
-extern void func_80010924_11524(void);
-extern void func_8005100C_51C0C(s32, s32, s32, s32, s32);
+typedef struct {
+    s32 unk0;
+    u8 pad0[0xB80];
+    s32 unkB84;
+} PlayerInfo;
+
+typedef struct {
+    u8 pad0[0x10];
+    PlayerInfo *timeRemaining;
+    u8 pad14[0x62];
+    u8 unk76;
+    u8 pad77[0x2];
+    u8 unk79;
+    u8 pad7A[0x3];
+    u8 timerExpired;
+} Allocation;
+
+// defined later to keep the rodata gods happy
+const char sTimerFormatLow[];
+const char sTimerFormatNormal[];
+
+typedef struct {
+    u8 padC[0xC];
+    void *unkC;
+    s16 timeRemaining;
+} Struct_func_8004EEB4_4FAB4;
 
 typedef struct {
     s16 unk0;
@@ -34,11 +54,6 @@ typedef struct {
     s32 unk10;
     s32 unk14;
 } Struct_func_8004D134;
-
-void func_8004D19C_4DD9C(Struct_func_8004D134 *arg0);
-void func_8004D23C_4DE3C(Struct_func_8004D134 *arg0);
-void func_8004D298_4DE98(Struct_func_8004D134 *arg0);
-void func_8004D338_4DF38(Struct_func_8004D134 *arg0);
 
 typedef struct {
     u8 pad0[0x4];
@@ -55,9 +70,6 @@ typedef struct {
     u16 unkA;
     u32 unkC;
 } Struct_func_8004D3A4;
-
-void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
-void func_8004D464_4E064(Struct_func_8004D3A4 *);
 
 typedef struct {
     void *unk0;
@@ -103,9 +115,6 @@ typedef struct {
     s32 unk10;
 } Struct_func_8004D8E4;
 
-void func_8004D954_4E554(Struct_func_8004D8E4 *arg0);
-void func_8004D98C_4E58C(Struct_func_8004F04C *arg0);
-
 typedef struct {
     s16 unk0;
     s16 unk2;
@@ -126,11 +135,30 @@ typedef struct {
     s16 unk2E;
 } Struct_func_8004D784;
 
+extern void func_8004E2D8_4EED8(void);
+extern void func_8000FED0_10AD0(void);
+extern void func_80058530_59130(s32, s32);
+extern void func_80069CF8_6A8F8(void);
+extern void func_80010240_10E40(void);
+extern void func_800105B0_111B0(void);
+extern void func_80010924_11524(void);
+extern void func_8005100C_51C0C(s32, s32, s32, s32, s32);
+extern void func_8003BD60_3C960(char *, s16, s16, s16, void *, s16, s16);
+
+void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
+void func_8004D464_4E064(Struct_func_8004D3A4 *);
+void func_8004D954_4E554(Struct_func_8004D8E4 *arg0);
+void func_8004D98C_4E58C(Struct_func_8004F04C *arg0);
 void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
 void func_8004D784_4E384(Struct_func_8004D784 *arg0);
 void func_8004D6FC_4E2FC(Struct_func_8004D784 *arg0);
 void func_8004D858_4E458(Struct_func_8004F04C *arg0);
-extern void func_8003BD60_3C960(char *, s16, s16, s16, void *, s16, s16);
+void func_8004D19C_4DD9C(Struct_func_8004D134 *arg0);
+void func_8004D23C_4DE3C(Struct_func_8004D134 *arg0);
+void func_8004D298_4DE98(Struct_func_8004D134 *arg0);
+void func_8004D338_4DF38(Struct_func_8004D134 *arg0);
+void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0);
+
 static const char D_8009E880_9F480[] = "%5d";
 extern char D_8009E89C_9F49C[];
 extern char D_8009E8A0_9F4A0[];
@@ -1244,7 +1272,6 @@ void func_8004EDCC_4F9CC(s16 arg0) {
     }
 }
 
-void func_8004EEB4_4FAB4(void *);
 void func_8004F04C_4FC4C(Struct_func_8004F04C *);
 
 void func_8004EE24_4FA24(Struct_func_8004F04C *arg0) {
@@ -1264,7 +1291,46 @@ void func_8004EE24_4FA24(Struct_func_8004F04C *arg0) {
     setCallback(func_8004EEB4_4FAB4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004EEB4_4FAB4);
+void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0) {
+    char buffer[16];
+    Allocation *allocation;
+    s32 timeValue;
+    s32 minutes;
+    s32 seconds;
+    s32 remainingTicks;
+    s32 temp;
+
+    allocation = getCurrentAllocation();
+
+    if (allocation->unk79 == 0 && allocation->unk76 == 0) {
+        PlayerInfo *player = allocation->timeRemaining;
+        if ((player->unkB84 & 0x80000) == 0) {
+            if (arg0->timeRemaining != 0) {
+                arg0->timeRemaining--;
+                if (arg0->timeRemaining == 0) {
+                    allocation->timerExpired = 1;
+                }
+            }
+        }
+    }
+
+    // Maths assumes 30 Hz timer
+    minutes = arg0->timeRemaining / 1800;
+    temp = arg0->timeRemaining - minutes * 1800;
+    seconds = temp / 30;
+    temp = temp - seconds * 30;
+    remainingTicks = temp * 100 / 30;
+
+    if (arg0->timeRemaining < SECONDS_TO_TICKS(30)) {
+        sprintf(buffer, sTimerFormatLow, minutes, seconds, remainingTicks);
+    } else {
+        sprintf(buffer, sTimerFormatNormal, minutes, seconds, remainingTicks);
+    }
+
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+
+    func_8003BD60_3C960(buffer, 0x48, 0x50, 0xFF, arg0->unkC, 8, 0);
+}
 
 void func_8004F04C_4FC4C(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
@@ -1691,9 +1757,9 @@ INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E8A0_9F4A0);
 
 INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E8A8_9F4A8);
 
-INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E8AC_9F4AC);
+const char sTimerFormatLow[] = "\x01%2.2d'%2.2d\"%2.2d";
 
-INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E8C0_9F4C0);
+const char sTimerFormatNormal[] = "\x03%2.2d'%2.2d\"%2.2d";
 
 INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E8D4_9F4D4);
 

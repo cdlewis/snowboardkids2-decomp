@@ -1,3 +1,5 @@
+sTimerFormatNormal = 0x8009E8C0;
+sTimerFormatLow = 0x8009E8AC;
 cutsceneBgmVolume_exec = 0x800B0894; // rom:0x1DD944
 cutsceneBgmFadeOut_exec = 0x800B0858; // rom:0x1DD908
 cutsceneBgmPlay_exec = 0x800B0820; // rom:0x1DD8D0
