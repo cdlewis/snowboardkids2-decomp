@@ -162,6 +162,10 @@ def analyze_function_content(func_name: str, content: str, file_path: str) -> Fu
         func_name == 'header'):
         return None
 
+    # Skip files that only contain rodata (no actual code)
+    if '.section .rodata' in content and 'glabel' not in content:
+        return None
+
     score = FunctionScore(name=func_name, file_path=file_path)
 
     for line in content.split('\n'):
@@ -247,7 +251,13 @@ def analyze_function(file_path: str) -> FunctionScore:
 
     try:
         with open(file_path, 'r') as f:
-            for line in f:
+            content = f.read()
+
+            # Skip files that only contain rodata (no actual code)
+            if '.section .rodata' in content and 'glabel' not in content:
+                return None
+
+            for line in content.splitlines():
                 line = line.strip()
 
                 # Skip empty lines, glabel, endlabel, and comments
