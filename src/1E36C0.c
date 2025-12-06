@@ -72,9 +72,38 @@ void func_800B68F4_1E39A4(unk_func_800B68F4_1E39A4 *arg0, s32 arg1, s32 arg2, s3
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6910_1E39C0);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6AB8_1E3B68);
-
 extern s16 func_800B6618_1E36C8(CutsceneSlotData *, s16, s16, s16);
+
+void func_800B6AB8_1E3B68(CutsceneSlotData *arg0, s16 arg1) {
+    s32 temp;
+    s16 delta;
+
+    temp = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+
+    if (arg1 == 1)
+        goto set_aa;
+
+    if (arg1 < 2) {
+        if (arg1 == 0) {
+            delta = 0x100;
+        }
+    }
+    goto check_temp;
+
+set_aa:
+    delta = 0xAA;
+
+check_temp:
+    if (temp > 0) {
+        arg0->unk7C = delta;
+        arg0->unk78 -= delta;
+    } else if (temp < 0) {
+        arg0->unk7C = -delta;
+        arg0->unk78 += delta;
+    } else {
+        arg0->unk7C = 0;
+    }
+}
 
 void func_800B6B6C_1E3C1C(CutsceneSlotData *arg0) {
     s16 temp;
@@ -93,7 +122,6 @@ void func_800B6B6C_1E3C1C(CutsceneSlotData *arg0) {
 }
 
 extern s32 func_800B6CD8_1E3D88(CutsceneSlotData *, SceneModel *, s32, s32, s32, s16, s16, s32, s32);
-extern void func_800B6AB8_1E3B68(CutsceneSlotData *, s32);
 
 void func_800B6C04_1E3CB4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6);
 
