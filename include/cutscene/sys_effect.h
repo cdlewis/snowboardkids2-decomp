@@ -32,7 +32,7 @@ void cutsceneEffectMLight_exec(void);
 void cutsceneEffectTrick_init(void);
 s32 cutsceneEffectTrick_validate(void);
 void cutsceneEffectTrick_exec(cutsceneEffectTrick_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
-void cutsceneEffectTrick_update(void);
+void cutsceneEffectTrick_update(CutsceneManager *arg0, s8 arg1);
 s32 cutsceneEffectTrick_isDone(void);
 void cutsceneInitTrack_init(void);
 s32 cutsceneInitTrack_validate(void);

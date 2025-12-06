@@ -74,7 +74,22 @@ void cutsceneEffectTrick_exec(cutsceneEffectTrick_exec_arg *arg0, CutsceneManage
     func_800B2A24_1DFAD4(arg1, arg2);
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectTrick_update);
+extern void func_800B523C_1E22EC(void *, s16);
+
+void cutsceneEffectTrick_update(CutsceneManager *arg0, s8 arg1) {
+    CutsceneSlot *slot;
+    CutsceneSlot *temp_s0;
+
+    slot = &arg0->slots[arg1];
+    temp_s0 = func_800B2A78_1DFB28(arg0, arg1);
+
+    if (temp_s0->unk0.TrickPayload.unk0 > 0) {
+        func_800B523C_1E22EC(slot->model, temp_s0->unk0.TrickPayload.unk2);
+        temp_s0->unk0.TrickPayload.unk0 -= 1;
+    } else {
+        func_800B2A50_1DFB00(arg0, arg1);
+    }
+}
 
 s32 cutsceneEffectTrick_isDone(void) {
     return 0;
