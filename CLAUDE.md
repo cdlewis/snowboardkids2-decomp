@@ -15,7 +15,6 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 - `lib` library code such as Ultralib which we call and link against
 - `assets` binary asset blobs extracted from the rom
 - `include` common headers included in all C and/or assembly code
-- `tools/vacuum.log` includes a log of everything Claude has ever done. It is a useful reference for decompilation work. Look here for more information on particular functions.
 
 ## Tools
 
