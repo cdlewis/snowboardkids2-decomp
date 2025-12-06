@@ -1076,7 +1076,25 @@ void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset) {
     alSynSetPitch(&__libmus_alglobals.drvr, mus_voices + x, frequency);
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073A3C_7463C);
+void func_80073A3C_7463C(channel_t *arg0) {
+    channel_t *chan = arg0;
+    u16 temp;
+
+    if (chan->unk96 != 0x7FFF) {
+        temp = chan->cutoff;
+        if (temp != 0) {
+            chan->unk54 = chan->unk40 + (temp << 8);
+        } else {
+            chan->unk54 = chan->unk3C - (chan->endit << 8);
+        }
+    } else {
+        chan->unk54 = 0x7FFFFFFF;
+    }
+
+    chan->unkBF = 1;
+    chan->unkC0 = chan->env_init_vol;
+    chan->unkC1 = chan->env_speed;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073AA4_746A4);
 
