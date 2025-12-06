@@ -30,7 +30,10 @@ typedef struct {
     s32 unk44C;
     s32 unk450;
     s32 unk454;
-    u8 padding1[0x10];
+    s32 unk458;
+    s32 unk45C;
+    s32 unk460;
+    u8 padding1[0x4];
     s32 unk468;
     s32 unk46C;
     void *unk470;
@@ -498,7 +501,7 @@ void func_800B2818_A26C8(func_800B30B0_arg *arg0, s8 arg1) {
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2950_A2800);
 
 extern void func_80059ADC_5A6DC(void *);
-extern void func_800B42A8_A4158(void *, s32, s32, s32);
+s32 func_800B42A8_A4158(func_800B30B0_arg *, s32, s32, s32);
 extern void func_80058CFC_598FC(void *);
 
 s32 func_800B2A3C_A28EC(func_800B30B0_arg *arg0) {
@@ -1315,7 +1318,112 @@ void func_800B419C_A404C(func_800B30B0_arg *arg0) {
     arg0->unk9A4 = value3 + delta2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B42A8_A4158);
+typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+} Vec3s32;
+
+extern s16 identityMatrix[];
+extern s32 approximate_sqrt(s32);
+extern void transformVector2(void *matrix, void *vector, s32 *output);
+extern void transformVector3(s32 *, Mat3x3Padded *, s32 *);
+
+s32 func_800B42A8_A4158(func_800B30B0_arg *arg0, s32 arg1, s32 arg2, s32 arg3) {
+    Vec3s32 sp10;
+    Vec3s32 sp20;
+    Vec3s32 sp30;
+    Mat3x3Padded sp40;
+    Mat3x3Padded sp60;
+    Mat3x3Padded sp80;
+    Mat3x3Padded spA0;
+    s32 temp;
+    s32 temp2;
+    s32 resultY;
+
+    createYRotationMatrix(&sp40, arg0->unkA90 + arg0->unkA94);
+
+    sp30.x = sp40.m[2][0];
+    sp30.y = sp40.m[2][1];
+    sp30.z = sp40.m[2][2];
+
+    memcpy(&sp60, identityMatrix, 0x20);
+    memcpy(&sp80, identityMatrix, 0x20);
+
+    temp2 = approximate_sqrt(arg0->unk458 * arg0->unk458 + arg0->unk460 * arg0->unk460);
+    temp = temp2 & 0xFFFF;
+
+    if (temp != 0) {
+        sp80.m[0][0] = (arg0->unk460 << 13) / temp;
+        sp80.m[0][2] = (arg0->unk458 << 13) / temp;
+        sp80.m[2][0] = (-arg0->unk458 << 13) / temp;
+        sp80.m[2][2] = (arg0->unk460 << 13) / temp;
+    }
+
+    sp60.m[1][1] = arg0->unk45C;
+    sp60.m[1][2] = -temp;
+    sp60.m[2][1] = temp;
+    sp60.m[2][2] = arg0->unk45C;
+
+    func_8006BDBC_6C9BC((void *)&sp80, &sp60, &spA0);
+    transformVector2(&arg0->unk44C, &spA0, &sp10.x);
+
+    if (sp10.y < 0) {
+        sp10.y = 0;
+    }
+
+    transformVector2(&sp30.x, &spA0, &sp20.x);
+    memcpy(&sp80, identityMatrix, 0x20);
+
+    temp2 = approximate_sqrt(sp20.x * sp20.x + sp20.z * sp20.z);
+    temp = temp2 & 0xFFFF;
+
+    if (temp != 0) {
+        sp80.m[0][0] = (sp20.z << 13) / temp;
+        sp80.m[2][2] = (sp20.z << 13) / temp;
+        sp80.m[0][2] = (sp20.x << 13) / temp;
+        sp80.m[2][0] = (-sp20.x << 13) / temp;
+    }
+
+    transformVector2(&sp10.x, &sp80, &sp20.x);
+
+    if (sp20.x > 0) {
+        if (arg3 < sp20.x) {
+            sp20.x = sp20.x - arg3;
+        } else {
+            sp20.x = 0;
+        }
+    } else {
+        if (sp20.x < -arg3) {
+            sp20.x = sp20.x + arg3;
+        } else {
+            sp20.x = 0;
+        }
+    }
+
+    if (sp20.z > 0) {
+        if (arg1 < sp20.z) {
+            sp20.z = sp20.z - arg1;
+        } else {
+            sp20.z = 0;
+        }
+    } else {
+        if (sp20.z < -arg2) {
+            sp20.z = sp20.z + arg2;
+        } else {
+            sp20.z = 0;
+        }
+    }
+
+    resultY = sp20.z;
+    transformVector3(&sp20.x, &sp80, &sp10.x);
+    transformVector3(&sp10.x, &spA0, &sp20.x);
+
+    arg0->unk44C = sp20.x;
+    arg0->unk454 = sp20.z;
+
+    return resultY;
+}
 
 void func_800B468C_A453C(func_800B00D4_arg *arg0) {
     D_800BAB78_AAA28[arg0->unkBBE](arg0);
@@ -2061,7 +2169,6 @@ s32 func_800B67E4_A6694(func_800B30B0_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6890_A6740);
 
 extern s32 D_800BAC80_AAB30;
-extern void transformVector2(void *matrix, void *vector, s32 *output);
 
 s32 func_800B6D14_A6BC4(func_800B30B0_arg *arg0) {
     GameState *gameState = getCurrentAllocation();
