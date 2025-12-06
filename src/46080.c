@@ -710,7 +710,28 @@ void func_80046D0C_4790C(DisplayListObject *arg0) {
     func_800630A4_63CA4(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80046D38_47938);
+typedef struct {
+    u8 _pad[0x20];
+    void *unk20;
+    u8 _pad2[0x24];
+    s16 unk48;
+    s16 unk4A;
+    s16 unk4C;
+    s16 unk4E;
+    s16 unk50;
+} func_80046D38_47938_Task;
+
+void func_80046D38_47938(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    func_80046D38_47938_Task *task = (func_80046D38_47938_Task *)scheduleTask(&func_800465A8_471A8, 0, 0, 0xD2);
+    if (task != NULL) {
+        task->unk20 = arg0;
+        task->unk48 = arg1;
+        task->unk4A = arg2;
+        task->unk4C = arg3;
+        task->unk4E = arg4;
+        task->unk50 = arg5;
+    }
+}
 
 typedef struct {
     u8 _pad[0x3C];
