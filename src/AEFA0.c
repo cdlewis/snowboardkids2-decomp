@@ -1,6 +1,8 @@
+#include "56910.h"
 #include "5E590.h"
 #include "common.h"
 #include "displaylist.h"
+#include "geometry.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
@@ -62,6 +64,23 @@ typedef struct {
 } func_800BBC2C_AF91C_arg;
 
 typedef struct {
+    /* 0x00 */ u8 pad[0x20];
+    /* 0x20 */ void *unk20;
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 pad30[0xC];
+    /* 0x3C */ s32 unk3C;
+    /* 0x40 */ s32 unk40;
+    /* 0x44 */ s32 unk44;
+    /* 0x48 */ s16 unk48;
+    /* 0x4A */ s16 unk4A;
+    /* 0x4C */ s16 unk4C;
+    /* 0x4E */ s16 unk4E;
+    /* 0x50 */ s16 unk50;
+} func_800BB8E8_AF5D8_arg;
+
+typedef struct {
     void *unk0;
     void *unk4;
     s32 unk8;
@@ -85,7 +104,11 @@ extern s32 func_8005CFC0_5DBC0(void *, u16, void *, s32);
 extern void func_800BB620_AF310(void);
 extern void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
 extern void func_800BB778_AF468(void);
+extern void func_800BB9A4_AF694(void);
+void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *);
 extern void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
+extern void setCleanupCallback(void *);
+extern void setCallback(void *);
 extern void func_800BBEAC_AFB9C(s16 *);
 extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
@@ -267,7 +290,31 @@ void func_800BB74C_AF43C(func_800BB74C_AF43C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB778_AF468);
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB8E8_AF5D8);
+void func_800BB8E8_AF5D8(func_800BB8E8_AF5D8_arg *arg0) {
+    func_80055E68_56A68_result *temp_v0_3;
+    u16 temp_a1;
+
+    arg0->unk24 = func_80055DC4_569C4(9);
+    arg0->unk28 = func_80055DF8_569F8(9);
+    arg0->unk2C = 0;
+
+    temp_v0_3 = func_80055E68_56A68(9);
+    arg0->unk20 = (void *)((u8 *)temp_v0_3 + 0x90);
+
+    arg0->unk4E = 0xF;
+    arg0->unk3C = 0xFD71ABE1;
+    arg0->unk40 = 0x1E37049C;
+    arg0->unk44 = 0xF61F3676;
+    arg0->unk4C = 0;
+    arg0->unk48 = 0;
+    arg0->unk4A = 0x400;
+    arg0->unk50 = 0x1E;
+
+    temp_a1 = arg0->unk4A + 0x2A0;
+    createYRotationMatrix((Mat3x3Padded *)arg0, temp_a1 & 0xFFFF);
+    setCleanupCallback(func_800BBC2C_AF91C);
+    setCallback(func_800BB9A4_AF694);
+}
 
 INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB9A4_AF694);
 
