@@ -5,6 +5,7 @@
 #include "task_scheduler.h"
 
 extern s16 D_8008C930_8D530[][10];
+extern s32 D_8008C920_8D520[];
 
 s32 func_800084F0_90F0(void) {
     return 10;
@@ -76,7 +77,15 @@ s32 func_80009E58_AA58(void *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80009E68_AA68);
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_80009EF8_AAF8);
+void *func_80009EF8_AAF8(s16 arg0) {
+    s32 *entry;
+
+    if (arg0 >= func_800084F0_90F0()) {
+        return NULL;
+    }
+    entry = &D_8008C920_8D520[arg0 * 5];
+    return dmaRequestAndUpdateStateWithSize((void *)entry[0], (void *)entry[1], entry[2]);
+}
 
 void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0) {
     if (arg0 != NULL) {
