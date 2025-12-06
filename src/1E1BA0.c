@@ -3,7 +3,15 @@
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
+#include "overlay.h"
 #include "task_scheduler.h"
+
+extern u32 D_1FB4E0;
+extern u32 D_1FB8B0;
+extern u32 D_4C9E70;
+extern u32 D_4CA440;
+extern StateEntry D_80088650;
+extern StateEntry D_80088660;
 
 extern s16 D_800BAD0E_1E7DBE;
 extern s16 D_800BAA60_1E7B10[];
@@ -83,7 +91,47 @@ void func_800B4CB0_1E1D60(void) {
     func_80057ABC_586BC(0, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E1BA0", func_800B4CD0_1E1D80);
+typedef struct {
+    u8 _pad0[0x20];
+    StateEntry *unk20;
+    StateEntry *unk24;
+    StateEntry *unk28;
+    u32 unk2C;
+    u8 _pad30[0x2C];
+    StateEntry *unk5C;
+    StateEntry *unk60;
+    StateEntry *unk64;
+    u32 unk68;
+    u8 _pad6C[0x18];
+    s16 unk84;
+} func_800B4CD0_1E1D80_arg;
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-prototypes"
+#pragma GCC diagnostic ignored "-Wdeprecated-non-prototype"
+void func_800B4D74_1E1E24();
+void func_800B4F28_1E1FD8();
+#pragma GCC diagnostic pop
+
+void func_800B4CD0_1E1D80(func_800B4CD0_1E1D80_arg *arg0) {
+    StateEntry **temp_a1;
+
+    arg0->unk20 = &D_80088650;
+    arg0->unk24 = dmaRequestAndUpdateState(&D_1FB4E0, &D_1FB8B0);
+
+    arg0->unk28 = dmaRequestAndUpdateStateWithSize(&D_4C9E70, &D_4CA440, 0xA10);
+    temp_a1 = &arg0->unk24;
+
+    arg0->unk5C = &D_80088660;
+    arg0->unk2C = 0;
+    arg0->unk68 = 0;
+    arg0->unk84 = 0x200;
+    arg0->unk60 = *temp_a1;
+    arg0->unk64 = arg0->unk28;
+
+    setCleanupCallback(&func_800B4F28_1E1FD8);
+    setCallbackWithContinue(&func_800B4D74_1E1E24);
+}
 
 extern Mat3x3Padded D_8009A8B0_9B4B0;
 
@@ -188,8 +236,6 @@ typedef struct {
     u8 padding3[4];
     s16 unk86;
 } func_800B4F60_1E2010_task;
-
-extern void func_800B4CD0_1E1D80(void *);
 
 void func_800B4F60_1E2010(s32 arg0, s16 arg1) {
     func_800B4F60_1E2010_task *task = (func_800B4F60_1E2010_task *)scheduleTask(&func_800B4CD0_1E1D80, 1, 0, 0x64);
