@@ -1,3 +1,4 @@
+D_800BC468_ACC98 = 0x800BC468;// type:s16 rom:0xACC98 size:0x98
 sTimerFormatNormal = 0x8009E8C0;
 sTimerFormatLow = 0x8009E8AC;
 cutsceneBgmVolume_exec = 0x800B0894; // rom:0x1DD944

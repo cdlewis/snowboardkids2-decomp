@@ -47,7 +47,9 @@ typedef struct {
     s32 unkB8C;
     u8 padB90[0xB94 - 0xB90];
     u16 unkB94;
-    u8 padB96[0xBB7 - 0xB96];
+    u8 padding[0x8];
+    u16 unkB9E;
+    u8 padB96[0xBB7 - 0xBA0];
     u8 unkBB7;
     u8 unkBB8;
     u8 padBB9[0xBBD - 0xBB9];
@@ -64,6 +66,12 @@ typedef struct {
     u8 unkBDB;
 } Arg0Struct;
 
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+} D_800BC468_ACC98_type;
+
+extern D_800BC468_ACC98_type D_800BC468_ACC98[];
 extern void func_800B00D4_9FF84(Arg0Struct *, s32);
 extern void func_800B02AC_A015C(Arg0Struct *);
 extern void func_8005D180_5DD80(Arg0Struct *, s32);
@@ -121,7 +129,40 @@ void func_800BBE1C_AC64C(Arg0Struct *arg0) {
     D_800BC460_ACC90[arg0->unkBBE](arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BBE4C_AC67C);
+s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
+    if (arg0->unkBBF == 0) {
+        s32 temp = arg0->unk450;
+        arg0->unkBBF++;
+        arg0->unkB8C = 1;
+        if (temp > 0) {
+            arg0->unk450 = 0;
+        }
+        func_80056B7C_5777C(&arg0->unk434, 0x21);
+    }
+
+    arg0->unkB8C--;
+    if (arg0->unkB8C == 0) {
+        arg0->unkB8C = D_800BC468_ACC98[arg0->unkBC0].unk0;
+        arg0->unkB9E = D_800BC468_ACC98[arg0->unkBC0].unk2;
+        arg0->unkBC0++;
+    }
+
+    arg0->unkB88 = 0x10;
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 += -0x8000;
+    func_800B02AC_A015C(arg0);
+
+    if (arg0->unkB8C == -1) {
+        arg0->unkB88 = 0;
+        arg0->unkBBD = 1;
+        arg0->unkBBE = 1;
+        arg0->unkBBF = 0;
+        arg0->unkBC0 = 0;
+    }
+
+    return 0;
+}
 
 s32 func_800BBF3C_AC76C(Arg0Struct *arg0) {
     if (arg0->unkBBF == 0) {
