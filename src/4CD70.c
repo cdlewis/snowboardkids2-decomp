@@ -13,9 +13,32 @@
 
 #define SECONDS_TO_TICKS(s) ((s) * 30)
 
+#define SCHEDULE_AND_SET(func, offset, value)        \
+    do {                                             \
+        void *task = scheduleTask(func, 0, 1, 0xE6); \
+        if (task)                                    \
+            ((s32 *)task)[offset] = (value);         \
+    } while (0)
+
+#define SCHEDULE_AND_SET_SHORT(func, offset, value)  \
+    do {                                             \
+        void *task = scheduleTask(func, 0, 1, 0xE6); \
+        if (task)                                    \
+            ((s16 *)task)[offset] = (value);         \
+    } while (0)
+
 USE_ASSET(_3F3940);
 USE_ASSET(_3F6950);
 USE_ASSET(_3F3EF0);
+
+typedef struct {
+    u8 padding[0x10];
+    void *unk10;
+    u8 padding2[0x4B];
+    u8 unk5F;
+    u8 padding3[0x1A];
+    u8 unk7A;
+} func_8005011C_50D1C_alloc;
 
 typedef struct {
     s32 unk0;
@@ -158,6 +181,11 @@ void func_8004D23C_4DE3C(Struct_func_8004D134 *arg0);
 void func_8004D298_4DE98(Struct_func_8004D134 *arg0);
 void func_8004D338_4DF38(Struct_func_8004D134 *arg0);
 void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0);
+void func_8004C170_4CD70(void);
+void func_8004C2C0_4CEC0(void);
+void func_8004C728_4D328(void);
+void func_8004CA90_4D690(void);
+void func_8004CDC0_4D9C0(void);
 
 static const char D_8009E880_9F480[] = "%5d";
 extern char D_8009E89C_9F49C[];
@@ -1777,4 +1805,74 @@ INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E924_9F524);
 
 INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E928_9F528);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8005011C_50D1C);
+void func_8005011C_50D1C(void) {
+    func_8005011C_50D1C_alloc *allocation;
+    s32 i;
+    s32 pad[2];
+    s32 temp;
+
+    allocation = (func_8005011C_50D1C_alloc *)getCurrentAllocation();
+
+    temp = allocation->unk5F;
+    if (temp <= 0) {
+        return;
+    }
+
+    i = 0;
+    do {
+        switch (allocation->unk7A) {
+            case 0:
+            case 8:
+            case 9:
+            case 10:
+                SCHEDULE_AND_SET(func_8004C170_4CD70, 4, i);
+                SCHEDULE_AND_SET(func_8004C2C0_4CEC0, 14, i);
+                SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
+                SCHEDULE_AND_SET_SHORT(func_8004CA90_4D690, 22, i);
+                scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
+                break;
+
+            case 1:
+                SCHEDULE_AND_SET(func_8004C170_4CD70, 4, i);
+                SCHEDULE_AND_SET(func_8004C2C0_4CEC0, 14, i);
+                SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
+                scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
+                break;
+
+            case 2:
+                SCHEDULE_AND_SET(func_8004C2C0_4CEC0, 14, i);
+                SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
+                SCHEDULE_AND_SET_SHORT(func_8004E8BC_4F4BC, 60, 0xA);
+                scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
+                break;
+
+            case 3:
+                SCHEDULE_AND_SET(func_8004C2C0_4CEC0, 14, i);
+                SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
+                SCHEDULE_AND_SET_SHORT(func_8004E8BC_4F4BC, 60, 0xB);
+                scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
+                break;
+
+            case 4:
+                scheduleTask(func_8004F424_50024, 0, 1, 0xF0);
+                SCHEDULE_AND_SET(func_8004F6D4_502D4, 4, i);
+                scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);
+                break;
+
+            case 5:
+                func_8004EBC8_4F7C8(allocation->unk10);
+                func_8004EDCC_4F9CC(0);
+                scheduleTask(func_8004EE24_4FA24, 0, 1, 0xF0);
+                scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);
+                break;
+
+            case 6:
+                func_8004FF60_50B60(0);
+                scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);
+                scheduleTask(func_8004EE24_4FA24, 0, 1, 0xF0);
+                break;
+        }
+
+        i++;
+    } while (i < allocation->unk5F);
+}
