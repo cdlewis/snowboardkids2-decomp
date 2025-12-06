@@ -836,7 +836,34 @@ INCLUDE_ASM("asm/nonmatchings/player", func_80072ACC_736CC);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072B3C_7373C);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072BAC_737AC);
+s32 func_80072BAC_737AC(void *arg0, s32 arg1) {
+    s32 count;
+    s32 i;
+    channel_t *cp;
+    u16 temp;
+
+    if (arg0 == NULL) {
+        return 0;
+    }
+
+    if (arg1 <= 0) {
+        arg1 = 1;
+    } else if (arg1 > 0x100) {
+        arg1 = 0x100;
+    }
+
+    count = 0;
+    for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
+        if ((void *)cp->handle == arg0) {
+            count++;
+            cp->temscale = arg1;
+            temp = cp->channel_tempo_save;
+            cp->channel_tempo = (temp * arg1) >> 7;
+        }
+    }
+
+    return count;
+}
 
 s32 func_80072C38_73838(void *arg0, s32 arg1) {
     s32 count;
