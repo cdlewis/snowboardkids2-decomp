@@ -51,6 +51,8 @@ typedef struct {
     Mat3x3Padded transform;
     s32 translationStep;
     u8 updateCounter;
+    u8 unk61;
+    s8 unk62;
 } func_8002F658_30258_arg;
 
 typedef struct {
@@ -197,7 +199,8 @@ void func_80030540_31140(func_80030540_31140_arg *arg0);
 void func_8002EFD8_2FBD8(void *);
 void func_8002F024_2FC24(void);
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
-void func_8002F290_2FE90(void);
+void func_8002F290_2FE90(func_8002F658_30258_arg *);
+void func_8002F36C_2FF6C(func_8002F658_30258_arg *);
 void func_8002F3E4_2FFE4(func_8002F518_30118_arg *);
 void func_8002F518_30118(func_8002F518_30118_arg *);
 void func_8002F5C8_301C8(void *);
@@ -303,7 +306,42 @@ void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F12C_2FD2C);
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F290_2FE90);
+void func_8002F290_2FE90(func_8002F658_30258_arg *arg0) {
+    volatile u8 padding[0x20];
+    GameState *state;
+
+    state = (GameState *)getCurrentAllocation();
+
+    if (state->unk5C5 == 2) {
+        if (state->unk5C6 == 2) {
+            if (arg0->unk62 == 0) {
+                arg0->unk62 = 2;
+                arg0->transform.unk14 = 0x400000;
+                arg0->updateCounter = 1;
+                goto end;
+            }
+        }
+        if (state->unk5C6 == 1) {
+            if (arg0->unk62 == 2) {
+                arg0->transform.unk14 = 0xFFC00000;
+                arg0->unk62 = 0;
+                arg0->updateCounter = 1;
+                goto end;
+            }
+        }
+        if (state->unk5C6 == 2) {
+            arg0->unk62 = arg0->unk62 - 1;
+        } else {
+            arg0->unk62 = arg0->unk62 + 1;
+        }
+        arg0->updateCounter = 0;
+
+    end:
+        setCallback(&func_8002F36C_2FF6C);
+    }
+
+    enqueueDisplayListObject(0, &arg0->displayList);
+}
 
 void func_8002F36C_2FF6C(func_8002F658_30258_arg *arg0) {
     volatile u8 padding[0x20];
