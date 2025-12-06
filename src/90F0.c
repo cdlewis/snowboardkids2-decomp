@@ -75,7 +75,22 @@ s32 func_80009E58_AA58(void *arg0) {
     return val != 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_80009E68_AA68);
+s32 func_80009E68_AA68(void *arg0, s16 arg1) {
+    s32 *entry;
+    s16 temp_s0;
+
+    temp_s0 = arg1;
+    if (temp_s0 >= func_800084F0_90F0()) {
+        *(void **)arg0 = NULL;
+        ((s16 *)arg0)[2] = 0;
+        return 0;
+    }
+    entry = &D_8008C920_8D520[temp_s0 * 5];
+    *(void **)arg0 = dmaRequestAndUpdateStateWithSize((void *)entry[0], (void *)entry[1], entry[2]);
+    ((s16 *)arg0)[2] = arg1;
+    ((u8 *)arg0)[6] = 0;
+    return 1;
+}
 
 void *func_80009EF8_AAF8(s16 arg0) {
     s32 *entry;
