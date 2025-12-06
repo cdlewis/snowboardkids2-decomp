@@ -340,10 +340,19 @@ void func_800B6180_1E3230(func_800B6180_1E3230_arg0 *arg0, s32 arg1, s16 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6190_1E3240);
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6544_1E35F4);
+s16 func_800B6544_1E35F4(func_800B5E64_1E2F14_arg0 *arg0) {
+    if (arg0->unk32 != 0) {
+        arg0->unk22 += arg0->unk2A;
+        if (arg0->unk32 > 0) {
+            arg0->unk32--;
+        }
+    } else {
+        arg0->unk70 = 2;
+    }
+    return 0;
+}
 
 extern s16 func_800B6190_1E3240(func_800B5E64_1E2F14_arg0 *);
-extern s16 func_800B6544_1E35F4(func_800B5E64_1E2F14_arg0 *);
 
 s16 advanceSceneManager(func_800B5E64_1E2F14_arg0 *arg0) {
     s16 result = 0;
