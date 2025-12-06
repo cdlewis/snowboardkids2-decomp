@@ -41,11 +41,11 @@ First we need to spin up a decomp environment for the function, run:
 
 Move to the directory created by the script. This will be `nonmatchings/<function name>-<number (optional)>`.
 
-Use the tools in this directory to match the function. You may need to make several attempts. Each attempt should be in a new file (base*1.c, base_2.c, ... base_n.c, etc). It's okay to give up if you're unable to match after \_20* attempts.
+Use the tools in this directory to match the function. You may need to make several attempts. Each attempt should be in a new file (base*1.c, base_2.c, ... base_n.c, etc). It's okay to give up if you're unable to match after \_30* attempts.
 
 #### Step 2a (unable to match, log and revert changes)
 
-If you cannot get a perfect match after 20 attempts, add the function name to `tools/difficult_functions` along with the number of attempts and best match percentage (function names should be separated by newlines). This should be in the form `\n<function name> <number of attempts to match> <best match percentage>\n`. By adding the function name to difficult_functions. You must also revert any changes you've made adding the function to the C file or other project files (we do not want to save incomplete matches).
+If you cannot get a perfect match after 30 attempts, add the function name to `tools/difficult_functions` along with the number of attempts and best match percentage (function names should be separated by newlines). This should be in the form `\n<function name> <number of attempts to match> <best match percentage>\n`. By adding the function name to difficult_functions. You must also revert any changes you've made adding the function to the C file or other project files (we do not want to save incomplete matches).
 
 #### Step 2b (successful match, integrate changes into project)
 
