@@ -206,6 +206,8 @@ s32 func_800744EC_750EC(song_t *, s32);
 void MusPtrBankInitialize(u8 *, u8 *);
 void __MusIntFifoOpen(s32);
 void __MusIntMemSet(void *, unsigned char, int);
+void __MusIntMemMove(u8 *, u8 *, s32);
+s32 func_80073058_73C58(u8 *);
 u32 func_800725F4_731F4(s32, s32, s32, s32, s32);
 s32 __MusIntRandom(s32);
 
@@ -931,8 +933,6 @@ fx_header_t *func_80072DBC_739BC(s32 handle) {
     return NULL;
 }
 
-extern int func_80073058_73C58(u8 *);
-
 void MusHandlePause(s32 arg0) {
     struct {
         u8 byte_at_10;
@@ -1029,7 +1029,22 @@ void __MusIntFifoProcessCommand(fifo_t *command) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073058_73C58);
+s32 func_80073058_73C58(u8 *arg0) {
+    s32 next_idx;
+    s32 current_idx;
+
+    current_idx = D_800A6524_A7124;
+    next_idx = (current_idx + 1) % D_800A6528_A7128;
+
+    if (next_idx == D_800A6520_A7120) {
+        return 0;
+    }
+
+    __MusIntMemMove(arg0, (u8 *)D_800A652C_A712C + (current_idx * 8), 8);
+    D_800A6524_A7124 = next_idx;
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", __MusIntMain);
 
