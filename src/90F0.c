@@ -110,7 +110,78 @@ void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80009F90_AB90);
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_8000A030_AC30);
+typedef struct {
+    /* 0x00 */ u16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ u16 unk4;
+    /* 0x06 */ u16 unk6;
+} AnimationEntry;
+
+typedef struct {
+    /* 0x00 */ u8 pad0[0x8];
+    /* 0x08 */ void *unk8;
+    /* 0x0C */ AnimationEntry *unkC;
+    /* 0x10 */ u16 unk10;
+    /* 0x12 */ s16 unk12;
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ s16 unk16;
+} AnimationState;
+
+s32 func_8000A030_AC30(AnimationState *arg0, s32 arg1) {
+    AnimationState *state = arg0;
+    s32 result = 0;
+    s32 looped = 0;
+    s16 timer = state->unk16;
+    AnimationEntry *entry;
+    s16 type;
+
+    if (timer > 0) {
+        state->unk16 = timer - 1;
+    } else {
+        state->unk14++;
+        if (state->unk14 >= ((s16 *)state->unk8)[2]) {
+            state->unk14 = 0;
+            looped = 1;
+        }
+
+        entry = &state->unkC[state->unk14];
+        type = entry->unk2;
+
+        if (type != 1) {
+            if (type >= 2) {
+                goto case_default;
+            }
+            if (type != 0) {
+                goto case_default;
+            }
+            // type == 0
+            state->unk12 = entry->unk4;
+            state->unk16 = entry->unk6;
+        } else {
+            // type == 1
+            state->unk14 = entry->unk6;
+            entry = &state->unkC[state->unk14];
+            state->unk12 = entry->unk4;
+            state->unk16 = entry->unk6;
+            result = 1;
+        }
+        goto end;
+
+    case_default:
+        state->unk14--;
+        entry = &state->unkC[state->unk14];
+        state->unk12 = entry->unk4;
+        state->unk16 = entry->unk6;
+        result = 2;
+    }
+
+end:
+    if (looped == 1) {
+        result = 1;
+    }
+
+    return result;
+}
 
 extern void func_8000A1E4_ADE4(s32, s32, s32, s32, s32, s32, s32, s16, u8, u8);
 
