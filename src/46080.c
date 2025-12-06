@@ -2210,7 +2210,34 @@ void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B2A0_4BEA0);
+void *func_8004B2A0_4BEA0(void *arg0, u32 arg1, void *arg2, s16 arg3, s32 arg4) {
+    GameState *allocation;
+    void *task;
+
+    allocation = (GameState *)getCurrentAllocation();
+
+    if (allocation->unk5B == 0) {
+        goto end;
+    }
+
+    task = scheduleTask(func_8004AED8_4BAD8, 3, 0, 0xEF);
+
+    if (task == NULL) {
+        goto end;
+    }
+
+    allocation->unk5B--;
+
+    memcpy((u8 *)task + 8, arg0, 0xC);
+    memcpy((u8 *)task + 0x24, arg2, 0xC);
+
+    *(s16 *)((u8 *)task + 0x30) = (s16)arg1;
+    *(s16 *)((u8 *)task + 0x38) = arg3;
+    *(s16 *)((u8 *)task + 0x36) = arg4;
+
+end:
+    return task;
+}
 
 typedef struct {
     void *unk0;
