@@ -114,10 +114,11 @@ extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
 extern void func_80066444_67044(s32, loadAssetMetadata_arg *);
 extern void func_8006BFB8_6CBB8(void *, void *);
+extern void func_80058530_59130(s32, s32);
 extern void func_800BC184_AFE74(void **);
 extern void func_800BC220_AFF10(void);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
-extern void func_800BC750_B0440(void);
+extern void func_800BC750_B0440(s16 *);
 
 typedef struct {
     s8 unk0;
@@ -485,4 +486,25 @@ void func_800BC72C_B041C(s16 *arg0) {
     setCallback(func_800BC750_B0440);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC750_B0440);
+void func_800BC750_B0440(s16 *arg0) {
+    s32 i;
+    void *allocation;
+    void *base;
+    u32 offset;
+    s16 value;
+
+    allocation = getCurrentAllocation();
+
+    for (i = 0; i < *(u8 *)((u8 *)allocation + 0x5F); i++) {
+        offset = (u32)(i * 0xBE8);
+        base = (void *)((u32)offset + (u32) * (u32 *)((u8 *)allocation + 0x10));
+        value = *arg0;
+
+        if (*(u8 *)((u8 *)base + 0xBC5) == value) {
+            if ((u32)(*(u16 *)((u8 *)base + 0xB94) - 7) < 4) {
+                *arg0 = value + 1;
+                func_80058530_59130(0xC, 6);
+            }
+        }
+    }
+}
