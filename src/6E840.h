@@ -42,8 +42,15 @@ typedef struct Node_70B00 {
     /* 0x16 */ u16 slot_index;
     /* 0x18 */ PoolEntry pool[7];
     /* 0x88 */ void* unk88;
-    u8 padding2[0x30];
-    u8 unkBC;
+    u8 padding2[0x14];
+    /* 0xA0 */ s16 unkA0;
+    /* 0xA2 */ s16 unkA2;
+    /* 0xA4 */ s16 unkA4;
+    /* 0xA6 */ s16 unkA6;
+    /* 0xA8 */ s16 unkA8;
+    /* 0xAA */ s16 unkAA;
+    u8 padding2b[0x10];
+    /* 0xBC */ u8 unkBC;
     u8 unkBD;
     u8 unkBE;
     u8 unkBF;
@@ -111,7 +118,7 @@ void func_8006FAA4_706A4(void *, s32, s32, s32, s32);
 
 void func_8006FA0C_7060C(Node_70B00 *, f32, f32, f32, f32);
 
-void setModelCameraTransform(void *, s32, s32, s32, s32, s32, s32);
+void setModelCameraTransform(void *, s16, s16, s16, s16, s16, s16);
 
 void unlinkNode(Node_70B00 *player);
 

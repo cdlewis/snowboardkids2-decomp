@@ -234,7 +234,15 @@ void func_8006F718_70318(void) {
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F82C_7042C);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", setModelCameraTransform);
+void setModelCameraTransform(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6) {
+    Node_70B00 *node = (Node_70B00 *)arg0;
+    node->unkA0 = arg1;
+    node->unkA2 = arg2;
+    node->unkA4 = arg3;
+    node->unkA6 = arg4;
+    node->unkA8 = arg5;
+    node->unkAA = arg6;
+}
 
 void func_8006F9BC_705BC(Node_70B00 *arg0, f32 arg1, f32 arg2) {
     arg0->unk1D0 = arg2;
