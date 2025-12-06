@@ -473,7 +473,9 @@ s32 distance_2d(s32 x, s32 y) {
     return isqrt64(x2 + y2);
 }
 
-INCLUDE_ASM("asm/nonmatchings/geometry", distance_3d);
+s32 distance_3d(s32 x, s32 y, s32 z) {
+    return isqrt64((s64)x * x + (s64)y * y + (s64)z * z);
+}
 
 INCLUDE_ASM("asm/nonmatchings/geometry", computeLookAtMatrix);
 

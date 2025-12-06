@@ -68,9 +68,6 @@ typedef struct {
     u8 unk76;
 } Alloc_55650;
 
-extern s32 distance_2d(s32, s32);
-extern s32 distance_3d(s32, s32, s32);
-
 void func_80051C80_52880(s32 *arg0, s32 arg1) {
     s32 dist;
 

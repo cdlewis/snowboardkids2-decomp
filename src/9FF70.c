@@ -1476,7 +1476,6 @@ s32 func_800B4CB8_A4B68(func_800B30B0_arg *arg0) {
 
 extern s32 D_800BABD4_AAA84[3];
 extern void func_80050C80_51880(void *, s32);
-extern s32 distance_3d(s32, s32, s32);
 extern s32 func_8005D8C8_5E4C8(void *);
 
 s32 func_800B4DB8_A4C68(func_800B30B0_arg *arg0) {
