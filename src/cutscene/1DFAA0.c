@@ -16,6 +16,7 @@ typedef struct {
     u16 unkE8;
     u8 padding4[0x6];
     SceneModel *unkF0;
+    u8 padding5[0x0];
 } func_800B2C78_arg;
 
 typedef struct {
@@ -38,6 +39,7 @@ extern s8 D_800BAEB4_1E7F64;
 extern s16 D_800BAEC0_1E7F70;
 extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
 extern s8 D_800BAE00_1E7EB0[];
+extern u8 identityMatrix[];
 
 extern s32 initializeSlotState(StateEntry *, CutsceneManager *, s32);
 extern s32 updateSlotData(void *, s32 slot);
@@ -185,7 +187,24 @@ void func_800B2D68_1DFE18(func_800B2C78_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B2DCC_1DFE7C);
+void func_800B2DCC_1DFE7C(func_800B2C78_arg *arg0) {
+    s32 i;
+    func_800B2C78_arg *ptr;
+
+    i = 0;
+    ptr = arg0;
+
+    while (i < (getCutsceneSlotCount() & 0xFF)) {
+        func_800B34B0_1E0560(i);
+
+        if (ptr[i].unkF0 != NULL) {
+            applyTransformToModel(ptr[i].unkF0, (applyTransformToModel_arg1 *)identityMatrix);
+            func_800021B8_2DB8(ptr[i].unkF0, 0);
+        }
+
+        i++;
+    }
+}
 
 void func_800B2E48_1DFEF8(func_800B2C78_arg *arg0) {
     s32 i;
