@@ -21,7 +21,8 @@ typedef struct {
     Node_70B00 *unkAB0;
     Node_70B00 *unkAB4;
     Node_70B00 *unkAB8;
-    u8 padding2[0x8];
+    s16 unkABC;
+    u8 padding2[0x6];
     u16 unkAC4;
     u8 padding5[0x2];
     u8 unkAC8;
@@ -166,4 +167,27 @@ void func_8001E320_1EF20(void) {
     allocation->unkAC4 = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1D520", func_8001E3E8_1EFE8);
+void func_8001E3E8_1EFE8(void) {
+    allocation_1D520 *allocation;
+    s16 counter;
+    u8 playerIndex;
+
+    allocation = (allocation_1D520 *)getCurrentAllocation();
+    counter = allocation->unkABC;
+
+    if (counter != 0) {
+        playerIndex = allocation->unkAC8;
+        counter -= 3;
+        allocation->unkABC = counter;
+
+        setModelCameraTransform(
+            &allocation->unk1D8[3],
+            0,
+            (s16)((playerIndex * 7 * 8) - 48),
+            (s16)-counter,
+            -0x18,
+            allocation->unkABC,
+            0x18
+        );
+    }
+}
