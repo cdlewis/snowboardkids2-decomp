@@ -7,7 +7,35 @@ s32 cutsceneEffectDisp_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectDisp_exec);
+void cutsceneEffectDisp_exec(cutsceneEffectDisp_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    extern void func_8000A510_B110(s32, s16, s16, s16, void *, s32, s32, s32, s32, s32, s32);
+    Node_70B00 *temp_v0;
+    s16 temp_t0;
+    s16 temp_t1;
+    s16 temp_a3;
+    CutsceneSlot *slots;
+
+    temp_v0 = arg1->uiResource;
+    temp_t1 = arg0->unkC;
+    temp_a3 = arg0->unkE;
+    temp_t0 = temp_v0->slot_index;
+
+    slots = (CutsceneSlot *)arg1;
+
+    func_8000A510_B110(
+        slots[arg2].slotData.unkA4,
+        temp_t0,
+        temp_t1,
+        temp_a3,
+        arg0,
+        (s32)(arg0->unk10 << 16) / 100,
+        arg0->unk13,
+        1,
+        0,
+        arg0->unk14,
+        arg0->unk16
+    );
+}
 
 s32 cutsceneEffectDisp_isDone(void) {
     return 0;

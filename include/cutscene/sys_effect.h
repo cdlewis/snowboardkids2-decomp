@@ -14,9 +14,20 @@ typedef struct {
     s16 unk0;
 } cutsceneEffectRocket_exec_arg;
 
+typedef struct {
+    u8 padding[0xC];
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    u8 unk12;
+    s8 unk13;
+    s16 unk14;
+    s16 unk16;
+} cutsceneEffectDisp_exec_arg;
+
 void cutsceneEffectDisp_init(void);
 s32 cutsceneEffectDisp_validate(void);
-void cutsceneEffectDisp_exec(void);
+void cutsceneEffectDisp_exec(cutsceneEffectDisp_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 s32 cutsceneEffectDisp_isDone(void);
 void cutsceneEffectFan_init(void);
 s32 cutsceneEffectFan_validate(void);
