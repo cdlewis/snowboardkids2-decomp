@@ -1,5 +1,6 @@
 #include "5EA60.h"
 #include "common.h"
+#include "geometry.h"
 
 void *func_8005DE60_5EA60(void *arg0) {
     return (void *)((s8 *)arg0 + *(s32 *)((s8 *)arg0 + 4));
@@ -122,7 +123,77 @@ void func_8005E800_5F400(func_8005E800_5F400_arg *entity, u16 param_2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005EA44_5F644);
+void func_8005EA44_5F644(func_8005E800_5F400_arg *entity, u16 param_2) {
+    s16 stack_data[16];
+    u16 idx;
+    s16 temp_val;
+    s32 source_val;
+    s32 dest_val;
+    s32 result;
+
+    if (entity->flags & 0x8000) {
+        entity->flags &= 0x7FFF;
+        func_8005DF10_5EB10(
+            entity->animation_data[1],
+            -entity->animation_data[2],
+            -entity->animation_data[3],
+            entity->values
+        );
+
+        idx = entity->animation_data[4];
+        temp_val = entity->frame_data[idx * 3];
+        entity->position[0] = -temp_val << 10;
+
+        idx = entity->animation_data[4];
+        temp_val = entity->frame_data[(idx * 3) + 1];
+        entity->position[1] = temp_val << 10;
+
+        idx = entity->animation_data[4];
+        temp_val = entity->frame_data[(idx * 3) + 2];
+        entity->position[2] = temp_val << 10;
+
+        memcpy(entity->prev_position, entity->values, 0x20);
+        entity->animation_data += 5;
+        entity->counter = entity->animation_data[3];
+    }
+
+    result = entity->animation_data[3] * (param_2 & 0xFFFF);
+    if (result < 0) {
+        result += 0x1FF;
+    }
+    entity->counter = result >> 9;
+
+    if (entity->counter & 0xFFFF) {
+        func_8005DF10_5EB10(entity->animation_data[1], -entity->animation_data[2], -entity->counter, stack_data);
+        func_8006BDBC_6C9BC(entity, stack_data, entity->prev_position);
+    }
+
+    idx = entity->animation_data[4];
+    source_val = -entity->frame_data[idx * 3] << 10;
+    dest_val = entity->position[0];
+    result = (source_val - dest_val) * param_2;
+    if (result < 0) {
+        result += 0x1FF;
+    }
+    entity->interpolated[0] = (result >> 9) + dest_val;
+
+    idx = entity->animation_data[4];
+    source_val = entity->frame_data[(idx * 3) + 1] << 10;
+    dest_val = entity->position[1];
+    result = (source_val - dest_val) * param_2;
+    if (result < 0) {
+        result += 0x1FF;
+    }
+    entity->interpolated[1] = (result >> 9) + dest_val;
+
+    idx = entity->animation_data[4];
+    source_val = entity->frame_data[(idx * 3) + 2] << 10;
+    result = (source_val - entity->position[2]) * param_2;
+    if (result < 0) {
+        result += 0x1FF;
+    }
+    entity->interpolated[2] = (result >> 9) + entity->position[2];
+}
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005ECB8_5F8B8);
 

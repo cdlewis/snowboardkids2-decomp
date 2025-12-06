@@ -5,8 +5,7 @@
 typedef struct {
     /* 0x00 */ s16 values[0xA];
     /* 0x14 */ s32 position[3];
-    /* 0x20 */ s32 prev_position[3];
-    /* 0x2C */ s32 unknown[2];
+    /* 0x20 */ s16 prev_position[0xA];
     /* 0x34 */ s32 interpolated[3];
     /* 0x40 */ s16 *animation_data;
     /* 0x44 */ s16 *frame_data;
