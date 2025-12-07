@@ -109,8 +109,6 @@ void func_800B6B6C_1E3C1C(CutsceneSlotData *arg0) {
     }
 }
 
-extern s32 func_800B6CD8_1E3D88(CutsceneSlotData *, SceneModel *, s32, s32, s32, s16, s16, s32, s32);
-
 void func_800B6C04_1E3CB4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6);
 
 void func_800B6BDC_1E3C8C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4) {

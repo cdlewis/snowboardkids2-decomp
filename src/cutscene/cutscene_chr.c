@@ -1,5 +1,6 @@
 #include "cutscene/cutscene_chr.h"
 #include "1DFAA0.h"
+#include "1E36C0.h"
 #include "20F0.h"
 
 extern void func_800B788C_1E493C(CutsceneSlotData *, s32, s32, s32);
@@ -9,17 +10,6 @@ extern void func_800B7B70_1E4C20(CutsceneSlotData *, s32 *, s16, s32, s32);
 extern void func_800B6BDC_1E3C8C(CutsceneSlotData *, s32, s32, s32, s16);
 extern void func_800B6C04_1E3CB4(CutsceneSlotData *, s32, s32, s32, s16, s16, s16);
 extern s32 setupSlotTransform(CutsceneSlotData *);
-extern s32 func_800B6CD8_1E3D88(
-    CutsceneSlotData *arg0,
-    SceneModel *arg1,
-    s32 arg2,
-    s32 arg3,
-    s32 arg4,
-    s16 arg5,
-    s16 arg6,
-    s32 arg7,
-    s32 arg8
-);
 extern void func_800B7128_1E41D8(
     CutsceneSlotData *arg0,
     SceneModel *arg1,
