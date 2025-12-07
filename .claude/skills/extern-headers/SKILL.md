@@ -29,6 +29,28 @@ Once you have fixed the header issues, run the following command to verify you h
 
 Command your changes when you're done.
 
+## Unable to fix header issue
+
+If you're unable to resolve the header issue after several attempts:
+
+First, revert all of your changes to ensure the build remains clean.
+
+Next add the file name and line number where the issue was flagged to `tools/difficult-headers`. For example, if you were unable to fix this warning:
+
+```
+329. MISSING HEADER DECLARATION
+   Function: func_800B523C_1E22EC
+   Defined in: src/1E2070.c:170
+   Used via extern in:
+     - src/cutscene/sys_effect.c:105
+   RECOMMENDATION: Add declaration to src/1E2070.h
+   Add this line: void func_800B523C_1E22EC(void *arg0, s16 arg1) ;
+```
+
+You would add `src/cutscene/sys_effect.c:105\n` to `tools/difficult-headers`.
+
+Finally commit this change. If you do not commit the change then you will forget that you couldn't handle this issue and be forced to try again forever.
+
 ## Resolving type conflicts
 
 In more complex cases, you might need to resolve conflicting definitions of a function. Generally whatever the type of the function is at the point that it is implemented (in the C file) is the best signal on the correct type of the function.

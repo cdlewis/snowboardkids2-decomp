@@ -39,6 +39,8 @@ while true; do
     break
   fi
 
+  echo "=== Starting iteration $((count + 1)) at $(date '+%Y-%m-%d %H:%M:%S') ==="
+
   output=$(claude -p "clean up extern headers" 2>&1 | tee -a tools/vacuum-headers.log)
   exit_code=$?
   echo "$output"
