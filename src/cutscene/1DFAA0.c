@@ -7,19 +7,6 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    u8 padding[0xC];
-    void *unkC;
-    func_80000710_1310_arg unk10;
-    u8 padding2[0x20];
-    s32 unkB8;
-    u8 padding3[0x2C];
-    u16 unkE8;
-    u8 padding4[0x6];
-    SceneModel *unkF0;
-    u8 padding5[0x0];
-} func_800B2C78_arg;
-
-typedef struct {
     u8 padding[0x2D8];
     void *unk2D8;
     void *unk2DC;

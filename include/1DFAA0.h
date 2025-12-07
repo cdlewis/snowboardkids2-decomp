@@ -234,14 +234,70 @@ typedef struct {
     /* 0x1220 */ s32 cameraAnimationTimer;
 } CutsceneManager;
 
-void resetScriptState(u8 *arg0);
+typedef struct {
+    u8 padding[0xC];
+    void *unkC;
+    func_80000710_1310_arg unk10;
+    u8 padding2[0x20];
+    s32 unkB8;
+    u8 padding3[0x2C];
+    u16 unkE8;
+    u8 padding4[0x6];
+    SceneModel *unkF0;
+    u8 padding5[0x0];
+} func_800B2C78_arg;
 
 void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0);
-
-void func_800B2A50_1DFB00(CutsceneManager *arg0, s16 arg1);
-
-CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1);
-
+void func_800B29FC_1DFAAC(func_800B29F0_1DFAA0_arg *arg0);
 void func_800B2A24_1DFAD4(CutsceneManager *arg0, s16 arg1);
-
-StateEntryItem *func_800B34B0_1E0560(s32);
+void func_800B2A50_1DFB00(CutsceneManager *arg0, s16 arg1);
+CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1);
+void func_800B2AA0(func_800B2C78_arg *arg0, Node_70B00 *arg1, void *arg2, void *arg3);
+void func_800B2C78(func_800B2C78_arg *arg0);
+void func_800B2D04(func_800B2C78_arg *arg0);
+void func_800B2D68_1DFE18(func_800B2C78_arg *arg0);
+void func_800B2DCC_1DFE7C(func_800B2C78_arg *arg0);
+void func_800B2E48_1DFEF8(func_800B2C78_arg *arg0);
+s32 processCutsceneFrame(CutsceneManager *uiManager);
+s16 func_800B3360(s16, s16);
+void *func_800B3420_1E04D0(void);
+void *func_800B3430_1E04E0(void);
+u16 func_800B3440_1E04F0(void);
+u8 func_800B3450_1E0500(void);
+u8 getCutsceneSlotCount(void);
+u16 func_800B3470_1E0520(void);
+u16 func_800B3480_1E0530(void);
+s16 func_800B3490_1E0540(void);
+void func_800B34A0_1E0550(s16 arg0);
+StateEntryItem *func_800B34B0_1E0560(s32 arg0);
+s16 func_800B34D0_1E0580(void);
+void func_800B34E0_1E0590(s16 arg0);
+u8 func_800B34F0(void);
+void func_800B3500_1E05B0(u8 arg0);
+s32 func_800B3510_1E05C0(void);
+s32 func_800B3540_1E05F0(void);
+s32 func_800B36C0(void *arg0);
+s32 func_800B3790_1E0840(void);
+u16 func_800B384C_1E08FC(void);
+void resetScriptState(u8 *arg0);
+void func_800B388C_1E093C(s32 arg0);
+void func_800B3B40(void);
+u16 func_800B3B68_1E0C18(u8 arg0, u16 arg1, s32 arg2);
+s32 findEventAtFrame(u8 a0, u16 a1);
+s32 func_800B3D24_1E0DD4(u8, u16);
+void func_800B3E58_1E0F08(u16 arg0, u16 arg1, u16 arg2);
+StateEntry *getStateEntry(u16 arg0);
+u16 func_800B41E0_1E1290(void);
+u16 func_800B4258_1E1308(u8 arg0);
+StateEntry *func_800B4288_1E1338(void);
+u8 *func_800B4294_1E1344(void);
+u16 func_800B42B0_1E1360(u16 arg0);
+u16 func_800B42E8_1E1398(u16 arg0);
+void func_800B4320_1E13D0(void);
+void func_800B44A8_1E1558(u8 arg0, u16 arg1);
+void func_800B4534_1E15E4(s32, s32);
+void func_800B462C_1E16DC(u8 arg0, u16 arg1, s32 arg2);
+void *func_800B4680_1E1730(s8 arg0);
+void func_800B46E0(s32 arg0, s8 arg1, s16 arg2);
+void func_800B477C_1E182C(void *);
+void initializeCutsceneSystem(void *);

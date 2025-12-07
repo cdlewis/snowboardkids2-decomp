@@ -1,3 +1,4 @@
+#include "1DFAA0.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
@@ -51,7 +52,6 @@ typedef struct {
 
 void func_80003C34_4834(void);
 void func_80003898_4498(void);
-s16 func_800B3360(s16, s16);
 void func_800B9020(void *);
 void loadCutsceneOverlay(void);
 void func_8000378C_438C(void);
@@ -61,7 +61,6 @@ void func_80003CC4_48C4(void);
 void func_80003508_4108(void);
 
 extern void *func_800B00C0_9FF70(void);
-extern void initializeCutsceneSystem(void *); /* extern */
 
 void func_80003450_4050(s16 arg0, s16 arg1) {
     D_800AB070_A23E0 = arg0;
