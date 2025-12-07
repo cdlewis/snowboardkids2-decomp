@@ -51,6 +51,7 @@ s16 func_8006D21C_6DE1C(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 atan2Fixed(s32, s32);
 
 s32 approximateSin(s16 inputAngle);
+s32 approximateCos(s16 inputAngle);
 
 s32 distance_2d(s32 x, s32 y);
 s32 distance_3d(s32 x, s32 y, s32 z);

@@ -3,8 +3,6 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern s32 approximateSin(s16);
-extern s32 approximateCos(s16);
 extern s32 isqrt64(s64 val);
 extern u8 D_800A8CC8_A0038;
 extern s16 identityMatrix[9];

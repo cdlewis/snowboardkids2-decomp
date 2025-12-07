@@ -416,7 +416,6 @@ typedef struct {
 } func_800BBF4C_AFC3C_arg;
 
 extern void func_800BC0D0_AFDC0(void **);
-extern s32 approximateSin(s16);
 extern void func_8005BCB8_5C8B8(void *, s32, s32);
 void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *);
 

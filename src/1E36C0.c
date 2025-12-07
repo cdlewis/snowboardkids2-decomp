@@ -1,4 +1,5 @@
 #include "1E36C0.h"
+#include "geometry.h"
 
 s16 func_800B6610_1E36C0(cutsceneSys2Wait_exec_asset *arg0) {
     return arg0->unk86;
@@ -225,9 +226,6 @@ void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2) {
         arg0->unk74 = 0;
     }
 }
-
-extern s32 approximateSin(s16);
-extern s32 approximateCos(s16);
 
 void func_800B788C_1E493C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 sinResult;

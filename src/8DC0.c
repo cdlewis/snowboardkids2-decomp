@@ -6,8 +6,6 @@
 extern s32 func_8000A030_AC30(void *, s32);
 extern void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32);
 extern u8 identityMatrix[];
-extern s32 approximateSin(s16);
-extern s32 approximateCos(s16);
 
 typedef struct {
     u8 padding[0x16];

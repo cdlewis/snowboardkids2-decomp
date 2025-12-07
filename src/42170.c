@@ -257,7 +257,6 @@ extern s8 D_80090950_91550;
 extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern u16 func_800625A4_631A4(void *, void *);
 extern void func_80066444_67044(s32, void *);
-extern s32 approximateSin(s16);
 
 void func_800415E8_421E8(Func41570State *);
 void func_8004168C_4228C(Func41570State *);
