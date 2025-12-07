@@ -1,7 +1,6 @@
 #include "common.h"
+#include "task_scheduler.h"
 
-extern u8 *allocateTaskMemory(s32 size);
-extern void setGameStateHandler(void *handler);
 extern void func_80033254_33E54(void);
 
 extern u8 D_800AFCE2_A7052;
