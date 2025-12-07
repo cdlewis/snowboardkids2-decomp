@@ -7,8 +7,6 @@
 
 extern s32 gControllerInputs;
 
-extern void func_8002FA9C_3069C(void);
-
 void func_8001C1E0_1CDE0(void);
 void func_8001C2FC_1CEFC(void);
 
