@@ -5,7 +5,7 @@
 #include "memory_allocator.h"
 #include "task_scheduler.h"
 
-extern void func_8003D560_3E160(void);
+extern void initRace(void);
 extern void func_80015A18_16618(void);
 extern void func_8000D7F8_E3F8(void);
 extern void func_80021D20_22920(void);
@@ -78,7 +78,7 @@ void func_800145AC_151AC(void) {
 
 void func_800145E0_151E0(void) {
     D_800AFE8C_A71FC->unk4 = 3;
-    createTaskQueue(func_8003D560_3E160, 0x96);
+    createTaskQueue(initRace, 0x96);
     setGameStateHandler(func_80014620_15220);
 }
 
@@ -122,7 +122,7 @@ void func_80014690_15290(void) {
 
 void func_8001474C_1534C(void) {
     D_800AFE8C_A71FC->unk4 = 2;
-    createTaskQueue(func_8003D560_3E160, 100);
+    createTaskQueue(initRace, 100);
     setGameStateHandler(func_8001478C_1538C);
 }
 
@@ -137,7 +137,7 @@ void func_8001478C_1538C(void) {
 void func_80014808_15408(void) {
     D_800AFE8C_A71FC->unk4 = 0;
     D_800AFE8C_A71FC->saveSlotIndex = 0xF;
-    createTaskQueue(func_8003D560_3E160, 100);
+    createTaskQueue(initRace, 100);
     setGameStateHandler(func_80014854_15454);
 }
 

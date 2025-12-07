@@ -4,7 +4,7 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-extern void func_8003D560_3E160(void);
+extern void initRace(void);
 extern void func_80033200_33E00(void);
 extern void func_8001452C_1512C(void);
 void func_80015218_15E18(void);
@@ -131,7 +131,7 @@ void func_80014D3C_1593C(void) {
 void func_80014DA8_159A8(void);
 
 void func_80014D78_15978(void) {
-    createTaskQueue(func_8003D560_3E160, 100);
+    createTaskQueue(initRace, 100);
     setGameStateHandler(func_80014DA8_159A8);
 }
 

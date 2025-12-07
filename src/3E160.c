@@ -9,10 +9,13 @@
 #include "gamestate.h"
 #include "graphics.h"
 #include "overlay.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_34CB50);
 USE_ASSET(_3FF010);
+USE_ASSET(_40E870);
+USE_OVERLAY(_9FF70);
 
 extern s32 D_800B0334;
 extern s32 D_800B7B7C;
@@ -66,7 +69,551 @@ void func_8006FEBC_70ABC(s32);
 void func_8004013C_40D3C(void);
 void func_800401E8_40DE8(void);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003D560_3E160);
+typedef struct {
+    u8 unk0[4];
+    u8 gameMode;
+    u8 unk5;
+    u8 unk6;
+    u8 currentLevel;
+    u8 unk8;
+    u8 unk9[4];
+    u8 unkD[4];
+    u8 unk11[4];
+    u8 unk15[4];
+    u8 unk19;
+    u8 pad1A[5];
+    u8 unk1F;
+    u8 unk20;
+    u8 pad21[3];
+    u8 unk24;
+} GameConfig;
+
+typedef struct {
+    u8 padding_0[0xBB8];
+    u8 unkBB8;
+    /* 0xBB9 */ u8 charcterID;
+    u8 unkBBA;
+    u8 unkBBB;
+    u8 unkBBC;
+    u8 unkBBD;
+    u8 padding_BBE[0xBC7 - 0xBBE];
+    u8 unkBC7;
+    u8 padding_BC8[0xBD9 - 0xBC8];
+    u8 unkBD9;
+    u8 unkBDA;
+    u8 padding_BDB[0xBDD - 0xBDB];
+    u8 unkBDD;
+    u8 padding_BDC[0xBE3 - 0xBDE];
+    u8 unkBE3;
+    u8 unkBE4;
+    u8 padding_BE5[0xBE8 - 0xBE5];
+} GameStateSmall_unk10;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+    GameStateSmall_unk10 *unk10;
+    void *unk14;
+    u8 pad18[64];
+    u16 unk58;
+    u8 unk5A;
+    u8 unk5B;
+    /* 0x5C */ u8 currentLevel;
+    /* 0x5D */ u8 humanPlayerCount;
+    /* 0x5E */ u8 totalRacers;
+    u8 unk5F;
+    u8 pad60[4];
+    u8 unk64[16];
+    u8 unk74;
+    u8 unk75;
+    u8 pad76[3];
+    u8 unk79;
+    u8 unk7A;
+    u8 unk7B;
+    u8 pad7C[3];
+    u8 unk7F;
+    u8 pad80[3];
+    u8 unk83;
+    u8 unk84;
+    u8 pad85[1];
+    u8 unk86;
+} GameStateSmall;
+
+typedef struct {
+    void *romStart;
+    void *romEnd;
+    void *ramStart;
+    void *icacheStart;
+    void *icacheEnd;
+    void *dcacheStart;
+    void *dcacheEnd;
+    void *bssStart;
+    void *bssEnd;
+} OverlayEntry;
+
+extern void func_800698CC_6A4CC(s32);
+extern void func_8003E4F0_3F0F0(void);
+
+extern u8 D_800A24A0_A30A0;
+extern GameConfig *D_800AFE8C_A71FC;
+extern s8 D_800AFCE2_A7052;
+extern OverlayEntry Overlays[];
+
+extern u8 D_80090280_90E80[4][4]; // unknown first (4) size
+extern u8 D_800902C0_90EC0[];
+
+typedef struct {
+    u8 unk0;
+    u8 unk1;
+    u8 unk2;
+    u8 unk3;
+} Unk800902D0_90ED0;
+extern Unk800902D0_90ED0 D_800902D0_90ED0[16][6]; // unknown size (16)
+extern u8 D_80090450_91050[];
+extern u8 D_80090520_91120[];
+
+extern u32 func_800B00C0_9FF70;
+extern u32 D_800BAA30;
+
+enum GameMode {
+    MODE_STORY = 0,
+    MODE_BATTLE = 1,
+    MODE_UNKNOWN = 2,
+    MODE_INTRO = 3,
+};
+
+enum Course {
+    SUNNY_MOUNTAIN = 0,
+    TURTLE_ISLAND = 1,
+    JINGLE_TOWN = 2,
+    JINGLE_TOWN_BOSS = 3,
+    WENDYS_HOUSE = 4,
+    LINDAS_CASTLE = 5,
+    CRAZY_JUNGLE = 6,
+    CRAZY_JUNGLE_BOSS = 7,
+    STARLIGHT_HIGHWAY = 8,
+    HAUNTED_HOUSE = 9,
+    ICE_LAND = 10,
+    ICE_LAND_BOSS = 11,
+    SNOWBOARD_STREET_SPEED_CROSS = 12,
+    SNOWBOARD_STREET_SHOT_CROSS = 13,
+    X_CROSS = 14,
+    TRAINING = 15,
+};
+
+void initRace(void) {
+    GameStateSmall *gs;
+    s32 i;
+    s32 mode;
+    s32 temp;
+    s32 offset;
+    u8 charCount[6];
+    s32 pad2[2];
+    u8 charList[6];
+    s32 pad[2];
+
+    LOAD_OVERLAY(_9FF70);
+
+    func_800698CC_6A4CC(0x37);
+
+    // Allocate gs and zero out memory
+    gs = allocateTaskMemory(0x88);
+    for (i = sizeof(GameStateSmall) - 1; i >= 0; i--) {
+        ((u8 *)gs)[i] = 0;
+    }
+
+    D_800A24A0_A30A0 = 2;
+    gs->unk75 = 0x7F;
+    gs->unk79 = 2;
+    gs->unk83 = 0;
+    gs->unk84 = 0;
+    gs->unk58 = 0x7FFF;
+
+    switch (D_800AFE8C_A71FC->gameMode) {
+        case MODE_STORY:
+            gs->currentLevel = D_800AFE8C_A71FC->currentLevel;
+            gs->unk74 = D_800AFE8C_A71FC->unk19 - 1;
+            gs->unk86 = D_800AFE8C_A71FC->unk24;
+
+            switch (gs->currentLevel) {
+                case LINDAS_CASTLE:
+                case WENDYS_HOUSE:
+                case CRAZY_JUNGLE:
+                default:
+                    gs->humanPlayerCount = D_800AFE8C_A71FC->unk8;
+                    gs->unk5F = D_800AFE8C_A71FC->unk8;
+                    gs->totalRacers = 4;
+                    if (gs->unk86 != 0) {
+                        gs->unk83 = 1;
+                    }
+                    break;
+                case CRAZY_JUNGLE_BOSS:
+                    gs->unk7A = 1;
+                    gs->humanPlayerCount = 1;
+                    gs->unk5F = 1;
+                    gs->totalRacers = 2;
+                    gs->unk74 = 0;
+                    break;
+                case JINGLE_TOWN_BOSS:
+                    gs->unk7A = 2;
+                    gs->humanPlayerCount = 1;
+                    gs->unk5F = 1;
+                    gs->totalRacers = 2;
+                    gs->unk74 = 0;
+                    break;
+                case ICE_LAND_BOSS:
+                    gs->unk7A = 3;
+                    gs->humanPlayerCount = 1;
+                    gs->unk5F = 1;
+                    gs->totalRacers = 2;
+                    gs->unk74 = 0;
+                    break;
+                case SNOWBOARD_STREET_SPEED_CROSS:
+                    gs->unk7A = 4;
+                    gs->humanPlayerCount = 1;
+                    gs->unk5F = 1;
+                    gs->totalRacers = 1;
+                    gs->unk74 = 0;
+                    break;
+                case SNOWBOARD_STREET_SHOT_CROSS:
+                    gs->unk7A = 5;
+                    gs->humanPlayerCount = 1;
+                    gs->unk5F = 1;
+                    gs->totalRacers = 1;
+                    gs->unk74 = 0;
+                    break;
+                case X_CROSS:
+                    gs->unk7A = 6;
+                    gs->humanPlayerCount = 1;
+                    gs->unk5F = 1;
+                    gs->totalRacers = 1;
+                    gs->unk74 = 0;
+                    break;
+                case TRAINING:
+                    gs->unk7A = 9;
+                    gs->humanPlayerCount = 1;
+                    gs->unk5F = 1;
+                    gs->totalRacers = 2;
+                    gs->unk74 = 1;
+                    gs->unk7B = 1;
+                    break;
+            }
+            break;
+        case MODE_BATTLE:
+            gs->currentLevel = D_800AFE8C_A71FC->currentLevel;
+            gs->unk74 = D_800AFE8C_A71FC->unk19 - 1;
+            gs->unk7A = 8;
+            gs->humanPlayerCount = D_800AFE8C_A71FC->unk8;
+            gs->unk5F = D_800AFE8C_A71FC->unk8;
+            gs->totalRacers = 4;
+            gs->unk7B = 1;
+            gs->unk83 = D_800AFE8C_A71FC->unk1F;
+            gs->unk84 = D_800AFE8C_A71FC->unk20;
+            break;
+
+        case MODE_UNKNOWN:
+            initRand();
+            gs->unk7A = 10;
+            gs->unk7F = D_800AFE8C_A71FC->unk5;
+
+            switch (gs->unk7F) {
+                case 0:
+                    gs->humanPlayerCount = 1;
+                    gs->unk5F = 1;
+                    gs->currentLevel = SUNNY_MOUNTAIN;
+                    gs->unk74 = 2;
+                    gs->totalRacers = 4;
+                    break;
+                case 1:
+                    gs->currentLevel = TURTLE_ISLAND;
+                    gs->unk74 = 2;
+                    gs->humanPlayerCount = 2;
+                    gs->unk5F = 2;
+                    gs->totalRacers = 4;
+                    break;
+                case 2:
+                    gs->currentLevel = LINDAS_CASTLE;
+                    gs->unk74 = 2;
+                    gs->humanPlayerCount = 4;
+                    gs->unk5F = 4;
+                    gs->totalRacers = 4;
+                    break;
+            }
+            break;
+        case MODE_INTRO:
+            initRand();
+            gs->unk7F = 0;
+            gs->unk7A = 11;
+            gs->currentLevel = 2;
+            gs->unk74 = 2;
+            gs->unk5F = 4;
+            gs->totalRacers = 4;
+
+            temp = gs->unk7F;
+            switch (gs->unk7F) {
+                case 0:
+                case 1:
+                    gs->humanPlayerCount = 1;
+                    gs->unk14 = dmaRequestAndUpdateStateWithSize(&_40E870_ROM_START, &_40E870_ROM_END, 0xB8E0);
+                    break;
+            }
+            break;
+    }
+
+    if (Overlays[gs->currentLevel].romStart != NULL) {
+        dmaLoadAndInvalidate(
+            Overlays[gs->currentLevel].romStart,
+            Overlays[gs->currentLevel].romEnd,
+            Overlays[gs->currentLevel].ramStart,
+            Overlays[gs->currentLevel].icacheStart,
+            Overlays[gs->currentLevel].icacheEnd,
+            Overlays[gs->currentLevel].dcacheStart,
+            Overlays[gs->currentLevel].dcacheEnd,
+            Overlays[gs->currentLevel].bssStart,
+            Overlays[gs->currentLevel].bssEnd
+        );
+    }
+
+    gs->unk0 = allocateNodeMemory(0x1D8);
+    gs->unk4 = allocateNodeMemory(((gs->humanPlayerCount * 16 - gs->humanPlayerCount) * 4 - gs->humanPlayerCount) * 8);
+    gs->unk8 = allocateNodeMemory(((gs->humanPlayerCount * 16 - gs->humanPlayerCount) * 4 - gs->humanPlayerCount) * 8);
+    gs->unkC = allocateNodeMemory(((gs->humanPlayerCount * 16 - gs->humanPlayerCount) * 4 - gs->humanPlayerCount) * 8);
+    gs->unk10 = allocateNodeMemory(
+        ((gs->totalRacers * 2 + gs->totalRacers) * 128 - (gs->totalRacers * 2 + gs->totalRacers)) * 8
+    );
+
+    for (i = 0; i < gs->totalRacers; i++) {
+        // zero out gs->unk10[i]
+        u8 *bytes = (u8 *)&gs->unk10[i];
+        for (temp = sizeof(GameStateSmall_unk10) - 1; temp >= 0; temp--) {
+            bytes[temp] = 0;
+        }
+
+        gs->unk10[i].unkBB8 = i;
+        gs->unk64[i] = i;
+    }
+
+    for (i = 11; i >= 0; i--) {
+        charCount[i] = 0;
+    }
+
+    if (gs->unk7A < 9) {
+        for (i = 0; i < gs->unk5F; i++) {
+            gs->unk10[i].charcterID = D_800AFE8C_A71FC->unk9[i];
+            gs->unk10[i].unkBBA = D_800AFE8C_A71FC->unk15[i];
+            gs->unk10[i].unkBBB = D_800AFE8C_A71FC->unkD[i];
+            gs->unk10[i].unkBBC = D_800AFE8C_A71FC->unk11[i];
+        }
+    }
+
+    for (i = gs->unk5F; i < gs->totalRacers; i++) {
+        gs->unk10[i].charcterID = D_80090280_90E80[gs->currentLevel][i];
+        gs->unk10[i].unkBBA = D_800902C0_90EC0[gs->currentLevel];
+        gs->unk10[i].unkBC7 = 1;
+        gs->unk10[i].unkBDA = 1;
+    }
+
+    switch (D_800AFE8C_A71FC->gameMode) {
+        case MODE_STORY:
+            switch (gs->currentLevel) {
+                case CRAZY_JUNGLE_BOSS:
+                    gs->unk10[1].unkBD9 = 1;
+                    gs->unk10[1].charcterID = 9;
+                    break;
+                case JINGLE_TOWN_BOSS:
+                    gs->unk10[1].unkBD9 = 2;
+                    gs->unk10[1].charcterID = 10;
+                    break;
+                case ICE_LAND_BOSS:
+                    gs->unk10[1].unkBD9 = 3;
+                    gs->unk10[1].charcterID = 11;
+                    break;
+                case TRAINING:
+                    gs->unk10[0].charcterID = 0;
+                    gs->unk10[0].unkBBA = 0;
+                    gs->unk10[0].unkBBB = 0;
+                    gs->unk10[0].unkBBC = 0;
+                    break;
+            }
+            break;
+        case MODE_UNKNOWN:
+            switch (gs->unk7F) {
+                case 0:
+                    gs->unk10[0].charcterID = 0;
+                    gs->unk10[0].unkBBA = 0;
+                    gs->unk10[0].unkBBB = 0;
+                    gs->unk10[0].unkBBC = 0;
+                    gs->unk10[0].unkBE3 = 1;
+                    gs->unk10[0].unkBE4 = 0;
+                    break;
+                case 1:
+                    for (i = 0; i < 2; i++) {
+                        gs->unk10[i].charcterID = i;
+                        gs->unk10[i].unkBBA = 1;
+                        gs->unk10[i].unkBBB = 0;
+                        gs->unk10[i].unkBBC = i;
+                        gs->unk10[i].unkBE3 = 1;
+                        gs->unk10[i].unkBE4 = i + 1;
+                    }
+                    break;
+                case 2:
+                    for (i = 0; i < 4; i++) {
+                        gs->unk10[i].charcterID = i;
+                        gs->unk10[i].unkBBA = 1;
+                        gs->unk10[i].unkBBB = 0;
+                        gs->unk10[i].unkBBC = i;
+                        gs->unk10[i].unkBE3 = 1;
+                        gs->unk10[i].unkBE4 = i + 3;
+                    }
+            }
+            break;
+        case MODE_INTRO:
+            gs->unk10[0].charcterID = 0;
+            gs->unk10[1].charcterID = 3;
+            gs->unk10[2].charcterID = 5;
+            gs->unk10[3].charcterID = 2;
+
+            for (i = 0; i < 4; i++) {
+                gs->unk10[i].unkBBA = 0;
+                gs->unk10[i].unkBBB = 0;
+                gs->unk10[i].unkBBC = i;
+                gs->unk10[i].unkBE4 = i + 7;
+                if (gs->unk7F == 3) {
+                    gs->unk10[i].unkBE3 = 2;
+                } else {
+                    gs->unk10[i].unkBE3 = 1;
+                }
+            }
+            break;
+        case MODE_BATTLE:
+            break;
+    }
+
+    for (i = 0; i < gs->totalRacers; i++) {
+        charCount[gs->unk10[i].charcterID]++;
+    }
+
+    for (i = gs->unk5F; i < gs->totalRacers; i++) {
+        s32 j;
+        u8 count;
+
+        if (charCount[gs->unk10[i].charcterID] >= 2) {
+            charCount[gs->unk10[i].charcterID]--;
+            count = 0;
+            for (j = 0; j < 6; j++) {
+                if (charCount[j] == 0) {
+                    charList[count] = j;
+                    count++;
+                }
+            }
+
+            gs->unk10[i].charcterID = charList[(u8)randA() % count];
+            charCount[gs->unk10[i].charcterID]++;
+        }
+    }
+
+    for (i = gs->unk5F; i < gs->totalRacers; i++) {
+        if (gs->unk10[i].charcterID < 6) {
+            gs->unk10[i].unkBBB = D_800902D0_90ED0[gs->currentLevel][gs->unk10[i].charcterID].unk0;
+            gs->unk10[i].unkBBC = D_800902D0_90ED0[gs->currentLevel][gs->unk10[i].charcterID].unk1;
+
+            if (gs->unk5F == 1) {
+                gs->unk10[i].unkBDD = D_800902D0_90ED0[gs->currentLevel][gs->unk10[i].charcterID].unk2;
+            } else {
+                gs->unk10[i].unkBDD = D_800902D0_90ED0[gs->currentLevel][gs->unk10[i].charcterID].unk3;
+            }
+
+            if (gs->unk86 != 0) {
+                gs->unk10[i].unkBBB = 2;
+                if (i == 1) {
+                    gs->unk10[1].unkBBB = D_80090450_91050[gs->currentLevel];
+                }
+            }
+        } else {
+            gs->unk10[i].unkBBB = 13;
+            gs->unk10[i].unkBBC = 5;
+            gs->unk10[i].unkBDD = 7;
+
+            if (gs->unk7A == 8) {
+                gs->unk10[i].unkBDD = 5;
+            }
+
+            if (gs->unk10[i].charcterID != 6) {
+                gs->unk10[i].unkBBB = 9;
+                if (gs->unk7A == 8) {
+                    gs->unk10[i].unkBDD = 5;
+                } else {
+                    gs->unk10[i].unkBDD = 0;
+                    gs->unk10[i].unkBBB = 1;
+                }
+            }
+        }
+
+        if (gs->unk86 != 0) {
+            gs->unk10[i].unkBDD = 7;
+        }
+    }
+
+    if (gs->unk7A == 8) {
+        u8 maxLevel = 0;
+        for (i = 0; i < gs->unk5F; i++) {
+            if (maxLevel < D_80090520_91120[gs->unk10[i].unkBBB]) {
+                maxLevel = D_80090520_91120[gs->unk10[i].unkBBB];
+            }
+        }
+
+        for (i = gs->unk5F; i < gs->totalRacers; i++) {
+            if (gs->unk10[i].unkBBB >= 9) {
+                if (maxLevel == 4) {
+                    gs->unk10[i].unkBBB = 16;
+                }
+                if (maxLevel == 5) {
+                    gs->unk10[i].unkBBB = 17;
+                }
+                continue;
+            }
+
+            if (maxLevel <= 2) {
+                gs->unk10[i].unkBBB = maxLevel + (gs->unk10[i].unkBBB / 3) * 3;
+                continue;
+            }
+
+            if (maxLevel == 3) {
+                gs->unk10[i].unkBBB = 9;
+            }
+            if (maxLevel == 4) {
+                gs->unk10[i].unkBBB = 16;
+            }
+            if (maxLevel == 5) {
+                gs->unk10[i].unkBBB = 17;
+            }
+        }
+    }
+
+    gs->unk5B = 0x28;
+    switch (gs->unk7A) {
+        default:
+            setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x28, 0xA, 0xA, 0xA, 0xA);
+            break;
+        case 2:
+            setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x28, 0xA, 0x1E, 0, 0);
+            break;
+        case 1:
+        case 3:
+            setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x3C, 0xA, 0x14, 0, 0);
+            gs->unk5B = 0x3C;
+            break;
+        case 5:
+            setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x28, 0x1E, 0, 0, 0);
+            break;
+    }
+
+    D_800AFCE2_A7052 = 1;
+    func_8006FDA0_709A0(0, 0xFF, 0);
+    func_8006983C_6A43C((void *)func_8003E4F0_3F0F0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003E4F0_3F0F0);
 

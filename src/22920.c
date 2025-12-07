@@ -151,7 +151,7 @@ void func_80022048_22C48(void) {
 }
 
 void func_8002207C_22C7C(void) {
-    createTaskQueue(func_8003D560_3E160, 100);
+    createTaskQueue(initRace, 100);
     setGameStateHandler(func_800220AC_22CAC);
 }
 
