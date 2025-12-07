@@ -1510,13 +1510,22 @@ void func_80048860_49460(Player *arg0) {
 }
 
 typedef struct {
+    s16 unk0;
+    u8 _pad[14];
+} func_80049104_49D04_DataElement;
+
+typedef struct {
+    s32 offset;
+} func_80049104_49D04_DataBlock;
+
+typedef struct {
     void *unk0;
     void *unk4;
     void *unk8;
-    void *unkC;
-    u8 _pad[0x4];
+    func_80049104_49D04_DataBlock *unkC;
+    func_80049104_49D04_DataElement *unk10;
     s16 unk14;
-    u8 _pad2[0x2];
+    s16 unk16;
     u8 unk18;
     u8 _pad3[0x3];
     u8 unk1C;
@@ -1626,7 +1635,9 @@ typedef struct {
     void *unkC;
 } func_80049230_49E30_arg;
 
-void func_80049104_49D04(void);
+extern void *allocateNodeMemory(s32 size);
+extern void func_80048F0C_49B0C(func_80048E34_49A34_arg *arg0, s32 arg1);
+void func_80049104_49D04(func_80048E34_49A34_arg *arg0);
 void func_80049230_49E30(func_80049230_49E30_arg *);
 
 void func_80048E34_49A34(func_80048E34_49A34_arg *arg0) {
@@ -1662,13 +1673,41 @@ loop:
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048F0C_49B0C);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80049104_49D04);
+struct func_800491CC_49DCC_arg;
+void func_800491CC_49DCC(struct func_800491CC_49DCC_arg *arg0);
+
+void func_80049104_49D04(func_80048E34_49A34_arg *arg0) {
+    func_80049104_49D04_DataElement *ptr;
+    func_80049104_49D04_DataElement *base;
+    s32 count;
+    s32 i;
+
+    arg0->unk10 = (func_80049104_49D04_DataElement *)((s32)arg0->unkC + arg0->unkC->offset);
+    arg0->unk16 = 0;
+    ptr = arg0->unk10;
+
+    if (ptr->unk0 != -1) {
+        base = ptr;
+        do {
+            arg0->unk16++;
+        } while (base[arg0->unk16].unk0 != -1);
+    }
+
+    count = arg0->unk16;
+    arg0->unk8 = allocateNodeMemory(count * 132);
+
+    for (i = 0; i < arg0->unk16; i++) {
+        func_80048F0C_49B0C(arg0, i);
+    }
+
+    setCallback(&func_800491CC_49DCC);
+}
 
 typedef struct {
     u8 _pad[0x84];
 } func_800491CC_49DCC_Element;
 
-typedef struct {
+typedef struct func_800491CC_49DCC_arg {
     u8 _pad[0x8];
     func_800491CC_49DCC_Element *unk8;
     u8 _pad2[0xA];
