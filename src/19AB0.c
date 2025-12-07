@@ -1,4 +1,5 @@
 #include "199C0.h"
+#include "1A770.h"
 #include "4050.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
@@ -15,7 +16,6 @@ void func_80019078_19C78(void);
 void func_800191B4_19DB4(void);
 void func_8001923C_19E3C(void);
 void func_80019258_19E58(void);
-void func_80019D50_1A950(void);
 void func_80019220_19E20(void);
 
 typedef struct {
