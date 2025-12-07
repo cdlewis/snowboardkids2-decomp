@@ -63,7 +63,6 @@ extern void func_800670D4_67CD4(void);
 extern void func_80014480_15080(void);
 extern void func_800680C4_68CC4(void);
 extern void func_80064CF4_658F4(void);
-extern void func_80064F74_65B74(void);
 extern void func_80064218_64E18(DisplayListObject *);
 extern void func_800643AC_64FAC(DisplayListObject *, s32);
 
@@ -71,6 +70,7 @@ void func_80062CF0_638F0(void);
 void setupDisplayListMatrix(DisplayListObject *);
 void func_80063A94_64694(void *);
 void func_800648EC_654EC(void);
+void func_80064F74_65B74(DisplayListObject *);
 void *func_8006C130_6CD30(void *, LookAt *);
 void func_80068060_68C60(void);
 
@@ -528,7 +528,23 @@ void func_80064E34_65A34(DisplayListObject *arg0) {
     );
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80064F74_65B74);
+void func_80064F74_65B74(DisplayListObject *arg0) {
+    func_800648EC_654EC();
+
+    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
+
+    gSPLightColor(
+        gRegionAllocPtr++,
+        LIGHT_1,
+        D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8
+    );
+
+    gSPLightColor(
+        gRegionAllocPtr++,
+        LIGHT_2,
+        D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8
+    );
+}
 
 void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
