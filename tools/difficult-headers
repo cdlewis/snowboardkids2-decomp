@@ -3,3 +3,4 @@ src/7850.c:46
 src/cutscene/cutscene_bgm.c:3
 src/cutscene/cutscene_bgm.c:4
 src/cutscene/cutscene_bgm.c:5
+src/cutscene/cutscene_sys2.c:9
