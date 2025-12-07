@@ -266,7 +266,37 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7914_1E49C4);
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7A60_1E4B10);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7B70_1E4C20);
+void func_800B7B70_1E4C20(CutsceneSlotData *arg0, s32 *arg1, s16 arg2, s32 arg3, s32 arg4) {
+    s16 duration;
+    s32 delta_x, delta_z;
+
+    if (arg2 == 0) {
+        arg2 = 1;
+    }
+
+    duration = arg2;
+
+    arg0->unk86 = duration;
+    arg0->unk84 = duration;
+    arg0->unk0.Two = 10;
+
+    arg0->unk30 = arg1[0];
+    arg0->unk34 = arg1[1];
+    arg0->unk38 = arg1[2];
+
+    delta_x = arg1[0] - arg0->unk04.unk20_u.unk20_s32;
+    arg0->unk3C = delta_x / duration;
+    arg0->unk48 = delta_x / duration;
+
+    arg0->unk40 = arg3;
+    arg0->unk4C = arg3;
+
+    delta_z = arg1[2] - arg0->unk2C;
+    arg0->unk44 = delta_z / duration;
+    arg0->unk50 = delta_z / duration;
+
+    arg0->unkA0 = arg4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7C48_1E4CF8);
 
