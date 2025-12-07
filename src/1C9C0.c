@@ -1,3 +1,4 @@
+#include "2F990.h"
 #include "3A1F0.h"
 #include "6E840.h"
 #include "common.h"
@@ -6,7 +7,6 @@
 
 extern s32 gControllerInputs;
 
-extern void func_800308FC_314FC(void);
 extern void func_800304B8_310B8(void);
 extern void func_80030694_31294(void);
 extern void func_80030A00_31600(void);

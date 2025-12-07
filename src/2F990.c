@@ -1,3 +1,4 @@
+#include "2F990.h"
 #include "20F0.h"
 #include "38C90.h"
 #include "56910.h"
@@ -132,15 +133,6 @@ typedef struct {
     u8 padding3[0xC];
     u8 unk60;
 } S0;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s8 unkA;
-    s8 unkB;
-} func_800308FC_314FC_arg;
 
 typedef struct {
     func_800308FC_314FC_arg items[6];
