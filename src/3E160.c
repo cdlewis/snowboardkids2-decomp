@@ -1,9 +1,12 @@
 #include "2DD40.h"
 #include "3A1F0.h"
+#include "3CD70.h"
 #include "413E0.h"
 #include "46080.h"
+#include "4CD70.h"
 #include "56910.h"
 #include "6E840.h"
+#include "9FF70.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -44,7 +47,6 @@ extern s32 D_800904A0_910A0[];
 extern s32 D_800904E0_910E0[];
 
 void func_80040420_41020(void);
-void func_800B9AE0(Player *);
 void func_800407B4_413B4(void);
 void func_8003EDF8_3F9F8(void);
 void func_8003EEEC_3FAEC(void);
@@ -53,7 +55,6 @@ void func_8003F0AC_3FCAC(void);
 void func_8003FB90_40790(void);
 void func_800401A0_40DA0(void);
 void func_8003F178_3FD78(void);
-void func_8005011C_50D1C(void);
 void func_8003EE50_3FA50(void);
 void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
@@ -62,10 +63,7 @@ void func_8003FCD8_408D8(void);
 void func_8003FD84_40984(void);
 void func_8003FF14_40B14(void);
 void func_8003FFC0_40BC0(void);
-void func_800B99E0(void *);
 void func_80040304_40F04(void);
-void func_8003D0C8_3DCC8(void);
-void func_8006FEBC_70ABC(s32);
 void func_8004013C_40D3C(void);
 void func_800401E8_40DE8(void);
 

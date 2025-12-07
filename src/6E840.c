@@ -18,11 +18,6 @@ typedef struct {
 } Item_A4188;
 
 typedef struct {
-    u8 padding[0xB8];
-    s8 unkB8;
-} func_8006FEBC_70ABC_arg;
-
-typedef struct {
     s16 unk0;
     s16 unk2;
     s16 unk4;

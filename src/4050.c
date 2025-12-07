@@ -2,6 +2,7 @@
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -48,7 +49,6 @@ typedef struct {
     s8 unk17E0;
 } allocateTaskMemory_return;
 
-void func_80057564_58164(s16);
 void func_80003C34_4834(void);
 void func_80003898_4498(void);
 s16 func_800B3360(s16, s16);
