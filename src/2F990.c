@@ -75,6 +75,28 @@ typedef struct {
     s16 unkA;
     s8 unkC;
     u8 unkD;
+} func_8002FDFC_309FC_arg;
+
+typedef struct {
+    u8 padding[0x5C0];
+    u16 unk5C0;
+    u8 padding2[0x3];
+    u8 unk5C5;
+    u8 unk5C6;
+    u8 unk5C7;
+    s8 unk5C8;
+    u8 unk5C9;
+    u8 unk5CA[0];
+} GameStateSub;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s8 unkC;
+    u8 unkD;
     s8 unkE;
     s8 unkF;
 } func_8002FA9C_3069C_item;
@@ -213,6 +235,8 @@ void func_8002FA44_30644(void *);
 void func_8002FA70_30670(func_8002FA70_30670_arg *);
 void func_8002FB40_30740(func_8002FA9C_3069C_arg *);
 void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0);
+void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *);
+void func_8002FF28_30B28(func_8002FF28_30B28_arg *);
 void func_80030238_30E38(void *arg0);
 void func_80030280_30E80(func_8002FF28_30B28_arg *arg0);
 void func_80030764_31364(void);
@@ -597,31 +621,39 @@ void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FCD4_308D4);
+void func_8002FCD4_308D4(func_8002FDFC_309FC_arg *arg0) {
+    void *dmaResult;
+    GameStateSub *state;
+    u8 itemValue;
 
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s8 unkC;
-    u8 unkD;
-    s8 unkE;
-    s8 unkF;
-} func_8002FDFC_309FC_arg;
+    state = getCurrentAllocation();
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    setCleanupCallback(func_8002FF28_30B28);
 
-typedef struct {
-    u8 padding[0x5C0];
-    u16 unk5C0;
-    u8 padding2[0x3];
-    u8 unk5C5;
-    u8 unk5C6;
-    u8 unk5C7;
-    s8 unk5C8;
-    u8 unk5C9;
-    u8 unk5CA[0];
-} GameStateSub;
+    arg0->unk2 = -0x18;
+
+    itemValue = ((u8 *)state + state->unk5C8)[0x5CA];
+
+    if (itemValue < 9) {
+        u8 tempValue;
+        arg0->unk0 = -0x30;
+        tempValue = ((u8 *)state + state->unk5C8)[0x5CA];
+        arg0->unk8 = (tempValue / 3) + 0x1D;
+    } else {
+        s16 tableVal = D_8008F0B2_8FCB2[itemValue] + 0x18;
+        s16 tableVal2 = D_8008F0C6_8FCC6[itemValue];
+
+        arg0->unk8 = itemValue + 0x23;
+        arg0->unk0 = ((0x120 - tableVal) / 2) - tableVal2 - 0x96;
+    }
+
+    arg0->unkA = 0xFF;
+    arg0->unkC = 0;
+    arg0->unkD = 0;
+    arg0->unk4 = dmaResult;
+
+    setCallback(func_8002FDFC_309FC);
+}
 
 void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *arg0) {
     GameStateSub *state;
