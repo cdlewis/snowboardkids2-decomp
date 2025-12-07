@@ -21,29 +21,6 @@ USE_ASSET(_3F6950);
 USE_ASSET(_3F6BB0);
 
 typedef struct {
-    s16 unk00;
-    s16 unk02;
-    s16 unk04;
-    s16 unk06;
-    void *unk08;
-} SubStruct;
-
-typedef struct {
-    void *unk00;
-    s16 unk04;
-    s16 unk06;
-    void *unk08;
-    s16 unk0C;
-    s16 unk0E;
-    SubStruct substruct[3];
-    s16 unk34;
-    s16 unk36;
-    s8 unk38;
-    s8 unk39;
-    s8 unk3A;
-} Struct_80030694;
-
-typedef struct {
     u8 padding[0x2C];
     s32 *unk2C;
 } func_8002FA70_30670_arg;
