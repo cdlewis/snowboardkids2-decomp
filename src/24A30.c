@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "38C90.h"
 #include "5E590.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
@@ -134,10 +135,8 @@ typedef struct {
     u8 unkA2;
 } func_80024048_arg;
 
-extern void func_800394BC_3A0BC(void *, s32);
 extern void func_8000FED0_10AD0(void);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
-extern void func_80038420_39020(void);
 extern s32 identityMatrix[];
 extern void func_800650B4_65CB4(u8, void *);
 extern s32 D_8008DD2C_8E92C[];

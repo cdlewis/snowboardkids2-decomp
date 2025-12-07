@@ -1,5 +1,6 @@
 #include "20F0.h"
 #include "288A0.h"
+#include "38C90.h"
 #include "5E590.h"
 #include "68CF0.h"
 #include "6E840.h"
@@ -24,7 +25,6 @@ USE_ASSET(_4237C0);
 extern u16 D_8008F150_8FD50[];
 extern const char D_8009E480_9F080;
 extern void func_80032708_33308(void);
-extern void func_80038420_39020(void);
 extern void func_8000FED0_10AD0(void);
 extern void func_8006FED8_70AD8(void *);
 
@@ -279,7 +279,6 @@ extern void func_80035408_36008(void);
 extern s32 func_80035F80_36B80(s32);
 extern void func_800136E0_142E0(void);
 extern void func_80031138_31D38(void);
-extern void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
 
 void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void func_800313A4_31FA4(void);

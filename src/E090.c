@@ -1,3 +1,4 @@
+#include "38C90.h"
 #include "6E840.h"
 #include "common.h"
 #include "overlay.h"
@@ -8,7 +9,6 @@ USE_ASSET(_67BEB0);
 USE_ASSET(_67DB80);
 
 extern void *freeNodeMemory(void *);
-extern void func_800394BC_3A0BC(void *, s32);
 extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 
 typedef struct {
@@ -203,7 +203,6 @@ void func_8000D818_E418(void) {
     setGameStateHandler(func_8000D974_E574);
 }
 
-extern void func_80038420_39020(void);
 extern void func_80011924_12524(void);
 
 void func_8000D974_E574(void) {

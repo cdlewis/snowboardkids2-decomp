@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "38C90.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
@@ -14,11 +15,9 @@ USE_ASSET(_422C60);
 extern u8 D_1DC0D0[];
 extern u8 D_1DC260[];
 
-extern void func_800394BC_3A0BC(void *, s32);
 extern void func_8000FED0_10AD0(void);
 extern void func_800630F0_63CF0(s32, void *);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
-extern void func_80038420_39020(void);
 extern void func_800B0218_1DA7B8(void *, u8);
 extern u8 identityMatrix[];
 extern void *D_800B1140_1DB6E0;

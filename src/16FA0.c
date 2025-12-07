@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "38C90.h"
 #include "common.h"
 #include "overlay.h"
 #include "task_scheduler.h"
@@ -11,7 +12,6 @@ extern void func_80000460_1060(s32, void *, void *);
 extern void func_80000760_1360(void);
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0(void);
-extern void func_80038420_39020(void);
 extern u8 gConnectedControllerMask;
 extern void func_80012518_13118(void);
 
@@ -65,8 +65,6 @@ typedef struct {
     u8 padding2[0x34];
     void *unk38;
 } Struct163F8;
-
-extern void func_800394BC_3A0BC(void *, s32);
 
 void func_800163CC_16FCC(Struct163F8 *);
 void func_800163A0_16FA0(Struct163F8 *);

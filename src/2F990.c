@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "38C90.h"
 #include "56910.h"
 #include "5E590.h"
 #include "68CF0.h"
@@ -246,8 +247,6 @@ void func_800309D4_315D4(func_800308FC_314FC_arg *);
 void func_80030AEC_316EC(void *);
 void func_80030B70_31770(func_80030B70_31770_arg *);
 void *func_80035F80_36B80(s32);
-void func_800394BC_3A0BC(func_8002FA1C_3061C_arg *, s32);
-void func_80038420_39020(void);
 void func_8006FF90_70B90(s32, s32, void *, void *);
 void updateDebugCameraYState(cameraState *arg0);
 

@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "38C90.h"
 #include "4050.h"
 #include "6E840.h"
 #include "common.h"
@@ -127,8 +128,6 @@ void func_8000E154_ED54(E770_struct *arg0) {
     unlinkNode(&arg0->unk20);
     unlinkNode(&arg0->unk1F8);
 }
-
-extern void func_800394BC_3A0BC(void *, s32);
 
 void func_8000E1D0_EDD0(E770_struct *arg0) {
     func_800394BC_3A0BC(&arg0->pad5C8, (s32)arg0->unk5C4);

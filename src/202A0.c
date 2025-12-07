@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "38C90.h"
 #include "56910.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
@@ -7,11 +8,9 @@
 #include "task_scheduler.h"
 
 extern s32 func_8006FED8_70AD8(void *arg0);
-extern void func_800394BC_3A0BC(void *, s32);
 extern void *freeNodeMemory(void *);
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0(void);
-extern void func_80038420_39020(void);
 extern u8 identityMatrix[];
 extern u16 func_80060A3C_6163C(void *, u16, void *);
 extern u16 func_80062B1C_6371C(void *, u16, void *, void *);
