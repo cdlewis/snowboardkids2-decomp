@@ -30,6 +30,7 @@ base_1_object_dump.s
 target_object_dump.s
 src/claude
 tools/vacuum.log
+tools/vacuum-*.log
 
 # m2c
 ctx.c

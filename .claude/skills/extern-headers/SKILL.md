@@ -45,4 +45,8 @@ If a caller defines an extern version of `func_80001640_2240` that accepts `void
 
 But similarly, a definition such as `func_80001640_2240(SceneModel *arg0);` in an extern may tell us something new about the function. SceneModel looks a lot more appropriate for a type than some function-specific struct.
 
-The golden rule: NEVER generalise types to void* just to make the build work.
+The golden rule: NEVER generalise types to void\* just to make the build work.
+
+## Style guide
+
+- Use `#pragma once` rather than `#ifndef` to guard against multiple imports.
