@@ -550,3 +550,4 @@ func_80004920_5520 (4 attempts, 12.469%)
 func_80005094_5C94 (4 attempts, 49.662%)
 func_80038420_39020 (1 attempt, 0%)
 func_8001CD90_1D990 (1 attempt, 0%) - Very large save menu state machine (4048 bytes, 25 switch cases, 61-entry jump table)
+func_8006E054_6EC54 (1 attempt, 0%) - Extremely large graphics/rendering function (5284 bytes), complex RDP/RSP display list generation, multiple rendering modes, matrix transformations
