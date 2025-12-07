@@ -577,7 +577,35 @@ void cutsceneChrAlpha_exec(cutsceneChrAlpha_exec_arg *arg0, CutsceneManager *arg
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrAlpha_update);
+void cutsceneChrAlpha_update(CutsceneManager *arg0, s8 arg1) {
+    CutsceneSlot *slot;
+    CutsceneSlot *managerSlot;
+    s32 newValue;
+
+    slot = func_800B2A78_1DFB28(arg0, arg1);
+    managerSlot = &arg0->slots[arg1];
+
+    if (slot->unk0.ChrPayload.unk0 > 0) {
+        func_8000152C_212C(managerSlot->model, slot->unk0.ChrPayload.padding[0xF]);
+        slot->unk0.ChrPayload.unk0--;
+        newValue = slot->unk0.ChrPayload.unk10 + slot->unk0.ChrPayload.unk24;
+        slot->unk0.ChrPayload.unk10 = newValue;
+
+        if (slot->unk0.ChrPayload.unk24 > 0) {
+            if (slot->unk0.ChrPayload.unk20 < newValue) {
+                slot->unk0.ChrPayload.unk0 = 0;
+            }
+        } else if (slot->unk0.ChrPayload.unk24 < 0) {
+            if (newValue < slot->unk0.ChrPayload.unk20) {
+                slot->unk0.ChrPayload.unk0 = 0;
+            }
+        } else {
+            slot->unk0.ChrPayload.unk0 = 0;
+        }
+    } else {
+        func_800B2A50_1DFB00(arg0, arg1);
+    }
+}
 
 s32 cutsceneChrAlpha_isDone(void) {
     return 0;

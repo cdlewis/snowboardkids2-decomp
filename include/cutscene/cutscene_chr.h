@@ -256,7 +256,7 @@ s32 cutsceneChrMoveSight_isDone(void);
 void cutsceneChrAlpha_init(void);
 s32 cutsceneChrAlpha_validate(void);
 void cutsceneChrAlpha_exec(cutsceneChrAlpha_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
-void cutsceneChrAlpha_update(void);
+void cutsceneChrAlpha_update(CutsceneManager *arg0, s8 arg1);
 s32 cutsceneChrAlpha_isDone(void);
 void cutsceneChrPosition2_init(void);
 s32 cutsceneChrPosition2_validate(void);
