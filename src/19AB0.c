@@ -1,3 +1,4 @@
+#include "199C0.h"
 #include "4050.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
@@ -11,7 +12,6 @@ extern void initializeGameState(void);
 extern u8 func_8001523C_15E3C(void);
 void func_80018F50_19B50(void);
 void func_80019078_19C78(void);
-void func_80018DC0_199C0(void);
 void func_800191B4_19DB4(void);
 void func_8001923C_19E3C(void);
 void func_80019258_19E58(void);
