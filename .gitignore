@@ -14,19 +14,23 @@ romdiffcount
 undefined_funcs_auto.txt
 undefined_syms_auto.txt
 .venv
-ctx.c
 tools/gcc_kmc
 snowboardkids2.map
 nonmatchings
 __pycache__
 src/temp.c
-src/claude
 .push_secrets
 astemp_*
-**/.claude/settings.local.json
 report.json
 build.log
-tools/vacuum.log
 
+# claude
+**/.claude/settings.local.json
 base_1_object_dump.s
 target_object_dump.s
+src/claude
+tools/vacuum.log
+
+# m2c
+ctx.c
+ctx.c.m2c

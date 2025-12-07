@@ -12,3 +12,7 @@ colorama
 watchdog
 levenshtein
 cxxfilt
+
+# mips2c
+m2c @ git+https://github.com/matt-kempster/m2c.git
+

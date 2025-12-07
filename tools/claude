@@ -4,7 +4,23 @@
 # for the target that we're trying to match. this will be run automatically
 # as part of setting up the build directory.
 
-ARG="$1"
+# Parse arguments
+BOOTSTRAP=false
+ARG=""
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --bootstrap)
+            BOOTSTRAP=true
+            shift
+            ;;
+        *)
+            ARG="$1"
+            shift
+            ;;
+    esac
+done
+
 CLAUDE_DIR="$(pwd)/tools/claude-decomp-env"
 CLAUDE_CONFIG="$(pwd)/.claude"
 
@@ -25,8 +41,8 @@ create_unique_dir() {
 }
 
 # Check if argument is provided
-if [ $# -eq 0 ]; then
-    echo "Usage: $0 <function_name_or_path_or_scratch_id>"
+if [ -z "$ARG" ]; then
+    echo "Usage: $0 [--bootstrap] <function_name_or_path_or_scratch_id>"
     exit 1
 fi
 
@@ -34,32 +50,40 @@ fi
 # Scratch IDs are typically 5-6 alphanumeric characters
 if [[ "$ARG" =~ ^[0-9]+$ ]] || [[ "$ARG" =~ ^[a-zA-Z0-9]+$ && ${#ARG} -ge 5 && ${#ARG} -le 10 ]]; then
     echo "Detected scratch ID: $ARG"
+
+    # Check for invalid --bootstrap + scratch ID combination
+    if [ "$BOOTSTRAP" = true ]; then
+        echo "Error: --bootstrap cannot be used with a scratch ID"
+        echo "Bootstrap mode requires a function name to generate code from m2c"
+        exit 1
+    fi
+
     echo "Fetching from decomp.me API..."
-    
+
     # Fetch the scratch data from decomp.me API
     SCRATCH_DATA=$(curl -s "https://decomp.me/api/scratch/$ARG")
-    
+
     if [ $? -ne 0 ] || [ -z "$SCRATCH_DATA" ]; then
         echo "Error: Failed to fetch scratch data from decomp.me"
         exit 1
     fi
-    
+
     # Check if we got an error response
     if echo "$SCRATCH_DATA" | grep -q '"error"'; then
         echo "Error: Scratch not found or API error"
         echo "$SCRATCH_DATA"
         exit 1
     fi
-    
+
     # Extract diff_label and source_code from JSON response
     DIFF_LABEL=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('diff_label', ''))" 2>/dev/null)
     SOURCE_CODE=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('source_code', ''))" 2>/dev/null)
-    
+
     if [ -z "$DIFF_LABEL" ] || [ -z "$SOURCE_CODE" ]; then
         echo "Error: Could not extract diff_label or source_code from API response"
         exit 1
     fi
-   
+
     # Use diff_label as the function name for ASM lookup
     FUNC_NAME="$DIFF_LABEL"
     USE_SCRATCH_SOURCE=true
@@ -97,7 +121,7 @@ if [ "$USE_SCRATCH_SOURCE" = true ]; then
     DIR_NAME="${DIFF_LABEL%.s}"
 else
     # Use original argument for directory name
-    DIR_NAME="$1"
+    DIR_NAME="$ARG"
 fi
 created_dir=$(create_unique_dir "$DIR_NAME")
 
@@ -107,6 +131,64 @@ if [ "$USE_SCRATCH_SOURCE" = true ]; then
     echo "#include \"common.h\"" > "$created_dir/base.c"
     echo "$SOURCE_CODE" >> "$created_dir/base.c"
     echo "Using source code from decomp.me scratch"
+elif [ "$BOOTSTRAP" = true ]; then
+    # Use m2c to generate initial C code from assembly
+    echo "Generating initial C code using m2c..."
+    if ! command -v m2c &> /dev/null; then
+        echo "Warning: m2c command not found. Creating blank base.c file."
+        echo "#include \"common.h\"" > "$created_dir/base.c"
+        echo "" >> "$created_dir/base.c"
+        echo "// file is blank because m2c is not installed" >> "$created_dir/base.c"
+    else
+        # Determine the C file path from the ASM path
+        # asm/nonmatchings/10AD0/func_8000FED0_10AD0.s -> src/10AD0.c
+        # asm/nonmatchings/levels/crazy_jungle_boss/func_800BB2B0_ABAE0.s -> src/levels/crazy_jungle_boss.c
+        ASM_DIR=$(dirname "$ASM_PATH")
+        # Remove the "asm/nonmatchings/" or "asm/matchings/" prefix
+        RELATIVE_DIR=${ASM_DIR#asm/nonmatchings/}
+        RELATIVE_DIR=${RELATIVE_DIR#asm/matchings/}
+        C_FILE="src/${RELATIVE_DIR}.c"
+
+        # Generate context file if the C file exists
+        CONTEXT_ARG=""
+        if [ -f "$C_FILE" ]; then
+            echo "Generating m2c context from $C_FILE..."
+            if python3 tools/m2ctx.py "$C_FILE" 2>/dev/null; then
+                if [ -f "ctx.c" ]; then
+                    CONTEXT_ARG="--context ctx.c"
+                    echo "Context file generated successfully"
+                else
+                    echo "Warning: Context file generation completed but ctx.c not found"
+                fi
+            else
+                echo "Warning: Failed to generate context file, continuing without context"
+            fi
+        else
+            echo "Note: C file $C_FILE not found, generating without context"
+        fi
+
+        # Generate C code using m2c with optional context
+        M2C_OUTPUT=$(m2c --target mips-gcc-c $CONTEXT_ARG "$ASM_PATH" 2>&1)
+        M2C_EXIT_CODE=$?
+
+        if [ $M2C_EXIT_CODE -ne 0 ]; then
+            echo "Warning: m2c failed to generate C code. Creating blank base.c file."
+            echo "$M2C_OUTPUT"
+            echo "#include \"common.h\"" > "$created_dir/base.c"
+            echo "" >> "$created_dir/base.c"
+            echo "// file is blank because m2c failed to decompile function" >> "$created_dir/base.c"
+        else
+            # Write m2c output to base.c
+            echo "#include \"common.h\"" > "$created_dir/base.c"
+            echo "" >> "$created_dir/base.c"
+            echo "// This is a decompilation attempt by the m2c tool." >> "$created_dir/base.c"
+            echo "// Function/type definitions might be missing or incomplete." >> "$created_dir/base.c"
+            echo "// The code will likely not compile without further modification." >> "$created_dir/base.c"
+            echo "" >> "$created_dir/base.c"
+            echo "$M2C_OUTPUT" >> "$created_dir/base.c"
+            echo "Generated initial C code from assembly using m2c"
+        fi
+    fi
 else
     # Use temp.c as before
     cp src/temp.c "$created_dir/base.c"

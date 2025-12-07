@@ -20,7 +20,7 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 - `./tools/build-and-verify.sh` build the project and verify that it matches the target.
 - `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>`
-- `./tools/claude <function name>` spin up a decompilation environment for a given function.
+- `./tools/claude --bootstrap <function name>` spin up a decompilation environment for a given function.
 - `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
 - `python3 tools/check_pointer_arithmetic.py <file or directory>` detect pointer arithmetic with casts that should be replaced with struct field access. Use `--strict` to fail on violations.
 
@@ -35,7 +35,7 @@ You may be given a function and asked to decompile it to C code.
 First we need to spin up a decomp environment for the function, run:
 
 ```
-./tools/claude <function name>
+./tools/claude --bootstrap <function name>
 ```
 
 Move to the directory created by the script. This will be `nonmatchings/<function name>-<number (optional)>`.
