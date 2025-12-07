@@ -492,3 +492,4 @@ func_80010924_11524 (2 attempts, 48.046%)
 func_800600E4_60CE4 (10 attempts, 100%) -- matched in isolation, integration blocked by type incompatibilities
 func_80006458_7058 12 67.537%
 func_80036424_37024 13 80.689%
+func_800B9500_A93B0 30 71.440%
