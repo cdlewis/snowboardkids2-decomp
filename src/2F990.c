@@ -163,17 +163,6 @@ typedef struct {
     void *unk4;
 } func_80030668_31268_arg;
 
-typedef struct {
-    func_800308FC_314FC_arg items[4];
-    s16 unk30;
-    s16 unk32;
-    void *unk34;
-    void *unk38;
-    s16 unk3C;
-    s16 unk3E;
-    s8 unk40;
-} func_80030A00_31600_arg;
-
 extern void func_8000FED0_10AD0(void);
 extern void func_80035408_36008(void);
 extern void func_80012004_12C04(void);
