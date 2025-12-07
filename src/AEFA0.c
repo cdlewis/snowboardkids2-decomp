@@ -133,7 +133,10 @@ extern void *D_800BC8C8_B05B8;
 extern s8 D_800BC908_B05F8[12];
 extern void *D_800BC920_B0610;
 extern void *D_800BC960_B0650;
+extern s32 D_800BC9A0_B0690[];
 extern s16 D_800BC9DC_B06CC[];
+extern s16 D_800BC9E8_B06D8[];
+extern s16 D_800BC9F4_B06E4[];
 extern s32 D_800BCA00_B06F0;
 extern s32 D_800BC914_B0604;
 extern s32 D_800BC918_B0608;
@@ -404,12 +407,18 @@ void func_800BBEAC_AFB9C(s16 *arg0) {
 typedef struct {
     void *unk0;
     void *unk4;
-    s8 pad[0x1C];
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 pad14[0x10];
     s16 unk24;
+    s16 unk26;
 } func_800BBF4C_AFC3C_arg;
 
 extern void func_800BC0D0_AFDC0(void **);
-extern void func_800BBFC8_AFCB8(void);
+extern s32 approximateSin(s16);
+extern void func_8005BCB8_5C8B8(void *, s32, s32);
+void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *);
 
 void func_800BBF4C_AFC3C(func_800BBF4C_AFC3C_arg *arg0) {
     s16 index;
@@ -426,7 +435,40 @@ void func_800BBF4C_AFC3C(func_800BBF4C_AFC3C_arg *arg0) {
     setCallback(func_800BBFC8_AFCB8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BBFC8_AFCB8);
+void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *arg0) {
+    Allocation *allocation;
+    s32 i;
+    s16 index;
+    s32 sinResult;
+    s16 multiplier;
+    s32 *src;
+
+    allocation = (Allocation *)getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        index = arg0->unk24;
+        arg0->unk26 += D_800BC9F4_B06E4[index];
+    }
+
+    index = arg0->unk24;
+    src = D_800BC9A0_B0690;
+    memcpy(&arg0->unk8, &src[index * 3], 0xC);
+
+    sinResult = approximateSin(arg0->unk26);
+
+    index = arg0->unk24;
+    multiplier = D_800BC9E8_B06D8[index];
+    arg0->unkC += sinResult * multiplier;
+
+    index = arg0->unk24;
+    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, D_800BC9DC_B06CC[index]);
+
+    func_8005BCB8_5C8B8(&arg0->unk8, 0x140000, 0x300000);
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (loadAssetMetadata_arg *)&arg0->unk4);
+    }
+}
 
 void func_800BC0D0_AFDC0(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
