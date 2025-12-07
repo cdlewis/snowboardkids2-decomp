@@ -13,3 +13,4 @@ typedef struct {
 
 s32 func_80009E68_AA68(void *arg0, s16 arg1);
 void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0);
+void func_80009F90_AB90(void *arg0, s32 arg1, s32 arg2, s32 arg3);

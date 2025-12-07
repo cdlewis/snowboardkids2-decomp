@@ -40,9 +40,9 @@ typedef struct {
 
 extern s32 func_80009E68_AA68(void *, s16);
 extern void func_80009F5C_AB5C(s32 *);
+extern void func_80009F90_AB90(void *, s32, s32, s32);
 
 void func_80007030_7C30(func_80007030_7C30_arg *);
-void func_80009F90_AB90(s32 *, s32, s32, s32);
 void func_80069CF8_6A8F8(void);
 s32 func_8000A030_AC30(void *, s32);
 void func_8000A190_AD90(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);
