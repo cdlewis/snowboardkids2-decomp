@@ -1,3 +1,4 @@
+#include "36B80.h"
 #include "36BE0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
@@ -61,7 +62,7 @@ typedef struct {
 typedef struct {
     func_80036328_36F28_arg_item entries[4];
     char __padding[6];
-    s32 unk58;
+    void *unk58;
     s16 unk5C;
     s16 unk5E;
     u8 unk60;
@@ -134,7 +135,6 @@ typedef struct {
     s32 unk3C;
 } func_80036C20_37820_arg;
 
-s32 func_80035F80_36B80(s32);
 void func_80036274_36E74(void *);
 void func_80036424_37024(void *);
 void func_80036848_37448(void *);
@@ -188,7 +188,7 @@ void func_80036274_36E74(void *arg0) {
 
 void func_80036328_36F28(func_80036328_36F28_arg *arg0) {
     void *resource;
-    s32 temp_value;
+    void *temp_value;
     s32 i;
     s16 var_a0;
 
