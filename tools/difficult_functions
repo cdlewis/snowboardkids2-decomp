@@ -541,3 +541,4 @@ func_8003C2BC_3CEBC (1 attempts, 0%) - Extremely large function (4772 bytes, 937
 func_80009548_A148 (1 attempts, 0%) - Large function (2064 bytes) with complex rendering code and RDP display list generation
 func_80008514_9114 (1 attempts, 0%) - Very large function (2052 bytes, 546 assembly lines) with complex RDP/RSP display list generation, texture loading state management, and matrix transformations
 func_80008D18_9918 (2 attempts, 0%) - Very large function (2096 bytes, 695 assembly lines) with complex RDP display list generation, texture management, graphics mode switching, and matrix transformation setup
+func_800136E0_142E0 (6 attempts, 70%)
