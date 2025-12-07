@@ -1,3 +1,4 @@
+#include "52880.h"
 #include "56910.h"
 #include "common.h"
 #include "displaylist.h"
@@ -70,7 +71,6 @@ void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0);
 void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *);
 void func_800BB71C_B795C(TrackHazard *);
 void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0);
-void func_800547E0_553E0(s32, s32);
 
 void func_800BB2B0_B74F0(TrackHazard *arg0) {
     GameState *gameState;
