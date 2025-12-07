@@ -218,7 +218,96 @@ INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005F344_5FF44);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005F6DC_602DC);
 
-INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005FAA0_606A0);
+typedef struct {
+    s16 values[10];
+    s32 position[3];
+    s16 prev_position[10];
+    s32 interpolated[3];
+    u16 flags;
+    u16 counter;
+    u16 animation_index;
+} func_8005FAA0_606A0_arg;
+
+void func_8005FAA0_606A0(void *arg0, s16 arg1, s16 arg2, func_8005FAA0_606A0_arg *entity, s16 param_2) {
+    s16 *frame_data;
+    u16 *animation_data;
+    s16 stack_data[16];
+    u16 idx;
+    s16 temp_val;
+    s32 source_val;
+    s32 dest_val;
+    s32 result;
+
+    animation_data = func_8005DE6C_5EA6C(arg0, arg1, arg2);
+    frame_data = func_8005DE60_5EA60(arg0);
+
+    if (entity->flags & 0x8000) {
+        entity->flags &= 0x7FFF;
+
+        idx = entity->animation_index;
+        func_8005DF10_5EB10(
+            animation_data[idx * 5 + 1],
+            animation_data[idx * 5 + 2],
+            animation_data[idx * 5 + 3],
+            entity->values
+        );
+
+        idx = entity->animation_index;
+        temp_val = frame_data[animation_data[idx * 5 + 4] * 3];
+        entity->position[0] = temp_val << 10;
+
+        idx = entity->animation_index;
+        temp_val = frame_data[animation_data[idx * 5 + 4] * 3 + 1];
+        entity->position[1] = temp_val << 10;
+
+        idx = entity->animation_index;
+        temp_val = frame_data[animation_data[idx * 5 + 4] * 3 + 2];
+        entity->position[2] = temp_val << 10;
+
+        memcpy(entity->prev_position, entity->values, 0x20);
+        entity->animation_index++;
+        entity->counter = animation_data[entity->animation_index * 5 + 3];
+    }
+
+    idx = entity->animation_index;
+    result = (s16)animation_data[idx * 5 + 3] * param_2;
+    if (result < 0) {
+        result += 0x1FF;
+    }
+    entity->counter = result >> 9;
+
+    if (entity->counter != 0) {
+        idx = entity->animation_index;
+        func_8005DF10_5EB10(animation_data[idx * 5 + 1], animation_data[idx * 5 + 2], entity->counter, stack_data);
+        func_8006BDBC_6C9BC((void *)entity, stack_data, entity->prev_position);
+    }
+
+    idx = entity->animation_index;
+    source_val = frame_data[animation_data[idx * 5 + 4] * 3] << 10;
+    dest_val = entity->position[0];
+    result = (source_val - dest_val) * param_2;
+    if (result < 0) {
+        result += 0x1FF;
+    }
+    entity->interpolated[0] = (result >> 9) + dest_val;
+
+    idx = entity->animation_index;
+    source_val = frame_data[animation_data[idx * 5 + 4] * 3 + 1] << 10;
+    dest_val = entity->position[1];
+    result = (source_val - dest_val) * param_2;
+    if (result < 0) {
+        result += 0x1FF;
+    }
+    entity->interpolated[1] = (result >> 9) + dest_val;
+
+    idx = entity->animation_index;
+    source_val = frame_data[animation_data[idx * 5 + 4] * 3 + 2] << 10;
+    result = (source_val - entity->position[2]) * param_2;
+    if (result < 0) {
+        result += 0x1FF;
+    }
+    entity->interpolated[2] = (result >> 9) + entity->position[2];
+}
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005FDAC_609AC);
 
