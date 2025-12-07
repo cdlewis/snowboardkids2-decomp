@@ -508,3 +508,4 @@ func_800B6190_1E3240 10 92.328%
 func_800B0930 0 0% - Complex state machine with jump table, 1164 bytes
 func_8005628C_56E8C 8 68.154%
 func_8000EE88_FA88 5 66.139%
+func_8005C868_5D468 2 71.015%
