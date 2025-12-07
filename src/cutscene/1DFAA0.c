@@ -652,7 +652,58 @@ do_work:
     return searchMasked;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3E58_1E0F08);
+void func_800B3E58_1E0F08(u16 arg0, u16 arg1, u16 arg2) {
+    u8 *s0;
+    u32 s1;
+    u16 s2;
+    u16 s3;
+    u16 s4;
+    u32 temp_s0;
+    u16 a1;
+    u16 v1;
+    u8 *a0;
+    u8 *v1ptr;
+    u32 v0;
+
+    s3 = arg0;
+    s4 = arg1;
+    s2 = arg2 & 0xFFFF;
+    getStateEntry(s2);
+
+    temp_s0 = s3 & 0xFFFF;
+    getStateEntry(temp_s0);
+
+    s1 = s4 & 0xFFFF;
+    getStateEntry(s1);
+
+    a0 = (u8 *)D_800BAEBC_1E7F6C;
+
+    s1 = s1 << 6;
+    temp_s0 = temp_s0 << 6;
+
+    a1 = *(u16 *)(a0 + s1 + 0xF8);
+    s0 = a0 + temp_s0;
+    v1 = *(u16 *)(s0 + 0xFA);
+
+    if ((a1 & 0xFFFF) != 0xFFFF) {
+        *(u16 *)(a0 + ((a1 & 0xFFFF) << 6) + 0xFA) = v1;
+    }
+
+    if ((v1 & 0xFFFF) != 0xFFFF) {
+        u8 *temp = (u8 *)D_800BAEBC_1E7F6C;
+        *(u16 *)(temp + ((v1 & 0xFFFF) << 6) + 0xF8) = a1;
+    }
+
+    v1ptr = (u8 *)D_800BAEBC_1E7F6C;
+    v0 = s2 << 6;
+    a1 = *(u16 *)(v1ptr + v0 + 0xF8);
+    *(u16 *)(v1ptr + v0 + 0xF8) = s3;
+    *(u16 *)(v1ptr + s1 + 0xF8) = a1;
+
+    if ((a1 & 0xFFFF) != 0xFFFF) {
+        *(u16 *)(v1ptr + ((a1 & 0xFFFF) << 6) + 0xFA) = s4;
+    }
+}
 
 StateEntry *getStateEntry(u16 arg0) {
     return &D_800BAEBC_1E7F6C[arg0 + 3];
