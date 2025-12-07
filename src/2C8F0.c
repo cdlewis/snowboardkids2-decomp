@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "297B0.h"
 #include "common.h"
 #include "geometry.h"
 #include "task_scheduler.h"
@@ -6,7 +7,6 @@
 extern void *D_8008EBF0_8F7F0[];
 extern void func_8002BFEC_2CBEC(void *);
 extern void func_8002C570_2D170(void *);
-extern void func_8002A2D0_2AED0(void *);
 
 typedef struct {
     /* 0x00 */ SceneModel *unk0;

@@ -1,10 +1,10 @@
+#include "297B0.h"
 #include "common.h"
 #include "gamestate.h"
 #include "task_scheduler.h"
 
 INCLUDE_ASM("asm/nonmatchings/2D4C0", func_8002C8C0_2D4C0);
 
-extern void func_8002A2D0_2AED0(void *);
 extern void func_8002EBB0_2F7B0(void *);
 extern void func_8002BEF4_2CAF4(void *);
 

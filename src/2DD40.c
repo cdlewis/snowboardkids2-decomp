@@ -1,8 +1,8 @@
 #include "2DD40.h"
+#include "297B0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "task_scheduler.h"
 
-extern void func_8002A2D0_2AED0(void *);
 extern void func_8002EBB0_2F7B0(void *);
 extern void func_8002BEF4_2CAF4(void *);
 
