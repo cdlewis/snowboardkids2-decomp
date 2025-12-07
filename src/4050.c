@@ -1,4 +1,5 @@
 #include "1DFAA0.h"
+#include "1E60D0.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
@@ -47,12 +48,11 @@ typedef struct {
     u8 padding1[0x20];
     u8 unk5B0;
     u8 padding[0x122F];
-    s8 unk17E0;
+    func_800B9020_arg unk17E0;
 } allocateTaskMemory_return;
 
 void func_80003C34_4834(void);
 void func_80003898_4498(void);
-void func_800B9020(void *);
 void loadCutsceneOverlay(void);
 void func_8000378C_438C(void);
 void func_80003C88_4888(void);
@@ -164,7 +164,7 @@ void func_80003C34_4834(void) {
     allocateTaskMemory_return *temp_v0;
 
     temp_v0 = (allocateTaskMemory_return *)getCurrentAllocation();
-    if (temp_v0->unk17E0 != 0) {
+    if (temp_v0->unk17E0.unk0 != 0) {
         unlinkNode(&temp_v0->unk3B8);
         unlinkNode(&temp_v0->unk1E0);
         unlinkNode(&temp_v0->unk8);
