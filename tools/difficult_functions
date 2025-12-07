@@ -521,3 +521,4 @@ func_8004674C_4734C 3 0%
 func_8003BD60_3C960 4 67.219% -- matched in isolated environment, but fails integration (register allocation mismatch in full build)
 func_80035878_36478 3 37.549%
 func_80066AF0_676F0 2 24.421%
+func_80063A94_64694 1 0%
