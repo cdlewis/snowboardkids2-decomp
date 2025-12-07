@@ -1,5 +1,6 @@
 #include "1A770.h"
 
+#include "15690.h"
 #include "20F0.h"
 #include "3A1F0.h"
 #include "3E160.h"
@@ -71,7 +72,6 @@ void func_80019DC4_1A9C4(void);
 void func_80019C7C_1A87C(applyTransformToModel_arg1 *arg0);
 void func_80019D24_1A924(TextData *arg0);
 void func_80019D84_1A984(void);
-void func_800154A8_160A8(s8 *, u16);
 void func_80019E60_1AA60(void);
 void func_80019EA8_1AAA8(void);
 void func_80019F30_1AB30(void);
