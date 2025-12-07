@@ -10,6 +10,7 @@
 
 extern u8 D_80090E70_91A70[];
 extern s16 D_80090EB0_91AB0[];
+extern u16 D_8009ADE0_9B9E0;
 
 typedef struct {
     void *unk0;
@@ -143,6 +144,18 @@ typedef struct {
     /* 0x34 */ void *unk34;
     /* 0x38 */ s16 unk38;
 } func_80050C00_51800_Task;
+
+typedef struct {
+    u8 padding[0x44C];
+    s32 unk44C;
+    s32 unk450;
+    s32 unk454;
+} func_80050C80_51880_arg0;
+
+typedef struct {
+    u8 padding[0x44];
+    void *unk44;
+} func_80050C80_51880_allocation;
 
 typedef struct {
     void *unk0;
@@ -417,7 +430,37 @@ void func_80050C00_51800(void *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80050C80_51880);
+void func_80050C80_51880(func_80050C80_51880_arg0 *arg0, s32 arg1) {
+    func_80050C80_51880_allocation *allocation;
+    func_80050C00_51800_Task *task;
+    u8 temp;
+
+    allocation = (func_80050C80_51880_allocation *)getCurrentAllocation();
+    temp = D_80090E70_91A70[arg1];
+
+    if (temp == 0xFF) {
+        return;
+    }
+
+    if (D_8009ADE0_9B9E0 & 1) {
+        return;
+    }
+
+    task = (func_80050C00_51800_Task *)scheduleTask(&func_8005098C_5158C, 2, 0, 0xEA);
+
+    if (task != NULL) {
+        u8 temp2;
+        task->unk34 = arg0;
+        temp2 = D_80090E70_91A70[arg1];
+        task->unk1E = 0x80;
+        task->unk24 = temp2;
+        task->unk28 = arg0->unk44C / 2;
+        task->unk2C = arg0->unk450 / 2;
+        task->unk30 = arg0->unk454 / 2;
+        task->unk38 = -1;
+        task->unk4 = (void *)((u32)allocation->unk44 + 0x1440);
+    }
+}
 
 void func_80050D70_51970(MemoryAllocatorNode **node) {
     *node = load_3ECE40();
