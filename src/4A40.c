@@ -113,7 +113,6 @@ extern s32 D_8008C000_8CC00;
 extern s16 D_8008C006_8CC06;
 extern s16 D_8008C00A_8CC0A;
 extern u8 identityMatrix[];
-void initializeGameEntity(void *, s32, void *, s8, s8, s8, s16);
 
 typedef struct {
     s16 unk0;

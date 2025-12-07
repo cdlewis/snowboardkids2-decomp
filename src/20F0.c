@@ -57,70 +57,6 @@ typedef struct {
 } func_80001970_2570_arg;
 
 typedef struct {
-    u8 transformationMatrix[0x20];
-    void *unk20;
-    void *asset1;
-    void *asset2;
-    void *asset3;
-    u8 padding2[0xC];
-} AssetSlot;
-
-typedef struct {
-    AssetSlot *unk00;
-    AssetSlot *unk04;
-    AssetSlot *unk08;
-    s16 unk0C;
-    s16 unk0E;
-    void *unk10;
-    s16 unk14;
-    s16 unk16;
-    u8 transformationMatrix[0x20];
-    s16 unk38;
-    s16 unk3A;
-    u8 unk3C;
-    u8 unk3D;
-    u8 unk3E;
-    u8 unk3F;
-    u32 unk40;
-    s32 unk44;
-    u32 unk48;
-    s16 unk4C;
-    u8 unk4E;
-    u8 unk4F;
-    u8 padding3[0x38];
-    u8 unk88;
-    u8 unk89;
-    u8 padding4[4];
-    s16 unk8E;
-    u8 padding5[4];
-    s8 unk94;
-    u8 unk95;
-    u8 unk96;
-    u8 unk97;
-    AssetSlot *unk98;
-    void *unk9C;
-    void *unkA0;
-    u8 unkA4[0x4C];
-    u8 asset2TransformationMatrix[0x20];
-    u32 unk110;
-    void *unk114;
-    void *unk118;
-    void *soundData;
-    void *unk120;
-    void *unk124;
-    u8 padding6[0xC];
-    void *unk134;
-    s16 unk138;
-    u8 unk13A;
-    u8 unk13B;
-    u8 padding7[0x18];
-    s16 unk154;
-    s16 unk156;
-    u32 unk158;
-    u8 unk15C;
-} GameEntity;
-
-typedef struct {
     void *assetStart;
     void *assetEnd;
     void *asset2Start;
@@ -141,7 +77,6 @@ extern u32 D_8008BD38_8C938;
 s32 func_800018F4_24F4(SceneModel *);
 s32 func_80001904_2504(s16);
 
-void initializeGameEntity(GameEntity *, s32, void *, s8, s8, s8, s16);
 void *func_80002040_2C40(SceneModel *arg0);
 void *func_80009F5C_AB5C(s32);
 
@@ -395,7 +330,7 @@ void *func_800019B8_25B8(s32 arg0, void *arg1, s8 arg2, s8 arg3, s8 arg4, s16 ar
 
 #ifdef NON_MATCHING
 void initializeGameEntity(
-    GameEntity *entity,
+    void *entity,
     s32 assetGroupIndex,
     void *param3,
     s8 assetPairIndex,
@@ -403,6 +338,7 @@ void initializeGameEntity(
     s8 param6,
     s16 yetAnotherAssetIndex
 ) {
+    GameEntity *ent = (GameEntity *)entity;
     AssetGroup *assetEntry;
     s32 i;
     AssetSlot *slot;
@@ -413,29 +349,29 @@ void initializeGameEntity(
 
     assetEntry = &gameAssets[assetGroupIndex];
 
-    entity->unk00 = allocateNodeMemory(0x780);
-    entity->unk0C = assetGroupIndex;
-    entity->unk14 = -1;
-    entity->unk16 = -1;
-    entity->unk0E = (s8)assetEntry->numAssets;
-    entity->unk3A = -1;
-    entity->unk38 = -1;
-    entity->unk8E = -1;
-    entity->unk89 = 0;
-    entity->unk40 = 0;
-    entity->unk44 = NULL;
-    entity->unk48 = 0;
-    entity->unk95 = 0;
+    ent->unk00 = allocateNodeMemory(0x780);
+    ent->unk0C = assetGroupIndex;
+    ent->unk14 = -1;
+    ent->unk16 = -1;
+    ent->unk0E = (s8)assetEntry->numAssets;
+    ent->unk3A = -1;
+    ent->unk38 = -1;
+    ent->unk8E = -1;
+    ent->unk89 = 0;
+    ent->unk40 = 0;
+    ent->unk44 = NULL;
+    ent->unk48 = 0;
+    ent->unk95 = 0;
 
-    memcpy(&entity->asset2TransformationMatrix, identityMatrix, 0x20);
+    memcpy(&ent->asset2TransformationMatrix, identityMatrix, 0x20);
 
-    entity->unk110 = -1;
-    entity->unk96 = 0xFF;
-    entity->unk4C = yetAnotherAssetIndex;
-    entity->unk97 = 0;
+    ent->unk110 = -1;
+    ent->unk96 = 0xFF;
+    ent->unk4C = yetAnotherAssetIndex;
+    ent->unk97 = 0;
 
     for (i = 0; i < 0x20; i++) {
-        entity->unk00[i].unk20 = entity->unk00[i].asset1 = entity->unk00[i].asset2 = entity->unk00[i].asset3 = NULL;
+        ent->unk00[i].unk20 = ent->unk00[i].asset1 = ent->unk00[i].asset2 = ent->unk00[i].asset3 = NULL;
     }
 
     if (assetEntry->displayListStart != NULL) {
@@ -444,119 +380,119 @@ void initializeGameEntity(
             dmaRequestAndUpdateStateWithSize(assetEntry->vertexDataStart, assetEntry->vertexDataEnd, assetEntry->size);
 
         for (i = 0; i < assetEntry->numAssets; i++) {
-            entity->unk00[i].unk20 = &assetEntry->unk1C[i];
-            entity->unk00[i].asset1 = asset1;
-            entity->unk00[i].asset2 = asset2;
-            memcpy(entity->unk00[i].transformationMatrix, identityMatrix, 0x20);
+            ent->unk00[i].unk20 = &assetEntry->unk1C[i];
+            ent->unk00[i].asset1 = asset1;
+            ent->unk00[i].asset2 = asset2;
+            memcpy(ent->unk00[i].transformationMatrix, identityMatrix, 0x20);
         }
     } else if (assetEntry->assetGroupIndex != -1) {
         asset1 = loadAssetByIndex_94F90(assetEntry->assetGroupIndex, assetPairIndex);
         asset2 = loadAssetByIndex_95200(assetEntry->assetGroupIndex, assetPairIndex);
 
         for (i = 0; i < assetEntry->numAssets; i++) {
-            entity->unk00[i].unk20 = &loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
-            entity->unk00[i].asset1 = asset1;
-            entity->unk00[i].asset2 = asset2;
-            memcpy(entity->unk00[i].transformationMatrix, identityMatrix, 0x20);
+            ent->unk00[i].unk20 = &loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
+            ent->unk00[i].asset1 = asset1;
+            ent->unk00[i].asset2 = asset2;
+            memcpy(ent->unk00[i].transformationMatrix, identityMatrix, 0x20);
         }
     }
 
     if (assetEntry->unk22) {
         if (assetEntry->anotherAssetIndex == -1) {
-            entity->unk08 = dmaRequestAndUpdateStateWithSize(
+            ent->unk08 = dmaRequestAndUpdateStateWithSize(
                 assetEntry->asset3Start,
                 assetEntry->asset3End,
                 assetEntry->asset3Size
             );
-            entity->unk04 = allocateNodeMemory(0x980);
+            ent->unk04 = allocateNodeMemory(0x980);
         } else {
             func_800585C8_591C8(0);
         }
     } else {
         if (assetEntry->anotherAssetIndex != -1) {
-            entity->unk08 = loadAssetByIndex_953E0(assetEntry->anotherAssetIndex);
-            entity->unk04 = allocateNodeMemory(0x980);
+            ent->unk08 = loadAssetByIndex_953E0(assetEntry->anotherAssetIndex);
+            ent->unk04 = allocateNodeMemory(0x980);
         } else {
-            entity->unk08 = NULL;
-            entity->unk04 = NULL;
+            ent->unk08 = NULL;
+            ent->unk04 = NULL;
         }
     }
 
     if (param5 != -1) {
-        entity->unk00[16].unk20 = loadAssetByIndex_95728(param5);
-        entity->unk00[16].asset1 = loadAssetByIndex_95500(param5);
-        entity->unk00[16].asset2 = loadAssetByIndex_95590(param5);
-        entity->unk00[16].asset3 = loadAssetByIndex_95668(param6);
+        ent->unk00[16].unk20 = loadAssetByIndex_95728(param5);
+        ent->unk00[16].asset1 = loadAssetByIndex_95500(param5);
+        ent->unk00[16].asset2 = loadAssetByIndex_95590(param5);
+        ent->unk00[16].asset3 = loadAssetByIndex_95668(param6);
 
-        memcpy(&entity->unk00[16].transformationMatrix, identityMatrix, 0x20);
+        memcpy(&ent->unk00[16].transformationMatrix, identityMatrix, 0x20);
     }
 
     if (yetAnotherAssetIndex != -1 && yetAnotherAssetIndex < D_80089768_8A368) {
         node8A1A0 = &D_800895A0_8A1A0[yetAnotherAssetIndex];
 
-        entity->unk00[17].unk20 = node8A1A0->unk14;
-        entity->unk00[17].asset1 = dmaRequestAndUpdateState(node8A1A0->assetStart, node8A1A0->assetEnd);
-        entity->unk00[17].asset2 =
+        ent->unk00[17].unk20 = node8A1A0->unk14;
+        ent->unk00[17].asset1 = dmaRequestAndUpdateState(node8A1A0->assetStart, node8A1A0->assetEnd);
+        ent->unk00[17].asset2 =
             dmaRequestAndUpdateStateWithSize(node8A1A0->asset2Start, node8A1A0->asset2End, node8A1A0->asset2Size);
-        entity->unk00[17].asset3 = NULL;
+        ent->unk00[17].asset3 = NULL;
 
-        memcpy(&entity->unk00[17].transformationMatrix, identityMatrix, 0x20);
+        memcpy(&ent->unk00[17].transformationMatrix, identityMatrix, 0x20);
     }
 
     if (assetEntry->initCallback != NULL) {
         task = scheduleTask(assetEntry->initCallback, 0, 0, 0);
         if (task != NULL) {
-            task->prev = (Node *)entity;
+            task->prev = (Node *)ent;
         }
     }
 
-    entity->unk98 = allocateNodeMemory(0x3C);
-    slot = entity->unk98;
+    ent->unk98 = allocateNodeMemory(0x3C);
+    slot = ent->unk98;
 
-    entity->unkA0 = NULL;
+    ent->unkA0 = NULL;
 
     slot->asset3 = NULL;
     slot->asset2 = NULL;
     slot->asset1 = NULL;
 
-    entity->unk94 = -1;
-    entity->unk9C = NULL;
+    ent->unk94 = -1;
+    ent->unk9C = NULL;
 
     if (assetEntry->Assets != NULL && assetPairIndex < assetEntry->count) {
-        entity->unk9C = &assetEntry->Assets[assetPairIndex];
+        ent->unk9C = &assetEntry->Assets[assetPairIndex];
     }
 
-    entity->unk98->asset1 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 0);
-    entity->unk98->asset2 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 1);
-    entity->unkA0 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
-    entity->unk98->unk20 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
+    ent->unk98->asset1 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 0);
+    ent->unk98->asset2 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 1);
+    ent->unkA0 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
+    ent->unk98->unk20 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
 
-    entity->unk10 = param3;
+    ent->unk10 = param3;
 
-    memcpy(&entity->transformationMatrix, identityMatrix, 0x20);
+    memcpy(&ent->transformationMatrix, identityMatrix, 0x20);
 
-    entity->unk3C = 0;
-    entity->unk3F = 1;
-    entity->unk88 = 1;
-    entity->unk4E = 0;
-    entity->unk4F = assetEntry->unk31;
-    entity->unk3D = 0;
+    ent->unk3C = 0;
+    ent->unk3F = 1;
+    ent->unk88 = 1;
+    ent->unk4E = 0;
+    ent->unk4F = assetEntry->unk31;
+    ent->unk3D = 0;
 
-    func_80009E68_AA68(&entity->unkA4, 0);
-    entity->unk114 = func_8000CD88_D988();
-    entity->unk118 = func_8000CDB4_D9B4();
-    entity->soundData = loadAssetGroupSoundData(entity);
-    entity->unk15C = 0;
-    entity->unk158 = 0;
+    func_80009E68_AA68(&ent->unkA4, 0);
+    ent->unk114 = func_8000CD88_D988();
+    ent->unk118 = func_8000CDB4_D9B4();
+    ent->soundData = loadAssetGroupSoundData((SceneModel *)ent);
+    ent->unk15C = 0;
+    ent->unk158 = 0;
 
-    entity->unk120 = dmaRequestAndUpdateStateWithSize(_646850_ROM_START, _646850_ROM_END, 0x238);
-    entity->unk124 = &D_8008BD38_8C938;
-    entity->unk13A = 0x50;
-    entity->unk154 = 0;
-    entity->unk156 = 0;
-    entity->unk138 = 0;
-    entity->unk13B = 0;
-    entity->unk134 = entity->unk120;
+    ent->unk120 = dmaRequestAndUpdateStateWithSize(_646850_ROM_START, _646850_ROM_END, 0x238);
+    ent->unk124 = &D_8008BD38_8C938;
+    ent->unk13A = 0x50;
+    ent->unk154 = 0;
+    ent->unk156 = 0;
+    ent->unk138 = 0;
+    ent->unk13B = 0;
+    ent->unk134 = ent->unk120;
 }
 #else
 INCLUDE_ASM("asm/nonmatchings/20F0", initializeGameEntity);

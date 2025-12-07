@@ -156,6 +156,70 @@ void updateModelGeometry(SceneModel *);
 void func_8000160C_220C(SceneModel *arg0, s8 arg1);
 
 typedef struct {
+    u8 transformationMatrix[0x20];
+    void *unk20;
+    void *asset1;
+    void *asset2;
+    void *asset3;
+    u8 padding2[0xC];
+} AssetSlot;
+
+typedef struct {
+    AssetSlot *unk00;
+    AssetSlot *unk04;
+    AssetSlot *unk08;
+    s16 unk0C;
+    s16 unk0E;
+    void *unk10;
+    s16 unk14;
+    s16 unk16;
+    u8 transformationMatrix[0x20];
+    s16 unk38;
+    s16 unk3A;
+    u8 unk3C;
+    u8 unk3D;
+    u8 unk3E;
+    u8 unk3F;
+    u32 unk40;
+    s32 unk44;
+    u32 unk48;
+    s16 unk4C;
+    u8 unk4E;
+    u8 unk4F;
+    u8 padding3[0x38];
+    u8 unk88;
+    u8 unk89;
+    u8 padding4[4];
+    s16 unk8E;
+    u8 padding5[4];
+    s8 unk94;
+    u8 unk95;
+    u8 unk96;
+    u8 unk97;
+    AssetSlot *unk98;
+    void *unk9C;
+    void *unkA0;
+    u8 unkA4[0x4C];
+    u8 asset2TransformationMatrix[0x20];
+    u32 unk110;
+    void *unk114;
+    void *unk118;
+    void *soundData;
+    void *unk120;
+    void *unk124;
+    u8 padding6[0xC];
+    void *unk134;
+    s16 unk138;
+    u8 unk13A;
+    u8 unk13B;
+    u8 padding7[0x18];
+    s16 unk154;
+    s16 unk156;
+    u32 unk158;
+    u8 unk15C;
+} GameEntity;
+
+typedef struct {
     u8 padding[0x14];
     s32 unk14;
     s32 unk18;
@@ -167,6 +231,8 @@ typedef struct {
 } applyTransformToModel_arg1;
 
 void applyTransformToModel(SceneModel *arg0, applyTransformToModel_arg1 *arg1);
+
+void initializeGameEntity(void *, s32, void *, s8, s8, s8, s16);
 
 SceneModel *func_80002014_2C14(SceneModel *arg0);
 
