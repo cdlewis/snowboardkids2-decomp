@@ -273,7 +273,7 @@ void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *arg0) {
     func_800BB2B0_AEFA0(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB620_AF310);
+INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BB620_AF310);
 
 void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *arg0) {
     arg0->unk1E -= 0x10;
@@ -292,7 +292,7 @@ void func_800BB74C_AF43C(func_800BB74C_AF43C_arg *arg0) {
     setCallback(func_800BB778_AF468);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB778_AF468);
+INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BB778_AF468);
 
 void func_800BB8E8_AF5D8(func_800BB8E8_AF5D8_arg *arg0) {
     func_80055E68_56A68_result *temp_v0_3;
@@ -320,7 +320,7 @@ void func_800BB8E8_AF5D8(func_800BB8E8_AF5D8_arg *arg0) {
     setCallback(func_800BB9A4_AF694);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BB9A4_AF694);
+INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BB9A4_AF694);
 
 void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
@@ -514,14 +514,14 @@ void func_800BC184_AFE74(void **arg0) {
     setCallback(func_800BC220_AFF10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC220_AFF10);
+INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BC220_AFF10);
 
 void func_800BC340_B0030(func_800BC340_B0030_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AEFA0", func_800BC378_B0068);
+INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BC378_B0068);
 
 void func_800BC72C_B041C(s16 *arg0) {
     *arg0 = 0;

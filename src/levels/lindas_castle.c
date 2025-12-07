@@ -2,8 +2,8 @@
 #include "displaylist.h"
 #include "geometry.h"
 #include "task_scheduler.h"
+#include "rand.h"
 
-extern u8 randA(void);
 extern void func_80058530_59130(s32, s32);
 extern void *getCurrentAllocation(void);
 extern void *func_80055E68_56A68(u8);
@@ -74,7 +74,7 @@ void func_800BB2B0(func_800BB2B0_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/AB160", func_800BB320_AB1D0);
+INCLUDE_ASM("asm/nonmatchings/levels/lindas_castle", func_800BB320_AB1D0);
 
 void func_800BB454_AB304(TaskArg_AB304 *task) {
     Allocation_AB304 *allocation;
@@ -128,9 +128,9 @@ void func_800BB454_AB304(TaskArg_AB304 *task) {
     setCallback(temp_callback);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AB160", func_800BB5BC_AB46C);
+INCLUDE_ASM("asm/nonmatchings/levels/lindas_castle", func_800BB5BC_AB46C);
 
-INCLUDE_ASM("asm/nonmatchings/AB160", func_800BB7D4_AB684);
+INCLUDE_ASM("asm/nonmatchings/levels/lindas_castle", func_800BB7D4_AB684);
 
 void func_800BB9F0_AB8A0(func_800BB9F0_AB8A0_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);

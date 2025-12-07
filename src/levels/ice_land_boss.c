@@ -5,9 +5,9 @@
 typedef void (*FuncPtr)(void *);
 
 typedef struct {
-    void *ptr;     // offset 0 within element
-    u8 _pad[0x38]; // 0x3C - 4 = 0x38
-} Element0x3C;     // Size: 0x3C
+    /* 0x0 */ void *ptr;
+    u8 _pad[0x38]
+} Element0x3C; // Size: 0x3C
 
 typedef struct {
     u8 _pad0[0x38];
@@ -78,9 +78,9 @@ extern void func_80064808_65408(s32, void *, u8);
 extern void enqueueMultiPartDisplayList(s32, void *, u8);
 extern void func_800BC61C_B1B0C(func_800BC4AC_arg *);
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BB2B0_B07A0);
+INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BB2B0_B07A0);
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BB66C_B0B5C);
+INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BB66C_B0B5C);
 
 void func_800BB8E0_B0DD0(func_800BC4AC_arg *arg0) {
     D_800BCA44_B1F34[arg0->unkBBE](arg0);
@@ -124,7 +124,7 @@ s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BBA54_B0F44);
+INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BBA54_B0F44);
 
 s32 func_800BC008_B14F8(func_800BC4AC_arg *arg0) {
     s32 pad[3];
@@ -149,9 +149,9 @@ void func_800BC0A8_B1598(func_800BC4AC_arg *arg0) {
     D_800BCA5C_B1F4C[arg0->unkBBE](arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC0D8_B15C8);
+INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC0D8_B15C8);
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC3B8_B18A8);
+INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC3B8_B18A8);
 
 s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
     s32 pad[3];
@@ -200,7 +200,7 @@ void func_800BC520_B1A10(func_800BC4AC_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC61C_B1B0C);
+INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC61C_B1B0C);
 
 void func_800BC7A8_B1C98(func_800BC4AC_arg *arg0) {
     s32 pad[36];
@@ -230,4 +230,4 @@ void func_800BC7A8_B1C98(func_800BC4AC_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/B07A0", func_800BC89C_B1D8C);
+INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC89C_B1D8C);

@@ -84,9 +84,9 @@ extern void func_80064808_65408(s32, void *, u8);
 extern void enqueueMultiPartDisplayList(s32, void *, u8);
 extern void func_800BC0E8_AC918(Arg0Struct *);
 
-INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BB2B0_ABAE0);
+INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BB2B0_ABAE0);
 
-INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BB754_ABF84);
+INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BB754_ABF84);
 
 void func_800BB9E8_AC218(Arg0Struct *arg0) {
     D_800BC454_ACC84[arg0->unkBBE](arg0);
@@ -110,7 +110,7 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BBAB8_AC2E8);
+INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BBAB8_AC2E8);
 
 s32 func_800BBD98_AC5C8(Arg0Struct *arg0) {
     s32 pad[3];
@@ -217,7 +217,7 @@ void func_800BBFEC_AC81C(Arg0Struct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BC0E8_AC918);
+INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BC0E8_AC918);
 
 void func_800BC23C_ACA6C(Arg0Struct *arg0) {
     s32 i;
@@ -247,4 +247,4 @@ void func_800BC23C_ACA6C(Arg0Struct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/ABAE0", func_800BC330_ACB60);
+INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BC330_ACB60);

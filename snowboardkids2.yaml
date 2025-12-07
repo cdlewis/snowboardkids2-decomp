@@ -779,148 +779,148 @@ segments:
       - [0xAA8E0, data]
       - [0xAAEB0, .rodata, 9FF70]
 
-  - name: _AB160
+  - name: levels/lindas_castle
     type: code
     vram: 0x800BB2B0
     start: 0xAB160
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xAB160, c]
-      - [0xABA70, data, AB160]
+      - [0xAB160, c, levels/lindas_castle]
+      - [0xABA70, data, levels/lindas_castle]
 
-  - name: _ABAE0
+  - name: levels/crazy_jungle_boss
     type: code
     vram: 0x800BB2B0
     start: 0xABAE0
     exclusive_ram_id: 800BB2B0
     overlay: true
     subsegments:
-      - [0xABAE0, c]
-      - [0xACC70, data, ABAE0]
+      - [0xABAE0, c, levels/crazy_jungle_boss]
+      - [0xACC70, data, levels/crazy_jungle_boss]
 
-  - name: _ACD30
+  - name: levels/snowboard_street_shoot_cross
     type: code
     vram: 0x800BB2B0
     start: 0xACD30
     exclusive_ram_id: 800BB2B0
     overlay: true
     subsegments:
-      - [0xACD30, c]
-      - [0xAD630, data, ACD30]
+      - [0xACD30, c, levels/snowboard_street_shoot_cross]
+      - [0xAD630, data, levels/snowboard_street_shoot_cross]
 
-  - name: _AD670
+  - name: levels/starlight_highway
     type: code
     vram: 0x800BB2B0
     start: 0xAD670
     exclusive_ram_id: 800BB2B0
     overlay: true
     subsegments:
-      - [0xAD670, c]
-      - [0xAEDF0, data, AD670]
-      - [0xAEF80, .rodata, AD670]
+      - [0xAD670, c, levels/starlight_highway]
+      - [0xAEDF0, data, levels/starlight_highway]
+      - [0xAEF80, .rodata, levels/starlight_highway]
 
-  - name: _AEFA0
+  - name: levels/haunted_house
     type: code
     vram: 0x800BB2B0
     start: 0xAEFA0
     exclusive_ram_id: 800BB2B0
     overlay: true
     subsegments:
-      - [0xAEFA0, c]
-      - [0xB04E0, data, AEFA0]
+      - [0xAEFA0, c, levels/haunted_house]
+      - [0xB04E0, data, levels/haunted_house]
 
-  - name: _B07A0
+  - name: levels/ice_land_boss
     type: code
     vram: 0x800BB2B0
     start: 0xB07A0
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB07A0, c]
-      - [0xB1EE0, data, B07A0]
+      - [0xB07A0, c, levels/ice_land_boss]
+      - [0xB1EE0, data, levels/ice_land_boss]
 
-  - name: _B2030
+  - name: levels/ice_land
     type: code
     vram: 0x800BB2B0
     start: 0xB2030
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB2030, c]
-      - [0xB2530, data, B2530]
+      - [0xB2030, c, levels/ice_land]
+      - [0xB2530, data, levels/ice_land]
 
-  - name: _B2750
+  - name: levels/snowboard_street_speed_cross
     type: code
     vram: 0x800BB2B0
     start: 0xB2750
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB2750, c]
+      - [0xB2750, c, levels/snowboard_street_speed_cross]
       # no data
 
-  - name: _B2870
+  - name: levels/jingle_town_boss
     type: code
     vram: 0x800BB2B0
     start: 0xB2870
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB2870, c]
-      - [0xB40E0, data, B2870]
-      - [0xB4220, .rodata, B2870]
+      - [0xB2870, c, levels/jingle_town_boss]
+      - [0xB40E0, data, levels/jingle_town_boss]
+      - [0xB4220, .rodata, levels/jingle_town_boss]
 
-  - name: _B4240
+  - name: levels/jingle_town
     type: code
     vram: 0x800BB2B0
     start: 0xB4240
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB4240, c]
-      - [0xB4B20, data, B4B20]
+      - [0xB4240, c, levels/jingle_town]
+      - [0xB4B20, data, levels/jingle_town]
 
-  - name: _B4BB0
+  - name: levels/sunny_mountain
     type: code
     vram: 0x800BB2B0
     start: 0xB4BB0
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB4BB0, c]
-      - [0xB5450, data, B4BB0]
+      - [0xB4BB0, c, levels/sunny_mountain]
+      - [0xB5450, data, levels/sunny_mountain]
 
-  - name: _B54C0
+  - name: levels/wendys_house
     type: code
     vram: 0x800BB2B0
     start: 0xB54C0
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB54C0, c]
-      - [0xB5B40, data, B54C0]
+      - [0xB54C0, c, levels/wendys_house]
+      - [0xB5B40, data, levels/wendys_house]
 
-  - name: _B5B90
+  - name: levels/training
     type: code
     vram: 0x800BB2B0
     start: 0xB5B90
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB5B90, c]
-      - [0xB6310, data, B5B90]
-      - [0xB74B0, .rodata, B5B90]
+      - [0xB5B90, c, levels/training]
+      - [0xB6310, data, levels/training]
+      - [0xB74B0, .rodata, levels/training]
 
-  - name: _B74F0
+  - name: levels/crazy_jungle
     type: code
     vram: 0x800BB2B0
     start: 0xB74F0
     overlay: true
     exclusive_ram_id: 800BB2B0
     subsegments:
-      - [0xB74F0, c]
-      - [0xB7DD0, data, B74F0]
+      - [0xB74F0, c, levels/crazy_jungle]
+      - [0xB7DD0, data, levels/crazy_jungle]
       - [0xB7E70, data]
       - [0xB9C40, data]
 

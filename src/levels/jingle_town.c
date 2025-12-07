@@ -64,7 +64,7 @@ void func_800BB2B0_B4240(B4240FuncArg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/B4240", func_800BB320_B42B0);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town", func_800BB320_B42B0);
 
 void func_800BB454_B43E4(B4240FuncArg *arg0) {
     B4240AllocationStruct *alloc;
@@ -132,9 +132,9 @@ void func_800BB598_B4528(B4240FuncArg *arg0) {
     func_800BB2B0_B4240(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B4240", func_800BB63C_B45CC);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town", func_800BB63C_B45CC);
 
-INCLUDE_ASM("asm/nonmatchings/B4240", func_800BB89C_B482C);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town", func_800BB89C_B482C);
 
 void func_800BBAFC_B4A8C(B4240Struct *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);

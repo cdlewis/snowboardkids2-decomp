@@ -48,7 +48,7 @@ void func_800BB2B0_B5B90(func_800BB2B0_B5B90_state *arg0) {
     setCallback(func_800BB320_B5C00);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B5B90", func_800BB320_B5C00);
+INCLUDE_ASM("asm/nonmatchings/levels/training", func_800BB320_B5C00);
 
 void func_800BB670_B5F50(func_800BB5CC_state *arg0);
 void func_800BB724_B6004(func_800BB5CC_state *arg0);
@@ -210,7 +210,7 @@ void func_800BB87C_B615C(func_800BB5CC_state *arg0) {
     );
 }
 
-INCLUDE_ASM("asm/nonmatchings/B5B90", func_800BB928_B6208);
+INCLUDE_ASM("asm/nonmatchings/levels/training", func_800BB928_B6208);
 
 void func_800BB9E0_B62C0(func_800BB2B0_B5B90_state *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);

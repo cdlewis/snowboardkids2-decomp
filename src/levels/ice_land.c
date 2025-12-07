@@ -84,7 +84,7 @@ void func_800BB2B0_B2030(B2030Payload *arg0) {
     setCallback(func_800BB3A0_B2120);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B2030", func_800BB3A0_B2120);
+INCLUDE_ASM("asm/nonmatchings/levels/ice_land", func_800BB3A0_B2120);
 
 void func_800BB650_B23D0(B2030TaskPayload *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);

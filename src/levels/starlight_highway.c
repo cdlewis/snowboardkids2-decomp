@@ -281,7 +281,7 @@ void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *arg0) {
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BB75C_ADB1C);
+INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BB75C_ADB1C);
 
 extern void func_800BB75C_ADB1C(void *);
 extern void func_8006300C_63C0C(void *);
@@ -370,7 +370,7 @@ void func_800BBC28_ADFE8(func_800BBC28_arg *arg0) {
     setCallback(&func_800BBCFC_AE0BC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BBCFC_AE0BC);
+INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BBCFC_AE0BC);
 
 void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
@@ -388,11 +388,11 @@ void func_800BBED8(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BBF28_AE2E8);
+INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BBF28_AE2E8);
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC084_AE444);
+INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC084_AE444);
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC1AC_AE56C);
+INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC1AC_AE56C);
 
 extern s32 func_8005C250_5CE50(void *, s32, s32);
 extern void func_80042340_42F40(void *);
@@ -476,7 +476,7 @@ void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0) {
     setCallback(&func_800BC550_AE910);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC550_AE910);
+INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC550_AE910);
 
 void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
     void *temp;
@@ -498,7 +498,7 @@ void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
     setCallback(&func_800BC768_AEB28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/AD670", func_800BC768_AEB28);
+INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC768_AEB28);
 
 void func_800BC984_AED44(func_800BB45C_AD81C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);

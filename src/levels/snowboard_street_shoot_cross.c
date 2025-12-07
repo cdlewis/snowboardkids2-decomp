@@ -54,7 +54,7 @@ void func_800BB2B0_ACD30(ACD30Struct *arg0) {
     setCallback(func_800BB310_ACD90);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB310_ACD90);
+INCLUDE_ASM("asm/nonmatchings/levels/snowboard_street_shoot_cross", func_800BB310_ACD90);
 
 extern void func_8005BCB8_5C8B8(void *, s32, s32);
 extern void debugEnqueueCallback(u16, u8, void *, void *);
@@ -81,9 +81,9 @@ void func_800BB4B8_ACF38(ACD30Struct *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB504);
+INCLUDE_ASM("asm/nonmatchings/levels/snowboard_street_shoot_cross", func_800BB504);
 
-INCLUDE_ASM("asm/nonmatchings/ACD30", func_800BB690_AD110);
+INCLUDE_ASM("asm/nonmatchings/levels/snowboard_street_shoot_cross", func_800BB690_AD110);
 
 void func_800BBA50(s16 arg0) {
     ACD30Task *task;

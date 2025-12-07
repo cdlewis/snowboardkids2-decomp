@@ -57,9 +57,9 @@ extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, vo
 extern u8 randA(void);
 extern s32 func_800544B4_550B4(s32, s32, s32);
 
-INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB2B0_B2870);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BB2B0_B2870);
 
-INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB66C_B2C2C);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BB66C_B2C2C);
 
 void func_800BB86C_B2E2C(Arg0Struct *arg0) {
     D_800BCB5C_B411C[arg0->unkBBE](arg0);
@@ -82,7 +82,7 @@ s32 func_800BB89C_B2E5C(Arg0Struct *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/B2870", func_800BB930_B2EF0);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BB930_B2EF0);
 
 void func_800BBE68_B3428(Arg0Struct *arg0) {
     s16 val;
@@ -122,7 +122,7 @@ void func_800BBF40_B3500(Arg0Struct *arg0) {
     D_800BCB74_B4134[arg0->unkBBE](arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B2870", func_800BBF70_B3530);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BBF70_B3530);
 
 s32 func_800BC094_B3654(Arg0Struct *arg0) {
     if (arg0->unkBBF == 0) {
@@ -176,7 +176,7 @@ s32 func_800BC094_B3654(Arg0Struct *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/B2870", func_800BC1C0_B3780);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BC1C0_B3780);
 
 void func_800BC378_B3938(Arg0Struct *arg0) {
     s32 pad[8];
@@ -205,8 +205,8 @@ void func_800BC378_B3938(Arg0Struct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/B2870", func_800BC474_B3A34);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BC474_B3A34);
 
-INCLUDE_ASM("asm/nonmatchings/B2870", func_800BC5A8_B3B68);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BC5A8_B3B68);
 
-INCLUDE_ASM("asm/nonmatchings/B2870", func_800BCA10_B3FD0);
+INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BCA10_B3FD0);

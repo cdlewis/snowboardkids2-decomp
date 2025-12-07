@@ -25,7 +25,7 @@ typedef struct {
 extern void func_800BB890_B5190(void);
 void func_800BBB18_B5418(func_800BB814_B5114_arg *arg0);
 
-INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB2B0_B4BB0);
+INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", func_800BB2B0_B4BB0);
 
 extern void func_800BB488_B4D88(void);
 
@@ -47,7 +47,7 @@ void func_800BB3D8_B4CD8(s32 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB488_B4D88);
+INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", func_800BB488_B4D88);
 
 void func_800BB7D0_B50D0(func_800BB7D0_arg *arg0) {
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
@@ -67,7 +67,7 @@ void func_800BB814_B5114(func_800BB814_B5114_arg *arg0) {
     setCallback(func_800BB890_B5190);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B4BB0", func_800BB890_B5190);
+INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", func_800BB890_B5190);
 
 extern u16 D_800BBBA8_B54A8[];
 typedef struct {
