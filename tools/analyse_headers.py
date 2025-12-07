@@ -238,7 +238,7 @@ class CProjectAnalyzer:
         # Third try: suggest creating a new header
         return str(def_path.with_suffix('.h'))
     
-    def generate_report(self):
+    def generate_report(self, limit=None):
         """Generate analysis report"""
         print("\n" + "="*80)
         print("C PROJECT HEADER ANALYSIS REPORT")
@@ -312,13 +312,18 @@ class CProjectAnalyzer:
         print(f"Extern declarations found: {sum(len(decls) for decls in self.extern_declarations.values())}")
         print(f"Header declarations found: {sum(len(decls) for decls in self.header_declarations.values())}")
         print(f"Issues found: {len(issues)}")
+        if limit is not None and len(issues) > limit:
+            print(f"Showing only first {limit} issues (use --limit to adjust)")
         
         # Print detailed issues
         if issues:
             print(f"\nISSUES FOUND:")
             print("-" * 80)
-            
-            for i, issue in enumerate(issues, 1):
+
+            # Apply limit if specified
+            issues_to_show = issues[:limit] if limit is not None else issues
+
+            for i, issue in enumerate(issues_to_show, 1):
                 print(f"\n{i}. {issue['type'].upper().replace('_', ' ')}")
                 
                 if issue['type'] == 'missing_header_declaration':
@@ -359,18 +364,22 @@ class CProjectAnalyzer:
         print(f"\n" + "="*80)
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python analyze_headers.py <project_directory>")
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Analyze C project headers')
+    parser.add_argument('project_directory', help='Path to the project directory')
+    parser.add_argument('--limit', type=int, default=None,
+                        help='Limit the number of issues shown in the report')
+
+    args = parser.parse_args()
+
+    if not os.path.isdir(args.project_directory):
+        print(f"Error: {args.project_directory} is not a valid directory")
         sys.exit(1)
-    
-    project_dir = sys.argv[1]
-    if not os.path.isdir(project_dir):
-        print(f"Error: {project_dir} is not a valid directory")
-        sys.exit(1)
-    
-    analyzer = CProjectAnalyzer(project_dir)
+
+    analyzer = CProjectAnalyzer(args.project_directory)
     analyzer.scan_project()
-    analyzer.generate_report()
+    analyzer.generate_report(limit=args.limit)
 
 if __name__ == "__main__":
     main()
