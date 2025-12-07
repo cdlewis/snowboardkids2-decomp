@@ -536,3 +536,4 @@ func_80060CDC_618DC (1 attempts, 0%)
 func_800670D4_67CD4 (3 attempts, 30.160%)
 func_800B05B8_A0468 (4 attempts, 72.229%)
 func_800B8894_A8744 (1 attempts, 0.836%)
+func_800677F0_683F0 (1 attempts, 0%) - Extremely large function (1772 bytes), complex display list state management
