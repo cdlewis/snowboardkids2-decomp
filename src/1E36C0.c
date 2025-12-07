@@ -1,16 +1,4 @@
-#include "1DFAA0.h"
-#include "common.h"
-#include "cutscene/cutscene_sys2.h"
-
-typedef struct {
-    u8 pad[0x54];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
-    s32 unk68;
-} unk_func_800B68F4_1E39A4;
+#include "1E36C0.h"
 
 s16 func_800B6610_1E36C0(cutsceneSys2Wait_exec_asset *arg0) {
     return arg0->unk86;

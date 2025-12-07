@@ -1,5 +1,6 @@
 #include "1DFAA0.h"
 #include "1DD170.h"
+#include "1E36C0.h"
 #include "20F0.h"
 #include "68CF0.h"
 #include "6E840.h"
@@ -48,15 +49,11 @@ StateEntry *getStateEntry(u16);
 u16 func_800B3B68_1E0C18(u8, u16, s32);
 void func_800B477C_1E182C(void *);
 void func_800B4534_1E15E4(s32, s32);
-void func_800B7760_1E4810(void *, s32, s32);
-void func_800B77C4_1E4874(void *, s32, s32);
-void func_800B7828_1E48D8(void *, s32, s32);
 
 s16 func_800B3490_1E0540(void);
 StateEntryItem *func_800B34B0_1E0560(s32 arg0);
 extern s32 func_80001904_2504(s16);
 extern void func_8000150C_210C(void *);
-extern void func_800B66B4_1E3764(void *);
 extern void *func_800B5B38_1E2BE8(u16);
 extern void func_80003000_3C00(void *, u8, void *, u8, void *);
 extern void func_800B5B30_1E2BE0(void *, s8);
@@ -117,7 +114,7 @@ void func_800B2AA0(func_800B2C78_arg *arg0, Node_70B00 *arg1, void *arg2, void *
             arg0[i].unkF0 = NULL;
         }
 
-        func_800B66B4_1E3764((u8 *)arg0 + slotOffset + 0x4C);
+        func_800B66B4_1E3764((CutsceneSlotData *)((u8 *)arg0 + slotOffset + 0x4C));
 
         slotOffset += 0xF4;
         i++;
@@ -215,9 +212,9 @@ void func_800B2E48_1DFEF8(func_800B2C78_arg *arg0) {
             slotDataA8 = (u8 *)arg0 + temp_offset;
             transformPtr = slotDataA8 + 0x4C;
 
-            func_800B7760_1E4810(transformPtr, 0x10000, 0);
-            func_800B77C4_1E4874(transformPtr, 0x10000, 0);
-            func_800B7828_1E48D8(transformPtr, 0x10000, 0);
+            func_800B7760_1E4810((CutsceneSlotData *)transformPtr, 0x10000, 0);
+            func_800B77C4_1E4874((CutsceneSlotData *)transformPtr, 0x10000, 0);
+            func_800B7828_1E48D8((CutsceneSlotData *)transformPtr, 0x10000, 0);
             setupSlotTransform(transformPtr);
             applyTransformToModel(model, (applyTransformToModel_arg1 *)(slotDataA8 + 0x50));
         }
