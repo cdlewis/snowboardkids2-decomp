@@ -544,3 +544,4 @@ func_80008D18_9918 (2 attempts, 0%) - Very large function (2096 bytes, 695 assem
 func_800136E0_142E0 (6 attempts, 70%)
 func_80011924_12524 (3 attempts, 65.605%)
 func_80012FA8_13BA8 (1 attempts, 42.128%)
+renderTextPalette (3 attempts, 93.497%)
