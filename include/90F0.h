@@ -11,4 +11,5 @@ typedef struct {
     /* 0x10 */ u16 index;
 } func_8000A410_B010_arg;
 
+s32 func_80009E68_AA68(void *arg0, s16 arg1);
 void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0);

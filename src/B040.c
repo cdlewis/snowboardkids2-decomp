@@ -41,7 +41,6 @@ typedef struct {
     s32 unk4;
 } Table2DRow;
 
-extern void func_80009E68_AA68(void *, s32);
 extern void func_80009F90_AB90(void *, s32, s32, s32);
 extern void func_8000A510_B110(s32, s16, s16, s16, void *, s32, s8, u8, u8, s16);
 

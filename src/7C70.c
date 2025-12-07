@@ -1,8 +1,8 @@
 #include "common.h"
 
+extern s32 func_80009E68_AA68(void *, s16);
 extern void func_80009F5C_AB5C(s32 *);
 extern void func_80069CF8_6A8F8(void);
-extern void func_80009E68_AA68(void *, s32);
 extern void func_80009F90_AB90(void *, s32, s32, s32);
 extern void setCleanupCallback(void *);
 extern void setCallback(void *);

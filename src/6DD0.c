@@ -53,7 +53,6 @@ typedef struct {
     s8 unk8C;
 } func_80006398_6F98_arg;
 
-extern void func_80009E68_AA68(void *, s32);
 extern void func_80009F90_AB90(void *, s32, s32, s32);
 void func_80006A88_7688(func_80006398_6F98_arg *);
 void func_800069B4_75B4(func_80006398_6F98_arg *);
