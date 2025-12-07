@@ -67,7 +67,6 @@ void func_80005714_6314(s32 arg0);
 void func_80005740_6340(s32 arg0);
 void func_80004920_5520(void);
 void func_80005094_5C94(void);
-void func_8006395C_6455C(DisplayListObject *arg0);
 void func_80005D30_6930(func_80005808_6408_arg *);
 void func_8000595C_655C(void);
 void *loadAssetGroupDisplayList(void *);
