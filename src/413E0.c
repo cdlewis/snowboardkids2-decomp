@@ -3,6 +3,7 @@
 #include "56910.h"
 #include "5E590.h"
 #include "68CF0.h"
+#include "6DE50.h"
 #include "common.h"
 #include "gamestate.h"
 #include "task_scheduler.h"
@@ -25,8 +26,6 @@ extern s32 D_800907F8_913F8;
 
 extern void func_80040870_41470(void);
 extern void func_8004106C_41C6C(void);
-extern void *loadAsset_34F7E0(void);
-extern void func_8006D4B8_6E0B8(s32, s16, s16, s16, s32, u8, u8, u8, u8, u8, u8, u8, u8);
 void func_80040E00_41A00(func_80040E00_41A00_arg *);
 void func_80040F34_41B34(func_800407E0_413E0_arg *);
 void func_800413E0_41FE0(func_800407E0_413E0_arg *arg0);

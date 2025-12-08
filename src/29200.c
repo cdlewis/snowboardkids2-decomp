@@ -1,8 +1,7 @@
+#include "20F0.h"
 #include "common.h"
 #include "rand.h"
 #include "task_scheduler.h"
-
-extern void *func_80002014_2C14(void *);
 extern void func_800288D4_294D4(void *);
 extern void func_80028744_29344(void *);
 

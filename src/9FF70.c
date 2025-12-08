@@ -147,7 +147,6 @@ extern void *loadAssetByIndex_5E990(s32 arg0);
 extern s32 func_8005D308_5DF08(func_800B30B0_arg *, s32);
 extern void func_80059A48_5A648(func_800B30B0_arg *, s16);
 extern void func_8004D890_4E490(u8, s16);
-extern void func_80058530_59130(s32, s32);
 extern void func_8004FCF0_508F0(s16);
 extern void func_80059A88_5A688(func_800B30B0_arg *, s16);
 
