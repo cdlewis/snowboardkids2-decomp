@@ -1,4 +1,5 @@
 #include "1DFAA0.h"
+#include "10AD0.h"
 #include "1DD170.h"
 #include "1E36C0.h"
 #include "20F0.h"
@@ -892,7 +893,6 @@ void func_800B46E0(s32 arg0, s8 arg1, s16 arg2) {
 }
 
 extern void func_80069CF8_6A8F8(void);
-extern void func_80011924_12524(void);
 
 typedef struct {
     void *start;

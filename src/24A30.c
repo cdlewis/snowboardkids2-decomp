@@ -1,3 +1,4 @@
+#include "10AD0.h"
 #include "20F0.h"
 #include "38C90.h"
 #include "5E590.h"
@@ -842,7 +843,6 @@ void func_80027AD8_286D8(func_80027AD8_286D8_arg *arg0) {
 }
 
 extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
-extern void func_80011924_12524(void);
 
 void func_80027B70_28770(void *arg0) {
     debugEnqueueCallback(0xC, 7, func_80011924_12524, arg0);

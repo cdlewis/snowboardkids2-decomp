@@ -1,3 +1,4 @@
+#include "10AD0.h"
 #include "38C90.h"
 #include "6E840.h"
 #include "common.h"
@@ -202,8 +203,6 @@ void func_8000D818_E418(void) {
     func_8006FDA0_709A0(s1, 0xFF, 0);
     setGameStateHandler(func_8000D974_E574);
 }
-
-extern void func_80011924_12524(void);
 
 void func_8000D974_E574(void) {
     E090_struct *arg0 = getCurrentAllocation();
