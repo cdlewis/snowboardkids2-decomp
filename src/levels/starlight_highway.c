@@ -7,7 +7,6 @@
 extern s32 gFrameCounter;
 
 extern void func_800BC768_AEB28(void *);
-extern void *freeNodeMemory(void *);
 
 typedef struct {
     u8 _pad[0x80];

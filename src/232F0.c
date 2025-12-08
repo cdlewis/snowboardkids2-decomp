@@ -5,8 +5,6 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-extern void *freeNodeMemory(void *);
-
 typedef struct {
     Node_70B00 unk0;
     u8 pad1D8[0x760 - 0x1D8];

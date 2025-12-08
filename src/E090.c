@@ -9,7 +9,6 @@ USE_ASSET(_67AB10);
 USE_ASSET(_67BEB0);
 USE_ASSET(_67DB80);
 
-extern void *freeNodeMemory(void *);
 extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 
 typedef struct {

@@ -840,8 +840,6 @@ void func_80027AD8_286D8(func_80027AD8_286D8_arg *arg0) {
     setCallback(func_80027B70_28770);
 }
 
-extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
-
 void func_80027B70_28770(void *arg0) {
     debugEnqueueCallback(0xC, 7, func_80011924_12524, arg0);
 }

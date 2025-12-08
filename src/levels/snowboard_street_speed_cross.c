@@ -15,8 +15,6 @@ typedef struct {
     s32 unk2C;
 } func_800BB2B0_B2750_arg;
 
-extern void *freeNodeMemory(void *);
-
 typedef struct {
     /* 0x00 */ Mat3x3Padded matrix;
     /* 0x20 */ u8 _pad20[0x1C];

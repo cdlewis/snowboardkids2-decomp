@@ -6,7 +6,6 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern void *freeNodeMemory(void *);
 extern s16 D_8008CE40_8DA40;
 
 typedef struct {

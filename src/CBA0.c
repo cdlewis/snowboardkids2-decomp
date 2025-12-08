@@ -183,8 +183,6 @@ INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C5AC_D1AC);
 
 INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C7A4_D3A4);
 
-extern void *freeNodeMemory(void *);
-
 typedef struct {
     u8 pad0[0x28];
     void *unk28;
