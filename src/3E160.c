@@ -171,7 +171,6 @@ extern Unk800902D0_90ED0 D_800902D0_90ED0[16][6]; // unknown size (16)
 extern u8 D_80090450_91050[];
 extern u8 D_80090520_91120[];
 
-extern u32 func_800B00C0_9FF70;
 extern u32 D_800BAA30;
 
 enum GameMode {
