@@ -1,3 +1,4 @@
+#include "10AD0.h"
 #include "20F0.h"
 #include "38C90.h"
 #include "6E840.h"
@@ -15,7 +16,6 @@ USE_ASSET(_422C60);
 extern u8 D_1DC0D0[];
 extern u8 D_1DC260[];
 
-extern void func_8000FED0_10AD0(void);
 extern void func_800630F0_63CF0(s32, void *);
 extern void func_800B0218_1DA7B8(void *, u8);
 extern u8 identityMatrix[];

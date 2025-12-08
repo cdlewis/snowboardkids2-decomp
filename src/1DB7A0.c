@@ -24,7 +24,6 @@ typedef struct {
     /* 0x1E2 */ u16 unk1E2;
 } Allocation_1DB7A0;
 
-extern void func_8000FED0_10AD0(void);
 extern s16 D_800B09B8_1DC098[];
 extern s16 D_800B09BA_1DC09A[];
 extern s16 D_800B09A8_1DC088[];

@@ -1,3 +1,4 @@
+#include "10AD0.h"
 #include "20F0.h"
 #include "38C90.h"
 #include "6E840.h"
@@ -11,7 +12,6 @@ USE_ASSET(_418520);
 extern void func_8000056C_116C(s32, s32, void *);
 extern void func_80000460_1060(s32, void *, void *);
 extern void func_80000760_1360(void);
-extern void func_8000FED0_10AD0(void);
 extern u8 gConnectedControllerMask;
 extern void func_80012518_13118(void);
 

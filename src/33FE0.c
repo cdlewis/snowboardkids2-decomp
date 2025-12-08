@@ -7,7 +7,6 @@
 #include "task_scheduler.h"
 
 extern void func_80034D58_35958(void);
-extern void func_8000FED0_10AD0(void);
 extern void *getCurrentAllocation(void);
 extern void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
 extern s16 D_8008F2C4_8FEC4[];

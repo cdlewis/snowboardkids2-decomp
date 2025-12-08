@@ -27,7 +27,6 @@ USE_ASSET(_4237C0);
 extern u16 D_8008F150_8FD50[];
 extern const char D_8009E480_9F080;
 extern void func_80032708_33308(void);
-extern void func_8000FED0_10AD0(void);
 extern void func_8006FED8_70AD8(void *);
 
 void func_800323FC_32FFC(void);

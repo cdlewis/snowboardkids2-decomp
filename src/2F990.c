@@ -147,7 +147,6 @@ typedef struct {
     void *unk4;
 } func_80030668_31268_arg;
 
-extern void func_8000FED0_10AD0(void);
 extern void func_80035408_36008(void);
 
 extern s32 gButtonsPressed[];

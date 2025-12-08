@@ -137,7 +137,6 @@ typedef struct {
     u8 unkA2;
 } func_80024048_arg;
 
-extern void func_8000FED0_10AD0(void);
 extern s32 identityMatrix[];
 extern void func_800650B4_65CB4(u8, void *);
 extern s32 D_8008DD2C_8E92C[];
