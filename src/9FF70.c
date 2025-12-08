@@ -1,4 +1,5 @@
 #include "56910.h"
+#include "5AA90.h"
 #include "5E590.h"
 #include "common.h"
 #include "gamestate.h"
@@ -1317,12 +1318,6 @@ void func_800B419C_A404C(func_800B30B0_arg *arg0) {
     arg0->unk9A4 = value3 + delta2;
 }
 
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-} Vec3s32;
-
 extern s16 identityMatrix[];
 extern s32 approximate_sqrt(s32);
 extern void transformVector3(s32 *, Mat3x3Padded *, s32 *);
@@ -1341,9 +1336,9 @@ s32 func_800B42A8_A4158(func_800B30B0_arg *arg0, s32 arg1, s32 arg2, s32 arg3) {
 
     createYRotationMatrix(&sp40, arg0->unkA90 + arg0->unkA94);
 
-    sp30.x = sp40.m[2][0];
-    sp30.y = sp40.m[2][1];
-    sp30.z = sp40.m[2][2];
+    sp30.unk0 = sp40.m[2][0];
+    sp30.unk4 = sp40.m[2][1];
+    sp30.unk8 = sp40.m[2][2];
 
     memcpy(&sp60, identityMatrix, 0x20);
     memcpy(&sp80, identityMatrix, 0x20);
@@ -1364,61 +1359,61 @@ s32 func_800B42A8_A4158(func_800B30B0_arg *arg0, s32 arg1, s32 arg2, s32 arg3) {
     sp60.m[2][2] = arg0->unk45C;
 
     func_8006BDBC_6C9BC((void *)&sp80, &sp60, &spA0);
-    transformVector2(&arg0->unk44C, &spA0, &sp10.x);
+    transformVector2(&arg0->unk44C, &spA0, &sp10.unk0);
 
-    if (sp10.y < 0) {
-        sp10.y = 0;
+    if (sp10.unk4 < 0) {
+        sp10.unk4 = 0;
     }
 
-    transformVector2(&sp30.x, &spA0, &sp20.x);
+    transformVector2(&sp30.unk0, &spA0, &sp20.unk0);
     memcpy(&sp80, identityMatrix, 0x20);
 
-    temp2 = approximate_sqrt(sp20.x * sp20.x + sp20.z * sp20.z);
+    temp2 = approximate_sqrt(sp20.unk0 * sp20.unk0 + sp20.unk8 * sp20.unk8);
     temp = temp2 & 0xFFFF;
 
     if (temp != 0) {
-        sp80.m[0][0] = (sp20.z << 13) / temp;
-        sp80.m[2][2] = (sp20.z << 13) / temp;
-        sp80.m[0][2] = (sp20.x << 13) / temp;
-        sp80.m[2][0] = (-sp20.x << 13) / temp;
+        sp80.m[0][0] = (sp20.unk8 << 13) / temp;
+        sp80.m[2][2] = (sp20.unk8 << 13) / temp;
+        sp80.m[0][2] = (sp20.unk0 << 13) / temp;
+        sp80.m[2][0] = (-sp20.unk0 << 13) / temp;
     }
 
-    transformVector2(&sp10.x, &sp80, &sp20.x);
+    transformVector2(&sp10.unk0, &sp80, &sp20.unk0);
 
-    if (sp20.x > 0) {
-        if (arg3 < sp20.x) {
-            sp20.x = sp20.x - arg3;
+    if (sp20.unk0 > 0) {
+        if (arg3 < sp20.unk0) {
+            sp20.unk0 = sp20.unk0 - arg3;
         } else {
-            sp20.x = 0;
+            sp20.unk0 = 0;
         }
     } else {
-        if (sp20.x < -arg3) {
-            sp20.x = sp20.x + arg3;
+        if (sp20.unk0 < -arg3) {
+            sp20.unk0 = sp20.unk0 + arg3;
         } else {
-            sp20.x = 0;
+            sp20.unk0 = 0;
         }
     }
 
-    if (sp20.z > 0) {
-        if (arg1 < sp20.z) {
-            sp20.z = sp20.z - arg1;
+    if (sp20.unk8 > 0) {
+        if (arg1 < sp20.unk8) {
+            sp20.unk8 = sp20.unk8 - arg1;
         } else {
-            sp20.z = 0;
+            sp20.unk8 = 0;
         }
     } else {
-        if (sp20.z < -arg2) {
-            sp20.z = sp20.z + arg2;
+        if (sp20.unk8 < -arg2) {
+            sp20.unk8 = sp20.unk8 + arg2;
         } else {
-            sp20.z = 0;
+            sp20.unk8 = 0;
         }
     }
 
-    resultY = sp20.z;
-    transformVector3(&sp20.x, &sp80, &sp10.x);
-    transformVector3(&sp10.x, &spA0, &sp20.x);
+    resultY = sp20.unk8;
+    transformVector3(&sp20.unk0, &sp80, &sp10.unk0);
+    transformVector3(&sp10.unk0, &spA0, &sp20.unk0);
 
-    arg0->unk44C = sp20.x;
-    arg0->unk454 = sp20.z;
+    arg0->unk44C = sp20.unk0;
+    arg0->unk454 = sp20.unk8;
 
     return resultY;
 }

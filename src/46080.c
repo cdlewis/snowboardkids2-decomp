@@ -1,5 +1,6 @@
 #include "19E80.h"
 #include "56910.h"
+#include "5AA90.h"
 #include "5E590.h"
 #include "common.h"
 #include "displaylist.h"
@@ -131,7 +132,6 @@ extern s32 D_80090B80_91780;
 
 extern s32 gFrameCounter;
 extern u16 D_8009ADE0_9B9E0;
-extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);
 extern void func_80059A48_5A648(Player *, s32);
 
 void func_80047330_47F30(FunctionArg_80047330 *arg0);
@@ -2096,7 +2096,7 @@ typedef struct {
 void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0) {
     func_8004AD18_4B918_CopyData sp10;
     func_8004AD18_4B918_CopyData *s0;
-    func_80066444_67044_arg1_unk4 *s2;
+    Vec3s32 *s2;
     void *s3;
     s32 i;
     allocation_46080 *alloc;
@@ -2402,7 +2402,7 @@ exit_loop:
 void func_8004B648_4C248(func_8004B648_4C248_arg *arg0) {
     func_8004AD18_4B918_CopyData sp10;
     func_8004AD18_4B918_CopyData *s0;
-    func_80066444_67044_arg1_unk4 *s2;
+    Vec3s32 *s2;
     void *s3;
     s32 i;
 
@@ -2530,7 +2530,7 @@ void func_8004B990_4C590(func_8004B990_4C590_arg *arg0) {
     func_8004B990_4C590_StackLocals sp;
     GameState_46080 *alloc;
     void *s0;
-    func_80066444_67044_arg1_unk4 *s2;
+    Vec3s32 *s2;
     void *temp_s0;
     s32 i;
 
@@ -2583,7 +2583,7 @@ void func_8004B990_4C590(func_8004B990_4C590_arg *arg0) {
 void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
     func_8004AD18_4B918_CopyData sp10;
     func_8004AD18_4B918_CopyData *s0;
-    func_80066444_67044_arg1_unk4 *s2;
+    Vec3s32 *s2;
     void *s3;
     s32 i;
 
@@ -2732,7 +2732,7 @@ exit_loop:
 void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0) {
     func_8004AD18_4B918_CopyData sp10;
     func_8004AD18_4B918_CopyData *s0;
-    func_80066444_67044_arg1_unk4 *s2;
+    Vec3s32 *s2;
     void *s3;
     s32 i;
 

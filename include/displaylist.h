@@ -1,6 +1,7 @@
 #pragma once
 
 #include "19E80.h"
+#include "5AA90.h"
 #include "common.h"
 
 typedef struct {
@@ -79,13 +80,7 @@ void func_800630F0_63CF0(s32, void *);
 
 typedef struct {
     s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} func_80066444_67044_arg1_unk4;
-
-typedef struct {
-    s32 unk0;
-    func_80066444_67044_arg1_unk4 unk4;
+    Vec3s32 unk4;
     u8 padding[0xC];
     s32 unk1C;
     u8 padding2[0x4];

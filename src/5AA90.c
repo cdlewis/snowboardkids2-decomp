@@ -1,3 +1,4 @@
+#include "5AA90.h"
 #include "56910.h"
 #include "common.h"
 #include "gamestate.h"
@@ -7,12 +8,6 @@ extern u16 func_80060A3C_6163C(void *, u16, void *);
 extern s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3);
 extern s16 func_80062254_62E54(void *arg0, u16 arg1);
 extern s32 isqrt64(s64 val);
-
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-} Vec3s32;
 
 typedef struct ListNode_5AA90 {
     /* 0x00 */ struct ListNode_5AA90 *next;
@@ -139,21 +134,21 @@ void *func_8005B24C_5BE4C(Vec3s32 *arg0, s32 arg1, s32 arg2) {
 
         memcpy(&pos, &node->localPos, 0xC);
 
-        pos.x += node->posPtr->x;
-        pos.y += node->posPtr->y;
-        pos.z += node->posPtr->z;
+        pos.unk0 += node->posPtr->unk0;
+        pos.unk4 += node->posPtr->unk4;
+        pos.unk8 += node->posPtr->unk8;
 
-        pos.x -= arg0->x;
-        pos.y -= arg0->y;
-        pos.z -= arg0->z;
+        pos.unk0 -= arg0->unk0;
+        pos.unk4 -= arg0->unk4;
+        pos.unk8 -= arg0->unk8;
 
         combinedRadius = node->radius + arg2;
 
-        if (-combinedRadius < pos.x && pos.x < combinedRadius && -combinedRadius < pos.y && pos.y < combinedRadius &&
-            -combinedRadius < pos.z && pos.z < combinedRadius) {
+        if (-combinedRadius < pos.unk0 && pos.unk0 < combinedRadius && -combinedRadius < pos.unk4 &&
+            pos.unk4 < combinedRadius && -combinedRadius < pos.unk8 && pos.unk8 < combinedRadius) {
             s32 dist;
 
-            dist = isqrt64((s64)pos.x * pos.x + (s64)pos.y * pos.y + (s64)pos.z * pos.z);
+            dist = isqrt64((s64)pos.unk0 * pos.unk0 + (s64)pos.unk4 * pos.unk4 + (s64)pos.unk8 * pos.unk8);
 
             if (dist < combinedRadius) {
                 u8 index = node->id;
@@ -173,20 +168,21 @@ s32 func_8005B400_5C000(Player *arg0, Vec3s32 *arg1, s32 arg2) {
 
     memcpy(&localVec, &arg0->unkAD4, 0xC);
 
-    localVec.x = localVec.x + arg0->worldPosX;
-    localVec.y = localVec.y + arg0->worldPosY;
-    localVec.z = localVec.z + arg0->worldPosZ;
+    localVec.unk0 = localVec.unk0 + arg0->worldPosX;
+    localVec.unk4 = localVec.unk4 + arg0->worldPosY;
+    localVec.unk8 = localVec.unk8 + arg0->worldPosZ;
 
-    localVec.x = localVec.x - arg1->x;
-    localVec.y = localVec.y - arg1->y;
-    localVec.z = localVec.z - arg1->z;
+    localVec.unk0 = localVec.unk0 - arg1->unk0;
+    localVec.unk4 = localVec.unk4 - arg1->unk4;
+    localVec.unk8 = localVec.unk8 - arg1->unk8;
 
     radius = arg0->unkAE0 + arg2;
     negRadius = -radius;
 
-    if (negRadius < localVec.x && localVec.x < radius && negRadius < localVec.y && localVec.y < radius &&
-        negRadius < localVec.z && localVec.z < radius) {
-        distSq = (s64)localVec.x * localVec.x + (s64)localVec.y * localVec.y + (s64)localVec.z * localVec.z;
+    if (negRadius < localVec.unk0 && localVec.unk0 < radius && negRadius < localVec.unk4 && localVec.unk4 < radius &&
+        negRadius < localVec.unk8 && localVec.unk8 < radius) {
+        distSq = (s64)localVec.unk0 * localVec.unk0 + (s64)localVec.unk4 * localVec.unk4 +
+                 (s64)localVec.unk8 * localVec.unk8;
         if (isqrt64(distSq) < radius) {
             return 1;
         }
