@@ -12,7 +12,6 @@ extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 extern void func_800BB928_B6208(void);
 extern s32 gControllerInputs;
 extern s8 *D_800BCB94_B7474[];
-extern void func_800585C8_591C8(s32);
 
 typedef struct {
     void *unk0;

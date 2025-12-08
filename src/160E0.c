@@ -1,4 +1,5 @@
 #include "3A1F0.h"
+#include "3E160.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
@@ -15,7 +16,6 @@ void func_80015CA4_168A4(void);
 void func_80015DF4_169F4(void);
 void func_80016070_16C70(void);
 void func_80016150_16D50(void);
-extern void func_800585C8_591C8(s32);
 
 void func_800156AC_162AC(void);
 
