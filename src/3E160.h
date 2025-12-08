@@ -15,3 +15,4 @@ void func_80035260_35E60(s32 arg0, s32 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg
 void func_8002529C_25E9C(void *arg0);
 void func_8002AE80_2BA80(void *arg0);
 void func_8002B248_2BE48(void *arg0);
+s32 func_8002A390_2AF90(void *arg0);
