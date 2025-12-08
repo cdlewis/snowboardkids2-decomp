@@ -1,3 +1,4 @@
+#include "15690.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
@@ -6,7 +7,6 @@
 extern s32 isqrt64(s64 val);
 extern u8 D_800A8CC8_A0038;
 extern s16 identityMatrix[9];
-extern u8 func_8001523C_15E3C(void);
 extern void func_800182FC_18EFC(void);
 extern void func_80018580_19180(void);
 

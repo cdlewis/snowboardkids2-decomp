@@ -1,3 +1,4 @@
+#include "15690.h"
 #include "199C0.h"
 #include "1A770.h"
 #include "4050.h"
@@ -10,7 +11,6 @@
 extern u8 D_800A8A98_9FE08;
 extern u8 D_800A8CC8_A0038;
 extern void initializeGameState(void);
-extern u8 func_8001523C_15E3C(void);
 void func_80018F50_19B50(void);
 void func_80019078_19C78(void);
 void func_800191B4_19DB4(void);
