@@ -129,3 +129,5 @@ void func_80065DA8_669A8(s32 arg0, DisplayListObject *arg1);
 u16 func_800625A4_631A4(void *arg0, void *arg1);
 
 void func_80060CDC_618DC(void *arg0, u16 arg1, void *arg2, s32 arg3, s32 *arg4);
+
+s32 func_80061A64_62664(void *arg0, u16 arg1, void *arg2);

@@ -1,8 +1,8 @@
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 #include "rand.h"
 
-extern s32 func_80061A64_62664(void *, u16, void *);
 extern s32 func_80061D6C_6296C(void *, u16, void *, s32);
 extern void func_80062918_63518(void *, u16, void *, void *, void *);
 
