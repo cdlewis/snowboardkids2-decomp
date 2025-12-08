@@ -143,7 +143,6 @@ typedef struct {
 } Struct_func_8004D784;
 
 extern void func_8004E2D8_4EED8(void);
-extern void func_8003BD60_3C960(char *, s16, s16, s16, void *, s16, s16);
 
 void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
 void func_8004D464_4E064(Struct_func_8004D3A4 *);
