@@ -1,3 +1,4 @@
+#include "288A0.h"
 #include "36B80.h"
 #include "38310.h"
 #include "3E160.h"
@@ -9,7 +10,6 @@
 
 USE_ASSET(_4196E0);
 
-extern void func_80027CA0_288A0(void *, s32, s32, s32);
 extern void func_800373E0_37FE0(void);
 void func_800373B0_37FB0(void);
 void func_800376EC_382EC(void);
@@ -32,7 +32,7 @@ void func_80037270_37E70(void) {
 
     allocation = allocateTaskMemory(0x1F0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    func_80027CA0_288A0(allocation, 8, 0xF, 1);
+    func_80027CA0_288A0((Node_70B00 *)allocation, 8, 0xF, 1);
     func_8006FDA0_709A0(0, 0xFF, 0);
     func_8006FDA0_709A0(0, 0, 0x10);
     allocation->unk1D8 = dmaRequestAndUpdateStateWithSize(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
