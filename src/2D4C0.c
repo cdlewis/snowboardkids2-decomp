@@ -1,12 +1,11 @@
 #include "297B0.h"
+#include "2C8F0.h"
 #include "2DD40.h"
 #include "common.h"
 #include "gamestate.h"
 #include "task_scheduler.h"
 
 INCLUDE_ASM("asm/nonmatchings/2D4C0", func_8002C8C0_2D4C0);
-
-extern void func_8002BEF4_2CAF4(void *);
 
 typedef struct {
     /* 0x00 */ s32 unk0;
