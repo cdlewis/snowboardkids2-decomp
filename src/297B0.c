@@ -6,7 +6,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern void func_8002B248_2BE48(void *);
 extern void func_80028C08_29808(void);
 extern s32 func_8002A390_2AF90(void *);
 extern void func_80028AEC_296EC(void *);
