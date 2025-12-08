@@ -438,7 +438,7 @@ void *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
     return NULL;
 }
 
-s16 getFreeNodeCount(s32 arg0) {
+s32 getFreeNodeCount(s32 arg0) {
     return gActiveScheduler->counters[arg0];
 }
 

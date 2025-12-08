@@ -39,7 +39,6 @@ extern void func_8002ED40_2F940(s32);
 extern void func_8004FF60_50B60(s32);
 extern void func_8004F820_50420(void);
 extern void func_8004EDCC_4F9CC(s32);
-extern s32 getFreeNodeCount(s32);
 extern s8 D_800AFCE2_A7052;
 extern s32 D_80090460_91060[];
 extern s32 D_800904A0_910A0[];

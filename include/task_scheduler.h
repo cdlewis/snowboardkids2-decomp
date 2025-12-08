@@ -90,3 +90,5 @@ void func_800698CC_6A4CC(s8 value);
 u8 func_800698DC_6A4DC(void);
 
 void func_80069CF8_6A8F8(void);
+
+s32 getFreeNodeCount(s32 arg0);
