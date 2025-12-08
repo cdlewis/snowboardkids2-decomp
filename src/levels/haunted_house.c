@@ -96,7 +96,6 @@ typedef struct {
 extern void *func_80055D7C_5697C(s32);
 extern void func_800BB45C_AF14C(void **);
 extern void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
-extern u16 func_80060A3C_6163C(void *, u16, void *);
 extern s32 func_8005CFC0_5DBC0(void *, u16, void *, s32);
 extern void func_800BB620_AF310(void);
 extern void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);

@@ -1,10 +1,10 @@
 #include "5AA90.h"
 #include "56910.h"
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 
 extern void *getCurrentAllocation(void);
-extern u16 func_80060A3C_6163C(void *, u16, void *);
 extern s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3);
 extern s16 func_80062254_62E54(void *arg0, u16 arg1);
 extern s32 isqrt64(s64 val);
