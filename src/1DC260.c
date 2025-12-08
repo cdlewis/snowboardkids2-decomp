@@ -1,8 +1,8 @@
+#include "10AD0.h"
 #include "6E840.h"
 #include "common.h"
 
 INCLUDE_ASM("asm/nonmatchings/1DC260", func_800B00C0_1DC260);
-extern void func_80012004_12C04(void);
 
 void func_800B016C(void *arg0) {
     s16 temp_v1;

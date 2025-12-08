@@ -1,3 +1,4 @@
+#include "10AD0.h"
 #include "20F0.h"
 #include "36B80.h"
 #include "38C90.h"
@@ -21,7 +22,6 @@ extern void func_8001FFE4_20BE4(void);
 extern void func_8001FA00_20600(void);
 extern void func_8006D7B0_6E3B0(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32);
 extern void func_80035408_36008(void);
-extern void func_80012004_12C04(void);
 
 USE_ASSET(_458E30);
 USE_ASSET(_43A000);

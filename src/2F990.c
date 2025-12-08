@@ -1,4 +1,5 @@
 #include "2F990.h"
+#include "10AD0.h"
 #include "20F0.h"
 #include "38C90.h"
 #include "56910.h"
@@ -148,7 +149,6 @@ typedef struct {
 
 extern void func_8000FED0_10AD0(void);
 extern void func_80035408_36008(void);
-extern void func_80012004_12C04(void);
 
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];

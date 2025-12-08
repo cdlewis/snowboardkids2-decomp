@@ -1,3 +1,4 @@
+#include "10AD0.h"
 #include "36B80.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
@@ -111,7 +112,6 @@ typedef struct {
 extern u8 D_8008FD30_90930[];
 extern void *D_8008FE54_90A54[];
 extern void func_80035408_36008(void);
-extern void func_80012004_12C04(void);
 extern void func_80012FA8_13BA8(void);
 extern void func_80035DE0_369E0(void *, void *, s16, s16, u8, u8, void *, s32);
 

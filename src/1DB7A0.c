@@ -1,3 +1,4 @@
+#include "10AD0.h"
 #include "common.h"
 #include "overlay.h"
 #include "task_scheduler.h"
@@ -24,7 +25,6 @@ typedef struct {
 } Allocation_1DB7A0;
 
 extern void func_8000FED0_10AD0(void);
-extern void func_80012004_12C04(void);
 extern s16 D_800B09B8_1DC098[];
 extern s16 D_800B09BA_1DC09A[];
 extern s16 D_800B09A8_1DC088[];

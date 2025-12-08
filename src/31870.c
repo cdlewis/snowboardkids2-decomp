@@ -1,3 +1,4 @@
+#include "10AD0.h"
 #include "20F0.h"
 #include "288A0.h"
 #include "36B80.h"
@@ -275,7 +276,6 @@ typedef struct {
     void *unk2C;
 } func_8002FA1C_3061C_arg;
 
-extern void func_80012004_12C04(void);
 extern void func_80035408_36008(void);
 extern void func_800136E0_142E0(void);
 extern void func_80031138_31D38(void);
