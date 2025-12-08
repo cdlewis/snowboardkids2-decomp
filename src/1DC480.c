@@ -1,6 +1,5 @@
+#include "B040.h"
 #include "common.h"
-
-extern void *func_8000B714_C314(void *, s32, s32);
 
 typedef struct {
     u8 _pad960[0x960];

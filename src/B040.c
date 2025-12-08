@@ -33,11 +33,6 @@ typedef struct {
 } ArrayElement_B934; // size 0x8
 
 typedef struct {
-    s32 array_offset;
-    s32 count_offset;
-} Table_B934;
-
-typedef struct {
     s32 unk0;
     s32 unk4;
 } Table2DRow;
