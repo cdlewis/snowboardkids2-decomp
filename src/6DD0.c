@@ -4,6 +4,7 @@
 #include "task_scheduler.h"
 
 extern s32 func_8000A030_AC30(void *, s32);
+extern void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32);
 extern void func_8000A1E4_ADE4(void *, u16, s32, s32, s32, s32, s32, s32, s32, s32, s16);
 
 typedef struct {

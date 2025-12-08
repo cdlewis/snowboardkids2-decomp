@@ -183,6 +183,7 @@ void func_80000DA4_19A4(func_80000DA4_19A4_arg *arg0);
 void func_80001264_1E64(func_80000C2C_182C_arg *arg0);
 void func_800011DC_1DDC(void *);
 void func_80000CAC_18AC(func_80000C2C_182C_arg *);
+void func_8000A13C_AD3C(void *, u16, s32, s32, s32, s32, s32, s32, s32); /* extern */
 void func_80000A68_1668(func_80000C2C_182C_arg *);
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *);
 typedef struct {
