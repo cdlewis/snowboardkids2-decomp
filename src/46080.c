@@ -681,7 +681,6 @@ void func_80046708_47308(func_80046708_47308_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004674C_4734C);
 
 void func_8004674C_4734C(DisplayListObject *);
-extern void func_8006300C_63C0C(DisplayListObject *);
 
 void func_80046CB4_478B4(DisplayListObject *arg0) {
     func_8004674C_4734C(arg0);

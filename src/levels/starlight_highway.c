@@ -282,7 +282,6 @@ void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BB75C_ADB1C);
 
 extern void func_800BB75C_ADB1C(void *);
-extern void func_8006300C_63C0C(void *);
 extern void func_80063058_63C58(DisplayListObject *);
 
 void func_800BBB0C_ADECC(void *arg0) {
