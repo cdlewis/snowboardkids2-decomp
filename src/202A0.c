@@ -2,6 +2,7 @@
 #include "20F0.h"
 #include "36B80.h"
 #include "38C90.h"
+#include "3E160.h"
 #include "56910.h"
 #include "6E840.h"
 #include "EepromSaveData_type.h"
@@ -735,8 +736,6 @@ void func_80021778_22378(Func80021810Arg *arg0) {
 
     setCallback(&func_80021810_22410);
 }
-
-extern void func_80035260_35E60(s32, s32, s16, s16, u8, u8, u8, u8, u8);
 
 void func_80021810_22410(Func80021810Arg *arg0) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();

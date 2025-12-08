@@ -1,4 +1,5 @@
 #include "36B80.h"
+#include "3E160.h"
 #include "5E590.h"
 #include "68CF0.h"
 #include "common.h"
@@ -25,7 +26,6 @@ extern void *func_80055D7C_5697C(s32);
 extern void func_80040870_41470(void);
 extern void func_8004106C_41C6C(void);
 extern void *loadAsset_34F7E0(void);
-extern void func_80035260_35E60(s32, s32, s16, s16, u8, u8, u8, u8, u8);
 extern void func_8006D4B8_6E0B8(s32, s16, s16, s16, s32, u8, u8, u8, u8, u8, u8, u8, u8);
 void func_80040E00_41A00(func_80040E00_41A00_arg *);
 void func_80040F34_41B34(func_800407E0_413E0_arg *);
