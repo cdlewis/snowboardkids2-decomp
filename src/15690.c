@@ -5,7 +5,6 @@
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "task_scheduler.h"
-extern void func_8001452C_1512C(void);
 void func_80015218_15E18(void);
 void func_80014CC4_158C4(void);
 void func_800150DC_15CDC(void);
