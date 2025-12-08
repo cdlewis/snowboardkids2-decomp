@@ -1461,7 +1461,6 @@ s32 func_800B4A4C_A48FC(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-extern s32 isqrt64(s64 val);
 extern s16 func_8005CE98_5DA98(void *);
 extern void func_80051C08_52808(void *, s32);
 

@@ -464,8 +464,6 @@ s32 approximate_sqrt(u32 input) {
 
 INCLUDE_ASM("asm/nonmatchings/geometry", isqrt64);
 
-s32 isqrt64(s64 val);
-
 s32 distance_2d(s32 x, s32 y) {
     s64 x2 = (s64)x * x;
     s64 y2 = (s64)y * y;
