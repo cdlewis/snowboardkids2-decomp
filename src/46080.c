@@ -1,4 +1,5 @@
 #include "19E80.h"
+#include "51060.h"
 #include "56910.h"
 #include "594E0.h"
 #include "5AA90.h"
@@ -2073,7 +2074,6 @@ typedef struct {
     func_80066444_67044_arg1 unk4;
 } func_8004AD18_4B918_arg;
 
-extern void func_80050ECC_51ACC(void *arg0);
 extern void func_80058924_59524(Player *arg0);
 
 typedef struct {

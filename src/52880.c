@@ -1,3 +1,4 @@
+#include "51060.h"
 #include "5E590.h"
 #include "common.h"
 #include "displaylist.h"
@@ -191,7 +192,6 @@ void func_80052AB0_536B0(Struct_52880 *arg0) {
 extern Player *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
 extern void func_80058A68_59668(Player *arg0);
 extern void func_80059C24_5A824(Player *arg0);
-extern void func_80050ECC_51ACC(void *arg0);
 
 void func_80052B0C_5370C(Struct_52880 *arg0) {
     GameState *alloc;
@@ -364,7 +364,6 @@ void func_8005383C_5443C(Struct_52880 *arg0) {
 extern Player *func_8005C454_5D054(void *arg0, s16 arg1, s32 arg2, void *arg3);
 extern void func_80058AEC_596EC(Player *arg0, void *arg1);
 extern void func_80059C24_5A824(Player *arg0);
-extern void func_80050ECC_51ACC(void *arg0);
 
 void func_80053898_54498(Struct_52880 *arg0) {
     GameState *allocation;

@@ -1,3 +1,4 @@
+#include "51060.h"
 #include "56910.h"
 #include "5AA90.h"
 #include "5E590.h"
@@ -1684,8 +1685,6 @@ skip:
     func_8005D804_5E404(arg0, 3, 0);
     return 0;
 }
-
-extern void func_80050ECC_51ACC(void *arg0);
 
 s32 func_800B50C0_A4F70(func_800B30B0_arg *arg0) {
     s32 stackVec[3];
