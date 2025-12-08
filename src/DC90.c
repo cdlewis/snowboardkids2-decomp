@@ -1,10 +1,9 @@
 #include "36B80.h"
 #include "56910.h"
+#include "B040.h"
 #include "common.h"
 #include "graphics.h"
 #include "task_scheduler.h"
-
-extern void *func_8000B6B8_C2B8(s32);
 
 extern void func_80035260_35E60(s32, s32, s16, s16, u8, u8, u8, u8, u8);
 extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
