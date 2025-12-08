@@ -205,7 +205,6 @@ void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0);
 
 extern s32 identityMatrix[];
 extern void *D_80094DD0_959D0;
-extern s32 func_80055E40_56A40(s16);
 extern s32 func_80055E54_56A54(s16);
 
 typedef struct {
