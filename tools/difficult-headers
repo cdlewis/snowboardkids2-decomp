@@ -1,2 +1,6 @@
 src/cutscene/sys_effect.c:11
 src/7850.c:46
+src/1E1BA0.c:20
+src/1E1BA0.c:21
+src/594E0.c:16
+src/cutscene/cutscene_bgm.c:3
