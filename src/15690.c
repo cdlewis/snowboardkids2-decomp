@@ -1,11 +1,10 @@
 #include "15690.h"
+#include "3E160.h"
 #include "4050.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "task_scheduler.h"
-
-extern void initRace(void);
 extern void func_80033200_33E00(void);
 extern void func_8001452C_1512C(void);
 void func_80015218_15E18(void);
