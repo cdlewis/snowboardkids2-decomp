@@ -13,7 +13,6 @@ extern void func_8000056C_116C(s32, s32, void *);
 extern void func_80000460_1060(s32, void *, void *);
 extern void func_80000760_1360(void);
 extern u8 gConnectedControllerMask;
-extern void func_80012518_13118(void);
 
 typedef struct {
     s32 unk0;
