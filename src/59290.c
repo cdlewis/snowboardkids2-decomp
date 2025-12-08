@@ -1,9 +1,9 @@
 #include "common.h"
 #include "gamestate.h"
+#include "task_scheduler.h"
 
 extern u8 D_80093BB0_947B0[];
 extern u8 D_80093F7C_94B7C[];
-extern void *getCurrentAllocation(void);
 
 void func_80058690_59290(Player *player) {
     GameState *gameState;

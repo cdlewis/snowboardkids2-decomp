@@ -6,7 +6,6 @@
 #include "rand.h"
 
 extern void func_80058530_59130(s32, s32);
-extern void *getCurrentAllocation(void);
 extern void *func_80055E68_56A68(u8);
 extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);
