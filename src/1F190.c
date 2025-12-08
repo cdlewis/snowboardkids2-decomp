@@ -1,4 +1,5 @@
 #include "3A1F0.h"
+#include "3E160.h"
 #include "56910.h"
 #include "6E840.h"
 #include "common.h"
@@ -6,7 +7,6 @@
 
 extern void func_8001E5EC_1F1EC(void);
 extern void func_8001EB4C_1F74C(void);
-extern void func_80041518_42118(void *arg0);
 extern void func_800497FC_4A3FC(u8);
 extern void func_8001F6A0_202A0(void);
 void func_8001EB1C_1F71C(void);
