@@ -1,8 +1,7 @@
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "task_scheduler.h"
-
-extern s32 distance_2d(s32, s32);
 
 INCLUDE_ASM("asm/nonmatchings/1A110", func_80019510_1A110);
 

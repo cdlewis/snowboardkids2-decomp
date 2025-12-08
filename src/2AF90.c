@@ -4,7 +4,6 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern s32 distance_2d(s32, s32);
 extern s32 func_8002A4AC_2B0AC(void *, u8);
 extern s32 func_8002A7CC_2B3CC(void *);
 extern u16 D_8008E768_8F368[];

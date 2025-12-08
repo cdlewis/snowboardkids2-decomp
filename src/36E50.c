@@ -2,6 +2,7 @@
 #include "36BE0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
+#include "geometry.h"
 #include "graphics.h"
 #include "overlay.h"
 #include "task_scheduler.h"
@@ -153,7 +154,6 @@ extern void D_8008FAC0_906C0;
 extern u16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
 void func_80036920_37520(func_80036920_37520_arg *arg0);
-extern s32 distance_2d(s32, s32);
 
 void func_80036250_36E50(s8 *arg0) {
     *arg0 = 0;
