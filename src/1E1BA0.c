@@ -77,8 +77,6 @@ void func_800B4BDC_1E1C8C(s16 arg0, s16 arg1, s16 arg2, CutsceneSlotData *arg3) 
     func_80056D64_57964(buffer, soundId, 0, duration);
 }
 
-extern void func_80058220_58E20(s32, s32);
-
 void func_800B4C80_1E1D30(s16 arg0) {
     s16 temp;
 
