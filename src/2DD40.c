@@ -3,7 +3,6 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "task_scheduler.h"
 
-extern void func_8002EBB0_2F7B0(void *);
 extern void func_8002BEF4_2CAF4(void *);
 
 extern void func_8000A49C_B09C(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
