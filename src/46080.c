@@ -1,5 +1,6 @@
 #include "19E80.h"
 #include "56910.h"
+#include "594E0.h"
 #include "5AA90.h"
 #include "5E590.h"
 #include "6E840.h"
@@ -133,7 +134,6 @@ extern s32 D_80090B80_91780;
 
 extern s32 gFrameCounter;
 extern u16 D_8009ADE0_9B9E0;
-extern void func_80059A48_5A648(Player *, s32);
 
 void func_80047330_47F30(FunctionArg_80047330 *arg0);
 void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
