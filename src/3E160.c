@@ -28,7 +28,6 @@ extern u8 D_800A24A0_A30A0;
 extern void func_800404A8_410A8(void);
 extern void func_80040588_41188(void);
 extern void func_80040608_41208(void);
-extern void func_8004FF60_50B60(s32);
 extern void func_8004F820_50420(void);
 extern void func_8004EDCC_4F9CC(s32);
 extern s8 D_800AFCE2_A7052;
