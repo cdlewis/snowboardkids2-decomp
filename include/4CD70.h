@@ -42,6 +42,7 @@ typedef struct {
 
 void func_8004D8E4_4E4E4(Struct_func_8004D8E4 *arg0);
 void func_8004D9D0_4E5D0(void *arg0);
+void func_8004E6A4_4F2A4(s16 arg0, s16 arg1);
 void func_8004E6F8_4F2F8(Struct_func_8004E6F8 *arg0);
 void func_8004F1D4_4FDD4(Struct_func_8004F1D4 *arg0);
 void func_8005011C_50D1C(void);
