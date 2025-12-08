@@ -5,6 +5,7 @@
 #include "6E840.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "displaylist.h"
 #include "geometry.h"
 #include "overlay.h"
 #include "task_scheduler.h"
@@ -13,7 +14,6 @@ extern s32 func_8006FED8_70AD8(void *arg0);
 extern void *freeNodeMemory(void *);
 extern void func_8000FED0_10AD0(void);
 extern u8 identityMatrix[];
-extern u16 func_80060A3C_6163C(void *, u16, void *);
 extern u16 func_80062B1C_6371C(void *, u16, void *, void *);
 extern void computeLookAtMatrix(void *, void *, void *);
 extern void func_8006FD3C_7093C(u16, void *);

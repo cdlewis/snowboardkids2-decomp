@@ -671,7 +671,6 @@ void func_800554BC_560BC(Struct_52880 *arg0) {
 
 extern void func_80066444_67044(s32, void *);
 extern void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
-extern s16 func_80060A3C_6163C(void *arg0, u16 arg1, s32 *arg2);
 extern s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, s32 *arg2, s32 arg3);
 
 void func_80055650_56250(Struct_52880 *arg0);
