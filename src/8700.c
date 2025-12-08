@@ -1,7 +1,7 @@
 #include "common.h"
+#include "task_scheduler.h"
 
 extern u8 identityMatrix[];
-extern void setCleanupCallback(void *);
 extern void setCallback(void *);
 void func_80007E30_8A30(void);
 extern void func_80007B58_8758(void);
