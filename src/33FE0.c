@@ -1,11 +1,11 @@
 #include "56910.h"
+#include "6E840.h"
 #include "common.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
 extern void *func_80035F80_36B80(s32);
 extern void func_80034D58_35958(void);
-extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern void func_8000FED0_10AD0(void);
 extern void *getCurrentAllocation(void);
 extern void func_80012004_12C04(void);

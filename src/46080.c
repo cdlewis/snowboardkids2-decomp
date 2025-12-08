@@ -2,6 +2,7 @@
 #include "56910.h"
 #include "5AA90.h"
 #include "5E590.h"
+#include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -637,7 +638,6 @@ void func_800465A8_471A8(func_80046708_47308_arg *arg0) {
     setCallback(&func_80046628_47228);
 }
 
-extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_80046CB4_478B4(DisplayListObject *);
 extern void func_80046CE0_478E0(DisplayListObject *);
 extern void func_80046D0C_4790C(DisplayListObject *);

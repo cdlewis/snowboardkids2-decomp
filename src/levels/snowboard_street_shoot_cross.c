@@ -1,4 +1,5 @@
 #include "56910.h"
+#include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
@@ -57,7 +58,6 @@ void func_800BB2B0_ACD30(ACD30Struct *arg0) {
 INCLUDE_ASM("asm/nonmatchings/levels/snowboard_street_shoot_cross", func_800BB310_ACD90);
 
 extern void func_8005BCB8_5C8B8(void *, s32, s32);
-extern void debugEnqueueCallback(u16, u8, void *, void *);
 
 void func_800BB690_AD110(void);
 

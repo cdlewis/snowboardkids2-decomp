@@ -1,8 +1,7 @@
+#include "6E840.h"
 #include "common.h"
 
 INCLUDE_ASM("asm/nonmatchings/1DC260", func_800B00C0_1DC260);
-
-extern void debugEnqueueCallback(s32, s32, void *, s32);
 extern void func_80012004_12C04(void);
 
 void func_800B016C(void *arg0) {
@@ -54,8 +53,8 @@ void func_800B016C(void *arg0) {
         void *callback = func_80012004_12C04;
         *(s16 *)((u8 *)arg0 + 0xE1A) = shortVal;
         *(s16 *)((u8 *)arg0 + 0xE0A) = shortVal;
-        debugEnqueueCallback(1, 4, callback, (s32)arg0 + 0xE00);
-        debugEnqueueCallback(1, 4, callback, (s32)arg0 + 0xE10);
+        debugEnqueueCallback(1, 4, callback, (void *)((s32)arg0 + 0xE00));
+        debugEnqueueCallback(1, 4, callback, (void *)((s32)arg0 + 0xE10));
     }
 
     temp_v0 = *(s32 *)((u8 *)arg0 + 0xDF8);
@@ -64,7 +63,7 @@ void func_800B016C(void *arg0) {
         void *callback = func_80012004_12C04;
         *(s16 *)((u8 *)arg0 + 0xE3A) = shortVal;
         *(s16 *)((u8 *)arg0 + 0xE2A) = shortVal;
-        debugEnqueueCallback(1, 4, callback, (s32)arg0 + 0xE20);
-        debugEnqueueCallback(1, 4, callback, (s32)arg0 + 0xE30);
+        debugEnqueueCallback(1, 4, callback, (void *)((s32)arg0 + 0xE20));
+        debugEnqueueCallback(1, 4, callback, (void *)((s32)arg0 + 0xE30));
     }
 }

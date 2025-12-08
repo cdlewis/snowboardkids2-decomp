@@ -1,6 +1,7 @@
 #include "20F0.h"
 #include "38C90.h"
 #include "56910.h"
+#include "6E840.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "geometry.h"
@@ -9,7 +10,6 @@
 
 extern s32 func_8006FED8_70AD8(void *arg0);
 extern void *freeNodeMemory(void *);
-extern void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 extern void func_8000FED0_10AD0(void);
 extern u8 identityMatrix[];
 extern u16 func_80060A3C_6163C(void *, u16, void *);
