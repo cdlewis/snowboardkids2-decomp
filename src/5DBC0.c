@@ -3,9 +3,6 @@
 #include "gamestate.h"
 #include "rand.h"
 
-extern s32 func_80061D6C_6296C(void *, u16, void *, s32);
-extern void func_80062918_63518(void *, u16, void *, void *, void *);
-
 s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, void *arg2, s32 arg3) {
     return func_80061A64_62664(arg0, arg1, arg2);
 }
@@ -17,8 +14,6 @@ s32 func_8005CFDC_5DBDC(void *arg0, u16 arg1, void *arg2, s32 arg3, s32 arg4) {
 void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4) {
     func_80062918_63518(arg0, arg1, arg2, arg3, arg4);
 }
-
-extern s32 func_80062274_62E74(void *, u16);
 
 s32 func_8005D020_5DC20(void *arg0, u16 arg1) {
     return func_80062274_62E74(arg0, arg1);

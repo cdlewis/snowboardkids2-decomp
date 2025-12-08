@@ -134,4 +134,10 @@ void func_80060CDC_618DC(void *arg0, u16 arg1, void *arg2, s32 arg3, s32 *arg4);
 
 s32 func_80061A64_62664(void *arg0, u16 arg1, void *arg2);
 
+s32 func_80061D6C_6296C(void *arg0, u16 arg1, void *arg2, s32 arg3);
+
+s32 func_80062274_62E74(void *arg0, u16 arg1);
+
+void func_80062918_63518(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
+
 void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1);
