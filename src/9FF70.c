@@ -300,7 +300,6 @@ s32 func_800B12F0_A11A0(func_800B30B0_arg *arg0) {
 
 extern void func_80059BD4_5A7D4(void *);
 extern void func_8005D804_5E404(void *, u8, u8);
-extern void rotateVectorY(void *, s32, void *);
 
 s32 func_800B13D4_A1284(func_800B30B0_arg *arg0) {
     s32 sp10[3];

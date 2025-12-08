@@ -1011,8 +1011,6 @@ struct Func42E40Arg {
     u8 unk42;              /* 0x42 */
 };
 
-extern void rotateVectorY(void *, s32, void *);
-
 void func_80042E40_43A40(struct Func42E40Arg *arg0) {
     Func43CA4GameState *gameState;
     s32 i;

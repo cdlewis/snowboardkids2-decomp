@@ -93,7 +93,6 @@ typedef struct {
     s16 unk28;
 } func_800BBC64_AF954_arg;
 
-extern void rotateVectorY(Vec3 *, s32, void *);
 extern void *func_80055D7C_5697C(s32);
 extern void func_80069CF8_6A8F8(void);
 extern void func_800BB45C_AF14C(void **);
