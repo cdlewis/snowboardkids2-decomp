@@ -1,4 +1,5 @@
 #include "3A1F0.h"
+#include "3E160.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
@@ -20,7 +21,6 @@ typedef struct {
     u16 unk18A0;
 } Allocation232F0;
 
-extern void func_8002529C_25E9C(void);
 void func_80022CEC_238EC(void);
 void func_80022D74_23974(void);
 void func_80023D74_24974(void);
