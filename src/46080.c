@@ -119,7 +119,6 @@ typedef struct {
 
 void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
 extern void func_8004562C_4622C(void);
-extern void func_80065DA8_669A8(s32, DisplayListObject *);
 extern void rotateVectorY(void *, s32, void *);
 extern void func_80056B7C_5777C(void *, s32);
 

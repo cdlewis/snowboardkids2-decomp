@@ -120,3 +120,5 @@ void loadAssetMetadataByIndex(
 void func_80067EDC_68ADC(s32, loadAssetMetadata_arg *);
 
 void func_8006395C_6455C(DisplayListObject *arg0);
+
+void func_80065DA8_669A8(s32 arg0, DisplayListObject *arg1);
