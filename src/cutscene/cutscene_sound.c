@@ -5,7 +5,6 @@ extern s32 gControllerInputs[4];
 
 extern void func_800B4C80_1E1D30(void);
 extern void func_800B4CB0_1E1D60(void);
-extern void func_800B4B30_1E1BE0(s16, s16, s16, s16);
 extern void func_800B57F0_1E28A0(s16, s16, s16, s16, s16, s16);
 extern void func_800B4BDC_1E1C8C(s16, s16, s16, CutsceneSlotData *);
 extern void func_800B598C_1E2A3C(s16, s16, s16, s16, s16, CutsceneSlotData *);

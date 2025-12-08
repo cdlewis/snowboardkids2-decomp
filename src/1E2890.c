@@ -1,9 +1,9 @@
 #include "1DFAA0.h"
+#include "3E160.h"
 #include "common.h"
 #include "task_scheduler.h"
 
 extern s8 D_800BAF08_1E7FB8;
-extern void func_800B4B30_1E1BE0(s16, s16, s16, s16);
 extern void func_800B4BDC_1E1C8C(s16, s16, s16, CutsceneSlotData *);
 
 typedef struct {
