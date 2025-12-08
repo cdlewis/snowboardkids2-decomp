@@ -1,4 +1,5 @@
 #include "19E80.h"
+#include "3E160.h"
 #include "51060.h"
 #include "56910.h"
 #include "594E0.h"
@@ -532,8 +533,6 @@ void func_800462D8_46ED8(Struct_func_8004657C_4717C *arg0) {
             break;
     }
 }
-
-extern void func_80066444_67044(s32, func_80066444_67044_arg1 *);
 
 void func_800463F4_46FF4(Struct_func_8004657C_4717C *arg0) {
     s32 i;
