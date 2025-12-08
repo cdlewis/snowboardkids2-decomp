@@ -1621,7 +1621,6 @@ typedef struct {
     void *unkC;
 } func_80049230_49E30_arg;
 
-extern void *allocateNodeMemory(s32 size);
 extern void func_80048F0C_49B0C(func_80048E34_49A34_arg *arg0, s32 arg1);
 void func_80049104_49D04(func_80048E34_49A34_arg *arg0);
 void func_80049230_49E30(func_80049230_49E30_arg *);
