@@ -11,6 +11,7 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "graphics.h"
+#include "levels/lindas_castle.h"
 #include "overlay.h"
 #include "rand.h"
 #include "task_scheduler.h"
@@ -27,7 +28,6 @@ extern u8 D_800A24A0_A30A0;
 extern void func_800404A8_410A8(void);
 extern void func_80040588_41188(void);
 extern void func_80040608_41208(void);
-extern void func_800BB2B0(void);
 extern void func_8004D8E4_4E4E4(void);
 extern void func_800574A0_580A0(s32);
 extern void func_8004E6A4_4F2A4(s32, s32);
