@@ -1,5 +1,6 @@
 #include "36B80.h"
 #include "3E160.h"
+#include "56910.h"
 #include "5E590.h"
 #include "68CF0.h"
 #include "common.h"
@@ -22,7 +23,6 @@ typedef struct {
 extern s32 gFrameCounter;
 extern s32 D_800907F8_913F8;
 
-extern void *func_80055D7C_5697C(s32);
 extern void func_80040870_41470(void);
 extern void func_8004106C_41C6C(void);
 extern void *loadAsset_34F7E0(void);
