@@ -692,8 +692,6 @@ void func_80046CE0_478E0(DisplayListObject *arg0) {
     func_80063058_63C58(arg0);
 }
 
-extern void func_800630A4_63CA4(DisplayListObject *);
-
 void func_80046D0C_4790C(DisplayListObject *arg0) {
     func_8004674C_4734C(arg0);
     func_800630A4_63CA4(arg0);

@@ -82,6 +82,8 @@ void func_8006300C_63C0C(DisplayListObject *arg0);
 
 void func_80063058_63C58(DisplayListObject *arg0);
 
+void func_800630A4_63CA4(DisplayListObject *arg0);
+
 typedef struct {
     s32 unk0;
     Vec3s32 unk4;
