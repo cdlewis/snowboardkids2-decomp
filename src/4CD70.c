@@ -1,3 +1,4 @@
+#include "4CD70.h"
 #include "10AD0.h"
 #include "19E80.h"
 #include "56910.h"
@@ -1023,19 +1024,6 @@ void func_8004E6A4_4F2A4(s16 arg0, s16 arg1) {
 }
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 padA[0x2];
-} Element_8004E6F8; // size 0xC
-
-typedef struct {
-    Element_8004E6F8 elements[3]; // offset 0x0, size 0x24
-    void *unk24;                  // offset 0x24
-} Struct_func_8004E6F8;
-
-typedef struct {
     u8 pad0[0x4];
     void *unk4;
     u8 pad8[0x1C];
@@ -1415,20 +1403,6 @@ void func_8004F194_4FD94(s16 arg0) {
         task->unkC = arg0;
     }
 }
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    u8 unkE;
-    u8 padF;
-    void *unk10;
-    s32 unk14;
-} Struct_func_8004F1D4;
 
 void func_8004F27C_4FE7C(Struct_func_8004F1D4 *);
 void func_8004F3EC_4FFEC(Struct_func_8004DCC4 *);
