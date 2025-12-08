@@ -30,3 +30,4 @@ u8 func_80038000_38C00(u8 arg0);
 u8 func_80038058_38C58(u8 arg0);
 s32 func_80038070_38C70(void);
 s16 func_80069810_6A410(void);
+void loadOverlay_1BBA0(void);

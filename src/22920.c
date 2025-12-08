@@ -66,7 +66,6 @@ void func_80021E18_22A18(void) {
     }
 }
 
-extern void loadOverlay_1BBA0(void);
 void func_80021E9C_22A9C(void);
 
 void func_80021E6C_22A6C(void) {
