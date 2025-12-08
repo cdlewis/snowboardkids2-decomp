@@ -44,6 +44,7 @@ void *func_80055DF8_569F8(s32 index);
 void *func_80055DC4_569C4(s32 index);
 D_80090F90_91B90_item *func_80055D10_56910(s32 index);
 s32 func_80055E40_56A40(s32 arg0);
+s32 func_80055E54_56A54(s32 arg0);
 
 void *loadAsset_B7E70(void);
 void *loadAsset_216290(void);
