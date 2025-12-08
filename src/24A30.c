@@ -6,6 +6,7 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 #include "overlay.h"
@@ -138,7 +139,6 @@ typedef struct {
 } func_80024048_arg;
 
 extern s32 identityMatrix[];
-extern void func_800650B4_65CB4(u8, void *);
 extern s32 D_8008DD2C_8E92C[];
 
 void func_80024220_24E20(func_80024220_24E20_arg *);
@@ -205,7 +205,7 @@ after_rotation:
             arg0->unk2C = freeNodeMemory(arg0->unk2C);
             setCallback(func_80024220_24E20);
         } else {
-            func_800650B4_65CB4(arg0->unkA1, arg0);
+            func_800650B4_65CB4(arg0->unkA1, (DisplayListObject *)arg0);
         }
     }
 }
@@ -251,7 +251,7 @@ void func_80024414_25014(func_80024518_arg *arg0) {
     func_8006B084_6BC84(&arg0->unk3C, &arg0->unk5C, localPtr);
     func_8006B084_6BC84(localPtr, &arg0->unk7C, arg0);
 
-    func_800650B4_65CB4(arg0->unkA1, arg0);
+    func_800650B4_65CB4(arg0->unkA1, (DisplayListObject *)arg0);
 
     if (arg0->unk7C.unk14 == 0) {
         *(base + arg0->unkA1 + 0x18C4) = *(base + arg0->unkA1 + 0x18C4) + 1;
@@ -278,7 +278,7 @@ void func_80024518_25118(func_80024518_arg *arg0) {
     func_8006B084_6BC84(&arg0->unk3C, &arg0->unk5C, localPtr);
     func_8006B084_6BC84(localPtr, &arg0->unk7C, arg0);
 
-    func_800650B4_65CB4(arg0->unkA1, arg0);
+    func_800650B4_65CB4(arg0->unkA1, (DisplayListObject *)arg0);
 
     val = base->unk1898[arg0->unkA1];
     if (val != 4 && val != 9) {
