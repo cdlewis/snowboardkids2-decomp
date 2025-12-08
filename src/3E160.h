@@ -2,6 +2,18 @@
 
 #include "common.h"
 
+typedef struct {
+    u8 padding[0x14];
+} D_8008D7FC_8E3FC_item;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    D_8008D7FC_8E3FC_item *unk8;
+} func_80019CD0_1A8D0_arg;
+
 void func_80014480_15080(void);
 void func_8001452C_1512C(void);
 void func_80033200_33E00(void);
@@ -10,6 +22,7 @@ void func_80021BD0_227D0(void);
 void func_80022130_22D30(void);
 void func_800226F0_232F0(void);
 void func_80018EB0_19AB0(void);
+void func_80019CD0_1A8D0(func_80019CD0_1A8D0_arg *arg0);
 void func_8001C920_1D520(void);
 void func_80003EE0_4AE0(void);
 void func_8001E5C0_1F1C0(void);

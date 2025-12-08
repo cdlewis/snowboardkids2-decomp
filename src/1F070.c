@@ -1,9 +1,9 @@
 #include "288A0.h"
+#include "3E160.h"
 #include "6E840.h"
 #include "common.h"
 #include "task_scheduler.h"
 
-extern void func_80019CD0_1A8D0(void);
 extern s32 gControllerInputs;
 
 void func_8001E508_1F108(void);

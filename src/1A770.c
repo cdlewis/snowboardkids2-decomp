@@ -15,18 +15,6 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    u8 padding[0x14];
-} D_8008D7FC_8E3FC_item;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    D_8008D7FC_8E3FC_item *unk8;
-} func_80019CD0_1A8D0_arg;
-
-typedef struct {
     Node_70B00 unk0;
     Node_70B00 unk1D8;
     Node_70B00 unk3B0;
