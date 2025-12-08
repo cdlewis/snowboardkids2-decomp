@@ -113,7 +113,6 @@ typedef struct {
 
 extern u8 D_8008FD30_90930[];
 extern void *D_8008FE54_90A54[];
-extern void func_80035DE0_369E0(void *, void *, s16, s16, u8, u8, void *, s32);
 
 void func_80037E40_38A40(func_80037E40_38A40_arg *);
 void func_80037D18_38918(void);

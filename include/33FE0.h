@@ -13,3 +13,4 @@ typedef struct {
 } Func80035408Arg;
 
 void func_80035408_36008(Func80035408Arg *arg0);
+void func_80035DE0_369E0(void *, void *, s16, s16, u8, u8, void *, s32);
