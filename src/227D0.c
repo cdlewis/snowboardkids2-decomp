@@ -3,8 +3,6 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern void func_8001E5C0_1F1C0(void);
-
 void func_80021C90_22890(void);
 void func_80021C00_22800(void);
 void func_80021CE4_228E4(void);

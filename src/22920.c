@@ -88,7 +88,6 @@ void func_80021E9C_22A9C(void) {
     }
 }
 
-extern void func_8001E5C0_1F1C0(void);
 void func_80021F2C_22B2C(void);
 void func_80021F80_22B80(void);
 
