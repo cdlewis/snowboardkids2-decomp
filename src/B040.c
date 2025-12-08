@@ -1,3 +1,4 @@
+#include "B040.h"
 #include "90F0.h"
 #include "common.h"
 #include "geometry.h"
@@ -40,8 +41,6 @@ typedef struct {
     s32 unk0;
     s32 unk4;
 } Table2DRow;
-
-extern void func_8000A510_B110(s32, s16, s16, s16, void *, s32, s8, u8, u8, s16);
 
 void func_8000A49C_B09C(s32, s16, s16, s16, void *, s32, s8, u8, u8, s16);
 
