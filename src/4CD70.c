@@ -1,6 +1,7 @@
 #include "4CD70.h"
 #include "10AD0.h"
 #include "19E80.h"
+#include "3E160.h"
 #include "56910.h"
 #include "5E590.h"
 #include "68CF0.h"
@@ -142,7 +143,6 @@ typedef struct {
 } Struct_func_8004D784;
 
 extern void func_8004E2D8_4EED8(void);
-extern void func_8005100C_51C0C(s32, s32, s32, s32, s32);
 extern void func_8003BD60_3C960(char *, s16, s16, s16, void *, s16, s16);
 
 void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
