@@ -198,8 +198,6 @@ void func_800B4D74_1E1E24(func_800B4D74_1E1E24_arg *arg0) {
     }
 }
 
-extern void func_80069CF8_6A8F8(void);
-
 void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0) {
     Mat3x3Padded matrix;
     s32 temp_v0;

@@ -892,8 +892,6 @@ void func_800B46E0(s32 arg0, s8 arg1, s16 arg2) {
     }
 }
 
-extern void func_80069CF8_6A8F8(void);
-
 typedef struct {
     void *start;
     void *end;

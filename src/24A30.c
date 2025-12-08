@@ -141,7 +141,6 @@ extern void debugEnqueueCallback(u16, u8, void *, void *);
 extern s32 identityMatrix[];
 extern void func_800650B4_65CB4(u8, void *);
 extern s32 D_8008DD2C_8E92C[];
-extern void func_80069CF8_6A8F8(void);
 
 void func_80024220_24E20(func_80024220_24E20_arg *);
 void func_80024298_24E98(void *);

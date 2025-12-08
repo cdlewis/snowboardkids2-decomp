@@ -1,11 +1,8 @@
 #include "1DFAA0.h"
 #include "common.h"
+#include "task_scheduler.h"
 
 extern s8 D_800BAF08_1E7FB8;
-extern void setCleanupCallback(void *);
-extern void setCallback(void *);
-extern void *scheduleTask(void *, u8, u8, u8);
-extern void func_80069CF8_6A8F8(void);
 extern void func_800B4B30_1E1BE0(s16, s16, s16, s16);
 extern void func_800B4BDC_1E1C8C(s16, s16, s16, CutsceneSlotData *);
 

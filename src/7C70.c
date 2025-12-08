@@ -1,14 +1,11 @@
 #include "common.h"
 #include "geometry.h"
+#include "task_scheduler.h"
 
 extern s32 func_80009E68_AA68(void *, s16);
 extern void func_80009F5C_AB5C(s32 *);
 extern void func_80009F90_AB90(void *, s32, s32, s32);
-extern void func_80069CF8_6A8F8(void);
-extern void setCleanupCallback(void *);
-extern void setCallback(void *);
 extern u8 randA(void);
-extern void *scheduleTask(void *, u8, u8, u8);
 
 extern s32 D_8008C190_8CD90[];
 extern s32 D_8008C194_8CD94[];

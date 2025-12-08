@@ -129,7 +129,6 @@ extern s32 D_80090B98_91798[];
 extern s32 D_80090BB0_917B0;
 extern s32 D_80090B80_91780;
 
-extern void func_80069CF8_6A8F8(void);
 extern s32 gFrameCounter;
 extern u16 D_8009ADE0_9B9E0;
 extern void *func_8005B24C_5BE4C(void *arg0, s32 arg1, s32 arg2);

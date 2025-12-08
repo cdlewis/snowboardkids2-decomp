@@ -396,9 +396,7 @@ void func_80053898_54498(Struct_52880 *arg0) {
     }
 }
 
-extern void setCallback(void *);
 extern void func_80042340_42F40(void *);
-extern void func_80069CF8_6A8F8(void);
 extern void func_80066444_67044(s32, void *);
 extern void func_80053B38_54738(void);
 
@@ -672,7 +670,6 @@ void func_800554BC_560BC(Struct_52880 *arg0) {
     }
 }
 
-extern void func_80069CF8_6A8F8(void);
 extern void func_80066444_67044(s32, void *);
 extern void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
 extern s16 func_80060A3C_6163C(void *arg0, u16 arg1, s32 *arg2);
@@ -827,7 +824,6 @@ void func_80055900_56500(Struct_52880 *arg0) {
     }
 }
 
-extern void func_80069CF8_6A8F8(void);
 extern void func_80066444_67044(s32, void *);
 extern void func_80055A84_56684(void);
 

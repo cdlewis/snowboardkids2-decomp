@@ -251,8 +251,6 @@ void func_800BB664_ADA24(func_800BB664_arg *arg0) {
     func_800BB51C_AD8DC(arg0);
 }
 
-extern void func_80069CF8_6A8F8(void);
-
 void func_800BB6C0_ADA80(func_800BB664_arg *arg0) {
     Allocation_ADA24 *allocation = getCurrentAllocation();
 

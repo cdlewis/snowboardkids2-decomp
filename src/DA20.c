@@ -7,7 +7,6 @@
 USE_ASSET(_647F90);
 
 extern void *D_8008CDD0_8D9D0;
-extern void func_80069CF8_6A8F8(void);
 
 void func_8000CFA0_DBA0(void **);
 
