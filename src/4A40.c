@@ -1,3 +1,5 @@
+#include "1DC480.h"
+#include "1DC900.h"
 #include "20F0.h"
 #include "6E840.h"
 #include "common.h"
@@ -38,10 +40,7 @@ static asset D_8008BFA0_8CBA0[6] = {
 void func_80004368_4F68(void);
 void func_80004454_5054(void);
 void func_8000454C_514C(void);
-extern void func_800B02E0(void *);
-extern void func_800B0760(void *);
 extern void func_800B00C0_9FF70(void *);
-extern void func_800B0930(void *);
 extern void func_800B016C(void *);
 void func_80004570_5170(void *);
 

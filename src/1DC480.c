@@ -1,3 +1,4 @@
+#include "1DC480.h"
 #include "B040.h"
 #include "common.h"
 
@@ -36,33 +37,34 @@ typedef struct {
     s16 unk9B2;
 } func_800B02E0_arg;
 
-void func_800B02E0(func_800B02E0_arg *arg0) {
+void func_800B02E0(void *arg0) {
+    func_800B02E0_arg *typedArg = (func_800B02E0_arg *)arg0;
     void *temp;
 
-    arg0->unk9A0 = -1;
-    temp = arg0->unk960;
-    arg0->unk96C = 0;
-    arg0->unk96E = 0;
-    arg0->unk978 = 0xFF;
-    arg0->unk97A = 0xFF;
-    arg0->unk97C = 0;
-    arg0->unk980 = 0;
-    arg0->unk982 = 0;
-    arg0->unk974 = temp;
-    arg0->unk988 = arg0->unk960;
-    arg0->unk984 = func_8000B714_C314(arg0->unk964, arg0->unk9A0, 0);
-    arg0->unk98C = 0xFF;
-    arg0->unk98E = 0xFF;
-    arg0->unk990 = 2;
-    arg0->unk9A4 = 0;
-    arg0->unk9A6 = 0;
-    arg0->unk9AC = 0;
-    arg0->unk99C = NULL;
-    arg0->unk998 = NULL;
-    arg0->unk9B0 = 0;
-    arg0->unk9B2 = 0;
-    arg0->unk9AE = 0;
-    arg0->unk994 = NULL;
+    typedArg->unk9A0 = -1;
+    temp = typedArg->unk960;
+    typedArg->unk96C = 0;
+    typedArg->unk96E = 0;
+    typedArg->unk978 = 0xFF;
+    typedArg->unk97A = 0xFF;
+    typedArg->unk97C = 0;
+    typedArg->unk980 = 0;
+    typedArg->unk982 = 0;
+    typedArg->unk974 = temp;
+    typedArg->unk988 = typedArg->unk960;
+    typedArg->unk984 = func_8000B714_C314(typedArg->unk964, typedArg->unk9A0, 0);
+    typedArg->unk98C = 0xFF;
+    typedArg->unk98E = 0xFF;
+    typedArg->unk990 = 2;
+    typedArg->unk9A4 = 0;
+    typedArg->unk9A6 = 0;
+    typedArg->unk9AC = 0;
+    typedArg->unk99C = NULL;
+    typedArg->unk998 = NULL;
+    typedArg->unk9B0 = 0;
+    typedArg->unk9B2 = 0;
+    typedArg->unk9AE = 0;
+    typedArg->unk994 = NULL;
 }
 
 INCLUDE_ASM("asm/nonmatchings/1DC480", func_800B0388_1DC528);
