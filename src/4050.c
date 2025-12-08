@@ -1,5 +1,6 @@
 #include "1DFAA0.h"
 #include "1E60D0.h"
+#include "3E160.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
@@ -34,7 +35,6 @@ D_8008BF90_8CB90_type D_8008BF90_8CB90 = { .unk0 = 0,
                                            .unk8 = { .half = { .lower = 0, .upper = 0 } },
                                            .unkC = { .half = { .lower = 0, .upper = 2 } } };
 
-extern void func_80014480_15080(void);
 extern s16 D_800AB070_A23E0;
 extern s16 D_800AFEF0_A7260;
 typedef struct {

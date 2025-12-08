@@ -2,6 +2,7 @@
 
 #include "common.h"
 
+void func_80014480_15080(void);
 void func_8001452C_1512C(void);
 void func_80033200_33E00(void);
 void initRace(void);
