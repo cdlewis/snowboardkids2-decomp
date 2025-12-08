@@ -19,7 +19,6 @@ USE_ASSET(_67E860)
 
 void *func_8000B6B8_C2B8(s32);
 void *func_80035F80_36B80(s32);
-extern void func_80002040_2C40(void *);
 
 typedef struct {
     void *start;
