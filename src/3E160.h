@@ -26,3 +26,4 @@ void func_80041518_42118(void *arg0);
 void func_800497FC_4A3FC(s32 poolId);
 s32 func_80037FE0_38BE0(u8 arg0);
 u8 func_80038000_38C00(u8 arg0);
+u8 func_80038058_38C58(u8 arg0);

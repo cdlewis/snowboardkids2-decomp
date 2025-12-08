@@ -37,7 +37,6 @@ typedef struct {
 } D_8008D348_Entry;
 
 extern D_8008D348_Entry D_8008D348_8DF48[];
-extern u8 func_80038058_38C58(u8);
 extern u8 func_80038070_38C70(void);
 
 typedef struct {
