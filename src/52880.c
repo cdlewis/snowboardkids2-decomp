@@ -192,7 +192,6 @@ extern Player *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
 extern void func_80058A68_59668(Player *arg0);
 extern void func_80059C24_5A824(Player *arg0);
 extern void func_80050ECC_51ACC(void *arg0);
-extern void func_80056B7C_5777C(void *arg0, s16 arg1);
 
 void func_80052B0C_5370C(Struct_52880 *arg0) {
     GameState *alloc;

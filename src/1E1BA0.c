@@ -3,6 +3,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -18,7 +19,6 @@ extern s16 D_800BAA60_1E7B10[];
 extern void func_80057ABC_586BC(s32, s32);
 extern void func_80058360_58F60(s32, s32, s32, s32);
 extern void func_80057DF0_589F0(s32, s32, s32, s32, s32);
-extern void func_80056B7C_5777C(void *, s16);
 extern void func_80056D64_57964(void *, s16, s16, s16);
 
 s16 func_800B4AF0_1E1BA0(void) {
