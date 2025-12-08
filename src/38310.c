@@ -14,34 +14,6 @@ USE_ASSET(_4237C0);
 USE_ASSET(_426EF0);
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    u8 padE[2];
-} Entry1;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    void *unk8;
-    s16 unkC;
-    s16 unkE;
-    u8 unk10;
-    u8 pad11[3];
-} Entry2;
-
-typedef struct {
-    Entry1 entries1[4];
-    Entry2 entries2[4];
-    void *unk90;
-} func_80037BFC_387FC_arg;
-
-typedef struct {
     u8 pad[0x8];
     void *unk8;
     u8 pad2[0xC];
