@@ -103,7 +103,6 @@ typedef struct {
 } func_8000A8B8_arg;
 
 extern s32 func_8000A030_AC30(void *, s32);
-extern void func_8000A13C_AD3C(void *, s32, s32, s32, s32, s32, s32, s16, u8);
 
 func_8000A834_B434_ret *func_8000A834_B434(func_8000A834_B434_arg *arg0, s16 arg1) {
     if (arg1 != 0 && arg0->unk0 != NULL) {
