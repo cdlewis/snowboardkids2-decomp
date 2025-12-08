@@ -1,4 +1,5 @@
 #include "common.h"
+#include "main.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -11,7 +12,6 @@ typedef struct {
     void *unk4;
 } func_80002FD4_3BD4_arg;
 
-extern void func_80000760_1360(void *);
 void func_80002FD4_3BD4(func_80002FD4_3BD4_arg *arg0);
 
 void func_80002F80_3B80(void *arg0, void *arg1) {
