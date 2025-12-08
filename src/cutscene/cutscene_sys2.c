@@ -6,8 +6,6 @@ extern void func_8000C2CC_CECC(void *, s32, s16);
 extern void func_8000C334_CF34(void *, Vec3 *, s16);
 extern void func_8000C2B4_CEB4(void *, s32);
 
-void func_800B29F0_1DFAA0(void *);
-
 extern void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *);
 
 void cutsceneSys2Wipe_init(void) {
@@ -53,11 +51,11 @@ s32 cutsceneSys2Wait_validate(void) {
     return 0;
 }
 
-void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, u8 *arg1, s8 arg2) {
+void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, func_800B29F0_1DFAA0_arg *arg1, s8 arg2) {
     cutsceneSys2Wait_exec_asset *temp_v0;
     s32 *ptr;
 
-    ptr = (s32 *)(arg1 + (arg2 * 244 + 0xA8));
+    ptr = (s32 *)((u8 *)arg1 + (arg2 * 244 + 0xA8));
     func_800B29F0_1DFAA0(arg1);
 
     temp_v0 = (cutsceneSys2Wait_exec_asset *)scheduleTask(&func_800B993C_1E69EC, 1, 0, 0x64);
@@ -68,6 +66,6 @@ void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, u8 *arg1, s8 arg2) 
         temp_v0->unk12 = arg0->unk4;
         temp_v0->unk86 = arg0->unk0;
     } else {
-        arg1[0xFF7] = 0;
+        arg1->unkFF7 = 0;
     }
 }

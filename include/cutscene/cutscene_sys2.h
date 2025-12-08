@@ -1,3 +1,4 @@
+#include "1DFAA0.h"
 #include "common.h"
 
 typedef struct {
@@ -87,4 +88,4 @@ void cutsceneSys2Wipe_exec(cutsceneSys2Wipe_exec_arg0 *params, cutsceneSys2Wipe_
 s32 cutsceneSys2Wipe_isDone(void);
 void cutsceneSys2Wait_init(void);
 s32 cutsceneSys2Wait_validate(void);
-void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, u8 *arg1, s8 arg2);
+void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, func_800B29F0_1DFAA0_arg *arg1, s8 arg2);
