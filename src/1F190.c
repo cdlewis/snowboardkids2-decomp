@@ -1,3 +1,4 @@
+#include "202A0.h"
 #include "3A1F0.h"
 #include "3E160.h"
 #include "56910.h"
@@ -7,7 +8,6 @@
 
 extern void func_8001E5EC_1F1EC(void);
 extern void func_8001EB4C_1F74C(void);
-extern void func_8001F6A0_202A0(void);
 void func_8001EB1C_1F71C(void);
 void func_8001F33C_1FF3C(void);
 void func_8001F358_1FF58(void);
