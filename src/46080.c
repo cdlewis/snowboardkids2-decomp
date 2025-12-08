@@ -342,7 +342,6 @@ typedef struct {
     void *unk28;
 } func_8004592C_4652C_arg;
 
-extern u16 func_800625A4_631A4(void *, void *);
 void func_80045878_46478(void);
 void func_8004592C_4652C(func_8004592C_4652C_arg *);
 
