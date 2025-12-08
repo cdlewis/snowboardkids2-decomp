@@ -20,9 +20,11 @@ src/7850.c:42
 src/7C70.c:8
 src/7850.c:43
 src/7C70.c:14
+src/6DD0.c:6
+src/main.c:201
 src/8DC0.c:6
 src/B040.c:105
-src/6DD0.c:6
+src/6DD0.c:7
 src/main.c:202
 src/22D30.c:30
 src/4050.c:63
