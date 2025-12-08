@@ -1,12 +1,12 @@
 #include "36B80.h"
 #include "3E160.h"
+#include "90F0.h"
 #include "B040.h"
 #include "common.h"
 #include "cutscene/cutscene_sys2.h"
 #include "task_scheduler.h"
 
 extern void func_800B9440_1E64F0(void *);
-extern void *func_80009EF8_AAF8(s16);
 extern void func_800B99A0_1E6A50(void);
 extern u16 D_800BADF0_1E7EA0[];
 extern u16 D_800BADF2_1E7EA2[];
