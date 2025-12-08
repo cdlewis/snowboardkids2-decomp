@@ -1,4 +1,5 @@
 #include "common.h"
+#include "geometry.h"
 
 extern s32 func_80009E68_AA68(void *, s16);
 extern void func_80009F5C_AB5C(s32 *);
@@ -13,7 +14,6 @@ extern s32 D_8008C190_8CD90[];
 extern s32 D_8008C194_8CD94[];
 extern s32 D_8008C1F0_8CDF0;
 
-extern void transformVector2(s32 *matrix, s32 *vector, s32 *output);
 extern s32 func_8000A030_AC30(void *, s32);
 extern void
 func_8000A190_AD90(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);

@@ -3,7 +3,6 @@
 #include "task_scheduler.h"
 
 extern void func_8003C2BC_3CEBC(void);
-extern void transformVector2(s32 *input, Mat3x3Padded *mtx, s32 *output);
 
 typedef struct {
     s32 x;        /* 0x00 */

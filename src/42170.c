@@ -254,7 +254,6 @@ extern s8 D_8009095C_9155C;
 extern s32 D_80090AA0_916A0;
 extern s32 D_80090AAC_916AC;
 extern s8 D_80090950_91550;
-extern void transformVector2(void *matrix, void *vector, s32 *output);
 extern u16 func_800625A4_631A4(void *, void *);
 extern void func_80066444_67044(s32, void *);
 
