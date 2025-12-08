@@ -750,7 +750,6 @@ void func_800304B8_310B8(func_800308FC_314FC_arg *arg0) {
 }
 
 extern s32 D_8008F070_8FC70[];
-extern void func_80010240_10E40(void);
 extern s32 *D_800AFE8C_A71FC;
 
 void func_80030540_31140(func_80030540_31140_arg *arg0) {
