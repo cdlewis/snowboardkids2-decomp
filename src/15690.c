@@ -9,7 +9,6 @@ void func_80015218_15E18(void);
 void func_80014CC4_158C4(void);
 void func_800150DC_15CDC(void);
 void func_80015248_15E48(s32);
-extern void func_80021BD0_227D0(void);
 extern void func_80018EB0_19AB0(void);
 extern void func_8001C920_1D520(void);
 extern void func_80003EE0_4AE0(void);
