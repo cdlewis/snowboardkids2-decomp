@@ -114,16 +114,6 @@ typedef struct {
     void *unk4;
     s16 unk8;
     u8 padA[0x2];
-    void *unkC;
-    s16 unk10;
-} Struct_func_8004F04C;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 padA[0x2];
     s16 unkC;
     s16 unkE;
     void *unk10;
