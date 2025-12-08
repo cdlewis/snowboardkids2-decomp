@@ -1392,7 +1392,6 @@ typedef struct {
     u8 _pad14[0xC];
 } Element_80048720;
 
-extern void func_800670A4_67CA4(u8, func_80066444_67044_arg1 *);
 extern void func_80048540_49140(void);
 
 void func_8004841C_4901C(func_80048350_48F50_arg *arg0) {
