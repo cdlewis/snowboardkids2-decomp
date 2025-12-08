@@ -1,3 +1,4 @@
+#include "rand.h"
 #include "common.h"
 
 // Very basic random number generator that just walks through a pre-shuffled table in order.

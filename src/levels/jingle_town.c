@@ -2,8 +2,8 @@
 #include "displaylist.h"
 #include "geometry.h"
 #include "task_scheduler.h"
+#include "rand.h"
 
-extern u8 randA(void);
 extern void *func_80055E68_56A68(u8);
 extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);

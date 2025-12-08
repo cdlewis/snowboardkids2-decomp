@@ -1,6 +1,7 @@
 #include "common.h"
 #include "gamestate.h"
 #include "graphics.h"
+#include "rand.h"
 
 extern s32 func_80044050_44C50(void);
 extern u16 D_80093FCC_94BCC[];
@@ -12,7 +13,6 @@ extern u16 D_80094030_94C30[];
 extern u16 D_80094044_94C44[];
 extern u16 D_80094058_94C58[];
 extern void func_80056D64_57964(void *, u16, s16, s16);
-extern u8 randA(void);
 extern void func_8005D804_5E404(Player *, u8, u8);
 
 void func_800588E0_594E0(Player *arg0, s16 arg1, void *arg2) {
