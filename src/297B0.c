@@ -1,11 +1,11 @@
 #include "20F0.h"
+#include "3E160.h"
 #include "common.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern void func_8002AE80_2BA80(void *);
 extern void func_8002B248_2BE48(void *);
 extern void func_80028C08_29808(void);
 extern s32 func_8002A390_2AF90(void *);
