@@ -361,7 +361,6 @@ void func_8000E680_F280(void) {
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E6E0_F2E0);
 
-extern s16 func_80069810_6A410(void);
 extern void func_8000DCD8_E8D8(E770_struct *);
 
 void func_8000EC98_F898(void) {
