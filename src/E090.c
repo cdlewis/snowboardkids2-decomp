@@ -1,5 +1,6 @@
 #include "10AD0.h"
 #include "38C90.h"
+#include "3E160.h"
 #include "6E840.h"
 #include "common.h"
 #include "overlay.h"
@@ -8,8 +9,6 @@
 USE_ASSET(_67AB10);
 USE_ASSET(_67BEB0);
 USE_ASSET(_67DB80);
-
-extern void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 
 typedef struct {
     s16 unk0;

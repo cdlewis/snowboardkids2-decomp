@@ -18,3 +18,4 @@ void func_8002AE80_2BA80(void *arg0);
 void func_8002B248_2BE48(void *arg0);
 s32 func_8002A390_2AF90(void *arg0);
 void func_80066444_67044(s32 arg0, void *arg1);
+void func_8006BEDC_6CADC(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
