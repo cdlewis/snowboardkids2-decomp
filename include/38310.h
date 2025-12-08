@@ -29,3 +29,4 @@ typedef struct {
 } func_80037710_38310_arg;
 
 void func_80037710_38310(func_80037710_38310_arg *arg0);
+void func_800378AC_384AC(void);

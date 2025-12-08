@@ -9,7 +9,6 @@
 USE_ASSET(_4196E0);
 
 extern void func_80027CA0_288A0(void *, s32, s32, s32);
-extern void func_800378AC_384AC(void);
 extern void func_80037BFC_387FC(void);
 extern void func_80037E78_38A78(void);
 extern void func_800373E0_37FE0(void);
