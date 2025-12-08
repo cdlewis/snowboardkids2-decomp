@@ -85,4 +85,8 @@ s16 func_80069810_6A410(void);
 
 void func_8006983C_6A43C(void (*arg0)(void));
 
+void func_800698CC_6A4CC(s8 value);
+
+u8 func_800698DC_6A4DC(void);
+
 void func_80069CF8_6A8F8(void);

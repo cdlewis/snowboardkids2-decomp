@@ -151,7 +151,6 @@ typedef struct {
     void *bssEnd;
 } OverlayEntry;
 
-extern void func_800698CC_6A4CC(s32);
 extern void func_8003E4F0_3F0F0(void);
 
 extern u8 D_800A24A0_A30A0;
