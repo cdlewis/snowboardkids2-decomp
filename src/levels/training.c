@@ -1,3 +1,4 @@
+#include "36B80.h"
 #include "56910.h"
 #include "common.h"
 #include "overlay.h"
@@ -5,7 +6,6 @@
 
 USE_ASSET(_40E1C0);
 
-extern void *func_80035F80_36B80(s32);
 extern void func_800BB320_B5C00(void *);
 extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 extern void func_80035260_35E60(s32, s32, s32, s32, s32, s32, s32, s32, s32);

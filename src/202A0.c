@@ -1,4 +1,5 @@
 #include "20F0.h"
+#include "36B80.h"
 #include "38C90.h"
 #include "56910.h"
 #include "6E840.h"
@@ -710,7 +711,6 @@ void func_8002174C_2234C(Func800216ACArg *arg0) {
 }
 
 extern void *D_8008DC2C_8E82C[];
-extern void *func_80035F80_36B80(s32);
 
 void func_80021810_22410(Func80021810Arg *arg0);
 void func_80021880_22480(Func80021880Arg *arg0);

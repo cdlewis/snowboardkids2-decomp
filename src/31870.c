@@ -1,5 +1,6 @@
 #include "20F0.h"
 #include "288A0.h"
+#include "36B80.h"
 #include "38C90.h"
 #include "5E590.h"
 #include "68CF0.h"
@@ -151,7 +152,7 @@ typedef struct {
     s16 unk0;
     s16 unk2;
     void *unk4;
-    s32 unk8;
+    void *unk8;
     s16 unkC;
     s16 unkE;
     s8 unk10;
@@ -276,7 +277,6 @@ typedef struct {
 
 extern void func_80012004_12C04(void);
 extern void func_80035408_36008(void);
-extern s32 func_80035F80_36B80(s32);
 extern void func_800136E0_142E0(void);
 extern void func_80031138_31D38(void);
 
@@ -1317,7 +1317,7 @@ void func_80032F64_33B64(func_80032244_32E44_arg *arg0) {
 }
 
 void func_80032F90_33B90(func_80032F90_33B90_arg *arg0) {
-    s32 temp_s1 = func_80035F80_36B80(1);
+    void *temp_s1 = func_80035F80_36B80(1);
     setCleanupCallback(&func_80033088_33C88);
     arg0->unk2 = -0x60;
     arg0->unk4 = &D_8008F18C_8FD8C;

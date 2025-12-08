@@ -1,3 +1,4 @@
+#include "36B80.h"
 #include "6E840.h"
 #include "common.h"
 #include "graphics.h"
@@ -7,7 +8,6 @@
 USE_ASSET(_4196E0);
 
 extern void func_80027CA0_288A0(void *, s32, s32, s32);
-extern void *func_80035F80_36B80(s32);
 extern void func_80037710_38310(void);
 extern void func_800378AC_384AC(void);
 extern void func_80037BFC_387FC(void);

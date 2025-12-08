@@ -1,5 +1,6 @@
 #include "1A770.h"
 #include "288A0.h"
+#include "36B80.h"
 #include "3A1F0.h"
 #include "6E840.h"
 #include "clocktrigger_tower.h"
@@ -15,7 +16,6 @@ USE_ASSET(_45A890);
 
 extern u16 D_8008D6B0_8E2B0;
 extern u8 D_800A8CC8_A0038;
-extern void *func_80035F80_36B80(s32);
 extern void func_80017350_17F50;
 extern void func_80018800_19400;
 extern void func_80018A90_19690;
