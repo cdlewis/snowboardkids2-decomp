@@ -1,8 +1,8 @@
+#include "3E160.h"
 #include "common.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern void func_800226F0_232F0(void);
 extern void func_8001E5C0_1F1C0(void);
 
 void func_80021C90_22890(void);

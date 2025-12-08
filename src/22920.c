@@ -26,8 +26,6 @@ void func_80021D50_22950(void) {
     setGameStateHandler(func_80021D88_22988);
 }
 
-extern void func_800226F0_232F0(void);
-
 void func_80021DE8_229E8(void);
 void func_80021EFC_22AFC(void);
 void func_80021FB8_22BB8(void);

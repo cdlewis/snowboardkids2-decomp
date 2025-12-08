@@ -54,7 +54,6 @@ extern u8 D_800A8CC8_A0038;
 extern void func_8001E590_1F190(void);
 extern void func_80019E18_1AA18(void);
 
-extern void func_800226F0_232F0(void);
 extern void func_80038090_38C90(s16);
 extern void func_80015254_15E54(void);
 extern s32 gControllerInputs[4];
