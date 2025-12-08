@@ -1,3 +1,4 @@
+#include "33FE0.h"
 #include "10AD0.h"
 #include "36B80.h"
 #include "56910.h"
@@ -46,16 +47,6 @@ typedef struct {
     /* 0x10 */ u8 unk10;
     /* 0x11 */ u8 unk11;
 } Func350ACArg;
-
-typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ u16 *unk4;
-    /* 0x08 */ void *unk8;
-    /* 0x0C */ u16 unkC;
-    /* 0x0E */ u16 unkE;
-    /* 0x10 */ u8 unk10;
-} Func80035408Arg;
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -111,7 +102,6 @@ void func_80033458_34058(void);
 void func_8003365C_3425C(Func34574Arg *arg0);
 void func_80034A30_35630(void *arg0);
 void func_80034A94_35694(Func34574Arg *arg0);
-void func_80035408_36008(Func80035408Arg *arg0);
 void func_8003513C_35D3C(Func350ACArg *arg0);
 void func_80035234_35E34(Func34574Arg *arg0);
 void func_80034640_35240(Func34574Arg *arg0);

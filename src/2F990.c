@@ -1,7 +1,9 @@
 #include "2F990.h"
 #include "10AD0.h"
 #include "20F0.h"
+#include "33FE0.h"
 #include "38C90.h"
+#include "3E160.h"
 #include "56910.h"
 #include "5E590.h"
 #include "68CF0.h"
@@ -146,8 +148,6 @@ typedef struct {
     u8 _pad[0x4];
     void *unk4;
 } func_80030668_31268_arg;
-
-extern void func_80035408_36008(void);
 
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
