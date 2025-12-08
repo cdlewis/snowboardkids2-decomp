@@ -2,6 +2,7 @@
 
 #include "15690.h"
 #include "20F0.h"
+#include "288A0.h"
 #include "3A1F0.h"
 #include "3E160.h"
 #include "4050.h"
@@ -45,7 +46,6 @@ extern void func_80019E18_1AA18(void);
 extern void func_80038090_38C90(s16);
 extern void func_80015254_15E54(void);
 extern s32 gControllerInputs[4];
-extern void func_80027CA0_288A0(void *, s32, s32, s32);
 extern void func_8001A478_1B078(void);
 extern void func_80032330_32F30(void);
 
@@ -347,7 +347,7 @@ void func_8001AE80_1BA80(void) {
     allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->unk1D8.unk0.callback_selector = 0;
-    func_80027CA0_288A0(temp_s0, 0, 0xA, 0);
+    func_80027CA0_288A0((Node_70B00 *)temp_s0, 0, 0xA, 0);
     func_8006FDA0_709A0(0, 0, 8);
     scheduleTask(&func_80019CD0_1A8D0, 0U, 0U, 0x5AU);
     setGameStateHandler(&func_8001AF18_1BB18);
