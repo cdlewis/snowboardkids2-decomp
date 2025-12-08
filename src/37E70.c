@@ -1,5 +1,6 @@
 #include "36B80.h"
 #include "38310.h"
+#include "3E160.h"
 #include "6E840.h"
 #include "common.h"
 #include "graphics.h"
@@ -9,7 +10,6 @@
 USE_ASSET(_4196E0);
 
 extern void func_80027CA0_288A0(void *, s32, s32, s32);
-extern void func_80037E78_38A78(void);
 extern void func_800373E0_37FE0(void);
 void func_800373B0_37FB0(void);
 void func_800376EC_382EC(void);

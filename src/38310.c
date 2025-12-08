@@ -40,17 +40,6 @@ typedef struct {
 } func_80037FB0_38BB0_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    u8 padE[2];
-} func_80037E78_38A78_entry;
-
-typedef struct {
     u8 pad[0x1E2];
     u16 unk1E2;
     u8 pad2[0x4];
@@ -260,10 +249,10 @@ void func_80037E40_38A40(func_80037E40_38A40_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80037F14_38B14(func_80037E78_38A78_entry *);
+void func_80037F14_38B14(Entry1 *);
 void func_80037FB0_38BB0(func_80037FB0_38BB0_arg *arg0);
 
-void func_80037E78_38A78(func_80037E78_38A78_entry *arg0) {
+void func_80037E78_38A78(Entry1 *arg0) {
     void *allocation;
     s32 i;
     s32 minus32;
@@ -291,7 +280,7 @@ void func_80037E78_38A78(func_80037E78_38A78_entry *arg0) {
     setCallback(func_80037F14_38B14);
 }
 
-void func_80037F14_38B14(func_80037E78_38A78_entry *arg0) {
+void func_80037F14_38B14(Entry1 *arg0) {
     func_80037F14_alloc *alloc = getCurrentAllocation();
     s32 i;
 
