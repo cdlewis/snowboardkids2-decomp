@@ -2302,7 +2302,6 @@ void func_8004B36C_4BF6C(func_8004B36C_4BF6C_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004B3B0_4BFB0);
 
 extern u16 func_80060A3C_6163C(void *, u16, void *);
-extern void func_80060CDC_618DC(void *, u16, void *, s32, s32 *);
 extern s32 func_80061A64_62664(void *, u16, void *);
 
 typedef struct {
