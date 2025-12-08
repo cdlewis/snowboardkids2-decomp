@@ -1,5 +1,6 @@
 #include "10AD0.h"
 #include "36BE0.h"
+#include "3E160.h"
 #include "5E590.h"
 #include "6E840.h"
 #include "common.h"
@@ -201,7 +202,6 @@ void func_80051B8C_5278C(func_8005186C_5246C_arg *);
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104(func_80050504_51104_arg *);
 
-extern void func_80066444_67044(s32, void *);
 extern void func_80051978_52578(void);
 
 extern loadAssetMetadata_arg D_80090EC0_91AC0;
