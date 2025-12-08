@@ -8,7 +8,6 @@
 extern void *func_80055E68_56A68(u8);
 extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);
-extern void setCallback(void *);
 
 extern s32 D_800BBBC0_ABA70[];
 extern s32 D_800BBBC4_ABA74[];

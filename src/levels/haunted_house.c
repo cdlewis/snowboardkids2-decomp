@@ -103,7 +103,6 @@ extern void func_800BB778_AF468(void);
 extern void func_800BB9A4_AF694(void);
 void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *);
 extern void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
-extern void setCallback(void *);
 extern void func_800BBEAC_AFB9C(s16 *);
 extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
