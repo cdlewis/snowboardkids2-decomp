@@ -63,9 +63,11 @@ typedef struct {
 } Alloc_52880;
 
 typedef struct {
-    u8 padding1[0x30];
+    u8 padding[0x30];
     u8 unk30[0x46];
     u8 unk76;
+    u8 padding2[0xF];
+    u8 unk86;
 } Alloc_55650;
 
 void func_80051C80_52880(s32 *arg0, s32 arg1) {
@@ -626,7 +628,133 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_80054D70_55970);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80054F44_55B44);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_800550B4_55CB4);
+extern void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
+extern void func_80051C80_52880(s32 *arg0, s32 arg1);
+extern s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, s32 *arg2, s32 arg3);
+extern void func_80054D70_55970(void *arg0);
+extern s16 func_8005BF50_5CB50(s32 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4);
+extern void func_80066444_67044(s32 arg0, void *arg1);
+
+typedef struct {
+    void *unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    u8 padding1[0x10];
+    void *unk20;
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    u8 padding2[0xC];
+    s32 unk3C;
+    s16 unk40;
+    s16 unk42;
+    s16 unk44;
+    s16 unk46;
+    s16 unk48;
+    s16 unk4A;
+    s16 unk4C;
+    s8 unk4E;
+} func_800550B4_55CB4_arg;
+
+void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
+    Alloc_55650 *alloc;
+    s32 sp18[3];
+    s32 savedVec[3];
+    s32 rotateVec[3];
+    u8 pad1[32];
+    s16 angle;
+    s16 var_s3;
+    s32 i;
+    s32 temp_v0;
+    s32 temp_v1;
+
+    alloc = (Alloc_55650 *)getCurrentAllocation();
+
+    if (alloc->unk76 == 0) {
+
+        func_80050604_51204(&arg0->unk4, &arg0->unk24, 0x6A);
+
+        arg0->unk28 += 0xFFFC0000;
+
+        func_80051C80_52880(&arg0->unk24, 0x1C0000);
+
+        memcpy(savedVec, &arg0->unk4, 0xC);
+
+        arg0->unk4 += arg0->unk24;
+        arg0->unk8 += arg0->unk28;
+        arg0->unkC += arg0->unk2C;
+
+        angle = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
+        arg0->unk40 = angle;
+
+        func_80060CDC_618DC(&alloc->unk30, angle, &arg0->unk4, 0x80000, sp18);
+
+        if (sp18[0] != 0 || sp18[2] != 0) {
+            arg0->unk4 = arg0->unk4 + sp18[0];
+            arg0->unkC = arg0->unkC + sp18[2];
+            arg0->unk4E = arg0->unk4E + 1;
+        }
+
+        arg0->unk48--;
+        if (arg0->unk48 == 0) {
+            arg0->unk4E++;
+        }
+
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+        temp_v1 = temp_v0 + 0x100000;
+
+        if (arg0->unk8 < temp_v1) {
+            arg0->unk8 = temp_v1;
+        }
+
+        arg0->unk24 = arg0->unk4 - savedVec[0];
+        arg0->unk28 = arg0->unk8 - savedVec[1];
+        arg0->unk2C = arg0->unkC - savedVec[2];
+
+        func_80054D70_55970(arg0);
+
+        angle = atan2Fixed(arg0->unk24, arg0->unk2C);
+        var_s3 = func_8005BF50_5CB50(&arg0->unk4, angle, arg0->unk42, 0x3C00000, 0x1B0000);
+
+        if (var_s3 != 0) {
+            var_s3 &= 0x1FFF;
+            if (var_s3 >= 0x1001) {
+                var_s3 |= 0xE000;
+            }
+
+            if (arg0->unk46 < var_s3) {
+                var_s3 = arg0->unk46;
+            }
+
+            if (var_s3 < -arg0->unk46) {
+                var_s3 = -arg0->unk46;
+            }
+
+            memcpy(rotateVec, &arg0->unk24, 0xC);
+            rotateVectorY(rotateVec, var_s3, &arg0->unk24);
+        }
+
+        if (alloc->unk86 != 0) {
+            if (arg0->unk46 < 0x20) {
+                arg0->unk46 += 4;
+            }
+        } else {
+            if (arg0->unk46 < 0xC) {
+                arg0->unk46++;
+            }
+        }
+    }
+    if (arg0->unk4E != 0) {
+        func_80050ECC_51ACC(&arg0->unk4);
+        func_80056B7C_5777C(&arg0->unk4, 0x11);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, arg0);
+    }
+}
 
 void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0) {
     arg0->unk20 = freeNodeMemory(arg0->unk20);
