@@ -180,7 +180,7 @@ void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *);
 void func_8002FF28_30B28(func_8002FF28_30B28_arg *);
 void func_80030238_30E38(void *arg0);
 void func_80030280_30E80(func_8002FF28_30B28_arg *arg0);
-void func_80030764_31364(void);
+void func_80030764_31364(Struct_80030694 *arg0);
 void func_800308C4_314C4(Struct_80030694 *arg0);
 void func_80030974_31574(void *);
 void func_800309D4_315D4(func_800308FC_314FC_arg *);
@@ -833,7 +833,50 @@ void func_80030694_31294(Struct_80030694 *arg0) {
     setCallback(func_80030764_31364);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030764_31364);
+extern u8 func_80027C44_28844(s32);
+extern u8 func_80027C60_28860(s32);
+extern u8 func_80027C7C_2887C(s32);
+extern void func_8006D7B0_6E3B0(void *, s16, s16, s32, s32, s32, s32, s32, s32, s32);
+
+void func_80030764_31364(Struct_80030694 *arg0) {
+    GameState *temp_s0;
+    s16 temp_a2;
+    s32 temp_s3;
+    s32 temp_s1;
+    s32 var_s1;
+    s32 var_s0;
+    char *formatStr;
+
+    temp_s0 = (GameState *)getCurrentAllocation();
+    temp_a2 = 0x30 - (temp_s0->unk5D7 * 8);
+    arg0->unk36 = temp_a2;
+    func_8006D7B0_6E3B0(arg0->unk00, arg0->unk34, temp_a2, 4, temp_s0->unk5D7, 0, 0x20, 0xB0, 8, 0);
+
+    if (temp_s0->unk5C5 != 0x14) {
+        temp_s3 = temp_s0->unk5CA[temp_s0->unk5C8];
+        temp_s1 = (u32)temp_s3 < 0x80U;
+        if (temp_s1 != 0) {
+            debugEnqueueCallback(8U, 1U, &func_8000FED0_10AD0, &arg0->unk04);
+        }
+        if (temp_s0->unk5C5 != 2) {
+            if (temp_s1 != 0) {
+                temp_s1 = temp_s3 & 0xFF;
+                formatStr = "%2d";
+                sprintf(arg0->unk38, formatStr, func_80027C44_28844(temp_s1) & 0xFF);
+                sprintf(arg0->unk3B, formatStr, func_80027C60_28860(temp_s1) & 0xFF);
+                sprintf(arg0->unk3E, formatStr, func_80027C7C_2887C(temp_s1) & 0xFF);
+
+                var_s1 = 0;
+                var_s0 = 0x10;
+                do {
+                    debugEnqueueCallback(8U, 1U, &renderTextPalette, (char *)arg0 + var_s0);
+                    var_s1 += 1;
+                    var_s0 += 0xC;
+                } while (var_s1 < 3);
+            }
+        }
+    }
+}
 
 void func_800308C4_314C4(Struct_80030694 *arg0) {
     arg0->unk00 = freeNodeMemory(arg0->unk00);

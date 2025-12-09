@@ -20,9 +20,9 @@ typedef struct {
     SubStruct substruct[3];
     s16 unk34;
     s16 unk36;
-    s8 unk38;
-    s8 unk39;
-    s8 unk3A;
+    char unk38[3];
+    char unk3B[3];
+    char unk3E[3];
 } Struct_80030694;
 
 typedef struct {

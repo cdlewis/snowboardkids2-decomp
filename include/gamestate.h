@@ -216,8 +216,8 @@ typedef struct {
     u8 unk5C7;
     s8 unk5C8;
     u8 unk5C9;
-    u8 unk5CA[0];
-    u8 PAD_15[0xE];
+    u8 unk5CA[0xD];
+    u8 unk5D7;
     u8 unk5D8;
     u8 PAD_15B[0x1A3];
     s16 unk77C;
