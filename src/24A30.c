@@ -399,6 +399,7 @@ void func_80024AAC_256AC(func_80024C8C_2588C_arg *arg0) {
 
 void func_80024D40_25940(func_80024C8C_2588C_arg *);
 void func_80024DCC_259CC(func_80024C8C_2588C_arg *);
+void func_80024E58_25A58(func_80024C8C_2588C_arg *);
 void func_80024FEC_25BEC(func_80024C8C_2588C_arg *);
 void func_80024F48_25B48(func_80024C8C_2588C_arg *);
 
