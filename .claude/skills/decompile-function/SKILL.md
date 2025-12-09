@@ -9,7 +9,7 @@ Decompiling a function is a difficult task. Use thinking. Avoid delegation to le
 
 ## Instructions
 
-### Step 1
+### Step 1: Match Function in Decomp Env
 
 First we need to spin up a decomp environment for the function, run:
 
@@ -21,11 +21,7 @@ Move to the directory created by the script. This will be `nonmatchings/<functio
 
 Use the tools in this directory to match the function. You may need to make several attempts. Each attempt should be in a new file (base*1.c, base_2.c, ... base_n.c, etc). It's okay to give up if you're unable to match after \_30* attempts.
 
-### Step 2a (unable to match, log and revert changes)
-
-If you cannot get a perfect match after 30 attempts, add the function name to `tools/difficult_functions` along with the number of attempts and best match percentage (function names should be separated by newlines). This should be in the form `\n<function name> <number of attempts to match> <best match percentage>\n`. By adding the function name to difficult_functions. You must also revert any changes you've made adding the function to the C file or other project files (we do not want to save incomplete matches).
-
-### Step 2b (successful match, integrate changes into project)
+## Step 2: Integrate Match into Project
 
 If you are able to match the function, update the C code to use it. The C code will be importing an assembly file, something along the lines of `INCLUDE_ASM/asm/nonmatchings/<function name>`. Replace this with the actual C code.
 
@@ -36,17 +32,19 @@ If you are able to match the function, update the C code to use it. The C code w
 Verify that the project still builds successfully by running `./tools/build-and-verify.sh`. If this check fails, the decompilation is NOT complete, even if individual functions appear to match.
 
 - If the checksum fails after your changes, use `python3 tools/asm-differ/diff.py --no-pager <function>` to check ALL functions in the modified file(s). Look for functions that access the same structs you modified. Fix any mismatches before declaring success.
-- If you are unable to fix the build issues the match should be marked with all changes reverted and the function name added to tools/difficult_functions in line with the instructions in step 2a.
+- If you are unable to fix the build issues the match should be marked with all changes reverted and the function name added to tools/difficult_functions
 
 ### Step 3: Commit
 
 If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name> <attempts>`.
 
-If you were not able to get a perfect matching decompilation, commit your changes to tools/difficult_functions.
-
 Respect any pre-commit hooks that prevent you from committing your change. A failed hook indicates that you have not correctly updates the C code.
 
-You are done. Do not attempt to find the next closest match.
+### What if I can't match?
+
+If you cannot get a perfect match after 30 attempts, add the function name to `tools/difficult_functions` along with the number of attempts and best match percentage (function names should be separated by newlines). This should be in the form `\n<function name> <number of attempts to match> <best match percentage>\n`. By adding the function name to difficult_functions. You must also revert any changes you've made adding the function to the C file or other project files (we do not want to save incomplete matches).
+
+Commit your change to tools/difficult_functions.
 
 ## Tools
 

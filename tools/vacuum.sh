@@ -3,6 +3,7 @@
 STOP_PHRASE="Error: All functions are marked as difficult!"
 MAX_TIMES=""
 STOP_REQUESTED=0
+STRICT_MODE=0
 DIFFICULT_FUNCTIONS="tools/difficult_functions"
 
 # Trap Ctrl+C (SIGINT) for graceful shutdown
@@ -14,9 +15,13 @@ while [[ $# -gt 0 ]]; do
       MAX_TIMES="$2"
       shift 2
       ;;
+    --strict)
+      STRICT_MODE=1
+      shift
+      ;;
     *)
       echo "Unknown option: $1"
-      echo "Usage: $0 [--times X]"
+      echo "Usage: $0 [--times X] [--strict]"
       exit 1
       ;;
   esac
@@ -59,6 +64,19 @@ while true; do
     echo "Detected uncommitted difficult_functions change" | tee -a "tools/vacuum.log"
     git add "$FILE"
     git commit -m "Update $DIFFICULT_FUNCTIONS"
+  fi
+
+  # Check for modified files before reset
+  modified_files=$(git diff --name-only)
+  if [[ -n "$modified_files" ]]; then
+    echo "Files to be reset:" | tee -a "tools/vacuum.log"
+    echo "$modified_files" | tee -a "tools/vacuum.log"
+
+    if [[ $STRICT_MODE -eq 1 ]]; then
+      echo "ERROR: Strict mode enabled and unexpected files were modified" | tee -a "tools/vacuum.log"
+      echo "Halting loop due to unexpected modifications" | tee -a "tools/vacuum.log"
+      break
+    fi
   fi
 
   git reset --hard HEAD
