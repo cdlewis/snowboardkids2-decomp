@@ -1,6 +1,7 @@
 #include "displaylist.h"
 
 #include "19E80.h"
+#include "5AA90.h"
 #include "68CF0.h"
 #include "6E840.h"
 #include "common.h"
@@ -128,7 +129,50 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_800626C4_632C4);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062918_63518);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062B1C_6371C);
+typedef struct {
+    s16 x;
+    s16 y;
+    s16 z;
+} Vertex6;
+
+typedef struct {
+    u8 padding[0x16];
+    u16 unk16;
+    u8 padding2[0x4];
+    u16 unk1C;
+    u8 padding3[0x6];
+} Element24;
+
+typedef struct {
+    void *unk0;
+    Vertex6 *unk4;
+    void *unk8;
+    Element24 *unkC;
+} func_80062B1C_arg0;
+
+u16 func_80062B1C_6371C(func_80062B1C_arg0 *arg0, u16 arg1, Vec3s32 *arg2, Vec3s32 *arg3) {
+    Vertex6 *verts;
+    u16 idx0;
+    u16 idx1;
+    Vertex6 *vert0;
+    Vertex6 *vert1;
+
+    arg2->unk0 = arg0->unk4[arg0->unkC[arg1].unk16].x << 16;
+    arg2->unk4 = arg0->unk4[arg0->unkC[arg1].unk16].y << 16;
+    arg2->unk8 = arg0->unk4[arg0->unkC[arg1].unk16].z << 16;
+
+    arg3->unk0 = arg0->unk4[arg0->unkC[arg1].unk1C].x << 16;
+    arg3->unk4 = arg0->unk4[arg0->unkC[arg1].unk1C].y << 16;
+    arg3->unk8 = arg0->unk4[arg0->unkC[arg1].unk1C].z << 16;
+
+    idx0 = arg0->unkC[arg1].unk16;
+    verts = arg0->unk4;
+    idx1 = arg0->unkC[arg1].unk1C;
+    vert0 = (Vertex6 *)((s32)idx0 * sizeof(Vertex6) + (s32)verts);
+    vert1 = (Vertex6 *)((s32)idx1 * sizeof(Vertex6) + (s32)verts);
+
+    return (func_8006D21C_6DE1C(vert0->x, vert0->z, vert1->x, vert1->z) - 0x1000) & 0xFFFF;
+}
 
 s32 func_80062C98_63898(func_80062C98_63898_arg **arg0, u16 index) {
     s16 temp_v0;
