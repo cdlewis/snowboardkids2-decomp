@@ -34,7 +34,7 @@ Verify that the project still builds successfully by running `./tools/build-and-
 - If the checksum fails after your changes, use `python3 tools/asm-differ/diff.py --no-pager <function>` to check ALL functions in the modified file(s). Look for functions that access the same structs you modified. Fix any mismatches before declaring success.
 - If you are unable to fix the build issues the match should be marked with all changes reverted and the function name added to tools/difficult_functions
 
-### Step 3: Commit
+### Step 3: Commit Your Changes
 
 If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name> <attempts>`.
 
@@ -42,9 +42,11 @@ Respect any pre-commit hooks that prevent you from committing your change. A fai
 
 ### What if I can't match?
 
-If you cannot get a perfect match after 30 attempts, add the function name to `tools/difficult_functions` along with the number of attempts and best match percentage (function names should be separated by newlines). This should be in the form `\n<function name> <number of attempts to match> <best match percentage>\n`. By adding the function name to difficult_functions. You must also revert any changes you've made adding the function to the C file or other project files (we do not want to save incomplete matches).
+Try up to 30 times to get a match. If you still can't get a match:
 
-Commit your change to tools/difficult_functions.
+1. Revert any changes you've made adding the function to the C file or other project files (we do not want to save incomplete matches).
+2. Add the function name to `tools/difficult_functions` along with the number of attempts and best match percentage (function names should be separated by newlines). This should be in the form `\n<function name> <number of attempts to match> <best match percentage>\n`. By adding the function name to difficult_functions.
+3. Commit your changes
 
 ## Tools
 

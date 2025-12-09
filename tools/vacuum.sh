@@ -54,7 +54,7 @@ while true; do
 
   echo -e "\n[$(date '+%H:%M:%S')] Decompiling $simplest_func...\n" | tee -a "tools/vacuum.log"
 
-  output=$(claude --model opus -p "use the decompile-a-function skill to decompile the function $simplest_func" 2>&1 | tee -a tools/vacuum.log)
+  output=$(claude --model opus -p "use the decompile-a-function skill to decompile the function $simplest_func. you are running in non-interactive mode so do not wait for answers to questions. just follow the instructions in the decompile-a-function skill and remember to always commit your changes." 2>&1 | tee -a tools/vacuum.log)
   exit_code=$?
   echo "$output"
 
