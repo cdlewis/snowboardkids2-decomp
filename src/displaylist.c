@@ -504,7 +504,48 @@ void func_80064768_65368(DisplayListObject *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80064808_65408);
+void func_80064808_65408(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2) {
+    enqueueMultiPartDisplayList_arg1 *new_var;
+    s32 var_a1;
+    s32 var_s0;
+    s32 *temp_v1;
+    enqueueMultiPartDisplayList_arg1 *var_a0;
+    volatile u8 padding[0x1];
+
+    var_a1 = 0;
+    var_s0 = 0;
+    arg1->unk37 = arg2;
+
+    if (arg2 > 0) {
+        var_a0 = arg1;
+        do {
+            temp_v1 = var_a0->unk20;
+            (new_var = var_a0)->unk30 = 0;
+            if (temp_v1[1] != 0) {
+                var_s0 |= 1;
+            }
+            if (temp_v1[2] != 0) {
+                var_s0 |= 2;
+            }
+            if (temp_v1[0x3] != 0) {
+                var_s0 |= 4;
+            }
+            var_a1 += 1;
+            var_a0 = (enqueueMultiPartDisplayList_arg1 *)(((s32)var_a0) + 0x3C);
+        } while (var_a1 < arg2);
+    }
+
+    if (var_s0 & 1) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 1, &func_80064628_65228, arg1);
+    }
+    new_var = arg1;
+    if (var_s0 & 2) {
+        debugEnqueueCallback((arg0 & 0xFFFF) ^ 0, 3, &func_800646C8_652C8, new_var);
+    }
+    if (var_s0 & 4) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_80064768_65368, arg1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800648EC_654EC);
 
