@@ -521,3 +521,4 @@ func_8004AFF8_4BBF8 1 -- Failed decompilation attempt, checksum mismatch
 func_80028480_29080 1 -- Failed decompilation attempt, checksum mismatch
 func_80041418_42018 1 -- Failed decompilation attempt, register allocation mismatch (s2/s3/s4 swapped)
 func_80005E54_6A54 1 -- Failed decompilation attempt, checksum mismatch
+func_800BB778_AF468 30 95.120% -- Register allocation mismatch: loop counter/offset swap (v1/a0), numPlayers load pattern differs
