@@ -502,3 +502,4 @@ func_8001CD90_1D990 (1 attempt, 0%) - Very large save menu state machine (4048 b
 func_8006E054_6EC54 (1 attempt, 0%) - Extremely large graphics/rendering function (5284 bytes), complex RDP/RSP display list generation, multiple rendering modes, matrix transformations
 func_80022D74_23974 (1 attempt, 0%) - Extremely large character selection menu state machine (~64KB, 15 switch cases, complex controller input handling, character/board selection logic)
 func_800397CC_3A3CC 14 81.0
+func_80058C64_59864 22 91.250%
