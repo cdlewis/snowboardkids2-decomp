@@ -1,5 +1,6 @@
 #include "20F0.h"
 #include "common.h"
+#include "geometry.h"
 #include "memory_allocator.h"
 #include "task_scheduler.h"
 
@@ -38,6 +39,25 @@ typedef struct {
     void *unk2C;
 } func_80007030_7C30_arg;
 
+typedef struct {
+    u8 _pad[0x18];
+    Mat3x3Padded unk18;
+    u8 _pad2[0x14];
+    s8 unk3C;
+} func_80006EE0_unk0;
+
+typedef struct {
+    void *unk0;
+    u8 unk4[0x20];
+    void *unk24;
+    MemoryAllocatorNode *unk28;
+    MemoryAllocatorNode *unk2C;
+    s32 unk30;
+    u8 padding[0xC];
+    s16 unk40;
+    s16 unk42;
+} func_80006E60_7A60_arg;
+
 extern s32 func_80009E68_AA68(void *, s16);
 extern void func_80009F5C_AB5C(s32 *);
 extern void func_80009F90_AB90(void *, s32, s32, s32);
@@ -48,9 +68,13 @@ void func_8000A190_AD90(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32
 
 void func_80006CBC_78BC(func_80006C50_7850_arg *);
 extern void func_80006E44_7A44(func_80006C50_7850_arg *);
+void func_80006E60_7A60(func_80006E60_7A60_arg *);
+void func_80006EE0_7AE0(func_80006E60_7A60_arg *);
 extern void *D_80088720_89320;
-extern void *func_80006EE0_7AE0(void);
 extern u8 identityMatrix[];
+
+extern void func_80002B50_3750(void *, void *);
+extern void func_80069CF8_6A8F8(void);
 
 void func_80006C50_7850(func_80006C50_7850_arg *arg0) {
     s32 *temp_s0;
@@ -134,18 +158,6 @@ void func_80006E44_7A44(func_80006C50_7850_arg *arg0) {
     func_80009F5C_AB5C(&arg0->unk4);
 }
 
-typedef struct {
-    void *unk0;
-    u8 unk4[0x20];
-    void *unk24;
-    MemoryAllocatorNode *unk28;
-    MemoryAllocatorNode *unk2C;
-    s32 unk30;
-    u8 padding[0xC];
-    s16 unk40;
-    s16 unk42;
-} func_80006E60_7A60_arg;
-
 void func_80006E60_7A60(func_80006E60_7A60_arg *arg0) {
     memcpy(arg0->unk4, identityMatrix, 0x20);
     arg0->unk28 = loadAssetGroupDisplayList(arg0->unk0);
@@ -158,7 +170,36 @@ void func_80006E60_7A60(func_80006E60_7A60_arg *arg0) {
     setCallback(&func_80006EE0_7AE0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/7850", func_80006EE0_7AE0);
+void func_80006EE0_7AE0(func_80006E60_7A60_arg *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    Mat3x3Padded sp50;
+    s16 temp_s0;
+    void *temp_s0_2;
+    Mat3x3Padded *sp10Ptr;
+    u16 angle;
+
+    sp10Ptr = &sp10;
+    memcpy(sp10Ptr, identityMatrix, 0x20);
+    memcpy(&sp30, identityMatrix, 0x20);
+    memcpy(&sp50, (u8 *)arg0->unk0 + 0x18, 0x20);
+
+    if (*(s8 *)((u8 *)arg0->unk0 + 0x3C) == 1) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    temp_s0 = ((s32)(approximateSin(arg0->unk42) * 0x133) >> 8) + 0x3000;
+    angle = ((approximateSin(arg0->unk40) >> 7) * 6) & 0xFFFE;
+    createZRotationMatrix(sp10Ptr, angle);
+    scaleMatrix(sp10Ptr, 0x2000, temp_s0, 0x2000);
+    temp_s0_2 = arg0->unk4;
+    func_8006B084_6BC84(sp10Ptr, (u8 *)arg0->unk0 + 0x18, temp_s0_2);
+    *(s32 *)((u8 *)arg0 + 0x1C) = (s32)(*(s32 *)((u8 *)arg0 + 0x1C) + 0x33333);
+    func_80002B50_3750(arg0->unk0, temp_s0_2);
+    arg0->unk40 = (s16)(((u16)arg0->unk40 + 0xB6) & 0x1FFF);
+    arg0->unk42 = (s16)(((u16)arg0->unk42 + 0x16C) & 0x1FFF);
+}
 
 void func_80007030_7C30(func_80007030_7C30_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
