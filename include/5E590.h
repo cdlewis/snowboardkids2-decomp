@@ -7,7 +7,7 @@ typedef struct {
     void *asset4;
 } UnknownAssetStruct;
 
-MemoryAllocatorNode *load_3ECE40(void);
+void *load_3ECE40(void);
 void *loadAssetByIndex_94F90(s16 groupIndex, s16 pairIndex);
 void *loadAssetByIndex_95200(s16 groupIndex, s16 pairIndex);
 UnknownAssetStruct *loadAssetByIndex_95380(s16 groupIndex, s16 pairIndex);

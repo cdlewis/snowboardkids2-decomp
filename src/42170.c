@@ -1,5 +1,6 @@
 #include "3E160.h"
 #include "56910.h"
+#include "5E590.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -386,7 +387,6 @@ typedef struct {
     void *unkD8;
 } Func41AD8Arg;
 
-extern void *load_3ECE40(void);
 void func_80041B18_42718(void);
 void func_80041DE4_429E4(Func41AD8Arg *);
 
