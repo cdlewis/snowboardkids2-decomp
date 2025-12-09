@@ -1,3 +1,4 @@
+#include "3E160.h"
 #include "51060.h"
 #include "5E590.h"
 #include "common.h"
@@ -17,7 +18,6 @@ s32 func_80055820_56420(s32, s32);
 extern void func_80058A68_59668(Player *arg0);
 extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
 extern s32 func_800BB504(void *, s32);
-extern void func_80066444_67044(s32, void *);
 extern void func_80052DB4_539B4(void);
 
 typedef struct {
