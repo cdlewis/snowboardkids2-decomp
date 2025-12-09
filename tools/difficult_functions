@@ -195,7 +195,7 @@ func_8003A864_3B464 16 75.649%
 func_800378AC_384AC 20 80.171%
 func_800BB5B0_B57C0 20 94.206%
 func_8000C5AC_D1AC 12 72.341%
-\_\_MusIntMain 15 93.287%
+__MusIntMain 36 99.147% -- Stack frame size mismatch (0x38 vs 0x30), branch delay slot scheduling difference
 func_80027678_28278 20 61.7%
 func_800BB890_B5190 6 43.7%
 func_800394BC_3A0BC 20 25.733%
@@ -396,16 +396,16 @@ func_800509CC_515CC (15 attempts, 96.545%)
 func_800BB620_AF310 30 99.811%
 func_800B6618_1E36C8 (24 attempts, 60.949%)
 func_80040870_41470 (25 attempts, 98.148%)
-func_8002F024_2FC24 (20 attempts, 97.797%)cutsceneChrAlpha_update (10 attempts, 61.726%)
+func_8002F024_2FC24 (20 attempts, 97.797%)
+cutsceneChrAlpha_update (10 attempts, 61.726%)
 func_8006BEDC_6CADC 13 86.964%
 func_80003D30_4930 27 86.036%
 func_8004B3B0_4BFB0 (16 attempts, 90.732%)
 func_800B3360 (18 attempts, 99.468%)
 func_80032628_33228 (30 attempts, 94.328%)
-
 func_80072960_73560 26 86.2%
 func_80004570_5170 17 91.947%
-func_80030BA8_317A8 (24 attempts, 99.388%)
+func_80030BA8_317A8 (24 attempts, 99.388%) -- matched
 func_80072814_73414 29 90.460%
 func_8002FF54_30B54 7 98.714%
 func_800625A4_631A4 15 80.079%
