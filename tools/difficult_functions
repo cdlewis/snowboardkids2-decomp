@@ -519,3 +519,4 @@ func_800477E4_483E4 1 ~98% -- Register allocation mismatches in loop
 func_8004562C_4622C 1 -- Failed decompilation attempt, checksum mismatch
 func_8004AFF8_4BBF8 1 -- Failed decompilation attempt, checksum mismatch
 func_80028480_29080 1 -- Failed decompilation attempt, checksum mismatch
+func_80041418_42018 1 -- Failed decompilation attempt, register allocation mismatch (s2/s3/s4 swapped)
