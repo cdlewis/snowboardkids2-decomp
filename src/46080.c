@@ -2373,18 +2373,103 @@ void func_8004AA50_4B650(s32 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004AA90_4B690);
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004AB50_4B750);
+typedef struct {
+    u8 _pad0[0x4];
+    u8 unk4[0x4];
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 _pad14[0x10];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    u8 _pad30[0x4];
+    u16 unk34;
+    s16 unk36;
+    s16 unk38;
+    s16 unk3A;
+} func_8004AB50_4B750_arg;
+
+typedef struct {
+    s32 sp18;
+    s32 sp1C;
+    s32 sp20;
+} func_8004AB50_4B750_sp;
+
+typedef struct {
+    u8 _pad0[0x4];
+    func_80066444_67044_arg1 unk4;
+} func_8004AD18_4B918_arg;
+
+void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0);
+
+void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0) {
+    func_8004AB50_4B750_sp sp;
+    GameState_46080 *s0;
+    void *temp_s0;
+    Vec3s32 *s2;
+    s32 temp_a0;
+    s32 temp_a1;
+    s32 temp_v1;
+    s32 var_v0;
+    s32 var_v0_2;
+    void *temp_v0_3;
+    s32 i;
+
+    s0 = (GameState_46080 *)getCurrentAllocation();
+    if (s0->unk76 == 0) {
+        if (arg0->unk3A != 0) {
+            arg0->unk3A = 0;
+        } else {
+            temp_a0 = arg0->unk24;
+            var_v0 = temp_a0;
+            if (temp_a0 < 0) {
+                var_v0 = temp_a0 + 7;
+            }
+            temp_v1 = arg0->unk28;
+            temp_a1 = arg0->unk2C;
+            arg0->unk24 = temp_a0 - (var_v0 >> 3);
+            var_v0_2 = temp_a1;
+            arg0->unk28 = temp_v1 - 0x3000;
+            if (temp_a1 < 0) {
+                var_v0_2 = temp_a1 + 7;
+            }
+            arg0->unk2C = temp_a1 - (var_v0_2 >> 3);
+            arg0->unk8 = arg0->unk8 + arg0->unk24;
+            arg0->unkC = arg0->unkC + arg0->unk28;
+            arg0->unk10 = arg0->unk10 + arg0->unk2C;
+        }
+        temp_s0 = (void *)((u8 *)s0 + 0x30);
+        s2 = (Vec3s32 *)((u8 *)arg0 + 8);
+        arg0->unk34 = func_80060A3C_6163C(temp_s0, arg0->unk34, s2);
+        func_80060CDC_618DC(temp_s0, arg0->unk34, s2, 0x100000, &sp.sp18);
+        arg0->unk8 = arg0->unk8 + sp.sp18;
+        arg0->unk10 = arg0->unk10 + sp.sp20;
+        sp.sp1C = func_80061A64_62664(temp_s0, arg0->unk34, s2);
+        temp_v0_3 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
+        if (temp_v0_3 != NULL) {
+            func_80050ECC_51ACC(s2);
+            func_80056B7C_5777C(s2, 0xD);
+            func_80058924_59524(temp_v0_3);
+            func_80069CF8_6A8F8();
+            return;
+        }
+        if (arg0->unkC < sp.sp1C) {
+            arg0->unkC = sp.sp1C;
+            arg0->unk36 = 0x1518;
+            setCallback(func_8004AD18_4B918);
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+    }
+}
 
 typedef struct {
     s32 unk0;
     s32 unk4;
     s32 unk8;
 } func_8004AD18_4B918_CopyData;
-
-typedef struct {
-    u8 _pad0[0x4];
-    func_80066444_67044_arg1 unk4;
-} func_8004AD18_4B918_arg;
 
 typedef struct {
     u8 padding[0x5B];
