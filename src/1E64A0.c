@@ -100,7 +100,71 @@ void *func_800B9774_1E6824(cutsceneSys2Wait_exec_asset *arg0) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B97C8_1E6878);
+extern s32 gControllerInputs;
+
+void *func_800B97C8_1E6878(cutsceneSys2Wait_exec_asset *arg0) {
+    void *var_s1;
+    u8 temp_a0;
+    u16 temp_v1_2;
+    u16 *temp_a3;
+
+    var_s1 = func_8000B714_C314(arg0->unkC, arg0->unk86, arg0->unk88);
+    temp_a0 = arg0->unk9D;
+    arg0->unk90 = var_s1;
+
+    if ((temp_a0 & 0xFF) != 0x64) {
+        temp_a3 = (u16 *)((temp_a0 & 0xFF) * 2 + (s32)var_s1);
+        temp_v1_2 = *temp_a3;
+
+        if (temp_v1_2 != 0xFFFF) {
+            switch (temp_v1_2) {
+                case 0xFFF1:
+                case 0xFFFD:
+                    arg0->unk9D = arg0->unk9D + 1;
+                    break;
+                case 0xFFF0:
+                    func_800021E8_2DE8(
+                        (SceneModel *)arg0->unk4,
+                        *(s16 *)((u8 *)temp_a3 + 2),
+                        *(s16 *)((u8 *)temp_a3 + 6),
+                        *(s8 *)((u8 *)temp_a3 + 5)
+                    );
+                    arg0->unk9D = arg0->unk9D + 4;
+                    break;
+                case 0xFFFC:
+                    arg0->unk9D = temp_a0 + 2;
+                    break;
+            }
+            arg0->unk9D = arg0->unk9D + 1;
+        } else {
+            arg0->unk9D = 0x64;
+        }
+    }
+
+    if (*(s8 *)((u8 *)arg0->unk0 + 0xFF7) != 0) {
+        if (gControllerInputs & 0x8000) {
+            if (arg0->unk9D != 0x64) {
+                arg0->unk9D = 0x64;
+            } else {
+                s16 temp_v0 = arg0->unk88 + 1;
+                arg0->unk88 = temp_v0;
+                var_s1 = func_8000B714_C314(arg0->unkC, arg0->unk86, temp_v0);
+                if (var_s1 == NULL) {
+                    *(s8 *)((u8 *)arg0->unk0 + 0xFF7) = 0;
+                    arg0->unk84 = 6;
+                } else {
+                    func_800585C8_591C8(0x2B);
+                    arg0->unk9D = 0;
+                    arg0->unk84 = 4;
+                }
+            }
+        }
+    } else {
+        arg0->unk84 = 6;
+    }
+
+    return var_s1;
+}
 
 void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->unk84 = 0;
