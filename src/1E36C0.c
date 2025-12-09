@@ -158,7 +158,36 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6FA4_1E4054);
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7128_1E41D8);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B734C_1E43FC);
+s32 func_800B734C_1E43FC(CutsceneSlotData *arg0, s32 unused, s16 arg1) {
+    s32 retval;
+    s32 temp;
+    s16 var_v1;
+
+    retval = 0;
+    arg0->unk7A = arg1;
+    arg0->unk0.Two = 4;
+    arg0->unk3C = 0;
+    arg0->unk40 = 0;
+    arg0->unk44 = 0;
+    temp = (s16)func_800B6618_1E36C8(arg0, 0, arg1, arg0->unk78);
+
+    if ((temp >= 0 ? temp : -temp) >= 0xAAB) {
+        retval = 2;
+        arg0->unk78 = ((u16)arg0->unk78 + 0x1000) & 0x1FFF;
+        if (temp > 0) {
+            retval = 1;
+        }
+    }
+    func_800B6AB8_1E3B68(arg0, 0);
+    var_v1 = arg0->unk7C;
+    if (var_v1 != 0) {
+        arg0->unk84 = (temp >= 0 ? temp : -temp) / (var_v1 >= 0 ? var_v1 : -var_v1);
+    } else {
+        arg0->unk84 = 0;
+    }
+    arg0->unk86 = arg0->unk84;
+    return retval;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7450_1E4500);
 
