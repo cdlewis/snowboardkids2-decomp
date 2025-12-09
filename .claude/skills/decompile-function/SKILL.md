@@ -1,6 +1,6 @@
 ---
 name: decompile-a-function
-description: Given a function name, decompile it from assembly to C code. Use this skill if you're asked to decompiile a function.
+description: Given a function name, decompile it from assembly to C code. Use this skill if you're asked to decompile a function.
 ---
 
 # Decompile a Function
@@ -44,7 +44,7 @@ If you were not able to get a perfect matching decompilation, commit your change
 
 Respect any pre-commit hooks that prevent you from committing your change. A failed hook indicates that you have not correctly updates the C code.
 
-You are done. Do not attemp to find the next closest match.
+You are done. Do not attempt to find the next closest match.
 
 ## Tools
 
