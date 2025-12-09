@@ -6,6 +6,7 @@
 #include "6DE50.h"
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -23,9 +24,12 @@ typedef struct {
 
 extern s32 gFrameCounter;
 extern s32 D_800907F8_913F8;
+extern s32 D_800907EC_913EC[];
+extern s16 identityMatrix[];
 
 extern void func_80040870_41470(void);
 extern void func_8004106C_41C6C(void);
+void func_80040B4C_4174C(void);
 void func_80040E00_41A00(func_80040E00_41A00_arg *);
 void func_80040F34_41B34(func_800407E0_413E0_arg *);
 void func_800413E0_41FE0(func_800407E0_413E0_arg *arg0);
@@ -51,6 +55,8 @@ typedef struct {
     void *unk24;
     void *unk28;
 } func_80040D48_41948_arg;
+
+void func_80040D48_41948(func_80040D48_41948_arg *);
 
 typedef struct {
     u8 high;
@@ -119,7 +125,45 @@ void func_80040974_41574(void *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_800409B4_415B4);
+void func_800409B4_415B4(void *arg0) {
+    s32 sp10[8];
+    s32 sp30[4]; // Extra padding for stack alignment
+    s32 *temp_s0;
+    void *temp_s2;
+    D_80090F90_91B90_item *temp_s3;
+    u16 angle;
+
+    temp_s2 = getCurrentAllocation();
+    temp_s3 = func_80055D10_56910(((u8 *)temp_s2)[0x5C]);
+    ((s32 *)arg0)[0x20 / 4] = (s32)((u8 *)func_80055E68_56A68(((u8 *)temp_s2)[0x5C]) + 0x50);
+    ((s32 *)arg0)[0x24 / 4] = (s32)func_80055DC4_569C4(((u8 *)temp_s2)[0x5C]);
+    ((s32 *)arg0)[0x28 / 4] = (s32)func_80055DF8_569F8(((u8 *)temp_s2)[0x5C]);
+    ((s32 *)arg0)[0x2C / 4] = 0;
+    angle = func_800625A4_631A4((u8 *)temp_s2 + 0x30, sp30);
+    createYRotationMatrix(arg0, (angle + temp_s3->unk8) & 0xFFFF);
+    rotateVectorY(&D_800907EC_913EC, (s16)(angle + temp_s3->unk8), (u8 *)arg0 + 0x14);
+    ((s32 *)arg0)[0x14 / 4] = ((s32 *)arg0)[0x14 / 4] + temp_s3->unk0;
+    ((s32 *)arg0)[0x1C / 4] = ((s32 *)arg0)[0x1C / 4] + temp_s3->unk4;
+    ((s32 *)arg0)[0x18 / 4] = sp30[1]; // sp34
+    ((s32 *)arg0)[0x5C / 4] = (s32)((u8 *)func_80055E68_56A68(((u8 *)temp_s2)[0x5C]) + 0x60);
+    temp_s0 = sp10;
+    ((void **)arg0)[0x60 / 4] = (void *)((s32 *)arg0)[0x24 / 4];
+    ((void **)arg0)[0x64 / 4] = (void *)((s32 *)arg0)[0x28 / 4];
+    ((s32 *)arg0)[0x68 / 4] = ((s32 *)arg0)[0x2C / 4];
+    memcpy(temp_s0, identityMatrix, 0x20);
+    temp_s0[6] = 0x180000;
+    func_8006B084_6BC84(temp_s0, arg0, (u8 *)arg0 + 0x3C);
+    ((void **)arg0)[0x9C / 4] = (void *)((s32 *)arg0)[0x24 / 4];
+    ((void **)arg0)[0xA0 / 4] = (void *)((s32 *)arg0)[0x28 / 4];
+    ((s32 *)arg0)[0xA4 / 4] = ((s32 *)arg0)[0x2C / 4];
+    temp_s0[6] = 0x160000;
+    temp_s0[7] = 0xA3333;
+    func_8006B084_6BC84(temp_s0, arg0, (u8 *)arg0 + 0x78);
+    ((s16 *)arg0)[0xB4 / 2] = 0;
+    ((s16 *)arg0)[0xB6 / 2] = 0;
+    setCleanupCallback(func_80040D48_41948);
+    setCallback(func_80040B4C_4174C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040B4C_4174C);
 
