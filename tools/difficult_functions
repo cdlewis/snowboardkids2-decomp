@@ -514,3 +514,4 @@ func_800B2F2C 8 0
 func_8002F72C_3032C 30 98.71%
 func_80031138_31D38 1 0% -- Non-matching due to compiler differences: GCC_KMC generates beqzl for inner condition (original uses bnez), hoists constant 0x10 to $s3 (original loads inline in delay slot)
 func_80003898_4498 10 99.697%
+func_8004106C_41C6C 30 95.461% -- Register allocation mismatch: compiler assigns arg0 to s0 but target uses s1
