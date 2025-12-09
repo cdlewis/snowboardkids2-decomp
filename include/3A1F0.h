@@ -21,6 +21,8 @@ s32 *queueDmaTransferToBuffer(void *romStart, void *romEnd, s32 size, s32 *dramA
 
 s32 func_8003BB5C_3C75C(void);
 
+void *func_8003B510_3C110(void);
+
 void func_8003AF6C_3BB6C(void);
 
 void func_8003AC38_3B838(void);

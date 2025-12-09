@@ -19,8 +19,6 @@ void func_80016150_16D50(void);
 
 void func_800156AC_162AC(void);
 
-extern void *func_8003B510_3C110(void);
-
 extern u8 D_8009F210_9FE10;
 
 void func_800154E0_160E0(void) {
