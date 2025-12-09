@@ -503,3 +503,4 @@ func_8006E054_6EC54 (1 attempt, 0%) - Extremely large graphics/rendering functio
 func_80022D74_23974 (1 attempt, 0%) - Extremely large character selection menu state machine (~64KB, 15 switch cases, complex controller input handling, character/board selection logic)
 func_800397CC_3A3CC 14 81.0
 func_80058C64_59864 22 91.250%
+func_8002F12C_2FD2C 18 90.551%
