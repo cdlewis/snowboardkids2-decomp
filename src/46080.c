@@ -1224,8 +1224,6 @@ typedef struct {
     u8 _pad14[0xC];
 } Element_80047F90;
 
-extern void func_800480A8_48CA8(void);
-
 typedef struct {
     void *unk0;
     AssetMetadata_46080 unk4;
@@ -1236,6 +1234,8 @@ typedef struct {
     s16 unk6A;
 } Struct_func_80047EFC_48AFC;
 
+extern void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *);
+extern void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *);
 extern void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
 void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
 
@@ -1310,7 +1310,50 @@ loop:
     } while (i < 4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800480A8_48CA8);
+void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *arg0) {
+    GameState *allocation;
+    s32 heightOffset;
+    s32 i;
+    s32 j;
+    s32 offset;
+    Element_80047F90 *elem;
+
+    allocation = (GameState *)getCurrentAllocation();
+
+    if (allocation->gamePaused == 0) {
+        arg0->unk68 -= 1;
+        if (arg0->unk68 == 0) {
+            loadAssetMetadata(&arg0->unk44.asset, arg0->unk0, 4);
+            setCallback(func_800481A0_48DA0);
+        }
+    }
+
+    i = 0;
+    heightOffset = 0x190000;
+    elem = (Element_80047F90 *)arg0;
+
+loop:
+    elem->unk8 = arg0->unk64->worldPosX;
+    elem->unkC = arg0->unk64->worldPosY + heightOffset;
+    elem->unk10 = arg0->unk64->worldPosZ;
+    i += 1;
+    elem += 1;
+    if (i < 3)
+        goto loop;
+
+    i = 0;
+    j = 0;
+    do {
+        offset = 4;
+        do {
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)((s32)arg0 + offset));
+            j++;
+            offset += 0x20;
+        } while (j < 3);
+        i++;
+        j = 0;
+    } while (i < 4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800481A0_48DA0);
 
