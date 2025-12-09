@@ -1,11 +1,10 @@
 #include "1E2BE0.h"
 #include "common.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 extern Mat3x3Padded D_8009A890_9B490;
-
-extern void func_80056914_57514(void *);
 
 void func_800B5B30_1E2BE0(func_800B5E64_1E2F14_arg0 *arg0, s8 arg1) {
     arg0->unk71 = arg1;

@@ -4,11 +4,11 @@
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 extern void func_80001640_2240(SceneModel *arg0);
 extern void func_80001650_2250(SceneModel *arg0);
-extern void func_80056914_57514(void *);
 extern s32 abs(s32);
 
 extern u8 identityMatrix[];
