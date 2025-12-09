@@ -1934,7 +1934,277 @@ void func_80049C70_4A870(s32 arg0) {
     func_80049280_49E80(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80049CA8_4A8A8);
+extern void func_80044538_45138(s16);
+extern void func_80045434_46034(s16);
+extern void func_80041418_42018(void);
+extern void func_800409B4_415B4(void);
+extern void func_800BB2B0(void);
+extern void func_800BBA50(s32);
+extern void func_800BBA98(void);
+extern void func_800BBB34(void);
+extern void func_800BBED8(void);
+extern void func_800BC0FC(s32);
+extern void func_800BC9BC(void);
+extern void D_800BB688(void);
+extern void D_800BB74C(void);
+extern void D_800BB7F0(void);
+extern void D_800BB814(void);
+extern void D_800BB8E8(void);
+extern void D_800BBA28(void);
+extern void D_800BBA90(void);
+extern void D_800BBAF8(void);
+extern void D_800BBE84(void);
+extern void D_800BC13C(void);
+extern void D_800BC528(void);
+extern void D_800BC72C(void);
+
+void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
+    GameState *temp_s1;
+    s32 s0;
+
+    temp_s1 = (GameState *)getCurrentAllocation();
+
+    switch (arg0) {
+        case 0:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            func_80049BFC_4A7FC();
+            scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
+            scheduleTask(&D_800BB814, 0, 0, 0xD3);
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            func_80049C38_4A838(arg0);
+            func_80049C70_4A870(arg0);
+            break;
+
+        case 1:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            func_80049C38_4A838(arg0);
+            func_80049C70_4A870(arg0);
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            func_80046244_46E44(arg0, 4);
+            func_80049BFC_4A7FC();
+            break;
+
+        case 2:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            if (temp_s1->unk7A != 0xB) {
+                func_80049C38_4A838(arg0);
+                func_80049C70_4A870(arg0);
+                func_800BBB34();
+                func_80049BFC_4A7FC();
+            }
+            func_80046244_46E44(arg0, 3);
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            break;
+
+        case 3:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            if (temp_s1->unk7A == 8) {
+                func_80049C38_4A838(arg0);
+                func_80049C70_4A870(arg0);
+            } else {
+                func_80045434_46034(1);
+            }
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            break;
+
+        case 4:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            scheduleTask(&func_800BB2B0, 0, 0, 0x32);
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&D_800BB7F0, 0, 0, 0x5E);
+            func_80049C38_4A838(arg0);
+            func_80049C70_4A870(arg0);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            break;
+
+        case 5:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            func_80049C38_4A838(arg0);
+            func_80049C70_4A870(arg0);
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            func_80046244_46E44(arg0, 6);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&D_800BBA28, 0, 0, 0x31);
+            scheduleTask(&D_800BBAF8, 0, 0, 0xF0);
+            func_80049BFC_4A7FC();
+            break;
+
+        case 6:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            func_80044538_45138(0);
+            func_80044538_45138(1);
+            func_80049C38_4A838(arg0);
+            func_80049C70_4A870(arg0);
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            func_800BBA98();
+            func_80049BFC_4A7FC();
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            break;
+
+        case 7:
+            func_80044538_45138(2);
+            func_80044538_45138(3);
+            if (temp_s1->unk7A != 8) {
+                func_80045434_46034(0);
+            } else {
+                func_80049C38_4A838(arg0);
+                func_80049C70_4A870(arg0);
+            }
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            break;
+
+        case 8:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            func_80049C38_4A838(arg0);
+            func_80049C70_4A870(arg0);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
+            func_800BBED8();
+            scheduleTask(&D_800BC528, 0, 0, 0xC7);
+            func_800BC9BC();
+            func_80049BFC_4A7FC();
+            break;
+
+        case 9:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            func_80049C38_4A838(arg0);
+            func_80049C70_4A870(arg0);
+            scheduleTask(&D_800BB74C, 0, 0, 0xC8);
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&D_800BB8E8, 0, 0, 0x32);
+            scheduleTask(&D_800BBE84, 0, 0, 0x32);
+            func_80044538_45138(6);
+            func_80044538_45138(7);
+            func_800BC0FC(0);
+            func_800BC0FC(1);
+            func_800BC0FC(2);
+            func_800BC0FC(3);
+            func_800BC0FC(4);
+            scheduleTask(&D_800BC13C, 0, 0, 0xD3);
+            scheduleTask(&D_800BC72C, 0, 0, 0xD3);
+            func_80049BFC_4A7FC();
+            break;
+
+        case 10:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            func_80044538_45138(4);
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&D_800BB688, 0, 0, 0xD3);
+            func_80049C38_4A838(arg0);
+            func_80049C70_4A870(arg0);
+            break;
+
+        case 11:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            if (temp_s1->unk7A == 8) {
+                func_80049C38_4A838(arg0);
+                func_80049C70_4A870(arg0);
+            } else {
+                func_80045434_46034(2);
+            }
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            func_80041418_42018();
+            func_80044538_45138(5);
+            break;
+
+        case 12:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            if (temp_s1->unk7A == 8) {
+                func_80049C38_4A838(arg0);
+                func_80049C70_4A870(arg0);
+            } else {
+                func_80045434_46034(3);
+            }
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
+            break;
+
+        case 13:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            if (temp_s1->unk7A == 8) {
+                func_80049C38_4A838(arg0);
+                func_80049C70_4A870(arg0);
+            } else {
+                func_800BBA50(arg0);
+            }
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&D_800BBA90, 0, 0, 0xD3);
+            break;
+
+        case 14:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            if (temp_s1->unk7A == 8) {
+                func_80049C38_4A838(arg0);
+                func_80049C70_4A870(arg0);
+            }
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            break;
+
+        case 15:
+            for (s0 = 0; s0 < arg1; s0++) {
+                temp_s1->unk60 = temp_s1->unk60 + 1;
+                func_80045964_46564(s0);
+            }
+            func_80049C38_4A838(arg0);
+            func_80049C70_4A870(arg0);
+            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            break;
+    }
+}
 
 typedef struct {
     void *unk0;
