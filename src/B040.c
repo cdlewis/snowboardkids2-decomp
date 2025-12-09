@@ -4,6 +4,20 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
+#define FILL_STRUCT(v)       \
+    (v)->unk0 = arg0;        \
+    (v)->unk4 = arg1;        \
+    (v)->unk6 = arg2;        \
+    (v)->unk8 = arg3;        \
+    (v)->unkA = arg6;        \
+    (v)->unkB = 0;           \
+    (v)->unk10 = arg4->unk0; \
+    (v)->unk14 = arg4->unk4; \
+    (v)->unk18 = arg4->unk8; \
+    (v)->unkC = arg5;        \
+    (v)->unk1C = arg9;       \
+    (v)->unk1E = arg10;
+
 typedef union {
     s16 unk70;
     u8 unk70_u8;
@@ -37,6 +51,18 @@ typedef struct {
     s32 unk4;
 } Table2DRow;
 
+typedef void (*SchedulerFunc)(func_8000B510_C110_arg *);
+
+extern u8 *D_8008C92C_8D52C;
+void func_8000A854_B454(func_8000B510_C110_arg *arg0);
+void func_8000A9A4_B5A4(func_8000B510_C110_arg *arg0);
+void func_8000AD24_B924(func_8000B510_C110_arg *arg0);
+void func_8000B044_BC44(func_8000B510_C110_arg *arg0);
+void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0);
+void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0);
+void func_8000B38C_BF8C(func_8000B510_C110_arg *arg0);
+void func_8000B52C_C12C(func_8000B510_C110_arg *arg0);
+
 void func_8000A49C_B09C(s32, s16, s16, s16, void *, s32, s8, u8, u8, s16);
 
 void func_8000A440_B040(s32 arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s32 arg5, s8 arg6) {
@@ -60,7 +86,98 @@ void func_8000A49C_B09C(
     func_8000A510_B110(arg0, arg1, arg2, arg3, arg4, arg5, arg6, new_var, arg8, arg9, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000A510_B110);
+s32 func_8000A510_B110(
+    s32 arg0,
+    s16 arg1,
+    s16 arg2,
+    s16 arg3,
+    cutsceneEffectDisp_exec_arg *arg4,
+    s32 arg5,
+    s8 arg6,
+    u8 arg7,
+    u8 arg8,
+    s16 arg9,
+    s16 arg10
+) {
+    s32 i;
+    u8 temp_v1;
+    ScheduledTask *temp_v0;
+    ScheduledTask *temp_v0_2;
+    ScheduledTask *var_a0_2;
+
+    temp_v1 = (D_8008C92C_8D52C + ((s32)(arg2 << 0x10) >> 0xD))[7];
+    if (arg0 == 0) {
+        return 0;
+    }
+
+    switch (temp_v1) {
+        case 0:
+            var_a0_2 = scheduleTask(&func_8000A854_B454, arg7, arg8, 0);
+            if (var_a0_2 == NULL) {
+                break;
+            }
+
+            FILL_STRUCT(var_a0_2)
+            return 1;
+        case 1:
+            temp_v0 = scheduleTask(&func_8000A9A4_B5A4, arg7, arg8, 0);
+            if (temp_v0 == NULL) {
+                break;
+            }
+
+            FILL_STRUCT(temp_v0)
+            temp_v0->unk6C = 1;
+            temp_v0->unk70 = 1;
+            return 1;
+        case 2:
+            for (i = 0; i < 4; i++) {
+                temp_v0_2 = scheduleTask(&func_8000AD24_B924, arg7, arg8, 0);
+                if (temp_v0_2 == NULL) {
+                    continue;
+                }
+
+                FILL_STRUCT(temp_v0_2)
+                temp_v0_2->unk6C = i << 0xB;
+                temp_v0_2->unk70 = 0;
+            }
+            return 1;
+        case 3:
+            var_a0_2 = scheduleTask(&func_8000B044_BC44, arg7, arg8, 0);
+            if (var_a0_2 != NULL) {
+                FILL_STRUCT(var_a0_2)
+                var_a0_2->unk6C = 0;
+                return 1;
+            }
+            // fallthrough
+        case 4:
+            var_a0_2 = scheduleTask(&func_8000B1CC_BDCC, arg7, arg8, 0);
+            if (var_a0_2 == NULL) {
+                break;
+            }
+
+            FILL_STRUCT(var_a0_2)
+            var_a0_2->unk6C = 0;
+            return 1;
+        case 5:
+            var_a0_2 = scheduleTask(&func_8000B38C_BF8C, arg7, arg8, 0);
+            if (var_a0_2 != NULL) {
+                FILL_STRUCT(var_a0_2)
+                return 1;
+            }
+            // fallthrough
+        case 6:
+            var_a0_2 = scheduleTask(&func_8000B52C_C12C, arg7, arg8, 0);
+            if (var_a0_2 == NULL) {
+                break;
+            }
+
+        set2:
+            FILL_STRUCT(var_a0_2)
+            return 1;
+    }
+
+    return 0;
+}
 
 typedef struct {
     void *unk0;

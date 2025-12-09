@@ -1,3 +1,5 @@
+#pragma once
+
 #include "1DFAA0.h"
 #include "common.h"
 
@@ -15,7 +17,9 @@ typedef struct {
 } cutsceneEffectRocket_exec_arg;
 
 typedef struct {
-    u8 padding[0xC];
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
     s16 unkC;
     s16 unkE;
     s16 unk10;
