@@ -516,3 +516,4 @@ func_80031138_31D38 1 0% -- Non-matching due to compiler differences: GCC_KMC ge
 func_80003898_4498 10 99.697%
 func_8004106C_41C6C 30 95.461% -- Register allocation mismatch: compiler assigns arg0 to s0 but target uses s1
 func_800477E4_483E4 1 ~98% -- Register allocation mismatches in loop
+func_8004562C_4622C 1 -- Failed decompilation attempt, checksum mismatch
