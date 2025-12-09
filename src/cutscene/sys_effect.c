@@ -1,4 +1,5 @@
 #include "cutscene/sys_effect.h"
+#include "B040.h"
 
 void cutsceneEffectDisp_init(void) {
 }
@@ -8,7 +9,6 @@ s32 cutsceneEffectDisp_validate(void) {
 }
 
 void cutsceneEffectDisp_exec(cutsceneEffectDisp_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    extern void func_8000A510_B110(s32, s16, s16, s16, void *, s32, s32, s32, s32, s32, s32);
     Node_70B00 *temp_v0;
     s16 temp_t0;
     s16 temp_t1;

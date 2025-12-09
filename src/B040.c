@@ -55,10 +55,9 @@ void func_8000A49C_B09C(
     u8 arg8,
     s16 arg9
 ) {
-    volatile s32 pad;
-    volatile s32 pad2;
-    *((s32 *)&pad2 - 1) = 0;
-    func_8000A510_B110(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+    u8 new_var;
+    new_var = arg7;
+    func_8000A510_B110(arg0, arg1, arg2, arg3, arg4, arg5, arg6, new_var, arg8, arg9, 0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000A510_B110);
