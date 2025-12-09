@@ -524,3 +524,4 @@ func_80005E54_6A54 1 -- Failed decompilation attempt, checksum mismatch
 func_800BB778_AF468 30 95.120% -- Register allocation mismatch: loop counter/offset swap (v1/a0), numPlayers load pattern differs
 func_800B4378_1E1428 30 97.829% -- Register allocation mismatch: addu/lhu scheduling (v0/v1 swap), FA loads before F8
 func_80045B3C_4673C 30 99.268%
+func_800B7620_1E46D0 30 93.850% -- Compiler optimization difference: bltzl/negu abs pattern not generated in first branch, register allocation mismatch (mflo v1 vs mflo v0)
