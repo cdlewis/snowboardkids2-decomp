@@ -518,3 +518,4 @@ func_8004106C_41C6C 30 95.461% -- Register allocation mismatch: compiler assigns
 func_800477E4_483E4 1 ~98% -- Register allocation mismatches in loop
 func_8004562C_4622C 1 -- Failed decompilation attempt, checksum mismatch
 func_8004AFF8_4BBF8 1 -- Failed decompilation attempt, checksum mismatch
+func_80028480_29080 1 -- Failed decompilation attempt, checksum mismatch
