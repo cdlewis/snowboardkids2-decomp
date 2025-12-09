@@ -505,3 +505,4 @@ func_800397CC_3A3CC 14 81.0
 func_80058C64_59864 22 91.250%
 func_8002F12C_2FD2C 18 90.551%
 func_80033E40_34A40 (7 attempts, 100%) -- matched in isolated environment, but fails integration (compiler reordering issues)
+func_8000D144_DD44 19 99.833%
