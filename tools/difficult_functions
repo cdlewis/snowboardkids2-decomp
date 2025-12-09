@@ -512,3 +512,4 @@ func_80044684_45284 15 97.262%
 setupSlotTransform 12 93.243%
 func_800B2F2C 8 0
 func_8002F72C_3032C 30 98.71%
+func_80031138_31D38 1 0% -- Non-matching due to compiler differences: GCC_KMC generates beqzl for inner condition (original uses bnez), hoists constant 0x10 to $s3 (original loads inline in delay slot)
