@@ -130,6 +130,8 @@ typedef struct {
     void *unk58;
     s16 unk5C;
     s8 unk5E;
+    char pad5F;
+    char unk60[8];
 } func_800302AC_30EAC_arg;
 
 typedef struct {
@@ -155,8 +157,9 @@ extern u8 identityMatrix[];
 extern s32 D_8008F110_8FD10;
 extern s16 D_8008F0B2_8FCB2[];
 extern s16 D_8008F0C6_8FCC6[];
+extern s32 *D_800AFE8C_A71FC;
 
-void func_80030378_30F78(void);
+void func_80030378_30F78(func_800302AC_30EAC_arg *);
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
 void func_80030540_31140(func_80030540_31140_arg *arg0);
 void func_8002EFD8_2FBD8(void *);
@@ -716,7 +719,42 @@ void func_800302AC_30EAC(func_800302AC_30EAC_arg *arg0) {
     setCallback(&func_80030378_30F78);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030378_30F78);
+void func_80030378_30F78(func_800302AC_30EAC_arg *arg0) {
+    s32 i;
+    func_800308FC_314FC_arg *item;
+    s8 value;
+    s32 space;
+
+    if (*D_800AFE8C_A71FC < 100) {
+        value = 1;
+        i = 6;
+        do {
+            arg0->items[i].unkA = value;
+        } while (--i >= 0);
+    } else {
+        value = 2;
+        i = 6;
+        do {
+            arg0->items[i].unkA = value;
+        } while (--i >= 0);
+    }
+
+    sprintf(arg0->unk60, "%7d", *D_800AFE8C_A71FC);
+
+    i = 0;
+    space = ' ';
+    item = &arg0->items[0];
+    do {
+        char c = arg0->unk60[i];
+        if (c != space) {
+            item->unk8 = c - '0';
+            debugEnqueueCallback(8, 0, &func_80010240_10E40, item);
+        }
+        item++;
+    } while (++i < 7);
+
+    debugEnqueueCallback(8, 0, &func_80010240_10E40, &arg0->unk54);
+}
 
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0) {
     arg0->items[0].unk4 = freeNodeMemory(arg0->items[0].unk4);
@@ -750,7 +788,6 @@ void func_800304B8_310B8(func_800308FC_314FC_arg *arg0) {
 }
 
 extern s32 D_8008F070_8FC70[];
-extern s32 *D_800AFE8C_A71FC;
 
 void func_80030540_31140(func_80030540_31140_arg *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
