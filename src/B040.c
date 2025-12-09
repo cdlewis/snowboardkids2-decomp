@@ -171,7 +171,6 @@ s32 func_8000A510_B110(
                 break;
             }
 
-        set2:
             FILL_STRUCT(var_a0_2)
             return 1;
     }
