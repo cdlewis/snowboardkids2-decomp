@@ -49,7 +49,7 @@ while true; do
 
   echo -e "\n[$(date '+%H:%M:%S')] Decompiling $simplest_func...\n" | tee -a "tools/vacuum.log"
 
-  output=$(claude -p "use the decompile-a-function skill to decompile the function $simplest_func" 2>&1 | tee -a tools/vacuum.log)
+  output=$(claude --model opus -p "use the decompile-a-function skill to decompile the function $simplest_func" 2>&1 | tee -a tools/vacuum.log)
   exit_code=$?
   echo "$output"
 

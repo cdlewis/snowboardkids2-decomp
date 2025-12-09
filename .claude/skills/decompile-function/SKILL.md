@@ -5,6 +5,8 @@ description: Given a function name, decompile it from assembly to C code. Use th
 
 # Decompile a Function
 
+Decompiling a function is a difficult task. Use thinking. Avoid delegation to less capable models (i.e. Sonnet).
+
 ## Instructions
 
 ### Step 1
