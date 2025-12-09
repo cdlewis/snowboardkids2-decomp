@@ -18,9 +18,9 @@ typedef struct {
     u8 padding[0x5];
 } Node_70B00_ColorData;
 typedef struct PoolEntry {
-    struct PoolEntry* next;
-    void* unk4;
-    void* unk8;
+    struct PoolEntry *next;
+    void *unk4;
+    void *unk8;
     u8 _padC[3];
     u8 unkF;
 } PoolEntry;
@@ -41,7 +41,7 @@ typedef struct Node_70B00 {
     s8 unk15;
     /* 0x16 */ u16 slot_index;
     /* 0x18 */ PoolEntry pool[7];
-    /* 0x88 */ void* unk88;
+    /* 0x88 */ void *unk88;
     u8 padding2[0x14];
     /* 0xA0 */ s16 unkA0;
     /* 0xA2 */ s16 unkA2;
@@ -95,15 +95,6 @@ void func_8006FE28_70A28(Node_70B00 *arg0, u8 arg1, u8 arg2, u8 arg3);
 
 void func_8006FE48_70A48(u16 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5);
 
-typedef struct {
-    u8 padding[0xC8];
-    s16 unkC8;
-    s16 unkCA;
-    u8 padding2[0x104];
-    f32 unk1D0;
-    s32 unk1D4;
-} func_8006F9BC_705BC_arg;
-
 void func_8006F9BC_705BC(Node_70B00 *arg0, f32 arg1, f32 arg2);
 
 void func_8006E054_6EC54(u16);
@@ -114,7 +105,7 @@ void func_8006FEF8_70AF8(Node_70B00 *, u16);
 
 void func_8006FD3C_7093C(u16, void *);
 
-void func_8006FAA4_706A4(void *, s32, s32, s32, s32);
+void func_8006FAA4_706A4(Node_70B00 *, Node_70B00 *, s32, s32, s32);
 
 void func_8006FA0C_7060C(Node_70B00 *, f32, f32, f32, f32);
 

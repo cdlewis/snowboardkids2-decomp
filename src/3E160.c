@@ -16,6 +16,26 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
+#define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                      \
+    do {                                                                        \
+        fov = 70.0f;                                                            \
+        aspect1 = (aspect_val);                                                 \
+        near = 20.0f;                                                           \
+        far1 = 10000.0f;                                                        \
+        if ((gs)->memoryPoolId != 0xB) {                                        \
+            func_8006FA0C_7060C(&(gs)->unk8[idx], fov, aspect1, near, 3000.0f); \
+        } else {                                                                \
+            func_8006FA0C_7060C(&(gs)->unk8[idx], fov, aspect1, near, 2000.0f); \
+        }                                                                       \
+        func_8006FA0C_7060C(&(gs)->unkC[idx], fov, aspect1, near, far1);        \
+    } while (0)
+
+typedef struct {
+    u8 unk0[0x18];
+    ColorData unk18;
+    ColorData unk20;
+} VarData;
+
 USE_ASSET(_34CB50);
 USE_ASSET(_3FF010);
 USE_ASSET(_40E870);
@@ -53,6 +73,22 @@ void func_8003FFC0_40BC0(void);
 void func_80040304_40F04(void);
 void func_8004013C_40D3C(void);
 void func_800401E8_40DE8(void);
+
+typedef struct {
+    Node_70B00 *audioPlayer0;
+    Node_70B00 *unk4;
+    Node_70B00 *unk8;
+    Node_70B00 *unkC;
+    u8 padding[0x5C - 0x10];
+    u8 memoryPoolId;
+    u8 numPlayers;
+    u8 padding2[0x7A - 0x5E];
+    u8 unk7A;
+} GameState_temp;
+
+extern void func_8003EDA0_3F9A0(void);
+extern ColorData D_80090774_91374;
+extern ColorData D_8009077C_9137C;
 
 typedef struct {
     u8 unk0[4];
@@ -598,7 +634,136 @@ void initRace(void) {
     func_8006983C_6A43C((void *)func_8003E4F0_3F0F0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003E4F0_3F0F0);
+void func_8003E4F0_3F0F0(void) {
+    GameState_temp *gs;
+    VarData *v2;
+    s32 i;
+    f32 new_var;
+    s32 j;
+    s32 counter;
+    f32 fov;
+    f32 aspect1;
+    f32 near;
+    f32 far1;
+
+    gs = (GameState_temp *)getCurrentAllocation();
+    v2 = (VarData *)func_80055D10_56910(gs->memoryPoolId);
+    func_80056990_57590(0x60, 0x1400);
+    func_8006FAA4_706A4(gs->audioPlayer0, 0, 0xC, 0x1E, 0);
+    setModelCameraTransform(gs->audioPlayer0, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
+
+    for (i = 0; i < gs->numPlayers; i++) {
+        func_8006FAA4_706A4(&gs->unkC[i], 0, (u16)(i + 4), 5, 1);
+        func_8006FAA4_706A4(&gs->unk8[i], &gs->unkC[i], (u16)i, 0xA, 1);
+        func_8006FAA4_706A4(&gs->unk4[i], &gs->unk8[i], (u16)(i + 8), 0x14, 0);
+        func_8006FEF8_70AF8(&gs->unk8[i], (u16)(i + 0x64));
+        func_8006FEF8_70AF8(&gs->unkC[i], (u16)(i + 0x64));
+
+        if (gs->unk7A == 0xB) {
+            func_8006FC70_70870(i + 0x64, 1, &D_80090774_91374, &D_8009077C_9137C);
+        } else {
+            func_8006FC70_70870(i + 0x64, 1, &v2->unk18, &v2->unk20);
+        }
+
+        if (gs->memoryPoolId != 0xB) {
+            func_8006FE48_70A48(i + 0x64, 0x3E3, 0x3E7, v2->unk20.r2, v2->unk20.g2, v2->unk20.b2);
+        } else {
+            func_8006FE48_70A48(i + 0x64, 0x384, 0x3E7, v2->unk20.r2, v2->unk20.g2, v2->unk20.b2);
+        }
+    }
+
+    switch (gs->numPlayers) {
+        case 1:
+            setModelCameraTransform(gs->unkC, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
+            setModelCameraTransform(gs->unk8, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
+            setModelCameraTransform(gs->unk4, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
+
+            if (gs->memoryPoolId != 0xB) {
+                near = 70.0f;
+                aspect1 = 4.0f / 3.0f;
+                fov = 20.0f;
+                func_8006FA0C_7060C(gs->unk8, near, aspect1, fov, 3800.0f);
+            } else {
+                near = 70.0f;
+                aspect1 = 4.0f / 3.0f;
+                fov = 20.0f;
+                func_8006FA0C_7060C(gs->unk8, near, aspect1, fov, 2000.0f);
+            }
+            func_8006FA0C_7060C(gs->unkC, near, aspect1, fov, 10000.0f);
+            break;
+
+        case 2:
+            osViExtendVStart(1);
+
+            setModelCameraTransform(&gs->unkC[0], 0, -0x35, -0xA0, -0x34, 0xA0, 0x34);
+            setModelCameraTransform(&gs->unkC[1], 0, 0x35, -0xA0, -0x34, 0xA0, 0x34);
+
+            for (counter = 0, i = 0; i < 2; i++, counter++) {
+                setModelCameraTransform(&gs->unk8[counter], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
+                setModelCameraTransform(&gs->unk4[counter], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
+                func_8006F9BC_705BC(&gs->unk8[counter], 1.0f, 0.5f);
+                func_8006F9BC_705BC(&gs->unkC[counter], 1.0f, 0.5f);
+
+                // SET_PLAYER_CAMERA_PERSPECTIVE should probably work here but it doesn't because
+                // the copy of far1 to new_var is essential here but breaks the 3 and 4 cases.
+                do {
+                    fov = 70.0f;
+                    aspect1 = (4.0f / 3.0f) * 2.0f;
+                    near = 20.0f;
+                    far1 = 10000.0f;
+                    new_var = far1;
+                    if (gs->memoryPoolId != 0xB) {
+                        func_8006FA0C_7060C(&gs->unk8[counter], fov, aspect1, near, 3000.0f);
+                    } else {
+                        func_8006FA0C_7060C(&gs->unk8[counter], fov, aspect1, near, 2000.0f);
+                    }
+                    func_8006FA0C_7060C(&gs->unkC[counter], fov, aspect1, near, new_var);
+                } while (0);
+            }
+
+            break;
+
+        case 3:
+            osViExtendVStart(1);
+
+            setModelCameraTransform(&gs->unkC[0], -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->unkC[1], -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->unkC[2], 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+
+            for (counter = 0, i = 0; i < 3; i++, counter++) {
+                setModelCameraTransform(&gs->unk8[counter], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                new_var = 0.5f;
+                setModelCameraTransform(&gs->unk4[counter], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                func_8006F9BC_705BC(&gs->unk8[counter], 0.5f, 0.5f);
+                func_8006F9BC_705BC(&gs->unkC[counter], 0.5f, new_var);
+
+                SET_PLAYER_CAMERA_PERSPECTIVE(gs, counter, (4.0f / 3.0f));
+            }
+
+            break;
+
+        case 4:
+            osViExtendVStart(1);
+
+            setModelCameraTransform(&gs->unkC[0], -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->unkC[1], -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->unkC[2], 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->unkC[3], 0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+
+            for (counter = 0, i = 0; i < 4; i++, counter++) {
+                setModelCameraTransform(&gs->unk8[counter], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                setModelCameraTransform(&gs->unk4[counter], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                func_8006F9BC_705BC(&gs->unk8[counter], 0.5f, 0.5f);
+                func_8006F9BC_705BC(&gs->unkC[counter], 0.5f, 0.5f);
+
+                SET_PLAYER_CAMERA_PERSPECTIVE(gs, counter, (4.0f / 3.0f));
+            }
+
+            break;
+    }
+
+    func_8006983C_6A43C(&func_8003EDA0_3F9A0);
+}
 
 void func_8003EDA0_3F9A0(void) {
     GameState *temp_v0;
@@ -614,7 +779,7 @@ void func_8003EDF8_3F9F8(void) {
 
     parseGameDataLayout(&gs->gameData);
 
-    gs->unk44 = (u8 *)gs->unk28 + gs->unk28->unk0;
+    gs->unk44 = (GameStateUnk44 *)((u8 *)gs->unk28 + gs->unk28->unk0);
     gs->unk48 = (u8 *)gs->unk28 + gs->unk28->unk4;
 
     func_8006983C_6A43C(&func_8003EE50_3FA50);
