@@ -997,7 +997,43 @@ void func_80030B70_31770(func_80030B70_31770_arg *arg0) {
     arg0->unk38 = freeNodeMemory(arg0->unk38);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_80030BA8_317A8);
+extern u8 *EepromSaveData;
+
+s32 func_80030BA8_317A8(u8 *buffer) {
+    s32 temp_t0;
+    s32 i;
+    s32 j;
+
+    // Clear 12 bytes
+    temp_t0 = 0;
+    for (i = 11; i >= 0; i--) {
+        buffer[i] = 0;
+    }
+
+    // Check 3x3 grid
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            if (EepromSaveData[i * 3 + (u64)j + 0x30] == 0) {
+                buffer[temp_t0] = i * 3 + j;
+                temp_t0++;
+                break;
+            }
+        }
+    }
+
+    // Check setting_42 array entries
+    for (i = 0; i < 9; i++) {
+        u8 value = EepromSaveData[(u64)i + 0x42];
+        if (value != 0) {
+            if (EepromSaveData[(u64)value + 0x30] == 0) {
+                buffer[temp_t0] = value;
+                temp_t0++;
+            }
+        }
+    }
+
+    return temp_t0 & 0xFF;
+}
 
 INCLUDE_RODATA("asm/nonmatchings/2F990", D_8009E47C_9F07C);
 
