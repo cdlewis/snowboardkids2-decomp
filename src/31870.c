@@ -8,6 +8,7 @@
 #include "5E590.h"
 #include "68CF0.h"
 #include "6E840.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "displaylist.h"
@@ -27,18 +28,20 @@ USE_ASSET(_4488E0);
 USE_ASSET(_4237C0);
 
 extern u16 D_8008F150_8FD50[];
+extern const char D_8009E47C_9F07C[];
 extern const char D_8009E480_9F080;
 extern void func_80032708_33308(void);
 extern void func_8006FED8_70AD8(void *);
 
-void func_800323FC_32FFC(void);
 void func_80032628_33228(void);
 
 typedef struct {
     s16 unk0;
     s16 unk2;
     void *unk4;
-    u8 pad[0x4];
+    s16 unk8;
+    u8 unkA;
+    u8 pad;
 } func_80032330_32F30_element;
 
 typedef struct {
@@ -48,7 +51,11 @@ typedef struct {
     void *unk58;
     s16 unk5C;
     u8 unk5E;
+    u8 pad;
+    char unk60[8];
 } func_80032330_32F30_arg;
+
+void func_800323FC_32FFC(func_80032330_32F30_arg *arg0);
 
 typedef struct {
     u8 padding[0x77C];
@@ -1060,7 +1067,42 @@ void func_80032330_32F30(func_80032330_32F30_arg *arg0) {
     setCallback(&func_800323FC_32FFC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_800323FC_32FFC);
+void func_800323FC_32FFC(func_80032330_32F30_arg *arg0) {
+    func_80032330_32F30_element *elem;
+    s32 space;
+    s32 i;
+    s32 val;
+
+    if (D_800AFE8C_A71FC->padding < 100) {
+        val = 1;
+        i = 6;
+        do {
+            arg0->elements[i].unkA = val;
+        } while (--i >= 0);
+    } else {
+        val = 2;
+        i = 6;
+        do {
+            arg0->elements[i].unkA = val;
+        } while (--i >= 0);
+    }
+
+    sprintf(arg0->unk60, D_8009E47C_9F07C, D_800AFE8C_A71FC->padding);
+
+    i = 0;
+    space = 0x20;
+    elem = arg0->elements;
+
+    for (; i < 7; i++) {
+        if (arg0->unk60[i] != space) {
+            elem->unk8 = arg0->unk60[i] - 0x30;
+            debugEnqueueCallback(9, 7, func_80010240_10E40, elem);
+        }
+        elem++;
+    }
+
+    debugEnqueueCallback(9, 7, func_80010240_10E40, &arg0->unk54);
+}
 
 void func_80032504_33104(func_80032504_33104_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
