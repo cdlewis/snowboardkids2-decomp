@@ -124,6 +124,8 @@ void func_80067EDC_68ADC(s32, loadAssetMetadata_arg *);
 
 void func_8006395C_6455C(DisplayListObject *arg0);
 
+void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1);
+
 void func_80065DA8_669A8(s32 arg0, DisplayListObject *arg1);
 
 u16 func_800625A4_631A4(void *arg0, void *arg1);

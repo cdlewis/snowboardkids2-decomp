@@ -23,7 +23,6 @@ extern Mat3x3Padded D_8009A8B0_9B4B0;
 extern s32 gFrameCounter;
 extern void func_80041810_42410(void *);
 extern void func_80042160_42D60(void);
-extern void func_800639F8_645F8(s32, DisplayListObject *);
 extern void func_80058B30_59730(Player *);
 
 typedef struct {
