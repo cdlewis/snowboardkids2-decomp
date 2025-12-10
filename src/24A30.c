@@ -132,7 +132,7 @@ typedef struct {
     Mat3x3Padded unk3C;
     Mat3x3Padded unk5C;
     Mat3x3Padded unk7C;
-    u8 pad9C[4];
+    s32 unk9C;
     u8 unkA0;
     u8 unkA1;
     u8 unkA2;
@@ -142,7 +142,7 @@ extern s32 identityMatrix[];
 extern s32 D_8008DD2C_8E92C[];
 
 void func_80024220_24E20(func_80024220_24E20_arg *);
-void func_80024298_24E98(void *);
+void func_80024298_24E98(func_80024048_arg *);
 void func_80027BC8_287C8(func_80027BC8_arg *, u8);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
@@ -223,9 +223,58 @@ void func_80024220_24E20(func_80024220_24E20_arg *arg0) {
     setCallback(func_80024048_24C48);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024298_24E98);
-
 void func_80024518_25118(func_80024518_arg *);
+void func_80024414_25014(func_80024518_arg *);
+
+void func_80024298_24E98(func_80024048_arg *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded *localPtr;
+    u8 *base;
+    Mat3x3Padded *unk7CPtr;
+    Mat3x3Padded *unk5CPtr;
+    s32 tableValue;
+    u8 charIndex;
+    u8 assetIndex;
+    s32 paletteValue;
+    u16 rotation;
+    s32 offset;
+
+    base = (u8 *)getCurrentAllocation();
+
+    unk7CPtr = &arg0->unk7C;
+    offset = arg0->unkA1 << 5;
+    memcpy(unk7CPtr, (u8 *)(offset + (s32)base + 0x17F8), 0x20);
+
+    tableValue = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->unk8 * 2) + *(base + arg0->unkA1 + 0x18C0)];
+    arg0->unk7C.unk14 = tableValue;
+    arg0->unk9C = tableValue;
+
+    charIndex = *(base + arg0->unkA1 + 0x18A8);
+    assetIndex = *(base + arg0->unkA1 + 0x18B0);
+    assetIndex += charIndex * 3;
+    arg0->unkA2 = assetIndex;
+
+    paletteValue = EepromSaveData->character_or_settings[assetIndex] - 1;
+    assetIndex &= 0xFF;
+
+    arg0->unk20 = loadAssetByIndex_95728(assetIndex);
+    arg0->unk24 = loadAssetByIndex_95500(assetIndex);
+    arg0->unk28 = loadAssetByIndex_95590(assetIndex);
+    arg0->unk2C = loadAssetByIndex_95668((u8)paletteValue);
+
+    localPtr = &sp10;
+    memcpy(localPtr, identityMatrix, 0x20);
+    memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
+
+    unk5CPtr = &arg0->unk5C;
+    rotation = *(u16 *)(base + arg0->unkA1 * 2 + 0x1888);
+    createYRotationMatrix(unk5CPtr, rotation);
+
+    func_8006B084_6BC84(&arg0->unk3C, unk5CPtr, localPtr);
+    func_8006B084_6BC84(localPtr, unk7CPtr, arg0);
+
+    setCallback(func_80024414_25014);
+}
 
 void func_80024414_25014(func_80024518_arg *arg0) {
     Mat3x3Padded sp10;
