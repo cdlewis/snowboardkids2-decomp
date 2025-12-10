@@ -439,3 +439,4 @@ func_80045B3C_4673C 30 99.268%
 func_800B7620_1E46D0 30 93.850% -- Compiler optimization difference: bltzl/negu abs pattern not generated in first branch, register allocation mismatch (mflo v1 vs mflo v0)
 atan2Fixed 13 ~0% -- Compiler optimization: (x<<16)>>15 to x<<1, branch inversion (bnez to beqz+j), affects function size and subsequent symbol addresses
 func_800B217C_A202C 24 97.778% -- Delay slot scheduling mismatch: compiler puts move a0,s0 in wrong delay slots (nop/move a0 swapped between two jal calls)
+func_800B2254_A2104 9 97.391%
