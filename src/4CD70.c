@@ -765,12 +765,14 @@ typedef struct {
     s16 unk2;
     void *unk4;
     s16 unk8;
-    u8 padA[0x6];
+    u8 padA[0x4];
+    u8 unkE;
+    u8 padF;
     void *unk10;
     s32 unk14;
 } Struct_func_8004DCFC;
 
-void func_8004DDD0_4E9D0(void);
+void func_8004DDD0_4E9D0(Struct_func_8004DCFC *arg0);
 void func_8004DEC0_4EAC0(Struct_func_8004DCC4 *);
 
 void func_8004DCFC_4E8FC(Struct_func_8004DCFC *arg0) {
@@ -806,7 +808,52 @@ void func_8004DCFC_4E8FC(Struct_func_8004DCFC *arg0) {
     setCallback(func_8004DDD0_4E9D0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004DDD0_4E9D0);
+extern char D_8009E894_9F494[];
+s32 func_8002ED30_2F930(void);
+
+void func_8004DDD0_4E9D0(Struct_func_8004DCFC *arg0) {
+    char buf[24];
+    s32 strLen;
+    char *ptr;
+    s32 temp;
+    s32 a2val;
+    s32 a1val;
+
+    temp = arg0->unk14;
+    if (temp != 0xFF) {
+        temp += 0x10;
+        arg0->unk14 = temp;
+        if (temp >= 0x100) {
+            arg0->unk14 = 0xFF;
+        }
+    }
+
+    arg0->unkE = (u8)arg0->unk14;
+    debugEnqueueCallback(8, 6, func_80012518_13118, arg0);
+
+    sprintf(buf, D_8009E894_9F494, func_8002ED30_2F930());
+
+    strLen = 0;
+    ptr = &buf[1];
+    if (*ptr != 0) {
+        do {
+            ptr++;
+            strLen++;
+        } while (*ptr != 0);
+    }
+
+    a2val = arg0->unk2;
+    a1val = arg0->unk0;
+    func_8003BD60_3C960(
+        buf,
+        (s16)(a1val + ((0x48 - (strLen << 3)) >> 1)),
+        (s16)(a2val + 0x14),
+        (s16)arg0->unk14,
+        arg0->unk10,
+        8,
+        6
+    );
+}
 
 void func_8004DEC0_4EAC0(Struct_func_8004DCC4 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
