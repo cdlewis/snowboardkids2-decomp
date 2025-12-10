@@ -441,3 +441,4 @@ atan2Fixed 13 ~0% -- Compiler optimization: (x<<16)>>15 to x<<1, branch inversio
 func_800B217C_A202C 24 97.778% -- Delay slot scheduling mismatch: compiler puts move a0,s0 in wrong delay slots (nop/move a0 swapped between two jal calls)
 func_800B2254_A2104 9 97.391%
 func_800B23DC_A228C 30 90.625% -- Register allocation mismatch: compiler uses v0 for both return value and -1 constant instead of v0/v1 split, stores unkBCD before unkBB5
+func_80025074_25C74 30 92.766% -- Instruction scheduling mismatch: compiler reorders addu a1/v0 computation and li a3/v0 sequence, sw delay slot placement differs
