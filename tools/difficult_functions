@@ -420,3 +420,4 @@ func_800B23DC_A228C 30 90.625% -- Register allocation mismatch: compiler uses v0
 func_80025074_25C74 30 92.766% -- Instruction scheduling mismatch: compiler reorders addu a1/v0 computation and li a3/v0 sequence, sw delay slot placement differs
 func_80055C80_56880 30 83.333% -- Instruction scheduling mismatch: compiler places function address load (lui/addiu) after all register saves, target places it between s2 and s3 saves
 func_80054D70_55970 15 98.974% -- Register allocation mismatch: compiler assigns arg0 to s2 instead of s1, loop counter i to s1 instead of s2
+func_800BB2B0_B4BB0 30 99.054% -- Register allocation mismatch: compiler assigns state to s3 and dst to s2, target uses s2 for state and s3 for dst
