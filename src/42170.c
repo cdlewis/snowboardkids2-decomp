@@ -1394,12 +1394,26 @@ s32 func_80043718_44318(void *arg0_void, void *arg1_void) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800437C4_443C4);
+void func_800437C4_443C4(Func4393CArg *arg0, s8 *arg1) {
+    s16 temp;
+
+    temp = arg0->unk42 - 1;
+    arg0->unk42 = temp;
+
+    if ((temp << 16) == 0) {
+        loadAssetMetadata((loadAssetMetadata_arg *)((s32)arg0 + 4), (void *)arg0->unk0, arg1[arg0->unk40 * 2 + 1]);
+        arg0->unk42 = (s8)arg1[arg0->unk40 * 2];
+        temp = (u16)arg0->unk40 + 1;
+        arg0->unk40 = temp;
+        if (arg1[temp * 2] == 0) {
+            arg0->unk40 = 0;
+        }
+    }
+}
 
 void func_80043D30_44930(void **);
 void func_8004393C_4453C(Func4393CArg *);
 void func_800438A0_444A0(Func4393CArg *);
-extern void func_800437C4_443C4(void *, void *);
 void func_80043AB4_446B4(Func4393CArg *);
 
 void func_80043860_44460(void **arg0) {
