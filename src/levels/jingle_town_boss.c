@@ -15,7 +15,7 @@ extern s32 D_8009A8AC_9B4AC;
 
 typedef struct {
     u8 pad[0x38];
-    u8 unk38[0x20];                     /* 0x38 - 0x57 */
+    s16 unk38[0x10];                    /* 0x38 - 0x57 */
     u8 pad58[0x74 - 0x58];
     u8 unk74[0x20];                     /* 0x74 - 0x93 */
     u8 pad94[0xB0 - 0x94];
@@ -24,7 +24,7 @@ typedef struct {
     s32 unk434;                         /* 0x434 */
     s32 unk438;                         /* 0x438 */
     s32 unk43C;                         /* 0x43C */
-    u8 pad440[0xC];
+    u8 unk440[0xC];
     s32 unk44C;                         /* 0x44C */
     s32 unk450;                         /* 0x450 */
     s32 unk454;                         /* 0x454 */
@@ -79,12 +79,14 @@ typedef struct {
 
 extern FuncPtr D_800BCB5C_B411C[];
 extern FuncPtr D_800BCB74_B4134[];
+extern s16 D_800BCBA0_B4160[];
 extern void func_800B00D4_9FF84(Arg0Struct *, s32);
 extern void func_800B02AC_A015C(Arg0Struct *);
 extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern void func_8005C868_5D468(void *arg0);
 extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
 extern s32 func_800544B4_550B4(s32, s32, s32);
+extern void func_80041EA4_42AA4(s32 *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BB2B0_B2870);
 
@@ -205,7 +207,46 @@ s32 func_800BC094_B3654(Arg0Struct *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BC1C0_B3780);
+s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
+    s32 sp10[3];
+    s32 sp20[3];
+    u8 temp_v0;
+
+    getCurrentAllocation();
+
+    temp_v0 = arg0->unkBBE;
+    if (temp_v0 == 0) {
+        arg0->unkBBE++;
+        transformVector2(D_800BCBA0_B4160, arg0->unk38, sp10);
+        arg0->unk434 += sp10[0];
+        arg0->unk438 += sp10[1];
+        arg0->unk43C += sp10[2];
+        memcpy(arg0->unk440, &arg0->unk434, 0xC);
+        arg0->unkB84 |= 0x200000;
+        transformVector(&D_800BCBA0_B4160[6], arg0->unk38, sp20);
+        func_80041EA4_42AA4(sp20);
+        transformVector(&D_800BCBA0_B4160[12], arg0->unk38, sp20);
+        func_80041EA4_42AA4(sp20);
+        transformVector(&D_800BCBA0_B4160[18], arg0->unk38, sp20);
+        func_80041EA4_42AA4(sp20);
+        transformVector(&D_800BCBA0_B4160[24], arg0->unk38, sp20);
+        func_80041EA4_42AA4(sp20);
+        transformVector(&D_800BCBA0_B4160[30], arg0->unk38, sp20);
+        func_80041EA4_42AA4(sp20);
+        arg0->unk468 = 0x100;
+    }
+
+    arg0->unk44C -= arg0->unk44C / 8;
+    arg0->unk454 -= arg0->unk454 / 8;
+    arg0->unk450 += -0x8000;
+    func_800BBE68_B3428(arg0);
+    arg0->unkA9E += arg0->unk468;
+    if (arg0->unk468 != 0) {
+        arg0->unk468 -= 2;
+    }
+    func_800B02AC_A015C(arg0);
+    return 0;
+}
 
 void func_800BC378_B3938(Arg0Struct *arg0) {
     s32 pad[8];
