@@ -26,6 +26,37 @@ extern s32 gFrameCounter;
 extern void func_80041810_42410(void *);
 extern void func_80042160_42D60(void);
 
+void func_80042F2C_43B2C(void **);
+
+typedef struct {
+    u8 _pad0[0x9F0];
+    s16 unk9F0[3];
+    u8 _pad9F6[0x1C5];
+    u8 unkBBB;
+    u8 _padBBC[0x13];
+    u8 unkBCF;
+    u8 _padBD0[0x9];
+    u8 unkBD9;
+} Func43CA4Unk28;
+
+typedef struct {
+    void *unk0;
+    loadAssetMetadata_arg unk4;
+    u8 padding[0x2];
+    Func43CA4Unk28 *unk24;
+    Func43CA4Unk28 *unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    s16 unk38;
+    s16 unk3A;
+    s16 unk3C;
+    s16 unk3E;
+    s16 unk40;
+    u8 unk42;
+    u8 unk43;
+} Func42BA4Arg;
+
 typedef struct {
     u8 _pad0[0x1F0];   /* 0x00 */
     s32 pos1F0;        /* 0x1F0 */
@@ -71,6 +102,21 @@ typedef struct {
     Player *unk3C;  /* 0x3C */
 } Func41A60Arg;
 
+struct Func42D54Arg {
+    u8 _pad0[0x4];
+    loadAssetMetadata_arg unk4;
+    void *unk20;
+    Func43CA4Unk28 *unk24;
+    Func43CA4Unk28 *unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    s32 unk38;
+    s16 unk3C;
+    u8 _pad3E[0x4];
+    u8 unk42;
+};
+
 void func_800419AC_425AC(Func4179CArg *);
 
 typedef struct {
@@ -89,7 +135,17 @@ typedef struct {
     s16 unk46;     /* 0x46 */
 } Func420E8State;
 
-void func_80042308_42F08(Func420E8State *);
+typedef struct {
+    u8 _pad0[0x4];
+    loadAssetMetadata_arg unk4;
+    u8 _pad20[0x4];
+    Func43CA4Unk28 *unk24;
+    u8 _pad28[0x4];
+    s16 unk2C[2];
+    s32 unk30;
+    u8 _pad34[0xE];
+    u8 unk42;
+} Func42C98Arg;
 
 typedef struct {
     u8 pad0[0x14]; /* 0x00 */
@@ -106,10 +162,6 @@ typedef struct {
     s16 unk44;     /* 0x44 */
     s16 unk46;     /* 0x46 */
 } Func43DC0State;
-
-void func_80044018_44C18(Func43DC0State *);
-void func_80043E24_44A24(Func43DC0State *);
-void func_80043F8C_44B8C(Func43DC0State *);
 
 typedef struct {
     u8 pad0[0x14];    /* 0x00 */
@@ -190,24 +242,6 @@ typedef struct {
     u16 unkCA;                     /* 0xCA */
 } Func44BBCArg;
 
-void func_80044578_45178(Func44BBCArg *);
-void func_80044684_45284(Func44BBCArg *);
-void func_800447D4_453D4(Func44BBCArg *);
-void func_80044888_45488(Func44BBCArg *);
-void func_80044990_45590(Func44BBCArg *);
-void func_80044C38_45838(Func44BBCArg *);
-
-typedef struct {
-    u8 _pad0[0x9F0];
-    s16 unk9F0[3];
-    u8 _pad9F6[0x1C5];
-    u8 unkBBB;
-    u8 _padBBC[0x13];
-    u8 unkBCF;
-    u8 _padBD0[0x9];
-    u8 unkBD9;
-} Func43CA4Unk28;
-
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -243,9 +277,77 @@ typedef struct {
     s32 unk4C;             /* 0x4C */
 } Func4393CArg;
 
+struct Func42E40Arg {
+    void *unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    u8 *unk10;
+    void *unk14;
+    s8 unk18;
+    s8 unk19;
+    u8 unk1A;
+    u8 _pad1B[0x1];
+    u8 _pad1C[0x2];
+    u8 unk1E;
+    u8 _pad1F[0x1];
+    void *unk20;
+    void *unk24;
+    Func43CA4Unk28 *unk28;
+    s16 unk2C[3];
+    u8 _pad32[0xA];
+    s16 unk3C;
+    u8 _pad3E[0x2];
+    u16 unk40;
+    u8 unk42;
+};
+
+typedef struct {
+    void *unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    u8 *unk10;
+    void *unk14;
+    s8 unk18;
+    s8 unk19;
+    u8 unk1A;
+    u8 _pad1B[0x1];
+    u8 _pad1C[0x2];
+    u8 unk1E;
+    u8 _pad1F[0x1];
+    void *unk20;
+    void *unk24;
+    Func43CA4Unk28 *unk28;
+    s16 unk2C[3];
+    u8 _pad32[0xA];
+    s16 unk3C;
+    u8 _pad3E[0x2];
+    u16 unk40;
+    u8 unk42;
+} Func42E40Arg;
+
+void func_80044578_45178(Func44BBCArg *);
+void func_80044684_45284(Func44BBCArg *);
+void func_800447D4_453D4(Func44BBCArg *);
+void func_80044888_45488(Func44BBCArg *);
+void func_80044990_45590(Func44BBCArg *);
+void func_80044C38_45838(Func44BBCArg *);
+void func_80044018_44C18(Func43DC0State *);
+void func_80043E24_44A24(Func43DC0State *);
+void func_80043F8C_44B8C(Func43DC0State *);
+void func_80042D54_43954(Func42BA4Arg *);
 void func_80043CA4_448A4(Func43CA4Arg *);
 void func_800439F4_445F4(Func4393CArg *);
+void func_80042BA4_437A4(Func42BA4Arg *);
+void func_80042C98_43898(Func42C98Arg *);
+void func_80042E40_43A40(Func42E40Arg *);
+void func_800415E8_421E8(Func41570State *);
+void func_8004168C_4228C(Func41570State *);
+void func_80042308_42F08(Func420E8State *);
 
+extern s8 D_80090928_91528[];
+extern s8 D_80090929_91529[];
 extern s32 D_80090964_91564;
 extern s32 D_80090974_91574;
 extern s32 D_8009093C_9153C;
@@ -255,9 +357,6 @@ extern s32 D_80090AA0_916A0;
 extern s32 D_80090AAC_916AC;
 extern s8 D_80090950_91550;
 extern void func_80066444_67044(s32, void *);
-
-void func_800415E8_421E8(Func41570State *);
-void func_8004168C_4228C(Func41570State *);
 
 void func_80041570_42170(Func41570State *arg0) {
     getCurrentAllocation();
@@ -810,38 +909,30 @@ Func426B0State *func_800429FC_435FC(void *arg0, Player *arg1, s16 arg2) {
     return task;
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80042A6C_4366C);
-
-void func_80042F2C_43B2C(void **);
-extern void func_80042A6C_4366C(void *);
-
-typedef struct {
-    void *unk0;            /* 0x00 */
-    void *unk4;            /* 0x04 */
-    s32 unk8;              /* 0x08 */
-    u8 _padC[0x12];        /* 0x0C */
-    u8 unk1E;              /* 0x1E */
-    u8 _pad1F[0x1];        /* 0x1F */
-    void *unk20;           /* 0x20 */
-    void *unk24;           /* 0x24 */
-    Func43CA4Unk28 *unk28; /* 0x28 */
-    s32 unk2C;             /* 0x2C */
-    s32 unk30;             /* 0x30 */
-    s32 unk34;             /* 0x34 */
-    s16 unk38;             /* 0x38 */
-    s16 unk3A;             /* 0x3A */
-    s16 unk3C;             /* 0x3C */
-    s16 unk3E;             /* 0x3E */
-    s16 unk40;             /* 0x40 */
-    u8 unk42;              /* 0x42 */
-    u8 unk43;              /* 0x43 */
-} Func42BA4Arg;
-
-void func_80042BA4_437A4(Func42BA4Arg *);
-struct Func42C98Arg;
-struct Func42E40Arg;
-void func_80042C98_43898(struct Func42C98Arg *);
-void func_80042E40_43A40(struct Func42E40Arg *);
+void func_80042A6C_4366C(Func42BA4Arg *arg0) {
+    unsigned int new_var;
+    arg0->unk3A--;
+    if ((arg0->unk3A << 0x10) == 0) {
+        new_var = 2;
+        loadAssetMetadata(&arg0->unk4, arg0->unk0, D_80090929_91529[arg0->unk38 * new_var]);
+        arg0->unk3A = (s8)D_80090928_91528[arg0->unk38 * 2];
+        arg0->unk38++;
+        if (D_80090928_91528[arg0->unk38 * new_var] == 0) {
+            arg0->unk38 = 0;
+        }
+    }
+    if (arg0->unk3E != 0) {
+        arg0->unk4.unk1A -= 0x10;
+        if (arg0->unk4.unk1A == 0x40) {
+            arg0->unk3E++;
+        }
+    } else {
+        arg0->unk4.unk1A += 0x10;
+        if (arg0->unk4.unk1A == 0xE0) {
+            arg0->unk3E--;
+        }
+    }
+}
 
 void func_80042B64_43764(void **arg0) {
     *arg0 = load_3ECE40();
@@ -860,14 +951,14 @@ void func_80042BA4_437A4(Func42BA4Arg *arg0) {
     if (temp == 0) {
         arg0->unk3A = 1;
         arg0->unk3E = 0;
-        arg0->unk1E = 0;
+        arg0->unk4.unk1A = 0;
         ptr = gameState->unk44;
         arg0->unk30 = 0x200000;
         arg0->unk2C = 0;
         arg0->unk34 = 0;
         arg0->unk38 = 0;
         arg0->unk42 = 1;
-        arg0->unk4 = (void *)((u8 *)ptr + 0xF00);
+        arg0->unk4.unk0 = (void *)((u8 *)ptr + 0xF00);
         func_80042A6C_4366C(arg0);
 
         if (arg0->unk43 != 0) {
@@ -892,22 +983,7 @@ void func_80042BA4_437A4(Func42BA4Arg *arg0) {
     }
 }
 
-struct Func42C98Arg {
-    u8 _pad0[0x4];              /* 0x00 - 0x04 */
-    loadAssetMetadata_arg unk4; /* 0x04 - 0x20 (unk4.unk4 is at 0x08) */
-    u8 _pad20[0x4];             /* 0x20 - 0x24 */
-    Func43CA4Unk28 *unk24;      /* 0x24 - 0x28 */
-    u8 _pad28[0x4];             /* 0x28 - 0x2C */
-    s16 unk2C[2];               /* 0x2C - 0x30 (4 bytes) */
-    s32 unk30;                  /* 0x30 - 0x34 */
-    u8 _pad34[0xE];             /* 0x34 - 0x42 */
-    u8 unk42;                   /* 0x42 */
-};
-
-typedef struct Func42D54Arg Func42D54Arg;
-void func_80042D54_43954(Func42D54Arg *);
-
-void func_80042C98_43898(struct Func42C98Arg *arg0) {
+void func_80042C98_43898(Func42C98Arg *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
 
@@ -925,7 +1001,7 @@ void func_80042C98_43898(struct Func42C98Arg *arg0) {
             func_80056B7C_5777C(&arg0->unk4.unk4, 0x1A);
         }
 
-        func_80042A6C_4366C(arg0);
+        func_80042A6C_4366C((Func42BA4Arg *)arg0);
     }
 
     for (i = 0; i < 4; i++) {
@@ -933,22 +1009,7 @@ void func_80042C98_43898(struct Func42C98Arg *arg0) {
     }
 }
 
-struct Func42D54Arg {
-    u8 _pad0[0x4];              /* 0x00 */
-    loadAssetMetadata_arg unk4; /* 0x04 - 0x1F */
-    void *unk20;                /* 0x20 */
-    Func43CA4Unk28 *unk24;      /* 0x24 */
-    Func43CA4Unk28 *unk28;      /* 0x28 */
-    s32 unk2C;                  /* 0x2C */
-    s32 unk30;                  /* 0x30 */
-    s32 unk34;                  /* 0x34 */
-    s32 unk38;                  /* 0x38 */
-    s16 unk3C;                  /* 0x3C */
-    u8 _pad3E[0x4];             /* 0x3E */
-    u8 unk42;                   /* 0x42 */
-};
-
-void func_80042D54_43954(Func42D54Arg *arg0) {
+void func_80042D54_43954(Func42BA4Arg *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
 
@@ -983,32 +1044,7 @@ void func_80042D54_43954(Func42D54Arg *arg0) {
     }
 }
 
-struct Func42E40Arg {
-    void *unk0;            /* 0x00 */
-    s32 unk4;              /* 0x04 */
-    s32 unk8;              /* 0x08 */
-    s32 unkC;              /* 0x0C */
-    u8 *unk10;             /* 0x10 */
-    void *unk14;           /* 0x14 */
-    s8 unk18;              /* 0x18 */
-    s8 unk19;              /* 0x19 */
-    u8 unk1A;              /* 0x1A */
-    u8 _pad1B[0x1];        /* 0x1B */
-    u8 _pad1C[0x2];        /* 0x1C */
-    u8 unk1E;              /* 0x1E */
-    u8 _pad1F[0x1];        /* 0x1F */
-    void *unk20;           /* 0x20 */
-    void *unk24;           /* 0x24 */
-    Func43CA4Unk28 *unk28; /* 0x28 */
-    s16 unk2C[3];          /* 0x2C - 0x32 */
-    u8 _pad32[0xA];        /* 0x32 - 0x3C */
-    s16 unk3C;             /* 0x3C */
-    u8 _pad3E[0x2];        /* 0x3E */
-    u16 unk40;             /* 0x40 */
-    u8 unk42;              /* 0x42 */
-};
-
-void func_80042E40_43A40(struct Func42E40Arg *arg0) {
+void func_80042E40_43A40(Func42E40Arg *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
     s32 pad;
@@ -1016,7 +1052,7 @@ void func_80042E40_43A40(struct Func42E40Arg *arg0) {
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        func_80042A6C_4366C(arg0);
+        func_80042A6C_4366C((Func42BA4Arg *)arg0);
         arg0->unk40 += 0x100;
         rotateVectorY(arg0->unk2C, (s16)arg0->unk40, rotated);
         transformVector((s16 *)rotated, arg0->unk28->unk9F0, &arg0->unk8);
