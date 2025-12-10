@@ -9,7 +9,6 @@ USE_ASSET(_40E1C0);
 
 extern void func_800BB320_B5C00(void *);
 extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
-extern void func_800BB928_B6208(void);
 extern s32 gControllerInputs;
 extern s8 *D_800BCB94_B7474[];
 
@@ -34,6 +33,8 @@ typedef struct {
 } func_800BB5CC_state;
 
 #define GET_UNK15(arg0) (((u8 *)&(arg0)->unk14)[1])
+
+void func_800BB928_B6208(func_800BB5CC_state *arg0);
 
 void func_800BB9E0_B62C0(func_800BB2B0_B5B90_state *arg0);
 
@@ -209,7 +210,41 @@ void func_800BB87C_B615C(func_800BB5CC_state *arg0) {
     );
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/training", func_800BB928_B6208);
+void func_800BB928_B6208(func_800BB5CC_state *arg0) {
+    s16 temp_v1;
+    s16 temp_a7;
+    s16 temp_a6;
+    s8 *alloc;
+
+    alloc = getCurrentAllocation();
+    arg0->unk10--;
+
+    temp_v1 = GET_UNK16_AS_S16(arg0);
+    if (temp_v1 != 0) {
+        SET_UNK16_AS_S16(arg0, temp_v1 - 0x10);
+    }
+
+    if (arg0->unk10 == 1) {
+        alloc[0x78] = -1;
+        setCallback(func_800BB320_B5C00);
+    }
+
+    temp_a7 = arg0->unk10;
+    temp_a6 = arg0->unk12;
+
+    func_8006D7B0_6E3B0(
+        arg0->unk0,
+        ((-temp_a7) << 19) >> 16,
+        ((-temp_a6) << 19) >> 16,
+        temp_a7,
+        temp_a6,
+        0,
+        GET_UNK15(arg0),
+        arg0->unk17,
+        0xC,
+        0x6
+    );
+}
 
 void func_800BB9E0_B62C0(func_800BB2B0_B5B90_state *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
