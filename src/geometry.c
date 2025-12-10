@@ -188,7 +188,7 @@ void createCombinedRotationMatrix(void *matrix, u16 angleX, u16 angleZ) {
     m[8] = temp4 >> 13;
 }
 
-void createRotationMatrixYX(Mat3x3Padded *matrix, s16 angleY, s16 angleX) {
+void createRotationMatrixYX(Mat3x3Padded *matrix, u16 angleY, u16 angleX) {
     s32 sinX = approximateSin(angleX);
     s32 cosX = approximateCos(angleX);
     s32 sinY = approximateSin(angleY);

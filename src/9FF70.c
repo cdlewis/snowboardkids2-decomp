@@ -1339,7 +1339,28 @@ s32 func_800B3F2C_A3DDC(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B4058_A3F08);
+extern Mat3x3Padded D_8009A890_9B490;
+extern s32 D_8009A8A4_9B4A4;
+extern s32 D_8009A8A8_9B4A8;
+extern s32 D_8009A8AC_9B4AC;
+
+void func_800B4058_A3F08(func_800B30B0_arg *arg0) {
+    Mat3x3Padded sp10;
+    s16 *a98;
+    s16 *a96;
+
+    D_8009A8A4_9B4A4 = 0;
+    D_8009A8A8_9B4A8 = 0xFFF00000;
+    D_8009A8AC_9B4AC = 0;
+    a98 = &arg0->unkA98;
+    a96 = &arg0->unkA96;
+    createRotationMatrixYX(&sp10, *a98, *a96);
+    sp10.unk14 = 0;
+    sp10.unk18 = 0x100000;
+    sp10.unk1C = 0;
+    func_8006B084_6BC84(&D_8009A890_9B490, &sp10, &arg0->padding3[0x28]);
+    arg0->unkB84 |= 0x800;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B40D4_A3F84);
 
