@@ -489,7 +489,49 @@ void func_80053E90_54A90(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80053FE0_54BE0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80053EEC_54AEC);
+extern void func_80058A94_59694(Player *);
+
+void func_80053EEC_54AEC(Struct_52880 *arg0) {
+    GameState *alloc;
+    Player *result;
+    void *s1;
+    s16 unk4C;
+    s32 v28;
+    s32 new_var;
+    s32 v2C;
+    Struct_52880 *new_var3;
+    s32 v24;
+    s32 new_var2;
+
+    alloc = (GameState *)getCurrentAllocation();
+    new_var3 = arg0;
+    s1 = &arg0->unk4;
+    result = func_8005B548_5C148(s1, new_var3->unk42, 0x80000);
+    if (result == 0) {
+        return;
+    }
+
+    new_var2 = result->unkB84 & 0x1000;
+    if (new_var2 == 0) {
+        func_80058A94_59694(result);
+        arg0->unk4E++;
+        unk4C = arg0->unk4C;
+        if (unk4C >= 0) {
+            func_80059C24_5A824(&alloc->players[unk4C]);
+        }
+    } else {
+        v28 = arg0->velZ;
+        v2C = (new_var = arg0->velX);
+        arg0->unk42 = result->unkBB8;
+        arg0->unk4C = result->unkBB8;
+        arg0->velZ = -v28;
+        v24 = arg0->velY;
+        arg0->velY = -v24;
+        arg0->velX = -v2C;
+        func_80050ECC_51ACC(s1);
+        func_80056B7C_5777C(s1, 0x20);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80053FE0_54BE0);
 
