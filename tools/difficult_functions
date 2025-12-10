@@ -428,3 +428,4 @@ func_8004E2D8_4EED8 27 97.731
 func_800BBCFC_AE0BC 35 98.000% -- Register allocation mismatch: compiler loads unk78 directly into v1 with nop delay slot, target loads into v0 then moves to v1 in delay slot
 func_80024810_25410 10 ~0% -- Register allocation mismatch: compiler does not allocate localPtr to s1 register, uses addiu+sp instead of move from saved register, and generates sll s0,s0,0x14 instead of and s0,s0,v0 for adjustment calculation
 func_8004FAB4_506B4 29 99.773% -- Sign extension register allocation mismatch: compiler generates sll a1,s0,0x10 then sra a1,a1,0x10 instead of sll s0,s0,0x10 then sra a1,s0,0x10
+func_8001F5EC_201EC 30 98.907% -- Register allocation mismatch: compiler assigns count to a2 and ptr to a1 instead of a1/a2
