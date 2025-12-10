@@ -426,3 +426,4 @@ func_80026028_26C28 20 88.804% -- Register allocation mismatch: compiler uses a3
 func_800B724C_A70FC 30 99.412% -- Register allocation mismatch: compiler assigns B44/B48/B4C to a0/a1/a2 and B74 to v1, target uses v1/a0/a1 for B44/B48/B4C and a2 for B74
 func_8004E2D8_4EED8 27 97.731
 func_800BBCFC_AE0BC 35 98.000% -- Register allocation mismatch: compiler loads unk78 directly into v1 with nop delay slot, target loads into v0 then moves to v1 in delay slot
+func_80024810_25410 10 ~0% -- Register allocation mismatch: compiler does not allocate localPtr to s1 register, uses addiu+sp instead of move from saved register, and generates sll s0,s0,0x14 instead of and s0,s0,v0 for adjustment calculation
