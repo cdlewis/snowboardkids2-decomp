@@ -414,7 +414,61 @@ s32 func_800B1FFC_A1EAC(func_800B1FFC_arg *arg0) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2018_A1EC8);
+extern s32 func_8005A9A8_5B5A8(func_800B30B0_arg *);
+extern void func_800B65F8_A64A8(func_800B00D4_arg *);
+extern void func_80058CFC_598FC(void *);
+extern s32 func_800B42A8_A4158(func_800B30B0_arg *, s32, s32, s32);
+extern void func_8005D48C_5E08C(func_800B30B0_arg *, s32, s32);
+
+s32 func_800B2018_A1EC8(func_800B30B0_arg *arg0) {
+    s16 temp_v0;
+    s16 v1;
+    s32 temp;
+
+    if (arg0->unkB84 & 0x20000) {
+        func_800B00D4_9FF84(arg0, 6);
+        return 1;
+    }
+
+    if (func_8005A9A8_5B5A8(arg0) != 0) {
+        func_800B65F8_A64A8((func_800B00D4_arg *)arg0);
+        return 1;
+    }
+
+    if (arg0->unkB84 & 1) {
+        func_800B00D4_9FF84(arg0, 1);
+        return 1;
+    }
+
+    arg0->unk450 = arg0->unk450 - arg0->unkAB8;
+    func_800B40D4_A3F84(arg0);
+    func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
+    func_800B00FC_9FFAC(arg0);
+
+    temp_v0 = arg0->unkA92;
+    v1 = temp_v0;
+    if (temp_v0 >= 0) {
+        if (temp_v0 >= 0x401) {
+            v1 = 0x400;
+        }
+        func_8005D48C_5E08C(arg0, 2, v1 / 2);
+    } else {
+        v1 = -v1;
+        if (v1 >= 0x401) {
+            v1 = 0x400;
+        }
+        func_8005D48C_5E08C(arg0, 1, v1 / 2);
+    }
+
+    temp = arg0->unkB8C - 1;
+    arg0->unkB8C = temp;
+    if (temp == 0) {
+        arg0->unkBBF = arg0->unkBBF + 1;
+    }
+
+    func_80058CFC_598FC(arg0);
+    return 0;
+}
 
 typedef struct {
     u8 _pad0[0xB84];
