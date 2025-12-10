@@ -83,6 +83,14 @@ typedef struct {
 } func_800272FC_27EFC_arg;
 
 typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 unkA;
+} func_80027348_entry;
+
+typedef struct {
     u8 padding[0x53];
     u8 unk53;
 } func_800253E0_25FE0_arg;
@@ -810,7 +818,7 @@ void func_80027268_27E68(func_80025FFC_26BFC_arg *arg0) {
     setCallback(func_800272FC_27EFC);
 }
 
-void func_80027348_27F48(void);
+void func_80027348_27F48(volatile func_80027348_entry *arg0);
 
 void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
@@ -820,7 +828,65 @@ void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027348_27F48);
+void func_80027400_28000(void);
+
+void func_80027348_27F48(volatile func_80027348_entry *arg0) {
+    s32 xBase;
+    s32 yBase;
+    s32 xIncrement;
+    s32 yIncrement;
+    s32 unk8Base;
+    s32 count;
+    s32 i;
+    s32 countMasked;
+    s32 xInc2;
+    s32 yInc2;
+    s32 constant;
+    s32 x;
+    s32 y;
+    s32 *dummyPtr;
+    s32 dummy;
+
+    dummyPtr = &dummy;
+
+    xBase = -0x38;
+    if (D_800AFE8C_A71FC->unk8 == 2) {
+        xBase = -0x58;
+        yBase = -0x64;
+        xIncrement = 0;
+        yIncrement = 0x10;
+        unk8Base = 0x27;
+        count = 3;
+    } else {
+        yBase = -0x5C;
+        xIncrement = 0x38;
+        yIncrement = 0;
+        unk8Base = 0x2A;
+        count = 2;
+    }
+
+    countMasked = count & 0xFF;
+    i = 0;
+    if (countMasked > 0) {
+        xInc2 = xIncrement;
+        yInc2 = (s16)yIncrement;
+        constant = 0xC;
+        y = yBase;
+        x = xBase;
+        do {
+            arg0->unk2 = (s16)y;
+            y = y + yInc2;
+            arg0->unk0 = (s16)x;
+            arg0->unk8 = (s16)(unk8Base + i);
+            arg0->unkA = (u8)constant;
+            arg0++;
+            i++;
+            x = x + xInc2;
+        } while (i < countMasked);
+    }
+
+    setCallback(func_80027400_28000);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80027400_28000);
 
