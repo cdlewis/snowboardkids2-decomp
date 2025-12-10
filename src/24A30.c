@@ -91,6 +91,11 @@ typedef struct {
 } func_80027348_entry;
 
 typedef struct {
+    func_80027348_entry entries[3];
+    u8 unk24;
+} func_80025824_arg;
+
+typedef struct {
     u8 padding[0x53];
     u8 unk53;
 } func_800253E0_25FE0_arg;
@@ -661,7 +666,45 @@ void func_8002567C_2627C(func_80025FFC_26BFC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800256A8_262A8);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80025824_26424);
+void func_80025904_26504(void);
+
+void func_80025824_26424(func_80025824_arg *arg0) {
+    func_80027348_entry *ptr;
+    u8 *base;
+    s32 i;
+    s16 val;
+    u8 constant;
+    u8 *bytePtr;
+
+    base = (u8 *)getCurrentAllocation();
+
+    i = 0;
+    ptr = (func_80027348_entry *)arg0;
+    do {
+        debugEnqueueCallback(arg0->unk24 + 8, 0, func_80010240_10E40, ptr);
+        ptr++;
+        i++;
+    } while (i < 3);
+
+    if (*(u16 *)(base + arg0->unk24 * 2 + 0x1898) == 3) {
+        val = 0xD;
+        if (D_800AFE8C_A71FC->unk8 == 1) {
+            val = 0x12;
+        }
+
+        i = 0;
+        constant = 8;
+        bytePtr = (u8 *)arg0;
+        do {
+            ((volatile s16 *)bytePtr)[4] = val;
+            ((volatile u8 *)bytePtr)[0xA] = constant;
+            bytePtr += 0xC;
+            i++;
+        } while (i < 3);
+
+        setCallback(func_80025904_26504);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025904_26504);
 
