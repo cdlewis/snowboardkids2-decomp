@@ -186,7 +186,7 @@ s32 func_80052418_53018(s32 arg0, s32 arg1) {
 }
 
 void func_800524A4_530A4(Struct_52880 *arg0);
-extern void func_800525F4_531F4(void);
+void func_800525F4_531F4(Struct_52880 *arg0);
 
 void func_8005245C_5305C(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
@@ -248,7 +248,51 @@ void func_80052500_53100(Struct_52880 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_800525F4_531F4);
+void func_80052758_53358(void);
+
+void func_800525F4_531F4(Struct_52880 *arg0) {
+    Alloc_52880 *alloc;
+    s16 playerIdx;
+    s32 temp_v0;
+    s32 temp_v1;
+    s32 temp_a1;
+    s32 temp_a2;
+    s32 i;
+
+    alloc = getCurrentAllocation();
+
+    playerIdx = arg0->unk42;
+    transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->unk4);
+
+    playerIdx = arg0->unk42;
+    transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->velY);
+
+    temp_v0 = arg0->unk4;
+    temp_a2 = arg0->velY;
+    temp_v1 = arg0->unk8;
+    temp_a1 = arg0->velZ;
+    arg0->velY = temp_v0 - temp_a2;
+    arg0->velZ = temp_v1 - temp_a1;
+    arg0->velX = arg0->unkC - arg0->velX;
+
+    playerIdx = arg0->unk42;
+    arg0->unk40 = alloc->unk10[playerIdx].unkB94;
+    arg0->unk48 = 0xF0;
+
+    func_80056B7C_5777C(&arg0->unk4, 0x10);
+    setCallback(func_80052758_53358);
+    func_80052500_53100(arg0);
+
+    if (arg0->unk4E != 0) {
+        func_80050ECC_51ACC(&arg0->unk4);
+        func_80056B7C_5777C(&arg0->unk4, 0xD);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80052758_53358);
 
