@@ -119,7 +119,54 @@ void func_80051E34_52A34(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80051FC4_52BC4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80051E90_52A90);
+extern void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2);
+extern void func_80058A10_59610(Player *arg0);
+extern void func_80059A48_5A648(Player *arg0, s32 arg1);
+
+void func_80051E90_52A90(Struct_52880 *arg0) {
+    GameState *alloc;
+    Player *result;
+    s32 *s1;
+    s16 unk4C;
+    s32 v28;
+    s32 new_var;
+    s32 v2C;
+    s32 v24;
+    s32 i;
+    u8 temp;
+
+    alloc = (GameState *)getCurrentAllocation();
+    s1 = &arg0->unk4;
+    result = func_8005B548_5C148(s1, arg0->unk42, 0x80000);
+    if (result != NULL) {
+        if (!(result->unkB84 & 0x1000)) {
+            func_80058A10_59610(result);
+            for (i = 0; i < 3; i++) {
+                if (result->unkB6C >= 100) {
+                    func_8004A9A8_4B5A8(&result->worldPosX, result->unkB94, &result->padding2[0xC]);
+                    func_80059A48_5A648(result, -100);
+                }
+            }
+            unk4C = arg0->unk4C;
+            if (unk4C >= 0) {
+                func_80059C24_5A824(&alloc->players[unk4C]);
+            }
+            arg0->unk4E = arg0->unk4E + 1;
+        } else {
+            v28 = arg0->velZ;
+            v2C = (new_var = arg0->velX);
+            arg0->unk42 = result->unkBB8;
+            temp = result->unkBB8;
+            arg0->velZ = -v28;
+            v24 = arg0->velY;
+            arg0->velY = -v24;
+            arg0->velX = -v2C;
+            arg0->unk4C = temp;
+            func_80050ECC_51ACC(s1);
+            func_80056B7C_5777C(s1, 0x20);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80051FC4_52BC4);
 
