@@ -383,10 +383,6 @@ void func_800BBED8(void) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BBF28_AE2E8);
 
-INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC084_AE444);
-
-INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC1AC_AE56C);
-
 extern s32 func_8005C250_5CE50(void *, s32, s32);
 extern void func_80042340_42F40(void *);
 extern s16 D_800BCB70_AEF30[];
@@ -411,6 +407,43 @@ typedef struct {
     u16 unk4C;
     u8 unk4E;
 } func_800BC3D0_AE790_arg;
+
+void func_800BC084_AE444(func_800BC3D0_AE790_arg *arg0) {
+    Allocation_AE790 *allocation;
+    s32 i;
+    void *posPtr;
+
+    allocation = getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        arg0->unk14 += arg0->unk3C;
+        arg0->unk18 += arg0->unk40;
+        arg0->unk1C += arg0->unk44;
+        arg0->unk48--;
+
+        if (arg0->unk48 == 0) {
+            func_80069CF8_6A8F8();
+            return;
+        }
+
+        posPtr = &arg0->unk14;
+        if (func_8005C250_5CE50(posPtr, -1, 0x300000) != 0) {
+            func_80042340_42F40(posPtr);
+            func_80069CF8_6A8F8();
+        }
+
+        arg0->unk4A += D_800BCB70_AEF30[arg0->unk4E];
+        arg0->unk4C += D_800BCB84_AEF44[arg0->unk4E];
+    }
+
+    createCombinedRotationMatrix(arg0, arg0->unk4A, arg0->unk4C);
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
+
+INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC1AC_AE56C);
 
 void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *arg0) {
     Allocation_AE790 *allocation;
