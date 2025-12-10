@@ -65,9 +65,9 @@ typedef struct {
     /* 0x008 */ void *pending;
     /* 0x00C */ s32 channel_frame;
     /* 0x010 */ s32 stopping;
-    u8 padding01[0x4];
+    /* 0x014 */ s32 volume_frame;
     /* 0x018 */ u32 pitchbend_frame;
-    u8 padding02[0x2];
+    u8 padding02[0x4];
     /* 0x020 */ f32 vib_amount;
     /* 0x024 */ f32 bendrange;
     /* 0x028 */ f32 old_frequency;
@@ -75,13 +75,13 @@ typedef struct {
     /* 0x030 */ f32 freqoffset;
     /* 0x034 */ u8 *ppitchbend;
     /* 0x038 */ u8 *pvolume;
-    /* 0x03C */ s32 unk3C;
-    /* 0x040 */ s32 unk40;
+    /* 0x03C */ s32 note_end_frame;
+    /* 0x040 */ s32 note_start_frame;
     /* 0x044 */ s32 handle;
     /* 0x048 */ s32 priority;
     /* 0x04C */ f32 last_note;
     /* 0x050 */ float port_base;
-    /* 0x054 */ s32 unk54;
+    /* 0x054 */ s32 release_frame;
     /* 0x058 */ f32 env_attack_calc;
     /* 0x05C */ f32 env_decay_calc;
     /* 0x060 */ f32 env_release_calc;
@@ -98,8 +98,8 @@ typedef struct {
     /* 0x08C */ f32 distort;
     /* 0x090 */ u32 sweep_frame;
     /* 0x094 */ s16 temscale;
-    /* 0x096 */ u16 unk96;
-    /* 0x098 */ s16 channel_tempo;
+    /* 0x096 */ u16 length;
+    /* 0x098 */ u16 channel_tempo;
     /* 0x09A */ s16 volscale;
     /* 0x09C */ u16 old_volume;
     /* 0x09E */ s16 cont_vol_repeat_count;
@@ -125,9 +125,9 @@ typedef struct {
     /* 0x0BC */ u8 env_init_vol;
     /* 0x0BD */ u8 env_max_vol;
     /* 0x0BE */ u8 env_sustain_vol;
-    /* 0x0BF */ u8 unkBF;
-    /* 0x0C0 */ u8 unkC0;
-    /* 0x0C1 */ u8 unkC1;
+    /* 0x0BF */ u8 env_phase;
+    /* 0x0C0 */ u8 env_current;
+    /* 0x0C1 */ u8 env_count;
     /* 0x0C2 */ u8 env_attack_speed;
     /* 0x0C3 */ u8 env_decay_speed;
     /* 0x0C4 */ u8 env_release_speed;
@@ -193,6 +193,24 @@ s32 D_800A6524_A7124;
 s32 D_800A6528_A7128;
 void *D_800A652C_A712C;
 
+extern ALGlobals __libmus_alglobals;
+extern ALVoice *mus_voices;
+extern ALMicroTime mus_next_frame_time;
+extern channel_t *mus_channels;
+extern s32 max_channels;
+
+void func_80072F54_73B54(void);
+void func_80073738_74338(channel_t *cp, int x);
+void func_8007335C_73F5C(channel_t *cp, int x);
+void func_80073E20_74A20(channel_t *cp);
+void __MusIntProcessContinuousPitchBend(channel_t *cp);
+u8 *Fstop(channel_t *cp, u8 *ptr);
+void func_80073AA4_746A4(channel_t *cp);
+void func_80073CB4_748B4(channel_t *cp);
+f32 func_80073DC4_749C4(channel_t *cp);
+f32 func_80073D6C_7496C(channel_t *cp);
+void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset);
+void func_800737C4_743C4(channel_t *cp, int x);
 f32 __MusIntPowerOf2(f32 x);
 void MusSetMasterVolume(u32 flags, u32 volume);
 void __MusIntInitialiseChannel(channel_t *cp);
@@ -1073,7 +1091,86 @@ s32 func_80073058_73C58(u8 *arg0) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", __MusIntMain);
+ALMicroTime __MusIntMain(void *node) {
+    channel_t *cp;
+    f32 total;
+    s32 x;
+
+    func_80072F54_73B54();
+
+    for (x = 0, cp = mus_channels; x < max_channels; x++, cp++) {
+        if (cp->pdata == NULL || (cp->flags & 1)) {
+            continue;
+        }
+
+        if (cp->pending != NULL) {
+            func_80073738_74338(cp, x);
+        }
+
+        cp->channel_frame += cp->channel_tempo;
+
+        if (cp->length != 0x7FFF) {
+            while ((u32)cp->note_end_frame < (u32)cp->channel_frame) {
+                if (cp->pdata == NULL) {
+                    break;
+                }
+                func_8007335C_73F5C(cp, x);
+            }
+
+            if (cp->pdata == NULL) {
+                continue;
+            }
+        }
+
+        if (cp->pvolume != NULL && (u32)cp->volume_frame < (u32)cp->channel_frame) {
+            func_80073E20_74A20(cp);
+        }
+
+        if (cp->ppitchbend != NULL && (u32)cp->pitchbend_frame < (u32)cp->channel_frame) {
+            __MusIntProcessContinuousPitchBend(cp);
+        }
+
+        if (cp->stopping != -1) {
+            cp->stopping--;
+            if (cp->stopping == -1) {
+                cp->pdata = Fstop(cp, NULL);
+                if (cp->playing != 0) {
+                    cp->playing = 0;
+                    alSynStopVoice(&__libmus_alglobals.drvr, mus_voices + x);
+                }
+            }
+        }
+
+        if (cp->playing != 0) {
+            if (cp->env_phase != 0) {
+                func_80073AA4_746A4(cp);
+            }
+
+            if (cp->sweep_speed != 0 && (u32)cp->sweep_frame < (u32)cp->channel_frame) {
+                func_80073CB4_748B4(cp);
+            }
+
+            total = cp->freqoffset;
+
+            if (cp->vib_speed != 0) {
+                total += func_80073DC4_749C4(cp);
+            }
+
+            if (cp->wobble_on_speed != 0) {
+                total += func_80073D6C_7496C(cp);
+            }
+
+            if (cp->pending == NULL) {
+                __MusIntSetPitch(cp, x, total);
+                func_800737C4_743C4(cp, x);
+            }
+        }
+
+        cp->count = (u32)(cp->channel_frame - cp->note_start_frame) >> 8;
+    }
+
+    return mus_next_frame_time;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_8007335C_73F5C);
 
@@ -1122,26 +1219,26 @@ void func_80073A3C_7463C(channel_t *arg0) {
     channel_t *chan = arg0;
     u16 temp;
 
-    if (chan->unk96 != 0x7FFF) {
+    if (chan->length != 0x7FFF) {
         temp = chan->cutoff;
         if (temp != 0) {
-            chan->unk54 = chan->unk40 + (temp << 8);
+            chan->release_frame = chan->note_start_frame + (temp << 8);
         } else {
-            chan->unk54 = chan->unk3C - (chan->endit << 8);
+            chan->release_frame = chan->note_end_frame - (chan->endit << 8);
         }
     } else {
-        chan->unk54 = 0x7FFFFFFF;
+        chan->release_frame = 0x7FFFFFFF;
     }
 
-    chan->unkBF = 1;
-    chan->unkC0 = chan->env_init_vol;
-    chan->unkC1 = chan->env_speed;
+    chan->env_phase = 1;
+    chan->env_current = chan->env_init_vol;
+    chan->env_count = chan->env_speed;
 }
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80073AA4_746A4);
 
 void func_80073C98_74898(channel_t *cp) {
-    s32 temp = cp->unk40;
+    s32 temp = cp->note_start_frame;
     u8 val = cp->pan;
 
     cp->sweep_timer = 0;
@@ -1325,7 +1422,7 @@ void __MusIntInitialiseChannel(channel_t *cp) {
     cp->env_attack_speed = 1;
     cp->env_release_speed = 15;
     bank = libmus_fxheader_single;
-    cp->unk96 = 1;
+    cp->length = 1;
     cp->cont_vol_repeat_count = 1;
     cp->cont_pb_repeat_count = 1;
     cp->stopping = -1;
