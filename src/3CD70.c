@@ -1,8 +1,11 @@
+#include "6E840.h"
 #include "common.h"
 #include "geometry.h"
 #include "task_scheduler.h"
 
 extern void func_8003C2BC_3CEBC(void);
+extern s32 D_8008FEB0_90AB0;
+extern u8 identityMatrix[];
 
 typedef struct {
     s32 x;        /* 0x00 */
@@ -21,6 +24,14 @@ typedef struct {
     u8 pad0[0x10]; /* 0x00 */
     u8 *players;   /* 0x10 */
 } Allocation;
+
+typedef struct {
+    Node_70B00 *unk0;
+    u8 pad4[0xC];
+    u8 *unk10;
+    u8 pad14[0x65];
+    u8 unk79;
+} func_8003CF40_Allocation;
 
 void func_8003C170_3CD70(NodeState *arg0) {
     Allocation *allocation;
@@ -85,7 +96,6 @@ void func_8003CEC4_3DAC4(u8 arg0) {
     }
 }
 
-void func_8003CF40_3DB40(void);
 void func_8003D0F4_3DCF4(NodeExt *arg0);
 void func_8003D210_3DE10(void);
 
@@ -93,13 +103,52 @@ typedef struct {
     s16 unk0;
 } func_8003CF0C_arg;
 
+void func_8003CF40_3DB40(s16 *arg0);
+
 void func_8003CF0C_3DB0C(func_8003CF0C_arg *arg0) {
     getCurrentAllocation();
     arg0->unk0 = 0;
     setCallbackWithContinue(func_8003CF40_3DB40);
 }
 
-INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003CF40_3DB40);
+void func_8003CF40_3DB40(s16 *arg0) {
+    func_8003CF40_Allocation *s1;
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    Mat3x3Padded sp50;
+    s32 sp70[3];
+    s16 temp_v0;
+    s16 temp_v1;
+    Mat3x3Padded *s2;
+
+    s1 = getCurrentAllocation();
+    s2 = &sp10;
+    memcpy(s2, identityMatrix, 0x20);
+    sp10.unk18 = 0x1E0000;
+    sp10.unk1C = 0x870000;
+    temp_v0 = *arg0 + 0x58;
+    *arg0 = temp_v0;
+    if (temp_v0 == 0x12E8) {
+        func_8006FE28_70A28(s1->unk0, 0xFF, 0xFF, 0xFF);
+        func_8006FDA0_709A0(s1->unk0, 0xFF, 0x20);
+    }
+    temp_v1 = *arg0;
+    if (temp_v1 == 0x1EF0) {
+        s1->unk79 = s1->unk79 - 1;
+        func_80069CF8_6A8F8();
+        func_8006FDA0_709A0(s1->unk0, 0, 0x10);
+        return;
+    }
+    createYRotationMatrix(&sp30, (temp_v1 + 0x1000) & 0xFFFF);
+    memcpy(&sp30.unk14, (u8 *)identityMatrix + 0x14, 0xC);
+    func_8006B084_6BC84(s2, &sp30, &sp50);
+    func_8006B084_6BC84(&sp50, (u8 *)s1->unk10 + 0x950, s2);
+    transformVector2(&D_8008FEB0_90AB0, (u8 *)s1->unk10 + 0x950, sp70);
+    sp10.unk14 = sp10.unk14 + sp70[0];
+    sp10.unk18 = sp10.unk18 + sp70[1];
+    sp10.unk1C = sp10.unk1C + sp70[2];
+    func_8006FD3C_7093C(0x64, s2);
+}
 
 void func_8003D0C8_3DCC8(void) {
     scheduleTask(func_8003CF0C_3DB0C, 1, 0, 0xF0);
