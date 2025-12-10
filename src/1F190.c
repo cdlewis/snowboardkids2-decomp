@@ -3,6 +3,7 @@
 #include "3E160.h"
 #include "56910.h"
 #include "6E840.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "task_scheduler.h"
 
@@ -35,6 +36,7 @@ typedef struct {
     u8 padB3F[0x5];    // 0xB3F
     u8 unkB44;         // 0xB44
     u8 unkB45;         // 0xB45
+    u8 unkB46;         // 0xB46
 } Allocation_1F190;
 
 void func_8001E590_1F190(void) {
@@ -114,7 +116,30 @@ void func_8001F358_1FF58(void) {
     func_800697F4_6A3F4(0xFF);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1F190", func_8001F374_1FF74);
+void func_8001F374_1FF74(void) {
+    Allocation_1F190 *allocation;
+    D_800AFE8C_A71FC_type *ptr;
+    u8 unk4;
+    u8 saveSlotIndex;
+
+    allocation = getCurrentAllocation();
+    ptr = D_800AFE8C_A71FC;
+    unk4 = ptr->unk4;
+    saveSlotIndex = ptr->saveSlotIndex;
+
+    if (unk4 == 0) {
+        if (saveSlotIndex == 3 || saveSlotIndex == 7 || saveSlotIndex == 11 || saveSlotIndex >= 12) {
+            ptr->unk9[0x10] = 1;
+            D_800AFE8C_A71FC->unk8 = 1;
+        } else {
+            ptr->unk9[0x10] = 3;
+            D_800AFE8C_A71FC->unk8 = 1;
+        }
+    } else {
+        ptr->unk9[0x10] = allocation->unkB46;
+        D_800AFE8C_A71FC->unk22 = allocation->unkB46;
+    }
+}
 
 #define ASPECT_RATIO (4.0f / 3.0f)
 
