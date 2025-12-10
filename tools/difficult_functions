@@ -431,3 +431,4 @@ func_8004FAB4_506B4 29 99.773% -- Sign extension register allocation mismatch: c
 func_8001F5EC_201EC 30 98.907% -- Register allocation mismatch: compiler assigns count to a2 and ptr to a1 instead of a1/a2
 func_80020924_21524 30 92.554% -- Register allocation mismatch: compiler assigns counter to s1 and element pointer to s0+0x40 instead of s0 and s1, optimizes stores to -0x4(s0) and 0(s0) instead of 0x3C(s1) and 0x40(s1)
 func_800B0720_1DACC0 20 97.294% -- Register allocation and stack size mismatch: compiler uses 0x20 stack vs 0x28 target, loop registers (a1/a2/a3 vs v0/v1/a2/a3)
+func_8004CDC0_4D9C0 30 98.923% -- Stack frame size mismatch: compiler generates 0x28 stack vs 0x30 target, all register offsets shifted by 8 bytes
