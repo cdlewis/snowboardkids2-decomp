@@ -32,6 +32,7 @@
     } while (0)
 
 USE_ASSET(_3F3940);
+USE_ASSET(_3F3D10);
 USE_ASSET(_3F6950);
 USE_ASSET(_3F3EF0);
 
@@ -157,7 +158,9 @@ void func_8004D23C_4DE3C(Struct_func_8004D134 *arg0);
 void func_8004D298_4DE98(Struct_func_8004D134 *arg0);
 void func_8004D338_4DF38(Struct_func_8004D134 *arg0);
 void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0);
-void func_8004C170_4CD70(void);
+void func_8004C170_4CD70(Struct_func_8004D8E4 *arg0);
+void func_8004C254_4CE54(Struct_func_8004D8E4 *arg0);
+void func_8004C294_4CE94(Struct_func_8004F04C *arg0);
 void func_8004C2C0_4CEC0(void);
 void func_8004C728_4D328(void);
 void func_8004CA90_4D690(void);
@@ -169,7 +172,44 @@ extern char D_8009E8A0_9F4A0[];
 extern char D_8009E8A8_9F4A8[];
 extern char D_8009E928_9F528[];
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C170_4CD70);
+void func_8004C170_4CD70(Struct_func_8004D8E4 *arg0) {
+    GameState *allocation;
+    s32 playerIndex;
+    s32 temp_v1;
+    void *romStart;
+    void *romEnd;
+    s32 size;
+
+    allocation = (GameState *)getCurrentAllocation();
+    playerIndex = arg0->unk10;
+    arg0->unkC = (Player *)((u8 *)allocation->players + playerIndex * 0xBE8);
+
+    temp_v1 = allocation->unk5F;
+    if (temp_v1 < 3) {
+        if (temp_v1 != 0) {
+            arg0->unk0 = -0x88;
+            arg0->unk2 = 0x40;
+            if (allocation->unk5F == 2) {
+                arg0->unk2 = 0x10;
+            }
+            romStart = &_3F3940_ROM_START;
+            romEnd = &_3F3D10_ROM_START;
+            size = 0x888;
+            goto dma_and_callbacks;
+        }
+    }
+
+    romStart = &_3F3D10_ROM_START;
+    romEnd = &_3F3EF0_ROM_START;
+    size = 0x288;
+    arg0->unk0 = -0x44;
+    arg0->unk2 = 0x20;
+
+dma_and_callbacks:
+    arg0->unk4 = dmaRequestAndUpdateStateWithSize(romStart, romEnd, size);
+    setCleanupCallback(func_8004C294_4CE94);
+    setCallback(func_8004C254_4CE54);
+}
 
 void func_8004C254_4CE54(Struct_func_8004D8E4 *arg0) {
     arg0->unk8 = arg0->unkC->unkBC4;
