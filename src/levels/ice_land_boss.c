@@ -38,7 +38,8 @@ typedef struct {
     s32 unkB2C;
     u8 _padB30[0xB84 - 0xB30];
     s32 unkB84;
-    u8 _padB88[0xB94 - 0xB88];
+    s32 unkB88;
+    u8 _padB8C[0xB94 - 0xB8C];
     u16 unkB94;
     u8 _padB96[0xBB4 - 0xB96];
     u8 unkBB4;
@@ -47,19 +48,24 @@ typedef struct {
     u8 _padBB8[0xBB9 - 0xBB8];
     u8 unkBB9;
     u8 unkBBA;
-    u8 _padBBB[0xBBE - 0xBBB];
+    u8 _padBBB[0xBBD - 0xBBB];
+    u8 unkBBD;
     u8 unkBBE;
     u8 unkBBF;
-    u8 _padBC0[0xBC9 - 0xBC0];
+    u8 unkBC0;
+    u8 _padBC1[0xBC9 - 0xBC1];
     u8 unkBC9;
     u8 unkBCA;
     u8 _padBCB[1];
     u8 unkBCC;
+    u8 _padBCD[0xBDB - 0xBCD];
+    u8 unkBDB;
 } func_800BC4AC_arg;
 
 extern FuncPtr D_800BCA44_B1F34[];
 extern FuncPtr D_800BCA5C_B1F4C[];
 
+extern u16 D_8009ADE0_9B9E0;
 extern u8 D_800BACC8_AAB78;
 extern u8 D_800BACC9_AAB79;
 extern u8 D_800BACCA_AAB7A;
@@ -77,6 +83,7 @@ extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, vo
 extern void func_80064808_65408(s32, void *, u8);
 extern void enqueueMultiPartDisplayList(s32, void *, u8);
 extern void func_800BC61C_B1B0C(func_800BC4AC_arg *);
+extern void func_8004C10C_4CD0C(func_800BC4AC_arg *);
 
 INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BB2B0_B07A0);
 
@@ -151,7 +158,51 @@ void func_800BC0A8_B1598(func_800BC4AC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC0D8_B15C8);
 
-INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC3B8_B18A8);
+s32 func_800BC3B8_B18A8(func_800BC4AC_arg *arg0) {
+    u8 temp;
+
+    temp = arg0->unkBBF;
+    if (temp == 0) {
+        arg0->unkBBF = temp + 1;
+        arg0->unk450 = 0x80000;
+        if (!(arg0->unkB84 & 0x80000)) {
+            if (arg0->unkBDB != 0) {
+                arg0->unkBDB = arg0->unkBDB - 1;
+            }
+        }
+    }
+
+    arg0->unkB88 = 0x200;
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 = arg0->unk450 + (-0x8000);
+
+    func_800B02AC_A015C(arg0);
+    func_8005D180_5DD80(arg0, 5);
+
+    if ((D_8009ADE0_9B9E0 & 0xF) == 0) {
+        func_8004C10C_4CD0C(arg0);
+    }
+
+    if (arg0->unk450 < 0) {
+        if (!(arg0->unkB84 & 0x1)) {
+            temp = arg0->unkBDB;
+            arg0->unkB88 = 0;
+            arg0->unkBBD = 1;
+            arg0->unkBBE = 1;
+            arg0->unkBBF = 0;
+            arg0->unkBC0 = 0;
+
+            if (temp == 0) {
+                arg0->unkB84 = arg0->unkB84 | 0x100000;
+            }
+
+            return 0;
+        }
+    }
+
+    return 0;
+}
 
 s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
     s32 pad[3];
