@@ -423,3 +423,4 @@ func_80054D70_55970 15 98.974% -- Register allocation mismatch: compiler assigns
 func_800BB2B0_B4BB0 30 99.054% -- Register allocation mismatch: compiler assigns state to s3 and dst to s2, target uses s2 for state and s3 for dst
 func_80026FF4_27BF4 30 99.184% -- Register allocation mismatch: compiler assigns arg0 to s0 and dmaResult to s1, target uses s1 for arg0 and s0 for dmaResult
 func_80026028_26C28 20 88.804% -- Register allocation mismatch: compiler uses a3/a2/a1 for DDBE/DDC2/counter instead of a2/a1/a0, adds intermediate pointer a0=s0+4, lhu instead of lh for DDC2
+func_800B724C_A70FC 30 99.412% -- Register allocation mismatch: compiler assigns B44/B48/B4C to a0/a1/a2 and B74 to v1, target uses v1/a0/a1 for B44/B48/B4C and a2 for B74
