@@ -23,6 +23,7 @@ extern void func_80059C24_5A824(Player *arg0);
 extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
 extern s32 func_800BB504(void *, s32);
 extern void func_80052DB4_539B4(void);
+extern s16 D_80090F60_91B60[];
 
 typedef struct {
     void *unk0;
@@ -49,7 +50,9 @@ typedef struct {
 typedef struct {
     u8 padding1[0x74];
     s16 unk74;
-    u8 padding1b[0x8DA];
+    u8 padding1b[0xEE];
+    s16 unk164[6];
+    u8 padding1c[0x7E0];
     s16 unk950;
     u8 padding2[0x242];
     u16 unkB94;
@@ -904,36 +907,8 @@ typedef struct {
 
 void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0);
 void func_80054D0C_5590C(Struct_52880 *arg0);
-extern void func_80054F44_55B44(void);
-
-void func_80054CCC_558CC(func_80054CCC_558CC_arg *arg0) {
-    arg0->unk20 = load_3ECE40();
-    setCleanupCallback(func_800553A8_55FA8);
-    setCallbackWithContinue(func_80054D0C_5590C);
-}
-
-void func_80054D0C_5590C(Struct_52880 *arg0) {
-    Alloc_52880 *alloc = getCurrentAllocation();
-    void *ptr;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 0x69);
-    ptr = alloc->unk44;
-    arg0->unk4E = 0;
-    arg0->unk46 = 0;
-    arg0->unk0 = ptr;
-    arg0->unk4C = arg0->unk42;
-    setCallbackWithContinue(func_80054F44_55B44);
-}
-
-INCLUDE_ASM("asm/nonmatchings/52880", func_80054D70_55970);
-
-INCLUDE_ASM("asm/nonmatchings/52880", func_80054F44_55B44);
-
-extern void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
-extern void func_80051C80_52880(s32 *arg0, s32 arg1);
-extern s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, s32 *arg2, s32 arg3);
+void func_80054F44_55B44(Struct_52880 *arg0);
 extern void func_80054D70_55970(void *arg0);
-extern s16 func_8005BF50_5CB50(s32 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4);
-extern void func_80066444_67044(s32 arg0, void *arg1);
 
 typedef struct {
     void *unk0;
@@ -956,6 +931,81 @@ typedef struct {
     s16 unk4C;
     s8 unk4E;
 } func_800550B4_55CB4_arg;
+
+void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0);
+
+void func_80054CCC_558CC(func_80054CCC_558CC_arg *arg0) {
+    arg0->unk20 = load_3ECE40();
+    setCleanupCallback(func_800553A8_55FA8);
+    setCallbackWithContinue(func_80054D0C_5590C);
+}
+
+void func_80054D0C_5590C(Struct_52880 *arg0) {
+    Alloc_52880 *alloc = getCurrentAllocation();
+    void *ptr;
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 0x69);
+    ptr = alloc->unk44;
+    arg0->unk4E = 0;
+    arg0->unk46 = 0;
+    arg0->unk0 = ptr;
+    arg0->unk4C = arg0->unk42;
+    setCallbackWithContinue(func_80054F44_55B44);
+}
+
+INCLUDE_ASM("asm/nonmatchings/52880", func_80054D70_55970);
+
+void func_80054F44_55B44(Struct_52880 *arg0) {
+    Alloc_52880 *alloc;
+    s32 playerIdx;
+    s32 temp_v0;
+    s32 temp_v1;
+    s32 temp_a0;
+    s32 temp_a1;
+    s32 temp_a2;
+    s32 temp_a3;
+    s32 i;
+    void *s1;
+
+    alloc = getCurrentAllocation();
+    transformVector(D_80090F60_91B60, alloc->unk10[arg0->unk42].unk164, s1 = &arg0->unk4);
+
+    transformVector(&D_80090F60_91B60[12], alloc->unk10[arg0->unk42].unk164, &arg0->velY);
+
+    temp_v0 = arg0->unk4;
+    temp_a1 = arg0->velY;
+    temp_v1 = arg0->unk8;
+    temp_a2 = arg0->velZ;
+    temp_a0 = arg0->unkC;
+    temp_a3 = arg0->velX;
+    playerIdx = arg0->unk42;
+    arg0->velY = temp_v0 - temp_a1;
+    arg0->velZ = temp_v1 - temp_a2;
+    arg0->velX = temp_a0 - temp_a3;
+
+    arg0->unk40 = alloc->unk10[playerIdx].unkB94;
+    arg0->unk48 = 0xF0;
+
+    setCallback(func_800550B4_55CB4);
+    func_80054D70_55970(arg0);
+
+    func_80056B7C_5777C(s1, 0x23);
+
+    if (arg0->unk4E != 0) {
+        func_80050ECC_51ACC(s1);
+        func_80056B7C_5777C(s1, 0x11);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, arg0);
+    }
+}
+
+extern void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
+extern void func_80051C80_52880(s32 *arg0, s32 arg1);
+extern s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, s32 *arg2, s32 arg3);
+extern s16 func_8005BF50_5CB50(s32 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4);
+extern void func_80066444_67044(s32 arg0, void *arg1);
 
 void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
     Alloc_55650 *alloc;
