@@ -15,7 +15,10 @@ s32 func_80053DF0_549F0(s32, s32);
 s32 func_80054470_55070(s32, s32);
 s32 func_80055820_56420(s32, s32);
 
+extern void func_80058A3C_5963C(Player *arg0);
 extern void func_80058A68_59668(Player *arg0);
+extern Player *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
+extern void func_80059C24_5A824(Player *arg0);
 extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
 extern s32 func_800BB504(void *, s32);
 extern void func_80052DB4_539B4(void);
@@ -155,7 +158,47 @@ void func_800524A4_530A4(Struct_52880 *arg0) {
     setCallbackWithContinue(func_800525F4_531F4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80052500_53100);
+void func_80052500_53100(Struct_52880 *arg0) {
+    GameState *alloc;
+    Player *result;
+    void *s1;
+    s16 unk4C;
+    s32 v28;
+    s32 new_var;
+    s32 v2C;
+    Struct_52880 *new_var3;
+    s32 v24;
+    s32 new_var2;
+
+    alloc = (GameState *)getCurrentAllocation();
+    new_var3 = arg0;
+    s1 = &arg0->unk4;
+    result = func_8005B548_5C148(s1, new_var3->unk42, 0x80000);
+    if (result == 0) {
+        return;
+    }
+
+    new_var2 = result->unkB84 & 0x1000;
+    if (new_var2 == 0) {
+        func_80058A3C_5963C(result);
+        arg0->unk4E++;
+        unk4C = arg0->unk4C;
+        if (unk4C >= 0) {
+            func_80059C24_5A824(&alloc->players[unk4C]);
+        }
+    } else {
+        v28 = arg0->velZ;
+        v2C = (new_var = arg0->velX);
+        arg0->unk42 = result->unkBB8;
+        arg0->unk4C = result->unkBB8;
+        arg0->velZ = -v28;
+        v24 = arg0->velY;
+        arg0->velY = -v24;
+        arg0->velX = -v2C;
+        func_80050ECC_51ACC(s1);
+        func_80056B7C_5777C(s1, 0x20);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_800525F4_531F4);
 
@@ -190,10 +233,6 @@ void func_80052AB0_536B0(Struct_52880 *arg0) {
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80052C00_53800);
 }
-
-extern Player *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
-extern void func_80058A68_59668(Player *arg0);
-extern void func_80059C24_5A824(Player *arg0);
 
 void func_80052B0C_5370C(Struct_52880 *arg0) {
     GameState *alloc;
@@ -365,7 +404,6 @@ void func_8005383C_5443C(Struct_52880 *arg0) {
 
 extern Player *func_8005C454_5D054(void *arg0, s16 arg1, s32 arg2, void *arg3);
 extern void func_80058AEC_596EC(Player *arg0, void *arg1);
-extern void func_80059C24_5A824(Player *arg0);
 
 void func_80053898_54498(Struct_52880 *arg0) {
     GameState *allocation;
