@@ -47,7 +47,11 @@ typedef struct {
     Mat3x3Padded unk970;
     u8 padding25[0x14];
     s32 unk9A4;
-    u8 padding3[0xE4];
+    u8 padding3[0xD4];
+    s32 unkA7C;
+    s32 _padA80;
+    s32 unkA84;
+    u8 _padA88[0x4];
     u16 unkA8C;
     s16 unkA8E;
     s16 unkA90;
@@ -75,7 +79,10 @@ typedef struct {
     s32 unkB4C;
     u8 padding6[0x24];
     u16 unkB74;
-    s32 unkB78;
+    u8 _padB76[2];
+    s16 unkB78;
+    s8 unkB7A;
+    s8 unkB7B;
     s16 unkB7C;
     u16 unkB7E;
     s32 unkB80;
@@ -690,7 +697,41 @@ s32 func_800B2A3C_A28EC(func_800B30B0_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2B3C_A29EC);
+extern void func_800B9B90_A9A40(void);
+extern void func_800516B4_522B4(void *);
+
+void func_800B2B3C_A29EC(func_800B30B0_arg *arg0) {
+    s32 temp_v1;
+    u16 temp_a1;
+    s16 var_v1;
+
+    temp_v1 = arg0->unkB84;
+    if (!(temp_v1 & 0x1000)) {
+        if (arg0->unkBDA != 0) {
+            func_800B9B90_A9A40();
+            var_v1 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, (s32)arg0->unk434, arg0->unk43C);
+            temp_a1 = (u16)arg0->unkA94;
+            var_v1 = (var_v1 - temp_a1) & 0x1FFF;
+            if (var_v1 >= 0x1001) {
+                var_v1 = var_v1 | 0xE000;
+            }
+            if (var_v1 >= 0x41) {
+                var_v1 = 0x40;
+            }
+            if (var_v1 < -0x40) {
+                var_v1 = -0x40;
+            }
+            arg0->unkA94 = temp_a1 + var_v1;
+        } else {
+            arg0->unkA94 = (u16)arg0->unkA94 - (arg0->unkB7A * 4);
+        }
+        func_80058CFC_598FC(arg0);
+        return;
+    }
+    if (temp_v1 & 0x4000) {
+        func_800516B4_522B4(arg0);
+    }
+}
 
 s32 func_800B2C18_A2AC8(func_800B30B0_arg *arg0) {
     GameState *state;
