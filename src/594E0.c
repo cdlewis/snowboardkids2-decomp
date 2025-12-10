@@ -6,6 +6,9 @@
 
 extern s32 func_80044050_44C50(void);
 extern s32 func_800436B4_442B4(void);
+extern u16 D_80093F90_94B90[];
+extern u16 D_80093FA4_94BA4[];
+extern u16 D_80093FB8_94BB8[];
 extern u16 D_80093FCC_94BCC[];
 extern u16 D_80093FE0_94BE0[];
 extern u16 D_80093FF4_94BF4[];
@@ -220,7 +223,21 @@ s32 func_80059AC4_5A6C4(Player *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_80059ADC_5A6DC);
+void func_80059ADC_5A6DC(Player *arg0) {
+    if (arg0->unkBB9 < 9) {
+        switch (randA() % 3) {
+            case 0:
+                func_80056D64_57964(&arg0->worldPosX, D_80093F90_94B90[arg0->unkBB9], 5, arg0->unkBB8 + 4);
+                break;
+            case 1:
+                func_80056D64_57964(&arg0->worldPosX, D_80093FA4_94BA4[arg0->unkBB9], 5, arg0->unkBB8 + 4);
+                break;
+            case 2:
+                func_80056D64_57964(&arg0->worldPosX, D_80093FB8_94BB8[arg0->unkBB9], 5, arg0->unkBB8 + 4);
+                break;
+        }
+    }
+}
 
 void func_80059BD4_5A7D4(Player *arg0) {
     u8 index = arg0->unkBB9;
