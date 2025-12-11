@@ -23,6 +23,23 @@ typedef struct {
     /* 0x2C */ ListNode_5AA90 *list;
 } Allocation5AA90;
 
+// Element size is 6 bytes based on *6 pattern in asm
+typedef struct {
+    /* 0x0 */ s16 unk0;
+    /* 0x2 */ s16 unk2;
+    /* 0x4 */ s16 unk4;
+} Section1Element;
+
+// Element at offset 0x3C has size 0x24 (36 bytes)
+typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ u8 pad[0x14];
+    /* 0x16 */ u16 unk16;
+    /* 0x18 */ u8 pad2[0x4];
+    /* 0x1C */ u16 unk1C;
+    /* 0x1E */ u8 pad3[0x6];
+} Section3Element;
+
 u16 func_80059E90_5AA90(Player *arg0, void *arg1, u16 arg2, void *arg3) {
     if (!(arg0->unkB84 & 0x100)) {
         return func_80060A3C_6163C(arg1, arg2, arg3);
@@ -214,4 +231,35 @@ void func_8005C838_5D438(ListNode_5AA90 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005C868_5D468);
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005CE98_5DA98);
+s16 func_8005CE98_5DA98(Player *arg0) {
+    GameState *allocation;
+    Section3Element *elem;
+    s16 result;
+
+    allocation = (GameState *)getCurrentAllocation();
+    elem = (Section3Element *)(arg0->unkB94 * 0x24 + (u32)allocation->gameData.section3Data);
+
+    if (elem->unk0 < 0) {
+        if (allocation->unk74 == arg0->unkBC5) {
+            Section1Element *section1Data = (Section1Element *)allocation->gameData.section1Data;
+            Section1Element *v1 = (Section1Element *)(elem->unk1C * 6 + (u32)section1Data);
+            Section1Element *v2 = (Section1Element *)(elem->unk16 * 6 + (u32)section1Data);
+            result = func_8006D21C_6DE1C(v1->unk0, v1->unk4, v2->unk0, v2->unk4) + 0x800;
+        } else {
+            D_80090F90_91B90_item *item = func_80055D10_56910(allocation->memoryPoolId);
+            result = func_8006D21C_6DE1C(item->unk0, item->unk4, arg0->worldPosX, arg0->worldPosZ);
+            if (arg0->unkB84 & 2) {
+                result += 0x1000;
+            }
+        }
+    } else {
+        Section1Element *section1Data = (Section1Element *)allocation->gameData.section1Data;
+        Section1Element *v1 = (Section1Element *)(elem->unk16 * 6 + (u32)section1Data);
+        Section1Element *v2 = (Section1Element *)(elem->unk1C * 6 + (u32)section1Data);
+        result = func_8006D21C_6DE1C(v1->unk0, v1->unk4, v2->unk0, v2->unk4);
+        if (arg0->unkB84 & 2) {
+            result += 0x1000;
+        }
+    }
+    return result;
+}
