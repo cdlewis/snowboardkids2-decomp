@@ -78,3 +78,4 @@ void func_80041418_42018(void);
 Func43374State *func_800436B4_442B4(Player *arg0);
 void func_80015A18_16618(void);
 void func_8000D7F8_E3F8(void);
+void func_80021D20_22920(void);
