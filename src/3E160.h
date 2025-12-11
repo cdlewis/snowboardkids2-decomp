@@ -52,3 +52,4 @@ void func_8003BD60_3C960(char *arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s
 void func_800585C8_591C8(s32 arg0);
 void func_80058B30_59730(Player *arg0);
 void func_8003B47C_3C07C(void *arg0);
+void func_80044538_45138(s16 arg0);
