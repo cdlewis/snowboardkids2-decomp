@@ -433,3 +433,4 @@ func_80025DAC_269AC (30 attempts, 97.756%)
 func_800316AC_322AC 30 98.488%
 func_80046464_47064 (30 attempts, 97.778%) -- Register allocation mismatch: compiler assigns a0 to loop counter i and v1 to offset, target has v1 for loop counter and a0 for offset, instruction scheduling differences for move v1,zero/lui a1,0xc/move a0,zero order
 func_800B5F2C_1E2FDC (30 attempts, 92.121%) -- Instruction scheduling mismatch: compiler does not reload unk20 from memory after store (uses move a3,v0 instead of lh a3,0x20(a0)), also sb zero,0x70(a0) scheduled after slti instead of after andi. With volatile, gets 88.4% but uses lhu+sll+sra instead of lh.
+func_800B5FB0_1E3060 (11 attempts, ~75%) -- Instruction scheduling mismatch: compiler reorders andi a1,a1,0x1fff before unk22 load-mask-store-load sequence, sb zero,0x70(a0) also scheduled differently, sh a1,0x26(a0) placed in wrong location
