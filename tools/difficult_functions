@@ -435,3 +435,4 @@ func_8004CDC0_4D9C0 30 98.923% -- Stack frame size mismatch: compiler generates 
 func_80028C08_29808 5 ~88% -- Register allocation mismatch with goto pattern: compiler hoists unk5E load to a0 instead of v1, reuses value instead of reloading at each use site. Function has shared epilogue via goto where two paths call func_80001688_2288 with different args.
 func_8003466C_3526C 19 90%
 func_80024990_25590 30 95.211% -- Register allocation and instruction scheduling mismatch: compiler reorders addu a1/v0 sequence (arg1/arg2 address calculation), swaps li a3/v0 order for -1 constants, places sw v0,0(s0) after memcpy jal instead of before
+func_800B62E4_A6194 (8 attempts, 89%)
