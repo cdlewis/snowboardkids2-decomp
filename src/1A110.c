@@ -25,7 +25,54 @@ s32 func_8001974C_1A34C(s32 arg0, s32 arg1, s32 arg2) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1A110", func_800197D8_1A3D8);
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} func_800197D8_1A3D8_arg1;
+
+typedef struct {
+    u8 padding[0x4C];
+    s32 unk4C;
+} func_800197D8_1A3D8_arg0;
+
+void func_800197D8_1A3D8(func_800197D8_1A3D8_arg0 *arg0, func_800197D8_1A3D8_arg1 *arg1, s32 arg2) {
+    GameState *state;
+    s16 angle;
+    s32 rot;
+    s32 scale;
+    s32 sinVal;
+    s32 cosVal;
+    s32 newX;
+    s32 newY;
+    s32 baseX;
+    s32 baseY;
+
+    state = (GameState *)getCurrentAllocation();
+    arg2 = arg2 - 1;
+    angle = func_8006D21C_6DE1C(state->unk408[arg2], state->unk410[arg2], arg1->unk0, arg1->unk8);
+    rot = state->unk418[arg2] + state->unk3FE;
+    rot <<= 16;
+    sinVal = approximateSin(angle);
+    scale = -(rot >> 8);
+    sinVal = sinVal * scale;
+    if (sinVal < 0) {
+        sinVal += 0x1FFF;
+    }
+    newX = (sinVal >> 13) << 8;
+    cosVal = approximateCos(angle);
+    cosVal = cosVal * scale;
+    if (cosVal < 0) {
+        cosVal += 0x1FFF;
+    }
+    baseX = state->unk408[arg2];
+    baseY = state->unk410[arg2];
+    newX += baseX;
+    arg1->unk0 = newX;
+    newY = ((cosVal >> 13) << 8) + baseY;
+    arg1->unk8 = newY;
+    arg0->unk4C = distance_2d(arg1->unk0, newY);
+}
 
 s32 func_800198F0_1A4F0(s32 arg0, s32 arg1, u8 arg2) {
     GameState *state;
