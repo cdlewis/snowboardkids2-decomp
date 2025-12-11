@@ -5,6 +5,7 @@
 #include "56910.h"
 #include "5E590.h"
 #include "68CF0.h"
+#include "6DE50.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
@@ -1126,7 +1127,25 @@ void func_8004E6F8_4F2F8(Struct_func_8004E6F8 *arg0) {
     setCallback(func_8004E794_4F394);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E794_4F394);
+void func_8004E794_4F394(Struct_func_8004E6F8 *arg0) {
+    GameState *allocation;
+    s32 i;
+
+    allocation = (GameState *)getCurrentAllocation();
+    i = 0;
+    if (allocation->gamePaused == 1) {
+        do {
+            if (allocation->unk77 == i) {
+                arg0->elements[i].padA[0] = 0x12;
+            } else {
+                arg0->elements[i].padA[0] = 0x11;
+            }
+            debugEnqueueCallback(0xC, 6, func_80010240_10E40, &arg0->elements[i]);
+            i++;
+        } while (i < 3);
+        func_8006D4B8_6E0B8((s32)arg0->unk24, -0x20, -8, 4, 1, 0, 0x80, 0, 0, 0xFF, 0x80, 0xC, 6);
+    }
+}
 
 void func_8004E884_4F484(Struct_func_8004E884 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
