@@ -6,7 +6,6 @@
 #include "task_scheduler.h"
 
 extern void func_8001CD90_1D990(void);
-extern void *func_8003B28C_3BE8C(void);
 extern u8 D_8008D9B0_8E5B0[8];
 
 void func_8001DE84_1EA84(void);
