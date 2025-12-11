@@ -437,3 +437,5 @@ func_80024990_25590 30 95.211% -- Register allocation and instruction scheduling
 func_800B62E4_A6194 (8 attempts, 89%)
 func_8001F7C8_203C8 (30 attempts, 97.1%) -- Register allocation mismatch: compiler assigns s1 for arg0+0x18 instead of s0, instruction scheduling differences for addiu s1,sp,0x80 and addiu s0,s2,0xc, temp variable uses a3 instead of a0
 func_800B00C0_1DC260 (22 attempts, 83.5%) -- Register allocation mismatch: compiler allocates temps to a2/a3/t0/t1 instead of a3/t0/t1/t2, constants to v0/a1/v1 instead of v1/a2/a1
+
+func_80044DB0_459B0 30 98.696%
