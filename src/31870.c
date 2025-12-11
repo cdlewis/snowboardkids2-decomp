@@ -283,7 +283,6 @@ typedef struct {
     void *unk2C;
 } func_8002FA1C_3061C_arg;
 
-extern void func_800136E0_142E0(void);
 extern void func_80031138_31D38(void);
 
 void func_800317D4_323D4(func_80031510_32110_arg *arg0);
