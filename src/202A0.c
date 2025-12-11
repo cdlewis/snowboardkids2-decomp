@@ -14,7 +14,6 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 
-extern s32 func_8006FED8_70AD8(void *arg0);
 extern u8 identityMatrix[];
 extern u16 func_80062B1C_6371C(void *, u16, void *, void *);
 extern void computeLookAtMatrix(void *, void *, void *);

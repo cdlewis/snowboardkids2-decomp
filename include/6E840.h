@@ -132,6 +132,7 @@ typedef struct {
 } func_8006FE94_70A94_arg;
 
 void func_8006FEBC_70ABC(func_8006FEBC_70ABC_arg *arg0);
+void func_8006FED8_70AD8(void *arg0);
 void func_8006FE94_70A94(func_8006FE94_70A94_arg *arg0, s8 arg1, s8 arg2, s8 arg3);
 
 typedef struct {
