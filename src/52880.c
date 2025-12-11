@@ -118,8 +118,6 @@ void func_80051E34_52A34(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80051FC4_52BC4);
 }
 
-extern void func_80058A10_59610(Player *arg0);
-
 void func_80051E90_52A90(Struct_52880 *arg0) {
     GameState *alloc;
     Player *result;
