@@ -2,6 +2,7 @@
 
 #include "5EA60.h"
 #include "common.h"
+#include "displaylist.h"
 #include "memory_allocator.h"
 
 #define MODE_DMA 0
@@ -270,3 +271,5 @@ s32 func_800015E4_21E4(s16);
 u8 func_80001534_2134(SceneModel *arg0);
 
 void func_8000152C_212C(SceneModel *arg0, u8 arg1);
+
+void func_80002B50_3750(func_80002B50_3750_arg *arg0, DisplayListObject *arg1);
