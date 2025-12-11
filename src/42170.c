@@ -361,7 +361,6 @@ extern s8 D_8009095C_9155C;
 extern s32 D_80090AA0_916A0;
 extern s32 D_80090AAC_916AC;
 extern s8 D_80090950_91550;
-extern void func_80066444_67044(s32, void *);
 
 void func_80041570_42170(Func41570State *arg0) {
     getCurrentAllocation();
@@ -1455,7 +1454,7 @@ void func_8004393C_4453C(Func4393CArg *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, &arg0->unk4);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
 
@@ -1479,7 +1478,7 @@ void func_800439F4_445F4(Func4393CArg *arg0) {
     transformVector((s16 *)&arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk8);
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, &arg0->unk4);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
 
@@ -1528,7 +1527,7 @@ transform_and_loop:
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, &arg0->unk4);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
 
@@ -1549,7 +1548,7 @@ void func_80043C00_44800(Func43CA4Arg *arg0) {
     transformVector(arg0->unk2C, arg0->unk28->unk9F0, &arg0->unk8);
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, &arg0->unk4);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
 
@@ -1567,7 +1566,7 @@ void func_80043CA4_448A4(Func43CA4Arg *arg0) {
     transformVector(arg0->unk2C, arg0->unk28->unk9F0, &arg0->unk8);
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, &arg0->unk4);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
 

@@ -213,7 +213,7 @@ void func_80051FC4_52BC4(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
     }
 }
 
@@ -337,7 +337,7 @@ void func_800525F4_531F4(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
     }
 }
 
@@ -463,7 +463,7 @@ void func_80052C00_53800(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
     }
 }
 
@@ -615,7 +615,6 @@ void func_80053898_54498(Struct_52880 *arg0) {
 }
 
 extern void func_80042340_42F40(void *);
-extern void func_80066444_67044(s32, void *);
 extern void func_80053B38_54738(void);
 
 void func_80053990_54590(Struct_52880 *arg0) {
@@ -668,7 +667,7 @@ void func_80053990_54590(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
     }
 }
 
@@ -792,7 +791,7 @@ void func_80053FE0_54BE0(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
     }
 }
 
@@ -997,7 +996,7 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
     }
 }
 
@@ -1005,7 +1004,6 @@ extern void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
 extern void func_80051C80_52880(s32 *arg0, s32 arg1);
 extern s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, s32 *arg2, s32 arg3);
 extern s16 func_8005BF50_5CB50(s32 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4);
-extern void func_80066444_67044(s32 arg0, void *arg1);
 
 void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
     Alloc_55650 *alloc;
@@ -1102,7 +1100,7 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
     }
 }
 
@@ -1147,7 +1145,6 @@ void func_800554BC_560BC(Struct_52880 *arg0) {
     }
 }
 
-extern void func_80066444_67044(s32, void *);
 extern void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
 extern s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, s32 *arg2, s32 arg3);
 
@@ -1183,7 +1180,7 @@ void func_800554FC_560FC(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
     }
 }
 
@@ -1248,7 +1245,7 @@ skip_main:
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
     }
 }
 
@@ -1299,7 +1296,6 @@ void func_80055900_56500(Struct_52880 *arg0) {
     }
 }
 
-extern void func_80066444_67044(s32, void *);
 extern void func_80055A84_56684(void);
 
 void func_80055964_56564(Struct_52880 *arg0) {
@@ -1337,7 +1333,7 @@ void func_80055964_56564(Struct_52880 *arg0) {
     i = 0;
 
     do {
-        func_80066444_67044(i, arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
         i++;
     } while (i < 4);
 }

@@ -399,7 +399,7 @@ void func_80050AA8_516A8(func_80050C00_51800_Task *arg0) {
     i = 0;
     if (arg0->unk1E == 0xFF) {
         do {
-            func_80066444_67044(i, &arg0->unk4);
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
             i++;
         } while (i < 4);
     } else {
@@ -502,7 +502,7 @@ void func_80050E08_51A08(func_80050DB0_519B0_arg *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, &arg0->unk4);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
 

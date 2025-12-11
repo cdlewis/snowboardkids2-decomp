@@ -97,6 +97,7 @@ typedef struct {
     s16 unk36;
 } func_80066444_67044_arg1;
 
+void func_80066444_67044(s32 arg0, func_80066444_67044_arg1 *arg1);
 void func_800677C0_683C0(s32 arg0, loadAssetMetadata_arg *arg1);
 
 void func_800670A4_67CA4(u16 arg0, func_80066444_67044_arg1 *arg1);
