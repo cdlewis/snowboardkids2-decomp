@@ -70,7 +70,6 @@ extern void *D_80088720_89320;
 extern u8 identityMatrix[];
 
 extern void func_80002B50_3750(void *, void *);
-extern void func_80069CF8_6A8F8(void);
 
 void func_80006C50_7850(func_80006C50_7850_arg *arg0) {
     s32 *temp_s0;
