@@ -65,9 +65,12 @@ typedef struct {
 } func_800506B4_512B4_arg;
 
 typedef struct {
-    s32 unk0;
+    s16 unk0;
+    s16 unk2;
     MemoryAllocatorNode *unk4;
     s16 unk8;
+    s8 unkA;
+    u8 paddingB;
     s32 unkC;
     s32 unk10;
     u16 unk14;
@@ -543,7 +546,22 @@ void func_80050FE0_51BE0(func_80050F18_51B18_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_8005100C_51C0C);
+void func_8005100C_51C0C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    func_80050F18_51B18_arg *task;
+
+    task = (func_80050F18_51B18_arg *)scheduleTask(&func_80050F18_51B18, 2, 0, 0xE6);
+    if (task != NULL) {
+        task->unk0 = arg0;
+        task->unk2 = arg1;
+        if (arg2 != 0) {
+            task->unkA = 0x11;
+        } else {
+            task->unkA = 0x10;
+        }
+        task->unk14 = arg3;
+        task->unk16 = arg4;
+    }
+}
 
 void func_800510A4_51CA4(func_800506B4_512B4_arg *arg0) {
     GameState *temp_s1 = (GameState *)getCurrentAllocation();
