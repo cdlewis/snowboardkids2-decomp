@@ -15,7 +15,6 @@
 #include "task_scheduler.h"
 
 extern u8 identityMatrix[];
-extern u16 func_80062B1C_6371C(void *, u16, void *, void *);
 extern void computeLookAtMatrix(void *, void *, void *);
 extern void func_8006FD3C_7093C(u16, void *);
 extern void func_8001FFE4_20BE4(void);

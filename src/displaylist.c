@@ -150,7 +150,10 @@ typedef struct {
     Element24 *unkC;
 } func_80062B1C_arg0;
 
-u16 func_80062B1C_6371C(func_80062B1C_arg0 *arg0, u16 arg1, Vec3s32 *arg2, Vec3s32 *arg3) {
+u16 func_80062B1C_6371C(void *arg0_void, u16 arg1, void *arg2_void, void *arg3_void) {
+    func_80062B1C_arg0 *arg0 = (func_80062B1C_arg0 *)arg0_void;
+    Vec3s32 *arg2 = (Vec3s32 *)arg2_void;
+    Vec3s32 *arg3 = (Vec3s32 *)arg3_void;
     Vertex6 *verts;
     u16 idx0;
     u16 idx1;
