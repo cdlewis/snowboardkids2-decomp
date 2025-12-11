@@ -1,3 +1,4 @@
+#include "3E160.h"
 #include "51060.h"
 #include "56910.h"
 #include "5AA90.h"
@@ -157,7 +158,6 @@ extern void *func_8005DE30_5EA30(s16 arg0, s16 arg1);
 extern void *func_8005DC60_5E860(s32 arg0);
 extern void *loadAssetByIndex_5E990(s32 arg0);
 extern s32 func_8005D308_5DF08(func_800B30B0_arg *, s32);
-extern void func_80059A48_5A648(func_800B30B0_arg *, s16);
 extern void func_8004D890_4E490(u8, s16);
 extern void func_8004FCF0_508F0(s16);
 extern void func_80059A88_5A688(func_800B30B0_arg *, s16);
@@ -809,7 +809,7 @@ s32 func_800B2C18_A2AC8(func_800B30B0_arg *arg0) {
     }
 
     if (arg0->unkBAC != 0) {
-        func_80059A48_5A648(arg0, arg0->unkBAC);
+        func_80059A48_5A648((Player *)arg0, arg0->unkBAC);
         if (arg0->unkBC7 == 0) {
             func_8004D890_4E490(arg0->unkBB8, arg0->unkBAC);
 

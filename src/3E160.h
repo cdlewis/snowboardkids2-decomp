@@ -117,3 +117,6 @@ Player *func_8005B548_5C148(void *arg0, s16 arg1, s32 arg2);
 Player *func_8005C454_5D054(void *arg0, s16 arg1, s32 arg2, void *arg3);
 void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2);
 void func_80058AEC_596EC(Player *arg0, void *arg1);
+void func_80058A94_59694(Player *arg0);
+void func_80059A48_5A648(Player *arg0, s32 arg1);
+s32 func_80059AC4_5A6C4(Player *arg0);

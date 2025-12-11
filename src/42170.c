@@ -1467,8 +1467,6 @@ void func_800439F4_445F4(Func4393CArg *arg0) {
     }
 }
 
-extern s32 func_80059AC4_5A6C4(Func43CA4Unk28 *);
-extern void func_80059A48_5A648(Func43CA4Unk28 *, s32);
 void func_80043C00_44800(Func43CA4Arg *);
 
 void func_80043AB4_446B4(Func4393CArg *arg0) {
@@ -1490,8 +1488,8 @@ void func_80043AB4_446B4(Func4393CArg *arg0) {
     } else if (arg0->unk48 == 0x800) {
         arg0->unk40 = 0;
         arg0->unk42 = 1;
-        arg0->unk3C = func_80059AC4_5A6C4(arg0->unk28);
-        func_80059A48_5A648(arg0->unk28, -arg0->unk3C);
+        arg0->unk3C = func_80059AC4_5A6C4((Player *)arg0->unk28);
+        func_80059A48_5A648((Player *)arg0->unk28, -arg0->unk3C);
         func_800437C4_443C4(arg0, &D_8009095C_9155C);
     } else {
         func_800437C4_443C4(arg0, &D_8009095C_9155C);
@@ -1500,7 +1498,7 @@ void func_80043AB4_446B4(Func4393CArg *arg0) {
     if (arg0->unk48 == 0xC00) {
         arg0->unk40 = 0;
         arg0->unk42 = 1;
-        func_80059A48_5A648(arg0->unk24, arg0->unk3C);
+        func_80059A48_5A648((Player *)arg0->unk24, arg0->unk3C);
         setCallback(func_80043C00_44800);
     }
 
