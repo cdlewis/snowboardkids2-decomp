@@ -1,5 +1,6 @@
 #include "19E80.h"
 #include "3E160.h"
+#include "413E0.h"
 #include "51060.h"
 #include "56910.h"
 #include "594E0.h"
@@ -2060,7 +2061,6 @@ void func_80049C70_4A870(s32 arg0) {
     func_80049280_49E80(arg0);
 }
 
-extern void func_800409B4_415B4(void);
 extern void func_800BB2B0(void);
 extern void func_800BBA50(s32);
 extern void func_800BBA98(void);
