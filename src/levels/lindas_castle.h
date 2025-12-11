@@ -13,3 +13,4 @@ typedef struct {
 } func_800BB2B0_arg;
 
 void func_800BB2B0(func_800BB2B0_arg *arg0);
+void func_800BBA50(s32 arg0);

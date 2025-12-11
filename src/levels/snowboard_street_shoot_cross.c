@@ -183,7 +183,7 @@ check_count:
 
 INCLUDE_ASM("asm/nonmatchings/levels/snowboard_street_shoot_cross", func_800BB690_AD110);
 
-void func_800BBA50(s16 arg0) {
+void func_800BBA50(s32 arg0) {
     ACD30Task *task;
 
     task = (ACD30Task *)scheduleTask(func_800BB2B0_ACD30, 0, 0, 0x32);
