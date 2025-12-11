@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "38310.h"
+#include "42170.h"
 #include "displaylist.h"
 #include "gamestate.h"
 

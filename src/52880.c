@@ -603,7 +603,6 @@ void func_80053898_54498(Struct_52880 *arg0) {
     }
 }
 
-extern void func_80042340_42F40(void *);
 extern void func_80053B38_54738(void);
 
 void func_80053990_54590(Struct_52880 *arg0) {
