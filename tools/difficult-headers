@@ -53,6 +53,7 @@ src/1E25B0.c:5
 src/4A40.c:41
 src/4A40.c:43
 src/displaylist.c:63
+src/displaylist.c:64
 src/levels/haunted_house.c:109
 src/42170.c:1410
 src/42170.c:1411
