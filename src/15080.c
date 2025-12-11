@@ -5,7 +5,6 @@
 #include "common.h"
 #include "memory_allocator.h"
 #include "task_scheduler.h"
-extern void func_80015A18_16618(void);
 extern void func_8000D7F8_E3F8(void);
 extern void func_80021D20_22920(void);
 extern void func_80014A90_15690(void);
