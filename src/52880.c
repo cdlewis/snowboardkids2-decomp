@@ -8,6 +8,7 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "levels/starlight_highway.h"
 #include "task_scheduler.h"
 
 s32 func_80052A24_53624(s32, s32);
@@ -17,7 +18,6 @@ s32 func_80053DF0_549F0(s32, s32);
 s32 func_80054470_55070(s32, s32);
 s32 func_80055820_56420(s32, s32);
 
-extern s32 func_800BB504(void *, s32);
 extern void func_80052DB4_539B4(void);
 extern s16 D_80090F60_91B60[];
 
