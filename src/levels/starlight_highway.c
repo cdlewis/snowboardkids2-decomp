@@ -381,7 +381,9 @@ void func_800BBED8(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BBF28_AE2E8);
+extern s32 D_800BCA84_AEE44[][3];
+extern s16 D_800BCAF0_AEEB0[];
+extern s32 D_800BCB04_AEEC4[][3];
 
 extern s32 func_8005C250_5CE50(void *, s32, s32);
 extern void func_80042340_42F40(void *);
@@ -398,7 +400,11 @@ typedef struct {
     s32 unk14;
     s32 unk18;
     s32 unk1C;
-    u8 _pad20[0x1C];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    s32 unk2C;
+    u8 _pad30[0xC];
     s32 unk3C;
     s32 unk40;
     s32 unk44;
@@ -407,6 +413,52 @@ typedef struct {
     u16 unk4C;
     u8 unk4E;
 } func_800BC3D0_AE790_arg;
+
+void func_800BC084_AE444(func_800BC3D0_AE790_arg *);
+void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *);
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_800BC4F0_AE8B0_arg;
+
+void func_800BC4F0_AE8B0(func_800BC4F0_AE8B0_arg *);
+
+typedef struct {
+    s16 rotation[3][3];
+    u8 pad2[0xE];
+} func_800BBF28_StackLocals;
+
+void func_800BBF28_AE2E8(func_800BC3D0_AE790_arg *arg0) {
+    u8 pad[0x20];
+    func_800BBF28_StackLocals stack;
+    s16 (*rotPtr)[3];
+    void (*callback)(func_800BC3D0_AE790_arg *);
+
+    (void)pad;
+
+    arg0->unk24 = func_80055DC4_569C4(8);
+    arg0->unk28 = func_80055DF8_569F8(8);
+    arg0->unk2C = 0;
+    arg0->unk20 = (void *)((u32)func_80055E68_56A68(8) + 0x90);
+    memcpy(&arg0->unk14, D_800BCA84_AEE44[arg0->unk4E], 0xC);
+    rotPtr = stack.rotation;
+    createXRotationMatrix(rotPtr, D_800BCAF0_AEEB0[arg0->unk4E]);
+    transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotPtr, &arg0->unk3C);
+    arg0->unk14 = arg0->unk14 - arg0->unk3C * 0x78;
+    arg0->unk18 = arg0->unk18 - arg0->unk40 * 0x78;
+    arg0->unk1C = arg0->unk1C - arg0->unk44 * 0x78;
+    setCleanupCallback(func_800BC4F0_AE8B0);
+    if (arg0->unk4E < 3) {
+        callback = func_800BC084_AE444;
+        arg0->unk48 = 0xF0;
+    } else {
+        arg0->unk48 = 0x78;
+        callback = func_800BC1AC_AE56C;
+    }
+    setCallback(callback);
+}
 
 void func_800BC084_AE444(func_800BC3D0_AE790_arg *arg0) {
     Allocation_AE790 *allocation;
@@ -479,12 +531,6 @@ void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *arg0) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
     }
 }
-
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_800BC4F0_AE8B0_arg;
 
 void func_800BC4F0_AE8B0(func_800BC4F0_AE8B0_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
