@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "memory_allocator.h"
+#include "thread_manager.h"
 
 typedef struct Node {
     struct Node *next;
@@ -65,7 +66,6 @@ extern void *gLinearArenaBuffer;
 extern u8 D_800A356C_A416C;
 extern void *D_800A355C_A415C[];
 extern void *D_800A3560_A4160;
-extern void sendMessageToThreadSyncQueue(OSMesg);
 extern s32 D_8009AFC8_9BBC8;
 extern s32 D_8009AFCC_9BBCC;
 extern void *D_800A3570_A4170;
