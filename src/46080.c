@@ -1235,9 +1235,9 @@ typedef struct {
 } Struct_func_80047EFC_48AFC;
 
 extern void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *);
-extern void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *);
 extern void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
 void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
+void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *);
 
 void func_80047EBC_48ABC(Struct_func_80047EBC_48ABC *arg0) {
     arg0->unk0 = loadAsset_34CB50();
@@ -1355,7 +1355,49 @@ loop:
     } while (i < 4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800481A0_48DA0);
+void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *arg0) {
+    GameState *allocation;
+    s32 heightOffset;
+    s32 i;
+    s32 j;
+    s32 offset;
+    Element_80047F90 *elem;
+
+    allocation = (GameState *)getCurrentAllocation();
+
+    if (allocation->gamePaused == 0) {
+        arg0->unk6A -= 0x40;
+        if (arg0->unk6A == 0) {
+            func_80069CF8_6A8F8();
+        }
+    }
+
+    heightOffset = ((0x2000 - approximateSin(arg0->unk6A)) * 5 * 256) + 0x190000;
+    i = 0;
+    elem = (Element_80047F90 *)arg0;
+
+loop:
+    elem->unk8 = arg0->unk64->worldPosX;
+    elem->unkC = arg0->unk64->worldPosY + heightOffset;
+    elem->unk10 = arg0->unk64->worldPosZ;
+    i += 1;
+    elem += 1;
+    if (i < 3)
+        goto loop;
+
+    i = 0;
+    j = 0;
+    do {
+        offset = 4;
+        do {
+            func_80066444_67044(i, (void *)((s32)arg0 + offset));
+            j++;
+            offset += 0x20;
+        } while (j < 3);
+        i++;
+        j = 0;
+    } while (i < 4);
+}
 
 void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
