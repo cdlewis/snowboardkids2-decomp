@@ -667,7 +667,40 @@ void func_800B2818_A26C8(func_800B30B0_arg *arg0, s8 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2950_A2800);
+void func_800B2950_A2800(func_800B30B0_arg *arg0, s32 arg1) {
+    s8 temp_a0;
+    s8 temp_v1;
+
+    arg0->unkBAC += 0x1E;
+    arg0->unkBAA += 1;
+    temp_a0 = arg0->unkBB6;
+    temp_v1 = temp_a0;
+
+    if (temp_a0 == 0) {
+        arg0->unkBB6 = temp_v1 | (1 << arg1);
+    } else {
+        if (!((temp_a0 >> (s8)arg1) & 1)) {
+            arg0->unkBAC += 0x14;
+            arg0->unkBAA += 1;
+        }
+
+        arg0->unkBB6 = arg0->unkBB6 | (1 << (s8)arg1);
+
+        if ((s8)arg0->unkBB6 == 0xF) {
+            arg0->unkBAC += 0x14;
+            arg0->unkBAA += 3;
+            arg0->unkBB6 |= 0x10;
+        }
+    }
+
+    if ((s16)arg0->unkBAC >= 10000) {
+        arg0->unkBAC = 9999;
+    }
+
+    if ((s16)arg0->unkBAA >= 1000) {
+        arg0->unkBAA = 999;
+    }
+}
 
 extern void func_80059ADC_5A6DC(void *);
 s32 func_800B42A8_A4158(func_800B30B0_arg *, s32, s32, s32);
@@ -1220,8 +1253,6 @@ s32 func_800B36F0_A35A0(func_800B30B0_arg *arg0) {
 
     return var_v1;
 }
-
-extern void func_800B2950_A2800(void *, s32);
 
 void func_800B3784_A3634(func_800B30B0_arg *arg0) {
     s32 result;
