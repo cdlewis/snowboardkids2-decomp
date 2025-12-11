@@ -5,9 +5,9 @@
 
 extern u16 D_8008E19C_8ED9C[];
 extern u8 D_8008E030_8EC30[][16];
+extern s16 D_8008E0C0_8ECC0[];
 
 extern void func_800288D4_294D4(void *);
-extern void func_80028744_29344(void *);
 
 void func_800288A0_294A0(void);
 
@@ -69,7 +69,41 @@ void func_80028600_29200(Func80028600Arg *arg0) {
     setCallback(func_800288A0_294A0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/29200", func_80028744_29344);
+void func_80028744_29344(Func80028600Arg *arg0) {
+    AllocationData29200 *alloc;
+    u8 temp;
+    u32 itemType;
+    s16 arg5;
+
+    alloc = getCurrentAllocation();
+
+    do {
+        temp = D_8008E030_8EC30[arg0->unk5C][randB() & 0xF];
+        arg0->unk5D = temp;
+    } while (D_8008E0C0_8ECC0[temp] == 4);
+
+    alloc->unk42D = temp;
+    itemType = arg0->unk5D;
+    arg5 = 5;
+
+    if (itemType == 5 || itemType == 0xB) {
+        if (itemType == 5) {
+            arg0->model = func_800019B8_25B8(arg0->unk5C + 0x50, alloc, 0, -1, 0, itemType);
+            alloc->unk421 = 0;
+        } else {
+            arg0->model = func_800019B8_25B8(arg0->unk5C + 0x50, alloc, 0, 0, 0, arg5);
+            alloc->unk421 = 1;
+        }
+    } else if (itemType < 0xBU || itemType == 0x10) {
+        arg0->model = func_8000198C_258C(arg0->unk5C + 0x50, alloc);
+        alloc->unk421 = 0;
+    } else {
+        arg0->model = func_800019B8_25B8(arg0->unk5C + 0x50, alloc, 0, 0, 0, -1);
+        alloc->unk421 = 1;
+    }
+
+    setCallback(func_800288A0_294A0);
+}
 
 void func_800288A0_294A0(void) {
     AllocationData29200 *alloc = getCurrentAllocation();
