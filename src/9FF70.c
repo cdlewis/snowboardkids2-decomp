@@ -61,7 +61,8 @@ typedef struct {
     s16 unkA96;
     s16 unkA98;
     s16 unkA9A;
-    u8 padding4[0x10];
+    u8 padding4[0xC];
+    s32 unkAA8;
     s32 unkAAC;
     s32 unkAB0;
     s32 unkAB4;
@@ -70,8 +71,10 @@ typedef struct {
     s32 unkAC0;
     u16 unkAC4;
     u8 _padAC6[0x2];
-    u8 unkAC8;
-    u8 padding45[0x14];
+    s32 unkAC8;
+    s32 unkACC;
+    s32 unkAD0;
+    u8 padding45[0xC];
     s32 unkAE0;
     u8 padding5[0x5C];
     s32 unkB40;
@@ -1727,7 +1730,60 @@ void func_800B46BC_A456C(func_800B00D4_arg *arg0) {
     func_80059D30_5A930(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B470C_A45BC);
+extern s16 func_8005CE98_5DA98(func_800B30B0_arg *);
+
+s32 func_800B470C_A45BC(func_800B30B0_arg *arg0) {
+    s32 stackVec[3];
+    GameState *allocation;
+    s16 angle;
+    s16 delta;
+    s32 vel1;
+    s32 vel2;
+    s16 rotAngle;
+
+    allocation = getCurrentAllocation();
+
+    if (arg0->unkBBF == 0) {
+        arg0->unkA8C = 0xFFFF;
+        arg0->unkB88 = 0;
+        arg0->unk44C = arg0->unkAC8;
+        arg0->unk454 = arg0->unkAD0;
+        arg0->unkBBF++;
+        rotAngle = atan2Fixed(-arg0->unkAC8, -arg0->unkAD0);
+        rotateVectorY((u8 *)allocation->unk48 + 0xE4, rotAngle, stackVec);
+        stackVec[0] += (s32)arg0->unk434;
+        stackVec[2] += arg0->unk43C;
+        stackVec[1] = arg0->unk438 + 0x100000;
+        func_80056B7C_5777C(&arg0->unk434, 0xD);
+        func_80050ECC_51ACC(stackVec);
+    }
+
+    angle = (func_8005CE98_5DA98(arg0) - arg0->unkA94) & 0x1FFF;
+    delta = angle;
+    if (angle >= 0x1001) {
+        delta = angle | 0xE000;
+    }
+    if (delta >= 0x101) {
+        delta = 0x100;
+    }
+    if (delta < -0x100) {
+        delta = -0x100;
+    }
+    arg0->unkA94 = arg0->unkA94 + delta;
+    arg0->unk450 -= 0x6000;
+    vel1 = arg0->unk44C;
+    arg0->unk44C = vel1 - (vel1 >> 4);
+    vel2 = arg0->unk454;
+    arg0->unk454 = vel2 - (vel2 >> 4);
+    func_800B419C_A404C(arg0);
+    func_800B02AC_A015C(arg0);
+    if (func_8005D308_5DF08(arg0, 8) != 0) {
+        arg0->unkAA8 = arg0->unkAA8 / 2;
+        func_800B00E4_9FF94(arg0);
+    }
+    func_8005D804_5E404(arg0, 3, 0);
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B48AC_A475C);
 
@@ -1751,7 +1807,6 @@ s32 func_800B4A4C_A48FC(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-extern s16 func_8005CE98_5DA98(void *);
 extern void func_80051C08_52808(void *, s32);
 
 typedef struct {
