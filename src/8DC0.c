@@ -3,7 +3,6 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern s32 func_8000A030_AC30(void *, s32);
 extern u8 identityMatrix[];
 
 typedef struct {

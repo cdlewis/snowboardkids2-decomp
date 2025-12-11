@@ -3,16 +3,34 @@
 #include "19E80.h"
 
 typedef struct {
-} func_80009F5C_AB5C_arg;
-
-typedef struct {
     /* 0x00 */ DataTable_19E80 *table;
     u8 _pad[0xC];
     /* 0x10 */ u16 index;
 } func_8000A410_B010_arg;
 
+typedef struct {
+    /* 0x00 */ u16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ u16 unk4;
+    /* 0x06 */ u16 unk6;
+} AnimationEntry;
+
+typedef struct {
+    /* 0x00 */ u8 pad0[0x8];
+    /* 0x08 */ void *unk8;
+    /* 0x0C */ AnimationEntry *unkC;
+    /* 0x10 */ u16 unk10;
+    /* 0x12 */ s16 unk12;
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ s16 unk16;
+} AnimationState;
+
+typedef struct {
+} func_80009F5C_AB5C_arg;
+
 s32 func_80009E68_AA68(void *arg0, s16 arg1);
 void *func_80009EF8_AAF8(s16 arg0);
 void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0);
 void func_80009F90_AB90(void *arg0, s32 arg1, s32 arg2, s32 arg3);
+s32 func_8000A030_AC30(void *arg0, s32 arg1);
 void func_8000A13C_AD3C(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8);

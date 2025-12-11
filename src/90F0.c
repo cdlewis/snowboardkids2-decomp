@@ -110,25 +110,8 @@ void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80009F90_AB90);
 
-typedef struct {
-    /* 0x00 */ u16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ u16 unk4;
-    /* 0x06 */ u16 unk6;
-} AnimationEntry;
-
-typedef struct {
-    /* 0x00 */ u8 pad0[0x8];
-    /* 0x08 */ void *unk8;
-    /* 0x0C */ AnimationEntry *unkC;
-    /* 0x10 */ u16 unk10;
-    /* 0x12 */ s16 unk12;
-    /* 0x14 */ s16 unk14;
-    /* 0x16 */ s16 unk16;
-} AnimationState;
-
-s32 func_8000A030_AC30(AnimationState *arg0, s32 arg1) {
-    AnimationState *state = arg0;
+s32 func_8000A030_AC30(void *arg0, s32 arg1) {
+    AnimationState *state = (AnimationState *)arg0;
     s32 result = 0;
     s32 looped = 0;
     s16 timer = state->unk16;

@@ -1,17 +1,13 @@
+#include "90F0.h"
 #include "common.h"
 #include "geometry.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern s32 func_80009E68_AA68(void *, s16);
-extern void func_80009F5C_AB5C(s32 *);
-extern void func_80009F90_AB90(void *, s32, s32, s32);
-
 extern s32 D_8008C190_8CD90[];
 extern s32 D_8008C194_8CD94[];
 extern s32 D_8008C1F0_8CDF0;
 
-extern s32 func_8000A030_AC30(void *, s32);
 extern void
 func_8000A190_AD90(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);
 
@@ -88,7 +84,7 @@ void func_80007100_7D00(func_80007100_7D00_arg *arg0) {
 }
 
 void func_80007130_7D30(func_80007130_7D30_arg *arg0) {
-    func_80009F5C_AB5C(&arg0->unk4);
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
 }
 
 void func_8000714C_7D4C(func_80007130_7D30_arg *arg0) {
@@ -150,5 +146,5 @@ void func_800071E4_7DE4(func_80007130_7D30_arg *arg0) {
 }
 
 void func_80007360_7F60(func_80007130_7D30_arg *arg0) {
-    func_80009F5C_AB5C(&arg0->unk4);
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
 }
