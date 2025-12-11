@@ -14,6 +14,7 @@
 #include "graphics.h"
 #include "levels/jingle_town.h"
 #include "levels/lindas_castle.h"
+#include "levels/starlight_highway.h"
 #include "overlay.h"
 #include "rand.h"
 #include "task_scheduler.h"
@@ -2063,7 +2064,6 @@ void func_80049C70_4A870(s32 arg0) {
     func_80049280_49E80(arg0);
 }
 
-extern void func_800BBED8(void);
 extern void func_800BC0FC(s32);
 extern void func_800BC9BC(void);
 extern void D_800BB688(void);
