@@ -426,29 +426,33 @@ void func_80045964_46564(s32 arg0) {
     }
 }
 
-extern void func_80045A28_46628(void);
+typedef struct {
+    s16 unk0;
+    u8 _pad2[0x6];
+    u8 unk8[0xC];
+} Entry_46628;
 
 typedef struct {
     void *unk0;
-    u8 _pad[0x8];
-    void *unkC;
-    void *unk10;
-} func_80045C84_46884_arg;
-
-extern void func_80045C84_46884(func_80045C84_46884_arg *);
-
-extern s32 D_80090AF0_916F0[];
-extern s32 D_80090AF4_916F4[];
-extern s32 D_80090AF8_916F8[];
-
-typedef struct {
-    void *unk0;
-    u8 _pad[0x8];
+    void *unk4;
+    Entry_46628 *volatile unk8;
     void *unkC;
     void *unk10;
     s16 unk14;
     s16 unk16;
+    s16 unk18;
 } func_80046244_46E44_Task;
+
+typedef func_80046244_46E44_Task func_80045C84_46884_arg;
+
+extern void func_80045C84_46884(func_80045C84_46884_arg *);
+extern void func_80045A28_46628(func_80046244_46E44_Task *);
+extern void func_8006BFB8_6CBB8(void *, void *);
+extern s32 D_8009A8A4_9B4A4;
+extern void func_80045B3C_4673C(void);
+extern s32 D_80090AF0_916F0[];
+extern s32 D_80090AF4_916F4[];
+extern s32 D_80090AF8_916F8[];
 
 void func_800459A4_465A4(func_80046244_46E44_Task *arg0) {
     s16 temp_v1;
@@ -467,7 +471,45 @@ void func_800459A4_465A4(func_80046244_46E44_Task *arg0) {
     setCallback(func_80045A28_46628);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80045A28_46628);
+void func_80045A28_46628(func_80046244_46E44_Task *arg0) {
+    s32 i;
+    s32 offset;
+    s32 *ptr;
+    Entry_46628 *entries;
+    Entry_46628 *loop_ent;
+    void *header;
+    s32 sp10[2];
+
+    header = arg0->unk10;
+    arg0->unk4 = (void *)((s32)header + *(s32 *)header);
+    arg0->unk8 = (Entry_46628 *)((s32)arg0->unk10 + *(s32 *)((s32)arg0->unk10 + 4));
+
+    entries = arg0->unk8;
+    arg0->unk18 = 0;
+
+    if (entries->unk0 >= 0) {
+        loop_ent = entries;
+        do {
+            arg0->unk18++;
+        } while (loop_ent[arg0->unk18].unk0 >= 0);
+    }
+
+    i = 0;
+    arg0->unk0 = allocateNodeMemory(arg0->unk18 << 6);
+
+    if (arg0->unk18 > 0) {
+        ptr = &D_8009A8A4_9B4A4;
+        offset = 0;
+        do {
+            memcpy(ptr, (u8 *)(offset + (s32)arg0->unk8) + 8, 0xC);
+            func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->unk0 + (i << 6));
+            i++;
+            offset += 0x14;
+        } while (i < arg0->unk18);
+    }
+
+    setCallback(&func_80045B3C_4673C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80045B3C_4673C);
 
