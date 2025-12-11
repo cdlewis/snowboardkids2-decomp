@@ -43,7 +43,6 @@ extern u8 D_800A8CC8_A0038;
 extern void func_80019E18_1AA18(void);
 extern s32 gControllerInputs[4];
 extern void func_8001A478_1B078(void);
-extern void func_80032330_32F30(void);
 
 void func_8001ACC8_1B8C8(void);
 void func_8001AD80_1B980(void);

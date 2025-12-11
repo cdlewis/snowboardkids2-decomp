@@ -33,27 +33,6 @@ extern const char D_8009E480_9F080;
 extern void func_80032708_33308(void);
 
 void func_80032628_33228(void);
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 unkA;
-    u8 pad;
-} func_80032330_32F30_element;
-
-typedef struct {
-    func_80032330_32F30_element elements[7];
-    s16 unk54;
-    s16 unk56;
-    void *unk58;
-    s16 unk5C;
-    u8 unk5E;
-    u8 pad;
-    char unk60[8];
-} func_80032330_32F30_arg;
-
 void func_800323FC_32FFC(func_80032330_32F30_arg *arg0);
 
 typedef struct {
