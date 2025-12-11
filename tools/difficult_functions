@@ -433,3 +433,4 @@ func_800339AC_345AC (11 attempts, 99.231%) -- Instruction scheduling mismatch: c
 func_80025DAC_269AC (30 attempts, 97.756%)
 
 func_800316AC_322AC 30 98.488%
+func_80046464_47064 (30 attempts, 97.778%) -- Register allocation mismatch: compiler assigns a0 to loop counter i and v1 to offset, target has v1 for loop counter and a0 for offset, instruction scheduling differences for move v1,zero/lui a1,0xc/move a0,zero order
