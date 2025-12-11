@@ -1,12 +1,12 @@
 #include "15690.h"
 #include "3E160.h"
+#include "4050.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "memory_allocator.h"
 #include "task_scheduler.h"
-extern void *__udiv_w_sdiv(void);
 extern u8 D_800AB47A_A27EA;
 
 void func_80014990_15590(void);

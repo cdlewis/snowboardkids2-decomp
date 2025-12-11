@@ -67,7 +67,7 @@ void func_80003450_4050(s16 arg0, s16 arg1) {
     D_800AFEF0_A7260 = arg1;
 }
 
-s32 __udiv_w_sdiv(void) {
+void *__udiv_w_sdiv(void) {
     return 0;
 }
 
