@@ -1,6 +1,7 @@
 #include "4CD70.h"
 #include "10AD0.h"
 #include "19E80.h"
+#include "2DD40.h"
 #include "3E160.h"
 #include "56910.h"
 #include "5E590.h"
@@ -812,7 +813,6 @@ void func_8004DCFC_4E8FC(Struct_func_8004DCFC *arg0) {
 }
 
 extern char D_8009E894_9F494[];
-s32 func_8002ED30_2F930(void);
 
 void func_8004DDD0_4E9D0(Struct_func_8004DCFC *arg0) {
     char buf[24];
