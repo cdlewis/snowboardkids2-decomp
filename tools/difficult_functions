@@ -459,3 +459,4 @@ func_80025EE4_26AE4 (30 attempts, 87.581%) -- Register allocation mismatch: comp
 func_80054658_55258 (19 attempts, 87.908%)
 func_8002CFAC_2DBAC (24 attempts, 80.673%) -- Register allocation mismatch: compiler uses s8 for 0xFFB30000 constant instead of s6, assigns arg0 to s0 instead of s1, ptr to s7 instead of s0, stack frame 0x48 instead of 0x50
 func_800339AC_345AC (11 attempts, 99.231%) -- Instruction scheduling mismatch: compiler generates li a2,-0x78 after other li instructions instead of last, and addu v0,v0,s1 instead of addu v0,s1,v0 for allocation+offset addition
+func_80025DAC_269AC (30 attempts, 97.756%)
