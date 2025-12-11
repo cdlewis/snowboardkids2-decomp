@@ -40,7 +40,6 @@ typedef struct {
     s32 unk3C;
 } func_8004A9A8_4B5A8_node;
 
-extern void func_8004BCFC_4C8FC(void *);
 extern void func_8004AFF8_4BBF8(void *);
 
 typedef struct {
@@ -128,6 +127,8 @@ extern void func_8004562C_4622C(void);
 
 extern s32 D_80090E20_91A20;
 extern s32 D_80090E40_91A40;
+extern s32 D_80090E4C_91A4C;
+extern s16 D_80090E50_91A50;
 extern s32 D_80090BC8_917C8[3];
 extern s32 D_80090BBC_917BC[3];
 extern s32 D_80090B98_91798[];
@@ -3061,14 +3062,6 @@ void func_8004BC5C_4C85C(s32 arg0) {
     }
 }
 
-void func_8004BCBC_4C8BC(MemoryAllocatorNode **arg0) {
-    *arg0 = load_3ECE40();
-    setCleanupCallback(&func_8004C0D0_4CCD0);
-    setCallbackWithContinue(&func_8004BCFC_4C8FC);
-}
-
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004BCFC_4C8FC);
-
 typedef struct {
     u8 _pad0[0x4];
     u8 unk4[0x4];
@@ -3083,6 +3076,40 @@ typedef struct {
     s16 unk36;
     s16 unk38;
 } func_8004BE40_4CA40_arg;
+
+void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0);
+void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0);
+
+void func_8004BCBC_4C8BC(MemoryAllocatorNode **arg0) {
+    *arg0 = load_3ECE40();
+    setCleanupCallback(&func_8004C0D0_4CCD0);
+    setCallbackWithContinue(&func_8004BCFC_4C8FC);
+}
+
+void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0) {
+    GameState *allocation;
+    void *temp_s2;
+    s32 rotationAngle;
+    s32 *addr;
+    s32 pad[4];
+
+    allocation = (GameState *)getCurrentAllocation();
+    arg0->unk4 = (void *)((s32)allocation->unk44 + 0xEC0);
+    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, 0x3F);
+    arg0->unk34 = arg0->unk24->unkB94;
+    temp_s2 = (void *)((s32)arg0 + 8);
+    transformVector(&D_80090E50_91A50, (s16 *)((s32)arg0->unk24 + 0x164), temp_s2);
+    arg0->unk38 = arg0->unk24->unkBB8;
+    rotationAngle = ((randA() & 0xFF) << 5) + arg0->unk24->unkA94;
+    addr = &D_80090E4C_91A4C;
+    *addr = (randA() & 0xFF) * 0x580;
+    rotateVectorY(addr - 2, (s16)rotationAngle, (void *)((s32)arg0 + 0x28));
+    arg0->unk28 = arg0->unk28 + arg0->unk24->unk44C;
+    arg0->unk2C = arg0->unk2C + (arg0->unk24->unk450 + ((randA() & 0xFF) * 0x600));
+    arg0->unk30 = arg0->unk30 + arg0->unk24->unk454;
+    func_80056B7C_5777C(temp_s2, 0x17);
+    setCallbackWithContinue(&func_8004BE40_4CA40);
+}
 
 typedef struct {
     u8 _pad0[0x4];
