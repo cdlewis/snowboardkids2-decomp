@@ -391,7 +391,21 @@ s32 cutsceneChrZoom2_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_chr", cutsceneChrZoom2_exec);
+void cutsceneChrZoom2_exec(cutsceneChrZoom2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    CutsceneSlotData *slotData;
+    s32 valueX;
+    s32 valueY;
+    s32 valueZ;
+
+    slotData = &arg1->slots[arg2].slotData;
+    valueX = (arg0->unk0 << 16) / 100;
+    valueY = (arg0->unk4 << 16) / 100;
+    valueZ = (arg0->unk8 << 16) / 100;
+
+    func_800B7760_1E4810(slotData, valueX, arg0->unkC);
+    func_800B77C4_1E4874(slotData, valueY, arg0->unkC);
+    func_800B7828_1E48D8(slotData, valueZ, arg0->unkC);
+}
 
 s32 cutsceneChrZoom2_isDone(void) {
     return 0;
