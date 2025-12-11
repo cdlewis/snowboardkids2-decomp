@@ -79,7 +79,11 @@ typedef struct {
     s32 unk8;
     s32 unkC;
     s32 unk10;
-    u8 padding[0x10];
+    s16 unk14;
+    s16 unk16;
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
 } D_800891A8_89DA8_entry_2C;
 
 typedef struct {
@@ -145,6 +149,28 @@ typedef struct {
 } func_80000C2C_182C_arg;
 
 typedef struct {
+    func_80000C2C_182C_arg_unk0 *unk0;
+    s8 unk4;
+    s8 unk5;
+    u8 pad6[2];
+    Mat3x3Padded unk8;
+    s32 unk28;
+    void *unk2C;
+    void *unk30;
+    s32 unk34;
+    u8 padding[0xC];
+    void *unk44;
+    u8 pad48[4];
+    s16 unk4C;
+    s16 unk4E;
+    u16 unk50;
+    u16 unk52;
+    s16 unk54;
+    s16 unk56;
+    s16 unk58;
+} func_80000F4C_1B4C_arg;
+
+typedef struct {
     u8 padding[0x8];
     func_80004FF8_5BF8_arg1 *unk8;
 } func_800014C8_20C8_arg;
@@ -198,6 +224,8 @@ void func_800008D0_14D0(func_80000C2C_182C_arg *arg0);
 void func_80000968_1568(func_80000968_1568_arg *arg0);
 void func_80000E84_1A84(func_80000C2C_182C_arg *arg0);
 void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0);
+void func_80001040_1C40(func_80000C2C_182C_arg *arg0);
+void func_80001114_1D14(func_80001114_1D14_arg *arg0);
 
 extern s32 func_8000A030_AC30(void *, s32);
 extern s32 identityMatrix[];
@@ -555,7 +583,31 @@ void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_80000F4C_1B4C);
+void func_80000F4C_1B4C(func_80000F4C_1B4C_arg *arg0) {
+    D_800891A8_89DA8_entry *temp_s0;
+    D_800891A8_89DA8_entry_2C *temp_s2;
+
+    temp_s0 = &D_800891A8_89DA8[arg0->unk0->unk84];
+    temp_s2 = &temp_s0->unk2C[arg0->unk4];
+
+    setCleanupCallback(&func_80001114_1D14);
+    memcpy(&arg0->unk8, &identityMatrix, 0x20);
+
+    arg0->unk2C = dmaRequestAndUpdateState(temp_s0->asset1Start, temp_s0->asset1End);
+    arg0->unk30 = dmaRequestAndUpdateStateWithSize(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
+    arg0->unk34 = 0;
+    arg0->unk28 = temp_s2->unk4;
+    arg0->unk44 = func_80009EF8_AAF8(temp_s2->unk16);
+    arg0->unk4C = 0;
+    arg0->unk4E = 0;
+    arg0->unk50 = temp_s2->unk18;
+    arg0->unk52 = temp_s2->unk1C;
+    arg0->unk54 = 0;
+    arg0->unk56 = 0;
+    arg0->unk58 = 0;
+
+    setCallback(&func_80001040_1C40);
+}
 
 void func_80001040_1C40(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry;
