@@ -2964,7 +2964,58 @@ s32 func_800B7784_A7634(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B781C_A76CC);
+s32 func_800B781C_A76CC(func_800B30B0_arg *arg0) {
+    GameState *gameState;
+    D_80090F90_91B90_item *item;
+    s32 pad[12];
+
+    gameState = getCurrentAllocation();
+    item = func_80055D10_56910(gameState->memoryPoolId);
+
+    if (arg0->unkBC0 == 0) {
+        arg0->unkA94 = 0xE00;
+        arg0->unkB9C = 0;
+        arg0->unkB94 = 0;
+        arg0->unkB84 |= 0x200;
+        arg0->unkBC0++;
+        arg0->unkBC5++;
+
+        createYRotationMatrix(&arg0->unk970, 0xE00);
+
+        arg0->unk434 = (void *)item->unkC;
+        arg0->unk438 = item->unk10;
+        arg0->unk43C = item->unk14;
+
+        memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+
+        arg0->unkBC3 = 2;
+        func_8006FDC8_709C8(arg0->unkBB8, 0, 0x10);
+
+        if (arg0->unkBC7 == 0) {
+            if (arg0->unkBC5 == gameState->unk74) {
+                func_8004D364_4DF64(arg0->unkBB8);
+            }
+        }
+
+        func_80056B7C_5777C(&arg0->unk434, 0x26);
+    }
+
+    func_800B40D4_A3F84(arg0);
+    func_8005D180_5DD80(arg0, 0);
+
+    arg0->unkBA0 += 0x400;
+    arg0->unkB8C = 0x400;
+    arg0->unkA94 = arg0->unkA94 + 0x400;
+    arg0->unkBA2 = arg0->unkBA2 - 0x400;
+
+    if (arg0->unkBA0 == 0x2000) {
+        arg0->unkB84 &= 0xFF7FFFFF;
+        arg0->unkBBF++;
+    }
+
+    arg0->unkB84 |= 0x10000;
+    return 0;
+}
 
 s32 func_800B7998_A7848(func_800B30B0_arg *arg0) {
     func_800B76BC_alloc *alloc = (func_800B76BC_alloc *)getCurrentAllocation();
