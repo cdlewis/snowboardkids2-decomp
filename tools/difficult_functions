@@ -447,3 +447,4 @@ func_8002ADB4_2B9B4 (30 attempts, 97.255%) -- Register allocation mismatch: comp
 func_80027544_28144 (30 attempts, 98.288%) -- Compiler optimization mismatch: compiler elides li v0,2 in else branch because v0 already equals 2 from the bne comparison, target code explicitly reloads v0=2 before setting var_s2=-0x13
 func_800BC61C_B1B0C 30 90.202%
 func_800BC0E8_AC918 22 82.435%
+func_80033254_33E54 (30 attempts, 95.389%) -- Register allocation mismatch: compiler assigns s2 for var_s3 and s3 for var_s2 instead of s3/s2, s4 for var_s5 instead of s5, stack frame 0x38 instead of 0x40
