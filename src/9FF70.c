@@ -1785,7 +1785,58 @@ s32 func_800B470C_A45BC(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B48AC_A475C);
+s32 func_800B48AC_A475C(func_800B30B0_arg *arg0) {
+    s32 stackVec[3];
+    GameState *allocation;
+    s16 angle;
+    s16 delta;
+    s32 vel1;
+    s32 vel2;
+    s16 rotAngle;
+
+    allocation = getCurrentAllocation();
+
+    if (arg0->unkBBF == 0) {
+        arg0->unkA8C = 0xFFFF;
+        arg0->unkB88 = 0;
+        arg0->unk44C = arg0->unkAC8;
+        arg0->unk454 = arg0->unkAD0;
+        arg0->unkBBF++;
+        rotAngle = atan2Fixed(-arg0->unkAC8, -arg0->unkAD0);
+        rotateVectorY((u8 *)allocation->unk48 + 0xE4, rotAngle, stackVec);
+        stackVec[0] += (s32)arg0->unk434;
+        stackVec[2] += arg0->unk43C;
+        stackVec[1] = arg0->unk438 + 0x100000;
+        func_80056B7C_5777C(&arg0->unk434, 0xD);
+        func_80050ECC_51ACC(stackVec);
+    }
+
+    angle = (func_8005CE98_5DA98(arg0) - arg0->unkA94) & 0x1FFF;
+    delta = angle;
+    if (angle >= 0x1001) {
+        delta = angle | 0xE000;
+    }
+    if (delta >= 0x101) {
+        delta = 0x100;
+    }
+    if (delta < -0x100) {
+        delta = -0x100;
+    }
+    arg0->unkA94 = arg0->unkA94 + delta;
+    arg0->unk450 -= 0x6000;
+    vel1 = arg0->unk44C;
+    arg0->unk44C = vel1 - (vel1 >> 4);
+    vel2 = arg0->unk454;
+    arg0->unk454 = vel2 - (vel2 >> 4);
+    func_800B419C_A404C(arg0);
+    func_800B02AC_A015C(arg0);
+    if (func_8005D308_5DF08(arg0, 7) != 0) {
+        arg0->unkAA8 = arg0->unkAA8 / 2;
+        func_800B00E4_9FF94(arg0);
+    }
+    func_8005D804_5E404(arg0, 3, 0);
+    return 0;
+}
 
 s32 func_800B4A4C_A48FC(func_800B30B0_arg *arg0) {
     arg0->unkB88 = 1;
