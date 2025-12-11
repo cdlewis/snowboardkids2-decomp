@@ -573,8 +573,6 @@ void func_8005383C_5443C(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80053990_54590);
 }
 
-extern void func_80058AEC_596EC(Player *arg0, void *arg1);
-
 void func_80053898_54498(Struct_52880 *arg0) {
     GameState *allocation;
     Player *player;
