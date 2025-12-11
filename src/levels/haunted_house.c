@@ -94,10 +94,15 @@ typedef struct {
     s16 unk28;
 } func_800BBC64_AF954_arg;
 
+typedef struct {
+    s8 unk0;
+    s8 unk1;
+} AnimationData;
+
 extern void func_800BB45C_AF14C(void **);
 extern void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
 extern s32 func_8005CFC0_5DBC0(void *, u16, void *, s32);
-extern void func_800BB620_AF310(void);
+extern void func_800BB620_AF310(func_800BB388_AF078_arg *);
 extern void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
 extern void func_800BB778_AF468(void);
 extern void func_800BB9A4_AF694(void);
@@ -112,11 +117,6 @@ extern void func_800BC184_AFE74(void **);
 extern void func_800BC220_AFF10(void);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
 extern void func_800BC750_B0440(s16 *);
-
-typedef struct {
-    s8 unk0;
-    s8 unk1;
-} AnimationData;
 
 extern s32 D_8009A8A4_9B4A4;
 extern void *D_800BC7F0_B04E0;
@@ -134,6 +134,10 @@ extern s32 D_800BCA00_B06F0;
 extern s32 D_800BC914_B0604;
 extern s32 D_800BC918_B0608;
 extern s32 D_800BC91C_B060C;
+
+extern void *func_8005B548_5C148(void *, s32, s32);
+extern void func_80042FC0_43BC0(void *);
+void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *);
 
 void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *arg0) {
     s32 i;
@@ -266,7 +270,38 @@ void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *arg0) {
     func_800BB2B0_AEFA0(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BB620_AF310);
+void func_800BB620_AF310(func_800BB388_AF078_arg *arg0) {
+    u8 temp;
+    Player *temp_a;
+
+    if (arg0->unk46 != 0) {
+        arg0->unk1E -= 0x10;
+        if (arg0->unk1E < 0x41) {
+            arg0->unk46 = 0;
+        }
+    } else {
+        arg0->unk1E += 0x10;
+        if (arg0->unk1E >= 0xE0) {
+            arg0->unk46 = 1;
+        }
+    }
+
+    if (func_800BB488_AF178(arg0) != 0) {
+        setCallback(func_800BB6F4_AF3E4);
+    }
+
+    temp_a = func_8005B548_5C148(&arg0->unk24, -1, 0x100000);
+
+    if (temp_a != NULL) {
+        if (temp_a->unkBCF < 3) {
+            func_80042FC0_43BC0(temp_a);
+        }
+
+        setCallback(func_800BB6F4_AF3E4);
+    }
+
+    func_800BB2B0_AEFA0(arg0);
+}
 
 void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *arg0) {
     arg0->unk1E -= 0x10;
