@@ -449,3 +449,4 @@ func_800BC61C_B1B0C 30 90.202%
 func_800BC0E8_AC918 22 82.435%
 func_80033254_33E54 (30 attempts, 95.389%) -- Register allocation mismatch: compiler assigns s2 for var_s3 and s3 for var_s2 instead of s3/s2, s4 for var_s5 instead of s5, stack frame 0x38 instead of 0x40
 func_80034AC0_356C0 (3 attempts, 100%) -- Matched in isolated environment, but fails integration due to register allocation mismatch: compiler uses different register assignments for loop variables (t0/t1 vs t1/t2), misses sign extension sll+sra sequence in negation path
+func_80026564_27164 (18 attempts, 94.243%) -- Register allocation and sign extension mismatch: compiler generates move a3,v0 instead of sll v0,v0,0x10/sra a3,v0,0x10 for u16 to s16 sign extension, stack frame 0x20 instead of 0x38, instruction scheduling differs for move a0,t2 placement
