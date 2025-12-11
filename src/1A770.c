@@ -40,7 +40,6 @@ extern void func_80019BF0_1A7F0(applyTransformToModel_arg1 *);
 extern s32 identityMatrix;
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 D_800A8CC8_A0038;
-extern void func_8001E590_1F190(void);
 extern void func_80019E18_1AA18(void);
 
 extern void func_80038090_38C90(s16);
