@@ -17,6 +17,15 @@ typedef struct {
 } cutsceneEffectRocket_exec_arg;
 
 typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s16 unk10;
+} cutsceneEffectMLight_exec_arg;
+
+typedef struct {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -43,7 +52,8 @@ void cutsceneEffectRocket_exec(cutsceneEffectRocket_exec_arg *arg0, CutsceneSlot
 s32 cutsceneEffectRocket_isDone(void);
 void cutsceneEffectMLight_init(void);
 s32 cutsceneEffectMLight_validate(void);
-void cutsceneEffectMLight_exec(void);
+void cutsceneEffectMLight_exec(cutsceneEffectMLight_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
+s32 cutsceneEffectMLight_isDone(void);
 void cutsceneEffectTrick_init(void);
 s32 cutsceneEffectTrick_validate(void);
 void cutsceneEffectTrick_exec(cutsceneEffectTrick_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);

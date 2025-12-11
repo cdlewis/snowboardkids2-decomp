@@ -1,5 +1,20 @@
 #include "cutscene/sys_effect.h"
 #include "B040.h"
+#include "geometry.h"
+
+extern u8 identityMatrix[];
+extern void func_800B5290_1E2340(u16, void *, s16, s16);
+extern void *func_800B5500_1E25B0(u16, void *, s16, s32);
+
+typedef struct {
+    union {
+        Mat3x3Padded mat;
+        struct {
+            s16 padding[10];
+            s32 x, y, z;
+        } vec;
+    } u;
+} MatrixWithVec;
 
 void cutsceneEffectDisp_init(void) {
 }
@@ -82,7 +97,45 @@ s32 cutsceneEffectMLight_validate(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/sys_effect", cutsceneEffectMLight_exec);
+void cutsceneEffectMLight_exec(cutsceneEffectMLight_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    MatrixWithVec sp50;
+    s32 sp70[3];
+    CutsceneSlot *slot;
+    UIResource *resource;
+    Mat3x3Padded *rotMatrix;
+
+    slot = &arg1->slots[arg2];
+    rotMatrix = &sp10;
+    memcpy(rotMatrix, identityMatrix, 0x20);
+    memcpy(&sp30, identityMatrix, 0x20);
+    memcpy(&sp50, identityMatrix, 0x20);
+
+    memcpy(&sp30, (u8 *)slot->model + 0x18, 0x20);
+
+    transformVector((s16 *)&arg0->unk4, (s16 *)&sp30, sp70);
+
+    switch (arg0->unk10) {
+        case 0:
+            memcpy(&sp50, &sp30, 0x20);
+            sp50.u.vec.x = sp70[0];
+            sp50.u.vec.y = sp70[1];
+            sp50.u.vec.z = sp70[2];
+            resource = *(UIResource **)((u8 *)slot->model + 0x10);
+            func_800B5290_1E2340(resource->unk16, &sp50, arg0->unk0, arg0->unk10);
+            break;
+        case 1:
+            createZRotationMatrix(rotMatrix, 0x1000);
+            func_8006B084_6BC84(rotMatrix, &sp30, &sp50);
+            sp50.u.vec.x = sp70[0];
+            sp50.u.vec.y = sp70[1];
+            sp50.u.vec.z = sp70[2];
+            resource = *(UIResource **)((u8 *)slot->model + 0x10);
+            func_800B5500_1E25B0(resource->unk16, &sp50, arg0->unk0, 0x4000);
+            break;
+    }
+}
 
 s32 cutsceneEffectMLight_isDone(void) {
     return 0;
