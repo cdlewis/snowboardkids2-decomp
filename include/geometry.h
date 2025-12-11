@@ -61,3 +61,5 @@ s32 approximateCos(s16 inputAngle);
 s32 isqrt64(s64 val);
 s32 distance_2d(s32 x, s32 y);
 s32 distance_3d(s32 x, s32 y, s32 z);
+
+void computeLookAtMatrix(void *arg0, void *arg1, void *arg2);
