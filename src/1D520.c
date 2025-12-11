@@ -1,3 +1,4 @@
+#include "3E160.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
@@ -5,7 +6,6 @@
 #include "task_scheduler.h"
 
 extern void func_8001CD90_1D990(void);
-extern void func_8003B1F4_3BDF4(s32 arg0, void *arg1);
 extern void *func_8003B28C_3BE8C(void);
 extern u8 D_8008D9B0_8E5B0[8];
 
