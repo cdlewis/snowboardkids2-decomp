@@ -1,5 +1,6 @@
 #include "3E160.h"
 #include "56910.h"
+#include "5DBC0.h"
 #include "5E590.h"
 #include "common.h"
 #include "displaylist.h"
@@ -102,7 +103,6 @@ typedef struct {
 
 extern void func_800BB45C_AF14C(void **);
 extern void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
-extern s32 func_8005CFC0_5DBC0(void *, u16, void *, s32);
 extern void func_800BB620_AF310(func_800BB388_AF078_arg *);
 extern void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
 extern void func_800BB778_AF468(void);

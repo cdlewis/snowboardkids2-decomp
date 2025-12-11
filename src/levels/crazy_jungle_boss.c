@@ -1,4 +1,5 @@
 #include "common.h"
+#include "5DBC0.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "graphics.h"
@@ -95,7 +96,6 @@ extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, vo
 extern void func_80064808_65408(s32, void *, u8);
 extern void enqueueMultiPartDisplayList(s32, void *, u8);
 extern void func_800BC0E8_AC918(Arg0Struct *);
-extern s32 func_8005CFC0_5DBC0(void *, u16, void *, s32);
 extern void func_800B9500_A93B0(void);
 extern s32 D_800BBA7C_AC2AC[][3];
 extern s32 D_800BBA84_AC2B4[][3];

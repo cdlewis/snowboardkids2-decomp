@@ -1,4 +1,5 @@
 #include "common.h"
+#include "5DBC0.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "task_scheduler.h"
@@ -93,7 +94,6 @@ extern s32 D_800BCBA0_B4160[][3];
 extern void func_800B00D4_9FF84(Arg0Struct *, s32);
 extern void func_800B02AC_A015C(Arg0Struct *);
 extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
-extern s32 func_8005CFC0_5DBC0(void *, u16, void *, s32);
 extern void func_8005C868_5D468(void *arg0);
 extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
 extern s32 func_800544B4_550B4(s32, s32, s32);

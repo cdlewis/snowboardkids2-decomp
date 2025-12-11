@@ -1,3 +1,4 @@
+#include "5DBC0.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"

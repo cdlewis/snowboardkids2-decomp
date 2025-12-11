@@ -2,6 +2,7 @@
 #include "51060.h"
 #include "594E0.h"
 #include "5AA90.h"
+#include "5DBC0.h"
 #include "5E590.h"
 #include "common.h"
 #include "displaylist.h"
@@ -987,7 +988,6 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
 }
 
 extern void func_80051C80_52880(s32 *arg0, s32 arg1);
-extern s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, s32 *arg2, s32 arg3);
 extern s16 func_8005BF50_5CB50(s32 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4);
 
 void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
@@ -1129,8 +1129,6 @@ void func_800554BC_560BC(Struct_52880 *arg0) {
         arg0->unk4E++;
     }
 }
-
-extern s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, s32 *arg2, s32 arg3);
 
 void func_80055650_56250(Struct_52880 *arg0);
 
