@@ -54,3 +54,4 @@ void func_80058B30_59730(Player *arg0);
 void func_8003B47C_3C07C(void *arg0);
 void func_80044538_45138(s16 arg0);
 void func_80045434_46034(s16 arg0);
+void func_80041418_42018(void);

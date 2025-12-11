@@ -2060,7 +2060,6 @@ void func_80049C70_4A870(s32 arg0) {
     func_80049280_49E80(arg0);
 }
 
-extern void func_80041418_42018(void);
 extern void func_800409B4_415B4(void);
 extern void func_800BB2B0(void);
 extern void func_800BBA50(s32);
