@@ -178,7 +178,6 @@ void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0);
 
 void func_8004AE58_4BA58(s32 **);
 void func_8004A96C_4B56C(s32 **);
-extern void func_8004AA90_4B690(void *);
 extern void func_8004A6D4_4B2D4(void);
 
 typedef struct {
@@ -2365,15 +2364,53 @@ void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2) {
     }
 }
 
+typedef struct {
+    void *unk0;
+    loadAssetMetadata_arg unk4;
+    u8 _pad20[0x4];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    Player *unk30;
+    u16 unk34;
+    u8 _pad36[0x2];
+    s16 unk38;
+    s16 unk3A;
+} func_8004AA90_4B690_arg;
+
+void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0);
+
+typedef struct func_8004AB50_4B750_arg func_8004AB50_4B750_arg;
+extern void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0);
+
 void func_8004AA50_4B650(s32 *arg0) {
     *arg0 = (s32)load_3ECE40();
     setCleanupCallback(func_8004AE58_4BA58);
     setCallbackWithContinue(&func_8004AA90_4B690);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004AA90_4B690);
+void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0) {
+    GameState *gs;
+    Player *player;
+    s32 *temp_s1;
+    s32 pad[4];
 
-typedef struct {
+    gs = (GameState *)getCurrentAllocation();
+    arg0->unk4.unk0 = (loadAssetMetadata_arg *)((u8 *)gs->unk44 + 0xEC0);
+    loadAssetMetadata(&arg0->unk4, arg0->unk0, 0x3F);
+    player = arg0->unk30;
+    temp_s1 = &arg0->unk4.unk4;
+    memcpy(temp_s1, (u8 *)player + 0x31C, 0xC);
+    arg0->unk34 = arg0->unk30->unkB94;
+    arg0->unk38 = (s16)arg0->unk30->unkBB8;
+    memcpy(&arg0->unk24, (u8 *)arg0->unk30 + 0x44C, 0xC);
+    arg0->unk3A = 1;
+    arg0->unk28 = arg0->unk28 + 0x28000;
+    func_80056B7C_5777C(temp_s1, 0x17);
+    setCallbackWithContinue(func_8004AB50_4B750);
+}
+
+struct func_8004AB50_4B750_arg {
     u8 _pad0[0x4];
     u8 unk4[0x4];
     s32 unk8;
@@ -2388,7 +2425,7 @@ typedef struct {
     s16 unk36;
     s16 unk38;
     s16 unk3A;
-} func_8004AB50_4B750_arg;
+};
 
 typedef struct {
     s32 sp18;
