@@ -1,5 +1,6 @@
 #include "3E160.h"
 #include "56910.h"
+#include "5AA90.h"
 #include "5E590.h"
 #include "common.h"
 #include "displaylist.h"
@@ -24,7 +25,6 @@ extern void *D_8009A770_9B370;
 extern Mat3x3Padded D_8009A8B0_9B4B0;
 extern s32 gFrameCounter;
 extern void func_80041810_42410(void *);
-extern s32 func_8005C250_5CE50(void *arg0, s16 arg1, s32 arg2);
 
 void func_80042F2C_43B2C(void **);
 

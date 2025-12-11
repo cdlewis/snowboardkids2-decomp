@@ -1,4 +1,5 @@
 #include "56910.h"
+#include "5AA90.h"
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
@@ -385,7 +386,6 @@ extern s32 D_800BCA84_AEE44[][3];
 extern s16 D_800BCAF0_AEEB0[];
 extern s32 D_800BCB04_AEEC4[][3];
 
-extern s32 func_8005C250_5CE50(void *, s32, s32);
 extern void func_80042340_42F40(void *);
 extern s16 D_800BCB70_AEF30[];
 extern s16 D_800BCB84_AEF44[];
