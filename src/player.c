@@ -820,7 +820,20 @@ INCLUDE_ASM("asm/nonmatchings/player", func_80072704_73304);
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072814_73414);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_800728E0_734E0);
+s32 func_800728E0_734E0(u32 flags) {
+    s32 i;
+    s32 count;
+    channel_t *cp;
+
+    for (i = 0, cp = mus_channels, count = 0; i < max_channels; i++, cp++) {
+        if (cp->pdata) {
+            if ((cp->fx_addr && (flags & MUSFLAG_EFFECTS)) || (!cp->fx_addr && (flags & MUSFLAG_SONGS))) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072960_73560);
 

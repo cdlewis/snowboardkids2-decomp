@@ -108,7 +108,7 @@ void func_800572B0_57EB0(void *arg);
 void func_80057928_58528(void *, s32);
 void func_800573F8_57FF8(void);
 void *func_800725F4_731F4(s32, s32, s32, s32, s32);
-void *func_800728E0_734E0(s32);
+s32 func_800728E0_734E0(u32);
 void *func_80072960_73560(void *, s32);
 void *func_80072A14_73614(void *);
 void *func_80072CDC_738DC(void *, void *);
@@ -500,7 +500,7 @@ void func_80057614_58214(void *arg0) {
         if ((u32)message < 0xF) {
             switch ((s32)message) {
                 case 0:
-                    result = func_800728E0_734E0(3);
+                    result = (void *)func_800728E0_734E0(3);
                     break;
                 case 1:
                     result = func_800725F4_731F4(
@@ -559,7 +559,7 @@ void func_80057614_58214(void *arg0) {
                     result = func_80072960_73560(D_800A2D10_A3910.unk1C, (s32)D_800A2D10_A3910.unk20);
                     break;
                 case 8:
-                    result = func_800728E0_734E0(1);
+                    result = (void *)func_800728E0_734E0(1);
                     break;
                 case 9:
                     result = func_80072A14_73614(D_800A2D10_A3910.unk1C);
@@ -580,7 +580,7 @@ void func_80057614_58214(void *arg0) {
                     func_80072814_73414(3, D_800A2D10_A3910.unk20);
                     break;
                 case 14:
-                    result = func_800728E0_734E0(2);
+                    result = (void *)func_800728E0_734E0(2);
                     break;
             }
         }
