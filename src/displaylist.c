@@ -186,7 +186,17 @@ s32 func_80062C98_63898(func_80062C98_63898_arg **arg0, u16 index) {
     return var_a1 & 0xFFFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062CD0_638D0);
+s32 func_80062CD0_638D0(s32 arg0) {
+    arg0 &= 0xF;
+
+    if (arg0 == 1) {
+        return 1;
+    }
+    if (arg0 == 2) {
+        return 1;
+    }
+    return arg0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062CF0_638F0);
 
