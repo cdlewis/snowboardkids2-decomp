@@ -42,7 +42,8 @@ typedef struct Node_70B00 {
     /* 0x16 */ u16 slot_index;
     /* 0x18 */ PoolEntry pool[7];
     /* 0x88 */ void *unk88;
-    u8 padding2[0x14];
+    u8 padding2[0x10];
+    /* 0x9C */ s32 unk9C;
     /* 0xA0 */ s16 unkA0;
     /* 0xA2 */ s16 unkA2;
     /* 0xA4 */ s16 unkA4;
