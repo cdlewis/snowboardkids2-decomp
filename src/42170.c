@@ -207,7 +207,9 @@ void func_80041724_42324(Func41570State *);
 typedef struct {
     u8 _pad0[0x44];
     void *unk44; /* 0x44 */
-    u8 _pad48[0x2E];
+    u8 _pad48[0x14];
+    u8 unk5C; /* 0x5C */
+    u8 _pad5D[0x19];
     u8 unk76; /* 0x76 */
 } Func43CA4GameState;
 
@@ -233,7 +235,7 @@ typedef struct {
     DisplayListObject unk3C;       /* 0x3C */
     DisplayListObject unk78;       /* 0x78 */
     Func44BBCPointerTarget *unkB4; /* 0xB4 */
-    u8 unkB8[0x4];                 /* 0xB8 */
+    s32 unkB8;                     /* 0xB8 */
     s32 unkBC;                     /* 0xBC */
     s32 unkC0;                     /* 0xC0 */
     s16 unkC4;                     /* 0xC4 - counter */
@@ -332,6 +334,7 @@ void func_80044684_45284(Func44BBCArg *);
 void func_800447D4_453D4(Func44BBCArg *);
 void func_80044888_45488(Func44BBCArg *);
 void func_80044990_45590(Func44BBCArg *);
+void func_80044AB8_456B8(Func44BBCArg *);
 void func_80044C38_45838(Func44BBCArg *);
 void func_80044018_44C18(Func43DC0State *);
 void func_80043E24_44A24(Func43DC0State *);
@@ -1861,7 +1864,43 @@ end:
     func_80044578_45178(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044990_45590);
+void func_80044990_45590(Func44BBCArg *arg0) {
+    D_80090F90_91B90_item *temp_v0;
+    Func44BBCPointerTarget *temp_a1;
+    s32 output[3];
+    s32 input[3];
+    s32 i;
+    s32 temp_unk14;
+
+    temp_v0 = func_80055D10_56910(((Func43CA4GameState *)getCurrentAllocation())->unk5C);
+    temp_a1 = arg0->unkB4;
+    temp_a1->unkBCE |= 2;
+    arg0->unkC6 = -0x300;
+    arg0->unkC4 = 0x5A;
+    arg0->unkC8 = 0x1000;
+    createCombinedRotationMatrix(arg0, (u16)arg0->unkC6, 0x1000);
+    arg0->unk14 = temp_v0->unkC + 0xFFD00000;
+    arg0->unk18 = temp_v0->unk10;
+    temp_unk14 = temp_v0->unk14;
+    i = 0;
+    arg0->unkC0 = 0;
+    arg0->unkBC = 0;
+    arg0->unkB8 = 0;
+    arg0->unk1C = temp_unk14 + 0x200000;
+    input[0] = 0;
+    input[1] = 0;
+    input[2] = 0;
+    do {
+        arg0->unkC0 += 0x2000;
+        i++;
+        input[2] += arg0->unkC0;
+    } while (i < 0x5A);
+    transformVector2(input, arg0, output);
+    arg0->unk14 -= output[0];
+    arg0->unk18 -= output[1];
+    arg0->unk1C -= output[2];
+    setCallbackWithContinue(func_80044AB8_456B8);
+}
 
 void func_80044BBC_457BC(Func44BBCArg *);
 
@@ -1888,7 +1927,7 @@ void func_80044AB8_456B8(Func44BBCArg *arg0) {
     createCombinedRotationMatrix(arg0, arg0->unkC6, arg0->unkC8);
 
 skip_rotation:
-    transformVector2(arg0->unkB8, arg0, output);
+    transformVector2(&arg0->unkB8, arg0, output);
     arg0->unk14 = arg0->unk14 + output[0];
     arg0->unk18 = arg0->unk18 + output[1];
     arg0->unk1C = arg0->unk1C + output[2];
