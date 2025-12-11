@@ -446,3 +446,4 @@ func_800B6688_A6538 20 98.784%
 func_8002ADB4_2B9B4 (30 attempts, 97.255%) -- Register allocation mismatch: compiler assigns sign-extended arg0 to a3 instead of a2, arg1 copy to a2 instead of a3, affecting entire function register usage
 func_80027544_28144 (30 attempts, 98.288%) -- Compiler optimization mismatch: compiler elides li v0,2 in else branch because v0 already equals 2 from the bne comparison, target code explicitly reloads v0=2 before setting var_s2=-0x13
 func_800BC61C_B1B0C 30 90.202%
+func_800BC0E8_AC918 22 82.435%
