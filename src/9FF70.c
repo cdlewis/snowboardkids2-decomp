@@ -2,6 +2,7 @@
 #include "56910.h"
 #include "5AA90.h"
 #include "5E590.h"
+#include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
@@ -160,6 +161,12 @@ extern void func_80059A88_5A688(func_800B30B0_arg *, s16);
 
 extern u16 D_800BAB48_AA9F8[];
 extern u16 D_800BAB58_AAA08[];
+
+extern s32 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
+extern s32 func_8005CFC0_5DBC0(void *, s32, void *, s32);
+extern s32 D_800BA348_AA1F8;
+extern s32 D_800BA350_AA200;
+extern void func_800B9500_A93B0(void);
 
 s32 func_800B2C18_A2AC8(func_800B30B0_arg *);
 void func_800B2B3C_A29EC(func_800B30B0_arg *);
@@ -3098,7 +3105,42 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B8894_A8744);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B9500_A93B0);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B98CC_A977C);
+void func_800B98CC_A977C(func_800B30B0_arg *arg0) {
+    void *alloc;
+    void *allocPlus30;
+    s32 i;
+    s32 offset;
+    u8 *ptr;
+    void *addrPtr;
+    s32 temp;
+
+    alloc = getCurrentAllocation();
+    i = 0;
+    allocPlus30 = (void *)((u8 *)alloc + 0x30);
+    offset = 0xA10;
+    ptr = (u8 *)arg0;
+
+    do {
+        addrPtr = (u8 *)arg0 + offset;
+        *(volatile s32 *)(ptr + 0xA10) = arg0->unk970.unk14 + *(s32 *)((u8 *)&D_800BA348_AA1F8 + offset);
+        *(volatile s32 *)(ptr + 0xA18) = arg0->unk970.unk1C + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
+
+        temp = func_80059E90_5AA90((void *)arg0, allocPlus30, arg0->unkB94, addrPtr);
+        *(volatile s32 *)(ptr + 0xA14) = func_8005CFC0_5DBC0(allocPlus30, temp, addrPtr, 0x100000);
+
+        i++;
+        offset += 0xC;
+        ptr += 0xC;
+    } while (i < 9);
+
+    arg0->unkBC1 = 1;
+
+    if (!(arg0->unkB84 & 0x800000)) {
+        for (i = 0; i < 4; i++) {
+            debugEnqueueCallback(i, 1, func_800B9500_A93B0, (void *)arg0);
+        }
+    }
+}
 
 void func_800B99E0(func_800B30B0_arg *arg0) {
     func_800B99E0_alloc *alloc;
