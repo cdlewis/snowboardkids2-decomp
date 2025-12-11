@@ -1,4 +1,5 @@
 #include "15690.h"
+#include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
@@ -6,6 +7,8 @@
 
 extern u8 D_800A8CC8_A0038;
 extern s16 identityMatrix[9];
+extern s16 D_8008D6EC_8E2EC;
+extern s16 D_8008D6EE_8E2EE;
 extern void func_800182FC_18EFC(void);
 extern void func_80018580_19180(void);
 
@@ -128,7 +131,60 @@ void func_80017384_17F84(Func80018474Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/17F50", func_800175E0_181E0);
 
-INCLUDE_ASM("asm/nonmatchings/17F50", func_80017FE8_18BE8);
+typedef struct {
+    u8 pad[0x3B0];
+    u8 unk3B0[0x20];
+    u8 pad3D0[0x55];
+    u8 unk425;
+} TempState17F50;
+
+void func_80018148_18D48(Func80018474Arg *arg0);
+
+void func_80017FE8_18BE8(Func80018474Arg *arg0) {
+    s32 sp10[10];
+    TempState17F50 *state;
+    s32 s1;
+    s32 s2;
+    s32 temp_v0_2;
+    s16 result, masked;
+
+    state = getCurrentAllocation();
+    temp_v0_2 = state->unk425 * 4;
+
+    s1 = *(s16 *)((u8 *)&D_8008D6EC_8E2EC + temp_v0_2);
+    s2 = *(s16 *)((u8 *)&D_8008D6EE_8E2EE + temp_v0_2);
+    s1 <<= 16;
+    s2 <<= 16;
+
+    result = func_8006D21C_6DE1C(arg0->unk34, arg0->unk3C, s1, s2);
+    arg0->unk46 = result;
+    arg0->unk44 = result;
+
+    if ((s16)result < 0x1000) {
+        arg0->unk44 = result + 0x1000;
+    } else {
+        arg0->unk44 = result - 0x1000;
+    }
+
+    s1 -= arg0->unk34;
+    s2 -= arg0->unk3C;
+
+    masked = (u16)arg0->unk44 & 0x1FFF;
+    arg0->unk44 = masked;
+    arg0->unk46 = masked;
+
+    arg0->unk54 = isqrt64((s64)s1 * s1 + (s64)s2 * s2);
+
+    func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+
+    createYRotationMatrix((Mat3x3Padded *)arg0, ((u16)arg0->unk44 - arg0->unk48) & 0xFFFF);
+
+    func_8006B084_6BC84(arg0, &arg0->matrix20, sp10);
+
+    memcpy(state->unk3B0, sp10, 0x20);
+
+    setCallback(func_80018148_18D48);
+}
 
 void func_800182F4_18EF4(void);
 
