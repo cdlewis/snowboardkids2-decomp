@@ -41,7 +41,6 @@ extern s32 identityMatrix;
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 D_800A8CC8_A0038;
 extern void func_80019E18_1AA18(void);
-extern void func_80015254_15E54(void);
 extern s32 gControllerInputs[4];
 extern void func_8001A478_1B078(void);
 extern void func_80032330_32F30(void);
