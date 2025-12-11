@@ -2647,7 +2647,39 @@ s32 func_800B7078_A6F28(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B7108_A6FB8);
+s32 func_800B7108_A6FB8(func_800B30B0_arg *arg0) {
+    s32 var_v0;
+    s32 temp_a1;
+    s32 new_unk474;
+    s32 new_unkB8C;
+
+    var_v0 = arg0->unkB48;
+    temp_a1 = arg0->unk474;
+    var_v0 = (var_v0 - temp_a1) * arg0->unkB8C;
+    if (var_v0 < 0) {
+        var_v0 += 0xF;
+    }
+    arg0->unk474 = (var_v0 >> 4) + temp_a1;
+    arg0->unk480 = arg0->unk480 + arg0->unk468;
+    new_unk474 = arg0->unk474;
+    new_unkB8C = arg0->unkB8C + 1;
+    arg0->unkB8C = new_unkB8C;
+    arg0->unk468 = arg0->unk468 - 0x6000;
+    arg0->unk438 = new_unk474 + arg0->unk480;
+    func_800B40D4_A3F84(arg0);
+    func_8005D308_5DF08(arg0, 4);
+    if (arg0->unkB8C == 16) {
+        s32 tempB84 = arg0->unkB84;
+        u8 tempBBF = arg0->unkBBF;
+        arg0->unkBC0 = 0;
+        tempBBF = tempBBF + 1;
+        tempB84 = tempB84 | 0x2000;
+        arg0->unkB84 = tempB84;
+        arg0->unkBBF = tempBBF;
+        func_80056B7C_5777C(&arg0->unk434, 0x25);
+    }
+    return 0;
+}
 
 s32 func_800B71E4_A7094(func_800B30B0_arg *arg0) {
     arg0->unk434 = arg0->unkB44;
