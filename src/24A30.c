@@ -141,7 +141,15 @@ typedef struct {
     void *unk24;
     void *unk28;
     void *unk2C;
-    u8 pad30[0xC];
+    u8 pad30[4];
+    u8 unk34;
+    u8 unk35;
+    u8 unk36;
+    u8 pad37;
+    u8 unk38;
+    u8 unk39;
+    u8 unk3A;
+    u8 pad3B;
     Mat3x3Padded unk3C;
     Mat3x3Padded unk5C;
     Mat3x3Padded unk7C;
@@ -154,11 +162,73 @@ typedef struct {
 extern s32 identityMatrix[];
 extern s32 D_8008DD2C_8E92C[];
 
+void func_80024048_24C48(func_80024048_arg *);
 void func_80024220_24E20(func_80024220_24E20_arg *);
 void func_80024298_24E98(func_80024048_arg *);
+void func_80024600_25200(func_8002494C_arg *);
 void func_80027BC8_287C8(func_80027BC8_arg *, u8);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80023E30_24A30);
+void func_80023E30_24A30(func_80024048_arg *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    Mat3x3Padded *sp10Ptr;
+    s32 temp_s1;
+    s32 var_v0;
+    u8 temp_s0;
+    Mat3x3Padded *temp_s3;
+    Mat3x3Padded *temp_s4;
+    u8 *temp_s5;
+    u8 *temp_ptr;
+
+    temp_s5 = (u8 *)getCurrentAllocation();
+    temp_s4 = &arg0->unk5C;
+    memcpy(temp_s4, identityMatrix, 0x20);
+    temp_s3 = &arg0->unk3C;
+    memcpy(temp_s3, temp_s4, 0x20);
+    memcpy(&sp30, temp_s3, 0x20);
+    sp10Ptr = &sp10;
+    memcpy(sp10Ptr, &sp30, 0x20);
+    createRotationMatrixYX(sp10Ptr, 0x1000, 0x800);
+    createZRotationMatrix(&sp30, 0x1F00);
+    func_8006B084_6BC84(sp10Ptr, &sp30, temp_s3);
+
+    var_v0 = -(approximateSin(0x1800) * 0x1600);
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    arg0->unk5C.unk14 = (var_v0 >> 0xD) << 8;
+
+    var_v0 = -(approximateCos(0x1800) * 0x1600);
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    arg0->unk5C.unk1C = (var_v0 >> 0xD) << 8;
+    memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
+
+    func_8006B084_6BC84(temp_s3, temp_s4, sp10Ptr);
+    func_8006B084_6BC84(sp10Ptr, temp_s5 + ((arg0->unkA1 << 5) + 0x17F8), arg0);
+
+    temp_ptr = (u8 *)D_800AFE8C_A71FC;
+    temp_s0 = *(temp_ptr + arg0->unkA1 + 0xD);
+    arg0->unkA2 = temp_s0;
+    temp_s1 = EepromSaveData->character_or_settings[temp_s0] - 1;
+
+    arg0->unk20 = loadAssetByIndex_95728(temp_s0);
+    arg0->unk24 = loadAssetByIndex_95500(temp_s0);
+    arg0->unk28 = loadAssetByIndex_95590(temp_s0);
+    arg0->unk2C = loadAssetByIndex_95668(temp_s1 & 0xFF);
+
+    arg0->unk34 = 0xFF;
+    arg0->unk35 = 0xFF;
+    arg0->unk36 = 0xFF;
+    arg0->unk38 = 0x80;
+    arg0->unk39 = 0x80;
+    arg0->unk3A = 0x80;
+    arg0->unkA0 = *(temp_s5 + arg0->unkA1 + 0x18C8);
+
+    setCleanupCallback(func_80024600_25200);
+    setCallback(func_80024048_24C48);
+}
 
 void func_80024048_24C48(func_80024048_arg *arg0) {
     Mat3x3Padded sp10;
