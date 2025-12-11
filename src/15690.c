@@ -1,6 +1,8 @@
 #include "15690.h"
+#include "38C90.h"
 #include "3E160.h"
 #include "4050.h"
+#include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
@@ -129,12 +131,74 @@ void func_80014D78_15978(void) {
     setGameStateHandler(func_80014DA8_159A8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/15690", func_80014DA8_159A8);
-
 extern u8 D_800A8CC9_A0039;
+extern u8 D_800AB47A_A27EA;
+
+void func_80015254_15E54(void);
+void func_80014F60_15B60(void);
+void func_80015028_15C28(void);
+
+void func_80014DA8_159A8(void) {
+    s16 result;
+    void (*handler)(void);
+    u8 *eepromBase;
+    u8 *temp;
+    u8 saveSlotIndex;
+    s32 slotIndexInt;
+
+    result = func_80069810_6A410();
+    if (result != 0) {
+        D_800A8CC9_A0039 = 0;
+
+        if (result >= 3) {
+            eepromBase = (u8 *)EepromSaveData;
+            if (EepromSaveData->save_slot_status[0] == 5) {
+                D_800A8CC9_A0039 = 1;
+            }
+
+            if ((result == 3) | (result == 5)) {
+                *(eepromBase + D_800AFE8C_A71FC->saveSlotIndex + 0x10) = 1;
+                func_80038090_38C90(result);
+            } else {
+                temp = eepromBase + D_800AFE8C_A71FC->saveSlotIndex;
+                if (*(temp + 0x10) != 1) {
+                    *(temp + 0x10) = 4;
+                }
+            }
+        }
+
+        func_80015254_15E54();
+        func_8006FDA0_709A0(NULL, 0, 0);
+
+        if (result == 1) {
+            handler = func_80014D78_15978;
+        } else {
+            if (EepromSaveData->save_slot_status[0] == 5) {
+                func_80015248_15E48(0);
+                goto set_handler_b70;
+            }
+            if ((result == 3) || (D_800AB47A_A27EA != 0)) {
+                saveSlotIndex = D_800AFE8C_A71FC->saveSlotIndex;
+                slotIndexInt = saveSlotIndex;
+                if (((slotIndexInt == 2) | (slotIndexInt == 6)) || (slotIndexInt == 10)) {
+                    D_800AFE8C_A71FC->saveSlotIndex = saveSlotIndex + 1;
+                    handler = func_80014CF8_158F8;
+                } else {
+                    handler = func_80014F60_15B60;
+                }
+            } else if (D_800A8CC9_A0039 != 0) {
+                handler = func_80015028_15C28;
+            } else {
+            set_handler_b70:
+                handler = func_80014B70_15770;
+            }
+        }
+
+        setGameStateHandler(handler);
+    }
+}
 
 void func_80014FA4_15BA4(void);
-void func_80015028_15C28(void);
 void func_8001511C_15D1C(void);
 void func_80015098_15C98(void);
 
