@@ -440,3 +440,4 @@ func_800B00C0_1DC260 (22 attempts, 83.5%) -- Register allocation mismatch: compi
 
 func_80044DB0_459B0 30 98.696%
 func_80034BD8_357D8 (30 attempts, 96.774%) -- Register allocation mismatch: compiler loads counter into v0 instead of a0, generates negu s3,s3 instead of negu s3,a0, instruction scheduling differences for li s5/move s0/lbu/lui sequence
+func_800BB310_ACD90 15 94.800%
