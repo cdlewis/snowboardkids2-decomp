@@ -12,6 +12,7 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "levels/haunted_house.h"
 #include "levels/jingle_town.h"
 #include "levels/lindas_castle.h"
 #include "levels/starlight_highway.h"
@@ -2064,8 +2065,6 @@ void func_80049C70_4A870(s32 arg0) {
     func_80049280_49E80(arg0);
 }
 
-extern void func_800BC0FC(s32);
-extern void func_800BC9BC(void);
 extern void D_800BB688(void);
 extern void D_800BB74C(void);
 extern void D_800BB7F0(void);
