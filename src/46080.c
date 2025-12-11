@@ -12,6 +12,7 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "levels/jingle_town.h"
 #include "levels/lindas_castle.h"
 #include "overlay.h"
 #include "rand.h"
@@ -2062,7 +2063,6 @@ void func_80049C70_4A870(s32 arg0) {
     func_80049280_49E80(arg0);
 }
 
-extern void func_800BBB34(void);
 extern void func_800BBED8(void);
 extern void func_800BC0FC(s32);
 extern void func_800BC9BC(void);
