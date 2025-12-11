@@ -106,3 +106,4 @@ typedef struct {
 } func_80032330_32F30_arg;
 
 void func_80032330_32F30(func_80032330_32F30_arg *arg0);
+s32 abs(s32 n);
