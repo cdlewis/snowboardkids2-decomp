@@ -108,7 +108,6 @@ void func_800572B0_57EB0(void *arg);
 void func_80057928_58528(void *, s32);
 void func_800573F8_57FF8(void);
 void *func_800725F4_731F4(s32, s32, s32, s32, s32);
-s32 func_800728E0_734E0(u32);
 void *func_80072960_73560(void *, s32);
 void *func_80072A14_73614(void *);
 void *func_80072CDC_738DC(void *, void *);
