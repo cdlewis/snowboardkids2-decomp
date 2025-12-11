@@ -1,5 +1,6 @@
 #include "common.h"
 #include "displaylist.h"
+#include "gamestate.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
@@ -13,6 +14,12 @@ extern u8 D_800BACCA_AAB7A;
 extern u8 D_800BACCC_AAB7C;
 extern u8 D_800BACCD_AAB7D;
 extern u8 D_800BACCE_AAB7E;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} UnkA10Entry;
 
 typedef struct {
     u8 pad[0x38];
@@ -37,8 +44,12 @@ typedef struct {
     u8 pad46C[0x8];
     s32 unk474;
     u8 pad478[0x984 - 0x478];
-    u8 unk984[0xC];
-    u8 pad990[0xA8C - 0x990];
+    s32 unk984;
+    s32 unk988;
+    s32 unk98C;
+    u8 pad990[0xA10 - 0x990];
+    UnkA10Entry unkA10[9];
+    u8 padA7C[0xA8C - 0xA7C];
     u16 unkA8C;
     u8 padA8E[0xA9C - 0xA8E];
     u16 unkA9C;
@@ -59,7 +70,8 @@ typedef struct {
     u8 unkBBE;
     u8 unkBBF;
     u8 unkBC0;
-    u8 padBC1[0x8];
+    u8 unkBC1;
+    u8 padBC2[0x7];
     u8 unkBC9;
     u8 unkBCA;
     u8 padBCB[1];
@@ -83,6 +95,10 @@ extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, vo
 extern void func_80064808_65408(s32, void *, u8);
 extern void enqueueMultiPartDisplayList(s32, void *, u8);
 extern void func_800BC0E8_AC918(Arg0Struct *);
+extern s32 func_8005CFC0_5DBC0(void *, u16, void *, s32);
+extern void func_800B9500_A93B0(void);
+extern s32 D_800BBA7C_AC2AC[][3];
+extern s32 D_800BBA84_AC2B4[][3];
 
 INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BB2B0_ABAE0);
 
@@ -199,7 +215,7 @@ void func_800BBFEC_AC81C(Arg0Struct *arg0) {
     u16 temp;
 
     alloc = getCurrentAllocation();
-    memcpy(arg0->unk984, &arg0->unk434, 0xC);
+    memcpy(&arg0->unk984, &arg0->unk434, 0xC);
     allocPlus30 = (u8 *)alloc + 0x30;
     temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
     arg0->unkB94 = temp;
@@ -247,4 +263,34 @@ void func_800BC23C_ACA6C(Arg0Struct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BC330_ACB60);
+#define DATA_OFFSET_ROW 214
+#define DATA_OFFSET_COL_0 2
+#define DATA_OFFSET_COL_2 0
+
+void func_800BC330_ACB60(Arg0Struct *arg0) {
+    s32 i;
+    u8 *temp_s5;
+    void *alloc;
+
+    alloc = getCurrentAllocation();
+    i = 0;
+    temp_s5 = (u8 *)alloc + 0x30;
+
+    do {
+        s32 *posPtr;
+        u16 temp;
+
+        arg0->unkA10[i].unk0 = arg0->unk984 + D_800BBA7C_AC2AC[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_0];
+        arg0->unkA10[i].unk8 = arg0->unk98C + D_800BBA84_AC2B4[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_2 + 2];
+        posPtr = &arg0->unkA10[i].unk0;
+        temp = func_80059E90_5AA90(arg0, temp_s5, arg0->unkB94, posPtr);
+        arg0->unkA10[i].unk4 = func_8005CFC0_5DBC0(temp_s5, temp, posPtr, 0x100000);
+        i++;
+    } while (i < 9);
+
+    arg0->unkBC1 = 1;
+
+    for (i = 0; i < 4; i++) {
+        debugEnqueueCallback((u16)i, 1, func_800B9500_A93B0, arg0);
+    }
+}
