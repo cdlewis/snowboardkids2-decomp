@@ -107,3 +107,4 @@ typedef struct {
 
 void func_80032330_32F30(func_80032330_32F30_arg *arg0);
 s32 abs(s32 n);
+void func_80058A3C_5963C(Player *arg0);
