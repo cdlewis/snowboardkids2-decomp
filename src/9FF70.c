@@ -77,7 +77,8 @@ typedef struct {
     void *unkB44;
     s32 unkB48;
     s32 unkB4C;
-    u8 padding6[0x24];
+    u8 padding6[0x20];
+    s32 unkB70;
     u16 unkB74;
     u8 _padB76[2];
     s16 unkB78;
@@ -1298,7 +1299,77 @@ void func_800B3950_A3800(func_800B00D4_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B3980_A3830);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B3CBC_A3B6C);
+typedef struct {
+    u8 pad[0x176C];
+    s32 unk176C;
+} GameStateUnk10;
+
+typedef struct {
+    u8 pad[0x10];
+    GameStateUnk10 *unk10;
+    u8 pad2[0x44];
+    u8 unk58;
+    u8 unk59;
+    u8 unk5A;
+    u8 pad3[0x1F];
+    u8 unk7A;
+    u8 unk7B;
+    u8 unk7C;
+    u8 unk7D;
+} GameStateLocal;
+
+s32 func_800B3CBC_A3B6C(func_800B30B0_arg *arg0) {
+    s32 var_s2 = 0;
+    GameStateLocal *temp_s0;
+
+    temp_s0 = getCurrentAllocation();
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 -= 0x6000;
+    func_800B40D4_A3F84(arg0);
+    func_800B02AC_A015C(arg0);
+    func_8005D180_5DD80(arg0, 0);
+    if (temp_s0->unk7B != 0) {
+        switch (temp_s0->unk7A) {
+            case 0:
+            case 1:
+            case 8:
+            case 9:
+                if (arg0->unkBC4 == 0) {
+                    var_s2 = 1;
+                }
+                break;
+            case 2:
+            case 3:
+                if (temp_s0->unk10->unk176C & 0x100000) {
+                    var_s2 = 1;
+                }
+                break;
+            case 4:
+                if (temp_s0->unk7D == 0) {
+                    var_s2 = 1;
+                }
+                break;
+            case 5:
+                if ((temp_s0->unk7D == 0) && (temp_s0->unk5A == 0x14)) {
+                    var_s2 = 1;
+                }
+                break;
+            case 6:
+                if ((temp_s0->unk7D == 0) && (arg0->unkB70 >= 0x12C)) {
+                    var_s2 = 1;
+                }
+                break;
+        }
+        if (var_s2 != 0) {
+            arg0->unkBBF = 2;
+        } else {
+            arg0->unkBBF = 3;
+        }
+        arg0->unkBC0 = 0;
+    }
+    return 0;
+}
 
 extern void func_80059CE0_5A8E0(void *);
 extern void func_8005D804_5E404(void *, u8, u8);
