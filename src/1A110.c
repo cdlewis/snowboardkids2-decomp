@@ -3,7 +3,44 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-INCLUDE_ASM("asm/nonmatchings/1A110", func_80019510_1A110);
+extern s16 D_8008D7E0_8E3E0;
+
+s32 func_80019510_1A110(s32 arg0, s32 arg1, s16 arg2) {
+    s32 var_s1;
+    s16 *var_s0;
+    s16 *var_s2;
+    s16 *var_s3;
+    s32 var_s4;
+    s32 dx;
+    s32 dy;
+    s32 dist;
+    s32 threshold;
+    s16 *base;
+
+    getCurrentAllocation();
+
+    var_s1 = 0;
+    var_s4 = (s16)arg2;
+    base = &D_8008D7E0_8E3E0;
+    var_s3 = base + 2;
+    var_s2 = base + 1;
+    var_s0 = base;
+
+    do {
+        dx = arg0 - (*var_s0 << 16);
+        dy = arg1 - (*var_s2 << 16);
+        dist = isqrt64((s64)dx * dx + (s64)dy * dy);
+        threshold = (*var_s3 + var_s4) << 16;
+        if (dist < threshold) {
+            return var_s1 + 1;
+        }
+        var_s3 += 3;
+        var_s2 += 3;
+        var_s1 += 1;
+        var_s0 += 3;
+    } while (var_s1 < 2);
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1A110", func_8001960C_1A20C);
 
