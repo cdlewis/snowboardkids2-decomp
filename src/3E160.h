@@ -120,3 +120,4 @@ void func_80058AEC_596EC(Player *arg0, void *arg1);
 void func_80058A94_59694(Player *arg0);
 void func_80059A48_5A648(Player *arg0, s32 arg1);
 s32 func_80059AC4_5A6C4(Player *arg0);
+void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
