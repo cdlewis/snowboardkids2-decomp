@@ -105,6 +105,7 @@ void func_8003513C_35D3C(Func350ACArg *arg0);
 void func_80035234_35E34(Func34574Arg *arg0);
 void func_80034640_35240(Func34574Arg *arg0);
 void func_800344A8_350A8(void *);
+void func_80033E08_34A08(Func34574Arg *arg0);
 
 void func_800333E0_33FE0(Func33FE0Arg *arg0) {
     void *allocation;
@@ -136,7 +137,61 @@ void func_80033974_34574(Func34574Arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_800339AC_345AC);
+void func_80033AE4_346E4(void);
+
+USE_ASSET(_459310);
+
+typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ s16 unkA;
+    /* 0x0C */ u8 unkC;
+    /* 0x0D */ u8 unkD;
+    /* 0x0E */ u8 padE[2];
+} Func345ACEntry; // size 0x10
+
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ Func345ACEntry *unk4;
+    /* 0x08 */ u8 pad8[0x14];
+    /* 0x1C */ u8 unk1C;
+    /* 0x1D */ u8 unk1D;
+    /* 0x1E */ u8 unk1E;
+} Func345ACArg;
+
+// Flat allocation structure with direct byte access
+typedef struct {
+    /* 0x000 */ u8 data[0xAD2]; // Everything including unkACE[4]
+} Func345ACAllocationFlat;
+
+void func_800339AC_345AC(Func345ACArg *arg0) {
+    u8 *allocation;
+    s32 i;
+    s16 unk2_val;
+    u8 *new_var;
+
+    allocation = (u8 *)getCurrentAllocation();
+    arg0->unk4 = (Func345ACEntry *)allocateNodeMemory(0xF0);
+    arg0->unk0 = dmaRequestAndUpdateStateWithSize(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    arg0->unk1E = *(allocation + arg0->unk1C + 0xACE);
+    setCleanupCallback(func_80033E08_34A08);
+
+    for (i = 0; i < 15; i++) {
+        unk2_val = ((-((*((new_var = (allocation + (arg0->unk1C * 0x5C)) + i) + 0x948)) != 0)) & (-8)) | 0xFF70;
+        arg0->unk4[i].unk0 = -0x78 + i * 0x10;
+        arg0->unk4[i].unk2 = unk2_val;
+        arg0->unk4[i].unk4 = arg0->unk0;
+        arg0->unk4[i].unk8 = 5;
+        arg0->unk4[i].unkA = 0xFF;
+        arg0->unk4[i].unkD = 0;
+        arg0->unk4[i].unkC = 0;
+    }
+
+    arg0->unk1D = 0;
+    setCallback(func_80033AE4_346E4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033AE4_346E4);
 
