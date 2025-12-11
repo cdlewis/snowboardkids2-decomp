@@ -184,11 +184,11 @@ s16 func_80001638_2238(func_80001688_2288_arg *arg0) {
     return arg0->unk8A;
 }
 
-void func_80001640_2240(func_80001688_2288_arg *arg0) {
+void func_80001640_2240(SceneModel *arg0) {
     arg0->unk89 |= 1;
 }
 
-void func_80001650_2250(func_80001688_2288_arg *arg0) {
+void func_80001650_2250(SceneModel *arg0) {
     arg0->unk89 &= 0xFE;
 }
 

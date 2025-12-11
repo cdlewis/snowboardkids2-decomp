@@ -155,6 +155,8 @@ void func_800021B8_2DB8(SceneModel *arg0, s16 arg1);
 void updateModelGeometry(SceneModel *);
 
 void func_8000160C_220C(SceneModel *arg0, s8 arg1);
+void func_80001640_2240(SceneModel *arg0);
+void func_80001650_2250(SceneModel *arg0);
 
 typedef struct {
     u8 transformationMatrix[0x20];

@@ -7,8 +7,6 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern void func_80001640_2240(SceneModel *arg0);
-extern void func_80001650_2250(SceneModel *arg0);
 extern s32 abs(s32);
 
 extern u8 identityMatrix[];
