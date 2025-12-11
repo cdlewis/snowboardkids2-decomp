@@ -443,3 +443,4 @@ func_80034BD8_357D8 (30 attempts, 96.774%) -- Register allocation mismatch: comp
 func_800BB310_ACD90 15 94.800%
 func_800BC550_AE910 (27 attempts, 98.670%) -- Register allocation mismatch: compiler assigns arg0 to s2 instead of s3, function pointer to s3 instead of s4, resulting in one fewer saved register used
 func_800B6688_A6538 20 98.784%
+func_8002ADB4_2B9B4 (30 attempts, 97.255%) -- Register allocation mismatch: compiler assigns sign-extended arg0 to a3 instead of a2, arg1 copy to a2 instead of a3, affecting entire function register usage
