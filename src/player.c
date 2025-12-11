@@ -869,7 +869,24 @@ s32 func_80072A6C_7366C(void *handle, s32 volume) {
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072ACC_736CC);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072B3C_7373C);
+s32 func_80072B3C_7373C(void *handle, f32 offset) {
+    s32 i;
+    s32 count;
+    channel_t *cp;
+
+    if (handle == NULL) {
+        return 0;
+    }
+
+    count = 0;
+    for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
+        if ((void *)cp->handle == handle) {
+            cp->freqoffset = offset + cp->distort;
+            count++;
+        }
+    }
+    return count;
+}
 
 s32 func_80072BAC_737AC(void *arg0, s32 arg1) {
     s32 count;

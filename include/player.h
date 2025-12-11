@@ -26,7 +26,7 @@ void func_80072CC0_738C0(void *pbank, void *wbank);
 
 s32 func_80072C38_73838(void *, s32);
 
-void func_80072B3C_7373C(void *, f32);
+s32 func_80072B3C_7373C(void *, f32);
 
 void func_80072ACC_736CC(void *, s32);
 
