@@ -988,7 +988,6 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
 }
 
 extern void func_80051C80_52880(s32 *arg0, s32 arg1);
-extern s16 func_8005BF50_5CB50(s32 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4);
 
 void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
     Alloc_55650 *alloc;
