@@ -848,7 +848,24 @@ void *func_80072A14_73614(musHandle arg0) {
     return (void *)count;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072A6C_7366C);
+s32 func_80072A6C_7366C(void *handle, s32 volume) {
+    s32 i;
+    s32 count;
+    channel_t *cp;
+
+    if (handle == NULL) {
+        return 0;
+    }
+
+    count = 0;
+    for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
+        if ((void *)cp->handle == handle) {
+            cp->volscale = volume;
+            count++;
+        }
+    }
+    return count;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072ACC_736CC);
 
