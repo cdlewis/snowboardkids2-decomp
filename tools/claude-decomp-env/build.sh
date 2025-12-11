@@ -35,4 +35,9 @@ echo ${1//.c/_diff}
 diff -u --suppress-common-lines target_object_dump.s $OBJECT_DUMP || true > ${1//.c/_diff}
 echo "Comparison with target file: ${1//.c/_diff}"
 
-python3 dist.py target.o $OBJECT_OUTPUT --stack-diffs
+SCORE_OUTPUT=$(python3 dist.py target.o $OBJECT_OUTPUT --stack-diffs)
+echo "$SCORE_OUTPUT"
+
+# Extract match percentage and log it
+MATCH_PERCENT=$(echo "$SCORE_OUTPUT" | grep -oP 'Score: \K[0-9.]+')
+echo "$1 ${MATCH_PERCENT}%" >> match_log.txt
