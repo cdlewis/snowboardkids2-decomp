@@ -16,6 +16,8 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
+extern s32 gFrameCounter;
+
 #define SECONDS_TO_TICKS(s) ((s) * 30)
 
 #define SCHEDULE_AND_SET(func, offset, value)        \
@@ -866,13 +868,15 @@ typedef struct {
     s16 unk2;
     void *unk4;
     s16 unk8;
-    u8 padA[0x6];
+    u8 padA[0x4];
+    u8 unkE;
+    u8 padF;
     void *unk10;
     s32 unk14;
     Player *unk18;
 } Struct_func_8004DEF8;
 
-void func_8004DFA0_4EBA0(void);
+void func_8004DFA0_4EBA0(Struct_func_8004DEF8 *arg0);
 void func_8004E0BC_4ECBC(Struct_func_8004DCC4 *);
 
 void func_8004DEF8_4EAF8(Struct_func_8004DEF8 *arg0) {
@@ -896,7 +900,44 @@ void func_8004DEF8_4EAF8(Struct_func_8004DEF8 *arg0) {
     setCallback(func_8004DFA0_4EBA0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004DFA0_4EBA0);
+void func_8004DFA0_4EBA0(Struct_func_8004DEF8 *arg0) {
+    char sp20[16];
+    s32 temp;
+    u8 var_a2;
+    Player *player;
+
+    temp = arg0->unk14;
+    if (temp != 0xFF) {
+        temp += 0x10;
+        arg0->unk14 = temp;
+        if (temp >= 0x100) {
+            arg0->unk14 = 0xFF;
+        }
+    }
+
+    player = arg0->unk18;
+    if (player->unkBC4 == 0 && (gFrameCounter & 1)) {
+        var_a2 = D_800AFE8C_A71FC->unk9[player->unkBB8 + 0x11];
+        sprintf(sp20, D_8009E89C_9F49C, var_a2);
+    } else {
+        var_a2 = D_800AFE8C_A71FC->unk9[arg0->unk18->unkBB8 + 0x11];
+        sprintf(sp20, D_8009E8A0_9F4A0, var_a2);
+    }
+
+    arg0->unkE = (u8)arg0->unk14;
+
+    debugEnqueueCallback(arg0->unk18->unkBB8 + 8, 6, func_80012518_13118, arg0);
+
+    func_8003BD60_3C960(
+        sp20,
+        (s16)((u16)arg0->unk0 - 0x18),
+        arg0->unk2,
+        arg0->unk14,
+        arg0->unk10,
+        (s16)(arg0->unk18->unkBB8 + 8),
+        6
+    );
+}
 
 void func_8004E0BC_4ECBC(Struct_func_8004DCC4 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
