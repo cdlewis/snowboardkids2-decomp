@@ -112,7 +112,6 @@ extern void func_800BBEAC_AFB9C(s16 *);
 extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
 extern void func_80066444_67044(s32, loadAssetMetadata_arg *);
-extern void func_8006BFB8_6CBB8(void *, void *);
 extern void func_800BC184_AFE74(void **);
 extern void func_800BC220_AFF10(void);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);

@@ -447,7 +447,6 @@ typedef func_80046244_46E44_Task func_80045C84_46884_arg;
 
 extern void func_80045C84_46884(func_80045C84_46884_arg *);
 extern void func_80045A28_46628(func_80046244_46E44_Task *);
-extern void func_8006BFB8_6CBB8(void *, void *);
 extern s32 D_8009A8A4_9B4A4;
 extern void func_80045B3C_4673C(void);
 extern s32 D_80090AF0_916F0[];
