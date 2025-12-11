@@ -151,8 +151,6 @@ void func_80014854_15454(void) {
     }
 }
 
-extern void func_80037270_37E70(void);
-
 void func_8001489C_1549C(void) {
     createTaskQueue(func_80037270_37E70, 0x64);
     setGameStateHandler(func_800148CC_154CC);
