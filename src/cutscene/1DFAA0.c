@@ -42,6 +42,8 @@ extern s32 func_800084D8_90D8(StateEntry *, s32, s32);
 extern s32 func_800084E0_90E0(StateEntry *, s32, s32);
 extern s32 func_8003A284_3AE84(s32, StateEntry **);
 extern s32 func_8003A28C_3AE8C(void);
+extern void func_8003A51C_3B11C(s32, StateEntry **);
+extern s32 func_8003A524_3B124(void);
 
 u8 getCutsceneSlotCount(void);
 s32 findEventAtFrame(u8 a0, u16 a1);
@@ -426,7 +428,14 @@ done:
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3734_1E07E4);
+void func_800B3734_1E07E4(void) {
+    StateEntry **ptr;
+
+    ptr = &D_800BA93C_1E79EC;
+    *ptr = (StateEntry *)D_800BAEB8_1E7F68;
+    D_800BA95C_1E7A0C = D_800BAEBC_1E7F6C;
+    func_8003A51C_3B11C(0, ptr);
+    do { } while (func_8003A524_3B124() == -1); }
 
 typedef struct {
     u8 _pad0[0x4];
