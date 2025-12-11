@@ -181,7 +181,8 @@ s32 D_800894F0_8A0F0[8];
 
 void func_80000DA4_19A4(func_80000DA4_19A4_arg *arg0);
 void func_80001264_1E64(func_80000C2C_182C_arg *arg0);
-void func_800011DC_1DDC(void *);
+void func_800011DC_1DDC(func_80000C2C_182C_arg *);
+void func_80001280_1E80(func_80000C2C_182C_arg *arg0);
 void func_80000CAC_18AC(func_80000C2C_182C_arg *);
 void func_80000A68_1668(func_80000C2C_182C_arg *);
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *);
@@ -595,7 +596,30 @@ void func_80001158_1D58(func_80000C2C_182C_arg *arg0) {
     setCallback(&func_800011DC_1DDC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_800011DC_1DDC);
+void func_800011DC_1DDC(func_80000C2C_182C_arg *arg0) {
+    s16 temp;
+    func_80000C2C_182C_arg *task;
+    u8 tempUnk4;
+
+    if (arg0->unk0->unk86 != 0) {
+        func_80069CF8_6A8F8();
+    }
+
+    temp = *(s16 *)&arg0->unk54;
+    if (temp <= 0) {
+        task = scheduleTask(func_80001280_1E80, 0, 0, 0xC8);
+        if (task != NULL) {
+            task->unk0 = arg0->unk0;
+            tempUnk4 = arg0->unk4;
+            task->unk5 = 0;
+            task->unk4 = tempUnk4;
+        } else {
+            *(s16 *)&arg0->unk54 = 0;
+        }
+    } else {
+        *(s16 *)&arg0->unk54 = temp - 1;
+    }
+}
 
 void func_80001264_1E64(func_80000C2C_182C_arg *arg0) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
