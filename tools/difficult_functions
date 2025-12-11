@@ -457,3 +457,4 @@ func_8005D818_5E418 (30 attempts, 97.093%) -- Register allocation mismatch: comp
 func_8004DB98_4E798 (25 attempts, 94.667%) -- Instruction scheduling mismatch: compiler places slti v0,v1,7 after lui/addiu for taskFunc address instead of before, also generates sltiu (unsigned) instead of slti (signed) for u8 field comparison
 func_80025EE4_26AE4 (30 attempts, 87.581%) -- Register allocation mismatch: compiler uses 8 saved registers (s0-s7) instead of 7 (s0-s6), assigns s0 for arg0 instead of s2, creates s1=s0+0xA optimization for unkA/unkD field access instead of direct 0xa(s0)/0xd(s0) stores, also swaps loop counter (s2 vs s1) and base pointer (s4 vs s3) registers
 func_80054658_55258 (19 attempts, 87.908%)
+func_8002CFAC_2DBAC (24 attempts, 80.673%) -- Register allocation mismatch: compiler uses s8 for 0xFFB30000 constant instead of s6, assigns arg0 to s0 instead of s1, ptr to s7 instead of s0, stack frame 0x48 instead of 0x50
