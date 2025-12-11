@@ -284,7 +284,6 @@ func_800B3980_A3830 9 69.029%
 func_800BC5A8_B3B68 (13 attempts, 94.670%)
 func_8001FA00_20600 (7 attempts, 77.851%)
 func_800509CC_515CC (15 attempts, 96.545%)
-func_800BB620_AF310 30 99.811%
 func_800B6618_1E36C8 (24 attempts, 60.949%)
 func_80040870_41470 (25 attempts, 98.148%)
 func_8002F024_2FC24 (20 attempts, 97.797%)
@@ -436,3 +435,4 @@ func_80028C08_29808 5 ~88% -- Register allocation mismatch with goto pattern: co
 func_8003466C_3526C 19 90%
 func_80024990_25590 30 95.211% -- Register allocation and instruction scheduling mismatch: compiler reorders addu a1/v0 sequence (arg1/arg2 address calculation), swaps li a3/v0 order for -1 constants, places sw v0,0(s0) after memcpy jal instead of before
 func_800B62E4_A6194 (8 attempts, 89%)
+func_8001F7C8_203C8 (30 attempts, 97.1%) -- Register allocation mismatch: compiler assigns s1 for arg0+0x18 instead of s0, instruction scheduling differences for addiu s1,sp,0x80 and addiu s0,s2,0xc, temp variable uses a3 instead of a0
