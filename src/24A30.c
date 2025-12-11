@@ -749,7 +749,6 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80025418_26018);
 
 extern u8 D_8008DD8C_8E98C[];
 extern u16 D_8008DE02_8EA02[];
-extern void func_80010C98_11898(void);
 
 void func_800255A0_261A0(func_800255A0_arg *arg0) {
     u8 *base;
