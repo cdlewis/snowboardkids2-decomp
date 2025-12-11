@@ -14,6 +14,12 @@ extern s32 D_8009A8A8_9B4A8;
 extern s32 D_8009A8AC_9B4AC;
 
 typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} UnkA10Entry;
+
+typedef struct {
     u8 pad[0x38];
     s16 unk38[0x10];                    /* 0x38 - 0x57 */
     u8 pad58[0x74 - 0x58];
@@ -35,12 +41,15 @@ typedef struct {
     u8 pad478[0x950 - 0x478];
     u8 unk950[0x20];                    /* 0x950 - 0x96F */
     u8 unk970[0x14];                    /* 0x970 - 0x983 */
-    u8 unk984[0xC];                     /* 0x984 - 0x98F */
+    s32 unk984;                         /* 0x984 */
+    s32 unk988;                         /* 0x988 */
+    s32 unk98C;                         /* 0x98C */
     u8 unk990[0x20];                    /* 0x990 - 0x9AF */
     u8 unk9B0[0x20];                    /* 0x9B0 - 0x9CF */
     u8 pad9D0[0x9F0 - 0x9D0];
     u8 unk9F0[0x20];                    /* 0x9F0 - 0xA0F */
-    u8 padA10[0xA8C - 0xA10];
+    UnkA10Entry unkA10[9];              /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
+    u8 padA7C[0xA8C - 0xA7C];
     u16 unkA8C;                         /* 0xA8C */
     u8 padA8E[0xA9C - 0xA8E];
     u16 unkA9C;                         /* 0xA9C */
@@ -60,7 +69,8 @@ typedef struct {
     u8 unkBBE;                          /* 0xBBE */
     u8 unkBBF;                          /* 0xBBF */
     u8 unkBC0;                          /* 0xBC0 */
-    u8 padBC1[0x8];
+    u8 unkBC1;                          /* 0xBC1 */
+    u8 padBC2[0x7];
     u8 unkBC9;                          /* 0xBC9 */
     u8 unkBCA;                          /* 0xBCA */
     u8 padBCB[1];
@@ -79,14 +89,16 @@ typedef struct {
 
 extern FuncPtr D_800BCB5C_B411C[];
 extern FuncPtr D_800BCB74_B4134[];
-extern s16 D_800BCBA0_B4160[];
+extern s32 D_800BCBA0_B4160[][3];
 extern void func_800B00D4_9FF84(Arg0Struct *, s32);
 extern void func_800B02AC_A015C(Arg0Struct *);
 extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
+extern s32 func_8005CFC0_5DBC0(void *, u16, void *, s32);
 extern void func_8005C868_5D468(void *arg0);
 extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
 extern s32 func_800544B4_550B4(s32, s32, s32);
 extern void func_80041EA4_42AA4(s32 *arg0);
+extern void func_800B9500_A93B0(void);
 
 INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BB2B0_B2870);
 
@@ -217,21 +229,21 @@ s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
     temp_v0 = arg0->unkBBE;
     if (temp_v0 == 0) {
         arg0->unkBBE++;
-        transformVector2(D_800BCBA0_B4160, arg0->unk38, sp10);
+        transformVector2((s16 *)D_800BCBA0_B4160, arg0->unk38, sp10);
         arg0->unk434 += sp10[0];
         arg0->unk438 += sp10[1];
         arg0->unk43C += sp10[2];
         memcpy(arg0->unk440, &arg0->unk434, 0xC);
         arg0->unkB84 |= 0x200000;
-        transformVector(&D_800BCBA0_B4160[6], arg0->unk38, sp20);
+        transformVector(&((s16 *)D_800BCBA0_B4160)[6], arg0->unk38, sp20);
         func_80041EA4_42AA4(sp20);
-        transformVector(&D_800BCBA0_B4160[12], arg0->unk38, sp20);
+        transformVector(&((s16 *)D_800BCBA0_B4160)[12], arg0->unk38, sp20);
         func_80041EA4_42AA4(sp20);
-        transformVector(&D_800BCBA0_B4160[18], arg0->unk38, sp20);
+        transformVector(&((s16 *)D_800BCBA0_B4160)[18], arg0->unk38, sp20);
         func_80041EA4_42AA4(sp20);
-        transformVector(&D_800BCBA0_B4160[24], arg0->unk38, sp20);
+        transformVector(&((s16 *)D_800BCBA0_B4160)[24], arg0->unk38, sp20);
         func_80041EA4_42AA4(sp20);
-        transformVector(&D_800BCBA0_B4160[30], arg0->unk38, sp20);
+        transformVector(&((s16 *)D_800BCBA0_B4160)[30], arg0->unk38, sp20);
         func_80041EA4_42AA4(sp20);
         arg0->unk468 = 0x100;
     }
@@ -257,7 +269,7 @@ void func_800BC378_B3938(Arg0Struct *arg0) {
     u16 temp;
 
     alloc = getCurrentAllocation();
-    memcpy(arg0->unk984, &arg0->unk434, 0xC);
+    memcpy(&arg0->unk984, &arg0->unk434, 0xC);
     allocPlus30 = (u8 *)alloc + 0x30;
     temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
     arg0->unkB94 = temp;
@@ -321,4 +333,30 @@ void func_800BC474_B3A34(Arg0Struct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BC5A8_B3B68);
 
-INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BCA10_B3FD0);
+void func_800BCA10_B3FD0(Arg0Struct *arg0) {
+    s32 i;
+    u8 *temp_s5;
+    void *alloc;
+
+    alloc = getCurrentAllocation();
+    i = 0;
+    temp_s5 = (u8 *)alloc + 0x30;
+
+    do {
+        s32 *posPtr;
+        u16 temp;
+
+        arg0->unkA10[i].unk0 = arg0->unk984 + D_800BCBA0_B4160[6 + i][0];
+        arg0->unkA10[i].unk8 = arg0->unk98C + D_800BCBA0_B4160[6 + i][2];
+        posPtr = &arg0->unkA10[i].unk0;
+        temp = func_80059E90_5AA90(arg0, temp_s5, arg0->unkB94, posPtr);
+        arg0->unkA10[i].unk4 = func_8005CFC0_5DBC0(temp_s5, temp, posPtr, 0x100000);
+        i++;
+    } while (i < 9);
+
+    arg0->unkBC1 = 1;
+
+    for (i = 0; i < 4; i++) {
+        debugEnqueueCallback((u16)i, 1, func_800B9500_A93B0, arg0);
+    }
+}
