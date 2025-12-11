@@ -74,6 +74,25 @@ typedef struct {
     s16 unk10;
     u8 unk12;
     u8 unk13;
+} func_800255A0_entry;
+
+typedef struct {
+    func_800255A0_entry entries[3];
+    u8 padding[0x16];
+    u8 unk52;
+} func_800255A0_arg;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    u8 unk12;
+    u8 unk13;
     u8 unk14;
 } func_80027AD8_286D8_arg;
 
@@ -728,7 +747,30 @@ void func_800253E0_25FE0(func_800253E0_25FE0_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025418_26018);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_800255A0_261A0);
+extern u8 D_8008DD8C_8E98C[];
+extern u16 D_8008DE02_8EA02[];
+extern void func_80010C98_11898(void);
+
+void func_800255A0_261A0(func_800255A0_arg *arg0) {
+    u8 *base;
+    s32 i;
+    func_800255A0_entry *ptr;
+    u8 idx;
+    u8 val1, val2;
+
+    base = (u8 *)getCurrentAllocation();
+    i = 0;
+
+    do {
+        val1 = (base + arg0->unk52)[0x18A8];
+        val2 = (base + arg0->unk52)[0x18B0];
+        idx = D_8008DD8C_8E98C[((u8)(val2 + val1 * 3)) * 3 + i];
+        ptr = &((func_800255A0_entry *)arg0)[i];
+        ptr->unkE = D_8008DE02_8EA02[idx];
+        debugEnqueueCallback(arg0->unk52 + 8, 0, func_80010C98_11898, ptr);
+        i++;
+    } while (i < 3);
+}
 
 void func_8002567C_2627C(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
@@ -1108,8 +1150,6 @@ void func_80027BC8_287C8(func_80027BC8_arg *arg0, u8 arg1) {
     arg0->unk39 = val;
     arg0->unk3A = val;
 }
-
-extern u8 D_8008DD8C_8E98C[];
 
 u8 func_80027C44_28844(u8 arg0) {
     return D_8008DD8C_8E98C[arg0 * 3];
