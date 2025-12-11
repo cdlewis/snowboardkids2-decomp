@@ -1,3 +1,4 @@
+#include "3E160.h"
 #include "5DBC0.h"
 #include "common.h"
 #include "gamestate.h"
@@ -5,7 +6,6 @@
 #include "rand.h"
 
 extern s32 func_80044050_44C50(void);
-extern s32 func_800436B4_442B4(void);
 extern u16 D_80093F90_94B90[];
 extern u16 D_80093FA4_94BA4[];
 extern u16 D_80093FB8_94BB8[];
@@ -145,7 +145,7 @@ void func_80058B94_59794(Player *arg0) {
 
 s32 func_80058BB0_597B0(Player *arg0) {
     if (arg0->unkBD0 == 0) {
-        if (func_800436B4_442B4() != 0) {
+        if (func_800436B4_442B4(arg0) != 0) {
             if (arg0->unkB84 & 2) {
                 arg0->unkBD0 = 4;
             } else {

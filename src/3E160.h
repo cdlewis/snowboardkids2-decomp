@@ -16,6 +16,25 @@ typedef struct {
     D_8008D7FC_8E3FC_item *unk8;
 } func_80019CD0_1A8D0_arg;
 
+typedef struct {
+    u8 pad0[0x18];  /* 0x00 */
+    s32 unk18;      /* 0x18 */
+    u8 pad1C[0x4];  /* 0x1C */
+    void *unk20;    /* 0x20 */
+    void *unk24;    /* 0x24 */
+    void *unk28;    /* 0x28 */
+    s32 unk2C;      /* 0x2C */
+    u8 pad30[0x30]; /* 0x30 */
+    void *unk60;    /* 0x60 */
+    void *unk64;    /* 0x64 */
+    s32 unk68;      /* 0x68 */
+    u8 pad6C[0xC];  /* 0x6C */
+    Player *unk78;  /* 0x78 */
+    s32 unk7C;      /* 0x7C */
+    s16 unk80;      /* 0x80 */
+    s16 unk82;      /* 0x82 */
+} Func43374State;
+
 void func_80014480_15080(void);
 void func_8001452C_1512C(void);
 void func_80033200_33E00(void);
@@ -55,3 +74,4 @@ void func_8003B47C_3C07C(void *arg0);
 void func_80044538_45138(s16 arg0);
 void func_80045434_46034(s16 arg0);
 void func_80041418_42018(void);
+Func43374State *func_800436B4_442B4(Player *arg0);

@@ -1299,25 +1299,6 @@ extern void *D_8009A730_9B330;
 extern void func_800433EC_43FEC(void);
 void func_8004367C_4427C(Func432D8Arg *);
 
-typedef struct {
-    u8 pad0[0x18];  /* 0x00 */
-    s32 unk18;      /* 0x18 */
-    u8 pad1C[0x4];  /* 0x1C */
-    void *unk20;    /* 0x20 */
-    void *unk24;    /* 0x24 */
-    void *unk28;    /* 0x28 */
-    s32 unk2C;      /* 0x2C */
-    u8 pad30[0x30]; /* 0x30 */
-    void *unk60;    /* 0x60 */
-    void *unk64;    /* 0x64 */
-    s32 unk68;      /* 0x68 */
-    u8 pad6C[0xC];  /* 0x6C */
-    Player *unk78;  /* 0x78 */
-    s32 unk7C;      /* 0x7C */
-    s16 unk80;      /* 0x80 */
-    s16 unk82;      /* 0x82 */
-} Func43374State;
-
 void func_80043374_43F74(Func43374State *arg0) {
     getCurrentAllocation();
     arg0->unk20 = &D_8009A730_9B330;
