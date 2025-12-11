@@ -1,5 +1,6 @@
 #include "3E160.h"
 #include "51060.h"
+#include "594E0.h"
 #include "5AA90.h"
 #include "5E590.h"
 #include "common.h"
@@ -123,7 +124,6 @@ void func_80051E34_52A34(Struct_52880 *arg0) {
 
 extern void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2);
 extern void func_80058A10_59610(Player *arg0);
-extern void func_80059A48_5A648(Player *arg0, s32 arg1);
 
 void func_80051E90_52A90(Struct_52880 *arg0) {
     GameState *alloc;
