@@ -124,3 +124,4 @@ s32 func_80059AC4_5A6C4(Player *arg0);
 void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
 u8 func_80027C44_28844(u8 arg0);
 u8 func_80027C60_28860(s32 arg0);
+u8 func_80027C7C_2887C(s32 arg0);
