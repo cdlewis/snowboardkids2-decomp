@@ -2903,7 +2903,41 @@ s32 func_800B71E4_A7094(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B724C_A70FC);
+s32 func_800B724C_A70FC(func_800B30B0_arg *arg0) {
+    GameState *alloc;
+    u8 flags;
+
+    alloc = (GameState *)getCurrentAllocation();
+    arg0->unk434 = arg0->unkB44;
+    arg0->unk438 = arg0->unkB48;
+    arg0->unk43C = arg0->unkB4C;
+    arg0->unkA8E = arg0->unkB74;
+    flags = arg0->unkBCE;
+
+    if (flags & 8) {
+        arg0->unkBCE = flags & 0xF7;
+        func_8006FDC8_709C8(arg0->unkBB8, 0xFF, 0x10);
+    }
+
+    if (arg0->unkBCE & 2) {
+        arg0->unkA94 = 0x1000;
+        arg0->unkB9C = 0;
+        arg0->unkB94 = 0;
+        arg0->unkBBF++;
+        arg0->unkB84 |= 0x200;
+        arg0->unkBC5++;
+        memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+        arg0->unkBC3 = 1;
+        func_8006FDC8_709C8(arg0->unkBB8, 0, 0x10);
+        if (arg0->unkBC7 == 0 && arg0->unkBC5 == alloc->unk74) {
+            func_8004D364_4DF64(arg0->unkBB8);
+        }
+    }
+
+    func_8005D308_5DF08(arg0, 0);
+
+    return 0;
+}
 
 s32 func_800B735C_A720C(func_800B30B0_arg *arg0) {
     arg0->unk434 = arg0->unkB44;
