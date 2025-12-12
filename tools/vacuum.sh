@@ -60,13 +60,14 @@ while true; do
 
   # Clean up git env before the next commit to ensure Claude doesn't accidentally commit broken code
 
+  # Check for and commit difficult_functions changes before reset
   if ! git diff --quiet -- "$DIFFICULT_FUNCTIONS" && [ -f "$DIFFICULT_FUNCTIONS" ]; then
     echo "Detected uncommitted difficult_functions change" | tee -a "tools/vacuum.log"
-    git add "$FILE"
-    git commit -m "Update $DIFFICULT_FUNCTIONS"
+    git add "$DIFFICULT_FUNCTIONS"
+    git commit -m "vacuum: update difficult_functions"
   fi
 
-  # Check for modified files before reset
+  # Check for other modified files before reset (difficult_functions already committed if it changed)
   modified_files=$(git diff --name-only)
   if [[ -n "$modified_files" ]]; then
     echo "Files to be reset:" | tee -a "tools/vacuum.log"
