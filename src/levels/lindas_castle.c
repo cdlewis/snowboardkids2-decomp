@@ -1,10 +1,14 @@
 #include "common.h"
 #include "displaylist.h"
+#include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "levels/lindas_castle.h"
 #include "task_scheduler.h"
 #include "rand.h"
+
+extern s32 isPlayerInRangeAndPull(void *a0, s32 a1, Player *a2);
+extern void func_800589CC_595CC(Player *arg0, void *arg1);
 extern void *func_80055E68_56A68(u8);
 extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);
@@ -61,7 +65,27 @@ void func_800BB2B0(func_800BB2B0_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/lindas_castle", func_800BB320_AB1D0);
+void func_800BB320_AB1D0(func_800BB2B0_arg *arg0) {
+    GameState *gs;
+    s32 pos[3];
+    s32 target[3];
+    s32 i;
+    Player *player;
+
+    gs = getCurrentAllocation();
+    memcpy(&pos[0], &arg0->targetPosition[0], 0xC);
+    pos[1] += 0x1C0000 + arg0->velocityY;
+
+    for (i = 0; i < gs->numPlayers; i++) {
+        player = &gs->players[i];
+        if (isPlayerInRangeAndPull(&pos[0], 0x1C0000, player) != 0) {
+            target[0] = ((player->worldPosX + player->unkAD4[0] - pos[0]) / 2) + pos[0];
+            target[1] = ((player->worldPosY + player->unkAD4[1] - pos[0]) / 2) + pos[1];
+            target[2] = ((player->worldPosZ + player->unkAD4[2] - pos[0]) / 2) + pos[2];
+            func_800589CC_595CC(&gs->players[i], &target[0]);
+        }
+    }
+}
 
 void func_800BB454_AB304(TaskArg_AB304 *task) {
     Allocation_AB304 *allocation;
