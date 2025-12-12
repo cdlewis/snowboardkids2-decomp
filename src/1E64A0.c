@@ -142,7 +142,7 @@ void *func_800B97C8_1E6878(cutsceneSys2Wait_exec_asset *arg0) {
     }
 
     if (*(s8 *)((u8 *)arg0->unk0 + 0xFF7) != 0) {
-        if (gControllerInputs & 0x8000) {
+        if (gControllerInputs & A_BUTTON) {
             if (arg0->unk9D != 0x64) {
                 arg0->unk9D = 0x64;
             } else {

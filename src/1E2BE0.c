@@ -137,7 +137,7 @@ void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
 
     switch (mode) {
         case 0:
-            if (gControllerInputs[3] & 0x2000) {
+            if (gControllerInputs[3] & Z_TRIG) {
                 arg0->unk34 = 0;
             } else {
                 temp = arg0->unk34;
@@ -167,7 +167,7 @@ void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
             break;
 
         case 1:
-            if (gControllerInputs[3] & 0x2000) {
+            if (gControllerInputs[3] & Z_TRIG) {
                 arg0->unk34 = 0;
             } else if (gButtonsPressed[3] & 0x10) {
                 temp = arg0->unk34;

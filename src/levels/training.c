@@ -158,7 +158,7 @@ void func_800BB724_B6004(func_800BB5CC_state *arg0) {
 
     func_8006D7B0_6E3B0(arg0->unk0, -0x68, -0x30, 0xD, s0_var, 1, GET_UNK15(arg0), arg0->unk17, s1_var, s0_var);
 
-    if (gControllerInputs & 0x8000) {
+    if (gControllerInputs & A_BUTTON) {
         temp_v0 = arg0->unkE + 1;
         arg0->unkE = temp_v0;
         table_ptr = D_800BCB94_B7474[arg0->unkC];

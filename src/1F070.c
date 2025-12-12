@@ -30,7 +30,7 @@ void func_8001E508_1F108(void) {
     allocation->unk1D8 = allocation->unk1D8 + 1;
     __asm__ volatile("" ::: "memory");
 
-    if (gControllerInputs & 0x8000) {
+    if (gControllerInputs & A_BUTTON) {
         allocation->unk1D8 = 60;
     }
 

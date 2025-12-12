@@ -71,7 +71,7 @@ void func_800223CC_22FCC(void) {
     switch (s0->unk1E6) {
         case 0:
             inputs = gControllerInputs;
-            if (inputs & 0x4000) {
+            if (inputs & B_BUTTON) {
                 func_800585C8_591C8(0x2E);
                 s0->unk1E6 = 0xA;
             } else {
@@ -89,7 +89,7 @@ void func_800223CC_22FCC(void) {
                         break;
                     }
                 }
-                if (gControllerInputs & 0x8000) {
+                if (gControllerInputs & A_BUTTON) {
                     s0->unk1E6 = 1;
                     s0->unk1E0 = 0;
                     func_80058220_58E20(0x2C, 0);
@@ -105,20 +105,20 @@ void func_800223CC_22FCC(void) {
             break;
         case 2:
             inputs = gControllerInputs;
-            if (inputs & 0x4000) {
+            if (inputs & B_BUTTON) {
                 goto common_exit;
-            } else if (inputs & 0x8000) {
+            } else if (inputs & A_BUTTON) {
                 s0->unk1E5 = 1;
                 func_80058220_58E20(0x2D, 0);
             }
             break;
         case 0xA:
             inputs = gControllerInputs;
-            if (inputs & 0x4000) {
+            if (inputs & B_BUTTON) {
             common_exit:
                 func_800585C8_591C8(0x2E);
                 s0->unk1E6 = 0;
-            } else if (inputs & 0x8000) {
+            } else if (inputs & A_BUTTON) {
                 s0->unk1E5 = 0x63;
             }
             break;

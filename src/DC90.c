@@ -94,7 +94,7 @@ void *func_8000D144_DD44(DC90TaskStruct *arg0) {
     } else {
         arg0->unk18 = temp_v0;
     }
-    if (gControllerInputs & 0x8000) {
+    if (gControllerInputs & A_BUTTON) {
         func_800585C8_591C8(45);
         arg0->unkC = 4;
     }

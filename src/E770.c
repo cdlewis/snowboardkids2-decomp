@@ -160,13 +160,13 @@ void func_8000E2AC_EEAC(E770_struct *arg0) {
     selection = arg0->unk1;
 
     // B button - exit
-    if (inputs & 0x4000) {
+    if (inputs & B_BUTTON) {
         arg0->unk0 = 5;
         return;
     }
 
     // A button - confirm
-    if (inputs & 0x8000) {
+    if (inputs & A_BUTTON) {
         func_8000DBA8_E7A8(arg0);
         if (arg0->unk1 == 5) {
             func_80057564_58164(10);
@@ -766,7 +766,7 @@ void func_8000FBBC_107BC(FD98_struct *arg0) {
     alloc = getCurrentAllocation();
     inputs = gControllerInputs;
 
-    if (inputs & 0x4000) {
+    if (inputs & B_BUTTON) {
         func_8000DC88_E888((E770_struct *)alloc, 0x90, 0x90, -1, -1);
         sound = 0x2E;
         arg0->unk0 = 3;
@@ -803,7 +803,7 @@ do_switch:
     return;
 
 button_check:
-    if (inputs & 0x8000) {
+    if (inputs & A_BUTTON) {
         arg0->unk0 = 3;
         func_8000DC88_E888((E770_struct *)alloc, 0x90, 0x90, -1, -1);
         sound = 0x2E;

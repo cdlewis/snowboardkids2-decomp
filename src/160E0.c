@@ -118,7 +118,7 @@ void func_800156AC_162AC(void) {
     input = gControllerInputs;
 
     if ((input & 0x20) != 0) {
-        if (((&gControllerInputs)[3] & 0x10) != 0) {
+        if (((&gControllerInputs)[3] & R_TRIG) != 0) {
             goto end;
         }
     }
@@ -210,7 +210,7 @@ case1_done_nav:
 
     temp = gControllerInputs;
 
-    if ((temp & 0x4000) != 0) {
+    if ((temp & B_BUTTON) != 0) {
         func_800585C8_591C8(0x2E);
         state->unk3BB = 0;
         state->unk3BD = 0;
