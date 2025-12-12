@@ -85,7 +85,26 @@ void func_8001BCC0_1C8C0(void) {
     func_800697F4_6A3F4(0xFF);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001BCDC_1C8DC);
+void func_8001BCDC_1C8DC(void) {
+    GameState *state = getCurrentAllocation();
+    s32 i;
+    s32 j;
+    u8 count;
+
+    for (i = 0; i < 9; i++) {
+        count = 0;
+
+        for (j = 0; j < D_800AFE8C_A71FC->unk8; j++) {
+            if (state->unk59A[j] == 1 || state->unk59A[j] == 3) {
+                count++;
+            }
+        }
+
+        if (count == 0) {
+            state->unk5B8[i] = 0;
+        }
+    }
+}
 
 void func_8001BD74_1C974(s8 *a0) {
     if (*a0 == 3) {
