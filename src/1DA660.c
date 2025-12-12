@@ -24,6 +24,11 @@ extern char D_800B115C_1DB6FC[];
 extern s32 gButtonsPressed;
 extern void *renderTextPalette;
 extern char D_800B11F0_1DB790[];
+extern s16 D_800B1160_1DB700[];
+extern s16 D_800B1162_1DB702[];
+extern void func_800014FC_20FC(SceneModel *, s32);
+extern void func_8000150C_210C(SceneModel *);
+
 typedef struct {
     u8 _pad0[0x2C];
     s32 unk2C;
@@ -31,7 +36,7 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    u8 _pad4[0x20];
+    Mat3x3Padded matrix;
     u16 unk24;
     s16 unk26;
     u8 unk28;
@@ -101,7 +106,9 @@ typedef struct {
 } func_800B100C_arg;
 
 void func_800B0DF8_1DB398(void *);
+void func_800B0598_1DAB38(func_800B08FC_arg *);
 void func_800B05DC_1DAB7C(func_800B08FC_arg *);
+void func_800B0964_1DAF04(func_800B08FC_arg *);
 void func_800B0638_1DABD8(func_800B08FC_arg *);
 void func_800B0720_1DACC0(func_800B08FC_arg *);
 void func_800B0A54_1DAFF4(void *);
@@ -119,7 +126,86 @@ INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0218_1DA7B8);
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0368_1DA908);
+void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
+    GameState *allocation;
+    Mat3x3Padded *matrix;
+    u16 modelIndex;
+    s32 pad[2];
+
+    allocation = getCurrentAllocation();
+    modelIndex = arg0->unk24 + 0x32;
+    arg0->unk28 = 0;
+
+    if (arg0->unk24 == 6) {
+        if (((s8 *)allocation)[0x5B2] == -1) {
+            arg0->unk28 = 2;
+        }
+    }
+
+    if (arg0->unk24 == 7) {
+        if (((s8 *)allocation)[0x5AE] == -1) {
+            arg0->unk28 = 1;
+            modelIndex = 0xF;
+        }
+    }
+
+    if (arg0->unk24 == 8) {
+        if (((s8 *)allocation)[0x5AD] == -1) {
+            arg0->unk28 = 1;
+            modelIndex = 0xF;
+        }
+    }
+
+    matrix = &arg0->matrix;
+    arg0->unk0 = func_8000198C_258C(modelIndex, allocation);
+    memcpy(matrix, identityMatrix, 0x20);
+
+    arg0->matrix.unk14 = D_800B1160_1DB700[arg0->unk24 * 2] << 16;
+    arg0->matrix.unk1C = D_800B1162_1DB702[arg0->unk24 * 2] << 16;
+
+    if (arg0->matrix.unk1C == (s32)0xFF900000) {
+        arg0->matrix.unk18 = (s32)0xFFE80000;
+    }
+
+    createYRotationMatrix(matrix, atan2Fixed(arg0->matrix.unk14, arg0->matrix.unk1C));
+
+    if (arg0->unk28 != 2) {
+        func_800014FC_20FC(arg0->unk0, arg0->matrix.unk18);
+        func_8000150C_210C(arg0->unk0);
+    }
+
+    if (arg0->unk24 == 0) {
+        createXRotationMatrix((s16(*)[3])matrix, 0x100);
+    } else if (arg0->unk24 == 4) {
+        arg0->matrix.unk1C = arg0->matrix.unk1C - 0x10;
+    } else if (arg0->unk24 == 7) {
+        if (arg0->unk28 == 0) {
+            arg0->matrix.unk1C = arg0->matrix.unk1C + 0x40000;
+        } else {
+            arg0->unk26 = 0x90;
+            goto after_unk26;
+        }
+    }
+
+    if (arg0->unk28 == 0) {
+        arg0->unk26 = 0;
+    } else {
+        arg0->unk26 = 0x90;
+    }
+
+after_unk26:
+    if (arg0->unk24 >= 7 && arg0->unk28 != 0) {
+        if (arg0->unk24 == 8) {
+            scaleMatrix(&arg0->matrix, 0x1000, 0x1000, 0x1000);
+            arg0->matrix.unk14 = arg0->matrix.unk14 + 0x80000;
+        } else {
+            scaleMatrix(&arg0->matrix, 0x800, 0x800, 0x800);
+        }
+    }
+
+    setCleanupCallback(func_800B0964_1DAF04);
+    setCallback(func_800B0598_1DAB38);
+}
 
 void func_800B0598_1DAB38(func_800B08FC_arg *arg0) {
     GameState *allocation = getCurrentAllocation();
@@ -131,7 +217,7 @@ void func_800B0598_1DAB38(func_800B08FC_arg *arg0) {
 }
 
 void func_800B05DC_1DAB7C(func_800B08FC_arg *arg0) {
-    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->_pad4);
+    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->matrix);
     if (arg0->unk28 != 2) {
         func_800021B8_2DB8(arg0->unk0, arg0->unk26);
         updateModelGeometry(arg0->unk0);
@@ -149,7 +235,7 @@ void func_800B0638_1DABD8(func_800B08FC_arg *arg0) {
     allocation = getCurrentAllocation();
 
     if (arg0->unk28 != 2) {
-        applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->_pad4);
+        applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->matrix);
         clearModelRotation(arg0->unk0);
         updateModelGeometry(arg0->unk0);
     }
