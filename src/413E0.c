@@ -5,8 +5,10 @@
 #include "68CF0.h"
 #include "6DE50.h"
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -29,7 +31,22 @@ extern s16 identityMatrix[];
 
 extern void func_80040870_41470(void);
 extern void func_8004106C_41C6C(void);
-void func_80040B4C_4174C(void);
+
+typedef struct {
+    u8 unk0[0x14];
+    s32 unk14;
+    u8 pad[0x24];
+    Mat3x3Padded unk3C;
+    u8 pad2[0x1C];
+    Mat3x3Padded unk78;
+    s32 unk98;
+    u8 pad3[0x18];
+    s16 unkB4;
+    s16 unkB6;
+    s16 unkB8;
+} func_80040B4C_4174C_arg;
+
+void func_80040B4C_4174C(func_80040B4C_4174C_arg *);
 void func_80040E00_41A00(func_80040E00_41A00_arg *);
 void func_80040F34_41B34(func_800407E0_413E0_arg *);
 void func_800413E0_41FE0(func_800407E0_413E0_arg *arg0);
@@ -165,7 +182,79 @@ void func_800409B4_415B4(void *arg0) {
     setCallback(func_80040B4C_4174C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80040B4C_4174C);
+void func_80040B4C_4174C(func_80040B4C_4174C_arg *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded *s0;
+    GameState *s2;
+    s32 i;
+
+    s2 = (GameState *)getCurrentAllocation();
+
+    switch (arg0->unkB6) {
+        case 0:
+            if (s2->unk63 != 3) {
+                goto block_else;
+            }
+            arg0->unkB6++;
+            func_80056B7C_5777C(&arg0->unk14, 0xA);
+            /* fallthrough */
+        case 1:
+            if (s2->gamePaused == 0) {
+                arg0->unkB4 -= 0x80;
+            }
+            if (arg0->unkB4 == -0x800) {
+                arg0->unkB8 = 0xA;
+                arg0->unkB6++;
+            }
+            createZRotationMatrix(&sp10, arg0->unkB4);
+            sp10.unk14 = 0;
+            sp10.unk18 = 0xC0000;
+            sp10.unk1C = 0;
+            func_8006B084_6BC84(&sp10, arg0, &arg0->unk3C);
+            break;
+        case 2:
+            if (s2->gamePaused == 0) {
+                arg0->unkB8--;
+            }
+            if (arg0->unkB8 == 0) {
+                arg0->unkB6++;
+            }
+            break;
+        case 3:
+            if (s2->gamePaused == 0) {
+                arg0->unkB4 += 0x100;
+            }
+            if (arg0->unkB4 == 0) {
+                arg0->unkB6++;
+            }
+            s0 = &arg0->unk3C;
+            createZRotationMatrix(s0, arg0->unkB4);
+            createZRotationMatrix(&sp10, arg0->unkB4);
+            sp10.unk14 = 0;
+            sp10.unk18 = 0xC0000;
+            sp10.unk1C = 0;
+            func_8006B084_6BC84(&sp10, arg0, s0);
+            break;
+        case 4:
+            if (s2->unk63 != 3) {
+                arg0->unkB6 = 0;
+            }
+            break;
+    }
+
+    if (s2->unk63 == 3) {
+        arg0->unk98 = (s32)func_80055E68_56A68(s2->memoryPoolId) + 0x70;
+    } else {
+    block_else:
+        arg0->unk98 = (s32)func_80055E68_56A68(s2->memoryPoolId) + 0x80;
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->unk3C);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->unk78);
+    }
+}
 
 void func_80040D48_41948(func_80040D48_41948_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
