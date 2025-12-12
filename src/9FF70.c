@@ -2710,7 +2710,48 @@ s32 func_800B5E90_A5D40(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B5FC4_A5E74);
+s32 func_800B5FC4_A5E74(func_800B30B0_arg *arg0) {
+    u8 temp;
+    s32 velZ;
+    s32 dist;
+
+    temp = arg0->unkBBF;
+    if (temp == 0) {
+        arg0->unk44C = arg0->unkAC8;
+        velZ = arg0->unkAD0;
+        arg0->unkBBF = temp + 1;
+        arg0->unk454 = velZ;
+        dist = isqrt64((s64)arg0->unk44C * arg0->unk44C + (s64)velZ * velZ);
+        if (dist > 0x60000) {
+            arg0->unk44C = (s64)arg0->unk44C * 0x60000 / dist;
+            arg0->unk454 = (s64)arg0->unk454 * 0x60000 / dist;
+        }
+        arg0->unk450 = 0x90000;
+        arg0->unkA8C = 0xFFFF;
+    }
+
+    arg0->unkB88 = 0x200;
+    arg0->unkB84 |= 0x20;
+    arg0->unk450 += 0xFFFF7000;
+    arg0->unk44C -= arg0->unk44C >> 6;
+    arg0->unk454 -= arg0->unk454 >> 6;
+
+    func_800B40D4_A3F84(arg0);
+    func_800B0300_A01B0(arg0);
+
+    if (func_8005D308_5DF08(arg0, 9) != 0) {
+        if ((arg0->unkB84 & 1) == 0) {
+            func_800B00D4_9FF84(arg0, 0x14);
+        }
+    }
+
+    if (randA() & 1) {
+        func_80050C00_51800(arg0);
+    }
+
+    func_8005D804_5E404(arg0, 3, 0);
+    return 0;
+}
 
 s32 func_800B6194_A6044(func_800B30B0_arg *arg0) {
     s16 angle;
