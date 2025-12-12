@@ -1672,7 +1672,54 @@ void func_800B4058_A3F08(func_800B30B0_arg *arg0) {
     arg0->unkB84 |= 0x800;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B40D4_A3F84);
+void func_800B40D4_A3F84(func_800B30B0_arg *arg0) {
+    s32 temp;
+    s32 delta;
+    s32 value;
+    s32 value2;
+    s32 temp_a2;
+    s32 var_v1;
+    s32 sp[4];
+
+    temp = (u16)arg0->unkA92 & 0x1FFF;
+    arg0->unkA92 = temp;
+    if (temp >= 0x1001) {
+        arg0->unkA92 = temp - 0x2000;
+    }
+    value = arg0->unkA92;
+    delta = -value, value2 = value;
+    if (delta >= 0x81) {
+        delta = 0x80;
+    }
+    if (delta < -0x80) {
+        delta = -0x80;
+    }
+    arg0->unkA92 = value2 + delta;
+
+    temp = (u16)arg0->unkA90 & 0x1FFF;
+    arg0->unkA90 = temp;
+    if (temp >= 0x1001) {
+        arg0->unkA90 = temp - 0x2000;
+    }
+    value = arg0->unkA90;
+    delta = -value, value2 = value;
+    if (delta >= 0x81) {
+        delta = 0x80;
+    }
+    if (delta < -0x80) {
+        delta = -0x80;
+    }
+    temp_a2 = arg0->unk9A4;
+    arg0->unkA90 = value2 + delta;
+    var_v1 = -temp_a2;
+    if (var_v1 > 0x8000) {
+        var_v1 = 0x8000;
+    }
+    if (var_v1 < -0x8000) {
+        var_v1 = -0x8000;
+    }
+    arg0->unk9A4 = temp_a2 + var_v1;
+}
 
 void func_800B419C_A404C(func_800B30B0_arg *arg0) {
     s16 temp;
