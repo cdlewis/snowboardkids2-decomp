@@ -162,16 +162,11 @@ typedef struct {
     /* 0x88 */ s16 unk88;
     u8 _pad8A[0x4];
     /* 0x8E */ s16 angle;
-    u8 padding3[0x4];
-    /* 0x94 */ s32 unk94;
-    /* 0x98 */ s32 unk98;
-    union {
-        /* 0x9C */ s32 unk9C;
-        struct {
-            s16 unk9C_hi;
-            /* 0x9E */ s16 unk9E;
-        } unk9C_parts;
-    } unk9C_u;
+    /* 0x90 */ u8 padding3[0x2];
+    s32 unk94;
+    s32 unk98;
+    s16 unk9C_low;
+    s16 unk9E;
     /* 0xA0 */ s32 unkA0;
     /* 0xA4 */ s32 unkA4;
 } CutsceneSlotData;

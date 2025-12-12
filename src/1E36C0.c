@@ -453,7 +453,63 @@ INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B844C_1E54FC);
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B8874_1E5924);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B8AC4_1E5B74);
+s32 func_800B8AC4_1E5B74(CutsceneSlotData *arg0, SceneModel *arg1) {
+    s32 angle_new;
+    s32 cosVal;
+    s32 sinVal;
+    s32 scaledCos;
+    s32 scaledSin;
+    s32 rotResult;
+    s32 *anglePtr = (s32 *)&arg0->unk9C_low;
+    s16 temp;
+
+    if (arg0->unk84 > 0 || arg0->unk86 == -1) {
+        sinVal = *anglePtr;
+        *anglePtr = (angle_new = sinVal + arg0->unk94);
+        cosVal = approximateCos((s16)angle_new);
+        scaledCos = cosVal << 2;
+        scaledCos = scaledCos >> 8;
+        sinVal = approximateSin(arg0->unk9E);
+        scaledSin = (sinVal << 2) >> 8;
+
+        // Store scaled results
+        arg0->unk2C = scaledCos * (arg0->unk98 >> 8);
+        arg0->unk04.unk20_u.unk20_s32 = scaledSin * (arg0->unk98 >> 8);
+
+        // Update target angle based on direction
+        if (arg0->unk94 > 0) {
+            angle_new = *anglePtr + 0x800;
+            arg0->unk7A = angle_new & 0x1FFF;
+        } else if (arg0->unk94 < 0) {
+            angle_new = *anglePtr - 0x800;
+            arg0->unk7A = angle_new & 0x1FFF;
+        }
+
+        // Update rotation and check result
+        arg0->unk78 += arg0->unk7C;
+        rotResult = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+
+        // Check for rotation completion
+        if ((arg0->unk7C > 0 && rotResult < 0) || (arg0->unk7C < 0 && rotResult > 0)) {
+            arg0->unk7C = 0;
+            arg0->unk78 = arg0->unk7A;
+        } else if (arg0->unk7C == 0) {
+            arg0->unk78 = arg0->unk7A;
+        }
+    } else {
+        temp = arg1->unk38;
+        if (temp != -1) {
+            func_800021B8_2DB8(arg1, temp);
+        }
+        arg0->unk0.bytes[0] = 0;
+    }
+
+    if (arg0->unk84 > 0) {
+        arg0->unk84--;
+    }
+
+    return 1;
+}
 
 void func_800B8C3C_1E5CEC(CutsceneSlotData *arg0) {
     s32 temp;
