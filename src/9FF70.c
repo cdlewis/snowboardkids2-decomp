@@ -153,7 +153,6 @@ typedef struct {
     u8 unkBE4;
 } func_800B30B0_arg;
 
-extern void *func_8005DC60_5E860(s32 arg0);
 extern void *loadAssetByIndex_5E990(s32 arg0);
 extern s32 func_8005D308_5DF08(func_800B30B0_arg *, s32);
 extern void func_8004D890_4E490(u8, s16);

@@ -126,5 +126,6 @@ void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
 u8 func_80027C44_28844(u8 arg0);
 u8 func_80027C60_28860(s32 arg0);
 u8 func_80027C7C_2887C(s32 arg0);
+void *func_8005DC60_5E860(s32 index);
 MemoryAllocatorNode *func_8005DE04_5EA04(s16 groupIndex, s16 entityIndex);
 MemoryAllocatorNode *func_8005DE30_5EA30(s16 groupIndex, s16 entityIndex);
