@@ -25,7 +25,6 @@ extern void *D_8009A760_9B360;
 extern void *D_8009A770_9B370;
 extern Mat3x3Padded D_8009A8B0_9B4B0;
 extern s32 gFrameCounter;
-extern void func_80041810_42410(void *);
 
 void func_80042F2C_43B2C(void **);
 
@@ -84,14 +83,35 @@ typedef struct {
 } Func41570State;
 
 typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+} Func4179CUnk20;
+
+typedef struct {
+    u8 _pad0[0x434];
+    s32 unk434;        /* 0x434 */
+    s32 unk438;        /* 0x438 */
+    s32 unk43C;        /* 0x43C */
+    u8 _pad440[0x748]; /* 0x440 to 0xB88 */
+    s32 unkB88;        /* 0xB88 */
+    u8 _padB8C[0x2C];  /* 0xB8C to 0xBB8 */
+    u8 unkBB8;         /* 0xBB8 */
+    u8 _padBB9[0x15];  /* 0xBB9 to 0xBCE */
+    u8 unkBCE;         /* 0xBCE */
+} Func4179CUnk3C;
+
+typedef struct {
     u8 pad0[0x20];
-    void *unk20;
+    Func4179CUnk20 *unk20;
     void *unk24;
     void *unk28;
     s32 unk2C;
-    u8 pad30[0xC];
-    void *unk3C;
-    s32 unk40;
+    s32 unk30;     /* 0x30 */
+    u8 pad34[0x8]; /* 0x34 */
+    Func4179CUnk3C *unk3C;
+    s32 unk40; /* 0x40 */
 } Func4179CArg;
 
 typedef struct {
@@ -119,6 +139,12 @@ struct Func42D54Arg {
 };
 
 void func_800419AC_425AC(Func4179CArg *);
+void func_80041A24_42624(Func41A60Arg *);
+void func_80041A60_42660(Func41A60Arg *);
+void func_80041A9C_4269C(Func41A60Arg *);
+
+extern s32 identityMatrix[];
+s32 func_8005B9E4_5C5E4(s32 *, s32, s32, u8);
 
 typedef struct {
     u8 _pad0[0x4];
@@ -421,9 +447,12 @@ void func_8004175C_4235C(void *arg0) {
     }
 }
 
+void func_80041810_42410(Func4179CArg *);
+void func_80041E10_42A10(s32 *);
+
 void func_8004179C_4239C(Func4179CArg *arg0) {
     getCurrentAllocation();
-    arg0->unk20 = &D_8009A6C0_9B2C0;
+    arg0->unk20 = (Func4179CUnk20 *)&D_8009A6C0_9B2C0;
     arg0->unk24 = loadAsset_B7E70();
     arg0->unk28 = loadAsset_216290();
     arg0->unk2C = 0;
@@ -433,7 +462,51 @@ void func_8004179C_4239C(Func4179CArg *arg0) {
     setCallbackWithContinue(func_80041810_42410);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041810_42410);
+void func_80041810_42410(Func4179CArg *arg0) {
+    s32 sp10[3];
+    s32 temp_v1_2;
+    s16 temp_a1;
+    s32 var_s0;
+
+    if (!(arg0->unk3C->unkB88 & 0x40)) {
+        sp10[0] = arg0->unk3C->unk434;
+        sp10[1] = arg0->unk3C->unk438 + 0x100000;
+        sp10[2] = arg0->unk3C->unk43C;
+        func_80041E10_42A10(sp10);
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    temp_v1_2 = arg0->unk40;
+    if (temp_v1_2 != 0x2000) {
+        arg0->unk40 = temp_v1_2 + 0x400;
+        memcpy(arg0, identityMatrix, 0x20);
+        temp_a1 = *(s16 *)((u8 *)arg0 + 0x42);
+        scaleMatrix((Mat3x3Padded *)arg0, temp_a1, temp_a1, temp_a1);
+    }
+
+    sp10[0] = arg0->unk3C->unk434;
+    sp10[1] = arg0->unk3C->unk438;
+    sp10[2] = arg0->unk3C->unk43C;
+    sp10[1] = sp10[1] + 0xFFFE0000;
+
+    if (func_8005B9E4_5C5E4(sp10, 0x180000, 0x320000, arg0->unk3C->unkBB8) != 0) {
+        arg0->unk3C->unkBCE |= 1;
+    }
+    arg0->unk30 = 0;
+
+    for (var_s0 = 0; var_s0 < 4; var_s0++) {
+        if (arg0->unk20->unk4 != 0) {
+            debugEnqueueCallback((u16)var_s0, 1, func_80041A24_42624, arg0);
+        }
+        if (arg0->unk20->unk8 != 0) {
+            debugEnqueueCallback((u16)var_s0, 3, func_80041A60_42660, arg0);
+        }
+        if (arg0->unk20->unkC != 0) {
+            debugEnqueueCallback((u16)var_s0, 5, func_80041A9C_4269C, arg0);
+        }
+    }
+}
 
 void func_800419AC_425AC(Func4179CArg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
