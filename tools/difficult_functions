@@ -284,3 +284,5 @@ func_80037D18_38918 10 91.489%
 func_80027400_28000 (31 attempts, 99.753%) -- Instruction scheduling mismatch: compiler generates 'move s0,s3' before 'move s4,v0' instead of after, stack frame and register allocation otherwise match perfectly
 
 func_8002BCF0_2C8F0 (27 attempts, 97.235%) -- Register allocation mismatch: compiler assigns s0 for arg0 instead of s3, s1 for elem instead of s0, s3 for loop counter i instead of s1. Stack frame size and control flow match perfectly. Also has addu operand ordering difference (addu v1,s4,v1 vs addu v1,v1,s4) and xori/sltiu/and sequence ordering.
+
+func_80041B18_42718 (26 attempts, 93.676%) -- Prologue instruction scheduling mismatch: compiler generates sw s3/lui s3/addiu s3/sw s2/move s2/sw s0/move s0 instead of sw s0/move s0/sw s3/lui s3/addiu s3/sw s2/move s2. Function body from 42758 onwards matches perfectly. Register allocation and control flow are correct, only prologue register save ordering differs.
