@@ -473,7 +473,7 @@ s32 func_80053078_53C78(s32 arg0, s32 arg1) {
 
 void func_80053784_54384(Struct_52880 *arg0);
 void func_80053104_53D04(Struct_52880 *arg0);
-extern void func_80053254_53E54(void);
+void func_80053254_53E54(Struct_52880 *arg0);
 
 void func_800530BC_53CBC(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
@@ -535,7 +535,71 @@ void func_80053160_53D60(Struct_52880 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80053254_53E54);
+extern void func_80053434_54034(void);
+
+void func_80053254_53E54(Struct_52880 *arg0) {
+    Alloc_52880 *alloc;
+    s16 playerIdx;
+    s32 temp_v0;
+    s32 temp_v1;
+    s32 temp_a0;
+    s32 temp_a1;
+    s32 temp_a2;
+    s32 temp_a3;
+    s32 i;
+    s32 *s0;
+
+    alloc = getCurrentAllocation();
+
+    playerIdx = arg0->unk42;
+
+    if (alloc->unk10[playerIdx].unkBD9 == 0) {
+        transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->unk4);
+
+        playerIdx = arg0->unk42;
+        transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->velY);
+    } else {
+        transformVector(&alloc->unk48[48], &alloc->unk10[playerIdx].unk74, &arg0->unk4);
+
+        playerIdx = arg0->unk42;
+        transformVector(&alloc->unk48[54], &alloc->unk10[playerIdx].unk74, &arg0->velY);
+    }
+
+    temp_v0 = arg0->unk4;
+    temp_a1 = arg0->velY;
+    temp_v1 = arg0->unk8;
+    temp_a2 = arg0->velZ;
+    temp_a0 = arg0->unkC;
+    temp_a3 = arg0->velX;
+    playerIdx = arg0->unk42;
+    arg0->velY = temp_v0 - temp_a1;
+    arg0->velZ = temp_v1 - temp_a2;
+    arg0->velX = temp_a0 - temp_a3;
+
+    playerIdx = arg0->unk42;
+    arg0->unk40 = alloc->unk10[playerIdx].unkB94;
+    arg0->unk48 = 0xF0;
+
+    playerIdx = arg0->unk42;
+    if (alloc->unk10[playerIdx].unkBD9 != 0) {
+        arg0->unk48 = 0x78;
+    }
+
+    s0 = &arg0->unk4;
+    func_80056B7C_5777C(s0, 0x10);
+    setCallback(func_80053434_54034);
+    func_80053160_53D60(arg0);
+
+    if (arg0->unk4E != 0) {
+        func_80050ECC_51ACC(s0);
+        func_80056B7C_5777C(s0, 0xD);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80053434_54034);
 
