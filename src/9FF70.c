@@ -275,7 +275,6 @@ void func_800B12C0_A1170(func_800B00D4_arg *arg0) {
     D_800BAAD4_AA984[arg0->unkBBE](arg0);
 }
 
-extern void func_80058BB0_597B0(func_800B30B0_arg *);
 extern void func_8005D180_5DD80(func_800B30B0_arg *, s32);
 
 s32 func_800B12F0_A11A0(func_800B30B0_arg *arg0) {
@@ -285,7 +284,7 @@ s32 func_800B12F0_A11A0(func_800B30B0_arg *arg0) {
         arg0->unkAAC = 0;
         if (arg0->unkBBF != 0) {
             if (arg0->unkB8C < 9) {
-                func_80058BB0_597B0(arg0);
+                func_80058BB0_597B0((Player *)arg0);
             }
         }
         func_800B00E4_9FF94(arg0);
