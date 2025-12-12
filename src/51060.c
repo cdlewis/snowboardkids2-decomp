@@ -94,6 +94,23 @@ typedef struct {
 } func_80051688_52288_arg;
 
 typedef struct {
+    Player *unk0;
+    DataTable_19E80 *unk4;
+    loadAssetMetadata_arg unk8;
+    u8 padding24[0x4];
+    loadAssetMetadata_arg unk28;
+    u8 padding44[0x4];
+    s32 unk48;
+    s32 unk4C;
+    s32 unk50;
+    s32 unk54;
+    s32 unk58;
+    s32 unk5C;
+    s16 unk60;
+    s16 unk62;
+} func_8005152C_5212C_arg;
+
+typedef struct {
     u8 padding[0xC0];
     MemoryAllocatorNode *unkC0;
 } func_8005186C_5246C_arg;
@@ -616,7 +633,39 @@ INCLUDE_ASM("asm/nonmatchings/51060", func_8005127C_51E7C);
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80051348_51F48);
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_8005152C_5212C);
+void func_8005152C_5212C(func_8005152C_5212C_arg *arg0) {
+    GameState *gs;
+    s32 i;
+
+    gs = (GameState *)getCurrentAllocation();
+    loadAssetMetadataByIndex((loadAssetMetadataByIndex_arg *)&arg0->unk8, arg0->unk4, arg0->unk60 + 0x61, arg0->unk62);
+
+    arg0->unk28.data_ptr = arg0->unk8.data_ptr;
+    arg0->unk28.index_ptr = arg0->unk8.index_ptr;
+    arg0->unk28.unk18 = arg0->unk8.unk18;
+    arg0->unk28.unk19 = arg0->unk8.unk19;
+
+    arg0->unk8.unk4 = arg0->unk48 + arg0->unk0->worldPosX;
+    arg0->unk8.unk8 = arg0->unk4C + arg0->unk0->worldPosY;
+    arg0->unk8.unkC = arg0->unk50 + arg0->unk0->worldPosZ;
+    arg0->unk28.unk4 = arg0->unk54 + arg0->unk0->worldPosX;
+    arg0->unk28.unk8 = arg0->unk58 + arg0->unk0->worldPosY;
+    arg0->unk28.unkC = arg0->unk5C + arg0->unk0->worldPosZ;
+
+    for (i = 0; i < 4; i++) {
+        func_80067EDC_68ADC(i, &arg0->unk8);
+        func_80067EDC_68ADC(i, &arg0->unk28);
+    }
+
+    if (gs->gamePaused == 0) {
+        arg0->unk8.unk1A -= 0x14;
+        arg0->unk28.unk1A -= 0x14;
+        arg0->unk60++;
+        if (arg0->unk60 == 8) {
+            func_80069CF8_6A8F8();
+        }
+    }
+}
 
 void func_80051688_52288(func_80051688_52288_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
