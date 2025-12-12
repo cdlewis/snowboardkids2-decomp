@@ -1,6 +1,4 @@
 func_80048F0C_49B0C 4 100%
-func_8006FAA4_706A4 10 67.530%
-func_8004CEC4_4DAC4 3 100%
 func_80034750_35350 14 87.781%
 isPlayerInRangeAndPull 20 83.201%
 func_8002BAEC_2C6EC 20 59.320%
@@ -235,7 +233,6 @@ func_80054D70_55970 15 98.974% -- Register allocation mismatch: compiler assigns
 func_800BB2B0_B4BB0 30 99.054% -- Register allocation mismatch: compiler assigns state to s3 and dst to s2, target uses s2 for state and s3 for dst
 func_80026FF4_27BF4 30 99.184% -- Register allocation mismatch: compiler assigns arg0 to s0 and dmaResult to s1, target uses s1 for arg0 and s0 for dmaResult
 func_80026028_26C28 20 88.804% -- Register allocation mismatch: compiler uses a3/a2/a1 for DDBE/DDC2/counter instead of a2/a1/a0, adds intermediate pointer a0=s0+4, lhu instead of lh for DDC2
-func_800B724C_A70FC 30 99.412% -- Register allocation mismatch: compiler assigns B44/B48/B4C to a0/a1/a2 and B74 to v1, target uses v1/a0/a1 for B44/B48/B4C and a2 for B74
 func_8004E2D8_4EED8 27 97.731
 func_800BBCFC_AE0BC 35 98.000% -- Register allocation mismatch: compiler loads unk78 directly into v1 with nop delay slot, target loads into v0 then moves to v1 in delay slot
 func_80024810_25410 10 ~0% -- Register allocation mismatch: compiler does not allocate localPtr to s1 register, uses addiu+sp instead of move from saved register, and generates sll s0,s0,0x14 instead of and s0,s0,v0 for adjustment calculation
@@ -282,3 +279,4 @@ func_8006BDBC_6C9BC (25 attempts, 91.946%) -- Compiler optimization mismatch: GC
 func_8006BE4C_6CA4C (30 attempts, 95.857%) -- Register allocation mismatch: compiler assigns row pointer to t0 and inner counter to t2, target uses t2 for row and t1 for counter. Third dot product term load order swapped (col before row vs row before col). Similar to func_8006BDBC: GCC array optimization cannot be disabled.
 func_80073E20_74A20 (22 attempts, 100% in isolation) -- Matched perfectly in isolated environment (base_22.c), but fails integration due to register allocation mismatch: compiler uses a0 directly without move a2,a0 copy at function start when compiled within player.c context. Struct type difference (s16 vs u16 for cont_vol_repeat_count) in full build context affects code generation.
 func_80035408_36008 (18 attempts, 87.900%) -- Register allocation mismatch: compiler uses s2 for arg0 instead of s3, missing s6 register allocation for unused variable (li s6,0xfffe in delay slot), shift source register (srl s0,a0,0xc vs srl v0,a2,0xc), branch pattern (beqzl vs bnez/move delay slot), u8 parameter masking (andi v0,s5,0xff before sw vs direct sw s5)
+func_80037D18_38918 10 91.489%
