@@ -1,6 +1,7 @@
 #include "33FE0.h"
 #include "10AD0.h"
 #include "36B80.h"
+#include "3E160.h"
 #include "56910.h"
 #include "6E840.h"
 #include "common.h"
@@ -9,7 +10,11 @@
 
 extern void func_80034D58_35958(void);
 extern void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
+extern s16 func_8000B7FC_C3FC(void *);
 extern s16 D_8008F2C4_8FEC4[];
+extern void *D_8008F7CC_903CC[];
+extern void *D_8008F7DC_903DC;
+extern void *D_8008F7E0_903E0;
 
 USE_ASSET(_459310);
 USE_ASSET(_41A1D0);
@@ -70,7 +75,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ s16 unk0;
     /* 0x02 */ s16 unk2;
-    /* 0x04 */ u8 pad4[0x4];
+    /* 0x04 */ void *unk4;
     /* 0x08 */ void *unk8;
     /* 0x0C */ s16 unkC;
     /* 0x0E */ s16 unkE;
@@ -78,7 +83,7 @@ typedef struct {
     /* 0x11 */ u8 pad11[0x3];
     /* 0x14 */ s16 unk14;
     /* 0x16 */ s16 unk16;
-    /* 0x18 */ u8 pad18[0x4];
+    /* 0x18 */ void *unk18;
     /* 0x1C */ void *unk1C;
     /* 0x20 */ s16 unk20;
     /* 0x22 */ s16 unk22;
@@ -89,10 +94,14 @@ typedef struct {
     /* 0x000 */ u8 pad0[0xABE];
     /* 0xABE */ u16 unkABE;
     /* 0xAC0 */ u16 unkAC0;
-    /* 0xAC2 */ u8 padAC2[0x2];
+    /* 0xAC2 */ u16 unkAC2;
     /* 0xAC4 */ u16 unkAC4;
     /* 0xAC6 */ u16 unkAC6;
-    /* 0xAC8 */ u8 padAC8[0xE];
+    /* 0xAC8 */ u8 unkAC8;
+    /* 0xAC9 */ u8 unkAC9;
+    /* 0xACA */ u8 unkACA;
+    /* 0xACB */ u8 unkACB;
+    /* 0xACC */ u8 padACC[0xA];
     /* 0xAD6 */ u8 unkAD6;
 } AllocationStruct;
 
@@ -104,7 +113,7 @@ void func_80034A94_35694(Func34574Arg *arg0);
 void func_8003513C_35D3C(Func350ACArg *arg0);
 void func_80035234_35E34(Func34574Arg *arg0);
 void func_80034640_35240(Func34574Arg *arg0);
-void func_800344A8_350A8(void *);
+void func_800344A8_350A8(Func343FCArg *arg0);
 void func_80033E08_34A08(Func34574Arg *arg0);
 
 void func_800333E0_33FE0(Func33FE0Arg *arg0) {
@@ -267,7 +276,63 @@ void func_800343FC_34FFC(Func343FCArg *arg0) {
     setCallback(func_800344A8_350A8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_800344A8_350A8);
+void func_800344A8_350A8(Func343FCArg *arg0) {
+    AllocationStruct *alloc;
+    void *temp_a0;
+    s16 temp_a2;
+    u16 temp_v1;
+    u16 temp_v0;
+    s16 var_v0;
+
+    alloc = getCurrentAllocation();
+
+    if ((alloc->unkAC6 < 0x3D) || (alloc->unkAC9 != 0)) {
+        temp_a0 = D_8008F7CC_903CC[alloc->unkACB];
+        arg0->unk4 = temp_a0;
+        temp_a2 = ((0x120 - func_8000B7FC_C3FC(temp_a0)) / 2) - 0x90;
+        arg0->unk0 = temp_a2;
+        func_80035260_35E60(arg0->unk8, arg0->unk4, temp_a2, arg0->unk2, arg0->unkC, arg0->unkE, arg0->unk10, 8, 0);
+
+        temp_v1 = alloc->unkAC6;
+        if (temp_v1 >= 6) {
+            if (temp_v1 >= 0xA) {
+                arg0->unk18 = D_8008F7E0_903E0;
+            } else {
+                arg0->unk18 = D_8008F7DC_903DC;
+            }
+
+            temp_v0 = alloc->unkAC6;
+            if (temp_v0 == 8 || temp_v0 == 0xB) {
+                var_v0 = alloc->unkAC2 + 0xA;
+            } else {
+                var_v0 = alloc->unkAC0 + 0xA;
+            }
+            arg0->unk16 = var_v0;
+
+            if ((u32)(alloc->unkAC6 - 9) < 2U) {
+                if (alloc->unkAC4 & 1) {
+                    arg0->unk24 = 0xFF;
+                } else {
+                    arg0->unk24 = 4;
+                }
+            } else {
+                arg0->unk24 = 4;
+            }
+
+            func_80035260_35E60(
+                arg0->unk1C,
+                arg0->unk18,
+                arg0->unk14,
+                arg0->unk16,
+                arg0->unk20,
+                arg0->unk22,
+                arg0->unk24,
+                8,
+                0
+            );
+        }
+    }
+}
 
 void func_80034640_35240(Func34574Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
