@@ -313,7 +313,46 @@ void func_800B7B70_1E4C20(CutsceneSlotData *arg0, s32 *arg1, s16 arg2, s32 arg3,
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7C48_1E4CF8);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B826C_1E531C);
+extern s32 func_800B7C48_1E4CF8(CutsceneSlotData *, SceneModel *);
+
+s16 func_800B826C_1E531C(CutsceneSlotData *arg0, SceneModel *arg1) {
+    s16 temp_v0;
+    s16 temp_a0;
+    s32 var_s2;
+
+    var_s2 = 0;
+    if (arg0->unk84 > 0) {
+        arg0->unk04.unk20_u.unk20_s32 += arg0->unk3C;
+        arg0->unk28 += arg0->unk40;
+        arg0->unk2C += arg0->unk44;
+        arg0->unk78 += arg0->unk7C;
+
+        temp_v0 = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+        temp_a0 = arg0->unk7C;
+
+        if (((temp_a0 > 0) & (temp_v0 < 0)) || ((temp_a0 < 0) & (temp_v0 > 0))) {
+            arg0->unk7C = 0;
+            arg0->unk78 = arg0->unk7A;
+        } else if (temp_a0 == 0) {
+            arg0->unk78 = arg0->unk7A;
+        }
+
+        var_s2 = 1;
+        arg0->unk84--;
+    } else {
+        arg0->unk3C = 0;
+        arg0->unk40 = 0;
+        arg0->unk44 = 0;
+        arg0->unk7C = 0;
+        arg0->unk78 = arg0->unk7A;
+
+        if ((arg1->unk38 != -1) && (arg1->unk3E <= 0)) {
+            func_800021B8_2DB8(arg1, arg1->unk38);
+        }
+        arg0->unk0.Two = 0;
+    }
+    return var_s2 | func_800B7C48_1E4CF8(arg0, arg1);
+}
 
 s32 func_800B83B8_1E5468(CutsceneSlotData *arg0, StateEntry *arg1) {
     s32 result;
