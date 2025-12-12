@@ -1,5 +1,6 @@
 #include "56910.h"
 #include "common.h"
+#include "displaylist.h"
 #include "geometry.h"
 #include "rand.h"
 #include "task_scheduler.h"
@@ -22,7 +23,11 @@ typedef struct {
     void *unk54;
 } func_800BB7D0_arg;
 
-extern void func_800BB890_B5190(void);
+extern u8 D_800BBB68_B5468[];
+extern u8 D_800BBB6C_B546C[];
+extern u8 D_800BBB88_B5488[];
+extern u8 D_800BBB8C_B548C[];
+
 void func_800BBB18_B5418(func_800BB814_B5114_arg *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", func_800BB2B0_B4BB0);
@@ -55,6 +60,22 @@ void func_800BB7D0_B50D0(func_800BB7D0_arg *arg0) {
     arg0->unk54 = freeNodeMemory(arg0->unk54);
 }
 
+extern u16 D_800BBBA8_B54A8[];
+extern s16 identityMatrix[];
+
+typedef struct {
+    DisplayListObject unk0;
+    s32 unk3C;
+    s32 unk40;
+    s32 unk44;
+    s32 unk48;
+    s16 unk4C;
+    u16 unk4E;
+} func_800BBA34_B5334_arg;
+
+void func_800BB890_B5190(func_800BBA34_B5334_arg *arg0);
+void func_800BBA34_B5334(func_800BBA34_B5334_arg *arg0);
+
 void func_800BB814_B5114(func_800BB814_B5114_arg *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
@@ -67,18 +88,48 @@ void func_800BB814_B5114(func_800BB814_B5114_arg *arg0) {
     setCallback(func_800BB890_B5190);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", func_800BB890_B5190);
+void func_800BB890_B5190(func_800BBA34_B5334_arg *arg0) {
+    s32 offset;
+    s32 dx;
+    s32 dy;
+    s32 endX;
+    s32 endY;
+    s32 startX;
+    s32 startY;
+    s32 temp;
 
-extern u16 D_800BBBA8_B54A8[];
-typedef struct {
-    DisplayListObject unk0;
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    s16 unk4C;
-    u16 unk4E;
-} func_800BBA34_B5334_arg;
+    if (arg0->unk4C != 0) {
+        arg0->unk4C = arg0->unk4C - 1;
+        return;
+    }
+
+    memcpy(arg0, identityMatrix, 0x20);
+
+    offset = (randA() & 3) * 8;
+
+    endX = *(s32 *)(D_800BBB88_B5488 + offset);
+    startX = *(s32 *)(D_800BBB68_B5468 + offset);
+    arg0->unk40 = (endX - startX) / 60;
+
+    endY = *(s32 *)(D_800BBB8C_B548C + offset);
+    startY = *(s32 *)(D_800BBB6C_B546C + offset);
+    arg0->unk44 = (endY - startY) / 60;
+
+    arg0->unk4E = func_8006D21C_6DE1C(*(s32 *)(D_800BBB88_B5488 + offset), *(s32 *)(D_800BBB8C_B548C + offset),
+                                       *(s32 *)(D_800BBB68_B5468 + offset), *(s32 *)(D_800BBB6C_B546C + offset));
+
+    dx = arg0->unk40;
+    dy = arg0->unk44;
+
+    temp = *(s32 *)(D_800BBB68_B5468 + offset);
+    arg0->unk0.unk10.position.Y = 0x243D1AC3;
+    arg0->unk0.unk10.position.X = temp;
+    arg0->unk0.unk10.position.Z = *(s32 *)(D_800BBB6C_B546C + offset);
+
+    arg0->unk48 = isqrt64((s64)dx * (s64)dx + (s64)dy * (s64)dy);
+    arg0->unk3C = 0x300000;
+    setCallbackWithContinue(func_800BBA34_B5334);
+}
 
 void func_800BBA34_B5334(func_800BBA34_B5334_arg *arg0) {
     int new_var;
