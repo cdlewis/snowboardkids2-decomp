@@ -1,4 +1,5 @@
 #include "3E160.h"
+#include "4CD70.h"
 #include "51060.h"
 #include "56910.h"
 #include "5AA90.h"
@@ -154,7 +155,6 @@ typedef struct {
 } func_800B30B0_arg;
 
 extern s32 func_8005D308_5DF08(func_800B30B0_arg *, s32);
-extern void func_8004D890_4E490(u8, s16);
 extern void func_8004FCF0_508F0(s16);
 extern void func_80059A88_5A688(func_800B30B0_arg *, s16);
 
@@ -807,7 +807,7 @@ s32 func_800B2C18_A2AC8(func_800B30B0_arg *arg0) {
     if (arg0->unkBAC != 0) {
         func_80059A48_5A648((Player *)arg0, arg0->unkBAC);
         if (arg0->unkBC7 == 0) {
-            func_8004D890_4E490(arg0->unkBB8, arg0->unkBAC);
+            func_8004D890_4E490(arg0->unkBB8, (void *)arg0->unkBAC);
 
             var_v1 = arg0->unkBAC;
             if (var_v1 < 0x96) {
