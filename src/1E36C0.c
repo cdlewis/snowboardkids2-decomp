@@ -1,5 +1,11 @@
 #include "1E36C0.h"
+#include "1E2BE0.h"
 #include "geometry.h"
+
+extern s8 D_800AB044_A23B4;
+extern s8 D_800AB048_A23B8;
+extern s32 gButtonsPressed;
+extern s32 gControllerInputs;
 
 s16 func_800B6610_1E36C0(cutsceneSys2Wait_exec_asset *arg0) {
     return arg0->unk86;
@@ -59,7 +65,52 @@ void func_800B68F4_1E39A4(unk_func_800B68F4_1E39A4 *arg0, s32 arg1, s32 arg2, s3
     arg0->unk5C = arg3;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6910_1E39C0);
+void func_800B6910_1E39C0(CutsceneSlotData *arg0, func_800B5E64_1E2F14_arg0 *arg1) {
+    s32 temp_s0;
+    s32 temp_v0;
+    s32 temp_a0;
+    s32 temp_v1;
+    u16 temp_angle;
+    s16 *p80;
+    s16 *p82;
+
+    if (((gButtonsPressed & 0x30) == 0x30) && (gControllerInputs & 0x2000)) {
+        temp_angle = (arg0->unk78 + 0x800) & 0x1FFF;
+        arg0->unk78 = temp_angle;
+        arg0->unk7A = temp_angle;
+        return;
+    }
+    if ((gButtonsPressed & 0x2010) == 0x2010) {
+        arg0->unk28 = 0;
+        arg0->unk80 = 0;
+        arg0->unk82 = 0;
+        return;
+    }
+    if (gButtonsPressed & 0x2000) {
+        arg0->unk78 = arg0->unk78 - (D_800AB048_A23B8 * 4);
+        return;
+    }
+    if (gButtonsPressed & 0x10) {
+        arg0->unk28 = arg0->unk28 + (D_800AB044_A23B4 << 12);
+        return;
+    }
+    if (gButtonsPressed & 0x20) {
+        p80 = &arg0->unk80;
+        *p80 = (u16)(*p80 + (D_800AB044_A23B4 * 4));
+        p82 = &arg0->unk82;
+        *p82 = (u16)(*p82 + (D_800AB048_A23B8 * 4));
+        return;
+    }
+
+    temp_s0 = approximateSin(arg1->unk22) * 4;
+    temp_v0 = (approximateCos(arg1->unk22) * 4) >> 8;
+    temp_a0 = D_800AB048_A23B8 * 16;
+    temp_v1 = -D_800AB044_A23B4 * 16;
+    temp_s0 = temp_s0 >> 8;
+
+    arg0->unk04.unk20_u.unk20_s32 = arg0->unk04.unk20_u.unk20_s32 + ((temp_v0 * temp_a0) + (temp_s0 * temp_v1));
+    arg0->unk2C = arg0->unk2C + ((-temp_s0 * temp_a0) + (temp_v0 * temp_v1));
+}
 
 extern s16 func_800B6618_1E36C8(CutsceneSlotData *, s16, s16, s16);
 
