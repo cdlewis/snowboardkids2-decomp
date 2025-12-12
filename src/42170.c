@@ -1992,7 +1992,69 @@ void func_80044D1C_4591C(Func44D1CArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_80044DB0_459B0);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044EC4_45AC4);
+typedef struct {
+    void *unk0;     /* 0x00 */
+    u8 _pad4[0x4];  /* 0x04 */
+    s8 *entries;    /* 0x08 */
+    u8 _pad10[0x6]; /* 0x0C */
+    u8 _pad12[0x4]; /* 0x12 */
+    s16 entryCount; /* 0x16 */
+} Func44EC4Arg;
+
+extern void func_80045054_45C54(Func44EC4Arg *);
+
+void func_80044EC4_45AC4(Func44EC4Arg *arg0) {
+    s32 i;
+    GameState *allocation;
+    s8 *temp_a0;
+    Player *player;
+    s8 *temp_v1;
+    u8 flags;
+    s32 offset;
+    u16 val;
+    s32 pad[2];
+    s32 three;
+    s32 nine;
+
+    allocation = (GameState *)getCurrentAllocation();
+    i = 0;
+    if (arg0->entryCount > 0) {
+        three = 3;
+        nine = 9;
+        offset = 0;
+        do {
+            temp_a0 = (s8 *)((s32)offset + (s32)arg0->entries);
+            if (*temp_a0 != 0) {
+                player = (Player *)func_8005B24C_5BE4C((Vec3s32 *)(temp_a0 + 4), -1, 0x100000);
+                if (player != NULL && player->unkBD9 == 0) {
+                    temp_v1 = (s8 *)((s32)offset + (s32)arg0->entries);
+                    if (temp_v1[1] == 0) {
+                        val = *(u16 *)(temp_v1 + 2);
+                        player->unkBD3 = three;
+                        player->unkBD2 = (u8)val;
+                        if (allocation->unk7A == three) {
+                            player->unkBD3 = nine;
+                        }
+                        flags = player->unkBD8 | 1;
+                    } else {
+                        flags = player->unkBD8 | 2;
+                        player->unkBD4 = (u8) * (u16 *)(temp_v1 + 2);
+                    }
+                    player->unkBD8 = flags;
+                    *(s8 *)((s32)offset + (s32)arg0->entries) = 0;
+                    func_80056B7C_5777C((s8 *)((s32)arg0->entries + (s32)offset) + 4, 8);
+                }
+            }
+            i++;
+            offset += 0x10;
+        } while (i < arg0->entryCount);
+        i = 0;
+    }
+    do {
+        debugEnqueueCallback((u16)i, 4, &func_80045054_45C54, arg0);
+        i++;
+    } while (i < 4);
+}
 
 struct Func45010Arg {
     void *unk0;   /* 0x00 */

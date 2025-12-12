@@ -95,7 +95,7 @@ typedef struct {
     u8 unkBD4;
     u8 padding5b[0x3];
     u8 unkBD8;
-    u8 padding5c[0x1];
+    u8 unkBD9;
     u8 unkBDA;
     u8 padding5d_2[0x3];
     u8 unkBDE;
