@@ -10,7 +10,6 @@ extern u8 D_800A8CC8_A0038;
 extern s16 identityMatrix[9];
 extern s16 D_8008D6EC_8E2EC;
 extern s16 D_8008D6EE_8E2EE;
-extern void func_80018580_19180(void);
 
 typedef struct {
     s16 matrix0[9];
@@ -38,6 +37,7 @@ typedef struct {
 
 void func_80017384_17F84(Func80018474Arg *arg0);
 void func_800175E0_181E0(void);
+void func_80018580_19180(Func80018474Arg *arg0);
 void func_800182FC_18EFC(Func80018474Arg *arg0);
 
 void func_80017350_17F50(void) {
@@ -329,7 +329,59 @@ void func_80018474_19074(Func80018474Arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/17F50", func_80018580_19180);
+void func_80018580_19180(Func80018474Arg *arg0) {
+    s32 sp10[8];
+    s32 sp30[3];
+    s32 pad3C[5];
+    s32 sp58;
+    u32 sp5C;
+    GameState *state;
+    Mat3x3Padded *matrixPtr;
+    s32 divResult;
+    s32 x, y;
+    u8 mode;
+    s8 var_a2;
+
+    state = getCurrentAllocation();
+    memcpy(sp30, &arg0->unk34, 0xC);
+
+    mode = func_8001523C_15E3C();
+    var_a2 = -3;
+    if (mode == 1) {
+        var_a2 = 3;
+    }
+
+    arg0->unk34 = arg0->unk34 + (((var_a2 * (sp30[2] >> 8)) / (arg0->unk4C >> 8)) << 16);
+
+    divResult = (-var_a2 * (sp30[0] >> 8)) / (arg0->unk4C >> 8);
+    arg0->unk3C = arg0->unk3C + (divResult << 16);
+
+    arg0->unk48 = atan2Fixed(arg0->unk34, arg0->unk3C);
+
+    x = arg0->unk34;
+    y = arg0->unk3C;
+    arg0->unk4C = isqrt64((s64)x * x + (s64)y * y);
+
+    matrixPtr = (Mat3x3Padded *)&arg0->matrix20;
+    createYRotationMatrix(matrixPtr, arg0->unk48);
+    func_8006B084_6BC84(arg0, matrixPtr, sp10);
+
+    state->unk3EC = arg0->unk34;
+    state->unk3F0 = arg0->unk3C;
+    memcpy(&state->unk3B0, sp10, 0x20);
+    state->unk3F4 = arg0->unk48;
+    state->unk3F8 = arg0->unk4C;
+    state->unk3FC = arg0->unk44 & 0x1FFF;
+
+    mode = func_8001523C_15E3C();
+    if (mode == 2) {
+        if ((s16)arg0->unk48 < 0x8D1) {
+            setCallback(func_800175E0_181E0);
+        }
+    } else if ((s16)arg0->unk48 >= 0x1730) {
+        setCallback(func_800175E0_181E0);
+    }
+}
 
 void func_800187DC_193DC(void);
 
