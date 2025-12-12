@@ -10,7 +10,6 @@ extern u8 D_800A8CC8_A0038;
 extern s16 identityMatrix[9];
 extern s16 D_8008D6EC_8E2EC;
 extern s16 D_8008D6EE_8E2EE;
-extern void func_800182FC_18EFC(void);
 extern void func_80018580_19180(void);
 
 typedef struct {
@@ -39,6 +38,7 @@ typedef struct {
 
 void func_80017384_17F84(Func80018474Arg *arg0);
 void func_800175E0_181E0(void);
+void func_800182FC_18EFC(Func80018474Arg *arg0);
 
 void func_80017350_17F50(void) {
     GameState *state = (GameState *)getCurrentAllocation();
@@ -248,7 +248,48 @@ void func_8001829C_18E9C(void) {
 void func_800182F4_18EF4(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/17F50", func_800182FC_18EFC);
+void func_80018474_19074(Func80018474Arg *arg0);
+
+void func_800182FC_18EFC(Func80018474Arg *arg0) {
+    s32 pad[2];
+    GameState *state;
+    s32 x, y;
+
+    state = getCurrentAllocation();
+
+    memcpy(&arg0->matrix20, identityMatrix, 0x20);
+    memcpy(arg0, identityMatrix, 0x20);
+
+    arg0->unk34 = *(s16 *)((u8 *)&D_8008D6EC_8E2EC + (u8)state->unk425 * 4);
+    arg0->unk3C = *(s16 *)((u8 *)&D_8008D6EE_8E2EE + (u8)state->unk425 * 4);
+
+    arg0->unk34 <<= 16;
+    arg0->unk3C <<= 16;
+
+    arg0->unk48 = atan2Fixed(arg0->unk34, arg0->unk3C);
+
+    x = arg0->unk34;
+    y = arg0->unk3C;
+    arg0->unk4C = isqrt64((s64)x * x + (s64)y * y);
+
+    arg0->unk46 = 0;
+    arg0->unk44 = 0;
+
+    state->unk3EC = arg0->unk34;
+    state->unk3F0 = arg0->unk3C;
+    state->unk3F4 = arg0->unk48;
+    state->unk3F8 = arg0->unk4C;
+    state->unk3FC = arg0->unk44 & 0x1FFF;
+
+    arg0->unk50 = 0;
+    arg0->unk5B = 8;
+    arg0->unk5A = 8;
+
+    createYRotationMatrix((Mat3x3Padded *)&arg0->matrix20, arg0->unk48);
+    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->unk44);
+
+    setCallback(func_80018474_19074);
+}
 
 void func_80018474_19074(Func80018474Arg *arg0) {
     GameState *state;
