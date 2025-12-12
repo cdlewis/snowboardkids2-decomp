@@ -23,6 +23,9 @@ extern void *D_8009A710_9B310;
 extern void *D_8009A720_9B320;
 extern void *D_8009A760_9B360;
 extern void *D_8009A770_9B370;
+extern s32 D_8009A8A4_9B4A4;
+extern s32 D_8009A8A8_9B4A8;
+extern s32 D_8009A8AC_9B4AC;
 extern Mat3x3Padded D_8009A8B0_9B4B0;
 extern s32 gFrameCounter;
 
@@ -1353,8 +1356,11 @@ void *func_80043310_43F10(Player *arg0) {
 }
 
 extern void *D_8009A730_9B330;
-extern void func_800433EC_43FEC(void);
+extern void *D_8009A740_9B340;
+extern void *D_8009A750_9B350;
 void func_8004367C_4427C(Func432D8Arg *);
+void func_800433EC_43FEC(Func43374State *);
+void func_800435F0_441F0(Func43374State *);
 
 void func_80043374_43F74(Func43374State *arg0) {
     getCurrentAllocation();
@@ -1370,7 +1376,77 @@ void func_80043374_43F74(Func43374State *arg0) {
     setCallbackWithContinue(func_800433EC_43FEC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_800433EC_43FEC);
+void func_800433EC_43FEC(Func43374State *arg0) {
+    s32 pad[8];
+    GameState *allocation;
+    s32 *ptr;
+    s32 i;
+    Player *player;
+    Player *player2;
+    s16 scale;
+
+    allocation = (GameState *)getCurrentAllocation();
+    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
+    func_8006B084_6BC84(&D_8009A8B0_9B4B0, (u8 *)arg0->unk78 + 0x3F8, arg0);
+    scale = arg0->unk82;
+    scaleMatrix((Mat3x3Padded *)arg0, scale, scale, scale);
+
+    ptr = &D_8009A8A4_9B4A4;
+    *ptr = 0;
+    D_8009A8A8_9B4A8 = 0x9CCCC;
+    D_8009A8AC_9B4AC = 0xFFE44CCD;
+
+    func_8006B084_6BC84(ptr - 5, arg0, (u8 *)arg0 + 0x3C);
+
+    if (gFrameCounter & 1) {
+        arg0->unk5C = &D_8009A740_9B340;
+    } else {
+        arg0->unk5C = &D_8009A750_9B350;
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        if (arg0->unk82 == 0x2000) {
+            enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)((u8 *)arg0 + 0x3C));
+        }
+    }
+
+    player = arg0->unk78;
+    if (player->unkBC9 == 3) {
+        if (player->unkB9A != 0) {
+            if (player->unkB9A < 0x3C) {
+                player->unkB9A = 0x3C;
+            }
+        }
+        player = arg0->unk78;
+    }
+
+    if (player->unkB84 & 0x80000) {
+        player->unkB9A = 0;
+    }
+
+    player2 = arg0->unk78;
+    if (player2->unkB9A != 0) {
+        if (allocation->gamePaused == 0) {
+            if (arg0->unk82 == 0x2000) {
+                player2->unkB9A--;
+                player = arg0->unk78;
+                if (player->unkB9A == 0 && player->unkBBB == 0x11) {
+                    player->unkB9A++;
+                }
+            } else {
+                arg0->unk82 = arg0->unk82 + 0x200;
+                if (arg0->unk82 == 0x2000) {
+                    arg0->unk78->unkBD0 += 2;
+                }
+            }
+        }
+    } else {
+        player2->unkBD0 = 0;
+        arg0->unk7C = 0x40000;
+        setCallback(func_800435F0_441F0);
+    }
+}
 
 void func_800435F0_441F0(Func43374State *arg0) {
     GameState *gameState;
