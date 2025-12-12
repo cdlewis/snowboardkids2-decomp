@@ -155,7 +155,6 @@ typedef struct {
 } func_800B30B0_arg;
 
 extern s32 func_8005D308_5DF08(void *, s32);
-extern void func_8004FCF0_508F0(s16);
 extern void func_80059A88_5A688(func_800B30B0_arg *, s16);
 
 extern u16 D_800BAB48_AA9F8[];

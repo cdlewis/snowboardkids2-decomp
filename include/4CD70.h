@@ -59,5 +59,6 @@ void func_8004EDCC_4F9CC(s16 arg0);
 void func_8004F1D4_4FDD4(Struct_func_8004F1D4 *arg0);
 void func_8004F194_4FD94(s16 arg0);
 void func_8004F820_50420(Struct_func_8004F04C *arg0);
+void func_8004FCF0_508F0(s32 arg0);
 void func_8004FF60_50B60(s16 arg0);
 void func_8005011C_50D1C(void);
