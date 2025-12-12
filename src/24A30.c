@@ -69,6 +69,24 @@ typedef struct {
     void *unk4;
     s16 unk8;
     s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 paddingE[2];
+} func_80025C64_entry;
+
+typedef struct {
+    func_80025C64_entry entries[3];
+    u8 unk30[3];
+    u8 unk33;
+    u8 unk34;
+} func_80025C64_arg;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
     s16 unkC;
     s16 unkE;
     s16 unk10;
@@ -180,6 +198,15 @@ typedef struct {
 
 extern s32 identityMatrix[];
 extern s32 D_8008DD2C_8E92C[];
+extern u16 D_8008DD4E_8E94E;
+extern u16 D_8008DD50_8E950;
+extern u16 D_8008DD52_8E952;
+extern u16 D_8008DD6C_8E96C;
+extern u16 D_8008DD6E_8E96E;
+extern u16 D_8008DD70_8E970;
+
+void func_80025DAC_269AC(func_80025FFC_26BFC_arg *);
+void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
 
 void func_80024048_24C48(func_80024048_arg *);
 void func_80024220_24E20(func_80024220_24E20_arg *);
@@ -825,7 +852,62 @@ void func_80025C38_26838(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80025C64_26864);
+void func_80025C64_26864(func_80025C64_arg *arg0) {
+    void *dmaResult;
+    u16 x;
+    u16 y;
+    u16 xIncrement;
+    s32 unk8Base;
+    s32 count;
+    s32 i;
+    s32 incrementSigned;
+    s32 pad[6];
+
+    (void)pad;
+
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    setCleanupCallback(func_80025FFC_26BFC);
+
+    unk8Base = 8;
+    if (D_800AFE8C_A71FC->unk8 == 1) {
+        unk8Base = 5;
+    }
+
+    arg0->unk33 = 3;
+
+    if (D_800AFE8C_A71FC->unk4 == 0) {
+        x = D_8008DD6C_8E96C;
+        y = D_8008DD6E_8E96E;
+        xIncrement = D_8008DD70_8E970;
+        unk8Base = 6;
+        arg0->unk33 = 2;
+    } else {
+        s32 offset = D_800AFE8C_A71FC->unk8 * 6;
+        x = *(u16 *)((u8 *)&D_8008DD4E_8E94E + offset);
+        y = *(u16 *)((u8 *)&D_8008DD50_8E950 + offset);
+        xIncrement = *(u16 *)((u8 *)&D_8008DD52_8E952 + offset);
+    }
+
+    count = arg0->unk33;
+    if (count > 0) {
+        i = 0;
+        incrementSigned = (s16)xIncrement;
+        do {
+            arg0->entries[i].unk0 = x;
+            arg0->entries[i].unk2 = y;
+            arg0->entries[i].unk8 = unk8Base + i;
+            arg0->entries[i].unkD = 0;
+            arg0->entries[i].unkC = 0;
+            arg0->entries[i].unkA = 0xFF;
+            arg0->entries[i].unk4 = dmaResult;
+            arg0->unk30[i] = 0;
+            i++;
+            x += incrementSigned;
+        } while (i < (s32)arg0->unk33);
+    }
+
+    setCallback(func_80025DAC_269AC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025DAC_269AC);
 
