@@ -74,3 +74,6 @@ src/levels/crazy_jungle_boss.c:93
 src/levels/jingle_town_boss.c:96
 src/levels/ice_land_boss.c:80
 src/9FF70.c:163
+src/9FF70.c:166
+src/levels/crazy_jungle_boss.c:99
+src/levels/jingle_town_boss.c:101
