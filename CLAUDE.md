@@ -8,7 +8,9 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 ## Project Structure
 
-- `src` decompiled (or partially decompiled) C code
+- `src` decompiled (or partially decompiled) C code. 
+- `src/cutscene` C functions and structures related to cutscene code
+- `src/levels` C functions and structures related to cutscene code
 - `include` headers for decompiled C code
 - `asm/nonmatchings` unmatched asm code extracted from the rom. Each file contains a separate function.
 - `asm/matchings` decompiled assembly code for already matched C functions. We keep this around as it's sometimes convenient to inspect.
