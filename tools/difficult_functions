@@ -354,3 +354,4 @@ func_800BB66C_B2C2C (34 attempts, 97.969%) -- Delay slot scheduling mismatch: co
 
 func_80055A84_56684 (16 attempts, 89.016%) -- Register allocation mismatch: compiler assigns arg0 to s1 instead of s2, resulting in s1/s2 swap throughout function. Instruction scheduling mismatch: compiler places addiu s0,s3,0x30 before func_80051C80_52880 call instead of after memcpy call. If-block instruction ordering differs: compiler loads unk4E and sp18[2] in different order than target, target reuses v1 from branch condition check (sp18[0]) while compiler uses a0. Control flow with goto skip_main pattern matches but fundamental register allocation difference causes ~11% instruction mismatch.
 func_8002C8C0_2D4C0 5 100% -- Matches in isolation but register allocation differs when integrated due to context
+func_8002E170_2ED70 10 ~0%
