@@ -816,7 +816,43 @@ u32 __MusIntFindChannelAndStart(s32 number) {
 
 INCLUDE_ASM("asm/nonmatchings/player", func_800725F4_731F4);
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072704_73304);
+u32 func_80072704_73304(s32 number, s32 volume, s32 pan, s32 handle, s32 priority) {
+    s32 i;
+    s32 current_priority;
+    channel_t *cp;
+    channel_t *current_cp;
+
+    if (priority == -1) {
+        priority = D_800A64F8_A70F8[number];
+    }
+
+    if (handle != 0) {
+        for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
+            if (cp->handle == handle) {
+                return __MusIntStartEffect(cp, number, volume, pan, priority);
+            }
+        }
+    }
+
+    current_priority = priority + 1;
+
+    for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
+        if (cp->pdata == 0) {
+            return __MusIntStartEffect(cp, number, volume, pan, priority);
+        }
+
+        if (cp->fx_addr && (cp->priority < current_priority)) {
+            current_priority = cp->priority;
+            current_cp = cp;
+        }
+    }
+
+    if (current_priority < priority) {
+        return __MusIntStartEffect(current_cp, number, volume, pan, priority);
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player", func_80072814_73414);
 
