@@ -3,11 +3,13 @@
 #include "3E160.h"
 #include "4050.h"
 #include "6E840.h"
+#include "B040.h"
 #include "common.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
 extern s16 D_8008CE40_8DA40;
+extern u8 D_8009DF6C_9EB6C[];
 
 typedef struct {
     s32 value;
@@ -26,7 +28,7 @@ extern LookupEntry D_8008CE9C_8DA9C[];
 typedef struct {
     u8 unk0;
     u8 unk1;
-    u8 pad[5];
+    s8 pad[5];
     s8 unk7;
     u8 pad2[4];
 } TableElement_F9B0;
@@ -690,7 +692,91 @@ void func_8000F7B0_103B0(FD98_struct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/E770", func_8000F884_10484);
+void func_8000F884_10484(FD98_struct *arg0) {
+    u8 sp30[0xC];
+    E770_struct *alloc;
+    TableElement_F9B0 *entry;
+    u8 *sp30_ptr;
+
+    alloc = getCurrentAllocation();
+    sp30_ptr = sp30;
+    entry = &D_8008D348_8DF48[alloc->unk1].elements[arg0->unk2];
+    memcpy(sp30_ptr, D_8009DF6C_9EB6C, 0xC);
+
+    if (gControllerInputs & 0x8000) {
+        if (func_8000EDB0_F9B0(arg0->unk2)) {
+            func_8000DB70_E770(alloc, entry->pad[4]);
+            if (alloc->unk624->unk16 != 0x92) {
+                func_8000A510_B110(
+                    (s32)alloc->unk624,
+                    0,
+                    9,
+                    -1,
+                    (cutsceneEffectDisp_exec_arg *)sp30_ptr,
+                    0xCCCC,
+                    0,
+                    1,
+                    0,
+                    0,
+                    1
+                );
+            }
+            func_8000DC88_E888(alloc, 0x92, 0x92, -1, 0);
+            return;
+        }
+        func_800585C8_591C8(9);
+        return;
+    }
+
+    if (gControllerInputs & 0x80200) {
+        s8 temp_v0 = arg0->unk2;
+        s8 temp_v1 = temp_v0;
+        if (temp_v0 == 0) {
+            arg0->unk2 = 0x1A;
+        } else {
+            arg0->unk2 = temp_v1 - 1;
+        }
+        func_800585C8_591C8(0x2B);
+        return;
+    }
+
+    if (gControllerInputs & 0x40100) {
+        s8 temp = arg0->unk2;
+        if (temp == 0x1A) {
+            arg0->unk2 = 0;
+        } else {
+            arg0->unk2 = temp + 1;
+        }
+        func_800585C8_591C8(0x2B);
+        return;
+    }
+
+    if (gControllerInputs & 0x10800) {
+        u8 val = arg0->unk2;
+        s8 temp = val - 9;
+        if ((u8)temp < 0x12u) {
+            arg0->unk2 = temp;
+        } else {
+            arg0->unk3 = val + 0x12;
+            arg0->unk1 = 1;
+            arg0->unk4 = arg0->unk2;
+        }
+        func_800585C8_591C8(0x2B);
+        return;
+    }
+
+    if (gControllerInputs & 0x20400) {
+        u8 val = arg0->unk2;
+        if (val < 0x12u) {
+            arg0->unk2 = val + 9;
+        } else {
+            arg0->unk3 = val;
+            arg0->unk1 = 1;
+            arg0->unk4 = arg0->unk2 - 0x12;
+        }
+        func_800585C8_591C8(0x2B);
+    }
+}
 
 void func_8000FA90_10690(FD98_struct *arg0) {
     s32 inputs;
@@ -753,8 +839,6 @@ void func_8000FA90_10690(FD98_struct *arg0) {
 }
 
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF6C_9EB6C);
-
-extern void func_8000F884_10484(FD98_struct *);
 
 void func_8000FBBC_107BC(FD98_struct *arg0) {
     FD98_struct *alloc;
