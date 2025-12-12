@@ -280,3 +280,5 @@ func_8006BE4C_6CA4C (30 attempts, 95.857%) -- Register allocation mismatch: comp
 func_80073E20_74A20 (22 attempts, 100% in isolation) -- Matched perfectly in isolated environment (base_22.c), but fails integration due to register allocation mismatch: compiler uses a0 directly without move a2,a0 copy at function start when compiled within player.c context. Struct type difference (s16 vs u16 for cont_vol_repeat_count) in full build context affects code generation.
 func_80035408_36008 (18 attempts, 87.900%) -- Register allocation mismatch: compiler uses s2 for arg0 instead of s3, missing s6 register allocation for unused variable (li s6,0xfffe in delay slot), shift source register (srl s0,a0,0xc vs srl v0,a2,0xc), branch pattern (beqzl vs bnez/move delay slot), u8 parameter masking (andi v0,s5,0xff before sw vs direct sw s5)
 func_80037D18_38918 10 91.489%
+
+func_80027400_28000 (31 attempts, 99.753%) -- Instruction scheduling mismatch: compiler generates 'move s0,s3' before 'move s4,v0' instead of after, stack frame and register allocation otherwise match perfectly
