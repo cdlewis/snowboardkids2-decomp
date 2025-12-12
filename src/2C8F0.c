@@ -1,5 +1,6 @@
 #include "20F0.h"
 #include "297B0.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "geometry.h"
 #include "task_scheduler.h"
@@ -8,9 +9,19 @@ extern void *D_8008EBF0_8F7F0[];
 extern void func_8002BFEC_2CBEC(void *);
 extern void func_8002C570_2D170(void *);
 
+extern void func_8000A49C_B09C(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
+extern u8 D_8008EBE0_8F7E0[];
+extern void *D_8008ECF0_8F8F0;
+extern void *D_8008ED00_8F900;
+
 typedef struct {
     /* 0x00 */ SceneModel *unk0;
-    /* 0x04 */ u8 pad4[0x60];
+    /* 0x04 */ u8 pad4[0x3C];
+    /* 0x40 */ s32 unk40;
+    /* 0x44 */ s32 unk44;
+    /* 0x48 */ u8 pad48[0x4];
+    /* 0x4C */ void *unk4C;
+    /* 0x50 */ u8 pad50[0x14];
 } Elem2C8F0; // size 0x64
 
 typedef struct {
@@ -87,4 +98,38 @@ INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BFEC_2CBEC);
 
 INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002C570_2D170);
 
-INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002C798_2D398);
+void func_8002C798_2D398(Struct2C8F0 *arg0, s32 arg1) {
+    Elem2C8F0 *elem;
+    u8 d4;
+    s32 offset;
+
+    d4 = arg0->unkD4;
+
+    if ((d4 == 1) & (arg1 == 0)) {
+        if (D_800AFE8C_A71FC->unk9[0] == 3) {
+            elem = &arg0->elems[arg1];
+            elem->unk4C = &D_8008ED00_8F900;
+            arg0->elems[0].unk44 = 0x300000;
+            func_8000A49C_B09C(
+                (s32)elem->unk0,
+                0,
+                0x1F,
+                D_8008EBE0_8F7E0[arg0->unkD4 * 2 + arg1] - 4,
+                &elem->unk40,
+                0x10000,
+                0,
+                2,
+                0,
+                0
+            );
+            return;
+        }
+    }
+
+    if ((arg0->unkD4 == 6) & (arg1 == 1)) {
+        if (D_800AFE8C_A71FC->unk9[0] == 3) {
+            offset = arg1 * 0x64;
+            ((Elem2C8F0 *)((u8 *)arg0 + offset))->unk4C = &D_8008ECF0_8F8F0;
+        }
+    }
+}
