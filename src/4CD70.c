@@ -38,6 +38,7 @@ extern s32 gFrameCounter;
 USE_ASSET(_3F3940);
 USE_ASSET(_3F3D10);
 USE_ASSET(_3F6950);
+USE_ASSET(_3F6BB0);
 USE_ASSET(_3F3EF0);
 
 typedef struct {
@@ -175,6 +176,10 @@ extern char D_8009E89C_9F49C[];
 extern char D_8009E8A0_9F4A0[];
 extern char D_8009E8A8_9F4A8[];
 extern char D_8009E928_9F528[];
+
+extern s32 D_80090460_91060[];
+extern s32 D_800904A0_910A0[];
+extern s32 D_800904E0_910E0[];
 
 void func_8004C170_4CD70(Struct_func_8004D8E4 *arg0) {
     GameState *allocation;
@@ -755,7 +760,62 @@ void func_8004D9B8_4E5B8(Struct_func_8004D9B8 *arg0) {
     arg0->unkA = 0xFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004D9D0_4E5D0);
+void func_8004DB98_4E798(Struct_func_8004D9D0 *arg0);
+void func_8004DCC4_4E8C4(Struct_func_8004DCC4 *arg0);
+
+void func_8004D9D0_4E5D0(Struct_func_8004D9D0 *arg0) {
+    GameState *allocation = (GameState *)getCurrentAllocation();
+    s32 temp;
+    u8 temp_unk5A;
+    s32 temp_unkB70;
+
+    arg0->unk14 = 0;
+    arg0->unk4 = loadAsset_34CB50();
+    func_8004D9B8_4E5B8((Struct_func_8004D9B8 *)arg0);
+    arg0->unk8 = 0x14;
+    arg0->unk10 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
+
+    switch (allocation->unk7A) {
+        case 5:
+            temp_unk5A = allocation->unk5A;
+            arg0->unk0 = 0x10;
+            arg0->unk2 = -0x48;
+            arg0->unk18 = temp_unk5A * 0x12C;
+            break;
+        case 6:
+            temp_unkB70 = allocation->players->unkB70;
+            arg0->unk0 = 0x10;
+            arg0->unk2 = -0x48;
+            arg0->unk18 = temp_unkB70 * 0x32;
+            break;
+        default:
+            switch (allocation->players->unkBC4) {
+                case 0:
+                    arg0->unk18 = D_80090460_91060[allocation->memoryPoolId];
+                    break;
+                case 1:
+                    arg0->unk18 = D_800904A0_910A0[allocation->memoryPoolId];
+                    break;
+                case 2:
+                    arg0->unk18 = D_800904E0_910E0[allocation->memoryPoolId];
+                    break;
+                default:
+                    arg0->unk18 = 0;
+                    break;
+            }
+            arg0->unk0 = 0x10;
+            arg0->unk2 = -0x3C;
+            temp = arg0->unk18 + allocation->players->unkB6C;
+            arg0->unk18 = temp;
+            if (temp > 0x1869F) {
+                arg0->unk18 = 0x1869F;
+            }
+            break;
+    }
+
+    setCleanupCallback(func_8004DCC4_4E8C4);
+    setCallback(func_8004DB98_4E798);
+}
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004DB98_4E798);
 
