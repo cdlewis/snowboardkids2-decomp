@@ -5,6 +5,7 @@
 #include "42170.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "memory_allocator.h"
 
 typedef struct {
     u8 padding[0x14];
@@ -125,3 +126,4 @@ void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
 u8 func_80027C44_28844(u8 arg0);
 u8 func_80027C60_28860(s32 arg0);
 u8 func_80027C7C_2887C(s32 arg0);
+MemoryAllocatorNode *func_8005DE04_5EA04(s16 groupIndex, s16 entityIndex);
