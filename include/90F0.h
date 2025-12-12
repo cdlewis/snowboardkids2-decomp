@@ -28,6 +28,35 @@ typedef struct {
 typedef struct {
 } func_80009F5C_AB5C_arg;
 
+typedef struct {
+    /* 0x00 */ s8 unk0;
+    /* 0x01 */ s8 unk1;
+    /* 0x02 */ u8 pad2[2];
+    /* 0x04 */ u16 unk4;
+    /* 0x06 */ u8 pad6[2];
+} SpriteEntry;
+
+typedef struct {
+    /* 0x00 */ u8 pad0[0x0C];
+    /* 0x0C */ SpriteEntry *unkC;
+    /* 0x10 */ u8 pad10[4];
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ u8 pad16[2];
+    /* 0x18 */ void *unk18;
+    /* 0x1C */ s32 unk1C;
+    /* 0x20 */ s32 unk20;
+    /* 0x24 */ s32 unk24;
+    /* 0x28 */ DataTable_19E80 *unk28;
+    /* 0x2C */ u16 unk2C;
+    /* 0x2E */ u8 unk2E;
+    /* 0x2F */ u8 unk2F;
+    /* 0x30 */ u8 pad30[0x10];
+    /* 0x40 */ s32 unk40;
+    /* 0x44 */ s32 unk44;
+    /* 0x48 */ u16 unk48;
+    /* 0x4A */ u16 unk4A;
+} SpriteState;
+
 s32 func_80009E68_AA68(void *arg0, s16 arg1);
 void *func_80009EF8_AAF8(s16 arg0);
 void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0);
