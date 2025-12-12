@@ -275,7 +275,47 @@ void func_800B788C_1E493C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3) 
     arg0->unkA0 = arg3;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7914_1E49C4);
+void func_800B7914_1E49C4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    volatile s32 *ptr30;
+    volatile s32 *ptr34;
+    volatile s32 *ptr38;
+    s16 temp_v0;
+    s16 var_t0;
+    s32 temp_a3;
+    s32 temp_t1;
+    s32 temp_a1;
+    s32 div1, div2, div3;
+
+    temp_v0 = arg4 + 1;
+    var_t0 = temp_v0;
+    if ((s32)(temp_v0 << 16) <= 0) {
+        var_t0 = 1;
+    }
+    ptr30 = &arg0->unk30;
+    *ptr30 = arg1;
+    temp_t1 = *ptr30 - arg0->unk04.unk20_u.unk20_s32;
+    div1 = temp_t1 / (s16)var_t0;
+    ptr34 = &arg0->unk34;
+    *ptr34 = arg2;
+    temp_a1 = *ptr34 - arg0->unk28;
+    div2 = temp_a1 / (s16)var_t0;
+    ptr38 = &arg0->unk38;
+    *ptr38 = arg3;
+    temp_a3 = *ptr38 - arg0->unk2C;
+    div3 = temp_a3 / (s16)var_t0;
+    arg0->unk84 = var_t0;
+    arg0->unk86 = var_t0;
+    arg0->angle = 0;
+    arg0->unk0.Two = 8;
+    arg0->unk3C = div1;
+    arg0->unk40 = div2;
+    arg0->unk44 = div3;
+    if ((u32)temp_t1 < 1 && (u32)temp_a3 < 1) {
+    } else {
+        arg0->unk7A = atan2Fixed(temp_t1, temp_a3) & 0x1FFF;
+    }
+    func_800B6AB8_1E3B68(arg0, 0);
+}
 
 void func_800B7A60_1E4B10(
     CutsceneSlotData *arg0,
