@@ -33,7 +33,9 @@ class CProjectAnalyzer:
         self.header_declarations = defaultdict(list)  # func_name -> [HeaderDecl]
         self.file_includes = defaultdict(set)  # file -> set of included headers
         self.c_file_declarations = defaultdict(list)  # func_name -> [FunctionDecl] (declarations in .c files)
-        self.deny_list = self._load_deny_list()  # set of (file_path, line_num) tuples to ignore
+        self.deny_list = {}  # (file_path, line_num) -> {'used': bool, 'original_line': str}
+        self.deny_list_path = Path('tools/difficult-headers')
+        self._load_deny_list()
         
         # Regex patterns
         self.func_def_pattern = re.compile(
@@ -66,15 +68,13 @@ class CProjectAnalyzer:
     
     def _load_deny_list(self):
         """Load deny list from tools/difficult-headers file"""
-        deny_list = set()
-        deny_list_path = Path('tools/difficult-headers')
-
-        if not deny_list_path.exists():
-            return deny_list
+        if not self.deny_list_path.exists():
+            return
 
         try:
-            with open(deny_list_path, 'r') as f:
+            with open(self.deny_list_path, 'r') as f:
                 for line in f:
+                    original_line = line.rstrip('\n')
                     line = line.strip()
                     if not line or line.startswith('#'):
                         continue
@@ -86,13 +86,15 @@ class CProjectAnalyzer:
                         if ':' in file_line:
                             file_path, line_num = file_line.rsplit(':', 1)
                             try:
-                                deny_list.add((file_path, int(line_num)))
+                                key = (file_path, int(line_num))
+                                self.deny_list[key] = {
+                                    'used': False,
+                                    'original_line': original_line
+                                }
                             except ValueError:
                                 print(f"Warning: Invalid line number in deny list: {line}")
         except Exception as e:
             print(f"Warning: Could not read deny list file: {e}")
-
-        return deny_list
 
     def _is_denied(self, file_path, line_num):
         """Check if a file:line combination is in the deny list"""
@@ -100,18 +102,58 @@ class CProjectAnalyzer:
         file_str = str(file_path)
 
         # Check exact match
-        if (file_str, line_num) in self.deny_list:
+        key = (file_str, line_num)
+        if key in self.deny_list:
+            self.deny_list[key]['used'] = True
             return True
 
         # Also check with relative path from project root
         try:
             rel_path = str(Path(file_str).relative_to(self.project_dir))
-            if (rel_path, line_num) in self.deny_list:
+            key = (rel_path, line_num)
+            if key in self.deny_list:
+                self.deny_list[key]['used'] = True
                 return True
         except ValueError:
             pass
 
         return False
+
+    def clean_deny_list(self):
+        """Remove unused entries from the deny list file"""
+        if not self.deny_list_path.exists():
+            print("No deny list file found, nothing to clean")
+            return
+
+        # Separate used and unused entries
+        used_entries = []
+        unused_entries = []
+
+        for key, data in self.deny_list.items():
+            if data['used']:
+                used_entries.append(data['original_line'])
+            else:
+                unused_entries.append(data['original_line'])
+
+        # Report what will be removed
+        if not unused_entries:
+            print("All entries in the deny list are still needed (no unused entries found)")
+            return
+
+        print(f"\nRemoving {len(unused_entries)} unused entries from {self.deny_list_path}:")
+        for entry in unused_entries:
+            print(f"  - {entry}")
+
+        # Write back only the used entries
+        try:
+            with open(self.deny_list_path, 'w') as f:
+                for entry in used_entries:
+                    f.write(entry + '\n')
+            print(f"\n✅ Cleaned {self.deny_list_path}")
+            print(f"   Kept: {len(used_entries)} entries")
+            print(f"   Removed: {len(unused_entries)} entries")
+        except Exception as e:
+            print(f"Error writing cleaned deny list: {e}")
 
     def extract_function_name_from_signature(self, signature):
         """Extract function name from a function signature"""
@@ -445,6 +487,8 @@ def main():
     parser.add_argument('project_directory', help='Path to the project directory')
     parser.add_argument('--limit', type=int, default=None,
                         help='Limit the number of issues shown in the report')
+    parser.add_argument('--clean', action='store_true',
+                        help='Remove unused entries from tools/difficult-headers')
 
     args = parser.parse_args()
 
@@ -455,6 +499,9 @@ def main():
     analyzer = CProjectAnalyzer(args.project_directory)
     analyzer.scan_project()
     analyzer.generate_report(limit=args.limit)
+
+    if args.clean:
+        analyzer.clean_deny_list()
 
 if __name__ == "__main__":
     main()
