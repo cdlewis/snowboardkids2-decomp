@@ -306,7 +306,6 @@ func_800648EC_654EC 9 66.345%
 func_8001A478_1B078 4 83.842%
 func_800B7B7C_A7A2C 1 10%
 func_80047AA8_486A8 10 33.598
-
 func_800BB75C_ADB1C (4 attempts, 84.134%)
 func_800BC378_B0068 (6 attempts, 40.705%)
 func_800BB690_AD110 (30 attempts, 30.750%)
@@ -363,7 +362,6 @@ func_800397CC_3A3CC 14 81.0
 func_80058C64_59864 22 91.250%
 func_8002F12C_2FD2C 18 90.551%
 func_80033E40_34A40 (7 attempts, 100%) -- matched in isolated environment, but fails integration (compiler reordering issues)
-func_8000D144_DD44 19 99.833%
 func_80024D40_25940 30 99.429%
 func_80024DCC_259CC 1 ~85%
 func_80044684_45284 15 97.262%
@@ -408,7 +406,6 @@ func_80024990_25590 30 95.211% -- Register allocation and instruction scheduling
 func_800B62E4_A6194 (8 attempts, 89%)
 func_8001F7C8_203C8 (30 attempts, 97.1%) -- Register allocation mismatch: compiler assigns s1 for arg0+0x18 instead of s0, instruction scheduling differences for addiu s1,sp,0x80 and addiu s0,s2,0xc, temp variable uses a3 instead of a0
 func_800B00C0_1DC260 (22 attempts, 83.5%) -- Register allocation mismatch: compiler allocates temps to a2/a3/t0/t1 instead of a3/t0/t1/t2, constants to v0/a1/v1 instead of v1/a2/a1
-
 func_80044DB0_459B0 30 98.696%
 func_80034BD8_357D8 (30 attempts, 96.774%) -- Register allocation mismatch: compiler loads counter into v0 instead of a0, generates negu s3,s3 instead of negu s3,a0, instruction scheduling differences for li s5/move s0/lbu/lui sequence
 func_800BB310_ACD90 15 94.800%
@@ -429,7 +426,6 @@ func_80025EE4_26AE4 (30 attempts, 87.581%) -- Register allocation mismatch: comp
 func_80054658_55258 (19 attempts, 87.908%)
 func_8002CFAC_2DBAC (24 attempts, 80.673%) -- Register allocation mismatch: compiler uses s8 for 0xFFB30000 constant instead of s6, assigns arg0 to s0 instead of s1, ptr to s7 instead of s0, stack frame 0x48 instead of 0x50
 func_80025DAC_269AC (30 attempts, 97.756%)
-
 func_800316AC_322AC 30 98.488%
 func_80046464_47064 (30 attempts, 97.778%) -- Register allocation mismatch: compiler assigns a0 to loop counter i and v1 to offset, target has v1 for loop counter and a0 for offset, instruction scheduling differences for move v1,zero/lui a1,0xc/move a0,zero order
 func_800B5F2C_1E2FDC (30 attempts, 92.121%) -- Instruction scheduling mismatch: compiler does not reload unk20 from memory after store (uses move a3,v0 instead of lh a3,0x20(a0)), also sb zero,0x70(a0) scheduled after slti instead of after andi. With volatile, gets 88.4% but uses lhu+sll+sra instead of lh.

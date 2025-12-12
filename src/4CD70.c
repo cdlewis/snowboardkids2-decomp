@@ -1184,7 +1184,7 @@ void func_8004E794_4F394(Struct_func_8004E6F8 *arg0) {
             debugEnqueueCallback(0xC, 6, func_80010240_10E40, &arg0->elements[i]);
             i++;
         } while (i < 3);
-        func_8006D4B8_6E0B8((s32)arg0->unk24, -0x20, -8, 4, 1, 0, 0x80, 0, 0, 0xFF, 0x80, 0xC, 6);
+        func_8006D4B8_6E0B8(arg0->unk24, -0x20, -8, 4, 1, 0, 0x80, 0, 0, 0xFF, 0x80, 0xC, 6);
     }
 }
 

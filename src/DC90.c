@@ -5,7 +5,6 @@
 #include "common.h"
 #include "graphics.h"
 #include "task_scheduler.h"
-extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 
 typedef struct {
     u8 high;
@@ -27,7 +26,7 @@ typedef struct {
     /* 0x12 */ u8 pad12[0x2];
     /* 0x14 */ s16 unk14;
     /* 0x16 */ s16 unk16;
-    /* 0x18 */ s32 unk18;
+    /* 0x18 */ void *unk18;
     /* 0x1C */ void *unk1C;
     /* 0x20 */ DC90S16OrBytes unk20;
     /* 0x22 */ DC90S16OrBytes unk22;
@@ -42,7 +41,10 @@ typedef struct {
     /* 0x3E */ s16 unk3E;
 } DC90TaskStruct;
 
-extern s32 func_8000D144_DD44(DC90TaskStruct *arg0);
+extern s32 gControllerInputs;
+
+extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
+extern void *func_8000D144_DD44(DC90TaskStruct *arg0);
 
 void func_8000D2C8_DEC8(DC90TaskStruct *arg0);
 void func_8000D448_E048(DC90TaskStruct *arg0);
@@ -82,7 +84,22 @@ void func_8000D100_DD00(DC90TaskStruct *arg0) {
     arg0->unk3C = (temp < 0x41) ? 0x40 : temp2 - 0x10;
 }
 
-INCLUDE_ASM("asm/nonmatchings/DC90", func_8000D144_DD44);
+void *func_8000D144_DD44(DC90TaskStruct *arg0) {
+    void *temp_v0 = func_8000B714_C314((Table_B934 *)arg0->unk8, arg0->unkE, arg0->unk10);
+    unsigned long new_var;
+    new_var = temp_v0 == 0;
+    if (new_var) {
+        arg0->unkC = 6;
+        arg0->unk18 = temp_v0;
+    } else {
+        arg0->unk18 = temp_v0;
+    }
+    if (gControllerInputs & 0x8000) {
+        func_800585C8_591C8(45);
+        arg0->unkC = 4;
+    }
+    return temp_v0;
+}
 
 void func_8000D1BC_DDBC(DC90TaskStruct *arg0) {
     arg0->unk38--;
@@ -124,7 +141,7 @@ void func_8000D244_DE44(DC90TaskStruct *arg0) {
 }
 
 void func_8000D2C8_DEC8(DC90TaskStruct *arg0) {
-    s32 result = 0;
+    void *result = 0;
     s32 flag = 0;
 
     switch (arg0->unkC) {
@@ -162,7 +179,7 @@ void func_8000D2C8_DEC8(DC90TaskStruct *arg0) {
         temp16 = arg0->unk30;
         arg0->unk16 = temp16;
         func_80035260_35E60(
-            (s32)arg0->unk1C,
+            arg0->unk1C,
             arg0->unk18,
             arg0->unk14,
             temp16,

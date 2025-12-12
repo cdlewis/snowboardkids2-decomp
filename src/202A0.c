@@ -712,8 +712,8 @@ void func_80021810_22410(Func80021810Arg *arg0) {
 
     if (allocation->unkB2F == 8) {
         func_80035260_35E60(
-            (s32)arg0->unk8,
-            (s32)arg0->unk4,
+            arg0->unk8,
+            arg0->unk4,
             arg0->unk0,
             arg0->unk2,
             arg0->unkC.asBytes.low,

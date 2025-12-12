@@ -1,8 +1,8 @@
 #pragma once
 
-#include "common.h"
 #include "38310.h"
 #include "42170.h"
+#include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "memory_allocator.h"
@@ -51,7 +51,7 @@ void func_8001C920_1D520(void);
 void func_80003EE0_4AE0(void);
 void func_8001E590_1F190(void);
 void func_8001E5C0_1F1C0(void);
-void func_80035260_35E60(s32 arg0, s32 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
+void func_80035260_35E60(void *arg0, void *arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
 void func_8002529C_25E9C(void *arg0);
 void func_80028AEC_296EC(void *arg0);
 void func_8002AE80_2BA80(void *arg0);

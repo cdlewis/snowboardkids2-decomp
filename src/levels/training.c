@@ -21,7 +21,7 @@ typedef struct {
 
 typedef struct {
     s32 unk0;
-    s32 unk4;
+    void *unk4;
     s32 *unk8;
     s16 unkC;
     s16 unkE;
@@ -154,7 +154,7 @@ void func_800BB724_B6004(func_800BB5CC_state *arg0) {
 
     table_ptr = D_800BCB94_B7474[arg0->unkC];
     temp_v1_2 = arg0->unk8[table_ptr[arg0->unkE]];
-    func_80035260_35E60(arg0->unk4, (s32)arg0->unk8 + temp_v1_2, -0x68, -0x30, 0xFF, 0xFF, 0, s1_var, s0_var);
+    func_80035260_35E60(arg0->unk4, (void *)arg0->unk8 + temp_v1_2, -0x68, -0x30, 0xFF, 0xFF, 0, s1_var, s0_var);
 
     func_8006D7B0_6E3B0(arg0->unk0, -0x68, -0x30, 0xD, s0_var, 1, GET_UNK15(arg0), arg0->unk17, s1_var, s0_var);
 

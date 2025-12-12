@@ -79,8 +79,8 @@ typedef union {
 } S16OrBytesE;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
+    void *unk0;
+    void *unk4;
     s16 unk8;
     s16 unkA;
     S16OrBytesC unkC;
@@ -178,8 +178,8 @@ void func_80040D80_41980(func_80040D80_41980_arg *arg0) {
         arg0->unk4 = NULL;
         setCallback(&func_80040E00_41A00);
     } else {
-        arg0->unk4 = (s32)func_80035F80_36B80(1);
-        arg0->unk0 = (s32)loadAsset_34F7E0();
+        arg0->unk4 = func_80035F80_36B80(1);
+        arg0->unk0 = loadAsset_34F7E0();
         arg0->unk10.asS16 = 0x80;
         arg0->unk12 = -8;
         setCallback(&func_80040E4C_41A4C);
@@ -198,7 +198,7 @@ void func_80040E00_41A00(func_80040E00_41A00_arg *arg0) {
 void func_80040E4C_41A4C(func_80040D80_41980_arg *arg0) {
     func_80035260_35E60(
         arg0->unk4,
-        (s32)&D_800907F8_913F8,
+        (void *)&D_800907F8_913F8,
         -0x68,
         arg0->unk8,
         0xFF,
