@@ -90,6 +90,8 @@ typedef struct {
 
 extern FuncPtr D_800BCB5C_B411C[];
 extern FuncPtr D_800BCB74_B4134[];
+extern s16 D_800BCB7C_B413C[];
+extern u16 D_800BCB7E_B413E[];
 extern s32 D_800BCBA0_B4160[][3];
 extern void func_800B00D4_9FF84(Arg0Struct *, s32);
 extern void func_800B02AC_A015C(Arg0Struct *);
@@ -165,7 +167,51 @@ void func_800BBF40_B3500(Arg0Struct *arg0) {
     D_800BCB74_B4134[arg0->unkBBE](arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BBF70_B3530);
+s32 func_800BBF70_B3530(Arg0Struct *arg0) {
+    u8 temp_v1;
+
+    temp_v1 = arg0->unkBBF;
+    if (temp_v1 == 0) {
+        arg0->unkBBF = temp_v1 + 1;
+        arg0->unkB8C = 1;
+        if (arg0->unk450 > 0) {
+            arg0->unk450 = 0;
+        }
+        if (!(arg0->unkB84 & 0x80000)) {
+            u8 temp_v0 = arg0->unkBDB;
+            if (temp_v0 != 0) {
+                arg0->unkBDB = temp_v0 - 1;
+            }
+        }
+    }
+
+    arg0->unkB8C--;
+    if (arg0->unkB8C == 0) {
+        arg0->unkB8C = D_800BCB7C_B413C[arg0->unkBC0 * 2];
+        arg0->unkB9E = D_800BCB7E_B413E[arg0->unkBC0 * 2];
+        arg0->unkBC0++;
+    }
+
+    arg0->unkB88 = 0x10;
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unk450 -= 0x8000;
+    func_800B02AC_A015C(arg0);
+
+    if (arg0->unkB8C == -1) {
+        arg0->unkB88 = 0;
+        arg0->unkBBD = 1;
+        arg0->unkBBE = 1;
+        arg0->unkBBF = 0;
+        arg0->unkBC0 = 0;
+        arg0->unk474 = 0;
+        if (arg0->unkBDB == 0) {
+            arg0->unkB84 |= 0x100000;
+        }
+    }
+
+    return 0;
+}
 
 s32 func_800BC094_B3654(Arg0Struct *arg0) {
     if (arg0->unkBBF == 0) {
