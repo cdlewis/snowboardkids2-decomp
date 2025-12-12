@@ -69,3 +69,7 @@ src/9FF70.c:160
 src/9FF70.c:156
 src/levels/ice_land_boss.c:78
 src/9FF70.c:157
+src/9FF70.c:162
+src/levels/crazy_jungle_boss.c:93
+src/levels/jingle_town_boss.c:96
+src/levels/ice_land_boss.c:80
