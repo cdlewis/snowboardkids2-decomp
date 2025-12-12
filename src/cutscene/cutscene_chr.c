@@ -27,7 +27,6 @@ extern void func_800B77C4_1E4874(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
 extern void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
 extern void func_800B7620_1E46D0(CutsceneSlotData *arg0, s16 arg1, s16 arg2, s16 arg3);
 extern void func_800B7914_1E49C4(CutsceneSlotData *, s32, s32, s32, s16);
-extern void func_800B7A60_1E4B10(CutsceneSlotData *, SceneModel *, s32, s32, s32, s16);
 extern StateEntryItem *func_800B34B0_1E0560(s32);
 extern s32 func_800B734C_1E43FC(CutsceneSlotData *, SceneModel *, s16);
 

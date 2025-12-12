@@ -277,7 +277,39 @@ void func_800B788C_1E493C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3) 
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7914_1E49C4);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7A60_1E4B10);
+void func_800B7A60_1E4B10(
+    CutsceneSlotData *arg0,
+    SceneModel *unused,
+    s32 targetX,
+    s32 targetY,
+    s32 targetZ,
+    s16 duration
+) {
+    s16 temp_v0;
+    s16 var_t1;
+
+    temp_v0 = duration + 1;
+    var_t1 = temp_v0;
+    if ((temp_v0 << 16) <= 0) {
+        var_t1 = 1;
+    }
+
+    arg0->unk30 = targetX;
+    arg0->unk34 = targetY;
+    arg0->unk38 = targetZ;
+
+    arg0->unk3C = (arg0->unk30 - arg0->unk04.unk20_u.unk20_s32) / var_t1;
+    arg0->unk40 = (arg0->unk34 - arg0->unk28) / var_t1;
+    arg0->unk44 = (arg0->unk38 - arg0->unk2C) / var_t1;
+
+    arg0->unk84 = var_t1;
+    arg0->unk86 = var_t1;
+    arg0->angle = 0;
+    arg0->unk7C = 0;
+    arg0->unk7E = 0;
+    arg0->unk0.bytes[0] = 1;
+    arg0->unk7A = arg0->unk78;
+}
 
 void func_800B7B70_1E4C20(CutsceneSlotData *arg0, s32 *arg1, s16 arg2, s32 arg3, s32 arg4) {
     s16 duration;
