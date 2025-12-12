@@ -870,7 +870,6 @@ void func_80030694_31294(Struct_80030694 *arg0) {
     setCallback(func_80030764_31364);
 }
 
-extern u8 func_80027C60_28860(s32);
 extern u8 func_80027C7C_2887C(s32);
 extern void func_8006D7B0_6E3B0(void *, s16, s16, s32, s32, s32, s32, s32, s32, s32);
 
