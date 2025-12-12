@@ -155,7 +155,6 @@ typedef struct {
 } func_800B30B0_arg;
 
 extern s32 func_8005D308_5DF08(void *, s32);
-extern void func_80059A88_5A688(func_800B30B0_arg *, s16);
 
 extern u16 D_800BAB48_AA9F8[];
 extern u16 D_800BAB58_AAA08[];
@@ -835,7 +834,7 @@ s32 func_800B2C18_A2AC8(func_800B30B0_arg *arg0) {
     if (state->unk7A == 6) {
         if (arg0->unkBAA != 0) {
             func_8004FCF0_508F0(arg0->unkBAA);
-            func_80059A88_5A688(arg0, arg0->unkBAA);
+            func_80059A88_5A688((Player *)arg0, arg0->unkBAA);
 
             var_v1 = arg0->unkBAA;
             if (var_v1 < 0xF) {

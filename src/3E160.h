@@ -121,6 +121,7 @@ void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2);
 void func_80058AEC_596EC(Player *arg0, void *arg1);
 void func_80058A94_59694(Player *arg0);
 void func_80059A48_5A648(Player *arg0, s32 arg1);
+void func_80059A88_5A688(Player *arg0, s32 arg1);
 s32 func_80059AC4_5A6C4(Player *arg0);
 void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2);
 u8 func_80027C44_28844(u8 arg0);
