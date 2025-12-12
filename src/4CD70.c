@@ -1700,6 +1700,14 @@ void func_8004F7F4_503F4(Struct_func_8004F04C *arg0) {
 void func_8004F898_50498(Struct_func_8004F04C *);
 void func_8004F9E8_505E8(Struct_func_8004F04C *);
 
+extern char D_8009E904_9F504[];
+extern char D_8009E914_9F514[];
+
+typedef struct {
+    u8 pad[0x54];
+    s32 unk54;
+} AllocationStruct_8004F898;
+
 void func_8004F820_50420(Struct_func_8004F04C *arg0) {
     arg0->unkC = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     arg0->unk4 = loadAsset_34CB50();
@@ -1711,7 +1719,39 @@ void func_8004F820_50420(Struct_func_8004F04C *arg0) {
     setCallback(func_8004F898_50498);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004F898_50498);
+void func_8004F898_50498(Struct_func_8004F04C *arg0) {
+    char buf[16];
+    AllocationStruct_8004F898 *allocation;
+    s32 time;
+    s32 minutes;
+    s32 seconds;
+    s32 frames;
+    s16 temp;
+    char *formatStr;
+
+    allocation = (AllocationStruct_8004F898 *)getCurrentAllocation();
+    time = allocation->unk54;
+    minutes = time / 32400;
+    seconds = (time % 32400) / 540;
+    frames = ((time % 32400) % 540) / 9;
+
+    temp = (u16)arg0->unk10 + 1;
+    arg0->unk10 = temp;
+    if (temp == 0x28) {
+        arg0->unk10 = 0;
+    }
+
+    if (arg0->unk10 < 0x14) {
+        formatStr = D_8009E904_9F504;
+        sprintf(buf, formatStr, minutes, seconds, frames);
+    } else {
+        formatStr = D_8009E914_9F514;
+        sprintf(buf, formatStr, minutes, seconds, frames);
+    }
+
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    func_8003BD60_3C960(buf, -0x54, -0x28, 0xFF, arg0->unkC, 8, 0);
+}
 
 void func_8004F9E8_505E8(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
