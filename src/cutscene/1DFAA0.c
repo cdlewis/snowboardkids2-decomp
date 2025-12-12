@@ -15,6 +15,24 @@ typedef struct {
     s32 unk2E0;
 } func_800B2AA0_slot16;
 
+typedef struct {
+    void *unk0;
+    void *unk4;
+    s32 unk8;
+} DmaInfo;
+
+typedef struct {
+    DmaInfo *array0;
+    s16 count0;
+    s16 pad06;
+    DmaInfo *array1;
+    s16 count1;
+    s16 pad0E;
+    DmaInfo *array2;
+    s16 count2;
+    s16 pad16;
+} CutsceneAssetTable;
+
 extern StateEntry *D_800BAEBC_1E7F6C;
 extern s32 D_800BAEB8_1E7F68;
 extern StateEntry *D_800BA93C_1E79EC;
@@ -29,6 +47,9 @@ extern s16 D_800BAEC0_1E7F70;
 extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
 extern s8 D_800BAE00_1E7EB0[];
 extern u8 identityMatrix[];
+extern CutsceneAssetTable D_800BA7BC_1E786C[];
+extern CutsceneAssetTable D_800BA7C4_1E7874[];
+extern CutsceneAssetTable D_800BA7CC_1E787C[];
 
 extern s32 initializeSlotState(StateEntry *, CutsceneManager *, s32);
 extern s32 updateSlotData(void *, s32 slot);
@@ -397,7 +418,49 @@ s32 func_800B3540_1E05F0(void) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3570);
+void *func_800B3570(s16 arg0, s16 arg1, s16 arg2) {
+    s16 clampedArg1;
+    DmaInfo *dmaInfo;
+    CutsceneAssetTable *tableEntry;
+    s32 tableOffset;
+
+    dmaInfo = NULL;
+
+    if (arg1 >= 3) {
+        clampedArg1 = 2;
+    } else {
+        clampedArg1 = arg1 & (~arg1 >> 31);
+    }
+
+    if (arg0 >= 16) {
+        return NULL;
+    }
+
+    tableOffset = arg0 * 0x18;
+    tableEntry = (CutsceneAssetTable *)((u8 *)D_800BA7BC_1E786C + tableOffset);
+
+    if (clampedArg1 == 0) {
+        if (arg2 < tableEntry->count0) {
+            dmaInfo = &((CutsceneAssetTable *)((u8 *)D_800BA7BC_1E786C + tableOffset))->array0[arg2];
+        }
+    } else if (clampedArg1 == 1) {
+        if (arg2 < tableEntry->count1) {
+            dmaInfo = &((CutsceneAssetTable *)((u8 *)D_800BA7C4_1E7874 + tableOffset))->array0[arg2];
+        }
+    }
+
+    if (clampedArg1 == 2) {
+        if (arg2 < tableEntry->count2) {
+            dmaInfo = &((CutsceneAssetTable *)((u8 *)D_800BA7CC_1E787C + (arg0 * 0x18)))->array0[arg2];
+        }
+    }
+
+    if (dmaInfo == NULL) {
+        return NULL;
+    }
+
+    return dmaRequestAndUpdateStateWithSize(dmaInfo->unk0, dmaInfo->unk4, dmaInfo->unk8);
+}
 
 s32 func_800B36C0(void *arg0) {
     s32 result;
