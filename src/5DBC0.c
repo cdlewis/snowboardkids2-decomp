@@ -2,6 +2,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "rand.h"
 
 s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, void *arg2, s32 arg3) {
@@ -20,7 +21,28 @@ s32 func_8005D020_5DC20(void *arg0, u16 arg1) {
     return func_80062274_62E74(arg0, arg1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D03C_5DC3C);
+void func_8005D03C_5DC3C(Player *arg0) {
+    s32 velX;
+    s32 velY;
+    s32 velZ;
+    s64 sum;
+    s32 magnitude;
+    s32 maxMagnitude;
+
+    velX = arg0->unk44C;
+    velY = arg0->unk450;
+    velZ = arg0->unk454;
+
+    sum = (s64)velX * velX + (s64)velY * velY + (s64)velZ * velZ;
+    magnitude = isqrt64(sum);
+
+    maxMagnitude = arg0->unkAA4;
+    if (maxMagnitude < magnitude) {
+        arg0->unk44C = (s32)(((s64)arg0->unk44C * arg0->unkAA4) / magnitude);
+        arg0->unk450 = (s32)(((s64)arg0->unk450 * arg0->unkAA4) / magnitude);
+        arg0->unk454 = (s32)(((s64)arg0->unk454 * arg0->unkAA4) / magnitude);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D180_5DD80);
 
