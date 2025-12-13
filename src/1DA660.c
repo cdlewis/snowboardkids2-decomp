@@ -26,7 +26,6 @@ extern void *renderTextPalette;
 extern char D_800B11F0_1DB790[];
 extern s16 D_800B1160_1DB700[];
 extern s16 D_800B1162_1DB702[];
-extern void func_800014FC_20FC(SceneModel *, s32);
 extern void func_8000150C_210C(SceneModel *);
 
 typedef struct {

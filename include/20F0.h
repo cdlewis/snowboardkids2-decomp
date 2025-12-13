@@ -141,6 +141,8 @@ typedef struct {
     void *unk118;
     void *unk11C;
     void *unk120;
+    u8 padding4[0x34];
+    s32 unk158;
 } SceneModel;
 
 void *func_800019B8_25B8(s32 arg0, void *arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5);
@@ -157,6 +159,7 @@ void updateModelGeometry(SceneModel *);
 void func_8000160C_220C(SceneModel *arg0, s8 arg1);
 void func_80001640_2240(SceneModel *arg0);
 void func_80001650_2250(SceneModel *arg0);
+void func_800014FC_20FC(SceneModel *arg0, s32 arg1);
 
 typedef struct {
     u8 transformationMatrix[0x20];
