@@ -324,16 +324,16 @@ void func_800B0BEC_1DB18C(func_800B0BEC_arg *arg0) {
 void func_800B0C54_1DB1F4(func_800B0BEC_arg *arg0) {
     s32 *buttons = &gButtonsPressed;
 
-    if (*buttons & 0x800) {
+    if (*buttons & U_JPAD) {
         arg0->unk2--;
     }
-    if (*buttons & 0x400) {
+    if (*buttons & D_JPAD) {
         arg0->unk2++;
     }
-    if (*buttons & 0x100) {
+    if (*buttons & R_JPAD) {
         arg0->unk0++;
     }
-    if (*buttons & 0x200) {
+    if (*buttons & L_JPAD) {
         arg0->unk0--;
     }
 

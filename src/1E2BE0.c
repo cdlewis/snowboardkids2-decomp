@@ -147,15 +147,15 @@ void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
 
             buttonCheck = gButtonsPressed[0];
 
-            if (buttonCheck & 0x10) {
+            if (buttonCheck & R_TRIG) {
                 temp = arg0->unk38;
                 temp += D_800AB044_A23B4 << 12;
                 arg0->unk38 = temp;
-            } else if (buttonCheck & 0x2000) {
+            } else if (buttonCheck & Z_TRIG) {
                 temp = arg0->unk3C;
                 temp -= D_800AB044_A23B4 << 12;
                 arg0->unk3C = temp;
-            } else if (buttonCheck & 0x20) {
+            } else if (buttonCheck & L_TRIG) {
                 u16 temp_angle = arg0->unk20;
                 temp_angle -= (s8)D_800AB044_A23B4;
                 arg0->unk20 = temp_angle & 0x1FFF;
@@ -169,7 +169,7 @@ void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
         case 1:
             if (gControllerInputs[3] & Z_TRIG) {
                 arg0->unk34 = 0;
-            } else if (gButtonsPressed[3] & 0x10) {
+            } else if (gButtonsPressed[3] & R_TRIG) {
                 temp = arg0->unk34;
                 temp += D_800AB04B << 16;
                 arg0->unk34 = temp;
@@ -179,7 +179,7 @@ void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
                 arg0->unk34 = temp;
             }
 
-            if (gButtonsPressed[0] & 0x10) {
+            if (gButtonsPressed[0] & R_TRIG) {
                 temp = arg0->unk38;
                 temp += D_800AB044_A23B4 << 12;
                 arg0->unk38 = temp;

@@ -219,9 +219,9 @@ case1_done_nav:
 
     if ((temp & 0x9000) != 0) {
         if (D_800AB47A_A27EA != 0) {
-            if ((gButtonsPressed & 0x100) != 0) {
+            if ((gButtonsPressed & R_JPAD) != 0) {
                 func_80016070_16C70();
-            } else if ((gButtonsPressed & 0x200) != 0) {
+            } else if ((gButtonsPressed & L_JPAD) != 0) {
                 func_80016150_16D50();
             }
         }
@@ -272,15 +272,15 @@ void func_80015CA4_168A4(void) {
     if (state_var < 5) {
         switch (state_var) {
             case 0:
-                if (gButtonsPressed == 0x10) {
+                if (gButtonsPressed == R_TRIG) {
                     state->unk3BF = state->unk3BF + 1;
                 }
                 break;
 
             case 1:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x10) && (buttons != 0)) {
-                    if (buttons == 0x400) {
+                if ((buttons != R_TRIG) && (buttons != 0)) {
+                    if (buttons == D_JPAD) {
                         state->unk3BF = state->unk3BF + 1;
                     } else {
                         state->unk3BF = 0xFF;
@@ -290,8 +290,8 @@ void func_80015CA4_168A4(void) {
 
             case 2:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x400) && (buttons != 0)) {
-                    if (buttons == 0x20) {
+                if ((buttons != D_JPAD) && (buttons != 0)) {
+                    if (buttons == L_TRIG) {
                         state->unk3BF = state->unk3BF + 1;
                     } else {
                         state->unk3BF = 0xFF;
@@ -301,7 +301,7 @@ void func_80015CA4_168A4(void) {
 
             case 3:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x20) && (buttons != 0)) {
+                if ((buttons != L_TRIG) && (buttons != 0)) {
                     if (buttons == 0x10000) {
                         state->unk3BF = state->unk3BF + 1;
                     } else {
@@ -313,7 +313,7 @@ void func_80015CA4_168A4(void) {
             case 4:
                 buttons = gButtonsPressed;
                 if ((buttons != 0x10000) && (buttons != 0)) {
-                    if (buttons == 0x1000) {
+                    if (buttons == START_BUTTON) {
                         func_80016150_16D50();
                         func_800585C8_591C8(0xDC);
                         func_800585C8_591C8(0xDC);
@@ -340,15 +340,15 @@ void func_80015DF4_169F4(void) {
         switch (cheatState) {
             case 0:
                 temp_v1 = gButtonsPressed;
-                if (temp_v1 == 0x2000) {
+                if (temp_v1 == Z_TRIG) {
                     state->unk3C0++;
                 }
                 break;
 
             case 1:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x2000) && (buttons != 0)) {
-                    if (buttons != 0x4000) {
+                if ((buttons != Z_TRIG) && (buttons != 0)) {
+                    if (buttons != B_BUTTON) {
                         state->unk3C0 = 0xFF;
                     } else {
                         state->unk3C0++;
@@ -358,7 +358,7 @@ void func_80015DF4_169F4(void) {
 
             case 2:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x4000) && (buttons != 0)) {
+                if ((buttons != B_BUTTON) && (buttons != 0)) {
                     if (buttons != 0x8) {
                         state->unk3C0 = 0xFF;
                     } else {
@@ -369,8 +369,8 @@ void func_80015DF4_169F4(void) {
 
             case 3:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x8) && (buttons != 0)) {
-                    if (buttons != 0x400) {
+                if ((buttons != U_CBUTTONS) && (buttons != 0)) {
+                    if (buttons != D_JPAD) {
                         state->unk3C0 = 0xFF;
                     } else {
                         state->unk3C0++;
@@ -380,7 +380,7 @@ void func_80015DF4_169F4(void) {
 
             case 4:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x400) && (buttons != 0)) {
+                if ((buttons != D_JPAD) && (buttons != 0)) {
                     if (buttons != 0x80000) {
                         state->unk3C0 = 0xFF;
                     } else {
@@ -424,8 +424,8 @@ void func_80015DF4_169F4(void) {
 
             case 8:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x10) && (buttons != 0)) {
-                    if (buttons != 0x2000) {
+                if ((buttons != R_TRIG) && (buttons != 0)) {
+                    if (buttons != Z_TRIG) {
                         state->unk3C0 = 0xFF;
                     } else {
                         state->unk3C0++;
@@ -435,8 +435,8 @@ void func_80015DF4_169F4(void) {
 
             case 9:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x2000) && (buttons != 0)) {
-                    if (buttons == 0x8000) {
+                if ((buttons != Z_TRIG) && (buttons != 0)) {
+                    if (buttons == A_BUTTON) {
                         func_80016070_16C70();
                         func_800585C8_591C8(0x110);
                         func_800585C8_591C8(0x110);

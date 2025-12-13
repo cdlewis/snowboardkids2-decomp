@@ -74,27 +74,27 @@ void func_800B6910_1E39C0(CutsceneSlotData *arg0, func_800B5E64_1E2F14_arg0 *arg
     s16 *p80;
     s16 *p82;
 
-    if (((gButtonsPressed & 0x30) == 0x30) && (gControllerInputs & 0x2000)) {
+    if (((gButtonsPressed & (L_TRIG + R_TRIG)) == (L_TRIG + R_TRIG)) && (gControllerInputs & Z_TRIG)) {
         temp_angle = (arg0->unk78 + 0x800) & 0x1FFF;
         arg0->unk78 = temp_angle;
         arg0->unk7A = temp_angle;
         return;
     }
-    if ((gButtonsPressed & 0x2010) == 0x2010) {
+    if ((gButtonsPressed & (Z_TRIG + R_TRIG)) == (Z_TRIG + R_TRIG)) {
         arg0->unk28 = 0;
         arg0->unk80 = 0;
         arg0->unk82 = 0;
         return;
     }
-    if (gButtonsPressed & 0x2000) {
+    if (gButtonsPressed & Z_TRIG) {
         arg0->unk78 = arg0->unk78 - (D_800AB048_A23B8 * 4);
         return;
     }
-    if (gButtonsPressed & 0x10) {
+    if (gButtonsPressed & R_TRIG) {
         arg0->unk28 = arg0->unk28 + (D_800AB044_A23B4 << 12);
         return;
     }
-    if (gButtonsPressed & 0x20) {
+    if (gButtonsPressed & L_TRIG) {
         p80 = &arg0->unk80;
         *p80 = (u16)(*p80 + (D_800AB044_A23B4 * 4));
         p82 = &arg0->unk82;

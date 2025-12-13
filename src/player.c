@@ -67,7 +67,7 @@ typedef struct {
     /* 0x010 */ s32 stopping;
     /* 0x014 */ s32 volume_frame;
     /* 0x018 */ u32 pitchbend_frame;
-    u8 padding02[0x4];
+    /* 0x01C */ s32 stopping_speed;
     /* 0x020 */ f32 vib_amount;
     /* 0x024 */ f32 bendrange;
     /* 0x028 */ f32 old_frequency;
@@ -181,8 +181,8 @@ extern s32 mus_last_fxtype;
 extern s32 mus_current_handle;
 extern s32 mus_random_seed;
 extern ALPlayer plr_player;
-extern s16 mus_master_volume_effects;
-extern s16 mus_master_volume_songs;
+extern u16 mus_master_volume_effects;
+extern u16 mus_master_volume_songs;
 
 u32 __muscontrol_flag;
 fx_t *D_800A64F4_A70F4;
@@ -210,7 +210,7 @@ void func_80073CB4_748B4(channel_t *cp);
 f32 func_80073DC4_749C4(channel_t *cp);
 f32 func_80073D6C_7496C(channel_t *cp);
 void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset);
-void func_800737C4_743C4(channel_t *cp, int x);
+void func_800737C4_743C4(channel_t *cp, s32 x);
 f32 __MusIntPowerOf2(f32 x);
 void MusSetMasterVolume(u32 flags, u32 volume);
 void __MusIntInitialiseChannel(channel_t *cp);
@@ -1320,7 +1320,42 @@ void func_80073738_74338(channel_t *cp, int x) {
     cp->pending = NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_800737C4_743C4);
+void func_800737C4_743C4(channel_t *cp, s32 x) {
+    u32 volume;
+    s32 stopping;
+    u8 pan;
+
+    volume = ((u32)(cp->volume * cp->env_current * (u8)cp->velocity * cp->volscale)) >> 13;
+    if (0x7FFFU < volume) {
+        volume = 0x7FFF;
+    }
+
+    if (cp->fx_addr == 0) {
+        volume = (volume * mus_master_volume_songs);
+    } else {
+        volume = (volume * mus_master_volume_effects);
+    }
+
+    stopping = cp->stopping;
+    volume = volume >> 15;
+
+    if (stopping != -1) {
+        volume = (volume * stopping) / cp->stopping_speed;
+    }
+
+    if (volume != cp->old_volume) {
+        cp->old_volume = volume;
+        alSynSetVol(&__libmus_alglobals.drvr, mus_voices + x, (s16)volume, mus_next_frame_time);
+    }
+
+    pan = cp->pan;
+    if (pan != cp->old_pan) {
+        pan = ((pan * cp->panscale) >> 7) & 0x7F;
+        volume = pan;
+        cp->old_pan = volume;
+        alSynSetPan(&__libmus_alglobals.drvr, mus_voices + x, pan);
+    }
+}
 
 void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset) {
     f32 frequency, temp;
