@@ -1,23 +1,26 @@
+#include "levels/lindas_castle.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
-#include "levels/lindas_castle.h"
-#include "task_scheduler.h"
 #include "rand.h"
 #include "594E0.h"
+#include "task_scheduler.h"
 
 extern s32 isPlayerInRangeAndPull(void *a0, s32 a1, Player *a2);
 extern void *func_80055E68_56A68(u8);
 extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);
 
-extern s32 D_800BBBC0_ABA70[];
-extern s32 D_800BBBC4_ABA74[];
-extern s32 D_800BBBC8_ABA78[];
-extern s32 D_800BBBCC_ABA7C[];
-extern s32 D_800BBBD0_ABA80[];
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+} D_800BBBC0_ABA70_struct;
+extern D_800BBBC0_ABA70_struct D_800BBBC0_ABA70[];
 
 extern void func_800BB5BC_AB46C(void);
 extern void func_800BB7D4_AB684(void);
@@ -107,18 +110,18 @@ void func_800BB454_AB304(TaskArg_AB304 *task) {
     task->unk2C = 0;
     task->unk52 = 1;
 
-    task->unk56 = D_800BBBC0_ABA70[task->unk50 * 5];
+    task->unk56 = D_800BBBC0_ABA70[task->unk50].unk0;
 
-    task->unk3C = D_800BBBC4_ABA74[task->unk50 * 5];
+    task->unk3C = D_800BBBC0_ABA70[task->unk50].unk4;
 
-    task->unk44 = D_800BBBC8_ABA78[task->unk50 * 5];
+    task->unk44 = D_800BBBC0_ABA70[task->unk50].unk8;
 
     task->unk40 = func_80061A64_62664((u8 *)allocation + 0x30, task->unk56, &task->unk3C);
 
     index = task->unk50;
 
     task->unk54 =
-        func_8006D21C_6DE1C(D_800BBBCC_ABA7C[index * 5], D_800BBBD0_ABA80[index * 5], task->unk3C, task->unk44);
+        func_8006D21C_6DE1C(D_800BBBC0_ABA70[index].unkC, D_800BBBC0_ABA70[index].unk10, task->unk3C, task->unk44);
 
     task->unk48 = 0;
     task->unk4C = 0;
