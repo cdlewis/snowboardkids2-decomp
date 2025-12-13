@@ -2,7 +2,9 @@
 #include "5DBC0.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "graphics.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 typedef void (*FuncPtr)(void *);
@@ -44,22 +46,25 @@ typedef struct {
     s32 unk468;
     u8 pad46C[0x8];
     s32 unk474;
-    u8 pad478[0x984 - 0x478];
-    s32 unk984;
-    s32 unk988;
-    s32 unk98C;
+    u8 pad478[0x970 - 0x478];
+    Mat3x3Padded unk970;
     u8 pad990[0xA10 - 0x990];
     UnkA10Entry unkA10[9];
-    u8 padA7C[0xA8C - 0xA7C];
+    s32 unkA7C;
+    u8 padA80[4];
+    s32 unkA84;
+    u8 padA88[4];
     u16 unkA8C;
-    u8 padA8E[0xA9C - 0xA8E];
+    u8 padA8E[6];
+    u16 unkA94;
+    u8 padA96[6];
     u16 unkA9C;
     u16 unkA9E;
     u8 padAA0[0xB84 - 0xAA0];
     s32 unkB84;
     s32 unkB88;
     s32 unkB8C;
-    u8 padB90[0xB94 - 0xB90];
+    s32 unkB90;
     u16 unkB94;
     u8 padding[0x8];
     u16 unkB9E;
@@ -89,7 +94,7 @@ typedef struct {
 extern D_800BC468_ACC98_type D_800BC468_ACC98[];
 extern void func_800B00D4_9FF84(Arg0Struct *, s32);
 extern void func_800B02AC_A015C(Arg0Struct *);
-extern void func_8005D180_5DD80(Arg0Struct *, s32);
+extern s32 func_8005D180_5DD80(Arg0Struct *, s32);
 extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern void func_8005C868_5D468(void *arg0);
 extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
@@ -97,6 +102,8 @@ extern void func_80064808_65408(s32, void *, u8);
 extern void enqueueMultiPartDisplayList(s32, void *, u8);
 extern void func_800BC0E8_AC918(Arg0Struct *);
 extern void func_800B9500_A93B0(void);
+extern void func_8004B794_4C394(void *arg0);
+extern void transformVector3(s32 *, Mat3x3Padded *, s32 *);
 extern s32 D_800BBA7C_AC2AC[][3];
 extern s32 D_800BBA84_AC2B4[][3];
 
@@ -126,7 +133,99 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BBAB8_AC2E8);
+s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
+    Mat3x3Padded sp10;
+    s32 sp30[3];
+    GameState *gameState;
+    s16 clampedAngle;
+    s16 angleDiff;
+    u16 currentAngle;
+    u16 newAngle;
+    s32 temp;
+    s32 temp2;
+
+    gameState = getCurrentAllocation();
+
+    if (arg0->padBC2[4] != 0) {
+        func_800B00D4_9FF84(arg0, 2);
+        return 1;
+    }
+
+    arg0->unkB84 |= 0x40000;
+
+    if (arg0->unkBBF == 0) {
+        if ((u32)*(s32 *)((u8 *)gameState + 0x50) < 0x1EU) {
+            arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
+        } else {
+            arg0->unkB8C += (randA() & 0xFF) >> 1;
+        }
+        arg0->unkB90 = 0;
+        arg0->unkA8C = 0xFFFF;
+        arg0->unkBBF++;
+    }
+
+    clampedAngle = (s16)func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->unk434, arg0->unk43C);
+    currentAngle = arg0->unkA94;
+    clampedAngle = (clampedAngle - currentAngle) & 0x1FFF;
+    if (clampedAngle >= 0x1001) {
+        clampedAngle = clampedAngle | 0xE000;
+    }
+    if (clampedAngle >= 0x39) {
+        clampedAngle = 0x38;
+    }
+    if (clampedAngle < -0x38) {
+        clampedAngle = -0x38;
+    }
+    arg0->unkA94 = currentAngle + clampedAngle;
+
+    if (!(arg0->unkB84 & 1)) {
+        createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)arg0->pad990, &arg0->unk970, &sp10);
+        transformVector3(&arg0->unk44C, &sp10, sp30);
+        sp30[0] = 0;
+        transformVector2(sp30, &sp10, &arg0->unk44C);
+        transformVector2((s32 *)(gameState->unk48 + 0x144), &sp10, sp30);
+        if (sp30[1] > 0) {
+            sp30[1] = 0;
+        }
+        arg0->unk44C += sp30[0];
+        arg0->unk450 += sp30[1];
+        arg0->unk454 += sp30[2];
+    } else {
+        temp = arg0->unk44C;
+        arg0->unk44C = temp - (temp / 16);
+        temp2 = arg0->unk454;
+        arg0->unk454 = temp2 - (temp2 / 16);
+    }
+
+    if (arg0->unk450 > 0) {
+        arg0->unk450 = 0;
+    }
+    arg0->unk450 += -0x10000;
+
+    func_800B02AC_A015C(arg0);
+    if (func_8005D180_5DD80(arg0, 1) != 0) {
+        arg0->unkB90 = 0;
+    }
+
+    arg0->unkB90++;
+    if (arg0->unkB90 == 4 || arg0->unkB90 == 0xC) {
+        func_80056B7C_5777C(&arg0->unk434, 0x49);
+    }
+
+    if (arg0->unkB8C == 0) {
+        func_8004B794_4C394(arg0);
+        if (*((u8 *)gameState + 0x86) != 0) {
+            arg0->unkB8C = arg0->unkB8C + (0xF + ((randA() & 0xFF) >> 4));
+        } else {
+            arg0->unkB8C = arg0->unkB8C + (0xF + ((randA() & 0xFF) >> 2));
+        }
+    } else {
+        arg0->unkB8C--;
+    }
+
+    return 0;
+}
 
 s32 func_800BBD98_AC5C8(Arg0Struct *arg0) {
     s32 pad[3];
@@ -215,7 +314,7 @@ void func_800BBFEC_AC81C(Arg0Struct *arg0) {
     u16 temp;
 
     alloc = getCurrentAllocation();
-    memcpy(&arg0->unk984, &arg0->unk434, 0xC);
+    memcpy(&arg0->unk970.unk14, &arg0->unk434, 0xC);
     allocPlus30 = (u8 *)alloc + 0x30;
     temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
     arg0->unkB94 = temp;
@@ -280,8 +379,8 @@ void func_800BC330_ACB60(Arg0Struct *arg0) {
         s32 *posPtr;
         u16 temp;
 
-        arg0->unkA10[i].unk0 = arg0->unk984 + D_800BBA7C_AC2AC[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_0];
-        arg0->unkA10[i].unk8 = arg0->unk98C + D_800BBA84_AC2B4[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_2 + 2];
+        arg0->unkA10[i].unk0 = arg0->unk970.unk14 + D_800BBA7C_AC2AC[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_0];
+        arg0->unkA10[i].unk8 = arg0->unk970.unk1C + D_800BBA84_AC2B4[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_2 + 2];
         posPtr = &arg0->unkA10[i].unk0;
         temp = func_80059E90_5AA90(arg0, temp_s5, arg0->unkB94, posPtr);
         arg0->unkA10[i].unk4 = func_8005CFC0_5DBC0(temp_s5, temp, posPtr, 0x100000);
