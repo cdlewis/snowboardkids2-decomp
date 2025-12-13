@@ -133,7 +133,7 @@ void func_80051E90_52A90(Struct_52880 *arg0) {
 
     alloc = (GameState *)getCurrentAllocation();
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148(s1, arg0->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3s32 *)s1, arg0->unk42, 0x80000);
     if (result != NULL) {
         if (!(result->unkB84 & 0x1000)) {
             func_80058A10_59610(result);
@@ -261,7 +261,7 @@ void func_80052500_53100(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148(s1, new_var3->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3s32 *)s1, new_var3->unk42, 0x80000);
     if (result == 0) {
         return;
     }
@@ -381,7 +381,7 @@ void func_80052B0C_5370C(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148(s1, new_var3->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3s32 *)s1, new_var3->unk42, 0x80000);
     if (result == 0) {
         return;
     }
@@ -508,7 +508,7 @@ void func_80053160_53D60(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148(s1, new_var3->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3s32 *)s1, new_var3->unk42, 0x80000);
     if (result == 0) {
         return;
     }
@@ -773,7 +773,7 @@ void func_80053EEC_54AEC(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148(s1, new_var3->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3s32 *)s1, new_var3->unk42, 0x80000);
     if (result == 0) {
         return;
     }
@@ -879,7 +879,7 @@ s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
 
 void func_80054568_55168(Struct_52880 *arg0) {
     getCurrentAllocation();
-    if (func_8005C250_5CE50(&arg0->unk4, arg0->unk42, 0xC0000)) {
+    if (func_8005C250_5CE50((Vec3s32 *)&arg0->unk4, arg0->unk42, 0xC0000)) {
         arg0->unk4E++;
     }
 }
@@ -1332,7 +1332,7 @@ void func_80055900_56500(Struct_52880 *arg0) {
     Player *result;
 
     getCurrentAllocation();
-    result = func_8005B548_5C148(&arg0->unk4, arg0->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
     if (result != NULL) {
         if ((result->unkB84 & 0x1000) == 0) {
             func_80058A68_59668(result);

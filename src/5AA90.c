@@ -1,4 +1,5 @@
 #include "5AA90.h"
+#include "3E160.h"
 #include "56910.h"
 #include "common.h"
 #include "displaylist.h"
@@ -272,7 +273,69 @@ INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005BCB8_5C8B8);
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005BF50_5CB50);
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005C250_5CE50);
+s32 func_8005C250_5CE50(Vec3s32 *arg0, s32 arg1, s32 arg2) {
+    Vec3s32 pos;
+    s32 combinedRadius;
+    Allocation5AA90 *allocation;
+    ListNode_5AA90 *node;
+    Player *playerData;
+    void *dataArray;
+    s32 result;
+    Vec3s32 *posPtr;
+
+    allocation = getCurrentAllocation();
+    node = allocation->list;
+    result = 0;
+    if (node != NULL) {
+        posPtr = &pos;
+        do {
+            u8 id = node->id;
+            if (arg1 == id) {
+                ;
+            } else {
+                dataArray = allocation->dataArray;
+                playerData = (Player *)(id * 0xBE8 + (s32)dataArray);
+
+                if (playerData->unkB88 & 0x10) {
+                    ;
+                } else if (playerData->unkBA4 != 0) {
+                    ;
+                } else {
+                    memcpy(posPtr, &node->localPos, 0xC);
+
+                    pos.unk0 += node->posPtr->unk0;
+                    pos.unk4 += node->posPtr->unk4;
+                    pos.unk8 += node->posPtr->unk8;
+
+                    pos.unk0 -= arg0->unk0;
+                    pos.unk4 -= arg0->unk4;
+                    pos.unk8 -= arg0->unk8;
+
+                    combinedRadius = node->radius + arg2;
+
+                    if (-combinedRadius < pos.unk0 && pos.unk0 < combinedRadius && -combinedRadius < pos.unk4 &&
+                        pos.unk4 < combinedRadius && -combinedRadius < pos.unk8 && pos.unk8 < combinedRadius) {
+                        s32 dist;
+
+                        dist = isqrt64((s64)pos.unk0 * pos.unk0 + (s64)pos.unk4 * pos.unk4 + (s64)pos.unk8 * pos.unk8);
+
+                        if (dist < combinedRadius) {
+                            u8 index = node->id;
+                            result = 1;
+                            func_80058AEC_596EC(
+                                (Player *)((u8 *)allocation->dataArray + ((index * 3 * 128) - (index * 3)) * 8),
+                                posPtr
+                            );
+                        }
+                    }
+                }
+            }
+            node = node->next;
+        } while (node != NULL);
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005C454_5D054);
 

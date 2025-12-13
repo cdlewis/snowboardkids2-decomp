@@ -703,7 +703,7 @@ void func_80042160_42D60(Func420E8State *arg0) {
     temp = arg0->unk40;
     scaleMatrix((Mat3x3Padded *)arg0, temp, temp, temp);
 
-    func_8005C250_5CE50(&arg0->unk14, arg0->unk46, arg0->unk40 * 0xF0);
+    func_8005C250_5CE50((Vec3s32 *)&arg0->unk14, arg0->unk46, arg0->unk40 * 0xF0);
 
     arg0->unk3B = (u8)arg0->unk44;
 
