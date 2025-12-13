@@ -165,7 +165,7 @@ void func_80051E90_52A90(Struct_52880 *arg0) {
     }
 }
 
-void func_80052128_52D28(void);
+void func_80052128_52D28(Struct_52880 *arg0);
 
 void func_80051FC4_52BC4(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
@@ -211,7 +211,96 @@ void func_80051FC4_52BC4(Struct_52880 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80052128_52D28);
+void func_80052128_52D28(Struct_52880 *arg0) {
+    Alloc_55650 *alloc;
+    s32 sp18[3];
+    s32 savedVec[3];
+    s32 rotateVec[3];
+    u8 pad1[32];
+    s16 var_s3;
+    s32 temp_v0;
+    s32 i;
+
+    alloc = (Alloc_55650 *)getCurrentAllocation();
+
+    if (alloc->unk76 == 0) {
+
+        func_80050604_51204(&arg0->unk4, &arg0->velY, 2);
+
+        arg0->velZ += 0xFFFC0000;
+
+        func_80051C80_52880(&arg0->velY, 0x1C0000);
+
+        memcpy(savedVec, &arg0->unk4, 0xC);
+
+        arg0->unk4 += arg0->velY;
+        arg0->unk8 += arg0->velZ;
+        arg0->unkC += arg0->velX;
+
+        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
+
+        func_80060CDC_618DC(&alloc->unk30, (u16)arg0->unk40, &arg0->unk4, 0x80000, sp18);
+
+        if ((sp18[0] != 0) || (sp18[2] != 0)) {
+            arg0->unk4 = arg0->unk4 + sp18[0];
+            arg0->unkC = arg0->unkC + sp18[2];
+            arg0->unk4E = arg0->unk4E + 1;
+        }
+
+        arg0->unk48--;
+        if (arg0->unk48 == 0) {
+            arg0->unk4E++;
+        }
+
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+
+        if (arg0->unk8 < temp_v0 + 0x100000) {
+            arg0->unk8 = temp_v0 + 0x100000;
+        }
+
+        arg0->velY = arg0->unk4 - savedVec[0];
+        arg0->velZ = arg0->unk8 - savedVec[1];
+        arg0->velX = arg0->unkC - savedVec[2];
+
+        func_80051E90_52A90(arg0);
+
+        var_s3 = func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->velY, arg0->velX), arg0->unk42, 0x3C00000, 0x1C0000);
+
+        if ((var_s3 << 16) != 0) {
+            var_s3 &= 0x1FFF;
+            if (var_s3 >= 0x1001) {
+                var_s3 |= 0xE000;
+            }
+
+            if ((s16)arg0->unk46 < var_s3) {
+                var_s3 = arg0->unk46;
+            }
+
+            if (var_s3 < -(s16)arg0->unk46) {
+                var_s3 = -(s16)arg0->unk46;
+            }
+
+            memcpy(rotateVec, &arg0->velY, 0xC);
+            rotateVectorY(rotateVec, var_s3, &arg0->velY);
+        }
+
+        if ((s16)arg0->unk46 < 0x2C) {
+            arg0->unk46 += 5;
+        }
+    }
+
+    if (arg0->unk4E != 0) {
+        func_80050ECC_51ACC(&arg0->unk4);
+        func_80056B7C_5777C(&arg0->unk4, 0x11);
+        func_80069CF8_6A8F8();
+    }
+
+    i = 0;
+    do {
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        i++;
+    } while (i < 4);
+}
 
 void func_800523EC_52FEC(Struct_52880 *arg0) {
     arg0->unk20 = freeNodeMemory(arg0->unk20);
