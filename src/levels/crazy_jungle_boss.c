@@ -103,7 +103,6 @@ extern void func_80064808_65408(s32, void *, u8);
 extern void enqueueMultiPartDisplayList(s32, void *, u8);
 extern void func_800BC0E8_AC918(Arg0Struct *);
 extern void func_8004B794_4C394(void *arg0);
-extern void transformVector3(s32 *, Mat3x3Padded *, s32 *);
 extern s32 D_800BBA7C_AC2AC[][3];
 extern s32 D_800BBA84_AC2B4[][3];
 

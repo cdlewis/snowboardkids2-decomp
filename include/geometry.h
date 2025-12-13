@@ -52,6 +52,7 @@ void matrixToEulerAngles(s32 *, s32 *, f32 *, f32 *, f32 *, f32 *, f32 *, f32 *)
 
 void transformVector(s16 *, s16 *, void *);
 void transformVector2(void *matrix, void *vector, s32 *output);
+void transformVector3(s32 *, Mat3x3Padded *, s32 *);
 
 void rotateVectorY(void *, s32, void *);
 
