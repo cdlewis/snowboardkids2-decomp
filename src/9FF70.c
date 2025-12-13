@@ -2020,8 +2020,6 @@ s32 func_800B4A4C_A48FC(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-extern void func_80051C08_52808(void *, s32);
-
 typedef struct {
     u8 _pad0[0xBDF];
     u8 unkBDF;
