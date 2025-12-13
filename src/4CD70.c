@@ -495,7 +495,130 @@ void func_8004CD88_4D988(Struct_func_8004CD88 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CDC0_4D9C0);
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CEC4_4DAC4);
+extern void func_8000FED0_10AD0(void);
+
+typedef struct {
+    u8 pad0[0x10];
+    void *unk10;
+    u8 pad14[0x4A];
+    u8 unk5E;
+    u8 pad5F[0x5];
+    u8 unk64[4]; // player indices
+} CEC4_Allocation;
+
+typedef struct {
+    u8 pad0[0xB88];
+    s32 unkB88;
+    u8 padB8C[0xC];
+    s16 unkB98;
+    u8 padB9A[0x35];
+    u8 unkBCF;
+} CEC4_PlayerData;
+
+// Element size is 0x14
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    u8 pad4[0x4];
+    s16 unk8;
+    u8 unkA;
+    u8 unkB;
+    u8 unkC;
+    s8 unkD;
+    u8 padE[0x2];
+    s16 unk10;
+    u8 pad12[0x2];
+} CEC4_Element;
+
+typedef struct {
+    u8 pad0[0x2];
+    s16 unk2;
+    u8 pad4[0x8];
+    CEC4_Element elements[4];
+} CEC4_Arg0Struct;
+
+void func_8004CEC4_4DAC4(CEC4_Arg0Struct *arg0) {
+    CEC4_Allocation *allocation;
+    s32 i;
+    u8 playerIndex;
+    CEC4_PlayerData *playerData;
+    CEC4_Element *elem;
+    s32 temp;
+    s32 delta;
+    s8 state;
+    s16 baseVal;
+    s32 count;
+    u8 pad[0x8];
+
+    allocation = getCurrentAllocation();
+
+    count = allocation->unk5E;
+    i = 0;
+    if (count > 0) {
+        do {
+            playerIndex = allocation->unk64[i];
+            playerData = (CEC4_PlayerData *)((u8 *)allocation->unk10 + playerIndex * 0xBE8);
+
+            temp = (0x2000 - playerData->unkB98) * 0x8C;
+            elem = (CEC4_Element *)((u8 *)arg0 + 0xC + playerIndex * 0x14);
+
+            if (temp < 0) {
+                temp += 0x1FFF;
+            }
+
+            baseVal = elem->unk10;
+            delta = (temp >> 13) - baseVal;
+
+            if (delta < -4) {
+                delta = -4;
+            }
+            if (delta >= 5) {
+                delta = 4;
+            }
+
+            elem->unk10 = baseVal + delta;
+            state = elem->unkD;
+
+            switch (state) {
+                case 0:
+                    if (playerData->unkB88 & 0x10) {
+                        elem->unkD = state + 1;
+                        case 1:
+                            elem->unkC++;
+                            if ((s8)elem->unkC == 2) {
+                                elem->unkD = elem->unkD + 1;
+                            }
+                    }
+                    break;
+                case 2:
+                    if (!(playerData->unkB88 & 0x10)) {
+                        elem->unkD = state + 1;
+                        case 3:
+                            elem->unkC--;
+                            if ((elem->unkC << 24) == 0) {
+                                elem->unkD = 0;
+                            }
+                    }
+                    break;
+            }
+
+            elem->unk2 = (u16)elem->unk10 + arg0->unk2 - 4;
+            elem->unk8 = (s8)elem->unkC;
+
+            if (playerData->unkBCF != 0) {
+                elem->unkA = 1;
+            } else {
+                elem->unkA = 0;
+            }
+
+            debugEnqueueCallback(0xC, 0, func_80010240_10E40, elem);
+            i++;
+            count = allocation->unk5E;
+        } while (i < count);
+    }
+
+    debugEnqueueCallback(0xC, 0, func_8000FED0_10AD0, arg0);
+}
 
 typedef struct {
     void *unk0;
