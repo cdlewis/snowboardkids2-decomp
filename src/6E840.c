@@ -257,7 +257,69 @@ void func_8006F718_70318(void) {
     } while (i >= 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006F82C_7042C);
+void func_8006F82C_7042C(void) {
+    Node_70B00 *temp_v0;
+    Node_70B00 *node;
+    u16 var_s0;
+    u16 var_t9;
+    u16 var_t8;
+    u16 var_t7;
+    u16 var_t6;
+    u16 var_t5;
+    s16 temp_b0;
+    s16 temp_b2;
+
+    var_s0 = 0xA0;
+    var_t9 = 0x78;
+    var_t8 = 0;
+    var_t7 = 0;
+    var_t6 = 0x13F;
+    node = &D_800A3370_A3F70;
+    var_t5 = 0xEF;
+
+    if (node != NULL) {
+        do {
+            temp_v0 = node->unk0.next;
+            if (temp_v0 != NULL) {
+                var_s0 = temp_v0->unkAC;
+                var_t9 = temp_v0->unkAE;
+                var_t8 = temp_v0->unkB0;
+                var_t7 = temp_v0->unkB2;
+                var_t6 = temp_v0->unkB4;
+                var_t5 = temp_v0->unkB6;
+            }
+            node->unkAC = var_s0 + (u16)node->unkA0;
+            node->unkAE = var_t9 + (u16)node->unkA2;
+            node->unkD0 = node->unkAC * 4;
+            node->unkD2 = node->unkAE * 4;
+            node->unkB0 = (u16)node->unkAC + (u16)node->unkA4;
+            node->unkB2 = (u16)node->unkAE + (u16)node->unkA6;
+            node->unkB4 = (u16)node->unkAC + (u16)node->unkA8;
+            node->unkB6 = (u16)node->unkAE + (u16)node->unkAA;
+            if (node->unkB0 < (s16)var_t8) {
+                node->unkB0 = var_t8;
+            }
+            if (node->unkB2 < (s16)var_t7) {
+                node->unkB2 = var_t7;
+            }
+            if ((s16)var_t6 < node->unkB4) {
+                node->unkB4 = var_t6;
+            }
+            if ((s16)var_t5 < node->unkB6) {
+                node->unkB6 = var_t5;
+            }
+            temp_b0 = node->unkB0;
+            if (node->unkB4 < temp_b0) {
+                node->unkB4 = temp_b0;
+            }
+            temp_b2 = node->unkB2;
+            if (node->unkB6 < temp_b2) {
+                node->unkB6 = temp_b2;
+            }
+            node = node->unk8.list2_next;
+        } while (node != NULL);
+    }
+}
 
 void setModelCameraTransform(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6) {
     Node_70B00 *node = (Node_70B00 *)arg0;

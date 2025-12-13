@@ -50,7 +50,13 @@ typedef struct Node_70B00 {
     /* 0xA6 */ s16 unkA6;
     /* 0xA8 */ s16 unkA8;
     /* 0xAA */ s16 unkAA;
-    u8 padding2b[0x10];
+    /* 0xAC */ s16 unkAC;
+    /* 0xAE */ s16 unkAE;
+    /* 0xB0 */ s16 unkB0;
+    /* 0xB2 */ s16 unkB2;
+    /* 0xB4 */ s16 unkB4;
+    /* 0xB6 */ s16 unkB6;
+    u8 padding2b[0x4];
     /* 0xBC */ u8 unkBC;
     u8 unkBD;
     u8 unkBE;
@@ -60,7 +66,10 @@ typedef struct Node_70B00 {
     u8 padding8[0x6];
     s16 unkC8;
     s16 unkCA;
-    u8 padding6[0xC];
+    u8 padding6[0x4];
+    /* 0xD0 */ s16 unkD0;
+    /* 0xD2 */ s16 unkD2;
+    u8 padding6b[0x4];
     /* 0xD8 */ u16 perspNorm;
     /* 0xDA */ u16 id;
     /* 0xE0 */ Mtx perspectiveMatrix;
