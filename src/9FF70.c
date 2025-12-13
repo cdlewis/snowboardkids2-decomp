@@ -1779,7 +1779,6 @@ void func_800B419C_A404C(func_800B30B0_arg *arg0) {
 }
 
 extern s16 identityMatrix[];
-extern s32 approximate_sqrt(s32);
 extern void transformVector3(s32 *, Mat3x3Padded *, s32 *);
 
 s32 func_800B42A8_A4158(func_800B30B0_arg *arg0, s32 arg1, s32 arg2, s32 arg3) {
