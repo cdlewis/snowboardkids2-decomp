@@ -1659,7 +1659,63 @@ void __MusIntInitialiseChannel(channel_t *cp) {
     cp->channel_tempo = tempo;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_800744EC_750EC);
+s32 func_800744EC_750EC(song_t *arg0, s32 arg1) {
+    channel_t *cp;
+    s32 i;
+    s32 lowest_priority;
+    s32 best_channel;
+
+    // find an empty channel
+    cp = mus_channels;
+    for (i = 0; i < max_channels; i++) {
+        if (cp->pdata == NULL) {
+            return i;
+        }
+        cp++;
+    }
+    cp = mus_channels;
+
+    // find lowest priority channel with fx
+    lowest_priority = 0x7FFFFFFF;
+    best_channel = -1;
+    for (i = 0; i < max_channels; i++) {
+        if (cp->fx_addr == 0) {
+        } else if (lowest_priority < cp->priority) {
+        } else {
+            lowest_priority = cp->priority;
+            best_channel = i;
+        }
+        cp++;
+    }
+
+    if (best_channel != -1) {
+        return best_channel;
+    }
+
+    // return i if fx_addr == 0 and song_addr != arg0
+    cp = mus_channels;
+    i = 0;
+    for (i = 0; i < max_channels; i++) {
+        if (cp->fx_addr != 0) {
+        } else if (cp->song_addr != arg0) {
+            return i;
+        }
+    }
+
+    // The reload happens unconditionally at this point
+    cp = mus_channels;
+
+    // find channel with same song and same channel data
+    for (i = 0; i < max_channels; i++) {
+        if (cp->song_addr != arg0) {
+        } else if (arg0->channel_data[arg1] == cp->pbase) {
+            return i;
+        }
+        cp++;
+    }
+
+    return arg1 % max_channels;
+}
 
 void __MusIntMemSet(void *dest, unsigned char value, int length) {
     unsigned char *a;
