@@ -7,6 +7,21 @@ OBJECT_OUTPUT="$(realpath "${1//.c/.o}")"
 ANNOTATED_OUTPUT="$(realpath "${1//.c/_annotated.s}")"
 OBJECT_DUMP="${1//.c/_object_dump.s}"
 
+# Check if file contains INCLUDE_ASM
+if grep -q "INCLUDE_ASM" "$INPUT"; then
+    echo "ERROR: The C file contains INCLUDE_ASM macro!"
+    echo ""
+    echo "INCLUDE_ASM is NOT a valid decompilation technique."
+    echo "You must write actual C code that compiles to matching assembly."
+    echo ""
+    echo "Using INCLUDE_ASM is an attempt to cheat the matching process by"
+    echo "embedding assembly directly. This defeats the entire purpose of"
+    echo "decompilation, which is to produce readable, maintainable C code."
+    echo ""
+    echo "Please rewrite your code as proper C without any INCLUDE_ASM macros."
+    exit 1
+fi
+
 pushd /home/chris/code/snowboardkids2-decomp
 
 # Set up / clean up compilation directory
