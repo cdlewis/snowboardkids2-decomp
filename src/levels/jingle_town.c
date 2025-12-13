@@ -4,9 +4,9 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 #include "rand.h"
+#include "594E0.h"
 
 extern s32 isPlayerInRangeAndPull(void *a0, s32 a1, Player *a2);
-extern void func_800589CC_595CC(Player *arg0, void *arg1);
 extern void *func_80055E68_56A68(u8);
 extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);

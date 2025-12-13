@@ -86,3 +86,8 @@ src/9FF70.c:2138
 src/9FF70.c:2605
 src/9FF70.c:1881
 src/9FF70.c:1895
+src/levels/lindas_castle.c:10
+src/levels/crazy_jungle.c:65
+src/levels/jingle_town.c:8
+src/levels/haunted_house.c:116
+src/levels/wendys_house.c:12
