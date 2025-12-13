@@ -1,13 +1,18 @@
 snowboardkids2.z64
+snowboardkids2.eeprom
+tools/gcc_kmc
+__pycache__
+
+# IDE and OS nonsense
 .clj-kondo
 .lsp
 .DS_Store
-snowboardkids2.eeprom
 .vscode
 .venv
-tools/gcc_kmc
-__pycache__
+
+# permuter
 src/temp.c
+src/ctx.c
 
 # build artefacts
 build.log

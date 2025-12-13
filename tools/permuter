@@ -39,9 +39,10 @@ if [[ "$ARG" =~ ^[0-9]+$ ]] || [[ "$ARG" =~ ^[a-zA-Z0-9]+$ && ${#ARG} -ge 5 && $
         exit 1
     fi
 
-    # Extract diff_label and source_code from JSON response
+    # Extract diff_label, source_code, and context from JSON response
     DIFF_LABEL=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('diff_label', ''))" 2>/dev/null)
     SOURCE_CODE=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('source_code', ''))" 2>/dev/null)
+    CONTEXT=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('context', ''))" 2>/dev/null)
 
     if [ -z "$DIFF_LABEL" ] || [ -z "$SOURCE_CODE" ]; then
         echo "Error: Could not extract diff_label or source_code from API response"
@@ -81,11 +82,24 @@ else
     echo "Found: $ASM_PATH"
 fi
 
+# Clean up temp files from previous runs
+rm -f src/temp.c src/ctx.c
+
 # Prepare source code for import
 if [ "$USE_SCRATCH_SOURCE" = true ]; then
+    # Write the context from the scratch to src/ctx.c
+    if [ -n "$CONTEXT" ]; then
+        echo "$CONTEXT" > src/ctx.c
+        echo "Saved context to src/ctx.c"
+    fi
+
     # Write the source code from the scratch to src/temp.c
-    echo '#include "common.h"' > src/temp.c
-    echo "$SOURCE_CODE" >> src/temp.c
+    if [ -n "$CONTEXT" ]; then
+        echo '#include "ctx.c"' > src/temp.c
+        echo "$SOURCE_CODE" >> src/temp.c
+    else
+        echo "$SOURCE_CODE" > src/temp.c
+    fi
     echo "Using source code from decomp.me scratch"
 fi
 
