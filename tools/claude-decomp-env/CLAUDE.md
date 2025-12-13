@@ -33,7 +33,6 @@ Repeat the following steps:
 - Favour `for` loops over `do` or `while` loops.
 - VARIABLE DECLARATIONS MUST APPEAR AT THE START OF THE FUNCTION.
 - Never add comments to code.
-- The only permitted #include is common.h
 - Use temporary variables instead of complex nested expressions
 
 🚨 CRITICAL: NEVER USE POINTER CASTS OR OFFSET ARITHMETIC 🚨
