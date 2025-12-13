@@ -1,8 +1,8 @@
 #pragma once
 
 #include "19E80.h"
-#include "5AA90.h"
 #include "common.h"
+#include "geometry.h"
 
 typedef struct {
     s32 X;
