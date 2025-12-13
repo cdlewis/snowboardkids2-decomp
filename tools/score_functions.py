@@ -354,6 +354,52 @@ def load_difficult_functions(difficult_file: str) -> set:
     return difficult_functions
 
 
+def clean_difficult_functions(difficult_file: str, folder_path: str):
+    """Remove entries from difficult_functions that are no longer needed.
+
+    An entry is not needed if the function no longer exists in the codebase
+    (usually because it has been matched and integrated).
+    """
+    if not os.path.exists(difficult_file):
+        print(f"Warning: {difficult_file} does not exist, nothing to clean", file=sys.stderr)
+        return
+
+    # Get all actual functions in the codebase (using exhaustive mode)
+    scores = score_folder(folder_path, exhaustive=True)
+    actual_functions = {s.name for s in scores}
+
+    # Read the difficult_functions file, preserving the full line for functions that still exist
+    cleaned_lines = []
+    removed_count = 0
+
+    try:
+        with open(difficult_file, 'r') as f:
+            for line in f:
+                stripped = line.strip()
+                if not stripped:  # Skip empty lines
+                    continue
+
+                # Extract function name (first token)
+                func_name = stripped.split()[0]
+
+                # Keep the entry only if the function still exists in the codebase
+                if func_name in actual_functions:
+                    cleaned_lines.append(line.rstrip() + '\n')
+                else:
+                    removed_count += 1
+                    print(f"Removing entry for matched/removed function: {func_name}")
+
+        # Write back the cleaned list
+        with open(difficult_file, 'w') as f:
+            f.writelines(cleaned_lines)
+
+        print(f"\nCleaned {difficult_file}: removed {removed_count} entries, kept {len(cleaned_lines)} entries")
+
+    except Exception as e:
+        print(f"Error cleaning {difficult_file}: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Score assembly functions by complexity and find the simplest one to decompile.",
@@ -365,6 +411,7 @@ Examples:
   python3 tools/score_functions.py --score-func func_800B6544_1E35F4 asm/
   python3 tools/score_functions.py --min-score 100 --max-score 200 asm/
   python3 tools/score_functions.py --exhaustive --min-score 50 asm/
+  python3 tools/score_functions.py --clean asm/
         """
     )
     parser.add_argument(
@@ -393,8 +440,20 @@ Examples:
         metavar='MAX',
         help='Only show functions with complexity score <= MAX'
     )
+    parser.add_argument(
+        '--clean',
+        action='store_true',
+        help='Remove entries from difficult_functions that are no longer needed (matched or removed functions)'
+    )
 
     args = parser.parse_args()
+
+    # If --clean is specified, clean the difficult_functions file and exit
+    if args.clean:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        difficult_file = os.path.join(script_dir, 'difficult_functions')
+        clean_difficult_functions(difficult_file, args.folder_path)
+        sys.exit(0)
 
     # If --score-func is specified, search for that specific function
     if args.score_func:
