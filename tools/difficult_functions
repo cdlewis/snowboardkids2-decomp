@@ -441,3 +441,4 @@ func_800B0760 21 96.034% -- Register allocation mismatch: compiler uses a0 for l
 func_800BB7D4_AB684 17 99.481% -- Register allocation mismatch (same issue as func_800BB5BC_AB46C): compiler assigns a2 for angle instead of a1, v1 for masked angleDiff instead of a0, and a1 for clampedDiff instead of v1. Pattern: target lhu a1,0x54(s2)/andi a0,v0,0x1fff/move v1,a0, compiler generates lhu a2,0x54(s2)/andi v1,v0,0x1fff/move a1,v1. All instruction scheduling and logic is identical, only register numbers differ. Cannot be resolved with standard C code techniques.
 
 func_800548C8_554C8 - 22 attempts, 88.252% match
+func_8002B760_2C360 26 73.301%
