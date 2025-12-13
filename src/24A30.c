@@ -846,7 +846,62 @@ void func_80025824_26424(func_80025824_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025904_26504);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80025A88_26688);
+void func_80025A88_26688(void *arg0) {
+    u8 *base;
+    s32 i;
+    s32 s2;
+    s32 idx;
+    u8 *ptr;
+    u8 val1, val2;
+    u8 *tableBase;
+    u8 *tablePtr;
+
+    base = (u8 *)getCurrentAllocation();
+
+    s2 = 0xC;
+    if (D_800AFE8C_A71FC->unk8 == 1) {
+        s2 = 0x11;
+    }
+
+    val1 = *(base + *((u8 *)arg0 + 0x24) + 0x18A8);
+    i = 0;
+    tableBase = D_8008DD8C_8E98C;
+    val2 = *(base + *((u8 *)arg0 + 0x24) + 0x18B0);
+    ptr = (u8 *)arg0;
+    idx = ((u8)(val2 + val1 * 3)) * 3;
+
+loop:
+    tablePtr = (u8 *)((u32)(idx + i) + (u32)tableBase);
+    ((volatile s16 *)ptr)[4] = s2 + (*tablePtr - 1) / 2;
+    i++;
+    ((volatile u8 *)ptr)[0xA] = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
+    debugEnqueueCallback(*((u8 *)arg0 + 0x24) + 8, 0, func_80010240_10E40, ptr);
+    ptr += 0xC;
+    if (i < 3)
+        goto loop;
+
+    if (*(u16 *)(base + *((u8 *)arg0 + 0x24) * 2 + 0x1898) == 3) {
+        s32 constant;
+        void *a0;
+
+        s2 = 0xD;
+        if (D_800AFE8C_A71FC->unk8 == 1) {
+            s2 = 0x12;
+        }
+
+        i = 0;
+        constant = 8;
+        a0 = arg0;
+        do {
+            ((volatile s16 *)a0)[4] = s2;
+            ((volatile u8 *)a0)[0xA] = constant;
+            a0 = (u8 *)a0 + 0xC;
+            i++;
+        } while (i < 3);
+
+        setCallback(func_80025904_26504);
+    }
+}
 
 void func_80025C38_26838(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
