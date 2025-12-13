@@ -207,7 +207,62 @@ s32 func_8005B400_5C000(Player *arg0, Vec3s32 *arg1, s32 arg2) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005B548_5C148);
+Player *func_8005B548_5C148(Vec3s32 *arg0, s32 arg1, s32 arg2) {
+    Vec3s32 pos;
+    s32 combinedRadius;
+    Allocation5AA90 *allocation;
+    ListNode_5AA90 *node;
+    Player *playerData;
+    void *dataArray;
+    u8 id;
+
+    allocation = getCurrentAllocation();
+    node = allocation->list;
+
+    for (; node != NULL; node = node->next) {
+        id = node->id;
+        if (arg1 == id) {
+            continue;
+        }
+
+        dataArray = allocation->dataArray;
+        playerData = (Player *)(id * 0xBE8 + (s32)dataArray);
+
+        if (playerData->unkB88 & 0x10) {
+            continue;
+        }
+
+        if (playerData->unkBA4 != 0) {
+            continue;
+        }
+
+        memcpy(&pos, &node->localPos, 0xC);
+
+        pos.unk0 += node->posPtr->unk0;
+        pos.unk4 += node->posPtr->unk4;
+        pos.unk8 += node->posPtr->unk8;
+
+        pos.unk0 -= arg0->unk0;
+        pos.unk4 -= arg0->unk4;
+        pos.unk8 -= arg0->unk8;
+
+        combinedRadius = node->radius + arg2;
+
+        if (-combinedRadius < pos.unk0 && pos.unk0 < combinedRadius && -combinedRadius < pos.unk4 &&
+            pos.unk4 < combinedRadius && -combinedRadius < pos.unk8 && pos.unk8 < combinedRadius) {
+            s32 dist;
+
+            dist = isqrt64((s64)pos.unk0 * pos.unk0 + (s64)pos.unk4 * pos.unk4 + (s64)pos.unk8 * pos.unk8);
+
+            if (dist < combinedRadius) {
+                u8 index = node->id;
+                return (Player *)((u8 *)allocation->dataArray + ((index * 3 * 128) - (index * 3)) * 8);
+            }
+        }
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005B730_5C330);
 
