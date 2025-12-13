@@ -63,7 +63,7 @@ typedef struct {
     /* 0x000 */ s32 flags;
     /* 0x004 */ u8 *pdata;
     /* 0x008 */ void *pending;
-    /* 0x00C */ s32 channel_frame;
+    /* 0x00C */ u32 channel_frame;
     /* 0x010 */ s32 stopping;
     /* 0x014 */ s32 volume_frame;
     /* 0x018 */ u32 pitchbend_frame;
@@ -76,12 +76,12 @@ typedef struct {
     /* 0x034 */ u8 *ppitchbend;
     /* 0x038 */ u8 *pvolume;
     /* 0x03C */ s32 note_end_frame;
-    /* 0x040 */ s32 note_start_frame;
+    /* 0x040 */ u32 note_start_frame;
     /* 0x044 */ s32 handle;
     /* 0x048 */ s32 priority;
     /* 0x04C */ f32 last_note;
     /* 0x050 */ float port_base;
-    /* 0x054 */ s32 release_frame;
+    /* 0x054 */ u32 release_frame;
     /* 0x058 */ f32 env_attack_calc;
     /* 0x05C */ f32 env_decay_calc;
     /* 0x060 */ f32 env_release_calc;
@@ -135,7 +135,7 @@ typedef struct {
     /* 0x0C6 */ u8 reverb;
     u8 padding11;
     /* 0x0C8 */ u8 old_reverb;
-    u8 padding12;
+    /* 0x0C9 */ u8 release_start_vol;
     /* 0x0CA */ u8 wobble_on_speed;
     /* 0x0CB */ u8 wobble_off_speed;
     /* 0x0CC */ u8 wobble_count;
@@ -1407,7 +1407,59 @@ void func_80073A3C_7463C(channel_t *arg0) {
     chan->env_count = chan->env_speed;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073AA4_746A4);
+void func_80073AA4_746A4(channel_t *cp) {
+    s32 progress;
+    u8 phase;
+
+    if (cp->channel_frame >= cp->release_frame && cp->env_phase < 4) {
+        cp->env_phase = 4;
+        cp->env_count = 1;
+        cp->release_start_vol = cp->env_current;
+    }
+
+    cp->env_count--;
+    if (cp->env_count != 0) {
+        return;
+    }
+
+    phase = cp->env_phase;
+    cp->env_count = cp->env_speed;
+
+    switch (phase) {
+        case 1:
+            progress = (u32)((cp->channel_frame - cp->note_start_frame) >> 8) * cp->env_speed_calc >> 10;
+            if (progress < cp->env_attack_speed) {
+                cp->env_current = cp->env_init_vol + (s32)(cp->env_attack_calc * (f32)progress);
+            } else {
+                cp->env_phase = phase + 1;
+                cp->env_current = cp->env_max_vol;
+            }
+            break;
+        case 2:
+            progress =
+                (u32)(((cp->channel_frame - cp->note_start_frame) >> 8) - cp->env_attack_speed) * cp->env_speed_calc >>
+                10;
+            if (progress < cp->env_decay_speed) {
+                cp->env_current = cp->env_max_vol + (s32)(cp->env_decay_calc * (f32)progress);
+            } else {
+                cp->env_phase = phase + 1;
+                cp->env_current = cp->env_sustain_vol;
+            }
+            break;
+        case 3:
+            break;
+        case 4:
+            progress = (u32)((cp->channel_frame - cp->release_frame) >> 8) * cp->env_speed_calc >> 10;
+            if (progress < cp->env_release_speed) {
+                cp->env_current =
+                    cp->release_start_vol - (s32)(cp->env_release_calc * (f32)progress * (f32)cp->release_start_vol);
+            } else {
+                cp->env_phase = phase + 1;
+                cp->env_current = 0;
+            }
+            break;
+    }
+}
 
 void func_80073C98_74898(channel_t *cp) {
     s32 temp = cp->note_start_frame;
