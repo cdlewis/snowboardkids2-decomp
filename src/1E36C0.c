@@ -205,7 +205,37 @@ s32 func_800B6C8C_1E3D3C(CutsceneSlotData *arg0, SceneModel *arg1, s32 arg2, s32
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6CD8_1E3D88);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6FA4_1E4054);
+s32 func_800B6FA4_1E4054(CutsceneSlotData *arg0, SceneModel *unused, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
+    s16 temp_v0;
+    s16 var_t0;
+    s16 temp_lo;
+
+    temp_v0 = arg5 + 1;
+    var_t0 = temp_v0;
+    if ((s32)(temp_v0 << 16) <= 0) {
+        var_t0 = 1;
+    }
+
+    arg0->unk30 = arg2;
+    arg0->unk34 = arg3;
+    arg0->unk38 = arg4;
+
+    arg0->unk84 = var_t0;
+    arg0->unk86 = var_t0;
+    arg0->angle = 0;
+    arg0->unk7A = arg6;
+    arg0->unk0.Two = 1;
+
+    arg0->unk3C = (arg0->unk30 - arg0->unk04.unk20_u.unk20_s32) / var_t0;
+    arg0->unk40 = (arg0->unk34 - arg0->unk28) / var_t0;
+    arg0->unk44 = (arg0->unk38 - arg0->unk2C) / var_t0;
+
+    temp_lo = func_800B6618_1E36C8(arg0, 0, arg6, arg0->unk78) / var_t0;
+    arg0->unk7C = temp_lo;
+    arg0->unk7E = temp_lo;
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7128_1E41D8);
 

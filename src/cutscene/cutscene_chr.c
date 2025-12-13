@@ -5,7 +5,7 @@
 
 extern void func_800B788C_1E493C(CutsceneSlotData *, s32, s32, s32);
 extern s32 func_800B75C4_1E4674(CutsceneSlotData *, SceneModel *, s16, s32, s32, s32);
-extern void func_800B6FA4_1E4054(CutsceneSlotData *, SceneModel *, s32, s32, s32, s32, s32);
+extern s32 func_800B6FA4_1E4054(CutsceneSlotData *, SceneModel *, s32, s32, s32, s16, s16);
 extern void func_800B7B70_1E4C20(CutsceneSlotData *, s32 *, s16, s32, s32);
 extern void func_800B6BDC_1E3C8C(CutsceneSlotData *, s32, s32, s32, s16);
 extern void func_800B6C04_1E3CB4(CutsceneSlotData *, s32, s32, s32, s16, s16, s16);
