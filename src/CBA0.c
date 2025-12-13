@@ -1,5 +1,7 @@
 #include "6E840.h"
 #include "common.h"
+#include "displaylist.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
 extern Gfx *gRegionAllocPtr;
@@ -181,7 +183,128 @@ void n_alSeqpDelete(Node_70B00 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C5AC_D1AC);
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000C7A4_D3A4);
+extern s16 identityMatrix[];
+
+typedef struct {
+    u8 pad0[0x16];
+    u16 slot_index;
+    u8 pad18[0x108];
+    u8 padding4[0x20]; // 0x120
+    u8 pad140[0xA4];
+    s32 unk1E4; // 0x1E4
+    s32 unk1E8; // 0x1E8
+    s32 unk1EC; // 0x1EC
+    s32 unk1F0; // 0x1F0
+    s32 unk1F4; // 0x1F4
+    s32 unk1F8; // 0x1F8
+    s16 unk1FC; // 0x1FC
+    s16 unk1FE; // 0x1FE
+    s16 unk200; // 0x200
+    s16 pad202; // 0x202
+    s32 unk204; // 0x204
+    s32 unk208; // 0x208
+    s16 unk20C; // 0x20C
+    u16 unk20E; // 0x20E
+    s32 unk210; // 0x210
+    u8 pad214[0x4];
+    s8 unk218; // 0x218
+} ExtendedNode;
+
+typedef struct {
+    s16 m[9]; // 0x12 bytes
+    u16 pad12;
+    s32 pos[3]; // 0x14-0x1F
+} MatrixWithPos;
+
+typedef struct {
+    ExtendedNode *unk0;
+    MatrixWithPos unk4;
+    u8 pad24[0x1C];
+    MatrixWithPos unk40;
+} Func8000C7A4Arg;
+
+void func_8000C7A4_D3A4(Func8000C7A4Arg *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    Mat3x3Padded *mat1;
+    Mat3x3Padded *mat2;
+    ExtendedNode *temp_v0;
+    ExtendedNode *temp_v1;
+    ExtendedNode *temp_a0;
+    MatrixWithPos *temp_s0;
+    ExtendedNode *temp_a1;
+    s16 scale;
+
+    temp_v1 = arg0->unk0;
+    if (temp_v1->unk210 & 1) {
+        mat1 = &sp10;
+        memcpy(mat1, identityMatrix, 0x20);
+        mat2 = &sp30;
+        memcpy(mat2, identityMatrix, 0x20);
+        func_8006FED8_70AD8(arg0->unk0);
+        func_8000C208_CE08((Func8000C208Arg *)arg0);
+        temp_v1 = arg0->unk0;
+
+        switch (temp_v1->unk218) {
+            case 0:
+                temp_v1->unk20E = 0;
+                temp_a1 = arg0->unk0;
+                temp_s0 = &arg0->unk4;
+                memcpy(temp_s0, temp_a1->padding4, 0x20);
+                memcpy(arg0->unk4.pos, &arg0->unk0->unk1E4, 0xC);
+                temp_v0 = arg0->unk0;
+                scale = (s16)((s64)(temp_v0->unk204 >> 8) * 0x2000 >> 8);
+                scaleMatrix((Mat3x3Padded *)temp_s0, scale, scale, scale);
+                enqueueDisplayListObject(arg0->unk0->slot_index, (DisplayListObject *)temp_s0);
+                break;
+            case 1:
+                createZRotationMatrix(mat1, temp_v1->unk20E);
+                memcpy(mat2, arg0->unk0->padding4, 0x20);
+                func_8006B084_6BC84(mat1, mat2, &arg0->unk40);
+                memcpy(arg0->unk40.pos, &arg0->unk0->unk1E4, 0xC);
+                temp_v0 = arg0->unk0;
+                scale = (s16)((s64)(temp_v0->unk204 >> 8) * 0x2000 >> 8);
+                scaleMatrix((Mat3x3Padded *)&arg0->unk40, scale, scale, scale);
+                enqueueDisplayListObject(arg0->unk0->slot_index, (DisplayListObject *)&arg0->unk40);
+                temp_v1 = arg0->unk0;
+                if (temp_v1->unk20C != 0) {
+                    temp_v1->unk20E += 0xB6;
+                }
+                break;
+        }
+
+        func_8000C238_CE38((Func8000C208Arg *)arg0);
+        temp_a0 = arg0->unk0;
+        if (temp_a0->unk20C > 0) {
+            temp_a0->unk204 += temp_a0->unk208;
+            temp_v1 = arg0->unk0;
+            temp_v1->unk20C--;
+            temp_a0 = arg0->unk0;
+        }
+        if (temp_a0->unk1FC > 0) {
+            temp_a0->unk1E4 += temp_a0->unk1F0;
+            temp_v1 = arg0->unk0;
+            temp_v1->unk1FC--;
+        }
+        temp_a0 = arg0->unk0;
+        if (temp_a0->unk1FE > 0) {
+            temp_a0->unk1E8 += temp_a0->unk1F4;
+            temp_v1 = arg0->unk0;
+            temp_v1->unk1FE--;
+        }
+        temp_a0 = arg0->unk0;
+        if (temp_a0->unk200 > 0) {
+            temp_a0->unk1EC += temp_a0->unk1F8;
+            temp_v1 = arg0->unk0;
+            temp_v1->unk200--;
+        }
+    } else {
+        temp_v1->unk204 = 0x10000;
+        arg0->unk0->unk208 = 0;
+        arg0->unk0->unk20C = 0;
+        arg0->unk0->unk20E = 0;
+    }
+}
 
 typedef struct {
     u8 pad0[0x28];
