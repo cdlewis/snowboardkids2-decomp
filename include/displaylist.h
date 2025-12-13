@@ -146,3 +146,12 @@ void func_80062918_63518(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg
 void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1);
 
 u16 func_80062B1C_6371C(void *arg0, u16 arg1, void *arg2, void *arg3);
+
+typedef struct {
+    s16 unk0;
+    u8 _pad[0x8];
+    s16 unkA;
+    u8 _pad2[0x18];
+} func_80062C98_63898_arg;
+
+s16 func_80062254_62E54(GameDataLayout *arg0, u16 arg1);

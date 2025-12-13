@@ -7,7 +7,6 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 extern s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3);
-extern s16 func_80062254_62E54(void *arg0, u16 arg1);
 
 typedef struct ListNode_5AA90 {
     /* 0x00 */ struct ListNode_5AA90 *next;

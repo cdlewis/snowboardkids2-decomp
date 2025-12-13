@@ -36,18 +36,6 @@ typedef struct {
     u8 unk15A;
 } D_800AB068_A23D8_arg;
 
-typedef struct {
-    s16 unk0;
-    u8 _pad[0x8];
-    s16 unkA;
-    u8 _pad2[0x18];
-} func_80062C98_63898_arg;
-
-typedef struct {
-    u8 _pad[0xC];
-    func_80062C98_63898_arg *unkC;
-} func_80062254_62E54_arg;
-
 extern D_800AB068_A23D8_arg *D_800AB068_A23D8;
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
@@ -116,8 +104,8 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80061D6C_6296C);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800620D0_62CD0);
 
-s16 func_80062254_62E54(func_80062254_62E54_arg *arg0, u16 arg1) {
-    return arg0->unkC[arg1].unkA;
+s16 func_80062254_62E54(GameDataLayout *arg0, u16 arg1) {
+    return ((func_80062C98_63898_arg *)arg0->section3Data)[arg1].unkA;
 }
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);
