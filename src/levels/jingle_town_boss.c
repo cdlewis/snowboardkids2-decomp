@@ -1,5 +1,6 @@
 #include "common.h"
 #include "5DBC0.h"
+#include "9FF70.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "task_scheduler.h"
@@ -100,7 +101,6 @@ extern void func_8005C868_5D468(void *arg0);
 extern void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
 extern s32 func_800544B4_550B4(s32, s32, s32);
 extern void func_80041EA4_42AA4(s32 *arg0);
-extern void func_800B9500_A93B0(void);
 
 INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BB2B0_B2870);
 

@@ -56,5 +56,11 @@ src/9FF70.c:183
 src/46080.c:1767
 src/9FF70.c:160
 src/9FF70.c:165
+src/9FF70.c:262
+src/9FF70.c:287
+src/9FF70.c:322
+src/9FF70.c:328
+src/9FF70.c:958
+src/levels/crazy_jungle_boss.c:97
 src/levels/crazy_jungle_boss.c:99
 src/levels/jingle_town_boss.c:99

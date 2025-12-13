@@ -1,3 +1,4 @@
+#include "9FF70.h"
 #include "3E160.h"
 #include "4CD70.h"
 #include "51060.h"
@@ -166,7 +167,6 @@ extern s32 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern s32 func_8005CFC0_5DBC0(void *, s32, void *, s32);
 extern s32 D_800BA348_AA1F8;
 extern s32 D_800BA350_AA200;
-extern void func_800B9500_A93B0(void);
 extern s32 D_800BAB40_AA9F0;
 extern s32 D_800BAB44_AA9F4;
 extern s32 D_800BAB3C_AA9EC;
@@ -207,21 +207,6 @@ typedef struct {
     u8 _pad0[0x5C];
     u8 unk5C;
 } func_800B99E0_alloc;
-
-typedef struct {
-    u8 _pad0[0xB84];
-    s32 unkB84;
-    u8 _padB88[0x12]; // 0xB88 to 0xB9A
-    s16 unkB9A;
-    u8 _padB9C[0x8]; // 0xB9C to 0xBA4
-    s16 unkBA4;
-    s16 unkBA6;
-    u8 _padBA8[0x15]; // 0xBA8 to 0xBBD
-    u8 unkBBD;
-    u8 unkBBE;
-    u8 unkBBF;
-    u8 unkBC0;
-} func_800B00D4_arg;
 
 void func_800B46BC_A456C(func_800B00D4_arg *);
 
@@ -319,8 +304,8 @@ s32 func_800B12F0_A11A0(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-extern void func_80059BD4_5A7D4(void *);
 extern void func_8005D804_5E404(void *, u8, u8);
+extern void func_80059BD4_5A7D4(void *);
 
 s32 func_800B13D4_A1284(func_800B30B0_arg *arg0) {
     s32 sp10[3];
@@ -3504,7 +3489,8 @@ void func_800B98CC_A977C(func_800B30B0_arg *arg0) {
     }
 }
 
-void func_800B99E0(func_800B30B0_arg *arg0) {
+void func_800B99E0(void *varg0) {
+    func_800B30B0_arg *arg0 = (func_800B30B0_arg *)varg0;
     func_800B99E0_alloc *alloc;
     u8 v0;
     u8 v1;
@@ -3541,7 +3527,8 @@ void func_800B99E0(func_800B30B0_arg *arg0) {
     }
 }
 
-void func_800B9AE0(func_800B30B0_arg *arg0) {
+void func_800B9AE0(void *varg0) {
+    func_800B30B0_arg *arg0 = (func_800B30B0_arg *)varg0;
     s32 pad[8];
 
     arg0->unk4 = freeNodeMemory(arg0->unk4);
