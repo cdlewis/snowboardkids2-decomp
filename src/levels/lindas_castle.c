@@ -16,14 +16,20 @@ extern void *func_80055DF8_569F8(u8);
 typedef struct {
     s32 unk0;
     s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+} D_800BBBC0_ABA70_substruct;
+
+typedef struct {
+    s32 unk0;
+    D_800BBBC0_ABA70_substruct unk4[2];
 } D_800BBBC0_ABA70_struct;
+
 extern D_800BBBC0_ABA70_struct D_800BBBC0_ABA70[];
+extern s32 D_800BBC1C_ABACC[3];
 
 extern void func_800BB5BC_AB46C(void);
-extern void func_800BB7D4_AB684(void);
+
+void func_800BB320_AB1D0(func_800BB2B0_arg *arg0);
+void func_800BB7D4_AB684(func_800BB2B0_arg *task);
 
 typedef struct {
     u8 pad[0x24];
@@ -112,16 +118,16 @@ void func_800BB454_AB304(TaskArg_AB304 *task) {
 
     task->unk56 = D_800BBBC0_ABA70[task->unk50].unk0;
 
-    task->unk3C = D_800BBBC0_ABA70[task->unk50].unk4;
+    task->unk3C = D_800BBBC0_ABA70[task->unk50].unk4[0].unk0;
 
-    task->unk44 = D_800BBBC0_ABA70[task->unk50].unk8;
+    task->unk44 = D_800BBBC0_ABA70[task->unk50].unk4[0].unk4;
 
     task->unk40 = func_80061A64_62664((u8 *)allocation + 0x30, task->unk56, &task->unk3C);
 
     index = task->unk50;
 
     task->unk54 =
-        func_8006D21C_6DE1C(D_800BBBC0_ABA70[index].unkC, D_800BBBC0_ABA70[index].unk10, task->unk3C, task->unk44);
+        func_8006D21C_6DE1C(D_800BBBC0_ABA70[index].unk4[1].unk0, D_800BBBC0_ABA70[index].unk4[1].unk4, task->unk3C, task->unk44);
 
     task->unk48 = 0;
     task->unk4C = 0;
@@ -134,7 +140,7 @@ void func_800BB454_AB304(TaskArg_AB304 *task) {
         temp_value = 0x40000;
     } else {
         temp_value = 0x18000;
-        temp_callback = func_800BB7D4_AB684;
+        temp_callback = (void (*)(void))func_800BB7D4_AB684;
         task->unk48 = 0;
     }
 
@@ -144,7 +150,66 @@ void func_800BB454_AB304(TaskArg_AB304 *task) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/lindas_castle", func_800BB5BC_AB46C);
 
-INCLUDE_ASM("asm/nonmatchings/levels/lindas_castle", func_800BB7D4_AB684);
+void func_800BB7D4_AB684(func_800BB2B0_arg *task) {
+    GameState *gs;
+    s32 rotatedVec[3];
+    s16 var_v1;
+    GameDataLayout *gameData;
+
+    gs = (GameState*)getCurrentAllocation();
+
+    if (gs->gamePaused == 0) {
+        var_v1 = func_8006D21C_6DE1C(
+            D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk0,
+            D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk4,
+            task->targetPosition[0],
+            task->targetPosition[2]
+        );
+        var_v1 = var_v1 - task->rotationAngle & 0x1FFF;
+
+
+        if (var_v1 >= 0x1001) {
+            var_v1 = var_v1 | 0xE000;
+        }
+
+        if (var_v1 >= 0x81) {
+            var_v1 = 0x80;
+        }
+
+        if (var_v1 < -0x80) {
+            var_v1 = -0x80;
+        }
+
+        task->rotationAngle = task->rotationAngle + var_v1;
+
+        rotateVectorY(&D_800BBBC0_ABA70[4].unk4[1].unk0, (s16)task->rotationAngle, &rotatedVec);
+
+        gameData = &gs->gameData;
+        task->targetPosition[0] += rotatedVec[0];
+        task->targetPosition[2] += rotatedVec[2];
+
+        task->unk56 = func_80060A3C_6163C(gameData, task->unk56, &task->targetPosition[0]);
+        task->targetPosition[1] = func_80061A64_62664(gameData, task->unk56, &task->targetPosition[0]);
+
+        task->velocityY += task->unk4C;
+        task->unk4C = task->unk4C - 0x8000;
+
+        if (task->velocityY == 0) {
+            task->unk4C = 0x18000;
+        }
+
+        rotatedVec[0] = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk0 - task->targetPosition[0];
+        rotatedVec[1] = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk4 - task->targetPosition[2];
+
+        if (rotatedVec[0] + 0xFFFFF <= 0x1FFFFEU && (rotatedVec[2] + 0xFFFFF) <= 0x1FFFFEU) {
+            func_80069CF8_6A8F8();
+        }
+
+        func_800BB320_AB1D0(task);
+    }
+
+    func_800BB2B0(task);
+}
 
 void func_800BB9F0_AB8A0(func_800BB9F0_AB8A0_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
