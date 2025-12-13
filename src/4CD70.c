@@ -59,12 +59,15 @@ typedef struct {
 typedef struct {
     u8 pad0[0x10];
     PlayerInfo *timeRemaining;
-    u8 pad14[0x62];
+    u8 pad14[0x40];
+    s32 unk54;
+    u8 pad58[0x1E];
     u8 unk76;
     u8 pad77[0x2];
     u8 unk79;
     u8 pad7A[0x3];
     u8 timerExpired;
+    u8 unk7E;
 } Allocation;
 
 // defined later to keep the rodata gods happy
@@ -1629,8 +1632,13 @@ typedef struct {
     s16 unk14;
 } Struct_func_8004F424;
 
-void func_8004F4A8_500A8(void);
+void func_8004F4A8_500A8(Struct_func_8004F424 *arg0);
 void func_8004F69C_5029C(Struct_func_8004F04C *arg0);
+
+extern char D_8009E8D4_9F4D4[];
+extern char D_8009E8E0_9F4E0[];
+extern char D_8009E8EC_9F4EC[];
+extern char D_8009E8F8_9F4F8[];
 
 void func_8004F424_50024(Struct_func_8004F424 *arg0) {
     arg0->unk10 = 0x4293C;
@@ -1644,7 +1652,71 @@ void func_8004F424_50024(Struct_func_8004F424 *arg0) {
     setCallback(func_8004F4A8_500A8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004F4A8_500A8);
+void func_8004F4A8_500A8(Struct_func_8004F424 *arg0) {
+    char sp20[0x10];
+    Allocation *alloc;
+    s32 minutes;
+    s32 seconds;
+
+    alloc = (Allocation *)getCurrentAllocation();
+
+    if (alloc->unk79 != 0) {
+        goto check_time_flag;
+    }
+    if (alloc->unk76 != 0) {
+        goto check_time_flag;
+    }
+    if (alloc->timeRemaining->unkB84 & 0x80000) {
+        goto set_7E;
+    }
+    if (arg0->unk10 == 0x433C8) {
+        goto check_time_flag;
+    }
+    arg0->unk10++;
+    if (arg0->unk10 != 0x433C8) {
+        goto check_time_flag;
+    }
+    alloc->timerExpired = 1;
+    func_80058530_59130(0x46, 6);
+
+check_time_flag:
+    if (!(alloc->timeRemaining->unkB84 & 0x80000)) {
+        goto after_7E;
+    }
+set_7E:
+    if (arg0->unk10 > 0x4309E) {
+        goto after_7E;
+    }
+    alloc->unk7E = 1;
+
+after_7E:
+    alloc->unk54 = arg0->unk10;
+
+    minutes = arg0->unk10 / 32400;
+    seconds = (arg0->unk10 % 32400) / 540;
+
+    arg0->unk14++;
+    if ((s16)arg0->unk14 == 0x28) {
+        arg0->unk14 = 0;
+    }
+
+    if (arg0->unk10 > 0x431AB) {
+        if ((s16)arg0->unk14 < 0x14) {
+            sprintf(sp20, D_8009E8D4_9F4D4, minutes, seconds);
+        } else {
+            sprintf(sp20, D_8009E8E0_9F4E0, minutes, seconds);
+        }
+    } else {
+        if ((s16)arg0->unk14 < 0x14) {
+            sprintf(sp20, D_8009E8EC_9F4EC, minutes, seconds);
+        } else {
+            sprintf(sp20, D_8009E8F8_9F4F8, minutes, seconds);
+        }
+    }
+
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    func_8003BD60_3C960(sp20, 0x68, 0x50, 0xFF, arg0->unkC, 8, 0);
+}
 
 void func_8004F69C_5029C(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
