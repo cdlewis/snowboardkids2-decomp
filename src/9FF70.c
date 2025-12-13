@@ -5,6 +5,7 @@
 #include "5AA90.h"
 #include "5E590.h"
 #include "6E840.h"
+#include "A9A40.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
@@ -178,7 +179,6 @@ void func_800B419C_A404C(func_800B30B0_arg *);
 void func_800B00FC_9FFAC(func_800B30B0_arg *);
 void func_800B40D4_A3F84(func_800B30B0_arg *);
 void func_800B27FC_A26AC(func_800B30B0_arg *);
-void func_800B9B90_A9A40(void);
 void func_8005D48C_5E08C(func_800B30B0_arg *, s32, s32);
 void func_80058CFC_598FC(void *);
 

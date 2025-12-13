@@ -1,3 +1,4 @@
+#include "A9A40.h"
 #include "common.h"
 
 INCLUDE_ASM("asm/nonmatchings/A9A40", func_800B9B90_A9A40);
