@@ -4,13 +4,13 @@
 #include "3E160.h"
 #include "56910.h"
 #include "6E840.h"
+#include "B040.h"
 #include "common.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
 extern void func_80034D58_35958(void);
 extern void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
-extern s16 func_8000B7FC_C3FC(void *);
 extern s16 D_8008F2C4_8FEC4[];
 extern void *D_8008F7CC_903CC[];
 extern void *D_8008F7DC_903DC;
