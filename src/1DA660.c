@@ -26,7 +26,6 @@ extern void *renderTextPalette;
 extern char D_800B11F0_1DB790[];
 extern s16 D_800B1160_1DB700[];
 extern s16 D_800B1162_1DB702[];
-extern void func_8000150C_210C(SceneModel *);
 
 typedef struct {
     u8 _pad0[0x2C];
@@ -170,7 +169,7 @@ void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
 
     if (arg0->unk28 != 2) {
         func_800014FC_20FC(arg0->unk0, arg0->matrix.unk18);
-        func_8000150C_210C(arg0->unk0);
+        func_8000150C_210C((GameEntity *)arg0->unk0);
     }
 
     if (arg0->unk24 == 0) {

@@ -83,11 +83,11 @@ void func_800014FC_20FC(SceneModel *arg0, s32 arg1) {
     arg0->unk158 = arg1;
 }
 
-void func_80001504_2104(func_8000150C_210C_arg *arg0) {
+void func_80001504_2104(GameEntity *arg0) {
     arg0->unk15C = 0;
 }
 
-void func_8000150C_210C(func_8000150C_210C_arg *arg0) {
+void func_8000150C_210C(GameEntity *arg0) {
     arg0->unk15C = 1;
 }
 

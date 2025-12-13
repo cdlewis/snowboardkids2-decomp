@@ -77,7 +77,6 @@ void func_800B4534_1E15E4(s32, s32);
 s16 func_800B3490_1E0540(void);
 StateEntryItem *func_800B34B0_1E0560(s32 arg0);
 extern s32 func_80001904_2504(s16);
-extern void func_8000150C_210C(void *);
 extern void *func_800B5B38_1E2BE8(u16);
 extern void func_80003000_3C00(void *, u8, void *, u8, void *);
 extern void func_800B5B30_1E2BE0(void *, s8);
@@ -132,7 +131,7 @@ void func_800B2AA0(func_800B2C78_arg *arg0, Node_70B00 *arg1, void *arg2, void *
             }
 
             if (needsVisibility) {
-                func_8000150C_210C(arg0[i].unkF0);
+                func_8000150C_210C((GameEntity *)arg0[i].unkF0);
             }
         } else {
             arg0[i].unkF0 = NULL;
