@@ -1,6 +1,7 @@
 #include "20F0.h"
 
 #include "19E80.h"
+#include "3E160.h"
 #include "5E590.h"
 #include "D6F0.h"
 #include "displaylist.h"
@@ -66,7 +67,6 @@ extern AssetGroup gameAssets[];
 extern s32 D_80089768_8A368;
 extern AssetGroup D_8008BD2C_8C92C;
 extern u8 identityMatrix[32];
-extern void func_80009E68_AA68(void *param, s16 value);
 extern u32 D_8008BD38_8C938;
 
 s32 func_800018F4_24F4(SceneModel *);

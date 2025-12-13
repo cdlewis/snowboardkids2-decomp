@@ -134,3 +134,4 @@ void *func_8005DC60_5E860(s32 index);
 void *loadAssetByIndex_5E990(s32 index);
 MemoryAllocatorNode *func_8005DE04_5EA04(s16 groupIndex, s16 entityIndex);
 MemoryAllocatorNode *func_8005DE30_5EA30(s16 groupIndex, s16 entityIndex);
+s32 func_80009E68_AA68(void *arg0, s16 arg1);
