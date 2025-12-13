@@ -1,5 +1,6 @@
 #include "9FF70.h"
 #include "3E160.h"
+#include "42170.h"
 #include "4CD70.h"
 #include "51060.h"
 #include "56910.h"
@@ -2533,8 +2534,6 @@ skip:
 
     return 0;
 }
-
-extern void func_800419E4_425E4(void *);
 
 s32 func_800B5B90_A5A40(func_800B30B0_arg *arg0) {
     s32 temp_v1;
