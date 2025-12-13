@@ -1,28 +1,33 @@
-build
-assets
-asm
-snowboardkids2.d
-snowboardkids2.ld
 snowboardkids2.z64
 .clj-kondo
 .lsp
 .DS_Store
 snowboardkids2.eeprom
-romdiff
-romdiffcount
 .vscode
-undefined_funcs_auto.txt
-undefined_syms_auto.txt
 .venv
 tools/gcc_kmc
-snowboardkids2.map
-nonmatchings
 __pycache__
 src/temp.c
-.push_secrets
+
+# build artefacts
+build.log
+snowboardkids2.map
+nonmatchings
+undefined_funcs_auto.txt
+undefined_syms_auto.txt
+romdiff
+romdiffcount
+build
+assets
+asm
+snowboardkids2.d
+snowboardkids2.ld
 astemp_*
 report.json
-build.log
+
+# secrets
+.decomp_dev_secret
+.push_secrets
 
 # claude
 **/.claude/settings.local.json

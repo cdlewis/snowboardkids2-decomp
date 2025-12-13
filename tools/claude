@@ -60,8 +60,18 @@ if [[ "$ARG" =~ ^[0-9]+$ ]] || [[ "$ARG" =~ ^[a-zA-Z0-9]+$ && ${#ARG} -ge 5 && $
 
     echo "Fetching from decomp.me API..."
 
+    # Read user agent from .decomp_dev_secret
+    USER_AGENT=""
+    if [ -f .decomp_dev_secret ]; then
+        USER_AGENT=$(head -n 1 .decomp_dev_secret | tr -d '\n\r')
+    fi
+
     # Fetch the scratch data from decomp.me API
-    SCRATCH_DATA=$(curl -s "https://decomp.me/api/scratch/$ARG")
+    if [ -n "$USER_AGENT" ]; then
+        SCRATCH_DATA=$(curl -s -H "User-Agent: $USER_AGENT" "https://decomp.me/api/scratch/$ARG")
+    else
+        SCRATCH_DATA=$(curl -s "https://decomp.me/api/scratch/$ARG")
+    fi
 
     if [ $? -ne 0 ] || [ -z "$SCRATCH_DATA" ]; then
         echo "Error: Failed to fetch scratch data from decomp.me"
