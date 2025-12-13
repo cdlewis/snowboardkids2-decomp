@@ -11,6 +11,8 @@
 #include "task_scheduler.h"
 
 extern u8 D_80090E70_91A70[];
+extern s16 D_80090E80_91A80[];
+extern s16 D_80090E98_91A98[];
 extern s16 D_80090EB0_91AB0[];
 extern u16 D_8009ADE0_9B9E0;
 
@@ -631,7 +633,72 @@ void func_80051250_51E50(func_800506B4_512B4_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_8005127C_51E7C);
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80051348_51F48);
+void func_8005152C_5212C(func_8005152C_5212C_arg *arg0);
+void func_80051688_52288(func_80051688_52288_arg *arg0);
+
+void func_80051348_51F48(func_8005152C_5212C_arg *arg0) {
+    GameState *gs;
+    s32 i;
+    s16 *srcVec;
+    s32 destOffset;
+    volatile func_8005152C_5212C_arg *destPtr;
+    void *temp;
+
+    gs = (GameState *)getCurrentAllocation();
+    arg0->unk4 = load_3ECE40();
+    temp = (void *)((u8 *)gs->unk44 + 0x13C0);
+    arg0->unk8.unk1A = 0xFF;
+    arg0->unk8.unk0 = temp;
+    arg0->unk28.unk1A = arg0->unk8.unk1A;
+    arg0->unk28.unk0 = arg0->unk8.unk0;
+
+    i = 0;
+
+    if (arg0->unk0->unkB84 & 2) {
+        destPtr = arg0;
+        destOffset = 0x48;
+        srcVec = D_80090E80_91A80;
+        do {
+            transformVector(srcVec, (s16 *)&arg0->unk0->unk3F8, (void *)((u8 *)arg0 + destOffset));
+            destPtr->unk48 -= arg0->unk0->worldPosX;
+            destPtr->unk4C -= arg0->unk0->worldPosY;
+            destOffset += 0xC;
+            srcVec += 6;
+            i++;
+            destPtr->unk50 -= arg0->unk0->worldPosZ;
+            destPtr = (volatile func_8005152C_5212C_arg *)((u8 *)destPtr + 0xC);
+        } while (i < 2);
+    } else {
+        destPtr = arg0;
+        destOffset = 0x48;
+        srcVec = D_80090E98_91A98;
+        do {
+            transformVector(srcVec, (s16 *)&arg0->unk0->unk3F8, (void *)((u8 *)arg0 + destOffset));
+            destPtr->unk48 -= arg0->unk0->worldPosX;
+            destPtr->unk4C -= arg0->unk0->worldPosY;
+            destOffset += 0xC;
+            srcVec += 6;
+            i++;
+            destPtr->unk50 -= arg0->unk0->worldPosZ;
+            destPtr = (volatile func_8005152C_5212C_arg *)((u8 *)destPtr + 0xC);
+        } while (i < 2);
+    }
+
+    i = 0;
+    arg0->unk60 = 0;
+    arg0->unk62 = -1;
+
+    do {
+        if ((*(s16 *)((u8 *)arg0->unk0 + 0xBAE) >> i) & 1) {
+            arg0->unk62++;
+        }
+        i++;
+    } while (i < 8);
+
+    arg0->unk62 += 0x15;
+    setCleanupCallback(func_80051688_52288);
+    setCallbackWithContinue(func_8005152C_5212C);
+}
 
 void func_8005152C_5212C(func_8005152C_5212C_arg *arg0) {
     GameState *gs;
@@ -670,8 +737,6 @@ void func_8005152C_5212C(func_8005152C_5212C_arg *arg0) {
 void func_80051688_52288(func_80051688_52288_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
-
-void func_80051348_51F48(void);
 
 void func_800516B4_522B4(void *arg0) {
     void *result = scheduleTask(&func_80051348_51F48, 2, 0, 0xDD);
