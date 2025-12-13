@@ -396,3 +396,4 @@ func_80048540_49140 30 94.025% -- CSE optimization mismatch: compiler caches D_8
 func_800373E0_37FE0 30 94.918% -- Branch likely mismatch: compiler generates beqzl for first controller input check while target uses beqz. Loop pointer initialization uses addu v1,a0,s0 instead of target's move v1,s0. Early instruction scheduling differs: target loads unk1EC between lui constant and lui gControllerInputs, compiler reorders. Cannot be resolved with standard C code techniques.
 
 func_80041C28_42828 30 96.622% -- Register allocation mismatch: first loop uses v1=unk4, v0=unk8 instead of target v0=unk4, v1=unk8, and DATA1 loads to a1 instead of a0. Also a1 for unkD8 scheduling differs (before li s2,1 vs after). Final loops have s0/s1 swap (s1 for counter, s0 for pointer instead of target s0 for counter, s1 for pointer). Cannot be resolved with standard C code techniques.
+func_800B55B4_A5464 - 22 attempts, 93.886% match
