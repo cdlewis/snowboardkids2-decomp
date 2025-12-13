@@ -2642,7 +2642,6 @@ s32 func_800B5D68_A5C18(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-extern void func_80050C00_51800(void *);
 extern s32 func_8005D8C8_5E4C8(void *);
 
 s32 func_800B5E90_A5D40(func_800B30B0_arg *arg0) {
