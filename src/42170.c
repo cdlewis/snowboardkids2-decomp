@@ -147,7 +147,6 @@ void func_80041A60_42660(Func41A60Arg *);
 void func_80041A9C_4269C(Func41A60Arg *);
 
 extern s32 identityMatrix[];
-s32 func_8005B9E4_5C5E4(s32 *, s32, s32, u8);
 
 typedef struct {
     u8 _pad0[0x4];
