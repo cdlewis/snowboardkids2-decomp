@@ -64,7 +64,6 @@ extern void func_800670D4_67CD4(void);
 extern void func_80014480_15080(void);
 extern void func_800680C4_68CC4(void);
 extern void func_80064CF4_658F4(void);
-extern void func_80064218_64E18(DisplayListObject *);
 extern void func_800643AC_64FAC(DisplayListObject *, s32);
 
 void func_80062CF0_638F0(void);
@@ -483,7 +482,68 @@ void func_8006417C_64D7C(u16 arg0, DisplayListObject *arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80064218_64E18);
+void func_80064218_64E18(DisplayListObject *arg0) {
+    DisplayListObject *var_s0;
+    Gfx *temp_v1;
+    s32 temp_v0;
+    s32 var_s1;
+    void *v1_temp;
+    void *temp_a0_val;
+    s32 count;
+    volatile u8 padding[0x44];
+
+    if (arg0->unk30 == 0) {
+        temp_v0 = (s32)arenaAlloc16(arg0->unk37 << 6);
+        arg0->unk30 = temp_v0;
+        if (temp_v0 == 0) {
+            return;
+        }
+        count = arg0->unk37;
+        var_s1 = 0;
+        if (count > 0) {
+            var_s0 = arg0;
+            do {
+                var_s0->unk30 = arg0->unk30 + (var_s1 << 6);
+                func_8006C130_6CD30(var_s0, (LookAt *)var_s0->unk30);
+                var_s1 += 1;
+                var_s0 = (DisplayListObject *)((u8 *)var_s0 + 0x3C);
+            } while (var_s1 < arg0->unk37);
+        }
+    }
+
+    if (gGraphicsMode == 3) {
+        return;
+    }
+
+    gDPPipeSync(gRegionAllocPtr++);
+    gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+    v1_temp = arg0->unk24;
+    gGraphicsMode = 3;
+
+    if (v1_temp != NULL) {
+        gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+    }
+
+    if (arg0->unk28 != NULL) {
+        temp_v1 = gRegionAllocPtr;
+        temp_v1->words.w0 = 0xDB060008;
+        temp_a0_val = arg0->unk28;
+        gRegionAllocPtr = temp_v1 + 1;
+        temp_v1->words.w1 = (u32)temp_a0_val;
+    }
+
+    if (arg0->unk2C != 0) {
+        temp_v1 = gRegionAllocPtr;
+        temp_v1->words.w0 = 0xDB06000C;
+        temp_a0_val = (void *)arg0->unk2C;
+        gRegionAllocPtr = temp_v1 + 1;
+        temp_v1->words.w1 = (u32)temp_a0_val;
+    }
+
+    D_800A2D40_A3940 = arg0->unk24;
+    D_800A2D44_A3944 = arg0->unk28;
+    D_800A2D48_A3948 = arg0->unk2C;
+}
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800643AC_64FAC);
 
