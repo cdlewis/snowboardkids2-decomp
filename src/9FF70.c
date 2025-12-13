@@ -830,8 +830,6 @@ s32 func_800B2A3C_A28EC(func_800B30B0_arg *arg0) {
     }
 }
 
-extern void func_800516B4_522B4(void *);
-
 void func_800B2B3C_A29EC(func_800B30B0_arg *arg0) {
     s32 temp_v1;
     u16 temp_a1;
