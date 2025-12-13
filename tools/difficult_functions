@@ -443,3 +443,4 @@ func_800BB7D4_AB684 17 99.481% -- Register allocation mismatch (same issue as fu
 func_800548C8_554C8 - 22 attempts, 88.252% match
 func_8002B760_2C360 26 73.301%
 func_800BBA54_B0F44 26 95.622% -- Register allocation mismatch: divide-by-16 block uses v1 instead of a0 for second value, compiler merges (randA() & 0xFF) + 60 and ((randA() & 0xFF) >> 1) + 60 code paths into shared epilogue, bnez vs bnezl branch type differences
+func_800269C8_275C8 30 85.680% -- Register allocation mismatch: stack frame 0x38 instead of 0x40, arg0 in s4 instead of s0, var_s1 pointer precomputed to allocation+0x18A0 offset instead of keeping base pointer, de54_plus2 computed inline instead of stored in fp register
