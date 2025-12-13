@@ -70,6 +70,7 @@ extern s32 D_8009AFC8_9BBC8;
 extern s32 D_8009AFCC_9BBCC;
 extern void *D_800A3570_A4170;
 extern s32 gFrameCounter;
+extern s16 identityMatrix[];
 
 void *LinearAlloc(size_t size);
 void func_8006F6F4_702F4(void);
@@ -359,7 +360,82 @@ void func_8006FA58_70658(Node_70B00 *arg0) {
     arg0->unk88 = NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006FAA4_706A4);
+void func_8006FAA4_706A4(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s32 arg4) {
+    Node_70B00 *temp_v0;
+    Node_70B00 *var_a0;
+    u8 arg4_byte = (u8)arg4;
+
+    D_800A3588_A4188[arg2 & 0xFFFF] = (Item_A4188 *)arg0;
+
+    if (arg1 == NULL) {
+        arg0->unk0.next = &D_800A3370_A3F70;
+        arg0->prev = &D_800A3370_A3F70;
+        temp_v0 = D_800A3370_A3F70.unk8.list2_next;
+        arg0->unk8.list2_next = temp_v0;
+        if (temp_v0 != NULL) {
+            temp_v0->prev = arg0;
+        }
+        D_800A3370_A3F70.unk8.list2_next = arg0;
+    } else {
+        arg0->unk0.next = arg1;
+        arg0->prev = arg1;
+        temp_v0 = arg1->unk8.list2_next;
+        arg0->unk8.list2_next = temp_v0;
+        if (temp_v0 != NULL) {
+            temp_v0->prev = arg0;
+        }
+        arg1->unk8.list2_next = arg0;
+    }
+
+    var_a0 = &D_800A3370_A3F70;
+    if (D_800A3370_A3F70.list3_next != NULL) {
+        do {
+            Node_70B00 *temp_v1 = var_a0->list3_next;
+            if ((u8)arg3 < (u8)temp_v1->unk14) {
+                break;
+            }
+            var_a0 = temp_v1;
+        } while (var_a0->list3_next != NULL);
+    }
+
+    arg0->list2_prev = var_a0;
+    arg0->list3_next = var_a0->list3_next;
+    var_a0->list3_next = arg0;
+    temp_v0 = arg0->list3_next;
+    if (temp_v0 != NULL) {
+        temp_v0->list2_prev = arg0;
+    }
+
+    arg0->unk14 = (s8)arg3;
+    arg0->slot_index = (u16)arg2;
+    arg0->unk15 = (s8)arg4_byte;
+    arg0->padding2b[0] = 0;
+    arg0->id = 0;
+    arg0->unk140 = 0;
+    arg0->unkC8 = 0x280;
+    arg0->unkCA = 0x1E0;
+    arg0->unkCC = 0x1FF;
+    arg0->unkCE = 0;
+    arg0->unkD0 = 0x280;
+    arg0->unkD2 = 0x1E0;
+    arg0->unkD4 = 0x1FF;
+    arg0->unkD6 = 0;
+    memcpy(arg0->padding4, identityMatrix, 0x20);
+    guPerspective(&arg0->perspectiveMatrix, &arg0->perspNorm, 30.0f, 1.3333334f, 20.0f, 2000.0f, 1.0f);
+    arg0->padding1CF = 0xFF;
+    arg0->unk1C8 = 0x3DE;
+    arg0->unk1CE = 0;
+    arg0->unk1CD = 0;
+    arg0->unk1CC = 0;
+    arg0->unk1CA = 0x3E6;
+    arg0->unkBC = 0;
+    arg0->unkBD = 0;
+    arg0->unkBE = 0;
+    arg0->unkBF = 0;
+    arg0->unkC1 = 0;
+    arg0->unk1D0 = 1.0f;
+    func_8006FA58_70658(arg0);
+}
 
 void func_8006FC68_70868(void) {
 }

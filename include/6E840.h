@@ -66,10 +66,12 @@ typedef struct Node_70B00 {
     u8 padding8[0x6];
     s16 unkC8;
     s16 unkCA;
-    u8 padding6[0x4];
+    /* 0xCC */ s16 unkCC;
+    /* 0xCE */ s16 unkCE;
     /* 0xD0 */ s16 unkD0;
     /* 0xD2 */ s16 unkD2;
-    u8 padding6b[0x4];
+    /* 0xD4 */ s16 unkD4;
+    /* 0xD6 */ s16 unkD6;
     /* 0xD8 */ u16 perspNorm;
     /* 0xDA */ u16 id;
     /* 0xE0 */ Mtx perspectiveMatrix;
