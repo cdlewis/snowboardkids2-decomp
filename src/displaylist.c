@@ -1,6 +1,7 @@
 #include "displaylist.h"
 
 #include "19E80.h"
+#include "3E160.h"
 #include "5AA90.h"
 #include "68CF0.h"
 #include "6E840.h"
@@ -49,7 +50,6 @@ extern void func_800659E4_665E4(void);
 extern void func_80065DD8_669D8(void);
 extern void func_80066474_67074(void);
 extern void func_800670D4_67CD4(void);
-extern void func_80014480_15080(void);
 extern void func_800680C4_68CC4(void);
 extern void func_80064CF4_658F4(void);
 extern void func_800643AC_64FAC(DisplayListObject *, s32);
