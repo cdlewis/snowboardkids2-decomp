@@ -48,8 +48,6 @@ extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
 extern s8 D_800BAE00_1E7EB0[];
 extern u8 identityMatrix[];
 extern CutsceneAssetTable D_800BA7BC_1E786C[];
-extern CutsceneAssetTable D_800BA7C4_1E7874[];
-extern CutsceneAssetTable D_800BA7CC_1E787C[];
 
 extern s32 initializeSlotState(StateEntry *, CutsceneManager *, s32);
 extern s32 updateSlotData(void *, s32 slot);
@@ -436,21 +434,21 @@ void *func_800B3570(s16 arg0, s16 arg1, s16 arg2) {
     }
 
     tableOffset = arg0 * 0x18;
-    tableEntry = (CutsceneAssetTable *)((u8 *)D_800BA7BC_1E786C + tableOffset);
+    tableEntry = &D_800BA7BC_1E786C[arg0];
 
     if (clampedArg1 == 0) {
         if (arg2 < tableEntry->count0) {
-            dmaInfo = &((CutsceneAssetTable *)((u8 *)D_800BA7BC_1E786C + tableOffset))->array0[arg2];
+            dmaInfo = &D_800BA7BC_1E786C[arg0].array0[arg2];
         }
     } else if (clampedArg1 == 1) {
         if (arg2 < tableEntry->count1) {
-            dmaInfo = &((CutsceneAssetTable *)((u8 *)D_800BA7C4_1E7874 + tableOffset))->array0[arg2];
+            dmaInfo = &D_800BA7BC_1E786C[arg0].array1[arg2];
         }
     }
 
     if (clampedArg1 == 2) {
         if (arg2 < tableEntry->count2) {
-            dmaInfo = &((CutsceneAssetTable *)((u8 *)D_800BA7CC_1E787C + (arg0 * 0x18)))->array0[arg2];
+            dmaInfo = &D_800BA7BC_1E786C[arg0].array2[arg2];
         }
     }
 
