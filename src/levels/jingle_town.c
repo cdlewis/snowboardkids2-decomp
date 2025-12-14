@@ -1,12 +1,12 @@
+#include "594E0.h"
+#include "5AA90.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "task_scheduler.h"
 #include "rand.h"
-#include "594E0.h"
+#include "task_scheduler.h"
 
-extern s32 isPlayerInRangeAndPull(void *a0, s32 a1, Player *a2);
 extern void *func_80055E68_56A68(u8);
 extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);
@@ -57,8 +57,8 @@ void func_800BB2B0_B4240(B4240FuncArg *arg0) {
     s32 i;
 
     createYRotationMatrix((Mat3x3Padded *)arg0, arg0->rotation);
-    memcpy(&arg0->node.unk10.position.X, &arg0->unk3C, 0xC);
-    arg0->node.unk10.position.Y += arg0->unk48;
+    memcpy(&arg0->node.unk10.position.unk0, &arg0->unk3C, 0xC);
+    arg0->node.unk10.position.unk4 += arg0->unk48;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, &arg0->node);
@@ -67,21 +67,21 @@ void func_800BB2B0_B4240(B4240FuncArg *arg0) {
 
 void func_800BB320_B42B0(B4240FuncArg *arg0) {
     GameState *gs;
-    s32 pos[3];
+    Vec3s32 pos;
     s32 target[3];
     s32 i;
     Player *player;
 
     gs = getCurrentAllocation();
-    memcpy(&pos[0], &arg0->unk3C, 0xC);
-    pos[1] += 0xC0000 + arg0->unk48;
+    memcpy(&pos, &arg0->unk3C, 0xC);
+    pos.unk4 += 0xC0000 + arg0->unk48;
 
     for (i = 0; i < gs->numPlayers; i++) {
         player = &gs->players[i];
-        if (isPlayerInRangeAndPull(&pos[0], 0xC0000, player) != 0) {
-            target[0] = ((player->worldPosX + player->unkAD4[0] - pos[0]) / 2) + pos[0];
-            target[1] = ((player->worldPosY + player->unkAD4[1] - pos[0]) / 2) + pos[1];
-            target[2] = ((player->worldPosZ + player->unkAD4[2] - pos[0]) / 2) + pos[2];
+        if (isPlayerInRangeAndPull(&pos, 0xC0000, player) != 0) {
+            target[0] = ((player->worldPosX + player->unkAD4[0] - pos.unk0) / 2) + pos.unk0;
+            target[1] = ((player->worldPosY + player->unkAD4[1] - pos.unk0) / 2) + pos.unk4;
+            target[2] = ((player->worldPosZ + player->unkAD4[2] - pos.unk0) / 2) + pos.unk8;
             func_800589CC_595CC(&gs->players[i], &target[0]);
         }
     }

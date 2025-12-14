@@ -1,5 +1,6 @@
 #include "52880.h"
 #include "56910.h"
+#include "5AA90.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -62,7 +63,6 @@ typedef struct {
 } func_800BB8B8_B7AF8_arg;
 
 extern s32 D_8009A8A4_9B4A4;
-extern s32 isPlayerInRangeAndPull(void *a0, s32 a1, Player *a2);
 extern void func_800589A0_595A0(Player *player);
 
 void func_800BB468_B76A8(TrackHazard *arg0);

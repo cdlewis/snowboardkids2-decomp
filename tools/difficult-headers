@@ -39,6 +39,5 @@ src/9FF70.c:165
 src/levels/crazy_jungle_boss.c:97
 src/levels/jingle_town_boss.c:99
 src/levels/crazy_jungle_boss.c:98
-src/levels/crazy_jungle.c:65
 src/levels/haunted_house.c:116
 src/levels/wendys_house.c:12

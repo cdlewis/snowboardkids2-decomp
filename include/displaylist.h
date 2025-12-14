@@ -5,14 +5,8 @@
 #include "geometry.h"
 
 typedef struct {
-    s32 X;
-    s32 Y;
-    s32 Z;
-} objectPosition;
-
-typedef struct {
     s32 unk0;
-    /* 0x4 */ objectPosition position;
+    /* 0x4 */ Vec3s32 position;
 } DisplayListObject_unk10;
 
 typedef struct {

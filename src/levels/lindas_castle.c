@@ -1,14 +1,14 @@
 #include "levels/lindas_castle.h"
+#include "594E0.h"
+#include "5AA90.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "rand.h"
-#include "594E0.h"
 #include "task_scheduler.h"
 
-extern s32 isPlayerInRangeAndPull(void *a0, s32 a1, Player *a2);
 extern void *func_80055E68_56A68(u8);
 extern void *func_80055DC4_569C4(u8);
 extern void *func_80055DF8_569F8(u8);
@@ -76,21 +76,21 @@ void func_800BB2B0(func_800BB2B0_arg *arg0) {
 
 void func_800BB320_AB1D0(func_800BB2B0_arg *arg0) {
     GameState *gs;
-    s32 pos[3];
+    Vec3s32 pos;
     s32 target[3];
     s32 i;
     Player *player;
 
     gs = getCurrentAllocation();
-    memcpy(&pos[0], &arg0->targetPosition[0], 0xC);
-    pos[1] += 0x1C0000 + arg0->velocityY;
+    memcpy(&pos, &arg0->targetPosition[0], 0xC);
+    pos.unk4 += 0x1C0000 + arg0->velocityY;
 
     for (i = 0; i < gs->numPlayers; i++) {
         player = &gs->players[i];
-        if (isPlayerInRangeAndPull(&pos[0], 0x1C0000, player) != 0) {
-            target[0] = ((player->worldPosX + player->unkAD4[0] - pos[0]) / 2) + pos[0];
-            target[1] = ((player->worldPosY + player->unkAD4[1] - pos[0]) / 2) + pos[1];
-            target[2] = ((player->worldPosZ + player->unkAD4[2] - pos[0]) / 2) + pos[2];
+        if (isPlayerInRangeAndPull(&pos, 0x1C0000, player) != 0) {
+            target[0] = ((player->worldPosX + player->unkAD4[0] - pos.unk0) / 2) + pos.unk0;
+            target[1] = ((player->worldPosY + player->unkAD4[1] - pos.unk0) / 2) + pos.unk4;
+            target[2] = ((player->worldPosZ + player->unkAD4[2] - pos.unk0) / 2) + pos.unk8;
             func_800589CC_595CC(&gs->players[i], &target[0]);
         }
     }
@@ -126,8 +126,12 @@ void func_800BB454_AB304(TaskArg_AB304 *task) {
 
     index = task->unk50;
 
-    task->unk54 =
-        func_8006D21C_6DE1C(D_800BBBC0_ABA70[index].unk4[1].unk0, D_800BBBC0_ABA70[index].unk4[1].unk4, task->unk3C, task->unk44);
+    task->unk54 = func_8006D21C_6DE1C(
+        D_800BBBC0_ABA70[index].unk4[1].unk0,
+        D_800BBBC0_ABA70[index].unk4[1].unk4,
+        task->unk3C,
+        task->unk44
+    );
 
     task->unk48 = 0;
     task->unk4C = 0;
@@ -156,7 +160,7 @@ void func_800BB7D4_AB684(func_800BB2B0_arg *task) {
     s16 var_v1;
     GameDataLayout *gameData;
 
-    gs = (GameState*)getCurrentAllocation();
+    gs = (GameState *)getCurrentAllocation();
 
     if (gs->gamePaused == 0) {
         var_v1 = func_8006D21C_6DE1C(
@@ -166,7 +170,6 @@ void func_800BB7D4_AB684(func_800BB2B0_arg *task) {
             task->targetPosition[2]
         );
         var_v1 = var_v1 - task->rotationAngle & 0x1FFF;
-
 
         if (var_v1 >= 0x1001) {
             var_v1 = var_v1 | 0xE000;

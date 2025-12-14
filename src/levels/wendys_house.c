@@ -1,4 +1,5 @@
 #include "56910.h"
+#include "5AA90.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -9,7 +10,6 @@
 
 extern s32 func_8005B400_5C000(Player *arg0, Vec3s32 *arg1, s32 arg2);
 extern void func_80058B30_59730(Player *arg0);
-extern s32 isPlayerInRangeAndPull(Vec3s32 *arg0, s32 arg1, Player *arg2);
 
 typedef struct {
     s32 unk0;
@@ -167,36 +167,36 @@ void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0) {
     }
 
     switch (arg0->unk4E) {
-    case 0:
-        arg0->unk14 += arg0->unk3C;
-        arg0->unk18 += arg0->unk40;
-        arg0->unk1C += arg0->unk44;
-        arg0->unk40 += (s32)0xFFFF4000;
-        if (arg0->unk40 < (s32)0xFFE80000) {
-            arg0->unk40 = 0xC0000;
-            arg0->unk4E += 1;
-            func_80056B7C_5777C(&arg0->unk14, 0x28);
-        }
-        arg0->unk4A += 0x100;
-        for (i = 0; i < gameState->numPlayers; i++) {
-            if (func_8005B400_5C000(&gameState->players[i], (Vec3s32 *)&arg0->unk14, 0x180000) != 0) {
-                func_80058B30_59730(&gameState->players[i]);
+        case 0:
+            arg0->unk14 += arg0->unk3C;
+            arg0->unk18 += arg0->unk40;
+            arg0->unk1C += arg0->unk44;
+            arg0->unk40 += (s32)0xFFFF4000;
+            if (arg0->unk40 < (s32)0xFFE80000) {
+                arg0->unk40 = 0xC0000;
+                arg0->unk4E += 1;
+                func_80056B7C_5777C(&arg0->unk14, 0x28);
             }
-        }
-        break;
-    case 1:
-        arg0->unk14 += arg0->unk3C;
-        arg0->unk18 += arg0->unk40;
-        arg0->unk1C += arg0->unk44;
-        for (i = 0; i < gameState->numPlayers; i++) {
-            isPlayerInRangeAndPull((Vec3s32 *)&arg0->unk14, 0x180000, &gameState->players[i]);
-        }
-        arg0->unk40 += (s32)0xFFFF4000;
-        if (arg0->unk40 < (s32)0xFFE20000) {
-            func_80069CF8_6A8F8();
-        }
-        arg0->unk4A += 0x100;
-        break;
+            arg0->unk4A += 0x100;
+            for (i = 0; i < gameState->numPlayers; i++) {
+                if (func_8005B400_5C000(&gameState->players[i], (Vec3s32 *)&arg0->unk14, 0x180000) != 0) {
+                    func_80058B30_59730(&gameState->players[i]);
+                }
+            }
+            break;
+        case 1:
+            arg0->unk14 += arg0->unk3C;
+            arg0->unk18 += arg0->unk40;
+            arg0->unk1C += arg0->unk44;
+            for (i = 0; i < gameState->numPlayers; i++) {
+                isPlayerInRangeAndPull((Vec3s32 *)&arg0->unk14, 0x180000, &gameState->players[i]);
+            }
+            arg0->unk40 += (s32)0xFFFF4000;
+            if (arg0->unk40 < (s32)0xFFE20000) {
+                func_80069CF8_6A8F8();
+            }
+            arg0->unk4A += 0x100;
+            break;
     }
 
 end:

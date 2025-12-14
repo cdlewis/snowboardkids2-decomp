@@ -1,9 +1,11 @@
 #include "3E160.h"
 #include "56910.h"
+#include "5AA90.h"
 #include "5DBC0.h"
 #include "5E590.h"
 #include "common.h"
 #include "displaylist.h"
+#include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "rand.h"
@@ -52,7 +54,7 @@ typedef struct {
 
 typedef struct {
     u8 pad[0x10];
-    void *unk10;
+    Player *unk10;
     u8 pad14[0x4A];
     u8 unk5E;
     u8 pad5F[0x17];
@@ -72,9 +74,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 pad[0x14];
-    /* 0x14 */ s32 unk14;
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ s32 unk1C;
+    /* 0x14 */ Vec3s32 unk14;
     /* 0x20 */ void *unk20;
     /* 0x24 */ void *unk24;
     /* 0x28 */ void *unk28;
@@ -113,7 +113,6 @@ extern void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
 extern void func_800BB620_AF310(func_800BB388_AF078_arg *);
 extern void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
 extern void func_800BB778_AF468(void);
-extern s32 isPlayerInRangeAndPull(void *, s32, void *);
 extern void func_80055C80_56880(s32, s16, void *);
 void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *);
 void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *);
@@ -359,56 +358,54 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
     Allocation *allocation;
     s32 i;
     s32 offset;
-    s32 *pos;
-    void *player;
+    Vec3s32 *pos;
+    Player *player;
 
     allocation = (Allocation *)getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
         switch (arg0->unk48) {
-        case 0:
-            arg0->unk4E--;
-            if (arg0->unk4E != 0) {
+            case 0:
+                arg0->unk4E--;
+                if (arg0->unk4E != 0) {
+                    break;
+                }
+                arg0->unk48++;
+                /* fallthrough */
+            case 1:
+                arg0->unk50--;
+                arg0->unk4A -= 0x10;
+                if ((s16)arg0->unk4A != -0x400) {
+                    break;
+                }
+                arg0->unk4E = 0xF;
+                arg0->unk48++;
+                /* fallthrough */
+            case 2:
+                arg0->unk4E--;
+                if (arg0->unk4E != 0) {
+                    break;
+                }
+                arg0->unk48++;
+                /* fallthrough */
+            case 3:
+                arg0->unk50--;
+                arg0->unk4A += 0x10;
+                if ((s16)arg0->unk4A != 0x400) {
+                    break;
+                }
+                arg0->unk48 = 0;
+                arg0->unk4E = 0xF;
                 break;
-            }
-            arg0->unk48++;
-            /* fallthrough */
-        case 1:
-            arg0->unk50--;
-            arg0->unk4A -= 0x10;
-            if ((s16)arg0->unk4A != -0x400) {
-                break;
-            }
-            arg0->unk4E = 0xF;
-            arg0->unk48++;
-            /* fallthrough */
-        case 2:
-            arg0->unk4E--;
-            if (arg0->unk4E != 0) {
-                break;
-            }
-            arg0->unk48++;
-            /* fallthrough */
-        case 3:
-            arg0->unk50--;
-            arg0->unk4A += 0x10;
-            if ((s16)arg0->unk4A != 0x400) {
-                break;
-            }
-            arg0->unk48 = 0;
-            arg0->unk4E = 0xF;
-            break;
         }
 
         arg0->unk4C += 0x40;
 
         i = 0;
         if (allocation->unk5E > i) {
-            offset = 0;
             do {
-                isPlayerInRangeAndPull(&arg0->unk14, 0x200000, (u8 *)allocation->unk10 + offset);
+                isPlayerInRangeAndPull(&arg0->unk14, 0x200000, allocation->unk10 + i);
                 i += 1;
-                offset += 0xBE8;
             } while (i < allocation->unk5E);
         }
 
@@ -418,7 +415,7 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
             arg0->unk50 = (randA() & 0xF) + 0xF;
 
             for (i = 0; i < allocation->unk5E; i++) {
-                player = (u8 *)allocation->unk10 + (i * 0xBE8);
+                player = allocation->unk10 + i;
                 if ((u16)(*(u16 *)((u8 *)player + 0xB94) - 0x38) < 5) {
                     break;
                 }
@@ -433,7 +430,7 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
     }
 
     memcpy(&arg0->unk14, &arg0->unk3C, 0xC);
-    arg0->unk18 = arg0->unk18 + approximateSin(arg0->unk4C) * 0x1C0;
+    arg0->unk14.unk4 = arg0->unk14.unk4 + approximateSin(arg0->unk4C) * 0x1C0;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);

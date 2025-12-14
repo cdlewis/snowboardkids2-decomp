@@ -910,12 +910,12 @@ void func_80047024_47C24(func_8004711C_47D1C_arg *arg0) {
     arg0->displayListObject.unk2C = 0;
 
     createYRotationMatrix((Mat3x3Padded *)arg0, temp_s2 + temp_s3->unk8);
-    arg0->displayListObject.unk10.position.Y = spStack[1];
+    arg0->displayListObject.unk10.position.unk4 = spStack[1];
 
     transformVector2(&D_80090B8C_9178C, arg0, spStack);
 
-    arg0->displayListObject.unk10.position.X = temp_s3->unk0 + spStack[0];
-    arg0->displayListObject.unk10.position.Z = temp_s3->unk4 + spStack[2];
+    arg0->displayListObject.unk10.position.unk0 = temp_s3->unk0 + spStack[0];
+    arg0->displayListObject.unk10.position.unk8 = temp_s3->unk4 + spStack[2];
     arg0->unk3C = 0x30;
 
     setCleanupCallback(&func_80047718_48318);
@@ -939,8 +939,8 @@ void func_8004711C_47D1C(func_8004711C_47D1C_arg *arg0) {
     if (alloc->unk76 == 0) {
         transformVector2(D_80090B98_91798, arg0, vec);
 
-        arg0->displayListObject.unk10.position.X += vec[0];
-        arg0->displayListObject.unk10.position.Z += vec[2];
+        arg0->displayListObject.unk10.position.unk0 += vec[0];
+        arg0->displayListObject.unk10.position.unk8 += vec[2];
 
         if (arg0->unk3C != 0) {
             arg0->unk3C--;
@@ -978,9 +978,9 @@ void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0) {
     if (allocation->unk76 == 0) {
         transformVector2(D_80090BA4_917A4, arg0, stackVec);
 
-        arg0->displayListObject.unk10.position.X += stackVec[0];
-        arg0->displayListObject.unk10.position.Y += stackVec[1];
-        arg0->displayListObject.unk10.position.Z += stackVec[2];
+        arg0->displayListObject.unk10.position.unk0 += stackVec[0];
+        arg0->displayListObject.unk10.position.unk4 += stackVec[1];
+        arg0->displayListObject.unk10.position.unk8 += stackVec[2];
 
         if (arg0->unk3C != 0) {
             arg0->unk3C -= 1;
@@ -1845,7 +1845,7 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
                 createYRotationMatrix(&arg0->matrix, arg0->unk7C);
             } else {
                 arg0->unk80 = 0;
-                arg0->displayList.unk10.position.Y = arg0->unk78 + 0x300000;
+                arg0->displayList.unk10.position.unk4 = arg0->unk78 + 0x300000;
             }
             break;
     }
@@ -1853,8 +1853,8 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
     if (arg0->unk80 == 0) {
         if (gameState->gamePaused != 0) {
             i = 0;
-        } else if (arg0->displayList.unk10.position.Y > arg0->unk78) {
-            arg0->displayList.unk10.position.Y = arg0->displayList.unk10.position.Y + (s32)0xFFFA0000;
+        } else if (arg0->displayList.unk10.position.unk4 > arg0->unk78) {
+            arg0->displayList.unk10.position.unk4 = arg0->displayList.unk10.position.unk4 + (s32)0xFFFA0000;
             i = 0;
         } else {
             i = 0;
