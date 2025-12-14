@@ -118,6 +118,7 @@ void func_80058A3C_5963C(Player *arg0);
 void func_80058A68_59668(Player *arg0);
 void func_80058AC0_596C0(Player *arg0);
 void func_80059C24_5A824(Player *arg0);
+void func_80059D30_5A930(Player *arg0);
 Player *func_8005B548_5C148(Vec3s32 *arg0, s32 arg1, s32 arg2);
 s16 func_8005BF50_5CB50(s32 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4);
 Player *func_8005C454_5D054(void *arg0, s16 arg1, s32 arg2, void *arg3);

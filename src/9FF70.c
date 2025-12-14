@@ -65,7 +65,7 @@ typedef struct {
     u8 unk5C;
 } func_800B99E0_alloc;
 
-void func_800B46BC_A456C(func_800B00D4_arg *);
+void func_800B46BC_A456C(Player *);
 
 void func_800B00C0_9FF70(func_800B00D4_arg *arg0, u8 arg1) {
     arg0->unkBBD = arg1;
@@ -733,7 +733,7 @@ s32 func_800B2C18_A2AC8(Player *arg0) {
     }
 
     if (flags & 0x1000) {
-        func_800B46BC_A456C((func_800B00D4_arg *)arg0);
+        func_800B46BC_A456C(arg0);
         return 1;
     }
 
@@ -1731,9 +1731,7 @@ void func_800B468C_A453C(func_800B00D4_arg *arg0) {
     D_800BAB78_AAA28[arg0->unkBBE](arg0);
 }
 
-extern void func_80059D30_5A930(void *);
-
-void func_800B46BC_A456C(func_800B00D4_arg *arg0) {
+void func_800B46BC_A456C(Player *arg0) {
     arg0->unkBBD = 2;
     arg0->unkBBE = 5;
     arg0->unkBBF = 0;
