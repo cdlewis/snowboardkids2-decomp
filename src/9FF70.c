@@ -16,150 +16,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-    void *unk10;
-    void *unk14;
-    void *unk18;
-    void *unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 padding[0x404];
-    void *unk434;
-    s32 unk438;
-    s32 unk43C;
-    s32 unk440;
-    s32 unk444;
-    s32 unk448;
-    s32 unk44C;
-    s32 unk450;
-    s32 unk454;
-    s32 unk458;
-    s32 unk45C;
-    s32 unk460;
-    u8 padding1[0x4];
-    s32 unk468;
-    s32 unk46C;
-    void *unk470;
-    s32 unk474;
-    s32 unk478;
-    s32 unk47C;
-    s32 unk480;
-    u8 padding2[0x4EC];
-    Mat3x3Padded unk970;
-    u8 padding25[0x14];
-    s32 unk9A4;
-    u8 padding3[0xD4];
-    s32 unkA7C;
-    s32 _padA80;
-    s32 unkA84;
-    u8 _padA88[0x4];
-    u16 unkA8C;
-    s16 unkA8E;
-    s16 unkA90;
-    s16 unkA92;
-    s16 unkA94;
-    s16 unkA96;
-    s16 unkA98;
-    s16 unkA9A;
-    u8 padding4[0xC];
-    s32 unkAA8;
-    s32 unkAAC;
-    s32 unkAB0;
-    s32 unkAB4;
-    s32 unkAB8;
-    s32 unkABC;
-    s32 unkAC0;
-    u16 unkAC4;
-    u8 _padAC6[0x2];
-    s32 unkAC8;
-    s32 unkACC;
-    s32 unkAD0;
-    u8 padding45[0xC];
-    s32 unkAE0;
-    u8 padding5[0x5C];
-    s32 unkB40;
-    void *unkB44;
-    s32 unkB48;
-    s32 unkB4C;
-    u8 padding6[0x20];
-    s32 unkB70;
-    u16 unkB74;
-    u8 _padB76[2];
-    s16 unkB78;
-    s8 unkB7A;
-    s8 unkB7B;
-    s16 unkB7C;
-    u16 unkB7E;
-    s32 unkB80;
-    s32 unkB84;
-    s32 unkB88;
-    s32 unkB8C;
-    s32 unkB90;
-    s16 unkB94;
-    u8 _padB96[0x2];
-    s16 unkB98;
-    u8 _padB9A[0x2];
-    s16 unkB9C;
-    s16 unkB9E;
-    u16 unkBA0;
-    s16 unkBA2;
-    u8 padding65[0x6];
-    s16 unkBAA;
-    s16 unkBAC;
-    s16 unkBAE;
-    u16 unkBB0;
-    u16 unkBB2;
-    u8 unkBB4;
-    s8 unkBB5;
-    u8 unkBB6;
-    u8 unkBB7;
-    u8 unkBB8;
-    u8 unkBB9;
-    u8 unkBBA;
-    u8 unkBBB;
-    u8 unkBBC;
-    u8 unkBBD;
-    u8 unkBBE;
-    u8 unkBBF;
-    u8 unkBC0;
-    u8 unkBC1;
-    u8 unkBC2;
-    u8 unkBC3;
-    u8 unkBC4;
-    u8 unkBC5;
-    u8 unkBC6;
-    u8 unkBC7;
-    u8 unkBC8;
-    u8 unkBC9;
-    u8 unkBCA;
-    u8 unkBCB;
-    u8 unkBCC;
-    s8 unkBCD;
-    u8 unkBCE;
-    u8 padding10[0x6];
-    u8 unkBD5;
-    u8 unkBD6;
-    u8 unkBD7;
-    u8 padding11[0x2];
-    u8 unkBDA;
-    u8 unkBDB;
-    u8 unkBDC;
-    u8 unkBDD;
-    u8 unkBDE;
-    u8 unkBDF;
-    u8 unkBE0;
-    u8 unkBE1;
-    u8 unkBE2;
-    u8 unkBE3;
-    u8 unkBE4;
-} func_800B30B0_arg;
-
 extern s32 func_8005D308_5DF08(void *, s32);
 
 extern u16 D_800BAB48_AA9F8[];
@@ -173,15 +29,15 @@ extern s32 D_800BAB40_AA9F0;
 extern s32 D_800BAB44_AA9F4;
 extern s32 D_800BAB3C_AA9EC;
 
-s32 func_800B2C18_A2AC8(func_800B30B0_arg *);
-void func_800B2B3C_A29EC(func_800B30B0_arg *);
-void func_800B3784_A3634(func_800B30B0_arg *);
-void func_800B4058_A3F08(func_800B30B0_arg *);
-void func_800B419C_A404C(func_800B30B0_arg *);
-void func_800B00FC_9FFAC(func_800B30B0_arg *);
-void func_800B40D4_A3F84(func_800B30B0_arg *);
-void func_800B27FC_A26AC(func_800B30B0_arg *);
-void func_8005D48C_5E08C(func_800B30B0_arg *, s32, s32);
+s32 func_800B2C18_A2AC8(Player *);
+void func_800B2B3C_A29EC(Player *);
+void func_800B3784_A3634(Player *);
+void func_800B4058_A3F08(Player *);
+void func_800B419C_A404C(Player *);
+void func_800B00FC_9FFAC(Player *);
+void func_800B40D4_A3F84(Player *);
+void func_800B27FC_A26AC(Player *);
+void func_8005D48C_5E08C(Player *, s32, s32);
 
 typedef void (*func_800B3950_callback)(void *);
 extern func_800B3950_callback D_800BAB68_AAA18[];
@@ -218,7 +74,7 @@ void func_800B00C0_9FF70(func_800B00D4_arg *arg0, u8 arg1) {
     arg0->unkBC0 = 0;
 }
 
-void func_800B00D4_9FF84(func_800B30B0_arg *arg0, s32 arg1) {
+void func_800B00D4_9FF84(Player *arg0, s32 arg1) {
     arg0->unkBBE = arg1;
     arg0->unkBBF = 0;
     arg0->unkBC0 = 0;
@@ -236,28 +92,28 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B00FC_9FFAC);
 
 typedef struct {
     u8 _pad0[0x434];
-    s32 unk434;
-    s32 unk438;
-    s32 unk43C;
+    s32 worldPosX;
+    s32 worldPosY;
+    s32 worldPosZ;
     u8 _pad440[0xC];
     s32 unk44C;
     s32 unk450;
     s32 unk454;
 } func_800B0300_arg;
 
-extern void func_8005D03C_5DC3C(func_800B30B0_arg *);
+extern void func_8005D03C_5DC3C(Player *);
 
-void func_800B02AC_A015C(func_800B30B0_arg *arg0) {
+void func_800B02AC_A015C(Player *arg0) {
     func_8005D03C_5DC3C(arg0);
-    arg0->unk434 = arg0->unk434 + arg0->unk44C;
-    arg0->unk438 = arg0->unk438 + arg0->unk450;
-    arg0->unk43C = arg0->unk43C + arg0->unk454;
+    arg0->worldPosX = arg0->worldPosX + arg0->unk44C;
+    arg0->worldPosY = arg0->worldPosY + arg0->unk450;
+    arg0->worldPosZ = arg0->worldPosZ + arg0->unk454;
 }
 
-void func_800B0300_A01B0(func_800B30B0_arg *arg0) {
-    arg0->unk434 = arg0->unk434 + arg0->unk44C;
-    arg0->unk438 = arg0->unk438 + arg0->unk450;
-    arg0->unk43C = arg0->unk43C + arg0->unk454;
+void func_800B0300_A01B0(Player *arg0) {
+    arg0->worldPosX = arg0->worldPosX + arg0->unk44C;
+    arg0->worldPosY = arg0->worldPosY + arg0->unk450;
+    arg0->worldPosZ = arg0->worldPosZ + arg0->unk454;
 }
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B0334_A01E4);
@@ -270,9 +126,9 @@ void func_800B12C0_A1170(func_800B00D4_arg *arg0) {
     D_800BAAD4_AA984[arg0->unkBBE](arg0);
 }
 
-extern void func_8005D180_5DD80(func_800B30B0_arg *, s32);
+extern void func_8005D180_5DD80(Player *, s32);
 
-s32 func_800B12F0_A11A0(func_800B30B0_arg *arg0) {
+s32 func_800B12F0_A11A0(Player *arg0) {
     GameState *alloc = getCurrentAllocation();
 
     if (alloc->unk79 == 0) {
@@ -308,7 +164,7 @@ s32 func_800B12F0_A11A0(func_800B30B0_arg *arg0) {
 extern void func_8005D804_5E404(void *, u8, u8);
 extern void func_80059BD4_5A7D4(void *);
 
-s32 func_800B13D4_A1284(func_800B30B0_arg *arg0) {
+s32 func_800B13D4_A1284(Player *arg0) {
     s32 sp10[3];
 
     if (!(arg0->unkB84 & 0x20000)) {
@@ -365,7 +221,7 @@ s32 func_800B13D4_A1284(func_800B30B0_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B1544_A13F4);
 
-s32 func_800B1DA0_A1C50(func_800B30B0_arg *arg0) {
+s32 func_800B1DA0_A1C50(Player *arg0) {
     s16 temp_v1;
     s32 var_a3;
     s32 temp_v1_3;
@@ -392,7 +248,7 @@ s32 func_800B1DA0_A1C50(func_800B30B0_arg *arg0) {
     }
     if (arg0->unkBDA != 0) {
         ((void (*)(void *))func_800B9B90_A9A40)(arg0);
-        var_a3 = (s16)func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, (s32)arg0->unk434, arg0->unk43C);
+        var_a3 = (s16)func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, (s32)arg0->worldPosX, arg0->worldPosZ);
         temp_v1 = arg0->unkA94;
         var_a3 = (var_a3 - temp_v1) & 0x1FFF;
         if (var_a3 >= 0x1001) {
@@ -487,11 +343,11 @@ s32 func_800B1FFC_A1EAC(func_800B1FFC_arg *arg0) {
     return 1;
 }
 
-extern s32 func_8005A9A8_5B5A8(func_800B30B0_arg *);
+extern s32 func_8005A9A8_5B5A8(Player *);
 extern void func_800B65F8_A64A8(func_800B00D4_arg *);
-extern s32 func_800B42A8_A4158(func_800B30B0_arg *, s32, s32, s32);
+extern s32 func_800B42A8_A4158(Player *, s32, s32, s32);
 
-s32 func_800B2018_A1EC8(func_800B30B0_arg *arg0) {
+s32 func_800B2018_A1EC8(Player *arg0) {
     s16 temp_v0;
     s16 v1;
     s32 temp;
@@ -573,12 +429,12 @@ void func_800B23AC_A225C(func_800B00D4_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B23DC_A228C);
 
-extern s32 func_8005A9A8_5B5A8(func_800B30B0_arg *);
+extern s32 func_8005A9A8_5B5A8(Player *);
 extern void func_800B65F8_A64A8(func_800B00D4_arg *);
-extern s8 func_8005D818_5E418(func_800B30B0_arg *);
-s32 func_800B42A8_A4158(func_800B30B0_arg *, s32, s32, s32);
+extern s8 func_8005D818_5E418(Player *);
+s32 func_800B42A8_A4158(Player *, s32, s32, s32);
 
-s32 func_800B243C_A22EC(func_800B30B0_arg *arg0) {
+s32 func_800B243C_A22EC(Player *arg0) {
     s32 temp_s1;
 
     if (arg0->unkB84 & 0x20000) {
@@ -621,7 +477,7 @@ s32 func_800B243C_A22EC(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B255C_A240C(func_800B30B0_arg *arg0) {
+s32 func_800B255C_A240C(Player *arg0) {
     s32 temp_s1;
 
     if (arg0->unkB84 & 0x20000) {
@@ -673,7 +529,7 @@ s32 func_800B255C_A240C(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B26D0_A2580(func_800B30B0_arg *arg0) {
+s32 func_800B26D0_A2580(Player *arg0) {
     s32 sp10[8];
     s32 sp30[8];
     s32 sp50[3];
@@ -714,7 +570,7 @@ s32 func_800B26D0_A2580(func_800B30B0_arg *arg0) {
     return 1;
 }
 
-void func_800B27FC_A26AC(func_800B30B0_arg *arg0) {
+void func_800B27FC_A26AC(Player *arg0) {
     arg0->unkBAC = 0;
     arg0->unkBAA = 0;
     arg0->unkBAE = 0;
@@ -723,7 +579,7 @@ void func_800B27FC_A26AC(func_800B30B0_arg *arg0) {
     arg0->unkBB6 = 0;
 }
 
-void func_800B2818_A26C8(func_800B30B0_arg *arg0, s8 arg1) {
+void func_800B2818_A26C8(Player *arg0, s8 arg1) {
     arg0->unkBAC = arg0->unkBAC + D_800BAB48_AA9F8[arg0->unkBB5];
     arg0->unkBAA = arg0->unkBAA + D_800BAB58_AAA08[arg0->unkBB5];
 
@@ -758,7 +614,7 @@ void func_800B2818_A26C8(func_800B30B0_arg *arg0, s8 arg1) {
     }
 }
 
-void func_800B2950_A2800(func_800B30B0_arg *arg0, s32 arg1) {
+void func_800B2950_A2800(Player *arg0, s32 arg1) {
     s8 temp_a0;
     s8 temp_v1;
 
@@ -794,9 +650,9 @@ void func_800B2950_A2800(func_800B30B0_arg *arg0, s32 arg1) {
 }
 
 extern void func_80059ADC_5A6DC(void *);
-s32 func_800B42A8_A4158(func_800B30B0_arg *, s32, s32, s32);
+s32 func_800B42A8_A4158(Player *, s32, s32, s32);
 
-s32 func_800B2A3C_A28EC(func_800B30B0_arg *arg0) {
+s32 func_800B2A3C_A28EC(Player *arg0) {
     s32 pad[16];
 
     if (arg0->unkB84 & 1) {
@@ -831,7 +687,7 @@ s32 func_800B2A3C_A28EC(func_800B30B0_arg *arg0) {
     }
 }
 
-void func_800B2B3C_A29EC(func_800B30B0_arg *arg0) {
+void func_800B2B3C_A29EC(Player *arg0) {
     s32 temp_v1;
     u16 temp_a1;
     s16 var_v1;
@@ -840,7 +696,7 @@ void func_800B2B3C_A29EC(func_800B30B0_arg *arg0) {
     if (!(temp_v1 & 0x1000)) {
         if (arg0->unkBDA != 0) {
             func_800B9B90_A9A40();
-            var_v1 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, (s32)arg0->unk434, arg0->unk43C);
+            var_v1 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, (s32)arg0->worldPosX, arg0->worldPosZ);
             temp_a1 = (u16)arg0->unkA94;
             var_v1 = (var_v1 - temp_a1) & 0x1FFF;
             if (var_v1 >= 0x1001) {
@@ -864,7 +720,7 @@ void func_800B2B3C_A29EC(func_800B30B0_arg *arg0) {
     }
 }
 
-s32 func_800B2C18_A2AC8(func_800B30B0_arg *arg0) {
+s32 func_800B2C18_A2AC8(Player *arg0) {
     GameState *state;
     s32 flags;
     u8 stateUnk7A;
@@ -963,7 +819,7 @@ skip_to_end:
     return 1;
 }
 
-void func_800B2DDC_A2C8C(func_800B30B0_arg *arg0) {
+void func_800B2DDC_A2C8C(Player *arg0) {
     arg0->unk44C = arg0->unk44C - (arg0->unk44C >> 7);
     arg0->unk450 = arg0->unk450 - arg0->unkAB8;
     arg0->unk454 = arg0->unk454 - (arg0->unk454 >> 7);
@@ -981,9 +837,9 @@ s32 func_800B2E38_A2CE8(void *arg0) {
     return 0;
 }
 
-extern void func_8005D810_5E410(func_800B30B0_arg *);
+extern void func_8005D810_5E410(Player *);
 
-void func_800B2E80_A2D30(func_800B30B0_arg *arg0) {
+void func_800B2E80_A2D30(Player *arg0) {
     arg0->unkB8C = 0x200;
     arg0->unkA96 = 0;
     arg0->unkA98 = 0;
@@ -992,12 +848,12 @@ void func_800B2E80_A2D30(func_800B30B0_arg *arg0) {
     arg0->unkBC0++;
     arg0->unkB84 |= 0x4000;
     func_8005D810_5E410(arg0);
-    func_80056B7C_5777C(&arg0->unk434, 0xB);
+    func_80056B7C_5777C(&arg0->worldPosX, 0xB);
 }
 
-extern s8 func_8005D818_5E418(func_800B30B0_arg *arg0);
+extern s8 func_8005D818_5E418(Player *arg0);
 
-void func_800B2EE4_A2D94(func_800B30B0_arg *arg0, s8 arg1) {
+void func_800B2EE4_A2D94(Player *arg0, s8 arg1) {
     switch (arg0->unkBC0) {
         case 0:
             func_800B2E80_A2D30(arg0);
@@ -1018,7 +874,7 @@ void func_800B2EE4_A2D94(func_800B30B0_arg *arg0, s8 arg1) {
     }
 }
 
-s32 func_800B2FD0_A2E80(func_800B30B0_arg *arg0) {
+s32 func_800B2FD0_A2E80(Player *arg0) {
     if (func_800B2C18_A2AC8(arg0) != 0) {
         return 1;
     }
@@ -1053,7 +909,7 @@ s32 func_800B2FD0_A2E80(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B30B0_A2F60(func_800B30B0_arg *arg0) {
+s32 func_800B30B0_A2F60(Player *arg0) {
     if (func_800B2C18_A2AC8(arg0) != 0) {
         return 1;
     }
@@ -1088,7 +944,7 @@ s32 func_800B30B0_A2F60(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B3190_A3040(func_800B30B0_arg *arg0) {
+s32 func_800B3190_A3040(Player *arg0) {
     if (func_800B2C18_A2AC8(arg0) != 0) {
         return 1;
     }
@@ -1123,7 +979,7 @@ s32 func_800B3190_A3040(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B3270_A3120(func_800B30B0_arg *arg0) {
+s32 func_800B3270_A3120(Player *arg0) {
     if (func_800B2C18_A2AC8(arg0) != 0) {
         return 1;
     }
@@ -1158,7 +1014,7 @@ s32 func_800B3270_A3120(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B3350_A3200(func_800B30B0_arg *arg0) {
+s32 func_800B3350_A3200(Player *arg0) {
     if (func_800B2C18_A2AC8(arg0) != 0) {
         return 1;
     }
@@ -1194,7 +1050,7 @@ s32 func_800B3350_A3200(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B3438_A32E8(func_800B30B0_arg *arg0) {
+s32 func_800B3438_A32E8(Player *arg0) {
     if (func_800B2C18_A2AC8(arg0) != 0) {
         return 1;
     }
@@ -1230,7 +1086,7 @@ s32 func_800B3438_A32E8(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B3520_A33D0(func_800B30B0_arg *arg0) {
+s32 func_800B3520_A33D0(Player *arg0) {
     if (func_800B2C18_A2AC8(arg0) != 0) {
         return 1;
     }
@@ -1266,7 +1122,7 @@ s32 func_800B3520_A33D0(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B3608_A34B8(func_800B30B0_arg *arg0) {
+s32 func_800B3608_A34B8(Player *arg0) {
     if (func_800B2C18_A2AC8(arg0) != 0) {
         return 1;
     }
@@ -1302,7 +1158,7 @@ s32 func_800B3608_A34B8(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B36F0_A35A0(func_800B30B0_arg *arg0) {
+s32 func_800B36F0_A35A0(Player *arg0) {
     u16 temp_a1 = arg0->unkB7E;
     s32 var_v1;
 
@@ -1341,7 +1197,7 @@ s32 func_800B36F0_A35A0(func_800B30B0_arg *arg0) {
     return var_v1;
 }
 
-void func_800B3784_A3634(func_800B30B0_arg *arg0) {
+void func_800B3784_A3634(Player *arg0) {
     s32 result;
     u8 temp;
 
@@ -1446,7 +1302,7 @@ typedef struct {
     u8 unk7D;
 } GameStateLocal;
 
-s32 func_800B3CBC_A3B6C(func_800B30B0_arg *arg0) {
+s32 func_800B3CBC_A3B6C(Player *arg0) {
     s32 var_s2 = 0;
     GameStateLocal *temp_s0;
 
@@ -1502,7 +1358,7 @@ s32 func_800B3CBC_A3B6C(func_800B30B0_arg *arg0) {
 extern void func_80059CE0_5A8E0(void *);
 extern void func_8005D804_5E404(void *, u8, u8);
 
-s32 func_800B3DF0_A3CA0(func_800B30B0_arg *arg0) {
+s32 func_800B3DF0_A3CA0(Player *arg0) {
     arg0->unk44C = 0;
     arg0->unk454 = 0;
     arg0->unk450 = arg0->unk450 - 0x6000;
@@ -1552,7 +1408,7 @@ end:
     return 0;
 }
 
-s32 func_800B3F2C_A3DDC(func_800B30B0_arg *arg0) {
+s32 func_800B3F2C_A3DDC(Player *arg0) {
     u32 temp_v0;
     s32 temp_v1;
     s32 temp_v0_2;
@@ -1638,7 +1494,7 @@ extern s32 D_8009A8A4_9B4A4;
 extern s32 D_8009A8A8_9B4A8;
 extern s32 D_8009A8AC_9B4AC;
 
-void func_800B4058_A3F08(func_800B30B0_arg *arg0) {
+void func_800B4058_A3F08(Player *arg0) {
     Mat3x3Padded sp10;
     s16 *a98;
     s16 *a96;
@@ -1652,11 +1508,11 @@ void func_800B4058_A3F08(func_800B30B0_arg *arg0) {
     sp10.unk14 = 0;
     sp10.unk18 = 0x100000;
     sp10.unk1C = 0;
-    func_8006B084_6BC84(&D_8009A890_9B490, &sp10, &arg0->padding3[0x28]);
+    func_8006B084_6BC84(&D_8009A890_9B490, &sp10, &arg0->padding2a_5[0x28]);
     arg0->unkB84 |= 0x800;
 }
 
-void func_800B40D4_A3F84(func_800B30B0_arg *arg0) {
+void func_800B40D4_A3F84(Player *arg0) {
     s32 temp;
     s32 delta;
     s32 value;
@@ -1705,7 +1561,7 @@ void func_800B40D4_A3F84(func_800B30B0_arg *arg0) {
     arg0->unk9A4 = temp_a2 + var_v1;
 }
 
-void func_800B419C_A404C(func_800B30B0_arg *arg0) {
+void func_800B419C_A404C(Player *arg0) {
     s16 temp;
     s16 value;
     s32 delta, value2;
@@ -1779,7 +1635,7 @@ void func_800B419C_A404C(func_800B30B0_arg *arg0) {
 
 extern s16 identityMatrix[];
 
-s32 func_800B42A8_A4158(func_800B30B0_arg *arg0, s32 arg1, s32 arg2, s32 arg3) {
+s32 func_800B42A8_A4158(Player *arg0, s32 arg1, s32 arg2, s32 arg3) {
     Vec3s32 sp10;
     Vec3s32 sp20;
     Vec3s32 sp30;
@@ -1893,9 +1749,9 @@ void func_800B46BC_A456C(func_800B00D4_arg *arg0) {
     func_80059D30_5A930(arg0);
 }
 
-extern s16 func_8005CE98_5DA98(func_800B30B0_arg *);
+extern s16 func_8005CE98_5DA98(Player *);
 
-s32 func_800B470C_A45BC(func_800B30B0_arg *arg0) {
+s32 func_800B470C_A45BC(Player *arg0) {
     s32 stackVec[3];
     GameState *allocation;
     s16 angle;
@@ -1914,10 +1770,10 @@ s32 func_800B470C_A45BC(func_800B30B0_arg *arg0) {
         arg0->unkBBF++;
         rotAngle = atan2Fixed(-arg0->unkAC8, -arg0->unkAD0);
         rotateVectorY((u8 *)allocation->unk48 + 0xE4, rotAngle, stackVec);
-        stackVec[0] += (s32)arg0->unk434;
-        stackVec[2] += arg0->unk43C;
-        stackVec[1] = arg0->unk438 + 0x100000;
-        func_80056B7C_5777C(&arg0->unk434, 0xD);
+        stackVec[0] += (s32)arg0->worldPosX;
+        stackVec[2] += arg0->worldPosZ;
+        stackVec[1] = arg0->worldPosY + 0x100000;
+        func_80056B7C_5777C(&arg0->worldPosX, 0xD);
         func_80050ECC_51ACC(stackVec);
     }
 
@@ -1948,7 +1804,7 @@ s32 func_800B470C_A45BC(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B48AC_A475C(func_800B30B0_arg *arg0) {
+s32 func_800B48AC_A475C(Player *arg0) {
     s32 stackVec[3];
     GameState *allocation;
     s16 angle;
@@ -1967,10 +1823,10 @@ s32 func_800B48AC_A475C(func_800B30B0_arg *arg0) {
         arg0->unkBBF++;
         rotAngle = atan2Fixed(-arg0->unkAC8, -arg0->unkAD0);
         rotateVectorY((u8 *)allocation->unk48 + 0xE4, rotAngle, stackVec);
-        stackVec[0] += (s32)arg0->unk434;
-        stackVec[2] += arg0->unk43C;
-        stackVec[1] = arg0->unk438 + 0x100000;
-        func_80056B7C_5777C(&arg0->unk434, 0xD);
+        stackVec[0] += (s32)arg0->worldPosX;
+        stackVec[2] += arg0->worldPosZ;
+        stackVec[1] = arg0->worldPosY + 0x100000;
+        func_80056B7C_5777C(&arg0->worldPosX, 0xD);
         func_80050ECC_51ACC(stackVec);
     }
 
@@ -2001,7 +1857,7 @@ s32 func_800B48AC_A475C(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B4A4C_A48FC(func_800B30B0_arg *arg0) {
+s32 func_800B4A4C_A48FC(Player *arg0) {
     arg0->unkB88 = 1;
     arg0->unkB84 = arg0->unkB84 | 0x20;
     arg0->unk450 = arg0->unk450 - 0x6000;
@@ -2030,7 +1886,7 @@ typedef struct {
 
 extern void func_800B7B44_A79F4(func_800B7B64_arg *, s32);
 
-s32 func_800B4B08_A49B8(func_800B30B0_arg *arg0) {
+s32 func_800B4B08_A49B8(Player *arg0) {
     s64 distSq;
     s32 dist;
 
@@ -2053,7 +1909,7 @@ s32 func_800B4B08_A49B8(func_800B30B0_arg *arg0) {
         if (arg0->unkBC0 == 0) {
             arg0->unkBC0++;
             func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-            func_80056B7C_5777C(&arg0->unk434, 0x25);
+            func_80056B7C_5777C(&arg0->worldPosX, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
         func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
@@ -2082,7 +1938,7 @@ s32 func_800B4B08_A49B8(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B4CB8_A4B68(func_800B30B0_arg *arg0) {
+s32 func_800B4CB8_A4B68(Player *arg0) {
     s16 angle;
     s16 diff;
     s16 clampedDiff;
@@ -2135,7 +1991,7 @@ s32 func_800B4CB8_A4B68(func_800B30B0_arg *arg0) {
 extern s32 D_800BABD4_AAA84[3];
 extern s32 func_8005D8C8_5E4C8(void *);
 
-s32 func_800B4DB8_A4C68(func_800B30B0_arg *arg0) {
+s32 func_800B4DB8_A4C68(Player *arg0) {
     s32 dist;
     s32 temp;
 
@@ -2189,7 +2045,7 @@ s32 func_800B4DB8_A4C68(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B4F5C_A4E0C(func_800B30B0_arg *arg0) {
+s32 func_800B4F5C_A4E0C(Player *arg0) {
     s16 angle;
 
     if (arg0->unkBBF != 0) {
@@ -2241,7 +2097,7 @@ skip:
     return 0;
 }
 
-s32 func_800B50C0_A4F70(func_800B30B0_arg *arg0) {
+s32 func_800B50C0_A4F70(Player *arg0) {
     s32 stackVec[3];
     void **allocation;
     u16 angle;
@@ -2262,11 +2118,11 @@ s32 func_800B50C0_A4F70(func_800B30B0_arg *arg0) {
 
         rotateVectorY((u8 *)allocation[0x48 / sizeof(void *)] + 0xE4, arg0->unkA94, stackVec);
 
-        stackVec[0] += (s32)arg0->unk434;
-        stackVec[2] += arg0->unk43C;
-        stackVec[1] = arg0->unk438 + 0x140000;
+        stackVec[0] += (s32)arg0->worldPosX;
+        stackVec[2] += arg0->worldPosZ;
+        stackVec[1] = arg0->worldPosY + 0x140000;
 
-        func_80056B7C_5777C(&arg0->unk434, 0xD);
+        func_80056B7C_5777C(&arg0->worldPosX, 0xD);
         func_80050ECC_51ACC(stackVec);
     }
 
@@ -2295,7 +2151,7 @@ s32 func_800B50C0_A4F70(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B5234_A50E4(func_800B30B0_arg *arg0) {
+s32 func_800B5234_A50E4(Player *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unk450 = 0;
         arg0->unkB8C = 0x14;
@@ -2316,7 +2172,7 @@ s32 func_800B5234_A50E4(func_800B30B0_arg *arg0) {
         if (arg0->unkBC0 == 0) {
             arg0->unkBC0++;
             func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-            func_80056B7C_5777C(&arg0->unk434, 0x25);
+            func_80056B7C_5777C(&arg0->worldPosX, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
         func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
@@ -2340,10 +2196,10 @@ s32 func_800B5234_A50E4(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B5394_A5244(func_800B30B0_arg *arg0) {
+s32 func_800B5394_A5244(Player *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unkBBF = arg0->unkBBF + 1;
-        func_80056B7C_5777C(&arg0->unk434, 0xD);
+        func_80056B7C_5777C(&arg0->worldPosX, 0xD);
     }
 
     arg0->unkB88 = 8;
@@ -2369,13 +2225,13 @@ s32 func_800B5394_A5244(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B5478_A5328(func_800B30B0_arg *arg0) {
+s32 func_800B5478_A5328(Player *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unk450 = 0;
         arg0->unkB8C = 0x14;
         arg0->unkBBF = arg0->unkBBF + 1;
         if ((arg0->unkB84 & 1) == 0) {
-            func_80056B7C_5777C(&arg0->unk434, 0x25);
+            func_80056B7C_5777C(&arg0->worldPosX, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
     }
@@ -2411,7 +2267,7 @@ s32 func_800B5478_A5328(func_800B30B0_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B55B4_A5464);
 
-s32 func_800B58B8_A5768(func_800B30B0_arg *arg0) {
+s32 func_800B58B8_A5768(Player *arg0) {
     arg0->unkB8C -= 1;
 
     if (arg0->unkB8C == 0) {
@@ -2421,14 +2277,14 @@ s32 func_800B58B8_A5768(func_800B30B0_arg *arg0) {
     }
 
     arg0->unkB88 = 8;
-    arg0->unk438 = arg0->unk438 + 0xFFFF0000;
+    arg0->worldPosY = arg0->worldPosY + 0xFFFF0000;
     func_800B40D4_A3F84(arg0);
     func_8005D180_5DD80(arg0, 0);
     func_8005D804_5E404(arg0, 3, 0);
     return 0;
 }
 
-s32 func_800B5938_A57E8(func_800B30B0_arg *arg0) {
+s32 func_800B5938_A57E8(Player *arg0) {
     s16 angle;
     s16 angleDelta;
 
@@ -2479,7 +2335,7 @@ s32 func_800B5938_A57E8(func_800B30B0_arg *arg0) {
 
 extern s32 func_8004175C_4235C(void *);
 
-s32 func_800B5A40_A58F0(func_800B30B0_arg *arg0) {
+s32 func_800B5A40_A58F0(Player *arg0) {
     s32 temp;
 
     if (!arg0->unkBBF) {
@@ -2535,7 +2391,7 @@ skip:
     return 0;
 }
 
-s32 func_800B5B90_A5A40(func_800B30B0_arg *arg0) {
+s32 func_800B5B90_A5A40(Player *arg0) {
     s32 temp_v1;
     u8 temp_v0;
 
@@ -2578,7 +2434,7 @@ s32 func_800B5B90_A5A40(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B5CB8_A5B68(func_800B30B0_arg *arg0) {
+s32 func_800B5CB8_A5B68(Player *arg0) {
     arg0->unkB88 = 1;
     arg0->unkB84 = arg0->unkB84 | 0x20;
     arg0->unk450 = arg0->unk450 - 0x6000;
@@ -2600,7 +2456,7 @@ s32 func_800B5CB8_A5B68(func_800B30B0_arg *arg0) {
 extern s32 func_800420A8_42CA8(void *);
 extern s32 func_8005D8C8_5E4C8(void *);
 
-s32 func_800B5D68_A5C18(func_800B30B0_arg *arg0) {
+s32 func_800B5D68_A5C18(Player *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unkB8C = 0x78;
         arg0->unkBBF = arg0->unkBBF + 1;
@@ -2643,7 +2499,7 @@ s32 func_800B5D68_A5C18(func_800B30B0_arg *arg0) {
 
 extern s32 func_8005D8C8_5E4C8(void *);
 
-s32 func_800B5E90_A5D40(func_800B30B0_arg *arg0) {
+s32 func_800B5E90_A5D40(Player *arg0) {
     s16 angle;
 
     if (arg0->unkBBF == 0) {
@@ -2686,7 +2542,7 @@ s32 func_800B5E90_A5D40(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B5FC4_A5E74(func_800B30B0_arg *arg0) {
+s32 func_800B5FC4_A5E74(Player *arg0) {
     u8 temp;
     s32 velZ;
     s32 dist;
@@ -2729,7 +2585,7 @@ s32 func_800B5FC4_A5E74(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B6194_A6044(func_800B30B0_arg *arg0) {
+s32 func_800B6194_A6044(Player *arg0) {
     s16 angle;
 
     if (arg0->unkBBF == 0) {
@@ -2781,7 +2637,7 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B62E4_A6194);
 extern s16 D_800BABEC_AAA9C;
 extern u16 D_800BABEE_AAA9E;
 
-s32 func_800B6488_A6338(func_800B30B0_arg *arg0) {
+s32 func_800B6488_A6338(Player *arg0) {
     u8 temp_v0;
 
     temp_v0 = arg0->unkBBF;
@@ -2791,7 +2647,7 @@ s32 func_800B6488_A6338(func_800B30B0_arg *arg0) {
         arg0->unk450 = 0;
         arg0->unkA8C = 0xFFFF;
         func_8005D308_5DF08(arg0, 0xB);
-        func_80056B7C_5777C(&arg0->unk434, 0x34);
+        func_80056B7C_5777C(&arg0->worldPosX, 0x34);
         if (!(arg0->unkB84 & 1)) {
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
@@ -2843,7 +2699,7 @@ void func_800B6610_A64C0(func_800B00D4_arg *arg0) {
     D_800BAC14_AAAC4[arg0->unkBBF](arg0);
 }
 
-s32 func_800B6640_A64F0(func_800B30B0_arg *arg0) {
+s32 func_800B6640_A64F0(Player *arg0) {
     arg0->unkB8C = 10;
     arg0->unkB84 = arg0->unkB84 | 0x180;
 
@@ -2858,7 +2714,7 @@ s32 func_800B6640_A64F0(func_800B30B0_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6688_A6538);
 
-s32 func_800B67E4_A6694(func_800B30B0_arg *arg0) {
+s32 func_800B67E4_A6694(Player *arg0) {
     D_80090F90_91B90_item *item;
     GameState *gameState = (GameState *)getCurrentAllocation();
 
@@ -2867,8 +2723,8 @@ s32 func_800B67E4_A6694(func_800B30B0_arg *arg0) {
     arg0->unk44C = 0;
     arg0->unk454 = 0;
     arg0->unk450 = arg0->unk450 - 0x6000;
-    arg0->unk434 = arg0->unk434 + ((item->unk0 - (s32)arg0->unk434) >> 2);
-    arg0->unk43C = arg0->unk43C + ((item->unk4 - arg0->unk43C) >> 2);
+    arg0->worldPosX = arg0->worldPosX + ((item->unk0 - (s32)arg0->worldPosX) >> 2);
+    arg0->worldPosZ = arg0->worldPosZ + ((item->unk4 - arg0->worldPosZ) >> 2);
     func_800B02AC_A015C(arg0);
     func_800B40D4_A3F84(arg0);
 
@@ -2884,7 +2740,7 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6890_A6740);
 
 extern s32 D_800BAC80_AAB30;
 
-s32 func_800B6D14_A6BC4(func_800B30B0_arg *arg0) {
+s32 func_800B6D14_A6BC4(Player *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     func_80055D10_56910(gameState->memoryPoolId);
@@ -2913,7 +2769,7 @@ extern s32 D_800BAC98_AAB48;
 extern void func_8006FDC8_709C8(u16 arg0, u8 arg1, u8 arg2);
 extern void func_8004D364_4DF64(u8 arg0);
 
-s32 func_800B6DB8_A6C68(func_800B30B0_arg *arg0) {
+s32 func_800B6DB8_A6C68(Player *arg0) {
     s32 pad[12];
     GameState *gameState = getCurrentAllocation();
 
@@ -2936,7 +2792,7 @@ s32 func_800B6DB8_A6C68(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B6E5C_A6D0C(func_800B30B0_arg *arg0) {
+s32 func_800B6E5C_A6D0C(Player *arg0) {
     s32 sp10[3];
     s32 pad[8];
     GameState *gameState;
@@ -2956,11 +2812,11 @@ s32 func_800B6E5C_A6D0C(func_800B30B0_arg *arg0) {
         createYRotationMatrix(&arg0->unk970, 0x1000);
         transformVector2(&D_800BAC98_AAB48, &arg0->unk970, sp10);
 
-        arg0->unk434 = (void *)(item->unkC + sp10[0]);
-        arg0->unk438 = item->unk10 + sp10[1];
-        arg0->unk43C = item->unk14 + sp10[2];
+        arg0->worldPosX = item->unkC + sp10[0];
+        arg0->worldPosY = item->unk10 + sp10[1];
+        arg0->worldPosZ = item->unk14 + sp10[2];
 
-        memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+        memcpy(&arg0->unk440, &arg0->worldPosX, 0xC);
 
         arg0->unkBC3 = 1;
         arg0->unkB8C = 0x32;
@@ -2989,7 +2845,7 @@ s32 func_800B6E5C_A6D0C(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B6FE8_A6E98(func_800B30B0_arg *arg0) {
+s32 func_800B6FE8_A6E98(Player *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     func_80055D10_56910(gameState->memoryPoolId);
@@ -3008,7 +2864,7 @@ s32 func_800B6FE8_A6E98(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B7078_A6F28(func_800B30B0_arg *arg0) {
+s32 func_800B7078_A6F28(Player *arg0) {
     arg0->unk44C = 0;
     arg0->unk454 = 0;
     arg0->unk450 = arg0->unk450 - 0x6000;
@@ -3020,7 +2876,7 @@ s32 func_800B7078_A6F28(func_800B30B0_arg *arg0) {
     if (arg0->unkB8C == 0) {
         arg0->unkBC0 = 0;
         arg0->unkBBF = arg0->unkBBF + 1;
-        memcpy(&arg0->unk470, &arg0->unk434, 0xC);
+        memcpy(&arg0->unk470, &arg0->worldPosX, 0xC);
         arg0->unk480 = 0;
         arg0->unk468 = 0x30000;
         arg0->unkB8C = 0;
@@ -3029,7 +2885,7 @@ s32 func_800B7078_A6F28(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B7108_A6FB8(func_800B30B0_arg *arg0) {
+s32 func_800B7108_A6FB8(Player *arg0) {
     s32 var_v0;
     s32 temp_a1;
     s32 new_unk474;
@@ -3047,7 +2903,7 @@ s32 func_800B7108_A6FB8(func_800B30B0_arg *arg0) {
     new_unkB8C = arg0->unkB8C + 1;
     arg0->unkB8C = new_unkB8C;
     arg0->unk468 = arg0->unk468 - 0x6000;
-    arg0->unk438 = new_unk474 + arg0->unk480;
+    arg0->worldPosY = new_unk474 + arg0->unk480;
     func_800B40D4_A3F84(arg0);
     func_8005D308_5DF08(arg0, 4);
     if (arg0->unkB8C == 16) {
@@ -3058,15 +2914,15 @@ s32 func_800B7108_A6FB8(func_800B30B0_arg *arg0) {
         tempB84 = tempB84 | 0x2000;
         arg0->unkB84 = tempB84;
         arg0->unkBBF = tempBBF;
-        func_80056B7C_5777C(&arg0->unk434, 0x25);
+        func_80056B7C_5777C(&arg0->worldPosX, 0x25);
     }
     return 0;
 }
 
-s32 func_800B71E4_A7094(func_800B30B0_arg *arg0) {
-    arg0->unk434 = arg0->unkB44;
-    arg0->unk438 = arg0->unkB48;
-    arg0->unk43C = arg0->unkB4C;
+s32 func_800B71E4_A7094(Player *arg0) {
+    arg0->worldPosX = arg0->unkB44;
+    arg0->worldPosY = arg0->unkB48;
+    arg0->worldPosZ = arg0->unkB4C;
     arg0->unkA8E = arg0->unkB74;
 
     if (func_8005D308_5DF08(arg0, 5) != 0) {
@@ -3077,14 +2933,14 @@ s32 func_800B71E4_A7094(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B724C_A70FC(func_800B30B0_arg *arg0) {
+s32 func_800B724C_A70FC(Player *arg0) {
     GameState *alloc;
     u8 flags;
 
     alloc = (GameState *)getCurrentAllocation();
-    arg0->unk434 = arg0->unkB44;
-    arg0->unk438 = arg0->unkB48;
-    arg0->unk43C = arg0->unkB4C;
+    arg0->worldPosX = arg0->unkB44;
+    arg0->worldPosY = arg0->unkB48;
+    arg0->worldPosZ = arg0->unkB4C;
     arg0->unkA8E = arg0->unkB74;
     flags = arg0->unkBCE;
 
@@ -3100,7 +2956,7 @@ s32 func_800B724C_A70FC(func_800B30B0_arg *arg0) {
         arg0->unkBBF++;
         arg0->unkB84 |= 0x200;
         arg0->unkBC5++;
-        memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+        memcpy(&arg0->unk440, &arg0->worldPosX, 0xC);
         arg0->unkBC3 = 1;
         func_8006FDC8_709C8(arg0->unkBB8, 0, 0x10);
         if (arg0->unkBC7 == 0 && arg0->unkBC5 == alloc->unk74) {
@@ -3113,10 +2969,10 @@ s32 func_800B724C_A70FC(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B735C_A720C(func_800B30B0_arg *arg0) {
-    arg0->unk434 = arg0->unkB44;
-    arg0->unk438 = arg0->unkB48;
-    arg0->unk43C = arg0->unkB4C;
+s32 func_800B735C_A720C(Player *arg0) {
+    arg0->worldPosX = arg0->unkB44;
+    arg0->worldPosY = arg0->unkB48;
+    arg0->worldPosZ = arg0->unkB4C;
     arg0->unkA8E = arg0->unkB74;
 
     func_8005D308_5DF08(arg0, 0);
@@ -3129,10 +2985,10 @@ s32 func_800B735C_A720C(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B73CC_A727C(func_800B30B0_arg *arg0) {
-    arg0->unk434 = arg0->unkB44;
-    arg0->unk438 = arg0->unkB48;
-    arg0->unk43C = arg0->unkB4C;
+s32 func_800B73CC_A727C(Player *arg0) {
+    arg0->worldPosX = arg0->unkB44;
+    arg0->worldPosY = arg0->unkB48;
+    arg0->worldPosZ = arg0->unkB4C;
     arg0->unkA8E = arg0->unkB74;
 
     func_8005D308_5DF08(arg0, 3);
@@ -3147,7 +3003,7 @@ s32 func_800B73CC_A727C(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B7444_A72F4(func_800B30B0_arg *arg0) {
+s32 func_800B7444_A72F4(Player *arg0) {
     if (arg0->unkBC0 == 0) {
         arg0->unk454 = 0xFFF80000;
         arg0->unk44C = 0;
@@ -3172,7 +3028,7 @@ s32 func_800B7444_A72F4(func_800B30B0_arg *arg0) {
 
 extern void func_800BBB90(s16);
 
-s32 func_800B74E4_A7394(func_800B30B0_arg *arg0) {
+s32 func_800B74E4_A7394(Player *arg0) {
     arg0->unk44C = 0;
     arg0->unk454 = 0;
     arg0->unk450 = arg0->unk450 - 0x6000;
@@ -3186,13 +3042,13 @@ s32 func_800B74E4_A7394(func_800B30B0_arg *arg0) {
         arg0->unkB8C = 0;
         arg0->unkBBF = arg0->unkBBF + 1;
         func_800BBB90(0);
-        func_80056B7C_5777C(&arg0->unk434, 0x26);
+        func_80056B7C_5777C(&arg0->worldPosX, 0x26);
     }
 
     return 0;
 }
 
-s32 func_800B756C_A741C(func_800B30B0_arg *arg0) {
+s32 func_800B756C_A741C(Player *arg0) {
     arg0->unk44C = 0;
     arg0->unk454 = 0;
     arg0->unk450 = arg0->unk450 - 0x6000;
@@ -3215,7 +3071,7 @@ typedef struct {
     u8 unk63; // 0x63
 } func_800B75F4_alloc;
 
-s32 func_800B75F4_A74A4(func_800B30B0_arg *arg0) {
+s32 func_800B75F4_A74A4(Player *arg0) {
     func_800B75F4_alloc *alloc = (func_800B75F4_alloc *)getCurrentAllocation();
     s32 temp;
 
@@ -3240,7 +3096,7 @@ s32 func_800B75F4_A74A4(func_800B30B0_arg *arg0) {
         arg0->unkBBF = temp2;
         arg0->unkB84 = temp3;
         alloc->unk63 = alloc->unk63 & 2;
-        func_80056B7C_5777C(&arg0->unk434, 0x4E);
+        func_80056B7C_5777C(&arg0->worldPosX, 0x4E);
     }
 
     return 0;
@@ -3251,7 +3107,7 @@ typedef struct {
     u8 unk81; // 0x81
 } func_800B76BC_alloc;
 
-s32 func_800B76BC_A756C(func_800B30B0_arg *arg0) {
+s32 func_800B76BC_A756C(Player *arg0) {
     func_800B76BC_alloc *alloc = (func_800B76BC_alloc *)getCurrentAllocation();
     u16 temp1;
     u16 temp2;
@@ -3287,7 +3143,7 @@ typedef struct {
     u8 unk80; // 0x80
 } func_800B7784_alloc;
 
-s32 func_800B7784_A7634(func_800B30B0_arg *arg0) {
+s32 func_800B7784_A7634(Player *arg0) {
     func_800B7784_alloc *alloc = (func_800B7784_alloc *)getCurrentAllocation();
     s32 temp;
 
@@ -3309,7 +3165,7 @@ s32 func_800B7784_A7634(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B781C_A76CC(func_800B30B0_arg *arg0) {
+s32 func_800B781C_A76CC(Player *arg0) {
     GameState *gameState;
     D_80090F90_91B90_item *item;
     s32 pad[12];
@@ -3327,11 +3183,11 @@ s32 func_800B781C_A76CC(func_800B30B0_arg *arg0) {
 
         createYRotationMatrix(&arg0->unk970, 0xE00);
 
-        arg0->unk434 = (void *)item->unkC;
-        arg0->unk438 = item->unk10;
-        arg0->unk43C = item->unk14;
+        arg0->worldPosX = item->unkC;
+        arg0->worldPosY = item->unk10;
+        arg0->worldPosZ = item->unk14;
 
-        memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+        memcpy(&arg0->unk440, &arg0->worldPosX, 0xC);
 
         arg0->unkBC3 = 2;
         func_8006FDC8_709C8(arg0->unkBB8, 0, 0x10);
@@ -3342,7 +3198,7 @@ s32 func_800B781C_A76CC(func_800B30B0_arg *arg0) {
             }
         }
 
-        func_80056B7C_5777C(&arg0->unk434, 0x26);
+        func_80056B7C_5777C(&arg0->worldPosX, 0x26);
     }
 
     func_800B40D4_A3F84(arg0);
@@ -3362,7 +3218,7 @@ s32 func_800B781C_A76CC(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B7998_A7848(func_800B30B0_arg *arg0) {
+s32 func_800B7998_A7848(Player *arg0) {
     func_800B76BC_alloc *alloc = (func_800B76BC_alloc *)getCurrentAllocation();
     s32 temp;
 
@@ -3383,7 +3239,7 @@ s32 func_800B7998_A7848(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B7A30_A78E0(func_800B30B0_arg *arg0) {
+s32 func_800B7A30_A78E0(Player *arg0) {
     func_8005D308_5DF08(arg0, 3);
 
     arg0->unkB8C = arg0->unkB8C - 1;
@@ -3397,7 +3253,7 @@ s32 func_800B7A30_A78E0(func_800B30B0_arg *arg0) {
     return 0;
 }
 
-s32 func_800B7A94_A7944(func_800B30B0_arg *arg0) {
+s32 func_800B7A94_A7944(Player *arg0) {
     if (arg0->unkBC0 == 0) {
         arg0->unk454 = 0xFFF80000;
         arg0->unk44C = 0;
@@ -3443,7 +3299,7 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B8894_A8744);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B9500_A93B0);
 
-void func_800B98CC_A977C(func_800B30B0_arg *arg0) {
+void func_800B98CC_A977C(Player *arg0) {
     void *alloc;
     void *allocPlus30;
     s32 i;
@@ -3481,7 +3337,7 @@ void func_800B98CC_A977C(func_800B30B0_arg *arg0) {
 }
 
 void func_800B99E0(void *varg0) {
-    func_800B30B0_arg *arg0 = (func_800B30B0_arg *)varg0;
+    Player *arg0 = (Player *)varg0;
     func_800B99E0_alloc *alloc;
     u8 v0;
     u8 v1;
@@ -3519,7 +3375,7 @@ void func_800B99E0(void *varg0) {
 }
 
 void func_800B9AE0(void *varg0) {
-    func_800B30B0_arg *arg0 = (func_800B30B0_arg *)varg0;
+    Player *arg0 = (Player *)varg0;
     s32 pad[8];
 
     arg0->unk4 = freeNodeMemory(arg0->unk4);

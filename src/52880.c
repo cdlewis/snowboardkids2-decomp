@@ -140,7 +140,7 @@ void func_80051E90_52A90(Struct_52880 *arg0) {
             func_80058A10_59610(result);
             for (i = 0; i < 3; i++) {
                 if (result->unkB6C >= 100) {
-                    func_8004A9A8_4B5A8(&result->worldPosX, result->unkB94, &result->padding2[0xC]);
+                    func_8004A9A8_4B5A8(&result->worldPosX, result->unkB94, &result->unk44C);
                     func_80059A48_5A648(result, -100);
                 }
             }
