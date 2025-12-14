@@ -15,7 +15,7 @@ typedef struct {
 } CharacterBoardStats;   // size = 0x6
 
 // Performance stats table: [18 snowboards][9 characters]
-CharacterBoardStats D_80093BB0_947B0[18][9] = {
+CharacterBoardStats gBoardStatsTable[18][9] = {
     /* Balance: Level 1 */
     {
      /* Slash  */ { 0x28, 0x32, 0x28, 0x2D, 0x4B, 0x37 },
@@ -243,7 +243,7 @@ struct {
     .entry = { 0x56, 0x41, 0x28, 0x48, 0x4B, 0x50 },
 };
 
-void func_80058690_59290(Player *player) {
+void applyCharacterBoardStats(Player *player) {
     GameState *gameState;
     CharacterBoardStats *boardStats;
     u8 charId;
@@ -255,7 +255,7 @@ void func_80058690_59290(Player *player) {
         boardStats = &D_80093F7C_94B7C.entry;
         charId = 0;
     } else {
-        boardStats = D_80093BB0_947B0[player->unkBBB];
+        boardStats = gBoardStatsTable[player->unkBBB];
         charId = player->unkBB9;
     }
 
@@ -272,37 +272,23 @@ void func_80058690_59290(Player *player) {
     player->unkABC = (boardStats[charId].param5 << 17) / 100 + 0x28000;
 }
 
-s32 func_80058804_59404(s32 characterId, s32 snowboardId) {
-    void *allocation;
+s32 getCharacterBoardStatParam0(s32 characterId, s32 snowboardId) {
+    GameState *allocation;
     CharacterBoardStats *boardStats;
     s32 value;
-    s32 temp;
-    s32 temp2;
 
-    allocation = getCurrentAllocation();
+    allocation = (GameState *)getCurrentAllocation();
 
-    if (*(u8 *)((u8 *)allocation + 0x7A) == 0xB) {
+    if (allocation->unk7A == 0xB) {
         // Special mode: use default stats
         boardStats = &D_80093F7C_94B7C.entry;
         characterId = 0;
     } else {
         // Normal mode
-        boardStats = D_80093BB0_947B0[snowboardId];
+        boardStats = gBoardStatsTable[snowboardId];
     }
 
     value = boardStats[characterId].param0;
 
-    // All this work for val * 353894
-    temp = value * 3;
-    temp = temp << 7;
-    temp = temp - value;
-    temp2 = temp << 3;
-    temp2 = temp2 - temp;
-    temp = temp2 << 5;
-    temp2 = temp2 + temp;
-    temp2 = temp2 << 2;
-    temp2 = temp2 + value;
-    temp2 = temp2 + value;
-
-    return (temp2 / 100) + 0xEB333;
+    return boardStats[characterId].param0 * 353894 / 100 + 0xEB333;
 }

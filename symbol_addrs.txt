@@ -1,3 +1,6 @@
+applyCharacterBoardStats = 0x80058690;
+getCharacterBoardStatParam0 = 0x80058804;
+gBoardStatsTable = 0x80093BB0;
 D_800BBBC0_ABA70 = 0x800BBBC0; // size:0x70 rom:0xABA70
 D_800BB930_B5B40 = 0x800BB930; // size:0x50 rom:0xB5B40
 initRace = 0x8003D560;
