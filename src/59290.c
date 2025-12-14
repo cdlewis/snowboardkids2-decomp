@@ -247,53 +247,29 @@ void func_80058690_59290(Player *player) {
     GameState *gameState;
     CharacterBoardStats *boardStats;
     u8 charId;
+    CharacterBoardStats *stats;
     u8 val;
-    s32 temp;
-    s32 temp2;
 
     gameState = (GameState *)getCurrentAllocation();
-
     if (gameState->unk7A == 0xB) {
-        // Special mode: use default stats
         boardStats = &D_80093F7C_94B7C.entry;
         charId = 0;
     } else {
-        // Normal mode: unkBBB = snowboard (0-17), unkBB9 = character (0-8)
         boardStats = D_80093BB0_947B0[player->unkBBB];
         charId = player->unkBB9;
     }
 
-    val = boardStats[charId].param0;
-
-    // All this work for val * 353894
-    temp = val * 3;
-    temp = temp << 7;
-    temp = temp - val;
-    temp2 = temp << 3;
-    temp2 = temp2 - temp;
-    temp = temp2 << 5;
-    temp2 = temp2 + temp;
-    temp2 = temp2 << 2;
-    temp2 = temp2 + val;
-    temp2 = temp2 + val;
-
-    player->unkAA0 = (temp2 / 100) + 0xEB333;
-
+    player->unkAA0 = boardStats[charId].param0 * 353894 / 100 + 0xEB333;
     player->unkAC0 = boardStats[charId].param1 + 0x19;
     player->unkAC1 = boardStats[charId].param2 + 1;
-
-    temp = boardStats[charId].param3 << 15;
-    player->unkAB0 = (temp / 100) + 0x1000;
+    player->unkAB0 = (boardStats[charId].param3 << 15) / 100 + 0x1000;
 
     if (player->unkBC7 != 0) {
         player->unkAB0 = 0xC000;
     }
 
-    temp = boardStats[charId].param4 << 14;
-    player->unkAB4 = (temp / 100) + 0x3000;
-
-    temp = boardStats[charId].param5 << 17;
-    player->unkABC = (temp / 100) + 0x28000;
+    player->unkAB4 = (boardStats[charId].param4 << 14) / 100 + 0x3000;
+    player->unkABC = (boardStats[charId].param5 << 17) / 100 + 0x28000;
 }
 
 s32 func_80058804_59404(s32 characterId, s32 snowboardId) {
