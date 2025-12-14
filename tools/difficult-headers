@@ -35,6 +35,7 @@ src/levels/jingle_town_boss.c:101
 src/levels/ice_land_boss.c:79
 src/levels/snowboard_street_shoot_cross.c:10
 src/46080.c:1767
+src/9FF70.c:164
 src/9FF70.c:165
 src/levels/crazy_jungle_boss.c:97
 src/levels/jingle_town_boss.c:99
