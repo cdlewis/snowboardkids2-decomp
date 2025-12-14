@@ -436,7 +436,7 @@ segments:
       - [0x92050, data]
       - [0x943C0, data, 56C80]
       - [0x94700, data]
-      - [0x947B0, data]
+      - [0x947B0, .data, 59290]
       - [0x94B90, data]
       - [0x94D10, data]
       - [0x94D80, data]
