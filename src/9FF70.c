@@ -343,7 +343,6 @@ s32 func_800B1FFC_A1EAC(func_800B1FFC_arg *arg0) {
     return 1;
 }
 
-extern s32 func_8005A9A8_5B5A8(Player *);
 extern void func_800B65F8_A64A8(func_800B00D4_arg *);
 extern s32 func_800B42A8_A4158(Player *, s32, s32, s32);
 
@@ -429,7 +428,6 @@ void func_800B23AC_A225C(func_800B00D4_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B23DC_A228C);
 
-extern s32 func_8005A9A8_5B5A8(Player *);
 extern void func_800B65F8_A64A8(func_800B00D4_arg *);
 extern s8 func_8005D818_5E418(Player *);
 s32 func_800B42A8_A4158(Player *, s32, s32, s32);
