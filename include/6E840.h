@@ -93,6 +93,7 @@ typedef struct Node_70B00 {
 extern Node_70B00 D_800A3370_A3F70;
 
 void func_8006FDA0_709A0(Node_70B00 *arg0, u8 arg1, u8 arg2);
+void func_8006FDC8_709C8(u16 arg0, u8 arg1, u8 arg2);
 
 void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 

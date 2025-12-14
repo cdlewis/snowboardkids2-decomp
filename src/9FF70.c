@@ -6,6 +6,7 @@
 #include "56910.h"
 #include "594E0.h"
 #include "5AA90.h"
+#include "5DBC0.h"
 #include "5E590.h"
 #include "6E840.h"
 #include "A9A40.h"
@@ -22,7 +23,6 @@ extern u16 D_800BAB48_AA9F8[];
 extern u16 D_800BAB58_AAA08[];
 
 extern s32 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
-extern s32 func_8005CFC0_5DBC0(void *, s32, void *, s32);
 extern s32 D_800BA348_AA1F8;
 extern s32 D_800BA350_AA200;
 extern s32 D_800BAB40_AA9F0;
@@ -161,7 +161,6 @@ s32 func_800B12F0_A11A0(Player *arg0) {
     return 0;
 }
 
-extern void func_8005D804_5E404(void *, u8, u8);
 extern void func_80059BD4_5A7D4(void *);
 
 s32 func_800B13D4_A1284(Player *arg0) {
@@ -835,6 +834,7 @@ s32 func_800B2E38_A2CE8(void *arg0) {
 }
 
 extern void func_8005D810_5E410(Player *);
+extern s8 func_8005D818_5E418(Player *arg0);
 
 void func_800B2E80_A2D30(Player *arg0) {
     arg0->unkB8C = 0x200;
@@ -847,8 +847,6 @@ void func_800B2E80_A2D30(Player *arg0) {
     func_8005D810_5E410(arg0);
     func_80056B7C_5777C(&arg0->worldPosX, 0xB);
 }
-
-extern s8 func_8005D818_5E418(Player *arg0);
 
 void func_800B2EE4_A2D94(Player *arg0, s8 arg1) {
     switch (arg0->unkBC0) {
@@ -1351,8 +1349,6 @@ s32 func_800B3CBC_A3B6C(Player *arg0) {
     }
     return 0;
 }
-
-extern void func_8005D804_5E404(void *, u8, u8);
 
 s32 func_800B3DF0_A3CA0(Player *arg0) {
     arg0->unk44C = 0;
@@ -1981,7 +1977,6 @@ s32 func_800B4CB8_A4B68(Player *arg0) {
 }
 
 extern s32 D_800BABD4_AAA84[3];
-extern s32 func_8005D8C8_5E4C8(void *);
 
 s32 func_800B4DB8_A4C68(Player *arg0) {
     s32 dist;
@@ -2325,8 +2320,6 @@ s32 func_800B5938_A57E8(Player *arg0) {
     return 0;
 }
 
-extern s32 func_8004175C_4235C(void *);
-
 s32 func_800B5A40_A58F0(Player *arg0) {
     s32 temp;
 
@@ -2343,6 +2336,7 @@ s32 func_800B5A40_A58F0(Player *arg0) {
     if (arg0->unk450 > 0) {
         arg0->unk450 = arg0->unk450 - 0x8000;
     } else {
+        extern s32 func_8004175C_4235C(void *);
         if (arg0->unkBBF == 1) {
             if (func_8004175C_4235C(arg0) != 0) {
                 arg0->unkBBF++;
@@ -2446,7 +2440,6 @@ s32 func_800B5CB8_A5B68(Player *arg0) {
 }
 
 extern s32 func_800420A8_42CA8(void *);
-extern s32 func_8005D8C8_5E4C8(void *);
 
 s32 func_800B5D68_A5C18(Player *arg0) {
     if (arg0->unkBBF == 0) {
@@ -2488,8 +2481,6 @@ s32 func_800B5D68_A5C18(Player *arg0) {
 
     return 0;
 }
-
-extern s32 func_8005D8C8_5E4C8(void *);
 
 s32 func_800B5E90_A5D40(Player *arg0) {
     s16 angle;
@@ -2758,8 +2749,6 @@ s32 func_800B6D14_A6BC4(Player *arg0) {
 
 extern s32 D_800BAC8C_AAB3C;
 extern s32 D_800BAC98_AAB48;
-extern void func_8006FDC8_709C8(u16 arg0, u8 arg1, u8 arg2);
-extern void func_8004D364_4DF64(u8 arg0);
 
 s32 func_800B6DB8_A6C68(Player *arg0) {
     s32 pad[12];
