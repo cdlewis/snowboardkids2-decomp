@@ -6,13 +6,12 @@ set -eu
 # Check if snowboardkids2.sha1 has been modified
 echo "[pre-commit] Checking staged files..."
 STAGED_FILES=$(git diff --cached --name-only)
-echo "Staged files: $STAGED_FILES"
-
 if echo "$STAGED_FILES" | grep -q "^snowboardkids2\.sha1$"; then
     echo "ERROR: Claude is not allowed to change snowboardkids2.sha1"
     echo "This file contains the expected checksum and should not be modified."
     exit 1
 fi
 
+# Rebuild the project to ensure we still match 100%
 echo "[pre-commit] Running tools/build-and-verify.sh..."
 tools/build-and-verify.sh
