@@ -1743,8 +1743,6 @@ void func_800B46BC_A456C(Player *arg0) {
     func_80059D30_5A930(arg0);
 }
 
-extern s16 func_8005CE98_5DA98(Player *);
-
 s32 func_800B470C_A45BC(Player *arg0) {
     s32 stackVec[3];
     GameState *allocation;
