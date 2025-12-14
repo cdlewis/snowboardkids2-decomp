@@ -17,7 +17,6 @@ extern StateEntry D_80088660;
 
 extern s16 D_800BAD0E_1E7DBE;
 extern s16 D_800BAA60_1E7B10[];
-extern void func_80057DF0_589F0(s32, s32, s32, s32, s32);
 extern void func_80056D64_57964(void *, s16, s16, s16);
 
 s16 func_800B4AF0_1E1BA0(void) {

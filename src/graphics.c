@@ -733,7 +733,7 @@ void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 a
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
 
-void func_80057DF0_589F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+void func_80057DF0_589F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     func_80057CE4_588E4(arg0, arg1, arg2, arg3, arg4, 0xC);
 }
 
