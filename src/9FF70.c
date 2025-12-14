@@ -647,7 +647,6 @@ void func_800B2950_A2800(Player *arg0, s32 arg1) {
     }
 }
 
-extern void func_80059ADC_5A6DC(void *);
 s32 func_800B42A8_A4158(Player *, s32, s32, s32);
 
 s32 func_800B2A3C_A28EC(Player *arg0) {
