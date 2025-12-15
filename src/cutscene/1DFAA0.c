@@ -347,7 +347,31 @@ s32 processCutsceneFrame(CutsceneManager *uiManager) {
     return (uiManager->currentFrame <= uiManager->endFrame) ? 1 : 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3360);
+s16 func_800B3360(s16 arg0, s16 arg1) {
+    s16 new_var;
+    s16 result;
+    new_var = 0xFFFFFFFFu;
+    if ((((((((((((arg1 & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & new_var) &
+             0xFFFFFFFFu) &
+            0xFFFFFFFFu) &
+           0xFFFFFFFFu) &
+          0xFFFFFFFFu) &
+         0xFFFFFFFFu) >= ((u64)3)) {
+        return 0;
+    }
+    if (arg0 >= 0x10) {
+        return 0;
+    }
+    if (arg1 == 0) {
+        result = D_800BA7BC_1E786C[arg0].count0;
+    } else if (arg1 == 1) {
+        result = D_800BA7BC_1E786C[arg0].count1;
+    }
+    if (arg1 == 2) {
+        result = D_800BA7BC_1E786C[arg0].count2;
+    }
+    return result;
+}
 
 void *func_800B3420_1E04D0(void) {
     return &D_800BAEBC_1E7F6C->padding0[4];
