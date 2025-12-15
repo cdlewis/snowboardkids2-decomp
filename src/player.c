@@ -6,6 +6,9 @@
 #define MAX_SONGS 4
 #define MUSFLAG_EFFECTS 1
 #define MUSFLAG_SONGS 2
+#define PTRFLAG_REMAPPED (1 << 31)
+#define BASEOFFSET 48
+#define U8_TO_FLOAT(c) (((c) & 128) ? -(256 - (c)) : (c))
 
 typedef unsigned long musHandle;
 typedef void (*LIBMUScb_marker)(musHandle, int);
@@ -221,7 +224,7 @@ void MusHandleUnPause(musHandle);
 void __MusIntFifoProcessCommand(fifo_t *command);
 void __MusIntHandleSetFlag(u32 handle, u32 clear, u32 set);
 s32 func_800744EC_750EC(song_t *, s32);
-void MusPtrBankInitialize(u8 *, u8 *);
+void MusPtrBankInitialize(void *, u8 *);
 void __MusIntFifoOpen(s32);
 void __MusIntMemSet(void *, unsigned char, int);
 void __MusIntMemMove(u8 *, u8 *, s32);
@@ -1588,7 +1591,59 @@ f32 __MusIntPowerOf2(f32 x) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", MusPtrBankInitialize);
+void MusPtrBankInitialize(void *pptr, u8 *wptr) {
+    ptr_bank_t *ptrfile_addr;
+    s32 i;
+    u8 *chardetune;
+    u8 charwork;
+    f32 *floatdetune;
+    f32 floatwork;
+    u32 base;
+
+    ptrfile_addr = (ptr_bank_t *)pptr;
+
+    if (ptrfile_addr->flags & PTRFLAG_REMAPPED) {
+        return;
+    }
+
+    ptrfile_addr->flags |= PTRFLAG_REMAPPED;
+
+    __MusIntRemapPtrs(&ptrfile_addr->basenote, ptrfile_addr, 3);
+    __MusIntRemapPtrs(ptrfile_addr->wave_list, ptrfile_addr, ptrfile_addr->count);
+
+    for (i = 0; i < (s32)ptrfile_addr->count; i++) {
+        floatdetune = &ptrfile_addr->detune[i];
+        chardetune = (u8 *)floatdetune;
+        charwork = *chardetune;
+
+        floatwork = U8_TO_FLOAT(charwork);
+        *floatdetune = floatwork / 100.0;
+
+        charwork = ptrfile_addr->basenote[i] - BASEOFFSET;
+        floatwork = U8_TO_FLOAT(charwork);
+        *floatdetune += floatwork;
+
+        if (!ptrfile_addr->wave_list[i]->flags) {
+            base = (u32)ptrfile_addr->wave_list[i]->base;
+            if ((base & 0xFF000000) != 0xFF000000) {
+                base += (u32)wptr;
+                ptrfile_addr->wave_list[i]->base = (u8 *)base;
+            }
+            ptrfile_addr->wave_list[i]->flags = 1;
+
+            if (ptrfile_addr->wave_list[i]->waveInfo.adpcmWave.loop) {
+                ptrfile_addr->wave_list[i]->waveInfo.adpcmWave.loop =
+                    (ALADPCMloop *)((u32)ptrfile_addr->wave_list[i]->waveInfo.adpcmWave.loop + (u32)pptr);
+            }
+            if (ptrfile_addr->wave_list[i]->type == AL_ADPCM_WAVE) {
+                ptrfile_addr->wave_list[i]->waveInfo.adpcmWave.book =
+                    (ALADPCMBook *)((u32)ptrfile_addr->wave_list[i]->waveInfo.adpcmWave.book + (u32)pptr);
+            }
+        }
+    }
+
+    osWritebackDCacheAll();
+}
 
 s32 __MusIntRandom(s32 range) {
     s32 temp;
