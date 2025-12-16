@@ -1,3 +1,4 @@
+#include "graphics.h"
 #include "common.h"
 #include "displaylist.h"
 #include "overlay.h"
