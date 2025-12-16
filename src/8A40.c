@@ -1,25 +1,14 @@
+#include "20F0.h"
 #include "common.h"
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern void *loadAssetGroupDisplayList(void *);
-extern void *loadAssetGroupVertexData(void *);
 extern u8 identityMatrix[];
 extern void *D_800882B0_88EB0;
 extern void func_80007EC8_8AC8(void);
 
 typedef struct {
-    u8 _pad0[0x3C];
-    s8 unk3C;
-    s8 unk3D;
-    u8 _pad3E[0xB2];
-    s16 unkF0[3][3];
-    u8 _padUnk102[0xA];
-    s32 unk10C;
-} InnerStruct8A40;
-
-typedef struct {
-    InnerStruct8A40 *unk0;
+    SceneModel *unk0;
     u8 unk4[0x20];
     void *unk24;
     void *unk28;
