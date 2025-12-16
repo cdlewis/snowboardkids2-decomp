@@ -1121,6 +1121,11 @@ segments:
 
   - [0x1EEC10, bin]
 
+  - name: _1FB4E0
+    type: bin
+    vram: 0
+    start: 0x1FB4E0
+
   - name: _1FB8B0
     type: bin
     vram: 0
@@ -1578,6 +1583,11 @@ segments:
     start: 0x4A7070
 
   - [0x4A73F0, bin]
+
+  - name: _4C9E70
+    type: bin
+    vram: 0
+    start: 0x4C9E70
 
   - name: _4CA440
     type: bin

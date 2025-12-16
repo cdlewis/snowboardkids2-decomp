@@ -8,15 +8,14 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 
-extern u32 D_1FB4E0;
-extern u32 D_1FB8B0;
-extern u32 D_4C9E70;
-extern u32 D_4CA440;
+USE_ASSET(_1FB4E0);
+USE_ASSET(_4C9E70);
+
 extern StateEntry D_80088650;
 extern StateEntry D_80088660;
-
 extern s16 D_800BAD0E_1E7DBE;
 extern s16 D_800BAA60_1E7B10[];
+
 extern void func_80056D64_57964(void *, s16, s16, s16);
 
 s16 func_800B4AF0_1E1BA0(void) {
@@ -113,9 +112,9 @@ void func_800B4CD0_1E1D80(func_800B4CD0_1E1D80_arg *arg0) {
     StateEntry **temp_a1;
 
     arg0->unk20 = &D_80088650;
-    arg0->unk24 = dmaRequestAndUpdateState(&D_1FB4E0, &D_1FB8B0);
+    arg0->unk24 = dmaRequestAndUpdateState(&_1FB4E0_ROM_START, &_1FB4E0_ROM_END);
 
-    arg0->unk28 = dmaRequestAndUpdateStateWithSize(&D_4C9E70, &D_4CA440, 0xA10);
+    arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_4C9E70_ROM_START, &_4C9E70_ROM_END, 0xA10);
     temp_a1 = &arg0->unk24;
 
     arg0->unk5C = &D_80088660;
