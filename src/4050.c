@@ -60,8 +60,6 @@ void func_80003D30_4930(void);
 void func_80003CC4_48C4(void);
 void func_80003508_4108(void);
 
-extern void *func_800B00C0_9FF70(void);
-
 void func_80003450_4050(s16 arg0, s16 arg1) {
     D_800AB070_A23E0 = arg0;
     D_800AFEF0_A7260 = arg1;
