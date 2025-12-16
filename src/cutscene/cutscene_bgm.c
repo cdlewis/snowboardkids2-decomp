@@ -1,8 +1,5 @@
 #include "cutscene/cutscene_bgm.h"
-
-void func_80057514_58114(s16, u16, u16);
-void func_80057564_58164(s16);
-void func_80057550_58150(u16, u16);
+#include "graphics.h"
 
 void cutsceneBgmPlay_init(void) {
 }

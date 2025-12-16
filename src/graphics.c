@@ -455,7 +455,7 @@ void func_800574E0_580E0(s16 arg0, s8 arg1) {
     gGraphicsManager->unk1C = arg1;
 }
 
-void func_80057514_58114(u32 arg0, s16 arg1, s16 arg2) {
+void func_80057514_58114(u32 arg0, u16 arg1, u16 arg2) {
     GraphicsManager *new_var;
     gGraphicsManager->unk1D = 2;
     gGraphicsManager->unk10 = arg0;

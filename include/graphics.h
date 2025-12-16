@@ -22,7 +22,7 @@ void func_800573F8_57FF8(void);
 void func_80057470_58070(void);
 void func_800574A0_580A0(s32 arg0);
 void func_800574E0_580E0(s16 arg0, s8 arg1);
-void func_80057514_58114(u32 arg0, s16 arg1, s16 arg2);
+void func_80057514_58114(u32 arg0, u16 arg1, u16 arg2);
 void func_80057550_58150(u16 arg0, u16 arg1);
 void func_80057564_58164(s32 arg0);
 void func_8005758C_5818C(void);
