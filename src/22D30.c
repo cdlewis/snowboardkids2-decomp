@@ -1,4 +1,5 @@
 #include "6E840.h"
+#include "9FF70.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "graphics.h"
@@ -27,7 +28,6 @@ extern u8 D_8008DCC0_8E8C0[];
 
 extern void D_800B0690(void);
 extern void D_800B07A0(void);
-extern void func_800B00C0_9FF70(void *);
 
 void func_800223CC_22FCC(void);
 void func_800225C8_231C8(void);
