@@ -1,8 +1,7 @@
+#include "5520.h"
 #include "common.h"
 #include "geometry.h"
 #include "task_scheduler.h"
-
-extern void func_8000576C_636C(s32 arg0, void *arg1);
 
 typedef struct {
     u8 _pad0[0x24];
@@ -11,33 +10,6 @@ typedef struct {
     u8 _pad2C[0x10];
     void *unk3C;
 } func_800B5794_1E2844_arg;
-
-typedef struct {
-    /* 0x00 */ u8 _pad0[0x20];
-    /* 0x20 */ struct {
-        s32 unk0;
-        s32 unk4;
-        s32 unk8;
-        s32 unkC;
-    } *unk20;
-    /* 0x24 */ u8 _pad24[0x10];
-    /* 0x34 */ s32 unk30;
-    /* 0x38 */ u8 _pad38[3];
-    /* 0x3B */ s8 unk3B;
-    /* 0x3C */ u8 _pad3C[8];
-    /* 0x44 */ u16 unk44;
-    /* 0x46 */ u16 unk46;
-    /* 0x48 */ u16 unk48;
-    /* 0x4A */ u16 unk4A;
-    /* 0x4C */ u8 _pad4C[8];
-    /* 0x54 */ u8 unk54[0x20];
-    /* 0x74 */ u16 unk74;
-    /* 0x76 */ s16 unk76;
-    /* 0x78 */ s32 unk78;
-    /* 0x7C */ s32 unk7C;
-    /* 0x80 */ s32 unk80;
-    /* 0x84 */ s8 unk84;
-} func_800B5500_Task;
 
 void func_800B5590_1E2640(void);
 
