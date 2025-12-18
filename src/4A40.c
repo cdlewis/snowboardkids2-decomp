@@ -34,8 +34,70 @@ static asset D_8008BFA0_8CBA0[6] = {
     { &_6280F0_ROM_START, &_6280F0_ROM_END, 0x9578 },
     { &_62F2F0_ROM_START, &_62F2F0_ROM_END, 0x9578 },
     { &_635AB0_ROM_START, &_635AB0_ROM_END, 0x9578 },
-    { &_63C9F0_ROM_START, &_63C9F0_ROM_END, 0x9578 }
+    { &_63C9F0_ROM_START, &_63C9F0_ROM_END, 0x9578 },
 };
+
+s32 padding[2] = { 0, 0 };
+
+s32 D_8008BFF0_8CBF0 = 0xB00000;
+
+s32 D_8008BFF4_8CBF4 = 0xB000;
+
+s32 D_8008BFF8_8CBF8 = 0x0;
+
+s32 D_8008BFFC_8CBFC = 0x600333;
+
+struct {
+    s32 unk0;
+    s16 unk4;
+    s16 unk6;
+    s16 unk8;
+    s16 unkA;
+} D_8008C000_8CC00 = {
+    0x1400000,
+    0,
+    0,
+    0,
+};
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    u8 unk4;
+    s8 unk5;
+    u16 unk6;
+    u16 unk8;
+    s16 unkA;
+    s32 unkC;
+} D_8008C00C_entry; // size 0x10
+
+D_8008C00C_entry D_8008C00C_8CC0C[] = {
+    { 0x64, 0,    0, 0, 0xF800, 0, 0x2000, 0          },
+    { 0x65, 1,    0, 0, 0xF800, 0, 0x2000, 0          },
+    { 0x71, 0xD,  0, 1, 0xF800, 0, 0x0CCC, 0          },
+    { 0x66, 2,    0, 0, 0xF800, 0, 0x2000, 0          },
+    { 0x67, 3,    0, 0, 0xF800, 0, 0x2000, 0          },
+    { 0x74, 0x10, 0, 1, 0,      0, 0x2000, 0          },
+    { 0x68, 4,    0, 0, 0xF800, 0, 0x2000, 0          },
+    { 0x69, 5,    0, 0, 0xF800, 0, 0x2000, 0          },
+    { 0x70, 0xC,  0, 0, 0xF800, 0, 0x2000, 0          },
+    { 0x6A, 6,    0, 0, 0xF800, 0, 0x2000, 0          },
+    { 0x6B, 7,    0, 0, 0xF800, 0, 0x2000, 0          },
+    { 0x6C, 8,    0, 0, 0xF800, 0, 0x2000, 0          },
+    { 0x73, 0xF,  0, 4, 0xF800, 0, 0x0CCC, 0x00100000 },
+    { 0x6E, 0xA,  0, 0, 0xF800, 0, 0x0E66, 0          },
+    { 0x6F, 0xB,  0, 0, 0xF800, 0, 0x0B33, 0          },
+    { 0x6D, 9,    0, 0, 0xF800, 0, 0x0999, 0          },
+    { 0x72, 0xE,  0, 0, 0xF800, 0, 0x2000, 0x00199999 }
+};
+
+struct {
+    u16 unk0;
+    u16 unk2;
+} D_8008C11C_8CD1C = { 0x11, 0 };
+
+s32 D_8008C120_8CD20[] = { 0x001428F5, 0x00099999, 0x00266666, 0xFFEBD70B, 0x00099999, 0x00266666,
+                           0x001428F5, 0x00099999, 0xFFE2E148, 0xFFEBD70B, 0x00099999, 0xFFE2E148 };
 
 void func_80004368_4F68(void);
 void func_80004454_5054(void);
@@ -102,27 +164,7 @@ typedef struct {
     ColorData unkE44[3];
 } func_80003EE0_4AE0_task_memory;
 
-extern s32 D_8008BFF4_8CBF4;
-extern s32 D_8008BFF0_8CBF0;
-extern s32 D_8008BFF8_8CBF8;
-extern s32 D_8008BFFC_8CBFC;
-extern s32 D_8008C000_8CC00;
-extern s16 D_8008C006_8CC06;
-extern s16 D_8008C00A_8CC0A;
 extern u8 identityMatrix[];
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    u8 unk4;
-    s8 unk5;
-    u16 unk6;
-    u8 _pad[0x2];
-    s16 unkA;
-    s32 unkC;
-} D_8008C00C_entry; // size 0x10
-
-extern D_8008C00C_entry D_8008C00C_8CC0C[];
 
 typedef struct {
     SceneModel *unk0;
@@ -328,15 +370,12 @@ void func_8000464C_524C(StructUnk800048D0 *arg0) {
 
     func_800015CC_21CC(arg0->unk0, entry->unk5);
 
-    func_8006BEDC_6CADC(
-        buffer,
-        D_8008BFF8_8CBF8,
-        D_8008BFFC_8CBFC,
-        D_8008C000_8CC00,
-        0,
-        D_8008C006_8CC06,
-        D_8008C00A_8CC0A
-    );
+    {
+        s32 temp_a1 = D_8008BFF8_8CBF8;
+        s32 temp_a2 = D_8008BFFC_8CBFC;
+        s32 temp_a3 = D_8008C000_8CC00.unk0;
+        func_8006BEDC_6CADC(buffer, temp_a1, temp_a2, temp_a3, 0, D_8008C000_8CC00.unk6, D_8008C000_8CC00.unkA);
+    }
 
     func_8006FD3C_7093C(taskMemory->unk768.id, buffer);
 
