@@ -85,7 +85,24 @@ typedef struct {
     u16 unk62;
 } func_800B4FC0_1E2070_arg;
 
-void func_800B5438_1E24E8(func_80004FF8_5BF8_arg1 *);
+typedef struct {
+    DisplayListObject unk0;
+    void *unk3C;
+    s32 unk40;
+    s16 unk44;
+    s16 unk46;
+    s16 unk48;
+    s16 unk4A;
+    s16 unk4C;
+    s16 unk4E;
+    s16 unk50;
+    s16 unk52;
+    s16 unk54;
+    s16 unk56;
+    s16 unk58;
+} func_800B5438_1E24E8_arg0;
+
+void func_800B5438_1E24E8(func_800B5438_1E24E8_arg0 *);
 void func_800B54B4_1E2564(func_80004FF8_5BF8_arg1 *);
 void func_800B5318_1E23C8(func_80004FF8_5BF8_arg1 *);
 void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *);
@@ -219,7 +236,7 @@ void func_800B5318_1E23C8(func_80004FF8_5BF8_arg1 *arg0) {
     setCallback(&func_800B5438_1E24E8);
 }
 
-void func_800B5438_1E24E8(func_80004FF8_5BF8_arg1 *arg0) {
+void func_800B5438_1E24E8(func_800B5438_1E24E8_arg0 *arg0) {
     if (arg0->unk56 == 0) {
         func_80069CF8_6A8F8();
     }
@@ -231,7 +248,7 @@ void func_800B5438_1E24E8(func_80004FF8_5BF8_arg1 *arg0) {
     arg0->unk44 = 0xFF & arg0->unk44;
     arg0->unk46 = 0xFF & arg0->unk46;
 
-    func_80004FF8_5BF8(arg0->unk54, arg0);
+    func_80004FF8_5BF8(arg0->unk54, &arg0->unk0);
 
     arg0->unk56--;
 }

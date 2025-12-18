@@ -68,28 +68,28 @@ void func_80004F74_5B74(DisplayListObject *arg0) {
     func_800634E8_640E8(arg0);
 }
 
-void func_80004FA0_5BA0(s32 arg0) {
+void func_80004FA0_5BA0(DisplayListObject *arg0) {
     func_80004920_5520();
     func_80063534_64134(arg0);
 }
 
-void func_80004FCC_5BCC(s32 arg0) {
+void func_80004FCC_5BCC(DisplayListObject *arg0) {
     func_80004920_5520();
     func_80063580_64180(arg0);
 }
 
-void func_80004FF8_5BF8(u16 arg0, func_80004FF8_5BF8_arg1 *arg1) {
+void func_80004FF8_5BF8(u16 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
 
-    if (arg1->unk20->unk4 != 0) {
+    if (arg1->unk20->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0, 1, &func_80004F74_5B74, arg1);
     }
 
-    if (arg1->unk20->unk8 != 0) {
+    if (arg1->unk20->transparentDisplayList != NULL) {
         debugEnqueueCallback(arg0, 3, &func_80004FA0_5BA0, arg1);
     }
 
-    if (arg1->unk20->unkC != 0) {
+    if (arg1->unk20->overlayDisplayList != NULL) {
         debugEnqueueCallback(arg0, 5, &func_80004FCC_5BCC, arg1);
     }
 }

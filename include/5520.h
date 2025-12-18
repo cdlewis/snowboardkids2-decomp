@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "displaylist.h"
 #include "geometry.h"
 
 typedef struct {
@@ -33,7 +34,7 @@ typedef struct {
     s16 unk58;
 } func_80004FF8_5BF8_arg1;
 
-void func_80004FF8_5BF8(u16 arg0, func_80004FF8_5BF8_arg1 *arg1);
+void func_80004FF8_5BF8(u16 arg0, DisplayListObject *arg1);
 
 typedef struct {
     /* 0x00 */ u8 _pad0[0x20];
@@ -43,9 +44,9 @@ typedef struct {
         s32 unk8;
         s32 unkC;
     } *unk20;
-    /* 0x24 */ u8 _pad24[0x30-0x24];
+    /* 0x24 */ u8 _pad24[0x30 - 0x24];
     /* 0x34 */ s32 unk30;
-    /* 0x38 */ u8 _pad34[0x3B-0x34];
+    /* 0x38 */ u8 _pad34[0x3B - 0x34];
     /* 0x3B */ s8 unk3B;
     /* 0x3C */ u8 _pad3C[8];
     /* 0x44 */ u16 unk44;

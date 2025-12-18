@@ -10,10 +10,10 @@ typedef struct {
 } DisplayListObject_unk10;
 
 typedef struct {
-    u32 flags;
-    Gfx *opaqueDisplayList;
-    Gfx *transparentDisplayList;
-    Gfx *overlayDisplayList;
+    /* 0x0 */ u32 flags;
+    /* 0x4 */ Gfx *opaqueDisplayList;
+    /* 0x8 */ Gfx *transparentDisplayList;
+    /* 0xC */ Gfx *overlayDisplayList;
 } DisplayLists;
 
 typedef struct {
@@ -64,9 +64,9 @@ void buildDisplayListSegment(DisplayListObject *);
 
 void func_800638C0_644C0(DisplayListObject *);
 
-void func_80063580_64180(s32);
+void func_80063580_64180(DisplayListObject *);
 
-void func_80063534_64134(s32);
+void func_80063534_64134(DisplayListObject *);
 
 void func_800634E8_640E8(DisplayListObject *arg0);
 

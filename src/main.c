@@ -217,6 +217,25 @@ typedef struct {
     u16 unk16;
 } func_800007C4_13C4_SubStruct;
 
+typedef struct {
+    func_80000C2C_182C_arg_unk0 *unk0;
+    s8 unk4;
+    s8 unk5;
+    DisplayListObject unk8;
+    u16 unk44;
+    u16 unk46;
+    u16 unk48;
+    u16 unk4A;
+    s16 unk4C;
+    s16 unk4E;
+    u16 unk50;
+    u16 unk52;
+    s32 unk54;
+    s32 unk58;
+    s32 unk5C;
+    s32 unk60;
+} func_80001040_1C40_arg;
+
 void func_800007C4_13C4(func_80000C2C_182C_arg_unk0 *arg0, void *arg1);
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
@@ -224,7 +243,7 @@ void func_800008D0_14D0(func_80000C2C_182C_arg *arg0);
 void func_80000968_1568(func_80000968_1568_arg *arg0);
 void func_80000E84_1A84(func_80000C2C_182C_arg *arg0);
 void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0);
-void func_80001040_1C40(func_80000C2C_182C_arg *arg0);
+void func_80001040_1C40(func_80001040_1C40_arg *arg0);
 void func_80001114_1D14(func_80001114_1D14_arg *arg0);
 
 extern s32 identityMatrix[];
@@ -608,7 +627,7 @@ void func_80000F4C_1B4C(func_80000F4C_1B4C_arg *arg0) {
     setCallback(&func_80001040_1C40);
 }
 
-void func_80001040_1C40(func_80000C2C_182C_arg *arg0) {
+void func_80001040_1C40(func_80001040_1C40_arg *arg0) {
     DataEntry *entry;
     SubEntry *subEntry;
 
@@ -623,9 +642,9 @@ void func_80001040_1C40(func_80000C2C_182C_arg *arg0) {
     arg0->unk4E = arg0->unk4E + arg0->unk52;
     arg0->unk4C = (u8)arg0->unk4C;
     arg0->unk4E = (u8)arg0->unk4E;
-    arg0->unk8.unk14 = subEntry->unk8;
-    arg0->unk8.unk18 = subEntry->unkC;
-    arg0->unk8.unk1C = subEntry->unk10;
+    arg0->unk8.unk10.position.unk0 = subEntry->unk8;
+    arg0->unk8.unk10.position.unk4 = subEntry->unkC;
+    arg0->unk8.unk10.position.unk8 = subEntry->unk10;
 
     if (arg0->unk0->unk87 != 0) {
         func_80004FF8_5BF8(arg0->unk0->ptr->unk16, &arg0->unk8);

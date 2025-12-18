@@ -302,8 +302,8 @@ void func_800634E8_640E8(DisplayListObject *arg0) {
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
 }
 
-void func_80063534_64134(s32 arg0) {
-    DisplayListObject *obj = (DisplayListObject *)arg0;
+void func_80063534_64134(DisplayListObject *arg0) {
+    DisplayListObject *obj = arg0;
     Gfx *dl;
 
     setupDisplayListMatrix(obj);
@@ -314,8 +314,8 @@ void func_80063534_64134(s32 arg0) {
     gRegionAllocPtr = dl + 1;
 }
 
-void func_80063580_64180(s32 arg0) {
-    DisplayListObject *obj = (DisplayListObject *)arg0;
+void func_80063580_64180(DisplayListObject *arg0) {
+    DisplayListObject *obj = arg0;
     Gfx *dl;
 
     setupDisplayListMatrix(obj);

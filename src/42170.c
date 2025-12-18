@@ -117,13 +117,12 @@ typedef struct {
     s32 unk40; /* 0x40 */
 } Func4179CArg;
 
+// /* 0x14 */ s32 posX;
+// /* 0x18 */ s32 posY;
+// /* 0x1C */ s32 posZ;
 typedef struct {
-    u8 pad0[0x14];  /* 0x00 */
-    s32 posX;       /* 0x14 */
-    s32 posY;       /* 0x18 */
-    s32 posZ;       /* 0x1C */
-    u8 pad20[0x1C]; /* 0x20 */
-    Player *unk3C;  /* 0x3C */
+    DisplayListObject unk0;
+    Player *unk3C;
 } Func41A60Arg;
 
 struct Func42D54Arg {
@@ -525,24 +524,24 @@ void func_800419E4_425E4(void *arg0) {
 }
 
 void func_80041A24_42624(Func41A60Arg *arg0) {
-    arg0->posX = arg0->unk3C->worldPosX;
-    arg0->posY = arg0->unk3C->worldPosY;
-    arg0->posZ = arg0->unk3C->worldPosZ;
-    func_800634E8_640E8((DisplayListObject *)arg0);
+    arg0->unk0.unk10.position.unk0 = arg0->unk3C->worldPosX;
+    arg0->unk0.unk10.position.unk4 = arg0->unk3C->worldPosY;
+    arg0->unk0.unk10.position.unk8 = arg0->unk3C->worldPosZ;
+    func_800634E8_640E8(&arg0->unk0);
 }
 
 void func_80041A60_42660(Func41A60Arg *arg0) {
-    arg0->posX = arg0->unk3C->worldPosX;
-    arg0->posY = arg0->unk3C->worldPosY;
-    arg0->posZ = arg0->unk3C->worldPosZ;
-    func_80063534_64134((s32)arg0);
+    arg0->unk0.unk10.position.unk0 = arg0->unk3C->worldPosX;
+    arg0->unk0.unk10.position.unk4 = arg0->unk3C->worldPosY;
+    arg0->unk0.unk10.position.unk8 = arg0->unk3C->worldPosZ;
+    func_80063534_64134(&arg0->unk0);
 }
 
 void func_80041A9C_4269C(Func41A60Arg *arg0) {
-    arg0->posX = arg0->unk3C->worldPosX;
-    arg0->posY = arg0->unk3C->worldPosY;
-    arg0->posZ = arg0->unk3C->worldPosZ;
-    func_80063580_64180((s32)arg0);
+    arg0->unk0.unk10.position.unk0 = arg0->unk3C->worldPosX;
+    arg0->unk0.unk10.position.unk4 = arg0->unk3C->worldPosY;
+    arg0->unk0.unk10.position.unk8 = arg0->unk3C->worldPosZ;
+    func_80063580_64180(&arg0->unk0);
 }
 
 typedef struct {
