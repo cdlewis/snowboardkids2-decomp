@@ -150,7 +150,7 @@ void func_8000C440_D040(Func8000C440Arg *arg0, u16 arg1, u8 arg2, u16 arg3, u8 a
     void *task;
     s32 pad[8];
 
-    func_8006FAA4_706A4(arg0, 0, arg1, arg2, 1);
+    func_8006FAA4_706A4(&arg0->base, NULL, arg1, arg2, 1);
     func_8006F9BC_705BC(&arg0->base, 1.0f, 1.0f);
     func_8006FEF8_70AF8(&arg0->base, arg3);
     setModelCameraTransform(arg0, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
