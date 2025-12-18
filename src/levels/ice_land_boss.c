@@ -66,12 +66,18 @@ extern FuncPtr D_800BCA44_B1F34[];
 extern FuncPtr D_800BCA5C_B1F4C[];
 
 extern u16 D_8009ADE0_9B9E0;
-extern u8 D_800BACC8_AAB78;
-extern u8 D_800BACC9_AAB79;
-extern u8 D_800BACCA_AAB7A;
-extern u8 D_800BACCC_AAB7C;
-extern u8 D_800BACCD_AAB7D;
-extern u8 D_800BACCE_AAB7E;
+
+typedef struct {
+    u8 unk0;
+    u8 unk1;
+    u8 unk2;
+    u8 unk3;
+    u8 unk4;
+    u8 unk5;
+    u8 unk6;
+    u8 unk7;
+} D_800BACC8_AAB78_type;
+extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
 extern void func_800B00D4_9FF84(func_800BC4AC_arg *, s32);
 extern void func_800B02AC_A015C(func_800BC4AC_arg *);
@@ -268,12 +274,12 @@ void func_800BC7A8_B1C98(func_800BC4AC_arg *arg0) {
             func_80064808_65408(i, &arg0->unk38, arg0->unkBB7);
         }
     } else {
-        arg0->unk6C = *(&D_800BACC8_AAB78 + index * 8);
-        arg0->unk6D = *(&D_800BACC9_AAB79 + index * 8);
-        arg0->unk6E = *(&D_800BACCA_AAB7A + index * 8);
-        arg0->unk70 = *(&D_800BACCC_AAB7C + index * 8);
-        arg0->unk71 = *(&D_800BACCD_AAB7D + index * 8);
-        arg0->unk72 = *(&D_800BACCE_AAB7E + index * 8);
+        arg0->unk6C = D_800BACC8_AAB78[index].unk0;
+        arg0->unk6D = D_800BACC8_AAB78[index].unk1;
+        arg0->unk6E = D_800BACC8_AAB78[index].unk2;
+        arg0->unk70 = D_800BACC8_AAB78[index].unk4;
+        arg0->unk71 = D_800BACC8_AAB78[index].unk5;
+        arg0->unk72 = D_800BACC8_AAB78[index].unk6;
 
         for (i = 0; i < 4; i++) {
             enqueueMultiPartDisplayList(i, &arg0->unk38, arg0->unkBB7);

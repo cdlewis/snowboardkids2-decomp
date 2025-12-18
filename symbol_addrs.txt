@@ -1,3 +1,4 @@
+D_800BACC8_AAB78 = 0x800BACC8; // size:0x60 rom:0xAAB78
 D_800BA7BC_1E786C = 0x800BA7BC; // size:0x180 rom:0x1E786C
 applyCharacterBoardStats = 0x80058690;
 getCharacterBoardStatParam0 = 0x80058804;

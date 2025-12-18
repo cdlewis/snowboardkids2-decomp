@@ -1,6 +1,6 @@
-#include "common.h"
 #include "5DBC0.h"
 #include "9FF70.h"
+#include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
@@ -12,12 +12,17 @@ typedef void (*FuncPtr)(void *);
 
 extern FuncPtr D_800BC454_ACC84[];
 extern FuncPtr D_800BC460_ACC90[];
-extern u8 D_800BACC8_AAB78;
-extern u8 D_800BACC9_AAB79;
-extern u8 D_800BACCA_AAB7A;
-extern u8 D_800BACCC_AAB7C;
-extern u8 D_800BACCD_AAB7D;
-extern u8 D_800BACCE_AAB7E;
+typedef struct {
+    u8 unk0;
+    u8 unk1;
+    u8 unk2;
+    u8 unk3;
+    u8 unk4;
+    u8 unk5;
+    u8 unk6;
+    u8 unk7;
+} D_800BACC8_AAB78_type;
+extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
 typedef struct {
     s32 unk0;
@@ -153,7 +158,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     arg0->unkB84 |= 0x40000;
 
     if (arg0->unkBBF == 0) {
-        if ((u32)*(s32 *)((u8 *)gameState + 0x50) < 0x1EU) {
+        if ((u32) * (s32 *)((u8 *)gameState + 0x50) < 0x1EU) {
             arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
         } else {
             arg0->unkB8C += (randA() & 0xFF) >> 1;
@@ -348,12 +353,12 @@ void func_800BC23C_ACA6C(Arg0Struct *arg0) {
             func_80064808_65408(i, &arg0->unk38, arg0->unkBB7);
         }
     } else {
-        arg0->unk6C = *(&D_800BACC8_AAB78 + index * 8);
-        arg0->unk6D = *(&D_800BACC9_AAB79 + index * 8);
-        arg0->unk6E = *(&D_800BACCA_AAB7A + index * 8);
-        arg0->unk70 = *(&D_800BACCC_AAB7C + index * 8);
-        arg0->unk71 = *(&D_800BACCD_AAB7D + index * 8);
-        arg0->unk72 = *(&D_800BACCE_AAB7E + index * 8);
+        arg0->unk6C = D_800BACC8_AAB78[index].unk0;
+        arg0->unk6D = D_800BACC8_AAB78[index].unk1;
+        arg0->unk6E = D_800BACC8_AAB78[index].unk2;
+        arg0->unk70 = D_800BACC8_AAB78[index].unk4;
+        arg0->unk71 = D_800BACC8_AAB78[index].unk5;
+        arg0->unk72 = D_800BACC8_AAB78[index].unk6;
 
         for (i = 0; i < 4; i++) {
             enqueueMultiPartDisplayList(i, &arg0->unk38, arg0->unkBB7);
