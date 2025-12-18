@@ -25,6 +25,12 @@ USE_ASSET(_3F6950);
 USE_ASSET(_3F3EF0);
 
 typedef struct {
+    Mat3x3Padded unk0;
+    u8 _pad2[0x1C];
+    s32 unk3C;
+} func_8004728C_47E8C_arg;
+
+typedef struct {
     void *unk0;
     loadAssetMetadata_arg unk4;
     u8 _pad[0x4];
@@ -139,6 +145,7 @@ extern s32 D_80090BBC_917BC[3];
 extern s32 D_80090B98_91798[];
 extern s32 D_80090BB0_917B0;
 extern s32 D_80090B80_91780;
+extern s32 D_80090BA4_917A4[3];
 
 extern s32 gFrameCounter;
 extern u16 D_8009ADE0_9B9E0;
@@ -148,6 +155,7 @@ void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
 void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0);
 void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0);
 void func_800462D8_46ED8(Struct_func_8004657C_4717C *);
+void func_8004728C_47E8C(func_8004728C_47E8C_arg *);
 
 typedef struct {
     u8 _pad0[0x4];
@@ -955,19 +963,6 @@ void func_8004711C_47D1C(func_8004711C_47D1C_arg *arg0) {
     }
 }
 
-extern s32 D_80090BA4_917A4[3];
-
-typedef struct {
-    u8 _pad[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    u8 _pad2[0x1C];
-    s32 unk3C;
-} TaskStruct;
-
-void func_8004728C_47E8C(TaskStruct *);
-
 void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0) {
     Allocation_47D1C *allocation;
     s32 stackVec[3];
@@ -1003,19 +998,19 @@ typedef struct {
     u8 unk5C;
 } AllocationStruct;
 
-void func_8004728C_47E8C(TaskStruct *arg0) {
+void func_8004728C_47E8C(func_8004728C_47E8C_arg *arg0) {
     s32 vec[3];
     AllocationStruct *alloc;
-    void *matrix;
+    D_80090F90_91B90_item *matrix;
 
     alloc = (AllocationStruct *)getCurrentAllocation();
-    createYRotationMatrix(arg0, 0x1000);
+    createYRotationMatrix(&arg0->unk0, 0x1000);
     matrix = func_80055D10_56910(alloc->unk5C);
-    transformVector2(D_80090BC8_917C8, arg0, vec);
+    transformVector2(D_80090BC8_917C8, &arg0->unk0, vec);
 
-    arg0->unk14 = ((AllocationStruct *)matrix)->unkC + vec[0];
-    arg0->unk18 = ((AllocationStruct *)matrix)->unk10 + vec[1];
-    arg0->unk1C = ((AllocationStruct *)matrix)->unk14 + vec[2];
+    arg0->unk0.unk14 = matrix->unkC + vec[0];
+    arg0->unk0.unk18 = matrix->unk10 + vec[1];
+    arg0->unk0.unk1C = matrix->unk14 + vec[2];
     arg0->unk3C = 0x32;
 
     setCallbackWithContinue(func_80047330_47F30);
