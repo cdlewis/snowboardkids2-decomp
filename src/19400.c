@@ -150,7 +150,7 @@ void func_80018A90_19690(func_80018A90_19690_arg *arg0) {
 
     temp = allocation->unk3F4;
     arg0->unk32 = temp;
-    if ((s16)temp >= 0x1001) {
+    if (temp >= 0x1001) {
         arg0->unk32 = temp - 0x2000;
     }
 

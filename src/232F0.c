@@ -32,7 +32,7 @@ void func_80022C80_23880(void) {
     Allocation232F0 *alloc = (Allocation232F0 *)getCurrentAllocation();
 
     alloc->unk18A0++;
-    if ((u16)alloc->unk18A0 < 3) {
+    if (alloc->unk18A0 < 3) {
         return;
     }
     alloc->unk18A0 = 2;

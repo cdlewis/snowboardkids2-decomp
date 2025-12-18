@@ -134,7 +134,6 @@ void func_80014D78_15978(void) {
 extern u8 D_800A8CC9_A0039;
 extern u8 D_800AB47A_A27EA;
 
-void func_80015254_15E54(void);
 void func_80014F60_15B60(void);
 void func_80015028_15C28(void);
 

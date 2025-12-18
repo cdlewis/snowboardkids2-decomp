@@ -72,7 +72,6 @@ extern u32 D_8008BD38_8C938;
 s32 func_800018F4_24F4(SceneModel *);
 s32 func_80001904_2504(s16);
 
-void *func_80002040_2C40(SceneModel *arg0);
 void *func_80009F5C_AB5C(s32);
 
 void func_800014F0_20F0(func_800014F0_20F0_arg *arg0) {
@@ -576,7 +575,7 @@ void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg
             local_arg2 = -1;
         }
 
-        if (((s16)local_arg4) >= entity->unk22) {
+        if ((local_arg4) >= entity->unk22) {
             local_arg4 = -1;
         }
 
@@ -585,7 +584,7 @@ void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg
             local_arg1 = local_arg4;
         }
 
-        if ((arg0->unk16 != local_arg1) | ((~((s16)local_arg4)) != 0)) {
+        if ((arg0->unk16 != local_arg1) | ((~(local_arg4)) != 0)) {
             arg0->unk95 = 0;
             arg0->unk8C = 0;
             temp_v0 = arg0->unk16;

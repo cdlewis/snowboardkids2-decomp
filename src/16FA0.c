@@ -250,7 +250,7 @@ void func_80016A00_17600(Struct16B68 *arg0) {
         animValue = *arg0->unk28;
         arg0->unk28 = arg0->unk28 + 1;
 
-        if ((u16)animValue == 0xFFFF) {
+        if (animValue == 0xFFFF) {
             arg0->unk2E = (arg0->unk2E + 1) & 1;
             arg0->unk28 = D_8008D534_8E134[arg0->unk2E];
             animValue = *arg0->unk28;
@@ -310,7 +310,7 @@ void func_80016B68_17768(Struct16B68 *arg0) {
     }
 
     animValue = *arg0->unk28;
-    if ((u16)animValue != 0xFFFF) {
+    if (animValue != 0xFFFF) {
         arg0->unk2C = animValue;
         arg0->unk28 += 1;
     } else {
@@ -369,7 +369,7 @@ void func_80016D0C_1790C(Struct16B68 *arg0) {
     }
 
     animValue = *arg0->unk28;
-    if ((u16)animValue != 0xFFFF) {
+    if (animValue != 0xFFFF) {
         arg0->unk2C = animValue;
         arg0->unk28 += 1;
     } else {

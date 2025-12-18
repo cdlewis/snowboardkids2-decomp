@@ -161,7 +161,7 @@ void func_80017FE8_18BE8(Func80018474Arg *arg0) {
     arg0->unk46 = result;
     arg0->unk44 = result;
 
-    if ((s16)result < 0x1000) {
+    if (result < 0x1000) {
         arg0->unk44 = result + 0x1000;
     } else {
         arg0->unk44 = result - 0x1000;
@@ -170,7 +170,7 @@ void func_80017FE8_18BE8(Func80018474Arg *arg0) {
     s1 -= arg0->unk34;
     s2 -= arg0->unk3C;
 
-    masked = (u16)arg0->unk44 & 0x1FFF;
+    masked = arg0->unk44 & 0x1FFF;
     arg0->unk44 = masked;
     arg0->unk46 = masked;
 
@@ -178,7 +178,7 @@ void func_80017FE8_18BE8(Func80018474Arg *arg0) {
 
     func_8006FDA0_709A0(NULL, 0xFF, 0x10);
 
-    createYRotationMatrix((Mat3x3Padded *)arg0, ((u16)arg0->unk44 - arg0->unk48) & 0xFFFF);
+    createYRotationMatrix((Mat3x3Padded *)arg0, (arg0->unk44 - arg0->unk48) & 0xFFFF);
 
     func_8006B084_6BC84(arg0, &arg0->matrix20, sp10);
 
@@ -375,10 +375,10 @@ void func_80018580_19180(Func80018474Arg *arg0) {
 
     mode = func_8001523C_15E3C();
     if (mode == 2) {
-        if ((s16)arg0->unk48 < 0x8D1) {
+        if (arg0->unk48 < 0x8D1) {
             setCallback(func_800175E0_181E0);
         }
-    } else if ((s16)arg0->unk48 >= 0x1730) {
+    } else if (arg0->unk48 >= 0x1730) {
         setCallback(func_800175E0_181E0);
     }
 }

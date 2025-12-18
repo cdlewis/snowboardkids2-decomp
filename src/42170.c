@@ -1018,7 +1018,7 @@ void func_80042A6C_4366C(Func42BA4Arg *arg0) {
     if ((arg0->unk3A << 0x10) == 0) {
         new_var = 2;
         loadAssetMetadata(&arg0->unk4, arg0->unk0, D_80090929_91529[arg0->unk38 * new_var]);
-        arg0->unk3A = (s8)D_80090928_91528[arg0->unk38 * 2];
+        arg0->unk3A = D_80090928_91528[arg0->unk38 * 2];
         arg0->unk38++;
         if (D_80090928_91528[arg0->unk38 * new_var] == 0) {
             arg0->unk38 = 0;
@@ -1491,16 +1491,16 @@ s32 func_80043718_44318(void *arg0_void, void *arg1_void) {
 
     arg0->unk42--;
 
-    if ((s16)arg0->unk42 != 0) {
+    if (arg0->unk42 != 0) {
         return 0;
     }
 
-    loadAssetMetadata((void *)((s32)arg0 + 4), (void *)arg0->unk0, (s8)arg1[(s16)arg0->unk40 * 2 + 1]);
+    loadAssetMetadata((void *)((s32)arg0 + 4), (void *)arg0->unk0, (s8)arg1[arg0->unk40 * 2 + 1]);
 
-    arg0->unk42 = (s8)arg1[(s16)arg0->unk40 * 2];
+    arg0->unk42 = (s8)arg1[arg0->unk40 * 2];
     arg0->unk40++;
 
-    check = arg1[(s16)arg0->unk40 * 2];
+    check = arg1[arg0->unk40 * 2];
     if (check != 0) {
         return 0;
     }
@@ -1517,7 +1517,7 @@ void func_800437C4_443C4(Func4393CArg *arg0, s8 *arg1) {
 
     if ((temp << 16) == 0) {
         loadAssetMetadata((loadAssetMetadata_arg *)((s32)arg0 + 4), (void *)arg0->unk0, arg1[arg0->unk40 * 2 + 1]);
-        arg0->unk42 = (s8)arg1[arg0->unk40 * 2];
+        arg0->unk42 = arg1[arg0->unk40 * 2];
         temp = (u16)arg0->unk40 + 1;
         arg0->unk40 = temp;
         if (arg1[temp * 2] == 0) {
@@ -2170,11 +2170,11 @@ void func_80044EC4_45AC4(Func44EC4Arg *arg0) {
         nine = 9;
         offset = 0;
         do {
-            temp_a0 = (s8 *)((s32)offset + (s32)arg0->entries);
+            temp_a0 = (s8 *)(offset + (s32)arg0->entries);
             if (*temp_a0 != 0) {
                 player = (Player *)func_8005B24C_5BE4C((Vec3s32 *)(temp_a0 + 4), -1, 0x100000);
                 if (player != NULL && player->unkBD9 == 0) {
-                    temp_v1 = (s8 *)((s32)offset + (s32)arg0->entries);
+                    temp_v1 = (s8 *)(offset + (s32)arg0->entries);
                     if (temp_v1[1] == 0) {
                         val = *(u16 *)(temp_v1 + 2);
                         player->unkBD3 = three;
@@ -2188,8 +2188,8 @@ void func_80044EC4_45AC4(Func44EC4Arg *arg0) {
                         player->unkBD4 = (u8) * (u16 *)(temp_v1 + 2);
                     }
                     player->unkBD8 = flags;
-                    *(s8 *)((s32)offset + (s32)arg0->entries) = 0;
-                    func_80056B7C_5777C((s8 *)((s32)arg0->entries + (s32)offset) + 4, 8);
+                    *(s8 *)(offset + (s32)arg0->entries) = 0;
+                    func_80056B7C_5777C((s8 *)((s32)arg0->entries + offset) + 4, 8);
                 }
             }
             i++;

@@ -460,7 +460,7 @@ typedef struct {
 } D_800AFE8C_type_202A0;
 
 extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
-extern EepromSaveData_type *EepromSaveData;
+
 extern u16 D_8009ADE0_9B9E0;
 
 void func_80021184_21D84(Func80021238Arg *arg0);

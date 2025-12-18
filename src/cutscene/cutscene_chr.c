@@ -3,12 +3,8 @@
 #include "1E36C0.h"
 #include "20F0.h"
 
-extern void func_800B788C_1E493C(CutsceneSlotData *, s32, s32, s32);
-extern s32 func_800B75C4_1E4674(CutsceneSlotData *, SceneModel *, s16, s32, s32, s32);
 extern s32 func_800B6FA4_1E4054(CutsceneSlotData *, SceneModel *, s32, s32, s32, s16, s16);
-extern void func_800B7B70_1E4C20(CutsceneSlotData *, s32 *, s16, s32, s32);
-extern void func_800B6BDC_1E3C8C(CutsceneSlotData *, s32, s32, s32, s16);
-extern void func_800B6C04_1E3CB4(CutsceneSlotData *, s32, s32, s32, s16, s16, s16);
+
 extern s32 setupSlotTransform(CutsceneSlotData *);
 extern void func_800B7128_1E41D8(
     CutsceneSlotData *arg0,
@@ -22,12 +18,10 @@ extern void func_800B7128_1E41D8(
     s8 arg8,
     s8 arg9
 );
-extern void func_800B7760_1E4810(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
-extern void func_800B77C4_1E4874(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
-extern void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
+
 extern void func_800B7620_1E46D0(CutsceneSlotData *arg0, s16 arg1, s16 arg2, s16 arg3);
 extern void func_800B7914_1E49C4(CutsceneSlotData *, s32, s32, s32, s16);
-extern StateEntryItem *func_800B34B0_1E0560(s32);
+
 extern s32 func_800B734C_1E43FC(CutsceneSlotData *, SceneModel *, s16);
 
 void cutsceneChrPosition_init(void) {

@@ -239,7 +239,7 @@ void func_80052128_52D28(Struct_52880 *arg0) {
 
         arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
 
-        func_80060CDC_618DC(&alloc->unk30, (u16)arg0->unk40, &arg0->unk4, 0x80000, sp18);
+        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, sp18);
 
         if ((sp18[0] != 0) || (sp18[2] != 0)) {
             arg0->unk4 = arg0->unk4 + sp18[0];
@@ -669,7 +669,7 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
 
         arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
 
-        func_80060CDC_618DC(&alloc->unk30, (u16)arg0->unk40, &arg0->unk4, 0x80000, sp18);
+        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, sp18);
 
         if ((sp18[0] != 0) || (sp18[2] != 0)) {
             arg0->unk4 = arg0->unk4 + sp18[0];
@@ -1412,8 +1412,6 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
         func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
     }
 }
-
-extern void func_80051C80_52880(s32 *arg0, s32 arg1);
 
 void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
     Alloc_55650 *alloc;

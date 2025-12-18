@@ -102,7 +102,7 @@ void func_800693C4_69FC4(void (*arg0)(void), s32 arg1) {
     if (gActiveSchedulerList != 0) {
         while (TRUE) {
             temp_v1 = var_a3->next;
-            if ((u8)arg1 >= (u8)temp_v1->unk19) {
+            if ((u8)arg1 >= temp_v1->unk19) {
                 var_a3 = temp_v1;
                 if (temp_v1->next != NULL) {
                     continue;
@@ -150,7 +150,7 @@ void createTaskQueue(void (*arg0)(void), s32 arg1) {
     if (gActiveSchedulerList != NULL) {
         while (TRUE) {
             temp_v1 = (gActiveScheduler_type *)var_a3->next;
-            if ((u8)arg1 < (u8)temp_v1->unk19) {
+            if ((u8)arg1 < temp_v1->unk19) {
                 break;
             }
             var_a3 = temp_v1;
@@ -182,7 +182,7 @@ void createTaskQueue(void (*arg0)(void), s32 arg1) {
     temp_a2->latestDmaSequenceNumber = 0;
     temp_a2->unk4C = 0;
     temp_a2->unk4A = 0;
-    temp_a2->unkC = (gActiveScheduler_type *)gActiveScheduler;
+    temp_a2->unkC = gActiveScheduler;
     gActiveScheduler->unk4C++;
 }
 
@@ -236,7 +236,7 @@ void runTaskSchedulers(void) {
                             gActiveScheduler->nodes =
                                 (NodeWithPayload *)decrementNodeRefCount((s32 *)gActiveScheduler->nodes);
                             gActiveScheduler->allocatedState =
-                                (void *)decrementNodeRefCount((s32 *)gActiveScheduler->allocatedState);
+                                decrementNodeRefCount((s32 *)gActiveScheduler->allocatedState);
                             gActiveScheduler->unk1C = gFrameCounter;
                             gActiveScheduler->schedulerState = SCHEDULER_STATE_CLEANUP;
                         }
@@ -332,7 +332,7 @@ void *allocateTaskMemory(s32 size) {
         do {
             *var_v1 = 0;
             var_v1 += 1;
-        } while ((u32)var_v1 < (u32)temp_a0);
+        } while ((u32)var_v1 < temp_a0);
     }
     return gActiveScheduler->allocatedState;
 }
@@ -474,7 +474,7 @@ void processActiveTasks(void) {
                 }
                 gDMAOverlay->freeNext = gActiveScheduler->freeList;
                 gActiveScheduler->freeList = gDMAOverlay;
-                gActiveScheduler->counters[(u8)gDMAOverlay->unkC]++;
+                gActiveScheduler->counters[gDMAOverlay->unkC]++;
                 break;
 
             case 3:

@@ -168,15 +168,15 @@ void func_80036274_36E74(void *arg0) {
     temp_v0 = (func_800698BC_6A4BC_return *)getCurrentAllocation();
     if (temp_v0->unk424 != 0) {
         if (*((u8 *)arg0) == 0) {
-            if ((u8)temp_v0->unk425 < 0xAU) {
+            if (temp_v0->unk425 < 0xAU) {
                 temp_v0_2 = scheduleTask(&func_80036328_36F28, 0, 0, 0x64);
                 if (temp_v0_2 != NULL) {
-                    temp_v0_2->unk73 = (u8)temp_v0->unk425;
+                    temp_v0_2->unk73 = temp_v0->unk425;
                 }
             } else {
                 temp_v0_3 = scheduleTask(&func_80036880_37480, 0, 0, 0x64);
                 if (temp_v0_3 != NULL) {
-                    temp_v0_3->unk10 = (u8)temp_v0->unk425;
+                    temp_v0_3->unk10 = temp_v0->unk425;
                 }
             }
             *(u8 *)arg0 = 1;
@@ -270,7 +270,7 @@ void func_80036920_37520(func_80036920_37520_arg *arg0) {
     s32 temp_val;
 
     temp_v0 = getCurrentAllocation();
-    sp10.x = (s32)D_8008F810_90410[arg0->unk10].unk0;
+    sp10.x = D_8008F810_90410[arg0->unk10].unk0;
     temp_val = D_8008F810_90410[arg0->unk10].unk4;
     sp10.y = 0x4B0000;
     sp10.z = temp_val;

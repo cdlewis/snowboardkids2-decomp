@@ -20,7 +20,7 @@ s32 func_80019510_1A110(s32 arg0, s32 arg1, s16 arg2) {
     getCurrentAllocation();
 
     var_s1 = 0;
-    var_s4 = (s16)arg2;
+    var_s4 = arg2;
     base = &D_8008D7E0_8E3E0;
     var_s3 = base + 2;
     var_s2 = base + 1;

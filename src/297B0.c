@@ -650,7 +650,7 @@ void func_80029C90_2A890(Func297D8Arg *arg0) {
 
         case 2:
             arg0->unk5A = arg0->unk5A + 1;
-            if ((s16)arg0->unk5A == 0x5A) {
+            if (arg0->unk5A == 0x5A) {
                 arg0->unk5A = 0;
                 arg0->unk5E = 3;
                 arg0->unk50 = arg0->unk50 + 1;
@@ -670,7 +670,7 @@ void func_80029C90_2A890(Func297D8Arg *arg0) {
                 setCallback(func_80028AEC_296EC);
             } else if (arg0->unk5E == 0) {
                 arg0->unk5A = arg0->unk5A + 1;
-                if ((s16)arg0->unk5A == 0x4B) {
+                if (arg0->unk5A == 0x4B) {
                     arg0->unk5E = 1;
                     arg0->unk5A = 0;
                     arg0->unk50 = 0x16;
@@ -680,7 +680,7 @@ void func_80029C90_2A890(Func297D8Arg *arg0) {
                     if (arg0->unk5C == 5) {
                         func_80001688_2288(arg0->model, 0);
                     }
-                } else if ((s16)arg0->unk5A == 0x37) {
+                } else if (arg0->unk5A == 0x37) {
                     func_8002A0DC_2ACDC(arg0);
                 }
             }

@@ -85,7 +85,7 @@ void func_8000CAF0_D6F0(func_8000CAF0_D6F0_arg *arg0) {
     arg0->unk8 = (s32)(temp_v0 + (arg0->unk56 << 6));
     arg0->unk22 = (u8)((randA() & 0x1F) + 0x70);
     arg0->unk54 = 0;
-    arg0->unk28 = (s32)arg0->unk8;
+    arg0->unk28 = arg0->unk8;
     arg0->unk42 = (u8)arg0->unk22;
     setCleanupCallback(&func_8000CC84_D884);
     setCallbackWithContinue(&func_8000CB94_D794);
@@ -130,9 +130,9 @@ void func_8000CCBC_D8BC(void *arg0, void *arg1, func_8000CCBC_D8BC_arg2 *arg2, s
         memcpy(&temp_v0->unkC, arg0, 0xC);
         memcpy(&temp_v0->unk2C, arg1, 0xC);
         temp_v0->unk56 = arg3;
-        temp_v0->unk48 = (s32)((s32)arg2->unk0 / 2);
-        temp_v0->unk4C = (s32)((s32)arg2->unk4 / 2);
-        temp_v0->unk50 = (s32)((s32)arg2->unk8 / 2);
+        temp_v0->unk48 = (s32)(arg2->unk0 / 2);
+        temp_v0->unk4C = (s32)(arg2->unk4 / 2);
+        temp_v0->unk50 = (s32)(arg2->unk8 / 2);
     }
 }
 

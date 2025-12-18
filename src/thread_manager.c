@@ -370,7 +370,7 @@ void thread_function_4(void *arg) {
             osRecvMesg(&eventQueue4, &stack.sp30, OS_MESG_BLOCK);
         }
 
-        osViSwapBuffer((void *)frameBuffer);
+        osViSwapBuffer(frameBuffer);
         if ((!(delayCounter & 0xFF)) || (frameDelay != 0)) {
             continue;
         }

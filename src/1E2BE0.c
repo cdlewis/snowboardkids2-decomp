@@ -157,7 +157,7 @@ void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
                 arg0->unk3C = temp;
             } else if (buttonCheck & L_TRIG) {
                 u16 temp_angle = arg0->unk20;
-                temp_angle -= (s8)D_800AB044_A23B4;
+                temp_angle -= D_800AB044_A23B4;
                 arg0->unk20 = temp_angle & 0x1FFF;
             } else {
                 u16 temp_angle = arg0->unk22;

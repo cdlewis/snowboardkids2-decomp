@@ -84,37 +84,12 @@ extern u8 D_80093BA5_947A5;
 extern u8 D_80093BA6_947A6;
 extern OSThread D_800A2998_A3598;
 
-void *func_80058638_59238(void);
-void func_800570BC_57CBC(void);
-void func_80057124_57D24(void);
-void func_800579E8_585E8(void *, void *);
-void func_80057B70_58770(s32, s32, s32, f32, s32, s32, s32);
-void func_80057CE4_588E4(s32, s32, s32, s32, s32, s32);
-void func_80057E18_58A18(s32, s32, s32, s32, s32);
-void func_80057F48_58B48(s32, s32, s32, s32);
-void func_80058064_58C64(s32, s32, s32, s32);
-void func_800582DC_58EDC(s32, s32, s32, s32, s32);
-void func_80058414_59014(s32, s32, s32);
-void func_800584AC_590AC(s32, s32, s32);
-void func_8005854C_5914C(s32, s32);
 void func_8005628C_56E8C(void);
-void func_8005610C_56D0C(void);
-void func_800570E0_57CE0(void *arg);
-void func_8005758C_5818C(void);
-void func_800578DC_584DC(void *, s32);
-void *func_80057A34_58634(void *);
-void func_80057470_58070(void);
-void *func_80057974_58574(void *arg0, void *arg1, s32 arg2);
-void func_800572B0_57EB0(void *arg);
-void func_80057928_58528(void *, s32);
-void func_800573F8_57FF8(void);
+
 void *func_800725F4_731F4(s32, s32, s32, s32, s32);
 void *func_80072960_73560(void *, s32);
 void *func_80072A14_73614(void *);
 void *func_80072CDC_738DC(void *, void *);
-void func_80057614_58214(void *);
-void func_80057214_57E14(void);
-void func_800571D0_57DD0(void(callback)(void *));
 
 typedef struct {
     void *start;
@@ -556,7 +531,7 @@ void func_80057614_58214(void *arg0) {
                     func_80072814_73414(1, D_800A2D10_A3910.unk20);
                     break;
                 case 7:
-                    result = func_80072960_73560(D_800A2D10_A3910.unk1C, (s32)D_800A2D10_A3910.unk20);
+                    result = func_80072960_73560(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk20);
                     break;
                 case 8:
                     result = (void *)func_800728E0_734E0(1);

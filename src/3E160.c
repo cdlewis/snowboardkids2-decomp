@@ -176,9 +176,8 @@ typedef struct {
 
 extern void func_8003E4F0_3F0F0(void);
 
-extern u8 D_800A24A0_A30A0;
 extern GameConfig *D_800AFE8C_A71FC;
-extern s8 D_800AFCE2_A7052;
+
 extern OverlayEntry Overlays[];
 
 extern u8 D_80090280_90E80[4][4]; // unknown first (4) size
@@ -528,7 +527,7 @@ void initRace(void) {
                 }
             }
 
-            gs->unk10[i].charcterID = charList[(u8)randA() % count];
+            gs->unk10[i].charcterID = charList[randA() % count];
             charCount[gs->unk10[i].charcterID]++;
         }
     }
@@ -922,7 +921,7 @@ void func_8003FA78_40678(void) {
         return;
     }
 
-    player = (Player *)gs->players;
+    player = gs->players;
 
     if (player->unkBC4 == 0) {
         D_800A24A0_A30A0 = 3;

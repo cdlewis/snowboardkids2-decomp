@@ -118,7 +118,7 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
     switch (arg0->unkC2) {
         case 0x62:
             arg0->unkBE++;
-            if ((s16)arg0->unkBE == 0x2D) {
+            if (arg0->unkBE == 0x2D) {
                 arg0->unkB4 = 0x10;
                 arg0->unkBE = 0;
                 arg0->unkC2 = 1;

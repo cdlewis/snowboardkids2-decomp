@@ -285,7 +285,7 @@ void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2) {
         task->unk30 = arg2;
         task->n.cleanupCallback = (void *)(arg1[0] / 2);
         task->n.payload = (void *)(arg1[1] / 2);
-        task->unk2C = ((s32)arg1[2] / 2);
+        task->unk2C = (arg1[2] / 2);
     }
 }
 
@@ -328,7 +328,7 @@ void func_80050740_51340(func_80050740_51340_arg *arg0) {
         }
 
         arg0->unk50++;
-        if ((s16)arg0->unk50 == 5) {
+        if (arg0->unk50 == 5) {
             func_80069CF8_6A8F8();
         }
     }
@@ -621,7 +621,7 @@ void func_80051124_51D24(func_80050740_51340_arg *arg0) {
         }
 
         arg0->unk50++;
-        if ((s16)arg0->unk50 == 0x14) {
+        if (arg0->unk50 == 0x14) {
             func_80069CF8_6A8F8();
         }
     }
@@ -768,7 +768,7 @@ void func_80051760_52360(func_800516F4_522F4_arg *arg0) {
 
     if (gs->gamePaused == 0) {
         arg0->unk8.unk1A -= 0x10;
-        if ((u8)arg0->unk8.unk1A < 0x40) {
+        if (arg0->unk8.unk1A < 0x40) {
             func_80069CF8_6A8F8();
         }
     }

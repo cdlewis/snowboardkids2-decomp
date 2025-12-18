@@ -196,12 +196,6 @@ s32 D_800A6524_A7124;
 s32 D_800A6528_A7128;
 void *D_800A652C_A712C;
 
-extern ALGlobals __libmus_alglobals;
-extern ALVoice *mus_voices;
-extern ALMicroTime mus_next_frame_time;
-extern channel_t *mus_channels;
-extern s32 max_channels;
-
 void func_80072F54_73B54(void);
 void func_80073738_74338(channel_t *cp, int x);
 void func_8007335C_73F5C(channel_t *cp, int x);
@@ -382,7 +376,7 @@ u8 *Flength(channel_t *cp, u8 *ptr) {
     u16 temp;
 
     length = *ptr++;
-    if ((u8)length < 0x80) {
+    if (length < 0x80) {
         cp->fixed_length = length;
     } else {
         temp = (length & 0x7f) << 8;
@@ -1250,7 +1244,7 @@ ALMicroTime __MusIntMain(void *node) {
         cp->channel_frame += cp->channel_tempo;
 
         if (cp->length != 0x7FFF) {
-            while ((u32)cp->note_end_frame < (u32)cp->channel_frame) {
+            while ((u32)cp->note_end_frame < cp->channel_frame) {
                 if (cp->pdata == NULL) {
                     break;
                 }
@@ -1262,11 +1256,11 @@ ALMicroTime __MusIntMain(void *node) {
             }
         }
 
-        if (cp->pvolume != NULL && (u32)cp->volume_frame < (u32)cp->channel_frame) {
+        if (cp->pvolume != NULL && (u32)cp->volume_frame < cp->channel_frame) {
             func_80073E20_74A20(cp);
         }
 
-        if (cp->ppitchbend != NULL && (u32)cp->pitchbend_frame < (u32)cp->channel_frame) {
+        if (cp->ppitchbend != NULL && cp->pitchbend_frame < cp->channel_frame) {
             __MusIntProcessContinuousPitchBend(cp);
         }
 
@@ -1286,7 +1280,7 @@ ALMicroTime __MusIntMain(void *node) {
                 func_80073AA4_746A4(cp);
             }
 
-            if (cp->sweep_speed != 0 && (u32)cp->sweep_frame < (u32)cp->channel_frame) {
+            if (cp->sweep_speed != 0 && cp->sweep_frame < cp->channel_frame) {
                 func_80073CB4_748B4(cp);
             }
 
@@ -1306,7 +1300,7 @@ ALMicroTime __MusIntMain(void *node) {
             }
         }
 
-        cp->count = (u32)(cp->channel_frame - cp->note_start_frame) >> 8;
+        cp->count = (cp->channel_frame - cp->note_start_frame) >> 8;
     }
 
     return mus_next_frame_time;
@@ -1504,12 +1498,12 @@ void func_80073CB4_748B4(channel_t *cp) {
                 }
             }
         }
-    } while ((u32)cp->sweep_frame < (u32)cp->channel_frame);
+    } while (cp->sweep_frame < cp->channel_frame);
 }
 
 f32 func_80073D6C_7496C(channel_t *cp) {
     cp->wobble_count--;
-    if ((u8)cp->wobble_count == 0) {
+    if (cp->wobble_count == 0) {
         if (cp->wobble_current == 0) {
             cp->wobble_current = cp->wobble_amount;
             cp->wobble_count = cp->wobble_on_speed;

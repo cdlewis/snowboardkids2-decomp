@@ -161,8 +161,6 @@ void func_800B6B6C_1E3C1C(CutsceneSlotData *arg0) {
     }
 }
 
-void func_800B6C04_1E3CB4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6);
-
 void func_800B6BDC_1E3C8C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4) {
     func_800B6C04_1E3CB4(arg0, arg1, arg2, arg3, arg4, 0, 0);
 }
@@ -250,7 +248,7 @@ s32 func_800B734C_1E43FC(CutsceneSlotData *arg0, s32 unused, s16 arg1) {
     arg0->unk3C = 0;
     arg0->unk40 = 0;
     arg0->unk44 = 0;
-    temp = (s16)func_800B6618_1E36C8(arg0, 0, arg1, arg0->unk78);
+    temp = func_800B6618_1E36C8(arg0, 0, arg1, arg0->unk78);
 
     if ((temp >= 0 ? temp : -temp) >= 0xAAB) {
         retval = 2;
@@ -285,7 +283,7 @@ s32 func_800B7450_1E4500(CutsceneSlotData *arg0, SceneModel *unused, s16 arg2, s
     arg0->unk40 = 0;
     arg0->unk44 = 0;
     arg0->unk7A = arg2;
-    temp_v0 = (s16)func_800B6618_1E36C8(arg0, arg3, arg2, arg0->unk78);
+    temp_v0 = func_800B6618_1E36C8(arg0, arg3, arg2, arg0->unk78);
 
     if ((temp_v0 >= 0 ? temp_v0 : -temp_v0) >= 0xAAB) {
         var_s2 = 2;
@@ -294,7 +292,7 @@ s32 func_800B7450_1E4500(CutsceneSlotData *arg0, SceneModel *unused, s16 arg2, s
             var_s2 = 1;
         }
     }
-    temp_a1 = (s16)func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+    temp_a1 = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
     arg4_s16 = (s16)arg4;
     arg0->unk84 = arg4;
     arg0->unk86 = arg4;
@@ -427,15 +425,15 @@ void func_800B7914_1E49C4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, 
     ptr30 = &arg0->unk30;
     *ptr30 = arg1;
     temp_t1 = *ptr30 - arg0->unk04.unk20_u.unk20_s32;
-    div1 = temp_t1 / (s16)var_t0;
+    div1 = temp_t1 / var_t0;
     ptr34 = &arg0->unk34;
     *ptr34 = arg2;
     temp_a1 = *ptr34 - arg0->unk28;
-    div2 = temp_a1 / (s16)var_t0;
+    div2 = temp_a1 / var_t0;
     ptr38 = &arg0->unk38;
     *ptr38 = arg3;
     temp_a3 = *ptr38 - arg0->unk2C;
-    div3 = temp_a3 / (s16)var_t0;
+    div3 = temp_a3 / var_t0;
     arg0->unk84 = var_t0;
     arg0->unk86 = var_t0;
     arg0->angle = 0;

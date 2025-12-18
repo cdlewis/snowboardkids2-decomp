@@ -64,16 +64,6 @@ extern s32 func_8003A28C_3AE8C(void);
 extern void func_8003A51C_3B11C(s32, StateEntry **);
 extern s32 func_8003A524_3B124(void);
 
-u8 getCutsceneSlotCount(void);
-s32 findEventAtFrame(u8 a0, u16 a1);
-s32 func_800B3D24_1E0DD4(u8, u16);
-StateEntry *getStateEntry(u16);
-u16 func_800B3B68_1E0C18(u8, u16, s32);
-void func_800B477C_1E182C(void *);
-void func_800B4534_1E15E4(s32, s32);
-
-s16 func_800B3490_1E0540(void);
-StateEntryItem *func_800B34B0_1E0560(s32 arg0);
 extern s32 func_80001904_2504(s16);
 extern void *func_800B5B38_1E2BE8(u16);
 extern void func_80003000_3C00(void *, u8, void *, u8, void *);
@@ -121,7 +111,7 @@ void func_800B2AA0(func_800B2C78_arg *arg0, Node_70B00 *arg1, void *arg2, void *
         slot = func_800B34B0_1E0560(i);
         arg0[i].unkE8 = slot->unk4;
 
-        if ((s16)slot->unk4 != -1) {
+        if (slot->unk4 != -1) {
             if (func_80001904_2504(slot->unk4)) {
                 arg0[i].unkF0 = func_800019B8_25B8(slot->unk4, arg1, slot->unk6, slot->unk7, slot->unk8, slot->unk9);
             } else {
@@ -609,7 +599,7 @@ u16 func_800B3B68_1E0C18(u8 arg0, u16 arg1, s32 arg2) {
     entry = getStateEntry(current);
     next = entry->next_index;
 
-    if ((u16)next != 0xFFFF) {
+    if (next != 0xFFFF) {
         arg1Masked = arg1;
         ffff = 0xFFFF;
         do {
@@ -702,8 +692,8 @@ do_work:
     prevNext = *(u16 *)((u8 *)base + (u32)(searchMasked << 6) + 0xF8);
     *(u16 *)((u8 *)base + (u32)(searchMasked << 6) + 0xF8) = newIndex;
 
-    if ((u16)prevNext != 0xFFFF) {
-        *(u16 *)((u8 *)base + (u32)((u16)prevNext << 6) + 0xFA) = newIndex;
+    if (prevNext != 0xFFFF) {
+        *(u16 *)((u8 *)base + (u32)(prevNext << 6) + 0xFA) = newIndex;
     }
 
     base2 = D_800BAEBC_1E7F6C;
@@ -1119,20 +1109,20 @@ void func_800B4914_1E19C4(FadeTaskData *arg0) {
     switch (arg0->unk0) {
         case 0:
             arg0->unkE4 += 10;
-            if ((s16)arg0->unkE4 >= 0xFF) {
+            if (arg0->unkE4 >= 0xFF) {
                 arg0->unkE4 = 0xFF;
                 arg0->unk0 = 1;
             }
             break;
         case 1:
             arg0->unk2--;
-            if ((s16)arg0->unk2 < 0) {
+            if (arg0->unk2 < 0) {
                 arg0->unk0 = 2;
             }
             break;
         case 2:
             arg0->unkE4 -= 10;
-            if ((s16)arg0->unkE4 <= 0) {
+            if (arg0->unkE4 <= 0) {
                 func_80069CF8_6A8F8();
                 return;
             }

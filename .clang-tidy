@@ -1,6 +1,7 @@
 Checks: >
   -*,
   readability-redundant-declaration,
+  readability-redundant-casting,
 WarningsAsErrors: ""
 HeaderFilterRegex: '^(src|include)\/.*\.h$'
 FormatStyle: "file"

@@ -181,7 +181,7 @@ void func_8002FF28_30B28(func_8002FF28_30B28_arg *);
 void func_80030238_30E38(void *arg0);
 void func_80030280_30E80(func_8002FF28_30B28_arg *arg0);
 void func_80030764_31364(Struct_80030694 *arg0);
-void func_800308C4_314C4(Struct_80030694 *arg0);
+
 void func_80030974_31574(void *);
 void func_800309D4_315D4(func_800308FC_314FC_arg *);
 void func_80030AEC_316EC(void *);
@@ -225,13 +225,13 @@ void updateDebugCameraYState(cameraState *arg0) {
     } else if (gControllerInputs[1] & D_JPAD) {
         arg0->cameraY++;
     }
-    func_8006BEDC_6CADC(&sp20, 0, arg0->cameraY << 0x10, 0x600000, 0, (s32)((s16)arg0->cameraRotation), 0);
+    func_8006BEDC_6CADC(&sp20, 0, arg0->cameraY << 0x10, 0x600000, 0, (s32)(arg0->cameraRotation), 0);
     func_8006FD3C_7093C(temp_s0->unkDA, &sp20);
 
     cameraYString = &arg0->unk3E;
     sprintf(cameraYString, "CAMERA Y = %d", arg0->cameraY);
     cameraYRotation = &arg0->unk1E;
-    sprintf(cameraYRotation, "CAMERA RX = %X", (s16)arg0->cameraRotation);
+    sprintf(cameraYRotation, "CAMERA RX = %X", arg0->cameraRotation);
     arg0->cameraYString = cameraYString;
     arg0->cameraYRotationString = cameraYRotation;
 
@@ -602,7 +602,7 @@ void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *arg0) {
     if (itemValue < 0x80) {
         if ((state->unk5C5 != 0) && (state->unk5C5 != 2)) {
             u8 masked = itemValue & 0x1F;
-            itemValue = (u8)masked;
+            itemValue = masked;
             if (itemValue < 9) {
                 arg0->unk0 = -0x30;
                 arg0->unk8 = (masked / 3) + 0x1D;

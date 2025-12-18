@@ -395,7 +395,7 @@ void func_8000EC98_F898(void) {
             }
             break;
         case 7:
-            if ((s16)func_80069810_6A410()) {
+            if (func_80069810_6A410()) {
                 setGameStateHandler(func_8000E6E0_F2E0);
             }
             return;

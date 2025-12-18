@@ -59,7 +59,7 @@ void func_8000A9A4_B5A4(func_8000B510_C110_arg *arg0);
 void func_8000AD24_B924(func_8000B510_C110_arg *arg0);
 void func_8000B044_BC44(func_8000B510_C110_arg *arg0);
 void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0);
-void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0);
+
 void func_8000B38C_BF8C(func_8000B510_C110_arg *arg0);
 void func_8000B52C_C12C(func_8000B510_C110_arg *arg0);
 
@@ -537,9 +537,6 @@ typedef struct {
     /* 0x70 */ s16 unk70;
 } func_8000B598_arg;
 
-extern void
-func_8000A190_AD90(s32 *ptr, s32 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, s16 arg7, u8 arg8, u8 arg9);
-
 void func_8000B598_C198(func_8000B598_arg *);
 void func_8000B684_C284(func_8000B510_C110_arg *);
 
@@ -642,7 +639,7 @@ s16 func_8000B770_C370(u16 *arg0) {
                 i++;
             }
 
-            if ((s16)count > (s16)maxCount) {
+            if (count > maxCount) {
                 maxCount = count;
             }
 

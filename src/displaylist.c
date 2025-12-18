@@ -523,7 +523,7 @@ void func_80064218_64E18(DisplayListObject *arg0) {
     if (arg0->unk2C != 0) {
         temp_v1 = gRegionAllocPtr;
         temp_v1->words.w0 = 0xDB06000C;
-        temp_a0_val = (void *)arg0->unk2C;
+        temp_a0_val = arg0->unk2C;
         gRegionAllocPtr = temp_v1 + 1;
         temp_v1->words.w1 = (u32)temp_a0_val;
     }

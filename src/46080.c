@@ -676,7 +676,6 @@ typedef struct {
     s16 unk48;
 } func_80046708_47308_arg;
 
-extern s32 identityMatrix[];
 void func_80046628_47228(func_80046628_47228_arg *);
 void func_80046708_47308(func_80046708_47308_arg *arg0);
 
@@ -1501,7 +1500,7 @@ void func_80048350_48F50(func_80048350_48F50_arg *arg0) {
     i = 0;
     offset = 0x180;
     for (; i < 5; i++) {
-        arg0->elements[i].asset.unk0 = (loadAssetMetadata_arg *)((s32)allocation->unk44 + offset);
+        arg0->elements[i].asset.unk0 = (loadAssetMetadata_arg *)(allocation->unk44 + offset);
         offset += 0x40;
     }
 
@@ -1532,7 +1531,7 @@ void func_8004841C_4901C(func_80048350_48F50_arg *arg0) {
 
     if (allocation->unk76 == 0) {
         arg0->unkAC += 0x40;
-        if ((s16)arg0->unkAC == 0x800) {
+        if (arg0->unkAC == 0x800) {
             arg0->unkA8 = 0;
             setCallback(&func_80048540_49140);
         }
@@ -2060,8 +2059,6 @@ extern void *D_800955E0_961E0;
 extern void *D_80095860_96460;
 extern void *D_80095930_96530;
 
-void func_80046D38_47938(void *, s32, s32, s32, s32, s32);
-
 void func_800497FC_4A3FC(s32 poolId) {
     s32 temp;
 
@@ -2517,13 +2514,13 @@ void func_8004A850_4B450(func_8004A850_4B450_arg *arg0) {
 
     if (D_8009ADE0_9B9E0 & 1) {
         arg0->unk26++;
-        if ((s16)arg0->unk26 >= 6) {
+        if (arg0->unk26 >= 6) {
             arg0->unk26 = 0;
         }
         loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk26);
     }
 
-    if ((s16)arg0->unk28 >= 0x1F || (gFrameCounter & 1)) {
+    if (arg0->unk28 >= 0x1F || (gFrameCounter & 1)) {
         for (i = 0; i < 4; i++) {
             func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
         }

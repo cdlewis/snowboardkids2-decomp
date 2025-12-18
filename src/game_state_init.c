@@ -140,9 +140,9 @@ void gameStateCleanupHandler(void) {
         unlinkNode(&gs->node1);
         unlinkNode(&gs->node2);
 
-        gs->unk3E4 = freeNodeMemory((void *)gs->unk3E4);
-        gs->unk3DC = freeNodeMemory((void *)gs->unk3DC);
-        gs->unk3E0 = freeNodeMemory((void *)gs->unk3E0);
+        gs->unk3E4 = freeNodeMemory(gs->unk3E4);
+        gs->unk3DC = freeNodeMemory(gs->unk3DC);
+        gs->unk3E0 = freeNodeMemory(gs->unk3E0);
 
         if (gs->unk427 == 0xFF) {
             terminateSchedulerWithCallback(transitionToMainMenu);

@@ -495,8 +495,6 @@ void func_8004CD88_4D988(Struct_func_8004CD88 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CDC0_4D9C0);
 
-extern void func_8000FED0_10AD0(void);
-
 typedef struct {
     u8 pad0[0x10];
     void *unk10;
@@ -1218,7 +1216,7 @@ void func_8004E410_4F010(Struct_func_8004E134 *arg0) {
         arg0->unk16 = randA() & 0xF;
     }
 
-    if ((s16)arg0->unk14 >= 0x6E1) {
+    if (arg0->unk14 >= 0x6E1) {
         func_80069CF8_6A8F8();
     }
 
@@ -1819,18 +1817,18 @@ after_7E:
     seconds = (arg0->unk10 % 32400) / 540;
 
     arg0->unk14++;
-    if ((s16)arg0->unk14 == 0x28) {
+    if (arg0->unk14 == 0x28) {
         arg0->unk14 = 0;
     }
 
     if (arg0->unk10 > 0x431AB) {
-        if ((s16)arg0->unk14 < 0x14) {
+        if (arg0->unk14 < 0x14) {
             sprintf(sp20, D_8009E8D4_9F4D4, minutes, seconds);
         } else {
             sprintf(sp20, D_8009E8E0_9F4E0, minutes, seconds);
         }
     } else {
-        if ((s16)arg0->unk14 < 0x14) {
+        if (arg0->unk14 < 0x14) {
             sprintf(sp20, D_8009E8EC_9F4EC, minutes, seconds);
         } else {
             sprintf(sp20, D_8009E8F8_9F4F8, minutes, seconds);

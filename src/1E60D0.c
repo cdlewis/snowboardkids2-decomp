@@ -154,7 +154,7 @@ void func_800B9180_1E6230(func_800B9180_1E6230_arg *arg0) {
         arg0->unk8.word = 0;
     }
 
-    value = (s16)arg0->unk8.halfword;
+    value = arg0->unk8.halfword;
     new_var = value;
     arg0->unk24 = (s8)new_var;
 

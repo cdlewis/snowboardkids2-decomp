@@ -453,9 +453,9 @@ void func_8006FC70_70870(u16 searchId, u16 colorCount, ColorData *srcColors, Col
     }
 
     while (node != NULL) {
-        if (node->id == (u16)searchId) {
+        if (node->id == searchId) {
             dst = &node->unk148[0];
-            for (i = 0; i < (u16)colorCount; i++) {
+            for (i = 0; i < colorCount; i++) {
                 node->unk148[i].unk148 = node->unk148[i].unk14C = srcColors[i].r;
                 node->unk148[i].unk149 = node->unk148[i].unk14D = srcColors[i].g;
                 node->unk148[i].unk14A = node->unk148[i].unk14E = srcColors[i].b;

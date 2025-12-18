@@ -981,7 +981,7 @@ void func_800260EC_26CEC(void *arg0) {
     void *ptr;
 
     i = 0;
-    if (i < ((D_800AFE8C_A71FC_type *)D_800AFE8C_A71FC)->unk8) {
+    if (i < (D_800AFE8C_A71FC)->unk8) {
         j = 0;
         do {
             index = i + 8;
@@ -993,7 +993,7 @@ void func_800260EC_26CEC(void *arg0) {
             } while (j < 3);
             i++;
             j = 0;
-        } while (i < ((D_800AFE8C_A71FC_type *)D_800AFE8C_A71FC)->unk8);
+        } while (i < (D_800AFE8C_A71FC)->unk8);
     }
 }
 

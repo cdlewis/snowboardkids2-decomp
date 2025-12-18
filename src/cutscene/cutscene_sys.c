@@ -28,7 +28,7 @@ s32 cutsceneSysDisp_validate(void) {
 }
 
 void cutsceneSysDisp_exec(u8 *arg0, cutsceneSysDisp_exec_arg *arg1) {
-    arg1->unkFF5 = (u8)*arg0;
+    arg1->unkFF5 = (*arg0);
 }
 
 void cutsceneSysFadeIn_init(void) {
@@ -166,7 +166,7 @@ void cutsceneSysWait_exec(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1) {
     if (temp_v0 != NULL) {
         func_800B29F0_1DFAA0(arg1);
         temp_v0->unk0 = arg1;
-        temp_v0->unkE = (u16)*arg0;
+        temp_v0->unkE = (*arg0);
     }
 }
 
