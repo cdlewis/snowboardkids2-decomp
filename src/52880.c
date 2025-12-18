@@ -313,6 +313,7 @@ s32 func_80052418_53018(s32 arg0, s32 arg1) {
     if (task != NULL) {
         task->unk42 = arg0;
     }
+    return (s32)task;
 }
 
 void func_800524A4_530A4(Struct_52880 *arg0);
@@ -522,6 +523,7 @@ s32 func_80052A24_53624(s32 arg0, s32 arg1) {
     if (task != NULL) {
         task->unk42 = arg0;
     }
+    return (s32)task;
 }
 
 void func_80052AB0_536B0(Struct_52880 *arg0);
@@ -737,6 +739,7 @@ s32 func_80053078_53C78(s32 arg0, s32 arg1) {
     if (task != NULL) {
         task->unk42 = arg0;
     }
+    return (s32)task;
 }
 
 void func_80053784_54384(Struct_52880 *arg0);
@@ -882,6 +885,7 @@ s32 func_800537B0_543B0(s32 arg0, s32 arg1) {
     if (task != NULL) {
         task->unk42 = arg0;
     }
+    return (s32)task;
 }
 
 void func_8005383C_5443C(Struct_52880 *arg0);
@@ -1090,6 +1094,7 @@ s32 func_80053DF0_549F0(s32 arg0, s32 arg1) {
         task->unk42 = arg0;
         task->unk4A = arg1;
     }
+    return (s32)task;
 }
 
 void func_80053E90_54A90(Struct_52880 *arg0);
@@ -1211,6 +1216,7 @@ s32 func_80054470_55070(s32 arg0, s32 arg1) {
     if (task != NULL) {
         task->unk42 = arg0;
     }
+    return (s32)task;
 }
 
 s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
@@ -1657,6 +1663,7 @@ s32 func_80055820_56420(s32 arg0, s32 arg1) {
     if (task != NULL) {
         task->unk42 = arg0;
     }
+    return (s32)task;
 }
 
 typedef struct {

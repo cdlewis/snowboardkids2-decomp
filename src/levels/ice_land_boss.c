@@ -7,7 +7,7 @@ typedef void (*FuncPtr)(void *);
 
 typedef struct {
     /* 0x0 */ void *ptr;
-    u8 _pad[0x38]
+    u8 _pad[0x38];
 } Element0x3C; // Size: 0x3C
 
 typedef struct {
