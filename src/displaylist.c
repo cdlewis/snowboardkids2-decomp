@@ -42,7 +42,7 @@ extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 extern void *D_800A2D40_A3940;
 extern void *D_800A2D44_A3944;
-extern s32 D_800A2D48_A3948;
+extern void *D_800A2D48_A3948;
 extern void func_80065150_65D50(void);
 extern void func_800653E0_65FE0(void);
 extern void func_80065670_66270(void);

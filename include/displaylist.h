@@ -22,7 +22,7 @@ typedef struct {
     DisplayLists *unk20;
     void *unk24;
     void *unk28;
-    s32 unk2C;
+    void* unk2C;
     s32 unk30;
     u8 padding3[0x3];
     u8 unk37;

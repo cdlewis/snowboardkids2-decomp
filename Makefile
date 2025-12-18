@@ -61,7 +61,7 @@ CFLAGS := $(ABIFLAG) -mno-abicalls -nostdinc -fno-PIC -G 0 -Wa,-force-n64align -
 IINC := -I include -I lib/ultralib/include -I lib/ultralib/include/PR -I lib/libmus/include/PR -I lib/libmus/src -I lib/f3dex2/PR
 
 MIPS_BUILTIN_DEFS := -D_MIPS_ISA_MIPS2=2 -D_MIPS_ISA=_MIPS_ISA_MIPS2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZPTR=32
-CC_CHECK_FLAGS    := -MMD -MP -fno-builtin -fsyntax-only -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1 -Werror=implicit-function-declaration -Werror=strict-prototypes -Wincompatible-pointer-types 
+CC_CHECK_FLAGS    := -MMD -MP -fno-builtin -fsyntax-only -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1 -Werror=implicit-function-declaration -Werror=strict-prototypes -Werror=incompatible-pointer-types 
 
 TARGET = $(BUILD_DIR)/$(BASENAME)
 
@@ -98,14 +98,12 @@ dirs:
 verify: $(TARGET).z64
 	@status=0; \
 	shasum --check $(BASENAME).sha1 || status=$$?; \
-	$(PYTHON) $(TOOLS_DIR)/check_warnings.py $(BUILD_LOG) || status=$$?; \
 	if [ -z "$$BUILD_AND_VERIFY" ]; then echo "Reminder to Claude: make caches things, you need to run ./tools/build-and-verify.sh instead."; fi; \
 	exit $$status
 
 no_verify: $(TARGET).z64
 	@echo "Skipping SHA1SUM check, updating CRC"
 	@$(PYTHON) $(N64CRC) $(TARGET).z64
-	@$(PYTHON) $(TOOLS_DIR)/check_warnings.py $(BUILD_LOG)
 
 extract:
 	$(SPLAT) $(BASENAME).yaml
@@ -115,14 +113,6 @@ clean:
 	rm -rf assets
 	rm -rf build
 	rm -f *auto.txt
-
-check-warnings:
-	@if [ -f $(BUILD_LOG) ]; then \
-		$(PYTHON) $(TOOLS_DIR)/check_warnings.py $(BUILD_LOG) --show-all; \
-	else \
-		echo "No build log found. Run 'make' first."; \
-		exit 1; \
-	fi
 
 clean-ultralib:
 	rm -r lib/ultralib/build
@@ -208,7 +198,7 @@ setup: install-hooks
 
 ### Settings
 .SECONDARY:
-.PHONY: all clean default updatediff check-warnings install-hooks
+.PHONY: all clean default updatediff install-hooks
 SHELL = /bin/bash -e -o pipefail
 
 # Print target for debugging

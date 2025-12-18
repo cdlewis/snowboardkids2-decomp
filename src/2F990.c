@@ -111,12 +111,9 @@ typedef struct {
 } func_8002EF3C_2FB3C_arg;
 
 typedef struct {
-    u8 padding[0x20];
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 padding2[0x20];
+    DisplayListObject unk0;
+    void *unk3C;
+    u8 padding[0x10];
     s32 unk50;
     u8 padding3[0xC];
     u8 unk60;
@@ -169,7 +166,7 @@ void func_8002F290_2FE90(func_8002F658_30258_arg *);
 void func_8002F36C_2FF6C(func_8002F658_30258_arg *);
 void func_8002F3E4_2FFE4(func_8002F518_30118_arg *);
 void func_8002F518_30118(func_8002F518_30118_arg *);
-void func_8002F5C8_301C8(void *);
+void func_8002F5C8_301C8(DisplayListObject *);
 void func_8002F72C_3032C(void);
 void func_8002F88C_3048C(func_8002F658_30258_arg *arg0);
 void func_8002F948_30548(void);
@@ -316,7 +313,7 @@ void func_8002F36C_2FF6C(func_8002F658_30258_arg *arg0) {
     if (arg0->updateCounter != 0) {
         arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
         arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
-        arg0->displayList.unk2C = (s32)freeNodeMemory((void *)arg0->displayList.unk2C);
+        arg0->displayList.unk2C = freeNodeMemory(arg0->displayList.unk2C);
         if (arg0->updateCounter != 0) {
             goto end;
         }
@@ -348,12 +345,12 @@ void func_8002F3E4_2FFE4(func_8002F518_30118_arg *arg0) {
         s0 = state->unk5CA[arg0->unk61] & 0x1F;
         s1 = s0;
 
-        memcpy(arg0, (void *)((s32)arg0 + 0x3C), 0x20);
+        memcpy(arg0, &arg0->unk3C, 0x20);
 
-        arg0->unk20 = loadAssetByIndex_95728(s1);
-        arg0->unk24 = loadAssetByIndex_95500(s1);
-        arg0->unk28 = loadAssetByIndex_95590(s1);
-        arg0->unk2C = loadAssetByIndex_95668(s0 / 3);
+        arg0->unk0.unk20 = loadAssetByIndex_95728(s1);
+        arg0->unk0.unk24 = loadAssetByIndex_95500(s1);
+        arg0->unk0.unk28 = loadAssetByIndex_95590(s1);
+        arg0->unk0.unk2C = loadAssetByIndex_95668(s0 / 3);
         arg0->unk60 = 0;
     } else {
         enqueueDisplayListObject(0, (DisplayListObject *)arg0);
@@ -386,11 +383,10 @@ void func_8002F518_30118(func_8002F518_30118_arg *s0) {
         setCallback(func_8002F5C8_301C8);
     }
 
-    enqueueDisplayListObject(0, s0);
+    enqueueDisplayListObject(0, &s0->unk0);
 }
 
-void func_8002F5C8_301C8(void *untypedArg) {
-    DisplayListObject *arg0 = (DisplayListObject *)untypedArg;
+void func_8002F5C8_301C8(DisplayListObject *arg0) {
     volatile u8 pad[0x20];
     if (((GameState *)getCurrentAllocation())->unk5C5 == 1) {
         setCallback(&func_8002F290_2FE90);
@@ -401,7 +397,7 @@ void func_8002F5C8_301C8(void *untypedArg) {
 void func_8002F614_30214(func_8002F658_30258_arg *arg0) {
     arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
     arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
-    arg0->displayList.unk2C = (s32)freeNodeMemory((void *)arg0->displayList.unk2C);
+    arg0->displayList.unk2C = freeNodeMemory(arg0->displayList.unk2C);
 }
 
 void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
@@ -447,7 +443,7 @@ void func_8002F88C_3048C(func_8002F658_30258_arg *arg0) {
         arg0->updateCounter = 0;
         arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
         arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
-        arg0->displayList.unk2C = (s32)freeNodeMemory((void *)arg0->displayList.unk2C);
+        arg0->displayList.unk2C = freeNodeMemory(arg0->displayList.unk2C);
         setCallbackWithContinue(func_8002F948_30548);
     } else {
         enqueueDisplayListObject(0, &arg0->displayList);
@@ -464,7 +460,7 @@ void func_8002F948_30548(void) {
 void func_8002F980_30580(func_8002F658_30258_arg *arg0) {
     arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
     arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
-    arg0->displayList.unk2C = (s32)freeNodeMemory((void *)arg0->displayList.unk2C);
+    arg0->displayList.unk2C = freeNodeMemory(arg0->displayList.unk2C);
 }
 
 void func_8002F9C4_305C4(func_8002FA70_30670_arg *arg0) {
