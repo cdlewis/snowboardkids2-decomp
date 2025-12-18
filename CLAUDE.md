@@ -8,7 +8,7 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 ## Project Structure
 
-- `src` decompiled (or partially decompiled) C code. 
+- `src` decompiled (or partially decompiled) C code.
 - `src/cutscene` C functions and structures related to cutscene code
 - `src/levels` C functions and structures related to cutscene code
 - `include` headers for decompiled C code
@@ -25,6 +25,7 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 - `./tools/claude --bootstrap <function name>` spin up a decompilation environment for a given function.
 - `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
 - `python3 tools/check_pointer_arithmetic.py <file or directory>` detect pointer arithmetic with casts that should be replaced with struct field access. Use `--strict` to fail on violations.
+- `python3 tools/project_status.py` shows functions that are currently non-matching. Use this if `./tools/build-and-verify.sh` is failing and you're not sure which function is the problem.
 
 ## Tasks
 
