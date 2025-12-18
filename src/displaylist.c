@@ -838,13 +838,18 @@ void initializeOverlaySystem(void) {
     setGameStateHandler(&func_80068060_68C60);
 }
 
+typedef struct {
+    DataTable_19E80 *unk0;
+} alloc_68C60;
+
 void func_80068060_68C60(void) {
-    func_800680F0_68CF0(((GameState *)getCurrentAllocation())->audioPlayer0);
+    alloc_68C60 *alloc = (alloc_68C60 *)getCurrentAllocation();
+    func_800680F0_68CF0(alloc->unk0);
     terminateSchedulerWithCallback(&func_800680C4_68CC4);
 }
 
 void func_80068090_68C90(void) {
-    if ((func_80069810_6A410() << 0x10) != 0) {
+    if (func_80069810_6A410() << 0x10 != 0) {
         terminateSchedulerWithCallback(&func_800680C4_68CC4);
     }
 }

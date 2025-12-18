@@ -12,4 +12,4 @@ void enqueueTextRender(s16 x, s16 y, s16 palette, u8 *target_string, s32 arg4, s
 
 void renderTextPalette(TextData *);
 
-void func_800680F0_68CF0(Node_70B00 *arg0);
+void func_800680F0_68CF0(DataTable_19E80 *arg0);
