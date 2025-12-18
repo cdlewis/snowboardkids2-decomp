@@ -88,6 +88,19 @@ typedef struct {
 } func_80031510_32110_arg;
 
 typedef struct {
+    DisplayListObject unk0;
+    s32 unk3C;
+    u8 unk40[0x10];
+    s32 unk50;
+    s32 unk54;
+    s32 unk58;
+    s32 unk5C;
+    s16 unk60;
+    s16 unk62;
+    s8 unk64;
+} func_80031944_32544_arg;
+
+typedef struct {
     u8 padding[0x7A4];
     u8 unk7A4;
 } func_8003316C_33D6C_alloc;
@@ -290,7 +303,7 @@ void func_80032EA4_33AA4(void *);
 void func_80032F64_33B64(func_80032244_32E44_arg *);
 void func_80032DBC_339BC(func_80032F90_33B90_arg *arg0);
 void func_800319C8_325C8(func_800319C8_325C8_arg *arg0);
-void func_80031944_32544(func_80031510_32110_arg *arg0);
+void func_80031944_32544(func_80031944_32544_arg *arg0);
 void func_80031CE8_328E8(void *arg0);
 void func_80031DE4_329E4(void);
 void func_80031248_31E48(func_80031248_31E48_arg *arg0);
@@ -668,7 +681,7 @@ void func_80031818_32418(func_80031510_32110_arg *arg0) {
     setCallbackWithContinue(&func_80031944_32544);
 }
 
-void func_80031944_32544(func_80031510_32110_arg *arg0) {
+void func_80031944_32544(func_80031944_32544_arg *arg0) {
     s32 pad[8];
     GameState *state;
     s32 offset;
@@ -687,9 +700,9 @@ void func_80031944_32544(func_80031510_32110_arg *arg0) {
 
     temp = arg0->unk50 + offset;
     arg0->unk50 = temp;
-    memcpy(arg0, &arg0->unk3C, 0x20);
+    memcpy(&arg0->unk0, &arg0->unk3C, 0x20);
 
-    enqueueDisplayListObject(0, arg0);
+    enqueueDisplayListObject(0, &arg0->unk0);
 
     if (arg0->unk50 == compareValue) {
         func_80069CF8_6A8F8();
