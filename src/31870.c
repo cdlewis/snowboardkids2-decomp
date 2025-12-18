@@ -107,9 +107,7 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    applyTransformToModel_arg1 *unk4;
-    u8 padding[0x1B];
-    s16 unk24;
+    applyTransformToModel_arg1 unk4;
 } func_80031ABC_326BC_arg;
 
 typedef struct {
@@ -740,7 +738,7 @@ void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0) {
     temp_s1 = (GameState *)getCurrentAllocation();
     applyTransformToModel(arg0->unk0, &arg0->unk4);
     func_8000160C_220C(arg0->unk0, 1);
-    func_800021B8_2DB8(arg0->unk0, arg0->unk24);
+    func_800021B8_2DB8(arg0->unk0, arg0->unk4.unk20_u.unk20_s16);
     updateModelGeometry(arg0->unk0);
     if (temp_s1->unk79B != 0) {
         setCallback(&func_80031B30_32730);

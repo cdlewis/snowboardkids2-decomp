@@ -236,6 +236,7 @@ typedef struct {
     union {
         SceneModel *unk20;
         s32 unk20_s32;
+        s16 unk20_s16;
     } unk20_u;
 } applyTransformToModel_arg1;
 
