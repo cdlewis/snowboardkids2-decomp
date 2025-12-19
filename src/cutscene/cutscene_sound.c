@@ -1,13 +1,9 @@
 #include "cutscene/cutscene_sound.h"
 #include "1E1BA0.h"
+#include "1E2890.h"
 #include "3E160.h"
 
 extern s32 gControllerInputs[4];
-
-extern void func_800B4C80_1E1D30(void);
-extern void func_800B4CB0_1E1D60(void);
-extern void func_800B57F0_1E28A0(s16, s16, s16, s16, s16, s16);
-extern void func_800B598C_1E2A3C(s16, s16, s16, s16, s16, CutsceneSlotData *);
 
 void func_800B20D0_1DF180(void) {
     s32 input = gControllerInputs[0x3];
