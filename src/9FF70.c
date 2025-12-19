@@ -16,13 +16,14 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern s32 func_8005D308_5DF08(void *, s32);
-
 extern u16 D_800BAB48_AA9F8[];
 extern u16 D_800BAB58_AAA08[];
 
 extern s32 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern s32 func_8005CFC0_5DBC0(void *, s32, void *, s32);
+extern s32 func_8005D308_5DF08(void *, s32);
+extern void func_8005D804_5E404(Player *, u8, u8);
+extern s8 func_8005D818_5E418(Player *);
 extern s32 D_800BA348_AA1F8;
 extern s32 D_800BA350_AA200;
 extern s32 D_800BAB40_AA9F0;
@@ -161,7 +162,6 @@ s32 func_800B12F0_A11A0(Player *arg0) {
     return 0;
 }
 
-extern void func_8005D804_5E404(void *, u8, u8);
 extern void func_80059BD4_5A7D4(void *);
 
 s32 func_800B13D4_A1284(Player *arg0) {
@@ -427,8 +427,6 @@ void func_800B23AC_A225C(func_800B00D4_arg *arg0) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B23DC_A228C);
-
-extern s8 func_8005D818_5E418(Player *);
 
 s32 func_800B243C_A22EC(Player *arg0) {
     s32 temp_s1;
