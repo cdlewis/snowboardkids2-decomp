@@ -46,12 +46,20 @@ But similarly, a definition such as `func_80001640_2240(SceneModel *arg0);` in a
 
 The golden rule: NEVER generalise types to void\* just to make the build work.
 
-## Circular dependencies
+## Common Challenges
+
+### Circular dependencies
 
 There are several strategies you can use to resolve circular dependencies:
 
 - If the dependency is defined in a C file, try moving it to the appropriate header file
 - If the dependency is between two header files, move the struct to a new, third, header file.
+
+### Sign Extension
+
+The compiler might be doing zero instruction sign extension at the call site.
+
+If you can't get a match on a type of one size (e.g. u16/s16), it's worth trying u32/s32.
 
 ## Style guide
 
