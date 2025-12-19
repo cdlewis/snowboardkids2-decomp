@@ -20,7 +20,6 @@
 extern u16 D_800BAB48_AA9F8[];
 extern u16 D_800BAB58_AAA08[];
 
-extern s32 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern s32 func_8005CFC0_5DBC0(void *, s32, void *, s32);
 extern void func_8005D03C_5DC3C(Player *arg0);
 extern s32 func_8005D308_5DF08(void *, s32);
@@ -828,7 +827,7 @@ s32 func_800B2E38_A2CE8(void *arg0) {
     return 0;
 }
 
-extern void func_8005D810_5E410(Player *);
+extern void func_8005D810_5E410(void *);
 
 void func_800B2E80_A2D30(Player *arg0) {
     arg0->unkB8C = 0x200;
@@ -838,7 +837,7 @@ void func_800B2E80_A2D30(Player *arg0) {
     arg0->unkBCD = -1;
     arg0->unkBC0++;
     arg0->unkB84 |= 0x4000;
-    func_8005D810_5E410(arg0);
+    func_8005D810_5E410((void *)arg0);
     func_80056B7C_5777C(&arg0->worldPosX, 0xB);
 }
 

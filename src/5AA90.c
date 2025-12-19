@@ -40,11 +40,12 @@ typedef struct {
     /* 0x1E */ u8 pad3[0x6];
 } Section3Element;
 
-u16 func_80059E90_5AA90(Player *arg0, void *arg1, u16 arg2, void *arg3) {
-    if (!(arg0->unkB84 & 0x100)) {
+s32 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3) {
+    Player *player = (Player *)arg0;
+    if (!(player->unkB84 & 0x100)) {
         return func_80060A3C_6163C(arg1, arg2, arg3);
     }
-    return arg0->unkB94;
+    return player->unkB94;
 }
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_80059ED0_5AAD0);
