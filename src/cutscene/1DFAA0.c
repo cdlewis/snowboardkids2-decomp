@@ -55,7 +55,6 @@ extern u8 identityMatrix[];
 extern CutsceneAssetTable D_800BA7BC_1E786C[];
 
 extern s16 advanceSceneManager(void *);
-extern s32 finalizeAnimationLoop(void *);
 
 extern void *func_800B5B38_1E2BE8(u16);
 

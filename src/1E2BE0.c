@@ -56,41 +56,6 @@ void func_800B5BFC_1E2CAC(void *arg0) {
     freeNodeMemory(arg0);
 }
 
-typedef struct {
-    u8 _pad[0x20];
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    s16 unk2A;
-    s16 unk2C;
-    s16 unk2E;
-    s16 unk30;
-    s16 unk32;
-    s32 unk34;
-    s32 unk38;
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    s16 unk58;
-    s16 unk5A;
-    s16 unk5C;
-    s16 unk5E;
-    s16 unk60;
-    s16 unk62;
-    s32 unk64;
-    s32 unk68;
-    s16 unk6C;
-    s16 unk6E;
-    s8 unk70;
-    s8 unk71;
-} AnimationLoopArg;
-
 void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     Mat3x3Padded sp10;
     Mat3x3Padded sp30;
