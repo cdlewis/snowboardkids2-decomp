@@ -16,6 +16,7 @@ Usage: python analyze_headers.py <project_directory>
 import json
 import os
 import re
+import subprocess
 import sys
 from collections import defaultdict, namedtuple
 from pathlib import Path
@@ -119,6 +120,21 @@ class CProjectAnalyzer:
             pass
 
         return False
+
+    def _is_git_ignored(self, filepath):
+        """Check if a file is ignored by git"""
+        try:
+            # Use git check-ignore to determine if file is ignored
+            # -q makes it quiet (no output), exit code 0 means ignored
+            result = subprocess.run(
+                ['git', 'check-ignore', '-q', str(filepath)],
+                cwd=self.project_dir,
+                capture_output=True
+            )
+            return result.returncode == 0
+        except (subprocess.SubprocessError, FileNotFoundError):
+            # If git is not available or command fails, don't filter
+            return False
 
     def clean_deny_list(self):
         """Remove unused entries from the deny list file"""
@@ -296,6 +312,10 @@ class CProjectAnalyzer:
 
         for filepath in self.project_dir.rglob('*'):
             if filepath.is_file():
+                # Skip git-ignored files
+                if self._is_git_ignored(filepath):
+                    continue
+
                 if self.is_c_file(filepath):
                     # Skip temp.c file
                     if filepath.name == 'temp.c' and filepath.parent.name == 'src':
@@ -304,12 +324,16 @@ class CProjectAnalyzer:
                 elif self.is_header_file(filepath):
                     h_files.append(filepath)
 
+        # Sort files for deterministic ordering
+        c_files.sort(key=lambda p: str(p))
+        h_files.sort(key=lambda p: str(p))
+
         print(f"Found {len(c_files)} C files and {len(h_files)} header files", file=output)
-        
+
         # Analyze all files
         for filepath in c_files:
             self.analyze_c_file(filepath)
-        
+
         for filepath in h_files:
             self.analyze_header_file(filepath)
     
@@ -346,10 +370,11 @@ class CProjectAnalyzer:
         # Find functions that need proper headers
         issues = []
         denied_count = 0
-        
+
         # Check for function declarations in C files that have definitions elsewhere
         # These should be moved to header files
-        for func_name, c_decls in self.c_file_declarations.items():
+        # Sort by function name for deterministic ordering
+        for func_name, c_decls in sorted(self.c_file_declarations.items()):
             # Only flag if this function HAS a definition somewhere (including INCLUDE_ASM)
             if func_name in self.function_definitions:
                 definition = self.function_definitions[func_name]
@@ -367,8 +392,9 @@ class CProjectAnalyzer:
                                 'declaration': c_decl,
                                 'definition': definition
                             })
-        
-        for func_name, extern_decls in self.extern_declarations.items():
+
+        # Sort by function name for deterministic ordering
+        for func_name, extern_decls in sorted(self.extern_declarations.items()):
             # Check if this function is defined somewhere
             if func_name in self.function_definitions:
                 definition = self.function_definitions[func_name]
@@ -424,6 +450,19 @@ class CProjectAnalyzer:
                                 'extern_use': extern_decl,
                                 'available_headers': header_files
                             })
+
+        # Sort issues for deterministic output
+        # Sort by: issue type, then file path, then line number
+        def issue_sort_key(issue):
+            if issue['type'] == 'missing_header_declaration':
+                return (issue['type'], issue['extern_uses'][0].file, issue['extern_uses'][0].line)
+            elif issue['type'] == 'missing_include':
+                return (issue['type'], issue['extern_use'].file, issue['extern_use'].line)
+            elif issue['type'] == 'declaration_should_be_in_header':
+                return (issue['type'], issue['declaration'].file, issue['declaration'].line)
+            return (issue['type'], '', 0)
+
+        issues.sort(key=issue_sort_key)
 
         # Handle JSON output mode
         if json_output:
