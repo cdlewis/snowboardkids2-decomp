@@ -1,6 +1,6 @@
 {
   "task_name": "clean_headers",
-  "script": "python3 tools/analyse_headers.py . --json --limit 50",
+  "script": "python3 tools/analyse_headers.py src --json --limit 50",
   "prompt": "use the fix-extern-headers skill to clean up the following header issue: $ARGUMENT",
   "claude_command": "~/.claude/local/node_modules/.bin/claude"
 }
