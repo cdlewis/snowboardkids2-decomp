@@ -1,4 +1,5 @@
 #include "56910.h"
+#include "594E0.h"
 #include "5AA90.h"
 #include "6E840.h"
 #include "common.h"
@@ -7,8 +8,6 @@
 #include "geometry.h"
 #include "overlay.h"
 #include "task_scheduler.h"
-
-extern void func_80059BD4_5A7D4(Player *);
 
 USE_ASSET(_4060A0);
 

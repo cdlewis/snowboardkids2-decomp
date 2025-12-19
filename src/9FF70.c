@@ -161,8 +161,6 @@ s32 func_800B12F0_A11A0(Player *arg0) {
     return 0;
 }
 
-extern void func_80059BD4_5A7D4(void *);
-
 s32 func_800B13D4_A1284(Player *arg0) {
     s32 sp10[3];
 
