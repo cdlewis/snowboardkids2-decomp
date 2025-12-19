@@ -112,7 +112,120 @@ void func_8001DEBC_1EABC(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001DF5C_1EB5C);
 
-INCLUDE_ASM("asm/nonmatchings/1D520", func_8001E104_1ED04);
+s32 func_8001E104_1ED04(u8 *arg0) {
+    s32 temp_a1;
+    s32 changed;
+    s32 i;
+    u8 temp;
+
+    temp_a1 = *(s32 *)(arg0 + 0xC);
+    changed = 0;
+    if (temp_a1 > 0x98967F) {
+        *(s32 *)(arg0 + 0xC) = 0x98967F;
+        changed = 1;
+        i = 0;
+    } else {
+        i = 0;
+        if (temp_a1 < 0) {
+            *(s32 *)(arg0 + 0xC) = 0;
+            changed = 1;
+            i = 0;
+        }
+    }
+
+    for (i = 0; i < 0x10; i++) {
+        temp = *(arg0 + i + 0x10);
+        if (temp >= 6) {
+            *(arg0 + i + 0x10) = 0;
+            changed = 1;
+        }
+        temp = *(arg0 + i + 0x20);
+        if (temp >= 6) {
+            *(arg0 + i + 0x20) = 0;
+            changed = 1;
+        }
+    }
+
+    if (arg0[0x10] == 0) {
+        arg0[0x10] = 5;
+        changed = 1;
+    }
+
+    for (i = 0; i < 3; i++) {
+        temp = *(arg0 + i + 0x20);
+        if (temp == 0) {
+            *(arg0 + i + 0x20) = 5;
+            changed = 1;
+        }
+        temp = *(arg0 + i + 0x24);
+        if (temp == 0) {
+            *(arg0 + i + 0x24) = 5;
+            changed = 1;
+        }
+    }
+
+    for (i = 0; i < 0x12; i++) {
+        temp = *(arg0 + i + 0x30);
+        if (temp >= 0x1A) {
+            *(arg0 + i + 0x30) = 0;
+            changed = 1;
+        }
+    }
+
+    for (i = 0; i < 3; i++) {
+        temp = *(arg0 + (i * 3) + 0x30);
+        if (temp == 0) {
+            *(arg0 + (i * 3) + 0x30) = i + 1;
+            changed = 1;
+        }
+    }
+
+    for (i = 0; i < 0x12; i++) {
+        temp = *(arg0 + i + 0x30);
+        if (temp >= 0x1A) {
+            *(arg0 + i + 0x30) = 1;
+            changed = 1;
+        }
+    }
+
+    for (i = 0; i < 9; i++) {
+        temp = *(arg0 + i + 0x42);
+        if (temp >= 0x12) {
+            *(arg0 + i + 0x42) = 0x11;
+            changed = 1;
+        }
+    }
+
+    for (i = 0; i < 3; i++) {
+        temp = *(arg0 + i + 0x4B);
+        if (temp >= 0x10) {
+            *(arg0 + i + 0x4B) = 0xF;
+            changed = 1;
+        }
+    }
+
+    if (arg0[0x4E] >= 2) {
+        arg0[0x4E] = 0;
+        changed = 1;
+    }
+
+    if (arg0[0x4F] >= 2) {
+        arg0[0x4F] = 0;
+        changed = 1;
+    }
+
+    if (arg0[0x50] >= 2) {
+        arg0[0x50] = 0;
+        changed = 1;
+    }
+
+    if (arg0[0x51] >= 2) {
+        arg0[0x51] = 0;
+        changed = 1;
+    }
+
+    return changed;
+}
 
 void func_8001E320_1EF20(void) {
     u8 sp10[0x60];
