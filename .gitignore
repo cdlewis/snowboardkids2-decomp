@@ -2,6 +2,7 @@ snowboardkids2.z64
 snowboardkids2.eeprom
 tools/gcc_kmc
 __pycache__
+tools/task-runner/logs
 tools/claude_logs_*
 tools/ignored_prompts_*.log
 

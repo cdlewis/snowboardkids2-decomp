@@ -8,6 +8,7 @@ import os
 import signal
 from datetime import datetime
 from pathlib import Path
+from glob import glob
 
 class TaskRunner:
     def __init__(self, taskfile_path, max_times=None, dry_run=False):
@@ -28,8 +29,11 @@ class TaskRunner:
         self.claude_command = self.taskfile.get('claude_command', 'claude')
 
         # Setup log files
-        self.ignored_prompts_file = f"tools/ignored_prompts_{self.task_name}.log"
-        self.claude_log_file = f"tools/claude_logs_{self.task_name}.log"
+        log_dir = Path("tools/task-runner/logs")
+        log_dir.mkdir(parents=True, exist_ok=True)
+
+        self.ignored_prompts_file = log_dir / f"ignored_prompts_{self.task_name}.log"
+        self.claude_log_file = log_dir / f"claude_logs_{self.task_name}.log"
 
         # Ensure log files exist
         Path(self.ignored_prompts_file).touch()
@@ -291,6 +295,40 @@ class TaskRunner:
         print(f"\nTotal iterations: {self.count}")
 
 
+def discover_tasks():
+    """Discover all task files and create a mapping from task name to file path."""
+    tasks_dir = Path("tools/task-runner/tasks")
+    task_map = {}
+
+    if not tasks_dir.exists():
+        return task_map
+
+    for task_file in tasks_dir.glob("*.json"):
+        try:
+            with open(task_file, 'r') as f:
+                task_data = json.load(f)
+                task_name = task_data.get('task_name')
+                if task_name:
+                    task_map[task_name] = str(task_file)
+        except (json.JSONDecodeError, KeyError, IOError) as e:
+            print(f"Warning: Could not load task from {task_file}: {e}", file=sys.stderr)
+
+    return task_map
+
+
+def list_available_tasks():
+    """List all available tasks."""
+    task_map = discover_tasks()
+
+    if not task_map:
+        print("No tasks found in tools/task-runner/tasks/")
+        return
+
+    print("Available tasks:")
+    for task_name, task_file in sorted(task_map.items()):
+        print(f"  - {task_name} ({task_file})")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Task runner harness for Claude',
@@ -306,10 +344,15 @@ Example taskfile.json:
 
 The script should output a JSON array of strings, e.g.:
 ["func_80001234", "func_80005678"]
+
+Tasks are discovered from tools/task-runner/tasks/*.json
+Use --list to see all available tasks.
         """
     )
 
-    parser.add_argument('taskfile', help='Path to task JSON file')
+    parser.add_argument('task', nargs='?', help='Task name to run (use --list to see available tasks)')
+    parser.add_argument('--list', action='store_true',
+                       help='List all available tasks')
     parser.add_argument('--times', type=int, metavar='X',
                        help='Maximum number of iterations')
     parser.add_argument('--dry-run', action='store_true',
@@ -317,17 +360,35 @@ The script should output a JSON array of strings, e.g.:
 
     args = parser.parse_args()
 
-    # Validate taskfile exists
-    if not os.path.exists(args.taskfile):
-        print(f"Error: Taskfile not found: {args.taskfile}")
+    # Handle --list
+    if args.list:
+        list_available_tasks()
+        sys.exit(0)
+
+    # Require task name
+    if not args.task:
+        parser.print_help()
+        print("\nError: task name is required (use --list to see available tasks)")
         sys.exit(1)
+
+    # Discover tasks
+    task_map = discover_tasks()
+
+    # Look up task name
+    if args.task not in task_map:
+        print(f"Error: Task '{args.task}' not found")
+        print()
+        list_available_tasks()
+        sys.exit(1)
+
+    taskfile_path = task_map[args.task]
 
     # Validate --times argument
     if args.times is not None and args.times < 1:
         print("Error: --times argument must be a positive integer")
         sys.exit(1)
 
-    runner = TaskRunner(args.taskfile, args.times, args.dry_run)
+    runner = TaskRunner(taskfile_path, args.times, args.dry_run)
     runner.run()
 
 

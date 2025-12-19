@@ -14,6 +14,7 @@ import sys
 import os
 import re
 import argparse
+import json
 import numpy as np
 from pathlib import Path
 from dataclasses import dataclass
@@ -412,6 +413,7 @@ Examples:
   python3 tools/score_functions.py --min-score 100 --max-score 200 asm/
   python3 tools/score_functions.py --exhaustive --min-score 50 asm/
   python3 tools/score_functions.py --clean asm/
+  python3 tools/score_functions.py --json asm/  # Output JSON array for task-runner.py
         """
     )
     parser.add_argument(
@@ -444,6 +446,11 @@ Examples:
         '--clean',
         action='store_true',
         help='Remove entries from difficult_functions that are no longer needed (matched or removed functions)'
+    )
+    parser.add_argument(
+        '--json',
+        action='store_true',
+        help='Output function names as JSON array ordered by difficulty (easiest first), suitable for task-runner.py'
     )
 
     args = parser.parse_args()
@@ -500,6 +507,12 @@ Examples:
     if not filtered_scores:
         print("Error: All functions are marked as difficult or are data sections!", file=sys.stderr)
         sys.exit(1)
+
+    # JSON output mode - output array of function names
+    if args.json:
+        function_names = [s.name for s in filtered_scores]
+        print(json.dumps(function_names))
+        sys.exit(0)
 
     # In exhaustive mode, list all functions
     if args.exhaustive:
