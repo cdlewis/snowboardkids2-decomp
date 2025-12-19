@@ -128,6 +128,8 @@ void setModelCameraTransform(void *, s16, s16, s16, s16, s16, s16);
 
 void unlinkNode(Node_70B00 *player);
 
+void n_alSeqpDelete(Node_70B00 *arg0);
+
 s32 func_8006FE10_70A10(Node_70B00 *);
 
 s32 isObjectCulled(Vec3s32 *arg0);

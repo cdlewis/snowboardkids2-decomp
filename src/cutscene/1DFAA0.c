@@ -53,7 +53,6 @@ extern CutsceneAssetTable D_800BA7BC_1E786C[];
 extern s16 advanceSceneManager(void *);
 extern s32 finalizeAnimationLoop(void *);
 extern void func_800B5BFC_1E2CAC(void *);
-extern void n_alSeqpDelete(s32 *);
 extern s32 func_800084D8_90D8(StateEntry *, s32, s32);
 extern s32 func_800084E0_90E0(StateEntry *, s32, s32);
 extern s32 func_8003A284_3AE84(s32, StateEntry **);
@@ -136,7 +135,7 @@ void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *ar
 void func_800B2C78(func_800B2C78_arg *arg0) {
     s32 i;
 
-    n_alSeqpDelete(&arg0[16].unkB8);
+    n_alSeqpDelete((Node_70B00 *)&arg0[16].unkB8);
 
     func_800B5BFC_1E2CAC(arg0->unkC);
 
