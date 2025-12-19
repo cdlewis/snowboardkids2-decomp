@@ -13,7 +13,7 @@ typedef struct {
 
 void func_800B5590_1E2640(void);
 
-void func_800B5500_1E25B0(s16 arg0, void *arg1, s16 arg2, void *arg3) {
+void func_800B5500_1E25B0(u16 arg0, void *arg1, s16 arg2, s32 arg3) {
     func_800B5500_Task *sp10;
 
     sp10 = (func_800B5500_Task *)scheduleTask(&func_800B5590_1E2640, 1, 0, 0);

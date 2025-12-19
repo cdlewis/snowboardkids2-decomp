@@ -20,7 +20,7 @@ typedef struct {
 typedef struct {
     Node n;
     u8 padding[0x28];
-    s16 unk54;
+    u16 unk54;
     s16 unk56;
     s16 unk58;
 } func_800B5290_1E2340_task;
@@ -192,7 +192,7 @@ void func_800B523C_1E22EC(void *arg0, s16 arg1) {
     }
 }
 
-void func_800B5290_1E2340(s16 arg0, void *arg1, s16 arg2, s16 arg3) {
+void func_800B5290_1E2340(u16 arg0, void *arg1, s16 arg2, s16 arg3) {
     func_800B5290_1E2340_task *task = (func_800B5290_1E2340_task *)scheduleTask(&func_800B5318_1E23C8, 1, 0, 0);
     if (task != NULL) {
         task->unk54 = arg0;

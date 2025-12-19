@@ -1,11 +1,11 @@
 #include "cutscene/sys_effect.h"
+#include "1E1BA0.h"
+#include "1E2070.h"
 #include "B040.h"
 #include "C570.h"
 #include "geometry.h"
 
 extern u8 identityMatrix[];
-extern void func_800B5290_1E2340(u16, void *, s16, s16);
-extern void *func_800B5500_1E25B0(u16, void *, s16, s32);
 
 typedef struct {
     union {
@@ -63,8 +63,6 @@ void cutsceneEffectFan_init(void) {
 s32 cutsceneEffectFan_validate(void) {
     return 0;
 }
-
-extern void func_800B4F60_1E2010(SceneModel *, s16);
 
 void cutsceneEffectFan_exec(cutsceneEffectFan_exec_arg *arg0, CutsceneSlot *arg1, s8 arg2) {
     func_800B4F60_1E2010(arg1[arg2].slotData.unkA4, arg0->unk0);
@@ -153,8 +151,6 @@ void cutsceneEffectTrick_exec(cutsceneEffectTrick_exec_arg *arg0, CutsceneManage
     temp_v0->unk0.TrickPayload.unk2 = arg0->unk2;
     func_800B2A24_1DFAD4(arg1, arg2);
 }
-
-extern void func_800B523C_1E22EC(void *, s16);
 
 void cutsceneEffectTrick_update(CutsceneManager *arg0, s8 arg1) {
     CutsceneSlot *slot;
