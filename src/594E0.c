@@ -17,7 +17,6 @@ extern u16 D_8009401C_94C1C[];
 extern u16 D_80094030_94C30[];
 extern u16 D_80094044_94C44[];
 extern u16 D_80094058_94C58[];
-extern void func_80056D64_57964(void *, u16, s16, s16);
 
 void func_800588E0_594E0(Player *arg0, s16 arg1, void *arg2) {
     if (arg0->unkAC2 != 0) {

@@ -261,7 +261,7 @@ void func_80056C6C_5786C(void *arg0, unsigned int arg1, s16 arg2) {
     }
 }
 
-void func_80056D64_57964(void *arg0, s16 arg1, s16 arg2, s16 arg3) {
+void func_80056D64_57964(void *arg0, s32 arg1, s16 arg2, s16 arg3) {
     RenderQueueItem *renderQueue;
     s32 index = gGraphicsManager->renderQueueCount;
     if (index < 0x20) {
