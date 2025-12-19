@@ -38,4 +38,5 @@ typedef struct {
 } func_800B5E64_1E2F14_arg0;
 
 void func_800B5B30_1E2BE0(func_800B5E64_1E2F14_arg0 *arg0, s8 arg1);
+void func_800B5BFC_1E2CAC(void *arg0);
 void func_800B6130_1E31E0(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2);
