@@ -1,3 +1,6 @@
+#ifndef _CUTSCENE_SYS2_H_
+#define _CUTSCENE_SYS2_H_
+
 #include "1DFAA0.h"
 #include "common.h"
 
@@ -89,3 +92,5 @@ s32 cutsceneSys2Wipe_isDone(void);
 void cutsceneSys2Wait_init(void);
 s32 cutsceneSys2Wait_validate(void);
 void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, CutsceneManager *arg1, s8 arg2);
+
+#endif

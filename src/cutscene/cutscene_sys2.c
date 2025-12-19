@@ -1,8 +1,7 @@
 #include "cutscene/cutscene_sys2.h"
+#include "1E64A0.h"
 #include "CBA0.h"
 #include "task_scheduler.h"
-
-extern void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *);
 
 void cutsceneSys2Wipe_init(void) {
 }
