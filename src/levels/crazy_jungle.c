@@ -1,5 +1,6 @@
 #include "52880.h"
 #include "56910.h"
+#include "594E0.h"
 #include "5AA90.h"
 #include "common.h"
 #include "displaylist.h"
@@ -63,7 +64,6 @@ typedef struct {
 } func_800BB8B8_B7AF8_arg;
 
 extern s32 D_8009A8A4_9B4A4;
-extern void func_800589A0_595A0(Player *player);
 
 void func_800BB468_B76A8(TrackHazard *arg0);
 void func_800BB658_B7898(TrackHazard *arg0);

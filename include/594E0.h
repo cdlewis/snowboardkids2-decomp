@@ -4,6 +4,7 @@
 #include "gamestate.h"
 
 void func_80058924_59524(Player *arg0);
+void func_800589A0_595A0(Player *arg0);
 void func_800589CC_595CC(Player *arg0, void *arg1);
 void func_80058CFC_598FC(void *arg0);
 
