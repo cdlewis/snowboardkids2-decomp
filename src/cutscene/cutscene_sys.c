@@ -1,9 +1,8 @@
 #include "cutscene/cutscene_sys.h"
 #include "1DFAA0.h"
 #include "6E840.h"
+#include "CBA0.h"
 #include "task_scheduler.h"
-
-extern void func_8000C2BC_CEBC(void *, u8, u8, u8);
 extern u8 D_800BA5C0_1E7670[];
 extern s32 gButtonsPressed[];
 
@@ -143,7 +142,7 @@ s32 cutsceneSysWipeColor_validate(void) {
 }
 
 void cutsceneSysWipeColor_exec(cutsceneSysWipeColor_exec_arg0 *arg0, cutsceneSysWipeColor_exec_arg1 *arg1) {
-    func_8000C2BC_CEBC(&arg1->unkFF8, arg0->unk0, arg0->unk1, arg0->unk2);
+    func_8000C2BC_CEBC((Func8000C2BCArg *)&arg1->unkFF8, arg0->unk0, arg0->unk1, arg0->unk2);
 }
 
 void func_800B2550_1DF600(func_800B2550_1DF600_arg **arg0) {
