@@ -13,6 +13,7 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "levels/starlight_highway.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
@@ -2998,8 +2999,6 @@ s32 func_800B7444_A72F4(Player *arg0) {
     func_8005D308_5DF08(arg0, 4);
     return 0;
 }
-
-extern void func_800BBB90(s16);
 
 s32 func_800B74E4_A7394(Player *arg0) {
     arg0->unk44C = 0;
