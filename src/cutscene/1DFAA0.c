@@ -6,6 +6,7 @@
 #include "3B80.h"
 #include "68CF0.h"
 #include "6E840.h"
+#include "90D0.h"
 #include "main.h"
 #include "task_scheduler.h"
 
@@ -53,8 +54,6 @@ extern CutsceneAssetTable D_800BA7BC_1E786C[];
 extern s16 advanceSceneManager(void *);
 extern s32 finalizeAnimationLoop(void *);
 extern void func_800B5BFC_1E2CAC(void *);
-extern s32 func_800084D8_90D8(StateEntry *, s32, s32);
-extern s32 func_800084E0_90E0(StateEntry *, s32, s32);
 extern s32 func_8003A284_3AE84(s32, StateEntry **);
 extern s32 func_8003A28C_3AE8C(void);
 extern void func_8003A51C_3B11C(s32, StateEntry **);
