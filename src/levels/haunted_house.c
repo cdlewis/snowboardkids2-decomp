@@ -1,5 +1,6 @@
 #include "3E160.h"
 #include "42170.h"
+#include "52880.h"
 #include "56910.h"
 #include "5AA90.h"
 #include "5DBC0.h"
@@ -114,7 +115,6 @@ extern void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
 extern void func_800BB620_AF310(func_800BB388_AF078_arg *);
 extern void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
 extern void func_800BB778_AF468(void);
-extern void func_80055C80_56880(s32, s16, void *);
 void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *);
 void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *);
 extern void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
