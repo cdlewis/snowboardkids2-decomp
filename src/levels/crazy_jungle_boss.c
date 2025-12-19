@@ -99,7 +99,6 @@ typedef struct {
 } D_800BC468_ACC98_type;
 
 extern D_800BC468_ACC98_type D_800BC468_ACC98[];
-extern void func_8005C868_5D468(void *arg0);
 extern void func_80064808_65408(s32, void *, u8);
 extern void enqueueMultiPartDisplayList(s32, void *, u8);
 extern void func_800BC0E8_AC918(Arg0Struct *);

@@ -82,7 +82,6 @@ typedef struct {
 } D_800BACC8_AAB78_type;
 extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
-extern void func_8005C868_5D468(void *arg0);
 extern void func_80064808_65408(s32, void *, u8);
 extern void enqueueMultiPartDisplayList(s32, void *, u8);
 extern void func_800BC61C_B1B0C(func_800BC4AC_arg *);
