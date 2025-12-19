@@ -94,8 +94,6 @@ extern FuncPtr D_800BCB74_B4134[];
 extern s16 D_800BCB7C_B413C[];
 extern u16 D_800BCB7E_B413E[];
 extern s32 D_800BCBA0_B4160[][3];
-extern void func_800B00D4_9FF84(Arg0Struct *, s32);
-extern void func_800B02AC_A015C(Arg0Struct *);
 extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern void func_8005C868_5D468(void *arg0);
 extern s32 func_800544B4_550B4(s32, s32, s32);
@@ -114,14 +112,14 @@ s32 func_800BB89C_B2E5C(Arg0Struct *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     if (gameState->unk79 == 0) {
-        func_800B00D4_9FF84(arg0, 1);
+        func_800B00D4_9FF84((Player *)arg0, 1);
         return 1;
     }
 
     arg0->unk44C -= arg0->unk44C / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
-    func_800B02AC_A015C(arg0);
+    func_800B02AC_A015C((Player *)arg0);
 
     return 0;
 }
@@ -158,7 +156,7 @@ s32 func_800BBEBC_B347C(Arg0Struct *arg0) {
     arg0->unk44C -= arg0->unk44C / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
-    func_800B02AC_A015C(arg0);
+    func_800B02AC_A015C((Player *)arg0);
     return 0;
 }
 
@@ -195,7 +193,7 @@ s32 func_800BBF70_B3530(Arg0Struct *arg0) {
     arg0->unk44C = 0;
     arg0->unk454 = 0;
     arg0->unk450 -= 0x8000;
-    func_800B02AC_A015C(arg0);
+    func_800B02AC_A015C((Player *)arg0);
 
     if (arg0->unkB8C == -1) {
         arg0->unkB88 = 0;
@@ -244,7 +242,7 @@ s32 func_800BC094_B3654(Arg0Struct *arg0) {
         arg0->unkB8C--;
     }
 
-    func_800B02AC_A015C(arg0);
+    func_800B02AC_A015C((Player *)arg0);
 
     arg0->unk474 += arg0->unk468;
 
@@ -301,7 +299,7 @@ s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
     if (arg0->unk468 != 0) {
         arg0->unk468 -= 2;
     }
-    func_800B02AC_A015C(arg0);
+    func_800B02AC_A015C((Player *)arg0);
     return 0;
 }
 

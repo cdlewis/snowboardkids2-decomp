@@ -19,6 +19,8 @@ typedef struct {
 } func_800B00D4_arg;
 
 void func_800B00C0_9FF70(func_800B00D4_arg *arg0, u8 arg1);
+void func_800B00D4_9FF84(Player *arg0, s32 arg1);
+void func_800B02AC_A015C(Player *arg0);
 void func_800B9500_A93B0(void *arg0);
 void func_800B99E0(void *arg0);
 void func_800B9AE0(void *arg0);

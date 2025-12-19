@@ -98,8 +98,6 @@ typedef struct {
 } D_800BC468_ACC98_type;
 
 extern D_800BC468_ACC98_type D_800BC468_ACC98[];
-extern void func_800B00D4_9FF84(Arg0Struct *, s32);
-extern void func_800B02AC_A015C(Arg0Struct *);
 extern s32 func_8005D180_5DD80(Arg0Struct *, s32);
 extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern void func_8005C868_5D468(void *arg0);
@@ -123,14 +121,14 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     if (gameState->unk79 == 0) {
-        func_800B00D4_9FF84(arg0, 1);
+        func_800B00D4_9FF84((Player *)arg0, 1);
         return 1;
     }
 
     arg0->unk44C -= arg0->unk44C / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
-    func_800B02AC_A015C(arg0);
+    func_800B02AC_A015C((Player *)arg0);
     func_8005D180_5DD80(arg0, 0);
 
     return 0;
@@ -150,7 +148,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     gameState = getCurrentAllocation();
 
     if (arg0->padBC2[4] != 0) {
-        func_800B00D4_9FF84(arg0, 2);
+        func_800B00D4_9FF84((Player *)arg0, 2);
         return 1;
     }
 
@@ -206,7 +204,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     }
     arg0->unk450 += -0x10000;
 
-    func_800B02AC_A015C(arg0);
+    func_800B02AC_A015C((Player *)arg0);
     if (func_8005D180_5DD80(arg0, 1) != 0) {
         arg0->unkB90 = 0;
     }
@@ -237,7 +235,7 @@ s32 func_800BBD98_AC5C8(Arg0Struct *arg0) {
     arg0->unk44C -= arg0->unk44C / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
-    func_800B02AC_A015C(arg0);
+    func_800B02AC_A015C((Player *)arg0);
     func_8005D180_5DD80(arg0, 0);
 
     return 0;
@@ -269,7 +267,7 @@ s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
     arg0->unk44C = 0;
     arg0->unk454 = 0;
     arg0->unk450 += -0x8000;
-    func_800B02AC_A015C(arg0);
+    func_800B02AC_A015C((Player *)arg0);
 
     if (arg0->unkB8C == -1) {
         arg0->unkB88 = 0;
@@ -294,7 +292,7 @@ s32 func_800BBF3C_AC76C(Arg0Struct *arg0) {
     arg0->unk44C = 0;
     arg0->unk454 = 0;
     arg0->unk450 = arg0->unk450 + -0x8000;
-    func_800B02AC_A015C(arg0);
+    func_800B02AC_A015C((Player *)arg0);
     func_8005D180_5DD80(arg0, 2);
 
     if (arg0->unkB84 & 1) {
