@@ -1,3 +1,4 @@
+#include "56910.h"
 #include "594E0.h"
 #include "5AA90.h"
 #include "common.h"
@@ -6,10 +7,6 @@
 #include "geometry.h"
 #include "rand.h"
 #include "task_scheduler.h"
-
-extern void *func_80055E68_56A68(u8);
-extern void *func_80055DC4_569C4(u8);
-extern void *func_80055DF8_569F8(u8);
 
 extern s32 D_800BBB90_B4B20[];
 extern s32 D_800BBB94_B4B24[];
@@ -89,14 +86,14 @@ void func_800BB320_B42B0(B4240FuncArg *arg0) {
 
 void func_800BB454_B43E4(B4240FuncArg *arg0) {
     B4240AllocationStruct *alloc;
-    void *temp;
+    func_80055E68_56A68_result *temp;
     s32 temp2;
     s32 temp3;
     s16 temp4;
 
     alloc = getCurrentAllocation();
     temp = func_80055E68_56A68(alloc->unk5C);
-    arg0->node.unk20 = (DisplayLists *)((u8 *)temp + 0x90);
+    arg0->node.unk20 = &temp->unk90;
     arg0->node.unk24 = func_80055DC4_569C4(alloc->unk5C);
     arg0->node.unk28 = func_80055DF8_569F8(alloc->unk5C);
     arg0->node.unk2C = 0;
