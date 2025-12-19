@@ -8,7 +8,7 @@ extern u8 D_800BA5C0_1E7670[];
 extern s32 gButtonsPressed[];
 
 typedef struct {
-    func_800B29F0_1DFAA0_arg *unk0;
+    CutsceneManager *unk0;
     u8 padding[0xA];
     s16 unkE;
 } cutsceneSysWait_exec_task;
@@ -161,7 +161,7 @@ s32 cutsceneSysWait_validate(void) {
     return 0;
 }
 
-void cutsceneSysWait_exec(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1) {
+void cutsceneSysWait_exec(u16 *arg0, CutsceneManager *arg1) {
     cutsceneSysWait_exec_task *temp_v0 = scheduleTask(&func_8000D244_DE44, 1, 0, 0x64);
     if (temp_v0 != NULL) {
         func_800B29F0_1DFAA0(arg1);

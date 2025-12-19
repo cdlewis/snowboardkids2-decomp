@@ -71,13 +71,13 @@ extern void func_800B5B30_1E2BE0(void *, s8);
 extern void func_8000C440_D040(void *, s32, s32, u16, s32, s32, s32);
 extern void func_8000C278_CE78(void *);
 
-void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0) {
-    arg0->unkFF7 = 1;
+void func_800B29F0_1DFAA0(CutsceneManager *arg0) {
+    arg0->skipAnimation = TRUE;
 }
 
-void func_800B29FC_1DFAAC(func_800B29F0_1DFAA0_arg *arg0) {
-    if (arg0->unkFF7 != 0 && (gButtonsPressed[0] & A_BUTTON)) {
-        arg0->unkFF7 = 0;
+void func_800B29FC_1DFAAC(CutsceneManager *arg0) {
+    if (arg0->skipAnimation != FALSE && (gButtonsPressed[0] & A_BUTTON)) {
+        arg0->skipAnimation = FALSE;
     }
 }
 
@@ -153,12 +153,12 @@ void func_800B2C78(func_800B2C78_arg *arg0) {
     func_80000710_1310(&arg0->unk10);
 }
 
-void func_800B2D04(func_800B2C78_arg *arg0) {
+void func_800B2D04(CutsceneSlot *arg0) {
     s32 i;
 
     for (i = 0; i < getCutsceneSlotCount(); i++) {
-        if (arg0[i].unkF0 != NULL) {
-            setModelVisibility(arg0[i].unkF0, 0);
+        if (arg0[i].slotData.unkA4 != NULL) {
+            setModelVisibility((SceneModel *)arg0[i].slotData.unkA4, 0);
         }
     }
 }

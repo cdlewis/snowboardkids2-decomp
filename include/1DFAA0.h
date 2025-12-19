@@ -258,14 +258,14 @@ typedef struct {
     u8 padding5[0x0];
 } func_800B2C78_arg;
 
-void func_800B29F0_1DFAA0(func_800B29F0_1DFAA0_arg *arg0);
-void func_800B29FC_1DFAAC(func_800B29F0_1DFAA0_arg *arg0);
+void func_800B29F0_1DFAA0(CutsceneManager *arg0);
+void func_800B29FC_1DFAAC(CutsceneManager *arg0);
 void func_800B2A24_1DFAD4(CutsceneManager *arg0, s16 arg1);
 void func_800B2A50_1DFB00(CutsceneManager *arg0, s16 arg1);
 CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1);
 void func_800B2AA0(CutsceneManager *, Node_70B00 *arg1, void *arg2, void *arg3);
 void func_800B2C78(func_800B2C78_arg *arg0);
-void func_800B2D04(func_800B2C78_arg *arg0);
+void func_800B2D04(CutsceneSlot *arg0);
 void func_800B2D68_1DFE18(func_800B2C78_arg *arg0);
 void func_800B2DCC_1DFE7C(func_800B2C78_arg *arg0);
 void func_800B2E48_1DFEF8(func_800B2C78_arg *arg0);

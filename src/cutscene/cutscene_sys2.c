@@ -51,7 +51,7 @@ s32 cutsceneSys2Wait_validate(void) {
     return 0;
 }
 
-void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, func_800B29F0_1DFAA0_arg *arg1, s8 arg2) {
+void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, CutsceneManager *arg1, s8 arg2) {
     cutsceneSys2Wait_exec_asset *temp_v0;
     s32 *ptr;
 
@@ -66,6 +66,6 @@ void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, func_800B29F0_1DFAA
         temp_v0->unk12 = arg0->unk4;
         temp_v0->unk86 = arg0->unk0;
     } else {
-        arg1->unkFF7 = 0;
+        arg1->skipAnimation = FALSE;
     }
 }

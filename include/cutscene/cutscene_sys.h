@@ -58,7 +58,7 @@ typedef struct {
 void cutsceneSysWipeColor_exec(cutsceneSysWipeColor_exec_arg0 *arg0, cutsceneSysWipeColor_exec_arg1 *arg1);
 void cutsceneSysWait_init(void);
 s32 cutsceneSysWait_validate(void);
-void cutsceneSysWait_exec(u16 *arg0, func_800B29F0_1DFAA0_arg *arg1);
+void cutsceneSysWait_exec(u16 *arg0, CutsceneManager *arg1);
 void cutsceneSysCurtain_init(void);
 s32 cutsceneSysCurtain_validate(void);
 typedef struct {
