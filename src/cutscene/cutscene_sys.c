@@ -2,6 +2,7 @@
 #include "1DFAA0.h"
 #include "6E840.h"
 #include "CBA0.h"
+#include "DC90.h"
 #include "task_scheduler.h"
 extern u8 D_800BA5C0_1E7670[];
 extern s32 gButtonsPressed[];
@@ -16,8 +17,6 @@ typedef struct {
     u8 padding[0xFF7];
     /* 0xFF7 */ s8 unkFF7;
 } func_800B2550_1DF600_arg;
-
-extern void func_8000D244_DE44(void);
 
 void cutsceneSysDisp_init(void) {
 }
