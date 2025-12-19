@@ -64,7 +64,6 @@ typedef struct {
     s32 unk48;
 } func_800BB2B0_arg;
 
-extern void createRotationMatrixYZ(s16 *, u16, u16);
 extern void func_8005B730_5C330(void *, s32, s32, s16);
 
 void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0);

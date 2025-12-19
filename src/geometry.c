@@ -275,7 +275,7 @@ void createRotationMatrixXZ(Mat3x3Padded *matrix, u16 angleX, u16 angleZ) {
  * [ (-sinY)*cosZ,  cosY,         sinY*sinZ     ]
  * [ cosZ,          0,            cosZ          ]
  */
-void createRotationMatrixYZ(s16 *matrix, s16 angleY, s16 angleZ) {
+void createRotationMatrixYZ(s16 *matrix, u16 angleY, u16 angleZ) {
     s32 temp0;
     s32 temp1;
     s32 temp2;
