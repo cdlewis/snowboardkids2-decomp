@@ -98,7 +98,6 @@ typedef struct {
 } D_800BC468_ACC98_type;
 
 extern D_800BC468_ACC98_type D_800BC468_ACC98[];
-extern s32 func_8005D180_5DD80(Arg0Struct *, s32);
 extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern void func_8005C868_5D468(void *arg0);
 extern void func_80064808_65408(s32, void *, u8);

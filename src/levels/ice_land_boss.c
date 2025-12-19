@@ -81,7 +81,6 @@ typedef struct {
 } D_800BACC8_AAB78_type;
 extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
-extern void func_8005D180_5DD80(func_800BC4AC_arg *, s32);
 extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern void func_8005C868_5D468(void *arg0);
 extern void func_80064808_65408(s32, void *, u8);

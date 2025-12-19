@@ -22,10 +22,12 @@ extern u16 D_800BAB58_AAA08[];
 
 extern s32 func_8005CFC0_5DBC0(void *, s32, void *, s32);
 extern void func_8005D03C_5DC3C(Player *arg0);
+extern s32 func_8005D180_5DD80(void *, s32);
 extern s32 func_8005D308_5DF08(void *, s32);
 extern void func_8005D48C_5E08C(Player *, s32, s32);
 extern void func_8005D804_5E404(Player *, u8, u8);
 extern s8 func_8005D818_5E418(Player *);
+extern s32 func_8005D8C8_5E4C8(void *);
 extern s32 D_800BA348_AA1F8;
 extern s32 D_800BA350_AA200;
 extern s32 D_800BAB40_AA9F0;
@@ -125,8 +127,6 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B0F14_A0DC4);
 void func_800B12C0_A1170(func_800B00D4_arg *arg0) {
     D_800BAAD4_AA984[arg0->unkBBE](arg0);
 }
-
-extern void func_8005D180_5DD80(Player *, s32);
 
 s32 func_800B12F0_A11A0(Player *arg0) {
     GameState *alloc = getCurrentAllocation();
@@ -827,6 +827,7 @@ s32 func_800B2E38_A2CE8(void *arg0) {
     return 0;
 }
 
+// NOTE: This function actually takes no parameters, but is declared here with void* for matching
 extern void func_8005D810_5E410(void *);
 
 void func_800B2E80_A2D30(Player *arg0) {
@@ -1970,8 +1971,6 @@ s32 func_800B4CB8_A4B68(Player *arg0) {
 }
 
 extern s32 D_800BABD4_AAA84[3];
-extern s32 func_8005D8C8_5E4C8(void *);
-
 s32 func_800B4DB8_A4C68(Player *arg0) {
     s32 dist;
     s32 temp;
