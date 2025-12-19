@@ -21,6 +21,7 @@ extern u16 D_800BAB58_AAA08[];
 
 extern s32 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern s32 func_8005CFC0_5DBC0(void *, s32, void *, s32);
+extern void func_8005D03C_5DC3C(Player *arg0);
 extern s32 func_8005D308_5DF08(void *, s32);
 extern void func_8005D48C_5E08C(Player *, s32, s32);
 extern void func_8005D804_5E404(Player *, u8, u8);
@@ -101,8 +102,6 @@ typedef struct {
     s32 unk450;
     s32 unk454;
 } func_800B0300_arg;
-
-void func_8005D03C_5DC3C(Player *arg0); // Declared in 5DBC0.h
 
 void func_800B02AC_A015C(Player *arg0) {
     func_8005D03C_5DC3C(arg0);
