@@ -1,10 +1,6 @@
 #include "cutscene/cutscene_sys2.h"
+#include "CBA0.h"
 #include "task_scheduler.h"
-
-extern void func_8000C268_CE68(void *); // Func8000C268Arg * - matrix data
-extern void func_8000C2CC_CECC(void *, s32, s16);
-extern void func_8000C334_CF34(void *, Vec3 *, s16);
-extern void func_8000C2B4_CEB4(void *, s32);
 
 extern void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *);
 
@@ -35,9 +31,9 @@ void cutsceneSys2Wipe_exec(cutsceneSys2Wipe_exec_arg0 *params, cutsceneSys2Wipe_
 
     temp_rotation = (s32)(params->rotation_y) << 0x10;
 
-    func_8000C2CC_CECC(&state->matrix, temp_rotation / 100, params->unk2);
-    func_8000C334_CF34(&state->matrix, &world_pos, params->unk2);
-    func_8000C2B4_CEB4(&state->matrix, params->render_flags);
+    func_8000C2CC_CECC((Func8000C2CCArg *)&state->matrix, temp_rotation / 100, params->unk2);
+    func_8000C334_CF34((Func8000C334Arg *)&state->matrix, (s32 *)&world_pos, params->unk2);
+    func_8000C2B4_CEB4((Func8000C2B4Arg *)&state->matrix, params->render_flags);
 }
 
 s32 cutsceneSys2Wipe_isDone(void) {

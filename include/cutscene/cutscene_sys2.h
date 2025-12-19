@@ -26,7 +26,7 @@ typedef struct {
     s8 padding[0xA8];
     cutsceneSys2Wipe_exec_arg1_slot slots[5];
     u8 padding2[0xA8C];
-    /* 0xFF8 */ void *matrix;
+    /* 0xFF8 */ Func8000C268Arg matrix;
 } cutsceneSys2Wipe_exec_arg1;
 
 typedef struct {
