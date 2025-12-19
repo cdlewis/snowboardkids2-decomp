@@ -2739,7 +2739,6 @@ s32 func_800B6D14_A6BC4(Player *arg0) {
 
 extern s32 D_800BAC8C_AAB3C;
 extern s32 D_800BAC98_AAB48;
-extern void func_8004D364_4DF64(u8 arg0);
 
 s32 func_800B6DB8_A6C68(Player *arg0) {
     s32 pad[12];
