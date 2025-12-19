@@ -253,15 +253,6 @@ void func_800B6130_1E31E0(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2) {
     }
 }
 
-typedef struct {
-    u8 _pad[0x68];
-    s32 unk68;
-    s16 unk6C;
-    s16 unk6E;
-    u8 unk70;
-    u8 unk71;
-} func_800B6180_1E3230_arg0;
-
 void func_800B6180_1E3230(func_800B6180_1E3230_arg0 *arg0, s32 arg1, s16 arg2) {
     arg0->unk70 = 0;
     arg0->unk68 = arg1;
