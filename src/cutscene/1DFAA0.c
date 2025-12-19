@@ -9,6 +9,7 @@
 #include "68CF0.h"
 #include "6E840.h"
 #include "90D0.h"
+#include "CBA0.h"
 #include "main.h"
 #include "task_scheduler.h"
 
@@ -57,8 +58,6 @@ extern s16 advanceSceneManager(void *);
 extern s32 finalizeAnimationLoop(void *);
 
 extern void *func_800B5B38_1E2BE8(u16);
-extern void func_8000C440_D040(void *, s32, s32, u16, s32, s32, s32);
-extern void func_8000C278_CE78(void *);
 
 void func_800B29F0_1DFAA0(CutsceneManager *arg0) {
     arg0->skipAnimation = TRUE;
