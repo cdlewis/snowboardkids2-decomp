@@ -1,6 +1,7 @@
 #include "1DFAA0.h"
 #include "10AD0.h"
 #include "1DD170.h"
+#include "1E2BE0.h"
 #include "1E36C0.h"
 #include "20F0.h"
 #include "3A1F0.h"
@@ -57,7 +58,6 @@ extern s32 finalizeAnimationLoop(void *);
 extern void func_800B5BFC_1E2CAC(void *);
 
 extern void *func_800B5B38_1E2BE8(u16);
-extern void func_800B5B30_1E2BE0(void *, s8);
 extern void func_8000C440_D040(void *, s32, s32, u16, s32, s32, s32);
 extern void func_8000C278_CE78(void *);
 
