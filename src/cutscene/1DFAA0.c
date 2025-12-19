@@ -3,6 +3,7 @@
 #include "1DD170.h"
 #include "1E36C0.h"
 #include "20F0.h"
+#include "3B80.h"
 #include "68CF0.h"
 #include "6E840.h"
 #include "main.h"
@@ -66,7 +67,6 @@ extern s32 func_8003A524_3B124(void);
 
 extern s32 func_80001904_2504(s16);
 extern void *func_800B5B38_1E2BE8(u16);
-extern void func_80003000_3C00(void *, u8, void *, u8, void *);
 extern void func_800B5B30_1E2BE0(void *, s8);
 extern void func_8000C440_D040(void *, s32, s32, u16, s32, s32, s32);
 extern void func_8000C278_CE78(void *);
@@ -93,57 +93,48 @@ CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1) {
     return &arg0->slots[arg1];
 }
 
-void func_800B2AA0(func_800B2C78_arg *arg0, Node_70B00 *arg1, void *arg2, void *arg3) {
+void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *arg3) {
     s32 i;
-    s16 initialValue;
-    s32 needsVisibility;
-    StateEntryItem *slot;
-    s32 slotOffset;
+    s16 initialValue = func_800B3490_1E0540();
+    s32 needsVisibility = func_8000056C_116C((func_8000056C_116C_arg *)&arg0->unk10, initialValue, arg1);
 
-    initialValue = func_800B3490_1E0540();
-    needsVisibility = func_8000056C_116C((func_8000056C_116C_arg *)&arg0->unk10, initialValue, arg1);
-    setModelRenderMode((setModelRenderMode_arg *)&arg0->unk10, 0);
+    setModelRenderMode(&arg0->unk10, 0);
 
-    i = 0;
-    slotOffset = 0xA8;
-
-    while (i < (getCutsceneSlotCount() & 0xFF)) {
-        slot = func_800B34B0_1E0560(i);
-        arg0[i].unkE8 = slot->unk4;
+    for (i = 0; i < (getCutsceneSlotCount() & 0xFF); i++) {
+        StateEntryItem *slot = func_800B34B0_1E0560(i);
+        arg0->slots[i].unk40 = slot->unk4;
 
         if (slot->unk4 != -1) {
             if (func_80001904_2504(slot->unk4)) {
-                arg0[i].unkF0 = func_800019B8_25B8(slot->unk4, arg1, slot->unk6, slot->unk7, slot->unk8, slot->unk9);
+                arg0->slots[i].model =
+                    func_800019B8_25B8(slot->unk4, arg1, slot->unk6, slot->unk7, slot->unk8, slot->unk9);
             } else {
-                arg0[i].unkF0 = func_8000198C_258C(slot->unk4, arg1);
+                arg0->slots[i].model = func_8000198C_258C(slot->unk4, arg1);
             }
 
             if (needsVisibility) {
-                func_8000150C_210C((GameEntity *)arg0[i].unkF0);
+                func_8000150C_210C(arg0->slots[i].model);
             }
         } else {
-            arg0[i].unkF0 = NULL;
+            arg0->slots[i].model = NULL;
         }
 
-        func_800B66B4_1E3764((CutsceneSlotData *)((u8 *)arg0 + slotOffset + 0x4C));
-
-        slotOffset += 0xF4;
-        i++;
+        func_800B66B4_1E3764(&arg0->slots[i].slotData);
     }
 
-    arg0->unkC = func_800B5B38_1E2BE8(arg1->id);
+    arg0->sceneContext = func_800B5B38_1E2BE8(arg1->id);
 
     if (needsVisibility) {
-        func_80003000_3C00(arg0, 0, (void *)0x8000, 1, (void *)0x10000);
-        func_800B5B30_1E2BE0(arg0->unkC, 1);
+        func_80003000_3C00(arg0, 0, 0x8000, 1, 0x10000);
+        func_800B5B30_1E2BE0(arg0->sceneContext, 1);
     }
 
-    func_8000C440_D040((u8 *)arg0 + 0xFF8, 2, 0xC, arg1->id, 0, 2, 0);
-    func_8000C278_CE78((u8 *)arg0 + 0xFF8);
+    func_8000C440_D040(&arg0->unkFF8, 2, 0xC, arg1->id, 0, 2, 0);
+    func_8000C278_CE78(&arg0->unkFF8);
 
-    ((func_800B2AA0_slot16 *)&arg0[16])->unk2D8 = arg2;
-    ((func_800B2AA0_slot16 *)&arg0[16])->unk2DC = arg3;
-    ((func_800B2AA0_slot16 *)&arg0[16])->unk2E0 = 0x10000;
+    arg0->shadowModel = arg2;
+    arg0->reflectionModel = arg3;
+    arg0->cameraAnimationTimer = 0x10000;
 }
 
 void func_800B2C78(func_800B2C78_arg *arg0) {

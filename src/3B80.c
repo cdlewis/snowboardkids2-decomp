@@ -1,3 +1,4 @@
+#include "33FE0.h"
 #include "common.h"
 #include "main.h"
 #include "task_scheduler.h"
@@ -46,7 +47,7 @@ typedef struct {
 typedef struct {
     void *unk0;
     void **unk4;
-    void *unk8;
+    s32 unk8;
     void *unkC;
     void *unk10;
     u8 _pad14[0xB0];
@@ -56,7 +57,7 @@ typedef struct {
 
 void func_800030B4_3CB4(func_800033AC_3FAC_arg *arg0);
 
-void func_80003000_3C00(void *arg0, u8 arg1, void *arg2, u8 arg3, void *arg4) {
+void func_80003000_3C00(void *arg0, u8 arg1, s32 arg2, u8 arg3, s32 arg4) {
     func_800033AC_3FAC_arg *task;
 
     task = scheduleTask(func_800030B4_3CB4, 3, 0, 0);

@@ -98,6 +98,11 @@ typedef struct {
 } StateEntryItem;
 
 typedef struct {
+    u8 pad[0x210];
+    s32 unk210;
+} Func8000C268Arg;
+
+typedef struct {
     u8 padding0[0xC];
     /* 0xC */ u16 current_index;
     u8 padding[0x2];
@@ -206,7 +211,8 @@ typedef struct {
             s32 unk24;
         } ChrPayload;
     } unk0;
-    u8 padding[0x1A];
+    u8 padding[0x18];
+    /* 0x40 */ u16 unk40;
     /* 0x42 */ u8 unk42;
     /* 0x43 */ u8 unk43;
     /* 0x44 */ u8 unk44;
@@ -232,7 +238,8 @@ typedef struct {
     /* 0xFF5 */ s8 enableTransparency;
     /* 0xFF6 */ s8 unused_FF6;
     /* 0xFF7 */ s8 skipAnimation;
-    /* 0xFF8 */ s8 padFF8[0x220];
+    /* 0xFF8 */ Func8000C268Arg unkFF8;
+    u8 padding[0xC];
     /* 0x1218 */ void *shadowModel;
     /* 0x121C */ void *reflectionModel;
     /* 0x1220 */ s32 cameraAnimationTimer;
@@ -256,7 +263,7 @@ void func_800B29FC_1DFAAC(func_800B29F0_1DFAA0_arg *arg0);
 void func_800B2A24_1DFAD4(CutsceneManager *arg0, s16 arg1);
 void func_800B2A50_1DFB00(CutsceneManager *arg0, s16 arg1);
 CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1);
-void func_800B2AA0(func_800B2C78_arg *arg0, Node_70B00 *arg1, void *arg2, void *arg3);
+void func_800B2AA0(CutsceneManager *, Node_70B00 *arg1, void *arg2, void *arg3);
 void func_800B2C78(func_800B2C78_arg *arg0);
 void func_800B2D04(func_800B2C78_arg *arg0);
 void func_800B2D68_1DFE18(func_800B2C78_arg *arg0);

@@ -32,11 +32,6 @@ typedef struct {
 } func_800014F0_20F0_arg;
 
 typedef struct {
-    u8 padding[0x15C];
-    s8 unk15C;
-} func_8000150C_210C_arg;
-
-typedef struct {
     u8 padding[0x3D];
     s8 unk3D;
 } func_800015CC_21CC_arg;
@@ -86,7 +81,7 @@ void func_80001504_2104(GameEntity *arg0) {
     arg0->unk15C = 0;
 }
 
-void func_8000150C_210C(GameEntity *arg0) {
+void func_8000150C_210C(SceneModel *arg0) {
     arg0->unk15C = 1;
 }
 

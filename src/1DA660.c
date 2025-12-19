@@ -169,7 +169,7 @@ void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
 
     if (arg0->unk28 != 2) {
         func_800014FC_20FC(arg0->unk0, arg0->matrix.unk18);
-        func_8000150C_210C((GameEntity *)arg0->unk0);
+        func_8000150C_210C(arg0->unk0);
     }
 
     if (arg0->unk24 == 0) {

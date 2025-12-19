@@ -1,3 +1,4 @@
+#include "1DFAA0.h"
 #include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
@@ -26,11 +27,6 @@ void func_8000C208_CE08(Func8000C208Arg *arg0) {
 void func_8000C238_CE38(Func8000C208Arg *arg0) {
     debugEnqueueCallback(arg0->unk0->slot_index, 0, func_8000BFA0_CBA0, arg0);
 }
-
-typedef struct {
-    u8 pad[0x210];
-    s32 unk210;
-} Func8000C268Arg;
 
 void func_8000C268_CE68(Func8000C268Arg *arg0) {
     arg0->unk210 |= 1;
