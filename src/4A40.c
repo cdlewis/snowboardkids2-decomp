@@ -103,7 +103,6 @@ s32 D_8008C120_8CD20[] = { 0x001428F5, 0x00099999, 0x00266666, 0xFFEBD70B, 0x000
 void func_80004368_4F68(void);
 void func_80004454_5054(void);
 void func_8000454C_514C(void);
-extern void func_800B016C(void *);
 void func_80004570_5170(void *);
 
 typedef struct {
