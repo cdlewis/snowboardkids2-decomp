@@ -531,7 +531,6 @@ typedef struct {
 } func_800BBF4C_AFC3C_arg;
 
 extern void func_800BC0D0_AFDC0(void **);
-extern void func_8005BCB8_5C8B8(void *, s32, s32);
 void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *);
 
 void func_800BBF4C_AFC3C(func_800BBF4C_AFC3C_arg *arg0) {
