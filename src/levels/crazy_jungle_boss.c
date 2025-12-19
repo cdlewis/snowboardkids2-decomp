@@ -8,6 +8,7 @@
 #include "rand.h"
 #include "task_scheduler.h"
 #include "5AA90.h"
+#include "46080.h"
 
 typedef void (*FuncPtr)(void *);
 
@@ -100,7 +101,6 @@ typedef struct {
 
 extern D_800BC468_ACC98_type D_800BC468_ACC98[];
 extern void func_800BC0E8_AC918(Arg0Struct *);
-extern void func_8004B794_4C394(void *arg0);
 extern s32 D_800BBA7C_AC2AC[][3];
 extern s32 D_800BBA84_AC2B4[][3];
 
