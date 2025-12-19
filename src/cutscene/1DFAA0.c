@@ -56,7 +56,6 @@ extern s16 advanceSceneManager(void *);
 extern s32 finalizeAnimationLoop(void *);
 extern void func_800B5BFC_1E2CAC(void *);
 
-extern s32 func_80001904_2504(s16);
 extern void *func_800B5B38_1E2BE8(u16);
 extern void func_800B5B30_1E2BE0(void *, s8);
 extern void func_8000C440_D040(void *, s32, s32, u16, s32, s32, s32);
