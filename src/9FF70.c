@@ -2432,8 +2432,6 @@ s32 func_800B5CB8_A5B68(Player *arg0) {
     return 0;
 }
 
-extern s32 func_800420A8_42CA8(void *);
-
 s32 func_800B5D68_A5C18(Player *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unkB8C = 0x78;

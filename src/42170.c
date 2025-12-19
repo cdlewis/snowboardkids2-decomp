@@ -652,13 +652,14 @@ void func_80042070_42C70(Func41F38State *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void func_800420A8_42CA8(void *arg0) {
+void *func_800420A8_42CA8(void *arg0) {
     Func41F38State *task;
 
     task = scheduleTask(&func_80041F38_42B38, 0, 0, 0xC8);
     if (task != NULL) {
         task->unk3C = arg0;
     }
+    return task;
 }
 
 void func_800420E8_42CE8(Func420E8State *arg0) {
