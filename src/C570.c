@@ -3,6 +3,7 @@
 #include "displaylist.h"
 #include "geometry.h"
 #include "overlay.h"
+#include "task_scheduler.h"
 
 USE_ASSET(_1FB8B0);
 USE_ASSET(_4CA440);
@@ -15,14 +16,6 @@ extern s32 D_8009A8A4_9B4A4;
 extern s32 D_8009A8A8_9B4A8;
 extern s32 D_8009A8AC_9B4AC;
 extern s32 gFrameCounter;
-extern void *freeNodeMemory(void *);
-extern void func_80069CF8_6A8F8(void);
-extern void setCleanupCallback(void *);
-extern void setCallbackWithContinue(void *);
-extern void setCallback(void *);
-extern void *dmaRequestAndUpdateState(void *, void *);
-extern void *dmaRequestAndUpdateStateWithSize(void *, void *, s32);
-extern void *scheduleTask(void *, u8, u8, u8);
 
 typedef struct func_8000BBA8_C7A8_arg func_8000BBA8_C7A8_arg;
 void func_8000BBA8_C7A8(func_8000BBA8_C7A8_arg *arg0);
