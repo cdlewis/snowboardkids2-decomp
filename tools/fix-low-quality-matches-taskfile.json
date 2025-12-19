@@ -1,5 +1,6 @@
 {
   "task_name": "fix_low_quality_matches",
   "script": "python3 tools/detect_low_quality_matches.py src --json --limit 50",
-  "prompt": "fix the low quality pointer arithmetic in $ARGUMENT by replacing it with proper struct field access"
+  "prompt": "fix the low quality pointer arithmetic in $ARGUMENT by replacing it with proper struct field access",
+  "claude_command": "~/.claude/local/node_modules/.bin/claude"
 }

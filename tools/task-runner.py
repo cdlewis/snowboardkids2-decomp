@@ -25,6 +25,7 @@ class TaskRunner:
         self.task_name = self.taskfile['task_name']
         self.script = self.taskfile['script']
         self.prompt_template = self.taskfile['prompt']
+        self.claude_command = self.taskfile.get('claude_command', 'claude')
 
         # Setup log files
         self.ignored_prompts_file = f"tools/ignored_prompts_{self.task_name}.log"
@@ -85,11 +86,16 @@ class TaskRunner:
 
     def _run_claude(self, prompt):
         """Run Claude with the given prompt and log output."""
-        print(f"Running: claude -p \"{prompt}\"")
+        # Escape any quotes in the prompt for shell safety
+        escaped_prompt = prompt.replace('"', '\\"')
+        command = f'{self.claude_command} -p "{escaped_prompt}"'
+
+        print(f"Running: {command}")
 
         try:
             result = subprocess.run(
-                ['claude', '-p', prompt],
+                command,
+                shell=True,
                 capture_output=True,
                 text=True
             )
@@ -142,6 +148,24 @@ class TaskRunner:
         print(f"Claude log file: {self.claude_log_file}")
         print()
 
+        # Verify claude command exists (skip in dry-run mode)
+        if not self.dry_run:
+            try:
+                result = subprocess.run(
+                    f'{self.claude_command} --version',
+                    shell=True,
+                    capture_output=True,
+                    timeout=5
+                )
+                if result.returncode != 0:
+                    print(f"Error: Claude command '{self.claude_command}' not found or not working.")
+                    print("Please ensure claude is installed and accessible.")
+                    return
+            except (subprocess.TimeoutExpired, FileNotFoundError, Exception) as e:
+                print(f"Error: Cannot execute claude command '{self.claude_command}': {e}")
+                print("Please ensure claude is installed and accessible.")
+                return
+
         while True:
             if self.stop_requested:
                 print("Stopping gracefully.")
@@ -185,6 +209,11 @@ class TaskRunner:
 
             # Run Claude
             exit_code, output = self._run_claude(prompt)
+
+            # If claude command failed to execute (not found), abort immediately
+            if "No such file or directory" in output or "command not found" in output:
+                print(f"Error: Claude command '{self.claude_command}' not found. Aborting.")
+                break
 
             if self.stop_requested:
                 print("Stopping gracefully.")
@@ -271,7 +300,8 @@ Example taskfile.json:
 {
   "task_name": "decompile",
   "script": "python3 tools/list_functions.py",
-  "prompt": "decompile the function $ARGUMENT"
+  "prompt": "decompile the function $ARGUMENT",
+  "claude_command": "claude"  (optional, defaults to "claude")
 }
 
 The script should output a JSON array of strings, e.g.:
