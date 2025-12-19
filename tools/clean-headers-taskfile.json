@@ -1,0 +1,5 @@
+{
+  "task_name": "clean_headers",
+  "script": "python3 tools/analyse_headers.py . --json --limit 50",
+  "prompt": "use the fix-extern-headers skill to clean up the following header issue: $ARGUMENT"
+}

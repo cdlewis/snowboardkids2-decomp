@@ -13,6 +13,7 @@ Format: file_path:line_number [optional comment]
 Usage: python analyze_headers.py <project_directory>
 """
 
+import json
 import os
 import re
 import sys
@@ -284,13 +285,15 @@ class CProjectAnalyzer:
                     signature=func_signature
                 ))
     
-    def scan_project(self):
+    def scan_project(self, json_output=False):
         """Scan the entire project directory"""
-        print(f"Scanning project directory: {self.project_dir}")
-        
+        # Use stderr for progress messages when in JSON mode
+        output = sys.stderr if json_output else sys.stdout
+        print(f"Scanning project directory: {self.project_dir}", file=output)
+
         c_files = []
         h_files = []
-        
+
         for filepath in self.project_dir.rglob('*'):
             if filepath.is_file():
                 if self.is_c_file(filepath):
@@ -300,8 +303,8 @@ class CProjectAnalyzer:
                     c_files.append(filepath)
                 elif self.is_header_file(filepath):
                     h_files.append(filepath)
-        
-        print(f"Found {len(c_files)} C files and {len(h_files)} header files")
+
+        print(f"Found {len(c_files)} C files and {len(h_files)} header files", file=output)
         
         # Analyze all files
         for filepath in c_files:
@@ -333,11 +336,12 @@ class CProjectAnalyzer:
         # Third try: suggest creating a new header
         return str(def_path.with_suffix('.h'))
     
-    def generate_report(self, limit=None):
+    def generate_report(self, limit=None, json_output=False):
         """Generate analysis report"""
-        print("\n" + "="*80)
-        print("C PROJECT HEADER ANALYSIS REPORT")
-        print("="*80)
+        if not json_output:
+            print("\n" + "="*80)
+            print("C PROJECT HEADER ANALYSIS REPORT")
+            print("="*80)
 
         # Find functions that need proper headers
         issues = []
@@ -420,7 +424,34 @@ class CProjectAnalyzer:
                                 'extern_use': extern_decl,
                                 'available_headers': header_files
                             })
-        
+
+        # Handle JSON output mode
+        if json_output:
+            # Collect all file:line references for issues with error type
+            references = []
+
+            for issue in issues:
+                if issue['type'] == 'missing_header_declaration':
+                    # Add references for each extern use
+                    for extern_decl in issue['extern_uses']:
+                        references.append(f"MISSING_HEADER_DECLARATION:{extern_decl.file}:{extern_decl.line}")
+                elif issue['type'] == 'missing_include':
+                    # Add reference for the extern use
+                    extern_use = issue['extern_use']
+                    references.append(f"MISSING_INCLUDE:{extern_use.file}:{extern_use.line}")
+                elif issue['type'] == 'declaration_should_be_in_header':
+                    # Add reference for the declaration
+                    declaration = issue['declaration']
+                    references.append(f"DECLARATION_SHOULD_BE_IN_HEADER:{declaration.file}:{declaration.line}")
+
+            # Apply limit if specified
+            if limit is not None:
+                references = references[:limit]
+
+            # Output as JSON array
+            print(json.dumps(references))
+            return
+
         # Print summary
         print(f"\nSUMMARY:")
         print(f"Functions defined: {len(self.function_definitions)}")
@@ -489,6 +520,8 @@ def main():
                         help='Limit the number of issues shown in the report')
     parser.add_argument('--clean', action='store_true',
                         help='Remove unused entries from tools/difficult-headers')
+    parser.add_argument('--json', action='store_true',
+                        help='Output file:line references as JSON array for task runner')
 
     args = parser.parse_args()
 
@@ -497,8 +530,8 @@ def main():
         sys.exit(1)
 
     analyzer = CProjectAnalyzer(args.project_directory)
-    analyzer.scan_project()
-    analyzer.generate_report(limit=args.limit)
+    analyzer.scan_project(json_output=args.json)
+    analyzer.generate_report(limit=args.limit, json_output=args.json)
 
     if args.clean:
         analyzer.clean_deny_list()

@@ -5,51 +5,28 @@ description: All functions in the project should be referenced through included 
 
 # Fix Extern Headers
 
-Project goals:
+## Instructions
+
+Look at the source file and line and try to determine which one of the rules is being violated:
 
 - All functions in this project should be defined in a header file.
 - The header file should be in the `includes/` folder.
 - Header files should mirror the C file implementing those functions. For example, function `A` defined in `cars.c` should have a header definition in `cars.h`.
+- There should be no extern functions as this indicates a missing header file or function defined in an existing header file.
 
-## Instructions
+Attempt to address the underlying issue. This may be as simple as moving a function definition. But watch out! Consolidating header definitions can reveal inconsistencies between different C files. You may need to determine what the 'true' function definition is, one which can satisfy all the different callers of that functions from different parts of the project.
 
-Run the following command to get a list of warnings to fix:
-
-```
-python3 tools/analyse_headers.py src --limit 1
-```
-
-Go through each warning and address the underlying issue. This might require you to create a new header file mirroring the C file. It might require you to define a function in the appropriate header file.
-
-Once you have fixed the header issues, run the following command to verify you haven't broken the build:
+Once you have fixed the header issue, run the following command to verify you haven't broken the build:
 
 ```
 ./tools/build-and-verify.sh
 ```
 
-Command your changes when you're done.
+Commit your changes when you're done.
 
 ## Unable to fix header issue
 
-If you're unable to resolve the header issue after several attempts:
-
-First, revert all of your changes to ensure the build remains clean.
-
-Next add the file name and line number where the issue was flagged to `tools/difficult-headers`. For example, if you were unable to fix this warning:
-
-```
-329. MISSING HEADER DECLARATION
-   Function: func_800B523C_1E22EC
-   Defined in: src/1E2070.c:170
-   Used via extern in:
-     - src/cutscene/sys_effect.c:105
-   RECOMMENDATION: Add declaration to src/1E2070.h
-   Add this line: void func_800B523C_1E22EC(void *arg0, s16 arg1) ;
-```
-
-You would add `src/cutscene/sys_effect.c:105\n` to `tools/difficult-headers`.
-
-Finally commit this change. If you do not commit the change then you will forget that you couldn't handle this issue and be forced to try again forever.
+If you're unable to resolve the header issue after several attempts, revert all of your changes to ensure the build remains clean then exit.
 
 ## Resolving type conflicts
 

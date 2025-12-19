@@ -2,6 +2,8 @@ snowboardkids2.z64
 snowboardkids2.eeprom
 tools/gcc_kmc
 __pycache__
+tools/claude_logs_*
+tools/ignored_prompts_*.log
 
 # IDE and OS nonsense
 .clj-kondo
