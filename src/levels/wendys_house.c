@@ -1,3 +1,4 @@
+#include "../3E160.h"
 #include "56910.h"
 #include "5AA90.h"
 #include "common.h"
@@ -7,9 +8,6 @@
 #include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
-
-extern s32 func_8005B400_5C000(Player *arg0, Vec3s32 *arg1, s32 arg2);
-extern void func_80058B30_59730(Player *arg0);
 
 typedef struct {
     s32 unk0;
