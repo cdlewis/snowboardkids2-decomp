@@ -36,7 +36,9 @@ Once you have fixed the header issue, run the following command to verify you ha
 
 Commit your changes when you're done.
 
-If you're unable to resolve the header issue after 10 attempts, revert all of your changes to ensure the build remains clean then exit.
+It is expected that adding a function to a header could break the build. Your job is to resolve this issue. Think carefully and do not give up just because your initial refactor breaks things.
+
+With that said, if it's VERY DIFFICULT to fix and you're unable to make progress after 30 attempts, revert all of your changes to ensure the build remains clean then exit.
 
 ## Header Rules
 
