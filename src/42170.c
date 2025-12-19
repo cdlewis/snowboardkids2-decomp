@@ -439,13 +439,14 @@ typedef struct {
     void *unk3C;
 } Func4175CTask;
 
-void func_8004175C_4235C(void *arg0) {
+void *func_8004175C_4235C(void *arg0) {
     Func4175CTask *task;
 
     task = (Func4175CTask *)scheduleTask(&func_80041570_42170, 0, 0, 0xC8);
     if (task != NULL) {
         task->unk3C = arg0;
     }
+    return task;
 }
 
 void func_80041810_42410(Func4179CArg *);

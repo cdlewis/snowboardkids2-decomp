@@ -2314,8 +2314,6 @@ s32 func_800B5938_A57E8(Player *arg0) {
     return 0;
 }
 
-extern s32 func_8004175C_4235C(void *);
-
 s32 func_800B5A40_A58F0(Player *arg0) {
     s32 temp;
 
