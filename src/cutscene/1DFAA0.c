@@ -52,7 +52,6 @@ extern CutsceneAssetTable D_800BA7BC_1E786C[];
 
 extern s16 advanceSceneManager(void *);
 extern s32 finalizeAnimationLoop(void *);
-extern s32 setupSlotTransform(void *);
 extern void func_800B5BFC_1E2CAC(void *);
 extern void n_alSeqpDelete(s32 *);
 extern s32 func_800084D8_90D8(StateEntry *, s32, s32);
@@ -214,7 +213,7 @@ void func_800B2E48_1DFEF8(func_800B2C78_arg *arg0) {
             func_800B7760_1E4810((CutsceneSlotData *)transformPtr, 0x10000, 0);
             func_800B77C4_1E4874((CutsceneSlotData *)transformPtr, 0x10000, 0);
             func_800B7828_1E48D8((CutsceneSlotData *)transformPtr, 0x10000, 0);
-            setupSlotTransform(transformPtr);
+            setupSlotTransform((CutsceneSlotData *)transformPtr);
             applyTransformToModel(model, (applyTransformToModel_arg1 *)(slotDataA8 + 0x50));
         }
 

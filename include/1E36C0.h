@@ -16,6 +16,7 @@ typedef struct {
 
 s16 func_800B6610_1E36C0(cutsceneSys2Wait_exec_asset *arg0);
 void func_800B66B4_1E3764(CutsceneSlotData *arg0);
+s32 setupSlotTransform(CutsceneSlotData *arg0);
 s32 syncModelFromSlot(void *, void *);
 void func_800B68F4_1E39A4(unk_func_800B68F4_1E39A4 *arg0, s32 arg1, s32 arg2, s32 arg3);
 void func_800B6AB8_1E3B68(CutsceneSlotData *arg0, s16 arg1);
