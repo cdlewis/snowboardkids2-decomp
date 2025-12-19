@@ -38,6 +38,12 @@ Commit your changes when you're done.
 
 It is expected that adding a function to a header could break the build. Your job is to resolve this issue. Think carefully and do not give up just because your initial refactor breaks things.
 
+This line of thinking is completely wrong and should be ignored:
+
+> sometimes you need "wrong" signatures to get the compiler to generate matching assembly.
+
+That's just lazy. There is a right signature and your job is to find it.
+
 With that said, if it's VERY DIFFICULT to fix and you're unable to make progress after 30 attempts, revert all of your changes to ensure the build remains clean then exit.
 
 ## Header Rules
