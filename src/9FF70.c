@@ -102,7 +102,7 @@ typedef struct {
     s32 unk454;
 } func_800B0300_arg;
 
-extern void func_8005D03C_5DC3C(Player *);
+void func_8005D03C_5DC3C(Player *arg0); // Declared in 5DBC0.h
 
 void func_800B02AC_A015C(Player *arg0) {
     func_8005D03C_5DC3C(arg0);
