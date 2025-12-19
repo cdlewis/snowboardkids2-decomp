@@ -22,6 +22,7 @@ extern u16 D_800BAB58_AAA08[];
 extern s32 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern s32 func_8005CFC0_5DBC0(void *, s32, void *, s32);
 extern s32 func_8005D308_5DF08(void *, s32);
+extern void func_8005D48C_5E08C(Player *, s32, s32);
 extern void func_8005D804_5E404(Player *, u8, u8);
 extern s8 func_8005D818_5E418(Player *);
 extern s32 D_800BA348_AA1F8;
@@ -38,7 +39,6 @@ void func_800B419C_A404C(Player *);
 void func_800B00FC_9FFAC(Player *);
 void func_800B40D4_A3F84(Player *);
 void func_800B27FC_A26AC(Player *);
-void func_8005D48C_5E08C(Player *, s32, s32);
 
 typedef void (*func_800B3950_callback)(void *);
 extern func_800B3950_callback D_800BAB68_AAA18[];
