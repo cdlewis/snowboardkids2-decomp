@@ -1,3 +1,4 @@
+#include "1DC260.h"
 #include "1DC480.h"
 #include "1DC900.h"
 #include "20F0.h"
@@ -102,7 +103,6 @@ s32 D_8008C120_8CD20[] = { 0x001428F5, 0x00099999, 0x00266666, 0xFFEBD70B, 0x000
 void func_80004368_4F68(void);
 void func_80004454_5054(void);
 void func_8000454C_514C(void);
-extern void func_800B00C0_9FF70(void *);
 extern void func_800B016C(void *);
 void func_80004570_5170(void *);
 
@@ -296,7 +296,7 @@ void func_80004368_4F68(void) {
     if (state->unk0 == 0) {
         func_800B02E0(state);
         func_800B0760(state);
-        func_800B00C0_9FF70(state);
+        func_800B00C0_1DC260(state);
         state->unk0 = 1;
     }
 
