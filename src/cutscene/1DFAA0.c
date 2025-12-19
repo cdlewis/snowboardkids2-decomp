@@ -50,7 +50,6 @@ extern s8 D_800BAE00_1E7EB0[];
 extern u8 identityMatrix[];
 extern CutsceneAssetTable D_800BA7BC_1E786C[];
 
-extern s32 initializeSlotState(StateEntry *, CutsceneManager *, s32);
 extern s32 updateSlotData(void *, s32 slot);
 extern s32 syncModelFromSlot(void *, void *);
 extern s16 advanceSceneManager(void *);
