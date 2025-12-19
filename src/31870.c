@@ -30,10 +30,20 @@ USE_ASSET(_4237C0);
 extern u16 D_8008F150_8FD50[];
 extern const char D_8009E47C_9F07C[];
 extern const char D_8009E480_9F080;
-extern void func_80032708_33308(void);
 
-void func_80032628_33228(void);
-void func_800323FC_32FFC(func_80032330_32F30_arg *arg0);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    u8 padding[0x4];
+    s16 unk8;
+    u8 padding2[0xE];
+} func_80032B0C_3370C_arg_element;
+
+typedef struct {
+    func_80032B0C_3370C_arg_element elements[4];
+    u8 padding[0x24];
+    u8 unk84[4];
+} func_80032B0C_3370C_arg;
 
 typedef struct {
     u8 padding[0x77C];
@@ -47,13 +57,16 @@ typedef struct {
 } func_800329A8_335A8_allocation;
 
 typedef struct {
-    u8 padding[0xC];
+    u8 padding[0x8];
+    s16 unk8;
+    u8 padding2[0x2];
     s16 unkC;
     s16 unkE;
     s16 unk10;
     s8 unk12;
     s8 unk13;
-    u8 padding2[0x4];
+    u8 unk14;
+    u8 padding3[0x3];
 } func_800329A8_335A8_arg_item;
 
 typedef struct {
@@ -63,7 +76,7 @@ typedef struct {
     s16 unk7A;
     u8 padding3[0x8];
     s8 unk84[4];
-    char unk88;
+    s8 unk88;
 } func_800329A8_335A8_arg;
 
 typedef struct {
@@ -306,6 +319,11 @@ void func_80031CE8_328E8(void *arg0);
 void func_80031DE4_329E4(void);
 void func_80031248_31E48(func_80031248_31E48_arg *arg0);
 void func_80031100_31D00(func_80031100_31D00_arg *arg0);
+void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0);
+void func_80032628_33228(void);
+void func_800323FC_32FFC(func_80032330_32F30_arg *arg0);
+void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0);
+void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0);
 
 extern u16 D_8008F16C_8FD6C[];
 extern u16 D_8008F16E_8FD6E[];
@@ -1136,7 +1154,76 @@ void func_8003253C_3313C(func_8003253C_3313C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/31870", func_80032628_33228);
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032708_33308);
+extern u16 D_8008F184_8FD84[];
+extern u16 D_8008F150_8FD50[];
+extern const char D_8009E480_9F080;
+extern void func_800136E0_142E0(void);
+void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
+
+void func_80032708_33308(func_800329A8_335A8_arg *arg0) {
+    func_800329A8_335A8_allocation *state;
+    s32 i;
+    int new_var;
+    u8 temp;
+    s16 adjustment;
+    state = getCurrentAllocation();
+    for (i = 0; i < 4; i++) {
+        if (state->unk799 == i) {
+            arg0->unk0[i].unk10 = 0xFF;
+            if (state->unk77C >= 5) {
+                temp = arg0->unk84[i];
+                if (temp < 30) {
+                    adjustment = D_8008F184_8FD84[temp / 10];
+                    arg0->unk0[i].unkC = arg0->unk0[i].unkC + adjustment;
+                } else {
+                    adjustment = D_8008F184_8FD84[2 - ((temp - 30) / 10)];
+                    arg0->unk0[i].unkC = arg0->unk0[i].unkC - adjustment;
+                }
+                arg0->unk84[i]++;
+                temp = arg0->unk84[i];
+                if (temp == 60) {
+                    arg0->unk84[i] = 0;
+                    arg0->unk0[i].unkC = 0x400;
+                } else if (temp == 30) {
+                    arg0->unk0[i].unk14 = (arg0->unk0[i].unk14 + 1) & 1;
+                }
+            }
+        } else {
+            arg0->unk0[i].unk10 = 0x80;
+            arg0->unk84[i] = 0;
+            arg0->unk0[i].unk14 = 0;
+            arg0->unk0[i].unkC = 0x400;
+        }
+        debugEnqueueCallback(8, 0, func_800136E0_142E0, &arg0->unk0[i]);
+    }
+
+    if (state->unk79B == 0x11) {
+        for (i = 0; i < 4; i++) {
+            arg0->unk0[i].unk10 = 0x80;
+            arg0->unk0[i].unkC = 0x400;
+            arg0->unk0[i].unk14 = 0;
+            arg0->unk0[i].unk8 = state->unk788[state->unk784[i]];
+        }
+
+        arg0->unk84[0] = 1;
+        setCallback(func_80032CB4_338B4);
+    } else if (state->unk79B == 0x13) {
+        new_var = 0x400;
+        for (i = 3; i >= 0; i--) {
+            arg0->unk0[i].unkC = new_var;
+        }
+
+        setCallback(func_80032B0C_3370C);
+    } else {
+        temp = state->unk788[state->unk784[state->unk799]];
+        sprintf(&arg0->unk88, &D_8009E480_9F080, D_8008F150_8FD50[temp]);
+        arg0->unk7A = (state->unk799 * 0x28) - 0x2A;
+        debugEnqueueCallback(8, 7, renderTextPalette, &arg0->unk78);
+        if (state->unk79B == 0x14) {
+            setCallback(func_800329A8_335A8);
+        }
+    }
+}
 
 void func_800329A8_335A8(func_800329A8_335A8_arg *arg0) {
     func_800329A8_335A8_allocation *state;
@@ -1177,22 +1264,6 @@ void func_800329A8_335A8(func_800329A8_335A8_arg *arg0) {
         setCallback(&func_80032708_33308);
     }
 }
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    u8 padding[0x4];
-    s16 unk8;
-    u8 padding2[0xE];
-} func_80032B0C_3370C_arg_element;
-
-typedef struct {
-    func_80032B0C_3370C_arg_element elements[4];
-    u8 padding[0x24];
-    u8 unk84[4];
-} func_80032B0C_3370C_arg;
-
-void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0);
 
 void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0) {
     func_80032DE8_339E8_asset *allocation;
