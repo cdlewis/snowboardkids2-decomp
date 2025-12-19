@@ -6,6 +6,7 @@
 #include "task_scheduler.h"
 #include "rand.h"
 #include "geometry.h"
+#include "5AA90.h"
 
 typedef void (*FuncPtr)(void *);
 
@@ -94,7 +95,6 @@ extern FuncPtr D_800BCB74_B4134[];
 extern s16 D_800BCB7C_B413C[];
 extern u16 D_800BCB7E_B413E[];
 extern s32 D_800BCBA0_B4160[][3];
-extern u16 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3);
 extern void func_8005C868_5D468(void *arg0);
 extern s32 func_800544B4_550B4(s32, s32, s32);
 extern void func_80041EA4_42AA4(s32 *arg0);
