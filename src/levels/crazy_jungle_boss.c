@@ -99,8 +99,6 @@ typedef struct {
 } D_800BC468_ACC98_type;
 
 extern D_800BC468_ACC98_type D_800BC468_ACC98[];
-extern void func_80064808_65408(s32, void *, u8);
-extern void enqueueMultiPartDisplayList(s32, void *, u8);
 extern void func_800BC0E8_AC918(Arg0Struct *);
 extern void func_8004B794_4C394(void *arg0);
 extern s32 D_800BBA7C_AC2AC[][3];
@@ -345,7 +343,7 @@ void func_800BC23C_ACA6C(Arg0Struct *arg0) {
 
     if (index == 0) {
         for (i = 0; i < 4; i++) {
-            func_80064808_65408(i, &arg0->unk38, arg0->unkBB7);
+            func_80064808_65408(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
         }
     } else {
         arg0->unk6C = D_800BACC8_AAB78[index].unk0;
@@ -356,7 +354,7 @@ void func_800BC23C_ACA6C(Arg0Struct *arg0) {
         arg0->unk72 = D_800BACC8_AAB78[index].unk6;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, &arg0->unk38, arg0->unkBB7);
+            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
         }
     }
 }

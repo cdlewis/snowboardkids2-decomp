@@ -16,15 +16,6 @@ USE_OVERLAY(rand);
 USE_ASSET(_215D70);
 
 typedef struct {
-    u8 padding[0x20];
-    s32 *unk20;
-    u8 padding3[0x9];
-    s32 unk30;
-    u8 padding2[0x3];
-    s8 unk37;
-} enqueueMultiPartDisplayList_arg1;
-
-typedef struct {
     u8 padding[0x120];
     s32 unk120;
     u8 padding2[0x24];

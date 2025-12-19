@@ -33,6 +33,18 @@ typedef struct {
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1);
 
 typedef struct {
+    u8 padding[0x20];
+    s32 *unk20;
+    u8 padding3[0x9];
+    s32 unk30;
+    u8 padding2[0x3];
+    s8 unk37;
+} enqueueMultiPartDisplayList_arg1;
+
+void func_80064808_65408(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2);
+void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2);
+
+typedef struct {
     u16 *dataStart;
     u16 *section1Data;
     u16 *section2Data;
