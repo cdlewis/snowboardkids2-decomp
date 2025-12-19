@@ -1,4 +1,5 @@
 #include "levels/lindas_castle.h"
+#include "56910.h"
 #include "594E0.h"
 #include "5AA90.h"
 #include "common.h"
@@ -8,10 +9,6 @@
 #include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
-
-extern void *func_80055E68_56A68(u8);
-extern void *func_80055DC4_569C4(u8);
-extern void *func_80055DF8_569F8(u8);
 
 typedef struct {
     s32 unk0;
