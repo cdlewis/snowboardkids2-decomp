@@ -3,7 +3,6 @@
 #include "1E36C0.h"
 #include "20F0.h"
 
-extern s32 func_800B6FA4_1E4054(CutsceneSlotData *, SceneModel *, s32, s32, s32, s16, s16);
 extern void func_800B7128_1E41D8(
     CutsceneSlotData *arg0,
     SceneModel *arg1,
