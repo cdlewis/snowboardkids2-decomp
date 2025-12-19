@@ -3,24 +3,6 @@
 #include "1E36C0.h"
 #include "20F0.h"
 
-extern void func_800B7128_1E41D8(
-    CutsceneSlotData *arg0,
-    SceneModel *arg1,
-    s32 arg2,
-    s32 arg3,
-    s32 arg4,
-    s16 arg5,
-    s16 arg6,
-    s16 arg7,
-    s8 arg8,
-    s8 arg9
-);
-
-extern void func_800B7620_1E46D0(CutsceneSlotData *arg0, s16 arg1, s16 arg2, s16 arg3);
-extern void func_800B7914_1E49C4(CutsceneSlotData *, s32, s32, s32, s16);
-
-extern s32 func_800B734C_1E43FC(CutsceneSlotData *, SceneModel *, s16);
-
 void cutsceneChrPosition_init(void) {
 }
 
@@ -290,8 +272,6 @@ void cutsceneChrTurn2_init(void) {
 s32 cutsceneChrTurn2_validate(void) {
     return 0;
 }
-
-extern s32 func_800B7450_1E4500(CutsceneSlotData *, SceneModel *, s16, s16, s32);
 
 void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *slot;

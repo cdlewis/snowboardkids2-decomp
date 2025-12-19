@@ -237,7 +237,7 @@ s32 func_800B6FA4_1E4054(CutsceneSlotData *arg0, SceneModel *unused, s32 arg2, s
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7128_1E41D8);
 
-s32 func_800B734C_1E43FC(CutsceneSlotData *arg0, s32 unused, s16 arg1) {
+s32 func_800B734C_1E43FC(CutsceneSlotData *arg0, SceneModel *unused, s16 arg1) {
     s32 retval;
     s32 temp;
     s16 var_v1;
@@ -268,7 +268,7 @@ s32 func_800B734C_1E43FC(CutsceneSlotData *arg0, s32 unused, s16 arg1) {
     return retval;
 }
 
-s32 func_800B7450_1E4500(CutsceneSlotData *arg0, SceneModel *unused, s16 arg2, s16 arg3, u16 arg4) {
+s32 func_800B7450_1E4500(CutsceneSlotData *arg0, SceneModel *unused, s16 arg2, s16 arg3, s16 arg4) {
     s32 temp_v0;
     s32 temp_a1;
     s32 var_s2;
