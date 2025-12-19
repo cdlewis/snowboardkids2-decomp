@@ -1,4 +1,5 @@
 #include "3E160.h"
+#include "42170.h"
 #include "56910.h"
 #include "5AA90.h"
 #include "5DBC0.h"
@@ -142,7 +143,6 @@ extern s32 D_800BC914_B0604;
 extern s32 D_800BC918_B0608;
 extern s32 D_800BC91C_B060C;
 
-extern void func_80042FC0_43BC0(void *);
 void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *);
 
 void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *arg0) {

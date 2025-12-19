@@ -18,7 +18,18 @@ typedef struct {
     s16 unk46;     /* 0x46 */
 } Func420E8State;
 
+typedef struct {
+    u8 _pad0[0x24]; /* 0x00 */
+    void *unk24;    /* 0x24 */
+    void *unk28;    /* 0x28 */
+    u8 _pad2C[0xE]; /* 0x2C */
+    s16 unk3A;      /* 0x3A */
+    u8 _pad3C[0x7]; /* 0x3C */
+    u8 unk43;       /* 0x43 */
+} Func42FC0TaskMem;
+
 Func420E8State *func_80042340_42F40(void *arg0);
+Func42FC0TaskMem *func_80042FC0_43BC0(void *arg0);
 void func_800419E4_425E4(void *arg0);
 void *func_8004175C_4235C(void *arg0);
 void *func_800420A8_42CA8(void *arg0);

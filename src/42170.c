@@ -1182,16 +1182,6 @@ void func_80042F2C_43B2C(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-typedef struct {
-    u8 _pad0[0x24]; /* 0x00 */
-    void *unk24;    /* 0x24 */
-    void *unk28;    /* 0x28 */
-    u8 _pad2C[0xE]; /* 0x2C */
-    s16 unk3A;      /* 0x3A */
-    u8 _pad3C[0x7]; /* 0x3C */
-    u8 unk43;       /* 0x43 */
-} Func42FC0TaskMem;
-
 void func_80042F58_43B58(void *arg0, void *arg1, s16 arg2) {
     Func42FC0TaskMem *task;
 
