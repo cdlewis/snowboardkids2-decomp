@@ -3,6 +3,7 @@
 #include "2DD40.h"
 #include "common.h"
 #include "gamestate.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 INCLUDE_ASM("asm/nonmatchings/2D4C0", func_8002C8C0_2D4C0);
@@ -60,7 +61,6 @@ void func_8002CA8C_2D68C(Func8002CA8CArg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/2D4C0", func_8002CB88_2D788);
 
 extern void func_8000A49C_B09C(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
-extern s32 randB(void);
 extern u16 D_8009ADE0_9B9E0;
 
 typedef struct Func8002CD3CArg Func8002CD3CArg;
