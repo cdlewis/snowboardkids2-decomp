@@ -3,6 +3,7 @@
 #include "1DD170.h"
 #include "1E36C0.h"
 #include "20F0.h"
+#include "3A1F0.h"
 #include "3B80.h"
 #include "68CF0.h"
 #include "6E840.h"
@@ -54,10 +55,6 @@ extern CutsceneAssetTable D_800BA7BC_1E786C[];
 extern s16 advanceSceneManager(void *);
 extern s32 finalizeAnimationLoop(void *);
 extern void func_800B5BFC_1E2CAC(void *);
-extern s32 func_8003A284_3AE84(s32, StateEntry **);
-extern s32 func_8003A28C_3AE8C(void);
-extern void func_8003A51C_3B11C(s32, StateEntry **);
-extern s32 func_8003A524_3B124(void);
 
 extern s32 func_80001904_2504(s16);
 extern void *func_800B5B38_1E2BE8(u16);
@@ -493,7 +490,7 @@ void func_800B3734_1E07E4(void) {
     ptr = &D_800BA93C_1E79EC;
     *ptr = (StateEntry *)D_800BAEB8_1E7F68;
     D_800BA95C_1E7A0C = D_800BAEBC_1E7F6C;
-    func_8003A51C_3B11C(0, ptr);
+    ((void (*)(s32, StateEntry **))func_8003A51C_3B11C)(0, ptr);
     do { } while (func_8003A524_3B124() == -1); }
 
 typedef struct {
@@ -512,7 +509,7 @@ s32 func_800B3790_1E0840(void) {
     ptr = &D_800BA93C_1E79EC;
     D_800BA95C_1E7A0C = (StateEntry *)buffer;
     *ptr = (StateEntry *)D_800BAEB8_1E7F68;
-    func_8003A284_3AE84(0, ptr);
+    ((void (*)(s32, StateEntry **))func_8003A284_3AE84)(0, ptr);
 
     do {
         result = func_8003A28C_3AE8C();
