@@ -338,7 +338,49 @@ s32 func_8005C250_5CE50(Vec3s32 *arg0, s32 arg1, s32 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005C454_5D054);
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", isPlayerInRangeAndPull);
+s32 isPlayerInRangeAndPull(Vec3s32 *arg0, s32 arg1, Player *arg2) {
+    Vec3s32 localVec;
+    s32 unused1;
+    s32 unused2;
+    s32 combinedRadius;
+    s32 negRadius;
+    s32 dist;
+
+    memcpy(&localVec, arg0, 0xC);
+
+    localVec.unk0 = localVec.unk0 - (arg2->worldPosX + arg2->unkAD4[0]);
+    localVec.unk4 = localVec.unk4 - (arg2->worldPosY + arg2->unkAD4[1]);
+    localVec.unk8 = localVec.unk8 - (arg2->worldPosZ + arg2->unkAD4[2]);
+
+    combinedRadius = arg1 + arg2->unkAE0;
+    negRadius = -combinedRadius;
+
+    if (negRadius < localVec.unk0 && localVec.unk0 < combinedRadius && negRadius < localVec.unk4 &&
+        localVec.unk4 < combinedRadius && negRadius < localVec.unk8 && localVec.unk8 < combinedRadius) {
+
+        dist = isqrt64(
+            (s64)localVec.unk0 * localVec.unk0 + (s64)localVec.unk4 * localVec.unk4 + (s64)localVec.unk8 * localVec.unk8
+        );
+
+        if (dist < combinedRadius) {
+            if (dist == 0) {
+                dist = 1;
+            }
+
+            localVec.unk0 = ((s64)localVec.unk0 * combinedRadius / dist) - localVec.unk0;
+            localVec.unk4 = ((s64)localVec.unk4 * combinedRadius / dist) - localVec.unk4;
+            localVec.unk8 = ((s64)localVec.unk8 * combinedRadius / dist) - localVec.unk8;
+
+            arg2->worldPosX -= localVec.unk0;
+            arg2->worldPosY -= localVec.unk4;
+            arg2->worldPosZ -= localVec.unk8;
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 void func_8005C838_5D438(ListNode_5AA90 *arg0) {
     Allocation5AA90 *alloc = (Allocation5AA90 *)getCurrentAllocation();
