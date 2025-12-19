@@ -123,7 +123,7 @@ class TaskRunner:
         try:
             # Run build and verify
             result = subprocess.run(
-                ['./tools/build-and-verify.sh'],
+                ['bash', './tools/build-and-verify.sh'],
                 capture_output=True,
                 text=True
             )

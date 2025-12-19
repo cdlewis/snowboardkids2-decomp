@@ -1,1 +1,2 @@
+#!/bin/bash
 make clean && make extract 1>/dev/null && BUILD_AND_VERIFY=1 QUIET=1 make && make format 1>/dev/null && (echo "✅ BUILD SUCCEEDED. Everything matched and there were no compiler or linter errors") || (echo "BUILD HAS FAILED. Claude, you should treat this as a build failure. Adding new warnings or accepting a non-matching checksum count as failures." && false)

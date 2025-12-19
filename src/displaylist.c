@@ -454,7 +454,7 @@ void func_8006411C_64D1C(DisplayListObject *arg0) {
     }
 }
 
-void func_8006417C_64D7C(u16 arg0, DisplayListObject *arg1) {
+void func_8006417C_64D7C(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
 
     if (arg1->unk20->opaqueDisplayList != NULL) {

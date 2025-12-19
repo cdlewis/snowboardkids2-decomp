@@ -1758,8 +1758,6 @@ typedef struct {
     s16 unk16;
 } func_80048AE8_496E8_arg;
 
-extern void func_8006417C_64D7C(s32 arg0, func_80048AE8_496E8_Element *arg1);
-
 void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_arg *arg1) {
     Vec3s32 sp10;
     Vec3s32 *sp10Ptr;
@@ -1865,7 +1863,7 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
     arg0->matrix.unk18 += 0x200000 + (sinResult << 5);
 
     do {
-        func_8006417C_64D7C(i, arg0);
+        func_8006417C_64D7C(i, (DisplayListObject *)arg0);
         i++;
     } while (i < 4);
 }
