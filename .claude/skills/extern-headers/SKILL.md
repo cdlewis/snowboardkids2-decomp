@@ -49,9 +49,36 @@ The golden rule: NEVER generalise types to void\* just to make the build work.
 ## Circular dependencies
 
 There are several strategies you can use to resolve circular dependencies:
-* If the dependency is defined in a C file, try moving it to the appropriate header file
-* If the dependency is between two header files, move the struct to a new, third, header file.
+
+- If the dependency is defined in a C file, try moving it to the appropriate header file
+- If the dependency is between two header files, move the struct to a new, third, header file.
 
 ## Style guide
 
 - Use `#pragma once` rather than `#ifndef` to guard against multiple imports.
+
+## Error Types
+
+### MISSING_HEADER_DECLARATION
+
+What it means: A function is defined in a C file and used via extern declarations in other files, but it has no declaration in any header file.
+
+Why it's a problem: Functions that are used across multiple files should be declared in a header file, not via ad-hoc extern statements scattered throughout the codebase.
+
+How to fix: Add a proper function declaration to the suggested header file (typically the .h file corresponding to the .c file where the function is defined).
+
+### MISSING_INCLUDE
+
+What it means: A function is properly declared in a header file, but a C file that uses the function has an extern declaration instead of including the header.
+
+Why it's a problem: The file is manually declaring the function with extern instead of including the header that already declares it, creating redundancy and potential for inconsistency.
+
+How to fix: Remove the extern declaration and add an #include directive for the appropriate header file.
+
+### DECLARATION_SHOULD_BE_IN_HEADER
+
+What it means: A function declaration (forward declaration, ending with ;) exists in a C file, but the actual function definition is in a different C file.
+
+Why it's a problem: Forward declarations that are needed across files belong in header files, not in C implementation files.
+
+How to fix: Move the function declaration from the C file to an appropriate header file that both C files can include.
