@@ -1,3 +1,4 @@
+#include "51060.h"
 #include "10AD0.h"
 #include "36BE0.h"
 #include "3E160.h"
@@ -224,8 +225,6 @@ void func_80051B8C_5278C(func_8005186C_5246C_arg *);
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104(func_80050504_51104_arg *);
 
-extern void func_80051978_52578(void);
-
 extern loadAssetMetadata_arg D_80090EC0_91AC0;
 extern loadAssetMetadata_arg D_80090F00_91B00;
 extern void *D_80090F40_91B40;
@@ -451,7 +450,7 @@ void func_80050C00_51800(void *arg0) {
     }
 }
 
-void func_80050C80_51880(func_80050C80_51880_arg0 *arg0, s32 arg1) {
+void func_80050C80_51880(Player *arg0, s32 arg1) {
     func_80050C80_51880_allocation *allocation;
     func_80050C00_51800_Task *task;
     u8 temp;
