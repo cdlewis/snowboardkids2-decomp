@@ -68,10 +68,21 @@ typedef struct {
         u8 padding[0x16];
         u16 unk16;
     } *unk10;
-    u8 padding2[0x2B];
+    u8 unk14[0x4];
+    /* 0x18 */ s16 matrix18[3][3];
+    u8 padding2[0x3C - 0x2A];
+    s8 unk3C;
+    s8 unk3D;
+    s8 unk3E;
     s8 unk3F;
-    u8 padding3[0x48];
+    u8 padding3[0x88 - 0x40];
     s8 unk88;
+    u8 padding4[0xF0 - 0x89];
+    s16 unkF0[3][3];
+    u8 _padUnk102[2];
+    s32 unk104;
+    s32 unk108;
+    s32 unk10C;
 } func_80002B50_3750_arg;
 
 typedef struct {
