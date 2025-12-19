@@ -1,10 +1,11 @@
 #pragma once
 
+#include "1DFAA0.h"
 #include "common.h"
 #include "cutscene/sys_effect.h"
 
 typedef struct {
-    s32 unk0;
+    SceneModel *unk0;
     s16 unk4;
     s16 unk6;
     s16 unk8;
@@ -27,7 +28,7 @@ typedef struct {
 } Table_B934;
 
 s32 func_8000A510_B110(
-    s32 arg0,
+    SceneModel *arg0,
     s16 arg1,
     s16 arg2,
     s16 arg3,
@@ -42,3 +43,4 @@ s32 func_8000A510_B110(
 void *func_8000B6B8_C2B8(s16 arg0);
 void *func_8000B714_C314(Table_B934 *arg0, s32 arg1, s32 arg2);
 s16 func_8000B7FC_C3FC(u16 *arg0);
+void func_8000A49C_B09C(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);

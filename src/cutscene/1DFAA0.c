@@ -158,24 +158,24 @@ void func_800B2D04(CutsceneSlot *arg0) {
 
     for (i = 0; i < getCutsceneSlotCount(); i++) {
         if (arg0[i].slotData.unkA4 != NULL) {
-            setModelVisibility((SceneModel *)arg0[i].slotData.unkA4, 0);
+            setModelVisibility(arg0[i].slotData.unkA4, 0);
         }
     }
 }
 
-void func_800B2D68_1DFE18(func_800B2C78_arg *arg0) {
+void func_800B2D68_1DFE18(CutsceneSlot *arg0) {
     s32 i;
 
     for (i = 0; i < getCutsceneSlotCount(); i++) {
-        if (arg0[i].unkF0 != NULL) {
-            setModelVisibility(arg0[i].unkF0, 1);
+        if (arg0[i].slotData.unkA4 != NULL) {
+            setModelVisibility(arg0[i].slotData.unkA4, 1);
         }
     }
 }
 
-void func_800B2DCC_1DFE7C(func_800B2C78_arg *arg0) {
+void func_800B2DCC_1DFE7C(CutsceneSlot *arg0) {
     s32 i;
-    func_800B2C78_arg *ptr;
+    CutsceneSlot *ptr;
 
     i = 0;
     ptr = arg0;
@@ -183,9 +183,9 @@ void func_800B2DCC_1DFE7C(func_800B2C78_arg *arg0) {
     while (i < (getCutsceneSlotCount() & 0xFF)) {
         func_800B34B0_1E0560(i);
 
-        if (ptr[i].unkF0 != NULL) {
-            applyTransformToModel(ptr[i].unkF0, (applyTransformToModel_arg1 *)identityMatrix);
-            func_800021B8_2DB8(ptr[i].unkF0, 0);
+        if (ptr[i].slotData.unkA4 != NULL) {
+            applyTransformToModel(ptr[i].slotData.unkA4, (applyTransformToModel_arg1 *)identityMatrix);
+            func_800021B8_2DB8(ptr[i].slotData.unkA4, 0);
         }
 
         i++;

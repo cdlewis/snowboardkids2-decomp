@@ -708,7 +708,7 @@ void func_8000F884_10484(FD98_struct *arg0) {
             func_8000DB70_E770(alloc, entry->pad[4]);
             if (alloc->unk624->unk16 != 0x92) {
                 func_8000A510_B110(
-                    (s32)alloc->unk624,
+                    alloc->unk624,
                     0,
                     9,
                     -1,

@@ -63,14 +63,12 @@ void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0);
 void func_8000B38C_BF8C(func_8000B510_C110_arg *arg0);
 void func_8000B52C_C12C(func_8000B510_C110_arg *arg0);
 
-void func_8000A49C_B09C(s32, s16, s16, s16, void *, s32, s8, u8, u8, s16);
-
-void func_8000A440_B040(s32 arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s32 arg5, s8 arg6) {
+void func_8000A440_B040(SceneModel *arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s32 arg5, s8 arg6) {
     func_8000A49C_B09C(arg0, arg1, arg2, arg3, arg4, arg5, arg6, 0, 0, 0);
 }
 
 void func_8000A49C_B09C(
-    s32 arg0,
+    SceneModel *arg0,
     s16 arg1,
     s16 arg2,
     s16 arg3,
@@ -87,7 +85,7 @@ void func_8000A49C_B09C(
 }
 
 s32 func_8000A510_B110(
-    s32 arg0,
+    SceneModel *arg0,
     s16 arg1,
     s16 arg2,
     s16 arg3,
@@ -106,7 +104,7 @@ s32 func_8000A510_B110(
     ScheduledTask *var_a0_2;
 
     temp_v1 = (D_8008C92C_8D52C + ((s32)(arg2 << 0x10) >> 0xD))[7];
-    if (arg0 == 0) {
+    if (arg0 == NULL) {
         return 0;
     }
 

@@ -1,5 +1,6 @@
 #include "cutscene/sys_effect.h"
 #include "B040.h"
+#include "C570.h"
 #include "geometry.h"
 
 extern u8 identityMatrix[];
@@ -63,7 +64,7 @@ s32 cutsceneEffectFan_validate(void) {
     return 0;
 }
 
-extern void func_800B4F60_1E2010(s32, s16);
+extern void func_800B4F60_1E2010(SceneModel *, s16);
 
 void cutsceneEffectFan_exec(cutsceneEffectFan_exec_arg *arg0, CutsceneSlot *arg1, s8 arg2) {
     func_800B4F60_1E2010(arg1[arg2].slotData.unkA4, arg0->unk0);
@@ -79,8 +80,6 @@ void cutsceneEffectRocket_init(void) {
 s32 cutsceneEffectRocket_validate(void) {
     return 0;
 }
-
-extern void func_8000BBE0_C7E0(s32, s16);
 
 void cutsceneEffectRocket_exec(cutsceneEffectRocket_exec_arg *arg0, CutsceneSlot *arg1, s8 arg2) {
     func_8000BBE0_C7E0(arg1[arg2].slotData.unkA4, arg0->unk0);
