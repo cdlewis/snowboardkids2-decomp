@@ -58,6 +58,9 @@ extern s32 gRegionAllocPtr;
 extern void *gArenaBasePtr;
 extern void *gLinearAllocPtr;
 extern void *gLinearAllocEnd;
+
+// Array view of arena regions [gLinearArenaRegions, gLinearArenaBuffer]
+#define gLinearArenaRegionsArray ((s32 *)&gLinearArenaRegions)
 extern s32 D_800A3548_A4148[];
 extern s32 D_800A3550_A4150[];
 extern s32 gBufferedFrameCounter;
@@ -204,7 +207,7 @@ void initLinearArenaRegions(void) {
 void linearAllocSelectRegion(s32 region) {
     s32 temp_v0;
 
-    temp_v0 = ((s32 *)&gLinearArenaRegions)[region];
+    temp_v0 = gLinearArenaRegionsArray[region];
 
     gRegionAllocPtr = temp_v0;
     gRegionAllocEnd = temp_v0 + 0x10000;
