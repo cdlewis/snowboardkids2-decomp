@@ -201,7 +201,81 @@ s32 func_800B6C8C_1E3D3C(CutsceneSlotData *arg0, SceneModel *arg1, s32 arg2, s32
     return func_800B6CD8_1E3D88(arg0, arg1, arg2, arg3, arg4, arg5, arg6, 0, 1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6CD8_1E3D88);
+s32 func_800B6CD8_1E3D88(
+    CutsceneSlotData *arg0,
+    SceneModel *arg1,
+    s32 arg2,
+    s32 arg3,
+    s32 arg4,
+    s16 arg5,
+    s16 arg6,
+    s32 arg7,
+    s32 arg8
+) {
+    s16 temp_v0;
+    s16 var_t0;
+    s32 temp_a3;
+    s32 temp_a1;
+    s32 temp_a2;
+    s32 var_s1;
+    s16 temp_result;
+    u16 temp_v0_3;
+    u16 temp_arg6;
+    s8 temp_arg7;
+    u8 temp_arg8;
+
+    temp_arg6 = (u16)arg6;
+    temp_arg7 = (s8)arg7;
+    temp_arg8 = (u8)arg8;
+    var_s1 = 0;
+    temp_v0 = arg5 + 1;
+    var_t0 = temp_v0;
+    if ((s32)(temp_v0 << 16) <= 0) {
+        var_t0 = 1;
+    }
+    arg0->unk30 = arg2;
+    arg0->unk34 = arg3;
+    arg0->unk38 = arg4;
+    arg0->unk84 = var_t0;
+    arg0->unk86 = var_t0;
+    temp_a3 = arg0->unk30 - arg0->unk04.unk20_u.unk20_s32;
+    temp_a1 = arg0->unk34 - arg0->unk28;
+    temp_a2 = arg0->unk38 - arg0->unk2C;
+    arg0->angle = 0;
+    if (temp_arg7 == 0) {
+        arg0->unk0.Two = 1;
+        arg0->unk3C = temp_a3 / var_t0;
+        arg0->unk40 = temp_a1 / var_t0;
+        arg0->unk44 = temp_a2 / var_t0;
+    } else if (temp_arg7 == 1) {
+        arg0->unk0.Two = 5;
+        arg0->unk0.bytes[3] = temp_arg8;
+        arg0->unk48 = temp_a3 / var_t0;
+        arg0->unk4C = temp_a1 / var_t0;
+        arg0->unk50 = temp_a2 / var_t0;
+    }
+    if ((temp_a3 == 0) && (temp_a2 == 0)) {
+        arg0->unk7A = (s16)temp_arg6;
+    } else {
+        arg0->unk7A = (atan2Fixed(temp_a3, temp_a2) + 0x1000) & 0x1FFF;
+    }
+    temp_result = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+
+    if ((temp_result >= 0 ? temp_result : -temp_result) >= 0xAAB) {
+        var_s1 = 2;
+        arg0->unk78 = ((u16)arg0->unk78 + 0x1000) & 0x1FFF;
+        if (temp_result > 0) {
+            var_s1 = 1;
+        }
+    }
+    func_800B6AB8_1E3B68(arg0, 0);
+    if (temp_arg7 == 1) {
+        temp_v0_3 = (u16)arg0->unk7C;
+        arg0->unk7C = 0;
+        arg0->unk7E = (s16)temp_v0_3;
+    }
+    return var_s1;
+}
 
 s32 func_800B6FA4_1E4054(CutsceneSlotData *arg0, SceneModel *unused, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
     s16 temp_v0;
