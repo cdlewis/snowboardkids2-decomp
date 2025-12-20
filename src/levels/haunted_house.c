@@ -416,7 +416,7 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
 
             for (i = 0; i < allocation->unk5E; i++) {
                 player = allocation->unk10 + i;
-                if ((u16)(*(u16 *)((u8 *)player + 0xB94) - 0x38) < 5) {
+                if ((u16)(player->unkB94 - 0x38) < 5) {
                     break;
                 }
             }
