@@ -29,7 +29,8 @@ typedef struct {
     void *unk24;    /* 0x24 */
     void *unk28;    /* 0x28 */
     s32 unk2C;      /* 0x2C */
-    u8 pad30[0x2C]; /* 0x30 */
+    u8 pad30[0xC];  /* 0x30 */
+    u8 unk3C[0x20]; /* 0x3C */
     void *unk5C;    /* 0x5C */
     void *unk60;    /* 0x60 */
     void *unk64;    /* 0x64 */

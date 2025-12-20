@@ -1373,7 +1373,7 @@ void func_800433EC_43FEC(Func43374State *arg0) {
 
     allocation = (GameState *)getCurrentAllocation();
     createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
-    func_8006B084_6BC84(&D_8009A8B0_9B4B0, (u8 *)arg0->unk78 + 0x3F8, arg0);
+    func_8006B084_6BC84(&D_8009A8B0_9B4B0, &arg0->unk78->unk3F8, arg0);
     scale = arg0->unk82;
     scaleMatrix((Mat3x3Padded *)arg0, scale, scale, scale);
 
@@ -1382,7 +1382,7 @@ void func_800433EC_43FEC(Func43374State *arg0) {
     D_8009A8A8_9B4A8 = 0x9CCCC;
     D_8009A8AC_9B4AC = 0xFFE44CCD;
 
-    func_8006B084_6BC84(ptr - 5, arg0, (u8 *)arg0 + 0x3C);
+    func_8006B084_6BC84(ptr - 5, arg0, arg0->unk3C);
 
     if (gFrameCounter & 1) {
         arg0->unk5C = &D_8009A740_9B340;
@@ -1393,7 +1393,7 @@ void func_800433EC_43FEC(Func43374State *arg0) {
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
         if (arg0->unk82 == 0x2000) {
-            enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)((u8 *)arg0 + 0x3C));
+            enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0->unk3C);
         }
     }
 
