@@ -5,6 +5,7 @@
 #include "displaylist.h"
 #include "task_scheduler.h"
 #include "5AA90.h"
+#include "gamestate.h"
 
 typedef void (*FuncPtr)(void *);
 
@@ -228,13 +229,13 @@ void func_800BC520_B1A10(func_800BC4AC_arg *arg0) {
     s32 pad[8];
     s32 sp38[3];
     s32 pad2[8];
-    void *alloc;
-    void *allocPlus30;
+    GameState *alloc;
+    GameDataLayout *allocPlus30;
     u16 temp;
 
     alloc = getCurrentAllocation();
     memcpy(arg0->unk984, &arg0->unk434, 0xC);
-    allocPlus30 = (u8 *)alloc + 0x30;
+    allocPlus30 = &alloc->gameData;
     temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
     arg0->unkB94 = temp;
     func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, sp38);
