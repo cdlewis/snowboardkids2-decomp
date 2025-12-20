@@ -405,12 +405,12 @@ void func_80024298_24E98(func_80024048_arg *arg0) {
 
 void func_80024414_25014(func_80024518_arg *arg0) {
     Mat3x3Padded sp10;
-    u8 *base;
+    GameState *state;
     Mat3x3Padded *localPtr;
     s32 adjustment;
     u16 rotation;
 
-    base = (u8 *)getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
 
     localPtr = &sp10;
 
@@ -421,7 +421,7 @@ void func_80024414_25014(func_80024518_arg *arg0) {
 
     arg0->unk7C.unk14 = arg0->unk7C.unk14 + adjustment;
 
-    rotation = *(u16 *)(base + arg0->unkA1 * 2 + 0x1888);
+    rotation = state->unk1888[arg0->unkA1];
     createYRotationMatrix(&arg0->unk5C, rotation);
 
     func_8006B084_6BC84(&arg0->unk3C, &arg0->unk5C, localPtr);
@@ -430,7 +430,7 @@ void func_80024414_25014(func_80024518_arg *arg0) {
     func_800650B4_65CB4(arg0->unkA1, (DisplayListObject *)arg0);
 
     if (arg0->unk7C.unk14 == 0) {
-        *(base + arg0->unkA1 + 0x18C4) = *(base + arg0->unkA1 + 0x18C4) + 1;
+        state->unk18C0[arg0->unkA1 + 4]++;
         setCallbackWithContinue(func_80024518_25118);
     }
 }
