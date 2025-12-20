@@ -846,7 +846,12 @@ void func_80025824_26424(func_80025824_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025904_26504);
 
-void func_80025A88_26688(void *arg0) {
+typedef struct {
+    u8 padding[0x24];
+    u8 unk24;
+} func_80025A88_26688_arg;
+
+void func_80025A88_26688(func_80025A88_26688_arg *arg0) {
     u8 *base;
     s32 i;
     s32 s2;
@@ -863,10 +868,10 @@ void func_80025A88_26688(void *arg0) {
         s2 = 0x11;
     }
 
-    val1 = *(base + *((u8 *)arg0 + 0x24) + 0x18A8);
+    val1 = *(base + arg0->unk24 + 0x18A8);
     i = 0;
     tableBase = D_8008DD8C_8E98C;
-    val2 = *(base + *((u8 *)arg0 + 0x24) + 0x18B0);
+    val2 = *(base + arg0->unk24 + 0x18B0);
     ptr = (u8 *)arg0;
     idx = ((u8)(val2 + val1 * 3)) * 3;
 
@@ -875,12 +880,12 @@ loop:
     ((volatile s16 *)ptr)[4] = s2 + (*tablePtr - 1) / 2;
     i++;
     ((volatile u8 *)ptr)[0xA] = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
-    debugEnqueueCallback(*((u8 *)arg0 + 0x24) + 8, 0, func_80010240_10E40, ptr);
+    debugEnqueueCallback(arg0->unk24 + 8, 0, func_80010240_10E40, ptr);
     ptr += 0xC;
     if (i < 3)
         goto loop;
 
-    if (*(u16 *)(base + *((u8 *)arg0 + 0x24) * 2 + 0x1898) == 3) {
+    if (*(u16 *)(base + arg0->unk24 * 2 + 0x1898) == 3) {
         s32 constant;
         void *a0;
 
