@@ -306,13 +306,13 @@ void func_800BC378_B3938(Arg0Struct *arg0) {
     s32 pad[8];
     s32 sp38[3];
     s32 pad2[8];
-    void *alloc;
-    void *allocPlus30;
+    GameState *alloc;
+    GameDataLayout *allocPlus30;
     u16 temp;
 
     alloc = getCurrentAllocation();
     memcpy(&arg0->unk984, &arg0->unk434, 0xC);
-    allocPlus30 = (u8 *)alloc + 0x30;
+    allocPlus30 = &alloc->gameData;
     temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
     arg0->unkB94 = temp;
     func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, sp38);
@@ -364,7 +364,7 @@ void func_800BC474_B3A34(Arg0Struct *arg0) {
     func_8006B084_6BC84(&sp50, arg0->unk38, arg0->unk74);
 
     ptr = &D_8009A8A4_9B4A4;
-    *(s32 *)((u8 *)arg0 + 0x8C) = *(s32 *)((u8 *)arg0 + 0x8C) + arg0->unk474;
+    *(s32 *)&arg0->unk74[0x18] = *(s32 *)&arg0->unk74[0x18] + arg0->unk474;
 
     *ptr = 0;
     D_8009A8A8_9B4A8 = 0x140000;
@@ -377,12 +377,12 @@ INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BC5A8_B3B68);
 
 void func_800BCA10_B3FD0(Arg0Struct *arg0) {
     s32 i;
-    u8 *temp_s5;
-    void *alloc;
+    GameDataLayout *temp_s5;
+    GameState *alloc;
 
     alloc = getCurrentAllocation();
     i = 0;
-    temp_s5 = (u8 *)alloc + 0x30;
+    temp_s5 = &alloc->gameData;
 
     do {
         s32 *posPtr;
