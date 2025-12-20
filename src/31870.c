@@ -545,7 +545,7 @@ void func_800313DC_31FDC(func_80031510_32110_arg *arg0) {
 
     arg0->unk50 += 0xFFF00000;
 
-    memcpy(arg0, (u8 *)arg0 + 0x3C, 0x20);
+    memcpy(arg0, &arg0->unk3C, 0x20);
 
     if (arg0->unk50 == 0) {
         allocation->unk788[19] = 0xC;
