@@ -244,13 +244,13 @@ typedef struct {
     void *unk28;
     s32 unk2C;
     u8 _pad30[0xC];
-    u8 _pad3C[0x20];
+    u8 unk3C[0x20];
     s32 unk5C;
     void *unk60;
     void *unk64;
     s32 unk68;
     u8 _pad6C[0xC];
-    u8 _pad78[0x20];
+    u8 unk78[0x20];
     void *unk98;
     void *unk9C;
     void *unkA0;
@@ -269,14 +269,14 @@ void func_80045480_46080(func_80045480_46080_arg *arg0) {
     arg0->unk28 = func_80055DF8_569F8(arg0->unkB4);
     arg0->unk2C = 0;
 
-    memcpy((u8 *)arg0 + 0x3C, identity, 0x20);
+    memcpy(arg0->unk3C, identity, 0x20);
 
     arg0->unk5C = func_80055E54_56A54(arg0->unkB4);
     arg0->unk68 = 0;
     arg0->unk60 = arg0->unk24;
     arg0->unk64 = arg0->unk28;
 
-    memcpy((u8 *)arg0 + 0x78, identity, 0x20);
+    memcpy(arg0->unk78, identity, 0x20);
 
     arg0->unk98 = &D_80094DD0_959D0;
     arg0->unkA4 = 0;
