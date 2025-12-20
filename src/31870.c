@@ -619,7 +619,7 @@ void func_800315C0_321C0(func_80031510_32110_arg *arg0) {
 
     arg0->unk50 += temp;
 
-    memcpy(arg0, (u8 *)arg0 + 0x3C, 0x20);
+    memcpy(arg0, &arg0->unk3C, 0x20);
 
     if (arg0->unk50 == 0) {
         allocation->unk79D--;
