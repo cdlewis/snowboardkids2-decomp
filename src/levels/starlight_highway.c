@@ -376,9 +376,9 @@ void func_800BBED8(void) {
     s32 i;
 
     for (i = 0; i < 7; i++) {
-        Node *task = scheduleTask(func_800BBC28_ADFE8, 0, 0, 0x32);
+        func_800BBC28_arg *task = scheduleTask(func_800BBC28_ADFE8, 0, 0, 0x32);
         if (task != NULL) {
-            *(u8 *)((u8 *)task + 0x7C) = i;
+            task->unk7C = i;
         }
     }
 }
