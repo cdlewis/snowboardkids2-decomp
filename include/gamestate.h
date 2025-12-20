@@ -301,7 +301,13 @@ typedef struct {
     u16 unk590;
     u8 PAD_13[0x8];
     u8 unk59A[8];
-    u8 PAD_13B[0x11];
+    u8 PAD_13B[0xB];
+    s8 unk5AD;
+    s8 unk5AE;
+    u8 unk5AF;
+    u8 unk5B0;
+    u8 unk5B1;
+    s8 unk5B2;
     u8 unk5B3;
     u8 PAD_14[0x4];
     u8 unk5B8[8];

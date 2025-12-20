@@ -92,6 +92,11 @@ typedef struct {
 } func_800B0980_element;
 
 typedef struct {
+    func_800B0980_element elements[4];
+    u8 unk40[8];
+} func_800B0980_container;
+
+typedef struct {
     s16 m[9];
     s16 _pad;
     s32 unk14;
@@ -135,20 +140,20 @@ void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
     arg0->unk28 = 0;
 
     if (arg0->unk24 == 6) {
-        if (((s8 *)allocation)[0x5B2] == -1) {
+        if (allocation->unk5B2 == -1) {
             arg0->unk28 = 2;
         }
     }
 
     if (arg0->unk24 == 7) {
-        if (((s8 *)allocation)[0x5AE] == -1) {
+        if (allocation->unk5AE == -1) {
             arg0->unk28 = 1;
             modelIndex = 0xF;
         }
     }
 
     if (arg0->unk24 == 8) {
-        if (((s8 *)allocation)[0x5AD] == -1) {
+        if (allocation->unk5AD == -1) {
             arg0->unk28 = 1;
             modelIndex = 0xF;
         }
@@ -279,7 +284,7 @@ void func_800B0964_1DAF04(func_800B08FC_arg *arg0) {
     func_80002014_2C14(arg0->unk0);
 }
 
-void func_800B0980_1DAF20(func_800B0980_element *arg0) {
+void func_800B0980_1DAF20(func_800B0980_container *arg0) {
     s32 i;
     void *allocation;
 
@@ -287,12 +292,12 @@ void func_800B0980_1DAF20(func_800B0980_element *arg0) {
     allocation = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
 
     for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
-        arg0[i].unk4 = allocation;
-        arg0[i].unkA = 0xFF;
-        arg0[i].unkD = 0;
-        arg0[i].unkC = 0;
-        *((u8 *)arg0 + i + 0x40) = 0;
-        func_800B0218_1DA7B8(&arg0[i], i);
+        arg0->elements[i].unk4 = allocation;
+        arg0->elements[i].unkA = 0xFF;
+        arg0->elements[i].unkD = 0;
+        arg0->elements[i].unkC = 0;
+        arg0->unk40[i] = 0;
+        func_800B0218_1DA7B8(&arg0->elements[i], i);
     }
 
     setCleanupCallback(func_800B0BC0_1DB160);
