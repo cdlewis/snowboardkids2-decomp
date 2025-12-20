@@ -547,8 +547,9 @@ void func_80046298_46E98(Struct_func_8004657C_4717C *arg0) {
     setCallback(func_800462D8_46ED8);
 }
 
-extern void func_80046464_47064(Struct_func_8004657C_4717C *);
+void func_80046464_47064(Struct_func_8004657C_4717C *);
 void func_800463F4_46FF4(Struct_func_8004657C_4717C *);
+void func_800464F4_470F4(Struct_func_8004657C_4717C *);
 
 void func_800462D8_46ED8(Struct_func_8004657C_4717C *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
@@ -604,7 +605,21 @@ void func_800463F4_46FF4(Struct_func_8004657C_4717C *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80046464_47064);
+void func_80046464_47064(Struct_func_8004657C_4717C *arg0) {
+    GameState *state;
+    s32 i;
+
+    state = (GameState *)getCurrentAllocation();
+    func_800463F4_46FF4(arg0);
+
+    for (i = 0; i < state->unk5F; i++) {
+        if ((u32)(state->players[i].unkB94 - 6) < 5U) {
+            arg0->unk28 = 0xC0000;
+            setCallback(func_800464F4_470F4);
+            return;
+        }
+    }
+}
 
 void func_800464F4_470F4(Struct_func_8004657C_4717C *arg0) {
     s32 temp_v0;
