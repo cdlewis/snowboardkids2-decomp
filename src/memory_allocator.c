@@ -162,9 +162,11 @@ s32 getNodeOwner(void *arg0) {
 }
 
 void setNodeSequenceNumber(void *arg0, void *arg1) {
-    *((void **)((u8 *)arg0 - 4)) = arg1;
+    MemoryAllocatorNode *node = ((MemoryAllocatorNode *)arg0) - 1;
+    node->unk1C = (s32)arg1;
 }
 
 void *getNodeSequenceNumber(void *arg0) {
-    return *((void **)((u8 *)arg0 - 4));
+    MemoryAllocatorNode *node = ((MemoryAllocatorNode *)arg0) - 1;
+    return (void *)node->unk1C;
 }
