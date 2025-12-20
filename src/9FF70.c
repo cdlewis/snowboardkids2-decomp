@@ -2077,7 +2077,7 @@ skip:
 
 s32 func_800B50C0_A4F70(Player *arg0) {
     s32 stackVec[3];
-    void **allocation;
+    GameState *allocation;
     u16 angle;
     s32 vel1;
     s32 vel2;
@@ -2094,7 +2094,7 @@ s32 func_800B50C0_A4F70(Player *arg0) {
             arg0->unkA94 += 0x1000;
         }
 
-        rotateVectorY((u8 *)allocation[0x48 / sizeof(void *)] + 0xE4, arg0->unkA94, stackVec);
+        rotateVectorY(allocation->unk48 + 0xE4, arg0->unkA94, stackVec);
 
         stackVec[0] += arg0->worldPosX;
         stackVec[2] += arg0->worldPosZ;
