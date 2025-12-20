@@ -57,7 +57,9 @@ typedef struct {
 typedef struct {
     u8 pad[0x10];
     Player *unk10;
-    u8 pad14[0x4A];
+    u8 pad14[0x1C];
+    void *unk30;
+    u8 pad34[0x2A];
     u8 unk5E;
     u8 pad5F[0x17];
     u8 unk76;
@@ -212,16 +214,16 @@ void func_800BB45C_AF14C(void **arg0) {
 
 s32 func_800BB488_AF178(func_800BB388_AF078_arg *arg0) {
     s32 sp18[3];
-    AllocationUnk30 *allocation;
+    Allocation *allocation;
     void *allocationUnk30;
     s32 *argPos;
     s32 result;
     u16 temp;
 
     result = 0;
-    allocation = (AllocationUnk30 *)getCurrentAllocation();
+    allocation = (Allocation *)getCurrentAllocation();
 
-    if (((u8 *)allocation)[0x76] == 0) {
+    if (allocation->unk76 == 0) {
         allocationUnk30 = &allocation->unk30;
 
         arg0->unk24 = arg0->unk24 + arg0->unk30;
