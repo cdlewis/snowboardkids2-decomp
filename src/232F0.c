@@ -7,12 +7,9 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    Node_70B00 unk0;
-    u8 pad1D8[0x760 - 0x1D8];
-    Node_70B00 unk760;
-    u8 padD38[0xEC0 - (0x760 + 0x1D8)];
-    Node_70B00 unkEC0;
-    u8 pad1098[0x1620 - (0xEC0 + 0x1D8)];
+    Node_70B00 unk0[4];
+    Node_70B00 unk760[4];
+    Node_70B00 unkEC0[4];
     Node_70B00 unk1620;
     u8 pad17F8[0x1878 - (0x1620 + 0x1D8)];
     void *unk1878;
@@ -80,9 +77,9 @@ void func_80023C7C_2487C(void) {
     unlinkNode(&s1->unk1620);
 
     for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
-        unlinkNode((Node_70B00 *)((u8 *)s1 + i * 0x1D8));
-        unlinkNode((Node_70B00 *)((u8 *)s1 + 0x760 + i * 0x1D8));
-        unlinkNode((Node_70B00 *)((u8 *)s1 + 0xEC0 + i * 0x1D8));
+        unlinkNode(&s1->unk0[i]);
+        unlinkNode(&s1->unk760[i]);
+        unlinkNode(&s1->unkEC0[i]);
     }
 
     s1->unk1878 = freeNodeMemory(s1->unk1878);
