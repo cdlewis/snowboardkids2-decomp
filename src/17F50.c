@@ -8,8 +8,13 @@
 
 extern u8 D_800A8CC8_A0038;
 extern s16 identityMatrix[9];
-extern s16 D_8008D6EC_8E2EC;
-extern s16 D_8008D6EE_8E2EE;
+
+typedef struct {
+    s16 x;
+    s16 z;
+} CoordPair;
+
+extern CoordPair D_8008D6EC_8E2EC[];
 
 typedef struct {
     s16 matrix0[9];
@@ -146,14 +151,12 @@ void func_80017FE8_18BE8(Func80018474Arg *arg0) {
     TempState17F50 *state;
     s32 s1;
     s32 s2;
-    s32 temp_v0_2;
     s16 result, masked;
 
     state = getCurrentAllocation();
-    temp_v0_2 = state->unk425 * 4;
 
-    s1 = *(s16 *)((u8 *)&D_8008D6EC_8E2EC + temp_v0_2);
-    s2 = *(s16 *)((u8 *)&D_8008D6EE_8E2EE + temp_v0_2);
+    s1 = D_8008D6EC_8E2EC[(u8)state->unk425].x;
+    s2 = D_8008D6EC_8E2EC[(u8)state->unk425].z;
     s1 <<= 16;
     s2 <<= 16;
 
@@ -260,8 +263,8 @@ void func_800182FC_18EFC(Func80018474Arg *arg0) {
     memcpy(&arg0->matrix20, identityMatrix, 0x20);
     memcpy(arg0, identityMatrix, 0x20);
 
-    arg0->unk34 = *(s16 *)((u8 *)&D_8008D6EC_8E2EC + (u8)state->unk425 * 4);
-    arg0->unk3C = *(s16 *)((u8 *)&D_8008D6EE_8E2EE + (u8)state->unk425 * 4);
+    arg0->unk34 = D_8008D6EC_8E2EC[(u8)state->unk425].x;
+    arg0->unk3C = D_8008D6EC_8E2EC[(u8)state->unk425].z;
 
     arg0->unk34 <<= 16;
     arg0->unk3C <<= 16;
