@@ -529,7 +529,7 @@ void func_8004CEC4_4DAC4(CEC4_Arg0Struct *arg0) {
             playerData = (CEC4_PlayerData *)((u8 *)allocation->unk10 + playerIndex * 0xBE8);
 
             temp = (0x2000 - playerData->unkB98) * 0x8C;
-            elem = (CEC4_Element *)((u8 *)arg0 + 0xC + playerIndex * 0x14);
+            elem = &arg0->elements[playerIndex];
 
             if (temp < 0) {
                 temp += 0x1FFF;
