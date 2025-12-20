@@ -1225,7 +1225,7 @@ void func_80040238_40E38(void) {
         scheduleTask((void *)func_8004D8E4_4E4E4, 1, 0, 0xE6);
         allocation->unk4C = 0xB4;
 
-        if (((u8 *)allocation->players)[0xBC4] == 0) {
+        if (allocation->players->unkBC4 == 0) {
             D_800A24A0_A30A0 = 3;
             func_800574A0_580A0(8);
             func_8004E6A4_4F2A4(0, 0);
