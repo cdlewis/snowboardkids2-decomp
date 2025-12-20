@@ -25,7 +25,7 @@ void getTableEntryByIndex(DataTable_19E80 *table, u32 entry_index, u8 sub_index,
     index_ptr = entry_base + table->index_table_offset;
     entry_base += (u16)entry_index;
 
-    output->data_ptr = (void *)table + entry_base->data_offset;
+    output->data_ptr = &table->header[entry_base->data_offset];
     output->index_ptr = index_ptr + (sub_index << 1);
     output->field1 = entry_base->field1;
     output->field2 = entry_base->field2;
