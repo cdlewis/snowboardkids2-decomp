@@ -43,8 +43,6 @@ extern void func_80066474_67074(void);
 extern void func_800670D4_67CD4(void);
 extern void func_800680C4_68CC4(void);
 extern void func_80064CF4_658F4(void);
-extern void func_800643AC_64FAC(DisplayListObject *, s32);
-
 void func_80062CF0_638F0(void);
 void setupDisplayListMatrix(DisplayListObject *);
 void func_80063A94_64694(void *);
@@ -524,7 +522,62 @@ void func_80064218_64E18(DisplayListObject *arg0) {
     D_800A2D48_A3948 = arg0->unk2C;
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800643AC_64FAC);
+void func_800643AC_64FAC(DisplayListObject *arg0, s32 arg1) {
+    Mtx sp30;
+    f32 sp70;
+    f32 sp74;
+    f32 sp78;
+    f32 sp7C;
+    f32 sp80;
+    f32 sp84;
+    DisplayListObject *obj;
+    LookAt *lookat;
+    Gfx *dl;
+    void *temp;
+    DisplayListObject *elem;
+
+    obj = (DisplayListObject *)(arg1 * sizeof(DisplayListObject) + (s32)arg0);
+
+    if (obj->unk20->flags & 1) {
+        lookat = arenaAlloc16(0x20);
+        if (lookat == NULL) {
+            return;
+        }
+
+        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
+        guLookAtReflect(&sp30, lookat, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
+
+        gSPLookAt(gRegionAllocPtr++, lookat);
+    }
+
+    temp = obj->unk24;
+    if (temp != D_800A2D40_A3940) {
+        if (temp != NULL) {
+            gSPSegment(gRegionAllocPtr++, 1, obj->unk24);
+        }
+        D_800A2D40_A3940 = obj->unk24;
+    }
+
+    elem = (DisplayListObject *)(arg1 * sizeof(DisplayListObject) + (s32)arg0);
+    temp = elem->unk28;
+    if (temp != D_800A2D44_A3944) {
+        if (temp != NULL) {
+            gSPSegment(gRegionAllocPtr++, 2, elem->unk28);
+        }
+        D_800A2D44_A3944 = elem->unk28;
+    }
+
+    elem = (DisplayListObject *)(arg1 * sizeof(DisplayListObject) + (s32)arg0);
+    temp = elem->unk2C;
+    if (temp != D_800A2D48_A3948) {
+        if (temp != NULL) {
+            gSPSegment(gRegionAllocPtr++, 3, elem->unk2C);
+        }
+        D_800A2D48_A3948 = elem->unk2C;
+    }
+
+    gSPMatrix(gRegionAllocPtr++, (arg1 + arg0)->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+}
 
 void func_80064628_65228(DisplayListObject *arg0) {
     s32 i;
