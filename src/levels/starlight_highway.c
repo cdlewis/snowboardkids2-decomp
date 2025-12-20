@@ -199,8 +199,8 @@ void func_800BB51C_AD8DC(func_800BB664_arg *arg0) {
     arg0->unk44 += arg0->unk48;
     arg0->unk46 = arg0->unk46 + arg0->unk4A;
     arg0->unk30 = 0;
-    arg0->unk44 = ((u8 *)&arg0->unk44)[1];
-    arg0->unk46 = ((u8 *)&arg0->unk46)[1];
+    arg0->unk44 = arg0->unk44 & 0xFF;
+    arg0->unk46 = arg0->unk46 & 0xFF;
     ;
 
     for (i = 0; i < 4; i++) {
