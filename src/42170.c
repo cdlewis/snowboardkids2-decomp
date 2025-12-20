@@ -459,7 +459,7 @@ void func_8004179C_4239C(Func4179CArg *arg0) {
     arg0->unk28 = loadAsset_216290();
     arg0->unk2C = 0;
     arg0->unk40 = 0x400;
-    func_80056B7C_5777C((u8 *)arg0->unk3C + 0x434, 0x13);
+    func_80056B7C_5777C(&arg0->unk3C->unk434, 0x13);
     setCleanupCallback(func_800419AC_425AC);
     setCallbackWithContinue(func_80041810_42410);
 }
