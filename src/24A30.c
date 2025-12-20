@@ -278,7 +278,7 @@ void func_80023E30_24A30(func_80024048_arg *arg0) {
 
 void func_80024048_24C48(func_80024048_arg *arg0) {
     Mat3x3Padded sp10;
-    u8 *base;
+    GameState *state;
     u8 prevA0;
     u8 newA0;
     u8 charIndex;
@@ -287,9 +287,9 @@ void func_80024048_24C48(func_80024048_arg *arg0) {
     u16 rotation;
     u16 val;
 
-    base = (u8 *)getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
 
-    newA0 = *(base + arg0->unkA1 + 0x18C8);
+    newA0 = state->unk18C8[arg0->unkA1];
     prevA0 = arg0->unkA0;
 
     if (prevA0 != newA0) {
@@ -297,30 +297,30 @@ void func_80024048_24C48(func_80024048_arg *arg0) {
         func_80027BC8_287C8((func_80027BC8_arg *)arg0, arg0->unkA1);
     }
 
-    charIndex = *(base + arg0->unkA1 + 0x18A8);
-    paletteIndex = *(base + arg0->unkA1 + 0x18B0);
+    charIndex = state->unk18A8[arg0->unkA1];
+    paletteIndex = state->unk18B0[arg0->unkA1];
     assetIndex = paletteIndex + charIndex * 3;
 
     memcpy(&sp10, identityMatrix, sizeof(Mat3x3Padded));
     memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
 
-    if (*(base + arg0->unkA1 + 0x18D2) == *(base + 0x18CC) - 1) {
-        val = *(u16 *)(base + arg0->unkA1 * 2 + 0x1898);
+    if (state->unk18D2[arg0->unkA1] == state->unk18CC - 1) {
+        val = state->unk1898[arg0->unkA1];
         if (val != 1) {
-            rotation = *(u16 *)(base + arg0->unkA1 * 2 + 0x1888);
+            rotation = state->unk1888[arg0->unkA1];
             createYRotationMatrix(&arg0->unk5C, rotation);
             goto after_rotation;
         }
     }
 
-    rotation = *(u16 *)(base + arg0->unkA1 * 2 + 0x1880);
+    rotation = state->unk1880[arg0->unkA1];
     createYRotationMatrix(&arg0->unk5C, (0x2000 - rotation) & 0xFFFF);
 
 after_rotation:
     func_8006B084_6BC84(&arg0->unk3C, &arg0->unk5C, &sp10);
-    func_8006B084_6BC84(&sp10, (arg0->unkA1 << 5) + 0x17F8 + base, arg0);
+    func_8006B084_6BC84(&sp10, &state->unk17F8[arg0->unkA1], arg0);
 
-    val = *(u16 *)(base + arg0->unkA1 * 2 + 0x1898);
+    val = state->unk1898[arg0->unkA1];
     if (val == 4 || val == 9) {
         arg0->unk24 = freeNodeMemory(arg0->unk24);
         arg0->unk28 = freeNodeMemory(arg0->unk28);
@@ -1075,7 +1075,7 @@ void func_80027158_27D58(func_80025FFC_26BFC_arg *arg0) {
 
     arg0->unk0 = -0x20;
     arg0->unk2 = 8;
-    arg0->unk8 = state->unk18A8 + 0x16;
+    arg0->unk8 = state->unk18A8[0] + 0x16;
     arg0->unk4 = dmaResult;
 
     setCallback(func_800271E4_27DE4);
@@ -1085,7 +1085,7 @@ void func_800271E4_27DE4(func_80025FFC_26BFC_arg *arg0) {
     GameState *state = getCurrentAllocation();
 
     if (state->unk1898[0] == 3) {
-        arg0->unk8 = state->unk18A8 + 0x16;
+        arg0->unk8 = state->unk18A8[0] + 0x16;
         debugEnqueueCallback(0xC, 0, func_8000FED0_10AD0, arg0);
     }
 }
