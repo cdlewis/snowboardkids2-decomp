@@ -28,8 +28,7 @@ typedef struct {
 
 typedef struct {
     func_80006940_inner *unk0;
-    func_80009F5C_AB5C_arg *unk4;
-    u8 _pad8[0x50 - 0x8];
+    SpriteAssetState unk4;
     s32 unk50;
     s32 unk54;
     s32 unk58;
@@ -127,7 +126,7 @@ void func_8000629C_6E9C(func_80006398_6F98_arg *arg0) {
 }
 
 void func_80006398_6F98(func_80006398_6F98_arg *arg0) {
-    func_80009F5C_AB5C(&arg0->unk4);
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
 }
 
 void func_800063B4_6FB4(func_80006398_6F98_arg *arg0) {
@@ -157,7 +156,7 @@ void func_800063B4_6FB4(func_80006398_6F98_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/6DD0", func_80006458_7058);
 
 void func_80006924_7524(func_80006398_6F98_arg *arg0) {
-    func_80009F5C_AB5C(&arg0->unk4);
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
 }
 
 void func_80006940_7540(func_80006398_6F98_arg *arg0) {
@@ -211,5 +210,5 @@ void func_800069B4_75B4(func_80006398_6F98_arg *arg0) {
 }
 
 void func_80006A88_7688(func_80006398_6F98_arg *arg0) {
-    func_80009F5C_AB5C(&arg0->unk4);
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
 }

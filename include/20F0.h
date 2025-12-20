@@ -1,6 +1,7 @@
 #pragma once
 
 #include "5EA60.h"
+#include "90F0.h"
 #include "common.h"
 #include "displaylist.h"
 #include "memory_allocator.h"
@@ -146,7 +147,8 @@ typedef struct {
     s8 unk97;
     SceneModel_unk98 *unk98;
     func_80001688_2288_arg_9C *unk9C;
-    u8 unkA0[0xF0 - 0xA0];
+    u8 unkA0[4];
+    SpriteAssetState unkA4;
     s16 unkF0[3][3];
     u8 unkF4[0x8];
     s32 unk10C;
@@ -220,7 +222,7 @@ typedef struct {
     AssetSlot *unk98;
     void *unk9C;
     void *unkA0;
-    u8 unkA4[0x4C];
+    SpriteAssetState unkA4;
     u8 asset2TransformationMatrix[0x20];
     u32 unk110;
     void *unk114;

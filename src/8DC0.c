@@ -40,8 +40,7 @@ void func_80008308_8F08(void);
 
 typedef struct {
     InnerStruct8DEC *unk0;
-    func_80009F5C_AB5C_arg *unk4;
-    u8 unk8[0x48];
+    SpriteAssetState unk4;
     u8 unk50;
 } Arg8F70;
 
@@ -144,5 +143,5 @@ void func_80008370_8F70(Arg8F70 *arg0) {
 }
 
 void func_800084A8_90A8(Arg8F70 *arg0) {
-    func_80009F5C_AB5C(&arg0->unk4);
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
 }

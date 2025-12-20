@@ -35,8 +35,7 @@ typedef struct {
 
 typedef struct {
     func_800071E4_inner *unk0;
-    s32 unk4;
-    u8 _pad8[0x48];
+    SpriteAssetState unk4;
     s32 unk50;
     s16 unk54;
     s8 unk56;
@@ -48,7 +47,7 @@ typedef struct {
 
 typedef struct {
     s32 unk0;
-    s32 unk4;
+    SpriteAssetState unk4;
 } func_80007070_7C70_arg;
 
 void func_800071E4_7DE4(func_80007130_7D30_arg *);
@@ -88,7 +87,7 @@ void func_80007130_7D30(func_80007130_7D30_arg *arg0) {
 }
 
 void func_8000714C_7D4C(func_80007130_7D30_arg *arg0) {
-    s32 *temp_s0;
+    SpriteAssetState *temp_s0;
 
     temp_s0 = &arg0->unk4;
     func_80009E68_AA68(temp_s0, 5);
@@ -142,7 +141,7 @@ void func_800071E4_7DE4(func_80007130_7D30_arg *arg0) {
         return;
     }
 
-    func_8000A190_AD90(&arg0->unk4, arg0->unk0->unk10->unk16, x, y, z, 0x4000, 0x4000, 0, 0, 0xAA);
+    func_8000A190_AD90((s32 *)&arg0->unk4, arg0->unk0->unk10->unk16, x, y, z, 0x4000, 0x4000, 0, 0, 0xAA);
 }
 
 void func_80007360_7F60(func_80007130_7D30_arg *arg0) {

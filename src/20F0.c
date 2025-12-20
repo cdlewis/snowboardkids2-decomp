@@ -67,8 +67,6 @@ extern u32 D_8008BD38_8C938;
 s32 func_800018F4_24F4(SceneModel *);
 s32 func_80001904_2504(s16);
 
-void *func_80009F5C_AB5C(s32);
-
 void func_800014F0_20F0(func_800014F0_20F0_arg *arg0) {
     arg0->unk3C = 1;
 }
@@ -505,7 +503,7 @@ void *func_80002040_2C40(SceneModel *arg0) {
     arg0->unk11C = freeNodeMemory(arg0->unk11C);
     arg0->unk118 = func_8000CDFC_D9FC(arg0->unk118);
     arg0->unk114 = func_8000CDE0_D9E0(arg0->unk114);
-    func_80009F5C_AB5C(((s32)arg0) + 0xA4);
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unkA4);
     temp_s0 = arg0->unk98;
     temp_s0->unk24 = freeNodeMemory(temp_s0->unk24);
     temp_s0->unk28 = freeNodeMemory(temp_s0->unk28);

@@ -28,8 +28,8 @@ typedef struct {
 
 typedef struct {
     func_80006CBC_inner *unk0;
-    s32 unk4;
-    u8 padding[0x4C];
+    SpriteAssetState unk4;
+    u8 padding[4];
     s32 unk54;
     s32 unk58;
 } func_80006C50_7850_arg;
@@ -70,7 +70,7 @@ extern void *D_80088720_89320;
 extern u8 identityMatrix[];
 
 void func_80006C50_7850(func_80006C50_7850_arg *arg0) {
-    s32 *temp_s0;
+    SpriteAssetState *temp_s0;
 
     temp_s0 = &arg0->unk4;
     arg0->unk54 = 0xC80000;
@@ -144,7 +144,18 @@ void func_80006CBC_78BC(func_80006C50_7850_arg *arg0) {
         return;
     }
 
-    func_8000A190_AD90(&arg0->unk4, temp->unk10->unk16, s3, s4, s1, 0x10000, 0x10000, 0, 0, ((u8 *)(&arg0->unk54))[1]);
+    func_8000A190_AD90(
+        (s32 *)&arg0->unk4,
+        temp->unk10->unk16,
+        s3,
+        s4,
+        s1,
+        0x10000,
+        0x10000,
+        0,
+        0,
+        ((u8 *)(&arg0->unk54))[1]
+    );
 }
 
 void func_80006E44_7A44(func_80006C50_7850_arg *arg0) {

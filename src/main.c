@@ -518,7 +518,7 @@ void func_80000C2C_182C(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
     setCleanupCallback(&func_80000DA4_19A4);
-    func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
+    func_80009E68_AA68((SpriteAssetState *)&arg0->unk8, subEntry->unk16);
     setCallback(&func_80000CAC_18AC);
 }
 
@@ -661,7 +661,7 @@ void func_80001158_1D58(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
     setCleanupCallback(&func_80001264_1E64);
-    func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
+    func_80009E68_AA68((SpriteAssetState *)&arg0->unk8, subEntry->unk16);
     *(s16 *)&arg0->unk54 = 0;
     setCallback(&func_800011DC_1DDC);
 }
@@ -709,7 +709,7 @@ void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
 
     memcpy(&sp20, &identityMatrix, sizeof(Mat3x3Padded));
     setCleanupCallback(&func_800014C8_20C8);
-    func_80009E68_AA68(&arg0->unk8, subEntry->unk16);
+    func_80009E68_AA68((SpriteAssetState *)&arg0->unk8, subEntry->unk16);
 
     sp10 = ((randA() & 0x1F) - 0x10) << 0x10;
     sp14 = ((randA() & 1) - 4) << 0x10;

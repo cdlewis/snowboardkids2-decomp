@@ -59,46 +59,46 @@ void func_80009DD0_A9D0(u16 arg0, Node *arg1) {
     debugEnqueueCallback(arg0, 4, &func_80009548_A148, arg1);
 }
 
-void func_80009E0C_AA0C(void *arg0) {
-    ((u8 *)arg0)[6] |= 1;
+void func_80009E0C_AA0C(SpriteAssetState *arg0) {
+    arg0->unk6 |= 1;
 }
 
-void func_80009E1C_AA1C(void *arg0) {
-    ((u8 *)arg0)[6] &= 0xFE;
+void func_80009E1C_AA1C(SpriteAssetState *arg0) {
+    arg0->unk6 &= 0xFE;
 }
 
-s32 func_80009E2C_AA2C(void *arg0) {
-    return ((u8 *)arg0)[6] & 1;
+s32 func_80009E2C_AA2C(SpriteAssetState *arg0) {
+    return arg0->unk6 & 1;
 }
 
-void func_80009E38_AA38(void *arg0) {
-    ((u8 *)arg0)[6] |= 2;
+void func_80009E38_AA38(SpriteAssetState *arg0) {
+    arg0->unk6 |= 2;
 }
 
-void func_80009E48_AA48(void *arg0) {
-    ((u8 *)arg0)[6] &= 0xFD;
+void func_80009E48_AA48(SpriteAssetState *arg0) {
+    arg0->unk6 &= 0xFD;
 }
 
-s32 func_80009E58_AA58(void *arg0) {
+s32 func_80009E58_AA58(SpriteAssetState *arg0) {
     u8 val;
-    val = ((u8 *)arg0)[6] & 2;
+    val = arg0->unk6 & 2;
     return val != 0;
 }
 
-s32 func_80009E68_AA68(void *arg0, s16 arg1) {
+s32 func_80009E68_AA68(SpriteAssetState *arg0, s16 arg1) {
     s32 *entry;
     s16 temp_s0;
 
     temp_s0 = arg1;
     if (temp_s0 >= func_800084F0_90F0()) {
-        *(void **)arg0 = NULL;
-        ((s16 *)arg0)[2] = 0;
+        arg0->unk0 = NULL;
+        arg0->unk4 = 0;
         return 0;
     }
     entry = &D_8008C920_8D520[temp_s0 * 5];
-    *(void **)arg0 = dmaRequestAndUpdateStateWithSize((void *)entry[0], (void *)entry[1], entry[2]);
-    ((s16 *)arg0)[2] = arg1;
-    ((u8 *)arg0)[6] = 0;
+    arg0->unk0 = dmaRequestAndUpdateStateWithSize((void *)entry[0], (void *)entry[1], entry[2]);
+    arg0->unk4 = arg1;
+    arg0->unk6 = 0;
     return 1;
 }
 
