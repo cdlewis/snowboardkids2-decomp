@@ -6,6 +6,7 @@
 #include "rand.h"
 
 extern s32 func_80044050_44C50(void);
+extern void *func_80043310_43F10(Player *arg0);
 extern u16 D_80093F90_94B90[];
 extern u16 D_80093FA4_94BA4[];
 extern u16 D_80093FB8_94BB8[];
@@ -169,7 +170,20 @@ s32 func_80058C10_59810(Player *arg0) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/594E0", func_80058C64_59864);
+s32 func_80058C64_59864(Player *arg0) {
+    if (arg0->unkBD0 == 0) {
+        if (func_80043310_43F10(arg0) != NULL) {
+            if (arg0->unkB84 & 2) {
+                arg0->unkBD0 = 2;
+            } else {
+                arg0->unkBD0 = 1;
+            }
+            arg0->unkB9A = 0xB4;
+            return 1;
+        }
+    }
+    return 0;
+}
 
 s32 func_80058CC4_598C4(Player *arg0) {
     if (arg0->unkBA4 == 0) {
