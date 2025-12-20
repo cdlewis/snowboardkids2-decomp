@@ -109,9 +109,18 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002DA54_2E654);
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002DE44_2EA44);
 
+struct Func2E024Element {
+    /* 0x00 */ u8 pad0[0x18];
+    /* 0x18 */ s32 unk18;
+    /* 0x1C */ u8 pad1[0x4];
+    /* 0x20 */ s32 unk20;
+    /* 0x24 */ u8 pad2[0x40];
+}; /* size = 0x64 */
+
 void func_8002E024_2EC24(Func2E024Arg *arg0) {
     GameState *allocation;
     s32 i;
+    struct Func2E024Element *elements;
 
     allocation = (GameState *)getCurrentAllocation();
 
@@ -136,11 +145,11 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
             break;
     }
 
+    elements = (struct Func2E024Element *)arg0;
     for (i = 0; i < arg0->unkD5; i++) {
-        Func2E024Arg *ptr = (Func2E024Arg *)((u8 *)arg0 + i * 0x64);
-        func_8002A2D0_2AED0(ptr);
-        ((s32 *)allocation)[0x102 + i] = ptr->unk18;
-        ((s32 *)allocation)[0x104 + i] = ptr->unk20;
+        func_8002A2D0_2AED0(&elements[i]);
+        ((s32 *)allocation)[0x102 + i] = elements[i].unk18;
+        ((s32 *)allocation)[0x104 + i] = elements[i].unk20;
     }
 
     if (allocation->unk42A == 0x11) {
