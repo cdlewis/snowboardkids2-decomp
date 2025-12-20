@@ -49,15 +49,24 @@ typedef struct {
     /* 0x38 */ u8 _pad34[0x3B - 0x34];
     /* 0x3B */ s8 unk3B;
     /* 0x3C */ u8 _pad3C[8];
-    /* 0x44 */ u16 unk44;
-    /* 0x46 */ u16 unk46;
+    /* 0x44 */ union {
+        u16 unk44;
+        u8 unk44_bytes[2];
+    } unk44_union;
+    /* 0x46 */ union {
+        u16 unk46;
+        u8 unk46_bytes[2];
+    } unk46_union;
     /* 0x48 */ u16 unk48;
     /* 0x4A */ u16 unk4A;
     /* 0x4C */ u8 _pad4C[8];
     /* 0x54 */ u8 unk54[0x20];
     /* 0x74 */ u16 unk74;
     /* 0x76 */ s16 unk76;
-    /* 0x78 */ s32 unk78;
+    /* 0x78 */ union {
+        s32 unk78;
+        s16 unk78_shorts[2];
+    } unk78_union;
     /* 0x7C */ s32 unk7C;
     /* 0x80 */ s32 unk80;
     /* 0x84 */ s8 unk84;
