@@ -172,7 +172,7 @@ void func_8003CF40_3DB40(s16 *arg0) {
         return;
     }
     createYRotationMatrix(&sp30, (temp_v1 + 0x1000) & 0xFFFF);
-    memcpy(&sp30.unk14, (u8 *)identityMatrix + 0x14, 0xC);
+    memcpy(&sp30.unk14, &((Mat3x3Padded *)identityMatrix)->unk14, 0xC);
     func_8006B084_6BC84(s2, &sp30, &sp50);
     func_8006B084_6BC84(&sp50, s1->unk10 + 0x950, s2);
     transformVector2(&D_8008FEB0_90AB0, s1->unk10 + 0x950, sp70);
