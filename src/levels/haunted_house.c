@@ -337,7 +337,7 @@ void func_800BB8E8_AF5D8(func_800BB8E8_AF5D8_arg *arg0) {
     arg0->unk2C = 0;
 
     temp_v0_3 = func_80055E68_56A68(9);
-    arg0->unk20 = (void *)((u8 *)temp_v0_3 + 0x90);
+    arg0->unk20 = &temp_v0_3->unk90;
 
     arg0->unk4E = 0xF;
     arg0->unk3C = 0xFD71ABE1;
