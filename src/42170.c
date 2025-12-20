@@ -1216,24 +1216,20 @@ typedef struct {
 void func_800432D8_43ED8(Func432D8Arg *);
 
 typedef struct {
-    u8 pad0[0x18];  /* 0x00 */
-    s32 unk18;      /* 0x18 */
-    u8 pad1C[0x4];  /* 0x1C */
-    void *unk20;    /* 0x20 */
-    void *unk24;    /* 0x24 */
-    void *unk28;    /* 0x28 */
-    s32 unk2C;      /* 0x2C */
-    u8 pad30[0x2C]; /* 0x30 */
-    void *unk5C;    /* 0x5C */
-    void *unk60;    /* 0x60 */
-    void *unk64;    /* 0x64 */
-    s32 unk68;      /* 0x68 */
-    u8 pad6C[0xC];  /* 0x6C */
-    Player *unk78;  /* 0x78 */
-    s32 unk7C;      /* 0x7C */
-    u16 unk80;      /* 0x80 */
-    u16 unk82;      /* 0x82 */
-    s16 unk84;      /* 0x84 */
+    u8 pad0[0x18];           /* 0x00 */
+    s32 unk18;               /* 0x18 */
+    u8 pad1C[0x4];           /* 0x1C */
+    void *unk20;             /* 0x20 */
+    void *unk24;             /* 0x24 */
+    void *unk28;             /* 0x28 */
+    s32 unk2C;               /* 0x2C */
+    u8 pad30[0xC];           /* 0x30 */
+    DisplayListObject unk3C; /* 0x3C */
+    Player *unk78;           /* 0x78 */
+    s32 unk7C;               /* 0x7C */
+    u16 unk80;               /* 0x80 */
+    u16 unk82;               /* 0x82 */
+    s16 unk84;               /* 0x84 */
 } Func43018State;
 
 void func_8004309C_43C9C(Func43018State *arg0);
@@ -1244,12 +1240,12 @@ void func_80043018_43C18(Func43018State *arg0) {
     arg0->unk20 = &D_8009A710_9B310;
     arg0->unk24 = loadAsset_B7E70();
     arg0->unk28 = loadAsset_216290();
-    arg0->unk5C = &D_8009A720_9B320;
+    arg0->unk3C.unk20 = (DisplayLists *)&D_8009A720_9B320;
     arg0->unk2C = 0;
-    arg0->unk68 = 0;
+    arg0->unk3C.unk2C = 0;
     arg0->unk84 = 0x200;
-    arg0->unk60 = arg0->unk24;
-    arg0->unk64 = arg0->unk28;
+    arg0->unk3C.unk24 = arg0->unk24;
+    arg0->unk3C.unk28 = arg0->unk28;
     setCleanupCallback(func_800432D8_43ED8);
     setCallbackWithContinue(func_8004309C_43C9C);
 }
@@ -1317,12 +1313,12 @@ void func_8004320C_43E0C(Func43018State *arg0) {
         matrix.unk14 = 0;
         matrix.unk18 = 0xBB333;
         matrix.unk1C = 0xFFEA0000;
-        func_8006B084_6BC84(&matrix, arg0, (u8 *)arg0 + 0x3C);
+        func_8006B084_6BC84(&matrix, arg0, &arg0->unk3C);
     }
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)((u8 *)arg0 + 0x3C));
+        enqueueDisplayListWithFrustumCull(i, &arg0->unk3C);
     }
 }
 
