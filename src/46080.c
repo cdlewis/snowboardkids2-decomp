@@ -2529,7 +2529,7 @@ void func_8004A96C_4B56C(s32 **arg0) {
     GameState *temp_v0;
 
     temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v0->PAD_5[0xB] += 1;
+    temp_v0->unk5B += 1;
     *arg0 = freeNodeMemory(*arg0);
 }
 
@@ -2538,10 +2538,10 @@ void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2) {
     func_8004A9A8_4B5A8_node *node;
 
     gs = (GameState *)getCurrentAllocation();
-    if (gs->PAD_5[0xB] != 0) {
+    if (gs->unk5B != 0) {
         node = (func_8004A9A8_4B5A8_node *)scheduleTask(&func_8004A5E0_4B1E0, 3U, 0U, 0xEFU);
         if (node != NULL) {
-            gs->PAD_5[0xB] -= 1;
+            gs->unk5B -= 1;
             memcpy(&node->unk8, arg0, 0xC);
             memcpy(&node->unk2C, arg2, 0xC);
             node->unk24 = arg1;
@@ -2754,7 +2754,7 @@ void func_8004AE58_4BA58(s32 **arg0) {
     GameState *temp_v0;
 
     temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v0->PAD_5[0xB] += 1;
+    temp_v0->unk5B += 1;
     *arg0 = freeNodeMemory(*arg0);
 }
 

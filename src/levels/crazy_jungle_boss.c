@@ -151,7 +151,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     arg0->unkB84 |= 0x40000;
 
     if (arg0->unkBBF == 0) {
-        if ((u32) * (s32 *)((u8 *)gameState + 0x50) < 0x1EU) {
+        if ((u32)gameState->unk50 < 0x1EU) {
             arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
         } else {
             arg0->unkB8C += (randA() & 0xFF) >> 1;
@@ -212,7 +212,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
 
     if (arg0->unkB8C == 0) {
         func_8004B794_4C394(arg0);
-        if (*((u8 *)gameState + 0x86) != 0) {
+        if (gameState->unk86 != 0) {
             arg0->unkB8C = arg0->unkB8C + (0xF + ((randA() & 0xFF) >> 4));
         } else {
             arg0->unkB8C = arg0->unkB8C + (0xF + ((randA() & 0xFF) >> 2));

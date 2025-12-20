@@ -216,7 +216,11 @@ typedef struct {
     GameStateUnk44 *unk44;
     u8 *unk48;
     s32 unk4C;
-    u8 PAD_5[0x8];
+    s32 unk50;
+    u8 unk54;
+    u8 unk55;
+    u8 unk56;
+    u8 unk57;
     u16 unk58;
     u8 unk5A;
     u8 unk5B;
@@ -242,7 +246,9 @@ typedef struct {
     u8 PAD_7[0x4];
     /* 0x83 */ u8 unk83;
     /* 0x84 */ u8 unk84;
-    u8 PAD_7B[0x55];
+    u8 PAD_85[0x1];
+    u8 unk86;
+    u8 PAD_7B[0x53];
     u16 unkDA;
     u8 PAD_8[0xF9];
     /* 0x1D8 */ ALPlayer *audioPlayer2;
