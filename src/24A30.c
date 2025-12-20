@@ -801,13 +801,13 @@ void func_80025904_26504(void);
 
 void func_80025824_26424(func_80025824_arg *arg0) {
     func_80027348_entry *ptr;
-    u8 *base;
+    GameState *base;
     s32 i;
     s16 val;
     u8 constant;
-    u8 *bytePtr;
+    func_80027348_entry *entryPtr;
 
-    base = (u8 *)getCurrentAllocation();
+    base = (GameState *)getCurrentAllocation();
 
     i = 0;
     ptr = (func_80027348_entry *)arg0;
@@ -817,7 +817,7 @@ void func_80025824_26424(func_80025824_arg *arg0) {
         i++;
     } while (i < 3);
 
-    if (*(u16 *)(base + arg0->unk24 * 2 + 0x1898) == 3) {
+    if (base->unk1898[arg0->unk24] == 3) {
         val = 0xD;
         if (D_800AFE8C_A71FC->unk8 == 1) {
             val = 0x12;
@@ -825,11 +825,11 @@ void func_80025824_26424(func_80025824_arg *arg0) {
 
         i = 0;
         constant = 8;
-        bytePtr = (u8 *)arg0;
+        entryPtr = arg0->entries;
         do {
-            ((volatile s16 *)bytePtr)[4] = val;
-            ((volatile u8 *)bytePtr)[0xA] = constant;
-            bytePtr += 0xC;
+            ((volatile func_80027348_entry *)entryPtr)->unk8 = val;
+            ((volatile func_80027348_entry *)entryPtr)->unkA = constant;
+            entryPtr++;
             i++;
         } while (i < 3);
 
