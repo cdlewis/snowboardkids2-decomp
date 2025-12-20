@@ -21,6 +21,11 @@ typedef struct {
     u16 unk18A0;
 } Allocation232F0;
 
+typedef struct {
+    u8 pad0[0x52];
+    u8 unk52;
+} Task232F0;
+
 void func_80022CEC_238EC(void);
 void func_80022D74_23974(void);
 void func_80023D74_24974(void);
@@ -46,16 +51,16 @@ void func_80022C80_23880(void) {
 
 void func_80022CEC_238EC(void) {
     s32 i;
-    void *task;
+    Task232F0 *task;
 
     if (func_8006FE10_70A10(0) != 0) {
         return;
     }
 
     for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
-        task = scheduleTask(func_8002529C_25E9C, 1, i, 0x5A);
+        task = (Task232F0 *)scheduleTask(func_8002529C_25E9C, 1, i, 0x5A);
         if (task != NULL) {
-            *(u8 *)((u8 *)task + 0x52) = i;
+            task->unk52 = i;
         }
     }
 
