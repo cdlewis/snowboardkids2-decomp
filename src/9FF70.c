@@ -742,7 +742,7 @@ s32 func_800B2C18_A2AC8(Player *arg0) {
     if (arg0->unkBAC != 0) {
         func_80059A48_5A648(arg0, arg0->unkBAC);
         if (arg0->unkBC7 == 0) {
-            func_8004D890_4E490(arg0->unkBB8, (void *)arg0->unkBAC);
+            func_8004D890_4E490(arg0->unkBB8, arg0->unkBAC);
 
             var_v1 = arg0->unkBAC;
             if (var_v1 < 0x96) {

@@ -76,7 +76,7 @@ typedef struct {
     s16 unk7A;
     u8 padding3[0x8];
     s8 unk84[4];
-    s8 unk88;
+    char unk88;
 } func_800329A8_335A8_arg;
 
 typedef struct {

@@ -30,12 +30,14 @@ void initRand(void) {
 }
 
 u8 randA(void) {
-    gRandIndexA = (u8)(++gRandIndexA);
+    ++gRandIndexA;
+    gRandIndexA = (u8)(gRandIndexA);
     return gRandTable[gRandIndexA];
 }
 
 u8 randB(void) {
-    gRandIndexB = (u8)(++gRandIndexB);
+    ++gRandIndexB;
+    gRandIndexB = (u8)(gRandIndexB);
     return gRandTable[gRandIndexB];
 }
 

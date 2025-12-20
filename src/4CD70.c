@@ -805,12 +805,12 @@ void func_8004D858_4E458(Struct_func_8004F04C *arg0) {
 
 typedef struct {
     u8 pad0[0x18];
-    void *unk18;
+    s32 unk18;
     u8 pad1C[0xC];
     s16 unk28;
 } func_8004D890_task;
 
-void func_8004D890_4E490(s32 arg0, void *arg1) {
+void func_8004D890_4E490(s32 arg0, s32 arg1) {
     func_8004D890_task *task;
 
     task = scheduleTask(func_8004D544_4E144, 0, 0, 0xE6);

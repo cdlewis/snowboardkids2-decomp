@@ -90,7 +90,7 @@ typedef struct {
 } Struct_func_8004C2C0;
 
 void func_8004D364_4DF64(s32 arg0);
-void func_8004D890_4E490(s32 arg0, void *arg1);
+void func_8004D890_4E490(s32 arg0, s32 arg1);
 void func_8004D8E4_4E4E4(Struct_func_8004D8E4 *arg0);
 void func_8004D9D0_4E5D0(Struct_func_8004D9D0 *arg0);
 void func_8004E6A4_4F2A4(s16 arg0, s16 arg1);
