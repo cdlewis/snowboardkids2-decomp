@@ -357,6 +357,7 @@ void func_80024298_24E98(func_80024048_arg *arg0) {
     Mat3x3Padded sp10;
     Mat3x3Padded *localPtr;
     u8 *base;
+    GameState *state;
     Mat3x3Padded *unk7CPtr;
     Mat3x3Padded *unk5CPtr;
     s32 tableValue;
@@ -367,17 +368,18 @@ void func_80024298_24E98(func_80024048_arg *arg0) {
     s32 offset;
 
     base = (u8 *)getCurrentAllocation();
+    state = (GameState *)base;
 
     unk7CPtr = &arg0->unk7C;
     offset = arg0->unkA1 << 5;
     memcpy(unk7CPtr, (u8 *)(offset + (s32)base + 0x17F8), 0x20);
 
-    tableValue = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->unk8 * 2) + *(base + arg0->unkA1 + 0x18C0)];
+    tableValue = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->unk8 * 2) + state->unk18C0[arg0->unkA1]];
     arg0->unk7C.unk14 = tableValue;
     arg0->unk9C = tableValue;
 
-    charIndex = *(base + arg0->unkA1 + 0x18A8);
-    assetIndex = *(base + arg0->unkA1 + 0x18B0);
+    charIndex = state->unk18A8[arg0->unkA1];
+    assetIndex = state->unk18B0[arg0->unkA1];
     assetIndex += charIndex * 3;
     arg0->unkA2 = assetIndex;
 
@@ -394,7 +396,7 @@ void func_80024298_24E98(func_80024048_arg *arg0) {
     memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
 
     unk5CPtr = &arg0->unk5C;
-    rotation = *(u16 *)(base + arg0->unkA1 * 2 + 0x1888);
+    rotation = state->unk1888[arg0->unkA1];
     createYRotationMatrix(unk5CPtr, rotation);
 
     func_8006B084_6BC84(&arg0->unk3C, unk5CPtr, localPtr);
