@@ -23,7 +23,8 @@ typedef struct {
     s32 unk14;
     ColorData unk18;
     ColorData unk20;
-    u8 padding2[0x4];
+    s16 unk28;
+    u8 padding2[0x2];
 } D_80090F90_91B90_item;
 
 typedef struct {

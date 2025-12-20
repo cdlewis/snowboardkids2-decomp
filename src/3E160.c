@@ -894,12 +894,12 @@ void func_8003F178_3FD78(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     if ((state->unk79 == 0) || (state->unk7A == 0xB)) {
-        void *ret = func_80055D10_56910(state->memoryPoolId);
+        D_80090F90_91B90_item *ret = func_80055D10_56910(state->memoryPoolId);
 
         if (state->unk7A == 0xB) {
             func_800574A0_580A0(0x20);
         } else {
-            func_800574A0_580A0(*(s16 *)(ret + 0x28));
+            func_800574A0_580A0(ret->unk28);
         }
 
         setGameStateHandler(func_8003F368_3FF68);
