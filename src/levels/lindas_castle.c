@@ -36,7 +36,9 @@ typedef struct {
 void func_800BB9F0_AB8A0(func_800BB9F0_AB8A0_arg *arg0);
 
 typedef struct {
-    u8 pad[0x5C];
+    u8 pad0[0x30];
+    void *unk30;
+    u8 pad34[0x28];
     u8 unk5C;
 } Allocation_AB304;
 
@@ -118,7 +120,7 @@ void func_800BB454_AB304(TaskArg_AB304 *task) {
 
     task->unk44 = D_800BBBC0_ABA70[task->unk50].unk4[0].unk4;
 
-    task->unk40 = func_80061A64_62664((u8 *)allocation + 0x30, task->unk56, &task->unk3C);
+    task->unk40 = func_80061A64_62664(&allocation->unk30, task->unk56, &task->unk3C);
 
     index = task->unk50;
 
