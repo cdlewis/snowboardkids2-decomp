@@ -273,59 +273,42 @@ void func_8004C46C_4D06C(Struct_func_8004C2C0 *arg0) {
     }
 }
 
-void func_8004C5A8_4D1A8(void *arg0) {
-    u8 *temp_v0;
+void func_8004C5A8_4D1A8(Struct_func_8004C2C0 *arg0) {
+    Player *temp_v0;
     u8 temp_v2;
-    void *temp_v1;
+    Player *temp_v1;
     void *callback;
 
-    // First block: handle unk34->BD3
-    temp_v0 = *(u8 **)(arg0 + 0x34);
-    temp_v2 = temp_v0[0xBD3];
+    temp_v0 = arg0->unk34;
+    temp_v2 = temp_v0->unkBD3;
     if (temp_v2 != 0) {
-        *(u8 *)(arg0 + 0x30) = temp_v2 + 0x30;
-        debugEnqueueCallback((*(u32 *)(arg0 + 0x38) + 8) & 0xFFFF, 0, renderTextPalette, arg0 + 0x24);
+        arg0->unk30 = temp_v2 + 0x30;
+        debugEnqueueCallback((arg0->unk38 + 8) & 0xFFFF, 0, renderTextPalette, &arg0->unk24);
     }
 
-    // Second block: handle unk34->BD2
     callback = func_8000FED0_10AD0;
-    temp_v2 = (*(u8 **)(arg0 + 0x34))[0xBD2];
-    *(s16 *)(arg0 + 0x8) = temp_v2;
-    debugEnqueueCallback((*(u32 *)(arg0 + 0x38) + 8) & 0xFFFF, 0, callback, arg0);
+    temp_v2 = arg0->unk34->unkBD2;
+    arg0->unk8 = temp_v2;
+    debugEnqueueCallback((arg0->unk38 + 8) & 0xFFFF, 0, callback, arg0);
 
-    // Third block: handle BD8 & 1
-    temp_v0 = *(u8 **)(arg0 + 0x34);
-    if ((temp_v0[0xBD8] & 1) != 0) {
-        func_8005100C_51C0C(
-            (s32) * (s16 *)(arg0 + 0x0) - 4,
-            (s32) * (s16 *)(arg0 + 0x2) - 4,
-            0,
-            *(u32 *)(arg0 + 0x38) + 8,
-            1
-        );
-        temp_v1 = *(u8 **)(arg0 + 0x34);
-        temp_v2 = *(u8 *)(temp_v1 + 0xBD8);
-        *(u8 *)(temp_v1 + 0xBD8) = temp_v2 & 0xFE;
+    temp_v0 = arg0->unk34;
+    if ((temp_v0->unkBD8 & 1) != 0) {
+        func_8005100C_51C0C((s32)arg0->unk0 - 4, (s32)arg0->unk2 - 4, 0, arg0->unk38 + 8, 1);
+        temp_v1 = arg0->unk34;
+        temp_v2 = temp_v1->unkBD8;
+        temp_v1->unkBD8 = temp_v2 & 0xFE;
     }
 
-    // Fourth block: handle unk34->BD4
-    temp_v2 = (*(u8 **)(arg0 + 0x34))[0xBD4];
-    *(s16 *)(arg0 + 0x14) = temp_v2 + 7;
-    debugEnqueueCallback((*(u32 *)(arg0 + 0x38) + 8) & 0xFFFF, 0, callback, arg0 + 0xC);
+    temp_v2 = arg0->unk34->unkBD4;
+    arg0->unk14 = temp_v2 + 7;
+    debugEnqueueCallback((arg0->unk38 + 8) & 0xFFFF, 0, callback, &arg0->unkC);
 
-    // Fifth block: handle BD8 & 2
-    temp_v0 = *(u8 **)(arg0 + 0x34);
-    if ((temp_v0[0xBD8] & 2) != 0) {
-        func_8005100C_51C0C(
-            (s32) * (s16 *)(arg0 + 0xC) - 4,
-            (s32) * (s16 *)(arg0 + 0xE) - 4,
-            1,
-            *(u32 *)(arg0 + 0x38) + 8,
-            1
-        );
-        temp_v1 = *(u8 **)(arg0 + 0x34);
-        temp_v2 = *(u8 *)(temp_v1 + 0xBD8);
-        *(u8 *)(temp_v1 + 0xBD8) = temp_v2 & 0xFD;
+    temp_v0 = arg0->unk34;
+    if ((temp_v0->unkBD8 & 2) != 0) {
+        func_8005100C_51C0C((s32)arg0->unkC - 4, (s32)arg0->unkE - 4, 1, arg0->unk38 + 8, 1);
+        temp_v1 = arg0->unk34;
+        temp_v2 = temp_v1->unkBD8;
+        temp_v1->unkBD8 = temp_v2 & 0xFD;
     }
 }
 
