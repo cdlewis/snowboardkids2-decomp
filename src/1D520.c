@@ -32,9 +32,9 @@ typedef struct {
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 
 void func_8001CD58_1D958(void) {
-    void *allocation = getCurrentAllocation();
+    allocation_1D520 *allocation = (allocation_1D520 *)getCurrentAllocation();
     u8 value = ((u8 *)D_800AFE8C_A71FC)[0x1E];
-    ((u8 *)allocation)[0xAC8] = value;
+    allocation->unkAC8 = value;
     setGameStateHandler(func_8001CD90_1D990);
 }
 
