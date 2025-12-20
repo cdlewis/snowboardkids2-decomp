@@ -18,8 +18,13 @@ typedef struct {
 } AnimationEntry;
 
 typedef struct {
+    /* 0x00 */ u8 pad0[0x4];
+    /* 0x04 */ s16 unk4;
+} AnimationHeader;
+
+typedef struct {
     /* 0x00 */ u8 pad0[0x8];
-    /* 0x08 */ void *unk8;
+    /* 0x08 */ AnimationHeader *unk8;
     /* 0x0C */ AnimationEntry *unkC;
     /* 0x10 */ u16 unk10;
     /* 0x12 */ s16 unk12;

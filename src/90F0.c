@@ -132,7 +132,7 @@ s32 func_8000A030_AC30(void *arg0, s32 arg1) {
         state->unk16 = timer - 1;
     } else {
         state->unk14++;
-        if (state->unk14 >= ((s16 *)state->unk8)[2]) {
+        if (state->unk14 >= state->unk8->unk4) {
             state->unk14 = 0;
             looped = 1;
         }
