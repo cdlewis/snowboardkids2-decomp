@@ -360,11 +360,11 @@ void func_800349B8_355B8(Func349B8Arg *arg0) {
 }
 
 void func_80034A30_35630(void *arg0) {
-    u8 *allocation;
+    AllocationStruct *allocation;
     u16 val;
 
     allocation = getCurrentAllocation();
-    val = *(u16 *)(allocation + 0xAC6);
+    val = allocation->unkAC6;
 
     if (val == 3 || val == 0x3C || val == 0x17) {
         debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
