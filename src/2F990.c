@@ -966,22 +966,18 @@ void func_80030A00_31600(func_80030A00_31600_arg *arg0) {
     setCallback(&func_80030AEC_316EC);
 }
 
-void func_80030AEC_316EC(void *arg0) {
+void func_80030AEC_316EC(void *untypedArg0) {
+    func_80030A00_31600_arg *arg0 = (func_80030A00_31600_arg *)untypedArg0;
     GameState *alloc;
     s32 i;
-    void *ptr;
 
     alloc = (GameState *)getCurrentAllocation();
 
     if (alloc->unk5D8 != 0) {
-        i = 0;
-        ptr = arg0;
-        do {
-            debugEnqueueCallback(8, 0, &func_8000FED0_10AD0, ptr);
-            debugEnqueueCallback(8, 1, &func_80035408_36008, (u8 *)arg0 + 0x30);
-            i++;
-            ptr = (u8 *)ptr + 0xC;
-        } while (i < 4);
+        for (i = 0; i < 4; i++) {
+            debugEnqueueCallback(8, 0, &func_8000FED0_10AD0, &arg0->items[i]);
+            debugEnqueueCallback(8, 1, &func_80035408_36008, &arg0->unk30);
+        }
     }
 }
 
