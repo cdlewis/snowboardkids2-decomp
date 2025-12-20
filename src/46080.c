@@ -3249,9 +3249,7 @@ void func_8004BC5C_4C85C(s32 arg0) {
 typedef struct {
     u8 _pad0[0x4];
     u8 unk4[0x4];
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    Vec3s32 unk8;
     u8 _pad14[0x14];
     s32 unk28;
     s32 unk2C;
@@ -3306,7 +3304,7 @@ void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0);
 void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0) {
     func_8004B4CC_4C0CC_StackLocals sp;
     GameState_46080 *s0;
-    void *s2;
+    Vec3s32 *s2;
     s32 i;
     void *temp_s0;
 
@@ -3317,21 +3315,21 @@ void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0) {
         goto exit_loop;
     }
 
-    s2 = (void *)((u8 *)arg0 + 0x8);
+    s2 = &arg0->unk8;
 
     arg0->unk2C -= 0x4000;
-    arg0->unk8 += arg0->unk28;
-    arg0->unkC += arg0->unk2C;
-    arg0->unk10 += arg0->unk30;
+    arg0->unk8.unk0 += arg0->unk28;
+    arg0->unk8.unk4 += arg0->unk2C;
+    arg0->unk8.unk8 += arg0->unk30;
 
-    arg0->unk34 = func_80060A3C_6163C((u8 *)s0 + 0x30, arg0->unk34, s2);
+    arg0->unk34 = func_80060A3C_6163C(s0->unk30, arg0->unk34, s2);
 
-    func_80060CDC_618DC((u8 *)s0 + 0x30, arg0->unk34, s2, 0x100000, &sp.sp18);
+    func_80060CDC_618DC(s0->unk30, arg0->unk34, s2, 0x100000, &sp.sp18);
 
-    arg0->unk8 += sp.sp18;
-    arg0->unk10 += sp.sp20;
+    arg0->unk8.unk0 += sp.sp18;
+    arg0->unk8.unk8 += sp.sp20;
 
-    sp.sp1C = func_80061A64_62664((u8 *)s0 + 0x30, arg0->unk34, s2);
+    sp.sp1C = func_80061A64_62664(s0->unk30, arg0->unk34, s2);
 
     temp_s0 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
 
@@ -3343,8 +3341,8 @@ void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0) {
         return;
     }
 
-    if (arg0->unkC < sp.sp1C) {
-        arg0->unkC = sp.sp1C;
+    if (arg0->unk8.unk4 < sp.sp1C) {
+        arg0->unk8.unk4 = sp.sp1C;
         arg0->unk36 = 0xF0;
         setCallback(&func_8004BFBC_4CBBC);
     }
