@@ -2598,9 +2598,7 @@ void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0) {
 struct func_8004AB50_4B750_arg {
     u8 _pad0[0x4];
     u8 unk4[0x4];
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    Vec3s32 unk8;
     u8 _pad14[0x10];
     s32 unk24;
     s32 unk28;
@@ -2657,16 +2655,16 @@ void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0) {
                 var_v0_2 = temp_a1 + 7;
             }
             arg0->unk2C = temp_a1 - (var_v0_2 >> 3);
-            arg0->unk8 = arg0->unk8 + arg0->unk24;
-            arg0->unkC = arg0->unkC + arg0->unk28;
-            arg0->unk10 = arg0->unk10 + arg0->unk2C;
+            arg0->unk8.unk0 = arg0->unk8.unk0 + arg0->unk24;
+            arg0->unk8.unk4 = arg0->unk8.unk4 + arg0->unk28;
+            arg0->unk8.unk8 = arg0->unk8.unk8 + arg0->unk2C;
         }
-        temp_s0 = (void *)((u8 *)s0 + 0x30);
-        s2 = (Vec3s32 *)((u8 *)arg0 + 8);
+        temp_s0 = &s0->unk30;
+        s2 = &arg0->unk8;
         arg0->unk34 = func_80060A3C_6163C(temp_s0, arg0->unk34, s2);
         func_80060CDC_618DC(temp_s0, arg0->unk34, s2, 0x100000, &sp.sp18);
-        arg0->unk8 = arg0->unk8 + sp.sp18;
-        arg0->unk10 = arg0->unk10 + sp.sp20;
+        arg0->unk8.unk0 = arg0->unk8.unk0 + sp.sp18;
+        arg0->unk8.unk8 = arg0->unk8.unk8 + sp.sp20;
         sp.sp1C = func_80061A64_62664(temp_s0, arg0->unk34, s2);
         temp_v0_3 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
         if (temp_v0_3 != NULL) {
@@ -2676,8 +2674,8 @@ void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0) {
             func_80069CF8_6A8F8();
             return;
         }
-        if (arg0->unkC < sp.sp1C) {
-            arg0->unkC = sp.sp1C;
+        if (arg0->unk8.unk4 < sp.sp1C) {
+            arg0->unk8.unk4 = sp.sp1C;
             arg0->unk36 = 0x1518;
             setCallback(func_8004AD18_4B918);
         }
