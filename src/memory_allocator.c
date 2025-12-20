@@ -157,7 +157,8 @@ void unlockNodeWithInterruptDisable(s32 *arg0) {
 }
 
 s32 getNodeOwner(void *arg0) {
-    return (s32)(*((void **)((u8 *)arg0 - 0xC)));
+    MemoryAllocatorNode *node = ((MemoryAllocatorNode *)arg0) - 1;
+    return node->unk_14;
 }
 
 void setNodeSequenceNumber(void *arg0, void *arg1) {
