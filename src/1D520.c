@@ -112,115 +112,115 @@ void func_8001DEBC_1EABC(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001DF5C_1EB5C);
 
-s32 func_8001E104_1ED04(u8 *arg0) {
+s32 func_8001E104_1ED04(EepromSaveData_type *arg0) {
     s32 temp_a1;
     s32 changed;
     s32 i;
     u8 temp;
 
-    temp_a1 = *(s32 *)(arg0 + 0xC);
+    temp_a1 = *(s32 *)arg0->unknown_0C;
     changed = 0;
     if (temp_a1 > 0x98967F) {
-        *(s32 *)(arg0 + 0xC) = 0x98967F;
+        *(s32 *)arg0->unknown_0C = 0x98967F;
         changed = 1;
         i = 0;
     } else {
         i = 0;
         if (temp_a1 < 0) {
-            *(s32 *)(arg0 + 0xC) = 0;
+            *(s32 *)arg0->unknown_0C = 0;
             changed = 1;
             i = 0;
         }
     }
 
     for (i = 0; i < 0x10; i++) {
-        temp = *(arg0 + i + 0x10);
+        temp = arg0->save_slot_status[i];
         if (temp >= 6) {
-            *(arg0 + i + 0x10) = 0;
+            arg0->save_slot_status[i] = 0;
             changed = 1;
         }
-        temp = *(arg0 + i + 0x20);
+        temp = arg0->save_slot_data[i];
         if (temp >= 6) {
-            *(arg0 + i + 0x20) = 0;
+            arg0->save_slot_data[i] = 0;
             changed = 1;
         }
     }
 
-    if (arg0[0x10] == 0) {
-        arg0[0x10] = 5;
+    if (arg0->save_slot_status[0] == 0) {
+        arg0->save_slot_status[0] = 5;
         changed = 1;
     }
 
     for (i = 0; i < 3; i++) {
-        temp = *(arg0 + i + 0x20);
+        temp = arg0->save_slot_data[i];
         if (temp == 0) {
-            *(arg0 + i + 0x20) = 5;
+            arg0->save_slot_data[i] = 5;
             changed = 1;
         }
-        temp = *(arg0 + i + 0x24);
+        temp = arg0->save_slot_data[i + 4];
         if (temp == 0) {
-            *(arg0 + i + 0x24) = 5;
+            arg0->save_slot_data[i + 4] = 5;
             changed = 1;
         }
     }
 
     for (i = 0; i < 0x12; i++) {
-        temp = *(arg0 + i + 0x30);
+        temp = arg0->character_or_settings[i];
         if (temp >= 0x1A) {
-            *(arg0 + i + 0x30) = 0;
+            arg0->character_or_settings[i] = 0;
             changed = 1;
         }
     }
 
     for (i = 0; i < 3; i++) {
-        temp = *(arg0 + (i * 3) + 0x30);
+        temp = arg0->character_or_settings[i * 3];
         if (temp == 0) {
-            *(arg0 + (i * 3) + 0x30) = i + 1;
+            arg0->character_or_settings[i * 3] = i + 1;
             changed = 1;
         }
     }
 
     for (i = 0; i < 0x12; i++) {
-        temp = *(arg0 + i + 0x30);
+        temp = arg0->character_or_settings[i];
         if (temp >= 0x1A) {
-            *(arg0 + i + 0x30) = 1;
+            arg0->character_or_settings[i] = 1;
             changed = 1;
         }
     }
 
     for (i = 0; i < 9; i++) {
-        temp = *(arg0 + i + 0x42);
+        temp = arg0->u.setting_42[i];
         if (temp >= 0x12) {
-            *(arg0 + i + 0x42) = 0x11;
+            arg0->u.setting_42[i] = 0x11;
             changed = 1;
         }
     }
 
     for (i = 0; i < 3; i++) {
-        temp = *(arg0 + i + 0x4B);
+        temp = arg0->setting_4B[i];
         if (temp >= 0x10) {
-            *(arg0 + i + 0x4B) = 0xF;
+            arg0->setting_4B[i] = 0xF;
             changed = 1;
         }
     }
 
-    if (arg0[0x4E] >= 2) {
-        arg0[0x4E] = 0;
+    if (arg0->setting_4E >= 2) {
+        arg0->setting_4E = 0;
         changed = 1;
     }
 
-    if (arg0[0x4F] >= 2) {
-        arg0[0x4F] = 0;
+    if (arg0->setting_4F >= 2) {
+        arg0->setting_4F = 0;
         changed = 1;
     }
 
-    if (arg0[0x50] >= 2) {
-        arg0[0x50] = 0;
+    if (arg0->setting_50 >= 2) {
+        arg0->setting_50 = 0;
         changed = 1;
     }
 
-    if (arg0[0x51] >= 2) {
-        arg0[0x51] = 0;
+    if (arg0->unk51 >= 2) {
+        arg0->unk51 = 0;
         changed = 1;
     }
 
