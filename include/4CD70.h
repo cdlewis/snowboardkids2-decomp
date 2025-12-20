@@ -61,6 +61,34 @@ typedef struct {
     s32 unk18;
 } Struct_func_8004D9D0;
 
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x2];
+    s16 unkC;
+    s16 unkE;
+    void *unk10;
+    s16 unk14;
+    u8 pad16[0x2];
+    s16 unk18;
+    s16 unk1A;
+    void *unk1C;
+    s16 unk20;
+    u8 pad22[0x2];
+    s16 unk24;
+    s16 unk26;
+    s16 unk28;
+    u8 pad2A[0x2];
+    void *unk2C;
+    u8 unk30;
+    u8 unk31;
+    u8 pad32[0x2];
+    Player *unk34;
+    s32 unk38;
+} Struct_func_8004C2C0;
+
 void func_8004D364_4DF64(s32 arg0);
 void func_8004D890_4E490(s32 arg0, void *arg1);
 void func_8004D8E4_4E4E4(Struct_func_8004D8E4 *arg0);
