@@ -1,4 +1,6 @@
+# splat
 splat64[mips]==0.35.2
+sortedcontainers
 
 # tools/progress.py deps
 mapfile_parser>=2.9.4
