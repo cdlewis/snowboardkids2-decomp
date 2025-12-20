@@ -70,7 +70,7 @@ void parseGameDataLayout(GameDataLayout *gameData) {
     parser = parser + section2Count * 4;
     configValue = parser[0];
     parser = parser + 1;
-    gameData->section3Data = parser;
+    gameData->section3Data = (void *)parser;
     gameData->finalValue = configValue;
 }
 

@@ -48,7 +48,7 @@ typedef struct {
     u16 *dataStart;
     u16 *section1Data;
     u16 *section2Data;
-    u16 *section3Data;
+    void *section3Data;
     u16 finalValue;
 } GameDataLayout;
 
