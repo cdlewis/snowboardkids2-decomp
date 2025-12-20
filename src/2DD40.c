@@ -41,6 +41,14 @@ struct Func2E024Arg {
     /* 0xD5 */ u8 unkD5;
 };
 
+struct Func2E024Element {
+    /* 0x00 */ u8 pad0[0x18];
+    /* 0x18 */ s32 unk18;
+    /* 0x1C */ u8 pad1[0x4];
+    /* 0x20 */ s32 unk20;
+    /* 0x24 */ u8 pad2[0x40];
+}; /* size = 0x64 */
+
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D140_2DD40);
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D46C_2E06C);
@@ -48,14 +56,14 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D46C_2E06C);
 void func_8002D668_2E268(Func2E024Arg *arg0) {
     GameState *allocation;
     s32 i;
-    Func2E024Arg *ptr;
+    struct Func2E024Element *elements;
     s32 val;
 
     allocation = getCurrentAllocation();
+    elements = (struct Func2E024Element *)arg0;
 
     for (i = 0; i < arg0->unkD5; i++) {
-        ptr = (Func2E024Arg *)((u8 *)arg0 + i * 0x64);
-        val = ptr->unk5E;
+        val = ((Func2E024Arg *)&elements[i])->unk5E;
 
         if (val < 0) {
             goto cont;
@@ -68,7 +76,7 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
             goto case23;
         }
 
-        if (ptr->unk62 == 0) {
+        if (((Func2E024Arg *)&elements[i])->unk62 == 0) {
             goto cont;
         }
         if (i == 0) {
@@ -81,16 +89,16 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
         goto cont;
 
     case23:
-        ptr->unk62 = 0;
+        ((Func2E024Arg *)&elements[i])->unk62 = 0;
         if (getFreeNodeCount(2) == 0x14) {
             func_8000A49C_B09C(arg0->unk0, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
             func_8000A49C_B09C(arg0->unk64, 0, 0x24, -1, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
         }
 
     cont:
-        func_8002A2D0_2AED0(ptr);
-        ((s32 *)allocation)[0x102 + i] = ptr->unk18;
-        ((s32 *)allocation)[0x104 + i] = ptr->unk20;
+        func_8002A2D0_2AED0(&elements[i]);
+        ((s32 *)allocation)[0x102 + i] = elements[i].unk18;
+        ((s32 *)allocation)[0x104 + i] = elements[i].unk20;
     }
 
     if (allocation->unk42A == 0x11) {
@@ -108,14 +116,6 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D814_2E414);
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002DA54_2E654);
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002DE44_2EA44);
-
-struct Func2E024Element {
-    /* 0x00 */ u8 pad0[0x18];
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ u8 pad1[0x4];
-    /* 0x20 */ s32 unk20;
-    /* 0x24 */ u8 pad2[0x40];
-}; /* size = 0x64 */
 
 void func_8002E024_2EC24(Func2E024Arg *arg0) {
     GameState *allocation;
