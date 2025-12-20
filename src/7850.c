@@ -42,19 +42,20 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x18];
-    Mat3x3Padded unk18;
-    u8 _pad2[0x14];
+    u8 unk18[0x24];
     s8 unk3C;
 } func_80006EE0_unk0;
 
 typedef struct {
     void *unk0;
-    u8 unk4[0x20];
+    u8 unk4[0x18];
+    s32 unk1C;
+    u8 padding[0x4];
     void *unk24;
     MemoryAllocatorNode *unk28;
     MemoryAllocatorNode *unk2C;
     s32 unk30;
-    u8 padding[0xC];
+    u8 padding2[0xC];
     s16 unk40;
     s16 unk42;
 } func_80006E60_7A60_arg;
@@ -186,9 +187,9 @@ void func_80006EE0_7AE0(func_80006E60_7A60_arg *arg0) {
     sp10Ptr = &sp10;
     memcpy(sp10Ptr, identityMatrix, 0x20);
     memcpy(&sp30, identityMatrix, 0x20);
-    memcpy(&sp50, (u8 *)arg0->unk0 + 0x18, 0x20);
+    memcpy(&sp50, &((func_80006EE0_unk0 *)arg0->unk0)->unk18, 0x20);
 
-    if (*(s8 *)((u8 *)arg0->unk0 + 0x3C) == 1) {
+    if (((func_80006EE0_unk0 *)arg0->unk0)->unk3C == 1) {
         func_80069CF8_6A8F8();
         return;
     }
@@ -198,8 +199,8 @@ void func_80006EE0_7AE0(func_80006E60_7A60_arg *arg0) {
     createZRotationMatrix(sp10Ptr, angle);
     scaleMatrix(sp10Ptr, 0x2000, temp_s0, 0x2000);
     temp_s0_2 = arg0->unk4;
-    func_8006B084_6BC84(sp10Ptr, (u8 *)arg0->unk0 + 0x18, temp_s0_2);
-    *(s32 *)((u8 *)arg0 + 0x1C) = (s32)(*(s32 *)((u8 *)arg0 + 0x1C) + 0x33333);
+    func_8006B084_6BC84(sp10Ptr, &((func_80006EE0_unk0 *)arg0->unk0)->unk18, temp_s0_2);
+    arg0->unk1C = (s32)(arg0->unk1C + 0x33333);
     func_80002B50_3750(arg0->unk0, temp_s0_2);
     arg0->unk40 = (s16)(((u16)arg0->unk40 + 0xB6) & 0x1FFF);
     arg0->unk42 = (s16)(((u16)arg0->unk42 + 0x16C) & 0x1FFF);
