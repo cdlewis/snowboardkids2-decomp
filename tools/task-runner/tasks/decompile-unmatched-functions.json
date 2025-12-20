@@ -1,6 +1,6 @@
 {
   "task_name": "decompile_unmatched_function",
   "script": "python3 tools/score_functions.py asm/nonmatchings --json",
-  "prompt": "decompile the function: $ARGUMENT",
-  "claude_command": "~/.claude/local/node_modules/.bin/claude"
+  "prompt": "decompile the function: $ARGUMENT. use ultrathink",
+  "claude_command": "~/.claude/local/node_modules/.bin/claude --model opus"
 }
