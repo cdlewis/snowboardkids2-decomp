@@ -271,21 +271,21 @@ s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
     temp_v0 = arg0->unkBBE;
     if (temp_v0 == 0) {
         arg0->unkBBE++;
-        transformVector2((s16 *)D_800BCBA0_B4160, arg0->unk38, sp10);
+        transformVector2((s16 *)D_800BCBA0_B4160[0], arg0->unk38, sp10);
         arg0->unk434 += sp10[0];
         arg0->unk438 += sp10[1];
         arg0->unk43C += sp10[2];
         memcpy(arg0->unk440, &arg0->unk434, 0xC);
         arg0->unkB84 |= 0x200000;
-        transformVector(&((s16 *)D_800BCBA0_B4160)[6], arg0->unk38, sp20);
+        transformVector((s16 *)D_800BCBA0_B4160[1], arg0->unk38, sp20);
         func_80041EA4_42AA4(sp20);
-        transformVector(&((s16 *)D_800BCBA0_B4160)[12], arg0->unk38, sp20);
+        transformVector((s16 *)D_800BCBA0_B4160[2], arg0->unk38, sp20);
         func_80041EA4_42AA4(sp20);
-        transformVector(&((s16 *)D_800BCBA0_B4160)[18], arg0->unk38, sp20);
+        transformVector((s16 *)D_800BCBA0_B4160[3], arg0->unk38, sp20);
         func_80041EA4_42AA4(sp20);
-        transformVector(&((s16 *)D_800BCBA0_B4160)[24], arg0->unk38, sp20);
+        transformVector((s16 *)D_800BCBA0_B4160[4], arg0->unk38, sp20);
         func_80041EA4_42AA4(sp20);
-        transformVector(&((s16 *)D_800BCBA0_B4160)[30], arg0->unk38, sp20);
+        transformVector((s16 *)D_800BCBA0_B4160[5], arg0->unk38, sp20);
         func_80041EA4_42AA4(sp20);
         arg0->unk468 = 0x100;
     }
