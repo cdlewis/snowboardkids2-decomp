@@ -570,12 +570,12 @@ void func_8002FCD4_308D4(func_8002FDFC_309FC_arg *arg0) {
 
     arg0->unk2 = -0x18;
 
-    itemValue = ((u8 *)state + state->unk5C8)[0x5CA];
+    itemValue = state->unk5CA[state->unk5C8];
 
     if (itemValue < 9) {
         u8 tempValue;
         arg0->unk0 = -0x30;
-        tempValue = ((u8 *)state + state->unk5C8)[0x5CA];
+        tempValue = state->unk5CA[state->unk5C8];
         arg0->unk8 = (tempValue / 3) + 0x1D;
     } else {
         s16 tableVal = D_8008F0B2_8FCB2[itemValue] + 0x18;
