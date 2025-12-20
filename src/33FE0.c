@@ -212,12 +212,12 @@ void func_80033E08_34A08(Func34574Arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033E40_34A40);
 
 void func_80033EDC_34ADC(Func34ADCArg *arg0) {
-    u8 *allocation;
+    AllocationStruct *allocation;
     u16 temp;
 
     allocation = getCurrentAllocation();
 
-    if (arg0->unk1C == allocation[0xAC8]) {
+    if (arg0->unk1C == allocation->unkAC8) {
         goto check_ac6;
     }
     if (arg0->unk1C != 3) {
@@ -225,7 +225,7 @@ void func_80033EDC_34ADC(Func34ADCArg *arg0) {
         goto end;
     }
 check_ac6:
-    temp = *(u16 *)(allocation + 0xAC6);
+    temp = allocation->unkAC6;
     if (temp < 0x32) {
         arg0->unk14 = 0xFF;
         goto end;
