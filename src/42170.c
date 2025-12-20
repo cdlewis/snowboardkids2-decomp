@@ -106,7 +106,7 @@ typedef struct {
 } Func4179CUnk3C;
 
 typedef struct {
-    u8 pad0[0x20];
+    u8 pad0[0x20]; /* 0x00 - matrix data copied via memcpy */
     Func4179CUnk20 *unk20;
     void *unk24;
     void *unk28;
@@ -114,7 +114,7 @@ typedef struct {
     s32 unk30;     /* 0x30 */
     u8 pad34[0x8]; /* 0x34 */
     Func4179CUnk3C *unk3C;
-    s32 unk40; /* 0x40 */
+    s32 unk40; /* 0x40 - includes unk42 as lower 16 bits */
 } Func4179CArg;
 
 // /* 0x14 */ s32 posX;
@@ -483,7 +483,7 @@ void func_80041810_42410(Func4179CArg *arg0) {
     if (temp_v1_2 != 0x2000) {
         arg0->unk40 = temp_v1_2 + 0x400;
         memcpy(arg0, identityMatrix, 0x20);
-        temp_a1 = *(s16 *)((u8 *)arg0 + 0x42);
+        temp_a1 = ((s16 *)&arg0->unk40)[1];
         scaleMatrix((Mat3x3Padded *)arg0, temp_a1, temp_a1, temp_a1);
     }
 
