@@ -86,3 +86,4 @@ void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0);
 void func_80009F90_AB90(void *arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 func_8000A030_AC30(void *arg0, s32 arg1);
 void func_8000A13C_AD3C(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8);
+s32 func_8000A410_B010(func_8000A410_B010_arg *arg0);

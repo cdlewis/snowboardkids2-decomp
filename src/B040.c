@@ -4,6 +4,15 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
+typedef enum {
+    ANIM_STATE_INIT,
+    ANIM_STATE_RAMP_UP,
+    ANIM_STATE_EASE_IN,
+    ANIM_STATE_HOLD,
+    ANIM_STATE_RAMP_OUT,
+    ANIM_STATE_EASE_OUT
+} AnimState;
+
 #define FILL_STRUCT(v)       \
     (v)->unk0 = arg0;        \
     (v)->unk4 = arg1;        \
@@ -208,15 +217,38 @@ typedef struct {
     /* 0x20 */ void *unk20;
 } func_8000A8B8_arg;
 
+typedef struct {
+    /* 0x00 */ func_8000A834_B434_arg *unk0;
+    /* 0x04 */ s16 unk4;
+    /* 0x06 */ u8 _pad6[2];
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ u8 unkA;
+    /* 0x0B */ s8 state;
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ s32 unk10;
+    /* 0x14 */ s32 unk14;
+    /* 0x18 */ s32 unk18;
+    /* 0x1C */ s16 unk1C;
+    /* 0x1E */ s16 unk1E;
+    /* 0x20 */ func_8000A410_B010_arg unk20;
+    u8 padding[0x6C - (0x20 + sizeof(func_8000A410_B010_arg))];
+    /* 0x6C */ s32 unk6C;
+    /* 0x70 */ s32 unk70;
+    /* 0x74 */ s32 unk74;
+    /* 0x78 */ s32 unk78;
+} func_8000AA08_B608_arg;
+
+void func_8000A8B8_B4B8(func_8000A8B8_arg *);
+void func_8000A988_B588(func_8000B510_C110_arg *);
+void func_8000AA08_B608(func_8000AA08_B608_arg *);
+void func_8000AD08_B908(func_8000B510_C110_arg *);
+
 func_8000A834_B434_ret *func_8000A834_B434(func_8000A834_B434_arg *arg0, s16 arg1) {
     if (arg1 != 0 && arg0->unk0 != NULL) {
         return arg0->unk0;
     }
     return (func_8000A834_B434_ret *)&arg0->unk18;
 }
-
-void func_8000A8B8_B4B8(func_8000A8B8_arg *);
-void func_8000A988_B588(func_8000B510_C110_arg *);
 
 void func_8000A854_B454(func_8000B510_C110_arg *arg0) {
     func_80009E68_AA68(&arg0->unk20, 0);
@@ -261,9 +293,6 @@ void func_8000A988_B588(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk20);
 }
 
-void func_8000AA08_B608(void);
-void func_8000AD08_B908(func_8000B510_C110_arg *);
-
 void func_8000A9A4_B5A4(func_8000B510_C110_arg *arg0) {
     func_80009E68_AA68(&arg0->unk20, 0);
     func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
@@ -271,7 +300,105 @@ void func_8000A9A4_B5A4(func_8000B510_C110_arg *arg0) {
     setCallback(func_8000AA08_B608);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000AA08_B608);
+void func_8000AA08_B608(func_8000AA08_B608_arg *arg0) {
+    func_8000A834_B434_ret *temp;
+    s32 result;
+    s32 val;
+    s32 temp_val;
+    s32 temp_a0;
+    s32 temp_v0;
+    s32 temp_v1;
+    void *ptr;
+    s16 a1;
+    s32 x;
+    s32 y;
+    s32 z;
+
+    switch (arg0->state) {
+        case ANIM_STATE_INIT:
+            result = func_8000A410_B010(&arg0->unk20);
+            if (result < 17) {
+                arg0->unk78 = 0xCCCC;
+                arg0->unk74 = (arg0->unkC >> 8) * 0xB3;
+            } else if (result < 33) {
+                arg0->unk78 = 0xB333;
+                arg0->unk74 = (arg0->unkC >> 8) * 0x99;
+            } else {
+                arg0->unk78 = 0x8000;
+                arg0->unk74 = (arg0->unkC >> 8) * 0x66;
+            }
+            arg0->state = ANIM_STATE_RAMP_UP;
+            /* fallthrough */
+        case ANIM_STATE_RAMP_UP:
+            arg0->unk6C += arg0->unk74;
+            if ((arg0->unkC * 3) / 2 < arg0->unk6C) {
+                arg0->unk6C = (arg0->unkC * 3) / 2;
+                arg0->state = ANIM_STATE_EASE_IN;
+            }
+            break;
+        case ANIM_STATE_EASE_IN:
+            val = ((arg0->unkC - arg0->unk6C) >> 8) * (arg0->unk78 >> 8);
+            if (val != 0) {
+                arg0->unk6C = arg0->unk6C + val;
+            } else {
+                arg0->unk6C = arg0->unkC;
+                arg0->state = ANIM_STATE_HOLD;
+            }
+            break;
+        case ANIM_STATE_HOLD:
+            if (arg0->unk8 == 0) {
+                arg0->state = ANIM_STATE_RAMP_OUT;
+            }
+            break;
+        case ANIM_STATE_RAMP_OUT:
+            arg0->unk6C = arg0->unk6C + arg0->unk74;
+            temp_val = (arg0->unkC * 5) / 3;
+            if (temp_val < arg0->unk6C) {
+                arg0->unk6C = temp_val;
+                arg0->state = ANIM_STATE_EASE_OUT;
+            }
+            break;
+        case ANIM_STATE_EASE_OUT:
+            val = (-arg0->unk6C >> 8) * (arg0->unk78 >> 8);
+            if (val != 0) {
+                arg0->unk6C = arg0->unk6C + val;
+            } else {
+                func_80069CF8_6A8F8();
+                return;
+            }
+            break;
+    }
+
+    if (arg0->unk8 != 0) {
+        temp_v1 = (arg0->unkC - arg0->unk70) / 4;
+        if (temp_v1 != 0) {
+            arg0->unk70 = arg0->unk70 + temp_v1;
+        } else {
+            arg0->unk70 = arg0->unkC;
+        }
+    } else {
+        arg0->unk70 = arg0->unk70 + (arg0->unkC / 48);
+    }
+
+    ptr = &arg0->unk20;
+    if (func_8000A030_AC30(ptr, 0x10000) == 2) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    temp = func_8000A834_B434(arg0->unk0, arg0->unk1E);
+
+    a1 = arg0->unk4;
+    x = temp->unk14 + arg0->unk10;
+    y = temp->unk18 + arg0->unk14;
+    z = temp->unk1C + arg0->unk18;
+
+    func_8000A13C_AD3C(ptr, a1, x, y, z, arg0->unk6C, arg0->unk70, (s16)arg0->unk1C, arg0->unkA);
+
+    if (arg0->unk8 > 0) {
+        arg0->unk8--;
+    }
+}
 
 void func_8000AD08_B908(func_8000B510_C110_arg *arg0) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk20);

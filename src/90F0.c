@@ -287,7 +287,7 @@ void func_8000A1E4_ADE4(
     }
 }
 
-u16 func_8000A410_B010(func_8000A410_B010_arg *arg0) {
+s32 func_8000A410_B010(func_8000A410_B010_arg *arg0) {
     OutputStruct_19E80 output;
     getTableEntryByU16Index(arg0->table, arg0->index, &output);
     return output.field1;
