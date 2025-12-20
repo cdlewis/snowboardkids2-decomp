@@ -198,9 +198,7 @@ typedef struct {
 
 extern s32 identityMatrix[];
 extern s32 D_8008DD2C_8E92C[];
-extern u16 D_8008DD4E_8E94E;
-extern u16 D_8008DD50_8E950;
-extern u16 D_8008DD52_8E952;
+extern u16 D_8008DD4E_8E94E[][3];
 extern u16 D_8008DD6C_8E96C;
 extern u16 D_8008DD6E_8E96E;
 extern u16 D_8008DD70_8E970;
@@ -942,10 +940,10 @@ void func_80025C64_26864(func_80025C64_arg *arg0) {
         unk8Base = 6;
         arg0->unk33 = 2;
     } else {
-        s32 offset = D_800AFE8C_A71FC->unk8 * 6;
-        x = *(u16 *)((u8 *)&D_8008DD4E_8E94E + offset);
-        y = *(u16 *)((u8 *)&D_8008DD50_8E950 + offset);
-        xIncrement = *(u16 *)((u8 *)&D_8008DD52_8E952 + offset);
+        s32 index = D_800AFE8C_A71FC->unk8;
+        x = D_8008DD4E_8E94E[index][0];
+        y = D_8008DD4E_8E94E[index][1];
+        xIncrement = D_8008DD4E_8E94E[index][2];
     }
 
     count = arg0->unk33;
