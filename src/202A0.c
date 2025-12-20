@@ -72,6 +72,10 @@ typedef struct {
 } Func80021B88Arg;
 
 typedef struct {
+    u8 data[0x10];
+} Func80021A20SubStruct;
+
+typedef struct {
     u8 _pad0[0xA];
     s16 unkA;
     u8 _padC[0xE];
@@ -145,7 +149,7 @@ typedef struct {
     s32 unk0;
     u8 _pad4[0x4];
     s32 unk8;
-    u8 _padC[0xC];
+    u8 unkC[0xC];
     u8 unk18[0x3A];
     u16 unk52;
     u8 _pad54[0x2];
@@ -159,10 +163,11 @@ typedef struct {
 } Func8001FEB4Arg;
 
 typedef struct {
-    u8 _pad0[0xB2C]; // 0x000-0xB2B
-    s8 unkB2C;       // 0xB2C
-    u8 _padB2D[0x6]; // 0xB2D-0xB32
-    u8 unkB33[12];   // 0xB33
+    u8 _pad0[0x3B0];  // 0x000-0x3AF
+    u8 unk3B0[0x77C]; // 0x3B0-0xB2B
+    s8 unkB2C;        // 0xB2C
+    u8 _padB2D[0x6];  // 0xB2D-0xB32
+    u8 unkB33[12];    // 0xB33
 } Allocation_80020418;
 
 typedef struct {
@@ -213,7 +218,7 @@ void func_8001F6A0_202A0(Func8001F6A0Arg *arg0) {
     arg0->unk56 = 0;
     arg0->unk52 = value;
 
-    arg0->unk2C = func_8000198C_258C(6, (u8 *)allocation + 0x3B0);
+    arg0->unk2C = func_8000198C_258C(6, allocation->unk3B0);
 
     // Read character index again
     temp = allocation->unkB2C;
@@ -301,7 +306,7 @@ void func_8001FEB4_20AB4(Func8001FEB4Arg *arg0) {
         arg0->unk76 = 0;
     }
 
-    computeLookAtMatrix((u8 *)arg0 + 0xC, arg0, mat3);
+    computeLookAtMatrix(arg0->unkC, arg0, mat3);
 
     memcpy(&mat2, identityMatrix, 0x20);
 
@@ -734,7 +739,7 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_800218AC_224AC);
 void func_80021A20_22620(Func80021A20Arg *arg0) {
     Allocation_202A0 *allocation;
     s32 i;
-    Func80021A20Arg *ptr;
+    Func80021A20SubStruct *subStructs;
 
     allocation = getCurrentAllocation();
 
@@ -763,13 +768,10 @@ void func_80021A20_22620(Func80021A20Arg *arg0) {
         func_8006D7B0_6E3B0(arg0->unk54, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
         debugEnqueueCallback(8, 1, func_80035408_36008, &arg0->unk2C);
 
-        i = 0;
-        ptr = arg0;
-        do {
-            debugEnqueueCallback(8, 1, func_80012004_12C04, ptr);
-            i++;
-            ptr = (Func80021A20Arg *)((u8 *)ptr + 0x10);
-        } while (i < 2);
+        subStructs = (Func80021A20SubStruct *)arg0;
+        for (i = 0; i < 2; i++) {
+            debugEnqueueCallback(8, 1, func_80012004_12C04, &subStructs[i]);
+        }
 
         arg0->unk58 = allocation->unkB46;
         debugEnqueueCallback(8, 1, func_80035408_36008, &arg0->unk40);
