@@ -445,7 +445,67 @@ s32 func_800B217C_A202C(Player *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B2254_A2104);
+typedef struct {
+    u8 _pad0[0xBDF];
+    u8 unkBDF;
+    u8 unkBE0;
+    u8 unkBE1;
+} func_800B7B64_arg;
+
+extern void func_800B7B44_A79F4(func_800B7B64_arg *, s32);
+extern void func_80051BB8_527B8(void *);
+
+s32 func_800B2254_A2104(Player *arg0) {
+    u8 temp_v0;
+
+    if (arg0->unkB84 & 0x20000) {
+        func_800B00D4_9FF84(arg0, 6);
+        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
+        func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+        return 1;
+    }
+
+    if (func_8005A9A8_5B5A8(arg0) != 0) {
+        func_800B65F8_A64A8((func_800B00D4_arg *)arg0);
+        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
+        func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+        return 1;
+    }
+
+    if (arg0->unkB84 & 1) {
+        func_800B00D4_9FF84(arg0, 1);
+        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
+        func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+        return 1;
+    }
+
+    arg0->unk450 -= arg0->unkAB8;
+    func_800B40D4_A3F84(arg0);
+    func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
+    func_800B00FC_9FFAC(arg0);
+
+    temp_v0 = arg0->unkBBF;
+    if (temp_v0 == 0) {
+        arg0->unkBBF = ++temp_v0;
+        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
+        if ((arg0->unkBCC & 0xF) == 7) {
+            func_80056B7C_5777C(&arg0->worldPosX, 0x29);
+        }
+        if ((arg0->unkBCC & 0xF) == 3) {
+            func_80051BB8_527B8(arg0);
+            func_80056B7C_5777C(&arg0->worldPosX, 0xF);
+        } else {
+            func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+        }
+    }
+
+    if (func_8005D308_5DF08(arg0, 5) != 0) {
+        func_800B00D4_9FF84(arg0, 0);
+    }
+
+    func_80058CFC_598FC(arg0);
+    return 0;
+}
 
 void func_800B23AC_A225C(func_800B00D4_arg *arg0) {
     D_800BAB04_AA9B4[arg0->unkBBF](arg0);
@@ -1884,15 +1944,6 @@ s32 func_800B4A4C_A48FC(Player *arg0) {
     func_8005D804_5E404(arg0, 3, 0);
     return 0;
 }
-
-typedef struct {
-    u8 _pad0[0xBDF];
-    u8 unkBDF;
-    u8 unkBE0;
-    u8 unkBE1;
-} func_800B7B64_arg;
-
-extern void func_800B7B44_A79F4(func_800B7B64_arg *, s32);
 
 s32 func_800B4B08_A49B8(Player *arg0) {
     s64 distSq;
