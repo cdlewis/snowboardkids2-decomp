@@ -1697,13 +1697,13 @@ void func_80043D30_44930(void **arg0) {
 }
 
 void func_80043D5C_4495C(void *arg0, void *arg1, s16 arg2) {
-    void *task;
+    Func4393CArg *task;
 
-    task = scheduleTask(func_80043860_44460, 0, 0, 0xDC);
+    task = (Func4393CArg *)scheduleTask(func_80043860_44460, 0, 0, 0xDC);
     if (task != NULL) {
-        *((void **)((u8 *)task + 0x24)) = arg0;
-        *((void **)((u8 *)task + 0x28)) = arg1;
-        *((s16 *)((u8 *)task + 0x42)) = arg2;
+        task->unk24 = arg0;
+        task->unk28 = arg1;
+        task->unk42 = arg2;
     }
 }
 
