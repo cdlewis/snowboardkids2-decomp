@@ -366,11 +366,11 @@ void func_800BC23C_ACA6C(Arg0Struct *arg0) {
 void func_800BC330_ACB60(Arg0Struct *arg0) {
     s32 i;
     u8 *temp_s5;
-    void *alloc;
+    GameState *alloc;
 
     alloc = getCurrentAllocation();
     i = 0;
-    temp_s5 = (u8 *)alloc + 0x30;
+    temp_s5 = (u8 *)&alloc->gameData;
 
     do {
         s32 *posPtr;
