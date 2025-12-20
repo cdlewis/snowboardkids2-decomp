@@ -353,8 +353,10 @@ Use --list to see all available tasks.
     parser.add_argument('task', nargs='?', help='Task name to run (use --list to see available tasks)')
     parser.add_argument('--list', action='store_true',
                        help='List all available tasks')
-    parser.add_argument('--times', type=int, metavar='X',
+    parser.add_argument('--limit', type=int, metavar='X', dest='times',
                        help='Maximum number of iterations')
+    parser.add_argument('--times', type=int, metavar='X', dest='times',
+                       help='(deprecated, use --limit) Maximum number of iterations')
     parser.add_argument('--dry-run', action='store_true',
                        help='Print the prompt that would be passed to Claude without executing')
 
@@ -383,9 +385,9 @@ Use --list to see all available tasks.
 
     taskfile_path = task_map[args.task]
 
-    # Validate --times argument
+    # Validate --limit/--times argument
     if args.times is not None and args.times < 1:
-        print("Error: --times argument must be a positive integer")
+        print("Error: --limit/--times argument must be a positive integer")
         sys.exit(1)
 
     runner = TaskRunner(taskfile_path, args.times, args.dry_run)
