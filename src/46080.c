@@ -2585,10 +2585,10 @@ void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0) {
     loadAssetMetadata(&arg0->unk4, arg0->unk0, 0x3F);
     player = arg0->unk30;
     temp_s1 = &arg0->unk4.unk4;
-    memcpy(temp_s1, (u8 *)player + 0x31C, 0xC);
+    memcpy(temp_s1, &player->unk31C, 0xC);
     arg0->unk34 = arg0->unk30->unkB94;
     arg0->unk38 = (s16)arg0->unk30->unkBB8;
-    memcpy(&arg0->unk24, (u8 *)arg0->unk30 + 0x44C, 0xC);
+    memcpy(&arg0->unk24, &arg0->unk30->unk44C, 0xC);
     arg0->unk3A = 1;
     arg0->unk28 = arg0->unk28 + 0x28000;
     func_80056B7C_5777C(temp_s1, 0x17);

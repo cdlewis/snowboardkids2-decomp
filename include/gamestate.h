@@ -44,7 +44,11 @@ typedef struct {
     void *unk24;
     void *unk28;
     void *unk2C;
-    u8 padding[0x3C8];
+    u8 padding[0x2EC];
+    s32 unk31C;
+    s32 unk320;
+    s32 unk324;
+    u8 padding_328[0xD0];
     s32 unk3F8;
     u8 padding1[0x38];
     s32 worldPosX;
