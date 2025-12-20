@@ -483,7 +483,7 @@ void func_80064218_64E18(DisplayListObject *arg0) {
                 var_s0->unk30 = arg0->unk30 + (var_s1 << 6);
                 func_8006C130_6CD30(var_s0, (LookAt *)var_s0->unk30);
                 var_s1 += 1;
-                var_s0 = (DisplayListObject *)((u8 *)var_s0 + 0x3C);
+                var_s0++;
             } while (var_s1 < arg0->unk37);
         }
     }
