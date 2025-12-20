@@ -477,7 +477,7 @@ void func_80024644_25244(func_80024644_arg *arg0) {
     Mat3x3Padded sp10;
     Mat3x3Padded sp30;
     Mat3x3Padded sp50;
-    u8 *base;
+    GameState *state;
     Mat3x3Padded *unk5CPtr;
     Mat3x3Padded *unk3CPtr;
     Mat3x3Padded *sp50Ptr;
@@ -489,7 +489,7 @@ void func_80024644_25244(func_80024644_arg *arg0) {
     u8 paletteIndex;
     u32 offset;
 
-    base = (u8 *)getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
 
     sp50Ptr = &sp50;
     memcpy(sp50Ptr, identityMatrix, 0x20);
@@ -504,18 +504,18 @@ void func_80024644_25244(func_80024644_arg *arg0) {
 
     offset = arg0->unkA1 << 5;
     unk7CPtr = &arg0->unk7C;
-    memcpy(unk7CPtr, (void *)(offset + (u32)base + 0x17F8), 0x20);
+    memcpy(unk7CPtr, (void *)(offset + (u32)state + 0x17F8), 0x20);
 
     createRotationMatrixYX(sp10Ptr, 0x1000, 0x800);
     createZRotationMatrix(sp30Ptr, 0x1F00);
     func_8006B084_6BC84(sp10Ptr, sp30Ptr, unk3CPtr);
 
-    createYRotationMatrix(unk5CPtr, *(u16 *)(base + arg0->unkA1 * 2 + 0x1888));
+    createYRotationMatrix(unk5CPtr, state->unk1888[arg0->unkA1]);
     func_8006B084_6BC84(unk3CPtr, unk5CPtr, sp50Ptr);
     func_8006B084_6BC84(sp50Ptr, unk7CPtr, arg0);
 
-    charIndex = *(base + arg0->unkA1 + 0x18AC);
-    assetIndex = *(base + arg0->unkA1 + 0x18B4);
+    charIndex = state->unk18A8[arg0->unkA1 + 4];
+    assetIndex = state->unk18B0[arg0->unkA1 + 4];
     assetIndex = assetIndex + charIndex * 3;
     paletteIndex = EepromSaveData->character_or_settings[assetIndex] - 1;
 
