@@ -656,7 +656,81 @@ s32 func_800B83B8_1E5468(CutsceneSlotData *arg0, StateEntry *arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B844C_1E54FC);
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B8874_1E5924);
+s32 func_800B8874_1E5924(CutsceneSlotData *arg0, SceneModel *arg1) {
+    s32 absX;
+    s32 absY;
+    s32 absZ;
+    s16 animIndex;
+    s32 delta;
+    s16 result;
+    s16 temp7C;
+
+    if (arg0->unk84 != 0) {
+        goto update_position;
+    }
+
+    arg0->unk50 = 0;
+    arg0->unk4C = 0;
+
+    absX = ABS(arg0->unk3C);
+
+    arg0->unk48 = 0;
+
+    if (absX >= 0x2000) {
+        goto update_position;
+    }
+
+    absY = arg0->unk40;
+    if (absY < 0) {
+        absY = -absY;
+    }
+    if (absY >= 0x2000) {
+        goto update_position;
+    }
+
+    absZ = arg0->unk44;
+    if (absZ < 0) {
+        absZ = -absZ;
+    }
+    if (absZ >= 0x2000) {
+        goto update_position;
+    }
+
+    animIndex = arg1->unk38;
+    if (animIndex != -1 && arg1->unk3E <= 0) {
+        func_800021B8_2DB8(arg1, animIndex);
+    }
+
+    arg0->unk0.Two = 0;
+    return 0;
+
+update_position:
+    arg0->unk3C += (arg0->unk48 - arg0->unk3C) / (s8)arg0->unk0.bytes[3];
+    arg0->unk40 += (arg0->unk4C - arg0->unk40) / (s8)arg0->unk0.bytes[3];
+    arg0->unk44 += (arg0->unk50 - arg0->unk44) / (s8)arg0->unk0.bytes[3];
+
+    arg0->unk7C += (arg0->unk7E - arg0->unk7C) / 32;
+
+    arg0->unk04.unk20_u.unk20_s32 += arg0->unk3C;
+    arg0->unk28 += arg0->unk40;
+    arg0->unk2C += arg0->unk44;
+    arg0->unk78 += arg0->unk7C;
+
+    result = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+
+    if ((arg0->unk7C > 0 && result < 0) || (arg0->unk7C < 0 && result > 0)) {
+        arg0->unk7C = 0;
+        arg0->unk78 = arg0->unk7A;
+    } else if (arg0->unk7C == 0) {
+        arg0->unk78 = arg0->unk7A;
+    }
+
+    if (arg0->unk84 > 0) {
+        arg0->unk84--;
+    }
+
+    return 1;
+}
 
 s32 func_800B8AC4_1E5B74(CutsceneSlotData *arg0, SceneModel *arg1) {
     s32 angle_new;
