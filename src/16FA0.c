@@ -3,6 +3,7 @@
 #include "38C90.h"
 #include "6E840.h"
 #include "common.h"
+#include "gamestate.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
@@ -90,13 +91,23 @@ void func_80016434_17034(Struct163F8 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016488_17088);
 
-void func_800165D8_171D8(void *arg0) {
+typedef struct {
+    u8 pad0[0xA];
+    s16 unkA;
+    void *unkC;
+} Struct165D8_Element;
+
+typedef struct {
+    Struct165D8_Element elements[8];
+} Struct165D8;
+
+void func_800165D8_171D8(Struct165D8 *arg0) {
     GameState *state;
     s32 i;
     s32 numControllers;
     s32 temp;
     s32 unused[2];
-    void *ptr;
+    Struct165D8_Element *ptr;
     s32 val1;
     s32 val2;
 
@@ -116,21 +127,21 @@ void func_800165D8_171D8(void *arg0) {
             do {
                 temp = state->unk3BB;
                 if (i == temp) {
-                    ptr = (u8 *)arg0 + ((i + (state->unk3BD << 2)) << 4);
-                    *(s16 *)((u8 *)ptr + 0xA) = val1;
+                    ptr = &arg0->elements[i + (state->unk3BD << 2)];
+                    ptr->unkA = val1;
                 } else {
-                    ptr = (u8 *)arg0 + ((i + (state->unk3BD << 2)) << 4);
-                    *(s16 *)((u8 *)ptr + 0xA) = val2;
+                    ptr = &arg0->elements[i + (state->unk3BD << 2)];
+                    ptr->unkA = val2;
                 }
 
-                debugEnqueueCallback(8, 1, func_80012518_13118, (u8 *)arg0 + ((i + (state->unk3BD << 2)) << 4));
+                debugEnqueueCallback(8, 1, func_80012518_13118, &arg0->elements[i + (state->unk3BD << 2)]);
                 i++;
             } while (i < numControllers);
         }
     }
 
-    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, (u8 *)arg0 + 0x60);
-    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, (u8 *)arg0 + 0x6C);
+    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, &arg0->elements[6]);
+    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, &arg0->elements[6].unkC);
 }
 
 void func_800166FC_172FC(void **arg0) {
@@ -192,10 +203,10 @@ void func_80016834_17434(void **arg0) {
 void func_80016860_17460(s32 arg0) {
     s32 sp28;
     s32 sp10[6];
-    void *alloc;
+    GameState *alloc;
 
-    alloc = getCurrentAllocation();
-    func_8000056C_116C(arg0, 2, (u8 *)alloc + 0x1D8);
+    alloc = (GameState *)getCurrentAllocation();
+    func_8000056C_116C(arg0, 2, &alloc->audioPlayer2);
     setCleanupCallback(func_800168D8_174D8);
     func_80000460_1060(arg0, sp10, &sp28);
     setCallback(func_800168BC_174BC);
@@ -210,11 +221,11 @@ void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0) {
 }
 
 void func_800168F4_174F4(Struct16B68 *arg0) {
-    void *alloc;
+    GameState *alloc;
     s32 temp;
 
-    alloc = getCurrentAllocation();
-    arg0->unk0 = func_8000198C_258C(arg0->unk2F + 0x32, (u8 *)alloc + 0x1D8);
+    alloc = (GameState *)getCurrentAllocation();
+    arg0->unk0 = func_8000198C_258C(arg0->unk2F + 0x32, &alloc->audioPlayer2);
     setCleanupCallback(func_80016E70_17A70);
     temp = 0x8000;
     arg0->unk32 = 0;
