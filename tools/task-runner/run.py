@@ -10,6 +10,16 @@ from datetime import datetime
 from pathlib import Path
 from glob import glob
 
+# ANSI color codes
+class Colors:
+    CYAN = '\033[96m'
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    MAGENTA = '\033[95m'
+    BOLD = '\033[1m'
+    RESET = '\033[0m'
+
 class TaskRunner:
     def __init__(self, taskfile_path, max_times=None, dry_run=False):
         self.taskfile_path = taskfile_path
@@ -97,12 +107,19 @@ class TaskRunner:
         print(f"Running: {command}")
 
         try:
+            # Temporarily ignore SIGINT in the parent process during subprocess execution
+            # This allows the subprocess to complete before we check stop_requested
+            old_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
+
             result = subprocess.run(
                 command,
                 shell=True,
                 capture_output=True,
                 text=True
             )
+
+            # Restore the original signal handler
+            signal.signal(signal.SIGINT, old_handler)
 
             output = result.stdout + result.stderr
 
@@ -119,6 +136,8 @@ class TaskRunner:
 
             return result.returncode, output
         except Exception as e:
+            # Restore signal handler in case of exception
+            signal.signal(signal.SIGINT, self._signal_handler)
             print(f"Error running Claude: {e}")
             return 1, str(e)
 
@@ -170,6 +189,16 @@ class TaskRunner:
                 print("Please ensure claude is installed and accessible.")
                 return
 
+        try:
+            self._run_loop()
+        except KeyboardInterrupt:
+            print("\nInterrupt received, stopping gracefully...")
+            self.stop_requested = True
+
+        print(f"\nTotal iterations: {self.count}")
+
+    def _run_loop(self):
+        """Internal loop that can be interrupted."""
         while True:
             if self.stop_requested:
                 print("Stopping gracefully.")
@@ -179,7 +208,12 @@ class TaskRunner:
                 print(f"Reached maximum iterations: {self.max_times}")
                 break
 
-            print(f"=== Starting iteration {self.count + 1} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ===")
+            # Print visually distinct iteration header
+            print()  # blank line before
+            print(f"{Colors.BOLD}{Colors.CYAN}{'='*70}{Colors.RESET}")
+            print(f"{Colors.BOLD}{Colors.MAGENTA}🚀 Starting iteration {self.count + 1}{Colors.RESET} {Colors.YELLOW}at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}{Colors.RESET}")
+            print(f"{Colors.BOLD}{Colors.CYAN}{'='*70}{Colors.RESET}")
+            print()  # blank line after
 
             # Run script to get candidates
             candidates = self._run_script()
@@ -291,8 +325,6 @@ class TaskRunner:
                 self.consecutive_failures = 0
 
             self.count += 1
-
-        print(f"\nTotal iterations: {self.count}")
 
 
 def discover_tasks():
