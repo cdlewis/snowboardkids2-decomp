@@ -28,7 +28,7 @@ typedef struct {
 void func_80037270_37E70(void) {
     Allocation_37E70 *allocation;
     s32 i;
-    u8 *ptr;
+    Allocation_37E70 *ptr;
 
     allocation = allocateTaskMemory(0x1F0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
@@ -41,11 +41,11 @@ void func_80037270_37E70(void) {
     allocation->unk1E2 = 0;
     allocation->unk1EC = 0;
     i = 3;
-    ptr = (u8 *)allocation + 3;
+    ptr = (Allocation_37E70 *)((u8 *)allocation + 3);
     do {
-        ptr[0x1E4] = 0;
+        ptr->unk1E4[0] = 0;
         i--;
-        ptr--;
+        ptr = (Allocation_37E70 *)((u8 *)ptr - 1);
     } while (i >= 0);
     scheduleTask(func_80037710_38310, 0, 0, 0x5A);
     scheduleTask(func_800378AC_384AC, 0, 0, 0x5A);
