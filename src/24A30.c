@@ -977,22 +977,26 @@ void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80026028_26C28);
 
-void func_800260EC_26CEC(void *arg0) {
+typedef struct {
+    func_80027348_entry entries[3];
+} func_800260EC_26CEC_arg;
+
+void func_800260EC_26CEC(func_800260EC_26CEC_arg *arg0) {
     s32 i;
     s32 j;
     u16 index;
-    void *ptr;
+    func_80027348_entry *ptr;
 
     i = 0;
     if (i < (D_800AFE8C_A71FC)->unk8) {
         j = 0;
         do {
             index = i + 8;
-            ptr = arg0;
+            ptr = arg0->entries;
             do {
                 debugEnqueueCallback(index, 7, &func_8000FED0_10AD0, ptr);
                 j++;
-                ptr = (u8 *)ptr + 0xC;
+                ptr++;
             } while (j < 3);
             i++;
             j = 0;
