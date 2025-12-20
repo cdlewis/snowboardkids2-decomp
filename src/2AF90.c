@@ -43,7 +43,7 @@ s32 func_8002A390_2AF90(Func8002A390Arg *arg0) {
             if (func_8002A4AC_2B0AC(&arg0->matrix, arg0->unk5D) != 0) {
                 return 1;
             }
-            if (((u8 *)state->unk420)[1] != 0) {
+            if (state->unk421 != 0) {
                 return 0;
             }
             if (func_8002ACFC_2B8FC(arg0->matrix.unk14, arg0->matrix.unk1C, arg0->unk2E) == 0) {

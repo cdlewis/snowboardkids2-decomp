@@ -291,7 +291,10 @@ typedef struct {
     s32 unk410[2];
     s16 unk418[2];
     s32 unk41C;
-    s16 unk420[2];
+    u8 unk420;
+    u8 unk421;
+    u8 unk422;
+    u8 unk423;
     u8 unk424;
     s8 unk425;
     u8 unk426;
