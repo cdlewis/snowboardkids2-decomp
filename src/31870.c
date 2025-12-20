@@ -595,7 +595,7 @@ void func_80031510_32110(func_80031510_32110_arg *arg0) {
 
     assetIndex = EepromSaveData->character_or_settings[state->unk79E];
 
-    memcpy(arg0, (u8 *)arg0 + 0x3C, 0x20);
+    memcpy(arg0, &arg0->unk3C, 0x20);
 
     arg0->unk20 = loadAssetByIndex_95728(state->unk79E);
     arg0->unk24 = loadAssetByIndex_95500(state->unk79E);
