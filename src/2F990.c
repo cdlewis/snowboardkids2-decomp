@@ -33,7 +33,7 @@ typedef struct {
     Mat3x3Padded transform;
     s32 translationStep;
     u8 updateCounter;
-    u8 unk61;
+    s8 unk61;
     s8 unk62;
 } func_8002F658_30258_arg;
 
@@ -167,6 +167,7 @@ void func_8002F36C_2FF6C(func_8002F658_30258_arg *);
 void func_8002F3E4_2FFE4(func_8002F518_30118_arg *);
 void func_8002F518_30118(func_8002F518_30118_arg *);
 void func_8002F5C8_301C8(DisplayListObject *);
+void func_8002F614_30214(func_8002F658_30258_arg *);
 void func_8002F72C_3032C(void);
 void func_8002F88C_3048C(func_8002F658_30258_arg *arg0);
 void func_8002F948_30548(void);
@@ -267,7 +268,47 @@ void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *arg0) {
     func_80002014_2C14(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F12C_2FD2C);
+void func_8002F12C_2FD2C(func_8002F658_30258_arg *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    s16 temp_s0;
+    u16 temp_s1;
+    Mat3x3Padded *temp_s3;
+    GameState *temp_s4;
+    Mat3x3Padded *sp30_ptr;
+    Mat3x3Padded *sp10_ptr;
+
+    temp_s3 = &arg0->transform;
+    temp_s4 = (GameState *)getCurrentAllocation();
+    memcpy(temp_s3, identityMatrix, 0x20);
+    sp30_ptr = &sp30;
+    memcpy(sp30_ptr, temp_s3, 0x20);
+    sp10_ptr = &sp10;
+    memcpy(sp10_ptr, sp30_ptr, 0x20);
+    createRotationMatrixYX(sp10_ptr, 0x1000, 0x800);
+    createZRotationMatrix(sp30_ptr, 0x1F00);
+    func_8006B084_6BC84(sp10_ptr, sp30_ptr, temp_s3);
+
+    if (temp_s4->unk5C9 != 1) {
+        arg0->transform.unk14 = 0x200000 - ((2 - arg0->unk62) << 21);
+    }
+
+    temp_s1 = temp_s4->unk5CA[arg0->unk61];
+    memcpy(arg0, temp_s3, 0x20);
+    do {
+        temp_s0 = temp_s1 & 0x1F;
+        temp_s1 = temp_s0;
+    } while (0);
+
+    arg0->displayList.unk20 = loadAssetByIndex_95728(temp_s0);
+    arg0->displayList.unk24 = loadAssetByIndex_95500(temp_s0);
+    arg0->displayList.unk28 = loadAssetByIndex_95590(temp_s0);
+    arg0->displayList.unk2C = loadAssetByIndex_95668(temp_s1 / 3);
+    arg0->updateCounter = 0;
+
+    setCleanupCallback(func_8002F614_30214);
+    setCallback(func_8002F290_2FE90);
+}
 
 void func_8002F290_2FE90(func_8002F658_30258_arg *arg0) {
     volatile u8 padding[0x20];
