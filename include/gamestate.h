@@ -69,9 +69,9 @@ typedef struct {
     s32 unk480;
     u8 padding2a_3[0x4EC];
     Mat3x3Padded unk970;
-    u8 padding2a_4[0x14];
-    s32 unk9A4;
-    u8 padding2a_5[0xD4];
+    Mat3x3Padded unk990;
+    func_8005E800_5F400_arg unk9B0;
+    u8 padding2a_5[0x80];
     s32 unkA7C;
     s32 _padA80;
     s32 unkA84;

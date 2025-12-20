@@ -186,7 +186,7 @@ s32 func_800B13D4_A1284(Player *arg0) {
 
     arg0->unkA90 = 0;
     arg0->unkA92 = 0;
-    arg0->unk9A4 = 0;
+    arg0->unk990.unk14 = 0;
 
     if (arg0->unkB84 & 2) {
         arg0->unkA8E = arg0->unkBB0;
@@ -550,8 +550,8 @@ s32 func_800B26D0_A2580(Player *arg0) {
         }
     }
 
-    func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)((u8 *)arg0 + 0x990), &arg0->unk970, sp10);
-    func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)((u8 *)arg0 + 0x9B0), sp10, sp30);
+    func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, &arg0->unk970, sp10);
+    func_8006BDBC_6C9BC(&arg0->unk9B0, sp10, sp30);
     transformVector2(&D_800BAB3C_AA9EC, sp30, sp50);
 
     arg0->unk44C += sp50[0];
@@ -1492,7 +1492,7 @@ void func_800B4058_A3F08(Player *arg0) {
     sp10.unk14 = 0;
     sp10.unk18 = 0x100000;
     sp10.unk1C = 0;
-    func_8006B084_6BC84(&D_8009A890_9B490, &sp10, &arg0->padding2a_5[0x28]);
+    func_8006B084_6BC84(&D_8009A890_9B490, &sp10, &arg0->unk9B0.prev_position);
     arg0->unkB84 |= 0x800;
 }
 
@@ -1533,7 +1533,7 @@ void func_800B40D4_A3F84(Player *arg0) {
     if (delta < -0x80) {
         delta = -0x80;
     }
-    temp_a2 = arg0->unk9A4;
+    temp_a2 = arg0->unk990.unk14;
     arg0->unkA90 = value2 + delta;
     var_v1 = -temp_a2;
     if (var_v1 > 0x8000) {
@@ -1542,7 +1542,7 @@ void func_800B40D4_A3F84(Player *arg0) {
     if (var_v1 < -0x8000) {
         var_v1 = -0x8000;
     }
-    arg0->unk9A4 = temp_a2 + var_v1;
+    arg0->unk990.unk14 = temp_a2 + var_v1;
 }
 
 void func_800B419C_A404C(Player *arg0) {
@@ -1605,7 +1605,7 @@ void func_800B419C_A404C(Player *arg0) {
     result = value2 + delta;
 
     // Handle unk9A4
-    temp2 = arg0->unk9A4;
+    temp2 = arg0->unk990.unk14;
     arg0->unkA90 = result;
     delta2 = -temp2, value3 = temp2;
     if (!(delta2 < 0x6001)) {
@@ -1614,7 +1614,7 @@ void func_800B419C_A404C(Player *arg0) {
     if (delta2 < -0x6000) {
         delta2 = -0x6000;
     }
-    arg0->unk9A4 = value3 + delta2;
+    arg0->unk990.unk14 = value3 + delta2;
 }
 
 extern s16 identityMatrix[];
