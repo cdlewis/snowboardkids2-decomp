@@ -155,24 +155,26 @@ typedef struct {
 } GameStateUnk44_Ext;
 
 typedef struct {
+    u8 padding[0xC];
+} func_80050C00_51800_Task_unk34_unk4C;
+
+typedef struct {
+    u8 padding[0x4C];
+    func_80050C00_51800_Task_unk34_unk4C *unk4C;
+    u8 padding2[0x434 - 0x50];
+    func_80050C00_51800_Task_unk34_unk4C *unk434;
+} func_80050C00_51800_Task_unk34;
+
+typedef struct {
     /* 0x00 */ void *unk0;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ s32 unk8;
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ s32 unk10;
-    /* 0x14 */ u8 *unk14;
-    /* 0x18 */ void *unk18;
-    /* 0x1C */ s8 unk1C;
-    /* 0x1D */ s8 unk1D;
-    /* 0x1E */ u8 unk1E;
-    /* 0x1F */ u8 padding_1F;
+    /* 0x04 */ loadAssetMetadata_arg unk4;
     /* 0x20 */ u8 padding_20[0x4];
     /* 0x24 */ s16 unk24;
     /* 0x26 */ u16 unk26;
     /* 0x28 */ s32 unk28;
     /* 0x2C */ s32 unk2C;
     /* 0x30 */ s32 unk30;
-    /* 0x34 */ void *unk34;
+    /* 0x34 */ func_80050C00_51800_Task_unk34 *unk34;
     /* 0x38 */ s16 unk38;
 } func_80050C00_51800_Task;
 
@@ -216,7 +218,7 @@ void func_800505D8_511D8(s32 **arg0);
 
 void func_80050740_51340(func_80050740_51340_arg *);
 void func_80050864_51464(func_80050864_51464_arg *);
-void func_800509CC_515CC(void);
+void func_800509CC_515CC(func_80050C00_51800_Task *);
 void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
 void func_80050E08_51A08(func_80050DB0_519B0_arg *);
 void func_80050EA0_51AA0(void **);
@@ -230,7 +232,7 @@ void func_800518AC_524AC(func_800518AC_524AC_arg *);
 void func_80051B8C_5278C(func_8005186C_5246C_arg *);
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104(func_80050504_51104_arg *);
-
+void func_80050AA8_516A8(func_80050C00_51800_Task *arg0);
 extern loadAssetMetadata_arg D_80090EC0_91AC0;
 extern loadAssetMetadata_arg D_80090F00_91B00;
 extern void *D_80090F40_91B40;
@@ -394,7 +396,29 @@ void func_8005098C_5158C(MemoryAllocatorNode **node) {
     setCallbackWithContinue(&func_800509CC_515CC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_800509CC_515CC);
+void func_800509CC_515CC(func_80050C00_51800_Task *arg0) {
+    s32 temp;
+    s32 shift9;
+    int new_var2;
+    s32 new_var;
+    getCurrentAllocation();
+    if (arg0->unk38 >= 0) {
+        memcpy(&arg0->unk4.unk4, &arg0->unk34->unk4C, sizeof(func_80050C00_51800_Task_unk34_unk4C));
+    } else {
+        memcpy(&arg0->unk4.unk4, &arg0->unk34->unk434, sizeof(func_80050C00_51800_Task_unk34_unk4C));
+        arg0->unk4.unk8 += 0x80000;
+    }
+    temp = (randA() & 0xFF) - 0x80;
+    shift9 = (new_var = temp << 9);
+    arg0->unk4.unk4 += ((temp << 11) + shift9) << 1;
+    new_var2 = (randA() & 0xFF) - 0x80;
+    temp = new_var2;
+    shift9 = temp << 9;
+    arg0->unk26 = 0;
+    arg0->unk4.unkC += ((temp << 11) + shift9) << 1;
+    loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk24);
+    setCallbackWithContinue(func_80050AA8_516A8);
+}
 
 void func_80050AA8_516A8(func_80050C00_51800_Task *arg0) {
     GameState *gs;
@@ -415,13 +439,13 @@ void func_80050AA8_516A8(func_80050C00_51800_Task *arg0) {
             func_80069CF8_6A8F8();
         }
 
-        arg0->unk8 += arg0->unk28;
-        arg0->unkC += arg0->unk2C;
-        arg0->unk10 += arg0->unk30;
+        arg0->unk4.unk4 += arg0->unk28;
+        arg0->unk4.unk8 += arg0->unk2C;
+        arg0->unk4.unkC += arg0->unk30;
     }
 
     i = 0;
-    if (arg0->unk1E == 0xFF) {
+    if (arg0->unk4.unk1A == 0xFF) {
         do {
             func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
             i++;
@@ -447,12 +471,12 @@ void func_80050C00_51800(void *arg0) {
     if (task != NULL) {
         task->unk24 = 0x35;
         task->unk34 = arg0;
-        task->unk1E = 0xFF;
+        task->unk4.unk1A = 0xFF;
         task->unk28 = 0;
         task->unk2C = 0;
         task->unk30 = 0;
         task->unk38 = 0;
-        task->unk4 = &allocation->unk44->unkFC0;
+        task->unk4.unk0 = (loadAssetMetadata_arg *)&allocation->unk44->unkFC0;
     }
 }
 
@@ -476,15 +500,15 @@ void func_80050C80_51880(Player *arg0, s32 arg1) {
 
     if (task != NULL) {
         u8 temp2;
-        task->unk34 = arg0;
+        task->unk34 = (func_80050C00_51800_Task_unk34 *)arg0;
         temp2 = D_80090E70_91A70[arg1];
-        task->unk1E = 0x80;
+        task->unk4.unk1A = 0x80;
         task->unk24 = temp2;
         task->unk28 = arg0->unk44C / 2;
         task->unk2C = arg0->unk450 / 2;
         task->unk30 = arg0->unk454 / 2;
         task->unk38 = -1;
-        task->unk4 = (void *)((u32)allocation->unk44 + 0x1440);
+        task->unk4.unk0 = (void *)((u32)allocation->unk44 + 0x1440);
     }
 }
 
