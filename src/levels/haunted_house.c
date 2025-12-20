@@ -463,27 +463,34 @@ void func_800BBCE8_AF9D8(void **arg0) {
 void func_800BBD14_AFA04(func_800BBC64_AF954_arg *arg0) {
     Allocation *allocation;
     s32 i;
+    s32 *ptr8;
+    s32 *ptrC;
+    s32 *ptr10;
 
     allocation = getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        *(s16 *)((u8 *)arg0 + 0x28) -= 1;
+        arg0->unk28 -= 1;
 
-        if (*(s16 *)((u8 *)arg0 + 0x28) == 0) {
+        if (arg0->unk28 == 0) {
             func_80069CF8_6A8F8();
             return;
         }
 
-        *(s32 *)((u8 *)arg0 + 0x8) += (D_800BC914_B0604 - *(s32 *)((u8 *)arg0 + 0x8)) / *(s16 *)((u8 *)arg0 + 0x28);
-        *(s32 *)((u8 *)arg0 + 0xC) += (D_800BC918_B0608 - (*(s32 *)((u8 *)arg0 + 0xC) + *(s32 *)((u8 *)arg0 + 0x24))) /
-                                      *(s16 *)((u8 *)arg0 + 0x28);
-        *(s32 *)((u8 *)arg0 + 0x10) += (D_800BC91C_B060C - *(s32 *)((u8 *)arg0 + 0x10)) / *(s16 *)((u8 *)arg0 + 0x28);
+        ptr8 = &arg0->unk8;
+        *ptr8 += (D_800BC914_B0604 - *ptr8) / arg0->unk28;
+
+        ptrC = &arg0->unkC;
+        *ptrC += (D_800BC918_B0608 - (*ptrC + arg0->unk24)) / arg0->unk28;
+
+        ptr10 = &arg0->unk10;
+        *ptr10 += (D_800BC91C_B060C - *ptr10) / arg0->unk28;
     }
 
-    loadAssetMetadata((loadAssetMetadata_arg *)((u8 *)arg0 + 0x4), *(void **)arg0, 5);
+    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, 5);
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)((u8 *)arg0 + 0x4));
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
 
