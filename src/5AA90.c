@@ -21,6 +21,7 @@ typedef struct {
     /* 0x10 */ void *dataArray;
     u8 _pad2[0x18];
     /* 0x2C */ ListNode_5AA90 *list;
+    /* 0x30 */ u8 unk30[0];
 } Allocation5AA90;
 
 // Element size is 6 bytes based on *6 pattern in asm
@@ -53,14 +54,14 @@ INCLUDE_ASM("asm/nonmatchings/5AA90", func_80059ED0_5AAD0);
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005A26C_5AE6C);
 
 void func_8005A930_5B530(Player *arg0) {
-    void *allocation;
+    Allocation5AA90 *allocation;
     void *sp0;
     void *sp1;
     u16 temp;
     s32 result;
 
     allocation = getCurrentAllocation();
-    sp0 = (void *)((u8 *)allocation + 0x30);
+    sp0 = &allocation->unk30;
     sp1 = (void *)&arg0->worldPosX;
     temp = func_80059E90_5AA90(arg0, sp0, arg0->unkB94, sp1);
     arg0->unkB94 = temp;
