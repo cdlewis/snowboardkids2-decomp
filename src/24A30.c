@@ -202,6 +202,10 @@ extern u16 D_8008DD4E_8E94E[][3];
 extern u16 D_8008DD6C_8E96C;
 extern u16 D_8008DD6E_8E96E;
 extern u16 D_8008DD70_8E970;
+extern u16 D_8008DDD8_8E9D8[];
+extern u16 D_8008DDDA_8E9DA[];
+extern u32 D_41A1D0;
+extern u32 D_41AD80;
 
 void func_80025DAC_269AC(func_80025FFC_26BFC_arg *);
 void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
@@ -1037,7 +1041,46 @@ void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80026FF4_27BF4);
+void func_800270B8_27CB8(u8 *);
+void func_8002712C_27D2C(func_80025FFC_26BFC_arg *);
+
+void func_80026FF4_27BF4(func_80025FFC_26BFC_arg *arg0) {
+    void *dmaResult;
+    D_800AFE8C_A71FC_type *global;
+    u8 count;
+    s32 i;
+    s32 unk8Base;
+    u16 x;
+    u16 y;
+    volatile func_80025FFC_26BFC_arg *ptr;
+    s32 pad[4];
+
+    (void)pad;
+
+    dmaResult = dmaRequestAndUpdateStateWithSize(&D_41A1D0, &D_41AD80, 0x1B48);
+    setCleanupCallback(func_8002712C_27D2C);
+
+    global = D_800AFE8C_A71FC;
+    count = global->unk8;
+    unk8Base = (count >= 3) * 8;
+    x = D_8008DDD8_8E9D8[count * 2];
+    y = D_8008DDDA_8E9DA[count * 2];
+
+    i = 0;
+    if (count != 0) {
+        ptr = arg0;
+        do {
+            ptr->unk0 = x;
+            ptr->unk2 = y;
+            ptr->unk8 = unk8Base + i;
+            ptr->unk4 = dmaResult;
+            ptr++;
+            i++;
+        } while (i < global->unk8);
+    }
+
+    setCallback(func_800270B8_27CB8);
+}
 
 void func_800270B8_27CB8(u8 *arg0) {
     s32 i;
