@@ -51,7 +51,8 @@ typedef struct {
     s32 unk3C;
 } func_8004A9A8_4B5A8_node;
 
-extern void func_8004AFF8_4BBF8(void *);
+typedef struct func_8004AFF8_arg func_8004AFF8_arg;
+void func_8004AFF8_4BBF8(func_8004AFF8_arg *);
 
 typedef struct {
     void *unk0;
@@ -2880,9 +2881,73 @@ void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *arg0) {
     setCallbackWithContinue(&func_8004AFF8_4BBF8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004AFF8_4BBF8);
+struct func_8004AFF8_arg {
+    void *unk0;
+    void *unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 _pad14[0x10];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    u16 unk30;
+    u8 _pad32[0x2];
+    s16 unk34;
+    s16 unk36;
+    s16 unk38;
+};
 
-typedef struct {
+struct func_8004B130_arg;
+void func_8004B130_4BD30(struct func_8004B130_arg *);
+
+void func_8004AFF8_4BBF8(func_8004AFF8_arg *arg0) {
+    GameState_46080 *allocation;
+    void *allocPlus30;
+    s32 *argPlus8;
+    s32 sp18[3];
+    u16 tempU16;
+    s32 tempS32;
+    s32 i;
+
+    allocation = (GameState_46080 *)getCurrentAllocation();
+    i = 0;
+
+    if (allocation->unk76 == 0) {
+        allocPlus30 = &allocation->unk30;
+
+        arg0->unk8 = arg0->unk8 + arg0->unk24;
+        arg0->unkC = arg0->unkC + arg0->unk28;
+        arg0->unk10 = arg0->unk10 + arg0->unk2C;
+        arg0->unk28 = arg0->unk28 + (s32)0xFFFF0000;
+
+        argPlus8 = &arg0->unk8;
+
+        tempU16 = func_80060A3C_6163C(allocPlus30, arg0->unk30, argPlus8);
+        arg0->unk30 = tempU16;
+
+        func_80060CDC_618DC(allocPlus30, tempU16, argPlus8, 0x100000, sp18);
+
+        arg0->unk8 = arg0->unk8 + sp18[0];
+        arg0->unk10 = arg0->unk10 + sp18[2];
+
+        tempS32 = func_80061A64_62664(allocPlus30, arg0->unk30, argPlus8);
+        sp18[1] = tempS32;
+
+        if (arg0->unkC < tempS32) {
+            arg0->unkC = tempS32;
+            arg0->unk34 = 0x5A;
+            setCallback(func_8004B130_4BD30);
+        }
+        i = 0;
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+    }
+}
+
+struct func_8004B130_arg {
     void *unk0;
     void *unk4;
     u8 _pad[0x28];
@@ -2891,9 +2956,9 @@ typedef struct {
     s16 unk34;
     s16 unk36;
     s16 unk38;
-} func_8004B130_arg;
+};
 
-void func_8004B130_4BD30(func_8004B130_arg *arg0) {
+void func_8004B130_4BD30(struct func_8004B130_arg *arg0) {
     allocation_46080 *allocation;
     Player *player;
     s32 i;
