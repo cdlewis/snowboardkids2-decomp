@@ -105,7 +105,7 @@ typedef struct {
     /* 0x098 */ u16 channel_tempo;
     /* 0x09A */ s16 volscale;
     /* 0x09C */ u16 old_volume;
-    /* 0x09E */ s16 cont_vol_repeat_count;
+    /* 0x09E */ u16 cont_vol_repeat_count;
     /* 0x0A0 */ u16 cont_pb_repeat_count;
     /* 0x0A2 */ u16 fx_addr;
     /* 0x0A4 */ s16 channel_tempo_save;
@@ -1527,7 +1527,30 @@ f32 func_80073DC4_749C4(channel_t *cp) {
     return cp->vibrato;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80073E20_74A20);
+void func_80073E20_74A20(channel_t *cp) {
+    u8 work_vol;
+    u16 temp;
+
+    do {
+        cp->volume_frame += 256;
+        if (!((temp = cp->cont_vol_repeat_count - 1, cp->cont_vol_repeat_count = temp) & 0xFFFF)) {
+            work_vol = *(cp->pvolume++);
+            if (work_vol > 127) {
+                cp->volume = work_vol & 0x7f;
+                work_vol = *(cp->pvolume++);
+                if (work_vol > 127) {
+                    cp->cont_vol_repeat_count = ((int)(work_vol & 0x7f) * 256);
+                    cp->cont_vol_repeat_count += (int)*(cp->pvolume++) + 2;
+                } else {
+                    cp->cont_vol_repeat_count = (int)work_vol + 2;
+                }
+            } else {
+                cp->volume = work_vol;
+                cp->cont_vol_repeat_count = 1;
+            }
+        }
+    } while ((u32)cp->volume_frame < cp->channel_frame);
+}
 
 extern f64 D_8009EAB8_9F6B8;
 
