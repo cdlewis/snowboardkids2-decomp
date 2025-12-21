@@ -1528,7 +1528,7 @@ INCLUDE_ASM("asm/nonmatchings/52880", func_800548C8_554C8);
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80054AE4_556E4);
 
-void func_80054C8C_5588C(s16 arg0) {
+s32 func_80054C8C_5588C(s16 arg0) {
     Struct_52880 *task;
     s32 pad[4];
 
@@ -1782,7 +1782,7 @@ void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0) {
     arg0->unk20 = freeNodeMemory(arg0->unk20);
 }
 
-void func_800553D4_55FD4(s32 arg0) {
+s32 func_800553D4_55FD4(s32 arg0) {
     Struct_52880 *task;
 
     task = scheduleTask(func_80054CCC_558CC, (arg0 + 4) & 0xFF, 0, 0x6E);

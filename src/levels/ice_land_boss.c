@@ -1,13 +1,21 @@
-#include "5E590.h"
+#include "51060.h"
+#include "52880.h"
+#include "5AA90.h"
 #include "5DBC0.h"
+#include "5E590.h"
 #include "9FF70.h"
+#include "A9A40.h"
 #include "common.h"
 #include "displaylist.h"
-#include "task_scheduler.h"
-#include "5AA90.h"
 #include "gamestate.h"
+#include "graphics.h"
+#include "rand.h"
+#include "task_scheduler.h"
 
 typedef void (*FuncPtr)(void *);
+
+extern s32 D_800BCA50_B1F40;
+extern s32 gControllerInputs[];
 
 typedef struct {
     /* 0x0 */ void *ptr;
@@ -83,8 +91,8 @@ typedef struct {
 } D_800BACC8_AAB78_type;
 extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
-extern void func_800BC61C_B1B0C(func_800BC4AC_arg *);
-extern void func_8004C10C_4CD0C(func_800BC4AC_arg *);
+void func_800BC61C_B1B0C(Player *);
+void func_8004C10C_4CD0C(Player *);
 
 INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BB2B0_B07A0);
 
@@ -94,7 +102,7 @@ void func_800BB8E0_B0DD0(func_800BC4AC_arg *arg0) {
     D_800BCA44_B1F34[arg0->unkBBE](arg0);
 }
 
-void func_800BB910_B0E00(func_800BC4AC_arg *arg0) {
+void func_800BB910_B0E00(Player *arg0) {
     s32 i;
     Element0x3C *elements = (Element0x3C *)arg0;
 
@@ -132,7 +140,223 @@ s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BBA54_B0F44);
+s32 func_800BBA54_B0F44(Player *arg0) {
+    Mat3x3Padded sp10;
+    s32 sp30[3];
+    s32 sp40[3];
+    GameState *gameState;
+    s16 angleDiff;
+    Player *player;
+    s32 v1, v0;
+
+    gameState = (GameState *)getCurrentAllocation();
+
+    if (arg0->unkB84 & 0x100000) {
+        func_800B00C0_9FF70(arg0, 3);
+        return 1;
+    }
+
+    if (arg0->unkB84 & 0x80000) {
+        func_800B00D4_9FF84(arg0, 2);
+        return 1;
+    }
+
+    if (gControllerInputs[1] & L_TRIG) {
+        func_800BB910_B0E00(arg0);
+    }
+
+    if (arg0->unkBBF == 0) {
+        arg0->unkBBF++;
+
+        if (gameState->unk50 < 0x1EU) {
+            arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
+        } else if (arg0->unkB84 & 0x400000) {
+            arg0->unkB8C = randA() & 0xF;
+        } else {
+            arg0->unkB8C = (randA() & 0xFF) >> 1;
+        }
+        arg0->unkB90 = 0;
+    }
+
+    arg0->unkB84 = arg0->unkB84 | 0x40000;
+    func_800B9B90_A9A40(arg0);
+
+    angleDiff = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPosX, arg0->worldPosZ) - arg0->unkA94;
+    angleDiff = angleDiff & 0x1FFF;
+
+    if (angleDiff >= 0x1001) {
+        angleDiff = angleDiff | 0xE000;
+    }
+
+    if (angleDiff >= 0x39) {
+        angleDiff = 0x38;
+    }
+
+    if (angleDiff < -0x38) {
+        angleDiff = -0x38;
+    }
+
+    arg0->unkA94 = arg0->unkA94 + angleDiff;
+
+    if (!(arg0->unkB84 & 0x1)) {
+        createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)((u8 *)arg0 + 0x990), &arg0->unk970, &sp10);
+        transformVector3(&arg0->unk44C, &sp10, sp30);
+        sp30[0] = 0;
+        transformVector2(sp30, &sp10, &arg0->unk44C);
+        transformVector2(&D_800BCA50_B1F40, &sp10, sp30);
+
+        if (sp30[1] > 0) {
+            sp30[1] = 0;
+        }
+
+        arg0->unk44C += sp30[0];
+        arg0->unk450 += sp30[1];
+        arg0->unk454 += sp30[2];
+    } else {
+        arg0->unk44C -= arg0->unk44C / 16;
+        arg0->unk454 -= arg0->unk454 / 16;
+    }
+
+    if (arg0->unk450 > 0) {
+        arg0->unk450 = 0;
+    }
+
+    arg0->unk450 -= 0x10000;
+    func_800B02AC_A015C(arg0);
+    func_800BC61C_B1B0C(arg0);
+
+    transformVectorRelative(&gameState->players->worldPosX, (u8 *)arg0 + 0x164, sp40);
+
+    angleDiff = atan2Fixed(-sp40[0], -sp40[2]) & 0x1FFF;
+
+    if (angleDiff >= 0x1000) {
+        angleDiff = angleDiff | 0xE000;
+    }
+
+    if (angleDiff >= 0x81) {
+        angleDiff = 0x80;
+    }
+
+    if (angleDiff < -0x80) {
+        angleDiff = -0x80;
+    }
+
+    // Access unkA9E via pointer arithmetic
+    *(s16 *)((u8 *)arg0 + 0xA9E) = *(s16 *)((u8 *)arg0 + 0xA9E) + angleDiff;
+
+    if (arg0->unkB84 & 0x400000) {
+        if (func_8005D180_5DD80(arg0, 3) != 0) {
+            arg0->unkB90 = 0;
+        }
+
+        arg0->unkB90++;
+
+        if (arg0->unkB90 == 4) {
+            arg0->unkB90 = 0;
+            func_80056B7C_5777C(&arg0->worldPosX, 0x4B);
+        }
+
+        if (arg0->unkB8C == 0) {
+            func_8004C10C_4CD0C(arg0);
+
+            if (gameState->unk86 != 0) {
+                arg0->unkB8C = ((u32)(randA() & 0xFF) >> 1) + 0x1E;
+            } else {
+                arg0->unkB8C = (randA() & 0xFF) + 0x3C;
+            }
+        } else {
+            arg0->unkB8C = arg0->unkB8C - 1;
+        }
+    } else {
+        if (func_8005D180_5DD80(arg0, 1) != 0) {
+            arg0->unkB90 = 0;
+        }
+
+        arg0->unkB90 = arg0->unkB90 + 1;
+
+        if ((arg0->unkB90 == 4) || (arg0->unkB90 == 0xC)) {
+            func_80056B7C_5777C(&arg0->worldPosX, 0x4A);
+        }
+
+        player = gameState->players;
+        if (player->unkB88 != 0) {
+            return 0;
+        }
+
+        if (arg0->unkB8C == 0) {
+            if (arg0->unkBC0 != 0) {
+                if (arg0->unkBBF == 2) {
+                    arg0->unkBC0 = arg0->unkBC0 - 1;
+                    if (func_80054C8C_5588C(arg0->unkBB8) != 0) {
+                        func_8005182C_5242C(arg0);
+                    }
+
+                    if (arg0->unkBC0 == 0) {
+                        if (gameState->unk86 != 0) {
+                            arg0->unkB8C = (randA() & 0xF) + 8;
+                        } else {
+                            arg0->unkB8C = ((u32)(randA() & 0xFF) >> 1) + 0x1E;
+                        }
+                    } else {
+                        arg0->unkB8C = 0xA;
+                    }
+                } else {
+                    arg0->unkBC0 = arg0->unkBC0 - 1;
+                    if (func_800553D4_55FD4(arg0->unkBB8) != 0) {
+                        func_8005182C_5242C(arg0);
+                    }
+
+                    if (arg0->unkBC0 == 0) {
+                        arg0->unkB8C = ((u32)(randA() & 0xFF) >> 1) + 0x1E;
+                    } else {
+                        arg0->unkB8C = 0xA;
+                    }
+                }
+            } else {
+                // unkBC0 is zero - calculate distance
+                if ((u32)distance_3d(
+                        arg0->worldPosX - player->worldPosX,
+                        arg0->worldPosY - player->worldPosY,
+                        arg0->worldPosZ - player->worldPosZ
+                    ) <= 0xDFFFFF) {
+                    // Close range
+                    if (func_80054C8C_5588C(arg0->unkBB8) != 0) {
+                        func_8005182C_5242C(arg0);
+                    }
+
+                    arg0->unkBC0 = randA() & 0x3;
+
+                    if (arg0->unkBC0 != 0) {
+                        arg0->unkBBF = 2;
+                        arg0->unkB8C = 0xA;
+                    } else {
+                        if (gameState->unk86 != 0) {
+                            arg0->unkB8C = (randA() & 0xF) + 8;
+                        } else {
+                            arg0->unkB8C = ((u32)(randA() & 0xFF) >> 1) + 0x3C;
+                        }
+                    }
+                } else {
+                    // Far range
+                    if (func_800553D4_55FD4(arg0->unkBB8) != 0) {
+                        func_8005182C_5242C(arg0);
+                    }
+
+                    if (gameState->unk86 != 0) {
+                        arg0->unkB8C = (randA() & 0xF) + 8;
+                    } else {
+                        arg0->unkB8C = ((u32)(randA() & 0xFF) >> 1) + 0x3C;
+                    }
+                }
+            }
+        } else {
+            arg0->unkB8C = arg0->unkB8C - 1;
+        }
+    }
+
+    return 0;
+}
 
 s32 func_800BC008_B14F8(func_800BC4AC_arg *arg0) {
     s32 pad[3];
@@ -159,7 +383,7 @@ void func_800BC0A8_B1598(func_800BC4AC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC0D8_B15C8);
 
-s32 func_800BC3B8_B18A8(func_800BC4AC_arg *arg0) {
+s32 func_800BC3B8_B18A8(Player *arg0) {
     u8 temp;
 
     temp = arg0->unkBBF;
@@ -178,7 +402,7 @@ s32 func_800BC3B8_B18A8(func_800BC4AC_arg *arg0) {
     arg0->unk454 = 0;
     arg0->unk450 = arg0->unk450 + (-0x8000);
 
-    func_800B02AC_A015C((Player *)arg0);
+    func_800B02AC_A015C(arg0);
     func_8005D180_5DD80(arg0, 5);
 
     if ((D_8009ADE0_9B9E0 & 0xF) == 0) {
@@ -254,7 +478,7 @@ void func_800BC520_B1A10(func_800BC4AC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC61C_B1B0C);
 
-void func_800BC7A8_B1C98(func_800BC4AC_arg *arg0) {
+void func_800BC7A8_B1C98(Player *arg0) {
     s32 pad[36];
     s32 i;
     s32 index;

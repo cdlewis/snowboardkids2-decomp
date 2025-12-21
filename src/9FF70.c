@@ -71,7 +71,7 @@ typedef struct {
 
 void func_800B46BC_A456C(Player *);
 
-void func_800B00C0_9FF70(func_800B00D4_arg *arg0, u8 arg1) {
+void func_800B00C0_9FF70(Player *arg0, u8 arg1) {
     arg0->unkBBD = arg1;
     arg0->unkBBE = 0;
     arg0->unkBBF = 0;
@@ -244,7 +244,7 @@ s32 func_800B1DA0_A1C50(Player *arg0) {
         arg0->unkBC0 = temp + 1;
     }
     if (arg0->unkBDA != 0) {
-        ((void (*)(void *))func_800B9B90_A9A40)(arg0);
+        func_800B9B90_A9A40(arg0);
         var_a3 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPosX, arg0->worldPosZ);
         temp_v1 = arg0->unkA94;
         var_a3 = (var_a3 - temp_v1) & 0x1FFF;
@@ -771,7 +771,7 @@ void func_800B2B3C_A29EC(Player *arg0) {
     temp_v1 = arg0->unkB84;
     if (!(temp_v1 & 0x1000)) {
         if (arg0->unkBDA != 0) {
-            func_800B9B90_A9A40();
+            func_800B9B90_A9A40(arg0);
             var_v1 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPosX, arg0->worldPosZ);
             temp_a1 = (u16)arg0->unkA94;
             var_v1 = (var_v1 - temp_a1) & 0x1FFF;

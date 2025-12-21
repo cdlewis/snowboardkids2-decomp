@@ -3414,7 +3414,7 @@ void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-void func_8004C10C_4CD0C(void *arg0) {
+void func_8004C10C_4CD0C(Player *arg0) {
     GameState *allocation;
     Node *task;
 
