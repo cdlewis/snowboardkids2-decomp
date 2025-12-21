@@ -1191,10 +1191,26 @@ void func_80047718_48318(func_80047718_48318_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-extern void func_800477E4_483E4(void);
 extern void *D_80090BD4_917D4[];
 extern void *D_80090BD8_917D8[];
 extern s32 D_80090BDC_917DC[];
+
+typedef struct {
+    s8 unk0;
+    u8 _pad1[0x3];
+    u8 unk4[0xC];
+} Entry_800477E4;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    Entry_800477E4 *unk8;
+    u8 _padC[0x4];
+    s32 *unk10;
+    u8 _pad14[0x2];
+    s16 unk16;
+    s16 unk18;
+} func_800477E4_arg;
 
 typedef struct {
     void *unk0;
@@ -1205,6 +1221,7 @@ typedef struct {
 } func_80047A64_48664_arg;
 
 void func_80047A64_48664(func_80047A64_48664_arg *arg0);
+void func_800477E4_483E4(func_800477E4_arg *arg0);
 
 void func_80047750_48350(func_80047A64_48664_arg *arg0) {
     s16 index;
@@ -1226,7 +1243,56 @@ void func_80047750_48350(func_80047A64_48664_arg *arg0) {
     setCallback(func_800477E4_483E4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800477E4_483E4);
+typedef struct {
+    u8 _pad0[0x44];
+    s32 unk44;
+} Alloc_800477E4;
+
+extern void func_800478FC_484FC(void);
+
+void func_800477E4_483E4(func_800477E4_arg *arg0) {
+    Alloc_800477E4 *alloc;
+    s32 *ptr;
+    s32 i;
+    s32 *globalBuf;
+    s8 one;
+    s32 sp10[2];
+    s32 offset;
+
+    (void)sp10;
+
+    alloc = (Alloc_800477E4 *)getCurrentAllocation();
+    arg0->unk4 = (void *)(alloc->unk44 + 0x80);
+
+    ptr = arg0->unk10;
+    arg0->unk8 = (Entry_800477E4 *)((u8 *)ptr + *ptr);
+
+    arg0->unk18 = 0;
+    arg0->unk16 = 0;
+
+    if (arg0->unk8[0].unk0 >= 0) {
+        do {
+            arg0->unk16++;
+        } while (arg0->unk8[arg0->unk16].unk0 >= 0);
+    }
+
+    i = 0;
+    arg0->unk0 = allocateNodeMemory(arg0->unk16 << 6);
+
+    if (arg0->unk16 > 0) {
+        one = 1;
+        globalBuf = &D_8009A8A4_9B4A4;
+        do {
+            offset = i * 16;
+            *(s8 *)(offset + (s32)arg0->unk8) = one;
+            memcpy(globalBuf, (u8 *)(offset + (s32)arg0->unk8) + 4, 0xC);
+            func_8006BFB8_6CBB8(globalBuf - 5, (u8 *)arg0->unk0 + (i << 6));
+            i++;
+        } while (i < arg0->unk16);
+    }
+
+    setCallback(func_800478FC_484FC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_800478FC_484FC);
 
