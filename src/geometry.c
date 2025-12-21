@@ -375,7 +375,33 @@ INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BDBC_6C9BC);
 
 INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BE4C_6CA4C);
 
-INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BEDC_6CADC);
+extern s32 D_8009A8A4_9B4A4;
+extern s32 D_8009A8A8_9B4A8;
+extern s32 D_8009A8AC_9B4AC;
+
+typedef void (*CreateXRotS16)(s16 matrix[3][3], s16 angle);
+
+void func_8006BEDC_6CADC(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    Mat3x3Padded sp50;
+    s32 *ptr;
+
+    createYRotationMatrix(&sp10, (u16)arg6);
+    sp10.unk14 = arg1;
+    sp10.unk18 = arg2;
+    sp10.unk1C = arg3;
+    ((CreateXRotS16)createXRotationMatrix)(sp30.m, (s16)arg5);
+    sp30.unk1C = 0;
+    sp30.unk18 = 0;
+    sp30.unk14 = 0;
+    func_8006B084_6BC84(&sp30, &sp10, &sp50);
+    ptr = &D_8009A8A4_9B4A4;
+    *ptr = 0;
+    D_8009A8A8_9B4A8 = 0;
+    D_8009A8AC_9B4AC = arg4;
+    func_8006B084_6BC84(ptr - 5, &sp50, arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BFB8_6CBB8);
 
