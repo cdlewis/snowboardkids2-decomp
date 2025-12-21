@@ -660,7 +660,17 @@ void func_80051250_51E50(func_800506B4_512B4_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_8005127C_51E7C);
+void func_8005127C_51E7C(void *arg0, void *arg1, Vec3i *arg2, s32 arg3) {
+    func_800506B4_512B4_arg *task = (func_800506B4_512B4_arg *)scheduleTask(&func_800510A4_51CA4, 2, 0, 0xDD);
+    if (task != NULL) {
+        memcpy(&task->unk8, arg0, 0xC);
+        memcpy(&task->unk28, arg1, 0xC);
+        task->unk54 = arg3;
+        task->unk44 = (s32)(arg2->x / 2);
+        task->unk48 = (s32)(arg2->y / 2);
+        task->unk4C = (s32)(arg2->z / 2);
+    }
+}
 
 void func_8005152C_5212C(func_8005152C_5212C_arg *arg0);
 void func_80051688_52288(func_80051688_52288_arg *arg0);
