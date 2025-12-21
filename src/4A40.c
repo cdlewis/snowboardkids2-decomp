@@ -103,7 +103,6 @@ s32 D_8008C120_8CD20[] = { 0x001428F5, 0x00099999, 0x00266666, 0xFFEBD70B, 0x000
 void func_80004368_4F68(void);
 void func_80004454_5054(void);
 void func_8000454C_514C(void);
-void func_80004570_5170(void *);
 
 typedef struct {
     s8 unk0;
@@ -176,6 +175,8 @@ typedef struct {
     s16 unkE40;
     s16 unkE42;
     ColorData unkE44[3];
+    u8 paddingE5C[4];
+    s16 unkE60;
 } func_80003EE0_4AE0_task_memory;
 
 extern u8 identityMatrix[];
@@ -197,6 +198,8 @@ typedef struct {
 
 void func_800047A0_53A0(StructUnk800048D0 *arg0);
 void func_800048D0_54D0(StructUnk800048D0 *arg0);
+void func_80004570_5170(func_80003EE0_4AE0_task_memory *);
+void func_8000464C_524C(StructUnk800048D0 *arg0);
 
 void func_80003E40_4A40(func_80003EE0_4AE0_task_memory *arg0) {
     arg0->unkE44[0].r2 = 0;
@@ -355,7 +358,38 @@ void func_8000454C_514C(void) {
     func_800697F4_6A3F4(1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4A40", func_80004570_5170);
+void func_80004570_5170(func_80003EE0_4AE0_task_memory *arg0) {
+    u16 temp_a0;
+    s32 temp_a0_2;
+    s32 temp_v1;
+    s32 var_v0;
+    StructUnk800048D0 *temp_v0;
+
+    temp_a0 = arg0->unk2;
+    if ((u32)(temp_a0 - 0x12C) >= 0x1717U) {
+        arg0->unkE60 = 0x12C;
+        return;
+    }
+    if ((s16)temp_a0 == arg0->unkE60) {
+        if (arg0->unkE40 >= (s16)D_8008C11C_8CD1C.unk0) {
+            temp_a0_2 = arg0->unkE42;
+            arg0->unkE40 = 0;
+            temp_v1 = temp_a0_2 + 1;
+            var_v0 = temp_v1;
+            if (temp_v1 < 0) {
+                var_v0 = temp_a0_2 + 4;
+            }
+            arg0->unkE42 = temp_v1 - ((var_v0 >> 2) * 4);
+        }
+        temp_v0 = scheduleTask(func_8000464C_524C, 0, 0, 0);
+        if (temp_v0 != NULL) {
+            temp_v0->unk6 = arg0->unkE40;
+            *(s16 *)&temp_v0->unk8 = arg0->unkE42;
+        }
+        arg0->unkE40 = arg0->unkE40 + 1;
+        arg0->unkE60 = arg0->unk2 + 0x3D;
+    }
+}
 
 void func_8000464C_524C(StructUnk800048D0 *arg0) {
     s32 buffer[8];
