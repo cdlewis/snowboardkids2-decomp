@@ -151,8 +151,6 @@ typedef struct {
     s16 unk2E;
 } Struct_func_8004D784;
 
-extern void func_8004E2D8_4EED8(void);
-
 void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
 void func_8004D464_4E064(Struct_func_8004D3A4 *);
 void func_8004D954_4E554(Struct_func_8004D8E4 *arg0);
@@ -1131,6 +1129,7 @@ void func_8004E614_4F214(Struct_func_8004E134 *arg0);
 void func_8004E410_4F010(Struct_func_8004E134 *arg0);
 void func_8004E4EC_4F0EC(Struct_func_8004E134 *arg0);
 void func_8004E580_4F180(Struct_func_8004E134 *arg0);
+void func_8004E2D8_4EED8(Struct_func_8004E134 *arg0);
 
 void func_8004E134_4ED34(Struct_func_8004E134 *arg0) {
     u8 temp;
@@ -1171,7 +1170,46 @@ void func_8004E134_4ED34(Struct_func_8004E134 *arg0) {
     setCleanupCallback(func_8004E614_4F214);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004E2D8_4EED8);
+void func_8004E2D8_4EED8(Struct_func_8004E134 *arg0) {
+    if (arg0->unk1C >= 0) {
+        if (arg0->unk1E != 0) {
+            __asm__ volatile("" ::: "memory");
+            arg0->unk18 += 3;
+            arg0->unk1E--;
+        } else {
+            arg0->unk18 -= 3;
+            if ((arg0->unk18 << 16) == 0) {
+                arg0->unk1E = (randA() & 0x1F) + 0x10;
+                arg0->unk1C = -1;
+            }
+        }
+    } else {
+        if (arg0->unk1E != 0) {
+            __asm__ volatile("" ::: "memory");
+            arg0->unk18 -= 3;
+            arg0->unk1E--;
+        } else {
+            arg0->unk18 += 3;
+            if ((arg0->unk18 << 16) == 0) {
+                arg0->unk1E = (randA() & 0x1F) + 0x10;
+                arg0->unk1C = 1;
+            }
+        }
+    }
+
+    arg0->unk12 += arg0->unk18;
+    arg0->unk14 += arg0->unk1A;
+
+    if (arg0->unk14 >= 0x6E1) {
+        func_80069CF8_6A8F8();
+    }
+
+    if (arg0->unkE != 0) {
+        func_8004E580_4F180(arg0);
+    } else {
+        func_8004E4EC_4F0EC(arg0);
+    }
+}
 
 void func_8004E410_4F010(Struct_func_8004E134 *arg0) {
     s32 sinVal;
