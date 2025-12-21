@@ -211,6 +211,9 @@ extern u32 D_426EF0;
 extern u16 D_8008DDBE_8E9BE[];
 extern u16 D_8008DDC0_8E9C0[];
 extern s16 D_8008DDC2_8E9C2[];
+extern u16 D_8008DE1A_8EA1A;
+extern u16 D_8008DE1C_8EA1C;
+extern u16 D_8008DE1E_8EA1E;
 extern u16 D_8008DE3A_8EA3A;
 extern u16 D_8008DE3C_8EA3C;
 extern u16 D_8008DE3E_8EA3E;
@@ -1087,7 +1090,62 @@ void func_80026190_26D90(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_800261BC_26DBC);
+void func_800262D4_26ED4(func_80026564_arg *);
+void func_80026538_27138(func_80025FFC_26BFC_arg *);
+
+void func_800261BC_26DBC(func_80026564_arg *arg0) {
+    void *dmaResult;
+    u8 count;
+    s32 i;
+    s32 j;
+    s32 index;
+    u16 xBase;
+    u16 y;
+    u16 xInc;
+    s32 xIncrement;
+    func_80025C64_entry *ptr;
+    u16 x;
+    s32 iTimesTwo;
+    s32 pad[6];
+
+    (void)pad;
+
+    getCurrentAllocation();
+    dmaResult = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    setCleanupCallback(func_80026538_27138);
+
+    count = D_800AFE8C_A71FC->unk8;
+    index = count * 3;
+    xBase = *(&D_8008DE1A_8EA1A + index);
+    y = *(&D_8008DE1C_8EA1C + index);
+    xInc = *(&D_8008DE1E_8EA1E + index);
+
+    i = 0;
+    if (count != 0) {
+        xIncrement = (s16)xInc;
+        do {
+            j = 0;
+            iTimesTwo = i * 2;
+            x = xBase;
+            do {
+                ptr = &arg0->entries[iTimesTwo + j];
+                ((volatile func_80025C64_entry *)ptr)->unk0 = x;
+                ((volatile func_80025C64_entry *)ptr)->unk8 = j;
+                j++;
+                ptr->unk2 = y;
+                ptr->unk4 = dmaResult;
+                ptr->unkA = 0xFF;
+                ptr->unkD = 0;
+                ptr->unkC = 0;
+                x += xIncrement;
+            } while (j < 2);
+            arg0->unk80[i] = 0;
+            i++;
+        } while (i < D_800AFE8C_A71FC->unk8);
+    }
+
+    setCallback(func_800262D4_26ED4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800262D4_26ED4);
 
