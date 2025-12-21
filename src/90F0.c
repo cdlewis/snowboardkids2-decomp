@@ -118,7 +118,35 @@ void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_80009F90_AB90);
+void func_80009F90_AB90(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
+    SpriteAssetState *state = (SpriteAssetState *)arg0;
+    s32 *entry;
+    s16 saved = arg2;
+    s16 index = arg2;
+    u16 t16;
+    void *t0;
+    u16 t7;
+
+    if (index == -1) {
+        state->unk8 = NULL;
+        return;
+    }
+
+    entry = &D_8008C920_8D520[state->unk4 * 5];
+    if (index < *(s16 *)(&entry[4])) {
+        state->unk8 = (AnimSetEntry *)entry[3] + index;
+        state->unkC = state->unk8->unk0;
+        state->unk10 = saved;
+        state->unk12 = state->unkC->unk4;
+        state->unk14 = 0;
+        t16 = state->unkC->unk6;
+        state->unk16 = t16;
+        t0 = state->unk0;
+        t7 = state->unk8->unk6;
+        state->unk28 = t0;
+        state->unk7 = t7;
+    }
+}
 
 s32 func_8000A030_AC30(void *arg0, s32 arg1) {
     AnimationState *state = (AnimationState *)arg0;

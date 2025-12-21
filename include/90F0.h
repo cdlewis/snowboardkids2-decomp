@@ -18,6 +18,18 @@ typedef struct {
 } AnimationEntry;
 
 typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ u16 unk4;
+    /* 0x06 */ u16 unk6;
+} AnimSetEntry;
+
+typedef struct {
+    /* 0x00 */ u32 unk0;
+    /* 0x04 */ u16 unk4;
+    /* 0x06 */ u16 unk6;
+} AnimFrameEntry;
+
+typedef struct {
     /* 0x00 */ u8 pad0[0x4];
     /* 0x04 */ s16 unk4;
 } AnimationHeader;
@@ -37,8 +49,8 @@ typedef struct {
     /* 0x04 */ s16 unk4;
     /* 0x06 */ u8 unk6;
     /* 0x07 */ u8 unk7;
-    /* 0x08 */ void *unk8;
-    /* 0x0C */ void *unkC;
+    /* 0x08 */ AnimSetEntry *unk8;
+    /* 0x0C */ AnimFrameEntry *unkC;
     /* 0x10 */ s16 unk10;
     /* 0x12 */ s16 unk12;
     /* 0x14 */ s16 unk14;
