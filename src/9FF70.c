@@ -2682,7 +2682,68 @@ s32 func_800B6194_A6044(Player *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B62E4_A6194);
+extern s32 func_80042670_43270(Player *);
+extern void *func_8004B2A0_4BEA0(void *, u32, void *, s16, s32);
+
+s32 func_800B62E4_A6194(Player *arg0) {
+    u8 temp_v0;
+
+    temp_v0 = arg0->unkBBF;
+    if (temp_v0 == 0) {
+        temp_v0 += 1;
+        arg0->unkBBF = temp_v0;
+        arg0->unkB8C = 0x8000;
+        arg0->unkA8C = 0xFFFF;
+        func_8005D308_5DF08(arg0, 0xE);
+    }
+    if ((arg0->unkBBF == 1) && (func_80042670_43270(arg0) != 0)) {
+        arg0->unkBBF = arg0->unkBBF + 1;
+    }
+    arg0->unkB88 = 0x400;
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unkB84 |= 0x20;
+    arg0->unk450 = arg0->unkB8C;
+    arg0->unkB8C = arg0->unkB8C + 0x8000;
+    func_800B419C_A404C(arg0);
+    arg0->unkA94 = (u16)arg0->unkA94 + 0x200;
+    func_800B0300_A01B0(arg0);
+    if (arg0->unkB8C > 0x7FFFF) {
+        if (arg0->unkBD4 != 0) {
+            if (arg0->unkBD2 != 0) {
+                if (randA() & 1) {
+                    if (func_8004B2A0_4BEA0(&arg0->worldPosX, arg0->unkB94, &arg0->unk44C, 0, arg0->unkBD2) != 0) {
+                        arg0->unkBD2 = 0;
+                        arg0->unkBD3 = 0;
+                    }
+                    goto block_end;
+                }
+                if (func_8004B2A0_4BEA0(&arg0->worldPosX, arg0->unkB94, &arg0->unk44C, 1, arg0->unkBD4) != 0) {
+                    arg0->unkBD4 = 0;
+                }
+                goto block_end;
+            }
+            goto block_check_BD4;
+        }
+        if (arg0->unkBD2 != 0) {
+            if (func_8004B2A0_4BEA0(&arg0->worldPosX, arg0->unkB94, &arg0->unk44C, 0, arg0->unkBD2) != 0) {
+                arg0->unkBD2 = 0;
+                arg0->unkBD3 = 0;
+            }
+        } else {
+        block_check_BD4:
+            if (arg0->unkBD4 != 0) {
+                if (func_8004B2A0_4BEA0(&arg0->worldPosX, arg0->unkB94, &arg0->unk44C, 1, arg0->unkBD4) != 0) {
+                    arg0->unkBD4 = 0;
+                }
+            }
+        }
+    block_end:
+        func_800B00D4_9FF84(arg0, 0x10);
+    }
+    func_8005D804_5E404(arg0, 3, 0);
+    return 0;
+}
 
 extern s16 D_800BABEC_AAA9C;
 extern u16 D_800BABEE_AAA9E;
