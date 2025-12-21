@@ -194,8 +194,8 @@ typedef struct {
 
 extern u8 D_8008D9F0_8E5F0[];
 
-void func_8001F7C8_203C8(void);
 void func_80020528_21128(Func80020528Arg *arg0);
+void func_8001F7C8_203C8(Func8001F6A0Arg *arg0);
 
 void func_8001F6A0_202A0(Func8001F6A0Arg *arg0) {
     Allocation_80020418 *allocation;
@@ -253,13 +253,88 @@ void func_8001F6A0_202A0(Func8001F6A0Arg *arg0) {
     temp = allocation->unkB2C;
     charIndex = allocation->unkB33[temp];
 
-    arg0->unk18 = func_80055D34_56934(charIndex);
+    *(void **)arg0->unk18 = func_80055D34_56934(charIndex);
 
     setCleanupCallback(&func_80020528_21128);
     setCallback(&func_8001F7C8_203C8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_8001F7C8_203C8);
+typedef struct {
+    u8 _pad0[0x48A];
+    u16 unk48A;
+    u8 _pad48C[0x6A0];
+    s8 unkB2C;
+    u8 _padB2D[0x6];
+    u8 unkB33[12];
+} Allocation_F7C8;
+
+void func_8001F7C8_203C8(Func8001F6A0Arg *arg0) {
+    Allocation_F7C8 *allocation;
+    Mat3x3Padded mat3;
+    Mat3x3Padded mat1;
+    Mat3x3Padded mat2;
+    s32 pos1[4];
+    s32 pos2[4];
+    s32 scaled;
+    u16 angle;
+
+    allocation = (Allocation_F7C8 *)getCurrentAllocation();
+    parseGameDataLayout((GameDataLayout *)arg0->unk18);
+
+    func_80062B1C_6371C(arg0->unk18, arg0->unk52, pos1, pos2);
+
+    memcpy(arg0->unk30, identityMatrix, 0x20);
+    memcpy(arg0, pos2, 0xC);
+
+    arg0->unk4 = func_80061A64_62664(arg0->unk18, arg0->unk52, arg0);
+
+    if (allocation->unkB33[allocation->unkB2C] == 5) {
+        arg0->unk4 = arg0->unk4 + arg0->unk68;
+    } else {
+        arg0->unk4 = arg0->unk4 + arg0->unk64;
+    }
+
+    memcpy(&arg0->unk30[0x14], arg0, 0xC);
+
+    createYRotationMatrix((Mat3x3Padded *)arg0->unk30, arg0->unk56);
+    applyTransformToModel(arg0->unk2C, (applyTransformToModel_arg1 *)arg0->unk30);
+    func_800021B8_2DB8(arg0->unk2C, 0x90);
+
+    angle = (func_8006D21C_6DE1C(pos1[0], pos1[2], pos2[0], pos2[2]) - 0x1000) & 0x1FFF;
+    arg0->unk56 = angle;
+    arg0->unk5A = angle;
+    arg0->unk76 = 0;
+
+    scaled = approximateSin((s16)arg0->unk56) * 5 << 12;
+    if (scaled < 0) {
+        scaled += 0x1FFF;
+    }
+    arg0->unkC = (scaled >> 13) << 8;
+
+    scaled = approximateCos((s16)arg0->unk56) * 5 << 12;
+    if (scaled < 0) {
+        scaled += 0x1FFF;
+    }
+    arg0->unk14 = (scaled >> 13) << 8;
+
+    arg0->unkC = arg0->unkC + arg0->unk0;
+    arg0->unk14 = arg0->unk14 + arg0->unk8;
+
+    angle = func_80060A3C_6163C(arg0->unk18, arg0->unk50, &arg0->unkC);
+    arg0->unk50 = angle;
+
+    arg0->unk10 = func_80061A64_62664(arg0->unk18, angle, &arg0->unkC);
+    arg0->unk10 = arg0->unk10 + arg0->unk64;
+
+    computeLookAtMatrix(&arg0->unkC, arg0, &mat2);
+
+    memcpy(&mat1, identityMatrix, 0x20);
+    mat1.unk1C = arg0->unk60;
+
+    func_8006B084_6BC84(&mat1, &mat2, &mat3);
+    func_8006FD3C_7093C(allocation->unk48A, &mat3);
+    setCallback(func_8001FA00_20600);
+}
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FA00_20600);
 
