@@ -200,7 +200,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
 
     if (!(arg0->unkB84 & 0x1)) {
         createYRotationMatrix(&arg0->unk970, arg0->unkA94);
-        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)((u8 *)arg0 + 0x990), &arg0->unk970, &sp10);
+        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, &arg0->unk970, &sp10);
         transformVector3(&arg0->unk44C, &sp10, sp30);
         sp30[0] = 0;
         transformVector2(sp30, &sp10, &arg0->unk44C);
@@ -226,7 +226,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
     func_800B02AC_A015C(arg0);
     func_800BC61C_B1B0C(arg0);
 
-    transformVectorRelative(&gameState->players->worldPosX, (u8 *)arg0 + 0x164, sp40);
+    transformVectorRelative(&gameState->players->worldPosX, arg0->unk164, sp40);
 
     angleDiff = atan2Fixed(-sp40[0], -sp40[2]) & 0x1FFF;
 
@@ -242,8 +242,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
         angleDiff = -0x80;
     }
 
-    // Access unkA9E via pointer arithmetic
-    *(s16 *)((u8 *)arg0 + 0xA9E) = *(s16 *)((u8 *)arg0 + 0xA9E) + angleDiff;
+    arg0->unkA9E = arg0->unkA9E + angleDiff;
 
     if (arg0->unkB84 & 0x400000) {
         if (func_8005D180_5DD80(arg0, 3) != 0) {
