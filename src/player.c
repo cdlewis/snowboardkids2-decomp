@@ -887,7 +887,47 @@ u32 func_80072704_73304(s32 number, s32 volume, s32 pan, s32 handle, s32 priorit
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072814_73414);
+void func_80072814_73414(s32 arg0, s32 arg1) {
+    channel_t *cp;
+    s32 i;
+    s32 speed;
+
+    speed = arg1;
+    if (arg1 == 0) {
+        speed = 1;
+    }
+
+    cp = mus_channels;
+    for (i = 0; i < max_channels; i++, cp++) {
+        if (cp->fx_addr != 0) {
+            if (arg0 & 1) {
+                goto check_pdata;
+            }
+            continue;
+        }
+        if (!(arg0 & 2)) {
+            continue;
+        }
+
+    check_pdata:
+        if (cp->pdata == NULL) {
+            continue;
+        }
+
+        if (cp->stopping != -1) {
+            continue;
+        }
+
+        if (cp->flags & 1) {
+            cp->stopping_speed = 1;
+            cp->stopping = 0;
+            cp->flags &= ~1;
+        } else {
+            cp->stopping_speed = speed;
+            cp->stopping = arg1;
+        }
+    }
+}
 
 s32 func_800728E0_734E0(u32 flags) {
     s32 i;
