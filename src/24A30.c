@@ -206,6 +206,11 @@ extern u16 D_8008DDD8_8E9D8[];
 extern u16 D_8008DDDA_8E9DA[];
 extern u32 D_41A1D0;
 extern u32 D_41AD80;
+extern u32 D_4237C0;
+extern u32 D_426EF0;
+extern u16 D_8008DDBE_8E9BE[];
+extern u16 D_8008DDC0_8E9C0[];
+extern s16 D_8008DDC2_8E9C2[];
 
 void func_80025DAC_269AC(func_80025FFC_26BFC_arg *);
 void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
@@ -976,11 +981,42 @@ void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80026028_26C28);
-
 typedef struct {
     func_80027348_entry entries[3];
 } func_800260EC_26CEC_arg;
+
+void func_80026190_26D90(func_80025FFC_26BFC_arg *);
+void func_800260EC_26CEC(func_800260EC_26CEC_arg *);
+
+void func_80026028_26C28(func_80025FFC_26BFC_arg *arg0) {
+    void *dmaResult;
+    s32 i;
+    s32 index;
+    u16 x;
+    s32 increment;
+    u16 y;
+    s32 pad[4];
+
+    dmaResult = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    setCleanupCallback(func_80026190_26D90);
+
+    i = 0;
+    index = D_800AFE8C_A71FC->unk8 * 3;
+    x = D_8008DDBE_8E9BE[index];
+    increment = D_8008DDC2_8E9C2[index];
+    y = D_8008DDC0_8E9C0[index];
+
+    do {
+        arg0[i].unk2 = y;
+        y += increment;
+        arg0[i].unk0 = x;
+        arg0[i].unk8 = i + 2;
+        arg0[i].unk4 = dmaResult;
+        i++;
+    } while (i < 3);
+
+    setCallback(func_800260EC_26CEC);
+}
 
 void func_800260EC_26CEC(func_800260EC_26CEC_arg *arg0) {
     s32 i;
