@@ -13,15 +13,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-s32 func_80052A24_53624(s32, s32);
-s32 func_80053078_53C78(s32, s32);
-s32 func_800537B0_543B0(s32, s32);
-s32 func_80053DF0_549F0(s32, s32);
-s32 func_80054470_55070(s32, s32);
-s32 func_80055820_56420(s32, s32);
-
-extern s16 D_80090F60_91B60[];
-
 typedef struct {
     void *unk0;
     s32 unk4;
@@ -29,9 +20,9 @@ typedef struct {
     s32 unkC;
     u8 padding1[0x10];
     void *unk20;
-    s32 velY;
-    s32 velZ;
-    s32 velX;
+    /* 0x24 */ s32 velY;
+    /* 0x28 */ s32 velZ;
+    /* 0x2C */ s32 velX;
     u8 padding2[0xC];
     s32 unk3C;
     u16 unk40;
@@ -67,14 +58,82 @@ typedef struct {
 } Alloc_52880;
 
 typedef struct {
-    u8 padding[0x30];
+    u8 padding1[0x10];
+    Unk10Element_52880 *unk10;
+    u8 padding2[0x1C];
     u8 unk30[0x46];
     u8 unk76;
-    u8 padding2[0xF];
+    u8 padding3[0xF];
     u8 unk86;
 } Alloc_55650;
 
+typedef struct {
+    u8 padding[0x20];
+    void *unk20;
+} func_80055864_56464_arg;
+
+typedef struct {
+    void *unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    u8 padding1[0x10];
+    void *unk20;
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    u8 padding2[0xC];
+    s32 unk3C;
+    s16 unk40;
+    s16 unk42;
+    s16 unk44;
+    s16 unk46;
+    s16 unk48;
+    s16 unk4A;
+    s16 unk4C;
+    s8 unk4E;
+} func_800550B4_55CB4_arg;
+
+typedef struct {
+    u8 padding[0x20];
+    void *unk20;
+} func_80054CCC_558CC_arg;
+
+void func_800545F8_551F8(Struct_52880 *arg0);
+void func_80054658_55258(void);
+void func_80054144_54D44(Struct_52880 *arg0);
+void func_80053FE0_54BE0(Struct_52880 *arg0);
+void func_80053E90_54A90(Struct_52880 *arg0);
+void func_80053B38_54738(Struct_52880 *arg0);
+void func_80053990_54590(Struct_52880 *arg0);
+void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0);
+void func_80054D0C_5590C(Struct_52880 *arg0);
+void func_80054F44_55B44(Struct_52880 *arg0);
+void func_80054D70_55970(void *arg0);
+void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0);
+void func_80055460_56060(Struct_52880 *arg0);
+void func_800554FC_560FC(Struct_52880 *arg0);
+void func_80055650_56250(Struct_52880 *arg0);
+void func_800558A4_564A4(Struct_52880 *arg0);
+void func_80055964_56564(Struct_52880 *arg0);
+void func_80055A84_56684(void);
+s32 func_80052A24_53624(s32, s32);
+s32 func_80053078_53C78(s32, s32);
+s32 func_800537B0_543B0(s32, s32);
+s32 func_80053DF0_549F0(s32, s32);
+s32 func_80054470_55070(s32, s32);
+s32 func_80055820_56420(s32, s32);
+void func_80053434_54034(Struct_52880 *);
 void func_80052DB4_539B4(Struct_52880 *);
+void func_800523EC_52FEC(Struct_52880 *arg0);
+void func_80051E34_52A34(Struct_52880 *arg0);
+void func_80051FC4_52BC4(Struct_52880 *arg0);
+void func_800524A4_530A4(Struct_52880 *arg0);
+void func_800525F4_531F4(Struct_52880 *arg0);
+void func_8005383C_5443C(Struct_52880 *arg0);
+void func_800548C8_554C8(void);
+
+extern s16 D_80090F60_91B60[];
 
 void func_80051C80_52880(s32 *arg0, s32 arg1) {
     s32 dist;
@@ -98,10 +157,6 @@ void func_80051C80_52880(s32 *arg0, s32 arg1) {
         arg0[2] = (s64)((s64)arg0[2] * arg1) / dist;
     }
 }
-
-void func_800523EC_52FEC(Struct_52880 *arg0);
-void func_80051E34_52A34(Struct_52880 *arg0);
-void func_80051FC4_52BC4(Struct_52880 *arg0);
 
 void func_80051DEC_529EC(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
@@ -316,9 +371,6 @@ s32 func_80052418_53018(s32 arg0, s32 arg1) {
     }
     return (s32)task;
 }
-
-void func_800524A4_530A4(Struct_52880 *arg0);
-void func_800525F4_531F4(Struct_52880 *arg0);
 
 void func_8005245C_5305C(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
@@ -807,8 +859,6 @@ void func_80053160_53D60(Struct_52880 *arg0) {
     }
 }
 
-extern void func_80053434_54034(void);
-
 void func_80053254_53E54(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s16 playerIdx;
@@ -873,7 +923,103 @@ void func_80053254_53E54(Struct_52880 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80053434_54034);
+void func_80053434_54034(Struct_52880 *arg0) {
+    Alloc_55650 *alloc;
+    s32 sp18[3];
+    s32 savedVec[3];
+    s32 rotateVec[3];
+    s32 pad[7];
+    s16 var_s3;
+    s32 temp_v0;
+    s32 i;
+    s32 s0;
+
+    alloc = (Alloc_55650 *)getCurrentAllocation();
+
+    if (alloc->unk76 == 0) {
+        func_80050604_51204(&arg0->unk4, &arg0->velY, 5);
+
+        arg0->velZ += 0xFFFC0000;
+
+        func_80051C80_52880(&arg0->velY, 0x1E0000);
+
+        memcpy(savedVec, &arg0->unk4, 0xC);
+
+        arg0->unk4 += arg0->velY;
+        arg0->unk8 += arg0->velZ;
+        arg0->unkC += arg0->velX;
+
+        arg0->unk40 = func_80060A3C_6163C(alloc->unk30, arg0->unk40, &arg0->unk4);
+
+        func_80060CDC_618DC(alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, sp18);
+
+        if ((sp18[0] != 0) || (sp18[2] != 0)) {
+            arg0->unk4 = arg0->unk4 + sp18[0];
+            arg0->unkC = arg0->unkC + sp18[2];
+            s0 = atan2Fixed(-sp18[0], -sp18[2]);
+            rotateVectorY(&arg0->velY, (s16)-s0, rotateVec);
+            if (rotateVec[2] < 0) {
+                rotateVec[2] = -rotateVec[2];
+            }
+            rotateVectorY(rotateVec, (s16)s0, &arg0->velY);
+            arg0->unk42 = -1;
+        } else {
+            arg0->velY = arg0->unk4 - savedVec[0];
+            arg0->velX = arg0->unkC - savedVec[2];
+        }
+
+        arg0->unk48--;
+        if (arg0->unk48 == 0) {
+            arg0->unk4E++;
+        }
+
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+
+        if (arg0->unk8 < temp_v0 + 0x100000) {
+            arg0->unk8 = temp_v0 + 0x100000;
+        }
+
+        arg0->velZ = arg0->unk8 - savedVec[1];
+
+        func_80053160_53D60(arg0);
+
+        s0 = arg0->velX;
+        var_s3 = func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->velY, s0), arg0->unk42, 0x1E00000, 0x1E0000);
+        if ((var_s3 << 16) != 0) {
+            var_s3 &= 0x1FFF;
+            if (var_s3 >= 0x1001) {
+                var_s3 |= 0xE000;
+            }
+
+            if ((s16)arg0->unk46 < var_s3) {
+                var_s3 = arg0->unk46;
+            }
+
+            if (var_s3 < -(s16)arg0->unk46) {
+                var_s3 = -(s16)arg0->unk46;
+            }
+
+            memcpy(rotateVec, &arg0->velY, 0xC);
+            rotateVectorY(rotateVec, var_s3, &arg0->velY);
+        }
+
+        if (alloc->unk10[arg0->unk42].unkBD9 == 0) {
+            if ((s16)arg0->unk46 < 0x13) {
+                arg0->unk46 += 2;
+            }
+        }
+    }
+
+    if (arg0->unk4E != 0) {
+        func_80050ECC_51ACC(&arg0->unk4);
+        func_80056B7C_5777C(&arg0->unk4, 0xD);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (void *)arg0);
+    }
+}
 
 void func_80053784_54384(Struct_52880 *arg0) {
     arg0->unk20 = freeNodeMemory(arg0->unk20);
@@ -889,16 +1035,12 @@ s32 func_800537B0_543B0(s32 arg0, s32 arg1) {
     return (s32)task;
 }
 
-void func_8005383C_5443C(Struct_52880 *arg0);
-
 void func_800537F4_543F4(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_8005383C_5443C);
 }
-
-void func_80053990_54590(Struct_52880 *arg0);
 
 void func_8005383C_5443C(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
@@ -940,8 +1082,6 @@ void func_80053898_54498(Struct_52880 *arg0) {
         }
     }
 }
-
-void func_80053B38_54738(Struct_52880 *arg0);
 
 void func_80053990_54590(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
@@ -1098,16 +1238,12 @@ s32 func_80053DF0_549F0(s32 arg0, s32 arg1) {
     return (s32)task;
 }
 
-void func_80053E90_54A90(Struct_52880 *arg0);
-
 void func_80053E48_54A48(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_80053E90_54A90);
 }
-
-void func_80053FE0_54BE0(Struct_52880 *arg0);
 
 void func_80053E90_54A90(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
@@ -1161,8 +1297,6 @@ void func_80053EEC_54AEC(Struct_52880 *arg0) {
         func_80056B7C_5777C(s1, 0x20);
     }
 }
-
-void func_80054144_54D44(Struct_52880 *arg0);
 
 void func_80053FE0_54BE0(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
@@ -1343,9 +1477,6 @@ void func_80054568_55168(Struct_52880 *arg0) {
     }
 }
 
-void func_800545F8_551F8(Struct_52880 *arg0);
-extern void func_80054658_55258(void);
-
 void func_800545B0_551B0(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
     arg0->unk20 = load_3ECE40();
@@ -1386,8 +1517,6 @@ void func_800547E0_553E0(s16 arg0, s32 arg1) {
     }
 }
 
-extern void func_800548C8_554C8(void);
-
 void func_80054880_55480(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
     arg0->unk20 = load_3ECE40();
@@ -1408,40 +1537,6 @@ void func_80054C8C_5588C(s16 arg0) {
         task->unk42 = arg0;
     }
 }
-
-typedef struct {
-    u8 padding[0x20];
-    void *unk20;
-} func_80054CCC_558CC_arg;
-
-void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0);
-void func_80054D0C_5590C(Struct_52880 *arg0);
-void func_80054F44_55B44(Struct_52880 *arg0);
-void func_80054D70_55970(void *arg0);
-
-typedef struct {
-    void *unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    u8 padding1[0x10];
-    void *unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    u8 padding2[0xC];
-    s32 unk3C;
-    s16 unk40;
-    s16 unk42;
-    s16 unk44;
-    s16 unk46;
-    s16 unk48;
-    s16 unk4A;
-    s16 unk4C;
-    s8 unk4E;
-} func_800550B4_55CB4_arg;
-
-void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0);
 
 void func_80054CCC_558CC(func_80054CCC_558CC_arg *arg0) {
     arg0->unk20 = load_3ECE40();
@@ -1696,16 +1791,12 @@ void func_800553D4_55FD4(s32 arg0) {
     }
 }
 
-void func_80055460_56060(Struct_52880 *arg0);
-
 void func_80055418_56018(Struct_52880 *arg0) {
     arg0->unk4C = arg0->unk42;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_80055460_56060);
 }
-
-void func_800554FC_560FC(Struct_52880 *arg0);
 
 void func_80055460_56060(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
@@ -1723,8 +1814,6 @@ void func_800554BC_560BC(Struct_52880 *arg0) {
         arg0->unk4E++;
     }
 }
-
-void func_80055650_56250(Struct_52880 *arg0);
 
 void func_800554FC_560FC(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
@@ -1835,14 +1924,6 @@ s32 func_80055820_56420(s32 arg0, s32 arg1) {
     return (s32)task;
 }
 
-typedef struct {
-    u8 padding[0x20];
-    void *unk20;
-} func_80055864_56464_arg;
-
-void func_800558A4_564A4(Struct_52880 *arg0);
-void func_80055964_56564(Struct_52880 *arg0);
-
 void func_80055864_56464(func_80055864_56464_arg *arg0) {
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
@@ -1872,8 +1953,6 @@ void func_80055900_56500(Struct_52880 *arg0) {
         }
     }
 }
-
-extern void func_80055A84_56684(void);
 
 void func_80055964_56564(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
