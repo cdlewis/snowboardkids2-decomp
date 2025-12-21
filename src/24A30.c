@@ -537,7 +537,38 @@ void func_80024644_25244(func_80024644_arg *arg0) {
     setCallbackWithContinue(func_80024810_25410);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024810_25410);
+void func_80024810_25410(func_80024644_arg *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded *sp10Ptr;
+    Mat3x3Padded *unk5CPtr;
+    s32 target;
+    s32 adjustment;
+    GameState *state;
+
+    state = (GameState *)getCurrentAllocation();
+
+    sp10Ptr = &sp10;
+    target = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->unk8 * 2) + ((state->unk18C0[arg0->unkA1] + 1) & 1)];
+    adjustment = (-(target < 0) & 0xFFF00000) | 0x100000;
+
+    memcpy(sp10Ptr, identityMatrix, 0x20);
+    memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
+
+    arg0->unk7C.unk14 += adjustment;
+
+    unk5CPtr = &arg0->unk5C;
+    createYRotationMatrix(unk5CPtr, state->unk1888[arg0->unkA1]);
+
+    func_8006B084_6BC84(&arg0->unk3C, unk5CPtr, sp10Ptr);
+    func_8006B084_6BC84(sp10Ptr, &arg0->unk7C, arg0);
+
+    if (arg0->unk7C.unk14 == target) {
+        state->unk18C0[arg0->unkA1 + 4]++;
+        func_80069CF8_6A8F8();
+    } else {
+        enqueueDisplayListObject(arg0->unkA1, (DisplayListObject *)arg0);
+    }
+}
 
 void func_8002494C_2554C(func_8002494C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
