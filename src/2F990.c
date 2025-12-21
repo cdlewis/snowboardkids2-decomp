@@ -153,6 +153,8 @@ extern s32 gControllerInputs[4];
 extern u8 identityMatrix[];
 extern s32 D_8008F110_8FD10;
 extern s16 D_8008F0B2_8FCB2[];
+extern u16 D_8008F0B4_8FCB4[];
+extern u16 D_8008F0B6_8FCB6[];
 extern s16 D_8008F0C6_8FCC6[];
 extern s32 *D_800AFE8C_A71FC;
 
@@ -160,7 +162,7 @@ void func_80030378_30F78(func_800302AC_30EAC_arg *);
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
 void func_80030540_31140(func_80030540_31140_arg *arg0);
 void func_8002EFD8_2FBD8(void *);
-void func_8002F024_2FC24(void);
+void func_8002F024_2FC24(func_8002EF3C_2FB3C_arg *);
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
 void func_8002F290_2FE90(func_8002F658_30258_arg *);
 void func_8002F36C_2FF6C(func_8002F658_30258_arg *);
@@ -262,7 +264,46 @@ void func_8002EFD8_2FBD8(void *untypedArg0) {
     setCallback(&func_8002F024_2FC24);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F024_2FC24);
+typedef struct {
+    u8 padding[0x5D6];
+    u8 unk5D6;
+} func_8002F024_2FC24_state;
+
+void func_8002F024_2FC24(func_8002EF3C_2FB3C_arg *arg0) {
+    func_8002F024_2FC24_state *state;
+    u8 animIndex;
+    u16 frameCounter;
+    s32 idx;
+    volatile u8 pad[8];
+
+    state = (func_8002F024_2FC24_state *)getCurrentAllocation();
+    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->unk4);
+    do {
+        if (clearModelRotation(arg0->unk0) != 0) {
+            animIndex = arg0->unk26;
+            idx = animIndex * 2;
+            if (animIndex != 0) {
+                frameCounter = arg0->unk24 + 1;
+                arg0->unk24 = frameCounter;
+                if ((u16)frameCounter == (u16)(D_8008F0B4_8FCB4[idx] + D_8008F0B6_8FCB6[idx])) {
+                    arg0->unk26 = 0;
+                    arg0->unk24 = 4;
+                }
+                func_800021B8_2DB8(arg0->unk0, (s16)arg0->unk24);
+            }
+        }
+    } while (0);
+    updateModelGeometry(arg0->unk0);
+    animIndex = state->unk5D6;
+    if (animIndex != 0) {
+        u16 start;
+        arg0->unk26 = animIndex;
+        start = D_8008F0B4_8FCB4[state->unk5D6 * 2];
+        arg0->unk24 = start;
+        func_800021B8_2DB8(arg0->unk0, (s16)start);
+        state->unk5D6 = 0;
+    }
+}
 
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *arg0) {
     func_80002014_2C14(arg0->unk0);
