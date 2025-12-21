@@ -2141,15 +2141,19 @@ void func_80044CDC_458DC(void *arg0) {
 extern void *D_80090AB8_916B8[];
 extern void *D_80090ABC_916BC[];
 extern s32 D_80090AC0_916C0[];
-extern void func_80044DB0_459B0(void);
 
 typedef struct {
-    void *unk0;    /* 0x00 */
-    u8 _pad4[0x8]; /* 0x04 */
-    void *unkC;    /* 0x0C */
-    void *unk10;   /* 0x10 */
-    s16 unk14;     /* 0x14 */
+    void *unk0; /* 0x00 */
+    void *unk4; /* 0x04 */
+    s8 *unk8;   /* 0x08 */
+    void *unkC; /* 0x0C */
+    s32 *unk10; /* 0x10 */
+    s16 unk14;  /* 0x14 */
+    s16 unk16;  /* 0x16 */
 } Func44D1CArg;
+
+void func_80044DB0_459B0(Func44D1CArg *);
+void func_80044EC4_45AC4(Func44D1CArg *);
 
 typedef struct Func45010Arg Func45010Arg;
 void func_80045010_45C10(Func45010Arg *);
@@ -2169,20 +2173,46 @@ void func_80044D1C_4591C(Func44D1CArg *arg0) {
     setCallback(func_80044DB0_459B0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044DB0_459B0);
+extern void func_80045054_45C54(Func44D1CArg *);
 
-typedef struct {
-    void *unk0;     /* 0x00 */
-    u8 _pad4[0x4];  /* 0x04 */
-    s8 *entries;    /* 0x08 */
-    u8 _pad10[0x6]; /* 0x0C */
-    u8 _pad12[0x4]; /* 0x12 */
-    s16 entryCount; /* 0x16 */
-} Func44EC4Arg;
+void func_80044DB0_459B0(Func44D1CArg *arg0) {
+    s32 i;
+    s32 *ptr;
+    s8 *entries;
+    s32 pad[2];
+    s32 one;
+    s32 offset;
 
-extern void func_80045054_45C54(Func44EC4Arg *);
+    arg0->unk4 = (void *)((u8 *)((GameState *)getCurrentAllocation())->unk44 + 0xF80);
+    arg0->unk8 = (s8 *)arg0->unk10 + *arg0->unk10;
+    entries = *(s8 *volatile *)&arg0->unk8;
+    arg0->unk16 = 0;
 
-void func_80044EC4_45AC4(Func44EC4Arg *arg0) {
+    if (*entries >= 0) {
+        do {
+            arg0->unk16++;
+        } while (*(entries + arg0->unk16 * 16) >= 0);
+    }
+
+    i = 0;
+    arg0->unk0 = allocateNodeMemory(arg0->unk16 << 6);
+
+    if (arg0->unk16 > 0) {
+        one = 1;
+        ptr = &D_8009A8A4_9B4A4;
+        do {
+            offset = i << 4;
+            *((s8 *)(offset + (s32)arg0->unk8)) = one;
+            memcpy(ptr, (s8 *)(offset + (s32)arg0->unk8 + 4), 0xC);
+            func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->unk0 + (i << 6));
+            i++;
+        } while (i < arg0->unk16);
+    }
+
+    setCallback(func_80044EC4_45AC4);
+}
+
+void func_80044EC4_45AC4(Func44D1CArg *arg0) {
     s32 i;
     GameState *allocation;
     s8 *temp_a0;
@@ -2197,16 +2227,16 @@ void func_80044EC4_45AC4(Func44EC4Arg *arg0) {
 
     allocation = (GameState *)getCurrentAllocation();
     i = 0;
-    if (arg0->entryCount > 0) {
+    if (arg0->unk16 > 0) {
         three = 3;
         nine = 9;
         offset = 0;
         do {
-            temp_a0 = (s8 *)(offset + (s32)arg0->entries);
+            temp_a0 = (s8 *)(offset + (s32)arg0->unk8);
             if (*temp_a0 != 0) {
                 player = (Player *)func_8005B24C_5BE4C((Vec3s32 *)(temp_a0 + 4), -1, 0x100000);
                 if (player != NULL && player->unkBD9 == 0) {
-                    temp_v1 = (s8 *)(offset + (s32)arg0->entries);
+                    temp_v1 = (s8 *)(offset + (s32)arg0->unk8);
                     if (temp_v1[1] == 0) {
                         val = *(u16 *)(temp_v1 + 2);
                         player->unkBD3 = three;
@@ -2220,13 +2250,13 @@ void func_80044EC4_45AC4(Func44EC4Arg *arg0) {
                         player->unkBD4 = (u8) * (u16 *)(temp_v1 + 2);
                     }
                     player->unkBD8 = flags;
-                    *(s8 *)(offset + (s32)arg0->entries) = 0;
-                    func_80056B7C_5777C((s8 *)((s32)arg0->entries + offset) + 4, 8);
+                    *(s8 *)(offset + (s32)arg0->unk8) = 0;
+                    func_80056B7C_5777C((s8 *)((s32)arg0->unk8 + offset) + 4, 8);
                 }
             }
             i++;
             offset += 0x10;
-        } while (i < arg0->entryCount);
+        } while (i < arg0->unk16);
         i = 0;
     }
     do {
