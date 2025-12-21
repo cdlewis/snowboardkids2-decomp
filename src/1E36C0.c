@@ -54,7 +54,82 @@ void func_800B66B4_1E3764(CutsceneSlotData *arg0) {
     arg0->angle = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", setupSlotTransform);
+s32 setupSlotTransform(CutsceneSlotData *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    Mat3x3Padded sp50;
+    Mat3x3Padded sp70;
+    Mat3x3Padded sp90;
+    Mat3x3Padded spB0;
+    Mat3x3Padded *pB0;
+    s16 angle;
+    s16 unk8A;
+    s16 var_a1;
+    s32 scaleX;
+    s32 scaleY;
+    s32 scaleZ;
+    s32 retval;
+    s16 a1, a2, a3;
+
+    memcpy(&sp10, identityMatrix, 0x20U);
+    memcpy(&sp30, identityMatrix, 0x20U);
+    memcpy(&sp50, identityMatrix, 0x20U);
+    memcpy(&sp70, identityMatrix, 0x20U);
+    memcpy(&sp90, identityMatrix, 0x20U);
+    memcpy(&spB0, identityMatrix, 0x20U);
+
+    angle = arg0->angle;
+    var_a1 = 0;
+    if (angle != 0) {
+        unk8A = *(s16 *)((u8 *)arg0 + 0x8A);
+        if (unk8A < 0) {
+            var_a1 = angle;
+        } else if (unk8A > 0) {
+            var_a1 = -angle;
+        }
+    } else {
+        var_a1 = (s16)(u16)arg0->unk82;
+    }
+
+    createZRotationMatrix(&sp30, var_a1 & 0xFFFF);
+    createYRotationMatrix(&sp10, (u16)arg0->unk78);
+    createXRotationMatrix(sp50.m, (u16)arg0->unk80);
+    func_8006B084_6BC84(&sp30, &sp10, &sp90);
+    func_8006B084_6BC84(&sp50, &sp90, &sp70);
+
+    scaleX = arg0->unk54;
+    pB0 = &spB0;
+    if (scaleX >= 0) {
+        goto skip1;
+    }
+    scaleX += 7;
+skip1:
+    scaleY = arg0->unk58;
+    a1 = (s16)((scaleX << 0xD) >> 0x10);
+    if (scaleY >= 0) {
+        goto skip2;
+    }
+    scaleY += 7;
+skip2:
+    scaleZ = arg0->unk5C;
+    a2 = (s16)((scaleY << 0xD) >> 0x10);
+    if (scaleZ >= 0) {
+        goto skip3;
+    }
+    scaleZ += 7;
+skip3:
+    a3 = (s16)((scaleZ << 0xD) >> 0x10);
+
+    scaleMatrix(pB0, a1, a2, a3);
+    func_8006B084_6BC84(pB0, &sp70, &arg0->unk04);
+
+    retval = arg0->unk04.unk20_u.unk20_s32;
+    arg0->unk04.unk14 = retval;
+    arg0->unk04.unk18 = arg0->unk28;
+    arg0->unk04.unk1C = arg0->unk2C;
+
+    return retval;
+}
 
 void func_800B68F4_1E39A4(unk_func_800B68F4_1E39A4 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     arg0->unk60 = arg1;
