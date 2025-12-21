@@ -14,19 +14,6 @@ USE_ASSET(_41A1D0);
 USE_ASSET(_41AD80);
 USE_ASSET(_422C60);
 
-extern u8 D_1DC0D0[];
-extern u8 D_1DC260[];
-
-extern void func_800B0218_1DA7B8(void *, u8);
-extern u8 identityMatrix[];
-extern void *D_800B1140_1DB6E0;
-extern char D_800B115C_1DB6FC[];
-extern s32 gButtonsPressed;
-extern void *renderTextPalette;
-extern char D_800B11F0_1DB790[];
-extern s16 D_800B1160_1DB700[];
-extern s16 D_800B1162_1DB702[];
-
 typedef struct {
     u8 _pad0[0x2C];
     s32 unk2C;
@@ -108,6 +95,27 @@ typedef struct {
     s32 unk2C;
 } func_800B100C_arg;
 
+typedef struct {
+    s16 x, y;
+} Vec2s;
+
+typedef struct {
+    u8 padding[0x592];
+    u16 unk592;
+    u8 padding2[0xE];
+    u8 unk5A2;
+} LocalGameState_Player;
+
+typedef struct {
+    LocalGameState_Player *players[4];
+    u8 pad[0x582];
+    u16 unk592[8];
+    u8 unk5A2[8];
+} LocalGameState;
+
+extern void *renderTextPalette;
+
+void func_800B0218(func_800B0980_element *, u8);
 void func_800B0DF8_1DB398(void *);
 void func_800B0598_1DAB38(func_800B08FC_arg *);
 void func_800B05DC_1DAB7C(func_800B08FC_arg *);
@@ -125,9 +133,55 @@ void func_800B10D4_1DB674(void *);
 void func_800B1104_1DB6A4(func_800B1104_arg *);
 void func_800B0C54_1DB1F4(func_800B0BEC_arg *);
 
+extern char D_800B11F0_1DB790[];
+extern s16 D_800B1160_1DB700[];
+extern s16 D_800B1162_1DB702[];
+extern Vec2s D_800B11A0_1DB740[];
+extern s16 D_800B11C2_1DB762[];
+extern u8 D_1DC0D0[];
+extern u8 D_1DC260[];
+extern u8 identityMatrix[];
+extern void *D_800B1140_1DB6E0;
+extern char D_800B115C_1DB6FC[];
+extern s32 gButtonsPressed;
+
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0218_1DA7B8);
+void func_800B0218_1DA7B8(func_800B0980_element *arg0, u8 arg1) {
+    LocalGameState *allocation;
+    u8 playerState;
+    u8 count;
+    s32 i;
+    volatile u8 padding[8];
+
+    allocation = (LocalGameState *)getCurrentAllocation();
+
+    arg0->unk0 = D_800B11A0_1DB740[allocation->unk592[arg1]].x;
+    arg0->unk2 = D_800B11A0_1DB740[allocation->unk592[arg1]].y;
+
+    if (allocation->unk5A2[arg1] >= 3) {
+        arg0->unk0 += 0x10;
+    }
+
+    if (!(allocation->unk5A2[arg1] & 1)) {
+        arg0->unk2 += 0x10;
+    }
+
+    count = 0;
+    for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+        if (allocation->unk592[arg1] == allocation->unk592[i]) {
+            count++;
+        }
+    }
+
+    playerState = allocation->unk5A2[arg1];
+    if ((playerState == 3) && (count == 3)) {
+        arg0->unk2 += 0x10;
+    }
+
+    count--;
+    arg0->unk8 = D_800B11C2_1DB762[count * 4 + allocation->unk5A2[arg1]] + arg1;
+}
 
 void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
     GameState *allocation;
