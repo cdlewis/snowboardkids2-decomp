@@ -182,6 +182,8 @@ void func_8002FB40_30740(func_8002FA9C_3069C_arg *);
 void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0);
 void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *);
 void func_8002FF28_30B28(func_8002FF28_30B28_arg *);
+void func_8003006C_30C6C(func_8002FA9C_3069C_item *);
+void func_80030194_30D94(func_8002FF28_30B28_arg *);
 void func_80030238_30E38(void *arg0);
 void func_80030280_30E80(func_8002FF28_30B28_arg *arg0);
 void func_80030764_31364(Struct_80030694 *arg0);
@@ -747,7 +749,37 @@ void func_8002FF28_30B28(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002FF54_30B54);
+void func_8002FF54_30B54(func_8002FA9C_3069C_item *arg0) {
+    GameState *state;
+    GameState *temp_s0;
+    void *dmaResult;
+    u8 itemValue;
+
+    state = (GameState *)getCurrentAllocation();
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    setCleanupCallback(func_80030194_30D94);
+
+    arg0->unk2 = -0x18;
+
+    temp_s0 = (GameState *)((u8 *)state + state->unk5C8);
+    itemValue = temp_s0->unk5CA[0];
+
+    if (itemValue < 9) {
+        arg0->unk0 = 0x12;
+        arg0->unk8 = ((itemValue % 3) & 0xFF) + 0x24;
+    } else {
+        s16 tableVal = D_8008F0B2_8FCB2[itemValue];
+        arg0->unk8 = 0x35;
+        arg0->unk0 = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
+    }
+
+    arg0->unkA = 0xFF;
+    arg0->unkC = 0;
+    arg0->unkD = 0;
+    arg0->unk4 = dmaResult;
+
+    setCallback(func_8003006C_30C6C);
+}
 
 void func_8003006C_30C6C(func_8002FA9C_3069C_item *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
