@@ -904,7 +904,38 @@ s32 func_800728E0_734E0(u32 flags) {
     return count;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player", func_80072960_73560);
+s32 func_80072960_73560(u32 handle, s32 stopSpeed) {
+    channel_t *channel;
+    s32 count;
+    s32 i;
+    s32 speed;
+
+    if (handle == 0) {
+        return 0;
+    }
+
+    speed = stopSpeed;
+    if (stopSpeed == 0) {
+        speed = 1;
+    }
+
+    count = 0;
+    for (i = 0, channel = mus_channels; i < max_channels; i++, channel++) {
+        if (channel->handle == handle && channel->stopping == -1) {
+            if (channel->flags & 1) {
+                channel->stopping_speed = 1;
+                channel->stopping = 0;
+                channel->flags &= ~1;
+            } else {
+                channel->stopping_speed = speed;
+                channel->stopping = stopSpeed;
+            }
+            count++;
+        }
+    }
+
+    return count;
+}
 
 void *func_80072A14_73614(musHandle arg0) {
     s32 i;
