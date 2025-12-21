@@ -2823,7 +2823,54 @@ s32 func_800B6640_A64F0(Player *arg0) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6688_A6538);
+s32 func_800B6688_A6538(Player *arg0) {
+    s32 sp10[4];
+    GameState *alloc;
+    D_80090F90_91B90_item *item;
+    s16 angle;
+    s16 temp_angle;
+    u16 unkA94;
+    s32 temp_worldPosX;
+    s32 item_unk4;
+    s32 temp_worldPosZ;
+    s16 temp;
+
+    alloc = getCurrentAllocation();
+    item = func_80055D10_56910(alloc->memoryPoolId);
+    temp = item->unk8 + func_800625A4_631A4(&alloc->gameData, sp10) + 0x1000;
+    unkA94 = arg0->unkA94;
+    angle = (temp - unkA94) & 0x1FFF;
+    temp_angle = angle;
+    if (angle >= 0x1001) {
+        temp_angle = angle | 0xE000;
+    }
+    arg0->unk450 -= 0x6000;
+    temp_worldPosX = arg0->worldPosX;
+    arg0->unk44C = 0;
+    arg0->unk454 = 0;
+    arg0->unkA94 = unkA94 + (temp_angle / arg0->unkB8C);
+    arg0->worldPosX = temp_worldPosX + ((item->unk0 - temp_worldPosX) >> 2);
+    item_unk4 = item->unk4;
+    temp_worldPosZ = arg0->worldPosZ;
+    arg0->worldPosZ = temp_worldPosZ + ((item_unk4 - temp_worldPosZ) >> 2);
+    func_800B02AC_A015C(arg0);
+    func_800B40D4_A3F84(arg0);
+    arg0->unkB8C -= 1;
+
+    if (arg0->unkBC0 != 0) {
+        if (func_8005D308_5DF08(arg0, 6) != 0) {
+            arg0->unkBC0 = 0;
+        }
+    } else {
+        func_8005D180_5DD80(arg0, 0);
+    }
+
+    if (arg0->unkB8C == 0) {
+        arg0->unkBBF += 1;
+    }
+
+    return 0;
+}
 
 s32 func_800B67E4_A6694(Player *arg0) {
     D_80090F90_91B90_item *item;
