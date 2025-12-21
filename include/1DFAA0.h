@@ -170,7 +170,8 @@ typedef struct {
     /* 0x84 */ s16 unk84;
     /* 0x86 */ s16 unk86;
     /* 0x88 */ s16 unk88;
-    u8 _pad8A[0x4];
+    /* 0x8A */ s16 unk8A;
+    /* 0x8C */ u8 _pad8C[0x2];
     /* 0x8E */ s16 angle;
     /* 0x90 */ u8 padding3[0x2];
     s32 unk94;

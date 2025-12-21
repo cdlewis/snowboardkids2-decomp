@@ -81,7 +81,7 @@ s32 setupSlotTransform(CutsceneSlotData *arg0) {
     angle = arg0->angle;
     var_a1 = 0;
     if (angle != 0) {
-        unk8A = *(s16 *)((u8 *)arg0 + 0x8A);
+        unk8A = arg0->unk8A;
         if (unk8A < 0) {
             var_a1 = angle;
         } else if (unk8A > 0) {
