@@ -170,7 +170,8 @@ void func_8002F3E4_2FFE4(func_8002F518_30118_arg *);
 void func_8002F518_30118(func_8002F518_30118_arg *);
 void func_8002F5C8_301C8(DisplayListObject *);
 void func_8002F614_30214(func_8002F658_30258_arg *);
-void func_8002F72C_3032C(void);
+void func_8002F72C_3032C(func_8002F658_30258_arg *);
+void func_8002F860_30460(DisplayListObject *);
 void func_8002F88C_3048C(func_8002F658_30258_arg *arg0);
 void func_8002F948_30548(void);
 void func_8002F980_30580(func_8002F658_30258_arg *);
@@ -506,7 +507,42 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
     setCallback(&func_8002F72C_3032C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2F990", func_8002F72C_3032C);
+void func_8002F72C_3032C(func_8002F658_30258_arg *arg0) {
+    GameState *state;
+    s8 temp_v1;
+    u8 temp_s1;
+    s16 s0;
+
+    state = (GameState *)getCurrentAllocation();
+    if (state->unk5C5 == 2) {
+        if (state->unk5C6 == 1) {
+            arg0->transform.unk14 = 0x200000;
+            arg0->translationStep = 0x80000;
+            temp_v1 = state->unk5C8 + 2;
+            arg0->unk61 = temp_v1;
+            if (temp_v1 >= (s32)state->unk5C9) {
+                arg0->unk61 = temp_v1 - state->unk5C9;
+            }
+        } else {
+            arg0->transform.unk14 = 0xFFE00000;
+            arg0->translationStep = 0xFFF80000;
+            temp_v1 = state->unk5C8 - 2;
+            arg0->unk61 = temp_v1;
+            if (temp_v1 < 0) {
+                arg0->unk61 = state->unk5C9 + temp_v1;
+            }
+        }
+        temp_s1 = state->unk5CA[arg0->unk61];
+        memcpy(arg0, &arg0->transform, 0x20);
+        temp_s1 &= 0x1F;
+        s0 = temp_s1;
+        arg0->displayList.unk20 = loadAssetByIndex_95728(s0);
+        arg0->displayList.unk24 = loadAssetByIndex_95500(s0);
+        arg0->displayList.unk28 = loadAssetByIndex_95590(s0);
+        arg0->displayList.unk2C = loadAssetByIndex_95668(temp_s1 / 3);
+        setCallback(func_8002F860_30460);
+    }
+}
 
 void func_8002F860_30460(DisplayListObject *arg0) {
     enqueueDisplayListObject(0, arg0);
