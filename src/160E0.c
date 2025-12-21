@@ -1,25 +1,52 @@
+#include "10AD0.h"
+#include "16FA0.h"
+#include "288A0.h"
 #include "3A1F0.h"
 #include "3E160.h"
+#include "4050.h"
+#include "413E0.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "gamestate.h"
 #include "graphics.h"
+#include "overlay.h"
 #include "task_scheduler.h"
 
-extern s32 gControllerInputs;
-extern s32 gButtonsPressed;
-extern u8 D_800AB47A_A27EA;
+typedef struct {
+    Node_70B00 node1;
+    Node_70B00 node2;
+    void *unk3B0;
+    void *unk3B4;
+    u16 unk3B8;
+    u8 unk3BA;
+    u8 unk3BB;
+    u8 unk3BC;
+    u8 unk3BD;
+    u8 unk3BE;
+    u8 unk3BF;
+    u8 unk3C0;
+    u8 unk3C1;
+} TitleState;
 
+USE_ASSET(_414CF0);
+USE_ASSET(_418520);
+
+void func_800161F4_16DF4(void);
+void func_800159AC_165AC(void);
 void func_80015CA4_168A4(void);
 void func_80015DF4_169F4(void);
 void func_80016070_16C70(void);
 void func_80016150_16D50(void);
-
 void func_800156AC_162AC(void);
 
 extern u8 D_8009F210_9FE10;
+extern s32 gControllerInputs;
+extern s32 gButtonsPressed;
+extern u8 D_800AB47A_A27EA;
+extern u8 D_8008D420_8E020;
+extern s8 D_800A8A98_9FE08;
 
 void func_800154E0_160E0(void) {
     func_800697F4_6A3F4(D_8009F210_9FE10);
@@ -259,7 +286,71 @@ void func_800159AC_165AC(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/160E0", func_80015A18_16618);
+void func_80015A18_16618(void) {
+    TitleState *state;
+    Node_70B00 *node2;
+    void *dmaResult;
+    s32 i;
+    void *checkResult;
+
+    state = (TitleState *)allocateTaskMemory(0x3C8);
+    func_8006FDA0_709A0(NULL, 0xFF, 0);
+    node2 = &state->node2;
+    func_80014440_15040();
+    setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
+    func_8006FAA4_706A4((Node_70B00 *)state, NULL, 8, 10, 0);
+    setModelCameraTransform(state, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    func_80027CA0_288A0(node2, 0, 8, 0);
+    func_8006FA0C_7060C(node2, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    func_8006FD3C_7093C(node2->id, &D_8008D420_8E020);
+    state->unk3B0 = dmaRequestAndUpdateStateWithSize(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
+    state->unk3BB = 0;
+    state->unk3BC = 0;
+    state->unk3BD = 0;
+    state->unk3BE = 0;
+    state->unk3C1 = 0x3C;
+    state->unk3BF = 0;
+    state->unk3C0 = 0;
+    state->unk3B4 = dmaResult;
+    state->unk3B8 = 0;
+
+    if (D_800AFE8C_A71FC->unk4 == 0xFE) {
+        state->unk3BB = 2;
+    } else if (D_800AFE8C_A71FC->saveSlotIndex == 0xF) {
+        state->unk3BB = 1;
+    }
+
+    func_800161F4_16DF4();
+
+    for (i = 0; i < 4; i++) {
+        *((u8 *)D_800AFE8C_A71FC + i + 0x1A) = 0;
+    }
+
+    D_800A8A98_9FE08 = 0;
+
+    checkResult = __udiv_w_sdiv();
+    if (checkResult != NULL) {
+        state->unk3BC = 4;
+    } else {
+        state->unk3BC = 3;
+    }
+
+    scheduleTask(&func_80016434_17034, 0, 0, 0x64);
+    scheduleTask(&func_80016488_17088, 0, 0, 0x62);
+    scheduleTask(&func_80016728_17328, 0, 0, 0x62);
+
+    for (i = 0; i < 7; i++) {
+        dmaResult = scheduleTask(&func_800168F4_174F4, 0, 0, 0x62);
+        if (dmaResult != NULL) {
+            *((u8 *)dmaResult + 0x2F) = i;
+        }
+    }
+
+    scheduleTask(&func_80016860_17460, 0, 0, 0x62);
+    func_80040F6C_41B6C(1, 0x20, 0, 0, 8, 7);
+    setGameStateHandler(func_800159AC_165AC);
+}
 
 void func_80015CA4_168A4(void) {
     GameState *state;

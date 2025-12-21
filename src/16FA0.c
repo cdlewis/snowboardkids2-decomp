@@ -1,3 +1,4 @@
+#include "16FA0.h"
 #include "10AD0.h"
 #include "20F0.h"
 #include "38C90.h"
@@ -28,28 +29,8 @@ extern void func_80000710_1310(func_80000710_1310_arg_16FA0 *);
 void func_800168BC_174BC(void);
 void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0);
 
-typedef struct {
-    u8 padding[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-} TransformData;
-
 extern TransformData D_8008D5C4_8E1C4[];
 extern u16 *D_8008D534_8E134[2];
-
-typedef struct {
-    SceneModel *unk0;   // 0x00
-    TransformData unk4; // 0x04 - 0x20 bytes of transform data
-    s32 unk24;          // 0x24
-    u16 *unk28;         // 0x28 - pointer to u16 animation data
-    u16 unk2C;          // 0x2C - current animation state
-    u8 unk2E;           // 0x2E
-    u8 unk2F;           // 0x2F - index into transform array
-    u8 _pad30;          // 0x30
-    u8 unk31;           // 0x31
-    u8 unk32;           // 0x32
-} Struct16B68;
 
 void func_80016C28_17828(Struct16B68 *arg0);
 void func_80016A00_17600(Struct16B68 *arg0);
@@ -58,13 +39,6 @@ void func_80016D0C_1790C(Struct16B68 *arg0);
 void func_80016DE0_179E0(Struct16B68 *arg0);
 void func_80016964_17564(Struct16B68 *arg0);
 void func_80016E70_17A70(Struct16B68 *arg0);
-
-typedef struct {
-    u8 padding[0x2];
-    s16 unk2;
-    u8 padding2[0x34];
-    void *unk38;
-} Struct163F8;
 
 void func_800163CC_16FCC(Struct163F8 *);
 void func_800163A0_16FA0(Struct163F8 *);
@@ -149,18 +123,6 @@ void func_800166FC_172FC(void **arg0) {
 }
 
 void func_80016834_17434(void **);
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 unkA;
-    u8 unkB;
-    u8 unkC;
-    u8 unkD;
-    u8 unkE;
-} Struct16728;
 
 void func_800167B0_173B0(Struct16728 *);
 

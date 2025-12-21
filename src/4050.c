@@ -66,7 +66,7 @@ void func_80003450_4050(s16 arg0, s16 arg1) {
 }
 
 void *__udiv_w_sdiv(void) {
-    return 0;
+    return NULL;
 }
 
 void func_8000346C_406C(s16 arg0, s16 arg1, s16 arg2) {

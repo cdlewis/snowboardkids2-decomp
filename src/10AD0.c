@@ -1,3 +1,4 @@
+#include "10AD0.h"
 #include "common.h"
 
 INCLUDE_ASM("asm/nonmatchings/10AD0", func_8000FED0_10AD0);
