@@ -15,6 +15,7 @@ extern s16 D_8008F2C4_8FEC4[];
 extern void *D_8008F7CC_903CC[];
 extern void *D_8008F7DC_903DC;
 extern void *D_8008F7E0_903E0;
+extern s32 D_8008F7D8_903D8;
 
 USE_ASSET(_459310);
 USE_ASSET(_41A1D0);
@@ -209,7 +210,51 @@ void func_80033E08_34A08(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033E40_34A40);
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ u8 pad4[0x4];
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ s16 unkA;
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ void *unk10;
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ s16 unk16;
+    /* 0x18 */ u8 unk18;
+    /* 0x19 */ u8 pad19[0x3];
+    /* 0x1C */ u8 unk1C;
+    /* 0x1D */ u8 unk1D;
+    /* 0x1E */ u8 unk1E;
+} Func34A40Arg;
+
+void func_80033EDC_34ADC(Func34ADCArg *arg0);
+void func_80033F50_34B50(Func34574Arg *arg0);
+
+void func_80033E40_34A40(Func34A40Arg *arg0) {
+    u8 *allocation;
+    s32 temp_c;
+    void *temp_10;
+
+    allocation = (u8 *)getCurrentAllocation();
+    arg0->unk0 = func_80035F80_36B80(1);
+    arg0->unk1E = *(allocation + arg0->unk1C + 0xACE);
+    setCleanupCallback(func_80033F50_34B50);
+
+    *(volatile s16 *)&arg0->unk8 = -0x26;
+    *(volatile s16 *)&arg0->unkA = -4;
+
+    temp_c = D_8008F7D8_903D8;
+    temp_10 = arg0->unk0;
+
+    arg0->unk14 = 0xFF;
+    arg0->unk18 = 0;
+    arg0->unk16 = 0xFF;
+    arg0->unk1D = 0;
+
+    arg0->unkC = temp_c;
+    arg0->unk10 = temp_10;
+
+    setCallback(func_80033EDC_34ADC);
+}
 
 void func_80033EDC_34ADC(Func34ADCArg *arg0) {
     AllocationStruct *allocation;
