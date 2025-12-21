@@ -217,8 +217,9 @@ typedef struct {
 void func_80041724_42324(Func41570State *);
 
 typedef struct {
-    u8 _pad0[0x44];
-    void *unk44; /* 0x44 */
+    u8 _pad0[0x30];
+    u8 unk30[0x14]; /* 0x30 */
+    void *unk44;    /* 0x44 */
     u8 _pad48[0x14];
     u8 unk5C; /* 0x5C */
     u8 _pad5D[0x19];
@@ -1214,6 +1215,7 @@ typedef struct {
 } Func432D8Arg;
 
 void func_800432D8_43ED8(Func432D8Arg *);
+void func_80044CA4_458A4(Func432D8Arg *);
 
 typedef struct {
     u8 pad0[0x18];           /* 0x00 */
@@ -1895,7 +1897,49 @@ void func_80044578_45178(Func44BBCArg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80044684_45284);
+void func_80044684_45284(Func44BBCArg *arg0) {
+    Vec3s32 posOutput;
+    s32 transformOutput[3];
+    Func43CA4GameState *allocation;
+    u16 rotation;
+    D_80090F90_91B90_item *item;
+    s32 temp_unk18;
+
+    allocation = (Func43CA4GameState *)getCurrentAllocation();
+    rotation = func_800625A4_631A4(&allocation->unk30, &posOutput) + 0x800;
+    item = func_80055D10_56910(allocation->unk5C);
+
+    arg0->unk20 = (u8 *)func_80055E68_56A68(allocation->unk5C) + 0x10;
+
+    arg0->unk24 = func_80055DC4_569C4(allocation->unk5C);
+    arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
+    arg0->unk2C = 0;
+
+    arg0->unk3C.unk20 = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0x90);
+    arg0->unk3C.unk2C = 0;
+    arg0->unk3C.unk24 = arg0->unk24;
+    arg0->unk3C.unk28 = arg0->unk28;
+
+    arg0->unk78.unk20 = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0xA0);
+    arg0->unk78.unk2C = 0;
+    arg0->unk78.unk24 = arg0->unk24;
+    arg0->unk78.unk28 = arg0->unk28;
+
+    arg0->unkC8 = rotation + item->unk8;
+    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->unkC8);
+
+    arg0->unkC6 = 0;
+    transformVector2(&D_80090AA0_916A0, arg0, transformOutput);
+
+    arg0->unk14 = item->unk0 + transformOutput[0];
+    arg0->unk1C = item->unk4 + transformOutput[2];
+    temp_unk18 = posOutput.unk4 + transformOutput[1];
+    arg0->unkC4 = 0x30;
+    arg0->unk18 = temp_unk18;
+
+    setCleanupCallback(func_80044CA4_458A4);
+    setCallbackWithContinue(func_800447D4_453D4);
+}
 
 void func_800447D4_453D4(Func44BBCArg *arg0) {
     Func43CA4GameState *gameState;
