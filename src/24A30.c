@@ -211,6 +211,17 @@ extern u32 D_426EF0;
 extern u16 D_8008DDBE_8E9BE[];
 extern u16 D_8008DDC0_8E9C0[];
 extern s16 D_8008DDC2_8E9C2[];
+extern u16 D_8008DE3A_8EA3A;
+extern u16 D_8008DE3C_8EA3C;
+extern u16 D_8008DE3E_8EA3E;
+
+typedef struct {
+    func_80025C64_entry entries[8];
+    u8 unk80[4];
+} func_80026564_arg;
+
+void func_8002667C_2727C(void *);
+void func_80026834_27434(func_80025FFC_26BFC_arg *);
 
 void func_80025DAC_269AC(func_80025FFC_26BFC_arg *);
 void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
@@ -1084,7 +1095,59 @@ void func_80026538_27138(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80026564_27164);
+void func_80026564_27164(func_80026564_arg *arg0) {
+    void *dmaResult;
+    u8 count;
+    s32 i;
+    s32 j;
+    s32 index;
+    u16 xBase;
+    u16 y;
+    u16 xInc;
+    s32 xIncrement;
+    func_80025C64_entry *ptr;
+    u16 x;
+    s32 iTimesTwo;
+    s32 pad[5];
+
+    (void)pad;
+
+    getCurrentAllocation();
+    dmaResult = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    setCleanupCallback(func_80026834_27434);
+
+    count = D_800AFE8C_A71FC->unk8;
+    index = count * 3;
+    xBase = *(&D_8008DE3A_8EA3A + index);
+    y = *(&D_8008DE3C_8EA3C + index);
+    xInc = *(&D_8008DE3E_8EA3E + index);
+
+    i = 0;
+    if (count != 0) {
+        xIncrement = (s16)xInc;
+        do {
+            arg0->unk80[i] = 0;
+            j = 0;
+            iTimesTwo = i * 2;
+            x = xBase;
+            do {
+                ptr = &arg0->entries[iTimesTwo + j];
+                ((volatile func_80025C64_entry *)ptr)->unk0 = x;
+                ((volatile func_80025C64_entry *)ptr)->unk8 = j;
+                j++;
+                ptr->unk2 = y;
+                ptr->unk4 = dmaResult;
+                ptr->unkA = 0xFF;
+                ptr->unkD = 0;
+                ptr->unkC = 0;
+                x += xIncrement;
+            } while (j < 2);
+            i++;
+        } while (i < D_800AFE8C_A71FC->unk8);
+    }
+
+    setCallback(func_8002667C_2727C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_8002667C_2727C);
 
