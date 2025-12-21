@@ -5,7 +5,7 @@
 
 typedef struct {
     s16 command;
-    s16 pad;
+    u16 pad;
     void *arg;
 } Entry;
 
@@ -32,6 +32,27 @@ typedef struct {
     u8 unk1C[4];
     u8 unk20[4];
 } D_800AB078_A23E8_type;
+
+extern OSMesgQueue D_800A1820_A2420;
+extern OSMesgQueue D_800A1868_A2468;
+extern OSMesgQueue D_800A1888_A2488;
+extern OSMesgQueue D_800A18A8_A24A8;
+extern OSMesgQueue mainStack;
+extern OSPfs D_800A1A68_A2668[];
+extern OSContPad D_800A1C08_A2808[];
+
+void initControllerPack(s32);
+void func_8003A294_3AE94(s32, void *);
+void func_8003A52C_3B12C(s32, void *);
+void func_8003A864_3B464(s32, void *);
+void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]);
+void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader *header);
+void controllerPackReadStatus(s32 arg0);
+void func_8003B1C0_3BDC0(void);
+void func_8003B2DC_3BEDC(s32 arg0, u8 *arg1);
+void func_8003B400_3C000(s32);
+void func_8003B560_3C160(u8 *);
+void func_800397CC_3A3CC(void *arg0);
 
 extern char piManagerThreadStack[0x8]; // this size seems wrong
 extern DmaTransferEntry *D_800A2108_A2D08;
@@ -81,15 +102,6 @@ extern s32 D_800A18C0_A24C0;
 extern s32 D_800A8D10_A0080;
 extern u8 gConnectedControllerMask;
 extern s8 D_800AFCE2_A7052;
-extern void func_800397CC_3A3CC;
-
-typedef struct {
-    s16 unk0;
-    u8 unk2;
-    u8 unk3;
-    u8 padding[0x2];
-} D_800A1C08_A2808_arg;
-extern D_800A1C08_A2808_arg D_800A1C08_A2808[];
 
 void func_800395F0_3A1F0(void) {
     s32 result;
@@ -118,9 +130,9 @@ void func_800395F0_3A1F0(void) {
             }
 
             for (i = 0; i < 4; i++) {
-                D_800A1C08_A2808[i].unk0 = 0;
-                D_800A1C08_A2808[i].unk2 = 0;
-                D_800A1C08_A2808[i].unk3 = 0;
+                D_800A1C08_A2808[i].button = 0;
+                D_800A1C08_A2808[i].stick_x = 0;
+                D_800A1C08_A2808[i].stick_y = 0;
             }
 
             D_800A1C98_A2898 = 0;
@@ -136,7 +148,109 @@ void func_800395F0_3A1F0(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_800397CC_3A3CC);
+void func_800397CC_3A3CC(void *arg0) {
+    OSPfs *motorPfs;
+    D_800AB078_A23E8_type *motorArg;
+    Entry *msg;
+    OSMesg mesg2;
+    char channel;
+    s16 cmd;
+    OSMesgQueue *queue;
+
+    msg = NULL;
+    while (TRUE) {
+        osRecvMesg(&D_800A1820_A2420, (OSMesg *)(&msg), 1);
+        cmd = msg->command;
+        switch (cmd & 0x1F0) {
+            case 0x10:
+                osContStartReadData(&mainStack);
+                osRecvMesg(&mainStack, &mesg2, 1);
+                osContGetReadData(D_800A1C08_A2808);
+                osSendMesg(&D_800A1868_A2468, (OSMesg)1, 0);
+                continue;
+
+            case 0x20:
+                initControllerPack(cmd & 3);
+                continue;
+
+            case 0x30:
+                func_8003A294_3AE94(cmd & 3, msg->arg);
+                continue;
+
+            case 0x40:
+                func_8003A52C_3B12C(cmd & 3, msg->arg);
+                continue;
+
+            case 0x50:
+                func_8003A864_3B464(cmd & 3, msg->arg);
+                continue;
+
+            case 0x60:
+                controllerPackDeleteFile(cmd & 3, msg->pad, msg->arg);
+                continue;
+
+            case 0xC0:
+                controllerPackDeleteFileFromHeader(cmd & 3, msg->arg);
+                continue;
+
+            case 0x70:
+                controllerPackReadStatus(cmd & 3);
+                continue;
+
+            case 0x80:
+                motorArg = msg->arg;
+                channel = cmd & 3;
+                motorArg->unk8[msg->command & 3] = osMotorInit(&mainStack, &D_800A1A68_A2668[channel], channel);
+                osSendMesg(&D_800A18A8_A24A8, (OSMesg)motorArg->unk8[msg->command & 3], 0);
+                continue;
+
+            case 0x90:
+                motorArg = msg->arg;
+                queue = &mainStack;
+                channel = cmd & 3;
+                motorArg->unk8[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2668[channel], channel);
+                continue;
+
+            case 0xA0:
+                motorArg = msg->arg;
+                channel = cmd & 3;
+                if (motorArg->unk8[channel] != 0) {
+                    queue = &mainStack;
+                    motorArg->unk8[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2668[channel], channel);
+                    continue;
+                }
+                (*motorArg).unk8[msg->command & 3] = osMotorStart(&D_800A1A68_A2668[channel]);
+                continue;
+
+            case 0xB0:
+                motorArg = msg->arg;
+                channel = cmd & 3;
+                if (motorArg->unk8[channel] == 0) {
+                    motorArg->unk8[msg->command & 3] = osMotorStop(&D_800A1A68_A2668[channel]);
+                    continue;
+                }
+                queue = &mainStack;
+                motorArg->unk8[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2668[channel], channel);
+                continue;
+
+            case 0xD0:
+                func_8003B1C0_3BDC0();
+                continue;
+
+            case 0xE0:
+                func_8003B2DC_3BEDC(cmd & 3, msg->arg);
+                continue;
+
+            case 0xF0:
+                func_8003B400_3C000(cmd & 3);
+                continue;
+
+            case 0x140:
+                func_8003B560_3C160(msg->arg);
+                continue;
+        }
+    }
+}
 
 void func_80039B88_3A788(void) {
     s16 temp_v0;
