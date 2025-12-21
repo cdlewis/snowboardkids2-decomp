@@ -1,9 +1,44 @@
 #include "288A0.h"
 #include "3E160.h"
 #include "6E840.h"
+#include "rand.h"
+#include "task_scheduler.h"
 
 extern ColorData D_8008DEF0_8EAF0;
 extern ColorData D_8008DEF8_8EAF8;
+
+extern u8 D_8008DF00_8EB00[][10];
+extern u8 D_8008DF3C_8EB3C[][8];
+extern u16 D_8009ADE0_9B9E0;
+
+typedef struct {
+    u8 pad0[0x9];
+    u8 unk9;
+} GameConfigLocal_288A0;
+
+extern GameConfigLocal_288A0 *D_800AFE8C_A71FC;
+extern void func_80028600_29200(void *);
+extern void func_8002BCF0_2C8F0(void *);
+
+void func_800285EC_291EC(void);
+
+typedef struct {
+    u8 pad0[0x41C];
+    s32 unk41C;
+    u8 unk420;
+    u8 pad421[0xB];
+    u8 unk42C;
+} AllocationLocal_288A0;
+
+typedef struct {
+    u8 pad0[0x5C];
+    u8 unk5C;
+} Task5C_288A0;
+
+typedef struct {
+    u8 pad0[0xD4];
+    u8 unkD4;
+} TaskD4_288A0;
 
 void func_80027CA0_288A0(Node_70B00 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     s8 sp20[0x20];
@@ -32,7 +67,41 @@ INCLUDE_ASM("asm/nonmatchings/288A0", func_80027E04_28A04);
 
 INCLUDE_ASM("asm/nonmatchings/288A0", func_80028074_28C74);
 
-INCLUDE_ASM("asm/nonmatchings/288A0", func_80028480_29080);
+void func_80028480_29080(u8 *arg0) {
+    AllocationLocal_288A0 *alloc;
+    u8 tableValue;
+    u8 randVal;
+    Task5C_288A0 *task;
+    TaskD4_288A0 *task2;
+
+    alloc = getCurrentAllocation();
+    alloc->unk41C = 0;
+    alloc->unk420 = 0xFF;
+
+    if ((randA() & 7) == 7) {
+        randVal = randB();
+        *arg0 = D_8008DF00_8EB00[D_800AFE8C_A71FC->unk9][randVal % 10] - 1;
+        task2 = scheduleTask(func_8002BCF0_2C8F0, 0, 0, 0x5B);
+        task2->unkD4 = *arg0;
+        alloc->unk42C = *arg0;
+        goto check_s2;
+    }
+
+    tableValue = D_8008DF3C_8EB3C[D_800AFE8C_A71FC->unk9][D_8009ADE0_9B9E0 & 7];
+    if (tableValue != 0) {
+        task = scheduleTask(func_80028600_29200, 0, 0, 0x5B);
+        task->unk5C = tableValue - 1;
+        alloc->unk420 = tableValue - 1;
+    }
+
+check_s2:
+    if (tableValue != 0) {
+        alloc->unk41C = 1;
+        setCallback(func_800285EC_291EC);
+    } else {
+        func_80069CF8_6A8F8();
+    }
+}
 
 void func_800285EC_291EC(void) {
 }
