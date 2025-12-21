@@ -3,7 +3,9 @@
 #include "5AA90.h"
 #include "common.h"
 #include "displaylist.h"
+#include "gamestate.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 extern s32 gFrameCounter;
@@ -326,46 +328,116 @@ void func_800BBB90(s16 arg0) {
 extern s32 D_800BCA30_AEDF0[][3];
 
 extern void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *);
-extern void func_800BBCFC_AE0BC(void *);
 
 typedef struct {
-    /* 0x00 */ u8 _pad0[0x14];
-    /* 0x14 */ s32 position[3];
-    /* 0x20 */ u8 _pad20[4];
+    /* 0x00 */ Mat3x3Padded mat1;
+    /* 0x20 */ DisplayLists *unk20;
     /* 0x24 */ void *unk24;
     /* 0x28 */ void *unk28;
     /* 0x2C */ s32 unk2C;
     /* 0x30 */ u8 _pad30[0xC];
-    /* 0x3C */ Mat3x3Padded mat;
-    /* 0x5C */ u8 _pad5C[4];
+    /* 0x3C */ Mat3x3Padded mat2;
+    /* 0x5C */ DisplayLists *unk5C;
     /* 0x60 */ void *unk60;
     /* 0x64 */ void *unk64;
     /* 0x68 */ s32 unk68;
     /* 0x6C */ u8 _pad6C[0xC];
     /* 0x78 */ s16 unk78;
-    /* 0x7A */ u8 _pad7A[2];
+    /* 0x7A */ u16 unk7A;
     /* 0x7C */ u8 unk7C;
 } func_800BBC28_arg;
+
+void func_800BBCFC_AE0BC(func_800BBC28_arg *);
 
 void func_800BBC28_ADFE8(func_800BBC28_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(8);
     arg0->unk28 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
-    memcpy(&arg0->position, &D_800BCA30_AEDF0[arg0->unk7C], 0xC);
+    memcpy(&arg0->mat1.unk14, &D_800BCA30_AEDF0[arg0->unk7C], 0xC);
     arg0->unk68 = 0;
-    arg0->position[1] += 0x100000;
+    arg0->mat1.unk18 += 0x100000;
     arg0->unk60 = arg0->unk24;
     arg0->unk64 = arg0->unk28;
-    createYRotationMatrix(&arg0->mat, 0);
+    createYRotationMatrix(&arg0->mat2, 0);
     arg0->unk78 = 0x2000;
-    arg0->mat.unk14 = arg0->position[0];
-    arg0->mat.unk18 = arg0->position[1] + 0x180000;
-    arg0->mat.unk1C = arg0->position[2];
+    arg0->mat2.unk14 = arg0->mat1.unk14;
+    arg0->mat2.unk18 = arg0->mat1.unk18 + 0x180000;
+    arg0->mat2.unk1C = arg0->mat1.unk1C;
     setCleanupCallback(&func_800BBEA0_AE260);
     setCallback(&func_800BBCFC_AE0BC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BBCFC_AE0BC);
+void func_800BBCFC_AE0BC(func_800BBC28_arg *arg0) {
+    GameState *allocation;
+    s32 var_s0;
+    s32 var_s1;
+    s16 temp_v0;
+    s16 temp_a1;
+    u16 temp_v0_2;
+    s32 temp;
+    u8 pad[0x10];
+
+    (void)pad;
+
+    allocation = (GameState *)getCurrentAllocation();
+    var_s0 = 0;
+    temp = allocation->numPlayers;
+    if (temp > 0) {
+        var_s1 = 0;
+loop_2:
+        if (isPlayerInRangeAndPull((Vec3s32 *)&arg0->mat1.unk14, 0x200000, (Player *)((u8 *)allocation->players + var_s1)) == 0) {
+            var_s0 += 1;
+            var_s1 += 0xBE8;
+            if (var_s0 < (s32)allocation->numPlayers) {
+                goto loop_2;
+            }
+        }
+    }
+
+    if ((var_s0 != allocation->numPlayers) && (arg0->unk78 == 0x2000)) {
+        var_s0 = 0;
+        if (allocation->numPlayers != 0) {
+            var_s1 = 0;
+            do {
+                isPlayerInRangeAndPull((Vec3s32 *)&arg0->mat1.unk14, 0x500000, (Player *)((u8 *)allocation->players + var_s1));
+                var_s0 += 1;
+                var_s1 += 0xBE8;
+            } while (var_s0 < (s32)allocation->numPlayers);
+        }
+        arg0->unk78 = 0x4000;
+        func_80056B7C_5777C(&arg0->mat1.unk14, 0x4E);
+    }
+
+    temp_v0_2 = arg0->unk7A + 0x100;
+    arg0->unk7A = temp_v0_2;
+    createYRotationMatrix(&arg0->mat1, temp_v0_2 & 0xFFFF);
+
+    temp_v0 = arg0->unk78;
+    if (temp_v0 != 0x2000) {
+        if (allocation->gamePaused == 0) {
+            arg0->unk78 = (s16)(temp_v0 - 0x800);
+        }
+        temp_a1 = arg0->unk78;
+        scaleMatrix(&arg0->mat1, temp_a1, 0x2000, temp_a1);
+        if (arg0->unk78 != 0x2000) {
+            goto block_c0f0;
+        }
+    }
+    // D0/E0 block
+    arg0->unk5C = (DisplayLists *)((arg0->unk20 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xD0)), (s32)func_80055E68_56A68(8) + 0xE0);
+    goto common;
+
+block_c0f0:
+    arg0->unk5C = (DisplayLists *)((arg0->unk20 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xC0)), (s32)func_80055E68_56A68(8) + 0xF0);
+
+common:
+    var_s0 = 0;
+    do {
+        enqueueDisplayListWithFrustumCull(var_s0, (DisplayListObject *)&arg0->mat1);
+        enqueueDisplayListWithFrustumCull(var_s0, (DisplayListObject *)&arg0->mat2);
+        var_s0 += 1;
+    } while (var_s0 < 4);
+}
 
 void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
