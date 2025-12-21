@@ -10,6 +10,7 @@
 #include "geometry.h"
 #include "graphics.h"
 #include "levels/starlight_highway.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 s32 func_80052A24_53624(s32, s32);
@@ -1416,7 +1417,7 @@ typedef struct {
 void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0);
 void func_80054D0C_5590C(Struct_52880 *arg0);
 void func_80054F44_55B44(Struct_52880 *arg0);
-extern void func_80054D70_55970(void *arg0);
+void func_80054D70_55970(void *arg0);
 
 typedef struct {
     void *unk0;
@@ -1460,7 +1461,81 @@ void func_80054D0C_5590C(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80054F44_55B44);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80054D70_55970);
+void func_80054D70_55970(void *arg) {
+    Struct_52880 *arg0 = arg;
+    GameState *alloc;
+    Player *player;
+    s32 i;
+    s16 unk4C;
+    u32 randVal;
+
+    alloc = (GameState *)getCurrentAllocation();
+    randVal = ((u32)(randA() & 0xFF) % 5U) & 0xFF;
+
+    switch (randVal) {
+        case 0:
+            player = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+            if (player != NULL) {
+                func_80058A10_59610(player);
+                for (i = 0; i < 3; i++) {
+                    if (player->unkB6C >= 100) {
+                        func_8004A9A8_4B5A8(&player->worldPosX, player->unkB94, &player->unk44C);
+                        func_80059A48_5A648(player, -100);
+                    }
+                }
+                arg0->unk4E = arg0->unk4E + 1;
+                unk4C = arg0->unk4C;
+                if (unk4C >= 0) {
+                    func_80059C24_5A824(&alloc->players[unk4C]);
+                }
+            }
+            break;
+        case 1:
+            player = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+            if (player != NULL) {
+                func_80058A3C_5963C(player);
+                arg0->unk4E = arg0->unk4E + 1;
+                unk4C = arg0->unk4C;
+                if (unk4C >= 0) {
+                    func_80059C24_5A824(&alloc->players[unk4C]);
+                }
+            }
+            break;
+        case 2:
+            player = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+            if (player != NULL) {
+                func_80058A68_59668(player);
+                arg0->unk4E = arg0->unk4E + 1;
+                unk4C = arg0->unk4C;
+                if (unk4C >= 0) {
+                    func_80059C24_5A824(&alloc->players[unk4C]);
+                }
+            }
+            break;
+        case 3:
+            player = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+            if (player != NULL) {
+                func_80058AC0_596C0(player);
+                arg0->unk4E = arg0->unk4E + 1;
+                unk4C = arg0->unk4C;
+                if (unk4C >= 0) {
+                    func_80059C24_5A824(&alloc->players[unk4C]);
+                }
+            }
+            break;
+        case 4:
+            player = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+            if (player != NULL) {
+                func_80058A94_59694(player);
+                arg0->unk4E = arg0->unk4E + 1;
+                unk4C = arg0->unk4C;
+                if (unk4C >= 0) {
+                    func_80059C24_5A824(&alloc->players[unk4C]);
+                }
+            }
+            break;
+    }
+}
 
 void func_80054F44_55B44(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
