@@ -19,6 +19,7 @@ extern s32 D_8008F7D8_903D8;
 
 USE_ASSET(_459310);
 USE_ASSET(_41A1D0);
+USE_ASSET(_3F6670);
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -105,6 +106,41 @@ typedef struct {
     /* 0xACC */ u8 padACC[0xA];
     /* 0xAD6 */ u8 unkAD6;
 } AllocationStruct;
+
+// Element at offset 0x00, size 0x14 (20 bytes)
+typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ s16 unkA;
+    /* 0x0C */ s16 unkC;
+    /* 0x0E */ s16 unkE;
+    /* 0x10 */ s16 unk10;
+    /* 0x12 */ u8 unk12;
+    /* 0x13 */ u8 unk13;
+} Func3466CElement14;
+
+// Element at offset 0x50, size 0x0C (12 bytes)
+typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ s16 unk4;
+    /* 0x06 */ s16 unk6;
+    /* 0x08 */ void *unk8;
+} Func3466CElement0C;
+
+// Element at offset 0x80, size 0x0A (10 bytes)
+typedef struct {
+    /* 0x00 */ u8 data[0xA];
+} Func3466CElement0A;
+
+typedef struct {
+    /* 0x00 */ Func3466CElement14 arr00[4]; // 4 * 0x14 = 0x50
+    /* 0x50 */ Func3466CElement0C arr50[4]; // 4 * 0x0C = 0x30
+    /* 0x80 */ Func3466CElement0A arr80[4]; // 4 * 0x0A = 0x28
+    /* 0xA8 */ u8 arrA8[4];
+} Func3466CArg;
 
 void func_80035074_35C74(Func358FCStruct *arg0);
 void func_80033458_34058(void);
@@ -383,7 +419,39 @@ void func_80034640_35240(Func34574Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_8003466C_3526C);
+void func_8003498C_3558C(Func34574Arg *arg0);
+void func_80034750_35350(void);
+
+void func_8003466C_3526C(Func3466CArg *arg0) {
+    void *temp_s1;
+    s32 i;
+
+    temp_s1 = dmaRequestAndUpdateStateWithSize(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    setCleanupCallback(func_8003498C_3558C);
+
+    for (i = 0; i < 4; i++) {
+        arg0->arr50[i].unk0 = 0x18;
+        arg0->arr50[i].unk2 = 0xC;
+        arg0->arr50[i].unk4 = 0;
+        arg0->arr50[i].unk6 = 0xFF;
+        arg0->arr50[i].unk8 = &arg0->arr80[i];
+
+        arg0->arr00[i].unk0 = 0x5C;
+        arg0->arr00[i].unk2 = 0x10;
+        arg0->arr00[i].unk4 = temp_s1;
+        arg0->arr00[i].unk8 = 0;
+        arg0->arr00[i].unkA = 0x555;
+        arg0->arr00[i].unkC = 0x555;
+        arg0->arr00[i].unkE = 0;
+        arg0->arr00[i].unk10 = 0xFF;
+        arg0->arr00[i].unk13 = 0;
+        arg0->arr00[i].unk12 = 0;
+
+        arg0->arrA8[i] = 0;
+    }
+
+    setCallback(func_80034750_35350);
+}
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034750_35350);
 
