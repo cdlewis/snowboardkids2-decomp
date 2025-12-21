@@ -1,7 +1,14 @@
 #include "5520.h"
 #include "common.h"
 #include "geometry.h"
+#include "overlay.h"
 #include "task_scheduler.h"
+
+USE_ASSET(_2151D0);
+USE_ASSET(_663BE0);
+USE_ASSET(_6637B0);
+
+extern func_80004FF8_5BF8_arg1_unk20 D_80089520;
 
 typedef struct {
     u8 _pad0[0x24];
@@ -11,7 +18,9 @@ typedef struct {
     void *unk3C;
 } func_800B5794_1E2844_arg;
 
-void func_800B5590_1E2640(void);
+void func_800B5590_1E2640(func_800B5500_Task *arg0);
+void func_800B5660_1E2710(func_800B5500_Task *arg0);
+void func_800B5794_1E2844(func_800B5794_1E2844_arg *arg0);
 
 void func_800B5500_1E25B0(u16 arg0, void *arg1, s16 arg2, s32 arg3) {
     func_800B5500_Task *sp10;
@@ -28,7 +37,24 @@ void func_800B5500_1E25B0(u16 arg0, void *arg1, s16 arg2, s32 arg3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E25B0", func_800B5590_1E2640);
+void func_800B5590_1E2640(func_800B5500_Task *arg0) {
+    setCleanupCallback(func_800B5794_1E2844);
+    arg0->unk24 = dmaRequestAndUpdateState(&_2151D0_ROM_START, &_2151D0_ROM_END);
+    arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_663BE0_ROM_START, &_663BE0_ROM_END, 0x200);
+    arg0->unk20 = &D_80089520;
+    arg0->unk50 = 1;
+    arg0->unk80 = 0x800000;
+    arg0->unk2C = 0;
+    arg0->unk3B = 0x80;
+    arg0->unk3C = dmaRequestAndUpdateStateWithSize(&_6637B0_ROM_START, &_6637B0_ROM_END, 0x858);
+    arg0->unk44_union.unk44 = 0;
+    arg0->unk46_union.unk46 = 0;
+    arg0->unk48 = 0;
+    arg0->unk4A = 0x10;
+    arg0->unk4C = 0;
+    arg0->unk4E = 0;
+    setCallback(func_800B5660_1E2710);
+}
 
 void func_800B5660_1E2710(func_800B5500_Task *arg0) {
 

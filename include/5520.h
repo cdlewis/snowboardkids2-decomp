@@ -38,17 +38,15 @@ void func_80004FF8_5BF8(u16 arg0, DisplayListObject *arg1);
 
 typedef struct {
     /* 0x00 */ u8 _pad0[0x20];
-    /* 0x20 */ struct {
-        s32 unk0;
-        s32 unk4;
-        s32 unk8;
-        s32 unkC;
-    } *unk20;
-    /* 0x24 */ u8 _pad24[0x30 - 0x24];
-    /* 0x34 */ s32 unk30;
-    /* 0x38 */ u8 _pad34[0x3B - 0x34];
-    /* 0x3B */ s8 unk3B;
-    /* 0x3C */ u8 _pad3C[8];
+    /* 0x20 */ func_80004FF8_5BF8_arg1_unk20 *unk20;
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ s32 unk30;
+    /* 0x34 */ u8 _pad34[0x3B - 0x34];
+    /* 0x3B */ u8 unk3B;
+    /* 0x3C */ void *unk3C;
+    /* 0x40 */ s32 unk40;
     /* 0x44 */ union {
         u16 unk44;
         u8 unk44_bytes[2];
@@ -59,7 +57,10 @@ typedef struct {
     } unk46_union;
     /* 0x48 */ u16 unk48;
     /* 0x4A */ u16 unk4A;
-    /* 0x4C */ u8 _pad4C[8];
+    /* 0x4C */ s16 unk4C;
+    /* 0x4E */ s16 unk4E;
+    /* 0x50 */ s16 unk50;
+    /* 0x52 */ s16 unk52;
     /* 0x54 */ u8 unk54[0x20];
     /* 0x74 */ u16 unk74;
     /* 0x76 */ s16 unk76;
