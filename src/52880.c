@@ -1842,4 +1842,15 @@ void func_80055964_56564(Struct_52880 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_80055A84_56684);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80055C80_56880);
+Struct_52880 *func_80055C80_56880(s32 arg0, s16 arg1, void *arg2) {
+    Struct_52880 *task;
+
+    task = scheduleTask(func_80055864_56464, 0, 0, 0x6F);
+    if (task != NULL) {
+        task->unk42 = -1;
+        task->unk4A = arg0;
+        task->unk44 = arg1;
+        memcpy(&task->unk4, arg2, 0xC);
+    }
+    return task;
+}
