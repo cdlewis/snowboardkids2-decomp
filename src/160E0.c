@@ -324,7 +324,7 @@ void func_80015A18_16618(void) {
     func_800161F4_16DF4();
 
     for (i = 0; i < 4; i++) {
-        *((u8 *)D_800AFE8C_A71FC + i + 0x1A) = 0;
+        D_800AFE8C_A71FC->unk9[0x11 + i] = 0;
     }
 
     D_800A8A98_9FE08 = 0;
@@ -343,7 +343,7 @@ void func_80015A18_16618(void) {
     for (i = 0; i < 7; i++) {
         dmaResult = scheduleTask(&func_800168F4_174F4, 0, 0, 0x62);
         if (dmaResult != NULL) {
-            *((u8 *)dmaResult + 0x2F) = i;
+            ((Struct16B68 *)dmaResult)->unk2F = i;
         }
     }
 
