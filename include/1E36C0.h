@@ -30,7 +30,7 @@ void func_800B7128_1E41D8(CutsceneSlotData *arg0, SceneModel *arg1, s32 arg2, s3
 s32 func_800B734C_1E43FC(CutsceneSlotData *arg0, SceneModel *arg1, s16 arg2);
 s32 func_800B7450_1E4500(CutsceneSlotData *arg0, SceneModel *arg1, s16 arg2, s16 arg3, s16 arg4);
 s32 func_800B75C4_1E4674(CutsceneSlotData *arg0, SceneModel *arg1, s16 arg2, s32 arg3, s32 arg4, s32 arg5);
-void func_800B7620_1E46D0(CutsceneSlotData *arg0, s16 arg1, s16 arg2, s16 arg3);
+void func_800B7620_1E46D0(CutsceneSlotData *arg0, s32 arg1, s16 arg2, s16 arg3);
 void func_800B7760_1E4810(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
 void func_800B77C4_1E4874(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
 void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2);

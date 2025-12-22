@@ -493,7 +493,37 @@ s32 func_800B75C4_1E4674(CutsceneSlotData *arg0, SceneModel *arg1, s16 arg2, s32
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7620_1E46D0);
+void func_800B7620_1E46D0(CutsceneSlotData *arg0, s32 arg1, s16 arg2, s16 arg3) {
+    s32 temp_a0;
+    s32 temp_v0;
+    s32 temp_v1;
+    s32 var_v0;
+    s32 var_v1;
+
+    arg0->unk0.Two = 6;
+    arg0->unk94 = arg1;
+    arg0->unk92 = arg3;
+    arg0->unk84 = arg2;
+    arg0->unk86 = arg2;
+    temp_a0 = ((s16)atan2Fixed(arg0->unk04.unk20_u.unk20_s32, arg0->unk2C) + 0x1000) & 0x1FFF;
+    arg0->unk9C_u.unk9C_s32 = temp_a0;
+    temp_v1 = approximateCos(temp_a0) << 2;
+    if (temp_v1 == 0) {
+        var_v1 = (arg0->unk04.unk20_u.unk20_s32 << 8) / ((approximateSin(arg0->unk9C_u.s.unk9E) << 2) >> 8);
+        var_v1 = (var_v1 > 0) ? var_v1 : -var_v1;
+        arg0->unk98 = var_v1;
+    } else {
+        var_v0 = (arg0->unk2C << 8) / (temp_v1 >> 8);
+        var_v0 = (var_v0 > 0) ? var_v0 : -var_v0;
+        arg0->unk98 = var_v0;
+    }
+    temp_v0 = arg0->unk94;
+    if (temp_v0 > 0) {
+        arg0->unk7A = (arg0->unk9C_u.unk9C_s32 + 0x800) & 0x1FFF;
+    } else if (temp_v0 < 0) {
+        arg0->unk7A = (arg0->unk9C_u.unk9C_s32 - 0x800) & 0x1FFF;
+    }
+}
 
 void func_800B7760_1E4810(CutsceneSlotData *arg0, s32 arg1, s16 arg2) {
     s32 diff;
@@ -814,7 +844,7 @@ s32 func_800B8AC4_1E5B74(CutsceneSlotData *arg0, SceneModel *arg1) {
     s32 scaledCos;
     s32 scaledSin;
     s32 rotResult;
-    s32 *anglePtr = (s32 *)&arg0->unk9C_low;
+    s32 *anglePtr = &arg0->unk9C_u.unk9C_s32;
     s16 temp;
 
     if (arg0->unk84 > 0 || arg0->unk86 == -1) {
@@ -823,7 +853,7 @@ s32 func_800B8AC4_1E5B74(CutsceneSlotData *arg0, SceneModel *arg1) {
         cosVal = approximateCos((s16)angle_new);
         scaledCos = cosVal << 2;
         scaledCos = scaledCos >> 8;
-        sinVal = approximateSin(arg0->unk9E);
+        sinVal = approximateSin(arg0->unk9C_u.s.unk9E);
         scaledSin = (sinVal << 2) >> 8;
 
         // Store scaled results
