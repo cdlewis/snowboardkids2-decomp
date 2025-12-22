@@ -7,20 +7,11 @@
 #include "cutscene/cutscene_sys2.h"
 #include "task_scheduler.h"
 
-extern void func_800B9440_1E64F0(void *);
 extern void func_800B99A0_1E6A50(void);
-extern u16 D_800BADF0_1E7EA0[];
-extern u16 D_800BADF2_1E7EA2[];
+extern s16 D_800BADF0_1E7EA0;
+extern s16 D_800BADF2_1E7EA2;
 
 void func_800B9C20_1E6CD0(cutsceneSys2Wait_exec_asset *arg0);
-
-typedef struct {
-    u8 _pad[0x74];
-    s32 unk74;
-    u8 _pad2[0x4];
-    s32 unk7C;
-    s32 unk80;
-} func_800B9680_1E6730_arg;
 
 s32 func_800B93F0_1E64A0(s32 arg0) {
     s32 result;
@@ -38,11 +29,37 @@ s32 func_800B93F0_1E64A0(s32 arg0) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B9440_1E64F0);
+void func_800B9440_1E64F0(cutsceneSys2Wait_exec_asset *arg0) {
+    s32 i;
+    s32 offset;
+    s32 one;
+
+    i = 0;
+    one = 1;
+    offset = 0;
+
+    do {
+        arg0->slots[i].unkA = func_800B93F0_1E64A0(arg0->unk74);
+        arg0->slots[i].unkC = func_800B93F0_1E64A0(arg0->unk78);
+
+        if (arg0->slots[i].unkA == 0) {
+            arg0->slots[i].unkA = one;
+        }
+        if (arg0->slots[i].unkC == 0) {
+            arg0->slots[i].unkC = one;
+        }
+
+        arg0->slots[i].unk0 = arg0->unk10 + ((*(s16 *)((u8 *)&D_800BADF0_1E7EA0 + offset) << 10) / arg0->slots[i].unkA);
+        arg0->slots[i].unk2 = arg0->unk12 + ((*(s16 *)((u8 *)&D_800BADF2_1E7EA2 + offset) << 10) / arg0->slots[i].unkC);
+
+        i++;
+        offset += 4;
+    } while (i < 4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B956C_1E661C);
 
-s32 func_800B9680_1E6730(func_800B9680_1E6730_arg *arg0) {
+s32 func_800B9680_1E6730(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->unk80 = 0x6600;
     arg0->unk7C = 0x8000;
     func_800B9440_1E64F0(arg0);
@@ -50,7 +67,7 @@ s32 func_800B9680_1E6730(func_800B9680_1E6730_arg *arg0) {
     return 2;
 }
 
-s32 func_800B96B4_1E6764(func_800B9680_1E6730_arg *arg0) {
+s32 func_800B96B4_1E6764(cutsceneSys2Wait_exec_asset *arg0) {
     s32 result = 2;
 
     arg0->unk74 += arg0->unk80;
@@ -65,7 +82,7 @@ s32 func_800B96B4_1E6764(func_800B9680_1E6730_arg *arg0) {
     return result;
 }
 
-s32 func_800B9708_1E67B8(func_800B9680_1E6730_arg *arg0) {
+s32 func_800B9708_1E67B8(cutsceneSys2Wait_exec_asset *arg0) {
     s32 temp_a1;
     s32 temp_v0;
     s32 result;

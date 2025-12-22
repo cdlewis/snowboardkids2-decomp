@@ -43,8 +43,8 @@ typedef struct {
     s16 unk2;
     void *unk4;
     s16 unk8;
-    s16 unkA;
-    s16 unkC;
+    u16 unkA;
+    u16 unkC;
     s16 unkE;
     s16 unk10;
     s8 unk12;
@@ -58,12 +58,13 @@ typedef struct {
     s32 unk4;
     void *unk8;
     void *unkC;
-    s16 unk10;
-    s16 unk12;
+    u16 unk10;
+    u16 unk12;
     cutsceneSys2WaitSlot slots[4];
     s32 unk74;
     s32 unk78;
-    u8 padding2[0x8];
+    s32 unk7C;
+    s32 unk80;
     s16 unk84;
     s16 unk86;
     s16 unk88;
