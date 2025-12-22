@@ -113,8 +113,16 @@ typedef struct {
     u8 unk5A2[8];
 } LocalGameState;
 
+typedef struct {
+    u8 _pad0[0x59A];
+    u8 unk59A[8];
+    u8 _pad5A2[0x1F];
+    u8 unk5C1[8];
+} func_800B0A54_allocation;
+
 extern void *renderTextPalette;
 
+void func_800B00C0_1DA660(void);
 void func_800B0218(func_800B0980_element *, u8);
 void func_800B0DF8_1DB398(void *);
 void func_800B0598_1DAB38(func_800B08FC_arg *);
@@ -122,7 +130,7 @@ void func_800B05DC_1DAB7C(func_800B08FC_arg *);
 void func_800B0964_1DAF04(func_800B08FC_arg *);
 void func_800B0638_1DABD8(func_800B08FC_arg *);
 void func_800B0720_1DACC0(func_800B08FC_arg *);
-void func_800B0A54_1DAFF4(void *);
+void func_800B0A54_1DAFF4(func_800B0980_container *);
 void func_800B0BC0_1DB160(func_800B0FE0_arg *);
 void func_800B0E94_1DB434(void *);
 void func_800B0EEC_1DB48C(func_800B0FE0_arg *);
@@ -358,7 +366,49 @@ void func_800B0980_1DAF20(func_800B0980_container *arg0) {
     setCallback(func_800B0A54_1DAFF4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0A54_1DAFF4);
+void func_800B0A54_1DAFF4(func_800B0980_container *arg0) {
+    func_800B0A54_allocation *allocation;
+    s32 i;
+    u8 state;
+
+    allocation = (func_800B0A54_allocation *)getCurrentAllocation();
+    func_800B00C0_1DA660();
+
+    for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+        func_800B0218_1DA7B8(&arg0->elements[i], i);
+        state = allocation->unk59A[i];
+
+        if (state == 10) {
+            arg0->elements[i].unkA = 0xFF;
+            arg0->unk40[i] = 0;
+            if (allocation->unk5C1[i] & 1) {
+                arg0->elements[i].unkD = 0xFF;
+            } else {
+                arg0->elements[i].unkD = 0;
+            }
+        } else if (state == 0) {
+            arg0->unk40[i] = arg0->unk40[i] % 30;
+            if (arg0->unk40[i] < 15) {
+                arg0->elements[i].unkA = arg0->elements[i].unkA - 8;
+            } else {
+                arg0->elements[i].unkA = arg0->elements[i].unkA + 8;
+            }
+            arg0->unk40[i] = arg0->unk40[i] + 1;
+        } else {
+            arg0->unk40[i] = 0;
+            arg0->elements[i].unkA = 0xFF;
+        }
+
+        if (allocation->unk59A[i] == 2) {
+            allocation->unk5C1[i] = 0;
+            arg0->elements[i].unkD = 0;
+            arg0->unk40[i] = 0;
+            arg0->elements[i].unkA = 0xFF;
+        }
+
+        debugEnqueueCallback(8, 0, func_80012004_12C04, &arg0->elements[i]);
+    }
+}
 
 void func_800B0BC0_1DB160(func_800B0FE0_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
