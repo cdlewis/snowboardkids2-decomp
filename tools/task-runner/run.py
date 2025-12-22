@@ -37,6 +37,7 @@ class TaskRunner:
         self.script = self.taskfile['script']
         self.prompt_template = self.taskfile['prompt']
         self.claude_command = self.taskfile.get('claude_command', 'claude')
+        self.accept_best_effort = self.taskfile.get('accept_best_effort', False)
 
         # Setup log files
         log_dir = Path("tools/task-runner/logs")
@@ -261,19 +262,56 @@ class TaskRunner:
             new_candidates = self._run_script()
 
             if selected in new_candidates:
-                # Issue still exists, clean up and add to ignored list
+                # Issue still exists
                 print(f"Argument '{selected}' still appears in script output.")
 
-                # Reset git to clean up Claude's changes
-                subprocess.run(['git', 'reset', '--hard', 'HEAD'], check=False)
+                if self.accept_best_effort:
+                    # Accept best effort - verify build and commit if successful
+                    print("Best effort mode: attempting to verify and commit changes...")
 
-                # Verify build still works
-                if not self._run_build_verify():
-                    print("Build verification failed, stopping.")
-                    break
+                    if not self._run_build_verify():
+                        print("Build verification failed. Resetting changes.")
+                        subprocess.run(['git', 'reset', '--hard', 'HEAD'], check=False)
 
-                print(f"Adding '{selected}' to ignored list.")
-                self._add_to_ignored(selected)
+                        # Verify we can still build after reset
+                        if not self._run_build_verify():
+                            print("Cannot recover to a good state. Stopping.")
+                            break
+                    else:
+                        # Build passed - check if there are uncommitted changes to commit
+                        result = subprocess.run(
+                            ['git', 'diff', '--quiet'],
+                            capture_output=True
+                        )
+
+                        if result.returncode != 0:
+                            # There are uncommitted changes, commit them
+                            print("Committing best effort changes...")
+                            try:
+                                subprocess.run(['git', 'add', '-A'], check=True)
+                                subprocess.run(
+                                    ['git', 'commit', '-m', f'task-runner: best effort {selected}'],
+                                    check=True
+                                )
+                                print("Best effort changes committed successfully.")
+                            except subprocess.CalledProcessError as e:
+                                print(f"Warning: Could not commit changes: {e}")
+                        else:
+                            print("No uncommitted changes to commit.")
+
+                    print(f"Adding '{selected}' to ignored list.")
+                    self._add_to_ignored(selected)
+                else:
+                    # Standard mode - reset git to clean up Claude's changes
+                    subprocess.run(['git', 'reset', '--hard', 'HEAD'], check=False)
+
+                    # Verify build still works
+                    if not self._run_build_verify():
+                        print("Build verification failed, stopping.")
+                        break
+
+                    print(f"Adding '{selected}' to ignored list.")
+                    self._add_to_ignored(selected)
             else:
                 # Issue was fixed! Verify build and commit if successful
                 print(f"Argument '{selected}' no longer appears in script output.")
@@ -371,11 +409,15 @@ Example taskfile.json:
   "task_name": "decompile",
   "script": "python3 tools/list_functions.py",
   "prompt": "decompile the function $ARGUMENT",
-  "claude_command": "claude"  (optional, defaults to "claude")
+  "claude_command": "claude",  (optional, defaults to "claude")
+  "accept_best_effort": false  (optional, defaults to false)
 }
 
 The script should output a JSON array of strings, e.g.:
 ["func_80001234", "func_80005678"]
+
+When accept_best_effort is true, changes are committed even if the
+argument still appears in the script output (best effort fix).
 
 Tasks are discovered from tools/task-runner/tasks/*.json
 Use --list to see all available tasks.
