@@ -7,7 +7,6 @@
 
 USE_ASSET(_40E1C0);
 
-extern void func_800BB320_B5C00(void *);
 extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 extern s32 gControllerInputs;
 extern s8 *D_800BCB94_B7474[];
@@ -38,6 +37,8 @@ void func_800BB928_B6208(func_800BB5CC_state *arg0);
 
 void func_800BB9E0_B62C0(func_800BB2B0_B5B90_state *arg0);
 
+void func_800BB320_B5C00(func_800BB5CC_state *arg0);
+
 void func_800BB2B0_B5B90(func_800BB2B0_B5B90_state *arg0) {
     getCurrentAllocation();
     arg0->unk4 = func_80035F80_36B80(1);
@@ -48,7 +49,94 @@ void func_800BB2B0_B5B90(func_800BB2B0_B5B90_state *arg0) {
     setCallback(func_800BB320_B5C00);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/training", func_800BB320_B5C00);
+void func_800BB51C_B5DFC(func_800BB5CC_state *arg0);
+
+void func_800BB320_B5C00(func_800BB5CC_state *arg0) {
+    GameState *state = getCurrentAllocation();
+
+    if (state->gamePaused == 0) {
+        switch (arg0->unkC) {
+        case 0:
+            if (state->unk79 != 0) {
+                break;
+            }
+            goto do_action;
+        case 1:
+            if ((state->players->unkB94 < 3) || (state->players->unkB84 & 1)) {
+                break;
+            }
+            goto do_action;
+        case 2:
+            if (state->players->unkB94 < 0xE) {
+                break;
+            }
+            goto do_action;
+        case 3:
+            if ((state->players->unkB94 < 0x12) || (state->players->unkB84 & 1)) {
+                break;
+            }
+            goto do_action;
+        case 4:
+            if (state->players->unkB94 < 0x14) {
+                break;
+            }
+            goto do_action;
+        case 5:
+            if (state->players->unkB94 < 0x1A) {
+                break;
+            }
+            goto do_action;
+        case 6:
+            if (state->players->unkB94 < 0x28) {
+                break;
+            }
+            goto do_action;
+        case 7:
+            if (state->players->unkB94 < 0x2D) {
+                break;
+            }
+            goto do_action;
+        case 8:
+            if (state->players->unkB94 < 0x30) {
+                break;
+            }
+            goto do_action;
+        case 9:
+            if (state->players->unkB94 < 0x32) {
+                break;
+            }
+            goto do_action;
+        case 10:
+            if (state->players->unkB94 < 0x35) {
+                break;
+            }
+            goto do_action;
+        case 11:
+            if (state->players->unkB94 < 0x38) {
+                break;
+            }
+            goto do_action;
+        case 12:
+            if ((state->players->unkBC5 == 0) || (state->players->unkB94 == 0)) {
+                break;
+            }
+            goto do_action;
+        case 13:
+            break;
+        default:
+        do_action:
+            state->unk78 = 1;
+            func_800585C8_591C8(0x2C);
+            arg0->unk10 = 1;
+            arg0->unk12 = 1;
+            arg0->unk14 = 0xF0;
+            arg0->unkE = 0;
+            *(s16 *)&arg0->unk16 = 0xC0;
+            setCallback(func_800BB51C_B5DFC);
+            break;
+        }
+    }
+}
 
 void func_800BB670_B5F50(func_800BB5CC_state *arg0);
 void func_800BB724_B6004(func_800BB5CC_state *arg0);
