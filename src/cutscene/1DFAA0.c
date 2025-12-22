@@ -843,7 +843,49 @@ void func_800B4320_1E13D0(void) {
     D_800BAEB4_1E7F64 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B4378_1E1428);
+void func_800B4378_1E1428(u8 arg0, s16 arg1) {
+    u16 searchResult;
+    u16 index;
+    u16 prevNext;
+    u16 nextPrev;
+    u16 headIndex;
+    StateEntry *base;
+
+    searchResult = func_800B3B68_1E0C18(arg0, arg1 & 0xFFFF, 0);
+    index = searchResult & 0xFFFF;
+
+    if (index == 0xFFFF) {
+        return;
+    }
+
+    if ((u16)getStateEntry(index)->unk3C == 0) {
+        return;
+    }
+
+    memcpy(D_800BAEC8_1E7F78, getStateEntry(index), 0x40);
+
+    base = D_800BAEBC_1E7F6C;
+    headIndex = *(u16 *)((u8 *)base + 0xE);
+    prevNext = *(u16 *)((u8 *)base + (index << 6) + 0xF8);
+    nextPrev = *(u16 *)((u8 *)base + (index << 6) + 0xFA);
+
+    *(u16 *)((u8 *)base + (headIndex << 6) + 0xF8) = searchResult;
+    *(u16 *)((u8 *)base + 0xE) = searchResult;
+
+    if ((nextPrev & 0xFFFF) != 0xFFFF) {
+        *(u16 *)((u8 *)base + (nextPrev << 6) + 0xF8) = prevNext;
+    }
+
+    if ((prevNext & 0xFFFF) != 0xFFFF) {
+        *(u16 *)((u8 *)D_800BAEBC_1E7F6C + (prevNext << 6) + 0xFA) = nextPrev;
+    }
+
+    D_800BAEB0_1E7F60 = 1;
+    D_800BAEC0_1E7F70 = arg0;
+    D_800BAEB2_1E7F62 = arg1;
+    D_800BAEB4_1E7F64 = 1;
+    D_800BAEBC_1E7F6C->unk10 -= 1;
+}
 
 void func_800B44A8_1E1558(u8 arg0, u16 arg1) {
     u16 eventId;

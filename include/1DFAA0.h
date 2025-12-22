@@ -311,6 +311,7 @@ u8 *func_800B4294_1E1344(void);
 u16 func_800B42B0_1E1360(u16 arg0);
 u16 func_800B42E8_1E1398(u16 arg0);
 void func_800B4320_1E13D0(void);
+void func_800B4378_1E1428(u8 arg0, s16 arg1);
 void func_800B44A8_1E1558(u8 arg0, u16 arg1);
 void func_800B4534_1E15E4(s32, s32);
 void func_800B462C_1E16DC(u8 arg0, u16 arg1, s32 arg2);
