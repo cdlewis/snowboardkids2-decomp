@@ -1347,7 +1347,84 @@ void func_80026BAC_277AC(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80026BD8_277D8);
+typedef struct {
+    func_80025C64_entry entries[4];
+    s16 unk40;
+    s16 unk42;
+    void *unk44;
+    s16 unk48;
+} func_80026BD8_arg;
+
+extern u16 D_8008DE9C_8EA9C[];
+extern u16 D_8008DE9E_8EA9E[];
+void func_80026D34_27934(func_80026BD8_arg *);
+void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
+
+void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
+    u8 *allocation;
+    void *dmaResult;
+    D_800AFE8C_A71FC_type *global;
+    u8 count;
+    s32 i;
+    u16 unk0Val;
+    u16 unk2Val;
+    s32 unk8Val;
+    s32 const_1;
+    s32 const_ff;
+    volatile func_80025C64_entry *ptr;
+    s32 pad[4];
+
+    (void)pad;
+
+    allocation = (u8 *)getCurrentAllocation();
+    dmaResult = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    setCleanupCallback(func_80026FC8_27BC8);
+
+    global = D_800AFE8C_A71FC;
+    count = global->unk8;
+    unk0Val = D_8008DE9C_8EA9C[count * 2];
+    unk2Val = D_8008DE9E_8EA9E[count * 2];
+
+    i = 0;
+    if (count != 0) {
+        const_1 = 1;
+        const_ff = 0xFF;
+        ptr = (volatile func_80025C64_entry *)arg0;
+        do {
+            if (global->unk9[i + 4] >= 9) {
+                unk8Val = 0x35;
+            } else {
+                unk8Val = 0x24;
+                if (global->unk8 == const_1) {
+                    unk8Val = 0x43;
+                }
+                unk8Val = unk8Val + (allocation + i)[0x18B0];
+            }
+            ptr->unkD = 0;
+            ptr->unkC = 0;
+            global = D_800AFE8C_A71FC;
+            ptr->unk0 = unk0Val;
+            ptr->unk2 = unk2Val;
+            ptr->unkA = const_ff;
+            ptr->unk8 = unk8Val;
+            ptr->unk4 = dmaResult;
+            i++;
+            ptr++;
+        } while (i < global->unk8);
+    }
+
+    if (D_800AFE8C_A71FC->unk8 == 1) {
+        arg0->unk40 = 0x38;
+        arg0->unk42 = -0x58;
+        arg0->unk44 = dmaResult;
+        arg0->unk48 = 0x42;
+        if (D_800AFE8C_A71FC->unk9[4] >= 9) {
+            arg0->unk40 = 0x50;
+        }
+    }
+
+    setCallback(func_80026D34_27934);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80026D34_27934);
 
