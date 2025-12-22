@@ -1,4 +1,5 @@
 #include "10AD0.h"
+#include "19E80.h"
 #include "20F0.h"
 #include "38C90.h"
 #include "5E590.h"
@@ -138,6 +139,15 @@ typedef struct {
 } func_800253E0_25FE0_arg;
 
 typedef struct {
+    func_800255A0_entry entries[3];
+    u8 padding[0x14];
+    u8 unk50;
+    u8 unk51;
+    u8 padding2;
+    u8 unk53;
+} func_8002529C_25E9C_arg;
+
+typedef struct {
     u8 pad0[0x34];
     u8 unk34;
     u8 unk35;
@@ -216,6 +226,10 @@ extern u32 D_426EF0;
 extern u16 D_8008DDBE_8E9BE[];
 extern u16 D_8008DDC0_8E9C0[];
 extern s16 D_8008DDC2_8E9C2[];
+extern u16 D_8008DDE6_8E9E6;
+extern u16 D_8008DDE8_8E9E8;
+extern u16 D_8008DDEA_8E9EA;
+extern u8 D_8008DE18_8EA18;
 extern u16 D_8008DE1A_8EA1A;
 extern u16 D_8008DE1C_8EA1C;
 extern u16 D_8008DE1E_8EA1E;
@@ -810,7 +824,81 @@ void *func_80025280_25E80(func_80025280_25E80_arg *arg0) {
     return func_80002014_2C14(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_8002529C_25E9C);
+void func_8002567C_2627C(func_80025FFC_26BFC_arg *);
+void func_800253E0_25FE0(func_800253E0_25FE0_arg *);
+
+#define CONST_0xB_8002529C 0xB
+
+void func_8002529C_25E9C(func_8002529C_25E9C_arg *arg0) {
+    OutputStruct_19E80 sp10;
+    u8 *tablePtr;
+    volatile func_800255A0_entry *ptr;
+    DataTable_19E80 *dmaResult;
+    s16 scaleX;
+    s16 scaleY;
+    s32 i;
+    s32 xIncrement;
+    u16 unk0Val;
+    u16 x;
+    u16 xTemp;
+    u16 xIncrementU16;
+    s32 temp_v0;
+    u8 unk8;
+    s32 const_0xB;
+    s32 pad[4];
+
+    (void)pad;
+
+    dmaResult = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    setCleanupCallback(func_8002567C_2627C);
+    getTableEntryByU16Index(dmaResult, 0xB, &sp10);
+
+    unk8 = D_800AFE8C_A71FC->unk8;
+    temp_v0 = unk8 * 6;
+
+    unk0Val = *(&D_8008DDE6_8E9E6 + (temp_v0 >> 1));
+    xTemp = *(&D_8008DDE8_8E9E8 + (temp_v0 >> 1));
+    xIncrementU16 = *(&D_8008DDEA_8E9EA + (temp_v0 >> 1));
+
+    scaleX = 0x400;
+    if (unk8 == 1) {
+        scaleX = 0x200;
+        scaleY = 0x200;
+    } else {
+        scaleY = 0x400;
+    }
+
+    i = 0;
+    xIncrement = (s32)(s16)xIncrementU16;
+    const_0xB = CONST_0xB_8002529C;
+    tablePtr = &D_8008DE18_8EA18;
+    x = xTemp;
+    ptr = (volatile func_800255A0_entry *)arg0;
+
+    do {
+        u8 tableVal;
+        ptr->unk0 = unk0Val;
+        ptr->unk2 = x;
+        ptr->unk8 = const_0xB;
+        tableVal = tablePtr[1];
+        tablePtr += 2;
+        ptr->unk12 = 0;
+        ptr->unkA = scaleX;
+        ptr->unkC = scaleY;
+        ptr->unk4 = dmaResult;
+        ptr->unkE = 0;
+        ptr->unk13 = (s8)(tableVal + 1);
+        x += xIncrement;
+        i++;
+        ptr->unk10 = sp10.field2;
+        ptr++;
+    } while (i < 3);
+
+    arg0->unk50 = 1;
+    arg0->unk51 = 0;
+    arg0->unk53 = 8;
+    setCallback(func_800253E0_25FE0);
+}
 
 void func_80025418_26018(void *);
 
