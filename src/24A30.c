@@ -1020,7 +1020,46 @@ void func_80025C64_26864(func_80025C64_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025DAC_269AC);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80025EE4_26AE4);
+#define ENTRY_SIZE_26AE4 0x10
+
+void func_80025EE4_26AE4(func_80025C64_arg *arg0) {
+    u8 *allocation;
+    s32 i;
+    s32 selectedIndex;
+    u8 *entryBase;
+    s32 pad[2];
+    s32 count;
+
+    (void)pad;
+
+    allocation = (u8 *)getCurrentAllocation();
+    count = arg0->unk33;
+    i = 0;
+    if (count > 0) {
+        entryBase = (u8 *)arg0;
+        do {
+            arg0->unk30[i] = 0;
+            if ((allocation + arg0->unk34)[0x18D2] == i) {
+                *(s16 *)(entryBase + i * ENTRY_SIZE_26AE4 + 0xA) = 0xFF;
+                selectedIndex = i;
+                if (*(u16 *)(allocation + arg0->unk34 * 2 + 0x18A0) & 1) {
+                    *(u8 *)(entryBase + i * ENTRY_SIZE_26AE4 + 0xD) = 0xFF;
+                } else {
+                    *(u8 *)(entryBase + i * ENTRY_SIZE_26AE4 + 0xD) = 0;
+                }
+            } else {
+                *(s16 *)(entryBase + i * ENTRY_SIZE_26AE4 + 0xA) = 0x50;
+            }
+            debugEnqueueCallback(arg0->unk34 + 0xC, 0, func_80012004_12C04, entryBase + i * ENTRY_SIZE_26AE4);
+            i++;
+        } while (i < (s32)arg0->unk33);
+    }
+
+    if (*(u16 *)(allocation + arg0->unk34 * 2 + 0x1898) != 2) {
+        arg0->entries[selectedIndex].unkD = 0;
+        setCallbackWithContinue(func_80025DAC_269AC);
+    }
+}
 
 void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
