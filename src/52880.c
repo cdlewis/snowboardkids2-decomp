@@ -112,7 +112,7 @@ void func_800554FC_560FC(Struct_52880 *arg0);
 void func_80055650_56250(Struct_52880 *arg0);
 void func_800558A4_564A4(Struct_52880 *arg0);
 void func_80055964_56564(Struct_52880 *arg0);
-void func_80055A84_56684(void);
+void func_80055A84_56684(Struct_52880 *);
 s32 func_80052A24_53624(s32, s32);
 s32 func_80053078_53C78(s32, s32);
 s32 func_800537B0_543B0(s32, s32);
@@ -1990,7 +1990,68 @@ void func_80055964_56564(Struct_52880 *arg0) {
     } while (i < 4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80055A84_56684);
+void func_80055A84_56684(Struct_52880 *arg0) {
+    s32 offset[3];
+    s32 prevPos[3];
+    s32 padding1[12];
+    Alloc_55650 *alloc;
+    s32 *vel;
+    s32 i;
+    s32 floorHeight;
+    u16 temp;
+
+    alloc = getCurrentAllocation();
+
+    if (alloc->unk76 == 0) {
+        vel = &arg0->velY;
+        func_80050604_51204(&arg0->unk4, vel, 4);
+        arg0->velZ += 0xFFFC0000;
+        func_80051C80_52880(vel, 0x190000);
+        memcpy(prevPos, &arg0->unk4, 0xC);
+
+        arg0->unk4.unk0 += arg0->velY;
+        arg0->unk4.unk4 += arg0->velZ;
+        arg0->unk4.unk8 += arg0->velX;
+
+        temp = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
+        arg0->unk40 = temp;
+        func_80060CDC_618DC(&alloc->unk30, temp, &arg0->unk4, 0x80000, offset);
+
+        if (offset[0] != 0 || offset[2] != 0) {
+            arg0->unk4.unk0 += offset[0];
+            arg0->unk4.unk8 += offset[2];
+            arg0->unk4E++;
+        }
+
+        temp = arg0->unk48 - 1;
+        arg0->unk48 = temp;
+        if ((temp << 16) == 0) {
+            arg0->unk4E++;
+        }
+
+        floorHeight = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000) + 0x100000;
+        if (arg0->unk4.unk4 < floorHeight) {
+            arg0->unk4.unk4 = floorHeight;
+        }
+
+        arg0->velY = arg0->unk4.unk0 - prevPos[0];
+        arg0->velZ = arg0->unk4.unk4 - prevPos[1];
+        arg0->velX = arg0->unk4.unk8 - prevPos[2];
+        func_80055900_56500(arg0);
+    }
+
+    if (arg0->unk4E != 0) {
+        func_80050ECC_51ACC(&arg0->unk4.unk0);
+        func_80056B7C_5777C(&arg0->unk4.unk0, 0xD);
+        func_80069CF8_6A8F8();
+    }
+
+    i = 0;
+    do {
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        i++;
+    } while (i < 4);
+}
 
 Struct_52880 *func_80055C80_56880(s32 arg0, s16 arg1, void *arg2) {
     Struct_52880 *task;
