@@ -49,8 +49,10 @@ void func_800B9440_1E64F0(cutsceneSys2Wait_exec_asset *arg0) {
             arg0->slots[i].unkC = one;
         }
 
-        arg0->slots[i].unk0 = arg0->unk10 + ((*(s16 *)((u8 *)&D_800BADF0_1E7EA0 + offset) << 10) / arg0->slots[i].unkA);
-        arg0->slots[i].unk2 = arg0->unk12 + ((*(s16 *)((u8 *)&D_800BADF2_1E7EA2 + offset) << 10) / arg0->slots[i].unkC);
+        arg0->slots[i].unk0 =
+            arg0->unk10 + ((((s16 *)((u8 *)&D_800BADF0_1E7EA0 + offset))[0]) << 10) / arg0->slots[i].unkA;
+        arg0->slots[i].unk2 =
+            arg0->unk12 + ((((s16 *)((u8 *)&D_800BADF2_1E7EA2 + offset))[0]) << 10) / arg0->slots[i].unkC;
 
         i++;
         offset += 4;
