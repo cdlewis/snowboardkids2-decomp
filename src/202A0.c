@@ -809,7 +809,121 @@ void func_80021880_22480(Func80021880Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_800218AC_224AC);
+extern u32 D_4237C0;
+extern u32 D_426EF0;
+extern u16 D_8008DC38_8E838;
+
+extern void *loadAsset_34F7E0(void);
+extern s16 func_8000B7FC_C3FC(u16 *arg0);
+
+void func_80021A20_22620(Func80021A20Arg *arg0);
+void func_80021B88_22788(Func80021B88Arg *arg0);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 _padE[2];
+    s16 unk10;
+    s16 unk12;
+    void *unk14;
+    s16 unk18;
+    s16 unk1A;
+    u8 unk1C;
+    u8 unk1D;
+    u8 _pad1E[2];
+    u8 _pad20[0xC];
+    s16 unk2C;
+    s16 unk2E;
+    u16 *unk30;
+    void *unk34;
+    s16 unk38;
+    s16 unk3A;
+    u8 unk3C;
+    u8 _pad3D[3];
+    s16 unk40;
+    s16 unk42;
+    void *unk44;
+    void *unk48;
+    s16 unk4C;
+    s16 unk4E;
+    u8 unk50;
+    u8 _pad51[3];
+    void *unk54;
+    s16 unk58;
+    u16 unk5A;
+    u8 _pad5C[4];
+    u8 unk60;
+} Func218ACArg;
+
+void func_800218AC_224AC(Func218ACArg *arg0) {
+    Allocation_202A0 *temp_s4;
+    void *temp_s3;
+    void *temp_s2;
+    u16 *temp_s0;
+    s16 temp_v1;
+    s16 retVal;
+    s32 i;
+    s32 x;
+    s16 *ptr;
+    s32 t0;
+    s32 a3;
+    u8 unkB46_val;
+    s16 unk2_val;
+
+    temp_s4 = (Allocation_202A0 *)getCurrentAllocation();
+    temp_s3 = func_80035F80_36B80(1);
+    arg0->unk54 = loadAsset_34F7E0();
+    temp_s2 = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    setCleanupCallback(func_80021B88_22788);
+    temp_s0 = &D_8008DC38_8E838;
+    arg0->unk60 = 0;
+    retVal = func_8000B7FC_C3FC(temp_s0);
+    i = 0;
+    t0 = 0x1C;
+    a3 = 0xFF;
+    ptr = (s16 *)arg0;
+    x = -0x28;
+    temp_v1 = ((0x120 - retVal) / 2) - 0x90;
+    arg0->unk2E = -8;
+    arg0->unk38 = 0xFF;
+    arg0->unk3A = 0xFF;
+    arg0->unk2C = temp_v1;
+    arg0->unk34 = temp_s3;
+    arg0->unk30 = temp_s0;
+    arg0->unk3C = 5;
+L1:
+    ptr[0] = x;
+    ptr[1] = t0;
+    *(void **)&ptr[2] = temp_s2;
+    ptr[4] = i;
+    ptr[5] = a3;
+    ((u8 *)ptr)[0xD] = 0;
+    ((u8 *)ptr)[0xC] = 0;
+    ptr += 8;
+    i++;
+    x += 0x40;
+    if (i < 2)
+        goto L1;
+
+    unkB46_val = temp_s4->unkB46;
+    unk2_val = arg0->unk2;
+    arg0->unk5A = 0xFFFF;
+    arg0->unk40 = -6;
+    arg0->unk44 = &arg0->unk58;
+    arg0->unk4C = 0xFF;
+    arg0->unk4E = 0xFF;
+    arg0->unk48 = temp_s3;
+    arg0->unk50 = 5;
+    arg0->unk58 = (s16)unkB46_val;
+    arg0->unk42 = (s16)(unk2_val + 2);
+
+    setCallback(func_80021A20_22620);
+}
 
 void func_80021A20_22620(Func80021A20Arg *arg0) {
     Allocation_202A0 *allocation;
