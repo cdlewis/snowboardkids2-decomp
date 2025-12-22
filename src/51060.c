@@ -285,10 +285,10 @@ void func_800505D8_511D8(s32 **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void func_80050604_51204(s32 *arg0, s32 *arg1, s32 arg2) {
+void func_80050604_51204(Vec3s32 *arg0, s32 *arg1, s32 arg2) {
     NodeWithPayload *task = (NodeWithPayload *)scheduleTask(&func_80050460_51060, 2, 0, 0xDC);
     if (task != NULL) {
-        memcpy((void *)&task->n.freeNext, arg0, 0xC);
+        memcpy((void *)&task->n.freeNext, arg0, sizeof(Vec3s32));
         task->unk30 = arg2;
         task->n.cleanupCallback = (void *)(arg1[0] / 2);
         task->n.payload = (void *)(arg1[1] / 2);

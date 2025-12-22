@@ -338,7 +338,55 @@ s32 func_8005C250_5CE50(Vec3s32 *arg0, s32 arg1, s32 arg2) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005C454_5D054);
+typedef struct {
+    u8 padding[0xB88];
+    s32 unkB88;
+    u8 padding3[0x18];
+    u16 unkBA4;
+} PlayerData;
+
+void *func_8005C454_5D054(Vec3s32 *arg0, s32 arg1, s32 arg2, Vec3s32 *arg3) {
+    s32 combinedRadius;
+    s32 negRadius;
+    Allocation5AA90 *allocation;
+    ListNode_5AA90 *node;
+    PlayerData *playerData;
+    u8 index;
+    int new_var;
+    allocation = (Allocation5AA90 *)getCurrentAllocation();
+    for (node = allocation->list; node != 0; node = node->next) {
+        index = node->id;
+        if (arg1 == index) {
+            continue;
+        };
+        if (((PlayerData *)(((u8 *)allocation->dataArray) + (index * 0xBE8)))->unkB88 & 0x10) {
+            continue;
+        }
+        new_var = 0xC;
+        if (((PlayerData *)(((u8 *)allocation->dataArray) + (index * 0xBE8)))->unkBA4 != 0) {
+            continue;
+        }
+        memcpy(arg3, &node->localPos, new_var);
+        arg3->unk0 += node->posPtr->unk0;
+        arg3->unk4 += node->posPtr->unk4;
+        arg3->unk8 += node->posPtr->unk8;
+        arg3->unk0 -= arg0->unk0;
+        arg3->unk4 -= arg0->unk4;
+        arg3->unk8 -= arg0->unk8;
+        combinedRadius = node->radius + arg2;
+        negRadius = -combinedRadius;
+        if ((((((negRadius < arg3->unk0) && (arg3->unk0 < combinedRadius)) && (negRadius < arg3->unk4)) &&
+              (arg3->unk4 < combinedRadius)) &&
+             (negRadius < arg3->unk8)) &&
+            (arg3->unk8 < combinedRadius)) {
+            if (distance_3d(arg3->unk0, arg3->unk4, arg3->unk8) < combinedRadius) {
+                return ((u8 *)allocation->dataArray) + (node->id * 0xBE8);
+            }
+        }
+    }
+
+    return 0;
+}
 
 s32 isPlayerInRangeAndPull(Vec3s32 *arg0, s32 arg1, Player *arg2) {
     Vec3s32 localVec;
