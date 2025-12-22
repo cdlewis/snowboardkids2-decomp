@@ -439,7 +439,56 @@ void func_80020528_21128(Func80020528Arg *arg0) {
     func_80002014_2C14(arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_8002055C_2115C);
+s32 func_8002055C_2115C(Func8001F6A0Arg *arg0) {
+    Allocation_80020418 *allocation;
+    s32 pos[4];
+    s32 i;
+    void *ptr;
+    s32 multiplier;
+    s32 maxHeight;
+    u16 angle;
+    s32 scaled;
+    s32 result;
+
+    allocation = (Allocation_80020418 *)getCurrentAllocation();
+    maxHeight = arg0->unk10;
+    angle = (u16)((arg0->unk54 - 0x400) & 0x1FFF);
+    multiplier = 0x500;
+
+    if (allocation->unkB33[allocation->unkB2C] == 9) {
+        multiplier = 0x5000;
+    }
+
+    i = 0;
+    ptr = arg0->unk18;
+
+    do {
+        angle = (angle + 0x800) & 0x1FFF;
+
+        scaled = approximateSin((s16)angle) * multiplier;
+        if (scaled < 0) {
+            scaled += 0x1FFF;
+        }
+        pos[0] = (scaled >> 13) << 8;
+
+        scaled = approximateCos((s16)angle) * multiplier;
+        if (scaled < 0) {
+            scaled += 0x1FFF;
+        }
+        pos[2] = (scaled >> 13) << 8;
+
+        pos[0] += arg0->unkC;
+        pos[2] += arg0->unk14;
+
+        result = func_80061A64_62664(ptr, func_80060A3C_6163C(ptr, arg0->unk50, pos) & 0xFFFF, pos);
+        if (maxHeight < result) {
+            maxHeight = result;
+        }
+        i++;
+    } while (i < 4);
+
+    return maxHeight;
+}
 
 void func_80020708_21308(void);
 void func_80020B18_21718(Func800206B4Arg *arg0);
