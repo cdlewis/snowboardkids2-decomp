@@ -99,12 +99,6 @@ s16 func_80062254_62E54(GameDataLayout *arg0, u16 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800625A4_631A4);
-
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800626C4_632C4);
-
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062918_63518);
-
 typedef struct {
     s16 x;
     s16 y;
@@ -112,7 +106,8 @@ typedef struct {
 } Vertex6;
 
 typedef struct {
-    u8 padding[0x16];
+    s16 unk0;
+    u8 padding[0x14];
     u16 unk16;
     u8 padding2[0x4];
     u16 unk1C;
@@ -125,6 +120,46 @@ typedef struct {
     void *unk8;
     Element24 *unkC;
 } func_80062B1C_arg0;
+
+u16 func_800625A4_631A4(void *arg0, void *arg1) {
+    s32 var_v1;
+    s32 temp_v0;
+    Element24 *elements;
+    Vertex6 *verts;
+    u16 idx0;
+    u16 idx1;
+    Vertex6 *vert0;
+    Vertex6 *vert1;
+
+    var_v1 = 0;
+    elements = ((func_80062B1C_arg0 *)arg0)->unkC;
+
+    while (1) {
+        temp_v0 = elements[var_v1].unk0;
+        if (temp_v0 < 0) {
+            break;
+        }
+        var_v1 = temp_v0;
+    }
+
+    ((Vec3s32 *)arg1)->unk0 = ((func_80062B1C_arg0 *)arg0)->unk4[(elements + var_v1)->unk1C].x << 16;
+    ((Vec3s32 *)arg1)->unk4 = ((func_80062B1C_arg0 *)arg0)->unk4[(((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk1C].y
+                              << 16;
+    ((Vec3s32 *)arg1)->unk8 = ((func_80062B1C_arg0 *)arg0)->unk4[(((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk1C].z
+                              << 16;
+
+    idx0 = (((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk16;
+    verts = ((func_80062B1C_arg0 *)arg0)->unk4;
+    idx1 = (((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk1C;
+    vert0 = (Vertex6 *)((s32)idx0 * sizeof(Vertex6) + (s32)verts);
+    vert1 = (Vertex6 *)((s32)idx1 * sizeof(Vertex6) + (s32)verts);
+
+    return (func_8006D21C_6DE1C(vert0->x, vert0->z, vert1->x, vert1->z) - 0x1000) & 0xFFFF;
+}
+
+INCLUDE_ASM("asm/nonmatchings/displaylist", func_800626C4_632C4);
+
+INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062918_63518);
 
 u16 func_80062B1C_6371C(void *arg0_void, u16 arg1, void *arg2_void, void *arg3_void) {
     func_80062B1C_arg0 *arg0 = (func_80062B1C_arg0 *)arg0_void;
