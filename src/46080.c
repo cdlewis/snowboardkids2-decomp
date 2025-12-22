@@ -193,7 +193,23 @@ void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0);
 
 void func_8004AE58_4BA58(s32 **);
 void func_8004A96C_4B56C(s32 **);
-extern void func_8004A6D4_4B2D4(void);
+typedef struct {
+    void *unk0;
+    void *unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 _pad14[0x10];
+    u16 unk24;
+    u16 unk26;
+    s16 unk28;
+    u8 _pad2A[0x2];
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+} func_8004A6D4_4B2D4_arg;
+
+void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0);
 
 typedef struct {
     DataTable_19E80 *unk0;
@@ -2558,7 +2574,11 @@ void func_8004A634_4B234(func_8004A634_4B234_arg *arg0) {
     setCallbackWithContinue(func_8004A6D4_4B2D4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004A6D4_4B2D4);
+typedef struct {
+    s32 sp18;
+    s32 sp1C;
+    s32 sp20;
+} func_8004A6D4_4B2D4_sp;
 
 typedef struct {
     void *unk0;
@@ -2567,6 +2587,53 @@ typedef struct {
     s16 unk26;
     s16 unk28;
 } func_8004A850_4B450_arg;
+
+void func_8004A850_4B450(func_8004A850_4B450_arg *arg0);
+
+void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0) {
+    func_8004A6D4_4B2D4_sp sp;
+    GameState_46080 *s0;
+    void *temp_s0;
+    void *s2;
+    s32 i;
+
+    s0 = (GameState_46080 *)getCurrentAllocation();
+    if (s0->unk76 == 0) {
+        arg0->unk8 = arg0->unk8 + arg0->unk2C;
+        arg0->unkC = arg0->unkC + arg0->unk30;
+        arg0->unk10 = arg0->unk10 + arg0->unk34;
+        arg0->unk30 = arg0->unk30 + 0xFFFF0000;
+
+        temp_s0 = &s0->unk30;
+        s2 = &arg0->unk8;
+
+        arg0->unk24 = func_80060A3C_6163C(temp_s0, arg0->unk24, s2);
+
+        func_80060CDC_618DC(temp_s0, arg0->unk24, s2, 0x100000, &sp.sp18);
+
+        arg0->unk8 = arg0->unk8 + sp.sp18;
+        arg0->unk10 = arg0->unk10 + sp.sp20;
+
+        sp.sp1C = func_80061A64_62664(temp_s0, arg0->unk24, s2);
+
+        if (arg0->unkC < sp.sp1C) {
+            arg0->unkC = sp.sp1C;
+            arg0->unk28 = 0x5A;
+            setCallback(&func_8004A850_4B450);
+        }
+
+        if (D_8009ADE0_9B9E0 & 1) {
+            arg0->unk26 = arg0->unk26 + 1;
+            if ((s16)arg0->unk26 >= 6) {
+                arg0->unk26 = 0;
+            }
+            loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, (s16)arg0->unk26);
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+    }
+}
 
 void func_8004A850_4B450(func_8004A850_4B450_arg *arg0) {
     GameState *allocation;
