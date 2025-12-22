@@ -1744,7 +1744,63 @@ void func_8004F1D4_4FDD4(Struct_func_8004F1D4 *arg0) {
     setCallback(func_8004F27C_4FE7C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004F27C_4FE7C);
+typedef struct {
+    s16 unk14_hi;
+    s16 unk16;
+} Struct_func_8004F27C_unk14;
+
+void func_8004F27C_4FE7C(Struct_func_8004F1D4 *arg0) {
+    char buf[16];
+    s32 var;
+    char *ptr;
+    GameState *allocation;
+    s32 y;
+    s32 x;
+    s16 z;
+
+    allocation = getCurrentAllocation();
+
+    if (arg0->unk14 != 0xFF) {
+        arg0->unk14 = arg0->unk14 + 0x10;
+        if (arg0->unk14 >= 0x100) {
+            arg0->unk14 = 0xFF;
+            scheduleTask(func_8004DCFC_4E8FC, 1, 0, 0xE6);
+        }
+    }
+
+    arg0->unkE = (u8)arg0->unk14;
+    debugEnqueueCallback(8, 6, func_80012518_13118, arg0);
+
+    var = 0;
+    if (allocation->unk7A == 4) {
+        var = 0x1388;
+    } else if (allocation->unk7A == 6) {
+        if (allocation->players->unkB70 >= 0x12C) {
+            var = 0x1388;
+        }
+    } else if (allocation->unk5A == 0x14) {
+        var = 0x2710;
+        if (allocation->players->unkBD3 == 0xA) {
+            var = 0x4E20;
+        }
+    }
+
+    sprintf(buf, D_8009E894_9F494, var);
+
+    var = 0;
+    ptr = &buf[1];
+    if (*ptr != 0) {
+        do {
+            ptr++;
+            var++;
+        } while (*ptr != 0);
+    }
+
+    y = arg0->unk2;
+    x = arg0->unk0;
+    z = ((Struct_func_8004F27C_unk14 *)&arg0->unk14)->unk16;
+    func_8003BD60_3C960(buf, (s16)(x + (0x50 - var * 8) / 2), (s16)(y + 0x14), z, arg0->unk10, 8, 6);
+}
 
 void func_8004F3EC_4FFEC(Struct_func_8004DCC4 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
