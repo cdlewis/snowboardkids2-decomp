@@ -14,6 +14,40 @@ USE_ASSET(_4237C0);
 USE_ASSET(_426EF0);
 
 typedef struct {
+    u8 pad0[0xA];
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 unkE;
+    u8 unkF;
+} func_80037A64_Entry10;
+
+typedef union {
+    s16 asShort;
+    u8 asBytes[2];
+} func_80037A64_UnkCUnion;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    u8 pad8[4];
+    func_80037A64_UnkCUnion unkC;
+    u8 unkE;
+    u8 unkF;
+    u8 unk10;
+    u8 unk11;
+    u8 unk12;
+    u8 unk13;
+} func_80037A64_Entry14;
+
+typedef struct {
+    func_80037A64_Entry10 entries10[6];
+    func_80037A64_Entry14 entries14[6];
+    void *unkD8;
+} func_80037A64_Arg0Struct;
+
+typedef struct {
     u8 pad[0x8];
     void *unk8;
     u8 pad2[0xC];
@@ -40,7 +74,8 @@ typedef struct {
 } func_80037FB0_38BB0_arg;
 
 typedef struct {
-    u8 pad[0x1E2];
+    u8 pad[0x1E0];
+    u16 unk1E0;
     u16 unk1E2;
     u8 pad2[0x4];
     u8 unk1E8[4];
@@ -51,9 +86,11 @@ extern u8 D_8008FD30_90930[];
 extern void *D_8008FE54_90A54[];
 
 void func_80037E40_38A40(func_80037E40_38A40_arg *);
-void func_80037D18_38918(void);
+void func_80037D18_38918(func_80037BFC_387FC_arg *);
 void func_80037874_38474(func_80037874_38474_arg *);
 void func_800377FC_383FC(u8 *);
+void func_80037F14_38B14(Entry1 *);
+void func_80037FB0_38BB0(func_80037FB0_38BB0_arg *arg0);
 
 void func_80037710_38310(func_80037710_38310_arg *arg0) {
     void *s1;
@@ -104,40 +141,6 @@ void func_80037874_38474(func_80037874_38474_arg *arg0) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/38310", func_800378AC_384AC);
-
-typedef struct {
-    u8 pad0[0xA];
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    u8 unkE;
-    u8 unkF;
-} func_80037A64_Entry10;
-
-typedef union {
-    s16 asShort;
-    u8 asBytes[2];
-} func_80037A64_UnkCUnion;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    u8 pad8[4];
-    func_80037A64_UnkCUnion unkC;
-    u8 unkE;
-    u8 unkF;
-    u8 unk10;
-    u8 unk11;
-    u8 unk12;
-    u8 unk13;
-} func_80037A64_Entry14;
-
-typedef struct {
-    func_80037A64_Entry10 entries10[6];
-    func_80037A64_Entry14 entries14[6];
-    void *unkD8;
-} func_80037A64_Arg0Struct;
 
 void func_80037A64_38664(func_80037A64_Arg0Struct *arg0) {
     func_80037F14_alloc *alloc;
@@ -242,15 +245,51 @@ void func_80037BFC_387FC(func_80037BFC_387FC_arg *arg0) {
     setCallback(func_80037D18_38918);
 }
 
-INCLUDE_ASM("asm/nonmatchings/38310", func_80037D18_38918);
+void func_80037D18_38918(func_80037BFC_387FC_arg *arg0) {
+    func_80037F14_alloc *alloc;
+    s32 i;
+    do {
+        alloc = (func_80037F14_alloc *)getCurrentAllocation();
+
+        for (i = 0; i < 4; i++) {
+            if (alloc->unk1E2 == 0) {
+                if (alloc->unk1EC == i) {
+                    arg0->entries1[i].unkA = alloc->unk1E8[i];
+                    arg0->entries2[i].unkC = alloc->unk1E8[i];
+                } else {
+                    arg0->entries1[i].unkA = 0;
+                    arg0->entries2[i].unkC = 0;
+                }
+            } else {
+                if (alloc->unk1E2 == 1 && alloc->unk1EC == i && (alloc->unk1E0 & 1)) {
+                    arg0->entries1[i].unkD = 0xFF;
+                } else {
+                    arg0->entries1[i].unkD = 1;
+                }
+                arg0->entries1[i].unkA = 0;
+                arg0->entries2[i].unkC = 0;
+            }
+
+            debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0->entries1[i]);
+
+            func_80035DE0_369E0(
+                arg0->unk90,
+                arg0->entries2[i].unk4,
+                arg0->entries2[i].unk0,
+                arg0->entries2[i].unk2,
+                (u8)arg0->entries2[i].unkC,
+                arg0->entries2[i].unk10,
+                (void *)8,
+                1
+            );
+        }
+    } while (0);
+}
 
 void func_80037E40_38A40(func_80037E40_38A40_arg *arg0) {
     arg0->unk48 = freeNodeMemory(arg0->unk48);
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
-
-void func_80037F14_38B14(Entry1 *);
-void func_80037FB0_38BB0(func_80037FB0_38BB0_arg *arg0);
 
 void func_80037E78_38A78(Entry1 *arg0) {
     void *allocation;
