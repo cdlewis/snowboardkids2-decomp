@@ -196,6 +196,11 @@ typedef struct {
     u8 unkA2;
 } func_80024048_arg;
 
+typedef struct {
+    func_80025C64_entry entries[8];
+    u8 unk80[4];
+} func_80026564_arg;
+
 extern s32 identityMatrix[];
 extern s32 D_8008DD2C_8E92C[];
 extern u16 D_8008DD4E_8E94E[][3];
@@ -218,22 +223,16 @@ extern u16 D_8008DE3A_8EA3A;
 extern u16 D_8008DE3C_8EA3C;
 extern u16 D_8008DE3E_8EA3E;
 
-typedef struct {
-    func_80025C64_entry entries[8];
-    u8 unk80[4];
-} func_80026564_arg;
-
 void func_8002667C_2727C(void *);
 void func_80026834_27434(func_80025FFC_26BFC_arg *);
-
 void func_80025DAC_269AC(func_80025FFC_26BFC_arg *);
 void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
-
 void func_80024048_24C48(func_80024048_arg *);
 void func_80024220_24E20(func_80024220_24E20_arg *);
 void func_80024298_24E98(func_80024048_arg *);
 void func_80024600_25200(func_8002494C_arg *);
 void func_80027BC8_287C8(func_80027BC8_arg *, u8);
+void func_80027400_28000(func_80025824_arg *);
 
 void func_80023E30_24A30(func_80024048_arg *arg0) {
     Mat3x3Padded sp10;
@@ -1393,8 +1392,6 @@ void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0) {
     }
 }
 
-void func_80027400_28000(void);
-
 void func_80027348_27F48(volatile func_80027348_entry *arg0) {
     s32 xBase;
     s32 yBase;
@@ -1453,7 +1450,50 @@ void func_80027348_27F48(volatile func_80027348_entry *arg0) {
     setCallback(func_80027400_28000);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027400_28000);
+void func_80027544_28144(void);
+
+void func_80027400_28000(func_80025824_arg *arg0) {
+    s16 minY;
+    s32 yIncrement;
+    s32 loopCount;
+    s32 i;
+    volatile func_80027348_entry *ptr;
+    GameState *state;
+    int new_var;
+    u16 val;
+    s32 pad[2];
+    (void)pad;
+    state = (GameState *)getCurrentAllocation();
+    minY = -0x10;
+    if (D_800AFE8C_A71FC->unk8 == 2) {
+        minY = -0x14;
+        yIncrement = 0x14;
+        loopCount = 3;
+    } else {
+        yIncrement = 0x13;
+        loopCount = 2;
+    }
+    yIncrement &= -(state->unk1898[arg0->unk24] == 0x1A);
+    i = 0;
+    if (((s32)(loopCount & 0xFF)) > 0) {
+        new_var = loopCount & 0xFF;
+        ptr = (volatile func_80027348_entry *)arg0;
+        do {
+            i += 1;
+            ptr->unk2 = ptr->unk2 + yIncrement;
+            debugEnqueueCallback(arg0->unk24 + 0xC, 0, func_80010240_10E40, (void *)ptr);
+            ptr++;
+        } while (i < ((s32)new_var));
+    }
+    val = state->unk1898[arg0->unk24];
+    if (val == 0x1A) {
+        if (arg0->entries[0].unk2 == minY) {
+            state->unk1898[arg0->unk24] = 0x1B;
+        }
+    } else if (val == 0x1E) {
+        setCallback(func_80027544_28144);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80027544_28144);
 
