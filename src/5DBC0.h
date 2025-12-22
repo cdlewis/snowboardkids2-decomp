@@ -13,5 +13,5 @@ s32 func_8005D308_5DF08(void *arg0, s32 arg1);
 void func_8005D48C_5E08C(Player *, s32, s32);
 void func_8005D804_5E404(Player *arg0, u8 arg1, u8 arg2);
 void func_8005D810_5E410(void);
-s8 func_8005D818_5E418(Player *);
+s16 func_8005D818_5E418(Player *);
 s16 func_8005D8C8_5E4C8(Player *arg0);

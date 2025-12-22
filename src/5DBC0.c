@@ -60,7 +60,54 @@ void func_8005D804_5E404(Player *arg0, u8 arg1, u8 arg2) {
 void func_8005D810_5E410(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D818_5E418);
+extern s8 D_800941C4_94DC4[];
+
+s16 func_8005D818_5E418(Player *arg0) {
+    s16 var_a1;
+    s8 temp_v0;
+    s8 temp_v1;
+    u16 temp_a0;
+    s8 *ptr;
+    s8 off;
+
+    var_a1 = -1;
+    if (arg0->unkBDA != 0) {
+        temp_v1 = arg0->unkBDC & 7;
+        if (temp_v1 != 0) {
+            ptr = D_800941C4_94DC4;
+            off = arg0->unkBB5;
+            return *(ptr + ((s32)temp_v1 << 3) + off);
+        }
+        goto block_17;
+    }
+    temp_v1 = arg0->unkB7B;
+    var_a1 = -(temp_v1 != 7);
+    if (temp_v1 == -7) {
+        var_a1 = 1;
+    }
+    temp_v0 = arg0->unkB7A;
+    if (temp_v0 == 7) {
+        var_a1 = 2;
+    }
+    if (temp_v0 == -7) {
+        var_a1 = 3;
+    }
+    temp_a0 = *(u16 *)&arg0->unkB7A;
+    if (temp_a0 == 0x707) {
+        var_a1 = 4;
+    }
+    if (temp_a0 == 0xF907) {
+        var_a1 = 5;
+    }
+    if (temp_a0 == 0x7F9) {
+        var_a1 = 6;
+    }
+    if (temp_a0 == 0xF9F9) {
+        var_a1 = 7;
+    }
+block_17:
+    return var_a1;
+}
 
 s16 func_8005D8C8_5E4C8(Player *arg0) {
     s32 count;
