@@ -1,4 +1,5 @@
 #include "2DD40.h"
+#include "20F0.h"
 #include "297B0.h"
 #include "2C8F0.h"
 #include "D_800AFE8C_A71FC_type.h"
@@ -167,7 +168,69 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002E680_2F280);
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002E8B4_2F4B4);
 
-INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002EBB0_2F7B0);
+extern u8 D_8008F044_8FC44[];
+extern s8 D_8008F054_8FC54[];
+
+s8 func_80001660_2260(void *arg0);
+
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ u8 pad0[0x28];
+    /* 0x2C */ u16 unk2C;
+    /* 0x2E */ u8 pad1[2];
+    /* 0x30 */ u16 unk30;
+    /* 0x32 */ u8 pad2[0xE];
+    /* 0x40 */ s32 unk40;
+    /* 0x44 */ s32 unk44;
+    /* 0x48 */ s32 unk48;
+    /* 0x4C */ u8 pad3[4];
+    /* 0x50 */ u16 unk50;
+    /* 0x52 */ u8 pad4[4];
+    /* 0x56 */ u16 unk56;
+    /* 0x58 */ u8 pad5[7];
+    /* 0x5F */ u8 unk5F;
+    /* 0x60 */ u8 pad6[4];
+} Func2EBB0Element; /* size = 0x64 */
+
+typedef struct {
+    /* 0x00 */ Func2EBB0Element elements[2];
+    /* 0xC8 */ u8 pad[8];
+    /* 0xD0 */ u8 ctrl[2];
+    /* 0xD2 */ u8 pad7;
+    /* 0xD3 */ u8 unkD3;
+    /* 0xD4 */ u8 unkD4;
+} Func2EBB0Container;
+
+void func_8002EBB0_2F7B0(void *ptr) {
+    Func2EBB0Container *arg0 = ptr;
+    s32 i;
+
+    for (i = 0; i < 2; i++) {
+        arg0->elements[i].unk56 = arg0->elements[i].unk50;
+        arg0->elements[i].unk5F = func_80001660_2260(arg0->elements[i].unk0);
+
+        if (((arg0->unkD4 == 1) & (i == 0)) && D_800AFE8C_A71FC->unk9[0] == 3) {
+            func_80001688_2288(arg0->elements[i].unk0, -1);
+            arg0->elements[i].unk48 = 0;
+            arg0->elements[i].unk40 = 0;
+            arg0->elements[i].unk44 = 0x240000;
+        } else if (((arg0->unkD4 == 6) & (i == 1)) && D_800AFE8C_A71FC->unk9[0] == 3) {
+            func_80001688_2288(arg0->elements[i].unk0, -1);
+        } else {
+            func_80001688_2288(arg0->elements[i].unk0, D_8008F054_8FC54[arg0->unkD4 * 2 + i]);
+        }
+
+        if (D_8008F044_8FC44[arg0->unkD4 * 2 + i] != 0) {
+            arg0->elements[i].unk50 = 0;
+            arg0->ctrl[i] = 1;
+        } else {
+            arg0->elements[i].unk30 = arg0->elements[i].unk2C;
+            arg0->ctrl[i] = 3;
+        }
+    }
+
+    arg0->unkD3 = 0;
+}
 
 s32 func_8002ED30_2F930(void) {
     return D_800AFE8C_A71FC->padding;
