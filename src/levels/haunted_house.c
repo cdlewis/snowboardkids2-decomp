@@ -5,6 +5,7 @@
 #include "5AA90.h"
 #include "5DBC0.h"
 #include "5E590.h"
+#include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -124,7 +125,7 @@ extern void func_800BBEAC_AFB9C(s16 *);
 extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
 extern void func_800BC184_AFE74(void **);
-extern void func_800BC220_AFF10(void);
+extern void func_800BC220_AFF10(u8 *);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
 extern void func_800BC750_B0440(s16 *);
 
@@ -636,7 +637,71 @@ void func_800BC184_AFE74(void **arg0) {
     setCallback(func_800BC220_AFF10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BC220_AFF10);
+void func_800BC378_B0068(void);
+
+void func_800BC220_AFF10(u8 *arg0) {
+    Allocation *allocation;
+    s32 i;
+    s32 maxState;
+    s32 numGhosts;
+    s32 numPlayers;
+    Player *players;
+    s32 num;
+    s32 temp;
+    s32 pad[4];
+
+    (void)pad;
+
+    allocation = (Allocation *)getCurrentAllocation();
+    num = allocation->unk5E;
+    maxState = 0;
+    i = 0;
+
+    if (num > 0) {
+        numPlayers = num;
+        players = allocation->unk10;
+        do {
+            temp = players->unkB94;
+            if ((u32)(temp - 7) < 5U) {
+                temp &= 0xFFFF;
+                if (maxState < temp) {
+                    maxState = temp;
+                }
+            }
+            i++;
+            players = (Player *)((u8 *)players + 0xBE8);
+        } while (i < numPlayers);
+    }
+
+    numGhosts = ((maxState < 7) ^ 1) * 2;
+    if (maxState >= 8) {
+        numGhosts = 4;
+    }
+    if (maxState >= 9) {
+        numGhosts = 6;
+    }
+    if (maxState >= 10) {
+        numGhosts = 8;
+    }
+
+    i = 0;
+    if (numGhosts != 0) {
+        do {
+            (arg0 + i)[8] = 8;
+            i++;
+        } while (i < numGhosts);
+    }
+
+    i = numGhosts;
+    while (i < 8) {
+        (arg0 + i)[8] = 9;
+        i++;
+    }
+
+    for (i = 0; i < 4; i++) {
+        debugEnqueueCallback((u16)i, 4, func_800BC378_B0068, arg0);
+    }
+}
 
 void func_800BC340_B0030(func_800BC340_B0030_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
