@@ -964,6 +964,8 @@ void func_80047024_47C24(func_8004711C_47D1C_arg *arg0) {
 typedef struct {
     u8 _pad[0x76];
     u8 unk76;
+    u8 _pad2[2];
+    u8 unk79;
 } Allocation_47D1C;
 
 void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0);
@@ -1559,12 +1561,15 @@ typedef struct {
     void *unk0;
 } Struct_func_80048834_49434;
 
+extern s8 D_80090C94_91894[];
+extern u8 D_80090C95_91895[];
+
 typedef struct {
     void *unk0;
     AssetMetadata_46080 elements[5];
     Player *unkA4;
     s16 unkA8;
-    s16 unkAA;
+    u16 unkAA;
     s16 unkAC;
 } func_80048350_48F50_arg;
 
@@ -1615,7 +1620,8 @@ typedef struct {
     u8 _pad14[0xC];
 } Element_80048720;
 
-extern void func_80048540_49140(void);
+void func_80048720_49320(func_80048350_48F50_arg *arg0);
+void func_80048540_49140(func_80048350_48F50_arg *arg0);
 
 void func_8004841C_4901C(func_80048350_48F50_arg *arg0) {
     Allocation_47D1C *allocation;
@@ -1658,7 +1664,79 @@ loop:
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80048540_49140);
+void func_80048540_49140(func_80048350_48F50_arg *arg0) {
+    Allocation_47D1C *allocation;
+    s32 i;
+    s32 offset;
+    Element_80048720 *elem;
+    s32 j;
+    s16 unkA8;
+    u16 index;
+    s32 tableIdx;
+    s32 heightOffset;
+
+    unkA8 = arg0->unkA8;
+    if (unkA8 == 0) {
+        index = arg0->unkAA + 1;
+        arg0->unkAA = index;
+        arg0->unkA8 = D_80090C94_91894[(s16)index * 2];
+
+        i = 2;
+        offset = 0x44;
+    loop1:
+        loadAssetMetadata(
+            (loadAssetMetadata_arg *)((u8 *)arg0 + offset),
+            arg0->unk0,
+            D_80090C95_91895[(s16)arg0->unkAA * 2]
+        );
+        offset += 0x20;
+        i += 1;
+        if (i < 5)
+            goto loop1;
+
+        if (arg0->unkA8 == -1) {
+            allocation = (Allocation_47D1C *)getCurrentAllocation();
+            allocation->unk79 = allocation->unk79 - 1;
+            setCallback(func_80048720_49320);
+        }
+
+        if (arg0->unkA4->unkBB8 != 0) {
+            goto position_loop;
+        }
+        tableIdx = (s16)arg0->unkAA * 2;
+        if (D_80090C95_91895[tableIdx] == 7) {
+            func_80058530_59130(0x116, 6);
+        }
+        tableIdx = (s16)arg0->unkAA * 2;
+        if (D_80090C95_91895[tableIdx] == 0xB) {
+            func_80058530_59130(0x117, 6);
+        }
+        i = 0;
+        goto position_loop;
+    }
+    arg0->unkA8 = unkA8 - 1;
+
+position_loop:
+    i = 0;
+    heightOffset = 0x200000;
+    elem = (Element_80048720 *)arg0;
+loop2:
+    elem->unk8 = arg0->unkA4->worldPosX;
+    elem->unkC = arg0->unkA4->worldPosY + heightOffset;
+    elem->unk10 = arg0->unkA4->worldPosZ;
+    i += 1;
+    elem += 1;
+    if (i < 5)
+        goto loop2;
+
+    for (i = 0; i < 2; i++) {
+        func_80066444_67044(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+    }
+
+    for (i = 2; i < 5; i++) {
+        func_800670A4_67CA4(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+    }
+}
 
 void func_80048720_49320(func_80048350_48F50_arg *arg0) {
     Allocation_47D1C *allocation;
