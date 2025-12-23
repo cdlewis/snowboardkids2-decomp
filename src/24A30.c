@@ -37,13 +37,23 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    applyTransformToModel_arg1 unk4;
+    Mat3x3Padded unk4;
+    union {
+        SceneModel *unk20;
+        s32 unk20_s32;
+        s16 unk20_s16;
+    } unk20_u;
     u8 unk28;
 } func_80024C8C_2588C_arg;
 
 typedef struct {
     SceneModel *unk0;
-    applyTransformToModel_arg1 unk4;
+    Mat3x3Padded unk4;
+    union {
+        SceneModel *unk20;
+        s32 unk20_s32;
+        s16 unk20_s16;
+    } unk20_u;
     u8 unk28;
 } func_80025130_25D30_arg;
 
@@ -619,13 +629,13 @@ void func_80024AAC_256AC(func_80024C8C_2588C_arg *arg0) {
     localPtr = &localMatrix;
     memcpy(localPtr, identityMatrix, sizeof(Mat3x3Padded));
 
-    matrix = (Mat3x3Padded *)&arg0->unk4;
+    matrix = &arg0->unk4;
     rotation = state->unk1880[arg0->unk28];
     createYRotationMatrix(matrix, 0x2000 - rotation);
 
     func_8006B084_6BC84(matrix, &state->unk17F8[arg0->unk28], localPtr);
 
-    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)localPtr);
+    applyTransformToModel(arg0->unk0, localPtr);
 
     if (D_800AFE8C_A71FC->unk9[arg0->unk28] == 7) {
         func_800021B8_2DB8(arg0->unk0, 4);
@@ -662,7 +672,7 @@ void func_80024BA0_257A0(func_80024C8C_2588C_arg *arg0) {
 
     func_8006B084_6BC84(matrix, base + (arg0->unk28 * 32 + 0x17F8), localPtr);
 
-    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)localPtr);
+    applyTransformToModel(arg0->unk0, localPtr);
 
     clearModelRotation(arg0->unk0);
     updateModelGeometry(arg0->unk0);
@@ -715,7 +725,7 @@ void func_80024E58_25A58(func_80024C8C_2588C_arg *arg0) {
     arg0->unk4.unk14 = D_8008DD2C_8E92C[D_800AFE8C_A71FC->unk8 * 2 + (base + index)[0x18C0]];
     arg0->unk4.unk1C = 0;
     arg0->unk4.unk18 = 0xFFF00000;
-    arg0->unk4.unk20_u.unk20_s32 = arg0->unk4.unk14;
+    arg0->unk20_u.unk20_s32 = arg0->unk4.unk14;
 
     applyTransformToModel(arg0->unk0, &arg0->unk4);
 
@@ -739,7 +749,7 @@ void func_80024F48_25B48(func_80024C8C_2588C_arg *arg0) {
 
     base = (u8 *)getCurrentAllocation();
 
-    unk24 = arg0->unk4.unk20_u.unk20_s32;
+    unk24 = arg0->unk20_u.unk20_s32;
 
     adjustment = (-(0 < unk24) & 0xFFF00000) | 0x100000;
 

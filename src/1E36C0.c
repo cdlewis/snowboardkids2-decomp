@@ -19,7 +19,7 @@ void func_800B66B4_1E3764(CutsceneSlotData *arg0) {
     memcpy(&arg0->unk04, identityMatrix, 0x20);
 
     arg0->unk0.bytes[0] = 0;
-    arg0->unk04.unk20_u.unk20_s32 = 0;
+    arg0->unk20_u.unk20_s32 = 0;
     arg0->unk28 = 0;
     arg0->unk2C = 0;
     arg0->unk30 = 0;
@@ -123,7 +123,7 @@ skip3:
     scaleMatrix(pB0, a1, a2, a3);
     func_8006B084_6BC84(pB0, &sp70, &arg0->unk04);
 
-    retval = arg0->unk04.unk20_u.unk20_s32;
+    retval = arg0->unk20_u.unk20_s32;
     arg0->unk04.unk14 = retval;
     arg0->unk04.unk18 = arg0->unk28;
     arg0->unk04.unk1C = arg0->unk2C;
@@ -183,7 +183,7 @@ void func_800B6910_1E39C0(CutsceneSlotData *arg0, func_800B5E64_1E2F14_arg0 *arg
     temp_v1 = -D_800AB044_A23B4 * 16;
     temp_s0 = temp_s0 >> 8;
 
-    arg0->unk04.unk20_u.unk20_s32 = arg0->unk04.unk20_u.unk20_s32 + ((temp_v0 * temp_a0) + (temp_s0 * temp_v1));
+    arg0->unk20_u.unk20_s32 = arg0->unk20_u.unk20_s32 + ((temp_v0 * temp_a0) + (temp_s0 * temp_v1));
     arg0->unk2C = arg0->unk2C + ((-temp_s0 * temp_a0) + (temp_v0 * temp_v1));
 }
 
@@ -245,7 +245,7 @@ void func_800B6C04_1E3CB4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, 
 
     temp_v0 = arg4 & 0x1FFF;
 
-    arg0->unk04.unk20_u.unk20_s32 = arg1;
+    arg0->unk20_u.unk20_s32 = arg1;
     arg0->unk30 = arg1;
     arg0->unk0.bytes[0] = 0;
     arg0->unk28 = arg2;
@@ -313,7 +313,7 @@ s32 func_800B6CD8_1E3D88(
     arg0->unk38 = arg4;
     arg0->unk84 = var_t0;
     arg0->unk86 = var_t0;
-    temp_a3 = arg0->unk30 - arg0->unk04.unk20_u.unk20_s32;
+    temp_a3 = arg0->unk30 - arg0->unk20_u.unk20_s32;
     temp_a1 = arg0->unk34 - arg0->unk28;
     temp_a2 = arg0->unk38 - arg0->unk2C;
     arg0->angle = 0;
@@ -373,7 +373,7 @@ s32 func_800B6FA4_1E4054(CutsceneSlotData *arg0, SceneModel *unused, s32 arg2, s
     arg0->unk7A = arg6;
     arg0->unk0.Two = 1;
 
-    arg0->unk3C = (arg0->unk30 - arg0->unk04.unk20_u.unk20_s32) / var_t0;
+    arg0->unk3C = (arg0->unk30 - arg0->unk20_u.unk20_s32) / var_t0;
     arg0->unk40 = (arg0->unk34 - arg0->unk28) / var_t0;
     arg0->unk44 = (arg0->unk38 - arg0->unk2C) / var_t0;
 
@@ -505,11 +505,11 @@ void func_800B7620_1E46D0(CutsceneSlotData *arg0, s32 arg1, s16 arg2, s16 arg3) 
     arg0->unk92 = arg3;
     arg0->unk84 = arg2;
     arg0->unk86 = arg2;
-    temp_a0 = ((s16)atan2Fixed(arg0->unk04.unk20_u.unk20_s32, arg0->unk2C) + 0x1000) & 0x1FFF;
+    temp_a0 = ((s16)atan2Fixed(arg0->unk20_u.unk20_s32, arg0->unk2C) + 0x1000) & 0x1FFF;
     arg0->unk9C_u.unk9C_s32 = temp_a0;
     temp_v1 = approximateCos(temp_a0) << 2;
     if (temp_v1 == 0) {
-        var_v1 = (arg0->unk04.unk20_u.unk20_s32 << 8) / ((approximateSin(arg0->unk9C_u.s.unk9E) << 2) >> 8);
+        var_v1 = (arg0->unk20_u.unk20_s32 << 8) / ((approximateSin(arg0->unk9C_u.s.unk9E) << 2) >> 8);
         var_v1 = (var_v1 > 0) ? var_v1 : -var_v1;
         arg0->unk98 = var_v1;
     } else {
@@ -603,7 +603,7 @@ void func_800B7914_1E49C4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, 
     }
     ptr30 = &arg0->unk30;
     *ptr30 = arg1;
-    temp_t1 = *ptr30 - arg0->unk04.unk20_u.unk20_s32;
+    temp_t1 = *ptr30 - arg0->unk20_u.unk20_s32;
     div1 = temp_t1 / var_t0;
     ptr34 = &arg0->unk34;
     *ptr34 = arg2;
@@ -648,7 +648,7 @@ void func_800B7A60_1E4B10(
     arg0->unk34 = targetY;
     arg0->unk38 = targetZ;
 
-    arg0->unk3C = (arg0->unk30 - arg0->unk04.unk20_u.unk20_s32) / var_t1;
+    arg0->unk3C = (arg0->unk30 - arg0->unk20_u.unk20_s32) / var_t1;
     arg0->unk40 = (arg0->unk34 - arg0->unk28) / var_t1;
     arg0->unk44 = (arg0->unk38 - arg0->unk2C) / var_t1;
 
@@ -679,7 +679,7 @@ void func_800B7B70_1E4C20(CutsceneSlotData *arg0, s32 *arg1, s16 arg2, s32 arg3,
     arg0->unk34 = arg1[1];
     arg0->unk38 = arg1[2];
 
-    delta_x = arg1[0] - arg0->unk04.unk20_u.unk20_s32;
+    delta_x = arg1[0] - arg0->unk20_u.unk20_s32;
     arg0->unk3C = delta_x / duration;
     arg0->unk48 = delta_x / duration;
 
@@ -704,7 +704,7 @@ s16 func_800B826C_1E531C(CutsceneSlotData *arg0, SceneModel *arg1) {
 
     var_s2 = 0;
     if (arg0->unk84 > 0) {
-        arg0->unk04.unk20_u.unk20_s32 += arg0->unk3C;
+        arg0->unk20_u.unk20_s32 += arg0->unk3C;
         arg0->unk28 += arg0->unk40;
         arg0->unk2C += arg0->unk44;
         arg0->unk78 += arg0->unk7C;
@@ -816,7 +816,7 @@ update_position:
 
     arg0->unk7C += (arg0->unk7E - arg0->unk7C) / 32;
 
-    arg0->unk04.unk20_u.unk20_s32 += arg0->unk3C;
+    arg0->unk20_u.unk20_s32 += arg0->unk3C;
     arg0->unk28 += arg0->unk40;
     arg0->unk2C += arg0->unk44;
     arg0->unk78 += arg0->unk7C;
@@ -858,7 +858,7 @@ s32 func_800B8AC4_1E5B74(CutsceneSlotData *arg0, SceneModel *arg1) {
 
         // Store scaled results
         arg0->unk2C = scaledCos * (arg0->unk98 >> 8);
-        arg0->unk04.unk20_u.unk20_s32 = scaledSin * (arg0->unk98 >> 8);
+        arg0->unk20_u.unk20_s32 = scaledSin * (arg0->unk98 >> 8);
 
         // Update target angle based on direction
         if (arg0->unk94 > 0) {
@@ -948,7 +948,7 @@ void func_800B8C3C_1E5CEC(CutsceneSlotData *arg0) {
 }
 
 s32 func_800B8D34_1E5DE4(CutsceneSlotData *arg0) {
-    arg0->unk04.unk20_u.unk20_s32 += arg0->unk3C;
+    arg0->unk20_u.unk20_s32 += arg0->unk3C;
     arg0->unk28 += arg0->unk40;
     arg0->unk2C += arg0->unk44;
 
@@ -967,7 +967,7 @@ s32 func_800B8D34_1E5DE4(CutsceneSlotData *arg0) {
 }
 
 s32 func_800B8DA8_1E5E58(CutsceneSlotData *arg0) {
-    arg0->unk04.unk20_u.unk20_s32 += arg0->unk3C;
+    arg0->unk20_u.unk20_s32 += arg0->unk3C;
     arg0->unk28 += arg0->unk40;
     arg0->unk2C += arg0->unk44;
 

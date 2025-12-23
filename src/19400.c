@@ -55,7 +55,7 @@ void func_80018898_19498(func_80018898_19498_arg *arg0) {
     func_80018898_19498_state *state = (func_80018898_19498_state *)getCurrentAllocation();
 
     func_80001650_2250(arg0->unk0);
-    applyTransformToModel(arg0->unk0, &state->unk3B0);
+    applyTransformToModel(arg0->unk0, &state->unk3B0.unk0);
     arg0->unk4 = state->unk400;
     func_800021B8_2DB8(arg0->unk0, state->unk400);
     updateModelGeometry(arg0->unk0);
@@ -67,7 +67,7 @@ void func_80018904_19504(func_80018898_19498_arg *arg0) {
     s32 rotationResult;
     u8 anim;
 
-    applyTransformToModel(arg0->unk0, &state->unk3B0);
+    applyTransformToModel(arg0->unk0, &state->unk3B0.unk0);
 
     anim = state->unk403;
     if (anim != arg0->unk5) {

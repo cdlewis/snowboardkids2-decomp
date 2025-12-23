@@ -99,9 +99,9 @@ u8 func_80001534_2134(SceneModel *arg0) {
     return arg0->unk96;
 }
 
-void applyTransformToModel(SceneModel *arg0, applyTransformToModel_arg1 *arg1) {
+void applyTransformToModel(SceneModel *arg0, Mat3x3Padded *arg1) {
     if (arg0 != NULL) {
-        memcpy(&arg0->unk18, arg1, 0x20);
+        memcpy(&arg0->unk18, arg1, sizeof(Mat3x3Padded));
     }
 }
 

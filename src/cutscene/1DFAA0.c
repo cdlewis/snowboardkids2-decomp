@@ -171,7 +171,7 @@ void func_800B2DCC_1DFE7C(CutsceneSlot *arg0) {
         func_800B34B0_1E0560(i);
 
         if (ptr[i].slotData.unkA4 != NULL) {
-            applyTransformToModel(ptr[i].slotData.unkA4, (applyTransformToModel_arg1 *)identityMatrix);
+            applyTransformToModel(ptr[i].slotData.unkA4, (Mat3x3Padded *)identityMatrix);
             func_800021B8_2DB8(ptr[i].slotData.unkA4, 0);
         }
 
@@ -205,7 +205,7 @@ void func_800B2E48_1DFEF8(func_800B2C78_arg *arg0) {
             func_800B77C4_1E4874((CutsceneSlotData *)transformPtr, 0x10000, 0);
             func_800B7828_1E48D8((CutsceneSlotData *)transformPtr, 0x10000, 0);
             setupSlotTransform((CutsceneSlotData *)transformPtr);
-            applyTransformToModel(model, (applyTransformToModel_arg1 *)(slotDataA8 + 0x50));
+            applyTransformToModel(model, (Mat3x3Padded *)(slotDataA8 + 0x50));
         }
 
         currentSlot = (func_800B2C78_arg *)((u8 *)currentSlot + 0xF4);

@@ -29,7 +29,7 @@ extern void func_80000710_1310(func_80000710_1310_arg_16FA0 *);
 void func_800168BC_174BC(void);
 void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0);
 
-extern TransformData D_8008D5C4_8E1C4[];
+extern Mat3x3Padded D_8008D5C4_8E1C4[];
 extern u16 *D_8008D534_8E134[2];
 
 void func_80016C28_17828(Struct16B68 *arg0);
@@ -201,7 +201,7 @@ void func_800168F4_174F4(Struct16B68 *arg0) {
 
 void func_80016964_17564(Struct16B68 *arg0) {
     getCurrentAllocation();
-    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&D_8008D5C4_8E1C4[arg0->unk2F]);
+    applyTransformToModel(arg0->unk0, &D_8008D5C4_8E1C4[arg0->unk2F]);
     memcpy(&arg0->unk4, &D_8008D5C4_8E1C4[arg0->unk2F], 0x20);
     arg0->unk2C = *arg0->unk28;
     arg0->unk28 = arg0->unk28 + 1;
@@ -313,7 +313,7 @@ void func_80016C28_17828(Struct16B68 *arg0) {
             temp = temp + div * 9;
             arg0->unk24 = temp;
             arg0->unk4.unk18 = arg0->unk4.unk18 + temp;
-            applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->unk4);
+            applyTransformToModel(arg0->unk0, &arg0->unk4);
             if (arg0->unk4.unk18 > 0x57FFFF) {
                 func_80069CF8_6A8F8();
             }

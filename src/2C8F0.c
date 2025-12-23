@@ -76,7 +76,7 @@ void func_8002BEF4_2CAF4(Func8002BEF4Arg *arg0) {
             for (i = 0; i < allocation->unk41C; i++) {
                 ptr = (Func8002BEF4Arg *)((u8 *)arg0 + i * 0x64);
                 createYRotationMatrix(&ptr->unk4, ptr->unk30);
-                func_8002A2D0_2AED0(ptr);
+                func_8002A2D0_2AED0((Func297D8Arg *)ptr);
             }
             break;
         case 1:
@@ -84,7 +84,7 @@ void func_8002BEF4_2CAF4(Func8002BEF4Arg *arg0) {
             for (i = 0; i < allocation->unk41C; i++) {
                 ptr = (Func8002BEF4Arg *)((u8 *)arg0 + i * 0x64);
                 createYRotationMatrix(&ptr->unk4, ptr->unk30);
-                func_8002A2D0_2AED0(ptr);
+                func_8002A2D0_2AED0((Func297D8Arg *)ptr);
             }
             break;
     }

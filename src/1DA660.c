@@ -282,7 +282,7 @@ void func_800B0598_1DAB38(func_800B08FC_arg *arg0) {
 }
 
 void func_800B05DC_1DAB7C(func_800B08FC_arg *arg0) {
-    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->matrix);
+    applyTransformToModel(arg0->unk0, &arg0->matrix);
     if (arg0->unk28 != 2) {
         func_800021B8_2DB8(arg0->unk0, arg0->unk26);
         updateModelGeometry(arg0->unk0);
@@ -300,7 +300,7 @@ void func_800B0638_1DABD8(func_800B08FC_arg *arg0) {
     allocation = getCurrentAllocation();
 
     if (arg0->unk28 != 2) {
-        applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->matrix);
+        applyTransformToModel(arg0->unk0, &arg0->matrix);
         clearModelRotation(arg0->unk0);
         updateModelGeometry(arg0->unk0);
     }

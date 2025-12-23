@@ -23,15 +23,8 @@ typedef struct {
 } Struct16728;
 
 typedef struct {
-    u8 padding[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-} TransformData;
-
-typedef struct {
     SceneModel *unk0;   // 0x00
-    TransformData unk4; // 0x04 - 0x20 bytes of transform data
+    Mat3x3Padded unk4; // 0x04 - 0x20 bytes of transform data
     s32 unk24;          // 0x24
     u16 *unk28;         // 0x28 - pointer to u16 animation data
     u16 unk2C;          // 0x2C - current animation state

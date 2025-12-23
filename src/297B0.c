@@ -1,16 +1,16 @@
+#include "297B0.h"
 #include "20F0.h"
 #include "3E160.h"
+#include "B040.h"
 #include "common.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern void func_8000A49C_B09C(s32, s16, s16, s16, void *, s32, s8, u8, u8, s16);
-
 typedef struct Func8002A154Arg Func8002A154Arg;
 void func_8002A154_2AD54(Func8002A154Arg *);
-void func_8002A200_2AE00(Func8002A154Arg *);
+void func_8002A200_2AE00(Func297D8Arg *);
 
 struct Func8002A154Arg {
     /* 0x00 */ void *model;
@@ -28,8 +28,6 @@ struct Func8002A154Arg {
     /* 0x5F */ u8 unk5F;
 };
 
-typedef Func8002A154Arg Func8002A200Arg;
-
 typedef struct {
     /* 0x000 */ u8 pad0[0x408];
     /* 0x408 */ s32 unk408;
@@ -40,72 +38,6 @@ typedef struct {
     /* 0x42B */ u8 pad42B[0x3];
     /* 0x42E */ u8 unk42E;
 } AllocationData;
-
-typedef struct {
-    /* 0x00 */ SceneModel *model;
-    /* 0x04 */ Mat3x3Padded matrix;
-    /* 0x24 */ s32 unk24;
-    /* 0x28 */ u8 pad28[0x4];
-    /* 0x2C */ u16 rotation;
-    /* 0x2E */ u8 pad2E[0xC];
-    /* 0x3A */ u8 unk3A;
-    /* 0x3B */ u8 pad3B[0x1];
-    /* 0x3C */ void *callback;
-    /* 0x40 */ s32 unk40;
-    /* 0x44 */ s32 unk44;
-    /* 0x48 */ s32 unk48;
-    /* 0x4C */ u8 pad4C[0x4];
-    /* 0x50 */ s16 unk50;
-    /* 0x52 */ u8 pad52[0x4];
-    /* 0x56 */ u16 unk56;
-    /* 0x58 */ u16 unk58;
-    /* 0x5A */ s16 unk5A;
-    /* 0x5C */ u8 unk5C;
-    /* 0x5D */ u8 unk5D;
-    /* 0x5E */ u8 unk5E;
-    /* 0x5F */ u8 unk5F;
-    /* 0x60 */ u8 pad60[0x1];
-    /* 0x61 */ u8 unk61;
-    /* 0x62 */ s8 unk62;
-} Func297D8Arg;
-
-void func_80028C08_29808(Func297D8Arg *);
-void func_800291CC_29DCC(Func297D8Arg *);
-void func_80029AA4_2A6A4(Func297D8Arg *);
-void func_80028DF0_299F0(Func297D8Arg *);
-void func_8002900C_29C0C(Func297D8Arg *);
-void func_80029360_29F60(Func297D8Arg *);
-void func_80029EA8_2AAA8(Func297D8Arg *);
-
-typedef struct {
-    /* 0x00 */ SceneModel *unk0;
-    /* 0x04 */ applyTransformToModel_arg1 unk4;
-    /* 0x28 */ u8 pad28[0x28];
-    /* 0x50 */ s16 unk50;
-} func_8002A290_2AE90_arg;
-
-typedef struct {
-    /* 0x00 */ SceneModel *model;
-    /* 0x04 */ u8 unk4[0x20];
-    /* 0x24 */ u8 pad24[0x13];
-    /* 0x37 */ u8 unk37;
-    /* 0x38 */ u8 pad38[0x18];
-    /* 0x50 */ s16 unk50;
-    /* 0x52 */ s16 unk52;
-    /* 0x54 */ u8 pad54[0x4];
-    /* 0x58 */ u16 unk58;
-    /* 0x5A */ u8 pad5A[0x4];
-    /* 0x5E */ u8 unk5E;
-    /* 0x5F */ u8 pad5F[0x3];
-    /* 0x62 */ s8 unk62;
-} Func8002A2D0Arg;
-
-void func_8002A290_2AE90(void *);
-void func_8002A2D0_2AED0(void *);
-void func_80029C90_2A890(Func297D8Arg *);
-void func_8002A0DC_2ACDC(Func297D8Arg *);
-void func_80029954_2A554(Func297D8Arg *);
-void func_8002A044_2AC44(Func297D8Arg *);
 
 void func_80028BB0_297B0(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
@@ -306,7 +238,7 @@ void func_8002900C_29C0C(Func297D8Arg *arg0) {
             if (arg0->unk5A >= 0) {
                 arg0->unk5E = 9;
                 arg0->unk50 = 0;
-                func_8000A49C_B09C((s32)arg0->model, 0, 6, 10, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+                func_8000A49C_B09C(arg0->model, 0, 6, 10, &arg0->unk40, 0x10000, 0, 2, 0, 0);
             }
         }
     }
@@ -454,7 +386,7 @@ void func_80029360_29F60(Func297D8Arg *arg0) {
                 arg0->unk50 = 0xA;
                 arg0->unk5A = 0;
                 arg0->unk61 = temp;
-                func_8000A49C_B09C((s32)arg0->model, 0, 7, 0x2D, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+                func_8000A49C_B09C(arg0->model, 0, 7, 0x2D, &arg0->unk40, 0x10000, 0, 2, 0, 0);
             }
         }
     }
@@ -515,7 +447,7 @@ void func_80029680_2A280(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk48 = 0;
     arg0->unk40 = 0;
-    func_8000A49C_B09C((s32)arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+    func_8000A49C_B09C(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_80001688_2288(arg0->model, 1);
@@ -530,7 +462,7 @@ void func_80029724_2A324(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk48 = 0;
     arg0->unk40 = 0;
-    func_8000A49C_B09C((s32)arg0->model, 0, 9, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+    func_8000A49C_B09C(arg0->model, 0, 9, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     if (arg0->unk5C == 1) {
@@ -880,7 +812,7 @@ void func_8002A154_2AD54(Func8002A154Arg *arg0) {
         setCallback(func_80028AEC_296EC);
     }
 
-    func_8002A2D0_2AED0(arg0);
+    func_8002A2D0_2AED0((Func297D8Arg *)arg0);
 
     alloc->unk408 = arg0->matrix.unk14;
     alloc->unk410 = arg0->matrix.unk1C;
@@ -900,17 +832,17 @@ void func_8002A154_2AD54(Func8002A154Arg *arg0) {
 void func_8002A1F8_2ADF8(void) {
 }
 
-void func_8002A200_2AE00(Func8002A200Arg *arg0) {
+void func_8002A200_2AE00(Func297D8Arg *arg0) {
     AllocationData *alloc = getCurrentAllocation();
 
-    switch (arg0->state) {
+    switch (arg0->unk5E) {
         case 0x14:
             func_8002AE80_2BA80(arg0);
-            createYRotationMatrix(&arg0->matrix, arg0->rotation);
+            createYRotationMatrix(&arg0->matrix, arg0->unk30);
             break;
         case 0x15:
             func_8002B248_2BE48(arg0);
-            createYRotationMatrix(&arg0->matrix, arg0->rotation);
+            createYRotationMatrix(&arg0->matrix, arg0->unk30);
             break;
     }
 
@@ -921,19 +853,17 @@ void func_8002A200_2AE00(Func8002A200Arg *arg0) {
     }
 }
 
-void func_8002A290_2AE90(void *untypedArg0) {
-    func_8002A290_2AE90_arg *arg0 = (func_8002A290_2AE90_arg *)untypedArg0;
-    applyTransformToModel(arg0->unk0, &arg0->unk4);
-    func_800021B8_2DB8(arg0->unk0, arg0->unk50);
-    updateModelGeometry(arg0->unk0);
+void func_8002A290_2AE90(Func297D8Arg *arg0) {
+    applyTransformToModel(arg0->model, &arg0->matrix);
+    func_800021B8_2DB8(arg0->model, arg0->unk50);
+    updateModelGeometry(arg0->model);
 }
 
-void func_8002A2D0_2AED0(void *untypedArg0) {
-    Func8002A2D0Arg *arg0 = (Func8002A2D0Arg *)untypedArg0;
+void func_8002A2D0_2AED0(Func297D8Arg *arg0) {
     s32 result;
 
     getCurrentAllocation();
-    applyTransformToModel(arg0->model, (applyTransformToModel_arg1 *)&arg0->unk4);
+    applyTransformToModel(arg0->model, &arg0->matrix);
 
     if (arg0->unk50 != arg0->unk52) {
         arg0->unk52 = arg0->unk50;

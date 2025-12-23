@@ -140,7 +140,12 @@ typedef struct {
         s8 Two;
         u8 bytes[4];
     } unk0;
-    applyTransformToModel_arg1 unk04;
+    Mat3x3Padded unk04;
+    union {
+        SceneModel *unk20;
+        s32 unk20_s32;
+        s16 unk20_s16;
+    } unk20_u;
     /* 0x28 */ s32 unk28;
     /* 0x2C */ s32 unk2C;
     /* 0x30 */ s32 unk30;

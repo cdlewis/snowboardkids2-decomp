@@ -97,7 +97,7 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
         }
 
     cont:
-        func_8002A2D0_2AED0(&elements[i]);
+        func_8002A2D0_2AED0((Func297D8Arg *)&elements[i]);
         ((s32 *)allocation)[0x102 + i] = elements[i].unk18;
         ((s32 *)allocation)[0x104 + i] = elements[i].unk20;
     }
@@ -148,7 +148,7 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
 
     elements = (struct Func2E024Element *)arg0;
     for (i = 0; i < arg0->unkD5; i++) {
-        func_8002A2D0_2AED0(&elements[i]);
+        func_8002A2D0_2AED0((Func297D8Arg *)&elements[i]);
         ((s32 *)allocation)[0x102 + i] = elements[i].unk18;
         ((s32 *)allocation)[0x104 + i] = elements[i].unk20;
     }

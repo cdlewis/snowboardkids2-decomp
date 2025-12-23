@@ -280,7 +280,7 @@ void func_8002F024_2FC24(func_8002EF3C_2FB3C_arg *arg0) {
     volatile u8 pad[8];
 
     state = (func_8002F024_2FC24_state *)getCurrentAllocation();
-    applyTransformToModel(arg0->unk0, (applyTransformToModel_arg1 *)&arg0->unk4);
+    applyTransformToModel(arg0->unk0, &arg0->unk4);
     do {
         if (clearModelRotation(arg0->unk0) != 0) {
             animIndex = arg0->unk26;
