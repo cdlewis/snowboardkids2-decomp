@@ -1,7 +1,7 @@
 {
   "task_name": "fix_low_quality_matches",
   "script": "python3 tools/detect_low_quality_matches.py src --json",
-  "prompt": "fix the low quality pointer arithmetic in $ARGUMENT by replacing it with proper struct field access. improve variable naming. and avoid manual casts in favour of correct types. Use the cleanup-function skill for further guidance on how to do this.",
+  "template": "tools/task-runner/tasks/low-quality-matches-template.md",
   "accept_best_effort": true,
   "claude_command": "~/.claude/local/node_modules/.bin/claude"
 }

@@ -6,6 +6,7 @@ import subprocess
 import sys
 import os
 import signal
+import shlex
 from datetime import datetime
 from pathlib import Path
 from glob import glob
@@ -33,9 +34,35 @@ class TaskRunner:
         with open(taskfile_path, 'r') as f:
             self.taskfile = json.load(f)
 
+        # Validate taskfile structure
+        allowed_fields = {'task_name', 'script', 'prompt', 'template', 'claude_command', 'accept_best_effort'}
+        unexpected_fields = set(self.taskfile.keys()) - allowed_fields
+        if unexpected_fields:
+            raise ValueError(f"Unexpected fields in taskfile: {', '.join(sorted(unexpected_fields))}")
+
         self.task_name = self.taskfile['task_name']
         self.script = self.taskfile['script']
-        self.prompt_template = self.taskfile['prompt']
+
+        # Handle prompt vs template
+        has_prompt = 'prompt' in self.taskfile
+        has_template = 'template' in self.taskfile
+
+        if has_prompt and has_template:
+            raise ValueError("Task file cannot have both 'prompt' and 'template' fields")
+
+        if not has_prompt and not has_template:
+            raise ValueError("Task file must have either 'prompt' or 'template' field")
+
+        if has_template:
+            template_path = self.taskfile['template']
+            if not os.path.isfile(template_path):
+                raise ValueError(f"Template file not found or not a valid file: {template_path}")
+
+            with open(template_path, 'r') as f:
+                self.prompt_template = f.read()
+        else:
+            self.prompt_template = self.taskfile['prompt']
+
         self.claude_command = self.taskfile.get('claude_command', 'claude')
         self.accept_best_effort = self.taskfile.get('accept_best_effort', False)
 
@@ -101,9 +128,8 @@ class TaskRunner:
 
     def _run_claude(self, prompt):
         """Run Claude with the given prompt and log output."""
-        # Escape any quotes in the prompt for shell safety
-        escaped_prompt = prompt.replace('"', '\\"')
-        command = f'{self.claude_command} -p "{escaped_prompt}"'
+        # Properly escape the prompt for shell safety
+        command = f'{self.claude_command} -p {shlex.quote(prompt)}'
 
         print(f"Running: {command}")
 
@@ -404,7 +430,7 @@ def main():
         description='Task runner harness for Claude',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Example taskfile.json:
+Example taskfile.json (with inline prompt):
 {
   "task_name": "decompile",
   "script": "python3 tools/list_functions.py",
@@ -413,8 +439,21 @@ Example taskfile.json:
   "accept_best_effort": false  (optional, defaults to false)
 }
 
+Example taskfile.json (with template file):
+{
+  "task_name": "cleanup",
+  "script": "python3 tools/list_functions.py",
+  "template": "tools/task-runner/tasks/cleanup-template.md",
+  "claude_command": "claude",  (optional, defaults to "claude")
+  "accept_best_effort": false  (optional, defaults to false)
+}
+
 The script should output a JSON array of strings, e.g.:
 ["func_80001234", "func_80005678"]
+
+Task files must have either "prompt" (inline string) or "template" (file path),
+but not both. $ARGUMENT in the prompt or template will be replaced with the
+selected argument from the script output.
 
 When accept_best_effort is true, changes are committed even if the
 argument still appears in the script output (best effort fix).
