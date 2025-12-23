@@ -16,6 +16,7 @@ extern void *D_8008F7CC_903CC[];
 extern void *D_8008F7DC_903DC;
 extern void *D_8008F7E0_903E0;
 extern s32 D_8008F7D8_903D8;
+extern u16 D_8009ADE0_9B9E0;
 
 USE_ASSET(_459310);
 USE_ASSET(_41A1D0);
@@ -107,6 +108,20 @@ typedef struct {
     /* 0xAD6 */ u8 unkAD6;
 } AllocationStruct;
 
+typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ u8 pad4[0xC];
+} Func33800Entry;
+
+typedef struct {
+    /* 0x00 */ Func33800Entry *unk0;
+    /* 0x04 */ s16 unk4;
+    /* 0x06 */ s16 unk6;
+    /* 0x08 */ u8 pad8[4];
+    /* 0x0C */ u16 unkC;
+} Func33800Arg;
+
 // Element at offset 0x00, size 0x14 (20 bytes)
 typedef struct {
     /* 0x00 */ s16 unk0;
@@ -176,7 +191,54 @@ void func_8003365C_3425C(Func34574Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033688_34288);
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033800_34400);
+void func_80033800_34400(Func33800Arg *arg0) {
+    AllocationStruct *allocation;
+    s32 row;
+    s32 outer_cnt;
+    s32 idx;
+    s32 col;
+    s32 inner_cnt;
+    s32 saved_idx;
+    s32 entry_idx;
+    u16 temp;
+    u16 temp2;
+
+    allocation = getCurrentAllocation();
+
+    row = 0;
+    outer_cnt = 0;
+    idx = 0;
+
+    do {
+        for (col = 0, inner_cnt = 0, saved_idx = idx; inner_cnt < 0xB; inner_cnt++, col += 0x10) {
+            entry_idx = saved_idx + inner_cnt;
+            arg0->unk0[entry_idx].unk0 = allocation->unkABE + col;
+            arg0->unk0[entry_idx].unk2 = allocation->unkAC0 + row;
+            debugEnqueueCallback(8U, 0U, func_80012004_12C04, &arg0->unk0[entry_idx]);
+        }
+
+        row += 0x10;
+        outer_cnt += 1;
+        idx += 0xB;
+    } while (outer_cnt < 5);
+
+    temp = allocation->unkAC6;
+    if ((temp == 8) | (temp == 0xB)) {
+        arg0->unk6 = allocation->unkAC2 + 0x38;
+    } else {
+        arg0->unk6 = allocation->unkAC0 + 0x38;
+    }
+
+    if (!(D_8009ADE0_9B9E0 & 7)) {
+        temp2 = arg0->unkC + 1;
+        arg0->unkC = temp2;
+        if ((u32)(temp2 & 0xFFFF) >= 0x15U) {
+            arg0->unkC = 0x13U;
+        }
+    }
+
+    debugEnqueueCallback(8U, 1U, func_8000FED0_10AD0, &arg0->unk4);
+}
 
 void func_80033974_34574(Func34574Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
