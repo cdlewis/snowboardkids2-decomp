@@ -18,11 +18,12 @@ typedef struct {
 } DmaTransferEntry;
 
 typedef struct {
-    u32 unknown;
+    s32 fileSize;
     u32 gameCode;
     u16 companyCode;
     u8 gameName[16];
-    u8 extName[1]; // maybe wrong
+    u8 extName[4];
+    u8 padding[6];
 } controllerPackFileHeader;
 
 typedef struct {
@@ -44,7 +45,7 @@ extern OSContPad D_800A1C08_A2808[];
 void initControllerPack(s32);
 void func_8003A294_3AE94(s32, void *);
 void func_8003A52C_3B12C(s32, void *);
-void func_8003A864_3B464(s32, void *);
+void func_8003A864_3B464(s32, controllerPackFileHeader *);
 void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]);
 void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader *header);
 void controllerPackReadStatus(s32 arg0);
@@ -322,7 +323,50 @@ int func_8003A85C_3B45C(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A864_3B464);
+void func_8003A864_3B464(s32 arg0, controllerPackFileHeader *arg1) {
+    OSPfsState pfsState;
+    s32 controllerPort;
+    s32 var_v0;
+    s32 i;
+    s32 baseIndex;
+    s32 j;
+    u8 *gameName;
+    u8 *extName;
+    s32 packsOffset;
+
+    controllerPort = arg0 & 0xFFFF;
+    var_v0 = osPfsInitPak(&mainStack, &controllerPacks[controllerPort], controllerPort);
+    if (var_v0 == 0) {
+        i = 0;
+        packsOffset = (s32)&controllerPacks[controllerPort] - (s32)controllerPacks;
+        gameName = (u8 *)pfsState.game_name;
+        extName = (u8 *)pfsState.ext_name;
+        baseIndex = controllerPort << 4;
+        do {
+            if (osPfsFileState((OSPfs *)((s32)controllerPacks + packsOffset), i, &pfsState) != 0) {
+                arg1[baseIndex + i].gameCode = 0;
+                arg1[baseIndex + i].companyCode = 0;
+            } else {
+                arg1[baseIndex + i].fileSize = pfsState.file_size;
+                j = 0;
+                arg1[baseIndex + i].gameCode = pfsState.game_code;
+                arg1[baseIndex + i].companyCode = pfsState.company_code;
+                do {
+                    arg1[baseIndex + i].gameName[j] = gameName[j];
+                    j++;
+                } while (j < 16);
+                j = 0;
+                do {
+                    arg1[baseIndex + i].extName[j] = extName[j];
+                    j++;
+                } while (j < 4);
+            }
+            i++;
+        } while (i < 16);
+        var_v0 = 0;
+    }
+    osSendMesg(&D_800A1888_A2488, (OSMesg)var_v0, 1);
+}
 
 void func_8003A9DC_3B5DC(void) {
 }
@@ -350,7 +394,7 @@ void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[
         if (!err) {
             header->companyCode = 0;
             header->gameCode = 0;
-            header->unknown = 0;
+            header->fileSize = 0;
         }
     }
 
