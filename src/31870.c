@@ -54,6 +54,8 @@ typedef struct {
     u8 unk799;
     u8 unk79A;
     u8 unk79B;
+    u8 unk79C;
+    s8 unk79D;
 } func_800329A8_335A8_allocation;
 
 typedef struct {
@@ -316,7 +318,6 @@ void func_80032DBC_339BC(func_80032F90_33B90_arg *arg0);
 void func_800319C8_325C8(func_800319C8_325C8_arg *arg0);
 void func_80031944_32544(func_80031944_32544_arg *arg0);
 void func_80031CE8_328E8(void *arg0);
-void func_80031DE4_329E4(void);
 void func_80031248_31E48(func_80031248_31E48_arg *arg0);
 void func_80031100_31D00(func_80031100_31D00_arg *arg0);
 void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0);
@@ -863,6 +864,8 @@ typedef struct {
     u8 unk20;
 } func_80031D40_32940_arg;
 
+void func_80031DE4_329E4(func_80031D40_32940_arg *arg0);
+
 void func_80031D40_32940(func_80031D40_32940_arg *arg0) {
     s32 i;
     void *temp_s0;
@@ -884,7 +887,68 @@ void func_80031D40_32940(func_80031D40_32940_arg *arg0) {
     setCallback(&func_80031DE4_329E4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031DE4_329E4);
+void func_80031DE4_329E4(func_80031D40_32940_arg *arg0) {
+    func_800329A8_335A8_allocation *allocation;
+    func_80031D40_32940_arg_element *s0;
+    u8 state;
+    s16 s4;
+    s16 s3;
+
+    allocation = getCurrentAllocation();
+
+    if (allocation->unk79B < 15) {
+        s4 = 0xFF;
+        s3 = 8;
+        s0 = arg0->unk0;
+
+    loop:
+        state = allocation->unk79B;
+        if ((state == 2) | (state == 5)) {
+            if (arg0->unk20 < 16) {
+                s0->unkA = s0->unkA - 8;
+            } else {
+                s0->unkA = s0->unkA + 8;
+            }
+        } else {
+            arg0->unk20 = 0;
+            s0->unkA = s4;
+            state = allocation->unk79B;
+            if ((state == 4) & (state == 7)) {
+                if (allocation->unk77C & 1) {
+                    s0->unkD = s4;
+                } else {
+                    s0->unkD = 0;
+                }
+            }
+        }
+
+        state = allocation->unk79B;
+        if (state >= 5) {
+            s0->unk2 = s3;
+        } else {
+            s0->unk2 = -24;
+        }
+
+        if (allocation->unk79B == 3) {
+            if (allocation->unk79D < 0) {
+                s0->unk2 = s3;
+            }
+        }
+
+        debugEnqueueCallback(8, 0, func_80012004_12C04, s0);
+        s0++;
+        if ((s32)s0 < (s32)(arg0->unk0 + 2)) {
+            goto loop;
+        }
+
+        state = allocation->unk79B;
+        if ((state != 4) & (state != 7)) {
+            if (state != 3) {
+                arg0->unk20 = (arg0->unk20 + 1) & 0x1F;
+            }
+        }
+    }
+}
 
 void func_80031F68_32B68(func_80031F68_32B68_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
