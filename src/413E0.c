@@ -33,14 +33,24 @@ extern void func_80040870_41470(void);
 extern void func_8004106C_41C6C(void);
 
 typedef struct {
-    u8 unk0[0x14];
-    s32 unk14;
-    u8 pad[0x24];
+    Mat3x3Padded rotationMatrix; // 0x00-0x1F, with position at 0x14-0x1F
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    s32 unk2C;
+    u8 pad[0xC];
     Mat3x3Padded unk3C;
-    u8 pad2[0x1C];
+    void *unk5C;
+    void *unk60;
+    void *unk64;
+    s32 unk68;
+    u8 pad2[0xC];
     Mat3x3Padded unk78;
     s32 unk98;
-    u8 pad3[0x18];
+    void *unk9C;
+    void *unkA0;
+    s32 unkA4;
+    u8 pad3[0xC];
     s16 unkB4;
     s16 unkB6;
     s16 unkB8;
@@ -142,42 +152,42 @@ void func_80040974_41574(void *arg0) {
     }
 }
 
-void func_800409B4_415B4(void *arg0) {
+void func_800409B4_415B4(func_80040B4C_4174C_arg *obj) {
     s32 sp10[8];
     s32 sp30[4]; // Extra padding for stack alignment
-    s32 *temp_s0;
-    void *temp_s2;
-    D_80090F90_91B90_item *temp_s3;
+    s32 *matrix;
+    GameState *gameState;
+    D_80090F90_91B90_item *positionData;
     u16 angle;
 
-    temp_s2 = getCurrentAllocation();
-    temp_s3 = func_80055D10_56910(((u8 *)temp_s2)[0x5C]);
-    ((s32 *)arg0)[0x20 / 4] = (s32)((u8 *)func_80055E68_56A68(((u8 *)temp_s2)[0x5C]) + 0x50);
-    ((s32 *)arg0)[0x24 / 4] = (s32)func_80055DC4_569C4(((u8 *)temp_s2)[0x5C]);
-    ((s32 *)arg0)[0x28 / 4] = (s32)func_80055DF8_569F8(((u8 *)temp_s2)[0x5C]);
-    ((s32 *)arg0)[0x2C / 4] = 0;
-    angle = func_800625A4_631A4((u8 *)temp_s2 + 0x30, sp30);
-    createYRotationMatrix(arg0, (angle + temp_s3->unk8) & 0xFFFF);
-    rotateVectorY(&D_800907EC_913EC, (s16)(angle + temp_s3->unk8), (u8 *)arg0 + 0x14);
-    ((s32 *)arg0)[0x14 / 4] = ((s32 *)arg0)[0x14 / 4] + temp_s3->unk0;
-    ((s32 *)arg0)[0x1C / 4] = ((s32 *)arg0)[0x1C / 4] + temp_s3->unk4;
-    ((s32 *)arg0)[0x18 / 4] = sp30[1]; // sp34
-    ((s32 *)arg0)[0x5C / 4] = (s32)((u8 *)func_80055E68_56A68(((u8 *)temp_s2)[0x5C]) + 0x60);
-    temp_s0 = sp10;
-    ((void **)arg0)[0x60 / 4] = (void *)((s32 *)arg0)[0x24 / 4];
-    ((void **)arg0)[0x64 / 4] = (void *)((s32 *)arg0)[0x28 / 4];
-    ((s32 *)arg0)[0x68 / 4] = ((s32 *)arg0)[0x2C / 4];
-    memcpy(temp_s0, identityMatrix, 0x20);
-    temp_s0[6] = 0x180000;
-    func_8006B084_6BC84(temp_s0, arg0, (u8 *)arg0 + 0x3C);
-    ((void **)arg0)[0x9C / 4] = (void *)((s32 *)arg0)[0x24 / 4];
-    ((void **)arg0)[0xA0 / 4] = (void *)((s32 *)arg0)[0x28 / 4];
-    ((s32 *)arg0)[0xA4 / 4] = ((s32 *)arg0)[0x2C / 4];
-    temp_s0[6] = 0x160000;
-    temp_s0[7] = 0xA3333;
-    func_8006B084_6BC84(temp_s0, arg0, (u8 *)arg0 + 0x78);
-    ((s16 *)arg0)[0xB4 / 2] = 0;
-    ((s16 *)arg0)[0xB6 / 2] = 0;
+    gameState = (GameState *)getCurrentAllocation();
+    positionData = func_80055D10_56910(gameState->memoryPoolId);
+    obj->unk20 = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x50);
+    obj->unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
+    obj->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
+    obj->unk2C = 0;
+    angle = func_800625A4_631A4((u8 *)gameState + 0x30, sp30);
+    createYRotationMatrix(&obj->rotationMatrix, (angle + positionData->unk8) & 0xFFFF);
+    rotateVectorY(&D_800907EC_913EC, (s16)(angle + positionData->unk8), &obj->rotationMatrix.unk14);
+    obj->rotationMatrix.unk14 = obj->rotationMatrix.unk14 + positionData->unk0;
+    obj->rotationMatrix.unk1C = obj->rotationMatrix.unk1C + positionData->unk4;
+    obj->rotationMatrix.unk18 = sp30[1]; // sp34
+    obj->unk5C = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x60);
+    matrix = sp10;
+    obj->unk60 = obj->unk24;
+    obj->unk64 = obj->unk28;
+    obj->unk68 = obj->unk2C;
+    memcpy(matrix, identityMatrix, 0x20);
+    matrix[6] = 0x180000;
+    func_8006B084_6BC84(matrix, obj, &obj->unk3C);
+    obj->unk9C = obj->unk24;
+    obj->unkA0 = obj->unk28;
+    obj->unkA4 = obj->unk2C;
+    matrix[6] = 0x160000;
+    matrix[7] = 0xA3333;
+    func_8006B084_6BC84(matrix, obj, &obj->unk78);
+    obj->unkB4 = 0;
+    obj->unkB6 = 0;
     setCleanupCallback(func_80040D48_41948);
     setCallback(func_80040B4C_4174C);
 }
@@ -196,7 +206,7 @@ void func_80040B4C_4174C(func_80040B4C_4174C_arg *arg0) {
                 goto block_else;
             }
             arg0->unkB6++;
-            func_80056B7C_5777C(&arg0->unk14, 0xA);
+            func_80056B7C_5777C(&arg0->rotationMatrix.unk14, 0xA);
             /* fallthrough */
         case 1:
             if (s2->gamePaused == 0) {
