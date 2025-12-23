@@ -488,6 +488,7 @@ typedef struct {
 
 void func_800BC084_AE444(func_800BC3D0_AE790_arg *);
 void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *);
+void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *);
 
 typedef struct {
     u8 _pad[0x24];
@@ -567,7 +568,80 @@ void func_800BC084_AE444(func_800BC3D0_AE790_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC1AC_AE56C);
+void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *arg0) {
+    Allocation_AE790 *allocation;
+    s32 i;
+    s16 rotation[3][3];
+    s16 pad2[4];
+    void (*callback)(func_800BC3D0_AE790_arg *);
+    s16 timer;
+    u8 state;
+    void *posPtr;
+
+    (void)pad2;
+
+    allocation = getCurrentAllocation();
+
+    if (allocation->unk76 == 0) {
+        if (arg0->unk48 != 0) {
+            arg0->unk14 = arg0->unk14 + arg0->unk3C;
+            arg0->unk18 = arg0->unk18 + arg0->unk40;
+            arg0->unk1C = arg0->unk1C + arg0->unk44;
+            arg0->unk48--;
+        } else {
+            state = arg0->unk4E;
+            switch (state) {
+            case 3:
+                createXRotationMatrix(rotation, 0xF300);
+                transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
+                callback = func_800BC084_AE444;
+                timer = 0x78;
+                arg0->unk48 = timer;
+                setCallbackWithContinue(callback);
+                break;
+            case 4:
+                createXRotationMatrix(rotation, 0xE00);
+                transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
+                callback = func_800BC3D0_AE790;
+                arg0->unk48 = 0xA;
+                setCallbackWithContinue(callback);
+                break;
+            case 5:
+                createXRotationMatrix(rotation, 0xFC00);
+                transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
+                callback = func_800BC084_AE444;
+                timer = 0x78;
+                arg0->unk48 = timer;
+                setCallbackWithContinue(callback);
+                break;
+            case 6:
+                createXRotationMatrix(rotation, 0);
+                transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
+                callback = func_800BC3D0_AE790;
+                arg0->unk48 = 0xA;
+                setCallbackWithContinue(callback);
+                break;
+            case 7:
+            case 8:
+                func_80042340_42F40(&arg0->unk14);
+                func_80069CF8_6A8F8();
+                break;
+            default:
+                break;
+            }
+        }
+        posPtr = &arg0->unk14;
+        func_8005C250_5CE50(posPtr, -1, 0x300000);
+        arg0->unk4A += D_800BCB70_AEF30[arg0->unk4E];
+        arg0->unk4C += D_800BCB84_AEF44[arg0->unk4E];
+    }
+
+    createCombinedRotationMatrix(arg0, arg0->unk4A, arg0->unk4C);
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+    }
+}
 
 void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *arg0) {
     Allocation_AE790 *allocation;
