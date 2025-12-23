@@ -14,7 +14,10 @@ USE_ASSET(_4237C0);
 USE_ASSET(_426EF0);
 
 typedef struct {
-    u8 pad0[0xA];
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
     s16 unkA;
     u8 unkC;
     u8 unkD;
@@ -31,10 +34,9 @@ typedef struct {
     s16 unk0;
     s16 unk2;
     void *unk4;
-    u8 pad8[4];
+    void *unk8;
     func_80037A64_UnkCUnion unkC;
-    u8 unkE;
-    u8 unkF;
+    s16 unkE;
     u8 unk10;
     u8 unk11;
     u8 unk12;
@@ -83,6 +85,10 @@ typedef struct {
 } func_80037F14_alloc;
 
 extern u8 D_8008FD30_90930[];
+extern void *D_8008FD8C_9098C;
+extern void *D_8008FD9C_9099C;
+extern void *D_8008FDAC_909AC;
+extern void *D_8008FDBC_909BC;
 extern void *D_8008FE54_90A54[];
 
 void func_80037E40_38A40(func_80037E40_38A40_arg *);
@@ -140,7 +146,67 @@ void func_80037874_38474(func_80037874_38474_arg *arg0) {
     arg0->unk18 = freeNodeMemory(arg0->unk18);
 }
 
-INCLUDE_ASM("asm/nonmatchings/38310", func_800378AC_384AC);
+void func_80037BC4_387C4(func_80037BC4_387C4_arg *);
+void func_80037A64_38664(func_80037A64_Arg0Struct *);
+
+#define ARG0 ((func_80037A64_Arg0Struct *)arg0)
+
+void func_800378AC_384AC(void *arg0) {
+    void *s1;
+    s32 i;
+    s32 v1;
+    u8 temp;
+
+    getCurrentAllocation();
+    s1 = dmaRequestAndUpdateStateWithSize(&_4196E0_ROM_START, &_419C60_ROM_START, 0xBB8);
+    ARG0->unkD8 = func_80035F80_36B80(1);
+    setCleanupCallback(func_80037BC4_387C4);
+
+    for (i = 0; i < 6; i++) {
+        v1 = i & 1;
+        ARG0->entries10[i].unk0 = (v1 * 0x38) + 0x18;
+        ARG0->entries10[i].unk2 = ((i / 2) << 5) - 0x20;
+        ARG0->entries10[i].unk4 = s1;
+        ARG0->entries10[i].unk8 = 1;
+        ARG0->entries10[i].unkA = 0;
+        ARG0->entries10[i].unkC = 0;
+
+        if (i < 2) {
+            temp = D_800AFE8C_A71FC->unk1F;
+        } else if (i < 4) {
+            temp = D_800AFE8C_A71FC->unk20;
+        } else {
+            temp = (D_800AFE8C_A71FC->unk21 + 1) & 1;
+        }
+        v1 = i & 1;
+        ARG0->entries10[i].unkD = ((temp + v1) & 1) | 2;
+
+        ARG0->entries14[i].unk0 = (v1 * 0x3A) + 0x16;
+        ARG0->entries14[i].unk2 = ARG0->entries10[i].unk2 + 2;
+        ARG0->entries14[i].unk8 = ARG0->unkD8;
+        ARG0->entries14[i].unkC.asShort = 0;
+        ARG0->entries14[i].unkE = 0xFF;
+        ARG0->entries14[i].unk10 = 5;
+
+        if (i < 4) {
+            if (v1 != 0) {
+                ARG0->entries14[i].unk4 = &D_8008FD9C_9099C;
+            } else {
+                ARG0->entries14[i].unk4 = &D_8008FD8C_9098C;
+            }
+        } else {
+            if (v1 != 0) {
+                ARG0->entries14[i].unk4 = &D_8008FDBC_909BC;
+            } else {
+                ARG0->entries14[i].unk4 = &D_8008FDAC_909AC;
+            }
+        }
+    }
+
+    setCallback(func_80037A64_38664);
+}
+
+#undef ARG0
 
 void func_80037A64_38664(func_80037A64_Arg0Struct *arg0) {
     func_80037F14_alloc *alloc;
