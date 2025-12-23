@@ -13,6 +13,7 @@ With --exhaustive, outputs all functions ranked by badness.
 import json
 import sys
 import re
+import subprocess
 from pathlib import Path
 from typing import List, Tuple, Dict, NamedTuple
 from collections import defaultdict
@@ -96,6 +97,26 @@ def analyze_file_for_violations(filepath: str) -> Dict[str, FunctionStats]:
     return function_stats
 
 
+def is_git_ignored(filepath: Path) -> bool:
+    """
+    Check if a file is ignored by git.
+
+    Returns:
+        True if the file is git-ignored, False otherwise
+    """
+    try:
+        result = subprocess.run(
+            ['git', 'check-ignore', '-q', str(filepath)],
+            capture_output=True,
+            timeout=1
+        )
+        # Exit code 0 means the file IS ignored
+        return result.returncode == 0
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        # If git is not available or times out, don't skip the file
+        return False
+
+
 def analyze_path(path: str) -> Dict[Tuple[str, str], FunctionStats]:
     """
     Analyze a file or directory.
@@ -112,6 +133,10 @@ def analyze_path(path: str) -> Dict[Tuple[str, str], FunctionStats]:
         files = list(p.rglob('*.c'))
 
     for filepath in files:
+        # Skip git-ignored files
+        if is_git_ignored(filepath):
+            continue
+
         stats = analyze_file_for_violations(str(filepath))
         for func_name, func_stats in stats.items():
             results[(str(filepath), func_name)] = func_stats
