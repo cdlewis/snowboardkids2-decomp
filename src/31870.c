@@ -1363,37 +1363,37 @@ void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0) {
 }
 
 void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0) {
-    func_80032DE8_339E8_asset *allocation;
+    func_80032DE8_339E8_asset *gameState;
     s32 i;
-    func_80032B0C_3370C_arg_element *ptr;
+    func_80032B0C_3370C_arg_element *element;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
     i = 0;
-    ptr = arg0->elements;
+    element = arg0->elements;
 
     while (i < 4) {
         arg0->unk84[i]++;
 
-        if (allocation->unk79C == 1) {
-            ptr[i].unk2 -= 10;
+        if (gameState->unk79C == 1) {
+            element[i].unk2 -= 10;
         } else {
-            ptr[i].unk2 += 10;
+            element[i].unk2 += 10;
         }
 
-        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &ptr[i]);
+        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &element[i]);
         i++;
     }
 
     if (arg0->unk84[0] == 4) {
-        u8 *clearPtr;
-        allocation->unk788[19] = 0x10;
+        u8 *frameCounter;
+        gameState->unk788[19] = 0x10;
         i = 3;
-        clearPtr = (u8 *)arg0 + 3;
+        frameCounter = (u8 *)arg0 + 3;
 
         do {
-            clearPtr[0x84] = 0;
+            frameCounter[0x84] = 0;
             i--;
-            clearPtr--;
+            frameCounter--;
         } while (i >= 0);
 
         setCallback(&func_80032708_33308);
