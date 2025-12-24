@@ -3,5 +3,5 @@
   "script": "python3 tools/detect_low_quality_matches.py src --json",
   "template": "tools/task-runner/tasks/low-quality-matches-template.md",
   "accept_best_effort": true,
-  "claude_command": "~/.claude/local/node_modules/.bin/claude"
+  "claude_command": "~/.claude/local/node_modules/.bin/claude --model opus"
 }

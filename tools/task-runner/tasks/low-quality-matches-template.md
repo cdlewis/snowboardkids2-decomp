@@ -4,19 +4,23 @@
 
 Look at the $ARGUMENT. Think about what its purpose is in the broader project and how it relates to other functions (as a caller / callee).
 
-Update the function to preserve the 100% match while better reflecting what the original developers would've written.
+Update the function to better reflect what the original developers would've written. This means proper structs, proper struct / array accesses, proper variable names, etc.
 
-Once you have fixed the header issue, run the following command to verify you haven't broken the build:
+Make sure to preserve the 100% match while doing this. It may require several iterations to get this balance right.
+
+Once you have cleaned up the function, run the following command to verify you haven't broken the build:
 
 ```
 ./tools/build-and-verify.sh
 ```
 
+If you have broken the build. Try to fix it while preserving your changes. This may require several iterations but that's fine.
+
 Commit your changes when you're done.
 
 ## Unable to clean up the function
 
-If you're unable to clean up the function without breaking the build, revert all of your changes to ensure the build remains clean then exit.
+Make several attempts to clean up the function without breaking the build. If you're unable to make progress after 10 attempts, revert all of your changes to ensure the build remains clean then exit.
 
 ## Safe Refactoring
 
