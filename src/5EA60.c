@@ -430,9 +430,9 @@ s32 func_80060950_61550(func_80060950_61550_arg *data, s16 index) {
 }
 
 s32 func_8006097C_6157C(func_8006097C_6157C_arg *table, s32 index) {
-    s32 adjusted_index = (index << 16) >> 14;
-    func_8006097C_6157C_arg_item *entry = (func_8006097C_6157C_arg_item *)((s8 *)table + adjusted_index);
-    u16 *data_ptr = (u16 *)((s8 *)table + entry->unk8);
+    s32 entryOffset = (index << 16) >> 14;
+    func_8006097C_6157C_arg_item *entry = (func_8006097C_6157C_arg_item *)((s8 *)table + entryOffset);
+    u16 *countPtr = (u16 *)((s8 *)table + entry->countOffset);
 
-    return *data_ptr;
+    return *countPtr;
 }

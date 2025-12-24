@@ -3,7 +3,7 @@
 
 typedef struct {
     u8 padding[0x8];
-    u32 unk8;
+    u32 countOffset;
 } func_8006097C_6157C_arg_item;
 
 typedef struct {
