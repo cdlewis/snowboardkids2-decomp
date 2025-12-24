@@ -192,10 +192,10 @@ fx_t *D_800A64F4_A70F4;
 s32 *D_800A64F8_A70F8;
 ALHeap audio_heap;
 // FIFO command queue variables (ring buffer)
-s32 D_800A6520_A7120;   // fifo_read_index
-s32 D_800A6524_A7124;   // fifo_write_index
-s32 D_800A6528_A7128;   // fifo_capacity
-void *D_800A652C_A712C; // fifo_buffer
+s32 D_800A6520_A7120;     // fifo_start (read index)
+s32 D_800A6524_A7124;     // fifo_current (write index)
+s32 D_800A6528_A7128;     // fifo_limit (capacity)
+fifo_t *D_800A652C_A712C; // fifo_addr (buffer)
 
 void __MusIntFifoProcess(void);
 void func_80073738_74338(channel_t *cp, int x);
@@ -1258,7 +1258,7 @@ void __MusIntFifoOpen(s32 commands) {
 
 void __MusIntFifoProcess(void) {
     while (D_800A6520_A7120 != D_800A6524_A7124) {
-        __MusIntFifoProcessCommand(&((fifo_t *)D_800A652C_A712C)[D_800A6520_A7120]);
+        __MusIntFifoProcessCommand(&D_800A652C_A712C[D_800A6520_A7120]);
         D_800A6520_A7120++;
         if (D_800A6520_A7120 == D_800A6528_A7128) {
             D_800A6520_A7120 = 0;
@@ -1291,7 +1291,7 @@ s32 func_80073058_73C58(u8 *arg0) {
         return 0;
     }
 
-    __MusIntMemMove(arg0, (u8 *)D_800A652C_A712C + (current_idx * 8), 8);
+    __MusIntMemMove(arg0, (u8 *)&D_800A652C_A712C[current_idx], 8);
     D_800A6524_A7124 = next_idx;
 
     return 1;
