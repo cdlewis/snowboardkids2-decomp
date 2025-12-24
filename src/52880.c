@@ -96,7 +96,7 @@ typedef struct {
 } func_80054CCC_558CC_arg;
 
 void func_800545F8_551F8(Struct_52880 *arg0);
-void func_80054658_55258(void);
+void func_80054658_55258(Struct_52880 *arg0);
 void func_80054144_54D44(Struct_52880 *arg0);
 void func_80053FE0_54BE0(Struct_52880 *arg0);
 void func_80053E90_54A90(Struct_52880 *arg0);
@@ -1494,7 +1494,53 @@ void func_800545F8_551F8(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80054658_55258);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80054658_55258);
+void func_80054658_55258(Struct_52880 *arg0) {
+    Alloc_55650 *alloc;
+    s32 sp18[3];
+    s32 pad1[15]; /* 60 bytes of padding */
+    void *s1;
+    s32 temp_v0;
+    s32 i;
+
+    alloc = (Alloc_55650 *)getCurrentAllocation();
+
+    if (alloc->unk76 == 0) {
+        func_80050604_51204(&arg0->unk4, &arg0->velY, 6);
+
+        arg0->velZ -= 0x3000;
+        s1 = &alloc->unk30;
+        arg0->unk4.unk0 += arg0->velY;
+        arg0->unk4.unk4 += arg0->velZ;
+        arg0->unk4.unk8 += arg0->velX;
+
+        arg0->unk40 = func_80060A3C_6163C(s1, arg0->unk40, &arg0->unk4);
+        func_80060CDC_618DC(s1, arg0->unk40, &arg0->unk4, 0x80000, sp18);
+
+        if ((sp18[0] != 0) || (sp18[2] != 0)) {
+            arg0->unk4.unk0 += sp18[0];
+            arg0->unk4.unk8 += sp18[2];
+            arg0->unk4E++;
+        }
+
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+
+        if (arg0->unk4.unk4 < temp_v0 + 0x100000) {
+            arg0->unk4.unk4 = temp_v0 + 0x100000;
+            arg0->unk4E += 1;
+        }
+
+        func_80054568_55168(arg0);
+    }
+
+    if (arg0->unk4E != 0) {
+        func_80042340_42F40(&arg0->unk4);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+    }
+}
 
 void func_800547E0_553E0(s16 arg0, s32 arg1) {
     Struct_52880 *task;
