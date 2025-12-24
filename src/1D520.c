@@ -29,6 +29,22 @@ typedef struct {
     u8 padding3[0x8];
 } allocation_1D520;
 
+typedef struct {
+    u8 padding1[0x938];           // 0x000
+    EepromSaveData_type slots[4]; // 0x938
+    u8 padding2[0x1C];            // 0xAA8
+    u16 unkAC4;                   // 0xAC4
+    u8 padding3[2];               // 0xAC6
+    u8 unkAC8;                    // 0xAC8
+    u8 padding4[3];               // 0xAC9
+    u8 unkACC;                    // 0xACC
+    u8 unkACD;                    // 0xACD
+    u8 slotFlags[8];              // 0xACE
+} SaveData;
+
+extern u8 D_8008D9B0_8E5B0[];
+extern s32 func_8001E104_1ED04(EepromSaveData_type *arg0);
+
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 
 void func_8001CD58_1D958(void) {
@@ -110,7 +126,80 @@ void func_8001DEBC_1EABC(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1D520", func_8001DF5C_1EB5C);
+void func_8001DF5C_1EB5C(u16 arg0, s32 arg1) {
+    SaveData *allocation;
+    s32 i;
+    s32 sum;
+    s32 savedChecksum;
+    u16 slotIndex;
+    u8 temp;
+    s32 funcResult;
+    u8 *dataPtr;
+    s32 limit;
+
+    allocation = (SaveData *)getCurrentAllocation();
+
+    if (arg1 == 0) {
+        i = 0;
+        slotIndex = arg0 & 0xFFFF;
+
+        while (i < 8) {
+            if (allocation->slots[slotIndex].header_data[i] != D_8008D9B0_8E5B0[i]) {
+                allocation->unkACD++;
+                break;
+            }
+            i++;
+        }
+
+        if (i == 8) {
+            limit = 0x58;
+            slotIndex = arg0 & 0xFFFF;
+            dataPtr = allocation->slots[slotIndex].header_data;
+            savedChecksum = allocation->slots[slotIndex].checksum;
+            sum = 0;
+            i = 0;
+            allocation->slots[slotIndex].checksum = 0;
+
+            while (i < limit) {
+                sum += *dataPtr;
+                i++;
+                dataPtr++;
+            }
+
+            slotIndex = arg0 & 0xFFFF;
+            if (sum != savedChecksum) {
+                allocation->unkACD++;
+
+            } else {
+
+                funcResult = func_8001E104_1ED04(&allocation->slots[slotIndex]);
+                allocation->unkACD = 0;
+                if (!(funcResult & 0xFF)) {
+                    allocation->unkACC++;
+                    allocation->slotFlags[slotIndex] = 1;
+
+                    if (allocation->unkAC8 >= 3) {
+                        allocation->unkAC8 = arg0;
+                    }
+                } else {
+                    allocation->slotFlags[slotIndex] = 0;
+                }
+            }
+        }
+    } else {
+        allocation->unkACD++;
+    }
+
+    temp = allocation->unkACD;
+    if (temp != 0) {
+        if (temp < 3) {
+            allocation->unkAC4 = allocation->unkAC4 - 1;
+            return;
+        }
+        allocation->unkACD = 0;
+        allocation->slotFlags[arg0 & 0xFFFF] = 0;
+    }
+}
 
 s32 func_8001E104_1ED04(EepromSaveData_type *arg0) {
     s32 temp_a1;
