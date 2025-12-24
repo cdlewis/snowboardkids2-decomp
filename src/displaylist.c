@@ -93,8 +93,8 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80061D6C_6296C);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800620D0_62CD0);
 
-s16 func_80062254_62E54(GameDataLayout *arg0, u16 arg1) {
-    return ((func_80062C98_63898_arg *)arg0->section3Data)[arg1].unkA;
+s16 func_80062254_62E54(GameDataLayout *gameData, u16 index) {
+    return ((func_80062C98_63898_arg *)gameData->section3Data)[index].unkA;
 }
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);

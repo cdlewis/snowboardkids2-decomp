@@ -162,4 +162,4 @@ typedef struct {
     u8 _pad2[0x18];
 } func_80062C98_63898_arg;
 
-s16 func_80062254_62E54(GameDataLayout *arg0, u16 arg1);
+s16 func_80062254_62E54(GameDataLayout *gameData, u16 index);
