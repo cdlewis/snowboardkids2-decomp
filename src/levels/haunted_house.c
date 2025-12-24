@@ -715,23 +715,23 @@ void func_800BC72C_B041C(s16 *arg0) {
     setCallback(func_800BC750_B0440);
 }
 
-void func_800BC750_B0440(s16 *arg0) {
+void func_800BC750_B0440(s16 *targetLap) {
     s32 i;
-    void *allocation;
-    void *base;
-    u32 offset;
-    s16 value;
+    GameState *gameState;
+    Player *player;
+    u32 playerOffset;
+    s16 lapValue;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    for (i = 0; i < *(u8 *)((u8 *)allocation + 0x5F); i++) {
-        offset = (u32)(i * 0xBE8);
-        base = (void *)((u32)offset + (u32) * (u32 *)((u8 *)allocation + 0x10));
-        value = *arg0;
+    for (i = 0; i < gameState->unk5F; i++) {
+        playerOffset = (u32)(i * sizeof(Player));
+        player = (Player *)((u32)playerOffset + (u32)gameState->players);
+        lapValue = *targetLap;
 
-        if (*(u8 *)((u8 *)base + 0xBC5) == value) {
-            if ((u32)(*(u16 *)((u8 *)base + 0xB94) - 7) < 4) {
-                *arg0 = value + 1;
+        if (player->unkBC5 == lapValue) {
+            if ((u32)(player->unkB94 - 7) < 4) {
+                *targetLap = lapValue + 1;
                 func_80058530_59130(0xC, 6);
             }
         }
