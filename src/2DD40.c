@@ -174,11 +174,11 @@ void func_8002DE44_2EA44(Func2E024Arg *arg0) {
 }
 
 void func_8002E024_2EC24(Func2E024Arg *arg0) {
-    GameState *allocation;
+    GameState *gameState;
     s32 i;
     struct Func2E024Element *elements;
 
-    allocation = (GameState *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
     switch (arg0->unkC2) {
         case 0x62:
@@ -204,11 +204,11 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
     elements = (struct Func2E024Element *)arg0;
     for (i = 0; i < arg0->unkD5; i++) {
         func_8002A2D0_2AED0((Func297D8Arg *)&elements[i]);
-        ((s32 *)allocation)[0x102 + i] = elements[i].matrix.unk14;
-        ((s32 *)allocation)[0x104 + i] = elements[i].matrix.unk1C;
+        gameState->unk408[i] = elements[i].matrix.unk14;
+        gameState->unk410[i] = elements[i].matrix.unk1C;
     }
 
-    if (allocation->unk42A == 0x11) {
+    if (gameState->unk42A == 0x11) {
         func_8002EBB0_2F7B0(arg0);
         arg0->unkC8 = func_8002E024_2EC24;
         setCallback(func_8002BEF4_2CAF4);
