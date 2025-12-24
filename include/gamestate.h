@@ -6,6 +6,12 @@
 #include "displaylist.h"
 
 typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} JointPosition;
+
+typedef struct {
     loadAssetMetadata_arg asset;
     u8 padding[0x24];
 } GameStateUnk44_Item;
@@ -91,7 +97,8 @@ typedef struct {
     Mat3x3Padded unk970;
     Mat3x3Padded unk990;
     func_8005E800_5F400_arg unk9B0;
-    u8 padding2a_5[0x80];
+    u8 padding9FC[0x14];
+    JointPosition jointPositions[9];
     s32 unkA7C;
     s32 _padA80;
     s32 unkA84;

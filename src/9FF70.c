@@ -3453,39 +3453,39 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B8894_A8744);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B9500_A93B0);
 
-void func_800B98CC_A977C(Player *arg0) {
-    void *alloc;
-    void *allocPlus30;
+void func_800B98CC_A977C(Player *player) {
+    GameState *gameState;
+    GameDataLayout *gameData;
     s32 i;
     s32 offset;
-    u8 *ptr;
-    void *addrPtr;
+    u8 *jointPtr;
+    JointPosition *jointPosAddr;
     s32 temp;
 
-    alloc = getCurrentAllocation();
+    gameState = getCurrentAllocation();
     i = 0;
-    allocPlus30 = (void *)((u8 *)alloc + 0x30);
+    gameData = &gameState->gameData;
     offset = 0xA10;
-    ptr = (u8 *)arg0;
+    jointPtr = (u8 *)player;
 
     do {
-        addrPtr = (u8 *)arg0 + offset;
-        *(volatile s32 *)(ptr + 0xA10) = arg0->unk970.unk14 + *(s32 *)((u8 *)&D_800BA348_AA1F8 + offset);
-        *(volatile s32 *)(ptr + 0xA18) = arg0->unk970.unk1C + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
+        jointPosAddr = (JointPosition *)((u8 *)player + offset);
+        *(volatile s32 *)(jointPtr + 0xA10) = player->unk970.unk14 + *(s32 *)((u8 *)&D_800BA348_AA1F8 + offset);
+        *(volatile s32 *)(jointPtr + 0xA18) = player->unk970.unk1C + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
 
-        temp = func_80059E90_5AA90((void *)arg0, allocPlus30, arg0->unkB94, addrPtr);
-        *(volatile s32 *)(ptr + 0xA14) = func_8005CFC0_5DBC0(allocPlus30, temp, addrPtr, 0x100000);
+        temp = func_80059E90_5AA90((void *)player, gameData, player->unkB94, jointPosAddr);
+        *(volatile s32 *)(jointPtr + 0xA14) = func_8005CFC0_5DBC0(gameData, temp, jointPosAddr, 0x100000);
 
         i++;
         offset += 0xC;
-        ptr += 0xC;
+        jointPtr += 0xC;
     } while (i < 9);
 
-    arg0->unkBC1 = 1;
+    player->unkBC1 = 1;
 
-    if (!(arg0->unkB84 & 0x800000)) {
+    if (!(player->unkB84 & 0x800000)) {
         for (i = 0; i < 4; i++) {
-            debugEnqueueCallback(i, 1, func_800B9500_A93B0, (void *)arg0);
+            debugEnqueueCallback(i, 1, func_800B9500_A93B0, (void *)player);
         }
     }
 }
