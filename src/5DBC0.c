@@ -56,7 +56,7 @@ extern u8 D_80094180_94D80[];
 extern u8 D_800941BC_94DBC[];
 extern s32 func_8005DDD8_5E9D8(u8, u8);
 
-void func_8005D61C_5E21C(Player *arg0) {
+void func_8005D61C_5E21C(Player *player) {
     s32 temp_v1;
     s32 var_s0;
     s32 var_s0_2;
@@ -66,64 +66,64 @@ void func_8005D61C_5E21C(Player *arg0) {
     u8 *ptr;
 
     if (((GameState *)getCurrentAllocation())->unk7A == 0xB) {
-        temp_v1 = arg0->unkB84;
+        temp_v1 = player->unkB84;
         if (temp_v1 & 4) {
-            arg0->unkB84 = temp_v1 | 8;
+            player->unkB84 = temp_v1 | 8;
             var_s0 = 0;
-            var_s2 = (u8 *)arg0;
+            var_s2 = (u8 *)player;
             do {
                 *(s32 *)(var_s2 + 0x58) =
-                    (s32)loadAssetByIndex_95380(arg0->unkBB9, arg0->unkBBA) + D_800941BC_94DBC[var_s0] * 0x10;
+                    (s32)loadAssetByIndex_95380(player->unkBB9, player->unkBBA) + D_800941BC_94DBC[var_s0] * 0x10;
                 var_s0 += 1;
                 var_s2 += 0x3C;
             } while (var_s0 < 0x10);
         } else {
-            arg0->unkB84 = temp_v1 & ~8;
+            player->unkB84 = temp_v1 & ~8;
             var_s0 = 0;
-            var_s2 = (u8 *)arg0;
+            var_s2 = (u8 *)player;
             do {
-                *(s32 *)(var_s2 + 0x58) = (s32)loadAssetByIndex_95380(arg0->unkBB9, arg0->unkBBA) + var_s0 * 0x10;
+                *(s32 *)(var_s2 + 0x58) = (s32)loadAssetByIndex_95380(player->unkBB9, player->unkBBA) + var_s0 * 0x10;
                 var_s2 += 0x3C;
             } while (++var_s0 < 0x10);
         }
     } else {
-        temp_v1 = arg0->unkB84;
+        temp_v1 = player->unkB84;
         if (temp_v1 & 4) {
-            arg0->unkB84 = temp_v1 | 8;
+            player->unkB84 = temp_v1 | 8;
             var_s0_2 = 0;
-            var_s2_2 = (u8 *)arg0;
+            var_s2_2 = (u8 *)player;
             do {
                 *(s32 *)(var_s2_2 + 0x58) =
-                    loadAssetByIndex_953B0(arg0->unkBB9, arg0->unkBBA) + D_800941BC_94DBC[var_s0_2] * 0x10;
+                    loadAssetByIndex_953B0(player->unkBB9, player->unkBBA) + D_800941BC_94DBC[var_s0_2] * 0x10;
                 var_s0_2 += 1;
                 var_s2_2 += 0x3C;
             } while (var_s0_2 < 0x10);
         } else {
-            arg0->unkB84 = temp_v1 & ~8;
+            player->unkB84 = temp_v1 & ~8;
             var_s0_2 = 0;
-            var_s2_2 = (u8 *)arg0;
+            var_s2_2 = (u8 *)player;
             do {
-                *(s32 *)(var_s2_2 + 0x58) = loadAssetByIndex_953B0(arg0->unkBB9, arg0->unkBBA) + var_s0_2 * 0x10;
+                *(s32 *)(var_s2_2 + 0x58) = loadAssetByIndex_953B0(player->unkBB9, player->unkBBA) + var_s0_2 * 0x10;
                 var_s2_2 += 0x3C;
             } while (++var_s0_2 < 0x10);
         }
     }
 
-    ptr = D_80094180_94D80 + arg0->unkBB9 * 5;
-    temp_s0 = ptr[arg0->unkBE6];
+    ptr = D_80094180_94D80 + player->unkBB9 * 5;
+    temp_s0 = ptr[player->unkBE6];
     if (temp_s0 == 0) {
         goto copy_basic;
     }
-    temp_v1 = (s32)arg0->unk20;
+    temp_v1 = (s32)player->unk20;
     if (temp_v1 == 0) {
     copy_basic:
-        *(s32 *)((u8 *)arg0 + 0x23C) = (s32)arg0->unk4;
-        *(s32 *)((u8 *)arg0 + 0x240) = (s32)arg0->unk8;
+        *(s32 *)((u8 *)player + 0x23C) = (s32)player->unk4;
+        *(s32 *)((u8 *)player + 0x240) = (s32)player->unk8;
         return;
     }
-    *(s32 *)((u8 *)arg0 + 0x23C) = temp_v1;
-    *(s32 *)((u8 *)arg0 + 0x240) = (s32)arg0->unk24;
-    *(s32 *)((u8 *)arg0 + 0x238) = func_8005DDD8_5E9D8(arg0->unkBB9, arg0->unkBBA) + temp_s0 * 0x10 - 0x10;
+    *(s32 *)((u8 *)player + 0x23C) = temp_v1;
+    *(s32 *)((u8 *)player + 0x240) = (s32)player->unk24;
+    *(s32 *)((u8 *)player + 0x238) = func_8005DDD8_5E9D8(player->unkBB9, player->unkBBA) + temp_s0 * 0x10 - 0x10;
 }
 
 void func_8005D804_5E404(Player *arg0, u8 arg1, u8 arg2) {
