@@ -924,22 +924,23 @@ extern u8 D_8008DD8C_8E98C[];
 extern u16 D_8008DE02_8EA02[];
 
 void func_800255A0_261A0(func_800255A0_arg *arg0) {
-    u8 *base;
+    GameState *state;
     s32 i;
-    func_800255A0_entry *ptr;
-    u8 idx;
-    u8 val1, val2;
+    func_800255A0_entry *entry;
+    u8 tableIndex;
+    u8 charIndex;
+    u8 paletteIndex;
 
-    base = (u8 *)getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
     i = 0;
 
     do {
-        val1 = (base + arg0->unk52)[0x18A8];
-        val2 = (base + arg0->unk52)[0x18B0];
-        idx = D_8008DD8C_8E98C[((u8)(val2 + val1 * 3)) * 3 + i];
-        ptr = &((func_800255A0_entry *)arg0)[i];
-        ptr->unkE = D_8008DE02_8EA02[idx];
-        debugEnqueueCallback(arg0->unk52 + 8, 0, func_80010C98_11898, ptr);
+        charIndex = state->unk18A8[arg0->unk52];
+        paletteIndex = state->unk18B0[arg0->unk52];
+        tableIndex = D_8008DD8C_8E98C[((u8)(paletteIndex + charIndex * 3)) * 3 + i];
+        entry = &arg0->entries[i];
+        entry->unkE = D_8008DE02_8EA02[tableIndex];
+        debugEnqueueCallback(arg0->unk52 + 8, 0, func_80010C98_11898, entry);
         i++;
     } while (i < 3);
 }
