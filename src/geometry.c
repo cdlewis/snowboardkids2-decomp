@@ -403,8 +403,6 @@ void func_8006BEDC_6CADC(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
     func_8006B084_6BC84(ptr - 5, &sp50, arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BFB8_6CBB8);
-
 typedef struct {
     s16 unk0;
     u16 unk2;
@@ -420,6 +418,28 @@ typedef struct {
     u16 unk1A;
     s32 unk1C;
 } LookAtData;
+
+void func_8006BFB8_6CBB8(void *a, void *b) {
+    LookAtData *arg0 = (LookAtData *)a;
+    s32 *arg1 = (s32 *)b;
+
+    arg1[0] = ((arg0->unk0 * 8) & 0xFFFF0000) + (((s32)(arg0->unk2 << 16) >> 29) & 0xFFFF);
+    arg1[1] = (arg0->unk4 * 8) & 0xFFFF0000;
+    arg1[2] = ((arg0->unk6 * 8) & 0xFFFF0000) + (((s32)(arg0->unk8 << 16) >> 29) & 0xFFFF);
+    arg1[3] = (arg0->unkA * 8) & 0xFFFF0000;
+    arg1[4] = ((arg0->unkC * 8) & 0xFFFF0000) + (((s32)(arg0->unkE << 16) >> 29) & 0xFFFF);
+    arg1[5] = (arg0->unk10 * 8) & 0xFFFF0000;
+    arg1[6] = (arg0->unk14 & 0xFFFF0000) + arg0->unk18;
+    arg1[7] = (arg0->unk1C & 0xFFFF0000) + 1;
+    arg1[8] = ((arg0->unk0 << 19) & 0xFFFF0000) + (((s16)arg0->unk2 * 8) & 0xFFFF);
+    arg1[9] = (arg0->unk4 << 19) & 0xFFFF0000;
+    arg1[10] = ((arg0->unk6 << 19) & 0xFFFF0000) + (((s16)arg0->unk8 * 8) & 0xFFFF);
+    arg1[11] = (arg0->unkA << 19) & 0xFFFF0000;
+    arg1[12] = ((arg0->unkC << 19) & 0xFFFF0000) + (((s16)arg0->unkE * 8) & 0xFFFF);
+    arg1[13] = (arg0->unk10 << 19) & 0xFFFF0000;
+    arg1[14] = (arg0->unk14 << 16) + arg0->unk1A;
+    arg1[15] = arg0->unk1C << 16;
+}
 
 void func_8006C130_6CD30(LookAtData *arg0, LookAt *arg1) {
     s32 *dst;
