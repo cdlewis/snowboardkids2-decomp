@@ -34,7 +34,8 @@ typedef struct {
     s32 x;        /* 0x00 */
     s32 y;        /* 0x04 */
     s32 z;        /* 0x08 */
-    u8 padC[0x4]; /* 0x0C */
+    u8 playerIdx; /* 0x0C */
+    u8 padD[0x3]; /* 0x0D */
     s32 unk10;    /* 0x10 */
     s32 unk14;    /* 0x14 */
     s32 unk18;    /* 0x18 */
@@ -74,56 +75,44 @@ void func_8003CF40_3DB40(s16 *arg0);
 void func_8003D0F4_3DCF4(NodeExt *arg0);
 void func_8003D210_3DE10(func_8003D210_3DE10_arg *);
 
-void func_8003C170_3CD70(NodeState *arg0) {
-    Allocation *allocation;
+void func_8003C170_3CD70(NodeState *node) {
+    Allocation *gameState;
     u8 playerIdx;
-    s32 tempVec[3];
-    s32 outputVec[3];
-    Mat3x3Padded mtx;
+    s32 inputOffset[3];
+    s32 transformedOffset[3];
+    Mat3x3Padded rotationMatrix;
 
-    allocation = (Allocation *)getCurrentAllocation();
+    gameState = (Allocation *)getCurrentAllocation();
 
-    // Initialize input vector on stack
-    tempVec[1] = 0;
-    tempVec[0] = 0;
-    tempVec[2] = 0xFFC00000;
+    inputOffset[1] = 0;
+    inputOffset[0] = 0;
+    inputOffset[2] = 0xFFC00000;
 
-    // Get player index from offset 0xC
-    playerIdx = *(u8 *)((u8 *)arg0 + 0xC);
+    playerIdx = node->playerIdx;
 
-    // Read rotation at offset 0xA94 from players[playerIdx]
-    createYRotationMatrix(&mtx, *(u16 *)((u8 *)allocation->players + (playerIdx * 0xBE8) + 0xA94));
+    createYRotationMatrix(&rotationMatrix, *(u16 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0xA94));
 
-    // Transform vector
-    transformVector2(tempVec, &mtx, outputVec);
+    transformVector2(inputOffset, &rotationMatrix, transformedOffset);
 
-    // Read player index again
-    playerIdx = *(u8 *)((u8 *)arg0 + 0xC);
+    playerIdx = node->playerIdx;
 
-    // Set position X with transformed vector offset
-    arg0->x = *(s32 *)((u8 *)allocation->players + (playerIdx * 0xBE8) + 0x434) + outputVec[0];
+    node->x = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x434) + transformedOffset[0];
 
-    // Read player index again
-    playerIdx = *(u8 *)((u8 *)arg0 + 0xC);
+    playerIdx = node->playerIdx;
 
-    // Set position Y with transformed vector offset
-    arg0->y = *(s32 *)((u8 *)allocation->players + (playerIdx * 0xBE8) + 0x438) + outputVec[1];
+    node->y = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x438) + transformedOffset[1];
 
-    // Read player index again
-    playerIdx = *(u8 *)((u8 *)arg0 + 0xC);
+    playerIdx = node->playerIdx;
 
-    // Set position Z with transformed vector offset
-    arg0->z = *(s32 *)((u8 *)allocation->players + (playerIdx * 0xBE8) + 0x43C) + outputVec[2];
+    node->z = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x43C) + transformedOffset[2];
 
-    // Set various node fields
-    arg0->unk10 = 0x600000;
-    arg0->unk1C = 0x20000;
-    arg0->unk18 = 0x2C0000;
-    arg0->unk20 = 0;
-    arg0->unk24 = 0;
-    arg0->unk14 = 0x1E0000;
+    node->unk10 = 0x600000;
+    node->unk1C = 0x20000;
+    node->unk18 = 0x2C0000;
+    node->unk20 = 0;
+    node->unk24 = 0;
+    node->unk14 = 0x1E0000;
 
-    // Set callback
     setCallbackWithContinue(func_8003C2BC_3CEBC);
 }
 
