@@ -635,12 +635,12 @@ s32 findEventAtFrame(u8 a0, u16 a1) {
     return 0xFFFF;
 }
 
-s32 func_800B3D24_1E0DD4(u8 arg0, u16 arg1) {
+s32 func_800B3D24_1E0DD4(u8 slotIndex, u16 frameNumber) {
     StateEntry *base;
     u16 searchResult;
-    u16 searchMasked;
+    u16 insertionPoint;
     u16 newIndex;
-    u16 prevNext;
+    u16 oldNextIndex;
     StateEntry *entry;
     StateEntry *base2;
 
@@ -648,15 +648,15 @@ s32 func_800B3D24_1E0DD4(u8 arg0, u16 arg1) {
         goto ret_ffff;
     }
 
-    searchResult = func_800B3B68_1E0C18(arg0 & 0xFF, arg1, 1);
-    searchMasked = searchResult;
+    searchResult = func_800B3B68_1E0C18(slotIndex & 0xFF, frameNumber, 1);
+    insertionPoint = searchResult;
 
-    if (searchMasked == 0xFFFF) {
+    if (insertionPoint == 0xFFFF) {
         return 0xFFFF;
     }
 
-    entry = getStateEntry(searchMasked);
-    if ((u16)entry->unk3C != arg1) {
+    entry = getStateEntry(insertionPoint);
+    if ((u16)entry->unk3C != frameNumber) {
         goto do_work;
     }
 
@@ -667,35 +667,35 @@ do_work:
     newIndex = func_800B384C_1E08FC();
     base = D_800BAEBC_1E7F6C;
 
-    prevNext = *(u16 *)((u8 *)base + (u32)(searchMasked << 6) + 0xF8);
-    *(u16 *)((u8 *)base + (u32)(searchMasked << 6) + 0xF8) = newIndex;
+    oldNextIndex = *(u16 *)((u8 *)base + (u32)(insertionPoint << 6) + 0xF8);
+    *(u16 *)((u8 *)base + (u32)(insertionPoint << 6) + 0xF8) = newIndex;
 
-    if (prevNext != 0xFFFF) {
-        *(u16 *)((u8 *)base + (u32)(prevNext << 6) + 0xFA) = newIndex;
+    if (oldNextIndex != 0xFFFF) {
+        *(u16 *)((u8 *)base + (u32)(oldNextIndex << 6) + 0xFA) = newIndex;
     }
 
     base2 = D_800BAEBC_1E7F6C;
-    searchMasked = newIndex;
-    base2 = (StateEntry *)((u8 *)base2 + (u32)(searchMasked << 6));
+    insertionPoint = newIndex;
+    base2 = (StateEntry *)((u8 *)base2 + (u32)(insertionPoint << 6));
     *(u16 *)((u8 *)base2 + 0xFA) = searchResult;
-    *(u16 *)((u8 *)base2 + 0xF8) = prevNext;
+    *(u16 *)((u8 *)base2 + 0xF8) = oldNextIndex;
 
-    func_800B388C_1E093C(searchMasked);
+    func_800B388C_1E093C(insertionPoint);
 
     D_800BAEBC_1E7F6C->unk10++;
 
-    if (searchMasked != 0xFFFF) {
-        entry = getStateEntry(searchMasked);
-        entry->unk3C = arg1;
+    if (insertionPoint != 0xFFFF) {
+        entry = getStateEntry(insertionPoint);
+        entry->unk3C = frameNumber;
 
-        entry = getStateEntry(searchMasked);
+        entry = getStateEntry(insertionPoint);
         entry->unk3E = 0;
 
-        entry = getStateEntry(searchMasked);
+        entry = getStateEntry(insertionPoint);
         entry->unk3F = 0;
     }
 
-    return searchMasked;
+    return insertionPoint;
 }
 
 void func_800B3E58_1E0F08(u16 arg0, u16 arg1, u16 arg2) {
