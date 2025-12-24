@@ -636,26 +636,26 @@ s32 findEventAtFrame(u8 a0, u16 a1) {
 }
 
 s32 func_800B3D24_1E0DD4(u8 slotIndex, u16 frameNumber) {
-    StateEntry *base;
-    u16 searchResult;
-    u16 insertionPoint;
-    u16 newIndex;
-    u16 oldNextIndex;
+    StateEntry *eventTable;
+    u16 insertAfterIndex;
+    u16 entryIndex;
+    u16 allocatedIndex;
+    u16 originalNextIndex;
     StateEntry *entry;
-    StateEntry *base2;
+    StateEntry *entryPtr;
 
     if (D_800BAEBC_1E7F6C->unk10 >= 0x1E0) {
         goto ret_ffff;
     }
 
-    searchResult = func_800B3B68_1E0C18(slotIndex & 0xFF, frameNumber, 1);
-    insertionPoint = searchResult;
+    insertAfterIndex = func_800B3B68_1E0C18(slotIndex & 0xFF, frameNumber, 1);
+    entryIndex = insertAfterIndex;
 
-    if (insertionPoint == 0xFFFF) {
+    if (entryIndex == 0xFFFF) {
         return 0xFFFF;
     }
 
-    entry = getStateEntry(insertionPoint);
+    entry = getStateEntry(entryIndex);
     if ((u16)entry->unk3C != frameNumber) {
         goto do_work;
     }
@@ -664,38 +664,43 @@ ret_ffff:
     return 0xFFFF;
 
 do_work:
-    newIndex = func_800B384C_1E08FC();
-    base = D_800BAEBC_1E7F6C;
+    allocatedIndex = func_800B384C_1E08FC();
+    eventTable = D_800BAEBC_1E7F6C;
 
-    oldNextIndex = *(u16 *)((u8 *)base + (u32)(insertionPoint << 6) + 0xF8);
-    *(u16 *)((u8 *)base + (u32)(insertionPoint << 6) + 0xF8) = newIndex;
+    /* Read next_index from entry at entryIndex */
+    originalNextIndex = *(u16 *)((u8 *)eventTable + (u32)(entryIndex << 6) + 0xF8);
+    /* Set next_index of entry at entryIndex to newly allocated entry */
+    *(u16 *)((u8 *)eventTable + (u32)(entryIndex << 6) + 0xF8) = allocatedIndex;
 
-    if (oldNextIndex != 0xFFFF) {
-        *(u16 *)((u8 *)base + (u32)(oldNextIndex << 6) + 0xFA) = newIndex;
+    if (originalNextIndex != 0xFFFF) {
+        /* Set prev_index of original next entry to point to newly allocated entry */
+        *(u16 *)((u8 *)eventTable + (u32)(originalNextIndex << 6) + 0xFA) = allocatedIndex;
     }
 
-    base2 = D_800BAEBC_1E7F6C;
-    insertionPoint = newIndex;
-    base2 = (StateEntry *)((u8 *)base2 + (u32)(insertionPoint << 6));
-    *(u16 *)((u8 *)base2 + 0xFA) = searchResult;
-    *(u16 *)((u8 *)base2 + 0xF8) = oldNextIndex;
+    entryPtr = D_800BAEBC_1E7F6C;
+    entryIndex = allocatedIndex;
+    entryPtr = (StateEntry *)((u8 *)entryPtr + (u32)(entryIndex << 6));
+    /* Set prev_index of new entry to point to insert-after entry */
+    *(u16 *)((u8 *)entryPtr + 0xFA) = insertAfterIndex;
+    /* Set next_index of new entry to point to original next entry */
+    *(u16 *)((u8 *)entryPtr + 0xF8) = originalNextIndex;
 
-    func_800B388C_1E093C(insertionPoint);
+    func_800B388C_1E093C(entryIndex);
 
     D_800BAEBC_1E7F6C->unk10++;
 
-    if (insertionPoint != 0xFFFF) {
-        entry = getStateEntry(insertionPoint);
+    if (entryIndex != 0xFFFF) {
+        entry = getStateEntry(entryIndex);
         entry->unk3C = frameNumber;
 
-        entry = getStateEntry(insertionPoint);
+        entry = getStateEntry(entryIndex);
         entry->unk3E = 0;
 
-        entry = getStateEntry(insertionPoint);
+        entry = getStateEntry(entryIndex);
         entry->unk3F = 0;
     }
 
-    return insertionPoint;
+    return entryIndex;
 }
 
 void func_800B3E58_1E0F08(u16 arg0, u16 arg1, u16 arg2) {
