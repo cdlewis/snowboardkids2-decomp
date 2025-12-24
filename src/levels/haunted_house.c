@@ -124,7 +124,7 @@ extern void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
 extern void func_800BBEAC_AFB9C(s16 *);
 extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
-extern void func_800BC184_AFE74(void **);
+extern void func_800BC184_AFE74(func_800BC340_B0030_arg *);
 extern void func_800BC220_AFF10(u8 *);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
 extern void func_800BC750_B0440(s16 *);
@@ -616,21 +616,21 @@ void func_800BC13C_AFE2C(func_800BC340_B0030_arg *arg0) {
     setCallback(func_800BC184_AFE74);
 }
 
-void func_800BC184_AFE74(void **arg0) {
+void func_800BC184_AFE74(func_800BC340_B0030_arg *arg0) {
     s32 i;
-    s32 *global_buffer;
-    s32 *src_ptr;
+    s32 *positionPtr;
+    s32 *srcPositions;
 
-    *arg0 = allocateNodeMemory(0x200);
+    arg0->unk0 = allocateNodeMemory(0x200);
 
     i = 0;
-    global_buffer = &D_8009A8A4_9B4A4;
-    src_ptr = &D_800BCA00_B06F0;
+    positionPtr = &D_8009A8A4_9B4A4;
+    srcPositions = &D_800BCA00_B06F0;
 
     while (i < 8) {
-        memcpy(global_buffer, src_ptr, 0xC);
-        func_8006BFB8_6CBB8(global_buffer - 5, (void *)((u8 *)*arg0 + (i << 6)));
-        src_ptr = (s32 *)((u8 *)src_ptr + 0xC);
+        memcpy(positionPtr, srcPositions, 0xC);
+        func_8006BFB8_6CBB8(positionPtr - 5, (void *)((u8 *)arg0->unk0 + (i << 6)));
+        srcPositions = (s32 *)((u8 *)srcPositions + 0xC);
         i++;
     }
 
