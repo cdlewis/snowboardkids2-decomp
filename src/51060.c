@@ -675,66 +675,66 @@ void func_8005127C_51E7C(void *arg0, void *arg1, Vec3i *arg2, s32 arg3) {
 void func_8005152C_5212C(func_8005152C_5212C_arg *arg0);
 void func_80051688_52288(func_80051688_52288_arg *arg0);
 
-void func_80051348_51F48(func_8005152C_5212C_arg *arg0) {
+void func_80051348_51F48(func_8005152C_5212C_arg *task) {
     GameState *gs;
     s32 i;
-    s16 *srcVec;
-    s32 destOffset;
-    volatile func_8005152C_5212C_arg *destPtr;
-    void *temp;
+    s16 *transformSource;
+    s32 outputOffset;
+    volatile func_8005152C_5212C_arg *outputPtr;
+    void *particleAsset;
 
     gs = (GameState *)getCurrentAllocation();
-    arg0->unk4 = load_3ECE40();
-    temp = (void *)((u8 *)gs->unk44 + 0x13C0);
-    arg0->unk8.unk1A = 0xFF;
-    arg0->unk8.unk0 = temp;
-    arg0->unk28.unk1A = arg0->unk8.unk1A;
-    arg0->unk28.unk0 = arg0->unk8.unk0;
+    task->unk4 = load_3ECE40();
+    particleAsset = (void *)((u8 *)gs->unk44 + 0x13C0);
+    task->unk8.unk1A = 0xFF;
+    task->unk8.unk0 = particleAsset;
+    task->unk28.unk1A = task->unk8.unk1A;
+    task->unk28.unk0 = task->unk8.unk0;
 
     i = 0;
 
-    if (arg0->unk0->unkB84 & 2) {
-        destPtr = arg0;
-        destOffset = 0x48;
-        srcVec = D_80090E80_91A80;
+    if (task->unk0->unkB84 & 2) {
+        outputPtr = task;
+        outputOffset = 0x48;
+        transformSource = D_80090E80_91A80;
         do {
-            transformVector(srcVec, (s16 *)&arg0->unk0->unk3F8, (void *)((u8 *)arg0 + destOffset));
-            destPtr->unk48 -= arg0->unk0->worldPosX;
-            destPtr->unk4C -= arg0->unk0->worldPosY;
-            destOffset += 0xC;
-            srcVec += 6;
+            transformVector(transformSource, (s16 *)&task->unk0->unk3F8, (void *)((u8 *)task + outputOffset));
+            outputPtr->unk48 -= task->unk0->worldPosX;
+            outputPtr->unk4C -= task->unk0->worldPosY;
+            outputOffset += 0xC;
+            transformSource += 6;
             i++;
-            destPtr->unk50 -= arg0->unk0->worldPosZ;
-            destPtr = (volatile func_8005152C_5212C_arg *)((u8 *)destPtr + 0xC);
+            outputPtr->unk50 -= task->unk0->worldPosZ;
+            outputPtr = (volatile func_8005152C_5212C_arg *)((u8 *)outputPtr + 0xC);
         } while (i < 2);
     } else {
-        destPtr = arg0;
-        destOffset = 0x48;
-        srcVec = D_80090E98_91A98;
+        outputPtr = task;
+        outputOffset = 0x48;
+        transformSource = D_80090E98_91A98;
         do {
-            transformVector(srcVec, (s16 *)&arg0->unk0->unk3F8, (void *)((u8 *)arg0 + destOffset));
-            destPtr->unk48 -= arg0->unk0->worldPosX;
-            destPtr->unk4C -= arg0->unk0->worldPosY;
-            destOffset += 0xC;
-            srcVec += 6;
+            transformVector(transformSource, (s16 *)&task->unk0->unk3F8, (void *)((u8 *)task + outputOffset));
+            outputPtr->unk48 -= task->unk0->worldPosX;
+            outputPtr->unk4C -= task->unk0->worldPosY;
+            outputOffset += 0xC;
+            transformSource += 6;
             i++;
-            destPtr->unk50 -= arg0->unk0->worldPosZ;
-            destPtr = (volatile func_8005152C_5212C_arg *)((u8 *)destPtr + 0xC);
+            outputPtr->unk50 -= task->unk0->worldPosZ;
+            outputPtr = (volatile func_8005152C_5212C_arg *)((u8 *)outputPtr + 0xC);
         } while (i < 2);
     }
 
     i = 0;
-    arg0->unk60 = 0;
-    arg0->unk62 = -1;
+    task->unk60 = 0;
+    task->unk62 = -1;
 
     do {
-        if ((*(s16 *)((u8 *)arg0->unk0 + 0xBAE) >> i) & 1) {
-            arg0->unk62++;
+        if ((*(s16 *)((u8 *)task->unk0 + 0xBAE) >> i) & 1) {
+            task->unk62++;
         }
         i++;
     } while (i < 8);
 
-    arg0->unk62 += 0x15;
+    task->unk62 += 0x15;
     setCleanupCallback(func_80051688_52288);
     setCallbackWithContinue(func_8005152C_5212C);
 }
