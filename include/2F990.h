@@ -3,27 +3,27 @@
 #include "common.h"
 
 typedef struct {
-    s16 unk00;
-    s16 unk02;
-    s16 unk04;
+    s16 x;
+    s16 y;
+    s16 palette;
     s16 unk06;
-    void *unk08;
-} SubStruct;
+    void *text;
+} StatTextLabel;
 
 typedef struct {
-    void *unk00;
-    s16 unk04;
-    s16 unk06;
-    void *unk08;
-    s16 unk0C;
+    void *progressBarAsset;
+    s16 priceLabelX;
+    s16 priceLabelY;
+    void *spriteAsset;
+    s16 priceSpriteIndex;
     s16 unk0E;
-    SubStruct substruct[3];
-    s16 unk34;
-    s16 unk36;
-    char unk38[3];
-    char unk3B[3];
-    char unk3E[3];
-} Struct_80030694;
+    StatTextLabel statLabels[3];
+    s16 progressBarX;
+    s16 progressBarY;
+    char statBuffer1[3];
+    char statBuffer2[3];
+    char statBuffer3[3];
+} ItemStatsDisplay;
 
 typedef struct {
     s16 unk0;
@@ -64,7 +64,7 @@ typedef struct {
 
 void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0);
 void func_800304B8_310B8(func_800308FC_314FC_arg *arg0);
-void func_80030694_31294(Struct_80030694 *arg0);
-void func_800308C4_314C4(Struct_80030694 *arg0);
+void func_80030694_31294(ItemStatsDisplay *arg0);
+void func_800308C4_314C4(ItemStatsDisplay *arg0);
 void func_800308FC_314FC(func_800308FC_314FC_arg *arg0);
 void func_80030A00_31600(func_80030A00_31600_arg *arg0);
