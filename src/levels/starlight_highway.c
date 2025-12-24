@@ -10,7 +10,6 @@
 
 extern s32 gFrameCounter;
 
-extern void func_800BC768_AEB28(void *);
 
 typedef struct {
     u8 _pad[0x80];
@@ -462,6 +461,11 @@ extern s32 D_800BCB04_AEEC4[][3];
 extern s16 D_800BCB70_AEF30[];
 extern s16 D_800BCB84_AEF44[];
 
+extern s32 D_800BCB98_AEF58[][3];
+extern s32 D_800BCB9C_AEF5C[][3];
+extern s32 D_800BCBA0_AEF60[][3];
+extern s16 D_800BCBB0_AEF70[];
+
 typedef struct {
     u8 _pad[0x76];
     u8 unk76;
@@ -696,6 +700,8 @@ void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC550_AE910);
 
+void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0);
+
 void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
     void *temp;
 
@@ -716,7 +722,72 @@ void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
     setCallback(&func_800BC768_AEB28);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC768_AEB28);
+void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
+    Vec3s32 vec;
+    s32 pad[2];
+    s32 found;
+    s32 i;
+    u8 temp;
+    s32 numPlayers;
+    GameState *allocation;
+    Player *player;
+    s32 unk78Val;
+    s32 tempS;
+
+    allocation = getCurrentAllocation();
+    temp = allocation->numPlayers;
+    found = 0;
+    i = 0;
+    tempS = temp;
+
+    if (tempS > 0) {
+        numPlayers = tempS;
+        player = allocation->players;
+        do {
+            if (player->unkB94 == D_800BCBB0_AEF70[arg0->unk7C]) {
+                found = 1;
+            }
+            i++;
+            player++;
+        } while (i < numPlayers);
+    }
+
+    if (found != 0) {
+        if (allocation->gamePaused == 0) {
+            if (arg0->unk78 != 0x600000) {
+                arg0->unk78 = arg0->unk78 + 0x100000;
+            }
+        }
+    } else if (allocation->gamePaused == 0) {
+        if (arg0->unk78 != 0) {
+            arg0->unk78 = arg0->unk78 - 0x100000;
+        }
+    }
+
+    unk78Val = arg0->unk78;
+    vec.unk4 = 0;
+    vec.unk8 = 0;
+    vec.unk0 = -unk78Val;
+    rotateVectorY(&vec, 0x1BEC, &arg0->node1.unk14);
+    vec.unk0 = arg0->unk78;
+    rotateVectorY(&vec, 0x1BEC, &arg0->node2.unk14);
+
+    arg0->node1.unk14 = arg0->node1.unk14 + D_800BCB98_AEF58[arg0->unk7C][0];
+    arg0->node1.unk18 = arg0->node1.unk18 + D_800BCB9C_AEF5C[arg0->unk7C][0];
+    arg0->node1.unk1C = arg0->node1.unk1C + D_800BCBA0_AEF60[arg0->unk7C][0];
+    arg0->node2.unk14 = arg0->node2.unk14 + D_800BCB98_AEF58[arg0->unk7C][0];
+    arg0->node2.unk18 = arg0->node2.unk18 + D_800BCB9C_AEF5C[arg0->unk7C][0];
+    i = 0;
+    arg0->node2.unk1C = arg0->node2.unk1C + D_800BCBA0_AEF60[arg0->unk7C][0];
+
+    do {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->node1);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->node2);
+        i++;
+    } while (i < 4);
+
+    (void)pad;
+}
 
 void func_800BC984_AED44(func_800BB45C_AD81C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
