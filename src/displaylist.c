@@ -614,22 +614,22 @@ void func_800643AC_64FAC(DisplayListObject *arg0, s32 arg1) {
     gSPMatrix(gRegionAllocPtr++, (arg1 + arg0)->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
-void func_80064628_65228(DisplayListObject *arg0) {
+void func_80064628_65228(DisplayListObject *displayObjects) {
     s32 i;
-    DisplayListObject *temp_s0;
-    u32 *temp_v1;
+    DisplayListObject *currentObject;
+    Gfx *displayListCmd;
     volatile u8 padding[0x40];
 
-    func_80064218_64E18(arg0);
+    func_80064218_64E18(displayObjects);
 
-    for (i = 0; i < arg0->unk37; i++) {
-        temp_s0 = (DisplayListObject *)((u8 *)arg0 + i * 0x3C);
-        if (temp_s0->unk20->opaqueDisplayList != NULL) {
-            func_800643AC_64FAC(arg0, i);
-            temp_v1 = (u32 *)gRegionAllocPtr;
-            temp_v1[0] = 0xDE000000;
-            temp_v1[1] = (u32)temp_s0->unk20->opaqueDisplayList;
-            gRegionAllocPtr = (Gfx *)(temp_v1 + 2);
+    for (i = 0; i < displayObjects->unk37; i++) {
+        currentObject = &displayObjects[i];
+        if (currentObject->unk20->opaqueDisplayList != NULL) {
+            func_800643AC_64FAC(displayObjects, i);
+            displayListCmd = gRegionAllocPtr;
+            displayListCmd->words.w0 = 0xDE000000;
+            displayListCmd->words.w1 = (u32)currentObject->unk20->opaqueDisplayList;
+            gRegionAllocPtr = displayListCmd + 1;
         }
     }
 }
