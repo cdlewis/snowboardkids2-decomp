@@ -20,8 +20,8 @@ typedef struct {
     /* 0x1DC */ void *unk1DC;
     /* 0x1E0 */ s16 unk1E0;
     /* 0x1E2 */ s16 unk1E2;
-    /* 0x1E4 */ u8 unk1E4[4];
-    /* 0x1E8 */ u8 pad1E8[0x4];
+    /* 0x1E4 */ u8 pad1E4[4];
+    /* 0x1E8 */ u8 unk1E8[4];
     /* 0x1EC */ u8 unk1EC;
 } Allocation_37E70;
 
@@ -43,7 +43,7 @@ void func_80037270_37E70(void) {
     i = 3;
     ptr = (Allocation_37E70 *)((u8 *)allocation + 3);
     do {
-        ptr->unk1E4[0] = 0;
+        ptr->pad1E4[0] = 0;
         i--;
         ptr = (Allocation_37E70 *)((u8 *)ptr - 1);
     } while (i >= 0);
