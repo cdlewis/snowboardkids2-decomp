@@ -93,6 +93,8 @@ extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
 void func_800BC61C_B1B0C(Player *);
 void func_8004C10C_4CD0C(Player *);
+void func_8004BC5C_4C85C(Player *);
+void func_800423A4_42FA4(s32 *, u8);
 
 INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BB2B0_B07A0);
 
@@ -380,7 +382,112 @@ void func_800BC0A8_B1598(func_800BC4AC_arg *arg0) {
     D_800BCA5C_B1F4C[arg0->unkBBE](arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC0D8_B15C8);
+s32 func_800BC0D8_B15C8(Player *arg0) {
+    Mat3x3Padded sp10;
+    s32 sp30[7];
+    Mat3x3Padded *temp_s0;
+    s32 *temp_s1;
+    s16 angleDiff;
+    s32 i;
+
+    getCurrentAllocation();
+
+    if (arg0->unkBBF == 0) {
+        arg0->unkA8C = 0xFFFF;
+        arg0->unkB8C = 0;
+        arg0->unkBBF += 1;
+
+        if (!(arg0->unkB84 & 0x80000)) {
+            if (arg0->unkBDB == 0) {
+                func_80056B7C_5777C(&arg0->worldPosX, 0x4C);
+            } else {
+                arg0->unkBDB -= 1;
+                if (arg0->unkBDB == 0) {
+                    func_80056B7C_5777C(&arg0->worldPosX, 0x4C);
+                }
+            }
+        }
+    }
+
+    arg0->unkB8C += 1;
+
+    if ((arg0->unkB8C == 5) || (arg0->unkB8C == 0xF)) {
+        func_8004BC5C_4C85C(arg0);
+        func_8004BC5C_4C85C(arg0);
+        func_8004BC5C_4C85C(arg0);
+        func_8004BC5C_4C85C(arg0);
+    }
+
+    arg0->unkB88 = 0x200;
+    func_800B9B90_A9A40(arg0);
+
+    angleDiff = (func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPosX, arg0->worldPosZ) - arg0->unkA94) & 0x1FFF;
+
+    if (angleDiff >= 0x1001) {
+        angleDiff = angleDiff | 0xE000;
+    }
+
+    if (angleDiff >= 0x39) {
+        angleDiff = 0x38;
+    }
+
+    if (angleDiff < -0x38) {
+        angleDiff = -0x38;
+    }
+
+    arg0->unkA94 = arg0->unkA94 + angleDiff;
+
+    if (!(arg0->unkB84 & 1)) {
+        temp_s0 = &arg0->unk970;
+        createYRotationMatrix(temp_s0, arg0->unkA94);
+        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, temp_s0, &sp10);
+        temp_s1 = &arg0->unk44C;
+        transformVector3(temp_s1, &sp10, sp30);
+        sp30[0] = 0;
+        transformVector2(sp30, &sp10, temp_s1);
+        transformVector2(&D_800BCA50_B1F40, &sp10, sp30);
+
+        if (sp30[1] > 0) {
+            sp30[1] = 0;
+        }
+
+        arg0->unk44C += sp30[0];
+        arg0->unk450 += sp30[1];
+        arg0->unk454 += sp30[2];
+    } else {
+        arg0->unk44C -= arg0->unk44C / 16;
+        arg0->unk454 -= arg0->unk454 / 16;
+    }
+
+    if (arg0->unk450 > 0) {
+        arg0->unk450 = 0;
+    }
+
+    arg0->unk450 += -0x10000;
+    func_800B02AC_A015C(arg0);
+
+    if (func_8005D308_5DF08(arg0, 4) != 0) {
+        arg0->unkB88 = 0;
+        arg0->unkBBD = 1;
+        arg0->unkBBE = 1;
+        arg0->unkBBF = 0;
+        arg0->unkBC0 = 0;
+
+        if (arg0->unkBDB == 0) {
+            for (i = 0; i < 0x1E; i++) {
+                func_8004BC5C_4C85C(arg0);
+            }
+            memcpy(sp30, &arg0->worldPosX, 0xC);
+            sp30[1] += 0x300000;
+            func_800423A4_42FA4(sp30, arg0->unkBB8);
+            func_800BB910_B0E00(arg0);
+            arg0->unkBDB = 3;
+            func_8005D180_5DD80(arg0, 2);
+        }
+    }
+
+    return 0;
+}
 
 s32 func_800BC3B8_B18A8(Player *arg0) {
     u8 temp;
