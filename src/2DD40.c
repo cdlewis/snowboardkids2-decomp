@@ -63,23 +63,23 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D140_2DD40);
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D46C_2E06C);
 
 void func_8002D668_2E268(Func2E024Arg *arg0) {
-    GameState *allocation;
+    GameState *gameState;
     s32 i;
     struct Func2E024Element *elements;
-    s32 val;
+    s32 state;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
     elements = (struct Func2E024Element *)arg0;
 
     for (i = 0; i < arg0->unkD5; i++) {
-        val = ((Func2E024Arg *)&elements[i])->unk5E;
+        state = ((Func2E024Arg *)&elements[i])->unk5E;
 
-        if (val < 0) {
+        if (state < 0) {
             goto cont;
         }
 
-        if (val >= 2) {
-            if (val >= 4) {
+        if (state >= 2) {
+            if (state >= 4) {
                 goto cont;
             }
             goto case23;
@@ -106,12 +106,12 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
 
     cont:
         func_8002A2D0_2AED0((Func297D8Arg *)&elements[i]);
-        ((s32 *)allocation)[0x102 + i] = elements[i].matrix.unk14;
-        ((s32 *)allocation)[0x104 + i] = elements[i].matrix.unk1C;
+        gameState->unk408[i] = elements[i].matrix.unk14;
+        gameState->unk410[i] = elements[i].matrix.unk1C;
     }
 
-    if (allocation->unk42A == 0x11) {
-        allocation->unk42E = 1;
+    if (gameState->unk42A == 0x11) {
+        gameState->unk42E = 1;
         arg0->unkCC = 1;
         arg0->unkCE = 1;
         func_8002EBB0_2F7B0(arg0);
