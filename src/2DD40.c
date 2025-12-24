@@ -53,11 +53,9 @@ struct Func2E024Arg {
 };
 
 struct Func2E024Element {
-    /* 0x00 */ u8 pad0[0x18];
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ u8 pad1[0x4];
-    /* 0x20 */ s32 unk20;
-    /* 0x24 */ u8 pad2[0x40];
+    /* 0x00 */ SceneModel *model;
+    /* 0x04 */ Mat3x3Padded matrix;
+    /* 0x24 */ u8 pad24[0x40];
 }; /* size = 0x64 */
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D140_2DD40);
@@ -108,8 +106,8 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
 
     cont:
         func_8002A2D0_2AED0((Func297D8Arg *)&elements[i]);
-        ((s32 *)allocation)[0x102 + i] = elements[i].unk18;
-        ((s32 *)allocation)[0x104 + i] = elements[i].unk20;
+        ((s32 *)allocation)[0x102 + i] = elements[i].matrix.unk14;
+        ((s32 *)allocation)[0x104 + i] = elements[i].matrix.unk1C;
     }
 
     if (allocation->unk42A == 0x11) {
@@ -129,15 +127,15 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002DA54_2E654);
 void func_8002E024_2EC24(Func2E024Arg *arg0);
 
 void func_8002DE44_2EA44(Func2E024Arg *arg0) {
-    GameState *allocation;
+    GameState *gameState;
     s32 i;
     struct Func2E024Element *elements;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
     elements = (struct Func2E024Element *)arg0;
 
     for (i = 0; i < arg0->unkD5; i++) {
-        memcpy((u8 *)&elements[i] + 4, identityMatrix, 0x20);
+        memcpy(&elements[i].matrix, identityMatrix, 0x20);
         ((Func2E024Arg *)&elements[i])->unk62 = 0;
 
         if (i == 0) {
@@ -165,11 +163,11 @@ void func_8002DE44_2EA44(Func2E024Arg *arg0) {
         ((Func297D8Arg *)&elements[i])->rotation = 0x1800;
         ((Func297D8Arg *)&elements[i])->unk2E = 0x1800;
         ((Func297D8Arg *)&elements[i])->unk52 = ((Func297D8Arg *)&elements[i])->unk50;
-        createYRotationMatrix((Mat3x3Padded *)((u8 *)&elements[i] + 4), ((Func297D8Arg *)&elements[i])->rotation);
+        createYRotationMatrix(&elements[i].matrix, ((Func297D8Arg *)&elements[i])->rotation);
         func_8002A290_2AE90((Func297D8Arg *)&elements[i]);
-        ((s32 *)allocation)[0x102 + i] = elements[i].unk18;
-        ((s32 *)allocation)[0x104 + i] = elements[i].unk20;
-        ((s16 *)allocation)[0x20C + i] = D_8008EF70_8FB70[((Func297D8Arg *)&elements[i])->unk5C];
+        ((s32 *)gameState)[0x102 + i] = elements[i].matrix.unk14;
+        ((s32 *)gameState)[0x104 + i] = elements[i].matrix.unk1C;
+        ((s16 *)gameState)[0x20C + i] = D_8008EF70_8FB70[((Func297D8Arg *)&elements[i])->unk5C];
     }
 
     setCallback(func_8002E024_2EC24);
@@ -206,8 +204,8 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
     elements = (struct Func2E024Element *)arg0;
     for (i = 0; i < arg0->unkD5; i++) {
         func_8002A2D0_2AED0((Func297D8Arg *)&elements[i]);
-        ((s32 *)allocation)[0x102 + i] = elements[i].unk18;
-        ((s32 *)allocation)[0x104 + i] = elements[i].unk20;
+        ((s32 *)allocation)[0x102 + i] = elements[i].matrix.unk14;
+        ((s32 *)allocation)[0x104 + i] = elements[i].matrix.unk1C;
     }
 
     if (allocation->unk42A == 0x11) {
