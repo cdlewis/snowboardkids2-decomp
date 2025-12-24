@@ -19,27 +19,27 @@ void TrickTriggerInit(EventTrigger *arg0) {
 }
 
 void TrickTriggerCheck(void *arg0) {
-    s16 temp_v0_2;
-    s16 var_v1;
-    s32 temp_a1;
-    GameState *temp_v0;
-    s32 val1, val2;
+    s16 rawAngle;
+    s16 angle;
+    s32 triggerId;
+    GameState *state;
+    s32 minAngle, maxAngle;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
-    if (temp_v0->unk3F8 > 0x800000) {
-        temp_v0_2 = temp_v0->unk3F4;
-        var_v1 = temp_v0_2;
-        if (temp_v0_2 >= 0x1001) {
-            var_v1 -= 0x2000;
+    state = (GameState *)getCurrentAllocation();
+    if (state->unk3F8 > 0x800000) {
+        rawAngle = state->unk3F4;
+        angle = rawAngle;
+        if (rawAngle >= 0x1001) {
+            angle -= 0x2000;
         }
 
-        temp_a1 = *(u8 *)arg0;
-        val1 = ((s16 *)D_8008D6C4_8E2C4)[temp_a1 * 2];
-        if (var_v1 < val1) {
-            val2 = ((s16 *)D_8008D6C4_8E2C4)[temp_a1 * 2 + 1];
-            if (val2 < var_v1) {
-                temp_v0->unk424 = 1;
-                temp_v0->unk425 = *(u8 *)arg0;
+        triggerId = *(u8 *)arg0;
+        minAngle = ((s16 *)D_8008D6C4_8E2C4)[triggerId * 2];
+        if (angle < minAngle) {
+            maxAngle = ((s16 *)D_8008D6C4_8E2C4)[triggerId * 2 + 1];
+            if (maxAngle < angle) {
+                state->unk424 = 1;
+                state->unk425 = *(u8 *)arg0;
             }
         }
     }
