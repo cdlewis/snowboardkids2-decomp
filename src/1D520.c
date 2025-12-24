@@ -33,8 +33,8 @@ INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 
 void func_8001CD58_1D958(void) {
     allocation_1D520 *allocation = (allocation_1D520 *)getCurrentAllocation();
-    u8 value = ((u8 *)D_800AFE8C_A71FC)[0x1E];
-    allocation->unkAC8 = value;
+    u8 saveSlot = D_800AFE8C_A71FC->unk9[0x15];
+    allocation->unkAC8 = saveSlot;
     setGameStateHandler(func_8001CD90_1D990);
 }
 
