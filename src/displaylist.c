@@ -661,30 +661,30 @@ void func_800646C8_652C8(DisplayListObject *displayObjects) {
     }
 }
 
-void func_80064768_65368(DisplayListObject *arg0) {
-    DisplayListObject *elements;
+void func_80064768_65368(DisplayListObject *displayObjects) {
+    DisplayListObject *currentObject;
     s32 i;
-    u32 *temp;
-    s32 v0;
+    Gfx *displayListCmd;
+    s32 objectCount;
     u8 pad[0x48];
 
-    func_80064218_64E18(arg0);
+    func_80064218_64E18(displayObjects);
 
-    v0 = arg0->unk37;
-    if (v0 > 0) {
-        elements = arg0;
+    objectCount = displayObjects->unk37;
+    if (objectCount > 0) {
+        currentObject = displayObjects;
         i = 0;
         do {
-            if (elements[i].unk20->overlayDisplayList != NULL) {
-                func_800643AC_64FAC(arg0, i);
-                temp = (u32 *)gRegionAllocPtr;
-                temp[0] = 0xDE000000;
-                temp[1] = (u32)elements[i].unk20->overlayDisplayList;
-                gRegionAllocPtr = (void *)(temp + 2);
+            if (currentObject[i].unk20->overlayDisplayList != NULL) {
+                func_800643AC_64FAC(displayObjects, i);
+                displayListCmd = gRegionAllocPtr;
+                displayListCmd->words.w0 = 0xDE000000;
+                displayListCmd->words.w1 = (u32)currentObject[i].unk20->overlayDisplayList;
+                gRegionAllocPtr = displayListCmd + 1;
             }
             i++;
-            v0 = arg0->unk37;
-        } while (i < v0);
+            objectCount = displayObjects->unk37;
+        } while (i < objectCount);
     }
 }
 
