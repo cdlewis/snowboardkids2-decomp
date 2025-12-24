@@ -2142,14 +2142,21 @@ extern void *D_80090AB8_916B8[];
 extern void *D_80090ABC_916BC[];
 extern s32 D_80090AC0_916C0[];
 
+/*
+ * ItemTriggerEntry: 0x10-byte entries pointed to by unk8
+ *   0x00 s8      active   - 1 when active, set to 0 when processed
+ *   0x01 s8      type     - 0 for primary item, non-zero for secondary
+ *   0x02 u16     itemId   - item ID to give to the player
+ *   0x04 Vec3s32 position - world position for player detection
+ */
 typedef struct {
     void *unk0; /* 0x00 */
     void *unk4; /* 0x04 */
-    s8 *unk8;   /* 0x08 */
+    s8 *unk8;   /* 0x08 - array of 0x10-byte item trigger entries */
     void *unkC; /* 0x0C */
     s32 *unk10; /* 0x10 */
     s16 unk14;  /* 0x14 */
-    s16 unk16;  /* 0x16 */
+    s16 unk16;  /* 0x16 - number of item trigger entries */
 } Func44D1CArg;
 
 void func_80044DB0_459B0(Func44D1CArg *);
@@ -2212,6 +2219,16 @@ void func_80044DB0_459B0(Func44D1CArg *arg0) {
     setCallback(func_80044EC4_45AC4);
 }
 
+/**
+ * Processes item trigger entries to give items to nearby players.
+ *
+ * For each active entry in arg0->unk8:
+ * - Finds a player within range of the entry's position
+ * - If player found (and not a boss), gives them the item:
+ *   - Type 0 (primary): Sets unkBD2 to itemId, unkBD3 to 3 (or 9 in special mode)
+ *   - Type 1 (secondary): Sets unkBD4 to itemId
+ * - Marks entry as inactive and plays pickup sound
+ */
 void func_80044EC4_45AC4(Func44D1CArg *arg0) {
     s32 i;
     GameState *allocation;
