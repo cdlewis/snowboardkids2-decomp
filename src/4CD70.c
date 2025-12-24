@@ -40,6 +40,7 @@ USE_ASSET(_3F3D10);
 USE_ASSET(_3F6950);
 USE_ASSET(_3F6BB0);
 USE_ASSET(_3F3EF0);
+USE_ASSET(_3F58E0);
 
 typedef struct {
     u8 padding[0x10];
@@ -151,6 +152,13 @@ typedef struct {
     s16 unk2E;
 } Struct_func_8004D784;
 
+typedef struct {
+    u8 pad0[0x4];
+    void *unk4;
+    u8 pad8[0x14];
+    void *unk1C;
+} Struct_func_8004C6F0;
+
 void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
 void func_8004D464_4E064(Struct_func_8004D3A4 *);
 void func_8004D954_4E554(Struct_func_8004D8E4 *arg0);
@@ -167,10 +175,13 @@ void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0);
 void func_8004C170_4CD70(Struct_func_8004D8E4 *arg0);
 void func_8004C254_4CE54(Struct_func_8004D8E4 *arg0);
 void func_8004C294_4CE94(Struct_func_8004F04C *arg0);
-void func_8004C2C0_4CEC0(void);
+void func_8004C2C0_4CEC0(Struct_func_8004C2C0 *arg0);
 void func_8004C728_4D328(void);
 void func_8004CA90_4D690(void);
 void func_8004CDC0_4D9C0(void);
+void func_8004C6F0_4D2F0(Struct_func_8004C6F0 *arg0);
+void func_8004C5A8_4D1A8(Struct_func_8004C2C0 *arg0);
+void func_8004C46C_4D06C(Struct_func_8004C2C0 *arg0);
 
 static const char D_8009E880_9F480[] = "%5d";
 extern char D_8009E89C_9F49C[];
@@ -230,7 +241,59 @@ void func_8004C294_4CE94(Struct_func_8004F04C *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C2C0_4CEC0);
+void func_8004C2C0_4CEC0(Struct_func_8004C2C0 *arg0) {
+    GameState *allocation;
+    s32 playerMode;
+
+    allocation = (GameState *)getCurrentAllocation();
+    arg0->unk34 = &allocation->players[arg0->unk38];
+    playerMode = allocation->unk5F;
+
+    if (playerMode >= 3) {
+        goto else_branch;
+    }
+    if (playerMode == 0) {
+        goto else_branch;
+    }
+
+    if (playerMode == 1) {
+        arg0->unk0 = -0x20;
+        arg0->unk2 = -0x60;
+        arg0->unkC = 0;
+        arg0->unkE = -0x60;
+    } else {
+        arg0->unk0 = -0x88;
+        arg0->unk2 = -0x30;
+        arg0->unkC = -0x68;
+        arg0->unkE = -0x30;
+    }
+    arg0->unk10 = arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    arg0->unk18 = arg0->unk0 + 0x18;
+    arg0->unk1A = arg0->unk2 + 0x10;
+    arg0->unk1C = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    goto callbacks;
+
+else_branch:
+    arg0->unk0 = -0x10;
+    arg0->unk2 = -0x30;
+    arg0->unkC = 0;
+    arg0->unkE = -0x30;
+    arg0->unk10 = arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_3F58E0_ROM_START, &_3F58E0_ROM_END, 0xB08);
+    arg0->unk28 = 0;
+    arg0->unk2C = &arg0->unk30;
+    arg0->unk24 = arg0->unk0 + 8;
+    arg0->unk26 = arg0->unk2 + 8;
+    arg0->unk1C = dmaRequestAndUpdateStateWithSize(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    arg0->unk31 = 0;
+
+callbacks:
+    if (allocation->unk5F < 3) {
+        setCallbackWithContinue(func_8004C46C_4D06C);
+    } else {
+        setCallbackWithContinue(func_8004C5A8_4D1A8);
+    }
+    setCleanupCallback(func_8004C6F0_4D2F0);
+}
 
 void func_8004C46C_4D06C(Struct_func_8004C2C0 *arg0) {
     Player *temp_v0;
@@ -309,13 +372,6 @@ void func_8004C5A8_4D1A8(Struct_func_8004C2C0 *arg0) {
         temp_v1->unkBD8 = temp_v2 & 0xFD;
     }
 }
-
-typedef struct {
-    u8 pad0[0x4];
-    void *unk4;
-    u8 pad8[0x14];
-    void *unk1C;
-} Struct_func_8004C6F0;
 
 void func_8004C6F0_4D2F0(Struct_func_8004C6F0 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);

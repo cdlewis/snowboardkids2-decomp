@@ -1331,7 +1331,13 @@ segments:
     vram: 0
     start: 0x3F3EF0
 
-  - [0x3F58E0, bin]
+  - name: _3F58E0
+    type: bin
+    vram: 0
+    start: 0x3F58E0
+
+
+  - [0x3F6420, bin]
 
   - name: _3F6670
     type: bin
