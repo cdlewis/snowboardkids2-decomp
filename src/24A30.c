@@ -75,22 +75,22 @@ typedef struct {
 } func_80025FFC_26BFC_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
     u8 unkC;
-    u8 unkD;
+    u8 blinkState;
     u8 paddingE[2];
-} func_80025C64_entry;
+} SelectionEntry;
 
 typedef struct {
-    func_80025C64_entry entries[3];
+    SelectionEntry entries[3];
     u8 unk30[3];
-    u8 unk33;
-    u8 unk34;
-} func_80025C64_arg;
+    u8 numEntries;
+    u8 playerIndex;
+} SelectionMenuState;
 
 typedef struct {
     s16 unk0;
@@ -217,7 +217,7 @@ typedef struct {
 } func_80024048_arg;
 
 typedef struct {
-    func_80025C64_entry entries[8];
+    SelectionEntry entries[8];
     u8 unk80[4];
 } func_80026564_arg;
 
@@ -1059,12 +1059,12 @@ void func_80025C38_26838(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80025C64_26864(func_80025C64_arg *arg0) {
+void func_80025C64_26864(SelectionMenuState *arg0) {
     void *dmaResult;
     u16 x;
     u16 y;
     u16 xIncrement;
-    s32 unk8Base;
+    s32 spriteIndexBase;
     s32 count;
     s32 i;
     s32 incrementSigned;
@@ -1075,19 +1075,19 @@ void func_80025C64_26864(func_80025C64_arg *arg0) {
     dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80025FFC_26BFC);
 
-    unk8Base = 8;
+    spriteIndexBase = 8;
     if (D_800AFE8C_A71FC->unk8 == 1) {
-        unk8Base = 5;
+        spriteIndexBase = 5;
     }
 
-    arg0->unk33 = 3;
+    arg0->numEntries = 3;
 
     if (D_800AFE8C_A71FC->unk4 == 0) {
         x = D_8008DD6C_8E96C;
         y = D_8008DD6E_8E96E;
         xIncrement = D_8008DD70_8E970;
-        unk8Base = 6;
-        arg0->unk33 = 2;
+        spriteIndexBase = 6;
+        arg0->numEntries = 2;
     } else {
         s32 index = D_800AFE8C_A71FC->unk8;
         x = D_8008DD4E_8E94E[index][0];
@@ -1095,22 +1095,22 @@ void func_80025C64_26864(func_80025C64_arg *arg0) {
         xIncrement = D_8008DD4E_8E94E[index][2];
     }
 
-    count = arg0->unk33;
+    count = arg0->numEntries;
     if (count > 0) {
         i = 0;
         incrementSigned = (s16)xIncrement;
         do {
-            arg0->entries[i].unk0 = x;
-            arg0->entries[i].unk2 = y;
-            arg0->entries[i].unk8 = unk8Base + i;
-            arg0->entries[i].unkD = 0;
+            arg0->entries[i].x = x;
+            arg0->entries[i].y = y;
+            arg0->entries[i].spriteIndex = spriteIndexBase + i;
+            arg0->entries[i].blinkState = 0;
             arg0->entries[i].unkC = 0;
-            arg0->entries[i].unkA = 0xFF;
-            arg0->entries[i].unk4 = dmaResult;
+            arg0->entries[i].alpha = 0xFF;
+            arg0->entries[i].asset = dmaResult;
             arg0->unk30[i] = 0;
             i++;
             x += incrementSigned;
-        } while (i < (s32)arg0->unk33);
+        } while (i < (s32)arg0->numEntries);
     }
 
     setCallback(func_80025DAC_269AC);
@@ -1118,43 +1118,43 @@ void func_80025C64_26864(func_80025C64_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025DAC_269AC);
 
-#define ENTRY_SIZE_26AE4 0x10
+#define SELECTION_ENTRY_SIZE 0x10
 
-void func_80025EE4_26AE4(func_80025C64_arg *arg0) {
-    u8 *allocation;
+void func_80025EE4_26AE4(SelectionMenuState *arg0) {
+    u8 *gameState;
     s32 i;
-    s32 selectedIndex;
+    s32 selectedEntryIndex;
     u8 *entryBase;
     s32 pad[2];
-    s32 count;
+    s32 entryCount;
 
     (void)pad;
 
-    allocation = (u8 *)getCurrentAllocation();
-    count = arg0->unk33;
+    gameState = (u8 *)getCurrentAllocation();
+    entryCount = arg0->numEntries;
     i = 0;
-    if (count > 0) {
+    if (entryCount > 0) {
         entryBase = (u8 *)arg0;
         do {
             arg0->unk30[i] = 0;
-            if ((allocation + arg0->unk34)[0x18D2] == i) {
-                *(s16 *)(entryBase + i * ENTRY_SIZE_26AE4 + 0xA) = 0xFF;
-                selectedIndex = i;
-                if (*(u16 *)(allocation + arg0->unk34 * 2 + 0x18A0) & 1) {
-                    *(u8 *)(entryBase + i * ENTRY_SIZE_26AE4 + 0xD) = 0xFF;
+            if ((gameState + arg0->playerIndex)[0x18D2] == i) {
+                *(s16 *)(entryBase + i * SELECTION_ENTRY_SIZE + 0xA) = 0xFF;
+                selectedEntryIndex = i;
+                if (*(u16 *)(gameState + arg0->playerIndex * 2 + 0x18A0) & 1) {
+                    *(u8 *)(entryBase + i * SELECTION_ENTRY_SIZE + 0xD) = 0xFF;
                 } else {
-                    *(u8 *)(entryBase + i * ENTRY_SIZE_26AE4 + 0xD) = 0;
+                    *(u8 *)(entryBase + i * SELECTION_ENTRY_SIZE + 0xD) = 0;
                 }
             } else {
-                *(s16 *)(entryBase + i * ENTRY_SIZE_26AE4 + 0xA) = 0x50;
+                *(s16 *)(entryBase + i * SELECTION_ENTRY_SIZE + 0xA) = 0x50;
             }
-            debugEnqueueCallback(arg0->unk34 + 0xC, 0, func_80012004_12C04, entryBase + i * ENTRY_SIZE_26AE4);
+            debugEnqueueCallback(arg0->playerIndex + 0xC, 0, func_80012004_12C04, entryBase + i * SELECTION_ENTRY_SIZE);
             i++;
-        } while (i < (s32)arg0->unk33);
+        } while (i < (s32)arg0->numEntries);
     }
 
-    if (*(u16 *)(allocation + arg0->unk34 * 2 + 0x1898) != 2) {
-        arg0->entries[selectedIndex].unkD = 0;
+    if (*(u16 *)(gameState + arg0->playerIndex * 2 + 0x1898) != 2) {
+        arg0->entries[selectedEntryIndex].blinkState = 0;
         setCallbackWithContinue(func_80025DAC_269AC);
     }
 }
@@ -1240,7 +1240,7 @@ void func_800261BC_26DBC(func_80026564_arg *arg0) {
     u16 y;
     u16 xInc;
     s32 xIncrement;
-    func_80025C64_entry *ptr;
+    SelectionEntry *ptr;
     u16 x;
     s32 iTimesTwo;
     s32 pad[6];
@@ -1266,13 +1266,13 @@ void func_800261BC_26DBC(func_80026564_arg *arg0) {
             x = xBase;
             do {
                 ptr = &arg0->entries[iTimesTwo + j];
-                ((volatile func_80025C64_entry *)ptr)->unk0 = x;
-                ((volatile func_80025C64_entry *)ptr)->unk8 = j;
+                ((volatile SelectionEntry *)ptr)->x = x;
+                ((volatile SelectionEntry *)ptr)->spriteIndex = j;
                 j++;
-                ptr->unk2 = y;
-                ptr->unk4 = dmaResult;
-                ptr->unkA = 0xFF;
-                ptr->unkD = 0;
+                ptr->y = y;
+                ptr->asset = dmaResult;
+                ptr->alpha = 0xFF;
+                ptr->blinkState = 0;
                 ptr->unkC = 0;
                 x += xIncrement;
             } while (j < 2);
@@ -1300,7 +1300,7 @@ void func_80026564_27164(func_80026564_arg *arg0) {
     u16 y;
     u16 xInc;
     s32 xIncrement;
-    func_80025C64_entry *ptr;
+    SelectionEntry *ptr;
     u16 x;
     s32 iTimesTwo;
     s32 pad[5];
@@ -1327,13 +1327,13 @@ void func_80026564_27164(func_80026564_arg *arg0) {
             x = xBase;
             do {
                 ptr = &arg0->entries[iTimesTwo + j];
-                ((volatile func_80025C64_entry *)ptr)->unk0 = x;
-                ((volatile func_80025C64_entry *)ptr)->unk8 = j;
+                ((volatile SelectionEntry *)ptr)->x = x;
+                ((volatile SelectionEntry *)ptr)->spriteIndex = j;
                 j++;
-                ptr->unk2 = y;
-                ptr->unk4 = dmaResult;
-                ptr->unkA = 0xFF;
-                ptr->unkD = 0;
+                ptr->y = y;
+                ptr->asset = dmaResult;
+                ptr->alpha = 0xFF;
+                ptr->blinkState = 0;
                 ptr->unkC = 0;
                 x += xIncrement;
             } while (j < 2);
@@ -1359,7 +1359,7 @@ void func_80026BAC_277AC(func_80025FFC_26BFC_arg *arg0) {
 }
 
 typedef struct {
-    func_80025C64_entry entries[4];
+    SelectionEntry entries[4];
     s16 unk40;
     s16 unk42;
     void *unk44;
@@ -1382,7 +1382,7 @@ void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
     s32 unk8Val;
     s32 const_1;
     s32 const_ff;
-    volatile func_80025C64_entry *ptr;
+    volatile SelectionEntry *ptr;
     s32 pad[4];
 
     (void)pad;
@@ -1400,7 +1400,7 @@ void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
     if (count != 0) {
         const_1 = 1;
         const_ff = 0xFF;
-        ptr = (volatile func_80025C64_entry *)arg0;
+        ptr = (volatile SelectionEntry *)arg0;
         do {
             if (global->unk9[i + 4] >= 9) {
                 unk8Val = 0x35;
@@ -1411,14 +1411,14 @@ void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
                 }
                 unk8Val = unk8Val + (allocation + i)[0x18B0];
             }
-            ptr->unkD = 0;
+            ptr->blinkState = 0;
             ptr->unkC = 0;
             global = D_800AFE8C_A71FC;
-            ptr->unk0 = unk0Val;
-            ptr->unk2 = unk2Val;
-            ptr->unkA = const_ff;
-            ptr->unk8 = unk8Val;
-            ptr->unk4 = dmaResult;
+            ptr->x = unk0Val;
+            ptr->y = unk2Val;
+            ptr->alpha = const_ff;
+            ptr->spriteIndex = unk8Val;
+            ptr->asset = dmaResult;
             i++;
             ptr++;
         } while (i < global->unk8);
