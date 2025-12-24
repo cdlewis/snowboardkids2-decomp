@@ -285,7 +285,7 @@ void func_800B2C78(func_800B2C78_arg *arg0);
 void func_800B2D04(CutsceneSlot *arg0);
 void func_800B2D68_1DFE18(CutsceneSlot *arg0);
 void func_800B2DCC_1DFE7C(CutsceneSlot *arg0);
-void func_800B2E48_1DFEF8(func_800B2C78_arg *arg0);
+void func_800B2E48_1DFEF8(CutsceneManager *manager);
 s32 processCutsceneFrame(CutsceneManager *uiManager);
 s16 func_800B3360(s16, s16);
 void *func_800B3420_1E04D0(void);
