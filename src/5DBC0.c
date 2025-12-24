@@ -57,73 +57,74 @@ extern u8 D_800941BC_94DBC[];
 extern s32 func_8005DDD8_5E9D8(u8, u8);
 
 void func_8005D61C_5E21C(Player *player) {
-    s32 temp_v1;
-    s32 var_s0;
-    s32 var_s0_2;
-    u8 temp_s0;
-    u8 *var_s2;
-    u8 *var_s2_2;
-    u8 *ptr;
+    s32 flags;
+    s32 partIndex;
+    s32 partIndex2;
+    u8 tableValue;
+    u8 *partPtr;
+    u8 *partPtr2;
+    u8 *lookupTable;
 
     if (((GameState *)getCurrentAllocation())->unk7A == 0xB) {
-        temp_v1 = player->unkB84;
-        if (temp_v1 & 4) {
-            player->unkB84 = temp_v1 | 8;
-            var_s0 = 0;
-            var_s2 = (u8 *)player;
+        flags = player->unkB84;
+        if (flags & 4) {
+            player->unkB84 = flags | 8;
+            partIndex = 0;
+            partPtr = (u8 *)player;
             do {
-                *(s32 *)(var_s2 + 0x58) =
-                    (s32)loadAssetByIndex_95380(player->unkBB9, player->unkBBA) + D_800941BC_94DBC[var_s0] * 0x10;
-                var_s0 += 1;
-                var_s2 += 0x3C;
-            } while (var_s0 < 0x10);
+                *(s32 *)(partPtr + 0x58) =
+                    (s32)loadAssetByIndex_95380(player->unkBB9, player->unkBBA) + D_800941BC_94DBC[partIndex] * 0x10;
+                partIndex += 1;
+                partPtr += 0x3C;
+            } while (partIndex < 0x10);
         } else {
-            player->unkB84 = temp_v1 & ~8;
-            var_s0 = 0;
-            var_s2 = (u8 *)player;
+            player->unkB84 = flags & ~8;
+            partIndex = 0;
+            partPtr = (u8 *)player;
             do {
-                *(s32 *)(var_s2 + 0x58) = (s32)loadAssetByIndex_95380(player->unkBB9, player->unkBBA) + var_s0 * 0x10;
-                var_s2 += 0x3C;
-            } while (++var_s0 < 0x10);
+                *(s32 *)(partPtr + 0x58) =
+                    (s32)loadAssetByIndex_95380(player->unkBB9, player->unkBBA) + partIndex * 0x10;
+                partPtr += 0x3C;
+            } while (++partIndex < 0x10);
         }
     } else {
-        temp_v1 = player->unkB84;
-        if (temp_v1 & 4) {
-            player->unkB84 = temp_v1 | 8;
-            var_s0_2 = 0;
-            var_s2_2 = (u8 *)player;
+        flags = player->unkB84;
+        if (flags & 4) {
+            player->unkB84 = flags | 8;
+            partIndex2 = 0;
+            partPtr2 = (u8 *)player;
             do {
-                *(s32 *)(var_s2_2 + 0x58) =
-                    loadAssetByIndex_953B0(player->unkBB9, player->unkBBA) + D_800941BC_94DBC[var_s0_2] * 0x10;
-                var_s0_2 += 1;
-                var_s2_2 += 0x3C;
-            } while (var_s0_2 < 0x10);
+                *(s32 *)(partPtr2 + 0x58) =
+                    loadAssetByIndex_953B0(player->unkBB9, player->unkBBA) + D_800941BC_94DBC[partIndex2] * 0x10;
+                partIndex2 += 1;
+                partPtr2 += 0x3C;
+            } while (partIndex2 < 0x10);
         } else {
-            player->unkB84 = temp_v1 & ~8;
-            var_s0_2 = 0;
-            var_s2_2 = (u8 *)player;
+            player->unkB84 = flags & ~8;
+            partIndex2 = 0;
+            partPtr2 = (u8 *)player;
             do {
-                *(s32 *)(var_s2_2 + 0x58) = loadAssetByIndex_953B0(player->unkBB9, player->unkBBA) + var_s0_2 * 0x10;
-                var_s2_2 += 0x3C;
-            } while (++var_s0_2 < 0x10);
+                *(s32 *)(partPtr2 + 0x58) = loadAssetByIndex_953B0(player->unkBB9, player->unkBBA) + partIndex2 * 0x10;
+                partPtr2 += 0x3C;
+            } while (++partIndex2 < 0x10);
         }
     }
 
-    ptr = D_80094180_94D80 + player->unkBB9 * 5;
-    temp_s0 = ptr[player->unkBE6];
-    if (temp_s0 == 0) {
+    lookupTable = D_80094180_94D80 + player->unkBB9 * 5;
+    tableValue = lookupTable[player->unkBE6];
+    if (tableValue == 0) {
         goto copy_basic;
     }
-    temp_v1 = (s32)player->unk20;
-    if (temp_v1 == 0) {
+    flags = (s32)player->unk20;
+    if (flags == 0) {
     copy_basic:
-        *(s32 *)((u8 *)player + 0x23C) = (s32)player->unk4;
-        *(s32 *)((u8 *)player + 0x240) = (s32)player->unk8;
+        player->unk23C = (s32)player->unk4;
+        player->unk240 = (s32)player->unk8;
         return;
     }
-    *(s32 *)((u8 *)player + 0x23C) = temp_v1;
-    *(s32 *)((u8 *)player + 0x240) = (s32)player->unk24;
-    *(s32 *)((u8 *)player + 0x238) = func_8005DDD8_5E9D8(player->unkBB9, player->unkBBA) + temp_s0 * 0x10 - 0x10;
+    player->unk23C = flags;
+    player->unk240 = (s32)player->unk24;
+    player->unk238 = func_8005DDD8_5E9D8(player->unkBB9, player->unkBBA) + tableValue * 0x10 - 0x10;
 }
 
 void func_8005D804_5E404(Player *arg0, u8 arg1, u8 arg2) {

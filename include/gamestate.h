@@ -56,7 +56,11 @@ typedef struct {
     u8 unk72;
     u8 padding73[0x164 - 0x73];
     s16 unk164[3];
-    u8 padding16A[0x31C - 0x16A];
+    u8 padding16A[0x238 - 0x16A];
+    s32 unk238;
+    s32 unk23C;
+    s32 unk240;
+    u8 padding244[0x31C - 0x244];
     s32 unk31C;
     s32 unk320;
     s32 unk324;
