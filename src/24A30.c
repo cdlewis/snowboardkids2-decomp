@@ -656,28 +656,28 @@ void func_80024F48_25B48(func_80024C8C_2588C_arg *);
 void func_80024BA0_257A0(func_80024C8C_2588C_arg *arg0) {
     Mat3x3Padded localMatrix;
     Mat3x3Padded *localPtr;
-    u8 *base;
+    GameState *state;
     Mat3x3Padded *matrix;
     u16 rotation;
     u16 val;
 
-    base = (u8 *)getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
 
     localPtr = &localMatrix;
     memcpy(localPtr, identityMatrix, sizeof(Mat3x3Padded));
 
-    matrix = (Mat3x3Padded *)&arg0->unk4;
-    rotation = *(u16 *)(base + arg0->unk28 * 2 + 0x1880);
+    matrix = &arg0->unk4;
+    rotation = state->unk1880[arg0->unk28];
     createYRotationMatrix(matrix, 0x2000 - rotation);
 
-    func_8006B084_6BC84(matrix, base + (arg0->unk28 * 32 + 0x17F8), localPtr);
+    func_8006B084_6BC84(matrix, &state->unk17F8[arg0->unk28], localPtr);
 
     applyTransformToModel(arg0->unk0, localPtr);
 
     clearModelRotation(arg0->unk0);
     updateModelGeometry(arg0->unk0);
 
-    val = *(u16 *)(base + arg0->unk28 * 2 + 0x1898);
+    val = state->unk1898[arg0->unk28];
     if (val == 0x10) {
         func_80002014_2C14(arg0->unk0);
         setCallback(func_80024DCC_259CC);
