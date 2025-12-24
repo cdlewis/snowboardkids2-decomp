@@ -5,28 +5,38 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "task_scheduler.h"
 
-extern void func_8000A49C_B09C(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
+extern void func_8000A49C_B09C(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
+extern u8 identityMatrix[];
+extern u16 D_8008EF70_8FB70[];
 
 typedef struct Func2E024Arg Func2E024Arg;
 struct Func2E024Arg {
-    /* 0x00 */ s32 unk0;
+    /* 0x00 */ SceneModel *model;
     /* 0x04 */ u8 pad0[0x14];
     /* 0x18 */ s32 unk18;
     /* 0x1C */ u8 pad1[0x4];
     /* 0x20 */ s32 unk20;
     /* 0x24 */ u8 pad2[0x1C];
     /* 0x40 */ s32 unk40;
-    /* 0x44 */ u8 pad3[0xC];
+    /* 0x44 */ s32 unk44;
+    /* 0x48 */ s32 unk48;
+    /* 0x4C */ u8 pad4C[0x4];
     /* 0x50 */ s16 unk50;
     /* 0x52 */ u8 pad3b[0xC];
     /* 0x5E */ u8 unk5E;
     /* 0x5F */ u8 pad4[0x3];
     /* 0x62 */ s8 unk62;
     /* 0x63 */ u8 pad5[0x1];
-    /* 0x64 */ s32 unk64;
-    /* 0x68 */ u8 pad6[0x3C];
+    /* 0x64 */ SceneModel *unk64;
+    /* 0x68 */ u8 pad6[0x14];
+    /* 0x7C */ s32 unk7C;
+    /* 0x80 */ u8 pad80[0x4];
+    /* 0x84 */ s32 unk84;
+    /* 0x88 */ u8 pad88[0x1C];
     /* 0xA4 */ s32 unkA4;
-    /* 0xA8 */ u8 pad7[0xC];
+    /* 0xA8 */ s32 unkA8;
+    /* 0xAC */ s32 unkAC;
+    /* 0xB0 */ u8 padB0[0x4];
     /* 0xB4 */ s16 unkB4;
     /* 0xB6 */ u8 pad8[0x8];
     /* 0xBE */ s16 unkBE;
@@ -92,7 +102,7 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
     case23:
         ((Func2E024Arg *)&elements[i])->unk62 = 0;
         if (getFreeNodeCount(2) == 0x14) {
-            func_8000A49C_B09C(arg0->unk0, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+            func_8000A49C_B09C(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
             func_8000A49C_B09C(arg0->unk64, 0, 0x24, -1, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
         }
 
@@ -116,7 +126,54 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D814_2E414);
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002DA54_2E654);
 
-INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002DE44_2EA44);
+void func_8002E024_2EC24(Func2E024Arg *arg0);
+
+void func_8002DE44_2EA44(Func2E024Arg *arg0) {
+    GameState *allocation;
+    s32 i;
+    struct Func2E024Element *elements;
+
+    allocation = getCurrentAllocation();
+    elements = (struct Func2E024Element *)arg0;
+
+    for (i = 0; i < arg0->unkD5; i++) {
+        memcpy((u8 *)&elements[i] + 4, identityMatrix, 0x20);
+        ((Func2E024Arg *)&elements[i])->unk62 = 0;
+
+        if (i == 0) {
+            arg0->unk18 = 0xFFFC0000;
+            arg0->unk20 = 0xFFBC0000;
+            func_80001688_2288(arg0->model, 4);
+            arg0->unk50 = 0x11;
+            arg0->unk5E = 0x63;
+            arg0->unk44 = 0x1D0000;
+            arg0->unk40 = 0xFFFC0000;
+            arg0->unk48 = 0;
+            func_8000A49C_B09C(arg0->model, 0, 0x2F, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+        } else {
+            arg0->unk7C = 0x200000;
+            arg0->unkC2 = 0x62;
+            arg0->unkA8 = 0x260000;
+            arg0->unk84 = 0xFFBC0000;
+            arg0->unkB4 = 0;
+            arg0->unkBE = 0;
+            arg0->unkA4 = 0;
+            arg0->unkAC = 0;
+            func_8000A49C_B09C(arg0->unk64, 0, 7, 0x2D, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
+        }
+
+        ((Func297D8Arg *)&elements[i])->rotation = 0x1800;
+        ((Func297D8Arg *)&elements[i])->unk2E = 0x1800;
+        ((Func297D8Arg *)&elements[i])->unk52 = ((Func297D8Arg *)&elements[i])->unk50;
+        createYRotationMatrix((Mat3x3Padded *)((u8 *)&elements[i] + 4), ((Func297D8Arg *)&elements[i])->rotation);
+        func_8002A290_2AE90((Func297D8Arg *)&elements[i]);
+        ((s32 *)allocation)[0x102 + i] = elements[i].unk18;
+        ((s32 *)allocation)[0x104 + i] = elements[i].unk20;
+        ((s16 *)allocation)[0x20C + i] = D_8008EF70_8FB70[((Func297D8Arg *)&elements[i])->unk5C];
+    }
+
+    setCallback(func_8002E024_2EC24);
+}
 
 void func_8002E024_2EC24(Func2E024Arg *arg0) {
     GameState *allocation;
