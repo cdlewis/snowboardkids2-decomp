@@ -1,12 +1,12 @@
 #include "5AA90.h"
 #include "3E160.h"
 #include "56910.h"
+#include "5DBC0.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 #include "task_scheduler.h"
-extern s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3);
 
 typedef struct ListNode_5AA90 {
     /* 0x00 */ struct ListNode_5AA90 *next;
