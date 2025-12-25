@@ -3519,10 +3519,10 @@ void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0) {
 
 typedef struct {
     u8 pad[0x24];
-    s32 unk24;
+    Player *unk24;
 } func_8004BC5C_4C85C_Task;
 
-void func_8004BC5C_4C85C(s32 arg0) {
+void func_8004BC5C_4C85C(Player *arg0) {
     GameState *allocation;
     func_8004BC5C_4C85C_Task *task;
 
