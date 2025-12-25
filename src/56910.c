@@ -26,31 +26,19 @@ D_80090F90_91B90_item *func_80055D10_56910(s32 index) {
 }
 
 void *func_80055D34_56934(s32 index) {
-    return dmaRequestAndUpdateStateWithSize(
-        D_80091250_91E50[index].start,
-        D_80091250_91E50[index].end,
-        D_80091250_91E50[index].size
-    );
+    return loadCompressedData(D_80091250_91E50[index].start, D_80091250_91E50[index].end, D_80091250_91E50[index].size);
 }
 
 void *func_80055D7C_5697C(s32 index) {
-    return dmaRequestAndUpdateStateWithSize(
-        D_80091310_91F10[index].start,
-        D_80091310_91F10[index].end,
-        D_80091310_91F10[index].size
-    );
+    return loadCompressedData(D_80091310_91F10[index].start, D_80091310_91F10[index].end, D_80091310_91F10[index].size);
 }
 
 void *func_80055DC4_569C4(s32 index) {
-    return dmaRequestAndUpdateState(D_800913D0_91FD0[index].start, D_800913D0_91FD0[index].end);
+    return loadUncompressedData(D_800913D0_91FD0[index].start, D_800913D0_91FD0[index].end);
 }
 
 void *func_80055DF8_569F8(s32 index) {
-    return dmaRequestAndUpdateStateWithSize(
-        D_80091450_92050[index].start,
-        D_80091450_92050[index].end,
-        D_80091450_92050[index].size
-    );
+    return loadCompressedData(D_80091450_92050[index].start, D_80091450_92050[index].end, D_80091450_92050[index].size);
 }
 
 s32 func_80055E40_56A40(s32 arg0) {
@@ -66,29 +54,29 @@ func_80055E68_56A68_result *func_80055E68_56A68(s32 index) {
 }
 
 void *loadAsset_B7E70(void) {
-    return dmaRequestAndUpdateState(&D_B7E70, &D_B9C40);
+    return loadUncompressedData(&D_B7E70, &D_B9C40);
 }
 
 void *loadAsset_216290(void) {
-    return dmaRequestAndUpdateStateWithSize(&_216290_ROM_START, &_216290_ROM_END, 0x5740);
+    return loadCompressedData(&_216290_ROM_START, &_216290_ROM_END, 0x5740);
 }
 
 void *loadAsset_34CB50(void) {
-    return dmaRequestAndUpdateStateWithSize(&_34CB50_ROM_START, &_34CB50_ROM_END, 0x5E28);
+    return loadCompressedData(&_34CB50_ROM_START, &_34CB50_ROM_END, 0x5E28);
 }
 
 void *loadAsset_34F9A0(void) {
-    return dmaRequestAndUpdateStateWithSize(&_34F9A0_ROM_START, &_34F9A0_ROM_END, 0xE08);
+    return loadCompressedData(&_34F9A0_ROM_START, &_34F9A0_ROM_END, 0xE08);
 }
 
 void *loadAsset_350140(void) {
-    return dmaRequestAndUpdateStateWithSize(&_350140_ROM_START, &_350140_ROM_END, 0x868);
+    return loadCompressedData(&_350140_ROM_START, &_350140_ROM_END, 0x868);
 }
 
 void *loadAsset_3505F0(void) {
-    return dmaRequestAndUpdateStateWithSize(&_3505F0_ROM_START, &_3505F0_ROM_END, 0xA88);
+    return loadCompressedData(&_3505F0_ROM_START, &_3505F0_ROM_END, 0xA88);
 }
 
 void *loadAsset_34F7E0(void) {
-    return dmaRequestAndUpdateStateWithSize(&_34F7E0_ROM_START, &_34F7E0_ROM_END, 0x438);
+    return loadCompressedData(&_34F7E0_ROM_START, &_34F7E0_ROM_END, 0x438);
 }

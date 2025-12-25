@@ -194,7 +194,7 @@ void func_80036328_36F28(func_80036328_36F28_arg *arg0) {
 
     func_80036328_36F28_arg_item *var_v1;
 
-    resource = dmaRequestAndUpdateStateWithSize(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
+    resource = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
     temp_value = func_80035F80_36B80(1);
 
     setCleanupCallback(&func_80036848_37448);
@@ -242,7 +242,7 @@ void func_80036848_37448(void *untypedArg) {
 void func_80036880_37480(func_80036880_37480_arg *arg0) {
     void *resource;
 
-    resource = dmaRequestAndUpdateStateWithSize(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
+    resource = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
     setCleanupCallback(&func_80036A10_37610);
     arg0->unk8 = 8;
     arg0->unkA = 0xFF;

@@ -322,8 +322,8 @@ s32 func_8000056C_116C(func_8000056C_116C_arg *entity, s16 index, void *arg2) {
     entity->unk86 = 0;
 
     if (entry->unk32 == 0xFFFF) {
-        entity->unk4 = dmaRequestAndUpdateState(entry->asset1Start, entry->asset1End);
-        entity->unk8 = dmaRequestAndUpdateStateWithSize(entry->asset2Start, entry->asset2End, entry->asset2Size);
+        entity->unk4 = loadUncompressedData(entry->asset1Start, entry->asset1End);
+        entity->unk8 = loadCompressedData(entry->asset2Start, entry->asset2End, entry->asset2Size);
 
         memcpy(&entity->unkC, &identityMatrix, 0x20);
 
@@ -404,8 +404,8 @@ void func_800007F0_13F0(func_80000C2C_182C_arg *arg0) {
     setCleanupCallback(&func_80000968_1568);
     memcpy(&arg0->unk8, &identityMatrix, sizeof(Mat3x3Padded));
 
-    arg0->unk2C = dmaRequestAndUpdateState(temp_s0->asset1Start, temp_s0->asset1End);
-    arg0->unk30 = dmaRequestAndUpdateStateWithSize(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
+    arg0->unk2C = loadUncompressedData(temp_s0->asset1Start, temp_s0->asset1End);
+    arg0->unk30 = loadCompressedData(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
     arg0->unk34 = 0;
     arg0->unk28 = temp_s2->unk4;
     arg0->unk8.unk14 = temp_s2->unk8;
@@ -449,8 +449,8 @@ void func_800009A0_15A0(func_80000C2C_182C_arg *arg0) {
 
     memcpy(&arg0->unk8, &identityMatrix, 0x20);
 
-    arg0->unk2C = dmaRequestAndUpdateState(temp_s0->asset1Start, temp_s0->asset1End);
-    arg0->unk30 = dmaRequestAndUpdateStateWithSize(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
+    arg0->unk2C = loadUncompressedData(temp_s0->asset1Start, temp_s0->asset1End);
+    arg0->unk30 = loadCompressedData(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
     arg0->unk34 = 0;
     arg0->unk28 = temp_s2->unk4;
     arg0->unk44 = 0;
@@ -574,8 +574,8 @@ void func_80000DC0_19C0(func_80000DC0_19C0_arg *arg0) {
 
     memcpy(&arg0->unk8, &identityMatrix, 0x20);
 
-    arg0->unk2C = dmaRequestAndUpdateState(var_s0->asset1Start, var_s0->asset1End);
-    arg0->unk30 = dmaRequestAndUpdateStateWithSize(var_s0->asset2Start, var_s0->asset2End, var_s0->asset2Size);
+    arg0->unk2C = loadUncompressedData(var_s0->asset1Start, var_s0->asset1End);
+    arg0->unk30 = loadCompressedData(var_s0->asset2Start, var_s0->asset2End, var_s0->asset2Size);
     arg0->unk34 = 0;
     arg0->unk28 = var_s2->unk4;
 
@@ -611,8 +611,8 @@ void func_80000F4C_1B4C(func_80000F4C_1B4C_arg *arg0) {
     setCleanupCallback(&func_80001114_1D14);
     memcpy(&arg0->unk8, &identityMatrix, 0x20);
 
-    arg0->unk2C = dmaRequestAndUpdateState(temp_s0->asset1Start, temp_s0->asset1End);
-    arg0->unk30 = dmaRequestAndUpdateStateWithSize(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
+    arg0->unk2C = loadUncompressedData(temp_s0->asset1Start, temp_s0->asset1End);
+    arg0->unk30 = loadCompressedData(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
     arg0->unk34 = 0;
     arg0->unk28 = temp_s2->unk4;
     arg0->unk44 = func_80009EF8_AAF8(temp_s2->unk16);

@@ -45,8 +45,8 @@ typedef struct {
 
 void func_8000B970_C570(func_8000BBA8_C7A8_arg *arg0) {
     arg0->unk20 = &D_80088670_89270;
-    arg0->unk24 = dmaRequestAndUpdateState(&_1FB8B0_ROM_START, &_1FB8B0_ROM_END);
-    arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_4CA440_ROM_START, &_4CA440_ROM_END, 0xE90);
+    arg0->unk24 = loadUncompressedData(&_1FB8B0_ROM_START, &_1FB8B0_ROM_END);
+    arg0->unk28 = loadCompressedData(&_4CA440_ROM_START, &_4CA440_ROM_END, 0xE90);
     arg0->unk2C = 0;
     arg0->unk68 = 0;
     arg0->unk82 = 0x200;

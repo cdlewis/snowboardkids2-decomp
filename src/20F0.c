@@ -227,10 +227,10 @@ void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
 
     switch (mode) {
         case MODE_DMA:
-            return dmaRequestAndUpdateState(entity->displayListStart, entity->displayListEnd);
+            return loadUncompressedData(entity->displayListStart, entity->displayListEnd);
 
         case MODE_QUEUED_DMA:
-            return dmaRequestAndUpdateStateWithSize(entity->vertexDataStart, entity->vertexDataEnd, entity->romBSize);
+            return loadCompressedData(entity->vertexDataStart, entity->vertexDataEnd, entity->romBSize);
 
         case MODE_DIRECT_FETCH:
             return entity->unk14;
@@ -259,7 +259,7 @@ void *loadAssetGroupSoundData(SceneModel *arg0) {
     void *allocatedSpaceStart = NULL;
 
     if (entry->soundSequenceDataStart != NULL) {
-        allocatedSpaceStart = dmaRequestAndUpdateStateWithSize(
+        allocatedSpaceStart = loadCompressedData(
             entry->soundSequenceDataStart,
             entry->soundSequenceDataEnd,
             entry->soundSequenceDataSize
@@ -271,12 +271,12 @@ void *loadAssetGroupSoundData(SceneModel *arg0) {
 
 void *loadAssetGroupDisplayList(SceneModel *arg0) {
     AssetGroup *entity = &gameAssets[arg0->index];
-    return dmaRequestAndUpdateState(entity->displayListStart, entity->displayListEnd);
+    return loadUncompressedData(entity->displayListStart, entity->displayListEnd);
 }
 
 void *loadAssetGroupVertexData(SceneModel *arg0) {
     AssetGroup *entity = &gameAssets[arg0->index];
-    return dmaRequestAndUpdateStateWithSize(entity->vertexDataStart, entity->vertexDataEnd, entity->size);
+    return loadCompressedData(entity->vertexDataStart, entity->vertexDataEnd, entity->size);
 }
 
 s32 func_800018F4_24F4(SceneModel *arg0) {
@@ -362,9 +362,8 @@ void initializeGameEntity(
     }
 
     if (assetEntry->displayListStart != NULL) {
-        asset1 = dmaRequestAndUpdateState(assetEntry->displayListStart, assetEntry->displayListEnd);
-        asset2 =
-            dmaRequestAndUpdateStateWithSize(assetEntry->vertexDataStart, assetEntry->vertexDataEnd, assetEntry->size);
+        asset1 = loadUncompressedData(assetEntry->displayListStart, assetEntry->displayListEnd);
+        asset2 = loadCompressedData(assetEntry->vertexDataStart, assetEntry->vertexDataEnd, assetEntry->size);
 
         for (i = 0; i < assetEntry->numAssets; i++) {
             ent->unk00[i].unk20 = &assetEntry->unk1C[i];
@@ -386,11 +385,7 @@ void initializeGameEntity(
 
     if (assetEntry->unk22) {
         if (assetEntry->anotherAssetIndex == -1) {
-            ent->unk08 = dmaRequestAndUpdateStateWithSize(
-                assetEntry->asset3Start,
-                assetEntry->asset3End,
-                assetEntry->asset3Size
-            );
+            ent->unk08 = loadCompressedData(assetEntry->asset3Start, assetEntry->asset3End, assetEntry->asset3Size);
             ent->unk04 = allocateNodeMemory(0x980);
         } else {
             func_800585C8_591C8(0);
@@ -418,9 +413,8 @@ void initializeGameEntity(
         node8A1A0 = &D_800895A0_8A1A0[yetAnotherAssetIndex];
 
         ent->unk00[17].unk20 = node8A1A0->unk14;
-        ent->unk00[17].asset1 = dmaRequestAndUpdateState(node8A1A0->assetStart, node8A1A0->assetEnd);
-        ent->unk00[17].asset2 =
-            dmaRequestAndUpdateStateWithSize(node8A1A0->asset2Start, node8A1A0->asset2End, node8A1A0->asset2Size);
+        ent->unk00[17].asset1 = loadUncompressedData(node8A1A0->assetStart, node8A1A0->assetEnd);
+        ent->unk00[17].asset2 = loadCompressedData(node8A1A0->asset2Start, node8A1A0->asset2End, node8A1A0->asset2Size);
         ent->unk00[17].asset3 = NULL;
 
         memcpy(&ent->unk00[17].transformationMatrix, identityMatrix, 0x20);
@@ -472,7 +466,7 @@ void initializeGameEntity(
     ent->unk15C = 0;
     ent->unk158 = 0;
 
-    ent->unk120 = dmaRequestAndUpdateStateWithSize(_646850_ROM_START, _646850_ROM_END, 0x238);
+    ent->unk120 = loadCompressedData(_646850_ROM_START, _646850_ROM_END, 0x238);
     ent->unk124 = &D_8008BD38_8C938;
     ent->unk13A = 0x50;
     ent->unk154 = 0;

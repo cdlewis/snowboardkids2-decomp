@@ -9,6 +9,12 @@ typedef struct {
     void *arg;
 } Entry;
 
+typedef enum {
+    DMA_COMPRESSION_NONE = 0,
+    DMA_COMPRESSION_RLE = 1,
+    DMA_COMPRESSION_DIRECT_BUFFER = 2
+} DmaCompressionType;
+
 typedef struct {
     void *start;
     void *end;
@@ -747,7 +753,7 @@ void piDmaHandlerThread(void *arg __attribute__((unused))) {
 
         dstOffset = 0;
 
-        if (entry->compressionType == 0) {
+        if (entry->compressionType == DMA_COMPRESSION_NONE) {
             size = entry->size;
             osInvalDCache(entry->dramAddr, size);
             devAddr = (u32)entry->start;
@@ -846,13 +852,13 @@ void piDmaHandlerThread(void *arg __attribute__((unused))) {
     END:
         unlockNodeWithInterruptDisable((s32 *)entry->dramAddr);
 
-        if ((u32)entry->compressionType < 2) {
+        if ((u32)entry->compressionType < DMA_COMPRESSION_DIRECT_BUFFER) {
             gPendingDmaCount--;
         }
     }
 }
 
-void *queueDmaTransfer(void *start, void *end) {
+void *queueUncompressedDmaTransfer(void *start, void *end) {
     void *dramAddr;
     u8 nodeAlreadyExists;
     s32 size;
@@ -872,7 +878,7 @@ void *queueDmaTransfer(void *start, void *end) {
 
     gDmaQueue[gDmaQueueIndex].start = start;
     gDmaQueue[gDmaQueueIndex].end = end;
-    gDmaQueue[gDmaQueueIndex].compressionType = 0;
+    gDmaQueue[gDmaQueueIndex].compressionType = DMA_COMPRESSION_NONE;
 
     gPendingDmaCount++;
     osSendMesg(&gDmaMsgQueue, (OSMesg)&gDmaQueue[gDmaQueueIndex], OS_MESG_BLOCK);
@@ -887,7 +893,7 @@ void *queueDmaTransfer(void *start, void *end) {
     return dramAddr;
 }
 
-void *dmaQueueRequest(void *romStart, void *romEnd, s32 size) {
+void *queueCompressedDmaTransfer(void *romStart, void *romEnd, s32 size) {
     u8 flag;
     DmaTransferEntry *entry;
     MemoryAllocatorNode *allocatedSpaceStart;
@@ -903,7 +909,7 @@ void *dmaQueueRequest(void *romStart, void *romEnd, s32 size) {
         gDmaQueue[gDmaQueueIndex].start = romStart;
         entry = &gDmaQueue[gDmaQueueIndex];
         entry->end = romEnd;
-        entry->compressionType = 1;
+        entry->compressionType = DMA_COMPRESSION_RLE;
         gPendingDmaCount++;
         osSendMesg(&gDmaMsgQueue, entry, OS_MESG_BLOCK);
         gDmaQueueIndex++;
@@ -925,7 +931,7 @@ s32 func_8003BB5C_3C75C(void) {
     return gPendingDmaCount;
 }
 
-s32 *queueDmaTransferToBuffer(void *romStart, void *romEnd, s32 size, s32 *dramAddr) {
+s32 *queueDirectDmaTransfer(void *romStart, void *romEnd, s32 size, s32 *dramAddr) {
     (&gDmaQueue[gDmaQueueIndex])->size = size;
     (&gDmaQueue[gDmaQueueIndex])->dramAddr = dramAddr;
 
@@ -933,7 +939,7 @@ s32 *queueDmaTransferToBuffer(void *romStart, void *romEnd, s32 size, s32 *dramA
 
     (&gDmaQueue[gDmaQueueIndex])->start = romStart;
     (&gDmaQueue[gDmaQueueIndex])->end = romEnd;
-    (&gDmaQueue[gDmaQueueIndex])->compressionType = 2;
+    (&gDmaQueue[gDmaQueueIndex])->compressionType = DMA_COMPRESSION_DIRECT_BUFFER;
 
     osSendMesg(&gDmaMsgQueue, &gDmaQueue[gDmaQueueIndex], 1);
 

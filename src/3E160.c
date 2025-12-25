@@ -374,7 +374,7 @@ void initRace(void) {
                 case 0:
                 case 1:
                     raceState->humanPlayerCount = 1;
-                    raceState->unk14 = dmaRequestAndUpdateStateWithSize(&_40E870_ROM_START, &_40E870_ROM_END, 0xB8E0);
+                    raceState->unk14 = loadCompressedData(&_40E870_ROM_START, &_40E870_ROM_END, 0xB8E0);
                     break;
             }
             break;
@@ -781,7 +781,7 @@ void func_8003EDA0_3F9A0(void) {
 
     temp_v0 = (GameState *)getCurrentAllocation();
     temp_v0->gameData.dataStart = func_80055D34_56934(temp_v0->memoryPoolId);
-    temp_v0->unk28 = dmaRequestAndUpdateStateWithSize(&_3FF010_ROM_START, &_3FF010_ROM_END, 0x16E0);
+    temp_v0->unk28 = loadCompressedData(&_3FF010_ROM_START, &_3FF010_ROM_END, 0x16E0);
     func_8006983C_6A43C(&func_8003EDF8_3F9F8);
 }
 
@@ -811,7 +811,7 @@ void func_8003EE50_3FA50(void) {
             offset += 0xBE8;
         } while (i < gs->numPlayers);
     }
-    gs->unk18 = dmaRequestAndUpdateStateWithSize(&_34CB50_ROM_START, &_34CB50_ROM_END, 0x5E28);
+    gs->unk18 = loadCompressedData(&_34CB50_ROM_START, &_34CB50_ROM_END, 0x5E28);
     gs->unk1C = loadAsset_B7E70();
     gs->unk20 = loadAsset_216290();
     func_8006983C_6A43C(&func_8003EEEC_3FAEC);

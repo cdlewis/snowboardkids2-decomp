@@ -102,8 +102,8 @@ void initializeGameState(void) {
     scheduleTask(&ClocktowerTriggerInit, 0, 0, 0x64);
     scheduleTask(&func_80036A3C_3763C, 0, 0, 0x64);
     scheduleTask(&func_80036250_36E50, 0, 0, 0x64);
-    temp_s0->unk3E4 = dmaRequestAndUpdateState(&_419440_ROM_START, &_419440_ROM_END);
-    temp_s0->unk3DC = dmaRequestAndUpdateStateWithSize(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
+    temp_s0->unk3E4 = loadUncompressedData(&_419440_ROM_START, &_419440_ROM_END);
+    temp_s0->unk3DC = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
     temp_s0->unk3E0 = func_80035F80_36B80(1);
     func_8006FDA0_709A0(NULL, 0xFF, 0);
     setGameStateHandler(&gameStateCountdownHandler);

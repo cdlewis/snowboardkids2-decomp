@@ -197,8 +197,8 @@ void func_80007560_8160(func_80007560_8160_arg *arg0) {
 
 void func_800078C4_84C4(func_800078C4_84C4_arg *arg0) {
     setCleanupCallback(&func_80007ABC_86BC);
-    arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_646CD0_ROM_START, &_646CD0_ROM_END, 0xE8);
-    arg0->unk44 = dmaRequestAndUpdateStateWithSize(&_49B500_ROM_START, &_49B500_ROM_END, 0xC00);
+    arg0->unk4 = loadCompressedData(&_646CD0_ROM_START, &_646CD0_ROM_END, 0xE8);
+    arg0->unk44 = loadCompressedData(&_49B500_ROM_START, &_49B500_ROM_END, 0xC00);
     if (arg0->unk0->index == 0x3E) {
         arg0->unk40 = 0;
     } else {

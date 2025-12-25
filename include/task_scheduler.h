@@ -35,9 +35,9 @@ typedef struct {
 
 void setGameStateHandler(void *arg0);
 
-void *dmaRequestAndUpdateStateWithSize(void *, void *, s32);
+void *loadCompressedData(void *romStart, void *romEnd, s32 decompressedSize);
 
-void *dmaRequestAndUpdateState(void *start, void *end);
+void *loadUncompressedData(void *start, void *end);
 
 void *allocateNodeMemory(s32 size);
 

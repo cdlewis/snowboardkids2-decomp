@@ -103,7 +103,7 @@ void func_80037710_38310(func_80037710_38310_arg *arg0) {
     void *s2;
 
     s1 = func_80035F80_36B80(1);
-    s2 = dmaRequestAndUpdateStateWithSize(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
+    s2 = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
     setCleanupCallback(func_80037874_38474);
 
     arg0->unk0 = -0x50;
@@ -158,7 +158,7 @@ void func_800378AC_384AC(void *arg0) {
     u8 temp;
 
     getCurrentAllocation();
-    s1 = dmaRequestAndUpdateStateWithSize(&_4196E0_ROM_START, &_419C60_ROM_START, 0xBB8);
+    s1 = loadCompressedData(&_4196E0_ROM_START, &_419C60_ROM_START, 0xBB8);
     ARG0->unkD8 = func_80035F80_36B80(1);
     setCleanupCallback(func_80037BC4_387C4);
 
@@ -275,7 +275,7 @@ void func_80037BFC_387FC(func_80037BFC_387FC_arg *arg0) {
     u8 const5;
 
     getCurrentAllocation();
-    allocation = dmaRequestAndUpdateStateWithSize(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
+    allocation = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
     arg0->unk90 = func_80035F80_36B80(1);
     setCleanupCallback(func_80037E40_38A40);
 
@@ -364,7 +364,7 @@ void func_80037E78_38A78(Entry1 *arg0) {
     s32 val;
 
     getCurrentAllocation();
-    allocation = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    allocation = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
     setCleanupCallback(func_80037FB0_38BB0);
 
     i = 0;

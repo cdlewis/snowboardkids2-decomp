@@ -103,7 +103,7 @@ void func_800B9020(func_800B9020_arg *arg0) {
 }
 
 void func_800B9074_1E6124(void **arg0) {
-    *arg0 = dmaRequestAndUpdateStateWithSize(&_646910_ROM_START, &_646910_ROM_END, 0x658);
+    *arg0 = loadCompressedData(&_646910_ROM_START, &_646910_ROM_END, 0x658);
 }
 
 void func_800B90B0_1E6160(func_800B9264_1E6314_input **arg0) {

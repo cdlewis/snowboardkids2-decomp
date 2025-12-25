@@ -35,23 +35,19 @@ extern s32 *D_800947B0_953B0[];
 
 void *loadAssetByIndex_94F90(s16 groupIndex, s16 pairIndex) {
     AssetPair *assetArray = D_80094390_94F90[groupIndex];
-    return dmaRequestAndUpdateState(assetArray[pairIndex].start, assetArray[pairIndex].end);
+    return loadUncompressedData(assetArray[pairIndex].start, assetArray[pairIndex].end);
 }
 
 void *loadAssetByIndex_95200(s16 groupIndex, s16 pairIndex) {
     AssetWithSize *assetArray = D_80094600_95200[groupIndex];
-    return dmaRequestAndUpdateStateWithSize(
-        assetArray[pairIndex].start,
-        assetArray[pairIndex].end,
-        assetArray[pairIndex].size
-    );
+    return loadCompressedData(assetArray[pairIndex].start, assetArray[pairIndex].end, assetArray[pairIndex].size);
 }
 
 void *loadAssetByIndex_953E0(s16 index) {
     if (index == 0xA) {
         return NULL;
     } else {
-        return dmaRequestAndUpdateStateWithSize(
+        return loadCompressedData(
             D_800947E0_953E0[index].start,
             D_800947E0_953E0[index].end,
             D_800947E0_953E0[index].size
@@ -70,27 +66,19 @@ s32 loadAssetByIndex_953B0(s16 groupIndex, s16 pairIndex) {
 }
 
 void *load_3ECE40(void) {
-    return dmaRequestAndUpdateStateWithSize(&_3ECE40_ROM_START, &_3ECE40_ROM_END, 0xA518);
+    return loadCompressedData(&_3ECE40_ROM_START, &_3ECE40_ROM_END, 0xA518);
 }
 
 void *loadAssetByIndex_95470(s32 index) {
-    return dmaRequestAndUpdateStateWithSize(
-        D_80094870_95470[index].start,
-        D_80094870_95470[index].end,
-        D_80094870_95470[index].size
-    );
+    return loadCompressedData(D_80094870_95470[index].start, D_80094870_95470[index].end, D_80094870_95470[index].size);
 }
 
 void *loadAssetByIndex_95500(s16 index) {
-    return dmaRequestAndUpdateState(D_80094900_95500[index].start, D_80094900_95500[index].end);
+    return loadUncompressedData(D_80094900_95500[index].start, D_80094900_95500[index].end);
 }
 
 void *loadAssetByIndex_95590(s16 index) {
-    return dmaRequestAndUpdateStateWithSize(
-        D_80094990_95590[index].start,
-        D_80094990_95590[index].end,
-        D_80094990_95590[index].size
-    );
+    return loadCompressedData(D_80094990_95590[index].start, D_80094990_95590[index].end, D_80094990_95590[index].size);
 }
 
 void *loadAssetByIndex_95668(s16 index) {
@@ -105,7 +93,7 @@ void *loadAssetByIndex_95668(s16 index) {
         clamped_index = 0;
     }
 
-    return dmaRequestAndUpdateStateWithSize(
+    return loadCompressedData(
         D_80094A68_95668[clamped_index].start,
         D_80094A68_95668[clamped_index].end,
         D_80094A68_95668[clamped_index].size
@@ -123,13 +111,13 @@ void *func_8005DC60_5E860(s32 index) {
     u8 val = ((GameState *)getCurrentAllocation())->unk7A;
 
     if (val == 1) {
-        return dmaRequestAndUpdateStateWithSize(&_40A450_ROM_START, &_40A450_ROM_END, 0x250);
+        return loadCompressedData(&_40A450_ROM_START, &_40A450_ROM_END, 0x250);
     } else if (val == 2) {
-        return dmaRequestAndUpdateStateWithSize(&_40A590_ROM_START, &_40A590_ROM_END, 0x260);
+        return loadCompressedData(&_40A590_ROM_START, &_40A590_ROM_END, 0x260);
     } else if (val == 3) {
-        return dmaRequestAndUpdateStateWithSize(&_40A760_ROM_START, &_40A760_ROM_END, 0x270);
+        return loadCompressedData(&_40A760_ROM_START, &_40A760_ROM_END, 0x270);
     } else {
-        return dmaRequestAndUpdateStateWithSize(
+        return loadCompressedData(
             D_80094B70_95770[index].start,
             D_80094B70_95770[index].end,
             D_80094B70_95770[index].size
@@ -157,11 +145,7 @@ s32 loadAssetByIndex_95770(s32 index) {
 }
 
 void *loadAssetByIndex_5E990(s32 index) {
-    return dmaRequestAndUpdateStateWithSize(
-        D_80094C30_95830[index].start,
-        D_80094C30_95830[index].end,
-        D_80094C30_95830[index].size
-    );
+    return loadCompressedData(D_80094C30_95830[index].start, D_80094C30_95830[index].end, D_80094C30_95830[index].size);
 }
 
 MemoryAllocatorNode *func_8005DDD8_5E9D8(s16 groupIndex, s16 entityIndex) {

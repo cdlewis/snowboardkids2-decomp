@@ -558,11 +558,11 @@ void terminateTasksByTypeAndID(s32 taskType, s32 taskID) {
     }
 }
 
-void *dmaRequestAndUpdateState(void *start, void *end) {
+void *loadUncompressedData(void *start, void *end) {
     void *allocatedSpaceStart;
 
     if (gDMAOverlay == NULL) {
-        allocatedSpaceStart = queueDmaTransfer(start, end);
+        allocatedSpaceStart = queueUncompressedDmaTransfer(start, end);
         if (getNodeOwner(allocatedSpaceStart) != 0) {
             if (gActiveScheduler->schedulerState != SCHEDULER_STATE_DMA_PENDING) {
                 gActiveScheduler->latestDmaSequenceNumber = getNodeSequenceNumber(allocatedSpaceStart);
@@ -574,7 +574,7 @@ void *dmaRequestAndUpdateState(void *start, void *end) {
             }
         }
     } else {
-        allocatedSpaceStart = queueDmaTransfer(start, end);
+        allocatedSpaceStart = queueUncompressedDmaTransfer(start, end);
         if (getNodeOwner(allocatedSpaceStart) != 0) {
             if (((u8)(gDMAOverlay->unkE - 3)) >= 2) {
                 gDMAOverlay->unk18 = getNodeSequenceNumber(allocatedSpaceStart);
@@ -593,11 +593,11 @@ void *dmaRequestAndUpdateState(void *start, void *end) {
     return allocatedSpaceStart;
 }
 
-void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
+void *loadCompressedData(void *romStart, void *romEnd, s32 size) {
     void *allocatedSpaceStart;
 
     if (gDMAOverlay == NULL) {
-        allocatedSpaceStart = dmaQueueRequest(romStart, romEnd, size);
+        allocatedSpaceStart = queueCompressedDmaTransfer(romStart, romEnd, size);
         if (getNodeOwner(allocatedSpaceStart) != NULL) {
             if (gActiveScheduler->schedulerState != SCHEDULER_STATE_DMA_PENDING) {
                 gActiveScheduler->latestDmaSequenceNumber = getNodeSequenceNumber(allocatedSpaceStart);
@@ -611,7 +611,7 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
             }
         }
     } else {
-        allocatedSpaceStart = dmaQueueRequest(romStart, romEnd, size);
+        allocatedSpaceStart = queueCompressedDmaTransfer(romStart, romEnd, size);
         if (getNodeOwner(allocatedSpaceStart) != NULL) {
             if (gDMAOverlay->unkE < 3 || gDMAOverlay->unkE >= 5) {
                 gDMAOverlay->unk18 = getNodeSequenceNumber(allocatedSpaceStart);
@@ -634,7 +634,7 @@ void *dmaRequestAndUpdateStateWithSize(void *romStart, void *romEnd, s32 size) {
 void *loadDataSegment(void *start, void *end, s32 size, void *dramAddr) {
     void *var_s0 = dramAddr;
     if (gDMAOverlay != NULL) {
-        var_s0 = queueDmaTransferToBuffer(start, end, size, dramAddr);
+        var_s0 = queueDirectDmaTransfer(start, end, size, dramAddr);
         if (getNodeOwner(var_s0) != 0) {
             if ((u32)(gDMAOverlay->unkE - 3) >= 2U) {
                 gDMAOverlay->unk18 = getNodeSequenceNumber(var_s0);

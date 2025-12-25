@@ -173,7 +173,7 @@ void func_800333E0_33FE0(Func33FE0Arg *arg0) {
     s32 i;
 
     getCurrentAllocation();
-    allocation = dmaRequestAndUpdateStateWithSize(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    allocation = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
     setCleanupCallback(func_8003365C_3425C);
 
     for (i = 12; i >= 0; i--) {
@@ -282,7 +282,7 @@ void func_800339AC_345AC(Func345ACArg *arg0) {
 
     allocation = (u8 *)getCurrentAllocation();
     arg0->unk4 = (Func345ACEntry *)allocateNodeMemory(0xF0);
-    arg0->unk0 = dmaRequestAndUpdateStateWithSize(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    arg0->unk0 = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
     arg0->unk1E = *(allocation + arg0->unk1C + 0xACE);
     setCleanupCallback(func_80033E08_34A08);
 
@@ -488,7 +488,7 @@ void func_8003466C_3526C(Func3466CArg *arg0) {
     void *temp_s1;
     s32 i;
 
-    temp_s1 = dmaRequestAndUpdateStateWithSize(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    temp_s1 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     setCleanupCallback(func_8003498C_3558C);
 
     for (i = 0; i < 4; i++) {
@@ -522,7 +522,7 @@ void func_8003498C_3558C(Func34574Arg *arg0) {
 }
 
 void func_800349B8_355B8(Func349B8Arg *arg0) {
-    void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    void *temp_s1 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
 
     setCleanupCallback(&func_80034A94_35694);
 
@@ -581,7 +581,7 @@ void func_80035074_35C74(Func358FCStruct *arg0) {
 void func_800350AC_35CAC(Func350ACArg *arg0) {
     void *temp_s1;
 
-    temp_s1 = dmaRequestAndUpdateStateWithSize(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    temp_s1 = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
     setCleanupCallback(func_80035234_35E34);
 
     arg0->unk0 = -0x52;

@@ -186,9 +186,9 @@ void func_8000D818_E418(void) {
     temp_s0->unk0 = 0;
     temp_s0->unk2 = 0;
     temp_s0->unk1 = 0;
-    temp_s0->unk1E0 = dmaRequestAndUpdateStateWithSize(&_67AB10_ROM_START, &_67AB10_ROM_END, 0x6350);
-    temp_s0->unk1E4 = dmaRequestAndUpdateStateWithSize(&_67BEB0_ROM_START, &_67BEB0_ROM_END, 0x4320);
-    temp_s0->unk1E8 = dmaRequestAndUpdateStateWithSize(&_67DB80_ROM_START, &_67DB80_ROM_END, 0x1A68);
+    temp_s0->unk1E0 = loadCompressedData(&_67AB10_ROM_START, &_67AB10_ROM_END, 0x6350);
+    temp_s0->unk1E4 = loadCompressedData(&_67BEB0_ROM_START, &_67BEB0_ROM_END, 0x4320);
+    temp_s0->unk1E8 = loadCompressedData(&_67DB80_ROM_START, &_67DB80_ROM_END, 0x1A68);
 
     s1 = &temp_s0->unk8;
     func_8006FAA4_706A4(s1, 0, 0, 10, 0);

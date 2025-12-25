@@ -96,7 +96,7 @@ s32 func_80009E68_AA68(SpriteAssetState *arg0, s16 arg1) {
         return 0;
     }
     entry = &D_8008C920_8D520[temp_s0 * 5];
-    arg0->unk0 = dmaRequestAndUpdateStateWithSize((void *)entry[0], (void *)entry[1], entry[2]);
+    arg0->unk0 = loadCompressedData((void *)entry[0], (void *)entry[1], entry[2]);
     arg0->unk4 = arg1;
     arg0->unk6 = 0;
     return 1;
@@ -109,7 +109,7 @@ void *func_80009EF8_AAF8(s16 arg0) {
         return NULL;
     }
     entry = &D_8008C920_8D520[arg0 * 5];
-    return dmaRequestAndUpdateStateWithSize((void *)entry[0], (void *)entry[1], entry[2]);
+    return loadCompressedData((void *)entry[0], (void *)entry[1], entry[2]);
 }
 
 void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0) {

@@ -71,7 +71,7 @@ void func_800B00C0_1DB7A0(func_800B00C0_Arg *arg0) {
     volatile func_800B00C0_InnerStruct *element;
 
     allocation = getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_426EF0_ROM_START, &_42F1D0_ROM_START, 0xEEE8);
+    dmaResult = loadCompressedData(&_426EF0_ROM_START, &_42F1D0_ROM_START, 0xEEE8);
     setCleanupCallback(func_800B0520_1DBC00);
 
     i = 0;
@@ -126,7 +126,7 @@ void func_800B054C_1DBC2C(func_800B07A0_1DBE80_arg *arg0) {
     s16 v0, v2;
 
     getCurrentAllocation();
-    temp = dmaRequestAndUpdateStateWithSize(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
+    temp = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
     setCleanupCallback(func_800B0664_1DBD44);
 
     for (i = 0; i < 4; i++) {
@@ -163,7 +163,7 @@ void func_800B0690_1DBD70(func_800B07A0_1DBE80_arg *arg0) {
     void *temp;
 
     getCurrentAllocation();
-    temp = dmaRequestAndUpdateStateWithSize(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
+    temp = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
     setCleanupCallback(func_800B0774_1DBE54);
     arg0->unk0 = -96;
     arg0->unk2 = -80;
@@ -193,7 +193,7 @@ void func_800B07A0_1DBE80(func_800B07A0_1DBE80_arg *arg0) {
     void *temp;
 
     getCurrentAllocation();
-    temp = dmaRequestAndUpdateStateWithSize(&_426EF0_ROM_START, &_42F1D0_ROM_START, 0xEEE8);
+    temp = loadCompressedData(&_426EF0_ROM_START, &_42F1D0_ROM_START, 0xEEE8);
     setCleanupCallback(func_800B0774_1DBE54);
     arg0->unk4 = temp;
     setCallback(func_800B0804_1DBEE4);
@@ -217,7 +217,7 @@ void func_800B087C_1DBF5C(func_800B07A0_1DBE80_arg *arg0) {
 void func_800B08A8_1DBF88(func_800B07A0_1DBE80_arg *arg0) {
     void *temp;
 
-    temp = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    temp = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     setCleanupCallback(func_800B0968_1DC048);
     arg0->unk0 = -0x2C;
     arg0->unk2 = -0x14;

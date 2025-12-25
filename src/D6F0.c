@@ -79,8 +79,8 @@ void func_8000CC84_D884(func_8000CC84_D884_arg *);
 void func_8000CAF0_D6F0(func_8000CAF0_D6F0_arg *arg0) {
     void *temp_v0;
 
-    arg0->unk0 = dmaRequestAndUpdateStateWithSize(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
-    temp_v0 = dmaRequestAndUpdateStateWithSize(&_49B420_ROM_START, &_49B420_ROM_END, 0x240);
+    arg0->unk0 = loadCompressedData(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
+    temp_v0 = loadCompressedData(&_49B420_ROM_START, &_49B420_ROM_END, 0x240);
     arg0->unk4 = temp_v0;
     arg0->unk8 = (s32)(temp_v0 + (arg0->unk56 << 6));
     arg0->unk22 = (u8)((randA() & 0x1F) + 0x70);
@@ -137,11 +137,11 @@ void func_8000CCBC_D8BC(void *arg0, void *arg1, func_8000CCBC_D8BC_arg2 *arg2, s
 }
 
 void *func_8000CD88_D988(void) {
-    return dmaRequestAndUpdateStateWithSize(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
+    return loadCompressedData(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
 }
 
 void *func_8000CDB4_D9B4(void) {
-    return dmaRequestAndUpdateStateWithSize(&_49B420_ROM_START, &_49B420_ROM_END, 0x240);
+    return loadCompressedData(&_49B420_ROM_START, &_49B420_ROM_END, 0x240);
 }
 
 void *func_8000CDE0_D9E0(void *node) {

@@ -303,8 +303,8 @@ void func_80015A18_16618(void) {
     func_80027CA0_288A0(node2, 0, 8, 0);
     func_8006FA0C_7060C(node2, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     func_8006FD3C_7093C(node2->id, &D_8008D420_8E020);
-    state->unk3B0 = dmaRequestAndUpdateStateWithSize(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
+    state->unk3B0 = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
+    dmaResult = loadCompressedData(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
     state->unk3BB = 0;
     state->unk3BC = 0;
     state->unk3BD = 0;

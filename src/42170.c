@@ -2152,13 +2152,9 @@ void func_80045010_45C10(Func45010Arg *);
 void func_80044D1C_4591C(Func44D1CArg *arg0) {
     s16 idx;
 
-    arg0->unkC = dmaRequestAndUpdateStateWithSize(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    arg0->unkC = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
     idx = arg0->unk14;
-    arg0->unk10 = dmaRequestAndUpdateStateWithSize(
-        D_80090AB8_916B8[idx * 3],
-        D_80090ABC_916BC[idx * 3],
-        D_80090AC0_916C0[idx * 3]
-    );
+    arg0->unk10 = loadCompressedData(D_80090AB8_916B8[idx * 3], D_80090ABC_916BC[idx * 3], D_80090AC0_916C0[idx * 3]);
     arg0->unk0 = NULL;
     setCleanupCallback(func_80045010_45C10);
     setCallback(func_80044DB0_459B0);

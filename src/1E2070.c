@@ -125,7 +125,7 @@ s32 D_800BAD68_1E7E18[2][3] = {
 void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *arg0) {
     s32 i;
 
-    arg0->unk4 = dmaRequestAndUpdateStateWithSize(&_646DF0_ROM_START, &_646DF0_ROM_END, 0x1188);
+    arg0->unk4 = loadCompressedData(&_646DF0_ROM_START, &_646DF0_ROM_END, 0x1188);
     arg0->unk8 = (s32 *)&D_800BAD10_1E7DC0;
     arg0->unk22 = 0xFF;
 
@@ -206,26 +206,26 @@ void func_800B5318_1E23C8(func_80004FF8_5BF8_arg1 *arg0) {
     setCleanupCallback(&func_800B54B4_1E2564);
 
     if (arg0->unk58 == 0) {
-        arg0->unk24 = dmaRequestAndUpdateState(&_215120_ROM_START, &_215120_ROM_END);
-        arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
+        arg0->unk24 = loadUncompressedData(&_215120_ROM_START, &_215120_ROM_END);
+        arg0->unk28 = loadCompressedData(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
         arg0->unk2C = 0;
         arg0->unk20 = &D_80089510_8A110;
         arg0->unk50 = 0;
     } else if (arg0->unk58 != 1) {
-        arg0->unk24 = dmaRequestAndUpdateState(&_215120_ROM_START, &_215120_ROM_END);
-        arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
+        arg0->unk24 = loadUncompressedData(&_215120_ROM_START, &_215120_ROM_END);
+        arg0->unk28 = loadCompressedData(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
         arg0->unk2C = 0;
         arg0->unk20 = &D_80089510_8A110;
         arg0->unk50 = 0;
     } else {
-        arg0->unk24 = dmaRequestAndUpdateState(&_2151D0_ROM_START, &_2151D0_ROM_END);
-        arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_663BE0_ROM_START, &_663BE0_ROM_END, 0x200);
+        arg0->unk24 = loadUncompressedData(&_2151D0_ROM_START, &_2151D0_ROM_END);
+        arg0->unk28 = loadCompressedData(&_663BE0_ROM_START, &_663BE0_ROM_END, 0x200);
         arg0->unk20 = &D_80089520;
         arg0->unk2C = 0;
         arg0->unk50 = 1;
     }
 
-    arg0->unk3C = dmaRequestAndUpdateStateWithSize(&_6637B0_ROM_START, &_6637B0_ROM_END, 0x858);
+    arg0->unk3C = loadCompressedData(&_6637B0_ROM_START, &_6637B0_ROM_END, 0x858);
     arg0->unk44 = 0;
     arg0->unk46 = 0;
     arg0->unk48 = 0;

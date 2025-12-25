@@ -110,9 +110,9 @@ void func_800B4CD0_1E1D80(func_800B4CD0_1E1D80_arg *arg0) {
     StateEntry **temp_a1;
 
     arg0->unk20 = &D_80088650;
-    arg0->unk24 = dmaRequestAndUpdateState(&_1FB4E0_ROM_START, &_1FB4E0_ROM_END);
+    arg0->unk24 = loadUncompressedData(&_1FB4E0_ROM_START, &_1FB4E0_ROM_END);
 
-    arg0->unk28 = dmaRequestAndUpdateStateWithSize(&_4C9E70_ROM_START, &_4C9E70_ROM_END, 0xA10);
+    arg0->unk28 = loadCompressedData(&_4C9E70_ROM_START, &_4C9E70_ROM_END, 0xA10);
     temp_a1 = &arg0->unk24;
 
     arg0->unk5C = &D_80088660;

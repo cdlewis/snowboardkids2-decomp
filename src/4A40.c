@@ -249,15 +249,12 @@ void func_80003EE0_4AE0(void) {
     taskMemory->unk964 = func_8000B6B8_C2B8(1);
 
     taskMemory->unk968 = func_8000B6B8_C2B8(3);
-    taskMemory->unkDEC = dmaRequestAndUpdateStateWithSize(&_67E860_ROM_START, &_67E860_ROM_END, 0x2448);
-    taskMemory->unk95C = dmaRequestAndUpdateStateWithSize(&_49BA20_ROM_START, &_49BA20_ROM_END, 0x2B0);
+    taskMemory->unkDEC = loadCompressedData(&_67E860_ROM_START, &_67E860_ROM_END, 0x2448);
+    taskMemory->unk95C = loadCompressedData(&_49BA20_ROM_START, &_49BA20_ROM_END, 0x2B0);
 
     for (i = 0; i < 6; i++) {
-        taskMemory->unk9B8[i] = dmaRequestAndUpdateStateWithSize(
-            D_8008BFA0_8CBA0[i].start,
-            D_8008BFA0_8CBA0[i].end,
-            D_8008BFA0_8CBA0[i].size
-        );
+        taskMemory->unk9B8[i] =
+            loadCompressedData(D_8008BFA0_8CBA0[i].start, D_8008BFA0_8CBA0[i].end, D_8008BFA0_8CBA0[i].size);
     }
 
     func_8006FAA4_706A4(&taskMemory->unk8, 0, 0, 0xB, 0);

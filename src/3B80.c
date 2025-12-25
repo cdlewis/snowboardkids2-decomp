@@ -98,7 +98,7 @@ void func_800030B4_3CB4(func_800033AC_3FAC_arg *arg0) {
     arg0->unk4 = allocateNodeMemory(entry->unk8 * 4);
 
     for (i = 0; i < entry->unk8; i++) {
-        arg0->unk4[i] = dmaRequestAndUpdateStateWithSize(assetList[i].unk0, assetList[i].unk4, assetList[i].unk8);
+        arg0->unk4[i] = loadCompressedData(assetList[i].unk0, assetList[i].unk4, assetList[i].unk8);
     }
 
     setCallback(func_80003184_3D84);

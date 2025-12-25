@@ -584,7 +584,7 @@ void func_8002F980_30580(func_8002F658_30258_arg *arg0) {
 }
 
 void func_8002F9C4_305C4(func_8002FA70_30670_arg *arg0) {
-    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_42F1D0_ROM_START, &_42F1D0_ROM_END, 0x14410);
+    arg0->unk2C = loadCompressedData(&_42F1D0_ROM_START, &_42F1D0_ROM_END, 0x14410);
     setCleanupCallback(&func_8002FA70_30670);
     setCallback(&func_8002FA1C_3061C);
 }
@@ -604,7 +604,7 @@ void func_8002FA70_30670(func_8002FA70_30670_arg *arg0) {
 
 void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0) {
     s32 i;
-    void *asset = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    void *asset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
 
     setCleanupCallback(&func_8002FCA8_308A8);
 
@@ -685,7 +685,7 @@ void func_8002FCD4_308D4(func_8002FDFC_309FC_arg *arg0) {
     u8 itemValue;
 
     state = getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_8002FF28_30B28);
 
     arg0->unk2 = -0x18;
@@ -756,7 +756,7 @@ void func_8002FF54_30B54(func_8002FA9C_3069C_item *arg0) {
     u8 itemValue;
 
     state = (GameState *)getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80030194_30D94);
 
     arg0->unk2 = -0x18;
@@ -818,7 +818,7 @@ void func_80030194_30D94(func_8002FF28_30B28_arg *arg0) {
 }
 
 void func_800301C0_30DC0(func_800308FC_314FC_arg *arg0) {
-    void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    void *temp_s1 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
 
     setCleanupCallback(&func_80030280_30E80);
 
@@ -848,8 +848,8 @@ void func_800302AC_30EAC(func_800302AC_30EAC_arg *arg0) {
     s32 i;
     s32 *new_var;
 
-    asset1 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    asset2 = dmaRequestAndUpdateStateWithSize(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    asset1 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    asset2 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     setCleanupCallback(&func_80030480_31080);
     for (i = 0; i < 7; i++) {
         arg0->items[i].unk0 = 0x48 + (i * 8);
@@ -915,7 +915,7 @@ void func_800304B8_310B8(func_800308FC_314FC_arg *arg0) {
     s32 temp_a1;
     s16 temp_v1;
 
-    temp_s1 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    temp_s1 = loadCompressedData(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
     setCleanupCallback(func_80030668_31268);
 
     i = 0;
@@ -995,7 +995,7 @@ void func_80030694_31294(ItemStatsDisplay *arg0) {
 
     getCurrentAllocation();
     arg0->progressBarAsset = loadAsset_34F7E0();
-    spriteAsset = dmaRequestAndUpdateStateWithSize(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    spriteAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
     setCleanupCallback(func_800308C4_314C4);
 
     arg0->progressBarX = -0x24;
@@ -1074,7 +1074,7 @@ void func_800308C4_314C4(ItemStatsDisplay *arg0) {
 }
 
 void func_800308FC_314FC(func_800308FC_314FC_arg *arg0) {
-    void *temp_s1 = dmaRequestAndUpdateStateWithSize(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    void *temp_s1 = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
 
     setCleanupCallback(&func_800309D4_315D4);
 
@@ -1104,7 +1104,7 @@ void func_80030A00_31600(func_80030A00_31600_arg *arg0) {
     void *temp_s2;
     s32 i;
 
-    temp_s1 = dmaRequestAndUpdateStateWithSize(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    temp_s1 = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
     temp_s2 = func_80035F80_36B80(1);
     setCleanupCallback(&func_80030B70_31770);
 

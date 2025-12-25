@@ -464,7 +464,7 @@ void func_80030FBC_31BBC(func_80030FBC_31BBC_arg *arg0) {
     s32 randVal;
 
     allocation = getCurrentAllocation();
-    asset = dmaRequestAndUpdateStateWithSize(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    asset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
     arg0->unk0 = allocateNodeMemory(0xF0);
     setCleanupCallback(func_80031248_31E48);
 
@@ -828,7 +828,7 @@ void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0) {
 }
 
 void func_80031C68_32868(func_8002FA1C_3061C_arg *arg0) {
-    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
+    arg0->unk2C = loadCompressedData(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
     setCleanupCallback(&func_80031D14_32914);
     setCallback(&func_80031CC0_328C0);
 }
@@ -875,7 +875,7 @@ void func_80031D40_32940(func_80031D40_32940_arg *arg0) {
     s32 i;
     void *temp_s0;
 
-    temp_s0 = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    temp_s0 = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(&func_80031F68_32B68);
 
     for (i = 0; i < 2; i++) {
@@ -992,7 +992,7 @@ void func_80031F94_32B94(func_80031F94_32B94_arg *arg0) {
     void *temp_s1;
 
     getCurrentAllocation();
-    temp_s1 = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    temp_s1 = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(&func_800320B8_32CB8);
     arg0->unk0 = -0x1C;
     arg0->unk2 = -0x18;
@@ -1048,7 +1048,7 @@ void func_800320E4_32CE4(func_800320E4_32CE4_arg *arg0) {
     void *temp_s1;
 
     getCurrentAllocation();
-    temp_s1 = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    temp_s1 = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(&func_80032218_32E18);
     arg0->unk0 = -8;
     arg0->unk2 = 8;
@@ -1097,7 +1097,7 @@ void func_80032218_32E18(void *arg0) {
 }
 
 void func_80032244_32E44(func_80032244_32E44_arg *arg0) {
-    void *asset = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    void *asset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     setCleanupCallback(&func_80032304_32F04);
     arg0->unk0 = -0x2C;
     arg0->unk2 = -0x14;
@@ -1120,8 +1120,8 @@ void func_80032304_32F04(func_80032244_32E44_arg *arg0) {
 }
 
 void func_80032330_32F30(func_80032330_32F30_arg *arg0) {
-    void *temp_v0 = dmaRequestAndUpdateStateWithSize(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    void *temp_v0_2 = dmaRequestAndUpdateStateWithSize(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    void *temp_v0 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    void *temp_v0_2 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     s32 i;
     s16 temp_a0;
 
@@ -1191,7 +1191,7 @@ void func_8003253C_3313C(func_8003253C_3313C_arg *arg0) {
     u8 temp;
 
     state = getCurrentAllocation();
-    asset = dmaRequestAndUpdateStateWithSize(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    asset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
 
     for (i = 0; i < 4; i++) {
         arg0->unk0[i].unk0 = 0x60;
@@ -1435,7 +1435,7 @@ void func_80032DE8_339E8(func_80032DE8_339E8_arg *arg0) {
     void *asset;
     func_80032DE8_339E8_asset *temp_s0 = getCurrentAllocation();
 
-    asset = dmaRequestAndUpdateStateWithSize(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    asset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
 
     arg0->unk0 = 0x60;
     arg0->unk8 = temp_s0->unk788[temp_s0->unk7A0];
@@ -1513,7 +1513,7 @@ void func_80033088_33C88(func_80033088_33C88_arg *arg0) {
 
 void func_800330B4_33CB4(func_800330B4_33CB4_arg *arg0) {
     s32 i;
-    void *asset = dmaRequestAndUpdateStateWithSize(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    void *asset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
     setCleanupCallback(&func_800331CC_33DCC);
 
     for (i = 0; i < 4; i++) {

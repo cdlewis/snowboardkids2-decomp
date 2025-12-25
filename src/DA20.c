@@ -68,7 +68,7 @@ typedef struct {
 } func_8000CFCC_DBCC_arg2;
 
 void func_8000CE20_DA20(func_8000CE20_DA20_arg *arg0) {
-    arg0->unk0 = dmaRequestAndUpdateStateWithSize(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
+    arg0->unk0 = loadCompressedData(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
     arg0->unk4 = &D_8008CDD0_8D9D0;
     arg0->unk1E = (randA() & 0x1F) + 0x70;
     arg0->unk50 = 0;

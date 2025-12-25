@@ -35,7 +35,7 @@ void func_80037270_37E70(void) {
     func_80027CA0_288A0((Node_70B00 *)allocation, 8, 0xF, 1);
     func_8006FDA0_709A0(0, 0xFF, 0);
     func_8006FDA0_709A0(0, 0, 0x10);
-    allocation->unk1D8 = dmaRequestAndUpdateStateWithSize(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
+    allocation->unk1D8 = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
     allocation->unk1DC = func_80035F80_36B80(1);
     allocation->unk1E0 = 0;
     allocation->unk1E2 = 0;

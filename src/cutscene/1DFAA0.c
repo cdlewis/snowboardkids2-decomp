@@ -448,7 +448,7 @@ void *func_800B3570(s16 arg0, s16 arg1, s16 arg2) {
         return NULL;
     }
 
-    return dmaRequestAndUpdateStateWithSize(dmaInfo->unk0, dmaInfo->unk4, dmaInfo->unk8);
+    return loadCompressedData(dmaInfo->unk0, dmaInfo->unk4, dmaInfo->unk8);
 }
 
 s32 func_800B36C0(void *arg0) {
@@ -973,7 +973,7 @@ void *func_800B4680_1E1730(s8 arg0) {
     if (arg0 < 0x10) {
         node = &D_800BA960_1E7A10[arg0];
         if (D_800BA960_1E7A10[arg0].start != NULL) {
-            return dmaRequestAndUpdateStateWithSize(node->start, node->end, node->size);
+            return loadCompressedData(node->start, node->end, node->size);
         }
     }
 
@@ -1052,7 +1052,7 @@ void func_800B477C_1E182C(void *varg0) {
     s32 i;
 
     node = (FadeNode *)&D_800BA960_1E7A10[arg0->unk1];
-    arg0->unk8 = dmaRequestAndUpdateStateWithSize(node->start, node->end, node->size);
+    arg0->unk8 = loadCompressedData(node->start, node->end, node->size);
 
     for (i = 0; i < 6; i++) {
         arg0->unkC[i].unk0 = 0;

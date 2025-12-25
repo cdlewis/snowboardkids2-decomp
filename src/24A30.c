@@ -863,7 +863,7 @@ void func_8002529C_25E9C(func_8002529C_25E9C_arg *arg0) {
 
     (void)pad;
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_8002567C_2627C);
     getTableEntryByU16Index(dmaResult, 0xB, &sp10);
 
@@ -1076,7 +1076,7 @@ void func_80025C64_26864(SelectionMenuState *arg0) {
 
     (void)pad;
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80025FFC_26BFC);
 
     spriteIndexBase = 8;
@@ -1183,7 +1183,7 @@ void func_80026028_26C28(func_80025FFC_26BFC_arg *arg0) {
     u16 y;
     s32 pad[4];
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026190_26D90);
 
     i = 0;
@@ -1252,7 +1252,7 @@ void func_800261BC_26DBC(func_80026564_arg *arg0) {
     (void)pad;
 
     getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026538_27138);
 
     count = D_800AFE8C_A71FC->unk8;
@@ -1312,7 +1312,7 @@ void func_80026564_27164(func_80026564_arg *arg0) {
     (void)pad;
 
     getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026834_27434);
 
     count = D_800AFE8C_A71FC->unk8;
@@ -1392,7 +1392,7 @@ void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
     (void)pad;
 
     allocation = (u8 *)getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026FC8_27BC8);
 
     global = D_800AFE8C_A71FC;
@@ -1463,7 +1463,7 @@ void func_80026FF4_27BF4(func_80025FFC_26BFC_arg *arg0) {
 
     (void)pad;
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(&D_41A1D0, &D_41AD80, 0x1B48);
+    dmaResult = loadCompressedData(&D_41A1D0, &D_41AD80, 0x1B48);
     setCleanupCallback(func_8002712C_27D2C);
 
     global = D_800AFE8C_A71FC;
@@ -1518,7 +1518,7 @@ void func_80027158_27D58(func_80025FFC_26BFC_arg *arg0) {
     void *dmaResult;
 
     state = getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_8002723C_27E3C);
 
     arg0->unk0 = -0x20;
@@ -1550,7 +1550,7 @@ void func_80027268_27E68(func_80025FFC_26BFC_arg *arg0) {
     s32 loopCount;
     s32 i;
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
 
     loopCount = (D_800AFE8C_A71FC->unk8 == 2) ? 3 : 2;
 
@@ -1717,7 +1717,7 @@ void func_80027AAC_286AC(func_80027A28_28628_arg *arg0);
 void func_80027A28_28628(func_80027A28_28628_arg *arg0);
 
 void func_800279D4_285D4(func_80027A28_28628_arg *arg0) {
-    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
+    arg0->unk2C = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
     setCleanupCallback(func_80027AAC_286AC);
     setCallback(func_80027A28_28628);
 }
@@ -1747,7 +1747,7 @@ void func_80027B9C_2879C(func_80025FFC_26BFC_arg *);
 void func_80027AD8_286D8(func_80027AD8_286D8_arg *arg0) {
     void *dmaResult;
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80027B9C_2879C);
 
     arg0->unk8 = 6;

@@ -733,7 +733,7 @@ void *func_8000B6B8_C2B8(s16 arg0) {
         return 0;
     }
     entry = &func_8000B6A0_C2A0()[arg0];
-    return dmaRequestAndUpdateStateWithSize(entry->romStart, entry->romEnd, entry->size);
+    return loadCompressedData(entry->romStart, entry->romEnd, entry->size);
 }
 
 void *func_8000B714_C314(Table_B934 *arg0, s32 arg1, s32 arg2) {

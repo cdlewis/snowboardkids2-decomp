@@ -73,7 +73,7 @@ typedef struct {
 
 void func_800BB2B0_ACD30(ACD30Struct *arg0) {
     arg0->unkC = loadAsset_34F9A0();
-    arg0->unk10 = dmaRequestAndUpdateStateWithSize(&_4060A0_ROM_START, &_4060A0_ROM_END, 0x160);
+    arg0->unk10 = loadCompressedData(&_4060A0_ROM_START, &_4060A0_ROM_END, 0x160);
     arg0->unk0 = NULL;
     setCleanupCallback(func_800BB4B8_ACF38);
     setCallback(func_800BB310_ACD90);

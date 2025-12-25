@@ -351,7 +351,7 @@ void func_800B0980_1DAF20(func_800B0980_container *arg0) {
     void *allocation;
 
     getCurrentAllocation();
-    allocation = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
+    allocation = loadCompressedData(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
 
     for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
         arg0->elements[i].unk4 = allocation;
@@ -459,7 +459,7 @@ void func_800B0D4C_1DB2EC(func_800B0D4C_arg *arg0) {
 }
 
 void func_800B0D78_1DB318(func_800B0D4C_arg *arg0) {
-    arg0->unk2C = dmaRequestAndUpdateStateWithSize(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
+    arg0->unk2C = loadCompressedData(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
     setCleanupCallback(func_800B0D4C_1DB2EC);
     setCallback(func_800B0DD0_1DB370);
 }
@@ -476,7 +476,7 @@ void func_800B0DF8_1DB398(void *arg0) {
 void func_800B0E24_1DB3C4(func_800B0F18_arg *arg0) {
     void *temp;
     getCurrentAllocation();
-    temp = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    temp = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     arg0->unk0 = -44;
     arg0->unk2 = -20;
     arg0->unk8 = 13;
@@ -501,7 +501,7 @@ void func_800B0EEC_1DB48C(func_800B0FE0_arg *arg0) {
 void func_800B0F18_1DB4B8(func_800B0F18_arg *arg0) {
     void *temp;
     getCurrentAllocation();
-    temp = dmaRequestAndUpdateStateWithSize(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    temp = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     arg0->unk0 = -76;
     arg0->unk2 = -8;
     arg0->unk8 = 12;
@@ -527,8 +527,8 @@ void func_800B100C_1DB5AC(func_800B100C_arg *arg0) {
     void *temp1;
     void *temp2;
 
-    temp1 = dmaRequestAndUpdateState(D_1DC0D0, D_1DC260);
-    temp2 = dmaRequestAndUpdateState(&_422C60_ROM_START, &_422C60_ROM_END);
+    temp1 = loadUncompressedData(D_1DC0D0, D_1DC260);
+    temp2 = loadUncompressedData(&_422C60_ROM_START, &_422C60_ROM_END);
     setCleanupCallback(func_800B1104_1DB6A4);
 
     memcpy(arg0, identityMatrix, 0x20);

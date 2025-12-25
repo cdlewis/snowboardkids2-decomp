@@ -490,11 +490,8 @@ void func_800459A4_465A4(func_80046244_46E44_Task *arg0) {
     arg0->unkC = func_80055D7C_5697C(arg0->unk14);
     temp_v1 = arg0->unk16;
     index = temp_v1 * 3;
-    arg0->unk10 = dmaRequestAndUpdateStateWithSize(
-        (void *)D_80090AF0_916F0[index],
-        (void *)D_80090AF4_916F4[index],
-        D_80090AF8_916F8[index]
-    );
+    arg0->unk10 =
+        loadCompressedData((void *)D_80090AF0_916F0[index], (void *)D_80090AF4_916F4[index], D_80090AF8_916F8[index]);
     arg0->unk0 = 0;
     setCleanupCallback(func_80045C84_46884);
     setCallback(func_80045A28_46628);
@@ -1246,16 +1243,13 @@ void func_80047750_48350(func_80047A64_48664_arg *arg0) {
     s16 index;
     s32 arrayOffset;
 
-    arg0->unkC = dmaRequestAndUpdateStateWithSize(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
+    arg0->unkC = loadCompressedData(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
 
     index = arg0->unk14;
     arrayOffset = index * 3;
 
-    arg0->unk10 = dmaRequestAndUpdateStateWithSize(
-        D_80090BD4_917D4[arrayOffset],
-        D_80090BD8_917D8[arrayOffset],
-        D_80090BDC_917DC[arrayOffset]
-    );
+    arg0->unk10 =
+        loadCompressedData(D_80090BD4_917D4[arrayOffset], D_80090BD8_917D8[arrayOffset], D_80090BDC_917DC[arrayOffset]);
 
     arg0->unk0 = 0;
     setCleanupCallback(func_80047A64_48664);
@@ -2065,8 +2059,7 @@ void func_80048E34_49A34(func_80048E34_49A34_arg *arg0) {
 
     index = arg0->unk14 * 3;
 
-    arg0->unkC =
-        dmaRequestAndUpdateStateWithSize(D_80090CEC_918EC[index], D_80090CF0_918F0[index], D_80090CF4_918F4[index]);
+    arg0->unkC = loadCompressedData(D_80090CEC_918EC[index], D_80090CF0_918F0[index], D_80090CF4_918F4[index]);
     arg0->unk8 = NULL;
 
     setCleanupCallback(&func_80049230_49E30);
@@ -2623,7 +2616,7 @@ typedef struct {
 void func_8004A634_4B234(func_8004A634_4B234_arg *arg0);
 
 void func_8004A5E0_4B1E0(void **arg0) {
-    *arg0 = dmaRequestAndUpdateStateWithSize(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    *arg0 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     setCleanupCallback(&func_8004A96C_4B56C);
     setCallbackWithContinue(&func_8004A634_4B234);
 }
@@ -2994,7 +2987,7 @@ void func_8004AE94_4BA94(s32 arg0) {
 }
 
 void func_8004AED8_4BAD8(void **arg0) {
-    *arg0 = dmaRequestAndUpdateStateWithSize(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    *arg0 = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
     setCleanupCallback(&func_8004B264_4BE64);
     setCallbackWithContinue(&func_8004AF2C_4BB2C);
 }

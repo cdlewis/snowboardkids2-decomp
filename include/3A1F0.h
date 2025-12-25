@@ -21,11 +21,11 @@ void dmaLoadAndInvalidate(
     void *bssEnd
 );
 
-void *dmaQueueRequest(void *arg0, void *arg1, s32 arg2);
-void *queueDmaTransfer(void *start, void *end);
+void *queueCompressedDmaTransfer(void *romStart, void *romEnd, s32 decompressedSize);
+void *queueUncompressedDmaTransfer(void *start, void *end);
 void initPiManager(void);
 
-s32 *queueDmaTransferToBuffer(void *romStart, void *romEnd, s32 size, s32 *dramAddr);
+s32 *queueDirectDmaTransfer(void *romStart, void *romEnd, s32 size, s32 *dramAddr);
 
 s32 func_8003BB5C_3C75C(void);
 

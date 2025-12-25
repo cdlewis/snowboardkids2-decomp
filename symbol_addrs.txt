@@ -323,7 +323,7 @@ D_800A3410_A4010 = 0x800A3410; // size:0xC
 gConnectedControllerMask = 0x800A9018;
 D_800A1C08_A2808 = 0x800A1C08; // size:0x4
 
-queueDmaTransferToBuffer = 0x8003BB68;
+queueDirectDmaTransfer = 0x8003BB68;
 
 gfxResultQueue = 0x800A2CF0;
 gfxTaskQueue = 0x800A2CD0;
@@ -397,7 +397,7 @@ D_80094B70_95770 = 0x80094B70; // type:s32 size:0xC0
 D_80094C30_95830 = 0x80094C30; // type:s32 size:0x90
 
 initializeGameEntity = 0x80001A6C;
-queueDmaTransfer = 0x8003B8F0;
+queueUncompressedDmaTransfer = 0x8003B8F0;
 loadAssetDataByMode = 0x80001714;
 loadAssetGroupSoundData = 0x80001818;
 loadAssetGroupVertexData = 0x800018AC;
@@ -485,10 +485,10 @@ setShortCountdownAndContinue = 0x800172DC;
 invokeTransitionEffect = 0x8001730C;
 cleanupTransitionEffect = 0x80017328;
 
-dmaRequestAndUpdateState = 0x80069E3C;
-dmaRequestAndUpdateStateWithSize = 0x80069F94;
+loadUncompressedData = 0x80069E3C;
+loadCompressedData = 0x80069F94;
 
-dmaQueueRequest = 0x8003BA24;
+queueCompressedDmaTransfer = 0x8003BA24;
 gDmaQueueIndex = 0x800A2488;
 gDmaQueue = 0x800A248C;
 gDmaMsgQueue = 0x800A20F0;
