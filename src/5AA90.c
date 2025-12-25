@@ -1,6 +1,7 @@
 #include "5AA90.h"
 #include "3E160.h"
 #include "56910.h"
+#include "594E0.h"
 #include "5DBC0.h"
 #include "common.h"
 #include "displaylist.h"
@@ -134,7 +135,104 @@ s32 func_8005AA9C_5B69C(Player *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AB58_5B758);
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AE8C_5BA8C);
+void func_8005AE8C_5BA8C(Player *arg0) {
+    Vec3s32 localVec;
+    u8 pad[0x8];
+    void *srcPtr;
+    s32 unused1;
+    s32 unused2;
+    s32 combinedRadius;
+    s32 negRadius;
+    s32 dist;
+    s32 i;
+    Player *otherPlayer;
+    void *dataArray;
+
+    dataArray = ((GameState *)getCurrentAllocation())->players;
+    otherPlayer = (Player *)((u8 *)dataArray + 0xBE8);
+
+    if (arg0->unkBB8 == otherPlayer->unkBB8) {
+        return;
+    }
+    if (arg0->unkB88 & 0x10) {
+        return;
+    }
+    if (otherPlayer->unkB88 & 0x10) {
+        return;
+    }
+
+    if ((s8)otherPlayer->unkBB4 > 0) {
+        i = 0;
+        srcPtr = otherPlayer;
+        do {
+            memcpy(&localVec, (u8 *)srcPtr + 0xAE4, 0xC);
+
+            localVec.unk0 += otherPlayer->worldPosX;
+            localVec.unk4 += otherPlayer->worldPosY;
+            localVec.unk8 += otherPlayer->worldPosZ;
+
+            localVec.unk0 -= arg0->worldPosX + arg0->unkAD4[0];
+            localVec.unk4 -= arg0->worldPosY + arg0->unkAD4[1];
+            localVec.unk8 -= arg0->worldPosZ + arg0->unkAD4[2];
+
+            combinedRadius = ((s32 *)((u8 *)otherPlayer + 0xB2C))[i] + arg0->unkAE0;
+            negRadius = -combinedRadius;
+
+            if (negRadius < localVec.unk0 && localVec.unk0 < combinedRadius && negRadius < localVec.unk4 &&
+                localVec.unk4 < combinedRadius && negRadius < localVec.unk8 && localVec.unk8 < combinedRadius) {
+
+                dist = isqrt64(
+                    (s64)localVec.unk0 * localVec.unk0 + (s64)localVec.unk4 * localVec.unk4 +
+                    (s64)localVec.unk8 * localVec.unk8
+                );
+
+                if (dist < combinedRadius) {
+                    if (otherPlayer->unkBD9 == 1) {
+                        if ((otherPlayer->unkB84 & 0x40000) && (u32)(i - 4) < 2U) {
+                            func_80058B30_59730(arg0);
+                            goto next;
+                        }
+                    }
+                    if (otherPlayer->unkBD9 == 3 && (otherPlayer->unkB84 & 0x40000) && (u32)(i - 1) < 2U) {
+                        func_80058B30_59730(arg0);
+                        goto next;
+                    }
+
+                    if (dist == 0) {
+                        dist = 1;
+                    }
+
+                    localVec.unk0 = ((s64)localVec.unk0 * combinedRadius / dist) - localVec.unk0;
+                    localVec.unk4 = ((s64)localVec.unk4 * combinedRadius / dist) - localVec.unk4;
+                    localVec.unk8 = ((s64)localVec.unk8 * combinedRadius / dist) - localVec.unk8;
+
+                    arg0->worldPosX -= localVec.unk0;
+                    arg0->worldPosY -= localVec.unk4;
+                    arg0->worldPosZ -= localVec.unk8;
+
+                    if ((otherPlayer->unkBD9 == 2) & (i == 0)) {
+                        dist = isqrt64((s64)localVec.unk0 * localVec.unk0 + (s64)localVec.unk8 * localVec.unk8);
+                        if (dist > 0x30000) {
+                            func_80058950_59550(
+                                arg0,
+                                func_8006D21C_6DE1C(
+                                    otherPlayer->worldPosX,
+                                    otherPlayer->worldPosZ,
+                                    arg0->worldPosX,
+                                    arg0->worldPosZ
+                                ),
+                                dist
+                            );
+                        }
+                    }
+                }
+            }
+        next:
+            i++;
+            srcPtr = (u8 *)srcPtr + 0xC;
+        } while (i < (s8)otherPlayer->unkBB4);
+    }
+}
 
 void *func_8005B24C_5BE4C(Vec3s32 *arg0, s32 arg1, s32 arg2) {
     Vec3s32 pos;
