@@ -153,39 +153,39 @@ void func_80040974_41574(void *arg0) {
 }
 
 void func_800409B4_415B4(func_80040B4C_4174C_arg *obj) {
-    s32 sp10[8];
-    s32 sp30[4]; // Extra padding for stack alignment
-    s32 *matrix;
+    s32 tempMatrix[8];
+    s32 worldPos[4];
+    s32 *transformMatrix;
     GameState *gameState;
-    D_80090F90_91B90_item *positionData;
-    u16 angle;
+    D_80090F90_91B90_item *spawnData;
+    u16 trackAngle;
 
     gameState = (GameState *)getCurrentAllocation();
-    positionData = func_80055D10_56910(gameState->memoryPoolId);
+    spawnData = func_80055D10_56910(gameState->memoryPoolId);
     obj->unk20 = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x50);
     obj->unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
     obj->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
     obj->unk2C = 0;
-    angle = func_800625A4_631A4((u8 *)gameState + 0x30, sp30);
-    createYRotationMatrix(&obj->rotationMatrix, (angle + positionData->unk8) & 0xFFFF);
-    rotateVectorY(&D_800907EC_913EC, (s16)(angle + positionData->unk8), &obj->rotationMatrix.unk14);
-    obj->rotationMatrix.unk14 = obj->rotationMatrix.unk14 + positionData->unk0;
-    obj->rotationMatrix.unk1C = obj->rotationMatrix.unk1C + positionData->unk4;
-    obj->rotationMatrix.unk18 = sp30[1]; // sp34
+    trackAngle = func_800625A4_631A4((u8 *)gameState + 0x30, worldPos);
+    createYRotationMatrix(&obj->rotationMatrix, (trackAngle + spawnData->unk8) & 0xFFFF);
+    rotateVectorY(&D_800907EC_913EC, (s16)(trackAngle + spawnData->unk8), &obj->rotationMatrix.unk14);
+    obj->rotationMatrix.unk14 = obj->rotationMatrix.unk14 + spawnData->unk0;
+    obj->rotationMatrix.unk1C = obj->rotationMatrix.unk1C + spawnData->unk4;
+    obj->rotationMatrix.unk18 = worldPos[1];
     obj->unk5C = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x60);
-    matrix = sp10;
+    transformMatrix = tempMatrix;
     obj->unk60 = obj->unk24;
     obj->unk64 = obj->unk28;
     obj->unk68 = obj->unk2C;
-    memcpy(matrix, identityMatrix, 0x20);
-    matrix[6] = 0x180000;
-    func_8006B084_6BC84(matrix, obj, &obj->unk3C);
+    memcpy(transformMatrix, identityMatrix, 0x20);
+    transformMatrix[6] = 0x180000;
+    func_8006B084_6BC84(transformMatrix, obj, &obj->unk3C);
     obj->unk9C = obj->unk24;
     obj->unkA0 = obj->unk28;
     obj->unkA4 = obj->unk2C;
-    matrix[6] = 0x160000;
-    matrix[7] = 0xA3333;
-    func_8006B084_6BC84(matrix, obj, &obj->unk78);
+    transformMatrix[6] = 0x160000;
+    transformMatrix[7] = 0xA3333;
+    func_8006B084_6BC84(transformMatrix, obj, &obj->unk78);
     obj->unkB4 = 0;
     obj->unkB6 = 0;
     setCleanupCallback(func_80040D48_41948);
