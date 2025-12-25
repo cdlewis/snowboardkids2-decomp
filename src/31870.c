@@ -1226,7 +1226,6 @@ INCLUDE_ASM("asm/nonmatchings/31870", func_80032628_33228);
 extern u16 D_8008F184_8FD84[];
 extern u16 D_8008F150_8FD50[];
 extern const char D_8009E480_9F080;
-extern void func_800136E0_142E0(void);
 void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
 
 void func_80032708_33308(func_800329A8_335A8_arg *arg0) {
