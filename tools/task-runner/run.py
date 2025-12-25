@@ -22,10 +22,11 @@ class Colors:
     RESET = '\033[0m'
 
 class TaskRunner:
-    def __init__(self, taskfile_path, max_times=None, dry_run=False):
+    def __init__(self, taskfile_path, max_times=None, dry_run=False, verbose=False):
         self.taskfile_path = taskfile_path
         self.max_times = max_times
         self.dry_run = dry_run
+        self.verbose = verbose
         self.stop_requested = False
         self.count = 0
         self.consecutive_failures = 0
@@ -193,7 +194,8 @@ class TaskRunner:
         if self.dry_run:
             print("MODE: DRY RUN (will not execute Claude)")
         print(f"Script: {self.script}")
-        print(f"Prompt template: {self.prompt_template}")
+        if self.verbose:
+            print(f"Prompt template: {self.prompt_template}")
         print(f"Ignored prompts file: {self.ignored_prompts_file}")
         print(f"Claude log file: {self.claude_log_file}")
         print()
@@ -472,6 +474,8 @@ Use --list to see all available tasks.
                        help='(deprecated, use --limit) Maximum number of iterations')
     parser.add_argument('--dry-run', action='store_true',
                        help='Print the prompt that would be passed to Claude without executing')
+    parser.add_argument('--verbose', action='store_true',
+                       help='Print verbose output including prompt template')
 
     args = parser.parse_args()
 
@@ -503,7 +507,7 @@ Use --list to see all available tasks.
         print("Error: --limit/--times argument must be a positive integer")
         sys.exit(1)
 
-    runner = TaskRunner(taskfile_path, args.times, args.dry_run)
+    runner = TaskRunner(taskfile_path, args.times, args.dry_run, args.verbose)
     runner.run()
 
 
