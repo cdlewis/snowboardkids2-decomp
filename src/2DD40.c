@@ -226,8 +226,6 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002E8B4_2F4B4);
 extern u8 D_8008F044_8FC44[];
 extern s8 D_8008F054_8FC54[];
 
-s8 func_80001660_2260(void *arg0);
-
 typedef struct {
     /* 0x00 */ void *unk0;
     /* 0x04 */ u8 pad0[0x28];

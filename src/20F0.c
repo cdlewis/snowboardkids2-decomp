@@ -179,7 +179,7 @@ void func_80001650_2250(SceneModel *arg0) {
     arg0->unk89 &= 0xFE;
 }
 
-s8 func_80001660_2260(func_80001688_2288_arg *arg0) {
+s8 func_80001660_2260(SceneModel *arg0) {
     return arg0->unk94;
 }
 
