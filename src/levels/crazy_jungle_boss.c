@@ -1,5 +1,6 @@
 #include "5DBC0.h"
 #include "9FF70.h"
+#include "A9A40.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -34,7 +35,8 @@ typedef struct {
 
 typedef struct {
     u8 pad[0x38];
-    u8 unk38[0x6C - 0x38];
+    s16 unk38[6];
+    u8 pad44[0x6C - 0x44];
     u8 unk6C;
     u8 unk6D;
     u8 unk6E;
@@ -42,11 +44,23 @@ typedef struct {
     u8 unk70;
     u8 unk71;
     u8 unk72;
-    u8 pad73[0x434 - 0x73];
+    u8 pad73[0xEC - 0x73];
+    s16 unkEC[6];
+    u8 padF8[0x1A0 - 0xF8];
+    s16 unk1A0[6];
+    u8 pad1AC[0x344 - 0x1AC];
+    s16 unk344[6];
+    u8 pad350[0x380 - 0x350];
+    s16 unk380[6];
+    u8 pad38C[0x3BC - 0x38C];
+    s16 unk3BC[6];
+    u8 pad3C8[0x434 - 0x3C8];
     s32 unk434;
     s32 unk438;
     s32 unk43C;
-    u8 pad440[0xC];
+    s32 unk440;
+    s32 unk444;
+    s32 unk448;
     s32 unk44C;
     s32 unk450;
     s32 unk454;
@@ -56,19 +70,56 @@ typedef struct {
     s32 unk474;
     u8 pad478[0x970 - 0x478];
     Mat3x3Padded unk970;
-    u8 pad990[0xA10 - 0x990];
+    Mat3x3Padded unk990;
+    Mat3x3Padded unk9B0;
+    u8 pad9D0[0xA10 - 0x9D0];
     UnkA10Entry unkA10[9];
     s32 unkA7C;
     u8 padA80[4];
     s32 unkA84;
     u8 padA88[4];
     u16 unkA8C;
-    u8 padA8E[6];
+    u16 unkA8E;
+    u16 unkA90;
+    u16 unkA92;
     u16 unkA94;
     u8 padA96[6];
     u16 unkA9C;
     u16 unkA9E;
-    u8 padAA0[0xB84 - 0xAA0];
+    u8 padAA0[4];
+    s32 unkAA4;
+    s32 unkAA8;
+    u8 padAAC[0xAC2 - 0xAAC];
+    s16 unkAC2;
+    u8 padAC4[0xAD4 - 0xAC4];
+    s32 unkAD4;
+    s32 unkAD8;
+    s32 unkADC;
+    u8 padAE0[0x4];
+    s32 unkAE4;
+    s32 unkAE8;
+    s32 unkAEC;
+    s32 unkAF0;
+    s32 unkAF4;
+    s32 unkAF8;
+    s32 unkAFC;
+    s32 unkB00;
+    s32 unkB04;
+    s32 unkB08;
+    s32 unkB0C;
+    s32 unkB10;
+    s32 unkB14;
+    s32 unkB18;
+    s32 unkB1C;
+    s32 unkB20;
+    s32 unkB24;
+    s32 unkB28;
+    u8 padB2C[0xB50 - 0xB2C];
+    s32 unkB50;
+    s32 unkB54;
+    s32 unkB58;
+    s32 unkB5C;
+    u8 padB60[0xB84 - 0xB60];
     s32 unkB84;
     s32 unkB88;
     s32 unkB8C;
@@ -85,12 +136,16 @@ typedef struct {
     u8 unkBBF;
     u8 unkBC0;
     u8 unkBC1;
-    u8 padBC2[0x7];
+    u8 padBC2[0x2];
+    u8 unkBC4;
+    u8 padBC5[0x4];
     u8 unkBC9;
     u8 unkBCA;
     u8 padBCB[1];
     u8 unkBCC;
-    u8 padBCD[0xBDB - 0xBCD];
+    u8 padBCD[0x2];
+    u8 unkBCF;
+    u8 padBD0[0xBDB - 0xBD0];
     u8 unkBDB;
 } Arg0Struct;
 
@@ -104,7 +159,144 @@ extern void func_800BC0E8_AC918(Arg0Struct *);
 extern s32 D_800BBA7C_AC2AC[][3];
 extern s32 D_800BBA84_AC2B4[][3];
 
-INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BB2B0_ABAE0);
+typedef s32 (*StateFunc)(void *);
+extern StateFunc D_800BC440_ACC70[];
+extern void func_8005C838_5D438(void *);
+extern s32 getCharacterBoardStatParam0(s32, s32);
+
+void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    volatile u8 pad[8];
+    GameState *alloc;
+    Arg0Struct *player;
+    s32 dist;
+    s32 diff;
+    s32 i;
+    s32 count;
+    s32 loopBound;
+
+    alloc = getCurrentAllocation();
+    func_800B9B90_A9A40((Player *)arg0);
+
+    arg0->unk44C = arg0->unk434 - arg0->unk440;
+    arg0->unk450 = arg0->unk438 - arg0->unk444;
+    arg0->unk454 = arg0->unk43C - arg0->unk448;
+    memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+
+    if (arg0->unkB94 < 0x16) {
+        arg0->unkAA4 = 0x180000;
+    } else {
+        player = (Arg0Struct *)alloc->players;
+        dist = distance_3d(arg0->unk434 - player->unk434, arg0->unk438 - player->unk438, arg0->unk43C - player->unk43C);
+
+        if (alloc->unk86 != 0) {
+            if ((arg0->unkBC4 == 0) & (dist > 0xE00000)) {
+                arg0->unkAA4 = getCharacterBoardStatParam0(0, 8) + 0x40000;
+            } else {
+                arg0->unkAA4 = 0x180000;
+            }
+        } else {
+            if ((arg0->unkBC4 == 0) & (dist > 0xE00000)) {
+                arg0->unkAA4 = getCharacterBoardStatParam0(0, 6) + -0x8000;
+            } else {
+                arg0->unkAA4 = getCharacterBoardStatParam0(0, 6) + 0x18000;
+            }
+        }
+    }
+
+    if (arg0->unkAA4 > 0x180000) {
+        arg0->unkAA4 = 0x180000;
+    }
+
+    count = arg0->unkBCF;
+    i = 0;
+    if (count > 0) {
+        loopBound = count;
+        do {
+            arg0->unkAA4 = arg0->unkAA4 - (arg0->unkAA4 >> 2);
+            i++;
+        } while (i < loopBound);
+    }
+
+    diff = arg0->unkAA4 - arg0->unkAA8;
+    if (diff >= 0x101) {
+        diff = 0x100;
+    }
+    if (diff < -0x80) {
+        diff = -0x80;
+    }
+    arg0->unkAA8 = arg0->unkAA8 + diff;
+    arg0->unkB84 &= 0xFFFBFFFF;
+
+    if (arg0->unkBBD != 3) {
+        if (arg0->unkAC2 != 0) {
+            if (arg0->unkAC2 != 0x3D) {
+                if (arg0->unkAC2 == 0x3E) {
+                    arg0->unkBBD = 2;
+                    arg0->unkBBE = 0;
+                    arg0->unkBBF = 0;
+                    arg0->unkBC0 = 0;
+                }
+            } else {
+                arg0->unkBBD = 2;
+                arg0->unkBBE = 1;
+                arg0->unkBBF = 0;
+                arg0->unkBC0 = 0;
+            }
+        }
+    }
+    arg0->unkAC2 = 0;
+
+    do {
+    } while (D_800BC440_ACC70[arg0->unkBBD](arg0) != 0);
+
+    createZRotationMatrix(&arg0->unk9B0, arg0->unkA92);
+    createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
+    createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+
+    func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk990, &sp10);
+    func_8006B084_6BC84(&sp10, &arg0->unk970, &sp30);
+
+    sp30.unk14 -= arg0->unk970.unk14;
+    sp30.unk18 -= arg0->unk970.unk18;
+    sp30.unk1C -= arg0->unk970.unk1C;
+
+    transformVector((s16 *)(alloc->unk48 + 0xF0), (s16 *)&sp30, &arg0->unkAD4);
+    memcpy(&arg0->unkB58, &arg0->unkAD4, 0xC);
+    func_8005C838_5D438(&arg0->unkB50);
+    func_800BC0E8_AC918(arg0);
+
+    transformVector((s16 *)(alloc->unk48 + 0xFC), arg0->unk38, &arg0->unkAE4);
+    arg0->unkAE4 -= arg0->unk970.unk14;
+    arg0->unkAE8 -= arg0->unk970.unk18;
+    arg0->unkAEC -= arg0->unk970.unk1C;
+
+    transformVector((s16 *)(alloc->unk48 + 0x108), arg0->unk344, &arg0->unkAF0);
+    arg0->unkAF0 -= arg0->unk970.unk14;
+    arg0->unkAF4 -= arg0->unk970.unk18;
+    arg0->unkAF8 -= arg0->unk970.unk1C;
+
+    transformVector((s16 *)(alloc->unk48 + 0x114), arg0->unk380, &arg0->unkAFC);
+    arg0->unkAFC -= arg0->unk970.unk14;
+    arg0->unkB00 -= arg0->unk970.unk18;
+    arg0->unkB04 -= arg0->unk970.unk1C;
+
+    transformVector((s16 *)(alloc->unk48 + 0x120), arg0->unk3BC, &arg0->unkB08);
+    arg0->unkB08 -= arg0->unk970.unk14;
+    arg0->unkB0C -= arg0->unk970.unk18;
+    arg0->unkB10 -= arg0->unk970.unk1C;
+
+    transformVector((s16 *)(alloc->unk48 + 0x12C), arg0->unkEC, &arg0->unkB14);
+    arg0->unkB14 -= arg0->unk970.unk14;
+    arg0->unkB18 -= arg0->unk970.unk18;
+    arg0->unkB1C -= arg0->unk970.unk1C;
+
+    transformVector((s16 *)(alloc->unk48 + 0x138), arg0->unk1A0, &arg0->unkB20);
+    arg0->unkB20 -= arg0->unk970.unk14;
+    arg0->unkB24 -= arg0->unk970.unk18;
+    arg0->unkB28 -= arg0->unk970.unk1C;
+}
 
 INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BB754_ABF84);
 
@@ -143,7 +335,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
 
     gameState = getCurrentAllocation();
 
-    if (arg0->padBC2[4] != 0) {
+    if (arg0->padBC5[1] != 0) {
         func_800B00D4_9FF84((Player *)arg0, 2);
         return 1;
     }
@@ -177,7 +369,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
 
     if (!(arg0->unkB84 & 1)) {
         createYRotationMatrix(&arg0->unk970, arg0->unkA94);
-        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)arg0->pad990, &arg0->unk970, &sp10);
+        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, &arg0->unk970, &sp10);
         transformVector3(&arg0->unk44C, &sp10, sp30);
         sp30[0] = 0;
         transformVector2(sp30, &sp10, &arg0->unk44C);
