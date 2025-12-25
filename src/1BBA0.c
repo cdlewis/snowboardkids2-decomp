@@ -11,7 +11,6 @@ USE_OVERLAY(_1DA660)
 
 extern void func_8001B020_1BC20(void);
 extern void func_8001B3E8_1BFE8(void);
-extern void func_800B00C0_9FF70(void);
 
 void func_8001BCC0_1C8C0(void);
 void func_8001BC78_1C878(void);
