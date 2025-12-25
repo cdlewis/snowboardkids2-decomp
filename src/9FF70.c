@@ -912,8 +912,7 @@ s32 func_800B2E38_A2CE8(void *arg0) {
     return 0;
 }
 
-// NOTE: This function actually takes no parameters, but is declared here with void* for matching
-extern void func_8005D810_5E410(void *);
+extern void func_8005D810_5E410(Player *);
 
 void func_800B2E80_A2D30(Player *arg0) {
     arg0->unkB8C = 0x200;
@@ -923,7 +922,7 @@ void func_800B2E80_A2D30(Player *arg0) {
     arg0->unkBCD = -1;
     arg0->unkBC0++;
     arg0->unkB84 |= 0x4000;
-    func_8005D810_5E410((void *)arg0);
+    func_8005D810_5E410(arg0);
     func_80056B7C_5777C(&arg0->worldPosX, 0xB);
 }
 
