@@ -855,7 +855,6 @@ extern u32 D_4237C0;
 extern u32 D_426EF0;
 extern u16 D_8008DC38_8E838;
 
-extern void *loadAsset_34F7E0(void);
 extern s16 func_8000B7FC_C3FC(u16 *arg0);
 
 void func_80021A20_22620(Func80021A20Arg *arg0);
