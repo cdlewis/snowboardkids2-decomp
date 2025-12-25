@@ -6,7 +6,6 @@
 #include "graphics.h"
 #include "rand.h"
 
-extern void *func_80043310_43F10(Player *arg0);
 extern u16 D_80093F90_94B90[];
 extern u16 D_80093FA4_94BA4[];
 extern u16 D_80093FB8_94BB8[];
