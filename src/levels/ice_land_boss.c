@@ -1,3 +1,4 @@
+#include "46080.h"
 #include "51060.h"
 #include "52880.h"
 #include "5AA90.h"
@@ -92,7 +93,6 @@ typedef struct {
 extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
 void func_800BC61C_B1B0C(Player *);
-void func_8004C10C_4CD0C(Player *);
 void func_8004BC5C_4C85C(Player *);
 void func_800423A4_42FA4(s32 *, u8);
 
