@@ -36,3 +36,4 @@ void *func_8004175C_4235C(void *arg0);
 void *func_800420A8_42CA8(void *arg0);
 void *func_80043310_43F10(Player *arg0);
 void *func_80044050_44C50(Player *arg0);
+void *func_80042670_43270(Player *arg0);

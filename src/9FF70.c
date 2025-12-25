@@ -2681,7 +2681,6 @@ s32 func_800B6194_A6044(Player *arg0) {
     return 0;
 }
 
-extern s32 func_80042670_43270(Player *);
 extern void *func_8004B2A0_4BEA0(void *, u32, void *, s16, s32);
 
 s32 func_800B62E4_A6194(Player *arg0) {

@@ -837,13 +837,14 @@ void func_80042638_43238(Func42410State *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void func_80042670_43270(Player *arg0) {
+void *func_80042670_43270(Player *arg0) {
     Func42410State *task;
 
     task = (Func42410State *)scheduleTask(func_80042410_43010, 0, 0, 0xC8);
     if (task != NULL) {
         task->unk3C = arg0;
     }
+    return task;
 }
 
 typedef struct {
