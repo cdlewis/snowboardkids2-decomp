@@ -30,13 +30,135 @@ void func_8005DE98_5EA98(void *animData, s32 tableIndex, s32 boneIndex, func_800
     state->flags = *(u16 *)data + 0x8000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005DF10_5EB10);
+void func_8005DF10_5EB10(s16 arg0, s16 arg1, s16 arg2, s16 *arg3) {
+    s32 spVars[3];
+    s16 temp_s0;
+    s16 temp_s1;
+    s32 temp_a0;
+    s32 temp_a1;
+    s32 temp_a2;
+    s32 temp_a3;
+    s32 temp_s0_2;
+    s32 temp_s1_2;
+    s32 temp_s2;
+    s32 temp_s4;
+    s32 temp_s5;
+    s32 temp_t0;
+    s32 temp_t1;
+    s32 temp_t2;
+    s32 temp_v1;
+    s32 temp_v1_2;
+    s32 temp_v1_3;
+    s32 var_a0;
+    s32 var_v0;
+    s32 var_v1;
+
+    temp_s0 = arg1;
+    temp_s1 = -arg0;
+    temp_s5 = approximateSin(temp_s1);
+    temp_s0 = -temp_s0;
+    temp_s1_2 = approximateSin(temp_s0);
+    temp_s0_2 = approximateCos(temp_s1);
+    temp_s4 = approximateCos(temp_s0);
+    temp_s2 = approximateSin(arg2);
+    temp_a3 = approximateCos(arg2);
+    var_v1 = temp_s5 * temp_s1_2;
+    if (var_v1 < 0) {
+        var_v1 += 0x1FFF;
+    }
+    var_v0 = temp_s5 * temp_s4;
+    temp_a2 = var_v1 >> 0xD;
+    spVars[0] = temp_a2;
+    spVars[1] = temp_s0_2;
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    var_v1 = temp_a2 * temp_s0_2;
+    temp_a0 = var_v0 >> 0xD;
+    spVars[2] = temp_a0;
+    temp_a1 = 0x2000 - temp_a3;
+    if (var_v1 < 0) {
+        var_v1 += 0x1FFF;
+    }
+    var_v0 = (var_v1 >> 0xD) * temp_a1;
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    var_v1 = temp_s0_2 * temp_a0;
+    temp_t2 = var_v0 >> 0xD;
+    if (var_v1 < 0) {
+        var_v1 += 0x1FFF;
+    }
+    var_v0 = (var_v1 >> 0xD) * temp_a1;
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    var_v1 = temp_a0 * temp_a2;
+    temp_t0 = var_v0 >> 0xD;
+    if (var_v1 < 0) {
+        var_v1 += 0x1FFF;
+    }
+    var_v0 = (var_v1 >> 0xD) * temp_a1;
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    var_v1 = temp_a2 * temp_a2;
+    temp_t1 = var_v0 >> 0xD;
+    if (var_v1 < 0) {
+        var_v1 += 0x1FFF;
+    }
+    var_a0 = temp_a2 * temp_s2;
+    temp_a1 = var_v1 >> 0xD;
+    if (var_a0 < 0) {
+        var_a0 += 0x1FFF;
+    }
+    var_v0 = temp_a3 * (0x2000 - temp_a1);
+    temp_v1 = var_a0 >> 0xD;
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    arg3[0] = temp_a1 + (var_v0 >> 0xD);
+    arg3[7] = (s16)(temp_t0 - temp_v1);
+    arg3[5] = (s16)(temp_t0 + temp_v1);
+    var_v0 = spVars[1] * spVars[1];
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    var_v1 = spVars[1] * temp_s2;
+    temp_a1 = var_v0 >> 0xD;
+    if (var_v1 < 0) {
+        var_v1 += 0x1FFF;
+    }
+    var_v0 = temp_a3 * (0x2000 - temp_a1);
+    temp_v1_2 = var_v1 >> 0xD;
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    arg3[4] = (s16)(temp_a1 + (var_v0 >> 0xD));
+    arg3[6] = (s16)(temp_t1 + temp_v1_2);
+    arg3[2] = (s16)(temp_t1 - temp_v1_2);
+    var_v0 = spVars[2] * spVars[2];
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    var_v1 = spVars[2] * temp_s2;
+    temp_a1 = var_v0 >> 0xD;
+    if (var_v1 < 0) {
+        var_v1 += 0x1FFF;
+    }
+    var_v0 = temp_a3 * (0x2000 - temp_a1);
+    temp_v1_3 = var_v1 >> 0xD;
+    if (var_v0 < 0) {
+        var_v0 += 0x1FFF;
+    }
+    arg3[8] = (s16)(temp_a1 + (var_v0 >> 0xD));
+    arg3[3] = (s16)(temp_t2 - temp_v1_3);
+    arg3[1] = (s16)(temp_t2 + temp_v1_3);
+}
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E22C_5EE2C);
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E500_5F100);
-
-extern void func_8005DF10_5EB10(s16, s16, s16, s16 *);
 
 void func_8005E800_5F400(func_8005E800_5F400_arg *entity, u16 param_2) {
     s16 stack_data[0x10];
