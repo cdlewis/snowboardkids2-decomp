@@ -34,7 +34,7 @@ extern s16 gGraphicsMode;
 extern void *D_800A2D40_A3940;
 extern void *D_800A2D44_A3944;
 extern void *D_800A2D48_A3948;
-extern void func_80065150_65D50(void);
+void func_80065150_65D50(DisplayListObject *displayObjects);
 void func_800653E0_65FE0(DisplayListObject *displayObjects);
 extern void func_80065670_66270(void);
 extern void func_800659E4_665E4(void);
@@ -803,7 +803,55 @@ void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80065150_65D50);
+void func_80065150_65D50(DisplayListObject *displayObjects) {
+    DisplayListObject *currentObject;
+    s32 i;
+    Gfx *displayListCmd;
+    s32 objectCount;
+    u8 pad[0x44];
+
+    func_80064218_64E18(displayObjects);
+
+    gSPLightColor(
+        gRegionAllocPtr++,
+        LIGHT_1,
+        displayObjects->padding3[0] << 0x18 | displayObjects->padding3[1] << 0x10 | displayObjects->padding3[2] << 8
+    );
+
+    gSPLightColor(
+        gRegionAllocPtr++,
+        LIGHT_2,
+        displayObjects->padding4[0] << 0x18 | displayObjects->padding4[1] << 0x10 | displayObjects->padding4[2] << 8
+    );
+
+    i = 0;
+    objectCount = displayObjects->unk37;
+    if (objectCount > 0) {
+        currentObject = displayObjects;
+        do {
+            if (currentObject[i].unk20->opaqueDisplayList != NULL) {
+                func_800643AC_64FAC(displayObjects, i);
+                displayListCmd = gRegionAllocPtr;
+                displayListCmd->words.w0 = 0xDE000000;
+                displayListCmd->words.w1 = (u32)currentObject[i].unk20->opaqueDisplayList;
+                gRegionAllocPtr = displayListCmd + 1;
+            }
+            i += 1;
+        } while (i < (s32)displayObjects->unk37);
+    }
+
+    gSPLightColor(
+        gRegionAllocPtr++,
+        LIGHT_1,
+        D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8
+    );
+
+    gSPLightColor(
+        gRegionAllocPtr++,
+        LIGHT_2,
+        D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8
+    );
+}
 
 void func_800653E0_65FE0(DisplayListObject *displayObjects) {
     DisplayListObject *currentObject;
