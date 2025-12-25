@@ -96,71 +96,71 @@ typedef struct {
     u8 unk5;
     u8 unk6;
     u8 currentLevel;
-    u8 unk8;
-    u8 unk9[4];
-    u8 unkD[4];
-    u8 unk11[4];
-    u8 unk15[4];
-    u8 unk19;
+    u8 numPlayers;
+    u8 characterIDs[4];
+    u8 boardTypes[4];
+    u8 costumeIDs[4];
+    u8 colorSlots[4];
+    u8 lapCount;
     u8 pad1A[5];
-    u8 unk1F;
-    u8 unk20;
+    u8 battleTimeLimit;
+    u8 battleScoreLimit;
     u8 pad21[3];
-    u8 unk24;
-} GameConfig;
+    u8 isExpertMode;
+} SessionConfig;
 
 typedef struct {
     u8 padding_0[0xBB8];
-    u8 unkBB8;
-    /* 0xBB9 */ u8 charcterID;
-    u8 unkBBA;
-    u8 unkBBB;
-    u8 unkBBC;
+    u8 racerIndex;
+    /* 0xBB9 */ u8 characterID;
+    u8 boardType;
+    u8 costumeID;
+    u8 colorSlot;
     u8 unkBBD;
     u8 padding_BBE[0xBC7 - 0xBBE];
-    u8 unkBC7;
+    u8 isCPU;
     u8 padding_BC8[0xBD9 - 0xBC8];
-    u8 unkBD9;
-    u8 unkBDA;
+    u8 bossID;
+    u8 cpuEnabled;
     u8 padding_BDB[0xBDD - 0xBDB];
-    u8 unkBDD;
+    u8 cpuDifficulty;
     u8 padding_BDC[0xBE3 - 0xBDE];
-    u8 unkBE3;
-    u8 unkBE4;
+    u8 demoControlType;
+    u8 demoControllerIndex;
     u8 padding_BE5[0xBE8 - 0xBE5];
-} GameStateSmall_unk10;
+} RacerConfig;
 
 typedef struct {
     void *unk0;
     void *unk4;
     void *unk8;
     void *unkC;
-    GameStateSmall_unk10 *unk10;
+    RacerConfig *racers;
     void *unk14;
     u8 pad18[64];
     u16 unk58;
     u8 unk5A;
-    u8 unk5B;
+    u8 frameDelay;
     /* 0x5C */ u8 currentLevel;
     /* 0x5D */ u8 humanPlayerCount;
     /* 0x5E */ u8 totalRacers;
-    u8 unk5F;
+    u8 activePlayerCount;
     u8 pad60[4];
-    u8 unk64[16];
-    u8 unk74;
+    u8 racerOrder[16];
+    u8 lapCount;
     u8 unk75;
     u8 pad76[3];
-    u8 unk79;
-    u8 unk7A;
-    u8 unk7B;
+    u8 fadeState;
+    u8 raceType;
+    u8 disableItems;
     u8 pad7C[3];
-    u8 unk7F;
+    u8 demoMode;
     u8 pad80[3];
-    u8 unk83;
-    u8 unk84;
+    u8 battleTimeLimit;
+    u8 battleScoreLimit;
     u8 pad85[1];
-    u8 unk86;
-} GameStateSmall;
+    u8 isExpertMode;
+} RaceState;
 
 typedef struct {
     void *romStart;
@@ -176,7 +176,7 @@ typedef struct {
 
 extern void func_8003E4F0_3F0F0(void);
 
-extern GameConfig *D_800AFE8C_A71FC;
+extern SessionConfig *D_800AFE8C_A71FC;
 
 extern OverlayEntry Overlays[];
 
@@ -222,286 +222,294 @@ enum Course {
 };
 
 void initRace(void) {
-    GameStateSmall *gs;
+    RaceState *raceState;
     s32 i;
     s32 mode;
     s32 temp;
     s32 offset;
-    u8 charCount[6];
+    u8 characterCount[6];
     s32 pad2[2];
-    u8 charList[6];
+    u8 availableCharacters[6];
     s32 pad[2];
 
     LOAD_OVERLAY(_9FF70);
 
     func_800698CC_6A4CC(0x37);
 
-    // Allocate gs and zero out memory
-    gs = allocateTaskMemory(0x88);
-    for (i = sizeof(GameStateSmall) - 1; i >= 0; i--) {
-        ((u8 *)gs)[i] = 0;
+    // Allocate race state and zero out memory
+    raceState = allocateTaskMemory(0x88);
+    for (i = sizeof(RaceState) - 1; i >= 0; i--) {
+        ((u8 *)raceState)[i] = 0;
     }
 
     D_800A24A0_A30A0 = 2;
-    gs->unk75 = 0x7F;
-    gs->unk79 = 2;
-    gs->unk83 = 0;
-    gs->unk84 = 0;
-    gs->unk58 = 0x7FFF;
+    raceState->unk75 = 0x7F;
+    raceState->fadeState = 2;
+    raceState->battleTimeLimit = 0;
+    raceState->battleScoreLimit = 0;
+    raceState->unk58 = 0x7FFF;
 
     switch (D_800AFE8C_A71FC->gameMode) {
         case MODE_STORY:
-            gs->currentLevel = D_800AFE8C_A71FC->currentLevel;
-            gs->unk74 = D_800AFE8C_A71FC->unk19 - 1;
-            gs->unk86 = D_800AFE8C_A71FC->unk24;
+            raceState->currentLevel = D_800AFE8C_A71FC->currentLevel;
+            raceState->lapCount = D_800AFE8C_A71FC->lapCount - 1;
+            raceState->isExpertMode = D_800AFE8C_A71FC->isExpertMode;
 
-            switch (gs->currentLevel) {
+            switch (raceState->currentLevel) {
                 case LINDAS_CASTLE:
                 case WENDYS_HOUSE:
                 case CRAZY_JUNGLE:
                 default:
-                    gs->humanPlayerCount = D_800AFE8C_A71FC->unk8;
-                    gs->unk5F = D_800AFE8C_A71FC->unk8;
-                    gs->totalRacers = 4;
-                    if (gs->unk86 != 0) {
-                        gs->unk83 = 1;
+                    raceState->humanPlayerCount = D_800AFE8C_A71FC->numPlayers;
+                    raceState->activePlayerCount = D_800AFE8C_A71FC->numPlayers;
+                    raceState->totalRacers = 4;
+                    if (raceState->isExpertMode != 0) {
+                        raceState->battleTimeLimit = 1;
                     }
                     break;
                 case CRAZY_JUNGLE_BOSS:
-                    gs->unk7A = 1;
-                    gs->humanPlayerCount = 1;
-                    gs->unk5F = 1;
-                    gs->totalRacers = 2;
-                    gs->unk74 = 0;
+                    raceState->raceType = 1;
+                    raceState->humanPlayerCount = 1;
+                    raceState->activePlayerCount = 1;
+                    raceState->totalRacers = 2;
+                    raceState->lapCount = 0;
                     break;
                 case JINGLE_TOWN_BOSS:
-                    gs->unk7A = 2;
-                    gs->humanPlayerCount = 1;
-                    gs->unk5F = 1;
-                    gs->totalRacers = 2;
-                    gs->unk74 = 0;
+                    raceState->raceType = 2;
+                    raceState->humanPlayerCount = 1;
+                    raceState->activePlayerCount = 1;
+                    raceState->totalRacers = 2;
+                    raceState->lapCount = 0;
                     break;
                 case ICE_LAND_BOSS:
-                    gs->unk7A = 3;
-                    gs->humanPlayerCount = 1;
-                    gs->unk5F = 1;
-                    gs->totalRacers = 2;
-                    gs->unk74 = 0;
+                    raceState->raceType = 3;
+                    raceState->humanPlayerCount = 1;
+                    raceState->activePlayerCount = 1;
+                    raceState->totalRacers = 2;
+                    raceState->lapCount = 0;
                     break;
                 case SNOWBOARD_STREET_SPEED_CROSS:
-                    gs->unk7A = 4;
-                    gs->humanPlayerCount = 1;
-                    gs->unk5F = 1;
-                    gs->totalRacers = 1;
-                    gs->unk74 = 0;
+                    raceState->raceType = 4;
+                    raceState->humanPlayerCount = 1;
+                    raceState->activePlayerCount = 1;
+                    raceState->totalRacers = 1;
+                    raceState->lapCount = 0;
                     break;
                 case SNOWBOARD_STREET_SHOT_CROSS:
-                    gs->unk7A = 5;
-                    gs->humanPlayerCount = 1;
-                    gs->unk5F = 1;
-                    gs->totalRacers = 1;
-                    gs->unk74 = 0;
+                    raceState->raceType = 5;
+                    raceState->humanPlayerCount = 1;
+                    raceState->activePlayerCount = 1;
+                    raceState->totalRacers = 1;
+                    raceState->lapCount = 0;
                     break;
                 case X_CROSS:
-                    gs->unk7A = 6;
-                    gs->humanPlayerCount = 1;
-                    gs->unk5F = 1;
-                    gs->totalRacers = 1;
-                    gs->unk74 = 0;
+                    raceState->raceType = 6;
+                    raceState->humanPlayerCount = 1;
+                    raceState->activePlayerCount = 1;
+                    raceState->totalRacers = 1;
+                    raceState->lapCount = 0;
                     break;
                 case TRAINING:
-                    gs->unk7A = 9;
-                    gs->humanPlayerCount = 1;
-                    gs->unk5F = 1;
-                    gs->totalRacers = 2;
-                    gs->unk74 = 1;
-                    gs->unk7B = 1;
+                    raceState->raceType = 9;
+                    raceState->humanPlayerCount = 1;
+                    raceState->activePlayerCount = 1;
+                    raceState->totalRacers = 2;
+                    raceState->lapCount = 1;
+                    raceState->disableItems = 1;
                     break;
             }
             break;
         case MODE_BATTLE:
-            gs->currentLevel = D_800AFE8C_A71FC->currentLevel;
-            gs->unk74 = D_800AFE8C_A71FC->unk19 - 1;
-            gs->unk7A = 8;
-            gs->humanPlayerCount = D_800AFE8C_A71FC->unk8;
-            gs->unk5F = D_800AFE8C_A71FC->unk8;
-            gs->totalRacers = 4;
-            gs->unk7B = 1;
-            gs->unk83 = D_800AFE8C_A71FC->unk1F;
-            gs->unk84 = D_800AFE8C_A71FC->unk20;
+            raceState->currentLevel = D_800AFE8C_A71FC->currentLevel;
+            raceState->lapCount = D_800AFE8C_A71FC->lapCount - 1;
+            raceState->raceType = 8;
+            raceState->humanPlayerCount = D_800AFE8C_A71FC->numPlayers;
+            raceState->activePlayerCount = D_800AFE8C_A71FC->numPlayers;
+            raceState->totalRacers = 4;
+            raceState->disableItems = 1;
+            raceState->battleTimeLimit = D_800AFE8C_A71FC->battleTimeLimit;
+            raceState->battleScoreLimit = D_800AFE8C_A71FC->battleScoreLimit;
             break;
 
         case MODE_UNKNOWN:
             initRand();
-            gs->unk7A = 10;
-            gs->unk7F = D_800AFE8C_A71FC->unk5;
+            raceState->raceType = 10;
+            raceState->demoMode = D_800AFE8C_A71FC->unk5;
 
-            switch (gs->unk7F) {
+            switch (raceState->demoMode) {
                 case 0:
-                    gs->humanPlayerCount = 1;
-                    gs->unk5F = 1;
-                    gs->currentLevel = SUNNY_MOUNTAIN;
-                    gs->unk74 = 2;
-                    gs->totalRacers = 4;
+                    raceState->humanPlayerCount = 1;
+                    raceState->activePlayerCount = 1;
+                    raceState->currentLevel = SUNNY_MOUNTAIN;
+                    raceState->lapCount = 2;
+                    raceState->totalRacers = 4;
                     break;
                 case 1:
-                    gs->currentLevel = TURTLE_ISLAND;
-                    gs->unk74 = 2;
-                    gs->humanPlayerCount = 2;
-                    gs->unk5F = 2;
-                    gs->totalRacers = 4;
+                    raceState->currentLevel = TURTLE_ISLAND;
+                    raceState->lapCount = 2;
+                    raceState->humanPlayerCount = 2;
+                    raceState->activePlayerCount = 2;
+                    raceState->totalRacers = 4;
                     break;
                 case 2:
-                    gs->currentLevel = LINDAS_CASTLE;
-                    gs->unk74 = 2;
-                    gs->humanPlayerCount = 4;
-                    gs->unk5F = 4;
-                    gs->totalRacers = 4;
+                    raceState->currentLevel = LINDAS_CASTLE;
+                    raceState->lapCount = 2;
+                    raceState->humanPlayerCount = 4;
+                    raceState->activePlayerCount = 4;
+                    raceState->totalRacers = 4;
                     break;
             }
             break;
         case MODE_INTRO:
             initRand();
-            gs->unk7F = 0;
-            gs->unk7A = 11;
-            gs->currentLevel = 2;
-            gs->unk74 = 2;
-            gs->unk5F = 4;
-            gs->totalRacers = 4;
+            raceState->demoMode = 0;
+            raceState->raceType = 11;
+            raceState->currentLevel = 2;
+            raceState->lapCount = 2;
+            raceState->activePlayerCount = 4;
+            raceState->totalRacers = 4;
 
-            temp = gs->unk7F;
-            switch (gs->unk7F) {
+            temp = raceState->demoMode;
+            switch (raceState->demoMode) {
                 case 0:
                 case 1:
-                    gs->humanPlayerCount = 1;
-                    gs->unk14 = dmaRequestAndUpdateStateWithSize(&_40E870_ROM_START, &_40E870_ROM_END, 0xB8E0);
+                    raceState->humanPlayerCount = 1;
+                    raceState->unk14 = dmaRequestAndUpdateStateWithSize(&_40E870_ROM_START, &_40E870_ROM_END, 0xB8E0);
                     break;
             }
             break;
     }
 
-    if (Overlays[gs->currentLevel].romStart != NULL) {
+    if (Overlays[raceState->currentLevel].romStart != NULL) {
         dmaLoadAndInvalidate(
-            Overlays[gs->currentLevel].romStart,
-            Overlays[gs->currentLevel].romEnd,
-            Overlays[gs->currentLevel].ramStart,
-            Overlays[gs->currentLevel].icacheStart,
-            Overlays[gs->currentLevel].icacheEnd,
-            Overlays[gs->currentLevel].dcacheStart,
-            Overlays[gs->currentLevel].dcacheEnd,
-            Overlays[gs->currentLevel].bssStart,
-            Overlays[gs->currentLevel].bssEnd
+            Overlays[raceState->currentLevel].romStart,
+            Overlays[raceState->currentLevel].romEnd,
+            Overlays[raceState->currentLevel].ramStart,
+            Overlays[raceState->currentLevel].icacheStart,
+            Overlays[raceState->currentLevel].icacheEnd,
+            Overlays[raceState->currentLevel].dcacheStart,
+            Overlays[raceState->currentLevel].dcacheEnd,
+            Overlays[raceState->currentLevel].bssStart,
+            Overlays[raceState->currentLevel].bssEnd
         );
     }
 
-    gs->unk0 = allocateNodeMemory(0x1D8);
-    gs->unk4 = allocateNodeMemory(((gs->humanPlayerCount * 16 - gs->humanPlayerCount) * 4 - gs->humanPlayerCount) * 8);
-    gs->unk8 = allocateNodeMemory(((gs->humanPlayerCount * 16 - gs->humanPlayerCount) * 4 - gs->humanPlayerCount) * 8);
-    gs->unkC = allocateNodeMemory(((gs->humanPlayerCount * 16 - gs->humanPlayerCount) * 4 - gs->humanPlayerCount) * 8);
-    gs->unk10 = allocateNodeMemory(
-        ((gs->totalRacers * 2 + gs->totalRacers) * 128 - (gs->totalRacers * 2 + gs->totalRacers)) * 8
+    raceState->unk0 = allocateNodeMemory(0x1D8);
+    raceState->unk4 = allocateNodeMemory(
+        ((raceState->humanPlayerCount * 16 - raceState->humanPlayerCount) * 4 - raceState->humanPlayerCount) * 8
+    );
+    raceState->unk8 = allocateNodeMemory(
+        ((raceState->humanPlayerCount * 16 - raceState->humanPlayerCount) * 4 - raceState->humanPlayerCount) * 8
+    );
+    raceState->unkC = allocateNodeMemory(
+        ((raceState->humanPlayerCount * 16 - raceState->humanPlayerCount) * 4 - raceState->humanPlayerCount) * 8
+    );
+    raceState->racers = allocateNodeMemory(
+        ((raceState->totalRacers * 2 + raceState->totalRacers) * 128 -
+         (raceState->totalRacers * 2 + raceState->totalRacers)) *
+        8
     );
 
-    for (i = 0; i < gs->totalRacers; i++) {
-        // zero out gs->unk10[i]
-        u8 *bytes = (u8 *)&gs->unk10[i];
-        for (temp = sizeof(GameStateSmall_unk10) - 1; temp >= 0; temp--) {
+    for (i = 0; i < raceState->totalRacers; i++) {
+        // zero out racer config
+        u8 *bytes = (u8 *)&raceState->racers[i];
+        for (temp = sizeof(RacerConfig) - 1; temp >= 0; temp--) {
             bytes[temp] = 0;
         }
 
-        gs->unk10[i].unkBB8 = i;
-        gs->unk64[i] = i;
+        raceState->racers[i].racerIndex = i;
+        raceState->racerOrder[i] = i;
     }
 
     for (i = 11; i >= 0; i--) {
-        charCount[i] = 0;
+        characterCount[i] = 0;
     }
 
-    if (gs->unk7A < 9) {
-        for (i = 0; i < gs->unk5F; i++) {
-            gs->unk10[i].charcterID = D_800AFE8C_A71FC->unk9[i];
-            gs->unk10[i].unkBBA = D_800AFE8C_A71FC->unk15[i];
-            gs->unk10[i].unkBBB = D_800AFE8C_A71FC->unkD[i];
-            gs->unk10[i].unkBBC = D_800AFE8C_A71FC->unk11[i];
+    if (raceState->raceType < 9) {
+        for (i = 0; i < raceState->activePlayerCount; i++) {
+            raceState->racers[i].characterID = D_800AFE8C_A71FC->characterIDs[i];
+            raceState->racers[i].boardType = D_800AFE8C_A71FC->colorSlots[i];
+            raceState->racers[i].costumeID = D_800AFE8C_A71FC->boardTypes[i];
+            raceState->racers[i].colorSlot = D_800AFE8C_A71FC->costumeIDs[i];
         }
     }
 
-    for (i = gs->unk5F; i < gs->totalRacers; i++) {
-        gs->unk10[i].charcterID = D_80090280_90E80[gs->currentLevel][i];
-        gs->unk10[i].unkBBA = D_800902C0_90EC0[gs->currentLevel];
-        gs->unk10[i].unkBC7 = 1;
-        gs->unk10[i].unkBDA = 1;
+    for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
+        raceState->racers[i].characterID = D_80090280_90E80[raceState->currentLevel][i];
+        raceState->racers[i].boardType = D_800902C0_90EC0[raceState->currentLevel];
+        raceState->racers[i].isCPU = 1;
+        raceState->racers[i].cpuEnabled = 1;
     }
 
     switch (D_800AFE8C_A71FC->gameMode) {
         case MODE_STORY:
-            switch (gs->currentLevel) {
+            switch (raceState->currentLevel) {
                 case CRAZY_JUNGLE_BOSS:
-                    gs->unk10[1].unkBD9 = 1;
-                    gs->unk10[1].charcterID = 9;
+                    raceState->racers[1].bossID = 1;
+                    raceState->racers[1].characterID = 9;
                     break;
                 case JINGLE_TOWN_BOSS:
-                    gs->unk10[1].unkBD9 = 2;
-                    gs->unk10[1].charcterID = 10;
+                    raceState->racers[1].bossID = 2;
+                    raceState->racers[1].characterID = 10;
                     break;
                 case ICE_LAND_BOSS:
-                    gs->unk10[1].unkBD9 = 3;
-                    gs->unk10[1].charcterID = 11;
+                    raceState->racers[1].bossID = 3;
+                    raceState->racers[1].characterID = 11;
                     break;
                 case TRAINING:
-                    gs->unk10[0].charcterID = 0;
-                    gs->unk10[0].unkBBA = 0;
-                    gs->unk10[0].unkBBB = 0;
-                    gs->unk10[0].unkBBC = 0;
+                    raceState->racers[0].characterID = 0;
+                    raceState->racers[0].boardType = 0;
+                    raceState->racers[0].costumeID = 0;
+                    raceState->racers[0].colorSlot = 0;
                     break;
             }
             break;
         case MODE_UNKNOWN:
-            switch (gs->unk7F) {
+            switch (raceState->demoMode) {
                 case 0:
-                    gs->unk10[0].charcterID = 0;
-                    gs->unk10[0].unkBBA = 0;
-                    gs->unk10[0].unkBBB = 0;
-                    gs->unk10[0].unkBBC = 0;
-                    gs->unk10[0].unkBE3 = 1;
-                    gs->unk10[0].unkBE4 = 0;
+                    raceState->racers[0].characterID = 0;
+                    raceState->racers[0].boardType = 0;
+                    raceState->racers[0].costumeID = 0;
+                    raceState->racers[0].colorSlot = 0;
+                    raceState->racers[0].demoControlType = 1;
+                    raceState->racers[0].demoControllerIndex = 0;
                     break;
                 case 1:
                     for (i = 0; i < 2; i++) {
-                        gs->unk10[i].charcterID = i;
-                        gs->unk10[i].unkBBA = 1;
-                        gs->unk10[i].unkBBB = 0;
-                        gs->unk10[i].unkBBC = i;
-                        gs->unk10[i].unkBE3 = 1;
-                        gs->unk10[i].unkBE4 = i + 1;
+                        raceState->racers[i].characterID = i;
+                        raceState->racers[i].boardType = 1;
+                        raceState->racers[i].costumeID = 0;
+                        raceState->racers[i].colorSlot = i;
+                        raceState->racers[i].demoControlType = 1;
+                        raceState->racers[i].demoControllerIndex = i + 1;
                     }
                     break;
                 case 2:
                     for (i = 0; i < 4; i++) {
-                        gs->unk10[i].charcterID = i;
-                        gs->unk10[i].unkBBA = 1;
-                        gs->unk10[i].unkBBB = 0;
-                        gs->unk10[i].unkBBC = i;
-                        gs->unk10[i].unkBE3 = 1;
-                        gs->unk10[i].unkBE4 = i + 3;
+                        raceState->racers[i].characterID = i;
+                        raceState->racers[i].boardType = 1;
+                        raceState->racers[i].costumeID = 0;
+                        raceState->racers[i].colorSlot = i;
+                        raceState->racers[i].demoControlType = 1;
+                        raceState->racers[i].demoControllerIndex = i + 3;
                     }
             }
             break;
         case MODE_INTRO:
-            gs->unk10[0].charcterID = 0;
-            gs->unk10[1].charcterID = 3;
-            gs->unk10[2].charcterID = 5;
-            gs->unk10[3].charcterID = 2;
+            raceState->racers[0].characterID = 0;
+            raceState->racers[1].characterID = 3;
+            raceState->racers[2].characterID = 5;
+            raceState->racers[3].characterID = 2;
 
             for (i = 0; i < 4; i++) {
-                gs->unk10[i].unkBBA = 0;
-                gs->unk10[i].unkBBB = 0;
-                gs->unk10[i].unkBBC = i;
-                gs->unk10[i].unkBE4 = i + 7;
-                if (gs->unk7F == 3) {
-                    gs->unk10[i].unkBE3 = 2;
+                raceState->racers[i].boardType = 0;
+                raceState->racers[i].costumeID = 0;
+                raceState->racers[i].colorSlot = i;
+                raceState->racers[i].demoControllerIndex = i + 7;
+                if (raceState->demoMode == 3) {
+                    raceState->racers[i].demoControlType = 2;
                 } else {
-                    gs->unk10[i].unkBE3 = 1;
+                    raceState->racers[i].demoControlType = 1;
                 }
             }
             break;
@@ -509,109 +517,113 @@ void initRace(void) {
             break;
     }
 
-    for (i = 0; i < gs->totalRacers; i++) {
-        charCount[gs->unk10[i].charcterID]++;
+    for (i = 0; i < raceState->totalRacers; i++) {
+        characterCount[raceState->racers[i].characterID]++;
     }
 
-    for (i = gs->unk5F; i < gs->totalRacers; i++) {
+    for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
         s32 j;
         u8 count;
 
-        if (charCount[gs->unk10[i].charcterID] >= 2) {
-            charCount[gs->unk10[i].charcterID]--;
+        if (characterCount[raceState->racers[i].characterID] >= 2) {
+            characterCount[raceState->racers[i].characterID]--;
             count = 0;
             for (j = 0; j < 6; j++) {
-                if (charCount[j] == 0) {
-                    charList[count] = j;
+                if (characterCount[j] == 0) {
+                    availableCharacters[count] = j;
                     count++;
                 }
             }
 
-            gs->unk10[i].charcterID = charList[randA() % count];
-            charCount[gs->unk10[i].charcterID]++;
+            raceState->racers[i].characterID = availableCharacters[randA() % count];
+            characterCount[raceState->racers[i].characterID]++;
         }
     }
 
-    for (i = gs->unk5F; i < gs->totalRacers; i++) {
-        if (gs->unk10[i].charcterID < 6) {
-            gs->unk10[i].unkBBB = D_800902D0_90ED0[gs->currentLevel][gs->unk10[i].charcterID].unk0;
-            gs->unk10[i].unkBBC = D_800902D0_90ED0[gs->currentLevel][gs->unk10[i].charcterID].unk1;
+    for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
+        if (raceState->racers[i].characterID < 6) {
+            raceState->racers[i].costumeID =
+                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].unk0;
+            raceState->racers[i].colorSlot =
+                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].unk1;
 
-            if (gs->unk5F == 1) {
-                gs->unk10[i].unkBDD = D_800902D0_90ED0[gs->currentLevel][gs->unk10[i].charcterID].unk2;
+            if (raceState->activePlayerCount == 1) {
+                raceState->racers[i].cpuDifficulty =
+                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].unk2;
             } else {
-                gs->unk10[i].unkBDD = D_800902D0_90ED0[gs->currentLevel][gs->unk10[i].charcterID].unk3;
+                raceState->racers[i].cpuDifficulty =
+                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].unk3;
             }
 
-            if (gs->unk86 != 0) {
-                gs->unk10[i].unkBBB = 2;
+            if (raceState->isExpertMode != 0) {
+                raceState->racers[i].costumeID = 2;
                 if (i == 1) {
-                    gs->unk10[1].unkBBB = D_80090450_91050[gs->currentLevel];
+                    raceState->racers[1].costumeID = D_80090450_91050[raceState->currentLevel];
                 }
             }
         } else {
-            gs->unk10[i].unkBBB = 13;
-            gs->unk10[i].unkBBC = 5;
-            gs->unk10[i].unkBDD = 7;
+            raceState->racers[i].costumeID = 13;
+            raceState->racers[i].colorSlot = 5;
+            raceState->racers[i].cpuDifficulty = 7;
 
-            if (gs->unk7A == 8) {
-                gs->unk10[i].unkBDD = 5;
+            if (raceState->raceType == 8) {
+                raceState->racers[i].cpuDifficulty = 5;
             }
 
-            if (gs->unk10[i].charcterID != 6) {
-                gs->unk10[i].unkBBB = 9;
-                if (gs->unk7A == 8) {
-                    gs->unk10[i].unkBDD = 5;
+            if (raceState->racers[i].characterID != 6) {
+                raceState->racers[i].costumeID = 9;
+                if (raceState->raceType == 8) {
+                    raceState->racers[i].cpuDifficulty = 5;
                 } else {
-                    gs->unk10[i].unkBDD = 0;
-                    gs->unk10[i].unkBBB = 1;
+                    raceState->racers[i].cpuDifficulty = 0;
+                    raceState->racers[i].costumeID = 1;
                 }
             }
         }
 
-        if (gs->unk86 != 0) {
-            gs->unk10[i].unkBDD = 7;
+        if (raceState->isExpertMode != 0) {
+            raceState->racers[i].cpuDifficulty = 7;
         }
     }
 
-    if (gs->unk7A == 8) {
-        u8 maxLevel = 0;
-        for (i = 0; i < gs->unk5F; i++) {
-            if (maxLevel < D_80090520_91120[gs->unk10[i].unkBBB]) {
-                maxLevel = D_80090520_91120[gs->unk10[i].unkBBB];
+    if (raceState->raceType == 8) {
+        u8 maxCostumeLevel = 0;
+        for (i = 0; i < raceState->activePlayerCount; i++) {
+            if (maxCostumeLevel < D_80090520_91120[raceState->racers[i].costumeID]) {
+                maxCostumeLevel = D_80090520_91120[raceState->racers[i].costumeID];
             }
         }
 
-        for (i = gs->unk5F; i < gs->totalRacers; i++) {
-            if (gs->unk10[i].unkBBB >= 9) {
-                if (maxLevel == 4) {
-                    gs->unk10[i].unkBBB = 16;
+        for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
+            if (raceState->racers[i].costumeID >= 9) {
+                if (maxCostumeLevel == 4) {
+                    raceState->racers[i].costumeID = 16;
                 }
-                if (maxLevel == 5) {
-                    gs->unk10[i].unkBBB = 17;
+                if (maxCostumeLevel == 5) {
+                    raceState->racers[i].costumeID = 17;
                 }
                 continue;
             }
 
-            if (maxLevel <= 2) {
-                gs->unk10[i].unkBBB = maxLevel + (gs->unk10[i].unkBBB / 3) * 3;
+            if (maxCostumeLevel <= 2) {
+                raceState->racers[i].costumeID = maxCostumeLevel + (raceState->racers[i].costumeID / 3) * 3;
                 continue;
             }
 
-            if (maxLevel == 3) {
-                gs->unk10[i].unkBBB = 9;
+            if (maxCostumeLevel == 3) {
+                raceState->racers[i].costumeID = 9;
             }
-            if (maxLevel == 4) {
-                gs->unk10[i].unkBBB = 16;
+            if (maxCostumeLevel == 4) {
+                raceState->racers[i].costumeID = 16;
             }
-            if (maxLevel == 5) {
-                gs->unk10[i].unkBBB = 17;
+            if (maxCostumeLevel == 5) {
+                raceState->racers[i].costumeID = 17;
             }
         }
     }
 
-    gs->unk5B = 0x28;
-    switch (gs->unk7A) {
+    raceState->frameDelay = 0x28;
+    switch (raceState->raceType) {
         default:
             setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x28, 0xA, 0xA, 0xA, 0xA);
             break;
@@ -621,7 +633,7 @@ void initRace(void) {
         case 1:
         case 3:
             setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x3C, 0xA, 0x14, 0, 0);
-            gs->unk5B = 0x3C;
+            raceState->frameDelay = 0x3C;
             break;
         case 5:
             setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x28, 0x1E, 0, 0, 0);
