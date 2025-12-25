@@ -1,8 +1,10 @@
 #include "common.h"
+#include "36BE0.h"
 #include "5DBC0.h"
 #include "9FF70.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 #include "rand.h"
 #include "geometry.h"
@@ -25,11 +27,40 @@ typedef struct {
 } UnkA10Entry;
 
 typedef struct {
+    u8 unk0;
+    u8 unk1;
+    u8 unk2;
+    u8 unk3;
+    u8 unk4;
+    u8 unk5;
+    u8 unk6;
+    u8 unk7;
+} D_800BACC8_AAB78_type;
+
+extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
+
+typedef struct {
     u8 pad[0x38];
     s16 unk38[0x10];                    /* 0x38 - 0x57 */
-    u8 pad58[0x74 - 0x58];
+    u8 pad58[0x6C - 0x58];
+    u8 unk6C;                           /* 0x6C */
+    u8 unk6D;                           /* 0x6D */
+    u8 unk6E;                           /* 0x6E */
+    u8 pad6F;
+    u8 unk70;                           /* 0x70 */
+    u8 unk71;                           /* 0x71 */
+    u8 unk72;                           /* 0x72 */
+    u8 pad73;
     u8 unk74[0x20];                     /* 0x74 - 0x93 */
-    u8 pad94[0xB0 - 0x94];
+    u8 pad94[0xA8 - 0x94];
+    u8 unkA8;                           /* 0xA8 */
+    u8 unkA9;                           /* 0xA9 */
+    u8 unkAA;                           /* 0xAA */
+    u8 padAB;
+    u8 unkAC;                           /* 0xAC */
+    u8 unkAD;                           /* 0xAD */
+    u8 unkAE;                           /* 0xAE */
+    u8 padAF;
     u8 unkB0[0x20];                     /* 0xB0 - 0xCF */
     u8 padD0[0x434 - 0xD0];
     s32 unk434;                         /* 0x434 */
@@ -145,6 +176,7 @@ extern s32 D_800BCBA0_B4160[][3];
 extern void func_8005C838_5D438(void *);
 extern void func_800B9B90_A9A40(Player *);
 extern void func_800BC474_B3A34(Arg0Struct *);
+extern void func_8005127C_51E7C(void *, void *, Vec3i *, s32);
 extern s32 getCharacterBoardStatParam0(s32, s32);
 
 void func_800BB2B0_B2870(Arg0Struct *arg0) {
@@ -527,7 +559,112 @@ void func_800BC474_B3A34(Arg0Struct *arg0) {
     func_8006B084_6BC84(ptr - 5, arg0->unk74, arg0->unkB0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BC5A8_B3B68);
+void func_800BC5A8_B3B68(Arg0Struct *arg0) {
+    s32 pad10[16];
+    s32 sp58[3];
+    s32 sp68[3];
+    s32 sp78[3];
+    s32 sp88;
+    u32 sp8C;
+    GameState *alloc;
+    s32 index;
+    s32 i;
+    s32 volume;
+    s16 angle;
+    s32 *inputVec;
+    s32 *outVec1;
+    s32 *outVec2;
+
+    (void)pad10;
+
+    alloc = getCurrentAllocation();
+    func_800BC474_B3A34(arg0);
+
+    index = arg0->unkBCC >> 4;
+
+    if (index == 0) {
+        if (arg0->unkB84 & 0x200000) {
+            for (i = 0; i < 4; i++) {
+                func_80064808_65408(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk74, 2);
+            }
+        } else {
+            for (i = 0; i < 4; i++) {
+                func_80064808_65408(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk38, 3);
+            }
+        }
+    } else {
+        if (arg0->unkB84 & 0x200000) {
+            arg0->unkA8 = D_800BACC8_AAB78[index].unk0;
+            arg0->unkA9 = D_800BACC8_AAB78[index].unk1;
+            arg0->unkAA = D_800BACC8_AAB78[index].unk2;
+            arg0->unkAC = D_800BACC8_AAB78[index].unk4;
+            arg0->unkAD = D_800BACC8_AAB78[index].unk5;
+            arg0->unkAE = D_800BACC8_AAB78[index].unk6;
+
+            for (i = 0; i < 4; i++) {
+                enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk74, 2);
+            }
+        } else {
+            arg0->unk6C = D_800BACC8_AAB78[index].unk0;
+            arg0->unk6D = D_800BACC8_AAB78[index].unk1;
+            arg0->unk6E = D_800BACC8_AAB78[index].unk2;
+            arg0->unk70 = D_800BACC8_AAB78[index].unk4;
+            arg0->unk71 = D_800BACC8_AAB78[index].unk5;
+            arg0->unk72 = D_800BACC8_AAB78[index].unk6;
+
+            for (i = 0; i < 4; i++) {
+                enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk38, 3);
+            }
+        }
+    }
+
+    if (alloc->gamePaused != 0) {
+        func_80057ABC_586BC(arg0->unkBB8, 0);
+        return;
+    }
+
+    if (!(arg0->unkB84 & 0x10000)) {
+        volume = isqrt64((s64)arg0->unk44C * arg0->unk44C + (s64)arg0->unk450 * arg0->unk450 + (s64)arg0->unk454 * arg0->unk454) >> 12;
+        if (volume >= 0x81) {
+            volume = 0x80;
+        }
+        func_80056F8C_57B8C(&arg0->unk434, 1, 0, 2, arg0->unkBB8, volume);
+    } else {
+        func_80057ABC_586BC(arg0->unkBB8, 0);
+    }
+
+    if (!(arg0->unkB84 & 1)) {
+        if (isqrt64((s64)arg0->unk44C * arg0->unk44C + (s64)arg0->unk450 * arg0->unk450 + (s64)arg0->unk454 * arg0->unk454) > 0x40000) {
+            s32 temp;
+
+            angle = atan2Fixed(-arg0->unk44C, -arg0->unk454);
+            temp = randA();
+            inputVec = sp58;
+            sp58[0] = (temp & 0xFF) << 13;
+            sp58[2] = 0;
+            sp58[1] = 0;
+            outVec1 = sp68;
+            rotateVectorY(inputVec, (s16)angle, outVec1);
+            temp = randA();
+            sp58[0] = -(temp & 0xFF) << 13;
+            outVec2 = sp78;
+            rotateVectorY(inputVec, (s16)angle, outVec2);
+            sp68[0] += arg0->unk434;
+            sp68[1] += arg0->unk438;
+            sp68[2] += arg0->unk43C;
+            sp78[0] += arg0->unk434;
+            sp78[1] += arg0->unk438;
+            sp78[2] += arg0->unk43C;
+
+            temp = arg0->unkBCC & 0xF;
+            if (temp >= 0) {
+                if (temp < 2) {
+                    func_8005127C_51E7C(outVec1, outVec2, (Vec3i *)&arg0->unk44C, 0);
+                }
+            }
+        }
+    }
+}
 
 void func_800BCA10_B3FD0(Arg0Struct *arg0) {
     s32 i;
