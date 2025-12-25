@@ -14,4 +14,6 @@ typedef struct {
     /* 0xD3 */ u8 unkD3;
 } Func8002BEF4Arg;
 
+void func_8002BCF0_2C8F0(void *arg0);
+
 void func_8002BEF4_2CAF4(Func8002BEF4Arg *arg0);

@@ -1,5 +1,6 @@
 #include "288A0.h"
 #include "29200.h"
+#include "2C8F0.h"
 #include "3E160.h"
 #include "6E840.h"
 #include "rand.h"
@@ -18,7 +19,6 @@ typedef struct {
 } GameConfigLocal_288A0;
 
 extern GameConfigLocal_288A0 *D_800AFE8C_A71FC;
-extern void func_8002BCF0_2C8F0(void *);
 
 void func_800285EC_291EC(void);
 
