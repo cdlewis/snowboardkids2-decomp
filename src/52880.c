@@ -80,7 +80,7 @@ typedef struct {
     s32 unk2C;
     u8 padding2[0xC];
     s32 unk3C;
-    s16 unk40;
+    u16 unk40;
     s16 unk42;
     s16 unk44;
     s16 unk46;

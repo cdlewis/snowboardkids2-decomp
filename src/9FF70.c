@@ -7,6 +7,7 @@
 #include "56910.h"
 #include "594E0.h"
 #include "5AA90.h"
+#include "5DBC0.h"
 #include "5E590.h"
 #include "6E840.h"
 #include "A9A40.h"
@@ -21,14 +22,6 @@
 extern u16 D_800BAB48_AA9F8[];
 extern u16 D_800BAB58_AAA08[];
 
-extern s32 func_8005CFC0_5DBC0(void *, s32, void *, s32);
-extern void func_8005D03C_5DC3C(Player *arg0);
-extern s32 func_8005D180_5DD80(void *, s32);
-extern s32 func_8005D308_5DF08(void *, s32);
-extern void func_8005D48C_5E08C(Player *, s32, s32);
-extern void func_8005D804_5E404(Player *, u8, u8);
-extern s8 func_8005D818_5E418(Player *);
-extern s32 func_8005D8C8_5E4C8(void *);
 extern s32 D_800BA348_AA1F8;
 extern s32 D_800BA350_AA200;
 extern s32 D_800BAB40_AA9F0;

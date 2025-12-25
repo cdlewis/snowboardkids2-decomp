@@ -7,7 +7,7 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-s32 func_8005CFC0_5DBC0(void *arg0, u16 arg1, void *arg2, s32 arg3) {
+s32 func_8005CFC0_5DBC0(void *arg0, s32 arg1, void *arg2, s32 arg3) {
     return func_80061A64_62664(arg0, arg1, arg2);
 }
 
@@ -184,8 +184,8 @@ block_17:
     return var_a1;
 }
 
-s16 func_8005D8C8_5E4C8(Player *arg0) {
-    s32 count;
+s32 func_8005D8C8_5E4C8(Player *arg0) {
+    s16 count;
     u32 temp;
     s8 temp_b7a;
     s8 temp_b7b;

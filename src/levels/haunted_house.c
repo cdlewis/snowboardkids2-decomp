@@ -237,7 +237,7 @@ s32 func_800BB488_AF178(func_800BB388_AF078_arg *arg0) {
 
         func_80060CDC_618DC(allocationUnk30, temp, argPos, 0x80000, sp18);
 
-        arg0->unk28 = func_8005CFC0_5DBC0(allocationUnk30, arg0->unk3E, argPos, 0x100000) + 0x180000;
+        arg0->unk28 = func_8005CFC0_5DBC0(allocationUnk30, (u16)arg0->unk3E, argPos, 0x100000) + 0x180000;
 
         if (arg0->unk3C == 0) {
             result = (arg0->unk3E != 0x1A);
