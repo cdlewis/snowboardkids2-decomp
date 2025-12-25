@@ -13,3 +13,4 @@ void func_80059A48_5A648(Player *arg0, s32 arg1);
 void func_80059ADC_5A6DC(Player *arg0);
 void func_80059BD4_5A7D4(Player *arg0);
 void func_80059CE0_5A8E0(Player *arg0);
+void func_80058950_59550(Player *arg0, s16 arg1, s32 arg2);

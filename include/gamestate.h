@@ -4,6 +4,7 @@
 #include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
+#include "geometry.h"
 
 typedef struct {
     s32 unk0;
@@ -131,7 +132,7 @@ typedef struct {
     s32 unkAD0;
     s32 unkAD4[3];
     s32 unkAE0;
-    u8 padding2c[0xB2C - 0xAE4];
+    Vec3s32 unkAE4[6];
     s32 unkB2C;
     u8 paddingB30[0xB40 - 0xB30];
     s32 unkB40;
