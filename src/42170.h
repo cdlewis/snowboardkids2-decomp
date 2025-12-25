@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "gamestate.h"
 
 typedef struct {
     u8 pad0[0x14]; /* 0x00 */
@@ -33,3 +34,4 @@ Func42FC0TaskMem *func_80042FC0_43BC0(void *arg0);
 void func_800419E4_425E4(void *arg0);
 void *func_8004175C_4235C(void *arg0);
 void *func_800420A8_42CA8(void *arg0);
+void *func_80044050_44C50(Player *arg0);

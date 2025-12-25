@@ -1,11 +1,11 @@
 #include "3E160.h"
+#include "42170.h"
 #include "5DBC0.h"
 #include "common.h"
 #include "gamestate.h"
 #include "graphics.h"
 #include "rand.h"
 
-extern s32 func_80044050_44C50(void);
 extern void *func_80043310_43F10(Player *arg0);
 extern u16 D_80093F90_94B90[];
 extern u16 D_80093FA4_94BA4[];
@@ -159,15 +159,14 @@ s32 func_80058BB0_597B0(Player *arg0) {
 }
 
 s32 func_80058C10_59810(Player *arg0) {
-    if (arg0->unkBD1 != 0) {
-        return 0;
+    if (arg0->unkBD1 == 0) {
+        if (func_80044050_44C50(arg0) != NULL) {
+            arg0->unkBD1 = 1;
+            arg0->unkBA6 = 300;
+            return 1;
+        }
     }
-    if (func_80044050_44C50() == 0) {
-        return 0;
-    }
-    arg0->unkBD1 = 1;
-    arg0->unkBA6 = 300;
-    return 1;
+    return 0;
 }
 
 s32 func_80058C64_59864(Player *arg0) {
