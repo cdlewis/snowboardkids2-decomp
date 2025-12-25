@@ -25,10 +25,6 @@ typedef struct {
     s16 unk58;
 } func_800B5290_1E2340_task;
 
-typedef struct Vec3i {
-    s32 x, y, z;
-} Vec3i;
-
 typedef struct {
     struct {
         u8 padding[0x2C];

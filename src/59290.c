@@ -1,3 +1,4 @@
+#include "59290.h"
 #include "common.h"
 #include "gamestate.h"
 #include "task_scheduler.h"

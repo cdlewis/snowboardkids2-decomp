@@ -9,6 +9,12 @@ typedef struct {
 } Vec3s32;
 
 typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+} Vec3i;
+
+typedef struct {
     /* 0x00 */ s16 values[0xA];
     /* 0x14 */ s32 position[3];
     /* 0x20 */ s16 prev_position[0xA];

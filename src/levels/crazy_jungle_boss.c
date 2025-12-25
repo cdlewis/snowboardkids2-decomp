@@ -1,3 +1,5 @@
+#include "46080.h"
+#include "5AA90.h"
 #include "5DBC0.h"
 #include "9FF70.h"
 #include "A9A40.h"
@@ -8,8 +10,6 @@
 #include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
-#include "5AA90.h"
-#include "46080.h"
 
 typedef void (*FuncPtr)(void *);
 
@@ -92,9 +92,7 @@ typedef struct {
     u8 padAAC[0xAC2 - 0xAAC];
     s16 unkAC2;
     u8 padAC4[0xAD4 - 0xAC4];
-    s32 unkAD4;
-    s32 unkAD8;
-    s32 unkADC;
+    Vec3i unkAD4;
     u8 padAE0[0x4];
     s32 unkAE4;
     s32 unkAE8;
@@ -115,11 +113,8 @@ typedef struct {
     s32 unkB24;
     s32 unkB28;
     u8 padB2C[0xB50 - 0xB2C];
-    s32 unkB50;
-    s32 unkB54;
-    s32 unkB58;
-    s32 unkB5C;
-    u8 padB60[0xB84 - 0xB60];
+    ListNode_5AA90 unkB50;
+    u8 padB69[0xB84 - 0xB6C];
     s32 unkB84;
     s32 unkB88;
     s32 unkB8C;
@@ -161,7 +156,6 @@ extern s32 D_800BBA84_AC2B4[][3];
 
 typedef s32 (*StateFunc)(void *);
 extern StateFunc D_800BC440_ACC70[];
-extern void func_8005C838_5D438(void *);
 extern s32 getCharacterBoardStatParam0(s32, s32);
 
 void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
@@ -263,7 +257,7 @@ void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
     sp30.unk1C -= arg0->unk970.unk1C;
 
     transformVector((s16 *)(alloc->unk48 + 0xF0), (s16 *)&sp30, &arg0->unkAD4);
-    memcpy(&arg0->unkB58, &arg0->unkAD4, 0xC);
+    memcpy(&arg0->unkB50.localPos, &arg0->unkAD4, sizeof(Vec3s32));
     func_8005C838_5D438(&arg0->unkB50);
     func_800BC0E8_AC918(arg0);
 
