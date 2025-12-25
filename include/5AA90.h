@@ -4,6 +4,15 @@
 #include "gamestate.h"
 #include "geometry.h"
 
+typedef struct ListNode_5AA90 {
+    /* 0x00 */ struct ListNode_5AA90 *next;
+    /* 0x04 */ Vec3s32 *posPtr;
+    /* 0x08 */ Vec3s32 localPos;
+    /* 0x14 */ s32 radius;
+    /* 0x18 */ u8 id;
+} ListNode_5AA90;
+
+void func_8005C838_5D438(ListNode_5AA90 *arg0);
 void *func_8005B24C_5BE4C(Vec3s32 *arg0, s32 arg1, s32 arg2);
 s32 func_8005A9A8_5B5A8(Player *arg0);
 s32 func_8005B400_5C000(Player *arg0, Vec3s32 *arg1, s32 arg2);

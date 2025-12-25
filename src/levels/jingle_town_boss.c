@@ -173,7 +173,6 @@ extern s16 D_800BCB7C_B413C[];
 extern u16 D_800BCB7E_B413E[];
 extern s32 D_800BCBA0_B4160[][3];
 
-extern void func_8005C838_5D438(void *);
 extern void func_800B9B90_A9A40(Player *);
 extern void func_800BC474_B3A34(Arg0Struct *);
 extern void func_8005127C_51E7C(void *, void *, Vec3i *, s32);
@@ -272,7 +271,7 @@ void func_800BB2B0_B2870(Arg0Struct *arg0) {
 
     transformVector(D_800BCB30_B40F0, (s16 *)&sp30, &arg0->unkAD4);
     memcpy(&arg0->unkB58, &arg0->unkAD4, 0xC);
-    func_8005C838_5D438(&arg0->unkB50);
+    func_8005C838_5D438((ListNode_5AA90 *)&arg0->unkB50);
     func_800BC474_B3A34(arg0);
 
     transformVector(D_800BCB3C_B40FC, arg0->unk38, &arg0->unkAE4);

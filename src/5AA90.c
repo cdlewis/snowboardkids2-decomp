@@ -9,14 +9,6 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-typedef struct ListNode_5AA90 {
-    /* 0x00 */ struct ListNode_5AA90 *next;
-    /* 0x04 */ Vec3s32 *posPtr;
-    /* 0x08 */ Vec3s32 localPos;
-    /* 0x14 */ s32 radius;
-    /* 0x18 */ u8 id;
-} ListNode_5AA90;
-
 typedef struct {
     u8 _pad[0x10];
     /* 0x10 */ void *dataArray;
