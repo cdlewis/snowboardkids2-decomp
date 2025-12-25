@@ -132,7 +132,10 @@ class TaskRunner:
         # Properly escape the prompt for shell safety
         command = f'{self.claude_command} -p {shlex.quote(prompt)}'
 
-        print(f"Running: {command}")
+        if self.verbose:
+            print(f"Running: {command}")
+        else:
+            print(f"Running: {self.claude_command} -p <prompt>")
 
         try:
             # Temporarily ignore SIGINT in the parent process during subprocess execution
