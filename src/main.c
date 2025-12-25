@@ -642,9 +642,9 @@ void func_80001040_1C40(func_80001040_1C40_arg *arg0) {
     arg0->unk4E = arg0->unk4E + arg0->unk52;
     arg0->unk4C = (u8)arg0->unk4C;
     arg0->unk4E = (u8)arg0->unk4E;
-    arg0->unk8.unk10.position.unk0 = subEntry->unk8;
-    arg0->unk8.unk10.position.unk4 = subEntry->unkC;
-    arg0->unk8.unk10.position.unk8 = subEntry->unk10;
+    arg0->unk8.unk10.position.x = subEntry->unk8;
+    arg0->unk8.unk10.position.y = subEntry->unkC;
+    arg0->unk8.unk10.position.z = subEntry->unk10;
 
     if (arg0->unk0->unk87 != 0) {
         func_80004FF8_5BF8(arg0->unk0->ptr->unk16, &arg0->unk8);

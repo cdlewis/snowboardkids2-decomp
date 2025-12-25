@@ -3,12 +3,6 @@
 #include "common.h"
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} Vec3s32;
-
-typedef struct {
     s32 x;
     s32 y;
     s32 z;

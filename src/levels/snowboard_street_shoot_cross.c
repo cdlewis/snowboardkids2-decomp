@@ -105,7 +105,7 @@ void func_800BB4B8_ACF38(ACD30Struct *arg0) {
 
 #define Y_OFFSET 0xFFE80000
 
-s32 func_800BB504(Vec3s32 *arg0, s32 arg1) {
+s32 func_800BB504(Vec3i *arg0, s32 arg1) {
     s32 pos[3];
     s32 unused[2];
     BB504Allocation *allocation;
@@ -144,7 +144,7 @@ check_count:
     negRange = -range;
 
     do {
-        memcpy(pos, arg0, sizeof(Vec3s32));
+        memcpy(pos, arg0, sizeof(Vec3i));
         idx = i << 4;
         x = pos[0] - s1->unk8[i].unk4;
         pos[0] = x;

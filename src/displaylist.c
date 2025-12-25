@@ -142,11 +142,11 @@ u16 func_800625A4_631A4(void *arg0, void *arg1) {
         var_v1 = temp_v0;
     }
 
-    ((Vec3s32 *)arg1)->unk0 = ((func_80062B1C_arg0 *)arg0)->unk4[(elements + var_v1)->unk1C].x << 16;
-    ((Vec3s32 *)arg1)->unk4 = ((func_80062B1C_arg0 *)arg0)->unk4[(((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk1C].y
-                              << 16;
-    ((Vec3s32 *)arg1)->unk8 = ((func_80062B1C_arg0 *)arg0)->unk4[(((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk1C].z
-                              << 16;
+    ((Vec3i *)arg1)->x = ((func_80062B1C_arg0 *)arg0)->unk4[(elements + var_v1)->unk1C].x << 16;
+    ((Vec3i *)arg1)->y = ((func_80062B1C_arg0 *)arg0)->unk4[(((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk1C].y
+                         << 16;
+    ((Vec3i *)arg1)->z = ((func_80062B1C_arg0 *)arg0)->unk4[(((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk1C].z
+                         << 16;
 
     idx0 = (((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk16;
     verts = ((func_80062B1C_arg0 *)arg0)->unk4;
@@ -163,21 +163,21 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062918_63518);
 
 u16 func_80062B1C_6371C(void *arg0_void, u16 arg1, void *arg2_void, void *arg3_void) {
     func_80062B1C_arg0 *arg0 = (func_80062B1C_arg0 *)arg0_void;
-    Vec3s32 *arg2 = (Vec3s32 *)arg2_void;
-    Vec3s32 *arg3 = (Vec3s32 *)arg3_void;
+    Vec3i *arg2 = (Vec3i *)arg2_void;
+    Vec3i *arg3 = (Vec3i *)arg3_void;
     Vertex6 *verts;
     u16 idx0;
     u16 idx1;
     Vertex6 *vert0;
     Vertex6 *vert1;
 
-    arg2->unk0 = arg0->unk4[arg0->unkC[arg1].unk16].x << 16;
-    arg2->unk4 = arg0->unk4[arg0->unkC[arg1].unk16].y << 16;
-    arg2->unk8 = arg0->unk4[arg0->unkC[arg1].unk16].z << 16;
+    arg2->x = arg0->unk4[arg0->unkC[arg1].unk16].x << 16;
+    arg2->y = arg0->unk4[arg0->unkC[arg1].unk16].y << 16;
+    arg2->z = arg0->unk4[arg0->unkC[arg1].unk16].z << 16;
 
-    arg3->unk0 = arg0->unk4[arg0->unkC[arg1].unk1C].x << 16;
-    arg3->unk4 = arg0->unk4[arg0->unkC[arg1].unk1C].y << 16;
-    arg3->unk8 = arg0->unk4[arg0->unkC[arg1].unk1C].z << 16;
+    arg3->x = arg0->unk4[arg0->unkC[arg1].unk1C].x << 16;
+    arg3->y = arg0->unk4[arg0->unkC[arg1].unk1C].y << 16;
+    arg3->z = arg0->unk4[arg0->unkC[arg1].unk1C].z << 16;
 
     idx0 = arg0->unkC[arg1].unk16;
     verts = arg0->unk4;

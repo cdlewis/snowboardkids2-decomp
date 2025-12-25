@@ -1,5 +1,6 @@
 #pragma once
 
+#include "36BE0.h"
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
@@ -132,7 +133,7 @@ void n_alSeqpDelete(Node_70B00 *arg0);
 
 s32 func_8006FE10_70A10(Node_70B00 *);
 
-s32 isObjectCulled(Vec3s32 *arg0);
+s32 isObjectCulled(Vec3i *arg0);
 
 typedef struct {
     u8 padding[0xB8];

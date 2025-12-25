@@ -74,21 +74,21 @@ void func_800BB2B0(func_800BB2B0_arg *arg0) {
 
 void func_800BB320_AB1D0(func_800BB2B0_arg *arg0) {
     GameState *gs;
-    Vec3s32 pos;
+    Vec3i pos;
     s32 target[3];
     s32 i;
     Player *player;
 
     gs = getCurrentAllocation();
     memcpy(&pos, &arg0->targetPosition[0], 0xC);
-    pos.unk4 += 0x1C0000 + arg0->velocityY;
+    pos.y += 0x1C0000 + arg0->velocityY;
 
     for (i = 0; i < gs->numPlayers; i++) {
         player = &gs->players[i];
         if (isPlayerInRangeAndPull(&pos, 0x1C0000, player) != 0) {
-            target[0] = ((player->worldPosX + player->unkAD4[0] - pos.unk0) / 2) + pos.unk0;
-            target[1] = ((player->worldPosY + player->unkAD4[1] - pos.unk0) / 2) + pos.unk4;
-            target[2] = ((player->worldPosZ + player->unkAD4[2] - pos.unk0) / 2) + pos.unk8;
+            target[0] = ((player->worldPosX + player->unkAD4[0] - pos.x) / 2) + pos.x;
+            target[1] = ((player->worldPosY + player->unkAD4[1] - pos.x) / 2) + pos.y;
+            target[2] = ((player->worldPosZ + player->unkAD4[2] - pos.x) / 2) + pos.z;
             func_800589CC_595CC(&gs->players[i], &target[0]);
         }
     }

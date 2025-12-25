@@ -673,17 +673,17 @@ void func_80070094_70C94(u16 id, u8 listIndex, void *data1, void *data2) {
     }
 }
 
-s32 isObjectCulled(Vec3s32 *arg0) {
-    if (D_800AB068_A23D8->cameraX - arg0->unk0 + 0x0FEA0000 > 0x1FD40000) {
+s32 isObjectCulled(Vec3i *arg0) {
+    if (D_800AB068_A23D8->cameraX - arg0->x + 0x0FEA0000 > 0x1FD40000) {
         return TRUE;
     }
 
-    if (D_800AB068_A23D8->cameraY - arg0->unk4 + 0x0FEA0000 > 0x1FD40000) {
+    if (D_800AB068_A23D8->cameraY - arg0->y + 0x0FEA0000 > 0x1FD40000) {
         return TRUE;
     }
 
     // compiler nonsense
     if (((!arg0) && (!arg0)) && (!arg0)) {}
 
-    return D_800AB068_A23D8->cameraZ - arg0->unk8 + 0x0FEA0000 > 0x1FD40000;
+    return D_800AB068_A23D8->cameraZ - arg0->z + 0x0FEA0000 > 0x1FD40000;
 }

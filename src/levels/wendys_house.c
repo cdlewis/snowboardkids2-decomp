@@ -176,7 +176,7 @@ void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0) {
             }
             arg0->unk4A += 0x100;
             for (i = 0; i < gameState->numPlayers; i++) {
-                if (func_8005B400_5C000(&gameState->players[i], (Vec3s32 *)&arg0->unk14, 0x180000) != 0) {
+                if (func_8005B400_5C000(&gameState->players[i], (Vec3i *)&arg0->unk14, 0x180000) != 0) {
                     func_80058B30_59730(&gameState->players[i]);
                 }
             }
@@ -186,7 +186,7 @@ void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0) {
             arg0->unk18 += arg0->unk40;
             arg0->unk1C += arg0->unk44;
             for (i = 0; i < gameState->numPlayers; i++) {
-                isPlayerInRangeAndPull((Vec3s32 *)&arg0->unk14, 0x180000, &gameState->players[i]);
+                isPlayerInRangeAndPull((Vec3i *)&arg0->unk14, 0x180000, &gameState->players[i]);
             }
             arg0->unk40 += (s32)0xFFFF4000;
             if (arg0->unk40 < (s32)0xFFE20000) {

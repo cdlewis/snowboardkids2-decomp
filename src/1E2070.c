@@ -1,3 +1,4 @@
+#include "36BE0.h"
 #include "5520.h"
 #include "common.h"
 #include "displaylist.h"

@@ -510,23 +510,23 @@ void func_800419E4_425E4(void *arg0) {
 }
 
 void func_80041A24_42624(Func41A60Arg *arg0) {
-    arg0->displayList.unk10.position.unk0 = arg0->player->worldPosX;
-    arg0->displayList.unk10.position.unk4 = arg0->player->worldPosY;
-    arg0->displayList.unk10.position.unk8 = arg0->player->worldPosZ;
+    arg0->displayList.unk10.position.x = arg0->player->worldPosX;
+    arg0->displayList.unk10.position.y = arg0->player->worldPosY;
+    arg0->displayList.unk10.position.z = arg0->player->worldPosZ;
     func_800634E8_640E8(&arg0->displayList);
 }
 
 void func_80041A60_42660(Func41A60Arg *arg0) {
-    arg0->displayList.unk10.position.unk0 = arg0->player->worldPosX;
-    arg0->displayList.unk10.position.unk4 = arg0->player->worldPosY;
-    arg0->displayList.unk10.position.unk8 = arg0->player->worldPosZ;
+    arg0->displayList.unk10.position.x = arg0->player->worldPosX;
+    arg0->displayList.unk10.position.y = arg0->player->worldPosY;
+    arg0->displayList.unk10.position.z = arg0->player->worldPosZ;
     func_80063534_64134(&arg0->displayList);
 }
 
 void func_80041A9C_4269C(Func41A60Arg *arg0) {
-    arg0->displayList.unk10.position.unk0 = arg0->player->worldPosX;
-    arg0->displayList.unk10.position.unk4 = arg0->player->worldPosY;
-    arg0->displayList.unk10.position.unk8 = arg0->player->worldPosZ;
+    arg0->displayList.unk10.position.x = arg0->player->worldPosX;
+    arg0->displayList.unk10.position.y = arg0->player->worldPosY;
+    arg0->displayList.unk10.position.z = arg0->player->worldPosZ;
     func_80063580_64180(&arg0->displayList);
 }
 
@@ -688,7 +688,7 @@ void func_80042160_42D60(Func420E8State *arg0) {
     temp = arg0->unk40;
     scaleMatrix((Mat3x3Padded *)arg0, temp, temp, temp);
 
-    func_8005C250_5CE50((Vec3s32 *)&arg0->unk14, arg0->unk46, arg0->unk40 * 0xF0);
+    func_8005C250_5CE50((Vec3i *)&arg0->unk14, arg0->unk46, arg0->unk40 * 0xF0);
 
     arg0->unk3B = (u8)arg0->unk44;
 
@@ -1883,7 +1883,7 @@ void func_80044578_45178(Func44BBCArg *arg0) {
 }
 
 void func_80044684_45284(Func44BBCArg *arg0) {
-    Vec3s32 posOutput;
+    Vec3i posOutput;
     s32 transformOutput[3];
     Func43CA4GameState *allocation;
     u16 rotation;
@@ -1918,7 +1918,7 @@ void func_80044684_45284(Func44BBCArg *arg0) {
 
     arg0->unk14 = item->unk0 + transformOutput[0];
     arg0->unk1C = item->unk4 + transformOutput[2];
-    temp_unk18 = posOutput.unk4 + transformOutput[1];
+    temp_unk18 = posOutput.y + transformOutput[1];
     arg0->unkC4 = 0x30;
     arg0->unk18 = temp_unk18;
 
@@ -2132,7 +2132,7 @@ extern s32 D_80090AC0_916C0[];
  *   0x00 s8      active   - 1 when active, set to 0 when processed
  *   0x01 s8      type     - 0 for primary item, non-zero for secondary
  *   0x02 u16     itemId   - item ID to give to the player
- *   0x04 Vec3s32 position - world position for player detection
+ *   0x04 Vec3i position - world position for player detection
  */
 typedef struct {
     void *unk0; /* 0x00 */
@@ -2232,7 +2232,7 @@ void func_80044EC4_45AC4(Func44D1CArg *arg0) {
         do {
             temp_a0 = (s8 *)(offset + (s32)arg0->unk8);
             if (*temp_a0 != 0) {
-                player = (Player *)func_8005B24C_5BE4C((Vec3s32 *)(temp_a0 + 4), -1, 0x100000);
+                player = (Player *)func_8005B24C_5BE4C((Vec3i *)(temp_a0 + 4), -1, 0x100000);
                 if (player != NULL && player->unkBD9 == 0) {
                     temp_v1 = (s8 *)(offset + (s32)arg0->unk8);
                     if (temp_v1[1] == 0) {

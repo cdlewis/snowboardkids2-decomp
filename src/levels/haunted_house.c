@@ -79,7 +79,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 pad[0x14];
-    /* 0x14 */ Vec3s32 unk14;
+    /* 0x14 */ Vec3i unk14;
     /* 0x20 */ void *unk20;
     /* 0x24 */ void *unk24;
     /* 0x28 */ void *unk28;
@@ -361,7 +361,7 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
     Allocation *allocation;
     s32 i;
     s32 offset;
-    Vec3s32 *pos;
+    Vec3i *pos;
     Player *player;
 
     allocation = (Allocation *)getCurrentAllocation();
@@ -433,7 +433,7 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
     }
 
     memcpy(&arg0->unk14, &arg0->unk3C, 0xC);
-    arg0->unk14.unk4 = arg0->unk14.unk4 + approximateSin(arg0->unk4C) * 0x1C0;
+    arg0->unk14.y = arg0->unk14.y + approximateSin(arg0->unk4C) * 0x1C0;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);

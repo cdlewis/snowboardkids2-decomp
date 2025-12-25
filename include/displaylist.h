@@ -1,12 +1,13 @@
 #pragma once
 
 #include "19E80.h"
+#include "36BE0.h"
 #include "common.h"
 #include "geometry.h"
 
 typedef struct {
     s32 unk0;
-    /* 0x4 */ Vec3s32 position;
+    /* 0x4 */ Vec3i position;
 } DisplayListObject_unk10;
 
 typedef struct {
@@ -92,7 +93,7 @@ void func_800630A4_63CA4(DisplayListObject *arg0);
 
 typedef struct {
     s32 unk0;
-    Vec3s32 unk4;
+    Vec3i unk4;
     u8 padding[0xC];
     s32 unk1C;
     u8 padding2[0x4];

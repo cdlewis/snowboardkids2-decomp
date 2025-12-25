@@ -257,7 +257,7 @@ void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
     sp30.unk1C -= arg0->unk970.unk1C;
 
     transformVector((s16 *)(alloc->unk48 + 0xF0), (s16 *)&sp30, &arg0->unkAD4);
-    memcpy(&arg0->unkB50.localPos, &arg0->unkAD4, sizeof(Vec3s32));
+    memcpy(&arg0->unkB50.localPos, &arg0->unkAD4, sizeof(Vec3i));
     func_8005C838_5D438(&arg0->unkB50);
     func_800BC0E8_AC918(arg0);
 

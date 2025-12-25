@@ -15,7 +15,7 @@
 
 typedef struct {
     void *unk0;
-    Vec3s32 unk4;
+    Vec3i unk4;
     u8 padding1[0x10];
     void *unk20;
     /* 0x24 */ s32 velY;
@@ -72,7 +72,7 @@ typedef struct {
 
 typedef struct {
     void *unk0;
-    Vec3s32 unk4;
+    Vec3i unk4;
     u8 padding1[0x10];
     void *unk20;
     s32 unk24;
@@ -175,7 +175,7 @@ void func_80051E34_52A34(Struct_52880 *arg0) {
 void func_80051E90_52A90(Struct_52880 *arg0) {
     GameState *alloc;
     Player *result;
-    Vec3s32 *s1;
+    Vec3i *s1;
     s16 unk4C;
     s32 v28;
     s32 new_var;
@@ -186,7 +186,7 @@ void func_80051E90_52A90(Struct_52880 *arg0) {
 
     alloc = (GameState *)getCurrentAllocation();
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148((Vec3s32 *)s1, arg0->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3i *)s1, arg0->unk42, 0x80000);
     if (result != NULL) {
         if (!(result->unkB84 & 0x1000)) {
             func_80058A10_59610(result);
@@ -236,13 +236,13 @@ void func_80051FC4_52BC4(Struct_52880 *arg0) {
     playerIdx = arg0->unk42;
     transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->velY);
 
-    temp_v0 = arg0->unk4.unk0;
+    temp_v0 = arg0->unk4.x;
     temp_a2 = arg0->velY;
-    temp_v1 = arg0->unk4.unk4;
+    temp_v1 = arg0->unk4.y;
     temp_a1 = arg0->velZ;
     arg0->velY = temp_v0 - temp_a2;
     arg0->velZ = temp_v1 - temp_a1;
-    arg0->velX = arg0->unk4.unk8 - arg0->velX;
+    arg0->velX = arg0->unk4.z - arg0->velX;
 
     playerIdx = arg0->unk42;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
@@ -283,19 +283,19 @@ void func_80052128_52D28(Struct_52880 *arg0) {
 
         func_80051C80_52880(&arg0->velY, 0x1C0000);
 
-        memcpy(savedVec, &arg0->unk4, sizeof(Vec3s32));
+        memcpy(savedVec, &arg0->unk4, sizeof(Vec3i));
 
-        arg0->unk4.unk0 += arg0->velY;
-        arg0->unk4.unk4 += arg0->velZ;
-        arg0->unk4.unk8 += arg0->velX;
+        arg0->unk4.x += arg0->velY;
+        arg0->unk4.y += arg0->velZ;
+        arg0->unk4.z += arg0->velX;
 
         arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
 
         func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, sp18);
 
         if ((sp18[0] != 0) || (sp18[2] != 0)) {
-            arg0->unk4.unk0 = arg0->unk4.unk0 + sp18[0];
-            arg0->unk4.unk8 = arg0->unk4.unk8 + sp18[2];
+            arg0->unk4.x = arg0->unk4.x + sp18[0];
+            arg0->unk4.z = arg0->unk4.z + sp18[2];
             arg0->unk4E = arg0->unk4E + 1;
         }
 
@@ -306,13 +306,13 @@ void func_80052128_52D28(Struct_52880 *arg0) {
 
         temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
 
-        if (arg0->unk4.unk4 < temp_v0 + 0x100000) {
-            arg0->unk4.unk4 = temp_v0 + 0x100000;
+        if (arg0->unk4.y < temp_v0 + 0x100000) {
+            arg0->unk4.y = temp_v0 + 0x100000;
         }
 
-        arg0->velY = arg0->unk4.unk0 - savedVec[0];
-        arg0->velZ = arg0->unk4.unk4 - savedVec[1];
-        arg0->velX = arg0->unk4.unk8 - savedVec[2];
+        arg0->velY = arg0->unk4.x - savedVec[0];
+        arg0->velZ = arg0->unk4.y - savedVec[1];
+        arg0->velX = arg0->unk4.z - savedVec[2];
 
         func_80051E90_52A90(arg0);
 
@@ -332,7 +332,7 @@ void func_80052128_52D28(Struct_52880 *arg0) {
                 var_s3 = -(s16)arg0->unk46;
             }
 
-            memcpy(rotateVec, &arg0->velY, sizeof(Vec3s32));
+            memcpy(rotateVec, &arg0->velY, sizeof(Vec3i));
             rotateVectorY(rotateVec, var_s3, &arg0->velY);
         }
 
@@ -401,7 +401,7 @@ void func_80052500_53100(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148((Vec3s32 *)s1, new_var3->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3i *)s1, new_var3->unk42, 0x80000);
     if (result == 0) {
         return;
     }
@@ -447,13 +447,13 @@ void func_800525F4_531F4(Struct_52880 *arg0) {
     playerIdx = arg0->unk42;
     transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->velY);
 
-    temp_v0 = arg0->unk4.unk0;
+    temp_v0 = arg0->unk4.x;
     temp_a2 = arg0->velY;
-    temp_v1 = arg0->unk4.unk4;
+    temp_v1 = arg0->unk4.y;
     temp_a1 = arg0->velZ;
     arg0->velY = temp_v0 - temp_a2;
     arg0->velZ = temp_v1 - temp_a1;
-    arg0->velX = arg0->unk4.unk8 - arg0->velX;
+    arg0->velX = arg0->unk4.z - arg0->velX;
 
     playerIdx = arg0->unk42;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
@@ -494,19 +494,19 @@ void func_80052758_53358(Struct_52880 *arg0) {
 
         func_80051C80_52880(&arg0->velY, 0x1C8000);
 
-        memcpy(savedVec, &arg0->unk4, sizeof(Vec3s32));
+        memcpy(savedVec, &arg0->unk4, sizeof(Vec3i));
 
-        arg0->unk4.unk0 += arg0->velY;
-        arg0->unk4.unk4 += arg0->velZ;
-        arg0->unk4.unk8 += arg0->velX;
+        arg0->unk4.x += arg0->velY;
+        arg0->unk4.y += arg0->velZ;
+        arg0->unk4.z += arg0->velX;
 
         arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
 
         func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, sp18);
 
         if ((sp18[0] != 0) || (sp18[2] != 0)) {
-            arg0->unk4.unk0 = arg0->unk4.unk0 + sp18[0];
-            arg0->unk4.unk8 = arg0->unk4.unk8 + sp18[2];
+            arg0->unk4.x = arg0->unk4.x + sp18[0];
+            arg0->unk4.z = arg0->unk4.z + sp18[2];
             arg0->unk4E++;
         }
 
@@ -517,13 +517,13 @@ void func_80052758_53358(Struct_52880 *arg0) {
 
         temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
 
-        if (arg0->unk4.unk4 < temp_v0 + 0x100000) {
-            arg0->unk4.unk4 = temp_v0 + 0x100000;
+        if (arg0->unk4.y < temp_v0 + 0x100000) {
+            arg0->unk4.y = temp_v0 + 0x100000;
         }
 
-        arg0->velY = arg0->unk4.unk0 - savedVec[0];
-        arg0->velZ = arg0->unk4.unk4 - savedVec[1];
-        arg0->velX = arg0->unk4.unk8 - savedVec[2];
+        arg0->velY = arg0->unk4.x - savedVec[0];
+        arg0->velZ = arg0->unk4.y - savedVec[1];
+        arg0->velX = arg0->unk4.z - savedVec[2];
 
         func_80052500_53100(arg0);
 
@@ -543,7 +543,7 @@ void func_80052758_53358(Struct_52880 *arg0) {
                 var_s3 = -(s16)arg0->unk46;
             }
 
-            memcpy(rotateVec, &arg0->velY, sizeof(Vec3s32));
+            memcpy(rotateVec, &arg0->velY, sizeof(Vec3i));
             rotateVectorY(rotateVec, var_s3, &arg0->velY);
         }
 
@@ -611,7 +611,7 @@ void func_80052B0C_5370C(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148((Vec3s32 *)s1, new_var3->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3i *)s1, new_var3->unk42, 0x80000);
     if (result == 0) {
         return;
     }
@@ -663,13 +663,13 @@ void func_80052C00_53800(Struct_52880 *arg0) {
         transformVector(&alloc->unk48[54], &alloc->unk10[playerIdx].unk74, &arg0->velY);
     }
 
-    temp_v0 = arg0->unk4.unk0;
+    temp_v0 = arg0->unk4.x;
     temp_a2 = arg0->velY;
-    temp_v1 = arg0->unk4.unk4;
+    temp_v1 = arg0->unk4.y;
     temp_a1 = arg0->velZ;
     arg0->velY = temp_v0 - temp_a2;
     arg0->velZ = temp_v1 - temp_a1;
-    arg0->velX = arg0->unk4.unk8 - arg0->velX;
+    arg0->velX = arg0->unk4.z - arg0->velX;
 
     playerIdx = arg0->unk42;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
@@ -710,19 +710,19 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
 
         func_80051C80_52880(&arg0->velY, 0x1D0000);
 
-        memcpy(savedVec, &arg0->unk4, sizeof(Vec3s32));
+        memcpy(savedVec, &arg0->unk4, sizeof(Vec3i));
 
-        arg0->unk4.unk0 += arg0->velY;
-        arg0->unk4.unk4 += arg0->velZ;
-        arg0->unk4.unk8 += arg0->velX;
+        arg0->unk4.x += arg0->velY;
+        arg0->unk4.y += arg0->velZ;
+        arg0->unk4.z += arg0->velX;
 
         arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
 
         func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, sp18);
 
         if ((sp18[0] != 0) || (sp18[2] != 0)) {
-            arg0->unk4.unk0 = arg0->unk4.unk0 + sp18[0];
-            arg0->unk4.unk8 = arg0->unk4.unk8 + sp18[2];
+            arg0->unk4.x = arg0->unk4.x + sp18[0];
+            arg0->unk4.z = arg0->unk4.z + sp18[2];
             arg0->unk4E++;
         }
 
@@ -733,13 +733,13 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
 
         temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
 
-        if (arg0->unk4.unk4 < temp_v0 + 0x100000) {
-            arg0->unk4.unk4 = temp_v0 + 0x100000;
+        if (arg0->unk4.y < temp_v0 + 0x100000) {
+            arg0->unk4.y = temp_v0 + 0x100000;
         }
 
-        arg0->velY = arg0->unk4.unk0 - savedVec[0];
-        arg0->velZ = arg0->unk4.unk4 - savedVec[1];
-        arg0->velX = arg0->unk4.unk8 - savedVec[2];
+        arg0->velY = arg0->unk4.x - savedVec[0];
+        arg0->velZ = arg0->unk4.y - savedVec[1];
+        arg0->velX = arg0->unk4.z - savedVec[2];
 
         func_80052B0C_5370C(arg0);
 
@@ -759,7 +759,7 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
                 var_s3 = -(s16)arg0->unk46;
             }
 
-            memcpy(rotateVec, &arg0->velY, sizeof(Vec3s32));
+            memcpy(rotateVec, &arg0->velY, sizeof(Vec3i));
             rotateVectorY(rotateVec, var_s3, &arg0->velY);
         }
 
@@ -828,7 +828,7 @@ void func_80053160_53D60(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148((Vec3s32 *)s1, new_var3->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3i *)s1, new_var3->unk42, 0x80000);
     if (result == 0) {
         return;
     }
@@ -883,11 +883,11 @@ void func_80053254_53E54(Struct_52880 *arg0) {
         transformVector(&alloc->unk48[54], &alloc->unk10[playerIdx].unk74, &arg0->velY);
     }
 
-    temp_v0 = arg0->unk4.unk0;
+    temp_v0 = arg0->unk4.x;
     temp_a1 = arg0->velY;
-    temp_v1 = arg0->unk4.unk4;
+    temp_v1 = arg0->unk4.y;
     temp_a2 = arg0->velZ;
-    temp_a0 = arg0->unk4.unk8;
+    temp_a0 = arg0->unk4.z;
     temp_a3 = arg0->velX;
     playerIdx = arg0->unk42;
     arg0->velY = temp_v0 - temp_a1;
@@ -903,7 +903,7 @@ void func_80053254_53E54(Struct_52880 *arg0) {
         arg0->unk48 = 0x78;
     }
 
-    s0 = &arg0->unk4.unk0;
+    s0 = &arg0->unk4.x;
     func_80056B7C_5777C(s0, 0x10);
     setCallback(func_80053434_54034);
     func_80053160_53D60(arg0);
@@ -939,19 +939,19 @@ void func_80053434_54034(Struct_52880 *arg0) {
 
         func_80051C80_52880(&arg0->velY, 0x1E0000);
 
-        memcpy(savedVec, &arg0->unk4, sizeof(Vec3s32));
+        memcpy(savedVec, &arg0->unk4, sizeof(Vec3i));
 
-        arg0->unk4.unk0 += arg0->velY;
-        arg0->unk4.unk4 += arg0->velZ;
-        arg0->unk4.unk8 += arg0->velX;
+        arg0->unk4.x += arg0->velY;
+        arg0->unk4.y += arg0->velZ;
+        arg0->unk4.z += arg0->velX;
 
         arg0->unk40 = func_80060A3C_6163C(alloc->unk30, arg0->unk40, &arg0->unk4);
 
         func_80060CDC_618DC(alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, sp18);
 
         if ((sp18[0] != 0) || (sp18[2] != 0)) {
-            arg0->unk4.unk0 = arg0->unk4.unk0 + sp18[0];
-            arg0->unk4.unk8 = arg0->unk4.unk8 + sp18[2];
+            arg0->unk4.x = arg0->unk4.x + sp18[0];
+            arg0->unk4.z = arg0->unk4.z + sp18[2];
             s0 = atan2Fixed(-sp18[0], -sp18[2]);
             rotateVectorY(&arg0->velY, (s16)-s0, rotateVec);
             if (rotateVec[2] < 0) {
@@ -960,8 +960,8 @@ void func_80053434_54034(Struct_52880 *arg0) {
             rotateVectorY(rotateVec, (s16)s0, &arg0->velY);
             arg0->unk42 = -1;
         } else {
-            arg0->velY = arg0->unk4.unk0 - savedVec[0];
-            arg0->velX = arg0->unk4.unk8 - savedVec[2];
+            arg0->velY = arg0->unk4.x - savedVec[0];
+            arg0->velX = arg0->unk4.z - savedVec[2];
         }
 
         arg0->unk48--;
@@ -971,11 +971,11 @@ void func_80053434_54034(Struct_52880 *arg0) {
 
         temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
 
-        if (arg0->unk4.unk4 < temp_v0 + 0x100000) {
-            arg0->unk4.unk4 = temp_v0 + 0x100000;
+        if (arg0->unk4.y < temp_v0 + 0x100000) {
+            arg0->unk4.y = temp_v0 + 0x100000;
         }
 
-        arg0->velZ = arg0->unk4.unk4 - savedVec[1];
+        arg0->velZ = arg0->unk4.y - savedVec[1];
 
         func_80053160_53D60(arg0);
 
@@ -995,7 +995,7 @@ void func_80053434_54034(Struct_52880 *arg0) {
                 var_s3 = -(s16)arg0->unk46;
             }
 
-            memcpy(rotateVec, &arg0->velY, sizeof(Vec3s32));
+            memcpy(rotateVec, &arg0->velY, sizeof(Vec3i));
             rotateVectorY(rotateVec, var_s3, &arg0->velY);
         }
 
@@ -1052,8 +1052,8 @@ void func_8005383C_5443C(Struct_52880 *arg0) {
 void func_80053898_54498(Struct_52880 *arg0) {
     GameState *allocation;
     Player *player;
-    Vec3s32 localVec;
-    Vec3s32 *s1;
+    Vec3i localVec;
+    Vec3i *s1;
     u8 temp;
 
     allocation = (GameState *)getCurrentAllocation();
@@ -1107,13 +1107,13 @@ void func_80053990_54590(Struct_52880 *arg0) {
     player = (void *)((u8 *)alloc->unk10 + (playerIdx * 3048) + 0x950);
     transformVector((void *)((u8 *)alloc->unk48 + 0xC), player, &arg0->velY);
 
-    temp_v0 = arg0->unk4.unk0;
+    temp_v0 = arg0->unk4.x;
     temp_a2 = arg0->velY;
-    temp_v1 = arg0->unk4.unk4;
+    temp_v1 = arg0->unk4.y;
     temp_a1 = arg0->velZ;
     arg0->velY = temp_v0 - temp_a2;
     arg0->velZ = temp_v1 - temp_a1;
-    arg0->velX = arg0->unk4.unk8 - arg0->velX;
+    arg0->velX = arg0->unk4.z - arg0->velX;
 
     playerIdx = arg0->unk42;
     arg0->unk40 = ((Unk10Element_52880 *)((u8 *)alloc->unk10 + (playerIdx * 3048)))->unkB94;
@@ -1153,19 +1153,19 @@ void func_80053B38_54738(Struct_52880 *arg0) {
 
         func_80051C80_52880(&arg0->velY, arg0->unk3C);
 
-        memcpy(savedVec, &arg0->unk4, sizeof(Vec3s32));
+        memcpy(savedVec, &arg0->unk4, sizeof(Vec3i));
 
-        arg0->unk4.unk0 += arg0->velY;
-        arg0->unk4.unk4 += arg0->velZ;
-        arg0->unk4.unk8 += arg0->velX;
+        arg0->unk4.x += arg0->velY;
+        arg0->unk4.y += arg0->velZ;
+        arg0->unk4.z += arg0->velX;
 
         arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
 
         func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, sp18);
 
         if ((sp18[0] != 0) || (sp18[2] != 0)) {
-            arg0->unk4.unk0 = arg0->unk4.unk0 + sp18[0];
-            arg0->unk4.unk8 = arg0->unk4.unk8 + sp18[2];
+            arg0->unk4.x = arg0->unk4.x + sp18[0];
+            arg0->unk4.z = arg0->unk4.z + sp18[2];
             arg0->unk4E = arg0->unk4E + 1;
         }
 
@@ -1176,13 +1176,13 @@ void func_80053B38_54738(Struct_52880 *arg0) {
 
         temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
 
-        if (arg0->unk4.unk4 < temp_v0 + 0x100000) {
-            arg0->unk4.unk4 = temp_v0 + 0x100000;
+        if (arg0->unk4.y < temp_v0 + 0x100000) {
+            arg0->unk4.y = temp_v0 + 0x100000;
         }
 
-        arg0->velY = arg0->unk4.unk0 - savedVec[0];
-        arg0->velZ = arg0->unk4.unk4 - savedVec[1];
-        arg0->velX = arg0->unk4.unk8 - savedVec[2];
+        arg0->velY = arg0->unk4.x - savedVec[0];
+        arg0->velZ = arg0->unk4.y - savedVec[1];
+        arg0->velX = arg0->unk4.z - savedVec[2];
 
         func_80053898_54498(arg0);
 
@@ -1202,7 +1202,7 @@ void func_80053B38_54738(Struct_52880 *arg0) {
                 var_s3 = -(s16)arg0->unk46;
             }
 
-            memcpy(rotateVec, &arg0->velY, sizeof(Vec3s32));
+            memcpy(rotateVec, &arg0->velY, sizeof(Vec3i));
             rotateVectorY(rotateVec, var_s3, &arg0->velY);
         }
 
@@ -1267,7 +1267,7 @@ void func_80053EEC_54AEC(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148((Vec3s32 *)s1, new_var3->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3i *)s1, new_var3->unk42, 0x80000);
     if (result == 0) {
         return;
     }
@@ -1311,13 +1311,13 @@ void func_80053FE0_54BE0(Struct_52880 *arg0) {
     playerIdx = arg0->unk42;
     transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->velY);
 
-    temp_v0 = arg0->unk4.unk0;
+    temp_v0 = arg0->unk4.x;
     temp_a2 = arg0->velY;
-    temp_v1 = arg0->unk4.unk4;
+    temp_v1 = arg0->unk4.y;
     temp_a1 = arg0->velZ;
     arg0->velY = temp_v0 - temp_a2;
     arg0->velZ = temp_v1 - temp_a1;
-    arg0->velX = arg0->unk4.unk8 - arg0->velX;
+    arg0->velX = arg0->unk4.z - arg0->velX;
 
     playerIdx = arg0->unk42;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
@@ -1358,19 +1358,19 @@ void func_80054144_54D44(Struct_52880 *arg0) {
 
         func_80051C80_52880(&arg0->velY, 0x198000);
 
-        memcpy(savedVec, &arg0->unk4, sizeof(Vec3s32));
+        memcpy(savedVec, &arg0->unk4, sizeof(Vec3i));
 
-        arg0->unk4.unk0 += arg0->velY;
-        arg0->unk4.unk4 += arg0->velZ;
-        arg0->unk4.unk8 += arg0->velX;
+        arg0->unk4.x += arg0->velY;
+        arg0->unk4.y += arg0->velZ;
+        arg0->unk4.z += arg0->velX;
 
         arg0->unk40 = func_80060A3C_6163C(alloc->unk30, arg0->unk40, &arg0->unk4);
 
         func_80060CDC_618DC(alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, sp18);
 
         if ((sp18[0] != 0) || (sp18[2] != 0)) {
-            arg0->unk4.unk0 = arg0->unk4.unk0 + sp18[0];
-            arg0->unk4.unk8 = arg0->unk4.unk8 + sp18[2];
+            arg0->unk4.x = arg0->unk4.x + sp18[0];
+            arg0->unk4.z = arg0->unk4.z + sp18[2];
             temp_v0 = atan2Fixed(-sp18[0], -sp18[2]);
             rotateVectorY(&arg0->velY, (s16)-temp_v0, rotateVec);
             if (rotateVec[2] < 0) {
@@ -1379,8 +1379,8 @@ void func_80054144_54D44(Struct_52880 *arg0) {
             rotateVectorY(rotateVec, (s16)temp_v0, &arg0->velY);
             arg0->unk42 = -1;
         } else {
-            arg0->velY = arg0->unk4.unk0 - savedVec[0];
-            arg0->velX = arg0->unk4.unk8 - savedVec[2];
+            arg0->velY = arg0->unk4.x - savedVec[0];
+            arg0->velX = arg0->unk4.z - savedVec[2];
         }
 
         arg0->unk48--;
@@ -1390,11 +1390,11 @@ void func_80054144_54D44(Struct_52880 *arg0) {
 
         temp_v0 = func_8005CFC0_5DBC0(alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
 
-        if (arg0->unk4.unk4 < temp_v0 + 0x100000) {
-            arg0->unk4.unk4 = temp_v0 + 0x100000;
+        if (arg0->unk4.y < temp_v0 + 0x100000) {
+            arg0->unk4.y = temp_v0 + 0x100000;
         }
 
-        arg0->velZ = arg0->unk4.unk4 - savedVec[1];
+        arg0->velZ = arg0->unk4.y - savedVec[1];
 
         func_80053EEC_54AEC(arg0);
 
@@ -1414,7 +1414,7 @@ void func_80054144_54D44(Struct_52880 *arg0) {
                 var_s3 = -(s16)arg0->unk46;
             }
 
-            memcpy(rotateVec, &arg0->velY, sizeof(Vec3s32));
+            memcpy(rotateVec, &arg0->velY, sizeof(Vec3i));
             rotateVectorY(rotateVec, var_s3, &arg0->velY);
         }
 
@@ -1468,7 +1468,7 @@ s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
 
 void func_80054568_55168(Struct_52880 *arg0) {
     getCurrentAllocation();
-    if (func_8005C250_5CE50((Vec3s32 *)&arg0->unk4, arg0->unk42, 0xC0000)) {
+    if (func_8005C250_5CE50((Vec3i *)&arg0->unk4, arg0->unk42, 0xC0000)) {
         arg0->unk4E++;
     }
 }
@@ -1509,23 +1509,23 @@ void func_80054658_55258(Struct_52880 *arg0) {
 
         arg0->velZ -= 0x3000;
         s1 = &alloc->unk30;
-        arg0->unk4.unk0 += arg0->velY;
-        arg0->unk4.unk4 += arg0->velZ;
-        arg0->unk4.unk8 += arg0->velX;
+        arg0->unk4.x += arg0->velY;
+        arg0->unk4.y += arg0->velZ;
+        arg0->unk4.z += arg0->velX;
 
         arg0->unk40 = func_80060A3C_6163C(s1, arg0->unk40, &arg0->unk4);
         func_80060CDC_618DC(s1, arg0->unk40, &arg0->unk4, 0x80000, sp18);
 
         if ((sp18[0] != 0) || (sp18[2] != 0)) {
-            arg0->unk4.unk0 += sp18[0];
-            arg0->unk4.unk8 += sp18[2];
+            arg0->unk4.x += sp18[0];
+            arg0->unk4.z += sp18[2];
             arg0->unk4E++;
         }
 
         temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
 
-        if (arg0->unk4.unk4 < temp_v0 + 0x100000) {
-            arg0->unk4.unk4 = temp_v0 + 0x100000;
+        if (arg0->unk4.y < temp_v0 + 0x100000) {
+            arg0->unk4.y = temp_v0 + 0x100000;
             arg0->unk4E += 1;
         }
 
@@ -1552,9 +1552,9 @@ void func_800547E0_553E0(s16 arg0, s32 arg1) {
         vec[1] = 0;
         vec[2] = arg1;
         rotateVectorY(vec, arg0, &task->velY);
-        task->unk4.unk0 = 0xDD12D592;
-        task->unk4.unk4 = 0x0B1D4CA3;
-        task->unk4.unk8 = 0xE27836C1;
+        task->unk4.x = 0xDD12D592;
+        task->unk4.y = 0x0B1D4CA3;
+        task->unk4.z = 0xE27836C1;
         task->unk42 = -1;
     }
 }
@@ -1611,7 +1611,7 @@ void func_80054D70_55970(void *arg) {
 
     switch (randVal) {
         case 0:
-            player = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
             if (player != NULL) {
                 func_80058A10_59610(player);
                 for (i = 0; i < 3; i++) {
@@ -1628,7 +1628,7 @@ void func_80054D70_55970(void *arg) {
             }
             break;
         case 1:
-            player = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
             if (player != NULL) {
                 func_80058A3C_5963C(player);
                 arg0->unk4E = arg0->unk4E + 1;
@@ -1639,7 +1639,7 @@ void func_80054D70_55970(void *arg) {
             }
             break;
         case 2:
-            player = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
             if (player != NULL) {
                 func_80058A68_59668(player);
                 arg0->unk4E = arg0->unk4E + 1;
@@ -1650,7 +1650,7 @@ void func_80054D70_55970(void *arg) {
             }
             break;
         case 3:
-            player = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
             if (player != NULL) {
                 func_80058AC0_596C0(player);
                 arg0->unk4E = arg0->unk4E + 1;
@@ -1661,7 +1661,7 @@ void func_80054D70_55970(void *arg) {
             }
             break;
         case 4:
-            player = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
             if (player != NULL) {
                 func_80058A94_59694(player);
                 arg0->unk4E = arg0->unk4E + 1;
@@ -1691,11 +1691,11 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
 
     transformVector(&D_80090F60_91B60[12], alloc->unk10[arg0->unk42].unk164, &arg0->velY);
 
-    temp_v0 = arg0->unk4.unk0;
+    temp_v0 = arg0->unk4.x;
     temp_a1 = arg0->velY;
-    temp_v1 = arg0->unk4.unk4;
+    temp_v1 = arg0->unk4.y;
     temp_a2 = arg0->velZ;
-    temp_a0 = arg0->unk4.unk8;
+    temp_a0 = arg0->unk4.z;
     temp_a3 = arg0->velX;
     playerIdx = arg0->unk42;
     arg0->velY = temp_v0 - temp_a1;
@@ -1743,11 +1743,11 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
 
         func_80051C80_52880(&arg0->unk24, 0x1C0000);
 
-        memcpy(savedVec, &arg0->unk4, sizeof(Vec3s32));
+        memcpy(savedVec, &arg0->unk4, sizeof(Vec3i));
 
-        arg0->unk4.unk0 += arg0->unk24;
-        arg0->unk4.unk4 += arg0->unk28;
-        arg0->unk4.unk8 += arg0->unk2C;
+        arg0->unk4.x += arg0->unk24;
+        arg0->unk4.y += arg0->unk28;
+        arg0->unk4.z += arg0->unk2C;
 
         angle = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
         arg0->unk40 = angle;
@@ -1755,8 +1755,8 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
         func_80060CDC_618DC(&alloc->unk30, angle, &arg0->unk4, 0x80000, sp18);
 
         if (sp18[0] != 0 || sp18[2] != 0) {
-            arg0->unk4.unk0 += sp18[0];
-            arg0->unk4.unk8 += sp18[2];
+            arg0->unk4.x += sp18[0];
+            arg0->unk4.z += sp18[2];
             arg0->unk4E = arg0->unk4E + 1;
         }
 
@@ -1768,13 +1768,13 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
         temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
         temp_v1 = temp_v0 + 0x100000;
 
-        if (arg0->unk4.unk4 < temp_v1) {
-            arg0->unk4.unk4 = temp_v1;
+        if (arg0->unk4.y < temp_v1) {
+            arg0->unk4.y = temp_v1;
         }
 
-        arg0->unk24 = arg0->unk4.unk0 - savedVec[0];
-        arg0->unk28 = arg0->unk4.unk4 - savedVec[1];
-        arg0->unk2C = arg0->unk4.unk8 - savedVec[2];
+        arg0->unk24 = arg0->unk4.x - savedVec[0];
+        arg0->unk28 = arg0->unk4.y - savedVec[1];
+        arg0->unk2C = arg0->unk4.z - savedVec[2];
 
         func_80054D70_55970(arg0);
 
@@ -1795,7 +1795,7 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
                 var_s3 = -arg0->unk46;
             }
 
-            memcpy(rotateVec, &arg0->unk24, sizeof(Vec3s32));
+            memcpy(rotateVec, &arg0->unk24, sizeof(Vec3i));
             rotateVectorY(rotateVec, var_s3, &arg0->unk24);
         }
 
@@ -1870,9 +1870,9 @@ void func_800554FC_560FC(Struct_52880 *arg0) {
     index = arg0->unk42;
     transformVector(&alloc->unk48[6], &alloc->unk10[index].unk950, &arg0->velY);
 
-    arg0->velY = arg0->unk4.unk0 - arg0->velY;
-    arg0->velZ = arg0->unk4.unk4 - arg0->velZ;
-    arg0->velX = arg0->unk4.unk8 - arg0->velX;
+    arg0->velY = arg0->unk4.x - arg0->velY;
+    arg0->velZ = arg0->unk4.y - arg0->velZ;
+    arg0->velX = arg0->unk4.z - arg0->velX;
 
     index = arg0->unk42;
     arg0->unk40 = alloc->unk10[index].unkB94;
@@ -1894,7 +1894,7 @@ void func_800554FC_560FC(Struct_52880 *arg0) {
 void func_80055650_56250(Struct_52880 *arg0) {
     s32 sp18[20];
     Alloc_55650 *s3;
-    Vec3s32 *s1;
+    Vec3i *s1;
     s32 *s0;
     s16 temp_v0_sh;
     s32 temp_v0;
@@ -1915,11 +1915,11 @@ void func_80055650_56250(Struct_52880 *arg0) {
 
     func_80051C80_52880(s0, 0x1D0000);
 
-    memcpy(&sp18[4], s1, sizeof(Vec3s32));
+    memcpy(&sp18[4], s1, sizeof(Vec3i));
 
-    arg0->unk4.unk0 += arg0->velY;
-    arg0->unk4.unk4 += arg0->velZ;
-    arg0->unk4.unk8 += arg0->velX;
+    arg0->unk4.x += arg0->velY;
+    arg0->unk4.y += arg0->velZ;
+    arg0->unk4.z += arg0->velX;
 
     temp_v0_sh = func_80060A3C_6163C(&s3->unk30, arg0->unk40, s1);
 
@@ -1928,20 +1928,20 @@ void func_80055650_56250(Struct_52880 *arg0) {
     func_80060CDC_618DC(&s3->unk30, temp_v0_sh & 0xFFFF, s1, 0x80000, sp18);
 
     if ((sp18[0] != 0) || (sp18[2] != 0)) {
-        arg0->unk4.unk0 += sp18[0];
-        arg0->unk4.unk8 += sp18[2];
+        arg0->unk4.x += sp18[0];
+        arg0->unk4.z += sp18[2];
         arg0->unk4E++;
     }
 
     temp_v0 = func_8005CFC0_5DBC0(&s3->unk30, arg0->unk40, &arg0->unk4, 0x100000);
 
-    if (arg0->unk4.unk4 < (temp_v0 + 0x100000)) {
-        arg0->unk4.unk4 = temp_v0 + 0x100000;
+    if (arg0->unk4.y < (temp_v0 + 0x100000)) {
+        arg0->unk4.y = temp_v0 + 0x100000;
     }
 
-    arg0->velY = arg0->unk4.unk0 - sp18[4];
-    arg0->velZ = arg0->unk4.unk4 - sp18[5];
-    arg0->velX = arg0->unk4.unk8 - sp18[6];
+    arg0->velY = arg0->unk4.x - sp18[4];
+    arg0->velZ = arg0->unk4.y - sp18[5];
+    arg0->velX = arg0->unk4.z - sp18[6];
 
     func_800554BC_560BC(arg0);
 
@@ -1987,7 +1987,7 @@ void func_80055900_56500(Struct_52880 *arg0) {
     Player *result;
 
     getCurrentAllocation();
-    result = func_8005B548_5C148((Vec3s32 *)&arg0->unk4, arg0->unk42, 0x80000);
+    result = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
     if (result != NULL) {
         if ((result->unkB84 & 0x1000) == 0) {
             func_80058A68_59668(result);
@@ -2012,10 +2012,10 @@ void func_80055964_56564(Struct_52880 *arg0) {
 
     rotateVectorY((u8 *)alloc->unk48 + 0x228, arg0->unk44, &arg0->velY);
 
-    arg0->unk4.unk0 += localVec[0];
-    arg0->unk4.unk4 += localVec[1];
-    arg0->unk4.unk8 += localVec[2];
-    s0 = &arg0->unk4.unk0;
+    arg0->unk4.x += localVec[0];
+    arg0->unk4.y += localVec[1];
+    arg0->unk4.z += localVec[2];
+    s0 = &arg0->unk4.x;
     arg0->unk40 = 60;
     arg0->unk48 = 45;
 
@@ -2055,17 +2055,17 @@ void func_80055A84_56684(Struct_52880 *arg0) {
         func_80051C80_52880(vel, 0x190000);
         memcpy(prevPos, &arg0->unk4, 0xC);
 
-        arg0->unk4.unk0 += arg0->velY;
-        arg0->unk4.unk4 += arg0->velZ;
-        arg0->unk4.unk8 += arg0->velX;
+        arg0->unk4.x += arg0->velY;
+        arg0->unk4.y += arg0->velZ;
+        arg0->unk4.z += arg0->velX;
 
         temp = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
         arg0->unk40 = temp;
         func_80060CDC_618DC(&alloc->unk30, temp, &arg0->unk4, 0x80000, offset);
 
         if (offset[0] != 0 || offset[2] != 0) {
-            arg0->unk4.unk0 += offset[0];
-            arg0->unk4.unk8 += offset[2];
+            arg0->unk4.x += offset[0];
+            arg0->unk4.z += offset[2];
             arg0->unk4E++;
         }
 
@@ -2076,19 +2076,19 @@ void func_80055A84_56684(Struct_52880 *arg0) {
         }
 
         floorHeight = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000) + 0x100000;
-        if (arg0->unk4.unk4 < floorHeight) {
-            arg0->unk4.unk4 = floorHeight;
+        if (arg0->unk4.y < floorHeight) {
+            arg0->unk4.y = floorHeight;
         }
 
-        arg0->velY = arg0->unk4.unk0 - prevPos[0];
-        arg0->velZ = arg0->unk4.unk4 - prevPos[1];
-        arg0->velX = arg0->unk4.unk8 - prevPos[2];
+        arg0->velY = arg0->unk4.x - prevPos[0];
+        arg0->velZ = arg0->unk4.y - prevPos[1];
+        arg0->velX = arg0->unk4.z - prevPos[2];
         func_80055900_56500(arg0);
     }
 
     if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4.unk0);
-        func_80056B7C_5777C(&arg0->unk4.unk0, 0xD);
+        func_80050ECC_51ACC(&arg0->unk4.x);
+        func_80056B7C_5777C(&arg0->unk4.x, 0xD);
         func_80069CF8_6A8F8();
     }
 
@@ -2107,7 +2107,7 @@ Struct_52880 *func_80055C80_56880(s32 arg0, s16 arg1, void *arg2) {
         task->unk42 = -1;
         task->unk4A = arg0;
         task->unk44 = arg1;
-        memcpy(&task->unk4, arg2, sizeof(Vec3s32));
+        memcpy(&task->unk4, arg2, sizeof(Vec3i));
     }
     return task;
 }

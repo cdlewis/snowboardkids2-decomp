@@ -384,7 +384,7 @@ void func_800BBCFC_AE0BC(func_800BBC28_arg *arg0) {
     if (temp > 0) {
         var_s1 = 0;
 loop_2:
-        if (isPlayerInRangeAndPull((Vec3s32 *)&arg0->mat1.unk14, 0x200000, (Player *)((u8 *)allocation->players + var_s1)) == 0) {
+        if (isPlayerInRangeAndPull((Vec3i *)&arg0->mat1.unk14, 0x200000, (Player *)((u8 *)allocation->players + var_s1)) == 0) {
             var_s0 += 1;
             var_s1 += 0xBE8;
             if (var_s0 < (s32)allocation->numPlayers) {
@@ -398,7 +398,7 @@ loop_2:
         if (allocation->numPlayers != 0) {
             var_s1 = 0;
             do {
-                isPlayerInRangeAndPull((Vec3s32 *)&arg0->mat1.unk14, 0x500000, (Player *)((u8 *)allocation->players + var_s1));
+                isPlayerInRangeAndPull((Vec3i *)&arg0->mat1.unk14, 0x500000, (Player *)((u8 *)allocation->players + var_s1));
                 var_s0 += 1;
                 var_s1 += 0xBE8;
             } while (var_s0 < (s32)allocation->numPlayers);
@@ -723,7 +723,7 @@ void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
 }
 
 void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
-    Vec3s32 vec;
+    Vec3i vec;
     s32 pad[2];
     s32 found;
     s32 i;
@@ -765,11 +765,11 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
     }
 
     unk78Val = arg0->unk78;
-    vec.unk4 = 0;
-    vec.unk8 = 0;
-    vec.unk0 = -unk78Val;
+    vec.y = 0;
+    vec.z = 0;
+    vec.x = -unk78Val;
     rotateVectorY(&vec, 0x1BEC, &arg0->node1.unk14);
-    vec.unk0 = arg0->unk78;
+    vec.x = arg0->unk78;
     rotateVectorY(&vec, 0x1BEC, &arg0->node2.unk14);
 
     arg0->node1.unk14 = arg0->node1.unk14 + D_800BCB98_AEF58[arg0->unk7C][0];

@@ -1,6 +1,7 @@
 #ifndef _GAMESTATE_H_
 #define _GAMESTATE_H_
 
+#include "36BE0.h"
 #include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
@@ -132,7 +133,7 @@ typedef struct {
     s32 unkAD0;
     s32 unkAD4[3];
     s32 unkAE0;
-    Vec3s32 unkAE4[6];
+    Vec3i unkAE4[6];
     s32 unkB2C;
     u8 paddingB30[0xB40 - 0xB30];
     s32 unkB40;
