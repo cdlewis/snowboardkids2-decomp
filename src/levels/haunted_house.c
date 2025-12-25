@@ -125,7 +125,7 @@ extern void func_800BBEAC_AFB9C(s16 *);
 extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
 extern void func_800BC184_AFE74(func_800BC340_B0030_arg *);
-extern void func_800BC220_AFF10(u8 *);
+extern void func_800BC220_AFF10(u8 *ghostSlots);
 extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
 extern void func_800BC750_B0440(s16 *);
 
@@ -639,67 +639,67 @@ void func_800BC184_AFE74(func_800BC340_B0030_arg *arg0) {
 
 void func_800BC378_B0068(void);
 
-void func_800BC220_AFF10(u8 *arg0) {
-    Allocation *allocation;
+void func_800BC220_AFF10(u8 *ghostSlots) {
+    GameState *gameState;
     s32 i;
-    s32 maxState;
-    s32 numGhosts;
-    s32 numPlayers;
-    Player *players;
-    s32 num;
-    s32 temp;
+    s32 maxRaceState;
+    s32 activeGhostCount;
+    s32 playerCount;
+    Player *player;
+    s32 numPlayersToCheck;
+    s32 raceState;
     s32 pad[4];
 
     (void)pad;
 
-    allocation = (Allocation *)getCurrentAllocation();
-    num = allocation->unk5E;
-    maxState = 0;
+    gameState = getCurrentAllocation();
+    numPlayersToCheck = gameState->numPlayers;
+    maxRaceState = 0;
     i = 0;
 
-    if (num > 0) {
-        numPlayers = num;
-        players = allocation->unk10;
+    if (numPlayersToCheck > 0) {
+        playerCount = numPlayersToCheck;
+        player = gameState->players;
         do {
-            temp = players->unkB94;
-            if ((u32)(temp - 7) < 5U) {
-                temp &= 0xFFFF;
-                if (maxState < temp) {
-                    maxState = temp;
+            raceState = player->unkB94;
+            if ((u32)(raceState - 7) < 5U) {
+                raceState &= 0xFFFF;
+                if (maxRaceState < raceState) {
+                    maxRaceState = raceState;
                 }
             }
             i++;
-            players = (Player *)((u8 *)players + 0xBE8);
-        } while (i < numPlayers);
+            player = (Player *)((u8 *)player + sizeof(Player));
+        } while (i < playerCount);
     }
 
-    numGhosts = ((maxState < 7) ^ 1) * 2;
-    if (maxState >= 8) {
-        numGhosts = 4;
+    activeGhostCount = ((maxRaceState < 7) ^ 1) * 2;
+    if (maxRaceState >= 8) {
+        activeGhostCount = 4;
     }
-    if (maxState >= 9) {
-        numGhosts = 6;
+    if (maxRaceState >= 9) {
+        activeGhostCount = 6;
     }
-    if (maxState >= 10) {
-        numGhosts = 8;
+    if (maxRaceState >= 10) {
+        activeGhostCount = 8;
     }
 
     i = 0;
-    if (numGhosts != 0) {
+    if (activeGhostCount != 0) {
         do {
-            (arg0 + i)[8] = 8;
+            (ghostSlots + i)[8] = 8;
             i++;
-        } while (i < numGhosts);
+        } while (i < activeGhostCount);
     }
 
-    i = numGhosts;
+    i = activeGhostCount;
     while (i < 8) {
-        (arg0 + i)[8] = 9;
+        (ghostSlots + i)[8] = 9;
         i++;
     }
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 4, func_800BC378_B0068, arg0);
+        debugEnqueueCallback((u16)i, 4, func_800BC378_B0068, ghostSlots);
     }
 }
 
