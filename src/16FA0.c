@@ -5,29 +5,17 @@
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
+#include "main.h"
 #include "overlay.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_414CF0);
 USE_ASSET(_418520);
 
-extern void func_8000056C_116C(s32, s32, void *);
-extern void func_80000460_1060(s32, void *, void *);
-extern void func_80000760_1360(void);
 extern u8 gConnectedControllerMask;
 
-typedef struct {
-    s32 unk0;
-    void *unk4;
-    void *unk8;
-    u8 padding[0x7A];
-    s8 unk86;
-} func_80000710_1310_arg_16FA0;
-
-extern void func_80000710_1310(func_80000710_1310_arg_16FA0 *);
-
-void func_800168BC_174BC(void);
-void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0);
+void func_800168BC_174BC(func_80000760_1360_arg *arg0);
+void func_800168D8_174D8(func_80000710_1310_arg *arg0);
 
 extern Mat3x3Padded D_8008D5C4_8E1C4[];
 extern u16 *D_8008D534_8E134[2];
@@ -162,9 +150,9 @@ void func_80016834_17434(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
 }
 
-void func_80016860_17460(s32 arg0) {
-    s32 sp28;
-    s32 sp10[6];
+void func_80016860_17460(func_8000056C_116C_arg *arg0) {
+    ColorData sp10[3];
+    ColorData sp28;
     GameState *alloc;
 
     alloc = (GameState *)getCurrentAllocation();
@@ -174,11 +162,11 @@ void func_80016860_17460(s32 arg0) {
     setCallback(func_800168BC_174BC);
 }
 
-void func_800168BC_174BC(void) {
-    func_80000760_1360();
+void func_800168BC_174BC(func_80000760_1360_arg *arg0) {
+    func_80000760_1360(arg0);
 }
 
-void func_800168D8_174D8(func_80000710_1310_arg_16FA0 *arg0) {
+void func_800168D8_174D8(func_80000710_1310_arg *arg0) {
     func_80000710_1310(arg0);
 }
 
