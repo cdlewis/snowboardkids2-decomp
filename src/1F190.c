@@ -5,13 +5,8 @@
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
+#include "graphics.h"
 #include "task_scheduler.h"
-
-extern void func_8001E5EC_1F1EC(void);
-extern void func_8001EB4C_1F74C(void);
-void func_8001EB1C_1F71C(void);
-void func_8001F33C_1FF3C(void);
-void func_8001F358_1FF58(void);
 
 typedef struct {
     Node_70B00 unk0;   // 0x000
@@ -38,6 +33,62 @@ typedef struct {
     u8 unkB45;         // 0xB45
     u8 unkB46;         // 0xB46
 } Allocation_1F190;
+
+typedef struct {
+    Node_70B00 unk0;
+    Node_70B00 unk1D8;
+    Node_70B00 unk3B0;
+    Node_70B00 unk588;
+    Node_70B00 unk760;
+    Node_70B00 unk938;
+    void *unkB10;
+    void *unkB14;
+    void *unkB18;
+    void *unkB1C;
+    void *unkB20;
+    s32 unkB24;
+    u16 unkB28;
+    u8 padB2A[0x2];
+    s8 unkB2C;
+    u8 unkB2D;
+    u8 unkB2E;
+    u8 menuState;
+    u8 unkB30;
+    u8 unkB31;
+    u8 unkB32;
+    u8 unkB33[16];
+    u8 unkB43;
+    u8 unkB44;
+    u8 unkB45;
+    u8 unkB46;
+    u8 unkB47;
+} Allocation_1F190_Local;
+
+typedef enum {
+    MENU_STATE_NAVIGATE = 0,      // Main selection, up/down navigation
+    MENU_STATE_SCROLL = 1,        // Not in switch - probably animation transition
+    MENU_STATE_CONFIRM = 2,       // Confirm selection, B backs out
+    MENU_STATE_NUMBER_SELECT = 3, // Adjust numeric value 1-9
+    MENU_STATE_UKNOWN = 4,
+    MENU_STATE_PROMPT = 5,       // Awaiting input before detail view
+    MENU_STATE_DETAIL_OPEN = 6,  // Opening detail view animation
+    MENU_STATE_DETAIL_WAIT = 7,  // Waiting for open animation to finish
+    MENU_STATE_DETAIL = 8,       // In detail view, can confirm or back out
+    MENU_STATE_DETAIL_CLOSE = 9, // Closing detail view animation
+} MenuState;
+
+void func_8001E5EC_1F1EC(void);
+void func_8001EB4C_1F74C(void);
+void func_8001EB1C_1F71C(void);
+void func_8001F33C_1FF3C(void);
+void func_8001F358_1FF58(void);
+void func_8001F374_1FF74(void);
+void func_8001F25C_1FE5C(void);
+void func_8001F42C_2002C(void);
+
+extern s32 gControllerInputs[];
+extern s32 gFrameCounter;
+extern u8 D_8008D9C0_8E5C0[];
 
 void func_8001E590_1F190(void) {
     Allocation_1F190 *allocation = allocateTaskMemory(0xB48);
@@ -77,7 +128,210 @@ void func_8001EB1C_1F71C(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1F190", func_8001EB4C_1F74C);
+void func_8001EB4C_1F74C(void) {
+    Allocation_1F190_Local *allocation;
+    D_800AFE8C_A71FC_type *tempA0;
+    s32 i;
+    u8 oldMenuSelection;
+    u8 oldB46;
+
+    allocation = (Allocation_1F190_Local *)getCurrentAllocation();
+
+    switch (allocation->menuState) {
+        case MENU_STATE_NAVIGATE:
+            oldMenuSelection = allocation->unkB2C;
+            oldB46 = oldMenuSelection & 0xFF;
+            for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+                if (oldB46 == ((s8)allocation->unkB2C)) {
+                    if (gControllerInputs[i] & 0x10800) {
+                        allocation->unkB2C = (s8)allocation->unkB2C - 1;
+                        allocation->unkB32 = 0;
+                        if ((s8)allocation->unkB2C < 0) {
+                            allocation->unkB2C = allocation->unkB43 - 1;
+                        }
+                    } else if (gControllerInputs[i] & 0x20400) {
+                        allocation->unkB2C = (s8)allocation->unkB2C + 1;
+                        allocation->unkB32 = 1;
+                        if ((s8)allocation->unkB2C > (s32)(allocation->unkB43 - 1)) {
+                            allocation->unkB2C = 0;
+                        }
+                    }
+                }
+            }
+
+            if (oldB46 != ((s8)allocation->unkB2C)) {
+                func_800585C8_591C8(0x2B);
+                allocation->menuState = MENU_STATE_SCROLL;
+                allocation->unkB28 = 0;
+                allocation->unkB31 = allocation->unkB33[oldB46];
+                allocation->unkB30 = allocation->unkB33[(s8)allocation->unkB2C];
+                if (allocation->unkB2E >= 3) {
+                    allocation->unkB2E = 0;
+                    terminateTasksByType(0);
+                    allocation->unkB44 = 1;
+                    allocation->unkB24 = gFrameCounter;
+                    func_8006FDA0_709A0(&allocation->unk588, 0xFF, 0);
+                    func_8006FDA0_709A0(&allocation->unk3B0, 0xFF, 0);
+                } else {
+                    allocation->unkB2E = 0;
+                }
+            } else {
+                func_8001F42C_2002C();
+                for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+                    tempA0 = D_800AFE8C_A71FC;
+                    if (allocation->menuState == MENU_STATE_NAVIGATE && allocation->unkB2D != 2) {
+                        if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
+                            if (tempA0->unk21 != 0) {
+                                if (tempA0->unk4 == 1) {
+                                    allocation->menuState = 3;
+                                    allocation->unkB46 = D_800AFE8C_A71FC->unk9[0x10];
+                                } else {
+                                    allocation->menuState = 2;
+                                }
+                            } else {
+                                allocation->menuState = 2;
+                            }
+                        } else if (gControllerInputs[i] & B_BUTTON) {
+                            func_800585C8_591C8(0x2E);
+                            allocation->unkB2D = 2;
+                        }
+                    }
+                }
+            }
+            break;
+
+        case MENU_STATE_CONFIRM:
+            func_8001F42C_2002C();
+            for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+                if (allocation->menuState == MENU_STATE_CONFIRM && allocation->unkB2D != 1) {
+                    if (gControllerInputs[i] & B_BUTTON) {
+                        func_800585C8_591C8(0x2E);
+                        allocation->menuState = 0;
+                    } else if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
+                        allocation->unkB2D = 1;
+                        D_800AFE8C_A71FC->saveSlotIndex = allocation->unkB33[(s8)allocation->unkB2C];
+                        if (D_800AFE8C_A71FC->unk4 == 0) {
+                            D_800AFE8C_A71FC->unk9[0xC] = D_8008D9C0_8E5C0[D_800AFE8C_A71FC->saveSlotIndex];
+                        }
+                        func_8001F374_1FF74();
+                        func_80058220_58E20(0x2D, 0);
+                    }
+                }
+            }
+            break;
+
+        case MENU_STATE_PROMPT:
+            func_8001F42C_2002C();
+            if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
+                func_800585C8_591C8(0x2C);
+                func_8006FDA0_709A0(&allocation->unk3B0, 0xFF, 8);
+                allocation->menuState = 6;
+            } else if (gControllerInputs[0] & B_BUTTON) {
+                func_800585C8_591C8(0x2E);
+                allocation->unkB2D = 2;
+            }
+            break;
+
+        case MENU_STATE_DETAIL_OPEN:
+            if (func_8006FE10_70A10(&allocation->unk3B0) == 0) {
+                Node_70B00 *node760;
+
+                terminateTasksByType(0);
+                node760 = &allocation->unk760;
+                allocation->unkB44 = 1;
+                allocation->unkB24 = gFrameCounter;
+                allocation->menuState = 7;
+                func_8006FAA4_706A4(node760, &allocation->unk0, 0xB, 0x12, 0);
+                func_8006FEF8_70AF8(node760, 0xC);
+                setModelCameraTransform(node760, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
+                func_8006FDA0_709A0(node760, 0xFF, 0);
+                func_8006FDA0_709A0(node760, 0, 8);
+            }
+            break;
+
+        case MENU_STATE_DETAIL_WAIT:
+            if (func_8006FE10_70A10(&allocation->unk760) == 0) {
+                allocation->menuState = 8;
+                allocation->unkB47 = 1;
+            }
+            break;
+
+        case MENU_STATE_DETAIL_CLOSE: {
+            Node_70B00 *node760 = &allocation->unk760;
+            if (func_8006FE10_70A10(node760) == 0) {
+                unlinkNode(node760);
+                allocation->menuState = 5;
+                allocation->unkB47 = 2;
+            }
+        } break;
+
+        case MENU_STATE_DETAIL:
+            if (gControllerInputs[0] & B_BUTTON) {
+                func_800585C8_591C8(0x2E);
+                func_8006FDA0_709A0(&allocation->unk760, 0xFF, 8);
+                allocation->menuState = 9;
+                allocation->unkB2E = 0;
+            } else if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
+                allocation->unkB2D = 1;
+                D_800AFE8C_A71FC->unk9[0xC] = D_8008D9C0_8E5C0[D_800AFE8C_A71FC->saveSlotIndex];
+                func_800585C8_591C8(0x2D);
+            }
+            break;
+
+        case MENU_STATE_NUMBER_SELECT:
+            func_8001F42C_2002C();
+            oldB46 = allocation->unkB46;
+            for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+                if ((oldB46 & 0xFF) == allocation->unkB46) {
+                    if (gControllerInputs[i] & 0x40100) {
+                        allocation->unkB46 = allocation->unkB46 + 1;
+                        if ((allocation->unkB46 & 0xFF) >= 10) {
+                            allocation->unkB46 = 1;
+                        }
+                    } else if (gControllerInputs[i] & 0x80200) {
+                        allocation->unkB46 = allocation->unkB46 - 1;
+                        if ((allocation->unkB46 & 0xFF) == 0) {
+                            allocation->unkB46 = 9;
+                        }
+                    }
+                }
+            }
+            if (oldB46 != allocation->unkB46) {
+                func_800585C8_591C8(0x2B);
+            } else {
+                for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+                    if (allocation->menuState == MENU_STATE_NUMBER_SELECT) {
+                        if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
+                            allocation->menuState = 2;
+                        } else if (gControllerInputs[i] & B_BUTTON) {
+                            func_800585C8_591C8(0x2E);
+                            allocation->menuState = 0;
+                        }
+                    }
+                }
+            }
+            break;
+    }
+
+    if (allocation->unkB44 != 0) {
+        if (getFreeNodeCount(0) == 0x44) {
+            s32 frameCheck = gFrameCounter - 5;
+            if ((u32)((allocation->unkB24 - frameCheck) & 0x0FFFFFFF) > 0x07FFFFFF) {
+                allocation->unkB44 = 0;
+            }
+        }
+    }
+
+    if (allocation->unkB2D != 0) {
+        func_80057564_58164(0xA);
+        if (allocation->unkB2D == 2) {
+            func_8006FDA0_709A0(NULL, 0xFF, 8);
+        } else {
+            func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+        }
+        setGameStateHandler(func_8001F25C_1FE5C);
+    }
+}
 
 void func_8001F25C_1FE5C(void) {
     Allocation_1F190 *allocation = (Allocation_1F190 *)getCurrentAllocation();
