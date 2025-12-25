@@ -18,3 +18,5 @@ void *loadAssetByIndex_95590(s16 index);
 void *loadAssetByIndex_95668(s16 index);
 void *loadAssetByIndex_95728(s16 index);
 void *loadAssetByIndex_953E0(s16 index);
+
+MemoryAllocatorNode *func_8005DDD8_5E9D8(s16 groupIndex, s16 entityIndex);

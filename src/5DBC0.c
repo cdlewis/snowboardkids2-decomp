@@ -54,7 +54,6 @@ INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D48C_5E08C);
 
 extern u8 D_80094180_94D80[];
 extern u8 D_800941BC_94DBC[];
-extern s32 func_8005DDD8_5E9D8(u8, u8);
 
 void func_8005D61C_5E21C(Player *player) {
     s32 flags;
@@ -124,7 +123,7 @@ void func_8005D61C_5E21C(Player *player) {
     }
     player->unk23C = flags;
     player->unk240 = (s32)player->unk24;
-    player->unk238 = func_8005DDD8_5E9D8(player->unkBB9, player->unkBBA) + tableValue * 0x10 - 0x10;
+    player->unk238 = (s32)func_8005DDD8_5E9D8(player->unkBB9, player->unkBBA) + tableValue * 0x10 - 0x10;
 }
 
 void func_8005D804_5E404(Player *arg0, u8 arg1, u8 arg2) {
