@@ -221,6 +221,11 @@ typedef struct {
     u8 unk80[4];
 } func_80026564_arg;
 
+typedef struct {
+    func_80027348_entry entries[3];
+    u8 unk24;
+} func_80027544_arg;
+
 extern s32 identityMatrix[];
 extern s32 D_8008DD2C_8E92C[];
 extern u16 D_8008DD4E_8E94E[][3];
@@ -257,6 +262,7 @@ void func_80024298_24E98(func_80024048_arg *);
 void func_80024600_25200(func_8002494C_arg *);
 void func_80027BC8_287C8(func_80027BC8_arg *, u8);
 void func_80027400_28000(func_80025824_arg *);
+void func_80027544_28144(func_80027544_arg *);
 
 void func_80023E30_24A30(func_80024048_arg *arg0) {
     Mat3x3Padded sp10;
@@ -1626,8 +1632,6 @@ void func_80027348_27F48(volatile func_80027348_entry *arg0) {
     setCallback(func_80027400_28000);
 }
 
-void func_80027544_28144(void);
-
 void func_80027400_28000(func_80025824_arg *arg0) {
     s16 minY;
     s32 yIncrement;
@@ -1671,7 +1675,33 @@ void func_80027400_28000(func_80025824_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027544_28144);
+void func_80027544_28144(func_80027544_arg *arg0) {
+    u8 *allocation;
+    s16 target;
+    unsigned char var_v0;
+    s32 count;
+    s32 i;
+    s16 increment;
+    allocation = (u8 *)getCurrentAllocation();
+    target = -0x5C;
+    if (D_800AFE8C_A71FC->unk8 == 2) {
+        target = -0x64;
+        var_v0 = 3;
+        increment = -0x14;
+    } else {
+        var_v0 = 2;
+        increment = -0x13;
+    }
+    for (i = 0; i < (var_v0 & 0xFF); i++) {
+        arg0->entries[i].unk2 += increment;
+        debugEnqueueCallback(arg0->unk24 + 0xC, 0, func_80010240_10E40, (void *)(&arg0->entries[i]));
+    }
+
+    if (arg0->entries[0].unk2 == target) {
+        *((u16 *)((allocation + (arg0->unk24 * 2)) + 0x1898)) = 0;
+        setCallback(func_800272FC_27EFC);
+    }
+}
 
 void func_8002764C_2824C(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
