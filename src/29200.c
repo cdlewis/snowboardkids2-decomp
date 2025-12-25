@@ -1,3 +1,4 @@
+#include "29200.h"
 #include "20F0.h"
 #include "common.h"
 #include "rand.h"
@@ -10,14 +11,6 @@ extern s16 D_8008E0C0_8ECC0[];
 extern void func_800288D4_294D4(void *);
 
 void func_800288A0_294A0(void);
-
-typedef struct {
-    void *model;
-    u8 pad4[0x56];
-    s16 unk5A;
-    u8 unk5C;
-    u8 unk5D;
-} Func80028600Arg;
 
 void func_80028B44_29744(Func80028600Arg *arg0);
 void func_80028B80_29780(Func80028600Arg *arg0);
