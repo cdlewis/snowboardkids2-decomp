@@ -93,19 +93,6 @@ typedef struct {
 } Func4179CUnk20;
 
 typedef struct {
-    u8 _pad0[0x434];
-    s32 unk434;        /* 0x434 */
-    s32 unk438;        /* 0x438 */
-    s32 unk43C;        /* 0x43C */
-    u8 _pad440[0x748]; /* 0x440 to 0xB88 */
-    s32 unkB88;        /* 0xB88 */
-    u8 _padB8C[0x2C];  /* 0xB8C to 0xBB8 */
-    u8 unkBB8;         /* 0xBB8 */
-    u8 _padBB9[0x15];  /* 0xBB9 to 0xBCE */
-    u8 unkBCE;         /* 0xBCE */
-} Func4179CUnk3C;
-
-typedef struct {
     u8 pad0[0x20]; /* 0x00 - matrix data copied via memcpy */
     Func4179CUnk20 *unk20;
     void *unk24;
@@ -113,16 +100,13 @@ typedef struct {
     s32 unk2C;
     s32 unk30;     /* 0x30 */
     u8 pad34[0x8]; /* 0x34 */
-    Func4179CUnk3C *unk3C;
+    Player *player;
     s32 unk40; /* 0x40 - includes unk42 as lower 16 bits */
 } Func4179CArg;
 
-// /* 0x14 */ s32 posX;
-// /* 0x18 */ s32 posY;
-// /* 0x1C */ s32 posZ;
 typedef struct {
-    DisplayListObject unk0;
-    Player *unk3C;
+    DisplayListObject displayList;
+    Player *player;
 } Func41A60Arg;
 
 struct Func42D54Arg {
@@ -460,53 +444,53 @@ void func_8004179C_4239C(Func4179CArg *arg0) {
     arg0->unk28 = loadAsset_216290();
     arg0->unk2C = 0;
     arg0->unk40 = 0x400;
-    func_80056B7C_5777C(&arg0->unk3C->unk434, 0x13);
+    func_80056B7C_5777C(&arg0->player->worldPosX, 0x13);
     setCleanupCallback(func_800419AC_425AC);
     setCallbackWithContinue(func_80041810_42410);
 }
 
 void func_80041810_42410(Func4179CArg *arg0) {
-    s32 sp10[3];
-    s32 temp_v1_2;
-    s16 temp_a1;
-    s32 var_s0;
+    s32 position[3];
+    s32 currentScale;
+    s16 scaleFactor;
+    s32 playerIndex;
 
-    if (!(arg0->unk3C->unkB88 & 0x40)) {
-        sp10[0] = arg0->unk3C->unk434;
-        sp10[1] = arg0->unk3C->unk438 + 0x100000;
-        sp10[2] = arg0->unk3C->unk43C;
-        func_80041E10_42A10(sp10);
+    if (!(arg0->player->unkB88 & 0x40)) {
+        position[0] = arg0->player->worldPosX;
+        position[1] = arg0->player->worldPosY + 0x100000;
+        position[2] = arg0->player->worldPosZ;
+        func_80041E10_42A10(position);
         func_80069CF8_6A8F8();
         return;
     }
 
-    temp_v1_2 = arg0->unk40;
-    if (temp_v1_2 != 0x2000) {
-        arg0->unk40 = temp_v1_2 + 0x400;
+    currentScale = arg0->unk40;
+    if (currentScale != 0x2000) {
+        arg0->unk40 = currentScale + 0x400;
         memcpy(arg0, identityMatrix, 0x20);
-        temp_a1 = ((s16 *)&arg0->unk40)[1];
-        scaleMatrix((Mat3x3Padded *)arg0, temp_a1, temp_a1, temp_a1);
+        scaleFactor = ((s16 *)&arg0->unk40)[1];
+        scaleMatrix((Mat3x3Padded *)arg0, scaleFactor, scaleFactor, scaleFactor);
     }
 
-    sp10[0] = arg0->unk3C->unk434;
-    sp10[1] = arg0->unk3C->unk438;
-    sp10[2] = arg0->unk3C->unk43C;
-    sp10[1] = sp10[1] + 0xFFFE0000;
+    position[0] = arg0->player->worldPosX;
+    position[1] = arg0->player->worldPosY;
+    position[2] = arg0->player->worldPosZ;
+    position[1] = position[1] + 0xFFFE0000;
 
-    if (func_8005B9E4_5C5E4(sp10, 0x180000, 0x320000, arg0->unk3C->unkBB8) != 0) {
-        arg0->unk3C->unkBCE |= 1;
+    if (func_8005B9E4_5C5E4(position, 0x180000, 0x320000, arg0->player->unkBB8) != 0) {
+        arg0->player->unkBCE |= 1;
     }
     arg0->unk30 = 0;
 
-    for (var_s0 = 0; var_s0 < 4; var_s0++) {
+    for (playerIndex = 0; playerIndex < 4; playerIndex++) {
         if (arg0->unk20->unk4 != 0) {
-            debugEnqueueCallback((u16)var_s0, 1, func_80041A24_42624, arg0);
+            debugEnqueueCallback((u16)playerIndex, 1, func_80041A24_42624, arg0);
         }
         if (arg0->unk20->unk8 != 0) {
-            debugEnqueueCallback((u16)var_s0, 3, func_80041A60_42660, arg0);
+            debugEnqueueCallback((u16)playerIndex, 3, func_80041A60_42660, arg0);
         }
         if (arg0->unk20->unkC != 0) {
-            debugEnqueueCallback((u16)var_s0, 5, func_80041A9C_4269C, arg0);
+            debugEnqueueCallback((u16)playerIndex, 5, func_80041A9C_4269C, arg0);
         }
     }
 }
@@ -521,29 +505,29 @@ void func_800419E4_425E4(void *arg0) {
 
     task = scheduleTask(&func_8004179C_4239C, 0, 0, 0x63);
     if (task != NULL) {
-        task->unk3C = arg0;
+        task->player = arg0;
     }
 }
 
 void func_80041A24_42624(Func41A60Arg *arg0) {
-    arg0->unk0.unk10.position.unk0 = arg0->unk3C->worldPosX;
-    arg0->unk0.unk10.position.unk4 = arg0->unk3C->worldPosY;
-    arg0->unk0.unk10.position.unk8 = arg0->unk3C->worldPosZ;
-    func_800634E8_640E8(&arg0->unk0);
+    arg0->displayList.unk10.position.unk0 = arg0->player->worldPosX;
+    arg0->displayList.unk10.position.unk4 = arg0->player->worldPosY;
+    arg0->displayList.unk10.position.unk8 = arg0->player->worldPosZ;
+    func_800634E8_640E8(&arg0->displayList);
 }
 
 void func_80041A60_42660(Func41A60Arg *arg0) {
-    arg0->unk0.unk10.position.unk0 = arg0->unk3C->worldPosX;
-    arg0->unk0.unk10.position.unk4 = arg0->unk3C->worldPosY;
-    arg0->unk0.unk10.position.unk8 = arg0->unk3C->worldPosZ;
-    func_80063534_64134(&arg0->unk0);
+    arg0->displayList.unk10.position.unk0 = arg0->player->worldPosX;
+    arg0->displayList.unk10.position.unk4 = arg0->player->worldPosY;
+    arg0->displayList.unk10.position.unk8 = arg0->player->worldPosZ;
+    func_80063534_64134(&arg0->displayList);
 }
 
 void func_80041A9C_4269C(Func41A60Arg *arg0) {
-    arg0->unk0.unk10.position.unk0 = arg0->unk3C->worldPosX;
-    arg0->unk0.unk10.position.unk4 = arg0->unk3C->worldPosY;
-    arg0->unk0.unk10.position.unk8 = arg0->unk3C->worldPosZ;
-    func_80063580_64180(&arg0->unk0);
+    arg0->displayList.unk10.position.unk0 = arg0->player->worldPosX;
+    arg0->displayList.unk10.position.unk4 = arg0->player->worldPosY;
+    arg0->displayList.unk10.position.unk8 = arg0->player->worldPosZ;
+    func_80063580_64180(&arg0->displayList);
 }
 
 typedef struct {
