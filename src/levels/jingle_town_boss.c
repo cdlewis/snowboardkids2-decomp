@@ -8,6 +8,7 @@
 #include "geometry.h"
 #include "5AA90.h"
 #include "52880.h"
+#include "42170.h"
 
 typedef void (*FuncPtr)(void *);
 
@@ -96,7 +97,6 @@ extern FuncPtr D_800BCB74_B4134[];
 extern s16 D_800BCB7C_B413C[];
 extern u16 D_800BCB7E_B413E[];
 extern s32 D_800BCBA0_B4160[][3];
-extern void func_80041EA4_42AA4(s32 *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BB2B0_B2870);
 
