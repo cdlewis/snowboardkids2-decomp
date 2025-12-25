@@ -5,12 +5,12 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "game_state_init.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
 extern u8 D_800A8A98_9FE08;
 extern u8 D_800A8CC8_A0038;
-extern void initializeGameState(void);
 void func_80018F50_19B50(void);
 void func_80019078_19C78(void);
 void func_800191B4_19DB4(void);

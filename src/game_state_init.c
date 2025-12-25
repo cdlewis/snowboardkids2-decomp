@@ -61,7 +61,7 @@ typedef struct {
     u8 unk42E;
 } task_memory_430;
 
-void initializeGameState(s32 arg0, s32 arg1, s32 arg2) {
+void initializeGameState(void) {
     int var_s1;
     task_memory_430 *temp_s0;
     volatile u8 padding[0x20];
