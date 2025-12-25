@@ -1,3 +1,4 @@
+#include "C870.h"
 #include "19E80.h"
 #include "common.h"
 
@@ -5,12 +6,6 @@ typedef struct {
     /* 0x000 */ u8 buffer1[0x200];
     /* 0x200 */ u8 buffer2[0x200];
 } IndexBuffer;
-
-typedef struct {
-    DataTable_19E80 *unk0;
-    void *unk4;
-    void *unk8;
-} C870Struct;
 
 void func_8000BC70_C870(C870Struct *arg0, DataTable_19E80 *arg1) {
     OutputStruct_19E80 output;
