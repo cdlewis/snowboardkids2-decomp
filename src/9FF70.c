@@ -453,7 +453,6 @@ typedef struct {
 } func_800B7B64_arg;
 
 extern void func_800B7B44_A79F4(func_800B7B64_arg *, s32);
-extern void func_80051BB8_527B8(void *);
 
 s32 func_800B2254_A2104(Player *arg0) {
     u8 temp_v0;
