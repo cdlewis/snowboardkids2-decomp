@@ -236,8 +236,6 @@ extern u16 D_8008DDD8_8E9D8[];
 extern u16 D_8008DDDA_8E9DA[];
 extern u32 D_41A1D0;
 extern u32 D_41AD80;
-extern u32 D_4237C0;
-extern u32 D_426EF0;
 extern u16 D_8008DDBE_8E9BE[];
 extern u16 D_8008DDC0_8E9C0[];
 extern s16 D_8008DDC2_8E9C2[];
@@ -865,7 +863,7 @@ void func_8002529C_25E9C(func_8002529C_25E9C_arg *arg0) {
 
     (void)pad;
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_8002567C_2627C);
     getTableEntryByU16Index(dmaResult, 0xB, &sp10);
 
@@ -1185,7 +1183,7 @@ void func_80026028_26C28(func_80025FFC_26BFC_arg *arg0) {
     u16 y;
     s32 pad[4];
 
-    dmaResult = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026190_26D90);
 
     i = 0;
@@ -1254,7 +1252,7 @@ void func_800261BC_26DBC(func_80026564_arg *arg0) {
     (void)pad;
 
     getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026538_27138);
 
     count = D_800AFE8C_A71FC->unk8;
@@ -1314,7 +1312,7 @@ void func_80026564_27164(func_80026564_arg *arg0) {
     (void)pad;
 
     getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026834_27434);
 
     count = D_800AFE8C_A71FC->unk8;
@@ -1394,7 +1392,7 @@ void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
     (void)pad;
 
     allocation = (u8 *)getCurrentAllocation();
-    dmaResult = dmaRequestAndUpdateStateWithSize(&D_4237C0, &D_426EF0, 0x8A08);
+    dmaResult = dmaRequestAndUpdateStateWithSize(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026FC8_27BC8);
 
     global = D_800AFE8C_A71FC;
