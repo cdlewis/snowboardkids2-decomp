@@ -1,6 +1,7 @@
 #include "9FF70.h"
 #include "3E160.h"
 #include "42170.h"
+#include "46080.h"
 #include "4CD70.h"
 #include "51060.h"
 #include "56910.h"
@@ -2679,8 +2680,6 @@ s32 func_800B6194_A6044(Player *arg0) {
     func_8005D804_5E404(arg0, 3, 0);
     return 0;
 }
-
-extern void *func_8004B2A0_4BEA0(void *, u32, void *, s16, s32);
 
 s32 func_800B62E4_A6194(Player *arg0) {
     u8 temp_v0;
