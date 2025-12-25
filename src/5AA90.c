@@ -135,66 +135,67 @@ s32 func_8005AA9C_5B69C(Player *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AB58_5B758);
 
-void func_8005AE8C_5BA8C(Player *arg0) {
-    Vec3s32 localVec;
+void func_8005AE8C_5BA8C(Player *player) {
+    Vec3s32 relativePos;
     u8 pad[0x8];
-    void *srcPtr;
+    void *collisionBoxPtr;
     s32 unused1;
     s32 unused2;
     s32 combinedRadius;
     s32 negRadius;
     s32 dist;
-    s32 i;
-    Player *otherPlayer;
-    void *dataArray;
+    s32 boxIndex;
+    Player *targetPlayer;
+    Player *players;
 
-    dataArray = ((GameState *)getCurrentAllocation())->players;
-    otherPlayer = (Player *)((u8 *)dataArray + 0xBE8);
+    players = ((GameState *)getCurrentAllocation())->players;
+    targetPlayer = players + 1;
 
-    if (arg0->unkBB8 == otherPlayer->unkBB8) {
+    if (player->unkBB8 == targetPlayer->unkBB8) {
         return;
     }
-    if (arg0->unkB88 & 0x10) {
+    if (player->unkB88 & 0x10) {
         return;
     }
-    if (otherPlayer->unkB88 & 0x10) {
+    if (targetPlayer->unkB88 & 0x10) {
         return;
     }
 
-    if ((s8)otherPlayer->unkBB4 > 0) {
-        i = 0;
-        srcPtr = otherPlayer;
+    if ((s8)targetPlayer->unkBB4 > 0) {
+        boxIndex = 0;
+        collisionBoxPtr = targetPlayer;
         do {
-            memcpy(&localVec, (u8 *)srcPtr + 0xAE4, 0xC);
+            memcpy(&relativePos, (u8 *)collisionBoxPtr + 0xAE4, 0xC);
 
-            localVec.unk0 += otherPlayer->worldPosX;
-            localVec.unk4 += otherPlayer->worldPosY;
-            localVec.unk8 += otherPlayer->worldPosZ;
+            relativePos.unk0 += targetPlayer->worldPosX;
+            relativePos.unk4 += targetPlayer->worldPosY;
+            relativePos.unk8 += targetPlayer->worldPosZ;
 
-            localVec.unk0 -= arg0->worldPosX + arg0->unkAD4[0];
-            localVec.unk4 -= arg0->worldPosY + arg0->unkAD4[1];
-            localVec.unk8 -= arg0->worldPosZ + arg0->unkAD4[2];
+            relativePos.unk0 -= player->worldPosX + player->unkAD4[0];
+            relativePos.unk4 -= player->worldPosY + player->unkAD4[1];
+            relativePos.unk8 -= player->worldPosZ + player->unkAD4[2];
 
-            combinedRadius = ((s32 *)((u8 *)otherPlayer + 0xB2C))[i] + arg0->unkAE0;
+            combinedRadius = (&targetPlayer->unkB2C)[boxIndex] + player->unkAE0;
             negRadius = -combinedRadius;
 
-            if (negRadius < localVec.unk0 && localVec.unk0 < combinedRadius && negRadius < localVec.unk4 &&
-                localVec.unk4 < combinedRadius && negRadius < localVec.unk8 && localVec.unk8 < combinedRadius) {
+            if (negRadius < relativePos.unk0 && relativePos.unk0 < combinedRadius && negRadius < relativePos.unk4 &&
+                relativePos.unk4 < combinedRadius && negRadius < relativePos.unk8 &&
+                relativePos.unk8 < combinedRadius) {
 
                 dist = isqrt64(
-                    (s64)localVec.unk0 * localVec.unk0 + (s64)localVec.unk4 * localVec.unk4 +
-                    (s64)localVec.unk8 * localVec.unk8
+                    (s64)relativePos.unk0 * relativePos.unk0 + (s64)relativePos.unk4 * relativePos.unk4 +
+                    (s64)relativePos.unk8 * relativePos.unk8
                 );
 
                 if (dist < combinedRadius) {
-                    if (otherPlayer->unkBD9 == 1) {
-                        if ((otherPlayer->unkB84 & 0x40000) && (u32)(i - 4) < 2U) {
-                            func_80058B30_59730(arg0);
+                    if (targetPlayer->unkBD9 == 1) {
+                        if ((targetPlayer->unkB84 & 0x40000) && (u32)(boxIndex - 4) < 2U) {
+                            func_80058B30_59730(player);
                             goto next;
                         }
                     }
-                    if (otherPlayer->unkBD9 == 3 && (otherPlayer->unkB84 & 0x40000) && (u32)(i - 1) < 2U) {
-                        func_80058B30_59730(arg0);
+                    if (targetPlayer->unkBD9 == 3 && (targetPlayer->unkB84 & 0x40000) && (u32)(boxIndex - 1) < 2U) {
+                        func_80058B30_59730(player);
                         goto next;
                     }
 
@@ -202,24 +203,26 @@ void func_8005AE8C_5BA8C(Player *arg0) {
                         dist = 1;
                     }
 
-                    localVec.unk0 = ((s64)localVec.unk0 * combinedRadius / dist) - localVec.unk0;
-                    localVec.unk4 = ((s64)localVec.unk4 * combinedRadius / dist) - localVec.unk4;
-                    localVec.unk8 = ((s64)localVec.unk8 * combinedRadius / dist) - localVec.unk8;
+                    relativePos.unk0 = ((s64)relativePos.unk0 * combinedRadius / dist) - relativePos.unk0;
+                    relativePos.unk4 = ((s64)relativePos.unk4 * combinedRadius / dist) - relativePos.unk4;
+                    relativePos.unk8 = ((s64)relativePos.unk8 * combinedRadius / dist) - relativePos.unk8;
 
-                    arg0->worldPosX -= localVec.unk0;
-                    arg0->worldPosY -= localVec.unk4;
-                    arg0->worldPosZ -= localVec.unk8;
+                    player->worldPosX -= relativePos.unk0;
+                    player->worldPosY -= relativePos.unk4;
+                    player->worldPosZ -= relativePos.unk8;
 
-                    if ((otherPlayer->unkBD9 == 2) & (i == 0)) {
-                        dist = isqrt64((s64)localVec.unk0 * localVec.unk0 + (s64)localVec.unk8 * localVec.unk8);
+                    if ((targetPlayer->unkBD9 == 2) & (boxIndex == 0)) {
+                        dist = isqrt64(
+                            (s64)relativePos.unk0 * relativePos.unk0 + (s64)relativePos.unk8 * relativePos.unk8
+                        );
                         if (dist > 0x30000) {
                             func_80058950_59550(
-                                arg0,
+                                player,
                                 func_8006D21C_6DE1C(
-                                    otherPlayer->worldPosX,
-                                    otherPlayer->worldPosZ,
-                                    arg0->worldPosX,
-                                    arg0->worldPosZ
+                                    targetPlayer->worldPosX,
+                                    targetPlayer->worldPosZ,
+                                    player->worldPosX,
+                                    player->worldPosZ
                                 ),
                                 dist
                             );
@@ -228,9 +231,9 @@ void func_8005AE8C_5BA8C(Player *arg0) {
                 }
             }
         next:
-            i++;
-            srcPtr = (u8 *)srcPtr + 0xC;
-        } while (i < (s8)otherPlayer->unkBB4);
+            boxIndex++;
+            collisionBoxPtr = (u8 *)collisionBoxPtr + 0xC;
+        } while (boxIndex < (s8)targetPlayer->unkBB4);
     }
 }
 
