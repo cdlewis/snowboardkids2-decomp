@@ -30,6 +30,7 @@ typedef struct {
 } Func42FC0TaskMem;
 
 Func420E8State *func_80042340_42F40(void *arg0);
+Func420E8State *func_800423A4_42FA4(void *arg0, s32 arg1);
 Func42FC0TaskMem *func_80042FC0_43BC0(void *arg0);
 void func_800419E4_425E4(void *arg0);
 void *func_8004175C_4235C(void *arg0);

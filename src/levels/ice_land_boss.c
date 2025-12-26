@@ -1,3 +1,4 @@
+#include "42170.h"
 #include "46080.h"
 #include "51060.h"
 #include "52880.h"
@@ -93,7 +94,6 @@ typedef struct {
 extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
 void func_800BC61C_B1B0C(Player *);
-void func_800423A4_42FA4(s32 *, u8);
 
 INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BB2B0_B07A0);
 
