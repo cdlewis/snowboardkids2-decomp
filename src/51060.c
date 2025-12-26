@@ -103,21 +103,16 @@ typedef struct {
 } func_80051688_52288_arg;
 
 typedef struct {
-    Player *unk0;
-    DataTable_19E80 *unk4;
-    loadAssetMetadata_arg unk8;
+    Player *player;
+    DataTable_19E80 *assetTable;
+    loadAssetMetadata_arg particleLeft;
     u8 padding24[0x4];
-    loadAssetMetadata_arg unk28;
+    loadAssetMetadata_arg particleRight;
     u8 padding44[0x4];
-    s32 unk48;
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s16 unk60;
-    s16 unk62;
-} func_8005152C_5212C_arg;
+    Vec3i skiOffsets[2];
+    s16 frameCounter;
+    s16 particleIndex;
+} SkiTrailTask;
 
 typedef struct {
     u8 padding[0xC0];
@@ -672,102 +667,107 @@ void func_8005127C_51E7C(void *arg0, void *arg1, Vec3i *arg2, s32 arg3) {
     }
 }
 
-void func_8005152C_5212C(func_8005152C_5212C_arg *arg0);
+void func_8005152C_5212C(SkiTrailTask *arg0);
 void func_80051688_52288(func_80051688_52288_arg *arg0);
 
-void func_80051348_51F48(func_8005152C_5212C_arg *task) {
+void func_80051348_51F48(SkiTrailTask *task) {
     GameState *gs;
     s32 i;
     s16 *transformSource;
     s32 outputOffset;
-    volatile func_8005152C_5212C_arg *outputPtr;
+    volatile SkiTrailTask *outputPtr;
     void *particleAsset;
 
     gs = (GameState *)getCurrentAllocation();
-    task->unk4 = load_3ECE40();
+    task->assetTable = load_3ECE40();
     particleAsset = (void *)((u8 *)gs->unk44 + 0x13C0);
-    task->unk8.unk1A = 0xFF;
-    task->unk8.unk0 = particleAsset;
-    task->unk28.unk1A = task->unk8.unk1A;
-    task->unk28.unk0 = task->unk8.unk0;
+    task->particleLeft.unk1A = 0xFF;
+    task->particleLeft.unk0 = particleAsset;
+    task->particleRight.unk1A = task->particleLeft.unk1A;
+    task->particleRight.unk0 = task->particleLeft.unk0;
 
     i = 0;
 
-    if (task->unk0->unkB84 & 2) {
+    if (task->player->unkB84 & 2) {
         outputPtr = task;
         outputOffset = 0x48;
         transformSource = D_80090E80_91A80;
         do {
-            transformVector(transformSource, (s16 *)&task->unk0->unk3F8, (void *)((u8 *)task + outputOffset));
-            outputPtr->unk48 -= task->unk0->worldPosX;
-            outputPtr->unk4C -= task->unk0->worldPosY;
+            transformVector(transformSource, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + outputOffset));
+            outputPtr->skiOffsets[0].x -= task->player->worldPosX;
+            outputPtr->skiOffsets[0].y -= task->player->worldPosY;
             outputOffset += 0xC;
             transformSource += 6;
             i++;
-            outputPtr->unk50 -= task->unk0->worldPosZ;
-            outputPtr = (volatile func_8005152C_5212C_arg *)((u8 *)outputPtr + 0xC);
+            outputPtr->skiOffsets[0].z -= task->player->worldPosZ;
+            outputPtr = (volatile SkiTrailTask *)((u8 *)outputPtr + 0xC);
         } while (i < 2);
     } else {
         outputPtr = task;
         outputOffset = 0x48;
         transformSource = D_80090E98_91A98;
         do {
-            transformVector(transformSource, (s16 *)&task->unk0->unk3F8, (void *)((u8 *)task + outputOffset));
-            outputPtr->unk48 -= task->unk0->worldPosX;
-            outputPtr->unk4C -= task->unk0->worldPosY;
+            transformVector(transformSource, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + outputOffset));
+            outputPtr->skiOffsets[0].x -= task->player->worldPosX;
+            outputPtr->skiOffsets[0].y -= task->player->worldPosY;
             outputOffset += 0xC;
             transformSource += 6;
             i++;
-            outputPtr->unk50 -= task->unk0->worldPosZ;
-            outputPtr = (volatile func_8005152C_5212C_arg *)((u8 *)outputPtr + 0xC);
+            outputPtr->skiOffsets[0].z -= task->player->worldPosZ;
+            outputPtr = (volatile SkiTrailTask *)((u8 *)outputPtr + 0xC);
         } while (i < 2);
     }
 
     i = 0;
-    task->unk60 = 0;
-    task->unk62 = -1;
+    task->frameCounter = 0;
+    task->particleIndex = -1;
 
     do {
-        if ((*(s16 *)((u8 *)task->unk0 + 0xBAE) >> i) & 1) {
-            task->unk62++;
+        if ((task->player->unkBAE >> i) & 1) {
+            task->particleIndex++;
         }
         i++;
     } while (i < 8);
 
-    task->unk62 += 0x15;
+    task->particleIndex += 0x15;
     setCleanupCallback(func_80051688_52288);
     setCallbackWithContinue(func_8005152C_5212C);
 }
 
-void func_8005152C_5212C(func_8005152C_5212C_arg *arg0) {
+void func_8005152C_5212C(SkiTrailTask *task) {
     GameState *gs;
     s32 i;
 
     gs = (GameState *)getCurrentAllocation();
-    loadAssetMetadataByIndex((loadAssetMetadataByIndex_arg *)&arg0->unk8, arg0->unk4, arg0->unk60 + 0x61, arg0->unk62);
+    loadAssetMetadataByIndex(
+        (loadAssetMetadataByIndex_arg *)&task->particleLeft,
+        task->assetTable,
+        task->frameCounter + 0x61,
+        task->particleIndex
+    );
 
-    arg0->unk28.data_ptr = arg0->unk8.data_ptr;
-    arg0->unk28.index_ptr = arg0->unk8.index_ptr;
-    arg0->unk28.unk18 = arg0->unk8.unk18;
-    arg0->unk28.unk19 = arg0->unk8.unk19;
+    task->particleRight.data_ptr = task->particleLeft.data_ptr;
+    task->particleRight.index_ptr = task->particleLeft.index_ptr;
+    task->particleRight.unk18 = task->particleLeft.unk18;
+    task->particleRight.unk19 = task->particleLeft.unk19;
 
-    arg0->unk8.unk4 = arg0->unk48 + arg0->unk0->worldPosX;
-    arg0->unk8.unk8 = arg0->unk4C + arg0->unk0->worldPosY;
-    arg0->unk8.unkC = arg0->unk50 + arg0->unk0->worldPosZ;
-    arg0->unk28.unk4 = arg0->unk54 + arg0->unk0->worldPosX;
-    arg0->unk28.unk8 = arg0->unk58 + arg0->unk0->worldPosY;
-    arg0->unk28.unkC = arg0->unk5C + arg0->unk0->worldPosZ;
+    task->particleLeft.unk4 = task->skiOffsets[0].x + task->player->worldPosX;
+    task->particleLeft.unk8 = task->skiOffsets[0].y + task->player->worldPosY;
+    task->particleLeft.unkC = task->skiOffsets[0].z + task->player->worldPosZ;
+    task->particleRight.unk4 = task->skiOffsets[1].x + task->player->worldPosX;
+    task->particleRight.unk8 = task->skiOffsets[1].y + task->player->worldPosY;
+    task->particleRight.unkC = task->skiOffsets[1].z + task->player->worldPosZ;
 
     for (i = 0; i < 4; i++) {
-        func_80067EDC_68ADC(i, &arg0->unk8);
-        func_80067EDC_68ADC(i, &arg0->unk28);
+        func_80067EDC_68ADC(i, &task->particleLeft);
+        func_80067EDC_68ADC(i, &task->particleRight);
     }
 
     if (gs->gamePaused == 0) {
-        arg0->unk8.unk1A -= 0x14;
-        arg0->unk28.unk1A -= 0x14;
-        arg0->unk60++;
-        if (arg0->unk60 == 8) {
+        task->particleLeft.unk1A -= 0x14;
+        task->particleRight.unk1A -= 0x14;
+        task->frameCounter++;
+        if (task->frameCounter == 8) {
             func_80069CF8_6A8F8();
         }
     }
@@ -777,10 +777,10 @@ void func_80051688_52288(func_80051688_52288_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_800516B4_522B4(void *arg0) {
-    void *result = scheduleTask(&func_80051348_51F48, 2, 0, 0xDD);
-    if (result != NULL) {
-        *(void **)result = arg0;
+void func_800516B4_522B4(Player *player) {
+    SkiTrailTask *task = (SkiTrailTask *)scheduleTask(&func_80051348_51F48, 2, 0, 0xDD);
+    if (task != NULL) {
+        task->player = player;
     }
 }
 
