@@ -10,7 +10,7 @@ char ClocktowerLabel[] = "CLOCKTOWER";
 s32 D_8008D7FC_8E3FC = 0;
 
 void ClocktowerTriggerInit(EventTrigger *arg0) {
-    arg0->unk0 = CLOCKTOWER_EVENT_ID;
+    arg0->eventId = CLOCKTOWER_EVENT_ID;
     arg0->unk6 = -0x68;
     arg0->unk1 = 0;
     arg0->unk4 = 0;
@@ -34,14 +34,14 @@ void ClocktowerTriggerCheck(EventTrigger *trigger) {
     if (angle >= 0x1001) {
         angle -= 0x2000;
     }
-    triggerId = trigger->unk0;
+    triggerId = trigger->eventId;
     minAngle = ((s16 *)D_8008D6C4_8E2C4)[triggerId * 2];
     if (angle < minAngle) {
         maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(triggerId * 2) + 1];
         if (maxAngle < angle) {
             if (((u16)(state->unk3FC - 0xC01)) < 0x7FF) {
                 state->unk424 = 1;
-                state->unk425 = trigger->unk0;
+                state->unk425 = trigger->eventId;
             }
         }
     }

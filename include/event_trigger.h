@@ -6,7 +6,7 @@
 #define TRICK_EVENT_ID 9
 
 typedef struct {
-    s8 unk0;
+    s8 eventId;
     s8 unk1;
     char padding[2];
     s16 unk4;

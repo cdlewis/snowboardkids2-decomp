@@ -9,7 +9,7 @@ extern u8 D_8008D6C4_8E2C4[];
 void GenericTriggerCheck(EventTrigger *);
 
 void GenericTriggerInit(EventTrigger *arg0) {
-    u8 eventId = arg0->unk0;
+    u8 eventId = arg0->eventId;
     arg0->unk1 = 0;
     arg0->unk4 = 0;
     arg0->unk6 = -0x68;
@@ -36,14 +36,14 @@ void GenericTriggerCheck(EventTrigger *trigger) {
         angle -= 0x2000;
     }
 
-    eventId = trigger->unk0;
+    eventId = trigger->eventId;
     minAngle = ((s16 *)D_8008D6C4_8E2C4)[eventId * 2];
     if (angle < minAngle) {
         maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(eventId * 2) + 1];
         if (maxAngle < angle) {
             if (((u16)(state->unk3FC - 0xC01)) < 0x7FF) {
                 state->unk424 = 1;
-                state->unk425 = trigger->unk0;
+                state->unk425 = trigger->eventId;
             }
         }
     }

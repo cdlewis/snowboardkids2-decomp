@@ -9,7 +9,7 @@ void TrickTriggerCheck(EventTrigger *);
 u8 TrickLabel[] = "TRICK";
 
 void TrickTriggerInit(EventTrigger *arg0) {
-    arg0->unk0 = TRICK_EVENT_ID;
+    arg0->eventId = TRICK_EVENT_ID;
     arg0->unk6 = -0x68;
     arg0->unk1 = 0;
     arg0->unk4 = 0;
@@ -33,13 +33,13 @@ void TrickTriggerCheck(EventTrigger *trigger) {
         if (rawAngle >= 0x1001) {
             angle -= 0x2000;
         }
-        triggerId = trigger->unk0;
+        triggerId = trigger->eventId;
         minAngle = ((s16 *)D_8008D6C4_8E2C4)[triggerId * 2];
         if (angle < minAngle) {
             maxAngle = ((s16 *)D_8008D6C4_8E2C4)[triggerId * 2 + 1];
             if (maxAngle < angle) {
                 state->unk424 = 1;
-                state->unk425 = trigger->unk0;
+                state->unk425 = trigger->eventId;
             }
         }
     }
