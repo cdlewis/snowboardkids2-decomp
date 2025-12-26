@@ -450,7 +450,7 @@ void checkUnlockAllCheatCode(void) {
             case 2:
                 buttons = gButtonsPressed;
                 if ((buttons != B_BUTTON) && (buttons != 0)) {
-                    if (buttons != 0x8) {
+                    if (buttons != U_CBUTTONS) {
                         state->unlockAllCheatProgress = 0xFF;
                     } else {
                         state->unlockAllCheatProgress++;
@@ -505,7 +505,7 @@ void checkUnlockAllCheatCode(void) {
             case 7:
                 buttons = gButtonsPressed;
                 if ((buttons != U_JPAD) && (buttons != 0)) {
-                    if (buttons != CONT_R) {
+                    if (buttons != R_TRIG) {
                         state->unlockAllCheatProgress = 0xFF;
                     } else {
                         state->unlockAllCheatProgress++;
