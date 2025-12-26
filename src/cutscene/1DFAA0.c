@@ -703,61 +703,61 @@ do_work:
     return entryIndex;
 }
 
-void func_800B3E58_1E0F08(u16 entryToMoveIndex, u16 targetPrevIndex, u16 insertAfterIndex) {
-    u8 *entryToMovePtr;
-    u32 targetPrevOffset;
-    u16 insertAfterIndexMasked;
-    u16 entryToMoveIndexMasked;
-    u16 targetPrevIndexMasked;
-    u32 entryToMoveOffset;
-    u16 targetNextIndex;
+void func_800B3E58_1E0F08(u16 entryIndex, u16 oldPrevIndex, u16 newPrevIndex) {
+    u8 *entryPtr;
+    u32 oldPrevOffset;
+    u16 newPrevIndexMasked;
+    u16 entryIndexMasked;
+    u16 oldPrevIndexMasked;
+    u32 entryOffset;
+    u16 oldNextIndex;
     u16 entryPrevIndex;
     u8 *eventTable;
     u8 *tablePtr;
-    u32 insertAfterOffset;
+    u32 newPrevOffset;
 
-    entryToMoveIndexMasked = entryToMoveIndex;
-    targetPrevIndexMasked = targetPrevIndex;
-    insertAfterIndexMasked = insertAfterIndex & 0xFFFF;
-    getStateEntry(insertAfterIndexMasked);
+    entryIndexMasked = entryIndex;
+    oldPrevIndexMasked = oldPrevIndex;
+    newPrevIndexMasked = newPrevIndex & 0xFFFF;
+    getStateEntry(newPrevIndexMasked);
 
-    entryToMoveOffset = entryToMoveIndexMasked & 0xFFFF;
-    getStateEntry(entryToMoveOffset);
+    entryOffset = entryIndexMasked & 0xFFFF;
+    getStateEntry(entryOffset);
 
-    targetPrevOffset = targetPrevIndexMasked & 0xFFFF;
-    getStateEntry(targetPrevOffset);
+    oldPrevOffset = oldPrevIndexMasked & 0xFFFF;
+    getStateEntry(oldPrevOffset);
 
     eventTable = (u8 *)D_800BAEBC_1E7F6C;
 
-    targetPrevOffset = targetPrevOffset << 6;
-    entryToMoveOffset = entryToMoveOffset << 6;
+    oldPrevOffset = oldPrevOffset << 6;
+    entryOffset = entryOffset << 6;
 
-    /* Read next_index from target prev entry and prev_index from entry being moved */
-    targetNextIndex = *(u16 *)(eventTable + targetPrevOffset + 0xF8);
-    entryToMovePtr = eventTable + entryToMoveOffset;
-    entryPrevIndex = *(u16 *)(entryToMovePtr + 0xFA);
+    /* Read next_index from old prev entry and prev_index from entry being moved */
+    oldNextIndex = *(u16 *)(eventTable + oldPrevOffset + 0xF8);
+    entryPtr = eventTable + entryOffset;
+    entryPrevIndex = *(u16 *)(entryPtr + 0xFA);
 
     /* Unlink entry from current position: update next entry's prev_index */
-    if ((targetNextIndex & 0xFFFF) != 0xFFFF) {
-        *(u16 *)(eventTable + ((targetNextIndex & 0xFFFF) << 6) + 0xFA) = entryPrevIndex;
+    if ((oldNextIndex & 0xFFFF) != 0xFFFF) {
+        *(u16 *)(eventTable + ((oldNextIndex & 0xFFFF) << 6) + 0xFA) = entryPrevIndex;
     }
 
     /* Unlink entry from current position: update prev entry's next_index */
     if ((entryPrevIndex & 0xFFFF) != 0xFFFF) {
         u8 *temp = (u8 *)D_800BAEBC_1E7F6C;
-        *(u16 *)(temp + ((entryPrevIndex & 0xFFFF) << 6) + 0xF8) = targetNextIndex;
+        *(u16 *)(temp + ((entryPrevIndex & 0xFFFF) << 6) + 0xF8) = oldNextIndex;
     }
 
-    /* Insert entry after insertAfterIndex */
+    /* Insert entry after newPrevIndex */
     tablePtr = (u8 *)D_800BAEBC_1E7F6C;
-    insertAfterOffset = insertAfterIndexMasked << 6;
-    targetNextIndex = *(u16 *)(tablePtr + insertAfterOffset + 0xF8);
-    *(u16 *)(tablePtr + insertAfterOffset + 0xF8) = entryToMoveIndexMasked;
-    *(u16 *)(tablePtr + targetPrevOffset + 0xF8) = targetNextIndex;
+    newPrevOffset = newPrevIndexMasked << 6;
+    oldNextIndex = *(u16 *)(tablePtr + newPrevOffset + 0xF8);
+    *(u16 *)(tablePtr + newPrevOffset + 0xF8) = entryIndexMasked;
+    *(u16 *)(tablePtr + oldPrevOffset + 0xF8) = oldNextIndex;
 
-    /* Update the next entry's prev_index to point to the target prev */
-    if ((targetNextIndex & 0xFFFF) != 0xFFFF) {
-        *(u16 *)(tablePtr + ((targetNextIndex & 0xFFFF) << 6) + 0xFA) = targetPrevIndexMasked;
+    /* Update the next entry's prev_index to point to the old prev */
+    if ((oldNextIndex & 0xFFFF) != 0xFFFF) {
+        *(u16 *)(tablePtr + ((oldNextIndex & 0xFFFF) << 6) + 0xFA) = oldPrevIndexMasked;
     }
 }
 

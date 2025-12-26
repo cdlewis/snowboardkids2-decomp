@@ -316,7 +316,7 @@ void func_800B3B40(void);
 u16 func_800B3B68_1E0C18(u8 arg0, u16 arg1, s32 arg2);
 s32 findEventAtFrame(u8 a0, u16 a1);
 s32 func_800B3D24_1E0DD4(u8, u16);
-void func_800B3E58_1E0F08(u16 entryToMoveIndex, u16 targetPrevIndex, u16 insertAfterIndex);
+void func_800B3E58_1E0F08(u16 entryIndex, u16 oldPrevIndex, u16 newPrevIndex);
 StateEntry *getStateEntry(u16 arg0);
 u16 func_800B41E0_1E1290(void);
 u16 func_800B4258_1E1308(u8 arg0);
