@@ -1033,23 +1033,23 @@ void func_80042B64_43764(void **arg0) {
 
 void func_80042BA4_437A4(Func42BA4Arg *arg0) {
     Func43CA4GameState *gameState;
-    s16 delayTimer;
-    void *displayBuffer;
+    s16 startDelay;
+    void *spriteBuffer;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
-    delayTimer = arg0->unk3A;
+    startDelay = arg0->unk3A;
 
-    if (delayTimer == 0) {
+    if (startDelay == 0) {
         arg0->unk3A = 1;
         arg0->unk3E = 0;
         arg0->unk4.unk1A = 0;
-        displayBuffer = gameState->unk44;
+        spriteBuffer = gameState->unk44;
         arg0->unk30 = 0x200000;
         arg0->unk2C = 0;
         arg0->unk34 = 0;
         arg0->unk38 = 0;
         arg0->unk42 = 1;
-        arg0->unk4.unk0 = (void *)((u8 *)displayBuffer + 0xF00);
+        arg0->unk4.unk0 = (void *)((u8 *)spriteBuffer + 0xF00);
         func_80042A6C_4366C(arg0);
 
         if (arg0->unk43 != 0) {
@@ -1069,7 +1069,7 @@ void func_80042BA4_437A4(Func42BA4Arg *arg0) {
         }
     } else {
         if (gameState->unk76 == 0) {
-            arg0->unk3A = delayTimer - 1;
+            arg0->unk3A = startDelay - 1;
         }
     }
 }
