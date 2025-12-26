@@ -34,10 +34,11 @@ extern s16 gGraphicsMode;
 extern void *D_800A2D40_A3940;
 extern void *D_800A2D44_A3944;
 extern void *D_800A2D48_A3948;
+extern s32 D_8009A8A4_9B4A4;
 void func_80065150_65D50(DisplayListObject *displayObjects);
 void func_800653E0_65FE0(DisplayListObject *displayObjects);
 void func_80065670_66270(DisplayListObject *displayObjects);
-extern void func_800659E4_665E4(void);
+void func_800659E4_665E4(DisplayListObject *arg0);
 extern void func_80065DD8_669D8(void);
 extern void func_80066474_67074(void);
 extern void func_800670D4_67CD4(void);
@@ -1058,7 +1059,86 @@ void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800659E4_665E4);
+void func_800659E4_665E4(DisplayListObject *arg0) {
+    Mtx sp30;
+    f32 sp70;
+    f32 sp74;
+    f32 sp78;
+    f32 sp7C;
+    f32 sp80;
+    f32 sp84;
+    LookAt *temp_v0;
+    void *alloc;
+
+    alloc = arenaAlloc16(0x40);
+    arg0->unk30 = (s32)alloc;
+    if (alloc == NULL) {
+        return;
+    }
+
+    memcpy(&D_8009A8A4_9B4A4, &D_800AB068_A23D8->padding2[0x10], 0xC);
+    func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, (void *)arg0->unk30);
+
+    if (arg0->unk20->flags & 1) {
+        temp_v0 = arenaAlloc16(0x20);
+        if (temp_v0 == NULL) {
+            return;
+        }
+
+        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
+        guLookAtReflect(&sp30, temp_v0, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
+        gSPLookAt(gRegionAllocPtr++, temp_v0);
+    }
+
+    if (gGraphicsMode != 3) {
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+
+        gGraphicsMode = 3;
+
+        if (arg0->unk24 != 0) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        }
+
+        if (arg0->unk28 != 0) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        }
+
+        if (arg0->unk2C != 0) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        }
+    } else {
+        if (arg0->unk24 != 0 && arg0->unk24 != D_800A2D40_A3940) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        }
+
+        if (arg0->unk28 != 0 && arg0->unk28 != D_800A2D44_A3944) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        }
+
+        if (arg0->unk2C != 0 && arg0->unk2C != D_800A2D48_A3948) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        }
+    }
+
+    D_800A2D40_A3940 = arg0->unk24;
+    D_800A2D44_A3944 = arg0->unk28;
+    D_800A2D48_A3948 = arg0->unk2C;
+
+    gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+
+    if (arg0->unk20->opaqueDisplayList != 0) {
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
+    }
+
+    if (arg0->unk20->transparentDisplayList != 0) {
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
+    }
+
+    if (arg0->unk20->overlayDisplayList != 0) {
+        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
+    }
+}
 
 void func_80065DA8_669A8(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
