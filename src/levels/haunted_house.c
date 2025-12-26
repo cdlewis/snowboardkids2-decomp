@@ -46,9 +46,9 @@ typedef struct {
 } func_800BB74C_AF43C_arg;
 
 typedef struct {
-    void *unk0;
+    void *ghostSlotData;
     void *unk4;
-} func_800BC340_B0030_arg;
+} GhostManager;
 
 typedef struct {
     u8 pad[0x30];
@@ -124,9 +124,9 @@ extern void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
 extern void func_800BBEAC_AFB9C(s16 *);
 extern void func_800BBCE8_AF9D8(void **);
 extern void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
-extern void func_800BC184_AFE74(func_800BC340_B0030_arg *);
+extern void func_800BC184_AFE74(GhostManager *);
 extern void func_800BC220_AFF10(u8 *ghostSlots);
-extern void func_800BC340_B0030(func_800BC340_B0030_arg *);
+extern void func_800BC340_B0030(GhostManager *);
 extern void func_800BC750_B0440(s16 *);
 
 extern s32 D_8009A8A4_9B4A4;
@@ -141,7 +141,7 @@ extern s32 D_800BC9A0_B0690[];
 extern s16 D_800BC9DC_B06CC[];
 extern s16 D_800BC9E8_B06D8[];
 extern s16 D_800BC9F4_B06E4[];
-extern s32 D_800BCA00_B06F0;
+extern Vec3i D_800BCA00_B06F0[];
 extern s32 D_800BC914_B0604;
 extern s32 D_800BC918_B0608;
 extern s32 D_800BC91C_B060C;
@@ -609,29 +609,29 @@ void func_800BC0FC(s16 arg0) {
     }
 }
 
-void func_800BC13C_AFE2C(func_800BC340_B0030_arg *arg0) {
-    arg0->unk4 = func_80055D7C_5697C(9);
-    arg0->unk0 = 0;
+void func_800BC13C_AFE2C(GhostManager *ghostManager) {
+    ghostManager->unk4 = func_80055D7C_5697C(9);
+    ghostManager->ghostSlotData = 0;
     setCleanupCallback(func_800BC340_B0030);
     setCallback(func_800BC184_AFE74);
 }
 
-void func_800BC184_AFE74(func_800BC340_B0030_arg *arg0) {
-    s32 i;
-    s32 *positionPtr;
-    s32 *srcPositions;
+void func_800BC184_AFE74(GhostManager *ghostManager) {
+    s32 ghostIndex;
+    s32 *tempPosition;
+    Vec3i *spawnPositions;
 
-    arg0->unk0 = allocateNodeMemory(0x200);
+    ghostManager->ghostSlotData = allocateNodeMemory(0x200);
 
-    i = 0;
-    positionPtr = &D_8009A8A4_9B4A4;
-    srcPositions = &D_800BCA00_B06F0;
+    ghostIndex = 0;
+    tempPosition = &D_8009A8A4_9B4A4;
+    spawnPositions = D_800BCA00_B06F0;
 
-    while (i < 8) {
-        memcpy(positionPtr, srcPositions, 0xC);
-        func_8006BFB8_6CBB8(positionPtr - 5, (void *)((u8 *)arg0->unk0 + (i << 6)));
-        srcPositions = (s32 *)((u8 *)srcPositions + 0xC);
-        i++;
+    while (ghostIndex < 8) {
+        memcpy(tempPosition, spawnPositions, 0xC);
+        func_8006BFB8_6CBB8(tempPosition - 5, (void *)((u8 *)ghostManager->ghostSlotData + (ghostIndex << 6)));
+        spawnPositions++;
+        ghostIndex++;
     }
 
     setCallback(func_800BC220_AFF10);
@@ -703,9 +703,9 @@ void func_800BC220_AFF10(u8 *ghostSlots) {
     }
 }
 
-void func_800BC340_B0030(func_800BC340_B0030_arg *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_800BC340_B0030(GhostManager *ghostManager) {
+    ghostManager->ghostSlotData = freeNodeMemory(ghostManager->ghostSlotData);
+    ghostManager->unk4 = freeNodeMemory(ghostManager->unk4);
 }
 
 INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BC378_B0068);
