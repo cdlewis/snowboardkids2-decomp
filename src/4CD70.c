@@ -41,6 +41,8 @@ USE_ASSET(_3F6950);
 USE_ASSET(_3F6BB0);
 USE_ASSET(_3F3EF0);
 USE_ASSET(_3F58E0);
+USE_ASSET(_3F6420);
+USE_ASSET(_3F65C0);
 
 typedef struct {
     u8 padding[0x10];
@@ -74,6 +76,26 @@ typedef struct {
 // defined later to keep the rodata gods happy
 const char sTimerFormatLow[];
 const char sTimerFormatNormal[];
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x2];
+    s16 unkC;
+    u8 padE[0x2];
+    s16 unk10;
+    u8 pad12[0x2];
+    s16 unk14;
+    u8 pad16[0x2];
+    s16 unk18;
+    u8 pad1A[0xA];
+    s16 unk24;
+    u8 pad26[0x1E];
+    Player *unk44;
+    s32 unk48;
+} Struct_func_8004C928;
 
 typedef struct {
     u8 padC[0xC];
@@ -159,6 +181,57 @@ typedef struct {
     void *unk1C;
 } Struct_func_8004C6F0;
 
+typedef struct {
+    u8 pad0[0x10];
+    void *players;
+    u8 pad14[0x4B];
+    u8 unk5F;
+    u8 pad60[0x14];
+    u8 unk74;
+} Allocation_C728;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 padA[0x2];
+    s16 unkC;
+    s16 unkE;
+    void *unk10;
+    u8 pad14[0x2];
+    u8 unk16;
+    u8 pad17[0x1];
+    s16 unk18;
+    s16 unk1A;
+    void *unk1C;
+    s16 unk20;
+    u8 pad22[0x2];
+    s16 unk24;
+    s16 unk26;
+    void *unk28;
+    s16 unk2C;
+    u8 unk2E;
+    u8 pad2F[0x1];
+    s16 unk30;
+    s16 unk32;
+    s16 unk34;
+    u8 pad36[0x2];
+    char *unk38;
+    char unk3C[8];
+    void *unk44;
+    s32 unk48;
+} Struct_func_8004C728;
+
+typedef struct {
+    u8 pad0[0x30];
+    TextData unk30;
+    u8 unk3C;
+    u8 pad3D[0x7];
+    Player *unk44;
+    s32 unk48;
+} Struct_func_8004C9E8;
+
 void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
 void func_8004D464_4E064(Struct_func_8004D3A4 *);
 void func_8004D954_4E554(Struct_func_8004D8E4 *arg0);
@@ -176,18 +249,22 @@ void func_8004C170_4CD70(Struct_func_8004D8E4 *arg0);
 void func_8004C254_4CE54(Struct_func_8004D8E4 *arg0);
 void func_8004C294_4CE94(Struct_func_8004F04C *arg0);
 void func_8004C2C0_4CEC0(Struct_func_8004C2C0 *arg0);
-void func_8004C728_4D328(void);
+void func_8004C728_4D328(Struct_func_8004C728 *arg0);
 void func_8004CA90_4D690(void);
 void func_8004CDC0_4D9C0(void);
 void func_8004C6F0_4D2F0(Struct_func_8004C6F0 *arg0);
 void func_8004C5A8_4D1A8(Struct_func_8004C2C0 *arg0);
 void func_8004C46C_4D06C(Struct_func_8004C2C0 *arg0);
+void func_8004C928_4D528(Struct_func_8004C928 *arg0);
+void func_8004CA58_4D658(Struct_func_8004DCC4 *arg0);
+void func_8004C9E8_4D5E8(Struct_func_8004C9E8 *arg0);
 
 static const char D_8009E880_9F480[] = "%5d";
 extern char D_8009E89C_9F49C[];
 extern char D_8009E8A0_9F4A0[];
 extern char D_8009E8A8_9F4A8[];
 extern char D_8009E928_9F528[];
+extern char D_8009E868_9F468[];
 
 extern s32 D_80090460_91060[];
 extern s32 D_800904A0_910A0[];
@@ -378,27 +455,61 @@ void func_8004C6F0_4D2F0(Struct_func_8004C6F0 *arg0) {
     arg0->unk1C = freeNodeMemory(arg0->unk1C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004C728_4D328);
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 padA[0x2];
-    s16 unkC;
-    u8 padE[0x2];
-    s16 unk10;
-    u8 pad12[0x2];
-    s16 unk14;
-    u8 pad16[0x2];
-    s16 unk18;
-    u8 pad1A[0xA];
-    s16 unk24;
-    u8 pad26[0x1E];
-    Player *unk44;
-    s32 unk48;
-} Struct_func_8004C928;
+void func_8004C728_4D328(Struct_func_8004C728 *arg0) {
+    Allocation_C728 *allocation;
+    char *temp_s0;
+    s16 new_var;
+    allocation = (Allocation_C728 *)getCurrentAllocation();
+    arg0->unk44 = (void *)(((u8 *)allocation->players) + (arg0->unk48 * 0xBE8));
+    if (allocation->unk5F == 1) {
+        arg0->unk0 = -0x88;
+        arg0->unk2 = -0x60;
+        arg0->unk4 = loadCompressedData(&_3F6420_ROM_START, &_3F6420_ROM_END, 0x168);
+        arg0->unk8 = 0;
+        arg0->unkC = ((u16)arg0->unk0) + 0x1C;
+        arg0->unkE = arg0->unk2;
+        arg0->unk10 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+        arg0->unk18 = ((u16)arg0->unkC) + 8;
+        arg0->unk16 = 1;
+        arg0->unk20 = 1;
+        arg0->unk1A = arg0->unk2;
+        arg0->unk1C = arg0->unk4;
+        new_var = arg0->unk18;
+        arg0->unk26 = arg0->unk2;
+        arg0->unk28 = arg0->unk10;
+        arg0->unk24 = ((u16)new_var) + 8;
+        arg0->unk2C = allocation->unk74 + 1;
+        arg0->unk2E = 3;
+    } else {
+        arg0->unk2 = -0x30;
+        if (allocation->unk5F == 2) {
+            arg0->unk0 = -0x18;
+            arg0->unk30 = 0;
+            arg0->unk32 = arg0->unk2;
+        } else {
+            if (arg0->unk48 < 2) {
+                arg0->unk0 = -0x44;
+            } else {
+                arg0->unk0 = 0x2C;
+            }
+            arg0->unk30 = arg0->unk0;
+            arg0->unk32 = ((u16)arg0->unk2) + 8;
+        }
+        temp_s0 = arg0->unk3C;
+        arg0->unk4 = loadCompressedData(&_3F65C0_ROM_START, &_3F65C0_ROM_END, 0x98);
+        arg0->unk8 = 0;
+        arg0->unk10 = 0;
+        sprintf(temp_s0, D_8009E868_9F468, 1, allocation->unk74 + 1);
+        arg0->unk34 = 1;
+        arg0->unk38 = temp_s0;
+    }
+    setCleanupCallback(func_8004CA58_4D658);
+    if (allocation->unk5F == 1) {
+        setCallbackWithContinue(func_8004C928_4D528);
+    } else {
+        setCallbackWithContinue(func_8004C9E8_4D5E8);
+    }
+}
 
 void func_8004C928_4D528(Struct_func_8004C928 *arg0) {
     debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_8000FED0_10AD0, arg0);
@@ -407,15 +518,6 @@ void func_8004C928_4D528(Struct_func_8004C928 *arg0) {
     debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_8000FED0_10AD0, &arg0->unk18);
     debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_80010240_10E40, &arg0->unk24);
 }
-
-typedef struct {
-    u8 pad0[0x30];
-    TextData unk30;
-    u8 unk3C;
-    u8 pad3D[0x7];
-    Player *unk44;
-    s32 unk48;
-} Struct_func_8004C9E8;
 
 void func_8004C9E8_4D5E8(Struct_func_8004C9E8 *arg0) {
     debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_8000FED0_10AD0, arg0);
