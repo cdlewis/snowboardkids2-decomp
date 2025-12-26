@@ -10,6 +10,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "gbi.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "levels/haunted_house.h"
@@ -211,10 +212,15 @@ typedef struct {
 
 void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0);
 
+extern Gfx *gRegionAllocPtr;
+extern s16 gGraphicsMode;
+extern Gfx D_80090DB0_919B0[];
+void *func_8006C130_6CD30(void *, LookAt *);
+
 typedef struct {
     DataTable_19E80 *unk0;
     OutputStruct_19E80 unk4;
-    u8 _pad[0x30 - 0x4 - sizeof(OutputStruct_19E80)];
+    u8 _pad10[0x30 - 0x4 - sizeof(OutputStruct_19E80)];
     s32 unk30;
     GameStateUnk44Unk2C0 *unk34;
     s32 unk38;
@@ -2157,7 +2163,7 @@ void func_80049300_49F00(func_80049300_49F00_arg *arg0) {
     setCallbackWithContinue(&func_8004934C_49F4C);
 }
 
-extern void func_80049430_4A030(func_80049300_49F00_arg *arg0);
+void func_80049430_4A030(func_80049300_49F00_arg *arg0);
 
 void func_8004934C_49F4C(func_80049300_49F00_arg *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
@@ -2186,7 +2192,123 @@ void func_80049404_4A004(Struct_func_80049404_4A004 *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80049430_4A030);
+void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
+    s32 var_a2;
+    s32 new_var;
+    u32 line;
+    s32 lrs;
+    u16 dxt;
+    u16 width_div_16;
+    Gfx *loadblock_ptr;
+    long loadblock_value;
+    volatile u8 padding[0x10];
+
+    gDPPipeSync(gRegionAllocPtr++);
+
+    gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
+
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, arg0->unk4.data_ptr);
+
+    gDPSetTile(
+        gRegionAllocPtr++,
+        G_IM_FMT_CI,
+        G_IM_SIZ_16b,
+        0,
+        0x0000,
+        G_TX_LOADTILE,
+        0,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMASK,
+        G_TX_NOLOD,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMASK,
+        G_TX_NOLOD
+    );
+
+    gDPLoadSync(gRegionAllocPtr++);
+
+    loadblock_ptr = gRegionAllocPtr++;
+    loadblock_ptr->words.w0 = 0xF3000000;
+    gGraphicsMode = -1;
+    width_div_16 = arg0->unk4.field1 >> 4;
+    var_a2 = 0x800;
+    if (width_div_16 != 0) {
+        var_a2 = width_div_16 + 0x7FF;
+    }
+    lrs = (((s32)((arg0->unk4.field1 * arg0->unk4.field2) + 3)) >> 2) - 1;
+    if (lrs < 0x800) {
+    } else {
+        lrs = 0x7FF;
+    }
+    line = lrs & 0xFFF;
+    new_var = (line << 12) | 0x07000000;
+    loadblock_value = new_var;
+    if (width_div_16 != 0) {
+        loadblock_value |= (var_a2 / width_div_16) & 0xFFF;
+    } else {
+        loadblock_value |= var_a2 & 0xFFF;
+    }
+    loadblock_ptr->words.w1 = loadblock_value;
+
+    gDPPipeSync(gRegionAllocPtr++);
+
+    line = (((arg0->unk4.field1 >> 1) + 7) >> 3) & 0x1FF;
+    new_var = G_TX_NOMIRROR;
+    gDPSetTile(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
+
+    gDPSetTileSize(
+        gRegionAllocPtr++,
+        G_TX_RENDERTILE,
+        0,
+        0,
+        (arg0->unk4.field1 - 1) << 2,
+        (arg0->unk4.field2 - 1) << 2
+    );
+
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, arg0->unk4.index_ptr);
+
+    gDPTileSync(gRegionAllocPtr++);
+
+    gDPSetTile(
+        gRegionAllocPtr++,
+        G_IM_FMT_RGBA,
+        G_IM_SIZ_4b,
+        0,
+        0x0100,
+        G_TX_LOADTILE,
+        0,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMASK,
+        G_TX_NOLOD,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMASK,
+        G_TX_NOLOD
+    );
+
+    gDPLoadSync(gRegionAllocPtr++);
+
+    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, 15);
+
+    gDPPipeSync(gRegionAllocPtr++);
+
+    if (arg0->unk30 == 0) {
+        arg0->unk30 = (s32)arenaAlloc16(0x40);
+        if (arg0->unk30 == 0) {
+            return;
+        }
+        func_8006C130_6CD30(&arg0->_pad10, (LookAt *)arg0->unk30);
+    }
+
+    gDPPipeSync(gRegionAllocPtr++);
+
+    gDPSetTexturePersp(gRegionAllocPtr++, G_TP_PERSP);
+
+    gSPSegment(gRegionAllocPtr++, 0x02, arg0->unk34);
+
+    gSPMatrix(gRegionAllocPtr++, arg0->unk30, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+
+    gSPDisplayList(gRegionAllocPtr++, D_80090DB0_919B0);
+}
 
 typedef struct {
     Node n;
