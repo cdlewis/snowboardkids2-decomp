@@ -2127,21 +2127,21 @@ extern void *D_80090AB8_916B8[];
 extern void *D_80090ABC_916BC[];
 extern s32 D_80090AC0_916C0[];
 
-/*
- * ItemTriggerEntry: 0x10-byte entries pointed to by unk8
- *   0x00 s8      active   - 1 when active, set to 0 when processed
- *   0x01 s8      type     - 0 for primary item, non-zero for secondary
- *   0x02 u16     itemId   - item ID to give to the player
- *   0x04 Vec3i position - world position for player detection
- */
 typedef struct {
-    void *unk0; /* 0x00 */
-    void *unk4; /* 0x04 */
-    s8 *unk8;   /* 0x08 - array of 0x10-byte item trigger entries */
-    void *unkC; /* 0x0C */
-    s32 *unk10; /* 0x10 */
-    s16 unk14;  /* 0x14 */
-    s16 unk16;  /* 0x16 - number of item trigger entries */
+    s8 active;      /* 0x00 - 1 when active, set to 0 when processed */
+    s8 type;        /* 0x01 - 0 for primary item, non-zero for secondary */
+    u16 itemId;     /* 0x02 - item ID to give to the player */
+    Vec3i position; /* 0x04 - world position for player detection */
+} ItemTriggerEntry; /* size: 0x10 */
+
+typedef struct {
+    void *unk0;              /* 0x00 */
+    void *unk4;              /* 0x04 */
+    ItemTriggerEntry *items; /* 0x08 - array of item trigger entries */
+    void *unkC;              /* 0x0C */
+    s32 *unk10;              /* 0x10 */
+    s16 unk14;               /* 0x14 */
+    s16 numItems;            /* 0x16 - number of item trigger entries */
 } Func44D1CArg;
 
 void func_80044DB0_459B0(Func44D1CArg *);
@@ -2166,35 +2166,35 @@ extern void func_80045054_45C54(Func44D1CArg *);
 void func_80044DB0_459B0(Func44D1CArg *arg0) {
     s32 i;
     s32 *ptr;
-    s8 *entries;
+    ItemTriggerEntry *entries;
     s32 pad[2];
     s32 one;
     s32 offset;
 
     arg0->unk4 = (void *)((u8 *)((GameState *)getCurrentAllocation())->unk44 + 0xF80);
-    arg0->unk8 = (s8 *)arg0->unk10 + *arg0->unk10;
-    entries = *(s8 *volatile *)&arg0->unk8;
-    arg0->unk16 = 0;
+    arg0->items = (ItemTriggerEntry *)((s8 *)arg0->unk10 + *arg0->unk10);
+    entries = *(ItemTriggerEntry *volatile *)&arg0->items;
+    arg0->numItems = 0;
 
-    if (*entries >= 0) {
+    if (entries->active >= 0) {
         do {
-            arg0->unk16++;
-        } while (*(entries + arg0->unk16 * 16) >= 0);
+            arg0->numItems++;
+        } while (entries[arg0->numItems].active >= 0);
     }
 
     i = 0;
-    arg0->unk0 = allocateNodeMemory(arg0->unk16 << 6);
+    arg0->unk0 = allocateNodeMemory(arg0->numItems << 6);
 
-    if (arg0->unk16 > 0) {
+    if (arg0->numItems > 0) {
         one = 1;
         ptr = &D_8009A8A4_9B4A4;
         do {
             offset = i << 4;
-            *((s8 *)(offset + (s32)arg0->unk8)) = one;
-            memcpy(ptr, (s8 *)(offset + (s32)arg0->unk8 + 4), 0xC);
+            *((s8 *)(offset + (s32)arg0->items)) = one;
+            memcpy(ptr, (s8 *)(offset + (s32)arg0->items + 4), 0xC);
             func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->unk0 + (i << 6));
             i++;
-        } while (i < arg0->unk16);
+        } while (i < arg0->numItems);
     }
 
     setCallback(func_80044EC4_45AC4);
@@ -2203,7 +2203,7 @@ void func_80044DB0_459B0(Func44D1CArg *arg0) {
 /**
  * Processes item trigger entries to give items to nearby players.
  *
- * For each active entry in arg0->unk8:
+ * For each active entry in arg0->items:
  * - Finds a player within range of the entry's position
  * - If player found (and not a boss), gives them the item:
  *   - Type 0 (primary): Sets unkBD2 to itemId, unkBD3 to 3 (or 9 in special mode)
@@ -2212,49 +2212,49 @@ void func_80044DB0_459B0(Func44D1CArg *arg0) {
  */
 void func_80044EC4_45AC4(Func44D1CArg *arg0) {
     s32 i;
-    GameState *allocation;
-    s8 *temp_a0;
+    GameState *gameState;
+    ItemTriggerEntry *entry;
     Player *player;
-    s8 *temp_v1;
-    u8 flags;
+    ItemTriggerEntry *entryForItem;
+    u8 itemFlags;
     s32 offset;
-    u16 val;
+    u16 itemId;
     s32 pad[2];
     s32 three;
     s32 nine;
 
-    allocation = (GameState *)getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
     i = 0;
-    if (arg0->unk16 > 0) {
+    if (arg0->numItems > 0) {
         three = 3;
         nine = 9;
         offset = 0;
         do {
-            temp_a0 = (s8 *)(offset + (s32)arg0->unk8);
-            if (*temp_a0 != 0) {
-                player = (Player *)func_8005B24C_5BE4C((Vec3i *)(temp_a0 + 4), -1, 0x100000);
+            entry = (ItemTriggerEntry *)(offset + (s32)arg0->items);
+            if (entry->active != 0) {
+                player = (Player *)func_8005B24C_5BE4C(&entry->position, -1, 0x100000);
                 if (player != NULL && player->unkBD9 == 0) {
-                    temp_v1 = (s8 *)(offset + (s32)arg0->unk8);
-                    if (temp_v1[1] == 0) {
-                        val = *(u16 *)(temp_v1 + 2);
+                    entryForItem = (ItemTriggerEntry *)(offset + (s32)arg0->items);
+                    if (entryForItem->type == 0) {
+                        itemId = entryForItem->itemId;
                         player->unkBD3 = three;
-                        player->unkBD2 = (u8)val;
-                        if (allocation->unk7A == three) {
+                        player->unkBD2 = (u8)itemId;
+                        if (gameState->unk7A == three) {
                             player->unkBD3 = nine;
                         }
-                        flags = player->unkBD8 | 1;
+                        itemFlags = player->unkBD8 | 1;
                     } else {
-                        flags = player->unkBD8 | 2;
-                        player->unkBD4 = (u8) * (u16 *)(temp_v1 + 2);
+                        itemFlags = player->unkBD8 | 2;
+                        player->unkBD4 = (u8)entryForItem->itemId;
                     }
-                    player->unkBD8 = flags;
-                    *(s8 *)(offset + (s32)arg0->unk8) = 0;
-                    func_80056B7C_5777C((s8 *)((s32)arg0->unk8 + offset) + 4, 8);
+                    player->unkBD8 = itemFlags;
+                    ((ItemTriggerEntry *)(offset + (s32)arg0->items))->active = 0;
+                    func_80056B7C_5777C((s8 *)((s32)arg0->items + offset) + 4, 8);
                 }
             }
             i++;
             offset += 0x10;
-        } while (i < arg0->unk16);
+        } while (i < arg0->numItems);
         i = 0;
     }
     do {
