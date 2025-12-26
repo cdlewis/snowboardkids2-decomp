@@ -338,7 +338,112 @@ void func_8005F2FC_5FEFC(s16 arg0, s16 arg1, s16 arg2, func_8005F2FC_5FEFC_arg *
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005F344_5FF44);
 
-INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005F6DC_602DC);
+typedef struct {
+    s16 values[10];
+    s32 position[3];
+    s16 prev_position[10];
+    s32 interpolated[3];
+    u16 flags;
+    u16 counter;
+    u16 animation_index;
+} func_8005F6DC_602DC_arg;
+
+s32 func_8005F6DC_602DC(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg *state) {
+    u16 *animation_data;
+    s16 *frame_data;
+    s16 stack_data[16];
+    u16 idx;
+    u16 flags;
+    u16 frame_idx;
+    u16 temp;
+
+    animation_data = func_8005DE6C_5EA6C(arg0, arg1, arg2);
+    frame_data = func_8005DE60_5EA60(arg0);
+    flags = state->flags;
+
+    if (flags & 0x8000) {
+        state->flags = flags & 0x7FFF;
+
+        idx = state->animation_index;
+        func_8005DF10_5EB10(
+            animation_data[idx * 5 + 1],
+            -animation_data[idx * 5 + 2],
+            -animation_data[idx * 5 + 3],
+            state->values
+        );
+
+        idx = state->animation_index;
+        frame_idx = animation_data[idx * 5 + 4];
+        state->position[0] = -frame_data[frame_idx * 3] << 10;
+
+        idx = state->animation_index;
+        frame_idx = animation_data[idx * 5 + 4];
+        state->position[1] = frame_data[frame_idx * 3 + 1] << 10;
+
+        idx = state->animation_index;
+        frame_idx = animation_data[idx * 5 + 4];
+        state->position[2] = frame_data[frame_idx * 3 + 2] << 10;
+
+        memcpy(state->prev_position, state->values, 0x20);
+
+        if (state->flags == 0) {
+            goto ret0;
+        }
+        goto advance_index;
+    }
+
+    if (flags == 0) {
+        return 1;
+    }
+
+    state->counter = state->counter - (state->counter / flags);
+
+    idx = state->animation_index;
+    if ((s16)animation_data[idx * 5 + 3] != (state->counter & 0xFFFF)) {
+        func_8005DF10_5EB10(
+            animation_data[idx * 5 + 1],
+            -animation_data[idx * 5 + 2],
+            state->counter - (s16)animation_data[idx * 5 + 3],
+            stack_data
+        );
+        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)state, stack_data, state->prev_position);
+    }
+
+    idx = state->animation_index;
+    frame_idx = animation_data[idx * 5 + 4];
+    state->interpolated[0] =
+        state->interpolated[0] + ((-frame_data[frame_idx * 3] << 10) - state->interpolated[0]) / state->flags;
+
+    idx = state->animation_index;
+    frame_idx = animation_data[idx * 5 + 4];
+    state->interpolated[1] =
+        state->interpolated[1] + ((frame_data[frame_idx * 3 + 1] << 10) - state->interpolated[1]) / state->flags;
+
+    idx = state->animation_index;
+    frame_idx = animation_data[idx * 5 + 4];
+    state->interpolated[2] =
+        state->interpolated[2] + ((frame_data[frame_idx * 3 + 2] << 10) - state->interpolated[2]) / state->flags;
+
+    state->flags--;
+    if ((state->flags & 0xFFFF) != 0) {
+        goto ret0;
+    }
+
+    idx = state->animation_index;
+    state->flags = animation_data[idx * 5];
+    memcpy(state->values, state->prev_position, 0x20);
+
+    if (state->flags == 0) {
+        return 1;
+    }
+
+advance_index:
+    temp = state->animation_index + 1;
+    state->animation_index = temp;
+    state->counter = animation_data[temp * 5 + 3];
+ret0:
+    return 0;
+}
 
 typedef struct {
     s16 values[10];
