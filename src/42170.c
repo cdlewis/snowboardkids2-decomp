@@ -101,7 +101,13 @@ typedef struct {
     s32 unk30;     /* 0x30 */
     u8 pad34[0x8]; /* 0x34 */
     Player *player;
-    s32 unk40; /* 0x40 - includes unk42 as lower 16 bits */
+    union {
+        s32 full;
+        struct {
+            s16 hi;
+            s16 lo;
+        } half;
+    } scale; /* 0x40 */
 } Func4179CArg;
 
 typedef struct {
@@ -443,54 +449,54 @@ void func_8004179C_4239C(Func4179CArg *arg0) {
     arg0->unk24 = loadAsset_B7E70();
     arg0->unk28 = loadAsset_216290();
     arg0->unk2C = 0;
-    arg0->unk40 = 0x400;
+    arg0->scale.full = 0x400;
     func_80056B7C_5777C(&arg0->player->worldPosX, 0x13);
     setCleanupCallback(func_800419AC_425AC);
     setCallbackWithContinue(func_80041810_42410);
 }
 
 void func_80041810_42410(Func4179CArg *arg0) {
-    s32 position[3];
-    s32 currentScale;
+    s32 effectPos[3];
+    s32 scale;
     s16 scaleFactor;
-    s32 playerIndex;
+    s32 i;
 
     if (!(arg0->player->unkB88 & 0x40)) {
-        position[0] = arg0->player->worldPosX;
-        position[1] = arg0->player->worldPosY + 0x100000;
-        position[2] = arg0->player->worldPosZ;
-        func_80041E10_42A10(position);
+        effectPos[0] = arg0->player->worldPosX;
+        effectPos[1] = arg0->player->worldPosY + 0x100000;
+        effectPos[2] = arg0->player->worldPosZ;
+        func_80041E10_42A10(effectPos);
         func_80069CF8_6A8F8();
         return;
     }
 
-    currentScale = arg0->unk40;
-    if (currentScale != 0x2000) {
-        arg0->unk40 = currentScale + 0x400;
+    scale = arg0->scale.full;
+    if (scale != 0x2000) {
+        arg0->scale.full = scale + 0x400;
         memcpy(arg0, identityMatrix, 0x20);
-        scaleFactor = ((s16 *)&arg0->unk40)[1];
+        scaleFactor = arg0->scale.half.lo;
         scaleMatrix((Mat3x3Padded *)arg0, scaleFactor, scaleFactor, scaleFactor);
     }
 
-    position[0] = arg0->player->worldPosX;
-    position[1] = arg0->player->worldPosY;
-    position[2] = arg0->player->worldPosZ;
-    position[1] = position[1] + 0xFFFE0000;
+    effectPos[0] = arg0->player->worldPosX;
+    effectPos[1] = arg0->player->worldPosY;
+    effectPos[2] = arg0->player->worldPosZ;
+    effectPos[1] = effectPos[1] + 0xFFFE0000;
 
-    if (func_8005B9E4_5C5E4(position, 0x180000, 0x320000, arg0->player->unkBB8) != 0) {
+    if (func_8005B9E4_5C5E4(effectPos, 0x180000, 0x320000, arg0->player->unkBB8) != 0) {
         arg0->player->unkBCE |= 1;
     }
     arg0->unk30 = 0;
 
-    for (playerIndex = 0; playerIndex < 4; playerIndex++) {
+    for (i = 0; i < 4; i++) {
         if (arg0->unk20->unk4 != 0) {
-            debugEnqueueCallback((u16)playerIndex, 1, func_80041A24_42624, arg0);
+            debugEnqueueCallback((u16)i, 1, func_80041A24_42624, arg0);
         }
         if (arg0->unk20->unk8 != 0) {
-            debugEnqueueCallback((u16)playerIndex, 3, func_80041A60_42660, arg0);
+            debugEnqueueCallback((u16)i, 3, func_80041A60_42660, arg0);
         }
         if (arg0->unk20->unkC != 0) {
-            debugEnqueueCallback((u16)playerIndex, 5, func_80041A9C_4269C, arg0);
+            debugEnqueueCallback((u16)i, 5, func_80041A9C_4269C, arg0);
         }
     }
 }
