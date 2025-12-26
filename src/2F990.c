@@ -989,27 +989,27 @@ void func_80030668_31268(func_80030668_31268_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80030694_31294(ItemStatsDisplay *arg0) {
+void func_80030694_31294(ItemStatsDisplay *display) {
     void *spriteAsset;
     s32 i;
 
     getCurrentAllocation();
-    arg0->progressBarAsset = loadAsset_34F7E0();
+    display->progressBarAsset = loadAsset_34F7E0();
     spriteAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
     setCleanupCallback(func_800308C4_314C4);
 
-    arg0->progressBarX = -0x24;
-    arg0->priceLabelX = -0x24;
-    arg0->priceLabelY = 0x1C;
-    arg0->progressBarY = 0;
-    arg0->spriteAsset = spriteAsset;
-    arg0->priceSpriteIndex = 4;
+    display->progressBarX = -0x24;
+    display->priceLabelX = -0x24;
+    display->priceLabelY = 0x1C;
+    display->progressBarY = 0;
+    display->spriteAsset = spriteAsset;
+    display->priceSpriteIndex = 4;
 
     for (i = 0; i < 3; i++) {
-        arg0->statLabels[i].y = 0x1C + (i * 8);
-        arg0->statLabels[i].x = 0xC;
-        arg0->statLabels[i].text = (void *)((char *)arg0 + 0x38 + (i * 3));
-        arg0->statLabels[i].palette = 0;
+        display->statLabels[i].y = 0x1C + (i * 8);
+        display->statLabels[i].x = 0xC;
+        display->statLabels[i].text = display->statBuffers[i];
+        display->statLabels[i].palette = 0;
     }
 
     setCallback(func_80030764_31364);
@@ -1052,9 +1052,9 @@ void func_80030764_31364(ItemStatsDisplay *arg0) {
             if (isValidItem != 0) {
                 isValidItem = currentItem & 0xFF;
                 formatStr = "%2d";
-                sprintf(arg0->statBuffer1, formatStr, func_80027C44_28844(isValidItem) & 0xFF);
-                sprintf(arg0->statBuffer2, formatStr, func_80027C60_28860(isValidItem) & 0xFF);
-                sprintf(arg0->statBuffer3, formatStr, func_80027C7C_2887C(isValidItem) & 0xFF);
+                sprintf(arg0->statBuffers[0], formatStr, func_80027C44_28844(isValidItem) & 0xFF);
+                sprintf(arg0->statBuffers[1], formatStr, func_80027C60_28860(isValidItem) & 0xFF);
+                sprintf(arg0->statBuffers[2], formatStr, func_80027C7C_2887C(isValidItem) & 0xFF);
 
                 labelIndex = 0;
                 labelOffset = 0x10;

@@ -20,9 +20,7 @@ typedef struct {
     StatTextLabel statLabels[3];
     s16 progressBarX;
     s16 progressBarY;
-    char statBuffer1[3];
-    char statBuffer2[3];
-    char statBuffer3[3];
+    char statBuffers[3][3];
 } ItemStatsDisplay;
 
 typedef struct {
