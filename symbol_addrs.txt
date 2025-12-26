@@ -321,7 +321,7 @@ D_800A3370_A3F70 = 0x800A3370; // size:0x18
 D_800A3410_A4010 = 0x800A3410; // size:0xC
 
 gConnectedControllerMask = 0x800A9018;
-D_800A1C08_A2808 = 0x800A1C08; // size:0x4
+D_800A1C08_A2808 = 0x800A1C08; // size:0x18
 
 queueDirectDmaTransfer = 0x8003BB68;
 
