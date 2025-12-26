@@ -180,37 +180,37 @@ void func_800B2DCC_1DFE7C(CutsceneSlot *arg0) {
 }
 
 void func_800B2E48_1DFEF8(CutsceneManager *manager) {
-    s32 slotIndex;
-    CutsceneManager *slotPtr;
-    s32 slotByteOffset;
+    s32 i;
+    CutsceneManager *iterPtr;
+    s32 byteOffset;
     SceneModel *model;
-    s32 slotDataOffset;
-    u8 *slotBase;
+    s32 slotOffset;
+    u8 *slotAddr;
     CutsceneSlotData *slotData;
 
-    slotIndex = 0;
-    slotPtr = manager;
-    slotByteOffset = 0;
+    i = 0;
+    iterPtr = manager;
+    byteOffset = 0;
 
-    while (slotIndex < (getCutsceneSlotCount() & 0xFF)) {
-        func_800B34B0_1E0560(slotIndex);
-        model = ((CutsceneSlot *)((u8 *)slotPtr + 0xA8))->model;
+    while (i < (getCutsceneSlotCount() & 0xFF)) {
+        func_800B34B0_1E0560(i);
+        model = ((CutsceneSlot *)((u8 *)iterPtr + 0xA8))->model;
 
         if (model != NULL) {
-            slotDataOffset = slotByteOffset + 0xA8;
-            slotBase = (u8 *)manager + slotDataOffset;
-            slotData = (CutsceneSlotData *)(slotBase + 0x4C);
+            slotOffset = byteOffset + 0xA8;
+            slotAddr = (u8 *)manager + slotOffset;
+            slotData = (CutsceneSlotData *)(slotAddr + 0x4C);
 
             func_800B7760_1E4810(slotData, 0x10000, 0);
             func_800B77C4_1E4874(slotData, 0x10000, 0);
             func_800B7828_1E48D8(slotData, 0x10000, 0);
             setupSlotTransform(slotData);
-            applyTransformToModel(model, (Mat3x3Padded *)(slotBase + 0x50));
+            applyTransformToModel(model, (Mat3x3Padded *)(slotAddr + 0x50));
         }
 
-        slotPtr = (CutsceneManager *)((u8 *)slotPtr + 0xF4);
-        slotByteOffset += 0xF4;
-        slotIndex++;
+        iterPtr = (CutsceneManager *)((u8 *)iterPtr + 0xF4);
+        byteOffset += 0xF4;
+        i++;
     }
 }
 
