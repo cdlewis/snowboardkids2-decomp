@@ -64,8 +64,6 @@ typedef struct {
     s32 unk48;
 } func_800BB2B0_arg;
 
-extern void func_8005B730_5C330(void *, s32, s32, s16);
-
 void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0);
 void func_800BB458_B5668(func_800BB458_B5668_arg *arg0);
 void func_800BB7B8_B59C8(func_800BB420_B5630_arg *arg0);
