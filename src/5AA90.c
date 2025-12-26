@@ -127,8 +127,12 @@ s32 func_8005AA9C_5B69C(Player *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AB58_5B758);
 
+/**
+ * Checks collision between a player and the target player (player index 1).
+ * Handles collision response including pushing the player out and knockback effects.
+ */
 void func_8005AE8C_5BA8C(Player *player) {
-    Vec3i relativePos;
+    Vec3i deltaPos;
     u8 pad[0x8];
     void *collisionBoxPtr;
     s32 unused1;
@@ -143,9 +147,11 @@ void func_8005AE8C_5BA8C(Player *player) {
     players = ((GameState *)getCurrentAllocation())->players;
     targetPlayer = players + 1;
 
+    /* Skip collision if players are on the same team */
     if (player->unkBB8 == targetPlayer->unkBB8) {
         return;
     }
+    /* Skip if either player has collision disabled (flag 0x10) */
     if (player->unkB88 & 0x10) {
         return;
     }
@@ -157,53 +163,62 @@ void func_8005AE8C_5BA8C(Player *player) {
         boxIndex = 0;
         collisionBoxPtr = targetPlayer;
         do {
-            memcpy(&relativePos, (u8 *)collisionBoxPtr + 0xAE4, 0xC);
+            /* Copy target's collision box local position (offset 0xAE4 is unkAE4 array) */
+            memcpy(&deltaPos, (u8 *)collisionBoxPtr + 0xAE4, 0xC);
 
-            relativePos.x += targetPlayer->worldPosX;
-            relativePos.y += targetPlayer->worldPosY;
-            relativePos.z += targetPlayer->worldPosZ;
+            /* Convert to world space */
+            deltaPos.x += targetPlayer->worldPosX;
+            deltaPos.y += targetPlayer->worldPosY;
+            deltaPos.z += targetPlayer->worldPosZ;
 
-            relativePos.x -= player->worldPosX + player->unkAD4[0];
-            relativePos.y -= player->worldPosY + player->unkAD4[1];
-            relativePos.z -= player->worldPosZ + player->unkAD4[2];
+            /* Calculate relative position to player's collision box */
+            deltaPos.x -= player->worldPosX + player->unkAD4[0];
+            deltaPos.y -= player->worldPosY + player->unkAD4[1];
+            deltaPos.z -= player->worldPosZ + player->unkAD4[2];
 
+            /* Sum of both collision box radii */
             combinedRadius = (&targetPlayer->unkB2C)[boxIndex] + player->unkAE0;
             negRadius = -combinedRadius;
 
-            if (negRadius < relativePos.x && relativePos.x < combinedRadius && negRadius < relativePos.y &&
-                relativePos.y < combinedRadius && negRadius < relativePos.z && relativePos.z < combinedRadius) {
+            /* Quick AABB check before expensive distance calculation */
+            if (negRadius < deltaPos.x && deltaPos.x < combinedRadius && negRadius < deltaPos.y &&
+                deltaPos.y < combinedRadius && negRadius < deltaPos.z && deltaPos.z < combinedRadius) {
 
-                dist = isqrt64(
-                    (s64)relativePos.x * relativePos.x + (s64)relativePos.y * relativePos.y +
-                    (s64)relativePos.z * relativePos.z
-                );
+                dist =
+                    isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z);
 
                 if (dist < combinedRadius) {
+                    /* Check for special knockback on collision boxes 4-5 when target is in state 1 */
                     if (targetPlayer->unkBD9 == 1) {
                         if ((targetPlayer->unkB84 & 0x40000) && (u32)(boxIndex - 4) < 2U) {
                             func_80058B30_59730(player);
                             goto next;
                         }
                     }
+                    /* Check for special knockback on collision boxes 1-2 when target is in state 3 */
                     if (targetPlayer->unkBD9 == 3 && (targetPlayer->unkB84 & 0x40000) && (u32)(boxIndex - 1) < 2U) {
                         func_80058B30_59730(player);
                         goto next;
                     }
 
+                    /* Avoid divide by zero */
                     if (dist == 0) {
                         dist = 1;
                     }
 
-                    relativePos.x = ((s64)relativePos.x * combinedRadius / dist) - relativePos.x;
-                    relativePos.y = ((s64)relativePos.y * combinedRadius / dist) - relativePos.y;
-                    relativePos.z = ((s64)relativePos.z * combinedRadius / dist) - relativePos.z;
+                    /* Calculate push vector to separate the players */
+                    deltaPos.x = ((s64)deltaPos.x * combinedRadius / dist) - deltaPos.x;
+                    deltaPos.y = ((s64)deltaPos.y * combinedRadius / dist) - deltaPos.y;
+                    deltaPos.z = ((s64)deltaPos.z * combinedRadius / dist) - deltaPos.z;
 
-                    player->worldPosX -= relativePos.x;
-                    player->worldPosY -= relativePos.y;
-                    player->worldPosZ -= relativePos.z;
+                    /* Push player out of collision */
+                    player->worldPosX -= deltaPos.x;
+                    player->worldPosY -= deltaPos.y;
+                    player->worldPosZ -= deltaPos.z;
 
+                    /* Apply knockback if target is in state 2 and colliding with main collision box */
                     if ((targetPlayer->unkBD9 == 2) & (boxIndex == 0)) {
-                        dist = isqrt64((s64)relativePos.x * relativePos.x + (s64)relativePos.z * relativePos.z);
+                        dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.z * deltaPos.z);
                         if (dist > 0x30000) {
                             func_80058950_59550(
                                 player,
