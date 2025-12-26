@@ -239,14 +239,14 @@ void func_80016A00_17600(Struct16B68 *arg0) {
     }
 
     if (arg0->unk2F == 6) {
-        if (alloc->unk3C0 == 0xF0) {
+        if (alloc->unlockAllCheatProgress == 0xF0) {
             setCallback(func_80016B68_17768);
             return;
         }
     }
 
     if (arg0->unk2F == 5) {
-        if (alloc->unk3BF == 0xF0) {
+        if (alloc->partialUnlockCheatProgress == 0xF0) {
             setCallback(func_80016D0C_1790C);
         }
     }

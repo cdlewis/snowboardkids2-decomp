@@ -25,8 +25,8 @@ typedef struct {
     u8 unk3BC;
     u8 unk3BD;
     u8 unk3BE;
-    u8 unk3BF;
-    u8 unk3C0;
+    u8 partialUnlockCheatProgress;
+    u8 unlockAllCheatProgress;
     u8 unk3C1;
 } TitleState;
 
@@ -35,10 +35,10 @@ USE_ASSET(_418520);
 
 void func_800161F4_16DF4(void);
 void func_800159AC_165AC(void);
-void func_80015CA4_168A4(void);
-void func_80015DF4_169F4(void);
-void func_80016070_16C70(void);
-void func_80016150_16D50(void);
+void checkPartialUnlockCheatCode(void);
+void checkUnlockAllCheatCode(void);
+void unlockAllContent(void);
+void unlockPartialContent(void);
 void func_800156AC_162AC(void);
 
 extern u8 D_8009F210_9FE10;
@@ -247,9 +247,9 @@ case1_done_nav:
     if ((temp & 0x9000) != 0) {
         if (D_800AB47A_A27EA != 0) {
             if ((gButtonsPressed & R_JPAD) != 0) {
-                func_80016070_16C70();
+                unlockAllContent();
             } else if ((gButtonsPressed & L_JPAD) != 0) {
-                func_80016150_16D50();
+                unlockPartialContent();
             }
         }
         func_80058220_58E20(0x2C, 1);
@@ -259,8 +259,8 @@ case1_done_nav:
     }
 
 end:
-    func_80015CA4_168A4();
-    func_80015DF4_169F4();
+    checkPartialUnlockCheatCode();
+    checkUnlockAllCheatCode();
 }
 
 void func_80015960_16560(void) {
@@ -310,8 +310,8 @@ void func_80015A18_16618(void) {
     state->unk3BD = 0;
     state->unk3BE = 0;
     state->unk3C1 = 0x3C;
-    state->unk3BF = 0;
-    state->unk3C0 = 0;
+    state->partialUnlockCheatProgress = 0;
+    state->unlockAllCheatProgress = 0;
     state->unk3B4 = dmaResult;
     state->unk3B8 = 0;
 
@@ -352,19 +352,19 @@ void func_80015A18_16618(void) {
     setGameStateHandler(func_800159AC_165AC);
 }
 
-void func_80015CA4_168A4(void) {
+void checkPartialUnlockCheatCode(void) {
     GameState *state;
     s32 buttons;
     u8 state_var;
 
     state = getCurrentAllocation();
-    state_var = state->unk3BF;
+    state_var = state->partialUnlockCheatProgress;
 
     if (state_var < 5) {
         switch (state_var) {
             case 0:
                 if (gButtonsPressed == R_TRIG) {
-                    state->unk3BF = state->unk3BF + 1;
+                    state->partialUnlockCheatProgress = state->partialUnlockCheatProgress + 1;
                 }
                 break;
 
@@ -372,9 +372,9 @@ void func_80015CA4_168A4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != R_TRIG) && (buttons != 0)) {
                     if (buttons == D_JPAD) {
-                        state->unk3BF = state->unk3BF + 1;
+                        state->partialUnlockCheatProgress = state->partialUnlockCheatProgress + 1;
                     } else {
-                        state->unk3BF = 0xFF;
+                        state->partialUnlockCheatProgress = 0xFF;
                     }
                 }
                 break;
@@ -383,9 +383,9 @@ void func_80015CA4_168A4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != D_JPAD) && (buttons != 0)) {
                     if (buttons == L_TRIG) {
-                        state->unk3BF = state->unk3BF + 1;
+                        state->partialUnlockCheatProgress = state->partialUnlockCheatProgress + 1;
                     } else {
-                        state->unk3BF = 0xFF;
+                        state->partialUnlockCheatProgress = 0xFF;
                     }
                 }
                 break;
@@ -394,9 +394,9 @@ void func_80015CA4_168A4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != L_TRIG) && (buttons != 0)) {
                     if (buttons == 0x10000) {
-                        state->unk3BF = state->unk3BF + 1;
+                        state->partialUnlockCheatProgress = state->partialUnlockCheatProgress + 1;
                     } else {
-                        state->unk3BF = 0xFF;
+                        state->partialUnlockCheatProgress = 0xFF;
                     }
                 }
                 break;
@@ -405,12 +405,12 @@ void func_80015CA4_168A4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != 0x10000) && (buttons != 0)) {
                     if (buttons == START_BUTTON) {
-                        func_80016150_16D50();
+                        unlockPartialContent();
                         func_800585C8_591C8(0xDC);
                         func_800585C8_591C8(0xDC);
-                        state->unk3BF = 0xF0;
+                        state->partialUnlockCheatProgress = 0xF0;
                     } else {
-                        state->unk3BF = 0xFF;
+                        state->partialUnlockCheatProgress = 0xFF;
                     }
                 }
                 break;
@@ -418,21 +418,21 @@ void func_80015CA4_168A4(void) {
     }
 }
 
-void func_80015DF4_169F4(void) {
+void checkUnlockAllCheatCode(void) {
     GameState *state;
     u8 cheatState;
     s32 buttons;
     s32 temp_v1;
 
     state = getCurrentAllocation();
-    cheatState = state->unk3C0;
+    cheatState = state->unlockAllCheatProgress;
 
     if (cheatState < 0xA) {
         switch (cheatState) {
             case 0:
                 temp_v1 = gButtonsPressed;
                 if (temp_v1 == Z_TRIG) {
-                    state->unk3C0++;
+                    state->unlockAllCheatProgress++;
                 }
                 break;
 
@@ -440,9 +440,9 @@ void func_80015DF4_169F4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != Z_TRIG) && (buttons != 0)) {
                     if (buttons != B_BUTTON) {
-                        state->unk3C0 = 0xFF;
+                        state->unlockAllCheatProgress = 0xFF;
                     } else {
-                        state->unk3C0++;
+                        state->unlockAllCheatProgress++;
                     }
                 }
                 break;
@@ -451,9 +451,9 @@ void func_80015DF4_169F4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != B_BUTTON) && (buttons != 0)) {
                     if (buttons != 0x8) {
-                        state->unk3C0 = 0xFF;
+                        state->unlockAllCheatProgress = 0xFF;
                     } else {
-                        state->unk3C0++;
+                        state->unlockAllCheatProgress++;
                     }
                 }
                 break;
@@ -462,9 +462,9 @@ void func_80015DF4_169F4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != U_CBUTTONS) && (buttons != 0)) {
                     if (buttons != D_JPAD) {
-                        state->unk3C0 = 0xFF;
+                        state->unlockAllCheatProgress = 0xFF;
                     } else {
-                        state->unk3C0++;
+                        state->unlockAllCheatProgress++;
                     }
                 }
                 break;
@@ -473,9 +473,9 @@ void func_80015DF4_169F4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != D_JPAD) && (buttons != 0)) {
                     if (buttons != 0x80000) {
-                        state->unk3C0 = 0xFF;
+                        state->unlockAllCheatProgress = 0xFF;
                     } else {
-                        state->unk3C0++;
+                        state->unlockAllCheatProgress++;
                     }
                 }
                 break;
@@ -484,9 +484,9 @@ void func_80015DF4_169F4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != 0x80000) && (buttons != 0)) {
                     if (buttons != 0x40000) {
-                        state->unk3C0 = 0xFF;
+                        state->unlockAllCheatProgress = 0xFF;
                     } else {
-                        state->unk3C0++;
+                        state->unlockAllCheatProgress++;
                     }
                 }
                 break;
@@ -495,9 +495,9 @@ void func_80015DF4_169F4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != 0x40000) && (buttons != 0)) {
                     if (buttons != 0x800) {
-                        state->unk3C0 = 0xFF;
+                        state->unlockAllCheatProgress = 0xFF;
                     } else {
-                        state->unk3C0++;
+                        state->unlockAllCheatProgress++;
                     }
                 }
                 break;
@@ -506,9 +506,9 @@ void func_80015DF4_169F4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != 0x800) && (buttons != 0)) {
                     if (buttons != 0x10) {
-                        state->unk3C0 = 0xFF;
+                        state->unlockAllCheatProgress = 0xFF;
                     } else {
-                        state->unk3C0++;
+                        state->unlockAllCheatProgress++;
                     }
                 }
                 break;
@@ -517,9 +517,9 @@ void func_80015DF4_169F4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != R_TRIG) && (buttons != 0)) {
                     if (buttons != Z_TRIG) {
-                        state->unk3C0 = 0xFF;
+                        state->unlockAllCheatProgress = 0xFF;
                     } else {
-                        state->unk3C0++;
+                        state->unlockAllCheatProgress++;
                     }
                 }
                 break;
@@ -528,27 +528,27 @@ void func_80015DF4_169F4(void) {
                 buttons = gButtonsPressed;
                 if ((buttons != Z_TRIG) && (buttons != 0)) {
                     if (buttons == A_BUTTON) {
-                        func_80016070_16C70();
+                        unlockAllContent();
                         func_800585C8_591C8(0x110);
                         func_800585C8_591C8(0x110);
                         func_800585C8_591C8(0x110);
                         func_800585C8_591C8(0x110);
-                        state->unk3C0 = 0xF0;
+                        state->unlockAllCheatProgress = 0xF0;
                     } else {
-                        state->unk3C0 = 0xFF;
+                        state->unlockAllCheatProgress = 0xFF;
                     }
                 }
                 break;
         }
     }
 
-    cheatState = state->unk3C0;
+    cheatState = state->unlockAllCheatProgress;
     if (cheatState == 0xFF) {
-        state->unk3C0 = 0xFF;
+        state->unlockAllCheatProgress = 0xFF;
     }
 }
 
-void func_80016070_16C70(void) {
+void unlockAllContent(void) {
     s32 i;
 
     // First loop: initialize save_slot_status and save_slot_data
@@ -573,7 +573,7 @@ void func_80016070_16C70(void) {
     EepromSaveData->setting_50 = 1;
 }
 
-void func_80016150_16D50(void) {
+void unlockPartialContent(void) {
     s32 i;
 
     for (i = 0; i < 16; i++) {

@@ -1424,6 +1424,11 @@ matrixToEulerAngles = 0x8006C8FC;
 atan2Fixed = 0x8006CF7C;
 
 handleLevelSelectInput = 0x8001EB4C; // rom:0x1F74C
+
+checkUnlockAllCheatCode = 0x80015DF4; // rom:0x169F4
+checkPartialUnlockCheatCode = 0x80015CA4; // rom:0x168A4
+unlockAllContent = 0x80016070; // rom:0x16C70
+unlockPartialContent = 0x80016150; // rom:0x16D50
 waitForFadeToLevelSelect = 0x8001EB1C; // rom:0x1F71C
 initLevelSelectTransition = 0x8001EAB0; // rom:0x1F6B0
 cleanupLevelSelect = 0x8001F25C; // rom:0x1FE5C
