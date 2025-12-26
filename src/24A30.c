@@ -1123,42 +1123,49 @@ void func_80025C64_26864(SelectionMenuState *arg0) {
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025DAC_269AC);
 
 #define SELECTION_ENTRY_SIZE 0x10
+#define SELECTION_ENTRY_ALPHA_OFFSET 0xA
+#define SELECTION_ENTRY_BLINKSTATE_OFFSET 0xD
 
-void func_80025EE4_26AE4(SelectionMenuState *arg0) {
-    u8 *gameState;
-    s32 i;
-    s32 selectedEntryIndex;
+void func_80025EE4_26AE4(SelectionMenuState *menu) {
+    u8 *state;
+    s32 entryIndex;
+    s32 selectedIndex;
     u8 *entryBase;
     s32 pad[2];
-    s32 entryCount;
+    s32 numEntries;
 
     (void)pad;
 
-    gameState = (u8 *)getCurrentAllocation();
-    entryCount = arg0->numEntries;
-    i = 0;
-    if (entryCount > 0) {
-        entryBase = (u8 *)arg0;
+    state = (u8 *)getCurrentAllocation();
+    numEntries = menu->numEntries;
+    entryIndex = 0;
+    if (numEntries > 0) {
+        entryBase = (u8 *)menu;
         do {
-            arg0->unk30[i] = 0;
-            if ((gameState + arg0->playerIndex)[0x18D2] == i) {
-                *(s16 *)(entryBase + i * SELECTION_ENTRY_SIZE + 0xA) = 0xFF;
-                selectedEntryIndex = i;
-                if (*(u16 *)(gameState + arg0->playerIndex * 2 + 0x18A0) & 1) {
-                    *(u8 *)(entryBase + i * SELECTION_ENTRY_SIZE + 0xD) = 0xFF;
+            menu->unk30[entryIndex] = 0;
+            if ((state + menu->playerIndex)[0x18D2] == entryIndex) {
+                *(s16 *)(entryBase + entryIndex * SELECTION_ENTRY_SIZE + SELECTION_ENTRY_ALPHA_OFFSET) = 0xFF;
+                selectedIndex = entryIndex;
+                if (*(u16 *)(state + menu->playerIndex * 2 + 0x18A0) & 1) {
+                    *(u8 *)(entryBase + entryIndex * SELECTION_ENTRY_SIZE + SELECTION_ENTRY_BLINKSTATE_OFFSET) = 0xFF;
                 } else {
-                    *(u8 *)(entryBase + i * SELECTION_ENTRY_SIZE + 0xD) = 0;
+                    *(u8 *)(entryBase + entryIndex * SELECTION_ENTRY_SIZE + SELECTION_ENTRY_BLINKSTATE_OFFSET) = 0;
                 }
             } else {
-                *(s16 *)(entryBase + i * SELECTION_ENTRY_SIZE + 0xA) = 0x50;
+                *(s16 *)(entryBase + entryIndex * SELECTION_ENTRY_SIZE + SELECTION_ENTRY_ALPHA_OFFSET) = 0x50;
             }
-            debugEnqueueCallback(arg0->playerIndex + 0xC, 0, func_80012004_12C04, entryBase + i * SELECTION_ENTRY_SIZE);
-            i++;
-        } while (i < (s32)arg0->numEntries);
+            debugEnqueueCallback(
+                menu->playerIndex + 0xC,
+                0,
+                func_80012004_12C04,
+                entryBase + entryIndex * SELECTION_ENTRY_SIZE
+            );
+            entryIndex++;
+        } while (entryIndex < (s32)menu->numEntries);
     }
 
-    if (*(u16 *)(gameState + arg0->playerIndex * 2 + 0x1898) != 2) {
-        arg0->entries[selectedEntryIndex].blinkState = 0;
+    if (*(u16 *)(state + menu->playerIndex * 2 + 0x1898) != 2) {
+        menu->entries[selectedIndex].blinkState = 0;
         setCallbackWithContinue(func_80025DAC_269AC);
     }
 }
