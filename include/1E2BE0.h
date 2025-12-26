@@ -59,3 +59,4 @@ void func_800B60DC_1E318C(func_800B5E64_1E2F14_arg0 *, s32, s16);
 void func_800B6130_1E31E0(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2);
 void func_800B6180_1E3230(func_800B6180_1E3230_arg0 *, s32, s16);
 void finalizeAnimationLoop(AnimationLoopArg *arg0);
+s16 advanceSceneManager(func_800B5E64_1E2F14_arg0 *arg0);

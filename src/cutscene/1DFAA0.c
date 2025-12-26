@@ -54,8 +54,6 @@ extern s8 D_800BAE00_1E7EB0[];
 extern u8 identityMatrix[];
 extern CutsceneAssetTable D_800BA7BC_1E786C[];
 
-extern s16 advanceSceneManager(void *);
-
 extern void *func_800B5B38_1E2BE8(u16);
 
 void func_800B29F0_1DFAA0(CutsceneManager *arg0) {
