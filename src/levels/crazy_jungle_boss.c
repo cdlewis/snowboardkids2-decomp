@@ -1,4 +1,5 @@
 #include "46080.h"
+#include "59290.h"
 #include "5AA90.h"
 #include "5DBC0.h"
 #include "9FF70.h"
@@ -156,7 +157,6 @@ extern s32 D_800BBA84_AC2B4[][3];
 
 typedef s32 (*StateFunc)(void *);
 extern StateFunc D_800BC440_ACC70[];
-extern s32 getCharacterBoardStatParam0(s32, s32);
 
 void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
     Mat3x3Padded sp10;
