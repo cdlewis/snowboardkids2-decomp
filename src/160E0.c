@@ -144,7 +144,7 @@ void func_800156AC_162AC(void) {
 
     input = gControllerInputs;
 
-    if ((input & 0x20) != 0) {
+    if ((input & L_TRIG) != 0) {
         if (((&gControllerInputs)[3] & R_TRIG) != 0) {
             goto end;
         }
@@ -163,13 +163,13 @@ void func_800156AC_162AC(void) {
 case_0:
     unk3BB = state->unk3BB;
 
-    if ((input & 0x10800) != 0) {
+    if ((input & (STICK_UP | U_JPAD)) != 0) {
         if (unk3BB != 0) {
             state->unk3BB = unk3BB - 1;
         } else {
             state->unk3BB = state->unk3BC - 1;
         }
-    } else if ((input & 0x20400) != 0) {
+    } else if ((input & (STICK_DOWN | D_JPAD)) != 0) {
         if (unk3BB < state->unk3BC - 1) {
             state->unk3BB = unk3BB + 1;
         } else {
@@ -188,7 +188,7 @@ case_0:
         }
     }
 
-    if ((gControllerInputs & 0x9000) != 0) {
+    if ((gControllerInputs & (A_BUTTON | START_BUTTON)) != 0) {
         func_80058220_58E20(0x2C, 1);
         if (state->unk3BB == 0) {
             state->unk3BD = 1;
@@ -210,7 +210,7 @@ case_0:
 case_1:
     unk3BB = state->unk3BB;
 
-    if ((input & 0x10800) == 0) {
+    if ((input & (STICK_UP | U_JPAD)) == 0) {
         goto case1_check2;
     }
     if (unk3BB != 0) {
@@ -221,7 +221,7 @@ case_1:
     goto case1_done_nav;
 
 case1_check2:
-    if ((input & 0x20400) == 0) {
+    if ((input & (STICK_DOWN | D_JPAD)) == 0) {
         goto case1_done_nav;
     }
     if (unk3BB == 0) {
@@ -244,7 +244,7 @@ case1_done_nav:
         goto end;
     }
 
-    if ((temp & 0x9000) != 0) {
+    if ((temp & (A_BUTTON | START_BUTTON)) != 0) {
         if (D_800AB47A_A27EA != 0) {
             if ((gButtonsPressed & R_JPAD) != 0) {
                 unlockAllContent();
@@ -393,7 +393,7 @@ void checkPartialUnlockCheatCode(void) {
             case 3:
                 buttons = gButtonsPressed;
                 if ((buttons != L_TRIG) && (buttons != 0)) {
-                    if (buttons == 0x10000) {
+                    if (buttons == STICK_UP) {
                         state->partialUnlockCheatProgress = state->partialUnlockCheatProgress + 1;
                     } else {
                         state->partialUnlockCheatProgress = 0xFF;
@@ -403,7 +403,7 @@ void checkPartialUnlockCheatCode(void) {
 
             case 4:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x10000) && (buttons != 0)) {
+                if ((buttons != STICK_UP) && (buttons != 0)) {
                     if (buttons == START_BUTTON) {
                         unlockPartialContent();
                         func_800585C8_591C8(0xDC);
@@ -472,7 +472,7 @@ void checkUnlockAllCheatCode(void) {
             case 4:
                 buttons = gButtonsPressed;
                 if ((buttons != D_JPAD) && (buttons != 0)) {
-                    if (buttons != 0x80000) {
+                    if (buttons != STICK_LEFT) {
                         state->unlockAllCheatProgress = 0xFF;
                     } else {
                         state->unlockAllCheatProgress++;
@@ -482,8 +482,8 @@ void checkUnlockAllCheatCode(void) {
 
             case 5:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x80000) && (buttons != 0)) {
-                    if (buttons != 0x40000) {
+                if ((buttons != STICK_LEFT) && (buttons != 0)) {
+                    if (buttons != STICK_RIGHT) {
                         state->unlockAllCheatProgress = 0xFF;
                     } else {
                         state->unlockAllCheatProgress++;
@@ -493,8 +493,8 @@ void checkUnlockAllCheatCode(void) {
 
             case 6:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x40000) && (buttons != 0)) {
-                    if (buttons != 0x800) {
+                if ((buttons != STICK_RIGHT) && (buttons != 0)) {
+                    if (buttons != U_JPAD) {
                         state->unlockAllCheatProgress = 0xFF;
                     } else {
                         state->unlockAllCheatProgress++;
@@ -504,8 +504,8 @@ void checkUnlockAllCheatCode(void) {
 
             case 7:
                 buttons = gButtonsPressed;
-                if ((buttons != 0x800) && (buttons != 0)) {
-                    if (buttons != 0x10) {
+                if ((buttons != U_JPAD) && (buttons != 0)) {
+                    if (buttons != CONT_R) {
                         state->unlockAllCheatProgress = 0xFF;
                     } else {
                         state->unlockAllCheatProgress++;

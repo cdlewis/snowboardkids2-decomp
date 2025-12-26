@@ -8,6 +8,10 @@ import sys
 
 # Button definitions from lib/ultralib/include/PR/os_cont.h
 BUTTONS = {
+    0x80000: "STICK_LEFT",
+    0x40000: "STICK_RIGHT",
+    0x20000: "STICK_DOWN",
+    0x10000: "STICK_UP",
     0x8000: "A_BUTTON (CONT_A)",
     0x4000: "B_BUTTON (CONT_B)",
     0x2000: "Z_TRIG (CONT_G)",
