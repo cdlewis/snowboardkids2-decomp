@@ -6,22 +6,23 @@
 extern u8 D_8008D714_8E314[];
 extern u8 D_8008D6C4_8E2C4[];
 
-void func_80018D04_19904(EventTrigger *arg0);
+void GenericTriggerCheck(EventTrigger *);
 
-void func_80018CB0_198B0(EventTrigger *arg0) {
+void GenericTriggerInit(EventTrigger *arg0) {
     u8 eventId = arg0->unk0;
     arg0->unk1 = 0;
     arg0->unk4 = 0;
     arg0->unk6 = -0x68;
     arg0->unk8 = 0;
     arg0->unkC = &D_8008D714_8E314[eventId * 20];
-    setCallback(func_80018D04_19904);
+    setCallback(GenericTriggerCheck);
 }
 
-void func_80018D04_19904(EventTrigger *trigger) {
+void GenericTriggerCheck(EventTrigger *trigger) {
     GameState *state = (GameState *)getCurrentAllocation();
+    s16 rawAngle;
     s16 angle;
-    u8 triggerId;
+    u8 eventId;
     s16 minAngle;
     s16 maxAngle;
 
@@ -29,15 +30,16 @@ void func_80018D04_19904(EventTrigger *trigger) {
         return;
     }
 
-    angle = state->unk3F4;
-    if (angle >= 0x1001) {
+    rawAngle = state->unk3F4;
+    angle = rawAngle;
+    if (rawAngle >= 0x1001) {
         angle -= 0x2000;
     }
 
-    triggerId = trigger->unk0;
-    minAngle = ((s16 *)D_8008D6C4_8E2C4)[triggerId * 2];
+    eventId = trigger->unk0;
+    minAngle = ((s16 *)D_8008D6C4_8E2C4)[eventId * 2];
     if (angle < minAngle) {
-        maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(triggerId * 2) + 1];
+        maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(eventId * 2) + 1];
         if (maxAngle < angle) {
             if (((u16)(state->unk3FC - 0xC01)) < 0x7FF) {
                 state->unk424 = 1;

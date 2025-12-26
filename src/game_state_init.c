@@ -19,7 +19,7 @@ extern u8 D_800A8CC8_A0038;
 extern void func_80017350_17F50;
 extern void func_80018800_19400;
 extern void func_80018A90_19690;
-extern void func_80018CB0_198B0;
+extern void GenericTriggerInit;
 extern void func_80028480_29080;
 extern void func_80036250_36E50;
 extern void func_80036A3C_3763C;
@@ -94,7 +94,7 @@ void initializeGameState(void) {
         scheduleTask(&setupGameStateTransition, 0, 0, 0x5D);
         scheduleTask(&func_80018A90_19690, 0, 0, 0x62);
         do {
-            *(s8 *)scheduleTask(&func_80018CB0_198B0, 0, 0, 0x64) = var_s1;
+            *(s8 *)scheduleTask(&GenericTriggerInit, 0, 0, 0x64) = var_s1;
             var_s1 += 1;
         } while (var_s1 < 6);
         scheduleTask(&PhoneTriggerInit, 0, 0, 0x64);
