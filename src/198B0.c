@@ -21,7 +21,7 @@ void GenericTriggerInit(EventTrigger *arg0) {
 void GenericTriggerCheck(EventTrigger *trigger) {
     GameState *state = (GameState *)getCurrentAllocation();
     s16 rawAngle;
-    s16 angle;
+    s16 playerAngle;
     u8 eventId;
     s16 minAngle;
     s16 maxAngle;
@@ -31,16 +31,16 @@ void GenericTriggerCheck(EventTrigger *trigger) {
     }
 
     rawAngle = state->unk3F4;
-    angle = rawAngle;
+    playerAngle = rawAngle;
     if (rawAngle >= 0x1001) {
-        angle -= 0x2000;
+        playerAngle -= 0x2000;
     }
 
     eventId = trigger->eventId;
     minAngle = ((s16 *)D_8008D6C4_8E2C4)[eventId * 2];
-    if (angle < minAngle) {
+    if (playerAngle < minAngle) {
         maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(eventId * 2) + 1];
-        if (maxAngle < angle) {
+        if (maxAngle < playerAngle) {
             if (((u16)(state->unk3FC - 0xC01)) < 0x7FF) {
                 state->unk424 = 1;
                 state->unk425 = trigger->eventId;
