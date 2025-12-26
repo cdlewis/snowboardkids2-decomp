@@ -3443,31 +3443,31 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B8894_A8744);
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B9500_A93B0);
 
 void func_800B98CC_A977C(Player *player) {
-    GameState *gameState;
+    GameState *alloc;
     GameDataLayout *gameData;
     s32 i;
     s32 offset;
-    u8 *jointPtr;
-    JointPosition *jointPosAddr;
-    s32 temp;
+    u8 *jointWritePtr;
+    JointPosition *jointPos;
+    s32 sectorIndex;
 
-    gameState = getCurrentAllocation();
+    alloc = getCurrentAllocation();
     i = 0;
-    gameData = &gameState->gameData;
+    gameData = &alloc->gameData;
     offset = 0xA10;
-    jointPtr = (u8 *)player;
+    jointWritePtr = (u8 *)player;
 
     do {
-        jointPosAddr = (JointPosition *)((u8 *)player + offset);
-        *(volatile s32 *)(jointPtr + 0xA10) = player->unk970.unk14 + *(s32 *)((u8 *)&D_800BA348_AA1F8 + offset);
-        *(volatile s32 *)(jointPtr + 0xA18) = player->unk970.unk1C + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
+        jointPos = (JointPosition *)((u8 *)player + offset);
+        *(volatile s32 *)(jointWritePtr + 0xA10) = player->unk970.unk14 + *(s32 *)((u8 *)&D_800BA348_AA1F8 + offset);
+        *(volatile s32 *)(jointWritePtr + 0xA18) = player->unk970.unk1C + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
 
-        temp = func_80059E90_5AA90((void *)player, gameData, player->unkB94, jointPosAddr);
-        *(volatile s32 *)(jointPtr + 0xA14) = func_8005CFC0_5DBC0(gameData, temp, jointPosAddr, 0x100000);
+        sectorIndex = func_80059E90_5AA90((void *)player, gameData, player->unkB94, jointPos);
+        *(volatile s32 *)(jointWritePtr + 0xA14) = func_8005CFC0_5DBC0(gameData, sectorIndex, jointPos, 0x100000);
 
         i++;
         offset += 0xC;
-        jointPtr += 0xC;
+        jointWritePtr += 0xC;
     } while (i < 9);
 
     player->unkBC1 = 1;
