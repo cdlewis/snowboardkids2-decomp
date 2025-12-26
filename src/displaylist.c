@@ -47,7 +47,7 @@ void func_80064CF4_658F4(DisplayListObject *);
 void func_80062CF0_638F0(DisplayListObject *);
 void setupDisplayListMatrix(DisplayListObject *);
 void func_80063A94_64694(void *);
-void func_800648EC_654EC(void);
+void func_800648EC_654EC(DisplayListObject *);
 void func_80064F74_65B74(DisplayListObject *);
 void *func_8006C130_6CD30(void *, LookAt *);
 void func_80068060_68C60(void);
@@ -797,10 +797,77 @@ void func_80064808_65408(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 a
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800648EC_654EC);
+void func_800648EC_654EC(DisplayListObject *arg0) {
+    Mtx sp30;
+    f32 sp70;
+    f32 sp74;
+    f32 sp78;
+    f32 sp7C;
+    f32 sp80;
+    f32 sp84;
+    LookAt *lookat;
+
+    if (arg0->unk30 == 0) {
+        arg0->unk30 = (s32)arenaAlloc16(0x40);
+        if (arg0->unk30 == 0) {
+            return;
+        }
+        func_8006C130_6CD30(arg0, (LookAt *)arg0->unk30);
+    }
+
+    if (arg0->unk20->flags & 1) {
+        lookat = arenaAlloc16(0x20);
+        if (lookat == NULL) {
+            return;
+        }
+
+        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
+        guLookAtReflect(&sp30, lookat, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
+        gSPLookAt(gRegionAllocPtr++, lookat);
+    }
+
+    if (gGraphicsMode != 3) {
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+
+        gGraphicsMode = 3;
+
+        if (arg0->unk24 != 0) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        }
+
+        if (arg0->unk28 != 0) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        }
+
+        if (arg0->unk2C != 0) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        }
+    } else {
+        if (arg0->unk24 != 0 && arg0->unk24 != D_800A2D40_A3940) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        }
+
+        if (arg0->unk28 != 0 && arg0->unk28 != D_800A2D44_A3944) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        }
+
+        if (arg0->unk2C != 0 && arg0->unk2C != D_800A2D48_A3948) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        }
+    }
+
+    D_800A2D40_A3940 = arg0->unk24;
+    D_800A2D44_A3944 = arg0->unk28;
+    D_800A2D48_A3948 = arg0->unk2C;
+
+    gSPLightColor(gRegionAllocPtr++, LIGHT_1, arg0->unk34 << 24 | arg0->unk35 << 16 | arg0->unk36 << 8);
+    gSPLightColor(gRegionAllocPtr++, LIGHT_2, arg0->unk38 << 24 | arg0->unk39 << 16 | arg0->unk3A << 8);
+    gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+}
 
 void func_80064CF4_658F4(DisplayListObject *arg0) {
-    func_800648EC_654EC();
+    func_800648EC_654EC(arg0);
 
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
 
@@ -818,7 +885,7 @@ void func_80064CF4_658F4(DisplayListObject *arg0) {
 }
 
 void func_80064E34_65A34(DisplayListObject *arg0) {
-    func_800648EC_654EC();
+    func_800648EC_654EC(arg0);
 
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
 
@@ -836,7 +903,7 @@ void func_80064E34_65A34(DisplayListObject *arg0) {
 }
 
 void func_80064F74_65B74(DisplayListObject *arg0) {
-    func_800648EC_654EC();
+    func_800648EC_654EC(arg0);
 
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
 
@@ -881,13 +948,13 @@ void func_80065150_65D50(DisplayListObject *displayObjects) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        displayObjects->padding3[0] << 0x18 | displayObjects->padding3[1] << 0x10 | displayObjects->padding3[2] << 8
+        displayObjects->unk34 << 0x18 | displayObjects->unk35 << 0x10 | displayObjects->unk36 << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        displayObjects->padding4[0] << 0x18 | displayObjects->padding4[1] << 0x10 | displayObjects->padding4[2] << 8
+        displayObjects->unk38 << 0x18 | displayObjects->unk39 << 0x10 | displayObjects->unk3A << 8
     );
 
     i = 0;
@@ -931,13 +998,13 @@ void func_800653E0_65FE0(DisplayListObject *displayObjects) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        displayObjects->padding3[0] << 0x18 | displayObjects->padding3[1] << 0x10 | displayObjects->padding3[2] << 8
+        displayObjects->unk34 << 0x18 | displayObjects->unk35 << 0x10 | displayObjects->unk36 << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        displayObjects->padding4[0] << 0x18 | displayObjects->padding4[1] << 0x10 | displayObjects->padding4[2] << 8
+        displayObjects->unk38 << 0x18 | displayObjects->unk39 << 0x10 | displayObjects->unk3A << 8
     );
 
     i = 0;
@@ -981,13 +1048,13 @@ void func_80065670_66270(DisplayListObject *displayObjects) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        displayObjects->padding3[0] << 0x18 | displayObjects->padding3[1] << 0x10 | displayObjects->padding3[2] << 8
+        displayObjects->unk34 << 0x18 | displayObjects->unk35 << 0x10 | displayObjects->unk36 << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        displayObjects->padding4[0] << 0x18 | displayObjects->padding4[1] << 0x10 | displayObjects->padding4[2] << 8
+        displayObjects->unk38 << 0x18 | displayObjects->unk39 << 0x10 | displayObjects->unk3A << 8
     );
 
     i = 0;
