@@ -4,7 +4,6 @@
 #include "task_scheduler.h"
 
 void ClocktowerTriggerCheck(EventTrigger *);
-extern u8 D_8008D6C4_8E2C4[];
 
 char ClocktowerLabel[] = "CLOCKTOWER";
 s32 D_8008D7FC_8E3FC = 0;

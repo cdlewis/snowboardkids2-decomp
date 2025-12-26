@@ -4,7 +4,6 @@
 #include "task_scheduler.h"
 
 extern u8 D_8008D714_8E314[];
-extern u8 D_8008D6C4_8E2C4[];
 
 void GenericTriggerCheck(EventTrigger *);
 

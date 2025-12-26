@@ -4,7 +4,6 @@
 #include "task_scheduler.h"
 
 void WallNewspaperTriggerCheck(EventTrigger *);
-extern u8 D_8008D6C4_8E2C4[];
 
 u8 WallNewspaperLabel[] = "WALL NEWSPAPER";
 
