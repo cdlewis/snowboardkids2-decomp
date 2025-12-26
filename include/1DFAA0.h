@@ -138,7 +138,7 @@ typedef struct {
     union {
         s32 One;
         s8 Two;
-        u8 bytes[4];
+        s8 bytes[4];
     } unk0;
     Mat3x3Padded unk04;
     union {
@@ -176,9 +176,9 @@ typedef struct {
     /* 0x86 */ s16 unk86;
     /* 0x88 */ s16 unk88;
     /* 0x8A */ s16 unk8A;
-    /* 0x8C */ u8 _pad8C[0x2];
+    /* 0x8C */ s16 unk8C;
     /* 0x8E */ s16 angle;
-    /* 0x90 */ u8 padding3[0x2];
+    /* 0x90 */ s16 unk90;
     /* 0x92 */ s16 unk92;
     /* 0x94 */ s32 unk94;
     /* 0x98 */ s32 unk98;
@@ -190,7 +190,10 @@ typedef struct {
         } s;
     } unk9C_u;
     /* 0xA0 */ s32 unkA0;
-    /* 0xA4 */ SceneModel *unkA4;
+    /* 0xA4 */ union {
+        SceneModel *ptr;
+        s8 byte;
+    } unkA4;
 } CutsceneSlotData;
 
 typedef struct {

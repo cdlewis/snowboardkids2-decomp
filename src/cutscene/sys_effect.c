@@ -39,7 +39,7 @@ void cutsceneEffectDisp_exec(cutsceneEffectDisp_exec_arg *arg0, CutsceneManager 
     slots = (CutsceneSlot *)arg1;
 
     func_8000A510_B110(
-        slots[arg2].slotData.unkA4,
+        slots[arg2].slotData.unkA4.ptr,
         temp_t0,
         temp_t1,
         temp_a3,
@@ -65,7 +65,7 @@ s32 cutsceneEffectFan_validate(void) {
 }
 
 void cutsceneEffectFan_exec(cutsceneEffectFan_exec_arg *arg0, CutsceneSlot *arg1, s8 arg2) {
-    func_800B4F60_1E2010(arg1[arg2].slotData.unkA4, arg0->unk0);
+    func_800B4F60_1E2010(arg1[arg2].slotData.unkA4.ptr, arg0->unk0);
 }
 
 s32 cutsceneEffectFan_isDone(void) {
@@ -80,7 +80,7 @@ s32 cutsceneEffectRocket_validate(void) {
 }
 
 void cutsceneEffectRocket_exec(cutsceneEffectRocket_exec_arg *arg0, CutsceneSlot *arg1, s8 arg2) {
-    func_8000BBE0_C7E0(arg1[arg2].slotData.unkA4, arg0->unk0);
+    func_8000BBE0_C7E0(arg1[arg2].slotData.unkA4.ptr, arg0->unk0);
 }
 
 s32 cutsceneEffectRocket_isDone(void) {

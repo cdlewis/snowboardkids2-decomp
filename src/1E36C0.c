@@ -759,7 +759,175 @@ s32 func_800B83B8_1E5468(CutsceneSlotData *arg0, StateEntry *arg1) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B844C_1E54FC);
+s16 func_800B844C_1E54FC(CutsceneSlotData *arg0, SceneModel *arg1) {
+    s16 temp_v0;
+    s16 temp_v0_2;
+    s16 temp_v0_3;
+    s16 temp_v0_4;
+    s16 temp_v0_5;
+    s16 temp_v0_6;
+    s16 temp_v0_7;
+    s16 temp_v0_8;
+    s16 temp_v0_9;
+    s16 temp_a0;
+    s16 temp_a1;
+    s16 var_a1;
+    s32 var_s2;
+    s32 var_v0_angle;
+    s32 temp_v1_3;
+    s32 var_v0;
+    s32 temp_a0_2;
+    s32 var_v0_2;
+    s32 temp_v1_4;
+    s32 var_v0_3;
+    s32 temp_a3;
+    s32 temp_t0_2;
+    s32 temp_t1;
+    s8 temp_t0;
+    s8 switch_v1;
+    s8 byte1_check;
+    u16 temp_v1;
+    s16 unk84_val;
+    s16 unk8C_val;
+
+    var_s2 = 0;
+    arg0->unk20_u.unk20_s32 += arg0->unk3C;
+    arg0->unk28 += arg0->unk40;
+    arg0->unk2C += arg0->unk44;
+    temp_t0 = arg0->unk0.bytes[1];
+
+    switch (temp_t0) {
+        case 0:
+            unk84_val = arg0->unk84;
+            unk8C_val = arg0->unk8C;
+            if (unk84_val > unk8C_val) {
+                temp_v0 = (u16)arg0->unk78 + (u16)arg0->unk7C;
+                arg0->unk78 = temp_v0;
+                temp_v0_2 = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, temp_v0);
+                temp_a0 = arg0->unk7C;
+                if (((temp_a0 > 0) & (temp_v0_2 < 0)) || ((temp_a0 < 0) & (temp_v0_2 > 0))) {
+                    arg0->unk7C = 0;
+                    arg0->unk78 = arg0->unk7A;
+                } else if (temp_a0 == 0) {
+                    temp_v0_3 = (u16)arg0->angle - 0x40;
+                    arg0->angle = temp_v0_3;
+                    arg0->unk78 = arg0->unk7A;
+                    if (temp_v0_3 < 0) {
+                        arg0->angle = 0;
+                    }
+                }
+                arg0->unk84 = (u16)arg0->unk84 - 1;
+            } else {
+                arg0->unk0.bytes[1] = 1;
+                arg0->unk78 = arg0->unk7A;
+            }
+            var_s2 = 1;
+            break;
+        case 1:
+            if (arg0->unk84 > 0) {
+                temp_v0_4 = arg0->unk78 + arg0->unk8A;
+                arg0->unk78 = (u16)temp_v0_4;
+                temp_v0_5 = func_800B6618_1E36C8(arg0, 0, arg0->unk88, temp_v0_4);
+                temp_a1 = arg0->unk8A;
+                if (((temp_a1 > 0) & (temp_v0_5 < 0)) || ((temp_a1 < 0) & (temp_v0_5 > 0))) {
+                    arg0->unk8A = 0;
+                    arg0->unk78 = arg0->unk88;
+                } else if (arg0->unk84 < 6) {
+                    temp_v0_6 = arg0->angle;
+                    var_v0_angle = -temp_v0_6;
+                    if (var_v0_angle < 0) {
+                        var_v0_angle += 0x1F;
+                    }
+                    temp_v0_7 = temp_v0_6 + (var_v0_angle >> 5);
+                    arg0->angle = temp_v0_7;
+                    if (temp_v0_7 < 0) {
+                        arg0->angle = 0;
+                    }
+                } else {
+                    temp_v0_8 = (u16)arg0->angle + 0x20;
+                    arg0->angle = temp_v0_8;
+                    if (temp_v0_8 >= 0x201) {
+                        arg0->angle = 0x200;
+                    }
+                }
+                var_s2 = 1;
+                arg0->unk84 = (u16)arg0->unk84 - 1;
+            } else {
+                temp_v1 = (u16)arg0->unk88;
+                arg0->unk0.bytes[0] = 9;
+                arg0->unk78 = (s16)temp_v1;
+                arg0->unk7A = (s16)temp_v1;
+            }
+            break;
+    }
+
+    switch_v1 = arg0->unkA4.byte;
+    switch (switch_v1) {
+        case 0:
+            if (arg0->unk84 < 6) {
+                temp_v1_3 = arg0->unk3C;
+                var_v0 = -temp_v1_3;
+                if (var_v0 < 0) {
+                    var_v0 += 0x1F;
+                }
+                arg0->unk3C = temp_v1_3 + (var_v0 >> 5);
+                temp_a0_2 = arg0->unk40;
+                var_v0_2 = -temp_a0_2;
+                if (var_v0_2 < 0) {
+                    var_v0_2 += 0x1F;
+                }
+                arg0->unk40 = temp_a0_2 + (var_v0_2 >> 5);
+                temp_v1_4 = arg0->unk44;
+                var_v0_3 = -temp_v1_4;
+                if (var_v0_3 < 0) {
+                    var_v0_3 += 0x1F;
+                }
+                arg0->unk44 = temp_v1_4 + (var_v0_3 >> 5);
+            }
+            break;
+        case 1:
+            if (arg0->unk84 < 0x14) {
+                temp_a3 = arg0->unk3C;
+                temp_t0_2 = arg0->unk40;
+                temp_t1 = arg0->unk44;
+                arg0->unk3C = temp_a3 + (-temp_a3 / 12);
+                arg0->unk40 = temp_t0_2 + (-temp_t0_2 / 12);
+                arg0->unk44 = temp_t1 + (-temp_t1 / 12);
+            }
+            break;
+    }
+
+    if (arg0->angle != 0) {
+        byte1_check = arg0->unk0.bytes[1];
+        if (byte1_check != 0) {
+            if (byte1_check == 1) {
+                temp_v0_9 = arg0->unk8A;
+                if (temp_v0_9 < 0) {
+                    var_a1 = 0x77;
+                    func_80002220_2E20(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+                } else if (temp_v0_9 > 0) {
+                    var_a1 = 0x78;
+                    func_80002220_2E20(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+                }
+            }
+        } else {
+            goto block_51;
+        }
+    } else if (arg0->unk7C != 0) {
+        if (arg0->unk0.bytes[2] != 0) {
+            var_a1 = 0x71;
+            func_80002220_2E20(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+        }
+    } else {
+    block_51:
+        if ((arg1->unk16 != 0x71) || (arg1->unk95 != 0)) {
+            var_a1 = arg0->unk90;
+            func_80002220_2E20(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+        }
+    }
+
+    return (s16)(var_s2 | func_800B7C48_1E4CF8(arg0, arg1));
+}
 
 s32 func_800B8874_1E5924(CutsceneSlotData *arg0, SceneModel *arg1) {
     s32 absX;
