@@ -4,7 +4,7 @@
 #include "task_scheduler.h"
 
 extern u8 D_8008D6C4_8E2C4[];
-void TrickTriggerCheck(void *);
+void TrickTriggerCheck(EventTrigger *);
 
 u8 TrickLabel[] = "TRICK";
 
@@ -18,12 +18,13 @@ void TrickTriggerInit(EventTrigger *arg0) {
     setCallback(&TrickTriggerCheck);
 }
 
-void TrickTriggerCheck(void *arg0) {
+void TrickTriggerCheck(EventTrigger *trigger) {
     s16 rawAngle;
     s16 angle;
-    s32 triggerId;
+    u8 triggerId;
     GameState *state;
-    s32 minAngle, maxAngle;
+    s32 minAngle;
+    s32 maxAngle;
 
     state = (GameState *)getCurrentAllocation();
     if (state->unk3F8 > 0x800000) {
@@ -32,14 +33,13 @@ void TrickTriggerCheck(void *arg0) {
         if (rawAngle >= 0x1001) {
             angle -= 0x2000;
         }
-
-        triggerId = *(u8 *)arg0;
+        triggerId = trigger->unk0;
         minAngle = ((s16 *)D_8008D6C4_8E2C4)[triggerId * 2];
         if (angle < minAngle) {
             maxAngle = ((s16 *)D_8008D6C4_8E2C4)[triggerId * 2 + 1];
             if (maxAngle < angle) {
                 state->unk424 = 1;
-                state->unk425 = *(u8 *)arg0;
+                state->unk425 = trigger->unk0;
             }
         }
     }
