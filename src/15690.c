@@ -132,7 +132,7 @@ void func_80014D78_15978(void) {
 }
 
 extern u8 D_800A8CC9_A0039;
-extern u8 D_800AB47A_A27EA;
+extern u8 gDebugUnlockEnabled;
 
 void func_80014F60_15B60(void);
 void func_80015028_15C28(void);
@@ -176,7 +176,7 @@ void func_80014DA8_159A8(void) {
                 func_80015248_15E48(0);
                 goto set_handler_b70;
             }
-            if ((result == 3) || (D_800AB47A_A27EA != 0)) {
+            if ((result == 3) || (gDebugUnlockEnabled != 0)) {
                 saveSlotIndex = D_800AFE8C_A71FC->saveSlotIndex;
                 slotIndexInt = saveSlotIndex;
                 if (((slotIndexInt == 2) | (slotIndexInt == 6)) || (slotIndexInt == 10)) {

@@ -7,7 +7,7 @@
 #include "common.h"
 #include "memory_allocator.h"
 #include "task_scheduler.h"
-extern u8 D_800AB47A_A27EA;
+extern u8 gDebugUnlockEnabled;
 
 void func_80014990_15590(void);
 
@@ -38,7 +38,7 @@ void func_80014480_15080(void) {
 
     D_800AFE8C_A71FC = allocateMemoryNode(0, 0x28, &allocation);
     EepromSaveData = allocateMemoryNode(0, 0x5C, &allocation);
-    D_800AB47A_A27EA = 0;
+    gDebugUnlockEnabled = 0;
     func_80014958_15558();
     func_8006983C_6A43C(func_800144DC_150DC);
 }
@@ -86,7 +86,7 @@ void func_80014620_15220(void) {
 }
 
 void func_80014660_15260(void) {
-    createTaskQueue(func_80015A18_16618, 0x64);
+    createTaskQueue(initTitleScreen, 0x64);
     setGameStateHandler(func_80014690_15290);
 }
 

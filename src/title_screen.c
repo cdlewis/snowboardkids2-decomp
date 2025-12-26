@@ -17,45 +17,45 @@
 typedef struct {
     Node_70B00 node1;
     Node_70B00 node2;
-    void *unk3B0;
-    void *unk3B4;
-    u16 unk3B8;
+    void *titleLogoData;
+    void *menuGraphicsData;
+    u16 frameCounter;
     u8 unk3BA;
-    u8 unk3BB;
-    u8 unk3BC;
-    u8 unk3BD;
+    u8 menuSelection;
+    u8 menuOptionCount;
+    u8 menuMode;
     u8 unk3BE;
     u8 partialUnlockCheatProgress;
     u8 unlockAllCheatProgress;
-    u8 unk3C1;
+    u8 initialSoundDelay;
 } TitleState;
 
 USE_ASSET(_414CF0);
 USE_ASSET(_418520);
 
-void func_800161F4_16DF4(void);
-void func_800159AC_165AC(void);
+void resetSaveDataToDefaults(void);
+void waitForTitleAssetsReady(void);
 void checkPartialUnlockCheatCode(void);
 void checkUnlockAllCheatCode(void);
 void unlockAllContent(void);
 void unlockPartialContent(void);
-void func_800156AC_162AC(void);
+void handleTitleMenuInput(void);
 
-extern u8 D_8009F210_9FE10;
+extern u8 gTitleExitMode;
 extern s32 gControllerInputs;
 extern s32 gButtonsPressed;
-extern u8 D_800AB47A_A27EA;
-extern u8 D_8008D420_8E020;
-extern s8 D_800A8A98_9FE08;
+extern u8 gDebugUnlockEnabled;
+extern u8 gTitleCameraSettings;
+extern s8 gTitleInitialized;
 
-void func_800154E0_160E0(void) {
-    func_800697F4_6A3F4(D_8009F210_9FE10);
+void exitTitleToNextMode(void) {
+    func_800697F4_6A3F4(gTitleExitMode);
 }
 
-void func_80015504_16104(void) {
-    GameState *state;
-    u8 unk3BB;
-    u8 unk3BD;
+void cleanupTitleAndTransition(void) {
+    TitleState *state;
+    u8 menuSelection;
+    u8 menuMode;
 
     state = getCurrentAllocation();
 
@@ -64,41 +64,41 @@ void func_80015504_16104(void) {
     }
 
     func_8006FDA0_709A0(0, 0, 0);
-    D_8009F210_9FE10 = 1;
+    gTitleExitMode = 1;
 
-    unk3BB = state->unk3BB;
+    menuSelection = state->menuSelection;
 
-    if (unk3BB == 3) {
+    if (menuSelection == 3) {
         D_800AFE8C_A71FC->unk4 = 0xFF;
     } else {
-        unk3BD = state->unk3BD;
-        if (unk3BD == 1) {
-            D_800AFE8C_A71FC->unk4 = unk3BB;
+        menuMode = state->menuMode;
+        if (menuMode == 1) {
+            D_800AFE8C_A71FC->unk4 = menuSelection;
             D_800AFE8C_A71FC->saveSlotIndex = 0;
-        } else if (unk3BB == 1) {
-            D_8009F210_9FE10 = 2;
+        } else if (menuSelection == 1) {
+            gTitleExitMode = 2;
         } else {
-            D_8009F210_9FE10 = 3;
+            gTitleExitMode = 3;
             D_800AFE8C_A71FC->unk4 = 0xFE;
         }
     }
 
-    if (state->unk3B8 == 0x384) {
+    if (state->frameCounter == 0x384) {
         D_800AFE8C_A71FC->unk4 = 0;
         D_800AFE8C_A71FC->saveSlotIndex = 0;
-        D_8009F210_9FE10 = 4;
+        gTitleExitMode = 4;
     }
 
     unlinkNode((Node_70B00 *)state);
-    unlinkNode((Node_70B00 *)&state->audioPlayer2);
+    unlinkNode((Node_70B00 *)&state->node2);
 
-    state->unk3B0 = freeNodeMemory(state->unk3B0);
-    state->unk3B4 = freeNodeMemory(state->unk3B4);
+    state->titleLogoData = freeNodeMemory(state->titleLogoData);
+    state->menuGraphicsData = freeNodeMemory(state->menuGraphicsData);
 
-    terminateSchedulerWithCallback(func_800154E0_160E0);
+    terminateSchedulerWithCallback(exitTitleToNextMode);
 }
 
-void func_8001563C_1623C(void) {
+void writeSaveDataToEeprom(void) {
     u8 buffer[0x200];
     s32 i;
     s32 result;
@@ -119,25 +119,25 @@ void func_8001563C_1623C(void) {
         func_800585C8_591C8(0x2B);
     }
 
-    setGameStateHandler(func_800156AC_162AC);
+    setGameStateHandler(handleTitleMenuInput);
 }
 
-void func_800156AC_162AC(void) {
-    GameState *state;
+void handleTitleMenuInput(void) {
+    TitleState *state;
     s32 input;
-    u8 unk3C1;
-    u8 unk3BD;
-    u8 unk3BB;
-    u16 unk3B8;
+    u8 soundDelay;
+    u8 menuMode;
+    u8 menuSelection;
+    u16 frameCounter;
     s32 temp;
 
     state = getCurrentAllocation();
 
-    unk3C1 = state->unk3C1;
-    if (unk3C1 != 0) {
-        unk3C1--;
-        state->unk3C1 = unk3C1;
-        if (unk3C1 == 0) {
+    soundDelay = state->initialSoundDelay;
+    if (soundDelay != 0) {
+        soundDelay--;
+        state->initialSoundDelay = soundDelay;
+        if (soundDelay == 0) {
             func_800574A0_580A0(0x1C);
         }
     }
@@ -150,88 +150,88 @@ void func_800156AC_162AC(void) {
         }
     }
 
-    unk3BD = state->unk3BD;
+    menuMode = state->menuMode;
 
-    if (unk3BD == 0) {
+    if (menuMode == 0) {
         goto case_0;
-    } else if (unk3BD == 1) {
+    } else if (menuMode == 1) {
         goto case_1;
     } else {
         goto end;
     }
 
 case_0:
-    unk3BB = state->unk3BB;
+    menuSelection = state->menuSelection;
 
     if ((input & (STICK_UP | U_JPAD)) != 0) {
-        if (unk3BB != 0) {
-            state->unk3BB = unk3BB - 1;
+        if (menuSelection != 0) {
+            state->menuSelection = menuSelection - 1;
         } else {
-            state->unk3BB = state->unk3BC - 1;
+            state->menuSelection = state->menuOptionCount - 1;
         }
     } else if ((input & (STICK_DOWN | D_JPAD)) != 0) {
-        if (unk3BB < state->unk3BC - 1) {
-            state->unk3BB = unk3BB + 1;
+        if (menuSelection < state->menuOptionCount - 1) {
+            state->menuSelection = menuSelection + 1;
         } else {
-            state->unk3BB = 0;
+            state->menuSelection = 0;
         }
     }
 
-    unk3B8 = state->unk3B8 + 1;
-    state->unk3B8 = unk3B8;
+    frameCounter = state->frameCounter + 1;
+    state->frameCounter = frameCounter;
 
-    if (unk3BB != state->unk3BB) {
+    if (menuSelection != state->menuSelection) {
         func_80058220_58E20(0x2B, 1);
-        unk3B8 = state->unk3B8;
-        if (unk3B8 >= 0x2D1) {
-            state->unk3B8 = 0x2D0;
+        frameCounter = state->frameCounter;
+        if (frameCounter >= 0x2D1) {
+            state->frameCounter = 0x2D0;
         }
     }
 
     if ((gControllerInputs & (A_BUTTON | START_BUTTON)) != 0) {
         func_80058220_58E20(0x2C, 1);
-        if (state->unk3BB == 0) {
-            state->unk3BD = 1;
+        if (state->menuSelection == 0) {
+            state->menuMode = 1;
             goto end;
         }
         func_80057564_58164(0x20);
         func_8006FDA0_709A0(0, 0xFF, 0x10);
-        func_8006983C_6A43C(func_80015504_16104);
+        func_8006983C_6A43C(cleanupTitleAndTransition);
         goto end;
     }
 
-    if (state->unk3B8 == 0x384) {
+    if (state->frameCounter == 0x384) {
         func_80057564_58164(0x20);
         func_8006FDA0_709A0(0, 0xFF, 0x10);
-        func_8006983C_6A43C(func_80015504_16104);
+        func_8006983C_6A43C(cleanupTitleAndTransition);
     }
     goto end;
 
 case_1:
-    unk3BB = state->unk3BB;
+    menuSelection = state->menuSelection;
 
     if ((input & (STICK_UP | U_JPAD)) == 0) {
         goto case1_check2;
     }
-    if (unk3BB != 0) {
-        state->unk3BB = unk3BB - 1;
+    if (menuSelection != 0) {
+        state->menuSelection = menuSelection - 1;
         goto case1_done_nav;
     }
-    state->unk3BB = 1;
+    state->menuSelection = 1;
     goto case1_done_nav;
 
 case1_check2:
     if ((input & (STICK_DOWN | D_JPAD)) == 0) {
         goto case1_done_nav;
     }
-    if (unk3BB == 0) {
-        state->unk3BB = unk3BB + 1;
+    if (menuSelection == 0) {
+        state->menuSelection = menuSelection + 1;
     } else {
-        state->unk3BB = 0;
+        state->menuSelection = 0;
     }
 
 case1_done_nav:
-    if (unk3BB != state->unk3BB) {
+    if (menuSelection != state->menuSelection) {
         func_80058220_58E20(0x2B, 1);
     }
 
@@ -239,13 +239,13 @@ case1_done_nav:
 
     if ((temp & B_BUTTON) != 0) {
         func_800585C8_591C8(0x2E);
-        state->unk3BB = 0;
-        state->unk3BD = 0;
+        state->menuSelection = 0;
+        state->menuMode = 0;
         goto end;
     }
 
     if ((temp & (A_BUTTON | START_BUTTON)) != 0) {
-        if (D_800AB47A_A27EA != 0) {
+        if (gDebugUnlockEnabled != 0) {
             if ((gButtonsPressed & R_JPAD) != 0) {
                 unlockAllContent();
             } else if ((gButtonsPressed & L_JPAD) != 0) {
@@ -255,7 +255,7 @@ case1_done_nav:
         func_80058220_58E20(0x2C, 1);
         func_80057564_58164(0x20);
         func_8006FDA0_709A0(0, 0xFF, 8);
-        func_8006983C_6A43C(func_80015504_16104);
+        func_8006983C_6A43C(cleanupTitleAndTransition);
     }
 
 end:
@@ -263,30 +263,30 @@ end:
     checkUnlockAllCheatCode();
 }
 
-void func_80015960_16560(void) {
+void onTitleFadeInComplete(void) {
     if (func_8006FE10_70A10(0) == 0) {
         func_8006FE28_70A28(0, 0, 0, 0);
         func_80058220_58E20(0x135, 0);
-        setGameStateHandler(func_800156AC_162AC);
+        setGameStateHandler(handleTitleMenuInput);
     }
 }
 
-void func_800159AC_165AC(void) {
-    GameState *state = (GameState *)getCurrentAllocation();
+void waitForTitleAssetsReady(void) {
+    TitleState *state = (TitleState *)getCurrentAllocation();
 
-    state->unk3B8++;
+    state->frameCounter++;
 
-    if (state->unk3B8 >= 3) {
-        state->unk3B8 = 2;
+    if (state->frameCounter >= 3) {
+        state->frameCounter = 2;
         if (func_8003BB5C_3C75C() == 0) {
-            state->unk3B8 = 0;
+            state->frameCounter = 0;
             func_8006FDA0_709A0(NULL, 0, 0x10);
-            setGameStateHandler(func_80015960_16560);
+            setGameStateHandler(onTitleFadeInComplete);
         }
     }
 }
 
-void func_80015A18_16618(void) {
+void initTitleScreen(void) {
     TitleState *state;
     Node_70B00 *node2;
     void *dmaResult;
@@ -302,38 +302,38 @@ void func_80015A18_16618(void) {
     setModelCameraTransform(state, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_80027CA0_288A0(node2, 0, 8, 0);
     func_8006FA0C_7060C(node2, 40.0f, 1.3333334f, 10.0f, 10000.0f);
-    func_8006FD3C_7093C(node2->id, &D_8008D420_8E020);
-    state->unk3B0 = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
+    func_8006FD3C_7093C(node2->id, &gTitleCameraSettings);
+    state->titleLogoData = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
     dmaResult = loadCompressedData(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
-    state->unk3BB = 0;
-    state->unk3BC = 0;
-    state->unk3BD = 0;
+    state->menuSelection = 0;
+    state->menuOptionCount = 0;
+    state->menuMode = 0;
     state->unk3BE = 0;
-    state->unk3C1 = 0x3C;
+    state->initialSoundDelay = 0x3C;
     state->partialUnlockCheatProgress = 0;
     state->unlockAllCheatProgress = 0;
-    state->unk3B4 = dmaResult;
-    state->unk3B8 = 0;
+    state->menuGraphicsData = dmaResult;
+    state->frameCounter = 0;
 
     if (D_800AFE8C_A71FC->unk4 == 0xFE) {
-        state->unk3BB = 2;
+        state->menuSelection = 2;
     } else if (D_800AFE8C_A71FC->saveSlotIndex == 0xF) {
-        state->unk3BB = 1;
+        state->menuSelection = 1;
     }
 
-    func_800161F4_16DF4();
+    resetSaveDataToDefaults();
 
     for (i = 0; i < 4; i++) {
         D_800AFE8C_A71FC->unk9[0x11 + i] = 0;
     }
 
-    D_800A8A98_9FE08 = 0;
+    gTitleInitialized = 0;
 
     checkResult = __udiv_w_sdiv();
     if (checkResult != NULL) {
-        state->unk3BC = 4;
+        state->menuOptionCount = 4;
     } else {
-        state->unk3BC = 3;
+        state->menuOptionCount = 3;
     }
 
     scheduleTask(&func_80016434_17034, 0, 0, 0x64);
@@ -349,77 +349,71 @@ void func_80015A18_16618(void) {
 
     scheduleTask(&func_80016860_17460, 0, 0, 0x62);
     func_80040F6C_41B6C(1, 0x20, 0, 0, 8, 7);
-    setGameStateHandler(func_800159AC_165AC);
+    setGameStateHandler(waitForTitleAssetsReady);
 }
 
 void checkPartialUnlockCheatCode(void) {
-    GameState *state;
+    TitleState *state = getCurrentAllocation();
     s32 buttons;
-    u8 state_var;
 
-    state = getCurrentAllocation();
-    state_var = state->partialUnlockCheatProgress;
+    switch (state->partialUnlockCheatProgress) {
+        case 0:
+            if (gButtonsPressed == R_TRIG) {
+                state->partialUnlockCheatProgress++;
+            }
+            break;
 
-    if (state_var < 5) {
-        switch (state_var) {
-            case 0:
-                if (gButtonsPressed == R_TRIG) {
-                    state->partialUnlockCheatProgress = state->partialUnlockCheatProgress + 1;
+        case 1:
+            buttons = gButtonsPressed;
+            if (buttons != R_TRIG && buttons != 0) {
+                if (buttons == D_JPAD) {
+                    state->partialUnlockCheatProgress++;
+                } else {
+                    state->partialUnlockCheatProgress = 0xFF;
                 }
-                break;
+            }
+            break;
 
-            case 1:
-                buttons = gButtonsPressed;
-                if ((buttons != R_TRIG) && (buttons != 0)) {
-                    if (buttons == D_JPAD) {
-                        state->partialUnlockCheatProgress = state->partialUnlockCheatProgress + 1;
-                    } else {
-                        state->partialUnlockCheatProgress = 0xFF;
-                    }
+        case 2:
+            buttons = gButtonsPressed;
+            if (buttons != D_JPAD && buttons != 0) {
+                if (buttons == L_TRIG) {
+                    state->partialUnlockCheatProgress++;
+                } else {
+                    state->partialUnlockCheatProgress = 0xFF;
                 }
-                break;
+            }
+            break;
 
-            case 2:
-                buttons = gButtonsPressed;
-                if ((buttons != D_JPAD) && (buttons != 0)) {
-                    if (buttons == L_TRIG) {
-                        state->partialUnlockCheatProgress = state->partialUnlockCheatProgress + 1;
-                    } else {
-                        state->partialUnlockCheatProgress = 0xFF;
-                    }
+        case 3:
+            buttons = gButtonsPressed;
+            if (buttons != L_TRIG && buttons != 0) {
+                if (buttons == STICK_UP) {
+                    state->partialUnlockCheatProgress++;
+                } else {
+                    state->partialUnlockCheatProgress = 0xFF;
                 }
-                break;
+            }
+            break;
 
-            case 3:
-                buttons = gButtonsPressed;
-                if ((buttons != L_TRIG) && (buttons != 0)) {
-                    if (buttons == STICK_UP) {
-                        state->partialUnlockCheatProgress = state->partialUnlockCheatProgress + 1;
-                    } else {
-                        state->partialUnlockCheatProgress = 0xFF;
-                    }
+        case 4:
+            buttons = gButtonsPressed;
+            if (buttons != STICK_UP && buttons != 0) {
+                if (buttons == START_BUTTON) {
+                    unlockPartialContent();
+                    func_800585C8_591C8(0xDC);
+                    func_800585C8_591C8(0xDC);
+                    state->partialUnlockCheatProgress = 0xF0;
+                } else {
+                    state->partialUnlockCheatProgress = 0xFF;
                 }
-                break;
-
-            case 4:
-                buttons = gButtonsPressed;
-                if ((buttons != STICK_UP) && (buttons != 0)) {
-                    if (buttons == START_BUTTON) {
-                        unlockPartialContent();
-                        func_800585C8_591C8(0xDC);
-                        func_800585C8_591C8(0xDC);
-                        state->partialUnlockCheatProgress = 0xF0;
-                    } else {
-                        state->partialUnlockCheatProgress = 0xFF;
-                    }
-                }
-                break;
-        }
+            }
+            break;
     }
 }
 
 void checkUnlockAllCheatCode(void) {
-    GameState *state;
+    TitleState *state;
     u8 cheatState;
     s32 buttons;
     s32 temp_v1;
@@ -593,7 +587,7 @@ void unlockPartialContent(void) {
     EepromSaveData->setting_4B[1] = 0xF;
 }
 
-void func_800161F4_16DF4(void) {
+void resetSaveDataToDefaults(void) {
     s32 i;
 
     // Zero header_data (8 bytes)

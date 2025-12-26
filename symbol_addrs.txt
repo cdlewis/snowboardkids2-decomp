@@ -1,4 +1,16 @@
 __MusIntFifoProcess = 0x80072F54;
+exitTitleToNextMode = 0x800154E0; // rom:0x160E0
+cleanupTitleAndTransition = 0x80015504; // rom:0x16104
+writeSaveDataToEeprom = 0x8001563C; // rom:0x1623C
+handleTitleMenuInput = 0x800156AC; // rom:0x162AC
+onTitleFadeInComplete = 0x80015960; // rom:0x16560
+waitForTitleAssetsReady = 0x800159AC; // rom:0x165AC
+initTitleScreen = 0x80015A18; // rom:0x16618
+resetSaveDataToDefaults = 0x800161F4; // rom:0x16DF4
+gTitleExitMode = 0x8009F210;
+gDebugUnlockEnabled = 0x800AB47A;
+gTitleCameraSettings = 0x8008D420;
+gTitleInitialized = 0x800A8A98;
 D_800B11A0_1DB740 = 0x800B11A0; // size:0x22 rom:0x1DB740
 D_8008C000_8CC00 = 0x8008C000; // size:0xC rom:0x8CC00
 D_800BACC8_AAB78 = 0x800BACC8; // size:0x60 rom:0xAAB78

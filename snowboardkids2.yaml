@@ -101,7 +101,7 @@ segments:
       - [0x10AD0, c]
       - [0x15080, c]
       - [0x15690, c]
-      - [0x160E0, c]
+      - [0x160E0, c, title_screen]
       - [0x16FA0, c]
       - [0x17AA0, c, game_state_init]
       - [0x17F50, c]
@@ -349,7 +349,7 @@ segments:
       - [0x8DA10, data, E090]
       - [0x8DA40, data, E770]
       - [0x8DFB0, data, 10AD0]
-      - [0x8E020, data, 160E0]
+      - [0x8E020, data, title_screen]
       - [0x8E360, data]
       - [0x8E3C0, .data, "phone_trigger"]
       - [0x8E3D0, .data, "wall_newspaper_trigger"]
@@ -620,7 +620,7 @@ segments:
       - [0x9E9C0, .rodata, DC90]
       - [0x9E9E0, .rodata, E090]
       - [0x9EA90, .rodata, E770]
-      - [0x9EBA8, .rodata, 160E0]
+      - [0x9EBA8, .rodata, title_screen]
       - [0x9EBE8, .rodata, 1A770]
       - [0x9EC60, .rodata, 1BBA0]
       - [0x9EC90, .rodata, 1C9C0]
@@ -1335,7 +1335,6 @@ segments:
     type: bin
     vram: 0
     start: 0x3F58E0
-
 
   - [0x3F6420, bin]
 

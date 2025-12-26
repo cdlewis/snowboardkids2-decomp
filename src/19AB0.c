@@ -9,7 +9,7 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern u8 D_800A8A98_9FE08;
+extern u8 gTitleInitialized;
 extern u8 D_800A8CC8_A0038;
 void func_80018F50_19B50(void);
 void func_80019078_19C78(void);
@@ -36,7 +36,7 @@ void func_80018EB0_19AB0(void) {
 
     if (func_8001523C_15E3C() != 0) {
         allocation->unk2 = 1;
-        D_800A8A98_9FE08 = 1;
+        gTitleInitialized = 1;
         D_800A8CC8_A0038 = 0;
         createTaskQueue(initializeGameState, 100);
         setGameStateHandler(func_80018F50_19B50);
@@ -105,7 +105,7 @@ void func_80019078_19C78(void) {
                 setGameStateHandler(func_800191B4_19DB4);
             } else {
                 allocation->unk2 = 1;
-                D_800A8A98_9FE08 = 1;
+                gTitleInitialized = 1;
                 createTaskQueue(initializeGameState, 0x64);
                 setGameStateHandler(func_80018F50_19B50);
             }
@@ -129,7 +129,7 @@ void func_800191B4_19DB4(void) {
     if (func_80069810_6A410() != 0) {
         EepromSaveData->unk51 = 0;
         allocation->unk2 = 1;
-        D_800A8A98_9FE08 = 1;
+        gTitleInitialized = 1;
         createTaskQueue(initializeGameState, 100);
         setGameStateHandler(func_80018F50_19B50);
     }
