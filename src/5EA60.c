@@ -14,20 +14,20 @@ u16 *func_8005DE6C_5EA6C(void *base, s16 tableIndex, s16 subIndex) {
 }
 
 void func_8005DE98_5EA98(void *animData, s32 tableIndex, s32 boneIndex, func_8005E800_5F400_arg *state) {
-    s16 *data;
+    s16 *animPtr;
     s16 tableIdx;
     s16 boneIdx;
 
-    data = func_8005DE60_5EA60(animData);
-    state->frame_data = data;
+    animPtr = func_8005DE60_5EA60(animData);
+    state->frame_data = animPtr;
 
     tableIdx = (s16)(tableIndex << 16 >> 16);
     boneIdx = (s16)(boneIndex << 16 >> 16);
 
-    data = func_8005DE6C_5EA6C(animData, tableIdx, boneIdx);
-    state->animation_data = data;
+    animPtr = func_8005DE6C_5EA6C(animData, tableIdx, boneIdx);
+    state->animation_data = animPtr;
 
-    state->flags = *(u16 *)data + 0x8000;
+    state->flags = *(u16 *)animPtr + 0x8000;
 }
 
 void func_8005DF10_5EB10(s16 arg0, s16 arg1, s16 arg2, s16 *arg3) {
