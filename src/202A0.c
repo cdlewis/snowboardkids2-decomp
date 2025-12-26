@@ -7,6 +7,7 @@
 #include "3E160.h"
 #include "56910.h"
 #include "6E840.h"
+#include "B040.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "displaylist.h"
@@ -854,8 +855,6 @@ void func_80021880_22480(Func80021880Arg *arg0) {
 extern u32 D_4237C0;
 extern u32 D_426EF0;
 extern u16 D_8008DC38_8E838;
-
-extern s16 func_8000B7FC_C3FC(u16 *arg0);
 
 void func_80021A20_22620(Func80021A20Arg *arg0);
 void func_80021B88_22788(Func80021B88Arg *arg0);
