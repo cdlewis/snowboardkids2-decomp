@@ -93,7 +93,7 @@ extern ColorData D_8009077C_9137C;
 typedef struct {
     u8 unk0[4];
     u8 gameMode;
-    u8 unk5;
+    u8 demoIndex;
     u8 unk6;
     u8 currentLevel;
     u8 numPlayers;
@@ -196,10 +196,25 @@ extern u8 D_80090520_91120[];
 extern u32 D_800BAA30;
 
 enum GameMode {
-    MODE_STORY = 0,
-    MODE_BATTLE = 1,
-    MODE_UNKNOWN = 2,
-    MODE_INTRO = 3,
+    GAME_MODE_STORY = 0,
+    GAME_MODE_BATTLE = 1,
+    GAME_MODE_DEMO = 2,
+    GAME_MODE_INTRO = 3,
+};
+
+enum RaceType {
+    RACE_TYPE_STANDARD = 0,
+    RACE_TYPE_BOSS_JUNGLE = 1,
+    RACE_TYPE_BOSS_JINGLE = 2,
+    RACE_TYPE_BOSS_ICE = 3,
+    RACE_TYPE_SPEED_CROSS = 4,
+    RACE_TYPE_SHOT_CROSS = 5,
+    RACE_TYPE_X_CROSS = 6,
+    RACE_TYPE_UNUSED_7 = 7,
+    RACE_TYPE_BATTLE = 8,
+    RACE_TYPE_TRAINING = 9,
+    RACE_TYPE_DEMO = 10,
+    RACE_TYPE_INTRO = 11,
 };
 
 enum Course {
@@ -224,20 +239,19 @@ enum Course {
 void initRace(void) {
     RaceState *raceState;
     s32 i;
-    s32 mode;
-    s32 temp;
-    s32 offset;
+    s32 unused_mode;
+    s32 j;
+    s32 unused_offset;
     u8 characterCount[6];
-    s32 pad2[2];
+    s32 unused_pad2[2];
     u8 availableCharacters[6];
-    s32 pad[2];
+    s32 unused_pad[2];
 
     LOAD_OVERLAY(_9FF70);
 
     func_800698CC_6A4CC(0x37);
 
-    // Allocate race state and zero out memory
-    raceState = allocateTaskMemory(0x88);
+    raceState = allocateTaskMemory(sizeof(RaceState));
     for (i = sizeof(RaceState) - 1; i >= 0; i--) {
         ((u8 *)raceState)[i] = 0;
     }
@@ -250,7 +264,7 @@ void initRace(void) {
     raceState->unk58 = 0x7FFF;
 
     switch (D_800AFE8C_A71FC->gameMode) {
-        case MODE_STORY:
+        case GAME_MODE_STORY:
             raceState->currentLevel = D_800AFE8C_A71FC->currentLevel;
             raceState->lapCount = D_800AFE8C_A71FC->lapCount - 1;
             raceState->isExpertMode = D_800AFE8C_A71FC->isExpertMode;
@@ -268,49 +282,49 @@ void initRace(void) {
                     }
                     break;
                 case CRAZY_JUNGLE_BOSS:
-                    raceState->raceType = 1;
+                    raceState->raceType = RACE_TYPE_BOSS_JUNGLE;
                     raceState->humanPlayerCount = 1;
                     raceState->activePlayerCount = 1;
                     raceState->totalRacers = 2;
                     raceState->lapCount = 0;
                     break;
                 case JINGLE_TOWN_BOSS:
-                    raceState->raceType = 2;
+                    raceState->raceType = RACE_TYPE_BOSS_JINGLE;
                     raceState->humanPlayerCount = 1;
                     raceState->activePlayerCount = 1;
                     raceState->totalRacers = 2;
                     raceState->lapCount = 0;
                     break;
                 case ICE_LAND_BOSS:
-                    raceState->raceType = 3;
+                    raceState->raceType = RACE_TYPE_BOSS_ICE;
                     raceState->humanPlayerCount = 1;
                     raceState->activePlayerCount = 1;
                     raceState->totalRacers = 2;
                     raceState->lapCount = 0;
                     break;
                 case SNOWBOARD_STREET_SPEED_CROSS:
-                    raceState->raceType = 4;
+                    raceState->raceType = RACE_TYPE_SPEED_CROSS;
                     raceState->humanPlayerCount = 1;
                     raceState->activePlayerCount = 1;
                     raceState->totalRacers = 1;
                     raceState->lapCount = 0;
                     break;
                 case SNOWBOARD_STREET_SHOT_CROSS:
-                    raceState->raceType = 5;
+                    raceState->raceType = RACE_TYPE_SHOT_CROSS;
                     raceState->humanPlayerCount = 1;
                     raceState->activePlayerCount = 1;
                     raceState->totalRacers = 1;
                     raceState->lapCount = 0;
                     break;
                 case X_CROSS:
-                    raceState->raceType = 6;
+                    raceState->raceType = RACE_TYPE_X_CROSS;
                     raceState->humanPlayerCount = 1;
                     raceState->activePlayerCount = 1;
                     raceState->totalRacers = 1;
                     raceState->lapCount = 0;
                     break;
                 case TRAINING:
-                    raceState->raceType = 9;
+                    raceState->raceType = RACE_TYPE_TRAINING;
                     raceState->humanPlayerCount = 1;
                     raceState->activePlayerCount = 1;
                     raceState->totalRacers = 2;
@@ -319,10 +333,10 @@ void initRace(void) {
                     break;
             }
             break;
-        case MODE_BATTLE:
+        case GAME_MODE_BATTLE:
             raceState->currentLevel = D_800AFE8C_A71FC->currentLevel;
             raceState->lapCount = D_800AFE8C_A71FC->lapCount - 1;
-            raceState->raceType = 8;
+            raceState->raceType = RACE_TYPE_BATTLE;
             raceState->humanPlayerCount = D_800AFE8C_A71FC->numPlayers;
             raceState->activePlayerCount = D_800AFE8C_A71FC->numPlayers;
             raceState->totalRacers = 4;
@@ -331,10 +345,10 @@ void initRace(void) {
             raceState->battleScoreLimit = D_800AFE8C_A71FC->battleScoreLimit;
             break;
 
-        case MODE_UNKNOWN:
+        case GAME_MODE_DEMO:
             initRand();
-            raceState->raceType = 10;
-            raceState->demoMode = D_800AFE8C_A71FC->unk5;
+            raceState->raceType = RACE_TYPE_DEMO;
+            raceState->demoMode = D_800AFE8C_A71FC->demoIndex;
 
             switch (raceState->demoMode) {
                 case 0:
@@ -360,16 +374,16 @@ void initRace(void) {
                     break;
             }
             break;
-        case MODE_INTRO:
+        case GAME_MODE_INTRO:
             initRand();
             raceState->demoMode = 0;
-            raceState->raceType = 11;
-            raceState->currentLevel = 2;
+            raceState->raceType = RACE_TYPE_INTRO;
+            raceState->currentLevel = JINGLE_TOWN;
             raceState->lapCount = 2;
             raceState->activePlayerCount = 4;
             raceState->totalRacers = 4;
 
-            temp = raceState->demoMode;
+            j = raceState->demoMode;
             switch (raceState->demoMode) {
                 case 0:
                 case 1:
@@ -411,10 +425,9 @@ void initRace(void) {
     );
 
     for (i = 0; i < raceState->totalRacers; i++) {
-        // zero out racer config
-        u8 *bytes = (u8 *)&raceState->racers[i];
-        for (temp = sizeof(RacerConfig) - 1; temp >= 0; temp--) {
-            bytes[temp] = 0;
+        u8 *racerBytes = (u8 *)&raceState->racers[i];
+        for (j = sizeof(RacerConfig) - 1; j >= 0; j--) {
+            racerBytes[j] = 0;
         }
 
         raceState->racers[i].racerIndex = i;
@@ -425,7 +438,7 @@ void initRace(void) {
         characterCount[i] = 0;
     }
 
-    if (raceState->raceType < 9) {
+    if (raceState->raceType < RACE_TYPE_TRAINING) {
         for (i = 0; i < raceState->activePlayerCount; i++) {
             raceState->racers[i].characterID = D_800AFE8C_A71FC->characterIDs[i];
             raceState->racers[i].boardType = D_800AFE8C_A71FC->colorSlots[i];
@@ -442,7 +455,7 @@ void initRace(void) {
     }
 
     switch (D_800AFE8C_A71FC->gameMode) {
-        case MODE_STORY:
+        case GAME_MODE_STORY:
             switch (raceState->currentLevel) {
                 case CRAZY_JUNGLE_BOSS:
                     raceState->racers[1].bossID = 1;
@@ -464,7 +477,7 @@ void initRace(void) {
                     break;
             }
             break;
-        case MODE_UNKNOWN:
+        case GAME_MODE_DEMO:
             switch (raceState->demoMode) {
                 case 0:
                     raceState->racers[0].characterID = 0;
@@ -495,7 +508,7 @@ void initRace(void) {
                     }
             }
             break;
-        case MODE_INTRO:
+        case GAME_MODE_INTRO:
             raceState->racers[0].characterID = 0;
             raceState->racers[1].characterID = 3;
             raceState->racers[2].characterID = 5;
@@ -513,7 +526,7 @@ void initRace(void) {
                 }
             }
             break;
-        case MODE_BATTLE:
+        case GAME_MODE_BATTLE:
             break;
     }
 
@@ -566,13 +579,13 @@ void initRace(void) {
             raceState->racers[i].colorSlot = 5;
             raceState->racers[i].cpuDifficulty = 7;
 
-            if (raceState->raceType == 8) {
+            if (raceState->raceType == RACE_TYPE_BATTLE) {
                 raceState->racers[i].cpuDifficulty = 5;
             }
 
             if (raceState->racers[i].characterID != 6) {
                 raceState->racers[i].costumeID = 9;
-                if (raceState->raceType == 8) {
+                if (raceState->raceType == RACE_TYPE_BATTLE) {
                     raceState->racers[i].cpuDifficulty = 5;
                 } else {
                     raceState->racers[i].cpuDifficulty = 0;
@@ -586,7 +599,7 @@ void initRace(void) {
         }
     }
 
-    if (raceState->raceType == 8) {
+    if (raceState->raceType == RACE_TYPE_BATTLE) {
         u8 maxCostumeLevel = 0;
         for (i = 0; i < raceState->activePlayerCount; i++) {
             if (maxCostumeLevel < D_80090520_91120[raceState->racers[i].costumeID]) {
