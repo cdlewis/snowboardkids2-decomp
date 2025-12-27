@@ -711,7 +711,7 @@ void enqueueModelDisplayList(func_80002B50_3750_arg *arg0, DisplayListObject *ar
     }
 }
 
-s32 func_80002B8C_378C(SceneModel *arg0) {
+s32 getEmptyModelDisplayOffset(SceneModel *arg0) {
     s32 new_var;
     if (isAssetGroupEmpty(arg0->index) == 0) {
         return 0;
