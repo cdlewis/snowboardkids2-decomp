@@ -57,7 +57,7 @@ extern AssetGroup D_8008BD2C_8C92C;
 extern u8 identityMatrix[32];
 extern u32 D_8008BD38_8C938;
 
-s32 func_800018F4_24F4(SceneModel *);
+s32 hasModelGraphicsData(SceneModel *);
 s32 func_80001904_2504(s16);
 
 void markEntityDestroyed(MarkDestroyedArg *arg0) {
@@ -272,8 +272,8 @@ void *loadAssetGroupVertexData(SceneModel *arg0) {
     return loadCompressedData(entity->vertexDataStart, entity->vertexDataEnd, entity->size);
 }
 
-s32 func_800018F4_24F4(SceneModel *arg0) {
-    return arg0->unk0->unk3E0 != 0;
+s32 hasModelGraphicsData(SceneModel *model) {
+    return model->unk0->graphicsData != 0;
 }
 
 s32 func_80001904_2504(s16 arg0) {
@@ -719,7 +719,7 @@ s32 func_80002B8C_378C(SceneModel *arg0) {
     if (func_80001904_2504(arg0->index) == 0) {
         return 0;
     }
-    new_var = func_800018F4_24F4(arg0);
+    new_var = hasModelGraphicsData(arg0);
     if (new_var != 0) {
         return 0;
     }
@@ -733,7 +733,7 @@ s32 func_80002BD0_37D0(SceneModel *arg0) {
         return 8;
     }
 
-    if (func_800018F4_24F4(arg0) != 0) {
+    if (hasModelGraphicsData(arg0) != 0) {
         index = 8;
         return index;
     }

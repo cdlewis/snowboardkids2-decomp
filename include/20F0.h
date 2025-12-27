@@ -96,7 +96,7 @@ typedef struct {
     void *unk28;
     s32 unk2C;
     u8 padding2[0x3B0];
-    s32 unk3E0;
+    s32 graphicsData;
     void *unk3E4;
     void *unk3E8;
     void *unk3EC;

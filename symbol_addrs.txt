@@ -484,6 +484,7 @@ isModelVisible = 0x800017F4; // rom:0x23F4
 loadAssetGroupSoundData = 0x80001818;
 loadAssetGroupVertexData = 0x800018AC;
 loadAssetGroupDisplayList = 0x80001868;
+hasModelGraphicsData = 0x800018F4; // rom:0x24F4
 __MusIntStartEffect = 0x80074704;
 func_800725F4_731F4 = 0x800725F4;
 __MusIntFindChannelAndStart = 0x80072540;
