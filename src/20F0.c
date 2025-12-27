@@ -75,12 +75,12 @@ void setModelHeight(SceneModel *arg0, s32 height) {
     arg0->height = height;
 }
 
-void func_80001504_2104(GameEntity *arg0) {
-    arg0->unk15C = 0;
+void disableEntityRendering(GameEntity *arg0) {
+    arg0->renderEnabled = 0;
 }
 
 void func_8000150C_210C(SceneModel *arg0) {
-    arg0->unk15C = 1;
+    arg0->renderEnabled = 1;
 }
 
 void func_80001518_2118(SceneModel *arg0) {
@@ -463,7 +463,7 @@ void initializeGameEntity(
     ent->unk114 = func_8000CD88_D988();
     ent->unk118 = func_8000CDB4_D9B4();
     ent->soundData = loadAssetGroupSoundData((SceneModel *)ent);
-    ent->unk15C = 0;
+    ent->renderEnabled = 0;
     ent->height = 0;
 
     ent->unk120 = loadCompressedData(_646850_ROM_START, _646850_ROM_END, 0x238);

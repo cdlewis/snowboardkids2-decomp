@@ -32,6 +32,7 @@ updateSpawnedSpriteTask = 0x800013B8; // rom:0x1FB8
 cleanupSpawnedSpriteTask = 0x800014C8; // rom:0x20C8
 markEntityDestroyed = 0x800014F0; // rom:0x20F0
 setModelHeight = 0x800014FC; // rom:0x20FC
+disableEntityRendering = 0x80001504; // rom:0x2104
 enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;

@@ -159,7 +159,7 @@ typedef struct {
     void *unk120;
     u8 padding4[0x34];
     s32 height;
-    s8 unk15C;
+    s8 renderEnabled;
 } SceneModel;
 
 void *func_800019B8_25B8(s32 arg0, void *arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5);
@@ -240,7 +240,7 @@ typedef struct {
     s16 unk154;
     s16 unk156;
     u32 height;
-    u8 unk15C;
+    u8 renderEnabled;
 } GameEntity;
 
 typedef struct {
@@ -269,7 +269,7 @@ s32 setModelRotation(SceneModel *, s16);
 
 void func_80001688_2288(SceneModel *arg0, s8 arg1);
 
-void func_80001504_2104(GameEntity *arg0);
+void disableEntityRendering(GameEntity *arg0);
 void func_8000150C_210C(SceneModel *arg0);
 void func_80001518_2118(SceneModel *arg0);
 
