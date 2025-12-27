@@ -54,7 +54,7 @@ typedef struct {
 void func_80003C34_4834(void);
 void func_80003898_4498(void);
 void loadCutsceneOverlay(void);
-void func_8000378C_438C(void);
+void runCutsceneFrame(void);
 void func_80003C88_4888(void);
 void func_80003D30_4930(void);
 void func_80003CC4_48C4(void);
@@ -126,10 +126,10 @@ void initCutsceneRenderer(void) {
     func_8006FE28_70A28(uiNodePtr, 0, 0, 0);
     func_8006FDA0_709A0(uiNodePtr, 0xFF, 0);
     func_8006FDA0_709A0(uiNodePtr, 0, 8);
-    setGameStateHandler(func_8000378C_438C);
+    setGameStateHandler(runCutsceneFrame);
 }
 
-void func_8000378C_438C(void) {
+void runCutsceneFrame(void) {
     CutsceneTaskMemory *taskMemory = (CutsceneTaskMemory *)getCurrentAllocation();
 
     if (taskMemory->frameCount >= func_800B3360(D_800AB070_A23E0, D_800AFEF0_A7260) || taskMemory->exitRequested != 0) {
