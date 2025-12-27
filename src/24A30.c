@@ -226,6 +226,12 @@ typedef struct {
     u8 unk24;
 } func_80027544_arg;
 
+typedef struct {
+    s16 x;
+    s16 y;
+    s16 z;
+} Vec3s;
+
 extern s32 identityMatrix[];
 extern s32 D_8008DD2C_8E92C[];
 extern u16 D_8008DD4E_8E94E[][3];
@@ -246,9 +252,7 @@ extern u8 D_8008DE18_8EA18;
 extern u16 D_8008DE1A_8EA1A;
 extern u16 D_8008DE1C_8EA1C;
 extern u16 D_8008DE1E_8EA1E;
-extern u16 D_8008DE3A_8EA3A;
-extern u16 D_8008DE3C_8EA3C;
-extern u16 D_8008DE3E_8EA3E;
+extern Vec3s D_8008DE3A_8EA3A[];
 
 void func_8002667C_2727C(void *);
 void func_80026834_27434(func_80025FFC_26BFC_arg *);
@@ -1324,9 +1328,9 @@ void func_80026564_27164(func_80026564_arg *arg0) {
 
     count = D_800AFE8C_A71FC->unk8;
     index = count * 3;
-    xBase = *(&D_8008DE3A_8EA3A + index);
-    y = *(&D_8008DE3C_8EA3C + index);
-    xInc = *(&D_8008DE3E_8EA3E + index);
+    xBase = D_8008DE3A_8EA3A[count].x;
+    y = D_8008DE3A_8EA3A[count].y;
+    xInc = D_8008DE3A_8EA3A[count].z;
 
     i = 0;
     if (count != 0) {
@@ -1377,8 +1381,10 @@ typedef struct {
     s16 unk48;
 } func_80026BD8_arg;
 
-extern u16 D_8008DE9C_8EA9C[];
-extern u16 D_8008DE9E_8EA9E[];
+extern struct {
+    u16 unk0;
+    u16 unk2;
+} D_8008DE9C_8EA9C[];
 void func_80026D34_27934(func_80026BD8_arg *);
 void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
 
@@ -1404,8 +1410,8 @@ void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
 
     global = D_800AFE8C_A71FC;
     count = global->unk8;
-    unk0Val = D_8008DE9C_8EA9C[count * 2];
-    unk2Val = D_8008DE9E_8EA9E[count * 2];
+    unk0Val = D_8008DE9C_8EA9C[count].unk0;
+    unk2Val = D_8008DE9C_8EA9C[count].unk2;
 
     i = 0;
     if (count != 0) {

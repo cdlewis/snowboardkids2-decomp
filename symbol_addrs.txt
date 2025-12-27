@@ -1,3 +1,6 @@
+D_8008DE3A_8EA3A = 0x8008DE3A; // rom:0x8EA3A size:0x6
+D_8008DE9C_8EA9C = 0x8008DE9C; // rom:0x8EA9C size:0x10
+D_8008DE54_8EA54 = 0x8008DE54; // rom:0x8EA54 size:0x10
 initRotatingModelTask = 0x800007F0; // rom:0x13F0
 updateRotatingModelTask = 0x800008D0; // rom:0x14D0
 enqueueDisplayListIfVisible = 0x800007C4;
