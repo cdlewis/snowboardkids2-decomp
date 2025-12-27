@@ -1558,3 +1558,4 @@ scheduleDualAssetGroupLoad = 0x80003000; // rom:0x3C00
 freeAssetGroupResources = 0x800033AC; // rom:0x3FAC
 assetGroupTable = 0x8008BF70; // rom:0x8CB70
 runCutsceneFrame = 0x8000378C; // rom:0x438C
+renderOpaqueScrollingTexture = 0x80004F74; // rom:0x5B74
