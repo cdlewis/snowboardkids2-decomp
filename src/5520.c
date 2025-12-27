@@ -111,7 +111,7 @@ void renderOverlayTiledTexture(s32 arg0) {
     func_8006395C_6455C((DisplayListObject *)arg0);
 }
 
-void func_8000576C_636C(s32 arg0, func_800B5500_Task *arg1) {
+void enqueueTiledTextureRender(s32 arg0, func_800B5500_Task *arg1) {
     arg1->unk30 = 0;
     if (arg1->unk20->unk4 != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderOpaqueTiledTexture, arg1);

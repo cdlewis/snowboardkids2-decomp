@@ -91,7 +91,7 @@ void func_800B5660_1E2710(func_800B5500_Task *arg0) {
 
     scaleMatrix((Mat3x3Padded *)arg0, 0x2000, arg0->unk78_union.unk78_shorts[1], 0x2000);
 
-    func_8000576C_636C(arg0->unk74, arg0);
+    enqueueTiledTextureRender(arg0->unk74, arg0);
 
     if (arg0->unk76 > 0) {
         arg0->unk76 = arg0->unk76 - 1;

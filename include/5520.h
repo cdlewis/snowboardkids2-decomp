@@ -73,4 +73,4 @@ typedef struct {
     /* 0x84 */ s8 unk84;
 } func_800B5500_Task;
 
-void func_8000576C_636C(s32 arg0, func_800B5500_Task *arg1);
+void enqueueTiledTextureRender(s32 arg0, func_800B5500_Task *arg1);
