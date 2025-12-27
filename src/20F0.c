@@ -54,12 +54,12 @@ typedef struct {
     void *asset2End;
     s32 asset2Size;
     s32 *unk14;
-} D_800895A0_8A1A0_node;
+} ItemAssetEntry;
 
-extern D_800895A0_8A1A0_node D_800895A0_8A1A0[];
+extern ItemAssetEntry itemAssetTable[];
 extern OSThread *__osActiveQueue_0;
 extern AssetGroup gameAssets[];
-extern s32 D_80089768_8A368;
+extern s32 itemAssetCount;
 extern AssetGroup D_8008BD2C_8C92C;
 extern u8 identityMatrix[32];
 extern u32 D_8008BD38_8C938;
@@ -159,8 +159,8 @@ void setItemDisplayEnabled(SceneModel *arg0, s8 arg1) {
     }
 }
 
-s32 func_80001624_2224(void) {
-    return D_80089768_8A368;
+s32 getItemAssetCount(void) {
+    return itemAssetCount;
 }
 
 void func_80001630_2230(func_80001630_2230_arg *arg0, s8 arg1) {
@@ -331,7 +331,7 @@ void initializeGameEntity(
     AssetSlot *slot;
     void *asset1;
     void *asset2;
-    D_800895A0_8A1A0_node *node8A1A0;
+    ItemAssetEntry *node8A1A0;
     Node *task;
 
     assetEntry = &gameAssets[assetGroupIndex];
@@ -409,8 +409,8 @@ void initializeGameEntity(
         memcpy(&ent->unk00[16].transformationMatrix, identityMatrix, 0x20);
     }
 
-    if (yetAnotherAssetIndex != -1 && yetAnotherAssetIndex < D_80089768_8A368) {
-        node8A1A0 = &D_800895A0_8A1A0[yetAnotherAssetIndex];
+    if (yetAnotherAssetIndex != -1 && yetAnotherAssetIndex < itemAssetCount) {
+        node8A1A0 = &itemAssetTable[yetAnotherAssetIndex];
 
         ent->unk00[17].unk20 = node8A1A0->unk14;
         ent->unk00[17].asset1 = loadUncompressedData(node8A1A0->assetStart, node8A1A0->assetEnd);
