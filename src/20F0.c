@@ -15,9 +15,9 @@ typedef struct {
     u8 padding[0x24];
     /* 0x24 */ u8 *data_ptr;
     /* 0x28 */ TableEntry_19E80 *index_ptr;
-    s8 unk2C;
-    s8 unk2D;
-} func_80002C14_3814_arg;
+    s8 tableField1;
+    s8 tableField2;
+} AssetSlotTableData;
 
 typedef struct {
     u8 padding[0x3C];
@@ -738,12 +738,12 @@ s32 getModelDisplayDataOffset(SceneModel *model) {
     return 0x90;
 }
 
-void func_80002C14_3814(func_80002C14_3814_arg *arg0, void *arg1, s32 arg2) {
+void loadAssetSlotTableEntry(AssetSlotTableData *slot, DataTable_19E80 *table, s32 entryIndex) {
     OutputStruct_19E80 result;
-    getTableEntryByU16Index(arg1, (s16)arg2, &result);
 
-    arg0->data_ptr = result.data_ptr;
-    arg0->index_ptr = result.index_ptr;
-    arg0->unk2C = result.field1;
-    arg0->unk2D = result.field2;
+    getTableEntryByU16Index(table, (s16)entryIndex, &result);
+    slot->data_ptr = result.data_ptr;
+    slot->index_ptr = result.index_ptr;
+    slot->tableField1 = result.field1;
+    slot->tableField2 = result.field2;
 }
