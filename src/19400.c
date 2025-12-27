@@ -78,7 +78,7 @@ void func_80018904_19504(func_80018898_19498_arg *arg0) {
     if (state->unk400 != arg0->unk4 && arg0->unk4 != 1) {
         arg0->unk4 = state->unk400;
         if (state->unk400 == 2 || state->unk400 == 4) {
-            func_80002260_2E60(arg0->unk0, state->unk400, -1, -1, -1, 0);
+            setModelAnimationEx(arg0->unk0, state->unk400, -1, -1, -1, 0);
         } else {
             setModelAnimation(arg0->unk0, state->unk400);
         }
@@ -93,7 +93,7 @@ void func_80018904_19504(func_80018898_19498_arg *arg0) {
             state->unk404 = 0;
             arg0->unk4 = state->unk400;
             if (state->unk400 == 2 || state->unk400 == 4) {
-                func_80002260_2E60(arg0->unk0, state->unk400, -1, -1, -1, 0);
+                setModelAnimationEx(arg0->unk0, state->unk400, -1, -1, -1, 0);
             } else {
                 setModelAnimation(arg0->unk0, state->unk400);
             }

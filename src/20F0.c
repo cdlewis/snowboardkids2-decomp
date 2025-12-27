@@ -523,10 +523,10 @@ void setModelAnimationLooped(SceneModel *model, s16 animIndex, s16 transitionAni
 }
 
 void setModelAnimationQueued(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
-    func_80002260_2E60(arg0, arg1, arg2, arg3, (s32)arg4, 1);
+    setModelAnimationEx(arg0, arg1, arg2, arg3, (s32)arg4, 1);
 }
 
-void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5) {
+void setModelAnimationEx(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5) {
     int new_var;
     s16 var_t0;
     s16 var_a1;

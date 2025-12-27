@@ -22,7 +22,7 @@ void cutsceneChrPosition_exec(cutsceneChrPosition_exec_arg *arg0, CutsceneManage
     func_800B6BDC_1E3C8C(slotData, arg0->unk0, arg0->unk4, arg0->unk8, temp);
     setupSlotTransform(slotData);
     applyTransformToModel(slot->model, &slot->slotData.unk04);
-    func_80002260_2E60(slot->model, arg0->unkE, arg0->unk12, arg0->unk11, -1, arg0->unk14);
+    setModelAnimationEx(slot->model, arg0->unkE, arg0->unk12, arg0->unk11, -1, arg0->unk14);
     setModelActionMode(slot->model, arg0->unk10);
 }
 
@@ -73,7 +73,7 @@ void cutsceneChrMove_exec(cutsceneChrMove_exec_arg *arg0, CutsceneManager *arg1,
             break;
     }
 
-    func_80002260_2E60(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, animId, arg0->unk16);
+    setModelAnimationEx(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, animId, arg0->unk16);
 
     setModelActionMode(slot->model, arg0->unk12);
 }
@@ -92,7 +92,7 @@ s32 cutsceneChrAnime_validate(void) {
 void cutsceneChrAnime_exec(cutsceneChrAnime_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *slot = &arg1->slots[arg2];
     slot->slotData.unk0.Two = 0;
-    func_80002260_2E60(slot->model, arg0->unk0, arg0->unk4, arg0->unk3, -1, -1);
+    setModelAnimationEx(slot->model, arg0->unk0, arg0->unk4, arg0->unk3, -1, -1);
     setModelActionMode(slot->model, arg0->unk2);
 }
 
@@ -200,7 +200,7 @@ void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg
             break;
     }
 
-    func_80002260_2E60(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, animId, arg0->unk17);
+    setModelAnimationEx(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, animId, arg0->unk17);
 
     setModelActionMode(slot->model, arg0->unk12);
 }
@@ -397,7 +397,7 @@ void cutsceneChrUpDown_exec(cutsceneChrUpDown_exec_arg *arg0, CutsceneManager *a
 
     func_800B7A60_1E4B10(&slot->slotData, slot->model, arg0->unk0, arg0->unk4, arg0->unk8, arg0->unkE);
 
-    func_80002260_2E60(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1, arg0->unk16);
+    setModelAnimationEx(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1, arg0->unk16);
 
     setModelActionMode(slot->model, arg0->unk12);
 }
@@ -432,7 +432,7 @@ void cutsceneChrAnime2_exec(cutsceneChrAnime2_exec_arg *arg0, CutsceneManager *a
 
     slot = &arg1->slots[arg2];
     slot->slotData.unk0.Two = 1;
-    func_80002260_2E60(slot->model, arg0->unk0, arg0->unk4, arg0->unk3, -1, -1);
+    setModelAnimationEx(slot->model, arg0->unk0, arg0->unk4, arg0->unk3, -1, -1);
     setModelActionMode(slot->model, arg0->unk2);
 }
 
@@ -462,7 +462,7 @@ void cutsceneChrMove3_exec(cutsceneChrMove3_exec_arg *arg0, CutsceneManager *arg
         arg0->unkC
     );
 
-    func_80002260_2E60(currentSlot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1, arg0->unk16);
+    setModelAnimationEx(currentSlot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1, arg0->unk16);
 
     setModelActionMode(currentSlot->model, arg0->unk12);
 }
@@ -602,7 +602,7 @@ void cutsceneChrPosition2_exec(cutsceneChrPosition2_exec_arg *arg0, CutsceneMana
     func_800B6C04_1E3CB4(slotData, arg0->unk0, arg0->unk4, arg0->unk8, arg0->unkC, arg0->unk16, arg0->unk18);
     setupSlotTransform(slotData);
     applyTransformToModel(slot->model, &slot->slotData.unk04);
-    func_80002260_2E60(slot->model, arg0->unkE, arg0->unk12, arg0->unk11, -1, arg0->unk14);
+    setModelAnimationEx(slot->model, arg0->unkE, arg0->unk12, arg0->unk11, -1, arg0->unk14);
     setModelActionMode(slot->model, arg0->unk10);
 }
 
