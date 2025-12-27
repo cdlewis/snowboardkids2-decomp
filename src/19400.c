@@ -54,7 +54,7 @@ void func_80018858_19458(func_80018898_19498_arg *arg0) {
 void func_80018898_19498(func_80018898_19498_arg *arg0) {
     func_80018898_19498_state *state = (func_80018898_19498_state *)getCurrentAllocation();
 
-    func_80001650_2250(arg0->unk0);
+    clearModelPendingDestroy(arg0->unk0);
     applyTransformToModel(arg0->unk0, &state->unk3B0.unk0);
     arg0->unk4 = state->unk400;
     func_800021B8_2DB8(arg0->unk0, state->unk400);

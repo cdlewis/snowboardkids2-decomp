@@ -168,7 +168,7 @@ void setModelPendingDestroy(SceneModel *arg0) {
     arg0->unk89 |= 1;
 }
 
-void func_80001650_2250(SceneModel *arg0) {
+void clearModelPendingDestroy(SceneModel *arg0) {
     arg0->unk89 &= 0xFE;
 }
 
