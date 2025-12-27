@@ -237,7 +237,7 @@ void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
 void updateRotatingModelTask(func_80000C2C_182C_arg *arg0);
 void cleanupRotatingModelTask(RotatingModelTaskState *state);
-void func_80000E84_1A84(func_80000C2C_182C_arg *arg0);
+void updateStaticModelTask(func_80000C2C_182C_arg *arg0);
 void func_80000F14_1B14(SwingingModelTaskState *arg0);
 void func_80001040_1C40(func_80001040_1C40_arg *arg0);
 void func_80001114_1D14(func_80001114_1D14_arg *arg0);
@@ -574,10 +574,10 @@ void initStaticModelTask(StaticModelTaskArg *arg0) {
     arg0->unk34 = 0;
     arg0->unk28 = var_s2->unk4;
 
-    setCallback(func_80000E84_1A84);
+    setCallback(updateStaticModelTask);
 }
 
-void func_80000E84_1A84(func_80000C2C_182C_arg *arg0) {
+void updateStaticModelTask(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
 

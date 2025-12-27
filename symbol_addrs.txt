@@ -19,6 +19,7 @@ initSpriteAnimationTask = 0x80000C2C; // rom:0x182C
 updateSpriteAnimationTask = 0x80000CAC; // rom:0x18AC
 cleanupSpriteAnimationTask = 0x80000DA4; // rom:0x19A4
 initStaticModelTask = 0x80000DC0; // rom:0x19C0
+updateStaticModelTask = 0x80000E84; // rom:0x1A84
 enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;
