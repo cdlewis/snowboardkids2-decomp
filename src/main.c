@@ -203,12 +203,12 @@ typedef struct {
     s32 unk34;
 } StaticModelTaskArg;
 
-s32 D_800894F0_8A0F0[8];
+s32 spawnedSpriteScales[8];
 
 void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state);
 void cleanupSpriteSpawnerTask(func_80000C2C_182C_arg *arg0);
 void updateSpriteSpawnerTask(func_80000C2C_182C_arg *);
-void func_80001280_1E80(func_80000C2C_182C_arg *arg0);
+void initSpawnedSpriteTask(func_80000C2C_182C_arg *arg0);
 void updateSpriteAnimationTask(func_80000C2C_182C_arg *);
 void updateSwingingModelTask(func_80000C2C_182C_arg *);
 void cleanupSwingingModelTask(SwingingModelTaskState *);
@@ -672,7 +672,7 @@ void updateSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
 
     temp = *(s16 *)&arg0->unk54;
     if (temp <= 0) {
-        task = scheduleTask(func_80001280_1E80, 0, 0, 0xC8);
+        task = scheduleTask(initSpawnedSpriteTask, 0, 0, 0xC8);
         if (task != NULL) {
             task->unk0 = arg0->unk0;
             tempUnk4 = arg0->unk4;
@@ -690,7 +690,7 @@ void cleanupSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
 }
 
-void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
+void initSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
     volatile s32 sp10;
     volatile s32 sp14;
     volatile s32 sp18;
@@ -716,7 +716,7 @@ void func_80001280_1E80(func_80000C2C_182C_arg *arg0) {
     arg0->unk54 = arg0->unk54 + subEntry->unk8;
     arg0->unk58 = arg0->unk58 + subEntry->unkC;
     arg0->unk5C = arg0->unk5C + subEntry->unk10;
-    arg0->unk60 = D_800894F0_8A0F0[randA() & 3];
+    arg0->unk60 = spawnedSpriteScales[randA() & 3];
 
     setCallback(&func_800013B8_1FB8);
 }
