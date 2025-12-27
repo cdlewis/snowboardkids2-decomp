@@ -183,10 +183,10 @@ typedef struct {
 typedef struct {
     u8 padding[0x84];
     s16 unk84;
-} func_80000DC0_19C0_arg_unk0;
+} StaticModelTaskArg_unk0;
 
 typedef struct {
-    func_80000DC0_19C0_arg_unk0 *unk0;
+    StaticModelTaskArg_unk0 *unk0;
     s8 unk4;
     u8 padding[3];
     s32 unk8;
@@ -201,7 +201,7 @@ typedef struct {
     void *unk2C;
     void *unk30;
     s32 unk34;
-} func_80000DC0_19C0_arg;
+} StaticModelTaskArg;
 
 s32 D_800894F0_8A0F0[8];
 
@@ -554,7 +554,7 @@ void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&state->spriteAsset);
 }
 
-void func_80000DC0_19C0(func_80000DC0_19C0_arg *arg0) {
+void initStaticModelTask(StaticModelTaskArg *arg0) {
     ModelEntityConfig *var_s0;
     ModelEntityTaskConfig *var_s2;
     s16 temp;
