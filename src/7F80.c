@@ -12,19 +12,19 @@ USE_ASSET(_646CD0);
 typedef struct {
     s32 unk0;
     u8 padding[0x17C];
-} func_800078C4_84C4_arg_unk44;
+} TransitionEffectFrame;
 
 typedef struct {
-    SceneModel *unk0;
-    void *unk4;
-    OutputStruct_19E80 unk8;
-    Mat3x3Padded unk14;
-    s32 unk34;
-    s32 *unk38;
-    s32 unk3C;
-    s32 unk40;
-    func_800078C4_84C4_arg_unk44 *unk44;
-} func_800078C4_84C4_arg;
+    SceneModel *model;
+    void *animationTable;
+    OutputStruct_19E80 tableEntry;
+    Mat3x3Padded transformMatrix;
+    s32 frameIndex;
+    s32 *frameData;
+    s32 currentFrame;
+    s32 effectVariant;
+    TransitionEffectFrame *frameBuffer;
+} ModelTransitionEffectState;
 
 typedef struct {
     s32 unk0;
@@ -38,9 +38,9 @@ typedef struct {
     /* 0x38 */ void *segmentData;
 } PalettedTextureState;
 
-void func_80007958_8558(func_800078C4_84C4_arg *);
-void func_8000799C_859C(func_800078C4_84C4_arg *);
-void func_80007ABC_86BC(func_800078C4_84C4_arg *);
+void setupModelTransitionVariant(ModelTransitionEffectState *);
+void updateModelTransitionEffect(ModelTransitionEffectState *);
+void cleanupModelTransitionEffect(ModelTransitionEffectState *);
 void func_800073E0_7FE0(void);
 void cleanupCameraRotationTask(void);
 void renderPalettedTexture(PalettedTextureState *);
@@ -195,64 +195,64 @@ void renderPalettedTexture(PalettedTextureState *state) {
     gSPDisplayList(gRegionAllocPtr++, &D_8008C200_8CE00);
 }
 
-void func_800078C4_84C4(func_800078C4_84C4_arg *arg0) {
-    setCleanupCallback(&func_80007ABC_86BC);
-    arg0->unk4 = loadCompressedData(&_646CD0_ROM_START, &_646CD0_ROM_END, 0xE8);
-    arg0->unk44 = loadCompressedData(&_49B500_ROM_START, &_49B500_ROM_END, 0xC00);
-    if (arg0->unk0->index == 0x3E) {
-        arg0->unk40 = 0;
+void initModelTransitionEffect(ModelTransitionEffectState *state) {
+    setCleanupCallback(&cleanupModelTransitionEffect);
+    state->animationTable = loadCompressedData(&_646CD0_ROM_START, &_646CD0_ROM_END, 0xE8);
+    state->frameBuffer = loadCompressedData(&_49B500_ROM_START, &_49B500_ROM_END, 0xC00);
+    if (state->model->index == 0x3E) {
+        state->effectVariant = 0;
     } else {
-        arg0->unk40 = 1;
+        state->effectVariant = 1;
     }
-    setCallback(&func_80007958_8558);
+    setCallback(&setupModelTransitionVariant);
 }
 
-void func_80007958_8558(func_800078C4_84C4_arg *arg0) {
-    getTableEntryByU16Index(arg0->unk4, arg0->unk40 != 0, &arg0->unk8);
-    arg0->unk3C = 0;
-    setCallback(&func_8000799C_859C);
+void setupModelTransitionVariant(ModelTransitionEffectState *state) {
+    getTableEntryByU16Index(state->animationTable, state->effectVariant != 0, &state->tableEntry);
+    state->currentFrame = 0;
+    setCallback(&updateModelTransitionEffect);
 }
 
-void func_8000799C_859C(func_800078C4_84C4_arg *arg0) {
-    u8 sp10[0x20];
-    s32 temp_t0;
-    s8 temp_v0;
-    void *temp_s0;
+void updateModelTransitionEffect(ModelTransitionEffectState *state) {
+    u8 unusedMatrixBuffer[0x20];
+    s32 frameBeforeIncrement;
+    s8 actionMode;
+    void *unused;
 
-    memcpy(&sp10, &identityMatrix, 0x20);
+    memcpy(&unusedMatrixBuffer, &identityMatrix, 0x20);
 
-    if (arg0->unk0->isDestroyed == 1) {
+    if (state->model->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    temp_v0 = arg0->unk0->actionMode;
-    if (arg0->unk0->actionMode == 0) {
-        arg0->unk3C = 0;
-    } else if (temp_v0 < 0 || arg0->unk0->actionMode >= 3) {
-        arg0->unk3C = 0;
+    actionMode = state->model->actionMode;
+    if (state->model->actionMode == 0) {
+        state->currentFrame = 0;
+    } else if (actionMode < 0 || state->model->actionMode >= 3) {
+        state->currentFrame = 0;
     } else {
         do {
-            if (arg0->unk3C == 0) {
-                memcpy(&arg0->unk14, &arg0->unk0->unk18, 0x20);
-                scaleMatrix(&arg0->unk14, 0x1000, 0x1000, 0x1000);
+            if (state->currentFrame == 0) {
+                memcpy(&state->transformMatrix, &state->model->unk18, 0x20);
+                scaleMatrix(&state->transformMatrix, 0x1000, 0x1000, 0x1000);
             }
         } while (0);
-        setModelDisplayEnabled(arg0->unk0, 0);
+        setModelDisplayEnabled(state->model, 0);
     }
 
-    if (arg0->unk0->actionMode == 1) {
-        temp_t0 = arg0->unk3C;
-        if (arg0->unk3C < 7) {
-            arg0->unk34 = 0;
-            arg0->unk38 = &arg0->unk44[temp_t0].unk0;
-            debugEnqueueCallback(0, 1, &renderPalettedTexture, arg0);
-            arg0->unk3C++;
+    if (state->model->actionMode == 1) {
+        frameBeforeIncrement = state->currentFrame;
+        if (state->currentFrame < 7) {
+            state->frameIndex = 0;
+            state->frameData = &state->frameBuffer[frameBeforeIncrement].unk0;
+            debugEnqueueCallback(0, 1, &renderPalettedTexture, state);
+            state->currentFrame++;
         }
     }
 }
 
-void func_80007ABC_86BC(func_800078C4_84C4_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk44 = freeNodeMemory(arg0->unk44);
+void cleanupModelTransitionEffect(ModelTransitionEffectState *state) {
+    state->animationTable = freeNodeMemory(state->animationTable);
+    state->frameBuffer = freeNodeMemory(state->frameBuffer);
 }
