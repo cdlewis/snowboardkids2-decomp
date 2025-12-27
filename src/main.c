@@ -61,9 +61,9 @@ extern DataEntry D_800891D4_89DD4[];
 
 typedef struct {
     char padding[44];
-    void *unk2C;
-    void *unk30;
-} func_80000BF4_17F4_arg;
+    void *uncompressedAsset;
+    void *compressedAsset;
+} SwingingModelTaskState;
 
 typedef struct {
     char padding[0x2C];
@@ -211,7 +211,7 @@ void func_800011DC_1DDC(func_80000C2C_182C_arg *);
 void func_80001280_1E80(func_80000C2C_182C_arg *arg0);
 void func_80000CAC_18AC(func_80000C2C_182C_arg *);
 void updateSwingingModelTask(func_80000C2C_182C_arg *);
-void func_80000BF4_17F4(func_80000BF4_17F4_arg *);
+void cleanupSwingingModelTask(SwingingModelTaskState *);
 
 typedef struct {
     func_80000C2C_182C_arg_unk0 *unk0;
@@ -238,7 +238,7 @@ void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
 void updateRotatingModelTask(func_80000C2C_182C_arg *arg0);
 void cleanupRotatingModelTask(RotatingModelTaskState *state);
 void func_80000E84_1A84(func_80000C2C_182C_arg *arg0);
-void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0);
+void func_80000F14_1B14(SwingingModelTaskState *arg0);
 void func_80001040_1C40(func_80001040_1C40_arg *arg0);
 void func_80001114_1D14(func_80001114_1D14_arg *arg0);
 
@@ -440,7 +440,7 @@ void initSwingingModelTask(func_80000C2C_182C_arg *arg0) {
     temp_s0 = &modelEntityConfigs[arg0->unk0->unk84];
     temp_s2 = &temp_s0->taskConfigs[arg0->unk4];
 
-    setCleanupCallback(&func_80000BF4_17F4);
+    setCleanupCallback(&cleanupSwingingModelTask);
 
     memcpy(&arg0->unk8, &identityMatrix, 0x20);
 
@@ -504,9 +504,9 @@ void updateSwingingModelTask(func_80000C2C_182C_arg *arg0) {
     enqueueDisplayListIfVisible(arg0->unk0, &arg0->unk8);
 }
 
-void func_80000BF4_17F4(func_80000BF4_17F4_arg *arg0) {
-    arg0->unk30 = freeNodeMemory(arg0->unk30);
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupSwingingModelTask(SwingingModelTaskState *state) {
+    state->compressedAsset = freeNodeMemory(state->compressedAsset);
+    state->uncompressedAsset = freeNodeMemory(state->uncompressedAsset);
 }
 
 void func_80000C2C_182C(func_80000C2C_182C_arg *arg0) {
@@ -591,9 +591,9 @@ void func_80000E84_1A84(func_80000C2C_182C_arg *arg0) {
     enqueueDisplayListIfVisible(arg0->unk0, &arg0->unk8);
 }
 
-void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0) {
-    arg0->unk30 = freeNodeMemory(arg0->unk30);
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void func_80000F14_1B14(SwingingModelTaskState *state) {
+    state->compressedAsset = freeNodeMemory(state->compressedAsset);
+    state->uncompressedAsset = freeNodeMemory(state->uncompressedAsset);
 }
 
 void func_80000F4C_1B4C(func_80000F4C_1B4C_arg *arg0) {

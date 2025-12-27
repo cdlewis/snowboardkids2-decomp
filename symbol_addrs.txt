@@ -14,6 +14,7 @@ updateRotatingModelTask = 0x800008D0; // rom:0x14D0
 cleanupRotatingModelTask = 0x80000968; // rom:0x1568
 initSwingingModelTask = 0x800009A0; // rom:0x15A0
 updateSwingingModelTask = 0x80000A68; // rom:0x1668
+cleanupSwingingModelTask = 0x80000BF4; // rom:0x17F4
 enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;
