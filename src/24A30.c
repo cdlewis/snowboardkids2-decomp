@@ -232,6 +232,30 @@ typedef struct {
     s16 z;
 } Vec3s;
 
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 paddingE[2];
+} func_80026860_entry;
+
+struct {
+    u16 unk0;
+    u16 unk2;
+} D_8008DE54_8EA54[0x10];
+
+typedef struct {
+    SelectionEntry entries[4];
+    s16 unk40;
+    s16 unk42;
+    void *unk44;
+    s16 unk48;
+} func_80026BD8_arg;
+
 extern s32 identityMatrix[];
 extern s32 D_8008DD2C_8E92C[];
 extern u16 D_8008DD4E_8E94E[][3];
@@ -253,7 +277,14 @@ extern u16 D_8008DE1A_8EA1A;
 extern u16 D_8008DE1C_8EA1C;
 extern u16 D_8008DE1E_8EA1E;
 extern Vec3s D_8008DE3A_8EA3A[];
+extern u16 D_8008DE7A_8EA7A[];
+extern struct {
+    u16 unk0;
+    u16 unk2;
+} D_8008DE9C_8EA9C[];
 
+void func_80026D34_27934(func_80026BD8_arg *);
+void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
 void func_8002667C_2727C(void *);
 void func_80026834_27434(func_80025FFC_26BFC_arg *);
 void func_80025DAC_269AC(func_80025FFC_26BFC_arg *);
@@ -265,6 +296,8 @@ void func_80024600_25200(func_8002494C_arg *);
 void func_80027BC8_287C8(func_80027BC8_arg *, u8);
 void func_80027400_28000(func_80025824_arg *);
 void func_80027544_28144(func_80027544_arg *);
+void func_800269C8_275C8(void *);
+void func_80026BAC_277AC(func_80025FFC_26BFC_arg *);
 
 void func_80023E30_24A30(func_80024048_arg *arg0) {
     Mat3x3Padded sp10;
@@ -1365,28 +1398,64 @@ void func_80026834_27434(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80026860_27460);
+void func_80026860_27460(func_80026860_entry *arg0) {
+    u8 *allocation;
+    void *dmaResult;
+    s32 i;
+    u16 unk0Val;
+    u16 unk2Val;
+    s32 unk8Val;
+    func_80026860_entry *ptr;
+    u8 charIndex;
+    u8 temp_v1;
+    s32 temp_v0;
+    s32 pad[2];
+
+    allocation = (u8 *)getCurrentAllocation();
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    setCleanupCallback(func_80026BAC_277AC);
+
+    temp_v1 = D_800AFE8C_A71FC->unk8;
+    unk0Val = D_8008DE54_8EA54[temp_v1].unk0;
+    unk2Val = D_8008DE54_8EA54[temp_v1].unk2;
+
+    for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+        temp_v1 = (allocation + i)[0x18A8];
+        if (temp_v1 == 3) {
+            temp_v1 = D_800AFE8C_A71FC->unk8;
+            temp_v0 = (s32)D_800AFE8C_A71FC + i;
+            if (temp_v1 == 1) {
+                unk0Val += 0x18;
+                unk8Val = ((u8 *)temp_v0)[0xD] + 0x30;
+            } else {
+                charIndex = ((u8 *)temp_v0)[0xD];
+                unk8Val = charIndex + 0x23;
+                unk0Val = *((u16 *)&D_8008DE9C_8EA9C + temp_v1 * 2) - D_8008DE7A_8EA7A[charIndex];
+            }
+            arg0[i].unk8 = unk8Val;
+        } else {
+            unk8Val = 0x1D;
+            if (D_800AFE8C_A71FC->unk8 == 1) {
+                unk8Val = 0x36;
+            }
+            arg0[i].unk8 = temp_v1 + unk8Val;
+        }
+        arg0[i].unkD = 0;
+        arg0[i].unkC = 0;
+        arg0[i].unk0 = unk0Val;
+        arg0[i].unk2 = unk2Val;
+        arg0[i].unkA = 0xFF;
+        arg0[i].unk4 = dmaResult;
+    }
+
+    setCallback(func_800269C8_275C8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800269C8_275C8);
 
 void func_80026BAC_277AC(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
-
-typedef struct {
-    SelectionEntry entries[4];
-    s16 unk40;
-    s16 unk42;
-    void *unk44;
-    s16 unk48;
-} func_80026BD8_arg;
-
-extern struct {
-    u16 unk0;
-    u16 unk2;
-} D_8008DE9C_8EA9C[];
-void func_80026D34_27934(func_80026BD8_arg *);
-void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
 
 void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
     u8 *allocation;
