@@ -52,8 +52,8 @@ typedef struct {
 
 void func_80006A88_7688(func_80006398_6F98_arg *);
 void func_800069B4_75B4(func_80006398_6F98_arg *);
-void func_80006398_6F98(func_80006398_6F98_arg *);
-void func_8000629C_6E9C(func_80006398_6F98_arg *);
+void cleanupFallingParticle(func_80006398_6F98_arg *);
+void updateFallingParticle(func_80006398_6F98_arg *);
 void func_80006924_7524(func_80006398_6F98_arg *);
 void func_80006458_7058(func_80006398_6F98_arg *);
 
@@ -77,38 +77,38 @@ void func_800061D0_6DD0(func_80006398_6F98_arg *arg0) {
     rand3 = randA();
     arg0->unk6A = (rand3 % 3) + 2;
 
-    setCleanupCallback(func_80006398_6F98);
-    setCallback(func_8000629C_6E9C);
+    setCleanupCallback(cleanupFallingParticle);
+    setCallback(updateFallingParticle);
 }
 
-void func_8000629C_6E9C(func_80006398_6F98_arg *arg0) {
-    func_80006940_inner *inner;
-    s16 temp;
-    s16 newTemp;
-    void *ptr;
+void updateFallingParticle(func_80006398_6F98_arg *arg0) {
+    func_80006940_inner *owner;
+    s16 lifetime;
+    s16 newLifetime;
+    void *spriteState;
 
     if (arg0->unk0->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    temp = arg0->unk68;
-    if (temp < 0) {
+    lifetime = arg0->unk68;
+    if (lifetime < 0) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    newTemp = temp - 1;
-    ptr = &arg0->unk4;
-    arg0->unk68 = newTemp;
-    func_8000A030_AC30(ptr, 0x10000);
+    newLifetime = lifetime - 1;
+    spriteState = &arg0->unk4;
+    arg0->unk68 = newLifetime;
+    func_8000A030_AC30(spriteState, 0x10000);
 
-    inner = arg0->unk0;
-    if (inner->unk88 != 0) {
-        if (inner->displayEnabled != 0) {
+    owner = arg0->unk0;
+    if (owner->unk88 != 0) {
+        if (owner->displayEnabled != 0) {
             func_8000A1E4_ADE4(
-                ptr,
-                inner->unk10->unk16,
+                spriteState,
+                owner->unk10->unk16,
                 arg0->unk50 + arg0->unk5C,
                 arg0->unk54 + arg0->unk60,
                 arg0->unk58 + arg0->unk64,
@@ -125,7 +125,7 @@ void func_8000629C_6E9C(func_80006398_6F98_arg *arg0) {
     arg0->unk60 = arg0->unk60 + 0xFFFEB852;
 }
 
-void func_80006398_6F98(func_80006398_6F98_arg *arg0) {
+void cleanupFallingParticle(func_80006398_6F98_arg *arg0) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
 }
 
