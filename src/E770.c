@@ -116,7 +116,7 @@ void func_8000DC88_E888(E770_struct *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DCD8_E8D8);
 
 void func_8000E154_ED54(E770_struct *arg0) {
-    func_80002014_2C14(arg0->unk624);
+    destroySceneModel(arg0->unk624);
     arg0->unk18 = freeNodeMemory(arg0->unk18);
     arg0->unkC = freeNodeMemory(arg0->unkC);
     arg0->unk8 = freeNodeMemory(arg0->unk8);

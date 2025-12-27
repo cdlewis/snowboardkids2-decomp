@@ -113,7 +113,7 @@ void func_80028AEC_296EC(Func80028600Arg *arg0) {
 
     alloc->unk422 = 1;
     alloc->unk42E = 1;
-    arg0->model = func_80002014_2C14(arg0->model);
+    arg0->model = destroySceneModel(arg0->model);
     arg0->unk5A = (randB() & 0x1F) + 0xF;
     setCallback(func_80028B44_29744);
 }
@@ -127,5 +127,5 @@ void func_80028B44_29744(Func80028600Arg *arg0) {
 }
 
 void func_80028B80_29780(Func80028600Arg *arg0) {
-    arg0->model = func_80002014_2C14(arg0->model);
+    arg0->model = destroySceneModel(arg0->model);
 }

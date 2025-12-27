@@ -131,7 +131,7 @@ void func_800B2C78(func_800B2C78_arg *arg0) {
 
     for (i = 0; i < (getCutsceneSlotCount() & 0xFF); i++) {
         if (arg0[i].unkF0 != 0) {
-            arg0[i].unkF0 = func_80002014_2C14(arg0[i].unkF0);
+            arg0[i].unkF0 = destroySceneModel(arg0[i].unkF0);
         }
     }
 

@@ -93,7 +93,7 @@ void func_80019C7C_1A87C(applyTransformToModel_arg1 *arg0) {
 }
 
 void func_80019CB4_1A8B4(applyTransformToModel_arg1 *arg0) {
-    func_80002014_2C14(arg0->unk20_u.unk20);
+    destroySceneModel(arg0->unk20_u.unk20);
 }
 
 void func_80019CD0_1A8D0(func_80019CD0_1A8D0_arg *arg0) {

@@ -258,8 +258,8 @@ void applyTransformToModel(SceneModel *arg0, Mat3x3Padded *arg1);
 
 void initializeGameEntity(void *, s32, void *, s8, s8, s8, s16);
 
-SceneModel *func_80002014_2C14(SceneModel *arg0);
-void *func_80002040_2C40(SceneModel *arg0);
+SceneModel *destroySceneModel(SceneModel *arg0);
+void *cleanupSceneModel(SceneModel *arg0);
 
 s32 clearModelRotation(SceneModel *);
 

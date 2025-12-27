@@ -460,7 +460,7 @@ void func_800047A0_53A0(StructUnk800048D0 *arg0) {
     arg0->unk0->unk2C -= D_8008BFF4_8CBF4;
 
     if (arg0->unk0->unk2C < -D_8008BFF0_8CBF0) {
-        func_80002040_2C40(arg0->unk0);
+        cleanupSceneModel(arg0->unk0);
         arg0->unkA = 1;
         func_80069CF8_6A8F8();
     } else {
@@ -471,7 +471,7 @@ void func_800047A0_53A0(StructUnk800048D0 *arg0) {
 void func_800048D0_54D0(StructUnk800048D0 *arg0) {
     getCurrentAllocation();
     if (arg0->unkA == 0) {
-        func_80002040_2C40(arg0->unk0);
+        cleanupSceneModel(arg0->unk0);
     }
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }

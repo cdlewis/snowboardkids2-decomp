@@ -756,7 +756,7 @@ void func_80024BA0_257A0(func_80024C8C_2588C_arg *arg0) {
 
     val = state->unk1898[arg0->unk28];
     if (val == 0x10) {
-        func_80002014_2C14(arg0->unk0);
+        destroySceneModel(arg0->unk0);
         setCallback(func_80024DCC_259CC);
     }
 }
@@ -773,11 +773,11 @@ void func_80024C8C_2588C(func_80024C8C_2588C_arg *arg0) {
     val = *(base + arg0->unk28 + (0x1898 / 2));
 
     if (val == 0x10) {
-        func_80002014_2C14(arg0->unk0);
+        destroySceneModel(arg0->unk0);
         setCallback(func_80024DCC_259CC);
     } else if (val == 0) {
         arg0->unk4.unk14 = 0xFFEA0000;
-        func_80002014_2C14(arg0->unk0);
+        destroySceneModel(arg0->unk0);
         setCallback(func_80024D40_25940);
     } else if (val == 0x11) {
         arg0->unk4.unk14 = 0xFFEA0000;
@@ -860,7 +860,7 @@ void func_80024FEC_25BEC(func_80024C8C_2588C_arg *arg0) {
 }
 
 void func_80025058_25C58(func_80025280_25E80_arg *arg0) {
-    func_80002014_2C14(arg0->unk0);
+    destroySceneModel(arg0->unk0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025074_25C74);
@@ -906,7 +906,7 @@ void func_800251AC_25DAC(func_80025130_25D30_arg *arg0) {
 }
 
 void *func_80025280_25E80(func_80025280_25E80_arg *arg0) {
-    return func_80002014_2C14(arg0->unk0);
+    return destroySceneModel(arg0->unk0);
 }
 
 #define CONST_0xB_8002529C 0xB

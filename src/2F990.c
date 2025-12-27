@@ -309,7 +309,7 @@ void func_8002F024_2FC24(func_8002EF3C_2FB3C_arg *arg0) {
 }
 
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *arg0) {
-    func_80002014_2C14(arg0->unk0);
+    destroySceneModel(arg0->unk0);
 }
 
 void func_8002F12C_2FD2C(func_8002F658_30258_arg *arg0) {

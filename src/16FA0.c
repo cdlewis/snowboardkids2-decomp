@@ -361,5 +361,5 @@ void func_80016DE0_179E0(Struct16B68 *arg0) {
 }
 
 void func_80016E70_17A70(Struct16B68 *arg0) {
-    arg0->unk0 = func_80002014_2C14(arg0->unk0);
+    arg0->unk0 = destroySceneModel(arg0->unk0);
 }

@@ -430,7 +430,7 @@ void func_80020418_21018(Func80020418Arg *arg0) {
 
 void func_80020528_21128(Func80020528Arg *arg0) {
     arg0->unk18 = freeNodeMemory(arg0->unk18);
-    func_80002014_2C14(arg0->unk2C);
+    destroySceneModel(arg0->unk2C);
 }
 
 s32 func_8002055C_2115C(Func8001F6A0Arg *arg0) {
@@ -736,7 +736,7 @@ void func_8002144C_2204C(Func8002144CArg *arg0) {
 }
 
 void func_8002152C_2212C(Func8002144CArg *arg0) {
-    func_80002014_2C14(arg0->unk0);
+    destroySceneModel(arg0->unk0);
 }
 
 void func_80021548_22148(u8 arg0, Func8002144CArg *arg1) {

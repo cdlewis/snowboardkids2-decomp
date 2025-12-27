@@ -462,43 +462,50 @@ void initializeGameEntity(
 INCLUDE_ASM("asm/nonmatchings/20F0", initializeGameEntity);
 #endif
 
-SceneModel *func_80002014_2C14(SceneModel *arg0) {
-    func_80002040_2C40(arg0);
+SceneModel *destroySceneModel(SceneModel *arg0) {
+    cleanupSceneModel(arg0);
     return (SceneModel *)freeNodeMemory(arg0);
 }
 
-void *func_80002040_2C40(SceneModel *arg0) {
-    SceneModel_unk98 *temp_s0;
-    SceneModel_unk0 *temp_s0_2;
-    void *new_var;
-    SceneModel_unk0 *temp_s0_3;
-    if (arg0 == 0) {
+void *cleanupSceneModel(SceneModel *model) {
+    SceneModel_unk98 *slotData;
+    SceneModel_unk0 *modelData;
+    void *freedSlot;
+    SceneModel_unk0 *modelData2;
+
+    if (model == 0) {
         return 0;
     }
-    arg0->isDestroyed = 1;
-    arg0->unk120 = freeNodeMemory(arg0->unk120);
-    arg0->unk11C = freeNodeMemory(arg0->unk11C);
-    arg0->unk118 = func_8000CDFC_D9FC(arg0->unk118);
-    arg0->unk114 = func_8000CDE0_D9E0(arg0->unk114);
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unkA4);
-    temp_s0 = arg0->unk98;
-    temp_s0->unk24 = freeNodeMemory(temp_s0->unk24);
-    temp_s0->unk28 = freeNodeMemory(temp_s0->unk28);
-    new_var = freeNodeMemory(arg0->unk98);
-    temp_s0_2 = arg0->unk0;
-    arg0->unk98 = new_var;
-    temp_s0_2->unk420 = freeNodeMemory(temp_s0_2->unk420);
-    temp_s0_2->unk424 = freeNodeMemory(temp_s0_2->unk424);
-    temp_s0_3 = arg0->unk0;
-    temp_s0_3->unk3E4 = freeNodeMemory(temp_s0_3->unk3E4);
-    temp_s0_3->unk3E8 = freeNodeMemory(temp_s0_3->unk3E8);
-    temp_s0_3->unk3EC = freeNodeMemory(temp_s0_3->unk3EC);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
-    arg0->unk0->unk24 = freeNodeMemory(arg0->unk0->unk24);
-    arg0->unk0->unk28 = freeNodeMemory(arg0->unk0->unk28);
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    return arg0;
+
+    model->isDestroyed = 1;
+    model->unk120 = freeNodeMemory(model->unk120);
+    model->unk11C = freeNodeMemory(model->unk11C);
+    model->unk118 = func_8000CDFC_D9FC(model->unk118);
+    model->unk114 = func_8000CDE0_D9E0(model->unk114);
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&model->unkA4);
+
+    slotData = model->unk98;
+    slotData->unk24 = freeNodeMemory(slotData->unk24);
+    slotData->unk28 = freeNodeMemory(slotData->unk28);
+    freedSlot = freeNodeMemory(model->unk98);
+
+    modelData = model->unk0;
+    model->unk98 = freedSlot;
+    modelData->unk420 = freeNodeMemory(modelData->unk420);
+    modelData->unk424 = freeNodeMemory(modelData->unk424);
+
+    modelData2 = model->unk0;
+    modelData2->unk3E4 = freeNodeMemory(modelData2->unk3E4);
+    modelData2->unk3E8 = freeNodeMemory(modelData2->unk3E8);
+    modelData2->unk3EC = freeNodeMemory(modelData2->unk3EC);
+
+    model->unk4 = freeNodeMemory(model->unk4);
+    model->unk8 = freeNodeMemory(model->unk8);
+    model->unk0->unk24 = freeNodeMemory(model->unk0->unk24);
+    model->unk0->unk28 = freeNodeMemory(model->unk0->unk28);
+    model->unk0 = freeNodeMemory(model->unk0);
+
+    return model;
 }
 
 void func_80002170_2D70(func_80002B50_3750_arg *arg0, s16 arg1) {

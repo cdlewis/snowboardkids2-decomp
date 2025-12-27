@@ -342,7 +342,7 @@ void func_800B08FC_1DAE9C(func_800B08FC_arg *arg0) {
 }
 
 void func_800B0964_1DAF04(func_800B08FC_arg *arg0) {
-    func_80002014_2C14(arg0->unk0);
+    destroySceneModel(arg0->unk0);
 }
 
 void func_800B0980_1DAF20(func_800B0980_container *arg0) {

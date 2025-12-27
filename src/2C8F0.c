@@ -48,7 +48,7 @@ void func_8002BE94_2CA94(Struct2C8F0 *arg0) {
     s32 i;
 
     for (i = 0; i < arg0->unkD5; i++) {
-        arg0->elems[i].unk0 = func_80002014_2C14(arg0->elems[i].unk0);
+        arg0->elems[i].unk0 = destroySceneModel(arg0->elems[i].unk0);
     }
 }
 
