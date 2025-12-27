@@ -23,7 +23,7 @@ void cutsceneChrPosition_exec(cutsceneChrPosition_exec_arg *arg0, CutsceneManage
     setupSlotTransform(slotData);
     applyTransformToModel(slot->model, &slot->slotData.unk04);
     func_80002260_2E60(slot->model, arg0->unkE, arg0->unk12, arg0->unk11, -1, arg0->unk14);
-    func_800015CC_21CC(slot->model, arg0->unk10);
+    setModelActionMode(slot->model, arg0->unk10);
 }
 
 s32 cutsceneChrPosition_isDone(void) {
@@ -75,7 +75,7 @@ void cutsceneChrMove_exec(cutsceneChrMove_exec_arg *arg0, CutsceneManager *arg1,
 
     func_80002260_2E60(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, animId, arg0->unk16);
 
-    func_800015CC_21CC(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg0->unk12);
 }
 
 s32 cutsceneChrMove_isDone(void) {
@@ -93,7 +93,7 @@ void cutsceneChrAnime_exec(cutsceneChrAnime_exec_arg *arg0, CutsceneManager *arg
     CutsceneSlot *slot = &arg1->slots[arg2];
     slot->slotData.unk0.Two = 0;
     func_80002260_2E60(slot->model, arg0->unk0, arg0->unk4, arg0->unk3, -1, -1);
-    func_800015CC_21CC(slot->model, arg0->unk2);
+    setModelActionMode(slot->model, arg0->unk2);
 }
 
 s32 cutsceneChrAnime_isDone(void) {
@@ -202,7 +202,7 @@ void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg
 
     func_80002260_2E60(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, animId, arg0->unk17);
 
-    func_800015CC_21CC(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg0->unk12);
 }
 
 s32 cutsceneChrMove2_isDone(void) {
@@ -259,7 +259,7 @@ void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager 
 
     func_80002220_2E20(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1);
 
-    func_800015CC_21CC(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg0->unk12);
 }
 
 s32 cutsceneChrBoardMove_isDone(void) {
@@ -347,7 +347,7 @@ void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg0, CutsceneManager *arg1,
 
     func_800B7914_1E49C4(&slot->slotData, arg0->unk0, arg0->unk4, arg0->unk8, arg0->unkE);
     func_80002220_2E20(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1);
-    func_800015CC_21CC(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg0->unk12);
 }
 
 s32 cutsceneChrBack_isDone(void) {
@@ -399,7 +399,7 @@ void cutsceneChrUpDown_exec(cutsceneChrUpDown_exec_arg *arg0, CutsceneManager *a
 
     func_80002260_2E60(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1, arg0->unk16);
 
-    func_800015CC_21CC(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg0->unk12);
 }
 
 s32 cutsceneChrUpDown_isDone(void) {
@@ -433,7 +433,7 @@ void cutsceneChrAnime2_exec(cutsceneChrAnime2_exec_arg *arg0, CutsceneManager *a
     slot = &arg1->slots[arg2];
     slot->slotData.unk0.Two = 1;
     func_80002260_2E60(slot->model, arg0->unk0, arg0->unk4, arg0->unk3, -1, -1);
-    func_800015CC_21CC(slot->model, arg0->unk2);
+    setModelActionMode(slot->model, arg0->unk2);
 }
 
 s32 cutsceneChrAnime2_isDone(void) {
@@ -464,7 +464,7 @@ void cutsceneChrMove3_exec(cutsceneChrMove3_exec_arg *arg0, CutsceneManager *arg
 
     func_80002260_2E60(currentSlot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1, arg0->unk16);
 
-    func_800015CC_21CC(currentSlot->model, arg0->unk12);
+    setModelActionMode(currentSlot->model, arg0->unk12);
 }
 
 s32 cutsceneChrMove3_isDone(void) {
@@ -509,7 +509,7 @@ void cutsceneChrMoveSight_exec(cutsceneChrMoveSight_exec_arg *arg0, CutsceneMana
 
     func_800021E8_2DE8(slot->model, arg0->unk10, arg0->unk14, arg0->unk13);
 
-    func_800015CC_21CC(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg0->unk12);
 }
 
 s32 cutsceneChrMoveSight_isDone(void) {
@@ -603,7 +603,7 @@ void cutsceneChrPosition2_exec(cutsceneChrPosition2_exec_arg *arg0, CutsceneMana
     setupSlotTransform(slotData);
     applyTransformToModel(slot->model, &slot->slotData.unk04);
     func_80002260_2E60(slot->model, arg0->unkE, arg0->unk12, arg0->unk11, -1, arg0->unk14);
-    func_800015CC_21CC(slot->model, arg0->unk10);
+    setModelActionMode(slot->model, arg0->unk10);
 }
 
 s32 cutsceneChrPosition2_isDone(void) {

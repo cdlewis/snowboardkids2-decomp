@@ -413,7 +413,7 @@ void func_8000464C_524C(StructUnk800048D0 *arg0) {
     ((SceneModel30 *)arg0->unk0)->unk2C = D_8008BFF0_8CBF0;
     ((SceneModel30 *)arg0->unk0)->unk30 += entry->unkC;
 
-    func_800015CC_21CC(arg0->unk0, entry->unk5);
+    setModelActionMode(arg0->unk0, entry->unk5);
 
     {
         s32 temp_a1 = D_8008BFF8_8CBF8;
@@ -442,14 +442,14 @@ void func_800047A0_53A0(StructUnk800048D0 *arg0) {
             break;
         case 1:
             if (entry->unk0 == 0x73) {
-                func_800015CC_21CC(arg0->unk0, 3);
+                setModelActionMode(arg0->unk0, 3);
                 arg0->unk4 = 2;
             }
             clearModelRotation(arg0->unk0);
             break;
         case 2:
             if (entry->unk0 == 0x73) {
-                func_800015CC_21CC(arg0->unk0, 8);
+                setModelActionMode(arg0->unk0, 8);
             }
             clearModelRotation(arg0->unk0);
             break;

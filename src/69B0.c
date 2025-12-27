@@ -80,7 +80,7 @@ void func_8000605C_6C5C(Struct69B0 *arg0) {
         return;
     }
 
-    switch (temp_a0->unk3D) {
+    switch (temp_a0->actionMode) {
         default:
         case 0:
             arg0->unkA = 0;

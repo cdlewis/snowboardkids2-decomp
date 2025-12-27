@@ -58,7 +58,7 @@ void func_80007EC8_8AC8(func_8A40_arg *arg0) {
         return;
     }
 
-    switch (arg0->unk0->unk3D) {
+    switch (arg0->unk0->actionMode) {
         case 0:
         default:
             arg0->unk42 = 0;
@@ -141,10 +141,10 @@ void func_8000811C_8D1C(func_800080B8_8CB8_arg *arg0) {
 
     memcpy(&arg0->unk0->unkF0, identityMatrix, 0x20);
 
-    if (arg0->unk0->unk3D == 0) {
+    if (arg0->unk0->actionMode == 0) {
         return;
     }
-    if (arg0->unk0->unk3D == 1) {
+    if (arg0->unk0->actionMode == 1) {
         createXRotationMatrix(arg0->unk0->unkF0, 0xFCE4);
         arg0->unk0->unk10C += 0x66666;
     }

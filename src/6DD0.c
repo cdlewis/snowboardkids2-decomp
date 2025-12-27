@@ -19,7 +19,7 @@ typedef struct {
     s32 unk34;
     u8 _pad4[0x4];
     s8 isDestroyed;
-    s8 unk3D;
+    s8 actionMode;
     s8 unk3E;
     s8 unk3F;
     u8 _pad5[0x48];

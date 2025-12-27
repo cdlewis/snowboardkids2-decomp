@@ -12,7 +12,7 @@ void func_80006C3C_783C(void);
 typedef struct {
     u8 padding[0x3C];
     s8 isDestroyed;
-    s8 unk3D;
+    s8 actionMode;
     u8 padding2[0xB2];
     u8 unkF0[0x20];
 } func_80006B04_Unk0;
@@ -44,10 +44,10 @@ void func_80006B04_7704(func_80006AB0_76B0_arg *arg0) {
         return;
     }
 
-    if (arg0->unk0->unk3D == 0) {
+    if (arg0->unk0->actionMode == 0) {
         goto copy_identity;
     }
-    if (arg0->unk0->unk3D == 1) {
+    if (arg0->unk0->actionMode == 1) {
         goto do_rotation;
     }
 

@@ -73,7 +73,7 @@ typedef struct {
     /* 0x18 */ s16 matrix18[3][3];
     u8 padding2[0x3C - 0x2A];
     s8 isDestroyed;
-    s8 unk3D;
+    s8 actionMode;
     s8 unk3E;
     s8 unk3F;
     u8 padding3[0x88 - 0x40];
@@ -126,7 +126,7 @@ typedef struct {
     s16 unk38;
     s16 unk3A;
     s8 isDestroyed;
-    s8 unk3D;
+    s8 actionMode;
     s8 unk3E;
     s8 unk3F;
     s32 unk40;
@@ -201,7 +201,7 @@ typedef struct {
     s16 unk38;
     s16 unk3A;
     u8 isDestroyed;
-    u8 unk3D;
+    u8 actionMode;
     u8 unk3E;
     u8 unk3F;
     u32 unk40;
@@ -280,7 +280,7 @@ void func_80002220_2E20(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4)
 
 void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5);
 
-void func_800015CC_21CC(SceneModel *arg0, s8 arg1);
+void setModelActionMode(SceneModel *model, s8 actionMode);
 
 void func_800016E0_22E0(SceneModel *arg0, s32 arg1);
 

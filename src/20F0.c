@@ -33,8 +33,8 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x3D];
-    s8 unk3D;
-} func_800015CC_21CC_arg;
+    s8 actionMode;
+} getModelActionMode_arg;
 
 typedef struct {
     u8 padding[0x14];
@@ -121,12 +121,12 @@ s8 getAssetCount(s16 arg0) {
     return gameAssets[arg0].numAssets;
 }
 
-void func_800015CC_21CC(SceneModel *arg0, s8 arg1) {
-    arg0->unk3D = arg1;
+void setModelActionMode(SceneModel *model, s8 actionMode) {
+    model->actionMode = actionMode;
 }
 
-s8 func_800015D4_21D4(func_800015CC_21CC_arg *arg0) {
-    return arg0->unk3D;
+s8 getModelActionMode(getModelActionMode_arg *arg0) {
+    return arg0->actionMode;
 }
 
 s32 func_800015DC_21DC(s16 arg0) {
@@ -457,7 +457,7 @@ void initializeGameEntity(
     ent->unk88 = 1;
     ent->unk4E = 0;
     ent->unk4F = assetEntry->unk31;
-    ent->unk3D = 0;
+    ent->actionMode = 0;
 
     func_80009E68_AA68(&ent->unkA4, 0);
     ent->unk114 = func_8000CD88_D988();

@@ -226,10 +226,10 @@ void func_8000799C_859C(func_800078C4_84C4_arg *arg0) {
         return;
     }
 
-    temp_v0 = arg0->unk0->unk3D;
-    if (arg0->unk0->unk3D == 0) {
+    temp_v0 = arg0->unk0->actionMode;
+    if (arg0->unk0->actionMode == 0) {
         arg0->unk3C = 0;
-    } else if (temp_v0 < 0 || arg0->unk0->unk3D >= 3) {
+    } else if (temp_v0 < 0 || arg0->unk0->actionMode >= 3) {
         arg0->unk3C = 0;
     } else {
         do {
@@ -241,7 +241,7 @@ void func_8000799C_859C(func_800078C4_84C4_arg *arg0) {
         func_80001604_2204(arg0->unk0, 0);
     }
 
-    if (arg0->unk0->unk3D == 1) {
+    if (arg0->unk0->actionMode == 1) {
         temp_t0 = arg0->unk3C;
         if (arg0->unk3C < 7) {
             arg0->unk34 = 0;

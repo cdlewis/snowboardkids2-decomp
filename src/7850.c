@@ -19,7 +19,7 @@ typedef struct {
     s32 unk34;
     u8 _pad4[0x4];
     s8 isDestroyed;
-    s8 unk3D;
+    s8 actionMode;
     u8 _pad5;
     s8 unk3F;
     u8 _pad6[0x48];
@@ -101,7 +101,7 @@ void func_80006CBC_78BC(func_80006C50_7850_arg *arg0) {
         return;
     }
 
-    switch (arg0->unk0->unk3D) {
+    switch (arg0->unk0->actionMode) {
         default:
 
         case 0:
@@ -125,7 +125,7 @@ void func_80006CBC_78BC(func_80006C50_7850_arg *arg0) {
             if (arg0->unk54 > 0xC80000) {
                 v0 = arg0->unk0;
                 arg0->unk58 = 0xC80000;
-                v0->unk3D = 0;
+                v0->actionMode = 0;
             }
             break;
     }

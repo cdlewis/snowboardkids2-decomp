@@ -21,7 +21,7 @@ typedef struct {
     s32 unk34;
     u8 _pad38[0x4];
     s8 isDestroyed;
-    s8 unk3D;
+    s8 actionMode;
     s8 unk3E;
     s8 unk3F;
     u8 _pad40[0x48];
@@ -68,10 +68,10 @@ void func_800081EC_8DEC(func_800081EC_8DEC_arg *arg0) {
 
     memcpy(&arg0->unk0->unkF0, identityMatrix, 0x20);
 
-    if (arg0->unk0->unk3D == 0) {
+    if (arg0->unk0->actionMode == 0) {
         return;
     }
-    if (arg0->unk0->unk3D != 1) {
+    if (arg0->unk0->actionMode != 1) {
         return;
     }
 
@@ -110,7 +110,7 @@ void func_80008370_8F70(Arg8F70 *arg0) {
         return;
     }
 
-    switch (inner->unk3D) {
+    switch (inner->actionMode) {
         case 0:
             arg0->unk50 = 0;
             break;
