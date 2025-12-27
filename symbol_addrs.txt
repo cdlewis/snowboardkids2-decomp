@@ -44,6 +44,7 @@ initSteppedMatrixController = 0x80006AB0; // rom:0x76B0
 updateSteppedMatrixController = 0x80006B04; // rom:0x7704
 cleanupSteppedMatrixController = 0x80006C3C; // rom:0x783C
 initPulsingSpriteIndicator = 0x80006C50; // rom:0x7850
+updatePulsingSpriteIndicator = 0x80006CBC; // rom:0x78BC
 getEmptyModelDisplayOffset = 0x80002B8C; // rom:0x378C
 getModelDisplayDataOffset = 0x80002BD0; // rom:0x37D0
 loadAssetSlotTableEntry = 0x80002C14; // rom:0x3814

@@ -8,15 +8,15 @@
 typedef struct {
     u8 _pad[0x16];
     u16 unk16;
-} func_80006CBC_unk10;
+} PulsingSpriteOwnerData;
 
 typedef struct {
     u8 _pad[0x10];
-    func_80006CBC_unk10 *unk10;
+    PulsingSpriteOwnerData *ownerData;
     u8 _pad2[0x18];
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
+    s32 posX;
+    s32 posY;
+    s32 posZ;
     u8 _pad4[0x4];
     s8 isDestroyed;
     s8 actionMode;
@@ -24,15 +24,15 @@ typedef struct {
     s8 displayEnabled;
     u8 _pad6[0x48];
     s8 unk88;
-} func_80006CBC_inner;
+} PulsingSpriteOwner;
 
 typedef struct {
-    func_80006CBC_inner *unk0;
-    SpriteAssetState unk4;
+    PulsingSpriteOwner *owner;
+    SpriteAssetState spriteState;
     u8 padding[4];
-    s32 unk54;
-    s32 unk58;
-} func_80006C50_7850_arg;
+    s32 scale;
+    s32 scaleVelocity;
+} PulsingSpriteState;
 
 typedef struct {
     u8 padding[0x28];
@@ -63,32 +63,32 @@ typedef struct {
 void func_80007030_7C30(func_80007030_7C30_arg *);
 void func_8000A190_AD90(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);
 
-void func_80006CBC_78BC(func_80006C50_7850_arg *);
-extern void func_80006E44_7A44(func_80006C50_7850_arg *);
+void updatePulsingSpriteIndicator(PulsingSpriteState *);
+extern void func_80006E44_7A44(PulsingSpriteState *);
 void func_80006E60_7A60(func_80006E60_7A60_arg *);
 void func_80006EE0_7AE0(func_80006E60_7A60_arg *);
 extern void *D_80088720_89320;
 extern u8 identityMatrix[];
 
-void initPulsingSpriteIndicator(func_80006C50_7850_arg *arg0) {
+void initPulsingSpriteIndicator(PulsingSpriteState *arg0) {
     SpriteAssetState *temp_s0;
 
-    temp_s0 = &arg0->unk4;
-    arg0->unk54 = 0xC80000;
-    arg0->unk58 = 0x80000;
+    temp_s0 = &arg0->spriteState;
+    arg0->scale = 0xC80000;
+    arg0->scaleVelocity = 0x80000;
     func_80009E68_AA68(temp_s0, 7);
     func_80009F90_AB90(temp_s0, 0x10000, 0, -1);
     setCleanupCallback(&func_80006E44_7A44);
-    setCallback(&func_80006CBC_78BC);
+    setCallback(&updatePulsingSpriteIndicator);
 }
 
-void func_80006CBC_78BC(func_80006C50_7850_arg *arg0) {
+void updatePulsingSpriteIndicator(PulsingSpriteState *arg0) {
     s8 sp28[2];
-    func_80006CBC_inner *temp;
-    func_80006CBC_inner *v0;
-    s32 s3;
-    s32 s4;
-    s32 s1;
+    PulsingSpriteOwner *ownerRef;
+    PulsingSpriteOwner *owner;
+    s32 x;
+    s32 y;
+    s32 z;
 
     do {
     } while (0);
@@ -96,71 +96,71 @@ void func_80006CBC_78BC(func_80006C50_7850_arg *arg0) {
     sp28[0] = 1;
     sp28[1] = -1;
 
-    if (arg0->unk0->isDestroyed == 1) {
+    if (arg0->owner->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    switch (arg0->unk0->actionMode) {
+    switch (arg0->owner->actionMode) {
         default:
 
         case 0:
-            arg0->unk54 += arg0->unk58;
-            if (arg0->unk54 > 0xC80000) {
-                arg0->unk58 = 0xFFF80000;
-            } else if (arg0->unk54 <= 0x63FFFF) {
-                arg0->unk58 = 0x80000;
+            arg0->scale += arg0->scaleVelocity;
+            if (arg0->scale > 0xC80000) {
+                arg0->scaleVelocity = 0xFFF80000;
+            } else if (arg0->scale <= 0x63FFFF) {
+                arg0->scaleVelocity = 0x80000;
             }
             break;
 
         case 1:
-            arg0->unk54 += 0xFFF80000;
-            if (arg0->unk54 < 0) {
-                arg0->unk54 = 0;
+            arg0->scale += 0xFFF80000;
+            if (arg0->scale < 0) {
+                arg0->scale = 0;
             }
             break;
 
         case 2:
-            arg0->unk54 += 0x40000;
-            if (arg0->unk54 > 0xC80000) {
-                v0 = arg0->unk0;
-                arg0->unk58 = 0xC80000;
-                v0->actionMode = 0;
+            arg0->scale += 0x40000;
+            if (arg0->scale > 0xC80000) {
+                owner = arg0->owner;
+                arg0->scaleVelocity = 0xC80000;
+                owner->actionMode = 0;
             }
             break;
     }
 
-    v0 = arg0->unk0;
-    s3 = v0->unk2C;
-    s4 = v0->unk30;
-    s1 = v0->unk34;
-    func_8000A030_AC30(&arg0->unk4, 0x10000);
+    owner = arg0->owner;
+    x = owner->posX;
+    y = owner->posY;
+    z = owner->posZ;
+    func_8000A030_AC30(&arg0->spriteState, 0x10000);
 
-    temp = arg0->unk0;
-    if (temp->unk88 == 0) {
+    ownerRef = arg0->owner;
+    if (ownerRef->unk88 == 0) {
         return;
     }
 
-    if (temp->displayEnabled == 0) {
+    if (ownerRef->displayEnabled == 0) {
         return;
     }
 
     func_8000A190_AD90(
-        (s32 *)&arg0->unk4,
-        temp->unk10->unk16,
-        s3,
-        s4,
-        s1,
+        (s32 *)&arg0->spriteState,
+        ownerRef->ownerData->unk16,
+        x,
+        y,
+        z,
         0x10000,
         0x10000,
         0,
         0,
-        ((u8 *)(&arg0->unk54))[1]
+        ((u8 *)(&arg0->scale))[1]
     );
 }
 
-void func_80006E44_7A44(func_80006C50_7850_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
+void func_80006E44_7A44(PulsingSpriteState *arg0) {
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
 }
 
 void func_80006E60_7A60(func_80006E60_7A60_arg *arg0) {
