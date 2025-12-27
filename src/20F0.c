@@ -233,16 +233,16 @@ void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
     }
 }
 
-s32 func_800017F4_23F4(func_80002B50_3750_arg *arg0) {
+s32 isModelVisible(func_80002B50_3750_arg *model) {
     s32 new_var;
     int new_var2 = 0;
-    s32 var_v0 = 0;
+    s32 isVisible = 0;
 
-    if ((arg0 != 0) && ((new_var = arg0->unk88) != new_var2)) {
-        var_v0 = arg0->displayEnabled != 0;
+    if ((model != 0) && ((new_var = model->unk88) != new_var2)) {
+        isVisible = model->displayEnabled != 0;
     }
 
-    new_var = var_v0;
+    new_var = isVisible;
     return new_var;
 }
 

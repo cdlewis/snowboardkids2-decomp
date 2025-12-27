@@ -480,6 +480,7 @@ D_80094C30_95830 = 0x80094C30; // type:s32 size:0x90
 initializeGameEntity = 0x80001A6C;
 queueUncompressedDmaTransfer = 0x8003B8F0;
 loadAssetDataByMode = 0x80001714;
+isModelVisible = 0x800017F4; // rom:0x23F4
 loadAssetGroupSoundData = 0x80001818;
 loadAssetGroupVertexData = 0x800018AC;
 loadAssetGroupDisplayList = 0x80001868;
