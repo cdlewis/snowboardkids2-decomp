@@ -11,6 +11,7 @@ D_8008DE54_8EA54 = 0x8008DE54; // rom:0x8EA54 size:0x10
 awaitCutsceneTransitionComplete = 0x80003C34; // rom:0x4834
 signalCutsceneComplete = 0x80003C88; // rom:0x4888
 beginCutsceneSequence = 0x80003CA4; // rom:0x48A4
+initCutscenePlayback = 0x80003CC4; // rom:0x48C4
 getEmptyModelDisplayOffset = 0x80002B8C; // rom:0x378C
 getModelDisplayDataOffset = 0x80002BD0; // rom:0x37D0
 loadAssetSlotTableEntry = 0x80002C14; // rom:0x3814

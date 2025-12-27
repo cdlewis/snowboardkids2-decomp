@@ -24,16 +24,16 @@ typedef struct {
     s16 cutsceneType;
     s16 frameIndex;
     s16 unk6;
-    CompositeInt unk8;
-    CompositeInt unkC;
+    CompositeInt slotSelection;
+    CompositeInt typeSelection;
 } CutsceneState;
 
 CutsceneState gCutsceneState = { .slotIndex = 0,
                                  .cutsceneType = 0,
                                  .frameIndex = 0,
                                  .unk6 = 0,
-                                 .unk8 = { .half = { .lower = 0, .upper = 0 } },
-                                 .unkC = { .half = { .lower = 0, .upper = 2 } } };
+                                 .slotSelection = { .half = { .lower = 0, .upper = 0 } },
+                                 .typeSelection = { .half = { .lower = 0, .upper = 2 } } };
 
 extern s16 D_800AB070_A23E0; // gCutsceneSlotIndex
 extern s16 D_800AFEF0_A7260; // gCutsceneType
@@ -57,7 +57,7 @@ void loadCutsceneOverlay(void);
 void runCutsceneFrame(void);
 void signalCutsceneComplete(void);
 void func_80003D30_4930(void);
-void func_80003CC4_48C4(void);
+void initCutscenePlayback(void);
 void initCutsceneRenderer(void);
 
 void setCutsceneSelection(s16 slotIndex, s16 cutsceneType) {
@@ -175,14 +175,14 @@ void signalCutsceneComplete(void) {
 }
 
 void beginCutsceneSequence(void) {
-    setGameStateHandler(&func_80003CC4_48C4);
+    setGameStateHandler(&initCutscenePlayback);
 }
 
-void func_80003CC4_48C4(void) {
-    if ((gCutsceneState.unk8.full == 5) && (gCutsceneState.unkC.full == 0)) {
-        gCutsceneState.unkC.full = 1;
+void initCutscenePlayback(void) {
+    if ((gCutsceneState.slotSelection.full == 5) && (gCutsceneState.typeSelection.full == 0)) {
+        gCutsceneState.typeSelection.full = 1;
     }
-    setCutsceneSelection(gCutsceneState.unk8.half.upper, gCutsceneState.unkC.half.upper);
+    setCutsceneSelection(gCutsceneState.slotSelection.half.upper, gCutsceneState.typeSelection.half.upper);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
     setGameStateHandler(&func_80003D30_4930);
 }
