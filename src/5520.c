@@ -51,7 +51,7 @@ typedef struct {
 } func_80005808_6408_arg;
 
 void renderOpaqueTiledTexture(DisplayListObject *arg0);
-void func_80005714_6314(s32 arg0);
+void renderTransparentTiledTexture(s32 arg0);
 void func_80005740_6340(s32 arg0);
 void func_80004920_5520(void);
 void func_80005094_5C94(void);
@@ -101,7 +101,7 @@ void renderOpaqueTiledTexture(DisplayListObject *arg0) {
     buildDisplayListSegment(arg0);
 }
 
-void func_80005714_6314(s32 arg0) {
+void renderTransparentTiledTexture(s32 arg0) {
     func_80005094_5C94();
     func_800638C0_644C0((DisplayListObject *)arg0);
 }
@@ -117,7 +117,7 @@ void func_8000576C_636C(s32 arg0, func_800B5500_Task *arg1) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderOpaqueTiledTexture, arg1);
     }
     if (arg1->unk20->unk8 != 0) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 3, &func_80005714_6314, arg1);
+        debugEnqueueCallback(arg0 & 0xFFFF, 3, &renderTransparentTiledTexture, arg1);
     }
     if (arg1->unk20->unkC != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_80005740_6340, arg1);
