@@ -147,6 +147,7 @@ python3 tools/decomp-permuter/permuter.py \
   --best-only \
   --stop-on-zero \
   --stack-diffs \
+  --quiet \
   --algorithm levenshtein "$PERMUTER_DIR"
 
 PERMUTER_EXIT_CODE=$?

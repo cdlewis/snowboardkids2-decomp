@@ -141,3 +141,7 @@ loadCompressedData(_4237C0_ROM_START, _4237C0_ROM_END);
 ```
 
 Failure to handle assets properly will almost certainly guarantee a mismatch.
+
+### Skills
+
+Consider what skills you have access to and how they may help you achieve your goals.
