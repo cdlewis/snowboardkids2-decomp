@@ -20,13 +20,6 @@ typedef struct {
 } func_80002C14_3814_arg;
 
 typedef struct {
-    u8 padding[0x4C];
-    s16 unk4C;
-    s8 unk4E;
-    s8 unk4F;
-} func_80001630_2230_arg;
-
-typedef struct {
     u8 padding[0x3C];
     s8 isDestroyed;
 } MarkDestroyedArg;
@@ -163,7 +156,7 @@ s32 getItemAssetCount(void) {
     return itemAssetCount;
 }
 
-void func_80001630_2230(func_80001630_2230_arg *arg0, s8 arg1) {
+void setItemFlags(SceneModel *arg0, s8 arg1) {
     arg0->unk4F = arg1;
 }
 

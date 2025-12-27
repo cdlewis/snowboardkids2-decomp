@@ -134,7 +134,8 @@ typedef struct {
     s32 unk48;
     s16 unk4C;
     s8 unk4E;
-    u8 padding2[0x39];
+    s8 unk4F;
+    u8 padding2[0x38];
     s8 unk88;
     s8 unk89;
     s16 unk8A;
@@ -174,6 +175,7 @@ void func_800021B8_2DB8(SceneModel *arg0, s16 arg1);
 void updateModelGeometry(SceneModel *);
 
 void setItemDisplayEnabled(SceneModel *arg0, s8 arg1);
+void setItemFlags(SceneModel *arg0, s8 arg1);
 void func_80001640_2240(SceneModel *arg0);
 void func_80001650_2250(SceneModel *arg0);
 s8 func_80001660_2260(SceneModel *arg0);
