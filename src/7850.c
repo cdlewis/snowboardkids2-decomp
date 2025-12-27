@@ -70,7 +70,7 @@ void func_80006EE0_7AE0(func_80006E60_7A60_arg *);
 extern void *D_80088720_89320;
 extern u8 identityMatrix[];
 
-void func_80006C50_7850(func_80006C50_7850_arg *arg0) {
+void initPulsingSpriteIndicator(func_80006C50_7850_arg *arg0) {
     SpriteAssetState *temp_s0;
 
     temp_s0 = &arg0->unk4;
