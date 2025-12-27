@@ -206,7 +206,7 @@ typedef struct {
 s32 D_800894F0_8A0F0[8];
 
 void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state);
-void func_80001264_1E64(func_80000C2C_182C_arg *arg0);
+void cleanupSpriteSpawnerTask(func_80000C2C_182C_arg *arg0);
 void updateSpriteSpawnerTask(func_80000C2C_182C_arg *);
 void func_80001280_1E80(func_80000C2C_182C_arg *arg0);
 void updateSpriteAnimationTask(func_80000C2C_182C_arg *);
@@ -655,7 +655,7 @@ void cleanupAnimatedModelTask(AnimatedModelTaskCleanupState *state) {
 void initSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
-    setCleanupCallback(&func_80001264_1E64);
+    setCleanupCallback(&cleanupSpriteSpawnerTask);
     func_80009E68_AA68((SpriteAssetState *)&arg0->unk8, subEntry->unk16);
     *(s16 *)&arg0->unk54 = 0;
     setCallback(&updateSpriteSpawnerTask);
@@ -686,7 +686,7 @@ void updateSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
     }
 }
 
-void func_80001264_1E64(func_80000C2C_182C_arg *arg0) {
+void cleanupSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
 }
 

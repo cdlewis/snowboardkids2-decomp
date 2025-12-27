@@ -26,6 +26,7 @@ updateAnimatedModelTask = 0x80001040; // rom:0x1C40
 cleanupAnimatedModelTask = 0x80001114; // rom:0x1D14
 initSpriteSpawnerTask = 0x80001158; // rom:0x1D58
 updateSpriteSpawnerTask = 0x800011DC; // rom:0x1DDC
+cleanupSpriteSpawnerTask = 0x80001264; // rom:0x1E64
 enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;
