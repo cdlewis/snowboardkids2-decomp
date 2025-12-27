@@ -221,7 +221,7 @@ void func_8000799C_859C(func_800078C4_84C4_arg *arg0) {
 
     memcpy(&sp10, &identityMatrix, 0x20);
 
-    if (arg0->unk0->unk3C == 1) {
+    if (arg0->unk0->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }

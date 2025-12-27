@@ -18,7 +18,7 @@ typedef struct {
     s32 unk30;
     s32 unk34;
     u8 _pad4[0x4];
-    s8 unk3C;
+    s8 isDestroyed;
     s8 unk3D;
     u8 _pad5;
     s8 unk3F;
@@ -43,7 +43,7 @@ typedef struct {
 typedef struct {
     u8 _pad[0x18];
     u8 unk18[0x24];
-    s8 unk3C;
+    s8 isDestroyed;
 } func_80006EE0_unk0;
 
 typedef struct {
@@ -96,7 +96,7 @@ void func_80006CBC_78BC(func_80006C50_7850_arg *arg0) {
     sp28[0] = 1;
     sp28[1] = -1;
 
-    if (arg0->unk0->unk3C == 1) {
+    if (arg0->unk0->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
@@ -189,7 +189,7 @@ void func_80006EE0_7AE0(func_80006E60_7A60_arg *arg0) {
     memcpy(&sp30, identityMatrix, 0x20);
     memcpy(&sp50, &((func_80006EE0_unk0 *)arg0->unk0)->unk18, 0x20);
 
-    if (((func_80006EE0_unk0 *)arg0->unk0)->unk3C == 1) {
+    if (((func_80006EE0_unk0 *)arg0->unk0)->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }

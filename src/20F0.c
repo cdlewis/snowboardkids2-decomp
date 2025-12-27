@@ -28,8 +28,8 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x3C];
-    s8 unk3C;
-} func_800014F0_20F0_arg;
+    s8 isDestroyed;
+} MarkDestroyedArg;
 
 typedef struct {
     u8 padding[0x3D];
@@ -67,8 +67,8 @@ extern u32 D_8008BD38_8C938;
 s32 func_800018F4_24F4(SceneModel *);
 s32 func_80001904_2504(s16);
 
-void func_800014F0_20F0(func_800014F0_20F0_arg *arg0) {
-    arg0->unk3C = 1;
+void markEntityDestroyed(MarkDestroyedArg *arg0) {
+    arg0->isDestroyed = 1;
 }
 
 void func_800014FC_20FC(SceneModel *arg0, s32 arg1) {
@@ -452,7 +452,7 @@ void initializeGameEntity(
 
     memcpy(&ent->transformationMatrix, identityMatrix, 0x20);
 
-    ent->unk3C = 0;
+    ent->isDestroyed = 0;
     ent->unk3F = 1;
     ent->unk88 = 1;
     ent->unk4E = 0;
@@ -492,7 +492,7 @@ void *func_80002040_2C40(SceneModel *arg0) {
     if (arg0 == 0) {
         return 0;
     }
-    arg0->unk3C = 1;
+    arg0->isDestroyed = 1;
     arg0->unk120 = freeNodeMemory(arg0->unk120);
     arg0->unk11C = freeNodeMemory(arg0->unk11C);
     arg0->unk118 = func_8000CDFC_D9FC(arg0->unk118);

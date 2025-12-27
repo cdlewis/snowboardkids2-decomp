@@ -20,7 +20,7 @@ typedef struct {
     s32 unk30;
     s32 unk34;
     u8 _pad38[0x4];
-    s8 unk3C;
+    s8 isDestroyed;
     s8 unk3D;
     s8 unk3E;
     s8 unk3F;
@@ -61,7 +61,7 @@ void func_800081EC_8DEC(func_800081EC_8DEC_arg *arg0) {
 
     memcpy(&local_buffer, identityMatrix, 0x20);
 
-    if (arg0->unk0->unk3C == 1) {
+    if (arg0->unk0->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
@@ -105,7 +105,7 @@ void func_80008370_8F70(Arg8F70 *arg0) {
 
     inner = arg0->unk0;
 
-    if (inner->unk3C == 1) {
+    if (inner->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }

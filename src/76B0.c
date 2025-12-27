@@ -11,7 +11,7 @@ void func_80006C3C_783C(void);
 
 typedef struct {
     u8 padding[0x3C];
-    s8 unk3C;
+    s8 isDestroyed;
     s8 unk3D;
     u8 padding2[0xB2];
     u8 unkF0[0x20];
@@ -39,7 +39,7 @@ void func_80006B04_7704(func_80006AB0_76B0_arg *arg0) {
     Mat3x3Padded *matrix;
     s32 temp;
 
-    if (arg0->unk0->unk3C == 1) {
+    if (arg0->unk0->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }

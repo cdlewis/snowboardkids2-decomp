@@ -30,6 +30,7 @@ cleanupSpriteSpawnerTask = 0x80001264; // rom:0x1E64
 initSpawnedSpriteTask = 0x80001280; // rom:0x1E80
 updateSpawnedSpriteTask = 0x800013B8; // rom:0x1FB8
 cleanupSpawnedSpriteTask = 0x800014C8; // rom:0x20C8
+markEntityDestroyed = 0x800014F0; // rom:0x20F0
 enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;

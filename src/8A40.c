@@ -53,7 +53,7 @@ void func_80007EC8_8AC8(func_8A40_arg *arg0) {
     s32 div;
     s32 temp;
 
-    if (arg0->unk0->unk3C == 1) {
+    if (arg0->unk0->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
@@ -134,7 +134,7 @@ void func_800080F0_8CF0(void) {
 }
 
 void func_8000811C_8D1C(func_800080B8_8CB8_arg *arg0) {
-    if (arg0->unk0->unk3C == 1) {
+    if (arg0->unk0->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }

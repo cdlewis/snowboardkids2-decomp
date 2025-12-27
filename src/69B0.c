@@ -75,7 +75,7 @@ void func_8000605C_6C5C(Struct69B0 *arg0) {
     s32 *s0;
 
     temp_a0 = arg0->unk0;
-    if (temp_a0->unk3C == 1) {
+    if (temp_a0->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }

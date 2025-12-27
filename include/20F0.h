@@ -72,7 +72,7 @@ typedef struct {
     u8 unk14[0x4];
     /* 0x18 */ s16 matrix18[3][3];
     u8 padding2[0x3C - 0x2A];
-    s8 unk3C;
+    s8 isDestroyed;
     s8 unk3D;
     s8 unk3E;
     s8 unk3F;
@@ -125,7 +125,7 @@ typedef struct {
     u8 padding1B[0x8];
     s16 unk38;
     s16 unk3A;
-    s8 unk3C;
+    s8 isDestroyed;
     s8 unk3D;
     s8 unk3E;
     s8 unk3F;
@@ -200,7 +200,7 @@ typedef struct {
     u8 transformationMatrix[0x20];
     s16 unk38;
     s16 unk3A;
-    u8 unk3C;
+    u8 isDestroyed;
     u8 unk3D;
     u8 unk3E;
     u8 unk3F;

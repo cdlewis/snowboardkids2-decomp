@@ -18,7 +18,7 @@ typedef struct {
     s32 unk30;
     s32 unk34;
     u8 _pad4[0x4];
-    s8 unk3C;
+    s8 isDestroyed;
     s8 unk3D;
     s8 unk3E;
     s8 unk3F;
@@ -87,7 +87,7 @@ void func_8000629C_6E9C(func_80006398_6F98_arg *arg0) {
     s16 newTemp;
     void *ptr;
 
-    if (arg0->unk0->unk3C == 1) {
+    if (arg0->unk0->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
@@ -190,7 +190,7 @@ void func_800069B4_75B4(func_80006398_6F98_arg *arg0) {
 
     inner = arg0->unk0;
 
-    if (inner->unk3C == 1) {
+    if (inner->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
