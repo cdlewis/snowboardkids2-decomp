@@ -1,3 +1,4 @@
+freeEffectResources = 0x80000710;
 __MusIntFifoProcess = 0x80072F54;
 initModelEntity = 0x8000056C; // rom:0x116C
 modelEntityConfigs = 0x800891A8; // rom:0x89DA8
