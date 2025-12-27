@@ -724,15 +724,15 @@ s32 getEmptyModelDisplayOffset(SceneModel *arg0) {
     return new_var;
 }
 
-s32 func_80002BD0_37D0(SceneModel *arg0) {
-    u32 index = arg0->index;
-    if (isAssetGroupEmpty(index) == 0) {
+s32 getModelDisplayDataOffset(SceneModel *model) {
+    u32 assetGroupIndex = model->index;
+    if (isAssetGroupEmpty(assetGroupIndex) == 0) {
         return 8;
     }
 
-    if (hasModelGraphicsData(arg0) != 0) {
-        index = 8;
-        return index;
+    if (hasModelGraphicsData(model) != 0) {
+        assetGroupIndex = 8;
+        return assetGroupIndex;
     }
 
     return 0x90;
