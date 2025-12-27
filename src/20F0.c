@@ -508,9 +508,9 @@ void *cleanupSceneModel(SceneModel *model) {
     return model;
 }
 
-void func_80002170_2D70(func_80002B50_3750_arg *arg0, s16 arg1) {
-    if (arg1 < arg0->unkE) {
-        enqueueDisplayListObject(arg0->unk10->unk16, (void *)arg0->unk0 + (arg1 * 0x3C));
+void enqueueModelDisplayListByIndex(func_80002B50_3750_arg *model, s16 index) {
+    if (index < model->unkE) {
+        enqueueDisplayListObject(model->unk10->unk16, (void *)model->unk0 + (index * 0x3C));
     }
 }
 
