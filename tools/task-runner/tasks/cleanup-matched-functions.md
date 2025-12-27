@@ -6,6 +6,7 @@ Specifically you should:
 
 - Rename the function to have a more suitable function name if the current name does not adequately reflect its purpose;
 - Update global variables/symbols used by the function if they have overly generic names or names that are at odds with their purpose;
+- Rename struct fields to have a more suitable name, if the fields purpose is clear from the function / other functions / surrounding context. This is particularly true for placeholder fields (those starting with `unk`).
 - Update local variables within the function if they have overly generic names or names that do not reflect their purpose;
 - Clean up function using better spacing, proper struct/array accesses/types, etc as long as doing so does not break the 100% match we require all functions to maintain.
 - Clean up decompilation artefacts where you are able to do so without breaking the 100% match that we require all functions to maintain.
