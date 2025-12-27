@@ -16,6 +16,7 @@
 USE_ASSET(_458E30);
 USE_ASSET(_459310);
 USE_ASSET(_4237C0);
+USE_ASSET(_41A1D0);
 
 typedef struct {
     u8 padding[0x24];
@@ -264,8 +265,6 @@ extern u16 D_8008DD6E_8E96E;
 extern u16 D_8008DD70_8E970;
 extern u16 D_8008DDD8_8E9D8[];
 extern u16 D_8008DDDA_8E9DA[];
-extern u32 D_41A1D0;
-extern u32 D_41AD80;
 extern u16 D_8008DDBE_8E9BE[];
 extern u16 D_8008DDC0_8E9C0[];
 extern s16 D_8008DDC2_8E9C2[];
@@ -1543,9 +1542,7 @@ void func_80026FF4_27BF4(func_80025FFC_26BFC_arg *arg0) {
     volatile func_80025FFC_26BFC_arg *ptr;
     s32 pad[4];
 
-    (void)pad;
-
-    dmaResult = loadCompressedData(&D_41A1D0, &D_41AD80, 0x1B48);
+    dmaResult = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     setCleanupCallback(func_8002712C_27D2C);
 
     global = D_800AFE8C_A71FC;
