@@ -514,8 +514,8 @@ void enqueueModelDisplayListByIndex(func_80002B50_3750_arg *model, s16 index) {
     }
 }
 
-void func_800021B8_2DB8(SceneModel *arg0, s16 arg1) {
-    func_80002220_2E20(arg0, arg1, -1, -1, -1);
+void setModelAnimation(SceneModel *model, s16 animationIndex) {
+    func_80002220_2E20(model, animationIndex, -1, -1, -1);
 }
 
 void func_800021E8_2DE8(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3) {

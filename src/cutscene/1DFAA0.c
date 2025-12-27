@@ -170,7 +170,7 @@ void func_800B2DCC_1DFE7C(CutsceneSlot *arg0) {
 
         if (ptr[i].slotData.unkA4.ptr != NULL) {
             applyTransformToModel(ptr[i].slotData.unkA4.ptr, (Mat3x3Padded *)identityMatrix);
-            func_800021B8_2DB8(ptr[i].slotData.unkA4.ptr, 0);
+            setModelAnimation(ptr[i].slotData.unkA4.ptr, 0);
         }
 
         i++;

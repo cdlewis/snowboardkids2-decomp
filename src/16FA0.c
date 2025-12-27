@@ -193,7 +193,7 @@ void func_80016964_17564(Struct16B68 *arg0) {
     memcpy(&arg0->unk4, &D_8008D5C4_8E1C4[arg0->unk2F], 0x20);
     arg0->unk2C = *arg0->unk28;
     arg0->unk28 = arg0->unk28 + 1;
-    func_800021B8_2DB8(arg0->unk0, arg0->unk2C);
+    setModelAnimation(arg0->unk0, arg0->unk2C);
     updateModelGeometry(arg0->unk0);
     setCallback(func_80016A00_17600);
 }
@@ -235,7 +235,7 @@ void func_80016A00_17600(Struct16B68 *arg0) {
         }
 
         arg0->unk2C = animValue;
-        func_800021B8_2DB8(arg0->unk0, (s16)animValue);
+        setModelAnimation(arg0->unk0, (s16)animValue);
     }
 
     if (arg0->unk2F == 6) {
@@ -265,7 +265,7 @@ void func_80016B68_17768(Struct16B68 *arg0) {
     }
 
     if (arg0->unk2C == 4) {
-        func_800021B8_2DB8(arg0->unk0, 8);
+        setModelAnimation(arg0->unk0, 8);
         setCallback(func_80016C28_17828);
         return;
     }
@@ -278,7 +278,7 @@ void func_80016B68_17768(Struct16B68 *arg0) {
         arg0->unk2C = 8;
         setCallback(func_80016C28_17828);
     }
-    func_800021B8_2DB8(arg0->unk0, (s16)arg0->unk2C);
+    setModelAnimation(arg0->unk0, (s16)arg0->unk2C);
 }
 
 void func_80016C28_17828(Struct16B68 *arg0) {
@@ -291,7 +291,7 @@ void func_80016C28_17828(Struct16B68 *arg0) {
     switch (arg0->unk32) {
         case 0:
             if (clearResult != 0) {
-                func_800021B8_2DB8(arg0->unk0, 9);
+                setModelAnimation(arg0->unk0, 9);
                 arg0->unk32 = 1;
             }
             break;
@@ -324,7 +324,7 @@ void func_80016D0C_1790C(Struct16B68 *arg0) {
     if (arg0->unk2C == 4) {
         arg0->unk2C = 8;
         arg0->unk31 = 0x11;
-        func_800021B8_2DB8(arg0->unk0, 8);
+        setModelAnimation(arg0->unk0, 8);
         setCallback(func_80016DE0_179E0);
         return;
     }
@@ -338,7 +338,7 @@ void func_80016D0C_1790C(Struct16B68 *arg0) {
         arg0->unk31 = 0x11;
         setCallback(func_80016DE0_179E0);
     }
-    func_800021B8_2DB8(arg0->unk0, (s16)arg0->unk2C);
+    setModelAnimation(arg0->unk0, (s16)arg0->unk2C);
 }
 
 void func_80016DE0_179E0(Struct16B68 *arg0) {
@@ -349,7 +349,7 @@ void func_80016DE0_179E0(Struct16B68 *arg0) {
 
     if (clearResult != 0 && arg0->unk2C == 8) {
         arg0->unk2C++;
-        func_800021B8_2DB8(arg0->unk0, (s16)arg0->unk2C);
+        setModelAnimation(arg0->unk0, (s16)arg0->unk2C);
     }
 
     if (arg0->unk31 != 0) {

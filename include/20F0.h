@@ -170,7 +170,7 @@ void *loadAssetGroupDisplayList(SceneModel *);
 void *loadAssetGroupVertexData(SceneModel *);
 void *createSceneModel(s32 assetGroupIndex, void *allocation);
 
-void func_800021B8_2DB8(SceneModel *arg0, s16 arg1);
+void setModelAnimation(SceneModel *model, s16 animationIndex);
 
 void updateModelGeometry(SceneModel *);
 

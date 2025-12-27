@@ -57,7 +57,7 @@ void func_80018898_19498(func_80018898_19498_arg *arg0) {
     clearModelPendingDestroy(arg0->unk0);
     applyTransformToModel(arg0->unk0, &state->unk3B0.unk0);
     arg0->unk4 = state->unk400;
-    func_800021B8_2DB8(arg0->unk0, state->unk400);
+    setModelAnimation(arg0->unk0, state->unk400);
     updateModelGeometry(arg0->unk0);
     setCallback(&func_80018904_19504);
 }
@@ -80,7 +80,7 @@ void func_80018904_19504(func_80018898_19498_arg *arg0) {
         if (state->unk400 == 2 || state->unk400 == 4) {
             func_80002260_2E60(arg0->unk0, state->unk400, -1, -1, -1, 0);
         } else {
-            func_800021B8_2DB8(arg0->unk0, state->unk400);
+            setModelAnimation(arg0->unk0, state->unk400);
         }
     }
 
@@ -95,7 +95,7 @@ void func_80018904_19504(func_80018898_19498_arg *arg0) {
             if (state->unk400 == 2 || state->unk400 == 4) {
                 func_80002260_2E60(arg0->unk0, state->unk400, -1, -1, -1, 0);
             } else {
-                func_800021B8_2DB8(arg0->unk0, state->unk400);
+                setModelAnimation(arg0->unk0, state->unk400);
             }
         }
     }

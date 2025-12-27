@@ -721,9 +721,9 @@ void func_80024AAC_256AC(func_80024C8C_2588C_arg *arg0) {
     applyTransformToModel(arg0->unk0, localPtr);
 
     if (D_800AFE8C_A71FC->unk9[arg0->unk28] == 7) {
-        func_800021B8_2DB8(arg0->unk0, 4);
+        setModelAnimation(arg0->unk0, 4);
     } else {
-        func_800021B8_2DB8(arg0->unk0, 0x90);
+        setModelAnimation(arg0->unk0, 0x90);
     }
 
     updateModelGeometry(arg0->unk0);
@@ -809,9 +809,9 @@ void func_80024E58_25A58(func_80024C8C_2588C_arg *arg0) {
     ptr = (u8 *)D_800AFE8C_A71FC;
     ptr = ptr + arg0->unk28;
     if (ptr[9] == 7) {
-        func_800021B8_2DB8(arg0->unk0, 4);
+        setModelAnimation(arg0->unk0, 4);
     } else {
-        func_800021B8_2DB8(arg0->unk0, 0x90);
+        setModelAnimation(arg0->unk0, 0x90);
     }
 
     updateModelGeometry(arg0->unk0);
@@ -874,9 +874,9 @@ void func_80025130_25D30(func_80025130_25D30_arg *arg0) {
 
     base = (u8 *)D_800AFE8C_A71FC;
     if (*(base + arg0->unk28 + 9) == 7) {
-        func_800021B8_2DB8(arg0->unk0, 4);
+        setModelAnimation(arg0->unk0, 4);
     } else {
-        func_800021B8_2DB8(arg0->unk0, 0x90);
+        setModelAnimation(arg0->unk0, 0x90);
     }
 
     updateModelGeometry(arg0->unk0);

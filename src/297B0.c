@@ -855,7 +855,7 @@ void func_8002A200_2AE00(Func297D8Arg *arg0) {
 
 void func_8002A290_2AE90(Func297D8Arg *arg0) {
     applyTransformToModel(arg0->model, &arg0->matrix);
-    func_800021B8_2DB8(arg0->model, arg0->unk50);
+    setModelAnimation(arg0->model, arg0->unk50);
     updateModelGeometry(arg0->model);
 }
 
@@ -867,7 +867,7 @@ void func_8002A2D0_2AED0(Func297D8Arg *arg0) {
 
     if (arg0->unk50 != arg0->unk52) {
         arg0->unk52 = arg0->unk50;
-        func_800021B8_2DB8(arg0->model, arg0->unk50);
+        setModelAnimation(arg0->model, arg0->unk50);
         arg0->unk62 = 0;
     }
 

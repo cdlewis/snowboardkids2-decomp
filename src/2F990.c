@@ -262,7 +262,7 @@ void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
 void func_8002EFD8_2FBD8(void *untypedArg0) {
     func_8002EFD8_2FBD8_arg *arg0 = (func_8002EFD8_2FBD8_arg *)untypedArg0;
     applyTransformToModel(arg0->unk0, (void *)((s32)arg0 + 4));
-    func_800021B8_2DB8(arg0->unk0, arg0->unk24);
+    setModelAnimation(arg0->unk0, arg0->unk24);
     updateModelGeometry(arg0->unk0);
     setCallback(&func_8002F024_2FC24);
 }
@@ -292,7 +292,7 @@ void func_8002F024_2FC24(func_8002EF3C_2FB3C_arg *arg0) {
                     arg0->unk26 = 0;
                     arg0->unk24 = 4;
                 }
-                func_800021B8_2DB8(arg0->unk0, (s16)arg0->unk24);
+                setModelAnimation(arg0->unk0, (s16)arg0->unk24);
             }
         }
     } while (0);
@@ -303,7 +303,7 @@ void func_8002F024_2FC24(func_8002EF3C_2FB3C_arg *arg0) {
         arg0->unk26 = animIndex;
         start = D_8008F0B4_8FCB4[state->unk5D6 * 2];
         arg0->unk24 = start;
-        func_800021B8_2DB8(arg0->unk0, (s16)start);
+        setModelAnimation(arg0->unk0, (s16)start);
         state->unk5D6 = 0;
     }
 }

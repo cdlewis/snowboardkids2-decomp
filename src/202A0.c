@@ -292,7 +292,7 @@ void func_8001F7C8_203C8(Func8001F6A0Arg *arg0) {
 
     createYRotationMatrix(&arg0->unk30, arg0->unk56);
     applyTransformToModel(arg0->unk2C, &arg0->unk30);
-    func_800021B8_2DB8(arg0->unk2C, 0x90);
+    setModelAnimation(arg0->unk2C, 0x90);
 
     angle = (func_8006D21C_6DE1C(pos1[0], pos1[2], pos2[0], pos2[2]) - 0x1000) & 0x1FFF;
     arg0->unk56 = angle;
@@ -704,7 +704,7 @@ void func_800213C8_21FC8(Func8002144CArg *arg0) {
     }
 
     applyTransformToModel(arg0->unk0, &arg0->unk4);
-    func_800021B8_2DB8(arg0->unk0, arg0->unk20);
+    setModelAnimation(arg0->unk0, arg0->unk20);
     updateModelGeometry(arg0->unk0);
     setCallback(&func_8002144C_2204C);
 }
@@ -730,7 +730,7 @@ void func_8002144C_2204C(Func8002144CArg *arg0) {
         unk24 = arg0->unk20;
         if (unk24 == 0xD) {
             arg0->unk20 = unk24 + 1;
-            func_800021B8_2DB8(arg0->unk0, unk24 + 1);
+            setModelAnimation(arg0->unk0, unk24 + 1);
         }
     }
 }
@@ -750,7 +750,7 @@ void func_80021548_22148(u8 arg0, Func8002144CArg *arg1) {
         arg1->unk20 = D_8008DAC8_8E6C8[D_800AFE8C_A71FC->unk7];
     }
 
-    func_800021B8_2DB8(arg1->unk0, arg1->unk20);
+    setModelAnimation(arg1->unk0, arg1->unk20);
 }
 
 void func_800215DC_221DC(Func8002144CArg *arg0) {
@@ -762,13 +762,13 @@ void func_800215DC_221DC(Func8002144CArg *arg0) {
         unk24 = arg0->unk20;
         if (unk24 == 0xD) {
             arg0->unk20 = unk24 + 1;
-            func_800021B8_2DB8(arg0->unk0, (s16)(unk24 + 1));
+            setModelAnimation(arg0->unk0, (s16)(unk24 + 1));
         }
     } else if (D_800AFE8C_A71FC->unk7 == 0xE) {
         unk24 = arg0->unk20;
         if (unk24 == 1) {
             arg0->unk20 = 2;
-            func_800021B8_2DB8(arg0->unk0, 2);
+            setModelAnimation(arg0->unk0, 2);
         }
     }
 }

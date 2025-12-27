@@ -80,7 +80,7 @@ void func_80019BF0_1A7F0(applyTransformToModel_arg1 *arg0) {
     arg0->unk0.unk18 = 0x340000;
     arg0->unk0.unk1C = 0xFF7D0000;
     applyTransformToModel(arg0->unk20_u.unk20, &arg0->unk0);
-    func_800021B8_2DB8(arg0->unk20_u.unk20, 0);
+    setModelAnimation(arg0->unk20_u.unk20, 0);
     updateModelGeometry(arg0->unk20_u.unk20);
     setCleanupCallback(&func_80019CB4_1A8B4);
     setCallback(&func_80019C7C_1A87C);

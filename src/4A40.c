@@ -437,7 +437,7 @@ void func_800047A0_53A0(StructUnk800048D0 *arg0) {
 
     switch (arg0->unk4) {
         case 0:
-            func_800021B8_2DB8(arg0->unk0, entry->unk2);
+            setModelAnimation(arg0->unk0, entry->unk2);
             arg0->unk4 = 1;
             break;
         case 1:

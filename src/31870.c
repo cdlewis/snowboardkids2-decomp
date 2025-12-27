@@ -762,7 +762,7 @@ void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0) {
     temp_s1 = (GameState *)getCurrentAllocation();
     applyTransformToModel(arg0->unk0, &arg0->unk4);
     setItemDisplayEnabled(arg0->unk0, 1);
-    func_800021B8_2DB8(arg0->unk0, arg0->unk20_u.unk20_s16);
+    setModelAnimation(arg0->unk0, arg0->unk20_u.unk20_s16);
     updateModelGeometry(arg0->unk0);
     if (temp_s1->unk79B != 0) {
         setCallback(&func_80031B30_32730);
@@ -802,7 +802,7 @@ void func_80031B30_32730(func_80031A0C_3260C_arg *arg0) {
                     arg0->unk24 = 0x10;
                 }
 
-                func_800021B8_2DB8(arg0->unk0, arg0->unk24);
+                setModelAnimation(arg0->unk0, arg0->unk24);
                 state = arg0->unk28;
             }
         }
@@ -812,7 +812,7 @@ void func_80031B30_32730(func_80031A0C_3260C_arg *arg0) {
         if (allocation->unk77E != 0) {
             arg0->unk24 = D_8008F16C_8FD6C[allocation->unk77E * 2];
             arg0->unk26 = D_8008F16E_8FD6E[allocation->unk77E * 2];
-            func_800021B8_2DB8(arg0->unk0, arg0->unk24);
+            setModelAnimation(arg0->unk0, arg0->unk24);
             allocation->unk77E = 0;
             arg0->unk28 = 1;
             allocation->unk7A3 = 0;

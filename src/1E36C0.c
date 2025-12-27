@@ -729,7 +729,7 @@ s16 func_800B826C_1E531C(CutsceneSlotData *arg0, SceneModel *arg1) {
         arg0->unk78 = arg0->unk7A;
 
         if ((arg1->unk38 != -1) && (arg1->unk3E <= 0)) {
-            func_800021B8_2DB8(arg1, arg1->unk38);
+            setModelAnimation(arg1, arg1->unk38);
         }
         arg0->unk0.Two = 0;
     }
@@ -751,7 +751,7 @@ s32 func_800B83B8_1E5468(CutsceneSlotData *arg0, StateEntry *arg1) {
         if ((nextIndex == -1) || ((s8)arg1->unk3E > 0)) {
             arg0->unk0.bytes[0] = 0;
         } else {
-            func_800021B8_2DB8((SceneModel *)arg1, nextIndex);
+            setModelAnimation((SceneModel *)arg1, nextIndex);
             arg0->unk0.bytes[0] = 0;
         }
     }
@@ -971,7 +971,7 @@ s32 func_800B8874_1E5924(CutsceneSlotData *arg0, SceneModel *arg1) {
 
     animIndex = arg1->unk38;
     if (animIndex != -1 && arg1->unk3E <= 0) {
-        func_800021B8_2DB8(arg1, animIndex);
+        setModelAnimation(arg1, animIndex);
     }
 
     arg0->unk0.Two = 0;
@@ -1051,7 +1051,7 @@ s32 func_800B8AC4_1E5B74(CutsceneSlotData *arg0, SceneModel *arg1) {
     } else {
         temp = arg1->unk38;
         if (temp != -1) {
-            func_800021B8_2DB8(arg1, temp);
+            setModelAnimation(arg1, temp);
         }
         arg0->unk0.bytes[0] = 0;
     }

@@ -283,7 +283,7 @@ void func_800B0598_1DAB38(func_800B08FC_arg *arg0) {
 void func_800B05DC_1DAB7C(func_800B08FC_arg *arg0) {
     applyTransformToModel(arg0->unk0, &arg0->matrix);
     if (arg0->unk28 != 2) {
-        func_800021B8_2DB8(arg0->unk0, arg0->unk26);
+        setModelAnimation(arg0->unk0, arg0->unk26);
         updateModelGeometry(arg0->unk0);
     }
     setCallback(func_800B0638_1DABD8);
@@ -335,7 +335,7 @@ void func_800B08FC_1DAE9C(func_800B08FC_arg *arg0) {
 
     if (result != 0) {
         arg0->unk26 = 0;
-        func_800021B8_2DB8(arg0->unk0, 0);
+        setModelAnimation(arg0->unk0, 0);
         setAnimationIndex(arg0->unk0, -1);
         setCallback(func_800B0638_1DABD8);
     }
