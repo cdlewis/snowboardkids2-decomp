@@ -51,12 +51,12 @@ typedef struct {
     u8 unkC5;
 } func_800033AC_3FAC_arg;
 
-void func_800030B4_3CB4(func_800033AC_3FAC_arg *arg0);
+void loadAssetGroupResources(func_800033AC_3FAC_arg *arg0);
 
 void scheduleDualAssetGroupLoad(void *context, u8 groupIndex1, s32 param1, u8 groupIndex2, s32 param2) {
     func_800033AC_3FAC_arg *task;
 
-    task = scheduleTask(func_800030B4_3CB4, 3, 0, 0);
+    task = scheduleTask(loadAssetGroupResources, 3, 0, 0);
     if (task != NULL) {
         task->unk0 = context;
         task->unkC4 = groupIndex2;
@@ -64,7 +64,7 @@ void scheduleDualAssetGroupLoad(void *context, u8 groupIndex1, s32 param1, u8 gr
         task->unkC5 = 0;
     }
 
-    task = scheduleTask(func_800030B4_3CB4, 3, 0, 0);
+    task = scheduleTask(loadAssetGroupResources, 3, 0, 0);
     if (task != NULL) {
         task->unk0 = context;
         task->unkC4 = groupIndex1;
@@ -77,7 +77,7 @@ extern func_800033AC_3FAC_TableEntry D_8008BF70_8CB70[];
 extern void func_80003184_3D84(void *);
 void func_800033AC_3FAC(func_800033AC_3FAC_arg *arg0);
 
-void func_800030B4_3CB4(func_800033AC_3FAC_arg *arg0) {
+void loadAssetGroupResources(func_800033AC_3FAC_arg *arg0) {
     func_800033AC_3FAC_TableEntry *entry;
     AssetEntry *assetList;
     s32 i;

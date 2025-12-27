@@ -13,6 +13,7 @@ getModelDisplayDataOffset = 0x80002BD0; // rom:0x37D0
 loadAssetSlotTableEntry = 0x80002C14; // rom:0x3814
 scheduleTransparentModelRender = 0x80002F80; // rom:0x3B80
 renderModelIfTransparent = 0x80002FD4; // rom:0x3BD4
+loadAssetGroupResources = 0x800030B4; // rom:0x3CB4
 setupModelEntityLighting = 0x80000460; // rom:0x1060
 initRotatingModelTask = 0x800007F0; // rom:0x13F0
 updateRotatingModelTask = 0x800008D0; // rom:0x14D0
