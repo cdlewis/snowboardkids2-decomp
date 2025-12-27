@@ -35,6 +35,7 @@ setModelHeight = 0x800014FC; // rom:0x20FC
 disableEntityRendering = 0x80001504; // rom:0x2104
 enableEntityRendering = 0x8000150C; // rom:0x210C
 enableModelShadow = 0x80001518; // rom:0x2118
+disableModelShadow = 0x80001524; // rom:0x2124
 enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;

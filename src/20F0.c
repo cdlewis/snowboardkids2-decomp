@@ -87,7 +87,7 @@ void enableModelShadow(SceneModel *arg0) {
     arg0->shadowEnabled = 1;
 }
 
-void func_80001524_2124(SceneModel *arg0) {
+void disableModelShadow(SceneModel *arg0) {
     arg0->shadowEnabled = 0;
 }
 

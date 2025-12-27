@@ -272,8 +272,7 @@ void func_80001688_2288(SceneModel *arg0, s8 arg1);
 void disableEntityRendering(GameEntity *arg0);
 void enableEntityRendering(SceneModel *arg0);
 void enableModelShadow(SceneModel *arg0);
-
-void func_80001524_2124(SceneModel *arg0);
+void disableModelShadow(SceneModel *arg0);
 
 void func_800021E8_2DE8(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3);
 
