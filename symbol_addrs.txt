@@ -31,6 +31,7 @@ cleanupQuadDisplayList = 0x80005FBC; // rom:0x6BBC
 initializeRotationController = 0x80006010; // rom:0x6C10
 updateRotationController = 0x8000605C; // rom:0x6C5C
 cleanupRotationController = 0x800061C0; // rom:0x6DC0
+initFallingParticle = 0x800061D0; // rom:0x6DD0
 getEmptyModelDisplayOffset = 0x80002B8C; // rom:0x378C
 getModelDisplayDataOffset = 0x80002BD0; // rom:0x37D0
 loadAssetSlotTableEntry = 0x80002C14; // rom:0x3814
