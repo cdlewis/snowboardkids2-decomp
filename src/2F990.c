@@ -247,7 +247,7 @@ void updateDebugCameraYState(cameraState *arg0) {
 
 void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
     GameState *temp = (GameState *)getCurrentAllocation();
-    arg0->unk0 = func_8000198C_258C(0x3A, temp);
+    arg0->unk0 = createSceneModel(0x3A, temp);
     memcpy(&arg0->unk4, identityMatrix, 0x20);
     arg0->unk4.unk14 = 0x200000;
     arg0->unk4.unk18 = 0xFFE00000;

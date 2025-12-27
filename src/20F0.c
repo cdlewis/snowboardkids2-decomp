@@ -285,8 +285,8 @@ void clearModelAnimationState(SceneModel *model) {
     model->unk8E = -1;
 }
 
-void *func_8000198C_258C(s32 arg0, void *arg1) {
-    return func_800019B8_25B8(arg0, arg1, 0, -1, -1, -1);
+void *createSceneModel(s32 assetGroupIndex, void *allocation) {
+    return func_800019B8_25B8(assetGroupIndex, allocation, 0, -1, -1, -1);
 }
 
 void *func_800019B8_25B8(s32 arg0, void *arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {

@@ -168,7 +168,7 @@ void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode);
 void *loadAssetGroupSoundData(SceneModel *);
 void *loadAssetGroupDisplayList(SceneModel *);
 void *loadAssetGroupVertexData(SceneModel *);
-void *func_8000198C_258C(s32 arg0, void *arg1);
+void *createSceneModel(s32 assetGroupIndex, void *allocation);
 
 void func_800021B8_2DB8(SceneModel *arg0, s16 arg1);
 

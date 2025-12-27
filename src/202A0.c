@@ -212,7 +212,7 @@ void func_8001F6A0_202A0(Func8001F6A0Arg *arg0) {
     arg0->unk56 = 0;
     arg0->unk52 = value;
 
-    arg0->unk2C = func_8000198C_258C(6, allocation->unk3B0);
+    arg0->unk2C = createSceneModel(6, allocation->unk3B0);
 
     // Read character index again
     temp = allocation->unkB2C;
@@ -664,7 +664,7 @@ void func_80021270_21E70(Func8002144CArg *arg0) {
     }
 
     if (temp_s2->unkB45 == 0) {
-        arg0->unk0 = func_8000198C_258C(temp_s3, temp_s2);
+        arg0->unk0 = createSceneModel(temp_s3, temp_s2);
     } else {
         arg0->unk0 = func_800019B8_25B8(temp_s3, temp_s2, (s8)temp_s0, -1, -1, -1);
     }

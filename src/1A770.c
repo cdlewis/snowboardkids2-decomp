@@ -62,7 +62,7 @@ void func_8001A434_1B034(void);
 void func_8001AC70_1B870(void);
 
 void func_80019B70_1A770(func_80019B70_1A770_arg *arg0) {
-    arg0->unk20 = func_8000198C_258C(0x13, getCurrentAllocation());
+    arg0->unk20 = createSceneModel(0x13, getCurrentAllocation());
     setCleanupCallback(&func_80019CB4_1A8B4);
     setCallback(&func_80019BBC_1A7BC);
 }

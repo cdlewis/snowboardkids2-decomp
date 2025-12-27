@@ -94,7 +94,7 @@ void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *ar
                 arg0->slots[i].model =
                     func_800019B8_25B8(slot->unk4, arg1, slot->unk6, slot->unk7, slot->unk8, slot->unk9);
             } else {
-                arg0->slots[i].model = func_8000198C_258C(slot->unk4, arg1);
+                arg0->slots[i].model = createSceneModel(slot->unk4, arg1);
             }
 
             if (needsVisibility) {

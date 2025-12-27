@@ -221,7 +221,7 @@ void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
     }
 
     matrix = &arg0->matrix;
-    arg0->unk0 = func_8000198C_258C(modelIndex, allocation);
+    arg0->unk0 = createSceneModel(modelIndex, allocation);
     memcpy(matrix, identityMatrix, 0x20);
 
     arg0->matrix.unk14 = D_800B1160_1DB700[arg0->unk24 * 2] << 16;

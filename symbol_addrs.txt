@@ -159,6 +159,7 @@ setModelVisibility = 0x800015FC; // rom:0x21FC
 setModelDisplayEnabled = 0x80001604; // rom:0x2204
 getAssetGroupOrDefault = 0x80001934; // rom:0x2534
 clearModelAnimationState = 0x80001970; // rom:0x2570
+createSceneModel = 0x8000198C; // rom:0x258C
 emptyAssetGroup = 0x8008BD2C; // rom:0x8C92C
 setItemDisplayEnabled = 0x8000160C; // rom:0x220C
 setItemFlags = 0x80001630; // rom:0x2230

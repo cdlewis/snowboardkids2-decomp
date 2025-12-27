@@ -175,7 +175,7 @@ void func_800168F4_174F4(Struct16B68 *arg0) {
     s32 temp;
 
     alloc = (GameState *)getCurrentAllocation();
-    arg0->unk0 = func_8000198C_258C(arg0->unk2F + 0x32, &alloc->audioPlayer2);
+    arg0->unk0 = createSceneModel(arg0->unk2F + 0x32, &alloc->audioPlayer2);
     setCleanupCallback(func_80016E70_17A70);
     temp = 0x8000;
     arg0->unk32 = 0;

@@ -51,7 +51,7 @@ void func_80028600_29200(Func80028600Arg *arg0) {
             alloc->unk421 = 1;
         }
     } else if (itemType < 0xBU || itemType == 0x10) {
-        arg0->model = func_8000198C_258C(arg0->unk5C + 0x50, alloc);
+        arg0->model = createSceneModel(arg0->unk5C + 0x50, alloc);
         alloc->unk421 = 0;
     } else {
         arg0->model = func_800019B8_25B8(arg0->unk5C + 0x50, alloc, 0, 0, 0, -1);
@@ -88,7 +88,7 @@ void func_80028744_29344(Func80028600Arg *arg0) {
             alloc->unk421 = 1;
         }
     } else if (itemType < 0xBU || itemType == 0x10) {
-        arg0->model = func_8000198C_258C(arg0->unk5C + 0x50, alloc);
+        arg0->model = createSceneModel(arg0->unk5C + 0x50, alloc);
         alloc->unk421 = 0;
     } else {
         arg0->model = func_800019B8_25B8(arg0->unk5C + 0x50, alloc, 0, 0, 0, -1);
