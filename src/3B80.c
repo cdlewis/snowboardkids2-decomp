@@ -1,33 +1,29 @@
+#include "1DFAA0.h"
 #include "33FE0.h"
 #include "common.h"
 #include "main.h"
 #include "task_scheduler.h"
 
 typedef struct {
-    u8 padding[0xFF5];
-    s8 unkFF5;
-} func_80002FD4_3BD4_inner;
+    CutsceneManager *cutsceneManager;
+    ModelEntityRenderState *renderState;
+} TransparentRenderTaskData;
 
-typedef struct {
-    func_80002FD4_3BD4_inner *unk0;
-    void *unk4;
-} func_80002FD4_3BD4_arg;
+void renderModelIfTransparent(TransparentRenderTaskData *taskData);
 
-void func_80002FD4_3BD4(func_80002FD4_3BD4_arg *arg0);
+void scheduleTransparentModelRender(CutsceneManager *cutsceneManager, ModelEntityRenderState *renderState) {
+    TransparentRenderTaskData *task;
 
-void func_80002F80_3B80(void *arg0, void *arg1) {
-    func_80002FD4_3BD4_arg *task;
-
-    task = scheduleTask(func_80002FD4_3BD4, 2, 0, 0xF0);
+    task = scheduleTask(renderModelIfTransparent, 2, 0, 0xF0);
     if (task != NULL) {
-        task->unk0 = arg0;
-        task->unk4 = arg1;
+        task->cutsceneManager = cutsceneManager;
+        task->renderState = renderState;
     }
 }
 
-void func_80002FD4_3BD4(func_80002FD4_3BD4_arg *arg0) {
-    if (arg0->unk0->unkFF5 != 0) {
-        renderModelEntity(arg0->unk4);
+void renderModelIfTransparent(TransparentRenderTaskData *taskData) {
+    if (taskData->cutsceneManager->enableTransparency != 0) {
+        renderModelEntity(taskData->renderState);
     }
 }
 
