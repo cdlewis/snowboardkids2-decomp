@@ -27,8 +27,8 @@ typedef struct {
 } func_80006940_inner;
 
 typedef struct {
-    func_80006940_inner *unk0;
-    SpriteAssetState unk4;
+    func_80006940_inner *owner;
+    SpriteAssetState spriteState;
     s32 unk50;
     s32 unk54;
     s32 unk58;
@@ -48,22 +48,22 @@ typedef struct {
     s16 unk88;
     s16 unk8A;
     s8 unk8C;
-} func_80006398_6F98_arg;
+} ParticleState;
 
-void func_80006A88_7688(func_80006398_6F98_arg *);
-void func_800069B4_75B4(func_80006398_6F98_arg *);
-void cleanupFallingParticle(func_80006398_6F98_arg *);
-void updateFallingParticle(func_80006398_6F98_arg *);
-void func_80006924_7524(func_80006398_6F98_arg *);
-void func_80006458_7058(func_80006398_6F98_arg *);
+void cleanupTrailingParticle(ParticleState *);
+void updateTrailingParticle(ParticleState *);
+void cleanupFallingParticle(ParticleState *);
+void updateFallingParticle(ParticleState *);
+void cleanupDriftingParticle(ParticleState *);
+void updateDriftingParticle(ParticleState *);
 
-void func_800061D0_6DD0(func_80006398_6F98_arg *arg0) {
+void initFallingParticle(ParticleState *arg0) {
     s32 rand1;
     s32 rand2;
     u8 rand3;
 
-    func_80009E68_AA68(&arg0->unk4, 2);
-    func_80009F90_AB90(&arg0->unk4, 0x10000, 1, -1);
+    func_80009E68_AA68(&arg0->spriteState, 2);
+    func_80009F90_AB90(&arg0->spriteState, 0x10000, 1, -1);
 
     rand1 = randA();
     rand1 = rand1 & 0xFF;
@@ -81,13 +81,13 @@ void func_800061D0_6DD0(func_80006398_6F98_arg *arg0) {
     setCallback(updateFallingParticle);
 }
 
-void updateFallingParticle(func_80006398_6F98_arg *arg0) {
-    func_80006940_inner *owner;
+void updateFallingParticle(ParticleState *arg0) {
+    func_80006940_inner *particleOwner;
     s16 lifetime;
     s16 newLifetime;
-    void *spriteState;
+    void *sprite;
 
-    if (arg0->unk0->isDestroyed == 1) {
+    if (arg0->owner->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
@@ -99,16 +99,16 @@ void updateFallingParticle(func_80006398_6F98_arg *arg0) {
     }
 
     newLifetime = lifetime - 1;
-    spriteState = &arg0->unk4;
+    sprite = &arg0->spriteState;
     arg0->unk68 = newLifetime;
-    func_8000A030_AC30(spriteState, 0x10000);
+    func_8000A030_AC30(sprite, 0x10000);
 
-    owner = arg0->unk0;
-    if (owner->unk88 != 0) {
-        if (owner->displayEnabled != 0) {
+    particleOwner = arg0->owner;
+    if (particleOwner->unk88 != 0) {
+        if (particleOwner->displayEnabled != 0) {
             func_8000A1E4_ADE4(
-                spriteState,
-                owner->unk10->unk16,
+                sprite,
+                particleOwner->unk10->unk16,
                 arg0->unk50 + arg0->unk5C,
                 arg0->unk54 + arg0->unk60,
                 arg0->unk58 + arg0->unk64,
@@ -125,13 +125,13 @@ void updateFallingParticle(func_80006398_6F98_arg *arg0) {
     arg0->unk60 = arg0->unk60 + 0xFFFEB852;
 }
 
-void cleanupFallingParticle(func_80006398_6F98_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
+void cleanupFallingParticle(ParticleState *arg0) {
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
 }
 
-void func_800063B4_6FB4(func_80006398_6F98_arg *arg0) {
-    func_80009E68_AA68(&arg0->unk4, 2);
-    func_80009F90_AB90(&arg0->unk4, 0x10000, 0, -1);
+void initDriftingParticle(ParticleState *arg0) {
+    func_80009E68_AA68(&arg0->spriteState, 2);
+    func_80009F90_AB90(&arg0->spriteState, 0x10000, 0, -1);
 
     arg0->unk50 = 0x10000;
     arg0->unk5C = 0;
@@ -149,36 +149,36 @@ void func_800063B4_6FB4(func_80006398_6F98_arg *arg0) {
     arg0->unk8A = 0;
     arg0->unk8C = 0;
 
-    setCleanupCallback(func_80006924_7524);
-    setCallback(func_80006458_7058);
+    setCleanupCallback(cleanupDriftingParticle);
+    setCallback(updateDriftingParticle);
 }
 
-INCLUDE_ASM("asm/nonmatchings/6DD0", func_80006458_7058);
+INCLUDE_ASM("asm/nonmatchings/6DD0", updateDriftingParticle);
 
-void func_80006924_7524(func_80006398_6F98_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
+void cleanupDriftingParticle(ParticleState *arg0) {
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
 }
 
-void func_80006940_7540(func_80006398_6F98_arg *arg0) {
-    func_80006940_inner *inner = arg0->unk0;
+void initTrailingParticle(ParticleState *arg0) {
+    func_80006940_inner *inner = arg0->owner;
 
     if (inner->unkC == 0x4F) {
-        func_80009E68_AA68(&arg0->unk4, 6);
+        func_80009E68_AA68(&arg0->spriteState, 6);
     } else {
-        func_80009E68_AA68(&arg0->unk4, 3);
+        func_80009E68_AA68(&arg0->spriteState, 3);
     }
-    func_80009F90_AB90(&arg0->unk4, 0x10000, 0, -1);
-    setCleanupCallback(func_80006A88_7688);
-    setCallback(func_800069B4_75B4);
+    func_80009F90_AB90(&arg0->spriteState, 0x10000, 0, -1);
+    setCleanupCallback(cleanupTrailingParticle);
+    setCallback(updateTrailingParticle);
 }
 
-void func_800069B4_75B4(func_80006398_6F98_arg *arg0) {
+void updateTrailingParticle(ParticleState *arg0) {
     s8 unused[2];
     func_80006940_inner *inner;
     func_80006940_inner *a0_inner;
-    s32 s3;
-    s32 s4;
-    s32 s2;
+    s32 posX;
+    s32 posY;
+    s32 posZ;
 
     do {
         unused[0] = 1;
@@ -188,27 +188,27 @@ void func_800069B4_75B4(func_80006398_6F98_arg *arg0) {
         unused[1] = -1;
     } while (0);
 
-    inner = arg0->unk0;
+    inner = arg0->owner;
 
     if (inner->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    s3 = inner->unk2C;
-    s4 = inner->unk30;
-    s2 = inner->unk34;
+    posX = inner->unk2C;
+    posY = inner->unk30;
+    posZ = inner->unk34;
 
-    func_8000A030_AC30(&arg0->unk4, 0x10000);
+    func_8000A030_AC30(&arg0->spriteState, 0x10000);
 
-    a0_inner = arg0->unk0;
+    a0_inner = arg0->owner;
     if (a0_inner->unk88 != 0) {
         if (a0_inner->displayEnabled != 0) {
-            func_8000A13C_AD3C(&arg0->unk4, a0_inner->unk10->unk16, s3, s4, s2, 0x10000, 0x10000, 0, 0);
+            func_8000A13C_AD3C(&arg0->spriteState, a0_inner->unk10->unk16, posX, posY, posZ, 0x10000, 0x10000, 0, 0);
         }
     }
 }
 
-void func_80006A88_7688(func_80006398_6F98_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
+void cleanupTrailingParticle(ParticleState *arg0) {
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
 }
