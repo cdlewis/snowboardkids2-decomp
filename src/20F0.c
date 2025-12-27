@@ -286,13 +286,14 @@ void clearModelAnimationState(SceneModel *model) {
 }
 
 void *createSceneModel(s32 assetGroupIndex, void *allocation) {
-    return func_800019B8_25B8(assetGroupIndex, allocation, 0, -1, -1, -1);
+    return createSceneModelEx(assetGroupIndex, allocation, 0, -1, -1, -1);
 }
 
-void *func_800019B8_25B8(s32 arg0, void *arg1, s8 arg2, s8 arg3, s8 arg4, s16 arg5) {
+void *
+createSceneModelEx(s32 assetGroupIndex, void *allocation, s8 assetPairIndex, s8 param4, s8 param5, s16 assetIndex) {
     GameState *obj = allocateNodeMemory(0x160);
     if (obj != NULL) {
-        initializeGameEntity(obj, arg0, arg1, arg2, arg3, arg4, arg5);
+        initializeGameEntity(obj, assetGroupIndex, allocation, assetPairIndex, param4, param5, assetIndex);
     }
     return obj;
 }

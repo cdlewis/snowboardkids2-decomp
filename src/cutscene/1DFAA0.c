@@ -92,7 +92,7 @@ void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *ar
         if (slot->unk4 != -1) {
             if (isAssetGroupEmpty(slot->unk4)) {
                 arg0->slots[i].model =
-                    func_800019B8_25B8(slot->unk4, arg1, slot->unk6, slot->unk7, slot->unk8, slot->unk9);
+                    createSceneModelEx(slot->unk4, arg1, slot->unk6, slot->unk7, slot->unk8, slot->unk9);
             } else {
                 arg0->slots[i].model = createSceneModel(slot->unk4, arg1);
             }

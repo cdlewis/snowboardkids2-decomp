@@ -738,7 +738,7 @@ void func_800319C8_325C8(func_800319C8_325C8_arg *arg0) {
 }
 
 void func_80031A0C_3260C(func_80031A0C_3260C_arg *arg0) {
-    arg0->unk0 = func_800019B8_25B8(0x3A, &((GameState *)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
+    arg0->unk0 = createSceneModelEx(0x3A, &((GameState *)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
 
     memcpy(&arg0->unk4, &identityMatrix, sizeof(Mat3x3Padded));
 

@@ -666,7 +666,7 @@ void func_80021270_21E70(Func8002144CArg *arg0) {
     if (temp_s2->unkB45 == 0) {
         arg0->unk0 = createSceneModel(temp_s3, temp_s2);
     } else {
-        arg0->unk0 = func_800019B8_25B8(temp_s3, temp_s2, (s8)temp_s0, -1, -1, -1);
+        arg0->unk0 = createSceneModelEx(temp_s3, temp_s2, (s8)temp_s0, -1, -1, -1);
     }
 
     memcpy((u8 *)&arg0->unk4, identityMatrix, 0x20);
