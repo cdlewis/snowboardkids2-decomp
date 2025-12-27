@@ -4,146 +4,160 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern s32 D_8008C190_8CD90[];
-extern s32 D_8008C194_8CD94[];
-extern s32 D_8008C1F0_8CDF0;
+#define ORBITAL_SPRITE_COUNT 12
+#define ORBITAL_SPRITE_Y_OFFSET 0x16147A
+
+extern s32 orbitalSpriteOffsetsZ[];
+extern s32 orbitalSpriteOffsetsX[];
+extern s32 maxActiveOrbitalSprites;
 
 extern void
 func_8000A190_AD90(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);
 
 typedef struct {
     u8 _pad[0x16];
-    u16 unk16;
-} func_800071E4_unk10;
+    u16 assetIndex;
+} OrbitalSpriteAssetData;
 
 typedef struct {
     u8 _pad[0x10];
-    func_800071E4_unk10 *unk10;
+    OrbitalSpriteAssetData *assetData;
     u8 _pad2[0x4];
-    s32 unk18[3];
+    s32 rotationMatrix[3];
     u8 _pad3[0x8];
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
+    s32 posX;
+    s32 posY;
+    s32 posZ;
     u8 _pad4[0x4];
     s8 isDestroyed;
     u8 _pad5[0x2];
     s8 displayEnabled;
     u8 _pad6[0x48];
-    s8 unk88;
-} func_800071E4_inner;
+    s8 isVisible;
+} OrbitalSpriteOwner;
 
 typedef struct {
-    func_800071E4_inner *unk0;
-    SpriteAssetState unk4;
-    s32 unk50;
-    s16 unk54;
-    s8 unk56;
-} func_80007130_7D30_arg;
+    OrbitalSpriteOwner *owner;
+    SpriteAssetState spriteState;
+    s32 spriteIndex;
+    s16 delayTimer;
+    s8 isActive;
+} OrbitalSpriteState;
 
 typedef struct {
-    func_800071E4_inner *unk0;
-} func_80007100_7D00_arg;
+    OrbitalSpriteOwner *owner;
+} OrbitalSpriteRingControllerState;
 
 typedef struct {
-    s32 unk0;
-    SpriteAssetState unk4;
-} func_80007070_7C70_arg;
+    s32 owner;
+    SpriteAssetState spriteState;
+} OrbitalSpriteRingInitArg;
 
-void func_800071E4_7DE4(func_80007130_7D30_arg *);
-void func_80007360_7F60(func_80007130_7D30_arg *);
-void func_80007100_7D00(func_80007100_7D00_arg *);
-void func_80007130_7D30(func_80007130_7D30_arg *);
-void func_8000714C_7D4C(func_80007130_7D30_arg *);
+void updateOrbitalSprite(OrbitalSpriteState *);
+void cleanupOrbitalSprite(OrbitalSpriteState *);
+void updateOrbitalSpriteRingController(OrbitalSpriteRingControllerState *);
+void cleanupOrbitalSpriteRingController(OrbitalSpriteState *);
+void initOrbitalSprite(OrbitalSpriteState *);
 
-void func_80007070_7C70(func_80007070_7C70_arg *arg0) {
+void initOrbitalSpriteRing(OrbitalSpriteRingInitArg *arg0) {
     s32 i;
-    func_80007130_7D30_arg *task;
+    OrbitalSpriteState *task;
     s32 temp;
 
-    func_80009E68_AA68(&arg0->unk4, 5);
+    func_80009E68_AA68(&arg0->spriteState, 5);
 
-    for (i = 0; i < 12; i++) {
-        task = scheduleTask(func_8000714C_7D4C, 0, 0, 0);
+    for (i = 0; i < ORBITAL_SPRITE_COUNT; i++) {
+        task = scheduleTask(initOrbitalSprite, 0, 0, 0);
         if (task != NULL) {
-            temp = arg0->unk0;
-            task->unk50 = i;
-            task->unk0 = (func_800071E4_inner *)temp;
+            temp = arg0->owner;
+            task->spriteIndex = i;
+            task->owner = (OrbitalSpriteOwner *)temp;
         }
     }
 
-    setCleanupCallback(func_80007130_7D30);
-    setCallback(func_80007100_7D00);
+    setCleanupCallback(cleanupOrbitalSpriteRingController);
+    setCallback(updateOrbitalSpriteRingController);
 }
 
-void func_80007100_7D00(func_80007100_7D00_arg *arg0) {
-    if (arg0->unk0->isDestroyed == 1) {
+void updateOrbitalSpriteRingController(OrbitalSpriteRingControllerState *arg0) {
+    if (arg0->owner->isDestroyed == 1) {
         func_80069CF8_6A8F8();
     }
 }
 
-void func_80007130_7D30(func_80007130_7D30_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
+void cleanupOrbitalSpriteRingController(OrbitalSpriteState *arg0) {
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
 }
 
-void func_8000714C_7D4C(func_80007130_7D30_arg *arg0) {
+void initOrbitalSprite(OrbitalSpriteState *arg0) {
     SpriteAssetState *temp_s0;
 
-    temp_s0 = &arg0->unk4;
+    temp_s0 = &arg0->spriteState;
     func_80009E68_AA68(temp_s0, 5);
     func_80009F90_AB90(temp_s0, 0x10000, 0, -1);
-    arg0->unk56 = 0;
-    arg0->unk54 = randA() % 15;
-    setCleanupCallback(func_80007360_7F60);
-    setCallback(func_800071E4_7DE4);
+    arg0->isActive = 0;
+    arg0->delayTimer = randA() % 15;
+    setCleanupCallback(cleanupOrbitalSprite);
+    setCallback(updateOrbitalSprite);
 }
 
-void func_800071E4_7DE4(func_80007130_7D30_arg *arg0) {
-    s32 matrix[3];
-    s32 output[3];
+void updateOrbitalSprite(OrbitalSpriteState *arg0) {
+    s32 localOffset[3];
+    s32 worldOffset[3];
     s32 x, y, z;
 
-    if (arg0->unk0->isDestroyed == 1) {
+    if (arg0->owner->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    if (arg0->unk56 == 0) {
-        if (arg0->unk54 == 0) {
-            arg0->unk56 = 1;
+    if (arg0->isActive == 0) {
+        if (arg0->delayTimer == 0) {
+            arg0->isActive = 1;
             return;
         }
-        arg0->unk54 = arg0->unk54 - 1;
+        arg0->delayTimer = arg0->delayTimer - 1;
         return;
     }
 
-    if (arg0->unk50 >= D_8008C1F0_8CDF0) {
+    if (arg0->spriteIndex >= maxActiveOrbitalSprites) {
         return;
     }
 
-    matrix[0] = D_8008C194_8CD94[arg0->unk50 * 2];
-    matrix[1] = 0x16147A;
-    matrix[2] = D_8008C190_8CD90[arg0->unk50 * 2];
+    localOffset[0] = orbitalSpriteOffsetsX[arg0->spriteIndex * 2];
+    localOffset[1] = ORBITAL_SPRITE_Y_OFFSET;
+    localOffset[2] = orbitalSpriteOffsetsZ[arg0->spriteIndex * 2];
 
-    transformVector2(matrix, &arg0->unk0->unk18[0], output);
+    transformVector2(localOffset, &arg0->owner->rotationMatrix[0], worldOffset);
 
-    x = arg0->unk0->unk2C + output[0];
-    y = arg0->unk0->unk30 + output[1];
-    z = arg0->unk0->unk34 + output[2];
+    x = arg0->owner->posX + worldOffset[0];
+    y = arg0->owner->posY + worldOffset[1];
+    z = arg0->owner->posZ + worldOffset[2];
 
-    func_8000A030_AC30(&arg0->unk4, 0x10000);
+    func_8000A030_AC30(&arg0->spriteState, 0x10000);
 
-    if (arg0->unk0->unk88 == 0) {
+    if (arg0->owner->isVisible == 0) {
         return;
     }
 
-    if (arg0->unk0->displayEnabled == 0) {
+    if (arg0->owner->displayEnabled == 0) {
         return;
     }
 
-    func_8000A190_AD90((s32 *)&arg0->unk4, arg0->unk0->unk10->unk16, x, y, z, 0x4000, 0x4000, 0, 0, 0xAA);
+    func_8000A190_AD90(
+        (s32 *)&arg0->spriteState,
+        arg0->owner->assetData->assetIndex,
+        x,
+        y,
+        z,
+        0x4000,
+        0x4000,
+        0,
+        0,
+        0xAA
+    );
 }
 
-void func_80007360_7F60(func_80007130_7D30_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
+void cleanupOrbitalSprite(OrbitalSpriteState *arg0) {
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
 }
