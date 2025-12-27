@@ -14,6 +14,7 @@ extern s32 D_800BBB98_B4B28[];
 extern s32 D_800BBB9C_B4B2C[];
 extern s32 D_800BBBA0_B4B30[];
 extern void *D_800BBC14_B4BA4;
+extern Vec3i D_800BBC08_B4B98;
 
 typedef struct {
     u8 _pad0[0x30];
@@ -158,7 +159,61 @@ void func_800BB598_B4528(B4240FuncArg *arg0) {
     func_800BB2B0_B4240(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/jingle_town", func_800BB63C_B45CC);
+void func_800BB63C_B45CC(B4240FuncArg *arg0) {
+    B4240AllocationStruct *alloc;
+    void *terrainPtr;
+    s32 *posPtr;
+    Vec3i rotResult;
+    s32 temp;
+    s16 angleDiff;
+    s16 newRotation;
+    u16 newUnk56;
+
+    alloc = getCurrentAllocation();
+    if (alloc->unk76 == 0) {
+        temp = (arg0->unk52 << 3) + (arg0->unk50 * 5 << 2);
+        angleDiff =
+            func_8006D21C_6DE1C(D_800BBB94_B4B24[temp >> 2], D_800BBB98_B4B28[temp >> 2], arg0->unk3C, arg0->unk44);
+        angleDiff = (angleDiff - arg0->rotation) & 0x1FFF;
+        if (angleDiff >= 0x1001) {
+            angleDiff = angleDiff | 0xE000;
+        }
+        if (angleDiff >= 0x81) {
+            angleDiff = 0x80;
+        }
+        if (angleDiff < -0x80) {
+            angleDiff = -0x80;
+        }
+        newRotation = arg0->rotation + angleDiff;
+        arg0->rotation = newRotation;
+        rotateVectorY(&D_800BBC08_B4B98, newRotation, &rotResult);
+        terrainPtr = &alloc->unk30;
+        arg0->unk3C += rotResult.x;
+        posPtr = &arg0->unk3C;
+        arg0->unk44 += rotResult.z;
+        newUnk56 = func_80060A3C_6163C(terrainPtr, arg0->unk56, posPtr);
+        arg0->unk56 = newUnk56;
+        arg0->unk40 = func_80061A64_62664(terrainPtr, newUnk56, posPtr);
+        arg0->unk48 += arg0->unk4C;
+        arg0->unk4C -= 0x8000;
+        if (arg0->unk48 == 0) {
+            arg0->unk5A--;
+            if (arg0->unk5A == 0) {
+                arg0->unk58 = ((randA() & 0xFF) >> 1) + 0xA;
+                setCallback(func_800BB598_B4528);
+            } else {
+                arg0->unk4C = 0x30000;
+            }
+        }
+        rotResult.x = D_800BBB94_B4B24[((arg0->unk52 << 3) + (arg0->unk50 * 5 << 2)) >> 2] - arg0->unk3C;
+        rotResult.y = D_800BBB98_B4B28[((arg0->unk52 << 3) + (arg0->unk50 * 5 << 2)) >> 2] - arg0->unk44;
+        if (((u32)(rotResult.x + 0xFFFFF) <= 0x1FFFFEUL) && ((u32)(rotResult.z + 0xFFFFF) <= 0x1FFFFEUL)) {
+            arg0->unk52 = (arg0->unk52 + 1) & 1;
+        }
+        func_800BB320_B42B0(arg0);
+    }
+    func_800BB2B0_B4240(arg0);
+}
 
 void func_800BB89C_B482C(B4240FuncArg *arg0) {
     AllocationStruct *alloc;
