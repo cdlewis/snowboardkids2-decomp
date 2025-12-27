@@ -30,17 +30,6 @@ typedef struct {
 } getModelActionMode_arg;
 
 typedef struct {
-    u8 padding[0x14];
-    s16 unk14;
-    s16 unk16;
-    u8 padding2[0x20];
-    s16 unk38;
-    s16 unk3A;
-    u8 padding5[0x52];
-    s16 unk8E;
-} func_80001970_2570_arg;
-
-typedef struct {
     void *assetStart;
     void *assetEnd;
     void *asset2Start;
@@ -288,12 +277,12 @@ AssetGroup *getAssetGroupOrDefault(s32 assetIndex) {
     return &emptyAssetGroup;
 }
 
-void func_80001970_2570(func_80001970_2570_arg *arg0) {
-    arg0->unk14 = -1;
-    arg0->unk16 = -1;
-    arg0->unk3A = -1;
-    arg0->unk38 = -1;
-    arg0->unk8E = -1;
+void clearModelAnimationState(SceneModel *model) {
+    model->unk14 = -1;
+    model->unk16 = -1;
+    model->unk3A = -1;
+    model->unk38 = -1;
+    model->unk8E = -1;
 }
 
 void *func_8000198C_258C(s32 arg0, void *arg1) {
