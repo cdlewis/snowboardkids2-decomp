@@ -155,7 +155,7 @@ void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1,
             break;
     }
 
-    func_80002220_2E20(slot->model, temp_arg0->unk2, temp_arg0->unk4, -1, animId);
+    setModelAnimationQueued(slot->model, temp_arg0->unk2, temp_arg0->unk4, -1, animId);
 }
 
 void cutsceneChrMove2_init(void) {
@@ -257,7 +257,7 @@ void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager 
         arg0->unk17
     );
 
-    func_80002220_2E20(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1);
+    setModelAnimationQueued(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1);
 
     setModelActionMode(slot->model, arg0->unk12);
 }
@@ -296,7 +296,7 @@ void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg0, CutsceneManager *arg
             break;
     }
 
-    func_80002220_2E20(slot->model, arg0->unk2, arg0->unk4, -1, animId);
+    setModelAnimationQueued(slot->model, arg0->unk2, arg0->unk4, -1, animId);
 }
 
 void cutsceneChrRotate_init(void) {
@@ -346,7 +346,7 @@ void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg0, CutsceneManager *arg1,
     slot = &arg1->slots[arg2];
 
     func_800B7914_1E49C4(&slot->slotData, arg0->unk0, arg0->unk4, arg0->unk8, arg0->unkE);
-    func_80002220_2E20(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1);
+    setModelAnimationQueued(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1);
     setModelActionMode(slot->model, arg0->unk12);
 }
 
@@ -624,7 +624,7 @@ void cutsceneChrTurn3_exec(cutsceneChrTurn3_exec_arg *arg0, CutsceneManager *arg
 
     func_800B75C4_1E4674(&currentSlot->slotData, currentSlot->model, arg0->unk0, arg0->unk8, arg0->unk6, arg0->unkA);
 
-    func_80002220_2E20(currentSlot->model, arg0->unk2, arg0->unk4, -1, -1);
+    setModelAnimationQueued(currentSlot->model, arg0->unk2, arg0->unk4, -1, -1);
 }
 
 s32 cutsceneChrTurn3_isDone(void) {

@@ -515,14 +515,14 @@ void enqueueModelDisplayListByIndex(func_80002B50_3750_arg *model, s16 index) {
 }
 
 void setModelAnimation(SceneModel *model, s16 animationIndex) {
-    func_80002220_2E20(model, animationIndex, -1, -1, -1);
+    setModelAnimationQueued(model, animationIndex, -1, -1, -1);
 }
 
 void setModelAnimationLooped(SceneModel *model, s16 animIndex, s16 transitionAnimIndex, s8 loopCount) {
-    func_80002220_2E20(model, animIndex, transitionAnimIndex, loopCount, -1);
+    setModelAnimationQueued(model, animIndex, transitionAnimIndex, loopCount, -1);
 }
 
-void func_80002220_2E20(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
+void setModelAnimationQueued(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
     func_80002260_2E60(arg0, arg1, arg2, arg3, (s32)arg4, 1);
 }
 

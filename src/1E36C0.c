@@ -904,10 +904,10 @@ s16 func_800B844C_1E54FC(CutsceneSlotData *arg0, SceneModel *arg1) {
                 temp_v0_9 = arg0->unk8A;
                 if (temp_v0_9 < 0) {
                     var_a1 = 0x77;
-                    func_80002220_2E20(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+                    setModelAnimationQueued(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
                 } else if (temp_v0_9 > 0) {
                     var_a1 = 0x78;
-                    func_80002220_2E20(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+                    setModelAnimationQueued(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
                 }
             }
         } else {
@@ -916,13 +916,13 @@ s16 func_800B844C_1E54FC(CutsceneSlotData *arg0, SceneModel *arg1) {
     } else if (arg0->unk7C != 0) {
         if (arg0->unk0.bytes[2] != 0) {
             var_a1 = 0x71;
-            func_80002220_2E20(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+            setModelAnimationQueued(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
         }
     } else {
     block_51:
         if ((arg1->unk16 != 0x71) || (arg1->unk95 != 0)) {
             var_a1 = arg0->unk90;
-            func_80002220_2E20(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+            setModelAnimationQueued(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
         }
     }
 
