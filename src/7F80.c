@@ -54,28 +54,29 @@ extern Gfx *gRegionAllocPtr;
 
 typedef struct {
     s32 unk0;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
+    s16 rotationX;
+    s16 rotationY;
+    s16 rotationZ;
     s16 unkA;
     s16 unkC;
     s16 unkE;
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
+    s16 angularVelocityX;
+    s16 angularVelocityY;
+    s16 angularVelocityZ;
     s16 unk16;
-} func_80007380_7F80_arg;
-void func_80007380_7F80(func_80007380_7F80_arg *arg0) {
+} CameraRotationTaskState;
+
+void initCameraRotationTask(CameraRotationTaskState *arg0) {
     setCleanupCallback(&func_80007558_8158);
-    arg0->unk8 = 0;
-    arg0->unk6 = 0;
-    arg0->unk4 = 0;
+    arg0->rotationZ = 0;
+    arg0->rotationY = 0;
+    arg0->rotationX = 0;
     arg0->unkE = 0;
     arg0->unkC = 0;
     arg0->unkA = 0;
-    arg0->unk14 = 0;
-    arg0->unk12 = 0;
-    arg0->unk10 = 0;
+    arg0->angularVelocityZ = 0;
+    arg0->angularVelocityY = 0;
+    arg0->angularVelocityX = 0;
     setCallback(&func_800073E0_7FE0);
 }
 
