@@ -109,8 +109,8 @@ OSThread *__osGetActiveQueue(void) {
     return __osActiveQueue_0;
 }
 
-s32 func_8000156C_216C(s32 arg0) {
-    return arg0 + 0x18;
+s32 getModelTransformPtr(s32 model) {
+    return model + 0x18;
 }
 
 s16 func_80001574_2174(s16 arg0) {
