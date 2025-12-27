@@ -244,10 +244,10 @@ typedef struct {
     u8 paddingE[2];
 } func_80026860_entry;
 
-struct {
+extern struct {
     u16 unk0;
     u16 unk2;
-} D_8008DE54_8EA54[0x10];
+} D_8008DE54_8EA54[];
 
 typedef struct {
     SelectionEntry entries[4];
@@ -257,31 +257,56 @@ typedef struct {
     s16 unk48;
 } func_80026BD8_arg;
 
-extern s32 identityMatrix[];
-extern s32 D_8008DD2C_8E92C[];
-extern u16 D_8008DD4E_8E94E[][3];
-extern u16 D_8008DD6C_8E96C;
-extern u16 D_8008DD6E_8E96E;
-extern u16 D_8008DD70_8E970;
-extern u16 D_8008DDD8_8E9D8[];
-extern u16 D_8008DDDA_8E9DA[];
-extern u16 D_8008DDBE_8E9BE[];
-extern u16 D_8008DDC0_8E9C0[];
-extern s16 D_8008DDC2_8E9C2[];
-extern u16 D_8008DDE6_8E9E6;
-extern u16 D_8008DDE8_8E9E8;
-extern u16 D_8008DDEA_8E9EA;
-extern u8 D_8008DE18_8EA18;
-extern u16 D_8008DE1A_8EA1A;
-extern u16 D_8008DE1C_8EA1C;
-extern u16 D_8008DE1E_8EA1E;
+typedef struct {
+    u16 x;
+    u16 y;
+} Vec2_u16;
+
+typedef struct {
+    u16 x;
+    u16 y;
+    s16 inc;
+} PositionConfig_DDBE;
+
+typedef struct {
+    u16 y;
+    u16 x;
+    u16 inc;
+} PositionConfig_DDE6;
+
+typedef struct {
+    u16 x;
+    u16 y;
+    u16 inc;
+} PositionConfig_DE1A;
+
+typedef struct {
+    func_80027348_entry entries[3];
+} func_800260EC_26CEC_arg;
+
+extern Vec2_u16 D_8008DDD8_8E9D8[];
+extern PositionConfig_DDBE D_8008DDBE_8E9BE[];
+extern PositionConfig_DDE6 D_8008DDE6_8E9E6[];
+extern u8 D_8008DE18_8EA18[];
+extern PositionConfig_DE1A D_8008DE1A_8EA1A[];
 extern Vec3s D_8008DE3A_8EA3A[];
 extern u16 D_8008DE7A_8EA7A[];
 extern struct {
     u16 unk0;
     u16 unk2;
 } D_8008DE9C_8EA9C[];
+extern u8 D_8008DD8D_8E98D[];
+extern u8 D_8008DD8E_8E98E[];
+extern s32 identityMatrix[];
+extern s32 D_8008DD2C_8E92C[];
+extern Vec3s D_8008DD4E_8E94E[];
+extern Vec3s D_8008DD6C_8E96C;
 
+void func_80025418_26018(void *);
+void func_8002567C_2627C(func_80025FFC_26BFC_arg *);
+void func_800253E0_25FE0(func_800253E0_25FE0_arg *);
+void func_800251AC_25DAC(func_80025130_25D30_arg *);
+void func_80024BA0_257A0(func_80024C8C_2588C_arg *);
 void func_80026D34_27934(func_80026BD8_arg *);
 void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
 void func_8002667C_2727C(void *);
@@ -297,6 +322,32 @@ void func_80027400_28000(func_80025824_arg *);
 void func_80027544_28144(func_80027544_arg *);
 void func_800269C8_275C8(void *);
 void func_80026BAC_277AC(func_80025FFC_26BFC_arg *);
+void func_80025904_26504(void);
+void func_80024810_25410(func_80024644_arg *);
+void func_8002494C_2554C(func_8002494C_arg *);
+void func_80024D40_25940(func_80024C8C_2588C_arg *);
+void func_80024DCC_259CC(func_80024C8C_2588C_arg *);
+void func_80024E58_25A58(func_80024C8C_2588C_arg *);
+void func_80024FEC_25BEC(func_80024C8C_2588C_arg *);
+void func_80024F48_25B48(func_80024C8C_2588C_arg *);
+void func_80026190_26D90(func_80025FFC_26BFC_arg *);
+void func_800260EC_26CEC(func_800260EC_26CEC_arg *);
+void func_800262D4_26ED4(func_80026564_arg *);
+void func_80026538_27138(func_80025FFC_26BFC_arg *);
+void func_800270B8_27CB8(u8 *);
+void func_8002712C_27D2C(func_80025FFC_26BFC_arg *);
+void func_800271E4_27DE4(func_80025FFC_26BFC_arg *);
+void func_8002723C_27E3C(func_80025FFC_26BFC_arg *);
+void func_8002764C_2824C(func_80025FFC_26BFC_arg *arg0);
+void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0);
+void func_80027348_27F48(volatile func_80027348_entry *arg0);
+void func_80027AAC_286AC(func_80027A28_28628_arg *arg0);
+void func_80027A28_28628(func_80027A28_28628_arg *arg0);
+void func_80027A50_28650(func_80027A28_28628_arg *arg0);
+void func_80027B70_28770(void *);
+void func_80027B9C_2879C(func_80025FFC_26BFC_arg *);
+void func_80024518_25118(func_80024518_arg *);
+void func_80024414_25014(func_80024518_arg *);
 
 void func_80023E30_24A30(func_80024048_arg *arg0) {
     Mat3x3Padded sp10;
@@ -436,9 +487,6 @@ void func_80024220_24E20(func_80024220_24E20_arg *arg0) {
     setCallback(func_80024048_24C48);
 }
 
-void func_80024518_25118(func_80024518_arg *);
-void func_80024414_25014(func_80024518_arg *);
-
 void func_80024298_24E98(func_80024048_arg *arg0) {
     Mat3x3Padded sp10;
     Mat3x3Padded *localPtr;
@@ -556,9 +604,6 @@ void func_80024600_25200(func_8002494C_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-void func_80024810_25410(func_80024644_arg *);
-void func_8002494C_2554C(func_8002494C_arg *);
-
 void func_80024644_25244(func_80024644_arg *arg0) {
     Mat3x3Padded sp10;
     Mat3x3Padded sp30;
@@ -655,8 +700,6 @@ void func_8002494C_2554C(func_8002494C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024990_25590);
 
-void func_80024BA0_257A0(func_80024C8C_2588C_arg *);
-
 void func_80024AAC_256AC(func_80024C8C_2588C_arg *arg0) {
     Mat3x3Padded localMatrix;
     Mat3x3Padded *localPtr;
@@ -686,12 +729,6 @@ void func_80024AAC_256AC(func_80024C8C_2588C_arg *arg0) {
     updateModelGeometry(arg0->unk0);
     setCallback(func_80024BA0_257A0);
 }
-
-void func_80024D40_25940(func_80024C8C_2588C_arg *);
-void func_80024DCC_259CC(func_80024C8C_2588C_arg *);
-void func_80024E58_25A58(func_80024C8C_2588C_arg *);
-void func_80024FEC_25BEC(func_80024C8C_2588C_arg *);
-void func_80024F48_25B48(func_80024C8C_2588C_arg *);
 
 void func_80024BA0_257A0(func_80024C8C_2588C_arg *arg0) {
     Mat3x3Padded localMatrix;
@@ -828,8 +865,6 @@ void func_80025058_25C58(func_80025280_25E80_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025074_25C74);
 
-void func_800251AC_25DAC(func_80025130_25D30_arg *);
-
 void func_80025130_25D30(func_80025130_25D30_arg *arg0) {
     u8 *base;
 
@@ -874,9 +909,6 @@ void *func_80025280_25E80(func_80025280_25E80_arg *arg0) {
     return func_80002014_2C14(arg0->unk0);
 }
 
-void func_8002567C_2627C(func_80025FFC_26BFC_arg *);
-void func_800253E0_25FE0(func_800253E0_25FE0_arg *);
-
 #define CONST_0xB_8002529C 0xB
 
 void func_8002529C_25E9C(func_8002529C_25E9C_arg *arg0) {
@@ -904,11 +936,10 @@ void func_8002529C_25E9C(func_8002529C_25E9C_arg *arg0) {
     getTableEntryByU16Index(dmaResult, 0xB, &sp10);
 
     unk8 = D_800AFE8C_A71FC->unk8;
-    temp_v0 = unk8 * 6;
 
-    unk0Val = *(&D_8008DDE6_8E9E6 + (temp_v0 >> 1));
-    xTemp = *(&D_8008DDE8_8E9E8 + (temp_v0 >> 1));
-    xIncrementU16 = *(&D_8008DDEA_8E9EA + (temp_v0 >> 1));
+    unk0Val = D_8008DDE6_8E9E6[unk8].y;
+    xTemp = D_8008DDE6_8E9E6[unk8].x;
+    xIncrementU16 = D_8008DDE6_8E9E6[unk8].inc;
 
     scaleX = 0x400;
     if (unk8 == 1) {
@@ -921,7 +952,7 @@ void func_8002529C_25E9C(func_8002529C_25E9C_arg *arg0) {
     i = 0;
     xIncrement = (s32)(s16)xIncrementU16;
     const_0xB = CONST_0xB_8002529C;
-    tablePtr = &D_8008DE18_8EA18;
+    tablePtr = D_8008DE18_8EA18;
     x = xTemp;
     ptr = (volatile func_800255A0_entry *)arg0;
 
@@ -949,8 +980,6 @@ void func_8002529C_25E9C(func_8002529C_25E9C_arg *arg0) {
     arg0->unk53 = 8;
     setCallback(func_800253E0_25FE0);
 }
-
-void func_80025418_26018(void *);
 
 void func_800253E0_25FE0(func_800253E0_25FE0_arg *arg0) {
     if (--arg0->unk53 == 0) {
@@ -990,8 +1019,6 @@ void func_8002567C_2627C(func_80025FFC_26BFC_arg *arg0) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800256A8_262A8);
-
-void func_80025904_26504(void);
 
 void func_80025824_26424(func_80025824_arg *arg0) {
     func_80027348_entry *ptr;
@@ -1123,16 +1150,16 @@ void func_80025C64_26864(SelectionMenuState *arg0) {
     arg0->numEntries = 3;
 
     if (D_800AFE8C_A71FC->unk4 == 0) {
-        x = D_8008DD6C_8E96C;
-        y = D_8008DD6E_8E96E;
-        xIncrement = D_8008DD70_8E970;
+        x = D_8008DD6C_8E96C.x;
+        y = D_8008DD6C_8E96C.y;
+        xIncrement = D_8008DD6C_8E96C.z;
         spriteIndexBase = 6;
         arg0->numEntries = 2;
     } else {
         s32 index = D_800AFE8C_A71FC->unk8;
-        x = D_8008DD4E_8E94E[index][0];
-        y = D_8008DD4E_8E94E[index][1];
-        xIncrement = D_8008DD4E_8E94E[index][2];
+        x = D_8008DD4E_8E94E[index].x;
+        y = D_8008DD4E_8E94E[index].y;
+        xIncrement = D_8008DD4E_8E94E[index].z;
     }
 
     count = arg0->numEntries;
@@ -1210,13 +1237,6 @@ void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-typedef struct {
-    func_80027348_entry entries[3];
-} func_800260EC_26CEC_arg;
-
-void func_80026190_26D90(func_80025FFC_26BFC_arg *);
-void func_800260EC_26CEC(func_800260EC_26CEC_arg *);
-
 void func_80026028_26C28(func_80025FFC_26BFC_arg *arg0) {
     void *dmaResult;
     s32 i;
@@ -1230,10 +1250,10 @@ void func_80026028_26C28(func_80025FFC_26BFC_arg *arg0) {
     setCleanupCallback(func_80026190_26D90);
 
     i = 0;
-    index = D_800AFE8C_A71FC->unk8 * 3;
-    x = D_8008DDBE_8E9BE[index];
-    increment = D_8008DDC2_8E9C2[index];
-    y = D_8008DDC0_8E9C0[index];
+    index = D_800AFE8C_A71FC->unk8;
+    x = D_8008DDBE_8E9BE[index].x;
+    increment = D_8008DDBE_8E9BE[index].inc;
+    y = D_8008DDBE_8E9BE[index].y;
 
     do {
         arg0[i].unk2 = y;
@@ -1274,9 +1294,6 @@ void func_80026190_26D90(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_800262D4_26ED4(func_80026564_arg *);
-void func_80026538_27138(func_80025FFC_26BFC_arg *);
-
 void func_800261BC_26DBC(func_80026564_arg *arg0) {
     void *dmaResult;
     u8 count;
@@ -1299,10 +1316,9 @@ void func_800261BC_26DBC(func_80026564_arg *arg0) {
     setCleanupCallback(func_80026538_27138);
 
     count = D_800AFE8C_A71FC->unk8;
-    index = count * 3;
-    xBase = *(&D_8008DE1A_8EA1A + index);
-    y = *(&D_8008DE1C_8EA1C + index);
-    xInc = *(&D_8008DE1E_8EA1E + index);
+    xBase = D_8008DE1A_8EA1A[count].x;
+    y = D_8008DE1A_8EA1A[count].y;
+    xInc = D_8008DE1A_8EA1A[count].inc;
 
     i = 0;
     if (count != 0) {
@@ -1528,9 +1544,6 @@ void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_800270B8_27CB8(u8 *);
-void func_8002712C_27D2C(func_80025FFC_26BFC_arg *);
-
 void func_80026FF4_27BF4(func_80025FFC_26BFC_arg *arg0) {
     void *dmaResult;
     D_800AFE8C_A71FC_type *global;
@@ -1548,8 +1561,8 @@ void func_80026FF4_27BF4(func_80025FFC_26BFC_arg *arg0) {
     global = D_800AFE8C_A71FC;
     count = global->unk8;
     unk8Base = (count >= 3) * 8;
-    x = D_8008DDD8_8E9D8[count * 2];
-    y = D_8008DDDA_8E9DA[count * 2];
+    x = D_8008DDD8_8E9D8[count].x;
+    y = D_8008DDD8_8E9D8[count].y;
 
     i = 0;
     if (count != 0) {
@@ -1589,9 +1602,6 @@ void func_8002712C_27D2C(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_800271E4_27DE4(func_80025FFC_26BFC_arg *);
-void func_8002723C_27E3C(func_80025FFC_26BFC_arg *);
-
 void func_80027158_27D58(func_80025FFC_26BFC_arg *arg0) {
     GameState *state;
     void *dmaResult;
@@ -1621,9 +1631,6 @@ void func_8002723C_27E3C(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_8002764C_2824C(func_80025FFC_26BFC_arg *arg0);
-void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0);
-
 void func_80027268_27E68(func_80025FFC_26BFC_arg *arg0) {
     void *dmaResult;
     s32 loopCount;
@@ -1640,8 +1647,6 @@ void func_80027268_27E68(func_80025FFC_26BFC_arg *arg0) {
     setCleanupCallback(func_8002764C_2824C);
     setCallback(func_800272FC_27EFC);
 }
-
-void func_80027348_27F48(volatile func_80027348_entry *arg0);
 
 void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
@@ -1792,16 +1797,11 @@ void func_800279A8_285A8(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80027AAC_286AC(func_80027A28_28628_arg *arg0);
-void func_80027A28_28628(func_80027A28_28628_arg *arg0);
-
 void func_800279D4_285D4(func_80027A28_28628_arg *arg0) {
     arg0->unk2C = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
     setCleanupCallback(func_80027AAC_286AC);
     setCallback(func_80027A28_28628);
 }
-
-void func_80027A50_28650(func_80027A28_28628_arg *arg0);
 
 void func_80027A28_28628(func_80027A28_28628_arg *arg0) {
     func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
@@ -1819,9 +1819,6 @@ void func_80027A50_28650(func_80027A28_28628_arg *arg0) {
 void func_80027AAC_286AC(func_80027A28_28628_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
-
-void func_80027B70_28770(void *);
-void func_80027B9C_2879C(func_80025FFC_26BFC_arg *);
 
 void func_80027AD8_286D8(func_80027AD8_286D8_arg *arg0) {
     void *dmaResult;
@@ -1888,13 +1885,9 @@ u8 func_80027C44_28844(u8 arg0) {
     return D_8008DD8C_8E98C[arg0 * 3];
 }
 
-extern u8 D_8008DD8D_8E98D[];
-
 u8 func_80027C60_28860(u8 arg0) {
     return D_8008DD8D_8E98D[arg0 * 3];
 }
-
-extern u8 D_8008DD8E_8E98E[];
 
 u8 func_80027C7C_2887C(u8 arg0) {
     return D_8008DD8E_8E98E[arg0 * 3];
