@@ -160,8 +160,8 @@ void setItemFlags(SceneModel *arg0, s8 arg1) {
     arg0->unk4F = arg1;
 }
 
-s16 func_80001638_2238(func_80001688_2288_arg *arg0) {
-    return arg0->unk8A;
+s16 getAnimationFrameCount(SceneModel *model) {
+    return model->animFrameCount;
 }
 
 void func_80001640_2240(SceneModel *arg0) {
@@ -686,7 +686,7 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
         arg0->unk3A = -1;
         if (arg0->unk16 != arg0->unk8E) {
             if (arg0->unk16 != arg0->unk14) {
-                arg0->unk8A = arg0->unk8C;
+                arg0->animFrameCount = arg0->unk8C;
             }
             if (arg0->unk16 != arg0->unk8E) {
                 arg0->unk8C = 0;
@@ -695,8 +695,8 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
         }
 
         if (arg0->unk16 == arg0->unk14) {
-            if (arg0->unk8A != arg0->unk8C) {
-                arg0->unk8A = arg0->unk8C;
+            if (arg0->animFrameCount != arg0->unk8C) {
+                arg0->animFrameCount = arg0->unk8C;
             }
         }
 

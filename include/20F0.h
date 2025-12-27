@@ -54,7 +54,7 @@ typedef struct {
 typedef struct {
     u8 padding[0x89];
     s8 unk89;
-    s16 unk8A;
+    s16 animFrameCount;
     u8 padding3[0x8];
     s8 unk94;
     u8 padding2[0x4];
@@ -138,7 +138,7 @@ typedef struct {
     u8 padding2[0x38];
     s8 unk88;
     s8 unk89;
-    s16 unk8A;
+    s16 animFrameCount;
     s16 unk8C;
     s16 unk8E;
     s32 unk90;

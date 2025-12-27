@@ -152,6 +152,7 @@ setModelVisibility = 0x800015FC; // rom:0x21FC
 setModelDisplayEnabled = 0x80001604; // rom:0x2204
 setItemDisplayEnabled = 0x8000160C; // rom:0x220C
 setItemFlags = 0x80001630; // rom:0x2230
+getAnimationFrameCount = 0x80001638; // rom:0x2238
 applyTransformToModel = 0x8000153C; // rom:0x213C
 setupSlotTransform = 0x800B6760; // rom:0x1E3810
 finalizeAnimationLoop = 0x800B5C18; // rom:0x1E2CC8
