@@ -235,7 +235,7 @@ typedef struct {
 void enqueueDisplayListIfVisible(func_80000C2C_182C_arg_unk0 *state, void *displayList);
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
-void func_800008D0_14D0(func_80000C2C_182C_arg *arg0);
+void updateRotatingModelTask(func_80000C2C_182C_arg *arg0);
 void func_80000968_1568(func_80000968_1568_arg *arg0);
 void func_80000E84_1A84(func_80000C2C_182C_arg *arg0);
 void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0);
@@ -409,11 +409,11 @@ void initRotatingModelTask(func_80000C2C_182C_arg *arg0) {
     arg0->unk8.unk1C = taskConfig->unk10;
     arg0->unk44 = 0;
 
-    setCallback(&func_800008D0_14D0);
+    setCallback(&updateRotatingModelTask);
 }
 
-void func_800008D0_14D0(func_80000C2C_182C_arg *arg0) {
-    u16 temp;
+void updateRotatingModelTask(func_80000C2C_182C_arg *arg0) {
+    u16 rotationAngle;
     DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
 
@@ -421,11 +421,11 @@ void func_800008D0_14D0(func_80000C2C_182C_arg *arg0) {
         func_80069CF8_6A8F8();
     }
 
-    temp = ((SubEntryVariant *)subEntry)->unk14;
-    temp = arg0->unk44 + temp;
-    arg0->unk44 = temp;
+    rotationAngle = ((SubEntryVariant *)subEntry)->unk14;
+    rotationAngle = arg0->unk44 + rotationAngle;
+    arg0->unk44 = rotationAngle;
 
-    createYRotationMatrix(&arg0->unk8, temp);
+    createYRotationMatrix(&arg0->unk8, rotationAngle);
     enqueueDisplayListIfVisible(arg0->unk0, &arg0->unk8);
 }
 
