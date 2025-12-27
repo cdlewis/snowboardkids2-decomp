@@ -35,38 +35,33 @@ typedef struct {
 } PulsingSpriteState;
 
 typedef struct {
-    u8 padding[0x28];
-    void *unk28;
-    void *unk2C;
-} func_80007030_7C30_arg;
-
-typedef struct {
     u8 _pad[0x18];
-    u8 unk18[0x24];
+    u8 transformMatrix[0x20];
+    u8 _pad2[0x4];
     s8 isDestroyed;
-} func_80006EE0_unk0;
+} StretchingModelOwner;
 
 typedef struct {
-    void *unk0;
-    u8 unk4[0x18];
+    void *owner;
+    u8 transformMatrix[0x18];
     s32 unk1C;
     u8 padding[0x4];
     void *unk24;
-    MemoryAllocatorNode *unk28;
-    MemoryAllocatorNode *unk2C;
+    MemoryAllocatorNode *displayList;
+    MemoryAllocatorNode *vertexData;
     s32 unk30;
     u8 padding2[0xC];
-    s16 unk40;
-    s16 unk42;
-} func_80006E60_7A60_arg;
+    s16 rotationAngle;
+    s16 stretchAngle;
+} StretchingModelTaskState;
 
-void func_80007030_7C30(func_80007030_7C30_arg *);
+void cleanupStretchingModelTask(StretchingModelTaskState *);
 void func_8000A190_AD90(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);
 
 void updatePulsingSpriteIndicator(PulsingSpriteState *);
 void cleanupPulsingSpriteIndicator(PulsingSpriteState *);
-void func_80006E60_7A60(func_80006E60_7A60_arg *);
-void func_80006EE0_7AE0(func_80006E60_7A60_arg *);
+void initStretchingModelTask(StretchingModelTaskState *);
+void updateStretchingModelTask(StretchingModelTaskState *);
 extern void *D_80088720_89320;
 extern u8 identityMatrix[];
 
@@ -163,50 +158,50 @@ void cleanupPulsingSpriteIndicator(PulsingSpriteState *arg0) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
 }
 
-void func_80006E60_7A60(func_80006E60_7A60_arg *arg0) {
-    memcpy(arg0->unk4, identityMatrix, 0x20);
-    arg0->unk28 = loadAssetGroupDisplayList(arg0->unk0);
-    arg0->unk2C = loadAssetGroupVertexData(arg0->unk0);
+void initStretchingModelTask(StretchingModelTaskState *arg0) {
+    memcpy(arg0->transformMatrix, identityMatrix, 0x20);
+    arg0->displayList = loadAssetGroupDisplayList(arg0->owner);
+    arg0->vertexData = loadAssetGroupVertexData(arg0->owner);
     arg0->unk30 = 0;
     arg0->unk24 = &D_80088720_89320;
-    arg0->unk40 = 0;
-    arg0->unk42 = 0;
-    setCleanupCallback(&func_80007030_7C30);
-    setCallback(&func_80006EE0_7AE0);
+    arg0->rotationAngle = 0;
+    arg0->stretchAngle = 0;
+    setCleanupCallback(&cleanupStretchingModelTask);
+    setCallback(&updateStretchingModelTask);
 }
 
-void func_80006EE0_7AE0(func_80006E60_7A60_arg *arg0) {
+void updateStretchingModelTask(StretchingModelTaskState *arg0) {
     Mat3x3Padded sp10;
     Mat3x3Padded sp30;
     Mat3x3Padded sp50;
-    s16 temp_s0;
-    void *temp_s0_2;
+    s16 stretchScale;
+    void *outputMatrix;
     Mat3x3Padded *sp10Ptr;
-    u16 angle;
+    u16 rotationOffset;
 
     sp10Ptr = &sp10;
     memcpy(sp10Ptr, identityMatrix, 0x20);
     memcpy(&sp30, identityMatrix, 0x20);
-    memcpy(&sp50, &((func_80006EE0_unk0 *)arg0->unk0)->unk18, 0x20);
+    memcpy(&sp50, &((StretchingModelOwner *)arg0->owner)->transformMatrix, 0x20);
 
-    if (((func_80006EE0_unk0 *)arg0->unk0)->isDestroyed == 1) {
+    if (((StretchingModelOwner *)arg0->owner)->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    temp_s0 = ((s32)(approximateSin(arg0->unk42) * 0x133) >> 8) + 0x3000;
-    angle = ((approximateSin(arg0->unk40) >> 7) * 6) & 0xFFFE;
-    createZRotationMatrix(sp10Ptr, angle);
-    scaleMatrix(sp10Ptr, 0x2000, temp_s0, 0x2000);
-    temp_s0_2 = arg0->unk4;
-    func_8006B084_6BC84(sp10Ptr, &((func_80006EE0_unk0 *)arg0->unk0)->unk18, temp_s0_2);
+    stretchScale = ((s32)(approximateSin(arg0->stretchAngle) * 0x133) >> 8) + 0x3000;
+    rotationOffset = ((approximateSin(arg0->rotationAngle) >> 7) * 6) & 0xFFFE;
+    createZRotationMatrix(sp10Ptr, rotationOffset);
+    scaleMatrix(sp10Ptr, 0x2000, stretchScale, 0x2000);
+    outputMatrix = arg0->transformMatrix;
+    func_8006B084_6BC84(sp10Ptr, &((StretchingModelOwner *)arg0->owner)->transformMatrix, outputMatrix);
     arg0->unk1C = (s32)(arg0->unk1C + 0x33333);
-    enqueueModelDisplayList(arg0->unk0, temp_s0_2);
-    arg0->unk40 = (s16)(((u16)arg0->unk40 + 0xB6) & 0x1FFF);
-    arg0->unk42 = (s16)(((u16)arg0->unk42 + 0x16C) & 0x1FFF);
+    enqueueModelDisplayList(arg0->owner, outputMatrix);
+    arg0->rotationAngle = (s16)(((u16)arg0->rotationAngle + 0xB6) & 0x1FFF);
+    arg0->stretchAngle = (s16)(((u16)arg0->stretchAngle + 0x16C) & 0x1FFF);
 }
 
-void func_80007030_7C30(func_80007030_7C30_arg *arg0) {
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupStretchingModelTask(StretchingModelTaskState *arg0) {
+    arg0->displayList = freeNodeMemory(arg0->displayList);
+    arg0->vertexData = freeNodeMemory(arg0->vertexData);
 }
