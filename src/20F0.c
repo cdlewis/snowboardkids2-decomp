@@ -53,7 +53,7 @@ extern ItemAssetEntry itemAssetTable[];
 extern OSThread *__osActiveQueue_0;
 extern AssetGroup gameAssets[];
 extern s32 itemAssetCount;
-extern AssetGroup D_8008BD2C_8C92C;
+extern AssetGroup emptyAssetGroup;
 extern u8 identityMatrix[32];
 extern u32 D_8008BD38_8C938;
 
@@ -280,12 +280,12 @@ s32 isAssetGroupEmpty(s16 assetIndex) {
     return gameAssets[assetIndex].displayListStart == NULL;
 }
 
-AssetGroup *func_80001934_2534(s32 arg0) {
-    if (arg0 != -1) {
-        return &gameAssets[arg0];
+AssetGroup *getAssetGroupOrDefault(s32 assetIndex) {
+    if (assetIndex != -1) {
+        return &gameAssets[assetIndex];
     }
 
-    return &D_8008BD2C_8C92C;
+    return &emptyAssetGroup;
 }
 
 void func_80001970_2570(func_80001970_2570_arg *arg0) {
