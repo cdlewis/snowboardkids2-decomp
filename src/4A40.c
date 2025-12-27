@@ -182,13 +182,13 @@ typedef struct {
 extern u8 identityMatrix[];
 
 typedef struct {
-    SceneModel *unk0;
-    s16 unk4;
-    s16 unk6;
+    SceneModel *model;
+    s16 animState;
+    s16 configIndex;
     u8 unk8;
-    s8 unk9;
-    s16 unkA;
-} StructUnk800048D0;
+    s8 direction;
+    s16 isCleanedUp;
+} CreditsCharacter;
 
 typedef struct {
     u8 padding[0x2C];
@@ -196,10 +196,10 @@ typedef struct {
     s32 unk30;
 } SceneModel30;
 
-void func_800047A0_53A0(StructUnk800048D0 *arg0);
-void func_800048D0_54D0(StructUnk800048D0 *arg0);
+void updateCreditsCharacter(CreditsCharacter *arg0);
+void cleanupCreditsCharacter(CreditsCharacter *arg0);
 void spawnCreditsCharacter(CreditsState *);
-void func_8000464C_524C(StructUnk800048D0 *arg0);
+void initCreditsCharacter(CreditsCharacter *arg0);
 
 void initSceneLighting(CreditsState *arg0) {
     arg0->unkE44[0].r2 = 0;
@@ -360,7 +360,7 @@ void spawnCreditsCharacter(CreditsState *arg0) {
     s32 temp_a0_2;
     s32 temp_v1;
     s32 var_v0;
-    StructUnk800048D0 *temp_v0;
+    CreditsCharacter *temp_v0;
 
     temp_a0 = arg0->unk2;
     if ((u32)(temp_a0 - 0x12C) >= 0x1717U) {
@@ -378,9 +378,9 @@ void spawnCreditsCharacter(CreditsState *arg0) {
             }
             arg0->unkE42 = temp_v1 - ((var_v0 >> 2) * 4);
         }
-        temp_v0 = scheduleTask(func_8000464C_524C, 0, 0, 0);
+        temp_v0 = scheduleTask(initCreditsCharacter, 0, 0, 0);
         if (temp_v0 != NULL) {
-            temp_v0->unk6 = arg0->unkE40;
+            temp_v0->configIndex = arg0->unkE40;
             *(s16 *)&temp_v0->unk8 = arg0->unkE42;
         }
         arg0->unkE40 = arg0->unkE40 + 1;
@@ -388,32 +388,32 @@ void spawnCreditsCharacter(CreditsState *arg0) {
     }
 }
 
-void func_8000464C_524C(StructUnk800048D0 *arg0) {
+void initCreditsCharacter(CreditsCharacter *arg0) {
     s32 buffer[8];
     CreditsState *taskMemory;
     D_8008C00C_entry *entry;
     s16 scale;
 
     taskMemory = getCurrentAllocation();
-    entry = &D_8008C00C_8CC0C[arg0->unk6];
-    arg0->unkA = 0;
-    arg0->unk4 = 0;
+    entry = &D_8008C00C_8CC0C[arg0->configIndex];
+    arg0->isCleanedUp = 0;
+    arg0->animState = 0;
 
-    arg0->unk0 = allocateNodeMemory(0x160);
+    arg0->model = allocateNodeMemory(0x160);
 
-    initializeGameEntity(arg0->unk0, entry->unk0, &taskMemory->unk768, arg0->unk9, -1, -1, -1);
+    initializeGameEntity(arg0->model, entry->unk0, &taskMemory->unk768, arg0->direction, -1, -1, -1);
 
-    memcpy((void *)((u8 *)arg0->unk0 + 0x18), identityMatrix, 0x20);
+    memcpy((void *)((u8 *)arg0->model + 0x18), identityMatrix, 0x20);
 
-    createYRotationMatrix((Mat3x3Padded *)((u8 *)arg0->unk0 + 0x18), entry->unk6);
+    createYRotationMatrix((Mat3x3Padded *)((u8 *)arg0->model + 0x18), entry->unk6);
 
     scale = entry->unkA;
-    scaleMatrix((Mat3x3Padded *)((u8 *)arg0->unk0 + 0x18), scale, scale, scale);
+    scaleMatrix((Mat3x3Padded *)((u8 *)arg0->model + 0x18), scale, scale, scale);
 
-    ((SceneModel30 *)arg0->unk0)->unk2C = D_8008BFF0_8CBF0;
-    ((SceneModel30 *)arg0->unk0)->unk30 += entry->unkC;
+    ((SceneModel30 *)arg0->model)->unk2C = D_8008BFF0_8CBF0;
+    ((SceneModel30 *)arg0->model)->unk30 += entry->unkC;
 
-    setModelActionMode(arg0->unk0, entry->unk5);
+    setModelActionMode(arg0->model, entry->unk5);
 
     {
         s32 temp_a1 = D_8008BFF8_8CBF8;
@@ -424,54 +424,54 @@ void func_8000464C_524C(StructUnk800048D0 *arg0) {
 
     func_8006FD3C_7093C(taskMemory->unk768.id, buffer);
 
-    setCleanupCallback(func_800048D0_54D0);
-    setCallback(func_800047A0_53A0);
+    setCleanupCallback(cleanupCreditsCharacter);
+    setCallback(updateCreditsCharacter);
 }
 
-void func_800047A0_53A0(StructUnk800048D0 *arg0) {
+void updateCreditsCharacter(CreditsCharacter *arg0) {
     D_8008C00C_entry *entry;
 
     getCurrentAllocation();
 
-    entry = &D_8008C00C_8CC0C[arg0->unk6];
+    entry = &D_8008C00C_8CC0C[arg0->configIndex];
 
-    switch (arg0->unk4) {
+    switch (arg0->animState) {
         case 0:
-            setModelAnimation(arg0->unk0, entry->unk2);
-            arg0->unk4 = 1;
+            setModelAnimation(arg0->model, entry->unk2);
+            arg0->animState = 1;
             break;
         case 1:
             if (entry->unk0 == 0x73) {
-                setModelActionMode(arg0->unk0, 3);
-                arg0->unk4 = 2;
+                setModelActionMode(arg0->model, 3);
+                arg0->animState = 2;
             }
-            clearModelRotation(arg0->unk0);
+            clearModelRotation(arg0->model);
             break;
         case 2:
             if (entry->unk0 == 0x73) {
-                setModelActionMode(arg0->unk0, 8);
+                setModelActionMode(arg0->model, 8);
             }
-            clearModelRotation(arg0->unk0);
+            clearModelRotation(arg0->model);
             break;
         default:
             break;
     }
 
-    arg0->unk0->unk2C -= D_8008BFF4_8CBF4;
+    arg0->model->unk2C -= D_8008BFF4_8CBF4;
 
-    if (arg0->unk0->unk2C < -D_8008BFF0_8CBF0) {
-        cleanupSceneModel(arg0->unk0);
-        arg0->unkA = 1;
+    if (arg0->model->unk2C < -D_8008BFF0_8CBF0) {
+        cleanupSceneModel(arg0->model);
+        arg0->isCleanedUp = 1;
         func_80069CF8_6A8F8();
     } else {
-        updateModelGeometry(arg0->unk0);
+        updateModelGeometry(arg0->model);
     }
 }
 
-void func_800048D0_54D0(StructUnk800048D0 *arg0) {
+void cleanupCreditsCharacter(CreditsCharacter *arg0) {
     getCurrentAllocation();
-    if (arg0->unkA == 0) {
-        cleanupSceneModel(arg0->unk0);
+    if (arg0->isCleanedUp == 0) {
+        cleanupSceneModel(arg0->model);
     }
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+    arg0->model = freeNodeMemory(arg0->model);
 }
