@@ -210,7 +210,7 @@ void func_80001264_1E64(func_80000C2C_182C_arg *arg0);
 void func_800011DC_1DDC(func_80000C2C_182C_arg *);
 void func_80001280_1E80(func_80000C2C_182C_arg *arg0);
 void func_80000CAC_18AC(func_80000C2C_182C_arg *);
-void func_80000A68_1668(func_80000C2C_182C_arg *);
+void updateSwingingModelTask(func_80000C2C_182C_arg *);
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *);
 
 typedef struct {
@@ -450,10 +450,10 @@ void initSwingingModelTask(func_80000C2C_182C_arg *arg0) {
     arg0->unk28 = temp_s2->unk4;
     arg0->unk44 = 0;
 
-    setCallback(&func_80000A68_1668);
+    setCallback(&updateSwingingModelTask);
 }
 
-void func_80000A68_1668(func_80000C2C_182C_arg *arg0) {
+void updateSwingingModelTask(func_80000C2C_182C_arg *arg0) {
     Mat3x3Padded yRotMatrix;
     Mat3x3Padded zRotMatrix;
     DataEntry *entry;
