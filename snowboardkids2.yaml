@@ -614,7 +614,12 @@ segments:
           name: rsp/aspMain,
         }
       - { start: 0x9E268, type: rodatabin, use_src_path: True, name: rsp/s2dex }
-      - { start: 0x9E2B0, type: rodatabin, use_src_path: True, name: rsp/f3dex2 }
+      - {
+          start: 0x9E2B0,
+          type: rodatabin,
+          use_src_path: True,
+          name: rsp/f3dex2,
+        }
       - [0x9E640, rodata]
       - [0x9E8E0, .rodata, 4050]
       - [0x9E910, .rodata, 5520]
@@ -904,7 +909,6 @@ segments:
     vram: 0x800B00C0
     start: 0x1DB7A0
     overlay: true
-    bss_size: 0x190
     exclusive_ram_id: 800B00C0
     subsegments:
       - [0x1DB7A0, c]
