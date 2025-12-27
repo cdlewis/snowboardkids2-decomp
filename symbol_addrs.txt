@@ -9,6 +9,7 @@ D_8008DE3A_8EA3A = 0x8008DE3A; // rom:0x8EA3A size:0x6
 D_8008DE9C_8EA9C = 0x8008DE9C; // rom:0x8EA9C size:0x10
 D_8008DE54_8EA54 = 0x8008DE54; // rom:0x8EA54 size:0x10
 awaitCutsceneTransitionComplete = 0x80003C34; // rom:0x4834
+signalCutsceneComplete = 0x80003C88; // rom:0x4888
 getEmptyModelDisplayOffset = 0x80002B8C; // rom:0x378C
 getModelDisplayDataOffset = 0x80002BD0; // rom:0x37D0
 loadAssetSlotTableEntry = 0x80002C14; // rom:0x3814

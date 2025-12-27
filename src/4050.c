@@ -55,7 +55,7 @@ void awaitCutsceneTransitionComplete(void);
 void func_80003898_4498(void);
 void loadCutsceneOverlay(void);
 void runCutsceneFrame(void);
-void func_80003C88_4888(void);
+void signalCutsceneComplete(void);
 void func_80003D30_4930(void);
 void func_80003CC4_48C4(void);
 void initCutsceneRenderer(void);
@@ -145,7 +145,7 @@ void runCutsceneFrame(void) {
         unlinkNode(&taskMemory->uiNode);
         unlinkNode(&taskMemory->overlayNode);
         unlinkNode(&taskMemory->sceneNode);
-        terminateSchedulerWithCallback(&func_80003C88_4888);
+        terminateSchedulerWithCallback(&signalCutsceneComplete);
 
         return;
     }
@@ -166,11 +166,11 @@ void awaitCutsceneTransitionComplete(void) {
         unlinkNode(&taskMemory->uiNode);
         unlinkNode(&taskMemory->overlayNode);
         unlinkNode(&taskMemory->sceneNode);
-        terminateSchedulerWithCallback(&func_80003C88_4888);
+        terminateSchedulerWithCallback(&signalCutsceneComplete);
     }
 }
 
-void func_80003C88_4888(void) {
+void signalCutsceneComplete(void) {
     func_800697F4_6A3F4(1);
 }
 
