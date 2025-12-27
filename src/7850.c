@@ -64,7 +64,7 @@ void func_80007030_7C30(func_80007030_7C30_arg *);
 void func_8000A190_AD90(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);
 
 void updatePulsingSpriteIndicator(PulsingSpriteState *);
-extern void func_80006E44_7A44(PulsingSpriteState *);
+void cleanupPulsingSpriteIndicator(PulsingSpriteState *);
 void func_80006E60_7A60(func_80006E60_7A60_arg *);
 void func_80006EE0_7AE0(func_80006E60_7A60_arg *);
 extern void *D_80088720_89320;
@@ -78,7 +78,7 @@ void initPulsingSpriteIndicator(PulsingSpriteState *arg0) {
     arg0->scaleVelocity = 0x80000;
     func_80009E68_AA68(temp_s0, 7);
     func_80009F90_AB90(temp_s0, 0x10000, 0, -1);
-    setCleanupCallback(&func_80006E44_7A44);
+    setCleanupCallback(&cleanupPulsingSpriteIndicator);
     setCallback(&updatePulsingSpriteIndicator);
 }
 
@@ -159,7 +159,7 @@ void updatePulsingSpriteIndicator(PulsingSpriteState *arg0) {
     );
 }
 
-void func_80006E44_7A44(PulsingSpriteState *arg0) {
+void cleanupPulsingSpriteIndicator(PulsingSpriteState *arg0) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
 }
 
