@@ -35,8 +35,8 @@ D_8008BF90_8CB90_type D_8008BF90_8CB90 = { .unk0 = 0,
                                            .unk8 = { .half = { .lower = 0, .upper = 0 } },
                                            .unkC = { .half = { .lower = 0, .upper = 2 } } };
 
-extern s16 D_800AB070_A23E0;
-extern s16 D_800AFEF0_A7260;
+extern s16 D_800AB070_A23E0; // gCutsceneSlotIndex
+extern s16 D_800AFEF0_A7260; // gCutsceneType
 typedef struct {
     s16 unk0;
     s8 unk2;
@@ -60,9 +60,9 @@ void func_80003D30_4930(void);
 void func_80003CC4_48C4(void);
 void func_80003508_4108(void);
 
-void func_80003450_4050(s16 arg0, s16 arg1) {
-    D_800AB070_A23E0 = arg0;
-    D_800AFEF0_A7260 = arg1;
+void setCutsceneSelection(s16 slotIndex, s16 cutsceneType) {
+    D_800AB070_A23E0 = slotIndex;
+    D_800AFEF0_A7260 = cutsceneType;
 }
 
 void *__udiv_w_sdiv(void) {
@@ -182,7 +182,7 @@ void func_80003CC4_48C4(void) {
     if ((D_8008BF90_8CB90.unk8.full == 5) && (D_8008BF90_8CB90.unkC.full == 0)) {
         D_8008BF90_8CB90.unkC.full = 1;
     }
-    func_80003450_4050(D_8008BF90_8CB90.unk8.half.upper, D_8008BF90_8CB90.unkC.half.upper);
+    setCutsceneSelection(D_8008BF90_8CB90.unk8.half.upper, D_8008BF90_8CB90.unkC.half.upper);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
     setGameStateHandler(&func_80003D30_4930);
 }

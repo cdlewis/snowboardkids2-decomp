@@ -100,7 +100,7 @@ void func_80019078_19C78(void) {
             terminateSchedulerWithCallback(func_80019258_19E58);
         } else if (result == 1) {
             if (EepromSaveData->unk51 != 0) {
-                func_80003450_4050(8, 2);
+                setCutsceneSelection(8, 2);
                 createTaskQueue(loadCutsceneOverlay, 0x64);
                 setGameStateHandler(func_800191B4_19DB4);
             } else {

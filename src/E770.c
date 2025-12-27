@@ -303,7 +303,7 @@ void func_8000E4CC_F0CC(E770_struct *arg0) {
     if (temp == 0) {
         if (arg0->unk1 == 5) {
             func_8000E154_ED54(arg0);
-            func_80003450_4050(0, 2);
+            setCutsceneSelection(0, 2);
             createTaskQueue(loadCutsceneOverlay, 0x64);
             arg0->unk16 = 1;
             arg0->unk0 = 7;

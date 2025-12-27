@@ -112,7 +112,7 @@ void func_80014D3C_1593C(void);
 void func_80014D78_15978(void);
 
 void func_80014CF8_158F8(void) {
-    func_80003450_4050(D_800AFE8C_A71FC->saveSlotIndex, 0);
+    setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 0);
     createTaskQueue(loadCutsceneOverlay, 0x96);
     setGameStateHandler(func_80014D3C_1593C);
 }
@@ -202,7 +202,7 @@ void func_8001511C_15D1C(void);
 void func_80015098_15C98(void);
 
 void func_80014F60_15B60(void) {
-    func_80003450_4050(D_800AFE8C_A71FC->saveSlotIndex, 1);
+    setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 1);
     createTaskQueue(loadCutsceneOverlay, 0x64);
     setGameStateHandler(func_80014FA4_15BA4);
 }
@@ -228,7 +228,7 @@ void func_80014FA4_15BA4(void) {
 void func_80015064_15C64(void);
 
 void func_80015028_15C28(void) {
-    func_80003450_4050(0xA, 2);
+    setCutsceneSelection(0xA, 2);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
     setGameStateHandler(func_80015064_15C64);
 }
@@ -240,7 +240,7 @@ void func_80015064_15C64(void) {
 }
 
 void func_80015098_15C98(void) {
-    func_80003450_4050(D_800AFE8C_A71FC->errorFlag, 2);
+    setCutsceneSelection(D_800AFE8C_A71FC->errorFlag, 2);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
     setGameStateHandler(func_800150DC_15CDC);
 }
