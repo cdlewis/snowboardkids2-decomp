@@ -1560,3 +1560,4 @@ assetGroupTable = 0x8008BF70; // rom:0x8CB70
 runCutsceneFrame = 0x8000378C; // rom:0x438C
 renderOpaqueScrollingTexture = 0x80004F74; // rom:0x5B74
 renderTransparentScrollingTexture = 0x80004FA0; // rom:0x5BA0
+renderOverlayScrollingTexture = 0x80004FCC; // rom:0x5BCC
