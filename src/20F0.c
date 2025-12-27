@@ -153,7 +153,7 @@ void setModelDisplayEnabled(SceneModel *arg0, s8 arg1) {
     arg0->displayEnabled = arg1;
 }
 
-void func_8000160C_220C(SceneModel *arg0, s8 arg1) {
+void setItemDisplayEnabled(SceneModel *arg0, s8 arg1) {
     if (arg0->unk4C != -1) {
         arg0->unk4E = arg1;
     }

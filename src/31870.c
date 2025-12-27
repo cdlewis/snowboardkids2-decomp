@@ -761,7 +761,7 @@ void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0) {
 
     temp_s1 = (GameState *)getCurrentAllocation();
     applyTransformToModel(arg0->unk0, &arg0->unk4);
-    func_8000160C_220C(arg0->unk0, 1);
+    setItemDisplayEnabled(arg0->unk0, 1);
     func_800021B8_2DB8(arg0->unk0, arg0->unk20_u.unk20_s16);
     updateModelGeometry(arg0->unk0);
     if (temp_s1->unk79B != 0) {
