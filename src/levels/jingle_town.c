@@ -13,6 +13,14 @@ extern s32 D_800BBB94_B4B24[];
 extern s32 D_800BBB98_B4B28[];
 extern s32 D_800BBB9C_B4B2C[];
 extern s32 D_800BBBA0_B4B30[];
+extern void *D_800BBC14_B4BA4;
+
+typedef struct {
+    u8 _pad0[0x30];
+    void *unk30;
+    u8 _pad34[0x42];
+    u8 unk76;
+} AllocationStruct;
 
 typedef struct {
     u8 _pad0[0x24];
@@ -152,7 +160,72 @@ void func_800BB598_B4528(B4240FuncArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/jingle_town", func_800BB63C_B45CC);
 
-INCLUDE_ASM("asm/nonmatchings/levels/jingle_town", func_800BB89C_B482C);
+void func_800BB89C_B482C(B4240FuncArg *arg0) {
+    AllocationStruct *alloc;
+    Vec3i rotatedVec;
+    s32 idx;
+    s16 delta;
+    s16 var_v1;
+    void *allocUnk30;
+    s32 *pos;
+
+    alloc = getCurrentAllocation();
+    if (alloc->unk76 == 0) {
+        idx = (arg0->unk52 * 8) + (arg0->unk50 * 0x14);
+        delta = (func_8006D21C_6DE1C(
+                     *(s32 *)((u8 *)D_800BBB94_B4B24 + idx),
+                     *(s32 *)((u8 *)D_800BBB98_B4B28 + idx),
+                     arg0->unk3C,
+                     arg0->unk44
+                 ) -
+                 arg0->rotation) &
+                0x1FFF;
+        var_v1 = delta;
+        if (delta >= 0x1001) {
+            var_v1 = 0xE000;
+            var_v1 = delta | var_v1;
+        }
+        if ((s16)var_v1 >= 0x81) {
+            var_v1 = 0x80;
+        }
+        if ((s16)var_v1 < -0x80) {
+            var_v1 = -0x80;
+        }
+        arg0->rotation = arg0->rotation + var_v1;
+        rotateVectorY(&D_800BBC14_B4BA4, (s32)(s16)arg0->rotation, &rotatedVec);
+
+        allocUnk30 = (u8 *)alloc + 0x30;
+        arg0->unk3C += rotatedVec.x;
+        pos = &arg0->unk3C;
+        arg0->unk44 += rotatedVec.z;
+
+        arg0->unk56 = func_80060A3C_6163C(allocUnk30, arg0->unk56, pos);
+        arg0->unk40 = func_80061A64_62664(allocUnk30, (u16)arg0->unk56, pos);
+
+        arg0->unk48 += arg0->unk4C;
+        arg0->unk4C += -0x8000;
+
+        if (arg0->unk48 == 0) {
+            arg0->unk5A -= 1;
+            if (arg0->unk5A == 0) {
+                arg0->unk58 = ((randA() & 0xFF) >> 1) + 0xA;
+                setCallback(func_800BB598_B4528);
+            } else {
+                arg0->unk4C = 0x20000;
+            }
+        }
+
+        rotatedVec.x = *(s32 *)((u8 *)D_800BBB94_B4B24 + (arg0->unk52 * 8) + (arg0->unk50 * 0x14)) - arg0->unk3C;
+        rotatedVec.y = *(s32 *)((u8 *)D_800BBB98_B4B28 + (arg0->unk52 * 8) + (arg0->unk50 * 0x14)) - arg0->unk44;
+
+        if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFEU && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
+            arg0->unk52 = (arg0->unk52 + 1) & 1;
+        }
+
+        func_800BB320_B42B0(arg0);
+    }
+    func_800BB2B0_B4240(arg0);
+}
 
 void func_800BBAFC_B4A8C(B4240Struct *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
