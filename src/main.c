@@ -433,7 +433,7 @@ void cleanupRotatingModelTask(RotatingModelTaskState *state) {
     state->uncompressedAsset = freeNodeMemory(state->uncompressedAsset);
 }
 
-void func_800009A0_15A0(func_80000C2C_182C_arg *arg0) {
+void initSwingingModelTask(func_80000C2C_182C_arg *arg0) {
     ModelEntityConfig *temp_s0;
     ModelEntityTaskConfig *temp_s2;
 
