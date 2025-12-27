@@ -12,6 +12,7 @@ awaitCutsceneTransitionComplete = 0x80003C34; // rom:0x4834
 signalCutsceneComplete = 0x80003C88; // rom:0x4888
 beginCutsceneSequence = 0x80003CA4; // rom:0x48A4
 initCutscenePlayback = 0x80003CC4; // rom:0x48C4
+returnToMainGame = 0x80003E10; // rom:0x4A10
 getEmptyModelDisplayOffset = 0x80002B8C; // rom:0x378C
 getModelDisplayDataOffset = 0x80002BD0; // rom:0x37D0
 loadAssetSlotTableEntry = 0x80002C14; // rom:0x3814

@@ -189,6 +189,6 @@ void initCutscenePlayback(void) {
 
 INCLUDE_ASM("asm/nonmatchings/4050", func_80003D30_4930);
 
-void func_80003E10_4A10(void) {
+void returnToMainGame(void) {
     func_800693C4_69FC4(&func_80014480_15080, 0xC8);
 }
