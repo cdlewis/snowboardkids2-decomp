@@ -652,7 +652,7 @@ void cleanupAnimatedModelTask(AnimatedModelTaskCleanupState *state) {
     state->unk2C = freeNodeMemory(state->unk2C);
 }
 
-void func_80001158_1D58(func_80000C2C_182C_arg *arg0) {
+void initSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
     setCleanupCallback(&func_80001264_1E64);
