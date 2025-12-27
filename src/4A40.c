@@ -201,7 +201,7 @@ void func_800048D0_54D0(StructUnk800048D0 *arg0);
 void func_80004570_5170(func_80003EE0_4AE0_task_memory *);
 void func_8000464C_524C(StructUnk800048D0 *arg0);
 
-void func_80003E40_4A40(func_80003EE0_4AE0_task_memory *arg0) {
+void initSceneLighting(func_80003EE0_4AE0_task_memory *arg0) {
     arg0->unkE44[0].r2 = 0;
     arg0->unkE44[0].g2 = 0x7F;
     arg0->unkE44[0].r = 0xE0;
@@ -287,7 +287,7 @@ void func_80003EE0_4AE0(void) {
     func_8006FDA0_709A0(&taskMemory->unk590, 0, 0);
     func_8006FDA0_709A0(&taskMemory->unk768, 0, 0);
     func_80057514_58114(0xB, 0x80, 0);
-    func_80003E40_4A40(taskMemory);
+    initSceneLighting(taskMemory);
     setGameStateHandler(&func_80004368_4F68);
 }
 
