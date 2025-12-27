@@ -98,7 +98,7 @@ void func_80028C08_29808(Func297D8Arg *arg0) {
                 arg0->unk50 = 0x1B;
             block_15:
                 arg0->unk61 = currentUnk5E;
-                func_80001688_2288(model, funcArg);
+                setAnimationIndex(model, funcArg);
             }
         }
     }
@@ -415,7 +415,7 @@ void func_80029584_2A184(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_80001688_2288(arg0->model, 4);
+    setAnimationIndex(arg0->model, 4);
     func_8002A290_2AE90(arg0);
     setCallback(func_80029954_2A554);
 }
@@ -450,7 +450,7 @@ void func_80029680_2A280(Func297D8Arg *arg0) {
     func_8000A49C_B09C(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_80001688_2288(arg0->model, 1);
+    setAnimationIndex(arg0->model, 1);
     func_8002A290_2AE90(arg0);
     setCallback(func_80029954_2A554);
 }
@@ -466,7 +466,7 @@ void func_80029724_2A324(Func297D8Arg *arg0) {
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     if (arg0->unk5C == 1) {
-        func_80001688_2288(arg0->model, 0);
+        setAnimationIndex(arg0->model, 0);
     }
     func_8002A290_2AE90(arg0);
     setCallback(func_80029954_2A554);
@@ -478,7 +478,7 @@ void func_800297D8_2A3D8(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = (randB() & 0x1F) + 0x14;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_80001688_2288(arg0->model, 4);
+    setAnimationIndex(arg0->model, 4);
     func_8002A290_2AE90(arg0);
     setCallback(func_80029954_2A554);
 }
@@ -662,7 +662,7 @@ void func_80029C90_2A890(Func297D8Arg *arg0) {
             if (arg0->unk62 != 0) {
                 arg0->unk5E = 0;
                 arg0->unk50 = arg0->unk58;
-                func_80001688_2288(arg0->model, -1);
+                setAnimationIndex(arg0->model, -1);
             }
             break;
 
@@ -679,7 +679,7 @@ void func_80029C90_2A890(Func297D8Arg *arg0) {
                         arg0->unk50 = 0xA;
                     }
                     if (arg0->unk5C == 5) {
-                        func_80001688_2288(arg0->model, 0);
+                        setAnimationIndex(arg0->model, 0);
                     }
                 } else if (arg0->unk5A == 0x37) {
                     func_8002A0DC_2ACDC(arg0);

@@ -336,7 +336,7 @@ void func_800B08FC_1DAE9C(func_800B08FC_arg *arg0) {
     if (result != 0) {
         arg0->unk26 = 0;
         func_800021B8_2DB8(arg0->unk0, 0);
-        func_80001688_2288(arg0->unk0, -1);
+        setAnimationIndex(arg0->unk0, -1);
         setCallback(func_800B0638_1DABD8);
     }
 }

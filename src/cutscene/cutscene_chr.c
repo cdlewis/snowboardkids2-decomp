@@ -416,7 +416,7 @@ s32 cutsceneChrFace_validate(void) {
 void cutsceneChrFace_exec(s8 *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *slot = &arg1->slots[arg2];
     do {
-        func_80001688_2288(slot->model, *arg0);
+        setAnimationIndex(slot->model, *arg0);
     } while (0);
 }
 

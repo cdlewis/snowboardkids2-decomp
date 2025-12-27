@@ -72,7 +72,7 @@ void func_80018904_19504(func_80018898_19498_arg *arg0) {
     anim = state->unk403;
     if (anim != arg0->unk5) {
         arg0->unk5 = anim;
-        func_80001688_2288(arg0->unk0, (s8)anim);
+        setAnimationIndex(arg0->unk0, (s8)anim);
     }
 
     if (state->unk400 != arg0->unk4 && arg0->unk4 != 1) {

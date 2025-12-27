@@ -224,13 +224,13 @@ void func_80016A00_17600(Struct16B68 *arg0) {
 
                 if (arg0->unk2F != 5) {
                     if (arg0->unk2F != 4) {
-                        func_80001688_2288(arg0->unk0, 0);
+                        setAnimationIndex(arg0->unk0, 0);
                     } else {
-                        func_80001688_2288(arg0->unk0, 4);
+                        setAnimationIndex(arg0->unk0, 4);
                     }
                 }
             } else {
-                func_80001688_2288(arg0->unk0, -1);
+                setAnimationIndex(arg0->unk0, -1);
             }
         }
 
@@ -355,7 +355,7 @@ void func_80016DE0_179E0(Struct16B68 *arg0) {
     if (arg0->unk31 != 0) {
         arg0->unk31--;
         if (arg0->unk31 == 0) {
-            func_80001688_2288(arg0->unk0, 2);
+            setAnimationIndex(arg0->unk0, 2);
         }
     }
 }

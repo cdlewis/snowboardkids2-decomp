@@ -48,8 +48,8 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x13];
-    s8 unk13;
-} func_80001688_2288_arg_9C;
+    s8 animationCount;
+} ModelAnimationData;
 
 typedef struct {
     u8 padding[0x89];
@@ -58,7 +58,7 @@ typedef struct {
     u8 padding3[0x8];
     s8 animationIndex;
     u8 padding2[0x4];
-    func_80001688_2288_arg_9C *unk9C;
+    ModelAnimationData *unk9C;
 } func_80001688_2288_arg;
 
 typedef struct {
@@ -147,7 +147,7 @@ typedef struct {
     s8 alpha;
     s8 shadowEnabled;
     SceneModel_unk98 *unk98;
-    func_80001688_2288_arg_9C *unk9C;
+    ModelAnimationData *unk9C;
     u8 unkA0[4];
     SpriteAssetState unkA4;
     s16 unkF0[3][3];
@@ -269,7 +269,8 @@ void setModelVisibility(SceneModel *, s8);
 
 s32 setModelRotation(SceneModel *, s16);
 
-void func_80001688_2288(SceneModel *arg0, s8 arg1);
+void setAnimationIndex(SceneModel *arg0, s8 arg1);
+s8 getModelAnimationCount(SceneModel *arg0);
 
 void disableEntityRendering(GameEntity *arg0);
 void enableEntityRendering(SceneModel *arg0);

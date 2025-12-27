@@ -81,7 +81,7 @@ void func_8002D46C_2E06C(Func2E024Arg *arg0) {
         if (i == 0) {
             arg0->unk4.unk14 = -0x80000;
             arg0->unk4.unk1C = -0x4E0000;
-            func_80001688_2288(arg0->model, 1);
+            setAnimationIndex(arg0->model, 1);
             arg0->unk50 = 0x11;
             arg0->unk44 = 0x260000;
             arg0->unk5E = 0;
@@ -91,7 +91,7 @@ void func_8002D46C_2E06C(Func2E024Arg *arg0) {
         } else {
             arg0->unk7C = 0x1C0000;
             arg0->unk84 = -0x4E0000;
-            func_80001688_2288(arg0->unk64, 2);
+            setAnimationIndex(arg0->unk64, 2);
             arg0->unkB4 = 0x1E;
             arg0->unkC2 = 1;
             arg0->unkA4 = 0x40000;
@@ -194,7 +194,7 @@ void func_8002DE44_2EA44(Func2E024Arg *container) {
         if (i == 0) {
             container->unk4.unk14 = 0xFFFC0000;
             container->unk4.unk1C = 0xFFBC0000;
-            func_80001688_2288(container->model, 4);
+            setAnimationIndex(container->model, 4);
             container->unk50 = 0x11;
             container->unk5E = 0x63;
             container->unk44 = 0x1D0000;
@@ -405,14 +405,14 @@ void func_8002EBB0_2F7B0(void *ptr) {
         arg0->elements[i].unk5F = getAnimationIndex(arg0->elements[i].unk0);
 
         if (((arg0->unkD4 == 1) & (i == 0)) && D_800AFE8C_A71FC->unk9[0] == 3) {
-            func_80001688_2288(arg0->elements[i].unk0, -1);
+            setAnimationIndex(arg0->elements[i].unk0, -1);
             arg0->elements[i].unk48 = 0;
             arg0->elements[i].unk40 = 0;
             arg0->elements[i].unk44 = 0x240000;
         } else if (((arg0->unkD4 == 6) & (i == 1)) && D_800AFE8C_A71FC->unk9[0] == 3) {
-            func_80001688_2288(arg0->elements[i].unk0, -1);
+            setAnimationIndex(arg0->elements[i].unk0, -1);
         } else {
-            func_80001688_2288(arg0->elements[i].unk0, D_8008F054_8FC54[arg0->unkD4 * 2 + i]);
+            setAnimationIndex(arg0->elements[i].unk0, D_8008F054_8FC54[arg0->unkD4 * 2 + i]);
         }
 
         if (D_8008F044_8FC44[arg0->unkD4 * 2 + i] != 0) {

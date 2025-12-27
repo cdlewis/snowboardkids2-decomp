@@ -176,18 +176,18 @@ s8 getAnimationIndex(SceneModel *arg0) {
     return arg0->animationIndex;
 }
 
-s8 func_80001668_2268(SceneModel *arg0) {
-    func_80001688_2288_arg_9C *temp_v0;
+s8 getModelAnimationCount(SceneModel *arg0) {
+    ModelAnimationData *animData;
 
-    temp_v0 = arg0->unk9C;
-    if (temp_v0 != NULL) {
-        return temp_v0->unk13;
+    animData = arg0->unk9C;
+    if (animData != NULL) {
+        return animData->animationCount;
     }
     return 0;
 }
 
-void func_80001688_2288(SceneModel *arg0, s8 arg1) {
-    if (arg1 < func_80001668_2268(arg0)) {
+void setAnimationIndex(SceneModel *arg0, s8 arg1) {
+    if (arg1 < getModelAnimationCount(arg0)) {
         arg0->animationIndex = arg1;
     }
 }
