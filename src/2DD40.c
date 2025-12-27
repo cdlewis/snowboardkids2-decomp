@@ -49,30 +49,78 @@ struct Func2E024Arg {
     /* 0xC6 */ s8 unkC6;
     /* 0xC7 */ u8 padC7[0x1];
     /* 0xC8 */ void (*unkC8)(Func2E024Arg *);
-    /* 0xCC */ s16 unkCC;
-    /* 0xCE */ s16 unkCE;
+    /* 0xCC */ s16 unkCC[2];
     /* 0xD0 */ u8 padD0[0x5];
     /* 0xD5 */ u8 unkD5;
 };
 
-struct Func2E024Element {
+typedef struct {
     /* 0x00 */ SceneModel *model;
     /* 0x04 */ Mat3x3Padded matrix;
     /* 0x24 */ u8 pad24[0x40];
-}; /* size = 0x64 */
+} Func2E024Element; /* size = 0x64 */
+
+void func_8002D668_2E268(Func2E024Arg *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D140_2DD40);
 
-INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D46C_2E06C);
+void func_8002D46C_2E06C(Func2E024Arg *arg0) {
+    GameState *allocation;
+    s32 i;
+    Func2E024Element *elements;
+    u16 rotation;
+
+    allocation = getCurrentAllocation();
+    elements = (Func2E024Element *)arg0;
+
+    for (i = 0; i < arg0->unkD5; i++) {
+        memcpy((u8 *)&elements[i] + 4, identityMatrix, sizeof(Mat3x3Padded));
+        ((Func297D8Arg *)&elements[i])->unk62 = 0;
+        arg0->unkCC[i] = 0;
+
+        if (i == 0) {
+            arg0->unk4.unk14 = -0x80000;
+            arg0->unk4.unk1C = -0x4E0000;
+            func_80001688_2288(arg0->model, 1);
+            arg0->unk50 = 0x11;
+            arg0->unk44 = 0x260000;
+            arg0->unk5E = 0;
+            arg0->unk40 = 0;
+            arg0->unk48 = 0;
+            func_8000A49C_B09C(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+        } else {
+            arg0->unk7C = 0x1C0000;
+            arg0->unk84 = -0x4E0000;
+            func_80001688_2288(arg0->unk64, 2);
+            arg0->unkB4 = 0x1E;
+            arg0->unkC2 = 1;
+            arg0->unkA4 = 0x40000;
+            arg0->unkA8 = 0x280000;
+            arg0->unkAC = 0;
+            func_8000A49C_B09C(arg0->unk64, 0, 0x24, -1, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
+        }
+
+        ((Func297D8Arg *)&elements[i])->rotation = 0x800 + i * 0x1000;
+        ((Func297D8Arg *)&elements[i])->unk2E = 0x800 + i * 0x1000;
+        ((Func297D8Arg *)&elements[i])->unk52 = ((Func297D8Arg *)&elements[i])->unk50;
+        createYRotationMatrix((Mat3x3Padded *)((u8 *)&elements[i] + 4), ((Func297D8Arg *)&elements[i])->rotation);
+        func_8002A290_2AE90((Func297D8Arg *)&elements[i]);
+        allocation->unk408[i] = elements[i].matrix.unk14;
+        allocation->unk410[i] = elements[i].matrix.unk1C;
+        allocation->unk418[i] = D_8008EF70_8FB70[((Func297D8Arg *)&elements[i])->unk5C];
+    }
+
+    setCallback(func_8002D668_2E268);
+}
 
 void func_8002D668_2E268(Func2E024Arg *arg0) {
     GameState *gameState;
     s32 i;
-    struct Func2E024Element *elements;
+    Func2E024Element *elements;
     s32 state;
 
     gameState = getCurrentAllocation();
-    elements = (struct Func2E024Element *)arg0;
+    elements = (Func2E024Element *)arg0;
 
     for (i = 0; i < arg0->unkD5; i++) {
         state = ((Func2E024Arg *)&elements[i])->unk5E;
@@ -115,8 +163,8 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
 
     if (gameState->unk42A == 0x11) {
         gameState->unk42E = 1;
-        arg0->unkCC = 1;
-        arg0->unkCE = 1;
+        arg0->unkCC[0] = 1;
+        arg0->unkCC[1] = 1;
         func_8002EBB0_2F7B0(arg0);
         arg0->unkC8 = func_8002D668_2E268;
         setCallback(func_8002BEF4_2CAF4);
@@ -132,10 +180,10 @@ void func_8002E024_2EC24(Func2E024Arg *arg0);
 void func_8002DE44_2EA44(Func2E024Arg *container) {
     GameState *gameState;
     s32 i;
-    struct Func2E024Element *elements;
+    Func2E024Element *elements;
 
     gameState = getCurrentAllocation();
-    elements = (struct Func2E024Element *)container;
+    elements = (Func2E024Element *)container;
 
     for (i = 0; i < container->unkD5; i++) {
         Func297D8Arg *element = (Func297D8Arg *)&elements[i];
@@ -181,7 +229,7 @@ void func_8002DE44_2EA44(Func2E024Arg *container) {
 void func_8002E024_2EC24(Func2E024Arg *arg0) {
     GameState *gameState;
     s32 i;
-    struct Func2E024Element *elements;
+    Func2E024Element *elements;
 
     gameState = getCurrentAllocation();
 
@@ -206,7 +254,7 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
             break;
     }
 
-    elements = (struct Func2E024Element *)arg0;
+    elements = (Func2E024Element *)arg0;
     for (i = 0; i < arg0->unkD5; i++) {
         func_8002A2D0_2AED0((Func297D8Arg *)&elements[i]);
         gameState->unk408[i] = elements[i].matrix.unk14;
@@ -278,10 +326,10 @@ void func_8002E8B4_2F4B4(Func2E024Arg *arg0) {
         }
 
         {
-            u16 temp = arg0->unkCC;
+            u16 temp = arg0->unkCC[0];
             if (temp != 0) {
                 temp--;
-                arg0->unkCC = temp;
+                arg0->unkCC[0] = temp;
                 if ((temp & 0xFFFF) == 0) {
                     func_800585C8_591C8(0xF5);
                 }
@@ -289,10 +337,10 @@ void func_8002E8B4_2F4B4(Func2E024Arg *arg0) {
         }
 
         {
-            u16 temp = arg0->unkCE;
+            u16 temp = arg0->unkCC[1];
             if (temp != 0) {
                 temp--;
-                arg0->unkCE = temp;
+                arg0->unkCC[1] = temp;
                 if ((temp & 0xFFFF) == 0) {
                     func_800585C8_591C8(0x10E);
                 }
