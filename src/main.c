@@ -238,7 +238,7 @@ void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
 void updateRotatingModelTask(func_80000C2C_182C_arg *arg0);
 void cleanupRotatingModelTask(RotatingModelTaskState *state);
 void updateStaticModelTask(func_80000C2C_182C_arg *arg0);
-void func_80000F14_1B14(SwingingModelTaskState *arg0);
+void cleanupStaticModelTask(SwingingModelTaskState *arg0);
 void func_80001040_1C40(func_80001040_1C40_arg *arg0);
 void func_80001114_1D14(func_80001114_1D14_arg *arg0);
 
@@ -565,7 +565,7 @@ void initStaticModelTask(StaticModelTaskArg *arg0) {
     var_s0 = &modelEntityConfigs[temp];
     var_s2 = &var_s0->taskConfigs[temp2];
 
-    setCleanupCallback(func_80000F14_1B14);
+    setCleanupCallback(cleanupStaticModelTask);
 
     memcpy(&arg0->unk8, &identityMatrix, 0x20);
 
@@ -591,7 +591,7 @@ void updateStaticModelTask(func_80000C2C_182C_arg *arg0) {
     enqueueDisplayListIfVisible(arg0->unk0, &arg0->unk8);
 }
 
-void func_80000F14_1B14(SwingingModelTaskState *state) {
+void cleanupStaticModelTask(SwingingModelTaskState *state) {
     state->compressedAsset = freeNodeMemory(state->compressedAsset);
     state->uncompressedAsset = freeNodeMemory(state->uncompressedAsset);
 }
