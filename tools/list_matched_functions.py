@@ -21,8 +21,8 @@ def get_matched_functions():
                 function_name = file[:-2]
                 matched_functions.append(function_name)
 
-    # Sort for consistent output
-    matched_functions.sort()
+    # Sort with priority: functions starting with func_ first, then alphabetically
+    matched_functions.sort(key=lambda f: (0 if f.startswith('func_') else 1, f))
 
     return matched_functions
 
