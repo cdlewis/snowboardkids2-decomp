@@ -1,9 +1,15 @@
+#include "288A0.h"
 #include "6E840.h"
 #include "9FF70.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "graphics.h"
+#include "overlay.h"
 #include "task_scheduler.h"
+
+USE_ASSET(_426EF0);
+USE_ASSET(_41A1D0);
+USE_OVERLAY(_1DB7A0);
 
 extern volatile s32 gControllerInputs;
 
@@ -25,16 +31,57 @@ typedef struct {
 } Struct22D30;
 
 extern u8 D_8008DCC0_8E8C0[];
-
 extern void D_800B0690(void);
 extern void D_800B07A0(void);
+extern void *D_800B054C;
+extern void *D_800B08A8;
+extern u8 gConnectedControllerMask;
 
 void func_800223CC_22FCC(void);
 void func_800225C8_231C8(void);
 void func_800226B0_232B0(void);
 void func_800226CC_232CC(void);
+void func_80022304_22F04(void);
 
-INCLUDE_ASM("asm/nonmatchings/22D30", func_80022130_22D30);
+void func_80022130_22D30(void) {
+    Struct22D30 *s0;
+    s32 i;
+    u8 temp;
+    u8 numControllers;
+
+    s0 = allocateTaskMemory(0x1E8);
+
+    LOAD_OVERLAY(_1DB7A0);
+
+    setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
+    s0->unk1E0 = 0;
+    s0->unk1E5 = 0;
+    s0->unk1E4 = 0;
+    s0->unk1E6 = 0;
+    for (i = 0; i < 4; i++) {
+        if ((gConnectedControllerMask >> i) & 1) {
+            s0->unk1E4 = s0->unk1E4 + 1;
+        }
+    }
+    temp = D_800AFE8C_A71FC->unk8;
+    if (temp != 0) {
+        s0->unk1E2_union.unk1E2 = temp - 1;
+    } else {
+        s0->unk1E2_union.unk1E2 = 0;
+    }
+    numControllers = s0->unk1E4;
+    if (numControllers < s0->unk1E2_union.unk1E2 + 1) {
+        s0->unk1E2_union.unk1E2 = numControllers - 1;
+    }
+    func_80027CA0_288A0(&s0->node, 8, 0xA, 1);
+    func_8006FDA0_709A0(&s0->node, 0xFF, 0);
+    func_8006FDA0_709A0(&s0->node, 0, 0x10);
+    s0->unk1D8 = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
+    s0->unk1DC = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    scheduleTask(&D_800B054C, 0, 0, 0x5A);
+    scheduleTask(&D_800B08A8, 0, 0, 0x5A);
+    setGameStateHandler(func_80022304_22F04);
+}
 
 void func_80022304_22F04(void) {
     Struct22D30 *s0;

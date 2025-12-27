@@ -899,12 +899,17 @@ segments:
     vram: 0x800B00C0
     start: 0x1DB7A0
     overlay: true
+    bss_size: 0x190
     exclusive_ram_id: 800B00C0
     subsegments:
       - [0x1DB7A0, c]
       - [0x1DC080, data]
       - [0x1DC0B0, .rodata, 1DB7A0]
-      - [0x1DC0D0, rodata]
+
+  - name: _1DC0D0
+    type: bin
+    vram: 0
+    start: 0x1DC0D0
 
   - name: _1DC260
     type: code

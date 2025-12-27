@@ -13,6 +13,7 @@
 USE_ASSET(_41A1D0);
 USE_ASSET(_41AD80);
 USE_ASSET(_422C60);
+USE_ASSET(_1DC0D0);
 
 typedef struct {
     u8 _pad0[0x2C];
@@ -146,8 +147,6 @@ extern s16 D_800B1160_1DB700[];
 extern s16 D_800B1162_1DB702[];
 extern Vec2s D_800B11A0_1DB740[];
 extern s16 D_800B11C2_1DB762[];
-extern u8 D_1DC0D0[];
-extern u8 D_1DC260[];
 extern u8 identityMatrix[];
 extern void *D_800B1140_1DB6E0;
 extern char D_800B115C_1DB6FC[];
@@ -527,7 +526,7 @@ void func_800B100C_1DB5AC(func_800B100C_arg *arg0) {
     void *temp1;
     void *temp2;
 
-    temp1 = loadUncompressedData(D_1DC0D0, D_1DC260);
+    temp1 = loadUncompressedData(&_1DC0D0_ROM_START, &_1DC0D0_ROM_END);
     temp2 = loadUncompressedData(&_422C60_ROM_START, &_422C60_ROM_END);
     setCleanupCallback(func_800B1104_1DB6A4);
 
