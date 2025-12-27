@@ -43,6 +43,7 @@ getAnimationCount = 0x80001574; // rom:0x2174
 getAssetCount = 0x800015A0; // rom:0x21A0
 setModelActionMode = 0x800015CC; // rom:0x21CC
 getModelActionMode = 0x800015D4; // rom:0x21D4
+getWalkAnimationId = 0x800015DC; // rom:0x21DC
 enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;

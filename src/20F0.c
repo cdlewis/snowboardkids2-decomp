@@ -129,7 +129,7 @@ s8 getModelActionMode(getModelActionMode_arg *arg0) {
     return arg0->actionMode;
 }
 
-s32 func_800015DC_21DC(s16 arg0) {
+s32 getWalkAnimationId(s16 arg0) {
     return 0x98;
 }
 
