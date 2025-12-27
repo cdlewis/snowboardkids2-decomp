@@ -14,7 +14,7 @@ USE_ASSET(_418520);
 
 extern u8 gConnectedControllerMask;
 
-void func_800168BC_174BC(func_80000760_1360_arg *arg0);
+void func_800168BC_174BC(ModelEntityRenderState *arg0);
 void func_800168D8_174D8(EffectState *arg0);
 
 extern Mat3x3Padded D_8008D5C4_8E1C4[];
@@ -162,8 +162,8 @@ void func_80016860_17460(ModelEntity *arg0) {
     setCallback(func_800168BC_174BC);
 }
 
-void func_800168BC_174BC(func_80000760_1360_arg *arg0) {
-    func_80000760_1360(arg0);
+void func_800168BC_174BC(ModelEntityRenderState *state) {
+    renderModelEntity(state);
 }
 
 void func_800168D8_174D8(EffectState *arg0) {

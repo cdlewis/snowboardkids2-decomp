@@ -35,18 +35,18 @@ s32 initModelEntity(ModelEntity *entity, s16 index, void *arg2);
 typedef struct {
     struct {
         u8 padding[0x16];
-        u16 unk16;
-    } *unk0;
+        u16 slotIndex;
+    } *parent;
     u8 padding[0x8];
-    DisplayListObject unkC;
-    s32 unk48;
+    DisplayListObject primaryDisplayList;
+    s32 secondaryDisplayList;
     u8 padding4[0x20];
-    s32 unk6C;
+    s32 hasSecondaryDisplayList;
     u8 padding5[0x17];
-    s8 unk87;
-} func_80000760_1360_arg;
+    s8 isVisible;
+} ModelEntityRenderState;
 
-void func_80000760_1360(func_80000760_1360_arg *);
+void renderModelEntity(ModelEntityRenderState *);
 
 typedef struct {
     s32 unk0;

@@ -380,13 +380,13 @@ void freeEffectResources(EffectState *state) {
     state->isDisposed = 1;
 }
 
-void func_80000760_1360(func_80000760_1360_arg *arg0) {
-    if (arg0->unk87 != 0) {
-        if (arg0->unkC.unk24 != 0) {
-            enqueueDisplayListObject(arg0->unk0->unk16, &arg0->unkC);
+void renderModelEntity(ModelEntityRenderState *state) {
+    if (state->isVisible != 0) {
+        if (state->primaryDisplayList.unk24 != 0) {
+            enqueueDisplayListObject(state->parent->slotIndex, &state->primaryDisplayList);
         }
-        if (arg0->unk6C != 0) {
-            func_800630F0_63CF0(arg0->unk0->unk16, &arg0->unk48);
+        if (state->hasSecondaryDisplayList != 0) {
+            func_800630F0_63CF0(state->parent->slotIndex, &state->secondaryDisplayList);
         }
     }
 }

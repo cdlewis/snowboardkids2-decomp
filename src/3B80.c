@@ -27,7 +27,7 @@ void func_80002F80_3B80(void *arg0, void *arg1) {
 
 void func_80002FD4_3BD4(func_80002FD4_3BD4_arg *arg0) {
     if (arg0->unk0->unkFF5 != 0) {
-        func_80000760_1360(arg0->unk4);
+        renderModelEntity(arg0->unk4);
     }
 }
 

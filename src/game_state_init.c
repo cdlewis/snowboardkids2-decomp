@@ -28,7 +28,7 @@ extern void PhoneTriggerInit;
 void cleanupTransitionEffect(EffectState *);
 void gameStateCleanupHandler(void);
 void gameStateCountdownHandler(void);
-void invokeTransitionEffect(func_80000760_1360_arg *);
+void invokeTransitionEffect(ModelEntityRenderState *);
 void setShortCountdownAndContinue(void);
 void setupGameStateTransition(ModelEntity *);
 void transitionToMainMenu(void);
@@ -177,8 +177,8 @@ void setShortCountdownAndContinue(void) {
     setCallback(&invokeTransitionEffect);
 }
 
-void invokeTransitionEffect(func_80000760_1360_arg *arg0) {
-    func_80000760_1360(arg0);
+void invokeTransitionEffect(ModelEntityRenderState *state) {
+    renderModelEntity(state);
 }
 
 void cleanupTransitionEffect(EffectState *arg0) {
