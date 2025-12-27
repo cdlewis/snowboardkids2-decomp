@@ -372,12 +372,12 @@ s32 initModelEntity(ModelEntity *entity, s16 index, void *arg2) {
     return 0;
 }
 
-void func_80000710_1310(func_80000710_1310_arg *arg0) {
-    if (arg0->unk4 != 0) {
-        arg0->unk8 = freeNodeMemory(arg0->unk8);
-        arg0->unk4 = freeNodeMemory(arg0->unk4);
+void freeEffectResources(EffectState *state) {
+    if (state->unk4 != 0) {
+        state->unk8 = freeNodeMemory(state->unk8);
+        state->unk4 = freeNodeMemory(state->unk4);
     }
-    arg0->unk86 = 1;
+    state->isDisposed = 1;
 }
 
 void func_80000760_1360(func_80000760_1360_arg *arg0) {

@@ -53,10 +53,10 @@ typedef struct {
     void *unk4;
     void *unk8;
     u8 padding[0x7A];
-    s8 unk86;
-} func_80000710_1310_arg;
+    s8 isDisposed;
+} EffectState;
 
-void func_80000710_1310(func_80000710_1310_arg *);
+void freeEffectResources(EffectState *);
 
 typedef struct {
     u8 padding[0x6];

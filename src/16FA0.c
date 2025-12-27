@@ -15,7 +15,7 @@ USE_ASSET(_418520);
 extern u8 gConnectedControllerMask;
 
 void func_800168BC_174BC(func_80000760_1360_arg *arg0);
-void func_800168D8_174D8(func_80000710_1310_arg *arg0);
+void func_800168D8_174D8(EffectState *arg0);
 
 extern Mat3x3Padded D_8008D5C4_8E1C4[];
 extern u16 *D_8008D534_8E134[2];
@@ -166,8 +166,8 @@ void func_800168BC_174BC(func_80000760_1360_arg *arg0) {
     func_80000760_1360(arg0);
 }
 
-void func_800168D8_174D8(func_80000710_1310_arg *arg0) {
-    func_80000710_1310(arg0);
+void func_800168D8_174D8(EffectState *arg0) {
+    freeEffectResources(arg0);
 }
 
 void func_800168F4_174F4(Struct16B68 *arg0) {

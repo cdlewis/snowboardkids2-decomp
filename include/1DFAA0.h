@@ -268,7 +268,7 @@ typedef struct {
 typedef struct {
     u8 padding[0xC];
     void *unkC;
-    func_80000710_1310_arg unk10;
+    EffectState unk10;
     u8 padding2[0x20];
     s32 unkB8;
     u8 padding3[0x2C];

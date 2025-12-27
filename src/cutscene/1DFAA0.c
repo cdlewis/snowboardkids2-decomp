@@ -135,7 +135,7 @@ void func_800B2C78(func_800B2C78_arg *arg0) {
         }
     }
 
-    func_80000710_1310(&arg0->unk10);
+    freeEffectResources(&arg0->unk10);
 }
 
 void func_800B2D04(CutsceneSlot *arg0) {
