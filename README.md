@@ -11,7 +11,15 @@ A (very much) work-in-progress matching decompilation of the greatest N64 game e
 
 **This repository does not contain any game assets or assembly whatsoever. An existing copy of the game is required. This project is not a port, to PC or any other platform. It takes a Nintendo 64 rom, extracts assets from it, and combines them with C code we reverse-engineered from the rom, to produce an identical rom. It is explicitly a non-goal for this project to be used for any commercial purpose.**
 
-## Dependencies
+## Cloning
+
+Clone this repository, including its submodules:
+
+```
+git clone --recurse-submodules -j8 git@github.com:cdlewis/snowboardkids2-decomp.git
+```
+
+# Dependencies
 
 This project has been tested on Ubuntu (x86). Your milege may vary on other systems.
 
