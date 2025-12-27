@@ -177,8 +177,8 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x8];
-    void *unk8;
-} func_80000DA4_19A4_arg;
+    void *spriteAsset;
+} SpriteAnimationTaskState;
 
 typedef struct {
     u8 padding[0x84];
@@ -205,11 +205,11 @@ typedef struct {
 
 s32 D_800894F0_8A0F0[8];
 
-void func_80000DA4_19A4(func_80000DA4_19A4_arg *arg0);
+void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state);
 void func_80001264_1E64(func_80000C2C_182C_arg *arg0);
 void func_800011DC_1DDC(func_80000C2C_182C_arg *);
 void func_80001280_1E80(func_80000C2C_182C_arg *arg0);
-void func_80000CAC_18AC(func_80000C2C_182C_arg *);
+void updateSpriteAnimationTask(func_80000C2C_182C_arg *);
 void updateSwingingModelTask(func_80000C2C_182C_arg *);
 void cleanupSwingingModelTask(SwingingModelTaskState *);
 
@@ -509,15 +509,15 @@ void cleanupSwingingModelTask(SwingingModelTaskState *state) {
     state->uncompressedAsset = freeNodeMemory(state->uncompressedAsset);
 }
 
-void func_80000C2C_182C(func_80000C2C_182C_arg *arg0) {
+void initSpriteAnimationTask(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
-    setCleanupCallback(&func_80000DA4_19A4);
+    setCleanupCallback(&cleanupSpriteAnimationTask);
     func_80009E68_AA68((SpriteAssetState *)&arg0->unk8, subEntry->unk16);
-    setCallback(&func_80000CAC_18AC);
+    setCallback(&updateSpriteAnimationTask);
 }
 
-void func_80000CAC_18AC(func_80000C2C_182C_arg *arg0) {
+void updateSpriteAnimationTask(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     SubEntryVariant *subEntry = (SubEntryVariant *)&entry->sub_entries[arg0->unk4];
 
@@ -550,8 +550,8 @@ void func_80000CAC_18AC(func_80000C2C_182C_arg *arg0) {
     }
 }
 
-void func_80000DA4_19A4(func_80000DA4_19A4_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
+void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state) {
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&state->spriteAsset);
 }
 
 void func_80000DC0_19C0(func_80000DC0_19C0_arg *arg0) {
