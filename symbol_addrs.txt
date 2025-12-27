@@ -1,3 +1,4 @@
+initRotatingModelTask = 0x800007F0; // rom:0x13F0
 enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;

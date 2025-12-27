@@ -393,20 +393,20 @@ void enqueueDisplayListIfVisible(func_80000C2C_182C_arg_unk0 *state, void *displ
     }
 }
 
-void func_800007F0_13F0(func_80000C2C_182C_arg *arg0) {
-    ModelEntityConfig *temp_s0 = &modelEntityConfigs[arg0->unk0->unk84];
-    ModelEntityTaskConfig *temp_s2 = &temp_s0->taskConfigs[arg0->unk4];
+void initRotatingModelTask(func_80000C2C_182C_arg *arg0) {
+    ModelEntityConfig *config = &modelEntityConfigs[arg0->unk0->unk84];
+    ModelEntityTaskConfig *taskConfig = &config->taskConfigs[arg0->unk4];
 
     setCleanupCallback(&func_80000968_1568);
     memcpy(&arg0->unk8, &identityMatrix, sizeof(Mat3x3Padded));
 
-    arg0->unk2C = loadUncompressedData(temp_s0->asset1Start, temp_s0->asset1End);
-    arg0->unk30 = loadCompressedData(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
+    arg0->unk2C = loadUncompressedData(config->asset1Start, config->asset1End);
+    arg0->unk30 = loadCompressedData(config->asset2Start, config->asset2End, config->asset2Size);
     arg0->unk34 = 0;
-    arg0->unk28 = temp_s2->unk4;
-    arg0->unk8.unk14 = temp_s2->unk8;
-    arg0->unk8.unk18 = temp_s2->unkC;
-    arg0->unk8.unk1C = temp_s2->unk10;
+    arg0->unk28 = taskConfig->unk4;
+    arg0->unk8.unk14 = taskConfig->unk8;
+    arg0->unk8.unk18 = taskConfig->unkC;
+    arg0->unk8.unk1C = taskConfig->unk10;
     arg0->unk44 = 0;
 
     setCallback(&func_800008D0_14D0);
