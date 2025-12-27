@@ -133,7 +133,7 @@ s32 getWalkAnimationId(s16 arg0) {
     return 0x98;
 }
 
-s32 func_800015E4_21E4(s16 arg0) {
+s32 getRunAnimationId(s16 arg0) {
     return 0x9B;
 }
 

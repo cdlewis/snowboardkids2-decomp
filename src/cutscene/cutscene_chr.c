@@ -69,7 +69,7 @@ void cutsceneChrMove_exec(cutsceneChrMove_exec_arg *arg0, CutsceneManager *arg1,
             animId = getWalkAnimationId(temp_s4);
             break;
         case 2:
-            animId = func_800015E4_21E4(temp_s4);
+            animId = getRunAnimationId(temp_s4);
             break;
     }
 
@@ -151,7 +151,7 @@ void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1,
             animId = getWalkAnimationId(temp_s0);
             break;
         case 2:
-            animId = func_800015E4_21E4(temp_s0);
+            animId = getRunAnimationId(temp_s0);
             break;
     }
 
@@ -196,7 +196,7 @@ void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg
             animId = getWalkAnimationId(temp_s4);
             break;
         case 2:
-            animId = func_800015E4_21E4(temp_s4);
+            animId = getRunAnimationId(temp_s4);
             break;
     }
 
@@ -292,7 +292,7 @@ void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg0, CutsceneManager *arg
             animId = getWalkAnimationId(temp_s3);
             break;
         case 2:
-            animId = func_800015E4_21E4(temp_s3);
+            animId = getRunAnimationId(temp_s3);
             break;
     }
 

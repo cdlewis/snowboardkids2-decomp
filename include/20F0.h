@@ -288,7 +288,7 @@ void func_800016F8_22F8(SceneModel *arg0, s32 arg1);
 
 s32 getWalkAnimationId(s16);
 
-s32 func_800015E4_21E4(s16);
+s32 getRunAnimationId(s16);
 
 u8 getModelAlpha(SceneModel *arg0);
 
