@@ -43,7 +43,7 @@ void func_80007958_8558(func_800078C4_84C4_arg *);
 void func_8000799C_859C(func_800078C4_84C4_arg *);
 void func_80007ABC_86BC(func_800078C4_84C4_arg *);
 void func_800073E0_7FE0(void);
-void func_80007558_8158(void);
+void cleanupCameraRotationTask(void);
 void func_80007560_8160(func_80007560_8160_arg *);
 
 extern u8 identityMatrix[];
@@ -67,7 +67,7 @@ typedef struct {
 } CameraRotationTaskState;
 
 void initCameraRotationTask(CameraRotationTaskState *arg0) {
-    setCleanupCallback(&func_80007558_8158);
+    setCleanupCallback(&cleanupCameraRotationTask);
     arg0->rotationZ = 0;
     arg0->rotationY = 0;
     arg0->rotationX = 0;
@@ -82,7 +82,7 @@ void initCameraRotationTask(CameraRotationTaskState *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/7F80", func_800073E0_7FE0);
 
-void func_80007558_8158(void) {
+void cleanupCameraRotationTask(void) {
 }
 
 void func_80007560_8160(func_80007560_8160_arg *arg0) {

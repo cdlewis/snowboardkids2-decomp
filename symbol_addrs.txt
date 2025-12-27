@@ -56,6 +56,7 @@ initOrbitalSprite = 0x8000714C; // rom:0x7D4C
 updateOrbitalSprite = 0x800071E4; // rom:0x7DE4
 cleanupOrbitalSprite = 0x80007360; // rom:0x7F60
 initCameraRotationTask = 0x80007380; // rom:0x7F80
+cleanupCameraRotationTask = 0x80007558; // rom:0x8158
 orbitalSpriteOffsetsZ = 0x8008C190; // rom:0x8CD90
 orbitalSpriteOffsetsX = 0x8008C194; // rom:0x8CD94
 maxActiveOrbitalSprites = 0x8008C1F0; // rom:0x8CDF0
