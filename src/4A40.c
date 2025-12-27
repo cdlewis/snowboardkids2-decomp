@@ -196,10 +196,10 @@ typedef struct {
     s32 unk30;
 } SceneModel30;
 
-void updateCreditsCharacter(CreditsCharacter *arg0);
-void cleanupCreditsCharacter(CreditsCharacter *arg0);
+void updateCreditsCharacter(CreditsCharacter *character);
+void cleanupCreditsCharacter(CreditsCharacter *character);
 void spawnCreditsCharacter(CreditsState *);
-void initCreditsCharacter(CreditsCharacter *arg0);
+void initCreditsCharacter(CreditsCharacter *character);
 
 void initSceneLighting(CreditsState *arg0) {
     arg0->unkE44[0].r2 = 0;
@@ -388,32 +388,32 @@ void spawnCreditsCharacter(CreditsState *arg0) {
     }
 }
 
-void initCreditsCharacter(CreditsCharacter *arg0) {
+void initCreditsCharacter(CreditsCharacter *character) {
     s32 buffer[8];
     CreditsState *taskMemory;
     CreditsCharacterConfig *config;
     s16 scale;
 
     taskMemory = getCurrentAllocation();
-    config = &creditsCharacterConfigs[arg0->configIndex];
-    arg0->isCleanedUp = 0;
-    arg0->animState = 0;
+    config = &creditsCharacterConfigs[character->configIndex];
+    character->isCleanedUp = 0;
+    character->animState = 0;
 
-    arg0->model = allocateNodeMemory(0x160);
+    character->model = allocateNodeMemory(0x160);
 
-    initializeGameEntity(arg0->model, config->modelId, &taskMemory->unk768, arg0->direction, -1, -1, -1);
+    initializeGameEntity(character->model, config->modelId, &taskMemory->unk768, character->direction, -1, -1, -1);
 
-    memcpy((void *)((u8 *)arg0->model + 0x18), identityMatrix, 0x20);
+    memcpy((void *)((u8 *)character->model + 0x18), identityMatrix, 0x20);
 
-    createYRotationMatrix((Mat3x3Padded *)((u8 *)arg0->model + 0x18), config->rotation);
+    createYRotationMatrix((Mat3x3Padded *)((u8 *)character->model + 0x18), config->rotation);
 
     scale = config->scale;
-    scaleMatrix((Mat3x3Padded *)((u8 *)arg0->model + 0x18), scale, scale, scale);
+    scaleMatrix((Mat3x3Padded *)((u8 *)character->model + 0x18), scale, scale, scale);
 
-    ((SceneModel30 *)arg0->model)->unk2C = creditsCharacterStartDepth;
-    ((SceneModel30 *)arg0->model)->unk30 += config->depthOffset;
+    ((SceneModel30 *)character->model)->unk2C = creditsCharacterStartDepth;
+    ((SceneModel30 *)character->model)->unk30 += config->depthOffset;
 
-    setModelActionMode(arg0->model, config->actionMode);
+    setModelActionMode(character->model, config->actionMode);
 
     {
         s32 temp_a1 = D_8008BFF8_8CBF8;
@@ -428,50 +428,50 @@ void initCreditsCharacter(CreditsCharacter *arg0) {
     setCallback(updateCreditsCharacter);
 }
 
-void updateCreditsCharacter(CreditsCharacter *arg0) {
+void updateCreditsCharacter(CreditsCharacter *character) {
     CreditsCharacterConfig *config;
 
     getCurrentAllocation();
 
-    config = &creditsCharacterConfigs[arg0->configIndex];
+    config = &creditsCharacterConfigs[character->configIndex];
 
-    switch (arg0->animState) {
+    switch (character->animState) {
         case 0:
-            setModelAnimation(arg0->model, config->animationIndex);
-            arg0->animState = 1;
+            setModelAnimation(character->model, config->animationIndex);
+            character->animState = 1;
             break;
         case 1:
             if (config->modelId == 0x73) {
-                setModelActionMode(arg0->model, 3);
-                arg0->animState = 2;
+                setModelActionMode(character->model, 3);
+                character->animState = 2;
             }
-            clearModelRotation(arg0->model);
+            clearModelRotation(character->model);
             break;
         case 2:
             if (config->modelId == 0x73) {
-                setModelActionMode(arg0->model, 8);
+                setModelActionMode(character->model, 8);
             }
-            clearModelRotation(arg0->model);
+            clearModelRotation(character->model);
             break;
         default:
             break;
     }
 
-    arg0->model->unk2C -= creditsCharacterScrollSpeed;
+    character->model->unk2C -= creditsCharacterScrollSpeed;
 
-    if (arg0->model->unk2C < -creditsCharacterStartDepth) {
-        cleanupSceneModel(arg0->model);
-        arg0->isCleanedUp = 1;
+    if (character->model->unk2C < -creditsCharacterStartDepth) {
+        cleanupSceneModel(character->model);
+        character->isCleanedUp = 1;
         func_80069CF8_6A8F8();
     } else {
-        updateModelGeometry(arg0->model);
+        updateModelGeometry(character->model);
     }
 }
 
-void cleanupCreditsCharacter(CreditsCharacter *arg0) {
+void cleanupCreditsCharacter(CreditsCharacter *character) {
     getCurrentAllocation();
-    if (arg0->isCleanedUp == 0) {
-        cleanupSceneModel(arg0->model);
+    if (character->isCleanedUp == 0) {
+        cleanupSceneModel(character->model);
     }
-    arg0->model = freeNodeMemory(arg0->model);
+    character->model = freeNodeMemory(character->model);
 }
