@@ -172,7 +172,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x8];
-    func_80004FF8_5BF8_arg1 *unk8;
+    ScrollingTextureState *unk8;
 } func_800014C8_20C8_arg;
 
 typedef struct {
@@ -642,7 +642,7 @@ void updateAnimatedModelTask(AnimatedModelTaskUpdateState *state) {
     state->unk8.unk10.position.z = subEntry->unk10;
 
     if (state->unk0->unk87 != 0) {
-        func_80004FF8_5BF8(state->unk0->ptr->unk16, &state->unk8);
+        enqueueScrollingTextureRender(state->unk0->ptr->unk16, &state->unk8);
     }
 }
 

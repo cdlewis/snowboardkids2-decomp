@@ -9,11 +9,11 @@ typedef struct {
     s32 unk4;
     s32 unk8;
     s32 unkC;
-} func_80004FF8_5BF8_arg1_unk20;
+} ScrollingTextureDisplayLists;
 
 typedef struct {
     Mat3x3Padded unk0;
-    func_80004FF8_5BF8_arg1_unk20 *unk20;
+    ScrollingTextureDisplayLists *unk20;
     void *unk24;
     void *unk28;
     s32 unk2C;
@@ -32,13 +32,13 @@ typedef struct {
     s16 unk54;
     s16 unk56;
     s16 unk58;
-} func_80004FF8_5BF8_arg1;
+} ScrollingTextureState;
 
-void func_80004FF8_5BF8(u16 arg0, DisplayListObject *arg1);
+void enqueueScrollingTextureRender(u16 renderLayer, DisplayListObject *displayListObj);
 
 typedef struct {
     /* 0x00 */ u8 _pad0[0x20];
-    /* 0x20 */ func_80004FF8_5BF8_arg1_unk20 *unk20;
+    /* 0x20 */ ScrollingTextureDisplayLists *unk20;
     /* 0x24 */ void *unk24;
     /* 0x28 */ void *unk28;
     /* 0x2C */ s32 unk2C;

@@ -8,7 +8,7 @@ USE_ASSET(_2151D0);
 USE_ASSET(_663BE0);
 USE_ASSET(_6637B0);
 
-extern func_80004FF8_5BF8_arg1_unk20 D_80089520;
+extern ScrollingTextureDisplayLists D_80089520;
 
 typedef struct {
     u8 _pad0[0x24];

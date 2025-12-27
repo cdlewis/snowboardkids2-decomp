@@ -78,19 +78,19 @@ void renderOverlayScrollingTexture(DisplayListObject *arg0) {
     func_80063580_64180(arg0);
 }
 
-void func_80004FF8_5BF8(u16 arg0, DisplayListObject *arg1) {
-    arg1->unk30 = 0;
+void enqueueScrollingTextureRender(u16 renderLayer, DisplayListObject *displayListObj) {
+    displayListObj->unk30 = 0;
 
-    if (arg1->unk20->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 1, &renderOpaqueScrollingTexture, arg1);
+    if (displayListObj->unk20->opaqueDisplayList != NULL) {
+        debugEnqueueCallback(renderLayer, 1, &renderOpaqueScrollingTexture, displayListObj);
     }
 
-    if (arg1->unk20->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 3, &renderTransparentScrollingTexture, arg1);
+    if (displayListObj->unk20->transparentDisplayList != NULL) {
+        debugEnqueueCallback(renderLayer, 3, &renderTransparentScrollingTexture, displayListObj);
     }
 
-    if (arg1->unk20->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 5, &renderOverlayScrollingTexture, arg1);
+    if (displayListObj->unk20->overlayDisplayList != NULL) {
+        debugEnqueueCallback(renderLayer, 5, &renderOverlayScrollingTexture, displayListObj);
     }
 }
 

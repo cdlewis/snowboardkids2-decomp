@@ -100,14 +100,14 @@ typedef struct {
 } func_800B5438_1E24E8_arg0;
 
 void func_800B5438_1E24E8(func_800B5438_1E24E8_arg0 *);
-void func_800B54B4_1E2564(func_80004FF8_5BF8_arg1 *);
-void func_800B5318_1E23C8(func_80004FF8_5BF8_arg1 *);
+void func_800B54B4_1E2564(ScrollingTextureState *);
+void func_800B5318_1E23C8(ScrollingTextureState *);
 void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *);
 void func_800B5210_1E22C0(func_800B5210_1E22C0_arg *);
 void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *);
 
-extern func_80004FF8_5BF8_arg1_unk20 D_80089510_8A110;
-extern func_80004FF8_5BF8_arg1_unk20 D_80089520;
+extern ScrollingTextureDisplayLists D_80089510_8A110;
+extern ScrollingTextureDisplayLists D_80089520;
 
 u32 D_800BAD10_1E7DC0[] = { 0xFFE80018, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180018, 0x00000000,
                             0x07F0FFF0, 0xFFFFFFFF, 0x0018FFE8, 0x00000000, 0x07F007F0, 0xFFFFFFFF,
@@ -199,7 +199,7 @@ void func_800B5290_1E2340(u16 arg0, void *arg1, s16 arg2, s16 arg3) {
     }
 }
 
-void func_800B5318_1E23C8(func_80004FF8_5BF8_arg1 *arg0) {
+void func_800B5318_1E23C8(ScrollingTextureState *arg0) {
     setCleanupCallback(&func_800B54B4_1E2564);
 
     if (arg0->unk58 == 0) {
@@ -245,12 +245,12 @@ void func_800B5438_1E24E8(func_800B5438_1E24E8_arg0 *arg0) {
     arg0->unk44 = 0xFF & arg0->unk44;
     arg0->unk46 = 0xFF & arg0->unk46;
 
-    func_80004FF8_5BF8(arg0->unk54, &arg0->unk0);
+    enqueueScrollingTextureRender(arg0->unk54, &arg0->unk0);
 
     arg0->unk56--;
 }
 
-void func_800B54B4_1E2564(func_80004FF8_5BF8_arg1 *arg0) {
+void func_800B54B4_1E2564(ScrollingTextureState *arg0) {
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk24 = freeNodeMemory(arg0->unk24);
