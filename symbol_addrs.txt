@@ -21,6 +21,7 @@ onCreditsComplete = 0x8000454C; // rom:0x514C
 spawnCreditsCharacter = 0x80004570; // rom:0x5170
 renderOpaqueTiledTexture = 0x800056E8; // rom:0x62E8
 renderTransparentTiledTexture = 0x80005714; // rom:0x6314
+renderOverlayTiledTexture = 0x80005740; // rom:0x6340
 getEmptyModelDisplayOffset = 0x80002B8C; // rom:0x378C
 getModelDisplayDataOffset = 0x80002BD0; // rom:0x37D0
 loadAssetSlotTableEntry = 0x80002C14; // rom:0x3814
