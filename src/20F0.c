@@ -91,12 +91,12 @@ void disableModelShadow(SceneModel *arg0) {
     arg0->shadowEnabled = 0;
 }
 
-void func_8000152C_212C(SceneModel *arg0, u8 arg1) {
-    arg0->unk96 = arg1;
+void setModelAlpha(SceneModel *arg0, u8 arg1) {
+    arg0->alpha = arg1;
 }
 
-u8 func_80001534_2134(SceneModel *arg0) {
-    return arg0->unk96;
+u8 getModelAlpha(SceneModel *arg0) {
+    return arg0->alpha;
 }
 
 void applyTransformToModel(SceneModel *arg0, Mat3x3Padded *arg1) {
@@ -353,7 +353,7 @@ void initializeGameEntity(
     memcpy(&ent->asset2TransformationMatrix, identityMatrix, 0x20);
 
     ent->unk110 = -1;
-    ent->unk96 = 0xFF;
+    ent->alpha = 0xFF;
     ent->unk4C = yetAnotherAssetIndex;
     ent->shadowEnabled = 0;
 

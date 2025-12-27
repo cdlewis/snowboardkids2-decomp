@@ -143,7 +143,7 @@ typedef struct {
     s32 unk90;
     s8 unk94;
     s8 unk95;
-    s8 unk96;
+    s8 alpha;
     s8 shadowEnabled;
     SceneModel_unk98 *unk98;
     func_80001688_2288_arg_9C *unk9C;
@@ -218,7 +218,7 @@ typedef struct {
     u8 padding5[4];
     s8 unk94;
     u8 unk95;
-    u8 unk96;
+    u8 alpha;
     u8 shadowEnabled;
     AssetSlot *unk98;
     void *unk9C;
@@ -290,9 +290,9 @@ s32 func_800015DC_21DC(s16);
 
 s32 func_800015E4_21E4(s16);
 
-u8 func_80001534_2134(SceneModel *arg0);
+u8 getModelAlpha(SceneModel *arg0);
 
-void func_8000152C_212C(SceneModel *arg0, u8 arg1);
+void setModelAlpha(SceneModel *arg0, u8 arg1);
 
 void func_80002B50_3750(func_80002B50_3750_arg *arg0, DisplayListObject *arg1);
 

@@ -532,17 +532,17 @@ void cutsceneChrAlpha_exec(cutsceneChrAlpha_exec_arg *arg0, CutsceneManager *arg
     currentSlot = &arg1->slots[arg2];
     slot->unk0.ChrPayload.unk0 = arg0->unk4;
 
-    currentAlpha = func_80001534_2134(currentSlot->model);
+    currentAlpha = getModelAlpha(currentSlot->model);
 
     if (slot->unk0.ChrPayload.unk0 == 0 || arg0->unk3 == currentAlpha) {
-        func_8000152C_212C(currentSlot->model, arg0->unk3);
+        setModelAlpha(currentSlot->model, arg0->unk3);
     } else {
         slot->unk0.ChrPayload.unk14 = arg0->unk0 << 16;
         slot->unk0.ChrPayload.unk18 = arg0->unk1 << 16;
         slot->unk0.ChrPayload.unk1C = arg0->unk2 << 16;
         slot->unk0.ChrPayload.unk20 = arg0->unk3 << 16;
 
-        currentAlpha = func_80001534_2134(currentSlot->model);
+        currentAlpha = getModelAlpha(currentSlot->model);
 
         slot->unk0.ChrPayload.unk10 = currentAlpha << 16;
         slot->unk0.ChrPayload.unk24 = (slot->unk0.ChrPayload.unk20 - (currentAlpha << 16)) / slot->unk0.ChrPayload.unk0;
@@ -560,7 +560,7 @@ void cutsceneChrAlpha_update(CutsceneManager *arg0, s8 arg1) {
     managerSlot = &arg0->slots[arg1];
 
     if (slot->unk0.ChrPayload.unk0 > 0) {
-        func_8000152C_212C(managerSlot->model, slot->unk0.ChrPayload.padding[0xF]);
+        setModelAlpha(managerSlot->model, slot->unk0.ChrPayload.padding[0xF]);
         slot->unk0.ChrPayload.unk0--;
         newValue = slot->unk0.ChrPayload.unk10 + slot->unk0.ChrPayload.unk24;
         slot->unk0.ChrPayload.unk10 = newValue;
