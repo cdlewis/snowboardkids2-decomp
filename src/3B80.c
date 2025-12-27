@@ -34,67 +34,67 @@ typedef struct {
 } AssetEntry;
 
 typedef struct {
-    AssetEntry *unk0;
+    AssetEntry *assetList;
     u8 _pad4[0x4];
-    u8 unk8;
+    u8 assetCount;
     u8 _pad9[0x3];
-} func_800033AC_3FAC_TableEntry;
+} AssetGroupTableEntry;
 
 typedef struct {
-    void *unk0;
-    void **unk4;
-    s32 unk8;
+    void *context;
+    void **loadedAssets;
+    s32 param;
     void *unkC;
     void *unk10;
     u8 _pad14[0xB0];
-    u8 unkC4;
+    u8 groupIndex;
     u8 unkC5;
-} func_800033AC_3FAC_arg;
+} AssetGroupTaskData;
 
-void loadAssetGroupResources(func_800033AC_3FAC_arg *arg0);
+void loadAssetGroupResources(AssetGroupTaskData *taskData);
 
 void scheduleDualAssetGroupLoad(void *context, u8 groupIndex1, s32 param1, u8 groupIndex2, s32 param2) {
-    func_800033AC_3FAC_arg *task;
+    AssetGroupTaskData *task;
 
     task = scheduleTask(loadAssetGroupResources, 3, 0, 0);
     if (task != NULL) {
-        task->unk0 = context;
-        task->unkC4 = groupIndex2;
-        task->unk8 = param2;
+        task->context = context;
+        task->groupIndex = groupIndex2;
+        task->param = param2;
         task->unkC5 = 0;
     }
 
     task = scheduleTask(loadAssetGroupResources, 3, 0, 0);
     if (task != NULL) {
-        task->unk0 = context;
-        task->unkC4 = groupIndex1;
-        task->unk8 = param1;
+        task->context = context;
+        task->groupIndex = groupIndex1;
+        task->param = param1;
         task->unkC5 = 0;
     }
 }
 
-extern func_800033AC_3FAC_TableEntry D_8008BF70_8CB70[];
+extern AssetGroupTableEntry assetGroupTable[];
 extern void func_80003184_3D84(void *);
-void func_800033AC_3FAC(func_800033AC_3FAC_arg *arg0);
+void freeAssetGroupResources(AssetGroupTaskData *taskData);
 
-void loadAssetGroupResources(func_800033AC_3FAC_arg *arg0) {
-    func_800033AC_3FAC_TableEntry *entry;
+void loadAssetGroupResources(AssetGroupTaskData *taskData) {
+    AssetGroupTableEntry *entry;
     AssetEntry *assetList;
     s32 i;
 
-    entry = &D_8008BF70_8CB70[arg0->unkC4];
-    assetList = entry->unk0;
+    entry = &assetGroupTable[taskData->groupIndex];
+    assetList = entry->assetList;
 
-    setCleanupCallback(func_800033AC_3FAC);
+    setCleanupCallback(freeAssetGroupResources);
     i = 0;
 
-    arg0->unk10 = NULL;
-    arg0->unkC = NULL;
+    taskData->unk10 = NULL;
+    taskData->unkC = NULL;
 
-    arg0->unk4 = allocateNodeMemory(entry->unk8 * 4);
+    taskData->loadedAssets = allocateNodeMemory(entry->assetCount * 4);
 
-    for (i = 0; i < entry->unk8; i++) {
-        arg0->unk4[i] = loadCompressedData(assetList[i].unk0, assetList[i].unk4, assetList[i].unk8);
+    for (i = 0; i < entry->assetCount; i++) {
+        taskData->loadedAssets[i] = loadCompressedData(assetList[i].unk0, assetList[i].unk4, assetList[i].unk8);
     }
 
     setCallback(func_80003184_3D84);
@@ -102,17 +102,17 @@ void loadAssetGroupResources(func_800033AC_3FAC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/3B80", func_80003184_3D84);
 
-void func_800033AC_3FAC(func_800033AC_3FAC_arg *arg0) {
-    func_800033AC_3FAC_TableEntry *entry;
+void freeAssetGroupResources(AssetGroupTaskData *taskData) {
+    AssetGroupTableEntry *entry;
     s32 i;
     u8 index;
 
-    index = arg0->unkC4;
-    entry = &D_8008BF70_8CB70[index];
+    index = taskData->groupIndex;
+    entry = &assetGroupTable[index];
 
-    for (i = 0; i < entry->unk8; i++) {
-        arg0->unk4[i] = freeNodeMemory(arg0->unk4[i]);
+    for (i = 0; i < entry->assetCount; i++) {
+        taskData->loadedAssets[i] = freeNodeMemory(taskData->loadedAssets[i]);
     }
 
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    taskData->loadedAssets = freeNodeMemory(taskData->loadedAssets);
 }
