@@ -321,10 +321,10 @@ segments:
       - [0x841E0, lib, libgultra_rom, xldtob]
       - [0x84C60, lib, libgultra_rom, ldiv]
       - [0x84E20, hasm, ../lib/libkmc/mmuldi3]
-      - [0x851F0, textbin, rspboot]
-      - [0x852C0, textbin, aspMain]
-      - [0x85AC0, textbin, gspS2DEX_maybe]
-      - [0x879A0, textbin, gspF3DEX_fifoText]
+      - { start: 0x851F0, type: textbin, use_src_path: True, name: rsp/rspboot }
+      - { start: 0x852C0, type: textbin, use_src_path: True, name: rsp/aspMain }
+      - { start: 0x85AC0, type: textbin, use_src_path: True, name: rsp/s2dex }
+      - { start: 0x879A0, type: textbin, use_src_path: True, name: rsp/f3dex2 }
       - [0x88D30, data, 8A40]
       - [0x891D0, data, 5520]
       - [0x89210, data]
@@ -607,9 +607,14 @@ segments:
       - [0x9DE20, lib, libgultra_rom, contpfs, .data]
       - [0x9DE30, lib, libgultra_rom, contramread, .data]
       - [0x9DE40, lib, libgultra_rom, xlitob, .data]
-      - [0x9DE70, rodatabin, aspMainData]
-      - [0x9E268, rodatabin, gspS2DEX_fifoData]
-      - [0x9E2B0, rodatabin, gspF3DEX_fifoData]
+      - {
+          start: 0x9DE70,
+          type: rodatabin,
+          use_src_path: True,
+          name: rsp/aspMain,
+        }
+      - { start: 0x9E268, type: rodatabin, use_src_path: True, name: rsp/s2dex }
+      - { start: 0x9E2B0, type: rodatabin, use_src_path: True, name: rsp/f3dex2 }
       - [0x9E640, rodata]
       - [0x9E8E0, .rodata, 4050]
       - [0x9E910, .rodata, 5520]
