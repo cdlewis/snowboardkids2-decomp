@@ -149,8 +149,8 @@ void setModelVisibility(SceneModel *arg0, s8 arg1) {
     arg0->unk88 = arg1;
 }
 
-void func_80001604_2204(SceneModel *arg0, s8 arg1) {
-    arg0->unk3F = arg1;
+void setModelDisplayEnabled(SceneModel *arg0, s8 arg1) {
+    arg0->displayEnabled = arg1;
 }
 
 void func_8000160C_220C(SceneModel *arg0, s8 arg1) {
@@ -246,7 +246,7 @@ s32 func_800017F4_23F4(func_80002B50_3750_arg *arg0) {
     s32 var_v0 = 0;
 
     if ((arg0 != 0) && ((new_var = arg0->unk88) != new_var2)) {
-        var_v0 = arg0->unk3F != 0;
+        var_v0 = arg0->displayEnabled != 0;
     }
 
     new_var = var_v0;
@@ -453,7 +453,7 @@ void initializeGameEntity(
     memcpy(&ent->transformationMatrix, identityMatrix, 0x20);
 
     ent->isDestroyed = 0;
-    ent->unk3F = 1;
+    ent->displayEnabled = 1;
     ent->unk88 = 1;
     ent->unk4E = 0;
     ent->unk4F = assetEntry->unk31;
@@ -716,7 +716,7 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
 INCLUDE_ASM("asm/nonmatchings/20F0", updateModelGeometry);
 
 void func_80002B50_3750(func_80002B50_3750_arg *arg0, DisplayListObject *arg1) {
-    if ((arg0 != NULL) && (arg0->unk88 != 0) && (arg0->unk3F != 0)) {
+    if ((arg0 != NULL) && (arg0->unk88 != 0) && (arg0->displayEnabled != 0)) {
         enqueueDisplayListObject(arg0->unk10->unk16, arg1);
     }
 }

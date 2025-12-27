@@ -238,7 +238,7 @@ void func_8000799C_859C(func_800078C4_84C4_arg *arg0) {
                 scaleMatrix(&arg0->unk14, 0x1000, 0x1000, 0x1000);
             }
         } while (0);
-        func_80001604_2204(arg0->unk0, 0);
+        setModelDisplayEnabled(arg0->unk0, 0);
     }
 
     if (arg0->unk0->actionMode == 1) {

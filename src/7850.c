@@ -21,7 +21,7 @@ typedef struct {
     s8 isDestroyed;
     s8 actionMode;
     u8 _pad5;
-    s8 unk3F;
+    s8 displayEnabled;
     u8 _pad6[0x48];
     s8 unk88;
 } func_80006CBC_inner;
@@ -141,7 +141,7 @@ void func_80006CBC_78BC(func_80006C50_7850_arg *arg0) {
         return;
     }
 
-    if (temp->unk3F == 0) {
+    if (temp->displayEnabled == 0) {
         return;
     }
 

@@ -21,7 +21,7 @@ typedef struct {
     s8 isDestroyed;
     s8 actionMode;
     s8 unk3E;
-    s8 unk3F;
+    s8 displayEnabled;
     u8 _pad5[0x48];
     s8 unk88;
 } func_80006940_inner;
@@ -105,7 +105,7 @@ void func_8000629C_6E9C(func_80006398_6F98_arg *arg0) {
 
     inner = arg0->unk0;
     if (inner->unk88 != 0) {
-        if (inner->unk3F != 0) {
+        if (inner->displayEnabled != 0) {
             func_8000A1E4_ADE4(
                 ptr,
                 inner->unk10->unk16,
@@ -203,7 +203,7 @@ void func_800069B4_75B4(func_80006398_6F98_arg *arg0) {
 
     a0_inner = arg0->unk0;
     if (a0_inner->unk88 != 0) {
-        if (a0_inner->unk3F != 0) {
+        if (a0_inner->displayEnabled != 0) {
             func_8000A13C_AD3C(&arg0->unk4, a0_inner->unk10->unk16, s3, s4, s2, 0x10000, 0x10000, 0, 0);
         }
     }

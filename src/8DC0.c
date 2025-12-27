@@ -23,7 +23,7 @@ typedef struct {
     s8 isDestroyed;
     s8 actionMode;
     s8 unk3E;
-    s8 unk3F;
+    s8 displayEnabled;
     u8 _pad40[0x48];
     s8 unk88;
     u8 _pad89[0x67];
@@ -136,7 +136,7 @@ void func_80008370_8F70(Arg8F70 *arg0) {
 
     inner = arg0->unk0;
     if (inner->unk88 != 0) {
-        if (inner->unk3F != 0) {
+        if (inner->displayEnabled != 0) {
             func_8000A13C_AD3C(&arg0->unk4, inner->unk10->unk16, s3, s4, s2, 0x13333, 0x13333, 0, arg0->unk50);
         }
     }

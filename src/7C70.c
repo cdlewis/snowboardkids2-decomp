@@ -28,7 +28,7 @@ typedef struct {
     u8 _pad4[0x4];
     s8 isDestroyed;
     u8 _pad5[0x2];
-    s8 unk3F;
+    s8 displayEnabled;
     u8 _pad6[0x48];
     s8 unk88;
 } func_800071E4_inner;
@@ -137,7 +137,7 @@ void func_800071E4_7DE4(func_80007130_7D30_arg *arg0) {
         return;
     }
 
-    if (arg0->unk0->unk3F == 0) {
+    if (arg0->unk0->displayEnabled == 0) {
         return;
     }
 

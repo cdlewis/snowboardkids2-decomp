@@ -75,7 +75,7 @@ typedef struct {
     s8 isDestroyed;
     s8 actionMode;
     s8 unk3E;
-    s8 unk3F;
+    s8 displayEnabled;
     u8 padding3[0x88 - 0x40];
     s8 unk88;
     u8 padding4[0xF0 - 0x89];
@@ -128,7 +128,7 @@ typedef struct {
     s8 isDestroyed;
     s8 actionMode;
     s8 unk3E;
-    s8 unk3F;
+    s8 displayEnabled;
     s32 unk40;
     s32 unk44;
     s32 unk48;
@@ -203,7 +203,7 @@ typedef struct {
     u8 isDestroyed;
     u8 actionMode;
     u8 unk3E;
-    u8 unk3F;
+    u8 displayEnabled;
     u32 unk40;
     s32 unk44;
     u32 unk48;
@@ -261,7 +261,7 @@ void *func_80002040_2C40(SceneModel *arg0);
 
 s32 clearModelRotation(SceneModel *);
 
-void func_80001604_2204(SceneModel *arg0, s8 arg1);
+void setModelDisplayEnabled(SceneModel *arg0, s8 arg1);
 
 void setModelVisibility(SceneModel *, s8);
 

@@ -109,7 +109,7 @@ s32 cutsceneChrDisp_validate(void) {
 
 void cutsceneChrDisp_exec(s8 *a0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *slot = &arg1->slots[arg2];
-    func_80001604_2204(slot->model, a0[1]);
+    setModelDisplayEnabled(slot->model, a0[1]);
 }
 
 void cutsceneChrItem_init(void) {
