@@ -233,8 +233,8 @@ typedef struct {
 } AnimatedModelTaskUpdateState;
 
 void enqueueDisplayListIfVisible(func_80000C2C_182C_arg_unk0 *state, void *displayList);
-void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
-void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
+void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0);
+void cleanupSpawnedSpriteTask(func_800014C8_20C8_arg *arg0);
 void updateRotatingModelTask(func_80000C2C_182C_arg *arg0);
 void cleanupRotatingModelTask(RotatingModelTaskState *state);
 void updateStaticModelTask(func_80000C2C_182C_arg *arg0);
@@ -703,7 +703,7 @@ void initSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
     subEntry = &entry->sub_entries[arg0->unk4];
 
     memcpy(&sp20, &identityMatrix, sizeof(Mat3x3Padded));
-    setCleanupCallback(&func_800014C8_20C8);
+    setCleanupCallback(&cleanupSpawnedSpriteTask);
     func_80009E68_AA68((SpriteAssetState *)&arg0->unk8, subEntry->unk16);
 
     sp10 = ((randA() & 0x1F) - 0x10) << 0x10;
@@ -718,10 +718,10 @@ void initSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
     arg0->unk5C = arg0->unk5C + subEntry->unk10;
     arg0->unk60 = spawnedSpriteScales[randA() & 3];
 
-    setCallback(&func_800013B8_1FB8);
+    setCallback(&updateSpawnedSpriteTask);
 }
 
-void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0) {
+void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
     DataEntry *entry;
     SubEntryVariant *subEntry;
 
@@ -760,6 +760,6 @@ void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0) {
     }
 }
 
-void func_800014C8_20C8(func_800014C8_20C8_arg *arg0) {
+void cleanupSpawnedSpriteTask(func_800014C8_20C8_arg *arg0) {
     func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
 }
