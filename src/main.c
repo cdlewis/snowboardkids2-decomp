@@ -71,7 +71,7 @@ typedef struct {
     s32 *unk30;
     char padding2[0x10];
     s32 *unk44;
-} func_80001114_1D14_arg;
+} AnimatedModelTaskCleanupState;
 
 typedef struct {
     void *unk0;
@@ -230,7 +230,7 @@ typedef struct {
     s32 unk58;
     s32 unk5C;
     s32 unk60;
-} func_80001040_1C40_arg;
+} AnimatedModelTaskUpdateState;
 
 void enqueueDisplayListIfVisible(func_80000C2C_182C_arg_unk0 *state, void *displayList);
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
@@ -239,8 +239,8 @@ void updateRotatingModelTask(func_80000C2C_182C_arg *arg0);
 void cleanupRotatingModelTask(RotatingModelTaskState *state);
 void updateStaticModelTask(func_80000C2C_182C_arg *arg0);
 void cleanupStaticModelTask(SwingingModelTaskState *arg0);
-void func_80001040_1C40(func_80001040_1C40_arg *arg0);
-void func_80001114_1D14(func_80001114_1D14_arg *arg0);
+void updateAnimatedModelTask(AnimatedModelTaskUpdateState *arg0);
+void cleanupAnimatedModelTask(AnimatedModelTaskCleanupState *arg0);
 
 extern s32 identityMatrix[];
 
@@ -603,7 +603,7 @@ void initAnimatedModelTask(AnimatedModelTaskState *arg0) {
     temp_s0 = &modelEntityConfigs[arg0->unk0->unk84];
     temp_s2 = &temp_s0->taskConfigs[arg0->unk4];
 
-    setCleanupCallback(&func_80001114_1D14);
+    setCleanupCallback(&cleanupAnimatedModelTask);
     memcpy(&arg0->unk8, &identityMatrix, 0x20);
 
     arg0->unk2C = loadUncompressedData(temp_s0->asset1Start, temp_s0->asset1End);
@@ -619,37 +619,37 @@ void initAnimatedModelTask(AnimatedModelTaskState *arg0) {
     arg0->unk56 = 0;
     arg0->unk58 = 0;
 
-    setCallback(&func_80001040_1C40);
+    setCallback(&updateAnimatedModelTask);
 }
 
-void func_80001040_1C40(func_80001040_1C40_arg *arg0) {
+void updateAnimatedModelTask(AnimatedModelTaskUpdateState *state) {
     DataEntry *entry;
     SubEntry *subEntry;
 
-    entry = &D_800891D4_89DD4[arg0->unk0->unk84];
-    subEntry = &entry->sub_entries[arg0->unk4];
+    entry = &D_800891D4_89DD4[state->unk0->unk84];
+    subEntry = &entry->sub_entries[state->unk4];
 
-    if (arg0->unk0->unk86 != 0) {
+    if (state->unk0->unk86 != 0) {
         func_80069CF8_6A8F8();
     }
 
-    arg0->unk4C = arg0->unk4C + arg0->unk50;
-    arg0->unk4E = arg0->unk4E + arg0->unk52;
-    arg0->unk4C = (u8)arg0->unk4C;
-    arg0->unk4E = (u8)arg0->unk4E;
-    arg0->unk8.unk10.position.x = subEntry->unk8;
-    arg0->unk8.unk10.position.y = subEntry->unkC;
-    arg0->unk8.unk10.position.z = subEntry->unk10;
+    state->unk4C = state->unk4C + state->unk50;
+    state->unk4E = state->unk4E + state->unk52;
+    state->unk4C = (u8)state->unk4C;
+    state->unk4E = (u8)state->unk4E;
+    state->unk8.unk10.position.x = subEntry->unk8;
+    state->unk8.unk10.position.y = subEntry->unkC;
+    state->unk8.unk10.position.z = subEntry->unk10;
 
-    if (arg0->unk0->unk87 != 0) {
-        func_80004FF8_5BF8(arg0->unk0->ptr->unk16, &arg0->unk8);
+    if (state->unk0->unk87 != 0) {
+        func_80004FF8_5BF8(state->unk0->ptr->unk16, &state->unk8);
     }
 }
 
-void func_80001114_1D14(func_80001114_1D14_arg *arg0) {
-    arg0->unk44 = freeNodeMemory(arg0->unk44);
-    arg0->unk30 = freeNodeMemory(arg0->unk30);
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupAnimatedModelTask(AnimatedModelTaskCleanupState *state) {
+    state->unk44 = freeNodeMemory(state->unk44);
+    state->unk30 = freeNodeMemory(state->unk30);
+    state->unk2C = freeNodeMemory(state->unk2C);
 }
 
 void func_80001158_1D58(func_80000C2C_182C_arg *arg0) {
