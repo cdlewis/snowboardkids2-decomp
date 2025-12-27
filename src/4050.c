@@ -174,7 +174,7 @@ void signalCutsceneComplete(void) {
     func_800697F4_6A3F4(1);
 }
 
-void func_80003CA4_48A4(void) {
+void beginCutsceneSequence(void) {
     setGameStateHandler(&func_80003CC4_48C4);
 }
 
