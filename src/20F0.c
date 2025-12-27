@@ -164,7 +164,7 @@ s16 getAnimationFrameCount(SceneModel *model) {
     return model->animFrameCount;
 }
 
-void func_80001640_2240(SceneModel *arg0) {
+void setModelPendingDestroy(SceneModel *arg0) {
     arg0->unk89 |= 1;
 }
 

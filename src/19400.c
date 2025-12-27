@@ -102,7 +102,7 @@ void func_80018904_19504(func_80018898_19498_arg *arg0) {
 }
 
 void func_80018A5C_1965C(func_80018898_19498_arg *arg0) {
-    func_80001640_2240(arg0->unk0);
+    setModelPendingDestroy(arg0->unk0);
     arg0->unk0 = func_80002014_2C14(arg0->unk0);
 }
 
