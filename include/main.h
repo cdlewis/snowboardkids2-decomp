@@ -8,29 +8,29 @@ typedef struct {
     struct {
         s8 padding[0xD5];
         s32 unkDA;
-    } *unk0;
-    void *unk4;
-    void *unk8;
-    f32 unkC[8];
-    s32 unk2C;
-    void *unk30;
-    void *unk34;
-    void *unk38;
+    } *parent;
+    void *modelData;
+    void *textureData;
+    f32 primaryMatrix[8];
+    s32 displayConfig;
+    void *activeModel;
+    void *activeTexture;
+    void *animState;
     s8 pad3C[12];
-    float unk48[8];
-    s32 unk68;
-    void *unk6C;
-    void *unk70;
+    float secondaryMatrix[8];
+    s32 secondaryConfig;
+    void *secondaryModel;
+    void *secondaryTexture;
     void *unk74;
     s8 pad78[12];
-    s16 unk84;
-    u8 unk86;
-    u8 unk87;
-} func_8000056C_116C_arg;
+    s16 configIndex;
+    u8 isDisposed;
+    u8 isVisible;
+} ModelEntity;
 
-void func_80000460_1060(func_8000056C_116C_arg *arg0, ColorData *arg1, ColorData *arg2);
+void func_80000460_1060(ModelEntity *arg0, ColorData *arg1, ColorData *arg2);
 
-s32 func_8000056C_116C(func_8000056C_116C_arg *entity, s16 index, void *arg2);
+s32 initModelEntity(ModelEntity *entity, s16 index, void *arg2);
 
 typedef struct {
     struct {

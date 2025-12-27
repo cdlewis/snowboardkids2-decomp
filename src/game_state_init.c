@@ -30,7 +30,7 @@ void gameStateCleanupHandler(void);
 void gameStateCountdownHandler(void);
 void invokeTransitionEffect(func_80000760_1360_arg *);
 void setShortCountdownAndContinue(void);
-void setupGameStateTransition(func_8000056C_116C_arg *);
+void setupGameStateTransition(ModelEntity *);
 void transitionToMainMenu(void);
 void transitionToNextGameMode(void);
 
@@ -162,11 +162,11 @@ void transitionToMainMenu(void) {
     func_800697F4_6A3F4(0xFF);
 }
 
-void setupGameStateTransition(func_8000056C_116C_arg *arg0) {
+void setupGameStateTransition(ModelEntity *arg0) {
     ColorData sp10[3];
     ColorData sp28;
 
-    func_8000056C_116C(arg0, 0, getCurrentAllocation());
+    initModelEntity(arg0, 0, getCurrentAllocation());
     setCleanupCallback(&cleanupTransitionEffect);
     func_80000460_1060(arg0, &sp10[0], &sp28);
     setCallback(&setShortCountdownAndContinue);

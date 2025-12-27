@@ -81,7 +81,7 @@ CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1) {
 void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *arg3) {
     s32 i;
     s16 initialValue = func_800B3490_1E0540();
-    s32 needsVisibility = func_8000056C_116C((func_8000056C_116C_arg *)&arg0->unk10, initialValue, arg1);
+    s32 needsVisibility = initModelEntity((ModelEntity *)&arg0->unk10, initialValue, arg1);
 
     setModelRenderMode(&arg0->unk10, 0);
 

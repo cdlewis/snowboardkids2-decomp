@@ -39,5 +39,5 @@ typedef struct {
 void func_80016434_17034(Struct163F8 *arg0);
 void func_80016488_17088(void);
 void func_80016728_17328(Struct16728 *arg0);
-void func_80016860_17460(func_8000056C_116C_arg *arg0);
+void func_80016860_17460(ModelEntity *arg0);
 void func_800168F4_174F4(Struct16B68 *arg0);

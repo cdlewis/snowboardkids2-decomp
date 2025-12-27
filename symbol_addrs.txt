@@ -1,4 +1,6 @@
 __MusIntFifoProcess = 0x80072F54;
+initModelEntity = 0x8000056C; // rom:0x116C
+modelEntityConfigs = 0x800891A8; // rom:0x89DA8
 exitTitleToNextMode = 0x800154E0; // rom:0x160E0
 cleanupTitleAndTransition = 0x80015504; // rom:0x16104
 writeSaveDataToEeprom = 0x8001563C; // rom:0x1623C

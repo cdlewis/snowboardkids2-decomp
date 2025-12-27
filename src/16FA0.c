@@ -150,13 +150,13 @@ void func_80016834_17434(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
 }
 
-void func_80016860_17460(func_8000056C_116C_arg *arg0) {
+void func_80016860_17460(ModelEntity *arg0) {
     ColorData sp10[3];
     ColorData sp28;
     GameState *alloc;
 
     alloc = (GameState *)getCurrentAllocation();
-    func_8000056C_116C(arg0, 2, &alloc->audioPlayer2);
+    initModelEntity(arg0, 2, &alloc->audioPlayer2);
     setCleanupCallback(func_800168D8_174D8);
     func_80000460_1060(arg0, sp10, &sp28);
     setCallback(func_800168BC_174BC);

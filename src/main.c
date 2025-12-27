@@ -84,7 +84,7 @@ typedef struct {
     s32 unk18;
     s32 unk1C;
     s32 unk20;
-} D_800891A8_89DA8_entry_2C;
+} ModelEntityTaskConfig;
 
 typedef struct {
     u8 unk0;
@@ -98,8 +98,8 @@ typedef struct {
     s32 unk20;
     s32 unk24;
     s32 unk28;
-    D_800891A8_89DA8_entry_2C *unk2C;
-    s16 unk30;
+    ModelEntityTaskConfig *taskConfigs;
+    s16 taskCount;
     u16 unk32;
     u8 unk34;
     u8 unk35;
@@ -109,8 +109,8 @@ typedef struct {
     u8 unk39;
     u8 unk3A;
     u8 unk3B;
-} D_800891A8_89DA8_entry;
-extern D_800891A8_89DA8_entry D_800891A8_89DA8[];
+} ModelEntityConfig;
+extern ModelEntityConfig modelEntityConfigs[];
 
 typedef struct {
     struct {
@@ -256,7 +256,7 @@ s32 osVoiceCheckWord(u8 *data) {
     return 0xE;
 }
 
-void func_80000460_1060(func_8000056C_116C_arg *arg0, ColorData *arg1, ColorData *arg2) {
+void func_80000460_1060(ModelEntity *arg0, ColorData *arg1, ColorData *arg2) {
     s32 temp_v0;
     s32 temp_v0_2;
     int new_var3;
@@ -264,10 +264,10 @@ void func_80000460_1060(func_8000056C_116C_arg *arg0, ColorData *arg1, ColorData
     s32 var_a1;
     u8 temp_a0;
     s32 new_var;
-    D_800891A8_89DA8_entry *temp_a2;
+    ModelEntityConfig *temp_a2;
     s16 index;
 
-    temp_a2 = &D_800891A8_89DA8[arg0->unk84];
+    temp_a2 = &modelEntityConfigs[arg0->configIndex];
     new_var3 = temp_a2->unk34 + temp_a2->unk35;
     temp_v0 = new_var3;
     temp_a0 = temp_a2->unk36;
@@ -302,51 +302,51 @@ void func_80000460_1060(func_8000056C_116C_arg *arg0, ColorData *arg1, ColorData
     arg2[0].r = temp_a2->unk38;
     arg2[0].g = temp_a2->unk39;
     arg2[0].b = temp_a2->unk3A;
-    func_8006FC70_70870(arg0->unk0->unkDA, 3, arg1, arg2);
+    func_8006FC70_70870(arg0->parent->unkDA, 3, arg1, arg2);
 }
 
 typedef struct {
     void *unk0;
     u8 unk4;
     u8 unk5;
-} func_8000056C_116C_task;
+} initModelEntity_task;
 
-s32 func_8000056C_116C(func_8000056C_116C_arg *entity, s16 index, void *arg2) {
-    D_800891A8_89DA8_entry *entry;
+s32 initModelEntity(ModelEntity *entity, s16 index, void *arg2) {
+    ModelEntityConfig *entry;
     s32 i;
 
-    entity->unk84 = index;
-    entity->unk87 = 1;
-    entry = &D_800891A8_89DA8[index];
-    entity->unk0 = arg2;
-    entity->unk86 = 0;
+    entity->configIndex = index;
+    entity->isVisible = 1;
+    entry = &modelEntityConfigs[index];
+    entity->parent = arg2;
+    entity->isDisposed = 0;
 
     if (entry->unk32 == 0xFFFF) {
-        entity->unk4 = loadUncompressedData(entry->asset1Start, entry->asset1End);
-        entity->unk8 = loadCompressedData(entry->asset2Start, entry->asset2End, entry->asset2Size);
+        entity->modelData = loadUncompressedData(entry->asset1Start, entry->asset1End);
+        entity->textureData = loadCompressedData(entry->asset2Start, entry->asset2End, entry->asset2Size);
 
-        memcpy(&entity->unkC, &identityMatrix, 0x20);
+        memcpy(&entity->primaryMatrix, &identityMatrix, 0x20);
 
-        entity->unk38 = 0;
-        entity->unk30 = entity->unk4;
-        entity->unk34 = entity->unk8;
-        entity->unk2C = entry->unk1C;
+        entity->animState = 0;
+        entity->activeModel = entity->modelData;
+        entity->activeTexture = entity->textureData;
+        entity->displayConfig = entry->unk1C;
 
         if (entry->unk24 != 0) {
-            memcpy(&entity->unk48, identityMatrix, 0x20);
-            entity->unk6C = entity->unk4;
-            entity->unk70 = entity->unk8;
-            entity->unk68 = entry->unk24;
+            memcpy(&entity->secondaryMatrix, identityMatrix, 0x20);
+            entity->secondaryModel = entity->modelData;
+            entity->secondaryTexture = entity->textureData;
+            entity->secondaryConfig = entry->unk24;
         } else {
-            entity->unk68 = 0;
-            entity->unk70 = 0;
-            entity->unk6C = 0;
+            entity->secondaryConfig = 0;
+            entity->secondaryTexture = 0;
+            entity->secondaryModel = 0;
         }
 
         entity->unk74 = 0;
 
-        for (i = 0; i < entry->unk30; i++) {
-            func_8000056C_116C_task *task = scheduleTask((entry->unk2C + i)->unk0, 0, 0, 0xC8);
+        for (i = 0; i < entry->taskCount; i++) {
+            initModelEntity_task *task = scheduleTask((entry->taskConfigs + i)->unk0, 0, 0, 0xC8);
             if (task != NULL) {
                 task->unk0 = entity;
                 task->unk4 = i;
@@ -355,15 +355,15 @@ s32 func_8000056C_116C(func_8000056C_116C_arg *entity, s16 index, void *arg2) {
         }
 
     } else {
-        entity->unk4 = 0;
-        entity->unk8 = 0;
-        entity->unk30 = 0;
-        entity->unk34 = 0;
-        entity->unk38 = 0;
-        entity->unk2C = 0;
-        entity->unk6C = 0;
-        entity->unk70 = 0;
-        entity->unk68 = 0;
+        entity->modelData = 0;
+        entity->textureData = 0;
+        entity->activeModel = 0;
+        entity->activeTexture = 0;
+        entity->animState = 0;
+        entity->displayConfig = 0;
+        entity->secondaryModel = 0;
+        entity->secondaryTexture = 0;
+        entity->secondaryConfig = 0;
         entity->unk74 = 0;
 
         return 1;
@@ -398,8 +398,8 @@ void func_800007C4_13C4(func_80000C2C_182C_arg_unk0 *arg0, void *arg1) {
 }
 
 void func_800007F0_13F0(func_80000C2C_182C_arg *arg0) {
-    D_800891A8_89DA8_entry *temp_s0 = &D_800891A8_89DA8[arg0->unk0->unk84];
-    D_800891A8_89DA8_entry_2C *temp_s2 = &temp_s0->unk2C[arg0->unk4];
+    ModelEntityConfig *temp_s0 = &modelEntityConfigs[arg0->unk0->unk84];
+    ModelEntityTaskConfig *temp_s2 = &temp_s0->taskConfigs[arg0->unk4];
 
     setCleanupCallback(&func_80000968_1568);
     memcpy(&arg0->unk8, &identityMatrix, sizeof(Mat3x3Padded));
@@ -439,11 +439,11 @@ void func_80000968_1568(func_80000968_1568_arg *arg0) {
 }
 
 void func_800009A0_15A0(func_80000C2C_182C_arg *arg0) {
-    D_800891A8_89DA8_entry *temp_s0;
-    D_800891A8_89DA8_entry_2C *temp_s2;
+    ModelEntityConfig *temp_s0;
+    ModelEntityTaskConfig *temp_s2;
 
-    temp_s0 = &D_800891A8_89DA8[arg0->unk0->unk84];
-    temp_s2 = &temp_s0->unk2C[arg0->unk4];
+    temp_s0 = &modelEntityConfigs[arg0->unk0->unk84];
+    temp_s2 = &temp_s0->taskConfigs[arg0->unk4];
 
     setCleanupCallback(&func_80000BF4_17F4);
 
@@ -560,15 +560,15 @@ void func_80000DA4_19A4(func_80000DA4_19A4_arg *arg0) {
 }
 
 void func_80000DC0_19C0(func_80000DC0_19C0_arg *arg0) {
-    D_800891A8_89DA8_entry *var_s0;
-    D_800891A8_89DA8_entry_2C *var_s2;
+    ModelEntityConfig *var_s0;
+    ModelEntityTaskConfig *var_s2;
     s16 temp;
     s8 temp2;
 
     temp = arg0->unk0->unk84;
     temp2 = arg0->unk4;
-    var_s0 = &D_800891A8_89DA8[temp];
-    var_s2 = &var_s0->unk2C[temp2];
+    var_s0 = &modelEntityConfigs[temp];
+    var_s2 = &var_s0->taskConfigs[temp2];
 
     setCleanupCallback(func_80000F14_1B14);
 
@@ -602,11 +602,11 @@ void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0) {
 }
 
 void func_80000F4C_1B4C(func_80000F4C_1B4C_arg *arg0) {
-    D_800891A8_89DA8_entry *temp_s0;
-    D_800891A8_89DA8_entry_2C *temp_s2;
+    ModelEntityConfig *temp_s0;
+    ModelEntityTaskConfig *temp_s2;
 
-    temp_s0 = &D_800891A8_89DA8[arg0->unk0->unk84];
-    temp_s2 = &temp_s0->unk2C[arg0->unk4];
+    temp_s0 = &modelEntityConfigs[arg0->unk0->unk84];
+    temp_s2 = &temp_s0->taskConfigs[arg0->unk4];
 
     setCleanupCallback(&func_80001114_1D14);
     memcpy(&arg0->unk8, &identityMatrix, 0x20);
