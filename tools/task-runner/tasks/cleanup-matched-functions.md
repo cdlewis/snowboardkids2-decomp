@@ -24,14 +24,14 @@ The project is complicated and you will often encounter a build error or mismatc
 
 If you are unable to resolve these issues after 30 attempts, you should give up and revert your changes to ensure the project remains in a healthy state.
 
-## When to leave names along
+## When to leave names alone
 
 If suitable name thing already exists -- or the name essentially conveys the purpose of the function/symbol -- you should leave them be.
 
 Avoid renaming functions that correspond to standard library functions. If a function is from the standard library then it is extremely valuable to maintain that naming convention.
 
-## Use skills
+## Update symbol_addrs.txt when renaming functions
 
-Look at your available skills and use those skills! Especially the `rename-global-variable-or-function` skill. It is not safe to rename functions without updating symbol_addrs.txt, for example.
+You MUST update symbol_addrs.txt when renaming functions. Use the `rename-global-variable-or-function` for additional information on how to do this.
 
 ## Use thinking
