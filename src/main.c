@@ -168,7 +168,7 @@ typedef struct {
     s16 unk54;
     s16 unk56;
     s16 unk58;
-} func_80000F4C_1B4C_arg;
+} AnimatedModelTaskState;
 
 typedef struct {
     u8 padding[0x8];
@@ -596,7 +596,7 @@ void cleanupStaticModelTask(SwingingModelTaskState *state) {
     state->uncompressedAsset = freeNodeMemory(state->uncompressedAsset);
 }
 
-void func_80000F4C_1B4C(func_80000F4C_1B4C_arg *arg0) {
+void initAnimatedModelTask(AnimatedModelTaskState *arg0) {
     ModelEntityConfig *temp_s0;
     ModelEntityTaskConfig *temp_s2;
 
