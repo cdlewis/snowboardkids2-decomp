@@ -71,8 +71,8 @@ void markEntityDestroyed(MarkDestroyedArg *arg0) {
     arg0->isDestroyed = 1;
 }
 
-void func_800014FC_20FC(SceneModel *arg0, s32 arg1) {
-    arg0->unk158 = arg1;
+void setModelHeight(SceneModel *arg0, s32 height) {
+    arg0->height = height;
 }
 
 void func_80001504_2104(GameEntity *arg0) {
@@ -464,7 +464,7 @@ void initializeGameEntity(
     ent->unk118 = func_8000CDB4_D9B4();
     ent->soundData = loadAssetGroupSoundData((SceneModel *)ent);
     ent->unk15C = 0;
-    ent->unk158 = 0;
+    ent->height = 0;
 
     ent->unk120 = loadCompressedData(_646850_ROM_START, _646850_ROM_END, 0x238);
     ent->unk124 = &D_8008BD38_8C938;

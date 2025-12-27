@@ -158,7 +158,7 @@ typedef struct {
     void *unk11C;
     void *unk120;
     u8 padding4[0x34];
-    s32 unk158;
+    s32 height;
     s8 unk15C;
 } SceneModel;
 
@@ -177,7 +177,7 @@ void func_8000160C_220C(SceneModel *arg0, s8 arg1);
 void func_80001640_2240(SceneModel *arg0);
 void func_80001650_2250(SceneModel *arg0);
 s8 func_80001660_2260(SceneModel *arg0);
-void func_800014FC_20FC(SceneModel *arg0, s32 arg1);
+void setModelHeight(SceneModel *arg0, s32 height);
 
 typedef struct {
     u8 transformationMatrix[0x20];
@@ -239,7 +239,7 @@ typedef struct {
     u8 padding7[0x18];
     s16 unk154;
     s16 unk156;
-    u32 unk158;
+    u32 height;
     u8 unk15C;
 } GameEntity;
 
