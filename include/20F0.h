@@ -153,7 +153,7 @@ typedef struct {
     s16 unkF0[3][3];
     u8 unkF4[0x8];
     s32 unk10C;
-    s32 unk110;
+    s32 partDisplayFlags;
     void *unk114;
     void *unk118;
     void *unk11C;
@@ -227,7 +227,7 @@ typedef struct {
     void *unkA0;
     SpriteAssetState unkA4;
     u8 asset2TransformationMatrix[0x20];
-    u32 unk110;
+    u32 partDisplayFlags;
     void *unk114;
     void *unk118;
     void *soundData;
@@ -285,9 +285,9 @@ void func_80002260_2E60(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg
 
 void setModelActionMode(SceneModel *model, s8 actionMode);
 
-void func_800016E0_22E0(SceneModel *arg0, s32 arg1);
+void setModelPartDisplayFlag(SceneModel *model, s32 partIndex);
 
-void func_800016F8_22F8(SceneModel *arg0, s32 arg1);
+void clearModelPartDisplayFlag(SceneModel *model, s32 partIndex);
 
 s32 getWalkAnimationId(s16);
 

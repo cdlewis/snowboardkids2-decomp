@@ -192,12 +192,12 @@ void setAnimationIndex(SceneModel *arg0, s8 arg1) {
     }
 }
 
-void func_800016E0_22E0(SceneModel *arg0, s32 arg1) {
-    arg0->unk110 = (s32)(arg0->unk110 | (1 << arg1));
+void setModelPartDisplayFlag(SceneModel *model, s32 partIndex) {
+    model->partDisplayFlags = (s32)(model->partDisplayFlags | (1 << partIndex));
 }
 
-void func_800016F8_22F8(SceneModel *arg0, s32 arg1) {
-    arg0->unk110 = (s32)(arg0->unk110 & ~(1 << arg1));
+void clearModelPartDisplayFlag(SceneModel *model, s32 partIndex) {
+    model->partDisplayFlags = (s32)(model->partDisplayFlags & ~(1 << partIndex));
 }
 
 void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
@@ -345,7 +345,7 @@ void initializeGameEntity(
 
     memcpy(&ent->asset2TransformationMatrix, identityMatrix, 0x20);
 
-    ent->unk110 = -1;
+    ent->partDisplayFlags = -1;
     ent->alpha = 0xFF;
     ent->unk4C = yetAnotherAssetIndex;
     ent->shadowEnabled = 0;

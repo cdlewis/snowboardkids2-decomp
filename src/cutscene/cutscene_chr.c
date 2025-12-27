@@ -482,9 +482,9 @@ void cutsceneChrModelDisp_exec(cutsceneChrModelDisp_exec_arg *arg0, CutsceneMana
     CutsceneSlot *slot = &cutsceneManager->slots[index];
 
     if (arg0->unk2 != 0) {
-        func_800016E0_22E0(slot->model, arg0->unk1);
+        setModelPartDisplayFlag(slot->model, arg0->unk1);
     } else {
-        func_800016F8_22F8(slot->model, arg0->unk1);
+        clearModelPartDisplayFlag(slot->model, arg0->unk1);
     }
 }
 
