@@ -212,10 +212,6 @@ void func_80001280_1E80(func_80000C2C_182C_arg *arg0);
 void func_80000CAC_18AC(func_80000C2C_182C_arg *);
 void func_80000A68_1668(func_80000C2C_182C_arg *);
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *);
-typedef struct {
-    u8 _pad[0x16];
-    u16 unk16;
-} func_800007C4_13C4_SubStruct;
 
 typedef struct {
     func_80000C2C_182C_arg_unk0 *unk0;
@@ -236,7 +232,7 @@ typedef struct {
     s32 unk60;
 } func_80001040_1C40_arg;
 
-void func_800007C4_13C4(func_80000C2C_182C_arg_unk0 *arg0, void *arg1);
+void enqueueDisplayListIfVisible(func_80000C2C_182C_arg_unk0 *state, void *displayList);
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
 void func_800008D0_14D0(func_80000C2C_182C_arg *arg0);
@@ -391,9 +387,9 @@ void renderModelEntity(ModelEntityRenderState *state) {
     }
 }
 
-void func_800007C4_13C4(func_80000C2C_182C_arg_unk0 *arg0, void *arg1) {
-    if (arg0->unk87 != 0) {
-        enqueueDisplayListObject(arg0->ptr->unk16, arg1);
+void enqueueDisplayListIfVisible(func_80000C2C_182C_arg_unk0 *state, void *displayList) {
+    if (state->unk87 != 0) {
+        enqueueDisplayListObject(state->ptr->unk16, displayList);
     }
 }
 
@@ -430,7 +426,7 @@ void func_800008D0_14D0(func_80000C2C_182C_arg *arg0) {
     arg0->unk44 = temp;
 
     createYRotationMatrix(&arg0->unk8, temp);
-    func_800007C4_13C4(arg0->unk0, &arg0->unk8);
+    enqueueDisplayListIfVisible(arg0->unk0, &arg0->unk8);
 }
 
 void func_80000968_1568(func_80000968_1568_arg *arg0) {
@@ -506,7 +502,7 @@ void func_80000A68_1668(func_80000C2C_182C_arg *arg0) {
     arg0->unk8.unk18 = subEntry->unkC;
     arg0->unk8.unk1C = subEntry->unk10;
 
-    func_800007C4_13C4(arg0->unk0, &arg0->unk8);
+    enqueueDisplayListIfVisible(arg0->unk0, &arg0->unk8);
 }
 
 void func_80000BF4_17F4(func_80000BF4_17F4_arg *arg0) {
@@ -593,7 +589,7 @@ void func_80000E84_1A84(func_80000C2C_182C_arg *arg0) {
     arg0->unk8.unk14 = subEntry->unk8;
     arg0->unk8.unk18 = subEntry->unkC;
     arg0->unk8.unk1C = subEntry->unk10;
-    func_800007C4_13C4(arg0->unk0, &arg0->unk8);
+    enqueueDisplayListIfVisible(arg0->unk0, &arg0->unk8);
 }
 
 void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0) {

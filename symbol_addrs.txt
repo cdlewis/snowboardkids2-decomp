@@ -1,3 +1,4 @@
+enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;
 __MusIntFifoProcess = 0x80072F54;
