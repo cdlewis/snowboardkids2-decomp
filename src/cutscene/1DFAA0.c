@@ -110,7 +110,7 @@ void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *ar
     arg0->sceneContext = func_800B5B38_1E2BE8(arg1->id);
 
     if (needsVisibility) {
-        func_80003000_3C00(arg0, 0, 0x8000, 1, 0x10000);
+        scheduleDualAssetGroupLoad(arg0, 0, 0x8000, 1, 0x10000);
         func_800B5B30_1E2BE0(arg0->sceneContext, 1);
     }
 

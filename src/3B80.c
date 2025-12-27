@@ -53,22 +53,22 @@ typedef struct {
 
 void func_800030B4_3CB4(func_800033AC_3FAC_arg *arg0);
 
-void func_80003000_3C00(void *arg0, u8 arg1, s32 arg2, u8 arg3, s32 arg4) {
+void scheduleDualAssetGroupLoad(void *context, u8 groupIndex1, s32 param1, u8 groupIndex2, s32 param2) {
     func_800033AC_3FAC_arg *task;
 
     task = scheduleTask(func_800030B4_3CB4, 3, 0, 0);
     if (task != NULL) {
-        task->unk0 = arg0;
-        task->unkC4 = arg3;
-        task->unk8 = arg4;
+        task->unk0 = context;
+        task->unkC4 = groupIndex2;
+        task->unk8 = param2;
         task->unkC5 = 0;
     }
 
     task = scheduleTask(func_800030B4_3CB4, 3, 0, 0);
     if (task != NULL) {
-        task->unk0 = arg0;
-        task->unkC4 = arg1;
-        task->unk8 = arg2;
+        task->unk0 = context;
+        task->unkC4 = groupIndex1;
+        task->unk8 = param1;
         task->unkC5 = 0;
     }
 }

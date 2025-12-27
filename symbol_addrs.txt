@@ -1539,3 +1539,4 @@ loadLevelPreview = 0x8001F42C; // rom:0x2002C
 
 GenericTriggerInit = 0x80018CB0; // rom:0x198B0
 GenericTriggerCheck = 0x80018D04; // rom:0x19904
+scheduleDualAssetGroupLoad = 0x80003000; // rom:0x3C00
