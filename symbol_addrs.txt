@@ -155,6 +155,7 @@ setModelRenderMode = 0x80000450; // rom:0x1050
 clearModelRotation = 0x80002468; // rom:0x3068
 setModelRotation = 0x80002484; // rom:0x3084
 updateModelGeometry = 0x80002750; // rom:0x3350
+enqueueModelDisplayList = 0x80002B50; // rom:0x3750
 setModelVisibility = 0x800015FC; // rom:0x21FC
 setModelDisplayEnabled = 0x80001604; // rom:0x2204
 getAssetGroupOrDefault = 0x80001934; // rom:0x2534

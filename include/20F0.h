@@ -297,6 +297,6 @@ u8 getModelAlpha(SceneModel *arg0);
 
 void setModelAlpha(SceneModel *arg0, u8 arg1);
 
-void func_80002B50_3750(func_80002B50_3750_arg *arg0, DisplayListObject *arg1);
+void enqueueModelDisplayList(func_80002B50_3750_arg *arg0, DisplayListObject *arg1);
 
 s32 isAssetGroupEmpty(s16);

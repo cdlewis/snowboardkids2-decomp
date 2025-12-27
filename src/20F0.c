@@ -705,7 +705,7 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/20F0", updateModelGeometry);
 
-void func_80002B50_3750(func_80002B50_3750_arg *arg0, DisplayListObject *arg1) {
+void enqueueModelDisplayList(func_80002B50_3750_arg *arg0, DisplayListObject *arg1) {
     if ((arg0 != NULL) && (arg0->unk88 != 0) && (arg0->displayEnabled != 0)) {
         enqueueDisplayListObject(arg0->unk10->unk16, arg1);
     }

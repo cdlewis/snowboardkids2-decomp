@@ -117,7 +117,7 @@ void func_80007EC8_8AC8(func_8A40_arg *arg0) {
 
     func_8006B084_6BC84(&sp10, arg0->unk0->unkF0, &sp30);
     func_8006B084_6BC84(&sp30, arg0->unk0->matrix18, &arg0->unk4);
-    func_80002B50_3750(arg0->unk0, &arg0->unk4);
+    enqueueModelDisplayList(arg0->unk0, &arg0->unk4);
 }
 
 void func_800080B8_8CB8(func_800080B8_8CB8_arg *arg0) {

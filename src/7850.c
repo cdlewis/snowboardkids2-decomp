@@ -201,7 +201,7 @@ void func_80006EE0_7AE0(func_80006E60_7A60_arg *arg0) {
     temp_s0_2 = arg0->unk4;
     func_8006B084_6BC84(sp10Ptr, &((func_80006EE0_unk0 *)arg0->unk0)->unk18, temp_s0_2);
     arg0->unk1C = (s32)(arg0->unk1C + 0x33333);
-    func_80002B50_3750(arg0->unk0, temp_s0_2);
+    enqueueModelDisplayList(arg0->unk0, temp_s0_2);
     arg0->unk40 = (s16)(((u16)arg0->unk40 + 0xB6) & 0x1FFF);
     arg0->unk42 = (s16)(((u16)arg0->unk42 + 0x16C) & 0x1FFF);
 }
