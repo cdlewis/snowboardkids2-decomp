@@ -277,7 +277,7 @@ void enableEntityRendering(SceneModel *arg0);
 void enableModelShadow(SceneModel *arg0);
 void disableModelShadow(SceneModel *arg0);
 
-void func_800021E8_2DE8(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3);
+void setModelAnimationLooped(SceneModel *model, s16 animIndex, s16 transitionAnimIndex, s8 loopCount);
 
 void func_80002220_2E20(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4);
 

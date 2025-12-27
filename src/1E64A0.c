@@ -143,7 +143,7 @@ void *func_800B97C8_1E6878(cutsceneSys2Wait_exec_asset *arg0) {
                     arg0->unk9D = arg0->unk9D + 1;
                     break;
                 case 0xFFF0:
-                    func_800021E8_2DE8(
+                    setModelAnimationLooped(
                         (SceneModel *)arg0->unk4,
                         *(s16 *)((u8 *)temp_a3 + 2),
                         *(s16 *)((u8 *)temp_a3 + 6),

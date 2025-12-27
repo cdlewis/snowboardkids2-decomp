@@ -312,7 +312,7 @@ void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg0, CutsceneManager *a
     slot = &arg1->slots[arg2];
 
     func_800B7620_1E46D0(&slot->slotData, arg0->unk0, arg0->unk6, arg0->unk8);
-    func_800021E8_2DE8(slot->model, arg0->unk2, arg0->unk4, -1);
+    setModelAnimationLooped(slot->model, arg0->unk2, arg0->unk4, -1);
 }
 
 s32 cutsceneChrRotate_isDone(void) {
@@ -330,7 +330,7 @@ void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *a0, CutsceneManager *a1, s8 a2
     CutsceneSlot *s1 = &a1->slots[a2];
 
     func_800B788C_1E493C(&s1->slotData, a0->unk0, a0->unk4, a0->unk8);
-    func_800021E8_2DE8(s1->model, a0->unkC, a0->unkE, 1);
+    setModelAnimationLooped(s1->model, a0->unkC, a0->unkE, 1);
 }
 
 void cutsceneChrBack_init(void) {
@@ -507,7 +507,7 @@ void cutsceneChrMoveSight_exec(cutsceneChrMoveSight_exec_arg *arg0, CutsceneMana
 
     func_800B7B70_1E4C20(&slot->slotData, (s32 *)&stackData, arg0->unkE, arg0->unk18, arg0->unk1C);
 
-    func_800021E8_2DE8(slot->model, arg0->unk10, arg0->unk14, arg0->unk13);
+    setModelAnimationLooped(slot->model, arg0->unk10, arg0->unk14, arg0->unk13);
 
     setModelActionMode(slot->model, arg0->unk12);
 }

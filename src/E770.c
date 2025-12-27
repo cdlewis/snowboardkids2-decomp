@@ -109,7 +109,7 @@ void *func_8000DC44_E844(E770_struct *arg0, s32 arg1) {
 }
 
 void func_8000DC88_E888(E770_struct *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
-    func_800021E8_2DE8(arg0->unk624, arg1, arg2, arg3);
+    setModelAnimationLooped(arg0->unk624, arg1, arg2, arg3);
     arg0->unk14 = arg4;
 }
 
