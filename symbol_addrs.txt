@@ -50,6 +50,7 @@ getPlayerCount = 0x800015F4; // rom:0x21F4
 getItemAssetCount = 0x80001624; // rom:0x2224
 setModelPendingDestroy = 0x80001640; // rom:0x2240
 clearModelPendingDestroy = 0x80001650; // rom:0x2250
+getAnimationIndex = 0x80001660; // rom:0x2260
 itemAssetCount = 0x80089768; // rom:0x8A368
 itemAssetTable = 0x800895A0; // rom:0x8A1A0
 enqueueDisplayListIfVisible = 0x800007C4;

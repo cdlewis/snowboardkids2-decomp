@@ -56,7 +56,7 @@ typedef struct {
     s8 unk89;
     s16 animFrameCount;
     u8 padding3[0x8];
-    s8 unk94;
+    s8 animationIndex;
     u8 padding2[0x4];
     func_80001688_2288_arg_9C *unk9C;
 } func_80001688_2288_arg;
@@ -142,7 +142,7 @@ typedef struct {
     s16 unk8C;
     s16 unk8E;
     s32 unk90;
-    s8 unk94;
+    s8 animationIndex;
     s8 unk95;
     s8 alpha;
     s8 shadowEnabled;
@@ -178,7 +178,7 @@ void setItemDisplayEnabled(SceneModel *arg0, s8 arg1);
 void setItemFlags(SceneModel *arg0, s8 arg1);
 void setModelPendingDestroy(SceneModel *arg0);
 void clearModelPendingDestroy(SceneModel *arg0);
-s8 func_80001660_2260(SceneModel *arg0);
+s8 getAnimationIndex(SceneModel *arg0);
 void setModelHeight(SceneModel *arg0, s32 height);
 
 typedef struct {
@@ -218,7 +218,7 @@ typedef struct {
     u8 padding4[4];
     s16 unk8E;
     u8 padding5[4];
-    s8 unk94;
+    s8 animationIndex;
     u8 unk95;
     u8 alpha;
     u8 shadowEnabled;

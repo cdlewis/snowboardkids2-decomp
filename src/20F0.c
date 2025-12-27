@@ -172,8 +172,8 @@ void clearModelPendingDestroy(SceneModel *arg0) {
     arg0->unk89 &= 0xFE;
 }
 
-s8 func_80001660_2260(SceneModel *arg0) {
-    return arg0->unk94;
+s8 getAnimationIndex(SceneModel *arg0) {
+    return arg0->animationIndex;
 }
 
 s8 func_80001668_2268(SceneModel *arg0) {
@@ -188,7 +188,7 @@ s8 func_80001668_2268(SceneModel *arg0) {
 
 void func_80001688_2288(SceneModel *arg0, s8 arg1) {
     if (arg1 < func_80001668_2268(arg0)) {
-        arg0->unk94 = arg1;
+        arg0->animationIndex = arg1;
     }
 }
 
@@ -429,7 +429,7 @@ void initializeGameEntity(
     slot->asset2 = NULL;
     slot->asset1 = NULL;
 
-    ent->unk94 = -1;
+    ent->animationIndex = -1;
     ent->unk9C = NULL;
 
     if (assetEntry->Assets != NULL && assetPairIndex < assetEntry->count) {

@@ -402,7 +402,7 @@ void func_8002EBB0_2F7B0(void *ptr) {
 
     for (i = 0; i < 2; i++) {
         arg0->elements[i].unk56 = arg0->elements[i].unk50;
-        arg0->elements[i].unk5F = func_80001660_2260(arg0->elements[i].unk0);
+        arg0->elements[i].unk5F = getAnimationIndex(arg0->elements[i].unk0);
 
         if (((arg0->unkD4 == 1) & (i == 0)) && D_800AFE8C_A71FC->unk9[0] == 3) {
             func_80001688_2288(arg0->elements[i].unk0, -1);
