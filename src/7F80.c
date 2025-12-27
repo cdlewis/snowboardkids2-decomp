@@ -29,22 +29,21 @@ typedef struct {
 typedef struct {
     s32 unk0;
     s32 unk4;
-    s32 unk8;
-    s32 unkC;
+    /* 0x08 */ void *textureData;
+    /* 0x0C */ void *paletteData;
     /* 0x10 */ u16 width;
     /* 0x12 */ u16 height;
-    s32 unk14;
-    u8 padding[0x1C];
-    void *unk34;
-    s32 unk38;
-} func_80007560_8160_arg;
+    /* 0x14 */ Mat3x3Padded rotationMatrix;
+    /* 0x34 */ void *lookAtMatrix;
+    /* 0x38 */ void *segmentData;
+} PalettedTextureState;
 
 void func_80007958_8558(func_800078C4_84C4_arg *);
 void func_8000799C_859C(func_800078C4_84C4_arg *);
 void func_80007ABC_86BC(func_800078C4_84C4_arg *);
 void func_800073E0_7FE0(void);
 void cleanupCameraRotationTask(void);
-void func_80007560_8160(func_80007560_8160_arg *);
+void renderPalettedTexture(PalettedTextureState *);
 
 extern u8 identityMatrix[];
 void *func_8006C130_6CD30(void *, LookAt *);
@@ -85,22 +84,22 @@ INCLUDE_ASM("asm/nonmatchings/7F80", func_800073E0_7FE0);
 void cleanupCameraRotationTask(void) {
 }
 
-void func_80007560_8160(func_80007560_8160_arg *arg0) {
-    s32 var_a2;
+void renderPalettedTexture(PalettedTextureState *state) {
+    s32 dxtBase;
     s32 new_var;
     u32 line;
     s32 lrs;
     u16 dxt;
-    u16 width_div_16;
-    Gfx *loadblock_ptr;
-    long loadblock_value;
+    u16 widthDiv16;
+    Gfx *loadBlockCmd;
+    long loadBlockWord;
     volatile u8 padding[0x10];
 
     gDPPipeSync(gRegionAllocPtr++);
 
     gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, arg0->unk8);
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, state->textureData);
 
     gDPSetTile(
         gRegionAllocPtr++,
@@ -120,38 +119,38 @@ void func_80007560_8160(func_80007560_8160_arg *arg0) {
 
     gDPLoadSync(gRegionAllocPtr++);
 
-    loadblock_ptr = gRegionAllocPtr++;
-    loadblock_ptr->words.w0 = 0xF3000000;
+    loadBlockCmd = gRegionAllocPtr++;
+    loadBlockCmd->words.w0 = 0xF3000000;
     gGraphicsMode = -1;
-    width_div_16 = arg0->width >> 4;
-    var_a2 = 0x800;
-    if (width_div_16 != 0) {
-        var_a2 = width_div_16 + 0x7FF;
+    widthDiv16 = state->width >> 4;
+    dxtBase = 0x800;
+    if (widthDiv16 != 0) {
+        dxtBase = widthDiv16 + 0x7FF;
     }
-    lrs = (((s32)((arg0->width * arg0->height) + 3)) >> 2) - 1;
+    lrs = (((s32)((state->width * state->height) + 3)) >> 2) - 1;
     if (lrs < 0x800) {
     } else {
         lrs = 0x7FF;
     }
     line = lrs & 0xFFF;
     new_var = (line << 12) | 0x07000000;
-    loadblock_value = new_var;
-    if (width_div_16 != 0) {
-        loadblock_value |= (var_a2 / width_div_16) & 0xFFF;
+    loadBlockWord = new_var;
+    if (widthDiv16 != 0) {
+        loadBlockWord |= (dxtBase / widthDiv16) & 0xFFF;
     } else {
-        loadblock_value |= var_a2 & 0xFFF;
+        loadBlockWord |= dxtBase & 0xFFF;
     }
-    loadblock_ptr->words.w1 = loadblock_value;
+    loadBlockCmd->words.w1 = loadBlockWord;
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    line = (((arg0->width >> 1) + 7) >> 3) & 0x1FF;
+    line = (((state->width >> 1) + 7) >> 3) & 0x1FF;
     new_var = G_TX_NOMIRROR;
     gDPSetTile(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
 
-    gDPSetTileSize(gRegionAllocPtr++, G_TX_RENDERTILE, 0, 0, (arg0->width - 1) << 2, (arg0->height - 1) << 2);
+    gDPSetTileSize(gRegionAllocPtr++, G_TX_RENDERTILE, 0, 0, (state->width - 1) << 2, (state->height - 1) << 2);
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, arg0->unkC);
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->paletteData);
 
     gDPTileSync(gRegionAllocPtr++);
 
@@ -177,21 +176,21 @@ void func_80007560_8160(func_80007560_8160_arg *arg0) {
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    if (arg0->unk34 == 0) {
-        arg0->unk34 = arenaAlloc16(0x40);
-        if (arg0->unk34 == 0) {
+    if (state->lookAtMatrix == 0) {
+        state->lookAtMatrix = arenaAlloc16(0x40);
+        if (state->lookAtMatrix == 0) {
             return;
         }
-        func_8006C130_6CD30(&arg0->unk14, arg0->unk34);
+        func_8006C130_6CD30(&state->rotationMatrix, state->lookAtMatrix);
     }
 
     gDPPipeSync(gRegionAllocPtr++);
 
     gDPSetTexturePersp(gRegionAllocPtr++, G_TP_PERSP);
 
-    gSPSegment(gRegionAllocPtr++, 0x02, arg0->unk38);
+    gSPSegment(gRegionAllocPtr++, 0x02, state->segmentData);
 
-    gSPMatrix(gRegionAllocPtr++, arg0->unk34, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, state->lookAtMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
 
     gSPDisplayList(gRegionAllocPtr++, &D_8008C200_8CE00);
 }
@@ -247,7 +246,7 @@ void func_8000799C_859C(func_800078C4_84C4_arg *arg0) {
         if (arg0->unk3C < 7) {
             arg0->unk34 = 0;
             arg0->unk38 = &arg0->unk44[temp_t0].unk0;
-            debugEnqueueCallback(0, 1, &func_80007560_8160, arg0);
+            debugEnqueueCallback(0, 1, &renderPalettedTexture, arg0);
             arg0->unk3C++;
         }
     }
