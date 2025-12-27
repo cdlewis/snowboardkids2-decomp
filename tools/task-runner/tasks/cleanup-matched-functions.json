@@ -1,0 +1,7 @@
+{
+  "task_name": "cleanup_matched_functions",
+  "script": "python3 tools/list_matched_functions.py",
+  "prompt": "examine the function: $ARGUMENT. think about what the original developers would have intended. update the function name, global symbols, and local variables to better reflect this intent. if suitable names for these things already exist -- or are more or less correct -- you should leave them be. avoid renaming functions that correspond to standard library functions, for example. clean up decompilation artefacts when possible but be sure to preserve a 100% match. your changes will be rejected if the match drops under 100%. take multiple attempts to cleanup code and maintain the match. you should give up if you're unable to make progress after 30 attempts, however. commit your changes when you are done. use ultrathink",
+  "claude_command": "~/.claude/local/node_modules/.bin/claude --model opus",
+  "accept_best_effort": true
+}
