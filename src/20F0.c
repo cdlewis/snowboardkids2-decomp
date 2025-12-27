@@ -79,7 +79,7 @@ void disableEntityRendering(GameEntity *arg0) {
     arg0->renderEnabled = 0;
 }
 
-void func_8000150C_210C(SceneModel *arg0) {
+void enableEntityRendering(SceneModel *arg0) {
     arg0->renderEnabled = 1;
 }
 

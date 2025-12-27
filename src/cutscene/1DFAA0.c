@@ -98,7 +98,7 @@ void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *ar
             }
 
             if (needsVisibility) {
-                func_8000150C_210C(arg0->slots[i].model);
+                enableEntityRendering(arg0->slots[i].model);
             }
         } else {
             arg0->slots[i].model = NULL;

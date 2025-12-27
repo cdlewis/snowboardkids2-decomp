@@ -270,7 +270,7 @@ s32 setModelRotation(SceneModel *, s16);
 void func_80001688_2288(SceneModel *arg0, s8 arg1);
 
 void disableEntityRendering(GameEntity *arg0);
-void func_8000150C_210C(SceneModel *arg0);
+void enableEntityRendering(SceneModel *arg0);
 void func_80001518_2118(SceneModel *arg0);
 
 void func_80001524_2124(SceneModel *arg0);
