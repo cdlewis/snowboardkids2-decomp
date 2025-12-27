@@ -7,7 +7,7 @@ description: Renaming a global variable or function requires additional steps in
 
 ## Instructions
 
-Global variables and function names are mapped to specific addresses in memory thought the symbol*addrs.txt file at the root of the project. Each symbol should only appear at most once. If a symbol is not present it will be given a default name (usually starting with `func_` or `D_`).
+Global variables and function names are mapped to specific addresses in memory through the symbol_addrs.txt file at the root of the project. Each symbol should only appear at most once. If a symbol is not present it will be given a default name (usually starting with `func_` or `D_`).
 
 So at a minimum this file will need to be updated when attempting to rename a variable. However additional steps may also be needed.
 
