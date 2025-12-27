@@ -117,7 +117,7 @@ s16 func_80001574_2174(s16 arg0) {
     return gameAssets[arg0].unk22;
 }
 
-s8 func_800015A0_21A0(s16 arg0) {
+s8 getAssetCount(s16 arg0) {
     return gameAssets[arg0].numAssets;
 }
 
