@@ -11,6 +11,7 @@ D_8008DE54_8EA54 = 0x8008DE54; // rom:0x8EA54 size:0x10
 setupModelEntityLighting = 0x80000460; // rom:0x1060
 initRotatingModelTask = 0x800007F0; // rom:0x13F0
 updateRotatingModelTask = 0x800008D0; // rom:0x14D0
+cleanupRotatingModelTask = 0x80000968; // rom:0x1568
 enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;

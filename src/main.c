@@ -11,9 +11,9 @@
 
 typedef struct {
     u8 padding[0x2C];
-    void *unk2C;
-    void *unk30;
-} func_80000968_1568_arg;
+    void *uncompressedAsset;
+    void *compressedAsset;
+} RotatingModelTaskState;
 
 typedef struct {
     s32 unk0;
@@ -236,7 +236,7 @@ void enqueueDisplayListIfVisible(func_80000C2C_182C_arg_unk0 *state, void *displ
 void func_800013B8_1FB8(func_80000C2C_182C_arg *arg0);
 void func_800014C8_20C8(func_800014C8_20C8_arg *arg0);
 void updateRotatingModelTask(func_80000C2C_182C_arg *arg0);
-void func_80000968_1568(func_80000968_1568_arg *arg0);
+void cleanupRotatingModelTask(RotatingModelTaskState *state);
 void func_80000E84_1A84(func_80000C2C_182C_arg *arg0);
 void func_80000F14_1B14(func_80000BF4_17F4_arg *arg0);
 void func_80001040_1C40(func_80001040_1C40_arg *arg0);
@@ -396,7 +396,7 @@ void initRotatingModelTask(func_80000C2C_182C_arg *arg0) {
     ModelEntityConfig *config = &modelEntityConfigs[arg0->unk0->unk84];
     ModelEntityTaskConfig *taskConfig = &config->taskConfigs[arg0->unk4];
 
-    setCleanupCallback(&func_80000968_1568);
+    setCleanupCallback(&cleanupRotatingModelTask);
     memcpy(&arg0->unk8, &identityMatrix, sizeof(Mat3x3Padded));
 
     arg0->unk2C = loadUncompressedData(config->asset1Start, config->asset1End);
@@ -428,9 +428,9 @@ void updateRotatingModelTask(func_80000C2C_182C_arg *arg0) {
     enqueueDisplayListIfVisible(arg0->unk0, &arg0->unk8);
 }
 
-void func_80000968_1568(func_80000968_1568_arg *arg0) {
-    arg0->unk30 = freeNodeMemory(arg0->unk30);
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupRotatingModelTask(RotatingModelTaskState *state) {
+    state->compressedAsset = freeNodeMemory(state->compressedAsset);
+    state->uncompressedAsset = freeNodeMemory(state->uncompressedAsset);
 }
 
 void func_800009A0_15A0(func_80000C2C_182C_arg *arg0) {
