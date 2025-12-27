@@ -141,7 +141,7 @@ s32 func_800015EC_21EC(void) {
     return 6;
 }
 
-s32 func_800015F4_21F4(void) {
+s32 getPlayerCount(void) {
     return 6;
 }
 

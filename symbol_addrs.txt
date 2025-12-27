@@ -46,6 +46,7 @@ getModelActionMode = 0x800015D4; // rom:0x21D4
 getWalkAnimationId = 0x800015DC; // rom:0x21DC
 getRunAnimationId = 0x800015E4; // rom:0x21E4
 getCharacterCount = 0x800015EC; // rom:0x21EC
+getPlayerCount = 0x800015F4; // rom:0x21F4
 enqueueDisplayListIfVisible = 0x800007C4;
 renderModelEntity = 0x80000760;
 freeEffectResources = 0x80000710;
