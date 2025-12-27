@@ -644,6 +644,6 @@ void cutsceneChrKageDisp_exec(cutsceneChrKageDisp_exec_arg *arg0, CutsceneManage
     if (arg0->unk0 != 0) {
         func_80001524_2124(slot->model);
     } else {
-        func_80001518_2118(slot->model);
+        enableModelShadow(slot->model);
     }
 }

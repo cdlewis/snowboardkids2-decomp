@@ -144,7 +144,7 @@ typedef struct {
     s8 unk94;
     s8 unk95;
     s8 unk96;
-    s8 unk97;
+    s8 shadowEnabled;
     SceneModel_unk98 *unk98;
     func_80001688_2288_arg_9C *unk9C;
     u8 unkA0[4];
@@ -219,7 +219,7 @@ typedef struct {
     s8 unk94;
     u8 unk95;
     u8 unk96;
-    u8 unk97;
+    u8 shadowEnabled;
     AssetSlot *unk98;
     void *unk9C;
     void *unkA0;
@@ -271,7 +271,7 @@ void func_80001688_2288(SceneModel *arg0, s8 arg1);
 
 void disableEntityRendering(GameEntity *arg0);
 void enableEntityRendering(SceneModel *arg0);
-void func_80001518_2118(SceneModel *arg0);
+void enableModelShadow(SceneModel *arg0);
 
 void func_80001524_2124(SceneModel *arg0);
 

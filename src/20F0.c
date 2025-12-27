@@ -83,12 +83,12 @@ void enableEntityRendering(SceneModel *arg0) {
     arg0->renderEnabled = 1;
 }
 
-void func_80001518_2118(SceneModel *arg0) {
-    arg0->unk97 = 1;
+void enableModelShadow(SceneModel *arg0) {
+    arg0->shadowEnabled = 1;
 }
 
 void func_80001524_2124(SceneModel *arg0) {
-    arg0->unk97 = 0;
+    arg0->shadowEnabled = 0;
 }
 
 void func_8000152C_212C(SceneModel *arg0, u8 arg1) {
@@ -355,7 +355,7 @@ void initializeGameEntity(
     ent->unk110 = -1;
     ent->unk96 = 0xFF;
     ent->unk4C = yetAnotherAssetIndex;
-    ent->unk97 = 0;
+    ent->shadowEnabled = 0;
 
     for (i = 0; i < 0x20; i++) {
         ent->unk00[i].unk20 = ent->unk00[i].asset1 = ent->unk00[i].asset2 = ent->unk00[i].asset3 = NULL;
