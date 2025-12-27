@@ -207,7 +207,7 @@ s32 D_800894F0_8A0F0[8];
 
 void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state);
 void func_80001264_1E64(func_80000C2C_182C_arg *arg0);
-void func_800011DC_1DDC(func_80000C2C_182C_arg *);
+void updateSpriteSpawnerTask(func_80000C2C_182C_arg *);
 void func_80001280_1E80(func_80000C2C_182C_arg *arg0);
 void updateSpriteAnimationTask(func_80000C2C_182C_arg *);
 void updateSwingingModelTask(func_80000C2C_182C_arg *);
@@ -658,10 +658,10 @@ void initSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
     setCleanupCallback(&func_80001264_1E64);
     func_80009E68_AA68((SpriteAssetState *)&arg0->unk8, subEntry->unk16);
     *(s16 *)&arg0->unk54 = 0;
-    setCallback(&func_800011DC_1DDC);
+    setCallback(&updateSpriteSpawnerTask);
 }
 
-void func_800011DC_1DDC(func_80000C2C_182C_arg *arg0) {
+void updateSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
     s16 temp;
     func_80000C2C_182C_arg *task;
     u8 tempUnk4;
