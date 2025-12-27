@@ -50,7 +50,7 @@ typedef struct {
     /* 0xE4 */ s16 unkE4;
 } func_80005808_6408_arg;
 
-void func_800056E8_62E8(DisplayListObject *arg0);
+void renderOpaqueTiledTexture(DisplayListObject *arg0);
 void func_80005714_6314(s32 arg0);
 void func_80005740_6340(s32 arg0);
 void func_80004920_5520(void);
@@ -96,7 +96,7 @@ void enqueueScrollingTextureRender(u16 renderLayer, DisplayListObject *displayLi
 
 INCLUDE_ASM("asm/nonmatchings/5520", func_80005094_5C94);
 
-void func_800056E8_62E8(DisplayListObject *arg0) {
+void renderOpaqueTiledTexture(DisplayListObject *arg0) {
     func_80005094_5C94();
     buildDisplayListSegment(arg0);
 }
@@ -114,7 +114,7 @@ void func_80005740_6340(s32 arg0) {
 void func_8000576C_636C(s32 arg0, func_800B5500_Task *arg1) {
     arg1->unk30 = 0;
     if (arg1->unk20->unk4 != 0) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 1, &func_800056E8_62E8, arg1);
+        debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderOpaqueTiledTexture, arg1);
     }
     if (arg1->unk20->unk8 != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 3, &func_80005714_6314, arg1);
