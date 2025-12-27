@@ -100,9 +100,9 @@ struct {
 s32 D_8008C120_8CD20[] = { 0x001428F5, 0x00099999, 0x00266666, 0xFFEBD70B, 0x00099999, 0x00266666,
                            0x001428F5, 0x00099999, 0xFFE2E148, 0xFFEBD70B, 0x00099999, 0xFFE2E148 };
 
-void func_80004368_4F68(void);
-void func_80004454_5054(void);
-void func_8000454C_514C(void);
+void updateCreditsSequence(void);
+void fadeOutCreditsSequence(void);
+void onCreditsComplete(void);
 
 typedef struct {
     s8 unk0;
@@ -177,7 +177,7 @@ typedef struct {
     ColorData unkE44[3];
     u8 paddingE5C[4];
     s16 unkE60;
-} func_80003EE0_4AE0_task_memory;
+} CreditsState;
 
 extern u8 identityMatrix[];
 
@@ -198,10 +198,10 @@ typedef struct {
 
 void func_800047A0_53A0(StructUnk800048D0 *arg0);
 void func_800048D0_54D0(StructUnk800048D0 *arg0);
-void func_80004570_5170(func_80003EE0_4AE0_task_memory *);
+void spawnCreditsCharacter(CreditsState *);
 void func_8000464C_524C(StructUnk800048D0 *arg0);
 
-void initSceneLighting(func_80003EE0_4AE0_task_memory *arg0) {
+void initSceneLighting(CreditsState *arg0) {
     arg0->unkE44[0].r2 = 0;
     arg0->unkE44[0].g2 = 0x7F;
     arg0->unkE44[0].r = 0xE0;
@@ -230,7 +230,7 @@ void initSceneLighting(func_80003EE0_4AE0_task_memory *arg0) {
 void func_80003EE0_4AE0(void) {
     s32 buffer[8];
     s32 i;
-    func_80003EE0_4AE0_task_memory *taskMemory = (func_80003EE0_4AE0_task_memory *)allocateTaskMemory(0xE68);
+    CreditsState *taskMemory = (CreditsState *)allocateTaskMemory(0xE68);
 
     LOAD_OVERLAY(_1DC260);
 
@@ -288,13 +288,13 @@ void func_80003EE0_4AE0(void) {
     func_8006FDA0_709A0(&taskMemory->unk768, 0, 0);
     func_80057514_58114(0xB, 0x80, 0);
     initSceneLighting(taskMemory);
-    setGameStateHandler(&func_80004368_4F68);
+    setGameStateHandler(&updateCreditsSequence);
 }
 
-void func_80004368_4F68(void) {
-    func_80003EE0_4AE0_task_memory *state;
+void updateCreditsSequence(void) {
+    CreditsState *state;
 
-    state = (func_80003EE0_4AE0_task_memory *)getCurrentAllocation();
+    state = (CreditsState *)getCurrentAllocation();
 
     if (state->unk2 == 0x1C98) {
         state->unk2 = 0x1C98;
@@ -304,7 +304,7 @@ void func_80004368_4F68(void) {
         func_8006FDA0_709A0(&state->unk3B8, 0xFF, 0x1E);
         func_8006FDA0_709A0(&state->unk590, 0xFF, 0x1E);
         func_8006FDA0_709A0(&state->unk768, 0xFF, 0x1E);
-        setGameStateHandler(func_80004454_5054);
+        setGameStateHandler(fadeOutCreditsSequence);
     }
 
     if (state->unk0 == 0) {
@@ -316,16 +316,16 @@ void func_80004368_4F68(void) {
 
     func_800B0930(state);
     func_800B016C(state);
-    func_80004570_5170(state);
+    spawnCreditsCharacter(state);
 
     state->unk2 = (u16)state->unk2 + 1;
 }
 
-void func_80004454_5054(void) {
-    func_80003EE0_4AE0_task_memory *state;
+void fadeOutCreditsSequence(void) {
+    CreditsState *state;
     s32 i;
 
-    state = (func_80003EE0_4AE0_task_memory *)getCurrentAllocation();
+    state = (CreditsState *)getCurrentAllocation();
 
     if (state->unk2 == 0x1CB8) {
         unlinkNode(&state->unk768);
@@ -341,21 +341,21 @@ void func_80004454_5054(void) {
         for (i = 0; i < 6; i++) {
             state->unk9B8[i] = freeNodeMemory(state->unk9B8[i]);
         }
-        terminateSchedulerWithCallback(func_8000454C_514C);
+        terminateSchedulerWithCallback(onCreditsComplete);
     } else {
         func_800B0930(state);
         func_800B016C(state);
-        func_80004570_5170(state);
+        spawnCreditsCharacter(state);
         state->unk2 = (u16)state->unk2 + 1;
     }
 }
 
-void func_8000454C_514C(void) {
+void onCreditsComplete(void) {
     getCurrentAllocation();
     func_800697F4_6A3F4(1);
 }
 
-void func_80004570_5170(func_80003EE0_4AE0_task_memory *arg0) {
+void spawnCreditsCharacter(CreditsState *arg0) {
     u16 temp_a0;
     s32 temp_a0_2;
     s32 temp_v1;
@@ -390,7 +390,7 @@ void func_80004570_5170(func_80003EE0_4AE0_task_memory *arg0) {
 
 void func_8000464C_524C(StructUnk800048D0 *arg0) {
     s32 buffer[8];
-    func_80003EE0_4AE0_task_memory *taskMemory;
+    CreditsState *taskMemory;
     D_8008C00C_entry *entry;
     s16 scale;
 
