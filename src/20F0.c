@@ -58,7 +58,7 @@ extern u8 identityMatrix[32];
 extern u32 D_8008BD38_8C938;
 
 s32 hasModelGraphicsData(SceneModel *);
-s32 func_80001904_2504(s16);
+s32 isAssetGroupEmpty(s16);
 
 void markEntityDestroyed(MarkDestroyedArg *arg0) {
     arg0->isDestroyed = 1;
@@ -276,8 +276,8 @@ s32 hasModelGraphicsData(SceneModel *model) {
     return model->unk0->graphicsData != 0;
 }
 
-s32 func_80001904_2504(s16 arg0) {
-    return gameAssets[arg0].displayListStart == NULL;
+s32 isAssetGroupEmpty(s16 assetIndex) {
+    return gameAssets[assetIndex].displayListStart == NULL;
 }
 
 AssetGroup *func_80001934_2534(s32 arg0) {
@@ -716,7 +716,7 @@ void func_80002B50_3750(func_80002B50_3750_arg *arg0, DisplayListObject *arg1) {
 
 s32 func_80002B8C_378C(SceneModel *arg0) {
     s32 new_var;
-    if (func_80001904_2504(arg0->index) == 0) {
+    if (isAssetGroupEmpty(arg0->index) == 0) {
         return 0;
     }
     new_var = hasModelGraphicsData(arg0);
@@ -729,7 +729,7 @@ s32 func_80002B8C_378C(SceneModel *arg0) {
 
 s32 func_80002BD0_37D0(SceneModel *arg0) {
     u32 index = arg0->index;
-    if (func_80001904_2504(index) == 0) {
+    if (isAssetGroupEmpty(index) == 0) {
         return 8;
     }
 
