@@ -51,7 +51,7 @@ typedef struct {
     func_800B9020_arg unk17E0;
 } CutsceneTaskMemory;
 
-void func_80003C34_4834(void);
+void awaitCutsceneTransitionComplete(void);
 void func_80003898_4498(void);
 void loadCutsceneOverlay(void);
 void runCutsceneFrame(void);
@@ -136,7 +136,7 @@ void runCutsceneFrame(void) {
         if (D_800AB070_A23E0 == 0xB && D_800AFEF0_A7260 == 1) {
             func_8006FDA0_709A0(&taskMemory->overlayNode, 0, 0);
             func_800B9020(&taskMemory->unk17E0);
-            setGameStateHandler(&func_80003C34_4834);
+            setGameStateHandler(&awaitCutsceneTransitionComplete);
 
             return;
         }
@@ -158,7 +158,7 @@ void runCutsceneFrame(void) {
 
 INCLUDE_ASM("asm/nonmatchings/4050", func_80003898_4498);
 
-void func_80003C34_4834(void) {
+void awaitCutsceneTransitionComplete(void) {
     CutsceneTaskMemory *taskMemory;
 
     taskMemory = (CutsceneTaskMemory *)getCurrentAllocation();
