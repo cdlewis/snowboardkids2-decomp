@@ -168,7 +168,7 @@ void setupGameStateTransition(ModelEntity *arg0) {
 
     initModelEntity(arg0, 0, getCurrentAllocation());
     setCleanupCallback(&cleanupTransitionEffect);
-    func_80000460_1060(arg0, &sp10[0], &sp28);
+    setupModelEntityLighting(arg0, &sp10[0], &sp28);
     setCallback(&setShortCountdownAndContinue);
 }
 

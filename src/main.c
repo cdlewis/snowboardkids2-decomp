@@ -101,13 +101,13 @@ typedef struct {
     ModelEntityTaskConfig *taskConfigs;
     s16 taskCount;
     u16 unk32;
-    u8 unk34;
-    u8 unk35;
-    u8 unk36;
+    u8 diffuseColorR;
+    u8 diffuseColorG;
+    u8 diffuseColorB;
     u8 unk37;
-    u8 unk38;
-    u8 unk39;
-    u8 unk3A;
+    u8 ambientColorR;
+    u8 ambientColorG;
+    u8 ambientColorB;
     u8 unk3B;
 } ModelEntityConfig;
 extern ModelEntityConfig modelEntityConfigs[];
@@ -252,53 +252,52 @@ s32 osVoiceCheckWord(u8 *data) {
     return 0xE;
 }
 
-void func_80000460_1060(ModelEntity *arg0, ColorData *arg1, ColorData *arg2) {
+void setupModelEntityLighting(ModelEntity *entity, ColorData *lightColors, ColorData *ambientColor) {
     s32 temp_v0;
-    s32 temp_v0_2;
-    int new_var3;
-    s32 temp_t1;
-    s32 var_a1;
-    u8 temp_a0;
+    s32 quarterAverage;
+    int colorSum;
+    s32 halfAverage;
+    s32 average;
+    u8 blueValue;
     s32 new_var;
-    ModelEntityConfig *temp_a2;
-    s16 index;
+    ModelEntityConfig *config;
 
-    temp_a2 = &modelEntityConfigs[arg0->configIndex];
-    new_var3 = temp_a2->unk34 + temp_a2->unk35;
-    temp_v0 = new_var3;
-    temp_a0 = temp_a2->unk36;
-    new_var = (temp_v0 + temp_a0) / 3;
-    var_a1 = new_var;
+    config = &modelEntityConfigs[entity->configIndex];
+    colorSum = config->diffuseColorR + config->diffuseColorG;
+    temp_v0 = colorSum;
+    blueValue = config->diffuseColorB;
+    new_var = (temp_v0 + blueValue) / 3;
+    average = new_var;
     temp_v0 = ((u32)new_var) >> 0x1F;
-    temp_v0 = var_a1 + ((s8)temp_v0);
+    temp_v0 = average + ((s8)temp_v0);
     new_var = temp_v0 >> 0x1;
-    temp_t1 = new_var;
-    if (var_a1 < 0) {
-        var_a1 += 3;
+    halfAverage = new_var;
+    if (average < 0) {
+        average += 3;
     }
-    arg1[0].r2 = 0;
-    arg1[0].g2 = 0x7F;
-    arg1[0].b2 = 0x7F;
-    arg1[0].r = temp_a2->unk34;
-    arg1[0].g = temp_a2->unk35;
-    temp_v0_2 = var_a1 >> 2;
-    arg1[0].b = temp_a2->unk36;
-    arg1[1].r = temp_v0_2;
-    arg1[1].g = temp_v0_2;
-    arg1[1].b = temp_v0_2;
-    arg1[1].r2 = 0x7F;
-    arg1[1].g2 = 0x7F;
-    arg1[1].b2 = 0;
-    arg1[2].r2 = -0x7F;
-    arg1[2].g2 = 0x7F;
-    arg1[2].b2 = 0;
-    arg1[2].r = temp_t1;
-    arg1[2].g = temp_t1;
-    arg1[2].b = temp_t1;
-    arg2[0].r = temp_a2->unk38;
-    arg2[0].g = temp_a2->unk39;
-    arg2[0].b = temp_a2->unk3A;
-    func_8006FC70_70870(arg0->parent->unkDA, 3, arg1, arg2);
+    lightColors[0].r2 = 0;
+    lightColors[0].g2 = 0x7F;
+    lightColors[0].b2 = 0x7F;
+    lightColors[0].r = config->diffuseColorR;
+    lightColors[0].g = config->diffuseColorG;
+    quarterAverage = average >> 2;
+    lightColors[0].b = config->diffuseColorB;
+    lightColors[1].r = quarterAverage;
+    lightColors[1].g = quarterAverage;
+    lightColors[1].b = quarterAverage;
+    lightColors[1].r2 = 0x7F;
+    lightColors[1].g2 = 0x7F;
+    lightColors[1].b2 = 0;
+    lightColors[2].r2 = -0x7F;
+    lightColors[2].g2 = 0x7F;
+    lightColors[2].b2 = 0;
+    lightColors[2].r = halfAverage;
+    lightColors[2].g = halfAverage;
+    lightColors[2].b = halfAverage;
+    ambientColor[0].r = config->ambientColorR;
+    ambientColor[0].g = config->ambientColorG;
+    ambientColor[0].b = config->ambientColorB;
+    func_8006FC70_70870(entity->parent->unkDA, 3, lightColors, ambientColor);
 }
 
 typedef struct {

@@ -28,7 +28,7 @@ typedef struct {
     u8 isVisible;
 } ModelEntity;
 
-void func_80000460_1060(ModelEntity *arg0, ColorData *arg1, ColorData *arg2);
+void setupModelEntityLighting(ModelEntity *entity, ColorData *lightColors, ColorData *ambientColor);
 
 s32 initModelEntity(ModelEntity *entity, s16 index, void *arg2);
 

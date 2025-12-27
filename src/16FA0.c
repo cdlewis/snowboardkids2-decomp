@@ -158,7 +158,7 @@ void func_80016860_17460(ModelEntity *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     initModelEntity(arg0, 2, &alloc->audioPlayer2);
     setCleanupCallback(func_800168D8_174D8);
-    func_80000460_1060(arg0, sp10, &sp28);
+    setupModelEntityLighting(arg0, sp10, &sp28);
     setCallback(func_800168BC_174BC);
 }
 
