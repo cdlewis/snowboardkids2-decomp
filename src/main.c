@@ -527,7 +527,7 @@ void updateSpriteAnimationTask(func_80000C2C_182C_arg *arg0) {
 
     switch (arg0->unk5) {
         case 0:
-            func_80009F90_AB90(&arg0->unk8, 0x10000, subEntry->unk1A, -1);
+            setSpriteAnimation(&arg0->unk8, 0x10000, subEntry->unk1A, -1);
             arg0->unk5 = 1;
             break;
         case 1:
@@ -734,7 +734,7 @@ void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
 
     switch (arg0->unk5) {
         case 0:
-            func_80009F90_AB90(&arg0->unk8, 0x10000, subEntry->unk1A, -1);
+            setSpriteAnimation(&arg0->unk8, 0x10000, subEntry->unk1A, -1);
             arg0->unk5 = 1;
             break;
         case 1:

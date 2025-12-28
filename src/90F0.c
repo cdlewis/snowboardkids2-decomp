@@ -119,7 +119,7 @@ void releaseNodeMemoryRef(void **ptr) {
     }
 }
 
-void func_80009F90_AB90(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
+void setSpriteAnimation(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
     SpriteAssetState *state = (SpriteAssetState *)arg0;
     s32 *entry;
     s16 saved = arg2;

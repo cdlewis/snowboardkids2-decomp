@@ -94,7 +94,7 @@ void initOrbitalSprite(OrbitalSpriteState *arg0) {
 
     temp_s0 = &arg0->spriteState;
     loadSpriteAsset(temp_s0, 5);
-    func_80009F90_AB90(temp_s0, 0x10000, 0, -1);
+    setSpriteAnimation(temp_s0, 0x10000, 0, -1);
     arg0->isActive = 0;
     arg0->delayTimer = randA() % 15;
     setCleanupCallback(cleanupOrbitalSprite);

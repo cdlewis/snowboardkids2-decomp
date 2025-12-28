@@ -252,7 +252,7 @@ func_8000A834_B434_ret *func_8000A834_B434(func_8000A834_B434_arg *arg0, s16 arg
 
 void func_8000A854_B454(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
-    func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(func_8000A988_B588);
     setCallback(func_8000A8B8_B4B8);
 }
@@ -295,7 +295,7 @@ void func_8000A988_B588(func_8000B510_C110_arg *arg0) {
 
 void func_8000A9A4_B5A4(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
-    func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(func_8000AD08_B908);
     setCallback(func_8000AA08_B608);
 }
@@ -409,7 +409,7 @@ void func_8000B028_BC28(func_8000B510_C110_arg *);
 
 void func_8000AD24_B924(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
-    func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(func_8000B028_BC28);
     setCallback(func_8000AD88_B988);
 }
@@ -441,7 +441,7 @@ void func_8000B1B0_BDB0(func_8000B510_C110_arg *);
 
 void func_8000B044_BC44(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
-    func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(func_8000B1B0_BDB0);
     setCallback(func_8000B0A8_BCA8);
 }
@@ -510,7 +510,7 @@ void func_8000B370_BF70(func_8000B510_C110_arg *);
 
 void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
-    func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(func_8000B370_BF70);
     setCallback(func_8000B230_BE30);
 }
@@ -593,7 +593,7 @@ void func_8000B510_C110(func_8000B510_C110_arg *);
 
 void func_8000B38C_BF8C(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
-    func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     arg0->unkC = 0;
     arg0->unk6C = 0;
     arg0->unk70.unk70_u8 = 0xFF;
@@ -678,7 +678,7 @@ void func_8000B684_C284(func_8000B510_C110_arg *);
 void func_8000B52C_C12C(func_8000B510_C110_arg *arg0) {
     setCleanupCallback(func_8000B684_C284);
     loadSpriteAsset(&arg0->unk20, 0);
-    func_80009F90_AB90(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     arg0->unk6C = 0;
     arg0->unk70.unk70 = 0;
     setCallback(func_8000B598_C198);

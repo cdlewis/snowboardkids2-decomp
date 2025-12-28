@@ -63,7 +63,7 @@ void initFallingParticle(ParticleState *arg0) {
     u8 rand3;
 
     loadSpriteAsset(&arg0->spriteState, 2);
-    func_80009F90_AB90(&arg0->spriteState, 0x10000, 1, -1);
+    setSpriteAnimation(&arg0->spriteState, 0x10000, 1, -1);
 
     rand1 = randA();
     rand1 = rand1 & 0xFF;
@@ -131,7 +131,7 @@ void cleanupFallingParticle(ParticleState *arg0) {
 
 void initDriftingParticle(ParticleState *arg0) {
     loadSpriteAsset(&arg0->spriteState, 2);
-    func_80009F90_AB90(&arg0->spriteState, 0x10000, 0, -1);
+    setSpriteAnimation(&arg0->spriteState, 0x10000, 0, -1);
 
     arg0->unk50 = 0x10000;
     arg0->unk5C = 0;
@@ -167,7 +167,7 @@ void initTrailingParticle(ParticleState *arg0) {
     } else {
         loadSpriteAsset(&arg0->spriteState, 3);
     }
-    func_80009F90_AB90(&arg0->spriteState, 0x10000, 0, -1);
+    setSpriteAnimation(&arg0->spriteState, 0x10000, 0, -1);
     setCleanupCallback(cleanupTrailingParticle);
     setCallback(updateTrailingParticle);
 }

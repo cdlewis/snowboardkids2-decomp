@@ -93,7 +93,7 @@ void cleanupOscillatingModelTask(void) {
 void initOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
     state->spriteFlipped = 0;
     loadSpriteAsset(&state->spriteState, 9);
-    func_80009F90_AB90(&state->spriteState, 0x10000, 0, -1);
+    setSpriteAnimation(&state->spriteState, 0x10000, 0, -1);
     setCleanupCallback(cleanupOscillatingSpriteTask);
     setCallback(updateOscillatingSpriteTask);
 }
@@ -115,10 +115,10 @@ void updateOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
             state->spriteFlipped = 0;
             break;
         case 1:
-            func_80009F90_AB90(&state->spriteState, 0x10000, 0, -1);
+            setSpriteAnimation(&state->spriteState, 0x10000, 0, -1);
             break;
         case 2:
-            func_80009F90_AB90(&state->spriteState, 0x10000, 1, -1);
+            setSpriteAnimation(&state->spriteState, 0x10000, 1, -1);
             break;
         case 3:
             state->spriteFlipped = 1;
