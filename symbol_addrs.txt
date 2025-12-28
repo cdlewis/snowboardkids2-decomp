@@ -31,6 +31,7 @@ cleanupSimpleSpriteEffect = 0x8000A988; // rom:0xB588
 initScalingSpriteEffect = 0x8000A9A4; // rom:0xB5A4
 updateScalingSpriteEffect = 0x8000AA08; // rom:0xB608
 cleanupScalingSpriteEffect = 0x8000AD08; // rom:0xB908
+initRadialBurstSpriteEffect = 0x8000AD24; // rom:0xB924
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14
