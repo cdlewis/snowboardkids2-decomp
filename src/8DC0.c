@@ -7,52 +7,52 @@ extern u8 identityMatrix[];
 
 typedef struct {
     u8 padding[0x16];
-    u16 unk16;
-} InnerInner8F70;
+    u16 spriteIndex;
+} OscillatingModelSpriteInfo;
 
 typedef struct {
     u8 _pad0[0xC];
     s16 unkC;
     u8 _pad0E[0x2];
-    InnerInner8F70 *unk10;
+    OscillatingModelSpriteInfo *spriteInfo;
     u8 _pad14[0x18];
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
+    s32 positionX;
+    s32 positionY;
+    s32 positionZ;
     u8 _pad38[0x4];
     s8 isDestroyed;
     s8 actionMode;
     s8 unk3E;
     s8 displayEnabled;
     u8 _pad40[0x48];
-    s8 unk88;
+    s8 isVisible;
     u8 _pad89[0x67];
-    Mat3x3Padded unkF0;
-} InnerStruct8DEC;
+    Mat3x3Padded rotationMatrix;
+} OscillatingModel;
 
 typedef struct {
-    InnerStruct8DEC *unk0;
-    u16 unk4;
-} func_800081EC_8DEC_arg;
+    OscillatingModel *model;
+    u16 oscillationAngle;
+} OscillatingModelTaskState;
 
-void func_800081EC_8DEC(func_800081EC_8DEC_arg *arg0);
-void func_80008308_8F08(void);
+void updateOscillatingModelTask(OscillatingModelTaskState *state);
+void cleanupOscillatingModelTask(void);
 
 typedef struct {
-    InnerStruct8DEC *unk0;
-    SpriteAssetState unk4;
-    u8 unk50;
-} Arg8F70;
+    OscillatingModel *model;
+    SpriteAssetState spriteState;
+    u8 spriteFlipped;
+} OscillatingSpriteTaskState;
 
-void func_80008370_8F70(Arg8F70 *arg0);
-void func_800084A8_90A8(Arg8F70 *arg0);
+void updateOscillatingSpriteTask(OscillatingSpriteTaskState *state);
+void cleanupOscillatingSpriteTask(OscillatingSpriteTaskState *state);
 
-void func_800081C0_8DC0(void) {
-    setCleanupCallback(func_80008308_8F08);
-    setCallback(func_800081EC_8DEC);
+void initOscillatingModelTask(void) {
+    setCleanupCallback(cleanupOscillatingModelTask);
+    setCallback(updateOscillatingModelTask);
 }
 
-void func_800081EC_8DEC(func_800081EC_8DEC_arg *arg0) {
+void updateOscillatingModelTask(OscillatingModelTaskState *state) {
     Mat3x3Padded local_buffer;
     s32 sinVal;
     s32 cosVal;
@@ -61,87 +61,97 @@ void func_800081EC_8DEC(func_800081EC_8DEC_arg *arg0) {
 
     memcpy(&local_buffer, identityMatrix, 0x20);
 
-    if (arg0->unk0->isDestroyed == 1) {
+    if (state->model->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    memcpy(&arg0->unk0->unkF0, identityMatrix, 0x20);
+    memcpy(&state->model->rotationMatrix, identityMatrix, 0x20);
 
-    if (arg0->unk0->actionMode == 0) {
+    if (state->model->actionMode == 0) {
         return;
     }
-    if (arg0->unk0->actionMode != 1) {
+    if (state->model->actionMode != 1) {
         return;
     }
 
-    arg0->unk4 += 0x333;
-    sinVal = approximateSin(arg0->unk4);
-    cosVal = approximateCos(arg0->unk4);
+    state->oscillationAngle += 0x333;
+    sinVal = approximateSin(state->oscillationAngle);
+    cosVal = approximateCos(state->oscillationAngle);
 
     scaledCos = ((cosVal * 7 * 8 + cosVal) * 4 - cosVal) >> 12;
     scaledSin = ((sinVal * 7 * 8 + sinVal) * 4 - sinVal) >> 12;
 
-    createRotationMatrixXZ(&arg0->unk0->unkF0, -scaledCos, scaledSin);
+    createRotationMatrixXZ(&state->model->rotationMatrix, -scaledCos, scaledSin);
 
-    arg0->unk0->unkF0.unk18 += 0x33333;
+    state->model->rotationMatrix.unk18 += 0x33333;
 }
 
-void func_80008308_8F08(void) {
+void cleanupOscillatingModelTask(void) {
 }
 
-void func_80008310_8F10(Arg8F70 *arg0) {
-    arg0->unk50 = 0;
-    func_80009E68_AA68(&arg0->unk4, 9);
-    func_80009F90_AB90(&arg0->unk4, 0x10000, 0, -1);
-    setCleanupCallback(func_800084A8_90A8);
-    setCallback(func_80008370_8F70);
+void initOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
+    state->spriteFlipped = 0;
+    func_80009E68_AA68(&state->spriteState, 9);
+    func_80009F90_AB90(&state->spriteState, 0x10000, 0, -1);
+    setCleanupCallback(cleanupOscillatingSpriteTask);
+    setCallback(updateOscillatingSpriteTask);
 }
 
-void func_80008370_8F70(Arg8F70 *arg0) {
+void updateOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
     s8 unused[2] = { 1, -1 };
-    InnerStruct8DEC *inner;
-    s32 s3, s4, s2;
+    OscillatingModel *model;
+    s32 posX, posY, posZ;
 
-    inner = arg0->unk0;
+    model = state->model;
 
-    if (inner->isDestroyed == 1) {
+    if (model->isDestroyed == 1) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    switch (inner->actionMode) {
+    switch (model->actionMode) {
         case 0:
-            arg0->unk50 = 0;
+            state->spriteFlipped = 0;
             break;
         case 1:
-            func_80009F90_AB90(&arg0->unk4, 0x10000, 0, -1);
+            func_80009F90_AB90(&state->spriteState, 0x10000, 0, -1);
             break;
         case 2:
-            func_80009F90_AB90(&arg0->unk4, 0x10000, 1, -1);
+            func_80009F90_AB90(&state->spriteState, 0x10000, 1, -1);
             break;
         case 3:
-            arg0->unk50 = 1;
+            state->spriteFlipped = 1;
             break;
         default:
-            arg0->unk50 = 0;
+            state->spriteFlipped = 0;
             break;
     }
 
-    s3 = arg0->unk0->unk2C;
-    s4 = arg0->unk0->unk30;
-    s2 = arg0->unk0->unk34;
+    posX = state->model->positionX;
+    posY = state->model->positionY;
+    posZ = state->model->positionZ;
 
-    func_8000A030_AC30(&arg0->unk4, 0x10000);
+    func_8000A030_AC30(&state->spriteState, 0x10000);
 
-    inner = arg0->unk0;
-    if (inner->unk88 != 0) {
-        if (inner->displayEnabled != 0) {
-            func_8000A13C_AD3C(&arg0->unk4, inner->unk10->unk16, s3, s4, s2, 0x13333, 0x13333, 0, arg0->unk50);
+    model = state->model;
+    if (model->isVisible != 0) {
+        if (model->displayEnabled != 0) {
+            func_8000A13C_AD3C(
+                &state->spriteState,
+                model->spriteInfo->spriteIndex,
+                posX,
+                posY,
+                posZ,
+                0x13333,
+                0x13333,
+                0,
+                state->spriteFlipped
+            );
         }
     }
 }
 
-void func_800084A8_90A8(Arg8F70 *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk4);
+void cleanupOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
+    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&state->spriteState);
 }
