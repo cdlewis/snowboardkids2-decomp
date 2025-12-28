@@ -718,21 +718,21 @@ void cleanupFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0) {
 extern DmaEntry *D_8008CC2C_8D82C;
 extern s32 D_8008CC30_8D830;
 
-DmaEntry *func_8000B6A0_C2A0(void) {
+DmaEntry *getDmaTable(void) {
     return D_8008CC2C_8D82C;
 }
 
-s32 func_8000B6AC_C2AC(void) {
+s32 getDmaTableCount(void) {
     return D_8008CC30_8D830;
 }
 
 void *func_8000B6B8_C2B8(s16 arg0) {
     DmaEntry *entry;
 
-    if (arg0 >= func_8000B6AC_C2AC()) {
+    if (arg0 >= getDmaTableCount()) {
         return 0;
     }
-    entry = &func_8000B6A0_C2A0()[arg0];
+    entry = &getDmaTable()[arg0];
     return loadCompressedData(entry->romStart, entry->romEnd, entry->size);
 }
 
