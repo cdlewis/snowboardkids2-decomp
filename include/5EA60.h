@@ -17,3 +17,4 @@ void func_8005DE98_5EA98(void *animData, s32 tableIndex, s32 boneIndex, func_800
 void func_8005E800_5F400(func_8005E800_5F400_arg *entity, u16 param_2);
 
 s32 func_8005ECB8_5F8B8(void *arg0, s32 arg1, s32 arg2, void *arg3);
+s32 func_8005EFC4_5FBC4(void *arg0, s32 arg1, s32 arg2, void *arg3);
