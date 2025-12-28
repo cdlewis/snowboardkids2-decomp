@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      pr_id:
+        description: 'Pull Request ID (optional)'
+        required: false
+        type: string
+
+jobs:
+  build:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libdbus-1-dev gobject-introspection libgirepository1.0-dev libcups2-dev binutils-mips-linux-gnu
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: main
+
+      - name: Checkout baserom
+        uses: actions/checkout@v4
+        with:
+          repository: cdlewis/snowboardkids2-private
+          token: ${{ secrets.PRIVATE_REPO_ACCESS }}
+          path: baserom
+
+      - name: Decrypt baserom
+        run: gpg --quiet --batch --yes --decrypt --passphrase "$BASEROM_KEY" --output snowboardkids2.z64 snowboardkids2.z64.gpg
+        env:
+          BASEROM_KEY: ${{ secrets.BASEROM_KEY }}
+        working-directory: baserom
+
+      - name: Copy decrypted rom to main repo
+        run: cp baserom/snowboardkids2.z64 main/
+
+      - name: Install C deps
+        run: make setup
+        working-directory: main
+
+      - name: Install Python deps
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -U pip
+          .venv/bin/pip install -r requirements.txt
+        working-directory: main
+
+      - name: Run make extract
+        run: PATH="$(pwd)/.venv/bin:$PATH" make extract
+        working-directory: main
+
+      # Verify project builds
+
+      - name: Run make
+        run: PATH="$(pwd)/.venv/bin:$PATH" make
+        working-directory: main
+
+      - name: Generate objdiff report
+        run: PATH="$(pwd)/.venv/bin:$PATH" python3 -m mapfile_parser objdiff_report
+        working-directory: main
