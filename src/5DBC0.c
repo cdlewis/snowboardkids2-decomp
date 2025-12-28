@@ -131,7 +131,7 @@ void func_8005D804_5E404(Player *arg0, u8 arg1, u8 arg2) {
     arg0->unkBE7 = arg2;
 }
 
-void func_8005D810_5E410(Player *arg0) {
+s16 func_8005D810_5E410(Player *arg0) {
     (void)arg0;
 }
 
