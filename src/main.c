@@ -531,7 +531,7 @@ void updateSpriteAnimationTask(func_80000C2C_182C_arg *arg0) {
             arg0->unk5 = 1;
             break;
         case 1:
-            func_8000A030_AC30(&arg0->unk8, 0x10000);
+            updateSpriteAnimation(&arg0->unk8, 0x10000);
             break;
     }
 
@@ -738,7 +738,7 @@ void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
             arg0->unk5 = 1;
             break;
         case 1:
-            if (func_8000A030_AC30(&arg0->unk8, 0x10000) != 0) {
+            if (updateSpriteAnimation(&arg0->unk8, 0x10000) != 0) {
                 func_80069CF8_6A8F8();
                 return;
             }

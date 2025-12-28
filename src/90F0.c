@@ -136,64 +136,64 @@ void setSpriteAnimation(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
     entry = &D_8008C920_8D520[state->assetIndex * 5];
     if (index < *(s16 *)(&entry[4])) {
         state->unk8 = (AnimSetEntry *)entry[3] + index;
-        state->unkC = state->unk8->unk0;
+        state->unkC = state->unk8->entries;
         state->unk10 = saved;
         state->unk12 = state->unkC->unk4;
         state->unk14 = 0;
         t16 = state->unkC->unk6;
         state->unk16 = t16;
         t0 = state->spriteData;
-        t7 = state->unk8->unk6;
+        t7 = state->unk8->initialDelay;
         state->unk28 = t0;
         state->unk7 = t7;
     }
 }
 
-s32 func_8000A030_AC30(void *arg0, s32 arg1) {
+s32 updateSpriteAnimation(void *arg0, s32 arg1) {
     AnimationState *state = (AnimationState *)arg0;
     s32 result = 0;
     s32 looped = 0;
-    s16 timer = state->unk16;
+    s16 timer = state->frameTimer;
     AnimationEntry *entry;
-    s16 type;
+    s16 command;
 
     if (timer > 0) {
-        state->unk16 = timer - 1;
+        state->frameTimer = timer - 1;
     } else {
-        state->unk14++;
-        if (state->unk14 >= state->unk8->unk4) {
-            state->unk14 = 0;
+        state->frameIndex++;
+        if (state->frameIndex >= state->header->frameCount) {
+            state->frameIndex = 0;
             looped = 1;
         }
 
-        entry = &state->unkC[state->unk14];
-        type = entry->unk2;
+        entry = &state->entries[state->frameIndex];
+        command = entry->command;
 
-        if (type != 1) {
-            if (type >= 2) {
+        if (command != 1) {
+            if (command >= 2) {
                 goto case_default;
             }
-            if (type != 0) {
+            if (command != 0) {
                 goto case_default;
             }
-            // type == 0
-            state->unk12 = entry->unk4;
-            state->unk16 = entry->unk6;
+            // command == 0: normal frame
+            state->currentSpriteFrame = entry->spriteFrame;
+            state->frameTimer = entry->duration;
         } else {
-            // type == 1
-            state->unk14 = entry->unk6;
-            entry = &state->unkC[state->unk14];
-            state->unk12 = entry->unk4;
-            state->unk16 = entry->unk6;
+            // command == 1: jump to frame
+            state->frameIndex = entry->duration;
+            entry = &state->entries[state->frameIndex];
+            state->currentSpriteFrame = entry->spriteFrame;
+            state->frameTimer = entry->duration;
             result = 1;
         }
         goto end;
 
     case_default:
-        state->unk14--;
-        entry = &state->unkC[state->unk14];
-        state->unk12 = entry->unk4;
-        state->unk16 = entry->unk6;
+        state->frameIndex--;
+        entry = &state->entries[state->frameIndex];
+        state->currentSpriteFrame = entry->spriteFrame;
+        state->frameTimer = entry->duration;
         result = 2;
     }
 

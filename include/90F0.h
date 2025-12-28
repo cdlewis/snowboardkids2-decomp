@@ -12,15 +12,15 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ u16 unk4;
-    /* 0x06 */ u16 unk6;
+    /* 0x02 */ s16 command;
+    /* 0x04 */ u16 spriteFrame;
+    /* 0x06 */ u16 duration;
 } AnimationEntry;
 
 typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ u16 unk4;
-    /* 0x06 */ u16 unk6;
+    /* 0x00 */ void *entries;
+    /* 0x04 */ u16 frameCount;
+    /* 0x06 */ u16 initialDelay;
 } AnimSetEntry;
 
 typedef struct {
@@ -31,17 +31,17 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 pad0[0x4];
-    /* 0x04 */ s16 unk4;
+    /* 0x04 */ s16 frameCount;
 } AnimationHeader;
 
 typedef struct {
     /* 0x00 */ u8 pad0[0x8];
-    /* 0x08 */ AnimationHeader *unk8;
-    /* 0x0C */ AnimationEntry *unkC;
+    /* 0x08 */ AnimationHeader *header;
+    /* 0x0C */ AnimationEntry *entries;
     /* 0x10 */ u16 unk10;
-    /* 0x12 */ s16 unk12;
-    /* 0x14 */ s16 unk14;
-    /* 0x16 */ s16 unk16;
+    /* 0x12 */ s16 currentSpriteFrame;
+    /* 0x14 */ s16 frameIndex;
+    /* 0x16 */ s16 frameTimer;
 } AnimationState;
 
 typedef struct {
@@ -94,6 +94,6 @@ s32 loadSpriteAsset(SpriteAssetState *arg0, s16 arg1);
 void *loadSpriteAssetData(s16 index);
 void releaseNodeMemoryRef(void **ptr);
 void setSpriteAnimation(void *arg0, s32 arg1, s32 arg2, s32 arg3);
-s32 func_8000A030_AC30(void *arg0, s32 arg1);
+s32 updateSpriteAnimation(void *arg0, s32 arg1);
 void func_8000A13C_AD3C(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8);
 s32 func_8000A410_B010(func_8000A410_B010_arg *arg0);

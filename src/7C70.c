@@ -134,7 +134,7 @@ void updateOrbitalSprite(OrbitalSpriteState *arg0) {
     y = arg0->owner->posY + worldOffset[1];
     z = arg0->owner->posZ + worldOffset[2];
 
-    func_8000A030_AC30(&arg0->spriteState, 0x10000);
+    updateSpriteAnimation(&arg0->spriteState, 0x10000);
 
     if (arg0->owner->isVisible == 0) {
         return;

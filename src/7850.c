@@ -129,7 +129,7 @@ void updatePulsingSpriteIndicator(PulsingSpriteState *arg0) {
     x = owner->posX;
     y = owner->posY;
     z = owner->posZ;
-    func_8000A030_AC30(&arg0->spriteState, 0x10000);
+    updateSpriteAnimation(&arg0->spriteState, 0x10000);
 
     ownerRef = arg0->owner;
     if (ownerRef->unk88 == 0) {

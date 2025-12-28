@@ -132,7 +132,7 @@ void updateOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
     posY = state->model->positionY;
     posZ = state->model->positionZ;
 
-    func_8000A030_AC30(&state->spriteState, 0x10000);
+    updateSpriteAnimation(&state->spriteState, 0x10000);
 
     model = state->model;
     if (model->isVisible != 0) {

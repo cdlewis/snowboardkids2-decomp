@@ -270,7 +270,7 @@ void func_8000A8B8_B4B8(func_8000A8B8_arg *arg0) {
         return;
     }
 
-    if (func_8000A030_AC30(ptr, 0x10000) == 2) {
+    if (updateSpriteAnimation(ptr, 0x10000) == 2) {
         func_80069CF8_6A8F8();
         return;
     }
@@ -381,7 +381,7 @@ void func_8000AA08_B608(func_8000AA08_B608_arg *arg0) {
     }
 
     ptr = &arg0->unk20;
-    if (func_8000A030_AC30(ptr, 0x10000) == 2) {
+    if (updateSpriteAnimation(ptr, 0x10000) == 2) {
         func_80069CF8_6A8F8();
         return;
     }

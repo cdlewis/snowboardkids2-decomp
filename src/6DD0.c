@@ -101,7 +101,7 @@ void updateFallingParticle(ParticleState *arg0) {
     newLifetime = lifetime - 1;
     sprite = &arg0->spriteState;
     arg0->unk68 = newLifetime;
-    func_8000A030_AC30(sprite, 0x10000);
+    updateSpriteAnimation(sprite, 0x10000);
 
     particleOwner = arg0->owner;
     if (particleOwner->unk88 != 0) {
@@ -199,7 +199,7 @@ void updateTrailingParticle(ParticleState *arg0) {
     posY = inner->unk30;
     posZ = inner->unk34;
 
-    func_8000A030_AC30(&arg0->spriteState, 0x10000);
+    updateSpriteAnimation(&arg0->spriteState, 0x10000);
 
     a0_inner = arg0->owner;
     if (a0_inner->unk88 != 0) {
