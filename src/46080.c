@@ -3350,8 +3350,9 @@ typedef struct {
     void *unk0;
 } func_8004B758_4C358_arg;
 
-extern void func_8004B3B0_4BFB0(void);
 extern void func_8004B758_4C358(func_8004B758_4C358_arg *);
+
+void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0);
 
 void func_8004B36C_4BF6C(func_8004B36C_4BF6C_arg *arg0) {
     arg0->unk0 = loadAssetByIndex_95470(9);
@@ -3359,20 +3360,7 @@ void func_8004B36C_4BF6C(func_8004B36C_4BF6C_arg *arg0) {
     setCallbackWithContinue(&func_8004B3B0_4BFB0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004B3B0_4BFB0);
-
-typedef struct {
-    u8 _pad0[0x4];
-    func_80066444_67044_arg1 unk4;
-} func_8004B648_4C248_arg;
-
-void func_8004B648_4C248(func_8004B648_4C248_arg *arg0);
-
-typedef struct {
-    s32 sp18;
-    s32 sp1C;
-    s32 sp20;
-} func_8004B4CC_4C0CC_StackLocals;
+extern s32 D_80090E2C_91A2C;
 
 typedef struct {
     u8 _pad0[0x4];
@@ -3388,6 +3376,57 @@ typedef struct {
     s16 unk36;
     s16 unk38;
 } func_8004B4CC_4C0CC_arg;
+
+void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0);
+
+void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0) {
+    GameState *allocation;
+    s32 rotationAngle;
+    s32 pad[4];
+    short new_var;
+    s32 *temp_s1;
+    func_8004B834_Player *player;
+
+    allocation = (GameState *)getCurrentAllocation();
+    arg0->unk4 = (void *)((s32)allocation->unk44 + 0x1300);
+
+    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, 3);
+
+    player = arg0->unk24;
+    temp_s1 = &arg0->unk8;
+    memcpy(temp_s1, (u8 *)player + 0x358, 0xC);
+
+    arg0->unkC = arg0->unkC + (s32)0xFFF10000;
+
+    arg0->unk34 = arg0->unk24->unkB94;
+    arg0->unk38 = arg0->unk24->unkBB8;
+
+    new_var = randA() & 0xFF;
+    rotationAngle = ((new_var - 0x80) * 6) - -0x1000;
+
+    rotateVectorY(&D_80090E2C_91A2C, (s16)(arg0->unk24->unkA94 + rotationAngle), &arg0->unk28);
+
+    arg0->unk28 = arg0->unk28 + arg0->unk24->unk44C;
+    arg0->unk2C = arg0->unk2C + arg0->unk24->unk450;
+    arg0->unk30 = arg0->unk30 + arg0->unk24->unk454;
+
+    func_80056B7C_5777C(temp_s1, 0x1F);
+
+    setCallbackWithContinue(&func_8004B4CC_4C0CC);
+}
+
+typedef struct {
+    u8 _pad0[0x4];
+    func_80066444_67044_arg1 unk4;
+} func_8004B648_4C248_arg;
+
+void func_8004B648_4C248(func_8004B648_4C248_arg *arg0);
+
+typedef struct {
+    s32 sp18;
+    s32 sp1C;
+    s32 sp20;
+} func_8004B4CC_4C0CC_StackLocals;
 
 void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0) {
     func_8004B4CC_4C0CC_StackLocals sp;
