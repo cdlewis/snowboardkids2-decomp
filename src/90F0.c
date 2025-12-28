@@ -75,7 +75,7 @@ void setSpriteAssetVisible(SpriteAssetState *state) {
     state->flags |= 2;
 }
 
-void func_80009E48_AA48(SpriteAssetState *state) {
+void clearSpriteAssetVisible(SpriteAssetState *state) {
     state->flags &= 0xFD;
 }
 

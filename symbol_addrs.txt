@@ -10,6 +10,7 @@ setSpriteAssetEnabled = 0x80009E0C; // rom:0xAA0C
 clearSpriteAssetEnabled = 0x80009E1C; // rom:0xAA1C
 isSpriteAssetEnabled = 0x80009E2C; // rom:0xAA2C
 setSpriteAssetVisible = 0x80009E38; // rom:0xAA38
+clearSpriteAssetVisible = 0x80009E48; // rom:0xAA48
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14
