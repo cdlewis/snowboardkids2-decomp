@@ -66,7 +66,7 @@ void initSimpleSpriteEffect(func_8000B510_C110_arg *arg0);
 void initScalingSpriteEffect(func_8000B510_C110_arg *arg0);
 void initRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0);
 void initSpinFadeSpriteEffect(func_8000B510_C110_arg *arg0);
-void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0);
+void initDropShrinkSpriteEffect(func_8000B510_C110_arg *arg0);
 
 void func_8000B38C_BF8C(func_8000B510_C110_arg *arg0);
 void func_8000B52C_C12C(func_8000B510_C110_arg *arg0);
@@ -156,7 +156,7 @@ s32 spawnSpriteEffectInternal(
             }
             // fallthrough
         case 4:
-            var_a0_2 = scheduleTask(&func_8000B1CC_BDCC, arg7, arg8, 0);
+            var_a0_2 = scheduleTask(&initDropShrinkSpriteEffect, arg7, arg8, 0);
             if (var_a0_2 == NULL) {
                 break;
             }
@@ -489,63 +489,63 @@ void cleanupSpinFadeSpriteEffect(func_8000B510_C110_arg *arg0) {
 }
 
 typedef struct {
-    /* 0x00 */ SpriteEffectPositionSource *unk0;
-    /* 0x04 */ s16 unk4;
+    /* 0x00 */ SpriteEffectPositionSource *positionSource;
+    /* 0x04 */ s16 layer;
     /* 0x06 */ u8 _pad6[2];
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ u8 unkA;
-    /* 0x0B */ s8 unkB;
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ s32 unk10;
-    /* 0x14 */ s32 unk14;
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ s16 unk1C;
-    /* 0x1E */ s16 unk1E;
-    /* 0x20 */ u8 unk20[0x4C];
-    /* 0x6C */ s32 unk6C;
-} func_8000B230_arg;
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
+    /* 0x0B */ s8 state;
+    /* 0x0C */ s32 scale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ s16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ u8 spriteState[0x4C];
+    /* 0x6C */ s32 dropOffset;
+} DropShrinkSpriteEffectState;
 
-void func_8000B230_BE30(func_8000B230_arg *);
-void func_8000B370_BF70(func_8000B510_C110_arg *);
+void updateDropShrinkSpriteEffect(DropShrinkSpriteEffectState *);
+void cleanupDropShrinkSpriteEffect(func_8000B510_C110_arg *);
 
-void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0) {
+void initDropShrinkSpriteEffect(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
-    setCleanupCallback(func_8000B370_BF70);
-    setCallback(func_8000B230_BE30);
+    setCleanupCallback(cleanupDropShrinkSpriteEffect);
+    setCallback(updateDropShrinkSpriteEffect);
 }
 
-void func_8000B230_BE30(func_8000B230_arg *arg0) {
-    SpriteEffectPosition *temp;
-    void *ptr;
+void updateDropShrinkSpriteEffect(DropShrinkSpriteEffectState *arg0) {
+    SpriteEffectPosition *pos;
+    void *spriteState;
     s32 x, y, z;
-    s16 a1;
+    s16 layer;
 
-    switch (arg0->unkB) {
+    switch (arg0->state) {
         case 0:
-            arg0->unk6C -= 0x51EB;
-            if (0x66666 < (arg0->unk6C < 0 ? -arg0->unk6C : arg0->unk6C)) {
-                arg0->unkB = 1;
+            arg0->dropOffset -= 0x51EB;
+            if (0x66666 < (arg0->dropOffset < 0 ? -arg0->dropOffset : arg0->dropOffset)) {
+                arg0->state = 1;
             }
             break;
         case 1: {
-            s16 cnt = arg0->unk8;
+            s16 cnt = arg0->duration;
             if (cnt == 0) {
-                arg0->unkB = 2;
+                arg0->state = 2;
             } else {
-                arg0->unk8 = cnt - 1;
+                arg0->duration = cnt - 1;
             }
             break;
         }
         case 2: {
-            s32 decrement = -arg0->unkC;
-            s32 val = arg0->unkC;
+            s32 decrement = -arg0->scale;
+            s32 val = arg0->scale;
             if (decrement < 0) {
                 decrement += 3;
             }
             decrement >>= 2;
             val += decrement;
-            arg0->unkC = val;
+            arg0->scale = val;
             if (decrement == 0) {
                 func_80069CF8_6A8F8();
                 return;
@@ -553,18 +553,18 @@ void func_8000B230_BE30(func_8000B230_arg *arg0) {
         } break;
     }
 
-    ptr = &arg0->unk20;
-    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
+    spriteState = &arg0->spriteState;
+    pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
 
-    x = temp->unk14 + arg0->unk10;
-    y = temp->unk18 + arg0->unk14 + arg0->unk6C;
-    z = temp->unk1C + arg0->unk18;
-    a1 = arg0->unk4;
+    x = pos->unk14 + arg0->offsetX;
+    y = pos->unk18 + arg0->offsetY + arg0->dropOffset;
+    z = pos->unk1C + arg0->offsetZ;
+    layer = arg0->layer;
 
-    renderOpaqueSprite(ptr, a1, x, y, z, arg0->unkC, arg0->unkC, arg0->unk1C, arg0->unkA);
+    renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scale, arg0->scale, arg0->rotation, arg0->opacity);
 }
 
-void func_8000B370_BF70(func_8000B510_C110_arg *arg0) {
+void cleanupDropShrinkSpriteEffect(func_8000B510_C110_arg *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
