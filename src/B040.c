@@ -68,7 +68,7 @@ void initRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0);
 void initSpinFadeSpriteEffect(func_8000B510_C110_arg *arg0);
 void initDropShrinkSpriteEffect(func_8000B510_C110_arg *arg0);
 
-void func_8000B38C_BF8C(func_8000B510_C110_arg *arg0);
+void initRiseStretchSpriteEffect(func_8000B510_C110_arg *arg0);
 void func_8000B52C_C12C(func_8000B510_C110_arg *arg0);
 
 void spawnSpriteEffect(SceneModel *arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s32 arg5, s8 arg6) {
@@ -165,7 +165,7 @@ s32 spawnSpriteEffectInternal(
             var_a0_2->unk6C = 0;
             return 1;
         case 5:
-            var_a0_2 = scheduleTask(&func_8000B38C_BF8C, arg7, arg8, 0);
+            var_a0_2 = scheduleTask(&initRiseStretchSpriteEffect, arg7, arg8, 0);
             if (var_a0_2 != NULL) {
                 FILL_STRUCT(var_a0_2)
                 return 1;
@@ -591,7 +591,7 @@ extern void renderSprite(s32 *, s32, s32, s32, s32, s32, s32, s16, u8, u8);
 void func_8000B400_C000(func_8000B400_C000_arg *);
 void func_8000B510_C110(func_8000B510_C110_arg *);
 
-void func_8000B38C_BF8C(func_8000B510_C110_arg *arg0) {
+void initRiseStretchSpriteEffect(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     arg0->unkC = 0;
