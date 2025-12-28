@@ -28,6 +28,7 @@ typedef struct {
     u8 unk15A;
 } D_800AB068_A23D8_arg;
 
+extern s32 D_800A8B14_9FE84;
 extern D_800AB068_A23D8_arg *D_800AB068_A23D8;
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
@@ -35,18 +36,19 @@ extern void *D_800A2D40_A3940;
 extern void *D_800A2D44_A3944;
 extern void *D_800A2D48_A3948;
 extern s32 D_8009A8A4_9B4A4;
+
 void func_80065150_65D50(DisplayListObject *displayObjects);
 void func_800653E0_65FE0(DisplayListObject *displayObjects);
 void func_80065670_66270(DisplayListObject *displayObjects);
 void func_800659E4_665E4(DisplayListObject *arg0);
-extern void func_80065DD8_669D8(void);
-extern void func_80066474_67074(void);
-extern void func_800670D4_67CD4(void);
-extern void func_800680C4_68CC4(void);
+void func_80065DD8_669D8(void);
+void func_80066474_67074(void);
+void func_800670D4_67CD4(void);
+void func_800680C4_68CC4(void);
 void func_80064CF4_658F4(DisplayListObject *);
 void func_80062CF0_638F0(DisplayListObject *);
 void setupDisplayListMatrix(DisplayListObject *);
-void func_80063A94_64694(void *);
+void func_80063A94_64694(DisplayListObject *);
 void func_800648EC_654EC(DisplayListObject *);
 void func_80064F74_65B74(DisplayListObject *);
 void *func_8006C130_6CD30(void *, LookAt *);
@@ -223,12 +225,12 @@ void func_80062CF0_638F0(DisplayListObject *arg0) {
     f32 sp84;
     LookAt *temp_v0;
 
-    if (arg0->unk30 == 0) {
-        arg0->unk30 = (s32)arenaAlloc16(0x40);
-        if (arg0->unk30 == 0) {
+    if (arg0->unk30 == NULL) {
+        arg0->unk30 = arenaAlloc16(0x40);
+        if (arg0->unk30 == NULL) {
             return;
         }
-        func_8006BFB8_6CBB8(arg0, (void *)arg0->unk30);
+        func_8006BFB8_6CBB8(arg0, arg0->unk30);
     }
 
     if (arg0->unk20->flags & 1) {
@@ -322,7 +324,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
     LookAt *temp_v0;
 
     if (arg0->unk30 == NULL) {
-        arg0->unk30 = (s32)arenaAlloc16(0x40);
+        arg0->unk30 = arenaAlloc16(0x40);
         if (arg0->unk30 == NULL) {
             return;
         }
@@ -521,7 +523,125 @@ void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80063A94_64694);
+void func_80063A94_64694(DisplayListObject *arg0) {
+    Mtx sp30;
+    f32 sp70;
+    f32 sp74;
+    int new_var;
+    s32 new_var2;
+    f32 sp78;
+    f32 sp7C;
+    f32 sp80;
+    f32 sp84;
+    LookAt *s1;
+    Mtx *temp_v0;
+    Gfx *temp_v1;
+    s32 temp_a0;
+    s32 temp_a1;
+    s16 *matrixData = (s16 *)arg0;
+
+    if (arg0->unk30 == NULL) {
+        temp_v0 = arenaAlloc16(0x80);
+        arg0->unk30 = temp_v0;
+        if (temp_v0 == NULL) {
+            return;
+        }
+        ((s32 *)arg0->unk30)[0] = 0x10000;
+        ((s32 *)arg0->unk30)[1] = 0;
+        ((s32 *)arg0->unk30)[2] = 1;
+        ((s32 *)arg0->unk30)[3] = 0;
+        ((s32 *)arg0->unk30)[4] = 0;
+        ((s32 *)arg0->unk30)[5] = 0x10000;
+        ((s32 *)arg0->unk30)[6] = (arg0->unk10.position.x & 0xFFFF0000) + ((u16 *)&arg0->unk10.position.y)[0];
+        ((s32 *)arg0->unk30)[7] = (arg0->unk10.position.z & 0xFFFF0000) + 1;
+        ((s32 *)arg0->unk30)[8] = 0;
+        ((s32 *)arg0->unk30)[9] = 0;
+        ((s32 *)arg0->unk30)[10] = 0;
+        ((s32 *)arg0->unk30)[11] = 0;
+        ((s32 *)arg0->unk30)[12] = 0;
+        ((s32 *)arg0->unk30)[13] = 0;
+        ((s32 *)arg0->unk30)[14] = (arg0->unk10.position.x << 16) + ((u16 *)&arg0->unk10.position.y)[1];
+        new_var = 0xFFFF;
+        ((s32 *)arg0->unk30)[15] = arg0->unk10.position.z << 16;
+        ((s32 *)arg0->unk30)[16] = ((matrixData[0] * 2) & 0xFFFF0000) + (-(s32)((u16)matrixData[1] >> 15) & new_var);
+        ((s32 *)arg0->unk30)[17] = (matrixData[2] * 2) & 0xFFFF0000;
+        ((s32 *)arg0->unk30)[18] = ((matrixData[3] * 2) & 0xFFFF0000) + (-(s32)((u16)matrixData[4] >> 15) & new_var);
+        ((s32 *)arg0->unk30)[19] = (matrixData[5] * 2) & 0xFFFF0000;
+        ((s32 *)arg0->unk30)[20] = ((matrixData[6] * 2) & 0xFFFF0000) + (-(s32)((u16)matrixData[7] >> 15) & 0xFFFF);
+        ((s32 *)arg0->unk30)[21] = (matrixData[8] * 2) & 0xFFFF0000;
+        ((s32 *)arg0->unk30)[22] = 0;
+        ((s32 *)arg0->unk30)[23] = 1;
+        ((s32 *)arg0->unk30)[24] = ((matrixData[0] << 17) & 0xFFFF0000) + (((s16)matrixData[1] * 2) & new_var);
+        ((s32 *)arg0->unk30)[25] = (matrixData[2] << 17) & 0xFFFF0000;
+        ((s32 *)arg0->unk30)[26] = ((matrixData[3] << 17) & 0xFFFF0000) + (((s16)matrixData[4] * 2) & new_var);
+        ((s32 *)arg0->unk30)[27] = (matrixData[5] << 17) & 0xFFFF0000;
+        ((s32 *)arg0->unk30)[28] = ((matrixData[6] << 17) & 0xFFFF0000) + (((s16)matrixData[7] * 2) & new_var);
+        ((s32 *)arg0->unk30)[29] = (matrixData[8] << 17) & 0xFFFF0000;
+        ((s32 *)arg0->unk30)[30] = 0;
+        ((s32 *)arg0->unk30)[31] = 0;
+    }
+
+    if (arg0->unk20->flags & 1) {
+        s1 = arenaAlloc16(0x20);
+        if (s1 == NULL) {
+            return;
+        }
+
+        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
+        guLookAtReflect(&sp30, s1, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
+        gSPLookAt(gRegionAllocPtr++, s1);
+    }
+
+    if (gGraphicsMode != 3) {
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+
+        gGraphicsMode = 3;
+
+        if (arg0->unk24 != NULL) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        }
+
+        if (arg0->unk28 != NULL) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        }
+
+        if (arg0->unk2C != NULL) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        }
+
+        D_800A2D40_A3940 = arg0->unk24;
+        D_800A2D44_A3944 = arg0->unk28;
+        D_800A2D48_A3948 = arg0->unk2C;
+    } else {
+        if (arg0->unk24 != D_800A2D40_A3940) {
+            if (arg0->unk24 != NULL) {
+                gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+            }
+            D_800A2D40_A3940 = arg0->unk24;
+        }
+
+        if (arg0->unk28 != D_800A2D44_A3944) {
+            if (arg0->unk28 != NULL) {
+                gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+            }
+            D_800A2D44_A3944 = arg0->unk28;
+        }
+
+        if (arg0->unk2C != D_800A2D48_A3948) {
+            if (arg0->unk2C != NULL) {
+                gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+            }
+            D_800A2D48_A3948 = arg0->unk2C;
+        }
+    }
+
+    gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+
+    gSPMatrix(gRegionAllocPtr++, &arg0->unk30[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+}
 
 void func_8006405C_64C5C(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->unk10.position)) {
@@ -563,17 +683,15 @@ void func_8006417C_64D7C(s32 arg0, DisplayListObject *arg1) {
 void func_80064218_64E18(DisplayListObject *arg0) {
     DisplayListObject *var_s0;
     Gfx *temp_v1;
-    s32 temp_v0;
     s32 var_s1;
     void *v1_temp;
     void *temp_a0_val;
     s32 count;
     volatile u8 padding[0x44];
 
-    if (arg0->unk30 == 0) {
-        temp_v0 = (s32)arenaAlloc16(arg0->unk37 << 6);
-        arg0->unk30 = temp_v0;
-        if (temp_v0 == 0) {
+    if (arg0->unk30 == NULL) {
+        arg0->unk30 = arenaAlloc16(arg0->unk37 << 6);
+        if (arg0->unk30 == NULL) {
             return;
         }
         count = arg0->unk37;
@@ -581,7 +699,7 @@ void func_80064218_64E18(DisplayListObject *arg0) {
         if (count > 0) {
             var_s0 = arg0;
             do {
-                var_s0->unk30 = arg0->unk30 + (var_s1 << 6);
+                var_s0->unk30 = arg0->unk30 + var_s1;
                 func_8006C130_6CD30(var_s0, (LookAt *)var_s0->unk30);
                 var_s1 += 1;
                 var_s0++;
@@ -807,9 +925,9 @@ void func_800648EC_654EC(DisplayListObject *arg0) {
     f32 sp84;
     LookAt *lookat;
 
-    if (arg0->unk30 == 0) {
-        arg0->unk30 = (s32)arenaAlloc16(0x40);
-        if (arg0->unk30 == 0) {
+    if (arg0->unk30 == NULL) {
+        arg0->unk30 = arenaAlloc16(0x40);
+        if (arg0->unk30 == NULL) {
             return;
         }
         func_8006C130_6CD30(arg0, (LookAt *)arg0->unk30);
@@ -1137,14 +1255,13 @@ void func_800659E4_665E4(DisplayListObject *arg0) {
     LookAt *temp_v0;
     void *alloc;
 
-    alloc = arenaAlloc16(0x40);
-    arg0->unk30 = (s32)alloc;
-    if (alloc == NULL) {
+    arg0->unk30 = arenaAlloc16(0x40);
+    if (arg0->unk30 == NULL) {
         return;
     }
 
     memcpy(&D_8009A8A4_9B4A4, &D_800AB068_A23D8->padding2[0x10], 0xC);
-    func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, (void *)arg0->unk30);
+    func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, arg0->unk30);
 
     if (arg0->unk20->flags & 1) {
         temp_v0 = arenaAlloc16(0x20);
