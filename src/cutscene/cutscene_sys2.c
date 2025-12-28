@@ -26,7 +26,7 @@ void cutsceneSys2Wipe_exec(cutsceneSys2Wipe_exec_arg0 *params, cutsceneSys2Wipe_
     world_pos.x += params->grid_x * 209715;
     world_pos.y += params->grid_y * 209715;
 
-    func_8000C268_CE68(&state->matrix);
+    setAuxRenderEnabled(&state->matrix);
 
     temp_rotation = (s32)(params->rotation_y) << 0x10;
 

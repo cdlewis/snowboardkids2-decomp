@@ -28,7 +28,7 @@ void enqueueAuxBufferSetup(AuxBufferContext *ctx) {
     debugEnqueueCallback(ctx->node->slot_index, 0, setColorImageToAuxBuffer, ctx);
 }
 
-void func_8000C268_CE68(Func8000C268Arg *arg0) {
+void setAuxRenderEnabled(Func8000C268Arg *arg0) {
     arg0->unk210 |= 1;
 }
 
