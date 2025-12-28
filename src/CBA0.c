@@ -5,20 +5,102 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern Gfx *gRegionAllocPtr;
+extern Gfx *volatile gRegionAllocPtr;
 extern u8 D_8016A000[];
+extern s32 D_8009AFCC_9BBCC;
+extern u8 gMemoryHeapEnd[];
+extern Gfx D_8008CD20_8D920[];
 
 void setColorImageToAuxBuffer(void *arg0) {
     gDPSetColorImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_8016A000);
 }
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", buildAuxBufferDisplayList);
-
-extern void buildAuxBufferDisplayList(void *);
-
 typedef struct {
     Node_70B00 *node;
 } AuxBufferContext;
+
+void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
+    Node_70B00 *node;
+    Gfx *gfx;
+    int new_var2;
+    s32 frameIdx;
+    s32 otherMode;
+    s32 texCoord;
+    f32 lrxf;
+    f32 lryf;
+    s32 lrx;
+    s32 lry;
+    int new_var;
+    s32 ulx;
+    s32 uly;
+
+    node = arg0->node;
+    gfx = gRegionAllocPtr;
+    frameIdx = D_8009AFCC_9BBCC;
+
+    gfx->words.w0 = 0xFF10013F;
+    gfx->words.w1 = (u32)(gMemoryHeapEnd + frameIdx * 0x25800);
+
+    gfx[1].words.w0 = 0xDE000000;
+    gfx[1].words.w1 = (u32)D_8008CD20_8D920;
+
+    {
+        s32 ulxf = (s32)(node->unkB0 * 4.0f);
+        s32 ulyf;
+        otherMode = 0xE2001D00;
+        gfx[2].words.w0 =
+            ((unsigned long long)((ulxf & 0xFFF) << 12)) | ((((s32)(node->unkB2 * 4.0f)) & 0xFFF) | 0xED000000);
+    }
+
+    lrxf = node->unkB4;
+    lryf = node->unkB6;
+    texCoord = 0x04000400;
+
+    gfx[3].words.w0 = 0xFA000000;
+    new_var2 = 0xFF;
+    gfx[3].words.w1 = new_var2;
+    lrxf = lrxf * 4.0f;
+
+    gfx[4].words.w0 = 0xEE000000;
+    gfx[4].words.w1 = 0xFFFC0000;
+    lryf = lryf * 4.0f;
+
+    gfx[5].words.w0 = otherMode;
+    gfx[5].words.w1 = 4;
+
+    gfx[2].words.w1 = (((s32)lrxf & 0xFFF) << 12) | ((s32)lryf & 0xFFF);
+
+    lrx = node->unkB4;
+    lry = node->unkB6;
+    gfx[6].words.w0 = (((lrx << 2) & 0xFFF) << 12) | (((node->unkB6 << 2) & 0xFFF) | (new_var = 0xE4000000));
+
+    ulx = node->unkB0;
+    uly = 1;
+    gRegionAllocPtr = gfx + uly;
+    gRegionAllocPtr = gfx + 2;
+    gRegionAllocPtr = gfx + 3;
+    gRegionAllocPtr = gfx + 4;
+    gRegionAllocPtr = gfx + 5;
+    gRegionAllocPtr = gfx + 6;
+    gRegionAllocPtr = gfx + 7;
+    gRegionAllocPtr = gfx + 8;
+
+    uly = node->unkB2;
+    gfx[6].words.w1 = (((ulx << 2) & 0xFFF) << 12) | ((uly << 2) & 0xFFF);
+
+    gfx[7].words.w0 = 0xE1000000;
+    gRegionAllocPtr = gfx + 9;
+
+    gfx[8].words.w0 = 0xF1000000;
+    gfx[7].words.w1 = 0;
+    gfx[8].words.w1 = texCoord;
+
+    gRegionAllocPtr = gfx + 10;
+
+    frameIdx = 0;
+    gfx[9].words.w0 = otherMode;
+    gfx[9].words.w1 = frameIdx;
+}
 
 void enqueueAuxBufferRender(AuxBufferContext *ctx) {
     debugEnqueueCallback(ctx->node->slot_index, 7, buildAuxBufferDisplayList, ctx);
