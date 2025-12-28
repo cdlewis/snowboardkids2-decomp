@@ -834,20 +834,20 @@ s16 getMaxLinePixelWidth(u16 *encodedText) {
     return maxWidth;
 }
 
-s32 func_8000B8D8_C4D8(u16 *arg0) {
+s32 getNewlineCount(u16 *encodedText) {
     s16 i = 0;
-    s16 count = 0;
+    s16 newlineCount = 0;
 
-    if (arg0[0] != 0xFFFF) {
+    if (encodedText[0] != 0xFFFF) {
         do {
-            if (arg0[i] == 0xFFFD) {
-                count++;
+            if (encodedText[i] == 0xFFFD) {
+                newlineCount++;
             }
             i++;
-        } while (arg0[i] != 0xFFFF);
+        } while (encodedText[i] != 0xFFFF);
     }
 
-    return count;
+    return newlineCount;
 }
 
 s16 func_8000B934_C534(Table_B934 *arg0, s32 arg1) {
