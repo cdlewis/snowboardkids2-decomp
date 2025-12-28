@@ -22,11 +22,12 @@ class Colors:
     RESET = '\033[0m'
 
 class TaskRunner:
-    def __init__(self, taskfile_path, max_times=None, dry_run=False, verbose=False):
+    def __init__(self, taskfile_path, max_times=None, dry_run=False, verbose=False, hash_filter=None):
         self.taskfile_path = taskfile_path
         self.max_times = max_times
         self.dry_run = dry_run
         self.verbose = verbose
+        self.hash_filter = hash_filter  # 'evens', 'odds', or None
         self.stop_requested = False
         self.count = 0
         self.consecutive_failures = 0
@@ -117,12 +118,70 @@ class TaskRunner:
         with open(self.ignored_prompts_file, 'a') as f:
             f.write(f"{prompt_arg}\n")
 
+    def _get_candidate_key(self, candidate):
+        """Get the key used for tracking a candidate in the ignored list.
+
+        For string candidates, the key is the string itself.
+        For array candidates, the key is the first element.
+        """
+        if isinstance(candidate, list):
+            return candidate[0] if candidate else None
+        return candidate
+
+    def _filter_by_hash(self, candidates):
+        """Filter candidates based on hash parity.
+
+        Uses the candidate key (function name) to compute a hash, then filters
+        to only even or odd hashes based on self.hash_filter.
+        """
+        if not self.hash_filter:
+            return candidates
+
+        filtered = []
+        for candidate in candidates:
+            key = self._get_candidate_key(candidate)
+            if key:
+                h = hash(key)
+                is_even = (h % 2) == 0
+                if self.hash_filter == 'evens' and is_even:
+                    filtered.append(candidate)
+                elif self.hash_filter == 'odds' and not is_even:
+                    filtered.append(candidate)
+
+        return filtered
+
+    def _interpolate_prompt(self, template, candidate):
+        """Interpolate the prompt template with the candidate.
+
+        For string candidates:
+            - $ARGUMENT is replaced with the string
+
+        For array candidates:
+            - $ARGUMENT_1, $ARGUMENT_2, etc. are replaced with array elements
+            - $ARGUMENT is replaced with the first element (backwards compat)
+        """
+        if isinstance(candidate, list):
+            prompt = template
+            # Replace indexed arguments ($ARGUMENT_1, $ARGUMENT_2, etc.)
+            for i, arg in enumerate(candidate, start=1):
+                prompt = prompt.replace(f'$ARGUMENT_{i}', arg if arg else '')
+            # Backwards compatibility: $ARGUMENT refers to first element
+            prompt = prompt.replace('$ARGUMENT', candidate[0] if candidate else '')
+            return prompt
+        else:
+            return template.replace('$ARGUMENT', candidate)
+
     def _select_argument(self, candidates):
-        """Select the first candidate not in ignored list."""
+        """Select the first candidate not in ignored list.
+
+        Candidates can be either strings or arrays of strings.
+        For arrays, the first element is used as the key for the ignored list.
+        """
         ignored = self._load_ignored_prompts()
 
         for candidate in candidates:
-            if candidate not in ignored:
+            key = self._get_candidate_key(candidate)
+            if key and key not in ignored:
                 return candidate
 
         return None
@@ -254,6 +313,13 @@ class TaskRunner:
                 print("No candidates returned from script.")
                 break
 
+            # Apply hash filter for parallel execution
+            candidates = self._filter_by_hash(candidates)
+
+            if not candidates:
+                print("No candidates after hash filter.")
+                break
+
             print(f"Script returned {len(candidates)} candidate(s)")
 
             # Select first non-ignored argument
@@ -266,7 +332,7 @@ class TaskRunner:
             print(f"Selected argument: {selected}")
 
             # Interpolate prompt
-            prompt = self.prompt_template.replace('$ARGUMENT', selected)
+            prompt = self._interpolate_prompt(self.prompt_template, selected)
 
             # Dry run mode - just print the prompt and exit
             if self.dry_run:
@@ -291,10 +357,17 @@ class TaskRunner:
 
             # Re-run script to check if same argument appears
             new_candidates = self._run_script()
+            new_candidates = self._filter_by_hash(new_candidates)
 
-            if selected in new_candidates:
+            # Get the key for the selected candidate (first element if array, string otherwise)
+            selected_key = self._get_candidate_key(selected)
+
+            # Check if the key appears in any of the new candidates
+            new_candidate_keys = {self._get_candidate_key(c) for c in new_candidates}
+
+            if selected_key in new_candidate_keys:
                 # Issue still exists
-                print(f"Argument '{selected}' still appears in script output.")
+                print(f"Argument '{selected_key}' still appears in script output.")
 
                 if self.accept_best_effort:
                     # Accept best effort - verify build and commit if successful
@@ -321,7 +394,7 @@ class TaskRunner:
                             try:
                                 subprocess.run(['git', 'add', '-A'], check=True)
                                 subprocess.run(
-                                    ['git', 'commit', '-m', f'task-runner: best effort {selected}'],
+                                    ['git', 'commit', '-m', f'task-runner: best effort {selected_key}'],
                                     check=True
                                 )
                                 print("Best effort changes committed successfully.")
@@ -330,8 +403,8 @@ class TaskRunner:
                         else:
                             print("No uncommitted changes to commit.")
 
-                    print(f"Adding '{selected}' to ignored list.")
-                    self._add_to_ignored(selected)
+                    print(f"Adding '{selected_key}' to ignored list.")
+                    self._add_to_ignored(selected_key)
                 else:
                     # Standard mode - reset git to clean up Claude's changes
                     subprocess.run(['git', 'reset', '--hard', 'HEAD'], check=False)
@@ -341,11 +414,11 @@ class TaskRunner:
                         print("Build verification failed, stopping.")
                         break
 
-                    print(f"Adding '{selected}' to ignored list.")
-                    self._add_to_ignored(selected)
+                    print(f"Adding '{selected_key}' to ignored list.")
+                    self._add_to_ignored(selected_key)
             else:
                 # Issue was fixed! Verify build and commit if successful
-                print(f"Argument '{selected}' no longer appears in script output.")
+                print(f"Argument '{selected_key}' no longer appears in script output.")
 
                 # Run build and verify
                 if not self._run_build_verify():
@@ -360,7 +433,7 @@ class TaskRunner:
                         break
 
                     print("Successfully recovered. Adding to ignored list and continuing.")
-                    self._add_to_ignored(selected)
+                    self._add_to_ignored(selected_key)
                 else:
                     # Build passed! Check if there are uncommitted changes
                     result = subprocess.run(
@@ -374,7 +447,7 @@ class TaskRunner:
                         try:
                             subprocess.run(['git', 'add', '-A'], check=True)
                             subprocess.run(
-                                ['git', 'commit', '-m', f'task-runner: fix {selected}'],
+                                ['git', 'commit', '-m', f'task-runner: fix {selected_key}'],
                                 check=True
                             )
                             print("Changes committed successfully.")
@@ -453,15 +526,23 @@ Example taskfile.json (with template file):
   "accept_best_effort": false  (optional, defaults to false)
 }
 
-The script should output a JSON array of strings, e.g.:
+The script should output a JSON array of strings or arrays, e.g.:
 ["func_80001234", "func_80005678"]
+or with additional context per item:
+[["func_80001234", "similar_func"], ["func_80005678", "other_func"]]
 
 Task files must have either "prompt" (inline string) or "template" (file path),
-but not both. $ARGUMENT in the prompt or template will be replaced with the
-selected argument from the script output.
+but not both. Variables in the prompt or template will be replaced:
+  - $ARGUMENT: The selected argument (or first element if array)
+  - $ARGUMENT_1, $ARGUMENT_2, ...: Individual elements when using array format
 
 When accept_best_effort is true, changes are committed even if the
 argument still appears in the script output (best effort fix).
+
+Parallel execution:
+Use --evens and --odds to run two sessions in parallel without conflicts.
+Each session will only process candidates whose function name hashes to
+an even or odd number respectively.
 
 Tasks are discovered from tools/task-runner/tasks/*.json
 Use --list to see all available tasks.
@@ -479,6 +560,13 @@ Use --list to see all available tasks.
                        help='Print the prompt that would be passed to Claude without executing')
     parser.add_argument('--verbose', action='store_true',
                        help='Print verbose output including prompt template')
+
+    # Mutually exclusive group for parallel execution
+    parallel_group = parser.add_mutually_exclusive_group()
+    parallel_group.add_argument('--evens', action='store_true',
+                       help='Only process candidates with even hash (for parallel execution)')
+    parallel_group.add_argument('--odds', action='store_true',
+                       help='Only process candidates with odd hash (for parallel execution)')
 
     args = parser.parse_args()
 
@@ -510,7 +598,14 @@ Use --list to see all available tasks.
         print("Error: --limit/--times argument must be a positive integer")
         sys.exit(1)
 
-    runner = TaskRunner(taskfile_path, args.times, args.dry_run, args.verbose)
+    # Determine hash filter
+    hash_filter = None
+    if args.evens:
+        hash_filter = 'evens'
+    elif args.odds:
+        hash_filter = 'odds'
+
+    runner = TaskRunner(taskfile_path, args.times, args.dry_run, args.verbose, hash_filter)
     runner.run()
 
 

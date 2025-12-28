@@ -565,8 +565,12 @@ Examples:
 
     # JSON output mode - output array of function names
     if args.json:
-        function_names = [s.name for s in filtered_scores]
-        print(json.dumps(function_names))
+        if args.by_similarity:
+            # Output [function_name, similar_to] pairs
+            function_data = [[s.name, s.similar_to] for s in filtered_scores]
+        else:
+            function_data = [s.name for s in filtered_scores]
+        print(json.dumps(function_data))
         sys.exit(0)
 
     # In exhaustive mode or by-similarity mode, list all functions
