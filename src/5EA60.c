@@ -158,7 +158,87 @@ void func_8005DF10_5EB10(s16 arg0, s16 arg1, s16 arg2, s16 *arg3) {
 
 INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E22C_5EE2C);
 
-INCLUDE_ASM("asm/nonmatchings/5EA60", func_8005E500_5F100);
+s32 func_8005E500_5F100(func_8005E800_5F400_arg *arg0) {
+    s16 stack_data[16];
+    u16 flags;
+    u16 frame_idx;
+
+    flags = arg0->flags;
+
+    if (flags & 0x8000) {
+        s16 *animation_data = arg0->animation_data;
+        arg0->flags = flags & 0x7FFF;
+        func_8005DF10_5EB10(animation_data[1], -(s16)animation_data[2], -(s16)animation_data[3], arg0->values);
+
+        frame_idx = arg0->animation_data[4];
+        arg0->position[0] = -arg0->frame_data[frame_idx * 3] << 10;
+
+        frame_idx = arg0->animation_data[4];
+        arg0->position[1] = arg0->frame_data[frame_idx * 3 + 1] << 10;
+
+        frame_idx = arg0->animation_data[4];
+        arg0->position[2] = arg0->frame_data[frame_idx * 3 + 2] << 10;
+
+        memcpy(arg0->prev_position, arg0->values, 0x20);
+
+        if (arg0->flags == 0) {
+            goto ret0;
+        }
+        goto advance_animation;
+    }
+
+    if ((flags & 0xFFFF) == 0) {
+        return 1;
+    }
+
+    arg0->counter = arg0->counter - (arg0->counter / flags);
+
+    {
+        s16 *animation_data = arg0->animation_data;
+        if ((s16)animation_data[3] != (arg0->counter & 0xFFFF)) {
+            func_8005DF10_5EB10(
+                animation_data[1],
+                -(s16)animation_data[2],
+                arg0->counter - (s16)animation_data[3],
+                stack_data
+            );
+            func_8006BDBC_6C9BC(arg0, stack_data, arg0->prev_position);
+        }
+    }
+
+    frame_idx = arg0->animation_data[4];
+    arg0->interpolated[0] =
+        arg0->interpolated[0] + ((-arg0->frame_data[frame_idx * 3] << 10) - arg0->interpolated[0]) / (s32)arg0->flags;
+
+    frame_idx = arg0->animation_data[4];
+    arg0->interpolated[1] = arg0->interpolated[1] +
+                            ((arg0->frame_data[frame_idx * 3 + 1] << 10) - arg0->interpolated[1]) / (s32)arg0->flags;
+
+    frame_idx = arg0->animation_data[4];
+    arg0->interpolated[2] = arg0->interpolated[2] +
+                            ((arg0->frame_data[frame_idx * 3 + 2] << 10) - arg0->interpolated[2]) / (s32)arg0->flags;
+
+    arg0->flags--;
+    if ((arg0->flags & 0xFFFF) != 0) {
+        goto ret0;
+    }
+
+    arg0->flags = arg0->animation_data[0];
+    memcpy(arg0->values, arg0->prev_position, 0x20);
+
+    if (arg0->flags == 0) {
+        return 1;
+    }
+
+advance_animation: {
+    s16 *animation_data = arg0->animation_data;
+    arg0->animation_data = animation_data + 5;
+    arg0->counter = animation_data[8];
+}
+
+ret0:
+    return 0;
+}
 
 void func_8005E800_5F400(func_8005E800_5F400_arg *entity, u16 param_2) {
     s16 stack_data[0x10];
