@@ -12,20 +12,20 @@ void setColorImageToAuxBuffer(void *arg0) {
     gDPSetColorImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_8016A000);
 }
 
-INCLUDE_ASM("asm/nonmatchings/CBA0", func_8000BFD0_CBD0);
+INCLUDE_ASM("asm/nonmatchings/CBA0", buildAuxBufferDisplayList);
 
-extern void func_8000BFD0_CBD0(void *);
+extern void buildAuxBufferDisplayList(void *);
 
 typedef struct {
-    Node_70B00 *unk0;
-} Func8000C208Arg;
+    Node_70B00 *node;
+} AuxBufferContext;
 
-void func_8000C208_CE08(Func8000C208Arg *arg0) {
-    debugEnqueueCallback(arg0->unk0->slot_index, 7, func_8000BFD0_CBD0, arg0);
+void enqueueAuxBufferRender(AuxBufferContext *ctx) {
+    debugEnqueueCallback(ctx->node->slot_index, 7, buildAuxBufferDisplayList, ctx);
 }
 
-void func_8000C238_CE38(Func8000C208Arg *arg0) {
-    debugEnqueueCallback(arg0->unk0->slot_index, 0, setColorImageToAuxBuffer, arg0);
+void enqueueAuxBufferSetup(AuxBufferContext *ctx) {
+    debugEnqueueCallback(ctx->node->slot_index, 0, setColorImageToAuxBuffer, ctx);
 }
 
 void func_8000C268_CE68(Func8000C268Arg *arg0) {
@@ -238,7 +238,7 @@ void func_8000C7A4_D3A4(Func8000C7A4Arg *arg0) {
         mat2 = &sp30;
         memcpy(mat2, identityMatrix, 0x20);
         func_8006FED8_70AD8(arg0->unk0);
-        func_8000C208_CE08((Func8000C208Arg *)arg0);
+        enqueueAuxBufferRender((AuxBufferContext *)arg0);
         temp_v1 = arg0->unk0;
 
         switch (temp_v1->unk218) {
@@ -269,7 +269,7 @@ void func_8000C7A4_D3A4(Func8000C7A4Arg *arg0) {
                 break;
         }
 
-        func_8000C238_CE38((Func8000C208Arg *)arg0);
+        enqueueAuxBufferSetup((AuxBufferContext *)arg0);
         temp_a0 = arg0->unk0;
         if (temp_a0->unk20C > 0) {
             temp_a0->unk204 += temp_a0->unk208;
