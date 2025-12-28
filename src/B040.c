@@ -69,7 +69,7 @@ void initSpinFadeSpriteEffect(SpriteEffectTaskState *arg0);
 void initDropShrinkSpriteEffect(SpriteEffectTaskState *arg0);
 
 void initRiseStretchSpriteEffect(SpriteEffectTaskState *arg0);
-void func_8000B52C_C12C(SpriteEffectTaskState *arg0);
+void initFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0);
 
 void spawnSpriteEffect(SceneModel *arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s32 arg5, s8 arg6) {
     spawnSpriteEffectEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, 0, 0, 0);
@@ -172,7 +172,7 @@ s32 spawnSpriteEffectInternal(
             }
             // fallthrough
         case 6:
-            var_a0_2 = scheduleTask(&func_8000B52C_C12C, arg7, arg8, 0);
+            var_a0_2 = scheduleTask(&initFloatBobbingSpriteEffect, arg7, arg8, 0);
             if (var_a0_2 == NULL) {
                 break;
             }
@@ -644,63 +644,74 @@ void cleanupRiseStretchSpriteEffect(SpriteEffectTaskState *arg0) {
 }
 
 typedef struct {
-    /* 0x00 */ SpriteEffectPositionSource *unk0;
-    /* 0x04 */ s16 unk4;
+    /* 0x00 */ SpriteEffectPositionSource *positionSource;
+    /* 0x04 */ s16 layer;
     /* 0x06 */ u8 _pad6[2];
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ u8 unkA;
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
     /* 0x0B */ u8 _padB[1];
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ s32 unk10;
-    /* 0x14 */ s32 unk14;
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ s16 unk1C;
-    /* 0x1E */ s16 unk1E;
-    /* 0x20 */ s32 unk20[0x13];
-    /* 0x6C */ s32 unk6C;
-    /* 0x70 */ s16 unk70;
-} func_8000B598_arg;
+    /* 0x0C */ s32 scale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ s16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ s32 spriteState[0x13];
+    /* 0x6C */ s32 bobOffset;
+    /* 0x70 */ s16 bobPhase;
+} FloatBobbingSpriteEffectState;
 
-void func_8000B598_C198(func_8000B598_arg *);
-void func_8000B684_C284(SpriteEffectTaskState *);
+void updateFloatBobbingSpriteEffect(FloatBobbingSpriteEffectState *);
+void cleanupFloatBobbingSpriteEffect(SpriteEffectTaskState *);
 
-void func_8000B52C_C12C(SpriteEffectTaskState *arg0) {
-    setCleanupCallback(func_8000B684_C284);
+void initFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0) {
+    setCleanupCallback(cleanupFloatBobbingSpriteEffect);
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     arg0->unk6C = 0;
     arg0->unk70.unk70 = 0;
-    setCallback(func_8000B598_C198);
+    setCallback(updateFloatBobbingSpriteEffect);
 }
 
-void func_8000B598_C198(func_8000B598_arg *arg0) {
-    SpriteEffectPosition *temp;
+void updateFloatBobbingSpriteEffect(FloatBobbingSpriteEffectState *arg0) {
+    SpriteEffectPosition *pos;
     s32 x, y, z;
     s32 sinVal;
 
-    if (arg0->unk8 < 0) {
+    if (arg0->duration < 0) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    arg0->unk8 = arg0->unk8 - 1;
+    arg0->duration = arg0->duration - 1;
 
-    sinVal = approximateSin(arg0->unk70);
+    sinVal = approximateSin(arg0->bobPhase);
 
-    arg0->unk6C = ((sinVal << 3) >> 8) * 655;
+    arg0->bobOffset = ((sinVal << 3) >> 8) * 655;
 
-    arg0->unk70 = arg0->unk70 + 0x111;
+    arg0->bobPhase = arg0->bobPhase + 0x111;
 
-    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
+    pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
 
-    x = temp->unk14 + arg0->unk10;
-    y = temp->unk18 + arg0->unk14 + arg0->unk6C;
-    z = temp->unk1C + arg0->unk18;
+    x = pos->unk14 + arg0->offsetX;
+    y = pos->unk18 + arg0->offsetY + arg0->bobOffset;
+    z = pos->unk1C + arg0->offsetZ;
 
-    renderSprite((s32 *)&arg0->unk20, arg0->unk4, x, y, z, 0x10000, arg0->unkC, arg0->unk1C, arg0->unkA, 0xFF);
+    renderSprite(
+        (s32 *)&arg0->spriteState,
+        arg0->layer,
+        x,
+        y,
+        z,
+        0x10000,
+        arg0->scale,
+        arg0->rotation,
+        arg0->opacity,
+        0xFF
+    );
 }
 
-void func_8000B684_C284(SpriteEffectTaskState *arg0) {
+void cleanupFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
