@@ -584,11 +584,11 @@ typedef struct {
     /* 0x20 */ s32 unk20[0x13];
     /* 0x6C */ s32 unk6C;
     /* 0x70 */ u8 unk70;
-} func_8000B400_C000_arg;
+} RiseStretchSpriteEffectState;
 
 extern void renderSprite(s32 *, s32, s32, s32, s32, s32, s32, s16, u8, u8);
 
-void func_8000B400_C000(func_8000B400_C000_arg *);
+void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *);
 void func_8000B510_C110(func_8000B510_C110_arg *);
 
 void initRiseStretchSpriteEffect(func_8000B510_C110_arg *arg0) {
@@ -598,10 +598,10 @@ void initRiseStretchSpriteEffect(func_8000B510_C110_arg *arg0) {
     arg0->unk6C = 0;
     arg0->unk70.unk70_u8 = 0xFF;
     setCleanupCallback(func_8000B510_C110);
-    setCallback(func_8000B400_C000);
+    setCallback(updateRiseStretchSpriteEffect);
 }
 
-void func_8000B400_C000(func_8000B400_C000_arg *arg0) {
+void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *arg0) {
     SpriteEffectPosition *temp;
     s32 x, y, z;
 
