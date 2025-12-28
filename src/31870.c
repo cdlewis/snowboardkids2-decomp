@@ -293,8 +293,32 @@ typedef struct {
     void *unk2C;
 } func_8002FA1C_3061C_arg;
 
-extern void func_80031138_31D38(void);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s8 unk12;
+    s8 unk13;
+    s8 unk14;
+    u8 padding[0x3];
+} func_80032628_item;
 
+typedef struct {
+    func_80032628_item unk0[4];
+} func_80032628_arg;
+
+typedef struct {
+    u8 padding[0x77C];
+    s16 unk77C;
+} func_80032628_alloc;
+
+void func_80031138_31D38(void);
+void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
 void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void func_800313A4_31FA4(void);
 void func_800313DC_31FDC(func_80031510_32110_arg *arg0);
@@ -326,10 +350,15 @@ void func_80031CE8_328E8(void *arg0);
 void func_80031248_31E48(func_80031248_31E48_arg *arg0);
 void func_80031100_31D00(func_80031100_31D00_arg *arg0);
 void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0);
-void func_80032628_33228(void);
+void func_80032628_33228(func_80032628_arg *arg0);
 void func_800323FC_32FFC(func_80032330_32F30_arg *arg0);
 void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0);
 void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0);
+void func_80032504_33104(func_80032504_33104_arg *arg0);
+void func_80030F6C_31B6C(func_80031510_32110_arg *arg0);
+void func_80030EAC_31AAC(func_80031510_32110_arg *arg0);
+void func_80030E54_31A54(func_80031510_32110_arg *arg0);
+void func_80032708_33308(func_800329A8_335A8_arg *arg0);
 
 extern u16 D_8008F16C_8FD6C[];
 extern u16 D_8008F16E_8FD6E[];
@@ -338,11 +367,11 @@ extern s32 D_8008F200_8FE00[];
 extern u16 D_8008F20A_8FE0A[];
 extern u16 D_8008F20C_8FE0C;
 extern s32 identityMatrix;
+extern s16 D_8008F17C_8FD7C[];
+extern u16 D_8008F184_8FD84[];
+extern u16 D_8008F150_8FD50[];
+extern const char D_8009E480_9F080;
 
-void func_80032504_33104(func_80032504_33104_arg *arg0);
-void func_80030F6C_31B6C(func_80031510_32110_arg *arg0);
-void func_80030EAC_31AAC(func_80031510_32110_arg *arg0);
-void func_80030E54_31A54(func_80031510_32110_arg *arg0);
 void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     s32 sp20[8];
     Mat3x3Padded matrixA;
@@ -1221,12 +1250,37 @@ void func_8003253C_3313C(func_8003253C_3313C_arg *arg0) {
     setCallback(&func_80032628_33228);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80032628_33228);
+void func_80032628_33228(func_80032628_arg *arg0) {
+    func_80032628_alloc *allocation;
+    s32 counter;
+    s32 i;
+    s16 current;
+    s32 delta;
+    s16 var_delta;
 
-extern u16 D_8008F184_8FD84[];
-extern u16 D_8008F150_8FD50[];
-extern const char D_8009E480_9F080;
-void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
+    allocation = getCurrentAllocation();
+    counter = 0;
+
+    for (i = 0; i < 4; i++) {
+        current = arg0->unk0[i].unk2;
+        if (current < D_8008F17C_8FD7C[i]) {
+            delta = D_8008F17C_8FD7C[i] - current;
+            var_delta = ABS(delta);
+            if ((s16)var_delta >= 20) {
+                arg0->unk0[i].unk2 = current + 20;
+            } else {
+                arg0->unk0[i].unk2 = current + var_delta;
+            }
+            counter++;
+        }
+        debugEnqueueCallback(8, 0, func_800136E0_142E0, &arg0->unk0[i]);
+    }
+
+    if ((counter & 0xFF) == 0) {
+        allocation->unk77C = 1;
+        setCallback(func_80032708_33308);
+    }
+}
 
 void func_80032708_33308(func_800329A8_335A8_arg *arg0) {
     func_800329A8_335A8_allocation *state;
