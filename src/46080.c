@@ -52,8 +52,12 @@ typedef struct {
     s32 unk3C;
 } func_8004A9A8_4B5A8_node;
 
+typedef struct {
+    u8 _pad[0x3C];
+    s32 unk3C;
+} func_80045964_46564_node;
+
 typedef struct func_8004AFF8_arg func_8004AFF8_arg;
-void func_8004AFF8_4BBF8(func_8004AFF8_arg *);
 
 typedef struct {
     void *unk0;
@@ -121,43 +125,25 @@ typedef struct {
     s32 unk40;
 } func_800473F4_47FF4_arg;
 
-extern void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
-
-extern void *D_80090CEC_918EC[];
-extern void *D_80090CF0_918F0[];
-extern s32 D_80090CF4_918F4[];
-extern u8 D_80090CA8_918A8[][5];
-extern u8 D_80090CE0_918E0[];
-extern u8 D_80090CBC_918BC[][9];
 typedef struct {
-    s32 unk0;
-    func_80066444_67044_arg1 unk4;
-    s16 unk38;
-} func_8004B990_4C590_arg;
+    s16 unk0;
+    u8 _pad2[0x4];
+    u16 unk6;
+    u8 unk8[0xC];
+} Entry_46628_New;
 
-void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
-extern void func_8004562C_4622C(void);
-
-extern s32 D_80090E20_91A20;
-extern s32 D_80090E40_91A40;
-extern s32 D_80090E4C_91A4C;
-extern s16 D_80090E50_91A50;
-extern s32 D_80090BC8_917C8[3];
-extern s32 D_80090BBC_917BC[3];
-extern s32 D_80090B98_91798[];
-extern s32 D_80090BB0_917B0;
-extern s32 D_80090B80_91780;
-extern s32 D_80090BA4_917A4[3];
-
-extern s32 gFrameCounter;
-extern u16 D_8009ADE0_9B9E0;
-
-void func_80047330_47F30(FunctionArg_80047330 *arg0);
-void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
-void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0);
-void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0);
-void func_800462D8_46ED8(Struct_func_8004657C_4717C *);
-void func_8004728C_47E8C(func_8004728C_47E8C_arg *);
+typedef struct {
+    void *unk0;
+    void *unk4;
+    Entry_46628_New *unk8;
+    void *unkC;
+    void *unk10;
+    s16 unk14;
+    s16 unk16;
+    s16 unk18;
+    s16 unk1A;
+    s32 unk1C;
+} func_80046244_46E44_Task_New;
 
 typedef struct {
     u8 _pad0[0x4];
@@ -183,17 +169,16 @@ typedef struct {
     s32 unk3C;
 } func_80047660_48260_arg;
 
-void func_80047590_48190(func_80047590_48190_arg *arg0);
-void func_80047660_48260(func_80047660_48260_arg *arg0);
+typedef struct {
+    s32 unk0;
+    func_80066444_67044_arg1 unk4;
+    s16 unk38;
+} func_8004B990_4C590_arg;
 
 typedef struct {
     void *unk0;
 } func_8004C0D0_4CCD0_arg;
 
-void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0);
-
-void func_8004AE58_4BA58(s32 **);
-void func_8004A96C_4B56C(s32 **);
 typedef struct {
     void *unk0;
     void *unk4;
@@ -210,13 +195,6 @@ typedef struct {
     s32 unk34;
 } func_8004A6D4_4B2D4_arg;
 
-void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0);
-
-extern Gfx *gRegionAllocPtr;
-extern s16 gGraphicsMode;
-extern Gfx D_80090DB0_919B0[];
-void *func_8006C130_6CD30(void *, LookAt *);
-
 typedef struct {
     DataTable_19E80 *unk0;
     OutputStruct_19E80 unk4;
@@ -227,23 +205,13 @@ typedef struct {
     s32 unk3C;
 } func_80049300_49F00_arg;
 
-void func_80049300_49F00(func_80049300_49F00_arg *arg0);
-void func_8004934C_49F4C(func_80049300_49F00_arg *arg0);
-
 typedef struct {
     void *unk0;
 } Struct_func_80049404_4A004;
 
-void func_80049404_4A004(Struct_func_80049404_4A004 *arg0);
-
 typedef struct {
     void *unk0;
 } func_8004B264_4BE64_arg;
-
-void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0);
-
-extern s32 identityMatrix[];
-extern void *D_80094DD0_959D0;
 
 typedef struct {
     u8 _pad[0x24];
@@ -251,14 +219,10 @@ typedef struct {
     void *unk28;
 } func_80045768_46368_arg;
 
-void func_80045768_46368(func_80045768_46368_arg *);
-
 typedef struct {
     u8 _pad[0xB4];
     s16 unkB4;
 } ScheduledTask;
-
-void func_80045564_46164(ScheduledTask *);
 
 typedef struct {
     u8 _pad0[0x20];
@@ -281,6 +245,89 @@ typedef struct {
     u8 _padA8[0xC];
     s16 unkB4;
 } func_80045480_46080_arg;
+
+typedef struct {
+    u8 _pad[0x30];
+    u8 unk30[0x2C];
+    u8 unk5C;
+    u8 _pad5D[0x19];
+    u8 unk76;
+} GameState_46080;
+
+typedef struct {
+    u8 _pad[0x14];
+    s32 unk14[3];
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 _pad3[0x10];
+    s32 unk40;
+} func_800457E0_463E0_arg;
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_8004592C_4652C_arg;
+
+typedef struct {
+    u8 _pad[0x20];
+    DisplayLists *unk20;
+    u8 _pad2[0x3C - 0x24];
+    s32 unk3C;
+    s32 unk40;
+} func_800458AC_464AC_arg;
+
+extern void *D_80090CEC_918EC[];
+extern void *D_80090CF0_918F0[];
+extern s32 D_80090CF4_918F4[];
+extern u8 D_80090CA8_918A8[][5];
+extern u8 D_80090CE0_918E0[];
+extern u8 D_80090CBC_918BC[][9];
+extern s32 D_80090E20_91A20;
+extern s32 D_80090E40_91A40;
+extern s32 D_80090E4C_91A4C;
+extern s16 D_80090E50_91A50;
+extern s32 D_80090BC8_917C8[3];
+extern s32 D_80090BBC_917BC[3];
+extern s32 D_80090B98_91798[];
+extern s32 D_80090BB0_917B0;
+extern s32 D_80090B80_91780;
+extern s32 D_80090BA4_917A4[3];
+extern s32 gFrameCounter;
+extern u16 D_8009ADE0_9B9E0;
+extern Gfx *gRegionAllocPtr;
+extern s16 gGraphicsMode;
+extern Gfx D_80090DB0_919B0[];
+extern s32 identityMatrix[];
+extern void *D_80094DD0_959D0;
+
+void func_800458AC_464AC(func_800458AC_464AC_arg *arg0);
+void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
+void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
+void func_8004562C_4622C(void);
+void func_80047330_47F30(FunctionArg_80047330 *arg0);
+void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
+void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0);
+void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0);
+void func_800462D8_46ED8(Struct_func_8004657C_4717C *);
+void func_8004728C_47E8C(func_8004728C_47E8C_arg *);
+void func_80047590_48190(func_80047590_48190_arg *arg0);
+void func_80047660_48260(func_80047660_48260_arg *arg0);
+void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0);
+void func_8004AE58_4BA58(s32 **);
+void func_8004A96C_4B56C(s32 **);
+void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0);
+void *func_8006C130_6CD30(void *, LookAt *);
+void func_80049300_49F00(func_80049300_49F00_arg *arg0);
+void func_8004934C_49F4C(func_80049300_49F00_arg *arg0);
+void func_80049404_4A004(Struct_func_80049404_4A004 *arg0);
+void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0);
+void func_80045768_46368(func_80045768_46368_arg *);
+void func_80045564_46164(ScheduledTask *);
+void func_8004AFF8_4BBF8(func_8004AFF8_arg *);
+void func_80045CC8_468C8(void);
 
 void func_80045480_46080(func_80045480_46080_arg *arg0) {
     void *identity = identityMatrix;
@@ -356,31 +403,6 @@ void func_800457A0_463A0(s32 arg0) {
     }
 }
 
-typedef struct {
-    u8 _pad[0x30];
-    u8 unk30[0x2C];
-    u8 unk5C;
-    u8 _pad5D[0x19];
-    u8 unk76;
-} GameState_46080;
-
-typedef struct {
-    u8 _pad[0x14];
-    s32 unk14[3];
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 _pad3[0x10];
-    s32 unk40;
-} func_800457E0_463E0_arg;
-
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_8004592C_4652C_arg;
-
 void func_80045878_46478(void);
 void func_8004592C_4652C(func_8004592C_4652C_arg *);
 
@@ -399,16 +421,6 @@ void func_800457E0_463E0(func_800457E0_463E0_arg *arg0) {
     setCleanupCallback(func_8004592C_4652C);
     setCallback(func_80045878_46478);
 }
-
-typedef struct {
-    u8 _pad[0x20];
-    DisplayLists *unk20;
-    u8 _pad2[0x3C - 0x24];
-    s32 unk3C;
-    s32 unk40;
-} func_800458AC_464AC_arg;
-
-void func_800458AC_464AC(func_800458AC_464AC_arg *arg0);
 
 void func_80045878_46478(void) {
     GameState *gs = (GameState *)getCurrentAllocation();
@@ -450,11 +462,6 @@ void func_8004592C_4652C(func_8004592C_4652C_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-typedef struct {
-    u8 _pad[0x3C];
-    s32 unk3C;
-} func_80045964_46564_node;
-
 void func_80045964_46564(s32 arg0) {
     func_80045964_46564_node *task = (func_80045964_46564_node *)scheduleTask(&func_800457E0_463E0, 0, 0, 0xD3);
     if (task != NULL) {
@@ -484,7 +491,7 @@ typedef func_80046244_46E44_Task func_80045C84_46884_arg;
 extern void func_80045C84_46884(func_80045C84_46884_arg *);
 extern void func_80045A28_46628(func_80046244_46E44_Task *);
 extern s32 D_8009A8A4_9B4A4;
-extern void func_80045B3C_4673C(void);
+extern void func_80045B3C_4673C(func_80046244_46E44_Task_New *);
 extern s32 D_80090AF0_916F0[];
 extern s32 D_80090AF4_916F4[];
 extern s32 D_80090AF8_916F8[];
@@ -543,7 +550,37 @@ void func_80045A28_46628(func_80046244_46E44_Task *arg0) {
     setCallback(&func_80045B3C_4673C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80045B3C_4673C);
+void func_80045B3C_4673C(func_80046244_46E44_Task_New *arg0) {
+    s32 i;
+
+    arg0->unk1C = (arg0->unk1C + 1) & 0x7FFFFFFF;
+
+    for (i = 0; i < arg0->unk18; i++) {
+        if (arg0->unk8[i].unk6 == 0) {
+            break;
+        }
+
+        if (arg0->unk8[i].unk6 == 1) {
+            func_8005BCB8_5C8B8(arg0->unk8[i].unk8, 0x100000, 0xC00000);
+        }
+
+        if (arg0->unk8[i].unk6 == 2) {
+            func_8005BCB8_5C8B8(arg0->unk8[i].unk8, 0x100000, 0x680000);
+        }
+
+        if (arg0->unk8[i].unk6 == 3) {
+            func_8005BCB8_5C8B8(arg0->unk8[i].unk8, 0x140000, 0x300000);
+        }
+
+        if (arg0->unk8[i].unk6 == 4) {
+            func_8005BCB8_5C8B8(arg0->unk8[i].unk8, 0x120000, 0xC00000);
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        debugEnqueueCallback((u16)i, 4, func_80045CC8_468C8, arg0);
+    }
+}
 
 void func_80045C84_46884(func_80045C84_46884_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
