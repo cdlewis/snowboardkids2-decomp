@@ -96,7 +96,7 @@ void func_8000D244_DE44(DC90TaskStruct *arg0) {
     arg0->unk10 = 0;
     arg0->unk4 = loadAsset_34F7E0();
     arg0->unk28 = func_80035F80_36B80(1);
-    arg0->unk8 = func_8000B6B8_C2B8(2);
+    arg0->unk8 = loadDmaAsset(2);
     arg0->unk34 = 1;
     arg0->unk38 = 1;
     arg0->unk3C = 0xFF;

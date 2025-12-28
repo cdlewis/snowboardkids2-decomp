@@ -20,7 +20,7 @@ USE_ASSET(_635AB0);
 USE_ASSET(_63C9F0);
 USE_ASSET(_67E860)
 
-void *func_8000B6B8_C2B8(s32);
+void *loadDmaAsset(s32);
 void *func_80035F80_36B80(s32);
 
 typedef struct {
@@ -246,9 +246,9 @@ void func_80003EE0_4AE0(void) {
     taskMemory->unk948 = &taskMemory->unk94C;
     taskMemory->unk94C = 0;
     taskMemory->unk960 = func_80035F80_36B80(1);
-    taskMemory->unk964 = func_8000B6B8_C2B8(1);
+    taskMemory->unk964 = loadDmaAsset(1);
 
-    taskMemory->unk968 = func_8000B6B8_C2B8(3);
+    taskMemory->unk968 = loadDmaAsset(3);
     taskMemory->unkDEC = loadCompressedData(&_67E860_ROM_START, &_67E860_ROM_END, 0x2448);
     taskMemory->unk95C = loadCompressedData(&_49BA20_ROM_START, &_49BA20_ROM_END, 0x2B0);
 

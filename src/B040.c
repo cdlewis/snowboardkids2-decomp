@@ -726,7 +726,7 @@ s32 getDmaTableCount(void) {
     return D_8008CC30_8D830;
 }
 
-void *func_8000B6B8_C2B8(s16 arg0) {
+void *loadDmaAsset(s16 arg0) {
     DmaEntry *entry;
 
     if (arg0 >= getDmaTableCount()) {
