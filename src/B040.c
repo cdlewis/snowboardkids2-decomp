@@ -50,11 +50,6 @@ typedef struct {
 } DmaEntry;
 
 typedef struct {
-    u8 _pad0[0x6];
-    s16 unk6;
-} ArrayElement_B934; // size 0x8
-
-typedef struct {
     s32 arrayOffset;
     s32 count;
 } Table2DRow;
@@ -850,14 +845,14 @@ s32 getNewlineCount(u16 *encodedText) {
     return newlineCount;
 }
 
-s16 func_8000B934_C534(Table_B934 *arg0, s32 arg1) {
-    s32 count;
-    ArrayElement_B934 *elem;
+s16 getTable2DRowCount(Table_B934 *table, s32 rowIndex) {
+    s32 rowCount;
+    Table2DRow *row;
 
-    count = *(s32 *)(arg0->count_offset + (s32)arg0);
-    if (arg1 >= count) {
+    rowCount = *(s32 *)(table->count_offset + (s32)table);
+    if (rowIndex >= rowCount) {
         return 0;
     }
-    elem = (ArrayElement_B934 *)(arg0->array_offset + arg1 * 8 + (s32)arg0);
-    return elem->unk6;
+    row = (Table2DRow *)(table->array_offset + rowIndex * 8 + (s32)table);
+    return row->count;
 }
