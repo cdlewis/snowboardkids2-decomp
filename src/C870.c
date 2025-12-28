@@ -3,21 +3,21 @@
 #include "common.h"
 
 typedef struct {
-    /* 0x000 */ u8 buffer1[0x200];
-    /* 0x200 */ u8 buffer2[0x200];
-} IndexBuffer;
+    /* 0x000 */ u8 originalPalette[0x200];
+    /* 0x200 */ u8 workingPalette[0x200];
+} PaletteBuffer;
 
-void func_8000BC70_C870(C870Struct *arg0, DataTable_19E80 *arg1) {
+void initPaletteContext(PaletteContext *ctx, DataTable_19E80 *dataTable) {
     OutputStruct_19E80 output;
 
-    getTableEntryByU16Index(arg1, 0, &output);
-    arg0->unk0 = arg1;
-    arg0->unk4 = ((IndexBuffer *)output.index_ptr)->buffer2;
-    arg0->unk8 = ((IndexBuffer *)output.index_ptr)->buffer1;
+    getTableEntryByU16Index(dataTable, 0, &output);
+    ctx->dataTable = dataTable;
+    ctx->workingPalette = ((PaletteBuffer *)output.index_ptr)->workingPalette;
+    ctx->originalPalette = ((PaletteBuffer *)output.index_ptr)->originalPalette;
 }
 
-void func_8000BCC4_C8C4(C870Struct *arg0) {
-    memcpy(arg0->unk4, arg0->unk8, 0x200);
+void resetPaletteContext(PaletteContext *ctx) {
+    memcpy(ctx->workingPalette, ctx->originalPalette, 0x200);
 }
 
-INCLUDE_ASM("asm/nonmatchings/C870", func_8000BCEC_C8EC);
+INCLUDE_ASM("asm/nonmatchings/C870", applyPaletteShift);

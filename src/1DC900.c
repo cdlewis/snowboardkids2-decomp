@@ -44,7 +44,7 @@ typedef struct {
     u8 padD34[0xD38 - 0xD34];
     s16 unkD38;
     s16 unkD3A;
-    C870Struct unkD3C[6];
+    PaletteContext paletteContexts[6];
     s32 unkD84;
     s32 unkD88;
     s16 unkD8C;
@@ -97,8 +97,8 @@ void func_800B0760(func_800B0760_arg *arg0) {
     }
 
     for (i = 0; i < 6; i++) {
-        func_8000BC70_C870(&arg0->unkD3C[i], arg0->unk9B8[i]);
-        func_8000BCEC_C8EC(&arg0->unkD3C[i], 0xF00000, 0xB80000, 0x800000, 0x640000);
+        initPaletteContext(&arg0->paletteContexts[i], arg0->unk9B8[i]);
+        applyPaletteShift(&arg0->paletteContexts[i], 0xF00000, 0xB80000, 0x800000, 0x640000);
     }
 
     arg0->unkD84 = 0;

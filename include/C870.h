@@ -3,10 +3,11 @@
 #include "19E80.h"
 
 typedef struct {
-    DataTable_19E80 *unk0;
-    void *unk4;
-    void *unk8;
-} C870Struct;
+    DataTable_19E80 *dataTable;
+    u8 *workingPalette;
+    u8 *originalPalette;
+} PaletteContext;
 
-void func_8000BC70_C870(C870Struct *arg0, DataTable_19E80 *arg1);
-void func_8000BCEC_C8EC(C870Struct *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void initPaletteContext(PaletteContext *ctx, DataTable_19E80 *dataTable);
+void resetPaletteContext(PaletteContext *ctx);
+void applyPaletteShift(PaletteContext *ctx, s32 redWeight, s32 greenWeight, s32 blueWeight, s32 intensity);
