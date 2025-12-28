@@ -311,7 +311,7 @@ void func_80026D34_27934(func_80026BD8_arg *);
 void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
 void func_8002667C_2727C(void *);
 void func_80026834_27434(func_80025FFC_26BFC_arg *);
-void func_80025DAC_269AC(func_80025FFC_26BFC_arg *);
+void func_80025DAC_269AC(SelectionMenuState *);
 void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
 void func_80024048_24C48(func_80024048_arg *);
 void func_80024220_24E20(func_80024220_24E20_arg *);
@@ -1183,11 +1183,66 @@ void func_80025C64_26864(SelectionMenuState *arg0) {
     setCallback(func_80025DAC_269AC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80025DAC_269AC);
+void func_80025EE4_26AE4(SelectionMenuState *);
 
 #define SELECTION_ENTRY_SIZE 0x10
 #define SELECTION_ENTRY_ALPHA_OFFSET 0xA
 #define SELECTION_ENTRY_BLINKSTATE_OFFSET 0xD
+
+void func_80025DAC_269AC(SelectionMenuState *menu) {
+    GameState *state;
+    s32 entryIndex;
+    u8 *entryBase;
+    u8 blinkVal;
+    u32 blinkMasked;
+    s16 alpha;
+    s32 pad[2];
+    s32 numEntries;
+
+    (void)pad;
+
+    state = getCurrentAllocation();
+    entryIndex = 0;
+    numEntries = menu->numEntries;
+    if (numEntries > 0) {
+        alpha = 0xFF;
+        entryBase = (u8 *)menu;
+        do {
+            if (state->unk18D2[menu->playerIndex] == entryIndex) {
+                if (state->unk1898[menu->playerIndex] == 0) {
+                    blinkVal = menu->unk30[entryIndex] + 1;
+                    blinkMasked = blinkVal & 0xFF;
+                    menu->unk30[entryIndex] = blinkVal;
+                    if (blinkMasked < 0x11) {
+                        *(s16 *)(entryBase + entryIndex * SELECTION_ENTRY_SIZE + SELECTION_ENTRY_ALPHA_OFFSET) =
+                            alpha - (blinkMasked * 8);
+                    } else {
+                        *(s16 *)(entryBase + entryIndex * SELECTION_ENTRY_SIZE + SELECTION_ENTRY_ALPHA_OFFSET) =
+                            (blinkMasked * 8) - 1;
+                    }
+                    menu->unk30[entryIndex] = menu->unk30[entryIndex] & 0x1F;
+                } else {
+                    menu->unk30[entryIndex] = 0;
+                    *(s16 *)(entryBase + entryIndex * SELECTION_ENTRY_SIZE + SELECTION_ENTRY_ALPHA_OFFSET) = alpha;
+                }
+            } else {
+                *(s16 *)(entryBase + entryIndex * SELECTION_ENTRY_SIZE + SELECTION_ENTRY_ALPHA_OFFSET) = 0x50;
+                menu->unk30[entryIndex] = 0;
+            }
+            debugEnqueueCallback(
+                menu->playerIndex + 0xC,
+                0,
+                func_80012004_12C04,
+                entryBase + entryIndex * SELECTION_ENTRY_SIZE
+            );
+            entryIndex++;
+        } while (entryIndex < (s32)menu->numEntries);
+    }
+
+    if (state->unk1898[menu->playerIndex] == 2) {
+        setCallbackWithContinue(func_80025EE4_26AE4);
+    }
+}
 
 void func_80025EE4_26AE4(SelectionMenuState *menu) {
     u8 *state;
