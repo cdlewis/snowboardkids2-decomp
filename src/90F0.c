@@ -79,7 +79,7 @@ void clearSpriteAssetVisible(SpriteAssetState *state) {
     state->flags &= 0xFD;
 }
 
-s32 func_80009E58_AA58(SpriteAssetState *state) {
+s32 isSpriteAssetVisible(SpriteAssetState *state) {
     u8 val;
 
     val = state->flags & 2;
