@@ -21,8 +21,8 @@ s32 getSpriteAssetCount(void) {
     return 10;
 }
 
-s16 func_800084F8_90F8(s32 arg0) {
-    return D_8008C930_8D530[arg0][0];
+s16 getSpriteAssetId(s32 index) {
+    return D_8008C930_8D530[index][0];
 }
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80008514_9114);
