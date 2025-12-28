@@ -32,6 +32,7 @@ jobs:
         with:
           submodules: recursive
           ref: ${{ github.event.inputs.pr_id && format('refs/pull/{0}/head', github.event.inputs.pr_id) || github.ref }}
+          path: main
 
       - name: Checkout baserom
         uses: actions/checkout@v4
