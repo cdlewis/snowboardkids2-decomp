@@ -305,8 +305,9 @@ void setupAndEnqueueSprite(
     }
 }
 
-s32 func_8000A410_B010(func_8000A410_B010_arg *arg0) {
+s32 getTableEntryValue(TableLookupContext *ctx) {
     OutputStruct_19E80 output;
-    getTableEntryByU16Index(arg0->table, arg0->index, &output);
+
+    getTableEntryByU16Index(ctx->table, ctx->index, &output);
     return output.field1;
 }

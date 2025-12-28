@@ -230,8 +230,8 @@ typedef struct {
     /* 0x18 */ s32 unk18;
     /* 0x1C */ s16 unk1C;
     /* 0x1E */ s16 unk1E;
-    /* 0x20 */ func_8000A410_B010_arg unk20;
-    u8 padding[0x6C - (0x20 + sizeof(func_8000A410_B010_arg))];
+    /* 0x20 */ TableLookupContext unk20;
+    u8 padding[0x6C - (0x20 + sizeof(TableLookupContext))];
     /* 0x6C */ s32 unk6C;
     /* 0x70 */ s32 unk70;
     /* 0x74 */ s32 unk74;
@@ -316,7 +316,7 @@ void func_8000AA08_B608(func_8000AA08_B608_arg *arg0) {
 
     switch (arg0->state) {
         case ANIM_STATE_INIT:
-            result = func_8000A410_B010(&arg0->unk20);
+            result = getTableEntryValue(&arg0->unk20);
             if (result < 17) {
                 arg0->unk78 = 0xCCCC;
                 arg0->unk74 = (arg0->unkC >> 8) * 0xB3;
