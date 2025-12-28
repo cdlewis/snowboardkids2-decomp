@@ -65,7 +65,7 @@ extern u8 *D_8008C92C_8D52C;
 void initSimpleSpriteEffect(func_8000B510_C110_arg *arg0);
 void initScalingSpriteEffect(func_8000B510_C110_arg *arg0);
 void initRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0);
-void func_8000B044_BC44(func_8000B510_C110_arg *arg0);
+void initSpinFadeSpriteEffect(func_8000B510_C110_arg *arg0);
 void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0);
 
 void func_8000B38C_BF8C(func_8000B510_C110_arg *arg0);
@@ -148,7 +148,7 @@ s32 spawnSpriteEffectInternal(
             }
             return 1;
         case 3:
-            var_a0_2 = scheduleTask(&func_8000B044_BC44, arg7, arg8, 0);
+            var_a0_2 = scheduleTask(&initSpinFadeSpriteEffect, arg7, arg8, 0);
             if (var_a0_2 != NULL) {
                 FILL_STRUCT(var_a0_2)
                 var_a0_2->unk6C = 0;
@@ -421,51 +421,51 @@ void cleanupRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0) {
 }
 
 typedef struct {
-    /* 0x00 */ SpriteEffectPositionSource *unk0;
-    /* 0x04 */ s16 unk4;
+    /* 0x00 */ SpriteEffectPositionSource *positionSource;
+    /* 0x04 */ s16 layer;
     /* 0x06 */ u8 _pad6[4];
-    /* 0x0A */ u8 unkA;
-    /* 0x0B */ s8 unkB;
+    /* 0x0A */ u8 opacity;
+    /* 0x0B */ s8 state;
     /* 0x0C */ s32 unkC;
-    /* 0x10 */ s32 unk10;
-    /* 0x14 */ s32 unk14;
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ u16 unk1C;
-    /* 0x1E */ s16 unk1E;
-    /* 0x20 */ u8 unk20[0x4C];
-    /* 0x6C */ s32 unk6C;
-} func_8000B0A8_arg;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ u16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ u8 spriteState[0x4C];
+    /* 0x6C */ s32 scale;
+} SpinFadeSpriteEffectState;
 
-void func_8000B0A8_BCA8(func_8000B0A8_arg *);
-void func_8000B1B0_BDB0(func_8000B510_C110_arg *);
+void updateSpinFadeSpriteEffect(SpinFadeSpriteEffectState *);
+void cleanupSpinFadeSpriteEffect(func_8000B510_C110_arg *);
 
-void func_8000B044_BC44(func_8000B510_C110_arg *arg0) {
+void initSpinFadeSpriteEffect(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
-    setCleanupCallback(func_8000B1B0_BDB0);
-    setCallback(func_8000B0A8_BCA8);
+    setCleanupCallback(cleanupSpinFadeSpriteEffect);
+    setCallback(updateSpinFadeSpriteEffect);
 }
 
-void func_8000B0A8_BCA8(func_8000B0A8_arg *arg0) {
-    SpriteEffectPosition *temp;
-    void *ptr;
+void updateSpinFadeSpriteEffect(SpinFadeSpriteEffectState *arg0) {
+    SpriteEffectPosition *pos;
+    void *spriteState;
     s32 x, y, z;
-    s16 a1;
+    s16 layer;
 
-    arg0->unk1C -= 0x155;
+    arg0->rotation -= 0x155;
 
-    switch (arg0->unkB) {
+    switch (arg0->state) {
         case 0:
-            arg0->unk6C += 0x4CCC;
-            if (arg0->unk6C > 0x10000) {
-                arg0->unkB = 1;
+            arg0->scale += 0x4CCC;
+            if (arg0->scale > 0x10000) {
+                arg0->state = 1;
             }
             break;
         case 1: {
-            s32 val = arg0->unk6C;
+            s32 val = arg0->scale;
             s32 decrement = (-val >> 8) * 76;
             val += decrement;
-            arg0->unk6C = val;
+            arg0->scale = val;
             if (val <= 0) {
                 func_80069CF8_6A8F8();
                 return;
@@ -473,18 +473,18 @@ void func_8000B0A8_BCA8(func_8000B0A8_arg *arg0) {
         } break;
     }
 
-    ptr = &arg0->unk20;
-    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
+    spriteState = &arg0->spriteState;
+    pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
 
-    x = temp->unk14 + arg0->unk10;
-    y = temp->unk18 + arg0->unk14;
-    z = temp->unk1C + arg0->unk18;
-    a1 = arg0->unk4;
+    x = pos->unk14 + arg0->offsetX;
+    y = pos->unk18 + arg0->offsetY;
+    z = pos->unk1C + arg0->offsetZ;
+    layer = arg0->layer;
 
-    renderOpaqueSprite(ptr, a1, x, y, z, arg0->unk6C, arg0->unk6C, (s16)arg0->unk1C, arg0->unkA);
+    renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scale, arg0->scale, (s16)arg0->rotation, arg0->opacity);
 }
 
-void func_8000B1B0_BDB0(func_8000B510_C110_arg *arg0) {
+void cleanupSpinFadeSpriteEffect(func_8000B510_C110_arg *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
