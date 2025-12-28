@@ -1,4 +1,5 @@
 #include "3E160.h"
+#include "42170.h"
 #include "51060.h"
 #include "594E0.h"
 #include "5AA90.h"
@@ -21,7 +22,9 @@ typedef struct {
     /* 0x24 */ s32 velY;
     /* 0x28 */ s32 velZ;
     /* 0x2C */ s32 velX;
-    u8 padding2[0xC];
+    /* 0x30 */ s32 unk30;
+    /* 0x34 */ s32 unk34;
+    /* 0x38 */ s32 unk38;
     s32 unk3C;
     u16 unk40;
     s16 unk42;
@@ -1568,7 +1571,53 @@ void func_80054880_55480(Struct_52880 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/52880", func_800548C8_554C8);
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_80054AE4_556E4);
+void func_80054AE4_556E4(Struct_52880 *arg0) {
+    Alloc_55650 *alloc;
+    s32 sp18[3];
+    s32 pad1[15];
+    void *s1;
+    s32 temp_v0;
+    s32 i;
+
+    alloc = (Alloc_55650 *)getCurrentAllocation();
+
+    if (alloc->unk76 == 0) {
+        func_80050604_51204(&arg0->unk4, &arg0->velY, 6);
+
+        s1 = &alloc->unk30;
+        arg0->velZ -= 0x8000;
+        arg0->unk4.x += arg0->velY + arg0->unk30;
+        arg0->unk4.y += arg0->velZ + arg0->unk34;
+        arg0->unk4.z += arg0->velX + arg0->unk38;
+
+        arg0->unk40 = func_80060A3C_6163C(s1, arg0->unk40, &arg0->unk4);
+        func_80060CDC_618DC(s1, arg0->unk40, &arg0->unk4, 0x80000, sp18);
+
+        if ((sp18[0] != 0) || (sp18[2] != 0)) {
+            arg0->unk4.x += sp18[0];
+            arg0->unk4.z += sp18[2];
+            arg0->unk4E++;
+        }
+
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+
+        if (arg0->unk4.y < temp_v0 + 0x100000) {
+            arg0->unk4.y = temp_v0 + 0x100000;
+            arg0->unk4E += 1;
+        }
+
+        func_80054568_55168(arg0);
+    }
+
+    if (arg0->unk4E != 0) {
+        func_800423A4_42FA4(&arg0->unk4, arg0->unk42);
+        func_80069CF8_6A8F8();
+    }
+
+    for (i = 0; i < 4; i++) {
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+    }
+}
 
 s32 func_80054C8C_5588C(s16 arg0) {
     Struct_52880 *task;
