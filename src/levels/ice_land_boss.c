@@ -20,6 +20,8 @@ typedef void (*FuncPtr)(void *);
 
 extern s32 D_800BCA50_B1F40;
 extern s32 gControllerInputs[];
+extern s32 D_800BC054_B1544;
+extern s32 D_800BC05C_B154C;
 
 typedef struct {
     /* 0x0 */ void *ptr;
@@ -772,4 +774,44 @@ void func_800BC7A8_B1C98(Player *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC89C_B1D8C);
+void func_800BC89C_B1D8C(Player *arg0) {
+    GameState *alloc;
+    GameDataLayout *gameData;
+    s32 i;
+    s32 mask;
+    s32 offset;
+    u8 *jointWritePtr;
+    JointPosition *jointPos;
+    u16 sectorIndex;
+
+    alloc = getCurrentAllocation();
+    i = 0;
+    mask = 0x400000;
+    gameData = &alloc->gameData;
+    jointWritePtr = (u8 *)arg0;
+    offset = 0xA10;
+
+    do {
+        if (arg0->unkB84 & mask) {
+            *(volatile s32 *)(jointWritePtr + 0xA10) = arg0->unk970.unk14 + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x18 + offset);
+            *(volatile s32 *)(jointWritePtr + 0xA18) = arg0->unk970.unk1C + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x20 + offset);
+        } else {
+            *(volatile s32 *)(jointWritePtr + 0xA10) = arg0->unk970.unk14 + *(s32 *)((u8 *)&D_800BC054_B1544 + offset);
+            *(volatile s32 *)(jointWritePtr + 0xA18) = arg0->unk970.unk1C + *(s32 *)((u8 *)&D_800BC05C_B154C + offset);
+        }
+
+        jointPos = (JointPosition *)((u8 *)arg0 + offset);
+        sectorIndex = func_80059E90_5AA90((void *)arg0, gameData, arg0->unkB94, jointPos);
+        offset += 0xC;
+        i += 1;
+        *(volatile s32 *)(jointWritePtr + 0xA14) = func_8005CFC0_5DBC0(gameData, sectorIndex, jointPos, 0x100000);
+
+        jointWritePtr += 0xC;
+    } while (i < 9);
+
+    arg0->unkBC1 = 1;
+
+    for (i = 0; i < 4; i++) {
+        debugEnqueueCallback(i, 1, func_800B9500_A93B0, (void *)arg0);
+    }
+}
