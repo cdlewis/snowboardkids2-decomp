@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-void func_800084D0_90D0(void);
+void nullsub(void);
 s32 func_800084D8_90D8(void *, s32, s32);
 s32 func_800084E0_90E0(void *, s32, s32);
 

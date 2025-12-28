@@ -1,6 +1,6 @@
 #include "common.h"
 
-void func_800084D0_90D0(void) {
+void nullsub(void) {
 }
 
 s32 func_800084D8_90D8(void *arg0, s32 arg1, s32 arg2) {
