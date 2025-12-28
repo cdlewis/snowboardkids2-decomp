@@ -204,7 +204,7 @@ void updateTrailingParticle(ParticleState *arg0) {
     a0_inner = arg0->owner;
     if (a0_inner->unk88 != 0) {
         if (a0_inner->displayEnabled != 0) {
-            func_8000A13C_AD3C(&arg0->spriteState, a0_inner->unk10->unk16, posX, posY, posZ, 0x10000, 0x10000, 0, 0);
+            renderOpaqueSprite(&arg0->spriteState, a0_inner->unk10->unk16, posX, posY, posZ, 0x10000, 0x10000, 0, 0);
         }
     }
 }

@@ -282,7 +282,7 @@ void func_8000A8B8_B4B8(func_8000A8B8_arg *arg0) {
     z = temp->unk1C + arg0->unk18;
     a1 = arg0->unk4;
 
-    func_8000A13C_AD3C(ptr, a1, x, y, z, arg0->unkC, arg0->unkC, arg0->unk1C, arg0->unkA);
+    renderOpaqueSprite(ptr, a1, x, y, z, arg0->unkC, arg0->unkC, arg0->unk1C, arg0->unkA);
 
     if (arg0->unk8 > 0) {
         arg0->unk8 = arg0->unk8 - 1;
@@ -393,7 +393,7 @@ void func_8000AA08_B608(func_8000AA08_B608_arg *arg0) {
     y = temp->unk18 + arg0->unk14;
     z = temp->unk1C + arg0->unk18;
 
-    func_8000A13C_AD3C(ptr, a1, x, y, z, arg0->unk6C, arg0->unk70, (s16)arg0->unk1C, arg0->unkA);
+    renderOpaqueSprite(ptr, a1, x, y, z, arg0->unk6C, arg0->unk70, (s16)arg0->unk1C, arg0->unkA);
 
     if (arg0->unk8 > 0) {
         arg0->unk8--;
@@ -481,7 +481,7 @@ void func_8000B0A8_BCA8(func_8000B0A8_arg *arg0) {
     z = temp->unk1C + arg0->unk18;
     a1 = arg0->unk4;
 
-    func_8000A13C_AD3C(ptr, a1, x, y, z, arg0->unk6C, arg0->unk6C, (s16)arg0->unk1C, arg0->unkA);
+    renderOpaqueSprite(ptr, a1, x, y, z, arg0->unk6C, arg0->unk6C, (s16)arg0->unk1C, arg0->unkA);
 }
 
 void func_8000B1B0_BDB0(func_8000B510_C110_arg *arg0) {
@@ -561,7 +561,7 @@ void func_8000B230_BE30(func_8000B230_arg *arg0) {
     z = temp->unk1C + arg0->unk18;
     a1 = arg0->unk4;
 
-    func_8000A13C_AD3C(ptr, a1, x, y, z, arg0->unkC, arg0->unkC, arg0->unk1C, arg0->unkA);
+    renderOpaqueSprite(ptr, a1, x, y, z, arg0->unkC, arg0->unkC, arg0->unk1C, arg0->unkA);
 }
 
 void func_8000B370_BF70(func_8000B510_C110_arg *arg0) {

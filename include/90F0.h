@@ -95,5 +95,5 @@ void *loadSpriteAssetData(s16 index);
 void releaseNodeMemoryRef(void **ptr);
 void setSpriteAnimation(void *arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 updateSpriteAnimation(void *arg0, s32 arg1);
-void func_8000A13C_AD3C(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8);
+void renderOpaqueSprite(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8);
 s32 func_8000A410_B010(func_8000A410_B010_arg *arg0);

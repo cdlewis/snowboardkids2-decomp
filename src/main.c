@@ -536,7 +536,7 @@ void updateSpriteAnimationTask(func_80000C2C_182C_arg *arg0) {
     }
 
     if (arg0->unk0->unk87 != 0) {
-        func_8000A13C_AD3C(
+        renderOpaqueSprite(
             &arg0->unk8,
             arg0->unk0->ptr->unk16,
             subEntry->unk8,
@@ -746,7 +746,7 @@ void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
     }
 
     if (arg0->unk0->unk87 != 0) {
-        func_8000A13C_AD3C(
+        renderOpaqueSprite(
             &arg0->unk8,
             arg0->unk0->ptr->unk16,
             arg0->unk54,

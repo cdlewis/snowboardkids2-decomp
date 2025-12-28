@@ -17,6 +17,7 @@ loadSpriteAssetData = 0x80009EF8; // rom:0xAAF8
 releaseNodeMemoryRef = 0x80009F5C; // rom:0xAB5C
 setSpriteAnimation = 0x80009F90; // rom:0xAB90
 updateSpriteAnimation = 0x8000A030; // rom:0xAC30
+renderOpaqueSprite = 0x8000A13C; // rom:0xAD3C
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14

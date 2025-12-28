@@ -221,7 +221,7 @@ void func_8000A1E4_ADE4(
 
 typedef void (*func_8000A1E4_ADE4_11_t)(SpriteState *, s32, s32, s32, s32, s32, s32, s16, u8, u8, s32);
 
-void func_8000A13C_AD3C(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8) {
+void renderOpaqueSprite(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8) {
     ((func_8000A1E4_ADE4_11_t
     )func_8000A1E4_ADE4)((SpriteState *)arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, 0xFF, 0);
 }

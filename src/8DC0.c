@@ -137,7 +137,7 @@ void updateOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
     model = state->model;
     if (model->isVisible != 0) {
         if (model->displayEnabled != 0) {
-            func_8000A13C_AD3C(
+            renderOpaqueSprite(
                 &state->spriteState,
                 model->spriteInfo->spriteIndex,
                 posX,
