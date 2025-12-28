@@ -37,6 +37,7 @@ CutsceneState gCutsceneState = { .slotIndex = 0,
 
 extern s16 D_800AB070_A23E0; // gCutsceneSlotIndex
 extern s16 D_800AFEF0_A7260; // gCutsceneType
+extern s32 gButtonsPressed;
 typedef struct {
     s16 frameCount;
     s8 unk2;
@@ -59,6 +60,7 @@ void signalCutsceneComplete(void);
 void func_80003D30_4930(void);
 void initCutscenePlayback(void);
 void initCutsceneRenderer(void);
+void returnToMainGame(void);
 
 void setCutsceneSelection(s16 slotIndex, s16 cutsceneType) {
     D_800AB070_A23E0 = slotIndex;
@@ -187,7 +189,35 @@ void initCutscenePlayback(void) {
     setGameStateHandler(&func_80003D30_4930);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4050", func_80003D30_4930);
+void func_80003D30_4930(void) {
+    s32 typeSelection;
+    CutsceneState *state;
+
+    if ((func_80069810_6A410() << 16) != 0) {
+        if (gButtonsPressed & 0x4000) {
+            terminateSchedulerWithCallback(returnToMainGame);
+            return;
+        }
+
+        state = &gCutsceneState;
+        typeSelection = state->typeSelection.full;
+
+        if (typeSelection == 2) {
+            state->slotSelection.full = (state->slotSelection.full + 1) % 14;
+            typeSelection = typeSelection;
+        }
+
+        state->typeSelection.full = typeSelection + 1;
+
+        if (typeSelection + 1 >= 3) {
+            state->typeSelection.full = 0;
+        }
+
+        state->slotSelection.full = 0;
+        state->typeSelection.full = 2;
+        setGameStateHandler(initCutscenePlayback);
+    }
+}
 
 void returnToMainGame(void) {
     func_800693C4_69FC4(&func_80014480_15080, 0xC8);
