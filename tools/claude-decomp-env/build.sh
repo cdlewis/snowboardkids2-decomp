@@ -22,7 +22,10 @@ if grep -q "INCLUDE_ASM" "$INPUT"; then
     exit 1
 fi
 
-pushd /home/chris/code/snowboardkids2-decomp
+# Set project root to two directories above this script
+SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_PATH/../.." && pwd)"
+pushd "$PROJECT_ROOT"
 
 # Set up / clean up compilation directory
 rm -f "src/claude/$1"
