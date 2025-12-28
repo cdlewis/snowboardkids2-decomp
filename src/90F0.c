@@ -43,12 +43,12 @@ void enqueueOpaqueSprite(u16 slot, Node *node) {
     debugEnqueueCallback(slot, 4, &func_80008514_9114, node);
 }
 
-void func_80009D94_A994(u16 arg0, Node *arg1) {
-    arg1->unk18 = NULL;
-    arg1->unk1C = NULL;
-    arg1->callback = NULL;
-    arg1->cleanupCallback = NULL;
-    debugEnqueueCallback(arg0, 4, &func_80008D18_9918, arg1);
+void enqueueTranslucentSprite(u16 slot, Node *node) {
+    node->unk18 = NULL;
+    node->unk1C = NULL;
+    node->callback = NULL;
+    node->cleanupCallback = NULL;
+    debugEnqueueCallback(slot, 4, &func_80008D18_9918, node);
 }
 
 void func_80009DD0_A9D0(u16 arg0, Node *arg1) {
@@ -311,7 +311,7 @@ void func_8000A1E4_ADE4(
     if ((arg9 & 0xFF) == 0xFF) {
         ((void (*)(s32, Node *))enqueueOpaqueSprite)(arg1, (Node *)&arg0->unk18);
     } else {
-        ((void (*)(s32, Node *))func_80009D94_A994)(arg1, (Node *)&arg0->unk18);
+        ((void (*)(s32, Node *))enqueueTranslucentSprite)(arg1, (Node *)&arg0->unk18);
     }
 }
 
