@@ -239,7 +239,7 @@ typedef struct {
 } func_8000AA08_B608_arg;
 
 void updateSimpleSpriteEffect(SimpleSpriteEffectState *);
-void func_8000A988_B588(func_8000B510_C110_arg *);
+void cleanupSimpleSpriteEffect(func_8000B510_C110_arg *);
 void func_8000AA08_B608(func_8000AA08_B608_arg *);
 void func_8000AD08_B908(func_8000B510_C110_arg *);
 
@@ -253,7 +253,7 @@ SpriteEffectPosition *getSpriteEffectPosition(SpriteEffectPositionSource *source
 void initSimpleSpriteEffect(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
-    setCleanupCallback(func_8000A988_B588);
+    setCleanupCallback(cleanupSimpleSpriteEffect);
     setCallback(updateSimpleSpriteEffect);
 }
 
@@ -289,7 +289,7 @@ void updateSimpleSpriteEffect(SimpleSpriteEffectState *arg0) {
     }
 }
 
-void func_8000A988_B588(func_8000B510_C110_arg *arg0) {
+void cleanupSimpleSpriteEffect(func_8000B510_C110_arg *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
