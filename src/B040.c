@@ -63,7 +63,7 @@ typedef void (*SchedulerFunc)(func_8000B510_C110_arg *);
 
 extern u8 *D_8008C92C_8D52C;
 void initSimpleSpriteEffect(func_8000B510_C110_arg *arg0);
-void func_8000A9A4_B5A4(func_8000B510_C110_arg *arg0);
+void initScalingSpriteEffect(func_8000B510_C110_arg *arg0);
 void func_8000AD24_B924(func_8000B510_C110_arg *arg0);
 void func_8000B044_BC44(func_8000B510_C110_arg *arg0);
 void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0);
@@ -126,7 +126,7 @@ s32 spawnSpriteEffectInternal(
             FILL_STRUCT(var_a0_2)
             return 1;
         case 1:
-            temp_v0 = scheduleTask(&func_8000A9A4_B5A4, arg7, arg8, 0);
+            temp_v0 = scheduleTask(&initScalingSpriteEffect, arg7, arg8, 0);
             if (temp_v0 == NULL) {
                 break;
             }
@@ -218,30 +218,30 @@ typedef struct {
 } SimpleSpriteEffectState;
 
 typedef struct {
-    /* 0x00 */ SpriteEffectPositionSource *unk0;
-    /* 0x04 */ s16 unk4;
+    /* 0x00 */ SpriteEffectPositionSource *positionSource;
+    /* 0x04 */ s16 layer;
     /* 0x06 */ u8 _pad6[2];
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ u8 unkA;
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
     /* 0x0B */ s8 state;
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ s32 unk10;
-    /* 0x14 */ s32 unk14;
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ s16 unk1C;
-    /* 0x1E */ s16 unk1E;
-    /* 0x20 */ TableLookupContext unk20;
+    /* 0x0C */ s32 targetScale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ s16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ TableLookupContext spriteState;
     u8 padding[0x6C - (0x20 + sizeof(TableLookupContext))];
-    /* 0x6C */ s32 unk6C;
-    /* 0x70 */ s32 unk70;
-    /* 0x74 */ s32 unk74;
-    /* 0x78 */ s32 unk78;
-} func_8000AA08_B608_arg;
+    /* 0x6C */ s32 scaleX;
+    /* 0x70 */ s32 scaleY;
+    /* 0x74 */ s32 rampSpeed;
+    /* 0x78 */ s32 easingFactor;
+} ScalingSpriteEffectState;
 
 void updateSimpleSpriteEffect(SimpleSpriteEffectState *);
 void cleanupSimpleSpriteEffect(func_8000B510_C110_arg *);
-void func_8000AA08_B608(func_8000AA08_B608_arg *);
-void func_8000AD08_B908(func_8000B510_C110_arg *);
+void updateScalingSpriteEffect(ScalingSpriteEffectState *);
+void cleanupScalingSpriteEffect(func_8000B510_C110_arg *);
 
 SpriteEffectPosition *getSpriteEffectPosition(SpriteEffectPositionSource *source, s16 useParent) {
     if (useParent != 0 && source->unk0 != NULL) {
@@ -293,75 +293,75 @@ void cleanupSimpleSpriteEffect(func_8000B510_C110_arg *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
-void func_8000A9A4_B5A4(func_8000B510_C110_arg *arg0) {
+void initScalingSpriteEffect(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
-    setCleanupCallback(func_8000AD08_B908);
-    setCallback(func_8000AA08_B608);
+    setCleanupCallback(cleanupScalingSpriteEffect);
+    setCallback(updateScalingSpriteEffect);
 }
 
-void func_8000AA08_B608(func_8000AA08_B608_arg *arg0) {
-    SpriteEffectPosition *temp;
+void updateScalingSpriteEffect(ScalingSpriteEffectState *arg0) {
+    SpriteEffectPosition *pos;
     s32 result;
     s32 val;
     s32 temp_val;
     s32 temp_a0;
     s32 temp_v0;
     s32 temp_v1;
-    void *ptr;
-    s16 a1;
+    void *spriteState;
+    s16 layer;
     s32 x;
     s32 y;
     s32 z;
 
     switch (arg0->state) {
         case ANIM_STATE_INIT:
-            result = getTableEntryValue(&arg0->unk20);
+            result = getTableEntryValue(&arg0->spriteState);
             if (result < 17) {
-                arg0->unk78 = 0xCCCC;
-                arg0->unk74 = (arg0->unkC >> 8) * 0xB3;
+                arg0->easingFactor = 0xCCCC;
+                arg0->rampSpeed = (arg0->targetScale >> 8) * 0xB3;
             } else if (result < 33) {
-                arg0->unk78 = 0xB333;
-                arg0->unk74 = (arg0->unkC >> 8) * 0x99;
+                arg0->easingFactor = 0xB333;
+                arg0->rampSpeed = (arg0->targetScale >> 8) * 0x99;
             } else {
-                arg0->unk78 = 0x8000;
-                arg0->unk74 = (arg0->unkC >> 8) * 0x66;
+                arg0->easingFactor = 0x8000;
+                arg0->rampSpeed = (arg0->targetScale >> 8) * 0x66;
             }
             arg0->state = ANIM_STATE_RAMP_UP;
             /* fallthrough */
         case ANIM_STATE_RAMP_UP:
-            arg0->unk6C += arg0->unk74;
-            if ((arg0->unkC * 3) / 2 < arg0->unk6C) {
-                arg0->unk6C = (arg0->unkC * 3) / 2;
+            arg0->scaleX += arg0->rampSpeed;
+            if ((arg0->targetScale * 3) / 2 < arg0->scaleX) {
+                arg0->scaleX = (arg0->targetScale * 3) / 2;
                 arg0->state = ANIM_STATE_EASE_IN;
             }
             break;
         case ANIM_STATE_EASE_IN:
-            val = ((arg0->unkC - arg0->unk6C) >> 8) * (arg0->unk78 >> 8);
+            val = ((arg0->targetScale - arg0->scaleX) >> 8) * (arg0->easingFactor >> 8);
             if (val != 0) {
-                arg0->unk6C = arg0->unk6C + val;
+                arg0->scaleX = arg0->scaleX + val;
             } else {
-                arg0->unk6C = arg0->unkC;
+                arg0->scaleX = arg0->targetScale;
                 arg0->state = ANIM_STATE_HOLD;
             }
             break;
         case ANIM_STATE_HOLD:
-            if (arg0->unk8 == 0) {
+            if (arg0->duration == 0) {
                 arg0->state = ANIM_STATE_RAMP_OUT;
             }
             break;
         case ANIM_STATE_RAMP_OUT:
-            arg0->unk6C = arg0->unk6C + arg0->unk74;
-            temp_val = (arg0->unkC * 5) / 3;
-            if (temp_val < arg0->unk6C) {
-                arg0->unk6C = temp_val;
+            arg0->scaleX = arg0->scaleX + arg0->rampSpeed;
+            temp_val = (arg0->targetScale * 5) / 3;
+            if (temp_val < arg0->scaleX) {
+                arg0->scaleX = temp_val;
                 arg0->state = ANIM_STATE_EASE_OUT;
             }
             break;
         case ANIM_STATE_EASE_OUT:
-            val = (-arg0->unk6C >> 8) * (arg0->unk78 >> 8);
+            val = (-arg0->scaleX >> 8) * (arg0->easingFactor >> 8);
             if (val != 0) {
-                arg0->unk6C = arg0->unk6C + val;
+                arg0->scaleX = arg0->scaleX + val;
             } else {
                 func_80069CF8_6A8F8();
                 return;
@@ -369,38 +369,38 @@ void func_8000AA08_B608(func_8000AA08_B608_arg *arg0) {
             break;
     }
 
-    if (arg0->unk8 != 0) {
-        temp_v1 = (arg0->unkC - arg0->unk70) / 4;
+    if (arg0->duration != 0) {
+        temp_v1 = (arg0->targetScale - arg0->scaleY) / 4;
         if (temp_v1 != 0) {
-            arg0->unk70 = arg0->unk70 + temp_v1;
+            arg0->scaleY = arg0->scaleY + temp_v1;
         } else {
-            arg0->unk70 = arg0->unkC;
+            arg0->scaleY = arg0->targetScale;
         }
     } else {
-        arg0->unk70 = arg0->unk70 + (arg0->unkC / 48);
+        arg0->scaleY = arg0->scaleY + (arg0->targetScale / 48);
     }
 
-    ptr = &arg0->unk20;
-    if (updateSpriteAnimation(ptr, 0x10000) == 2) {
+    spriteState = &arg0->spriteState;
+    if (updateSpriteAnimation(spriteState, 0x10000) == 2) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
+    pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
 
-    a1 = arg0->unk4;
-    x = temp->unk14 + arg0->unk10;
-    y = temp->unk18 + arg0->unk14;
-    z = temp->unk1C + arg0->unk18;
+    layer = arg0->layer;
+    x = pos->unk14 + arg0->offsetX;
+    y = pos->unk18 + arg0->offsetY;
+    z = pos->unk1C + arg0->offsetZ;
 
-    renderOpaqueSprite(ptr, a1, x, y, z, arg0->unk6C, arg0->unk70, (s16)arg0->unk1C, arg0->unkA);
+    renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scaleX, arg0->scaleY, (s16)arg0->rotation, arg0->opacity);
 
-    if (arg0->unk8 > 0) {
-        arg0->unk8--;
+    if (arg0->duration > 0) {
+        arg0->duration--;
     }
 }
 
-void func_8000AD08_B908(func_8000B510_C110_arg *arg0) {
+void cleanupScalingSpriteEffect(func_8000B510_C110_arg *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
