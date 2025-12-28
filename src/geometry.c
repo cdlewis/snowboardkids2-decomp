@@ -371,7 +371,28 @@ INCLUDE_ASM("asm/nonmatchings/geometry", transformVectorRelative);
 
 INCLUDE_ASM("asm/nonmatchings/geometry", rotateVectorY);
 
-INCLUDE_ASM("asm/nonmatchings/geometry", func_8006BDBC_6C9BC);
+void func_8006BDBC_6C9BC(func_8005E800_5F400_arg *arg0, void *arg1, void *arg2) {
+    Mat3x3Padded *mat1 = arg1;
+    Mat3x3Padded *mat2 = arg2;
+    s32 row;
+    s16 *rowPtr;
+    s32 i;
+    s32 sum;
+    s32 j;
+
+    for (i = 0; i < 3; i++) {
+        row = i;
+        rowPtr = arg0->values + (row * 3);
+        for (j = 0; j < 3; j++) {
+            sum = rowPtr[0] * mat1->m[0][j] + arg0->values[row * 3 + 1] * mat1->m[1][j] +
+                  arg0->values[row * 3 + 2] * mat1->m[2][j];
+            if (sum < 0) {
+                sum += 0x1FFF;
+            }
+            mat2->m[i][j] = sum >> 13;
+        }
+    }
+}
 
 void func_8006BE4C_6CA4C(Mat3x3Padded *arg0, Mat3x3Padded *arg1, Mat3x3Padded *arg2) {
     s32 row;
