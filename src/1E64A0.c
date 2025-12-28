@@ -189,7 +189,7 @@ void *func_800B97C8_1E6878(cutsceneSys2Wait_exec_asset *arg0) {
 void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->unk84 = 0;
     arg0->unk88 = 0;
-    arg0->unk8 = func_80009EF8_AAF8(0);
+    arg0->unk8 = loadSpriteAssetData(0);
     arg0->unkA0 = func_80035F80_36B80(1);
     arg0->unkC = func_8000B6B8_C2B8(0);
     setCleanupCallback(&func_800B9C20_1E6CD0);

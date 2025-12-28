@@ -93,7 +93,7 @@ typedef struct {
 } SpriteState;
 
 s32 loadSpriteAsset(SpriteAssetState *arg0, s16 arg1);
-void *func_80009EF8_AAF8(s16 arg0);
+void *loadSpriteAssetData(s16 index);
 void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0);
 void func_80009F90_AB90(void *arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 func_8000A030_AC30(void *arg0, s32 arg1);

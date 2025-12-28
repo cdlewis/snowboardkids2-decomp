@@ -103,13 +103,13 @@ s32 loadSpriteAsset(SpriteAssetState *state, s16 index) {
     return 1;
 }
 
-void *func_80009EF8_AAF8(s16 arg0) {
+void *loadSpriteAssetData(s16 index) {
     s32 *entry;
 
-    if (arg0 >= getSpriteAssetCount()) {
+    if (index >= getSpriteAssetCount()) {
         return NULL;
     }
-    entry = &D_8008C920_8D520[arg0 * 5];
+    entry = &D_8008C920_8D520[index * 5];
     return loadCompressedData((void *)entry[0], (void *)entry[1], entry[2]);
 }
 

@@ -610,7 +610,7 @@ void initAnimatedModelTask(AnimatedModelTaskState *arg0) {
     arg0->unk30 = loadCompressedData(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
     arg0->unk34 = 0;
     arg0->unk28 = temp_s2->unk4;
-    arg0->unk44 = func_80009EF8_AAF8(temp_s2->unk16);
+    arg0->unk44 = loadSpriteAssetData(temp_s2->unk16);
     arg0->unk4C = 0;
     arg0->unk4E = 0;
     arg0->unk50 = temp_s2->unk18;
