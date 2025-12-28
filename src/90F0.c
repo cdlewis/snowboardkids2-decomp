@@ -51,12 +51,12 @@ void enqueueTranslucentSprite(u16 slot, Node *node) {
     debugEnqueueCallback(slot, 4, &func_80008D18_9918, node);
 }
 
-void func_80009DD0_A9D0(u16 arg0, Node *arg1) {
-    arg1->unk18 = NULL;
-    arg1->unk1C = NULL;
-    arg1->callback = NULL;
-    arg1->cleanupCallback = NULL;
-    debugEnqueueCallback(arg0, 4, &func_80009548_A148, arg1);
+void enqueueTransformedSprite(u16 slot, Node *node) {
+    node->unk18 = NULL;
+    node->unk1C = NULL;
+    node->callback = NULL;
+    node->cleanupCallback = NULL;
+    debugEnqueueCallback(slot, 4, &func_80009548_A148, node);
 }
 
 void func_80009E0C_AA0C(SpriteAssetState *arg0) {

@@ -5,6 +5,7 @@ getSpriteAssetCount = 0x800084F0; // rom:0x90F0
 getSpriteAssetId = 0x800084F8; // rom:0x90F8
 enqueueOpaqueSprite = 0x80009D58; // rom:0xA958
 enqueueTranslucentSprite = 0x80009D94; // rom:0xA994
+enqueueTransformedSprite = 0x80009DD0; // rom:0xA9D0
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14
