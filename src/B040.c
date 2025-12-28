@@ -89,10 +89,10 @@ void spawnSpriteEffectEx(
 ) {
     u8 new_var;
     new_var = arg7;
-    func_8000A510_B110(arg0, arg1, arg2, arg3, arg4, arg5, arg6, new_var, arg8, arg9, 0);
+    spawnSpriteEffectInternal(arg0, arg1, arg2, arg3, arg4, arg5, arg6, new_var, arg8, arg9, 0);
 }
 
-s32 func_8000A510_B110(
+s32 spawnSpriteEffectInternal(
     SceneModel *arg0,
     s16 arg1,
     s16 arg2,

@@ -27,7 +27,7 @@ typedef struct {
     s32 count_offset;
 } Table_B934;
 
-s32 func_8000A510_B110(
+s32 spawnSpriteEffectInternal(
     SceneModel *arg0,
     s16 arg1,
     s16 arg2,

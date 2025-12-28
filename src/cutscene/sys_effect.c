@@ -38,7 +38,7 @@ void cutsceneEffectDisp_exec(cutsceneEffectDisp_exec_arg *arg0, CutsceneManager 
 
     slots = (CutsceneSlot *)arg1;
 
-    func_8000A510_B110(
+    spawnSpriteEffectInternal(
         slots[arg2].slotData.unkA4.ptr,
         temp_t0,
         temp_t1,
