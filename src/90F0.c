@@ -63,7 +63,7 @@ void setSpriteAssetEnabled(SpriteAssetState *state) {
     state->flags |= 1;
 }
 
-void func_80009E1C_AA1C(SpriteAssetState *state) {
+void clearSpriteAssetEnabled(SpriteAssetState *state) {
     state->flags &= 0xFE;
 }
 
