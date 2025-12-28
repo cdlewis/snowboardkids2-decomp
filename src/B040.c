@@ -64,7 +64,7 @@ typedef void (*SchedulerFunc)(func_8000B510_C110_arg *);
 extern u8 *D_8008C92C_8D52C;
 void initSimpleSpriteEffect(func_8000B510_C110_arg *arg0);
 void initScalingSpriteEffect(func_8000B510_C110_arg *arg0);
-void func_8000AD24_B924(func_8000B510_C110_arg *arg0);
+void initRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0);
 void func_8000B044_BC44(func_8000B510_C110_arg *arg0);
 void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0);
 
@@ -137,7 +137,7 @@ s32 spawnSpriteEffectInternal(
             return 1;
         case 2:
             for (i = 0; i < 4; i++) {
-                temp_v0_2 = scheduleTask(&func_8000AD24_B924, arg7, arg8, 0);
+                temp_v0_2 = scheduleTask(&initRadialBurstSpriteEffect, arg7, arg8, 0);
                 if (temp_v0_2 == NULL) {
                     continue;
                 }
@@ -405,18 +405,18 @@ void cleanupScalingSpriteEffect(func_8000B510_C110_arg *arg0) {
 }
 
 void func_8000AD88_B988(void);
-void func_8000B028_BC28(func_8000B510_C110_arg *);
+void cleanupRadialBurstSpriteEffect(func_8000B510_C110_arg *);
 
-void func_8000AD24_B924(func_8000B510_C110_arg *arg0) {
+void initRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
-    setCleanupCallback(func_8000B028_BC28);
+    setCleanupCallback(cleanupRadialBurstSpriteEffect);
     setCallback(func_8000AD88_B988);
 }
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000AD88_B988);
 
-void func_8000B028_BC28(func_8000B510_C110_arg *arg0) {
+void cleanupRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
