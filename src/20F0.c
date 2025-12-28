@@ -442,7 +442,7 @@ void initializeGameEntity(
     ent->unk4F = assetEntry->unk31;
     ent->actionMode = 0;
 
-    func_80009E68_AA68(&ent->unkA4, 0);
+    loadSpriteAsset(&ent->unkA4, 0);
     ent->unk114 = func_8000CD88_D988();
     ent->unk118 = func_8000CDB4_D9B4();
     ent->soundData = loadAssetGroupSoundData((SceneModel *)ent);

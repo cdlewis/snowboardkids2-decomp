@@ -64,7 +64,7 @@ void initOrbitalSpriteRing(OrbitalSpriteRingInitArg *arg0) {
     OrbitalSpriteState *task;
     s32 temp;
 
-    func_80009E68_AA68(&arg0->spriteState, 5);
+    loadSpriteAsset(&arg0->spriteState, 5);
 
     for (i = 0; i < ORBITAL_SPRITE_COUNT; i++) {
         task = scheduleTask(initOrbitalSprite, 0, 0, 0);
@@ -93,7 +93,7 @@ void initOrbitalSprite(OrbitalSpriteState *arg0) {
     SpriteAssetState *temp_s0;
 
     temp_s0 = &arg0->spriteState;
-    func_80009E68_AA68(temp_s0, 5);
+    loadSpriteAsset(temp_s0, 5);
     func_80009F90_AB90(temp_s0, 0x10000, 0, -1);
     arg0->isActive = 0;
     arg0->delayTimer = randA() % 15;

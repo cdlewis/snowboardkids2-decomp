@@ -71,7 +71,7 @@ void initPulsingSpriteIndicator(PulsingSpriteState *arg0) {
     temp_s0 = &arg0->spriteState;
     arg0->scale = 0xC80000;
     arg0->scaleVelocity = 0x80000;
-    func_80009E68_AA68(temp_s0, 7);
+    loadSpriteAsset(temp_s0, 7);
     func_80009F90_AB90(temp_s0, 0x10000, 0, -1);
     setCleanupCallback(&cleanupPulsingSpriteIndicator);
     setCallback(&updatePulsingSpriteIndicator);

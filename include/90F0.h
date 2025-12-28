@@ -45,8 +45,8 @@ typedef struct {
 } AnimationState;
 
 typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ s16 unk4;
+    /* 0x00 */ void *spriteData;
+    /* 0x04 */ s16 assetIndex;
     /* 0x06 */ u8 flags;
     /* 0x07 */ u8 unk7;
     /* 0x08 */ AnimSetEntry *unk8;
@@ -92,7 +92,7 @@ typedef struct {
     /* 0x4A */ u16 unk4A;
 } SpriteState;
 
-s32 func_80009E68_AA68(SpriteAssetState *arg0, s16 arg1);
+s32 loadSpriteAsset(SpriteAssetState *arg0, s16 arg1);
 void *func_80009EF8_AAF8(s16 arg0);
 void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0);
 void func_80009F90_AB90(void *arg0, s32 arg1, s32 arg2, s32 arg3);

@@ -86,20 +86,20 @@ s32 isSpriteAssetVisible(SpriteAssetState *state) {
     return val != 0;
 }
 
-s32 func_80009E68_AA68(SpriteAssetState *arg0, s16 arg1) {
+s32 loadSpriteAsset(SpriteAssetState *state, s16 index) {
     s32 *entry;
-    s16 temp_s0;
+    s16 savedIndex;
 
-    temp_s0 = arg1;
-    if (temp_s0 >= getSpriteAssetCount()) {
-        arg0->unk0 = NULL;
-        arg0->unk4 = 0;
+    savedIndex = index;
+    if (savedIndex >= getSpriteAssetCount()) {
+        state->spriteData = NULL;
+        state->assetIndex = 0;
         return 0;
     }
-    entry = &D_8008C920_8D520[temp_s0 * 5];
-    arg0->unk0 = loadCompressedData((void *)entry[0], (void *)entry[1], entry[2]);
-    arg0->unk4 = arg1;
-    arg0->flags = 0;
+    entry = &D_8008C920_8D520[savedIndex * 5];
+    state->spriteData = loadCompressedData((void *)entry[0], (void *)entry[1], entry[2]);
+    state->assetIndex = index;
+    state->flags = 0;
     return 1;
 }
 
@@ -133,7 +133,7 @@ void func_80009F90_AB90(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
         return;
     }
 
-    entry = &D_8008C920_8D520[state->unk4 * 5];
+    entry = &D_8008C920_8D520[state->assetIndex * 5];
     if (index < *(s16 *)(&entry[4])) {
         state->unk8 = (AnimSetEntry *)entry[3] + index;
         state->unkC = state->unk8->unk0;
@@ -142,7 +142,7 @@ void func_80009F90_AB90(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
         state->unk14 = 0;
         t16 = state->unkC->unk6;
         state->unk16 = t16;
-        t0 = state->unk0;
+        t0 = state->spriteData;
         t7 = state->unk8->unk6;
         state->unk28 = t0;
         state->unk7 = t7;
