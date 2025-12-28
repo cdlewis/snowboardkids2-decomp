@@ -753,36 +753,36 @@ void *getTable2DEntry(Table_B934 *table, s32 rowIndex, s32 colIndex) {
     return (void *)(colOffsets[colIndex] + (s32)table);
 }
 
-s16 func_8000B770_C370(u16 *arg0) {
+s16 getMaxLineCharCount(u16 *encodedText) {
     s16 i = 0;
-    s16 count = 0;
-    u16 val;
-    s16 maxCount;
+    s16 lineLength = 0;
+    u16 code;
+    s16 maxLength;
 
-    val = arg0[0];
-    maxCount = 0;
-    if (val != 0xFFFF) {
+    code = encodedText[0];
+    maxLength = 0;
+    if (code != 0xFFFF) {
         do {
-            val = arg0[i];
-            if (val != 0xFFFC) {
-                if (val == 0xFFFD) {
-                    count = 0;
+            code = encodedText[i];
+            if (code != 0xFFFC) {
+                if (code == 0xFFFD) {
+                    lineLength = 0;
                 } else {
-                    count++;
+                    lineLength++;
                 }
             } else {
                 i++;
             }
 
-            if (count > maxCount) {
-                maxCount = count;
+            if (lineLength > maxLength) {
+                maxLength = lineLength;
             }
 
             i++;
-        } while (arg0[i] != 0xFFFF);
+        } while (encodedText[i] != 0xFFFF);
     }
 
-    return maxCount;
+    return maxLength;
 }
 
 s16 func_8000B7FC_C3FC(u16 *arg0) {
