@@ -47,7 +47,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ void *unk0;
     /* 0x04 */ s16 unk4;
-    /* 0x06 */ u8 unk6;
+    /* 0x06 */ u8 flags;
     /* 0x07 */ u8 unk7;
     /* 0x08 */ AnimSetEntry *unk8;
     /* 0x0C */ AnimFrameEntry *unkC;

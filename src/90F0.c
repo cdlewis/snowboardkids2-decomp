@@ -59,29 +59,30 @@ void enqueueTransformedSprite(u16 slot, Node *node) {
     debugEnqueueCallback(slot, 4, &func_80009548_A148, node);
 }
 
-void func_80009E0C_AA0C(SpriteAssetState *arg0) {
-    arg0->unk6 |= 1;
+void setSpriteAssetEnabled(SpriteAssetState *state) {
+    state->flags |= 1;
 }
 
-void func_80009E1C_AA1C(SpriteAssetState *arg0) {
-    arg0->unk6 &= 0xFE;
+void func_80009E1C_AA1C(SpriteAssetState *state) {
+    state->flags &= 0xFE;
 }
 
-s32 func_80009E2C_AA2C(SpriteAssetState *arg0) {
-    return arg0->unk6 & 1;
+s32 func_80009E2C_AA2C(SpriteAssetState *state) {
+    return state->flags & 1;
 }
 
-void func_80009E38_AA38(SpriteAssetState *arg0) {
-    arg0->unk6 |= 2;
+void func_80009E38_AA38(SpriteAssetState *state) {
+    state->flags |= 2;
 }
 
-void func_80009E48_AA48(SpriteAssetState *arg0) {
-    arg0->unk6 &= 0xFD;
+void func_80009E48_AA48(SpriteAssetState *state) {
+    state->flags &= 0xFD;
 }
 
-s32 func_80009E58_AA58(SpriteAssetState *arg0) {
+s32 func_80009E58_AA58(SpriteAssetState *state) {
     u8 val;
-    val = arg0->unk6 & 2;
+
+    val = state->flags & 2;
     return val != 0;
 }
 
@@ -98,7 +99,7 @@ s32 func_80009E68_AA68(SpriteAssetState *arg0, s16 arg1) {
     entry = &D_8008C920_8D520[temp_s0 * 5];
     arg0->unk0 = loadCompressedData((void *)entry[0], (void *)entry[1], entry[2]);
     arg0->unk4 = arg1;
-    arg0->unk6 = 0;
+    arg0->flags = 0;
     return 1;
 }
 
