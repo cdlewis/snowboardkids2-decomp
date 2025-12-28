@@ -113,21 +113,11 @@ typedef struct {
     s8 unk1;
 } AnimationData;
 
-extern void func_800BB45C_AF14C(void **);
-extern void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
-extern void func_800BB620_AF310(func_800BB388_AF078_arg *);
-extern void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
-extern void func_800BB778_AF468(void);
-void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *);
-void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *);
-extern void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
-extern void func_800BBEAC_AFB9C(s16 *);
-extern void func_800BBCE8_AF9D8(void **);
-extern void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
-extern void func_800BC184_AFE74(GhostManager *);
-extern void func_800BC220_AFF10(u8 *ghostSlots);
-extern void func_800BC340_B0030(GhostManager *);
-extern void func_800BC750_B0440(s16 *);
+typedef struct {
+    void *matrixData;
+    void *textureTable;
+    u8 textureIndices[8];
+} GhostRenderState;
 
 extern s32 D_8009A8A4_9B4A4;
 extern void *D_800BC7F0_B04E0;
@@ -145,8 +135,30 @@ extern Vec3i D_800BCA00_B06F0[];
 extern s32 D_800BC914_B0604;
 extern s32 D_800BC918_B0608;
 extern s32 D_800BC91C_B060C;
+extern Vec3i D_800BCA00_B06F0[];
+extern Gfx D_8009A780_9B380[];
+extern Gfx D_800BCA60_B0750[];
+extern s32 D_800A8B14_9FE84;
+extern s16 gGraphicsMode;
+extern Gfx *gRegionAllocPtr;
 
+void func_800BB45C_AF14C(void **);
+void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
+void func_800BB620_AF310(func_800BB388_AF078_arg *);
+void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
+void func_800BB778_AF468(void);
+void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *);
+void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *);
+void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
+void func_800BBEAC_AFB9C(s16 *);
+void func_800BBCE8_AF9D8(void **);
+void func_800BBD14_AFA04(func_800BBC64_AF954_arg *);
+void func_800BC184_AFE74(GhostManager *);
+void func_800BC220_AFF10(u8 *ghostSlots);
+void func_800BC340_B0030(GhostManager *);
+void func_800BC750_B0440(s16 *);
 void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *);
+void func_800BC378_B0068(GhostRenderState *);
 
 void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *arg0) {
     s32 i;
@@ -637,8 +649,6 @@ void func_800BC184_AFE74(GhostManager *ghostManager) {
     setCallback(func_800BC220_AFF10);
 }
 
-void func_800BC378_B0068(void);
-
 void func_800BC220_AFF10(u8 *ghostSlots) {
     GameState *gameState;
     s32 i;
@@ -708,7 +718,57 @@ void func_800BC340_B0030(GhostManager *ghostManager) {
     ghostManager->unk4 = freeNodeMemory(ghostManager->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BC378_B0068);
+void func_800BC378_B0068(GhostRenderState *state) {
+    OutputStruct_19E80 tableEntry;
+    s32 prevTextureIndex;
+    s32 i;
+
+    prevTextureIndex = -1;
+    gGraphicsMode = -1;
+    gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+
+    for (i = 0; i < 8; i++) {
+        if (isObjectCulled(&D_800BCA00_B06F0[i]) == 0) {
+            u8 textureIndex = state->textureIndices[i];
+
+            if (textureIndex != prevTextureIndex) {
+                prevTextureIndex = textureIndex;
+                getTableEntryByU16Index(state->textureTable, (u16)prevTextureIndex, &tableEntry);
+
+                gDPLoadMultiBlock_4b(
+                    gRegionAllocPtr++,
+                    tableEntry.data_ptr,
+                    0,
+                    G_TX_RENDERTILE,
+                    G_IM_FMT_CI,
+                    tableEntry.field1,
+                    tableEntry.field2,
+                    0,
+                    G_TX_CLAMP,
+                    G_TX_CLAMP,
+                    G_TX_NOMASK,
+                    G_TX_NOMASK,
+                    G_TX_NOLOD,
+                    G_TX_NOLOD
+                );
+
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
+            }
+
+            gSPMatrix(
+                gRegionAllocPtr++,
+                (u8 *)state->matrixData + (i << 6),
+                G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
+            );
+
+            gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+
+            gSPVertex(gRegionAllocPtr++, D_800BCA60_B0750, 4, 0);
+
+            gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+        }
+    }
+}
 
 void func_800BC72C_B041C(s16 *arg0) {
     *arg0 = 0;
