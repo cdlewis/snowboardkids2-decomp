@@ -17,7 +17,7 @@ extern void *D_8008CB28_8D728;
 extern void *D_8008CB68_8D768;
 extern void *D_8008CBA8_8D7A8;
 
-s32 func_800084F0_90F0(void) {
+s32 getSpriteAssetCount(void) {
     return 10;
 }
 
@@ -90,7 +90,7 @@ s32 func_80009E68_AA68(SpriteAssetState *arg0, s16 arg1) {
     s16 temp_s0;
 
     temp_s0 = arg1;
-    if (temp_s0 >= func_800084F0_90F0()) {
+    if (temp_s0 >= getSpriteAssetCount()) {
         arg0->unk0 = NULL;
         arg0->unk4 = 0;
         return 0;
@@ -105,7 +105,7 @@ s32 func_80009E68_AA68(SpriteAssetState *arg0, s16 arg1) {
 void *func_80009EF8_AAF8(s16 arg0) {
     s32 *entry;
 
-    if (arg0 >= func_800084F0_90F0()) {
+    if (arg0 >= getSpriteAssetCount()) {
         return NULL;
     }
     entry = &D_8008C920_8D520[arg0 * 5];
