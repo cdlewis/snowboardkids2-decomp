@@ -62,6 +62,7 @@ spawnRocketEffectEx = 0x8000BC10; // rom:0xC810
 initPaletteContext = 0x8000BC70; // rom:0xC870
 resetPaletteContext = 0x8000BCC4; // rom:0xC8C4
 applyPaletteShift = 0x8000BCEC; // rom:0xC8EC
+setColorImageToAuxBuffer = 0x8000BFA0; // rom:0xCBA0
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14
