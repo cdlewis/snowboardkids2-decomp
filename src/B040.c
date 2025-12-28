@@ -188,7 +188,7 @@ typedef struct {
     void *unk0;
     u8 _pad4[0x14];
     u8 unk18[1];
-} func_8000A834_B434_arg;
+} SpriteEffectPositionSource;
 
 typedef struct {
     s32 unk0;
@@ -199,7 +199,7 @@ typedef struct {
     s32 unk14;
     s32 unk18;
     s32 unk1C;
-} func_8000A834_B434_ret;
+} SpriteEffectPosition;
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -218,7 +218,7 @@ typedef struct {
 } func_8000A8B8_arg;
 
 typedef struct {
-    /* 0x00 */ func_8000A834_B434_arg *unk0;
+    /* 0x00 */ SpriteEffectPositionSource *unk0;
     /* 0x04 */ s16 unk4;
     /* 0x06 */ u8 _pad6[2];
     /* 0x08 */ s16 unk8;
@@ -243,11 +243,11 @@ void func_8000A988_B588(func_8000B510_C110_arg *);
 void func_8000AA08_B608(func_8000AA08_B608_arg *);
 void func_8000AD08_B908(func_8000B510_C110_arg *);
 
-func_8000A834_B434_ret *func_8000A834_B434(func_8000A834_B434_arg *arg0, s16 arg1) {
-    if (arg1 != 0 && arg0->unk0 != NULL) {
-        return arg0->unk0;
+SpriteEffectPosition *getSpriteEffectPosition(SpriteEffectPositionSource *source, s16 useParent) {
+    if (useParent != 0 && source->unk0 != NULL) {
+        return source->unk0;
     }
-    return (func_8000A834_B434_ret *)&arg0->unk18;
+    return (SpriteEffectPosition *)&source->unk18;
 }
 
 void func_8000A854_B454(func_8000B510_C110_arg *arg0) {
@@ -258,7 +258,7 @@ void func_8000A854_B454(func_8000B510_C110_arg *arg0) {
 }
 
 void func_8000A8B8_B4B8(func_8000A8B8_arg *arg0) {
-    func_8000A834_B434_ret *temp;
+    SpriteEffectPosition *temp;
     void *ptr;
     s32 x, y, z;
     s16 a1;
@@ -275,7 +275,7 @@ void func_8000A8B8_B4B8(func_8000A8B8_arg *arg0) {
         return;
     }
 
-    temp = func_8000A834_B434(arg0->unk0, arg0->unk1E);
+    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
 
     x = temp->unk14 + arg0->unk10;
     y = temp->unk18 + arg0->unk14;
@@ -301,7 +301,7 @@ void func_8000A9A4_B5A4(func_8000B510_C110_arg *arg0) {
 }
 
 void func_8000AA08_B608(func_8000AA08_B608_arg *arg0) {
-    func_8000A834_B434_ret *temp;
+    SpriteEffectPosition *temp;
     s32 result;
     s32 val;
     s32 temp_val;
@@ -386,7 +386,7 @@ void func_8000AA08_B608(func_8000AA08_B608_arg *arg0) {
         return;
     }
 
-    temp = func_8000A834_B434(arg0->unk0, arg0->unk1E);
+    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
 
     a1 = arg0->unk4;
     x = temp->unk14 + arg0->unk10;
@@ -421,7 +421,7 @@ void func_8000B028_BC28(func_8000B510_C110_arg *arg0) {
 }
 
 typedef struct {
-    /* 0x00 */ func_8000A834_B434_arg *unk0;
+    /* 0x00 */ SpriteEffectPositionSource *unk0;
     /* 0x04 */ s16 unk4;
     /* 0x06 */ u8 _pad6[4];
     /* 0x0A */ u8 unkA;
@@ -447,7 +447,7 @@ void func_8000B044_BC44(func_8000B510_C110_arg *arg0) {
 }
 
 void func_8000B0A8_BCA8(func_8000B0A8_arg *arg0) {
-    func_8000A834_B434_ret *temp;
+    SpriteEffectPosition *temp;
     void *ptr;
     s32 x, y, z;
     s16 a1;
@@ -474,7 +474,7 @@ void func_8000B0A8_BCA8(func_8000B0A8_arg *arg0) {
     }
 
     ptr = &arg0->unk20;
-    temp = func_8000A834_B434(arg0->unk0, arg0->unk1E);
+    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
 
     x = temp->unk14 + arg0->unk10;
     y = temp->unk18 + arg0->unk14;
@@ -489,7 +489,7 @@ void func_8000B1B0_BDB0(func_8000B510_C110_arg *arg0) {
 }
 
 typedef struct {
-    /* 0x00 */ func_8000A834_B434_arg *unk0;
+    /* 0x00 */ SpriteEffectPositionSource *unk0;
     /* 0x04 */ s16 unk4;
     /* 0x06 */ u8 _pad6[2];
     /* 0x08 */ s16 unk8;
@@ -516,7 +516,7 @@ void func_8000B1CC_BDCC(func_8000B510_C110_arg *arg0) {
 }
 
 void func_8000B230_BE30(func_8000B230_arg *arg0) {
-    func_8000A834_B434_ret *temp;
+    SpriteEffectPosition *temp;
     void *ptr;
     s32 x, y, z;
     s16 a1;
@@ -554,7 +554,7 @@ void func_8000B230_BE30(func_8000B230_arg *arg0) {
     }
 
     ptr = &arg0->unk20;
-    temp = func_8000A834_B434(arg0->unk0, arg0->unk1E);
+    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
 
     x = temp->unk14 + arg0->unk10;
     y = temp->unk18 + arg0->unk14 + arg0->unk6C;
@@ -569,7 +569,7 @@ void func_8000B370_BF70(func_8000B510_C110_arg *arg0) {
 }
 
 typedef struct {
-    /* 0x00 */ func_8000A834_B434_arg *unk0;
+    /* 0x00 */ SpriteEffectPositionSource *unk0;
     /* 0x04 */ s16 unk4;
     /* 0x06 */ u8 _pad6[2];
     /* 0x08 */ s16 unk8;
@@ -602,7 +602,7 @@ void func_8000B38C_BF8C(func_8000B510_C110_arg *arg0) {
 }
 
 void func_8000B400_C000(func_8000B400_C000_arg *arg0) {
-    func_8000A834_B434_ret *temp;
+    SpriteEffectPosition *temp;
     s32 x, y, z;
 
     if (arg0->unk8 < 0) {
@@ -630,7 +630,7 @@ void func_8000B400_C000(func_8000B400_C000_arg *arg0) {
         }
     }
 
-    temp = func_8000A834_B434(arg0->unk0, arg0->unk1E);
+    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
 
     x = temp->unk14 + arg0->unk10;
     y = temp->unk18 + arg0->unk14 + arg0->unk6C;
@@ -644,7 +644,7 @@ void func_8000B510_C110(func_8000B510_C110_arg *arg0) {
 }
 
 typedef struct {
-    /* 0x00 */ func_8000A834_B434_arg *unk0;
+    /* 0x00 */ SpriteEffectPositionSource *unk0;
     /* 0x04 */ s16 unk4;
     /* 0x06 */ u8 _pad6[2];
     /* 0x08 */ s16 unk8;
@@ -674,7 +674,7 @@ void func_8000B52C_C12C(func_8000B510_C110_arg *arg0) {
 }
 
 void func_8000B598_C198(func_8000B598_arg *arg0) {
-    func_8000A834_B434_ret *temp;
+    SpriteEffectPosition *temp;
     s32 x, y, z;
     s32 sinVal;
 
@@ -691,7 +691,7 @@ void func_8000B598_C198(func_8000B598_arg *arg0) {
 
     arg0->unk70 = arg0->unk70 + 0x111;
 
-    temp = func_8000A834_B434(arg0->unk0, arg0->unk1E);
+    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
 
     x = temp->unk14 + arg0->unk10;
     y = temp->unk18 + arg0->unk14 + arg0->unk6C;
