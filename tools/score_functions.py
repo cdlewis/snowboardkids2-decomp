@@ -8,6 +8,7 @@ Usage:
     python3 tools/score_functions.py --exhaustive asm/
     python3 tools/score_functions.py --score-func func_800B6544_1E35F4 asm/
     python3 tools/score_functions.py --min-score 100 --max-score 200 asm/
+    python3 tools/score_functions.py --by-similarity asm/nonmatchings/
 """
 
 import sys
@@ -18,7 +19,7 @@ import json
 import numpy as np
 from pathlib import Path
 from dataclasses import dataclass
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 
 def decompilation_difficulty_score(instructions, branches, jumps, labels):
@@ -49,6 +50,9 @@ class FunctionScore:
     jump_count: int = 0
     label_count: int = 0
     stack_size: int = 0
+    # Similarity info (populated when --by-similarity is used)
+    similar_to: Optional[str] = None
+    similarity_score: float = 0.0
 
     @property
     def total_score(self) -> float:
@@ -61,7 +65,7 @@ class FunctionScore:
         )
 
     def __str__(self) -> str:
-        return (
+        base = (
             f"{self.name:50s} | Difficulty: {self.total_score:5.3f} | "
             f"Instructions: {self.instruction_count:3d} | "
             f"Branches: {self.branch_count:2d} | "
@@ -69,14 +73,20 @@ class FunctionScore:
             f"Labels: {self.label_count:2d} | "
             f"Stack: {self.stack_size:4d}"
         )
+        if self.similar_to:
+            base += f" | ({self.similar_to} is similar and might provide a useful reference)"
+        return base
 
     def to_simple_format(self) -> str:
         """Return a simple parseable format without column names."""
-        return (
+        base = (
             f"{self.name} | {self.total_score:.3f} | "
             f"{self.instruction_count} | {self.branch_count} | "
             f"{self.jump_count} | {self.label_count} | {self.stack_size}"
         )
+        if self.similar_to:
+            base += f" | (similar to {self.similar_to}, {self.similarity_score:.2f})"
+        return base
 
 
 def parse_multi_function_file(file_path: str) -> List[FunctionScore]:
@@ -414,6 +424,7 @@ Examples:
   python3 tools/score_functions.py --exhaustive --min-score 50 asm/
   python3 tools/score_functions.py --clean asm/
   python3 tools/score_functions.py --json asm/  # Output JSON array for task-runner.py
+  python3 tools/score_functions.py --by-similarity asm/nonmatchings/  # Rank by best reference
         """
     )
     parser.add_argument(
@@ -451,6 +462,11 @@ Examples:
         '--json',
         action='store_true',
         help='Output function names as JSON array ordered by difficulty (easiest first), suitable for task-runner.py'
+    )
+    parser.add_argument(
+        '--by-similarity',
+        action='store_true',
+        help='Rank functions by how similar they are to existing matched functions (best reference material first)'
     )
 
     args = parser.parse_args()
@@ -508,15 +524,57 @@ Examples:
         print("Error: All functions are marked as difficult or are data sections!", file=sys.stderr)
         sys.exit(1)
 
+    # If --by-similarity, compute similarity scores and re-sort
+    if args.by_similarity:
+        try:
+            from find_similar_functions import (
+                get_matchings_index, get_project_root, find_function,
+                find_similar_functions as find_similar, ParsedFunction,
+                parse_function_content, parse_asm_file
+            )
+
+            project_root = get_project_root()
+            print("Building similarity index...", file=sys.stderr)
+            matchings_index = get_matchings_index(project_root)
+            print(f"Indexed {len(matchings_index)} matched functions", file=sys.stderr)
+
+            # For each function, find best match and store similarity
+            print("Computing similarities...", file=sys.stderr)
+            for func_score in filtered_scores:
+                # Parse the function to get its features
+                parsed_funcs = parse_asm_file(func_score.file_path)
+                query = None
+                for pf in parsed_funcs:
+                    if pf.name == func_score.name:
+                        query = pf
+                        break
+
+                if query:
+                    results = find_similar(query, matchings_index, top_n=1, threshold=0.0)
+                    if results:
+                        func_score.similar_to = results[0].function.name
+                        func_score.similarity_score = results[0].total_score
+
+            # Sort by similarity score (highest first - best reference material)
+            filtered_scores.sort(key=lambda s: s.similarity_score, reverse=True)
+            print("", file=sys.stderr)
+
+        except ImportError as e:
+            print(f"Error: Could not import find_similar_functions: {e}", file=sys.stderr)
+            sys.exit(1)
+
     # JSON output mode - output array of function names
     if args.json:
         function_names = [s.name for s in filtered_scores]
         print(json.dumps(function_names))
         sys.exit(0)
 
-    # In exhaustive mode, list all functions
-    if args.exhaustive:
-        print("ALL FUNCTIONS (sorted by complexity):\n")
+    # In exhaustive mode or by-similarity mode, list all functions
+    if args.exhaustive or args.by_similarity:
+        if args.by_similarity:
+            print("ALL FUNCTIONS (sorted by similarity to matched functions):\n")
+        else:
+            print("ALL FUNCTIONS (sorted by complexity):\n")
         for score in filtered_scores:
             print(score.to_simple_format())
         print(f"\n{'='*80}\n")
@@ -524,10 +582,13 @@ Examples:
     simplest = filtered_scores[0]
 
     # Simple mode: just print the function name if no special flags
-    if not args.exhaustive and args.min_score is None and args.max_score is None:
+    if not args.exhaustive and not args.by_similarity and args.min_score is None and args.max_score is None:
         print(simplest.name)
     else:
-        print(f"SIMPLEST FUNCTION: {simplest.name}")
+        if args.by_similarity:
+            print(f"BEST REFERENCE: {simplest.name}")
+        else:
+            print(f"SIMPLEST FUNCTION: {simplest.name}")
         print(f"{simplest}")
 
 if __name__ == '__main__':

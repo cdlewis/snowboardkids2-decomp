@@ -456,6 +456,100 @@ def get_c_source_for_function(func_name: str, project_root: str) -> Optional[str
     return None
 
 
+# --- Programmatic API for use by other scripts ---
+
+_cached_matchings_index: Optional[List[ParsedFunction]] = None
+_cached_project_root: Optional[str] = None
+
+
+def get_project_root() -> str:
+    """Get the project root directory."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.dirname(script_dir)
+
+
+def get_matchings_index(project_root: Optional[str] = None) -> List[ParsedFunction]:
+    """Get or build the cached index of matched functions."""
+    global _cached_matchings_index, _cached_project_root
+
+    if project_root is None:
+        project_root = get_project_root()
+
+    # Return cached index if available for same project
+    if _cached_matchings_index is not None and _cached_project_root == project_root:
+        return _cached_matchings_index
+
+    matchings_dir = os.path.join(project_root, 'asm', 'matchings')
+    _cached_matchings_index = build_function_index(matchings_dir)
+    _cached_project_root = project_root
+
+    return _cached_matchings_index
+
+
+def get_best_match_for_function(func_name: str, project_root: Optional[str] = None) -> Optional[Tuple[str, float]]:
+    """
+    Find the best matching function for a given function name.
+
+    Args:
+        func_name: Name of the function to find matches for
+        project_root: Optional project root path
+
+    Returns:
+        Tuple of (best_match_name, similarity_score) or None if no match found
+    """
+    if project_root is None:
+        project_root = get_project_root()
+
+    nonmatchings_dir = os.path.join(project_root, 'asm', 'nonmatchings')
+    matchings_dir = os.path.join(project_root, 'asm', 'matchings')
+
+    # Find the query function
+    query = find_function(func_name, [nonmatchings_dir, matchings_dir])
+    if not query:
+        return None
+
+    # Get matchings index
+    candidates = get_matchings_index(project_root)
+    if not candidates:
+        return None
+
+    # Find similar functions
+    results = find_similar_functions(query, candidates, top_n=1, threshold=0.0)
+
+    if results:
+        return (results[0].function.name, results[0].total_score)
+
+    return None
+
+
+def get_best_match_for_parsed_function(query: ParsedFunction, project_root: Optional[str] = None) -> Optional[Tuple[str, float]]:
+    """
+    Find the best matching function for an already-parsed function.
+
+    Args:
+        query: ParsedFunction object to find matches for
+        project_root: Optional project root path
+
+    Returns:
+        Tuple of (best_match_name, similarity_score) or None if no match found
+    """
+    if project_root is None:
+        project_root = get_project_root()
+
+    # Get matchings index
+    candidates = get_matchings_index(project_root)
+    if not candidates:
+        return None
+
+    # Find similar functions
+    results = find_similar_functions(query, candidates, top_n=1, threshold=0.0)
+
+    if results:
+        return (results[0].function.name, results[0].total_score)
+
+    return None
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Find similar assembly functions to assist with decompilation.",
