@@ -43,8 +43,8 @@ s32 func_8000A510_B110(
 void *func_8000B6B8_C2B8(s16 arg0);
 void *func_8000B714_C314(Table_B934 *arg0, s32 arg1, s32 arg2);
 s16 func_8000B7FC_C3FC(u16 *arg0);
-void func_8000A49C_B09C(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
-void func_8000A49C_B09C(
+void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
+void spawnSpriteEffectEx(
     SceneModel *arg0,
     s16 arg1,
     s16 arg2,

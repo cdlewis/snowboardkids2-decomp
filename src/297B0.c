@@ -238,7 +238,7 @@ void func_8002900C_29C0C(Func297D8Arg *arg0) {
             if (arg0->unk5A >= 0) {
                 arg0->unk5E = 9;
                 arg0->unk50 = 0;
-                func_8000A49C_B09C(arg0->model, 0, 6, 10, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+                spawnSpriteEffectEx(arg0->model, 0, 6, 10, &arg0->unk40, 0x10000, 0, 2, 0, 0);
             }
         }
     }
@@ -386,7 +386,7 @@ void func_80029360_29F60(Func297D8Arg *arg0) {
                 arg0->unk50 = 0xA;
                 arg0->unk5A = 0;
                 arg0->unk61 = temp;
-                func_8000A49C_B09C(arg0->model, 0, 7, 0x2D, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+                spawnSpriteEffectEx(arg0->model, 0, 7, 0x2D, &arg0->unk40, 0x10000, 0, 2, 0, 0);
             }
         }
     }
@@ -447,7 +447,7 @@ void func_80029680_2A280(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk48 = 0;
     arg0->unk40 = 0;
-    func_8000A49C_B09C(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+    spawnSpriteEffectEx(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     setAnimationIndex(arg0->model, 1);
@@ -462,7 +462,7 @@ void func_80029724_2A324(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk48 = 0;
     arg0->unk40 = 0;
-    func_8000A49C_B09C(arg0->model, 0, 9, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+    spawnSpriteEffectEx(arg0->model, 0, 9, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     if (arg0->unk5C == 1) {

@@ -186,7 +186,7 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
             arg0->unkCE = (u8)temp_a0 + 0x18;
             if (D_8009ADE0_9B9E0 & 1) {
                 arg0->unk0[0].unk44 = 0x290000;
-                func_8000A49C_B09C(
+                spawnSpriteEffectEx(
                     (SceneModel *)arg0->unk0[0].unk0,
                     0,
                     8,
@@ -201,7 +201,7 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
             } else {
                 arg0->unkCE = (u8)temp_a0 + 0x2C;
                 arg0->unk0[0].unk44 = 0x290000;
-                func_8000A49C_B09C(
+                spawnSpriteEffectEx(
                     (SceneModel *)arg0->unk0[0].unk0,
                     0,
                     0x3E,
@@ -213,7 +213,7 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
                     0,
                     0x400
                 );
-                func_8000A49C_B09C(
+                spawnSpriteEffectEx(
                     (SceneModel *)arg0->unk0[1].unk0,
                     0,
                     0x3E,

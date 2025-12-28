@@ -9,7 +9,7 @@ extern void *D_8008EBF0_8F7F0[];
 extern void func_8002BFEC_2CBEC(void *);
 extern void func_8002C570_2D170(void *);
 
-extern void func_8000A49C_B09C(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
+extern void spawnSpriteEffectEx(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
 extern u8 D_8008EBE0_8F7E0[];
 extern void *D_8008ECF0_8F8F0;
 extern void *D_8008ED00_8F900;
@@ -110,7 +110,7 @@ void func_8002C798_2D398(Struct2C8F0 *arg0, s32 arg1) {
             elem = &arg0->elems[arg1];
             elem->unk4C = &D_8008ED00_8F900;
             arg0->elems[0].unk44 = 0x300000;
-            func_8000A49C_B09C(
+            spawnSpriteEffectEx(
                 (s32)elem->unk0,
                 0,
                 0x1F,

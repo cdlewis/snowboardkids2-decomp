@@ -6,7 +6,7 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern void func_8000A49C_B09C(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
+extern void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
 extern u8 identityMatrix[];
 extern u16 D_8008EF70_8FB70[];
 
@@ -87,7 +87,7 @@ void func_8002D46C_2E06C(Func2E024Arg *arg0) {
             arg0->unk5E = 0;
             arg0->unk40 = 0;
             arg0->unk48 = 0;
-            func_8000A49C_B09C(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+            spawnSpriteEffectEx(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
         } else {
             arg0->unk7C = 0x1C0000;
             arg0->unk84 = -0x4E0000;
@@ -97,7 +97,7 @@ void func_8002D46C_2E06C(Func2E024Arg *arg0) {
             arg0->unkA4 = 0x40000;
             arg0->unkA8 = 0x280000;
             arg0->unkAC = 0;
-            func_8000A49C_B09C(arg0->unk64, 0, 0x24, -1, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
+            spawnSpriteEffectEx(arg0->unk64, 0, 0x24, -1, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
         }
 
         ((Func297D8Arg *)&elements[i])->rotation = 0x800 + i * 0x1000;
@@ -151,8 +151,8 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
     case23:
         ((Func2E024Arg *)&elements[i])->unk62 = 0;
         if (getFreeNodeCount(2) == 0x14) {
-            func_8000A49C_B09C(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
-            func_8000A49C_B09C(arg0->unk64, 0, 0x24, -1, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
+            spawnSpriteEffectEx(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+            spawnSpriteEffectEx(arg0->unk64, 0, 0x24, -1, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
         }
 
     cont:
@@ -200,7 +200,7 @@ void func_8002DE44_2EA44(Func2E024Arg *container) {
             container->unk44 = 0x1D0000;
             container->unk40 = 0xFFFC0000;
             container->unk48 = 0;
-            func_8000A49C_B09C(container->model, 0, 0x2F, -1, &container->unk40, 0x10000, 0, 2, 0, 0);
+            spawnSpriteEffectEx(container->model, 0, 0x2F, -1, &container->unk40, 0x10000, 0, 2, 0, 0);
         } else {
             container->unk7C = 0x200000;
             container->unkC2 = 0x62;
@@ -210,7 +210,7 @@ void func_8002DE44_2EA44(Func2E024Arg *container) {
             container->unkBE = 0;
             container->unkA4 = 0;
             container->unkAC = 0;
-            func_8000A49C_B09C(container->unk64, 0, 7, 0x2D, &container->unkA4, 0x10000, 0, 2, 0, 0);
+            spawnSpriteEffectEx(container->unk64, 0, 7, 0x2D, &container->unkA4, 0x10000, 0, 2, 0, 0);
         }
 
         element->rotation = 0x1800;

@@ -22,6 +22,7 @@ renderSprite = 0x8000A190; // rom:0xAD90
 setupAndEnqueueSprite = 0x8000A1E4; // rom:0xADE4
 getTableEntryValue = 0x8000A410; // rom:0xB010
 spawnSpriteEffect = 0x8000A440; // rom:0xB040
+spawnSpriteEffectEx = 0x8000A49C; // rom:0xB09C
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14
