@@ -327,7 +327,7 @@ void func_80031510_32110(func_80031510_32110_arg *arg0);
 void func_800315C0_321C0(func_80031510_32110_arg *arg0);
 void func_8003165C_3225C(func_800319C8_325C8_arg *arg0);
 void func_80031758_32358(func_80031510_32110_arg *arg0);
-void func_800316AC_322AC(void);
+void func_800316AC_322AC(func_80031510_32110_arg *arg0);
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 void func_80031B30_32730(func_80031A0C_3260C_arg *arg0);
@@ -671,7 +671,28 @@ void func_8003165C_3225C(func_800319C8_325C8_arg *arg0) {
     setCallback(&func_800316AC_322AC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_800316AC_322AC);
+void func_800316AC_322AC(func_80031510_32110_arg *arg0) {
+    func_80032DE8_339E8_asset *allocation;
+    s16 assetIndex;
+    int new_var;
+    u8 characterIndex;
+
+    allocation = getCurrentAllocation();
+    new_var = allocation->unk784[allocation->unk788[17]];
+    assetIndex = allocation->unk7A1;
+    characterIndex = allocation->unk7A2;
+    assetIndex = (characterIndex + (assetIndex * 3)) & 0xFF;
+    characterIndex = allocation->unk788[new_var];
+
+    memcpy(arg0, &arg0->unk3C, 0x20);
+
+    arg0->unk20 = loadAssetByIndex_95728(assetIndex);
+    arg0->unk24 = loadAssetByIndex_95500(assetIndex);
+    arg0->unk28 = loadAssetByIndex_95590(assetIndex);
+    arg0->unk2C = loadAssetByIndex_95668(characterIndex);
+
+    setCallback(&func_80031458_32058);
+}
 
 void func_80031758_32358(func_80031510_32110_arg *arg0) {
     func_800329A8_335A8_allocation *allocation;
