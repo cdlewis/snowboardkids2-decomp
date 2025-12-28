@@ -1358,7 +1358,156 @@ void func_80047A64_48664(func_80047A64_48664_arg *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80047AA8_486A8);
+extern Gfx D_8009A780_9B380[];
+extern s32 D_800A8B14_9FE84;
+
+typedef struct {
+    s8 unk0;
+    u8 unk1;
+    u8 _pad2[0x2];
+    Vec3i position;
+} RenderEntry_486A8;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    RenderEntry_486A8 *unk8;
+    DataTable_19E80 *unkC;
+    s32 unk10;
+    s16 unk14;
+    s16 unk16;
+    u16 unk18;
+} func_80047AA8_486A8_arg;
+
+void func_80047AA8_486A8(func_80047AA8_486A8_arg *arg0) {
+    OutputStruct_19E80 tableEntry;
+    s32 dxtBase;
+    s32 new_var;
+    u32 line;
+    s32 lrs;
+    u16 dxt;
+    u16 widthDiv16;
+    Gfx *loadBlockCmd;
+    long loadBlockWord;
+    s32 i;
+    u32 tileLine;
+
+    gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+    gGraphicsMode = -1;
+
+    getTableEntryByU16Index(arg0->unkC, arg0->unk18, &tableEntry);
+
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
+
+    gDPSetTile(
+        gRegionAllocPtr++,
+        G_IM_FMT_CI,
+        G_IM_SIZ_16b,
+        0,
+        0x0000,
+        G_TX_LOADTILE,
+        0,
+        G_TX_CLAMP,
+        G_TX_NOMASK,
+        G_TX_NOLOD,
+        G_TX_CLAMP,
+        G_TX_NOMASK,
+        G_TX_NOLOD
+    );
+
+    gDPLoadSync(gRegionAllocPtr++);
+
+    loadBlockCmd = gRegionAllocPtr++;
+    loadBlockCmd->words.w0 = 0xF3000000;
+    widthDiv16 = tableEntry.field1 >> 4;
+    dxtBase = 0x800;
+    if (widthDiv16 != 0) {
+        dxtBase = widthDiv16 + 0x7FF;
+    }
+    lrs = (((s32)((tableEntry.field1 * tableEntry.field2) + 3)) >> 2) - 1;
+    if (lrs < 0x800) {
+    } else {
+        lrs = 0x7FF;
+    }
+    line = lrs & 0xFFF;
+    new_var = (line << 12) | 0x07000000;
+    loadBlockWord = new_var;
+    if (widthDiv16 != 0) {
+        loadBlockWord |= (dxtBase / widthDiv16) & 0xFFF;
+    } else {
+        loadBlockWord |= dxtBase & 0xFFF;
+    }
+    loadBlockCmd->words.w1 = loadBlockWord;
+
+    gDPPipeSync(gRegionAllocPtr++);
+
+    tileLine = (((tableEntry.field1 >> 1) + 7) >> 3) & 0x1FF;
+    new_var = G_TX_NOMIRROR;
+    gDPSetTile(
+        gRegionAllocPtr++,
+        G_IM_FMT_CI,
+        G_IM_SIZ_4b,
+        tileLine,
+        0,
+        G_TX_RENDERTILE,
+        0,
+        G_TX_CLAMP,
+        G_TX_NOMASK,
+        G_TX_NOLOD,
+        G_TX_CLAMP,
+        G_TX_NOMASK,
+        G_TX_NOLOD
+    );
+
+    gDPSetTileSize(
+        gRegionAllocPtr++,
+        G_TX_RENDERTILE,
+        0,
+        0,
+        (tableEntry.field1 - 1) << 2,
+        (tableEntry.field2 - 1) << 2
+    );
+
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
+
+    gDPTileSync(gRegionAllocPtr++);
+
+    gDPSetTile(
+        gRegionAllocPtr++,
+        G_IM_FMT_RGBA,
+        G_IM_SIZ_4b,
+        0,
+        0x0100,
+        G_TX_LOADTILE,
+        0,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMASK,
+        G_TX_NOLOD,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMASK,
+        G_TX_NOLOD
+    );
+
+    gDPLoadSync(gRegionAllocPtr++);
+
+    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, 15);
+
+    gDPPipeSync(gRegionAllocPtr++);
+
+    for (i = 0; i < arg0->unk16; i++) {
+        if (isObjectCulled(&arg0->unk8[i].position) == 0) {
+            arg0->unk8[i].unk1 = 1;
+            if (arg0->unk8[i].unk0 != 0) {
+                gSPMatrix(gRegionAllocPtr++, (u8 *)arg0->unk0 + (i << 6), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+                gSPVertex(gRegionAllocPtr++, arg0->unk4, 4, 0);
+                gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+            }
+        } else {
+            arg0->unk8[i].unk1 &= 1;
+        }
+    }
+}
 
 typedef struct {
     u8 _pad[0x14];
