@@ -74,3 +74,36 @@ jobs:
       - name: Generate objdiff report
         run: PATH="$(pwd)/.venv/bin:$PATH" python3 -m mapfile_parser objdiff_report
         working-directory: main
+
+    # Publish report
+
+      - name: Generate objdiff report
+        id: objdiff
+        run: |
+          OUTPUT=$(PATH="$(pwd)/.venv/bin:$PATH" python3 -m mapfile_parser objdiff_report)
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          echo "$OUTPUT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        working-directory: main
+      
+      - name: Find existing comment
+        if: ${{ github.event.pull_request.number || github.event.inputs.pr_id }}
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number || github.event.inputs.pr_id }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '## Objdiff Report'
+      
+      - name: Create or update comment
+        if: ${{ github.event.pull_request.number || github.event.inputs.pr_id }}
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number || github.event.inputs.pr_id }}
+          body: |
+            ## Objdiff Report
+            ```
+            ${{ steps.objdiff.outputs.report }}
+            ```
+          edit-mode: replace
