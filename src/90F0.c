@@ -71,7 +71,7 @@ s32 func_80009E2C_AA2C(SpriteAssetState *state) {
     return state->flags & 1;
 }
 
-void func_80009E38_AA38(SpriteAssetState *state) {
+void setSpriteAssetVisible(SpriteAssetState *state) {
     state->flags |= 2;
 }
 
