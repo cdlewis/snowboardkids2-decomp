@@ -202,20 +202,20 @@ typedef struct {
 } SpriteEffectPosition;
 
 typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ s16 unk4;
+    /* 0x00 */ void *positionSource;
+    /* 0x04 */ s16 layer;
     /* 0x06 */ u8 _pad6[2];
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ u8 unkA;
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
     /* 0x0B */ u8 _padB[1];
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ s32 unk10;
-    /* 0x14 */ s32 unk14;
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ s16 unk1C;
-    /* 0x1E */ s16 unk1E;
-    /* 0x20 */ void *unk20;
-} func_8000A8B8_arg;
+    /* 0x0C */ s32 scale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ s16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ void *spriteState;
+} SimpleSpriteEffectState;
 
 typedef struct {
     /* 0x00 */ SpriteEffectPositionSource *unk0;
@@ -238,7 +238,7 @@ typedef struct {
     /* 0x78 */ s32 unk78;
 } func_8000AA08_B608_arg;
 
-void func_8000A8B8_B4B8(func_8000A8B8_arg *);
+void updateSimpleSpriteEffect(SimpleSpriteEffectState *);
 void func_8000A988_B588(func_8000B510_C110_arg *);
 void func_8000AA08_B608(func_8000AA08_B608_arg *);
 void func_8000AD08_B908(func_8000B510_C110_arg *);
@@ -254,38 +254,38 @@ void initSimpleSpriteEffect(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(func_8000A988_B588);
-    setCallback(func_8000A8B8_B4B8);
+    setCallback(updateSimpleSpriteEffect);
 }
 
-void func_8000A8B8_B4B8(func_8000A8B8_arg *arg0) {
-    SpriteEffectPosition *temp;
-    void *ptr;
+void updateSimpleSpriteEffect(SimpleSpriteEffectState *arg0) {
+    SpriteEffectPosition *pos;
+    void *spriteState;
     s32 x, y, z;
-    s16 a1;
+    s16 layer;
 
-    ptr = &arg0->unk20;
+    spriteState = &arg0->spriteState;
 
-    if (arg0->unk8 == 0) {
+    if (arg0->duration == 0) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    if (updateSpriteAnimation(ptr, 0x10000) == 2) {
+    if (updateSpriteAnimation(spriteState, 0x10000) == 2) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
+    pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
 
-    x = temp->unk14 + arg0->unk10;
-    y = temp->unk18 + arg0->unk14;
-    z = temp->unk1C + arg0->unk18;
-    a1 = arg0->unk4;
+    x = pos->unk14 + arg0->offsetX;
+    y = pos->unk18 + arg0->offsetY;
+    z = pos->unk1C + arg0->offsetZ;
+    layer = arg0->layer;
 
-    renderOpaqueSprite(ptr, a1, x, y, z, arg0->unkC, arg0->unkC, arg0->unk1C, arg0->unkA);
+    renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scale, arg0->scale, arg0->rotation, arg0->opacity);
 
-    if (arg0->unk8 > 0) {
-        arg0->unk8 = arg0->unk8 - 1;
+    if (arg0->duration > 0) {
+        arg0->duration = arg0->duration - 1;
     }
 }
 

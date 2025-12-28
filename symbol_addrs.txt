@@ -26,6 +26,7 @@ spawnSpriteEffectEx = 0x8000A49C; // rom:0xB09C
 spawnSpriteEffectInternal = 0x8000A510; // rom:0xB110
 getSpriteEffectPosition = 0x8000A834; // rom:0xB434
 initSimpleSpriteEffect = 0x8000A854; // rom:0xB454
+updateSimpleSpriteEffect = 0x8000A8B8; // rom:0xB4B8
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14
