@@ -30,7 +30,7 @@ typedef enum {
 typedef union {
     s16 unk70;
     u8 unk70_u8;
-} func_8000B510_C110_arg_unk70;
+} SpriteEffectTaskState_unk70;
 
 typedef struct {
     u8 _pad0[0x6];
@@ -40,8 +40,8 @@ typedef struct {
     u8 _pad10[0x10];
     SpriteAssetState unk20;
     s32 unk6C;
-    func_8000B510_C110_arg_unk70 unk70;
-} func_8000B510_C110_arg;
+    SpriteEffectTaskState_unk70 unk70;
+} SpriteEffectTaskState;
 
 typedef struct {
     void *romStart;
@@ -59,17 +59,17 @@ typedef struct {
     s32 unk4;
 } Table2DRow;
 
-typedef void (*SchedulerFunc)(func_8000B510_C110_arg *);
+typedef void (*SchedulerFunc)(SpriteEffectTaskState *);
 
 extern u8 *D_8008C92C_8D52C;
-void initSimpleSpriteEffect(func_8000B510_C110_arg *arg0);
-void initScalingSpriteEffect(func_8000B510_C110_arg *arg0);
-void initRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0);
-void initSpinFadeSpriteEffect(func_8000B510_C110_arg *arg0);
-void initDropShrinkSpriteEffect(func_8000B510_C110_arg *arg0);
+void initSimpleSpriteEffect(SpriteEffectTaskState *arg0);
+void initScalingSpriteEffect(SpriteEffectTaskState *arg0);
+void initRadialBurstSpriteEffect(SpriteEffectTaskState *arg0);
+void initSpinFadeSpriteEffect(SpriteEffectTaskState *arg0);
+void initDropShrinkSpriteEffect(SpriteEffectTaskState *arg0);
 
-void initRiseStretchSpriteEffect(func_8000B510_C110_arg *arg0);
-void func_8000B52C_C12C(func_8000B510_C110_arg *arg0);
+void initRiseStretchSpriteEffect(SpriteEffectTaskState *arg0);
+void func_8000B52C_C12C(SpriteEffectTaskState *arg0);
 
 void spawnSpriteEffect(SceneModel *arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s32 arg5, s8 arg6) {
     spawnSpriteEffectEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, 0, 0, 0);
@@ -239,9 +239,9 @@ typedef struct {
 } ScalingSpriteEffectState;
 
 void updateSimpleSpriteEffect(SimpleSpriteEffectState *);
-void cleanupSimpleSpriteEffect(func_8000B510_C110_arg *);
+void cleanupSimpleSpriteEffect(SpriteEffectTaskState *);
 void updateScalingSpriteEffect(ScalingSpriteEffectState *);
-void cleanupScalingSpriteEffect(func_8000B510_C110_arg *);
+void cleanupScalingSpriteEffect(SpriteEffectTaskState *);
 
 SpriteEffectPosition *getSpriteEffectPosition(SpriteEffectPositionSource *source, s16 useParent) {
     if (useParent != 0 && source->unk0 != NULL) {
@@ -250,7 +250,7 @@ SpriteEffectPosition *getSpriteEffectPosition(SpriteEffectPositionSource *source
     return (SpriteEffectPosition *)&source->unk18;
 }
 
-void initSimpleSpriteEffect(func_8000B510_C110_arg *arg0) {
+void initSimpleSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(cleanupSimpleSpriteEffect);
@@ -289,11 +289,11 @@ void updateSimpleSpriteEffect(SimpleSpriteEffectState *arg0) {
     }
 }
 
-void cleanupSimpleSpriteEffect(func_8000B510_C110_arg *arg0) {
+void cleanupSimpleSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
-void initScalingSpriteEffect(func_8000B510_C110_arg *arg0) {
+void initScalingSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(cleanupScalingSpriteEffect);
@@ -400,14 +400,14 @@ void updateScalingSpriteEffect(ScalingSpriteEffectState *arg0) {
     }
 }
 
-void cleanupScalingSpriteEffect(func_8000B510_C110_arg *arg0) {
+void cleanupScalingSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
 void func_8000AD88_B988(void);
-void cleanupRadialBurstSpriteEffect(func_8000B510_C110_arg *);
+void cleanupRadialBurstSpriteEffect(SpriteEffectTaskState *);
 
-void initRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0) {
+void initRadialBurstSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(cleanupRadialBurstSpriteEffect);
@@ -416,7 +416,7 @@ void initRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000AD88_B988);
 
-void cleanupRadialBurstSpriteEffect(func_8000B510_C110_arg *arg0) {
+void cleanupRadialBurstSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
@@ -437,9 +437,9 @@ typedef struct {
 } SpinFadeSpriteEffectState;
 
 void updateSpinFadeSpriteEffect(SpinFadeSpriteEffectState *);
-void cleanupSpinFadeSpriteEffect(func_8000B510_C110_arg *);
+void cleanupSpinFadeSpriteEffect(SpriteEffectTaskState *);
 
-void initSpinFadeSpriteEffect(func_8000B510_C110_arg *arg0) {
+void initSpinFadeSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(cleanupSpinFadeSpriteEffect);
@@ -484,7 +484,7 @@ void updateSpinFadeSpriteEffect(SpinFadeSpriteEffectState *arg0) {
     renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scale, arg0->scale, (s16)arg0->rotation, arg0->opacity);
 }
 
-void cleanupSpinFadeSpriteEffect(func_8000B510_C110_arg *arg0) {
+void cleanupSpinFadeSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
@@ -506,9 +506,9 @@ typedef struct {
 } DropShrinkSpriteEffectState;
 
 void updateDropShrinkSpriteEffect(DropShrinkSpriteEffectState *);
-void cleanupDropShrinkSpriteEffect(func_8000B510_C110_arg *);
+void cleanupDropShrinkSpriteEffect(SpriteEffectTaskState *);
 
-void initDropShrinkSpriteEffect(func_8000B510_C110_arg *arg0) {
+void initDropShrinkSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(cleanupDropShrinkSpriteEffect);
@@ -564,7 +564,7 @@ void updateDropShrinkSpriteEffect(DropShrinkSpriteEffectState *arg0) {
     renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scale, arg0->scale, arg0->rotation, arg0->opacity);
 }
 
-void cleanupDropShrinkSpriteEffect(func_8000B510_C110_arg *arg0) {
+void cleanupDropShrinkSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
@@ -589,15 +589,15 @@ typedef struct {
 extern void renderSprite(s32 *, s32, s32, s32, s32, s32, s32, s16, u8, u8);
 
 void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *);
-void func_8000B510_C110(func_8000B510_C110_arg *);
+void cleanupRiseStretchSpriteEffect(SpriteEffectTaskState *);
 
-void initRiseStretchSpriteEffect(func_8000B510_C110_arg *arg0) {
+void initRiseStretchSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     arg0->unkC = 0;
     arg0->unk6C = 0;
     arg0->unk70.unk70_u8 = 0xFF;
-    setCleanupCallback(func_8000B510_C110);
+    setCleanupCallback(cleanupRiseStretchSpriteEffect);
     setCallback(updateRiseStretchSpriteEffect);
 }
 
@@ -639,7 +639,7 @@ void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *arg0) {
     renderSprite((s32 *)&arg0->unk20, arg0->unk4, x, y, z, 0x10000, arg0->unkC, arg0->unk1C, arg0->unkA, arg0->unk70);
 }
 
-void func_8000B510_C110(func_8000B510_C110_arg *arg0) {
+void cleanupRiseStretchSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
@@ -662,9 +662,9 @@ typedef struct {
 } func_8000B598_arg;
 
 void func_8000B598_C198(func_8000B598_arg *);
-void func_8000B684_C284(func_8000B510_C110_arg *);
+void func_8000B684_C284(SpriteEffectTaskState *);
 
-void func_8000B52C_C12C(func_8000B510_C110_arg *arg0) {
+void func_8000B52C_C12C(SpriteEffectTaskState *arg0) {
     setCleanupCallback(func_8000B684_C284);
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
@@ -700,7 +700,7 @@ void func_8000B598_C198(func_8000B598_arg *arg0) {
     renderSprite((s32 *)&arg0->unk20, arg0->unk4, x, y, z, 0x10000, arg0->unkC, arg0->unk1C, arg0->unkA, 0xFF);
 }
 
-void func_8000B684_C284(func_8000B510_C110_arg *arg0) {
+void func_8000B684_C284(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 

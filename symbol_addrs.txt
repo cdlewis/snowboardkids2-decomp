@@ -41,6 +41,7 @@ updateDropShrinkSpriteEffect = 0x8000B230; // rom:0xBE30
 cleanupDropShrinkSpriteEffect = 0x8000B370; // rom:0xBF70
 initRiseStretchSpriteEffect = 0x8000B38C; // rom:0xBF8C
 updateRiseStretchSpriteEffect = 0x8000B400; // rom:0xC000
+cleanupRiseStretchSpriteEffect = 0x8000B510; // rom:0xC110
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14
