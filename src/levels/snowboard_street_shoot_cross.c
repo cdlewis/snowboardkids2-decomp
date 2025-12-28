@@ -24,13 +24,17 @@ typedef struct {
     void *unk4;
     BB504Entry *unk8;
     void *unkC;
-    void *unk10;
+    s32 *unk10;
     u8 _pad14[0x2];
     s16 unk16;
 } ACD30Struct;
 
 void func_800BB4B8_ACF38(ACD30Struct *arg0);
-void func_800BB310_ACD90(void);
+void func_800BB310_ACD90(ACD30Struct *arg0);
+void func_800BB428_ACEA8(ACD30Struct *arg0);
+
+extern s32 D_8009A8A4_9B4A4;
+extern void *D_800BBBB0_AD630;
 
 typedef struct {
     u8 _pad[0x24];
@@ -79,7 +83,45 @@ void func_800BB2B0_ACD30(ACD30Struct *arg0) {
     setCallback(func_800BB310_ACD90);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/snowboard_street_shoot_cross", func_800BB310_ACD90);
+void func_800BB310_ACD90(ACD30Struct *arg0) {
+    s32 i;
+    s32 *ptr;
+    BB504Entry *entries;
+    s32 pad[2];
+    s32 offset;
+    ACD30AllocationStruct *allocation;
+    BB504Entry *temp;
+
+    allocation = (ACD30AllocationStruct *)getCurrentAllocation();
+    arg0->unk4 = &D_800BBBB0_AD630;
+    arg0->unk8 = (BB504Entry *)((s8 *)arg0->unk10 + *arg0->unk10);
+    entries = *(BB504Entry *volatile *)&arg0->unk8;
+    arg0->unk16 = 0;
+
+    if (entries->unk0 >= 0) {
+        temp = entries;
+        do {
+            arg0->unk16++;
+        } while (temp[arg0->unk16].unk0 >= 0);
+    }
+
+    i = 0;
+    arg0->unk0 = allocateNodeMemory(arg0->unk16 << 6);
+
+    if (arg0->unk16 > 0) {
+        ptr = &D_8009A8A4_9B4A4;
+        do {
+            offset = i << 4;
+            *((s8 *)(offset + (s32)arg0->unk8)) = 0;
+            memcpy(ptr, (s8 *)(offset + (s32)arg0->unk8 + 4), 0xC);
+            func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->unk0 + (i << 6));
+            i++;
+        } while (i < arg0->unk16);
+    }
+
+    allocation->unk24 = arg0;
+    setCallback(func_800BB428_ACEA8);
+}
 
 void func_800BB690_AD110(void);
 
