@@ -56,7 +56,7 @@ typedef struct {
 } StretchingModelTaskState;
 
 void cleanupStretchingModelTask(StretchingModelTaskState *);
-void func_8000A190_AD90(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);
+void renderSprite(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);
 
 void updatePulsingSpriteIndicator(PulsingSpriteState *);
 void cleanupPulsingSpriteIndicator(PulsingSpriteState *);
@@ -140,7 +140,7 @@ void updatePulsingSpriteIndicator(PulsingSpriteState *arg0) {
         return;
     }
 
-    func_8000A190_AD90(
+    renderSprite(
         (s32 *)&arg0->spriteState,
         ownerRef->ownerData->unk16,
         x,

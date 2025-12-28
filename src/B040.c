@@ -586,7 +586,7 @@ typedef struct {
     /* 0x70 */ u8 unk70;
 } func_8000B400_C000_arg;
 
-extern void func_8000A190_AD90(s32 *, s32, s32, s32, s32, s32, s32, s16, u8, u8);
+extern void renderSprite(s32 *, s32, s32, s32, s32, s32, s32, s16, u8, u8);
 
 void func_8000B400_C000(func_8000B400_C000_arg *);
 void func_8000B510_C110(func_8000B510_C110_arg *);
@@ -636,18 +636,7 @@ void func_8000B400_C000(func_8000B400_C000_arg *arg0) {
     y = temp->unk18 + arg0->unk14 + arg0->unk6C;
     z = temp->unk1C + arg0->unk18;
 
-    func_8000A190_AD90(
-        (s32 *)&arg0->unk20,
-        arg0->unk4,
-        x,
-        y,
-        z,
-        0x10000,
-        arg0->unkC,
-        arg0->unk1C,
-        arg0->unkA,
-        arg0->unk70
-    );
+    renderSprite((s32 *)&arg0->unk20, arg0->unk4, x, y, z, 0x10000, arg0->unkC, arg0->unk1C, arg0->unkA, arg0->unk70);
 }
 
 void func_8000B510_C110(func_8000B510_C110_arg *arg0) {
@@ -708,7 +697,7 @@ void func_8000B598_C198(func_8000B598_arg *arg0) {
     y = temp->unk18 + arg0->unk14 + arg0->unk6C;
     z = temp->unk1C + arg0->unk18;
 
-    func_8000A190_AD90((s32 *)&arg0->unk20, arg0->unk4, x, y, z, 0x10000, arg0->unkC, arg0->unk1C, arg0->unkA, 0xFF);
+    renderSprite((s32 *)&arg0->unk20, arg0->unk4, x, y, z, 0x10000, arg0->unkC, arg0->unk1C, arg0->unkA, 0xFF);
 }
 
 void func_8000B684_C284(func_8000B510_C110_arg *arg0) {

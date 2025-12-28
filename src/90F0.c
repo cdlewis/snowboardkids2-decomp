@@ -205,114 +205,103 @@ end:
     return result;
 }
 
-void func_8000A1E4_ADE4(
-    SpriteState *arg0,
-    s32 arg1,
-    s32 arg2,
-    s32 arg3,
-    s32 arg4,
-    s32 arg5,
-    s32 arg6,
+void setupAndEnqueueSprite(
+    SpriteState *state,
+    s32 slot,
+    s32 posX,
+    s32 posY,
+    s32 posZ,
+    s32 scaleX,
+    s32 scaleY,
     s16 arg7,
-    u8 arg8,
-    u8 arg9,
+    u8 flipH,
+    u8 alpha,
     u16 arg10
 );
 
-typedef void (*func_8000A1E4_ADE4_11_t)(SpriteState *, s32, s32, s32, s32, s32, s32, s16, u8, u8, s32);
+typedef void (*SetupAndEnqueueSprite_t)(SpriteState *, s32, s32, s32, s32, s32, s32, s16, u8, u8, s32);
 
 void renderOpaqueSprite(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8) {
-    ((func_8000A1E4_ADE4_11_t
-    )func_8000A1E4_ADE4)((SpriteState *)arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, 0xFF, 0);
+    ((SetupAndEnqueueSprite_t
+    )setupAndEnqueueSprite)((SpriteState *)arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, 0xFF, 0);
 }
 
-void func_8000A190_AD90(
-    s32 arg0,
-    s32 arg1,
-    s32 arg2,
-    s32 arg3,
-    s32 arg4,
-    s32 arg5,
-    s32 arg6,
-    s16 arg7,
-    u8 arg8,
-    u8 arg9
-) {
+void renderSprite(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8, u8 arg9) {
     s32 pad[2];
 
     pad[0] = 0;
     ((void (*)(s32, s32, s32, s32, s32, s32, s32, s16, u8, u8)
-    )func_8000A1E4_ADE4)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+    )setupAndEnqueueSprite)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 }
 
-void func_8000A1E4_ADE4(
-    SpriteState *arg0,
-    s32 arg1,
-    s32 arg2,
-    s32 arg3,
-    s32 arg4,
-    s32 arg5,
-    s32 arg6,
+void setupAndEnqueueSprite(
+    SpriteState *state,
+    s32 slot,
+    s32 posX,
+    s32 posY,
+    s32 posZ,
+    s32 scaleX,
+    s32 scaleY,
     s16 arg7,
-    u8 arg8,
-    u8 arg9,
+    u8 flipH,
+    u8 alpha,
     u16 arg10
 ) {
     OutputStruct_19E80 sp10;
     SpriteEntry *entry;
-    s32 temp_v1;
+    s32 dimensions;
     s32 sign;
-    s32 temp;
+    s32 offsetX;
 
-    sign = -(arg8 != 0) | 1;
-    entry = arg0->unkC + arg0->unk14;
-    temp = entry->unk0;
-    arg0->unk1C = arg2 + ((temp * sign) << 16);
-    arg0->unk20 = arg3 + (entry->unk1 << 16);
-    arg0->unk24 = arg4;
-    arg0->unk2C = entry->unk4;
-    arg0->unk2F = arg8;
-    arg0->unk48 = arg7;
-    arg0->unk40 = arg5 >> 4;
-    arg0->unk44 = arg6 >> 4;
-    arg0->unk2E = arg9;
-    arg0->unk4A = arg10;
+    sign = -(flipH != 0) | 1;
+    entry = state->unkC + state->unk14;
+    offsetX = entry->unk0;
+    state->unk1C = posX + ((offsetX * sign) << 16);
+    state->unk20 = posY + (entry->unk1 << 16);
+    state->unk24 = posZ;
+    state->unk2C = entry->unk4;
+    state->unk2F = flipH;
+    state->unk48 = arg7;
+    state->unk40 = scaleX >> 4;
+    state->unk44 = scaleY >> 4;
+    state->unk2E = alpha;
+    state->unk4A = arg10;
 
-    getTableEntryByU16Index(arg0->unk28, arg0->unk2C, &sp10);
+    getTableEntryByU16Index(state->unk28, state->unk2C, &sp10);
 
-    temp_v1 = (sp10.field1 << 16) | sp10.field2;
+    dimensions = (sp10.field1 << 16) | sp10.field2;
 
-    switch (temp_v1) {
+    switch (dimensions) {
         case 0x80008:
-            arg0->unk18 = &D_8008C9E8_8D5E8;
+            state->unk18 = &D_8008C9E8_8D5E8;
             break;
         case 0x100010:
-            arg0->unk18 = &D_8008CA28_8D628;
+            state->unk18 = &D_8008CA28_8D628;
             break;
         case 0x100020:
-            arg0->unk18 = &D_8008CA68_8D668;
+            state->unk18 = &D_8008CA68_8D668;
             break;
         case 0x200010:
-            arg0->unk18 = &D_8008CAA8_8D6A8;
+            state->unk18 = &D_8008CAA8_8D6A8;
             break;
         case 0x200020:
-            arg0->unk18 = &D_8008CAE8_8D6E8;
+            state->unk18 = &D_8008CAE8_8D6E8;
             break;
         case 0x400020:
-            arg0->unk18 = &D_8008CB28_8D728;
+            state->unk18 = &D_8008CB28_8D728;
             break;
         case 0x200040:
-            arg0->unk18 = &D_8008CB68_8D768;
+            state->unk18 = &D_8008CB68_8D768;
             break;
         case 0x400040:
-            arg0->unk18 = &D_8008CBA8_8D7A8;
+            state->unk18 = &D_8008CBA8_8D7A8;
             break;
     }
 
-    if ((arg9 & 0xFF) == 0xFF) {
-        ((void (*)(s32, Node *))enqueueOpaqueSprite)(arg1, (Node *)&arg0->unk18);
+    if ((alpha & 0xFF) == 0xFF) {
+        ((void (*)(s32, Node *))enqueueOpaqueSprite)(slot, (Node *)&state->unk18);
     } else {
-        ((void (*)(s32, Node *))enqueueTranslucentSprite)(arg1, (Node *)&arg0->unk18);
+        ((void (*)(s32, Node *))enqueueTranslucentSprite)(slot, (Node *)&state->unk18);
     }
 }
 

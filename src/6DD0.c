@@ -3,7 +3,7 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern void func_8000A1E4_ADE4(void *, u16, s32, s32, s32, s32, s32, s32, s32, s32, s16);
+extern void setupAndEnqueueSprite(void *, u16, s32, s32, s32, s32, s32, s32, s32, s32, s16);
 
 typedef struct {
     u8 _pad[0xC];
@@ -106,7 +106,7 @@ void updateFallingParticle(ParticleState *arg0) {
     particleOwner = arg0->owner;
     if (particleOwner->unk88 != 0) {
         if (particleOwner->displayEnabled != 0) {
-            func_8000A1E4_ADE4(
+            setupAndEnqueueSprite(
                 sprite,
                 particleOwner->unk10->unk16,
                 arg0->unk50 + arg0->unk5C,
