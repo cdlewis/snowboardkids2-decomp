@@ -2,6 +2,7 @@
 #include "46080.h"
 #include "51060.h"
 #include "52880.h"
+#include "59290.h"
 #include "5AA90.h"
 #include "5DBC0.h"
 #include "5E590.h"
@@ -10,6 +11,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
@@ -95,7 +97,166 @@ extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
 void func_800BC61C_B1B0C(Player *);
 
-INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BB2B0_B07A0);
+typedef s32 (*StateFunc)(void *);
+extern StateFunc D_800BCA14_B1F04[];
+extern s16 D_800BC9F0_B1EE0[];
+extern s16 D_800BCA24_B1F14[];
+extern s16 D_800BCA30_B1F20[];
+
+typedef struct {
+    u8 pad[0x38];
+    s16 unk38[6];
+    u8 pad44[0xB0 - 0x44];
+    s16 unkB0[6];
+    u8 padBC[0x128 - 0xBC];
+    s16 unk128[6];
+    u8 pad134[0x434 - 0x134];
+    s32 unk434;
+    s32 unk438;
+    s32 unk43C;
+    s32 unk440;
+    s32 unk444;
+    s32 unk448;
+    s32 unk44C;
+    s32 unk450;
+    s32 unk454;
+    u8 pad458[0x970 - 0x458];
+    Mat3x3Padded unk970;
+    Mat3x3Padded unk990;
+    Mat3x3Padded unk9B0;
+    u8 pad9D0[0xA8E - 0x9D0];
+    u16 unkA8E;
+    u16 unkA90;
+    u16 unkA92;
+    u16 unkA94;
+    u8 padA96[0xAA4 - 0xA96];
+    s32 unkAA4;
+    s32 unkAA8;
+    u8 padAAC[0xAC2 - 0xAAC];
+    s16 unkAC2;
+    u8 padAC4[0xAD4 - 0xAC4];
+    Vec3i unkAD4;
+    u8 padAE0[0x4];
+    Vec3i unkAE4;
+    Vec3i unkAF0;
+    Vec3i unkAFC;
+    u8 padB08[0xB50 - 0xB08];
+    ListNode_5AA90 unkB50;
+    u8 padB6C[0xB84 - 0xB6C];
+    s32 unkB84;
+    u8 padB88[0xBBD - 0xB88];
+    u8 unkBBD;
+    u8 unkBBE;
+    u8 unkBBF;
+    u8 unkBC0;
+    u8 padBC1[3];
+    u8 unkBC4;
+} IceBossArg;
+
+void func_800BB2B0_B07A0(IceBossArg *arg0) {
+    Mat3x3Padded sp10;
+    Mat3x3Padded sp30;
+    GameState *alloc;
+    IceBossArg *player;
+    s32 dist;
+    s32 diff;
+
+    alloc = getCurrentAllocation();
+
+    arg0->unk44C = arg0->unk434 - arg0->unk440;
+    arg0->unk450 = arg0->unk438 - arg0->unk444;
+    arg0->unk454 = arg0->unk43C - arg0->unk448;
+    memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+
+    player = (IceBossArg *)alloc->players;
+    dist = distance_3d(arg0->unk434 - player->unk434,
+                       arg0->unk438 - player->unk438,
+                       arg0->unk43C - player->unk43C);
+
+    if ((arg0->unkBC4 == 0) & (dist > 0xE00000)) {
+        if (arg0->unkB84 & 0x400000) {
+            arg0->unkAA4 = getCharacterBoardStatParam0(0, 4) + -0x8000;
+        } else if (dist > 0x8C00000) {
+            arg0->unkAA4 = 0x70000;
+        } else {
+            arg0->unkAA4 = getCharacterBoardStatParam0(0, 0) + -0x8000;
+        }
+    } else {
+        arg0->unkAA4 = getCharacterBoardStatParam0(0, 8) + 0x18000;
+    }
+
+    if (arg0->unkAA4 > 0x180000) {
+        arg0->unkAA4 = 0x180000;
+    }
+
+    diff = arg0->unkAA4 - arg0->unkAA8;
+    if (diff >= 0x1001) {
+        diff = 0x1000;
+    }
+    if (diff < -0x80) {
+        diff = -0x80;
+    }
+
+    arg0->unkAA8 = arg0->unkAA8 + diff;
+    arg0->unkB84 &= 0xFFFBFFFF;
+
+    if (arg0->unkBBD != 3) {
+        if (arg0->unkAC2 != 0) {
+            if (arg0->unkAC2 == 0x3D) {
+                arg0->unkBBD = 2;
+                arg0->unkBBE = 0;
+                arg0->unkBBF = 0;
+                arg0->unkBC0 = 0;
+                if (arg0->unkB84 & 0x400000) {
+                    arg0->unkBBE = 1;
+                }
+            }
+        }
+    }
+    arg0->unkAC2 = 0;
+
+    do {
+    } while (D_800BCA14_B1F04[arg0->unkBBD](arg0) != 0);
+
+    createZRotationMatrix(&arg0->unk9B0, arg0->unkA92);
+    createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
+    createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+
+    func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk990, &sp10);
+    func_8006B084_6BC84(&sp10, &arg0->unk970, &sp30);
+
+    sp30.unk14 -= arg0->unk970.unk14;
+    sp30.unk18 -= arg0->unk970.unk18;
+    sp30.unk1C -= arg0->unk970.unk1C;
+
+    if (arg0->unkB84 & 0x400000) {
+        transformVector(D_800BCA30_B1F20, (s16 *)&sp30, &arg0->unkAD4);
+    } else {
+        transformVector(D_800BCA24_B1F14, (s16 *)&sp30, &arg0->unkAD4);
+    }
+    memcpy(&arg0->unkB50.localPos, &arg0->unkAD4, 0xC);
+    func_8005C838_5D438(&arg0->unkB50);
+    func_800BC61C_B1B0C((Player *)arg0);
+
+    if (arg0->unkB84 & 0x400000) {
+        transformVector(D_800BCA30_B1F20, (s16 *)&sp30, &arg0->unkAE4);
+    } else {
+        transformVector(D_800BC9F0_B1EE0, arg0->unk38, &arg0->unkAE4);
+        arg0->unkAE4.x -= arg0->unk970.unk14;
+        arg0->unkAE4.y -= arg0->unk970.unk18;
+        arg0->unkAE4.z -= arg0->unk970.unk1C;
+
+        transformVector(D_800BC9F0_B1EE0 + 6, arg0->unkB0, &arg0->unkAF0);
+        arg0->unkAF0.x -= arg0->unk970.unk14;
+        arg0->unkAF0.y -= arg0->unk970.unk18;
+        arg0->unkAF0.z -= arg0->unk970.unk1C;
+
+        transformVector(D_800BC9F0_B1EE0 + 12, arg0->unk128, &arg0->unkAFC);
+        arg0->unkAFC.x -= arg0->unk970.unk14;
+        arg0->unkAFC.y -= arg0->unk970.unk18;
+        arg0->unkAFC.z -= arg0->unk970.unk1C;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BB66C_B0B5C);
 
