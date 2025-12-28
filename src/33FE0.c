@@ -432,7 +432,7 @@ void func_800344A8_350A8(Func343FCArg *arg0) {
     if ((alloc->unkAC6 < 0x3D) || (alloc->unkAC9 != 0)) {
         temp_a0 = D_8008F7CC_903CC[alloc->unkACB];
         arg0->unk4 = temp_a0;
-        temp_a2 = ((0x120 - func_8000B7FC_C3FC(temp_a0)) / 2) - 0x90;
+        temp_a2 = ((0x120 - getMaxLinePixelWidth(temp_a0)) / 2) - 0x90;
         arg0->unk0 = temp_a2;
         func_80035260_35E60(arg0->unk8, arg0->unk4, temp_a2, arg0->unk2, arg0->unkC, arg0->unkE, arg0->unk10, 8, 0);
 

@@ -785,53 +785,53 @@ s16 getMaxLineCharCount(u16 *encodedText) {
     return maxLength;
 }
 
-s16 func_8000B7FC_C3FC(u16 *arg0) {
+s16 getMaxLinePixelWidth(u16 *encodedText) {
     s16 i;
-    s16 count;
-    s16 max;
-    u16 val;
-    u16 tmp;
+    s16 lineWidth;
+    s16 maxWidth;
+    u16 code;
+    u16 charWidth;
 
     i = 0;
-    count = 0;
-    val = arg0[0];
-    max = 0;
-    if (val != 0xFFFF) {
+    lineWidth = 0;
+    code = encodedText[0];
+    maxWidth = 0;
+    if (code != 0xFFFF) {
         do {
-            val = arg0[i];
-            switch (val) {
+            code = encodedText[i];
+            switch (code) {
                 case 0xFFFC:
                     i++;
                     break;
                 case 0xFFFB:
-                    count += 4;
+                    lineWidth += 4;
                     break;
                 case 0xFFFD:
-                    count = 0;
+                    lineWidth = 0;
                     break;
                 case 0xFFFE:
-                    count += 4;
+                    lineWidth += 4;
                     break;
                 default:
-                    tmp = arg0[i] >> 12;
-                    if (tmp == 0) {
-                        count += 0xC;
+                    charWidth = encodedText[i] >> 12;
+                    if (charWidth == 0) {
+                        lineWidth += 0xC;
                     } else {
-                        count += tmp;
+                        lineWidth += charWidth;
                     }
                     break;
             }
 
-            if (count > max) {
-                max = count;
+            if (lineWidth > maxWidth) {
+                maxWidth = lineWidth;
             }
 
             i++;
-            val = arg0[i];
-        } while (val != 0xFFFF);
+            code = encodedText[i];
+        } while (code != 0xFFFF);
     }
 
-    return max;
+    return maxWidth;
 }
 
 s32 func_8000B8D8_C4D8(u16 *arg0) {

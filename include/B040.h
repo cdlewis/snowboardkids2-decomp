@@ -42,7 +42,7 @@ s32 spawnSpriteEffectInternal(
 );
 void *loadDmaAsset(s16 arg0);
 void *getTable2DEntry(Table_B934 *table, s32 rowIndex, s32 colIndex);
-s16 func_8000B7FC_C3FC(u16 *arg0);
+s16 getMaxLinePixelWidth(u16 *encodedText);
 void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
 void spawnSpriteEffectEx(
     SceneModel *arg0,

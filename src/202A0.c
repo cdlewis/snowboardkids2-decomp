@@ -918,7 +918,7 @@ void func_800218AC_224AC(PrizeDisplayState *arg0) {
     setCleanupCallback(func_80021B88_22788);
     titleText = &D_8008DC38_8E838;
     arg0->animationTimer = 0;
-    titleWidth = func_8000B7FC_C3FC(titleText);
+    titleWidth = getMaxLinePixelWidth(titleText);
     i = 0;
     yPos = 0x1C;
     alpha = 0xFF;
