@@ -62,7 +62,7 @@ typedef struct {
 typedef void (*SchedulerFunc)(func_8000B510_C110_arg *);
 
 extern u8 *D_8008C92C_8D52C;
-void func_8000A854_B454(func_8000B510_C110_arg *arg0);
+void initSimpleSpriteEffect(func_8000B510_C110_arg *arg0);
 void func_8000A9A4_B5A4(func_8000B510_C110_arg *arg0);
 void func_8000AD24_B924(func_8000B510_C110_arg *arg0);
 void func_8000B044_BC44(func_8000B510_C110_arg *arg0);
@@ -118,7 +118,7 @@ s32 spawnSpriteEffectInternal(
 
     switch (temp_v1) {
         case 0:
-            var_a0_2 = scheduleTask(&func_8000A854_B454, arg7, arg8, 0);
+            var_a0_2 = scheduleTask(&initSimpleSpriteEffect, arg7, arg8, 0);
             if (var_a0_2 == NULL) {
                 break;
             }
@@ -250,7 +250,7 @@ SpriteEffectPosition *getSpriteEffectPosition(SpriteEffectPositionSource *source
     return (SpriteEffectPosition *)&source->unk18;
 }
 
-void func_8000A854_B454(func_8000B510_C110_arg *arg0) {
+void initSimpleSpriteEffect(func_8000B510_C110_arg *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(func_8000A988_B588);
