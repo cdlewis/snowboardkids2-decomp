@@ -4,6 +4,7 @@
 #include "2C8F0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "graphics.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 extern void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
@@ -50,7 +51,9 @@ struct Func2E024Arg {
     /* 0xC7 */ u8 padC7[0x1];
     /* 0xC8 */ void (*unkC8)(Func2E024Arg *);
     /* 0xCC */ s16 unkCC[2];
-    /* 0xD0 */ u8 padD0[0x5];
+    /* 0xD0 */ u8 padD0[0x2];
+    /* 0xD2 */ u8 unkD2;
+    /* 0xD3 */ u8 padD3[0x2];
     /* 0xD5 */ u8 unkD5;
 };
 
@@ -268,7 +271,94 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002E170_2ED70);
+void func_8002E314_2EF14(Func2E024Arg *);
+
+typedef struct {
+    s32 unk0;
+    Mat3x3Padded unk4;
+    /* 0x24 */ u8 pad2[0x8];
+    /* 0x2C */ u16 unk2C;
+    /* 0x2E */ u16 unk2E;
+    /* 0x30 */ u8 pad3[0x10];
+    /* 0x40 */ s32 unk40;
+    /* 0x44 */ s32 unk44;
+    /* 0x48 */ s32 unk48;
+    /* 0x4C */ u8 pad3b[0x4];
+    /* 0x50 */ s16 unk50;
+    /* 0x52 */ s16 unk52;
+    /* 0x54 */ u8 pad4[0x6];
+    /* 0x5A */ s16 unk5A;
+    /* 0x5C */ u8 unk5C;
+    /* 0x5D */ u8 pad5[0x1];
+    /* 0x5E */ u8 unk5E;
+    /* 0x5F */ u8 pad5b[0x3];
+    /* 0x62 */ s8 unk62;
+    /* 0x63 */ s8 unk63;
+} FuncE170Element;
+
+typedef struct FuncE170Container FuncE170Container;
+struct FuncE170Container {
+    /* 0x00 */ FuncE170Element unk0[2];
+    /* 0xC8 */ void (*unkC8)(FuncE170Container *);
+    /* 0xCC */ s16 unkCC;
+    /* 0xCE */ s16 unkCE;
+    /* 0xD0 */ u8 pad9[0x2];
+    /* 0xD2 */ u8 unkD2;
+    /* 0xD3 */ u8 pad9b[0x2];
+    /* 0xD5 */ u8 unkD5;
+};
+
+void func_8002E170_2ED70(Func2E024Arg *arg0) {
+    FuncE170Container *container = (FuncE170Container *)arg0;
+    GameState *allocation;
+    s32 i;
+
+    allocation = getCurrentAllocation();
+    i = 0;
+    container->unkD2 = 0;
+
+    for (; i < container->unkD5; i++) {
+        memcpy(&container->unk0[i].unk4, identityMatrix, sizeof(Mat3x3Padded));
+        container->unk0[i].unk62 = 0;
+        container->unk0[i].unk5A = 0;
+
+        if (i == 0) {
+            container->unk0[0].unk4.unk14 = -0x60000;
+            container->unk0[0].unk4.unk1C = -0x4E0000;
+            container->unk0[0].unk50 = 0;
+            container->unk0[0].unk5E = 3;
+        } else {
+            container->unk0[1].unk4.unk14 = 0x1E0000;
+            container->unk0[1].unk4.unk1C = -0x4E0000;
+            container->unk0[1].unk50 = 0x13;
+            container->unk0[1].unk5E = 0;
+        }
+
+        container->unk0[i].unk48 = 0;
+        container->unk0[i].unk40 = 0;
+
+        if (i == 0) {
+            container->unk0[0].unk44 = 0x290000;
+            container->unk0[0].unk40 += -0x90000;
+        } else {
+            container->unk0[i].unk40 = 0x60000;
+            container->unk0[i].unk44 = 0x290000;
+        }
+
+        container->unk0[i].unk2C = 0x800 + i * 0x1000;
+        container->unk0[i].unk2E = 0x800 + i * 0x1000;
+        container->unk0[i].unk52 = container->unk0[i].unk50;
+        createYRotationMatrix(&container->unk0[i].unk4, container->unk0[i].unk2C);
+        func_8002A290_2AE90((Func297D8Arg *)&container->unk0[i]);
+        allocation->unk408[i] = container->unk0[i].unk4.unk14;
+        allocation->unk410[i] = container->unk0[i].unk4.unk1C;
+        allocation->unk418[i] = D_8008EF70_8FB70[container->unk0[i].unk5C];
+    }
+
+    container->unkCC = (randB() & 0x1F) + 0x28;
+    container->unkCE = 0;
+    setCallback(func_8002E314_2EF14);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002E314_2EF14);
 
