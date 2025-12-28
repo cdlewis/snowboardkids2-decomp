@@ -17,14 +17,14 @@ extern s32 D_8009A8A8_9B4A8;
 extern s32 D_8009A8AC_9B4AC;
 extern s32 gFrameCounter;
 
-typedef struct func_8000BBA8_C7A8_arg func_8000BBA8_C7A8_arg;
-void func_8000BBA8_C7A8(func_8000BBA8_C7A8_arg *arg0);
+typedef struct RocketEffectData RocketEffectData;
+void cleanupRocketEffect(RocketEffectData *data);
 
-struct func_8000BBA8_C7A8_arg {
+struct RocketEffectData {
     u8 _pad0[0x20];
     void *unk20;
-    void *unk24;
-    void *unk28;
+    void *uncompressedAsset;
+    void *compressedAsset;
     s32 unk2C;
     u8 _pad30[0x30];
     void *unk60;
@@ -36,27 +36,27 @@ struct func_8000BBA8_C7A8_arg {
 
 typedef struct {
     u8 _pad0[0x78];
-    SceneModel *unk78;
+    SceneModel *sceneModel;
     u8 _pad7C[0x4];
-    s16 unk80;
+    s16 rotation;
     u8 _pad82[0x2];
-    s16 unk84;
-} func_8000BC10_C810_task;
+    s16 displayDuration;
+} RocketEffectTask;
 
-void func_8000B970_C570(func_8000BBA8_C7A8_arg *arg0) {
-    arg0->unk20 = &D_80088670_89270;
-    arg0->unk24 = loadUncompressedData(&_1FB8B0_ROM_START, &_1FB8B0_ROM_END);
-    arg0->unk28 = loadCompressedData(&_4CA440_ROM_START, &_4CA440_ROM_END, 0xE90);
-    arg0->unk2C = 0;
-    arg0->unk68 = 0;
-    arg0->unk82 = 0x200;
-    arg0->unk60 = arg0->unk24;
-    arg0->unk64 = arg0->unk28;
-    setCleanupCallback(&func_8000BBA8_C7A8);
-    setCallbackWithContinue(&func_8000BA08_C608);
+void initRocketEffect(RocketEffectData *data) {
+    data->unk20 = &D_80088670_89270;
+    data->uncompressedAsset = loadUncompressedData(&_1FB8B0_ROM_START, &_1FB8B0_ROM_END);
+    data->compressedAsset = loadCompressedData(&_4CA440_ROM_START, &_4CA440_ROM_END, 0xE90);
+    data->unk2C = 0;
+    data->unk68 = 0;
+    data->unk82 = 0x200;
+    data->unk60 = data->uncompressedAsset;
+    data->unk64 = data->compressedAsset;
+    setCleanupCallback(&cleanupRocketEffect);
+    setCallbackWithContinue(&updateRocketEffect);
 }
 
-void func_8000BA08_C608(func_8000BA08_C608_arg *arg0) {
+void updateRocketEffect(RocketEffectUpdateData *arg0) {
     s32 pad[8];
     void *temp_v0;
     s32 *ptr;
@@ -93,11 +93,11 @@ void func_8000BA08_C608(func_8000BA08_C608_arg *arg0) {
         }
     } else {
         arg0->unk7C = 0x40000;
-        setCallback(&func_8000BB48_C748);
+        setCallback(&updateRocketEffectFalling);
     }
 }
 
-void func_8000BB48_C748(func_8000BB48_C748_arg *arg0) {
+void updateRocketEffectFalling(RocketEffectFallingData *arg0) {
     s32 pad[8];
     arg0->unk7C -= 0x8000;
     if (arg0->unk7C <= (s32)0xFFF80000) {
@@ -107,22 +107,22 @@ void func_8000BB48_C748(func_8000BB48_C748_arg *arg0) {
     enqueueDisplayListObject(0, &arg0->unk0);
 }
 
-void func_8000BBA8_C7A8(func_8000BBA8_C7A8_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupRocketEffect(RocketEffectData *data) {
+    data->uncompressedAsset = freeNodeMemory(data->uncompressedAsset);
+    data->compressedAsset = freeNodeMemory(data->compressedAsset);
 }
 
-void func_8000BBE0_C7E0(SceneModel *arg0, s16 arg1) {
-    func_8000BC10_C810(arg0, arg1, 1, 0, 100);
+void spawnRocketEffect(SceneModel *sceneModel, s16 displayDuration) {
+    spawnRocketEffectEx(sceneModel, displayDuration, 1, 0, 100);
 }
 
-void func_8000BC10_C810(SceneModel *arg0, s16 arg1, u8 arg2, u8 arg3, u8 arg4) {
-    func_8000BC10_C810_task *task;
+void spawnRocketEffectEx(SceneModel *sceneModel, s16 displayDuration, u8 nodeType, u8 identifierFlag, u8 priority) {
+    RocketEffectTask *task;
 
-    task = (func_8000BC10_C810_task *)scheduleTask(&func_8000B970_C570, arg2, arg3, arg4);
+    task = (RocketEffectTask *)scheduleTask(&initRocketEffect, nodeType, identifierFlag, priority);
     if (task != NULL) {
-        task->unk78 = arg0;
-        task->unk80 = 0;
-        task->unk84 = arg1;
+        task->sceneModel = sceneModel;
+        task->rotation = 0;
+        task->displayDuration = displayDuration;
     }
 }

@@ -80,7 +80,7 @@ s32 cutsceneEffectRocket_validate(void) {
 }
 
 void cutsceneEffectRocket_exec(cutsceneEffectRocket_exec_arg *arg0, CutsceneSlot *arg1, s8 arg2) {
-    func_8000BBE0_C7E0(arg1[arg2].slotData.unkA4.ptr, arg0->unk0);
+    spawnRocketEffect(arg1[arg2].slotData.unkA4.ptr, arg0->unk0);
 }
 
 s32 cutsceneEffectRocket_isDone(void) {

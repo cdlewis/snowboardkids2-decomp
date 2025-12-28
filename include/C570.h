@@ -11,15 +11,15 @@ typedef struct {
     u16 unk80;
     s16 unk82;
     s16 unk84;
-} func_8000BA08_C608_arg;
+} RocketEffectUpdateData;
 
 typedef struct {
     DisplayListObject unk0;
     u8 padding[0x7C - 0x3C];
     s32 unk7C;
-} func_8000BB48_C748_arg;
+} RocketEffectFallingData;
 
-void func_8000BB48_C748(func_8000BB48_C748_arg *arg0);
-void func_8000BBE0_C7E0(SceneModel *, s16);
-void func_8000BC10_C810(SceneModel *arg0, s16 arg1, u8 arg2, u8 arg3, u8 arg4);
-void func_8000BA08_C608(func_8000BA08_C608_arg *arg0);
+void updateRocketEffectFalling(RocketEffectFallingData *arg0);
+void spawnRocketEffect(SceneModel *, s16);
+void spawnRocketEffectEx(SceneModel *sceneModel, s16 displayDuration, u8 nodeType, u8 identifierFlag, u8 priority);
+void updateRocketEffect(RocketEffectUpdateData *arg0);
