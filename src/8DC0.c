@@ -153,5 +153,5 @@ void updateOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
 }
 
 void cleanupOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&state->spriteState);
+    releaseNodeMemoryRef((void **)&state->spriteState);
 }

@@ -60,8 +60,6 @@ typedef struct {
     /* 0x2C */ u8 pad2C[0x20];
 } SpriteAssetState;
 
-typedef struct {
-} func_80009F5C_AB5C_arg;
 
 typedef struct {
     /* 0x00 */ s8 unk0;
@@ -94,7 +92,7 @@ typedef struct {
 
 s32 loadSpriteAsset(SpriteAssetState *arg0, s16 arg1);
 void *loadSpriteAssetData(s16 index);
-void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0);
+void releaseNodeMemoryRef(void **ptr);
 void func_80009F90_AB90(void *arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 func_8000A030_AC30(void *arg0, s32 arg1);
 void func_8000A13C_AD3C(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8);

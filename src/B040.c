@@ -290,7 +290,7 @@ void func_8000A8B8_B4B8(func_8000A8B8_arg *arg0) {
 }
 
 void func_8000A988_B588(func_8000B510_C110_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
 void func_8000A9A4_B5A4(func_8000B510_C110_arg *arg0) {
@@ -401,7 +401,7 @@ void func_8000AA08_B608(func_8000AA08_B608_arg *arg0) {
 }
 
 void func_8000AD08_B908(func_8000B510_C110_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
 void func_8000AD88_B988(void);
@@ -417,7 +417,7 @@ void func_8000AD24_B924(func_8000B510_C110_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/B040", func_8000AD88_B988);
 
 void func_8000B028_BC28(func_8000B510_C110_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
 typedef struct {
@@ -485,7 +485,7 @@ void func_8000B0A8_BCA8(func_8000B0A8_arg *arg0) {
 }
 
 void func_8000B1B0_BDB0(func_8000B510_C110_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
 typedef struct {
@@ -565,7 +565,7 @@ void func_8000B230_BE30(func_8000B230_arg *arg0) {
 }
 
 void func_8000B370_BF70(func_8000B510_C110_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
 typedef struct {
@@ -651,7 +651,7 @@ void func_8000B400_C000(func_8000B400_C000_arg *arg0) {
 }
 
 void func_8000B510_C110(func_8000B510_C110_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
 typedef struct {
@@ -712,7 +712,7 @@ void func_8000B598_C198(func_8000B598_arg *arg0) {
 }
 
 void func_8000B684_C284(func_8000B510_C110_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
 extern DmaEntry *D_8008CC2C_8D82C;

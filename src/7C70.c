@@ -86,7 +86,7 @@ void updateOrbitalSpriteRingController(OrbitalSpriteRingControllerState *arg0) {
 }
 
 void cleanupOrbitalSpriteRingController(OrbitalSpriteState *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 void initOrbitalSprite(OrbitalSpriteState *arg0) {
@@ -159,5 +159,5 @@ void updateOrbitalSprite(OrbitalSpriteState *arg0) {
 }
 
 void cleanupOrbitalSprite(OrbitalSpriteState *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }

@@ -126,7 +126,7 @@ void updateFallingParticle(ParticleState *arg0) {
 }
 
 void cleanupFallingParticle(ParticleState *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 void initDriftingParticle(ParticleState *arg0) {
@@ -156,7 +156,7 @@ void initDriftingParticle(ParticleState *arg0) {
 INCLUDE_ASM("asm/nonmatchings/6DD0", updateDriftingParticle);
 
 void cleanupDriftingParticle(ParticleState *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 void initTrailingParticle(ParticleState *arg0) {
@@ -210,5 +210,5 @@ void updateTrailingParticle(ParticleState *arg0) {
 }
 
 void cleanupTrailingParticle(ParticleState *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }

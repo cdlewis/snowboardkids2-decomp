@@ -551,7 +551,7 @@ void updateSpriteAnimationTask(func_80000C2C_182C_arg *arg0) {
 }
 
 void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&state->spriteAsset);
+    releaseNodeMemoryRef((void **)&state->spriteAsset);
 }
 
 void initStaticModelTask(StaticModelTaskArg *arg0) {
@@ -687,7 +687,7 @@ void updateSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
 }
 
 void cleanupSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
+    releaseNodeMemoryRef((void **)&arg0->unk8);
 }
 
 void initSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
@@ -761,5 +761,5 @@ void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
 }
 
 void cleanupSpawnedSpriteTask(func_800014C8_20C8_arg *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->unk8);
+    releaseNodeMemoryRef((void **)&arg0->unk8);
 }

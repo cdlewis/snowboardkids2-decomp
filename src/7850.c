@@ -155,7 +155,7 @@ void updatePulsingSpriteIndicator(PulsingSpriteState *arg0) {
 }
 
 void cleanupPulsingSpriteIndicator(PulsingSpriteState *arg0) {
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&arg0->spriteState);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 void initStretchingModelTask(StretchingModelTaskState *arg0) {

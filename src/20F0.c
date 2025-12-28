@@ -482,7 +482,7 @@ void *cleanupSceneModel(SceneModel *model) {
     model->unk11C = freeNodeMemory(model->unk11C);
     model->unk118 = func_8000CDFC_D9FC(model->unk118);
     model->unk114 = func_8000CDE0_D9E0(model->unk114);
-    func_80009F5C_AB5C((func_80009F5C_AB5C_arg **)&model->unkA4);
+    releaseNodeMemoryRef((void **)&model->unkA4);
 
     slotData = model->unk98;
     slotData->unk24 = freeNodeMemory(slotData->unk24);

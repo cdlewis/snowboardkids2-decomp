@@ -113,9 +113,9 @@ void *loadSpriteAssetData(s16 index) {
     return loadCompressedData((void *)entry[0], (void *)entry[1], entry[2]);
 }
 
-void func_80009F5C_AB5C(func_80009F5C_AB5C_arg **arg0) {
-    if (arg0 != NULL) {
-        *arg0 = (func_80009F5C_AB5C_arg *)freeNodeMemory(*arg0);
+void releaseNodeMemoryRef(void **ptr) {
+    if (ptr != NULL) {
+        *ptr = freeNodeMemory(*ptr);
     }
 }
 
