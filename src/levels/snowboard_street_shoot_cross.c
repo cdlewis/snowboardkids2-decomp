@@ -1,3 +1,4 @@
+#include "19E80.h"
 #include "56910.h"
 #include "594E0.h"
 #include "5AA90.h"
@@ -8,6 +9,11 @@
 #include "geometry.h"
 #include "overlay.h"
 #include "task_scheduler.h"
+
+extern Gfx D_8009A780_9B380[];
+extern Gfx *gRegionAllocPtr;
+extern s16 gGraphicsMode;
+extern s32 D_800A8B14_9FE84;
 
 USE_ASSET(_4060A0);
 
@@ -123,7 +129,7 @@ void func_800BB310_ACD90(ACD30Struct *arg0) {
     setCallback(func_800BB428_ACEA8);
 }
 
-void func_800BB690_AD110(void);
+void func_800BB690_AD110(ACD30Struct *arg0);
 
 void func_800BB428_ACEA8(ACD30Struct *arg0) {
     s32 i;
@@ -221,7 +227,60 @@ check_count:
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/snowboard_street_shoot_cross", func_800BB690_AD110);
+void func_800BB690_AD110(ACD30Struct *arg0) {
+    OutputStruct_19E80 tableEntry;
+    s32 prevTextureIndex;
+    s32 i;
+    s32 offset;
+
+    prevTextureIndex = -1;
+    gGraphicsMode = -1;
+    gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+
+    for (i = 0; i < arg0->unk16; i++) {
+        offset = i << 4;
+
+        if (isObjectCulled((Vec3i *)((u8 *)arg0->unk8 + offset + 4)) == 0) {
+            s8 textureIndex = *(s8 *)(offset + (s32)arg0->unk8);
+
+            if (prevTextureIndex != textureIndex) {
+                prevTextureIndex = textureIndex;
+                getTableEntryByU16Index(arg0->unkC, (u16)prevTextureIndex, &tableEntry);
+
+                gDPLoadMultiBlock_4b(
+                    gRegionAllocPtr++,
+                    tableEntry.data_ptr,
+                    0,
+                    G_TX_RENDERTILE,
+                    G_IM_FMT_CI,
+                    tableEntry.field1,
+                    tableEntry.field2,
+                    0,
+                    G_TX_CLAMP,
+                    G_TX_CLAMP,
+                    G_TX_NOMASK,
+                    G_TX_NOMASK,
+                    G_TX_NOLOD,
+                    G_TX_NOLOD
+                );
+
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
+            }
+
+            gSPMatrix(
+                gRegionAllocPtr++,
+                (u8 *)arg0->unk0 + (i << 6),
+                G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
+            );
+
+            gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+
+            gSPVertex(gRegionAllocPtr++, arg0->unk4, 4, 0);
+
+            gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+        }
+    }
+}
 
 void func_800BBA50(s32 arg0) {
     ACD30Task *task;
