@@ -67,6 +67,7 @@ buildAuxBufferDisplayList = 0x8000BFD0; // rom:0xCBD0
 enqueueAuxBufferRender = 0x8000C208; // rom:0xCE08
 enqueueAuxBufferSetup = 0x8000C238; // rom:0xCE38
 setAuxRenderEnabled = 0x8000C268; // rom:0xCE68
+clearAuxRenderEnabled = 0x8000C278; // rom:0xCE78
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14

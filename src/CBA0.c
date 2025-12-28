@@ -32,7 +32,7 @@ void setAuxRenderEnabled(Func8000C268Arg *arg0) {
     arg0->unk210 |= 1;
 }
 
-void func_8000C278_CE78(Func8000C268Arg *arg0) {
+void clearAuxRenderEnabled(Func8000C268Arg *arg0) {
     arg0->unk210 &= ~1;
 }
 

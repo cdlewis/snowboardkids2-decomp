@@ -36,7 +36,7 @@ typedef struct {
 } Func8000C334Arg;
 
 void setAuxRenderEnabled(Func8000C268Arg *arg0);
-void func_8000C278_CE78(Func8000C268Arg *arg0);
+void clearAuxRenderEnabled(Func8000C268Arg *arg0);
 void func_8000C2B4_CEB4(Func8000C2B4Arg *arg0, s32 arg1);
 void func_8000C2BC_CEBC(Func8000C2BCArg *arg0, u8 arg1, u8 arg2, u8 arg3);
 void func_8000C2CC_CECC(Func8000C2CCArg *arg0, s32 arg1, s16 arg2);

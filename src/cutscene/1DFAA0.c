@@ -115,7 +115,7 @@ void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *ar
     }
 
     func_8000C440_D040(&arg0->unkFF8, 2, 0xC, arg1->id, 0, 2, 0);
-    func_8000C278_CE78(&arg0->unkFF8);
+    clearAuxRenderEnabled(&arg0->unkFF8);
 
     arg0->shadowModel = arg2;
     arg0->reflectionModel = arg3;
