@@ -55,8 +55,8 @@ typedef struct {
 } ArrayElement_B934; // size 0x8
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
+    s32 arrayOffset;
+    s32 count;
 } Table2DRow;
 
 typedef void (*SchedulerFunc)(SpriteEffectTaskState *);
@@ -736,21 +736,21 @@ void *loadDmaAsset(s16 arg0) {
     return loadCompressedData(entry->romStart, entry->romEnd, entry->size);
 }
 
-void *func_8000B714_C314(Table_B934 *arg0, s32 arg1, s32 arg2) {
-    s32 count;
+void *getTable2DEntry(Table_B934 *table, s32 rowIndex, s32 colIndex) {
+    s32 rowCount;
     Table2DRow *row;
-    s32 *subarray;
+    s32 *colOffsets;
 
-    count = *(s32 *)(arg0->count_offset + (s32)arg0);
-    if (arg1 >= count) {
+    rowCount = *(s32 *)(table->count_offset + (s32)table);
+    if (rowIndex >= rowCount) {
         return NULL;
     }
-    row = (Table2DRow *)(arg0->array_offset + arg1 * 8 + (s32)arg0);
-    if (arg2 >= row->unk4) {
+    row = (Table2DRow *)(table->array_offset + rowIndex * 8 + (s32)table);
+    if (colIndex >= row->count) {
         return NULL;
     }
-    subarray = (s32 *)(row->unk0 + (s32)arg0);
-    return (void *)(subarray[arg2] + (s32)arg0);
+    colOffsets = (s32 *)(row->arrayOffset + (s32)table);
+    return (void *)(colOffsets[colIndex] + (s32)table);
 }
 
 s16 func_8000B770_C370(u16 *arg0) {

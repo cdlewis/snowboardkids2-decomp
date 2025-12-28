@@ -51,7 +51,7 @@ void func_8000D100_DD00(DC90TaskStruct *arg0) {
 }
 
 void *func_8000D144_DD44(DC90TaskStruct *arg0) {
-    void *temp_v0 = func_8000B714_C314((Table_B934 *)arg0->unk8, arg0->unkE, arg0->unk10);
+    void *temp_v0 = getTable2DEntry((Table_B934 *)arg0->unk8, arg0->unkE, arg0->unk10);
     unsigned long new_var;
     new_var = temp_v0 == 0;
     if (new_var) {

@@ -52,7 +52,7 @@ void func_800B02E0(void *arg0) {
     typedArg->unk982 = 0;
     typedArg->unk974 = temp;
     typedArg->unk988 = typedArg->unk960;
-    typedArg->unk984 = func_8000B714_C314(typedArg->unk964, typedArg->unk9A0, 0);
+    typedArg->unk984 = getTable2DEntry(typedArg->unk964, typedArg->unk9A0, 0);
     typedArg->unk98C = 0xFF;
     typedArg->unk98E = 0xFF;
     typedArg->unk990 = 2;

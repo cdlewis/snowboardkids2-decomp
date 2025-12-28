@@ -48,6 +48,7 @@ cleanupFloatBobbingSpriteEffect = 0x8000B684; // rom:0xC284
 getDmaTable = 0x8000B6A0; // rom:0xC2A0
 getDmaTableCount = 0x8000B6AC; // rom:0xC2AC
 loadDmaAsset = 0x8000B6B8; // rom:0xC2B8
+getTable2DEntry = 0x8000B714; // rom:0xC314
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14

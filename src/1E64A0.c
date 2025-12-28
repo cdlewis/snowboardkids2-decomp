@@ -108,7 +108,7 @@ s32 func_800B9708_1E67B8(cutsceneSys2Wait_exec_asset *arg0) {
 void *func_800B9774_1E6824(cutsceneSys2Wait_exec_asset *arg0) {
     void *result;
 
-    result = func_8000B714_C314(arg0->unkC, arg0->unk86, arg0->unk88);
+    result = getTable2DEntry(arg0->unkC, arg0->unk86, arg0->unk88);
 
     if (result == NULL) {
         arg0->unk84 = 6;
@@ -128,7 +128,7 @@ void *func_800B97C8_1E6878(cutsceneSys2Wait_exec_asset *arg0) {
     u16 temp_v1_2;
     u16 *temp_a3;
 
-    var_s1 = func_8000B714_C314(arg0->unkC, arg0->unk86, arg0->unk88);
+    var_s1 = getTable2DEntry(arg0->unkC, arg0->unk86, arg0->unk88);
     temp_a0 = arg0->unk9D;
     arg0->unk90 = var_s1;
 
@@ -168,7 +168,7 @@ void *func_800B97C8_1E6878(cutsceneSys2Wait_exec_asset *arg0) {
             } else {
                 s16 temp_v0 = arg0->unk88 + 1;
                 arg0->unk88 = temp_v0;
-                var_s1 = func_8000B714_C314(arg0->unkC, arg0->unk86, temp_v0);
+                var_s1 = getTable2DEntry(arg0->unkC, arg0->unk86, temp_v0);
                 if (var_s1 == NULL) {
                     *(s8 *)((u8 *)arg0->unk0 + 0xFF7) = 0;
                     arg0->unk84 = 6;

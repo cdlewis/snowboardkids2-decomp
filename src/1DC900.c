@@ -109,7 +109,7 @@ void func_800B0760(func_800B0760_arg *arg0) {
     arg0->unkD8F = 0;
 
     for (i = 0; i < 8; i++) {
-        temp_v0 = func_8000B714_C314(arg0->unk968, arg0->unkDE0, 0);
+        temp_v0 = getTable2DEntry(arg0->unk968, arg0->unkDE0, 0);
         arg0->unkD90[i] = temp_v0;
         arg0->unkDB0[i] = -(func_8000B7FC_C3FC(temp_v0) / 2);
         arg0->unkDC0[i] = -0x18;
