@@ -480,7 +480,7 @@ void func_8006BFB8_6CBB8(void *a, void *b) {
     arg1[15] = arg0->unk1C << 16;
 }
 
-void func_8006C130_6CD30(LookAtData *arg0, LookAt *arg1) {
+void func_8006C130_6CD30(LookAtData *arg0, Mtx *arg1) {
     s32 *dst;
     s16 temp16;
 

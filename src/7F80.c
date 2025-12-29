@@ -34,7 +34,7 @@ typedef struct {
     /* 0x10 */ u16 width;
     /* 0x12 */ u16 height;
     /* 0x14 */ Transform3D rotationMatrix;
-    /* 0x34 */ void *lookAtMatrix;
+    /* 0x34 */ Mtx *lookAtMatrix;
     /* 0x38 */ void *segmentData;
 } PalettedTextureState;
 
@@ -46,7 +46,7 @@ void cleanupCameraRotationTask(void);
 void renderPalettedTexture(PalettedTextureState *);
 
 extern u8 identityMatrix[];
-void *func_8006C130_6CD30(void *, LookAt *);
+void *func_8006C130_6CD30(void *, Mtx *);
 extern s32 D_8008C200_8CE00[];
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;

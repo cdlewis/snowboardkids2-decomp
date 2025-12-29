@@ -51,7 +51,7 @@ void setupDisplayListMatrix(DisplayListObject *);
 void func_80063A94_64694(DisplayListObject *);
 void func_800648EC_654EC(DisplayListObject *);
 void func_80064F74_65B74(DisplayListObject *);
-void *func_8006C130_6CD30(void *, LookAt *);
+void *func_8006C130_6CD30(void *, Mtx *);
 void func_80068060_68C60(void);
 
 void parseGameDataLayout(GameDataLayout *gameData) {
@@ -328,7 +328,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
         if (arg0->unk30 == NULL) {
             return;
         }
-        func_8006C130_6CD30(arg0, (LookAt *)arg0->unk30);
+        func_8006C130_6CD30(arg0, arg0->unk30);
     }
 
     if (arg0->unk20->flags & 1) {
@@ -700,7 +700,7 @@ void func_80064218_64E18(DisplayListObject *arg0) {
             var_s0 = arg0;
             do {
                 var_s0->unk30 = arg0->unk30 + var_s1;
-                func_8006C130_6CD30(var_s0, (LookAt *)var_s0->unk30);
+                func_8006C130_6CD30(var_s0, var_s0->unk30);
                 var_s1 += 1;
                 var_s0++;
             } while (var_s1 < arg0->unk37);
@@ -930,7 +930,7 @@ void func_800648EC_654EC(DisplayListObject *arg0) {
         if (arg0->unk30 == NULL) {
             return;
         }
-        func_8006C130_6CD30(arg0, (LookAt *)arg0->unk30);
+        func_8006C130_6CD30(arg0, arg0->unk30);
     }
 
     if (arg0->unk20->flags & 1) {
