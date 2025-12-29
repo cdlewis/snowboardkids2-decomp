@@ -384,7 +384,87 @@ s32 func_800B6FA4_1E4054(CutsceneSlotData *arg0, SceneModel *unused, s32 arg2, s
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7128_1E41D8);
+void func_800B7128_1E41D8(
+    CutsceneSlotData *arg0,
+    SceneModel *arg1,
+    s32 arg2,
+    s32 arg3,
+    s32 arg4,
+    s16 arg5,
+    s16 arg6,
+    s16 arg7,
+    s8 arg8,
+    s8 arg9
+) {
+    volatile s32 *ptr30;
+    volatile s32 *ptr34;
+    volatile s32 *ptr38;
+    s16 temp_v0;
+    s16 var_t0;
+    s32 temp_t1;
+    s32 temp_a3;
+    s32 div1, div2, div3;
+    s32 var_v1;
+    s32 var_v0;
+
+    temp_v0 = arg5 + 1;
+    var_t0 = temp_v0;
+    if ((s32)(temp_v0 << 16) <= 0) {
+        var_t0 = 1;
+    }
+
+    ptr30 = &arg0->unk30;
+    *ptr30 = arg2;
+    temp_t1 = *ptr30 - arg0->unk20_u.unk20_s32;
+    div1 = temp_t1 / var_t0;
+
+    ptr34 = &arg0->unk34;
+    *ptr34 = arg3;
+    div2 = (*ptr34 - arg0->unk28) / var_t0;
+
+    ptr38 = &arg0->unk38;
+    *ptr38 = arg4;
+    temp_a3 = *ptr38 - arg0->unk2C;
+    div3 = temp_a3 / var_t0;
+
+    arg0->unk0.bytes[1] = 0;
+    arg0->unk84 = var_t0;
+    arg0->unk86 = var_t0;
+    arg0->unk88 = arg6;
+    arg0->angle = 0;
+    arg0->unk90 = arg7;
+    arg0->unk0.bytes[2] = arg8;
+    arg0->unkA4.byte = arg9;
+    arg0->unk0.Two = 3;
+
+    arg0->unk3C = div1;
+    arg0->unk40 = div2;
+    arg0->unk44 = div3;
+
+    if ((u32)temp_t1 < 1 && (u32)temp_a3 < 1) {
+    } else {
+        arg0->unk7A = (atan2Fixed(temp_t1, temp_a3) + 0x1000) & 0x1FFF;
+    }
+
+    func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+    func_800B6AB8_1E3B68(arg0, 1);
+
+    var_v1 = func_800B6618_1E36C8(arg0, 0, arg0->unk88, arg0->unk7A);
+    var_v0 = var_v1 >= 0 ? var_v1 : -var_v1;
+    if (var_v0 >= 0x1001) {
+        var_v1 = arg0->unk78 - arg0->unk7A;
+    }
+
+    if (var_v1 > 0) {
+        arg0->unk8A = 0x55;
+        arg0->unk8C = (var_v1 >= 0 ? var_v1 : -var_v1) / 85;
+    } else if (var_v1 < 0) {
+        arg0->unk8A = -0x55;
+        arg0->unk8C = (var_v1 >= 0 ? var_v1 : -var_v1) / 85;
+    } else {
+        arg0->unk8C = 0;
+    }
+}
 
 s32 func_800B734C_1E43FC(CutsceneSlotData *arg0, SceneModel *unused, s16 arg1) {
     s32 retval;
