@@ -100,7 +100,66 @@ s32 func_8002ACFC_2B8FC(s32 arg0, s32 arg1, s16 arg2) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002ADB4_2B9B4);
+s16 func_8002ADB4_2B9B4(s16 arg0, s16 arg1) {
+    s16 target;
+    s16 current;
+    s32 diff;
+    s16 absDiff;
+    s16 direction;
+
+    target = arg0;
+    current = arg1;
+
+    if (arg0 == arg1) {
+        goto done;
+    }
+
+    // Calculate absolute difference for wrap check
+    diff = arg0 - arg1;
+    diff = ABS(diff);
+
+    // If difference >= half circle, need to wrap
+    if ((s16)diff >= 0x1001) {
+        if (arg1 < arg0) {
+            current = arg1 + 0x2000;
+        } else {
+            target = arg0 + 0x2000;
+        }
+    }
+
+    // Re-extract signed values
+    arg0 = target;
+    arg1 = current;
+
+    // Calculate new difference after possible wrap
+    diff = arg0 - arg1;
+    absDiff = ABS(diff);
+
+    // Large diff: fixed large step
+    if (absDiff >= 0xAAB) {
+        current += 0x1000;
+        goto done;
+    }
+
+    // Calculate direction
+    if (arg1 < arg0) {
+        direction = 1;
+    } else {
+        direction = -1;
+    }
+
+    // Medium diff: fixed step of 128
+    if (absDiff >= 0x80) {
+        current += direction << 7;
+        goto done;
+    }
+
+    // Small diff: snap towards target
+    current = (current + absDiff * direction) & 0x1FFF;
+
+done:
+    return current;
+}
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002AE80_2BA80);
 
