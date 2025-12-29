@@ -1,5 +1,5 @@
 # splat
-splat64[mips]==0.35.2
+splat64[mips]==0.37.0
 sortedcontainers
 
 # tools/progress.py deps
