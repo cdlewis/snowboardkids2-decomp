@@ -1,6 +1,6 @@
 {
   "task_name": "decompile_simlar_unmatched_function",
   "script": "python3 tools/score_functions.py asm/nonmatchings --json --by-similarity",
-  "prompt": "decompile the function: $ARGUMENT_1. a similar function exists and has been matched, it might provide a useful reference: $ARGUMENT_2. use ultrathink",
+  "prompt": "decompile the function: $ARGUMENT_1. There are several similar functions that have been matched, they might provide a useful reference: $REMAINING_ARGUMENTS. use ultrathink",
   "claude_command": "~/.claude/local/node_modules/.bin/claude --model opus"
 }

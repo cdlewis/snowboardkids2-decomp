@@ -51,7 +51,7 @@ class FunctionScore:
     label_count: int = 0
     stack_size: int = 0
     # Similarity info (populated when --by-similarity is used)
-    similar_to: Optional[str] = None
+    similar_to: Optional[List[str]] = None
     similarity_score: float = 0.0
 
     @property
@@ -74,7 +74,7 @@ class FunctionScore:
             f"Stack: {self.stack_size:4d}"
         )
         if self.similar_to:
-            base += f" | ({self.similar_to} is similar and might provide a useful reference)"
+            base += f" | (similar: {', '.join(self.similar_to)})"
         return base
 
     def to_simple_format(self) -> str:
@@ -85,7 +85,7 @@ class FunctionScore:
             f"{self.jump_count} | {self.label_count} | {self.stack_size}"
         )
         if self.similar_to:
-            base += f" | (similar to {self.similar_to}, {self.similarity_score:.2f})"
+            base += f" | (similar: {', '.join(self.similar_to)}, score: {self.similarity_score:.2f})"
         return base
 
 
@@ -550,9 +550,9 @@ Examples:
                         break
 
                 if query:
-                    results = find_similar(query, matchings_index, top_n=1, threshold=0.0)
+                    results = find_similar(query, matchings_index, top_n=5, threshold=0.0)
                     if results:
-                        func_score.similar_to = results[0].function.name
+                        func_score.similar_to = [r.function.name for r in results]
                         func_score.similarity_score = results[0].total_score
 
             # Sort by similarity score (highest first - best reference material)
@@ -566,8 +566,8 @@ Examples:
     # JSON output mode - output array of function names
     if args.json:
         if args.by_similarity:
-            # Output [function_name, similar_to] pairs
-            function_data = [[s.name, s.similar_to] for s in filtered_scores]
+            # Output [function_name, similar_func1, similar_func2, ...] tuples
+            function_data = [[s.name] + (s.similar_to or []) for s in filtered_scores]
         else:
             function_data = [s.name for s in filtered_scores]
         print(json.dumps(function_data))
