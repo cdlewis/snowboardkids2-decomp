@@ -9,6 +9,7 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -30,7 +31,8 @@ extern s32 D_800907EC_913EC[];
 extern s16 identityMatrix[];
 
 extern void func_80040870_41470(void);
-extern void func_8004106C_41C6C(void);
+extern void *D_80090860_91460;
+extern void func_8004119C_41D9C(void);
 
 typedef struct {
     Transform3D rotationMatrix; // 0x00-0x1F, with position at 0x14-0x1F
@@ -362,9 +364,13 @@ void func_80040F6C_41B6C(s32 arg0, s16 arg1, u8 arg2, u8 arg3, s16 arg4, s16 arg
 typedef struct {
     void *unk0;
     void *unk4;
-    u8 _pad[0x12];
+    void *unk8;
+    u8 unkC[12];
+    s16 unk18;
     s16 unk1A;
 } func_80041010_41C10_arg;
+
+void func_8004106C_41C6C(func_80041010_41C10_arg *arg0);
 
 void func_80041010_41C10(func_80041010_41C10_arg *arg0) {
     s16 temp;
@@ -376,7 +382,37 @@ void func_80041010_41C10(func_80041010_41C10_arg *arg0) {
     setCallbackWithContinue(&func_8004106C_41C6C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_8004106C_41C6C);
+void func_8004106C_41C6C(func_80041010_41C10_arg *arg0) {
+    s32 pad[2];
+    s32 offset;
+    s32 i;
+    s32 constant;
+    void *extPtr;
+
+    do {
+        (void)pad;
+        i = 0;
+        if (arg0->unk1A > 0) {
+            constant = 0x40000;
+            extPtr = &D_80090860_91460;
+            offset = 0;
+            do {
+                i++;
+                *(s32 *)(offset + (s32)arg0->unk4 + 0x20) = (randA() & 0xFF) << 17;
+                *(s32 *)(offset + (s32)arg0->unk4 + 0x24) = (randA() & 0xFF) << 17;
+                *(s32 *)(offset + (s32)arg0->unk4 + 0x28) = (randA() & 0xFF) << 17;
+                *(s32 *)(offset + (s32)arg0->unk4 + 0x2C) = constant;
+                *(s32 *)(offset + (s32)arg0->unk4 + 0x30) = -((randA() & 0xFF) << 8) - constant;
+                *(s32 *)(offset + (s32)arg0->unk4 + 0x34) = 0;
+                loadAssetMetadata((loadAssetMetadata_arg *)(arg0->unk4 + offset), arg0->unk0, 0);
+                *(void **)(offset + (s32)arg0->unk4) = extPtr;
+                offset += 0x38;
+            } while (i < arg0->unk1A);
+        }
+    } while (0);
+    memcpy(arg0->unkC, (u8 *)arg0->unk8 + 0x134, 0xC);
+    setCallbackWithContinue(&func_8004119C_41D9C);
+}
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_8004119C_41D9C);
 
