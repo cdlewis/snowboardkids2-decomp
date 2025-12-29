@@ -12,7 +12,7 @@ typedef struct {
     s32 unk14;          // 0x14
     u8 unk18[0x14];     // 0x18 - embedded GameDataLayout
     void *unk2C;        // 0x2C
-    Mat3x3Padded unk30; // 0x30 - matrix
+    Transform3D unk30; // 0x30 - matrix
     u16 unk50;          // 0x50
     u16 unk52;          // 0x52
     s16 unk54;          // 0x54

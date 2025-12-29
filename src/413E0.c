@@ -33,19 +33,19 @@ extern void func_80040870_41470(void);
 extern void func_8004106C_41C6C(void);
 
 typedef struct {
-    Mat3x3Padded rotationMatrix; // 0x00-0x1F, with position at 0x14-0x1F
+    Transform3D rotationMatrix; // 0x00-0x1F, with position at 0x14-0x1F
     void *unk20;
     void *unk24;
     void *unk28;
     s32 unk2C;
     u8 pad[0xC];
-    Mat3x3Padded unk3C;
+    Transform3D unk3C;
     void *unk5C;
     void *unk60;
     void *unk64;
     s32 unk68;
     u8 pad2[0xC];
-    Mat3x3Padded unk78;
+    Transform3D unk78;
     s32 unk98;
     void *unk9C;
     void *unkA0;
@@ -168,10 +168,10 @@ void func_800409B4_415B4(func_80040B4C_4174C_arg *obj) {
     obj->unk2C = 0;
     trackAngle = func_800625A4_631A4((u8 *)gameState + 0x30, worldPos);
     createYRotationMatrix(&obj->rotationMatrix, (trackAngle + spawnData->unk8) & 0xFFFF);
-    rotateVectorY(&D_800907EC_913EC, (s16)(trackAngle + spawnData->unk8), &obj->rotationMatrix.unk14);
-    obj->rotationMatrix.unk14 = obj->rotationMatrix.unk14 + spawnData->unk0;
-    obj->rotationMatrix.unk1C = obj->rotationMatrix.unk1C + spawnData->unk4;
-    obj->rotationMatrix.unk18 = worldPos[1];
+    rotateVectorY(&D_800907EC_913EC, (s16)(trackAngle + spawnData->unk8), &obj->rotationMatrix.translation.x);
+    obj->rotationMatrix.translation.x = obj->rotationMatrix.translation.x + spawnData->unk0;
+    obj->rotationMatrix.translation.z = obj->rotationMatrix.translation.z + spawnData->unk4;
+    obj->rotationMatrix.translation.y = worldPos[1];
     obj->unk5C = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x60);
     transformMatrix = tempMatrix;
     obj->unk60 = obj->unk24;
@@ -193,8 +193,8 @@ void func_800409B4_415B4(func_80040B4C_4174C_arg *obj) {
 }
 
 void func_80040B4C_4174C(func_80040B4C_4174C_arg *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded *s0;
+    Transform3D sp10;
+    Transform3D *s0;
     GameState *s2;
     s32 i;
 
@@ -206,7 +206,7 @@ void func_80040B4C_4174C(func_80040B4C_4174C_arg *arg0) {
                 goto block_else;
             }
             arg0->unkB6++;
-            func_80056B7C_5777C(&arg0->rotationMatrix.unk14, 0xA);
+            func_80056B7C_5777C(&arg0->rotationMatrix.translation.x, 0xA);
             /* fallthrough */
         case 1:
             if (s2->gamePaused == 0) {
@@ -217,9 +217,9 @@ void func_80040B4C_4174C(func_80040B4C_4174C_arg *arg0) {
                 arg0->unkB6++;
             }
             createZRotationMatrix(&sp10, arg0->unkB4);
-            sp10.unk14 = 0;
-            sp10.unk18 = 0xC0000;
-            sp10.unk1C = 0;
+            sp10.translation.x = 0;
+            sp10.translation.y = 0xC0000;
+            sp10.translation.z = 0;
             func_8006B084_6BC84(&sp10, arg0, &arg0->unk3C);
             break;
         case 2:
@@ -240,9 +240,9 @@ void func_80040B4C_4174C(func_80040B4C_4174C_arg *arg0) {
             s0 = &arg0->unk3C;
             createZRotationMatrix(s0, arg0->unkB4);
             createZRotationMatrix(&sp10, arg0->unkB4);
-            sp10.unk14 = 0;
-            sp10.unk18 = 0xC0000;
-            sp10.unk1C = 0;
+            sp10.translation.x = 0;
+            sp10.translation.y = 0xC0000;
+            sp10.translation.z = 0;
             func_8006B084_6BC84(&sp10, arg0, s0);
             break;
         case 4:

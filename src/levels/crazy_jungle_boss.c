@@ -70,9 +70,9 @@ typedef struct {
     u8 pad46C[0x8];
     s32 unk474;
     u8 pad478[0x970 - 0x478];
-    Mat3x3Padded unk970;
-    Mat3x3Padded unk990;
-    Mat3x3Padded unk9B0;
+    Transform3D unk970;
+    Transform3D unk990;
+    Transform3D unk9B0;
     u8 pad9D0[0xA10 - 0x9D0];
     UnkA10Entry unkA10[9];
     s32 unkA7C;
@@ -159,8 +159,8 @@ typedef s32 (*StateFunc)(void *);
 extern StateFunc D_800BC440_ACC70[];
 
 void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
+    Transform3D sp10;
+    Transform3D sp30;
     volatile u8 pad[8];
     GameState *alloc;
     Arg0Struct *player;
@@ -252,9 +252,9 @@ void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
     func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk990, &sp10);
     func_8006B084_6BC84(&sp10, &arg0->unk970, &sp30);
 
-    sp30.unk14 -= arg0->unk970.unk14;
-    sp30.unk18 -= arg0->unk970.unk18;
-    sp30.unk1C -= arg0->unk970.unk1C;
+    sp30.translation.x -= arg0->unk970.translation.x;
+    sp30.translation.y -= arg0->unk970.translation.y;
+    sp30.translation.z -= arg0->unk970.translation.z;
 
     transformVector((s16 *)(alloc->unk48 + 0xF0), (s16 *)&sp30, &arg0->unkAD4);
     memcpy(&arg0->unkB50.localPos, &arg0->unkAD4, sizeof(Vec3i));
@@ -262,34 +262,34 @@ void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
     func_800BC0E8_AC918(arg0);
 
     transformVector((s16 *)(alloc->unk48 + 0xFC), arg0->unk38, &arg0->unkAE4);
-    arg0->unkAE4 -= arg0->unk970.unk14;
-    arg0->unkAE8 -= arg0->unk970.unk18;
-    arg0->unkAEC -= arg0->unk970.unk1C;
+    arg0->unkAE4 -= arg0->unk970.translation.x;
+    arg0->unkAE8 -= arg0->unk970.translation.y;
+    arg0->unkAEC -= arg0->unk970.translation.z;
 
     transformVector((s16 *)(alloc->unk48 + 0x108), arg0->unk344, &arg0->unkAF0);
-    arg0->unkAF0 -= arg0->unk970.unk14;
-    arg0->unkAF4 -= arg0->unk970.unk18;
-    arg0->unkAF8 -= arg0->unk970.unk1C;
+    arg0->unkAF0 -= arg0->unk970.translation.x;
+    arg0->unkAF4 -= arg0->unk970.translation.y;
+    arg0->unkAF8 -= arg0->unk970.translation.z;
 
     transformVector((s16 *)(alloc->unk48 + 0x114), arg0->unk380, &arg0->unkAFC);
-    arg0->unkAFC -= arg0->unk970.unk14;
-    arg0->unkB00 -= arg0->unk970.unk18;
-    arg0->unkB04 -= arg0->unk970.unk1C;
+    arg0->unkAFC -= arg0->unk970.translation.x;
+    arg0->unkB00 -= arg0->unk970.translation.y;
+    arg0->unkB04 -= arg0->unk970.translation.z;
 
     transformVector((s16 *)(alloc->unk48 + 0x120), arg0->unk3BC, &arg0->unkB08);
-    arg0->unkB08 -= arg0->unk970.unk14;
-    arg0->unkB0C -= arg0->unk970.unk18;
-    arg0->unkB10 -= arg0->unk970.unk1C;
+    arg0->unkB08 -= arg0->unk970.translation.x;
+    arg0->unkB0C -= arg0->unk970.translation.y;
+    arg0->unkB10 -= arg0->unk970.translation.z;
 
     transformVector((s16 *)(alloc->unk48 + 0x12C), arg0->unkEC, &arg0->unkB14);
-    arg0->unkB14 -= arg0->unk970.unk14;
-    arg0->unkB18 -= arg0->unk970.unk18;
-    arg0->unkB1C -= arg0->unk970.unk1C;
+    arg0->unkB14 -= arg0->unk970.translation.x;
+    arg0->unkB18 -= arg0->unk970.translation.y;
+    arg0->unkB1C -= arg0->unk970.translation.z;
 
     transformVector((s16 *)(alloc->unk48 + 0x138), arg0->unk1A0, &arg0->unkB20);
-    arg0->unkB20 -= arg0->unk970.unk14;
-    arg0->unkB24 -= arg0->unk970.unk18;
-    arg0->unkB28 -= arg0->unk970.unk1C;
+    arg0->unkB20 -= arg0->unk970.translation.x;
+    arg0->unkB24 -= arg0->unk970.translation.y;
+    arg0->unkB28 -= arg0->unk970.translation.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BB754_ABF84);
@@ -317,7 +317,7 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
 }
 
 s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
-    Mat3x3Padded sp10;
+    Transform3D sp10;
     s32 sp30[3];
     GameState *gameState;
     s16 clampedAngle;
@@ -497,7 +497,7 @@ void func_800BBFEC_AC81C(Arg0Struct *arg0) {
     u16 temp;
 
     alloc = getCurrentAllocation();
-    memcpy(&arg0->unk970.unk14, &arg0->unk434, 0xC);
+    memcpy(&arg0->unk970.translation.x, &arg0->unk434, 0xC);
     allocPlus30 = &alloc->gameData;
     temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
     arg0->unkB94 = temp;
@@ -562,8 +562,8 @@ void func_800BC330_ACB60(Arg0Struct *arg0) {
         s32 *posPtr;
         u16 temp;
 
-        arg0->unkA10[i].unk0 = arg0->unk970.unk14 + D_800BBA7C_AC2AC[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_0];
-        arg0->unkA10[i].unk8 = arg0->unk970.unk1C + D_800BBA84_AC2B4[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_2 + 2];
+        arg0->unkA10[i].unk0 = arg0->unk970.translation.x + D_800BBA7C_AC2AC[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_0];
+        arg0->unkA10[i].unk8 = arg0->unk970.translation.z + D_800BBA84_AC2B4[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_2 + 2];
         posPtr = &arg0->unkA10[i].unk0;
         temp = func_80059E90_5AA90(arg0, temp_s5, arg0->unkB94, posPtr);
         arg0->unkA10[i].unk4 = func_8005CFC0_5DBC0(temp_s5, temp, posPtr, 0x100000);

@@ -81,9 +81,9 @@ u8 getModelAlpha(SceneModel *arg0) {
     return arg0->alpha;
 }
 
-void applyTransformToModel(SceneModel *arg0, Mat3x3Padded *arg1) {
+void applyTransformToModel(SceneModel *arg0, Transform3D *arg1) {
     if (arg0 != NULL) {
-        memcpy(&arg0->unk18, arg1, sizeof(Mat3x3Padded));
+        memcpy(&arg0->unk18, arg1, sizeof(Transform3D));
     }
 }
 

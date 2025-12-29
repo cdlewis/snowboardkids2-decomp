@@ -302,10 +302,10 @@ typedef struct {
 } Func8000C7A4Arg;
 
 void func_8000C7A4_D3A4(Func8000C7A4Arg *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
-    Mat3x3Padded *mat1;
-    Mat3x3Padded *mat2;
+    Transform3D sp10;
+    Transform3D sp30;
+    Transform3D *mat1;
+    Transform3D *mat2;
     ExtendedNode *temp_v0;
     ExtendedNode *temp_v1;
     ExtendedNode *temp_a0;
@@ -332,7 +332,7 @@ void func_8000C7A4_D3A4(Func8000C7A4Arg *arg0) {
                 memcpy(arg0->unk4.pos, &arg0->unk0->unk1E4, 0xC);
                 temp_v0 = arg0->unk0;
                 scale = (s16)((s64)(temp_v0->unk204 >> 8) * 0x2000 >> 8);
-                scaleMatrix((Mat3x3Padded *)temp_s0, scale, scale, scale);
+                scaleMatrix((Transform3D *)temp_s0, scale, scale, scale);
                 enqueueDisplayListObject(arg0->unk0->slot_index, (DisplayListObject *)temp_s0);
                 break;
             case 1:
@@ -342,7 +342,7 @@ void func_8000C7A4_D3A4(Func8000C7A4Arg *arg0) {
                 memcpy(arg0->unk40.pos, &arg0->unk0->unk1E4, 0xC);
                 temp_v0 = arg0->unk0;
                 scale = (s16)((s64)(temp_v0->unk204 >> 8) * 0x2000 >> 8);
-                scaleMatrix((Mat3x3Padded *)&arg0->unk40, scale, scale, scale);
+                scaleMatrix((Transform3D *)&arg0->unk40, scale, scale, scale);
                 enqueueDisplayListObject(arg0->unk0->slot_index, (DisplayListObject *)&arg0->unk40);
                 temp_v1 = arg0->unk0;
                 if (temp_v1->unk20C != 0) {

@@ -80,7 +80,7 @@ void func_8003C170_3CD70(NodeState *node) {
     u8 playerIdx;
     s32 inputOffset[3];
     s32 transformedOffset[3];
-    Mat3x3Padded rotationMatrix;
+    Transform3D rotationMatrix;
 
     gameState = (Allocation *)getCurrentAllocation();
 
@@ -134,19 +134,19 @@ void func_8003CF0C_3DB0C(func_8003CF0C_arg *arg0) {
 
 void func_8003CF40_3DB40(s16 *arg0) {
     func_8003CF40_Allocation *s1;
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
-    Mat3x3Padded sp50;
+    Transform3D sp10;
+    Transform3D sp30;
+    Transform3D sp50;
     s32 sp70[3];
     s16 temp_v0;
     s16 temp_v1;
-    Mat3x3Padded *s2;
+    Transform3D *s2;
 
     s1 = getCurrentAllocation();
     s2 = &sp10;
     memcpy(s2, identityMatrix, 0x20);
-    sp10.unk18 = 0x1E0000;
-    sp10.unk1C = 0x870000;
+    sp10.translation.y = 0x1E0000;
+    sp10.translation.z = 0x870000;
     temp_v0 = *arg0 + 0x58;
     *arg0 = temp_v0;
     if (temp_v0 == 0x12E8) {
@@ -161,13 +161,13 @@ void func_8003CF40_3DB40(s16 *arg0) {
         return;
     }
     createYRotationMatrix(&sp30, (temp_v1 + 0x1000) & 0xFFFF);
-    memcpy(&sp30.unk14, &((Mat3x3Padded *)identityMatrix)->unk14, 0xC);
+    memcpy(&sp30.translation, &((Transform3D *)identityMatrix)->translation, 0xC);
     func_8006B084_6BC84(s2, &sp30, &sp50);
     func_8006B084_6BC84(&sp50, s1->unk10 + 0x950, s2);
     transformVector2(&D_8008FEB0_90AB0, s1->unk10 + 0x950, sp70);
-    sp10.unk14 = sp10.unk14 + sp70[0];
-    sp10.unk18 = sp10.unk18 + sp70[1];
-    sp10.unk1C = sp10.unk1C + sp70[2];
+    sp10.translation.x = sp10.translation.x + sp70[0];
+    sp10.translation.y = sp10.translation.y + sp70[1];
+    sp10.translation.z = sp10.translation.z + sp70[2];
     func_8006FD3C_7093C(0x64, s2);
 }
 

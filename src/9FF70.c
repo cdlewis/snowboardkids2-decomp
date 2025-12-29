@@ -180,7 +180,7 @@ s32 func_800B13D4_A1284(Player *arg0) {
 
     arg0->unkA90 = 0;
     arg0->unkA92 = 0;
-    arg0->unk990.unk14 = 0;
+    arg0->unk990.translation.x = 0;
 
     if (arg0->unkB84 & 2) {
         arg0->unkA8E = arg0->unkBB0;
@@ -1562,13 +1562,13 @@ s32 func_800B3F2C_A3DDC(Player *arg0) {
     return 0;
 }
 
-extern Mat3x3Padded D_8009A890_9B490;
+extern Transform3D D_8009A890_9B490;
 extern s32 D_8009A8A4_9B4A4;
 extern s32 D_8009A8A8_9B4A8;
 extern s32 D_8009A8AC_9B4AC;
 
 void func_800B4058_A3F08(Player *arg0) {
-    Mat3x3Padded sp10;
+    Transform3D sp10;
     s16 *a98;
     s16 *a96;
 
@@ -1578,9 +1578,9 @@ void func_800B4058_A3F08(Player *arg0) {
     a98 = &arg0->unkA98;
     a96 = &arg0->unkA96;
     createRotationMatrixYX(&sp10, *a98, *a96);
-    sp10.unk14 = 0;
-    sp10.unk18 = 0x100000;
-    sp10.unk1C = 0;
+    sp10.translation.x = 0;
+    sp10.translation.y = 0x100000;
+    sp10.translation.z = 0;
     func_8006B084_6BC84(&D_8009A890_9B490, &sp10, &arg0->unk9B0.prev_position);
     arg0->unkB84 |= 0x800;
 }
@@ -1622,7 +1622,7 @@ void func_800B40D4_A3F84(Player *arg0) {
     if (delta < -0x80) {
         delta = -0x80;
     }
-    temp_a2 = arg0->unk990.unk14;
+    temp_a2 = arg0->unk990.translation.x;
     arg0->unkA90 = value2 + delta;
     var_v1 = -temp_a2;
     if (var_v1 > 0x8000) {
@@ -1631,7 +1631,7 @@ void func_800B40D4_A3F84(Player *arg0) {
     if (var_v1 < -0x8000) {
         var_v1 = -0x8000;
     }
-    arg0->unk990.unk14 = temp_a2 + var_v1;
+    arg0->unk990.translation.x = temp_a2 + var_v1;
 }
 
 void func_800B419C_A404C(Player *arg0) {
@@ -1694,7 +1694,7 @@ void func_800B419C_A404C(Player *arg0) {
     result = value2 + delta;
 
     // Handle unk9A4
-    temp2 = arg0->unk990.unk14;
+    temp2 = arg0->unk990.translation.x;
     arg0->unkA90 = result;
     delta2 = -temp2, value3 = temp2;
     if (!(delta2 < 0x6001)) {
@@ -1703,7 +1703,7 @@ void func_800B419C_A404C(Player *arg0) {
     if (delta2 < -0x6000) {
         delta2 = -0x6000;
     }
-    arg0->unk990.unk14 = value3 + delta2;
+    arg0->unk990.translation.x = value3 + delta2;
 }
 
 extern s16 identityMatrix[];
@@ -1712,10 +1712,10 @@ s32 func_800B42A8_A4158(Player *arg0, s32 arg1, s32 arg2, s32 arg3) {
     Vec3i sp10;
     Vec3i sp20;
     Vec3i sp30;
-    Mat3x3Padded sp40;
-    Mat3x3Padded sp60;
-    Mat3x3Padded sp80;
-    Mat3x3Padded spA0;
+    Transform3D sp40;
+    Transform3D sp60;
+    Transform3D sp80;
+    Transform3D spA0;
     s32 temp;
     s32 temp2;
     s32 resultY;
@@ -3468,8 +3468,10 @@ void func_800B98CC_A977C(Player *player) {
 
     do {
         jointPos = (JointPosition *)((u8 *)player + offset);
-        *(volatile s32 *)(jointWritePtr + 0xA10) = player->unk970.unk14 + *(s32 *)((u8 *)&D_800BA348_AA1F8 + offset);
-        *(volatile s32 *)(jointWritePtr + 0xA18) = player->unk970.unk1C + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
+        *(volatile s32 *)(jointWritePtr + 0xA10) =
+            player->unk970.translation.x + *(s32 *)((u8 *)&D_800BA348_AA1F8 + offset);
+        *(volatile s32 *)(jointWritePtr + 0xA18) =
+            player->unk970.translation.z + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
 
         sectorIndex = func_80059E90_5AA90((void *)player, gameData, player->unkB94, jointPos);
         *(volatile s32 *)(jointWritePtr + 0xA14) = func_8005CFC0_5DBC0(gameData, sectorIndex, jointPos, 0x100000);

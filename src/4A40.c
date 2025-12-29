@@ -405,10 +405,10 @@ void initCreditsCharacter(CreditsCharacter *character) {
 
     memcpy((void *)((u8 *)character->model + 0x18), identityMatrix, 0x20);
 
-    createYRotationMatrix((Mat3x3Padded *)((u8 *)character->model + 0x18), config->rotation);
+    createYRotationMatrix((Transform3D *)((u8 *)character->model + 0x18), config->rotation);
 
     scale = config->scale;
-    scaleMatrix((Mat3x3Padded *)((u8 *)character->model + 0x18), scale, scale, scale);
+    scaleMatrix((Transform3D *)((u8 *)character->model + 0x18), scale, scale, scale);
 
     ((SceneModel30 *)character->model)->unk2C = creditsCharacterStartDepth;
     ((SceneModel30 *)character->model)->unk30 += config->depthOffset;

@@ -55,13 +55,13 @@ void func_800B66B4_1E3764(CutsceneSlotData *arg0) {
 }
 
 s32 setupSlotTransform(CutsceneSlotData *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
-    Mat3x3Padded sp50;
-    Mat3x3Padded sp70;
-    Mat3x3Padded sp90;
-    Mat3x3Padded spB0;
-    Mat3x3Padded *pB0;
+    Transform3D sp10;
+    Transform3D sp30;
+    Transform3D sp50;
+    Transform3D sp70;
+    Transform3D sp90;
+    Transform3D spB0;
+    Transform3D *pB0;
     s16 angle;
     s16 unk8A;
     s16 var_a1;
@@ -124,9 +124,9 @@ skip3:
     func_8006B084_6BC84(pB0, &sp70, &arg0->unk04);
 
     retval = arg0->unk20_u.unk20_s32;
-    arg0->unk04.unk14 = retval;
-    arg0->unk04.unk18 = arg0->unk28;
-    arg0->unk04.unk1C = arg0->unk2C;
+    arg0->unk04.translation.x = retval;
+    arg0->unk04.translation.y = arg0->unk28;
+    arg0->unk04.translation.z = arg0->unk2C;
 
     return retval;
 }

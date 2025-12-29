@@ -128,7 +128,7 @@ typedef struct {
     func_80000C2C_182C_arg_unk0 *unk0;
     s8 unk4;
     s8 unk5;
-    Mat3x3Padded unk8;
+    Transform3D unk8;
     s32 unk28;
     void *unk2C;
     void *unk30;
@@ -153,7 +153,7 @@ typedef struct {
     s8 unk4;
     s8 unk5;
     u8 pad6[2];
-    Mat3x3Padded unk8;
+    Transform3D unk8;
     s32 unk28;
     void *unk2C;
     void *unk30;
@@ -397,15 +397,15 @@ void initRotatingModelTask(func_80000C2C_182C_arg *arg0) {
     ModelEntityTaskConfig *taskConfig = &config->taskConfigs[arg0->unk4];
 
     setCleanupCallback(&cleanupRotatingModelTask);
-    memcpy(&arg0->unk8, &identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(&arg0->unk8, &identityMatrix, sizeof(Transform3D));
 
     arg0->unk2C = loadUncompressedData(config->asset1Start, config->asset1End);
     arg0->unk30 = loadCompressedData(config->asset2Start, config->asset2End, config->asset2Size);
     arg0->unk34 = 0;
     arg0->unk28 = taskConfig->unk4;
-    arg0->unk8.unk14 = taskConfig->unk8;
-    arg0->unk8.unk18 = taskConfig->unkC;
-    arg0->unk8.unk1C = taskConfig->unk10;
+    arg0->unk8.translation.x = taskConfig->unk8;
+    arg0->unk8.translation.y = taskConfig->unkC;
+    arg0->unk8.translation.z = taskConfig->unk10;
     arg0->unk44 = 0;
 
     setCallback(&updateRotatingModelTask);
@@ -454,8 +454,8 @@ void initSwingingModelTask(func_80000C2C_182C_arg *arg0) {
 }
 
 void updateSwingingModelTask(func_80000C2C_182C_arg *arg0) {
-    Mat3x3Padded yRotMatrix;
-    Mat3x3Padded zRotMatrix;
+    Transform3D yRotMatrix;
+    Transform3D zRotMatrix;
     DataEntry *entry;
     SubEntry *subEntry;
 
@@ -497,9 +497,9 @@ void updateSwingingModelTask(func_80000C2C_182C_arg *arg0) {
     createZRotationMatrix(&zRotMatrix, arg0->unk44);
     func_8006B084_6BC84(&zRotMatrix, &yRotMatrix, &arg0->unk8);
 
-    arg0->unk8.unk14 = subEntry->unk8;
-    arg0->unk8.unk18 = subEntry->unkC;
-    arg0->unk8.unk1C = subEntry->unk10;
+    arg0->unk8.translation.x = subEntry->unk8;
+    arg0->unk8.translation.y = subEntry->unkC;
+    arg0->unk8.translation.z = subEntry->unk10;
 
     enqueueDisplayListIfVisible(arg0->unk0, &arg0->unk8);
 }
@@ -585,9 +585,9 @@ void updateStaticModelTask(func_80000C2C_182C_arg *arg0) {
         func_80069CF8_6A8F8();
     }
 
-    arg0->unk8.unk14 = subEntry->unk8;
-    arg0->unk8.unk18 = subEntry->unkC;
-    arg0->unk8.unk1C = subEntry->unk10;
+    arg0->unk8.translation.x = subEntry->unk8;
+    arg0->unk8.translation.y = subEntry->unkC;
+    arg0->unk8.translation.z = subEntry->unk10;
     enqueueDisplayListIfVisible(arg0->unk0, &arg0->unk8);
 }
 
@@ -695,14 +695,14 @@ void initSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
     volatile s32 sp14;
     volatile s32 sp18;
     volatile s32 sp1C;
-    Mat3x3Padded sp20;
+    Transform3D sp20;
     DataEntry *entry;
     SubEntry *subEntry;
 
     entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     subEntry = &entry->sub_entries[arg0->unk4];
 
-    memcpy(&sp20, &identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(&sp20, &identityMatrix, sizeof(Transform3D));
     setCleanupCallback(&cleanupSpawnedSpriteTask);
     loadSpriteAsset((SpriteAssetState *)&arg0->unk8, subEntry->unk16);
 

@@ -89,7 +89,7 @@ void func_800B5660_1E2710(func_800B5500_Task *arg0) {
 
     memcpy(arg0, arg0->unk54, 0x20);
 
-    scaleMatrix((Mat3x3Padded *)arg0, 0x2000, arg0->unk78_union.unk78_shorts[1], 0x2000);
+    scaleMatrix((Transform3D *)arg0, 0x2000, arg0->unk78_union.unk78_shorts[1], 0x2000);
 
     enqueueTiledTextureRender(arg0->unk74, arg0);
 

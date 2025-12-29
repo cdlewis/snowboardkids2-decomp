@@ -246,7 +246,7 @@ typedef struct {
 } GameEntity;
 
 typedef struct {
-    Mat3x3Padded unk0;
+    Transform3D unk0;
     union {
         SceneModel *unk20;
         s32 unk20_s32;
@@ -254,7 +254,7 @@ typedef struct {
     } unk20_u;
 } applyTransformToModel_arg1;
 
-void applyTransformToModel(SceneModel *arg0, Mat3x3Padded *arg1);
+void applyTransformToModel(SceneModel *arg0, Transform3D *arg1);
 
 void initializeGameEntity(void *, s32, void *, s8, s8, s8, s16);
 

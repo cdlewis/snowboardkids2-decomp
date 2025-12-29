@@ -19,7 +19,7 @@ typedef struct {
 
 typedef struct {
     SteppedMatrixOwner *owner;
-    Mat3x3Padded matrix;
+    Transform3D matrix;
     s16 frameDelay;
     u8 padding[0x2];
     s16 stepIndex;
@@ -36,7 +36,7 @@ void initSteppedMatrixController(SteppedMatrixState *state) {
 }
 
 void updateSteppedMatrixController(SteppedMatrixState *state) {
-    Mat3x3Padded *matrix;
+    Transform3D *matrix;
     s32 translation;
 
     if (state->owner->isDestroyed == 1) {
@@ -62,7 +62,7 @@ do_rotation:
         createZRotationMatrix(matrix, (&gSteppedMatrixAngles)[state->stepIndex * 4]);
         translation = (&gSteppedMatrixTranslations)[state->stepIndex * 2];
         state->frameDelay = 4;
-        state->matrix.unk18 = translation;
+        state->matrix.translation.y = translation;
         state->stepIndex = (state->stepIndex + 1) % gSteppedMatrixStepCount;
     }
     state->frameDelay -= 1;

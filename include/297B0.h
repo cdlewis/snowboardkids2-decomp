@@ -4,7 +4,7 @@
 
 typedef struct {
     /* 0x00 */ SceneModel *model;
-    /* 0x04 */ Mat3x3Padded matrix;
+    /* 0x04 */ Transform3D matrix;
     /* 0x24 */ s32 unk24;
     /* 0x28 */ u8 pad28[0x4];
     /* 0x2C */ u16 rotation;

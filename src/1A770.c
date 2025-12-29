@@ -76,9 +76,9 @@ void func_80019BBC_1A7BC(void) {
 void func_80019BF0_1A7F0(applyTransformToModel_arg1 *arg0) {
     getCurrentAllocation();
     memcpy(arg0, &identityMatrix, 0x20);
-    arg0->unk0.unk14 = 0x830000;
-    arg0->unk0.unk18 = 0x340000;
-    arg0->unk0.unk1C = 0xFF7D0000;
+    arg0->unk0.translation.x = 0x830000;
+    arg0->unk0.translation.y = 0x340000;
+    arg0->unk0.translation.z = 0xFF7D0000;
     applyTransformToModel(arg0->unk20_u.unk20, &arg0->unk0);
     setModelAnimation(arg0->unk20_u.unk20, 0);
     updateModelGeometry(arg0->unk20_u.unk20);

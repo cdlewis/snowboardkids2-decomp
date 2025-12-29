@@ -14,7 +14,7 @@ void func_8002A200_2AE00(Func297D8Arg *);
 
 struct Func8002A154Arg {
     /* 0x00 */ void *model;
-    /* 0x04 */ Mat3x3Padded matrix;
+    /* 0x04 */ Transform3D matrix;
     /* 0x24 */ u8 pad24[0xC];
     /* 0x30 */ u16 rotation;
     /* 0x32 */ u8 pad32[0xA];
@@ -105,8 +105,8 @@ void func_80028C08_29808(Func297D8Arg *arg0) {
 
     func_8002A2D0_2AED0(arg0);
 
-    allocation->unk408 = arg0->matrix.unk14;
-    allocation->unk410 = arg0->matrix.unk1C;
+    allocation->unk408 = arg0->matrix.translation.x;
+    allocation->unk410 = arg0->matrix.translation.z;
 
     if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
         savedUnk50 = arg0->unk50;
@@ -184,8 +184,8 @@ void func_80028DF0_299F0(Func297D8Arg *arg0) {
 
     func_8002A2D0_2AED0(arg0);
 
-    allocation->unk408 = arg0->matrix.unk14;
-    allocation->unk410 = arg0->matrix.unk1C;
+    allocation->unk408 = arg0->matrix.translation.x;
+    allocation->unk410 = arg0->matrix.translation.z;
 
     if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
         savedUnk50 = arg0->unk50;
@@ -245,8 +245,8 @@ void func_8002900C_29C0C(Func297D8Arg *arg0) {
 
     func_8002A2D0_2AED0(arg0);
 
-    allocation->unk408 = arg0->matrix.unk14;
-    allocation->unk410 = arg0->matrix.unk1C;
+    allocation->unk408 = arg0->matrix.translation.x;
+    allocation->unk410 = arg0->matrix.translation.z;
 
     if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
         savedUnk50 = arg0->unk50;
@@ -302,8 +302,8 @@ void func_800291CC_29DCC(Func297D8Arg *arg0) {
 
     func_8002A2D0_2AED0(arg0);
 
-    alloc->unk408 = arg0->matrix.unk14;
-    alloc->unk410 = arg0->matrix.unk1C;
+    alloc->unk408 = arg0->matrix.translation.x;
+    alloc->unk410 = arg0->matrix.translation.z;
 
     if ((alloc->unk42A == 0x11) && (setCallbackFlag ^ 1)) {
         u16 savedUnk50 = arg0->unk50;
@@ -393,8 +393,8 @@ void func_80029360_29F60(Func297D8Arg *arg0) {
 
     func_8002A2D0_2AED0(arg0);
 
-    allocation->unk408 = arg0->matrix.unk14;
-    allocation->unk410 = arg0->matrix.unk1C;
+    allocation->unk408 = arg0->matrix.translation.x;
+    allocation->unk410 = arg0->matrix.translation.z;
 
     if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
         allocation->unk42E = 1;
@@ -527,8 +527,8 @@ void func_80029954_2A554(Func297D8Arg *arg0) {
 
     func_8002A2D0_2AED0(arg0);
 
-    alloc->unk408 = arg0->matrix.unk14;
-    alloc->unk410 = arg0->matrix.unk1C;
+    alloc->unk408 = arg0->matrix.translation.x;
+    alloc->unk410 = arg0->matrix.translation.z;
 
     if (arg0->unk5A != 0) {
         arg0->unk5A--;
@@ -610,8 +610,8 @@ void func_80029AA4_2A6A4(Func297D8Arg *arg0) {
 
     func_8002A2D0_2AED0(arg0);
 
-    alloc->unk408 = arg0->matrix.unk14;
-    alloc->unk410 = arg0->matrix.unk1C;
+    alloc->unk408 = arg0->matrix.translation.x;
+    alloc->unk410 = arg0->matrix.translation.z;
 
     if ((alloc->unk42A == 0x11) && (setCallbackFlag ^ 1)) {
         u16 savedUnk50 = arg0->unk50;
@@ -689,8 +689,8 @@ void func_80029C90_2A890(Func297D8Arg *arg0) {
     }
 
     func_8002A2D0_2AED0(arg0);
-    alloc->unk408 = arg0->matrix.unk14;
-    alloc->unk410 = arg0->matrix.unk1C;
+    alloc->unk408 = arg0->matrix.translation.x;
+    alloc->unk410 = arg0->matrix.translation.z;
 }
 
 void func_80029E58_2AA58(Func297D8Arg *arg0) {
@@ -751,8 +751,8 @@ void func_80029EA8_2AAA8(Func297D8Arg *arg0) {
 
     func_8002A2D0_2AED0(arg0);
 
-    allocation->unk408 = arg0->matrix.unk14;
-    allocation->unk410 = arg0->matrix.unk1C;
+    allocation->unk408 = arg0->matrix.translation.x;
+    allocation->unk410 = arg0->matrix.translation.z;
 
     if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
         savedUnk50 = arg0->unk50;
@@ -814,8 +814,8 @@ void func_8002A154_2AD54(Func8002A154Arg *arg0) {
 
     func_8002A2D0_2AED0((Func297D8Arg *)arg0);
 
-    alloc->unk408 = arg0->matrix.unk14;
-    alloc->unk410 = arg0->matrix.unk1C;
+    alloc->unk408 = arg0->matrix.translation.x;
+    alloc->unk410 = arg0->matrix.translation.z;
 
     if (alloc->unk42A == 0x11) {
         savedUnk50 = arg0->unk50;

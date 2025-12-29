@@ -169,7 +169,7 @@ void func_800B2DCC_1DFE7C(CutsceneSlot *arg0) {
         func_800B34B0_1E0560(i);
 
         if (ptr[i].slotData.unkA4.ptr != NULL) {
-            applyTransformToModel(ptr[i].slotData.unkA4.ptr, (Mat3x3Padded *)identityMatrix);
+            applyTransformToModel(ptr[i].slotData.unkA4.ptr, (Transform3D *)identityMatrix);
             setModelAnimation(ptr[i].slotData.unkA4.ptr, 0);
         }
 
@@ -203,7 +203,7 @@ void func_800B2E48_1DFEF8(CutsceneManager *manager) {
             func_800B77C4_1E4874(slotData, 0x10000, 0);
             func_800B7828_1E48D8(slotData, 0x10000, 0);
             setupSlotTransform(slotData);
-            applyTransformToModel(model, (Mat3x3Padded *)(slotAddr + 0x50));
+            applyTransformToModel(model, (Transform3D *)(slotAddr + 0x50));
         }
 
         iterPtr = (CutsceneManager *)((u8 *)iterPtr + 0xF4);

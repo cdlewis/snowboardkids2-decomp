@@ -9,7 +9,7 @@ extern u8 identityMatrix[];
 
 typedef struct {
     union {
-        Mat3x3Padded mat;
+        Transform3D mat;
         struct {
             s16 padding[10];
             s32 x, y, z;
@@ -95,13 +95,13 @@ s32 cutsceneEffectMLight_validate(void) {
 }
 
 void cutsceneEffectMLight_exec(cutsceneEffectMLight_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
+    Transform3D sp10;
+    Transform3D sp30;
     MatrixWithVec sp50;
     s32 sp70[3];
     CutsceneSlot *slot;
     UIResource *resource;
-    Mat3x3Padded *rotMatrix;
+    Transform3D *rotMatrix;
 
     slot = &arg1->slots[arg2];
     rotMatrix = &sp10;

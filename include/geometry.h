@@ -26,13 +26,11 @@ typedef struct {
 // Matrices always seem to be copied into size 0x20 buffers :/
 typedef struct {
     s16 m[3][3];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-} Mat3x3Padded;
+    Vec3i translation;
+} Transform3D;
 
-void createYRotationMatrix(Mat3x3Padded *, u16 angle);
-void createZRotationMatrix(Mat3x3Padded *, u16 angle);
+void createYRotationMatrix(Transform3D *, u16 angle);
+void createZRotationMatrix(Transform3D *, u16 angle);
 void createXRotationMatrix(s16 matrix[3][3], u16 angle);
 
 void func_8006BDBC_6C9BC(func_8005E800_5F400_arg *, void *, void *);
@@ -45,19 +43,19 @@ void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 
 void func_8006BFB8_6CBB8(void *, void *);
 
-void createRotationMatrixYX(Mat3x3Padded *matrix, u16 angleY, u16 angleX);
-void createRotationMatrixXZ(Mat3x3Padded *matrix, u16 angleX, u16 angleZ);
+void createRotationMatrixYX(Transform3D *matrix, u16 angleY, u16 angleX);
+void createRotationMatrixXZ(Transform3D *matrix, u16 angleX, u16 angleZ);
 void createRotationMatrixYZ(s16 *matrix, u16 angleY, u16 angleZ);
 
 void matrixToEulerAngles(s32 *, s32 *, f32 *, f32 *, f32 *, f32 *, f32 *, f32 *);
 
 void transformVector(s16 *, s16 *, void *);
 void transformVector2(void *matrix, void *vector, s32 *output);
-void transformVector3(s32 *, Mat3x3Padded *, s32 *);
+void transformVector3(s32 *, Transform3D *, s32 *);
 
 void rotateVectorY(void *, s32, void *);
 
-void scaleMatrix(Mat3x3Padded *matrix, s16 scaleX, s16 scaleY, s16 scaleZ);
+void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ);
 
 s16 func_8006D21C_6DE1C(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 

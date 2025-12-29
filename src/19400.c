@@ -132,8 +132,8 @@ void func_80018B90_19790(func_80018A90_19690_arg *arg0);
 void func_80018A90_19690(func_80018A90_19690_arg *arg0) {
     GameState *allocation;
     s16 temp;
-    Mat3x3Padded sp20;
-    Mat3x3Padded sp40;
+    Transform3D sp20;
+    Transform3D sp40;
 
     allocation = (GameState *)getCurrentAllocation();
 
@@ -170,8 +170,8 @@ void func_80018B90_19790(func_80018A90_19690_arg *arg0) {
     s16 temp;
     s16 currentAngle;
     s16 diff;
-    Mat3x3Padded sp20;
-    Mat3x3Padded sp40;
+    Transform3D sp20;
+    Transform3D sp40;
 
     allocation = (GameState *)getCurrentAllocation();
 

@@ -64,8 +64,8 @@ void func_800BB2B0(func_800BB2B0_arg *arg0) {
     s32 i;
 
     createYRotationMatrix(&arg0->matrix, arg0->rotationAngle);
-    memcpy(&arg0->matrix.unk14, arg0->targetPosition, 0xC);
-    arg0->matrix.unk18 += arg0->velocityY;
+    memcpy(&arg0->matrix.translation.x, arg0->targetPosition, 0xC);
+    arg0->matrix.translation.y += arg0->velocityY;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);

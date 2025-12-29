@@ -30,7 +30,7 @@ typedef struct {
 
 typedef struct {
     DisplayListObject displayList;
-    Mat3x3Padded transform;
+    Transform3D transform;
     s32 translationStep;
     u8 updateCounter;
     s8 unk61;
@@ -105,7 +105,7 @@ typedef struct {
 
 typedef struct {
     void *unk0;
-    Mat3x3Padded unk4;
+    Transform3D unk4;
     s16 unk24;
     s8 unk26;
 } func_8002EF3C_2FB3C_arg;
@@ -249,9 +249,9 @@ void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
     GameState *temp = (GameState *)getCurrentAllocation();
     arg0->unk0 = createSceneModel(0x3A, temp);
     memcpy(&arg0->unk4, identityMatrix, 0x20);
-    arg0->unk4.unk14 = 0x200000;
-    arg0->unk4.unk18 = 0xFFE00000;
-    arg0->unk4.unk1C = 0x80000;
+    arg0->unk4.translation.x = 0x200000;
+    arg0->unk4.translation.y = 0xFFE00000;
+    arg0->unk4.translation.z = 0x80000;
     arg0->unk24 = 4;
     arg0->unk26 = 0;
     createYRotationMatrix(&arg0->unk4, 0x1E00);
@@ -313,14 +313,14 @@ void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *arg0) {
 }
 
 void func_8002F12C_2FD2C(func_8002F658_30258_arg *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
+    Transform3D sp10;
+    Transform3D sp30;
     s16 temp_s0;
     u16 temp_s1;
-    Mat3x3Padded *temp_s3;
+    Transform3D *temp_s3;
     GameState *temp_s4;
-    Mat3x3Padded *sp30_ptr;
-    Mat3x3Padded *sp10_ptr;
+    Transform3D *sp30_ptr;
+    Transform3D *sp10_ptr;
 
     temp_s3 = &arg0->transform;
     temp_s4 = (GameState *)getCurrentAllocation();
@@ -334,7 +334,7 @@ void func_8002F12C_2FD2C(func_8002F658_30258_arg *arg0) {
     func_8006B084_6BC84(sp10_ptr, sp30_ptr, temp_s3);
 
     if (temp_s4->unk5C9 != 1) {
-        arg0->transform.unk14 = 0x200000 - ((2 - arg0->unk62) << 21);
+        arg0->transform.translation.x = 0x200000 - ((2 - arg0->unk62) << 21);
     }
 
     temp_s1 = temp_s4->unk5CA[arg0->unk61];
@@ -364,14 +364,14 @@ void func_8002F290_2FE90(func_8002F658_30258_arg *arg0) {
         if (state->unk5C6 == 2) {
             if (arg0->unk62 == 0) {
                 arg0->unk62 = 2;
-                arg0->transform.unk14 = 0x400000;
+                arg0->transform.translation.x = 0x400000;
                 arg0->updateCounter = 1;
                 goto end;
             }
         }
         if (state->unk5C6 == 1) {
             if (arg0->unk62 == 2) {
-                arg0->transform.unk14 = 0xFFC00000;
+                arg0->transform.translation.x = 0xFFC00000;
                 arg0->unk62 = 0;
                 arg0->updateCounter = 1;
                 goto end;
@@ -486,17 +486,17 @@ void func_8002F614_30214(func_8002F658_30258_arg *arg0) {
 }
 
 void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
-    Mat3x3Padded *new_var;
-    Mat3x3Padded *matrix;
+    Transform3D sp10;
+    Transform3D sp30;
+    Transform3D *new_var;
+    Transform3D *matrix;
 
     getCurrentAllocation();
     new_var = &sp10;
     matrix = &arg0->transform;
-    memcpy(matrix, &identityMatrix, sizeof(Mat3x3Padded));
-    memcpy(&sp30, matrix, sizeof(Mat3x3Padded));
-    memcpy(new_var, &sp30, sizeof(Mat3x3Padded));
+    memcpy(matrix, &identityMatrix, sizeof(Transform3D));
+    memcpy(&sp30, matrix, sizeof(Transform3D));
+    memcpy(new_var, &sp30, sizeof(Transform3D));
     createRotationMatrixYX(&sp10, 0x1000, 0x800);
     createZRotationMatrix(&sp30, 0x1F00);
     func_8006B084_6BC84(&sp10, &sp30, matrix);
@@ -518,7 +518,7 @@ void func_8002F72C_3032C(func_8002F658_30258_arg *arg0) {
     state = (GameState *)getCurrentAllocation();
     if (state->unk5C5 == 2) {
         if (state->unk5C6 == 1) {
-            arg0->transform.unk14 = 0x200000;
+            arg0->transform.translation.x = 0x200000;
             arg0->translationStep = 0x80000;
             temp_v1 = state->unk5C8 + 2;
             arg0->unk61 = temp_v1;
@@ -526,7 +526,7 @@ void func_8002F72C_3032C(func_8002F658_30258_arg *arg0) {
                 arg0->unk61 = temp_v1 - state->unk5C9;
             }
         } else {
-            arg0->transform.unk14 = 0xFFE00000;
+            arg0->transform.translation.x = 0xFFE00000;
             arg0->translationStep = 0xFFF80000;
             temp_v1 = state->unk5C8 - 2;
             arg0->unk61 = temp_v1;
@@ -554,8 +554,8 @@ void func_8002F860_30460(DisplayListObject *arg0) {
 void func_8002F88C_3048C(func_8002F658_30258_arg *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    arg0->transform.unk14 += arg0->translationStep;
-    memcpy(arg0, &arg0->transform, sizeof(Mat3x3Padded));
+    arg0->transform.translation.x += arg0->translationStep;
+    memcpy(arg0, &arg0->transform, sizeof(Transform3D));
 
     arg0->updateCounter++;
     if (arg0->updateCounter == 4) {

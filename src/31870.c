@@ -122,7 +122,7 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    Mat3x3Padded unk4;
+    Transform3D unk4;
     union {
         SceneModel *unk20;
         s32 unk20_s32;
@@ -150,7 +150,7 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    Mat3x3Padded unk4;
+    Transform3D unk4;
     s16 unk24;
     u16 unk26;
     u8 unk28;
@@ -374,8 +374,8 @@ extern const char D_8009E480_9F080;
 
 void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     s32 sp20[8];
-    Mat3x3Padded matrixA;
-    Mat3x3Padded matrixB;
+    Transform3D matrixA;
+    Transform3D matrixB;
 
     u8 temp_s0;
     s32 temp_s0_2;
@@ -383,7 +383,7 @@ void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     void *temp_s3;
     func_80032DE8_339E8_asset *asset;
     Node_70B00 *temp_v0;
-    Mat3x3Padded *pMatrixB;
+    Transform3D *pMatrixB;
 
     pMatrixB = &matrixB;
 
@@ -534,10 +534,10 @@ void func_80031248_31E48(func_80031248_31E48_arg *arg0) {
 }
 
 void func_80031288_31E88(func_80031510_32110_arg *arg0) {
-    Mat3x3Padded matrixA;
-    Mat3x3Padded *pMatrixB;
-    Mat3x3Padded *pMatrixA;
-    Mat3x3Padded matrixB;
+    Transform3D matrixA;
+    Transform3D *pMatrixB;
+    Transform3D *pMatrixA;
+    Transform3D matrixB;
     u8 temp_s0;
     void *temp_s3;
 
@@ -717,22 +717,22 @@ void func_800317D4_323D4(func_80031510_32110_arg *arg0) {
 
 void func_80031818_32418(func_80031510_32110_arg *arg0) {
     func_80032DE8_339E8_asset *state;
-    Mat3x3Padded matrixB;
-    Mat3x3Padded matrixA;
+    Transform3D matrixB;
+    Transform3D matrixA;
     u8 temp_v0;
     u8 temp_s1;
-    Mat3x3Padded *pMatrixB;
-    Mat3x3Padded *pMatrixA;
+    Transform3D *pMatrixB;
+    Transform3D *pMatrixA;
 
     state = getCurrentAllocation();
 
-    memcpy(&arg0->unk3C, &identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(&arg0->unk3C, &identityMatrix, sizeof(Transform3D));
 
     pMatrixA = &matrixA;
-    memcpy(pMatrixA, &arg0->unk3C, sizeof(Mat3x3Padded));
+    memcpy(pMatrixA, &arg0->unk3C, sizeof(Transform3D));
 
     pMatrixB = &matrixB;
-    memcpy(pMatrixB, pMatrixA, sizeof(Mat3x3Padded));
+    memcpy(pMatrixB, pMatrixA, sizeof(Transform3D));
 
     createRotationMatrixYX(pMatrixB, 0x1000, 0x800);
     createZRotationMatrix(pMatrixA, 0x1F00);
@@ -790,11 +790,11 @@ void func_800319C8_325C8(func_800319C8_325C8_arg *arg0) {
 void func_80031A0C_3260C(func_80031A0C_3260C_arg *arg0) {
     arg0->unk0 = createSceneModelEx(0x3A, &((GameState *)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
 
-    memcpy(&arg0->unk4, &identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(&arg0->unk4, &identityMatrix, sizeof(Transform3D));
 
-    arg0->unk4.unk14 = 0xFFE70000;
-    arg0->unk4.unk18 = 0xFFE00000;
-    arg0->unk4.unk1C = 0;
+    arg0->unk4.translation.x = 0xFFE70000;
+    arg0->unk4.translation.y = 0xFFE00000;
+    arg0->unk4.translation.z = 0;
 
     createYRotationMatrix(&arg0->unk4, 0x200);
 

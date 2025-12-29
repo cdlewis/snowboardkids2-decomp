@@ -171,12 +171,12 @@ void initStretchingModelTask(StretchingModelTaskState *arg0) {
 }
 
 void updateStretchingModelTask(StretchingModelTaskState *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
-    Mat3x3Padded sp50;
+    Transform3D sp10;
+    Transform3D sp30;
+    Transform3D sp50;
     s16 stretchScale;
     void *outputMatrix;
-    Mat3x3Padded *sp10Ptr;
+    Transform3D *sp10Ptr;
     u16 rotationOffset;
 
     sp10Ptr = &sp10;

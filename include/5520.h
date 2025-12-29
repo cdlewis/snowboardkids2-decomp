@@ -12,7 +12,7 @@ typedef struct {
 } ScrollingTextureDisplayLists;
 
 typedef struct {
-    Mat3x3Padded unk0;
+    Transform3D unk0;
     ScrollingTextureDisplayLists *unk20;
     void *unk24;
     void *unk28;

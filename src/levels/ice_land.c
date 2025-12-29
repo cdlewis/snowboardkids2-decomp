@@ -30,7 +30,7 @@ typedef struct {
 } WaypointEntry;
 
 typedef struct {
-    Mat3x3Padded unk0;
+    Transform3D unk0;
     DisplayLists *unk20;
     void *unk24;
     void *unk28;

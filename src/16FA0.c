@@ -17,7 +17,7 @@ extern u8 gConnectedControllerMask;
 void func_800168BC_174BC(ModelEntityRenderState *arg0);
 void func_800168D8_174D8(EffectState *arg0);
 
-extern Mat3x3Padded D_8008D5C4_8E1C4[];
+extern Transform3D D_8008D5C4_8E1C4[];
 extern u16 *D_8008D534_8E134[2];
 
 void func_80016C28_17828(Struct16B68 *arg0);
@@ -300,9 +300,9 @@ void func_80016C28_17828(Struct16B68 *arg0) {
             s32 div = temp / 100;
             temp = temp + div * 9;
             arg0->unk24 = temp;
-            arg0->unk4.unk18 = arg0->unk4.unk18 + temp;
+            arg0->unk4.translation.y = arg0->unk4.translation.y + temp;
             applyTransformToModel(arg0->unk0, &arg0->unk4);
-            if (arg0->unk4.unk18 > 0x57FFFF) {
+            if (arg0->unk4.translation.y > 0x57FFFF) {
                 func_80069CF8_6A8F8();
             }
         } break;

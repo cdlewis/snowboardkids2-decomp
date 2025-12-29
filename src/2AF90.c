@@ -13,7 +13,7 @@ s32 func_8002ACFC_2B8FC(s32, s32, s16);
 
 typedef struct {
     /* 0x00 */ void *model;
-    /* 0x04 */ Mat3x3Padded matrix;
+    /* 0x04 */ Transform3D matrix;
     /* 0x24 */ u8 pad24[0xA];
     /* 0x2E */ s16 unk2E;
     /* 0x30 */ u8 pad30[0x7];
@@ -46,7 +46,7 @@ s32 func_8002A390_2AF90(Func8002A390Arg *arg0) {
             if (state->unk421 != 0) {
                 return 0;
             }
-            if (func_8002ACFC_2B8FC(arg0->matrix.unk14, arg0->matrix.unk1C, arg0->unk2E) == 0) {
+            if (func_8002ACFC_2B8FC(arg0->matrix.translation.x, arg0->matrix.translation.z, arg0->unk2E) == 0) {
                 return 0;
             }
             arg0->unk54 = arg0->unk50;

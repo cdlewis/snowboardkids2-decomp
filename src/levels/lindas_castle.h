@@ -4,7 +4,7 @@
 #include "geometry.h"
 
 typedef struct {
-    /* 0x00 */ Mat3x3Padded matrix;
+    /* 0x00 */ Transform3D matrix;
     /* 0x20 */ u8 _pad20[0x1C];
     /* 0x3C */ s32 targetPosition[3];
     /* 0x48 */ s32 velocityY;

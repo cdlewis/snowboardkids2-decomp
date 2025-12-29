@@ -4,7 +4,7 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern Mat3x3Padded D_8009A890_9B490;
+extern Transform3D D_8009A890_9B490;
 
 void func_800B5B30_1E2BE0(func_800B5E64_1E2F14_arg0 *arg0, s8 arg1) {
     arg0->unk71 = arg1;
@@ -57,29 +57,29 @@ void func_800B5BFC_1E2CAC(void *arg0) {
 }
 
 void finalizeAnimationLoop(AnimationLoopArg *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
-    Mat3x3Padded sp50;
-    Mat3x3Padded sp70;
-    Mat3x3Padded *temp_s0;
+    Transform3D sp10;
+    Transform3D sp30;
+    Transform3D sp50;
+    Transform3D sp70;
+    Transform3D *temp_s0;
 
-    D_8009A890_9B490.unk14 = arg0->unk34;
-    D_8009A890_9B490.unk18 = arg0->unk38 + arg0->unk64;
-    D_8009A890_9B490.unk1C = arg0->unk3C;
+    D_8009A890_9B490.translation.x = arg0->unk34;
+    D_8009A890_9B490.translation.y = arg0->unk38 + arg0->unk64;
+    D_8009A890_9B490.translation.z = arg0->unk3C;
 
     createYRotationMatrix(&sp70, arg0->unk22);
 
-    sp70.unk14 = 0;
-    sp70.unk18 = 0;
-    sp70.unk1C = 0;
+    sp70.translation.x = 0;
+    sp70.translation.y = 0;
+    sp70.translation.z = 0;
 
     func_8006B084_6BC84(&D_8009A890_9B490, &sp70, &sp30);
 
     createXRotationMatrix(sp50.m, arg0->unk20);
 
-    sp50.unk14 = 0;
-    sp50.unk18 = 0;
-    sp50.unk1C = 0;
+    sp50.translation.x = 0;
+    sp50.translation.y = 0;
+    sp50.translation.z = 0;
 
     func_8006B084_6BC84(&sp50, &sp30, &sp10);
 

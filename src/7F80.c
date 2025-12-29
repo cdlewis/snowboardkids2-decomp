@@ -18,7 +18,7 @@ typedef struct {
     SceneModel *model;
     void *animationTable;
     OutputStruct_19E80 tableEntry;
-    Mat3x3Padded transformMatrix;
+    Transform3D transformMatrix;
     s32 frameIndex;
     s32 *frameData;
     s32 currentFrame;
@@ -33,7 +33,7 @@ typedef struct {
     /* 0x0C */ void *paletteData;
     /* 0x10 */ u16 width;
     /* 0x12 */ u16 height;
-    /* 0x14 */ Mat3x3Padded rotationMatrix;
+    /* 0x14 */ Transform3D rotationMatrix;
     /* 0x34 */ void *lookAtMatrix;
     /* 0x38 */ void *segmentData;
 } PalettedTextureState;

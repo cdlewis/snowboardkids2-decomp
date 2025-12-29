@@ -14,7 +14,7 @@ extern u16 D_8008EF70_8FB70[];
 typedef struct Func2E024Arg Func2E024Arg;
 struct Func2E024Arg {
     /* 0x00 */ SceneModel *model;
-    /* 0x04 */ Mat3x3Padded unk4;
+    /* 0x04 */ Transform3D unk4;
     /* 0x24 */ u8 pad24[0x6];
     /* 0x2A */ u16 unk2A;
     /* 0x2C */ u16 unk2C;
@@ -59,7 +59,7 @@ struct Func2E024Arg {
 
 typedef struct {
     /* 0x00 */ SceneModel *model;
-    /* 0x04 */ Mat3x3Padded matrix;
+    /* 0x04 */ Transform3D matrix;
     /* 0x24 */ u8 pad24[0x40];
 } Func2E024Element; /* size = 0x64 */
 
@@ -77,13 +77,13 @@ void func_8002D46C_2E06C(Func2E024Arg *arg0) {
     elements = (Func2E024Element *)arg0;
 
     for (i = 0; i < arg0->unkD5; i++) {
-        memcpy((u8 *)&elements[i] + 4, identityMatrix, sizeof(Mat3x3Padded));
+        memcpy((u8 *)&elements[i] + 4, identityMatrix, sizeof(Transform3D));
         ((Func297D8Arg *)&elements[i])->unk62 = 0;
         arg0->unkCC[i] = 0;
 
         if (i == 0) {
-            arg0->unk4.unk14 = -0x80000;
-            arg0->unk4.unk1C = -0x4E0000;
+            arg0->unk4.translation.x = -0x80000;
+            arg0->unk4.translation.z = -0x4E0000;
             setAnimationIndex(arg0->model, 1);
             arg0->unk50 = 0x11;
             arg0->unk44 = 0x260000;
@@ -106,10 +106,10 @@ void func_8002D46C_2E06C(Func2E024Arg *arg0) {
         ((Func297D8Arg *)&elements[i])->rotation = 0x800 + i * 0x1000;
         ((Func297D8Arg *)&elements[i])->unk2E = 0x800 + i * 0x1000;
         ((Func297D8Arg *)&elements[i])->unk52 = ((Func297D8Arg *)&elements[i])->unk50;
-        createYRotationMatrix((Mat3x3Padded *)((u8 *)&elements[i] + 4), ((Func297D8Arg *)&elements[i])->rotation);
+        createYRotationMatrix((Transform3D *)((u8 *)&elements[i] + 4), ((Func297D8Arg *)&elements[i])->rotation);
         func_8002A290_2AE90((Func297D8Arg *)&elements[i]);
-        allocation->unk408[i] = elements[i].matrix.unk14;
-        allocation->unk410[i] = elements[i].matrix.unk1C;
+        allocation->unk408[i] = elements[i].matrix.translation.x;
+        allocation->unk410[i] = elements[i].matrix.translation.z;
         allocation->unk418[i] = D_8008EF70_8FB70[((Func297D8Arg *)&elements[i])->unk5C];
     }
 
@@ -160,8 +160,8 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
 
     cont:
         func_8002A2D0_2AED0((Func297D8Arg *)&elements[i]);
-        gameState->unk408[i] = elements[i].matrix.unk14;
-        gameState->unk410[i] = elements[i].matrix.unk1C;
+        gameState->unk408[i] = elements[i].matrix.translation.x;
+        gameState->unk410[i] = elements[i].matrix.translation.z;
     }
 
     if (gameState->unk42A == 0x11) {
@@ -195,8 +195,8 @@ void func_8002DE44_2EA44(Func2E024Arg *container) {
         element->unk62 = 0;
 
         if (i == 0) {
-            container->unk4.unk14 = 0xFFFC0000;
-            container->unk4.unk1C = 0xFFBC0000;
+            container->unk4.translation.x = 0xFFFC0000;
+            container->unk4.translation.z = 0xFFBC0000;
             setAnimationIndex(container->model, 4);
             container->unk50 = 0x11;
             container->unk5E = 0x63;
@@ -221,8 +221,8 @@ void func_8002DE44_2EA44(Func2E024Arg *container) {
         element->unk52 = element->unk50;
         createYRotationMatrix(&elements[i].matrix, element->rotation);
         func_8002A290_2AE90(element);
-        gameState->unk408[i] = elements[i].matrix.unk14;
-        gameState->unk410[i] = elements[i].matrix.unk1C;
+        gameState->unk408[i] = elements[i].matrix.translation.x;
+        gameState->unk410[i] = elements[i].matrix.translation.z;
         gameState->unk418[i] = D_8008EF70_8FB70[element->unk5C];
     }
 
@@ -260,8 +260,8 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
     elements = (Func2E024Element *)arg0;
     for (i = 0; i < arg0->unkD5; i++) {
         func_8002A2D0_2AED0((Func297D8Arg *)&elements[i]);
-        gameState->unk408[i] = elements[i].matrix.unk14;
-        gameState->unk410[i] = elements[i].matrix.unk1C;
+        gameState->unk408[i] = elements[i].matrix.translation.x;
+        gameState->unk410[i] = elements[i].matrix.translation.z;
     }
 
     if (gameState->unk42A == 0x11) {
@@ -275,7 +275,7 @@ void func_8002E314_2EF14(Func2E024Arg *);
 
 typedef struct {
     s32 unk0;
-    Mat3x3Padded unk4;
+    Transform3D unk4;
     /* 0x24 */ u8 pad2[0x8];
     /* 0x2C */ u16 unk2C;
     /* 0x2E */ u16 unk2E;
@@ -318,18 +318,18 @@ void func_8002E170_2ED70(Func2E024Arg *arg0) {
     container->unkD2 = 0;
 
     for (; i < container->unkD5; i++) {
-        memcpy(&container->unk0[i].unk4, identityMatrix, sizeof(Mat3x3Padded));
+        memcpy(&container->unk0[i].unk4, identityMatrix, sizeof(Transform3D));
         container->unk0[i].unk62 = 0;
         container->unk0[i].unk5A = 0;
 
         if (i == 0) {
-            container->unk0[0].unk4.unk14 = -0x60000;
-            container->unk0[0].unk4.unk1C = -0x4E0000;
+            container->unk0[0].unk4.translation.x = -0x60000;
+            container->unk0[0].unk4.translation.z = -0x4E0000;
             container->unk0[0].unk50 = 0;
             container->unk0[0].unk5E = 3;
         } else {
-            container->unk0[1].unk4.unk14 = 0x1E0000;
-            container->unk0[1].unk4.unk1C = -0x4E0000;
+            container->unk0[1].unk4.translation.x = 0x1E0000;
+            container->unk0[1].unk4.translation.z = -0x4E0000;
             container->unk0[1].unk50 = 0x13;
             container->unk0[1].unk5E = 0;
         }
@@ -350,8 +350,8 @@ void func_8002E170_2ED70(Func2E024Arg *arg0) {
         container->unk0[i].unk52 = container->unk0[i].unk50;
         createYRotationMatrix(&container->unk0[i].unk4, container->unk0[i].unk2C);
         func_8002A290_2AE90((Func297D8Arg *)&container->unk0[i]);
-        allocation->unk408[i] = container->unk0[i].unk4.unk14;
-        allocation->unk410[i] = container->unk0[i].unk4.unk1C;
+        allocation->unk408[i] = container->unk0[i].unk4.translation.x;
+        allocation->unk410[i] = container->unk0[i].unk4.translation.z;
         allocation->unk418[i] = D_8008EF70_8FB70[container->unk0[i].unk5C];
     }
 
@@ -371,8 +371,8 @@ void func_8002E8B4_2F4B4(Func2E024Arg *arg0) {
     Func2E024Arg *ptr;
     s32 sp10[3];
     s32 sp20[3];
-    Mat3x3Padded sp30;
-    Mat3x3Padded sp50;
+    Transform3D sp30;
+    Transform3D sp50;
     s16 var_v1;
     s32 var_a0;
     s32 tempAngle;
@@ -384,8 +384,8 @@ void func_8002E8B4_2F4B4(Func2E024Arg *arg0) {
     for (i = 0; i < arg0->unkD5; i++) {
         ptr = (Func2E024Arg *)((u8 *)arg0 + i * 0x64);
 
-        memcpy(&sp30, identityMatrix, sizeof(Mat3x3Padded));
-        memcpy(&sp50, &ptr->unk4, sizeof(Mat3x3Padded));
+        memcpy(&sp30, identityMatrix, sizeof(Transform3D));
+        memcpy(&sp50, &ptr->unk4, sizeof(Transform3D));
 
         switch (ptr->unk5E) {
             case 0:
@@ -395,7 +395,7 @@ void func_8002E8B4_2F4B4(Func2E024Arg *arg0) {
                 }
                 break;
             case 1:
-                memcpy(sp20, &ptr->unk4.unk14, 0xC);
+                memcpy(sp20, &ptr->unk4.translation, 0xC);
                 memcpy(sp10, sp20, 0xC);
 
                 if (i == 0) {
@@ -408,7 +408,7 @@ void func_8002E8B4_2F4B4(Func2E024Arg *arg0) {
 
                 sp10[0] += ((var_v1 * (sp20[2] >> 8)) / var_a0) << 12;
                 sp10[2] += ((-var_v1 * (sp20[0] >> 8)) / var_a0) << 12;
-                memcpy(&ptr->unk4.unk14, sp10, 0xC);
+                memcpy(&ptr->unk4.translation, sp10, 0xC);
                 break;
             case 2:
                 incrementedCount++;
@@ -439,13 +439,13 @@ void func_8002E8B4_2F4B4(Func2E024Arg *arg0) {
 
         if (ptr->unk5E != 2) {
             createYRotationMatrix(&sp30, ptr->unk2C);
-            tempAngle = atan2Fixed(ptr->unk4.unk14, ptr->unk4.unk1C);
+            tempAngle = atan2Fixed(ptr->unk4.translation.x, ptr->unk4.translation.z);
             createYRotationMatrix(&sp50, tempAngle & 0xFFFF);
-            memcpy(&sp50.unk14, &ptr->unk4.unk14, 0xC);
+            memcpy(&sp50.translation, &ptr->unk4.translation, 0xC);
             func_8006B084_6BC84(&sp30, &sp50, &ptr->unk4);
             func_8002A2D0_2AED0((Func297D8Arg *)ptr);
-            allocation->unk408[i] = ptr->unk4.unk14;
-            allocation->unk410[i] = ptr->unk4.unk1C;
+            allocation->unk408[i] = ptr->unk4.translation.x;
+            allocation->unk410[i] = ptr->unk4.translation.z;
             if (((u32)((tempAngle - 0x1001) & 0xFFFF) < 0x468)) {
                 ptr->unk5E = 2;
             }

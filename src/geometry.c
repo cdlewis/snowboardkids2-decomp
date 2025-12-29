@@ -101,7 +101,7 @@ void createXRotationMatrix(s16 matrix[3][3], u16 angle) {
     matrix[2][2] = cosVal;
 }
 
-void createYRotationMatrix(Mat3x3Padded *matrix, u16 angle) {
+void createYRotationMatrix(Transform3D *matrix, u16 angle) {
     s16 sinTheta = approximateSin(angle);
     s16 cosTheta = approximateCos(angle);
 
@@ -116,7 +116,7 @@ void createYRotationMatrix(Mat3x3Padded *matrix, u16 angle) {
     matrix->m[2][2] = cosTheta;
 }
 
-void createZRotationMatrix(Mat3x3Padded *matrix, u16 angle) {
+void createZRotationMatrix(Transform3D *matrix, u16 angle) {
     s16 new_var;
     int new_var2;
     int new_var3;
@@ -188,7 +188,7 @@ void createCombinedRotationMatrix(void *matrix, u16 angleX, u16 angleZ) {
     m[8] = temp4 >> 13;
 }
 
-void createRotationMatrixYX(Mat3x3Padded *matrix, u16 angleY, u16 angleX) {
+void createRotationMatrixYX(Transform3D *matrix, u16 angleY, u16 angleX) {
     s32 sinX = approximateSin(angleX);
     s32 cosX = approximateCos(angleX);
     s32 sinY = approximateSin(angleY);
@@ -230,7 +230,7 @@ void createRotationMatrixYX(Mat3x3Padded *matrix, u16 angleY, u16 angleX) {
     matrix->m[2][2] = temp4 >> 13;
 }
 
-void createRotationMatrixXZ(Mat3x3Padded *matrix, u16 angleX, u16 angleZ) {
+void createRotationMatrixXZ(Transform3D *matrix, u16 angleX, u16 angleZ) {
     s32 sinX = approximateSin(angleX);
     s32 cosX = approximateCos(angleX);
     s32 sinZ = approximateSin(angleZ);
@@ -331,7 +331,7 @@ void func_8006AFDC_6BBDC(func_8006AFDC_6BBDC_arg *arg0, s32 arg1, s32 arg2, s32 
     arg0->unk1C = arg3;
 }
 
-void scaleMatrix(Mat3x3Padded *matrix, s16 scaleX, s16 scaleY, s16 scaleZ) {
+void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ) {
     s32 i;
     s32 temp1;
     s32 temp2;
@@ -372,8 +372,8 @@ INCLUDE_ASM("asm/nonmatchings/geometry", transformVectorRelative);
 INCLUDE_ASM("asm/nonmatchings/geometry", rotateVectorY);
 
 void func_8006BDBC_6C9BC(func_8005E800_5F400_arg *arg0, void *arg1, void *arg2) {
-    Mat3x3Padded *mat1 = arg1;
-    Mat3x3Padded *mat2 = arg2;
+    Transform3D *mat1 = arg1;
+    Transform3D *mat2 = arg2;
     s32 row;
     s16 *rowPtr;
     s32 i;
@@ -394,7 +394,7 @@ void func_8006BDBC_6C9BC(func_8005E800_5F400_arg *arg0, void *arg1, void *arg2) 
     }
 }
 
-void func_8006BE4C_6CA4C(Mat3x3Padded *arg0, Mat3x3Padded *arg1, Mat3x3Padded *arg2) {
+void func_8006BE4C_6CA4C(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
     s32 row;
     s16 *rowPtr;
     s32 i;
@@ -421,19 +421,19 @@ extern s32 D_8009A8AC_9B4AC;
 typedef void (*CreateXRotS16)(s16 matrix[3][3], s16 angle);
 
 void func_8006BEDC_6CADC(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
-    Mat3x3Padded sp50;
+    Transform3D sp10;
+    Transform3D sp30;
+    Transform3D sp50;
     s32 *ptr;
 
     createYRotationMatrix(&sp10, (u16)arg6);
-    sp10.unk14 = arg1;
-    sp10.unk18 = arg2;
-    sp10.unk1C = arg3;
+    sp10.translation.x = arg1;
+    sp10.translation.y = arg2;
+    sp10.translation.z = arg3;
     ((CreateXRotS16)createXRotationMatrix)(sp30.m, (s16)arg5);
-    sp30.unk1C = 0;
-    sp30.unk18 = 0;
-    sp30.unk14 = 0;
+    sp30.translation.z = 0;
+    sp30.translation.y = 0;
+    sp30.translation.x = 0;
     func_8006B084_6BC84(&sp30, &sp10, &sp50);
     ptr = &D_8009A8A4_9B4A4;
     *ptr = 0;

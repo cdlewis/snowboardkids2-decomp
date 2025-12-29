@@ -26,7 +26,7 @@ USE_ASSET(_3F6950);
 USE_ASSET(_3F3EF0);
 
 typedef struct {
-    Mat3x3Padded unk0;
+    Transform3D unk0;
     u8 _pad2[0x1C];
     s32 unk3C;
 } func_8004728C_47E8C_arg;
@@ -412,7 +412,7 @@ void func_800457E0_463E0(func_800457E0_463E0_arg *arg0) {
 
     allocation = (GameState_46080 *)getCurrentAllocation();
     rotation = func_800625A4_631A4(&allocation->unk30, &arg0->unk14);
-    createYRotationMatrix((Mat3x3Padded *)arg0, rotation);
+    createYRotationMatrix((Transform3D *)arg0, rotation);
     arg0->unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x30);
     arg0->unk24 = func_80055DC4_569C4(allocation->unk5C);
     arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
@@ -900,7 +900,7 @@ void func_80046DCC_479CC(func_80046DCC_479CC_arg *arg0) {
     arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
     arg0->unk2C = NULL;
 
-    createYRotationMatrix((Mat3x3Padded *)arg0, (u16)(rotation + s1->unk8));
+    createYRotationMatrix((Transform3D *)arg0, (u16)(rotation + s1->unk8));
 
     arg0->unk18 = sp10[1];
     transformVector2(&D_80090B80_91780, arg0, sp10);
@@ -912,7 +912,7 @@ void func_80046DCC_479CC(func_80046DCC_479CC_arg *arg0) {
 
     displayLists = func_80055E68_56A68(allocation->unk5C);
     arg0->unk5C = (void *)((u32)displayLists + 0x20);
-    createYRotationMatrix((Mat3x3Padded *)arg0->unk3C, 0x1000);
+    createYRotationMatrix((Transform3D *)arg0->unk3C, 0x1000);
 
     arg0->unk50 = s1->unkC;
     arg0->unk54 = s1->unk10;
@@ -944,7 +944,7 @@ void func_80046F44_47B44(func_80046F44_47B44_arg *arg0) {
     if (allocation->unk5C == 4) {
         rotation = arg0->unkB4 + 0x80;
         arg0->unkB4 = rotation;
-        createYRotationMatrix((Mat3x3Padded *)&arg0->unk78, rotation);
+        createYRotationMatrix((Transform3D *)&arg0->unk78, rotation);
 
         for (i = 0; i < 4; i++) {
             enqueueDisplayListObject(i, (DisplayListObject *)&arg0->unk78);
@@ -988,7 +988,7 @@ void func_80047024_47C24(func_8004711C_47D1C_arg *arg0) {
     arg0->displayListObject.unk28 = func_80055DF8_569F8(temp_s0->unk5C);
     arg0->displayListObject.unk2C = 0;
 
-    createYRotationMatrix((Mat3x3Padded *)arg0, temp_s2 + temp_s3->unk8);
+    createYRotationMatrix((Transform3D *)arg0, temp_s2 + temp_s3->unk8);
     arg0->displayListObject.unk10.position.y = spStack[1];
 
     transformVector2(&D_80090B8C_9178C, arg0, spStack);
@@ -1081,9 +1081,9 @@ void func_8004728C_47E8C(func_8004728C_47E8C_arg *arg0) {
     matrix = func_80055D10_56910(alloc->unk5C);
     transformVector2(D_80090BC8_917C8, &arg0->unk0, vec);
 
-    arg0->unk0.unk14 = matrix->unkC + vec[0];
-    arg0->unk0.unk18 = matrix->unk10 + vec[1];
-    arg0->unk0.unk1C = matrix->unk14 + vec[2];
+    arg0->unk0.translation.x = matrix->unkC + vec[0];
+    arg0->unk0.translation.y = matrix->unk10 + vec[1];
+    arg0->unk0.translation.z = matrix->unk14 + vec[2];
     arg0->unk3C = 0x32;
 
     setCallbackWithContinue(func_80047330_47F30);
@@ -1171,7 +1171,7 @@ void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0) {
         rotation = arg0->unk40;
         angle = rotation + 0x1080;
         arg0->unk40 = rotation + 0x80;
-        createYRotationMatrix((Mat3x3Padded *)arg0, angle);
+        createYRotationMatrix((Transform3D *)arg0, angle);
         transformVector2(&D_80090BB0_917B0, arg0, vector);
 
         arg0->unk14 += vector[0];
@@ -1197,7 +1197,7 @@ void func_80047590_48190(func_80047590_48190_arg *arg0) {
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        createYRotationMatrix((Mat3x3Padded *)arg0, 0);
+        createYRotationMatrix((Transform3D *)arg0, 0);
         transformVector2(D_80090B98_91798, arg0, vec);
 
         arg0->unk14 += vec[0];
@@ -2102,7 +2102,7 @@ s32 func_8004899C_4959C(Player *arg0, u8 *arg1) {
 void func_80049794_4A394(void *payload, s32 arg1);
 
 typedef struct {
-    Mat3x3Padded matrix;
+    Transform3D matrix;
     u8 padding[0x1C];
     DisplayListObject displayList;
     s32 unk78;
@@ -2219,10 +2219,10 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
         } while (i < 4);
     }
 
-    arg0->matrix.unk18 = arg0->unk78;
+    arg0->matrix.translation.y = arg0->unk78;
     sinResult = approximateSin((D_8009ADE0_9B9E0 << 8) & 0x1F00);
     i = 0;
-    arg0->matrix.unk18 += 0x200000 + (sinResult << 5);
+    arg0->matrix.translation.y += 0x200000 + (sinResult << 5);
 
     do {
         func_8006417C_64D7C(i, (DisplayListObject *)arg0);

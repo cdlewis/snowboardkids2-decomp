@@ -16,7 +16,7 @@ typedef struct {
 } func_800BB2B0_B2750_arg;
 
 typedef struct {
-    /* 0x00 */ Mat3x3Padded matrix;
+    /* 0x00 */ Transform3D matrix;
     /* 0x20 */ u8 _pad20[0x1C];
     /* 0x3C */ u16 unk3C;
 } func_800BB334_B27D4_arg;

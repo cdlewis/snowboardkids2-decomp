@@ -62,7 +62,7 @@ void func_800BBAFC_B4A8C(B4240Struct *);
 void func_800BB2B0_B4240(B4240FuncArg *arg0) {
     s32 i;
 
-    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->rotation);
+    createYRotationMatrix((Transform3D *)arg0, arg0->rotation);
     memcpy(&arg0->node.unk10.position.x, &arg0->unk3C, 0xC);
     arg0->node.unk10.position.y += arg0->unk48;
 

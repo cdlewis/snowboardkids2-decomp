@@ -123,9 +123,9 @@ typedef struct {
     s32 unk450;
     s32 unk454;
     u8 pad458[0x970 - 0x458];
-    Mat3x3Padded unk970;
-    Mat3x3Padded unk990;
-    Mat3x3Padded unk9B0;
+    Transform3D unk970;
+    Transform3D unk990;
+    Transform3D unk9B0;
     u8 pad9D0[0xA8E - 0x9D0];
     u16 unkA8E;
     u16 unkA90;
@@ -156,8 +156,8 @@ typedef struct {
 } IceBossArg;
 
 void func_800BB2B0_B07A0(IceBossArg *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
+    Transform3D sp10;
+    Transform3D sp30;
     GameState *alloc;
     IceBossArg *player;
     s32 dist;
@@ -227,9 +227,9 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
     func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk990, &sp10);
     func_8006B084_6BC84(&sp10, &arg0->unk970, &sp30);
 
-    sp30.unk14 -= arg0->unk970.unk14;
-    sp30.unk18 -= arg0->unk970.unk18;
-    sp30.unk1C -= arg0->unk970.unk1C;
+    sp30.translation.x -= arg0->unk970.translation.x;
+    sp30.translation.y -= arg0->unk970.translation.y;
+    sp30.translation.z -= arg0->unk970.translation.z;
 
     if (arg0->unkB84 & 0x400000) {
         transformVector(D_800BCA30_B1F20, (s16 *)&sp30, &arg0->unkAD4);
@@ -244,19 +244,19 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
         transformVector(D_800BCA30_B1F20, (s16 *)&sp30, &arg0->unkAE4);
     } else {
         transformVector(D_800BC9F0_B1EE0, arg0->unk38, &arg0->unkAE4);
-        arg0->unkAE4.x -= arg0->unk970.unk14;
-        arg0->unkAE4.y -= arg0->unk970.unk18;
-        arg0->unkAE4.z -= arg0->unk970.unk1C;
+        arg0->unkAE4.x -= arg0->unk970.translation.x;
+        arg0->unkAE4.y -= arg0->unk970.translation.y;
+        arg0->unkAE4.z -= arg0->unk970.translation.z;
 
         transformVector(D_800BC9F0_B1EE0 + 6, arg0->unkB0, &arg0->unkAF0);
-        arg0->unkAF0.x -= arg0->unk970.unk14;
-        arg0->unkAF0.y -= arg0->unk970.unk18;
-        arg0->unkAF0.z -= arg0->unk970.unk1C;
+        arg0->unkAF0.x -= arg0->unk970.translation.x;
+        arg0->unkAF0.y -= arg0->unk970.translation.y;
+        arg0->unkAF0.z -= arg0->unk970.translation.z;
 
         transformVector(D_800BC9F0_B1EE0 + 12, arg0->unk128, &arg0->unkAFC);
-        arg0->unkAFC.x -= arg0->unk970.unk14;
-        arg0->unkAFC.y -= arg0->unk970.unk18;
-        arg0->unkAFC.z -= arg0->unk970.unk1C;
+        arg0->unkAFC.x -= arg0->unk970.translation.x;
+        arg0->unkAFC.y -= arg0->unk970.translation.y;
+        arg0->unkAFC.z -= arg0->unk970.translation.z;
     }
 }
 
@@ -305,7 +305,7 @@ s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
 }
 
 s32 func_800BBA54_B0F44(Player *arg0) {
-    Mat3x3Padded sp10;
+    Transform3D sp10;
     s32 sp30[3];
     s32 sp40[3];
     GameState *gameState;
@@ -545,9 +545,9 @@ void func_800BC0A8_B1598(func_800BC4AC_arg *arg0) {
 }
 
 s32 func_800BC0D8_B15C8(Player *arg0) {
-    Mat3x3Padded sp10;
+    Transform3D sp10;
     s32 sp30[7];
-    Mat3x3Padded *temp_s0;
+    Transform3D *temp_s0;
     s32 *temp_s1;
     s16 angleDiff;
     s32 i;
@@ -793,11 +793,11 @@ void func_800BC89C_B1D8C(Player *arg0) {
 
     do {
         if (arg0->unkB84 & mask) {
-            *(volatile s32 *)(jointWritePtr + 0xA10) = arg0->unk970.unk14 + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x18 + offset);
-            *(volatile s32 *)(jointWritePtr + 0xA18) = arg0->unk970.unk1C + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x20 + offset);
+            *(volatile s32 *)(jointWritePtr + 0xA10) = arg0->unk970.translation.x + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x18 + offset);
+            *(volatile s32 *)(jointWritePtr + 0xA18) = arg0->unk970.translation.z + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x20 + offset);
         } else {
-            *(volatile s32 *)(jointWritePtr + 0xA10) = arg0->unk970.unk14 + *(s32 *)((u8 *)&D_800BC054_B1544 + offset);
-            *(volatile s32 *)(jointWritePtr + 0xA18) = arg0->unk970.unk1C + *(s32 *)((u8 *)&D_800BC05C_B154C + offset);
+            *(volatile s32 *)(jointWritePtr + 0xA10) = arg0->unk970.translation.x + *(s32 *)((u8 *)&D_800BC054_B1544 + offset);
+            *(volatile s32 *)(jointWritePtr + 0xA18) = arg0->unk970.translation.z + *(s32 *)((u8 *)&D_800BC05C_B154C + offset);
         }
 
         jointPos = (JointPosition *)((u8 *)arg0 + offset);

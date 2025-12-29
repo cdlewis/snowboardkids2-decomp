@@ -48,8 +48,8 @@ void initBobbingModelTask(BobbingModelTaskState *state) {
 }
 
 void updateBobbingModelTask(BobbingModelState *state) {
-    Mat3x3Padded rotationMatrix;
-    Mat3x3Padded combinedMatrix;
+    Transform3D rotationMatrix;
+    Transform3D combinedMatrix;
     s32 delta;
     s32 temp;
 
@@ -111,9 +111,9 @@ void updateBobbingModelTask(BobbingModelState *state) {
     state->rotationAngle += 0x2AA;
     createYRotationMatrix(&rotationMatrix, state->rotationAngle);
 
-    rotationMatrix.unk14 = 0;
-    rotationMatrix.unk18 = 0x499999;
-    rotationMatrix.unk1C = 0;
+    rotationMatrix.translation.x = 0;
+    rotationMatrix.translation.y = 0x499999;
+    rotationMatrix.translation.z = 0;
 
     func_8006B084_6BC84(&rotationMatrix, state->model->unkF0, &combinedMatrix);
     func_8006B084_6BC84(&combinedMatrix, state->model->matrix18, &state->displayObject);

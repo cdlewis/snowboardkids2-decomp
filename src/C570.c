@@ -11,7 +11,7 @@ USE_ASSET(_4CA440);
 extern void *D_80088670_89270;
 extern void *D_80088680_89280;
 extern void *D_80088690_89290;
-extern Mat3x3Padded D_8009A8B0_9B4B0;
+extern Transform3D D_8009A8B0_9B4B0;
 extern s32 D_8009A8A4_9B4A4;
 extern s32 D_8009A8A8_9B4A8;
 extern s32 D_8009A8AC_9B4AC;
@@ -64,7 +64,7 @@ void updateRocketEffect(RocketEffectUpdateData *arg0) {
     createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
     temp_v0 = (void *)((u8 *)(*arg0->unk78) + 0x3C0);
     func_8006B084_6BC84(&D_8009A8B0_9B4B0, temp_v0, arg0);
-    scaleMatrix((Mat3x3Padded *)&arg0->unk0, arg0->unk82, arg0->unk82, arg0->unk82);
+    scaleMatrix((Transform3D *)&arg0->unk0, arg0->unk82, arg0->unk82, arg0->unk82);
 
     ptr = &D_8009A8A4_9B4A4;
     *ptr = 0;

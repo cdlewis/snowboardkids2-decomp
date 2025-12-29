@@ -37,7 +37,7 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    Mat3x3Padded unk4;
+    Transform3D unk4;
     s16 unk20;
     s16 unk22;
 } Func8002144CArg;
@@ -264,9 +264,9 @@ typedef struct {
 
 void func_8001F7C8_203C8(Func8001F6A0Arg *arg0) {
     Allocation_F7C8 *allocation;
-    Mat3x3Padded mat3;
-    Mat3x3Padded mat1;
-    Mat3x3Padded mat2;
+    Transform3D mat3;
+    Transform3D mat1;
+    Transform3D mat2;
     s32 pos1[4];
     s32 pos2[4];
     s32 scaled;
@@ -277,7 +277,7 @@ void func_8001F7C8_203C8(Func8001F6A0Arg *arg0) {
 
     func_80062B1C_6371C(arg0->unk18, arg0->unk52, pos1, pos2);
 
-    memcpy(&arg0->unk30, identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(&arg0->unk30, identityMatrix, sizeof(Transform3D));
     memcpy(arg0, pos2, 0xC);
 
     arg0->unk4 = func_80061A64_62664(arg0->unk18, arg0->unk52, arg0);
@@ -288,7 +288,7 @@ void func_8001F7C8_203C8(Func8001F6A0Arg *arg0) {
         arg0->unk4 = arg0->unk4 + arg0->unk64;
     }
 
-    memcpy(&arg0->unk30.unk14, arg0, 0xC);
+    memcpy(&arg0->unk30.translation, arg0, 0xC);
 
     createYRotationMatrix(&arg0->unk30, arg0->unk56);
     applyTransformToModel(arg0->unk2C, &arg0->unk30);
@@ -323,7 +323,7 @@ void func_8001F7C8_203C8(Func8001F6A0Arg *arg0) {
     computeLookAtMatrix(&arg0->unkC, arg0, &mat2);
 
     memcpy(&mat1, identityMatrix, 0x20);
-    mat1.unk1C = arg0->unk60;
+    mat1.translation.z = arg0->unk60;
 
     func_8006B084_6BC84(&mat1, &mat2, &mat3);
     func_8006FD3C_7093C(allocation->unk48A, &mat3);
@@ -672,19 +672,19 @@ void func_80021270_21E70(Func8002144CArg *arg0) {
     memcpy((u8 *)&arg0->unk4, identityMatrix, 0x20);
 
     if ((temp_s2->unkB45 != 0) && (temp_s3 != 0x3A)) {
-        createYRotationMatrix((Mat3x3Padded *)&arg0->unk4, 0x1E00);
-        arg0->unk4.unk14 = 0x280000;
+        createYRotationMatrix((Transform3D *)&arg0->unk4, 0x1E00);
+        arg0->unk4.translation.x = 0x280000;
     } else {
-        createYRotationMatrix((Mat3x3Padded *)&arg0->unk4, 0x200);
+        createYRotationMatrix((Transform3D *)&arg0->unk4, 0x200);
         if (temp_s2->unkB45 == 0) {
-            arg0->unk4.unk14 = 0xFFD80000;
+            arg0->unk4.translation.x = 0xFFD80000;
         } else {
-            arg0->unk4.unk14 = 0xFFD00000;
+            arg0->unk4.translation.x = 0xFFD00000;
         }
     }
 
-    arg0->unk4.unk18 = 0xFFD60000;
-    arg0->unk4.unk1C = 0x100000;
+    arg0->unk4.translation.y = 0xFFD60000;
+    arg0->unk4.translation.z = 0x100000;
 
     setCleanupCallback(&func_8002152C_2212C);
     setCallback(&func_800213C8_21FC8);
@@ -699,7 +699,7 @@ void func_800213C8_21FC8(Func8002144CArg *arg0) {
 
     if (allocation->unkB45 != 0) {
         if (D_800AFE8C_A71FC->unk7 == 0xC) {
-            scaleMatrix((Mat3x3Padded *)&arg0->unk4, 0x1000, 0x1000, 0x1000);
+            scaleMatrix((Transform3D *)&arg0->unk4, 0x1000, 0x1000, 0x1000);
         }
     }
 

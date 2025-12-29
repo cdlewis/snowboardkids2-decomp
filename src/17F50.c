@@ -124,8 +124,8 @@ void func_80017384_17F84(Func80018474Arg *arg0) {
     arg0->unk5B = 8;
     arg0->unk5A = 8;
 
-    createYRotationMatrix((Mat3x3Padded *)&arg0->matrix0, arg0->unk44);
-    createYRotationMatrix((Mat3x3Padded *)&arg0->matrix20, arg0->unk48);
+    createYRotationMatrix((Transform3D *)&arg0->matrix0, arg0->unk44);
+    createYRotationMatrix((Transform3D *)&arg0->matrix20, arg0->unk48);
 
     mode = func_8001523C_15E3C();
     if (mode == 3) {
@@ -181,7 +181,7 @@ void func_80017FE8_18BE8(Func80018474Arg *arg0) {
 
     func_8006FDA0_709A0(NULL, 0xFF, 0x10);
 
-    createYRotationMatrix((Mat3x3Padded *)arg0, (arg0->unk44 - arg0->unk48) & 0xFFFF);
+    createYRotationMatrix((Transform3D *)arg0, (arg0->unk44 - arg0->unk48) & 0xFFFF);
 
     func_8006B084_6BC84(arg0, &arg0->matrix20, sp10);
 
@@ -194,7 +194,7 @@ void func_800182F4_18EF4(void);
 
 void func_80018148_18D48(Func80018474Arg *arg0) {
     GameState *state;
-    Mat3x3Padded localMatrix;
+    Transform3D localMatrix;
     s32 velocity;
     s32 temp;
     s16 angle;
@@ -221,8 +221,8 @@ void func_80018148_18D48(Func80018474Arg *arg0) {
 
     angle = atan2Fixed(arg0->unk34, arg0->unk3C);
 
-    createYRotationMatrix((Mat3x3Padded *)&arg0->matrix20, (u16)angle);
-    createYRotationMatrix((Mat3x3Padded *)arg0, (u16)(arg0->unk44 - angle));
+    createYRotationMatrix((Transform3D *)&arg0->matrix20, (u16)angle);
+    createYRotationMatrix((Transform3D *)arg0, (u16)(arg0->unk44 - angle));
 
     func_8006B084_6BC84(arg0, &arg0->matrix20, &localMatrix);
 
@@ -288,15 +288,15 @@ void func_800182FC_18EFC(Func80018474Arg *arg0) {
     arg0->unk5B = 8;
     arg0->unk5A = 8;
 
-    createYRotationMatrix((Mat3x3Padded *)&arg0->matrix20, arg0->unk48);
-    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->unk44);
+    createYRotationMatrix((Transform3D *)&arg0->matrix20, arg0->unk48);
+    createYRotationMatrix((Transform3D *)arg0, arg0->unk44);
 
     setCallback(func_80018474_19074);
 }
 
 void func_80018474_19074(Func80018474Arg *arg0) {
     GameState *state;
-    Mat3x3Padded localMatrix;
+    Transform3D localMatrix;
     s32 sinVal;
     s32 cosVal;
     s32 x, y;
@@ -339,7 +339,7 @@ void func_80018580_19180(Func80018474Arg *arg0) {
     s32 sp58;
     u32 sp5C;
     GameState *state;
-    Mat3x3Padded *matrixPtr;
+    Transform3D *matrixPtr;
     s32 divResult;
     s32 x, y;
     u8 mode;
@@ -365,7 +365,7 @@ void func_80018580_19180(Func80018474Arg *arg0) {
     y = arg0->unk3C;
     arg0->unk4C = isqrt64((s64)x * x + (s64)y * y);
 
-    matrixPtr = (Mat3x3Padded *)&arg0->matrix20;
+    matrixPtr = (Transform3D *)&arg0->matrix20;
     createYRotationMatrix(matrixPtr, arg0->unk48);
     func_8006B084_6BC84(arg0, matrixPtr, sp10);
 

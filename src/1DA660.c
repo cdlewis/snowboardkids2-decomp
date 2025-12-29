@@ -22,7 +22,7 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    Mat3x3Padded matrix;
+    Transform3D matrix;
     u16 unk24;
     s16 unk26;
     u8 unk28;
@@ -192,7 +192,7 @@ void func_800B0218_1DA7B8(func_800B0980_element *arg0, u8 arg1) {
 
 void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
     GameState *allocation;
-    Mat3x3Padded *matrix;
+    Transform3D *matrix;
     u16 modelIndex;
     s32 pad[2];
 
@@ -224,27 +224,27 @@ void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
     arg0->unk0 = createSceneModel(modelIndex, allocation);
     memcpy(matrix, identityMatrix, 0x20);
 
-    arg0->matrix.unk14 = D_800B1160_1DB700[arg0->unk24 * 2] << 16;
-    arg0->matrix.unk1C = D_800B1162_1DB702[arg0->unk24 * 2] << 16;
+    arg0->matrix.translation.x = D_800B1160_1DB700[arg0->unk24 * 2] << 16;
+    arg0->matrix.translation.z = D_800B1162_1DB702[arg0->unk24 * 2] << 16;
 
-    if (arg0->matrix.unk1C == (s32)0xFF900000) {
-        arg0->matrix.unk18 = (s32)0xFFE80000;
+    if (arg0->matrix.translation.z == (s32)0xFF900000) {
+        arg0->matrix.translation.y = (s32)0xFFE80000;
     }
 
-    createYRotationMatrix(matrix, atan2Fixed(arg0->matrix.unk14, arg0->matrix.unk1C));
+    createYRotationMatrix(matrix, atan2Fixed(arg0->matrix.translation.x, arg0->matrix.translation.z));
 
     if (arg0->unk28 != 2) {
-        setModelHeight(arg0->unk0, arg0->matrix.unk18);
+        setModelHeight(arg0->unk0, arg0->matrix.translation.y);
         enableEntityRendering(arg0->unk0);
     }
 
     if (arg0->unk24 == 0) {
         createXRotationMatrix((s16(*)[3])matrix, 0x100);
     } else if (arg0->unk24 == 4) {
-        arg0->matrix.unk1C = arg0->matrix.unk1C - 0x10;
+        arg0->matrix.translation.z = arg0->matrix.translation.z - 0x10;
     } else if (arg0->unk24 == 7) {
         if (arg0->unk28 == 0) {
-            arg0->matrix.unk1C = arg0->matrix.unk1C + 0x40000;
+            arg0->matrix.translation.z = arg0->matrix.translation.z + 0x40000;
         } else {
             arg0->unk26 = 0x90;
             goto after_unk26;
@@ -261,7 +261,7 @@ after_unk26:
     if (arg0->unk24 >= 7 && arg0->unk28 != 0) {
         if (arg0->unk24 == 8) {
             scaleMatrix(&arg0->matrix, 0x1000, 0x1000, 0x1000);
-            arg0->matrix.unk14 = arg0->matrix.unk14 + 0x80000;
+            arg0->matrix.translation.x = arg0->matrix.translation.x + 0x80000;
         } else {
             scaleMatrix(&arg0->matrix, 0x800, 0x800, 0x800);
         }
@@ -539,7 +539,7 @@ void func_800B100C_1DB5AC(func_800B100C_arg *arg0) {
     arg0->unk2C = 0;
     arg0->unk18 = (s32)0xFFF40000;
 
-    createZRotationMatrix((Mat3x3Padded *)arg0, 0x1F50);
+    createZRotationMatrix((Transform3D *)arg0, 0x1F50);
     setCallback(func_800B10D4_1DB674);
 }
 

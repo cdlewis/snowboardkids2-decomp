@@ -364,7 +364,7 @@ void func_800BB8E8_AF5D8(func_800BB8E8_AF5D8_arg *arg0) {
     arg0->unk50 = 0x1E;
 
     temp_a1 = arg0->unk4A + 0x2A0;
-    createYRotationMatrix((Mat3x3Padded *)arg0, temp_a1 & 0xFFFF);
+    createYRotationMatrix((Transform3D *)arg0, temp_a1 & 0xFFFF);
     setCleanupCallback(func_800BBC2C_AF91C);
     setCallback(func_800BB9A4_AF694);
 }
@@ -424,7 +424,7 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
             } while (i < allocation->unk5E);
         }
 
-        createYRotationMatrix((Mat3x3Padded *)arg0, (arg0->unk4A + 0x2A0) & 0xFFFF);
+        createYRotationMatrix((Transform3D *)arg0, (arg0->unk4A + 0x2A0) & 0xFFFF);
 
         if (arg0->unk50 == 0) {
             arg0->unk50 = (randA() & 0xF) + 0xF;

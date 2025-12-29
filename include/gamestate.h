@@ -96,8 +96,8 @@ typedef struct {
     s32 unk47C;
     s32 unk480;
     u8 padding2a_3[0x4EC];
-    Mat3x3Padded unk970;
-    Mat3x3Padded unk990;
+    Transform3D unk970;
+    Transform3D unk990;
     func_8005E800_5F400_arg unk9B0;
     u8 padding9FC[0x14];
     JointPosition jointPositions[9];
@@ -372,7 +372,7 @@ typedef struct {
     u8 PAD_18[0x103E];
     s8 unk17E0;
     u8 PAD_19[0x17];
-    Mat3x3Padded unk17F8[4];
+    Transform3D unk17F8[4];
     u8 PAD_19B[0x8];
     u16 unk1880[4];
     u16 unk1888[8];

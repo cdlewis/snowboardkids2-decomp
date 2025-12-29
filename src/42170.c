@@ -26,7 +26,7 @@ extern void *D_8009A770_9B370;
 extern s32 D_8009A8A4_9B4A4;
 extern s32 D_8009A8A8_9B4A8;
 extern s32 D_8009A8AC_9B4AC;
-extern Mat3x3Padded D_8009A8B0_9B4B0;
+extern Transform3D D_8009A8B0_9B4B0;
 extern s32 gFrameCounter;
 
 void func_80042F2C_43B2C(void **);
@@ -475,7 +475,7 @@ void func_80041810_42410(Func4179CArg *arg0) {
         arg0->scale.full = scale + 0x400;
         memcpy(arg0, identityMatrix, 0x20);
         scaleFactor = arg0->scale.half.lo;
-        scaleMatrix((Mat3x3Padded *)arg0, scaleFactor, scaleFactor, scaleFactor);
+        scaleMatrix((Transform3D *)arg0, scaleFactor, scaleFactor, scaleFactor);
     }
 
     effectPos[0] = arg0->player->worldPosX;
@@ -605,7 +605,7 @@ void func_80041F38_42B38(Func41F38State *arg0) {
     arg0->unk24 = loadAsset_B7E70();
     arg0->unk28 = loadAsset_216290();
     arg0->unk2C = 0;
-    createYRotationMatrix((Mat3x3Padded *)arg0->matrix, 0xF800);
+    createYRotationMatrix((Transform3D *)arg0->matrix, 0xF800);
     arg0->unk54 = 0;
     arg0->unk58 = 0;
     arg0->unk5C = 0;
@@ -689,10 +689,10 @@ void func_80042160_42D60(Func420E8State *arg0) {
     }
 
     arg0->unk42 += 0x300;
-    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->unk42);
+    createYRotationMatrix((Transform3D *)arg0, arg0->unk42);
 
     temp = arg0->unk40;
-    scaleMatrix((Mat3x3Padded *)arg0, temp, temp, temp);
+    scaleMatrix((Transform3D *)arg0, temp, temp, temp);
 
     func_8005C250_5CE50((Vec3i *)&arg0->unk14, arg0->unk46, arg0->unk40 * 0xF0);
 
@@ -725,8 +725,8 @@ void func_80042254_42E54(Func420E8State *arg0) {
     }
 
     arg0->unk42 += 0x300;
-    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->unk42);
-    scaleMatrix((Mat3x3Padded *)arg0, arg0->unk40, arg0->unk40, arg0->unk40);
+    createYRotationMatrix((Transform3D *)arg0, arg0->unk42);
+    scaleMatrix((Transform3D *)arg0, arg0->unk40, arg0->unk40, arg0->unk40);
     arg0->unk3B = (u8)arg0->unk44;
 
     for (i = 0; i < 4; i++) {
@@ -791,8 +791,8 @@ void func_8004247C_4307C(Func42410State *arg0) {
     }
 
     arg0->unk44 += 0x300;
-    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->unk44);
-    scaleMatrix((Mat3x3Padded *)arg0, arg0->unk42, arg0->unk42, arg0->unk42);
+    createYRotationMatrix((Transform3D *)arg0, arg0->unk44);
+    scaleMatrix((Transform3D *)arg0, arg0->unk42, arg0->unk42, arg0->unk42);
     player = arg0->unk3C;
     pos = &arg0->unk14;
     memcpy(pos, &player->worldPosX, 0xC);
@@ -828,8 +828,8 @@ void func_8004256C_4316C(Func42410State *arg0) {
     }
 
     arg0->unk44 += 0x12C;
-    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->unk44);
-    scaleMatrix((Mat3x3Padded *)arg0, arg0->unk42, arg0->unk42, arg0->unk42);
+    createYRotationMatrix((Transform3D *)arg0, arg0->unk44);
+    scaleMatrix((Transform3D *)arg0, arg0->unk42, arg0->unk42, arg0->unk42);
     memcpy(&arg0->unk14, &arg0->unk3C->worldPosX, 0xC);
     arg0->unk18 += 0xFFEC0000;
 
@@ -927,7 +927,7 @@ void func_8004273C_4333C(Func426B0State *arg0) {
 
     createXRotationMatrix(arg0->matrix, 0);
     scale = (s16)arg0->unk48;
-    scaleMatrix((Mat3x3Padded *)arg0, scale, scale, scale);
+    scaleMatrix((Transform3D *)arg0, scale, scale, scale);
     memcpy(&arg0->unk14, arg0->unk3C->pos434, 0xC);
     arg0->unk18 += arg0->unk4C;
 
@@ -1246,19 +1246,19 @@ void func_80043018_43C18(Func43018State *arg0) {
 void func_8004309C_43C9C(Func43018State *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
-    Mat3x3Padded matrix;
+    Transform3D matrix;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
     func_8006B084_6BC84(&D_8009A8B0_9B4B0, &arg0->unk78->unk3F8, arg0);
-    scaleMatrix((Mat3x3Padded *)arg0, arg0->unk84, arg0->unk84, arg0->unk84);
+    scaleMatrix((Transform3D *)arg0, arg0->unk84, arg0->unk84, arg0->unk84);
 
     arg0->unk82 += 0x300;
     createZRotationMatrix(&matrix, arg0->unk82);
 
-    matrix.unk14 = 0;
-    matrix.unk18 = 0xBB333;
-    matrix.unk1C = 0xFFEA0000;
+    matrix.translation.x = 0;
+    matrix.translation.y = 0xBB333;
+    matrix.translation.z = 0xFFEA0000;
 
     func_8006B084_6BC84(&matrix, arg0, &arg0->unk3C);
 
@@ -1293,7 +1293,7 @@ void func_8004309C_43C9C(Func43018State *arg0) {
 void func_8004320C_43E0C(Func43018State *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
-    Mat3x3Padded matrix;
+    Transform3D matrix;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
@@ -1303,9 +1303,9 @@ void func_8004320C_43E0C(Func43018State *arg0) {
         }
         arg0->unk18 += arg0->unk7C;
         createZRotationMatrix(&matrix, arg0->unk82);
-        matrix.unk14 = 0;
-        matrix.unk18 = 0xBB333;
-        matrix.unk1C = 0xFFEA0000;
+        matrix.translation.x = 0;
+        matrix.translation.y = 0xBB333;
+        matrix.translation.z = 0xFFEA0000;
         func_8006B084_6BC84(&matrix, arg0, &arg0->unk3C);
     }
 
@@ -1368,7 +1368,7 @@ void func_800433EC_43FEC(Func43374State *arg0) {
     createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
     func_8006B084_6BC84(&D_8009A8B0_9B4B0, &arg0->unk78->unk3F8, arg0);
     scale = arg0->unk82;
-    scaleMatrix((Mat3x3Padded *)arg0, scale, scale, scale);
+    scaleMatrix((Transform3D *)arg0, scale, scale, scale);
 
     ptr = &D_8009A8A4_9B4A4;
     *ptr = 0;
@@ -1727,7 +1727,7 @@ void func_80043E24_44A24(Func43DC0State *arg0) {
         arg0->unk46 += 0x200;
     }
 
-    scaleMatrix((Mat3x3Padded *)arg0, arg0->unk46, arg0->unk46, arg0->unk46);
+    scaleMatrix((Transform3D *)arg0, arg0->unk46, arg0->unk46, arg0->unk46);
 
     if (gFrameCounter & 4) {
         arg0->unk20 = &D_8009A760_9B360;
@@ -1860,7 +1860,7 @@ void func_80044538_45138(s16 arg0) {
 }
 
 void func_80044578_45178(Func44BBCArg *arg0) {
-    Mat3x3Padded matrix;
+    Transform3D matrix;
     s32 sinVal;
     s32 i;
 
@@ -1868,17 +1868,17 @@ void func_80044578_45178(Func44BBCArg *arg0) {
     sinVal = approximateSin((s16)arg0->unkCA);
     createZRotationMatrix(&matrix, (sinVal >> 5) & 0xFFFF);
 
-    matrix.unk14 = 0xFFF7490A;
-    matrix.unk18 = 0xFFF98007;
-    matrix.unk1C = 0xCB326;
+    matrix.translation.x = 0xFFF7490A;
+    matrix.translation.y = 0xFFF98007;
+    matrix.translation.z = 0xCB326;
     func_8006B084_6BC84(&matrix, arg0, &arg0->unk3C);
 
     sinVal = approximateSin(arg0->unkCA);
     createZRotationMatrix(&matrix, (-(sinVal >> 5)) & 0xFFFF);
 
-    matrix.unk14 = 0x8B6F6;
-    matrix.unk18 = 0xFFF98007;
-    matrix.unk1C = 0xCB326;
+    matrix.translation.x = 0x8B6F6;
+    matrix.translation.y = 0xFFF98007;
+    matrix.translation.z = 0xCB326;
     func_8006B084_6BC84(&matrix, arg0, &arg0->unk78);
 
     for (i = 0; i < 4; i++) {
@@ -1917,7 +1917,7 @@ void func_80044684_45284(Func44BBCArg *arg0) {
     arg0->unk78.unk28 = arg0->unk28;
 
     arg0->unkC8 = rotation + item->unk8;
-    createYRotationMatrix((Mat3x3Padded *)arg0, arg0->unkC8);
+    createYRotationMatrix((Transform3D *)arg0, arg0->unkC8);
 
     arg0->unkC6 = 0;
     transformVector2(&D_80090AA0_916A0, arg0, transformOutput);

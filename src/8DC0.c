@@ -27,7 +27,7 @@ typedef struct {
     u8 _pad40[0x48];
     s8 isVisible;
     u8 _pad89[0x67];
-    Mat3x3Padded rotationMatrix;
+    Transform3D rotationMatrix;
 } OscillatingModel;
 
 typedef struct {
@@ -53,7 +53,7 @@ void initOscillatingModelTask(void) {
 }
 
 void updateOscillatingModelTask(OscillatingModelTaskState *state) {
-    Mat3x3Padded local_buffer;
+    Transform3D local_buffer;
     s32 sinVal;
     s32 cosVal;
     s32 scaledCos;
@@ -84,7 +84,7 @@ void updateOscillatingModelTask(OscillatingModelTaskState *state) {
 
     createRotationMatrixXZ(&state->model->rotationMatrix, -scaledCos, scaledSin);
 
-    state->model->rotationMatrix.unk18 += 0x33333;
+    state->model->rotationMatrix.translation.y += 0x33333;
 }
 
 void cleanupOscillatingModelTask(void) {

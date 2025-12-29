@@ -126,7 +126,7 @@ void func_800B4CD0_1E1D80(func_800B4CD0_1E1D80_arg *arg0) {
     setCallbackWithContinue(&func_800B4D74_1E1E24);
 }
 
-extern Mat3x3Padded D_8009A8B0_9B4B0;
+extern Transform3D D_8009A8B0_9B4B0;
 
 typedef struct {
     u8 _pad0[0x18];
@@ -152,7 +152,7 @@ typedef struct {
 } func_800B4D74_1E1E24_arg;
 
 void func_800B4D74_1E1E24(func_800B4D74_1E1E24_arg *arg0) {
-    Mat3x3Padded sp10;
+    Transform3D sp10;
     void *temp_v0;
     s16 temp_v0_2;
     s16 temp_a0;
@@ -163,16 +163,16 @@ void func_800B4D74_1E1E24(func_800B4D74_1E1E24_arg *arg0) {
 
     func_8006B084_6BC84(&D_8009A8B0_9B4B0, temp_v0, arg0);
 
-    scaleMatrix((Mat3x3Padded *)arg0, arg0->unk84, arg0->unk84, arg0->unk84);
+    scaleMatrix((Transform3D *)arg0, arg0->unk84, arg0->unk84, arg0->unk84);
 
     temp_v0_2 = arg0->unk82 + 0x300;
     arg0->unk82 = temp_v0_2;
 
     createZRotationMatrix(&sp10, temp_v0_2);
 
-    sp10.unk18 = 0xBB333;
-    sp10.unk14 = 0;
-    sp10.unk1C = 0xFFEA0000;
+    sp10.translation.y = 0xBB333;
+    sp10.translation.x = 0;
+    sp10.translation.z = 0xFFEA0000;
 
     func_8006B084_6BC84(&sp10, arg0, &arg0->unk3C);
 
@@ -192,7 +192,7 @@ void func_800B4D74_1E1E24(func_800B4D74_1E1E24_arg *arg0) {
 }
 
 void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0) {
-    Mat3x3Padded matrix;
+    Transform3D matrix;
     s32 temp_v0;
 
     temp_v0 = arg0->unk7C - 0x8000;
@@ -205,9 +205,9 @@ void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0) {
     arg0->unk18 += arg0->unk7C;
     createZRotationMatrix(&matrix, arg0->unk82);
 
-    matrix.unk18 = 0xBB333;
-    matrix.unk14 = 0;
-    matrix.unk1C = 0xFFEA0000;
+    matrix.translation.y = 0xBB333;
+    matrix.translation.x = 0;
+    matrix.translation.z = 0xFFEA0000;
 
     func_8006B084_6BC84(&matrix, (DisplayListObject *)arg0, (DisplayListObject *)&arg0->unk3C);
     enqueueDisplayListObject(0, (DisplayListObject *)arg0);

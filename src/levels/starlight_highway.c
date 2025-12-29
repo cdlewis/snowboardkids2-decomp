@@ -23,13 +23,13 @@ typedef struct {
 } func_800BB368_AD728_arg;
 
 typedef struct {
-    /* 0x00 */ Mat3x3Padded node1;
+    /* 0x00 */ Transform3D node1;
     /* 0x20 */ void *unk20;
     /* 0x24 */ void *unk24;
     /* 0x28 */ void *unk28;
     /* 0x2C */ s32 unk2C;
     /* 0x30 */ u8 pad30[0xC];
-    /* 0x3C */ Mat3x3Padded node2;
+    /* 0x3C */ Transform3D node2;
     /* 0x5C */ void *unk5C;
     /* 0x60 */ void *unk60;
     /* 0x64 */ void *unk64;
@@ -40,13 +40,13 @@ typedef struct {
 } func_800BC6C4_AEA84_arg;
 
 typedef struct {
-    /* 0x00 */ Mat3x3Padded node1;
+    /* 0x00 */ Transform3D node1;
     /* 0x20 */ u8 _pad20[4];
     /* 0x24 */ void *unk24;
     /* 0x28 */ void *unk28;
     /* 0x2C */ s32 unk2C;
     /* 0x30 */ u8 _pad30[0xC];
-    /* 0x3C */ Mat3x3Padded node2;
+    /* 0x3C */ Transform3D node2;
     /* 0x5C */ u8 _pad5C[4];
     /* 0x60 */ void *unk60;
     /* 0x64 */ void *unk64;
@@ -67,16 +67,16 @@ void func_800BB2B0_AD670(func_800BB2B0_AD670_arg *arg0) {
     arg0->unk28 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
     createYRotationMatrix(&arg0->node1, 0x98A);
-    arg0->node1.unk14 = 0x130F588E;
-    arg0->node1.unk18 = 0x03930000;
-    arg0->node1.unk1C = 0x0DB72F2C;
+    arg0->node1.translation.x = 0x130F588E;
+    arg0->node1.translation.y = 0x03930000;
+    arg0->node1.translation.z = 0x0DB72F2C;
     arg0->unk68 = 0;
     arg0->unk60 = arg0->unk24;
     arg0->unk64 = arg0->unk28;
     createYRotationMatrix(&arg0->node2, 0);
-    arg0->node2.unk14 = 0;
-    arg0->node2.unk18 = 0x30000000;
-    arg0->node2.unk1C = 0x30458CB2;
+    arg0->node2.translation.x = 0;
+    arg0->node2.translation.y = 0x30000000;
+    arg0->node2.translation.z = 0x30458CB2;
     setCleanupCallback(&func_800BB45C_AD81C);
     setCallback(&func_800BB368_AD728);
 }
@@ -301,7 +301,7 @@ void func_800BBB64_ADF24(void *arg0) {
 }
 
 typedef struct {
-    /* 0x00 */ Mat3x3Padded mat;
+    /* 0x00 */ Transform3D mat;
     /* 0x20 */ u8 _pad20[0x5C];
 } func_800BBB90_task;
 
@@ -312,14 +312,14 @@ void func_800BBB90(s16 arg0) {
     if (task != NULL) {
         if (arg0 == 0) {
             createYRotationMatrix(&task->mat, 0x98A);
-            task->mat.unk14 = 0x130F588E;
-            task->mat.unk18 = 0x03930000;
-            task->mat.unk1C = 0x0DB72F2C;
+            task->mat.translation.x = 0x130F588E;
+            task->mat.translation.y = 0x03930000;
+            task->mat.translation.z = 0x0DB72F2C;
         } else {
             createYRotationMatrix(&task->mat, 0);
-            task->mat.unk14 = 0;
-            task->mat.unk18 = 0x30000000;
-            task->mat.unk1C = 0x30458CB2;
+            task->mat.translation.x = 0;
+            task->mat.translation.y = 0x30000000;
+            task->mat.translation.z = 0x30458CB2;
         }
     }
 }
@@ -329,13 +329,13 @@ extern s32 D_800BCA30_AEDF0[][3];
 extern void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *);
 
 typedef struct {
-    /* 0x00 */ Mat3x3Padded mat1;
+    /* 0x00 */ Transform3D mat1;
     /* 0x20 */ DisplayLists *unk20;
     /* 0x24 */ void *unk24;
     /* 0x28 */ void *unk28;
     /* 0x2C */ s32 unk2C;
     /* 0x30 */ u8 _pad30[0xC];
-    /* 0x3C */ Mat3x3Padded mat2;
+    /* 0x3C */ Transform3D mat2;
     /* 0x5C */ DisplayLists *unk5C;
     /* 0x60 */ void *unk60;
     /* 0x64 */ void *unk64;
@@ -352,16 +352,16 @@ void func_800BBC28_ADFE8(func_800BBC28_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(8);
     arg0->unk28 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
-    memcpy(&arg0->mat1.unk14, &D_800BCA30_AEDF0[arg0->unk7C], 0xC);
+    memcpy(&arg0->mat1.translation.x, &D_800BCA30_AEDF0[arg0->unk7C], 0xC);
     arg0->unk68 = 0;
-    arg0->mat1.unk18 += 0x100000;
+    arg0->mat1.translation.y += 0x100000;
     arg0->unk60 = arg0->unk24;
     arg0->unk64 = arg0->unk28;
     createYRotationMatrix(&arg0->mat2, 0);
     arg0->unk78 = 0x2000;
-    arg0->mat2.unk14 = arg0->mat1.unk14;
-    arg0->mat2.unk18 = arg0->mat1.unk18 + 0x180000;
-    arg0->mat2.unk1C = arg0->mat1.unk1C;
+    arg0->mat2.translation.x = arg0->mat1.translation.x;
+    arg0->mat2.translation.y = arg0->mat1.translation.y + 0x180000;
+    arg0->mat2.translation.z = arg0->mat1.translation.z;
     setCleanupCallback(&func_800BBEA0_AE260);
     setCallback(&func_800BBCFC_AE0BC);
 }
@@ -384,7 +384,7 @@ void func_800BBCFC_AE0BC(func_800BBC28_arg *arg0) {
     if (temp > 0) {
         var_s1 = 0;
 loop_2:
-        if (isPlayerInRangeAndPull((Vec3i *)&arg0->mat1.unk14, 0x200000, (Player *)((u8 *)allocation->players + var_s1)) == 0) {
+        if (isPlayerInRangeAndPull((Vec3i *)&arg0->mat1.translation.x, 0x200000, (Player *)((u8 *)allocation->players + var_s1)) == 0) {
             var_s0 += 1;
             var_s1 += 0xBE8;
             if (var_s0 < (s32)allocation->numPlayers) {
@@ -398,13 +398,13 @@ loop_2:
         if (allocation->numPlayers != 0) {
             var_s1 = 0;
             do {
-                isPlayerInRangeAndPull((Vec3i *)&arg0->mat1.unk14, 0x500000, (Player *)((u8 *)allocation->players + var_s1));
+                isPlayerInRangeAndPull((Vec3i *)&arg0->mat1.translation.x, 0x500000, (Player *)((u8 *)allocation->players + var_s1));
                 var_s0 += 1;
                 var_s1 += 0xBE8;
             } while (var_s0 < (s32)allocation->numPlayers);
         }
         arg0->unk78 = 0x4000;
-        func_80056B7C_5777C(&arg0->mat1.unk14, 0x4E);
+        func_80056B7C_5777C(&arg0->mat1.translation.x, 0x4E);
     }
 
     temp_v0_2 = arg0->unk7A + 0x100;
@@ -768,17 +768,17 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
     vec.y = 0;
     vec.z = 0;
     vec.x = -unk78Val;
-    rotateVectorY(&vec, 0x1BEC, &arg0->node1.unk14);
+    rotateVectorY(&vec, 0x1BEC, &arg0->node1.translation.x);
     vec.x = arg0->unk78;
-    rotateVectorY(&vec, 0x1BEC, &arg0->node2.unk14);
+    rotateVectorY(&vec, 0x1BEC, &arg0->node2.translation.x);
 
-    arg0->node1.unk14 = arg0->node1.unk14 + D_800BCB98_AEF58[arg0->unk7C][0];
-    arg0->node1.unk18 = arg0->node1.unk18 + D_800BCB9C_AEF5C[arg0->unk7C][0];
-    arg0->node1.unk1C = arg0->node1.unk1C + D_800BCBA0_AEF60[arg0->unk7C][0];
-    arg0->node2.unk14 = arg0->node2.unk14 + D_800BCB98_AEF58[arg0->unk7C][0];
-    arg0->node2.unk18 = arg0->node2.unk18 + D_800BCB9C_AEF5C[arg0->unk7C][0];
+    arg0->node1.translation.x = arg0->node1.translation.x + D_800BCB98_AEF58[arg0->unk7C][0];
+    arg0->node1.translation.y = arg0->node1.translation.y + D_800BCB9C_AEF5C[arg0->unk7C][0];
+    arg0->node1.translation.z = arg0->node1.translation.z + D_800BCBA0_AEF60[arg0->unk7C][0];
+    arg0->node2.translation.x = arg0->node2.translation.x + D_800BCB98_AEF58[arg0->unk7C][0];
+    arg0->node2.translation.y = arg0->node2.translation.y + D_800BCB9C_AEF5C[arg0->unk7C][0];
     i = 0;
-    arg0->node2.unk1C = arg0->node2.unk1C + D_800BCBA0_AEF60[arg0->unk7C][0];
+    arg0->node2.translation.z = arg0->node2.translation.z + D_800BCBA0_AEF60[arg0->unk7C][0];
 
     do {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->node1);

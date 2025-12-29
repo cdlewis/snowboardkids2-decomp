@@ -38,7 +38,7 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    Mat3x3Padded unk4;
+    Transform3D unk4;
     union {
         SceneModel *unk20;
         s32 unk20_s32;
@@ -49,7 +49,7 @@ typedef struct {
 
 typedef struct {
     SceneModel *unk0;
-    Mat3x3Padded unk4;
+    Transform3D unk4;
     union {
         SceneModel *unk20;
         s32 unk20_s32;
@@ -171,9 +171,9 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x3C];
-    Mat3x3Padded unk3C;
-    Mat3x3Padded unk5C;
-    Mat3x3Padded unk7C;
+    Transform3D unk3C;
+    Transform3D unk5C;
+    Transform3D unk7C;
     s32 unk9C;
     u8 padA0;
     u8 unkA1;
@@ -186,9 +186,9 @@ typedef struct {
     void *unk28;
     void *unk2C;
     u8 pad30[0xC];
-    Mat3x3Padded unk3C;
-    Mat3x3Padded unk5C;
-    Mat3x3Padded unk7C;
+    Transform3D unk3C;
+    Transform3D unk5C;
+    Transform3D unk7C;
     u8 pad9C[0x5];
     u8 unkA1;
 } func_80024644_arg;
@@ -208,9 +208,9 @@ typedef struct {
     u8 unk39;
     u8 unk3A;
     u8 pad3B;
-    Mat3x3Padded unk3C;
-    Mat3x3Padded unk5C;
-    Mat3x3Padded unk7C;
+    Transform3D unk3C;
+    Transform3D unk5C;
+    Transform3D unk7C;
     s32 unk9C;
     u8 unkA0;
     u8 unkA1;
@@ -350,14 +350,14 @@ void func_80024518_25118(func_80024518_arg *);
 void func_80024414_25014(func_80024518_arg *);
 
 void func_80023E30_24A30(func_80024048_arg *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
-    Mat3x3Padded *sp10Ptr;
+    Transform3D sp10;
+    Transform3D sp30;
+    Transform3D *sp10Ptr;
     s32 temp_s1;
     s32 var_v0;
     u8 temp_s0;
-    Mat3x3Padded *temp_s3;
-    Mat3x3Padded *temp_s4;
+    Transform3D *temp_s3;
+    Transform3D *temp_s4;
     u8 *temp_s5;
     u8 *temp_ptr;
 
@@ -377,14 +377,14 @@ void func_80023E30_24A30(func_80024048_arg *arg0) {
     if (var_v0 < 0) {
         var_v0 += 0x1FFF;
     }
-    arg0->unk5C.unk14 = (var_v0 >> 0xD) << 8;
+    arg0->unk5C.translation.x = (var_v0 >> 0xD) << 8;
 
     var_v0 = -(approximateCos(0x1800) * 0x1600);
     if (var_v0 < 0) {
         var_v0 += 0x1FFF;
     }
-    arg0->unk5C.unk1C = (var_v0 >> 0xD) << 8;
-    memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
+    arg0->unk5C.translation.z = (var_v0 >> 0xD) << 8;
+    memcpy(&sp10.translation, &arg0->unk5C.translation.x, 0xC);
 
     func_8006B084_6BC84(temp_s3, temp_s4, sp10Ptr);
     func_8006B084_6BC84(sp10Ptr, temp_s5 + ((arg0->unkA1 << 5) + 0x17F8), arg0);
@@ -412,7 +412,7 @@ void func_80023E30_24A30(func_80024048_arg *arg0) {
 }
 
 void func_80024048_24C48(func_80024048_arg *arg0) {
-    Mat3x3Padded sp10;
+    Transform3D sp10;
     GameState *state;
     u8 prevA0;
     u8 newA0;
@@ -436,8 +436,8 @@ void func_80024048_24C48(func_80024048_arg *arg0) {
     paletteIndex = state->unk18B0[arg0->unkA1];
     assetIndex = paletteIndex + charIndex * 3;
 
-    memcpy(&sp10, identityMatrix, sizeof(Mat3x3Padded));
-    memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
+    memcpy(&sp10, identityMatrix, sizeof(Transform3D));
+    memcpy(&sp10.translation, &arg0->unk5C.translation.x, 0xC);
 
     if (state->unk18D2[arg0->unkA1] == state->unk18CC - 1) {
         val = state->unk1898[arg0->unkA1];
@@ -488,12 +488,12 @@ void func_80024220_24E20(func_80024220_24E20_arg *arg0) {
 }
 
 void func_80024298_24E98(func_80024048_arg *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded *localPtr;
+    Transform3D sp10;
+    Transform3D *localPtr;
     u8 *base;
     GameState *state;
-    Mat3x3Padded *unk7CPtr;
-    Mat3x3Padded *unk5CPtr;
+    Transform3D *unk7CPtr;
+    Transform3D *unk5CPtr;
     s32 tableValue;
     u8 charIndex;
     u8 assetIndex;
@@ -509,7 +509,7 @@ void func_80024298_24E98(func_80024048_arg *arg0) {
     memcpy(unk7CPtr, (u8 *)(offset + (s32)base + 0x17F8), 0x20);
 
     tableValue = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->unk8 * 2) + state->unk18C0[arg0->unkA1]];
-    arg0->unk7C.unk14 = tableValue;
+    arg0->unk7C.translation.x = tableValue;
     arg0->unk9C = tableValue;
 
     charIndex = state->unk18A8[arg0->unkA1];
@@ -527,7 +527,7 @@ void func_80024298_24E98(func_80024048_arg *arg0) {
 
     localPtr = &sp10;
     memcpy(localPtr, identityMatrix, 0x20);
-    memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
+    memcpy(&sp10.translation, &arg0->unk5C.translation.x, 0xC);
 
     unk5CPtr = &arg0->unk5C;
     rotation = state->unk1888[arg0->unkA1];
@@ -540,9 +540,9 @@ void func_80024298_24E98(func_80024048_arg *arg0) {
 }
 
 void func_80024414_25014(func_80024518_arg *arg0) {
-    Mat3x3Padded sp10;
+    Transform3D sp10;
     GameState *state;
-    Mat3x3Padded *localPtr;
+    Transform3D *localPtr;
     s32 adjustment;
     u16 rotation;
 
@@ -552,10 +552,10 @@ void func_80024414_25014(func_80024518_arg *arg0) {
 
     adjustment = (-(0 < arg0->unk9C) & 0xFFF00000) | 0x100000;
 
-    memcpy(localPtr, identityMatrix, sizeof(Mat3x3Padded));
-    memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
+    memcpy(localPtr, identityMatrix, sizeof(Transform3D));
+    memcpy(&sp10.translation, &arg0->unk5C.translation.x, 0xC);
 
-    arg0->unk7C.unk14 = arg0->unk7C.unk14 + adjustment;
+    arg0->unk7C.translation.x = arg0->unk7C.translation.x + adjustment;
 
     rotation = state->unk1888[arg0->unkA1];
     createYRotationMatrix(&arg0->unk5C, rotation);
@@ -565,15 +565,15 @@ void func_80024414_25014(func_80024518_arg *arg0) {
 
     func_800650B4_65CB4(arg0->unkA1, (DisplayListObject *)arg0);
 
-    if (arg0->unk7C.unk14 == 0) {
+    if (arg0->unk7C.translation.x == 0) {
         state->unk18C0[arg0->unkA1 + 4]++;
         setCallbackWithContinue(func_80024518_25118);
     }
 }
 
 void func_80024518_25118(func_80024518_arg *arg0) {
-    Mat3x3Padded localMatrix;
-    Mat3x3Padded *localPtr;
+    Transform3D localMatrix;
+    Transform3D *localPtr;
     GameState *base;
     u16 rotation;
     u16 val;
@@ -581,8 +581,8 @@ void func_80024518_25118(func_80024518_arg *arg0) {
     base = (GameState *)getCurrentAllocation();
 
     localPtr = &localMatrix;
-    memcpy(localPtr, identityMatrix, sizeof(Mat3x3Padded));
-    memcpy(&localMatrix.unk14, &arg0->unk5C.unk14, 0xC);
+    memcpy(localPtr, identityMatrix, sizeof(Transform3D));
+    memcpy(&localMatrix.translation, &arg0->unk5C.translation.x, 0xC);
 
     rotation = base->unk1888[arg0->unkA1];
     createYRotationMatrix(&arg0->unk5C, rotation);
@@ -605,16 +605,16 @@ void func_80024600_25200(func_8002494C_arg *arg0) {
 }
 
 void func_80024644_25244(func_80024644_arg *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded sp30;
-    Mat3x3Padded sp50;
+    Transform3D sp10;
+    Transform3D sp30;
+    Transform3D sp50;
     GameState *state;
-    Mat3x3Padded *unk5CPtr;
-    Mat3x3Padded *unk3CPtr;
-    Mat3x3Padded *sp50Ptr;
-    Mat3x3Padded *sp30Ptr;
-    Mat3x3Padded *sp10Ptr;
-    Mat3x3Padded *unk7CPtr;
+    Transform3D *unk5CPtr;
+    Transform3D *unk3CPtr;
+    Transform3D *sp50Ptr;
+    Transform3D *sp30Ptr;
+    Transform3D *sp10Ptr;
+    Transform3D *unk7CPtr;
     u8 charIndex;
     u8 assetIndex;
     u8 paletteIndex;
@@ -660,9 +660,9 @@ void func_80024644_25244(func_80024644_arg *arg0) {
 }
 
 void func_80024810_25410(func_80024644_arg *arg0) {
-    Mat3x3Padded sp10;
-    Mat3x3Padded *sp10Ptr;
-    Mat3x3Padded *unk5CPtr;
+    Transform3D sp10;
+    Transform3D *sp10Ptr;
+    Transform3D *unk5CPtr;
     s32 target;
     s32 adjustment;
     GameState *state;
@@ -674,9 +674,9 @@ void func_80024810_25410(func_80024644_arg *arg0) {
     adjustment = (-(target < 0) & 0xFFF00000) | 0x100000;
 
     memcpy(sp10Ptr, identityMatrix, 0x20);
-    memcpy(&sp10.unk14, &arg0->unk5C.unk14, 0xC);
+    memcpy(&sp10.translation, &arg0->unk5C.translation.x, 0xC);
 
-    arg0->unk7C.unk14 += adjustment;
+    arg0->unk7C.translation.x += adjustment;
 
     unk5CPtr = &arg0->unk5C;
     createYRotationMatrix(unk5CPtr, state->unk1888[arg0->unkA1]);
@@ -684,7 +684,7 @@ void func_80024810_25410(func_80024644_arg *arg0) {
     func_8006B084_6BC84(&arg0->unk3C, unk5CPtr, sp10Ptr);
     func_8006B084_6BC84(sp10Ptr, &arg0->unk7C, arg0);
 
-    if (arg0->unk7C.unk14 == target) {
+    if (arg0->unk7C.translation.x == target) {
         state->unk18C0[arg0->unkA1 + 4]++;
         func_80069CF8_6A8F8();
     } else {
@@ -701,16 +701,16 @@ void func_8002494C_2554C(func_8002494C_arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024990_25590);
 
 void func_80024AAC_256AC(func_80024C8C_2588C_arg *arg0) {
-    Mat3x3Padded localMatrix;
-    Mat3x3Padded *localPtr;
+    Transform3D localMatrix;
+    Transform3D *localPtr;
     GameState *state;
-    Mat3x3Padded *matrix;
+    Transform3D *matrix;
     u16 rotation;
 
     state = (GameState *)getCurrentAllocation();
 
     localPtr = &localMatrix;
-    memcpy(localPtr, identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(localPtr, identityMatrix, sizeof(Transform3D));
 
     matrix = &arg0->unk4;
     rotation = state->unk1880[arg0->unk28];
@@ -731,17 +731,17 @@ void func_80024AAC_256AC(func_80024C8C_2588C_arg *arg0) {
 }
 
 void func_80024BA0_257A0(func_80024C8C_2588C_arg *arg0) {
-    Mat3x3Padded localMatrix;
-    Mat3x3Padded *localPtr;
+    Transform3D localMatrix;
+    Transform3D *localPtr;
     GameState *state;
-    Mat3x3Padded *matrix;
+    Transform3D *matrix;
     u16 rotation;
     u16 val;
 
     state = (GameState *)getCurrentAllocation();
 
     localPtr = &localMatrix;
-    memcpy(localPtr, identityMatrix, sizeof(Mat3x3Padded));
+    memcpy(localPtr, identityMatrix, sizeof(Transform3D));
 
     matrix = &arg0->unk4;
     rotation = state->unk1880[arg0->unk28];
@@ -776,11 +776,11 @@ void func_80024C8C_2588C(func_80024C8C_2588C_arg *arg0) {
         destroySceneModel(arg0->unk0);
         setCallback(func_80024DCC_259CC);
     } else if (val == 0) {
-        arg0->unk4.unk14 = 0xFFEA0000;
+        arg0->unk4.translation.x = 0xFFEA0000;
         destroySceneModel(arg0->unk0);
         setCallback(func_80024D40_25940);
     } else if (val == 0x11) {
-        arg0->unk4.unk14 = 0xFFEA0000;
+        arg0->unk4.translation.x = 0xFFEA0000;
         setCallback(func_80024BA0_257A0);
     }
 }
@@ -799,10 +799,10 @@ void func_80024E58_25A58(func_80024C8C_2588C_arg *arg0) {
     memcpy(&arg0->unk4, identityMatrix, 0x20);
 
     index = arg0->unk28;
-    arg0->unk4.unk14 = D_8008DD2C_8E92C[D_800AFE8C_A71FC->unk8 * 2 + (base + index)[0x18C0]];
-    arg0->unk4.unk1C = 0;
-    arg0->unk4.unk18 = 0xFFF00000;
-    arg0->unk20_u.unk20_s32 = arg0->unk4.unk14;
+    arg0->unk4.translation.x = D_8008DD2C_8E92C[D_800AFE8C_A71FC->unk8 * 2 + (base + index)[0x18C0]];
+    arg0->unk4.translation.z = 0;
+    arg0->unk4.translation.y = 0xFFF00000;
+    arg0->unk20_u.unk20_s32 = arg0->unk4.translation.x;
 
     applyTransformToModel(arg0->unk0, &arg0->unk4);
 
@@ -830,13 +830,13 @@ void func_80024F48_25B48(func_80024C8C_2588C_arg *arg0) {
 
     adjustment = (-(0 < unk24) & 0xFFF00000) | 0x100000;
 
-    arg0->unk4.unk14 = arg0->unk4.unk14 + adjustment;
+    arg0->unk4.translation.x = arg0->unk4.translation.x + adjustment;
 
     applyTransformToModel(arg0->unk0, &arg0->unk4);
     clearModelRotation(arg0->unk0);
     updateModelGeometry(arg0->unk0);
 
-    if (arg0->unk4.unk14 == 0) {
+    if (arg0->unk4.translation.x == 0) {
         ptr = base + arg0->unk28;
         ptr[0x18C4]++;
         setCallbackWithContinue(func_80024FEC_25BEC);
@@ -893,13 +893,13 @@ void func_800251AC_25DAC(func_80025130_25D30_arg *arg0) {
 
     target = D_8008DD2C_8E92C[D_800AFE8C_A71FC->unk8 * 2 + (((base + arg0->unk28)[0x18C0] + 1) & 1)];
 
-    arg0->unk4.unk14 += ((target >> 31) & adj1) | adj2;
+    arg0->unk4.translation.x += ((target >> 31) & adj1) | adj2;
 
     applyTransformToModel(arg0->unk0, &arg0->unk4);
     clearModelRotation(arg0->unk0);
     updateModelGeometry(arg0->unk0);
 
-    if (arg0->unk4.unk14 == target) {
+    if (arg0->unk4.translation.x == target) {
         (base + arg0->unk28)[0x18C4]++;
         func_80069CF8_6A8F8();
     }

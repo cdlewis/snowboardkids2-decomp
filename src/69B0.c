@@ -65,7 +65,7 @@ void initializeRotationController(RotationControllerState *state) {
 }
 
 void updateRotationController(RotationControllerState *state) {
-    Mat3x3Padded rotationMatrix;
+    Transform3D rotationMatrix;
     SceneModel *model;
     s16 currentX;
     s32 deltaX;
@@ -134,9 +134,9 @@ void updateRotationController(RotationControllerState *state) {
 
     createRotationMatrixYX(&rotationMatrix, (u16)state->currentRotationY, (u16)state->currentRotationX);
 
-    rotationMatrix.unk14 = 0;
-    rotationMatrix.unk18 = 0x100000;
-    rotationMatrix.unk1C = 0;
+    rotationMatrix.translation.x = 0;
+    rotationMatrix.translation.y = 0x100000;
+    rotationMatrix.translation.z = 0;
 
     func_8006B084_6BC84(positionPtr - 5, &rotationMatrix, (u8 *)state->model + 0xF0);
 }
