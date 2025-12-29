@@ -228,12 +228,6 @@ typedef struct {
 } func_80027544_arg;
 
 typedef struct {
-    s16 x;
-    s16 y;
-    s16 z;
-} Vec3s;
-
-typedef struct {
     s16 unk0;
     s16 unk2;
     void *unk4;
