@@ -64,4 +64,3 @@ void func_800585C8_591C8(s32 arg0);
 void *func_800585E4_591E4(void);
 void *func_80058638_59238(void);
 void func_80057DF0_589F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void func_80056B7C_5777C(void *arg0, s16 arg1);

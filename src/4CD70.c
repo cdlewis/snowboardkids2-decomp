@@ -1069,7 +1069,7 @@ void func_8004D9D0_4E5D0(Struct_func_8004D9D0 *arg0) {
 }
 
 extern char D_8009E894_9F494[];
-extern void func_8003BD60_3C960(char *arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s16 arg5, s16 arg6);
+
 typedef struct Struct_func_8004DCFC Struct_func_8004DCFC;
 extern void func_8004DCFC_4E8FC(Struct_func_8004DCFC *);
 

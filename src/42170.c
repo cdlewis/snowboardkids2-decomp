@@ -1264,7 +1264,7 @@ void func_8004309C_43C9C(Func43018State *arg0) {
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->unk3C);
+        enqueueDisplayListWithFrustumCull(i, (&arg0->unk3C));
     }
 
     if (arg0->unk78->unkB84 & 0x80000) {

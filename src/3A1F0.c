@@ -67,13 +67,11 @@ extern DmaTransferEntry *gDmaQueue;
 extern Entry D_800A1C20_A2820[];
 extern OSMesg D_800A2128_A2D28[];
 extern OSMesg gPiDmaMsgBuf[];
-extern OSMesgQueue D_800A1820_A2420;
-extern OSMesgQueue D_800A1888_A2488;
-extern OSMesgQueue D_800A18A8_A24A8;
+
 extern OSMesgQueue D_800A2110_A2D10;
 extern OSMesgQueue gDmaMsgQueue;
 extern OSMesgQueue gPiDmaMsgQueue;
-extern OSMesgQueue mainStack;
+
 extern OSMesgQueue *D_800A2150_A2D50[];
 extern OSPfs controllerPacks[];
 extern OSThread D_800A1DC0_A29C0;
@@ -102,7 +100,7 @@ void func_8003AFA0_3BBA0(void);
 extern OSContStatus D_8009F660_A0260;
 extern OSThread D_8009F670_A0270;
 extern s32 D_800A1838_A2438;
-extern OSMesgQueue D_800A1868_A2468;
+
 extern s32 D_800A1880_A2480;
 extern s32 D_800A18A0_A24A0;
 extern s32 D_800A18C0_A24C0;

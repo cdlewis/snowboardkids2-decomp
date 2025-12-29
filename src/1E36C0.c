@@ -522,7 +522,7 @@ s32 func_800B7450_1E4500(CutsceneSlotData *arg0, SceneModel *unused, s16 arg2, s
         }
     }
     temp_a1 = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
-    arg4_s16 = (s16)arg4;
+    arg4_s16 = arg4;
     arg0->unk84 = arg4;
     arg0->unk86 = arg4;
     if (arg4_s16 != 0) {
@@ -1058,9 +1058,9 @@ s32 func_800B8874_1E5924(CutsceneSlotData *arg0, SceneModel *arg1) {
     return 0;
 
 update_position:
-    arg0->unk3C += (arg0->unk48 - arg0->unk3C) / (s8)arg0->unk0.bytes[3];
-    arg0->unk40 += (arg0->unk4C - arg0->unk40) / (s8)arg0->unk0.bytes[3];
-    arg0->unk44 += (arg0->unk50 - arg0->unk44) / (s8)arg0->unk0.bytes[3];
+    arg0->unk3C += (arg0->unk48 - arg0->unk3C) / arg0->unk0.bytes[3];
+    arg0->unk40 += (arg0->unk4C - arg0->unk40) / arg0->unk0.bytes[3];
+    arg0->unk44 += (arg0->unk50 - arg0->unk44) / arg0->unk0.bytes[3];
 
     arg0->unk7C += (arg0->unk7E - arg0->unk7C) / 32;
 

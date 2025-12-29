@@ -672,10 +672,10 @@ void func_80021270_21E70(Func8002144CArg *arg0) {
     memcpy((u8 *)&arg0->unk4, identityMatrix, 0x20);
 
     if ((temp_s2->unkB45 != 0) && (temp_s3 != 0x3A)) {
-        createYRotationMatrix((Transform3D *)&arg0->unk4, 0x1E00);
+        createYRotationMatrix((&arg0->unk4), 0x1E00);
         arg0->unk4.translation.x = 0x280000;
     } else {
-        createYRotationMatrix((Transform3D *)&arg0->unk4, 0x200);
+        createYRotationMatrix((&arg0->unk4), 0x200);
         if (temp_s2->unkB45 == 0) {
             arg0->unk4.translation.x = 0xFFD80000;
         } else {
@@ -699,7 +699,7 @@ void func_800213C8_21FC8(Func8002144CArg *arg0) {
 
     if (allocation->unkB45 != 0) {
         if (D_800AFE8C_A71FC->unk7 == 0xC) {
-            scaleMatrix((Transform3D *)&arg0->unk4, 0x1000, 0x1000, 0x1000);
+            scaleMatrix((&arg0->unk4), 0x1000, 0x1000, 0x1000);
         }
     }
 

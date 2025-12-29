@@ -369,8 +369,6 @@ extern u16 D_8008F20C_8FE0C;
 extern s32 identityMatrix;
 extern s16 D_8008F17C_8FD7C[];
 extern u16 D_8008F184_8FD84[];
-extern u16 D_8008F150_8FD50[];
-extern const char D_8009E480_9F080;
 
 void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     s32 sp20[8];
@@ -1287,7 +1285,7 @@ void func_80032628_33228(func_80032628_arg *arg0) {
         if (current < D_8008F17C_8FD7C[i]) {
             delta = D_8008F17C_8FD7C[i] - current;
             var_delta = ABS(delta);
-            if ((s16)var_delta >= 20) {
+            if (var_delta >= 20) {
                 arg0->unk0[i].unk2 = current + 20;
             } else {
                 arg0->unk0[i].unk2 = current + var_delta;

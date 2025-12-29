@@ -571,11 +571,11 @@ void func_80063A94_64694(DisplayListObject *arg0) {
         ((s32 *)arg0->unk30)[21] = (matrixData[8] * 2) & 0xFFFF0000;
         ((s32 *)arg0->unk30)[22] = 0;
         ((s32 *)arg0->unk30)[23] = 1;
-        ((s32 *)arg0->unk30)[24] = ((matrixData[0] << 17) & 0xFFFF0000) + (((s16)matrixData[1] * 2) & new_var);
+        ((s32 *)arg0->unk30)[24] = ((matrixData[0] << 17) & 0xFFFF0000) + ((matrixData[1] * 2) & new_var);
         ((s32 *)arg0->unk30)[25] = (matrixData[2] << 17) & 0xFFFF0000;
-        ((s32 *)arg0->unk30)[26] = ((matrixData[3] << 17) & 0xFFFF0000) + (((s16)matrixData[4] * 2) & new_var);
+        ((s32 *)arg0->unk30)[26] = ((matrixData[3] << 17) & 0xFFFF0000) + ((matrixData[4] * 2) & new_var);
         ((s32 *)arg0->unk30)[27] = (matrixData[5] << 17) & 0xFFFF0000;
-        ((s32 *)arg0->unk30)[28] = ((matrixData[6] << 17) & 0xFFFF0000) + (((s16)matrixData[7] * 2) & new_var);
+        ((s32 *)arg0->unk30)[28] = ((matrixData[6] << 17) & 0xFFFF0000) + ((matrixData[7] * 2) & new_var);
         ((s32 *)arg0->unk30)[29] = (matrixData[8] << 17) & 0xFFFF0000;
         ((s32 *)arg0->unk30)[30] = 0;
         ((s32 *)arg0->unk30)[31] = 0;

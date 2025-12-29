@@ -288,11 +288,11 @@ void func_8002F024_2FC24(func_8002EF3C_2FB3C_arg *arg0) {
             if (animIndex != 0) {
                 frameCounter = arg0->unk24 + 1;
                 arg0->unk24 = frameCounter;
-                if ((u16)frameCounter == (u16)(D_8008F0B4_8FCB4[idx] + D_8008F0B6_8FCB6[idx])) {
+                if (frameCounter == (u16)(D_8008F0B4_8FCB4[idx] + D_8008F0B6_8FCB6[idx])) {
                     arg0->unk26 = 0;
                     arg0->unk24 = 4;
                 }
-                setModelAnimation(arg0->unk0, (s16)arg0->unk24);
+                setModelAnimation(arg0->unk0, arg0->unk24);
             }
         }
     } while (0);

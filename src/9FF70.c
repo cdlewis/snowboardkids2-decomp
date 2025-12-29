@@ -915,8 +915,6 @@ s32 func_800B2E38_A2CE8(void *arg0) {
     return 0;
 }
 
-extern s16 func_8005D810_5E410(Player *);
-
 void func_800B2E80_A2D30(Player *arg0) {
     arg0->unkB8C = 0x200;
     arg0->unkA96 = 0;

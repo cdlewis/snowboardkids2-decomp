@@ -189,7 +189,7 @@ void func_80051E90_52A90(Struct_52880 *arg0) {
 
     alloc = (GameState *)getCurrentAllocation();
     s1 = &arg0->unk4;
-    result = func_8005B548_5C148((Vec3i *)s1, arg0->unk42, 0x80000);
+    result = func_8005B548_5C148(s1, arg0->unk42, 0x80000);
     if (result != NULL) {
         if (!(result->unkB84 & 0x1000)) {
             func_80058A10_59610(result);
@@ -1471,7 +1471,7 @@ s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
 
 void func_80054568_55168(Struct_52880 *arg0) {
     getCurrentAllocation();
-    if (func_8005C250_5CE50((Vec3i *)&arg0->unk4, arg0->unk42, 0xC0000)) {
+    if (func_8005C250_5CE50((&arg0->unk4), arg0->unk42, 0xC0000)) {
         arg0->unk4E++;
     }
 }
@@ -1660,7 +1660,7 @@ void func_80054D70_55970(void *arg) {
 
     switch (randVal) {
         case 0:
-            player = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
             if (player != NULL) {
                 func_80058A10_59610(player);
                 for (i = 0; i < 3; i++) {
@@ -1677,7 +1677,7 @@ void func_80054D70_55970(void *arg) {
             }
             break;
         case 1:
-            player = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
             if (player != NULL) {
                 func_80058A3C_5963C(player);
                 arg0->unk4E = arg0->unk4E + 1;
@@ -1688,7 +1688,7 @@ void func_80054D70_55970(void *arg) {
             }
             break;
         case 2:
-            player = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
             if (player != NULL) {
                 func_80058A68_59668(player);
                 arg0->unk4E = arg0->unk4E + 1;
@@ -1699,7 +1699,7 @@ void func_80054D70_55970(void *arg) {
             }
             break;
         case 3:
-            player = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
             if (player != NULL) {
                 func_80058AC0_596C0(player);
                 arg0->unk4E = arg0->unk4E + 1;
@@ -1710,7 +1710,7 @@ void func_80054D70_55970(void *arg) {
             }
             break;
         case 4:
-            player = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
             if (player != NULL) {
                 func_80058A94_59694(player);
                 arg0->unk4E = arg0->unk4E + 1;
@@ -2036,7 +2036,7 @@ void func_80055900_56500(Struct_52880 *arg0) {
     Player *result;
 
     getCurrentAllocation();
-    result = func_8005B548_5C148((Vec3i *)&arg0->unk4, arg0->unk42, 0x80000);
+    result = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
     if (result != NULL) {
         if ((result->unkB84 & 0x1000) == 0) {
             func_80058A68_59668(result);

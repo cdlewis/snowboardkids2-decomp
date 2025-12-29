@@ -42,7 +42,6 @@ typedef struct {
     u8 slotFlags[8];              // 0xACE
 } SaveData;
 
-extern u8 D_8008D9B0_8E5B0[];
 extern s32 func_8001E104_1ED04(EepromSaveData_type *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);

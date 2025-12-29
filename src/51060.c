@@ -426,7 +426,7 @@ void func_80050AA8_516A8(func_80050C00_51800_Task *arg0) {
         temp = arg0->unk26;
 
         if (temp % 3 == 0) {
-            loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, arg0->unk24 + (temp >> 2));
+            loadAssetMetadata((&arg0->unk4), arg0->unk0, arg0->unk24 + (temp >> 2));
         }
 
         arg0->unk26++;
@@ -447,7 +447,7 @@ void func_80050AA8_516A8(func_80050C00_51800_Task *arg0) {
         } while (i < 4);
     } else {
         do {
-            func_800677C0_683C0(i, (loadAssetMetadata_arg *)&arg0->unk4);
+            func_800677C0_683C0(i, (&arg0->unk4));
             i++;
         } while (i < 4);
     }

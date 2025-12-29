@@ -32,7 +32,7 @@ void func_800B5500_1E25B0(u16 arg0, void *arg1, s16 arg2, s32 arg3) {
         memcpy(sp10->unk54, arg1, 0x20);
         sp10->unk76 = arg2;
         sp10->unk78_union.unk78 = 0;
-        sp10->unk7C = (s32)arg3;
+        sp10->unk7C = arg3;
         sp10->unk84 = 0;
     }
 }

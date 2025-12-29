@@ -193,13 +193,8 @@ s32 func_8005E22C_5EE2C(func_8005E800_5F400_arg *arg0) {
 
     {
         s16 *animation_data = arg0->animation_data;
-        if ((s16)animation_data[3] != (arg0->counter & 0xFFFF)) {
-            func_8005DF10_5EB10(
-                animation_data[1],
-                animation_data[2],
-                (s16)animation_data[3] - arg0->counter,
-                stack_data
-            );
+        if (animation_data[3] != (arg0->counter & 0xFFFF)) {
+            func_8005DF10_5EB10(animation_data[1], animation_data[2], animation_data[3] - arg0->counter, stack_data);
             func_8006BDBC_6C9BC(arg0, stack_data, arg0->prev_position);
         }
     }
@@ -248,7 +243,7 @@ s32 func_8005E500_5F100(func_8005E800_5F400_arg *arg0) {
     if (flags & 0x8000) {
         s16 *animation_data = arg0->animation_data;
         arg0->flags = flags & 0x7FFF;
-        func_8005DF10_5EB10(animation_data[1], -(s16)animation_data[2], -(s16)animation_data[3], arg0->values);
+        func_8005DF10_5EB10(animation_data[1], -animation_data[2], -animation_data[3], arg0->values);
 
         frame_idx = arg0->animation_data[4];
         arg0->position[0] = -arg0->frame_data[frame_idx * 3] << 10;
@@ -275,13 +270,8 @@ s32 func_8005E500_5F100(func_8005E800_5F400_arg *arg0) {
 
     {
         s16 *animation_data = arg0->animation_data;
-        if ((s16)animation_data[3] != (arg0->counter & 0xFFFF)) {
-            func_8005DF10_5EB10(
-                animation_data[1],
-                -(s16)animation_data[2],
-                arg0->counter - (s16)animation_data[3],
-                stack_data
-            );
+        if (animation_data[3] != (arg0->counter & 0xFFFF)) {
+            func_8005DF10_5EB10(animation_data[1], -animation_data[2], arg0->counter - animation_data[3], stack_data);
             func_8006BDBC_6C9BC(arg0, stack_data, arg0->prev_position);
         }
     }
@@ -519,13 +509,8 @@ s32 func_8005ECB8_5F8B8(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
 
     {
         s16 *animation_data = arg3->animation_data;
-        if ((s16)animation_data[3] != (arg3->counter & 0xFFFF)) {
-            func_8005DF10_5EB10(
-                animation_data[1],
-                animation_data[2],
-                (s16)animation_data[3] - arg3->counter,
-                stack_data
-            );
+        if (animation_data[3] != (arg3->counter & 0xFFFF)) {
+            func_8005DF10_5EB10(animation_data[1], animation_data[2], animation_data[3] - arg3->counter, stack_data);
             func_8006BDBC_6C9BC(arg3, stack_data, arg3->prev_position);
         }
     }
@@ -582,7 +567,7 @@ s32 func_8005EFC4_5FBC4(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
     if (flags & 0x8000) {
         s16 *animation_data = arg3->animation_data;
         arg3->flags = flags & 0x7FFF;
-        func_8005DF10_5EB10(animation_data[1], -(s16)animation_data[2], -(s16)animation_data[3], arg3->values);
+        func_8005DF10_5EB10(animation_data[1], -animation_data[2], -animation_data[3], arg3->values);
 
         frame_idx = arg3->animation_data[4];
         arg3->position[0] = -arg3->frame_data[frame_idx * 3] << 10;
@@ -609,13 +594,8 @@ s32 func_8005EFC4_5FBC4(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
 
     {
         s16 *animation_data = arg3->animation_data;
-        if ((s16)animation_data[3] != (arg3->counter & 0xFFFF)) {
-            func_8005DF10_5EB10(
-                animation_data[1],
-                -(s16)animation_data[2],
-                arg3->counter - (s16)animation_data[3],
-                stack_data
-            );
+        if (animation_data[3] != (arg3->counter & 0xFFFF)) {
+            func_8005DF10_5EB10(animation_data[1], -animation_data[2], arg3->counter - animation_data[3], stack_data);
             func_8006BDBC_6C9BC(arg3, stack_data, arg3->prev_position);
         }
     }

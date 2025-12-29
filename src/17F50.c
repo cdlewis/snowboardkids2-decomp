@@ -155,8 +155,8 @@ void func_80017FE8_18BE8(Func80018474Arg *arg0) {
 
     state = getCurrentAllocation();
 
-    s1 = D_8008D6EC_8E2EC[(u8)state->unk425].x;
-    s2 = D_8008D6EC_8E2EC[(u8)state->unk425].z;
+    s1 = D_8008D6EC_8E2EC[state->unk425].x;
+    s2 = D_8008D6EC_8E2EC[state->unk425].z;
     s1 <<= 16;
     s2 <<= 16;
 

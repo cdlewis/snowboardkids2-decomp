@@ -90,7 +90,7 @@ void cleanupTitleAndTransition(void) {
     }
 
     unlinkNode((Node_70B00 *)state);
-    unlinkNode((Node_70B00 *)&state->node2);
+    unlinkNode((&state->node2));
 
     state->titleLogoData = freeNodeMemory(state->titleLogoData);
     state->menuGraphicsData = freeNodeMemory(state->menuGraphicsData);

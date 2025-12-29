@@ -142,29 +142,29 @@ void handleLevelSelectInput(void) {
             oldMenuSelection = allocation->selectedIndex;
             oldB46 = oldMenuSelection & 0xFF;
             for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
-                if (oldB46 == ((s8)allocation->selectedIndex)) {
+                if (oldB46 == (allocation->selectedIndex)) {
                     if (gControllerInputs[i] & 0x10800) {
-                        allocation->selectedIndex = (s8)allocation->selectedIndex - 1;
+                        allocation->selectedIndex = allocation->selectedIndex - 1;
                         allocation->scrollDirection = 0;
-                        if ((s8)allocation->selectedIndex < 0) {
+                        if (allocation->selectedIndex < 0) {
                             allocation->selectedIndex = allocation->menuItemCount - 1;
                         }
                     } else if (gControllerInputs[i] & 0x20400) {
-                        allocation->selectedIndex = (s8)allocation->selectedIndex + 1;
+                        allocation->selectedIndex = allocation->selectedIndex + 1;
                         allocation->scrollDirection = 1;
-                        if ((s8)allocation->selectedIndex > (s32)(allocation->menuItemCount - 1)) {
+                        if (allocation->selectedIndex > (s32)(allocation->menuItemCount - 1)) {
                             allocation->selectedIndex = 0;
                         }
                     }
                 }
             }
 
-            if (oldB46 != ((s8)allocation->selectedIndex)) {
+            if (oldB46 != (allocation->selectedIndex)) {
                 func_800585C8_591C8(0x2B);
                 allocation->menuState = MENU_STATE_SCROLL;
                 allocation->transitionCounter = 0;
                 allocation->oldLevelId = allocation->levelIdList[oldB46];
-                allocation->newLevelId = allocation->levelIdList[(s8)allocation->selectedIndex];
+                allocation->newLevelId = allocation->levelIdList[allocation->selectedIndex];
                 if (allocation->previewLoadCounter >= 3) {
                     allocation->previewLoadCounter = 0;
                     terminateTasksByType(0);
@@ -209,7 +209,7 @@ void handleLevelSelectInput(void) {
                         allocation->menuState = 0;
                     } else if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
                         allocation->exitMode = 1;
-                        D_800AFE8C_A71FC->saveSlotIndex = allocation->levelIdList[(s8)allocation->selectedIndex];
+                        D_800AFE8C_A71FC->saveSlotIndex = allocation->levelIdList[allocation->selectedIndex];
                         if (D_800AFE8C_A71FC->unk4 == 0) {
                             D_800AFE8C_A71FC->unk9[0xC] = D_8008D9C0_8E5C0[D_800AFE8C_A71FC->saveSlotIndex];
                         }

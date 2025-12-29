@@ -551,7 +551,7 @@ void updateSpriteAnimationTask(func_80000C2C_182C_arg *arg0) {
 }
 
 void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state) {
-    releaseNodeMemoryRef((void **)&state->spriteAsset);
+    releaseNodeMemoryRef((&state->spriteAsset));
 }
 
 void initStaticModelTask(StaticModelTaskArg *arg0) {

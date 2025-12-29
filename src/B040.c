@@ -388,7 +388,7 @@ void updateScalingSpriteEffect(ScalingSpriteEffectState *arg0) {
     y = pos->unk18 + arg0->offsetY;
     z = pos->unk1C + arg0->offsetZ;
 
-    renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scaleX, arg0->scaleY, (s16)arg0->rotation, arg0->opacity);
+    renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scaleX, arg0->scaleY, arg0->rotation, arg0->opacity);
 
     if (arg0->duration > 0) {
         arg0->duration--;

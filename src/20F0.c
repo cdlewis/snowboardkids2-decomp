@@ -47,7 +47,6 @@ extern u8 identityMatrix[32];
 extern u32 D_8008BD38_8C938;
 
 s32 hasModelGraphicsData(SceneModel *);
-s32 isAssetGroupEmpty(s16);
 
 void markEntityDestroyed(MarkDestroyedArg *arg0) {
     arg0->isDestroyed = 1;
