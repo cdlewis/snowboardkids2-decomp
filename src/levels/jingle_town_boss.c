@@ -204,9 +204,9 @@ void func_800BB2B0_B2870(Arg0Struct *arg0) {
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
 
     temp = distance_3d(
-        arg0->unk434 - alloc->players->worldPosX,
-        arg0->unk438 - alloc->players->worldPosY,
-        arg0->unk43C - alloc->players->worldPosZ
+        arg0->unk434 - alloc->players->worldPos.x,
+        arg0->unk438 - alloc->players->worldPos.y,
+        arg0->unk43C - alloc->players->worldPos.z
     );
 
     if ((arg0->unkBC4 == 0) && (temp > 0x1000000)) {

@@ -345,7 +345,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
     arg0->unkB84 = arg0->unkB84 | 0x40000;
     func_800B9B90_A9A40(arg0);
 
-    angleDiff = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPosX, arg0->worldPosZ) - arg0->unkA94;
+    angleDiff = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->unkA94;
     angleDiff = angleDiff & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
@@ -390,7 +390,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
     func_800B02AC_A015C(arg0);
     func_800BC61C_B1B0C(arg0);
 
-    transformVectorRelative(&gameState->players->worldPosX, arg0->unk164, sp40);
+    transformVectorRelative(&gameState->players->worldPos.x, arg0->unk164, sp40);
 
     angleDiff = atan2Fixed(-sp40[0], -sp40[2]) & 0x1FFF;
 
@@ -417,7 +417,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
 
         if (arg0->unkB90 == 4) {
             arg0->unkB90 = 0;
-            func_80056B7C_5777C(&arg0->worldPosX, 0x4B);
+            func_80056B7C_5777C(&arg0->worldPos.x, 0x4B);
         }
 
         if (arg0->unkB8C == 0) {
@@ -439,7 +439,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
         arg0->unkB90 = arg0->unkB90 + 1;
 
         if ((arg0->unkB90 == 4) || (arg0->unkB90 == 0xC)) {
-            func_80056B7C_5777C(&arg0->worldPosX, 0x4A);
+            func_80056B7C_5777C(&arg0->worldPos.x, 0x4A);
         }
 
         player = gameState->players;
@@ -479,9 +479,9 @@ s32 func_800BBA54_B0F44(Player *arg0) {
             } else {
                 // unkBC0 is zero - calculate distance
                 if ((u32)distance_3d(
-                        arg0->worldPosX - player->worldPosX,
-                        arg0->worldPosY - player->worldPosY,
-                        arg0->worldPosZ - player->worldPosZ
+                        arg0->worldPos.x - player->worldPos.x,
+                        arg0->worldPos.y - player->worldPos.y,
+                        arg0->worldPos.z - player->worldPos.z
                     ) <= 0xDFFFFF) {
                     // Close range
                     if (func_80054C8C_5588C(arg0->unkBB8) != 0) {
@@ -561,11 +561,11 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
 
         if (!(arg0->unkB84 & 0x80000)) {
             if (arg0->unkBDB == 0) {
-                func_80056B7C_5777C(&arg0->worldPosX, 0x4C);
+                func_80056B7C_5777C(&arg0->worldPos.x, 0x4C);
             } else {
                 arg0->unkBDB -= 1;
                 if (arg0->unkBDB == 0) {
-                    func_80056B7C_5777C(&arg0->worldPosX, 0x4C);
+                    func_80056B7C_5777C(&arg0->worldPos.x, 0x4C);
                 }
             }
         }
@@ -583,7 +583,7 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
     arg0->unkB88 = 0x200;
     func_800B9B90_A9A40(arg0);
 
-    angleDiff = (func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPosX, arg0->worldPosZ) - arg0->unkA94) & 0x1FFF;
+    angleDiff = (func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->unkA94) & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
         angleDiff = angleDiff | 0xE000;
@@ -639,7 +639,7 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
             for (i = 0; i < 0x1E; i++) {
                 func_8004BC5C_4C85C(arg0);
             }
-            memcpy(sp30, &arg0->worldPosX, 0xC);
+            memcpy(sp30, &arg0->worldPos.x, 0xC);
             sp30[1] += 0x300000;
             func_800423A4_42FA4(sp30, arg0->unkBB8);
             func_800BB910_B0E00(arg0);

@@ -450,7 +450,7 @@ void func_8004179C_4239C(Func4179CArg *arg0) {
     arg0->unk28 = loadAsset_216290();
     arg0->unk2C = 0;
     arg0->scale.full = 0x400;
-    func_80056B7C_5777C(&arg0->player->worldPosX, 0x13);
+    func_80056B7C_5777C(&arg0->player->worldPos.x, 0x13);
     setCleanupCallback(func_800419AC_425AC);
     setCallbackWithContinue(func_80041810_42410);
 }
@@ -462,9 +462,9 @@ void func_80041810_42410(Func4179CArg *arg0) {
     s32 i;
 
     if (!(arg0->player->unkB88 & 0x40)) {
-        effectPos[0] = arg0->player->worldPosX;
-        effectPos[1] = arg0->player->worldPosY + 0x100000;
-        effectPos[2] = arg0->player->worldPosZ;
+        effectPos[0] = arg0->player->worldPos.x;
+        effectPos[1] = arg0->player->worldPos.y + 0x100000;
+        effectPos[2] = arg0->player->worldPos.z;
         func_80041E10_42A10(effectPos);
         func_80069CF8_6A8F8();
         return;
@@ -478,9 +478,9 @@ void func_80041810_42410(Func4179CArg *arg0) {
         scaleMatrix((Transform3D *)arg0, scaleFactor, scaleFactor, scaleFactor);
     }
 
-    effectPos[0] = arg0->player->worldPosX;
-    effectPos[1] = arg0->player->worldPosY;
-    effectPos[2] = arg0->player->worldPosZ;
+    effectPos[0] = arg0->player->worldPos.x;
+    effectPos[1] = arg0->player->worldPos.y;
+    effectPos[2] = arg0->player->worldPos.z;
     effectPos[1] = effectPos[1] + 0xFFFE0000;
 
     if (func_8005B9E4_5C5E4(effectPos, 0x180000, 0x320000, arg0->player->unkBB8) != 0) {
@@ -516,23 +516,23 @@ void func_800419E4_425E4(void *arg0) {
 }
 
 void func_80041A24_42624(Func41A60Arg *arg0) {
-    arg0->displayList.unk10.position.x = arg0->player->worldPosX;
-    arg0->displayList.unk10.position.y = arg0->player->worldPosY;
-    arg0->displayList.unk10.position.z = arg0->player->worldPosZ;
+    arg0->displayList.unk10.position.x = arg0->player->worldPos.x;
+    arg0->displayList.unk10.position.y = arg0->player->worldPos.y;
+    arg0->displayList.unk10.position.z = arg0->player->worldPos.z;
     func_800634E8_640E8(&arg0->displayList);
 }
 
 void func_80041A60_42660(Func41A60Arg *arg0) {
-    arg0->displayList.unk10.position.x = arg0->player->worldPosX;
-    arg0->displayList.unk10.position.y = arg0->player->worldPosY;
-    arg0->displayList.unk10.position.z = arg0->player->worldPosZ;
+    arg0->displayList.unk10.position.x = arg0->player->worldPos.x;
+    arg0->displayList.unk10.position.y = arg0->player->worldPos.y;
+    arg0->displayList.unk10.position.z = arg0->player->worldPos.z;
     func_80063534_64134(&arg0->displayList);
 }
 
 void func_80041A9C_4269C(Func41A60Arg *arg0) {
-    arg0->displayList.unk10.position.x = arg0->player->worldPosX;
-    arg0->displayList.unk10.position.y = arg0->player->worldPosY;
-    arg0->displayList.unk10.position.z = arg0->player->worldPosZ;
+    arg0->displayList.unk10.position.x = arg0->player->worldPos.x;
+    arg0->displayList.unk10.position.y = arg0->player->worldPos.y;
+    arg0->displayList.unk10.position.z = arg0->player->worldPos.z;
     func_80063580_64180(&arg0->displayList);
 }
 
@@ -621,9 +621,9 @@ void func_80041FB4_42BB4(Func41F38State *arg0) {
     func_8006B084_6BC84(arg0->matrix, &arg0->unk3C->unk3F8, arg0);
 
     if ((arg0->unk3C->unkB88 & 0x80) == 0) {
-        pos[0] = arg0->unk3C->worldPosX;
-        pos[1] = arg0->unk3C->worldPosY + 0x100000;
-        pos[2] = arg0->unk3C->worldPosZ;
+        pos[0] = arg0->unk3C->worldPos.x;
+        pos[1] = arg0->unk3C->worldPos.y + 0x100000;
+        pos[2] = arg0->unk3C->worldPos.z;
         func_80041EA4_42AA4(pos);
         func_80069CF8_6A8F8();
     }
@@ -795,7 +795,7 @@ void func_8004247C_4307C(Func42410State *arg0) {
     scaleMatrix((Transform3D *)arg0, arg0->unk42, arg0->unk42, arg0->unk42);
     player = arg0->unk3C;
     pos = &arg0->unk14;
-    memcpy(pos, &player->worldPosX, 0xC);
+    memcpy(pos, &player->worldPos.x, 0xC);
     arg0->unk18 += 0xFFEC0000;
 
     if (arg0->unk46 != 0) {
@@ -830,7 +830,7 @@ void func_8004256C_4316C(Func42410State *arg0) {
     arg0->unk44 += 0x12C;
     createYRotationMatrix((Transform3D *)arg0, arg0->unk44);
     scaleMatrix((Transform3D *)arg0, arg0->unk42, arg0->unk42, arg0->unk42);
-    memcpy(&arg0->unk14, &arg0->unk3C->worldPosX, 0xC);
+    memcpy(&arg0->unk14, &arg0->unk3C->worldPos.x, 0xC);
     arg0->unk18 += 0xFFEC0000;
 
     for (i = 0; i < 4; i++) {
@@ -957,7 +957,7 @@ void func_80042820_43420(Func426B0State *arg0) {
         }
     }
 
-    memcpy(&arg0->unk14, &arg0->unk40->worldPosX, 0xC);
+    memcpy(&arg0->unk14, &arg0->unk40->worldPos.x, 0xC);
     arg0->unk18 += arg0->unk4C;
 
     i = 0;

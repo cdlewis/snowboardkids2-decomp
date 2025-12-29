@@ -90,9 +90,7 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B00FC_9FFAC);
 
 typedef struct {
     u8 _pad0[0x434];
-    s32 worldPosX;
-    s32 worldPosY;
-    s32 worldPosZ;
+    Vec3i worldPos;
     u8 _pad440[0xC];
     s32 unk44C;
     s32 unk450;
@@ -101,15 +99,15 @@ typedef struct {
 
 void func_800B02AC_A015C(Player *arg0) {
     func_8005D03C_5DC3C(arg0);
-    arg0->worldPosX = arg0->worldPosX + arg0->unk44C;
-    arg0->worldPosY = arg0->worldPosY + arg0->unk450;
-    arg0->worldPosZ = arg0->worldPosZ + arg0->unk454;
+    arg0->worldPos.x = arg0->worldPos.x + arg0->unk44C;
+    arg0->worldPos.y = arg0->worldPos.y + arg0->unk450;
+    arg0->worldPos.z = arg0->worldPos.z + arg0->unk454;
 }
 
 void func_800B0300_A01B0(Player *arg0) {
-    arg0->worldPosX = arg0->worldPosX + arg0->unk44C;
-    arg0->worldPosY = arg0->worldPosY + arg0->unk450;
-    arg0->worldPosZ = arg0->worldPosZ + arg0->unk454;
+    arg0->worldPos.x = arg0->worldPos.x + arg0->unk44C;
+    arg0->worldPos.y = arg0->worldPos.y + arg0->unk450;
+    arg0->worldPos.z = arg0->worldPos.z + arg0->unk454;
 }
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B0334_A01E4);
@@ -239,7 +237,7 @@ s32 func_800B1DA0_A1C50(Player *arg0) {
     }
     if (arg0->unkBDA != 0) {
         func_800B9B90_A9A40(arg0);
-        var_a3 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPosX, arg0->worldPosZ);
+        var_a3 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z);
         temp_v1 = arg0->unkA94;
         var_a3 = (var_a3 - temp_v1) & 0x1FFF;
         if (var_a3 >= 0x1001) {
@@ -454,21 +452,21 @@ s32 func_800B2254_A2104(Player *arg0) {
     if (arg0->unkB84 & 0x20000) {
         func_800B00D4_9FF84(arg0, 6);
         func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-        func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+        func_80056B7C_5777C(&arg0->worldPos.x, 0x25);
         return 1;
     }
 
     if (func_8005A9A8_5B5A8(arg0) != 0) {
         func_800B65F8_A64A8((func_800B00D4_arg *)arg0);
         func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-        func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+        func_80056B7C_5777C(&arg0->worldPos.x, 0x25);
         return 1;
     }
 
     if (arg0->unkB84 & 1) {
         func_800B00D4_9FF84(arg0, 1);
         func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-        func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+        func_80056B7C_5777C(&arg0->worldPos.x, 0x25);
         return 1;
     }
 
@@ -482,13 +480,13 @@ s32 func_800B2254_A2104(Player *arg0) {
         arg0->unkBBF = ++temp_v0;
         func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
         if ((arg0->unkBCC & 0xF) == 7) {
-            func_80056B7C_5777C(&arg0->worldPosX, 0x29);
+            func_80056B7C_5777C(&arg0->worldPos.x, 0x29);
         }
         if ((arg0->unkBCC & 0xF) == 3) {
             func_80051BB8_527B8(arg0);
-            func_80056B7C_5777C(&arg0->worldPosX, 0xF);
+            func_80056B7C_5777C(&arg0->worldPos.x, 0xF);
         } else {
-            func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+            func_80056B7C_5777C(&arg0->worldPos.x, 0x25);
         }
     }
 
@@ -774,7 +772,7 @@ void func_800B2B3C_A29EC(Player *arg0) {
     if (!(temp_v1 & 0x1000)) {
         if (arg0->unkBDA != 0) {
             func_800B9B90_A9A40(arg0);
-            var_v1 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPosX, arg0->worldPosZ);
+            var_v1 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z);
             temp_a1 = (u16)arg0->unkA94;
             var_v1 = (var_v1 - temp_a1) & 0x1FFF;
             if (var_v1 >= 0x1001) {
@@ -924,7 +922,7 @@ void func_800B2E80_A2D30(Player *arg0) {
     arg0->unkBC0++;
     arg0->unkB84 |= 0x4000;
     func_8005D810_5E410(arg0);
-    func_80056B7C_5777C(&arg0->worldPosX, 0xB);
+    func_80056B7C_5777C(&arg0->worldPos.x, 0xB);
 }
 
 void func_800B2EE4_A2D94(Player *arg0, s8 arg1) {
@@ -1837,10 +1835,10 @@ s32 func_800B470C_A45BC(Player *arg0) {
         arg0->unkBBF++;
         rotAngle = atan2Fixed(-arg0->unkAC8, -arg0->unkAD0);
         rotateVectorY(allocation->unk48 + 0xE4, rotAngle, stackVec);
-        stackVec[0] += arg0->worldPosX;
-        stackVec[2] += arg0->worldPosZ;
-        stackVec[1] = arg0->worldPosY + 0x100000;
-        func_80056B7C_5777C(&arg0->worldPosX, 0xD);
+        stackVec[0] += arg0->worldPos.x;
+        stackVec[2] += arg0->worldPos.z;
+        stackVec[1] = arg0->worldPos.y + 0x100000;
+        func_80056B7C_5777C(&arg0->worldPos.x, 0xD);
         func_80050ECC_51ACC(stackVec);
     }
 
@@ -1890,10 +1888,10 @@ s32 func_800B48AC_A475C(Player *arg0) {
         arg0->unkBBF++;
         rotAngle = atan2Fixed(-arg0->unkAC8, -arg0->unkAD0);
         rotateVectorY(allocation->unk48 + 0xE4, rotAngle, stackVec);
-        stackVec[0] += arg0->worldPosX;
-        stackVec[2] += arg0->worldPosZ;
-        stackVec[1] = arg0->worldPosY + 0x100000;
-        func_80056B7C_5777C(&arg0->worldPosX, 0xD);
+        stackVec[0] += arg0->worldPos.x;
+        stackVec[2] += arg0->worldPos.z;
+        stackVec[1] = arg0->worldPos.y + 0x100000;
+        func_80056B7C_5777C(&arg0->worldPos.x, 0xD);
         func_80050ECC_51ACC(stackVec);
     }
 
@@ -1967,7 +1965,7 @@ s32 func_800B4B08_A49B8(Player *arg0) {
         if (arg0->unkBC0 == 0) {
             arg0->unkBC0++;
             func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-            func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+            func_80056B7C_5777C(&arg0->worldPos.x, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
         func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
@@ -2174,11 +2172,11 @@ s32 func_800B50C0_A4F70(Player *arg0) {
 
         rotateVectorY(allocation->unk48 + 0xE4, arg0->unkA94, stackVec);
 
-        stackVec[0] += arg0->worldPosX;
-        stackVec[2] += arg0->worldPosZ;
-        stackVec[1] = arg0->worldPosY + 0x140000;
+        stackVec[0] += arg0->worldPos.x;
+        stackVec[2] += arg0->worldPos.z;
+        stackVec[1] = arg0->worldPos.y + 0x140000;
 
-        func_80056B7C_5777C(&arg0->worldPosX, 0xD);
+        func_80056B7C_5777C(&arg0->worldPos.x, 0xD);
         func_80050ECC_51ACC(stackVec);
     }
 
@@ -2228,7 +2226,7 @@ s32 func_800B5234_A50E4(Player *arg0) {
         if (arg0->unkBC0 == 0) {
             arg0->unkBC0++;
             func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-            func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+            func_80056B7C_5777C(&arg0->worldPos.x, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
         func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
@@ -2255,7 +2253,7 @@ s32 func_800B5234_A50E4(Player *arg0) {
 s32 func_800B5394_A5244(Player *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unkBBF = arg0->unkBBF + 1;
-        func_80056B7C_5777C(&arg0->worldPosX, 0xD);
+        func_80056B7C_5777C(&arg0->worldPos.x, 0xD);
     }
 
     arg0->unkB88 = 8;
@@ -2287,7 +2285,7 @@ s32 func_800B5478_A5328(Player *arg0) {
         arg0->unkB8C = 0x14;
         arg0->unkBBF = arg0->unkBBF + 1;
         if ((arg0->unkB84 & 1) == 0) {
-            func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+            func_80056B7C_5777C(&arg0->worldPos.x, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
     }
@@ -2333,7 +2331,7 @@ s32 func_800B58B8_A5768(Player *arg0) {
     }
 
     arg0->unkB88 = 8;
-    arg0->worldPosY = arg0->worldPosY + 0xFFFF0000;
+    arg0->worldPos.y = arg0->worldPos.y + 0xFFFF0000;
     func_800B40D4_A3F84(arg0);
     func_8005D180_5DD80(arg0, 0);
     func_8005D804_5E404(arg0, 3, 0);
@@ -2708,13 +2706,13 @@ s32 func_800B62E4_A6194(Player *arg0) {
         if (arg0->unkBD4 != 0) {
             if (arg0->unkBD2 != 0) {
                 if (randA() & 1) {
-                    if (func_8004B2A0_4BEA0(&arg0->worldPosX, arg0->unkB94, &arg0->unk44C, 0, arg0->unkBD2) != 0) {
+                    if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->unk44C, 0, arg0->unkBD2) != 0) {
                         arg0->unkBD2 = 0;
                         arg0->unkBD3 = 0;
                     }
                     goto block_end;
                 }
-                if (func_8004B2A0_4BEA0(&arg0->worldPosX, arg0->unkB94, &arg0->unk44C, 1, arg0->unkBD4) != 0) {
+                if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->unk44C, 1, arg0->unkBD4) != 0) {
                     arg0->unkBD4 = 0;
                 }
                 goto block_end;
@@ -2722,14 +2720,14 @@ s32 func_800B62E4_A6194(Player *arg0) {
             goto block_check_BD4;
         }
         if (arg0->unkBD2 != 0) {
-            if (func_8004B2A0_4BEA0(&arg0->worldPosX, arg0->unkB94, &arg0->unk44C, 0, arg0->unkBD2) != 0) {
+            if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->unk44C, 0, arg0->unkBD2) != 0) {
                 arg0->unkBD2 = 0;
                 arg0->unkBD3 = 0;
             }
         } else {
         block_check_BD4:
             if (arg0->unkBD4 != 0) {
-                if (func_8004B2A0_4BEA0(&arg0->worldPosX, arg0->unkB94, &arg0->unk44C, 1, arg0->unkBD4) != 0) {
+                if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->unk44C, 1, arg0->unkBD4) != 0) {
                     arg0->unkBD4 = 0;
                 }
             }
@@ -2754,7 +2752,7 @@ s32 func_800B6488_A6338(Player *arg0) {
         arg0->unk450 = 0;
         arg0->unkA8C = 0xFFFF;
         func_8005D308_5DF08(arg0, 0xB);
-        func_80056B7C_5777C(&arg0->worldPosX, 0x34);
+        func_80056B7C_5777C(&arg0->worldPos.x, 0x34);
         if (!(arg0->unkB84 & 1)) {
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
@@ -2841,14 +2839,14 @@ s32 func_800B6688_A6538(Player *arg0) {
         temp_angle = angle | 0xE000;
     }
     arg0->unk450 -= 0x6000;
-    temp_worldPosX = arg0->worldPosX;
+    temp_worldPosX = arg0->worldPos.x;
     arg0->unk44C = 0;
     arg0->unk454 = 0;
     arg0->unkA94 = unkA94 + (temp_angle / arg0->unkB8C);
-    arg0->worldPosX = temp_worldPosX + ((item->unk0 - temp_worldPosX) >> 2);
+    arg0->worldPos.x = temp_worldPosX + ((item->unk0 - temp_worldPosX) >> 2);
     item_unk4 = item->unk4;
-    temp_worldPosZ = arg0->worldPosZ;
-    arg0->worldPosZ = temp_worldPosZ + ((item_unk4 - temp_worldPosZ) >> 2);
+    temp_worldPosZ = arg0->worldPos.z;
+    arg0->worldPos.z = temp_worldPosZ + ((item_unk4 - temp_worldPosZ) >> 2);
     func_800B02AC_A015C(arg0);
     func_800B40D4_A3F84(arg0);
     arg0->unkB8C -= 1;
@@ -2877,8 +2875,8 @@ s32 func_800B67E4_A6694(Player *arg0) {
     arg0->unk44C = 0;
     arg0->unk454 = 0;
     arg0->unk450 = arg0->unk450 - 0x6000;
-    arg0->worldPosX = arg0->worldPosX + ((item->unk0 - arg0->worldPosX) >> 2);
-    arg0->worldPosZ = arg0->worldPosZ + ((item->unk4 - arg0->worldPosZ) >> 2);
+    arg0->worldPos.x = arg0->worldPos.x + ((item->unk0 - arg0->worldPos.x) >> 2);
+    arg0->worldPos.z = arg0->worldPos.z + ((item->unk4 - arg0->worldPos.z) >> 2);
     func_800B02AC_A015C(arg0);
     func_800B40D4_A3F84(arg0);
 
@@ -2964,11 +2962,11 @@ s32 func_800B6E5C_A6D0C(Player *arg0) {
         createYRotationMatrix(&arg0->unk970, 0x1000);
         transformVector2(&D_800BAC98_AAB48, &arg0->unk970, sp10);
 
-        arg0->worldPosX = item->unkC + sp10[0];
-        arg0->worldPosY = item->unk10 + sp10[1];
-        arg0->worldPosZ = item->unk14 + sp10[2];
+        arg0->worldPos.x = item->unkC + sp10[0];
+        arg0->worldPos.y = item->unk10 + sp10[1];
+        arg0->worldPos.z = item->unk14 + sp10[2];
 
-        memcpy(&arg0->unk440, &arg0->worldPosX, 0xC);
+        memcpy(&arg0->unk440, &arg0->worldPos.x, 0xC);
 
         arg0->unkBC3 = 1;
         arg0->unkB8C = 0x32;
@@ -3028,7 +3026,7 @@ s32 func_800B7078_A6F28(Player *arg0) {
     if (arg0->unkB8C == 0) {
         arg0->unkBC0 = 0;
         arg0->unkBBF = arg0->unkBBF + 1;
-        memcpy(&arg0->unk470, &arg0->worldPosX, 0xC);
+        memcpy(&arg0->unk470, &arg0->worldPos.x, 0xC);
         arg0->unk480 = 0;
         arg0->unk468 = 0x30000;
         arg0->unkB8C = 0;
@@ -3055,7 +3053,7 @@ s32 func_800B7108_A6FB8(Player *arg0) {
     new_unkB8C = arg0->unkB8C + 1;
     arg0->unkB8C = new_unkB8C;
     arg0->unk468 = arg0->unk468 - 0x6000;
-    arg0->worldPosY = new_unk474 + arg0->unk480;
+    arg0->worldPos.y = new_unk474 + arg0->unk480;
     func_800B40D4_A3F84(arg0);
     func_8005D308_5DF08(arg0, 4);
     if (arg0->unkB8C == 16) {
@@ -3066,15 +3064,15 @@ s32 func_800B7108_A6FB8(Player *arg0) {
         tempB84 = tempB84 | 0x2000;
         arg0->unkB84 = tempB84;
         arg0->unkBBF = tempBBF;
-        func_80056B7C_5777C(&arg0->worldPosX, 0x25);
+        func_80056B7C_5777C(&arg0->worldPos.x, 0x25);
     }
     return 0;
 }
 
 s32 func_800B71E4_A7094(Player *arg0) {
-    arg0->worldPosX = arg0->unkB44;
-    arg0->worldPosY = arg0->unkB48;
-    arg0->worldPosZ = arg0->unkB4C;
+    arg0->worldPos.x = arg0->unkB44;
+    arg0->worldPos.y = arg0->unkB48;
+    arg0->worldPos.z = arg0->unkB4C;
     arg0->unkA8E = arg0->unkB74;
 
     if (func_8005D308_5DF08(arg0, 5) != 0) {
@@ -3090,9 +3088,9 @@ s32 func_800B724C_A70FC(Player *arg0) {
     u8 flags;
 
     alloc = (GameState *)getCurrentAllocation();
-    arg0->worldPosX = arg0->unkB44;
-    arg0->worldPosY = arg0->unkB48;
-    arg0->worldPosZ = arg0->unkB4C;
+    arg0->worldPos.x = arg0->unkB44;
+    arg0->worldPos.y = arg0->unkB48;
+    arg0->worldPos.z = arg0->unkB4C;
     arg0->unkA8E = arg0->unkB74;
     flags = arg0->unkBCE;
 
@@ -3108,7 +3106,7 @@ s32 func_800B724C_A70FC(Player *arg0) {
         arg0->unkBBF++;
         arg0->unkB84 |= 0x200;
         arg0->unkBC5++;
-        memcpy(&arg0->unk440, &arg0->worldPosX, 0xC);
+        memcpy(&arg0->unk440, &arg0->worldPos.x, 0xC);
         arg0->unkBC3 = 1;
         func_8006FDC8_709C8(arg0->unkBB8, 0, 0x10);
         if (arg0->unkBC7 == 0 && arg0->unkBC5 == alloc->unk74) {
@@ -3122,9 +3120,9 @@ s32 func_800B724C_A70FC(Player *arg0) {
 }
 
 s32 func_800B735C_A720C(Player *arg0) {
-    arg0->worldPosX = arg0->unkB44;
-    arg0->worldPosY = arg0->unkB48;
-    arg0->worldPosZ = arg0->unkB4C;
+    arg0->worldPos.x = arg0->unkB44;
+    arg0->worldPos.y = arg0->unkB48;
+    arg0->worldPos.z = arg0->unkB4C;
     arg0->unkA8E = arg0->unkB74;
 
     func_8005D308_5DF08(arg0, 0);
@@ -3138,9 +3136,9 @@ s32 func_800B735C_A720C(Player *arg0) {
 }
 
 s32 func_800B73CC_A727C(Player *arg0) {
-    arg0->worldPosX = arg0->unkB44;
-    arg0->worldPosY = arg0->unkB48;
-    arg0->worldPosZ = arg0->unkB4C;
+    arg0->worldPos.x = arg0->unkB44;
+    arg0->worldPos.y = arg0->unkB48;
+    arg0->worldPos.z = arg0->unkB4C;
     arg0->unkA8E = arg0->unkB74;
 
     func_8005D308_5DF08(arg0, 3);
@@ -3192,7 +3190,7 @@ s32 func_800B74E4_A7394(Player *arg0) {
         arg0->unkB8C = 0;
         arg0->unkBBF = arg0->unkBBF + 1;
         func_800BBB90(0);
-        func_80056B7C_5777C(&arg0->worldPosX, 0x26);
+        func_80056B7C_5777C(&arg0->worldPos.x, 0x26);
     }
 
     return 0;
@@ -3246,7 +3244,7 @@ s32 func_800B75F4_A74A4(Player *arg0) {
         arg0->unkBBF = temp2;
         arg0->unkB84 = temp3;
         alloc->unk63 = alloc->unk63 & 2;
-        func_80056B7C_5777C(&arg0->worldPosX, 0x4E);
+        func_80056B7C_5777C(&arg0->worldPos.x, 0x4E);
     }
 
     return 0;
@@ -3333,11 +3331,11 @@ s32 func_800B781C_A76CC(Player *arg0) {
 
         createYRotationMatrix(&arg0->unk970, 0xE00);
 
-        arg0->worldPosX = item->unkC;
-        arg0->worldPosY = item->unk10;
-        arg0->worldPosZ = item->unk14;
+        arg0->worldPos.x = item->unkC;
+        arg0->worldPos.y = item->unk10;
+        arg0->worldPos.z = item->unk14;
 
-        memcpy(&arg0->unk440, &arg0->worldPosX, 0xC);
+        memcpy(&arg0->unk440, &arg0->worldPos.x, 0xC);
 
         arg0->unkBC3 = 2;
         func_8006FDC8_709C8(arg0->unkBB8, 0, 0x10);
@@ -3348,7 +3346,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
             }
         }
 
-        func_80056B7C_5777C(&arg0->worldPosX, 0x26);
+        func_80056B7C_5777C(&arg0->worldPos.x, 0x26);
     }
 
     func_800B40D4_A3F84(arg0);

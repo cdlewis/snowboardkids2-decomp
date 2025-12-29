@@ -135,8 +135,8 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
     flag = 0;
 
     for (i = 0; i < gs->numPlayers; i++) {
-        sp20 = gs->players[i].worldPosX - arg0->unk8C;
-        sp28 = gs->players[i].worldPosZ - arg0->unk94;
+        sp20 = gs->players[i].worldPos.x - arg0->unk8C;
+        sp28 = gs->players[i].worldPos.z - arg0->unk94;
         if (((0x27FFFFE >= ((u32)sp20) + 0x13FFFFF) & (0x13FFFFF >= sp28)) == 0) {
             continue;
         }

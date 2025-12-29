@@ -55,12 +55,12 @@ void func_8005A930_5B530(Player *arg0) {
 
     allocation = getCurrentAllocation();
     sp0 = &allocation->unk30;
-    sp1 = (void *)&arg0->worldPosX;
+    sp1 = (void *)&arg0->worldPos.x;
     temp = func_80059E90_5AA90(arg0, sp0, arg0->unkB94, sp1);
     arg0->unkB94 = temp;
     result = func_8005D020_5DC20(sp0, temp, sp1, 0x200000);
-    if (result < arg0->worldPosY) {
-        arg0->worldPosY = result;
+    if (result < arg0->worldPos.y) {
+        arg0->worldPos.y = result;
     }
 }
 
@@ -86,8 +86,8 @@ s32 func_8005A9A8_5B5A8(Player *arg0) {
 
     item = func_80055D10_56910(allocation->memoryPoolId);
 
-    dx = arg0->worldPosX - item->unk0;
-    dz = arg0->worldPosZ - item->unk4;
+    dx = arg0->worldPos.x - item->unk0;
+    dz = arg0->worldPos.z - item->unk4;
 
     distSq = (s64)dx * dx + (s64)dz * dz;
 
@@ -113,8 +113,8 @@ s32 func_8005AA9C_5B69C(Player *arg0) {
     if (func_80062254_62E54(&allocation->gameData, arg0->unkB94) == 0) {
         item = func_80055D10_56910(allocation->memoryPoolId);
 
-        dx = arg0->worldPosX - item->unk0;
-        dz = arg0->worldPosZ - item->unk4;
+        dx = arg0->worldPos.x - item->unk0;
+        dz = arg0->worldPos.z - item->unk4;
 
         distSq = (s64)dx * dx + (s64)dz * dz;
 
@@ -157,14 +157,14 @@ void func_8005AB58_5B758(Player *player) {
         memcpy(&deltaPos, &targetPlayer->unkAD4, 0xC);
 
         /* Convert to world space */
-        deltaPos.x += targetPlayer->worldPosX;
-        deltaPos.y += targetPlayer->worldPosY;
-        deltaPos.z += targetPlayer->worldPosZ;
+        deltaPos.x += targetPlayer->worldPos.x;
+        deltaPos.y += targetPlayer->worldPos.y;
+        deltaPos.z += targetPlayer->worldPos.z;
 
         /* Calculate relative position to player's collision box */
-        deltaPos.x -= player->worldPosX + player->unkAD4[0];
-        deltaPos.y -= player->worldPosY + player->unkAD4[1];
-        deltaPos.z -= player->worldPosZ + player->unkAD4[2];
+        deltaPos.x -= player->worldPos.x + player->unkAD4[0];
+        deltaPos.y -= player->worldPos.y + player->unkAD4[1];
+        deltaPos.z -= player->worldPos.z + player->unkAD4[2];
 
         /* Sum of both collision box radii */
         combinedRadius = targetPlayer->unkAE0 + player->unkAE0;
@@ -194,14 +194,14 @@ void func_8005AB58_5B758(Player *player) {
 
                 /* If target has flag 0x80, do full push */
                 if (targetPlayer->unkB84 & 0x80) {
-                    player->worldPosX -= deltaPos.x;
-                    player->worldPosY -= deltaPos.y;
-                    player->worldPosZ -= deltaPos.z;
+                    player->worldPos.x -= deltaPos.x;
+                    player->worldPos.y -= deltaPos.y;
+                    player->worldPos.z -= deltaPos.z;
                 } else {
                     /* Half push */
-                    player->worldPosX -= deltaPos.x / 2;
-                    player->worldPosY -= deltaPos.y / 2;
-                    player->worldPosZ -= deltaPos.z / 2;
+                    player->worldPos.x -= deltaPos.x / 2;
+                    player->worldPos.y -= deltaPos.y / 2;
+                    player->worldPos.z -= deltaPos.z / 2;
                 }
             }
         }
@@ -248,14 +248,14 @@ void func_8005AE8C_5BA8C(Player *player) {
             memcpy(&deltaPos, (u8 *)collisionBoxPtr + 0xAE4, 0xC);
 
             /* Convert to world space */
-            deltaPos.x += targetPlayer->worldPosX;
-            deltaPos.y += targetPlayer->worldPosY;
-            deltaPos.z += targetPlayer->worldPosZ;
+            deltaPos.x += targetPlayer->worldPos.x;
+            deltaPos.y += targetPlayer->worldPos.y;
+            deltaPos.z += targetPlayer->worldPos.z;
 
             /* Calculate relative position to player's collision box */
-            deltaPos.x -= player->worldPosX + player->unkAD4[0];
-            deltaPos.y -= player->worldPosY + player->unkAD4[1];
-            deltaPos.z -= player->worldPosZ + player->unkAD4[2];
+            deltaPos.x -= player->worldPos.x + player->unkAD4[0];
+            deltaPos.y -= player->worldPos.y + player->unkAD4[1];
+            deltaPos.z -= player->worldPos.z + player->unkAD4[2];
 
             /* Sum of both collision box radii */
             combinedRadius = (&targetPlayer->unkB2C)[boxIndex] + player->unkAE0;
@@ -293,9 +293,9 @@ void func_8005AE8C_5BA8C(Player *player) {
                     deltaPos.z = ((s64)deltaPos.z * combinedRadius / dist) - deltaPos.z;
 
                     /* Push player out of collision */
-                    player->worldPosX -= deltaPos.x;
-                    player->worldPosY -= deltaPos.y;
-                    player->worldPosZ -= deltaPos.z;
+                    player->worldPos.x -= deltaPos.x;
+                    player->worldPos.y -= deltaPos.y;
+                    player->worldPos.z -= deltaPos.z;
 
                     /* Apply knockback if target is in state 2 and colliding with main collision box */
                     if ((targetPlayer->unkBD9 == 2) & (boxIndex == 0)) {
@@ -304,10 +304,10 @@ void func_8005AE8C_5BA8C(Player *player) {
                             func_80058950_59550(
                                 player,
                                 func_8006D21C_6DE1C(
-                                    targetPlayer->worldPosX,
-                                    targetPlayer->worldPosZ,
-                                    player->worldPosX,
-                                    player->worldPosZ
+                                    targetPlayer->worldPos.x,
+                                    targetPlayer->worldPos.z,
+                                    player->worldPos.x,
+                                    player->worldPos.z
                                 ),
                                 dist
                             );
@@ -372,9 +372,9 @@ s32 func_8005B400_5C000(Player *arg0, Vec3i *arg1, s32 arg2) {
 
     memcpy(&localVec, &arg0->unkAD4, 0xC);
 
-    localVec.x = localVec.x + arg0->worldPosX;
-    localVec.y = localVec.y + arg0->worldPosY;
-    localVec.z = localVec.z + arg0->worldPosZ;
+    localVec.x = localVec.x + arg0->worldPos.x;
+    localVec.y = localVec.y + arg0->worldPos.y;
+    localVec.z = localVec.z + arg0->worldPos.z;
 
     localVec.x = localVec.x - arg1->x;
     localVec.y = localVec.y - arg1->y;
@@ -583,9 +583,9 @@ s32 isPlayerInRangeAndPull(Vec3i *arg0, s32 arg1, Player *arg2) {
 
     memcpy(&localVec, arg0, 0xC);
 
-    localVec.x = localVec.x - (arg2->worldPosX + arg2->unkAD4[0]);
-    localVec.y = localVec.y - (arg2->worldPosY + arg2->unkAD4[1]);
-    localVec.z = localVec.z - (arg2->worldPosZ + arg2->unkAD4[2]);
+    localVec.x = localVec.x - (arg2->worldPos.x + arg2->unkAD4[0]);
+    localVec.y = localVec.y - (arg2->worldPos.y + arg2->unkAD4[1]);
+    localVec.z = localVec.z - (arg2->worldPos.z + arg2->unkAD4[2]);
 
     combinedRadius = arg1 + arg2->unkAE0;
     negRadius = -combinedRadius;
@@ -604,9 +604,9 @@ s32 isPlayerInRangeAndPull(Vec3i *arg0, s32 arg1, Player *arg2) {
             localVec.y = ((s64)localVec.y * combinedRadius / dist) - localVec.y;
             localVec.z = ((s64)localVec.z * combinedRadius / dist) - localVec.z;
 
-            arg2->worldPosX -= localVec.x;
-            arg2->worldPosY -= localVec.y;
-            arg2->worldPosZ -= localVec.z;
+            arg2->worldPos.x -= localVec.x;
+            arg2->worldPos.y -= localVec.y;
+            arg2->worldPos.z -= localVec.z;
 
             return 1;
         }
@@ -639,7 +639,7 @@ s16 func_8005CE98_5DA98(Player *arg0) {
             result = func_8006D21C_6DE1C(v1->unk0, v1->unk4, v2->unk0, v2->unk4) + 0x800;
         } else {
             D_80090F90_91B90_item *item = func_80055D10_56910(allocation->memoryPoolId);
-            result = func_8006D21C_6DE1C(item->unk0, item->unk4, arg0->worldPosX, arg0->worldPosZ);
+            result = func_8006D21C_6DE1C(item->unk0, item->unk4, arg0->worldPos.x, arg0->worldPos.z);
             if (arg0->unkB84 & 2) {
                 result += 0x1000;
             }

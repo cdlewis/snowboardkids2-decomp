@@ -72,11 +72,11 @@ s8 func_800BA694_AA544(Player *player) {
         normalizedZ = (sv.valZ << 13) / dist;
 
         idx14 = SEC3(gs)[player->unkB94].unk14;
-        posX = player->worldPosX - (SEC1(gs)[idx14].x << 16);
+        posX = player->worldPos.x - (SEC1(gs)[idx14].x << 16);
         sv.valX = posX;
 
         idx14 = SEC3(gs)[player->unkB94].unk14;
-        posZ = player->worldPosZ - (SEC1(gs)[idx14].z << 16);
+        posZ = player->worldPos.z - (SEC1(gs)[idx14].z << 16);
         sv.valZ = posZ;
 
         product = (((s64)(-((s16)normalizedZ))) * posX) + (((s64)((s16)normalizedX)) * posZ);

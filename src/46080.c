@@ -1614,9 +1614,9 @@ void func_80047F90_48B90(Struct_func_80047EFC_48AFC *arg0) {
     elem = (Element_80047F90 *)arg0;
 
 loop:
-    elem->unk8 = arg0->unk64->worldPosX;
-    elem->unkC = arg0->unk64->worldPosY + heightOffset;
-    elem->unk10 = arg0->unk64->worldPosZ;
+    elem->unk8 = arg0->unk64->worldPos.x;
+    elem->unkC = arg0->unk64->worldPos.y + heightOffset;
+    elem->unk10 = arg0->unk64->worldPos.z;
     i += 1;
     elem += 1;
     if (i < 3)
@@ -1659,9 +1659,9 @@ void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *arg0) {
     elem = (Element_80047F90 *)arg0;
 
 loop:
-    elem->unk8 = arg0->unk64->worldPosX;
-    elem->unkC = arg0->unk64->worldPosY + heightOffset;
-    elem->unk10 = arg0->unk64->worldPosZ;
+    elem->unk8 = arg0->unk64->worldPos.x;
+    elem->unkC = arg0->unk64->worldPos.y + heightOffset;
+    elem->unk10 = arg0->unk64->worldPos.z;
     i += 1;
     elem += 1;
     if (i < 3)
@@ -1703,9 +1703,9 @@ void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *arg0) {
     elem = (Element_80047F90 *)arg0;
 
 loop:
-    elem->unk8 = arg0->unk64->worldPosX;
-    elem->unkC = arg0->unk64->worldPosY + heightOffset;
-    elem->unk10 = arg0->unk64->worldPosZ;
+    elem->unk8 = arg0->unk64->worldPos.x;
+    elem->unkC = arg0->unk64->worldPos.y + heightOffset;
+    elem->unk10 = arg0->unk64->worldPos.z;
     i += 1;
     elem += 1;
     if (i < 3)
@@ -1833,9 +1833,9 @@ void func_8004841C_4901C(func_80048350_48F50_arg *arg0) {
     elem = (Element_80048720 *)arg0;
 
 loop:
-    elem->unk8 = arg0->unkA4->worldPosX;
-    elem->unkC = arg0->unkA4->worldPosY + heightOffset;
-    elem->unk10 = arg0->unkA4->worldPosZ;
+    elem->unk8 = arg0->unkA4->worldPos.x;
+    elem->unkC = arg0->unkA4->worldPos.y + heightOffset;
+    elem->unk10 = arg0->unkA4->worldPos.z;
     j += 1;
     elem += 1;
     if (j < 5)
@@ -1907,9 +1907,9 @@ position_loop:
     heightOffset = 0x200000;
     elem = (Element_80048720 *)arg0;
 loop2:
-    elem->unk8 = arg0->unkA4->worldPosX;
-    elem->unkC = arg0->unkA4->worldPosY + heightOffset;
-    elem->unk10 = arg0->unkA4->worldPosZ;
+    elem->unk8 = arg0->unkA4->worldPos.x;
+    elem->unkC = arg0->unkA4->worldPos.y + heightOffset;
+    elem->unk10 = arg0->unkA4->worldPos.z;
     i += 1;
     elem += 1;
     if (i < 5)
@@ -1947,9 +1947,9 @@ void func_80048720_49320(func_80048350_48F50_arg *arg0) {
     elem = (Element_80048720 *)arg0;
 
 loop:
-    elem->unk8 = arg0->unkA4->worldPosX;
-    elem->unkC = arg0->unkA4->worldPosY + heightOffset;
-    elem->unk10 = arg0->unkA4->worldPosZ;
+    elem->unk8 = arg0->unkA4->worldPos.x;
+    elem->unkC = arg0->unkA4->worldPos.y + heightOffset;
+    elem->unk10 = arg0->unkA4->worldPos.z;
     j += 1;
     elem += 1;
     if (j < 5)

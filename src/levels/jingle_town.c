@@ -85,9 +85,9 @@ void func_800BB320_B42B0(B4240FuncArg *arg0) {
     for (i = 0; i < gs->numPlayers; i++) {
         player = &gs->players[i];
         if (isPlayerInRangeAndPull(&pos, 0xC0000, player) != 0) {
-            target[0] = ((player->worldPosX + player->unkAD4[0] - pos.x) / 2) + pos.x;
-            target[1] = ((player->worldPosY + player->unkAD4[1] - pos.x) / 2) + pos.y;
-            target[2] = ((player->worldPosZ + player->unkAD4[2] - pos.x) / 2) + pos.z;
+            target[0] = ((player->worldPos.x + player->unkAD4[0] - pos.x) / 2) + pos.x;
+            target[1] = ((player->worldPos.y + player->unkAD4[1] - pos.x) / 2) + pos.y;
+            target[2] = ((player->worldPos.z + player->unkAD4[2] - pos.x) / 2) + pos.z;
             func_800589CC_595CC(&gs->players[i], &target[0]);
         }
     }

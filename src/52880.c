@@ -195,7 +195,7 @@ void func_80051E90_52A90(Struct_52880 *arg0) {
             func_80058A10_59610(result);
             for (i = 0; i < 3; i++) {
                 if (result->unkB6C >= 100) {
-                    func_8004A9A8_4B5A8(&result->worldPosX, result->unkB94, &result->unk44C);
+                    func_8004A9A8_4B5A8(&result->worldPos.x, result->unkB94, &result->unk44C);
                     func_80059A48_5A648(result, -100);
                 }
             }
@@ -1665,7 +1665,7 @@ void func_80054D70_55970(void *arg) {
                 func_80058A10_59610(player);
                 for (i = 0; i < 3; i++) {
                     if (player->unkB6C >= 100) {
-                        func_8004A9A8_4B5A8(&player->worldPosX, player->unkB94, &player->unk44C);
+                        func_8004A9A8_4B5A8(&player->worldPos.x, player->unkB94, &player->unk44C);
                         func_80059A48_5A648(player, -100);
                     }
                 }

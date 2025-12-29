@@ -694,12 +694,12 @@ void func_80051348_51F48(SkiTrailTask *task) {
         transformSource = D_80090E80_91A80;
         do {
             transformVector(transformSource, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + outputOffset));
-            outputPtr->skiOffsets[0].x -= task->player->worldPosX;
-            outputPtr->skiOffsets[0].y -= task->player->worldPosY;
+            outputPtr->skiOffsets[0].x -= task->player->worldPos.x;
+            outputPtr->skiOffsets[0].y -= task->player->worldPos.y;
             outputOffset += 0xC;
             transformSource += 6;
             i++;
-            outputPtr->skiOffsets[0].z -= task->player->worldPosZ;
+            outputPtr->skiOffsets[0].z -= task->player->worldPos.z;
             outputPtr = (volatile SkiTrailTask *)((u8 *)outputPtr + 0xC);
         } while (i < 2);
     } else {
@@ -708,12 +708,12 @@ void func_80051348_51F48(SkiTrailTask *task) {
         transformSource = D_80090E98_91A98;
         do {
             transformVector(transformSource, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + outputOffset));
-            outputPtr->skiOffsets[0].x -= task->player->worldPosX;
-            outputPtr->skiOffsets[0].y -= task->player->worldPosY;
+            outputPtr->skiOffsets[0].x -= task->player->worldPos.x;
+            outputPtr->skiOffsets[0].y -= task->player->worldPos.y;
             outputOffset += 0xC;
             transformSource += 6;
             i++;
-            outputPtr->skiOffsets[0].z -= task->player->worldPosZ;
+            outputPtr->skiOffsets[0].z -= task->player->worldPos.z;
             outputPtr = (volatile SkiTrailTask *)((u8 *)outputPtr + 0xC);
         } while (i < 2);
     }
@@ -751,12 +751,12 @@ void func_8005152C_5212C(SkiTrailTask *task) {
     task->particleRight.unk18 = task->particleLeft.unk18;
     task->particleRight.unk19 = task->particleLeft.unk19;
 
-    task->particleLeft.unk4 = task->skiOffsets[0].x + task->player->worldPosX;
-    task->particleLeft.unk8 = task->skiOffsets[0].y + task->player->worldPosY;
-    task->particleLeft.unkC = task->skiOffsets[0].z + task->player->worldPosZ;
-    task->particleRight.unk4 = task->skiOffsets[1].x + task->player->worldPosX;
-    task->particleRight.unk8 = task->skiOffsets[1].y + task->player->worldPosY;
-    task->particleRight.unkC = task->skiOffsets[1].z + task->player->worldPosZ;
+    task->particleLeft.unk4 = task->skiOffsets[0].x + task->player->worldPos.x;
+    task->particleLeft.unk8 = task->skiOffsets[0].y + task->player->worldPos.y;
+    task->particleLeft.unkC = task->skiOffsets[0].z + task->player->worldPos.z;
+    task->particleRight.unk4 = task->skiOffsets[1].x + task->player->worldPos.x;
+    task->particleRight.unk8 = task->skiOffsets[1].y + task->player->worldPos.y;
+    task->particleRight.unkC = task->skiOffsets[1].z + task->player->worldPos.z;
 
     for (i = 0; i < 4; i++) {
         func_80067EDC_68ADC(i, &task->particleLeft);
