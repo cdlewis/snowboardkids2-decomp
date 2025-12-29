@@ -650,11 +650,11 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
             sp58[2] = 0;
             sp58[1] = 0;
             outVec1 = sp68;
-            rotateVectorY(inputVec, (s16)angle, outVec1);
+            rotateVectorY(inputVec, angle, outVec1);
             temp = randA();
             sp58[0] = -(temp & 0xFF) << 13;
             outVec2 = sp78;
-            rotateVectorY(inputVec, (s16)angle, outVec2);
+            rotateVectorY(inputVec, angle, outVec2);
             sp68[0] += arg0->unk434;
             sp68[1] += arg0->unk438;
             sp68[2] += arg0->unk43C;

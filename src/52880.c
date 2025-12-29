@@ -956,11 +956,11 @@ void func_80053434_54034(Struct_52880 *arg0) {
             arg0->unk4.x = arg0->unk4.x + sp18[0];
             arg0->unk4.z = arg0->unk4.z + sp18[2];
             s0 = atan2Fixed(-sp18[0], -sp18[2]);
-            rotateVectorY(&arg0->velY, (s16)-s0, rotateVec);
+            rotateVectorY(&arg0->velY, -s0, rotateVec);
             if (rotateVec[2] < 0) {
                 rotateVec[2] = -rotateVec[2];
             }
-            rotateVectorY(rotateVec, (s16)s0, &arg0->velY);
+            rotateVectorY(rotateVec, s0, &arg0->velY);
             arg0->unk42 = -1;
         } else {
             arg0->velY = arg0->unk4.x - savedVec[0];
@@ -1375,11 +1375,11 @@ void func_80054144_54D44(Struct_52880 *arg0) {
             arg0->unk4.x = arg0->unk4.x + sp18[0];
             arg0->unk4.z = arg0->unk4.z + sp18[2];
             temp_v0 = atan2Fixed(-sp18[0], -sp18[2]);
-            rotateVectorY(&arg0->velY, (s16)-temp_v0, rotateVec);
+            rotateVectorY(&arg0->velY, -temp_v0, rotateVec);
             if (rotateVec[2] < 0) {
                 rotateVec[2] = -rotateVec[2];
             }
-            rotateVectorY(rotateVec, (s16)temp_v0, &arg0->velY);
+            rotateVectorY(rotateVec, temp_v0, &arg0->velY);
             arg0->unk42 = -1;
         } else {
             arg0->velY = arg0->unk4.x - savedVec[0];

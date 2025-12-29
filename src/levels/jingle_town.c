@@ -247,7 +247,7 @@ void func_800BB89C_B482C(B4240FuncArg *arg0) {
             var_v1 = -0x80;
         }
         arg0->rotation = arg0->rotation + var_v1;
-        rotateVectorY(&D_800BBC14_B4BA4, (s32)(s16)arg0->rotation, &rotatedVec);
+        rotateVectorY(&D_800BBC14_B4BA4, (s16)arg0->rotation, &rotatedVec);
 
         allocUnk30 = (u8 *)alloc + 0x30;
         arg0->unk3C += rotatedVec.x;

@@ -53,7 +53,7 @@ void transformVector(s16 *, s16 *, void *);
 void transformVector2(void *matrix, void *vector, s32 *output);
 void transformVector3(s32 *, Transform3D *, s32 *);
 
-void rotateVectorY(void *, s32, void *);
+void rotateVectorY(void *, s16, void *);
 
 void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ);
 

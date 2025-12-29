@@ -1151,7 +1151,7 @@ void func_80042E40_43A40(Func42E40Arg *arg0) {
     if (gameState->unk76 == 0) {
         func_80042A6C_4366C((Func42BA4Arg *)arg0);
         arg0->unk40 += 0x100;
-        rotateVectorY(arg0->unk2C, (s16)arg0->unk40, rotated);
+        rotateVectorY(arg0->unk2C, arg0->unk40, rotated);
         transformVector((s16 *)rotated, arg0->unk28->unk9F0, &arg0->unk8);
         if (arg0->unk42 != 0) {
             arg0->unk42 = 0;

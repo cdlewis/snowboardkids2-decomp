@@ -190,9 +190,9 @@ s32 func_800B13D4_A1284(Player *arg0) {
         arg0->unkA94 = arg0->unkBB2 + 0x1000;
     }
 
-    rotateVectorY(&arg0->unk44C, (s16)(-arg0->unkBB2), sp10);
+    rotateVectorY(&arg0->unk44C, -arg0->unkBB2, sp10);
     sp10[0] = 0;
-    rotateVectorY(sp10, (s16)(arg0->unkBB2), &arg0->unk44C);
+    rotateVectorY(sp10, arg0->unkBB2, &arg0->unk44C);
 
     arg0->unk450 = arg0->unk450 - arg0->unkAB8;
     func_800B02AC_A015C(arg0);
@@ -2073,7 +2073,7 @@ s32 func_800B4DB8_A4C68(Player *arg0) {
     dist = distance_3d(arg0->unk44C, arg0->unk450, arg0->unk454);
     if (dist <= 0xFFFF) {
         if (arg0->unkB84 & 2) {
-            rotateVectorY(D_800BABD4_AAA84, (s16)(arg0->unkA94 + 0x1000), &arg0->unk44C);
+            rotateVectorY(D_800BABD4_AAA84, arg0->unkA94 + 0x1000, &arg0->unk44C);
         } else {
             rotateVectorY(D_800BABD4_AAA84, arg0->unkA94, &arg0->unk44C);
         }
@@ -2168,7 +2168,7 @@ s32 func_800B50C0_A4F70(Player *arg0) {
         arg0->unkBBF++;
         angle = arg0->unkAC4;
         arg0->unkA94 = angle;
-        rotateVectorY(&arg0->unkAC8, (s16)angle, &arg0->unk44C);
+        rotateVectorY(&arg0->unkAC8, angle, &arg0->unk44C);
 
         if (arg0->unkB84 & 2) {
             arg0->unkA94 += 0x1000;

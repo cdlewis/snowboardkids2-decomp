@@ -180,7 +180,7 @@ void func_800BB5BC_AB46C(func_800BB2B0_arg *task) {
 
         task->rotationAngle = task->rotationAngle + var_v1;
 
-        rotateVectorY(&D_800BBBC0_ABA70[4], (s16)task->rotationAngle, &rotatedVec);
+        rotateVectorY(&D_800BBBC0_ABA70[4], task->rotationAngle, &rotatedVec);
 
         task->targetPosition[0] += rotatedVec[0];
         task->targetPosition[2] += rotatedVec[2];
@@ -239,7 +239,7 @@ void func_800BB7D4_AB684(func_800BB2B0_arg *task) {
 
         task->rotationAngle = task->rotationAngle + var_v1;
 
-        rotateVectorY(&D_800BBBC0_ABA70[4].unk4[1].unk0, (s16)task->rotationAngle, &rotatedVec);
+        rotateVectorY(&D_800BBBC0_ABA70[4].unk4[1].unk0, task->rotationAngle, &rotatedVec);
 
         gameData = &gs->gameData;
         task->targetPosition[0] += rotatedVec[0];

@@ -3553,7 +3553,7 @@ void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0) {
     new_var = randA() & 0xFF;
     rotationAngle = ((new_var - 0x80) * 6) - -0x1000;
 
-    rotateVectorY(&D_80090E2C_91A2C, (s16)(arg0->unk24->unkA94 + rotationAngle), &arg0->unk28);
+    rotateVectorY(&D_80090E2C_91A2C, arg0->unk24->unkA94 + rotationAngle, &arg0->unk28);
 
     arg0->unk28 = arg0->unk28 + arg0->unk24->unk44C;
     arg0->unk2C = arg0->unk2C + arg0->unk24->unk450;
@@ -3739,7 +3739,7 @@ void func_8004B834_4C434(func_8004B834_4C434_arg *arg0) {
     randomValue3 = randA();
     addr = &D_80090E40_91A40;
     *addr = (randomValue3 & 0xFF) * 7 * 256;
-    rotateVectorY(addr - 2, (s16)rotationAngle, &arg0->unk28);
+    rotateVectorY(addr - 2, rotationAngle, &arg0->unk28);
 
     arg0->unk28 = arg0->unk28 + arg0->unk24->unk44C;
 
@@ -3914,7 +3914,7 @@ void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0) {
     rotationAngle = ((randA() & 0xFF) << 5) + arg0->unk24->unkA94;
     addr = &D_80090E4C_91A4C;
     *addr = (randA() & 0xFF) * 0x580;
-    rotateVectorY(addr - 2, (s16)rotationAngle, (void *)((s32)arg0 + 0x28));
+    rotateVectorY(addr - 2, rotationAngle, (void *)((s32)arg0 + 0x28));
     arg0->unk28 = arg0->unk28 + arg0->unk24->unk44C;
     arg0->unk2C = arg0->unk2C + (arg0->unk24->unk450 + ((randA() & 0xFF) * 0x600));
     arg0->unk30 = arg0->unk30 + arg0->unk24->unk454;
