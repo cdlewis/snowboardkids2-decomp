@@ -159,12 +159,16 @@ class TaskRunner:
         For array candidates:
             - $ARGUMENT_1, $ARGUMENT_2, etc. are replaced with array elements
             - $ARGUMENT is replaced with the first element (backwards compat)
+            - $REMAINING_ARGUMENTS is replaced with a comma-separated list of elements 2+
         """
         if isinstance(candidate, list):
             prompt = template
             # Replace indexed arguments ($ARGUMENT_1, $ARGUMENT_2, etc.)
             for i, arg in enumerate(candidate, start=1):
                 prompt = prompt.replace(f'$ARGUMENT_{i}', arg if arg else '')
+            # Replace $REMAINING_ARGUMENTS with comma-separated list of elements 2+
+            remaining = candidate[1:] if len(candidate) > 1 else []
+            prompt = prompt.replace('$REMAINING_ARGUMENTS', ', '.join(remaining))
             # Backwards compatibility: $ARGUMENT refers to first element
             prompt = prompt.replace('$ARGUMENT', candidate[0] if candidate else '')
             return prompt
@@ -535,6 +539,7 @@ Task files must have either "prompt" (inline string) or "template" (file path),
 but not both. Variables in the prompt or template will be replaced:
   - $ARGUMENT: The selected argument (or first element if array)
   - $ARGUMENT_1, $ARGUMENT_2, ...: Individual elements when using array format
+  - $REMAINING_ARGUMENTS: Comma-separated list of elements 2+ (for array format)
 
 When accept_best_effort is true, changes are committed even if the
 argument still appears in the script output (best effort fix).
