@@ -125,7 +125,88 @@ s32 func_8005AA9C_5B69C(Player *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005AB58_5B758);
+void func_8005AB58_5B758(Player *player) {
+    Vec3i deltaPos;
+    GameState *allocation;
+    s32 unused1;
+    s32 combinedRadius;
+    s32 playerIndex;
+    Player *targetPlayer;
+    s32 numPlayers;
+
+    allocation = (GameState *)getCurrentAllocation();
+    numPlayers = allocation->numPlayers;
+
+    for (playerIndex = 0; playerIndex < allocation->numPlayers; playerIndex++) {
+        targetPlayer = &allocation->players[playerIndex];
+
+        /* Skip collision if players are on the same team */
+        if (player->unkBB8 == targetPlayer->unkBB8) {
+            continue;
+        }
+
+        /* Skip if either player has collision disabled (flag 0x10) */
+        if (player->unkB88 & 0x10) {
+            continue;
+        }
+        if (targetPlayer->unkB88 & 0x10) {
+            continue;
+        }
+
+        /* Copy target's collision box local position */
+        memcpy(&deltaPos, &targetPlayer->unkAD4, 0xC);
+
+        /* Convert to world space */
+        deltaPos.x += targetPlayer->worldPosX;
+        deltaPos.y += targetPlayer->worldPosY;
+        deltaPos.z += targetPlayer->worldPosZ;
+
+        /* Calculate relative position to player's collision box */
+        deltaPos.x -= player->worldPosX + player->unkAD4[0];
+        deltaPos.y -= player->worldPosY + player->unkAD4[1];
+        deltaPos.z -= player->worldPosZ + player->unkAD4[2];
+
+        /* Sum of both collision box radii */
+        combinedRadius = targetPlayer->unkAE0 + player->unkAE0;
+
+        /* Quick AABB check before expensive distance calculation */
+        if (-combinedRadius < deltaPos.x && deltaPos.x < combinedRadius && -combinedRadius < deltaPos.y &&
+            deltaPos.y < combinedRadius && -combinedRadius < deltaPos.z && deltaPos.z < combinedRadius) {
+            s32 dist;
+
+            dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z);
+
+            if (dist < combinedRadius) {
+                /* Avoid divide by zero */
+                if (dist == 0) {
+                    dist = 1;
+                }
+
+                /* Calculate push vector to separate the players */
+                deltaPos.x = ((s64)deltaPos.x * combinedRadius / dist) - deltaPos.x;
+                deltaPos.y = ((s64)deltaPos.y * combinedRadius / dist) - deltaPos.y;
+                deltaPos.z = ((s64)deltaPos.z * combinedRadius / dist) - deltaPos.z;
+
+                /* Skip push if player has flag 0x80 */
+                if (player->unkB84 & 0x80) {
+                    continue;
+                }
+
+                /* If target has flag 0x80, do full push */
+                if (targetPlayer->unkB84 & 0x80) {
+                    player->worldPosX -= deltaPos.x;
+                    player->worldPosY -= deltaPos.y;
+                    player->worldPosZ -= deltaPos.z;
+                } else {
+                    /* Half push */
+                    player->worldPosX -= deltaPos.x / 2;
+                    player->worldPosY -= deltaPos.y / 2;
+                    player->worldPosZ -= deltaPos.z / 2;
+                }
+            }
+        }
+    }
+}
 
 /**
  * Checks collision between a player and the target player (player index 1).
