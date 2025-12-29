@@ -21,6 +21,10 @@ extern u16 D_8009ADE0_9B9E0;
 USE_ASSET(_459310);
 USE_ASSET(_41A1D0);
 USE_ASSET(_3F6670);
+USE_ASSET(_4547D0);
+
+extern u16 D_8008F2AC_8FEAC;
+extern u16 D_8008F2B8_8FEB8;
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -94,7 +98,8 @@ typedef struct {
 } Func343FCArg;
 
 typedef struct {
-    /* 0x000 */ u8 pad0[0xABE];
+    /* 0x000 */ u8 pad0[0xABC];
+    /* 0xABC */ u16 unkABC;
     /* 0xABE */ u16 unkABE;
     /* 0xAC0 */ u16 unkAC0;
     /* 0xAC2 */ u16 unkAC2;
@@ -107,6 +112,22 @@ typedef struct {
     /* 0xACC */ u8 padACC[0xA];
     /* 0xAD6 */ u8 unkAD6;
 } AllocationStruct;
+
+typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ u8 unkA;
+    /* 0x0B */ u8 padB;
+} Func356C0Entry; // size 0x0C
+
+typedef struct {
+    /* 0x00 */ Func356C0Entry entries[4]; // 0x00 - 0x2F
+    /* 0x30 */ u8 pad30[0x18];
+    /* 0x48 */ u8 unk48;
+    /* 0x49 */ u8 unk49;
+} Func356C0Arg;
 
 typedef struct {
     /* 0x00 */ s16 unk0;
@@ -550,7 +571,41 @@ void func_80034A94_35694(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034AC0_356C0);
+extern void func_80034BD8_357D8(void);
+void func_80034CD0_358D0(Func34574Arg *arg0);
+
+void func_80034AC0_356C0(Func356C0Arg *arg0) {
+    AllocationStruct *allocation;
+    void *asset;
+    s32 i;
+    s16 temp_a0;
+    s16 xOffset;
+    s16 yOffset;
+
+    allocation = getCurrentAllocation();
+    asset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    setCleanupCallback(func_80034CD0_358D0);
+
+    arg0->unk49 = 0;
+
+    temp_a0 = allocation->unkABC - 6;
+    xOffset = temp_a0;
+    yOffset = (allocation->unkAC8 * 0x38) - 0x3C;
+
+    if (arg0->unk48 == 0) {
+        xOffset = -(s16)((temp_a0 << 16) >> 16);
+    }
+
+    for (i = 0; i < 4; i++) {
+        arg0->entries[i].unk0 = xOffset + (&D_8008F2AC_8FEAC)[i];
+        arg0->entries[i].unk2 = yOffset + (&D_8008F2B8_8FEB8)[i];
+        arg0->entries[i].unk8 = (i % 8) + 0x10;
+        arg0->entries[i].unkA = 0x12;
+        arg0->entries[i].unk4 = asset;
+    }
+
+    setCallback(func_80034BD8_357D8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034BD8_357D8);
 
