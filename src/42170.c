@@ -483,7 +483,7 @@ void func_80041810_42410(Func4179CArg *arg0) {
     effectPos[2] = arg0->player->worldPos.z;
     effectPos[1] = effectPos[1] + 0xFFFE0000;
 
-    if (func_8005B9E4_5C5E4(effectPos, 0x180000, 0x320000, arg0->player->unkBB8) != 0) {
+    if (func_8005B9E4_5C5E4((Vec3i *)effectPos, 0x180000, 0x320000, arg0->player->unkBB8) != 0) {
         arg0->player->unkBCE |= 1;
     }
     arg0->unk30 = 0;

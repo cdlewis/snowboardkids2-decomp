@@ -453,7 +453,111 @@ Player *func_8005B548_5C148(Vec3i *arg0, s32 arg1, s32 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005B730_5C330);
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005B9E4_5C5E4);
+/**
+ * Checks 2D collision (xz-plane) between a point and all players.
+ * Pushes players out of collision and may apply knockback.
+ *
+ * @param arg0 Position to check collision against
+ * @param arg1 Radius to add to player's collision radius
+ * @param arg2 Maximum height difference for collision
+ * @param arg3 Player index to skip (team check)
+ * @return 1 if knockback was applied, 0 otherwise
+ */
+s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
+    Vec3i deltaPos;
+    GameState *allocation;
+    s32 combinedRadius;
+    s32 playerIndex;
+    Player *targetPlayer;
+    s32 dist;
+    s32 negRadius;
+    s32 deltaX, deltaZ;
+
+    allocation = (GameState *)getCurrentAllocation();
+
+    for (playerIndex = 0; playerIndex < allocation->numPlayers; playerIndex++) {
+        targetPlayer = &allocation->players[playerIndex];
+
+        /* Skip collision if players are on the same team */
+        if (arg3 == targetPlayer->unkBB8) {
+            continue;
+        }
+
+        /* Copy target's collision box local position */
+        memcpy(&deltaPos, &targetPlayer->unkAD4, 0xC);
+
+        /* Convert to world space */
+        deltaPos.x += targetPlayer->worldPos.x;
+        deltaPos.y += targetPlayer->worldPos.y;
+        deltaPos.z += targetPlayer->worldPos.z;
+
+        /* Calculate relative position */
+        deltaPos.x -= arg0->x;
+        deltaPos.y -= arg0->y;
+        deltaPos.z -= arg0->z;
+
+        /* Height constraint check - must be above ground and within range */
+        if (deltaPos.y <= 0) {
+            continue;
+        }
+        if (deltaPos.y >= arg2) {
+            continue;
+        }
+
+        /* Sum of both collision radii */
+        combinedRadius = targetPlayer->unkAE0 + arg1;
+        negRadius = -combinedRadius;
+
+        /* Quick AABB check on xz plane */
+        if (negRadius >= deltaPos.x || deltaPos.x >= combinedRadius) {
+            continue;
+        }
+        if (negRadius >= deltaPos.z || deltaPos.z >= combinedRadius) {
+            continue;
+        }
+
+        /* 2D distance check (xz plane only) */
+        dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.z * deltaPos.z);
+
+        if (dist >= combinedRadius) {
+            continue;
+        }
+
+        /* Avoid divide by zero */
+        if (dist == 0) {
+            dist = 1;
+        }
+
+        /* Calculate push vector (xz only) */
+        deltaX = deltaPos.x;
+        deltaZ = deltaPos.z;
+        deltaPos.x = ((s64)deltaX * combinedRadius / dist) - deltaX;
+        deltaPos.z = ((s64)deltaZ * combinedRadius / dist) - deltaZ;
+
+        /* Skip push if target has flag 0x80 */
+        if (targetPlayer->unkB84 & 0x80) {
+            continue;
+        }
+
+        /* Apply push to target player */
+        targetPlayer->worldPos.x += deltaPos.x;
+        targetPlayer->worldPos.z += deltaPos.z;
+
+        /* Check if push was significant enough for knockback */
+        dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.z * deltaPos.z);
+
+        if (dist > 0x30000) {
+            func_80058950_59550(
+                targetPlayer,
+                func_8006D21C_6DE1C(arg0->x, arg0->z, targetPlayer->worldPos.x, targetPlayer->worldPos.z),
+                dist
+            );
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005BCB8_5C8B8);
 
