@@ -17,13 +17,6 @@ extern void *D_800BBC14_B4BA4;
 extern Vec3i D_800BBC08_B4B98;
 
 typedef struct {
-    u8 _pad0[0x30];
-    void *unk30;
-    u8 _pad34[0x42];
-    u8 unk76;
-} AllocationStruct;
-
-typedef struct {
     u8 _pad0[0x24];
     void *unk24;
     void *unk28;
@@ -216,46 +209,46 @@ void func_800BB63C_B45CC(B4240FuncArg *arg0) {
 }
 
 void func_800BB89C_B482C(B4240FuncArg *arg0) {
-    AllocationStruct *alloc;
+    B4240AllocationStruct *alloc;
     Vec3i rotatedVec;
-    s32 idx;
-    s16 delta;
-    s16 var_v1;
-    void *allocUnk30;
-    s32 *pos;
+    s32 waypointOffset;
+    s16 angleDiff;
+    s16 clampedAngle;
+    void *terrainPtr;
+    s32 *posPtr;
 
     alloc = getCurrentAllocation();
     if (alloc->unk76 == 0) {
-        idx = (arg0->unk52 * 8) + (arg0->unk50 * 0x14);
-        delta = (func_8006D21C_6DE1C(
-                     *(s32 *)((u8 *)D_800BBB94_B4B24 + idx),
-                     *(s32 *)((u8 *)D_800BBB98_B4B28 + idx),
+        waypointOffset = (arg0->unk52 * 8) + (arg0->unk50 * 0x14);
+        angleDiff = (func_8006D21C_6DE1C(
+                     *(s32 *)((u8 *)D_800BBB94_B4B24 + waypointOffset),
+                     *(s32 *)((u8 *)D_800BBB98_B4B28 + waypointOffset),
                      arg0->unk3C,
                      arg0->unk44
                  ) -
                  arg0->rotation) &
                 0x1FFF;
-        var_v1 = delta;
-        if (delta >= 0x1001) {
-            var_v1 = 0xE000;
-            var_v1 = delta | var_v1;
+        clampedAngle = angleDiff;
+        if (angleDiff >= 0x1001) {
+            clampedAngle = 0xE000;
+            clampedAngle = angleDiff | clampedAngle;
         }
-        if ((s16)var_v1 >= 0x81) {
-            var_v1 = 0x80;
+        if ((s16)clampedAngle >= 0x81) {
+            clampedAngle = 0x80;
         }
-        if ((s16)var_v1 < -0x80) {
-            var_v1 = -0x80;
+        if ((s16)clampedAngle < -0x80) {
+            clampedAngle = -0x80;
         }
-        arg0->rotation = arg0->rotation + var_v1;
+        arg0->rotation = arg0->rotation + clampedAngle;
         rotateVectorY(&D_800BBC14_B4BA4, (s16)arg0->rotation, &rotatedVec);
 
-        allocUnk30 = (u8 *)alloc + 0x30;
+        terrainPtr = &alloc->unk30;
         arg0->unk3C += rotatedVec.x;
-        pos = &arg0->unk3C;
+        posPtr = &arg0->unk3C;
         arg0->unk44 += rotatedVec.z;
 
-        arg0->unk56 = func_80060A3C_6163C(allocUnk30, arg0->unk56, pos);
-        arg0->unk40 = func_80061A64_62664(allocUnk30, (u16)arg0->unk56, pos);
+        arg0->unk56 = func_80060A3C_6163C(terrainPtr, arg0->unk56, posPtr);
+        arg0->unk40 = func_80061A64_62664(terrainPtr, (u16)arg0->unk56, posPtr);
 
         arg0->unk48 += arg0->unk4C;
         arg0->unk4C += -0x8000;
