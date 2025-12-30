@@ -65,7 +65,7 @@ void initTitleTextSequence(E090_struct *arg0);
 void updateTitleTextDelay(E090_struct *arg0);
 void updateTitleLetterReveal(E090_struct *arg0);
 void updateTitleFinalFadeIn(E090_struct *arg0);
-void func_8000D7A0_E3A0(E090_struct *arg0);
+void cleanupLogoScreen(E090_struct *arg0);
 
 void initLogoNodeFadeIn(E090_struct *arg0) {
     func_8006FE28_70A28(&arg0->unk8, 0, 0, 0);
@@ -162,7 +162,7 @@ void updateTitleFinalFadeIn(E090_struct *arg0) {
     }
 }
 
-void func_8000D7A0_E3A0(E090_struct *arg0) {
+void cleanupLogoScreen(E090_struct *arg0) {
     arg0->unk1E0 = freeNodeMemory(arg0->unk1E0);
     arg0->unk1E4 = freeNodeMemory(arg0->unk1E4);
     arg0->unk1E8 = freeNodeMemory(arg0->unk1E8);
@@ -232,7 +232,7 @@ void func_8000D974_E574(void) {
             break;
         case 7:
         default:
-            func_8000D7A0_E3A0(arg0);
+            cleanupLogoScreen(arg0);
             return;
     }
 
