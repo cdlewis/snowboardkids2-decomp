@@ -5,8 +5,8 @@
 
 typedef struct {
     u8 pad[0x218];
-    s8 unk218;
-} Func8000C2B4Arg;
+    s8 renderMode;
+} NodeRenderModeArg;
 
 typedef struct {
     u8 padding[0x214];
@@ -37,7 +37,7 @@ typedef struct {
 
 void setAuxRenderEnabled(Func8000C268Arg *arg0);
 void clearAuxRenderEnabled(Func8000C268Arg *arg0);
-void func_8000C2B4_CEB4(Func8000C2B4Arg *arg0, s32 arg1);
+void setNodeRenderMode(NodeRenderModeArg *arg0, s32 arg1);
 void func_8000C2BC_CEBC(Func8000C2BCArg *arg0, u8 arg1, u8 arg2, u8 arg3);
 void func_8000C2CC_CECC(Func8000C2CCArg *arg0, s32 arg1, s16 arg2);
 void func_8000C334_CF34(Func8000C334Arg *arg0, s32 *arg1, s16 arg2);

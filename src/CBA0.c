@@ -138,11 +138,11 @@ void setNodeScale(Func8000C2ACArg *arg0, s32 arg1) {
 
 typedef struct {
     u8 pad[0x218];
-    s8 unk218;
-} Func8000C2B4Arg;
+    s8 renderMode;
+} NodeRenderModeArg;
 
-void func_8000C2B4_CEB4(Func8000C2B4Arg *arg0, s32 arg1) {
-    arg0->unk218 = arg1;
+void setNodeRenderMode(NodeRenderModeArg *arg0, s32 arg1) {
+    arg0->renderMode = arg1;
 }
 
 typedef struct {
@@ -285,7 +285,7 @@ typedef struct {
     u16 unk20E; // 0x20E
     s32 unk210; // 0x210
     u8 pad214[0x4];
-    s8 unk218; // 0x218
+    s8 renderMode; // 0x218
 } ExtendedNode;
 
 typedef struct {
@@ -323,7 +323,7 @@ void func_8000C7A4_D3A4(Func8000C7A4Arg *arg0) {
         enqueueAuxBufferRender((AuxBufferContext *)arg0);
         temp_v1 = arg0->unk0;
 
-        switch (temp_v1->unk218) {
+        switch (temp_v1->renderMode) {
             case 0:
                 temp_v1->unk20E = 0;
                 temp_a1 = arg0->unk0;

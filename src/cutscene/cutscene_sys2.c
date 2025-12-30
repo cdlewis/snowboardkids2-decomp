@@ -32,7 +32,7 @@ void cutsceneSys2Wipe_exec(cutsceneSys2Wipe_exec_arg0 *params, cutsceneSys2Wipe_
 
     func_8000C2CC_CECC((Func8000C2CCArg *)&state->matrix, temp_rotation / 100, params->unk2);
     func_8000C334_CF34((Func8000C334Arg *)&state->matrix, (s32 *)&world_pos, params->unk2);
-    func_8000C2B4_CEB4((Func8000C2B4Arg *)&state->matrix, params->render_flags);
+    setNodeRenderMode((NodeRenderModeArg *)&state->matrix, params->render_flags);
 }
 
 s32 cutsceneSys2Wipe_isDone(void) {
