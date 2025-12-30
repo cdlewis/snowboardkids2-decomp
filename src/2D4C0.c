@@ -275,8 +275,6 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
     }
 }
 
-void func_8002D140_2DD40(Func8002CFACArg *);
-
 void func_8002CFAC_2DBAC(Func8002CFACArg *arg0) {
     GameState *allocation;
     s32 vec3[3];
