@@ -199,7 +199,31 @@ void func_800B5F20_1E2FD0(func_800B5F20_1E2FD0_arg0 *arg0, func_800B5F20_1E2FD0_
     arg0->unk34 = arg1->unk2C;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5F2C_1E2FDC);
+void func_800B5F2C_1E2FDC(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2) {
+    s16 temp_a3;
+    s16 temp_a1;
+    int new_var;
+    s32 var_v1;
+    s32 var_v0;
+
+    *(volatile u16 *)&arg0->unk20 = *(u16 *)&arg0->unk20 & 0x1FFF;
+    temp_a3 = arg0->unk20;
+    temp_a1 = arg1 & 0x1FFF;
+    new_var = temp_a1 - temp_a3;
+    arg0->unk70 = 0;
+    var_v1 = new_var;
+    arg0->unk24 = temp_a1;
+    if (var_v1 >= 0x1001) {
+        var_v0 = temp_a3 + 0x2000;
+        var_v1 = temp_a1 - var_v0;
+    } else if (var_v1 < -0x1000) {
+        var_v0 = temp_a3 - 0x2000;
+        var_v1 = temp_a1 - var_v0;
+    }
+    arg0->unk2C = arg2;
+    arg0->unk30 = arg2;
+    arg0->unk28 = var_v1 / arg2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5FB0_1E3060);
 
