@@ -39,7 +39,7 @@ void animateMenuExpandHorizontal(DC90TaskStruct *arg0) {
     }
 }
 
-void func_8000D100_DD00(DC90TaskStruct *arg0) {
+void animateMenuExpandVertical(DC90TaskStruct *arg0) {
     s16 temp;
     s16 temp2;
 
@@ -120,7 +120,7 @@ void func_8000D2C8_DEC8(DC90TaskStruct *arg0) {
             animateMenuExpandHorizontal(arg0);
             break;
         case 2:
-            func_8000D100_DD00(arg0);
+            animateMenuExpandVertical(arg0);
             break;
         case 3:
             result = func_8000D144_DD44(arg0);
