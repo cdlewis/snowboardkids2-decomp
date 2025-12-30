@@ -522,74 +522,82 @@ void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1) {
     }
 }
 
-void func_80063A94_64694(DisplayListObject *arg0) {
-    Mtx sp30;
-    f32 sp70;
-    f32 sp74;
-    int new_var;
-    s32 new_var2;
-    f32 sp78;
-    f32 sp7C;
-    f32 sp80;
-    f32 sp84;
-    LookAt *s1;
-    Mtx *temp_v0;
-    Gfx *temp_v1;
-    s32 temp_a0;
-    s32 temp_a1;
-    s16 *matrixData = (s16 *)arg0;
+void func_80063A94_64694(DisplayListObject *obj) {
+    Mtx tempMtx;
+    f32 eyeX;
+    f32 eyeY;
+    int fracMask;
+    s32 unused;
+    f32 eyeZ;
+    f32 upX;
+    f32 upY;
+    f32 upZ;
+    LookAt *lookAt;
+    Mtx *matrices;
+    Gfx *dl;
+    s32 posXInt;
+    s32 posZInt;
+    s16 *rotationMatrix = (s16 *)obj;
 
-    if (arg0->unk30 == NULL) {
-        temp_v0 = arenaAlloc16(0x80);
-        arg0->unk30 = temp_v0;
-        if (temp_v0 == NULL) {
+    if (obj->unk30 == NULL) {
+        matrices = arenaAlloc16(0x80);
+        obj->unk30 = matrices;
+        if (matrices == NULL) {
             return;
         }
-        ((s32 *)arg0->unk30)[0] = 0x10000;
-        ((s32 *)arg0->unk30)[1] = 0;
-        ((s32 *)arg0->unk30)[2] = 1;
-        ((s32 *)arg0->unk30)[3] = 0;
-        ((s32 *)arg0->unk30)[4] = 0;
-        ((s32 *)arg0->unk30)[5] = 0x10000;
-        ((s32 *)arg0->unk30)[6] =
-            (arg0->transform.translation.x & 0xFFFF0000) + ((u16 *)&arg0->transform.translation.y)[0];
-        ((s32 *)arg0->unk30)[7] = (arg0->transform.translation.z & 0xFFFF0000) + 1;
-        ((s32 *)arg0->unk30)[8] = 0;
-        ((s32 *)arg0->unk30)[9] = 0;
-        ((s32 *)arg0->unk30)[10] = 0;
-        ((s32 *)arg0->unk30)[11] = 0;
-        ((s32 *)arg0->unk30)[12] = 0;
-        ((s32 *)arg0->unk30)[13] = 0;
-        ((s32 *)arg0->unk30)[14] = (arg0->transform.translation.x << 16) + ((u16 *)&arg0->transform.translation.y)[1];
-        new_var = 0xFFFF;
-        ((s32 *)arg0->unk30)[15] = arg0->transform.translation.z << 16;
-        ((s32 *)arg0->unk30)[16] = ((matrixData[0] * 2) & 0xFFFF0000) + (-(s32)((u16)matrixData[1] >> 15) & new_var);
-        ((s32 *)arg0->unk30)[17] = (matrixData[2] * 2) & 0xFFFF0000;
-        ((s32 *)arg0->unk30)[18] = ((matrixData[3] * 2) & 0xFFFF0000) + (-(s32)((u16)matrixData[4] >> 15) & new_var);
-        ((s32 *)arg0->unk30)[19] = (matrixData[5] * 2) & 0xFFFF0000;
-        ((s32 *)arg0->unk30)[20] = ((matrixData[6] * 2) & 0xFFFF0000) + (-(s32)((u16)matrixData[7] >> 15) & 0xFFFF);
-        ((s32 *)arg0->unk30)[21] = (matrixData[8] * 2) & 0xFFFF0000;
-        ((s32 *)arg0->unk30)[22] = 0;
-        ((s32 *)arg0->unk30)[23] = 1;
-        ((s32 *)arg0->unk30)[24] = ((matrixData[0] << 17) & 0xFFFF0000) + ((matrixData[1] * 2) & new_var);
-        ((s32 *)arg0->unk30)[25] = (matrixData[2] << 17) & 0xFFFF0000;
-        ((s32 *)arg0->unk30)[26] = ((matrixData[3] << 17) & 0xFFFF0000) + ((matrixData[4] * 2) & new_var);
-        ((s32 *)arg0->unk30)[27] = (matrixData[5] << 17) & 0xFFFF0000;
-        ((s32 *)arg0->unk30)[28] = ((matrixData[6] << 17) & 0xFFFF0000) + ((matrixData[7] * 2) & new_var);
-        ((s32 *)arg0->unk30)[29] = (matrixData[8] << 17) & 0xFFFF0000;
-        ((s32 *)arg0->unk30)[30] = 0;
-        ((s32 *)arg0->unk30)[31] = 0;
+        /* First matrix: translation matrix */
+        /* Integer portion (s32[0-7]) */
+        ((s32 *)obj->unk30)[0] = 0x10000; /* m[0][0] = 1.0 (integer part: 1, high; 0, low) */
+        ((s32 *)obj->unk30)[1] = 0;       /* m[0][1] = 0, m[0][2] = 0 */
+        ((s32 *)obj->unk30)[2] = 1;       /* m[0][3] = 0 (int=0, frac packed), m[1][0] = 0 (int=1 for perspective) */
+        ((s32 *)obj->unk30)[3] = 0;       /* m[1][1] = 0, m[1][2] = 0 */
+        ((s32 *)obj->unk30)[4] = 0;       /* m[1][3] = 0, m[2][0] = 0 */
+        ((s32 *)obj->unk30)[5] = 0x10000; /* m[2][1] = 0, m[2][2] = 1.0 (integer part) */
+        ((s32 *)obj->unk30)[6] = (obj->transform.translation.x & 0xFFFF0000) + ((u16 *)&obj->transform.translation.y)[0];
+        ((s32 *)obj->unk30)[7] = (obj->transform.translation.z & 0xFFFF0000) + 1;
+        /* Fractional portion (s32[8-15]) */
+        ((s32 *)obj->unk30)[8] = 0;
+        ((s32 *)obj->unk30)[9] = 0;
+        ((s32 *)obj->unk30)[10] = 0;
+        ((s32 *)obj->unk30)[11] = 0;
+        ((s32 *)obj->unk30)[12] = 0;
+        ((s32 *)obj->unk30)[13] = 0;
+        ((s32 *)obj->unk30)[14] = (obj->transform.translation.x << 16) + ((u16 *)&obj->transform.translation.y)[1];
+        fracMask = 0xFFFF;
+        ((s32 *)obj->unk30)[15] = obj->transform.translation.z << 16;
+        /* Second matrix: rotation matrix built from Transform3D at offset 0 */
+        /* Integer portion (s32[16-23]) - extracts high bits from s15 rotation values */
+        ((s32 *)obj->unk30)[16] =
+            ((rotationMatrix[0] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationMatrix[1] >> 15) & fracMask);
+        ((s32 *)obj->unk30)[17] = (rotationMatrix[2] * 2) & 0xFFFF0000;
+        ((s32 *)obj->unk30)[18] =
+            ((rotationMatrix[3] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationMatrix[4] >> 15) & fracMask);
+        ((s32 *)obj->unk30)[19] = (rotationMatrix[5] * 2) & 0xFFFF0000;
+        ((s32 *)obj->unk30)[20] =
+            ((rotationMatrix[6] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationMatrix[7] >> 15) & 0xFFFF);
+        ((s32 *)obj->unk30)[21] = (rotationMatrix[8] * 2) & 0xFFFF0000;
+        ((s32 *)obj->unk30)[22] = 0;
+        ((s32 *)obj->unk30)[23] = 1;
+        /* Fractional portion (s32[24-31]) - extracts low bits from s15 rotation values */
+        ((s32 *)obj->unk30)[24] = ((rotationMatrix[0] << 17) & 0xFFFF0000) + ((rotationMatrix[1] * 2) & fracMask);
+        ((s32 *)obj->unk30)[25] = (rotationMatrix[2] << 17) & 0xFFFF0000;
+        ((s32 *)obj->unk30)[26] = ((rotationMatrix[3] << 17) & 0xFFFF0000) + ((rotationMatrix[4] * 2) & fracMask);
+        ((s32 *)obj->unk30)[27] = (rotationMatrix[5] << 17) & 0xFFFF0000;
+        ((s32 *)obj->unk30)[28] = ((rotationMatrix[6] << 17) & 0xFFFF0000) + ((rotationMatrix[7] * 2) & fracMask);
+        ((s32 *)obj->unk30)[29] = (rotationMatrix[8] << 17) & 0xFFFF0000;
+        ((s32 *)obj->unk30)[30] = 0;
+        ((s32 *)obj->unk30)[31] = 0;
     }
 
-    if (arg0->unk20->flags & 1) {
-        s1 = arenaAlloc16(0x20);
-        if (s1 == NULL) {
+    if (obj->unk20->flags & 1) {
+        lookAt = arenaAlloc16(0x20);
+        if (lookAt == NULL) {
             return;
         }
 
-        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
-        guLookAtReflect(&sp30, s1, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
-        gSPLookAt(gRegionAllocPtr++, s1);
+        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)obj, &eyeX, &eyeY, &eyeZ, &upX, &upY, &upZ);
+        guLookAtReflect(&tempMtx, lookAt, 0.0f, 0.0f, 0.0f, eyeX, eyeY, eyeZ, upX, upY, upZ);
+        gSPLookAt(gRegionAllocPtr++, lookAt);
     }
 
     if (gGraphicsMode != 3) {
@@ -598,49 +606,49 @@ void func_80063A94_64694(DisplayListObject *arg0) {
 
         gGraphicsMode = 3;
 
-        if (arg0->unk24 != NULL) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        if (obj->unk24 != NULL) {
+            gSPSegment(gRegionAllocPtr++, 1, obj->unk24);
         }
 
-        if (arg0->unk28 != NULL) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        if (obj->unk28 != NULL) {
+            gSPSegment(gRegionAllocPtr++, 2, obj->unk28);
         }
 
-        if (arg0->unk2C != NULL) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        if (obj->unk2C != NULL) {
+            gSPSegment(gRegionAllocPtr++, 3, obj->unk2C);
         }
 
-        D_800A2D40_A3940 = arg0->unk24;
-        D_800A2D44_A3944 = arg0->unk28;
-        D_800A2D48_A3948 = arg0->unk2C;
+        D_800A2D40_A3940 = obj->unk24;
+        D_800A2D44_A3944 = obj->unk28;
+        D_800A2D48_A3948 = obj->unk2C;
     } else {
-        if (arg0->unk24 != D_800A2D40_A3940) {
-            if (arg0->unk24 != NULL) {
-                gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        if (obj->unk24 != D_800A2D40_A3940) {
+            if (obj->unk24 != NULL) {
+                gSPSegment(gRegionAllocPtr++, 1, obj->unk24);
             }
-            D_800A2D40_A3940 = arg0->unk24;
+            D_800A2D40_A3940 = obj->unk24;
         }
 
-        if (arg0->unk28 != D_800A2D44_A3944) {
-            if (arg0->unk28 != NULL) {
-                gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        if (obj->unk28 != D_800A2D44_A3944) {
+            if (obj->unk28 != NULL) {
+                gSPSegment(gRegionAllocPtr++, 2, obj->unk28);
             }
-            D_800A2D44_A3944 = arg0->unk28;
+            D_800A2D44_A3944 = obj->unk28;
         }
 
-        if (arg0->unk2C != D_800A2D48_A3948) {
-            if (arg0->unk2C != NULL) {
-                gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        if (obj->unk2C != D_800A2D48_A3948) {
+            if (obj->unk2C != NULL) {
+                gSPSegment(gRegionAllocPtr++, 3, obj->unk2C);
             }
-            D_800A2D48_A3948 = arg0->unk2C;
+            D_800A2D48_A3948 = obj->unk2C;
         }
     }
 
-    gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, obj->unk30, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-    gSPMatrix(gRegionAllocPtr++, &arg0->unk30[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, &obj->unk30[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 }
 
 void func_8006405C_64C5C(DisplayListObject *arg0) {
