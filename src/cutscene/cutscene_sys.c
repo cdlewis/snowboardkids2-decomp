@@ -141,7 +141,7 @@ s32 cutsceneSysWipeColor_validate(void) {
 }
 
 void cutsceneSysWipeColor_exec(cutsceneSysWipeColor_exec_arg0 *arg0, cutsceneSysWipeColor_exec_arg1 *arg1) {
-    func_8000C2BC_CEBC((Func8000C2BCArg *)&arg1->unkFF8, arg0->unk0, arg0->unk1, arg0->unk2);
+    setNodeWipeColor((NodeWipeColorArg *)&arg1->unkFF8, arg0->unk0, arg0->unk1, arg0->unk2);
 }
 
 void func_800B2550_1DF600(func_800B2550_1DF600_arg **arg0) {

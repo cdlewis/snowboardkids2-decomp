@@ -10,10 +10,10 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x214];
-    u8 unk214;
-    u8 unk215;
-    u8 unk216;
-} Func8000C2BCArg;
+    u8 wipeR;
+    u8 wipeG;
+    u8 wipeB;
+} NodeWipeColorArg;
 
 typedef struct {
     u8 pad[0x204];
@@ -38,7 +38,7 @@ typedef struct {
 void setAuxRenderEnabled(Func8000C268Arg *arg0);
 void clearAuxRenderEnabled(Func8000C268Arg *arg0);
 void setNodeRenderMode(NodeRenderModeArg *arg0, s32 arg1);
-void func_8000C2BC_CEBC(Func8000C2BCArg *arg0, u8 arg1, u8 arg2, u8 arg3);
+void setNodeWipeColor(NodeWipeColorArg *node, u8 r, u8 g, u8 b);
 void func_8000C2CC_CECC(Func8000C2CCArg *arg0, s32 arg1, s16 arg2);
 void func_8000C334_CF34(Func8000C334Arg *arg0, s32 *arg1, s16 arg2);
 void func_8000C440_D040(void *arg0, s32 arg1, s32 arg2, u16 arg3, s32 arg4, s32 arg5, s32 arg6);

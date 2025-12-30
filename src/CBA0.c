@@ -147,15 +147,15 @@ void setNodeRenderMode(NodeRenderModeArg *arg0, s32 arg1) {
 
 typedef struct {
     u8 pad[0x214];
-    u8 unk214;
-    u8 unk215;
-    u8 unk216;
-} Func8000C2BCArg;
+    u8 wipeR;
+    u8 wipeG;
+    u8 wipeB;
+} NodeWipeColorArg;
 
-void func_8000C2BC_CEBC(Func8000C2BCArg *arg0, u8 arg1, u8 arg2, u8 arg3) {
-    arg0->unk214 = arg1;
-    arg0->unk215 = arg2;
-    arg0->unk216 = arg3;
+void setNodeWipeColor(NodeWipeColorArg *node, u8 r, u8 g, u8 b) {
+    node->wipeR = r;
+    node->wipeG = g;
+    node->wipeB = b;
 }
 
 typedef struct {
