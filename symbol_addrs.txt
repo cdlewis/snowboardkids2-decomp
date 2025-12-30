@@ -88,6 +88,7 @@ initStaticSpriteEffectTask = 0x8000CE20; // rom:0xDA20
 updateStaticSpriteEffectTask = 0x8000CEA4; // rom:0xDAA4
 cleanupStaticSpriteEffectTask = 0x8000CFA0; // rom:0xDBA0
 scheduleStaticSpriteEffectTask = 0x8000CFCC; // rom:0xDBCC
+initMenuFadeIn = 0x8000D090; // rom:0xDC90
 staticSpriteEffectTexture = 0x8008CDD0; // rom:0x8D9D0
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
