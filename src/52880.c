@@ -41,7 +41,11 @@ typedef struct {
     s16 unk74;
     u8 padding1b[0xEE];
     s16 unk164[6];
-    u8 padding1c[0x7E0];
+    u8 padding_170_434[0x2C4];
+    s32 unk434[3];
+    u8 padding_440_44C[0xC];
+    s32 unk44C[3];
+    u8 padding_458_950[0x4F8];
     s16 unk950;
     u8 padding2[0x242];
     u16 unkB94;
@@ -130,9 +134,12 @@ void func_80051FC4_52BC4(Struct_52880 *arg0);
 void func_800524A4_530A4(Struct_52880 *arg0);
 void func_800525F4_531F4(Struct_52880 *arg0);
 void func_8005383C_5443C(Struct_52880 *arg0);
-void func_800548C8_554C8(void);
+void func_800548C8_554C8(Struct_52880 *arg0);
+void func_80054AE4_556E4(Struct_52880 *arg0);
 
 extern s16 D_80090F60_91B60[];
+extern s32 D_80090F68_91B68;
+extern s32 D_80090F74_91B74;
 
 void func_80051C80_52880(s32 *arg0, s32 arg1) {
     s32 dist;
@@ -1569,7 +1576,57 @@ void func_80054880_55480(Struct_52880 *arg0) {
     setCallbackWithContinue(func_800548C8_554C8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/52880", func_800548C8_554C8);
+void func_800548C8_554C8(Struct_52880 *arg0) {
+    Alloc_52880 *alloc;
+    s16 playerIdx;
+    s32 vel;
+    Unk10Element_52880 *players;
+    void *position;
+    s16 *playerIdxPtr;
+    void *velocity;
+    s32 pad[4];
+
+    alloc = getCurrentAllocation();
+    playerIdxPtr = &arg0->unk42;
+    arg0->unk40 = alloc->unk10[arg0->unk42].unkB94;
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 6);
+
+    arg0->unk0 = alloc->unk44;
+    arg0->unk4E = 0;
+    playerIdx = *playerIdxPtr;
+    players = (Unk10Element_52880 *)&arg0->unk4;
+    transformVector(D_80090F60_91B60, alloc->unk10[arg0->unk42].unk164, position = players);
+
+    playerIdx = arg0->unk42;
+    transformVectorRelative(alloc->unk10[0].unk434, alloc->unk10[arg0->unk42].unk164, velocity = &arg0->velY);
+
+    vel = arg0->velX;
+    if (vel < 0) {
+        arg0->velX = -vel;
+    }
+
+    vel = (arg0->velX = arg0->velX / 26);
+    if (vel <= 0x1FFFF) {
+        arg0->velX = 0x20000;
+    }
+    if (arg0->velX > 0x300000) {
+        arg0->velX = 0x300000;
+    }
+
+    D_80090F74_91B74 = D_80090F68_91B68 - arg0->velX;
+
+    playerIdx = *playerIdxPtr;
+    transformVector(&D_80090F60_91B60[6], alloc->unk10[arg0->unk42].unk164, velocity);
+
+    arg0->velY = arg0->unk4.x - arg0->velY;
+    arg0->velZ = arg0->unk4.y - arg0->velZ;
+    arg0->velX = arg0->unk4.z - arg0->velX;
+    if ((!alloc->unk10[*playerIdxPtr].unkB94) && (!alloc->unk10[*playerIdxPtr].unkB94)) {}
+    players = alloc->unk10;
+    memcpy(&arg0->unk30, players[*playerIdxPtr].unk44C, 12);
+    func_80056B7C_5777C(position, 0x23);
+    setCallbackWithContinue(func_80054AE4_556E4);
+}
 
 void func_80054AE4_556E4(Struct_52880 *arg0) {
     Alloc_55650 *alloc;
