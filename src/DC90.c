@@ -10,7 +10,7 @@
 extern s32 gControllerInputs;
 
 extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
-extern void *func_8000D144_DD44(DC90TaskStruct *arg0);
+extern void *handleMenuSelection(DC90TaskStruct *arg0);
 
 void func_8000D2C8_DEC8(DC90TaskStruct *arg0);
 void func_8000D448_E048(DC90TaskStruct *arg0);
@@ -51,7 +51,7 @@ void animateMenuExpandVertical(DC90TaskStruct *arg0) {
     arg0->unk3C = (temp < 0x41) ? 0x40 : temp2 - 0x10;
 }
 
-void *func_8000D144_DD44(DC90TaskStruct *arg0) {
+void *handleMenuSelection(DC90TaskStruct *arg0) {
     void *temp_v0 = getTable2DEntry((Table_B934 *)arg0->unk8, arg0->unkE, arg0->unk10);
     unsigned long new_var;
 
@@ -123,7 +123,7 @@ void func_8000D2C8_DEC8(DC90TaskStruct *arg0) {
             animateMenuExpandVertical(arg0);
             break;
         case 3:
-            result = func_8000D144_DD44(arg0);
+            result = handleMenuSelection(arg0);
             flag = 1;
             break;
         case 4:
