@@ -774,44 +774,54 @@ void func_800BC7A8_B1C98(Player *arg0) {
     }
 }
 
-void func_800BC89C_B1D8C(Player *arg0) {
-    GameState *alloc;
+/**
+ * Updates ground contact positions for the boss's 9 joints.
+ * For each joint, computes X/Z world position from local offsets,
+ * then finds the terrain height at that position.
+ * Enqueues debug callbacks to render joint positions.
+ */
+void func_800BC89C_B1D8C(Player *boss) {
+    GameState *gameState;
     GameDataLayout *gameData;
-    s32 i;
-    s32 mask;
-    s32 offset;
+    s32 jointIndex;
+    s32 isFlying;
+    s32 jointOffset;
     u8 *jointWritePtr;
     JointPosition *jointPos;
     u16 sectorIndex;
 
-    alloc = getCurrentAllocation();
-    i = 0;
-    mask = 0x400000;
-    gameData = &alloc->gameData;
-    jointWritePtr = (u8 *)arg0;
-    offset = 0xA10;
+    gameState = getCurrentAllocation();
+    jointIndex = 0;
+    isFlying = 0x400000;
+    gameData = &gameState->gameData;
+    jointWritePtr = (u8 *)boss;
+    jointOffset = 0xA10;
 
     do {
-        if (arg0->unkB84 & mask) {
-            *(volatile s32 *)(jointWritePtr + 0xA10) = arg0->unk970.translation.x + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x18 + offset);
-            *(volatile s32 *)(jointWritePtr + 0xA18) = arg0->unk970.translation.z + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x20 + offset);
+        if (boss->unkB84 & isFlying) {
+            // Flying mode: use flying joint offsets
+            *(volatile s32 *)(jointWritePtr + 0xA10) = boss->unk970.translation.x + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x18 + jointOffset);
+            *(volatile s32 *)(jointWritePtr + 0xA18) = boss->unk970.translation.z + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x20 + jointOffset);
         } else {
-            *(volatile s32 *)(jointWritePtr + 0xA10) = arg0->unk970.translation.x + *(s32 *)((u8 *)&D_800BC054_B1544 + offset);
-            *(volatile s32 *)(jointWritePtr + 0xA18) = arg0->unk970.translation.z + *(s32 *)((u8 *)&D_800BC05C_B154C + offset);
+            // Ground mode: use ground joint offsets
+            *(volatile s32 *)(jointWritePtr + 0xA10) = boss->unk970.translation.x + *(s32 *)((u8 *)&D_800BC054_B1544 + jointOffset);
+            *(volatile s32 *)(jointWritePtr + 0xA18) = boss->unk970.translation.z + *(s32 *)((u8 *)&D_800BC05C_B154C + jointOffset);
         }
 
-        jointPos = (JointPosition *)((u8 *)arg0 + offset);
-        sectorIndex = func_80059E90_5AA90((void *)arg0, gameData, arg0->unkB94, jointPos);
-        offset += 0xC;
-        i += 1;
+        jointPos = (JointPosition *)((u8 *)boss + jointOffset);
+        sectorIndex = func_80059E90_5AA90((void *)boss, gameData, boss->unkB94, jointPos);
+        jointOffset += 0xC;
+        jointIndex += 1;
+        // Compute terrain height at joint position
         *(volatile s32 *)(jointWritePtr + 0xA14) = func_8005CFC0_5DBC0(gameData, sectorIndex, jointPos, 0x100000);
 
         jointWritePtr += 0xC;
-    } while (i < 9);
+    } while (jointIndex < 9);
 
-    arg0->unkBC1 = 1;
+    boss->unkBC1 = 1;
 
-    for (i = 0; i < 4; i++) {
-        debugEnqueueCallback(i, 1, func_800B9500_A93B0, (void *)arg0);
+    // Enqueue debug render callbacks for all 4 viewports
+    for (jointIndex = 0; jointIndex < 4; jointIndex++) {
+        debugEnqueueCallback(jointIndex, 1, func_800B9500_A93B0, (void *)boss);
     }
 }
