@@ -49,10 +49,10 @@ void updateQuadDisplayList(func_80002B50_3750_arg **state) {
     Transform3D rotationMatrix;
     func_80002B50_3750_arg *model;
     s32 i;
-    u8 *element;
-    s32 offset;
-    s32 *dataPtr;
-    s32 two;
+    u8 *displayListElement;
+    s32 elementOffset;
+    s32 *translationData;
+    s32 positiveRotationIndex;
 
     memcpy(&rotationMatrix, identityMatrix, 0x20);
 
@@ -69,9 +69,9 @@ void updateQuadDisplayList(func_80002B50_3750_arg **state) {
             *(u16 *)((u8 *)state + 0xF4) = 0;
             break;
         case 1: {
-            u16 temp = *(u16 *)((u8 *)state + 0xF6) + 0x5B;
-            *(u16 *)((u8 *)state + 0xF6) = temp;
-            if ((s16)temp >= 0x2AB) {
+            u16 newSpeed = *(u16 *)((u8 *)state + 0xF6) + 0x5B;
+            *(u16 *)((u8 *)state + 0xF6) = newSpeed;
+            if ((s16)newSpeed >= 0x2AB) {
                 *(u16 *)((u8 *)state + 0xF6) = 0x2AA;
             }
             *(u16 *)((u8 *)state + 0xF4) = *(u16 *)((u8 *)state + 0xF4) + *(u16 *)((u8 *)state + 0xF6);
@@ -79,14 +79,14 @@ void updateQuadDisplayList(func_80002B50_3750_arg **state) {
     }
 
     i = 0;
-    two = 2;
-    offset = 4;
-    dataPtr = D_8008C120_8CD20;
+    positiveRotationIndex = 2;
+    elementOffset = 4;
+    translationData = D_8008C120_8CD20;
 loop:
     if (i == 0) {
         goto positive;
     }
-    if (i != two) {
+    if (i != positiveRotationIndex) {
         goto negative;
     }
 positive:
@@ -95,12 +95,12 @@ positive:
 negative:
     createCombinedRotationMatrix(&rotationMatrix, -*(u16 *)((u8 *)state + 0xF4), 0x1000);
 after:
-    element = (u8 *)state + offset;
-    memcpy(&rotationMatrix.translation, dataPtr, 0xC);
-    func_8006B084_6BC84(&rotationMatrix, (*state)->matrix18, element);
-    offset += 0x3C;
-    dataPtr += 3;
-    enqueueModelDisplayList(*state, (DisplayListObject *)element);
+    displayListElement = (u8 *)state + elementOffset;
+    memcpy(&rotationMatrix.translation, translationData, 0xC);
+    func_8006B084_6BC84(&rotationMatrix, (*state)->matrix18, displayListElement);
+    elementOffset += 0x3C;
+    translationData += 3;
+    enqueueModelDisplayList(*state, (DisplayListObject *)displayListElement);
     if (++i < 4) {
         goto loop;
     }
