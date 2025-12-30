@@ -33,7 +33,8 @@ typedef struct {
     /* 0x60 */ u8 pad60[0x1];
     /* 0x61 */ u8 unk61;
     /* 0x62 */ s8 unk62;
-} Func297D8Arg;
+    /* 0x63 */ u8 pad63;
+} Func297D8Arg; /* size = 0x64 */
 
 typedef struct {
     /* 0x00 */ SceneModel *unk0;
