@@ -132,7 +132,7 @@ typedef struct {
     s32 unk204;
 } Func8000C2ACArg;
 
-void func_8000C2AC_CEAC(Func8000C2ACArg *arg0, s32 arg1) {
+void setNodeScale(Func8000C2ACArg *arg0, s32 arg1) {
     arg0->unk204 = arg1;
 }
 

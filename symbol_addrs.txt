@@ -69,6 +69,7 @@ enqueueAuxBufferSetup = 0x8000C238; // rom:0xCE38
 setAuxRenderEnabled = 0x8000C268; // rom:0xCE68
 clearAuxRenderEnabled = 0x8000C278; // rom:0xCE78
 copyNodePosition = 0x8000C28C; // rom:0xCE8C
+setNodeScale = 0x8000C2AC; // rom:0xCEAC
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14
