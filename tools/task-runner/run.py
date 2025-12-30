@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import hashlib
 import json
 import subprocess
 import sys
@@ -131,8 +132,12 @@ class TaskRunner:
     def _filter_by_hash(self, candidates):
         """Filter candidates based on hash parity.
 
-        Uses the candidate key (function name) to compute a hash, then filters
-        to only even or odd hashes based on self.hash_filter.
+        Uses the candidate key (function name) to compute a deterministic hash,
+        then filters to only even or odd hashes based on self.hash_filter.
+
+        Note: We use MD5 instead of Python's built-in hash() because hash() is
+        randomized per-process (PYTHONHASHSEED), which would cause --odds and
+        --evens to work on the same functions when run in separate processes.
         """
         if not self.hash_filter:
             return candidates
@@ -141,7 +146,8 @@ class TaskRunner:
         for candidate in candidates:
             key = self._get_candidate_key(candidate)
             if key:
-                h = hash(key)
+                # Use MD5 for deterministic hashing across processes
+                h = int(hashlib.md5(key.encode()).hexdigest(), 16)
                 is_even = (h % 2) == 0
                 if self.hash_filter == 'evens' and is_even:
                     filtered.append(candidate)
