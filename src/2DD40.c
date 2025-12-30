@@ -313,8 +313,6 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
     }
 }
 
-void func_8002E314_2EF14(Func2E024Arg *);
-
 typedef struct {
     s32 unk0;
     Transform3D unk4;
@@ -342,13 +340,15 @@ typedef struct FuncE170Container FuncE170Container;
 struct FuncE170Container {
     /* 0x00 */ FuncE170Element unk0[2];
     /* 0xC8 */ void (*unkC8)(FuncE170Container *);
-    /* 0xCC */ s16 unkCC;
+    /* 0xCC */ u16 unkCC;
     /* 0xCE */ s16 unkCE;
     /* 0xD0 */ u8 pad9[0x2];
     /* 0xD2 */ u8 unkD2;
     /* 0xD3 */ u8 pad9b[0x2];
     /* 0xD5 */ u8 unkD5;
 };
+
+void func_8002E314_2EF14(FuncE170Container *);
 
 void func_8002E170_2ED70(Func2E024Arg *arg0) {
     FuncE170Container *container = (FuncE170Container *)arg0;
@@ -402,7 +402,156 @@ void func_8002E170_2ED70(Func2E024Arg *arg0) {
     setCallback(func_8002E314_2EF14);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002E314_2EF14);
+void func_8002E314_2EF14(FuncE170Container *arg0) {
+    GameState *allocation;
+    s32 i;
+    FuncE170Element *ptr;
+    int new_var;
+    allocation = getCurrentAllocation();
+    for (i = 0; i < arg0->unkD5; i++) {
+        ptr = &arg0->unk0[i];
+        switch (ptr->unk5E) {
+            case 0:
+                if (ptr->unk62 != 0) {
+                    ptr->unk62 = 0;
+                    ptr->unk50 = 0x14;
+                    ptr->unk5E = 1;
+                }
+                break;
+
+            case 1:
+                ptr->unk5A++;
+                if (((s16)ptr->unk5A) >= 0x3C) {
+                    if (ptr->unk62 != 0) {
+                        ptr->unk5A = 0;
+                        ptr->unk62 = 0;
+                        ptr->unk50 = 0x15;
+                        ptr->unk5E = 2;
+                        if (arg0->unkD2 == 2) {
+                            arg0->unk0[0].unk5E = 7;
+                            arg0->unk0[0].unk50 = 0xA;
+                        }
+                    }
+                }
+                break;
+
+            case 2:
+                if (ptr->unk62 != 0) {
+                    u8 d2;
+                    ptr->unk62 = 0;
+                    d2 = arg0->unkD2;
+                    if (d2 < 2) {
+                        arg0->unk0[d2].unk5E = 4;
+                        ptr->unk50 = 0;
+                        ptr->unk5E = 3;
+                    } else {
+                        ptr->unk50 = 0x13;
+                        ptr->unk5E = 5;
+                    }
+                    arg0->unkD2++;
+                }
+                break;
+
+            case 4:
+                ptr->unk5E = 0;
+                ptr->unk5A = 0;
+                ptr->unk50 = 0x13;
+                break;
+
+            case 5:
+                if (ptr->unk62 != 0) {
+                    ptr->unk62 = 0;
+                    ptr->unk50 = 0x14;
+                    ptr->unk5E = 6;
+                }
+                break;
+
+            case 7:
+                if (arg0->unk0[0].unk62 != 0) {
+                    arg0->unk0[0].unk50++;
+                    if (((s16)arg0->unk0[0].unk50) >= 0xD) {
+                        arg0->unk0[0].unk50 = 0;
+                        arg0->unk0[0].unk5E = 8;
+                    }
+                }
+                break;
+
+            case 8:
+                if (arg0->unk0[1].unk5E == 6) {
+                    arg0->unk0[0].unk50 = 0x20;
+                    arg0->unk0[0].unk5E = 9;
+                }
+                break;
+
+            case 6:
+
+            case 9:
+                ptr->unk62 = 0;
+                break;
+        }
+
+        func_8002A2D0_2AED0((Func297D8Arg *)ptr);
+        allocation->unk408[i] = ptr->unk4.translation.x;
+        allocation->unk410[i] = ptr->unk4.translation.z;
+    }
+
+    {
+        u16 temp = arg0->unkCC;
+        if (arg0->unkCC != 0) {
+            arg0->unkCC--;
+            if (!(arg0->unkCC & 0xFFFF)) {
+                unsigned char temp_v0_5 = randB() & 0x1F;
+                temp_v0_5 &= 0xFF;
+                new_var = 0x10000;
+                arg0->unkCE = temp_v0_5 + 0x1E;
+                spawnSpriteEffectEx(
+                    (SceneModel *)arg0->unk0[0].unk0,
+                    0,
+                    0x3E,
+                    temp_v0_5 + 0x1A,
+                    &arg0->unk0[0].unk40,
+                    new_var,
+                    0,
+                    2,
+                    0,
+                    0x400
+                );
+                spawnSpriteEffectEx(
+                    (SceneModel *)arg0->unk0[1].unk0,
+                    0,
+                    0x3E,
+                    (s16)(arg0->unkCE - 4),
+                    &arg0->unk0[1].unk40,
+                    new_var,
+                    0,
+                    2,
+                    0,
+                    0x1F00
+                );
+            }
+        } else {
+            u16 temp2 = arg0->unkCE;
+            s16 temp_v0_7;
+            if (temp2 != 0) {
+                temp_v0_7 = temp2 - 1;
+                arg0->unkCE = temp_v0_7;
+                if (!(temp_v0_7 & 0xFFFF)) {
+                    arg0->unkCC = (randB() & 0x1F) + 0x2D;
+                }
+            }
+        }
+    }
+    do {
+        if (allocation->unk42A == 0x11) {
+            func_8002EBB0_2F7B0(arg0);
+            allocation->unk42E = 1;
+            arg0->unkCC = (randB() & 0x1F) + 0x28;
+            arg0->unkCE = 0;
+            arg0->unkC8 = func_8002E314_2EF14;
+            setCallback(func_8002BEF4_2CAF4);
+        }
+    } while (0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002E680_2F280);
 
