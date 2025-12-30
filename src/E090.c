@@ -63,7 +63,7 @@ void initLogoDisplaySequence(E090_struct *arg0);
 void updateLogoDisplayFade(E090_struct *arg0);
 void initTitleTextSequence(E090_struct *arg0);
 void updateTitleTextDelay(E090_struct *arg0);
-void func_8000D6F8_E2F8(E090_struct *arg0);
+void updateTitleLetterReveal(E090_struct *arg0);
 void func_8000D750_E350(E090_struct *arg0);
 void func_8000D7A0_E3A0(E090_struct *arg0);
 
@@ -136,7 +136,7 @@ void updateTitleTextDelay(E090_struct *arg0) {
     }
 }
 
-void func_8000D6F8_E2F8(E090_struct *arg0) {
+void updateTitleLetterReveal(E090_struct *arg0) {
     s16 temp = arg0->frameTimer - 0x29;
     arg0->frameTimer--;
     switch (temp) {
@@ -225,7 +225,7 @@ void func_8000D974_E574(void) {
             updateTitleTextDelay(arg0);
             break;
         case 5:
-            func_8000D6F8_E2F8(arg0);
+            updateTitleLetterReveal(arg0);
             break;
         case 6:
             func_8000D750_E350(arg0);
