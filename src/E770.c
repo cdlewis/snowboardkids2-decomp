@@ -136,7 +136,7 @@ void activateGalleryMenu(E770_struct *arg0) {
     arg0->unk0 = 2;
 }
 
-void func_8000E240_EE40(E770_struct *arg0) {
+void waitForMenuFadeIn(E770_struct *arg0) {
     s16 temp = arg0->fadeTimer;
 
     if (temp == 0) {
@@ -374,7 +374,7 @@ void func_8000EC98_F898(void) {
             activateGalleryMenu(s0);
             break;
         case 1:
-            func_8000E240_EE40(s0);
+            waitForMenuFadeIn(s0);
             break;
         case 2:
             func_8000E2AC_EEAC(s0);
