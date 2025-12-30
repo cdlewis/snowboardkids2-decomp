@@ -62,7 +62,7 @@ void initLogoScreenElements(E090_struct *arg0);
 void initLogoDisplaySequence(E090_struct *arg0);
 void updateLogoDisplayFade(E090_struct *arg0);
 void initTitleTextSequence(E090_struct *arg0);
-void func_8000D6C0_E2C0(E090_struct *arg0);
+void updateTitleTextDelay(E090_struct *arg0);
 void func_8000D6F8_E2F8(E090_struct *arg0);
 void func_8000D750_E350(E090_struct *arg0);
 void func_8000D7A0_E3A0(E090_struct *arg0);
@@ -128,7 +128,7 @@ void initTitleTextSequence(E090_struct *arg0) {
     arg0->state = 4;
 }
 
-void func_8000D6C0_E2C0(E090_struct *arg0) {
+void updateTitleTextDelay(E090_struct *arg0) {
     arg0->frameTimer--;
     if (arg0->frameTimer == 0x50) {
         arg0->state = 5;
@@ -222,7 +222,7 @@ void func_8000D974_E574(void) {
             initTitleTextSequence(arg0);
             break;
         case 4:
-            func_8000D6C0_E2C0(arg0);
+            updateTitleTextDelay(arg0);
             break;
         case 5:
             func_8000D6F8_E2F8(arg0);

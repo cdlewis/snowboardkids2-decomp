@@ -103,6 +103,7 @@ initLogoScreenElements = 0x8000D518; // rom:0xE118
 initLogoDisplaySequence = 0x8000D5F0; // rom:0xE1F0
 updateLogoDisplayFade = 0x8000D624; // rom:0xE224
 initTitleTextSequence = 0x8000D68C; // rom:0xE28C
+updateTitleTextDelay = 0x8000D6C0; // rom:0xE2C0
 staticSpriteEffectTexture = 0x8008CDD0; // rom:0x8D9D0
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
