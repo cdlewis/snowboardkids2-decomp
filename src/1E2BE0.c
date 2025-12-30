@@ -225,7 +225,31 @@ void func_800B5F2C_1E2FDC(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2) {
     arg0->unk28 = var_v1 / arg2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B5FB0_1E3060);
+void func_800B5FB0_1E3060(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2) {
+    s16 temp_a3;
+    s16 temp_a1;
+    int new_var;
+    s32 var_v1;
+    s32 var_v0;
+
+    *(volatile u16 *)&arg0->unk22 = *(u16 *)&arg0->unk22 & 0x1FFF;
+    temp_a3 = arg0->unk22;
+    temp_a1 = arg1 & 0x1FFF;
+    new_var = temp_a1 - temp_a3;
+    arg0->unk70 = 0;
+    var_v1 = new_var;
+    arg0->unk26 = temp_a1;
+    if (var_v1 >= 0x1001) {
+        var_v0 = temp_a3 + 0x2000;
+        var_v1 = temp_a1 - var_v0;
+    } else if (var_v1 < -0x1000) {
+        var_v0 = temp_a3 - 0x2000;
+        var_v1 = temp_a1 - var_v0;
+    }
+    arg0->unk2E = arg2;
+    arg0->unk32 = arg2;
+    arg0->unk2A = var_v1 / arg2;
+}
 
 void func_800B6034_1E30E4(func_800B5E64_1E2F14_arg0 *arg0, s32 arg1, s16 arg2) {
     s32 quotient;
