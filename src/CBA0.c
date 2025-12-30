@@ -120,11 +120,11 @@ void clearAuxRenderEnabled(Func8000C268Arg *arg0) {
 
 typedef struct {
     u8 pad[0x1E4];
-    u8 unk1E4[0xC];
-} Func8000C28CArg;
+    s32 position[3];
+} NodePositionArg;
 
-void func_8000C28C_CE8C(Func8000C28CArg *arg0, void *arg1) {
-    memcpy(arg0->unk1E4, arg1, 0xC);
+void copyNodePosition(NodePositionArg *node, void *position) {
+    memcpy(node->position, position, 0xC);
 }
 
 typedef struct {
