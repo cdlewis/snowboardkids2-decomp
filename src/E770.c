@@ -50,7 +50,7 @@ typedef struct {
     void *unkC;
     s16 unk10;
     s16 fadeTimer;
-    s16 unk14;
+    s16 animTimer;
     u8 unk16;
     u8 pad17;
     void *unk18;
@@ -63,7 +63,7 @@ typedef struct {
     u8 pad5C8[0x2C];
     void *unk5F4;
     u8 pad5F8[0x2C];
-    SceneModel *unk624;
+    SceneModel *menuModel;
 } E770_struct;
 
 void playBgmTrack(E770_struct *arg0, s16 bgmId) {
@@ -108,15 +108,15 @@ void *getMenuOptionEntry(E770_struct *arg0, s32 index) {
     return result;
 }
 
-void func_8000DC88_E888(E770_struct *arg0, s16 arg1, s16 arg2, s8 arg3, s16 arg4) {
-    setModelAnimationLooped(arg0->unk624, arg1, arg2, arg3);
-    arg0->unk14 = arg4;
+void setMenuAnimation(E770_struct *arg0, s16 animIndex, s16 transitionAnimIndex, s8 loopCount, s16 animTimer) {
+    setModelAnimationLooped(arg0->menuModel, animIndex, transitionAnimIndex, loopCount);
+    arg0->animTimer = animTimer;
 }
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DCD8_E8D8);
 
 void func_8000E154_ED54(E770_struct *arg0) {
-    destroySceneModel(arg0->unk624);
+    destroySceneModel(arg0->menuModel);
     arg0->unk18 = freeNodeMemory(arg0->unk18);
     arg0->unkC = freeNodeMemory(arg0->unkC);
     arg0->unk8 = freeNodeMemory(arg0->unk8);
@@ -131,7 +131,7 @@ void func_8000E1D0_EDD0(E770_struct *arg0) {
     func_800394BC_3A0BC(&arg0->pad5C8, (s32)arg0->unk5C4);
     func_800394BC_3A0BC(&arg0->pad5F8, (s32)arg0->unk5F4);
     func_8006FDA0_709A0(NULL, 0, 10);
-    func_8000DC88_E888(arg0, 0x90, 0x90, -1, 0);
+    setMenuAnimation(arg0, 0x90, 0x90, -1, 0);
     arg0->fadeTimer = 10;
     arg0->unk0 = 2;
 }
@@ -140,8 +140,8 @@ void func_8000E240_EE40(E770_struct *arg0) {
     s16 temp = arg0->fadeTimer;
 
     if (temp == 0) {
-        if (arg0->unk624->unk16 == 0x15B) {
-            func_8000DC88_E888(arg0, 0x15C, 0x90, 1, -1);
+        if (arg0->menuModel->unk16 == 0x15B) {
+            setMenuAnimation(arg0, 0x15C, 0x90, 1, -1);
         }
         arg0->unk0 = 2;
     } else {
@@ -174,7 +174,7 @@ void func_8000E2AC_EEAC(E770_struct *arg0) {
             func_80057564_58164(10);
             func_8006FDA0_709A0(0, 0xFF, 10);
         }
-        func_8000DC88_E888(arg0, 0x15A, 0x15B, 1, 0x14);
+        setMenuAnimation(arg0, 0x15A, 0x15B, 1, 0x14);
         sound = 0xD3;
         arg0->unk0 = 3;
         goto play_sound;
@@ -328,7 +328,7 @@ void func_8000E56C_F16C(E770_struct *arg0) {
 void func_8000E5B0_F1B0(E770_struct *arg0) {
     func_800585C8_591C8(0xDB);
     func_8006FDA0_709A0(NULL, 0xFF, 10);
-    func_8000DC88_E888(arg0, 0x15A, 0x15B, 1, -1);
+    setMenuAnimation(arg0, 0x15A, 0x15B, 1, -1);
     arg0->fadeTimer = 10;
     arg0->unk0 = 6;
 }
@@ -525,8 +525,8 @@ void func_8000F4F0_100F0(E770_struct *arg0) {
 
     temp = alloc->fadeTimer;
     if (temp == 0) {
-        if (alloc->unk624->unk16 == 0x15B) {
-            func_8000DC88_E888(alloc, 0x15C, 0x90, 1, -1);
+        if (alloc->menuModel->unk16 == 0x15B) {
+            setMenuAnimation(alloc, 0x15C, 0x90, 1, -1);
         }
         arg0->unk0 = 2;
     } else {
@@ -706,9 +706,9 @@ void func_8000F884_10484(FD98_struct *arg0) {
     if (gControllerInputs & 0x8000) {
         if (func_8000EDB0_F9B0(arg0->unk2)) {
             playBgmTrack(alloc, entry->pad[4]);
-            if (alloc->unk624->unk16 != 0x92) {
+            if (alloc->menuModel->unk16 != 0x92) {
                 spawnSpriteEffectInternal(
-                    alloc->unk624,
+                    alloc->menuModel,
                     0,
                     9,
                     -1,
@@ -721,7 +721,7 @@ void func_8000F884_10484(FD98_struct *arg0) {
                     1
                 );
             }
-            func_8000DC88_E888(alloc, 0x92, 0x92, -1, 0);
+            setMenuAnimation(alloc, 0x92, 0x92, -1, 0);
             return;
         }
         func_800585C8_591C8(9);
@@ -851,7 +851,7 @@ void func_8000FBBC_107BC(FD98_struct *arg0) {
     inputs = gControllerInputs;
 
     if (inputs & B_BUTTON) {
-        func_8000DC88_E888((E770_struct *)alloc, 0x90, 0x90, -1, -1);
+        setMenuAnimation((E770_struct *)alloc, 0x90, 0x90, -1, -1);
         sound = 0x2E;
         arg0->unk0 = 3;
         goto play_sound;
@@ -889,7 +889,7 @@ do_switch:
 button_check:
     if (inputs & A_BUTTON) {
         arg0->unk0 = 3;
-        func_8000DC88_E888((E770_struct *)alloc, 0x90, 0x90, -1, -1);
+        setMenuAnimation((E770_struct *)alloc, 0x90, 0x90, -1, -1);
         sound = 0x2E;
         goto play_sound;
     }
