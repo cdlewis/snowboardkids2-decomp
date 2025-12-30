@@ -125,8 +125,8 @@ typedef struct {
     u8 unk0;
     u8 unk1;
     u8 unk2;
-    s8 unk3;
-} PlayerUnk28Entry;
+    s8 pathPreference;
+} AIPathPreference;
 
 typedef struct {
     u8 pad0[0x14];
@@ -137,11 +137,11 @@ typedef struct {
 } Section3Entry;
 
 typedef struct {
-    s32 valX;
+    s32 tempX;
     s32 _pad1;
-    s32 valZ;
+    s32 tempZ;
     s32 _pad2;
-} StackVars_A9A40;
+} TrackCalcStackVars;
 
 extern u8 D_800BADD0_AAC80[];
 
@@ -150,51 +150,51 @@ extern u8 D_800BADD0_AAC80[];
 
 s8 func_800BA694_AA544(Player *player) {
     GameState *gs;
-    volatile StackVars_A9A40 sv;
-    s32 segmentDirX;
-    s32 segmentDirZ;
-    s32 distSq;
-    s32 dist;
+    volatile TrackCalcStackVars sv;
+    s32 trackDirX;
+    s32 trackDirZ;
+    s32 trackLengthSq;
+    s32 trackLength;
     s32 normalizedDirX;
     s32 normalizedDirZ;
-    s32 playerOffsetX;
-    s32 playerOffsetZ;
-    s64 crossProduct;
-    u16 segmentStartIdx;
-    u16 segmentEndIdx;
+    s32 playerToStartX;
+    s32 playerToStartZ;
+    s64 lateralOffset;
+    u16 trackStartIdx;
+    u16 trackEndIdx;
 
     gs = getCurrentAllocation();
 
-    if (player->unk28 != NULL && ((PlayerUnk28Entry *)player->unk28)[player->unkB94].unk3 != 0) {
-        segmentStartIdx = SEC3(gs)[player->unkB94].unk14;
-        segmentEndIdx = SEC3(gs)[player->unkB94].unk18;
-        segmentDirX = SEC1(gs)[segmentStartIdx].x - SEC1(gs)[segmentEndIdx].x;
-        sv.valX = segmentDirX;
+    if (player->unk28 != NULL && ((AIPathPreference *)player->unk28)[player->unkB94].pathPreference != 0) {
+        trackStartIdx = SEC3(gs)[player->unkB94].unk14;
+        trackEndIdx = SEC3(gs)[player->unkB94].unk18;
+        trackDirX = SEC1(gs)[trackStartIdx].x - SEC1(gs)[trackEndIdx].x;
+        sv.tempX = trackDirX;
 
-        segmentStartIdx = SEC3(gs)[player->unkB94].unk14;
-        distSq = segmentDirX * segmentDirX;
-        segmentEndIdx = SEC3(gs)[player->unkB94].unk18;
-        segmentDirZ = SEC1(gs)[segmentStartIdx].z - SEC1(gs)[segmentEndIdx].z;
-        sv.valZ = segmentDirZ;
-        distSq += segmentDirZ * segmentDirZ;
+        trackStartIdx = SEC3(gs)[player->unkB94].unk14;
+        trackLengthSq = trackDirX * trackDirX;
+        trackEndIdx = SEC3(gs)[player->unkB94].unk18;
+        trackDirZ = SEC1(gs)[trackStartIdx].z - SEC1(gs)[trackEndIdx].z;
+        sv.tempZ = trackDirZ;
+        trackLengthSq += trackDirZ * trackDirZ;
 
-        dist = isqrt64(distSq);
-        normalizedDirX = (sv.valX << 13) / dist;
-        normalizedDirZ = (sv.valZ << 13) / dist;
+        trackLength = isqrt64(trackLengthSq);
+        normalizedDirX = (sv.tempX << 13) / trackLength;
+        normalizedDirZ = (sv.tempZ << 13) / trackLength;
 
-        segmentStartIdx = SEC3(gs)[player->unkB94].unk14;
-        playerOffsetX = player->worldPos.x - (SEC1(gs)[segmentStartIdx].x << 16);
-        sv.valX = playerOffsetX;
+        trackStartIdx = SEC3(gs)[player->unkB94].unk14;
+        playerToStartX = player->worldPos.x - (SEC1(gs)[trackStartIdx].x << 16);
+        sv.tempX = playerToStartX;
 
-        segmentStartIdx = SEC3(gs)[player->unkB94].unk14;
-        playerOffsetZ = player->worldPos.z - (SEC1(gs)[segmentStartIdx].z << 16);
-        sv.valZ = playerOffsetZ;
+        trackStartIdx = SEC3(gs)[player->unkB94].unk14;
+        playerToStartZ = player->worldPos.z - (SEC1(gs)[trackStartIdx].z << 16);
+        sv.tempZ = playerToStartZ;
 
-        crossProduct =
-            (((s64)(-((s16)normalizedDirZ))) * playerOffsetX) + (((s64)((s16)normalizedDirX)) * playerOffsetZ);
-        dist = -((s32)(crossProduct / 0x2000));
-        if (dist < (player->unkAA8 * 6)) {
-            return ((PlayerUnk28Entry *)player->unk28)[player->unkB94].unk3;
+        lateralOffset =
+            (((s64)(-((s16)normalizedDirZ))) * playerToStartX) + (((s64)((s16)normalizedDirX)) * playerToStartZ);
+        trackLength = -((s32)(lateralOffset / 0x2000));
+        if (trackLength < (player->unkAA8 * 6)) {
+            return ((AIPathPreference *)player->unk28)[player->unkB94].pathPreference;
         }
     }
 
