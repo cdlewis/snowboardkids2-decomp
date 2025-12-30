@@ -160,7 +160,7 @@ s32 cutsceneSysWait_validate(void) {
 }
 
 void cutsceneSysWait_exec(u16 *arg0, CutsceneManager *arg1) {
-    cutsceneSysWait_exec_task *temp_v0 = scheduleTask(&func_8000D244_DE44, 1, 0, 0x64);
+    cutsceneSysWait_exec_task *temp_v0 = scheduleTask(&initCutsceneWaitMenu, 1, 0, 0x64);
     if (temp_v0 != NULL) {
         func_800B29F0_1DFAA0(arg1);
         temp_v0->unk0 = arg1;

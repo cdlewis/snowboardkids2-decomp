@@ -38,6 +38,6 @@ typedef struct {
     /* 0x3E */ s16 unk3E;
 } DC90TaskStruct;
 
-void func_8000D244_DE44(DC90TaskStruct *arg0);
+void initCutsceneWaitMenu(DC90TaskStruct *arg0);
 
 #endif

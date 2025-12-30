@@ -12,8 +12,8 @@ extern s32 gControllerInputs;
 extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 extern void *handleMenuSelection(DC90TaskStruct *arg0);
 
-void func_8000D2C8_DEC8(DC90TaskStruct *arg0);
-void func_8000D448_E048(DC90TaskStruct *arg0);
+void updateCutsceneWaitMenu(DC90TaskStruct *arg0);
+void cleanupCutsceneWaitMenu(DC90TaskStruct *arg0);
 
 void initMenuFadeIn(DC90TaskStruct *arg0) {
     void *temp = arg0->baseSpriteData;
@@ -69,7 +69,7 @@ void *handleMenuSelection(DC90TaskStruct *arg0) {
     return temp_v0;
 }
 
-void func_8000D1BC_DDBC(DC90TaskStruct *arg0) {
+void animateMenuContractVertical(DC90TaskStruct *arg0) {
     arg0->animFrameY--;
     if (arg0->animFrameY < 2) {
         arg0->state = 5;
@@ -93,7 +93,7 @@ void animateMenuContractHorizontal(DC90TaskStruct *arg0) {
     }
 }
 
-void func_8000D244_DE44(DC90TaskStruct *arg0) {
+void initCutsceneWaitMenu(DC90TaskStruct *arg0) {
     arg0->state = 0;
     arg0->unk10 = 0;
     arg0->unk4 = loadAsset_34F7E0();
@@ -104,11 +104,11 @@ void func_8000D244_DE44(DC90TaskStruct *arg0) {
     arg0->unk3C = 0xFF;
     arg0->unk3E = 0xC0;
     func_800585C8_591C8(0x2C);
-    setCleanupCallback(&func_8000D448_E048);
-    setCallback(&func_8000D2C8_DEC8);
+    setCleanupCallback(&cleanupCutsceneWaitMenu);
+    setCallback(&updateCutsceneWaitMenu);
 }
 
-void func_8000D2C8_DEC8(DC90TaskStruct *arg0) {
+void updateCutsceneWaitMenu(DC90TaskStruct *arg0) {
     void *result = 0;
     s32 flag = 0;
 
@@ -127,7 +127,7 @@ void func_8000D2C8_DEC8(DC90TaskStruct *arg0) {
             flag = 1;
             break;
         case 4:
-            func_8000D1BC_DDBC(arg0);
+            animateMenuContractVertical(arg0);
             break;
         case 5:
             animateMenuContractHorizontal(arg0);
@@ -173,7 +173,7 @@ void func_8000D2C8_DEC8(DC90TaskStruct *arg0) {
     );
 }
 
-void func_8000D448_E048(DC90TaskStruct *arg0) {
+void cleanupCutsceneWaitMenu(DC90TaskStruct *arg0) {
     arg0->baseSpriteData = freeNodeMemory(arg0->baseSpriteData);
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unk8 = freeNodeMemory(arg0->unk8);
