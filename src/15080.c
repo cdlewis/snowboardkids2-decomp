@@ -62,7 +62,7 @@ void func_8001452C_1512C(void) {
 }
 
 void func_8001457C_1517C(void) {
-    createTaskQueue(func_8000D7F8_E3F8, 0x64);
+    createTaskQueue(initLogoScreen, 0x64);
     setGameStateHandler(func_800145AC_151AC);
 }
 

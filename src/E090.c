@@ -173,7 +173,7 @@ void cleanupLogoScreen(E090_struct *arg0) {
 void func_8000D818_E418(void);
 void func_8000D974_E574(void);
 
-void func_8000D7F8_E3F8(void) {
+void initLogoScreen(void) {
     setGameStateHandler(func_8000D818_E418);
 }
 
