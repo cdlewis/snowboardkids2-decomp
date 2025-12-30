@@ -27,7 +27,7 @@ void initMenuFadeIn(DC90TaskStruct *arg0) {
     arg0->currentSprite = temp;
 }
 
-void func_8000D0BC_DCBC(DC90TaskStruct *arg0) {
+void animateMenuExpandHorizontal(DC90TaskStruct *arg0) {
     arg0->animFrameX++;
     if (arg0->animFrameX >= 13) {
         arg0->state = 2;
@@ -117,7 +117,7 @@ void func_8000D2C8_DEC8(DC90TaskStruct *arg0) {
             initMenuFadeIn(arg0);
             break;
         case 1:
-            func_8000D0BC_DCBC(arg0);
+            animateMenuExpandHorizontal(arg0);
             break;
         case 2:
             func_8000D100_DD00(arg0);
