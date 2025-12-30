@@ -81,7 +81,7 @@ void func_8000D1BC_DDBC(DC90TaskStruct *arg0) {
     }
 }
 
-void func_8000D200_DE00(DC90TaskStruct *arg0) {
+void animateMenuContractHorizontal(DC90TaskStruct *arg0) {
     arg0->animFrameX--;
     if (arg0->animFrameX < 2) {
         arg0->state = 6;
@@ -130,7 +130,7 @@ void func_8000D2C8_DEC8(DC90TaskStruct *arg0) {
             func_8000D1BC_DDBC(arg0);
             break;
         case 5:
-            func_8000D200_DE00(arg0);
+            animateMenuContractHorizontal(arg0);
             break;
         case 6:
             arg0->unk0[0xFF7] = 0;
