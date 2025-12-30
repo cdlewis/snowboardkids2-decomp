@@ -19,7 +19,7 @@ typedef struct {
 
 extern E090_DataEntry D_8008CE10_8DA10[];
 
-void func_8000DB4C_E74C(void);
+void transitionFromLogoScreen(void);
 
 typedef struct {
     s16 unk0;
@@ -167,96 +167,96 @@ void cleanupLogoScreen(E090_struct *arg0) {
     arg0->unk1E4 = freeNodeMemory(arg0->unk1E4);
     arg0->unk1E8 = freeNodeMemory(arg0->unk1E8);
     unlinkNode(&arg0->unk8);
-    terminateSchedulerWithCallback(func_8000DB4C_E74C);
+    terminateSchedulerWithCallback(transitionFromLogoScreen);
 }
 
-void func_8000D818_E418(void);
-void func_8000D974_E574(void);
+void loadLogoScreenAssets(void);
+void updateLogoScreen(void);
 
 void initLogoScreen(void) {
-    setGameStateHandler(func_8000D818_E418);
+    setGameStateHandler(loadLogoScreenAssets);
 }
 
-void func_8000D818_E418(void) {
-    E090_struct *temp_s0;
-    Node_70B00 *s1;
-    u8 sp20[0x20];
+void loadLogoScreenAssets(void) {
+    E090_struct *logoScreen;
+    Node_70B00 *node;
+    u8 nodeParams[0x20];
 
-    temp_s0 = (E090_struct *)allocateTaskMemory(0x2F0);
-    temp_s0->state = 0;
-    temp_s0->frameTimer = 0;
-    temp_s0->visibleLetterCount = 0;
-    temp_s0->unk1E0 = loadCompressedData(&_67AB10_ROM_START, &_67AB10_ROM_END, 0x6350);
-    temp_s0->unk1E4 = loadCompressedData(&_67BEB0_ROM_START, &_67BEB0_ROM_END, 0x4320);
-    temp_s0->unk1E8 = loadCompressedData(&_67DB80_ROM_START, &_67DB80_ROM_END, 0x1A68);
+    logoScreen = (E090_struct *)allocateTaskMemory(0x2F0);
+    logoScreen->state = 0;
+    logoScreen->frameTimer = 0;
+    logoScreen->visibleLetterCount = 0;
+    logoScreen->unk1E0 = loadCompressedData(&_67AB10_ROM_START, &_67AB10_ROM_END, 0x6350);
+    logoScreen->unk1E4 = loadCompressedData(&_67BEB0_ROM_START, &_67BEB0_ROM_END, 0x4320);
+    logoScreen->unk1E8 = loadCompressedData(&_67DB80_ROM_START, &_67DB80_ROM_END, 0x1A68);
 
-    s1 = &temp_s0->unk8;
-    func_8006FAA4_706A4(s1, 0, 0, 10, 0);
-    func_8006F9BC_705BC(s1, 1.0f, 1.0f);
-    setModelCameraTransform(s1, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    func_8006FEF8_70AF8(s1, 1);
-    func_8006BEDC_6CADC(&sp20, 0, 0, 0x01000000, 0, 0, 0);
-    func_8006FD3C_7093C(temp_s0->unk8.id, &sp20);
-    func_8006FE28_70A28(s1, 0, 0, 0);
-    func_8006FDA0_709A0(s1, 0xFF, 0);
-    setGameStateHandler(func_8000D974_E574);
+    node = &logoScreen->unk8;
+    func_8006FAA4_706A4(node, 0, 0, 10, 0);
+    func_8006F9BC_705BC(node, 1.0f, 1.0f);
+    setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    func_8006FEF8_70AF8(node, 1);
+    func_8006BEDC_6CADC(&nodeParams, 0, 0, 0x01000000, 0, 0, 0);
+    func_8006FD3C_7093C(logoScreen->unk8.id, &nodeParams);
+    func_8006FE28_70A28(node, 0, 0, 0);
+    func_8006FDA0_709A0(node, 0xFF, 0);
+    setGameStateHandler(updateLogoScreen);
 }
 
-void func_8000D974_E574(void) {
-    E090_struct *arg0 = getCurrentAllocation();
+void updateLogoScreen(void) {
+    E090_struct *logoScreen = getCurrentAllocation();
     s8 state;
     s32 i;
 
-    state = arg0->state;
+    state = logoScreen->state;
     switch (state) {
         case 0:
-            initLogoScreenElements(arg0);
+            initLogoScreenElements(logoScreen);
             break;
         case 1:
-            initLogoDisplaySequence(arg0);
+            initLogoDisplaySequence(logoScreen);
             break;
         case 2:
-            updateLogoDisplayFade(arg0);
+            updateLogoDisplayFade(logoScreen);
             break;
         case 3:
-            initTitleTextSequence(arg0);
+            initTitleTextSequence(logoScreen);
             break;
         case 4:
-            updateTitleTextDelay(arg0);
+            updateTitleTextDelay(logoScreen);
             break;
         case 5:
-            updateTitleLetterReveal(arg0);
+            updateTitleLetterReveal(logoScreen);
             break;
         case 6:
-            updateTitleFinalFadeIn(arg0);
+            updateTitleFinalFadeIn(logoScreen);
             break;
         case 7:
         default:
-            cleanupLogoScreen(arg0);
+            cleanupLogoScreen(logoScreen);
             return;
     }
 
-    state = arg0->state;
+    state = logoScreen->state;
     if (state == 2) {
-        debugEnqueueCallback(0, 4, func_80038420_39020, &arg0->unk1EC);
+        debugEnqueueCallback(0, 4, func_80038420_39020, &logoScreen->unk1EC);
     } else if (state >= 2) {
         if (state < 7) {
             if (state >= 4) {
-                debugEnqueueCallback(0, 4, func_80038420_39020, &arg0->unk218);
+                debugEnqueueCallback(0, 4, func_80038420_39020, &logoScreen->unk218);
 
-                for (i = 0; i < arg0->visibleLetterCount; i++) {
-                    arg0->unk2D4[i] += 0x330000;
-                    if (arg0->unk2D4[i] > 0xFFFFFF) {
-                        arg0->unk2D4[i] = 0xFF0000;
+                for (i = 0; i < logoScreen->visibleLetterCount; i++) {
+                    logoScreen->unk2D4[i] += 0x330000;
+                    if (logoScreen->unk2D4[i] > 0xFFFFFF) {
+                        logoScreen->unk2D4[i] = 0xFF0000;
                     }
-                    arg0->unk244[i].unk14 = (s8)(arg0->unk2D4[i] >> 16);
-                    debugEnqueueCallback(0, 3, func_80011924_12524, &arg0->unk244[i]);
+                    logoScreen->unk244[i].unk14 = (s8)(logoScreen->unk2D4[i] >> 16);
+                    debugEnqueueCallback(0, 3, func_80011924_12524, &logoScreen->unk244[i]);
                 }
             }
         }
     }
 }
 
-void func_8000DB4C_E74C(void) {
+void transitionFromLogoScreen(void) {
     func_800697F4_6A3F4(1);
 }
