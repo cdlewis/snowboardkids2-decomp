@@ -212,7 +212,7 @@ ln -sf "${CLAUDE_CONFIG}" "$created_dir/"
 
 if command -v claude &> /dev/null; then
     cd "$created_dir"
-    claude "decompile ${FUNC_NAME%.s}. use thinking"
+    claude "decompile ${FUNC_NAME%.s}. the appropriate claude environment has already been created (do not re-run tools/claude --bootstrap). use thinking"
 else
     echo "Success! Please navigate to the created directory and start your decompilation work:"
     echo ""
