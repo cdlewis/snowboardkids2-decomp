@@ -464,31 +464,58 @@ void func_8006BFB8_6CBB8(void *srcPtr, void *dstPtr) {
     mtxWords[15] = src->translation.z << 16;
 }
 
-void func_8006C130_6CD30(Transform3D *arg0, Mtx *arg1) {
-    s32 *dst;
-    s16 temp16;
+/**
+ * Converts a Transform3D (3x3 rotation matrix + translation) to an N64 RSP Mtx.
+ *
+ * The Transform3D uses s2.13 fixed-point for rotation values.
+ * The Mtx uses s15.16 fixed-point split into integer and fractional halves.
+ *
+ * Matrix layout (each word packs two 16-bit values):
+ *   dst[0-5]:   Integer parts of 3x3 rotation matrix (rows 0-2)
+ *   dst[6-7]:   Integer parts of translation vector + w=1
+ *   dst[8-13]:  Fractional parts of 3x3 rotation matrix
+ *   dst[14-15]: Fractional parts of translation vector
+ */
+void func_8006C130_6CD30(Transform3D *transform, Mtx *mtx) {
+    s32 *mtxWords;
+    s16 m01;
 
-    dst = (s32 *)arg1;
+    mtxWords = (s32 *)mtx;
 
-    dst[0] = (((s32)arg0->m[0][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)arg0->m[0][1] >> 15)) & 0xFFFF);
-    dst[1] = ((s32)arg0->m[0][2] << 1) & 0xFFFF0000;
-    dst[2] = (((s32)arg0->m[1][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)arg0->m[1][1] >> 15)) & 0xFFFF);
-    dst[3] = ((s32)arg0->m[1][2] << 1) & 0xFFFF0000;
-    dst[4] = (((s32)arg0->m[2][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)arg0->m[2][1] >> 15)) & 0xFFFF);
-    dst[5] = ((s32)arg0->m[2][2] << 1) & 0xFFFF0000;
-    dst[6] = (arg0->translation.x & 0xFFFF0000) + ((u16 *)&arg0->translation.y)[0];
-    dst[7] = (arg0->translation.z & 0xFFFF0000) + 1;
-    temp16 = arg0->m[0][1];
-    dst[8] = (((s32)arg0->m[0][0] << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
-    dst[9] = ((s32)arg0->m[0][2] << 17) & 0xFFFF0000;
-    temp16 = arg0->m[1][1];
-    dst[10] = (((s32)arg0->m[1][0] << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
-    dst[11] = ((s32)arg0->m[1][2] << 17) & 0xFFFF0000;
-    temp16 = arg0->m[2][1];
-    dst[12] = (((s32)arg0->m[2][0] << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
-    dst[13] = ((s32)arg0->m[2][2] << 17) & 0xFFFF0000;
-    dst[14] = (arg0->translation.x << 16) + ((u16 *)&arg0->translation.y)[1];
-    dst[15] = arg0->translation.z << 16;
+    /* Row 0: m[0][0] and m[0][1] integer parts */
+    mtxWords[0] = (((s32)transform->m[0][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)transform->m[0][1] >> 15)) & 0xFFFF);
+    mtxWords[1] = ((s32)transform->m[0][2] << 1) & 0xFFFF0000;
+
+    /* Row 1: m[1][0] and m[1][1] integer parts */
+    mtxWords[2] = (((s32)transform->m[1][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)transform->m[1][1] >> 15)) & 0xFFFF);
+    mtxWords[3] = ((s32)transform->m[1][2] << 1) & 0xFFFF0000;
+
+    /* Row 2: m[2][0] and m[2][1] integer parts */
+    mtxWords[4] = (((s32)transform->m[2][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)transform->m[2][1] >> 15)) & 0xFFFF);
+    mtxWords[5] = ((s32)transform->m[2][2] << 1) & 0xFFFF0000;
+
+    /* Row 3: translation integer parts (x high, y high, z high, w=1) */
+    mtxWords[6] = (transform->translation.x & 0xFFFF0000) + ((u16 *)&transform->translation.y)[0];
+    mtxWords[7] = (transform->translation.z & 0xFFFF0000) + 1;
+
+    /* Row 0: m[0][0] and m[0][1] fractional parts */
+    m01 = transform->m[0][1];
+    mtxWords[8] = (((s32)transform->m[0][0] << 17) & 0xFFFF0000) + ((((s32)m01 << 1) & 0xFFFF));
+    mtxWords[9] = ((s32)transform->m[0][2] << 17) & 0xFFFF0000;
+
+    /* Row 1: m[1][0] and m[1][1] fractional parts */
+    m01 = transform->m[1][1];
+    mtxWords[10] = (((s32)transform->m[1][0] << 17) & 0xFFFF0000) + ((((s32)m01 << 1) & 0xFFFF));
+    mtxWords[11] = ((s32)transform->m[1][2] << 17) & 0xFFFF0000;
+
+    /* Row 2: m[2][0] and m[2][1] fractional parts */
+    m01 = transform->m[2][1];
+    mtxWords[12] = (((s32)transform->m[2][0] << 17) & 0xFFFF0000) + ((((s32)m01 << 1) & 0xFFFF));
+    mtxWords[13] = ((s32)transform->m[2][2] << 17) & 0xFFFF0000;
+
+    /* Row 3: translation fractional parts (x low, y low, z low, w=0) */
+    mtxWords[14] = (transform->translation.x << 16) + ((u16 *)&transform->translation.y)[1];
+    mtxWords[15] = transform->translation.z << 16;
 }
 
 void func_8006C2A8_6CEA8(func_8006C2A8_6CEA8_arg0 *arg0, func_8006C2A8_6CEA8_arg1 *arg1) {
