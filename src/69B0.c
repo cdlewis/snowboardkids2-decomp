@@ -24,8 +24,9 @@ typedef struct {
 extern s32 D_8009A8A4_9B4A4;
 extern u8 identityMatrix[];
 extern u8 D_80088640_89240[];
+extern s32 D_8008C120_8CD20[];
 
-void updateQuadDisplayList(void);
+void updateQuadDisplayList(func_80002B50_3750_arg **);
 void cleanupQuadDisplayList(QuadDisplayListElement *);
 void updateRotationController(RotationControllerState *);
 void cleanupRotationController(void);
@@ -44,7 +45,66 @@ void initializeQuadDisplayList(QuadDisplayListElement *elements) {
     setCallback(updateQuadDisplayList);
 }
 
-INCLUDE_ASM("asm/nonmatchings/69B0", updateQuadDisplayList);
+void updateQuadDisplayList(func_80002B50_3750_arg **state) {
+    Transform3D rotationMatrix;
+    func_80002B50_3750_arg *model;
+    s32 i;
+    u8 *element;
+    s32 offset;
+    s32 *dataPtr;
+    s32 two;
+
+    memcpy(&rotationMatrix, identityMatrix, 0x20);
+
+    model = *state;
+    if (model->isDestroyed == 1) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    switch (model->actionMode) {
+        default:
+        case 0:
+            *(u16 *)((u8 *)state + 0xF6) = 0;
+            *(u16 *)((u8 *)state + 0xF4) = 0;
+            break;
+        case 1: {
+            u16 temp = *(u16 *)((u8 *)state + 0xF6) + 0x5B;
+            *(u16 *)((u8 *)state + 0xF6) = temp;
+            if ((s16)temp >= 0x2AB) {
+                *(u16 *)((u8 *)state + 0xF6) = 0x2AA;
+            }
+            *(u16 *)((u8 *)state + 0xF4) = *(u16 *)((u8 *)state + 0xF4) + *(u16 *)((u8 *)state + 0xF6);
+        } break;
+    }
+
+    i = 0;
+    two = 2;
+    offset = 4;
+    dataPtr = D_8008C120_8CD20;
+loop:
+    if (i == 0) {
+        goto positive;
+    }
+    if (i != two) {
+        goto negative;
+    }
+positive:
+    createCombinedRotationMatrix(&rotationMatrix, *(u16 *)((u8 *)state + 0xF4), 0);
+    goto after;
+negative:
+    createCombinedRotationMatrix(&rotationMatrix, -*(u16 *)((u8 *)state + 0xF4), 0x1000);
+after:
+    element = (u8 *)state + offset;
+    memcpy(&rotationMatrix.translation, dataPtr, 0xC);
+    func_8006B084_6BC84(&rotationMatrix, (*state)->matrix18, element);
+    offset += 0x3C;
+    dataPtr += 3;
+    enqueueModelDisplayList(*state, (DisplayListObject *)element);
+    if (++i < 4) {
+        goto loop;
+    }
+}
 
 void cleanupQuadDisplayList(QuadDisplayListElement *elements) {
     s32 i = 0;
