@@ -228,15 +228,15 @@ typedef struct {
 } func_80027544_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
     u8 unkC;
-    u8 unkD;
+    u8 blinkState;
     u8 paddingE[2];
-} func_80026860_entry;
+} CharacterNameSprite;
 
 extern struct {
     u16 unk0;
@@ -1446,54 +1446,51 @@ void func_80026834_27434(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80026860_27460(func_80026860_entry *arg0) {
-    u8 *allocation;
-    void *dmaResult;
+void func_80026860_27460(CharacterNameSprite *sprites) {
+    GameState *gameState;
+    void *spriteAsset;
     s32 i;
-    u16 unk0Val;
-    u16 unk2Val;
-    s32 unk8Val;
-    func_80026860_entry *ptr;
+    u16 xPos;
+    u16 yPos;
+    s32 spriteIdx;
     u8 charIndex;
-    u8 temp_v1;
-    s32 temp_v0;
+    u8 numPlayers;
     s32 pad[2];
 
-    allocation = (u8 *)getCurrentAllocation();
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    gameState = (GameState *)getCurrentAllocation();
+    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026BAC_277AC);
 
-    temp_v1 = D_800AFE8C_A71FC->unk8;
-    unk0Val = D_8008DE54_8EA54[temp_v1].unk0;
-    unk2Val = D_8008DE54_8EA54[temp_v1].unk2;
+    numPlayers = D_800AFE8C_A71FC->unk8;
+    xPos = D_8008DE54_8EA54[numPlayers].unk0;
+    yPos = D_8008DE54_8EA54[numPlayers].unk2;
 
     for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
-        temp_v1 = (allocation + i)[0x18A8];
-        if (temp_v1 == 3) {
-            temp_v1 = D_800AFE8C_A71FC->unk8;
-            temp_v0 = (s32)D_800AFE8C_A71FC + i;
-            if (temp_v1 == 1) {
-                unk0Val += 0x18;
-                unk8Val = ((u8 *)temp_v0)[0xD] + 0x30;
+        numPlayers = gameState->unk18A8[i];
+        if (numPlayers == 3) {
+            numPlayers = D_800AFE8C_A71FC->unk8;
+            if (numPlayers == 1) {
+                xPos += 0x18;
+                spriteIdx = D_800AFE8C_A71FC->unk9[i + 4] + 0x30;
             } else {
-                charIndex = ((u8 *)temp_v0)[0xD];
-                unk8Val = charIndex + 0x23;
-                unk0Val = *((u16 *)&D_8008DE9C_8EA9C + temp_v1 * 2) - D_8008DE7A_8EA7A[charIndex];
+                charIndex = D_800AFE8C_A71FC->unk9[i + 4];
+                spriteIdx = charIndex + 0x23;
+                xPos = *((u16 *)&D_8008DE9C_8EA9C + numPlayers * 2) - D_8008DE7A_8EA7A[charIndex];
             }
-            arg0[i].unk8 = unk8Val;
+            sprites[i].spriteIndex = spriteIdx;
         } else {
-            unk8Val = 0x1D;
+            spriteIdx = 0x1D;
             if (D_800AFE8C_A71FC->unk8 == 1) {
-                unk8Val = 0x36;
+                spriteIdx = 0x36;
             }
-            arg0[i].unk8 = temp_v1 + unk8Val;
+            sprites[i].spriteIndex = numPlayers + spriteIdx;
         }
-        arg0[i].unkD = 0;
-        arg0[i].unkC = 0;
-        arg0[i].unk0 = unk0Val;
-        arg0[i].unk2 = unk2Val;
-        arg0[i].unkA = 0xFF;
-        arg0[i].unk4 = dmaResult;
+        sprites[i].blinkState = 0;
+        sprites[i].unkC = 0;
+        sprites[i].x = xPos;
+        sprites[i].y = yPos;
+        sprites[i].alpha = 0xFF;
+        sprites[i].asset = spriteAsset;
     }
 
     setCallback(func_800269C8_275C8);
