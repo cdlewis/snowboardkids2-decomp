@@ -61,7 +61,7 @@ typedef struct {
 void initLogoScreenElements(E090_struct *arg0);
 void initLogoDisplaySequence(E090_struct *arg0);
 void updateLogoDisplayFade(E090_struct *arg0);
-void func_8000D68C_E28C(E090_struct *arg0);
+void initTitleTextSequence(E090_struct *arg0);
 void func_8000D6C0_E2C0(E090_struct *arg0);
 void func_8000D6F8_E2F8(E090_struct *arg0);
 void func_8000D750_E350(E090_struct *arg0);
@@ -122,7 +122,7 @@ void updateLogoDisplayFade(E090_struct *arg0) {
     }
 }
 
-void func_8000D68C_E28C(E090_struct *arg0) {
+void initTitleTextSequence(E090_struct *arg0) {
     initLogoNodeFadeOut(arg0);
     arg0->frameTimer = 100;
     arg0->state = 4;
@@ -219,7 +219,7 @@ void func_8000D974_E574(void) {
             updateLogoDisplayFade(arg0);
             break;
         case 3:
-            func_8000D68C_E28C(arg0);
+            initTitleTextSequence(arg0);
             break;
         case 4:
             func_8000D6C0_E2C0(arg0);
