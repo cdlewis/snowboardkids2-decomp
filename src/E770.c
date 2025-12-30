@@ -91,18 +91,18 @@ s32 getMenuOptionCount(E770_struct *arg0) {
     return 0;
 }
 
-void *func_8000DC44_E844(E770_struct *arg0, s32 arg1) {
+void *getMenuOptionEntry(E770_struct *arg0, s32 index) {
     void *result;
-    s8 temp;
+    s8 menuType;
     LookupEntry *entry;
 
     result = NULL;
-    temp = arg0->unk2;
+    menuType = arg0->unk2;
 
-    if (temp < 2) {
-        entry = &D_8008CE9C_8DA9C[temp];
-        if (arg1 < entry->count) {
-            result = (u8 *)entry->ptr + arg1 * 8;
+    if (menuType < 2) {
+        entry = &D_8008CE9C_8DA9C[menuType];
+        if (index < entry->count) {
+            result = (u8 *)entry->ptr + index * 8;
         }
     }
     return result;
