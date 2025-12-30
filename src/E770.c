@@ -49,14 +49,14 @@ typedef struct {
     void *unk8;
     void *unkC;
     s16 unk10;
-    s16 unk12;
+    s16 fadeTimer;
     s16 unk14;
     u8 unk16;
     u8 pad17;
     void *unk18;
     u8 pad1C[0x4];
     Node_70B00 unk20;
-    Node_70B00 unk1F8;
+    Node_70B00 fadeNode;
     Node_70B00 unk3D0;
     u8 pad5A8[0x1C];
     void *unk5C4;
@@ -72,14 +72,14 @@ void playBgmTrack(E770_struct *arg0, s16 bgmId) {
     func_80057514_58114(bgmId, 0x80, 0);
 }
 
-void func_8000DBA8_E7A8(E770_struct *arg0) {
-    func_8006FDA0_709A0(&arg0->unk1F8, 0xFF, 10);
-    arg0->unk12 = 10;
+void beginMenuFadeOut(E770_struct *arg0) {
+    func_8006FDA0_709A0(&arg0->fadeNode, 0xFF, 10);
+    arg0->fadeTimer = 10;
 }
 
-void func_8000DBE0_E7E0(E770_struct *arg0) {
-    func_8006FDA0_709A0(&arg0->unk1F8, 0, 10);
-    arg0->unk12 = 10;
+void beginMenuFadeIn(E770_struct *arg0) {
+    func_8006FDA0_709A0(&arg0->fadeNode, 0, 10);
+    arg0->fadeTimer = 10;
 }
 
 s32 func_8000DC18_E818(E770_struct *arg0) {
@@ -124,7 +124,7 @@ void func_8000E154_ED54(E770_struct *arg0) {
     arg0->unk5F4 = freeNodeMemory(arg0->unk5F4);
     unlinkNode(&arg0->unk3D0);
     unlinkNode(&arg0->unk20);
-    unlinkNode(&arg0->unk1F8);
+    unlinkNode(&arg0->fadeNode);
 }
 
 void func_8000E1D0_EDD0(E770_struct *arg0) {
@@ -132,12 +132,12 @@ void func_8000E1D0_EDD0(E770_struct *arg0) {
     func_800394BC_3A0BC(&arg0->pad5F8, (s32)arg0->unk5F4);
     func_8006FDA0_709A0(NULL, 0, 10);
     func_8000DC88_E888(arg0, 0x90, 0x90, -1, 0);
-    arg0->unk12 = 10;
+    arg0->fadeTimer = 10;
     arg0->unk0 = 2;
 }
 
 void func_8000E240_EE40(E770_struct *arg0) {
-    s16 temp = arg0->unk12;
+    s16 temp = arg0->fadeTimer;
 
     if (temp == 0) {
         if (arg0->unk624->unk16 == 0x15B) {
@@ -145,7 +145,7 @@ void func_8000E240_EE40(E770_struct *arg0) {
         }
         arg0->unk0 = 2;
     } else {
-        arg0->unk12 = temp - 1;
+        arg0->fadeTimer = temp - 1;
     }
 }
 
@@ -169,7 +169,7 @@ void func_8000E2AC_EEAC(E770_struct *arg0) {
 
     // A button - confirm
     if (inputs & A_BUTTON) {
-        func_8000DBA8_E7A8(arg0);
+        beginMenuFadeOut(arg0);
         if (arg0->unk1 == 5) {
             func_80057564_58164(10);
             func_8006FDA0_709A0(0, 0xFF, 10);
@@ -298,7 +298,7 @@ typedef struct FD98_struct {
 extern void func_8000FD98_10998(FD98_struct *);
 
 void func_8000E4CC_F0CC(E770_struct *arg0) {
-    s16 temp = arg0->unk12;
+    s16 temp = arg0->fadeTimer;
 
     if (temp == 0) {
         if (arg0->unk1 == 5) {
@@ -313,14 +313,14 @@ void func_8000E4CC_F0CC(E770_struct *arg0) {
             arg0->unk0 = 4;
         }
     } else {
-        arg0->unk12 = temp - 1;
+        arg0->fadeTimer = temp - 1;
     }
 }
 
 void func_8000E56C_F16C(E770_struct *arg0) {
     if (arg0->unk3 != 0) {
         terminateTasksByType(1);
-        func_8000DBE0_E7E0(arg0);
+        beginMenuFadeIn(arg0);
         arg0->unk0 = 1;
     }
 }
@@ -329,7 +329,7 @@ void func_8000E5B0_F1B0(E770_struct *arg0) {
     func_800585C8_591C8(0xDB);
     func_8006FDA0_709A0(NULL, 0xFF, 10);
     func_8000DC88_E888(arg0, 0x15A, 0x15B, 1, -1);
-    arg0->unk12 = 10;
+    arg0->fadeTimer = 10;
     arg0->unk0 = 6;
 }
 
@@ -338,16 +338,16 @@ extern void func_8000ED88_F988(void);
 s32 func_8000E614_F214(E770_struct *arg0) {
     s16 temp;
 
-    if (arg0->unk12 == 8) {
+    if (arg0->fadeTimer == 8) {
         func_80057564_58164(8);
     }
-    temp = arg0->unk12;
+    temp = arg0->fadeTimer;
     if (temp == 0) {
         func_8000E154_ED54(arg0);
         terminateSchedulerWithCallback(func_8000ED88_F988);
         return 1;
     }
-    arg0->unk12 = temp - 1;
+    arg0->fadeTimer = temp - 1;
     return 0;
 }
 
@@ -516,21 +516,21 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000EE88_FA88);
 void func_8000F4BC_100BC(E770_struct *arg0) {
     void *alloc = getCurrentAllocation();
     arg0->unk0 = 1;
-    func_8000DBE0_E7E0(alloc);
+    beginMenuFadeIn(alloc);
 }
 
 void func_8000F4F0_100F0(E770_struct *arg0) {
     E770_struct *alloc = getCurrentAllocation();
     s16 temp;
 
-    temp = alloc->unk12;
+    temp = alloc->fadeTimer;
     if (temp == 0) {
         if (alloc->unk624->unk16 == 0x15B) {
             func_8000DC88_E888(alloc, 0x15C, 0x90, 1, -1);
         }
         arg0->unk0 = 2;
     } else {
-        alloc->unk12 = temp - 1;
+        alloc->fadeTimer = temp - 1;
     }
 }
 
@@ -910,19 +910,19 @@ button_check:
 
 void func_8000FD1C_1091C(E770_struct *arg0) {
     void *alloc = getCurrentAllocation();
-    func_8000DBA8_E7A8(alloc);
+    beginMenuFadeOut(alloc);
     arg0->unk0 = 4;
 }
 
 s32 func_8000FD50_10950(E770_struct *arg0) {
     E770_struct *alloc = getCurrentAllocation();
-    s16 temp = alloc->unk12;
+    s16 temp = alloc->fadeTimer;
 
     if (temp == 0) {
         func_80069CF8_6A8F8();
         return 1;
     }
-    alloc->unk12 = temp - 1;
+    alloc->fadeTimer = temp - 1;
     return 0;
 }
 
