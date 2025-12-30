@@ -581,8 +581,6 @@ typedef struct {
     /* 0x70 */ u8 unk70;
 } RiseStretchSpriteEffectState;
 
-extern void renderSprite(s32 *, s32, s32, s32, s32, s32, s32, s16, u8, u8);
-
 void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *);
 void cleanupRiseStretchSpriteEffect(SpriteEffectTaskState *);
 
@@ -631,7 +629,7 @@ void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *arg0) {
     y = temp->unk18 + arg0->unk14 + arg0->unk6C;
     z = temp->unk1C + arg0->unk18;
 
-    renderSprite((s32 *)&arg0->unk20, arg0->unk4, x, y, z, 0x10000, arg0->unkC, arg0->unk1C, arg0->unkA, arg0->unk70);
+    renderSprite(&arg0->unk20, arg0->unk4, x, y, z, 0x10000, arg0->unkC, arg0->unk1C, arg0->unkA, arg0->unk70);
 }
 
 void cleanupRiseStretchSpriteEffect(SpriteEffectTaskState *arg0) {
@@ -692,18 +690,7 @@ void updateFloatBobbingSpriteEffect(FloatBobbingSpriteEffectState *arg0) {
     y = pos->unk18 + arg0->offsetY + arg0->bobOffset;
     z = pos->unk1C + arg0->offsetZ;
 
-    renderSprite(
-        (s32 *)&arg0->spriteState,
-        arg0->layer,
-        x,
-        y,
-        z,
-        0x10000,
-        arg0->scale,
-        arg0->rotation,
-        arg0->opacity,
-        0xFF
-    );
+    renderSprite(&arg0->spriteState, arg0->layer, x, y, z, 0x10000, arg0->scale, arg0->rotation, arg0->opacity, 0xFF);
 }
 
 void cleanupFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0) {

@@ -226,11 +226,11 @@ void renderOpaqueSprite(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 
     )setupAndEnqueueSprite)((SpriteState *)arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, 0xFF, 0);
 }
 
-void renderSprite(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8, u8 arg9) {
+void renderSprite(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8, u8 arg9) {
     s32 pad[2];
 
     pad[0] = 0;
-    ((void (*)(s32, s32, s32, s32, s32, s32, s32, s16, u8, u8)
+    ((void (*)(void *, s32, s32, s32, s32, s32, s32, s16, u8, u8)
     )setupAndEnqueueSprite)(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 }
 

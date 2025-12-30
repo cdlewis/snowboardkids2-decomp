@@ -11,8 +11,6 @@ extern s32 orbitalSpriteOffsetsZ[];
 extern s32 orbitalSpriteOffsetsX[];
 extern s32 maxActiveOrbitalSprites;
 
-extern void renderSprite(s32 *ptr, u16 arg1, s32 x, s32 y, s32 z, s32 scaleX, s32 scaleY, u8 arg7, u8 arg8, u8 arg9);
-
 typedef struct {
     u8 _pad[0x16];
     u16 assetIndex;
@@ -143,7 +141,7 @@ void updateOrbitalSprite(OrbitalSpriteState *arg0) {
         return;
     }
 
-    renderSprite((s32 *)&arg0->spriteState, arg0->owner->assetData->assetIndex, x, y, z, 0x4000, 0x4000, 0, 0, 0xAA);
+    renderSprite(&arg0->spriteState, arg0->owner->assetData->assetIndex, x, y, z, 0x4000, 0x4000, 0, 0, 0xAA);
 }
 
 void cleanupOrbitalSprite(OrbitalSpriteState *arg0) {
