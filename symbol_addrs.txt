@@ -105,6 +105,7 @@ updateLogoDisplayFade = 0x8000D624; // rom:0xE224
 initTitleTextSequence = 0x8000D68C; // rom:0xE28C
 updateTitleTextDelay = 0x8000D6C0; // rom:0xE2C0
 updateTitleLetterReveal = 0x8000D6F8; // rom:0xE2F8
+updateTitleFinalFadeIn = 0x8000D750; // rom:0xE350
 staticSpriteEffectTexture = 0x8008CDD0; // rom:0x8D9D0
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E

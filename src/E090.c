@@ -64,7 +64,7 @@ void updateLogoDisplayFade(E090_struct *arg0);
 void initTitleTextSequence(E090_struct *arg0);
 void updateTitleTextDelay(E090_struct *arg0);
 void updateTitleLetterReveal(E090_struct *arg0);
-void func_8000D750_E350(E090_struct *arg0);
+void updateTitleFinalFadeIn(E090_struct *arg0);
 void func_8000D7A0_E3A0(E090_struct *arg0);
 
 void initLogoNodeFadeIn(E090_struct *arg0) {
@@ -153,7 +153,7 @@ void updateTitleLetterReveal(E090_struct *arg0) {
     }
 }
 
-void func_8000D750_E350(E090_struct *arg0) {
+void updateTitleFinalFadeIn(E090_struct *arg0) {
     arg0->frameTimer--;
     if (arg0->frameTimer == 15) {
         initLogoNodeFadeIn(arg0);
@@ -228,7 +228,7 @@ void func_8000D974_E574(void) {
             updateTitleLetterReveal(arg0);
             break;
         case 6:
-            func_8000D750_E350(arg0);
+            updateTitleFinalFadeIn(arg0);
             break;
         case 7:
         default:
