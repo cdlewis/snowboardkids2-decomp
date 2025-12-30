@@ -127,7 +127,7 @@ void cleanupGalleryMenu(E770_struct *arg0) {
     unlinkNode(&arg0->fadeNode);
 }
 
-void func_8000E1D0_EDD0(E770_struct *arg0) {
+void activateGalleryMenu(E770_struct *arg0) {
     func_800394BC_3A0BC(&arg0->pad5C8, (s32)arg0->unk5C4);
     func_800394BC_3A0BC(&arg0->pad5F8, (s32)arg0->unk5F4);
     func_8006FDA0_709A0(NULL, 0, 10);
@@ -371,7 +371,7 @@ void func_8000EC98_F898(void) {
     s0 = getCurrentAllocation();
     switch (s0->unk0) {
         case 0:
-            func_8000E1D0_EDD0(s0);
+            activateGalleryMenu(s0);
             break;
         case 1:
             func_8000E240_EE40(s0);
