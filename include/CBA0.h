@@ -41,4 +41,4 @@ void setNodeRenderMode(NodeRenderModeArg *arg0, s32 arg1);
 void setNodeWipeColor(NodeWipeColorArg *node, u8 r, u8 g, u8 b);
 void setNodeScaleTarget(Func8000C2CCArg *arg0, s32 arg1, s16 arg2);
 void setNodePositionTarget(NodePositionTargetArg *arg0, s32 *arg1, s16 arg2);
-void func_8000C440_D040(void *arg0, s32 arg1, s32 arg2, u16 arg3, s32 arg4, s32 arg5, s32 arg6);
+void initSceneRenderNode(void *node, u16 slotIndex, u8 priority, u16 sceneId, u8 renderMode, u16 taskArg1, u16 taskArg2);

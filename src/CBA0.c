@@ -216,42 +216,50 @@ extern void func_8000C5AC_D1AC(void *);
 
 typedef struct {
     Node_70B00 base;
-    ColorData unk1D8;
-    ColorData unk1E0;
+    ColorData lightColor;
+    ColorData ambientColor;
     u8 pad1E8[0x28];
     s32 unk210;
     u8 pad214[0x4];
-    u8 unk218;
-} Func8000C440Arg;
+    u8 renderMode;
+} SceneRenderNode;
 
-void func_8000C440_D040(Func8000C440Arg *arg0, u16 arg1, u8 arg2, u16 arg3, u8 arg4, u16 arg5, u16 arg6) {
+void initSceneRenderNode(
+    SceneRenderNode *node,
+    u16 slotIndex,
+    u8 priority,
+    u16 sceneId,
+    u8 renderMode,
+    u16 taskArg1,
+    u16 taskArg2
+) {
     void *task;
     s32 pad[8];
 
-    func_8006FAA4_706A4(&arg0->base, NULL, arg1, arg2, 1);
-    func_8006F9BC_705BC(&arg0->base, 1.0f, 1.0f);
-    func_8006FEF8_70AF8(&arg0->base, arg3);
-    setModelCameraTransform(arg0, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    func_8006FA0C_7060C(&arg0->base, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    func_8006FAA4_706A4(&node->base, NULL, slotIndex, priority, 1);
+    func_8006F9BC_705BC(&node->base, 1.0f, 1.0f);
+    func_8006FEF8_70AF8(&node->base, sceneId);
+    setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    func_8006FA0C_7060C(&node->base, 40.0f, 1.3333334f, 10.0f, 10000.0f);
 
-    arg0->unk1D8.r2 = 0;
-    arg0->unk1D8.g2 = 0x7F;
-    arg0->unk1D8.b2 = 0x7F;
-    arg0->unk1D8.r = 0;
-    arg0->unk1D8.g = 0;
-    arg0->unk1D8.b = 0;
-    arg0->unk1E0.r = 0;
-    arg0->unk1E0.g = 0;
-    arg0->unk1E0.b = 0;
+    node->lightColor.r2 = 0;
+    node->lightColor.g2 = 0x7F;
+    node->lightColor.b2 = 0x7F;
+    node->lightColor.r = 0;
+    node->lightColor.g = 0;
+    node->lightColor.b = 0;
+    node->ambientColor.r = 0;
+    node->ambientColor.g = 0;
+    node->ambientColor.b = 0;
 
-    func_8006FC70_70870(arg0->base.id, 1, &arg0->unk1D8, &arg0->unk1E0);
+    func_8006FC70_70870(node->base.id, 1, &node->lightColor, &node->ambientColor);
 
-    arg0->unk210 = 0;
-    arg0->unk218 = arg4;
+    node->unk210 = 0;
+    node->renderMode = renderMode;
 
-    task = scheduleTask(func_8000C5AC_D1AC, arg5, arg6, 0);
+    task = scheduleTask(func_8000C5AC_D1AC, taskArg1, taskArg2, 0);
     if (task != NULL) {
-        *(Func8000C440Arg **)task = arg0;
+        *(SceneRenderNode **)task = node;
     }
 }
 

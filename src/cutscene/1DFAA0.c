@@ -114,7 +114,7 @@ void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *ar
         func_800B5B30_1E2BE0(arg0->sceneContext, 1);
     }
 
-    func_8000C440_D040(&arg0->unkFF8, 2, 0xC, arg1->id, 0, 2, 0);
+    initSceneRenderNode(&arg0->unkFF8, 2, 0xC, arg1->id, 0, 2, 0);
     clearAuxRenderEnabled(&arg0->unkFF8);
 
     arg0->shadowModel = arg2;
