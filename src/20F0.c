@@ -440,8 +440,8 @@ void initializeGameEntity(
     ent->actionMode = 0;
 
     loadSpriteAsset(&ent->unkA4, 0);
-    ent->unk114 = func_8000CD88_D988();
-    ent->unk118 = func_8000CDB4_D9B4();
+    ent->unk114 = loadSpriteEffectModelData();
+    ent->unk118 = loadSpriteEffectTextureData();
     ent->soundData = loadAssetGroupSoundData((SceneModel *)ent);
     ent->renderEnabled = 0;
     ent->height = 0;
@@ -477,8 +477,8 @@ void *cleanupSceneModel(SceneModel *model) {
     model->isDestroyed = 1;
     model->unk120 = freeNodeMemory(model->unk120);
     model->unk11C = freeNodeMemory(model->unk11C);
-    model->unk118 = func_8000CDFC_D9FC(model->unk118);
-    model->unk114 = func_8000CDE0_D9E0(model->unk114);
+    model->unk118 = freeSpriteEffectTextureData(model->unk118);
+    model->unk114 = freeSpriteEffectModelData(model->unk114);
     releaseNodeMemoryRef((void **)&model->unkA4);
 
     slotData = model->unk98;
