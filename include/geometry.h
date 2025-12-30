@@ -47,7 +47,7 @@ void createCombinedRotationMatrix(void *, u16, u16);
 
 void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
 
-void func_8006BFB8_6CBB8(void *, void *);
+void func_8006BFB8_6CBB8(void *src, void *dst);
 
 void createRotationMatrixYX(Transform3D *matrix, u16 angleY, u16 angleX);
 void createRotationMatrixXZ(Transform3D *matrix, u16 angleX, u16 angleZ);

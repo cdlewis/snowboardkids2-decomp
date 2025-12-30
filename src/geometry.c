@@ -442,26 +442,26 @@ void func_8006BEDC_6CADC(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
     func_8006B084_6BC84(ptr - 5, &sp50, arg0);
 }
 
-void func_8006BFB8_6CBB8(void *a, void *b) {
-    Transform3D *arg0 = (Transform3D *)a;
-    s32 *arg1 = (s32 *)b;
+void func_8006BFB8_6CBB8(void *srcPtr, void *dstPtr) {
+    Transform3D *src = (Transform3D *)srcPtr;
+    s32 *mtxWords = (s32 *)dstPtr;
 
-    arg1[0] = ((arg0->m[0][0] * 8) & 0xFFFF0000) + (((s32)((u16)arg0->m[0][1] << 16) >> 29) & 0xFFFF);
-    arg1[1] = (arg0->m[0][2] * 8) & 0xFFFF0000;
-    arg1[2] = ((arg0->m[1][0] * 8) & 0xFFFF0000) + (((s32)((u16)arg0->m[1][1] << 16) >> 29) & 0xFFFF);
-    arg1[3] = (arg0->m[1][2] * 8) & 0xFFFF0000;
-    arg1[4] = ((arg0->m[2][0] * 8) & 0xFFFF0000) + (((s32)((u16)arg0->m[2][1] << 16) >> 29) & 0xFFFF);
-    arg1[5] = (arg0->m[2][2] * 8) & 0xFFFF0000;
-    arg1[6] = (arg0->translation.x & 0xFFFF0000) + ((u16 *)&arg0->translation.y)[0];
-    arg1[7] = (arg0->translation.z & 0xFFFF0000) + 1;
-    arg1[8] = ((arg0->m[0][0] << 19) & 0xFFFF0000) + (((s16)arg0->m[0][1] * 8) & 0xFFFF);
-    arg1[9] = (arg0->m[0][2] << 19) & 0xFFFF0000;
-    arg1[10] = ((arg0->m[1][0] << 19) & 0xFFFF0000) + (((s16)arg0->m[1][1] * 8) & 0xFFFF);
-    arg1[11] = (arg0->m[1][2] << 19) & 0xFFFF0000;
-    arg1[12] = ((arg0->m[2][0] << 19) & 0xFFFF0000) + (((s16)arg0->m[2][1] * 8) & 0xFFFF);
-    arg1[13] = (arg0->m[2][2] << 19) & 0xFFFF0000;
-    arg1[14] = (arg0->translation.x << 16) + ((u16 *)&arg0->translation.y)[1];
-    arg1[15] = arg0->translation.z << 16;
+    mtxWords[0] = ((src->m[0][0] * 8) & 0xFFFF0000) + (((s32)((u16)src->m[0][1] << 16) >> 29) & 0xFFFF);
+    mtxWords[1] = (src->m[0][2] * 8) & 0xFFFF0000;
+    mtxWords[2] = ((src->m[1][0] * 8) & 0xFFFF0000) + (((s32)((u16)src->m[1][1] << 16) >> 29) & 0xFFFF);
+    mtxWords[3] = (src->m[1][2] * 8) & 0xFFFF0000;
+    mtxWords[4] = ((src->m[2][0] * 8) & 0xFFFF0000) + (((s32)((u16)src->m[2][1] << 16) >> 29) & 0xFFFF);
+    mtxWords[5] = (src->m[2][2] * 8) & 0xFFFF0000;
+    mtxWords[6] = (src->translation.x & 0xFFFF0000) + ((u16 *)&src->translation.y)[0];
+    mtxWords[7] = (src->translation.z & 0xFFFF0000) + 1;
+    mtxWords[8] = ((src->m[0][0] << 19) & 0xFFFF0000) + (((s16)src->m[0][1] * 8) & 0xFFFF);
+    mtxWords[9] = (src->m[0][2] << 19) & 0xFFFF0000;
+    mtxWords[10] = ((src->m[1][0] << 19) & 0xFFFF0000) + (((s16)src->m[1][1] * 8) & 0xFFFF);
+    mtxWords[11] = (src->m[1][2] << 19) & 0xFFFF0000;
+    mtxWords[12] = ((src->m[2][0] << 19) & 0xFFFF0000) + (((s16)src->m[2][1] * 8) & 0xFFFF);
+    mtxWords[13] = (src->m[2][2] << 19) & 0xFFFF0000;
+    mtxWords[14] = (src->translation.x << 16) + ((u16 *)&src->translation.y)[1];
+    mtxWords[15] = src->translation.z << 16;
 }
 
 void func_8006C130_6CD30(Transform3D *arg0, Mtx *arg1) {
