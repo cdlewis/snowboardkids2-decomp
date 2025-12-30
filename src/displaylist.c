@@ -553,7 +553,8 @@ void func_80063A94_64694(DisplayListObject *obj) {
         ((s32 *)obj->unk30)[3] = 0;       /* m[1][1] = 0, m[1][2] = 0 */
         ((s32 *)obj->unk30)[4] = 0;       /* m[1][3] = 0, m[2][0] = 0 */
         ((s32 *)obj->unk30)[5] = 0x10000; /* m[2][1] = 0, m[2][2] = 1.0 (integer part) */
-        ((s32 *)obj->unk30)[6] = (obj->transform.translation.x & 0xFFFF0000) + ((u16 *)&obj->transform.translation.y)[0];
+        ((s32 *)obj->unk30)[6] =
+            (obj->transform.translation.x & 0xFFFF0000) + ((u16 *)&obj->transform.translation.y)[0];
         ((s32 *)obj->unk30)[7] = (obj->transform.translation.z & 0xFFFF0000) + 1;
         /* Fractional portion (s32[8-15]) */
         ((s32 *)obj->unk30)[8] = 0;
