@@ -82,7 +82,7 @@ void beginMenuFadeIn(E770_struct *arg0) {
     arg0->fadeTimer = 10;
 }
 
-s32 func_8000DC18_E818(E770_struct *arg0) {
+s32 getMenuOptionCount(E770_struct *arg0) {
     s8 temp = arg0->unk2;
 
     if (temp < 2) {
@@ -269,8 +269,8 @@ set_zero:
 
 check_max:
     sel2 = arg0->unk1;
-    if (func_8000DC18_E818(arg0) - 1 < sel2) {
-        arg0->unk1 = func_8000DC18_E818(arg0) - 1;
+    if (getMenuOptionCount(arg0) - 1 < sel2) {
+        arg0->unk1 = getMenuOptionCount(arg0) - 1;
     }
 
     if (arg0->unk1 == (s8)selection) {
