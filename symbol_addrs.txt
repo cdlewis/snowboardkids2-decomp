@@ -97,6 +97,7 @@ animateMenuContractHorizontal = 0x8000D200; // rom:0xDE00
 initCutsceneWaitMenu = 0x8000D244; // rom:0xDE44
 updateCutsceneWaitMenu = 0x8000D2C8; // rom:0xDEC8
 cleanupCutsceneWaitMenu = 0x8000D448; // rom:0xE048
+initLogoNodeFadeIn = 0x8000D490; // rom:0xE090
 staticSpriteEffectTexture = 0x8008CDD0; // rom:0x8D9D0
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
