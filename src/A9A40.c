@@ -151,47 +151,48 @@ extern u8 D_800BADD0_AAC80[];
 s8 func_800BA694_AA544(Player *player) {
     GameState *gs;
     volatile StackVars_A9A40 sv;
-    s32 diffX;
-    s32 diffZ;
+    s32 segmentDirX;
+    s32 segmentDirZ;
     s32 distSq;
     s32 dist;
-    s32 normalizedX;
-    s32 normalizedZ;
-    s32 posX;
-    s32 posZ;
-    s64 product;
-    u16 idx14;
-    u16 idx18;
+    s32 normalizedDirX;
+    s32 normalizedDirZ;
+    s32 playerOffsetX;
+    s32 playerOffsetZ;
+    s64 crossProduct;
+    u16 segmentStartIdx;
+    u16 segmentEndIdx;
 
     gs = getCurrentAllocation();
 
     if (player->unk28 != NULL && ((PlayerUnk28Entry *)player->unk28)[player->unkB94].unk3 != 0) {
-        idx14 = SEC3(gs)[player->unkB94].unk14;
-        idx18 = SEC3(gs)[player->unkB94].unk18;
-        diffX = SEC1(gs)[idx14].x - SEC1(gs)[idx18].x;
-        sv.valX = diffX;
+        segmentStartIdx = SEC3(gs)[player->unkB94].unk14;
+        segmentEndIdx = SEC3(gs)[player->unkB94].unk18;
+        segmentDirX = SEC1(gs)[segmentStartIdx].x - SEC1(gs)[segmentEndIdx].x;
+        sv.valX = segmentDirX;
 
-        idx14 = SEC3(gs)[player->unkB94].unk14;
-        distSq = diffX * diffX;
-        idx18 = SEC3(gs)[player->unkB94].unk18;
-        diffZ = SEC1(gs)[idx14].z - SEC1(gs)[idx18].z;
-        sv.valZ = diffZ;
-        distSq += diffZ * diffZ;
+        segmentStartIdx = SEC3(gs)[player->unkB94].unk14;
+        distSq = segmentDirX * segmentDirX;
+        segmentEndIdx = SEC3(gs)[player->unkB94].unk18;
+        segmentDirZ = SEC1(gs)[segmentStartIdx].z - SEC1(gs)[segmentEndIdx].z;
+        sv.valZ = segmentDirZ;
+        distSq += segmentDirZ * segmentDirZ;
 
         dist = isqrt64(distSq);
-        normalizedX = (sv.valX << 13) / dist;
-        normalizedZ = (sv.valZ << 13) / dist;
+        normalizedDirX = (sv.valX << 13) / dist;
+        normalizedDirZ = (sv.valZ << 13) / dist;
 
-        idx14 = SEC3(gs)[player->unkB94].unk14;
-        posX = player->worldPos.x - (SEC1(gs)[idx14].x << 16);
-        sv.valX = posX;
+        segmentStartIdx = SEC3(gs)[player->unkB94].unk14;
+        playerOffsetX = player->worldPos.x - (SEC1(gs)[segmentStartIdx].x << 16);
+        sv.valX = playerOffsetX;
 
-        idx14 = SEC3(gs)[player->unkB94].unk14;
-        posZ = player->worldPos.z - (SEC1(gs)[idx14].z << 16);
-        sv.valZ = posZ;
+        segmentStartIdx = SEC3(gs)[player->unkB94].unk14;
+        playerOffsetZ = player->worldPos.z - (SEC1(gs)[segmentStartIdx].z << 16);
+        sv.valZ = playerOffsetZ;
 
-        product = (((s64)(-((s16)normalizedZ))) * posX) + (((s64)((s16)normalizedX)) * posZ);
-        dist = -((s32)(product / 0x2000));
+        crossProduct =
+            (((s64)(-((s16)normalizedDirZ))) * playerOffsetX) + (((s64)((s16)normalizedDirX)) * playerOffsetZ);
+        dist = -((s32)(crossProduct / 0x2000));
         if (dist < (player->unkAA8 * 6)) {
             return ((PlayerUnk28Entry *)player->unk28)[player->unkB94].unk3;
         }
