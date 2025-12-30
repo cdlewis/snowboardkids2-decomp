@@ -394,20 +394,20 @@ void updateSceneRenderTask(SceneRenderTaskCtx *ctx) {
 
 typedef struct {
     u8 pad0[0x28];
-    void *unk28;
-    void *unk2C;
-    void *unk30;
+    void *modelData1;
+    void *textureData1;
+    void *spare1;
     u8 pad34[0x30];
-    void *unk64;
-    void *unk68;
-    void *unk6C;
-} Func8000CA80Arg;
+    void *modelData2;
+    void *textureData2;
+    void *spare2;
+} SceneRenderTaskData;
 
-void func_8000CA80_D680(Func8000CA80Arg *arg0) {
-    arg0->unk30 = freeNodeMemory(arg0->unk30);
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
-    arg0->unk6C = freeNodeMemory(arg0->unk6C);
-    arg0->unk68 = freeNodeMemory(arg0->unk68);
-    arg0->unk64 = freeNodeMemory(arg0->unk64);
+void cleanupSceneRenderTask(SceneRenderTaskData *task) {
+    task->spare1 = freeNodeMemory(task->spare1);
+    task->textureData1 = freeNodeMemory(task->textureData1);
+    task->modelData1 = freeNodeMemory(task->modelData1);
+    task->spare2 = freeNodeMemory(task->spare2);
+    task->textureData2 = freeNodeMemory(task->textureData2);
+    task->modelData2 = freeNodeMemory(task->modelData2);
 }
