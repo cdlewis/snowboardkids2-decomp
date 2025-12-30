@@ -1,3 +1,5 @@
+gCurrentBgmId = 0x8008CE40; // rom:0x8DA40
+playBgmTrack = 0x8000DB70; // rom:0xE770
 nullsub = 0x800084D0; // rom:0x90D0
 nullsub_s32 = 0x800084D8; // rom:0x90D8
 nullsub_s32_2 = 0x800084E0; // rom:0x90E0

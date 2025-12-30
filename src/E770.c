@@ -8,7 +8,7 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern s16 D_8008CE40_8DA40;
+extern s16 gCurrentBgmId;
 extern u8 D_8009DF6C_9EB6C[];
 
 typedef struct {
@@ -66,10 +66,10 @@ typedef struct {
     SceneModel *unk624;
 } E770_struct;
 
-void func_8000DB70_E770(E770_struct *arg0, s16 arg1) {
-    D_8008CE40_8DA40 = arg1;
+void playBgmTrack(E770_struct *arg0, s16 bgmId) {
+    gCurrentBgmId = bgmId;
     arg0->unk10 = 0x28;
-    func_80057514_58114(arg1, 0x80, 0);
+    func_80057514_58114(bgmId, 0x80, 0);
 }
 
 void func_8000DBA8_E7A8(E770_struct *arg0) {
@@ -355,7 +355,7 @@ extern void func_8000E6E0_F2E0(void);
 
 void func_8000E680_F280(void) {
     allocateTaskMemory(0xCC0);
-    D_8008CE40_8DA40 = 5;
+    gCurrentBgmId = 5;
     setupTaskSchedulerNodes(0x40, 4, 0, 0, 0, 0, 0, 0);
     func_800585C8_591C8(0xD0);
     setGameStateHandler(func_8000E6E0_F2E0);
@@ -404,7 +404,7 @@ void func_8000EC98_F898(void) {
 }
 
 void func_8000ED88_F988(void) {
-    D_8008CE40_8DA40 = 5;
+    gCurrentBgmId = 5;
     func_800697F4_6A3F4(1);
 }
 
@@ -705,7 +705,7 @@ void func_8000F884_10484(FD98_struct *arg0) {
 
     if (gControllerInputs & 0x8000) {
         if (func_8000EDB0_F9B0(arg0->unk2)) {
-            func_8000DB70_E770(alloc, entry->pad[4]);
+            playBgmTrack(alloc, entry->pad[4]);
             if (alloc->unk624->unk16 != 0x92) {
                 spawnSpriteEffectInternal(
                     alloc->unk624,
