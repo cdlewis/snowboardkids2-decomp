@@ -275,26 +275,26 @@ typedef struct {
     u8 pad0[0x16];
     u16 slot_index;
     u8 pad18[0x108];
-    u8 padding4[0x20]; // 0x120
+    u8 baseTransform[0x20]; // 0x120
     u8 pad140[0xA4];
-    s32 unk1E4; // 0x1E4
-    s32 unk1E8; // 0x1E8
-    s32 unk1EC; // 0x1EC
-    s32 unk1F0; // 0x1F0
-    s32 unk1F4; // 0x1F4
-    s32 unk1F8; // 0x1F8
-    s16 unk1FC; // 0x1FC
-    s16 unk1FE; // 0x1FE
-    s16 unk200; // 0x200
-    s16 pad202; // 0x202
-    s32 unk204; // 0x204
-    s32 unk208; // 0x208
-    s16 unk20C; // 0x20C
-    u16 unk20E; // 0x20E
-    s32 unk210; // 0x210
+    s32 posX;          // 0x1E4
+    s32 posY;          // 0x1E8
+    s32 posZ;          // 0x1EC
+    s32 velocityX;     // 0x1F0
+    s32 velocityY;     // 0x1F4
+    s32 velocityZ;     // 0x1F8
+    s16 posFramesX;    // 0x1FC
+    s16 posFramesY;    // 0x1FE
+    s16 posFramesZ;    // 0x200
+    s16 pad202;        // 0x202
+    s32 scale;         // 0x204
+    s32 scaleVelocity; // 0x208
+    s16 scaleFrames;   // 0x20C
+    u16 rotationAngle; // 0x20E
+    s32 renderFlags;   // 0x210
     u8 pad214[0x4];
     s8 renderMode; // 0x218
-} ExtendedNode;
+} SceneRenderNodeExt;
 
 typedef struct {
     s16 m[9]; // 0x12 bytes
@@ -303,92 +303,92 @@ typedef struct {
 } MatrixWithPos;
 
 typedef struct {
-    ExtendedNode *unk0;
-    MatrixWithPos unk4;
+    SceneRenderNodeExt *node;
+    MatrixWithPos staticTransform;
     u8 pad24[0x1C];
-    MatrixWithPos unk40;
-} Func8000C7A4Arg;
+    MatrixWithPos rotatedTransform;
+} SceneRenderTaskCtx;
 
-void func_8000C7A4_D3A4(Func8000C7A4Arg *arg0) {
+void updateSceneRenderTask(SceneRenderTaskCtx *ctx) {
     Transform3D sp10;
     Transform3D sp30;
-    Transform3D *mat1;
-    Transform3D *mat2;
-    ExtendedNode *temp_v0;
-    ExtendedNode *temp_v1;
-    ExtendedNode *temp_a0;
-    MatrixWithPos *temp_s0;
-    ExtendedNode *temp_a1;
-    s16 scale;
+    Transform3D *rotMatrix;
+    Transform3D *tempMatrix;
+    SceneRenderNodeExt *nodeA;
+    SceneRenderNodeExt *nodeB;
+    SceneRenderNodeExt *nodeC;
+    MatrixWithPos *transform;
+    SceneRenderNodeExt *nodeD;
+    s16 scaleFactor;
 
-    temp_v1 = arg0->unk0;
-    if (temp_v1->unk210 & 1) {
-        mat1 = &sp10;
-        memcpy(mat1, identityMatrix, 0x20);
-        mat2 = &sp30;
-        memcpy(mat2, identityMatrix, 0x20);
-        func_8006FED8_70AD8(arg0->unk0);
-        enqueueAuxBufferRender((AuxBufferContext *)arg0);
-        temp_v1 = arg0->unk0;
+    nodeB = ctx->node;
+    if (nodeB->renderFlags & 1) {
+        rotMatrix = &sp10;
+        memcpy(rotMatrix, identityMatrix, 0x20);
+        tempMatrix = &sp30;
+        memcpy(tempMatrix, identityMatrix, 0x20);
+        func_8006FED8_70AD8(ctx->node);
+        enqueueAuxBufferRender((AuxBufferContext *)ctx);
+        nodeB = ctx->node;
 
-        switch (temp_v1->renderMode) {
+        switch (nodeB->renderMode) {
             case 0:
-                temp_v1->unk20E = 0;
-                temp_a1 = arg0->unk0;
-                temp_s0 = &arg0->unk4;
-                memcpy(temp_s0, temp_a1->padding4, 0x20);
-                memcpy(arg0->unk4.pos, &arg0->unk0->unk1E4, 0xC);
-                temp_v0 = arg0->unk0;
-                scale = (s16)((s64)(temp_v0->unk204 >> 8) * 0x2000 >> 8);
-                scaleMatrix((Transform3D *)temp_s0, scale, scale, scale);
-                enqueueDisplayListObject(arg0->unk0->slot_index, (DisplayListObject *)temp_s0);
+                nodeB->rotationAngle = 0;
+                nodeD = ctx->node;
+                transform = &ctx->staticTransform;
+                memcpy(transform, nodeD->baseTransform, 0x20);
+                memcpy(ctx->staticTransform.pos, &ctx->node->posX, 0xC);
+                nodeA = ctx->node;
+                scaleFactor = (s16)((s64)(nodeA->scale >> 8) * 0x2000 >> 8);
+                scaleMatrix((Transform3D *)transform, scaleFactor, scaleFactor, scaleFactor);
+                enqueueDisplayListObject(ctx->node->slot_index, (DisplayListObject *)transform);
                 break;
             case 1:
-                createZRotationMatrix(mat1, temp_v1->unk20E);
-                memcpy(mat2, arg0->unk0->padding4, 0x20);
-                func_8006B084_6BC84(mat1, mat2, &arg0->unk40);
-                memcpy(arg0->unk40.pos, &arg0->unk0->unk1E4, 0xC);
-                temp_v0 = arg0->unk0;
-                scale = (s16)((s64)(temp_v0->unk204 >> 8) * 0x2000 >> 8);
-                scaleMatrix((Transform3D *)&arg0->unk40, scale, scale, scale);
-                enqueueDisplayListObject(arg0->unk0->slot_index, (DisplayListObject *)&arg0->unk40);
-                temp_v1 = arg0->unk0;
-                if (temp_v1->unk20C != 0) {
-                    temp_v1->unk20E += 0xB6;
+                createZRotationMatrix(rotMatrix, nodeB->rotationAngle);
+                memcpy(tempMatrix, ctx->node->baseTransform, 0x20);
+                func_8006B084_6BC84(rotMatrix, tempMatrix, &ctx->rotatedTransform);
+                memcpy(ctx->rotatedTransform.pos, &ctx->node->posX, 0xC);
+                nodeA = ctx->node;
+                scaleFactor = (s16)((s64)(nodeA->scale >> 8) * 0x2000 >> 8);
+                scaleMatrix((Transform3D *)&ctx->rotatedTransform, scaleFactor, scaleFactor, scaleFactor);
+                enqueueDisplayListObject(ctx->node->slot_index, (DisplayListObject *)&ctx->rotatedTransform);
+                nodeB = ctx->node;
+                if (nodeB->scaleFrames != 0) {
+                    nodeB->rotationAngle += 0xB6;
                 }
                 break;
         }
 
-        enqueueAuxBufferSetup((AuxBufferContext *)arg0);
-        temp_a0 = arg0->unk0;
-        if (temp_a0->unk20C > 0) {
-            temp_a0->unk204 += temp_a0->unk208;
-            temp_v1 = arg0->unk0;
-            temp_v1->unk20C--;
-            temp_a0 = arg0->unk0;
+        enqueueAuxBufferSetup((AuxBufferContext *)ctx);
+        nodeC = ctx->node;
+        if (nodeC->scaleFrames > 0) {
+            nodeC->scale += nodeC->scaleVelocity;
+            nodeB = ctx->node;
+            nodeB->scaleFrames--;
+            nodeC = ctx->node;
         }
-        if (temp_a0->unk1FC > 0) {
-            temp_a0->unk1E4 += temp_a0->unk1F0;
-            temp_v1 = arg0->unk0;
-            temp_v1->unk1FC--;
+        if (nodeC->posFramesX > 0) {
+            nodeC->posX += nodeC->velocityX;
+            nodeB = ctx->node;
+            nodeB->posFramesX--;
         }
-        temp_a0 = arg0->unk0;
-        if (temp_a0->unk1FE > 0) {
-            temp_a0->unk1E8 += temp_a0->unk1F4;
-            temp_v1 = arg0->unk0;
-            temp_v1->unk1FE--;
+        nodeC = ctx->node;
+        if (nodeC->posFramesY > 0) {
+            nodeC->posY += nodeC->velocityY;
+            nodeB = ctx->node;
+            nodeB->posFramesY--;
         }
-        temp_a0 = arg0->unk0;
-        if (temp_a0->unk200 > 0) {
-            temp_a0->unk1EC += temp_a0->unk1F8;
-            temp_v1 = arg0->unk0;
-            temp_v1->unk200--;
+        nodeC = ctx->node;
+        if (nodeC->posFramesZ > 0) {
+            nodeC->posZ += nodeC->velocityZ;
+            nodeB = ctx->node;
+            nodeB->posFramesZ--;
         }
     } else {
-        temp_v1->unk204 = 0x10000;
-        arg0->unk0->unk208 = 0;
-        arg0->unk0->unk20C = 0;
-        arg0->unk0->unk20E = 0;
+        nodeB->scale = 0x10000;
+        ctx->node->scaleVelocity = 0;
+        ctx->node->scaleFrames = 0;
+        ctx->node->rotationAngle = 0;
     }
 }
 
