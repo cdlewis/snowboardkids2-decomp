@@ -3,6 +3,7 @@
 #include "297B0.h"
 #include "2C8F0.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "gamestate.h"
 #include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
@@ -65,7 +66,95 @@ typedef struct {
 
 void func_8002D668_2E268(Func2E024Arg *arg0);
 
-INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D140_2DD40);
+void func_8002D140_2DD40(Func2E024Arg *arg0) {
+    GameState *allocation;
+    s32 i;
+    Func2E024Element *ptr;
+    u16 temp;
+    s32 pad[4];
+
+    (void)pad;
+    allocation = getCurrentAllocation();
+
+    switch (arg0->unkD2) {
+        case 0:
+            temp = arg0->unk5A + 1;
+            arg0->unk5A = temp;
+            if ((s16)temp == 0x3C) {
+                arg0->unkD2 = 1;
+                arg0->unk5A = 0;
+                arg0->unkB4 = 0x1C;
+                setAnimationIndex(arg0->unk64, 3);
+                spawnSpriteEffectEx(arg0->model, 0, 6, 0xF, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+                spawnSpriteEffectEx(arg0->unk64, 0, 6, 0xF, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
+            }
+            break;
+
+        case 1:
+            if (arg0->unkC6 != 0) {
+                arg0->unkC6 = -1;
+                arg0->unkD2 = 2;
+            }
+            break;
+
+        case 2:
+            temp = arg0->unk5A + 1;
+            arg0->unk5A = temp;
+            if ((s16)temp == 0x14) {
+                arg0->unkC6 = 0;
+                arg0->unkB4 = 0x1E;
+                setAnimationIndex(arg0->unk64, 2);
+                arg0->unk50 = 0x17;
+                setAnimationIndex(arg0->model, 2);
+                arg0->unkD2 = 3;
+                arg0->unk5A = 0;
+            }
+            break;
+
+        case 3:
+            if (arg0->unkC6 != 0) {
+                arg0->unkB4 = 0x1F;
+                arg0->unk50 = 0x18;
+                arg0->unkD2 = 4;
+            }
+            break;
+
+        case 4:
+            arg0->unk62 = 0;
+            arg0->unkC6 = 0;
+            if (getFreeNodeCount(2) == 0x14) {
+                arg0->unk40 = (s32)0xFFF90000;
+                arg0->unk44 = 0x220000;
+                spawnSpriteEffectEx(arg0->model, 0, 0x24, -1, &arg0->unk40, 0x10000, 1, 2, 1, 0);
+                arg0->unkA4 = 0x90000;
+                arg0->unkA8 = 0x260000;
+                spawnSpriteEffectEx(arg0->unk64, 0, 0x24, -1, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
+            } else if (getFreeNodeCount(2) == 0x13) {
+                arg0->unk40 = (s32)0xFFF90000;
+                arg0->unk44 = 0x220000;
+                spawnSpriteEffectEx(arg0->model, 0, 0x24, -1, &arg0->unk40, 0x10000, 1, 2, 1, 0);
+            }
+            break;
+    }
+
+    ptr = (Func2E024Element *)arg0;
+    for (i = 0; i < 2; i++) {
+        func_8002A2D0_2AED0((Func297D8Arg *)&ptr[i]);
+        allocation->unk408[i] = ptr[i].matrix.translation.x;
+        allocation->unk410[i] = ptr[i].matrix.translation.z;
+    }
+
+    if (allocation->unk42A == 0x11) {
+        if (arg0->unkD2 == 4) {
+            allocation->unk42E = 2;
+        } else {
+            allocation->unk42E = 1;
+        }
+        func_8002EBB0_2F7B0(arg0);
+        arg0->unkC8 = func_8002D140_2DD40;
+        setCallback(func_8002BEF4_2CAF4);
+    }
+}
 
 void func_8002D46C_2E06C(Func2E024Arg *arg0) {
     GameState *allocation;
