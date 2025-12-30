@@ -153,6 +153,7 @@ maxActiveOrbitalSprites = 0x8008C1F0; // rom:0x8CDF0
 getEmptyModelDisplayOffset = 0x80002B8C; // rom:0x378C
 getModelDisplayDataOffset = 0x80002BD0; // rom:0x37D0
 loadAssetSlotTableEntry = 0x80002C14; // rom:0x3814
+renderShadow = 0x80002C70; // rom:0x3870
 scheduleTransparentModelRender = 0x80002F80; // rom:0x3B80
 renderModelIfTransparent = 0x80002FD4; // rom:0x3BD4
 loadAssetGroupResources = 0x800030B4; // rom:0x3CB4
