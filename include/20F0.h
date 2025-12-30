@@ -163,7 +163,8 @@ typedef struct {
     s8 renderEnabled;
 } SceneModel;
 
-void *createSceneModelEx(s32 assetGroupIndex, void *allocation, s8 assetPairIndex, s8 param4, s8 param5, s16 assetIndex);
+void *
+createSceneModelEx(s32 assetGroupIndex, void *allocation, s8 assetPairIndex, s8 param4, s8 param5, s16 assetIndex);
 void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode);
 void *loadAssetGroupSoundData(SceneModel *);
 void *loadAssetGroupDisplayList(SceneModel *);
@@ -300,3 +301,5 @@ void setModelAlpha(SceneModel *arg0, u8 arg1);
 void enqueueModelDisplayList(func_80002B50_3750_arg *arg0, DisplayListObject *arg1);
 
 s32 isAssetGroupEmpty(s16);
+
+s32 hasModelGraphicsData(SceneModel *);

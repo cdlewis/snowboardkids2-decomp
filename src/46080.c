@@ -319,7 +319,6 @@ void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0);
 void func_8004AE58_4BA58(s32 **);
 void func_8004A96C_4B56C(s32 **);
 void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0);
-void *func_8006C130_6CD30(void *, Mtx *);
 void func_80049300_49F00(func_80049300_49F00_arg *arg0);
 void func_8004934C_49F4C(func_80049300_49F00_arg *arg0);
 void func_80049404_4A004(Struct_func_80049404_4A004 *arg0);
@@ -2482,7 +2481,7 @@ void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
         if (arg0->unk30 == NULL) {
             return;
         }
-        func_8006C130_6CD30(&arg0->_pad10, arg0->unk30);
+        func_8006C130_6CD30((LookAtData *)&arg0->_pad10, arg0->unk30);
     }
 
     gDPPipeSync(gRegionAllocPtr++);

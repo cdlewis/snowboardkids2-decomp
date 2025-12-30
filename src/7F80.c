@@ -46,7 +46,6 @@ void cleanupCameraRotationTask(void);
 void renderPalettedTexture(PalettedTextureState *);
 
 extern u8 identityMatrix[];
-void *func_8006C130_6CD30(void *, Mtx *);
 extern s32 D_8008C200_8CE00[];
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
@@ -181,7 +180,7 @@ void renderPalettedTexture(PalettedTextureState *state) {
         if (state->lookAtMatrix == 0) {
             return;
         }
-        func_8006C130_6CD30(&state->rotationMatrix, state->lookAtMatrix);
+        func_8006C130_6CD30((LookAtData *)&state->rotationMatrix, state->lookAtMatrix);
     }
 
     gDPPipeSync(gRegionAllocPtr++);

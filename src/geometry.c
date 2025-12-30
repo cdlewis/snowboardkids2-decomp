@@ -442,22 +442,6 @@ void func_8006BEDC_6CADC(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
     func_8006B084_6BC84(ptr - 5, &sp50, arg0);
 }
 
-typedef struct {
-    s16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    u16 unk8;
-    s16 unkA;
-    s16 unkC;
-    u16 unkE;
-    s16 unk10;
-    s32 unk14;
-    u16 unk18;
-    u16 unk1A;
-    s32 unk1C;
-} LookAtData;
-
 void func_8006BFB8_6CBB8(void *a, void *b) {
     LookAtData *arg0 = (LookAtData *)a;
     s32 *arg1 = (s32 *)b;
