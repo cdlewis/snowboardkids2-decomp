@@ -443,52 +443,52 @@ void func_8006BEDC_6CADC(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
 }
 
 void func_8006BFB8_6CBB8(void *a, void *b) {
-    LookAtData *arg0 = (LookAtData *)a;
+    Transform3D *arg0 = (Transform3D *)a;
     s32 *arg1 = (s32 *)b;
 
-    arg1[0] = ((arg0->unk0 * 8) & 0xFFFF0000) + (((s32)(arg0->unk2 << 16) >> 29) & 0xFFFF);
-    arg1[1] = (arg0->unk4 * 8) & 0xFFFF0000;
-    arg1[2] = ((arg0->unk6 * 8) & 0xFFFF0000) + (((s32)(arg0->unk8 << 16) >> 29) & 0xFFFF);
-    arg1[3] = (arg0->unkA * 8) & 0xFFFF0000;
-    arg1[4] = ((arg0->unkC * 8) & 0xFFFF0000) + (((s32)(arg0->unkE << 16) >> 29) & 0xFFFF);
-    arg1[5] = (arg0->unk10 * 8) & 0xFFFF0000;
-    arg1[6] = (arg0->unk14 & 0xFFFF0000) + arg0->unk18;
-    arg1[7] = (arg0->unk1C & 0xFFFF0000) + 1;
-    arg1[8] = ((arg0->unk0 << 19) & 0xFFFF0000) + (((s16)arg0->unk2 * 8) & 0xFFFF);
-    arg1[9] = (arg0->unk4 << 19) & 0xFFFF0000;
-    arg1[10] = ((arg0->unk6 << 19) & 0xFFFF0000) + (((s16)arg0->unk8 * 8) & 0xFFFF);
-    arg1[11] = (arg0->unkA << 19) & 0xFFFF0000;
-    arg1[12] = ((arg0->unkC << 19) & 0xFFFF0000) + (((s16)arg0->unkE * 8) & 0xFFFF);
-    arg1[13] = (arg0->unk10 << 19) & 0xFFFF0000;
-    arg1[14] = (arg0->unk14 << 16) + arg0->unk1A;
-    arg1[15] = arg0->unk1C << 16;
+    arg1[0] = ((arg0->m[0][0] * 8) & 0xFFFF0000) + (((s32)((u16)arg0->m[0][1] << 16) >> 29) & 0xFFFF);
+    arg1[1] = (arg0->m[0][2] * 8) & 0xFFFF0000;
+    arg1[2] = ((arg0->m[1][0] * 8) & 0xFFFF0000) + (((s32)((u16)arg0->m[1][1] << 16) >> 29) & 0xFFFF);
+    arg1[3] = (arg0->m[1][2] * 8) & 0xFFFF0000;
+    arg1[4] = ((arg0->m[2][0] * 8) & 0xFFFF0000) + (((s32)((u16)arg0->m[2][1] << 16) >> 29) & 0xFFFF);
+    arg1[5] = (arg0->m[2][2] * 8) & 0xFFFF0000;
+    arg1[6] = (arg0->translation.x & 0xFFFF0000) + ((u16 *)&arg0->translation.y)[0];
+    arg1[7] = (arg0->translation.z & 0xFFFF0000) + 1;
+    arg1[8] = ((arg0->m[0][0] << 19) & 0xFFFF0000) + (((s16)arg0->m[0][1] * 8) & 0xFFFF);
+    arg1[9] = (arg0->m[0][2] << 19) & 0xFFFF0000;
+    arg1[10] = ((arg0->m[1][0] << 19) & 0xFFFF0000) + (((s16)arg0->m[1][1] * 8) & 0xFFFF);
+    arg1[11] = (arg0->m[1][2] << 19) & 0xFFFF0000;
+    arg1[12] = ((arg0->m[2][0] << 19) & 0xFFFF0000) + (((s16)arg0->m[2][1] * 8) & 0xFFFF);
+    arg1[13] = (arg0->m[2][2] << 19) & 0xFFFF0000;
+    arg1[14] = (arg0->translation.x << 16) + ((u16 *)&arg0->translation.y)[1];
+    arg1[15] = arg0->translation.z << 16;
 }
 
-void func_8006C130_6CD30(LookAtData *arg0, Mtx *arg1) {
+void func_8006C130_6CD30(Transform3D *arg0, Mtx *arg1) {
     s32 *dst;
     s16 temp16;
 
     dst = (s32 *)arg1;
 
-    dst[0] = (((s32)arg0->unk0 << 1) & 0xFFFF0000) + ((-(s32)((u32)arg0->unk2 >> 15)) & 0xFFFF);
-    dst[1] = ((s32)arg0->unk4 << 1) & 0xFFFF0000;
-    dst[2] = (((s32)arg0->unk6 << 1) & 0xFFFF0000) + ((-(s32)((u32)arg0->unk8 >> 15)) & 0xFFFF);
-    dst[3] = ((s32)arg0->unkA << 1) & 0xFFFF0000;
-    dst[4] = (((s32)arg0->unkC << 1) & 0xFFFF0000) + ((-(s32)((u32)arg0->unkE >> 15)) & 0xFFFF);
-    dst[5] = ((s32)arg0->unk10 << 1) & 0xFFFF0000;
-    dst[6] = (arg0->unk14 & 0xFFFF0000) + arg0->unk18;
-    dst[7] = (arg0->unk1C & 0xFFFF0000) + 1;
-    temp16 = arg0->unk2;
-    dst[8] = (((s32)arg0->unk0 << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
-    dst[9] = ((s32)arg0->unk4 << 17) & 0xFFFF0000;
-    temp16 = arg0->unk8;
-    dst[10] = (((s32)arg0->unk6 << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
-    dst[11] = ((s32)arg0->unkA << 17) & 0xFFFF0000;
-    temp16 = arg0->unkE;
-    dst[12] = (((s32)arg0->unkC << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
-    dst[13] = ((s32)arg0->unk10 << 17) & 0xFFFF0000;
-    dst[14] = (arg0->unk14 << 16) + arg0->unk1A;
-    dst[15] = arg0->unk1C << 16;
+    dst[0] = (((s32)arg0->m[0][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)arg0->m[0][1] >> 15)) & 0xFFFF);
+    dst[1] = ((s32)arg0->m[0][2] << 1) & 0xFFFF0000;
+    dst[2] = (((s32)arg0->m[1][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)arg0->m[1][1] >> 15)) & 0xFFFF);
+    dst[3] = ((s32)arg0->m[1][2] << 1) & 0xFFFF0000;
+    dst[4] = (((s32)arg0->m[2][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)arg0->m[2][1] >> 15)) & 0xFFFF);
+    dst[5] = ((s32)arg0->m[2][2] << 1) & 0xFFFF0000;
+    dst[6] = (arg0->translation.x & 0xFFFF0000) + ((u16 *)&arg0->translation.y)[0];
+    dst[7] = (arg0->translation.z & 0xFFFF0000) + 1;
+    temp16 = arg0->m[0][1];
+    dst[8] = (((s32)arg0->m[0][0] << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
+    dst[9] = ((s32)arg0->m[0][2] << 17) & 0xFFFF0000;
+    temp16 = arg0->m[1][1];
+    dst[10] = (((s32)arg0->m[1][0] << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
+    dst[11] = ((s32)arg0->m[1][2] << 17) & 0xFFFF0000;
+    temp16 = arg0->m[2][1];
+    dst[12] = (((s32)arg0->m[2][0] << 17) & 0xFFFF0000) + ((((s32)temp16 << 1) & 0xFFFF));
+    dst[13] = ((s32)arg0->m[2][2] << 17) & 0xFFFF0000;
+    dst[14] = (arg0->translation.x << 16) + ((u16 *)&arg0->translation.y)[1];
+    dst[15] = arg0->translation.z << 16;
 }
 
 void func_8006C2A8_6CEA8(func_8006C2A8_6CEA8_arg0 *arg0, func_8006C2A8_6CEA8_arg1 *arg1) {

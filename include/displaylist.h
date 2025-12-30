@@ -6,11 +6,6 @@
 #include "geometry.h"
 
 typedef struct {
-    s32 unk0;
-    /* 0x4 */ Vec3i position;
-} DisplayListObject_unk10;
-
-typedef struct {
     /* 0x0 */ u32 flags;
     /* 0x4 */ Gfx *opaqueDisplayList;
     /* 0x8 */ Gfx *transparentDisplayList;
@@ -18,21 +13,20 @@ typedef struct {
 } DisplayLists;
 
 typedef struct {
-    DisplayLists unk0;
-    DisplayListObject_unk10 unk10;
-    DisplayLists *unk20;
-    void *unk24;
-    void *unk28;
-    void* unk2C;
-    Mtx *unk30;
-    u8 unk34;
-    u8 unk35;
-    u8 unk36;
-    u8 unk37;
-    u8 unk38;
-    u8 unk39;
-    u8 unk3A;
-    u8 unk3B;
+    /* 0x00 */ Transform3D transform;
+    /* 0x20 */ DisplayLists *unk20;
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ void *unk2C;
+    /* 0x30 */ Mtx *unk30;
+    /* 0x34 */ u8 unk34;
+    /* 0x35 */ u8 unk35;
+    /* 0x36 */ u8 unk36;
+    /* 0x37 */ u8 unk37;
+    /* 0x38 */ u8 unk38;
+    /* 0x39 */ u8 unk39;
+    /* 0x3A */ u8 unk3A;
+    /* 0x3B */ u8 unk3B;
 } DisplayListObject;
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1);

@@ -180,7 +180,7 @@ void renderPalettedTexture(PalettedTextureState *state) {
         if (state->lookAtMatrix == 0) {
             return;
         }
-        func_8006C130_6CD30((LookAtData *)&state->rotationMatrix, state->lookAtMatrix);
+        func_8006C130_6CD30(&state->rotationMatrix, state->lookAtMatrix);
     }
 
     gDPPipeSync(gRegionAllocPtr++);

@@ -103,7 +103,7 @@ void updateRocketEffectFalling(RocketEffectFallingData *arg0) {
     if (arg0->unk7C <= (s32)0xFFF80000) {
         func_80069CF8_6A8F8();
     }
-    arg0->unk0.unk10.position.y += arg0->unk7C;
+    arg0->unk0.transform.translation.y += arg0->unk7C;
     enqueueDisplayListObject(0, &arg0->unk0);
 }
 

@@ -988,12 +988,12 @@ void func_80047024_47C24(func_8004711C_47D1C_arg *arg0) {
     arg0->displayListObject.unk2C = 0;
 
     createYRotationMatrix((Transform3D *)arg0, temp_s2 + temp_s3->unk8);
-    arg0->displayListObject.unk10.position.y = spStack[1];
+    arg0->displayListObject.transform.translation.y = spStack[1];
 
     transformVector2(&D_80090B8C_9178C, arg0, spStack);
 
-    arg0->displayListObject.unk10.position.x = temp_s3->unk0 + spStack[0];
-    arg0->displayListObject.unk10.position.z = temp_s3->unk4 + spStack[2];
+    arg0->displayListObject.transform.translation.x = temp_s3->unk0 + spStack[0];
+    arg0->displayListObject.transform.translation.z = temp_s3->unk4 + spStack[2];
     arg0->unk3C = 0x30;
 
     setCleanupCallback(&func_80047718_48318);
@@ -1019,8 +1019,8 @@ void func_8004711C_47D1C(func_8004711C_47D1C_arg *arg0) {
     if (alloc->unk76 == 0) {
         transformVector2(D_80090B98_91798, arg0, vec);
 
-        arg0->displayListObject.unk10.position.x += vec[0];
-        arg0->displayListObject.unk10.position.z += vec[2];
+        arg0->displayListObject.transform.translation.x += vec[0];
+        arg0->displayListObject.transform.translation.z += vec[2];
 
         if (arg0->unk3C != 0) {
             arg0->unk3C--;
@@ -1045,9 +1045,9 @@ void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0) {
     if (allocation->unk76 == 0) {
         transformVector2(D_80090BA4_917A4, arg0, stackVec);
 
-        arg0->displayListObject.unk10.position.x += stackVec[0];
-        arg0->displayListObject.unk10.position.y += stackVec[1];
-        arg0->displayListObject.unk10.position.z += stackVec[2];
+        arg0->displayListObject.transform.translation.x += stackVec[0];
+        arg0->displayListObject.transform.translation.y += stackVec[1];
+        arg0->displayListObject.transform.translation.z += stackVec[2];
 
         if (arg0->unk3C != 0) {
             arg0->unk3C -= 1;
@@ -2135,7 +2135,7 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
         case 0:
             if (gameState->gamePaused == 0) {
                 sp10Ptr = &sp10;
-                memcpy(sp10Ptr, &arg0->displayList.unk10.position, 0xC);
+                memcpy(sp10Ptr, &arg0->displayList.transform.translation, 0xC);
                 sp10.y += 0x100000;
                 player = (Player *)func_8005B24C_5BE4C(sp10Ptr, -1, 0x100000);
                 if (player != NULL) {
@@ -2162,9 +2162,9 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
                             player->unkBD3 = 3;
                             player->unkBD8 |= 1;
                         }
-                        func_80056B7C_5777C(&arg0->displayList.unk10.position, 8);
+                        func_80056B7C_5777C(&arg0->displayList.transform.translation, 8);
                     } else {
-                        func_80056B7C_5777C(&arg0->displayList.unk10.position, 9);
+                        func_80056B7C_5777C(&arg0->displayList.transform.translation, 9);
                     }
                 } else if (gameState->unk79 == 0) {
                     randB();
@@ -2198,7 +2198,7 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
                 createYRotationMatrix(&arg0->matrix, arg0->unk7C);
             } else {
                 arg0->unk80 = 0;
-                arg0->displayList.unk10.position.y = arg0->unk78 + 0x300000;
+                arg0->displayList.transform.translation.y = arg0->unk78 + 0x300000;
             }
             break;
     }
@@ -2206,8 +2206,8 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
     if (arg0->unk80 == 0) {
         if (gameState->gamePaused != 0) {
             i = 0;
-        } else if (arg0->displayList.unk10.position.y > arg0->unk78) {
-            arg0->displayList.unk10.position.y = arg0->displayList.unk10.position.y + (s32)0xFFFA0000;
+        } else if (arg0->displayList.transform.translation.y > arg0->unk78) {
+            arg0->displayList.transform.translation.y = arg0->displayList.transform.translation.y + (s32)0xFFFA0000;
             i = 0;
         } else {
             i = 0;
@@ -2481,7 +2481,7 @@ void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
         if (arg0->unk30 == NULL) {
             return;
         }
-        func_8006C130_6CD30((LookAtData *)&arg0->_pad10, arg0->unk30);
+        func_8006C130_6CD30((Transform3D *)&arg0->_pad10, arg0->unk30);
     }
 
     gDPPipeSync(gRegionAllocPtr++);

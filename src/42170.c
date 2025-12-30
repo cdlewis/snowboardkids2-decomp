@@ -152,7 +152,7 @@ typedef struct {
 typedef struct {
     u8 pad0[0x14]; /* 0x00 */
     s32 unk14;     /* 0x14 */
-    s32 unk18;     /* 0x18 - corresponds to DisplayListObject.unk10.position.Y */
+    s32 unk18;     /* 0x18 - corresponds to DisplayListObject.transform.translation.Y */
     s32 unk1C;     /* 0x1C */
     void *unk20;   /* 0x20 */
     void *unk24;   /* 0x24 */
@@ -516,23 +516,23 @@ void func_800419E4_425E4(void *arg0) {
 }
 
 void func_80041A24_42624(Func41A60Arg *arg0) {
-    arg0->displayList.unk10.position.x = arg0->player->worldPos.x;
-    arg0->displayList.unk10.position.y = arg0->player->worldPos.y;
-    arg0->displayList.unk10.position.z = arg0->player->worldPos.z;
+    arg0->displayList.transform.translation.x = arg0->player->worldPos.x;
+    arg0->displayList.transform.translation.y = arg0->player->worldPos.y;
+    arg0->displayList.transform.translation.z = arg0->player->worldPos.z;
     func_800634E8_640E8(&arg0->displayList);
 }
 
 void func_80041A60_42660(Func41A60Arg *arg0) {
-    arg0->displayList.unk10.position.x = arg0->player->worldPos.x;
-    arg0->displayList.unk10.position.y = arg0->player->worldPos.y;
-    arg0->displayList.unk10.position.z = arg0->player->worldPos.z;
+    arg0->displayList.transform.translation.x = arg0->player->worldPos.x;
+    arg0->displayList.transform.translation.y = arg0->player->worldPos.y;
+    arg0->displayList.transform.translation.z = arg0->player->worldPos.z;
     func_80063534_64134(&arg0->displayList);
 }
 
 void func_80041A9C_4269C(Func41A60Arg *arg0) {
-    arg0->displayList.unk10.position.x = arg0->player->worldPos.x;
-    arg0->displayList.unk10.position.y = arg0->player->worldPos.y;
-    arg0->displayList.unk10.position.z = arg0->player->worldPos.z;
+    arg0->displayList.transform.translation.x = arg0->player->worldPos.x;
+    arg0->displayList.transform.translation.y = arg0->player->worldPos.y;
+    arg0->displayList.transform.translation.z = arg0->player->worldPos.z;
     func_80063580_64180(&arg0->displayList);
 }
 

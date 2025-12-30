@@ -35,22 +35,6 @@ typedef struct {
     Vec3i translation;
 } Transform3D;
 
-typedef struct {
-    s16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    u16 unk8;
-    s16 unkA;
-    s16 unkC;
-    u16 unkE;
-    s16 unk10;
-    s32 unk14;
-    u16 unk18;
-    u16 unk1A;
-    s32 unk1C;
-} LookAtData;
-
 void createYRotationMatrix(Transform3D *, u16 angle);
 void createZRotationMatrix(Transform3D *, u16 angle);
 void createXRotationMatrix(s16 matrix[3][3], u16 angle);
@@ -95,4 +79,4 @@ void computeLookAtMatrix(void *arg0, void *arg1, void *arg2);
 
 void transformVectorRelative(void *arg0, void *arg1, void *arg2);
 
-void func_8006C130_6CD30(LookAtData *arg0, Mtx *arg1);
+void func_8006C130_6CD30(Transform3D *arg0, Mtx *arg1);

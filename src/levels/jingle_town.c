@@ -63,8 +63,8 @@ void func_800BB2B0_B4240(B4240FuncArg *arg0) {
     s32 i;
 
     createYRotationMatrix((Transform3D *)arg0, arg0->rotation);
-    memcpy(&arg0->node.unk10.position.x, &arg0->unk3C, 0xC);
-    arg0->node.unk10.position.y += arg0->unk48;
+    memcpy(&arg0->node.transform.translation.x, &arg0->unk3C, 0xC);
+    arg0->node.transform.translation.y += arg0->unk48;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, &arg0->node);

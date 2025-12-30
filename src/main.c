@@ -637,9 +637,9 @@ void updateAnimatedModelTask(AnimatedModelTaskUpdateState *state) {
     state->unk4E = state->unk4E + state->unk52;
     state->unk4C = (u8)state->unk4C;
     state->unk4E = (u8)state->unk4E;
-    state->unk8.unk10.position.x = subEntry->unk8;
-    state->unk8.unk10.position.y = subEntry->unkC;
-    state->unk8.unk10.position.z = subEntry->unk10;
+    state->unk8.transform.translation.x = subEntry->unk8;
+    state->unk8.transform.translation.y = subEntry->unkC;
+    state->unk8.transform.translation.z = subEntry->unk10;
 
     if (state->unk0->unk87 != 0) {
         enqueueScrollingTextureRender(state->unk0->ptr->unk16, &state->unk8);

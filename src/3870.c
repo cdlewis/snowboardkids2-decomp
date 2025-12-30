@@ -112,7 +112,7 @@ void func_80002C70_3870(ShadowEntity *arg0) {
         }
 
         matrix.translation.y = 0;
-        func_8006C130_6CD30((LookAtData *)&matrix, arg0->unk84);
+        func_8006C130_6CD30(&matrix, arg0->unk84);
     }
 
     if (arg0->unk80 == NULL || arg0->unk84 == NULL) {

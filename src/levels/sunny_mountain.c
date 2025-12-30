@@ -122,9 +122,9 @@ void func_800BB890_B5190(func_800BBA34_B5334_arg *arg0) {
     dy = arg0->unk44;
 
     temp = *(s32 *)(D_800BBB68_B5468 + offset);
-    arg0->unk0.unk10.position.y = 0x243D1AC3;
-    arg0->unk0.unk10.position.x = temp;
-    arg0->unk0.unk10.position.z = *(s32 *)(D_800BBB6C_B546C + offset);
+    arg0->unk0.transform.translation.y = 0x243D1AC3;
+    arg0->unk0.transform.translation.x = temp;
+    arg0->unk0.transform.translation.z = *(s32 *)(D_800BBB6C_B546C + offset);
 
     arg0->unk48 = isqrt64((s64)dx * (s64)dx + (s64)dy * (s64)dy);
     arg0->unk3C = 0x300000;
@@ -146,15 +146,15 @@ void func_800BBA34_B5334(func_800BBA34_B5334_arg *arg0) {
 
     createCombinedRotationMatrix(arg0, angle, arg0->unk4E);
 
-    temp_v0 = arg0->unk0.unk10.position.x;
+    temp_v0 = arg0->unk0.transform.translation.x;
     temp_a2 = arg0->unk40;
-    temp_a0 = arg0->unk0.unk10.position.z;
+    temp_a0 = arg0->unk0.transform.translation.z;
     temp_a3 = arg0->unk44;
-    temp_a1 = arg0->unk0.unk10.position.y;
+    temp_a1 = arg0->unk0.transform.translation.y;
 
-    arg0->unk0.unk10.position.x = temp_v0 + temp_a2;
-    arg0->unk0.unk10.position.z = temp_a0 + temp_a3;
-    arg0->unk0.unk10.position.y = temp_a1 + arg0->unk3C;
+    arg0->unk0.transform.translation.x = temp_v0 + temp_a2;
+    arg0->unk0.transform.translation.z = temp_a0 + temp_a3;
+    arg0->unk0.transform.translation.y = temp_a1 + arg0->unk3C;
 
     if ((arg0->unk3C = arg0->unk3C + 0xFFFE6667) < ((s32)0xFFD00000)) {
         new_var = randA() & 7;

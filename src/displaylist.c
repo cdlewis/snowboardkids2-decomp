@@ -327,7 +327,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
         if (arg0->unk30 == NULL) {
             return;
         }
-        func_8006C130_6CD30((LookAtData *)arg0, arg0->unk30);
+        func_8006C130_6CD30((Transform3D *)arg0, arg0->unk30);
     }
 
     if (arg0->unk20->flags & 1) {
@@ -431,14 +431,14 @@ void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1) {
 }
 
 void func_80063668_64268(DisplayListObject *arg0) {
-    if (!isObjectCulled(&arg0->unk10.position)) {
+    if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
     }
 }
 
 void func_800636C8_642C8(DisplayListObject *arg0) {
-    if (!isObjectCulled(&arg0->unk10.position)) {
+    if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
     }
@@ -447,7 +447,7 @@ void func_800636C8_642C8(DisplayListObject *arg0) {
 void func_80063728_64328(DisplayListObject *arg0) {
     s32 *temp_v1;
 
-    if (!isObjectCulled(&arg0->unk10.position)) {
+    if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
     }
@@ -467,7 +467,7 @@ void enqueueDisplayListWithFrustumCull(s32 arg0, DisplayListObject *arg1) {
 }
 
 void buildDisplayListSegment(DisplayListObject *arg0) {
-    if (!isObjectCulled(&arg0->unk10.position)) {
+    if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
 
         gDPPipeSync(gRegionAllocPtr++);
@@ -481,7 +481,7 @@ void buildDisplayListSegment(DisplayListObject *arg0) {
 void func_800638C0_644C0(DisplayListObject *arg0) {
     Gfx *dl;
 
-    if (!isObjectCulled(&arg0->unk10.position)) {
+    if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
 
         dl = gRegionAllocPtr;
@@ -500,7 +500,7 @@ void func_800638C0_644C0(DisplayListObject *arg0) {
 }
 
 void func_8006395C_6455C(DisplayListObject *arg0) {
-    if (!isObjectCulled(&arg0->unk10.position)) {
+    if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
 
         gDPPipeSync(gRegionAllocPtr++);
@@ -551,17 +551,18 @@ void func_80063A94_64694(DisplayListObject *arg0) {
         ((s32 *)arg0->unk30)[3] = 0;
         ((s32 *)arg0->unk30)[4] = 0;
         ((s32 *)arg0->unk30)[5] = 0x10000;
-        ((s32 *)arg0->unk30)[6] = (arg0->unk10.position.x & 0xFFFF0000) + ((u16 *)&arg0->unk10.position.y)[0];
-        ((s32 *)arg0->unk30)[7] = (arg0->unk10.position.z & 0xFFFF0000) + 1;
+        ((s32 *)arg0->unk30)[6] =
+            (arg0->transform.translation.x & 0xFFFF0000) + ((u16 *)&arg0->transform.translation.y)[0];
+        ((s32 *)arg0->unk30)[7] = (arg0->transform.translation.z & 0xFFFF0000) + 1;
         ((s32 *)arg0->unk30)[8] = 0;
         ((s32 *)arg0->unk30)[9] = 0;
         ((s32 *)arg0->unk30)[10] = 0;
         ((s32 *)arg0->unk30)[11] = 0;
         ((s32 *)arg0->unk30)[12] = 0;
         ((s32 *)arg0->unk30)[13] = 0;
-        ((s32 *)arg0->unk30)[14] = (arg0->unk10.position.x << 16) + ((u16 *)&arg0->unk10.position.y)[1];
+        ((s32 *)arg0->unk30)[14] = (arg0->transform.translation.x << 16) + ((u16 *)&arg0->transform.translation.y)[1];
         new_var = 0xFFFF;
-        ((s32 *)arg0->unk30)[15] = arg0->unk10.position.z << 16;
+        ((s32 *)arg0->unk30)[15] = arg0->transform.translation.z << 16;
         ((s32 *)arg0->unk30)[16] = ((matrixData[0] * 2) & 0xFFFF0000) + (-(s32)((u16)matrixData[1] >> 15) & new_var);
         ((s32 *)arg0->unk30)[17] = (matrixData[2] * 2) & 0xFFFF0000;
         ((s32 *)arg0->unk30)[18] = ((matrixData[3] * 2) & 0xFFFF0000) + (-(s32)((u16)matrixData[4] >> 15) & new_var);
@@ -643,21 +644,21 @@ void func_80063A94_64694(DisplayListObject *arg0) {
 }
 
 void func_8006405C_64C5C(DisplayListObject *arg0) {
-    if (!isObjectCulled(&arg0->unk10.position)) {
+    if (!isObjectCulled(&arg0->transform.translation)) {
         func_80063A94_64694(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
     }
 }
 
 void func_800640BC_64CBC(DisplayListObject *arg0) {
-    if (!isObjectCulled(&arg0->unk10.position)) {
+    if (!isObjectCulled(&arg0->transform.translation)) {
         func_80063A94_64694(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
     }
 }
 
 void func_8006411C_64D1C(DisplayListObject *arg0) {
-    if (!isObjectCulled(&arg0->unk10.position)) {
+    if (!isObjectCulled(&arg0->transform.translation)) {
         func_80063A94_64694(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
     }
@@ -699,7 +700,7 @@ void func_80064218_64E18(DisplayListObject *arg0) {
             var_s0 = arg0;
             do {
                 var_s0->unk30 = arg0->unk30 + var_s1;
-                func_8006C130_6CD30((LookAtData *)var_s0, var_s0->unk30);
+                func_8006C130_6CD30((Transform3D *)var_s0, var_s0->unk30);
                 var_s1 += 1;
                 var_s0++;
             } while (var_s1 < arg0->unk37);
@@ -929,7 +930,7 @@ void func_800648EC_654EC(DisplayListObject *arg0) {
         if (arg0->unk30 == NULL) {
             return;
         }
-        func_8006C130_6CD30((LookAtData *)arg0, arg0->unk30);
+        func_8006C130_6CD30((Transform3D *)arg0, arg0->unk30);
     }
 
     if (arg0->unk20->flags & 1) {
