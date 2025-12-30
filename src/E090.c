@@ -44,9 +44,9 @@ typedef struct {
 } E090_SubStruct;
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    s16 unk2;
+    s8 state;
+    s8 visibleLetterCount;
+    s16 frameTimer;
     u8 pad4[0x4];
     Node_70B00 unk8;
     void *unk1E0;
@@ -59,7 +59,7 @@ typedef struct {
 } E090_struct;
 
 void initLogoScreenElements(E090_struct *arg0);
-void func_8000D5F0_E1F0(E090_struct *arg0);
+void initLogoDisplaySequence(E090_struct *arg0);
 void func_8000D624_E224(E090_struct *arg0);
 void func_8000D68C_E28C(E090_struct *arg0);
 void func_8000D6C0_E2C0(E090_struct *arg0);
@@ -67,12 +67,12 @@ void func_8000D6F8_E2F8(E090_struct *arg0);
 void func_8000D750_E350(E090_struct *arg0);
 void func_8000D7A0_E3A0(E090_struct *arg0);
 
-void func_8000D490_E090(E090_struct *arg0) {
+void initLogoNodeFadeIn(E090_struct *arg0) {
     func_8006FE28_70A28(&arg0->unk8, 0, 0, 0);
     func_8006FDA0_709A0(&arg0->unk8, 0xFF, 0xF);
 }
 
-void func_8000D4D4_E0D4(E090_struct *arg0) {
+void initLogoNodeFadeOut(E090_struct *arg0) {
     func_8006FE28_70A28(&arg0->unk8, 0, 0, 0);
     func_8006FDA0_709A0(&arg0->unk8, 0, 0xF);
 }
@@ -103,62 +103,62 @@ void initLogoScreenElements(E090_struct *arg0) {
         arg0->unk2D4[i] = 0;
     }
 
-    arg0->unk0 = 1;
+    arg0->state = 1;
 }
 
-void func_8000D5F0_E1F0(E090_struct *arg0) {
-    func_8000D4D4_E0D4(arg0);
-    arg0->unk2 = 100;
-    arg0->unk0 = 2;
+void initLogoDisplaySequence(E090_struct *arg0) {
+    initLogoNodeFadeOut(arg0);
+    arg0->frameTimer = 100;
+    arg0->state = 2;
 }
 
 void func_8000D624_E224(E090_struct *arg0) {
-    arg0->unk2--;
-    if (arg0->unk2 == 15) {
-        func_8000D490_E090(arg0);
-    } else if (arg0->unk2 == 0) {
-        func_8000D4D4_E0D4(arg0);
-        arg0->unk0 = 3;
+    arg0->frameTimer--;
+    if (arg0->frameTimer == 15) {
+        initLogoNodeFadeIn(arg0);
+    } else if (arg0->frameTimer == 0) {
+        initLogoNodeFadeOut(arg0);
+        arg0->state = 3;
     }
 }
 
 void func_8000D68C_E28C(E090_struct *arg0) {
-    func_8000D4D4_E0D4(arg0);
-    arg0->unk2 = 100;
-    arg0->unk0 = 4;
+    initLogoNodeFadeOut(arg0);
+    arg0->frameTimer = 100;
+    arg0->state = 4;
 }
 
 void func_8000D6C0_E2C0(E090_struct *arg0) {
-    arg0->unk2--;
-    if (arg0->unk2 == 0x50) {
-        arg0->unk0 = 5;
-        arg0->unk1++;
+    arg0->frameTimer--;
+    if (arg0->frameTimer == 0x50) {
+        arg0->state = 5;
+        arg0->visibleLetterCount++;
     }
 }
 
 void func_8000D6F8_E2F8(E090_struct *arg0) {
-    s16 temp = arg0->unk2 - 0x29;
-    arg0->unk2--;
+    s16 temp = arg0->frameTimer - 0x29;
+    arg0->frameTimer--;
     switch (temp) {
         case 11:
         case 17:
         case 23:
         case 29:
         case 35:
-            arg0->unk1++;
+            arg0->visibleLetterCount++;
             break;
         case 0:
-            arg0->unk0 = 6;
+            arg0->state = 6;
             break;
     }
 }
 
 void func_8000D750_E350(E090_struct *arg0) {
-    arg0->unk2--;
-    if (arg0->unk2 == 15) {
-        func_8000D490_E090(arg0);
-    } else if (arg0->unk2 == 0) {
-        arg0->unk0 = 7;
+    arg0->frameTimer--;
+    if (arg0->frameTimer == 15) {
+        initLogoNodeFadeIn(arg0);
+    } else if (arg0->frameTimer == 0) {
+        arg0->state = 7;
     }
 }
 
@@ -183,9 +183,9 @@ void func_8000D818_E418(void) {
     u8 sp20[0x20];
 
     temp_s0 = (E090_struct *)allocateTaskMemory(0x2F0);
-    temp_s0->unk0 = 0;
-    temp_s0->unk2 = 0;
-    temp_s0->unk1 = 0;
+    temp_s0->state = 0;
+    temp_s0->frameTimer = 0;
+    temp_s0->visibleLetterCount = 0;
     temp_s0->unk1E0 = loadCompressedData(&_67AB10_ROM_START, &_67AB10_ROM_END, 0x6350);
     temp_s0->unk1E4 = loadCompressedData(&_67BEB0_ROM_START, &_67BEB0_ROM_END, 0x4320);
     temp_s0->unk1E8 = loadCompressedData(&_67DB80_ROM_START, &_67DB80_ROM_END, 0x1A68);
@@ -207,13 +207,13 @@ void func_8000D974_E574(void) {
     s8 state;
     s32 i;
 
-    state = arg0->unk0;
+    state = arg0->state;
     switch (state) {
         case 0:
             initLogoScreenElements(arg0);
             break;
         case 1:
-            func_8000D5F0_E1F0(arg0);
+            initLogoDisplaySequence(arg0);
             break;
         case 2:
             func_8000D624_E224(arg0);
@@ -236,7 +236,7 @@ void func_8000D974_E574(void) {
             return;
     }
 
-    state = arg0->unk0;
+    state = arg0->state;
     if (state == 2) {
         debugEnqueueCallback(0, 4, func_80038420_39020, &arg0->unk1EC);
     } else if (state >= 2) {
@@ -244,7 +244,7 @@ void func_8000D974_E574(void) {
             if (state >= 4) {
                 debugEnqueueCallback(0, 4, func_80038420_39020, &arg0->unk218);
 
-                for (i = 0; i < arg0->unk1; i++) {
+                for (i = 0; i < arg0->visibleLetterCount; i++) {
                     arg0->unk2D4[i] += 0x330000;
                     if (arg0->unk2D4[i] > 0xFFFFFF) {
                         arg0->unk2D4[i] = 0xFF0000;
