@@ -165,7 +165,7 @@ typedef struct {
     s16 unk20C;
 } Func8000C2CCArg;
 
-void func_8000C2CC_CECC(Func8000C2CCArg *arg0, s32 arg1, s16 arg2) {
+void setNodeScaleTarget(Func8000C2CCArg *arg0, s32 arg1, s16 arg2) {
     if (arg2 == 0) {
         arg0->unk20C = 0;
         arg0->unk208 = 0;

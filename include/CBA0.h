@@ -39,6 +39,6 @@ void setAuxRenderEnabled(Func8000C268Arg *arg0);
 void clearAuxRenderEnabled(Func8000C268Arg *arg0);
 void setNodeRenderMode(NodeRenderModeArg *arg0, s32 arg1);
 void setNodeWipeColor(NodeWipeColorArg *node, u8 r, u8 g, u8 b);
-void func_8000C2CC_CECC(Func8000C2CCArg *arg0, s32 arg1, s16 arg2);
+void setNodeScaleTarget(Func8000C2CCArg *arg0, s32 arg1, s16 arg2);
 void func_8000C334_CF34(Func8000C334Arg *arg0, s32 *arg1, s16 arg2);
 void func_8000C440_D040(void *arg0, s32 arg1, s32 arg2, u16 arg3, s32 arg4, s32 arg5, s32 arg6);
