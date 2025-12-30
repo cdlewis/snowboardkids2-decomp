@@ -9,7 +9,23 @@ description: Decomp-Permuter is a tool that automatically permutes C files to be
 
 These instructions assume you are in the root directory of the Github repo.
 
-Place your function in `src/temp.c`. Ensure that only one function is implemented in this file (unimplemented function headers are fine).
+### Step 1: Prepare src/temp.c
+
+Copy your best matching attempt to `src/temp.c`. This should be a complete, compilable C file including all headers and extern declarations:
+
+```bash
+cp nonmatchings/<function-name>/base_N.c src/temp.c
+```
+
+Or use the Write tool to create `src/temp.c` with the full contents of your best attempt.
+
+**Requirements for temp.c:**
+- Must compile successfully
+- Should already be 95%+ match (permuter works on register allocation, not control flow)
+- Only one function body should be implemented (extern declarations for other functions are fine)
+- Include all necessary headers at the top
+
+### Step 2: Run the permuter
 
 Run `timeout 120s ./tools/permuter <function name>`. This will automatically create a permuter environment and run the permuter for 120 seconds. You can tweak this number to an appropriate time. If you fail to use the `timeout` command the permuter will run forever.
 
