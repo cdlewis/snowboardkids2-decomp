@@ -115,7 +115,7 @@ void setMenuAnimation(E770_struct *arg0, s16 animIndex, s16 transitionAnimIndex,
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000DCD8_E8D8);
 
-void func_8000E154_ED54(E770_struct *arg0) {
+void cleanupGalleryMenu(E770_struct *arg0) {
     destroySceneModel(arg0->menuModel);
     arg0->unk18 = freeNodeMemory(arg0->unk18);
     arg0->unkC = freeNodeMemory(arg0->unkC);
@@ -302,7 +302,7 @@ void func_8000E4CC_F0CC(E770_struct *arg0) {
 
     if (temp == 0) {
         if (arg0->unk1 == 5) {
-            func_8000E154_ED54(arg0);
+            cleanupGalleryMenu(arg0);
             setCutsceneSelection(0, 2);
             createTaskQueue(loadCutsceneOverlay, 0x64);
             arg0->unk16 = 1;
@@ -343,7 +343,7 @@ s32 func_8000E614_F214(E770_struct *arg0) {
     }
     temp = arg0->fadeTimer;
     if (temp == 0) {
-        func_8000E154_ED54(arg0);
+        cleanupGalleryMenu(arg0);
         terminateSchedulerWithCallback(func_8000ED88_F988);
         return 1;
     }

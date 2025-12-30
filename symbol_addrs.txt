@@ -5,6 +5,7 @@ beginMenuFadeIn = 0x8000DBE0; // rom:0xE7E0
 getMenuOptionCount = 0x8000DC18; // rom:0xE818
 getMenuOptionEntry = 0x8000DC44; // rom:0xE844
 setMenuAnimation = 0x8000DC88; // rom:0xE888
+cleanupGalleryMenu = 0x8000E154; // rom:0xED54
 nullsub = 0x800084D0; // rom:0x90D0
 nullsub_s32 = 0x800084D8; // rom:0x90D8
 nullsub_s32_2 = 0x800084E0; // rom:0x90E0
