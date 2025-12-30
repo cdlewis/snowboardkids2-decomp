@@ -93,14 +93,10 @@ typedef struct {
 typedef struct {
     void *unk0;
     void *unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    Vec3i position;
     u8 _pad14[0x10];
     func_8004B834_Player *unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
+    Vec3i velocity;
     s16 unk34;
     s16 unk36;
     s16 unk38;
@@ -3528,37 +3524,37 @@ typedef struct {
 void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0);
 
 void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0) {
-    GameState *allocation;
+    GameState *gameState;
     s32 rotationAngle;
     s32 pad[4];
-    short new_var;
-    s32 *temp_s1;
+    short randomOffset;
+    s32 *position;
     func_8004B834_Player *player;
 
-    allocation = (GameState *)getCurrentAllocation();
-    arg0->unk4 = (void *)((s32)allocation->unk44 + 0x1300);
+    gameState = (GameState *)getCurrentAllocation();
+    arg0->unk4 = (void *)((s32)gameState->unk44 + 0x1300);
 
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, 3);
 
     player = arg0->unk24;
-    temp_s1 = &arg0->unk8;
-    memcpy(temp_s1, (u8 *)player + 0x358, 0xC);
+    position = &arg0->position.x;
+    memcpy(position, (u8 *)player + 0x358, 0xC);
 
-    arg0->unkC = arg0->unkC + (s32)0xFFF10000;
+    arg0->position.y = arg0->position.y + (s32)0xFFF10000;
 
     arg0->unk34 = arg0->unk24->unkB94;
     arg0->unk38 = arg0->unk24->unkBB8;
 
-    new_var = randA() & 0xFF;
-    rotationAngle = ((new_var - 0x80) * 6) - -0x1000;
+    randomOffset = randA() & 0xFF;
+    rotationAngle = ((randomOffset - 0x80) * 6) - -0x1000;
 
-    rotateVectorY(&D_80090E2C_91A2C, arg0->unk24->unkA94 + rotationAngle, &arg0->unk28);
+    rotateVectorY(&D_80090E2C_91A2C, arg0->unk24->unkA94 + rotationAngle, &arg0->velocity.x);
 
-    arg0->unk28 = arg0->unk28 + arg0->unk24->unk44C;
-    arg0->unk2C = arg0->unk2C + arg0->unk24->unk450;
-    arg0->unk30 = arg0->unk30 + arg0->unk24->unk454;
+    arg0->velocity.x = arg0->velocity.x + arg0->unk24->unk44C;
+    arg0->velocity.y = arg0->velocity.y + arg0->unk24->unk450;
+    arg0->velocity.z = arg0->velocity.z + arg0->unk24->unk454;
 
-    func_80056B7C_5777C(temp_s1, 0x1F);
+    func_80056B7C_5777C(position, 0x1F);
 
     setCallbackWithContinue(&func_8004B4CC_4C0CC);
 }
@@ -3725,9 +3721,9 @@ void func_8004B834_4C434(func_8004B834_4C434_arg *arg0) {
     randomValue = randA();
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, (randomValue % 3) + 0x6B);
 
-    memcpy(&arg0->unk8, (void *)((s32)arg0->unk24 + 0x4C), 0xC);
+    memcpy(&arg0->position.x, (void *)((s32)arg0->unk24 + 0x4C), 0xC);
 
-    arg0->unkC = arg0->unkC + (s32)0xFFF10000;
+    arg0->position.y = arg0->position.y + (s32)0xFFF10000;
 
     arg0->unk34 = arg0->unk24->unkB94;
     arg0->unk38 = arg0->unk24->unkBB8;
@@ -3738,13 +3734,13 @@ void func_8004B834_4C434(func_8004B834_4C434_arg *arg0) {
     randomValue3 = randA();
     addr = &D_80090E40_91A40;
     *addr = (randomValue3 & 0xFF) * 7 * 256;
-    rotateVectorY(addr - 2, rotationAngle, &arg0->unk28);
+    rotateVectorY(addr - 2, rotationAngle, &arg0->velocity.x);
 
-    arg0->unk28 = arg0->unk28 + arg0->unk24->unk44C;
+    arg0->velocity.x = arg0->velocity.x + arg0->unk24->unk44C;
 
     randomValue4 = randA();
-    arg0->unk2C = arg0->unk2C + (arg0->unk24->unk450 + (((randomValue4 & 0xFF) * 5) << 9));
-    arg0->unk30 = arg0->unk30 + arg0->unk24->unk454;
+    arg0->velocity.y = arg0->velocity.y + (arg0->unk24->unk450 + (((randomValue4 & 0xFF) * 5) << 9));
+    arg0->velocity.z = arg0->velocity.z + arg0->unk24->unk454;
 
     setCallbackWithContinue(&func_8004B990_4C590);
 }
@@ -3914,9 +3910,9 @@ void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0) {
     addr = &D_80090E4C_91A4C;
     *addr = (randA() & 0xFF) * 0x580;
     rotateVectorY(addr - 2, rotationAngle, (void *)((s32)arg0 + 0x28));
-    arg0->unk28 = arg0->unk28 + arg0->unk24->unk44C;
-    arg0->unk2C = arg0->unk2C + (arg0->unk24->unk450 + ((randA() & 0xFF) * 0x600));
-    arg0->unk30 = arg0->unk30 + arg0->unk24->unk454;
+    arg0->velocity.x = arg0->velocity.x + arg0->unk24->unk44C;
+    arg0->velocity.y = arg0->velocity.y + (arg0->unk24->unk450 + ((randA() & 0xFF) * 0x600));
+    arg0->velocity.z = arg0->velocity.z + arg0->unk24->unk454;
     func_80056B7C_5777C(temp_s2, 0x17);
     setCallbackWithContinue(&func_8004BE40_4CA40);
 }
