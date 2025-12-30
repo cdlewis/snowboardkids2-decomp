@@ -57,7 +57,7 @@ void func_80003898_4498(void);
 void loadCutsceneOverlay(void);
 void runCutsceneFrame(void);
 void signalCutsceneComplete(void);
-void func_80003D30_4930(void);
+void awaitCutsceneTaskComplete(void);
 void initCutscenePlayback(void);
 void initCutsceneRenderer(void);
 void returnToMainGame(void);
@@ -186,15 +186,15 @@ void initCutscenePlayback(void) {
     }
     setCutsceneSelection(gCutsceneState.slotSelection.half.upper, gCutsceneState.typeSelection.half.upper);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
-    setGameStateHandler(&func_80003D30_4930);
+    setGameStateHandler(&awaitCutsceneTaskComplete);
 }
 
-void func_80003D30_4930(void) {
+void awaitCutsceneTaskComplete(void) {
     s32 typeSelection;
     CutsceneState *state;
 
     if ((func_80069810_6A410() << 16) != 0) {
-        if (gButtonsPressed & 0x4000) {
+        if (gButtonsPressed & B_BUTTON) {
             terminateSchedulerWithCallback(returnToMainGame);
             return;
         }

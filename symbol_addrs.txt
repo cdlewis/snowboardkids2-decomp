@@ -82,6 +82,7 @@ awaitCutsceneTransitionComplete = 0x80003C34; // rom:0x4834
 signalCutsceneComplete = 0x80003C88; // rom:0x4888
 beginCutsceneSequence = 0x80003CA4; // rom:0x48A4
 initCutscenePlayback = 0x80003CC4; // rom:0x48C4
+awaitCutsceneTaskComplete = 0x80003D30; // rom:0x4930
 returnToMainGame = 0x80003E10; // rom:0x4A10
 initSceneLighting = 0x80003E40; // rom:0x4A40
 initCreditsSequence = 0x80003EE0; // rom:0x4AE0
