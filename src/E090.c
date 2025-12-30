@@ -58,7 +58,7 @@ typedef struct {
     s32 unk2D4[6];
 } E090_struct;
 
-void func_8000D518_E118(E090_struct *arg0);
+void initLogoScreenElements(E090_struct *arg0);
 void func_8000D5F0_E1F0(E090_struct *arg0);
 void func_8000D624_E224(E090_struct *arg0);
 void func_8000D68C_E28C(E090_struct *arg0);
@@ -77,7 +77,7 @@ void func_8000D4D4_E0D4(E090_struct *arg0) {
     func_8006FDA0_709A0(&arg0->unk8, 0, 0xF);
 }
 
-void func_8000D518_E118(E090_struct *arg0) {
+void initLogoScreenElements(E090_struct *arg0) {
     s32 i;
 
     func_800394BC_3A0BC(&arg0->unk1EC, (s32)arg0->unk1E0);
@@ -210,7 +210,7 @@ void func_8000D974_E574(void) {
     state = arg0->unk0;
     switch (state) {
         case 0:
-            func_8000D518_E118(arg0);
+            initLogoScreenElements(arg0);
             break;
         case 1:
             func_8000D5F0_E1F0(arg0);
