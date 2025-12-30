@@ -73,6 +73,7 @@ setNodeScale = 0x8000C2AC; // rom:0xCEAC
 setNodeRenderMode = 0x8000C2B4; // rom:0xCEB4
 setNodeWipeColor = 0x8000C2BC; // rom:0xCEBC
 setNodeScaleTarget = 0x8000C2CC; // rom:0xCECC
+setNodePositionTarget = 0x8000C334; // rom:0xCF34
 D_8008DD6C_8E96C = 0x8008DD6C; // size:0x6
 D_8008DDBE_8E9BE = 0x8008DDBE; // size:0x1E
 D_8008DDD8_8E9D8 = 0x8008DDD8; // size:0x14

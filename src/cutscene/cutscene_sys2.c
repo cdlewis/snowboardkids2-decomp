@@ -31,7 +31,7 @@ void cutsceneSys2Wipe_exec(cutsceneSys2Wipe_exec_arg0 *params, cutsceneSys2Wipe_
     temp_rotation = (s32)(params->rotation_y) << 0x10;
 
     setNodeScaleTarget((Func8000C2CCArg *)&state->matrix, temp_rotation / 100, params->unk2);
-    func_8000C334_CF34((Func8000C334Arg *)&state->matrix, (s32 *)&world_pos, params->unk2);
+    setNodePositionTarget((NodePositionTargetArg *)&state->matrix, (s32 *)&world_pos, params->unk2);
     setNodeRenderMode((NodeRenderModeArg *)&state->matrix, params->render_flags);
 }
 

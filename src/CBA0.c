@@ -178,37 +178,37 @@ void setNodeScaleTarget(Func8000C2CCArg *arg0, s32 arg1, s16 arg2) {
 
 typedef struct {
     u8 pad[0x1E4];
-    s32 unk1E4;
-    s32 unk1E8;
-    s32 unk1EC;
-    s32 unk1F0;
-    s32 unk1F4;
-    s32 unk1F8;
-    s16 unk1FC;
-    s16 unk1FE;
-    s16 unk200;
-} Func8000C334Arg;
+    s32 posX;
+    s32 posY;
+    s32 posZ;
+    s32 velocityX;
+    s32 velocityY;
+    s32 velocityZ;
+    s16 framesRemainingX;
+    s16 framesRemainingY;
+    s16 framesRemainingZ;
+} NodePositionTargetArg;
 
-void func_8000C334_CF34(Func8000C334Arg *arg0, s32 *arg1, s16 arg2) {
-    s16 temp = arg2;
+void setNodePositionTarget(NodePositionTargetArg *node, s32 *targetPos, s16 frames) {
+    s16 temp = frames;
 
-    if (arg2 == 0) {
-        arg0->unk1FC = 0;
-        arg0->unk1FE = 0;
-        arg0->unk200 = 0;
-        arg0->unk1F0 = 0;
-        arg0->unk1F4 = 0;
-        arg0->unk1F8 = 0;
-        arg0->unk1E4 = arg1[0];
-        arg0->unk1E8 = arg1[1];
-        arg0->unk1EC = arg1[2];
+    if (frames == 0) {
+        node->framesRemainingX = 0;
+        node->framesRemainingY = 0;
+        node->framesRemainingZ = 0;
+        node->velocityX = 0;
+        node->velocityY = 0;
+        node->velocityZ = 0;
+        node->posX = targetPos[0];
+        node->posY = targetPos[1];
+        node->posZ = targetPos[2];
     } else {
-        arg0->unk1FC = temp;
-        arg0->unk1FE = temp;
-        arg0->unk200 = temp;
-        arg0->unk1F0 = (arg1[0] - arg0->unk1E4) / arg2;
-        arg0->unk1F4 = (arg1[1] - arg0->unk1E8) / arg2;
-        arg0->unk1F8 = (arg1[2] - arg0->unk1EC) / arg2;
+        node->framesRemainingX = temp;
+        node->framesRemainingY = temp;
+        node->framesRemainingZ = temp;
+        node->velocityX = (targetPos[0] - node->posX) / frames;
+        node->velocityY = (targetPos[1] - node->posY) / frames;
+        node->velocityZ = (targetPos[2] - node->posZ) / frames;
     }
 }
 

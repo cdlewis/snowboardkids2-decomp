@@ -24,21 +24,21 @@ typedef struct {
 
 typedef struct {
     u8 pad[0x1E4];
-    s32 unk1E4;
-    s32 unk1E8;
-    s32 unk1EC;
-    s32 unk1F0;
-    s32 unk1F4;
-    s32 unk1F8;
-    s16 unk1FC;
-    s16 unk1FE;
-    s16 unk200;
-} Func8000C334Arg;
+    s32 posX;
+    s32 posY;
+    s32 posZ;
+    s32 velocityX;
+    s32 velocityY;
+    s32 velocityZ;
+    s16 framesRemainingX;
+    s16 framesRemainingY;
+    s16 framesRemainingZ;
+} NodePositionTargetArg;
 
 void setAuxRenderEnabled(Func8000C268Arg *arg0);
 void clearAuxRenderEnabled(Func8000C268Arg *arg0);
 void setNodeRenderMode(NodeRenderModeArg *arg0, s32 arg1);
 void setNodeWipeColor(NodeWipeColorArg *node, u8 r, u8 g, u8 b);
 void setNodeScaleTarget(Func8000C2CCArg *arg0, s32 arg1, s16 arg2);
-void func_8000C334_CF34(Func8000C334Arg *arg0, s32 *arg1, s16 arg2);
+void setNodePositionTarget(NodePositionTargetArg *arg0, s32 *arg1, s16 arg2);
 void func_8000C440_D040(void *arg0, s32 arg1, s32 arg2, u16 arg3, s32 arg4, s32 arg5, s32 arg6);
