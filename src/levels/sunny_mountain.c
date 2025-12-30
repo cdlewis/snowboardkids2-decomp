@@ -30,9 +30,82 @@ extern u8 D_800BBB8C_B548C[];
 
 void func_800BBB18_B5418(func_800BB814_B5114_arg *arg0);
 
-INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", func_800BB2B0_B4BB0);
+typedef struct {
+    u8 _pad[0x48];
+    u8 *unk48;
+    u8 _pad2[0x10];
+    u8 unk5C;
+} Allocation_B4BB0;
+
+typedef struct {
+    u8 _pad[0x38];
+    void *unk38;
+    void *unk3C;
+    void *unk40;
+    s32 unk44;
+    u8 _pad2[0xC];
+    u8 *unk54;
+    u8 _pad3[0x80];
+    s16 unkD8;
+} TaskArg_B4BB0;
 
 extern void func_800BB488_B4D88(void);
+void func_800BB7D0_B50D0(func_800BB7D0_arg *arg0);
+void func_800BB3D8_B4CD8(s32 *arg0);
+
+void func_800BB2B0_B4BB0(TaskArg_B4BB0 *arg0) {
+    s32 i;
+    s32 srcOffset;
+    TaskArg_B4BB0 *dest;
+    u8 *new_var;
+    s32 offset;
+    func_80055E68_56A68_result *temp;
+    Allocation_B4BB0 *allocation;
+
+    allocation = (Allocation_B4BB0 *)getCurrentAllocation();
+
+    i = 0;
+    temp = func_80055E68_56A68(allocation->unk5C);
+    arg0->unk38 = (void *)((u32)temp + 0x90);
+
+    srcOffset = 0;
+    arg0->unk3C = func_80055DC4_569C4(allocation->unk5C);
+
+    dest = arg0;
+    offset = 0;
+    arg0->unk40 = func_80055DF8_569F8(allocation->unk5C);
+
+    arg0->unk44 = 0;
+    arg0->unkD8 = 0;
+    arg0->unk54 = allocateNodeMemory(0xF0);
+
+    do {
+        s32 entryAddr;
+        i++;
+
+        temp = func_80055E68_56A68(allocation->unk5C);
+        entryAddr = offset + (s32)arg0->unk54;
+        *(void **)(entryAddr + 0x20) = (void *)((u32)temp + 0xA0);
+
+        new_var = (u8 *)dest;
+        new_var = new_var + 0x6C;
+
+        *(void **)(offset + (s32)arg0->unk54 + 0x24) = arg0->unk3C;
+
+        *(void **)(offset + (s32)arg0->unk54 + 0x28) = arg0->unk40;
+
+        *(void **)(offset + (s32)arg0->unk54 + 0x2C) = 0;
+
+        memcpy(new_var, (u8 *)(srcOffset + (s32)allocation->unk48) + 0x30, 0xC);
+
+        dest = (TaskArg_B4BB0 *)((u8 *)dest + 0x20);
+        offset += 0x3C;
+        srcOffset += 0xC;
+    } while (i < 4);
+
+    setCleanupCallback(func_800BB7D0_B50D0);
+    setCallback(func_800BB3D8_B4CD8);
+}
 
 void func_800BB3D8_B4CD8(s32 *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
