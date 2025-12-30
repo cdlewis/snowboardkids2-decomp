@@ -110,50 +110,49 @@ void func_8002D140_2DD40(Func2E024Arg *arg0) {
     }
 }
 
-void func_8002D46C_2E06C(Func2E024Arg *arg0) {
-    GameState *allocation;
+void func_8002D46C_2E06C(Func2E024Arg *container) {
+    GameState *gameState;
     s32 i;
-    Func2E024Element *elements;
-    u16 rotation;
+    Func297D8Arg *characters;
 
-    allocation = getCurrentAllocation();
-    elements = (Func2E024Element *)arg0;
+    gameState = getCurrentAllocation();
+    characters = (Func297D8Arg *)container;
 
-    for (i = 0; i < arg0->unkD5; i++) {
-        memcpy((u8 *)&elements[i] + 4, identityMatrix, sizeof(Transform3D));
-        ((Func297D8Arg *)&elements[i])->unk62 = 0;
-        arg0->unkCC[i] = 0;
+    for (i = 0; i < container->unkD5; i++) {
+        memcpy(&characters[i].matrix, identityMatrix, sizeof(Transform3D));
+        characters[i].unk62 = 0;
+        container->unkCC[i] = 0;
 
         if (i == 0) {
-            arg0->unk4.translation.x = -0x80000;
-            arg0->unk4.translation.z = -0x4E0000;
-            setAnimationIndex(arg0->model, 1);
-            arg0->unk50 = 0x11;
-            arg0->unk44 = 0x260000;
-            arg0->unk5E = 0;
-            arg0->unk40 = 0;
-            arg0->unk48 = 0;
-            spawnSpriteEffectEx(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+            container->unk4.translation.x = -0x80000;
+            container->unk4.translation.z = -0x4E0000;
+            setAnimationIndex(container->model, 1);
+            container->unk50 = 0x11;
+            container->unk44 = 0x260000;
+            container->unk5E = 0;
+            container->unk40 = 0;
+            container->unk48 = 0;
+            spawnSpriteEffectEx(container->model, 0, 0x29, -1, &container->unk40, 0x10000, 0, 2, 0, 0);
         } else {
-            arg0->unk7C = 0x1C0000;
-            arg0->unk84 = -0x4E0000;
-            setAnimationIndex(arg0->unk64, 2);
-            arg0->unkB4 = 0x1E;
-            arg0->unkC2 = 1;
-            arg0->unkA4 = 0x40000;
-            arg0->unkA8 = 0x280000;
-            arg0->unkAC = 0;
-            spawnSpriteEffectEx(arg0->unk64, 0, 0x24, -1, &arg0->unkA4, 0x10000, 0, 2, 0, 0);
+            container->unk7C = 0x1C0000;
+            container->unk84 = -0x4E0000;
+            setAnimationIndex(container->unk64, 2);
+            container->unkB4 = 0x1E;
+            container->unkC2 = 1;
+            container->unkA4 = 0x40000;
+            container->unkA8 = 0x280000;
+            container->unkAC = 0;
+            spawnSpriteEffectEx(container->unk64, 0, 0x24, -1, &container->unkA4, 0x10000, 0, 2, 0, 0);
         }
 
-        ((Func297D8Arg *)&elements[i])->rotation = 0x800 + i * 0x1000;
-        ((Func297D8Arg *)&elements[i])->unk2E = 0x800 + i * 0x1000;
-        ((Func297D8Arg *)&elements[i])->unk52 = ((Func297D8Arg *)&elements[i])->unk50;
-        createYRotationMatrix((Transform3D *)((u8 *)&elements[i] + 4), ((Func297D8Arg *)&elements[i])->rotation);
-        func_8002A290_2AE90((Func297D8Arg *)&elements[i]);
-        allocation->unk408[i] = elements[i].matrix.translation.x;
-        allocation->unk410[i] = elements[i].matrix.translation.z;
-        allocation->unk418[i] = D_8008EF70_8FB70[((Func297D8Arg *)&elements[i])->unk5C];
+        characters[i].rotation = 0x800 + i * 0x1000;
+        characters[i].unk2E = 0x800 + i * 0x1000;
+        characters[i].unk52 = characters[i].unk50;
+        createYRotationMatrix(&characters[i].matrix, characters[i].rotation);
+        func_8002A290_2AE90(&characters[i]);
+        gameState->unk408[i] = characters[i].matrix.translation.x;
+        gameState->unk410[i] = characters[i].matrix.translation.z;
+        gameState->unk418[i] = D_8008EF70_8FB70[characters[i].unk5C];
     }
 
     setCallback(func_8002D668_2E268);
