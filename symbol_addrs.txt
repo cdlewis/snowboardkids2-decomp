@@ -1766,3 +1766,4 @@ startViewerFadeIn = 0x8000F4BC; // rom:0x100BC
 waitForViewerFadeIn = 0x8000F4F0; // rom:0x100F0
 handleViewerGridNavigation_TwoPage = 0x8000F564; // rom:0x10164
 handleViewerGridNavigation_TwoColumn = 0x8000F690; // rom:0x10290
+handleViewerGridNavigation_SingleRow = 0x8000F7B0; // rom:0x103B0

@@ -655,7 +655,7 @@ void func_8000F690_10290(FD98_struct *arg0) {
     }
 }
 
-void func_8000F7B0_103B0(FD98_struct *arg0) {
+void handleViewerGridNavigation_SingleRow(FD98_struct *arg0) {
     s32 inputs;
 
     inputs = gControllerInputs;
@@ -875,7 +875,7 @@ do_switch:
             func_8000F690_10290(arg0);
             break;
         case 2:
-            func_8000F7B0_103B0(arg0);
+            handleViewerGridNavigation_SingleRow(arg0);
             break;
         case 3:
             func_8000F884_10484(arg0);
