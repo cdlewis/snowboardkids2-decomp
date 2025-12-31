@@ -43,7 +43,7 @@ typedef struct {
 void initStoryMapCamera(StoryMapCameraState *arg0);
 void func_800175E0_181E0(void);
 void func_80018580_19180(StoryMapCameraState *arg0);
-void func_800182FC_18EFC(StoryMapCameraState *arg0);
+void initStoryMapCameraAtLocation(StoryMapCameraState *arg0);
 
 void storyMapCameraTask(void) {
     GameState *state = (GameState *)getCurrentAllocation();
@@ -64,7 +64,7 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
 
     if (storyMapLocationIndex != 0) {
         state->unk425 = storyMapLocationIndex - 1;
-        setCallbackWithContinue(&func_800182FC_18EFC);
+        setCallbackWithContinue(&initStoryMapCameraAtLocation);
         return;
     }
 
@@ -253,7 +253,7 @@ void storyMapCameraTravelComplete(void) {
 
 void func_80018474_19074(StoryMapCameraState *arg0);
 
-void func_800182FC_18EFC(StoryMapCameraState *camera) {
+void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
     s32 pad[2];
     GameState *state;
     s32 x, z;
