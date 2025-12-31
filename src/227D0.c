@@ -3,35 +3,35 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-void func_80021C90_22890(void);
-void func_80021C00_22800(void);
-void func_80021CE4_228E4(void);
+void awaitCharacterSelect(void);
+void awaitLevelSelectBasic(void);
+void onLevelSelectProceed(void);
 
 void initLevelSelectBasicState(void) {
     createTaskQueue(&initLevelSelectBasic, 100);
-    setGameStateHandler(&func_80021C00_22800);
+    setGameStateHandler(&awaitLevelSelectBasic);
 }
 
-void func_80021C58_22858(void);
-void func_80021D00_22900(void);
+void loadCharacterSelect(void);
+void onLevelSelectCancel(void);
 
-void func_80021C00_22800(void) {
+void awaitLevelSelectBasic(void) {
     s16 result = func_80069810_6A410();
 
     if (result == 0xFF) {
-        terminateSchedulerWithCallback(&func_80021D00_22900);
+        terminateSchedulerWithCallback(&onLevelSelectCancel);
     } else if (result == 1) {
-        setGameStateHandler(&func_80021C58_22858);
+        setGameStateHandler(&loadCharacterSelect);
     }
 }
 
-void func_80021C58_22858(void) {
+void loadCharacterSelect(void) {
     func_800574A0_580A0(2);
     createTaskQueue(&func_800226F0_232F0, 100);
-    setGameStateHandler(&func_80021C90_22890);
+    setGameStateHandler(&awaitCharacterSelect);
 }
 
-void func_80021C90_22890(void) {
+void awaitCharacterSelect(void) {
     s16 result = func_80069810_6A410();
 
     if (result == 0) {
@@ -41,14 +41,14 @@ void func_80021C90_22890(void) {
     if (result == 0xFF) {
         setGameStateHandler(&initLevelSelectBasicState);
     } else {
-        terminateSchedulerWithCallback(&func_80021CE4_228E4);
+        terminateSchedulerWithCallback(&onLevelSelectProceed);
     }
 }
 
-void func_80021CE4_228E4(void) {
+void onLevelSelectProceed(void) {
     func_800697F4_6A3F4(1);
 }
 
-void func_80021D00_22900(void) {
+void onLevelSelectCancel(void) {
     func_800697F4_6A3F4(0xFF);
 }
