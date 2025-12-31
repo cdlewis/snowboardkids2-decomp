@@ -10,8 +10,8 @@ extern s32 gControllerInputs;
 void unlockScreenScheduleDisplayTasks(void);
 void func_8001C2FC_1CEFC(void);
 
-void func_8001C7E8_1D3E8(void);
-void func_8001C744_1D344(void);
+void onUnlockScreenExit(void);
+void unlockScreenCleanupAndExit(void);
 void unlockScreenAwaitUserDismiss(void);
 void unlockScreenAwaitFadeIn(void);
 
@@ -104,7 +104,7 @@ void unlockScreenAwaitUserDismiss(void) {
         func_80058220_58E20(0xED, 1);
         allocation->transitionState = 2;
         func_8006FDA0_709A0(0, 0xFF, 0x10);
-        setGameStateHandler(func_8001C744_1D344);
+        setGameStateHandler(unlockScreenCleanupAndExit);
     }
 }
 
@@ -116,7 +116,7 @@ void unlockScreenCountdownToExit(void) {
     allocation->waitCounter--;
     if (allocation->waitCounter == 0) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
-        setGameStateHandler(func_8001C744_1D344);
+        setGameStateHandler(unlockScreenCleanupAndExit);
     }
 
     if (allocation->transitionState != 0) {
@@ -124,7 +124,7 @@ void unlockScreenCountdownToExit(void) {
     }
 }
 
-void func_8001C744_1D344(void) {
+void unlockScreenCleanupAndExit(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
 
     if (func_8006FE10_70A10(NULL) != 0) {
@@ -142,9 +142,9 @@ void func_8001C744_1D344(void) {
     allocation->unk598 = freeNodeMemory(allocation->unk598);
     allocation->unk59C = freeNodeMemory(allocation->unk59C);
 
-    terminateSchedulerWithCallback(func_8001C7E8_1D3E8);
+    terminateSchedulerWithCallback(onUnlockScreenExit);
 }
 
-void func_8001C7E8_1D3E8(void) {
+void onUnlockScreenExit(void) {
     func_800697F4_6A3F4(1);
 }
