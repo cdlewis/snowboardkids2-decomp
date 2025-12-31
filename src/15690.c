@@ -10,7 +10,7 @@
 void returnToMainMenu(void);
 void awaitSaveDataLoad(void);
 void awaitUnlockCutscene(void);
-void func_80015248_15E48(s32);
+void setStoryMapCameraMode(s32);
 
 typedef struct {
     s16 unk0;
@@ -28,7 +28,7 @@ void initStoryMode(void) {
     D_800AB1C8_A2538 = 0;
     D_800AFE8C_A71FC->unk8 = 1;
     D_800AFE8C_A71FC->unk9[0] = 0;
-    func_80015248_15E48(0);
+    setStoryMapCameraMode(0);
     func_8006983C_6A43C(loadSaveSlotScreen);
 }
 
@@ -119,7 +119,7 @@ void loadPreRaceCutscene(void) {
 
 void awaitPreRaceCutscene(void) {
     if ((func_80069810_6A410() << 16) != 0) {
-        func_80015248_15E48(3);
+        setStoryMapCameraMode(3);
         setGameStateHandler(loadRace);
     }
 }
@@ -173,7 +173,7 @@ void awaitRaceResult(void) {
             handler = loadRace;
         } else {
             if (EepromSaveData->save_slot_status[0] == 5) {
-                func_80015248_15E48(0);
+                setStoryMapCameraMode(0);
                 goto set_handler_b70;
             }
             if ((result == 3) || (gDebugUnlockEnabled != 0)) {
@@ -295,7 +295,7 @@ u8 getStoryMapCameraMode(void) {
     return D_8009F200_9FE00;
 }
 
-void func_80015248_15E48(s32 arg0) {
+void setStoryMapCameraMode(s32 arg0) {
     D_8009F200_9FE00 = arg0;
 }
 
