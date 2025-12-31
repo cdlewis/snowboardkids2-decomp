@@ -189,7 +189,7 @@ typedef struct {
 extern u8 D_8008D9F0_8E5F0[];
 
 void func_80020528_21128(Func80020528Arg *arg0);
-void func_8001F7C8_203C8(LevelPreviewCharacterState *arg0);
+void setupLevelPreviewCamera(LevelPreviewCharacterState *arg0);
 
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     Allocation_80020418 *allocation;
@@ -250,7 +250,7 @@ void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     *(void **)arg0->gameData = func_80055D34_56934(charIndex);
 
     setCleanupCallback(&func_80020528_21128);
-    setCallback(&func_8001F7C8_203C8);
+    setCallback(&setupLevelPreviewCamera);
 }
 
 typedef struct {
@@ -262,71 +262,71 @@ typedef struct {
     u8 unkB33[12];
 } Allocation_F7C8;
 
-void func_8001F7C8_203C8(LevelPreviewCharacterState *arg0) {
+void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     Allocation_F7C8 *allocation;
-    Transform3D mat3;
-    Transform3D mat1;
-    Transform3D mat2;
-    s32 pos1[4];
-    s32 pos2[4];
+    Transform3D cameraTransform;
+    Transform3D offsetTransform;
+    Transform3D lookAtTransform;
+    s32 waypointStart[4];
+    s32 waypointEnd[4];
     s32 scaled;
     u16 angle;
 
     allocation = (Allocation_F7C8 *)getCurrentAllocation();
-    parseGameDataLayout((GameDataLayout *)arg0->gameData);
+    parseGameDataLayout((GameDataLayout *)state->gameData);
 
-    func_80062B1C_6371C(arg0->gameData, arg0->startWaypoint, pos1, pos2);
+    func_80062B1C_6371C(state->gameData, state->startWaypoint, waypointStart, waypointEnd);
 
-    memcpy(&arg0->transform, identityMatrix, sizeof(Transform3D));
-    memcpy(arg0, pos2, 0xC);
+    memcpy(&state->transform, identityMatrix, sizeof(Transform3D));
+    memcpy(state, waypointEnd, 0xC);
 
-    arg0->posY = func_80061A64_62664(arg0->gameData, arg0->startWaypoint, arg0);
+    state->posY = func_80061A64_62664(state->gameData, state->startWaypoint, state);
 
     if (allocation->unkB33[allocation->unkB2C] == 5) {
-        arg0->posY = arg0->posY + arg0->altHeightOffset;
+        state->posY = state->posY + state->altHeightOffset;
     } else {
-        arg0->posY = arg0->posY + arg0->heightOffset;
+        state->posY = state->posY + state->heightOffset;
     }
 
-    memcpy(&arg0->transform.translation, arg0, 0xC);
+    memcpy(&state->transform.translation, state, 0xC);
 
-    createYRotationMatrix(&arg0->transform, arg0->currentRotation);
-    applyTransformToModel(arg0->sceneModel, &arg0->transform);
-    setModelAnimation(arg0->sceneModel, 0x90);
+    createYRotationMatrix(&state->transform, state->currentRotation);
+    applyTransformToModel(state->sceneModel, &state->transform);
+    setModelAnimation(state->sceneModel, 0x90);
 
-    angle = (func_8006D21C_6DE1C(pos1[0], pos1[2], pos2[0], pos2[2]) - 0x1000) & 0x1FFF;
-    arg0->currentRotation = angle;
-    arg0->targetRotation = angle;
-    arg0->turnDirection = 0;
+    angle = (func_8006D21C_6DE1C(waypointStart[0], waypointStart[2], waypointEnd[0], waypointEnd[2]) - 0x1000) & 0x1FFF;
+    state->currentRotation = angle;
+    state->targetRotation = angle;
+    state->turnDirection = 0;
 
-    scaled = approximateSin((s16)arg0->currentRotation) * 5 << 12;
+    scaled = approximateSin((s16)state->currentRotation) * 5 << 12;
     if (scaled < 0) {
         scaled += 0x1FFF;
     }
-    arg0->targetX = (scaled >> 13) << 8;
+    state->targetX = (scaled >> 13) << 8;
 
-    scaled = approximateCos((s16)arg0->currentRotation) * 5 << 12;
+    scaled = approximateCos((s16)state->currentRotation) * 5 << 12;
     if (scaled < 0) {
         scaled += 0x1FFF;
     }
-    arg0->targetZ = (scaled >> 13) << 8;
+    state->targetZ = (scaled >> 13) << 8;
 
-    arg0->targetX = arg0->targetX + arg0->posX;
-    arg0->targetZ = arg0->targetZ + arg0->posZ;
+    state->targetX = state->targetX + state->posX;
+    state->targetZ = state->targetZ + state->posZ;
 
-    angle = func_80060A3C_6163C(arg0->gameData, arg0->currentWaypoint, &arg0->targetX);
-    arg0->currentWaypoint = angle;
+    angle = func_80060A3C_6163C(state->gameData, state->currentWaypoint, &state->targetX);
+    state->currentWaypoint = angle;
 
-    arg0->targetY = func_80061A64_62664(arg0->gameData, angle, &arg0->targetX);
-    arg0->targetY = arg0->targetY + arg0->heightOffset;
+    state->targetY = func_80061A64_62664(state->gameData, angle, &state->targetX);
+    state->targetY = state->targetY + state->heightOffset;
 
-    computeLookAtMatrix(&arg0->targetX, arg0, &mat2);
+    computeLookAtMatrix(&state->targetX, state, &lookAtTransform);
 
-    memcpy(&mat1, identityMatrix, 0x20);
-    mat1.translation.z = arg0->cameraDistance;
+    memcpy(&offsetTransform, identityMatrix, 0x20);
+    offsetTransform.translation.z = state->cameraDistance;
 
-    func_8006B084_6BC84(&mat1, &mat2, &mat3);
-    func_8006FD3C_7093C(allocation->unk48A, &mat3);
+    func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
+    func_8006FD3C_7093C(allocation->unk48A, &cameraTransform);
     setCallback(func_8001FA00_20600);
 }
 
