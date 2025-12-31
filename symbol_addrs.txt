@@ -1851,6 +1851,7 @@ setupLevelPreviewCamera = 0x8001F7C8; // rom:0x203C8
 holdLevelPreviewCamera = 0x8001FE64; // rom:0x20A64
 updateLevelPreviewCamera = 0x8001FEB4; // rom:0x20AB4
 resumeLevelPreviewAfterHold = 0x80020418; // rom:0x21018
+cleanupLevelPreviewCharacter = 0x80020528; // rom:0x21128
 
 GenericTriggerInit = 0x80018CB0; // rom:0x198B0
 GenericTriggerCheck = 0x80018D04; // rom:0x19904

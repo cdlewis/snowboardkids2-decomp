@@ -50,13 +50,6 @@ typedef struct {
 } Func800216ACArg;
 
 typedef struct {
-    u8 _pad0[0x18];
-    void *unk18;
-    u8 _pad1C[0x10];
-    void *unk2C;
-} Func80020528Arg;
-
-typedef struct {
     void *unk0;
     void *unk4;
     u8 _pad8[0x2C];
@@ -166,7 +159,7 @@ typedef struct {
 
 extern u8 D_8008D9F0_8E5F0[];
 
-void func_80020528_21128(Func80020528Arg *arg0);
+void cleanupLevelPreviewCharacter(LevelPreviewCharacterState *arg0);
 void setupLevelPreviewCamera(LevelPreviewCharacterState *arg0);
 
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
@@ -227,7 +220,7 @@ void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
 
     *(void **)arg0->gameData = func_80055D34_56934(charIndex);
 
-    setCleanupCallback(&func_80020528_21128);
+    setCleanupCallback(&cleanupLevelPreviewCharacter);
     setCallback(&setupLevelPreviewCamera);
 }
 
@@ -407,9 +400,9 @@ void resumeLevelPreviewAfterHold(Func80020418Arg *arg0) {
     }
 }
 
-void func_80020528_21128(Func80020528Arg *arg0) {
-    arg0->unk18 = freeNodeMemory(arg0->unk18);
-    destroySceneModel(arg0->unk2C);
+void cleanupLevelPreviewCharacter(LevelPreviewCharacterState *state) {
+    *(void **)state->gameData = freeNodeMemory(*(void **)state->gameData);
+    destroySceneModel(state->sceneModel);
 }
 
 s32 func_8002055C_2115C(LevelPreviewCharacterState *arg0) {
