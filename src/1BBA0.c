@@ -12,8 +12,8 @@ USE_OVERLAY(_1DA660)
 extern void func_8001B020_1BC20(void);
 extern void func_8001B3E8_1BFE8(void);
 
-void func_8001BCC0_1C8C0(void);
-void func_8001BC78_1C878(void);
+void onStoryMapExitToMainMenu(void);
+void onStoryMapNormalExit(void);
 void storyMapAwaitFadeIn(void);
 
 void loadOverlay_1BBA0(void) {
@@ -46,41 +46,41 @@ void storyMapAwaitFadeIn(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001B3E8_1BFE8);
 
-void func_8001BBE8_1C7E8(void) {
-    void *var_a0;
-    Node_70B00 *temp_s0 = (Node_70B00 *)getCurrentAllocation();
+void storyMapAwaitFadeOutAndCleanup(void) {
+    void *exitCallback;
+    Node_70B00 *state = (Node_70B00 *)getCurrentAllocation();
 
     if (func_8006FE10_70A10(0) == 0) {
-        unlinkNode(&temp_s0[0]);
-        unlinkNode(&temp_s0[1]);
-        unlinkNode(&temp_s0[2]);
+        unlinkNode(&state[0]);
+        unlinkNode(&state[1]);
+        unlinkNode(&state[2]);
 
         osViExtendVStart(0);
 
-        temp_s0[3].unk0.next = freeNodeMemory(temp_s0[3].unk0.next);
-        temp_s0[3].prev = freeNodeMemory(temp_s0[3].prev);
+        state[3].unk0.next = freeNodeMemory(state[3].unk0.next);
+        state[3].prev = freeNodeMemory(state[3].prev);
 
-        if (temp_s0[3].unk8.callback_selector != 0) {
-            var_a0 = &func_8001BCC0_1C8C0;
+        if (state[3].unk8.callback_selector != 0) {
+            exitCallback = &onStoryMapExitToMainMenu;
         } else {
-            var_a0 = &func_8001BC78_1C878;
+            exitCallback = &onStoryMapNormalExit;
         }
 
-        terminateSchedulerWithCallback(var_a0);
+        terminateSchedulerWithCallback(exitCallback);
     }
 }
 
-void func_8001BC78_1C878(void) {
-    s32 var_a0;
+void onStoryMapNormalExit(void) {
+    s32 exitCode;
 
-    var_a0 = 1;
+    exitCode = 1;
     if ((D_800AFE8C_A71FC->unk4 == 0) && (EepromSaveData->save_slot_status[0] == 5)) {
-        var_a0 = 0x44;
+        exitCode = 0x44;
     }
-    func_800697F4_6A3F4(var_a0);
+    func_800697F4_6A3F4(exitCode);
 }
 
-void func_8001BCC0_1C8C0(void) {
+void onStoryMapExitToMainMenu(void) {
     func_800697F4_6A3F4(0xFF);
 }
 

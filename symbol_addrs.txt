@@ -1913,3 +1913,6 @@ awaitStoryMapLocationIntro = 0x8001AF18; // rom:0x1BB18
 onStoryMapLocationIntroComplete = 0x8001AF80; // rom:0x1BB80
 storyMapInitFadeIn = 0x8001B368; // rom:0x1BF68
 storyMapAwaitFadeIn = 0x8001B3B8; // rom:0x1BFB8
+storyMapAwaitFadeOutAndCleanup = 0x8001BBE8; // rom:0x1C7E8
+onStoryMapNormalExit = 0x8001BC78; // rom:0x1C878
+onStoryMapExitToMainMenu = 0x8001BCC0; // rom:0x1C8C0
