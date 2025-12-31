@@ -10,6 +10,7 @@ updateStoryMapCameraOrbit = 0x80018580; // rom:0x19180
 finalizeStoryMapExit = 0x80018798; // rom:0x19398
 storyMapExitComplete = 0x800187DC; // rom:0x193DC
 storyMapCharacterTask = 0x80018800; // rom:0x19400
+awaitStoryMapCharacterReady = 0x80018858; // rom:0x19458
 cleanupTitleLogoTask = 0x800163A0; // rom:0x16FA0
 enqueueTitleLogoRender = 0x800163CC; // rom:0x16FCC
 initTitleLogoRenderState = 0x800163F8; // rom:0x16FF8
