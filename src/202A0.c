@@ -112,10 +112,10 @@ typedef struct {
 
 typedef struct {
     void *unk0;
-    void *unk4;
+    void *portraitAsset;
     u8 _pad8[0x98];
-    void *unkA0;
-} Func80020FA4Arg;
+    void *spriteSheetAsset;
+} CharacterSelectionIconState;
 
 typedef struct {
     u8 _pad0[0xF8];
@@ -506,9 +506,9 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_80020B44_21744);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020D18_21918);
 
-void func_80020FA4_21BA4(Func80020FA4Arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unkA0 = freeNodeMemory(arg0->unkA0);
+void cleanupCharacterSelectionIcons(CharacterSelectionIconState *state) {
+    state->portraitAsset = freeNodeMemory(state->portraitAsset);
+    state->spriteSheetAsset = freeNodeMemory(state->spriteSheetAsset);
 }
 
 typedef struct {

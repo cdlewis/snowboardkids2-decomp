@@ -1856,6 +1856,7 @@ sampleMaxSurroundingTerrainHeight = 0x8002055C; // rom:0x2115C
 initLevelPreviewPortraits = 0x800206B4; // rom:0x212B4
 renderLevelPreviewPortraits = 0x800208AC; // rom:0x214AC
 cleanupLevelPreviewPortraits = 0x80020B18; // rom:0x21718
+cleanupCharacterSelectionIcons = 0x80020FA4; // rom:0x21BA4
 
 GenericTriggerInit = 0x80018CB0; // rom:0x198B0
 GenericTriggerCheck = 0x80018D04; // rom:0x19904
