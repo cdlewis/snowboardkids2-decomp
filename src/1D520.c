@@ -8,8 +8,8 @@
 extern void func_8001CD90_1D990(void);
 extern u8 D_8008D9B0_8E5B0[8];
 
-void func_8001DE84_1EA84(void);
-void func_8001DEA0_1EAA0(void);
+void onSaveSlotSelectionConfirm(void);
+void onSaveSlotSelectionCancel(void);
 
 typedef struct {
     Node_70B00 unk0;
@@ -55,7 +55,7 @@ void initSaveSlotSelection(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001CD90_1D990);
 
-void func_8001DD54_1E954(void) {
+void cleanupSaveSlotSelectionAndExit(void) {
     allocation_1D520 *allocation;
     s32 i;
 
@@ -88,17 +88,17 @@ void func_8001DD54_1E954(void) {
     }
 
     if (allocation->unkAC4 == 1) {
-        terminateSchedulerWithCallback(func_8001DE84_1EA84);
+        terminateSchedulerWithCallback(onSaveSlotSelectionConfirm);
     } else {
-        terminateSchedulerWithCallback(func_8001DEA0_1EAA0);
+        terminateSchedulerWithCallback(onSaveSlotSelectionCancel);
     }
 }
 
-void func_8001DE84_1EA84(void) {
+void onSaveSlotSelectionConfirm(void) {
     func_800697F4_6A3F4(1);
 }
 
-void func_8001DEA0_1EAA0(void) {
+void onSaveSlotSelectionCancel(void) {
     func_800697F4_6A3F4(0xFE);
 }
 
