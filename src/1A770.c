@@ -42,6 +42,7 @@ extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 storyMapLocationIndex;
 extern void awaitFadeLoadCharacterSelect(void);
 extern s32 gControllerInputs[4];
+void awaitFadeLoadBoardShop(void);
 extern void func_8001A478_1B078(void);
 
 void func_8001ACC8_1B8C8(void);
@@ -58,7 +59,6 @@ void awaitStoryModeCharacterSelect(void);
 void awaitFadeLoadPreRaceCutscene(void);
 void loadStoryModeRace(void);
 void func_8001AF80_1BB80(void);
-void func_8001A434_1B034(void);
 void func_8001AC70_1B870(void);
 
 void storyMapDecorModelTask(StoryMapDecorModelState *arg0) {
@@ -232,21 +232,21 @@ void onStoryModeRaceCancelled(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A110_1AD10);
 
-void func_8001A3D8_1AFD8(void) {
-    GameState *temp_v0;
+void awaitBoardShopDmaComplete(void) {
+    GameState *state;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
-    if (temp_v0->unk77C != 0U) {
-        temp_v0->unk77C--;
+    state = (GameState *)getCurrentAllocation();
+    if (state->unk77C != 0U) {
+        state->unk77C--;
         return;
     }
     if (func_8003BB5C_3C75C() == 0) {
         func_8006FDA0_709A0(0, 0, 0x10);
-        setGameStateHandler(&func_8001A434_1B034);
+        setGameStateHandler(&awaitFadeLoadBoardShop);
     }
 }
 
-void func_8001A434_1B034(void) {
+void awaitFadeLoadBoardShop(void) {
     if (func_8006FE10_70A10(0) == 0) {
         scheduleTask(&func_80032330_32F30, 0, 0, 0x5A);
         setGameStateHandler(&func_8001A478_1B078);
