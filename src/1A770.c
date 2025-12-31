@@ -96,7 +96,7 @@ void cleanupStoryMapDecorModel(applyTransformToModel_arg1 *arg0) {
     destroySceneModel(arg0->unk20_u.unk20);
 }
 
-void func_80019CD0_1A8D0(func_80019CD0_1A8D0_arg *arg0) {
+void storyMapLocationTextTask(func_80019CD0_1A8D0_arg *arg0) {
     arg0->unk0 = -0x28;
     arg0->unk2 = 0;
     arg0->unk4 = 0;
@@ -344,7 +344,7 @@ void func_8001AE80_1BA80(void) {
     temp_s0->unk1D8.unk0.callback_selector = 0;
     func_80027CA0_288A0((Node_70B00 *)temp_s0, 0, 0xA, 0);
     func_8006FDA0_709A0(0, 0, 8);
-    scheduleTask(&func_80019CD0_1A8D0, 0U, 0U, 0x5AU);
+    scheduleTask(&storyMapLocationTextTask, 0U, 0U, 0x5AU);
     setGameStateHandler(&func_8001AF18_1BB18);
 }
 

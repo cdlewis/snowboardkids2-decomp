@@ -19,7 +19,7 @@ void func_8001C810_1D410(void) {
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->unk1D8 = 0;
     func_80027CA0_288A0((Node_70B00 *)temp_s0, 0, 0xA, 0);
-    scheduleTask(&func_80019CD0_1A8D0, 0, 0, 0x5A);
+    scheduleTask(&storyMapLocationTextTask, 0, 0, 0x5A);
     setGameStateHandler(&func_8001C898_1D498);
 }
 

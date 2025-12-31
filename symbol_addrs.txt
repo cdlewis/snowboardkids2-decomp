@@ -38,6 +38,7 @@ awaitStoryMapDecorReady = 0x80019BBC; // rom:0x1A7BC
 setupStoryMapDecorModel = 0x80019BF0; // rom:0x1A7F0
 updateStoryMapDecorModel = 0x80019C7C; // rom:0x1A87C
 cleanupStoryMapDecorModel = 0x80019CB4; // rom:0x1A8B4
+storyMapLocationTextTask = 0x80019CD0; // rom:0x1A8D0
 storyMapExitCode = 0x8009F220;
 cleanupTitleLogoTask = 0x800163A0; // rom:0x16FA0
 enqueueTitleLogoRender = 0x800163CC; // rom:0x16FCC
