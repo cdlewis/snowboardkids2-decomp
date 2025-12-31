@@ -39,7 +39,7 @@ void enqueueTitleLogoRender(Struct163F8 *arg0) {
     debugEnqueueCallback(8, 0, func_80038420_39020, arg0);
 }
 
-void func_800163F8_16FF8(Struct163F8 *arg0) {
+void initTitleLogoRenderState(Struct163F8 *arg0) {
     func_800394BC_3A0BC(arg0, (s32)arg0->unk38);
     arg0->unk2 = 0x10;
     setCallback(enqueueTitleLogoRender);
@@ -48,7 +48,7 @@ void func_800163F8_16FF8(Struct163F8 *arg0) {
 void func_80016434_17034(Struct163F8 *arg0) {
     arg0->unk38 = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
     setCleanupCallback(cleanupTitleLogoTask);
-    setCallback(func_800163F8_16FF8);
+    setCallback(initTitleLogoRenderState);
 }
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016488_17088);
