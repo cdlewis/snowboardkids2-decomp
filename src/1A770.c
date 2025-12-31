@@ -302,20 +302,20 @@ void onBoardShopCleanupComplete(void) {
     func_800697F4_6A3F4(1);
 }
 
-u8 func_8001AD9C_1B99C(void) {
+u8 countOwnedBoardsInCategory(void) {
     GameState *state;
-    u8 result;
+    u8 count;
     s32 i;
 
     state = getCurrentAllocation();
-    result = 0;
+    count = 0;
     for (i = 0; i < 3; i++) {
         if (EepromSaveData->character_or_settings[state->unk7A1 * 3 + i] != 0) {
-            result++;
+            count++;
         }
     }
 
-    return result;
+    return count;
 }
 
 void func_8001ADFC_1B9FC(void) {
