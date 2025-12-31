@@ -15,7 +15,7 @@ void func_800144DC_150DC(void);
 void func_8001489C_1549C(void);
 void func_80014690_15290(void);
 void func_80014660_15260(void);
-void func_800145AC_151AC(void);
+void waitForLogoScreen(void);
 void startLogoScreen(void);
 void func_800148CC_154CC(void);
 void func_8001474C_1534C(void);
@@ -63,10 +63,10 @@ void func_8001452C_1512C(void) {
 
 void startLogoScreen(void) {
     createTaskQueue(initLogoScreen, 0x64);
-    setGameStateHandler(func_800145AC_151AC);
+    setGameStateHandler(waitForLogoScreen);
 }
 
-void func_800145AC_151AC(void) {
+void waitForLogoScreen(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         setGameStateHandler(func_800145E0_151E0);
     }
