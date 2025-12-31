@@ -31,55 +31,55 @@ void func_80038090_38C90(s16 arg0) {
     if (D_800AFE8C_A71FC->unk24 != 0) {
         if (D_800AFE8C_A71FC->saveSlotIndex == 1) {
             if (func_80038388_38F88(0xA) & 0xFF) {
-                D_800AFE8C_A71FC->errorFlag = 2;
+                D_800AFE8C_A71FC->pendingUnlockCutscene = 2;
             }
         }
 
         if (D_800AFE8C_A71FC->saveSlotIndex == 3) {
             if (func_80038388_38F88(0xB) & 0xFF) {
-                D_800AFE8C_A71FC->errorFlag = 3;
+                D_800AFE8C_A71FC->pendingUnlockCutscene = 3;
             }
         }
 
         if (D_800AFE8C_A71FC->saveSlotIndex == 9) {
             if (func_80038388_38F88(0xC) & 0xFF) {
-                D_800AFE8C_A71FC->errorFlag = 4;
+                D_800AFE8C_A71FC->pendingUnlockCutscene = 4;
             }
         }
 
         if (D_800AFE8C_A71FC->saveSlotIndex == 5) {
             if (func_80038388_38F88(0xE) & 0xFF) {
-                D_800AFE8C_A71FC->errorFlag = 6;
+                D_800AFE8C_A71FC->pendingUnlockCutscene = 6;
             }
         }
 
         if (D_800AFE8C_A71FC->saveSlotIndex == 8) {
             if (func_80038388_38F88(0xF) & 0xFF) {
-                D_800AFE8C_A71FC->errorFlag = 7;
+                D_800AFE8C_A71FC->pendingUnlockCutscene = 7;
             }
         }
 
         if (D_800AFE8C_A71FC->saveSlotIndex == 0xB) {
             if (func_80038388_38F88(0x10) & 0xFF) {
-                D_800AFE8C_A71FC->errorFlag = 8;
+                D_800AFE8C_A71FC->pendingUnlockCutscene = 8;
             }
         }
 
         if (D_800AFE8C_A71FC->saveSlotIndex == 0) {
             if (func_80038388_38F88(0xD) & 0xFF) {
-                D_800AFE8C_A71FC->errorFlag = 5;
+                D_800AFE8C_A71FC->pendingUnlockCutscene = 5;
             }
         }
 
         if (D_800AFE8C_A71FC->saveSlotIndex == 4) {
             if (func_80038388_38F88(9) & 0xFF) {
-                D_800AFE8C_A71FC->errorFlag = 1;
+                D_800AFE8C_A71FC->pendingUnlockCutscene = 1;
             }
         }
 
         if (D_800AFE8C_A71FC->saveSlotIndex == 7) {
             if (func_80038388_38F88(0x11) & 0xFF) {
-                D_800AFE8C_A71FC->errorFlag = 9;
+                D_800AFE8C_A71FC->pendingUnlockCutscene = 9;
             }
         }
     }

@@ -12,7 +12,7 @@ typedef struct {
     u8 unk20;
     u8 customLapEnabled;
     u8 customLapCount;
-    u8 errorFlag;
+    u8 pendingUnlockCutscene;
     u8 unk24;
     u8 unk25;
 } D_800AFE8C_A71FC_type;

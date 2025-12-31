@@ -206,7 +206,7 @@ void resetGameSession(void) {
 
     D_800AFE8C_A71FC->unk9[0x15] = 0;
     D_800AFE8C_A71FC->unk5 = 0;
-    D_800AFE8C_A71FC->errorFlag = 0;
+    D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
     D_800AFE8C_A71FC->unk24 = 0;
     D_800AFE8C_A71FC->unk25 = 0;
 }

@@ -204,7 +204,7 @@ void func_80019F60_1AB60(void) {
         return;
     }
 
-    if (D_800AFE8C_A71FC->errorFlag != 0) {
+    if (D_800AFE8C_A71FC->pendingUnlockCutscene != 0) {
         setGameStateHandler(func_8001A070_1AC70);
         return;
     }
@@ -213,14 +213,14 @@ void func_80019F60_1AB60(void) {
 }
 
 void func_8001A070_1AC70(void) {
-    setCutsceneSelection(D_800AFE8C_A71FC->errorFlag, 2);
+    setCutsceneSelection(D_800AFE8C_A71FC->pendingUnlockCutscene, 2);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
     setGameStateHandler(&func_8001A0B4_1ACB4);
 }
 
 void func_8001A0B4_1ACB4(void) {
     if ((func_80069810_6A410() << 0x10) != 0) {
-        D_800AFE8C_A71FC->errorFlag = 0;
+        D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
         terminateSchedulerWithCallback(&func_8001A0F4_1ACF4);
     }
 }

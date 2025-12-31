@@ -9,7 +9,7 @@
 #include "task_scheduler.h"
 void func_80015218_15E18(void);
 void awaitSaveDataLoad(void);
-void func_800150DC_15CDC(void);
+void awaitUnlockCutscene(void);
 void func_80015248_15E48(s32);
 
 typedef struct {
@@ -199,7 +199,7 @@ void awaitRaceResult(void) {
 
 void awaitPostRaceCutscene(void);
 void func_8001511C_15D1C(void);
-void func_80015098_15C98(void);
+void loadUnlockCutscene(void);
 
 void loadPostRaceCutscene(void) {
     setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 1);
@@ -217,8 +217,8 @@ void awaitPostRaceCutscene(void) {
             handler = func_8001511C_15D1C;
         } else {
             handler = loadStoryMapScreen;
-            if (D_800AFE8C_A71FC->errorFlag != 0) {
-                handler = func_80015098_15C98;
+            if (D_800AFE8C_A71FC->pendingUnlockCutscene != 0) {
+                handler = loadUnlockCutscene;
             }
         }
         setGameStateHandler(handler);
@@ -239,15 +239,15 @@ void awaitStoryCompleteCutscene(void) {
     }
 }
 
-void func_80015098_15C98(void) {
-    setCutsceneSelection(D_800AFE8C_A71FC->errorFlag, 2);
+void loadUnlockCutscene(void) {
+    setCutsceneSelection(D_800AFE8C_A71FC->pendingUnlockCutscene, 2);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
-    setGameStateHandler(func_800150DC_15CDC);
+    setGameStateHandler(awaitUnlockCutscene);
 }
 
-void func_800150DC_15CDC(void) {
+void awaitUnlockCutscene(void) {
     if ((func_80069810_6A410() << 16) != 0) {
-        D_800AFE8C_A71FC->errorFlag = 0;
+        D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
         setGameStateHandler(loadStoryMapScreen);
     }
 }
@@ -263,8 +263,8 @@ void func_800151A4_15DA4(void);
 
 void func_8001514C_15D4C(void) {
     if ((func_80069810_6A410() << 16) != 0) {
-        if (D_800AFE8C_A71FC->errorFlag == 8) {
-            D_800AFE8C_A71FC->errorFlag = 0;
+        if (D_800AFE8C_A71FC->pendingUnlockCutscene == 8) {
+            D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
             EepromSaveData->unk51 = 1;
         }
         setGameStateHandler(func_800151A4_15DA4);
