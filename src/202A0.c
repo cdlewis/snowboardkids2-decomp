@@ -130,11 +130,6 @@ typedef struct {
 } Func800206B4Arg;
 
 typedef struct {
-    u8 _pad0[0x72];
-    u16 unk72;
-} Func8001FE64Arg;
-
-typedef struct {
     u8 _pad0[0x48A];
     u16 unk48A;
 } Allocation_8001FEB4;
@@ -334,12 +329,12 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FA00_20600);
 
 void func_8001FEB4_20AB4(Func8001FEB4Arg *arg0);
 
-void func_8001FE64_20A64(Func8001FE64Arg *arg0) {
+void holdLevelPreviewCamera(LevelPreviewCharacterState *state) {
     getCurrentAllocation();
 
-    arg0->unk72++;
-    if (arg0->unk72 == 150) {
-        arg0->unk72 = 0;
+    state->frameTimer++;
+    if (state->frameTimer == 150) {
+        state->frameTimer = 0;
         setCallback(&func_8001FEB4_20AB4);
     }
 }

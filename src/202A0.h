@@ -24,7 +24,7 @@ typedef struct {
     s32 heightOffset;       // 0x64
     s32 altHeightOffset;    // 0x68
     u8 _pad6C[0x6];         // 0x6C
-    s16 frameTimer;         // 0x72
+    u16 frameTimer;         // 0x72
     s16 extraRotation;      // 0x74
     u8 turnDirection;       // 0x76
 } LevelPreviewCharacterState;
