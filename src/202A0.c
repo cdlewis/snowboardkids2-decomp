@@ -135,23 +135,6 @@ typedef struct {
 } Allocation_8001FEB4;
 
 typedef struct {
-    s32 unk0;
-    u8 _pad4[0x4];
-    s32 unk8;
-    u8 unkC[0xC];
-    u8 unk18[0x3A];
-    u16 unk52;
-    u8 _pad54[0x2];
-    u16 unk56;
-    u8 _pad58[0x2];
-    u16 unk5A;
-    u8 _pad5C[0x4];
-    s32 unk60;
-    u8 _pad64[0x12];
-    u8 unk76;
-} Func8001FEB4Arg;
-
-typedef struct {
     u8 _pad0[0x3B0];  // 0x000-0x3AF
     u8 unk3B0[0x77C]; // 0x3B0-0xB2B
     s8 unkB2C;        // 0xB2C
@@ -327,7 +310,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FA00_20600);
 
-void func_8001FEB4_20AB4(Func8001FEB4Arg *arg0);
+void updateLevelPreviewCamera(LevelPreviewCharacterState *state);
 
 void holdLevelPreviewCamera(LevelPreviewCharacterState *state) {
     getCurrentAllocation();
@@ -335,50 +318,51 @@ void holdLevelPreviewCamera(LevelPreviewCharacterState *state) {
     state->frameTimer++;
     if (state->frameTimer == 150) {
         state->frameTimer = 0;
-        setCallback(&func_8001FEB4_20AB4);
+        setCallback(&updateLevelPreviewCamera);
     }
 }
 
-void func_8001FEB4_20AB4(Func8001FEB4Arg *arg0) {
+void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
     Allocation_8001FEB4 *allocation;
-    u8 mat1[0x20];
-    Mat2WithTemp mat2;
-    u8 mat3[0x20];
-    s32 pos1[4];
-    s32 pos2[4];
-    u16 temp;
-    u16 unk56;
-    void *unk18;
+    u8 cameraTransform[0x20];
+    Mat2WithTemp offsetTransform;
+    u8 lookAtTransform[0x20];
+    s32 waypointStart[4];
+    s32 waypointEnd[4];
+    u16 waypoint;
+    u16 rotation;
+    void *gameData;
 
     allocation = (Allocation_8001FEB4 *)getCurrentAllocation();
-    memcpy(mat1, identityMatrix, 0x20);
+    memcpy(cameraTransform, identityMatrix, 0x20);
 
-    unk18 = arg0->unk18;
-    temp = func_80060A3C_6163C(unk18, arg0->unk52, arg0);
-    arg0->unk52 = temp;
+    gameData = state->gameData;
+    waypoint = func_80060A3C_6163C(gameData, state->startWaypoint, state);
+    state->startWaypoint = waypoint;
 
-    func_80062B1C_6371C(unk18, temp, pos1, pos2);
+    func_80062B1C_6371C(gameData, waypoint, waypointStart, waypointEnd);
 
-    arg0->unk5A = (func_8006D21C_6DE1C(pos2[0], pos2[2], arg0->unk0, arg0->unk8) - 0x1000) & 0x1FFF;
+    state->targetRotation =
+        (func_8006D21C_6DE1C(waypointEnd[0], waypointEnd[2], state->posX, state->posZ) - 0x1000) & 0x1FFF;
 
-    unk56 = (arg0->unk56 + 0x1000) & 0x1FFF;
-    arg0->unk56 = unk56;
+    rotation = (state->currentRotation + 0x1000) & 0x1FFF;
+    state->currentRotation = rotation;
 
-    if (((arg0->unk5A - unk56) & 0x1FFF) >= 0x1001) {
-        arg0->unk76 = 1;
+    if (((state->targetRotation - rotation) & 0x1FFF) >= 0x1001) {
+        state->turnDirection = 1;
     } else {
-        arg0->unk76 = 0;
+        state->turnDirection = 0;
     }
 
-    computeLookAtMatrix(arg0->unkC, arg0, mat3);
+    computeLookAtMatrix(&state->targetX, state, lookAtTransform);
 
-    memcpy(&mat2, identityMatrix, 0x20);
+    memcpy(&offsetTransform, identityMatrix, 0x20);
 
-    mat2.unk1C = arg0->unk60;
+    offsetTransform.unk1C = state->cameraDistance;
 
-    func_8006B084_6BC84(&mat2, mat3, mat1);
+    func_8006B084_6BC84(&offsetTransform, lookAtTransform, cameraTransform);
 
-    func_8006FD3C_7093C(allocation->unk48A, mat1);
+    func_8006FD3C_7093C(allocation->unk48A, cameraTransform);
 
     setCallback(&func_8001FFE4_20BE4);
 }
