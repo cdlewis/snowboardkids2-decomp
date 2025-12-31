@@ -456,7 +456,7 @@ void func_8002E314_2EF14(Func2E024Arg *arg0) {
 
             case 1:
                 ptr->unk5A++;
-                if (((s16)ptr->unk5A) >= 0x3C) {
+                if ((ptr->unk5A) >= 0x3C) {
                     if (ptr->unk62 != 0) {
                         ptr->unk5A = 0;
                         ptr->unk62 = 0;
@@ -504,7 +504,7 @@ void func_8002E314_2EF14(Func2E024Arg *arg0) {
             case 7:
                 if (arg0->elements[0].unk62 != 0) {
                     arg0->elements[0].unk50++;
-                    if (((s16)arg0->elements[0].unk50) >= 0xD) {
+                    if ((arg0->elements[0].unk50) >= 0xD) {
                         arg0->elements[0].unk50 = 0;
                         arg0->elements[0].unk5E = 8;
                     }

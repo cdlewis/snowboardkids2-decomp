@@ -454,11 +454,11 @@ void func_8006BFB8_6CBB8(void *srcPtr, void *dstPtr) {
     mtxWords[5] = (src->m[2][2] * 8) & 0xFFFF0000;
     mtxWords[6] = (src->translation.x & 0xFFFF0000) + ((u16 *)&src->translation.y)[0];
     mtxWords[7] = (src->translation.z & 0xFFFF0000) + 1;
-    mtxWords[8] = ((src->m[0][0] << 19) & 0xFFFF0000) + (((s16)src->m[0][1] * 8) & 0xFFFF);
+    mtxWords[8] = ((src->m[0][0] << 19) & 0xFFFF0000) + ((src->m[0][1] * 8) & 0xFFFF);
     mtxWords[9] = (src->m[0][2] << 19) & 0xFFFF0000;
-    mtxWords[10] = ((src->m[1][0] << 19) & 0xFFFF0000) + (((s16)src->m[1][1] * 8) & 0xFFFF);
+    mtxWords[10] = ((src->m[1][0] << 19) & 0xFFFF0000) + ((src->m[1][1] * 8) & 0xFFFF);
     mtxWords[11] = (src->m[1][2] << 19) & 0xFFFF0000;
-    mtxWords[12] = ((src->m[2][0] << 19) & 0xFFFF0000) + (((s16)src->m[2][1] * 8) & 0xFFFF);
+    mtxWords[12] = ((src->m[2][0] << 19) & 0xFFFF0000) + ((src->m[2][1] * 8) & 0xFFFF);
     mtxWords[13] = (src->m[2][2] << 19) & 0xFFFF0000;
     mtxWords[14] = (src->translation.x << 16) + ((u16 *)&src->translation.y)[1];
     mtxWords[15] = src->translation.z << 16;
