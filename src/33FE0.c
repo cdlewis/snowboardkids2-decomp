@@ -9,22 +9,11 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 
-extern void func_80034D58_35958(void);
-extern void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
-extern s16 D_8008F2C4_8FEC4[];
-extern void *D_8008F7CC_903CC[];
-extern void *D_8008F7DC_903DC;
-extern void *D_8008F7E0_903E0;
-extern s32 D_8008F7D8_903D8;
-extern u16 D_8009ADE0_9B9E0;
-
 USE_ASSET(_459310);
 USE_ASSET(_41A1D0);
 USE_ASSET(_3F6670);
 USE_ASSET(_4547D0);
-
-extern u16 D_8008F2AC_8FEAC;
-extern u16 D_8008F2B8_8FEB8;
+USE_ASSET(_459310);
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -143,7 +132,6 @@ typedef struct {
     /* 0x0C */ u16 unkC;
 } Func33800Arg;
 
-// Element at offset 0x00, size 0x14 (20 bytes)
 typedef struct {
     /* 0x00 */ s16 unk0;
     /* 0x02 */ s16 unk2;
@@ -157,7 +145,6 @@ typedef struct {
     /* 0x13 */ u8 unk13;
 } Func3466CElement14;
 
-// Element at offset 0x50, size 0x0C (12 bytes)
 typedef struct {
     /* 0x00 */ s16 unk0;
     /* 0x02 */ s16 unk2;
@@ -166,7 +153,6 @@ typedef struct {
     /* 0x08 */ void *unk8;
 } Func3466CElement0C;
 
-// Element at offset 0x80, size 0x0A (10 bytes)
 typedef struct {
     /* 0x00 */ u8 data[0xA];
 } Func3466CElement0A;
@@ -178,6 +164,85 @@ typedef struct {
     /* 0xA8 */ u8 arrA8[4];
 } Func3466CArg;
 
+typedef struct {
+    /* 0x000 */ u8 pad0[0xABC];
+    /* 0xABC */ s16 unkABC;
+} Func34BD8AllocationStruct;
+
+typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ s16 unkA;
+    /* 0x0C */ u8 unkC;
+    /* 0x0D */ u8 unkD;
+    /* 0x0E */ u8 padE[2];
+} Func345ACEntry; // size 0x10
+
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ Func345ACEntry *unk4;
+    /* 0x08 */ u8 pad8[0x14];
+    /* 0x1C */ u8 unk1C;
+    /* 0x1D */ u8 unk1D;
+    /* 0x1E */ u8 unk1E;
+} Func345ACArg;
+
+typedef struct {
+    /* 0x000 */ u8 data[0xAD2]; // Everything including unkACE[4]
+} Func345ACAllocationFlat;
+
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ u8 pad4[0x4];
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ s16 unkA;
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ void *unk10;
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ s16 unk16;
+    /* 0x18 */ u8 unk18;
+    /* 0x19 */ u8 pad19[0x3];
+    /* 0x1C */ u8 unk1C;
+    /* 0x1D */ u8 unk1D;
+    /* 0x1E */ u8 unk1E;
+} Func34A40Arg;
+
+typedef struct {
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ u16 unk8;
+    /* 0x0A */ u8 unkA;
+    /* 0x0B */ u8 padB;
+} Func34BD8Entry;
+
+typedef struct {
+    /* 0x00 */ Func34BD8Entry entries[4];
+    /* 0x30 */ u8 pad30[0x18];
+    /* 0x48 */ u8 unk48;
+    /* 0x49 */ u8 unk49;
+} Func34BD8Arg;
+
+extern u16 D_8008F2B8_8FEB8;
+extern u16 D_8008F2AC_8FEAC[];
+extern s16 D_8008F2C4_8FEC4[];
+extern void *D_8008F7CC_903CC[];
+extern void *D_8008F7DC_903DC;
+extern void *D_8008F7E0_903E0;
+extern s32 D_8008F7D8_903D8;
+extern u16 D_8009ADE0_9B9E0;
+
+void func_80034D58_35958(void);
+void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
+void func_80033EDC_34ADC(Func34ADCArg *arg0);
+void func_80033F50_34B50(Func34574Arg *arg0);
+void func_8003498C_3558C(Func34574Arg *arg0);
+void func_80034750_35350(void);
+void func_80034BD8_357D8(Func34BD8Arg *arg0);
+void func_80034CD0_358D0(Func34574Arg *arg0);
+void func_80033AE4_346E4(void);
 void func_80035074_35C74(Func358FCStruct *arg0);
 void func_80033458_34058(void);
 void func_8003365C_3425C(Func34574Arg *arg0);
@@ -266,35 +331,6 @@ void func_80033974_34574(Func34574Arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-void func_80033AE4_346E4(void);
-
-USE_ASSET(_459310);
-
-typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ s16 unkA;
-    /* 0x0C */ u8 unkC;
-    /* 0x0D */ u8 unkD;
-    /* 0x0E */ u8 padE[2];
-} Func345ACEntry; // size 0x10
-
-typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ Func345ACEntry *unk4;
-    /* 0x08 */ u8 pad8[0x14];
-    /* 0x1C */ u8 unk1C;
-    /* 0x1D */ u8 unk1D;
-    /* 0x1E */ u8 unk1E;
-} Func345ACArg;
-
-// Flat allocation structure with direct byte access
-typedef struct {
-    /* 0x000 */ u8 data[0xAD2]; // Everything including unkACE[4]
-} Func345ACAllocationFlat;
-
 void func_800339AC_345AC(Func345ACArg *arg0) {
     u8 *allocation;
     s32 i;
@@ -328,25 +364,6 @@ void func_80033E08_34A08(Func34574Arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
-
-typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ u8 pad4[0x4];
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ s16 unkA;
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ void *unk10;
-    /* 0x14 */ s16 unk14;
-    /* 0x16 */ s16 unk16;
-    /* 0x18 */ u8 unk18;
-    /* 0x19 */ u8 pad19[0x3];
-    /* 0x1C */ u8 unk1C;
-    /* 0x1D */ u8 unk1D;
-    /* 0x1E */ u8 unk1E;
-} Func34A40Arg;
-
-void func_80033EDC_34ADC(Func34ADCArg *arg0);
-void func_80033F50_34B50(Func34574Arg *arg0);
 
 void func_80033E40_34A40(Func34A40Arg *arg0) {
     u8 *allocation;
@@ -502,9 +519,6 @@ void func_80034640_35240(Func34574Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
 }
 
-void func_8003498C_3558C(Func34574Arg *arg0);
-void func_80034750_35350(void);
-
 void func_8003466C_3526C(Func3466CArg *arg0) {
     void *temp_s1;
     s32 i;
@@ -571,9 +585,6 @@ void func_80034A94_35694(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-extern void func_80034BD8_357D8(void);
-void func_80034CD0_358D0(Func34574Arg *arg0);
-
 void func_80034AC0_356C0(Func356C0Arg *arg0) {
     AllocationStruct *allocation;
     void *asset;
@@ -597,7 +608,7 @@ void func_80034AC0_356C0(Func356C0Arg *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        arg0->entries[i].unk0 = xOffset + (&D_8008F2AC_8FEAC)[i];
+        arg0->entries[i].unk0 = xOffset + D_8008F2AC_8FEAC[i];
         arg0->entries[i].unk2 = yOffset + (&D_8008F2B8_8FEB8)[i];
         arg0->entries[i].unk8 = (i % 8) + 0x10;
         arg0->entries[i].unkA = 0x12;
@@ -607,7 +618,39 @@ void func_80034AC0_356C0(Func356C0Arg *arg0) {
     setCallback(func_80034BD8_357D8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034BD8_357D8);
+void func_80034BD8_357D8(Func34BD8Arg *arg0) {
+    Func34BD8AllocationStruct *allocation;
+    unsigned int new_var;
+    s16 baseVal;
+    s32 i;
+
+    allocation = (Func34BD8AllocationStruct *)getCurrentAllocation();
+
+    if (allocation->unkABC != 0) {
+        baseVal = allocation->unkABC;
+        if (arg0->unk48 == 0) {
+            new_var = baseVal;
+            baseVal = -new_var;
+        }
+
+        arg0->unk49 = (u8)((arg0->unk49 + 1) & 1);
+
+        for (i = 0; i < 4; i++) {
+            arg0->entries[i].unk0 = baseVal + D_8008F2AC_8FEAC[i];
+
+            if (arg0->unk49 == 0) {
+                arg0->entries[i].unk8++;
+                if (arg0->entries[i].unk8 > 0x17) {
+                    arg0->entries[i].unk8 = 0x10;
+                }
+            }
+
+            debugEnqueueCallback(8, 0, func_80010240_10E40, (void *)&arg0->entries[i]);
+        }
+    } else {
+        func_80069CF8_6A8F8();
+    }
+}
 
 void func_80034CD0_358D0(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
