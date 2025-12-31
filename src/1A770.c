@@ -40,7 +40,7 @@ extern void setupStoryMapDecorModel(applyTransformToModel_arg1 *);
 extern s32 identityMatrix;
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 storyMapLocationIndex;
-extern void func_80019E18_1AA18(void);
+extern void awaitFadeLoadCharacterSelect(void);
 extern s32 gControllerInputs[4];
 extern void func_8001A478_1B078(void);
 
@@ -129,11 +129,11 @@ void awaitStoryModeRaceLevelSelect(void) {
             return;
         }
 
-        setGameStateHandler(&func_80019E18_1AA18);
+        setGameStateHandler(&awaitFadeLoadCharacterSelect);
     }
 }
 
-void func_80019E18_1AA18(void) {
+void awaitFadeLoadCharacterSelect(void) {
     if (func_8006FE10_70A10(0) == 0) {
         func_800574A0_580A0(2);
         createTaskQueue(&func_800226F0_232F0, 100);
