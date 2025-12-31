@@ -2028,3 +2028,4 @@ dispatchCharSelectBoardState = 0x80024C8C; // rom:0x2588C
 initCharSelectBoardSlideIn = 0x80024E58; // rom:0x25A58
 updateCharSelectBoardSlideIn = 0x80024F48; // rom:0x25B48
 waitForCharSelectBoardState = 0x80024FEC; // rom:0x25BEC
+cleanupCharSelectBoardModel = 0x80025058; // rom:0x25C58
