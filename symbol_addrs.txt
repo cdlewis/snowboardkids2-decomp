@@ -1816,3 +1816,5 @@ loadUnlockCutscene = 0x80015098; // rom:0x15C98
 awaitUnlockCutscene = 0x800150DC; // rom:0x15CDC
 loadCreditsSequence = 0x8001511C; // rom:0x15D1C
 awaitCreditsSequence = 0x8001514C; // rom:0x15D4C
+loadPostCreditsSaveScreen = 0x800151A4; // rom:0x15DA4
+awaitPostCreditsSaveScreen = 0x800151E4; // rom:0x15DE4

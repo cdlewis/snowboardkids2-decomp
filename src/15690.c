@@ -259,7 +259,7 @@ void loadCreditsSequence(void) {
     setGameStateHandler(awaitCreditsSequence);
 }
 
-void func_800151A4_15DA4(void);
+void loadPostCreditsSaveScreen(void);
 
 void awaitCreditsSequence(void) {
     if ((func_80069810_6A410() << 16) != 0) {
@@ -267,19 +267,19 @@ void awaitCreditsSequence(void) {
             D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
             EepromSaveData->unk51 = 1;
         }
-        setGameStateHandler(func_800151A4_15DA4);
+        setGameStateHandler(loadPostCreditsSaveScreen);
     }
 }
 
-void func_800151E4_15DE4(void);
+void awaitPostCreditsSaveScreen(void);
 
-void func_800151A4_15DA4(void) {
-    D_800AFE8C_A71FC->unk25 = 1;
+void loadPostCreditsSaveScreen(void) {
+    D_800AFE8C_A71FC->creditsCompleted = 1;
     createTaskQueue(func_8001C920_1D520, 0x96);
-    setGameStateHandler(func_800151E4_15DE4);
+    setGameStateHandler(awaitPostCreditsSaveScreen);
 }
 
-void func_800151E4_15DE4(void) {
+void awaitPostCreditsSaveScreen(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         terminateSchedulerWithCallback(func_80015218_15E18);
     }

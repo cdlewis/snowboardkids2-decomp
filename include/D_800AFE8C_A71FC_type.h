@@ -14,7 +14,7 @@ typedef struct {
     u8 customLapCount;
     u8 pendingUnlockCutscene;
     u8 unk24;
-    u8 unk25;
+    u8 creditsCompleted;
 } D_800AFE8C_A71FC_type;
 
 extern D_800AFE8C_A71FC_type *D_800AFE8C_A71FC;
