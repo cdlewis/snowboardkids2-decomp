@@ -1989,3 +1989,4 @@ initVersusMode = 0x80021D20; // rom:0x22920
 loadPlayerCountSelect = 0x80021D50; // rom:0x22950
 awaitPlayerCountSelect = 0x80021D88; // rom:0x22988
 loadSaveSlotSelect = 0x80021DE8; // rom:0x229E8
+awaitSaveSlotSelect = 0x80021E18; // rom:0x22A18
