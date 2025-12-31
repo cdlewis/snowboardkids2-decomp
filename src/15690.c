@@ -19,7 +19,7 @@ typedef struct {
 
 extern u8 D_800AB1C8_A2538;
 
-void func_80014AEC_156EC(void);
+void loadSaveSlotScreen(void);
 
 void initStoryMode(void) {
     TaskData_15690 *data = allocateTaskMemory(4);
@@ -29,12 +29,12 @@ void initStoryMode(void) {
     D_800AFE8C_A71FC->unk8 = 1;
     D_800AFE8C_A71FC->unk9[0] = 0;
     func_80015248_15E48(0);
-    func_8006983C_6A43C(func_80014AEC_156EC);
+    func_8006983C_6A43C(loadSaveSlotScreen);
 }
 
 void func_80014B1C_1571C(void);
 
-void func_80014AEC_156EC(void) {
+void loadSaveSlotScreen(void) {
     createTaskQueue(func_8001C920_1D520, 0x96);
     setGameStateHandler(func_80014B1C_1571C);
 }
