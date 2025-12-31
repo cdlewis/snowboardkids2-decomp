@@ -745,25 +745,25 @@ void updateCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     }
 }
 
-void func_80024C8C_2588C(CharSelectBoardPreview *arg0) {
-    u16 *base;
-    u16 val;
+void dispatchCharSelectBoardState(CharSelectBoardPreview *arg0) {
+    u16 *statePtr;
+    u16 boardState;
 
-    base = (u16 *)getCurrentAllocation();
+    statePtr = (u16 *)getCurrentAllocation();
 
     clearModelRotation(arg0->model);
     updateModelGeometry(arg0->model);
 
-    val = *(base + arg0->playerIndex + (0x1898 / 2));
+    boardState = *(statePtr + arg0->playerIndex + (0x1898 / 2));
 
-    if (val == 0x10) {
+    if (boardState == 0x10) {
         destroySceneModel(arg0->model);
         setCallback(func_80024DCC_259CC);
-    } else if (val == 0) {
+    } else if (boardState == 0) {
         arg0->transform.translation.x = 0xFFEA0000;
         destroySceneModel(arg0->model);
         setCallback(func_80024D40_25940);
-    } else if (val == 0x11) {
+    } else if (boardState == 0x11) {
         arg0->transform.translation.x = 0xFFEA0000;
         setCallback(updateCharSelectBoardPreview);
     }
@@ -839,7 +839,7 @@ void func_80024FEC_25BEC(CharSelectBoardPreview *arg0) {
     val = *(base + arg0->playerIndex + (0x1898 / 2));
 
     if (val != 0x10) {
-        setCallback(func_80024C8C_2588C);
+        setCallback(dispatchCharSelectBoardState);
     }
 }
 
