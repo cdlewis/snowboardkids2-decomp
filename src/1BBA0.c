@@ -105,13 +105,13 @@ void storyMapClearLocationArrivalsIfNoActivePlayers(void) {
     }
 }
 
-void func_8001BD74_1C974(s8 *a0) {
-    if (*a0 == 3) {
-        *a0 = 2;
-    } else if (*a0 == 8) {
-        *a0 = 7;
-    } else if (*a0 != 4) {
+void storyMapRevertBlockedLocationIndex(s8 *locationIndex) {
+    if (*locationIndex == 3) {
+        *locationIndex = 2;
+    } else if (*locationIndex == 8) {
+        *locationIndex = 7;
+    } else if (*locationIndex != 4) {
     } else {
-        *a0 = 0;
+        *locationIndex = 0;
     }
 }
