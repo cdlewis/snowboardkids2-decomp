@@ -12,7 +12,7 @@ void func_8001C2FC_1CEFC(void);
 
 void func_8001C7E8_1D3E8(void);
 void func_8001C744_1D344(void);
-void func_8001C28C_1CE8C(void);
+void unlockScreenAwaitUserDismiss(void);
 void unlockScreenAwaitFadeIn(void);
 
 typedef struct {
@@ -69,7 +69,7 @@ void unlockScreenAwaitFadeIn(void) {
     } else {
         allocation->transitionState = 3;
         func_80058220_58E20(0xEE, 1);
-        setGameStateHandler(func_8001C28C_1CE8C);
+        setGameStateHandler(unlockScreenAwaitUserDismiss);
         scheduleTask(func_800308FC_314FC, 0, 0, 0x5A);
     }
 }
@@ -93,7 +93,7 @@ void unlockScreenScheduleDisplayTasks(void) {
     setGameStateHandler(func_8001C2FC_1CEFC);
 }
 
-void func_8001C28C_1CE8C(void) {
+void unlockScreenAwaitUserDismiss(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
 
     if (allocation->transitionState != 0) {

@@ -1921,3 +1921,4 @@ storyMapRevertBlockedLocationIndex = 0x8001BD74; // rom:0x1C974
 waitForUnlocksAssetsReady = 0x8001C0D8; // rom:0x1CCD8
 unlockScreenAwaitFadeIn = 0x8001C144; // rom:0x1CD44
 unlockScreenScheduleDisplayTasks = 0x8001C1E0; // rom:0x1CDE0
+unlockScreenAwaitUserDismiss = 0x8001C28C; // rom:0x1CE8C
