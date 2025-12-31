@@ -44,7 +44,7 @@ typedef struct {
     u8 slotFlags[8];              // 0xACE
 } SaveData;
 
-extern s32 func_8001E104_1ED04(EepromSaveData_type *arg0);
+s32 sanitizeSaveSlotData(EepromSaveData_type *saveData);
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 
@@ -173,7 +173,7 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
 
             } else {
 
-                funcResult = func_8001E104_1ED04(&allocation->slots[slotIndex]);
+                funcResult = sanitizeSaveSlotData(&allocation->slots[slotIndex]);
                 allocation->unkACD = 0;
                 if (!(funcResult & 0xFF)) {
                     allocation->unkACC++;
@@ -202,119 +202,119 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
     }
 }
 
-s32 func_8001E104_1ED04(EepromSaveData_type *arg0) {
-    s32 temp_a1;
-    s32 changed;
+s32 sanitizeSaveSlotData(EepromSaveData_type *saveData) {
+    s32 coinValue;
+    s32 wasModified;
     s32 i;
-    u8 temp;
+    u8 value;
 
-    temp_a1 = *(s32 *)arg0->unknown_0C;
-    changed = 0;
-    if (temp_a1 > 0x98967F) {
-        *(s32 *)arg0->unknown_0C = 0x98967F;
-        changed = 1;
+    coinValue = *(s32 *)saveData->unknown_0C;
+    wasModified = 0;
+    if (coinValue > 0x98967F) {
+        *(s32 *)saveData->unknown_0C = 0x98967F;
+        wasModified = 1;
         i = 0;
     } else {
         i = 0;
-        if (temp_a1 < 0) {
-            *(s32 *)arg0->unknown_0C = 0;
-            changed = 1;
+        if (coinValue < 0) {
+            *(s32 *)saveData->unknown_0C = 0;
+            wasModified = 1;
             i = 0;
         }
     }
 
     for (i = 0; i < 0x10; i++) {
-        temp = arg0->save_slot_status[i];
-        if (temp >= 6) {
-            arg0->save_slot_status[i] = 0;
-            changed = 1;
+        value = saveData->save_slot_status[i];
+        if (value >= 6) {
+            saveData->save_slot_status[i] = 0;
+            wasModified = 1;
         }
-        temp = arg0->save_slot_data[i];
-        if (temp >= 6) {
-            arg0->save_slot_data[i] = 0;
-            changed = 1;
+        value = saveData->save_slot_data[i];
+        if (value >= 6) {
+            saveData->save_slot_data[i] = 0;
+            wasModified = 1;
         }
     }
 
-    if (arg0->save_slot_status[0] == 0) {
-        arg0->save_slot_status[0] = 5;
-        changed = 1;
+    if (saveData->save_slot_status[0] == 0) {
+        saveData->save_slot_status[0] = 5;
+        wasModified = 1;
     }
 
     for (i = 0; i < 3; i++) {
-        temp = arg0->save_slot_data[i];
-        if (temp == 0) {
-            arg0->save_slot_data[i] = 5;
-            changed = 1;
+        value = saveData->save_slot_data[i];
+        if (value == 0) {
+            saveData->save_slot_data[i] = 5;
+            wasModified = 1;
         }
-        temp = arg0->save_slot_data[i + 4];
-        if (temp == 0) {
-            arg0->save_slot_data[i + 4] = 5;
-            changed = 1;
+        value = saveData->save_slot_data[i + 4];
+        if (value == 0) {
+            saveData->save_slot_data[i + 4] = 5;
+            wasModified = 1;
         }
     }
 
     for (i = 0; i < 0x12; i++) {
-        temp = arg0->character_or_settings[i];
-        if (temp >= 0x1A) {
-            arg0->character_or_settings[i] = 0;
-            changed = 1;
+        value = saveData->character_or_settings[i];
+        if (value >= 0x1A) {
+            saveData->character_or_settings[i] = 0;
+            wasModified = 1;
         }
     }
 
     for (i = 0; i < 3; i++) {
-        temp = arg0->character_or_settings[i * 3];
-        if (temp == 0) {
-            arg0->character_or_settings[i * 3] = i + 1;
-            changed = 1;
+        value = saveData->character_or_settings[i * 3];
+        if (value == 0) {
+            saveData->character_or_settings[i * 3] = i + 1;
+            wasModified = 1;
         }
     }
 
     for (i = 0; i < 0x12; i++) {
-        temp = arg0->character_or_settings[i];
-        if (temp >= 0x1A) {
-            arg0->character_or_settings[i] = 1;
-            changed = 1;
+        value = saveData->character_or_settings[i];
+        if (value >= 0x1A) {
+            saveData->character_or_settings[i] = 1;
+            wasModified = 1;
         }
     }
 
     for (i = 0; i < 9; i++) {
-        temp = arg0->u.setting_42[i];
-        if (temp >= 0x12) {
-            arg0->u.setting_42[i] = 0x11;
-            changed = 1;
+        value = saveData->u.setting_42[i];
+        if (value >= 0x12) {
+            saveData->u.setting_42[i] = 0x11;
+            wasModified = 1;
         }
     }
 
     for (i = 0; i < 3; i++) {
-        temp = arg0->setting_4B[i];
-        if (temp >= 0x10) {
-            arg0->setting_4B[i] = 0xF;
-            changed = 1;
+        value = saveData->setting_4B[i];
+        if (value >= 0x10) {
+            saveData->setting_4B[i] = 0xF;
+            wasModified = 1;
         }
     }
 
-    if (arg0->setting_4E >= 2) {
-        arg0->setting_4E = 0;
-        changed = 1;
+    if (saveData->setting_4E >= 2) {
+        saveData->setting_4E = 0;
+        wasModified = 1;
     }
 
-    if (arg0->setting_4F >= 2) {
-        arg0->setting_4F = 0;
-        changed = 1;
+    if (saveData->setting_4F >= 2) {
+        saveData->setting_4F = 0;
+        wasModified = 1;
     }
 
-    if (arg0->setting_50 >= 2) {
-        arg0->setting_50 = 0;
-        changed = 1;
+    if (saveData->setting_50 >= 2) {
+        saveData->setting_50 = 0;
+        wasModified = 1;
     }
 
-    if (arg0->unk51 >= 2) {
-        arg0->unk51 = 0;
-        changed = 1;
+    if (saveData->unk51 >= 2) {
+        saveData->unk51 = 0;
+        wasModified = 1;
     }
 
-    return changed;
+    return wasModified;
 }
 
 void func_8001E320_1EF20(void) {
