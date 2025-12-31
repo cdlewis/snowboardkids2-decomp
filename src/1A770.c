@@ -49,7 +49,7 @@ void func_8001AD80_1B980(void);
 void func_8001A0B4_1ACB4(void);
 void func_8001A070_1AC70(void);
 void func_80019F60_1AB60(void);
-void func_80019EFC_1AAFC(void);
+void awaitStoryModePreRaceCutscene(void);
 void awaitStoryModeRaceLevelSelect(void);
 void updateStoryMapDecorModel(applyTransformToModel_arg1 *arg0);
 void enqueueStoryMapLocationText(TextData *arg0);
@@ -156,11 +156,11 @@ void awaitFadeLoadPreRaceCutscene(void) {
     if (func_8006FE10_70A10(0) == 0) {
         setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 0);
         createTaskQueue(&loadCutsceneOverlay, 150);
-        setGameStateHandler(&func_80019EFC_1AAFC);
+        setGameStateHandler(&awaitStoryModePreRaceCutscene);
     }
 }
 
-void func_80019EFC_1AAFC(void) {
+void awaitStoryModePreRaceCutscene(void) {
     if ((func_80069810_6A410() << 0x10) != 0) {
         setGameStateHandler(&func_80019F30_1AB30);
     }
