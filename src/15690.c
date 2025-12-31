@@ -39,7 +39,7 @@ void loadSaveSlotScreen(void) {
     setGameStateHandler(func_80014B1C_1571C);
 }
 
-void func_80014C94_15894(void);
+void loadSaveData(void);
 
 void func_80014B1C_1571C(void) {
     s16 result = func_80069810_6A410();
@@ -48,7 +48,7 @@ void func_80014B1C_1571C(void) {
         if (result == 0xFE) {
             terminateSchedulerWithCallback(func_80015218_15E18);
         } else {
-            setGameStateHandler(func_80014C94_15894);
+            setGameStateHandler(loadSaveData);
         }
     }
 }
@@ -97,7 +97,7 @@ void func_80014C3C_1583C(void) {
     }
 }
 
-void func_80014C94_15894(void) {
+void loadSaveData(void) {
     createTaskQueue(func_80033200_33E00, 0x96);
     setGameStateHandler(func_80014CC4_158C4);
 }
