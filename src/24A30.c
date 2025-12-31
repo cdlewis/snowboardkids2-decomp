@@ -124,17 +124,12 @@ typedef struct {
 } func_80025824_arg;
 
 typedef struct {
-    u8 padding[0x53];
-    u8 unk53;
-} func_800253E0_25FE0_arg;
-
-typedef struct {
     func_800255A0_entry entries[3];
     u8 padding[0x14];
     u8 unk50;
     u8 unk51;
     u8 padding2;
-    u8 unk53;
+    u8 delayTimer;
 } CharSelectIconsState;
 
 typedef struct {
@@ -277,7 +272,7 @@ extern Vec3s D_8008DD6C_8E96C;
 
 void func_80025418_26018(void *);
 void func_8002567C_2627C(func_80025FFC_26BFC_arg *);
-void func_800253E0_25FE0(func_800253E0_25FE0_arg *);
+void updateCharSelectIconsDelay(CharSelectIconsState *);
 void updateCharSelectBoardSlideOut(CharSelectBoardPreview *);
 void updateCharSelectBoardPreview(CharSelectBoardPreview *);
 void func_80026D34_27934(func_80026BD8_arg *);
@@ -950,12 +945,12 @@ void initCharSelectIcons(CharSelectIconsState *arg0) {
 
     arg0->unk50 = 1;
     arg0->unk51 = 0;
-    arg0->unk53 = 8;
-    setCallback(func_800253E0_25FE0);
+    arg0->delayTimer = 8;
+    setCallback(updateCharSelectIconsDelay);
 }
 
-void func_800253E0_25FE0(func_800253E0_25FE0_arg *arg0) {
-    if (--arg0->unk53 == 0) {
+void updateCharSelectIconsDelay(CharSelectIconsState *arg0) {
+    if (--arg0->delayTimer == 0) {
         setCallback(func_80025418_26018);
     }
 }

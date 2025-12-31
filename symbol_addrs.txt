@@ -2033,3 +2033,4 @@ initCharSelectBoardSlideOut = 0x80025130; // rom:0x25D30
 updateCharSelectBoardSlideOut = 0x800251AC; // rom:0x25DAC
 cleanupSceneModelHolder = 0x80025280; // rom:0x25E80
 initCharSelectIcons = 0x8002529C; // rom:0x25E9C
+updateCharSelectIconsDelay = 0x800253E0; // rom:0x25FE0
