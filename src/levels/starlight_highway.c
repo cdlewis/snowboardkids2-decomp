@@ -2,6 +2,7 @@
 #include "56910.h"
 #include "5AA90.h"
 #include "common.h"
+#include "rand.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
@@ -691,14 +692,52 @@ typedef struct {
     s16 unk0;
 } func_800BC528_AE8E8_arg;
 
-extern void func_800BC550_AE910(void);
+void func_800BC550_AE910(s16 *arg0);
 
 void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0) {
     arg0->unk0 = 0xF0;
     setCallback(&func_800BC550_AE910);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BC550_AE910);
+void func_800BC550_AE910(s16 *arg0) {
+    Allocation_AE790 *allocation;
+    func_800BC3D0_AE790_arg *task;
+    s32 new_var;
+    s32 new_var2;
+    u32 s2;
+
+    allocation = getCurrentAllocation();
+    if (allocation->unk76 != 0) {
+        return;
+    }
+
+    *arg0 -= 1;
+    if ((s16)*arg0 == 0x78) {
+        task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
+        if (task != NULL) {
+            task->unk4E = (u32)(randA() & 0xFF) % 3U;
+        }
+    }
+
+    if ((s16)(s2 = *arg0) == 0) {
+        if (getFreeNodeCount(0) >= 2) {
+            s2 = 2;
+            s2 = (u8)((u32)(randA() & 0xFF) % 3U) * s2;
+            new_var2 = s2 + 3;
+            task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
+            if (task != NULL) {
+                do { task->unk4E = (new_var = new_var2); } while (0);
+            }
+
+            task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
+            if (task != NULL) {
+                task->unk4E = s2 + 4;
+            }
+        }
+
+        *arg0 = (randA() & 0x1F) + 0xF0;
+    }
+}
 
 void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0);
 
