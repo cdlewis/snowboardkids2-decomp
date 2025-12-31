@@ -110,7 +110,7 @@ void cleanupControllerSlotDisplay(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
 }
 
-void func_80016834_17434(void **);
+void cleanupPressStartPrompt(void **);
 
 void func_800167B0_173B0(Struct16728 *);
 
@@ -118,7 +118,7 @@ void func_80016728_17328(Struct16728 *arg0) {
     void *dmaResult;
 
     dmaResult = loadCompressedData(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
-    setCleanupCallback(func_80016834_17434);
+    setCleanupCallback(cleanupPressStartPrompt);
     arg0->unk0 = 0x58;
     arg0->unk2 = 0x30;
     arg0->unk8 = 0x7;
@@ -146,7 +146,7 @@ void func_800167B0_173B0(Struct16728 *arg0) {
     debugEnqueueCallback(8, 1, func_8000FED0_10AD0, arg0);
 }
 
-void func_80016834_17434(void **arg0) {
+void cleanupPressStartPrompt(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
 }
 
