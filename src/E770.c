@@ -295,7 +295,7 @@ typedef struct FD98_struct {
     s32 unk14;
 } FD98_struct;
 
-extern void func_8000FD98_10998(FD98_struct *);
+extern void initGalleryViewer(FD98_struct *);
 
 void processGalleryMenuSelection(E770_struct *arg0) {
     s16 temp = arg0->fadeTimer;
@@ -308,7 +308,7 @@ void processGalleryMenuSelection(E770_struct *arg0) {
             arg0->unk16 = 1;
             arg0->menuState = 7;
         } else {
-            scheduleTask(func_8000FD98_10998, 0, 0, 0);
+            scheduleTask(initGalleryViewer, 0, 0, 0);
             arg0->viewerComplete = 0;
             arg0->menuState = 4;
         }
@@ -519,7 +519,7 @@ void startViewerFadeIn(E770_struct *arg0) {
     beginMenuFadeIn(alloc);
 }
 
-void func_8000F4F0_100F0(E770_struct *arg0) {
+void waitForViewerFadeIn(E770_struct *arg0) {
     E770_struct *alloc = getCurrentAllocation();
     s16 temp;
 
@@ -594,7 +594,7 @@ void handleViewerGridNavigation_TwoPage(FD98_struct *arg0) {
     }
 }
 
-void func_8000F690_10290(FD98_struct *arg0) {
+void handleViewerGridNavigation_TwoColumn(FD98_struct *arg0) {
     s32 inputs;
     s8 temp2;
     s8 newVal;
@@ -872,7 +872,7 @@ do_switch:
             handleViewerGridNavigation_TwoPage(arg0);
             break;
         case 1:
-            func_8000F690_10290(arg0);
+            handleViewerGridNavigation_TwoColumn(arg0);
             break;
         case 2:
             handleViewerGridNavigation_SingleRow(arg0);
@@ -908,7 +908,7 @@ button_check:
     }
 }
 
-void func_8000FD1C_1091C(E770_struct *arg0) {
+void startViewerFadeOut(E770_struct *arg0) {
     void *alloc = getCurrentAllocation();
     beginMenuFadeOut(alloc);
     arg0->menuState = 4;
@@ -926,12 +926,12 @@ s32 updateViewerFadeOut(E770_struct *arg0) {
     return 0;
 }
 
-extern void func_8000FEA0_10AA0(void);
-extern void func_8000FE00_10A00(E770_struct *);
+extern void onGalleryViewerCleanup(void);
+extern void updateGalleryViewer(E770_struct *);
 
-void func_8000FD98_10998(FD98_struct *arg0) {
+void initGalleryViewer(FD98_struct *arg0) {
     getCurrentAllocation();
-    setCleanupCallback(func_8000FEA0_10AA0);
+    setCleanupCallback(onGalleryViewerCleanup);
     arg0->unk10 = 0x780000;
     arg0->unk14 = 0x0F0000;
     arg0->unk8 = 0xFF0000;
@@ -939,25 +939,25 @@ void func_8000FD98_10998(FD98_struct *arg0) {
     arg0->navigationMode = 0;
     arg0->cursorIndex = 0;
     arg0->unkC = 0xFFF10000;
-    setCallback(func_8000FE00_10A00);
+    setCallback(updateGalleryViewer);
 }
 
 extern void func_8000EE88_FA88(E770_struct *);
 
-void func_8000FE00_10A00(E770_struct *arg0) {
+void updateGalleryViewer(E770_struct *arg0) {
     getCurrentAllocation();
     switch (arg0->menuState) {
         case 0:
             startViewerFadeIn(arg0);
             break;
         case 1:
-            func_8000F4F0_100F0(arg0);
+            waitForViewerFadeIn(arg0);
             break;
         case 2:
             handleViewerInput((FD98_struct *)arg0);
             break;
         case 3:
-            func_8000FD1C_1091C(arg0);
+            startViewerFadeOut(arg0);
             break;
         case 4:
             if (updateViewerFadeOut(arg0)) {
@@ -968,7 +968,7 @@ void func_8000FE00_10A00(E770_struct *arg0) {
     func_8000EE88_FA88(arg0);
 }
 
-void func_8000FEA0_10AA0(void) {
+void onGalleryViewerCleanup(void) {
     E770_struct *alloc = getCurrentAllocation();
     alloc->viewerComplete = 1;
 }

@@ -1772,3 +1772,6 @@ handleViewerGridNavigation_Prize = 0x8000FA90; // rom:0x10690
 handleViewerInput = 0x8000FBBC; // rom:0x107BC
 startViewerFadeOut = 0x8000FD1C; // rom:0x1091C
 updateViewerFadeOut = 0x8000FD50; // rom:0x10950
+initGalleryViewer = 0x8000FD98; // rom:0x10998
+updateGalleryViewer = 0x8000FE00; // rom:0x10A00
+onGalleryViewerCleanup = 0x8000FEA0; // rom:0x10AA0
