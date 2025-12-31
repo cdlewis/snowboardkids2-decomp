@@ -2002,3 +2002,4 @@ loadVersusRace = 0x8002207C; // rom:0x22C7C
 awaitVersusRace = 0x800220AC; // rom:0x22CAC
 exitVersusMode = 0x80022108; // rom:0x22D08
 initPlayerCountSelectState = 0x80022130; // rom:0x22D30
+awaitPlayerCountSelectFadeIn = 0x80022304; // rom:0x22F04
