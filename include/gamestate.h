@@ -343,7 +343,7 @@ typedef struct {
     u8 unk5B0;
     u8 unk5B1;
     s8 unk5B2;
-    u8 unk5B3;
+    u8 isStoryMapInitializing;
     u8 PAD_14[0x4];
     u8 unk5B8[8];
     u16 unk5C0;

@@ -14,7 +14,7 @@ extern void func_8001B3E8_1BFE8(void);
 
 void func_8001BCC0_1C8C0(void);
 void func_8001BC78_1C878(void);
-void func_8001B3B8_1BFB8(void);
+void storyMapAwaitFadeIn(void);
 
 void loadOverlay_1BBA0(void) {
     LOAD_OVERLAY(_1DA660)
@@ -23,9 +23,9 @@ void loadOverlay_1BBA0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001B020_1BC20);
 
-void func_8001B368_1BF68(void) {
+void storyMapInitFadeIn(void) {
     GameState *state = (GameState *)getCurrentAllocation();
-    if (state->unk5B3 != 0) {
+    if (state->isStoryMapInitializing != 0) {
         return;
     }
 
@@ -35,10 +35,10 @@ void func_8001B368_1BF68(void) {
 
     func_8006FDA0_709A0(NULL, 0, 0x10);
 
-    setGameStateHandler(func_8001B3B8_1BFB8);
+    setGameStateHandler(storyMapAwaitFadeIn);
 }
 
-void func_8001B3B8_1BFB8(void) {
+void storyMapAwaitFadeIn(void) {
     if (!func_8006FE10_70A10(0)) {
         setGameStateHandler(&func_8001B3E8_1BFE8);
     }

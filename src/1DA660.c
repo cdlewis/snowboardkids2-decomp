@@ -275,7 +275,7 @@ void func_800B0598_1DAB38(func_800B08FC_arg *arg0) {
     GameState *allocation = getCurrentAllocation();
 
     if (arg0->unk24 == 6) {
-        allocation->unk5B3 = 0;
+        allocation->isStoryMapInitializing = 0;
     }
     setCallback(func_800B05DC_1DAB7C);
 }
