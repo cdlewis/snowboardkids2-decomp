@@ -37,7 +37,7 @@ extern void *D_800B054C;
 extern void *D_800B08A8;
 extern u8 gConnectedControllerMask;
 
-void func_800223CC_22FCC(void);
+void handlePlayerCountSelectInput(void);
 void func_800225C8_231C8(void);
 void func_800226B0_232B0(void);
 void func_800226CC_232CC(void);
@@ -94,7 +94,7 @@ void func_80022304_22F04(void) {
 
     if (result == 0) {
         state->frameCounter = 0;
-        setGameStateHandler(&func_800223CC_22FCC);
+        setGameStateHandler(&handlePlayerCountSelectInput);
         scheduleTask(&D_800B0690, 0, 0, 0x5A);
         scheduleTask(&D_800B07A0, 0, 0, 0x5A);
     } else {
@@ -109,7 +109,7 @@ void func_80022304_22F04(void) {
     }
 }
 
-void func_800223CC_22FCC(void) {
+void handlePlayerCountSelectInput(void) {
     PlayerCountSelectState *state;
     s32 inputs;
 
