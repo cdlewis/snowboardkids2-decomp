@@ -79,17 +79,17 @@ typedef struct {
     s16 unk8;
     s16 unkA;
     s16 unkC;
-    s16 unkE;
+    s16 targetY;
     s16 unk10;
     u8 unk12;
     u8 unk13;
-} func_800255A0_entry;
+} CharSelectIconEntry;
 
 typedef struct {
-    func_800255A0_entry entries[3];
+    CharSelectIconEntry entries[3];
     u8 padding[0x16];
-    u8 unk52;
-} func_800255A0_arg;
+    u8 playerIndex;
+} CharSelectIconTargetState;
 
 typedef struct {
     s16 unk0;
@@ -124,7 +124,7 @@ typedef struct {
 } func_80025824_arg;
 
 typedef struct {
-    func_800255A0_entry entries[3];
+    CharSelectIconEntry entries[3];
     u8 padding[0x14];
     u8 unk50;
     u8 unk51;
@@ -882,7 +882,7 @@ SceneModel *cleanupSceneModelHolder(SceneModelHolder *arg0) {
 void initCharSelectIcons(CharSelectIconsState *arg0) {
     OutputStruct_19E80 sp10;
     u8 *tablePtr;
-    volatile func_800255A0_entry *iconEntry;
+    volatile CharSelectIconEntry *iconEntry;
     DataTable_19E80 *spriteAsset;
     s16 scaleX;
     s16 scaleY;
@@ -922,7 +922,7 @@ void initCharSelectIcons(CharSelectIconsState *arg0) {
     iconTableIndex = ICON_TABLE_INDEX;
     tablePtr = D_8008DE18_8EA18;
     xPos = xTemp;
-    iconEntry = (volatile func_800255A0_entry *)arg0;
+    iconEntry = (volatile CharSelectIconEntry *)arg0;
 
     do {
         u8 tableVal;
@@ -935,7 +935,7 @@ void initCharSelectIcons(CharSelectIconsState *arg0) {
         iconEntry->unkA = scaleX;
         iconEntry->unkC = scaleY;
         iconEntry->unk4 = spriteAsset;
-        iconEntry->unkE = 0;
+        iconEntry->targetY = 0;
         iconEntry->unk13 = (s8)(tableVal + 1);
         xPos += xIncrement;
         i++;
@@ -960,10 +960,10 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80025418_26018);
 extern u8 D_8008DD8C_8E98C[];
 extern u16 D_8008DE02_8EA02[];
 
-void func_800255A0_261A0(func_800255A0_arg *arg0) {
+void updateCharSelectIconTargets(CharSelectIconTargetState *arg0) {
     GameState *state;
     s32 i;
-    func_800255A0_entry *entry;
+    CharSelectIconEntry *entry;
     u8 tableIndex;
     u8 charIndex;
     u8 paletteIndex;
@@ -972,12 +972,12 @@ void func_800255A0_261A0(func_800255A0_arg *arg0) {
     i = 0;
 
     do {
-        charIndex = state->unk18A8[arg0->unk52];
-        paletteIndex = state->unk18B0[arg0->unk52];
+        charIndex = state->unk18A8[arg0->playerIndex];
+        paletteIndex = state->unk18B0[arg0->playerIndex];
         tableIndex = D_8008DD8C_8E98C[((u8)(paletteIndex + charIndex * 3)) * 3 + i];
         entry = &arg0->entries[i];
-        entry->unkE = D_8008DE02_8EA02[tableIndex];
-        debugEnqueueCallback(arg0->unk52 + 8, 0, func_80010C98_11898, entry);
+        entry->targetY = D_8008DE02_8EA02[tableIndex];
+        debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010C98_11898, entry);
         i++;
     } while (i < 3);
 }
