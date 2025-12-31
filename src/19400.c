@@ -12,98 +12,98 @@ extern u8 identityMatrix[];
 
 typedef struct {
     u8 padding[0x3B0];
-    applyTransformToModel_arg1 unk3B0;
+    applyTransformToModel_arg1 transform;
     u8 padding2[0x2C];
-    u8 unk400;
-    u8 unk401;
+    u8 animState;
+    u8 rotationComplete;
     u8 padding3[0x1];
-    u8 unk403;
+    u8 animIndex;
     u8 unk404;
     u8 padding4[0x24];
-    u8 unk429;
-} func_80018898_19498_state;
+    u8 isLoading;
+} StoryMapCharacterState;
 
 typedef struct {
-    SceneModel *unk0;
-    u8 unk4;
-    u8 unk5;
-} func_80018898_19498_arg;
+    SceneModel *model;
+    u8 currentAnimState;
+    u8 currentAnimIndex;
+} StoryMapCharacterArg;
 
-void awaitStoryMapCharacterReady(func_80018898_19498_arg *arg0);
-void initStoryMapCharacter(func_80018898_19498_arg *arg0);
-void func_80018904_19504(func_80018898_19498_arg *arg0);
-void func_80018A5C_1965C(func_80018898_19498_arg *arg0);
+void awaitStoryMapCharacterReady(StoryMapCharacterArg *arg0);
+void initStoryMapCharacter(StoryMapCharacterArg *arg0);
+void updateStoryMapCharacter(StoryMapCharacterArg *arg0);
+void cleanupStoryMapCharacter(StoryMapCharacterArg *arg0);
 
 void func_80018800_19400(void **arg0) {
     void *allocation = getCurrentAllocation();
 
     *arg0 = createSceneModel(D_800AFE8C_A71FC->unk9[0] + 0x50, allocation);
-    setCleanupCallback(&func_80018A5C_1965C);
+    setCleanupCallback(&cleanupStoryMapCharacter);
     setCallback(&awaitStoryMapCharacterReady);
 }
 
-void awaitStoryMapCharacterReady(func_80018898_19498_arg *arg0) {
-    func_80018898_19498_state *allocation = (func_80018898_19498_state *)getCurrentAllocation();
+void awaitStoryMapCharacterReady(StoryMapCharacterArg *arg0) {
+    StoryMapCharacterState *state = (StoryMapCharacterState *)getCurrentAllocation();
 
-    if (allocation->unk429 == 0) {
-        arg0->unk5 = 0;
+    if (state->isLoading == 0) {
+        arg0->currentAnimIndex = 0;
         setCallback(&initStoryMapCharacter);
     }
 }
 
-void initStoryMapCharacter(func_80018898_19498_arg *arg0) {
-    func_80018898_19498_state *state = (func_80018898_19498_state *)getCurrentAllocation();
+void initStoryMapCharacter(StoryMapCharacterArg *arg0) {
+    StoryMapCharacterState *state = (StoryMapCharacterState *)getCurrentAllocation();
 
-    clearModelPendingDestroy(arg0->unk0);
-    applyTransformToModel(arg0->unk0, &state->unk3B0.unk0);
-    arg0->unk4 = state->unk400;
-    setModelAnimation(arg0->unk0, state->unk400);
-    updateModelGeometry(arg0->unk0);
-    setCallback(&func_80018904_19504);
+    clearModelPendingDestroy(arg0->model);
+    applyTransformToModel(arg0->model, &state->transform.unk0);
+    arg0->currentAnimState = state->animState;
+    setModelAnimation(arg0->model, state->animState);
+    updateModelGeometry(arg0->model);
+    setCallback(&updateStoryMapCharacter);
 }
 
-void func_80018904_19504(func_80018898_19498_arg *arg0) {
-    func_80018898_19498_state *state = (func_80018898_19498_state *)getCurrentAllocation();
+void updateStoryMapCharacter(StoryMapCharacterArg *arg0) {
+    StoryMapCharacterState *state = (StoryMapCharacterState *)getCurrentAllocation();
     s32 rotationResult;
     u8 anim;
 
-    applyTransformToModel(arg0->unk0, &state->unk3B0.unk0);
+    applyTransformToModel(arg0->model, &state->transform.unk0);
 
-    anim = state->unk403;
-    if (anim != arg0->unk5) {
-        arg0->unk5 = anim;
-        setAnimationIndex(arg0->unk0, (s8)anim);
+    anim = state->animIndex;
+    if (anim != arg0->currentAnimIndex) {
+        arg0->currentAnimIndex = anim;
+        setAnimationIndex(arg0->model, (s8)anim);
     }
 
-    if (state->unk400 != arg0->unk4 && arg0->unk4 != 1) {
-        arg0->unk4 = state->unk400;
-        if (state->unk400 == 2 || state->unk400 == 4) {
-            setModelAnimationEx(arg0->unk0, state->unk400, -1, -1, -1, 0);
+    if (state->animState != arg0->currentAnimState && arg0->currentAnimState != 1) {
+        arg0->currentAnimState = state->animState;
+        if (state->animState == 2 || state->animState == 4) {
+            setModelAnimationEx(arg0->model, state->animState, -1, -1, -1, 0);
         } else {
-            setModelAnimation(arg0->unk0, state->unk400);
+            setModelAnimation(arg0->model, state->animState);
         }
     }
 
-    rotationResult = clearModelRotation(arg0->unk0);
-    updateModelGeometry(arg0->unk0);
+    rotationResult = clearModelRotation(arg0->model);
+    updateModelGeometry(arg0->model);
 
     if (rotationResult != 0) {
-        state->unk401 = 1;
-        if (arg0->unk4 == 1) {
+        state->rotationComplete = 1;
+        if (arg0->currentAnimState == 1) {
             state->unk404 = 0;
-            arg0->unk4 = state->unk400;
-            if (state->unk400 == 2 || state->unk400 == 4) {
-                setModelAnimationEx(arg0->unk0, state->unk400, -1, -1, -1, 0);
+            arg0->currentAnimState = state->animState;
+            if (state->animState == 2 || state->animState == 4) {
+                setModelAnimationEx(arg0->model, state->animState, -1, -1, -1, 0);
             } else {
-                setModelAnimation(arg0->unk0, state->unk400);
+                setModelAnimation(arg0->model, state->animState);
             }
         }
     }
 }
 
-void func_80018A5C_1965C(func_80018898_19498_arg *arg0) {
-    setModelPendingDestroy(arg0->unk0);
-    arg0->unk0 = destroySceneModel(arg0->unk0);
+void cleanupStoryMapCharacter(StoryMapCharacterArg *arg0) {
+    setModelPendingDestroy(arg0->model);
+    arg0->model = destroySceneModel(arg0->model);
 }
 
 typedef struct {
