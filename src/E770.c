@@ -333,7 +333,7 @@ void beginGalleryMenuExit(E770_struct *arg0) {
     arg0->menuState = 6;
 }
 
-extern void func_8000ED88_F988(void);
+extern void onGalleryMenuExit(void);
 
 s32 completeGalleryMenuExit(E770_struct *arg0) {
     s16 temp;
@@ -344,7 +344,7 @@ s32 completeGalleryMenuExit(E770_struct *arg0) {
     temp = arg0->fadeTimer;
     if (temp == 0) {
         cleanupGalleryMenu(arg0);
-        terminateSchedulerWithCallback(func_8000ED88_F988);
+        terminateSchedulerWithCallback(onGalleryMenuExit);
         return 1;
     }
     arg0->fadeTimer = temp - 1;
@@ -403,7 +403,7 @@ void updateGalleryMenu(void) {
     func_8000DCD8_E8D8(s0);
 }
 
-void func_8000ED88_F988(void) {
+void onGalleryMenuExit(void) {
     gCurrentBgmId = 5;
     func_800697F4_6A3F4(1);
 }
