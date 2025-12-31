@@ -219,5 +219,5 @@ void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
     func_8006FD3C_7093C(allocation->unkDA, &sp40);
 }
 
-void func_80018C9C_1989C(void) {
+void cleanupStoryMapMiniCamera(void) {
 }
