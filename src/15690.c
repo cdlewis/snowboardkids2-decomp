@@ -135,7 +135,7 @@ extern u8 gStoryCompleted;
 extern u8 gDebugUnlockEnabled;
 
 void loadPostRaceCutscene(void);
-void func_80015028_15C28(void);
+void loadStoryCompleteCutscene(void);
 
 void awaitRaceResult(void) {
     s16 result;
@@ -186,7 +186,7 @@ void awaitRaceResult(void) {
                     handler = loadPostRaceCutscene;
                 }
             } else if (gStoryCompleted != 0) {
-                handler = func_80015028_15C28;
+                handler = loadStoryCompleteCutscene;
             } else {
             set_handler_b70:
                 handler = loadStoryMapScreen;
@@ -212,7 +212,7 @@ void awaitPostRaceCutscene(void) {
 
     if ((func_80069810_6A410() << 16) != 0) {
         if (gStoryCompleted != 0) {
-            handler = func_80015028_15C28;
+            handler = loadStoryCompleteCutscene;
         } else if (D_800AFE8C_A71FC->saveSlotIndex == 0xB) {
             handler = func_8001511C_15D1C;
         } else {
@@ -225,15 +225,15 @@ void awaitPostRaceCutscene(void) {
     }
 }
 
-void func_80015064_15C64(void);
+void awaitStoryCompleteCutscene(void);
 
-void func_80015028_15C28(void) {
+void loadStoryCompleteCutscene(void) {
     setCutsceneSelection(0xA, 2);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
-    setGameStateHandler(func_80015064_15C64);
+    setGameStateHandler(awaitStoryCompleteCutscene);
 }
 
-void func_80015064_15C64(void) {
+void awaitStoryCompleteCutscene(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         setGameStateHandler(loadStoryMapScreen);
     }

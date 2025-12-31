@@ -1811,3 +1811,4 @@ awaitRaceResult = 0x80014DA8; // rom:0x159A8
 loadPostRaceCutscene = 0x80014F60; // rom:0x15B60
 awaitPostRaceCutscene = 0x80014FA4; // rom:0x15BA4
 loadStoryCompleteCutscene = 0x80015028; // rom:0x15C28
+awaitStoryCompleteCutscene = 0x80015064; // rom:0x15C64
