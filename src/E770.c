@@ -692,7 +692,7 @@ void handleViewerGridNavigation_SingleRow(FD98_struct *arg0) {
     }
 }
 
-void func_8000F884_10484(FD98_struct *arg0) {
+void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
     u8 sp30[0xC];
     E770_struct *alloc;
     GalleryItemEntry *entry;
@@ -878,7 +878,7 @@ do_switch:
             handleViewerGridNavigation_SingleRow(arg0);
             break;
         case 3:
-            func_8000F884_10484(arg0);
+            handleViewerGridNavigation_ThreeRow(arg0);
             break;
         case 4:
             func_8000FA90_10690(arg0);
