@@ -9,6 +9,11 @@ extern s32 func_8002A7CC_2B3CC(void *);
 extern u16 D_8008E768_8F368[];
 extern u16 D_8008E75C_8F35C[];
 
+extern s16 D_8009F240_9FE40;
+extern s16 D_8009F242_9FE42;
+extern s32 D_800AB06C_A23DC;
+extern Vec3i D_800AFF20_A7290;
+
 s32 func_8002ACFC_2B8FC(s32, s32, s16);
 
 typedef struct {
@@ -212,6 +217,81 @@ INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B598_2C198);
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B760_2C360);
 
-INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B94C_2C54C);
+typedef struct {
+    u8 pad0[0x14];
+    s16 unk14;
+    s16 unk16;
+    u8 pad18[4];
+    s16 unk1C;
+    s16 unk1E;
+} Func8002B94CArg;
+
+void func_8002B94C_2C54C(Func8002B94CArg *arg0) {
+    s32 target[3];
+    s32 source[3];
+    s32 zAdjust;
+    s32 xAdjust;
+    s32 arrayIndex;
+    s32 nextIndex;
+    s16 *arrayBase;
+    s16 *arrayBase2;
+    s32 *sourcePtr;
+    s32 *targetPtr;
+    s32 coord14;
+    s32 coord1C;
+    s32 readVal14;
+    s32 readVal1C;
+    s32 xScaled;
+    s32 multiplier;
+
+    arrayIndex = D_800AB06C_A23DC;
+    sourcePtr = source;
+    targetPtr = target;
+    arrayBase = &D_8009F242_9FE42;
+    coord14 = arg0->unk14;
+    arrayBase[arrayIndex * 2] = coord14;
+    arrayBase2 = arrayBase + 1;
+    coord1C = arg0->unk1C;
+    arrayBase2[arrayIndex * 2] = coord1C;
+
+    memcpy(sourcePtr, &D_800AFF20_A7290, 12);
+    memcpy(target, sourcePtr, 12);
+
+    zAdjust = sourcePtr[2] >> 8;
+    zAdjust = zAdjust * 8;
+    zAdjust = zAdjust / 224;
+    coord1C = zAdjust;
+    targetPtr[0] += coord1C << 12;
+
+    multiplier = -8;
+    xScaled = sourcePtr[0] >> 8;
+    xAdjust = xScaled * multiplier;
+    if (xAdjust < 0) {
+        xAdjust += 0x7FF;
+    }
+    xAdjust >>= 11;
+    coord1C = xAdjust;
+    target[2] += coord1C << 12;
+
+    memcpy(&D_800AFF20_A7290, target, 12);
+
+    *(s32 *)&arg0->unk14 = target[0];
+    *(s32 *)&arg0->unk1C = target[2] - 0x440000;
+
+    nextIndex = D_800AB06C_A23DC + 1;
+    D_800AB06C_A23DC = nextIndex;
+
+    if (target[2] > 0) {
+        if ((u32)(target[0] - 0x100001) <= 0xFFFFE) {
+            do {
+                D_8009F240_9FE40 = nextIndex;
+            } while (0);
+            readVal14 = arg0->unk14;
+            arrayBase[nextIndex * 2] = readVal14;
+            readVal1C = arg0->unk1C;
+            arrayBase2[nextIndex * 2] = readVal1C;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002BAEC_2C6EC);
