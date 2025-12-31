@@ -36,11 +36,11 @@ typedef struct {
 } Allocation_202A0;
 
 typedef struct {
-    SceneModel *unk0;
-    Transform3D unk4;
-    s16 unk20;
+    SceneModel *model;
+    Transform3D transform;
+    s16 animationIndex;
     s16 unk22;
-} Func8002144CArg;
+} MenuCharacterModelState;
 
 typedef struct {
     u16 unk0;
@@ -612,134 +612,134 @@ extern u16 D_8008DAB0_8E6B0[];
 extern u16 D_8008DAB8_8E6B8[];
 extern u16 D_8008DAC8_8E6C8[];
 
-void func_8002152C_2212C(Func8002144CArg *arg0);
-void func_800213C8_21FC8(Func8002144CArg *arg0);
+void cleanupMenuCharacterModel(MenuCharacterModelState *state);
+void setupMenuCharacterModel(MenuCharacterModelState *state);
 
-void func_80021270_21E70(Func8002144CArg *arg0) {
-    Allocation_202A0 *temp_s2;
-    u16 temp_s3;
-    u16 temp_s0;
-    u16 temp_v1;
+void initMenuCharacterModel(MenuCharacterModelState *state) {
+    Allocation_202A0 *allocation;
+    u16 modelIndex;
+    u16 assetPairIndex;
+    u16 animIndex;
 
-    temp_s2 = (Allocation_202A0 *)getCurrentAllocation();
+    allocation = (Allocation_202A0 *)getCurrentAllocation();
 
-    if (temp_s2->unkB45 != 0) {
+    if (allocation->unkB45 != 0) {
         s32 idx = D_800AFE8C_A71FC->unk7 * 2;
-        temp_v1 = D_8008DAC0_8E6C0[D_800AFE8C_A71FC->unk7];
-        temp_s3 = D_8008DAB0_8E6B0[D_800AFE8C_A71FC->unk7];
-        temp_s0 = D_8008DAB8_8E6B8[D_800AFE8C_A71FC->unk7];
-        arg0->unk20 = temp_v1;
+        animIndex = D_8008DAC0_8E6C0[D_800AFE8C_A71FC->unk7];
+        modelIndex = D_8008DAB0_8E6B0[D_800AFE8C_A71FC->unk7];
+        assetPairIndex = D_8008DAB8_8E6B8[D_800AFE8C_A71FC->unk7];
+        state->animationIndex = animIndex;
     } else {
-        temp_s3 = 0x3A;
-        arg0->unk20 = 0xD;
+        modelIndex = 0x3A;
+        state->animationIndex = 0xD;
     }
 
-    if (temp_s2->unkB45 == 0) {
-        arg0->unk0 = createSceneModel(temp_s3, temp_s2);
+    if (allocation->unkB45 == 0) {
+        state->model = createSceneModel(modelIndex, allocation);
     } else {
-        arg0->unk0 = createSceneModelEx(temp_s3, temp_s2, (s8)temp_s0, -1, -1, -1);
+        state->model = createSceneModelEx(modelIndex, allocation, (s8)assetPairIndex, -1, -1, -1);
     }
 
-    memcpy((u8 *)&arg0->unk4, identityMatrix, 0x20);
+    memcpy((u8 *)&state->transform, identityMatrix, 0x20);
 
-    if ((temp_s2->unkB45 != 0) && (temp_s3 != 0x3A)) {
-        createYRotationMatrix((&arg0->unk4), 0x1E00);
-        arg0->unk4.translation.x = 0x280000;
+    if ((allocation->unkB45 != 0) && (modelIndex != 0x3A)) {
+        createYRotationMatrix((&state->transform), 0x1E00);
+        state->transform.translation.x = 0x280000;
     } else {
-        createYRotationMatrix((&arg0->unk4), 0x200);
-        if (temp_s2->unkB45 == 0) {
-            arg0->unk4.translation.x = 0xFFD80000;
+        createYRotationMatrix((&state->transform), 0x200);
+        if (allocation->unkB45 == 0) {
+            state->transform.translation.x = 0xFFD80000;
         } else {
-            arg0->unk4.translation.x = 0xFFD00000;
+            state->transform.translation.x = 0xFFD00000;
         }
     }
 
-    arg0->unk4.translation.y = 0xFFD60000;
-    arg0->unk4.translation.z = 0x100000;
+    state->transform.translation.y = 0xFFD60000;
+    state->transform.translation.z = 0x100000;
 
-    setCleanupCallback(&func_8002152C_2212C);
-    setCallback(&func_800213C8_21FC8);
+    setCleanupCallback(&cleanupMenuCharacterModel);
+    setCallback(&setupMenuCharacterModel);
 }
 
-void func_8002144C_2204C(Func8002144CArg *arg0);
-void func_800215DC_221DC(Func8002144CArg *arg0);
-void func_80021548_22148(u8 arg0, Func8002144CArg *arg1);
+void updateMenuCharacterModel(MenuCharacterModelState *state);
+void handleMenuCharacterAnimationEnd(MenuCharacterModelState *state);
+void setMenuCharacterAnimation(u8 animationType, MenuCharacterModelState *state);
 
-void func_800213C8_21FC8(Func8002144CArg *arg0) {
+void setupMenuCharacterModel(MenuCharacterModelState *state) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->unkB45 != 0) {
         if (D_800AFE8C_A71FC->unk7 == 0xC) {
-            scaleMatrix((&arg0->unk4), 0x1000, 0x1000, 0x1000);
+            scaleMatrix((&state->transform), 0x1000, 0x1000, 0x1000);
         }
     }
 
-    applyTransformToModel(arg0->unk0, &arg0->unk4);
-    setModelAnimation(arg0->unk0, arg0->unk20);
-    updateModelGeometry(arg0->unk0);
-    setCallback(&func_8002144C_2204C);
+    applyTransformToModel(state->model, &state->transform);
+    setModelAnimation(state->model, state->animationIndex);
+    updateModelGeometry(state->model);
+    setCallback(&updateMenuCharacterModel);
 }
 
-void func_8002144C_2204C(Func8002144CArg *arg0) {
+void updateMenuCharacterModel(MenuCharacterModelState *state) {
     Allocation_202A0 *allocation;
-    s32 temp;
-    u16 unk24;
+    s32 animationFinished;
+    u16 currentAnimation;
 
     allocation = (Allocation_202A0 *)getCurrentAllocation();
-    applyTransformToModel(arg0->unk0, &arg0->unk4);
-    temp = clearModelRotation(arg0->unk0);
+    applyTransformToModel(state->model, &state->transform);
+    animationFinished = clearModelRotation(state->model);
     func_8006FED8_70AD8(allocation);
-    updateModelGeometry(arg0->unk0);
+    updateModelGeometry(state->model);
 
     if (allocation->unkB45 != 0) {
         if (allocation->unkB47 != 0) {
-            func_80021548_22148(allocation->unkB47, arg0);
-        } else if (temp != 0 && allocation->menuState == 8) {
-            func_800215DC_221DC(arg0);
+            setMenuCharacterAnimation(allocation->unkB47, state);
+        } else if (animationFinished != 0 && allocation->menuState == 8) {
+            handleMenuCharacterAnimationEnd(state);
         }
-    } else if (temp != 0) {
-        unk24 = arg0->unk20;
-        if (unk24 == 0xD) {
-            arg0->unk20 = unk24 + 1;
-            setModelAnimation(arg0->unk0, unk24 + 1);
+    } else if (animationFinished != 0) {
+        currentAnimation = state->animationIndex;
+        if (currentAnimation == 0xD) {
+            state->animationIndex = currentAnimation + 1;
+            setModelAnimation(state->model, currentAnimation + 1);
         }
     }
 }
 
-void func_8002152C_2212C(Func8002144CArg *arg0) {
-    destroySceneModel(arg0->unk0);
+void cleanupMenuCharacterModel(MenuCharacterModelState *state) {
+    destroySceneModel(state->model);
 }
 
-void func_80021548_22148(u8 arg0, Func8002144CArg *arg1) {
+void setMenuCharacterAnimation(u8 animationType, MenuCharacterModelState *state) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     allocation->unkB47 = 0;
 
-    if (arg0 == 2) {
-        arg1->unk20 = D_8008DAC0_8E6C0[D_800AFE8C_A71FC->unk7];
+    if (animationType == 2) {
+        state->animationIndex = D_8008DAC0_8E6C0[D_800AFE8C_A71FC->unk7];
     } else {
-        arg1->unk20 = D_8008DAC8_8E6C8[D_800AFE8C_A71FC->unk7];
+        state->animationIndex = D_8008DAC8_8E6C8[D_800AFE8C_A71FC->unk7];
     }
 
-    setModelAnimation(arg1->unk0, arg1->unk20);
+    setModelAnimation(state->model, state->animationIndex);
 }
 
-void func_800215DC_221DC(Func8002144CArg *arg0) {
-    u16 unk24;
+void handleMenuCharacterAnimationEnd(MenuCharacterModelState *state) {
+    u16 currentAnimation;
 
     getCurrentAllocation();
 
     if (D_800AFE8C_A71FC->unk7 == 0xD) {
-        unk24 = arg0->unk20;
-        if (unk24 == 0xD) {
-            arg0->unk20 = unk24 + 1;
-            setModelAnimation(arg0->unk0, (s16)(unk24 + 1));
+        currentAnimation = state->animationIndex;
+        if (currentAnimation == 0xD) {
+            state->animationIndex = currentAnimation + 1;
+            setModelAnimation(state->model, (s16)(currentAnimation + 1));
         }
     } else if (D_800AFE8C_A71FC->unk7 == 0xE) {
-        unk24 = arg0->unk20;
-        if (unk24 == 1) {
-            arg0->unk20 = 2;
-            setModelAnimation(arg0->unk0, 2);
+        currentAnimation = state->animationIndex;
+        if (currentAnimation == 1) {
+            state->animationIndex = 2;
+            setModelAnimation(state->model, 2);
         }
     }
 }
