@@ -25,7 +25,7 @@ void waitForDemoRace(void);
 void startSelectedGameMode(void);
 void startBattleRace(void);
 void waitForBattleRace(void);
-void func_80014958_15558(void);
+void initOptionsDefaults(void);
 
 typedef struct {
     s16 unk0;
@@ -39,7 +39,7 @@ void func_80014480_15080(void) {
     D_800AFE8C_A71FC = allocateMemoryNode(0, 0x28, &allocation);
     EepromSaveData = allocateMemoryNode(0, 0x5C, &allocation);
     gDebugUnlockEnabled = 0;
-    func_80014958_15558();
+    initOptionsDefaults();
     func_8006983C_6A43C(func_800144DC_150DC);
 }
 
@@ -174,11 +174,11 @@ void startSelectedGameMode(void) {
     }
 }
 
-void func_80014958_15558(void) {
+void initOptionsDefaults(void) {
     D_800AFE8C_A71FC->unk1F = 0;
     D_800AFE8C_A71FC->unk20 = 0;
-    D_800AFE8C_A71FC->unk21 = 0;
-    D_800AFE8C_A71FC->unk22 = 3;
+    D_800AFE8C_A71FC->customLapEnabled = 0;
+    D_800AFE8C_A71FC->customLapCount = 3;
 }
 
 void func_80014990_15590(void) {
@@ -187,8 +187,8 @@ void func_80014990_15590(void) {
     D_800AFE8C_A71FC->unk4 = 0;
     D_800AFE8C_A71FC->saveSlotIndex = 0;
 
-    if (D_800AFE8C_A71FC->unk21 == 1) {
-        D_800AFE8C_A71FC->unk9[0x10] = D_800AFE8C_A71FC->unk22;
+    if (D_800AFE8C_A71FC->customLapEnabled == 1) {
+        D_800AFE8C_A71FC->unk9[0x10] = D_800AFE8C_A71FC->customLapCount;
     } else {
         D_800AFE8C_A71FC->unk9[0x10] = 3;
     }

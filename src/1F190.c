@@ -182,7 +182,7 @@ void handleLevelSelectInput(void) {
                     tempA0 = D_800AFE8C_A71FC;
                     if (allocation->menuState == MENU_STATE_NAVIGATE && allocation->exitMode != 2) {
                         if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
-                            if (tempA0->unk21 != 0) {
+                            if (tempA0->customLapEnabled != 0) {
                                 if (tempA0->unk4 == 1) {
                                     allocation->menuState = 3;
                                     allocation->selectedNumber = D_800AFE8C_A71FC->unk9[0x10];
@@ -392,7 +392,7 @@ void applyLevelSelection(void) {
         }
     } else {
         ptr->unk9[0x10] = allocation->selectedNumber;
-        D_800AFE8C_A71FC->unk22 = allocation->selectedNumber;
+        D_800AFE8C_A71FC->customLapCount = allocation->selectedNumber;
     }
 }
 

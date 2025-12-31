@@ -176,7 +176,7 @@ void func_800378AC_384AC(void *arg0) {
         } else if (i < 4) {
             temp = D_800AFE8C_A71FC->unk20;
         } else {
-            temp = (D_800AFE8C_A71FC->unk21 + 1) & 1;
+            temp = (D_800AFE8C_A71FC->customLapEnabled + 1) & 1;
         }
         v1 = i & 1;
         ARG0->entries10[i].unkD = ((temp + v1) & 1) | 2;
@@ -221,7 +221,7 @@ void func_80037A64_38664(func_80037A64_Arg0Struct *arg0) {
         } else if (i < 4) {
             temp = D_800AFE8C_A71FC->unk20;
         } else {
-            temp = (D_800AFE8C_A71FC->unk21 + 1) & 1;
+            temp = (D_800AFE8C_A71FC->customLapEnabled + 1) & 1;
         }
 
         arg0->entries10[i].unkD = ((temp + (i & 1)) & 1) | 2;

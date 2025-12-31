@@ -10,8 +10,8 @@ typedef struct {
     u8 unk9[0x16];
     u8 unk1F;
     u8 unk20;
-    u8 unk21;
-    u8 unk22;
+    u8 customLapEnabled;
+    u8 customLapCount;
     u8 errorFlag;
     u8 unk24;
     u8 unk25;
