@@ -1937,3 +1937,6 @@ onSaveSlotReadComplete = 0x8001DF5C; // rom:0x1EB5C
 sanitizeSaveSlotData = 0x8001E104; // rom:0x1ED04
 verifySaveSlotChecksum = 0x8001E320; // rom:0x1EF20
 updateSlotSelectionSlide = 0x8001E3E8; // rom:0x1EFE8
+initStoryMapExtraIntro = 0x8001E470; // rom:0x1F070
+awaitStoryMapExtraIntro = 0x8001E508; // rom:0x1F108
+onStoryMapExtraIntroComplete = 0x8001E570; // rom:0x1F170
