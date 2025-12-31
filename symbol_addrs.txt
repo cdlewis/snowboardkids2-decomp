@@ -1992,3 +1992,4 @@ loadSaveSlotSelect = 0x80021DE8; // rom:0x229E8
 awaitSaveSlotSelect = 0x80021E18; // rom:0x22A18
 loadVersusMapScreen = 0x80021E6C; // rom:0x22A6C
 awaitVersusMapScreen = 0x80021E9C; // rom:0x22A9C
+loadVersusLevelSelect = 0x80021EFC; // rom:0x22AFC
