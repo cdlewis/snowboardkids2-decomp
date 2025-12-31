@@ -55,23 +55,23 @@ INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016488_17088);
 
 typedef struct {
     u8 pad0[0xA];
-    s16 unkA;
+    s16 alpha;
     void *unkC;
-} Struct165D8_Element;
+} ControllerSlotElement;
 
 typedef struct {
-    Struct165D8_Element elements[8];
-} Struct165D8;
+    ControllerSlotElement elements[8];
+} ControllerSlotDisplay;
 
-void func_800165D8_171D8(Struct165D8 *arg0) {
+void updateControllerSlotHighlights(ControllerSlotDisplay *arg0) {
     GameState *state;
     s32 i;
     s32 numControllers;
-    s32 temp;
+    s32 selectedSlot;
     s32 unused[2];
-    Struct165D8_Element *ptr;
-    s32 val1;
-    s32 val2;
+    ControllerSlotElement *slot;
+    s32 selectedAlpha;
+    s32 unselectedAlpha;
 
     state = (GameState *)getCurrentAllocation();
 
@@ -84,16 +84,16 @@ void func_800165D8_171D8(Struct165D8 *arg0) {
 
         if (numControllers != 0) {
             i = 0;
-            val1 = 0xFF;
-            val2 = 0x80;
+            selectedAlpha = 0xFF;
+            unselectedAlpha = 0x80;
             do {
-                temp = state->unk3BB;
-                if (i == temp) {
-                    ptr = &arg0->elements[i + (state->unk3BD << 2)];
-                    ptr->unkA = val1;
+                selectedSlot = state->unk3BB;
+                if (i == selectedSlot) {
+                    slot = &arg0->elements[i + (state->unk3BD << 2)];
+                    slot->alpha = selectedAlpha;
                 } else {
-                    ptr = &arg0->elements[i + (state->unk3BD << 2)];
-                    ptr->unkA = val2;
+                    slot = &arg0->elements[i + (state->unk3BD << 2)];
+                    slot->alpha = unselectedAlpha;
                 }
 
                 debugEnqueueCallback(8, 1, func_80012518_13118, &arg0->elements[i + (state->unk3BD << 2)]);

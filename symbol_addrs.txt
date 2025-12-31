@@ -2,6 +2,7 @@ cleanupTitleLogoTask = 0x800163A0; // rom:0x16FA0
 enqueueTitleLogoRender = 0x800163CC; // rom:0x16FCC
 initTitleLogoRenderState = 0x800163F8; // rom:0x16FF8
 loadTitleLogoAsset = 0x80016434; // rom:0x17034
+updateControllerSlotHighlights = 0x800165D8; // rom:0x171D8
 returnToMainMenu = 0x80015218; // rom:0x15E18
 getStoryMapCameraMode = 0x8001523C; // rom:0x15E3C
 setStoryMapCameraMode = 0x80015248; // rom:0x15E48
