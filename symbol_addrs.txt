@@ -2004,3 +2004,6 @@ exitVersusMode = 0x80022108; // rom:0x22D08
 initPlayerCountSelectState = 0x80022130; // rom:0x22D30
 awaitPlayerCountSelectFadeIn = 0x80022304; // rom:0x22F04
 handlePlayerCountSelectInput = 0x800223CC; // rom:0x22FCC
+exitPlayerCountSelect = 0x800225C8; // rom:0x231C8
+onPlayerCountProceed = 0x800226B0; // rom:0x232B0
+onPlayerCountCancel = 0x800226CC; // rom:0x232CC

@@ -38,9 +38,9 @@ extern void *D_800B08A8;
 extern u8 gConnectedControllerMask;
 
 void handlePlayerCountSelectInput(void);
-void func_800225C8_231C8(void);
-void func_800226B0_232B0(void);
-void func_800226CC_232CC(void);
+void exitPlayerCountSelect(void);
+void onPlayerCountProceed(void);
+void onPlayerCountCancel(void);
 void func_80022304_22F04(void);
 
 void initPlayerCountSelectState(void) {
@@ -178,11 +178,11 @@ void handlePlayerCountSelectInput(void) {
         } else {
             func_8006FDA0_709A0((Node_70B00 *)state, 0xFF, 0x10);
         }
-        setGameStateHandler(&func_800225C8_231C8);
+        setGameStateHandler(&exitPlayerCountSelect);
     }
 }
 
-void func_800225C8_231C8(void) {
+void exitPlayerCountSelect(void) {
     PlayerCountSelectState *state;
     s32 i;
 
@@ -193,21 +193,21 @@ void func_800225C8_231C8(void) {
         state->assetData1 = freeNodeMemory(state->assetData1);
         state->assetData2 = freeNodeMemory(state->assetData2);
         if (state->menuResult == 1) {
-            terminateSchedulerWithCallback(func_800226B0_232B0);
+            terminateSchedulerWithCallback(onPlayerCountProceed);
             D_800AFE8C_A71FC->numPlayers = state->playerCount.bytes.selectedPlayerIndexLo + 1;
             for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                 D_800AFE8C_A71FC->unk9[i] = D_8008DCC0_8E8C0[i];
             }
         } else {
-            terminateSchedulerWithCallback(func_800226CC_232CC);
+            terminateSchedulerWithCallback(onPlayerCountCancel);
         }
     }
 }
 
-void func_800226B0_232B0(void) {
+void onPlayerCountProceed(void) {
     func_800697F4_6A3F4(1);
 }
 
-void func_800226CC_232CC(void) {
+void onPlayerCountCancel(void) {
     func_800697F4_6A3F4(0xFF);
 }
