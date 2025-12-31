@@ -16,7 +16,7 @@ USE_ASSET(_45A890);
 
 extern u16 D_8008D6B0_8E2B0;
 extern u8 D_800A8CC8_A0038;
-extern void func_80017350_17F50;
+extern void storyMapCameraTask;
 extern void func_80018800_19400;
 extern void func_80018A90_19690;
 extern void GenericTriggerInit;
@@ -85,7 +85,7 @@ void initializeGameState(void) {
         setupTaskSchedulerNodes(0x30, 0xA, 0x14, 0, 0, 0, 0, 0);
         func_80027CA0_288A0(&temp_s0->node1, 0, 0xA, 0);
         func_80027CA0_288A0(&temp_s0->node2, 8, 0xF, 1);
-        scheduleTask(&func_80017350_17F50, 0, 0, 0x5A);
+        scheduleTask(&storyMapCameraTask, 0, 0, 0x5A);
         scheduleTask(&func_80018800_19400, 0, 0, 0x5B);
         scheduleTask(&func_80028480_29080, 0, 0, 0x5B);
         var_s1++;

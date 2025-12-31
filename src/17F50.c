@@ -45,7 +45,7 @@ void func_800175E0_181E0(void);
 void func_80018580_19180(Func80018474Arg *arg0);
 void func_800182FC_18EFC(Func80018474Arg *arg0);
 
-void func_80017350_17F50(void) {
+void storyMapCameraTask(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     if (state->unk429 == 0) {
