@@ -52,7 +52,7 @@ void func_80019F60_1AB60(void);
 void func_80019EFC_1AAFC(void);
 void func_80019DC4_1A9C4(void);
 void updateStoryMapDecorModel(applyTransformToModel_arg1 *arg0);
-void func_80019D24_1A924(TextData *arg0);
+void enqueueStoryMapLocationText(TextData *arg0);
 void func_80019D84_1A984(void);
 void func_80019E60_1AA60(void);
 void func_80019EA8_1AAA8(void);
@@ -101,10 +101,10 @@ void storyMapLocationTextTask(func_80019CD0_1A8D0_arg *arg0) {
     arg0->unk2 = 0;
     arg0->unk4 = 0;
     arg0->unk8 = &D_8008D7FC_8E3FC[storyMapLocationIndex];
-    setCallback(&func_80019D24_1A924);
+    setCallback(&enqueueStoryMapLocationText);
 }
 
-void func_80019D24_1A924(TextData *arg0) {
+void enqueueStoryMapLocationText(TextData *arg0) {
     debugEnqueueCallback(0, 7, &renderTextPalette, arg0);
 }
 
