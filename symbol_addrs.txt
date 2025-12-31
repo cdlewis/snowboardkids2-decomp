@@ -1925,3 +1925,4 @@ unlockScreenAwaitUserDismiss = 0x8001C28C; // rom:0x1CE8C
 unlockScreenCountdownToExit = 0x8001C6E4; // rom:0x1D2E4
 unlockScreenCleanupAndExit = 0x8001C744; // rom:0x1D344
 onUnlockScreenExit = 0x8001C7E8; // rom:0x1D3E8
+initPostUnlockLocationIntro = 0x8001C810; // rom:0x1D410

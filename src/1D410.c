@@ -14,7 +14,7 @@ typedef struct {
 void func_8001C898_1D498(void);
 void func_8001C900_1D500(void);
 
-void func_8001C810_1D410(void) {
+void initPostUnlockLocationIntro(void) {
     func_8001C810_allocation *temp_s0 = (func_8001C810_allocation *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->unk1D8 = 0;
