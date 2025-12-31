@@ -69,52 +69,52 @@ s32 checkStoryMapCharacterCollision(s32 posX, s32 posY, s32 characterIndex) {
 }
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} func_800197D8_1A3D8_arg1;
+    s32 x;
+    s32 y;
+    s32 z;
+} StoryMapPosition;
 
 typedef struct {
     u8 padding[0x4C];
-    s32 unk4C;
-} func_800197D8_1A3D8_arg0;
+    s32 distanceFromOrigin;
+} StoryMapController;
 
-void func_800197D8_1A3D8(func_800197D8_1A3D8_arg0 *arg0, func_800197D8_1A3D8_arg1 *arg1, s32 arg2) {
+void resolveStoryMapCharacterCollision(StoryMapController *controller, StoryMapPosition *position, s32 characterIndex) {
     GameState *state;
     s16 angle;
-    s32 rot;
-    s32 scale;
-    s32 sinVal;
-    s32 cosVal;
-    s32 newX;
-    s32 newY;
-    s32 baseX;
-    s32 baseY;
+    s32 combinedRadius;
+    s32 pushScale;
+    s32 sinComponent;
+    s32 cosComponent;
+    s32 offsetX;
+    s32 offsetZ;
+    s32 characterX;
+    s32 characterZ;
 
     state = (GameState *)getCurrentAllocation();
-    arg2 = arg2 - 1;
-    angle = func_8006D21C_6DE1C(state->unk408[arg2], state->unk410[arg2], arg1->unk0, arg1->unk8);
-    rot = state->unk418[arg2] + state->unk3FE;
-    rot <<= 16;
-    sinVal = approximateSin(angle);
-    scale = -(rot >> 8);
-    sinVal = sinVal * scale;
-    if (sinVal < 0) {
-        sinVal += 0x1FFF;
+    characterIndex = characterIndex - 1;
+    angle = func_8006D21C_6DE1C(state->unk408[characterIndex], state->unk410[characterIndex], position->x, position->z);
+    combinedRadius = state->unk418[characterIndex] + state->unk3FE;
+    combinedRadius <<= 16;
+    sinComponent = approximateSin(angle);
+    pushScale = -(combinedRadius >> 8);
+    sinComponent = sinComponent * pushScale;
+    if (sinComponent < 0) {
+        sinComponent += 0x1FFF;
     }
-    newX = (sinVal >> 13) << 8;
-    cosVal = approximateCos(angle);
-    cosVal = cosVal * scale;
-    if (cosVal < 0) {
-        cosVal += 0x1FFF;
+    offsetX = (sinComponent >> 13) << 8;
+    cosComponent = approximateCos(angle);
+    cosComponent = cosComponent * pushScale;
+    if (cosComponent < 0) {
+        cosComponent += 0x1FFF;
     }
-    baseX = state->unk408[arg2];
-    baseY = state->unk410[arg2];
-    newX += baseX;
-    arg1->unk0 = newX;
-    newY = ((cosVal >> 13) << 8) + baseY;
-    arg1->unk8 = newY;
-    arg0->unk4C = distance_2d(arg1->unk0, newY);
+    characterX = state->unk408[characterIndex];
+    characterZ = state->unk410[characterIndex];
+    offsetX += characterX;
+    position->x = offsetX;
+    offsetZ = ((cosComponent >> 13) << 8) + characterZ;
+    position->z = offsetZ;
+    controller->distanceFromOrigin = distance_2d(position->x, offsetZ);
 }
 
 s32 func_800198F0_1A4F0(s32 arg0, s32 arg1, u8 arg2) {
