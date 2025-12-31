@@ -21,7 +21,7 @@ void awaitPlayerCountSelect(void);
 
 void loadPlayerCountSelect(void) {
     func_800574A0_580A0(2);
-    createTaskQueue(func_80022130_22D30, 100);
+    createTaskQueue(initPlayerCountSelectState, 100);
     setGameStateHandler(awaitPlayerCountSelect);
 }
 
