@@ -840,7 +840,7 @@ void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
 
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF6C_9EB6C);
 
-void func_8000FBBC_107BC(FD98_struct *arg0) {
+void handleViewerInput(FD98_struct *arg0) {
     FD98_struct *alloc;
     s32 inputs;
     s8 temp;
@@ -954,7 +954,7 @@ void func_8000FE00_10A00(E770_struct *arg0) {
             func_8000F4F0_100F0(arg0);
             break;
         case 2:
-            func_8000FBBC_107BC((FD98_struct *)arg0);
+            handleViewerInput((FD98_struct *)arg0);
             break;
         case 3:
             func_8000FD1C_1091C(arg0);
