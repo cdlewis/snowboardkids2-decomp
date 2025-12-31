@@ -28,25 +28,25 @@ void func_80016DE0_179E0(Struct16B68 *arg0);
 void func_80016964_17564(Struct16B68 *arg0);
 void func_80016E70_17A70(Struct16B68 *arg0);
 
-void enqueueTitleLogoRender(Struct163F8 *);
-void cleanupTitleLogoTask(Struct163F8 *);
+void enqueueTitleLogoRender(TitleLogoTask *);
+void cleanupTitleLogoTask(TitleLogoTask *);
 
-void cleanupTitleLogoTask(Struct163F8 *arg0) {
-    arg0->unk38 = freeNodeMemory(arg0->unk38);
+void cleanupTitleLogoTask(TitleLogoTask *arg0) {
+    arg0->assetData = freeNodeMemory(arg0->assetData);
 }
 
-void enqueueTitleLogoRender(Struct163F8 *arg0) {
+void enqueueTitleLogoRender(TitleLogoTask *arg0) {
     debugEnqueueCallback(8, 0, func_80038420_39020, arg0);
 }
 
-void initTitleLogoRenderState(Struct163F8 *arg0) {
-    func_800394BC_3A0BC(arg0, (s32)arg0->unk38);
+void initTitleLogoRenderState(TitleLogoTask *arg0) {
+    func_800394BC_3A0BC(arg0, (s32)arg0->assetData);
     arg0->unk2 = 0x10;
     setCallback(enqueueTitleLogoRender);
 }
 
-void func_80016434_17034(Struct163F8 *arg0) {
-    arg0->unk38 = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
+void loadTitleLogoAsset(TitleLogoTask *arg0) {
+    arg0->assetData = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
     setCleanupCallback(cleanupTitleLogoTask);
     setCallback(initTitleLogoRenderState);
 }

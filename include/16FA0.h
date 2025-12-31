@@ -8,8 +8,8 @@ typedef struct {
     u8 padding[0x2];
     s16 unk2;
     u8 padding2[0x34];
-    void *unk38;
-} Struct163F8;
+    void *assetData;
+} TitleLogoTask;
 
 typedef struct {
     s16 unk0;
@@ -36,7 +36,7 @@ typedef struct {
     u8 unk32;           // 0x32
 } Struct16B68;
 
-void func_80016434_17034(Struct163F8 *arg0);
+void loadTitleLogoAsset(TitleLogoTask *arg0);
 void func_80016488_17088(void);
 void func_80016728_17328(Struct16728 *arg0);
 void func_80016860_17460(ModelEntity *arg0);

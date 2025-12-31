@@ -336,7 +336,7 @@ void initTitleScreen(void) {
         state->menuOptionCount = 3;
     }
 
-    scheduleTask(&func_80016434_17034, 0, 0, 0x64);
+    scheduleTask(&loadTitleLogoAsset, 0, 0, 0x64);
     scheduleTask(&func_80016488_17088, 0, 0, 0x62);
     scheduleTask(&func_80016728_17328, 0, 0, 0x62);
 
