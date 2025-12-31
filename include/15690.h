@@ -2,4 +2,4 @@
 
 #include "common.h"
 
-void func_800154A8_160A8(s8 *arg0, u16 arg1);
+void clearMemory(s8 *dest, u16 size);

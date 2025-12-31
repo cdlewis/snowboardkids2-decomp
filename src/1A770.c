@@ -109,7 +109,7 @@ void func_80019D24_1A924(TextData *arg0) {
 }
 
 void func_80019D50_1A950(void) {
-    func_800154A8_160A8(allocateTaskMemory(0x1E0), 0x1E0);
+    clearMemory(allocateTaskMemory(0x1E0), 0x1E0);
     setGameStateHandler(&func_80019D84_1A984);
 }
 

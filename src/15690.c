@@ -301,18 +301,18 @@ void setStoryMapCameraMode(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/15690", func_80015254_15E54);
 
-void func_800154A8_160A8(s8 *arg0, u16 arg1) {
-    s32 end;
-    s32 ptr;
+void clearMemory(s8 *dest, u16 size) {
+    s32 endAddr;
+    s32 current;
 
-    if (arg1 == 0) {
+    if (size == 0) {
         return;
     }
 
-    ptr = (s32)arg0;
-    end = arg1 + ptr;
+    current = (s32)dest;
+    endAddr = size + current;
     do {
-        *(s8 *)ptr = 0;
-        ptr++;
-    } while (ptr < end);
+        *(s8 *)current = 0;
+        current++;
+    } while (current < endAddr);
 }
