@@ -325,7 +325,7 @@ void waitForGalleryViewerExit(E770_struct *arg0) {
     }
 }
 
-void func_8000E5B0_F1B0(E770_struct *arg0) {
+void beginGalleryMenuExit(E770_struct *arg0) {
     func_800585C8_591C8(0xDB);
     func_8006FDA0_709A0(NULL, 0xFF, 10);
     setMenuAnimation(arg0, 0x15A, 0x15B, 1, -1);
@@ -387,7 +387,7 @@ void func_8000EC98_F898(void) {
             break;
         case 5:
         default:
-            func_8000E5B0_F1B0(s0);
+            beginGalleryMenuExit(s0);
             break;
         case 6:
             if (func_8000E614_F214(s0)) {
