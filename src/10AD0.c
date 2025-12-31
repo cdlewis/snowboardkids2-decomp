@@ -29,7 +29,7 @@ INCLUDE_ASM("asm/nonmatchings/10AD0", func_80013EA0_14AA0);
 
 extern u16 gDefaultFontPalette[];
 
-void func_80014440_15040(void) {
+void initDefaultFontPalette(void) {
     s32 i;
 
     gDefaultFontPalette[0] = 0;

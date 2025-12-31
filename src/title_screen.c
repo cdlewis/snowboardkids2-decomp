@@ -296,7 +296,7 @@ void initTitleScreen(void) {
     state = (TitleState *)allocateTaskMemory(0x3C8);
     func_8006FDA0_709A0(NULL, 0xFF, 0);
     node2 = &state->node2;
-    func_80014440_15040();
+    initDefaultFontPalette();
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     func_8006FAA4_706A4((Node_70B00 *)state, NULL, 8, 10, 0);
     setModelCameraTransform(state, 0, 0, -0xA0, -0x78, 0x9F, 0x77);

@@ -667,6 +667,7 @@ gFontPaletteBase = 0x800A2D64;
 gCurrentPaletteId = 0x800A2D68;
 gGraphicsMode = 0x800AB060;
 gDefaultFontPalette = 0x800AB258;
+initDefaultFontPalette = 0x80014440; // rom:0x15040
 gTextureEnabled = 0x800AFCE0;
 
 initializeOverlaySystem = 0x80067FB0;
