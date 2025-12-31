@@ -171,17 +171,17 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x20];
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
+    void *modelAsset;
+    void *animationAsset;
+    void *skeletonAsset;
+    void *paletteAsset;
     u8 pad30[0xC];
-    Transform3D unk3C;
-    Transform3D unk5C;
-    Transform3D unk7C;
+    Transform3D rotationMatrix;
+    Transform3D positionMatrix;
+    Transform3D worldMatrix;
     u8 pad9C[0x5];
-    u8 unkA1;
-} func_80024644_arg;
+    u8 playerIndex;
+} CharSelectSecondarySlot;
 
 typedef struct {
     u8 pad0[0x20];
@@ -307,8 +307,8 @@ void func_80027544_28144(func_80027544_arg *);
 void func_800269C8_275C8(void *);
 void func_80026BAC_277AC(func_80025FFC_26BFC_arg *);
 void func_80025904_26504(void);
-void func_80024810_25410(func_80024644_arg *);
-void func_8002494C_2554C(func_8002494C_arg *);
+void updateCharSelectSecondarySlide(CharSelectSecondarySlot *);
+void cleanupCharSelectSecondaryAssets(func_8002494C_arg *);
 void func_80024D40_25940(func_80024C8C_2588C_arg *);
 void func_80024DCC_259CC(func_80024C8C_2588C_arg *);
 void func_80024E58_25A58(func_80024C8C_2588C_arg *);
@@ -588,17 +588,17 @@ void cleanupCharSelectPreviewAssets(CharSelectPreviewModel *arg0) {
     arg0->paletteAsset = freeNodeMemory(arg0->paletteAsset);
 }
 
-void func_80024644_25244(func_80024644_arg *arg0) {
-    Transform3D sp10;
-    Transform3D sp30;
-    Transform3D sp50;
+void initCharSelectSecondarySlot(CharSelectSecondarySlot *arg0) {
+    Transform3D localMatrix1;
+    Transform3D localMatrix2;
+    Transform3D localMatrix3;
     GameState *state;
-    Transform3D *unk5CPtr;
-    Transform3D *unk3CPtr;
-    Transform3D *sp50Ptr;
-    Transform3D *sp30Ptr;
-    Transform3D *sp10Ptr;
-    Transform3D *unk7CPtr;
+    Transform3D *posMatrixPtr;
+    Transform3D *rotMatrixPtr;
+    Transform3D *localMatrix3Ptr;
+    Transform3D *localMatrix2Ptr;
+    Transform3D *localMatrix1Ptr;
+    Transform3D *worldMatrixPtr;
     u8 charIndex;
     u8 assetIndex;
     u8 paletteIndex;
@@ -606,77 +606,77 @@ void func_80024644_25244(func_80024644_arg *arg0) {
 
     state = (GameState *)getCurrentAllocation();
 
-    sp50Ptr = &sp50;
-    memcpy(sp50Ptr, identityMatrix, 0x20);
-    unk5CPtr = &arg0->unk5C;
-    memcpy(unk5CPtr, sp50Ptr, 0x20);
-    unk3CPtr = &arg0->unk3C;
-    memcpy(unk3CPtr, unk5CPtr, 0x20);
-    sp30Ptr = &sp30;
-    memcpy(sp30Ptr, unk3CPtr, 0x20);
-    sp10Ptr = &sp10;
-    memcpy(sp10Ptr, sp30Ptr, 0x20);
+    localMatrix3Ptr = &localMatrix3;
+    memcpy(localMatrix3Ptr, identityMatrix, 0x20);
+    posMatrixPtr = &arg0->positionMatrix;
+    memcpy(posMatrixPtr, localMatrix3Ptr, 0x20);
+    rotMatrixPtr = &arg0->rotationMatrix;
+    memcpy(rotMatrixPtr, posMatrixPtr, 0x20);
+    localMatrix2Ptr = &localMatrix2;
+    memcpy(localMatrix2Ptr, rotMatrixPtr, 0x20);
+    localMatrix1Ptr = &localMatrix1;
+    memcpy(localMatrix1Ptr, localMatrix2Ptr, 0x20);
 
-    offset = arg0->unkA1 << 5;
-    unk7CPtr = &arg0->unk7C;
-    memcpy(unk7CPtr, (void *)(offset + (u32)state + 0x17F8), 0x20);
+    offset = arg0->playerIndex << 5;
+    worldMatrixPtr = &arg0->worldMatrix;
+    memcpy(worldMatrixPtr, (void *)(offset + (u32)state + 0x17F8), 0x20);
 
-    createRotationMatrixYX(sp10Ptr, 0x1000, 0x800);
-    createZRotationMatrix(sp30Ptr, 0x1F00);
-    func_8006B084_6BC84(sp10Ptr, sp30Ptr, unk3CPtr);
+    createRotationMatrixYX(localMatrix1Ptr, 0x1000, 0x800);
+    createZRotationMatrix(localMatrix2Ptr, 0x1F00);
+    func_8006B084_6BC84(localMatrix1Ptr, localMatrix2Ptr, rotMatrixPtr);
 
-    createYRotationMatrix(unk5CPtr, state->unk1888[arg0->unkA1]);
-    func_8006B084_6BC84(unk3CPtr, unk5CPtr, sp50Ptr);
-    func_8006B084_6BC84(sp50Ptr, unk7CPtr, arg0);
+    createYRotationMatrix(posMatrixPtr, state->unk1888[arg0->playerIndex]);
+    func_8006B084_6BC84(rotMatrixPtr, posMatrixPtr, localMatrix3Ptr);
+    func_8006B084_6BC84(localMatrix3Ptr, worldMatrixPtr, arg0);
 
-    charIndex = state->unk18A8[arg0->unkA1 + 4];
-    assetIndex = state->unk18B0[arg0->unkA1 + 4];
+    charIndex = state->unk18A8[arg0->playerIndex + 4];
+    assetIndex = state->unk18B0[arg0->playerIndex + 4];
     assetIndex = assetIndex + charIndex * 3;
     paletteIndex = EepromSaveData->character_or_settings[assetIndex] - 1;
 
-    arg0->unk20 = loadAssetByIndex_95728(assetIndex);
-    arg0->unk24 = loadAssetByIndex_95500(assetIndex);
-    arg0->unk28 = loadAssetByIndex_95590(assetIndex);
-    arg0->unk2C = loadAssetByIndex_95668(paletteIndex);
+    arg0->modelAsset = loadAssetByIndex_95728(assetIndex);
+    arg0->animationAsset = loadAssetByIndex_95500(assetIndex);
+    arg0->skeletonAsset = loadAssetByIndex_95590(assetIndex);
+    arg0->paletteAsset = loadAssetByIndex_95668(paletteIndex);
 
-    setCleanupCallback(func_8002494C_2554C);
-    setCallbackWithContinue(func_80024810_25410);
+    setCleanupCallback(cleanupCharSelectSecondaryAssets);
+    setCallbackWithContinue(updateCharSelectSecondarySlide);
 }
 
-void func_80024810_25410(func_80024644_arg *arg0) {
-    Transform3D sp10;
-    Transform3D *sp10Ptr;
-    Transform3D *unk5CPtr;
+void updateCharSelectSecondarySlide(CharSelectSecondarySlot *arg0) {
+    Transform3D localMatrix;
+    Transform3D *localMatrixPtr;
+    Transform3D *posMatrixPtr;
     s32 target;
     s32 adjustment;
     GameState *state;
 
     state = (GameState *)getCurrentAllocation();
 
-    sp10Ptr = &sp10;
-    target = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->numPlayers * 2) + ((state->unk18C0[arg0->unkA1] + 1) & 1)];
+    localMatrixPtr = &localMatrix;
+    target = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->numPlayers * 2) + ((state->unk18C0[arg0->playerIndex] + 1) & 1)];
     adjustment = (-(target < 0) & 0xFFF00000) | 0x100000;
 
-    memcpy(sp10Ptr, identityMatrix, 0x20);
-    memcpy(&sp10.translation, &arg0->unk5C.translation.x, 0xC);
+    memcpy(localMatrixPtr, identityMatrix, 0x20);
+    memcpy(&localMatrix.translation, &arg0->positionMatrix.translation.x, 0xC);
 
-    arg0->unk7C.translation.x += adjustment;
+    arg0->worldMatrix.translation.x += adjustment;
 
-    unk5CPtr = &arg0->unk5C;
-    createYRotationMatrix(unk5CPtr, state->unk1888[arg0->unkA1]);
+    posMatrixPtr = &arg0->positionMatrix;
+    createYRotationMatrix(posMatrixPtr, state->unk1888[arg0->playerIndex]);
 
-    func_8006B084_6BC84(&arg0->unk3C, unk5CPtr, sp10Ptr);
-    func_8006B084_6BC84(sp10Ptr, &arg0->unk7C, arg0);
+    func_8006B084_6BC84(&arg0->rotationMatrix, posMatrixPtr, localMatrixPtr);
+    func_8006B084_6BC84(localMatrixPtr, &arg0->worldMatrix, arg0);
 
-    if (arg0->unk7C.translation.x == target) {
-        state->unk18C0[arg0->unkA1 + 4]++;
+    if (arg0->worldMatrix.translation.x == target) {
+        state->unk18C0[arg0->playerIndex + 4]++;
         func_80069CF8_6A8F8();
     } else {
-        enqueueDisplayListObject(arg0->unkA1, (DisplayListObject *)arg0);
+        enqueueDisplayListObject(arg0->playerIndex, (DisplayListObject *)arg0);
     }
 }
 
-void func_8002494C_2554C(func_8002494C_arg *arg0) {
+void cleanupCharSelectSecondaryAssets(func_8002494C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk2C = freeNodeMemory(arg0->unk2C);

@@ -2019,3 +2019,6 @@ initCharSelectSlidePosition = 0x80024298; // rom:0x24E98
 updateCharSelectSlide = 0x80024414; // rom:0x25014
 updateCharSelectPostSlide = 0x80024518; // rom:0x25118
 cleanupCharSelectPreviewAssets = 0x80024600; // rom:0x25200
+initCharSelectSecondarySlot = 0x80024644; // rom:0x25244
+updateCharSelectSecondarySlide = 0x80024810; // rom:0x25410
+cleanupCharSelectSecondaryAssets = 0x8002494C; // rom:0x2554C
