@@ -1085,7 +1085,7 @@ loop:
     }
 }
 
-void func_80025C38_26838(func_80025FFC_26BFC_arg *arg0) {
+void cleanupCharSelectIconHideAsset(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
