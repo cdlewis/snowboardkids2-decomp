@@ -3,14 +3,20 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern s16 D_8008D7E0_8E3E0;
+typedef struct {
+    s16 x;
+    s16 y;
+    s16 radius;
+} StoryMapHotspot;
 
-s32 func_80019510_1A110(s32 arg0, s32 arg1, s16 arg2) {
-    s32 var_s1;
-    s16 *var_s0;
-    s16 *var_s2;
-    s16 *var_s3;
-    s32 var_s4;
+extern StoryMapHotspot storyMapHotspots[];
+
+s32 checkStoryMapHotspotCollision(s32 posX, s32 posY, s16 collisionRadius) {
+    s32 index;
+    s16 *hotspotX;
+    s16 *hotspotY;
+    s16 *hotspotRadius;
+    s32 extraRadius;
     s32 dx;
     s32 dy;
     s32 dist;
@@ -19,26 +25,26 @@ s32 func_80019510_1A110(s32 arg0, s32 arg1, s16 arg2) {
 
     getCurrentAllocation();
 
-    var_s1 = 0;
-    var_s4 = arg2;
-    base = &D_8008D7E0_8E3E0;
-    var_s3 = base + 2;
-    var_s2 = base + 1;
-    var_s0 = base;
+    index = 0;
+    extraRadius = collisionRadius;
+    base = (s16 *)storyMapHotspots;
+    hotspotRadius = base + 2;
+    hotspotY = base + 1;
+    hotspotX = base;
 
     do {
-        dx = arg0 - (*var_s0 << 16);
-        dy = arg1 - (*var_s2 << 16);
+        dx = posX - (*hotspotX << 16);
+        dy = posY - (*hotspotY << 16);
         dist = isqrt64((s64)dx * dx + (s64)dy * dy);
-        threshold = (*var_s3 + var_s4) << 16;
+        threshold = (*hotspotRadius + extraRadius) << 16;
         if (dist < threshold) {
-            return var_s1 + 1;
+            return index + 1;
         }
-        var_s3 += 3;
-        var_s2 += 3;
-        var_s1 += 1;
-        var_s0 += 3;
-    } while (var_s1 < 2);
+        hotspotRadius += 3;
+        hotspotY += 3;
+        index += 1;
+        hotspotX += 3;
+    } while (index < 2);
     return 0;
 }
 
