@@ -1986,3 +1986,4 @@ awaitCharacterSelect = 0x80021C90; // rom:0x22890
 onLevelSelectProceed = 0x80021CE4; // rom:0x228E4
 onLevelSelectCancel = 0x80021D00; // rom:0x22900
 initVersusMode = 0x80021D20; // rom:0x22920
+loadPlayerCountSelect = 0x80021D50; // rom:0x22950
