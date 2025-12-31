@@ -1987,3 +1987,4 @@ onLevelSelectProceed = 0x80021CE4; // rom:0x228E4
 onLevelSelectCancel = 0x80021D00; // rom:0x22900
 initVersusMode = 0x80021D20; // rom:0x22920
 loadPlayerCountSelect = 0x80021D50; // rom:0x22950
+awaitPlayerCountSelect = 0x80021D88; // rom:0x22988

@@ -17,12 +17,12 @@ void initVersusMode(void) {
     func_8006983C_6A43C(loadPlayerCountSelect);
 }
 
-void func_80021D88_22988(void);
+void awaitPlayerCountSelect(void);
 
 void loadPlayerCountSelect(void) {
     func_800574A0_580A0(2);
     createTaskQueue(func_80022130_22D30, 100);
-    setGameStateHandler(func_80021D88_22988);
+    setGameStateHandler(awaitPlayerCountSelect);
 }
 
 void func_80021DE8_229E8(void);
@@ -32,7 +32,7 @@ void func_80022108_22D08(void);
 void func_80021E18_22A18(void);
 void func_8002207C_22C7C(void);
 
-void func_80021D88_22988(void) {
+void awaitPlayerCountSelect(void) {
     s16 result;
 
     getCurrentAllocation();
