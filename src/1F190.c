@@ -435,7 +435,7 @@ void loadLevelPreview(void) {
             func_8006FE48_70A48(100, 995, 999, item->unk20.r2, item->unk20.g2, item->unk20.b2);
         }
 
-        scheduleTask(&func_8001F6A0_202A0, 0, 0, 0x5B);
+        scheduleTask(&initLevelPreviewCharacter, 0, 0, 0x5B);
         func_800497FC_4A3FC(poolIdRaw);
         allocation->previewLoadCounter = allocation->previewLoadCounter + 1;
     } else if (counter < 6) {

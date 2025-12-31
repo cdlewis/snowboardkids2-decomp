@@ -189,9 +189,9 @@ typedef struct {
 extern u8 D_8008D9F0_8E5F0[];
 
 void func_80020528_21128(Func80020528Arg *arg0);
-void func_8001F7C8_203C8(Func8001F6A0Arg *arg0);
+void func_8001F7C8_203C8(LevelPreviewCharacterState *arg0);
 
-void func_8001F6A0_202A0(Func8001F6A0Arg *arg0) {
+void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     Allocation_80020418 *allocation;
     s8 temp;
     u8 charIndex;
@@ -206,48 +206,48 @@ void func_8001F6A0_202A0(Func8001F6A0Arg *arg0) {
     value = D_8008D9F0_8E5F0[charIndex];
 
     // Initialize arg0 structure
-    arg0->unk8 = 0;
-    arg0->unk4 = 0;
-    arg0->unk0 = 0;
-    arg0->unk56 = 0;
-    arg0->unk52 = value;
+    arg0->posZ = 0;
+    arg0->posY = 0;
+    arg0->posX = 0;
+    arg0->currentRotation = 0;
+    arg0->startWaypoint = value;
 
-    arg0->unk2C = createSceneModel(6, allocation->unk3B0);
+    arg0->sceneModel = createSceneModel(6, allocation->unk3B0);
 
     // Read character index again
     temp = allocation->unkB2C;
     charIndex = allocation->unkB33[temp];
     value2 = D_8008D9F0_8E5F0[charIndex];
 
-    arg0->unk5C = 0x2E000;
-    arg0->unk60 = 0x800000;
-    arg0->unk14 = 0;
-    arg0->unk10 = 0;
-    arg0->unkC = 0;
-    arg0->unk54 = 0;
-    arg0->unk74 = 0;
-    arg0->unk64 = 0xA00000;
-    arg0->unk68 = 0xA00000;
-    arg0->unk50 = value2;
+    arg0->cameraHorzOffset = 0x2E000;
+    arg0->cameraDistance = 0x800000;
+    arg0->targetZ = 0;
+    arg0->targetY = 0;
+    arg0->targetX = 0;
+    arg0->animationPhase = 0;
+    arg0->extraRotation = 0;
+    arg0->heightOffset = 0xA00000;
+    arg0->altHeightOffset = 0xA00000;
+    arg0->currentWaypoint = value2;
 
     // Read character index again for conditional
     temp = allocation->unkB2C;
     charIndex = allocation->unkB33[temp];
 
     if (charIndex == 9) {
-        arg0->unk64 += 0xFFB00000;
+        arg0->heightOffset += 0xFFB00000;
     } else {
         if (charIndex == 5) {
-            arg0->unk74 = 0x1E0;
+            arg0->extraRotation = 0x1E0;
         }
     }
-    arg0->unk72 = 0;
+    arg0->frameTimer = 0;
 
     // Read character index one more time
     temp = allocation->unkB2C;
     charIndex = allocation->unkB33[temp];
 
-    *(void **)arg0->unk18 = func_80055D34_56934(charIndex);
+    *(void **)arg0->gameData = func_80055D34_56934(charIndex);
 
     setCleanupCallback(&func_80020528_21128);
     setCallback(&func_8001F7C8_203C8);
@@ -262,7 +262,7 @@ typedef struct {
     u8 unkB33[12];
 } Allocation_F7C8;
 
-void func_8001F7C8_203C8(Func8001F6A0Arg *arg0) {
+void func_8001F7C8_203C8(LevelPreviewCharacterState *arg0) {
     Allocation_F7C8 *allocation;
     Transform3D mat3;
     Transform3D mat1;
@@ -273,57 +273,57 @@ void func_8001F7C8_203C8(Func8001F6A0Arg *arg0) {
     u16 angle;
 
     allocation = (Allocation_F7C8 *)getCurrentAllocation();
-    parseGameDataLayout((GameDataLayout *)arg0->unk18);
+    parseGameDataLayout((GameDataLayout *)arg0->gameData);
 
-    func_80062B1C_6371C(arg0->unk18, arg0->unk52, pos1, pos2);
+    func_80062B1C_6371C(arg0->gameData, arg0->startWaypoint, pos1, pos2);
 
-    memcpy(&arg0->unk30, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->transform, identityMatrix, sizeof(Transform3D));
     memcpy(arg0, pos2, 0xC);
 
-    arg0->unk4 = func_80061A64_62664(arg0->unk18, arg0->unk52, arg0);
+    arg0->posY = func_80061A64_62664(arg0->gameData, arg0->startWaypoint, arg0);
 
     if (allocation->unkB33[allocation->unkB2C] == 5) {
-        arg0->unk4 = arg0->unk4 + arg0->unk68;
+        arg0->posY = arg0->posY + arg0->altHeightOffset;
     } else {
-        arg0->unk4 = arg0->unk4 + arg0->unk64;
+        arg0->posY = arg0->posY + arg0->heightOffset;
     }
 
-    memcpy(&arg0->unk30.translation, arg0, 0xC);
+    memcpy(&arg0->transform.translation, arg0, 0xC);
 
-    createYRotationMatrix(&arg0->unk30, arg0->unk56);
-    applyTransformToModel(arg0->unk2C, &arg0->unk30);
-    setModelAnimation(arg0->unk2C, 0x90);
+    createYRotationMatrix(&arg0->transform, arg0->currentRotation);
+    applyTransformToModel(arg0->sceneModel, &arg0->transform);
+    setModelAnimation(arg0->sceneModel, 0x90);
 
     angle = (func_8006D21C_6DE1C(pos1[0], pos1[2], pos2[0], pos2[2]) - 0x1000) & 0x1FFF;
-    arg0->unk56 = angle;
-    arg0->unk5A = angle;
-    arg0->unk76 = 0;
+    arg0->currentRotation = angle;
+    arg0->targetRotation = angle;
+    arg0->turnDirection = 0;
 
-    scaled = approximateSin((s16)arg0->unk56) * 5 << 12;
+    scaled = approximateSin((s16)arg0->currentRotation) * 5 << 12;
     if (scaled < 0) {
         scaled += 0x1FFF;
     }
-    arg0->unkC = (scaled >> 13) << 8;
+    arg0->targetX = (scaled >> 13) << 8;
 
-    scaled = approximateCos((s16)arg0->unk56) * 5 << 12;
+    scaled = approximateCos((s16)arg0->currentRotation) * 5 << 12;
     if (scaled < 0) {
         scaled += 0x1FFF;
     }
-    arg0->unk14 = (scaled >> 13) << 8;
+    arg0->targetZ = (scaled >> 13) << 8;
 
-    arg0->unkC = arg0->unkC + arg0->unk0;
-    arg0->unk14 = arg0->unk14 + arg0->unk8;
+    arg0->targetX = arg0->targetX + arg0->posX;
+    arg0->targetZ = arg0->targetZ + arg0->posZ;
 
-    angle = func_80060A3C_6163C(arg0->unk18, arg0->unk50, &arg0->unkC);
-    arg0->unk50 = angle;
+    angle = func_80060A3C_6163C(arg0->gameData, arg0->currentWaypoint, &arg0->targetX);
+    arg0->currentWaypoint = angle;
 
-    arg0->unk10 = func_80061A64_62664(arg0->unk18, angle, &arg0->unkC);
-    arg0->unk10 = arg0->unk10 + arg0->unk64;
+    arg0->targetY = func_80061A64_62664(arg0->gameData, angle, &arg0->targetX);
+    arg0->targetY = arg0->targetY + arg0->heightOffset;
 
-    computeLookAtMatrix(&arg0->unkC, arg0, &mat2);
+    computeLookAtMatrix(&arg0->targetX, arg0, &mat2);
 
     memcpy(&mat1, identityMatrix, 0x20);
-    mat1.translation.z = arg0->unk60;
+    mat1.translation.z = arg0->cameraDistance;
 
     func_8006B084_6BC84(&mat1, &mat2, &mat3);
     func_8006FD3C_7093C(allocation->unk48A, &mat3);
@@ -433,7 +433,7 @@ void func_80020528_21128(Func80020528Arg *arg0) {
     destroySceneModel(arg0->unk2C);
 }
 
-s32 func_8002055C_2115C(Func8001F6A0Arg *arg0) {
+s32 func_8002055C_2115C(LevelPreviewCharacterState *arg0) {
     Allocation_80020418 *allocation;
     s32 pos[4];
     s32 i;
@@ -445,8 +445,8 @@ s32 func_8002055C_2115C(Func8001F6A0Arg *arg0) {
     s32 result;
 
     allocation = (Allocation_80020418 *)getCurrentAllocation();
-    maxHeight = arg0->unk10;
-    angle = (u16)((arg0->unk54 - 0x400) & 0x1FFF);
+    maxHeight = arg0->targetY;
+    angle = (u16)((arg0->animationPhase - 0x400) & 0x1FFF);
     multiplier = 0x500;
 
     if (allocation->unkB33[allocation->unkB2C] == 9) {
@@ -454,7 +454,7 @@ s32 func_8002055C_2115C(Func8001F6A0Arg *arg0) {
     }
 
     i = 0;
-    ptr = arg0->unk18;
+    ptr = arg0->gameData;
 
     do {
         angle = (angle + 0x800) & 0x1FFF;
@@ -471,10 +471,10 @@ s32 func_8002055C_2115C(Func8001F6A0Arg *arg0) {
         }
         pos[2] = (scaled >> 13) << 8;
 
-        pos[0] += arg0->unkC;
-        pos[2] += arg0->unk14;
+        pos[0] += arg0->targetX;
+        pos[2] += arg0->targetZ;
 
-        result = func_80061A64_62664(ptr, func_80060A3C_6163C(ptr, arg0->unk50, pos) & 0xFFFF, pos);
+        result = func_80061A64_62664(ptr, func_80060A3C_6163C(ptr, arg0->currentWaypoint, pos) & 0xFFFF, pos);
         if (maxHeight < result) {
             maxHeight = result;
         }

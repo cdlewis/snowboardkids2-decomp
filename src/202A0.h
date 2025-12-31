@@ -4,29 +4,29 @@
 #include "geometry.h"
 
 typedef struct {
-    s32 unk0;           // 0x00
-    s32 unk4;           // 0x04
-    s32 unk8;           // 0x08
-    s32 unkC;           // 0x0C
-    s32 unk10;          // 0x10
-    s32 unk14;          // 0x14
-    u8 unk18[0x14];     // 0x18 - embedded GameDataLayout
-    void *unk2C;        // 0x2C
-    Transform3D unk30; // 0x30 - matrix
-    u16 unk50;          // 0x50
-    u16 unk52;          // 0x52
-    s16 unk54;          // 0x54
-    u16 unk56;          // 0x56
-    u8 _pad58[0x2];     // 0x58
-    u16 unk5A;          // 0x5A
-    s32 unk5C;          // 0x5C
-    s32 unk60;          // 0x60
-    s32 unk64;          // 0x64
-    s32 unk68;          // 0x68
-    u8 _pad6C[0x6];     // 0x6C
-    s16 unk72;          // 0x72
-    s16 unk74;          // 0x74
-    u8 unk76;           // 0x76
-} Func8001F6A0Arg;
+    s32 posX;               // 0x00
+    s32 posY;               // 0x04
+    s32 posZ;               // 0x08
+    s32 targetX;            // 0x0C
+    s32 targetY;            // 0x10
+    s32 targetZ;            // 0x14
+    u8 gameData[0x14];      // 0x18 - embedded GameDataLayout
+    void *sceneModel;       // 0x2C
+    Transform3D transform;  // 0x30
+    u16 currentWaypoint;    // 0x50
+    u16 startWaypoint;      // 0x52
+    s16 animationPhase;     // 0x54
+    u16 currentRotation;    // 0x56
+    u8 _pad58[0x2];         // 0x58
+    u16 targetRotation;     // 0x5A
+    s32 cameraHorzOffset;   // 0x5C
+    s32 cameraDistance;     // 0x60
+    s32 heightOffset;       // 0x64
+    s32 altHeightOffset;    // 0x68
+    u8 _pad6C[0x6];         // 0x6C
+    s16 frameTimer;         // 0x72
+    s16 extraRotation;      // 0x74
+    u8 turnDirection;       // 0x76
+} LevelPreviewCharacterState;
 
-void func_8001F6A0_202A0(Func8001F6A0Arg *arg0);
+void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0);
