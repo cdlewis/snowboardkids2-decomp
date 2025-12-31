@@ -339,7 +339,7 @@ void advanceBoardDisplaySlots(void) {
     }
 }
 
-void func_8001AE80_1BA80(void) {
+void initStoryMapLocationIntro(void) {
     allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->unk1D8.unk0.callback_selector = 0;
