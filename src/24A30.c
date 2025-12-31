@@ -107,8 +107,8 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x24];
-    u8 unk24;
-} func_800272FC_27EFC_arg;
+    u8 playerIndex;
+} P2NameRevealState;
 
 typedef struct {
     s16 unk0;
@@ -116,12 +116,16 @@ typedef struct {
     void *unk4;
     s16 unk8;
     u8 unkA;
-} func_80027348_entry;
+} P2NameSpriteEntry;
+
+typedef P2NameSpriteEntry func_80027348_entry;
 
 typedef struct {
-    func_80027348_entry entries[3];
+    P2NameSpriteEntry entries[3];
     u8 playerIndex;
-} CharSelectIconHideState;
+} P2NameAnimationState;
+
+typedef P2NameAnimationState CharSelectIconHideState;
 
 typedef struct {
     CharSelectIconEntry entries[3];
@@ -197,9 +201,9 @@ typedef struct {
 } SelectionArrowsState;
 
 typedef struct {
-    func_80027348_entry entries[3];
-    u8 unk24;
-} func_80027544_arg;
+    P2NameSpriteEntry entries[3];
+    u8 playerIndex;
+} P2NameHideState;
 
 typedef struct {
     s16 x;
@@ -286,8 +290,8 @@ void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
 void initCharSelectSlidePosition(CharSelectPreviewModel *);
 void cleanupCharSelectPreviewAssets(CharSelectPreviewModel *);
 void func_80027BC8_287C8(func_80027BC8_arg *, u8);
-void func_80027400_28000(CharSelectIconHideState *);
-void func_80027544_28144(func_80027544_arg *);
+void animateCharSelectP2NameReveal(P2NameAnimationState *);
+void animateCharSelectP2NameHide(P2NameHideState *);
 void func_800269C8_275C8(void *);
 void func_80026BAC_277AC(SimpleSpriteEntry *);
 void func_80025904_26504(void);
@@ -306,9 +310,9 @@ void updateCharSelectPlayerNumbers(u8 *);
 void cleanupCharSelectPlayerNumbers(SimpleSpriteEntry *);
 void updateCharSelectPlayer1NameSprite(SimpleSpriteEntry *);
 void cleanupCharSelectPlayer1NameSprite(SimpleSpriteEntry *);
-void func_8002764C_2824C(SimpleSpriteEntry *arg0);
-void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0);
-void func_80027348_27F48(volatile func_80027348_entry *arg0);
+void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0);
+void waitForCharSelectP2NameReveal(P2NameRevealState *arg0);
+void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0);
 void func_80027AAC_286AC(func_80027A28_28628_arg *arg0);
 void func_80027A28_28628(func_80027A28_28628_arg *arg0);
 void func_80027A50_28650(func_80027A28_28628_arg *arg0);
@@ -1630,7 +1634,7 @@ void cleanupCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80027268_27E68(SimpleSpriteEntry *arg0) {
+void initCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
     void *dmaResult;
     s32 loopCount;
     s32 i;
@@ -1643,30 +1647,30 @@ void func_80027268_27E68(SimpleSpriteEntry *arg0) {
         arg0[i].asset = dmaResult;
     }
 
-    setCleanupCallback(func_8002764C_2824C);
-    setCallback(func_800272FC_27EFC);
+    setCleanupCallback(cleanupCharSelectPlayer2NameSprites);
+    setCallback(waitForCharSelectP2NameReveal);
 }
 
-void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0) {
+void waitForCharSelectP2NameReveal(P2NameRevealState *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    if (state->unk1898[arg0->unk24] == 0x1A) {
-        setCallbackWithContinue(func_80027348_27F48);
+    if (state->unk1898[arg0->playerIndex] == 0x1A) {
+        setCallbackWithContinue(setupCharSelectP2NamePositions);
     }
 }
 
-void func_80027348_27F48(volatile func_80027348_entry *arg0) {
+void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0) {
     s32 xBase;
     s32 yBase;
     s32 xIncrement;
     s32 yIncrement;
-    s32 unk8Base;
+    s32 spriteIndexBase;
     s32 count;
     s32 i;
     s32 countMasked;
     s32 xInc2;
     s32 yInc2;
-    s32 constant;
+    s32 priority;
     s32 x;
     s32 y;
     s32 *dummyPtr;
@@ -1680,13 +1684,13 @@ void func_80027348_27F48(volatile func_80027348_entry *arg0) {
         yBase = -0x64;
         xIncrement = 0;
         yIncrement = 0x10;
-        unk8Base = 0x27;
+        spriteIndexBase = 0x27;
         count = 3;
     } else {
         yBase = -0x5C;
         xIncrement = 0x38;
         yIncrement = 0;
-        unk8Base = 0x2A;
+        spriteIndexBase = 0x2A;
         count = 2;
     }
 
@@ -1695,30 +1699,30 @@ void func_80027348_27F48(volatile func_80027348_entry *arg0) {
     if (countMasked > 0) {
         xInc2 = xIncrement;
         yInc2 = (s16)yIncrement;
-        constant = 0xC;
+        priority = 0xC;
         y = yBase;
         x = xBase;
         do {
             arg0->unk2 = (s16)y;
             y = y + yInc2;
             arg0->unk0 = (s16)x;
-            arg0->unk8 = (s16)(unk8Base + i);
-            arg0->unkA = (u8)constant;
+            arg0->unk8 = (s16)(spriteIndexBase + i);
+            arg0->unkA = (u8)priority;
             arg0++;
             i++;
             x = x + xInc2;
         } while (i < countMasked);
     }
 
-    setCallback(func_80027400_28000);
+    setCallback(animateCharSelectP2NameReveal);
 }
 
-void func_80027400_28000(CharSelectIconHideState *arg0) {
+void animateCharSelectP2NameReveal(P2NameAnimationState *arg0) {
     s16 minY;
     s32 yIncrement;
     s32 loopCount;
     s32 i;
-    volatile func_80027348_entry *ptr;
+    volatile P2NameSpriteEntry *ptr;
     GameState *state;
     int new_var;
     u16 val;
@@ -1738,7 +1742,7 @@ void func_80027400_28000(CharSelectIconHideState *arg0) {
     i = 0;
     if (((s32)(loopCount & 0xFF)) > 0) {
         new_var = loopCount & 0xFF;
-        ptr = (volatile func_80027348_entry *)arg0;
+        ptr = (volatile P2NameSpriteEntry *)arg0;
         do {
             i += 1;
             ptr->unk2 = ptr->unk2 + yIncrement;
@@ -1752,11 +1756,11 @@ void func_80027400_28000(CharSelectIconHideState *arg0) {
             state->unk1898[arg0->playerIndex] = 0x1B;
         }
     } else if (val == 0x1E) {
-        setCallback(func_80027544_28144);
+        setCallback(animateCharSelectP2NameHide);
     }
 }
 
-void func_80027544_28144(func_80027544_arg *arg0) {
+void animateCharSelectP2NameHide(P2NameHideState *arg0) {
     u8 *allocation;
     s16 target;
     unsigned char var_v0;
@@ -1775,16 +1779,16 @@ void func_80027544_28144(func_80027544_arg *arg0) {
     }
     for (i = 0; i < (var_v0 & 0xFF); i++) {
         arg0->entries[i].unk2 += increment;
-        debugEnqueueCallback(arg0->unk24 + 0xC, 0, func_80010240_10E40, (void *)(&arg0->entries[i]));
+        debugEnqueueCallback(arg0->playerIndex + 0xC, 0, func_80010240_10E40, (void *)(&arg0->entries[i]));
     }
 
     if (arg0->entries[0].unk2 == target) {
-        *((u16 *)((allocation + (arg0->unk24 * 2)) + 0x1898)) = 0;
-        setCallback(func_800272FC_27EFC);
+        *((u16 *)((allocation + (arg0->playerIndex * 2)) + 0x1898)) = 0;
+        setCallback(waitForCharSelectP2NameReveal);
     }
 }
 
-void func_8002764C_2824C(SimpleSpriteEntry *arg0) {
+void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
