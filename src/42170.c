@@ -72,9 +72,7 @@ typedef struct {
 typedef struct {
     s16 matrix[3][3];           /* 0x00 (0x12 bytes: 9 * 2), offset 0x0E is matrix[2][1] */
     u8 pad12[0x2];              /* 0x12 */
-    s32 unk14;                  /* 0x14 */
-    s32 unk18;                  /* 0x18 */
-    s32 unk1C;                  /* 0x1C */
+    Vec3i unk14;                /* 0x14 */
     void *unk20;                /* 0x20 */
     void *unk24;                /* 0x24 */
     void *unk28;                /* 0x28 */
@@ -151,9 +149,7 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x14]; /* 0x00 */
-    s32 unk14;     /* 0x14 */
-    s32 unk18;     /* 0x18 - corresponds to DisplayListObject.transform.translation.Y */
-    s32 unk1C;     /* 0x1C */
+    Vec3i unk14;   /* 0x14 */
     void *unk20;   /* 0x20 */
     void *unk24;   /* 0x24 */
     void *unk28;   /* 0x28 */
@@ -167,7 +163,7 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x14];    /* 0x00 */
-    u8 unk14[0xC];    /* 0x14 */
+    Vec3i unk14;      /* 0x14 */
     void *unk20;      /* 0x20 */
     void *unk24;      /* 0x24 */
     void *unk28;      /* 0x28 */
@@ -189,9 +185,7 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x14]; /* 0x00 */
-    s32 unk14;     /* 0x14 - position X */
-    s32 unk18;     /* 0x18 - position Y */
-    s32 unk1C;     /* 0x1C - position Z */
+    Vec3i unk14;   /* 0x14 */
     void *unk20;   /* 0x20 */
     void *unk24;   /* 0x24 */
     void *unk28;   /* 0x28 */
@@ -227,9 +221,7 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x14];                /* 0x00 */
-    s32 unk14;                     /* 0x14 */
-    s32 unk18;                     /* 0x18 */
-    s32 unk1C;                     /* 0x1C */
+    Vec3i unk14;                   /* 0x14 */
     void *unk20;                   /* 0x20 */
     void *unk24;                   /* 0x24 */
     void *unk28;                   /* 0x28 */
@@ -250,22 +242,20 @@ typedef struct {
 typedef struct {
     s32 unk0;
     s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    u8 _pad10[0x18];
-    Func43CA4Unk28 *unk28;
-    s16 unk2C[3];
-    u8 _pad32[0xE];
-    s16 unk40;
-    s16 unk42;
+    Vec3i unk8;            /* 0x08 */
+    u8 _pad14[0x14];       /* 0x14 */
+    Func43CA4Unk28 *unk28; /* 0x28 */
+    s16 unk2C[3];          /* 0x2C */
+    u8 _pad32[0xE];        /* 0x32 */
+    s16 unk40;             /* 0x40 */
+    s16 unk42;             /* 0x42 */
 } Func43CA4Arg;
 
 typedef struct {
     s32 unk0;              /* 0x00 */
     void *unk4;            /* 0x04 */
-    s32 unk8;              /* 0x08 */
-    s32 unkC;              /* 0x0C */
-    u8 _pad10[0x14];       /* 0x10 */
+    Vec3i unk8;            /* 0x08 */
+    u8 _pad14[0x10];       /* 0x14 */
     Func43CA4Unk28 *unk24; /* 0x24 */
     Func43CA4Unk28 *unk28; /* 0x28 */
     s32 unk2C;             /* 0x2C */
@@ -282,42 +272,9 @@ typedef struct {
     s32 unk4C;             /* 0x4C */
 } Func4393CArg;
 
-struct Func42E40Arg {
-    void *unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    u8 *unk10;
-    void *unk14;
-    s8 unk18;
-    s8 unk19;
-    u8 unk1A;
-    u8 _pad1B[0x1];
-    u8 _pad1C[0x2];
-    u8 unk1E;
-    u8 _pad1F[0x1];
-    void *unk20;
-    void *unk24;
-    Func43CA4Unk28 *unk28;
-    s16 unk2C[3];
-    u8 _pad32[0xA];
-    s16 unk3C;
-    u8 _pad3E[0x2];
-    u16 unk40;
-    u8 unk42;
-};
-
 typedef struct {
     void *unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    u8 *unk10;
-    void *unk14;
-    s8 unk18;
-    s8 unk19;
-    u8 unk1A;
-    u8 _pad1B[0x1];
+    loadAssetMetadata_arg_base unk4;
     u8 _pad1C[0x2];
     u8 unk1E;
     u8 _pad1F[0x1];
@@ -381,9 +338,9 @@ void func_80041570_42170(Func41570State *arg0) {
 void func_800415E8_421E8(Func41570State *arg0) {
     s32 i;
 
-    arg0->unk14 = arg0->unk3C->pos1F0;
-    arg0->unk18 = arg0->unk3C->pos1F4;
-    arg0->unk1C = arg0->unk3C->pos1F8;
+    arg0->unk14.x = arg0->unk3C->pos1F0;
+    arg0->unk14.y = arg0->unk3C->pos1F4;
+    arg0->unk14.z = arg0->unk3C->pos1F8;
 
     if ((arg0->unk3C->unkB88 & 0x20) == 0) {
         setCallback(func_8004168C_4228C);
@@ -413,7 +370,7 @@ void func_8004168C_4228C(Func41570State *arg0) {
     }
 
     arg0->matrix[2][1] = -arg0->unk40;
-    arg0->unk18 += 0xFFFF0000;
+    arg0->unk14.y += 0xFFFF0000;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
@@ -441,7 +398,7 @@ void *func_8004175C_4235C(void *arg0) {
 }
 
 void func_80041810_42410(Func4179CArg *);
-void func_80041E10_42A10(s32 *);
+void func_80041E10_42A10(Vec3i *);
 
 void func_8004179C_4239C(Func4179CArg *arg0) {
     getCurrentAllocation();
@@ -450,22 +407,22 @@ void func_8004179C_4239C(Func4179CArg *arg0) {
     arg0->unk28 = loadAsset_216290();
     arg0->unk2C = 0;
     arg0->scale.full = 0x400;
-    func_80056B7C_5777C(&arg0->player->worldPos.x, 0x13);
+    func_80056B7C_5777C(&arg0->player->worldPos, 0x13);
     setCleanupCallback(func_800419AC_425AC);
     setCallbackWithContinue(func_80041810_42410);
 }
 
 void func_80041810_42410(Func4179CArg *arg0) {
-    s32 effectPos[3];
+    Vec3i effectPos;
     s32 scale;
     s16 scaleFactor;
     s32 i;
 
     if (!(arg0->player->unkB88 & 0x40)) {
-        effectPos[0] = arg0->player->worldPos.x;
-        effectPos[1] = arg0->player->worldPos.y + 0x100000;
-        effectPos[2] = arg0->player->worldPos.z;
-        func_80041E10_42A10(effectPos);
+        effectPos.x = arg0->player->worldPos.x;
+        effectPos.y = arg0->player->worldPos.y + 0x100000;
+        effectPos.z = arg0->player->worldPos.z;
+        func_80041E10_42A10(&effectPos);
         func_80069CF8_6A8F8();
         return;
     }
@@ -478,12 +435,12 @@ void func_80041810_42410(Func4179CArg *arg0) {
         scaleMatrix((Transform3D *)arg0, scaleFactor, scaleFactor, scaleFactor);
     }
 
-    effectPos[0] = arg0->player->worldPos.x;
-    effectPos[1] = arg0->player->worldPos.y;
-    effectPos[2] = arg0->player->worldPos.z;
-    effectPos[1] = effectPos[1] + 0xFFFE0000;
+    effectPos.x = arg0->player->worldPos.x;
+    effectPos.y = arg0->player->worldPos.y;
+    effectPos.z = arg0->player->worldPos.z;
+    effectPos.y = effectPos.y + 0xFFFE0000;
 
-    if (func_8005B9E4_5C5E4((Vec3i *)effectPos, 0x180000, 0x320000, arg0->player->unkBB8) != 0) {
+    if (func_8005B9E4_5C5E4(&effectPos, 0x180000, 0x320000, arg0->player->unkBB8) != 0) {
         arg0->player->unkBCE |= 1;
     }
     arg0->unk30 = 0;
@@ -558,7 +515,7 @@ void func_80041DE4_429E4(Func41AD8Arg *arg0) {
     arg0->unkD8 = freeNodeMemory(arg0->unkD8);
 }
 
-void func_80041E10_42A10(s32 *arg0) {
+void func_80041E10_42A10(Vec3i *arg0) {
     u8 *task;
     s32 i;
     u8 *ptr;
@@ -577,7 +534,7 @@ void func_80041E10_42A10(s32 *arg0) {
     }
 }
 
-void func_80041EA4_42AA4(s32 *arg0) {
+void func_80041EA4_42AA4(Vec3i *arg0) {
     u8 *task;
     s32 i;
     u8 *ptr;
@@ -615,16 +572,16 @@ void func_80041F38_42B38(Func41F38State *arg0) {
 }
 
 void func_80041FB4_42BB4(Func41F38State *arg0) {
-    s32 pos[3];
+    Vec3i pos;
     s32 i;
 
     func_8006B084_6BC84(arg0->matrix, &arg0->unk3C->unk3F8, arg0);
 
     if ((arg0->unk3C->unkB88 & 0x80) == 0) {
-        pos[0] = arg0->unk3C->worldPos.x;
-        pos[1] = arg0->unk3C->worldPos.y + 0x100000;
-        pos[2] = arg0->unk3C->worldPos.z;
-        func_80041EA4_42AA4(pos);
+        pos.x = arg0->unk3C->worldPos.x;
+        pos.y = arg0->unk3C->worldPos.y + 0x100000;
+        pos.z = arg0->unk3C->worldPos.z;
+        func_80041EA4_42AA4(&pos);
         func_80069CF8_6A8F8();
     }
 
@@ -744,7 +701,7 @@ Func420E8State *func_80042340_42F40(void *arg0) {
 
     task = (Func420E8State *)scheduleTask(func_800420E8_42CE8, 0, 0, 0xC8);
     if (task != NULL) {
-        memcpy(task->unk14, arg0, 0xC);
+        memcpy(&task->unk14, arg0, 0xC);
         task->unk46 = -1;
     }
     return task;
@@ -755,7 +712,7 @@ Func420E8State *func_800423A4_42FA4(void *arg0, s32 arg1) {
 
     task = (Func420E8State *)scheduleTask(&func_800420E8_42CE8, 0, 0, 0xC8);
     if (task != NULL) {
-        memcpy(task->unk14, arg0, 0xC);
+        memcpy(&task->unk14, arg0, 0xC);
         task->unk46 = arg1;
     }
     return task;
@@ -780,7 +737,7 @@ void func_80042410_43010(Func42410State *arg0) {
 void func_8004247C_4307C(Func42410State *arg0) {
     Func43CA4GameState *gameState;
     Player *player;
-    s32 *pos;
+    Vec3i *pos;
     s32 i;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
@@ -795,8 +752,8 @@ void func_8004247C_4307C(Func42410State *arg0) {
     scaleMatrix((Transform3D *)arg0, arg0->unk42, arg0->unk42, arg0->unk42);
     player = arg0->unk3C;
     pos = &arg0->unk14;
-    memcpy(pos, &player->worldPos.x, 0xC);
-    arg0->unk18 += 0xFFEC0000;
+    memcpy(pos, &player->worldPos, 0xC);
+    arg0->unk14.y += 0xFFEC0000;
 
     if (arg0->unk46 != 0) {
         func_80056B7C_5777C(pos, 0x15);
@@ -830,8 +787,8 @@ void func_8004256C_4316C(Func42410State *arg0) {
     arg0->unk44 += 0x12C;
     createYRotationMatrix((Transform3D *)arg0, arg0->unk44);
     scaleMatrix((Transform3D *)arg0, arg0->unk42, arg0->unk42, arg0->unk42);
-    memcpy(&arg0->unk14, &arg0->unk3C->worldPos.x, 0xC);
-    arg0->unk18 += 0xFFEC0000;
+    memcpy(&arg0->unk14, &arg0->unk3C->worldPos, 0xC);
+    arg0->unk14.y += 0xFFEC0000;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
@@ -861,9 +818,7 @@ typedef struct {
 typedef struct {
     s16 matrix[3][3];      /* 0x00 (0x12 bytes: 9 * s16) */
     u8 pad12[0x2];         /* 0x12 */
-    s32 unk14;             /* 0x14 */
-    s32 unk18;             /* 0x18 */
-    s32 unk1C;             /* 0x1C */
+    Vec3i unk14;           /* 0x14 */
     void *unk20;           /* 0x20 */
     void *unk24;           /* 0x24 */
     void *unk28;           /* 0x28 */
@@ -929,7 +884,7 @@ void func_8004273C_4333C(Func426B0State *arg0) {
     scale = (s16)arg0->unk48;
     scaleMatrix((Transform3D *)arg0, scale, scale, scale);
     memcpy(&arg0->unk14, arg0->unk3C->pos434, 0xC);
-    arg0->unk18 += arg0->unk4C;
+    arg0->unk14.y += arg0->unk4C;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
@@ -957,8 +912,8 @@ void func_80042820_43420(Func426B0State *arg0) {
         }
     }
 
-    memcpy(&arg0->unk14, &arg0->unk40->worldPos.x, 0xC);
-    arg0->unk18 += arg0->unk4C;
+    memcpy(&arg0->unk14, &arg0->unk40->worldPos, 0xC);
+    arg0->unk14.y += arg0->unk4C;
 
     i = 0;
     do {
@@ -980,8 +935,8 @@ void func_8004290C_4350C(Func426B0State *arg0) {
             func_80069CF8_6A8F8();
         }
 
-        arg0->unk14 = arg0->unk14 + 0x20000;
-        arg0->unk18 = arg0->unk18 + arg0->unk50;
+        arg0->unk14.x = arg0->unk14.x + 0x20000;
+        arg0->unk14.y = arg0->unk14.y + arg0->unk50;
     }
 
     for (i = 0; i < 4; i++) {
@@ -1091,11 +1046,11 @@ void func_80042C98_43898(Func42C98Arg *arg0) {
             setCallback(func_80042D54_43954);
         }
 
-        transformVector(arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk4.unk4);
+        transformVector(arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk4.position);
 
         if (arg0->unk42 != 0) {
             arg0->unk42 = 0;
-            func_80056B7C_5777C(&arg0->unk4.unk4, 0x1A);
+            func_80056B7C_5777C(&arg0->unk4.position, 0x1A);
         }
 
         func_80042A6C_4366C((Func42BA4Arg *)arg0);
@@ -1113,7 +1068,7 @@ void func_80042D54_43954(Func42BA4Arg *arg0) {
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
         func_80042A6C_4366C(arg0);
-        transformVector((s16 *)&arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk4.unk4);
+        transformVector((s16 *)&arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk4.position);
 
         if (arg0->unk4.unk1A == 0x40) {
             if (arg0->unk28->unkBD9 != 0) {
@@ -1145,17 +1100,17 @@ void func_80042E40_43A40(Func42E40Arg *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
     s32 pad;
-    s32 rotated[3];
+    Vec3i rotated;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
         func_80042A6C_4366C((Func42BA4Arg *)arg0);
         arg0->unk40 += 0x100;
-        rotateVectorY(arg0->unk2C, arg0->unk40, rotated);
-        transformVector((s16 *)rotated, arg0->unk28->unk9F0, &arg0->unk8);
+        rotateVectorY(arg0->unk2C, arg0->unk40, &rotated);
+        transformVector((s16 *)&rotated, arg0->unk28->unk9F0, &arg0->unk4.position);
         if (arg0->unk42 != 0) {
             arg0->unk42 = 0;
-            func_80056B7C_5777C(&arg0->unk8, 0x1A);
+            func_80056B7C_5777C(&arg0->unk4.position, 0x1A);
         }
         if (arg0->unk3C != 0) {
             arg0->unk3C--;
@@ -1777,7 +1732,7 @@ void func_80043F8C_44B8C(Func43DC0State *arg0) {
         if ((s32)0xFFF80000 >= arg0->unk40) {
             func_80069CF8_6A8F8();
         }
-        arg0->unk18 = arg0->unk18 + arg0->unk40;
+        arg0->unk14.y = arg0->unk14.y + arg0->unk40;
     }
 
     for (i = 0; i < 4; i++) {
@@ -1890,7 +1845,7 @@ void func_80044578_45178(Func44BBCArg *arg0) {
 
 void func_80044684_45284(Func44BBCArg *arg0) {
     Vec3i posOutput;
-    s32 transformOutput[3];
+    Vec3i transformOutput;
     Func43CA4GameState *allocation;
     u16 rotation;
     D_80090F90_91B90_item *item;
@@ -1920,13 +1875,13 @@ void func_80044684_45284(Func44BBCArg *arg0) {
     createYRotationMatrix((Transform3D *)arg0, arg0->unkC8);
 
     arg0->unkC6 = 0;
-    transformVector2(&D_80090AA0_916A0, arg0, transformOutput);
+    transformVector2(&D_80090AA0_916A0, arg0, &transformOutput);
 
-    arg0->unk14 = item->unk0 + transformOutput[0];
-    arg0->unk1C = item->unk4 + transformOutput[2];
-    temp_unk18 = posOutput.y + transformOutput[1];
+    arg0->unk14.x = item->unk0 + transformOutput.x;
+    arg0->unk14.z = item->unk4 + transformOutput.z;
+    temp_unk18 = posOutput.y + transformOutput.y;
     arg0->unkC4 = 0x30;
-    arg0->unk18 = temp_unk18;
+    arg0->unk14.y = temp_unk18;
 
     setCleanupCallback(func_80044CA4_458A4);
     setCallbackWithContinue(func_800447D4_453D4);
@@ -1934,13 +1889,13 @@ void func_80044684_45284(Func44BBCArg *arg0) {
 
 void func_800447D4_453D4(Func44BBCArg *arg0) {
     Func43CA4GameState *gameState;
-    s32 output[3];
+    Vec3i output;
 
     gameState = getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        transformVector2(&D_80090AAC_916AC, arg0, output);
-        arg0->unk14 = arg0->unk14 + output[0];
-        arg0->unk1C = arg0->unk1C + output[2];
+        transformVector2(&D_80090AAC_916AC, arg0, &output);
+        arg0->unk14.x = arg0->unk14.x + output.x;
+        arg0->unk14.z = arg0->unk14.z + output.z;
         memcpy(&arg0->unkB4->unkB44, &arg0->unk14, 0xC);
         arg0->unkB4->unkB74 = arg0->unkC6;
         if (arg0->unkC4 != 0) {
@@ -1956,7 +1911,7 @@ void func_800447D4_453D4(Func44BBCArg *arg0) {
 
 void func_80044888_45488(Func44BBCArg *arg0) {
     Func43CA4GameState *gameState;
-    s32 output[3];
+    Vec3i output;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 != 0) {
@@ -1971,11 +1926,11 @@ void func_80044888_45488(Func44BBCArg *arg0) {
     }
 
     createCombinedRotationMatrix(arg0, arg0->unkC6, arg0->unkC8);
-    transformVector2(&D_80090AAC_916AC, arg0, output);
+    transformVector2(&D_80090AAC_916AC, arg0, &output);
 
-    arg0->unk14 = arg0->unk14 + output[0];
-    arg0->unk18 = arg0->unk18 + output[1];
-    arg0->unk1C = arg0->unk1C + output[2];
+    arg0->unk14.x = arg0->unk14.x + output.x;
+    arg0->unk14.y = arg0->unk14.y + output.y;
+    arg0->unk14.z = arg0->unk14.z + output.z;
 
     memcpy(&arg0->unkB4->unkB44, &arg0->unk14, 0xC);
     arg0->unkB4->unkB74 = arg0->unkC6;
@@ -2000,8 +1955,8 @@ end:
 void func_80044990_45590(Func44BBCArg *arg0) {
     D_80090F90_91B90_item *temp_v0;
     Func44BBCPointerTarget *temp_a1;
-    s32 output[3];
-    s32 input[3];
+    Vec3i output;
+    Vec3i input;
     s32 i;
     s32 temp_unk14;
 
@@ -2012,26 +1967,26 @@ void func_80044990_45590(Func44BBCArg *arg0) {
     arg0->unkC4 = 0x5A;
     arg0->unkC8 = 0x1000;
     createCombinedRotationMatrix(arg0, (u16)arg0->unkC6, 0x1000);
-    arg0->unk14 = temp_v0->unkC + 0xFFD00000;
-    arg0->unk18 = temp_v0->unk10;
-    temp_unk14 = temp_v0->unk14;
+    arg0->unk14.x = temp_v0->unkC.x + 0xFFD00000;
+    arg0->unk14.y = temp_v0->unkC.y;
+    temp_unk14 = temp_v0->unkC.z;
     i = 0;
     arg0->unkC0 = 0;
     arg0->unkBC = 0;
     arg0->unkB8 = 0;
-    arg0->unk1C = temp_unk14 + 0x200000;
-    input[0] = 0;
-    input[1] = 0;
-    input[2] = 0;
+    arg0->unk14.z = temp_unk14 + 0x200000;
+    input.x = 0;
+    input.y = 0;
+    input.z = 0;
     do {
         arg0->unkC0 += 0x2000;
         i++;
-        input[2] += arg0->unkC0;
+        input.z += arg0->unkC0;
     } while (i < 0x5A);
-    transformVector2(input, arg0, output);
-    arg0->unk14 -= output[0];
-    arg0->unk18 -= output[1];
-    arg0->unk1C -= output[2];
+    transformVector2(&input, arg0, &output);
+    arg0->unk14.x -= output.x;
+    arg0->unk14.y -= output.y;
+    arg0->unk14.z -= output.z;
     setCallbackWithContinue(func_80044AB8_456B8);
 }
 
@@ -2039,7 +1994,7 @@ void func_80044BBC_457BC(Func44BBCArg *);
 
 void func_80044AB8_456B8(Func44BBCArg *arg0) {
     Func43CA4GameState *gameState;
-    s32 output[3];
+    Vec3i output;
 
     gameState = getCurrentAllocation();
     if (gameState->unk76 != 0) {
@@ -2060,10 +2015,10 @@ void func_80044AB8_456B8(Func44BBCArg *arg0) {
     createCombinedRotationMatrix(arg0, arg0->unkC6, arg0->unkC8);
 
 skip_rotation:
-    transformVector2(&arg0->unkB8, arg0, output);
-    arg0->unk14 = arg0->unk14 + output[0];
-    arg0->unk18 = arg0->unk18 + output[1];
-    arg0->unk1C = arg0->unk1C + output[2];
+    transformVector2(&arg0->unkB8, arg0, &output);
+    arg0->unk14.x = arg0->unk14.x + output.x;
+    arg0->unk14.y = arg0->unk14.y + output.y;
+    arg0->unk14.z = arg0->unk14.z + output.z;
     memcpy(arg0->unkB4->unkB44, &arg0->unk14, 0xC);
     arg0->unkB4->unkB74 = arg0->unkC6;
 
@@ -2104,7 +2059,7 @@ void func_80044C38_45838(Func44BBCArg *arg0) {
         if (arg0->unkBC < (s32)0xFFF00000) {
             func_80069CF8_6A8F8();
         }
-        arg0->unk18 += arg0->unkBC;
+        arg0->unk14.y += arg0->unkBC;
     }
 
     func_80044578_45178(arg0);
@@ -2255,7 +2210,7 @@ void func_80044EC4_45AC4(Func44D1CArg *arg0) {
                     }
                     player->unkBD8 = itemFlags;
                     ((ItemTriggerEntry *)(offset + (s32)arg0->items))->active = 0;
-                    func_80056B7C_5777C((s8 *)((s32)arg0->items + offset) + 4, 8);
+                    func_80056B7C_5777C((Vec3i *)((s8 *)((s32)arg0->items + offset) + 4), 8);
                 }
             }
             i++;

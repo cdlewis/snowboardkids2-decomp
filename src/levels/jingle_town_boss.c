@@ -66,9 +66,7 @@ typedef struct {
     u8 padAF;
     u8 unkB0[0x20]; /* 0xB0 - 0xCF */
     u8 padD0[0x434 - 0xD0];
-    s32 unk434; /* 0x434 */
-    s32 unk438; /* 0x438 */
-    s32 unk43C; /* 0x43C */
+    Vec3i unk434; /* 0x434 */
     s32 unk440; /* 0x440 */
     s32 unk444; /* 0x444 */
     s32 unk448; /* 0x448 */
@@ -80,7 +78,7 @@ typedef struct {
     u8 pad46C[0x8];
     s32 unk474; /* 0x474 */
     u8 pad478[0x950 - 0x478];
-    u8 unk950[0x20];     /* 0x950 - 0x96F */
+    u8 unk950[0x20];    /* 0x950 - 0x96F */
     Transform3D unk970; /* 0x970 - 0x98F */
     Transform3D unk990; /* 0x990 - 0x9AF */
     Transform3D unk9B0; /* 0x9B0 - 0x9CF */
@@ -198,15 +196,15 @@ void func_800BB2B0_B2870(Arg0Struct *arg0) {
         arg0->unkB7E = arg0->unkB7C & ~arg0->unkB82;
     }
 
-    arg0->unk44C = arg0->unk434 - arg0->unk440;
-    arg0->unk450 = arg0->unk438 - arg0->unk444;
-    arg0->unk454 = arg0->unk43C - arg0->unk448;
+    arg0->unk44C = arg0->unk434.x - arg0->unk440;
+    arg0->unk450 = arg0->unk434.y - arg0->unk444;
+    arg0->unk454 = arg0->unk434.z - arg0->unk448;
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
 
     temp = distance_3d(
-        arg0->unk434 - alloc->players->worldPos.x,
-        arg0->unk438 - alloc->players->worldPos.y,
-        arg0->unk43C - alloc->players->worldPos.z
+        arg0->unk434.x - alloc->players->worldPos.x,
+        arg0->unk434.y - alloc->players->worldPos.y,
+        arg0->unk434.z - alloc->players->worldPos.z
     );
 
     if ((arg0->unkBC4 == 0) && (temp > 0x1000000)) {
@@ -448,8 +446,8 @@ s32 func_800BC094_B3654(Arg0Struct *arg0) {
 }
 
 s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
-    s32 sp10[3];
-    s32 sp20[3];
+    Vec3i sp10;
+    Vec3i sp20;
     u8 temp_v0;
 
     getCurrentAllocation();
@@ -457,22 +455,22 @@ s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
     temp_v0 = arg0->unkBBE;
     if (temp_v0 == 0) {
         arg0->unkBBE++;
-        transformVector2((s16 *)D_800BCBA0_B4160[0], arg0->unk38, sp10);
-        arg0->unk434 += sp10[0];
-        arg0->unk438 += sp10[1];
-        arg0->unk43C += sp10[2];
+        transformVector2((s16 *)D_800BCBA0_B4160[0], arg0->unk38, &sp10);
+        arg0->unk434.x += sp10.x;
+        arg0->unk434.y += sp10.y;
+        arg0->unk434.z += sp10.z;
         memcpy(&arg0->unk440, &arg0->unk434, 0xC);
         arg0->unkB84 |= 0x200000;
-        transformVector((s16 *)D_800BCBA0_B4160[1], arg0->unk38, sp20);
-        func_80041EA4_42AA4(sp20);
-        transformVector((s16 *)D_800BCBA0_B4160[2], arg0->unk38, sp20);
-        func_80041EA4_42AA4(sp20);
-        transformVector((s16 *)D_800BCBA0_B4160[3], arg0->unk38, sp20);
-        func_80041EA4_42AA4(sp20);
-        transformVector((s16 *)D_800BCBA0_B4160[4], arg0->unk38, sp20);
-        func_80041EA4_42AA4(sp20);
-        transformVector((s16 *)D_800BCBA0_B4160[5], arg0->unk38, sp20);
-        func_80041EA4_42AA4(sp20);
+        transformVector((s16 *)D_800BCBA0_B4160[1], arg0->unk38, &sp20);
+        func_80041EA4_42AA4(&sp20);
+        transformVector((s16 *)D_800BCBA0_B4160[2], arg0->unk38, &sp20);
+        func_80041EA4_42AA4(&sp20);
+        transformVector((s16 *)D_800BCBA0_B4160[3], arg0->unk38, &sp20);
+        func_80041EA4_42AA4(&sp20);
+        transformVector((s16 *)D_800BCBA0_B4160[4], arg0->unk38, &sp20);
+        func_80041EA4_42AA4(&sp20);
+        transformVector((s16 *)D_800BCBA0_B4160[5], arg0->unk38, &sp20);
+        func_80041EA4_42AA4(&sp20);
         arg0->unk468 = 0x100;
     }
 
@@ -490,7 +488,7 @@ s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
 
 void func_800BC378_B3938(Arg0Struct *arg0) {
     s32 pad[8];
-    s32 sp38[3];
+    Vec3i sp38;
     s32 pad2[8];
     GameState *alloc;
     GameDataLayout *allocPlus30;
@@ -501,9 +499,9 @@ void func_800BC378_B3938(Arg0Struct *arg0) {
     allocPlus30 = &alloc->gameData;
     temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
     arg0->unkB94 = temp;
-    func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, sp38);
-    arg0->unk434 = arg0->unk434 + sp38[0];
-    arg0->unk43C = arg0->unk43C + sp38[2];
+    func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, &sp38);
+    arg0->unk434.x = arg0->unk434.x + sp38.x;
+    arg0->unk434.z = arg0->unk434.z + sp38.z;
     func_8005C868_5D468(arg0);
 
     if (arg0->unkB84 & 0x10000) {
@@ -561,9 +559,9 @@ void func_800BC474_B3A34(Arg0Struct *arg0) {
 
 void func_800BC5A8_B3B68(Arg0Struct *arg0) {
     s32 pad10[16];
-    s32 sp58[3];
-    s32 sp68[3];
-    s32 sp78[3];
+    Vec3i sp58;
+    Vec3i sp68;
+    Vec3i sp78;
     s32 sp88;
     u32 sp8C;
     GameState *alloc;
@@ -571,9 +569,9 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
     s32 i;
     s32 volume;
     s16 angle;
-    s32 *inputVec;
-    s32 *outVec1;
-    s32 *outVec2;
+    Vec3i *inputVec;
+    Vec3i *outVec1;
+    Vec3i *outVec2;
 
     (void)pad10;
 
@@ -645,22 +643,22 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
 
             angle = atan2Fixed(-arg0->unk44C, -arg0->unk454);
             temp = randA();
-            inputVec = sp58;
-            sp58[0] = (temp & 0xFF) << 13;
-            sp58[2] = 0;
-            sp58[1] = 0;
-            outVec1 = sp68;
+            inputVec = &sp58;
+            sp58.x = (temp & 0xFF) << 13;
+            sp58.z = 0;
+            sp58.y = 0;
+            outVec1 = &sp68;
             rotateVectorY(inputVec, angle, outVec1);
             temp = randA();
-            sp58[0] = -(temp & 0xFF) << 13;
-            outVec2 = sp78;
+            sp58.x = -(temp & 0xFF) << 13;
+            outVec2 = &sp78;
             rotateVectorY(inputVec, angle, outVec2);
-            sp68[0] += arg0->unk434;
-            sp68[1] += arg0->unk438;
-            sp68[2] += arg0->unk43C;
-            sp78[0] += arg0->unk434;
-            sp78[1] += arg0->unk438;
-            sp78[2] += arg0->unk43C;
+            sp68.x += arg0->unk434.x;
+            sp68.y += arg0->unk434.y;
+            sp68.z += arg0->unk434.z;
+            sp78.x += arg0->unk434.x;
+            sp78.y += arg0->unk434.y;
+            sp78.z += arg0->unk434.z;
 
             temp = arg0->unkBCC & 0xF;
             if (temp >= 0) {

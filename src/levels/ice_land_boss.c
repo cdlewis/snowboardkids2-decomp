@@ -41,13 +41,9 @@ typedef struct {
     u8 _pad73[0x328 - 0x73];
     // Element0x3C elements[12] overlaps at offset 0x58
     u8 _pad328[0x434 - 0x328];
-    s32 unk434;
-    s32 unk438;
-    s32 unk43C;
+    Vec3i unk434;
     u8 _pad440[0x44C - 0x440];
-    s32 unk44C;
-    s32 unk450;
-    s32 unk454;
+    Vec3i unk44C;
     u8 _pad458[0x984 - 0x458];
     u8 unk984[0xC];
     u8 _pad990[0xAE0 - 0x990];
@@ -113,15 +109,9 @@ typedef struct {
     u8 padBC[0x128 - 0xBC];
     s16 unk128[6];
     u8 pad134[0x434 - 0x134];
-    s32 unk434;
-    s32 unk438;
-    s32 unk43C;
-    s32 unk440;
-    s32 unk444;
-    s32 unk448;
-    s32 unk44C;
-    s32 unk450;
-    s32 unk454;
+    Vec3i unk434;
+    Vec3i unk440;
+    Vec3i unk44C;
     u8 pad458[0x970 - 0x458];
     Transform3D unk970;
     Transform3D unk990;
@@ -165,15 +155,15 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
 
     alloc = getCurrentAllocation();
 
-    arg0->unk44C = arg0->unk434 - arg0->unk440;
-    arg0->unk450 = arg0->unk438 - arg0->unk444;
-    arg0->unk454 = arg0->unk43C - arg0->unk448;
+    arg0->unk44C.x = arg0->unk434.x - arg0->unk440.x;
+    arg0->unk44C.y = arg0->unk434.y - arg0->unk440.y;
+    arg0->unk44C.z = arg0->unk434.z - arg0->unk440.z;
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
 
     player = (IceBossArg *)alloc->players;
-    dist = distance_3d(arg0->unk434 - player->unk434,
-                       arg0->unk438 - player->unk438,
-                       arg0->unk43C - player->unk43C);
+    dist = distance_3d(arg0->unk434.x - player->unk434.x,
+                       arg0->unk434.y - player->unk434.y,
+                       arg0->unk434.z - player->unk434.z);
 
     if ((arg0->unkBC4 == 0) & (dist > 0xE00000)) {
         if (arg0->unkB84 & 0x400000) {
@@ -290,9 +280,9 @@ s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
         return 1;
     }
 
-    arg0->unk44C -= arg0->unk44C / 8;
-    arg0->unk454 -= arg0->unk454 / 8;
-    arg0->unk450 += -0x8000;
+    arg0->unk44C.x -= arg0->unk44C.x / 8;
+    arg0->unk44C.z -= arg0->unk44C.z / 8;
+    arg0->unk44C.y += -0x8000;
     func_800B02AC_A015C((Player *)arg0);
 
     if (arg0->unkB84 & 0x400000) {
@@ -306,8 +296,8 @@ s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
 
 s32 func_800BBA54_B0F44(Player *arg0) {
     Transform3D sp10;
-    s32 sp30[3];
-    s32 sp40[3];
+    Vec3i sp30;
+    Vec3i sp40;
     GameState *gameState;
     s16 angleDiff;
     Player *player;
@@ -365,34 +355,34 @@ s32 func_800BBA54_B0F44(Player *arg0) {
     if (!(arg0->unkB84 & 0x1)) {
         createYRotationMatrix(&arg0->unk970, arg0->unkA94);
         func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, &arg0->unk970, &sp10);
-        transformVector3(&arg0->unk44C, &sp10, sp30);
-        sp30[0] = 0;
-        transformVector2(sp30, &sp10, &arg0->unk44C);
-        transformVector2(&D_800BCA50_B1F40, &sp10, sp30);
+        transformVector3(&arg0->unk44C, &sp10, &sp30);
+        sp30.x = 0;
+        transformVector2(&sp30, &sp10, &arg0->unk44C);
+        transformVector2(&D_800BCA50_B1F40, &sp10, &sp30);
 
-        if (sp30[1] > 0) {
-            sp30[1] = 0;
+        if (sp30.y > 0) {
+            sp30.y = 0;
         }
 
-        arg0->unk44C += sp30[0];
-        arg0->unk450 += sp30[1];
-        arg0->unk454 += sp30[2];
+        arg0->unk44C.x += sp30.x;
+        arg0->unk44C.y += sp30.y;
+        arg0->unk44C.z += sp30.z;
     } else {
-        arg0->unk44C -= arg0->unk44C / 16;
-        arg0->unk454 -= arg0->unk454 / 16;
+        arg0->unk44C.x -= arg0->unk44C.x / 16;
+        arg0->unk44C.z -= arg0->unk44C.z / 16;
     }
 
-    if (arg0->unk450 > 0) {
-        arg0->unk450 = 0;
+    if (arg0->unk44C.y > 0) {
+        arg0->unk44C.y = 0;
     }
 
-    arg0->unk450 -= 0x10000;
+    arg0->unk44C.y -= 0x10000;
     func_800B02AC_A015C(arg0);
     func_800BC61C_B1B0C(arg0);
 
-    transformVectorRelative(&gameState->players->worldPos.x, arg0->unk164, sp40);
+    transformVectorRelative(&gameState->players->worldPos.x, arg0->unk164, &sp40);
 
-    angleDiff = atan2Fixed(-sp40[0], -sp40[2]) & 0x1FFF;
+    angleDiff = atan2Fixed(-sp40.x, -sp40.z) & 0x1FFF;
 
     if (angleDiff >= 0x1000) {
         angleDiff = angleDiff | 0xE000;
@@ -417,7 +407,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
 
         if (arg0->unkB90 == 4) {
             arg0->unkB90 = 0;
-            func_80056B7C_5777C(&arg0->worldPos.x, 0x4B);
+            func_80056B7C_5777C(&arg0->worldPos, 0x4B);
         }
 
         if (arg0->unkB8C == 0) {
@@ -439,7 +429,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
         arg0->unkB90 = arg0->unkB90 + 1;
 
         if ((arg0->unkB90 == 4) || (arg0->unkB90 == 0xC)) {
-            func_80056B7C_5777C(&arg0->worldPos.x, 0x4A);
+            func_80056B7C_5777C(&arg0->worldPos, 0x4A);
         }
 
         player = gameState->players;
@@ -526,9 +516,9 @@ s32 func_800BC008_B14F8(func_800BC4AC_arg *arg0) {
 
     getCurrentAllocation();
 
-    arg0->unk44C -= arg0->unk44C / 8;
-    arg0->unk454 -= arg0->unk454 / 8;
-    arg0->unk450 += -0x8000;
+    arg0->unk44C.x -= arg0->unk44C.x / 8;
+    arg0->unk44C.z -= arg0->unk44C.z / 8;
+    arg0->unk44C.y += -0x8000;
     func_800B02AC_A015C((Player *)arg0);
 
     if (arg0->unkB84 & 0x400000) {
@@ -546,9 +536,10 @@ void func_800BC0A8_B1598(func_800BC4AC_arg *arg0) {
 
 s32 func_800BC0D8_B15C8(Player *arg0) {
     Transform3D sp10;
-    s32 sp30[7];
+    Vec3i sp30;
+    s32 sp3C[4];
     Transform3D *temp_s0;
-    s32 *temp_s1;
+    Vec3i *temp_s1;
     s16 angleDiff;
     s32 i;
 
@@ -561,11 +552,11 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
 
         if (!(arg0->unkB84 & 0x80000)) {
             if (arg0->unkBDB == 0) {
-                func_80056B7C_5777C(&arg0->worldPos.x, 0x4C);
+                func_80056B7C_5777C(&arg0->worldPos, 0x4C);
             } else {
                 arg0->unkBDB -= 1;
                 if (arg0->unkBDB == 0) {
-                    func_80056B7C_5777C(&arg0->worldPos.x, 0x4C);
+                    func_80056B7C_5777C(&arg0->worldPos, 0x4C);
                 }
             }
         }
@@ -604,28 +595,28 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
         createYRotationMatrix(temp_s0, arg0->unkA94);
         func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, temp_s0, &sp10);
         temp_s1 = &arg0->unk44C;
-        transformVector3(temp_s1, &sp10, sp30);
-        sp30[0] = 0;
-        transformVector2(sp30, &sp10, temp_s1);
-        transformVector2(&D_800BCA50_B1F40, &sp10, sp30);
+        transformVector3(temp_s1, &sp10, &sp30);
+        sp30.x = 0;
+        transformVector2(&sp30, &sp10, temp_s1);
+        transformVector2(&D_800BCA50_B1F40, &sp10, &sp30);
 
-        if (sp30[1] > 0) {
-            sp30[1] = 0;
+        if (sp30.y > 0) {
+            sp30.y = 0;
         }
 
-        arg0->unk44C += sp30[0];
-        arg0->unk450 += sp30[1];
-        arg0->unk454 += sp30[2];
+        arg0->unk44C.x += sp30.x;
+        arg0->unk44C.y += sp30.y;
+        arg0->unk44C.z += sp30.z;
     } else {
-        arg0->unk44C -= arg0->unk44C / 16;
-        arg0->unk454 -= arg0->unk454 / 16;
+        arg0->unk44C.x -= arg0->unk44C.x / 16;
+        arg0->unk44C.z -= arg0->unk44C.z / 16;
     }
 
-    if (arg0->unk450 > 0) {
-        arg0->unk450 = 0;
+    if (arg0->unk44C.y > 0) {
+        arg0->unk44C.y = 0;
     }
 
-    arg0->unk450 += -0x10000;
+    arg0->unk44C.y += -0x10000;
     func_800B02AC_A015C(arg0);
 
     if (func_8005D308_5DF08(arg0, 4) != 0) {
@@ -639,9 +630,9 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
             for (i = 0; i < 0x1E; i++) {
                 func_8004BC5C_4C85C(arg0);
             }
-            memcpy(sp30, &arg0->worldPos.x, 0xC);
-            sp30[1] += 0x300000;
-            func_800423A4_42FA4(sp30, arg0->unkBB8);
+            memcpy(&sp30, &arg0->worldPos, sizeof(Vec3i));
+            sp30.y += 0x300000;
+            func_800423A4_42FA4(&sp30, arg0->unkBB8);
             func_800BB910_B0E00(arg0);
             arg0->unkBDB = 3;
             func_8005D180_5DD80(arg0, 2);
@@ -657,7 +648,7 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
     temp = arg0->unkBBF;
     if (temp == 0) {
         arg0->unkBBF = temp + 1;
-        arg0->unk450 = 0x80000;
+        arg0->unk44C.y = 0x80000;
         if (!(arg0->unkB84 & 0x80000)) {
             if (arg0->unkBDB != 0) {
                 arg0->unkBDB = arg0->unkBDB - 1;
@@ -666,9 +657,9 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
     }
 
     arg0->unkB88 = 0x200;
-    arg0->unk44C = 0;
-    arg0->unk454 = 0;
-    arg0->unk450 = arg0->unk450 + (-0x8000);
+    arg0->unk44C.x = 0;
+    arg0->unk44C.z = 0;
+    arg0->unk44C.y = arg0->unk44C.y + (-0x8000);
 
     func_800B02AC_A015C(arg0);
     func_8005D180_5DD80(arg0, 5);
@@ -677,7 +668,7 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
         func_8004C10C_4CD0C(arg0);
     }
 
-    if (arg0->unk450 < 0) {
+    if (arg0->unk44C.y < 0) {
         if (!(arg0->unkB84 & 0x1)) {
             temp = arg0->unkBDB;
             arg0->unkB88 = 0;
@@ -702,7 +693,7 @@ s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
 
     getCurrentAllocation();
 
-    arg0->unk450 += -0x8000;
+    arg0->unk44C.y += -0x8000;
     func_800B02AC_A015C((Player *)arg0);
 
     if (arg0->unkBBF == 0) {
@@ -719,7 +710,7 @@ s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
 
 void func_800BC520_B1A10(func_800BC4AC_arg *arg0) {
     s32 pad[8];
-    s32 sp38[3];
+    Vec3i sp38;
     s32 pad2[8];
     GameState *alloc;
     GameDataLayout *allocPlus30;
@@ -730,9 +721,9 @@ void func_800BC520_B1A10(func_800BC4AC_arg *arg0) {
     allocPlus30 = &alloc->gameData;
     temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
     arg0->unkB94 = temp;
-    func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, sp38);
-    arg0->unk434 = arg0->unk434 + sp38[0];
-    arg0->unk43C = arg0->unk43C + sp38[2];
+    func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, &sp38);
+    arg0->unk434.x = arg0->unk434.x + sp38.x;
+    arg0->unk434.z = arg0->unk434.z + sp38.z;
     func_8005C868_5D468(arg0);
 
     if (arg0->unkB84 & 0x10000) {

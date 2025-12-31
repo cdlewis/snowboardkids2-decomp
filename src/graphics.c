@@ -30,7 +30,7 @@ typedef struct {
     s16 unk4;
     s16 unk6;
     f32 unk8;
-    u8 data[12];
+    Vec3i position;
     s16 flags;
     u8 padding[2];
 } RenderQueueItem;
@@ -231,11 +231,11 @@ void setBufferData(void *source, u8 arg1, s32 arg2) {
     }
 }
 
-void func_80056B7C_5777C(void *arg0, s16 arg1) {
+void func_80056B7C_5777C(Vec3i *position, s16 arg1) {
     s32 index = gGraphicsManager->renderQueueCount;
     if (index < 0x20) {
         RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
-        memcpy(renderQueue[index].data, arg0, 0xC);
+        memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
         index = arg1;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = index;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = -1;
@@ -246,11 +246,11 @@ void func_80056B7C_5777C(void *arg0, s16 arg1) {
     }
 }
 
-void func_80056C6C_5786C(void *arg0, unsigned int arg1, s16 arg2) {
+void func_80056C6C_5786C(Vec3i *arg0, u32 arg1, s16 arg2) {
     if (gGraphicsManager->renderQueueCount < 0x20) {
         RenderQueueItem *arrayCopy = gGraphicsManager->renderQueue;
 
-        memcpy(arrayCopy[gGraphicsManager->renderQueueCount].data, arg0, 0xC);
+        memcpy(&arrayCopy[gGraphicsManager->renderQueueCount].position, arg0, sizeof(Vec3i));
 
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = arg1;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = arg2;
@@ -261,12 +261,12 @@ void func_80056C6C_5786C(void *arg0, unsigned int arg1, s16 arg2) {
     }
 }
 
-void func_80056D64_57964(void *arg0, s32 arg1, s16 arg2, s16 arg3) {
+void func_80056D64_57964(Vec3i *arg0, s32 arg1, s16 arg2, s16 arg3) {
     RenderQueueItem *renderQueue;
     s32 index = gGraphicsManager->renderQueueCount;
     if (index < 0x20) {
         renderQueue = gGraphicsManager->renderQueue;
-        memcpy(renderQueue[index].data, arg0, 0xC);
+        memcpy(&renderQueue[index].position, arg0, sizeof(Vec3i));
         index = arg1;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = index;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = arg3;
@@ -277,11 +277,11 @@ void func_80056D64_57964(void *arg0, s32 arg1, s16 arg2, s16 arg3) {
     }
 }
 
-void func_80056E64_57A64(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4) {
+void func_80056E64_57A64(Vec3i *arg0, s32 arg1, f32 arg2, s16 arg3, s32 arg4) {
     RenderQueueItem(*dest)[32];
     if (gGraphicsManager->renderQueueCount < 0x20) {
         dest = &gGraphicsManager->renderQueue;
-        memcpy((*dest)[gGraphicsManager->renderQueueCount].data, arg0, 0xC);
+        memcpy(&(*dest)[gGraphicsManager->renderQueueCount].position, arg0, sizeof(Vec3i));
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = arg1;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = (s16)arg4;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = arg3;
@@ -292,11 +292,11 @@ void func_80056E64_57A64(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4) {
     }
 }
 
-void func_80056F8C_57B8C(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4, s32 arg5) {
+void func_80056F8C_57B8C(Vec3i *arg0, s32 arg1, f32 arg2, s16 arg3, s32 arg4, s32 arg5) {
     s32 index = gGraphicsManager->renderQueueCount;
     if (index < 0x20) {
         RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
-        memcpy(renderQueue[index].data, arg0, 0xC);
+        memcpy(&renderQueue[index].position, arg0, sizeof(Vec3i));
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = arg1;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = (s16)arg4;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = arg3;

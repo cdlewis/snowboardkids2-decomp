@@ -56,15 +56,11 @@ typedef struct {
     u8 pad38C[0x3BC - 0x38C];
     s16 unk3BC[6];
     u8 pad3C8[0x434 - 0x3C8];
-    s32 unk434;
-    s32 unk438;
-    s32 unk43C;
+    Vec3i unk434;
     s32 unk440;
     s32 unk444;
     s32 unk448;
-    s32 unk44C;
-    s32 unk450;
-    s32 unk454;
+    Vec3i unk44C;
     u8 pad458[0x10];
     s32 unk468;
     u8 pad46C[0x8];
@@ -173,16 +169,16 @@ void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
     alloc = getCurrentAllocation();
     func_800B9B90_A9A40((Player *)arg0);
 
-    arg0->unk44C = arg0->unk434 - arg0->unk440;
-    arg0->unk450 = arg0->unk438 - arg0->unk444;
-    arg0->unk454 = arg0->unk43C - arg0->unk448;
+    arg0->unk44C.x = arg0->unk434.x - arg0->unk440;
+    arg0->unk44C.y = arg0->unk434.y - arg0->unk444;
+    arg0->unk44C.z = arg0->unk434.z - arg0->unk448;
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
 
     if (arg0->unkB94 < 0x16) {
         arg0->unkAA4 = 0x180000;
     } else {
         player = (Arg0Struct *)alloc->players;
-        dist = distance_3d(arg0->unk434 - player->unk434, arg0->unk438 - player->unk438, arg0->unk43C - player->unk43C);
+        dist = distance_3d(arg0->unk434.x - player->unk434.x, arg0->unk434.y - player->unk434.y, arg0->unk434.z - player->unk434.z);
 
         if (alloc->unk86 != 0) {
             if ((arg0->unkBC4 == 0) & (dist > 0xE00000)) {
@@ -307,9 +303,9 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
         return 1;
     }
 
-    arg0->unk44C -= arg0->unk44C / 8;
-    arg0->unk454 -= arg0->unk454 / 8;
-    arg0->unk450 += -0x8000;
+    arg0->unk44C.x -= arg0->unk44C.x / 8;
+    arg0->unk44C.z -= arg0->unk44C.z / 8;
+    arg0->unk44C.y += -0x8000;
     func_800B02AC_A015C((Player *)arg0);
     func_8005D180_5DD80(arg0, 0);
 
@@ -318,7 +314,7 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
 
 s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     Transform3D sp10;
-    s32 sp30[3];
+    Vec3i sp30;
     GameState *gameState;
     s16 clampedAngle;
     s16 angleDiff;
@@ -347,7 +343,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
         arg0->unkBBF++;
     }
 
-    clampedAngle = (s16)func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->unk434, arg0->unk43C);
+    clampedAngle = (s16)func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->unk434.x, arg0->unk434.z);
     currentAngle = arg0->unkA94;
     clampedAngle = (clampedAngle - currentAngle) & 0x1FFF;
     if (clampedAngle >= 0x1001) {
@@ -364,27 +360,27 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     if (!(arg0->unkB84 & 1)) {
         createYRotationMatrix(&arg0->unk970, arg0->unkA94);
         func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, &arg0->unk970, &sp10);
-        transformVector3(&arg0->unk44C, &sp10, sp30);
-        sp30[0] = 0;
-        transformVector2(sp30, &sp10, &arg0->unk44C);
-        transformVector2((s32 *)(gameState->unk48 + 0x144), &sp10, sp30);
-        if (sp30[1] > 0) {
-            sp30[1] = 0;
+        transformVector3(&arg0->unk44C, &sp10, &sp30);
+        sp30.x = 0;
+        transformVector2(&sp30, &sp10, &arg0->unk44C);
+        transformVector2((s32 *)(gameState->unk48 + 0x144), &sp10, &sp30);
+        if (sp30.y > 0) {
+            sp30.y = 0;
         }
-        arg0->unk44C += sp30[0];
-        arg0->unk450 += sp30[1];
-        arg0->unk454 += sp30[2];
+        arg0->unk44C.x += sp30.x;
+        arg0->unk44C.y += sp30.y;
+        arg0->unk44C.z += sp30.z;
     } else {
-        temp = arg0->unk44C;
-        arg0->unk44C = temp - (temp / 16);
-        temp2 = arg0->unk454;
-        arg0->unk454 = temp2 - (temp2 / 16);
+        temp = arg0->unk44C.x;
+        arg0->unk44C.x = temp - (temp / 16);
+        temp2 = arg0->unk44C.z;
+        arg0->unk44C.z = temp2 - (temp2 / 16);
     }
 
-    if (arg0->unk450 > 0) {
-        arg0->unk450 = 0;
+    if (arg0->unk44C.y > 0) {
+        arg0->unk44C.y = 0;
     }
-    arg0->unk450 += -0x10000;
+    arg0->unk44C.y += -0x10000;
 
     func_800B02AC_A015C((Player *)arg0);
     if (func_8005D180_5DD80(arg0, 1) != 0) {
@@ -414,9 +410,9 @@ s32 func_800BBD98_AC5C8(Arg0Struct *arg0) {
     s32 pad[3];
     getCurrentAllocation();
 
-    arg0->unk44C -= arg0->unk44C / 8;
-    arg0->unk454 -= arg0->unk454 / 8;
-    arg0->unk450 += -0x8000;
+    arg0->unk44C.x -= arg0->unk44C.x / 8;
+    arg0->unk44C.z -= arg0->unk44C.z / 8;
+    arg0->unk44C.y += -0x8000;
     func_800B02AC_A015C((Player *)arg0);
     func_8005D180_5DD80(arg0, 0);
 
@@ -429,11 +425,11 @@ void func_800BBE1C_AC64C(Arg0Struct *arg0) {
 
 s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
     if (arg0->unkBBF == 0) {
-        s32 temp = arg0->unk450;
+        s32 temp = arg0->unk44C.y;
         arg0->unkBBF++;
         arg0->unkB8C = 1;
         if (temp > 0) {
-            arg0->unk450 = 0;
+            arg0->unk44C.y = 0;
         }
         func_80056B7C_5777C(&arg0->unk434, 0x21);
     }
@@ -446,9 +442,9 @@ s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
     }
 
     arg0->unkB88 = 0x10;
-    arg0->unk44C = 0;
-    arg0->unk454 = 0;
-    arg0->unk450 += -0x8000;
+    arg0->unk44C.x = 0;
+    arg0->unk44C.z = 0;
+    arg0->unk44C.y += -0x8000;
     func_800B02AC_A015C((Player *)arg0);
 
     if (arg0->unkB8C == -1) {
@@ -465,15 +461,15 @@ s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
 s32 func_800BBF3C_AC76C(Arg0Struct *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unkA8C = 0xFFFF;
-        arg0->unk450 = 0x80000;
+        arg0->unk44C.y = 0x80000;
         arg0->unkBBF = arg0->unkBBF + 1;
         func_80056B7C_5777C(&arg0->unk434, 0x21);
     }
 
     arg0->unkB88 = 0x200;
-    arg0->unk44C = 0;
-    arg0->unk454 = 0;
-    arg0->unk450 = arg0->unk450 + -0x8000;
+    arg0->unk44C.x = 0;
+    arg0->unk44C.z = 0;
+    arg0->unk44C.y = arg0->unk44C.y + -0x8000;
     func_800B02AC_A015C((Player *)arg0);
     func_8005D180_5DD80(arg0, 2);
 
@@ -490,7 +486,7 @@ s32 func_800BBF3C_AC76C(Arg0Struct *arg0) {
 
 void func_800BBFEC_AC81C(Arg0Struct *arg0) {
     s32 pad[8];
-    s32 sp38[3];
+    Vec3i sp38;
     s32 pad2[8];
     GameState *alloc;
     void *allocPlus30;
@@ -501,9 +497,9 @@ void func_800BBFEC_AC81C(Arg0Struct *arg0) {
     allocPlus30 = &alloc->gameData;
     temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
     arg0->unkB94 = temp;
-    func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, sp38);
-    arg0->unk434 = arg0->unk434 + sp38[0];
-    arg0->unk43C = arg0->unk43C + sp38[2];
+    func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, &sp38);
+    arg0->unk434.x = arg0->unk434.x + sp38.x;
+    arg0->unk434.z = arg0->unk434.z + sp38.z;
     func_8005C868_5D468(arg0);
 
     if (arg0->unkB84 & 0x10000) {

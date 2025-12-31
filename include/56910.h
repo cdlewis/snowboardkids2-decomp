@@ -1,5 +1,6 @@
 #include "common.h"
 #include "displaylist.h"
+#include "geometry.h"
 #include "6E840.h"
 
 typedef struct {
@@ -18,12 +19,10 @@ typedef struct {
     s32 unk4;
     u16 unk8;
     u8 padding[2];
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    ColorData unk18;
-    ColorData unk20;
-    s16 unk28;
+    Vec3i unkC;      /* 0x0C */
+    ColorData unk18; /* 0x18 */
+    ColorData unk20; /* 0x20 */
+    s16 unk28;       /* 0x28 */
     u8 padding2[0x2];
 } D_80090F90_91B90_item;
 

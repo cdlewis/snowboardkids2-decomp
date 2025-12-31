@@ -2,10 +2,11 @@
 
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 
 typedef struct {
     u8 pad0[0x14]; /* 0x00 */
-    u8 unk14[0xC]; /* 0x14 */
+    Vec3i unk14;   /* 0x14 */
     void *unk20;   /* 0x20 */
     void *unk24;   /* 0x24 */
     void *unk28;   /* 0x28 */
@@ -38,4 +39,4 @@ void *func_800420A8_42CA8(void *arg0);
 void *func_80043310_43F10(Player *arg0);
 void *func_80044050_44C50(Player *arg0);
 void *func_80042670_43270(Player *arg0);
-void func_80041EA4_42AA4(s32 *arg0);
+void func_80041EA4_42AA4(Vec3i *arg0);

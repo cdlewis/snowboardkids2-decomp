@@ -24,9 +24,7 @@ typedef struct {
     s32 unk24;
     s32 unk28;
     s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
+    Vec3i unk30;
     s16 unk3C;
     s16 unk3E;
     s16 unk40;
@@ -211,7 +209,7 @@ void func_800BB45C_AF14C(void **arg0) {
 }
 
 s32 func_800BB488_AF178(func_800BB388_AF078_arg *arg0) {
-    s32 sp18[3];
+    Vec3i sp18;
     Allocation *allocation;
     void *allocationUnk30;
     s32 *argPos;
@@ -224,15 +222,15 @@ s32 func_800BB488_AF178(func_800BB388_AF078_arg *arg0) {
     if (allocation->unk76 == 0) {
         allocationUnk30 = &allocation->unk30;
 
-        arg0->unk24 = arg0->unk24 + arg0->unk30;
-        arg0->unk2C = arg0->unk2C + arg0->unk38;
+        arg0->unk24 = arg0->unk24 + arg0->unk30.x;
+        arg0->unk2C = arg0->unk2C + arg0->unk30.z;
 
         argPos = &arg0->unk24;
 
         temp = func_80060A3C_6163C(allocationUnk30, arg0->unk3E, argPos);
         arg0->unk3E = temp;
 
-        func_80060CDC_618DC(allocationUnk30, temp, argPos, 0x80000, sp18);
+        func_80060CDC_618DC(allocationUnk30, temp, argPos, 0x80000, &sp18);
 
         arg0->unk28 = func_8005CFC0_5DBC0(allocationUnk30, (u16)arg0->unk3E, argPos, 0x100000) + 0x180000;
 
@@ -245,9 +243,9 @@ s32 func_800BB488_AF178(func_800BB388_AF078_arg *arg0) {
             }
         }
 
-        if (sp18[0] != 0) {
+        if (sp18.x != 0) {
             result = 1;
-        } else if (sp18[2] != 0) {
+        } else if (sp18.z != 0) {
             result = 1;
         }
 

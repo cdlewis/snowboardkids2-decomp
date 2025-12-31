@@ -31,18 +31,18 @@ void func_8005D03C_5DC3C(Player *arg0) {
     s32 magnitude;
     s32 maxMagnitude;
 
-    velX = arg0->unk44C;
-    velY = arg0->unk450;
-    velZ = arg0->unk454;
+    velX = arg0->unk44C.x;
+    velY = arg0->unk44C.y;
+    velZ = arg0->unk44C.z;
 
     sum = (s64)velX * velX + (s64)velY * velY + (s64)velZ * velZ;
     magnitude = isqrt64(sum);
 
     maxMagnitude = arg0->unkAA4;
     if (maxMagnitude < magnitude) {
-        arg0->unk44C = (s32)(((s64)arg0->unk44C * arg0->unkAA4) / magnitude);
-        arg0->unk450 = (s32)(((s64)arg0->unk450 * arg0->unkAA4) / magnitude);
-        arg0->unk454 = (s32)(((s64)arg0->unk454 * arg0->unkAA4) / magnitude);
+        arg0->unk44C.x = (s32)(((s64)arg0->unk44C.x * arg0->unkAA4) / magnitude);
+        arg0->unk44C.y = (s32)(((s64)arg0->unk44C.y * arg0->unkAA4) / magnitude);
+        arg0->unk44C.z = (s32)(((s64)arg0->unk44C.z * arg0->unkAA4) / magnitude);
     }
 }
 

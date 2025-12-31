@@ -141,17 +141,13 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
+    Vec3i unk14;
     void *unk20;
     void *unk24;
     void *unk28;
     s32 unk2C;
     u8 _pad30[0xC];
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
+    Vec3i unk3C;
     s16 unk48;
     u16 unk4A;
     u16 unk4C;
@@ -169,7 +165,7 @@ typedef struct {
     u8 pad2[0xE];
 } func_800BBF28_StackLocals;
 
-extern s32 D_800BCA30_AEDF0[][3];
+extern Vec3i D_800BCA30_AEDF0[];
 extern s32 D_800BCA84_AEE44[][3];
 extern s16 D_800BCAF0_AEEB0[];
 extern s32 D_800BCB04_AEEC4[][3];
@@ -396,7 +392,7 @@ void func_800BBC28_ADFE8(func_800BBC28_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(8);
     arg0->unk28 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
-    memcpy(&arg0->mat1.translation.x, &D_800BCA30_AEDF0[arg0->unk7C], 0xC);
+    memcpy(&arg0->mat1.translation, &D_800BCA30_AEDF0[arg0->unk7C], sizeof(Vec3i));
     arg0->unk68 = 0;
     arg0->mat1.translation.y += 0x100000;
     arg0->unk60 = arg0->unk24;
@@ -456,7 +452,7 @@ void func_800BBCFC_AE0BC(func_800BBC28_arg *arg0) {
             } while (var_s0 < (s32)allocation->numPlayers);
         }
         arg0->unk78 = 0x4000;
-        func_80056B7C_5777C(&arg0->mat1.translation.x, 0x4E);
+        func_80056B7C_5777C(&arg0->mat1.translation, 0x4E);
     }
 
     temp_v0_2 = arg0->unk7A + 0x100;
@@ -524,9 +520,9 @@ void func_800BBF28_AE2E8(func_800BC3D0_AE790_arg *arg0) {
     rotPtr = stack.rotation;
     createXRotationMatrix(rotPtr, D_800BCAF0_AEEB0[arg0->unk4E]);
     transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotPtr, &arg0->unk3C);
-    arg0->unk14 = arg0->unk14 - arg0->unk3C * 0x78;
-    arg0->unk18 = arg0->unk18 - arg0->unk40 * 0x78;
-    arg0->unk1C = arg0->unk1C - arg0->unk44 * 0x78;
+    arg0->unk14.x = arg0->unk14.x - arg0->unk3C.x * 0x78;
+    arg0->unk14.y = arg0->unk14.y - arg0->unk3C.y * 0x78;
+    arg0->unk14.z = arg0->unk14.z - arg0->unk3C.z * 0x78;
     setCleanupCallback(func_800BC4F0_AE8B0);
     if (arg0->unk4E < 3) {
         callback = func_800BC084_AE444;
@@ -546,9 +542,9 @@ void func_800BC084_AE444(func_800BC3D0_AE790_arg *arg0) {
     allocation = getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        arg0->unk14 += arg0->unk3C;
-        arg0->unk18 += arg0->unk40;
-        arg0->unk1C += arg0->unk44;
+        arg0->unk14.x += arg0->unk3C.x;
+        arg0->unk14.y += arg0->unk3C.y;
+        arg0->unk14.z += arg0->unk3C.z;
         arg0->unk48--;
 
         if (arg0->unk48 == 0) {
@@ -589,9 +585,9 @@ void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *arg0) {
 
     if (allocation->unk76 == 0) {
         if (arg0->unk48 != 0) {
-            arg0->unk14 = arg0->unk14 + arg0->unk3C;
-            arg0->unk18 = arg0->unk18 + arg0->unk40;
-            arg0->unk1C = arg0->unk1C + arg0->unk44;
+            arg0->unk14.x = arg0->unk14.x + arg0->unk3C.x;
+            arg0->unk14.y = arg0->unk14.y + arg0->unk3C.y;
+            arg0->unk14.z = arg0->unk14.z + arg0->unk3C.z;
             arg0->unk48--;
         } else {
             state = arg0->unk4E;
@@ -656,9 +652,9 @@ void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *arg0) {
     allocation = getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        arg0->unk14 += arg0->unk3C;
-        arg0->unk18 += arg0->unk40;
-        arg0->unk1C += arg0->unk44;
+        arg0->unk14.x += arg0->unk3C.x;
+        arg0->unk14.y += arg0->unk3C.y;
+        arg0->unk14.z += arg0->unk3C.z;
         arg0->unk48--;
 
         if (arg0->unk48 == 0) {
@@ -801,9 +797,9 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
     vec.y = 0;
     vec.z = 0;
     vec.x = -unk78Val;
-    rotateVectorY(&vec, 0x1BEC, &arg0->node1.translation.x);
+    rotateVectorY(&vec, 0x1BEC, &arg0->node1.translation);
     vec.x = arg0->unk78;
-    rotateVectorY(&vec, 0x1BEC, &arg0->node2.translation.x);
+    rotateVectorY(&vec, 0x1BEC, &arg0->node2.translation);
 
     arg0->node1.translation.x = arg0->node1.translation.x + D_800BCB98_AEF58[arg0->unk7C][0];
     arg0->node1.translation.y = arg0->node1.translation.y + D_800BCB9C_AEF5C[arg0->unk7C][0];

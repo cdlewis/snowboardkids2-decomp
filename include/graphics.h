@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "geometry.h"
 
 void func_80056080_56C80(void);
 void func_8005610C_56D0C(void);
@@ -8,11 +9,11 @@ void func_80056914_57514(void *source);
 void func_80056990_57590(s32 arg0, s32 arg1);
 void func_800569A4_575A4(u8 *src_data, s8 search_id);
 void setBufferData(void *source, u8 arg1, s32 arg2);
-void func_80056B7C_5777C(void *arg0, s16 arg1);
-void func_80056C6C_5786C(void *arg0, unsigned int arg1, s16 arg2);
-void func_80056D64_57964(void *arg0, s32 arg1, s16 arg2, s16 arg3);
-void func_80056E64_57A64(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4);
-void func_80056F8C_57B8C(void *arg0, int arg1, f32 arg2, s16 arg3, s32 arg4, s32 arg5);
+void func_80056B7C_5777C(Vec3i *arg0, s16 arg1);
+void func_80056C6C_5786C(Vec3i *arg0, u32 arg1, s16 arg2);
+void func_80056D64_57964(Vec3i *arg0, s32 arg1, s16 arg2, s16 arg3);
+void func_80056E64_57A64(Vec3i *arg0, s32 arg1, f32 arg2, s16 arg3, s32 arg4);
+void func_80056F8C_57B8C(Vec3i *arg0, s32 arg1, f32 arg2, s16 arg3, s32 arg4, s32 arg5);
 void func_800570BC_57CBC(void);
 void func_800570E0_57CE0(void *arg);
 void func_80057124_57D24(void);

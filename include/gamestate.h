@@ -79,9 +79,7 @@ typedef struct {
     s32 unk440;
     s32 unk444;
     s32 unk448;
-    s32 unk44C;
-    s32 unk450;
-    s32 unk454;
+    Vec3i unk44C; /* 0x44C */
     s32 unk458;
     s32 unk45C;
     s32 unk460;

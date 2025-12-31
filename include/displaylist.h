@@ -55,11 +55,18 @@ void parseGameDataLayout(GameDataLayout *gameData);
 
 void initializeOverlaySystem(void);
 
+/* Base struct without trailing fields - 0x18 bytes */
+typedef struct loadAssetMetadata_arg_base {
+    struct loadAssetMetadata_arg *unk0;
+    /* 0x4 */ Vec3i position;
+    /* 0x10 */ u8 *data_ptr;
+    /* 0x14 */ TableEntry_19E80 *index_ptr;
+} loadAssetMetadata_arg_base;
+
+/* Full struct with alpha/animation fields - 0x1C bytes */
 typedef struct loadAssetMetadata_arg {
     struct loadAssetMetadata_arg *unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
+    /* 0x4 */ Vec3i position;
     /* 0x10 */ u8 *data_ptr;
     /* 0x14 */ TableEntry_19E80 *index_ptr;
     s8 unk18;
@@ -140,7 +147,7 @@ u16 func_800625A4_631A4(void *arg0, void *arg1);
 
 u16 func_80060A3C_6163C(void *arg0, u16 arg1, void *arg2);
 
-void func_80060CDC_618DC(void *arg0, u16 arg1, void *arg2, s32 arg3, s32 *arg4);
+void func_80060CDC_618DC(void *arg0, u16 arg1, void *arg2, s32 arg3, Vec3i *arg4);
 
 s32 func_80061A64_62664(void *arg0, u16 arg1, void *arg2);
 

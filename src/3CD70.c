@@ -78,33 +78,33 @@ void func_8003D210_3DE10(func_8003D210_3DE10_arg *);
 void func_8003C170_3CD70(NodeState *node) {
     Allocation *gameState;
     u8 playerIdx;
-    s32 inputOffset[3];
-    s32 transformedOffset[3];
+    Vec3i inputOffset;
+    Vec3i transformedOffset;
     Transform3D rotationMatrix;
 
     gameState = (Allocation *)getCurrentAllocation();
 
-    inputOffset[1] = 0;
-    inputOffset[0] = 0;
-    inputOffset[2] = 0xFFC00000;
+    inputOffset.y = 0;
+    inputOffset.x = 0;
+    inputOffset.z = 0xFFC00000;
 
     playerIdx = node->playerIdx;
 
     createYRotationMatrix(&rotationMatrix, *(u16 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0xA94));
 
-    transformVector2(inputOffset, &rotationMatrix, transformedOffset);
+    transformVector2(&inputOffset, &rotationMatrix, &transformedOffset);
 
     playerIdx = node->playerIdx;
 
-    node->x = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x434) + transformedOffset[0];
+    node->x = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x434) + transformedOffset.x;
 
     playerIdx = node->playerIdx;
 
-    node->y = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x438) + transformedOffset[1];
+    node->y = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x438) + transformedOffset.y;
 
     playerIdx = node->playerIdx;
 
-    node->z = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x43C) + transformedOffset[2];
+    node->z = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x43C) + transformedOffset.z;
 
     node->unk10 = 0x600000;
     node->unk1C = 0x20000;
@@ -137,7 +137,7 @@ void func_8003CF40_3DB40(s16 *arg0) {
     Transform3D sp10;
     Transform3D sp30;
     Transform3D sp50;
-    s32 sp70[3];
+    Vec3i sp70;
     s16 temp_v0;
     s16 temp_v1;
     Transform3D *s2;
@@ -164,10 +164,10 @@ void func_8003CF40_3DB40(s16 *arg0) {
     memcpy(&sp30.translation, &((Transform3D *)identityMatrix)->translation, 0xC);
     func_8006B084_6BC84(s2, &sp30, &sp50);
     func_8006B084_6BC84(&sp50, s1->unk10 + 0x950, s2);
-    transformVector2(&D_8008FEB0_90AB0, s1->unk10 + 0x950, sp70);
-    sp10.translation.x = sp10.translation.x + sp70[0];
-    sp10.translation.y = sp10.translation.y + sp70[1];
-    sp10.translation.z = sp10.translation.z + sp70[2];
+    transformVector2(&D_8008FEB0_90AB0, s1->unk10 + 0x950, &sp70);
+    sp10.translation.x = sp10.translation.x + sp70.x;
+    sp10.translation.y = sp10.translation.y + sp70.y;
+    sp10.translation.z = sp10.translation.z + sp70.z;
     func_8006FD3C_7093C(0x64, s2);
 }
 

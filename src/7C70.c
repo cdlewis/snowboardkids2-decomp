@@ -99,8 +99,8 @@ void initOrbitalSprite(OrbitalSpriteState *arg0) {
 }
 
 void updateOrbitalSprite(OrbitalSpriteState *arg0) {
-    s32 localOffset[3];
-    s32 worldOffset[3];
+    Vec3i localOffset;
+    Vec3i worldOffset;
     s32 x, y, z;
 
     if (arg0->owner->isDestroyed == 1) {
@@ -121,15 +121,15 @@ void updateOrbitalSprite(OrbitalSpriteState *arg0) {
         return;
     }
 
-    localOffset[0] = orbitalSpriteOffsetsX[arg0->spriteIndex * 2];
-    localOffset[1] = ORBITAL_SPRITE_Y_OFFSET;
-    localOffset[2] = orbitalSpriteOffsetsZ[arg0->spriteIndex * 2];
+    localOffset.x = orbitalSpriteOffsetsX[arg0->spriteIndex * 2];
+    localOffset.y = ORBITAL_SPRITE_Y_OFFSET;
+    localOffset.z = orbitalSpriteOffsetsZ[arg0->spriteIndex * 2];
 
-    transformVector2(localOffset, &arg0->owner->rotationMatrix[0], worldOffset);
+    transformVector2(&localOffset, &arg0->owner->rotationMatrix[0], &worldOffset);
 
-    x = arg0->owner->posX + worldOffset[0];
-    y = arg0->owner->posY + worldOffset[1];
-    z = arg0->owner->posZ + worldOffset[2];
+    x = arg0->owner->posX + worldOffset.x;
+    y = arg0->owner->posY + worldOffset.y;
+    z = arg0->owner->posZ + worldOffset.z;
 
     updateSpriteAnimation(&arg0->spriteState, 0x10000);
 

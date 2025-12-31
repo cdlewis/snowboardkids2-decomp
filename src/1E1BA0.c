@@ -50,27 +50,27 @@ void func_800B4B30_1E1BE0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
 }
 
 void func_800B4BDC_1E1C8C(s16 arg0, s16 arg1, s16 arg2, CutsceneSlotData *arg3) {
-    s32 buffer[3];
+    Vec3i position;
     s16 duration;
     s16 soundId;
 
     if (arg3 != NULL) {
-        memcpy(buffer, &arg3->unk2C, 0xC);
+        memcpy(&position, &arg3->unk2C, sizeof(Vec3i));
     } else {
-        buffer[0] = 0;
-        buffer[1] = 0;
-        buffer[2] = 0;
+        position.x = 0;
+        position.y = 0;
+        position.z = 0;
     }
 
     duration = arg2;
     if (duration <= 0) {
         soundId = func_800B4AFC_1E1BAC(arg0);
-        func_80056B7C_5777C(buffer, soundId);
+        func_80056B7C_5777C(&position, soundId);
         return;
     }
 
     soundId = func_800B4AFC_1E1BAC(arg0);
-    func_80056D64_57964(buffer, soundId, 0, duration);
+    func_80056D64_57964(&position, soundId, 0, duration);
 }
 
 void func_800B4C80_1E1D30(s16 arg0) {

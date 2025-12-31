@@ -152,7 +152,7 @@ void func_800BB454_AB304(TaskArg_AB304 *task) {
 
 void func_800BB5BC_AB46C(func_800BB2B0_arg *task) {
     GameState *gs;
-    s32 rotatedVec[3];
+    Vec3i rotatedVec;
     s16 var_v1;
 
     gs = (GameState *)getCurrentAllocation();
@@ -182,8 +182,8 @@ void func_800BB5BC_AB46C(func_800BB2B0_arg *task) {
 
         rotateVectorY(&D_800BBBC0_ABA70[4], task->rotationAngle, &rotatedVec);
 
-        task->targetPosition[0] += rotatedVec[0];
-        task->targetPosition[2] += rotatedVec[2];
+        task->targetPosition[0] += rotatedVec.x;
+        task->targetPosition[2] += rotatedVec.z;
 
         task->unk56 = func_80060A3C_6163C(&gs->gameData, task->unk56, &task->targetPosition[0]);
         task->targetPosition[1] = func_80061A64_62664(&gs->gameData, task->unk56, &task->targetPosition[0]);
@@ -195,10 +195,10 @@ void func_800BB5BC_AB46C(func_800BB2B0_arg *task) {
             task->unk4C = 0x40000;
         }
 
-        rotatedVec[0] = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk0 - task->targetPosition[0];
-        rotatedVec[1] = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk4 - task->targetPosition[2];
+        rotatedVec.x = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk0 - task->targetPosition[0];
+        rotatedVec.y = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk4 - task->targetPosition[2];
 
-        if ((u32)(rotatedVec[0] + 0xFFFFF) <= 0x1FFFFEU && (u32)(rotatedVec[2] + 0xFFFFF) <= 0x1FFFFEU) {
+        if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFEU && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
             func_80069CF8_6A8F8();
         }
 
@@ -210,7 +210,7 @@ void func_800BB5BC_AB46C(func_800BB2B0_arg *task) {
 
 void func_800BB7D4_AB684(func_800BB2B0_arg *task) {
     GameState *gs;
-    s32 rotatedVec[3];
+    Vec3i rotatedVec;
     s16 var_v1;
     GameDataLayout *gameData;
 
@@ -242,8 +242,8 @@ void func_800BB7D4_AB684(func_800BB2B0_arg *task) {
         rotateVectorY(&D_800BBBC0_ABA70[4].unk4[1].unk0, task->rotationAngle, &rotatedVec);
 
         gameData = &gs->gameData;
-        task->targetPosition[0] += rotatedVec[0];
-        task->targetPosition[2] += rotatedVec[2];
+        task->targetPosition[0] += rotatedVec.x;
+        task->targetPosition[2] += rotatedVec.z;
 
         task->unk56 = func_80060A3C_6163C(gameData, task->unk56, &task->targetPosition[0]);
         task->targetPosition[1] = func_80061A64_62664(gameData, task->unk56, &task->targetPosition[0]);
@@ -255,10 +255,10 @@ void func_800BB7D4_AB684(func_800BB2B0_arg *task) {
             task->unk4C = 0x18000;
         }
 
-        rotatedVec[0] = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk0 - task->targetPosition[0];
-        rotatedVec[1] = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk4 - task->targetPosition[2];
+        rotatedVec.x = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk0 - task->targetPosition[0];
+        rotatedVec.y = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk4 - task->targetPosition[2];
 
-        if (rotatedVec[0] + 0xFFFFF <= 0x1FFFFEU && (rotatedVec[2] + 0xFFFFF) <= 0x1FFFFEU) {
+        if (rotatedVec.x + 0xFFFFF <= 0x1FFFFEU && (rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
             func_80069CF8_6A8F8();
         }
 

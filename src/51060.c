@@ -150,14 +150,10 @@ typedef struct {
 } GameStateUnk44_Ext;
 
 typedef struct {
-    u8 padding[0xC];
-} func_80050C00_51800_Task_unk34_unk4C;
-
-typedef struct {
     u8 padding[0x4C];
-    func_80050C00_51800_Task_unk34_unk4C *unk4C;
+    Vec3i *unk4C;
     u8 padding2[0x434 - 0x50];
-    func_80050C00_51800_Task_unk34_unk4C *unk434;
+    Vec3i *unk434;
 } func_80050C00_51800_Task_unk34;
 
 typedef struct {
@@ -266,9 +262,9 @@ void func_80050504_51104(func_80050504_51104_arg *arg0) {
             return;
         }
         arg0->unk4.unk1A = arg0->unk4.unk1A - 0x30;
-        arg0->unk4.unk4 += arg0->unk24;
-        arg0->unk4.unk8 += arg0->unk28;
-        arg0->unk4.unkC += arg0->unk2C;
+        arg0->unk4.position.x += arg0->unk24;
+        arg0->unk4.position.y += arg0->unk28;
+        arg0->unk4.position.z += arg0->unk2C;
     }
 
     for (i = 0; i < 4; i++) {
@@ -280,14 +276,14 @@ void func_800505D8_511D8(s32 **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void func_80050604_51204(Vec3i *arg0, s32 *arg1, s32 arg2) {
+void func_80050604_51204(Vec3i *arg0, Vec3i *arg1, s32 arg2) {
     NodeWithPayload *task = (NodeWithPayload *)scheduleTask(&func_80050460_51060, 2, 0, 0xDC);
     if (task != NULL) {
         memcpy((void *)&task->n.freeNext, arg0, sizeof(Vec3i));
         task->unk30 = arg2;
-        task->n.cleanupCallback = (void *)(arg1[0] / 2);
-        task->n.payload = (void *)(arg1[1] / 2);
-        task->unk2C = (arg1[2] / 2);
+        task->n.cleanupCallback = (void *)(arg1->x / 2);
+        task->n.payload = (void *)(arg1->y / 2);
+        task->unk2C = (arg1->z / 2);
     }
 }
 
@@ -323,9 +319,9 @@ void func_80050740_51340(func_80050740_51340_arg *arg0) {
     if (gs->gamePaused == 0) {
         if (arg0->unk50 != 0) {
             for (i = 0; i < 2; i++) {
-                arg0->assets[i].lam.unk4 += arg0->unk44;
-                arg0->assets[i].lam.unk8 += arg0->unk48;
-                arg0->assets[i].lam.unkC += arg0->unk4C;
+                arg0->assets[i].lam.position.x += arg0->unk44;
+                arg0->assets[i].lam.position.y += arg0->unk48;
+                arg0->assets[i].lam.position.z += arg0->unk4C;
             }
         }
 
@@ -398,19 +394,19 @@ void func_800509CC_515CC(func_80050C00_51800_Task *arg0) {
     s32 new_var;
     getCurrentAllocation();
     if (arg0->unk38 >= 0) {
-        memcpy(&arg0->unk4.unk4, &arg0->unk34->unk4C, sizeof(func_80050C00_51800_Task_unk34_unk4C));
+        memcpy(&arg0->unk4.position, &arg0->unk34->unk4C, sizeof(Vec3i));
     } else {
-        memcpy(&arg0->unk4.unk4, &arg0->unk34->unk434, sizeof(func_80050C00_51800_Task_unk34_unk4C));
-        arg0->unk4.unk8 += 0x80000;
+        memcpy(&arg0->unk4.position, &arg0->unk34->unk434, sizeof(Vec3i));
+        arg0->unk4.position.y += 0x80000;
     }
     temp = (randA() & 0xFF) - 0x80;
     shift9 = (new_var = temp << 9);
-    arg0->unk4.unk4 += ((temp << 11) + shift9) << 1;
+    arg0->unk4.position.x += ((temp << 11) + shift9) << 1;
     new_var2 = (randA() & 0xFF) - 0x80;
     temp = new_var2;
     shift9 = temp << 9;
     arg0->unk26 = 0;
-    arg0->unk4.unkC += ((temp << 11) + shift9) << 1;
+    arg0->unk4.position.z += ((temp << 11) + shift9) << 1;
     loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk24);
     setCallbackWithContinue(func_80050AA8_516A8);
 }
@@ -434,9 +430,9 @@ void func_80050AA8_516A8(func_80050C00_51800_Task *arg0) {
             func_80069CF8_6A8F8();
         }
 
-        arg0->unk4.unk4 += arg0->unk28;
-        arg0->unk4.unk8 += arg0->unk2C;
-        arg0->unk4.unkC += arg0->unk30;
+        arg0->unk4.position.x += arg0->unk28;
+        arg0->unk4.position.y += arg0->unk2C;
+        arg0->unk4.position.z += arg0->unk30;
     }
 
     i = 0;
@@ -499,9 +495,9 @@ void func_80050C80_51880(Player *arg0, s32 arg1) {
         temp2 = D_80090E70_91A70[arg1];
         task->unk4.unk1A = 0x80;
         task->unk24 = temp2;
-        task->unk28 = arg0->unk44C / 2;
-        task->unk2C = arg0->unk450 / 2;
-        task->unk30 = arg0->unk454 / 2;
+        task->unk28 = arg0->unk44C.x / 2;
+        task->unk2C = arg0->unk44C.y / 2;
+        task->unk30 = arg0->unk44C.z / 2;
         task->unk38 = -1;
         task->unk4.unk0 = (void *)((u32)allocation->unk44 + 0x1440);
     }
@@ -553,12 +549,12 @@ void func_80050EA0_51AA0(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void func_80050ECC_51ACC(void *arg0) {
+void func_80050ECC_51ACC(Vec3i *arg0) {
     Node *task;
 
     task = scheduleTask(&func_80050D70_51970, 2, 0, 0xFA);
     if (task != NULL) {
-        memcpy(&task->freeNext, arg0, 0xC);
+        memcpy(&task->freeNext, arg0, sizeof(Vec3i));
     }
 }
 
@@ -638,9 +634,9 @@ void func_80051124_51D24(func_80050740_51340_arg *arg0) {
     if (gs->gamePaused == 0) {
         if (arg0->unk50 != 0) {
             for (i = 0; i < 2; i++) {
-                arg0->assets[i].lam.unk4 += arg0->unk44;
-                arg0->assets[i].lam.unk8 += arg0->unk48;
-                arg0->assets[i].lam.unkC += arg0->unk4C;
+                arg0->assets[i].lam.position.x += arg0->unk44;
+                arg0->assets[i].lam.position.y += arg0->unk48;
+                arg0->assets[i].lam.position.z += arg0->unk4C;
             }
         }
 
@@ -751,12 +747,12 @@ void func_8005152C_5212C(SkiTrailTask *task) {
     task->particleRight.unk18 = task->particleLeft.unk18;
     task->particleRight.unk19 = task->particleLeft.unk19;
 
-    task->particleLeft.unk4 = task->skiOffsets[0].x + task->player->worldPos.x;
-    task->particleLeft.unk8 = task->skiOffsets[0].y + task->player->worldPos.y;
-    task->particleLeft.unkC = task->skiOffsets[0].z + task->player->worldPos.z;
-    task->particleRight.unk4 = task->skiOffsets[1].x + task->player->worldPos.x;
-    task->particleRight.unk8 = task->skiOffsets[1].y + task->player->worldPos.y;
-    task->particleRight.unkC = task->skiOffsets[1].z + task->player->worldPos.z;
+    task->particleLeft.position.x = task->skiOffsets[0].x + task->player->worldPos.x;
+    task->particleLeft.position.y = task->skiOffsets[0].y + task->player->worldPos.y;
+    task->particleLeft.position.z = task->skiOffsets[0].z + task->player->worldPos.z;
+    task->particleRight.position.x = task->skiOffsets[1].x + task->player->worldPos.x;
+    task->particleRight.position.y = task->skiOffsets[1].y + task->player->worldPos.y;
+    task->particleRight.position.z = task->skiOffsets[1].z + task->player->worldPos.z;
 
     for (i = 0; i < 4; i++) {
         func_80067EDC_68ADC(i, &task->particleLeft);
@@ -799,7 +795,7 @@ void func_80051760_52360(func_800516F4_522F4_arg *arg0) {
     GameState *gs;
 
     gs = (GameState *)getCurrentAllocation();
-    transformVector((s16 *)&D_80090EB0_91AB0, (s16 *)&arg0->unk0->unk164, &arg0->unk8.unk4);
+    transformVector((s16 *)&D_80090EB0_91AB0, (s16 *)&arg0->unk0->unk164, &arg0->unk8.position);
 
     for (i = 0; i < 4; i++) {
         func_80067EDC_68ADC(i, &arg0->unk8);

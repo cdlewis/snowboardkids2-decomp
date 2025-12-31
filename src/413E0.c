@@ -170,7 +170,7 @@ void func_800409B4_415B4(func_80040B4C_4174C_arg *obj) {
     obj->unk2C = 0;
     trackAngle = func_800625A4_631A4((u8 *)gameState + 0x30, worldPos);
     createYRotationMatrix(&obj->rotationMatrix, (trackAngle + spawnData->unk8) & 0xFFFF);
-    rotateVectorY(&D_800907EC_913EC, trackAngle + spawnData->unk8, &obj->rotationMatrix.translation.x);
+    rotateVectorY(&D_800907EC_913EC, trackAngle + spawnData->unk8, &obj->rotationMatrix.translation);
     obj->rotationMatrix.translation.x = obj->rotationMatrix.translation.x + spawnData->unk0;
     obj->rotationMatrix.translation.z = obj->rotationMatrix.translation.z + spawnData->unk4;
     obj->rotationMatrix.translation.y = worldPos[1];
@@ -208,7 +208,7 @@ void func_80040B4C_4174C(func_80040B4C_4174C_arg *arg0) {
                 goto block_else;
             }
             arg0->unkB6++;
-            func_80056B7C_5777C(&arg0->rotationMatrix.translation.x, 0xA);
+            func_80056B7C_5777C(&arg0->rotationMatrix.translation, 0xA);
             /* fallthrough */
         case 1:
             if (s2->gamePaused == 0) {
