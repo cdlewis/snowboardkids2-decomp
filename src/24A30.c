@@ -1415,7 +1415,7 @@ void cleanupBoardSelectArrows(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80026860_27460(CharacterNameSprite *sprites) {
+void initBoardSelectCharNames(CharacterNameSprite *sprites) {
     GameState *gameState;
     void *spriteAsset;
     s32 i;

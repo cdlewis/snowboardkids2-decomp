@@ -2051,3 +2051,4 @@ cleanupCharSelectArrows = 0x80026538; // rom:0x27138
 initBoardSelectArrows = 0x80026564; // rom:0x27164
 updateBoardSelectArrows = 0x8002667C; // rom:0x2727C
 cleanupBoardSelectArrows = 0x80026834; // rom:0x27434
+initBoardSelectCharNames = 0x80026860; // rom:0x27460
