@@ -119,8 +119,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0xF8];
-    void *unkF8;
-} Func800206B4Arg;
+    void *portraitAsset;
+} LevelPreviewPortraitState;
 
 typedef struct {
     u8 _pad0[0x48A];
@@ -461,12 +461,12 @@ s32 sampleMaxSurroundingTerrainHeight(LevelPreviewCharacterState *state) {
 }
 
 void func_80020708_21308(void);
-void func_80020B18_21718(Func800206B4Arg *arg0);
+void cleanupLevelPreviewPortraits(LevelPreviewPortraitState *state);
 
-void func_800206B4_212B4(Func800206B4Arg *arg0) {
+void initLevelPreviewPortraits(LevelPreviewPortraitState *state) {
     s32 pad[4];
-    arg0->unkF8 = loadCompressedData(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
-    setCleanupCallback(&func_80020B18_21718);
+    state->portraitAsset = loadCompressedData(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
+    setCleanupCallback(&cleanupLevelPreviewPortraits);
     setCallback(&func_80020708_21308);
 }
 
@@ -498,8 +498,8 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_80020924_21524);
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020A00_21600);
 
-void func_80020B18_21718(Func800206B4Arg *arg0) {
-    arg0->unkF8 = freeNodeMemory(arg0->unkF8);
+void cleanupLevelPreviewPortraits(LevelPreviewPortraitState *state) {
+    state->portraitAsset = freeNodeMemory(state->portraitAsset);
 }
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020B44_21744);
