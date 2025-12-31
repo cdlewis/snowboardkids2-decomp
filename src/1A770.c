@@ -255,7 +255,7 @@ void awaitFadeLoadBoardShop(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A478_1B078);
 
-void func_8001AC30_1B830(void) {
+void awaitBoardShopExitDelay(void) {
     u16 temp_v1;
     allocation_1B8C8 *temp_v0 = (allocation_1B8C8 *)getCurrentAllocation();
     temp_v1 = temp_v0->unk77C - 1;
