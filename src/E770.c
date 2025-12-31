@@ -297,7 +297,7 @@ typedef struct FD98_struct {
 
 extern void func_8000FD98_10998(FD98_struct *);
 
-void func_8000E4CC_F0CC(E770_struct *arg0) {
+void processGalleryMenuSelection(E770_struct *arg0) {
     s16 temp = arg0->fadeTimer;
 
     if (temp == 0) {
@@ -380,7 +380,7 @@ void func_8000EC98_F898(void) {
             handleGalleryMenuInput(s0);
             break;
         case 3:
-            func_8000E4CC_F0CC(s0);
+            processGalleryMenuSelection(s0);
             break;
         case 4:
             func_8000E56C_F16C(s0);
