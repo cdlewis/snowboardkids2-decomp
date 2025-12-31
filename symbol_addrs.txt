@@ -1770,3 +1770,4 @@ handleViewerGridNavigation_SingleRow = 0x8000F7B0; // rom:0x103B0
 handleViewerGridNavigation_ThreeRow = 0x8000F884; // rom:0x10484
 handleViewerGridNavigation_Prize = 0x8000FA90; // rom:0x10690
 handleViewerInput = 0x8000FBBC; // rom:0x107BC
+startViewerFadeOut = 0x8000FD1C; // rom:0x1091C
