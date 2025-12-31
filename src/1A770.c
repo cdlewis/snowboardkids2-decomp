@@ -56,7 +56,7 @@ void enqueueStoryMapLocationText(TextData *arg0);
 void awaitFadeLoadStoryMap(void);
 void awaitStoryModeCharacterSelect(void);
 void awaitFadeLoadPreRaceCutscene(void);
-void func_80019F30_1AB30(void);
+void loadStoryModeRace(void);
 void func_8001AF80_1BB80(void);
 void func_8001A434_1B034(void);
 void func_8001AC70_1B870(void);
@@ -162,11 +162,11 @@ void awaitFadeLoadPreRaceCutscene(void) {
 
 void awaitStoryModePreRaceCutscene(void) {
     if ((func_80069810_6A410() << 0x10) != 0) {
-        setGameStateHandler(&func_80019F30_1AB30);
+        setGameStateHandler(&loadStoryModeRace);
     }
 }
 
-void func_80019F30_1AB30(void) {
+void loadStoryModeRace(void) {
     createTaskQueue(&initRace, 100);
     setGameStateHandler(&func_80019F60_1AB60);
 }
@@ -201,7 +201,7 @@ void func_80019F60_1AB60(void) {
     func_80015254_15E54();
 
     if (saveOperationResult == 1) {
-        setGameStateHandler(func_80019F30_1AB30);
+        setGameStateHandler(loadStoryModeRace);
         return;
     }
 

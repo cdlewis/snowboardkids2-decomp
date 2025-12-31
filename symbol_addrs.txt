@@ -47,6 +47,7 @@ awaitFadeLoadCharacterSelect = 0x80019E18; // rom:0x1AA18
 awaitStoryModeCharacterSelect = 0x80019E60; // rom:0x1AA60
 awaitFadeLoadPreRaceCutscene = 0x80019EA8; // rom:0x1AAA8
 awaitStoryModePreRaceCutscene = 0x80019EFC; // rom:0x1AAFC
+loadStoryModeRace = 0x80019F30; // rom:0x1AB30
 storyMapExitCode = 0x8009F220;
 cleanupTitleLogoTask = 0x800163A0; // rom:0x16FA0
 enqueueTitleLogoRender = 0x800163CC; // rom:0x16FCC
