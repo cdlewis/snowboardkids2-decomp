@@ -1870,6 +1870,10 @@ updateMenuCharacterModel = 0x8002144C; // rom:0x2204C
 cleanupMenuCharacterModel = 0x8002152C; // rom:0x2212C
 setMenuCharacterAnimation = 0x80021548; // rom:0x22148
 handleMenuCharacterAnimationEnd = 0x800215DC; // rom:0x221DC
+initMenuBackgroundEffect = 0x80021658; // rom:0x22258
+setupMenuBackgroundEffect = 0x800216AC; // rom:0x222AC
+updateMenuBackgroundEffect = 0x800216D4; // rom:0x222D4
+cleanupMenuBackgroundEffect = 0x8002174C; // rom:0x2234C
 
 GenericTriggerInit = 0x80018CB0; // rom:0x198B0
 GenericTriggerCheck = 0x80018D04; // rom:0x19904

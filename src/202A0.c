@@ -43,11 +43,11 @@ typedef struct {
 } MenuCharacterModelState;
 
 typedef struct {
-    u16 unk0;
-    u16 unk2;
+    u16 rotationX;
+    u16 rotationY;
     u8 _pad4[0x28];
-    void *unk2C;
-} Func800216ACArg;
+    void *effectAsset;
+} MenuBackgroundEffectState;
 
 typedef struct {
     void *unk0;
@@ -744,35 +744,35 @@ void handleMenuCharacterAnimationEnd(MenuCharacterModelState *state) {
     }
 }
 
-void func_8002174C_2234C(Func800216ACArg *arg0);
-void func_800216AC_222AC(Func800216ACArg *arg0);
-void func_800216D4_222D4(Func800216ACArg *arg0);
+void cleanupMenuBackgroundEffect(MenuBackgroundEffectState *state);
+void setupMenuBackgroundEffect(MenuBackgroundEffectState *state);
+void updateMenuBackgroundEffect(MenuBackgroundEffectState *state);
 
-void func_80021658_22258(Func800216ACArg *arg0) {
-    arg0->unk2C = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
-    setCleanupCallback(&func_8002174C_2234C);
-    setCallback(&func_800216AC_222AC);
+void initMenuBackgroundEffect(MenuBackgroundEffectState *state) {
+    state->effectAsset = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
+    setCleanupCallback(&cleanupMenuBackgroundEffect);
+    setCallback(&setupMenuBackgroundEffect);
 }
 
-void func_800216AC_222AC(Func800216ACArg *arg0) {
-    func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
-    setCallback(&func_800216D4_222D4);
+void setupMenuBackgroundEffect(MenuBackgroundEffectState *state) {
+    func_800394BC_3A0BC(state, (s32)state->effectAsset);
+    setCallback(&updateMenuBackgroundEffect);
 }
 
-void func_800216D4_222D4(Func800216ACArg *arg0) {
+void updateMenuBackgroundEffect(MenuBackgroundEffectState *state) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->menuState == 8) {
-        arg0->unk0++;
-        arg0->unk2++;
-        arg0->unk0 &= 0x3FF;
-        arg0->unk2 &= 0x3FF;
-        debugEnqueueCallback(0xB, 0, func_80038420_39020, arg0);
+        state->rotationX++;
+        state->rotationY++;
+        state->rotationX &= 0x3FF;
+        state->rotationY &= 0x3FF;
+        debugEnqueueCallback(0xB, 0, func_80038420_39020, state);
     }
 }
 
-void func_8002174C_2234C(Func800216ACArg *arg0) {
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupMenuBackgroundEffect(MenuBackgroundEffectState *state) {
+    state->effectAsset = freeNodeMemory(state->effectAsset);
 }
 
 extern void *D_8008DC2C_8E82C[];
