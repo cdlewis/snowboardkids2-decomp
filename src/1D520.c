@@ -26,7 +26,7 @@ typedef struct {
     u16 selectionBaseY;     // 0xAC2 - base Y position
     u16 selectionAnimState; // 0xAC4 - animation counter (0-24) / selection result (1=confirmed)
     u8 padding5[0x2];
-    u8 unkAC8;
+    u8 saveSlotIndex;
     u8 unkAC9;
     u8 padding3[0x8];
 } allocation_1D520;
@@ -51,7 +51,7 @@ INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 void initSaveSlotSelection(void) {
     allocation_1D520 *allocation = (allocation_1D520 *)getCurrentAllocation();
     u8 saveSlot = D_800AFE8C_A71FC->previousSaveSlot;
-    allocation->unkAC8 = saveSlot;
+    allocation->saveSlotIndex = saveSlot;
     setGameStateHandler(func_8001CD90_1D990);
 }
 
@@ -317,24 +317,24 @@ s32 sanitizeSaveSlotData(EepromSaveData_type *saveData) {
     return wasModified;
 }
 
-void func_8001E320_1EF20(void) {
-    u8 sp10[0x60];
+void verifySaveSlotChecksum(void) {
+    u8 saveBuffer[0x60];
     allocation_1D520 *allocation;
     void *result;
     s32 retryCount;
-    u32 checksum;
+    u32 computedChecksum;
     u32 expectedChecksum;
-    u8 *ptr;
-    s32 limit;
+    u8 *dataPtr;
+    s32 dataSize;
 
     allocation = (allocation_1D520 *)getCurrentAllocation();
     allocation->selectionAnimState = 0;
 
-    checksum = 0;
+    computedChecksum = 0;
     retryCount = 0;
 
     while (retryCount < 3) {
-        func_8003B1F4_3BDF4(allocation->unkAC8, sp10);
+        func_8003B1F4_3BDF4(allocation->saveSlotIndex, saveBuffer);
 
         do {
             result = func_8003B28C_3BE8C();
@@ -348,19 +348,19 @@ void func_8001E320_1EF20(void) {
     }
 
     if (retryCount < 3) {
-        limit = 0x58;
-        expectedChecksum = *(u32 *)&sp10[8];
-        ptr = sp10;
+        dataSize = 0x58;
+        expectedChecksum = *(u32 *)&saveBuffer[8];
+        dataPtr = saveBuffer;
         retryCount = 0;
-        *(u32 *)&sp10[8] = 0;
+        *(u32 *)&saveBuffer[8] = 0;
 
-        while (retryCount < limit) {
+        while (retryCount < dataSize) {
             retryCount++;
-            checksum += *ptr;
-            ptr++;
+            computedChecksum += *dataPtr;
+            dataPtr++;
         }
 
-        if (checksum == expectedChecksum) {
+        if (computedChecksum == expectedChecksum) {
             allocation->selectionAnimState = 0;
             return;
         }
@@ -372,20 +372,20 @@ void func_8001E320_1EF20(void) {
 void func_8001E3E8_1EFE8(void) {
     allocation_1D520 *allocation;
     s16 counter;
-    u8 playerIndex;
+    u8 slotIndex;
 
     allocation = (allocation_1D520 *)getCurrentAllocation();
     counter = allocation->unkABC;
 
     if (counter != 0) {
-        playerIndex = allocation->unkAC8;
+        slotIndex = allocation->saveSlotIndex;
         counter -= 3;
         allocation->unkABC = counter;
 
         setModelCameraTransform(
             &allocation->unk1D8[3],
             0,
-            (s16)((playerIndex * 7 * 8) - 48),
+            (s16)((slotIndex * 7 * 8) - 48),
             (s16)-counter,
             -0x18,
             allocation->unkABC,
