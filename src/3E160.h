@@ -88,7 +88,7 @@ void func_80041418_42018(void);
 Func43374State *func_800436B4_442B4(Player *arg0);
 void initTitleScreen(void);
 void initLogoScreen(void);
-void func_80021D20_22920(void);
+void initVersusMode(void);
 void initOptionsMenu(void);
 void func_8003B1F4_3BDF4(s32 arg0, void *arg1);
 void *func_8003B28C_3BE8C(void);

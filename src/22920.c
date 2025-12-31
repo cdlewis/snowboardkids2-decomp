@@ -10,7 +10,7 @@ typedef struct {
 
 void func_80021D50_22950(void);
 
-void func_80021D20_22920(void) {
+void initVersusMode(void) {
     TaskData_22920 *data = allocateTaskMemory(4);
     data->unk0 = 0;
     data->unk2 = 0;
