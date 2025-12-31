@@ -86,15 +86,15 @@ void awaitVersusMapScreen(void) {
     }
 }
 
-void func_80021F2C_22B2C(void);
+void awaitVersusLevelSelect(void);
 void func_80021F80_22B80(void);
 
 void func_80021EFC_22AFC(void) {
     createTaskQueue(initLevelSelectBasic, 100);
-    setGameStateHandler(func_80021F2C_22B2C);
+    setGameStateHandler(awaitVersusLevelSelect);
 }
 
-void func_80021F2C_22B2C(void) {
+void awaitVersusLevelSelect(void) {
     s16 result;
 
     result = func_80069810_6A410();
