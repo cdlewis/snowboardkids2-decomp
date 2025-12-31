@@ -290,7 +290,7 @@ void func_80025418_26018(void *);
 void func_8002567C_2627C(func_80025FFC_26BFC_arg *);
 void func_800253E0_25FE0(func_800253E0_25FE0_arg *);
 void func_800251AC_25DAC(func_80025130_25D30_arg *);
-void func_80024BA0_257A0(CharSelectBoardPreview *);
+void updateCharSelectBoardPreview(CharSelectBoardPreview *);
 void func_80026D34_27934(func_80026BD8_arg *);
 void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
 void func_8002667C_2727C(void *);
@@ -711,10 +711,10 @@ void initCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     }
 
     updateModelGeometry(arg0->model);
-    setCallback(func_80024BA0_257A0);
+    setCallback(updateCharSelectBoardPreview);
 }
 
-void func_80024BA0_257A0(CharSelectBoardPreview *arg0) {
+void updateCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     Transform3D localMatrix;
     Transform3D *localPtr;
     GameState *state;
@@ -765,7 +765,7 @@ void func_80024C8C_2588C(CharSelectBoardPreview *arg0) {
         setCallback(func_80024D40_25940);
     } else if (val == 0x11) {
         arg0->transform.translation.x = 0xFFEA0000;
-        setCallback(func_80024BA0_257A0);
+        setCallback(updateCharSelectBoardPreview);
     }
 }
 
