@@ -13,7 +13,7 @@ void func_8001C2FC_1CEFC(void);
 void func_8001C7E8_1D3E8(void);
 void func_8001C744_1D344(void);
 void func_8001C28C_1CE8C(void);
-void func_8001C144_1CD44(void);
+void unlockScreenAwaitFadeIn(void);
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x1D8];
@@ -52,10 +52,10 @@ void waitForUnlocksAssetsReady(void) {
 
     allocation->waitCounter = 0;
     func_8006FDA0_709A0(0, 0, 0xE);
-    setGameStateHandler(func_8001C144_1CD44);
+    setGameStateHandler(unlockScreenAwaitFadeIn);
 }
 
-void func_8001C144_1CD44(void) {
+void unlockScreenAwaitFadeIn(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
 
     if (func_8006FE10_70A10(NULL) != 0) {
