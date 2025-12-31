@@ -1,16 +1,16 @@
+#include "levels/starlight_highway.h"
 #include "42170.h"
 #include "56910.h"
 #include "5AA90.h"
 #include "common.h"
-#include "rand.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "rand.h"
 #include "task_scheduler.h"
 
 extern s32 gFrameCounter;
-
 
 typedef struct {
     u8 _pad[0x80];
@@ -41,6 +41,14 @@ typedef struct {
 } func_800BC6C4_AEA84_arg;
 
 typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+    u8 _pad2[0x10];
+    void *unk3C;
+} func_800BB718_ADAD8_arg;
+
+typedef struct {
     /* 0x00 */ Transform3D node1;
     /* 0x20 */ u8 _pad20[4];
     /* 0x24 */ void *unk24;
@@ -60,8 +68,133 @@ typedef struct {
     void *unk28;
 } func_800BB45C_AD81C_arg;
 
+typedef struct {
+    /* 0x00 */ u8 _pad0[0x20];
+    /* 0x20 */ void *unk20;
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 _pad30[0xC];
+    /* 0x3C */ void *unk3C;
+    /* 0x40 */ u8 _pad40[0x4];
+    /* 0x44 */ s16 unk44;
+    /* 0x46 */ s16 unk46;
+    /* 0x48 */ s16 unk48;
+    /* 0x4A */ s16 unk4A;
+    /* 0x4C */ s16 unk4C;
+    /* 0x4E */ u8 _pad4E[0x2];
+    /* 0x50 */ s16 unk50;
+} func_800BB494_AD854_arg;
+
+typedef struct {
+    u8 unk00[0x20];
+    struct {
+        s32 unk00;
+        s32 unk04;
+        s32 unk08;
+        s32 unk0C;
+    } *unk20;
+    u8 unk24[0xC];
+    s32 unk30;
+    u8 unk34[0x10];
+    u16 unk44;
+    u16 unk46;
+    u16 unk48;
+    u16 unk4A;
+    s32 unk4C;
+    s16 unk50;
+    s16 unk52;
+} func_800BB664_arg;
+
+typedef struct {
+    u8 pad[0x76];
+    u8 unk76;
+} Allocation_ADA24;
+
+typedef struct {
+    /* 0x00 */ Transform3D mat;
+    /* 0x20 */ u8 _pad20[0x5C];
+} func_800BBB90_task;
+
+typedef struct {
+    /* 0x00 */ Transform3D mat1;
+    /* 0x20 */ DisplayLists *unk20;
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 _pad30[0xC];
+    /* 0x3C */ Transform3D mat2;
+    /* 0x5C */ DisplayLists *unk5C;
+    /* 0x60 */ void *unk60;
+    /* 0x64 */ void *unk64;
+    /* 0x68 */ s32 unk68;
+    /* 0x6C */ u8 _pad6C[0xC];
+    /* 0x78 */ s16 unk78;
+    /* 0x7A */ u16 unk7A;
+    /* 0x7C */ u8 unk7C;
+} func_800BBC28_arg;
+
+typedef struct {
+    u8 _pad[0x76];
+    u8 unk76;
+} Allocation_AE790;
+
+typedef struct {
+    u8 _pad0[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    s32 unk2C;
+    u8 _pad30[0xC];
+    s32 unk3C;
+    s32 unk40;
+    s32 unk44;
+    s16 unk48;
+    u16 unk4A;
+    u16 unk4C;
+    u8 unk4E;
+} func_800BC3D0_AE790_arg;
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_800BC4F0_AE8B0_arg;
+
+typedef struct {
+    s16 rotation[3][3];
+    u8 pad2[0xE];
+} func_800BBF28_StackLocals;
+
+extern s32 D_800BCA30_AEDF0[][3];
+extern s32 D_800BCA84_AEE44[][3];
+extern s16 D_800BCAF0_AEEB0[];
+extern s32 D_800BCB04_AEEC4[][3];
+extern s16 D_800BCB70_AEF30[];
+extern s16 D_800BCB84_AEF44[];
+extern s32 D_800BCB98_AEF58[][3];
+extern s32 D_800BCB9C_AEF5C[][3];
+extern s32 D_800BCBA0_AEF60[][3];
+extern s16 D_800BCBB0_AEF70[];
+extern void *D_800955B0;
+
+void func_800BC984_AED44(func_800BB45C_AD81C_arg *);
+void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *);
+void func_800BB5FC_AD9BC(func_800BB664_arg *);
 void func_800BB368_AD728(func_800BB368_AD728_arg *);
 void func_800BB45C_AD81C(func_800BB45C_AD81C_arg *);
+void func_800BB75C_ADB1C(void *);
+void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *);
+void func_800BBCFC_AE0BC(func_800BBC28_arg *);
+void func_800BC084_AE444(func_800BC3D0_AE790_arg *);
+void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *);
+void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *);
+void func_800BC4F0_AE8B0(func_800BC4F0_AE8B0_arg *);
+void func_800BC550_AE910(s16 *arg0);
+void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0);
 
 void func_800BB2B0_AD670(func_800BB2B0_AD670_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(8);
@@ -119,61 +252,10 @@ void func_800BB368_AD728(func_800BB368_AD728_arg *arg0) {
     }
 }
 
-void func_800BC984_AED44(func_800BB45C_AD81C_arg *);
-
 void func_800BB45C_AD81C(func_800BB45C_AD81C_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
-
-typedef struct {
-    /* 0x00 */ u8 _pad0[0x20];
-    /* 0x20 */ void *unk20;
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ u8 _pad30[0xC];
-    /* 0x3C */ void *unk3C;
-    /* 0x40 */ u8 _pad40[0x4];
-    /* 0x44 */ s16 unk44;
-    /* 0x46 */ s16 unk46;
-    /* 0x48 */ s16 unk48;
-    /* 0x4A */ s16 unk4A;
-    /* 0x4C */ s16 unk4C;
-    /* 0x4E */ u8 _pad4E[0x2];
-    /* 0x50 */ s16 unk50;
-} func_800BB494_AD854_arg;
-
-typedef struct {
-    u8 unk00[0x20];
-    struct {
-        s32 unk00;
-        s32 unk04;
-        s32 unk08;
-        s32 unk0C;
-    } *unk20;
-    u8 unk24[0xC];
-    s32 unk30;
-    u8 unk34[0x10];
-    u16 unk44;
-    u16 unk46;
-    u16 unk48;
-    u16 unk4A;
-    s32 unk4C;
-    s16 unk50;
-    s16 unk52;
-} func_800BB664_arg;
-
-typedef struct {
-    u8 pad[0x76];
-    u8 unk76;
-} Allocation_ADA24;
-
-extern void *D_800955B0;
-
-typedef struct func_800BB718_ADAD8_arg func_800BB718_ADAD8_arg;
-void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *);
-void func_800BB5FC_AD9BC(func_800BB664_arg *);
 
 void func_800BB494_AD854(func_800BB494_AD854_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(8);
@@ -268,14 +350,6 @@ void func_800BB6C0_ADA80(func_800BB664_arg *arg0) {
     func_800BB51C_AD8DC(arg0);
 }
 
-struct func_800BB718_ADAD8_arg {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-    u8 _pad2[0x10];
-    void *unk3C;
-};
-
 void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
@@ -283,8 +357,6 @@ void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *arg0) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BB75C_ADB1C);
-
-extern void func_800BB75C_ADB1C(void *);
 
 void func_800BBB0C_ADECC(void *arg0) {
     func_800BB75C_ADB1C(arg0);
@@ -300,11 +372,6 @@ void func_800BBB64_ADF24(void *arg0) {
     func_800BB75C_ADB1C(arg0);
     func_800630A4_63CA4(arg0);
 }
-
-typedef struct {
-    /* 0x00 */ Transform3D mat;
-    /* 0x20 */ u8 _pad20[0x5C];
-} func_800BBB90_task;
 
 void func_800BBB90(s16 arg0) {
     func_800BBB90_task *task;
@@ -324,30 +391,6 @@ void func_800BBB90(s16 arg0) {
         }
     }
 }
-
-extern s32 D_800BCA30_AEDF0[][3];
-
-extern void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *);
-
-typedef struct {
-    /* 0x00 */ Transform3D mat1;
-    /* 0x20 */ DisplayLists *unk20;
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ u8 _pad30[0xC];
-    /* 0x3C */ Transform3D mat2;
-    /* 0x5C */ DisplayLists *unk5C;
-    /* 0x60 */ void *unk60;
-    /* 0x64 */ void *unk64;
-    /* 0x68 */ s32 unk68;
-    /* 0x6C */ u8 _pad6C[0xC];
-    /* 0x78 */ s16 unk78;
-    /* 0x7A */ u16 unk7A;
-    /* 0x7C */ u8 unk7C;
-} func_800BBC28_arg;
-
-void func_800BBCFC_AE0BC(func_800BBC28_arg *);
 
 void func_800BBC28_ADFE8(func_800BBC28_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(8);
@@ -384,8 +427,12 @@ void func_800BBCFC_AE0BC(func_800BBC28_arg *arg0) {
     temp = allocation->numPlayers;
     if (temp > 0) {
         var_s1 = 0;
-loop_2:
-        if (isPlayerInRangeAndPull((Vec3i *)&arg0->mat1.translation.x, 0x200000, (Player *)((u8 *)allocation->players + var_s1)) == 0) {
+    loop_2:
+        if (isPlayerInRangeAndPull(
+                (Vec3i *)&arg0->mat1.translation.x,
+                0x200000,
+                (Player *)((u8 *)allocation->players + var_s1)
+            ) == 0) {
             var_s0 += 1;
             var_s1 += 0xBE8;
             if (var_s0 < (s32)allocation->numPlayers) {
@@ -399,7 +446,11 @@ loop_2:
         if (allocation->numPlayers != 0) {
             var_s1 = 0;
             do {
-                isPlayerInRangeAndPull((Vec3i *)&arg0->mat1.translation.x, 0x500000, (Player *)((u8 *)allocation->players + var_s1));
+                isPlayerInRangeAndPull(
+                    (Vec3i *)&arg0->mat1.translation.x,
+                    0x500000,
+                    (Player *)((u8 *)allocation->players + var_s1)
+                );
                 var_s0 += 1;
                 var_s1 += 0xBE8;
             } while (var_s0 < (s32)allocation->numPlayers);
@@ -424,11 +475,13 @@ loop_2:
         }
     }
     // D0/E0 block
-    arg0->unk5C = (DisplayLists *)((arg0->unk20 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xD0)), (s32)func_80055E68_56A68(8) + 0xE0);
+    arg0->unk5C = (DisplayLists *)((arg0->unk20 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xD0)),
+                                   (s32)func_80055E68_56A68(8) + 0xE0);
     goto common;
 
 block_c0f0:
-    arg0->unk5C = (DisplayLists *)((arg0->unk20 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xC0)), (s32)func_80055E68_56A68(8) + 0xF0);
+    arg0->unk5C = (DisplayLists *)((arg0->unk20 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xC0)),
+                                   (s32)func_80055E68_56A68(8) + 0xF0);
 
 common:
     var_s0 = 0;
@@ -455,63 +508,10 @@ void func_800BBED8(void) {
     }
 }
 
-extern s32 D_800BCA84_AEE44[][3];
-extern s16 D_800BCAF0_AEEB0[];
-extern s32 D_800BCB04_AEEC4[][3];
-
-extern s16 D_800BCB70_AEF30[];
-extern s16 D_800BCB84_AEF44[];
-
-extern s32 D_800BCB98_AEF58[][3];
-extern s32 D_800BCB9C_AEF5C[][3];
-extern s32 D_800BCBA0_AEF60[][3];
-extern s16 D_800BCBB0_AEF70[];
-
-typedef struct {
-    u8 _pad[0x76];
-    u8 unk76;
-} Allocation_AE790;
-
-typedef struct {
-    u8 _pad0[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    s32 unk2C;
-    u8 _pad30[0xC];
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
-    s16 unk48;
-    u16 unk4A;
-    u16 unk4C;
-    u8 unk4E;
-} func_800BC3D0_AE790_arg;
-
-void func_800BC084_AE444(func_800BC3D0_AE790_arg *);
-void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *);
-void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *);
-
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_800BC4F0_AE8B0_arg;
-
-void func_800BC4F0_AE8B0(func_800BC4F0_AE8B0_arg *);
-
-typedef struct {
-    s16 rotation[3][3];
-    u8 pad2[0xE];
-} func_800BBF28_StackLocals;
-
 void func_800BBF28_AE2E8(func_800BC3D0_AE790_arg *arg0) {
     u8 pad[0x20];
     func_800BBF28_StackLocals stack;
-    s16 (*rotPtr)[3];
+    s16(*rotPtr)[3];
     void (*callback)(func_800BC3D0_AE790_arg *);
 
     (void)pad;
@@ -596,43 +596,43 @@ void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *arg0) {
         } else {
             state = arg0->unk4E;
             switch (state) {
-            case 3:
-                createXRotationMatrix(rotation, 0xF300);
-                transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
-                callback = func_800BC084_AE444;
-                timer = 0x78;
-                arg0->unk48 = timer;
-                setCallbackWithContinue(callback);
-                break;
-            case 4:
-                createXRotationMatrix(rotation, 0xE00);
-                transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
-                callback = func_800BC3D0_AE790;
-                arg0->unk48 = 0xA;
-                setCallbackWithContinue(callback);
-                break;
-            case 5:
-                createXRotationMatrix(rotation, 0xFC00);
-                transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
-                callback = func_800BC084_AE444;
-                timer = 0x78;
-                arg0->unk48 = timer;
-                setCallbackWithContinue(callback);
-                break;
-            case 6:
-                createXRotationMatrix(rotation, 0);
-                transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
-                callback = func_800BC3D0_AE790;
-                arg0->unk48 = 0xA;
-                setCallbackWithContinue(callback);
-                break;
-            case 7:
-            case 8:
-                func_80042340_42F40(&arg0->unk14);
-                func_80069CF8_6A8F8();
-                break;
-            default:
-                break;
+                case 3:
+                    createXRotationMatrix(rotation, 0xF300);
+                    transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
+                    callback = func_800BC084_AE444;
+                    timer = 0x78;
+                    arg0->unk48 = timer;
+                    setCallbackWithContinue(callback);
+                    break;
+                case 4:
+                    createXRotationMatrix(rotation, 0xE00);
+                    transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
+                    callback = func_800BC3D0_AE790;
+                    arg0->unk48 = 0xA;
+                    setCallbackWithContinue(callback);
+                    break;
+                case 5:
+                    createXRotationMatrix(rotation, 0xFC00);
+                    transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
+                    callback = func_800BC084_AE444;
+                    timer = 0x78;
+                    arg0->unk48 = timer;
+                    setCallbackWithContinue(callback);
+                    break;
+                case 6:
+                    createXRotationMatrix(rotation, 0);
+                    transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
+                    callback = func_800BC3D0_AE790;
+                    arg0->unk48 = 0xA;
+                    setCallbackWithContinue(callback);
+                    break;
+                case 7:
+                case 8:
+                    func_80042340_42F40(&arg0->unk14);
+                    func_80069CF8_6A8F8();
+                    break;
+                default:
+                    break;
             }
         }
         posPtr = &arg0->unk14;
@@ -688,12 +688,6 @@ void func_800BC4F0_AE8B0(func_800BC4F0_AE8B0_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-typedef struct {
-    s16 unk0;
-} func_800BC528_AE8E8_arg;
-
-void func_800BC550_AE910(s16 *arg0);
-
 void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0) {
     arg0->unk0 = 0xF0;
     setCallback(&func_800BC550_AE910);
@@ -726,7 +720,9 @@ void func_800BC550_AE910(s16 *arg0) {
             new_var2 = s2 + 3;
             task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
             if (task != NULL) {
-                do { task->unk4E = (new_var = new_var2); } while (0);
+                do {
+                    task->unk4E = (new_var = new_var2);
+                } while (0);
             }
 
             task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
@@ -738,8 +734,6 @@ void func_800BC550_AE910(s16 *arg0) {
         *arg0 = (randA() & 0x1F) + 0xF0;
     }
 }
-
-void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0);
 
 void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
     void *temp;

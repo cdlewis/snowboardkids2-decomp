@@ -278,11 +278,6 @@ typedef struct {
     u16 unk50;
 } ScheduledTaskWith50;
 
-typedef struct {
-    u16 unk0;
-    s16 unk2;
-} func_800BBA28_AB8D8_arg;
-
 void func_800BBA54_AB904(func_800BBA28_AB8D8_arg *arg0);
 
 void func_800BBA28_AB8D8(func_800BBA28_AB8D8_arg *arg0) {

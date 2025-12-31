@@ -1,3 +1,4 @@
+#include "levels/ice_land.h"
 #include "56910.h"
 #include "common.h"
 #include "gamestate.h"
@@ -5,21 +6,9 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    u8 pad4[0x20];
-    void *unk24;
-    void *unk28;
-} B2030TaskPayload;
-
-typedef struct {
     u8 padding[0x5C];
     void (*callback)(void *);
 } ScheduledTask;
-
-extern void D_800BB7B0_B2530(void *);
-extern void D_800BB860_B25E0(void *);
-extern void D_800BB910_B2690(void *);
 
 typedef struct {
     u8 unk0;
@@ -53,8 +42,12 @@ typedef struct {
     u8 memoryPoolId;
 } Allocation;
 
+extern void D_800BB7B0_B2530(void *);
+extern void D_800BB860_B25E0(void *);
+extern void D_800BB910_B2690(void *);
 extern void func_800BB3A0_B2120(void);
 void func_800BB650_B23D0(B2030TaskPayload *arg0);
+void func_800BB6B4_B2434(B2030TaskPayload *arg0);
 
 void func_800BB2B0_B2030(B2030Payload *arg0) {
     Allocation *allocation;
@@ -90,8 +83,6 @@ void func_800BB650_B23D0(B2030TaskPayload *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
-
-void func_800BB6B4_B2434(B2030TaskPayload *arg0);
 
 void func_800BB688_B2408(B2030TaskPayload *arg0) {
     arg0->unk0 = 0x78;

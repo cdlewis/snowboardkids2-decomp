@@ -1,3 +1,4 @@
+#include "levels/haunted_house.h"
 #include "3E160.h"
 #include "42170.h"
 #include "52880.h"
@@ -35,22 +36,6 @@ typedef struct {
 } func_800BB388_AF078_arg;
 
 typedef struct {
-    s32 unk00;
-    s32 unk04;
-    s32 unk08;
-} Vec3;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-} func_800BB74C_AF43C_arg;
-
-typedef struct {
-    void *ghostSlotData;
-    void *unk4;
-} GhostManager;
-
-typedef struct {
     u8 pad[0x30];
     void *unk30;
 } AllocationUnk30;
@@ -78,24 +63,6 @@ typedef struct {
 } func_800BBC2C_AF91C_arg;
 
 typedef struct {
-    /* 0x00 */ u8 pad[0x14];
-    /* 0x14 */ Vec3i unk14;
-    /* 0x20 */ void *unk20;
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ u8 pad30[0xC];
-    /* 0x3C */ s32 unk3C;
-    /* 0x40 */ s32 unk40;
-    /* 0x44 */ s32 unk44;
-    /* 0x48 */ s16 unk48;
-    /* 0x4A */ s16 unk4A;
-    /* 0x4C */ s16 unk4C;
-    /* 0x4E */ s16 unk4E;
-    /* 0x50 */ s16 unk50;
-} func_800BB8E8_AF5D8_arg;
-
-typedef struct {
     void *unk0;
     void *unk4;
     s32 unk8;
@@ -119,9 +86,25 @@ typedef struct {
     u8 textureIndices[8];
 } GhostRenderState;
 
+typedef struct {
+    u8 _pad[0x24];
+    s16 unk24;
+} func_800BC0FC_Task;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 pad14[0x10];
+    s16 unk24;
+    s16 unk26;
+} func_800BBF4C_AFC3C_arg;
+
 extern s32 D_8009A8A4_9B4A4;
 extern void *D_800BC7F0_B04E0;
-extern Vec3 D_800BCAA0_B0790;
+extern Vec3i D_800BCAA0_B0790;
 extern AnimationData D_800BC830_B0520[];
 extern void *D_800BC8C8_B05B8;
 extern s8 D_800BC908_B05F8[12];
@@ -159,6 +142,8 @@ void func_800BC340_B0030(GhostManager *);
 void func_800BC750_B0440(s16 *);
 void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *);
 void func_800BC378_B0068(GhostRenderState *);
+extern void func_800BC0D0_AFDC0(void **);
+void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *);
 
 void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *arg0) {
     s32 i;
@@ -184,13 +169,13 @@ void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *arg0) {
 }
 
 void func_800BB388_AF078(func_800BB388_AF078_arg *entity) {
-    Vec3 vector;
-    Vec3 *vector_ptr;
+    Vec3i vector;
+    Vec3i *vector_ptr;
     s32 random_value;
     s32 rotation_angle;
 
     vector_ptr = &vector;
-    memcpy(vector_ptr, &D_800BCAA0_B0790, 12);
+    memcpy(vector_ptr, &D_800BCAA0_B0790, sizeof(Vec3i));
 
     getCurrentAllocation();
 
@@ -200,7 +185,7 @@ void func_800BB388_AF078(func_800BB388_AF078_arg *entity) {
 
     random_value = randA() & 0xFF;
     random_value = random_value << 10;
-    vector.unk08 = random_value + 0x20000;
+    vector.z = random_value + 0x20000;
 
     rotation_angle = randA() & 0xFF;
     rotation_angle = rotation_angle << 5;
@@ -541,20 +526,6 @@ void func_800BBEAC_AFB9C(s16 *arg0) {
     *arg0 = rand + 0xB4;
 }
 
-typedef struct {
-    void *unk0;
-    void *unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    u8 pad14[0x10];
-    s16 unk24;
-    s16 unk26;
-} func_800BBF4C_AFC3C_arg;
-
-extern void func_800BC0D0_AFDC0(void **);
-void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *);
-
 void func_800BBF4C_AFC3C(func_800BBF4C_AFC3C_arg *arg0) {
     s16 index;
 
@@ -608,11 +579,6 @@ void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *arg0) {
 void func_800BC0D0_AFDC0(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
-
-typedef struct {
-    u8 _pad[0x24];
-    s16 unk24;
-} func_800BC0FC_Task;
 
 void func_800BC0FC(s16 arg0) {
     func_800BC0FC_Task *task = (func_800BC0FC_Task *)scheduleTask(func_800BBF4C_AFC3C, 0, 0, 0xC8);

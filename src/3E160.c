@@ -8,6 +8,7 @@
 #include "6E840.h"
 #include "9FF70.h"
 #include "common.h"
+#include "course.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "graphics.h"
@@ -215,25 +216,6 @@ enum RaceType {
     RACE_TYPE_TRAINING = 9,
     RACE_TYPE_DEMO = 10,
     RACE_TYPE_INTRO = 11,
-};
-
-enum Course {
-    SUNNY_MOUNTAIN = 0,
-    TURTLE_ISLAND = 1,
-    JINGLE_TOWN = 2,
-    JINGLE_TOWN_BOSS = 3,
-    WENDYS_HOUSE = 4,
-    LINDAS_CASTLE = 5,
-    CRAZY_JUNGLE = 6,
-    CRAZY_JUNGLE_BOSS = 7,
-    STARLIGHT_HIGHWAY = 8,
-    HAUNTED_HOUSE = 9,
-    ICE_LAND = 10,
-    ICE_LAND_BOSS = 11,
-    SNOWBOARD_STREET_SPEED_CROSS = 12,
-    SNOWBOARD_STREET_SHOT_CROSS = 13,
-    X_CROSS = 14,
-    TRAINING = 15,
 };
 
 void initRace(void) {

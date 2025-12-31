@@ -1,19 +1,10 @@
+#include "levels/sunny_mountain.h"
 #include "56910.h"
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
 #include "rand.h"
 #include "task_scheduler.h"
-
-typedef struct {
-    u8 _pad[0x20];
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    s32 unk2C;
-    u8 _pad2[0x4C - 0x30];
-    s16 unk4C;
-} func_800BB814_B5114_arg;
 
 typedef struct {
     u8 _pad[0x3C];
@@ -32,21 +23,21 @@ void func_800BBB18_B5418(func_800BB814_B5114_arg *arg0);
 
 typedef struct {
     u8 _pad[0x48];
-    u8 *positionData;           /* 0x48: Source position data for display objects */
+    u8 *positionData; /* 0x48: Source position data for display objects */
     u8 _pad2[0x10];
-    u8 memoryPoolId;            /* 0x5C: ID for memory pool and display list lookup */
+    u8 memoryPoolId; /* 0x5C: ID for memory pool and display list lookup */
 } SunnyMountainAllocation;
 
 typedef struct {
     u8 _pad[0x38];
-    void *displayList;          /* 0x38: Main display list (offset 0x90 from result) */
-    void *unk3C;                /* 0x3C: Shared pointer for all display objects */
-    void *unk40;                /* 0x40: Shared pointer for all display objects */
-    s32 unk44;                  /* 0x44: Always set to 0 */
+    void *displayList; /* 0x38: Main display list (offset 0x90 from result) */
+    void *unk3C;       /* 0x3C: Shared pointer for all display objects */
+    void *unk40;       /* 0x40: Shared pointer for all display objects */
+    s32 unk44;         /* 0x44: Always set to 0 */
     u8 _pad2[0xC];
-    u8 *displayObjects;         /* 0x54: Array of 4 DisplayListObjects (0xF0 bytes) */
+    u8 *displayObjects; /* 0x54: Array of 4 DisplayListObjects (0xF0 bytes) */
     u8 _pad3[0x80];
-    s16 unkD8;                  /* 0xD8: Always set to 0 */
+    s16 unkD8; /* 0xD8: Always set to 0 */
 } SunnyMountainTaskState;
 
 extern void func_800BB488_B4D88(void);
@@ -206,8 +197,12 @@ void func_800BB890_B5190(func_800BBA34_B5334_arg *arg0) {
     startY = *(s32 *)(D_800BBB6C_B546C + offset);
     arg0->unk44 = (endY - startY) / 60;
 
-    arg0->unk4E = func_8006D21C_6DE1C(*(s32 *)(D_800BBB88_B5488 + offset), *(s32 *)(D_800BBB8C_B548C + offset),
-                                       *(s32 *)(D_800BBB68_B5468 + offset), *(s32 *)(D_800BBB6C_B546C + offset));
+    arg0->unk4E = func_8006D21C_6DE1C(
+        *(s32 *)(D_800BBB88_B5488 + offset),
+        *(s32 *)(D_800BBB8C_B548C + offset),
+        *(s32 *)(D_800BBB68_B5468 + offset),
+        *(s32 *)(D_800BBB6C_B546C + offset)
+    );
 
     dx = arg0->unk40;
     dy = arg0->unk44;

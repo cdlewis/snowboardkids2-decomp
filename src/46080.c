@@ -8,15 +8,20 @@
 #include "5E590.h"
 #include "6E840.h"
 #include "common.h"
+#include "course.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "gbi.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "levels/haunted_house.h"
+#include "levels/ice_land.h"
 #include "levels/jingle_town.h"
 #include "levels/lindas_castle.h"
+#include "levels/snowboard_street_shoot_cross.h"
 #include "levels/starlight_highway.h"
+#include "levels/sunny_mountain.h"
+#include "levels/wendys_house.h"
 #include "overlay.h"
 #include "rand.h"
 #include "task_scheduler.h"
@@ -914,7 +919,6 @@ void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
 void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
 void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *);
 void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *);
-
 void func_800478FC_484FC(void);
 void func_80048834_49434(Struct_func_80048834_49434 *arg0);
 void func_80048350_48F50(func_80048350_48F50_arg *arg0);
@@ -926,18 +930,6 @@ void func_80048F0C_49B0C(func_80048E34_49A34_arg *arg0, s32 arg1);
 void func_80049104_49D04(func_80048E34_49A34_arg *arg0);
 void func_80049230_49E30(func_80049230_49E30_arg *);
 void func_80049430_4A030(func_80049300_49F00_arg *arg0);
-extern void D_800BB688(void);
-extern void D_800BB74C(void);
-extern void D_800BB7F0(void);
-extern void D_800BB814(void);
-extern void D_800BB8E8(void);
-extern void D_800BBA28(void);
-extern void D_800BBA90(void);
-extern void D_800BBAF8(void);
-extern void D_800BBE84(void);
-extern void D_800BC13C(void);
-extern void D_800BC528(void);
-extern void D_800BC72C(void);
 
 void func_80045480_46080(func_80045480_46080_arg *arg0) {
     void *identity = identityMatrix;
@@ -2819,21 +2811,21 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
     temp_s1 = (GameState *)getCurrentAllocation();
 
     switch (arg0) {
-        case 0:
+        case SUNNY_MOUNTAIN:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
             }
             func_80049BFC_4A7FC();
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
-            scheduleTask(&D_800BB814, 0, 0, 0xD3);
+            scheduleTask(&func_800BB814_B5114, 0, 0, 0xD3);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
             break;
 
-        case 1:
+        case TURTLE_ISLAND:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -2846,7 +2838,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80049BFC_4A7FC();
             break;
 
-        case 2:
+        case JINGLE_TOWN:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -2862,7 +2854,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
             break;
 
-        case 3:
+        case JINGLE_TOWN_BOSS:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -2877,20 +2869,20 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
             break;
 
-        case 4:
+        case WENDYS_HOUSE:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
             }
             scheduleTask(&func_800BB2B0, 0, 0, 0x32);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&D_800BB7F0, 0, 0, 0x5E);
+            scheduleTask(&func_800BB7F0_B5A00, 0, 0, 0x5E);
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
             break;
 
-        case 5:
+        case LINDAS_CASTLE:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -2900,12 +2892,12 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             func_80046244_46E44(arg0, 6);
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
-            scheduleTask(&D_800BBA28, 0, 0, 0x31);
-            scheduleTask(&D_800BBAF8, 0, 0, 0xF0);
+            scheduleTask(&func_800BBA28_AB8D8, 0, 0, 0x31);
+            scheduleTask(&func_800BBAF8_AB9A8, 0, 0, 0xF0);
             func_80049BFC_4A7FC();
             break;
 
-        case 6:
+        case CRAZY_JUNGLE:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -2920,7 +2912,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
             break;
 
-        case 7:
+        case CRAZY_JUNGLE_BOSS:
             func_80044538_45138(2);
             func_80044538_45138(3);
             if (temp_s1->unk7A != 8) {
@@ -2933,7 +2925,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
             break;
 
-        case 8:
+        case STARLIGHT_HIGHWAY:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -2943,23 +2935,23 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             func_800BBED8();
-            scheduleTask(&D_800BC528, 0, 0, 0xC7);
+            scheduleTask(&func_800BC528_AE8E8, 0, 0, 0xC7);
             func_800BC9BC();
             func_80049BFC_4A7FC();
             break;
 
-        case 9:
+        case HAUNTED_HOUSE:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
             }
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
-            scheduleTask(&D_800BB74C, 0, 0, 0xC8);
+            scheduleTask(&func_800BB74C_AF43C, 0, 0, 0xC8);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
-            scheduleTask(&D_800BB8E8, 0, 0, 0x32);
-            scheduleTask(&D_800BBE84, 0, 0, 0x32);
+            scheduleTask(&func_800BB8E8_AF5D8, 0, 0, 0x32);
+            scheduleTask(&func_800BBE84_AFB74, 0, 0, 0x32);
             func_80044538_45138(6);
             func_80044538_45138(7);
             func_800BC0FC(0);
@@ -2967,12 +2959,12 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_800BC0FC(2);
             func_800BC0FC(3);
             func_800BC0FC(4);
-            scheduleTask(&D_800BC13C, 0, 0, 0xD3);
-            scheduleTask(&D_800BC72C, 0, 0, 0xD3);
+            scheduleTask(&func_800BC13C_AFE2C, 0, 0, 0xD3);
+            scheduleTask(&func_800BC72C_B041C, 0, 0, 0xD3);
             func_80049BFC_4A7FC();
             break;
 
-        case 10:
+        case ICE_LAND:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -2980,12 +2972,12 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80044538_45138(4);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
-            scheduleTask(&D_800BB688, 0, 0, 0xD3);
+            scheduleTask(&func_800BB688_B2408, 0, 0, 0xD3);
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
             break;
 
-        case 11:
+        case ICE_LAND_BOSS:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -3002,7 +2994,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80044538_45138(5);
             break;
 
-        case 12:
+        case SNOWBOARD_STREET_SPEED_CROSS:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -3018,7 +3010,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             break;
 
-        case 13:
+        case SNOWBOARD_STREET_SHOT_CROSS:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -3031,10 +3023,10 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             }
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
-            scheduleTask(&D_800BBA90, 0, 0, 0xD3);
+            scheduleTask(&func_800BBA90_AD510, 0, 0, 0xD3);
             break;
 
-        case 14:
+        case X_CROSS:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
@@ -3047,7 +3039,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
             break;
 
-        case 15:
+        case TRAINING:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);

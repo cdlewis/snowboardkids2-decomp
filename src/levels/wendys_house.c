@@ -1,3 +1,4 @@
+#include "levels/wendys_house.h"
 #include "../3E160.h"
 #include "56910.h"
 #include "5AA90.h"
@@ -64,6 +65,12 @@ typedef struct {
     s32 unk48;
 } func_800BB2B0_arg;
 
+typedef struct {
+    u8 pad[0x4C];
+    s16 unk4C;
+} Task;
+
+void func_800BB828_B5A38(func_800BB7F0_B5A00_arg *);
 void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0);
 void func_800BB458_B5668(func_800BB458_B5668_arg *arg0);
 void func_800BB7B8_B59C8(func_800BB420_B5630_arg *arg0);
@@ -205,20 +212,6 @@ void func_800BB7B8_B59C8(func_800BB420_B5630_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} func_800BB7F0_B5A00_arg;
-
-typedef struct {
-    u8 pad[0x4C];
-    s16 unk4C;
-} Task;
-
-void func_800BB828_B5A38(func_800BB7F0_B5A00_arg *);
 
 void func_800BB7F0_B5A00(func_800BB7F0_B5A00_arg *arg0) {
     arg0->unk2 = 0x50;

@@ -1,3 +1,4 @@
+#include "levels/snowboard_street_shoot_cross.h"
 #include "19E80.h"
 #include "56910.h"
 #include "594E0.h"
@@ -10,10 +11,7 @@
 #include "overlay.h"
 #include "task_scheduler.h"
 
-extern Gfx D_8009A780_9B380[];
-extern Gfx *gRegionAllocPtr;
-extern s16 gGraphicsMode;
-extern s32 D_800A8B14_9FE84;
+#define Y_OFFSET 0xFFE80000
 
 USE_ASSET(_4060A0);
 
@@ -34,13 +32,6 @@ typedef struct {
     u8 _pad14[0x2];
     s16 unk16;
 } ACD30Struct;
-
-void func_800BB4B8_ACF38(ACD30Struct *arg0);
-void func_800BB310_ACD90(ACD30Struct *arg0);
-void func_800BB428_ACEA8(ACD30Struct *arg0);
-
-extern s32 D_8009A8A4_9B4A4;
-extern void *D_800BBBB0_AD630;
 
 typedef struct {
     u8 _pad[0x24];
@@ -67,19 +58,28 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    s32 unk2C;
-} AD510Arg;
-
-typedef struct {
-    u8 _pad[0x14];
     s16 unk14;
 } ACD30Task;
+
+typedef struct {
+    /* 0x00 */ Transform3D matrix;
+    /* 0x20 */ u8 _pad20[0x1C];
+    /* 0x3C */ u16 unk3C;
+} AD594Arg;
+
+void func_800BB690_AD110(ACD30Struct *arg0);
+void func_800BBB14_AD594(AD594Arg *arg0);
+void func_800BBB70_AD5F0(AD510Arg *arg0);
+void func_800BB4B8_ACF38(ACD30Struct *arg0);
+void func_800BB310_ACD90(ACD30Struct *arg0);
+void func_800BB428_ACEA8(ACD30Struct *arg0);
+
+extern Gfx D_8009A780_9B380[];
+extern Gfx *gRegionAllocPtr;
+extern s16 gGraphicsMode;
+extern s32 D_800A8B14_9FE84;
+extern s32 D_8009A8A4_9B4A4;
+extern void *D_800BBBB0_AD630;
 
 void func_800BB2B0_ACD30(ACD30Struct *arg0) {
     arg0->unkC = loadAsset_34F9A0();
@@ -129,8 +129,6 @@ void func_800BB310_ACD90(ACD30Struct *arg0) {
     setCallback(func_800BB428_ACEA8);
 }
 
-void func_800BB690_AD110(ACD30Struct *arg0);
-
 void func_800BB428_ACEA8(ACD30Struct *arg0) {
     s32 i;
 
@@ -150,8 +148,6 @@ void func_800BB4B8_ACF38(ACD30Struct *arg0) {
     arg0->unkC = freeNodeMemory(arg0->unkC);
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
-
-#define Y_OFFSET 0xFFE80000
 
 s32 func_800BB504(Vec3i *arg0, s32 arg1) {
     s32 pos[3];
@@ -267,11 +263,7 @@ void func_800BB690_AD110(ACD30Struct *arg0) {
                 gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
             }
 
-            gSPMatrix(
-                gRegionAllocPtr++,
-                (u8 *)arg0->unk0 + (i << 6),
-                G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
-            );
+            gSPMatrix(gRegionAllocPtr++, (u8 *)arg0->unk0 + (i << 6), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
@@ -290,15 +282,6 @@ void func_800BBA50(s32 arg0) {
         task->unk14 = arg0;
     }
 }
-
-typedef struct {
-    /* 0x00 */ Transform3D matrix;
-    /* 0x20 */ u8 _pad20[0x1C];
-    /* 0x3C */ u16 unk3C;
-} AD594Arg;
-
-void func_800BBB14_AD594(AD594Arg *arg0);
-void func_800BBB70_AD5F0(AD510Arg *arg0);
 
 void func_800BBA90_AD510(AD510Arg *arg0) {
     AD510Allocation *allocation;
