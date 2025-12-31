@@ -18,8 +18,8 @@ void func_80014660_15260(void);
 void waitForLogoScreen(void);
 void startLogoScreen(void);
 void func_800148CC_154CC(void);
-void func_8001474C_1534C(void);
-void func_8001478C_1538C(void);
+void startAttractRace(void);
+void waitForAttractRace(void);
 void startDemoRace(void);
 void waitForDemoRace(void);
 void func_80014900_15500(void);
@@ -105,7 +105,7 @@ void func_80014690_15290(void) {
             ptr->unk5 = val & 0xF;
             setGameStateHandler(startDemoRace);
         } else {
-            setGameStateHandler(func_8001474C_1534C);
+            setGameStateHandler(startAttractRace);
         }
     } else if (result == 2) {
         setGameStateHandler(func_80014808_15408);
@@ -116,13 +116,13 @@ void func_80014690_15290(void) {
     }
 }
 
-void func_8001474C_1534C(void) {
+void startAttractRace(void) {
     D_800AFE8C_A71FC->unk4 = 2;
     createTaskQueue(initRace, 100);
-    setGameStateHandler(func_8001478C_1538C);
+    setGameStateHandler(waitForAttractRace);
 }
 
-void func_8001478C_1538C(void) {
+void waitForAttractRace(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         D_800AFE8C_A71FC->unk5 = (D_800AFE8C_A71FC->unk5 + 1) % 3;
         D_800AFE8C_A71FC->unk5 |= 0xF0;
