@@ -330,7 +330,16 @@ class TaskRunner:
                 print("No candidates after hash filter.")
                 break
 
-            print(f"Script returned {len(candidates)} candidate(s)")
+            # Count ignored candidates for reporting
+            ignored = self._load_ignored_prompts()
+            ignored_count = sum(1 for c in candidates if self._get_candidate_key(c) in ignored)
+            eligible_count = len(candidates) - ignored_count
+
+            eligible_word = "candidate" if eligible_count == 1 else "candidates"
+            if ignored_count > 0:
+                print(f"Script returned {eligible_count} eligible {eligible_word} ({ignored_count} ignored)")
+            else:
+                print(f"Script returned {eligible_count} {eligible_word}")
 
             # Select first non-ignored argument
             selected = self._select_argument(candidates)
