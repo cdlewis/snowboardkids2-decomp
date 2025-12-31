@@ -29,9 +29,9 @@ void func_80016964_17564(Struct16B68 *arg0);
 void func_80016E70_17A70(Struct16B68 *arg0);
 
 void func_800163CC_16FCC(Struct163F8 *);
-void func_800163A0_16FA0(Struct163F8 *);
+void cleanupTitleLogoTask(Struct163F8 *);
 
-void func_800163A0_16FA0(Struct163F8 *arg0) {
+void cleanupTitleLogoTask(Struct163F8 *arg0) {
     arg0->unk38 = freeNodeMemory(arg0->unk38);
 }
 
@@ -47,7 +47,7 @@ void func_800163F8_16FF8(Struct163F8 *arg0) {
 
 void func_80016434_17034(Struct163F8 *arg0) {
     arg0->unk38 = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
-    setCleanupCallback(func_800163A0_16FA0);
+    setCleanupCallback(cleanupTitleLogoTask);
     setCallback(func_800163F8_16FF8);
 }
 
