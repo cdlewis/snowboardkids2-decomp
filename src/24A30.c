@@ -59,16 +59,6 @@ typedef struct {
 } func_80025130_25D30_arg;
 
 typedef struct {
-    u8 padding[0x20];
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 padding2[0x72];
-    u8 unkA2;
-} func_80024220_24E20_arg;
-
-typedef struct {
     s16 unk0;
     s16 unk2;
     void *unk4;
@@ -308,7 +298,7 @@ void func_80026834_27434(func_80025FFC_26BFC_arg *);
 void func_80025DAC_269AC(SelectionMenuState *);
 void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
 void updateCharSelectPreviewModel(CharSelectPreviewModel *);
-void func_80024220_24E20(func_80024220_24E20_arg *);
+void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
 void func_80024298_24E98(CharSelectPreviewModel *);
 void func_80024600_25200(func_8002494C_arg *);
 void func_80027BC8_287C8(func_80027BC8_arg *, u8);
@@ -461,22 +451,22 @@ after_rotation:
             arg0->animationAsset = freeNodeMemory(arg0->animationAsset);
             arg0->skeletonAsset = freeNodeMemory(arg0->skeletonAsset);
             arg0->paletteAsset = freeNodeMemory(arg0->paletteAsset);
-            setCallback(func_80024220_24E20);
+            setCallback(reloadCharSelectPreviewAssets);
         } else {
             func_800650B4_65CB4(arg0->playerIndex, (DisplayListObject *)arg0);
         }
     }
 }
 
-void func_80024220_24E20(func_80024220_24E20_arg *arg0) {
-    u8 charIndex;
+void reloadCharSelectPreviewAssets(CharSelectPreviewModel *arg0) {
+    u8 paletteIndex;
 
-    charIndex = EepromSaveData->character_or_settings[arg0->unkA2] - 1;
+    paletteIndex = EepromSaveData->character_or_settings[arg0->charPaletteIndex] - 1;
 
-    arg0->unk20 = loadAssetByIndex_95728(arg0->unkA2);
-    arg0->unk24 = loadAssetByIndex_95500(arg0->unkA2);
-    arg0->unk28 = loadAssetByIndex_95590(arg0->unkA2);
-    arg0->unk2C = loadAssetByIndex_95668(charIndex);
+    arg0->modelAsset = loadAssetByIndex_95728(arg0->charPaletteIndex);
+    arg0->animationAsset = loadAssetByIndex_95500(arg0->charPaletteIndex);
+    arg0->skeletonAsset = loadAssetByIndex_95590(arg0->charPaletteIndex);
+    arg0->paletteAsset = loadAssetByIndex_95668(paletteIndex);
 
     setCallback(updateCharSelectPreviewModel);
 }
