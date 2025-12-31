@@ -1854,6 +1854,7 @@ resumeLevelPreviewAfterHold = 0x80020418; // rom:0x21018
 cleanupLevelPreviewCharacter = 0x80020528; // rom:0x21128
 sampleMaxSurroundingTerrainHeight = 0x8002055C; // rom:0x2115C
 initLevelPreviewPortraits = 0x800206B4; // rom:0x212B4
+renderLevelPreviewPortraits = 0x800208AC; // rom:0x214AC
 cleanupLevelPreviewPortraits = 0x80020B18; // rom:0x21718
 
 GenericTriggerInit = 0x80018CB0; // rom:0x198B0

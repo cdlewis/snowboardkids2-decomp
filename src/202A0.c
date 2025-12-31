@@ -28,7 +28,7 @@ USE_ASSET(_41A1D0);
 
 typedef struct {
     u8 _pad0[0xB2F];
-    u8 unkB2F;
+    u8 menuState;
     u8 _padB30[0x15];
     u8 unkB45;
     u8 unkB46;
@@ -474,22 +474,22 @@ INCLUDE_ASM("asm/nonmatchings/202A0", func_80020708_21308);
 
 typedef struct {
     u8 _pad[0xC];
-} Func800208ACArg;
+} LevelPreviewPortraitEntry;
 
 extern void func_80020924_21524(void);
 
-void func_800208AC_214AC(Func800208ACArg *arg0) {
+void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
     Allocation_202A0 *allocation;
     s32 i;
 
     allocation = (Allocation_202A0 *)getCurrentAllocation();
     i = 0;
 
-    if (allocation->unkB2F == 1) {
+    if (allocation->menuState == 1) {
         setCallbackWithContinue(&func_80020924_21524);
     } else {
         for (i = 0; i < 2; i++) {
-            debugEnqueueCallback(8, 7, func_8000FED0_10AD0, &arg0[i]);
+            debugEnqueueCallback(8, 7, func_8000FED0_10AD0, &portraitEntries[i]);
         }
     }
 }
@@ -542,7 +542,7 @@ void func_80020FDC_21BDC(Func80020FDCArg *arg0) {
 void func_80021054_21C54(void *arg0) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
-    if (allocation->unkB2F == 2) {
+    if (allocation->menuState == 2) {
         debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
     }
 }
@@ -699,7 +699,7 @@ void func_8002144C_2204C(Func8002144CArg *arg0) {
     if (allocation->unkB45 != 0) {
         if (allocation->unkB47 != 0) {
             func_80021548_22148(allocation->unkB47, arg0);
-        } else if (temp != 0 && allocation->unkB2F == 8) {
+        } else if (temp != 0 && allocation->menuState == 8) {
             func_800215DC_221DC(arg0);
         }
     } else if (temp != 0) {
@@ -767,7 +767,7 @@ void func_800216AC_222AC(Func800216ACArg *arg0) {
 void func_800216D4_222D4(Func800216ACArg *arg0) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
-    if (allocation->unkB2F == 8) {
+    if (allocation->menuState == 8) {
         arg0->unk0++;
         arg0->unk2++;
         arg0->unk0 &= 0x3FF;
@@ -809,7 +809,7 @@ void func_80021778_22378(Func80021810Arg *arg0) {
 void func_80021810_22410(Func80021810Arg *arg0) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
-    if (allocation->unkB2F == 8) {
+    if (allocation->menuState == 8) {
         func_80035260_35E60(
             arg0->unk8,
             arg0->unk4,
@@ -944,7 +944,7 @@ void func_80021A20_22620(Func80021A20Arg *arg0) {
 
     allocation = getCurrentAllocation();
 
-    if (allocation->unkB2F == 3) {
+    if (allocation->menuState == 3) {
         arg0->unk60++;
         if (arg0->unk60 < 0x11) {
             arg0->unkA -= 8;
@@ -965,7 +965,7 @@ void func_80021A20_22620(Func80021A20Arg *arg0) {
         arg0->unk1A = 0xFF;
     }
 
-    if ((u32)(allocation->unkB2F - 2) < 2) {
+    if ((u32)(allocation->menuState - 2) < 2) {
         func_8006D7B0_6E3B0(arg0->unk54, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
         debugEnqueueCallback(8, 1, func_80035408_36008, &arg0->unk2C);
 
