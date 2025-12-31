@@ -1909,3 +1909,5 @@ awaitCreditsSequence = 0x8001514C; // rom:0x15D4C
 loadPostCreditsSaveScreen = 0x800151A4; // rom:0x15DA4
 awaitPostCreditsSaveScreen = 0x800151E4; // rom:0x15DE4
 initStoryMapLocationIntro = 0x8001AE80; // rom:0x1BA80
+awaitStoryMapLocationIntro = 0x8001AF18; // rom:0x1BB18
+onStoryMapLocationIntroComplete = 0x8001AF80; // rom:0x1BB80

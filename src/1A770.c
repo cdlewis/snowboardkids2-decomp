@@ -33,7 +33,7 @@ typedef struct {
 } allocation_1B8C8;
 
 extern void onStoryModeRaceCancelled(void);
-extern void func_8001AF18_1BB18(void);
+extern void awaitStoryMapLocationIntro(void);
 extern void awaitStoryMapDecorReady(void);
 extern void cleanupStoryMapDecorModel(applyTransformToModel_arg1 *);
 extern void setupStoryMapDecorModel(applyTransformToModel_arg1 *);
@@ -58,7 +58,7 @@ void awaitFadeLoadStoryMap(void);
 void awaitStoryModeCharacterSelect(void);
 void awaitFadeLoadPreRaceCutscene(void);
 void loadStoryModeRace(void);
-void func_8001AF80_1BB80(void);
+void onStoryMapLocationIntroComplete(void);
 void startBoardShopFadeOut(void);
 
 void storyMapDecorModelTask(StoryMapDecorModelState *arg0) {
@@ -346,26 +346,26 @@ void initStoryMapLocationIntro(void) {
     func_80027CA0_288A0((Node_70B00 *)temp_s0, 0, 0xA, 0);
     func_8006FDA0_709A0(0, 0, 8);
     scheduleTask(&storyMapLocationTextTask, 0U, 0U, 0x5AU);
-    setGameStateHandler(&func_8001AF18_1BB18);
+    setGameStateHandler(&awaitStoryMapLocationIntro);
 }
 
-void func_8001AF18_1BB18(void) {
-    Node_70B00 *temp_v0 = (Node_70B00 *)getCurrentAllocation();
+void awaitStoryMapLocationIntro(void) {
+    Node_70B00 *state = (Node_70B00 *)getCurrentAllocation();
 
-    temp_v0[1].unk0.callback_selector++;
+    state[1].unk0.callback_selector++;
 
     do {
         if (gControllerInputs[0] & A_BUTTON) {
-            temp_v0[1].unk0.callback_selector = 0x3C;
+            state[1].unk0.callback_selector = 0x3C;
         }
     } while (0);
 
-    if (temp_v0[1].unk0.callback_selector >= 0x3C) {
-        unlinkNode(temp_v0);
-        terminateSchedulerWithCallback(&func_8001AF80_1BB80);
+    if (state[1].unk0.callback_selector >= 0x3C) {
+        unlinkNode(state);
+        terminateSchedulerWithCallback(&onStoryMapLocationIntroComplete);
     }
 }
 
-void func_8001AF80_1BB80(void) {
+void onStoryMapLocationIntroComplete(void) {
     func_800697F4_6A3F4(1);
 }
