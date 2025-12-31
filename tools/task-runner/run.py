@@ -79,11 +79,12 @@ class TaskRunner:
         # Ensure log files exist
         Path(self.ignored_prompts_file).touch()
 
-        # Setup signal handler for graceful shutdown
-        signal.signal(signal.SIGINT, self._signal_handler)
+        # Setup SIGQUIT handler for graceful shutdown (Ctrl+\)
+        signal.signal(signal.SIGQUIT, self._sigquit_handler)
 
-    def _signal_handler(self, sig, frame):
-        print("\nInterrupt received, will stop after current iteration...")
+    def _sigquit_handler(self, sig, frame):
+        r"""Handle SIGQUIT (Ctrl+\) for graceful shutdown."""
+        print("\n[Ctrl+\\] Graceful stop requested, will finish current iteration...")
         self.stop_requested = True
 
     def _run_script(self):
@@ -207,19 +208,12 @@ class TaskRunner:
             print(f"Running: {self.claude_command} -p <prompt>")
 
         try:
-            # Temporarily ignore SIGINT in the parent process during subprocess execution
-            # This allows the subprocess to complete before we check stop_requested
-            old_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
-
             result = subprocess.run(
                 command,
                 shell=True,
                 capture_output=True,
                 text=True
             )
-
-            # Restore the original signal handler
-            signal.signal(signal.SIGINT, old_handler)
 
             output = result.stdout + result.stderr
 
@@ -236,8 +230,6 @@ class TaskRunner:
 
             return result.returncode, output
         except Exception as e:
-            # Restore signal handler in case of exception
-            signal.signal(signal.SIGINT, self._signal_handler)
             print(f"Error running Claude: {e}")
             return 1, str(e)
 
@@ -290,16 +282,15 @@ class TaskRunner:
                 print("Please ensure claude is installed and accessible.")
                 return
 
-        try:
-            self._run_loop()
-        except KeyboardInterrupt:
-            print("\nInterrupt received, stopping gracefully...")
-            self.stop_requested = True
+        print("Press Ctrl+\\ to stop gracefully after current iteration")
+        print()
+
+        self._run_loop()
 
         print(f"\nTotal iterations: {self.count}")
 
     def _run_loop(self):
-        """Internal loop that can be interrupted."""
+        """Internal loop."""
         while True:
             if self.stop_requested:
                 print("Stopping gracefully.")
@@ -563,6 +554,10 @@ Parallel execution:
 Use --evens and --odds to run two sessions in parallel without conflicts.
 Each session will only process candidates whose function name hashes to
 an even or odd number respectively.
+
+Graceful shutdown:
+Press Ctrl+\\ to stop after the current iteration completes.
+Ctrl+C will kill immediately.
 
 Tasks are discovered from tools/task-runner/tasks/*.json
 Use --list to see all available tasks.
