@@ -14,8 +14,8 @@ USE_ASSET(_418520);
 
 extern u8 gConnectedControllerMask;
 
-void func_800168BC_174BC(ModelEntityRenderState *arg0);
-void func_800168D8_174D8(EffectState *arg0);
+void renderTitleEffectModel(ModelEntityRenderState *arg0);
+void cleanupTitleEffectModel(EffectState *arg0);
 
 extern Transform3D D_8008D5C4_8E1C4[];
 extern u16 *D_8008D534_8E134[2];
@@ -157,16 +157,16 @@ void initTitleEffectModel(ModelEntity *arg0) {
 
     alloc = (GameState *)getCurrentAllocation();
     initModelEntity(arg0, 2, &alloc->audioPlayer2);
-    setCleanupCallback(func_800168D8_174D8);
+    setCleanupCallback(cleanupTitleEffectModel);
     setupModelEntityLighting(arg0, sp10, &sp28);
-    setCallback(func_800168BC_174BC);
+    setCallback(renderTitleEffectModel);
 }
 
-void func_800168BC_174BC(ModelEntityRenderState *state) {
+void renderTitleEffectModel(ModelEntityRenderState *state) {
     renderModelEntity(state);
 }
 
-void func_800168D8_174D8(EffectState *arg0) {
+void cleanupTitleEffectModel(EffectState *arg0) {
     freeEffectResources(arg0);
 }
 
