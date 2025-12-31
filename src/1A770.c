@@ -32,7 +32,7 @@ typedef struct {
     u8 unk79A;
 } allocation_1B8C8;
 
-extern void func_8001A0F4_1ACF4(void);
+extern void onStoryModeRaceCancelled(void);
 extern void func_8001AF18_1BB18(void);
 extern void awaitStoryMapDecorReady(void);
 extern void cleanupStoryMapDecorModel(applyTransformToModel_arg1 *);
@@ -125,7 +125,7 @@ void awaitStoryModeRaceLevelSelect(void) {
 
     if (selectionResult != 0) {
         if (selectionResult == 0xFF) {
-            terminateSchedulerWithCallback(&func_8001A0F4_1ACF4);
+            terminateSchedulerWithCallback(&onStoryModeRaceCancelled);
             return;
         }
 
@@ -210,7 +210,7 @@ void awaitStoryModeRaceResult(void) {
         return;
     }
 
-    terminateSchedulerWithCallback(func_8001A0F4_1ACF4);
+    terminateSchedulerWithCallback(onStoryModeRaceCancelled);
 }
 
 void loadStoryModeUnlockCutscene(void) {
@@ -222,11 +222,11 @@ void loadStoryModeUnlockCutscene(void) {
 void awaitStoryModeUnlockCutscene(void) {
     if ((func_80069810_6A410() << 0x10) != 0) {
         D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
-        terminateSchedulerWithCallback(&func_8001A0F4_1ACF4);
+        terminateSchedulerWithCallback(&onStoryModeRaceCancelled);
     }
 }
 
-void func_8001A0F4_1ACF4(void) {
+void onStoryModeRaceCancelled(void) {
     func_800697F4_6A3F4(0xFF);
 }
 
