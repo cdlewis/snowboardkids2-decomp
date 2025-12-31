@@ -280,7 +280,7 @@ void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
 void func_8002667C_2727C(void *);
 void func_80026834_27434(func_80025FFC_26BFC_arg *);
 void updateCharSelectMenu(SelectionMenuState *);
-void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
+void cleanupCharSelectMenu(func_80025FFC_26BFC_arg *);
 void updateCharSelectPreviewModel(CharSelectPreviewModel *);
 void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
 void initCharSelectSlidePosition(CharSelectPreviewModel *);
@@ -1103,7 +1103,7 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
     (void)pad;
 
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_80025FFC_26BFC);
+    setCleanupCallback(cleanupCharSelectMenu);
 
     spriteIndexBase = 8;
     if (D_800AFE8C_A71FC->numPlayers == 1) {
@@ -1235,7 +1235,7 @@ void updateCharSelectMenuConfirm(SelectionMenuState *menu) {
     }
 }
 
-void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *arg0) {
+void cleanupCharSelectMenu(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
