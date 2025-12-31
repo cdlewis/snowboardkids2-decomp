@@ -283,11 +283,11 @@ play_sound:
 }
 
 typedef struct FD98_struct {
-    s8 unk0;
-    s8 unk1;
-    s8 unk2;
-    u8 unk3;
-    u8 unk4;
+    s8 viewerState;
+    s8 navigationMode;
+    s8 cursorIndex;
+    u8 pageUpCursorDest;
+    u8 pageDownCursorDest;
     u8 pad5[0x3];
     s32 unk8;
     s32 unkC;
@@ -534,7 +534,7 @@ void func_8000F4F0_100F0(E770_struct *arg0) {
     }
 }
 
-void func_8000F564_10164(FD98_struct *arg0) {
+void handleViewerGridNavigation_TwoPage(FD98_struct *arg0) {
     s32 inputs;
     s8 temp;
     u8 val;
@@ -542,53 +542,53 @@ void func_8000F564_10164(FD98_struct *arg0) {
     inputs = gControllerInputs;
 
     if (inputs & 0x80200) {
-        if (arg0->unk2 == 0) {
-            arg0->unk2 = 14;
+        if (arg0->cursorIndex == 0) {
+            arg0->cursorIndex = 14;
         } else {
-            arg0->unk2 = arg0->unk2 - 1;
+            arg0->cursorIndex = arg0->cursorIndex - 1;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (inputs & 0x40100) {
-        if (arg0->unk2 == 14) {
-            arg0->unk2 = 0;
+        if (arg0->cursorIndex == 14) {
+            arg0->cursorIndex = 0;
         } else {
-            arg0->unk2 = arg0->unk2 + 1;
+            arg0->cursorIndex = arg0->cursorIndex + 1;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (inputs & 0x10800) {
-        val = arg0->unk2;
+        val = arg0->cursorIndex;
         if ((u8)(val - 8) < 7u) {
-            arg0->unk2 = val - 7;
+            arg0->cursorIndex = val - 7;
         } else {
             if (val == 0) {
-                arg0->unk3 = val + 8;
-                arg0->unk4 = arg0->unk2;
+                arg0->pageUpCursorDest = val + 8;
+                arg0->pageDownCursorDest = arg0->cursorIndex;
             } else {
-                arg0->unk3 = val + 7;
-                arg0->unk4 = arg0->unk2;
+                arg0->pageUpCursorDest = val + 7;
+                arg0->pageDownCursorDest = arg0->cursorIndex;
             }
-            arg0->unk1 = 1;
+            arg0->navigationMode = 1;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (inputs & 0x20400) {
-        temp = arg0->unk2;
+        temp = arg0->cursorIndex;
         if (temp == 0) {
-            arg0->unk2 = 8;
+            arg0->cursorIndex = 8;
         } else if ((u8)(temp - 1) < 7u) {
-            arg0->unk2 = temp + 7;
+            arg0->cursorIndex = temp + 7;
         } else {
-            arg0->unk3 = temp;
-            arg0->unk1 = 1;
-            arg0->unk4 = arg0->unk2 - 7;
+            arg0->pageUpCursorDest = temp;
+            arg0->navigationMode = 1;
+            arg0->pageDownCursorDest = arg0->cursorIndex - 7;
         }
         func_800585C8_591C8(0x2B);
     }
@@ -602,7 +602,7 @@ void func_8000F690_10290(FD98_struct *arg0) {
     inputs = gControllerInputs;
 
     if (inputs & 0x80200) {
-        s8 temp = arg0->unk2;
+        s8 temp = arg0->cursorIndex;
         if (!temp) {
             newVal = 8;
         } else if (temp == 9) {
@@ -610,46 +610,46 @@ void func_8000F690_10290(FD98_struct *arg0) {
         } else {
             newVal = temp - 1;
         }
-        arg0->unk2 = newVal;
+        arg0->cursorIndex = newVal;
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (inputs & 0x40100) {
-        s8 temp = arg0->unk2;
+        s8 temp = arg0->cursorIndex;
         if (temp == 8) {
-            arg0->unk2 = 0;
+            arg0->cursorIndex = 0;
         } else if (temp == 17) {
-            arg0->unk2 = 9;
+            arg0->cursorIndex = 9;
         } else {
-            arg0->unk2 = temp + 1;
+            arg0->cursorIndex = temp + 1;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (inputs & 0x10800) {
-        u8 val = arg0->unk2;
+        u8 val = arg0->cursorIndex;
         temp2 = val - 9;
         if ((u8)temp2 < 9u) {
-            arg0->unk2 = temp2;
+            arg0->cursorIndex = temp2;
         } else {
-            arg0->unk3 = val + 9;
-            arg0->unk1 = 1;
-            arg0->unk4 = arg0->unk2;
+            arg0->pageUpCursorDest = val + 9;
+            arg0->navigationMode = 1;
+            arg0->pageDownCursorDest = arg0->cursorIndex;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (inputs & 0x20400) {
-        u8 val = arg0->unk2;
+        u8 val = arg0->cursorIndex;
         if (val < 9u) {
-            arg0->unk2 = val + 9;
+            arg0->cursorIndex = val + 9;
         } else {
-            arg0->unk3 = val;
-            arg0->unk1 = 1;
-            arg0->unk4 = arg0->unk2 - 9;
+            arg0->pageUpCursorDest = val;
+            arg0->navigationMode = 1;
+            arg0->pageDownCursorDest = arg0->cursorIndex - 9;
         }
         func_800585C8_591C8(0x2B);
     }
@@ -661,20 +661,20 @@ void func_8000F7B0_103B0(FD98_struct *arg0) {
     inputs = gControllerInputs;
 
     if (inputs & 0x80200) {
-        if (arg0->unk2 == 0) {
-            arg0->unk2 = 8;
+        if (arg0->cursorIndex == 0) {
+            arg0->cursorIndex = 8;
         } else {
-            arg0->unk2 = arg0->unk2 - 1;
+            arg0->cursorIndex = arg0->cursorIndex - 1;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (inputs & 0x40100) {
-        if (arg0->unk2 == 8) {
-            arg0->unk2 = 0;
+        if (arg0->cursorIndex == 8) {
+            arg0->cursorIndex = 0;
         } else {
-            arg0->unk2 = arg0->unk2 + 1;
+            arg0->cursorIndex = arg0->cursorIndex + 1;
         }
         func_800585C8_591C8(0x2B);
         return;
@@ -685,9 +685,9 @@ void func_8000F7B0_103B0(FD98_struct *arg0) {
     }
     if (inputs & 0x20400) {
     set_values:
-        arg0->unk3 = arg0->unk2;
-        arg0->unk4 = arg0->unk2;
-        arg0->unk1 = 1;
+        arg0->pageUpCursorDest = arg0->cursorIndex;
+        arg0->pageDownCursorDest = arg0->cursorIndex;
+        arg0->navigationMode = 1;
         func_800585C8_591C8(0x2B);
     }
 }
@@ -700,11 +700,11 @@ void func_8000F884_10484(FD98_struct *arg0) {
 
     alloc = getCurrentAllocation();
     sp30_ptr = sp30;
-    entry = &gGalleryCategories[alloc->selectedOption].items[arg0->unk2];
+    entry = &gGalleryCategories[alloc->selectedOption].items[arg0->cursorIndex];
     memcpy(sp30_ptr, D_8009DF6C_9EB6C, 0xC);
 
     if (gControllerInputs & 0x8000) {
-        if (isGalleryItemUnlocked(arg0->unk2)) {
+        if (isGalleryItemUnlocked(arg0->cursorIndex)) {
             playBgmTrack(alloc, entry->pad[4]);
             if (alloc->menuModel->unk16 != 0x92) {
                 spawnSpriteEffectInternal(
@@ -729,50 +729,50 @@ void func_8000F884_10484(FD98_struct *arg0) {
     }
 
     if (gControllerInputs & 0x80200) {
-        s8 temp_v0 = arg0->unk2;
+        s8 temp_v0 = arg0->cursorIndex;
         s8 temp_v1 = temp_v0;
         if (temp_v0 == 0) {
-            arg0->unk2 = 0x1A;
+            arg0->cursorIndex = 0x1A;
         } else {
-            arg0->unk2 = temp_v1 - 1;
+            arg0->cursorIndex = temp_v1 - 1;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (gControllerInputs & 0x40100) {
-        s8 temp = arg0->unk2;
+        s8 temp = arg0->cursorIndex;
         if (temp == 0x1A) {
-            arg0->unk2 = 0;
+            arg0->cursorIndex = 0;
         } else {
-            arg0->unk2 = temp + 1;
+            arg0->cursorIndex = temp + 1;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (gControllerInputs & 0x10800) {
-        u8 val = arg0->unk2;
+        u8 val = arg0->cursorIndex;
         s8 temp = val - 9;
         if ((u8)temp < 0x12u) {
-            arg0->unk2 = temp;
+            arg0->cursorIndex = temp;
         } else {
-            arg0->unk3 = val + 0x12;
-            arg0->unk1 = 1;
-            arg0->unk4 = arg0->unk2;
+            arg0->pageUpCursorDest = val + 0x12;
+            arg0->navigationMode = 1;
+            arg0->pageDownCursorDest = arg0->cursorIndex;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (gControllerInputs & 0x20400) {
-        u8 val = arg0->unk2;
+        u8 val = arg0->cursorIndex;
         if (val < 0x12u) {
-            arg0->unk2 = val + 9;
+            arg0->cursorIndex = val + 9;
         } else {
-            arg0->unk3 = val;
-            arg0->unk1 = 1;
-            arg0->unk4 = arg0->unk2 - 0x12;
+            arg0->pageUpCursorDest = val;
+            arg0->navigationMode = 1;
+            arg0->pageDownCursorDest = arg0->cursorIndex - 0x12;
         }
         func_800585C8_591C8(0x2B);
     }
@@ -786,53 +786,53 @@ void func_8000FA90_10690(FD98_struct *arg0) {
     inputs = gControllerInputs;
 
     if (inputs & 0x80200) {
-        if (arg0->unk2 == 0) {
-            arg0->unk2 = 14;
+        if (arg0->cursorIndex == 0) {
+            arg0->cursorIndex = 14;
         } else {
-            arg0->unk2 = arg0->unk2 - 1;
+            arg0->cursorIndex = arg0->cursorIndex - 1;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (inputs & 0x40100) {
-        if (arg0->unk2 == 14) {
-            arg0->unk2 = 0;
+        if (arg0->cursorIndex == 14) {
+            arg0->cursorIndex = 0;
         } else {
-            arg0->unk2 = arg0->unk2 + 1;
+            arg0->cursorIndex = arg0->cursorIndex + 1;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (inputs & 0x10800) {
-        val = arg0->unk2;
+        val = arg0->cursorIndex;
         if ((u8)(val - 8) < 7u) {
-            arg0->unk2 = val - 7;
+            arg0->cursorIndex = val - 7;
         } else {
             if (val == 0) {
-                arg0->unk3 = val + 8;
-                arg0->unk4 = arg0->unk2;
+                arg0->pageUpCursorDest = val + 8;
+                arg0->pageDownCursorDest = arg0->cursorIndex;
             } else {
-                arg0->unk3 = val + 7;
-                arg0->unk4 = arg0->unk2;
+                arg0->pageUpCursorDest = val + 7;
+                arg0->pageDownCursorDest = arg0->cursorIndex;
             }
-            arg0->unk1 = 1;
+            arg0->navigationMode = 1;
         }
         func_800585C8_591C8(0x2B);
         return;
     }
 
     if (inputs & 0x20400) {
-        temp = arg0->unk2;
+        temp = arg0->cursorIndex;
         if (temp == 0) {
-            arg0->unk2 = 8;
+            arg0->cursorIndex = 8;
         } else if ((u8)(temp - 1) < 7u) {
-            arg0->unk2 = temp + 7;
+            arg0->cursorIndex = temp + 7;
         } else {
-            arg0->unk3 = temp;
-            arg0->unk1 = 1;
-            arg0->unk4 = arg0->unk2 - 7;
+            arg0->pageUpCursorDest = temp;
+            arg0->navigationMode = 1;
+            arg0->pageDownCursorDest = arg0->cursorIndex - 7;
         }
         func_800585C8_591C8(0x2B);
     }
@@ -853,11 +853,11 @@ void func_8000FBBC_107BC(FD98_struct *arg0) {
     if (inputs & B_BUTTON) {
         setMenuAnimation((E770_struct *)alloc, 0x90, 0x90, -1, -1);
         sound = 0x2E;
-        arg0->unk0 = 3;
+        arg0->viewerState = 3;
         goto play_sound;
     }
 
-    temp = arg0->unk1;
+    temp = arg0->navigationMode;
     if (temp == 0) {
         goto do_switch;
     }
@@ -867,9 +867,9 @@ void func_8000FBBC_107BC(FD98_struct *arg0) {
     return;
 
 do_switch:
-    switch (alloc->unk1) {
+    switch (alloc->navigationMode) {
         case 0:
-            func_8000F564_10164(arg0);
+            handleViewerGridNavigation_TwoPage(arg0);
             break;
         case 1:
             func_8000F690_10290(arg0);
@@ -888,21 +888,21 @@ do_switch:
 
 button_check:
     if (inputs & A_BUTTON) {
-        arg0->unk0 = 3;
+        arg0->viewerState = 3;
         setMenuAnimation((E770_struct *)alloc, 0x90, 0x90, -1, -1);
         sound = 0x2E;
         goto play_sound;
     }
     if (inputs & 0x10800) {
-        newVal = arg0->unk3;
+        newVal = arg0->pageUpCursorDest;
         goto set_2b;
     }
     if (inputs & 0x20400) {
-        newVal = arg0->unk4;
+        newVal = arg0->pageDownCursorDest;
     set_2b:
         sound = 0x2B;
-        arg0->unk1 = 0;
-        arg0->unk2 = newVal;
+        arg0->navigationMode = 0;
+        arg0->cursorIndex = newVal;
     play_sound:
         func_800585C8_591C8(sound);
     }
@@ -935,9 +935,9 @@ void func_8000FD98_10998(FD98_struct *arg0) {
     arg0->unk10 = 0x780000;
     arg0->unk14 = 0x0F0000;
     arg0->unk8 = 0xFF0000;
-    arg0->unk0 = 0;
-    arg0->unk1 = 0;
-    arg0->unk2 = 0;
+    arg0->viewerState = 0;
+    arg0->navigationMode = 0;
+    arg0->cursorIndex = 0;
     arg0->unkC = 0xFFF10000;
     setCallback(func_8000FE00_10A00);
 }
