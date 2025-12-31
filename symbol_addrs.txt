@@ -2000,3 +2000,4 @@ loadVersusSaveData = 0x80022018; // rom:0x22C18
 awaitVersusSaveDataLoad = 0x80022048; // rom:0x22C48
 loadVersusRace = 0x8002207C; // rom:0x22C7C
 awaitVersusRace = 0x800220AC; // rom:0x22CAC
+exitVersusMode = 0x80022108; // rom:0x22D08

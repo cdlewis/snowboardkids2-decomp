@@ -28,7 +28,7 @@ void loadPlayerCountSelect(void) {
 void func_80021DE8_229E8(void);
 void func_80021EFC_22AFC(void);
 void awaitVersusCharacterSelect(void);
-void func_80022108_22D08(void);
+void exitVersusMode(void);
 void func_80021E18_22A18(void);
 void loadVersusRace(void);
 
@@ -41,7 +41,7 @@ void awaitPlayerCountSelect(void) {
     if (result == 1) {
         setGameStateHandler(func_80021DE8_229E8);
     } else if (result == 0xFF) {
-        terminateSchedulerWithCallback(func_80022108_22D08);
+        terminateSchedulerWithCallback(exitVersusMode);
     }
 }
 
@@ -59,7 +59,7 @@ void func_80021E18_22A18(void) {
 
     if (result != 0) {
         if (result == 0xFE) {
-            terminateSchedulerWithCallback(func_80022108_22D08);
+            terminateSchedulerWithCallback(exitVersusMode);
         } else {
             setGameStateHandler(loadVersusSaveData);
         }
@@ -80,7 +80,7 @@ void awaitVersusMapScreen(void) {
 
     if (result == 0xFF) {
         func_80057564_58164(0x14);
-        terminateSchedulerWithCallback(func_80022108_22D08);
+        terminateSchedulerWithCallback(exitVersusMode);
     } else if (result == 1) {
         setGameStateHandler(func_80021EFC_22AFC);
     }
@@ -161,6 +161,6 @@ void func_800220AC_22CAC(void) {
     }
 }
 
-void func_80022108_22D08(void) {
+void exitVersusMode(void) {
     func_800693C4_69FC4(func_8001452C_1512C, 0xC8);
 }
