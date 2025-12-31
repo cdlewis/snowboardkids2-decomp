@@ -307,7 +307,7 @@ void func_8002667C_2727C(void *);
 void func_80026834_27434(func_80025FFC_26BFC_arg *);
 void func_80025DAC_269AC(SelectionMenuState *);
 void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
-void func_80024048_24C48(CharSelectPreviewModel *);
+void updateCharSelectPreviewModel(CharSelectPreviewModel *);
 void func_80024220_24E20(func_80024220_24E20_arg *);
 void func_80024298_24E98(CharSelectPreviewModel *);
 void func_80024600_25200(func_8002494C_arg *);
@@ -402,10 +402,10 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     arg0->selectionState = *(gameState + arg0->playerIndex + 0x18C8);
 
     setCleanupCallback(func_80024600_25200);
-    setCallback(func_80024048_24C48);
+    setCallback(updateCharSelectPreviewModel);
 }
 
-void func_80024048_24C48(CharSelectPreviewModel *arg0) {
+void updateCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     Transform3D sp10;
     GameState *state;
     u8 prevSelState;
@@ -478,7 +478,7 @@ void func_80024220_24E20(func_80024220_24E20_arg *arg0) {
     arg0->unk28 = loadAssetByIndex_95590(arg0->unkA2);
     arg0->unk2C = loadAssetByIndex_95668(charIndex);
 
-    setCallback(func_80024048_24C48);
+    setCallback(updateCharSelectPreviewModel);
 }
 
 void func_80024298_24E98(CharSelectPreviewModel *arg0) {
@@ -588,7 +588,7 @@ void func_80024518_25118(func_80024518_arg *arg0) {
 
     val = base->unk1898[arg0->unkA1];
     if (val != 4 && val != 9) {
-        setCallback(func_80024048_24C48);
+        setCallback(updateCharSelectPreviewModel);
     }
 }
 
