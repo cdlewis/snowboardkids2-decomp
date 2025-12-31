@@ -46,7 +46,7 @@ void awaitFadeLoadBoardShop(void);
 extern void func_8001A478_1B078(void);
 
 void awaitFadeCleanupBoardShop(void);
-void func_8001AD80_1B980(void);
+void onBoardShopCleanupComplete(void);
 void awaitStoryModeUnlockCutscene(void);
 void loadStoryModeUnlockCutscene(void);
 void awaitStoryModeRaceResult(void);
@@ -294,11 +294,11 @@ void awaitFadeCleanupBoardShop(void) {
         temp_s0->unk770 = freeNodeMemory(temp_s0->unk770);
         temp_s0->unk774 = freeNodeMemory(temp_s0->unk774);
         temp_s0->unk778 = freeNodeMemory(temp_s0->unk778);
-        terminateSchedulerWithCallback(&func_8001AD80_1B980);
+        terminateSchedulerWithCallback(&onBoardShopCleanupComplete);
     }
 }
 
-void func_8001AD80_1B980(void) {
+void onBoardShopCleanupComplete(void) {
     func_800697F4_6A3F4(1);
 }
 
