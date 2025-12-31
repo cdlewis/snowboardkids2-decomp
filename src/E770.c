@@ -335,7 +335,7 @@ void beginGalleryMenuExit(E770_struct *arg0) {
 
 extern void func_8000ED88_F988(void);
 
-s32 func_8000E614_F214(E770_struct *arg0) {
+s32 completeGalleryMenuExit(E770_struct *arg0) {
     s16 temp;
 
     if (arg0->fadeTimer == 8) {
@@ -390,7 +390,7 @@ void func_8000EC98_F898(void) {
             beginGalleryMenuExit(s0);
             break;
         case 6:
-            if (func_8000E614_F214(s0)) {
+            if (completeGalleryMenuExit(s0)) {
                 return;
             }
             break;
