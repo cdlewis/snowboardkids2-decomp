@@ -9,7 +9,7 @@
 #include "task_scheduler.h"
 extern u8 gDebugUnlockEnabled;
 
-void func_80014990_15590(void);
+void resetGameSession(void);
 
 void func_800144DC_150DC(void);
 void startOptionsMenu(void);
@@ -48,7 +48,7 @@ void func_800144DC_150DC(void) {
     func_8006FDA0_709A0(NULL, 0, 0);
     data->unk0 = 0;
     data->unk2 = 0;
-    func_80014990_15590();
+    resetGameSession();
     func_8006983C_6A43C(startLogoScreen);
 }
 
@@ -57,7 +57,7 @@ void func_8001452C_1512C(void) {
     func_8006FDA0_709A0(NULL, 0, 0);
     data->unk0 = 0;
     data->unk2 = 0;
-    func_80014990_15590();
+    resetGameSession();
     func_8006983C_6A43C(func_80014660_15260);
 }
 
@@ -181,7 +181,7 @@ void initOptionsDefaults(void) {
     D_800AFE8C_A71FC->customLapCount = 3;
 }
 
-void func_80014990_15590(void) {
+void resetGameSession(void) {
     s32 i;
 
     D_800AFE8C_A71FC->unk4 = 0;
