@@ -1796,3 +1796,4 @@ initOptionsMenu = 0x80037270; // rom:0x37E70
 resetGameSession = 0x80014990; // rom:0x15590
 initStoryMode = 0x80014A90; // rom:0x15690
 loadSaveSlotScreen = 0x80014AEC; // rom:0x156EC
+awaitSaveSlotSelection = 0x80014B1C; // rom:0x1571C
