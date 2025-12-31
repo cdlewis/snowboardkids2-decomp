@@ -170,7 +170,7 @@ INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002AE80_2BA80);
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B248_2BE48);
 
-s16 func_8002B4B8_2C0B8(u16 arg0, u16 arg1) {
+s16 func_8002B4B8_2C0B8(s16 arg0, s16 arg1) {
     s16 diff;
 
     arg0 &= 0x1FFF;
