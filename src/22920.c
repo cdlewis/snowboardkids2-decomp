@@ -66,14 +66,14 @@ void func_80021E18_22A18(void) {
     }
 }
 
-void func_80021E9C_22A9C(void);
+void awaitVersusMapScreen(void);
 
 void loadVersusMapScreen(void) {
     createTaskQueue(loadOverlay_1BBA0, 100);
-    setGameStateHandler(func_80021E9C_22A9C);
+    setGameStateHandler(awaitVersusMapScreen);
 }
 
-void func_80021E9C_22A9C(void) {
+void awaitVersusMapScreen(void) {
     s16 result;
 
     result = func_80069810_6A410();
