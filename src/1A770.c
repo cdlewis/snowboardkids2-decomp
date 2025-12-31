@@ -318,7 +318,7 @@ u8 countOwnedBoardsInCategory(void) {
     return count;
 }
 
-void func_8001ADFC_1B9FC(void) {
+void advanceBoardDisplaySlots(void) {
     GameState *gameState;
     s32 delta;
     s32 i;
