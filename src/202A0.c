@@ -78,12 +78,12 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x2C];
-    void *unk2C;
-    s16 unk30;
-    s16 unk32;
-    void *unk34;
-    u16 unk38;
-} Func80021238Arg;
+    void *imageAsset;
+    s16 x;
+    s16 y;
+    void *spriteSheetAsset;
+    u16 frameIndex;
+} UnlockNotificationState;
 
 typedef struct {
     u8 _pad0[0x8];
@@ -557,54 +557,54 @@ extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
 
 extern u16 D_8009ADE0_9B9E0;
 
-void func_80021184_21D84(Func80021238Arg *arg0);
-void func_8002115C_21D5C(Func80021238Arg *arg0);
-void func_80021238_21E38(Func80021238Arg *arg0);
+void renderUnlockNotification(UnlockNotificationState *state);
+void initUnlockNotificationSprite(UnlockNotificationState *state);
+void cleanupUnlockNotification(UnlockNotificationState *state);
 
-void initUnlockNotification(Func80021238Arg *arg0) {
-    void *temp_s1;
+void initUnlockNotification(UnlockNotificationState *state) {
+    void *spriteSheet;
 
-    arg0->unk2C = loadCompressedData(&_43F050_ROM_START, &_43F050_ROM_END, 0x14010);
-    temp_s1 = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
-    setCleanupCallback(&func_80021238_21E38);
+    state->imageAsset = loadCompressedData(&_43F050_ROM_START, &_43F050_ROM_END, 0x14010);
+    spriteSheet = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    setCleanupCallback(&cleanupUnlockNotification);
 
-    arg0->unk30 = 0x40;
-    arg0->unk32 = 0x40;
-    arg0->unk34 = temp_s1;
-    arg0->unk38 = 0x13;
+    state->x = 0x40;
+    state->y = 0x40;
+    state->spriteSheetAsset = spriteSheet;
+    state->frameIndex = 0x13;
 
-    setCallback(&func_8002115C_21D5C);
+    setCallback(&initUnlockNotificationSprite);
 }
 
-void func_8002115C_21D5C(Func80021238Arg *arg0) {
-    func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
-    setCallback(&func_80021184_21D84);
+void initUnlockNotificationSprite(UnlockNotificationState *state) {
+    func_800394BC_3A0BC(state, (s32)state->imageAsset);
+    setCallback(&renderUnlockNotification);
 }
 
-void func_80021184_21D84(Func80021238Arg *arg0) {
-    u16 temp;
+void renderUnlockNotification(UnlockNotificationState *state) {
+    u16 nextFrame;
 
-    debugEnqueueCallback(0xA, 0, func_80038420_39020, arg0);
+    debugEnqueueCallback(0xA, 0, func_80038420_39020, state);
 
     if (D_800AFE8C_A71FC->unk4 == 0) {
         if (EepromSaveData->save_slot_status[0] == 5) {
             if ((D_8009ADE0_9B9E0 & 7) == 0) {
-                temp = arg0->unk38 + 1;
-                arg0->unk38 = temp;
-                if (temp < 0x15) {
+                nextFrame = state->frameIndex + 1;
+                state->frameIndex = nextFrame;
+                if (nextFrame < 0x15) {
                     // continue
                 } else {
-                    arg0->unk38 = 0x13;
+                    state->frameIndex = 0x13;
                 }
             }
-            debugEnqueueCallback(8, 7, func_8000FED0_10AD0, &arg0->unk30);
+            debugEnqueueCallback(8, 7, func_8000FED0_10AD0, &state->x);
         }
     }
 }
 
-void func_80021238_21E38(Func80021238Arg *arg0) {
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
-    arg0->unk34 = freeNodeMemory(arg0->unk34);
+void cleanupUnlockNotification(UnlockNotificationState *state) {
+    state->imageAsset = freeNodeMemory(state->imageAsset);
+    state->spriteSheetAsset = freeNodeMemory(state->spriteSheetAsset);
 }
 
 extern u16 D_8008DAC0_8E6C0[];
