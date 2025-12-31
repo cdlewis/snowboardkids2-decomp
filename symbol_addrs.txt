@@ -42,6 +42,7 @@ storyMapLocationTextTask = 0x80019CD0; // rom:0x1A8D0
 enqueueStoryMapLocationText = 0x80019D24; // rom:0x1A924
 initStoryModeRace = 0x80019D50; // rom:0x1A950
 awaitFadeLoadStoryMap = 0x80019D84; // rom:0x1A984
+awaitStoryModeRaceLevelSelect = 0x80019DC4; // rom:0x1A9C4
 storyMapExitCode = 0x8009F220;
 cleanupTitleLogoTask = 0x800163A0; // rom:0x16FA0
 enqueueTitleLogoRender = 0x800163CC; // rom:0x16FCC

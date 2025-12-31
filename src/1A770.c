@@ -50,7 +50,7 @@ void func_8001A0B4_1ACB4(void);
 void func_8001A070_1AC70(void);
 void func_80019F60_1AB60(void);
 void func_80019EFC_1AAFC(void);
-void func_80019DC4_1A9C4(void);
+void awaitStoryModeRaceLevelSelect(void);
 void updateStoryMapDecorModel(applyTransformToModel_arg1 *arg0);
 void enqueueStoryMapLocationText(TextData *arg0);
 void awaitFadeLoadStoryMap(void);
@@ -116,14 +116,15 @@ void initStoryModeRace(void) {
 void awaitFadeLoadStoryMap(void) {
     if (func_8006FE10_70A10(0) == 0) {
         createTaskQueue(&func_8001E590_1F190, 100);
-        setGameStateHandler(&func_80019DC4_1A9C4);
+        setGameStateHandler(&awaitStoryModeRaceLevelSelect);
     }
 }
 
-void func_80019DC4_1A9C4(void) {
-    s16 temp_v0 = func_80069810_6A410();
-    if (temp_v0 != 0) {
-        if (temp_v0 == 0xFF) {
+void awaitStoryModeRaceLevelSelect(void) {
+    s16 selectionResult = func_80069810_6A410();
+
+    if (selectionResult != 0) {
+        if (selectionResult == 0xFF) {
             terminateSchedulerWithCallback(&func_8001A0F4_1ACF4);
             return;
         }
