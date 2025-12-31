@@ -12,7 +12,7 @@ typedef struct {
 } PostUnlockLocationIntroAllocation;
 
 void postUnlockLocationWaitForDismiss(void);
-void func_8001C900_1D500(void);
+void onPostUnlockLocationIntroComplete(void);
 
 void initPostUnlockLocationIntro(void) {
     PostUnlockLocationIntroAllocation *allocation = (PostUnlockLocationIntroAllocation *)allocateTaskMemory(0x1E0);
@@ -35,10 +35,10 @@ void postUnlockLocationWaitForDismiss(void) {
 
     if (!(allocation->waitCounter < 60)) {
         unlinkNode(&allocation->unk0);
-        terminateSchedulerWithCallback(&func_8001C900_1D500);
+        terminateSchedulerWithCallback(&onPostUnlockLocationIntroComplete);
     }
 }
 
-void func_8001C900_1D500(void) {
+void onPostUnlockLocationIntroComplete(void) {
     func_800697F4_6A3F4(1);
 }
