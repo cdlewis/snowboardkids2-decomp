@@ -271,7 +271,7 @@ extern Vec3s D_8008DD4E_8E94E[];
 extern Vec3s D_8008DD6C_8E96C;
 
 void func_80025418_26018(void *);
-void func_8002567C_2627C(func_80025FFC_26BFC_arg *);
+void cleanupCharSelectIcons(func_80025FFC_26BFC_arg *);
 void updateCharSelectIconsDelay(CharSelectIconsState *);
 void updateCharSelectBoardSlideOut(CharSelectBoardPreview *);
 void updateCharSelectBoardPreview(CharSelectBoardPreview *);
@@ -900,7 +900,7 @@ void initCharSelectIcons(CharSelectIconsState *arg0) {
     (void)pad;
 
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_8002567C_2627C);
+    setCleanupCallback(cleanupCharSelectIcons);
     getTableEntryByU16Index(spriteAsset, 0xB, &sp10);
 
     numPlayers = D_800AFE8C_A71FC->numPlayers;
@@ -982,7 +982,7 @@ void updateCharSelectIconTargets(CharSelectIconTargetState *arg0) {
     } while (i < 3);
 }
 
-void func_8002567C_2627C(func_80025FFC_26BFC_arg *arg0) {
+void cleanupCharSelectIcons(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
