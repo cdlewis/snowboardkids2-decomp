@@ -135,7 +135,7 @@ typedef struct {
     u8 unk51;
     u8 padding2;
     u8 unk53;
-} func_8002529C_25E9C_arg;
+} CharSelectIconsState;
 
 typedef struct {
     u8 pad0[0x34];
@@ -882,40 +882,40 @@ SceneModel *cleanupSceneModelHolder(SceneModelHolder *arg0) {
     return destroySceneModel(arg0->model);
 }
 
-#define CONST_0xB_8002529C 0xB
+#define ICON_TABLE_INDEX 0xB
 
-void func_8002529C_25E9C(func_8002529C_25E9C_arg *arg0) {
+void initCharSelectIcons(CharSelectIconsState *arg0) {
     OutputStruct_19E80 sp10;
     u8 *tablePtr;
-    volatile func_800255A0_entry *ptr;
-    DataTable_19E80 *dmaResult;
+    volatile func_800255A0_entry *iconEntry;
+    DataTable_19E80 *spriteAsset;
     s16 scaleX;
     s16 scaleY;
     s32 i;
     s32 xIncrement;
-    u16 unk0Val;
-    u16 x;
+    u16 yPos;
+    u16 xPos;
     u16 xTemp;
     u16 xIncrementU16;
     s32 temp_v0;
-    u8 unk8;
-    s32 const_0xB;
+    u8 numPlayers;
+    s32 iconTableIndex;
     s32 pad[4];
 
     (void)pad;
 
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_8002567C_2627C);
-    getTableEntryByU16Index(dmaResult, 0xB, &sp10);
+    getTableEntryByU16Index(spriteAsset, 0xB, &sp10);
 
-    unk8 = D_800AFE8C_A71FC->numPlayers;
+    numPlayers = D_800AFE8C_A71FC->numPlayers;
 
-    unk0Val = D_8008DDE6_8E9E6[unk8].y;
-    xTemp = D_8008DDE6_8E9E6[unk8].x;
-    xIncrementU16 = D_8008DDE6_8E9E6[unk8].inc;
+    yPos = D_8008DDE6_8E9E6[numPlayers].y;
+    xTemp = D_8008DDE6_8E9E6[numPlayers].x;
+    xIncrementU16 = D_8008DDE6_8E9E6[numPlayers].inc;
 
     scaleX = 0x400;
-    if (unk8 == 1) {
+    if (numPlayers == 1) {
         scaleX = 0x200;
         scaleY = 0x200;
     } else {
@@ -924,28 +924,28 @@ void func_8002529C_25E9C(func_8002529C_25E9C_arg *arg0) {
 
     i = 0;
     xIncrement = (s32)(s16)xIncrementU16;
-    const_0xB = CONST_0xB_8002529C;
+    iconTableIndex = ICON_TABLE_INDEX;
     tablePtr = D_8008DE18_8EA18;
-    x = xTemp;
-    ptr = (volatile func_800255A0_entry *)arg0;
+    xPos = xTemp;
+    iconEntry = (volatile func_800255A0_entry *)arg0;
 
     do {
         u8 tableVal;
-        ptr->unk0 = unk0Val;
-        ptr->unk2 = x;
-        ptr->unk8 = const_0xB;
+        iconEntry->unk0 = yPos;
+        iconEntry->unk2 = xPos;
+        iconEntry->unk8 = iconTableIndex;
         tableVal = tablePtr[1];
         tablePtr += 2;
-        ptr->unk12 = 0;
-        ptr->unkA = scaleX;
-        ptr->unkC = scaleY;
-        ptr->unk4 = dmaResult;
-        ptr->unkE = 0;
-        ptr->unk13 = (s8)(tableVal + 1);
-        x += xIncrement;
+        iconEntry->unk12 = 0;
+        iconEntry->unkA = scaleX;
+        iconEntry->unkC = scaleY;
+        iconEntry->unk4 = spriteAsset;
+        iconEntry->unkE = 0;
+        iconEntry->unk13 = (s8)(tableVal + 1);
+        xPos += xIncrement;
         i++;
-        ptr->unk10 = sp10.field2;
-        ptr++;
+        iconEntry->unk10 = sp10.field2;
+        iconEntry++;
     } while (i < 3);
 
     arg0->unk50 = 1;

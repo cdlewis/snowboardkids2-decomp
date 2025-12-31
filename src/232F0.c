@@ -55,7 +55,7 @@ void scheduleCharacterSelectTasks(void) {
     }
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        task = (CharacterSelectTask *)scheduleTask(func_8002529C_25E9C, 1, i, 0x5A);
+        task = (CharacterSelectTask *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
         if (task != NULL) {
             task->playerIndex = i;
         }
