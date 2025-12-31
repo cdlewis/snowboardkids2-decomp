@@ -1028,59 +1028,54 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025904_26504);
 
-typedef struct {
-    u8 padding[0x24];
-    u8 unk24;
-} func_80025A88_26688_arg;
-
-void func_80025A88_26688(func_80025A88_26688_arg *arg0) {
-    GameState *base;
+void showCharSelectIcons(CharSelectIconHideState *arg0) {
+    GameState *state;
     s32 i;
-    s32 s2;
-    s32 idx;
-    func_80027348_entry *ptr;
-    u8 val1, val2;
+    s32 iconBaseIndex;
+    s32 tableOffset;
+    func_80027348_entry *entry;
+    u8 charIndex, paletteIndex;
     u8 *tableBase;
     u8 *tablePtr;
 
-    base = (GameState *)getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
 
-    s2 = 0xC;
+    iconBaseIndex = 0xC;
     if (D_800AFE8C_A71FC->numPlayers == 1) {
-        s2 = 0x11;
+        iconBaseIndex = 0x11;
     }
 
-    val1 = base->unk18A8[arg0->unk24];
+    charIndex = state->unk18A8[arg0->playerIndex];
     i = 0;
     tableBase = D_8008DD8C_8E98C;
-    val2 = base->unk18B0[arg0->unk24];
-    ptr = (func_80027348_entry *)arg0;
-    idx = ((u8)(val2 + val1 * 3)) * 3;
+    paletteIndex = state->unk18B0[arg0->playerIndex];
+    entry = (func_80027348_entry *)arg0;
+    tableOffset = ((u8)(paletteIndex + charIndex * 3)) * 3;
 
 loop:
-    tablePtr = (u8 *)((idx + i) + (u32)tableBase);
-    ptr->unk8 = s2 + (*tablePtr - 1) / 2;
+    tablePtr = (u8 *)((tableOffset + i) + (u32)tableBase);
+    entry->unk8 = iconBaseIndex + (*tablePtr - 1) / 2;
     i++;
-    ptr->unkA = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
-    debugEnqueueCallback(arg0->unk24 + 8, 0, func_80010240_10E40, ptr);
-    ptr++;
+    entry->unkA = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
+    debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010240_10E40, entry);
+    entry++;
     if (i < 3)
         goto loop;
 
-    if (base->unk1898[arg0->unk24] == 3) {
+    if (state->unk1898[arg0->playerIndex] == 3) {
         s32 constant;
         u8 *a0;
 
-        s2 = 0xD;
+        iconBaseIndex = 0xD;
         if (D_800AFE8C_A71FC->numPlayers == 1) {
-            s2 = 0x12;
+            iconBaseIndex = 0x12;
         }
 
         i = 0;
         constant = 8;
         a0 = (u8 *)arg0;
         do {
-            ((volatile s16 *)a0)[4] = s2;
+            ((volatile s16 *)a0)[4] = iconBaseIndex;
             ((volatile u8 *)a0)[0xA] = constant;
             a0 += 0xC;
             i++;
