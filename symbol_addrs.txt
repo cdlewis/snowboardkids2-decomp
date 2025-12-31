@@ -2053,3 +2053,6 @@ updateBoardSelectArrows = 0x8002667C; // rom:0x2727C
 cleanupBoardSelectArrows = 0x80026834; // rom:0x27434
 initBoardSelectCharNames = 0x80026860; // rom:0x27460
 cleanupBoardSelectCharNames = 0x80026BAC; // rom:0x277AC
+initCharSelectNameSprites = 0x80026BD8; // rom:0x277D8
+updateCharSelectNameSprites = 0x80026D34; // rom:0x27934
+cleanupCharSelectNameSprites = 0x80026FC8; // rom:0x27BC8

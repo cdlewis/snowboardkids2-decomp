@@ -219,11 +219,11 @@ extern struct {
 
 typedef struct {
     SelectionEntry entries[4];
-    s16 unk40;
-    s16 unk42;
-    void *unk44;
-    s16 unk48;
-} func_80026BD8_arg;
+    s16 singlePlayerX;
+    s16 singlePlayerY;
+    void *singlePlayerAsset;
+    s16 singlePlayerSpriteIndex;
+} CharSelectNameSpritesState;
 
 typedef struct {
     u16 x;
@@ -260,8 +260,8 @@ extern PositionConfig_DE1A D_8008DE1A_8EA1A[];
 extern Vec3s boardSelectArrowPositions[];
 extern u16 D_8008DE7A_8EA7A[];
 extern struct {
-    u16 unk0;
-    u16 unk2;
+    u16 x;
+    u16 y;
 } D_8008DE9C_8EA9C[];
 extern u8 D_8008DD8D_8E98D[];
 extern u8 D_8008DD8E_8E98E[];
@@ -275,8 +275,8 @@ void cleanupCharSelectIcons(SimpleSpriteEntry *);
 void updateCharSelectIconsDelay(CharSelectIconsState *);
 void updateCharSelectBoardSlideOut(CharSelectBoardPreview *);
 void updateCharSelectBoardPreview(CharSelectBoardPreview *);
-void func_80026D34_27934(func_80026BD8_arg *);
-void func_80026FC8_27BC8(SimpleSpriteEntry *);
+void updateCharSelectNameSprites(CharSelectNameSpritesState *);
+void cleanupCharSelectNameSprites(SimpleSpriteEntry *);
 void updateBoardSelectArrows(void *);
 void cleanupBoardSelectArrows(SimpleSpriteEntry *);
 void updateCharSelectMenu(SelectionMenuState *);
@@ -1471,75 +1471,75 @@ void func_80026BAC_277AC(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
-    u8 *allocation;
-    void *dmaResult;
-    D_800AFE8C_A71FC_type *global;
-    u8 count;
+void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
+    u8 *gameState;
+    void *spriteAsset;
+    D_800AFE8C_A71FC_type *gameConfig;
+    u8 numPlayers;
     s32 i;
-    u16 unk0Val;
-    u16 unk2Val;
-    s32 unk8Val;
+    u16 xPos;
+    u16 yPos;
+    s32 spriteIndex;
     s32 const_1;
     s32 const_ff;
-    volatile SelectionEntry *ptr;
+    volatile SelectionEntry *entry;
     s32 pad[4];
 
     (void)pad;
 
-    allocation = (u8 *)getCurrentAllocation();
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_80026FC8_27BC8);
+    gameState = (u8 *)getCurrentAllocation();
+    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    setCleanupCallback(cleanupCharSelectNameSprites);
 
-    global = D_800AFE8C_A71FC;
-    count = global->numPlayers;
-    unk0Val = D_8008DE9C_8EA9C[count].unk0;
-    unk2Val = D_8008DE9C_8EA9C[count].unk2;
+    gameConfig = D_800AFE8C_A71FC;
+    numPlayers = gameConfig->numPlayers;
+    xPos = D_8008DE9C_8EA9C[numPlayers].x;
+    yPos = D_8008DE9C_8EA9C[numPlayers].y;
 
     i = 0;
-    if (count != 0) {
+    if (numPlayers != 0) {
         const_1 = 1;
         const_ff = 0xFF;
-        ptr = (volatile SelectionEntry *)arg0;
+        entry = (volatile SelectionEntry *)state;
         do {
-            if (global->unk9[i + 4] >= 9) {
-                unk8Val = 0x35;
+            if (gameConfig->unk9[i + 4] >= 9) {
+                spriteIndex = 0x35;
             } else {
-                unk8Val = 0x24;
-                if (global->numPlayers == const_1) {
-                    unk8Val = 0x43;
+                spriteIndex = 0x24;
+                if (gameConfig->numPlayers == const_1) {
+                    spriteIndex = 0x43;
                 }
-                unk8Val = unk8Val + (allocation + i)[0x18B0];
+                spriteIndex = spriteIndex + (gameState + i)[0x18B0];
             }
-            ptr->blinkState = 0;
-            ptr->unkC = 0;
-            global = D_800AFE8C_A71FC;
-            ptr->x = unk0Val;
-            ptr->y = unk2Val;
-            ptr->alpha = const_ff;
-            ptr->spriteIndex = unk8Val;
-            ptr->asset = dmaResult;
+            entry->blinkState = 0;
+            entry->unkC = 0;
+            gameConfig = D_800AFE8C_A71FC;
+            entry->x = xPos;
+            entry->y = yPos;
+            entry->alpha = const_ff;
+            entry->spriteIndex = spriteIndex;
+            entry->asset = spriteAsset;
             i++;
-            ptr++;
-        } while (i < global->numPlayers);
+            entry++;
+        } while (i < gameConfig->numPlayers);
     }
 
     if (D_800AFE8C_A71FC->numPlayers == 1) {
-        arg0->unk40 = 0x38;
-        arg0->unk42 = -0x58;
-        arg0->unk44 = dmaResult;
-        arg0->unk48 = 0x42;
+        state->singlePlayerX = 0x38;
+        state->singlePlayerY = -0x58;
+        state->singlePlayerAsset = spriteAsset;
+        state->singlePlayerSpriteIndex = 0x42;
         if (D_800AFE8C_A71FC->unk9[4] >= 9) {
-            arg0->unk40 = 0x50;
+            state->singlePlayerX = 0x50;
         }
     }
 
-    setCallback(func_80026D34_27934);
+    setCallback(updateCharSelectNameSprites);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80026D34_27934);
+INCLUDE_ASM("asm/nonmatchings/24A30", updateCharSelectNameSprites);
 
-void func_80026FC8_27BC8(SimpleSpriteEntry *arg0) {
+void cleanupCharSelectNameSprites(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
