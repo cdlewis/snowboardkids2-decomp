@@ -252,7 +252,7 @@ typedef struct {
     func_80027348_entry entries[3];
 } PlayerLabelSpritesState;
 
-extern Vec2_u16 D_8008DDD8_8E9D8[];
+extern Vec2_u16 playerNumberPositions[];
 extern PositionConfig_DDBE D_8008DDBE_8E9BE[];
 extern PositionConfig_DDE6 D_8008DDE6_8E9E6[];
 extern u8 D_8008DE18_8EA18[];
@@ -302,8 +302,8 @@ void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *);
 void updateCharSelectPlayerLabels(PlayerLabelSpritesState *);
 void func_800262D4_26ED4(SelectionArrowsState *);
 void cleanupCharSelectArrows(SimpleSpriteEntry *);
-void func_800270B8_27CB8(u8 *);
-void func_8002712C_27D2C(SimpleSpriteEntry *);
+void updateCharSelectPlayerNumbers(u8 *);
+void cleanupCharSelectPlayerNumbers(SimpleSpriteEntry *);
 void func_800271E4_27DE4(SimpleSpriteEntry *);
 void func_8002723C_27E3C(SimpleSpriteEntry *);
 void func_8002764C_2824C(SimpleSpriteEntry *arg0);
@@ -1543,25 +1543,25 @@ void cleanupCharSelectNameSprites(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80026FF4_27BF4(SimpleSpriteEntry *arg0) {
+void initCharSelectPlayerNumbers(SimpleSpriteEntry *arg0) {
     void *dmaResult;
     D_800AFE8C_A71FC_type *global;
     u8 count;
     s32 i;
-    s32 unk8Base;
+    s32 spriteOffset;
     u16 x;
     u16 y;
     volatile SimpleSpriteEntry *ptr;
     s32 pad[4];
 
     dmaResult = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
-    setCleanupCallback(func_8002712C_27D2C);
+    setCleanupCallback(cleanupCharSelectPlayerNumbers);
 
     global = D_800AFE8C_A71FC;
     count = global->numPlayers;
-    unk8Base = (count >= 3) * 8;
-    x = D_8008DDD8_8E9D8[count].x;
-    y = D_8008DDD8_8E9D8[count].y;
+    spriteOffset = (count >= 3) * 8;
+    x = playerNumberPositions[count].x;
+    y = playerNumberPositions[count].y;
 
     i = 0;
     if (count != 0) {
@@ -1569,17 +1569,17 @@ void func_80026FF4_27BF4(SimpleSpriteEntry *arg0) {
         do {
             ptr->x = x;
             ptr->y = y;
-            ptr->spriteIndex = unk8Base + i;
+            ptr->spriteIndex = spriteOffset + i;
             ptr->asset = dmaResult;
             ptr++;
             i++;
         } while (i < global->numPlayers);
     }
 
-    setCallback(func_800270B8_27CB8);
+    setCallback(updateCharSelectPlayerNumbers);
 }
 
-void func_800270B8_27CB8(u8 *arg0) {
+void updateCharSelectPlayerNumbers(u8 *arg0) {
     s32 i;
     s32 pad[2];
     u8 *ptr;
@@ -1597,7 +1597,7 @@ void func_800270B8_27CB8(u8 *arg0) {
     }
 }
 
-void func_8002712C_27D2C(SimpleSpriteEntry *arg0) {
+void cleanupCharSelectPlayerNumbers(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
