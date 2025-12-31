@@ -68,7 +68,7 @@ void func_80021E18_22A18(void) {
 
 void func_80021E9C_22A9C(void);
 
-void func_80021E6C_22A6C(void) {
+void loadVersusMapScreen(void) {
     createTaskQueue(loadOverlay_1BBA0, 100);
     setGameStateHandler(func_80021E9C_22A9C);
 }
@@ -100,7 +100,7 @@ void func_80021F2C_22B2C(void) {
     result = func_80069810_6A410();
 
     if (result == 0xFF) {
-        setGameStateHandler(func_80021E6C_22A6C);
+        setGameStateHandler(loadVersusMapScreen);
     } else if (result == 1) {
         setGameStateHandler(func_80021F80_22B80);
     }
@@ -137,7 +137,7 @@ void func_80022018_22C18(void) {
 
 void func_80022048_22C48(void) {
     if ((func_80069810_6A410() << 16) != 0) {
-        setGameStateHandler(func_80021E6C_22A6C);
+        setGameStateHandler(loadVersusMapScreen);
     }
 }
 
@@ -156,7 +156,7 @@ void func_800220AC_22CAC(void) {
         if (result == 1) {
             setGameStateHandler(func_8002207C_22C7C);
         } else {
-            setGameStateHandler(func_80021E6C_22A6C);
+            setGameStateHandler(loadVersusMapScreen);
         }
     }
 }
