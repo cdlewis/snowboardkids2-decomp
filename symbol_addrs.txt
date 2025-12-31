@@ -1845,6 +1845,7 @@ proceedFromLevelSelect = 0x8001F33C; // rom:0x1FF3C
 cancelLevelSelect = 0x8001F358; // rom:0x1FF58
 applyLevelSelection = 0x8001F374; // rom:0x1FF74
 loadLevelPreview = 0x8001F42C; // rom:0x2002C
+buildUnlockedLevelList = 0x8001F5EC; // rom:0x201EC
 
 GenericTriggerInit = 0x80018CB0; // rom:0x198B0
 GenericTriggerCheck = 0x80018D04; // rom:0x19904

@@ -448,27 +448,27 @@ void loadLevelPreview(void) {
     }
 }
 
-s32 func_8001F5EC_201EC(u8 *arg0) {
+s32 buildUnlockedLevelList(u8 *levelIdList) {
     s32 count;
-    s32 limit;
+    s32 maxSlots;
     s32 i;
+
     count = 0;
+    maxSlots = D_800AFE8C_A71FC->unk4 ? 15 : 12;
 
-    limit = D_800AFE8C_A71FC->unk4 ? 15 : 12;
-
-    for (i = 0; i < limit; i++) {
+    for (i = 0; i < maxSlots; i++) {
         if (D_800AFE8C_A71FC->unk4 == 0) {
             do {
                 if (EepromSaveData->save_slot_status[i] != 0) {
-                    arg0[(u8)(count++)] = i;
+                    levelIdList[(u8)(count++)] = i;
                 } else {
-                    arg0[i] = 0;
+                    levelIdList[i] = 0;
                 }
             } while (0);
         } else if (EepromSaveData->save_slot_data[i] != 0) {
-            arg0[(u8)(count++)] = i;
+            levelIdList[(u8)(count++)] = i;
         } else {
-            arg0[i] = 0;
+            levelIdList[i] = 0;
         }
     }
 
