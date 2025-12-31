@@ -190,7 +190,7 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
     setCallback(updateStoryMapCameraTravel);
 }
 
-void func_800182F4_18EF4(void);
+void storyMapCameraTravelComplete(void);
 
 void updateStoryMapCameraTravel(StoryMapCameraState *camera) {
     GameState *state;
@@ -234,7 +234,7 @@ void updateStoryMapCameraTravel(StoryMapCameraState *camera) {
     if (func_8006FE10_70A10(0) == 0) {
         storyMapLocationIndex = state->unk425;
         state->unk427 = state->unk425 + 1;
-        setCallback(&func_800182F4_18EF4);
+        setCallback(&storyMapCameraTravelComplete);
     }
 }
 
@@ -244,11 +244,11 @@ void finalizeStoryMapCameraTravel(void) {
     if (func_8006FE10_70A10(0) == 0) {
         storyMapLocationIndex = state->unk425;
         state->unk427 = state->unk425 + 1;
-        setCallback(&func_800182F4_18EF4);
+        setCallback(&storyMapCameraTravelComplete);
     }
 }
 
-void func_800182F4_18EF4(void) {
+void storyMapCameraTravelComplete(void) {
 }
 
 void func_80018474_19074(StoryMapCameraState *arg0);
