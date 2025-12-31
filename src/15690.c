@@ -124,20 +124,20 @@ void awaitPreRaceCutscene(void) {
     }
 }
 
-void func_80014DA8_159A8(void);
+void awaitRaceResult(void);
 
 void loadRace(void) {
     createTaskQueue(initRace, 100);
-    setGameStateHandler(func_80014DA8_159A8);
+    setGameStateHandler(awaitRaceResult);
 }
 
-extern u8 D_800A8CC9_A0039;
+extern u8 gStoryCompleted;
 extern u8 gDebugUnlockEnabled;
 
 void func_80014F60_15B60(void);
 void func_80015028_15C28(void);
 
-void func_80014DA8_159A8(void) {
+void awaitRaceResult(void) {
     s16 result;
     void (*handler)(void);
     u8 *eepromBase;
@@ -147,12 +147,12 @@ void func_80014DA8_159A8(void) {
 
     result = func_80069810_6A410();
     if (result != 0) {
-        D_800A8CC9_A0039 = 0;
+        gStoryCompleted = 0;
 
         if (result >= 3) {
             eepromBase = (u8 *)EepromSaveData;
             if (EepromSaveData->save_slot_status[0] == 5) {
-                D_800A8CC9_A0039 = 1;
+                gStoryCompleted = 1;
             }
 
             if ((result == 3) | (result == 5)) {
@@ -185,7 +185,7 @@ void func_80014DA8_159A8(void) {
                 } else {
                     handler = func_80014F60_15B60;
                 }
-            } else if (D_800A8CC9_A0039 != 0) {
+            } else if (gStoryCompleted != 0) {
                 handler = func_80015028_15C28;
             } else {
             set_handler_b70:
@@ -211,7 +211,7 @@ void func_80014FA4_15BA4(void) {
     void *handler;
 
     if ((func_80069810_6A410() << 16) != 0) {
-        if (D_800A8CC9_A0039 != 0) {
+        if (gStoryCompleted != 0) {
             handler = func_80015028_15C28;
         } else if (D_800AFE8C_A71FC->saveSlotIndex == 0xB) {
             handler = func_8001511C_15D1C;
