@@ -8,4 +8,4 @@ typedef struct {
 } StoryMapDecorModelState;
 
 void storyMapDecorModelTask(StoryMapDecorModelState *arg0);
-void func_80019D50_1A950(void);
+void initStoryModeRace(void);

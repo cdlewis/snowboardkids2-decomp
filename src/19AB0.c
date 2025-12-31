@@ -76,7 +76,7 @@ void handleGameStateComplete(void) {
             D_800AFE8C_A71FC->saveSlotIndex = 0xE;
         }
 
-        createTaskQueue(func_80019D50_1A950, 100);
+        createTaskQueue(initStoryModeRace, 100);
     } else {
         createTaskQueue(initStoryMapLocation, 100);
         if (storyMapLocationIndex == 7) {

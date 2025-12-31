@@ -108,7 +108,7 @@ void enqueueStoryMapLocationText(TextData *arg0) {
     debugEnqueueCallback(0, 7, &renderTextPalette, arg0);
 }
 
-void func_80019D50_1A950(void) {
+void initStoryModeRace(void) {
     clearMemory(allocateTaskMemory(0x1E0), 0x1E0);
     setGameStateHandler(&func_80019D84_1A984);
 }
