@@ -15,49 +15,49 @@ typedef struct {
     void *unk1878;
     void *unk187C;
     u8 pad1880[0x18A0 - 0x1880];
-    u16 unk18A0;
-} Allocation232F0;
+    u16 stateCounter;
+} CharacterSelectState;
 
 typedef struct {
     u8 pad0[0x52];
-    u8 unk52;
-} Task232F0;
+    u8 playerIndex;
+} CharacterSelectTask;
 
-void func_80022CEC_238EC(void);
+void scheduleCharacterSelectTasks(void);
 void func_80022D74_23974(void);
-void func_80023D74_24974(void);
-void func_80023DA0_249A0(void);
+void onCharacterSelectProceed(void);
+void onCharacterSelectCancel(void);
 
 INCLUDE_ASM("asm/nonmatchings/232F0", func_800226F0_232F0);
 
-void func_80022C80_23880(void) {
-    Allocation232F0 *alloc = (Allocation232F0 *)getCurrentAllocation();
+void awaitCharacterSelectLoad(void) {
+    CharacterSelectState *state = (CharacterSelectState *)getCurrentAllocation();
 
-    alloc->unk18A0++;
-    if (alloc->unk18A0 < 3) {
+    state->stateCounter++;
+    if (state->stateCounter < 3) {
         return;
     }
-    alloc->unk18A0 = 2;
+    state->stateCounter = 2;
     if (func_8003BB5C_3C75C() != 0) {
         return;
     }
-    alloc->unk18A0 = 0;
+    state->stateCounter = 0;
     func_8006FDA0_709A0(NULL, 0, 10);
-    setGameStateHandler(func_80022CEC_238EC);
+    setGameStateHandler(scheduleCharacterSelectTasks);
 }
 
-void func_80022CEC_238EC(void) {
+void scheduleCharacterSelectTasks(void) {
     s32 i;
-    Task232F0 *task;
+    CharacterSelectTask *task;
 
     if (func_8006FE10_70A10(0) != 0) {
         return;
     }
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        task = (Task232F0 *)scheduleTask(func_8002529C_25E9C, 1, i, 0x5A);
+        task = (CharacterSelectTask *)scheduleTask(func_8002529C_25E9C, 1, i, 0x5A);
         if (task != NULL) {
-            task->unk52 = i;
+            task->playerIndex = i;
         }
     }
 
@@ -66,38 +66,38 @@ void func_80022CEC_238EC(void) {
 
 INCLUDE_ASM("asm/nonmatchings/232F0", func_80022D74_23974);
 
-void func_80023C7C_2487C(void) {
-    Allocation232F0 *s1 = getCurrentAllocation();
+void cleanupCharacterSelect(void) {
+    CharacterSelectState *state = getCurrentAllocation();
     s32 i;
 
     if (func_8006FE10_70A10(0) != 0) {
         return;
     }
 
-    unlinkNode(&s1->unk1620);
+    unlinkNode(&state->unk1620);
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        unlinkNode(&s1->unk0[i]);
-        unlinkNode(&s1->unk760[i]);
-        unlinkNode(&s1->unkEC0[i]);
+        unlinkNode(&state->unk0[i]);
+        unlinkNode(&state->unk760[i]);
+        unlinkNode(&state->unkEC0[i]);
     }
 
-    s1->unk1878 = freeNodeMemory(s1->unk1878);
-    s1->unk187C = freeNodeMemory(s1->unk187C);
+    state->unk1878 = freeNodeMemory(state->unk1878);
+    state->unk187C = freeNodeMemory(state->unk187C);
 
-    if (s1->unk18A0 == 0x63) {
-        terminateSchedulerWithCallback(func_80023DA0_249A0);
+    if (state->stateCounter == 0x63) {
+        terminateSchedulerWithCallback(onCharacterSelectCancel);
     } else {
-        terminateSchedulerWithCallback(func_80023D74_24974);
+        terminateSchedulerWithCallback(onCharacterSelectProceed);
     }
 }
 
-void func_80023D74_24974(void) {
+void onCharacterSelectProceed(void) {
     func_8006FDA0_709A0(NULL, 0, 0);
     func_800697F4_6A3F4(1);
 }
 
-void func_80023DA0_249A0(void) {
+void onCharacterSelectCancel(void) {
     func_8006FDA0_709A0(NULL, 0, 0);
     func_800697F4_6A3F4(0xFF);
 }
