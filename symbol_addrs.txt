@@ -1763,3 +1763,4 @@ renderTransparentScrollingTexture = 0x80004FA0; // rom:0x5BA0
 renderOverlayScrollingTexture = 0x80004FCC; // rom:0x5BCC
 enqueueScrollingTextureRender = 0x80004FF8; // rom:0x5BF8
 startViewerFadeIn = 0x8000F4BC; // rom:0x100BC
+waitForViewerFadeIn = 0x8000F4F0; // rom:0x100F0
