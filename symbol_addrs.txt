@@ -1976,3 +1976,4 @@ awaitStoryMapExtraIntro = 0x8001E508; // rom:0x1F108
 onStoryMapExtraIntroComplete = 0x8001E570; // rom:0x1F170
 initLevelSelectWithDetail = 0x8001E590; // rom:0x1F190
 initLevelSelectBasic = 0x8001E5C0; // rom:0x1F1C0
+initPrizeDisplay = 0x800218AC; // rom:0x224AC

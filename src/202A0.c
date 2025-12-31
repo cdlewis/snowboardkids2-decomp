@@ -862,7 +862,7 @@ typedef struct {
     /* 0x60 */ u8 animationTimer;
 } PrizeDisplayState;
 
-void func_800218AC_224AC(PrizeDisplayState *arg0) {
+void initPrizeDisplay(PrizeDisplayState *arg0) {
     Allocation_202A0 *allocation;
     void *textRenderAsset;
     void *spriteAsset;
