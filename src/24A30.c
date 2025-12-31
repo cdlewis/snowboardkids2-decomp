@@ -311,9 +311,9 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *);
 void cleanupCharSelectSecondaryAssets(func_8002494C_arg *);
 void func_80024D40_25940(CharSelectBoardPreview *);
 void func_80024DCC_259CC(CharSelectBoardPreview *);
-void func_80024E58_25A58(CharSelectBoardPreview *);
-void func_80024FEC_25BEC(CharSelectBoardPreview *);
-void func_80024F48_25B48(CharSelectBoardPreview *);
+void initCharSelectBoardSlideIn(CharSelectBoardPreview *);
+void waitForCharSelectBoardState(CharSelectBoardPreview *);
+void updateCharSelectBoardSlideIn(CharSelectBoardPreview *);
 void func_80026190_26D90(func_80025FFC_26BFC_arg *);
 void func_800260EC_26CEC(func_800260EC_26CEC_arg *);
 void func_800262D4_26ED4(func_80026564_arg *);
@@ -773,72 +773,72 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80024D40_25940);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024DCC_259CC);
 
-void func_80024E58_25A58(CharSelectBoardPreview *arg0) {
-    u8 *base;
-    u8 *ptr;
-    u8 index;
+void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
+    u8 *state;
+    u8 *sessionPtr;
+    u8 playerIdx;
 
-    base = (u8 *)getCurrentAllocation();
+    state = (u8 *)getCurrentAllocation();
 
-    memcpy(&arg0->transform, identityMatrix, 0x20);
+    memcpy(&preview->transform, identityMatrix, 0x20);
 
-    index = arg0->playerIndex;
-    arg0->transform.translation.x = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (base + index)[0x18C0]];
-    arg0->transform.translation.z = 0;
-    arg0->transform.translation.y = 0xFFF00000;
-    arg0->unk20_u.targetX = arg0->transform.translation.x;
+    playerIdx = preview->playerIndex;
+    preview->transform.translation.x = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (state + playerIdx)[0x18C0]];
+    preview->transform.translation.z = 0;
+    preview->transform.translation.y = 0xFFF00000;
+    preview->unk20_u.targetX = preview->transform.translation.x;
 
-    applyTransformToModel(arg0->model, &arg0->transform);
+    applyTransformToModel(preview->model, &preview->transform);
 
-    ptr = (u8 *)D_800AFE8C_A71FC;
-    ptr = ptr + arg0->playerIndex;
-    if (ptr[9] == 7) {
-        setModelAnimation(arg0->model, 4);
+    sessionPtr = (u8 *)D_800AFE8C_A71FC;
+    sessionPtr = sessionPtr + preview->playerIndex;
+    if (sessionPtr[9] == 7) {
+        setModelAnimation(preview->model, 4);
     } else {
-        setModelAnimation(arg0->model, 0x90);
+        setModelAnimation(preview->model, 0x90);
     }
 
-    updateModelGeometry(arg0->model);
-    setCallback(func_80024F48_25B48);
+    updateModelGeometry(preview->model);
+    setCallback(updateCharSelectBoardSlideIn);
 }
 
-void func_80024F48_25B48(CharSelectBoardPreview *arg0) {
-    u8 *base;
-    s32 target;
-    s32 adjustment;
-    u8 *ptr;
+void updateCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
+    u8 *state;
+    s32 targetX;
+    s32 slideStep;
+    u8 *statePtr;
 
-    base = (u8 *)getCurrentAllocation();
+    state = (u8 *)getCurrentAllocation();
 
-    target = arg0->unk20_u.targetX;
+    targetX = preview->unk20_u.targetX;
 
-    adjustment = (-(0 < target) & 0xFFF00000) | 0x100000;
+    slideStep = (-(0 < targetX) & 0xFFF00000) | 0x100000;
 
-    arg0->transform.translation.x = arg0->transform.translation.x + adjustment;
+    preview->transform.translation.x = preview->transform.translation.x + slideStep;
 
-    applyTransformToModel(arg0->model, &arg0->transform);
-    clearModelRotation(arg0->model);
-    updateModelGeometry(arg0->model);
+    applyTransformToModel(preview->model, &preview->transform);
+    clearModelRotation(preview->model);
+    updateModelGeometry(preview->model);
 
-    if (arg0->transform.translation.x == 0) {
-        ptr = base + arg0->playerIndex;
-        ptr[0x18C4]++;
-        setCallbackWithContinue(func_80024FEC_25BEC);
+    if (preview->transform.translation.x == 0) {
+        statePtr = state + preview->playerIndex;
+        statePtr[0x18C4]++;
+        setCallbackWithContinue(waitForCharSelectBoardState);
     }
 }
 
-void func_80024FEC_25BEC(CharSelectBoardPreview *arg0) {
-    u16 *base;
-    u16 val;
+void waitForCharSelectBoardState(CharSelectBoardPreview *preview) {
+    u16 *state;
+    u16 boardState;
 
-    base = (u16 *)getCurrentAllocation();
+    state = (u16 *)getCurrentAllocation();
 
-    clearModelRotation(arg0->model);
-    updateModelGeometry(arg0->model);
+    clearModelRotation(preview->model);
+    updateModelGeometry(preview->model);
 
-    val = *(base + arg0->playerIndex + (0x1898 / 2));
+    boardState = *(state + preview->playerIndex + (0x1898 / 2));
 
-    if (val != 0x10) {
+    if (boardState != 0x10) {
         setCallback(dispatchCharSelectBoardState);
     }
 }
