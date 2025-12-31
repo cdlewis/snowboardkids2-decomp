@@ -117,17 +117,17 @@ void resolveStoryMapCharacterCollision(StoryMapController *controller, StoryMapP
     controller->distanceFromOrigin = distance_2d(position->x, offsetZ);
 }
 
-s32 func_800198F0_1A4F0(s32 arg0, s32 arg1, u8 arg2) {
+s32 checkStoryMapPlayerCollision(s32 posX, s32 posZ, u8 characterIndex) {
     GameState *state;
     s32 dx;
-    s32 dy;
+    s32 dz;
     s32 dist;
     s32 threshold;
 
     state = (GameState *)getCurrentAllocation();
-    dx = arg0 - state->unk3EC;
-    dy = arg1 - state->unk3F0;
-    dist = distance_2d(dx, dy);
-    threshold = state->unk3FE + state->unk418[arg2];
+    dx = posX - state->unk3EC;
+    dz = posZ - state->unk3F0;
+    dist = distance_2d(dx, dz);
+    threshold = state->unk3FE + state->unk418[characterIndex];
     return dist < (threshold << 16);
 }
