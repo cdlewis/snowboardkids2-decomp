@@ -29,16 +29,16 @@ typedef struct {
     u8 unk0;
     u8 unk1;
     s8 pad[5];
-    s8 unk7;
+    s8 unlockSlotIndex;
     u8 pad2[4];
-} TableElement_F9B0;
+} GalleryItemEntry;
 
 typedef struct {
-    TableElement_F9B0 *elements;
-    s32 unk4;
-} D_8008D348_Entry;
+    GalleryItemEntry *items;
+    s32 count;
+} GalleryCategoryData;
 
-extern D_8008D348_Entry D_8008D348_8DF48[];
+extern GalleryCategoryData gGalleryCategories[];
 
 typedef struct {
     s8 menuState;
@@ -476,35 +476,35 @@ INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF30_9EB30);
 
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF34_9EB34);
 
-u8 func_8000EDB0_F9B0(u8 arg0) {
-    E770_struct *alloc;
-    s8 idx;
-    TableElement_F9B0 *entry;
-    s8 unk7;
-    u8 arg0_masked;
+u8 isGalleryItemUnlocked(u8 itemIndex) {
+    E770_struct *menu;
+    s8 categoryIndex;
+    GalleryItemEntry *item;
+    s8 unlockSlot;
+    u8 itemIndexMasked;
 
-    alloc = getCurrentAllocation();
-    idx = alloc->selectedOption;
-    arg0_masked = arg0;
-    entry = &D_8008D348_8DF48[idx].elements[arg0_masked];
+    menu = getCurrentAllocation();
+    categoryIndex = menu->selectedOption;
+    itemIndexMasked = itemIndex;
+    item = &gGalleryCategories[categoryIndex].items[itemIndexMasked];
 
-    switch (idx) {
+    switch (categoryIndex) {
         case 1:
-            return func_80038058_38C58(arg0) & 0xFF;
+            return func_80038058_38C58(itemIndex) & 0xFF;
         case 2:
-            return func_80038000_38C00(arg0) & 0xFF;
+            return func_80038000_38C00(itemIndex) & 0xFF;
         case 3:
-            unk7 = entry->unk7;
-            if (unk7 == -1) {
+            unlockSlot = item->unlockSlotIndex;
+            if (unlockSlot == -1) {
                 return 1;
             }
-            if (unk7 == -2) {
+            if (unlockSlot == -2) {
                 return func_80038070_38C70() & 0xFF;
             }
-            return func_80037FE0_38BE0(unk7 & 0xFF) & 0xFF;
+            return func_80037FE0_38BE0(unlockSlot & 0xFF) & 0xFF;
         case 0:
         case 4:
-            return func_80037FE0_38BE0(arg0) & 0xFF;
+            return func_80037FE0_38BE0(itemIndex) & 0xFF;
         case 5:
             return func_80038070_38C70() & 0xFF;
     }
@@ -695,16 +695,16 @@ void func_8000F7B0_103B0(FD98_struct *arg0) {
 void func_8000F884_10484(FD98_struct *arg0) {
     u8 sp30[0xC];
     E770_struct *alloc;
-    TableElement_F9B0 *entry;
+    GalleryItemEntry *entry;
     u8 *sp30_ptr;
 
     alloc = getCurrentAllocation();
     sp30_ptr = sp30;
-    entry = &D_8008D348_8DF48[alloc->selectedOption].elements[arg0->unk2];
+    entry = &gGalleryCategories[alloc->selectedOption].items[arg0->unk2];
     memcpy(sp30_ptr, D_8009DF6C_9EB6C, 0xC);
 
     if (gControllerInputs & 0x8000) {
-        if (func_8000EDB0_F9B0(arg0->unk2)) {
+        if (isGalleryItemUnlocked(arg0->unk2)) {
             playBgmTrack(alloc, entry->pad[4]);
             if (alloc->menuModel->unk16 != 0x92) {
                 spawnSpriteEffectInternal(
