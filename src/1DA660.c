@@ -175,7 +175,7 @@ void func_800B0218_1DA7B8(func_800B0980_element *arg0, u8 arg1) {
     }
 
     count = 0;
-    for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         if (allocation->unk592[arg1] == allocation->unk592[i]) {
             count++;
         }
@@ -306,7 +306,7 @@ void func_800B0638_1DABD8(func_800B08FC_arg *arg0) {
 
     if (arg0->unk28 == 0) {
         ptr = D_800AFE8C_A71FC;
-        count = ptr->unk8;
+        count = ptr->numPlayers;
         if (count > 0) {
             i = 0;
             do {
@@ -320,7 +320,7 @@ void func_800B0638_1DABD8(func_800B08FC_arg *arg0) {
                 }
                 ptr = D_800AFE8C_A71FC;
                 i++;
-            } while (i < ptr->unk8);
+            } while (i < ptr->numPlayers);
         }
     }
 }
@@ -352,7 +352,7 @@ void func_800B0980_1DAF20(func_800B0980_container *arg0) {
     getCurrentAllocation();
     allocation = loadCompressedData(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
 
-    for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         arg0->elements[i].unk4 = allocation;
         arg0->elements[i].unkA = 0xFF;
         arg0->elements[i].unkD = 0;
@@ -373,7 +373,7 @@ void func_800B0A54_1DAFF4(func_800B0980_container *arg0) {
     allocation = (func_800B0A54_allocation *)getCurrentAllocation();
     func_800B00C0_1DA660();
 
-    for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         func_800B0218_1DA7B8(&arg0->elements[i], i);
         state = allocation->unk59A[i];
 

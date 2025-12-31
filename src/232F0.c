@@ -54,7 +54,7 @@ void func_80022CEC_238EC(void) {
         return;
     }
 
-    for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         task = (Task232F0 *)scheduleTask(func_8002529C_25E9C, 1, i, 0x5A);
         if (task != NULL) {
             task->unk52 = i;
@@ -76,7 +76,7 @@ void func_80023C7C_2487C(void) {
 
     unlinkNode(&s1->unk1620);
 
-    for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         unlinkNode(&s1->unk0[i]);
         unlinkNode(&s1->unk760[i]);
         unlinkNode(&s1->unkEC0[i]);

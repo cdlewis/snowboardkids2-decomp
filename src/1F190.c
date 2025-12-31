@@ -142,7 +142,7 @@ void handleLevelSelectInput(void) {
         case MENU_STATE_NAVIGATE:
             oldMenuSelection = allocation->selectedIndex;
             oldB46 = oldMenuSelection & 0xFF;
-            for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+            for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                 if (oldB46 == (allocation->selectedIndex)) {
                     if (gControllerInputs[i] & 0x10800) {
                         allocation->selectedIndex = allocation->selectedIndex - 1;
@@ -178,7 +178,7 @@ void handleLevelSelectInput(void) {
                 }
             } else {
                 loadLevelPreview();
-                for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+                for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                     tempA0 = D_800AFE8C_A71FC;
                     if (allocation->menuState == MENU_STATE_NAVIGATE && allocation->exitMode != 2) {
                         if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
@@ -203,7 +203,7 @@ void handleLevelSelectInput(void) {
 
         case MENU_STATE_CONFIRM:
             loadLevelPreview();
-            for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+            for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                 if (allocation->menuState == MENU_STATE_CONFIRM && allocation->exitMode != 1) {
                     if (gControllerInputs[i] & B_BUTTON) {
                         func_800585C8_591C8(0x2E);
@@ -282,7 +282,7 @@ void handleLevelSelectInput(void) {
         case MENU_STATE_NUMBER_SELECT:
             loadLevelPreview();
             oldB46 = allocation->selectedNumber;
-            for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+            for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                 if ((oldB46 & 0xFF) == allocation->selectedNumber) {
                     if (gControllerInputs[i] & 0x40100) {
                         allocation->selectedNumber = allocation->selectedNumber + 1;
@@ -300,7 +300,7 @@ void handleLevelSelectInput(void) {
             if (oldB46 != allocation->selectedNumber) {
                 func_800585C8_591C8(0x2B);
             } else {
-                for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+                for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                     if (allocation->menuState == MENU_STATE_NUMBER_SELECT) {
                         if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
                             allocation->menuState = 2;
@@ -385,10 +385,10 @@ void applyLevelSelection(void) {
     if (unk4 == 0) {
         if (saveSlotIndex == 3 || saveSlotIndex == 7 || saveSlotIndex == 11 || saveSlotIndex >= 12) {
             ptr->unk9[0x10] = 1;
-            D_800AFE8C_A71FC->unk8 = 1;
+            D_800AFE8C_A71FC->numPlayers = 1;
         } else {
             ptr->unk9[0x10] = 3;
-            D_800AFE8C_A71FC->unk8 = 1;
+            D_800AFE8C_A71FC->numPlayers = 1;
         }
     } else {
         ptr->unk9[0x10] = allocation->selectedNumber;

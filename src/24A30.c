@@ -502,7 +502,7 @@ void func_80024298_24E98(func_80024048_arg *arg0) {
     offset = arg0->unkA1 << 5;
     memcpy(unk7CPtr, (u8 *)(offset + (s32)base + 0x17F8), 0x20);
 
-    tableValue = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->unk8 * 2) + state->unk18C0[arg0->unkA1]];
+    tableValue = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->numPlayers * 2) + state->unk18C0[arg0->unkA1]];
     arg0->unk7C.translation.x = tableValue;
     arg0->unk9C = tableValue;
 
@@ -664,7 +664,7 @@ void func_80024810_25410(func_80024644_arg *arg0) {
     state = (GameState *)getCurrentAllocation();
 
     sp10Ptr = &sp10;
-    target = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->unk8 * 2) + ((state->unk18C0[arg0->unkA1] + 1) & 1)];
+    target = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->numPlayers * 2) + ((state->unk18C0[arg0->unkA1] + 1) & 1)];
     adjustment = (-(target < 0) & 0xFFF00000) | 0x100000;
 
     memcpy(sp10Ptr, identityMatrix, 0x20);
@@ -793,7 +793,7 @@ void func_80024E58_25A58(func_80024C8C_2588C_arg *arg0) {
     memcpy(&arg0->unk4, identityMatrix, 0x20);
 
     index = arg0->unk28;
-    arg0->unk4.translation.x = D_8008DD2C_8E92C[D_800AFE8C_A71FC->unk8 * 2 + (base + index)[0x18C0]];
+    arg0->unk4.translation.x = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (base + index)[0x18C0]];
     arg0->unk4.translation.z = 0;
     arg0->unk4.translation.y = 0xFFF00000;
     arg0->unk20_u.unk20_s32 = arg0->unk4.translation.x;
@@ -885,7 +885,7 @@ void func_800251AC_25DAC(func_80025130_25D30_arg *arg0) {
 
     base = (u8 *)getCurrentAllocation();
 
-    target = D_8008DD2C_8E92C[D_800AFE8C_A71FC->unk8 * 2 + (((base + arg0->unk28)[0x18C0] + 1) & 1)];
+    target = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (((base + arg0->unk28)[0x18C0] + 1) & 1)];
 
     arg0->unk4.translation.x += ((target >> 31) & adj1) | adj2;
 
@@ -929,7 +929,7 @@ void func_8002529C_25E9C(func_8002529C_25E9C_arg *arg0) {
     setCleanupCallback(func_8002567C_2627C);
     getTableEntryByU16Index(dmaResult, 0xB, &sp10);
 
-    unk8 = D_800AFE8C_A71FC->unk8;
+    unk8 = D_800AFE8C_A71FC->numPlayers;
 
     unk0Val = D_8008DDE6_8E9E6[unk8].y;
     xTemp = D_8008DDE6_8E9E6[unk8].x;
@@ -1034,7 +1034,7 @@ void func_80025824_26424(func_80025824_arg *arg0) {
 
     if (base->unk1898[arg0->unk24] == 3) {
         val = 0xD;
-        if (D_800AFE8C_A71FC->unk8 == 1) {
+        if (D_800AFE8C_A71FC->numPlayers == 1) {
             val = 0x12;
         }
 
@@ -1072,7 +1072,7 @@ void func_80025A88_26688(func_80025A88_26688_arg *arg0) {
     base = (GameState *)getCurrentAllocation();
 
     s2 = 0xC;
-    if (D_800AFE8C_A71FC->unk8 == 1) {
+    if (D_800AFE8C_A71FC->numPlayers == 1) {
         s2 = 0x11;
     }
 
@@ -1098,7 +1098,7 @@ loop:
         u8 *a0;
 
         s2 = 0xD;
-        if (D_800AFE8C_A71FC->unk8 == 1) {
+        if (D_800AFE8C_A71FC->numPlayers == 1) {
             s2 = 0x12;
         }
 
@@ -1137,7 +1137,7 @@ void func_80025C64_26864(SelectionMenuState *arg0) {
     setCleanupCallback(func_80025FFC_26BFC);
 
     spriteIndexBase = 8;
-    if (D_800AFE8C_A71FC->unk8 == 1) {
+    if (D_800AFE8C_A71FC->numPlayers == 1) {
         spriteIndexBase = 5;
     }
 
@@ -1150,7 +1150,7 @@ void func_80025C64_26864(SelectionMenuState *arg0) {
         spriteIndexBase = 6;
         arg0->numEntries = 2;
     } else {
-        s32 index = D_800AFE8C_A71FC->unk8;
+        s32 index = D_800AFE8C_A71FC->numPlayers;
         x = D_8008DD4E_8E94E[index].x;
         y = D_8008DD4E_8E94E[index].y;
         xIncrement = D_8008DD4E_8E94E[index].z;
@@ -1283,7 +1283,7 @@ void func_80026028_26C28(func_80025FFC_26BFC_arg *arg0) {
     setCleanupCallback(func_80026190_26D90);
 
     i = 0;
-    index = D_800AFE8C_A71FC->unk8;
+    index = D_800AFE8C_A71FC->numPlayers;
     x = D_8008DDBE_8E9BE[index].x;
     increment = D_8008DDBE_8E9BE[index].inc;
     y = D_8008DDBE_8E9BE[index].y;
@@ -1307,7 +1307,7 @@ void func_800260EC_26CEC(func_800260EC_26CEC_arg *arg0) {
     func_80027348_entry *ptr;
 
     i = 0;
-    if (i < (D_800AFE8C_A71FC)->unk8) {
+    if (i < (D_800AFE8C_A71FC)->numPlayers) {
         j = 0;
         do {
             index = i + 8;
@@ -1319,7 +1319,7 @@ void func_800260EC_26CEC(func_800260EC_26CEC_arg *arg0) {
             } while (j < 3);
             i++;
             j = 0;
-        } while (i < (D_800AFE8C_A71FC)->unk8);
+        } while (i < (D_800AFE8C_A71FC)->numPlayers);
     }
 }
 
@@ -1348,7 +1348,7 @@ void func_800261BC_26DBC(func_80026564_arg *arg0) {
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026538_27138);
 
-    count = D_800AFE8C_A71FC->unk8;
+    count = D_800AFE8C_A71FC->numPlayers;
     xBase = D_8008DE1A_8EA1A[count].x;
     y = D_8008DE1A_8EA1A[count].y;
     xInc = D_8008DE1A_8EA1A[count].inc;
@@ -1374,7 +1374,7 @@ void func_800261BC_26DBC(func_80026564_arg *arg0) {
             } while (j < 2);
             arg0->unk80[i] = 0;
             i++;
-        } while (i < D_800AFE8C_A71FC->unk8);
+        } while (i < D_800AFE8C_A71FC->numPlayers);
     }
 
     setCallback(func_800262D4_26ED4);
@@ -1407,7 +1407,7 @@ void func_80026564_27164(func_80026564_arg *arg0) {
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026834_27434);
 
-    count = D_800AFE8C_A71FC->unk8;
+    count = D_800AFE8C_A71FC->numPlayers;
     index = count * 3;
     xBase = D_8008DE3A_8EA3A[count].x;
     y = D_8008DE3A_8EA3A[count].y;
@@ -1434,7 +1434,7 @@ void func_80026564_27164(func_80026564_arg *arg0) {
                 x += xIncrement;
             } while (j < 2);
             i++;
-        } while (i < D_800AFE8C_A71FC->unk8);
+        } while (i < D_800AFE8C_A71FC->numPlayers);
     }
 
     setCallback(func_8002667C_2727C);
@@ -1461,14 +1461,14 @@ void func_80026860_27460(CharacterNameSprite *sprites) {
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80026BAC_277AC);
 
-    numPlayers = D_800AFE8C_A71FC->unk8;
+    numPlayers = D_800AFE8C_A71FC->numPlayers;
     xPos = D_8008DE54_8EA54[numPlayers].unk0;
     yPos = D_8008DE54_8EA54[numPlayers].unk2;
 
-    for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         numPlayers = gameState->unk18A8[i];
         if (numPlayers == 3) {
-            numPlayers = D_800AFE8C_A71FC->unk8;
+            numPlayers = D_800AFE8C_A71FC->numPlayers;
             if (numPlayers == 1) {
                 xPos += 0x18;
                 spriteIdx = D_800AFE8C_A71FC->unk9[i + 4] + 0x30;
@@ -1480,7 +1480,7 @@ void func_80026860_27460(CharacterNameSprite *sprites) {
             sprites[i].spriteIndex = spriteIdx;
         } else {
             spriteIdx = 0x1D;
-            if (D_800AFE8C_A71FC->unk8 == 1) {
+            if (D_800AFE8C_A71FC->numPlayers == 1) {
                 spriteIdx = 0x36;
             }
             sprites[i].spriteIndex = numPlayers + spriteIdx;
@@ -1523,7 +1523,7 @@ void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
     setCleanupCallback(func_80026FC8_27BC8);
 
     global = D_800AFE8C_A71FC;
-    count = global->unk8;
+    count = global->numPlayers;
     unk0Val = D_8008DE9C_8EA9C[count].unk0;
     unk2Val = D_8008DE9C_8EA9C[count].unk2;
 
@@ -1537,7 +1537,7 @@ void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
                 unk8Val = 0x35;
             } else {
                 unk8Val = 0x24;
-                if (global->unk8 == const_1) {
+                if (global->numPlayers == const_1) {
                     unk8Val = 0x43;
                 }
                 unk8Val = unk8Val + (allocation + i)[0x18B0];
@@ -1552,10 +1552,10 @@ void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
             ptr->asset = dmaResult;
             i++;
             ptr++;
-        } while (i < global->unk8);
+        } while (i < global->numPlayers);
     }
 
-    if (D_800AFE8C_A71FC->unk8 == 1) {
+    if (D_800AFE8C_A71FC->numPlayers == 1) {
         arg0->unk40 = 0x38;
         arg0->unk42 = -0x58;
         arg0->unk44 = dmaResult;
@@ -1589,7 +1589,7 @@ void func_80026FF4_27BF4(func_80025FFC_26BFC_arg *arg0) {
     setCleanupCallback(func_8002712C_27D2C);
 
     global = D_800AFE8C_A71FC;
-    count = global->unk8;
+    count = global->numPlayers;
     unk8Base = (count >= 3) * 8;
     x = D_8008DDD8_8E9D8[count].x;
     y = D_8008DDD8_8E9D8[count].y;
@@ -1604,7 +1604,7 @@ void func_80026FF4_27BF4(func_80025FFC_26BFC_arg *arg0) {
             ptr->unk4 = dmaResult;
             ptr++;
             i++;
-        } while (i < global->unk8);
+        } while (i < global->numPlayers);
     }
 
     setCallback(func_800270B8_27CB8);
@@ -1616,7 +1616,7 @@ void func_800270B8_27CB8(u8 *arg0) {
     u8 *ptr;
     s32 count;
 
-    count = D_800AFE8C_A71FC->unk8;
+    count = D_800AFE8C_A71FC->numPlayers;
     if (count > 0) {
         i = 0;
         ptr = arg0;
@@ -1624,7 +1624,7 @@ void func_800270B8_27CB8(u8 *arg0) {
             debugEnqueueCallback((u16)(i + 0xC), 0, func_8000FED0_10AD0, ptr);
             i++;
             ptr += 0xC;
-        } while (i < D_800AFE8C_A71FC->unk8);
+        } while (i < D_800AFE8C_A71FC->numPlayers);
     }
 }
 
@@ -1668,7 +1668,7 @@ void func_80027268_27E68(func_80025FFC_26BFC_arg *arg0) {
 
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
 
-    loopCount = (D_800AFE8C_A71FC->unk8 == 2) ? 3 : 2;
+    loopCount = (D_800AFE8C_A71FC->numPlayers == 2) ? 3 : 2;
 
     for (i = 0; i < loopCount; i++) {
         arg0[i].unk4 = dmaResult;
@@ -1706,7 +1706,7 @@ void func_80027348_27F48(volatile func_80027348_entry *arg0) {
     dummyPtr = &dummy;
 
     xBase = -0x38;
-    if (D_800AFE8C_A71FC->unk8 == 2) {
+    if (D_800AFE8C_A71FC->numPlayers == 2) {
         xBase = -0x58;
         yBase = -0x64;
         xIncrement = 0;
@@ -1757,7 +1757,7 @@ void func_80027400_28000(func_80025824_arg *arg0) {
     (void)pad;
     state = (GameState *)getCurrentAllocation();
     minY = -0x10;
-    if (D_800AFE8C_A71FC->unk8 == 2) {
+    if (D_800AFE8C_A71FC->numPlayers == 2) {
         minY = -0x14;
         yIncrement = 0x14;
         loopCount = 3;
@@ -1796,7 +1796,7 @@ void func_80027544_28144(func_80027544_arg *arg0) {
     s16 increment;
     allocation = (u8 *)getCurrentAllocation();
     target = -0x5C;
-    if (D_800AFE8C_A71FC->unk8 == 2) {
+    if (D_800AFE8C_A71FC->numPlayers == 2) {
         target = -0x64;
         var_v0 = 3;
         increment = -0x14;

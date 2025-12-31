@@ -84,23 +84,23 @@ void onStoryMapExitToMainMenu(void) {
     func_800697F4_6A3F4(0xFF);
 }
 
-void func_8001BCDC_1C8DC(void) {
+void storyMapClearLocationArrivalsIfNoActivePlayers(void) {
     GameState *state = getCurrentAllocation();
-    s32 i;
-    s32 j;
-    u8 count;
+    s32 locationIdx;
+    s32 playerIdx;
+    u8 activePlayerCount;
 
-    for (i = 0; i < 9; i++) {
-        count = 0;
+    for (locationIdx = 0; locationIdx < 9; locationIdx++) {
+        activePlayerCount = 0;
 
-        for (j = 0; j < D_800AFE8C_A71FC->unk8; j++) {
-            if (state->unk59A[j] == 1 || state->unk59A[j] == 3) {
-                count++;
+        for (playerIdx = 0; playerIdx < D_800AFE8C_A71FC->numPlayers; playerIdx++) {
+            if (state->unk59A[playerIdx] == 1 || state->unk59A[playerIdx] == 3) {
+                activePlayerCount++;
             }
         }
 
-        if (count == 0) {
-            state->unk5B8[i] = 0;
+        if (activePlayerCount == 0) {
+            state->unk5B8[locationIdx] = 0;
         }
     }
 }

@@ -63,7 +63,7 @@ void func_80022130_22D30(void) {
             s0->unk1E4 = s0->unk1E4 + 1;
         }
     }
-    temp = D_800AFE8C_A71FC->unk8;
+    temp = D_800AFE8C_A71FC->numPlayers;
     if (temp != 0) {
         s0->unk1E2_union.unk1E2 = temp - 1;
     } else {
@@ -194,8 +194,8 @@ void func_800225C8_231C8(void) {
         s0->unk1DC = freeNodeMemory(s0->unk1DC);
         if (s0->unk1E5 == 1) {
             terminateSchedulerWithCallback(func_800226B0_232B0);
-            D_800AFE8C_A71FC->unk8 = s0->unk1E2_union.bytes.unk1E3 + 1;
-            for (i = 0; i < D_800AFE8C_A71FC->unk8; i++) {
+            D_800AFE8C_A71FC->numPlayers = s0->unk1E2_union.bytes.unk1E3 + 1;
+            for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                 D_800AFE8C_A71FC->unk9[i] = D_8008DCC0_8E8C0[i];
             }
         } else {

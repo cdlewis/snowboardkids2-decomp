@@ -193,7 +193,7 @@ void resetGameSession(void) {
         D_800AFE8C_A71FC->unk9[0x10] = 3;
     }
 
-    D_800AFE8C_A71FC->unk8 = 0;
+    D_800AFE8C_A71FC->numPlayers = 0;
     D_800AFE8C_A71FC->padding = 0;
 
     for (i = 0; i < 4; i++) {

@@ -1916,3 +1916,4 @@ storyMapAwaitFadeIn = 0x8001B3B8; // rom:0x1BFB8
 storyMapAwaitFadeOutAndCleanup = 0x8001BBE8; // rom:0x1C7E8
 onStoryMapNormalExit = 0x8001BC78; // rom:0x1C878
 onStoryMapExitToMainMenu = 0x8001BCC0; // rom:0x1C8C0
+storyMapClearLocationArrivalsIfNoActivePlayers = 0x8001BCDC; // rom:0x1C8DC
