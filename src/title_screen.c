@@ -347,7 +347,7 @@ void initTitleScreen(void) {
         }
     }
 
-    scheduleTask(&func_80016860_17460, 0, 0, 0x62);
+    scheduleTask(&initTitleEffectModel, 0, 0, 0x62);
     func_80040F6C_41B6C(1, 0x20, 0, 0, 8, 7);
     setGameStateHandler(waitForTitleAssetsReady);
 }

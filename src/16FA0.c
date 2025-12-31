@@ -150,7 +150,7 @@ void cleanupPressStartPrompt(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
 }
 
-void func_80016860_17460(ModelEntity *arg0) {
+void initTitleEffectModel(ModelEntity *arg0) {
     ColorData sp10[3];
     ColorData sp28;
     GameState *alloc;
