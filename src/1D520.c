@@ -13,14 +13,14 @@ void onSaveSlotSelectionCancel(void);
 
 typedef struct {
     Node_70B00 unk0;
-    Node_70B00 unk1D8[4];
+    Node_70B00 slotModels[4];
     u8 padding0[0x170];
     Node_70B00 *unkAA8;
     Node_70B00 *unkAAC;
     Node_70B00 *unkAB0;
     Node_70B00 *unkAB4;
     Node_70B00 *unkAB8;
-    s16 unkABC;
+    s16 slideOffset;
     u16 unkABE;
     u16 selectionY;         // 0xAC0 - animated Y position (wiggles on selection)
     u16 selectionBaseY;     // 0xAC2 - base Y position
@@ -77,7 +77,7 @@ void cleanupSaveSlotSelectionAndExit(void) {
 
     if (allocation->unkAC9 == 0) {
         for (i = 0; i < 3; i++) {
-            unlinkNode(&allocation->unk1D8[i]);
+            unlinkNode(&allocation->slotModels[i]);
         }
 
         for (i = 0; i < 8; i++) {
@@ -85,7 +85,7 @@ void cleanupSaveSlotSelectionAndExit(void) {
         }
     } else {
         for (i = 0; i < 4; i++) {
-            unlinkNode(&allocation->unk1D8[i]);
+            unlinkNode(&allocation->slotModels[i]);
         }
     }
 
@@ -369,26 +369,26 @@ void verifySaveSlotChecksum(void) {
     allocation->selectionAnimState = 1;
 }
 
-void func_8001E3E8_1EFE8(void) {
+void updateSlotSelectionSlide(void) {
     allocation_1D520 *allocation;
-    s16 counter;
+    s16 slideOffset;
     u8 slotIndex;
 
     allocation = (allocation_1D520 *)getCurrentAllocation();
-    counter = allocation->unkABC;
+    slideOffset = allocation->slideOffset;
 
-    if (counter != 0) {
+    if (slideOffset != 0) {
         slotIndex = allocation->saveSlotIndex;
-        counter -= 3;
-        allocation->unkABC = counter;
+        slideOffset -= 3;
+        allocation->slideOffset = slideOffset;
 
         setModelCameraTransform(
-            &allocation->unk1D8[3],
+            &allocation->slotModels[3],
             0,
             (s16)((slotIndex * 7 * 8) - 48),
-            (s16)-counter,
+            (s16)-slideOffset,
             -0x18,
-            allocation->unkABC,
+            allocation->slideOffset,
             0x18
         );
     }
