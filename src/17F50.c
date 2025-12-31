@@ -42,7 +42,7 @@ typedef struct {
 
 void initStoryMapCamera(StoryMapCameraState *arg0);
 void func_800175E0_181E0(void);
-void func_80018580_19180(StoryMapCameraState *arg0);
+void updateStoryMapCameraOrbit(StoryMapCameraState *arg0);
 void initStoryMapCameraAtLocation(StoryMapCameraState *arg0);
 
 void storyMapCameraTask(void) {
@@ -131,7 +131,7 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
     if (mode == 3) {
         setCallback(&func_800175E0_181E0);
     } else {
-        setCallback(&func_80018580_19180);
+        setCallback(&updateStoryMapCameraOrbit);
     }
 }
 
@@ -332,21 +332,21 @@ void approachStoryMapOrigin(StoryMapCameraState *camera) {
     }
 }
 
-void func_80018580_19180(StoryMapCameraState *camera) {
-    s32 sp10[8];
-    s32 sp30[3];
+void updateStoryMapCameraOrbit(StoryMapCameraState *camera) {
+    s32 combinedMatrix[8];
+    s32 cameraPosition[3];
     s32 pad3C[5];
     s32 sp58;
     u32 sp5C;
     GameState *state;
-    Transform3D *matrixPtr;
-    s32 divResult;
+    Transform3D *orientMatrixPtr;
+    s32 zDelta;
     s32 x, z;
     u8 mode;
     s8 orbitSpeed;
 
     state = getCurrentAllocation();
-    memcpy(sp30, &camera->cameraX, 0xC);
+    memcpy(cameraPosition, &camera->cameraX, 0xC);
 
     mode = getStoryMapCameraMode();
     orbitSpeed = -3;
@@ -354,10 +354,10 @@ void func_80018580_19180(StoryMapCameraState *camera) {
         orbitSpeed = 3;
     }
 
-    camera->cameraX = camera->cameraX + (((orbitSpeed * (sp30[2] >> 8)) / (camera->orbitRadius >> 8)) << 16);
+    camera->cameraX = camera->cameraX + (((orbitSpeed * (cameraPosition[2] >> 8)) / (camera->orbitRadius >> 8)) << 16);
 
-    divResult = (-orbitSpeed * (sp30[0] >> 8)) / (camera->orbitRadius >> 8);
-    camera->cameraZ = camera->cameraZ + (divResult << 16);
+    zDelta = (-orbitSpeed * (cameraPosition[0] >> 8)) / (camera->orbitRadius >> 8);
+    camera->cameraZ = camera->cameraZ + (zDelta << 16);
 
     camera->orbitAngle = atan2Fixed(camera->cameraX, camera->cameraZ);
 
@@ -365,13 +365,13 @@ void func_80018580_19180(StoryMapCameraState *camera) {
     z = camera->cameraZ;
     camera->orbitRadius = isqrt64((s64)x * x + (s64)z * z);
 
-    matrixPtr = (Transform3D *)&camera->orientMatrix;
-    createYRotationMatrix(matrixPtr, camera->orbitAngle);
-    func_8006B084_6BC84(camera, matrixPtr, sp10);
+    orientMatrixPtr = (Transform3D *)&camera->orientMatrix;
+    createYRotationMatrix(orientMatrixPtr, camera->orbitAngle);
+    func_8006B084_6BC84(camera, orientMatrixPtr, combinedMatrix);
 
     state->unk3EC = camera->cameraX;
     state->unk3F0 = camera->cameraZ;
-    memcpy(&state->unk3B0, sp10, 0x20);
+    memcpy(&state->unk3B0, combinedMatrix, 0x20);
     state->unk3F4 = camera->orbitAngle;
     state->unk3F8 = camera->orbitRadius;
     state->unk3FC = camera->viewAngle & 0x1FFF;
