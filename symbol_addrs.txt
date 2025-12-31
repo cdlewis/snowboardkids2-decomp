@@ -1932,3 +1932,4 @@ initSaveSlotSelection = 0x8001CD58; // rom:0x1D958
 cleanupSaveSlotSelectionAndExit = 0x8001DD54; // rom:0x1E954
 onSaveSlotSelectionConfirm = 0x8001DE84; // rom:0x1EA84
 onSaveSlotSelectionCancel = 0x8001DEA0; // rom:0x1EAA0
+updateSelectionWiggle = 0x8001DEBC; // rom:0x1EABC

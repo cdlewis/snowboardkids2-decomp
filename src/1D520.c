@@ -21,8 +21,10 @@ typedef struct {
     Node_70B00 *unkAB4;
     Node_70B00 *unkAB8;
     s16 unkABC;
-    u8 padding2[0x6];
-    u16 unkAC4;
+    u16 unkABE;
+    u16 selectionY;         // 0xAC0 - animated Y position (wiggles on selection)
+    u16 selectionBaseY;     // 0xAC2 - base Y position
+    u16 selectionAnimState; // 0xAC4 - animation counter (0-24) / selection result (1=confirmed)
     u8 padding5[0x2];
     u8 unkAC8;
     u8 unkAC9;
@@ -87,7 +89,7 @@ void cleanupSaveSlotSelectionAndExit(void) {
         }
     }
 
-    if (allocation->unkAC4 == 1) {
+    if (allocation->selectionAnimState == 1) {
         terminateSchedulerWithCallback(onSaveSlotSelectionConfirm);
     } else {
         terminateSchedulerWithCallback(onSaveSlotSelectionCancel);
@@ -102,26 +104,26 @@ void onSaveSlotSelectionCancel(void) {
     func_800697F4_6A3F4(0xFE);
 }
 
-void func_8001DEBC_1EABC(void) {
-    u16 *allocation = (u16 *)getCurrentAllocation();
-    u16 counter = allocation[0xAC4 / 2];
+void updateSelectionWiggle(void) {
+    allocation_1D520 *allocation = (allocation_1D520 *)getCurrentAllocation();
+    u16 counter = allocation->selectionAnimState;
     u16 temp;
 
     if (counter < 15) {
         if (counter & 1) {
-            allocation[0xAC0 / 2] = allocation[0xAC2 / 2] - 2;
+            allocation->selectionY = allocation->selectionBaseY - 2;
         } else {
-            allocation[0xAC0 / 2] = allocation[0xAC2 / 2] + 2;
+            allocation->selectionY = allocation->selectionBaseY + 2;
         }
-        counter = allocation[0xAC4 / 2];
+        counter = allocation->selectionAnimState;
     }
 
     temp = ((counter + 1) & 0xFFFF) % 25U;
-    allocation[0xAC4 / 2] = temp;
+    allocation->selectionAnimState = temp;
     temp &= 0xFFFF;
 
     if (temp == 15) {
-        allocation[0xAC0 / 2] = allocation[0xAC2 / 2];
+        allocation->selectionY = allocation->selectionBaseY;
     }
 }
 
@@ -326,7 +328,7 @@ void func_8001E320_1EF20(void) {
     s32 limit;
 
     allocation = (allocation_1D520 *)getCurrentAllocation();
-    allocation->unkAC4 = 0;
+    allocation->selectionAnimState = 0;
 
     checksum = 0;
     retryCount = 0;
@@ -359,12 +361,12 @@ void func_8001E320_1EF20(void) {
         }
 
         if (checksum == expectedChecksum) {
-            allocation->unkAC4 = 0;
+            allocation->selectionAnimState = 0;
             return;
         }
     }
 
-    allocation->unkAC4 = 1;
+    allocation->selectionAnimState = 1;
 }
 
 void func_8001E3E8_1EFE8(void) {
