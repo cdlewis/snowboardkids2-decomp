@@ -193,8 +193,8 @@ typedef struct {
 
 typedef struct {
     SelectionEntry entries[8];
-    u8 unk80[4];
-} func_80026564_arg;
+    u8 blinkTimers[4];
+} SelectionArrowsState;
 
 typedef struct {
     func_80027348_entry entries[3];
@@ -257,7 +257,7 @@ extern PositionConfig_DDBE D_8008DDBE_8E9BE[];
 extern PositionConfig_DDE6 D_8008DDE6_8E9E6[];
 extern u8 D_8008DE18_8EA18[];
 extern PositionConfig_DE1A D_8008DE1A_8EA1A[];
-extern Vec3s D_8008DE3A_8EA3A[];
+extern Vec3s boardSelectArrowPositions[];
 extern u16 D_8008DE7A_8EA7A[];
 extern struct {
     u16 unk0;
@@ -277,8 +277,8 @@ void updateCharSelectBoardSlideOut(CharSelectBoardPreview *);
 void updateCharSelectBoardPreview(CharSelectBoardPreview *);
 void func_80026D34_27934(func_80026BD8_arg *);
 void func_80026FC8_27BC8(SimpleSpriteEntry *);
-void func_8002667C_2727C(void *);
-void func_80026834_27434(SimpleSpriteEntry *);
+void updateBoardSelectArrows(void *);
+void cleanupBoardSelectArrows(SimpleSpriteEntry *);
 void updateCharSelectMenu(SelectionMenuState *);
 void cleanupCharSelectMenu(SimpleSpriteEntry *);
 void updateCharSelectPreviewModel(CharSelectPreviewModel *);
@@ -300,7 +300,7 @@ void waitForCharSelectBoardState(CharSelectBoardPreview *);
 void updateCharSelectBoardSlideIn(CharSelectBoardPreview *);
 void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *);
 void updateCharSelectPlayerLabels(PlayerLabelSpritesState *);
-void func_800262D4_26ED4(func_80026564_arg *);
+void func_800262D4_26ED4(SelectionArrowsState *);
 void cleanupCharSelectArrows(SimpleSpriteEntry *);
 void func_800270B8_27CB8(u8 *);
 void func_8002712C_27D2C(SimpleSpriteEntry *);
@@ -1296,7 +1296,7 @@ void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void initCharSelectArrows(func_80026564_arg *arg0) {
+void initCharSelectArrows(SelectionArrowsState *arg0) {
     void *dmaResult;
     u8 count;
     s32 i;
@@ -1341,7 +1341,7 @@ void initCharSelectArrows(func_80026564_arg *arg0) {
                 ptr->unkC = 0;
                 x += xIncrement;
             } while (j < 2);
-            arg0->unk80[i] = 0;
+            arg0->blinkTimers[i] = 0;
             i++;
         } while (i < D_800AFE8C_A71FC->numPlayers);
     }
@@ -1355,63 +1355,63 @@ void cleanupCharSelectArrows(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80026564_27164(func_80026564_arg *arg0) {
-    void *dmaResult;
-    u8 count;
-    s32 i;
-    s32 j;
-    s32 index;
+void initBoardSelectArrows(SelectionArrowsState *state) {
+    void *arrowAsset;
+    u8 numPlayers;
+    s32 playerIdx;
+    s32 arrowIdx;
+    s32 unused;
     u16 xBase;
     u16 y;
-    u16 xInc;
-    s32 xIncrement;
-    SelectionEntry *ptr;
+    u16 xSpacing;
+    s32 xOffset;
+    SelectionEntry *arrow;
     u16 x;
-    s32 iTimesTwo;
+    s32 entryOffset;
     s32 pad[5];
 
     (void)pad;
 
     getCurrentAllocation();
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_80026834_27434);
+    arrowAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    setCleanupCallback(cleanupBoardSelectArrows);
 
-    count = D_800AFE8C_A71FC->numPlayers;
-    index = count * 3;
-    xBase = D_8008DE3A_8EA3A[count].x;
-    y = D_8008DE3A_8EA3A[count].y;
-    xInc = D_8008DE3A_8EA3A[count].z;
+    numPlayers = D_800AFE8C_A71FC->numPlayers;
+    unused = numPlayers * 3;
+    xBase = boardSelectArrowPositions[numPlayers].x;
+    y = boardSelectArrowPositions[numPlayers].y;
+    xSpacing = boardSelectArrowPositions[numPlayers].z;
 
-    i = 0;
-    if (count != 0) {
-        xIncrement = (s16)xInc;
+    playerIdx = 0;
+    if (numPlayers != 0) {
+        xOffset = (s16)xSpacing;
         do {
-            arg0->unk80[i] = 0;
-            j = 0;
-            iTimesTwo = i * 2;
+            state->blinkTimers[playerIdx] = 0;
+            arrowIdx = 0;
+            entryOffset = playerIdx * 2;
             x = xBase;
             do {
-                ptr = &arg0->entries[iTimesTwo + j];
-                ((volatile SelectionEntry *)ptr)->x = x;
-                ((volatile SelectionEntry *)ptr)->spriteIndex = j;
-                j++;
-                ptr->y = y;
-                ptr->asset = dmaResult;
-                ptr->alpha = 0xFF;
-                ptr->blinkState = 0;
-                ptr->unkC = 0;
-                x += xIncrement;
-            } while (j < 2);
-            i++;
-        } while (i < D_800AFE8C_A71FC->numPlayers);
+                arrow = &state->entries[entryOffset + arrowIdx];
+                ((volatile SelectionEntry *)arrow)->x = x;
+                ((volatile SelectionEntry *)arrow)->spriteIndex = arrowIdx;
+                arrowIdx++;
+                arrow->y = y;
+                arrow->asset = arrowAsset;
+                arrow->alpha = 0xFF;
+                arrow->blinkState = 0;
+                arrow->unkC = 0;
+                x += xOffset;
+            } while (arrowIdx < 2);
+            playerIdx++;
+        } while (playerIdx < D_800AFE8C_A71FC->numPlayers);
     }
 
-    setCallback(func_8002667C_2727C);
+    setCallback(updateBoardSelectArrows);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_8002667C_2727C);
+INCLUDE_ASM("asm/nonmatchings/24A30", updateBoardSelectArrows);
 
-void func_80026834_27434(SimpleSpriteEntry *arg0) {
+void cleanupBoardSelectArrows(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
