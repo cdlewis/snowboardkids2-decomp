@@ -301,7 +301,7 @@ void updateCharSelectBoardSlideIn(CharSelectBoardPreview *);
 void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *);
 void updateCharSelectPlayerLabels(PlayerLabelSpritesState *);
 void func_800262D4_26ED4(func_80026564_arg *);
-void func_80026538_27138(SimpleSpriteEntry *);
+void cleanupCharSelectArrows(SimpleSpriteEntry *);
 void func_800270B8_27CB8(u8 *);
 void func_8002712C_27D2C(SimpleSpriteEntry *);
 void func_800271E4_27DE4(SimpleSpriteEntry *);
@@ -1315,7 +1315,7 @@ void initCharSelectArrows(func_80026564_arg *arg0) {
 
     getCurrentAllocation();
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_80026538_27138);
+    setCleanupCallback(cleanupCharSelectArrows);
 
     count = D_800AFE8C_A71FC->numPlayers;
     xBase = D_8008DE1A_8EA1A[count].x;
@@ -1351,7 +1351,7 @@ void initCharSelectArrows(func_80026564_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800262D4_26ED4);
 
-void func_80026538_27138(SimpleSpriteEntry *arg0) {
+void cleanupCharSelectArrows(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
