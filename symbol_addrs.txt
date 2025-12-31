@@ -1799,3 +1799,4 @@ loadSaveSlotScreen = 0x80014AEC; // rom:0x156EC
 awaitSaveSlotSelection = 0x80014B1C; // rom:0x1571C
 loadStoryMapScreen = 0x80014B70; // rom:0x15770
 awaitStoryMapSelection = 0x80014BA0; // rom:0x157A0
+loadLevelSelectScreen = 0x80014C0C; // rom:0x1580C
