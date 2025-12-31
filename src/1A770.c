@@ -55,7 +55,7 @@ void updateStoryMapDecorModel(applyTransformToModel_arg1 *arg0);
 void enqueueStoryMapLocationText(TextData *arg0);
 void awaitFadeLoadStoryMap(void);
 void awaitStoryModeCharacterSelect(void);
-void func_80019EA8_1AAA8(void);
+void awaitFadeLoadPreRaceCutscene(void);
 void func_80019F30_1AB30(void);
 void func_8001AF80_1BB80(void);
 void func_8001A434_1B034(void);
@@ -144,7 +144,7 @@ void awaitFadeLoadCharacterSelect(void) {
 void awaitStoryModeCharacterSelect(void) {
     s16 selectionResult = func_80069810_6A410();
     if (selectionResult != 0) {
-        void *nextHandler = &func_80019EA8_1AAA8;
+        void *nextHandler = &awaitFadeLoadPreRaceCutscene;
         if (selectionResult == 0xFF) {
             nextHandler = &awaitFadeLoadStoryMap;
         }
@@ -152,7 +152,7 @@ void awaitStoryModeCharacterSelect(void) {
     }
 }
 
-void func_80019EA8_1AAA8(void) {
+void awaitFadeLoadPreRaceCutscene(void) {
     if (func_8006FE10_70A10(0) == 0) {
         setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 0);
         createTaskQueue(&loadCutsceneOverlay, 150);
