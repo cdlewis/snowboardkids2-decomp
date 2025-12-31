@@ -513,7 +513,7 @@ u8 isGalleryItemUnlocked(u8 itemIndex) {
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000EE88_FA88);
 
-void func_8000F4BC_100BC(E770_struct *arg0) {
+void startViewerFadeIn(E770_struct *arg0) {
     void *alloc = getCurrentAllocation();
     arg0->menuState = 1;
     beginMenuFadeIn(alloc);
@@ -948,7 +948,7 @@ void func_8000FE00_10A00(E770_struct *arg0) {
     getCurrentAllocation();
     switch (arg0->menuState) {
         case 0:
-            func_8000F4BC_100BC(arg0);
+            startViewerFadeIn(arg0);
             break;
         case 1:
             func_8000F4F0_100F0(arg0);
