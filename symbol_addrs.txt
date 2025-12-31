@@ -10,6 +10,7 @@ activateGalleryMenu = 0x8000E1D0; // rom:0xEDD0
 waitForMenuFadeIn = 0x8000E240; // rom:0xEE40
 handleGalleryMenuInput = 0x8000E2AC; // rom:0xEEAC
 processGalleryMenuSelection = 0x8000E4CC; // rom:0xF0CC
+waitForGalleryViewerExit = 0x8000E56C; // rom:0xF16C
 nullsub = 0x800084D0; // rom:0x90D0
 nullsub_s32 = 0x800084D8; // rom:0x90D8
 nullsub_s32_2 = 0x800084E0; // rom:0x90E0

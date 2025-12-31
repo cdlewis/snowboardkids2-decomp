@@ -44,7 +44,7 @@ typedef struct {
     s8 menuState;
     s8 selectedOption;
     s8 menuType;
-    s8 unk3;
+    s8 viewerComplete;
     u8 pad4[0x4];
     void *unk8;
     void *unkC;
@@ -309,7 +309,7 @@ void processGalleryMenuSelection(E770_struct *arg0) {
             arg0->menuState = 7;
         } else {
             scheduleTask(func_8000FD98_10998, 0, 0, 0);
-            arg0->unk3 = 0;
+            arg0->viewerComplete = 0;
             arg0->menuState = 4;
         }
     } else {
@@ -317,8 +317,8 @@ void processGalleryMenuSelection(E770_struct *arg0) {
     }
 }
 
-void func_8000E56C_F16C(E770_struct *arg0) {
-    if (arg0->unk3 != 0) {
+void waitForGalleryViewerExit(E770_struct *arg0) {
+    if (arg0->viewerComplete != 0) {
         terminateTasksByType(1);
         beginMenuFadeIn(arg0);
         arg0->menuState = 1;
@@ -383,7 +383,7 @@ void func_8000EC98_F898(void) {
             processGalleryMenuSelection(s0);
             break;
         case 4:
-            func_8000E56C_F16C(s0);
+            waitForGalleryViewerExit(s0);
             break;
         case 5:
         default:
@@ -970,5 +970,5 @@ void func_8000FE00_10A00(E770_struct *arg0) {
 
 void func_8000FEA0_10AA0(void) {
     E770_struct *alloc = getCurrentAllocation();
-    alloc->unk3 = 1;
+    alloc->viewerComplete = 1;
 }
