@@ -56,6 +56,7 @@ awaitBoardShopDmaComplete = 0x8001A3D8; // rom:0x1AFD8
 awaitFadeLoadBoardShop = 0x8001A434; // rom:0x1B034
 awaitBoardShopExitDelay = 0x8001AC30; // rom:0x1B830
 startBoardShopFadeOut = 0x8001AC70; // rom:0x1B870
+awaitFadeCleanupBoardShop = 0x8001ACC8; // rom:0x1B8C8
 storyMapExitCode = 0x8009F220;
 cleanupTitleLogoTask = 0x800163A0; // rom:0x16FA0
 enqueueTitleLogoRender = 0x800163CC; // rom:0x16FCC

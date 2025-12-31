@@ -45,7 +45,7 @@ extern s32 gControllerInputs[4];
 void awaitFadeLoadBoardShop(void);
 extern void func_8001A478_1B078(void);
 
-void func_8001ACC8_1B8C8(void);
+void awaitFadeCleanupBoardShop(void);
 void func_8001AD80_1B980(void);
 void awaitStoryModeUnlockCutscene(void);
 void loadStoryModeUnlockCutscene(void);
@@ -276,11 +276,11 @@ void startBoardShopFadeOut(void) {
             func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         }
 
-        setGameStateHandler(&func_8001ACC8_1B8C8);
+        setGameStateHandler(&awaitFadeCleanupBoardShop);
     }
 }
 
-void func_8001ACC8_1B8C8(void) {
+void awaitFadeCleanupBoardShop(void) {
     allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)getCurrentAllocation();
     if (func_8006FE10_70A10(0) == 0) {
         unlinkNode(&temp_s0->unk0);
