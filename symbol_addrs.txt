@@ -2022,3 +2022,4 @@ cleanupCharSelectPreviewAssets = 0x80024600; // rom:0x25200
 initCharSelectSecondarySlot = 0x80024644; // rom:0x25244
 updateCharSelectSecondarySlide = 0x80024810; // rom:0x25410
 cleanupCharSelectSecondaryAssets = 0x8002494C; // rom:0x2554C
+initCharSelectBoardPreview = 0x80024AAC; // rom:0x256AC

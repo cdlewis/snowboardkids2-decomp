@@ -37,15 +37,15 @@ typedef struct {
 } func_80025280_25E80_arg;
 
 typedef struct {
-    SceneModel *unk0;
-    Transform3D unk4;
+    SceneModel *model;
+    Transform3D transform;
     union {
         SceneModel *unk20;
-        s32 unk20_s32;
+        s32 targetX;
         s16 unk20_s16;
     } unk20_u;
-    u8 unk28;
-} func_80024C8C_2588C_arg;
+    u8 playerIndex;
+} CharSelectBoardPreview;
 
 typedef struct {
     SceneModel *unk0;
@@ -290,7 +290,7 @@ void func_80025418_26018(void *);
 void func_8002567C_2627C(func_80025FFC_26BFC_arg *);
 void func_800253E0_25FE0(func_800253E0_25FE0_arg *);
 void func_800251AC_25DAC(func_80025130_25D30_arg *);
-void func_80024BA0_257A0(func_80024C8C_2588C_arg *);
+void func_80024BA0_257A0(CharSelectBoardPreview *);
 void func_80026D34_27934(func_80026BD8_arg *);
 void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
 void func_8002667C_2727C(void *);
@@ -309,11 +309,11 @@ void func_80026BAC_277AC(func_80025FFC_26BFC_arg *);
 void func_80025904_26504(void);
 void updateCharSelectSecondarySlide(CharSelectSecondarySlot *);
 void cleanupCharSelectSecondaryAssets(func_8002494C_arg *);
-void func_80024D40_25940(func_80024C8C_2588C_arg *);
-void func_80024DCC_259CC(func_80024C8C_2588C_arg *);
-void func_80024E58_25A58(func_80024C8C_2588C_arg *);
-void func_80024FEC_25BEC(func_80024C8C_2588C_arg *);
-void func_80024F48_25B48(func_80024C8C_2588C_arg *);
+void func_80024D40_25940(CharSelectBoardPreview *);
+void func_80024DCC_259CC(CharSelectBoardPreview *);
+void func_80024E58_25A58(CharSelectBoardPreview *);
+void func_80024FEC_25BEC(CharSelectBoardPreview *);
+void func_80024F48_25B48(CharSelectBoardPreview *);
 void func_80026190_26D90(func_80025FFC_26BFC_arg *);
 void func_800260EC_26CEC(func_800260EC_26CEC_arg *);
 void func_800262D4_26ED4(func_80026564_arg *);
@@ -684,11 +684,11 @@ void cleanupCharSelectSecondaryAssets(func_8002494C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024990_25590);
 
-void func_80024AAC_256AC(func_80024C8C_2588C_arg *arg0) {
+void initCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     Transform3D localMatrix;
     Transform3D *localPtr;
     GameState *state;
-    Transform3D *matrix;
+    Transform3D *transformPtr;
     u16 rotation;
 
     state = (GameState *)getCurrentAllocation();
@@ -696,29 +696,29 @@ void func_80024AAC_256AC(func_80024C8C_2588C_arg *arg0) {
     localPtr = &localMatrix;
     memcpy(localPtr, identityMatrix, sizeof(Transform3D));
 
-    matrix = &arg0->unk4;
-    rotation = state->unk1880[arg0->unk28];
-    createYRotationMatrix(matrix, 0x2000 - rotation);
+    transformPtr = &arg0->transform;
+    rotation = state->unk1880[arg0->playerIndex];
+    createYRotationMatrix(transformPtr, 0x2000 - rotation);
 
-    func_8006B084_6BC84(matrix, &state->unk17F8[arg0->unk28], localPtr);
+    func_8006B084_6BC84(transformPtr, &state->unk17F8[arg0->playerIndex], localPtr);
 
-    applyTransformToModel(arg0->unk0, localPtr);
+    applyTransformToModel(arg0->model, localPtr);
 
-    if (D_800AFE8C_A71FC->unk9[arg0->unk28] == 7) {
-        setModelAnimation(arg0->unk0, 4);
+    if (D_800AFE8C_A71FC->unk9[arg0->playerIndex] == 7) {
+        setModelAnimation(arg0->model, 4);
     } else {
-        setModelAnimation(arg0->unk0, 0x90);
+        setModelAnimation(arg0->model, 0x90);
     }
 
-    updateModelGeometry(arg0->unk0);
+    updateModelGeometry(arg0->model);
     setCallback(func_80024BA0_257A0);
 }
 
-void func_80024BA0_257A0(func_80024C8C_2588C_arg *arg0) {
+void func_80024BA0_257A0(CharSelectBoardPreview *arg0) {
     Transform3D localMatrix;
     Transform3D *localPtr;
     GameState *state;
-    Transform3D *matrix;
+    Transform3D *transformPtr;
     u16 rotation;
     u16 val;
 
@@ -727,44 +727,44 @@ void func_80024BA0_257A0(func_80024C8C_2588C_arg *arg0) {
     localPtr = &localMatrix;
     memcpy(localPtr, identityMatrix, sizeof(Transform3D));
 
-    matrix = &arg0->unk4;
-    rotation = state->unk1880[arg0->unk28];
-    createYRotationMatrix(matrix, 0x2000 - rotation);
+    transformPtr = &arg0->transform;
+    rotation = state->unk1880[arg0->playerIndex];
+    createYRotationMatrix(transformPtr, 0x2000 - rotation);
 
-    func_8006B084_6BC84(matrix, &state->unk17F8[arg0->unk28], localPtr);
+    func_8006B084_6BC84(transformPtr, &state->unk17F8[arg0->playerIndex], localPtr);
 
-    applyTransformToModel(arg0->unk0, localPtr);
+    applyTransformToModel(arg0->model, localPtr);
 
-    clearModelRotation(arg0->unk0);
-    updateModelGeometry(arg0->unk0);
+    clearModelRotation(arg0->model);
+    updateModelGeometry(arg0->model);
 
-    val = state->unk1898[arg0->unk28];
+    val = state->unk1898[arg0->playerIndex];
     if (val == 0x10) {
-        destroySceneModel(arg0->unk0);
+        destroySceneModel(arg0->model);
         setCallback(func_80024DCC_259CC);
     }
 }
 
-void func_80024C8C_2588C(func_80024C8C_2588C_arg *arg0) {
+void func_80024C8C_2588C(CharSelectBoardPreview *arg0) {
     u16 *base;
     u16 val;
 
     base = (u16 *)getCurrentAllocation();
 
-    clearModelRotation(arg0->unk0);
-    updateModelGeometry(arg0->unk0);
+    clearModelRotation(arg0->model);
+    updateModelGeometry(arg0->model);
 
-    val = *(base + arg0->unk28 + (0x1898 / 2));
+    val = *(base + arg0->playerIndex + (0x1898 / 2));
 
     if (val == 0x10) {
-        destroySceneModel(arg0->unk0);
+        destroySceneModel(arg0->model);
         setCallback(func_80024DCC_259CC);
     } else if (val == 0) {
-        arg0->unk4.translation.x = 0xFFEA0000;
-        destroySceneModel(arg0->unk0);
+        arg0->transform.translation.x = 0xFFEA0000;
+        destroySceneModel(arg0->model);
         setCallback(func_80024D40_25940);
     } else if (val == 0x11) {
-        arg0->unk4.translation.x = 0xFFEA0000;
+        arg0->transform.translation.x = 0xFFEA0000;
         setCallback(func_80024BA0_257A0);
     }
 }
@@ -773,70 +773,70 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80024D40_25940);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80024DCC_259CC);
 
-void func_80024E58_25A58(func_80024C8C_2588C_arg *arg0) {
+void func_80024E58_25A58(CharSelectBoardPreview *arg0) {
     u8 *base;
     u8 *ptr;
     u8 index;
 
     base = (u8 *)getCurrentAllocation();
 
-    memcpy(&arg0->unk4, identityMatrix, 0x20);
+    memcpy(&arg0->transform, identityMatrix, 0x20);
 
-    index = arg0->unk28;
-    arg0->unk4.translation.x = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (base + index)[0x18C0]];
-    arg0->unk4.translation.z = 0;
-    arg0->unk4.translation.y = 0xFFF00000;
-    arg0->unk20_u.unk20_s32 = arg0->unk4.translation.x;
+    index = arg0->playerIndex;
+    arg0->transform.translation.x = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (base + index)[0x18C0]];
+    arg0->transform.translation.z = 0;
+    arg0->transform.translation.y = 0xFFF00000;
+    arg0->unk20_u.targetX = arg0->transform.translation.x;
 
-    applyTransformToModel(arg0->unk0, &arg0->unk4);
+    applyTransformToModel(arg0->model, &arg0->transform);
 
     ptr = (u8 *)D_800AFE8C_A71FC;
-    ptr = ptr + arg0->unk28;
+    ptr = ptr + arg0->playerIndex;
     if (ptr[9] == 7) {
-        setModelAnimation(arg0->unk0, 4);
+        setModelAnimation(arg0->model, 4);
     } else {
-        setModelAnimation(arg0->unk0, 0x90);
+        setModelAnimation(arg0->model, 0x90);
     }
 
-    updateModelGeometry(arg0->unk0);
+    updateModelGeometry(arg0->model);
     setCallback(func_80024F48_25B48);
 }
 
-void func_80024F48_25B48(func_80024C8C_2588C_arg *arg0) {
+void func_80024F48_25B48(CharSelectBoardPreview *arg0) {
     u8 *base;
-    s32 unk24;
+    s32 target;
     s32 adjustment;
     u8 *ptr;
 
     base = (u8 *)getCurrentAllocation();
 
-    unk24 = arg0->unk20_u.unk20_s32;
+    target = arg0->unk20_u.targetX;
 
-    adjustment = (-(0 < unk24) & 0xFFF00000) | 0x100000;
+    adjustment = (-(0 < target) & 0xFFF00000) | 0x100000;
 
-    arg0->unk4.translation.x = arg0->unk4.translation.x + adjustment;
+    arg0->transform.translation.x = arg0->transform.translation.x + adjustment;
 
-    applyTransformToModel(arg0->unk0, &arg0->unk4);
-    clearModelRotation(arg0->unk0);
-    updateModelGeometry(arg0->unk0);
+    applyTransformToModel(arg0->model, &arg0->transform);
+    clearModelRotation(arg0->model);
+    updateModelGeometry(arg0->model);
 
-    if (arg0->unk4.translation.x == 0) {
-        ptr = base + arg0->unk28;
+    if (arg0->transform.translation.x == 0) {
+        ptr = base + arg0->playerIndex;
         ptr[0x18C4]++;
         setCallbackWithContinue(func_80024FEC_25BEC);
     }
 }
 
-void func_80024FEC_25BEC(func_80024C8C_2588C_arg *arg0) {
+void func_80024FEC_25BEC(CharSelectBoardPreview *arg0) {
     u16 *base;
     u16 val;
 
     base = (u16 *)getCurrentAllocation();
 
-    clearModelRotation(arg0->unk0);
-    updateModelGeometry(arg0->unk0);
+    clearModelRotation(arg0->model);
+    updateModelGeometry(arg0->model);
 
-    val = *(base + arg0->unk28 + (0x1898 / 2));
+    val = *(base + arg0->playerIndex + (0x1898 / 2));
 
     if (val != 0x10) {
         setCallback(func_80024C8C_2588C);
