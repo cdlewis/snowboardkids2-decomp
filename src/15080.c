@@ -23,8 +23,8 @@ void waitForAttractRace(void);
 void startDemoRace(void);
 void waitForDemoRace(void);
 void func_80014900_15500(void);
-void func_80014808_15408(void);
-void func_80014854_15454(void);
+void startBattleRace(void);
+void waitForBattleRace(void);
 void func_80014958_15558(void);
 
 typedef struct {
@@ -108,7 +108,7 @@ void func_80014690_15290(void) {
             setGameStateHandler(startAttractRace);
         }
     } else if (result == 2) {
-        setGameStateHandler(func_80014808_15408);
+        setGameStateHandler(startBattleRace);
     } else if (result == 3) {
         setGameStateHandler(func_8001489C_1549C);
     } else {
@@ -130,14 +130,14 @@ void waitForAttractRace(void) {
     }
 }
 
-void func_80014808_15408(void) {
+void startBattleRace(void) {
     D_800AFE8C_A71FC->unk4 = 0;
     D_800AFE8C_A71FC->saveSlotIndex = 0xF;
     createTaskQueue(initRace, 100);
-    setGameStateHandler(func_80014854_15454);
+    setGameStateHandler(waitForBattleRace);
 }
 
-void func_80014854_15454(void) {
+void waitForBattleRace(void) {
     s16 result = func_80069810_6A410();
 
     if (result == 0) {
@@ -145,7 +145,7 @@ void func_80014854_15454(void) {
     }
 
     if (result == 1) {
-        setGameStateHandler(func_80014808_15408);
+        setGameStateHandler(startBattleRace);
     } else {
         setGameStateHandler(func_80014660_15260);
     }

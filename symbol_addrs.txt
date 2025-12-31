@@ -1787,3 +1787,5 @@ startTitleScreen = 0x80014660; // rom:0x15260
 waitForTitleScreen = 0x80014690; // rom:0x15290
 startAttractRace = 0x8001474C; // rom:0x1534C
 waitForAttractRace = 0x8001478C; // rom:0x1538C
+startBattleRace = 0x80014808; // rom:0x15408
+waitForBattleRace = 0x80014854; // rom:0x15454
