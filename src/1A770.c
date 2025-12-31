@@ -53,7 +53,7 @@ void func_80019EFC_1AAFC(void);
 void func_80019DC4_1A9C4(void);
 void updateStoryMapDecorModel(applyTransformToModel_arg1 *arg0);
 void enqueueStoryMapLocationText(TextData *arg0);
-void func_80019D84_1A984(void);
+void awaitFadeLoadStoryMap(void);
 void func_80019E60_1AA60(void);
 void func_80019EA8_1AAA8(void);
 void func_80019F30_1AB30(void);
@@ -110,10 +110,10 @@ void enqueueStoryMapLocationText(TextData *arg0) {
 
 void initStoryModeRace(void) {
     clearMemory(allocateTaskMemory(0x1E0), 0x1E0);
-    setGameStateHandler(&func_80019D84_1A984);
+    setGameStateHandler(&awaitFadeLoadStoryMap);
 }
 
-void func_80019D84_1A984(void) {
+void awaitFadeLoadStoryMap(void) {
     if (func_8006FE10_70A10(0) == 0) {
         createTaskQueue(&func_8001E590_1F190, 100);
         setGameStateHandler(&func_80019DC4_1A9C4);
@@ -145,7 +145,7 @@ void func_80019E60_1AA60(void) {
     if (temp_v0 != 0) {
         void *var_a0 = &func_80019EA8_1AAA8;
         if (temp_v0 == 0xFF) {
-            var_a0 = &func_80019D84_1A984;
+            var_a0 = &awaitFadeLoadStoryMap;
         }
         setGameStateHandler(var_a0);
     }
