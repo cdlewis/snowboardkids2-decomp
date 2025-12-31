@@ -299,7 +299,7 @@ void func_80025DAC_269AC(SelectionMenuState *);
 void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
 void updateCharSelectPreviewModel(CharSelectPreviewModel *);
 void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
-void func_80024298_24E98(CharSelectPreviewModel *);
+void initCharSelectSlidePosition(CharSelectPreviewModel *);
 void func_80024600_25200(func_8002494C_arg *);
 void func_80027BC8_287C8(func_80027BC8_arg *, u8);
 void func_80027400_28000(func_80025824_arg *);
@@ -444,7 +444,7 @@ after_rotation:
         arg0->animationAsset = freeNodeMemory(arg0->animationAsset);
         arg0->skeletonAsset = freeNodeMemory(arg0->skeletonAsset);
         arg0->paletteAsset = freeNodeMemory(arg0->paletteAsset);
-        setCallback(func_80024298_24E98);
+        setCallback(initCharSelectSlidePosition);
     } else {
         if (assetIndex != arg0->charPaletteIndex) {
             arg0->charPaletteIndex = assetIndex;
@@ -471,7 +471,7 @@ void reloadCharSelectPreviewAssets(CharSelectPreviewModel *arg0) {
     setCallback(updateCharSelectPreviewModel);
 }
 
-void func_80024298_24E98(CharSelectPreviewModel *arg0) {
+void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     Transform3D sp10;
     Transform3D *localPtr;
     u8 *base;
