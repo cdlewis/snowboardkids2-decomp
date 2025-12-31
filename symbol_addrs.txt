@@ -2059,3 +2059,6 @@ cleanupCharSelectNameSprites = 0x80026FC8; // rom:0x27BC8
 initCharSelectPlayerNumbers = 0x80026FF4; // rom:0x27BF4
 updateCharSelectPlayerNumbers = 0x800270B8; // rom:0x27CB8
 cleanupCharSelectPlayerNumbers = 0x8002712C; // rom:0x27D2C
+initCharSelectPlayer1NameSprite = 0x80027158; // rom:0x27D58
+updateCharSelectPlayer1NameSprite = 0x800271E4; // rom:0x27DE4
+cleanupCharSelectPlayer1NameSprite = 0x8002723C; // rom:0x27E3C

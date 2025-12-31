@@ -304,8 +304,8 @@ void func_800262D4_26ED4(SelectionArrowsState *);
 void cleanupCharSelectArrows(SimpleSpriteEntry *);
 void updateCharSelectPlayerNumbers(u8 *);
 void cleanupCharSelectPlayerNumbers(SimpleSpriteEntry *);
-void func_800271E4_27DE4(SimpleSpriteEntry *);
-void func_8002723C_27E3C(SimpleSpriteEntry *);
+void updateCharSelectPlayer1NameSprite(SimpleSpriteEntry *);
+void cleanupCharSelectPlayer1NameSprite(SimpleSpriteEntry *);
 void func_8002764C_2824C(SimpleSpriteEntry *arg0);
 void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0);
 void func_80027348_27F48(volatile func_80027348_entry *arg0);
@@ -1601,23 +1601,23 @@ void cleanupCharSelectPlayerNumbers(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80027158_27D58(SimpleSpriteEntry *arg0) {
+void initCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
     GameState *state;
     void *dmaResult;
 
     state = getCurrentAllocation();
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_8002723C_27E3C);
+    setCleanupCallback(cleanupCharSelectPlayer1NameSprite);
 
     arg0->x = -0x20;
     arg0->y = 8;
     arg0->spriteIndex = state->unk18A8[0] + 0x16;
     arg0->asset = dmaResult;
 
-    setCallback(func_800271E4_27DE4);
+    setCallback(updateCharSelectPlayer1NameSprite);
 }
 
-void func_800271E4_27DE4(SimpleSpriteEntry *arg0) {
+void updateCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
     GameState *state = getCurrentAllocation();
 
     if (state->unk1898[0] == 3) {
@@ -1626,7 +1626,7 @@ void func_800271E4_27DE4(SimpleSpriteEntry *arg0) {
     }
 }
 
-void func_8002723C_27E3C(SimpleSpriteEntry *arg0) {
+void cleanupCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
