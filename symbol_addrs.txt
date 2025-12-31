@@ -1776,3 +1776,4 @@ updateViewerFadeOut = 0x8000FD50; // rom:0x10950
 initGalleryViewer = 0x8000FD98; // rom:0x10998
 updateGalleryViewer = 0x8000FE00; // rom:0x10A00
 onGalleryViewerCleanup = 0x8000FEA0; // rom:0x10AA0
+initGameSession = 0x80014480; // rom:0x15080
