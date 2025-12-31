@@ -41,9 +41,9 @@ typedef struct {
 extern D_8008D348_Entry D_8008D348_8DF48[];
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    s8 unk2;
+    s8 menuState;
+    s8 selectedOption;
+    s8 menuType;
     s8 unk3;
     u8 pad4[0x4];
     void *unk8;
@@ -83,7 +83,7 @@ void beginMenuFadeIn(E770_struct *arg0) {
 }
 
 s32 getMenuOptionCount(E770_struct *arg0) {
-    s8 temp = arg0->unk2;
+    s8 temp = arg0->menuType;
 
     if (temp < 2) {
         return D_8008CEA0_8DAA0[temp].value;
@@ -97,7 +97,7 @@ void *getMenuOptionEntry(E770_struct *arg0, s32 index) {
     LookupEntry *entry;
 
     result = NULL;
-    menuType = arg0->unk2;
+    menuType = arg0->menuType;
 
     if (menuType < 2) {
         entry = &D_8008CE9C_8DA9C[menuType];
@@ -133,7 +133,7 @@ void activateGalleryMenu(E770_struct *arg0) {
     func_8006FDA0_709A0(NULL, 0, 10);
     setMenuAnimation(arg0, 0x90, 0x90, -1, 0);
     arg0->fadeTimer = 10;
-    arg0->unk0 = 2;
+    arg0->menuState = 2;
 }
 
 void waitForMenuFadeIn(E770_struct *arg0) {
@@ -143,7 +143,7 @@ void waitForMenuFadeIn(E770_struct *arg0) {
         if (arg0->menuModel->unk16 == 0x15B) {
             setMenuAnimation(arg0, 0x15C, 0x90, 1, -1);
         }
-        arg0->unk0 = 2;
+        arg0->menuState = 2;
     } else {
         arg0->fadeTimer = temp - 1;
     }
@@ -151,7 +151,7 @@ void waitForMenuFadeIn(E770_struct *arg0) {
 
 extern s32 gControllerInputs;
 
-void func_8000E2AC_EEAC(E770_struct *arg0) {
+void handleGalleryMenuInput(E770_struct *arg0) {
     s32 inputs;
     u8 selection;
     s8 sel_signed;
@@ -159,24 +159,24 @@ void func_8000E2AC_EEAC(E770_struct *arg0) {
     s32 sel2;
 
     inputs = gControllerInputs;
-    selection = arg0->unk1;
+    selection = arg0->selectedOption;
 
     // B button - exit
     if (inputs & B_BUTTON) {
-        arg0->unk0 = 5;
+        arg0->menuState = 5;
         return;
     }
 
     // A button - confirm
     if (inputs & A_BUTTON) {
         beginMenuFadeOut(arg0);
-        if (arg0->unk1 == 5) {
+        if (arg0->selectedOption == 5) {
             func_80057564_58164(10);
             func_8006FDA0_709A0(0, 0xFF, 10);
         }
         setMenuAnimation(arg0, 0x15A, 0x15B, 1, 0x14);
         sound = 0xD3;
-        arg0->unk0 = 3;
+        arg0->menuState = 3;
         goto play_sound;
     }
 
@@ -187,7 +187,7 @@ void func_8000E2AC_EEAC(E770_struct *arg0) {
             goto check_bounds;
         }
         if (sel_signed < 3) {
-            arg0->unk1 = selection - 1;
+            arg0->selectedOption = selection - 1;
             goto check_bounds;
         }
         if (sel_signed >= 6) {
@@ -196,7 +196,7 @@ void func_8000E2AC_EEAC(E770_struct *arg0) {
         if (sel_signed < 4) {
             goto check_bounds;
         }
-        arg0->unk1 = selection - 1;
+        arg0->selectedOption = selection - 1;
         goto check_bounds;
     }
 
@@ -207,7 +207,7 @@ void func_8000E2AC_EEAC(E770_struct *arg0) {
             goto set_zero;
         }
         if (sel_signed < 2) {
-            arg0->unk1 = selection + 1;
+            arg0->selectedOption = selection + 1;
             goto check_bounds;
         }
         if (sel_signed >= 5) {
@@ -216,7 +216,7 @@ void func_8000E2AC_EEAC(E770_struct *arg0) {
         if (sel_signed < 3) {
             goto check_bounds;
         }
-        arg0->unk1 = selection + 1;
+        arg0->selectedOption = selection + 1;
         goto check_bounds;
     }
 
@@ -229,11 +229,11 @@ void func_8000E2AC_EEAC(E770_struct *arg0) {
         if (sel_signed < 3) {
             goto check_bounds;
         }
-        arg0->unk1 = selection - 2;
-        if (arg0->unk2 == 0) {
+        arg0->selectedOption = selection - 2;
+        if (arg0->menuType == 0) {
             goto check_bounds;
         }
-        arg0->unk1 = selection - 3;
+        arg0->selectedOption = selection - 3;
         goto check_bounds;
     }
 
@@ -251,29 +251,29 @@ void func_8000E2AC_EEAC(E770_struct *arg0) {
     if (sel_signed >= 3) {
         goto check_bounds;
     }
-    if (arg0->unk2 != 0) {
+    if (arg0->menuType != 0) {
         goto add_three;
     }
-    arg0->unk1 = selection - 1;
+    arg0->selectedOption = selection - 1;
 
 add_three:
-    arg0->unk1 = arg0->unk1 + 3;
+    arg0->selectedOption = arg0->selectedOption + 3;
 
 check_bounds:
-    if (arg0->unk1 >= 0) {
+    if (arg0->selectedOption >= 0) {
         goto check_max;
     }
 
 set_zero:
-    arg0->unk1 = 0;
+    arg0->selectedOption = 0;
 
 check_max:
-    sel2 = arg0->unk1;
+    sel2 = arg0->selectedOption;
     if (getMenuOptionCount(arg0) - 1 < sel2) {
-        arg0->unk1 = getMenuOptionCount(arg0) - 1;
+        arg0->selectedOption = getMenuOptionCount(arg0) - 1;
     }
 
-    if (arg0->unk1 == (s8)selection) {
+    if (arg0->selectedOption == (s8)selection) {
         return;
     }
     sound = 0x2B;
@@ -301,16 +301,16 @@ void func_8000E4CC_F0CC(E770_struct *arg0) {
     s16 temp = arg0->fadeTimer;
 
     if (temp == 0) {
-        if (arg0->unk1 == 5) {
+        if (arg0->selectedOption == 5) {
             cleanupGalleryMenu(arg0);
             setCutsceneSelection(0, 2);
             createTaskQueue(loadCutsceneOverlay, 0x64);
             arg0->unk16 = 1;
-            arg0->unk0 = 7;
+            arg0->menuState = 7;
         } else {
             scheduleTask(func_8000FD98_10998, 0, 0, 0);
             arg0->unk3 = 0;
-            arg0->unk0 = 4;
+            arg0->menuState = 4;
         }
     } else {
         arg0->fadeTimer = temp - 1;
@@ -321,7 +321,7 @@ void func_8000E56C_F16C(E770_struct *arg0) {
     if (arg0->unk3 != 0) {
         terminateTasksByType(1);
         beginMenuFadeIn(arg0);
-        arg0->unk0 = 1;
+        arg0->menuState = 1;
     }
 }
 
@@ -330,7 +330,7 @@ void func_8000E5B0_F1B0(E770_struct *arg0) {
     func_8006FDA0_709A0(NULL, 0xFF, 10);
     setMenuAnimation(arg0, 0x15A, 0x15B, 1, -1);
     arg0->fadeTimer = 10;
-    arg0->unk0 = 6;
+    arg0->menuState = 6;
 }
 
 extern void func_8000ED88_F988(void);
@@ -369,7 +369,7 @@ void func_8000EC98_F898(void) {
     E770_struct *s0;
 
     s0 = getCurrentAllocation();
-    switch (s0->unk0) {
+    switch (s0->menuState) {
         case 0:
             activateGalleryMenu(s0);
             break;
@@ -377,7 +377,7 @@ void func_8000EC98_F898(void) {
             waitForMenuFadeIn(s0);
             break;
         case 2:
-            func_8000E2AC_EEAC(s0);
+            handleGalleryMenuInput(s0);
             break;
         case 3:
             func_8000E4CC_F0CC(s0);
@@ -484,7 +484,7 @@ u8 func_8000EDB0_F9B0(u8 arg0) {
     u8 arg0_masked;
 
     alloc = getCurrentAllocation();
-    idx = alloc->unk1;
+    idx = alloc->selectedOption;
     arg0_masked = arg0;
     entry = &D_8008D348_8DF48[idx].elements[arg0_masked];
 
@@ -515,7 +515,7 @@ INCLUDE_ASM("asm/nonmatchings/E770", func_8000EE88_FA88);
 
 void func_8000F4BC_100BC(E770_struct *arg0) {
     void *alloc = getCurrentAllocation();
-    arg0->unk0 = 1;
+    arg0->menuState = 1;
     beginMenuFadeIn(alloc);
 }
 
@@ -528,7 +528,7 @@ void func_8000F4F0_100F0(E770_struct *arg0) {
         if (alloc->menuModel->unk16 == 0x15B) {
             setMenuAnimation(alloc, 0x15C, 0x90, 1, -1);
         }
-        arg0->unk0 = 2;
+        arg0->menuState = 2;
     } else {
         alloc->fadeTimer = temp - 1;
     }
@@ -700,7 +700,7 @@ void func_8000F884_10484(FD98_struct *arg0) {
 
     alloc = getCurrentAllocation();
     sp30_ptr = sp30;
-    entry = &D_8008D348_8DF48[alloc->unk1].elements[arg0->unk2];
+    entry = &D_8008D348_8DF48[alloc->selectedOption].elements[arg0->unk2];
     memcpy(sp30_ptr, D_8009DF6C_9EB6C, 0xC);
 
     if (gControllerInputs & 0x8000) {
@@ -911,7 +911,7 @@ button_check:
 void func_8000FD1C_1091C(E770_struct *arg0) {
     void *alloc = getCurrentAllocation();
     beginMenuFadeOut(alloc);
-    arg0->unk0 = 4;
+    arg0->menuState = 4;
 }
 
 s32 func_8000FD50_10950(E770_struct *arg0) {
@@ -946,7 +946,7 @@ extern void func_8000EE88_FA88(E770_struct *);
 
 void func_8000FE00_10A00(E770_struct *arg0) {
     getCurrentAllocation();
-    switch (arg0->unk0) {
+    switch (arg0->menuState) {
         case 0:
             func_8000F4BC_100BC(arg0);
             break;
