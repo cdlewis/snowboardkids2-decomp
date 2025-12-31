@@ -3,43 +3,43 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    s16 unk0;
-    u8 unk2;
-} task_mem_199C0;
+    s16 frameCounter;
+    u8 isComplete;
+} StoryMapLocationState;
 
 extern u8 storyMapLocationIndex;
-extern void (*D_8008D78C_8E38C[])(void);
-extern s16 D_8009F220_9FE20;
-void func_80018E2C_19A2C(void);
-void func_80018E80_19A80(void);
+extern void (*storyMapLocationHandlers[])(void);
+extern s16 storyMapExitCode;
+void awaitStoryMapLocation(void);
+void onStoryMapLocationComplete(void);
 
-void func_80018DC0_199C0(void) {
-    task_mem_199C0 *mem;
+void initStoryMapLocation(void) {
+    StoryMapLocationState *state;
 
-    mem = (task_mem_199C0 *)allocateTaskMemory(4);
-    mem->unk2 = 0;
-    mem->unk0 = 0;
+    state = (StoryMapLocationState *)allocateTaskMemory(4);
+    state->isComplete = 0;
+    state->frameCounter = 0;
 
     if (storyMapLocationIndex != 4) {
         func_800574A0_580A0(2);
     }
 
-    createTaskQueue(D_8008D78C_8E38C[storyMapLocationIndex], 0x5A);
-    setGameStateHandler(func_80018E2C_19A2C);
+    createTaskQueue(storyMapLocationHandlers[storyMapLocationIndex], 0x5A);
+    setGameStateHandler(awaitStoryMapLocation);
 }
 
-void func_80018E2C_19A2C(void) {
-    s16 temp;
+void awaitStoryMapLocation(void) {
+    s16 result;
 
     getCurrentAllocation();
-    temp = func_80069810_6A410();
-    if (temp != 0) {
+    result = func_80069810_6A410();
+    if (result != 0) {
         func_80057564_58164(0xA);
-        D_8009F220_9FE20 = temp;
-        terminateSchedulerWithCallback(func_80018E80_19A80);
+        storyMapExitCode = result;
+        terminateSchedulerWithCallback(onStoryMapLocationComplete);
     }
 }
 
-void func_80018E80_19A80(void) {
-    func_800697F4_6A3F4(D_8009F220_9FE20);
+void onStoryMapLocationComplete(void) {
+    func_800697F4_6A3F4(storyMapExitCode);
 }

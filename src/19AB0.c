@@ -42,7 +42,7 @@ void func_80018EB0_19AB0(void) {
         setGameStateHandler(func_80018F50_19B50);
     } else {
         storyMapLocationIndex = 4;
-        createTaskQueue(func_80018DC0_199C0, 100);
+        createTaskQueue(initStoryMapLocation, 100);
         setGameStateHandler(func_80019078_19C78);
     }
 }
@@ -78,7 +78,7 @@ void func_80018F50_19B50(void) {
 
         createTaskQueue(func_80019D50_1A950, 100);
     } else {
-        createTaskQueue(func_80018DC0_199C0, 100);
+        createTaskQueue(initStoryMapLocation, 100);
         if (storyMapLocationIndex == 7) {
             func_800585C8_591C8(0x22);
         }
