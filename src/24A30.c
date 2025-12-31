@@ -67,7 +67,7 @@ typedef struct {
 
 typedef struct {
     SelectionEntry entries[3];
-    u8 unk30[3];
+    u8 blinkTimers[3];
     u8 numEntries;
     u8 playerIndex;
 } SelectionMenuState;
@@ -279,7 +279,7 @@ void func_80026D34_27934(func_80026BD8_arg *);
 void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
 void func_8002667C_2727C(void *);
 void func_80026834_27434(func_80025FFC_26BFC_arg *);
-void func_80025DAC_269AC(SelectionMenuState *);
+void updateCharSelectMenu(SelectionMenuState *);
 void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
 void updateCharSelectPreviewModel(CharSelectPreviewModel *);
 void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
@@ -1137,18 +1137,18 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
             arg0->entries[i].unkC = 0;
             arg0->entries[i].alpha = 0xFF;
             arg0->entries[i].asset = dmaResult;
-            arg0->unk30[i] = 0;
+            arg0->blinkTimers[i] = 0;
             i++;
             x += incrementSigned;
         } while (i < (s32)arg0->numEntries);
     }
 
-    setCallback(func_80025DAC_269AC);
+    setCallback(updateCharSelectMenu);
 }
 
-void func_80025EE4_26AE4(SelectionMenuState *);
+void updateCharSelectMenuConfirm(SelectionMenuState *);
 
-void func_80025DAC_269AC(SelectionMenuState *menu) {
+void updateCharSelectMenu(SelectionMenuState *menu) {
     GameState *state;
     s32 entryIndex;
     SelectionEntry *entries;
@@ -1169,22 +1169,22 @@ void func_80025DAC_269AC(SelectionMenuState *menu) {
         do {
             if (state->unk18D2[menu->playerIndex] == entryIndex) {
                 if (state->unk1898[menu->playerIndex] == 0) {
-                    blinkCounter = menu->unk30[entryIndex] + 1;
+                    blinkCounter = menu->blinkTimers[entryIndex] + 1;
                     blinkPhase = blinkCounter & 0xFF;
-                    menu->unk30[entryIndex] = blinkCounter;
+                    menu->blinkTimers[entryIndex] = blinkCounter;
                     if (blinkPhase < 0x11) {
                         entries[entryIndex].alpha = fullAlpha - (blinkPhase * 8);
                     } else {
                         entries[entryIndex].alpha = (blinkPhase * 8) - 1;
                     }
-                    menu->unk30[entryIndex] = menu->unk30[entryIndex] & 0x1F;
+                    menu->blinkTimers[entryIndex] = menu->blinkTimers[entryIndex] & 0x1F;
                 } else {
-                    menu->unk30[entryIndex] = 0;
+                    menu->blinkTimers[entryIndex] = 0;
                     entries[entryIndex].alpha = fullAlpha;
                 }
             } else {
                 entries[entryIndex].alpha = 0x50;
-                menu->unk30[entryIndex] = 0;
+                menu->blinkTimers[entryIndex] = 0;
             }
             debugEnqueueCallback(menu->playerIndex + 0xC, 0, func_80012004_12C04, &entries[entryIndex]);
             entryIndex++;
@@ -1192,11 +1192,11 @@ void func_80025DAC_269AC(SelectionMenuState *menu) {
     }
 
     if (state->unk1898[menu->playerIndex] == 2) {
-        setCallbackWithContinue(func_80025EE4_26AE4);
+        setCallbackWithContinue(updateCharSelectMenuConfirm);
     }
 }
 
-void func_80025EE4_26AE4(SelectionMenuState *menu) {
+void updateCharSelectMenuConfirm(SelectionMenuState *menu) {
     u8 *state;
     s32 entryIndex;
     s32 selectedIndex;
@@ -1212,7 +1212,7 @@ void func_80025EE4_26AE4(SelectionMenuState *menu) {
     if (numEntries > 0) {
         entries = menu->entries;
         do {
-            menu->unk30[entryIndex] = 0;
+            menu->blinkTimers[entryIndex] = 0;
             if ((state + menu->playerIndex)[0x18D2] == entryIndex) {
                 entries[entryIndex].alpha = 0xFF;
                 selectedIndex = entryIndex;
@@ -1231,7 +1231,7 @@ void func_80025EE4_26AE4(SelectionMenuState *menu) {
 
     if (*(u16 *)(state + menu->playerIndex * 2 + 0x1898) != 2) {
         menu->entries[selectedIndex].blinkState = 0;
-        setCallbackWithContinue(func_80025DAC_269AC);
+        setCallbackWithContinue(updateCharSelectMenu);
     }
 }
 
