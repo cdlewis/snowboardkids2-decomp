@@ -78,7 +78,7 @@ void awaitStoryMapSelection(void) {
 }
 
 void func_80014C3C_1583C(void);
-void func_80014CF8_158F8(void);
+void loadPreRaceCutscene(void);
 
 void loadLevelSelectScreen(void) {
     createTaskQueue(func_80021BD0_227D0, 0x96);
@@ -92,7 +92,7 @@ void func_80014C3C_1583C(void) {
         if (result == 0xFF) {
             setGameStateHandler(loadStoryMapScreen);
         } else if (result == 1) {
-            setGameStateHandler(func_80014CF8_158F8);
+            setGameStateHandler(loadPreRaceCutscene);
         }
     }
 }
@@ -111,7 +111,7 @@ void awaitSaveDataLoad(void) {
 void func_80014D3C_1593C(void);
 void func_80014D78_15978(void);
 
-void func_80014CF8_158F8(void) {
+void loadPreRaceCutscene(void) {
     setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 0);
     createTaskQueue(loadCutsceneOverlay, 0x96);
     setGameStateHandler(func_80014D3C_1593C);
@@ -181,7 +181,7 @@ void func_80014DA8_159A8(void) {
                 slotIndexInt = saveSlotIndex;
                 if (((slotIndexInt == 2) | (slotIndexInt == 6)) || (slotIndexInt == 10)) {
                     D_800AFE8C_A71FC->saveSlotIndex = saveSlotIndex + 1;
-                    handler = func_80014CF8_158F8;
+                    handler = loadPreRaceCutscene;
                 } else {
                     handler = func_80014F60_15B60;
                 }

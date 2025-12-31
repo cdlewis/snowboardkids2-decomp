@@ -1803,3 +1803,4 @@ loadLevelSelectScreen = 0x80014C0C; // rom:0x1580C
 awaitLevelSelection = 0x80014C3C; // rom:0x1583C
 loadSaveData = 0x80014C94; // rom:0x15894
 awaitSaveDataLoad = 0x80014CC4; // rom:0x158C4
+loadPreRaceCutscene = 0x80014CF8; // rom:0x158F8
