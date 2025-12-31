@@ -252,16 +252,16 @@ void awaitUnlockCutscene(void) {
     }
 }
 
-void func_8001514C_15D4C(void);
+void awaitCreditsSequence(void);
 
 void loadCreditsSequence(void) {
     createTaskQueue(func_80003EE0_4AE0, 0x64);
-    setGameStateHandler(func_8001514C_15D4C);
+    setGameStateHandler(awaitCreditsSequence);
 }
 
 void func_800151A4_15DA4(void);
 
-void func_8001514C_15D4C(void) {
+void awaitCreditsSequence(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         if (D_800AFE8C_A71FC->pendingUnlockCutscene == 8) {
             D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
