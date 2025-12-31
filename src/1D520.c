@@ -127,7 +127,7 @@ void updateSelectionWiggle(void) {
     }
 }
 
-void func_8001DF5C_1EB5C(u16 arg0, s32 arg1) {
+void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
     SaveData *allocation;
     s32 i;
     s32 sum;
