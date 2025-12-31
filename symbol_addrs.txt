@@ -1779,3 +1779,4 @@ onGalleryViewerCleanup = 0x8000FEA0; // rom:0x10AA0
 initGameSession = 0x80014480; // rom:0x15080
 initLogoSequence = 0x800144DC; // rom:0x150DC
 initTitleSequence = 0x8001452C; // rom:0x1512C
+startLogoScreen = 0x8001457C; // rom:0x1517C

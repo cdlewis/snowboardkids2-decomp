@@ -16,7 +16,7 @@ void func_8001489C_1549C(void);
 void func_80014690_15290(void);
 void func_80014660_15260(void);
 void func_800145AC_151AC(void);
-void func_8001457C_1517C(void);
+void startLogoScreen(void);
 void func_800148CC_154CC(void);
 void func_8001474C_1534C(void);
 void func_8001478C_1538C(void);
@@ -49,7 +49,7 @@ void func_800144DC_150DC(void) {
     data->unk0 = 0;
     data->unk2 = 0;
     func_80014990_15590();
-    func_8006983C_6A43C(func_8001457C_1517C);
+    func_8006983C_6A43C(startLogoScreen);
 }
 
 void func_8001452C_1512C(void) {
@@ -61,7 +61,7 @@ void func_8001452C_1512C(void) {
     func_8006983C_6A43C(func_80014660_15260);
 }
 
-void func_8001457C_1517C(void) {
+void startLogoScreen(void) {
     createTaskQueue(initLogoScreen, 0x64);
     setGameStateHandler(func_800145AC_151AC);
 }
