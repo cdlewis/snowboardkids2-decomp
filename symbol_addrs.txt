@@ -2012,3 +2012,4 @@ scheduleCharacterSelectTasks = 0x80022CEC; // rom:0x238EC
 cleanupCharacterSelect = 0x80023C7C; // rom:0x2487C
 onCharacterSelectProceed = 0x80023D74; // rom:0x24974
 onCharacterSelectCancel = 0x80023DA0; // rom:0x249A0
+countUnlockedSlotsInCategory = 0x80023DCC; // rom:0x249CC

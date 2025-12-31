@@ -102,17 +102,17 @@ void onCharacterSelectCancel(void) {
     func_800697F4_6A3F4(0xFF);
 }
 
-s32 func_80023DCC_249CC(u8 arg0) {
+s32 countUnlockedSlotsInCategory(u8 category) {
     s32 i;
     s32 count = 0;
     s32 limit = 3;
 
-    if (arg0 == 3) {
+    if (category == 3) {
         limit = 9;
     }
 
     for (i = 0; i < limit; i++) {
-        if (EepromSaveData->character_or_settings[arg0 * 3 + i] != 0) {
+        if (EepromSaveData->character_or_settings[category * 3 + i] != 0) {
             count++;
         }
     }
