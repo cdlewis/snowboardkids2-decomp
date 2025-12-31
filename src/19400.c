@@ -30,7 +30,7 @@ typedef struct {
 } func_80018898_19498_arg;
 
 void awaitStoryMapCharacterReady(func_80018898_19498_arg *arg0);
-void func_80018898_19498(func_80018898_19498_arg *arg0);
+void initStoryMapCharacter(func_80018898_19498_arg *arg0);
 void func_80018904_19504(func_80018898_19498_arg *arg0);
 void func_80018A5C_1965C(func_80018898_19498_arg *arg0);
 
@@ -47,11 +47,11 @@ void awaitStoryMapCharacterReady(func_80018898_19498_arg *arg0) {
 
     if (allocation->unk429 == 0) {
         arg0->unk5 = 0;
-        setCallback(&func_80018898_19498);
+        setCallback(&initStoryMapCharacter);
     }
 }
 
-void func_80018898_19498(func_80018898_19498_arg *arg0) {
+void initStoryMapCharacter(func_80018898_19498_arg *arg0) {
     func_80018898_19498_state *state = (func_80018898_19498_state *)getCurrentAllocation();
 
     clearModelPendingDestroy(arg0->unk0);
