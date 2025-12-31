@@ -55,7 +55,7 @@ void func_80014B1C_1571C(void) {
 
 void func_80014BA0_157A0(void);
 
-void func_80014B70_15770(void) {
+void loadStoryMapScreen(void) {
     createTaskQueue(func_80018EB0_19AB0, 0x96);
     setGameStateHandler(func_80014BA0_157A0);
 }
@@ -90,7 +90,7 @@ void func_80014C3C_1583C(void) {
 
     if (result != 0) {
         if (result == 0xFF) {
-            setGameStateHandler(func_80014B70_15770);
+            setGameStateHandler(loadStoryMapScreen);
         } else if (result == 1) {
             setGameStateHandler(func_80014CF8_158F8);
         }
@@ -104,7 +104,7 @@ void func_80014C94_15894(void) {
 
 void func_80014CC4_158C4(void) {
     if ((func_80069810_6A410() << 16) != 0) {
-        setGameStateHandler(func_80014B70_15770);
+        setGameStateHandler(loadStoryMapScreen);
     }
 }
 
@@ -189,7 +189,7 @@ void func_80014DA8_159A8(void) {
                 handler = func_80015028_15C28;
             } else {
             set_handler_b70:
-                handler = func_80014B70_15770;
+                handler = loadStoryMapScreen;
             }
         }
 
@@ -216,7 +216,7 @@ void func_80014FA4_15BA4(void) {
         } else if (D_800AFE8C_A71FC->saveSlotIndex == 0xB) {
             handler = func_8001511C_15D1C;
         } else {
-            handler = func_80014B70_15770;
+            handler = loadStoryMapScreen;
             if (D_800AFE8C_A71FC->errorFlag != 0) {
                 handler = func_80015098_15C98;
             }
@@ -235,7 +235,7 @@ void func_80015028_15C28(void) {
 
 void func_80015064_15C64(void) {
     if ((func_80069810_6A410() << 16) != 0) {
-        setGameStateHandler(func_80014B70_15770);
+        setGameStateHandler(loadStoryMapScreen);
     }
 }
 
@@ -248,7 +248,7 @@ void func_80015098_15C98(void) {
 void func_800150DC_15CDC(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         D_800AFE8C_A71FC->errorFlag = 0;
-        setGameStateHandler(func_80014B70_15770);
+        setGameStateHandler(loadStoryMapScreen);
     }
 }
 
