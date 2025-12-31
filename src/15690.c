@@ -7,7 +7,7 @@
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "task_scheduler.h"
-void func_80015218_15E18(void);
+void returnToMainMenu(void);
 void awaitSaveDataLoad(void);
 void awaitUnlockCutscene(void);
 void func_80015248_15E48(s32);
@@ -46,7 +46,7 @@ void func_80014B1C_1571C(void) {
 
     if (result != 0) {
         if (result == 0xFE) {
-            terminateSchedulerWithCallback(func_80015218_15E18);
+            terminateSchedulerWithCallback(returnToMainMenu);
         } else {
             setGameStateHandler(loadSaveData);
         }
@@ -72,7 +72,7 @@ void awaitStoryMapSelection(void) {
         if (result == 0x44 || result == 0xFF) {
             setGameStateHandler(loadLevelSelectScreen);
         } else {
-            terminateSchedulerWithCallback(func_80015218_15E18);
+            terminateSchedulerWithCallback(returnToMainMenu);
         }
     }
 }
@@ -281,11 +281,11 @@ void loadPostCreditsSaveScreen(void) {
 
 void awaitPostCreditsSaveScreen(void) {
     if ((func_80069810_6A410() << 16) != 0) {
-        terminateSchedulerWithCallback(func_80015218_15E18);
+        terminateSchedulerWithCallback(returnToMainMenu);
     }
 }
 
-void func_80015218_15E18(void) {
+void returnToMainMenu(void) {
     func_800693C4_69FC4(func_8001452C_1512C, 0xC8);
 }
 

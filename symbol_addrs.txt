@@ -1,3 +1,4 @@
+returnToMainMenu = 0x80015218; // rom:0x15E18
 gCurrentBgmId = 0x8008CE40; // rom:0x8DA40
 playBgmTrack = 0x8000DB70; // rom:0xE770
 beginMenuFadeOut = 0x8000DBA8; // rom:0xE7A8
