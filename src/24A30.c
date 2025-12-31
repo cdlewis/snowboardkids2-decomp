@@ -33,8 +33,8 @@ typedef struct {
 } func_80027A28_28628_arg;
 
 typedef struct {
-    void *unk0;
-} func_80025280_25E80_arg;
+    SceneModel *model;
+} SceneModelHolder;
 
 typedef struct {
     SceneModel *model;
@@ -878,8 +878,8 @@ void updateCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
     }
 }
 
-void *func_80025280_25E80(func_80025280_25E80_arg *arg0) {
-    return destroySceneModel(arg0->unk0);
+SceneModel *cleanupSceneModelHolder(SceneModelHolder *arg0) {
+    return destroySceneModel(arg0->model);
 }
 
 #define CONST_0xB_8002529C 0xB
