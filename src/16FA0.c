@@ -28,21 +28,21 @@ void func_80016DE0_179E0(Struct16B68 *arg0);
 void func_80016964_17564(Struct16B68 *arg0);
 void func_80016E70_17A70(Struct16B68 *arg0);
 
-void func_800163CC_16FCC(Struct163F8 *);
+void enqueueTitleLogoRender(Struct163F8 *);
 void cleanupTitleLogoTask(Struct163F8 *);
 
 void cleanupTitleLogoTask(Struct163F8 *arg0) {
     arg0->unk38 = freeNodeMemory(arg0->unk38);
 }
 
-void func_800163CC_16FCC(Struct163F8 *arg0) {
+void enqueueTitleLogoRender(Struct163F8 *arg0) {
     debugEnqueueCallback(8, 0, func_80038420_39020, arg0);
 }
 
 void func_800163F8_16FF8(Struct163F8 *arg0) {
     func_800394BC_3A0BC(arg0, (s32)arg0->unk38);
     arg0->unk2 = 0x10;
-    setCallback(func_800163CC_16FCC);
+    setCallback(enqueueTitleLogoRender);
 }
 
 void func_80016434_17034(Struct163F8 *arg0) {
