@@ -48,11 +48,11 @@ typedef struct {
 } CharSelectBoardPreview;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-} func_80025FFC_26BFC_arg;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+} SimpleSpriteEntry;
 
 typedef struct {
     s16 x;
@@ -250,7 +250,7 @@ typedef struct {
 
 typedef struct {
     func_80027348_entry entries[3];
-} func_800260EC_26CEC_arg;
+} PlayerLabelSpritesState;
 
 extern Vec2_u16 D_8008DDD8_8E9D8[];
 extern PositionConfig_DDBE D_8008DDBE_8E9BE[];
@@ -271,16 +271,16 @@ extern Vec3s D_8008DD4E_8E94E[];
 extern Vec3s D_8008DD6C_8E96C;
 
 void func_80025418_26018(void *);
-void cleanupCharSelectIcons(func_80025FFC_26BFC_arg *);
+void cleanupCharSelectIcons(SimpleSpriteEntry *);
 void updateCharSelectIconsDelay(CharSelectIconsState *);
 void updateCharSelectBoardSlideOut(CharSelectBoardPreview *);
 void updateCharSelectBoardPreview(CharSelectBoardPreview *);
 void func_80026D34_27934(func_80026BD8_arg *);
-void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
+void func_80026FC8_27BC8(SimpleSpriteEntry *);
 void func_8002667C_2727C(void *);
-void func_80026834_27434(func_80025FFC_26BFC_arg *);
+void func_80026834_27434(SimpleSpriteEntry *);
 void updateCharSelectMenu(SelectionMenuState *);
-void cleanupCharSelectMenu(func_80025FFC_26BFC_arg *);
+void cleanupCharSelectMenu(SimpleSpriteEntry *);
 void updateCharSelectPreviewModel(CharSelectPreviewModel *);
 void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
 void initCharSelectSlidePosition(CharSelectPreviewModel *);
@@ -289,7 +289,7 @@ void func_80027BC8_287C8(func_80027BC8_arg *, u8);
 void func_80027400_28000(CharSelectIconHideState *);
 void func_80027544_28144(func_80027544_arg *);
 void func_800269C8_275C8(void *);
-void func_80026BAC_277AC(func_80025FFC_26BFC_arg *);
+void func_80026BAC_277AC(SimpleSpriteEntry *);
 void func_80025904_26504(void);
 void updateCharSelectSecondarySlide(CharSelectSecondarySlot *);
 void cleanupCharSelectSecondaryAssets(func_8002494C_arg *);
@@ -298,22 +298,22 @@ void func_80024DCC_259CC(CharSelectBoardPreview *);
 void initCharSelectBoardSlideIn(CharSelectBoardPreview *);
 void waitForCharSelectBoardState(CharSelectBoardPreview *);
 void updateCharSelectBoardSlideIn(CharSelectBoardPreview *);
-void func_80026190_26D90(func_80025FFC_26BFC_arg *);
-void func_800260EC_26CEC(func_800260EC_26CEC_arg *);
+void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *);
+void updateCharSelectPlayerLabels(PlayerLabelSpritesState *);
 void func_800262D4_26ED4(func_80026564_arg *);
-void func_80026538_27138(func_80025FFC_26BFC_arg *);
+void func_80026538_27138(SimpleSpriteEntry *);
 void func_800270B8_27CB8(u8 *);
-void func_8002712C_27D2C(func_80025FFC_26BFC_arg *);
-void func_800271E4_27DE4(func_80025FFC_26BFC_arg *);
-void func_8002723C_27E3C(func_80025FFC_26BFC_arg *);
-void func_8002764C_2824C(func_80025FFC_26BFC_arg *arg0);
+void func_8002712C_27D2C(SimpleSpriteEntry *);
+void func_800271E4_27DE4(SimpleSpriteEntry *);
+void func_8002723C_27E3C(SimpleSpriteEntry *);
+void func_8002764C_2824C(SimpleSpriteEntry *arg0);
 void func_800272FC_27EFC(func_800272FC_27EFC_arg *arg0);
 void func_80027348_27F48(volatile func_80027348_entry *arg0);
 void func_80027AAC_286AC(func_80027A28_28628_arg *arg0);
 void func_80027A28_28628(func_80027A28_28628_arg *arg0);
 void func_80027A50_28650(func_80027A28_28628_arg *arg0);
 void func_80027B70_28770(void *);
-void func_80027B9C_2879C(func_80025FFC_26BFC_arg *);
+void func_80027B9C_2879C(SimpleSpriteEntry *);
 void updateCharSelectPostSlide(CharSelectSlideState *);
 void updateCharSelectSlide(CharSelectSlideState *);
 
@@ -982,8 +982,8 @@ void updateCharSelectIconTargets(CharSelectIconTargetState *arg0) {
     } while (i < 3);
 }
 
-void cleanupCharSelectIcons(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupCharSelectIcons(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800256A8_262A8);
@@ -1085,8 +1085,8 @@ loop:
     }
 }
 
-void cleanupCharSelectIconHideAsset(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupCharSelectIconHideAsset(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 void initCharSelectMenu(SelectionMenuState *arg0) {
@@ -1235,11 +1235,11 @@ void updateCharSelectMenuConfirm(SelectionMenuState *menu) {
     }
 }
 
-void cleanupCharSelectMenu(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupCharSelectMenu(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80026028_26C28(func_80025FFC_26BFC_arg *arg0) {
+void initCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
     void *dmaResult;
     s32 i;
     s32 index;
@@ -1249,7 +1249,7 @@ void func_80026028_26C28(func_80025FFC_26BFC_arg *arg0) {
     s32 pad[4];
 
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_80026190_26D90);
+    setCleanupCallback(cleanupCharSelectPlayerLabels);
 
     i = 0;
     index = D_800AFE8C_A71FC->numPlayers;
@@ -1258,18 +1258,18 @@ void func_80026028_26C28(func_80025FFC_26BFC_arg *arg0) {
     y = D_8008DDBE_8E9BE[index].y;
 
     do {
-        arg0[i].unk2 = y;
+        arg0[i].y = y;
         y += increment;
-        arg0[i].unk0 = x;
-        arg0[i].unk8 = i + 2;
-        arg0[i].unk4 = dmaResult;
+        arg0[i].x = x;
+        arg0[i].spriteIndex = i + 2;
+        arg0[i].asset = dmaResult;
         i++;
     } while (i < 3);
 
-    setCallback(func_800260EC_26CEC);
+    setCallback(updateCharSelectPlayerLabels);
 }
 
-void func_800260EC_26CEC(func_800260EC_26CEC_arg *arg0) {
+void updateCharSelectPlayerLabels(PlayerLabelSpritesState *arg0) {
     s32 i;
     s32 j;
     u16 index;
@@ -1292,8 +1292,8 @@ void func_800260EC_26CEC(func_800260EC_26CEC_arg *arg0) {
     }
 }
 
-void func_80026190_26D90(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 void func_800261BC_26DBC(func_80026564_arg *arg0) {
@@ -1351,8 +1351,8 @@ void func_800261BC_26DBC(func_80026564_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800262D4_26ED4);
 
-void func_80026538_27138(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_80026538_27138(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 void func_80026564_27164(func_80026564_arg *arg0) {
@@ -1411,8 +1411,8 @@ void func_80026564_27164(func_80026564_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_8002667C_2727C);
 
-void func_80026834_27434(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_80026834_27434(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 void func_80026860_27460(CharacterNameSprite *sprites) {
@@ -1467,8 +1467,8 @@ void func_80026860_27460(CharacterNameSprite *sprites) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800269C8_275C8);
 
-void func_80026BAC_277AC(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_80026BAC_277AC(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
@@ -1539,11 +1539,11 @@ void func_80026BD8_277D8(func_80026BD8_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80026D34_27934);
 
-void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_80026FC8_27BC8(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80026FF4_27BF4(func_80025FFC_26BFC_arg *arg0) {
+void func_80026FF4_27BF4(SimpleSpriteEntry *arg0) {
     void *dmaResult;
     D_800AFE8C_A71FC_type *global;
     u8 count;
@@ -1551,7 +1551,7 @@ void func_80026FF4_27BF4(func_80025FFC_26BFC_arg *arg0) {
     s32 unk8Base;
     u16 x;
     u16 y;
-    volatile func_80025FFC_26BFC_arg *ptr;
+    volatile SimpleSpriteEntry *ptr;
     s32 pad[4];
 
     dmaResult = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
@@ -1567,10 +1567,10 @@ void func_80026FF4_27BF4(func_80025FFC_26BFC_arg *arg0) {
     if (count != 0) {
         ptr = arg0;
         do {
-            ptr->unk0 = x;
-            ptr->unk2 = y;
-            ptr->unk8 = unk8Base + i;
-            ptr->unk4 = dmaResult;
+            ptr->x = x;
+            ptr->y = y;
+            ptr->spriteIndex = unk8Base + i;
+            ptr->asset = dmaResult;
             ptr++;
             i++;
         } while (i < global->numPlayers);
@@ -1597,11 +1597,11 @@ void func_800270B8_27CB8(u8 *arg0) {
     }
 }
 
-void func_8002712C_27D2C(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_8002712C_27D2C(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80027158_27D58(func_80025FFC_26BFC_arg *arg0) {
+void func_80027158_27D58(SimpleSpriteEntry *arg0) {
     GameState *state;
     void *dmaResult;
 
@@ -1609,28 +1609,28 @@ void func_80027158_27D58(func_80025FFC_26BFC_arg *arg0) {
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_8002723C_27E3C);
 
-    arg0->unk0 = -0x20;
-    arg0->unk2 = 8;
-    arg0->unk8 = state->unk18A8[0] + 0x16;
-    arg0->unk4 = dmaResult;
+    arg0->x = -0x20;
+    arg0->y = 8;
+    arg0->spriteIndex = state->unk18A8[0] + 0x16;
+    arg0->asset = dmaResult;
 
     setCallback(func_800271E4_27DE4);
 }
 
-void func_800271E4_27DE4(func_80025FFC_26BFC_arg *arg0) {
+void func_800271E4_27DE4(SimpleSpriteEntry *arg0) {
     GameState *state = getCurrentAllocation();
 
     if (state->unk1898[0] == 3) {
-        arg0->unk8 = state->unk18A8[0] + 0x16;
+        arg0->spriteIndex = state->unk18A8[0] + 0x16;
         debugEnqueueCallback(0xC, 0, func_8000FED0_10AD0, arg0);
     }
 }
 
-void func_8002723C_27E3C(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_8002723C_27E3C(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80027268_27E68(func_80025FFC_26BFC_arg *arg0) {
+void func_80027268_27E68(SimpleSpriteEntry *arg0) {
     void *dmaResult;
     s32 loopCount;
     s32 i;
@@ -1640,7 +1640,7 @@ void func_80027268_27E68(func_80025FFC_26BFC_arg *arg0) {
     loopCount = (D_800AFE8C_A71FC->numPlayers == 2) ? 3 : 2;
 
     for (i = 0; i < loopCount; i++) {
-        arg0[i].unk4 = dmaResult;
+        arg0[i].asset = dmaResult;
     }
 
     setCleanupCallback(func_8002764C_2824C);
@@ -1784,16 +1784,16 @@ void func_80027544_28144(func_80027544_arg *arg0) {
     }
 }
 
-void func_8002764C_2824C(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_8002764C_2824C(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80027678_28278);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800277F4_283F4);
 
-void func_800279A8_285A8(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_800279A8_285A8(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 void func_800279D4_285D4(func_80027A28_28628_arg *arg0) {
@@ -1844,8 +1844,8 @@ void func_80027B70_28770(void *arg0) {
     debugEnqueueCallback(0xC, 7, func_80011924_12524, arg0);
 }
 
-void func_80027B9C_2879C(func_80025FFC_26BFC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_80027B9C_2879C(SimpleSpriteEntry *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 void func_80027BC8_287C8(func_80027BC8_arg *arg0, u8 arg1) {

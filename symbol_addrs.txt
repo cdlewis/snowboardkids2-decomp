@@ -2043,3 +2043,6 @@ initCharSelectMenu = 0x80025C64; // rom:0x26864
 updateCharSelectMenu = 0x80025DAC; // rom:0x269AC
 updateCharSelectMenuConfirm = 0x80025EE4; // rom:0x26AE4
 cleanupCharSelectMenu = 0x80025FFC; // rom:0x26BFC
+initCharSelectPlayerLabels = 0x80026028; // rom:0x26C28
+updateCharSelectPlayerLabels = 0x800260EC; // rom:0x26CEC
+cleanupCharSelectPlayerLabels = 0x80026190; // rom:0x26D90
