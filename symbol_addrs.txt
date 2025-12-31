@@ -1977,3 +1977,5 @@ onStoryMapExtraIntroComplete = 0x8001E570; // rom:0x1F170
 initLevelSelectWithDetail = 0x8001E590; // rom:0x1F190
 initLevelSelectBasic = 0x8001E5C0; // rom:0x1F1C0
 initPrizeDisplay = 0x800218AC; // rom:0x224AC
+updatePrizeDisplay = 0x80021A20; // rom:0x22620
+cleanupPrizeDisplay = 0x80021B88; // rom:0x22788

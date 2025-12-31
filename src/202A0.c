@@ -50,33 +50,6 @@ typedef struct {
 } MenuBackgroundEffectState;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    u8 _pad8[0x2C];
-    void *unk34;
-    u8 _pad38[0x1C];
-    void *unk54;
-} Func80021B88Arg;
-
-typedef struct {
-    u8 data[0x10];
-} Func80021A20SubStruct;
-
-typedef struct {
-    u8 _pad0[0xA];
-    s16 unkA;
-    u8 _padC[0xE];
-    s16 unk1A;
-    u8 _pad1C[0x10];
-    u8 unk2C[0x14];
-    u8 unk40[0x14];
-    void *unk54;
-    s16 unk58;
-    u8 _pad5A[0x6];
-    u8 unk60;
-} Func80021A20Arg;
-
-typedef struct {
     u8 _pad0[0x2C];
     void *imageAsset;
     s16 x;
@@ -822,9 +795,6 @@ extern u32 D_4237C0;
 extern u32 D_426EF0;
 extern u16 D_8008DC38_8E838;
 
-void func_80021A20_22620(Func80021A20Arg *arg0);
-void func_80021B88_22788(Func80021B88Arg *arg0);
-
 typedef struct {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
@@ -862,6 +832,9 @@ typedef struct {
     /* 0x60 */ u8 animationTimer;
 } PrizeDisplayState;
 
+void updatePrizeDisplay(PrizeDisplayState *state);
+void cleanupPrizeDisplay(PrizeDisplayState *state);
+
 void initPrizeDisplay(PrizeDisplayState *arg0) {
     Allocation_202A0 *allocation;
     void *textRenderAsset;
@@ -881,7 +854,7 @@ void initPrizeDisplay(PrizeDisplayState *arg0) {
     textRenderAsset = func_80035F80_36B80(1);
     arg0->backgroundAsset = loadAsset_34F7E0();
     spriteAsset = loadCompressedData(&D_4237C0, &D_426EF0, 0x8A08);
-    setCleanupCallback(func_80021B88_22788);
+    setCleanupCallback(cleanupPrizeDisplay);
     titleText = &D_8008DC38_8E838;
     arg0->animationTimer = 0;
     titleWidth = getMaxLinePixelWidth(titleText);
@@ -924,53 +897,53 @@ L1:
     arg0->prizeCount = (s16)prizeCountValue;
     arg0->counterY = (s16)(spriteY + 2);
 
-    setCallback(func_80021A20_22620);
+    setCallback(updatePrizeDisplay);
 }
 
-void func_80021A20_22620(Func80021A20Arg *arg0) {
+void updatePrizeDisplay(PrizeDisplayState *state) {
     Allocation_202A0 *allocation;
     s32 i;
-    Func80021A20SubStruct *subStructs;
+    PrizeSpriteEntry *spriteEntry;
 
     allocation = getCurrentAllocation();
 
     if (allocation->menuState == 3) {
-        arg0->unk60++;
-        if (arg0->unk60 < 0x11) {
-            arg0->unkA -= 8;
-            arg0->unk1A -= 8;
+        state->animationTimer++;
+        if (state->animationTimer < 0x11) {
+            state->spriteEntries[0].alpha -= 8;
+            state->spriteEntries[1].alpha -= 8;
         } else {
-            arg0->unkA += 8;
-            arg0->unk1A += 8;
+            state->spriteEntries[0].alpha += 8;
+            state->spriteEntries[1].alpha += 8;
         }
 
-        if (arg0->unk60 == 0x20) {
-            arg0->unk60 = 0;
-            arg0->unkA = 0xFF;
-            arg0->unk1A = 0xFF;
+        if (state->animationTimer == 0x20) {
+            state->animationTimer = 0;
+            state->spriteEntries[0].alpha = 0xFF;
+            state->spriteEntries[1].alpha = 0xFF;
         }
     } else {
-        arg0->unk60 = 0;
-        arg0->unkA = 0xFF;
-        arg0->unk1A = 0xFF;
+        state->animationTimer = 0;
+        state->spriteEntries[0].alpha = 0xFF;
+        state->spriteEntries[1].alpha = 0xFF;
     }
 
     if ((u32)(allocation->menuState - 2) < 2) {
-        func_8006D7B0_6E3B0(arg0->unk54, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
-        debugEnqueueCallback(8, 1, func_80035408_36008, &arg0->unk2C);
+        func_8006D7B0_6E3B0(state->backgroundAsset, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
+        debugEnqueueCallback(8, 1, func_80035408_36008, &state->titleX);
 
-        subStructs = (Func80021A20SubStruct *)arg0;
+        spriteEntry = state->spriteEntries;
         for (i = 0; i < 2; i++) {
-            debugEnqueueCallback(8, 1, func_80012004_12C04, &subStructs[i]);
+            debugEnqueueCallback(8, 1, func_80012004_12C04, &spriteEntry[i]);
         }
 
-        arg0->unk58 = allocation->unkB46;
-        debugEnqueueCallback(8, 1, func_80035408_36008, &arg0->unk40);
+        state->prizeCount = allocation->unkB46;
+        debugEnqueueCallback(8, 1, func_80035408_36008, &state->counterX);
     }
 }
 
-void func_80021B88_22788(Func80021B88Arg *arg0) {
-    arg0->unk34 = freeNodeMemory(arg0->unk34);
-    arg0->unk54 = freeNodeMemory(arg0->unk54);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupPrizeDisplay(PrizeDisplayState *state) {
+    state->textRenderAsset = freeNodeMemory(state->textRenderAsset);
+    state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
+    state->spriteEntries[0].spriteAsset = freeNodeMemory(state->spriteEntries[0].spriteAsset);
 }
