@@ -50,6 +50,7 @@ awaitStoryModePreRaceCutscene = 0x80019EFC; // rom:0x1AAFC
 loadStoryModeRace = 0x80019F30; // rom:0x1AB30
 awaitStoryModeRaceResult = 0x80019F60; // rom:0x1AB60
 loadStoryModeUnlockCutscene = 0x8001A070; // rom:0x1AC70
+awaitStoryModeUnlockCutscene = 0x8001A0B4; // rom:0x1ACB4
 storyMapExitCode = 0x8009F220;
 cleanupTitleLogoTask = 0x800163A0; // rom:0x16FA0
 enqueueTitleLogoRender = 0x800163CC; // rom:0x16FCC

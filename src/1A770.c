@@ -46,8 +46,8 @@ extern void func_8001A478_1B078(void);
 
 void func_8001ACC8_1B8C8(void);
 void func_8001AD80_1B980(void);
-void func_8001A0B4_1ACB4(void);
-void func_8001A070_1AC70(void);
+void awaitStoryModeUnlockCutscene(void);
+void loadStoryModeUnlockCutscene(void);
 void awaitStoryModeRaceResult(void);
 void awaitStoryModePreRaceCutscene(void);
 void awaitStoryModeRaceLevelSelect(void);
@@ -206,20 +206,20 @@ void awaitStoryModeRaceResult(void) {
     }
 
     if (D_800AFE8C_A71FC->pendingUnlockCutscene != 0) {
-        setGameStateHandler(func_8001A070_1AC70);
+        setGameStateHandler(loadStoryModeUnlockCutscene);
         return;
     }
 
     terminateSchedulerWithCallback(func_8001A0F4_1ACF4);
 }
 
-void func_8001A070_1AC70(void) {
+void loadStoryModeUnlockCutscene(void) {
     setCutsceneSelection(D_800AFE8C_A71FC->pendingUnlockCutscene, 2);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
-    setGameStateHandler(&func_8001A0B4_1ACB4);
+    setGameStateHandler(&awaitStoryModeUnlockCutscene);
 }
 
-void func_8001A0B4_1ACB4(void) {
+void awaitStoryModeUnlockCutscene(void) {
     if ((func_80069810_6A410() << 0x10) != 0) {
         D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
         terminateSchedulerWithCallback(&func_8001A0F4_1ACF4);
