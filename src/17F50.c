@@ -251,7 +251,7 @@ void finalizeStoryMapCameraTravel(void) {
 void storyMapCameraTravelComplete(void) {
 }
 
-void func_80018474_19074(StoryMapCameraState *arg0);
+void approachStoryMapOrigin(StoryMapCameraState *camera);
 
 void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
     s32 pad[2];
@@ -291,10 +291,10 @@ void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
     createYRotationMatrix((Transform3D *)&camera->orientMatrix, camera->orbitAngle);
     createYRotationMatrix((Transform3D *)camera, camera->viewAngle);
 
-    setCallback(func_80018474_19074);
+    setCallback(approachStoryMapOrigin);
 }
 
-void func_80018474_19074(StoryMapCameraState *camera) {
+void approachStoryMapOrigin(StoryMapCameraState *camera) {
     GameState *state;
     Transform3D localMatrix;
     s32 sinVal;
