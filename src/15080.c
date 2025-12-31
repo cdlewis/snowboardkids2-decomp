@@ -20,8 +20,8 @@ void startLogoScreen(void);
 void func_800148CC_154CC(void);
 void func_8001474C_1534C(void);
 void func_8001478C_1538C(void);
-void func_800145E0_151E0(void);
-void func_80014620_15220(void);
+void startDemoRace(void);
+void waitForDemoRace(void);
 void func_80014900_15500(void);
 void func_80014808_15408(void);
 void func_80014854_15454(void);
@@ -68,17 +68,17 @@ void startLogoScreen(void) {
 
 void waitForLogoScreen(void) {
     if ((func_80069810_6A410() << 16) != 0) {
-        setGameStateHandler(func_800145E0_151E0);
+        setGameStateHandler(startDemoRace);
     }
 }
 
-void func_800145E0_151E0(void) {
+void startDemoRace(void) {
     D_800AFE8C_A71FC->unk4 = 3;
     createTaskQueue(initRace, 0x96);
-    setGameStateHandler(func_80014620_15220);
+    setGameStateHandler(waitForDemoRace);
 }
 
-void func_80014620_15220(void) {
+void waitForDemoRace(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         D_800AFE8C_A71FC->unk4 = 0;
         setGameStateHandler(func_80014660_15260);
@@ -103,7 +103,7 @@ void func_80014690_15290(void) {
 
         if (val >= 3) {
             ptr->unk5 = val & 0xF;
-            setGameStateHandler(func_800145E0_151E0);
+            setGameStateHandler(startDemoRace);
         } else {
             setGameStateHandler(func_8001474C_1534C);
         }
