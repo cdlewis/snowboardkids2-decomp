@@ -1841,6 +1841,8 @@ unlockPartialContent = 0x80016150; // rom:0x16D50
 waitForFadeToLevelSelect = 0x8001EB1C; // rom:0x1F71C
 initLevelSelectTransition = 0x8001EAB0; // rom:0x1F6B0
 cleanupLevelSelect = 0x8001F25C; // rom:0x1FE5C
+proceedFromLevelSelect = 0x8001F33C; // rom:0x1FF3C
+cancelLevelSelect = 0x8001F358; // rom:0x1FF58
 applyLevelSelection = 0x8001F374; // rom:0x1FF74
 loadLevelPreview = 0x8001F42C; // rom:0x2002C
 

@@ -81,8 +81,8 @@ typedef enum {
 void func_8001E5EC_1F1EC(void);
 void handleLevelSelectInput(void);
 void waitForFadeToLevelSelect(void);
-void func_8001F33C_1FF3C(void);
-void func_8001F358_1FF58(void);
+void proceedFromLevelSelect(void);
+void cancelLevelSelect(void);
 void applyLevelSelection(void);
 void cleanupLevelSelect(void);
 void loadLevelPreview(void);
@@ -354,20 +354,20 @@ void cleanupLevelSelect(void) {
     allocation->unkB20 = freeNodeMemory(allocation->unkB20);
 
     if (allocation->exitMode == 1) {
-        terminateSchedulerWithCallback(func_8001F33C_1FF3C);
+        terminateSchedulerWithCallback(proceedFromLevelSelect);
         if (allocation->showDetailView != 0) {
             unlinkNode(&allocation->detailNode);
         }
     } else {
-        terminateSchedulerWithCallback(func_8001F358_1FF58);
+        terminateSchedulerWithCallback(cancelLevelSelect);
     }
 }
 
-void func_8001F33C_1FF3C(void) {
+void proceedFromLevelSelect(void) {
     func_800697F4_6A3F4(1);
 }
 
-void func_8001F358_1FF58(void) {
+void cancelLevelSelect(void) {
     func_800697F4_6A3F4(0xFF);
 }
 
