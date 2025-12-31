@@ -1089,7 +1089,7 @@ void cleanupCharSelectIconHideAsset(func_80025FFC_26BFC_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80025C64_26864(SelectionMenuState *arg0) {
+void initCharSelectMenu(SelectionMenuState *arg0) {
     void *dmaResult;
     u16 x;
     u16 y;

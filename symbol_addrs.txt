@@ -2039,3 +2039,4 @@ cleanupCharSelectIcons = 0x8002567C; // rom:0x2627C
 hideCharSelectIcons = 0x80025824; // rom:0x26424
 showCharSelectIcons = 0x80025A88; // rom:0x26688
 cleanupCharSelectIconHideAsset = 0x80025C38; // rom:0x26838
+initCharSelectMenu = 0x80025C64; // rom:0x26864
