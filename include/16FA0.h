@@ -24,20 +24,20 @@ typedef struct {
 } Struct16728;
 
 typedef struct {
-    SceneModel *unk0;   // 0x00
-    Transform3D unk4; // 0x04 - 0x20 bytes of transform data
-    s32 unk24;          // 0x24
-    u16 *unk28;         // 0x28 - pointer to u16 animation data
-    u16 unk2C;          // 0x2C - current animation state
-    u8 unk2E;           // 0x2E
-    u8 unk2F;           // 0x2F - index into transform array
-    u8 _pad30;          // 0x30
-    u8 unk31;           // 0x31
-    u8 unk32;           // 0x32
-} Struct16B68;
+    SceneModel *sceneModel;
+    Transform3D transform;
+    s32 yVelocity;
+    u16 *animSequencePtr;
+    u16 currentAnim;
+    u8 animSequenceIndex;
+    u8 characterIndex;
+    u8 _pad30;
+    u8 animTimer;
+    u8 flyAwayState;
+} TitleCharacterState;
 
 void loadTitleLogoAsset(TitleLogoTask *arg0);
 void func_80016488_17088(void);
 void func_80016728_17328(Struct16728 *arg0);
 void initTitleEffectModel(ModelEntity *arg0);
-void func_800168F4_174F4(Struct16B68 *arg0);
+void initTitleCharacterModel(TitleCharacterState *arg0);
