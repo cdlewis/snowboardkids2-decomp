@@ -914,7 +914,7 @@ void func_8000FD1C_1091C(E770_struct *arg0) {
     arg0->menuState = 4;
 }
 
-s32 func_8000FD50_10950(E770_struct *arg0) {
+s32 updateViewerFadeOut(E770_struct *arg0) {
     E770_struct *alloc = getCurrentAllocation();
     s16 temp = alloc->fadeTimer;
 
@@ -960,7 +960,7 @@ void func_8000FE00_10A00(E770_struct *arg0) {
             func_8000FD1C_1091C(arg0);
             break;
         case 4:
-            if (func_8000FD50_10950(arg0)) {
+            if (updateViewerFadeOut(arg0)) {
                 return;
             }
             break;
