@@ -561,7 +561,7 @@ void func_80021184_21D84(Func80021238Arg *arg0);
 void func_8002115C_21D5C(Func80021238Arg *arg0);
 void func_80021238_21E38(Func80021238Arg *arg0);
 
-void func_800210C8_21CC8(Func80021238Arg *arg0) {
+void initUnlockNotification(Func80021238Arg *arg0) {
     void *temp_s1;
 
     arg0->unk2C = loadCompressedData(&_43F050_ROM_START, &_43F050_ROM_END, 0x14010);
