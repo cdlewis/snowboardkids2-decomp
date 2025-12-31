@@ -386,18 +386,18 @@ void updateStoryMapCameraOrbit(StoryMapCameraState *camera) {
     }
 }
 
-void func_800187DC_193DC(void);
+void storyMapExitComplete(void);
 
-void func_80018798_19398(void) {
+void finalizeStoryMapExit(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     if (func_8006FE10_70A10(0) == 0) {
         state->unk427 = 0xFF;
-        setCallbackWithContinue(&func_800187DC_193DC);
+        setCallbackWithContinue(&storyMapExitComplete);
     }
 }
 
-void func_800187DC_193DC(void) {
+void storyMapExitComplete(void) {
 }
 
 s32 abs(s32 n) {
