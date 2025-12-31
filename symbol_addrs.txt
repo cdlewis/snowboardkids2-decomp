@@ -2029,3 +2029,5 @@ initCharSelectBoardSlideIn = 0x80024E58; // rom:0x25A58
 updateCharSelectBoardSlideIn = 0x80024F48; // rom:0x25B48
 waitForCharSelectBoardState = 0x80024FEC; // rom:0x25BEC
 cleanupCharSelectBoardModel = 0x80025058; // rom:0x25C58
+initCharSelectBoardSlideOut = 0x80025130; // rom:0x25D30
+updateCharSelectBoardSlideOut = 0x800251AC; // rom:0x25DAC

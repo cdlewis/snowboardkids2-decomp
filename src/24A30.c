@@ -48,17 +48,6 @@ typedef struct {
 } CharSelectBoardPreview;
 
 typedef struct {
-    SceneModel *unk0;
-    Transform3D unk4;
-    union {
-        SceneModel *unk20;
-        s32 unk20_s32;
-        s16 unk20_s16;
-    } unk20_u;
-    u8 unk28;
-} func_80025130_25D30_arg;
-
-typedef struct {
     s16 unk0;
     s16 unk2;
     void *unk4;
@@ -289,7 +278,7 @@ extern Vec3s D_8008DD6C_8E96C;
 void func_80025418_26018(void *);
 void func_8002567C_2627C(func_80025FFC_26BFC_arg *);
 void func_800253E0_25FE0(func_800253E0_25FE0_arg *);
-void func_800251AC_25DAC(func_80025130_25D30_arg *);
+void updateCharSelectBoardSlideOut(CharSelectBoardPreview *);
 void updateCharSelectBoardPreview(CharSelectBoardPreview *);
 void func_80026D34_27934(func_80026BD8_arg *);
 void func_80026FC8_27BC8(func_80025FFC_26BFC_arg *);
@@ -849,42 +838,42 @@ void cleanupCharSelectBoardModel(CharSelectBoardPreview *preview) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80025074_25C74);
 
-void func_80025130_25D30(func_80025130_25D30_arg *arg0) {
+void initCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
     u8 *base;
 
     getCurrentAllocation();
 
-    applyTransformToModel(arg0->unk0, &arg0->unk4);
+    applyTransformToModel(preview->model, &preview->transform);
 
     base = (u8 *)D_800AFE8C_A71FC;
-    if (*(base + arg0->unk28 + 9) == 7) {
-        setModelAnimation(arg0->unk0, 4);
+    if (*(base + preview->playerIndex + 9) == 7) {
+        setModelAnimation(preview->model, 4);
     } else {
-        setModelAnimation(arg0->unk0, 0x90);
+        setModelAnimation(preview->model, 0x90);
     }
 
-    updateModelGeometry(arg0->unk0);
-    setCallback(&func_800251AC_25DAC);
+    updateModelGeometry(preview->model);
+    setCallback(&updateCharSelectBoardSlideOut);
 }
 
-void func_800251AC_25DAC(func_80025130_25D30_arg *arg0) {
-    u8 *base;
+void updateCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
+    u8 *state;
     s32 target;
-    s32 adj2 = 0x100000;
-    s32 adj1 = 0xFFF00000;
+    s32 slideStep = 0x100000;
+    s32 slideMask = 0xFFF00000;
 
-    base = (u8 *)getCurrentAllocation();
+    state = (u8 *)getCurrentAllocation();
 
-    target = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (((base + arg0->unk28)[0x18C0] + 1) & 1)];
+    target = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (((state + preview->playerIndex)[0x18C0] + 1) & 1)];
 
-    arg0->unk4.translation.x += ((target >> 31) & adj1) | adj2;
+    preview->transform.translation.x += ((target >> 31) & slideMask) | slideStep;
 
-    applyTransformToModel(arg0->unk0, &arg0->unk4);
-    clearModelRotation(arg0->unk0);
-    updateModelGeometry(arg0->unk0);
+    applyTransformToModel(preview->model, &preview->transform);
+    clearModelRotation(preview->model);
+    updateModelGeometry(preview->model);
 
-    if (arg0->unk4.translation.x == target) {
-        (base + arg0->unk28)[0x18C4]++;
+    if (preview->transform.translation.x == target) {
+        (state + preview->playerIndex)[0x18C4]++;
         func_80069CF8_6A8F8();
     }
 }
