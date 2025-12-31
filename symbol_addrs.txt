@@ -2018,3 +2018,4 @@ updateCharSelectPreviewModel = 0x80024048; // rom:0x24C48
 initCharSelectSlidePosition = 0x80024298; // rom:0x24E98
 updateCharSelectSlide = 0x80024414; // rom:0x25014
 updateCharSelectPostSlide = 0x80024518; // rom:0x25118
+cleanupCharSelectPreviewAssets = 0x80024600; // rom:0x25200

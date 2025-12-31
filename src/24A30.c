@@ -300,7 +300,7 @@ void func_80025FFC_26BFC(func_80025FFC_26BFC_arg *);
 void updateCharSelectPreviewModel(CharSelectPreviewModel *);
 void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
 void initCharSelectSlidePosition(CharSelectPreviewModel *);
-void func_80024600_25200(func_8002494C_arg *);
+void cleanupCharSelectPreviewAssets(CharSelectPreviewModel *);
 void func_80027BC8_287C8(func_80027BC8_arg *, u8);
 void func_80027400_28000(func_80025824_arg *);
 void func_80027544_28144(func_80027544_arg *);
@@ -391,7 +391,7 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     arg0->ambientB = 0x80;
     arg0->selectionState = *(gameState + arg0->playerIndex + 0x18C8);
 
-    setCleanupCallback(func_80024600_25200);
+    setCleanupCallback(cleanupCharSelectPreviewAssets);
     setCallback(updateCharSelectPreviewModel);
 }
 
@@ -582,10 +582,10 @@ void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
     }
 }
 
-void func_80024600_25200(func_8002494C_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupCharSelectPreviewAssets(CharSelectPreviewModel *arg0) {
+    arg0->animationAsset = freeNodeMemory(arg0->animationAsset);
+    arg0->skeletonAsset = freeNodeMemory(arg0->skeletonAsset);
+    arg0->paletteAsset = freeNodeMemory(arg0->paletteAsset);
 }
 
 void func_80024644_25244(func_80024644_arg *arg0) {
