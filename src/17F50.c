@@ -146,7 +146,7 @@ typedef struct {
 
 void func_80018148_18D48(StoryMapCameraState *arg0);
 
-void func_80017FE8_18BE8(StoryMapCameraState *camera) {
+void startStoryMapCameraTravel(StoryMapCameraState *camera) {
     s32 sp10[10];
     TempState17F50 *state;
     s32 targetX;
