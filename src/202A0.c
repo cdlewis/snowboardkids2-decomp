@@ -369,7 +369,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FFE4_20BE4);
 
-void func_80020418_21018(Func80020418Arg *arg0) {
+void resumeLevelPreviewAfterHold(Func80020418Arg *arg0) {
     Allocation_80020418 *allocation;
     u8 mat1[0x20];
     s32 pos1[4];
