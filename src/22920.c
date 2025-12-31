@@ -50,7 +50,7 @@ void func_80021DE8_229E8(void) {
     setGameStateHandler(func_80021E18_22A18);
 }
 
-void func_80022018_22C18(void);
+void loadVersusSaveData(void);
 
 void func_80021E18_22A18(void) {
     s16 result;
@@ -61,7 +61,7 @@ void func_80021E18_22A18(void) {
         if (result == 0xFE) {
             terminateSchedulerWithCallback(func_80022108_22D08);
         } else {
-            setGameStateHandler(func_80022018_22C18);
+            setGameStateHandler(loadVersusSaveData);
         }
     }
 }
@@ -127,15 +127,15 @@ void awaitVersusCharacterSelect(void) {
     }
 }
 
-void func_80022048_22C48(void);
+void awaitVersusSaveDataLoad(void);
 void func_800220AC_22CAC(void);
 
-void func_80022018_22C18(void) {
+void loadVersusSaveData(void) {
     createTaskQueue(func_80033200_33E00, 0x96);
-    setGameStateHandler(func_80022048_22C48);
+    setGameStateHandler(awaitVersusSaveDataLoad);
 }
 
-void func_80022048_22C48(void) {
+void awaitVersusSaveDataLoad(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         setGameStateHandler(loadVersusMapScreen);
     }

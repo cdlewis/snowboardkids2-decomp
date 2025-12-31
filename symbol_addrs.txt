@@ -1996,3 +1996,5 @@ loadVersusLevelSelect = 0x80021EFC; // rom:0x22AFC
 awaitVersusLevelSelect = 0x80021F2C; // rom:0x22B2C
 loadVersusCharacterSelect = 0x80021F80; // rom:0x22B80
 awaitVersusCharacterSelect = 0x80021FB8; // rom:0x22BB8
+loadVersusSaveData = 0x80022018; // rom:0x22C18
+awaitVersusSaveDataLoad = 0x80022048; // rom:0x22C48
