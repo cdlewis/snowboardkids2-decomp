@@ -2036,3 +2036,4 @@ initCharSelectIcons = 0x8002529C; // rom:0x25E9C
 updateCharSelectIconsDelay = 0x800253E0; // rom:0x25FE0
 updateCharSelectIconTargets = 0x800255A0; // rom:0x261A0
 cleanupCharSelectIcons = 0x8002567C; // rom:0x2627C
+hideCharSelectIcons = 0x80025824; // rom:0x26424

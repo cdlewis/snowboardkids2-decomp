@@ -120,8 +120,8 @@ typedef struct {
 
 typedef struct {
     func_80027348_entry entries[3];
-    u8 unk24;
-} func_80025824_arg;
+    u8 playerIndex;
+} CharSelectIconHideState;
 
 typedef struct {
     CharSelectIconEntry entries[3];
@@ -286,7 +286,7 @@ void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
 void initCharSelectSlidePosition(CharSelectPreviewModel *);
 void cleanupCharSelectPreviewAssets(CharSelectPreviewModel *);
 void func_80027BC8_287C8(func_80027BC8_arg *, u8);
-void func_80027400_28000(func_80025824_arg *);
+void func_80027400_28000(CharSelectIconHideState *);
 void func_80027544_28144(func_80027544_arg *);
 void func_800269C8_275C8(void *);
 void func_80026BAC_277AC(func_80025FFC_26BFC_arg *);
@@ -988,35 +988,35 @@ void cleanupCharSelectIcons(func_80025FFC_26BFC_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800256A8_262A8);
 
-void func_80025824_26424(func_80025824_arg *arg0) {
-    func_80027348_entry *ptr;
-    GameState *base;
+void hideCharSelectIcons(CharSelectIconHideState *arg0) {
+    func_80027348_entry *entry;
+    GameState *state;
     s32 i;
-    s16 val;
+    s16 iconIndex;
     u8 constant;
     func_80027348_entry *entryPtr;
 
-    base = (GameState *)getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
 
     i = 0;
-    ptr = (func_80027348_entry *)arg0;
+    entry = (func_80027348_entry *)arg0;
     do {
-        debugEnqueueCallback(arg0->unk24 + 8, 0, func_80010240_10E40, ptr);
-        ptr++;
+        debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010240_10E40, entry);
+        entry++;
         i++;
     } while (i < 3);
 
-    if (base->unk1898[arg0->unk24] == 3) {
-        val = 0xD;
+    if (state->unk1898[arg0->playerIndex] == 3) {
+        iconIndex = 0xD;
         if (D_800AFE8C_A71FC->numPlayers == 1) {
-            val = 0x12;
+            iconIndex = 0x12;
         }
 
         i = 0;
         constant = 8;
         entryPtr = arg0->entries;
         do {
-            ((volatile func_80027348_entry *)entryPtr)->unk8 = val;
+            ((volatile func_80027348_entry *)entryPtr)->unk8 = iconIndex;
             ((volatile func_80027348_entry *)entryPtr)->unkA = constant;
             entryPtr++;
             i++;
@@ -1718,7 +1718,7 @@ void func_80027348_27F48(volatile func_80027348_entry *arg0) {
     setCallback(func_80027400_28000);
 }
 
-void func_80027400_28000(func_80025824_arg *arg0) {
+void func_80027400_28000(CharSelectIconHideState *arg0) {
     s16 minY;
     s32 yIncrement;
     s32 loopCount;
@@ -1739,7 +1739,7 @@ void func_80027400_28000(func_80025824_arg *arg0) {
         yIncrement = 0x13;
         loopCount = 2;
     }
-    yIncrement &= -(state->unk1898[arg0->unk24] == 0x1A);
+    yIncrement &= -(state->unk1898[arg0->playerIndex] == 0x1A);
     i = 0;
     if (((s32)(loopCount & 0xFF)) > 0) {
         new_var = loopCount & 0xFF;
@@ -1747,14 +1747,14 @@ void func_80027400_28000(func_80025824_arg *arg0) {
         do {
             i += 1;
             ptr->unk2 = ptr->unk2 + yIncrement;
-            debugEnqueueCallback(arg0->unk24 + 0xC, 0, func_80010240_10E40, (void *)ptr);
+            debugEnqueueCallback(arg0->playerIndex + 0xC, 0, func_80010240_10E40, (void *)ptr);
             ptr++;
         } while (i < ((s32)new_var));
     }
-    val = state->unk1898[arg0->unk24];
+    val = state->unk1898[arg0->playerIndex];
     if (val == 0x1A) {
         if (arg0->entries[0].unk2 == minY) {
-            state->unk1898[arg0->unk24] = 0x1B;
+            state->unk1898[arg0->playerIndex] = 0x1B;
         }
     } else if (val == 0x1E) {
         setCallback(func_80027544_28144);
