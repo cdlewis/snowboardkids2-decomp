@@ -512,34 +512,29 @@ void cleanupCharacterSelectionIcons(CharacterSelectionIconState *state) {
 }
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-} Func80020FDCArg;
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 frameIndex;
+} ConfirmationIndicatorState;
 
-typedef struct {
-    void *unk0;
-    void *unk4;
-} Func8002109CArg;
+void renderConfirmationIndicator(void *arg0);
+void cleanupConfirmationIndicator(ConfirmationIndicatorState *state);
 
-void func_80021054_21C54(void *arg0);
-void func_8002109C_21C9C(Func8002109CArg *arg0);
+void initConfirmationIndicator(ConfirmationIndicatorState *state) {
+    void *asset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
 
-void func_80020FDC_21BDC(Func80020FDCArg *arg0) {
-    void *temp_s1 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    setCleanupCallback(&cleanupConfirmationIndicator);
 
-    setCleanupCallback(&func_8002109C_21C9C);
+    state->x = -0x2C;
+    state->y = 4;
+    state->frameIndex = 0xD;
+    state->spriteAsset = asset;
 
-    arg0->unk0 = -0x2C;
-    arg0->unk2 = 4;
-    arg0->unk8 = 0xD;
-    arg0->unk4 = temp_s1;
-
-    setCallback(&func_80021054_21C54);
+    setCallback(&renderConfirmationIndicator);
 }
 
-void func_80021054_21C54(void *arg0) {
+void renderConfirmationIndicator(void *arg0) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->menuState == 2) {
@@ -547,8 +542,8 @@ void func_80021054_21C54(void *arg0) {
     }
 }
 
-void func_8002109C_21C9C(Func8002109CArg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupConfirmationIndicator(ConfirmationIndicatorState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
 typedef struct {
