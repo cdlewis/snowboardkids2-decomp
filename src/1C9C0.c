@@ -110,7 +110,7 @@ void unlockScreenAwaitUserDismiss(void) {
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C2FC_1CEFC);
 
-void func_8001C6E4_1D2E4(void) {
+void unlockScreenCountdownToExit(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
 
     allocation->waitCounter--;
