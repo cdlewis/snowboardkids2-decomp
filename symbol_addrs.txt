@@ -1804,3 +1804,5 @@ awaitLevelSelection = 0x80014C3C; // rom:0x1583C
 loadSaveData = 0x80014C94; // rom:0x15894
 awaitSaveDataLoad = 0x80014CC4; // rom:0x158C4
 loadPreRaceCutscene = 0x80014CF8; // rom:0x158F8
+awaitPreRaceCutscene = 0x80014D3C; // rom:0x1593C
+loadRace = 0x80014D78; // rom:0x15978

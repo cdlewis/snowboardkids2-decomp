@@ -108,25 +108,25 @@ void awaitSaveDataLoad(void) {
     }
 }
 
-void func_80014D3C_1593C(void);
-void func_80014D78_15978(void);
+void awaitPreRaceCutscene(void);
+void loadRace(void);
 
 void loadPreRaceCutscene(void) {
     setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 0);
     createTaskQueue(loadCutsceneOverlay, 0x96);
-    setGameStateHandler(func_80014D3C_1593C);
+    setGameStateHandler(awaitPreRaceCutscene);
 }
 
-void func_80014D3C_1593C(void) {
+void awaitPreRaceCutscene(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         func_80015248_15E48(3);
-        setGameStateHandler(func_80014D78_15978);
+        setGameStateHandler(loadRace);
     }
 }
 
 void func_80014DA8_159A8(void);
 
-void func_80014D78_15978(void) {
+void loadRace(void) {
     createTaskQueue(initRace, 100);
     setGameStateHandler(func_80014DA8_159A8);
 }
@@ -170,7 +170,7 @@ void func_80014DA8_159A8(void) {
         func_8006FDA0_709A0(NULL, 0, 0);
 
         if (result == 1) {
-            handler = func_80014D78_15978;
+            handler = loadRace;
         } else {
             if (EepromSaveData->save_slot_status[0] == 5) {
                 func_80015248_15E48(0);
