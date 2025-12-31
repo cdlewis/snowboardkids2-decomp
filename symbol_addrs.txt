@@ -1861,6 +1861,7 @@ initConfirmationIndicator = 0x80020FDC; // rom:0x21BDC
 renderConfirmationIndicator = 0x80021054; // rom:0x21C54
 cleanupConfirmationIndicator = 0x8002109C; // rom:0x21C9C
 initUnlockNotification = 0x800210C8; // rom:0x21CC8
+initUnlockNotificationSprite = 0x8002115C; // rom:0x21D5C
 
 GenericTriggerInit = 0x80018CB0; // rom:0x198B0
 GenericTriggerCheck = 0x80018D04; // rom:0x19904
