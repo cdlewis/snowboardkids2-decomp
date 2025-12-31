@@ -22,7 +22,7 @@ void startAttractRace(void);
 void waitForAttractRace(void);
 void startDemoRace(void);
 void waitForDemoRace(void);
-void func_80014900_15500(void);
+void startSelectedGameMode(void);
 void startBattleRace(void);
 void waitForBattleRace(void);
 void func_80014958_15558(void);
@@ -112,7 +112,7 @@ void func_80014690_15290(void) {
     } else if (result == 3) {
         setGameStateHandler(startOptionsMenu);
     } else {
-        terminateSchedulerWithCallback(func_80014900_15500);
+        terminateSchedulerWithCallback(startSelectedGameMode);
     }
 }
 
@@ -162,7 +162,7 @@ void waitForOptionsMenu(void) {
     }
 }
 
-void func_80014900_15500(void) {
+void startSelectedGameMode(void) {
     u8 val = D_800AFE8C_A71FC->unk4;
 
     if (val == 0xFF) {

@@ -1791,4 +1791,5 @@ startBattleRace = 0x80014808; // rom:0x15408
 waitForBattleRace = 0x80014854; // rom:0x15454
 startOptionsMenu = 0x8001489C; // rom:0x1549C
 waitForOptionsMenu = 0x800148CC; // rom:0x154CC
+startSelectedGameMode = 0x80014900; // rom:0x15500
 initOptionsMenu = 0x80037270; // rom:0x37E70
