@@ -1296,7 +1296,7 @@ void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_800261BC_26DBC(func_80026564_arg *arg0) {
+void initCharSelectArrows(func_80026564_arg *arg0) {
     void *dmaResult;
     u8 count;
     s32 i;
