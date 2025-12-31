@@ -353,7 +353,7 @@ s32 completeGalleryMenuExit(E770_struct *arg0) {
 
 extern void func_8000E6E0_F2E0(void);
 
-void func_8000E680_F280(void) {
+void initGalleryMenu(void) {
     allocateTaskMemory(0xCC0);
     gCurrentBgmId = 5;
     setupTaskSchedulerNodes(0x40, 4, 0, 0, 0, 0, 0, 0);

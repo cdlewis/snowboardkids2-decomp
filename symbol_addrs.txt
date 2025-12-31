@@ -13,6 +13,7 @@ processGalleryMenuSelection = 0x8000E4CC; // rom:0xF0CC
 waitForGalleryViewerExit = 0x8000E56C; // rom:0xF16C
 beginGalleryMenuExit = 0x8000E5B0; // rom:0xF1B0
 completeGalleryMenuExit = 0x8000E614; // rom:0xF214
+initGalleryMenu = 0x8000E680; // rom:0xF280
 nullsub = 0x800084D0; // rom:0x90D0
 nullsub_s32 = 0x800084D8; // rom:0x90D8
 nullsub_s32_2 = 0x800084E0; // rom:0x90E0
