@@ -168,7 +168,7 @@ void startSelectedGameMode(void) {
     if (val == 0xFF) {
         func_800693C4_69FC4(__udiv_w_sdiv(), 0xC8);
     } else if (val == 0) {
-        func_800693C4_69FC4(func_80014A90_15690, 0xC8);
+        func_800693C4_69FC4(initStoryMode, 0xC8);
     } else {
         func_800693C4_69FC4(func_80021D20_22920, 0xC8);
     }

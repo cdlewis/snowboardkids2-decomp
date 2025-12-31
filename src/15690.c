@@ -21,7 +21,7 @@ extern u8 D_800AB1C8_A2538;
 
 void func_80014AEC_156EC(void);
 
-void func_80014A90_15690(void) {
+void initStoryMode(void) {
     TaskData_15690 *data = allocateTaskMemory(4);
     data->unk2 = 0;
     data->unk0 = 0;
