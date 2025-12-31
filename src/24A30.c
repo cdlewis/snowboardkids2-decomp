@@ -161,13 +161,13 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x3C];
-    Transform3D unk3C;
-    Transform3D unk5C;
-    Transform3D unk7C;
-    s32 unk9C;
+    Transform3D rotationMatrix;
+    Transform3D positionMatrix;
+    Transform3D worldMatrix;
+    s32 targetX;
     u8 padA0;
-    u8 unkA1;
-} func_80024518_arg;
+    u8 playerIndex;
+} CharSelectSlideState;
 
 typedef struct {
     u8 pad0[0x20];
@@ -330,8 +330,8 @@ void func_80027A28_28628(func_80027A28_28628_arg *arg0);
 void func_80027A50_28650(func_80027A28_28628_arg *arg0);
 void func_80027B70_28770(void *);
 void func_80027B9C_2879C(func_80025FFC_26BFC_arg *);
-void func_80024518_25118(func_80024518_arg *);
-void func_80024414_25014(func_80024518_arg *);
+void updateCharSelectPostSlide(CharSelectSlideState *);
+void updateCharSelectSlide(CharSelectSlideState *);
 
 void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     Transform3D sp10;
@@ -520,10 +520,10 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     func_8006B084_6BC84(&arg0->rotationMatrix, posMatPtr, localPtr);
     func_8006B084_6BC84(localPtr, worldMatPtr, arg0);
 
-    setCallback(func_80024414_25014);
+    setCallback(updateCharSelectSlide);
 }
 
-void func_80024414_25014(func_80024518_arg *arg0) {
+void updateCharSelectSlide(CharSelectSlideState *arg0) {
     Transform3D sp10;
     GameState *state;
     Transform3D *localPtr;
@@ -534,28 +534,28 @@ void func_80024414_25014(func_80024518_arg *arg0) {
 
     localPtr = &sp10;
 
-    adjustment = (-(0 < arg0->unk9C) & 0xFFF00000) | 0x100000;
+    adjustment = (-(0 < arg0->targetX) & 0xFFF00000) | 0x100000;
 
     memcpy(localPtr, identityMatrix, sizeof(Transform3D));
-    memcpy(&sp10.translation, &arg0->unk5C.translation.x, 0xC);
+    memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, 0xC);
 
-    arg0->unk7C.translation.x = arg0->unk7C.translation.x + adjustment;
+    arg0->worldMatrix.translation.x = arg0->worldMatrix.translation.x + adjustment;
 
-    rotation = state->unk1888[arg0->unkA1];
-    createYRotationMatrix(&arg0->unk5C, rotation);
+    rotation = state->unk1888[arg0->playerIndex];
+    createYRotationMatrix(&arg0->positionMatrix, rotation);
 
-    func_8006B084_6BC84(&arg0->unk3C, &arg0->unk5C, localPtr);
-    func_8006B084_6BC84(localPtr, &arg0->unk7C, arg0);
+    func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
+    func_8006B084_6BC84(localPtr, &arg0->worldMatrix, arg0);
 
-    func_800650B4_65CB4(arg0->unkA1, (DisplayListObject *)arg0);
+    func_800650B4_65CB4(arg0->playerIndex, (DisplayListObject *)arg0);
 
-    if (arg0->unk7C.translation.x == 0) {
-        state->unk18C0[arg0->unkA1 + 4]++;
-        setCallbackWithContinue(func_80024518_25118);
+    if (arg0->worldMatrix.translation.x == 0) {
+        state->unk18C0[arg0->playerIndex + 4]++;
+        setCallbackWithContinue(updateCharSelectPostSlide);
     }
 }
 
-void func_80024518_25118(func_80024518_arg *arg0) {
+void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
     Transform3D localMatrix;
     Transform3D *localPtr;
     GameState *base;
@@ -566,17 +566,17 @@ void func_80024518_25118(func_80024518_arg *arg0) {
 
     localPtr = &localMatrix;
     memcpy(localPtr, identityMatrix, sizeof(Transform3D));
-    memcpy(&localMatrix.translation, &arg0->unk5C.translation.x, 0xC);
+    memcpy(&localMatrix.translation, &arg0->positionMatrix.translation.x, 0xC);
 
-    rotation = base->unk1888[arg0->unkA1];
-    createYRotationMatrix(&arg0->unk5C, rotation);
+    rotation = base->unk1888[arg0->playerIndex];
+    createYRotationMatrix(&arg0->positionMatrix, rotation);
 
-    func_8006B084_6BC84(&arg0->unk3C, &arg0->unk5C, localPtr);
-    func_8006B084_6BC84(localPtr, &arg0->unk7C, arg0);
+    func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
+    func_8006B084_6BC84(localPtr, &arg0->worldMatrix, arg0);
 
-    func_800650B4_65CB4(arg0->unkA1, (DisplayListObject *)arg0);
+    func_800650B4_65CB4(arg0->playerIndex, (DisplayListObject *)arg0);
 
-    val = base->unk1898[arg0->unkA1];
+    val = base->unk1898[arg0->playerIndex];
     if (val != 4 && val != 9) {
         setCallback(updateCharSelectPreviewModel);
     }
