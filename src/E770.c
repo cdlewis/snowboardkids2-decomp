@@ -778,7 +778,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
     }
 }
 
-void func_8000FA90_10690(FD98_struct *arg0) {
+void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
     s32 inputs;
     s8 temp;
     u8 val;
@@ -881,7 +881,7 @@ do_switch:
             handleViewerGridNavigation_ThreeRow(arg0);
             break;
         case 4:
-            func_8000FA90_10690(arg0);
+            handleViewerGridNavigation_Prize(arg0);
             break;
     }
     return;
