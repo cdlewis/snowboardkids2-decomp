@@ -7,7 +7,7 @@
 
 extern s32 gControllerInputs;
 
-void func_8001C1E0_1CDE0(void);
+void unlockScreenScheduleDisplayTasks(void);
 void func_8001C2FC_1CEFC(void);
 
 void func_8001C7E8_1D3E8(void);
@@ -65,7 +65,7 @@ void unlockScreenAwaitFadeIn(void) {
     if (allocation->unlockCount != 0) {
         allocation->transitionState = 1;
         func_80058220_58E20(0xEA, 1);
-        setGameStateHandler(func_8001C1E0_1CDE0);
+        setGameStateHandler(unlockScreenScheduleDisplayTasks);
     } else {
         allocation->transitionState = 3;
         func_80058220_58E20(0xEE, 1);
@@ -74,7 +74,7 @@ void unlockScreenAwaitFadeIn(void) {
     }
 }
 
-void func_8001C1E0_1CDE0(void) {
+void unlockScreenScheduleDisplayTasks(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
 
     if (allocation->transitionState != 0) {

@@ -1920,3 +1920,4 @@ storyMapClearLocationArrivalsIfNoActivePlayers = 0x8001BCDC; // rom:0x1C8DC
 storyMapRevertBlockedLocationIndex = 0x8001BD74; // rom:0x1C974
 waitForUnlocksAssetsReady = 0x8001C0D8; // rom:0x1CCD8
 unlockScreenAwaitFadeIn = 0x8001C144; // rom:0x1CD44
+unlockScreenScheduleDisplayTasks = 0x8001C1E0; // rom:0x1CDE0
