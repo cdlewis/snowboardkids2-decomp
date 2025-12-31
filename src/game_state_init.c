@@ -90,7 +90,7 @@ void initializeGameState(void) {
         scheduleTask(&func_80028480_29080, 0, 0, 0x5B);
         var_s1++;
         var_s1--;
-        scheduleTask(&func_80019B70_1A770, 0, 0, 0x5C);
+        scheduleTask(&storyMapDecorModelTask, 0, 0, 0x5C);
         scheduleTask(&setupGameStateTransition, 0, 0, 0x5D);
         scheduleTask(&initStoryMapMiniCamera, 0, 0, 0x62);
         do {

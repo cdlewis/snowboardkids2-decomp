@@ -34,9 +34,9 @@ typedef struct {
 
 extern void func_8001A0F4_1ACF4(void);
 extern void func_8001AF18_1BB18(void);
-extern void func_80019BBC_1A7BC(void);
-extern void func_80019CB4_1A8B4(applyTransformToModel_arg1 *);
-extern void func_80019BF0_1A7F0(applyTransformToModel_arg1 *);
+extern void awaitStoryMapDecorReady(void);
+extern void cleanupStoryMapDecorModel(applyTransformToModel_arg1 *);
+extern void setupStoryMapDecorModel(applyTransformToModel_arg1 *);
 extern s32 identityMatrix;
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 storyMapLocationIndex;
@@ -51,7 +51,7 @@ void func_8001A070_1AC70(void);
 void func_80019F60_1AB60(void);
 void func_80019EFC_1AAFC(void);
 void func_80019DC4_1A9C4(void);
-void func_80019C7C_1A87C(applyTransformToModel_arg1 *arg0);
+void updateStoryMapDecorModel(applyTransformToModel_arg1 *arg0);
 void func_80019D24_1A924(TextData *arg0);
 void func_80019D84_1A984(void);
 void func_80019E60_1AA60(void);
@@ -61,19 +61,19 @@ void func_8001AF80_1BB80(void);
 void func_8001A434_1B034(void);
 void func_8001AC70_1B870(void);
 
-void func_80019B70_1A770(func_80019B70_1A770_arg *arg0) {
-    arg0->unk20 = createSceneModel(0x13, getCurrentAllocation());
-    setCleanupCallback(&func_80019CB4_1A8B4);
-    setCallback(&func_80019BBC_1A7BC);
+void storyMapDecorModelTask(StoryMapDecorModelState *arg0) {
+    arg0->model = createSceneModel(0x13, getCurrentAllocation());
+    setCleanupCallback(&cleanupStoryMapDecorModel);
+    setCallback(&awaitStoryMapDecorReady);
 }
 
-void func_80019BBC_1A7BC(void) {
+void awaitStoryMapDecorReady(void) {
     if (((GameState *)getCurrentAllocation())->unk429 == 0) {
-        setCallback(&func_80019BF0_1A7F0);
+        setCallback(&setupStoryMapDecorModel);
     }
 }
 
-void func_80019BF0_1A7F0(applyTransformToModel_arg1 *arg0) {
+void setupStoryMapDecorModel(applyTransformToModel_arg1 *arg0) {
     getCurrentAllocation();
     memcpy(arg0, &identityMatrix, 0x20);
     arg0->unk0.translation.x = 0x830000;
@@ -82,17 +82,17 @@ void func_80019BF0_1A7F0(applyTransformToModel_arg1 *arg0) {
     applyTransformToModel(arg0->unk20_u.unk20, &arg0->unk0);
     setModelAnimation(arg0->unk20_u.unk20, 0);
     updateModelGeometry(arg0->unk20_u.unk20);
-    setCleanupCallback(&func_80019CB4_1A8B4);
-    setCallback(&func_80019C7C_1A87C);
+    setCleanupCallback(&cleanupStoryMapDecorModel);
+    setCallback(&updateStoryMapDecorModel);
 }
 
-void func_80019C7C_1A87C(applyTransformToModel_arg1 *arg0) {
+void updateStoryMapDecorModel(applyTransformToModel_arg1 *arg0) {
     getCurrentAllocation();
     clearModelRotation(arg0->unk20_u.unk20);
     updateModelGeometry(arg0->unk20_u.unk20);
 }
 
-void func_80019CB4_1A8B4(applyTransformToModel_arg1 *arg0) {
+void cleanupStoryMapDecorModel(applyTransformToModel_arg1 *arg0) {
     destroySceneModel(arg0->unk20_u.unk20);
 }
 
