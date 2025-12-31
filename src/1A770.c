@@ -48,7 +48,7 @@ void func_8001ACC8_1B8C8(void);
 void func_8001AD80_1B980(void);
 void func_8001A0B4_1ACB4(void);
 void func_8001A070_1AC70(void);
-void func_80019F60_1AB60(void);
+void awaitStoryModeRaceResult(void);
 void awaitStoryModePreRaceCutscene(void);
 void awaitStoryModeRaceLevelSelect(void);
 void updateStoryMapDecorModel(applyTransformToModel_arg1 *arg0);
@@ -168,30 +168,30 @@ void awaitStoryModePreRaceCutscene(void) {
 
 void loadStoryModeRace(void) {
     createTaskQueue(&initRace, 100);
-    setGameStateHandler(&func_80019F60_1AB60);
+    setGameStateHandler(&awaitStoryModeRaceResult);
 }
 
-void func_80019F60_1AB60(void) {
-    s16 saveOperationResult;
-    D_800AFE8C_A71FC_type *gameStatePtr;
+void awaitStoryModeRaceResult(void) {
+    s16 raceResult;
+    D_800AFE8C_A71FC_type *gameState;
     u8 saveSlotIndex;
 
-    saveOperationResult = func_80069810_6A410();
+    raceResult = func_80069810_6A410();
 
-    if (saveOperationResult == 0) {
+    if (raceResult == 0) {
         return;
     }
 
-    if (saveOperationResult >= 3) {
-        if (saveOperationResult == 5 || saveOperationResult >= 7) {
+    if (raceResult >= 3) {
+        if (raceResult == 5 || raceResult >= 7) {
             saveSlotIndex = D_800AFE8C_A71FC->saveSlotIndex;
             do {
                 EepromSaveData->save_slot_status[saveSlotIndex] = 1;
             } while (0);
-            func_80038090_38C90(saveOperationResult);
+            func_80038090_38C90(raceResult);
         } else {
-            gameStatePtr = D_800AFE8C_A71FC;
-            saveSlotIndex = gameStatePtr->saveSlotIndex;
+            gameState = D_800AFE8C_A71FC;
+            saveSlotIndex = gameState->saveSlotIndex;
             if (EepromSaveData->save_slot_status[saveSlotIndex] != 1) {
                 EepromSaveData->save_slot_status[saveSlotIndex] = 4;
             }
@@ -200,7 +200,7 @@ void func_80019F60_1AB60(void) {
 
     func_80015254_15E54();
 
-    if (saveOperationResult == 1) {
+    if (raceResult == 1) {
         setGameStateHandler(loadStoryModeRace);
         return;
     }
