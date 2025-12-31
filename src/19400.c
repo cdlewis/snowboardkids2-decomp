@@ -107,29 +107,29 @@ void cleanupStoryMapCharacter(StoryMapCharacterArg *arg0) {
 }
 
 typedef struct {
-    /* 0x00 */ s16 matrix[9]; // 3x3 matrix (0x12 bytes)
+    /* 0x00 */ s16 matrix[9]; // 3x3 rotation matrix (0x12 bytes)
     /* 0x12 */ s16 pad12;
-    /* 0x14 */ s32 unk14;
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ s32 unk1C;
-    /* 0x20 */ s32 unk20;
-    /* 0x24 */ s32 unk24;
-    /* 0x28 */ s32 unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ s16 unk30;
-    /* 0x32 */ s16 unk32;
+    /* 0x14 */ s32 translateX;
+    /* 0x18 */ s32 translateY;
+    /* 0x1C */ s32 translateZ;
+    /* 0x20 */ s32 cameraX;
+    /* 0x24 */ s32 cameraY;
+    /* 0x28 */ s32 cameraZ;
+    /* 0x2C */ s32 pitchAngle;
+    /* 0x30 */ s16 rollAngle;
+    /* 0x32 */ s16 yawAngle;
     /* 0x34 */ s16 pad34[2];
-    /* 0x38 */ s16 unk38;
-    /* 0x3A */ s16 unk3A;
-    /* 0x3C */ s16 unk3C;
+    /* 0x38 */ s16 screenOffsetX;
+    /* 0x3A */ s16 screenOffsetY;
+    /* 0x3C */ s16 screenOffsetZ;
     /* 0x3E */ s16 pad3E;
-    /* 0x40 */ s16 *unk40;
+    /* 0x40 */ s16 *frameDataPtr;
     /* 0x44 */ s16 frameData[1];
-} func_80018A90_19690_arg;
+} StoryMapMiniCameraState;
 
-void func_80018B90_19790(func_80018A90_19690_arg *arg0);
+void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0);
 
-void func_80018A90_19690(func_80018A90_19690_arg *arg0) {
+void initStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
     GameState *allocation;
     s16 temp;
     Transform3D sp20;
@@ -137,38 +137,46 @@ void func_80018A90_19690(func_80018A90_19690_arg *arg0) {
 
     allocation = (GameState *)getCurrentAllocation();
 
-    arg0->unk20 = 0;
-    arg0->unk24 = 0x200000;
-    arg0->unk28 = 0;
+    arg0->cameraX = 0;
+    arg0->cameraY = 0x200000;
+    arg0->cameraZ = 0;
     memcpy(arg0, identityMatrix, 0x20);
 
-    arg0->unk14 = 0;
-    arg0->unk18 = 0;
-    arg0->unk1C = 0x280000;
-    arg0->unk2C = 0;
-    arg0->unk30 = 0;
+    arg0->translateX = 0;
+    arg0->translateY = 0;
+    arg0->translateZ = 0x280000;
+    arg0->pitchAngle = 0;
+    arg0->rollAngle = 0;
 
     temp = allocation->unk3F4;
-    arg0->unk32 = temp;
+    arg0->yawAngle = temp;
     if (temp >= 0x1001) {
-        arg0->unk32 = temp - 0x2000;
+        arg0->yawAngle = temp - 0x2000;
     }
 
-    arg0->unk38 = -0x88;
-    arg0->unk3A = -0x60;
-    arg0->unk3C = 0;
-    arg0->unk40 = arg0->frameData;
+    arg0->screenOffsetX = -0x88;
+    arg0->screenOffsetY = -0x60;
+    arg0->screenOffsetZ = 0;
+    arg0->frameDataPtr = arg0->frameData;
 
-    func_8006BEDC_6CADC(&sp20, arg0->unk20, arg0->unk24, arg0->unk28, arg0->unk2C, arg0->unk30, arg0->unk32);
+    func_8006BEDC_6CADC(
+        &sp20,
+        arg0->cameraX,
+        arg0->cameraY,
+        arg0->cameraZ,
+        arg0->pitchAngle,
+        arg0->rollAngle,
+        arg0->yawAngle
+    );
     func_8006B084_6BC84(arg0, &sp20, &sp40);
     func_8006FD3C_7093C(allocation->unkDA, &sp40);
-    setCallback(&func_80018B90_19790);
+    setCallback(&updateStoryMapMiniCamera);
 }
 
-void func_80018B90_19790(func_80018A90_19690_arg *arg0) {
+void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
     GameState *allocation;
     s16 temp;
-    s16 currentAngle;
+    s16 targetAngle;
     s16 diff;
     Transform3D sp20;
     Transform3D sp40;
@@ -179,25 +187,33 @@ void func_80018B90_19790(func_80018A90_19690_arg *arg0) {
     if (temp >= 0x1001) {
         temp -= 0x2000;
     }
-    currentAngle = temp;
+    targetAngle = temp;
 
-    diff = abs(currentAngle - arg0->unk32);
+    diff = abs(targetAngle - arg0->yawAngle);
 
     if (diff >= 0x100) {
-        if (currentAngle < arg0->unk32) {
-            arg0->unk32 = temp + 0x100;
+        if (targetAngle < arg0->yawAngle) {
+            arg0->yawAngle = temp + 0x100;
         } else {
-            arg0->unk32 = temp - 0x100;
+            arg0->yawAngle = temp - 0x100;
         }
     }
 
-    if (arg0->unk32 >= 0x660) {
-        arg0->unk32 = 0x65F;
-    } else if (arg0->unk32 < -0x65F) {
-        arg0->unk32 = -0x65F;
+    if (arg0->yawAngle >= 0x660) {
+        arg0->yawAngle = 0x65F;
+    } else if (arg0->yawAngle < -0x65F) {
+        arg0->yawAngle = -0x65F;
     }
 
-    func_8006BEDC_6CADC(&sp20, arg0->unk20, arg0->unk24, arg0->unk28, arg0->unk2C, arg0->unk30, arg0->unk32);
+    func_8006BEDC_6CADC(
+        &sp20,
+        arg0->cameraX,
+        arg0->cameraY,
+        arg0->cameraZ,
+        arg0->pitchAngle,
+        arg0->rollAngle,
+        arg0->yawAngle
+    );
     func_8006B084_6BC84(arg0, &sp20, &sp40);
     func_80056914_57514(&sp40);
     func_8006FD3C_7093C(allocation->unkDA, &sp40);

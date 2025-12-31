@@ -18,7 +18,7 @@ extern u16 D_8008D6B0_8E2B0;
 extern u8 storyMapLocationIndex;
 extern void storyMapCameraTask;
 extern void func_80018800_19400;
-extern void func_80018A90_19690;
+extern void initStoryMapMiniCamera;
 extern void GenericTriggerInit;
 extern void func_80028480_29080;
 extern void func_80036250_36E50;
@@ -92,7 +92,7 @@ void initializeGameState(void) {
         var_s1--;
         scheduleTask(&func_80019B70_1A770, 0, 0, 0x5C);
         scheduleTask(&setupGameStateTransition, 0, 0, 0x5D);
-        scheduleTask(&func_80018A90_19690, 0, 0, 0x62);
+        scheduleTask(&initStoryMapMiniCamera, 0, 0, 0x62);
         do {
             *(s8 *)scheduleTask(&GenericTriggerInit, 0, 0, 0x64) = var_s1;
             var_s1 += 1;
