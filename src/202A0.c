@@ -780,7 +780,7 @@ extern void *D_8008DC2C_8E82C[];
 void func_80021810_22410(Func80021810Arg *arg0);
 void func_80021880_22480(Func80021880Arg *arg0);
 
-void func_80021778_22378(Func80021810Arg *arg0) {
+void initCharacterDescriptionText(Func80021810Arg *arg0) {
     void *temp_s1;
     D_800AFE8C_type_202A0 *temp_v1;
     s32 idx;
