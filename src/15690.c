@@ -56,7 +56,7 @@ void func_80014B1C_1571C(void) {
 void awaitStoryMapSelection(void);
 
 void loadStoryMapScreen(void) {
-    createTaskQueue(func_80018EB0_19AB0, 0x96);
+    createTaskQueue(initStoryMapState, 0x96);
     setGameStateHandler(awaitStoryMapSelection);
 }
 

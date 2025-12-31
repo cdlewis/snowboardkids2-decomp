@@ -50,7 +50,7 @@ void initRace(void);
 void func_80021BD0_227D0(void);
 void func_80022130_22D30(void);
 void func_800226F0_232F0(void);
-void func_80018EB0_19AB0(void);
+void initStoryMapState(void);
 void func_80019CD0_1A8D0(func_80019CD0_1A8D0_arg *arg0);
 void func_8001C920_1D520(void);
 void func_80003EE0_4AE0(void);
