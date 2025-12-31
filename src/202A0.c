@@ -405,50 +405,54 @@ void cleanupLevelPreviewCharacter(LevelPreviewCharacterState *state) {
     destroySceneModel(state->sceneModel);
 }
 
-s32 func_8002055C_2115C(LevelPreviewCharacterState *arg0) {
+s32 sampleMaxSurroundingTerrainHeight(LevelPreviewCharacterState *state) {
     Allocation_80020418 *allocation;
-    s32 pos[4];
+    s32 samplePos[4];
     s32 i;
-    void *ptr;
-    s32 multiplier;
+    void *gameData;
+    s32 sampleRadius;
     s32 maxHeight;
-    u16 angle;
+    u16 sampleAngle;
     s32 scaled;
-    s32 result;
+    s32 terrainHeight;
 
     allocation = (Allocation_80020418 *)getCurrentAllocation();
-    maxHeight = arg0->targetY;
-    angle = (u16)((arg0->animationPhase - 0x400) & 0x1FFF);
-    multiplier = 0x500;
+    maxHeight = state->targetY;
+    sampleAngle = (u16)((state->animationPhase - 0x400) & 0x1FFF);
+    sampleRadius = 0x500;
 
     if (allocation->unkB33[allocation->unkB2C] == 9) {
-        multiplier = 0x5000;
+        sampleRadius = 0x5000;
     }
 
     i = 0;
-    ptr = arg0->gameData;
+    gameData = state->gameData;
 
     do {
-        angle = (angle + 0x800) & 0x1FFF;
+        sampleAngle = (sampleAngle + 0x800) & 0x1FFF;
 
-        scaled = approximateSin((s16)angle) * multiplier;
+        scaled = approximateSin((s16)sampleAngle) * sampleRadius;
         if (scaled < 0) {
             scaled += 0x1FFF;
         }
-        pos[0] = (scaled >> 13) << 8;
+        samplePos[0] = (scaled >> 13) << 8;
 
-        scaled = approximateCos((s16)angle) * multiplier;
+        scaled = approximateCos((s16)sampleAngle) * sampleRadius;
         if (scaled < 0) {
             scaled += 0x1FFF;
         }
-        pos[2] = (scaled >> 13) << 8;
+        samplePos[2] = (scaled >> 13) << 8;
 
-        pos[0] += arg0->targetX;
-        pos[2] += arg0->targetZ;
+        samplePos[0] += state->targetX;
+        samplePos[2] += state->targetZ;
 
-        result = func_80061A64_62664(ptr, func_80060A3C_6163C(ptr, arg0->currentWaypoint, pos) & 0xFFFF, pos);
-        if (maxHeight < result) {
-            maxHeight = result;
+        terrainHeight = func_80061A64_62664(
+            gameData,
+            func_80060A3C_6163C(gameData, state->currentWaypoint, samplePos) & 0xFFFF,
+            samplePos
+        );
+        if (maxHeight < terrainHeight) {
+            maxHeight = terrainHeight;
         }
         i++;
     } while (i < 4);
