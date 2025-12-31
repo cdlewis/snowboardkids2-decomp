@@ -34,7 +34,7 @@ void func_80018EB0_19AB0(void) {
     allocation->unk2 = 0;
     allocation->unk3 = 0;
 
-    if (func_8001523C_15E3C() != 0) {
+    if (getStoryMapCameraMode() != 0) {
         allocation->unk2 = 1;
         gTitleInitialized = 1;
         D_800A8CC8_A0038 = 0;

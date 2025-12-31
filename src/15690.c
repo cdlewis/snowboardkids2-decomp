@@ -291,7 +291,7 @@ void returnToMainMenu(void) {
 
 extern u8 D_8009F200_9FE00;
 
-u8 func_8001523C_15E3C(void) {
+u8 getStoryMapCameraMode(void) {
     return D_8009F200_9FE00;
 }
 

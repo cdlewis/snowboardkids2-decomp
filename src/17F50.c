@@ -71,7 +71,7 @@ void func_80017384_17F84(Func80018474Arg *arg0) {
     memcpy(&arg0->matrix20, identityMatrix, 0x20);
     memcpy(&arg0->matrix0, identityMatrix, 0x20);
 
-    mode = func_8001523C_15E3C();
+    mode = getStoryMapCameraMode();
 
     if (mode == 3) {
         arg0->unk34 = 0xFFE60000;
@@ -86,7 +86,7 @@ void func_80017384_17F84(Func80018474Arg *arg0) {
         arg0->unk44 = 0;
         state->unk400 = 0;
     } else {
-        mode = func_8001523C_15E3C();
+        mode = getStoryMapCameraMode();
         if (mode == 1) {
             arg0->unk48 = 0x14B0;
             arg0->unk4C = 0x650000;
@@ -127,7 +127,7 @@ void func_80017384_17F84(Func80018474Arg *arg0) {
     createYRotationMatrix((Transform3D *)&arg0->matrix0, arg0->unk44);
     createYRotationMatrix((Transform3D *)&arg0->matrix20, arg0->unk48);
 
-    mode = func_8001523C_15E3C();
+    mode = getStoryMapCameraMode();
     if (mode == 3) {
         setCallback(&func_800175E0_181E0);
     } else {
@@ -348,7 +348,7 @@ void func_80018580_19180(Func80018474Arg *arg0) {
     state = getCurrentAllocation();
     memcpy(sp30, &arg0->unk34, 0xC);
 
-    mode = func_8001523C_15E3C();
+    mode = getStoryMapCameraMode();
     var_a2 = -3;
     if (mode == 1) {
         var_a2 = 3;
@@ -376,7 +376,7 @@ void func_80018580_19180(Func80018474Arg *arg0) {
     state->unk3F8 = arg0->unk4C;
     state->unk3FC = arg0->unk44 & 0x1FFF;
 
-    mode = func_8001523C_15E3C();
+    mode = getStoryMapCameraMode();
     if (mode == 2) {
         if (arg0->unk48 < 0x8D1) {
             setCallback(func_800175E0_181E0);
