@@ -26,31 +26,31 @@ typedef struct {
     /* 0x598 */ void *unk598;
     /* 0x59C */ void *unk59C;
     /* 0x5A0 */ u8 pad5A0[0x20];
-    /* 0x5C0 */ u16 unk5C0;
+    /* 0x5C0 */ u16 waitCounter;
     /* 0x5C2 */ u8 pad5C2[0x3];
     /* 0x5C5 */ u8 unk5C5;
     /* 0x5C6 */ u8 pad5C6[0x3];
-    /* 0x5C9 */ u8 unk5C9;
+    /* 0x5C9 */ u8 unlockCount;
     /* 0x5CA */ u8 pad5CA[0xC];
-    /* 0x5D6 */ u8 unk5D6;
+    /* 0x5D6 */ u8 transitionState;
 } Allocation_1C9C0;
 
 INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001BDC0_1C9C0);
 
-void func_8001C0D8_1CCD8(void) {
+void waitForUnlocksAssetsReady(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
 
-    allocation->unk5C0++;
-    if (allocation->unk5C0 < 3) {
+    allocation->waitCounter++;
+    if (allocation->waitCounter < 3) {
         return;
     }
 
-    allocation->unk5C0 = 2;
+    allocation->waitCounter = 2;
     if (func_8003BB5C_3C75C() != 0) {
         return;
     }
 
-    allocation->unk5C0 = 0;
+    allocation->waitCounter = 0;
     func_8006FDA0_709A0(0, 0, 0xE);
     setGameStateHandler(func_8001C144_1CD44);
 }
@@ -62,12 +62,12 @@ void func_8001C144_1CD44(void) {
         return;
     }
 
-    if (allocation->unk5C9 != 0) {
-        allocation->unk5D6 = 1;
+    if (allocation->unlockCount != 0) {
+        allocation->transitionState = 1;
         func_80058220_58E20(0xEA, 1);
         setGameStateHandler(func_8001C1E0_1CDE0);
     } else {
-        allocation->unk5D6 = 3;
+        allocation->transitionState = 3;
         func_80058220_58E20(0xEE, 1);
         setGameStateHandler(func_8001C28C_1CE8C);
         scheduleTask(func_800308FC_314FC, 0, 0, 0x5A);
@@ -77,7 +77,7 @@ void func_8001C144_1CD44(void) {
 void func_8001C1E0_1CDE0(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
 
-    if (allocation->unk5D6 != 0) {
+    if (allocation->transitionState != 0) {
         return;
     }
 
@@ -86,7 +86,7 @@ void func_8001C1E0_1CDE0(void) {
     scheduleTask(func_80030694_31294, 1, 0, 0x5A);
     scheduleTask(func_80030A00_31600, 0, 0, 0x5A);
 
-    if (allocation->unk5C9 >= 2) {
+    if (allocation->unlockCount >= 2) {
         scheduleTask(func_8002FA9C_3069C, 1, 0, 0x5A);
     }
 
@@ -96,13 +96,13 @@ void func_8001C1E0_1CDE0(void) {
 void func_8001C28C_1CE8C(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
 
-    if (allocation->unk5D6 != 0) {
+    if (allocation->transitionState != 0) {
         return;
     }
 
     if (gControllerInputs & 0xD000) {
         func_80058220_58E20(0xED, 1);
-        allocation->unk5D6 = 2;
+        allocation->transitionState = 2;
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         setGameStateHandler(func_8001C744_1D344);
     }
@@ -113,14 +113,14 @@ INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C2FC_1CEFC);
 void func_8001C6E4_1D2E4(void) {
     Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
 
-    allocation->unk5C0--;
-    if (allocation->unk5C0 == 0) {
+    allocation->waitCounter--;
+    if (allocation->waitCounter == 0) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         setGameStateHandler(func_8001C744_1D344);
     }
 
-    if (allocation->unk5D6 != 0) {
-        allocation->unk5D6 = 0;
+    if (allocation->transitionState != 0) {
+        allocation->transitionState = 0;
     }
 }
 
