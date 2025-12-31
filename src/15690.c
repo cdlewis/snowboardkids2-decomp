@@ -8,7 +8,7 @@
 #include "common.h"
 #include "task_scheduler.h"
 void func_80015218_15E18(void);
-void func_80014CC4_158C4(void);
+void awaitSaveDataLoad(void);
 void func_800150DC_15CDC(void);
 void func_80015248_15E48(s32);
 
@@ -99,10 +99,10 @@ void func_80014C3C_1583C(void) {
 
 void loadSaveData(void) {
     createTaskQueue(func_80033200_33E00, 0x96);
-    setGameStateHandler(func_80014CC4_158C4);
+    setGameStateHandler(awaitSaveDataLoad);
 }
 
-void func_80014CC4_158C4(void) {
+void awaitSaveDataLoad(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         setGameStateHandler(loadStoryMapScreen);
     }
