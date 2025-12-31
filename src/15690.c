@@ -81,7 +81,7 @@ void func_80014C3C_1583C(void);
 void loadPreRaceCutscene(void);
 
 void loadLevelSelectScreen(void) {
-    createTaskQueue(func_80021BD0_227D0, 0x96);
+    createTaskQueue(initLevelSelectBasicState, 0x96);
     setGameStateHandler(func_80014C3C_1583C);
 }
 

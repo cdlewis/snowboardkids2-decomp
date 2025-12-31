@@ -7,7 +7,7 @@ void func_80021C90_22890(void);
 void func_80021C00_22800(void);
 void func_80021CE4_228E4(void);
 
-void func_80021BD0_227D0(void) {
+void initLevelSelectBasicState(void) {
     createTaskQueue(&initLevelSelectBasic, 100);
     setGameStateHandler(&func_80021C00_22800);
 }
@@ -39,7 +39,7 @@ void func_80021C90_22890(void) {
     }
 
     if (result == 0xFF) {
-        setGameStateHandler(&func_80021BD0_227D0);
+        setGameStateHandler(&initLevelSelectBasicState);
     } else {
         terminateSchedulerWithCallback(&func_80021CE4_228E4);
     }
