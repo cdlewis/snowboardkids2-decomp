@@ -115,7 +115,7 @@ void initStoryModeRace(void) {
 
 void awaitFadeLoadStoryMap(void) {
     if (func_8006FE10_70A10(0) == 0) {
-        createTaskQueue(&func_8001E590_1F190, 100);
+        createTaskQueue(&initLevelSelectWithDetail, 100);
         setGameStateHandler(&awaitStoryModeRaceLevelSelect);
     }
 }

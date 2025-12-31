@@ -1940,3 +1940,5 @@ updateSlotSelectionSlide = 0x8001E3E8; // rom:0x1EFE8
 initStoryMapExtraIntro = 0x8001E470; // rom:0x1F070
 awaitStoryMapExtraIntro = 0x8001E508; // rom:0x1F108
 onStoryMapExtraIntroComplete = 0x8001E570; // rom:0x1F170
+initLevelSelectWithDetail = 0x8001E590; // rom:0x1F190
+initLevelSelectBasic = 0x8001E5C0; // rom:0x1F1C0

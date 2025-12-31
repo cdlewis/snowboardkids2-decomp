@@ -8,7 +8,7 @@ void func_80021C00_22800(void);
 void func_80021CE4_228E4(void);
 
 void func_80021BD0_227D0(void) {
-    createTaskQueue(&func_8001E5C0_1F1C0, 100);
+    createTaskQueue(&initLevelSelectBasic, 100);
     setGameStateHandler(&func_80021C00_22800);
 }
 

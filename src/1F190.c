@@ -91,13 +91,13 @@ extern s32 gControllerInputs[];
 extern s32 gFrameCounter;
 extern u8 D_8008D9C0_8E5C0[];
 
-void func_8001E590_1F190(void) {
+void initLevelSelectWithDetail(void) {
     LevelSelectState_Base *allocation = allocateTaskMemory(0xB48);
     allocation->showDetailView = 1;
     setGameStateHandler(func_8001E5EC_1F1EC);
 }
 
-void func_8001E5C0_1F1C0(void) {
+void initLevelSelectBasic(void) {
     LevelSelectState_Base *allocation = allocateTaskMemory(0xB48);
     allocation->showDetailView = 0;
     setGameStateHandler(func_8001E5EC_1F1EC);
