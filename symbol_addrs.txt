@@ -1798,3 +1798,4 @@ initStoryMode = 0x80014A90; // rom:0x15690
 loadSaveSlotScreen = 0x80014AEC; // rom:0x156EC
 awaitSaveSlotSelection = 0x80014B1C; // rom:0x1571C
 loadStoryMapScreen = 0x80014B70; // rom:0x15770
+awaitStoryMapSelection = 0x80014BA0; // rom:0x157A0

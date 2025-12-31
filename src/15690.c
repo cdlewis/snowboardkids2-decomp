@@ -53,16 +53,16 @@ void func_80014B1C_1571C(void) {
     }
 }
 
-void func_80014BA0_157A0(void);
+void awaitStoryMapSelection(void);
 
 void loadStoryMapScreen(void) {
     createTaskQueue(func_80018EB0_19AB0, 0x96);
-    setGameStateHandler(func_80014BA0_157A0);
+    setGameStateHandler(awaitStoryMapSelection);
 }
 
 void func_80014C0C_1580C(void);
 
-void func_80014BA0_157A0(void) {
+void awaitStoryMapSelection(void) {
     s16 result;
 
     getCurrentAllocation();
