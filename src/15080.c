@@ -204,7 +204,7 @@ void resetGameSession(void) {
         D_800AFE8C_A71FC->unk9[i + 0x11] = 0;
     }
 
-    D_800AFE8C_A71FC->unk9[0x15] = 0;
+    D_800AFE8C_A71FC->previousSaveSlot = 0;
     D_800AFE8C_A71FC->unk5 = 0;
     D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
     D_800AFE8C_A71FC->unk24 = 0;

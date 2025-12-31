@@ -1928,3 +1928,4 @@ onUnlockScreenExit = 0x8001C7E8; // rom:0x1D3E8
 initPostUnlockLocationIntro = 0x8001C810; // rom:0x1D410
 postUnlockLocationWaitForDismiss = 0x8001C898; // rom:0x1D498
 onPostUnlockLocationIntroComplete = 0x8001C900; // rom:0x1D500
+initSaveSlotSelection = 0x8001CD58; // rom:0x1D958

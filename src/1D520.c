@@ -46,9 +46,9 @@ extern s32 func_8001E104_1ED04(EepromSaveData_type *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/1D520", func_8001C920_1D520);
 
-void func_8001CD58_1D958(void) {
+void initSaveSlotSelection(void) {
     allocation_1D520 *allocation = (allocation_1D520 *)getCurrentAllocation();
-    u8 saveSlot = D_800AFE8C_A71FC->unk9[0x15];
+    u8 saveSlot = D_800AFE8C_A71FC->previousSaveSlot;
     allocation->unkAC8 = saveSlot;
     setGameStateHandler(func_8001CD90_1D990);
 }
