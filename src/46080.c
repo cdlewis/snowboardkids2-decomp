@@ -26,6 +26,160 @@ USE_ASSET(_3F6950);
 USE_ASSET(_3F3EF0);
 
 typedef struct {
+    void *unk0;
+    loadAssetMetadata_arg unk4;
+    u8 _pad20[0x4];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    Player *unk30;
+    u16 unk34;
+    u8 _pad36[0x2];
+    s16 unk38;
+    s16 unk3A;
+} func_8004AA90_4B690_arg;
+
+typedef struct {
+    u8 _pad0[0x4];
+    u8 unk4[0x4];
+    Vec3i unk8;
+    u8 _pad14[0x10];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    u8 _pad30[0x4];
+    u16 unk34;
+    s16 unk36;
+    s16 unk38;
+    s16 unk3A;
+} func_8004AB50_4B750_arg;
+
+typedef struct {
+    s32 sp18;
+    s32 sp1C;
+    s32 sp20;
+} func_8004AB50_4B750_sp;
+
+typedef struct {
+    u8 _pad0[0x4];
+    func_80066444_67044_arg1 unk4;
+} func_8004AD18_4B918_arg;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} func_8004AD18_4B918_CopyData;
+
+typedef struct {
+    u8 padding[0x5B];
+    u8 unk5B;
+    u8 padding2[0x1A];
+    u8 unk76;
+} allocation_46080;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 _pad14[0x10];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    u16 unk30;
+    u8 _pad32[0x2];
+    s16 unk34;
+    s16 unk36;
+    s16 unk38;
+} func_8004AFF8_arg;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    u8 _pad[0x28];
+    s16 unk30;
+    u8 _pad2[0x2];
+    s16 unk34;
+    s16 unk36;
+    s16 unk38;
+} func_8004B130_arg;
+
+typedef struct {
+    void *unk0;
+} func_8004B36C_4BF6C_arg;
+
+typedef struct {
+    void *unk0;
+} func_8004B758_4C358_arg;
+
+typedef struct {
+    u8 _pad0[0x4];
+    u8 unk4[0x4];
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 _pad14[0x14];
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    u16 unk34;
+    s16 unk36;
+    s16 unk38;
+} func_8004B4CC_4C0CC_arg;
+
+typedef struct {
+    u8 _pad0[0x4];
+    func_80066444_67044_arg1 unk4;
+} func_8004B648_4C248_arg;
+
+typedef struct {
+    s32 sp18;
+    s32 sp1C;
+    s32 sp20;
+} func_8004B4CC_4C0CC_StackLocals;
+
+typedef struct {
+    u8 pad[0x24];
+    void *unk24;
+} func_8004B794_4C394_Task;
+
+typedef struct {
+    void *unk0;
+} func_8004BC20_4C820_arg;
+
+typedef struct {
+    s32 sp18;
+    s32 sp1C;
+    s32 sp20;
+} func_8004B990_4C590_StackLocals;
+
+typedef struct {
+    u8 pad[0x24];
+    Player *unk24;
+} func_8004BC5C_4C85C_Task;
+
+typedef struct {
+    u8 _pad0[0x4];
+    u8 unk4[0x4];
+    Vec3i unk8;
+    u8 _pad14[0x14];
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    u16 unk34;
+    s16 unk36;
+    s16 unk38;
+} func_8004BE40_4CA40_arg;
+
+typedef struct {
+    u8 _pad0[0x4];
+    func_80066444_67044_arg1 unk4;
+    s16 unk38;
+} func_8004BFBC_4CBBC_arg;
+
+typedef struct {
     Transform3D unk0;
     u8 _pad2[0x1C];
     s32 unk3C;
@@ -56,8 +210,6 @@ typedef struct {
     u8 _pad[0x3C];
     s32 unk3C;
 } func_80045964_46564_node;
-
-typedef struct func_8004AFF8_arg func_8004AFF8_arg;
 
 typedef struct {
     void *unk0;
@@ -275,6 +427,400 @@ typedef struct {
     s32 unk40;
 } func_800458AC_464AC_arg;
 
+typedef struct {
+    s16 unk0;
+    u8 _pad2[0x6];
+    u8 unk8[0xC];
+} Entry_46628;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    Entry_46628 *volatile unk8;
+    void *unkC;
+    void *unk10;
+    s16 unk14;
+    s16 unk16;
+    s16 unk18;
+} func_80046244_46E44_Task;
+
+typedef struct {
+    u8 _pad[0x3C];
+    u8 unk3C[0x20];
+    s32 unk5C;
+} func_800455BC_461BC_arg;
+
+typedef union {
+    s16 halfword;
+    struct {
+        u8 high;
+        u8 low;
+    } bytes;
+} HalfwordBytes;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+} Struct_unk20;
+
+typedef struct {
+    u8 _pad[0x20];
+    Struct_unk20 *unk20;
+    u8 _pad2[0xC];
+    s32 unk30;
+    u8 _pad3[0x10];
+    HalfwordBytes unk44;
+    HalfwordBytes unk46;
+    s16 unk48;
+    s16 unk4A;
+    s16 unk4C;
+} func_80046628_47228_arg;
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 _pad2[0xC];
+    void *unk3C;
+    u8 _pad3[0x4];
+    HalfwordBytes unk44;
+    HalfwordBytes unk46;
+    s16 unk48;
+} func_80046708_47308_arg;
+
+typedef struct {
+    u8 _pad[0x76];
+    u8 unk76;
+    u8 _pad2[2];
+    u8 unk79;
+} Allocation_47D1C;
+
+typedef struct {
+    DisplayListObject displayListObject;
+    s32 unk3C;
+} func_8004711C_47D1C_arg;
+
+typedef struct {
+    u8 unk0[0x14];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 _pad2[0xC];
+    u8 unk3C[0x14];
+    s32 unk50;
+    s32 unk54;
+    s32 unk58;
+    void *unk5C;
+    u8 _pad3[0x18];
+    u8 unk78[0x18];
+    s32 unk90;
+    u8 _pad4[4];
+    void *unk98;
+} func_80046DCC_479CC_arg;
+
+typedef struct {
+    u8 _pad[0x3C];
+    u8 unk3C[0x3C];
+    u8 unk78[0x3C];
+    s16 unkB4;
+} func_80046F44_47B44_arg;
+
+typedef struct {
+    u8 _pad[0x20];
+    void *unk20;
+    u8 _pad2[0x24];
+    s16 unk48;
+    s16 unk4A;
+    s16 unk4C;
+    s16 unk4E;
+    s16 unk50;
+} func_80046D38_47938_Task;
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_80046FEC_47BEC_arg_fwd;
+
+typedef struct {
+    u8 _pad[0x24];
+    void *unk24;
+    void *unk28;
+} func_80047718_48318_arg;
+
+typedef struct {
+    s8 unk0;
+    u8 _pad1[0x3];
+    u8 unk4[0xC];
+} Entry_800477E4;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    Entry_800477E4 *unk8;
+    u8 _padC[0x4];
+    s32 *unk10;
+    u8 _pad14[0x2];
+    s16 unk16;
+    s16 unk18;
+} func_800477E4_arg;
+
+typedef struct {
+    void *unk0;
+    u8 _pad[0x8];
+    void *unkC;
+    void *unk10;
+    s16 unk14;
+} func_80047A64_48664_arg;
+
+typedef struct {
+    u8 _pad0[0x76];
+    u8 unk76;
+} AllocationData;
+
+typedef struct {
+    u8 _pad[0x14];
+    s16 unk14;
+} func_80047E7C_48A7C_ScheduledTask;
+
+typedef struct {
+    void *unk0;
+} Struct_func_800482A4_48EA4;
+
+typedef struct {
+    void *unk0;
+} Struct_func_80047EBC_48ABC;
+
+typedef struct {
+    u8 _pad0[0x44];
+    s32 unk44;
+} AllocationType_46080;
+
+typedef struct {
+    loadAssetMetadata_arg asset;
+    u8 _pad1C[0x4];
+} AssetMetadata_46080;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 _pad14[0xC];
+} Element_80047F90;
+
+typedef struct {
+    void *unk0;
+    AssetMetadata_46080 unk4;
+    AssetMetadata_46080 unk24;
+    AssetMetadata_46080 unk44;
+    Player *unk64;
+    s16 unk68;
+    s16 unk6A;
+} Struct_func_80047EFC_48AFC;
+
+typedef struct {
+    s8 unk0;
+    u8 unk1;
+    u8 _pad2[0x2];
+    Vec3i position;
+} RenderEntry_486A8;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    RenderEntry_486A8 *unk8;
+    DataTable_19E80 *unkC;
+    s32 unk10;
+    s16 unk14;
+    s16 unk16;
+    u16 unk18;
+} func_80047AA8_486A8_arg;
+
+typedef struct {
+    Node n;
+    s32 unk2C;
+    s32 unk30;
+    s32 padding[2];
+    s32 unk3C;
+} NodeWithPayload;
+
+typedef struct {
+    u8 _pad[0x14];
+    s16 unk14;
+} func_80049280_49E80_Task;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+} func_80049230_49E30_arg;
+
+typedef struct {
+    Transform3D matrix;
+    u8 padding[0x1C];
+    DisplayListObject displayList;
+    s32 unk78;
+    s16 unk7C;
+    s16 unk7E;
+    s8 unk80;
+    s8 unk81;
+    u8 padding4[0x2];
+} func_80048AE8_496E8_Element;
+
+typedef struct {
+    u8 _pad[0x8];
+    func_80048AE8_496E8_Element *unk8;
+    u8 _pad2[0xA];
+    s16 unk16;
+} func_80048AE8_496E8_arg;
+
+typedef struct {
+    u8 padding[0x18];
+    u8 unk18;
+    u8 _pad[0x7];
+    u8 unk20;
+} func_8004899C_arg1_element;
+
+typedef struct {
+    s16 unk0;
+    u8 _pad[14];
+} func_80049104_49D04_DataElement;
+
+typedef struct {
+    s32 offset;
+} func_80049104_49D04_DataBlock;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    func_80049104_49D04_DataBlock *unkC;
+    func_80049104_49D04_DataElement *unk10;
+    s16 unk14;
+    s16 unk16;
+    u8 unk18;
+    u8 _pad3[0x3];
+    u8 unk1C;
+    u8 _pad4[0x3];
+    u8 unk20;
+    u8 _pad5[0x3];
+    u8 unk24;
+} func_80048E34_49A34_arg;
+
+typedef struct {
+    u8 padding[0xA4];
+    void *unkA4;
+} Struct_func_80048860_49460_task;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u8 _pad14[0xC];
+} Element_80048720;
+
+typedef struct {
+    void *unk0;
+} Struct_func_80048834_49434;
+
+typedef struct {
+    u8 padding[0x64];
+    void *unk64;
+} Struct_func_800482D0_48ED0_task;
+
+typedef struct {
+    u8 _pad0[0x44];
+    s32 unk44;
+} Alloc_800477E4;
+
+typedef struct {
+    u8 _pad[0xC];
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    u8 _pad2[0x44];
+    u8 unk5C;
+} AllocationStruct;
+
+typedef struct {
+    void *unk0;
+    AssetMetadata_46080 elements[5];
+    Player *unkA4;
+    s16 unkA8;
+    u16 unkAA;
+    s16 unkAC;
+} func_80048350_48F50_arg;
+
+typedef struct {
+    s32 sp18;
+    s32 sp1C;
+    s32 sp20;
+} func_8004A6D4_4B2D4_sp;
+
+typedef struct {
+    void *unk0;
+    loadAssetMetadata_arg unk4;
+    u8 _pad20[0x6];
+    s16 unk26;
+    s16 unk28;
+} func_8004A850_4B450_arg;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    u8 _pad[0x1E];
+    s16 unk26;
+    u8 _pad2[0x4];
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+} func_8004A634_4B234_arg;
+
+extern s8 D_80090C94_91894[];
+extern u8 D_80090C95_91895[];
+extern void *D_80094DA0_959A0;
+extern void *D_80094DE0_959E0;
+extern void *D_80094DF0_959F0;
+extern void *D_80094E00_95A00;
+extern void *D_80094E10_95A10;
+extern void *D_80094EE0_95AE0;
+extern void *D_80094EF0_95AF0;
+extern void *D_80094FC0_95BC0;
+extern void *D_80094FD0_95BD0;
+extern void *D_800950B0_95CB0;
+extern void *D_80095360_95F60;
+extern void *D_80095370_95F70;
+extern void *D_80095380_95F80;
+extern void *D_80095460_96060;
+extern void *D_80095470_96070;
+extern void *D_80095480_96080;
+extern void *D_800955C0_961C0;
+extern void *D_800955D0_961D0;
+extern void *D_800955E0_961E0;
+extern void *D_80095860_96460;
+extern void *D_80095930_96530;
+extern Gfx D_8009A780_9B380[];
+extern s32 D_800A8B14_9FE84;
+extern void *D_80090BD4_917D4[];
+extern void *D_80090BD8_917D8[];
+extern s32 D_80090BDC_917DC[];
+extern s32 D_80090B8C_9178C[3];
+extern s32 D_80090AF0_916F0[];
+extern s32 D_80090AF4_916F4[];
+extern s32 D_80090AF8_916F8[];
+extern s32 D_8009A8A4_9B4A4;
 extern void *D_80090CEC_918EC[];
 extern void *D_80090CF0_918F0[];
 extern s32 D_80090CF4_918F4[];
@@ -298,7 +844,13 @@ extern s16 gGraphicsMode;
 extern Gfx D_80090DB0_919B0[];
 extern s32 identityMatrix[];
 extern void *D_80094DD0_959D0;
+extern s32 D_80090E2C_91A2C;
 
+void func_800491CC_49DCC(func_80048AE8_496E8_arg *arg0);
+void func_8004A634_4B234(func_8004A634_4B234_arg *arg0);
+void func_8004A850_4B450(func_8004A850_4B450_arg *arg0);
+void func_80047A64_48664(func_80047A64_48664_arg *arg0);
+void func_800477E4_483E4(func_800477E4_arg *arg0);
 void func_800458AC_464AC(func_800458AC_464AC_arg *arg0);
 void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
 void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
@@ -323,6 +875,69 @@ void func_80045768_46368(func_80045768_46368_arg *);
 void func_80045564_46164(ScheduledTask *);
 void func_8004AFF8_4BBF8(func_8004AFF8_arg *);
 void func_80045CC8_468C8(void);
+void func_8004B758_4C358(func_8004B758_4C358_arg *);
+void func_8004B130_4BD30(func_8004B130_arg *);
+void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0);
+void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0);
+void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0);
+void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0);
+void func_8004B834_4C434(func_8004B834_4C434_arg *);
+void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *);
+void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0);
+void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0);
+void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0);
+void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0);
+void func_8004B648_4C248(func_8004B648_4C248_arg *arg0);
+void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0);
+void func_800455BC_461BC(func_800455BC_461BC_arg *arg0);
+void func_80045878_46478(void);
+void func_8004592C_4652C(func_8004592C_4652C_arg *);
+void func_80045C84_46884(func_80046244_46E44_Task *);
+void func_80045A28_46628(func_80046244_46E44_Task *);
+void func_80045B3C_4673C(func_80046244_46E44_Task_New *);
+void func_80046628_47228(func_80046628_47228_arg *);
+void func_80046708_47308(func_80046708_47308_arg *arg0);
+void func_80046464_47064(Struct_func_8004657C_4717C *);
+void func_800463F4_46FF4(Struct_func_8004657C_4717C *);
+void func_800464F4_470F4(Struct_func_8004657C_4717C *);
+void func_8004674C_4734C(DisplayListObject *);
+void func_80046CB4_478B4(DisplayListObject *);
+void func_80046CE0_478E0(DisplayListObject *);
+void func_80046D0C_4790C(DisplayListObject *);
+void func_80046F44_47B44(func_80046F44_47B44_arg *arg0);
+void func_80046FEC_47BEC(func_80046FEC_47BEC_arg_fwd *arg0);
+void func_80047718_48318(func_80047718_48318_arg *);
+void func_8004711C_47D1C(func_8004711C_47D1C_arg *);
+void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0);
+void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *);
+void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
+void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
+void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *);
+void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *);
+
+void func_800478FC_484FC(void);
+void func_80048834_49434(Struct_func_80048834_49434 *arg0);
+void func_80048350_48F50(func_80048350_48F50_arg *arg0);
+void func_8004841C_4901C(func_80048350_48F50_arg *arg0);
+void func_80048720_49320(func_80048350_48F50_arg *arg0);
+void func_80048540_49140(func_80048350_48F50_arg *arg0);
+void func_80049794_4A394(void *payload, s32 arg1);
+void func_80048F0C_49B0C(func_80048E34_49A34_arg *arg0, s32 arg1);
+void func_80049104_49D04(func_80048E34_49A34_arg *arg0);
+void func_80049230_49E30(func_80049230_49E30_arg *);
+void func_80049430_4A030(func_80049300_49F00_arg *arg0);
+extern void D_800BB688(void);
+extern void D_800BB74C(void);
+extern void D_800BB7F0(void);
+extern void D_800BB814(void);
+extern void D_800BB8E8(void);
+extern void D_800BBA28(void);
+extern void D_800BBA90(void);
+extern void D_800BBAF8(void);
+extern void D_800BBE84(void);
+extern void D_800BC13C(void);
+extern void D_800BC528(void);
+extern void D_800BC72C(void);
 
 void func_80045480_46080(func_80045480_46080_arg *arg0) {
     void *identity = identityMatrix;
@@ -351,14 +966,6 @@ void func_80045480_46080(func_80045480_46080_arg *arg0) {
     setCleanupCallback(&func_80045768_46368);
     setCallback(&func_80045564_46164);
 }
-
-typedef struct {
-    u8 _pad[0x3C];
-    u8 unk3C[0x20];
-    s32 unk5C;
-} func_800455BC_461BC_arg;
-
-void func_800455BC_461BC(func_800455BC_461BC_arg *arg0);
 
 void func_80045564_46164(ScheduledTask *arg0) {
     if (arg0->unkB4 == 1) {
@@ -397,9 +1004,6 @@ void func_800457A0_463A0(s32 arg0) {
         task->unkB4 = arg0;
     }
 }
-
-void func_80045878_46478(void);
-void func_8004592C_4652C(func_8004592C_4652C_arg *);
 
 void func_800457E0_463E0(func_800457E0_463E0_arg *arg0) {
     u16 rotation;
@@ -463,33 +1067,6 @@ void func_80045964_46564(s32 arg0) {
         task->unk3C = arg0;
     }
 }
-
-typedef struct {
-    s16 unk0;
-    u8 _pad2[0x6];
-    u8 unk8[0xC];
-} Entry_46628;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    Entry_46628 *volatile unk8;
-    void *unkC;
-    void *unk10;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-} func_80046244_46E44_Task;
-
-typedef func_80046244_46E44_Task func_80045C84_46884_arg;
-
-extern void func_80045C84_46884(func_80045C84_46884_arg *);
-extern void func_80045A28_46628(func_80046244_46E44_Task *);
-extern s32 D_8009A8A4_9B4A4;
-extern void func_80045B3C_4673C(func_80046244_46E44_Task_New *);
-extern s32 D_80090AF0_916F0[];
-extern s32 D_80090AF4_916F4[];
-extern s32 D_80090AF8_916F8[];
 
 void func_800459A4_465A4(func_80046244_46E44_Task *arg0) {
     s16 temp_v1;
@@ -577,7 +1154,7 @@ void func_80045B3C_4673C(func_80046244_46E44_Task_New *arg0) {
     }
 }
 
-void func_80045C84_46884(func_80045C84_46884_arg *arg0) {
+void func_80045C84_46884(func_80046244_46E44_Task *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
     arg0->unkC = freeNodeMemory(arg0->unkC);
     arg0->unk10 = freeNodeMemory(arg0->unk10);
@@ -598,10 +1175,6 @@ void func_80046298_46E98(Struct_func_8004657C_4717C *arg0) {
     setCleanupCallback(func_8004657C_4717C);
     setCallback(func_800462D8_46ED8);
 }
-
-void func_80046464_47064(Struct_func_8004657C_4717C *);
-void func_800463F4_46FF4(Struct_func_8004657C_4717C *);
-void func_800464F4_470F4(Struct_func_8004657C_4717C *);
 
 void func_800462D8_46ED8(Struct_func_8004657C_4717C *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
@@ -702,50 +1275,6 @@ void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-typedef union {
-    s16 halfword;
-    struct {
-        u8 high;
-        u8 low;
-    } bytes;
-} HalfwordBytes;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-} Struct_unk20;
-
-typedef struct {
-    u8 _pad[0x20];
-    Struct_unk20 *unk20;
-    u8 _pad2[0xC];
-    s32 unk30;
-    u8 _pad3[0x10];
-    HalfwordBytes unk44;
-    HalfwordBytes unk46;
-    s16 unk48;
-    s16 unk4A;
-    s16 unk4C;
-} func_80046628_47228_arg;
-
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 _pad2[0xC];
-    void *unk3C;
-    u8 _pad3[0x4];
-    HalfwordBytes unk44;
-    HalfwordBytes unk46;
-    s16 unk48;
-} func_80046708_47308_arg;
-
-void func_80046628_47228(func_80046628_47228_arg *);
-void func_80046708_47308(func_80046708_47308_arg *arg0);
-
 void func_800465A8_471A8(func_80046708_47308_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(arg0->unk48);
     arg0->unk28 = func_80055DF8_569F8(arg0->unk48);
@@ -757,10 +1286,6 @@ void func_800465A8_471A8(func_80046708_47308_arg *arg0) {
     setCleanupCallback(&func_80046708_47308);
     setCallback(&func_80046628_47228);
 }
-
-extern void func_80046CB4_478B4(DisplayListObject *);
-extern void func_80046CE0_478E0(DisplayListObject *);
-extern void func_80046D0C_4790C(DisplayListObject *);
 
 void func_80046628_47228(func_80046628_47228_arg *arg0) {
     u8 byte_45;
@@ -800,8 +1325,6 @@ void func_80046708_47308(func_80046708_47308_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004674C_4734C);
 
-void func_8004674C_4734C(DisplayListObject *);
-
 void func_80046CB4_478B4(DisplayListObject *arg0) {
     func_8004674C_4734C(arg0);
     func_8006300C_63C0C(arg0);
@@ -817,17 +1340,6 @@ void func_80046D0C_4790C(DisplayListObject *arg0) {
     func_800630A4_63CA4(arg0);
 }
 
-typedef struct {
-    u8 _pad[0x20];
-    void *unk20;
-    u8 _pad2[0x24];
-    s16 unk48;
-    s16 unk4A;
-    s16 unk4C;
-    s16 unk4E;
-    s16 unk50;
-} func_80046D38_47938_Task;
-
 void func_80046D38_47938(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     func_80046D38_47938_Task *task = (func_80046D38_47938_Task *)scheduleTask(&func_800465A8_471A8, 0, 0, 0xD2);
     if (task != NULL) {
@@ -839,45 +1351,6 @@ void func_80046D38_47938(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
         task->unk50 = arg5;
     }
 }
-
-typedef struct {
-    u8 _pad[0x3C];
-    u8 unk3C[0x3C];
-    u8 unk78[0x3C];
-    s16 unkB4;
-} func_80046F44_47B44_arg;
-
-void func_80046F44_47B44(func_80046F44_47B44_arg *arg0);
-
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_80046FEC_47BEC_arg_fwd;
-
-void func_80046FEC_47BEC(func_80046FEC_47BEC_arg_fwd *arg0);
-
-typedef struct {
-    u8 unk0[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 _pad2[0xC];
-    u8 unk3C[0x14];
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    void *unk5C;
-    u8 _pad3[0x18];
-    u8 unk78[0x18];
-    s32 unk90;
-    u8 _pad4[4];
-    void *unk98;
-} func_80046DCC_479CC_arg;
 
 void func_80046DCC_479CC(func_80046DCC_479CC_arg *arg0) {
     s32 sp10[3];
@@ -952,22 +1425,6 @@ void func_80046FEC_47BEC(func_80046FEC_47BEC_arg_fwd *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-typedef struct {
-    DisplayListObject displayListObject;
-    s32 unk3C;
-} func_8004711C_47D1C_arg;
-
-extern s32 D_80090B8C_9178C[3];
-
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_80047718_48318_arg;
-
-void func_80047718_48318(func_80047718_48318_arg *);
-void func_8004711C_47D1C(func_8004711C_47D1C_arg *);
-
 void func_80047024_47C24(func_8004711C_47D1C_arg *arg0) {
     s32 spStack[3];
     GameState_46080 *temp_s0;
@@ -995,15 +1452,6 @@ void func_80047024_47C24(func_8004711C_47D1C_arg *arg0) {
     setCleanupCallback(&func_80047718_48318);
     setCallbackWithContinue(&func_8004711C_47D1C);
 }
-
-typedef struct {
-    u8 _pad[0x76];
-    u8 unk76;
-    u8 _pad2[2];
-    u8 unk79;
-} Allocation_47D1C;
-
-void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0);
 
 void func_8004711C_47D1C(func_8004711C_47D1C_arg *arg0) {
     s32 vec[3];
@@ -1057,15 +1505,6 @@ void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0) {
     }
 }
 
-typedef struct {
-    u8 _pad[0xC];
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    u8 _pad2[0x44];
-    u8 unk5C;
-} AllocationStruct;
-
 void func_8004728C_47E8C(func_8004728C_47E8C_arg *arg0) {
     s32 vec[3];
     AllocationStruct *alloc;
@@ -1083,11 +1522,6 @@ void func_8004728C_47E8C(func_8004728C_47E8C_arg *arg0) {
 
     setCallbackWithContinue(func_80047330_47F30);
 }
-
-typedef struct {
-    u8 _pad0[0x76];
-    u8 unk76;
-} AllocationData;
 
 void func_80047330_47F30(FunctionArg_80047330 *arg0) {
     AllocationData *allocation = getCurrentAllocation();
@@ -1113,15 +1547,10 @@ void func_80047330_47F30(FunctionArg_80047330 *arg0) {
     }
 }
 
-typedef struct {
-    u8 pad[0x76];
-    u8 unk76;
-} Allocation_800473F4;
-
 void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0) {
     s32 vec[3];
     s32 i;
-    Allocation_800473F4 *temp_v0;
+    AllocationData *temp_v0;
 
     temp_v0 = getCurrentAllocation();
     i = 0;
@@ -1148,13 +1577,8 @@ void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0) {
     } while (i < 4);
 }
 
-typedef struct {
-    u8 pad0[0x76];
-    u8 unk76;
-} Allocation_800474B4;
-
 void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0) {
-    Allocation_800474B4 *allocation;
+    AllocationData *allocation;
     s32 vector[3];
     s32 i;
     s32 rotation;
@@ -1245,38 +1669,6 @@ void func_80047718_48318(func_80047718_48318_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-extern void *D_80090BD4_917D4[];
-extern void *D_80090BD8_917D8[];
-extern s32 D_80090BDC_917DC[];
-
-typedef struct {
-    s8 unk0;
-    u8 _pad1[0x3];
-    u8 unk4[0xC];
-} Entry_800477E4;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    Entry_800477E4 *unk8;
-    u8 _padC[0x4];
-    s32 *unk10;
-    u8 _pad14[0x2];
-    s16 unk16;
-    s16 unk18;
-} func_800477E4_arg;
-
-typedef struct {
-    void *unk0;
-    u8 _pad[0x8];
-    void *unkC;
-    void *unk10;
-    s16 unk14;
-} func_80047A64_48664_arg;
-
-void func_80047A64_48664(func_80047A64_48664_arg *arg0);
-void func_800477E4_483E4(func_800477E4_arg *arg0);
-
 void func_80047750_48350(func_80047A64_48664_arg *arg0) {
     s16 index;
     s32 arrayOffset;
@@ -1293,13 +1685,6 @@ void func_80047750_48350(func_80047A64_48664_arg *arg0) {
     setCleanupCallback(func_80047A64_48664);
     setCallback(func_800477E4_483E4);
 }
-
-typedef struct {
-    u8 _pad0[0x44];
-    s32 unk44;
-} Alloc_800477E4;
-
-extern void func_800478FC_484FC(void);
 
 void func_800477E4_483E4(func_800477E4_arg *arg0) {
     Alloc_800477E4 *alloc;
@@ -1352,27 +1737,6 @@ void func_80047A64_48664(func_80047A64_48664_arg *arg0) {
     arg0->unkC = freeNodeMemory(arg0->unkC);
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
-
-extern Gfx D_8009A780_9B380[];
-extern s32 D_800A8B14_9FE84;
-
-typedef struct {
-    s8 unk0;
-    u8 unk1;
-    u8 _pad2[0x2];
-    Vec3i position;
-} RenderEntry_486A8;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    RenderEntry_486A8 *unk8;
-    DataTable_19E80 *unkC;
-    s32 unk10;
-    s16 unk14;
-    s16 unk16;
-    u16 unk18;
-} func_80047AA8_486A8_arg;
 
 void func_80047AA8_486A8(func_80047AA8_486A8_arg *arg0) {
     OutputStruct_19E80 tableEntry;
@@ -1504,61 +1868,12 @@ void func_80047AA8_486A8(func_80047AA8_486A8_arg *arg0) {
     }
 }
 
-typedef struct {
-    u8 _pad[0x14];
-    s16 unk14;
-} func_80047E7C_48A7C_ScheduledTask;
-
 void func_80047E7C_48A7C(s16 arg0) {
     func_80047E7C_48A7C_ScheduledTask *result = scheduleTask(func_80047750_48350, 0, 0, 0xD3);
     if (result != NULL) {
         result->unk14 = arg0;
     }
 }
-
-typedef struct {
-    void *unk0;
-} Struct_func_800482A4_48EA4;
-
-extern void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *);
-
-typedef struct {
-    void *unk0;
-} Struct_func_80047EBC_48ABC;
-
-typedef struct {
-    u8 _pad0[0x44];
-    s32 unk44;
-} AllocationType_46080;
-
-typedef struct {
-    loadAssetMetadata_arg asset;
-    u8 _pad1C[0x4];
-} AssetMetadata_46080;
-
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    u8 _pad14[0xC];
-} Element_80047F90;
-
-typedef struct {
-    void *unk0;
-    AssetMetadata_46080 unk4;
-    AssetMetadata_46080 unk24;
-    AssetMetadata_46080 unk44;
-    Player *unk64;
-    s16 unk68;
-    s16 unk6A;
-} Struct_func_80047EFC_48AFC;
-
-extern void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *);
-extern void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
-void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
-void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *);
 
 void func_80047EBC_48ABC(Struct_func_80047EBC_48ABC *arg0) {
     arg0->unk0 = loadAsset_34CB50();
@@ -1724,11 +2039,6 @@ void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-typedef struct {
-    u8 padding[0x64];
-    void *unk64;
-} Struct_func_800482D0_48ED0_task;
-
 void func_800482D0_48ED0(void *arg0) {
     Struct_func_800482D0_48ED0_task *task;
 
@@ -1737,27 +2047,6 @@ void func_800482D0_48ED0(void *arg0) {
         task->unk64 = arg0;
     }
 }
-
-typedef struct {
-    void *unk0;
-} Struct_func_80048834_49434;
-
-extern s8 D_80090C94_91894[];
-extern u8 D_80090C95_91895[];
-
-typedef struct {
-    void *unk0;
-    AssetMetadata_46080 elements[5];
-    Player *unkA4;
-    s16 unkA8;
-    u16 unkAA;
-    s16 unkAC;
-} func_80048350_48F50_arg;
-
-extern void func_80048834_49434(Struct_func_80048834_49434 *arg0);
-
-void func_80048350_48F50(func_80048350_48F50_arg *arg0);
-void func_8004841C_4901C(func_80048350_48F50_arg *arg0);
 
 void func_80048310_48F10(Struct_func_80048834_49434 *arg0) {
     arg0->unk0 = loadAsset_34CB50();
@@ -1791,18 +2080,6 @@ void func_80048350_48F50(func_80048350_48F50_arg *arg0) {
     arg0->unkAC = 0;
     setCallbackWithContinue(&func_8004841C_4901C);
 }
-
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    u8 _pad14[0xC];
-} Element_80048720;
-
-void func_80048720_49320(func_80048350_48F50_arg *arg0);
-void func_80048540_49140(func_80048350_48F50_arg *arg0);
 
 void func_8004841C_4901C(func_80048350_48F50_arg *arg0) {
     Allocation_47D1C *allocation;
@@ -1963,11 +2240,6 @@ void func_80048834_49434(Struct_func_80048834_49434 *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-typedef struct {
-    u8 padding[0xA4];
-    void *unkA4;
-} Struct_func_80048860_49460_task;
-
 void func_80048860_49460(Player *arg0) {
     Struct_func_80048860_49460_task *task;
 
@@ -1976,32 +2248,6 @@ void func_80048860_49460(Player *arg0) {
         task->unkA4 = arg0;
     }
 }
-
-typedef struct {
-    s16 unk0;
-    u8 _pad[14];
-} func_80049104_49D04_DataElement;
-
-typedef struct {
-    s32 offset;
-} func_80049104_49D04_DataBlock;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    func_80049104_49D04_DataBlock *unkC;
-    func_80049104_49D04_DataElement *unk10;
-    s16 unk14;
-    s16 unk16;
-    u8 unk18;
-    u8 _pad3[0x3];
-    u8 unk1C;
-    u8 _pad4[0x3];
-    u8 unk20;
-    u8 _pad5[0x3];
-    u8 unk24;
-} func_80048E34_49A34_arg;
 
 s32 func_800488A0_494A0(Player *arg0, u8 *arg1) {
     s32 i;
@@ -2039,13 +2285,6 @@ s32 func_800488A0_494A0(Player *arg0, u8 *arg1) {
 
     return i + 1;
 }
-
-typedef struct {
-    u8 padding[0x18];
-    u8 unk18;
-    u8 _pad[0x7];
-    u8 unk20;
-} func_8004899C_arg1_element;
 
 s32 func_8004899C_4959C(Player *arg0, u8 *arg1) {
     s32 i;
@@ -2093,27 +2332,6 @@ s32 func_8004899C_4959C(Player *arg0, u8 *arg1) {
 
     return i + 1;
 }
-
-void func_80049794_4A394(void *payload, s32 arg1);
-
-typedef struct {
-    Transform3D matrix;
-    u8 padding[0x1C];
-    DisplayListObject displayList;
-    s32 unk78;
-    s16 unk7C;
-    s16 unk7E;
-    s8 unk80;
-    s8 unk81;
-    u8 padding4[0x2];
-} func_80048AE8_496E8_Element;
-
-typedef struct {
-    u8 _pad[0x8];
-    func_80048AE8_496E8_Element *unk8;
-    u8 _pad2[0xA];
-    s16 unk16;
-} func_80048AE8_496E8_arg;
 
 void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_arg *arg1) {
     Vec3i sp10;
@@ -2225,17 +2443,6 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
     } while (i < 4);
 }
 
-typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-} func_80049230_49E30_arg;
-
-extern void func_80048F0C_49B0C(func_80048E34_49A34_arg *arg0, s32 arg1);
-void func_80049104_49D04(func_80048E34_49A34_arg *arg0);
-void func_80049230_49E30(func_80049230_49E30_arg *);
-
 void func_80048E34_49A34(func_80048E34_49A34_arg *arg0) {
     s32 i;
     s32 index;
@@ -2267,8 +2474,6 @@ loop:
 }
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048F0C_49B0C);
-
-void func_800491CC_49DCC(func_80048AE8_496E8_arg *arg0);
 
 void func_80049104_49D04(func_80048E34_49A34_arg *arg0) {
     func_80049104_49D04_DataElement *ptr;
@@ -2312,11 +2517,6 @@ void func_80049230_49E30(func_80049230_49E30_arg *arg0) {
     arg0->unkC = freeNodeMemory(arg0->unkC);
 }
 
-typedef struct {
-    u8 _pad[0x14];
-    s16 unk14;
-} func_80049280_49E80_Task;
-
 void func_80049280_49E80(s32 arg0) {
     func_80049280_49E80_Task *task = (func_80049280_49E80_Task *)scheduleTask(&func_80048E34_49A34, 0, 0, 0xEA);
     if (task != NULL) {
@@ -2343,8 +2543,6 @@ void func_80049300_49F00(func_80049300_49F00_arg *arg0) {
     arg0->unk38 = 0;
     setCallbackWithContinue(&func_8004934C_49F4C);
 }
-
-void func_80049430_4A030(func_80049300_49F00_arg *arg0);
 
 void func_8004934C_49F4C(func_80049300_49F00_arg *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
@@ -2491,14 +2689,6 @@ void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
     gSPDisplayList(gRegionAllocPtr++, D_80090DB0_919B0);
 }
 
-typedef struct {
-    Node n;
-    s32 unk2C;
-    s32 unk30;
-    s32 padding[2];
-    s32 unk3C;
-} NodeWithPayload;
-
 void func_80049794_4A394(void *payload, s32 arg1) {
     NodeWithPayload *temp_v0 = (NodeWithPayload *)scheduleTask(&func_800492C0_49EC0, 0, 0, 0xEB);
     if (temp_v0 != NULL) {
@@ -2506,28 +2696,6 @@ void func_80049794_4A394(void *payload, s32 arg1) {
         temp_v0->unk3C = arg1;
     }
 }
-
-extern void *D_80094DA0_959A0;
-extern void *D_80094DE0_959E0;
-extern void *D_80094DF0_959F0;
-extern void *D_80094E00_95A00;
-extern void *D_80094E10_95A10;
-extern void *D_80094EE0_95AE0;
-extern void *D_80094EF0_95AF0;
-extern void *D_80094FC0_95BC0;
-extern void *D_80094FD0_95BD0;
-extern void *D_800950B0_95CB0;
-extern void *D_80095360_95F60;
-extern void *D_80095370_95F70;
-extern void *D_80095380_95F80;
-extern void *D_80095460_96060;
-extern void *D_80095470_96070;
-extern void *D_80095480_96080;
-extern void *D_800955C0_961C0;
-extern void *D_800955D0_961D0;
-extern void *D_800955E0_961E0;
-extern void *D_80095860_96460;
-extern void *D_80095930_96530;
 
 void func_800497FC_4A3FC(s32 poolId) {
     s32 temp;
@@ -2643,19 +2811,6 @@ void func_80049C70_4A870(s32 arg0) {
     }
     func_80049280_49E80(arg0);
 }
-
-extern void D_800BB688(void);
-extern void D_800BB74C(void);
-extern void D_800BB7F0(void);
-extern void D_800BB814(void);
-extern void D_800BB8E8(void);
-extern void D_800BBA28(void);
-extern void D_800BBA90(void);
-extern void D_800BBAF8(void);
-extern void D_800BBE84(void);
-extern void D_800BC13C(void);
-extern void D_800BC528(void);
-extern void D_800BC72C(void);
 
 void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
     GameState *temp_s1;
@@ -2905,19 +3060,6 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
     }
 }
 
-typedef struct {
-    void *unk0;
-    void *unk4;
-    u8 _pad[0x1E];
-    s16 unk26;
-    u8 _pad2[0x4];
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-} func_8004A634_4B234_arg;
-
-void func_8004A634_4B234(func_8004A634_4B234_arg *arg0);
-
 void func_8004A5E0_4B1E0(void **arg0) {
     *arg0 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     setCleanupCallback(&func_8004A96C_4B56C);
@@ -2947,22 +3089,6 @@ void func_8004A634_4B234(func_8004A634_4B234_arg *arg0) {
 
     setCallbackWithContinue(func_8004A6D4_4B2D4);
 }
-
-typedef struct {
-    s32 sp18;
-    s32 sp1C;
-    s32 sp20;
-} func_8004A6D4_4B2D4_sp;
-
-typedef struct {
-    void *unk0;
-    loadAssetMetadata_arg unk4;
-    u8 _pad20[0x6];
-    s16 unk26;
-    s16 unk28;
-} func_8004A850_4B450_arg;
-
-void func_8004A850_4B450(func_8004A850_4B450_arg *arg0);
 
 void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0) {
     func_8004A6D4_4B2D4_sp sp;
@@ -3072,25 +3198,6 @@ void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2) {
     }
 }
 
-typedef struct {
-    void *unk0;
-    loadAssetMetadata_arg unk4;
-    u8 _pad20[0x4];
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    Player *unk30;
-    u16 unk34;
-    u8 _pad36[0x2];
-    s16 unk38;
-    s16 unk3A;
-} func_8004AA90_4B690_arg;
-
-void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0);
-
-typedef struct func_8004AB50_4B750_arg func_8004AB50_4B750_arg;
-extern void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0);
-
 void func_8004AA50_4B650(s32 *arg0) {
     *arg0 = (s32)load_3ECE40();
     setCleanupCallback(func_8004AE58_4BA58);
@@ -3117,34 +3224,6 @@ void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0) {
     func_80056B7C_5777C(temp_s1, 0x17);
     setCallbackWithContinue(func_8004AB50_4B750);
 }
-
-struct func_8004AB50_4B750_arg {
-    u8 _pad0[0x4];
-    u8 unk4[0x4];
-    Vec3i unk8;
-    u8 _pad14[0x10];
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    u8 _pad30[0x4];
-    u16 unk34;
-    s16 unk36;
-    s16 unk38;
-    s16 unk3A;
-};
-
-typedef struct {
-    s32 sp18;
-    s32 sp1C;
-    s32 sp20;
-} func_8004AB50_4B750_sp;
-
-typedef struct {
-    u8 _pad0[0x4];
-    func_80066444_67044_arg1 unk4;
-} func_8004AD18_4B918_arg;
-
-void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0);
 
 void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0) {
     func_8004AB50_4B750_sp sp;
@@ -3207,19 +3286,6 @@ void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0) {
         func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
-
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} func_8004AD18_4B918_CopyData;
-
-typedef struct {
-    u8 padding[0x5B];
-    u8 unk5B;
-    u8 padding2[0x1A];
-    u8 unk76;
-} allocation_46080;
 
 void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0) {
     func_8004AD18_4B918_CopyData sp10;
@@ -3322,26 +3388,6 @@ void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *arg0) {
     setCallbackWithContinue(&func_8004AFF8_4BBF8);
 }
 
-struct func_8004AFF8_arg {
-    void *unk0;
-    void *unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    u8 _pad14[0x10];
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    u16 unk30;
-    u8 _pad32[0x2];
-    s16 unk34;
-    s16 unk36;
-    s16 unk38;
-};
-
-struct func_8004B130_arg;
-void func_8004B130_4BD30(struct func_8004B130_arg *);
-
 void func_8004AFF8_4BBF8(func_8004AFF8_arg *arg0) {
     GameState_46080 *allocation;
     void *allocPlus30;
@@ -3388,18 +3434,7 @@ void func_8004AFF8_4BBF8(func_8004AFF8_arg *arg0) {
     }
 }
 
-struct func_8004B130_arg {
-    void *unk0;
-    void *unk4;
-    u8 _pad[0x28];
-    s16 unk30;
-    u8 _pad2[0x2];
-    s16 unk34;
-    s16 unk36;
-    s16 unk38;
-};
-
-void func_8004B130_4BD30(struct func_8004B130_arg *arg0) {
+void func_8004B130_4BD30(func_8004B130_arg *arg0) {
     allocation_46080 *allocation;
     Player *player;
     s32 i;
@@ -3486,42 +3521,11 @@ end:
     return task;
 }
 
-typedef struct {
-    void *unk0;
-} func_8004B36C_4BF6C_arg;
-
-typedef struct {
-    void *unk0;
-} func_8004B758_4C358_arg;
-
-extern void func_8004B758_4C358(func_8004B758_4C358_arg *);
-
-void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0);
-
 void func_8004B36C_4BF6C(func_8004B36C_4BF6C_arg *arg0) {
     arg0->unk0 = loadAssetByIndex_95470(9);
     setCleanupCallback(&func_8004B758_4C358);
     setCallbackWithContinue(&func_8004B3B0_4BFB0);
 }
-
-extern s32 D_80090E2C_91A2C;
-
-typedef struct {
-    u8 _pad0[0x4];
-    u8 unk4[0x4];
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    u8 _pad14[0x14];
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    u16 unk34;
-    s16 unk36;
-    s16 unk38;
-} func_8004B4CC_4C0CC_arg;
-
-void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0);
 
 void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0) {
     GameState *gameState;
@@ -3558,19 +3562,6 @@ void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0) {
 
     setCallbackWithContinue(&func_8004B4CC_4C0CC);
 }
-
-typedef struct {
-    u8 _pad0[0x4];
-    func_80066444_67044_arg1 unk4;
-} func_8004B648_4C248_arg;
-
-void func_8004B648_4C248(func_8004B648_4C248_arg *arg0);
-
-typedef struct {
-    s32 sp18;
-    s32 sp1C;
-    s32 sp20;
-} func_8004B4CC_4C0CC_StackLocals;
 
 void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0) {
     func_8004B4CC_4C0CC_StackLocals sp;
@@ -3674,11 +3665,6 @@ void func_8004B758_4C358(func_8004B758_4C358_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-typedef struct {
-    u8 pad[0x24];
-    void *unk24;
-} func_8004B794_4C394_Task;
-
 void func_8004B794_4C394(void *arg0) {
     GameState *allocation;
     func_8004B794_4C394_Task *task;
@@ -3691,14 +3677,6 @@ void func_8004B794_4C394(void *arg0) {
         allocation->unk5B -= 1;
     }
 }
-
-typedef struct {
-    void *unk0;
-} func_8004BC20_4C820_arg;
-
-void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0);
-
-void func_8004B834_4C434(func_8004B834_4C434_arg *);
 
 void func_8004B7F4_4C3F4(MemoryAllocatorNode **arg0) {
     *arg0 = load_3ECE40();
@@ -3744,14 +3722,6 @@ void func_8004B834_4C434(func_8004B834_4C434_arg *arg0) {
 
     setCallbackWithContinue(&func_8004B990_4C590);
 }
-
-extern void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *);
-
-typedef struct {
-    s32 sp18;
-    s32 sp1C;
-    s32 sp20;
-} func_8004B990_4C590_StackLocals;
 
 void func_8004B990_4C590(func_8004B990_4C590_arg *arg0) {
     func_8004B990_4C590_StackLocals sp;
@@ -3852,11 +3822,6 @@ void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-typedef struct {
-    u8 pad[0x24];
-    Player *unk24;
-} func_8004BC5C_4C85C_Task;
-
 void func_8004BC5C_4C85C(Player *arg0) {
     GameState *allocation;
     func_8004BC5C_4C85C_Task *task;
@@ -3869,22 +3834,6 @@ void func_8004BC5C_4C85C(Player *arg0) {
         allocation->unk5B -= 1;
     }
 }
-
-typedef struct {
-    u8 _pad0[0x4];
-    u8 unk4[0x4];
-    Vec3i unk8;
-    u8 _pad14[0x14];
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    u16 unk34;
-    s16 unk36;
-    s16 unk38;
-} func_8004BE40_4CA40_arg;
-
-void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0);
-void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0);
 
 void func_8004BCBC_4C8BC(MemoryAllocatorNode **arg0) {
     *arg0 = load_3ECE40();
@@ -3916,14 +3865,6 @@ void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0) {
     func_80056B7C_5777C(temp_s2, 0x17);
     setCallbackWithContinue(&func_8004BE40_4CA40);
 }
-
-typedef struct {
-    u8 _pad0[0x4];
-    func_80066444_67044_arg1 unk4;
-    s16 unk38;
-} func_8004BFBC_4CBBC_arg;
-
-void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0);
 
 void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0) {
     func_8004B4CC_4C0CC_StackLocals sp;
