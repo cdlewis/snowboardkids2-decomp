@@ -25,7 +25,7 @@ typedef struct {
     /* 0x1EC */ u8 selectedIndex;
 } MenuAllocation;
 
-void func_80037270_37E70(void) {
+void initOptionsMenu(void) {
     MenuAllocation *allocation;
     s32 i;
     MenuAllocation *ptr;

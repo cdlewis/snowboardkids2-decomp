@@ -1789,3 +1789,6 @@ startAttractRace = 0x8001474C; // rom:0x1534C
 waitForAttractRace = 0x8001478C; // rom:0x1538C
 startBattleRace = 0x80014808; // rom:0x15408
 waitForBattleRace = 0x80014854; // rom:0x15454
+startOptionsMenu = 0x8001489C; // rom:0x1549C
+waitForOptionsMenu = 0x800148CC; // rom:0x154CC
+initOptionsMenu = 0x80037270; // rom:0x37E70

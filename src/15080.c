@@ -12,12 +12,12 @@ extern u8 gDebugUnlockEnabled;
 void func_80014990_15590(void);
 
 void func_800144DC_150DC(void);
-void func_8001489C_1549C(void);
+void startOptionsMenu(void);
 void func_80014690_15290(void);
 void func_80014660_15260(void);
 void waitForLogoScreen(void);
 void startLogoScreen(void);
-void func_800148CC_154CC(void);
+void waitForOptionsMenu(void);
 void startAttractRace(void);
 void waitForAttractRace(void);
 void startDemoRace(void);
@@ -110,7 +110,7 @@ void func_80014690_15290(void) {
     } else if (result == 2) {
         setGameStateHandler(startBattleRace);
     } else if (result == 3) {
-        setGameStateHandler(func_8001489C_1549C);
+        setGameStateHandler(startOptionsMenu);
     } else {
         terminateSchedulerWithCallback(func_80014900_15500);
     }
@@ -151,12 +151,12 @@ void waitForBattleRace(void) {
     }
 }
 
-void func_8001489C_1549C(void) {
-    createTaskQueue(func_80037270_37E70, 0x64);
-    setGameStateHandler(func_800148CC_154CC);
+void startOptionsMenu(void) {
+    createTaskQueue(initOptionsMenu, 0x64);
+    setGameStateHandler(waitForOptionsMenu);
 }
 
-void func_800148CC_154CC(void) {
+void waitForOptionsMenu(void) {
     if ((func_80069810_6A410() << 16) != 0) {
         setGameStateHandler(func_80014660_15260);
     }

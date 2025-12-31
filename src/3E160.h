@@ -89,7 +89,7 @@ Func43374State *func_800436B4_442B4(Player *arg0);
 void initTitleScreen(void);
 void initLogoScreen(void);
 void func_80021D20_22920(void);
-void func_80037270_37E70(void);
+void initOptionsMenu(void);
 void func_8003B1F4_3BDF4(s32 arg0, void *arg1);
 void *func_8003B28C_3BE8C(void);
 
