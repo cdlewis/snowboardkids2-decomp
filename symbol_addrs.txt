@@ -1808,3 +1808,5 @@ loadPreRaceCutscene = 0x80014CF8; // rom:0x158F8
 awaitPreRaceCutscene = 0x80014D3C; // rom:0x1593C
 loadRace = 0x80014D78; // rom:0x15978
 awaitRaceResult = 0x80014DA8; // rom:0x159A8
+loadPostRaceCutscene = 0x80014F60; // rom:0x15B60
+awaitPostRaceCutscene = 0x80014FA4; // rom:0x15BA4

@@ -134,7 +134,7 @@ void loadRace(void) {
 extern u8 gStoryCompleted;
 extern u8 gDebugUnlockEnabled;
 
-void func_80014F60_15B60(void);
+void loadPostRaceCutscene(void);
 void func_80015028_15C28(void);
 
 void awaitRaceResult(void) {
@@ -183,7 +183,7 @@ void awaitRaceResult(void) {
                     D_800AFE8C_A71FC->saveSlotIndex = saveSlotIndex + 1;
                     handler = loadPreRaceCutscene;
                 } else {
-                    handler = func_80014F60_15B60;
+                    handler = loadPostRaceCutscene;
                 }
             } else if (gStoryCompleted != 0) {
                 handler = func_80015028_15C28;
@@ -197,17 +197,17 @@ void awaitRaceResult(void) {
     }
 }
 
-void func_80014FA4_15BA4(void);
+void awaitPostRaceCutscene(void);
 void func_8001511C_15D1C(void);
 void func_80015098_15C98(void);
 
-void func_80014F60_15B60(void) {
+void loadPostRaceCutscene(void) {
     setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 1);
     createTaskQueue(loadCutsceneOverlay, 0x64);
-    setGameStateHandler(func_80014FA4_15BA4);
+    setGameStateHandler(awaitPostRaceCutscene);
 }
 
-void func_80014FA4_15BA4(void) {
+void awaitPostRaceCutscene(void) {
     void *handler;
 
     if ((func_80069810_6A410() << 16) != 0) {
