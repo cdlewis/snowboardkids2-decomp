@@ -144,7 +144,7 @@ typedef struct {
     u8 unk425;
 } TempState17F50;
 
-void func_80018148_18D48(StoryMapCameraState *arg0);
+void updateStoryMapCameraTravel(StoryMapCameraState *camera);
 
 void startStoryMapCameraTravel(StoryMapCameraState *camera) {
     s32 sp10[10];
@@ -187,12 +187,12 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
 
     memcpy(state->unk3B0, sp10, 0x20);
 
-    setCallback(func_80018148_18D48);
+    setCallback(updateStoryMapCameraTravel);
 }
 
 void func_800182F4_18EF4(void);
 
-void func_80018148_18D48(StoryMapCameraState *camera) {
+void updateStoryMapCameraTravel(StoryMapCameraState *camera) {
     GameState *state;
     Transform3D localMatrix;
     s32 velocity;

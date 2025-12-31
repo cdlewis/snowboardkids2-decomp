@@ -1,6 +1,7 @@
 storyMapCameraTask = 0x80017350; // rom:0x17F50
 initStoryMapCamera = 0x80017384; // rom:0x17F84
 startStoryMapCameraTravel = 0x80017FE8; // rom:0x18BE8
+updateStoryMapCameraTravel = 0x80018148; // rom:0x18D48
 cleanupTitleLogoTask = 0x800163A0; // rom:0x16FA0
 enqueueTitleLogoRender = 0x800163CC; // rom:0x16FCC
 initTitleLogoRenderState = 0x800163F8; // rom:0x16FF8
