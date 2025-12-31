@@ -17,46 +17,46 @@ typedef struct {
 extern CoordPair D_8008D6EC_8E2EC[];
 
 typedef struct {
-    s16 matrix0[9];
+    s16 viewMatrix[9];
     u8 pad12[0x2];
     s32 unk14;
     s32 unk18;
     s32 unk1C;
-    s16 matrix20[9];
+    s16 orientMatrix[9];
     u8 pad32[0x2];
-    s32 unk34;
+    s32 cameraX;
     s32 unk38;
-    s32 unk3C;
+    s32 cameraZ;
     u8 pad40[0x4];
-    u16 unk44;
-    s16 unk46;
-    s16 unk48;
+    u16 viewAngle;
+    s16 targetAngle;
+    s16 orbitAngle;
     u8 pad4A[0x2];
-    s32 unk4C;
+    s32 orbitRadius;
     s16 unk50;
-    s32 unk54;
+    s32 travelDistance;
     u8 pad58[0x2];
     u8 unk5A;
     u8 unk5B;
-} Func80018474Arg;
+} StoryMapCameraState;
 
-void func_80017384_17F84(Func80018474Arg *arg0);
+void initStoryMapCamera(StoryMapCameraState *arg0);
 void func_800175E0_181E0(void);
-void func_80018580_19180(Func80018474Arg *arg0);
-void func_800182FC_18EFC(Func80018474Arg *arg0);
+void func_80018580_19180(StoryMapCameraState *arg0);
+void func_800182FC_18EFC(StoryMapCameraState *arg0);
 
 void storyMapCameraTask(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     if (state->unk429 == 0) {
-        setCallback(&func_80017384_17F84);
+        setCallback(&initStoryMapCamera);
     }
 }
 
-void func_80017384_17F84(Func80018474Arg *arg0) {
+void initStoryMapCamera(StoryMapCameraState *camera) {
     GameState *state;
     s32 temp;
-    s32 x, y;
+    s32 x, z;
     u8 mode;
 
     state = getCurrentAllocation();
@@ -68,64 +68,64 @@ void func_80017384_17F84(Func80018474Arg *arg0) {
         return;
     }
 
-    memcpy(&arg0->matrix20, identityMatrix, 0x20);
-    memcpy(&arg0->matrix0, identityMatrix, 0x20);
+    memcpy(&camera->orientMatrix, identityMatrix, 0x20);
+    memcpy(&camera->viewMatrix, identityMatrix, 0x20);
 
     mode = getStoryMapCameraMode();
 
     if (mode == 3) {
-        arg0->unk34 = 0xFFE60000;
-        arg0->unk3C = 0xFF9C0000;
-        arg0->unk48 = atan2Fixed(arg0->unk34, arg0->unk3C);
+        camera->cameraX = 0xFFE60000;
+        camera->cameraZ = 0xFF9C0000;
+        camera->orbitAngle = atan2Fixed(camera->cameraX, camera->cameraZ);
 
-        x = arg0->unk34;
-        y = arg0->unk3C;
-        arg0->unk4C = isqrt64((s64)x * x + (s64)y * y);
+        x = camera->cameraX;
+        z = camera->cameraZ;
+        camera->orbitRadius = isqrt64((s64)x * x + (s64)z * z);
 
-        arg0->unk46 = 0;
-        arg0->unk44 = 0;
+        camera->targetAngle = 0;
+        camera->viewAngle = 0;
         state->unk400 = 0;
     } else {
         mode = getStoryMapCameraMode();
         if (mode == 1) {
-            arg0->unk48 = 0x14B0;
-            arg0->unk4C = 0x650000;
-            arg0->unk46 = 0x1800;
-            arg0->unk44 = 0x1800;
+            camera->orbitAngle = 0x14B0;
+            camera->orbitRadius = 0x650000;
+            camera->targetAngle = 0x1800;
+            camera->viewAngle = 0x1800;
         } else {
-            arg0->unk48 = 0x0B50;
-            arg0->unk4C = 0x650000;
-            arg0->unk46 = 0x0800;
-            arg0->unk44 = 0x0800;
+            camera->orbitAngle = 0x0B50;
+            camera->orbitRadius = 0x650000;
+            camera->targetAngle = 0x0800;
+            camera->viewAngle = 0x0800;
         }
 
-        temp = approximateSin(arg0->unk48);
-        temp = temp * -(arg0->unk4C >> 8);
+        temp = approximateSin(camera->orbitAngle);
+        temp = temp * -(camera->orbitRadius >> 8);
         if (temp < 0) {
             temp += 0x1FFF;
         }
-        arg0->unk34 = (temp >> 13) << 8;
+        camera->cameraX = (temp >> 13) << 8;
 
-        temp = approximateCos(arg0->unk48);
-        temp = temp * -(arg0->unk4C >> 8);
+        temp = approximateCos(camera->orbitAngle);
+        temp = temp * -(camera->orbitRadius >> 8);
         if (temp < 0) {
             temp += 0x1FFF;
         }
-        arg0->unk3C = (temp >> 13) << 8;
+        camera->cameraZ = (temp >> 13) << 8;
     }
 
-    state->unk3EC = arg0->unk34;
-    state->unk3F0 = arg0->unk3C;
-    state->unk3F4 = arg0->unk48;
-    state->unk3F8 = arg0->unk4C;
-    state->unk3FC = arg0->unk44 & 0x1FFF;
+    state->unk3EC = camera->cameraX;
+    state->unk3F0 = camera->cameraZ;
+    state->unk3F4 = camera->orbitAngle;
+    state->unk3F8 = camera->orbitRadius;
+    state->unk3FC = camera->viewAngle & 0x1FFF;
 
-    arg0->unk50 = 0;
-    arg0->unk5B = 8;
-    arg0->unk5A = 8;
+    camera->unk50 = 0;
+    camera->unk5B = 8;
+    camera->unk5A = 8;
 
-    createYRotationMatrix((Transform3D *)&arg0->matrix0, arg0->unk44);
-    createYRotationMatrix((Transform3D *)&arg0->matrix20, arg0->unk48);
+    createYRotationMatrix((Transform3D *)&camera->viewMatrix, camera->viewAngle);
+    createYRotationMatrix((Transform3D *)&camera->orientMatrix, camera->orbitAngle);
 
     mode = getStoryMapCameraMode();
     if (mode == 3) {
@@ -144,46 +144,46 @@ typedef struct {
     u8 unk425;
 } TempState17F50;
 
-void func_80018148_18D48(Func80018474Arg *arg0);
+void func_80018148_18D48(StoryMapCameraState *arg0);
 
-void func_80017FE8_18BE8(Func80018474Arg *arg0) {
+void func_80017FE8_18BE8(StoryMapCameraState *camera) {
     s32 sp10[10];
     TempState17F50 *state;
-    s32 s1;
-    s32 s2;
+    s32 targetX;
+    s32 targetZ;
     s16 result, masked;
 
     state = getCurrentAllocation();
 
-    s1 = D_8008D6EC_8E2EC[state->unk425].x;
-    s2 = D_8008D6EC_8E2EC[state->unk425].z;
-    s1 <<= 16;
-    s2 <<= 16;
+    targetX = D_8008D6EC_8E2EC[state->unk425].x;
+    targetZ = D_8008D6EC_8E2EC[state->unk425].z;
+    targetX <<= 16;
+    targetZ <<= 16;
 
-    result = func_8006D21C_6DE1C(arg0->unk34, arg0->unk3C, s1, s2);
-    arg0->unk46 = result;
-    arg0->unk44 = result;
+    result = func_8006D21C_6DE1C(camera->cameraX, camera->cameraZ, targetX, targetZ);
+    camera->targetAngle = result;
+    camera->viewAngle = result;
 
     if (result < 0x1000) {
-        arg0->unk44 = result + 0x1000;
+        camera->viewAngle = result + 0x1000;
     } else {
-        arg0->unk44 = result - 0x1000;
+        camera->viewAngle = result - 0x1000;
     }
 
-    s1 -= arg0->unk34;
-    s2 -= arg0->unk3C;
+    targetX -= camera->cameraX;
+    targetZ -= camera->cameraZ;
 
-    masked = arg0->unk44 & 0x1FFF;
-    arg0->unk44 = masked;
-    arg0->unk46 = masked;
+    masked = camera->viewAngle & 0x1FFF;
+    camera->viewAngle = masked;
+    camera->targetAngle = masked;
 
-    arg0->unk54 = isqrt64((s64)s1 * s1 + (s64)s2 * s2);
+    camera->travelDistance = isqrt64((s64)targetX * targetX + (s64)targetZ * targetZ);
 
     func_8006FDA0_709A0(NULL, 0xFF, 0x10);
 
-    createYRotationMatrix((Transform3D *)arg0, (arg0->unk44 - arg0->unk48) & 0xFFFF);
+    createYRotationMatrix((Transform3D *)camera, (camera->viewAngle - camera->orbitAngle) & 0xFFFF);
 
-    func_8006B084_6BC84(arg0, &arg0->matrix20, sp10);
+    func_8006B084_6BC84(camera, &camera->orientMatrix, sp10);
 
     memcpy(state->unk3B0, sp10, 0x20);
 
@@ -192,7 +192,7 @@ void func_80017FE8_18BE8(Func80018474Arg *arg0) {
 
 void func_800182F4_18EF4(void);
 
-void func_80018148_18D48(Func80018474Arg *arg0) {
+void func_80018148_18D48(StoryMapCameraState *camera) {
     GameState *state;
     Transform3D localMatrix;
     s32 velocity;
@@ -201,35 +201,35 @@ void func_80018148_18D48(Func80018474Arg *arg0) {
 
     state = getCurrentAllocation();
 
-    velocity = arg0->unk54;
+    velocity = camera->travelDistance;
     if (velocity < 0) {
         velocity += 0x1F;
     }
     velocity >>= 9;
 
-    temp = approximateSin(arg0->unk44) * velocity;
+    temp = approximateSin(camera->viewAngle) * velocity;
     if (temp < 0) {
         temp += 0x1FFF;
     }
-    arg0->unk34 = arg0->unk34 + ((temp >> 13) << 4);
+    camera->cameraX = camera->cameraX + ((temp >> 13) << 4);
 
-    temp = approximateCos(arg0->unk44) * velocity;
+    temp = approximateCos(camera->viewAngle) * velocity;
     if (temp < 0) {
         temp += 0x1FFF;
     }
-    arg0->unk3C = arg0->unk3C + ((temp >> 13) << 4);
+    camera->cameraZ = camera->cameraZ + ((temp >> 13) << 4);
 
-    angle = atan2Fixed(arg0->unk34, arg0->unk3C);
+    angle = atan2Fixed(camera->cameraX, camera->cameraZ);
 
-    createYRotationMatrix((Transform3D *)&arg0->matrix20, (u16)angle);
-    createYRotationMatrix((Transform3D *)arg0, (u16)(arg0->unk44 - angle));
+    createYRotationMatrix((Transform3D *)&camera->orientMatrix, (u16)angle);
+    createYRotationMatrix((Transform3D *)camera, (u16)(camera->viewAngle - angle));
 
-    func_8006B084_6BC84(arg0, &arg0->matrix20, &localMatrix);
+    func_8006B084_6BC84(camera, &camera->orientMatrix, &localMatrix);
 
     memcpy(&state->unk3B0, &localMatrix, 0x20);
 
-    state->unk3EC = arg0->unk34;
-    state->unk3F0 = arg0->unk3C;
+    state->unk3EC = camera->cameraX;
+    state->unk3F0 = camera->cameraZ;
 
     if (func_8006FE10_70A10(0) == 0) {
         D_800A8CC8_A0038 = state->unk425;
@@ -251,80 +251,80 @@ void func_8001829C_18E9C(void) {
 void func_800182F4_18EF4(void) {
 }
 
-void func_80018474_19074(Func80018474Arg *arg0);
+void func_80018474_19074(StoryMapCameraState *arg0);
 
-void func_800182FC_18EFC(Func80018474Arg *arg0) {
+void func_800182FC_18EFC(StoryMapCameraState *camera) {
     s32 pad[2];
     GameState *state;
-    s32 x, y;
+    s32 x, z;
 
     state = getCurrentAllocation();
 
-    memcpy(&arg0->matrix20, identityMatrix, 0x20);
-    memcpy(arg0, identityMatrix, 0x20);
+    memcpy(&camera->orientMatrix, identityMatrix, 0x20);
+    memcpy(camera, identityMatrix, 0x20);
 
-    arg0->unk34 = D_8008D6EC_8E2EC[(u8)state->unk425].x;
-    arg0->unk3C = D_8008D6EC_8E2EC[(u8)state->unk425].z;
+    camera->cameraX = D_8008D6EC_8E2EC[(u8)state->unk425].x;
+    camera->cameraZ = D_8008D6EC_8E2EC[(u8)state->unk425].z;
 
-    arg0->unk34 <<= 16;
-    arg0->unk3C <<= 16;
+    camera->cameraX <<= 16;
+    camera->cameraZ <<= 16;
 
-    arg0->unk48 = atan2Fixed(arg0->unk34, arg0->unk3C);
+    camera->orbitAngle = atan2Fixed(camera->cameraX, camera->cameraZ);
 
-    x = arg0->unk34;
-    y = arg0->unk3C;
-    arg0->unk4C = isqrt64((s64)x * x + (s64)y * y);
+    x = camera->cameraX;
+    z = camera->cameraZ;
+    camera->orbitRadius = isqrt64((s64)x * x + (s64)z * z);
 
-    arg0->unk46 = 0;
-    arg0->unk44 = 0;
+    camera->targetAngle = 0;
+    camera->viewAngle = 0;
 
-    state->unk3EC = arg0->unk34;
-    state->unk3F0 = arg0->unk3C;
-    state->unk3F4 = arg0->unk48;
-    state->unk3F8 = arg0->unk4C;
-    state->unk3FC = arg0->unk44 & 0x1FFF;
+    state->unk3EC = camera->cameraX;
+    state->unk3F0 = camera->cameraZ;
+    state->unk3F4 = camera->orbitAngle;
+    state->unk3F8 = camera->orbitRadius;
+    state->unk3FC = camera->viewAngle & 0x1FFF;
 
-    arg0->unk50 = 0;
-    arg0->unk5B = 8;
-    arg0->unk5A = 8;
+    camera->unk50 = 0;
+    camera->unk5B = 8;
+    camera->unk5A = 8;
 
-    createYRotationMatrix((Transform3D *)&arg0->matrix20, arg0->unk48);
-    createYRotationMatrix((Transform3D *)arg0, arg0->unk44);
+    createYRotationMatrix((Transform3D *)&camera->orientMatrix, camera->orbitAngle);
+    createYRotationMatrix((Transform3D *)camera, camera->viewAngle);
 
     setCallback(func_80018474_19074);
 }
 
-void func_80018474_19074(Func80018474Arg *arg0) {
+void func_80018474_19074(StoryMapCameraState *camera) {
     GameState *state;
     Transform3D localMatrix;
     s32 sinVal;
     s32 cosVal;
-    s32 x, y;
+    s32 x, z;
     s64 sumSquares;
     s32 distance;
 
     state = getCurrentAllocation();
 
-    sinVal = approximateSin(arg0->unk48);
-    arg0->unk34 = arg0->unk34 + (sinVal << 4);
+    sinVal = approximateSin(camera->orbitAngle);
+    camera->cameraX = camera->cameraX + (sinVal << 4);
 
-    cosVal = approximateCos(arg0->unk48);
-    arg0->unk3C = arg0->unk3C + (cosVal << 4);
+    cosVal = approximateCos(camera->orbitAngle);
+    camera->cameraZ = camera->cameraZ + (cosVal << 4);
 
-    func_8006B084_6BC84(arg0, &arg0->matrix20, &localMatrix);
+    func_8006B084_6BC84(camera, &camera->orientMatrix, &localMatrix);
 
-    state->unk3EC = arg0->unk34;
-    state->unk3F0 = arg0->unk3C;
+    state->unk3EC = camera->cameraX;
+    state->unk3F0 = camera->cameraZ;
 
     memcpy(&state->unk3B0, &localMatrix, 0x20);
 
-    state->unk3F4 = arg0->unk48;
-    state->unk3F8 = arg0->unk4C;
-    state->unk3FC = arg0->unk44 & 0x1FFF;
+    state->unk3F4 = camera->orbitAngle;
+    state->unk3F8 = camera->orbitRadius;
+    state->unk3FC = camera->viewAngle & 0x1FFF;
 
-    x = arg0->unk34;
-    y = arg0->unk3C;
-    sumSquares = (s64)x * x + (s64)y * y;
+    x = camera->cameraX;
+    z = camera->cameraZ;
+    sumSquares = (s64)x * x + (s64)z * z;
     distance = isqrt64(sumSquares);
 
     if (distance <= 0x880000) {
@@ -332,7 +332,7 @@ void func_80018474_19074(Func80018474Arg *arg0) {
     }
 }
 
-void func_80018580_19180(Func80018474Arg *arg0) {
+void func_80018580_19180(StoryMapCameraState *camera) {
     s32 sp10[8];
     s32 sp30[3];
     s32 pad3C[5];
@@ -341,47 +341,47 @@ void func_80018580_19180(Func80018474Arg *arg0) {
     GameState *state;
     Transform3D *matrixPtr;
     s32 divResult;
-    s32 x, y;
+    s32 x, z;
     u8 mode;
-    s8 var_a2;
+    s8 orbitSpeed;
 
     state = getCurrentAllocation();
-    memcpy(sp30, &arg0->unk34, 0xC);
+    memcpy(sp30, &camera->cameraX, 0xC);
 
     mode = getStoryMapCameraMode();
-    var_a2 = -3;
+    orbitSpeed = -3;
     if (mode == 1) {
-        var_a2 = 3;
+        orbitSpeed = 3;
     }
 
-    arg0->unk34 = arg0->unk34 + (((var_a2 * (sp30[2] >> 8)) / (arg0->unk4C >> 8)) << 16);
+    camera->cameraX = camera->cameraX + (((orbitSpeed * (sp30[2] >> 8)) / (camera->orbitRadius >> 8)) << 16);
 
-    divResult = (-var_a2 * (sp30[0] >> 8)) / (arg0->unk4C >> 8);
-    arg0->unk3C = arg0->unk3C + (divResult << 16);
+    divResult = (-orbitSpeed * (sp30[0] >> 8)) / (camera->orbitRadius >> 8);
+    camera->cameraZ = camera->cameraZ + (divResult << 16);
 
-    arg0->unk48 = atan2Fixed(arg0->unk34, arg0->unk3C);
+    camera->orbitAngle = atan2Fixed(camera->cameraX, camera->cameraZ);
 
-    x = arg0->unk34;
-    y = arg0->unk3C;
-    arg0->unk4C = isqrt64((s64)x * x + (s64)y * y);
+    x = camera->cameraX;
+    z = camera->cameraZ;
+    camera->orbitRadius = isqrt64((s64)x * x + (s64)z * z);
 
-    matrixPtr = (Transform3D *)&arg0->matrix20;
-    createYRotationMatrix(matrixPtr, arg0->unk48);
-    func_8006B084_6BC84(arg0, matrixPtr, sp10);
+    matrixPtr = (Transform3D *)&camera->orientMatrix;
+    createYRotationMatrix(matrixPtr, camera->orbitAngle);
+    func_8006B084_6BC84(camera, matrixPtr, sp10);
 
-    state->unk3EC = arg0->unk34;
-    state->unk3F0 = arg0->unk3C;
+    state->unk3EC = camera->cameraX;
+    state->unk3F0 = camera->cameraZ;
     memcpy(&state->unk3B0, sp10, 0x20);
-    state->unk3F4 = arg0->unk48;
-    state->unk3F8 = arg0->unk4C;
-    state->unk3FC = arg0->unk44 & 0x1FFF;
+    state->unk3F4 = camera->orbitAngle;
+    state->unk3F8 = camera->orbitRadius;
+    state->unk3FC = camera->viewAngle & 0x1FFF;
 
     mode = getStoryMapCameraMode();
     if (mode == 2) {
-        if (arg0->unk48 < 0x8D1) {
+        if (camera->orbitAngle < 0x8D1) {
             setCallback(func_800175E0_181E0);
         }
-    } else if (arg0->unk48 >= 0x1730) {
+    } else if (camera->orbitAngle >= 0x1730) {
         setCallback(func_800175E0_181E0);
     }
 }
