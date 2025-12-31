@@ -106,7 +106,7 @@ void updateControllerSlotHighlights(ControllerSlotDisplay *arg0) {
     debugEnqueueCallback(8, 1, func_8000FED0_10AD0, &arg0->elements[6].unkC);
 }
 
-void func_800166FC_172FC(void **arg0) {
+void cleanupControllerSlotDisplay(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
 }
 
