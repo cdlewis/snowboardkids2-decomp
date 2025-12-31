@@ -27,7 +27,7 @@ void loadPlayerCountSelect(void) {
 
 void func_80021DE8_229E8(void);
 void func_80021EFC_22AFC(void);
-void func_80021FB8_22BB8(void);
+void awaitVersusCharacterSelect(void);
 void func_80022108_22D08(void);
 void func_80021E18_22A18(void);
 void func_8002207C_22C7C(void);
@@ -87,7 +87,7 @@ void awaitVersusMapScreen(void) {
 }
 
 void awaitVersusLevelSelect(void);
-void func_80021F80_22B80(void);
+void loadVersusCharacterSelect(void);
 
 void func_80021EFC_22AFC(void) {
     createTaskQueue(initLevelSelectBasic, 100);
@@ -102,17 +102,17 @@ void awaitVersusLevelSelect(void) {
     if (result == 0xFF) {
         setGameStateHandler(loadVersusMapScreen);
     } else if (result == 1) {
-        setGameStateHandler(func_80021F80_22B80);
+        setGameStateHandler(loadVersusCharacterSelect);
     }
 }
 
-void func_80021F80_22B80(void) {
+void loadVersusCharacterSelect(void) {
     func_800574A0_580A0(2);
     createTaskQueue(func_800226F0_232F0, 100);
-    setGameStateHandler(func_80021FB8_22BB8);
+    setGameStateHandler(awaitVersusCharacterSelect);
 }
 
-void func_80021FB8_22BB8(void) {
+void awaitVersusCharacterSelect(void) {
     s16 result;
 
     result = func_80069810_6A410();

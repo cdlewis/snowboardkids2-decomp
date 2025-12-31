@@ -1994,3 +1994,5 @@ loadVersusMapScreen = 0x80021E6C; // rom:0x22A6C
 awaitVersusMapScreen = 0x80021E9C; // rom:0x22A9C
 loadVersusLevelSelect = 0x80021EFC; // rom:0x22AFC
 awaitVersusLevelSelect = 0x80021F2C; // rom:0x22B2C
+loadVersusCharacterSelect = 0x80021F80; // rom:0x22B80
+awaitVersusCharacterSelect = 0x80021FB8; // rom:0x22BB8
