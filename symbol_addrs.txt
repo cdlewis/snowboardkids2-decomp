@@ -1875,6 +1875,8 @@ setupMenuBackgroundEffect = 0x800216AC; // rom:0x222AC
 updateMenuBackgroundEffect = 0x800216D4; // rom:0x222D4
 cleanupMenuBackgroundEffect = 0x8002174C; // rom:0x2234C
 initCharacterDescriptionText = 0x80021778; // rom:0x22378
+renderCharacterDescriptionText = 0x80021810; // rom:0x22410
+cleanupCharacterDescriptionText = 0x80021880; // rom:0x22480
 
 GenericTriggerInit = 0x80018CB0; // rom:0x198B0
 GenericTriggerCheck = 0x80018D04; // rom:0x19904

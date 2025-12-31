@@ -86,29 +86,24 @@ typedef struct {
 } UnlockNotificationState;
 
 typedef struct {
-    u8 _pad0[0x8];
-    void *unk8;
-} Func80021880Arg;
-
-typedef struct {
     u8 high;
     u8 low;
-} Func80021810Bytes;
+} ColorBytes;
 
 typedef union {
     s16 asS16;
-    Func80021810Bytes asBytes;
-} Func80021810S16OrBytes;
+    ColorBytes asBytes;
+} ColorValue;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    void *unk8;
-    Func80021810S16OrBytes unkC;
-    Func80021810S16OrBytes unkE;
-    u8 unk10;
-} Func80021810Arg;
+    s16 x;
+    s16 y;
+    void *textString;
+    void *textRenderAsset;
+    ColorValue color1;
+    ColorValue color2;
+    u8 priority;
+} CharacterDescriptionTextState;
 
 typedef struct {
     void *unk0;
@@ -777,50 +772,50 @@ void cleanupMenuBackgroundEffect(MenuBackgroundEffectState *state) {
 
 extern void *D_8008DC2C_8E82C[];
 
-void func_80021810_22410(Func80021810Arg *arg0);
-void func_80021880_22480(Func80021880Arg *arg0);
+void renderCharacterDescriptionText(CharacterDescriptionTextState *state);
+void cleanupCharacterDescriptionText(CharacterDescriptionTextState *state);
 
-void initCharacterDescriptionText(Func80021810Arg *arg0) {
-    void *temp_s1;
-    D_800AFE8C_type_202A0 *temp_v1;
+void initCharacterDescriptionText(CharacterDescriptionTextState *state) {
+    void *textRenderAsset;
+    D_800AFE8C_type_202A0 *globalState;
     s32 idx;
 
-    temp_s1 = func_80035F80_36B80(1);
-    setCleanupCallback(&func_80021880_22480);
+    textRenderAsset = func_80035F80_36B80(1);
+    setCleanupCallback(&cleanupCharacterDescriptionText);
 
-    arg0->unk10 = 5;
-    temp_v1 = D_800AFE8C_A71FC;
-    arg0->unk0 = -0x50;
-    arg0->unk2 = -0x10;
-    arg0->unkC.asS16 = 0xFF;
-    arg0->unkE.asS16 = 0xFF;
-    arg0->unk8 = temp_s1;
-    idx = temp_v1->unk7 - 0xC;
-    arg0->unk4 = D_8008DC2C_8E82C[idx];
+    state->priority = 5;
+    globalState = D_800AFE8C_A71FC;
+    state->x = -0x50;
+    state->y = -0x10;
+    state->color1.asS16 = 0xFF;
+    state->color2.asS16 = 0xFF;
+    state->textRenderAsset = textRenderAsset;
+    idx = globalState->unk7 - 0xC;
+    state->textString = D_8008DC2C_8E82C[idx];
 
-    setCallback(&func_80021810_22410);
+    setCallback(&renderCharacterDescriptionText);
 }
 
-void func_80021810_22410(Func80021810Arg *arg0) {
+void renderCharacterDescriptionText(CharacterDescriptionTextState *state) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->menuState == 8) {
         func_80035260_35E60(
-            arg0->unk8,
-            arg0->unk4,
-            arg0->unk0,
-            arg0->unk2,
-            arg0->unkC.asBytes.low,
-            arg0->unkE.asBytes.low,
-            arg0->unk10,
+            state->textRenderAsset,
+            state->textString,
+            state->x,
+            state->y,
+            state->color1.asBytes.low,
+            state->color2.asBytes.low,
+            state->priority,
             0xB,
             1
         );
     }
 }
 
-void func_80021880_22480(Func80021880Arg *arg0) {
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
+void cleanupCharacterDescriptionText(CharacterDescriptionTextState *state) {
+    state->textRenderAsset = freeNodeMemory(state->textRenderAsset);
 }
 
 extern u32 D_4237C0;
