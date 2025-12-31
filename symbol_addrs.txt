@@ -30,6 +30,7 @@ onStoryMapExitToLevelSelect = 0x80019258; // rom:0x19E58
 storyMapLocationHandlers = 0x8008D78C; // rom:0x8E38C
 storyMapHotspots = 0x8008D7E0; // rom:0x8E3E0
 checkStoryMapHotspotCollision = 0x80019510; // rom:0x1A110
+checkStoryMapCharacterCollision = 0x8001974C; // rom:0x1A34C
 storyMapExitCode = 0x8009F220;
 cleanupTitleLogoTask = 0x800163A0; // rom:0x16FA0
 enqueueTitleLogoRender = 0x800163CC; // rom:0x16FCC

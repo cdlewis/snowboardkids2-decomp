@@ -50,7 +50,7 @@ s32 checkStoryMapHotspotCollision(s32 posX, s32 posY, s16 collisionRadius) {
 
 INCLUDE_ASM("asm/nonmatchings/1A110", func_8001960C_1A20C);
 
-s32 func_8001974C_1A34C(s32 arg0, s32 arg1, s32 arg2) {
+s32 checkStoryMapCharacterCollision(s32 posX, s32 posY, s32 characterIndex) {
     GameState *state;
     s32 dx;
     s32 dy;
@@ -58,12 +58,12 @@ s32 func_8001974C_1A34C(s32 arg0, s32 arg1, s32 arg2) {
     s32 threshold;
 
     state = (GameState *)getCurrentAllocation();
-    dx = arg0 - state->unk408[arg2];
-    dy = arg1 - state->unk410[arg2];
+    dx = posX - state->unk408[characterIndex];
+    dy = posY - state->unk410[characterIndex];
     dist = distance_2d(dx, dy);
-    threshold = state->unk3FE + state->unk418[arg2];
+    threshold = state->unk3FE + state->unk418[characterIndex];
     if (dist < (threshold << 16)) {
-        return arg2 + 1;
+        return characterIndex + 1;
     }
     return 0;
 }
