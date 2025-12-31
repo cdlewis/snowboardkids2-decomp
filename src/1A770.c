@@ -39,7 +39,7 @@ extern void func_80019CB4_1A8B4(applyTransformToModel_arg1 *);
 extern void func_80019BF0_1A7F0(applyTransformToModel_arg1 *);
 extern s32 identityMatrix;
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
-extern u8 D_800A8CC8_A0038;
+extern u8 storyMapLocationIndex;
 extern void func_80019E18_1AA18(void);
 extern s32 gControllerInputs[4];
 extern void func_8001A478_1B078(void);
@@ -100,7 +100,7 @@ void func_80019CD0_1A8D0(func_80019CD0_1A8D0_arg *arg0) {
     arg0->unk0 = -0x28;
     arg0->unk2 = 0;
     arg0->unk4 = 0;
-    arg0->unk8 = &D_8008D7FC_8E3FC[D_800A8CC8_A0038];
+    arg0->unk8 = &D_8008D7FC_8E3FC[storyMapLocationIndex];
     setCallback(&func_80019D24_1A924);
 }
 

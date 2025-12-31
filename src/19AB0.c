@@ -10,7 +10,7 @@
 #include "task_scheduler.h"
 
 extern u8 gTitleInitialized;
-extern u8 D_800A8CC8_A0038;
+extern u8 storyMapLocationIndex;
 void func_80018F50_19B50(void);
 void func_80019078_19C78(void);
 void func_800191B4_19DB4(void);
@@ -37,11 +37,11 @@ void func_80018EB0_19AB0(void) {
     if (getStoryMapCameraMode() != 0) {
         allocation->unk2 = 1;
         gTitleInitialized = 1;
-        D_800A8CC8_A0038 = 0;
+        storyMapLocationIndex = 0;
         createTaskQueue(initializeGameState, 100);
         setGameStateHandler(func_80018F50_19B50);
     } else {
-        D_800A8CC8_A0038 = 4;
+        storyMapLocationIndex = 4;
         createTaskQueue(func_80018DC0_199C0, 100);
         setGameStateHandler(func_80019078_19C78);
     }
@@ -64,13 +64,13 @@ void func_80018F50_19B50(void) {
         return;
     }
 
-    gameState = D_800A8CC8_A0038;
+    gameState = storyMapLocationIndex;
     if (gameState == 3 || gameState == 9 || gameState == 6) {
         allocation->unk4 = D_800AFE8C_A71FC->saveSlotIndex;
 
-        if (D_800A8CC8_A0038 == 3) {
+        if (storyMapLocationIndex == 3) {
             D_800AFE8C_A71FC->saveSlotIndex = 0xD;
-        } else if (D_800A8CC8_A0038 == 9) {
+        } else if (storyMapLocationIndex == 9) {
             D_800AFE8C_A71FC->saveSlotIndex = 0xC;
         } else {
             D_800AFE8C_A71FC->saveSlotIndex = 0xE;
@@ -79,7 +79,7 @@ void func_80018F50_19B50(void) {
         createTaskQueue(func_80019D50_1A950, 100);
     } else {
         createTaskQueue(func_80018DC0_199C0, 100);
-        if (D_800A8CC8_A0038 == 7) {
+        if (storyMapLocationIndex == 7) {
             func_800585C8_591C8(0x22);
         }
     }

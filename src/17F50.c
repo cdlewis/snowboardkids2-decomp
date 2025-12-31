@@ -6,7 +6,7 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern u8 D_800A8CC8_A0038;
+extern u8 storyMapLocationIndex;
 extern s16 identityMatrix[9];
 
 typedef struct {
@@ -62,8 +62,8 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
     state = getCurrentAllocation();
     state->unk400 = 4;
 
-    if (D_800A8CC8_A0038 != 0) {
-        state->unk425 = D_800A8CC8_A0038 - 1;
+    if (storyMapLocationIndex != 0) {
+        state->unk425 = storyMapLocationIndex - 1;
         setCallbackWithContinue(&func_800182FC_18EFC);
         return;
     }
@@ -232,17 +232,17 @@ void updateStoryMapCameraTravel(StoryMapCameraState *camera) {
     state->unk3F0 = camera->cameraZ;
 
     if (func_8006FE10_70A10(0) == 0) {
-        D_800A8CC8_A0038 = state->unk425;
+        storyMapLocationIndex = state->unk425;
         state->unk427 = state->unk425 + 1;
         setCallback(&func_800182F4_18EF4);
     }
 }
 
-void func_8001829C_18E9C(void) {
+void finalizeStoryMapCameraTravel(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     if (func_8006FE10_70A10(0) == 0) {
-        D_800A8CC8_A0038 = state->unk425;
+        storyMapLocationIndex = state->unk425;
         state->unk427 = state->unk425 + 1;
         setCallback(&func_800182F4_18EF4);
     }

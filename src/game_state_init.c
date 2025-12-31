@@ -15,7 +15,7 @@ USE_ASSET(_419440);
 USE_ASSET(_45A890);
 
 extern u16 D_8008D6B0_8E2B0;
-extern u8 D_800A8CC8_A0038;
+extern u8 storyMapLocationIndex;
 extern void storyMapCameraTask;
 extern void func_80018800_19400;
 extern void func_80018A90_19690;
@@ -148,7 +148,7 @@ void gameStateCleanupHandler(void) {
             terminateSchedulerWithCallback(transitionToMainMenu);
         } else {
             u8 tmp = gs->unk425 + 1;
-            D_800A8CC8_A0038 = tmp;
+            storyMapLocationIndex = tmp;
             terminateSchedulerWithCallback(transitionToNextGameMode);
         }
     }

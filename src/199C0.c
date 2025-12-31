@@ -7,7 +7,7 @@ typedef struct {
     u8 unk2;
 } task_mem_199C0;
 
-extern u8 D_800A8CC8_A0038;
+extern u8 storyMapLocationIndex;
 extern void (*D_8008D78C_8E38C[])(void);
 extern s16 D_8009F220_9FE20;
 void func_80018E2C_19A2C(void);
@@ -20,11 +20,11 @@ void func_80018DC0_199C0(void) {
     mem->unk2 = 0;
     mem->unk0 = 0;
 
-    if (D_800A8CC8_A0038 != 4) {
+    if (storyMapLocationIndex != 4) {
         func_800574A0_580A0(2);
     }
 
-    createTaskQueue(D_8008D78C_8E38C[D_800A8CC8_A0038], 0x5A);
+    createTaskQueue(D_8008D78C_8E38C[storyMapLocationIndex], 0x5A);
     setGameStateHandler(func_80018E2C_19A2C);
 }
 
