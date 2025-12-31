@@ -59,7 +59,7 @@ void awaitStoryModeCharacterSelect(void);
 void awaitFadeLoadPreRaceCutscene(void);
 void loadStoryModeRace(void);
 void func_8001AF80_1BB80(void);
-void func_8001AC70_1B870(void);
+void startBoardShopFadeOut(void);
 
 void storyMapDecorModelTask(StoryMapDecorModelState *arg0) {
     arg0->model = createSceneModel(0x13, getCurrentAllocation());
@@ -261,11 +261,11 @@ void awaitBoardShopExitDelay(void) {
     temp_v1 = temp_v0->unk77C - 1;
     temp_v0->unk77C = temp_v1;
     if (!(temp_v1 & 0xFFFF)) {
-        setGameStateHandler(&func_8001AC70_1B870);
+        setGameStateHandler(&startBoardShopFadeOut);
     }
 }
 
-void func_8001AC70_1B870(void) {
+void startBoardShopFadeOut(void) {
     u8 temp_v1 = ((allocation_1B8C8 *)getCurrentAllocation())->unk79A;
 
     if (temp_v1 != 0) {
