@@ -198,7 +198,7 @@ void awaitRaceResult(void) {
 }
 
 void awaitPostRaceCutscene(void);
-void func_8001511C_15D1C(void);
+void loadCreditsSequence(void);
 void loadUnlockCutscene(void);
 
 void loadPostRaceCutscene(void) {
@@ -214,7 +214,7 @@ void awaitPostRaceCutscene(void) {
         if (gStoryCompleted != 0) {
             handler = loadStoryCompleteCutscene;
         } else if (D_800AFE8C_A71FC->saveSlotIndex == 0xB) {
-            handler = func_8001511C_15D1C;
+            handler = loadCreditsSequence;
         } else {
             handler = loadStoryMapScreen;
             if (D_800AFE8C_A71FC->pendingUnlockCutscene != 0) {
@@ -254,7 +254,7 @@ void awaitUnlockCutscene(void) {
 
 void func_8001514C_15D4C(void);
 
-void func_8001511C_15D1C(void) {
+void loadCreditsSequence(void) {
     createTaskQueue(func_80003EE0_4AE0, 0x64);
     setGameStateHandler(func_8001514C_15D4C);
 }

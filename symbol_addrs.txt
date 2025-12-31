@@ -1814,3 +1814,4 @@ loadStoryCompleteCutscene = 0x80015028; // rom:0x15C28
 awaitStoryCompleteCutscene = 0x80015064; // rom:0x15C64
 loadUnlockCutscene = 0x80015098; // rom:0x15C98
 awaitUnlockCutscene = 0x800150DC; // rom:0x15CDC
+loadCreditsSequence = 0x8001511C; // rom:0x15D1C
