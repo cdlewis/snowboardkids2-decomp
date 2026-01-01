@@ -63,7 +63,7 @@ void func_8003F0AC_3FCAC(void);
 void func_8003FB90_40790(void);
 void func_800401A0_40DA0(void);
 void func_8003F178_3FD78(void);
-void func_8003EE50_3FA50(void);
+void loadPlayerAssets(void);
 void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
 void func_8003FF78_40B78(void);
@@ -802,14 +802,15 @@ void parseRaceAssetData(void) {
     gs->unk44 = (GameStateUnk44 *)((u8 *)gs->unk28 + gs->unk28->assetTableOffset);
     gs->unk48 = (u8 *)gs->unk28 + gs->unk28->transformDataOffset;
 
-    func_8006983C_6A43C(&func_8003EE50_3FA50);
+    func_8006983C_6A43C(&loadPlayerAssets);
 }
 
-void func_8003EE50_3FA50(void) {
+void loadPlayerAssets(void) {
     GameState *gs = (GameState *)getCurrentAllocation();
     s32 i = 0;
     s32 offset;
     int new_var;
+
     new_var = 0;
     if (gs->numPlayers <= new_var) {
     } else {
@@ -820,9 +821,11 @@ void func_8003EE50_3FA50(void) {
             offset += 0xBE8;
         } while (i < gs->numPlayers);
     }
+
     gs->unk18 = loadCompressedData(&_34CB50_ROM_START, &_34CB50_ROM_END, 0x5E28);
     gs->unk1C = loadAsset_B7E70();
     gs->unk20 = loadAsset_216290();
+
     func_8006983C_6A43C(&func_8003EEEC_3FAEC);
 }
 

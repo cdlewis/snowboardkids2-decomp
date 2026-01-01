@@ -469,6 +469,7 @@ initRace = 0x8003D560;
 initRaceViewports = 0x8003E4F0; // rom:0x3F0F0
 loadRaceGameData = 0x8003EDA0; // rom:0x3F9A0
 parseRaceAssetData = 0x8003EDF8; // rom:0x3F9F8
+loadPlayerAssets = 0x8003EE50; // rom:0x3FA50
 D_800902D0_90ED0 = 0x800902D0; // type:s8 size:0x17F
 D_800BC468_ACC98 = 0x800BC468; // type:s16 rom:0xACC98 size:0x98
 sTimerFormatNormal = 0x8009E8C0;
