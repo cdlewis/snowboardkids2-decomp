@@ -337,7 +337,7 @@ void cleanupBoardShopGoldDisplay(BoardShopGoldDisplayCleanupArg *arg0);
 void cleanupBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void waitBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
-void func_80032708_33308(func_800329A8_335A8_arg *arg0);
+void updateBoardShopBoardIconSelection(func_800329A8_335A8_arg *arg0);
 
 extern u16 D_8008F16C_8FD6C[];
 extern u16 D_8008F16E_8FD6E[];
@@ -1256,11 +1256,11 @@ void animateBoardShopBoardIconsSlideIn(BoardShopBoardIconsState *arg0) {
 
     if ((animatingCount & 0xFF) == 0) {
         allocation->unk77C = 1;
-        setCallback(func_80032708_33308);
+        setCallback(updateBoardShopBoardIconSelection);
     }
 }
 
-void func_80032708_33308(func_800329A8_335A8_arg *arg0) {
+void updateBoardShopBoardIconSelection(func_800329A8_335A8_arg *arg0) {
     func_800329A8_335A8_allocation *state;
     s32 i;
     int new_var;
@@ -1361,7 +1361,7 @@ void func_800329A8_335A8(func_800329A8_335A8_arg *arg0) {
     arg0->unk7A = state->unk799 * 0x28 - 0x2A;
     debugEnqueueCallback(8, 7, &renderTextPalette, &arg0->unk78);
     if (state->unk79B < 0x14) {
-        setCallback(&func_80032708_33308);
+        setCallback(&updateBoardShopBoardIconSelection);
     }
 }
 
@@ -1427,7 +1427,7 @@ void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0) {
             frameCounterPtr--;
         } while (playerIndex >= 0);
 
-        setCallback(&func_80032708_33308);
+        setCallback(&updateBoardShopBoardIconSelection);
     }
 }
 

@@ -2259,4 +2259,5 @@ updateBoardShopGoldDisplay = 0x800323FC; // rom:0x32FFC
 cleanupBoardShopGoldDisplay = 0x80032504; // rom:0x33104
 initBoardShopBoardIcons = 0x8003253C; // rom:0x3313C
 animateBoardShopBoardIconsSlideIn = 0x80032628; // rom:0x33228
+updateBoardShopBoardIconSelection = 0x80032708; // rom:0x33308
 boardIconTargetYPositions = 0x8008F17C; // rom:0x8FD7C
