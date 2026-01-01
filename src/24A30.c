@@ -26,11 +26,11 @@ typedef struct {
 } func_8002494C_arg;
 
 typedef struct {
-    u16 unk0;
-    u16 unk2;
+    u16 rotationX;
+    u16 rotationY;
     u8 padding[0x28];
-    void *unk2C;
-} func_80027A28_28628_arg;
+    void *effectAsset;
+} CharSelectBackgroundEffectState;
 
 typedef struct {
     SceneModel *model;
@@ -313,9 +313,9 @@ void cleanupCharSelectPlayer1NameSprite(SimpleSpriteEntry *);
 void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0);
 void waitForCharSelectP2NameReveal(P2NameRevealState *arg0);
 void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0);
-void func_80027AAC_286AC(func_80027A28_28628_arg *arg0);
-void func_80027A28_28628(func_80027A28_28628_arg *arg0);
-void func_80027A50_28650(func_80027A28_28628_arg *arg0);
+void cleanupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state);
+void setupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state);
+void updateCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state);
 void func_80027B70_28770(void *);
 void func_80027B9C_2879C(SimpleSpriteEntry *);
 void updateCharSelectPostSlide(CharSelectSlideState *);
@@ -1800,27 +1800,27 @@ void cleanupCharSelectStats(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_800279D4_285D4(func_80027A28_28628_arg *arg0) {
-    arg0->unk2C = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
-    setCleanupCallback(func_80027AAC_286AC);
-    setCallback(func_80027A28_28628);
+void initCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
+    state->effectAsset = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
+    setCleanupCallback(cleanupCharSelectBackgroundEffect);
+    setCallback(setupCharSelectBackgroundEffect);
 }
 
-void func_80027A28_28628(func_80027A28_28628_arg *arg0) {
-    func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
-    setCallback(func_80027A50_28650);
+void setupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
+    func_800394BC_3A0BC(state, (s32)state->effectAsset);
+    setCallback(updateCharSelectBackgroundEffect);
 }
 
-void func_80027A50_28650(func_80027A28_28628_arg *arg0) {
-    arg0->unk0++;
-    arg0->unk2++;
-    arg0->unk0 &= 0x3FF;
-    arg0->unk2 &= 0x3FF;
-    debugEnqueueCallback(7, 0, func_80038420_39020, arg0);
+void updateCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
+    state->rotationX++;
+    state->rotationY++;
+    state->rotationX &= 0x3FF;
+    state->rotationY &= 0x3FF;
+    debugEnqueueCallback(7, 0, func_80038420_39020, state);
 }
 
-void func_80027AAC_286AC(func_80027A28_28628_arg *arg0) {
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
+    state->effectAsset = freeNodeMemory(state->effectAsset);
 }
 
 void func_80027AD8_286D8(func_80027AD8_286D8_arg *arg0) {

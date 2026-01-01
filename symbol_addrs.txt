@@ -2074,3 +2074,7 @@ animateCharSelectP2NameReveal = 0x80027400; // rom:0x28000
 animateCharSelectP2NameHide = 0x80027544; // rom:0x28144
 cleanupCharSelectPlayer2NameSprites = 0x8002764C; // rom:0x2824C
 cleanupCharSelectStats = 0x800279A8; // rom:0x285A8
+initCharSelectBackgroundEffect = 0x800279D4; // rom:0x285D4
+setupCharSelectBackgroundEffect = 0x80027A28; // rom:0x28628
+updateCharSelectBackgroundEffect = 0x80027A50; // rom:0x28650
+cleanupCharSelectBackgroundEffect = 0x80027AAC; // rom:0x286AC
