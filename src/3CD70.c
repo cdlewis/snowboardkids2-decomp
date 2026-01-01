@@ -61,17 +61,17 @@ typedef struct {
 } Allocation;
 
 typedef struct {
-    Node_70B00 *unk0;
+    Node_70B00 *sceneNode;
     u8 pad4[0xC];
-    u8 *unk10;
+    u8 *playerData;
     u8 pad14[0x65];
     u8 unk79;
-} func_8003CF40_Allocation;
+} OrbitCameraAllocation;
 
 extern void func_8003C2BC_3CEBC(void);
 extern s32 D_8008FEB0_90AB0;
 extern u8 identityMatrix[];
-void func_8003CF40_3DB40(s16 *arg0);
+void updateOrbitCamera(OrbitCameraState *camera);
 void func_8003D0F4_3DCF4(NodeExt *arg0);
 void func_8003D210_3DE10(func_8003D210_3DE10_arg *);
 
@@ -129,46 +129,46 @@ void spawnChaseCameraTask(u8 playerIdx) {
 void initOrbitCamera(OrbitCameraState *camera) {
     getCurrentAllocation();
     camera->rotationAngle = 0;
-    setCallbackWithContinue(func_8003CF40_3DB40);
+    setCallbackWithContinue(updateOrbitCamera);
 }
 
-void func_8003CF40_3DB40(s16 *arg0) {
-    func_8003CF40_Allocation *s1;
-    Transform3D sp10;
-    Transform3D sp30;
-    Transform3D sp50;
-    Vec3i sp70;
-    s16 temp_v0;
-    s16 temp_v1;
-    Transform3D *s2;
+void updateOrbitCamera(OrbitCameraState *camera) {
+    OrbitCameraAllocation *allocation;
+    Transform3D cameraMatrix;
+    Transform3D rotationMatrix;
+    Transform3D tempMatrix;
+    Vec3i translationOffset;
+    s16 newAngle;
+    s16 currentAngle;
+    Transform3D *cameraMatrixPtr;
 
-    s1 = getCurrentAllocation();
-    s2 = &sp10;
-    memcpy(s2, identityMatrix, 0x20);
-    sp10.translation.y = 0x1E0000;
-    sp10.translation.z = 0x870000;
-    temp_v0 = *arg0 + 0x58;
-    *arg0 = temp_v0;
-    if (temp_v0 == 0x12E8) {
-        func_8006FE28_70A28(s1->unk0, 0xFF, 0xFF, 0xFF);
-        func_8006FDA0_709A0(s1->unk0, 0xFF, 0x20);
+    allocation = getCurrentAllocation();
+    cameraMatrixPtr = &cameraMatrix;
+    memcpy(cameraMatrixPtr, identityMatrix, 0x20);
+    cameraMatrix.translation.y = 0x1E0000;
+    cameraMatrix.translation.z = 0x870000;
+    newAngle = camera->rotationAngle + 0x58;
+    camera->rotationAngle = newAngle;
+    if (newAngle == 0x12E8) {
+        func_8006FE28_70A28(allocation->sceneNode, 0xFF, 0xFF, 0xFF);
+        func_8006FDA0_709A0(allocation->sceneNode, 0xFF, 0x20);
     }
-    temp_v1 = *arg0;
-    if (temp_v1 == 0x1EF0) {
-        s1->unk79 = s1->unk79 - 1;
+    currentAngle = camera->rotationAngle;
+    if (currentAngle == 0x1EF0) {
+        allocation->unk79 = allocation->unk79 - 1;
         func_80069CF8_6A8F8();
-        func_8006FDA0_709A0(s1->unk0, 0, 0x10);
+        func_8006FDA0_709A0(allocation->sceneNode, 0, 0x10);
         return;
     }
-    createYRotationMatrix(&sp30, (temp_v1 + 0x1000) & 0xFFFF);
-    memcpy(&sp30.translation, &((Transform3D *)identityMatrix)->translation, 0xC);
-    func_8006B084_6BC84(s2, &sp30, &sp50);
-    func_8006B084_6BC84(&sp50, s1->unk10 + 0x950, s2);
-    transformVector2(&D_8008FEB0_90AB0, s1->unk10 + 0x950, &sp70);
-    sp10.translation.x = sp10.translation.x + sp70.x;
-    sp10.translation.y = sp10.translation.y + sp70.y;
-    sp10.translation.z = sp10.translation.z + sp70.z;
-    func_8006FD3C_7093C(0x64, s2);
+    createYRotationMatrix(&rotationMatrix, (currentAngle + 0x1000) & 0xFFFF);
+    memcpy(&rotationMatrix.translation, &((Transform3D *)identityMatrix)->translation, 0xC);
+    func_8006B084_6BC84(cameraMatrixPtr, &rotationMatrix, &tempMatrix);
+    func_8006B084_6BC84(&tempMatrix, allocation->playerData + 0x950, cameraMatrixPtr);
+    transformVector2(&D_8008FEB0_90AB0, allocation->playerData + 0x950, &translationOffset);
+    cameraMatrix.translation.x = cameraMatrix.translation.x + translationOffset.x;
+    cameraMatrix.translation.y = cameraMatrix.translation.y + translationOffset.y;
+    cameraMatrix.translation.z = cameraMatrix.translation.z + translationOffset.z;
+    func_8006FD3C_7093C(0x64, cameraMatrixPtr);
 }
 
 void spawnOrbitCameraTask(void) {
