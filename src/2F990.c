@@ -174,7 +174,7 @@ void updateStoryMapShopItemStatLabel(ScrollArrowSprite *);
 void cleanupStoryMapShopItemStatLabel(func_8002FF28_30B28_arg *);
 void updateStoryMapShopExitOverlay(void *arg0);
 void cleanupStoryMapShopExitOverlay(func_8002FF28_30B28_arg *arg0);
-void func_80030764_31364(ItemStatsDisplay *arg0);
+void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
 
 void func_80030974_31574(void *);
 void func_800309D4_315D4(func_800308FC_314FC_arg *);
@@ -977,14 +977,14 @@ void cleanupStoryMapShopItemPriceDisplay(func_80030668_31268_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80030694_31294(ItemStatsDisplay *display) {
+void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *display) {
     void *spriteAsset;
     s32 i;
 
     getCurrentAllocation();
     display->progressBarAsset = loadAsset_34F7E0();
     spriteAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
-    setCleanupCallback(func_800308C4_314C4);
+    setCleanupCallback(cleanupStoryMapShopItemStatsDisplay);
 
     display->progressBarX = -0x24;
     display->priceLabelX = -0x24;
@@ -1000,12 +1000,12 @@ void func_80030694_31294(ItemStatsDisplay *display) {
         display->statLabels[i].palette = 0;
     }
 
-    setCallback(func_80030764_31364);
+    setCallback(updateStoryMapShopItemStatsDisplay);
 }
 
 extern void func_8006D7B0_6E3B0(void *, s16, s16, s32, s32, s32, s32, s32, s32, s32);
 
-void func_80030764_31364(ItemStatsDisplay *arg0) {
+void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
     GameState *state;
     s16 progressBarY;
     s32 currentItem;
@@ -1056,7 +1056,7 @@ void func_80030764_31364(ItemStatsDisplay *arg0) {
     }
 }
 
-void func_800308C4_314C4(ItemStatsDisplay *arg0) {
+void cleanupStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
     arg0->progressBarAsset = freeNodeMemory(arg0->progressBarAsset);
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }

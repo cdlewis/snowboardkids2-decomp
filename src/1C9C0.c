@@ -83,7 +83,7 @@ void unlockScreenScheduleDisplayTasks(void) {
 
     allocation->unk5C5 = 0x14;
     scheduleTask(initStoryMapShopItemPriceDisplay, 1, 0, 0x5A);
-    scheduleTask(func_80030694_31294, 1, 0, 0x5A);
+    scheduleTask(initStoryMapShopItemStatsDisplay, 1, 0, 0x5A);
     scheduleTask(func_80030A00_31600, 0, 0, 0x5A);
 
     if (allocation->unlockCount >= 2) {

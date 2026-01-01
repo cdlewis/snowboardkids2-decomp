@@ -2199,3 +2199,7 @@ cleanupStoryMapShopGoldDisplay = 0x80030480; // rom:0x31080
 initStoryMapShopItemPriceDisplay = 0x800304B8; // rom:0x310B8
 updateStoryMapShopItemPriceDisplay = 0x80030540; // rom:0x31140
 cleanupStoryMapShopItemPriceDisplay = 0x80030668; // rom:0x31268
+
+initStoryMapShopItemStatsDisplay = 0x80030694; // rom:0x31294
+updateStoryMapShopItemStatsDisplay = 0x80030764; // rom:0x31364
+cleanupStoryMapShopItemStatsDisplay = 0x800308C4; // rom:0x314C4
