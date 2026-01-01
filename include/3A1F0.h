@@ -33,7 +33,7 @@ void *func_8003B510_3C110(void);
 
 void func_8003AF6C_3BB6C(void);
 
-void func_8003AC38_3B838(void);
+void motorUpdate(void);
 
 void startControllerRead(void);
 

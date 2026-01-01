@@ -77,12 +77,12 @@ void mainThreadEntrypoint(void *arg) {
             D_8009ADE0_9B9E0++;
             cleanupUnusedNodes();
             runTaskSchedulers();
-            func_8003AC38_3B838();
+            motorUpdate();
             func_8006E054_6EC54(messageData);
         } else {
             gControllerPollingEnabled = 1;
             func_8003AF6C_3BB6C();
-            func_8003AC38_3B838();
+            motorUpdate();
         }
     }
 }

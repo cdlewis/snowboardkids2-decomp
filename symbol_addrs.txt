@@ -1,3 +1,5 @@
+motorUpdate = 0x8003AC38; // rom:0x3B838
+motorProcessState = 0x8003AC58; // rom:0x3B858
 initMenuCameraNode = 0x80027CA0; // rom:0x288A0
 initStoryMapRandomEvent = 0x80028480; // rom:0x29080
 nullRandomEventCallback = 0x800285EC; // rom:0x291EC
@@ -509,7 +511,7 @@ cross2d = 0x800609E8;
 isPlayerInRangeAndPull = 0x8005C60C;
 isObjectCulled = 0x80070140;
 D_8008F810_90410 = 0x8008F810; // size:0x60
-D_800AB078_A23E8 = 0x800AB078; // size:0x24
+gMotorState = 0x800AB078; // size:0x24
 gCutsceneState = 0x8008BF90; // size:0x10
 setModelCameraTransform = 0x8006F994; // rom:0x70594
 setModelRenderMode = 0x80000450; // rom:0x1050
