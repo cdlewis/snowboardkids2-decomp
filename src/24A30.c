@@ -137,17 +137,6 @@ typedef struct {
 } CharSelectIconsState;
 
 typedef struct {
-    u8 pad0[0x34];
-    u8 unk34;
-    u8 unk35;
-    u8 unk36;
-    u8 pad37;
-    u8 unk38;
-    u8 unk39;
-    u8 unk3A;
-} func_80027BC8_arg;
-
-typedef struct {
     u8 pad0[0x3C];
     Transform3D rotationMatrix;
     Transform3D positionMatrix;
@@ -289,7 +278,7 @@ void updateCharSelectPreviewModel(CharSelectPreviewModel *);
 void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
 void initCharSelectSlidePosition(CharSelectPreviewModel *);
 void cleanupCharSelectPreviewAssets(CharSelectPreviewModel *);
-void func_80027BC8_287C8(func_80027BC8_arg *, u8);
+void updateCharSelectPreviewLighting(CharSelectPreviewModel *, u8);
 void animateCharSelectP2NameReveal(P2NameAnimationState *);
 void animateCharSelectP2NameHide(P2NameHideState *);
 void func_800269C8_275C8(void *);
@@ -401,7 +390,7 @@ void updateCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
 
     if (prevSelState != newSelState) {
         arg0->selectionState = newSelState;
-        func_80027BC8_287C8((func_80027BC8_arg *)arg0, arg0->playerIndex);
+        updateCharSelectPreviewLighting(arg0, arg0->playerIndex);
     }
 
     charIndex = state->unk18A8[arg0->playerIndex];
@@ -1852,7 +1841,7 @@ void cleanupCharSelectScaledSprite(ScaledSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80027BC8_287C8(func_80027BC8_arg *arg0, u8 arg1) {
+void updateCharSelectPreviewLighting(CharSelectPreviewModel *arg0, u8 arg1) {
     u8 *allocation;
     u8 byte;
     u8 val;
@@ -1863,25 +1852,25 @@ void func_80027BC8_287C8(func_80027BC8_arg *arg0, u8 arg1) {
 
     if (byte == 1) {
         val = 0x50;
-        arg0->unk34 = val;
-        arg0->unk35 = val;
-        arg0->unk36 = val;
+        arg0->lightR = val;
+        arg0->lightG = val;
+        arg0->lightB = val;
     } else if (byte == 0) {
         val = 0xFF;
-        arg0->unk34 = val;
-        arg0->unk35 = val;
-        arg0->unk36 = val;
+        arg0->lightR = val;
+        arg0->lightG = val;
+        arg0->lightB = val;
         val = 0x80;
     } else {
         val = 0xFF;
-        arg0->unk34 = val;
-        arg0->unk35 = val;
-        arg0->unk36 = val;
+        arg0->lightR = val;
+        arg0->lightG = val;
+        arg0->lightB = val;
     }
 
-    arg0->unk38 = val;
-    arg0->unk39 = val;
-    arg0->unk3A = val;
+    arg0->ambientR = val;
+    arg0->ambientG = val;
+    arg0->ambientB = val;
 }
 
 u8 func_80027C44_28844(u8 arg0) {
