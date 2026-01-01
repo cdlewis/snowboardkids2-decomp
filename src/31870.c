@@ -348,8 +348,8 @@ void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0);
 void func_80032EA4_33AA4(void *);
 void func_80032F64_33B64(func_80032244_32E44_arg *);
 void func_80032DBC_339BC(func_80032F90_33B90_arg *arg0);
-void func_800319C8_325C8(func_800319C8_325C8_arg *arg0);
-void func_80031944_32544(func_80031944_32544_arg *arg0);
+void freeBoardShopCharacterTransitionAssets(func_800319C8_325C8_arg *arg0);
+void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0);
 void func_80031CE8_328E8(void *arg0);
 void cleanupBoardShopSnowParticles(SnowParticleState *arg0);
 void waitBoardShopSnowParticles(SnowParticleState *arg0);
@@ -698,73 +698,73 @@ void freeBoardShopCharacterPreviewAssets(BoardShopCharacterPreviewState *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-void func_80031818_32418(BoardShopCharacterPreviewState *arg0) {
+void initBoardShopCharacterTransition(BoardShopCharacterPreviewState *arg0) {
     func_80032DE8_339E8_asset *state;
-    Transform3D matrixB;
-    Transform3D matrixA;
-    u8 temp_v0;
-    u8 temp_s1;
-    Transform3D *pMatrixB;
-    Transform3D *pMatrixA;
+    Transform3D rotationYX;
+    Transform3D rotationZ;
+    u8 characterIndex;
+    u8 paletteIndex;
+    Transform3D *pRotationYX;
+    Transform3D *pRotationZ;
 
     state = getCurrentAllocation();
 
     memcpy(&arg0->unk3C, &identityMatrix, sizeof(Transform3D));
 
-    pMatrixA = &matrixA;
-    memcpy(pMatrixA, &arg0->unk3C, sizeof(Transform3D));
+    pRotationZ = &rotationZ;
+    memcpy(pRotationZ, &arg0->unk3C, sizeof(Transform3D));
 
-    pMatrixB = &matrixB;
-    memcpy(pMatrixB, pMatrixA, sizeof(Transform3D));
+    pRotationYX = &rotationYX;
+    memcpy(pRotationYX, pRotationZ, sizeof(Transform3D));
 
-    createRotationMatrixYX(pMatrixB, 0x1000, 0x800);
-    createZRotationMatrix(pMatrixA, 0x1F00);
-    func_8006B084_6BC84(pMatrixB, pMatrixA, &arg0->unk3C);
+    createRotationMatrixYX(pRotationYX, 0x1000, 0x800);
+    createZRotationMatrix(pRotationZ, 0x1F00);
+    func_8006B084_6BC84(pRotationYX, pRotationZ, &arg0->unk3C);
 
     arg0->unk58 = 0xFFF80000;
     memcpy(arg0, &arg0->unk3C, 0x20U);
 
-    temp_v0 = state->unk79F;
-    temp_s1 = EepromSaveData->character_or_settings[temp_v0];
+    characterIndex = state->unk79F;
+    paletteIndex = EepromSaveData->character_or_settings[characterIndex];
 
-    arg0->unk20 = loadAssetByIndex_95728(temp_v0);
-    arg0->unk24 = loadAssetByIndex_95500(temp_v0);
-    arg0->unk28 = loadAssetByIndex_95590(temp_v0);
-    arg0->unk2C = loadAssetByIndex_95668(temp_s1 - 1);
+    arg0->unk20 = loadAssetByIndex_95728(characterIndex);
+    arg0->unk24 = loadAssetByIndex_95500(characterIndex);
+    arg0->unk28 = loadAssetByIndex_95590(characterIndex);
+    arg0->unk2C = loadAssetByIndex_95668(paletteIndex - 1);
 
-    setCleanupCallback(&func_800319C8_325C8);
-    setCallbackWithContinue(&func_80031944_32544);
+    setCleanupCallback(&freeBoardShopCharacterTransitionAssets);
+    setCallbackWithContinue(&animateBoardShopCharacterTransition);
 }
 
-void func_80031944_32544(func_80031944_32544_arg *arg0) {
+void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0) {
     s32 pad[8];
     GameState *state;
-    s32 offset;
-    s32 compareValue;
-    s32 temp;
+    s32 slideSpeed;
+    s32 targetPosition;
+    s32 newPosition;
 
     state = getCurrentAllocation();
 
-    offset = 0x100000;
-    compareValue = 0x600000;
+    slideSpeed = 0x100000;
+    targetPosition = 0x600000;
 
     if (state->unk79C == 1) {
-        offset = 0xFFF00000;
-        compareValue = 0xFFA00000;
+        slideSpeed = 0xFFF00000;
+        targetPosition = 0xFFA00000;
     }
 
-    temp = arg0->unk50 + offset;
-    arg0->unk50 = temp;
+    newPosition = arg0->unk50 + slideSpeed;
+    arg0->unk50 = newPosition;
     memcpy(&arg0->unk0, &arg0->unk3C, 0x20);
 
     enqueueDisplayListObject(0, &arg0->unk0);
 
-    if (arg0->unk50 == compareValue) {
+    if (arg0->unk50 == targetPosition) {
         func_80069CF8_6A8F8();
     }
 }
 
-void func_800319C8_325C8(func_800319C8_325C8_arg *arg0) {
+void freeBoardShopCharacterTransitionAssets(func_800319C8_325C8_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk2C = freeNodeMemory(arg0->unk2C);

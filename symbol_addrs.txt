@@ -2231,3 +2231,6 @@ freeBoardShopPurchaseAssets = 0x8003165C; // rom:0x3225C
 loadBoardShopPurchaseAssets = 0x800316AC; // rom:0x322AC
 animateBoardShopCharacterSlideOut = 0x80031758; // rom:0x32358
 freeBoardShopCharacterPreviewAssets = 0x800317D4; // rom:0x323D4
+initBoardShopCharacterTransition = 0x80031818; // rom:0x32418
+animateBoardShopCharacterTransition = 0x80031944; // rom:0x32544
+freeBoardShopCharacterTransitionAssets = 0x800319C8; // rom:0x325C8
