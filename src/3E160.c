@@ -56,7 +56,7 @@ extern s32 D_800904E0_910E0[];
 
 void func_80040420_41020(void);
 void func_800407B4_413B4(void);
-void func_8003EDF8_3F9F8(void);
+void parseRaceAssetData(void);
 void func_8003EEEC_3FAEC(void);
 void func_8003EFDC_3FBDC(void);
 void func_8003F0AC_3FCAC(void);
@@ -791,16 +791,16 @@ void loadRaceGameData(void) {
     gameState = (GameState *)getCurrentAllocation();
     gameState->gameData.dataStart = func_80055D34_56934(gameState->memoryPoolId);
     gameState->unk28 = loadCompressedData(&_3FF010_ROM_START, &_3FF010_ROM_END, 0x16E0);
-    func_8006983C_6A43C(&func_8003EDF8_3F9F8);
+    func_8006983C_6A43C(&parseRaceAssetData);
 }
 
-void func_8003EDF8_3F9F8(void) {
+void parseRaceAssetData(void) {
     GameState *gs = (GameState *)getCurrentAllocation();
 
     parseGameDataLayout(&gs->gameData);
 
-    gs->unk44 = (GameStateUnk44 *)((u8 *)gs->unk28 + gs->unk28->unk0);
-    gs->unk48 = (u8 *)gs->unk28 + gs->unk28->unk4;
+    gs->unk44 = (GameStateUnk44 *)((u8 *)gs->unk28 + gs->unk28->assetTableOffset);
+    gs->unk48 = (u8 *)gs->unk28 + gs->unk28->transformDataOffset;
 
     func_8006983C_6A43C(&func_8003EE50_3FA50);
 }

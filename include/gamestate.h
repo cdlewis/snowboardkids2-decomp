@@ -35,9 +35,9 @@ typedef struct {
 } GameStateUnk44;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-} GameStateUnk28;
+    s32 assetTableOffset;
+    s32 transformDataOffset;
+} RaceAssetHeader;
 
 typedef struct {
     void *unk0;
@@ -234,7 +234,7 @@ typedef struct {
     void *unk1C;
     void *unk20;
     u8 PAD_2[0x4];
-    GameStateUnk28 *unk28;
+    RaceAssetHeader *unk28;
     u8 PAD_3[0x4];
     /* 0x30 */ GameDataLayout gameData;
     GameStateUnk44 *unk44;
