@@ -155,7 +155,7 @@ void func_80030378_30F78(func_800302AC_30EAC_arg *);
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
 void func_80030540_31140(func_80030540_31140_arg *arg0);
 void updateStoryMapShopFairyInitial(StoryMapShopFairyState *);
-void func_8002F024_2FC24(StoryMapShopFairyState *);
+void updateStoryMapShopFairy(StoryMapShopFairyState *);
 void destroyStoryMapShopFairy(StoryMapShopFairyState *);
 void func_8002F290_2FE90(func_8002F658_30258_arg *);
 void func_8002F36C_2FF6C(func_8002F658_30258_arg *);
@@ -257,47 +257,47 @@ void updateStoryMapShopFairyInitial(StoryMapShopFairyState *arg0) {
     applyTransformToModel(arg0->model, &arg0->transform);
     setModelAnimation(arg0->model, arg0->animationFrame);
     updateModelGeometry(arg0->model);
-    setCallback(&func_8002F024_2FC24);
+    setCallback(&updateStoryMapShopFairy);
 }
 
 typedef struct {
     u8 padding[0x5D6];
-    u8 unk5D6;
-} func_8002F024_2FC24_state;
+    u8 pendingFairyAnimation;
+} ShopFairyGameState;
 
-void func_8002F024_2FC24(StoryMapShopFairyState *arg0) {
-    func_8002F024_2FC24_state *state;
+void updateStoryMapShopFairy(StoryMapShopFairyState *fairy) {
+    ShopFairyGameState *state;
     u8 animIndex;
     u16 frameCounter;
     s32 idx;
     volatile u8 pad[8];
 
-    state = (func_8002F024_2FC24_state *)getCurrentAllocation();
-    applyTransformToModel(arg0->model, &arg0->transform);
+    state = (ShopFairyGameState *)getCurrentAllocation();
+    applyTransformToModel(fairy->model, &fairy->transform);
     do {
-        if (clearModelRotation(arg0->model) != 0) {
-            animIndex = arg0->animationType;
+        if (clearModelRotation(fairy->model) != 0) {
+            animIndex = fairy->animationType;
             idx = animIndex * 2;
             if (animIndex != 0) {
-                frameCounter = arg0->animationFrame + 1;
-                arg0->animationFrame = frameCounter;
+                frameCounter = fairy->animationFrame + 1;
+                fairy->animationFrame = frameCounter;
                 if (frameCounter == (u16)(D_8008F0B4_8FCB4[idx] + D_8008F0B6_8FCB6[idx])) {
-                    arg0->animationType = 0;
-                    arg0->animationFrame = 4;
+                    fairy->animationType = 0;
+                    fairy->animationFrame = 4;
                 }
-                setModelAnimation(arg0->model, arg0->animationFrame);
+                setModelAnimation(fairy->model, fairy->animationFrame);
             }
         }
     } while (0);
-    updateModelGeometry(arg0->model);
-    animIndex = state->unk5D6;
+    updateModelGeometry(fairy->model);
+    animIndex = state->pendingFairyAnimation;
     if (animIndex != 0) {
         u16 start;
-        arg0->animationType = animIndex;
-        start = D_8008F0B4_8FCB4[state->unk5D6 * 2];
-        arg0->animationFrame = start;
-        setModelAnimation(arg0->model, (s16)start);
-        state->unk5D6 = 0;
+        fairy->animationType = animIndex;
+        start = D_8008F0B4_8FCB4[state->pendingFairyAnimation * 2];
+        fairy->animationFrame = start;
+        setModelAnimation(fairy->model, (s16)start);
+        state->pendingFairyAnimation = 0;
     }
 }
 
