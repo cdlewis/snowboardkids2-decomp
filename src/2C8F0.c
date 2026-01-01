@@ -15,7 +15,7 @@ extern void *D_8008ECF0_8F8F0;
 extern void *D_8008ED00_8F900;
 
 typedef struct {
-    /* 0x00 */ SceneModel *unk0;
+    /* 0x00 */ SceneModel *model;
     /* 0x04 */ u8 pad4[0x3C];
     /* 0x40 */ s32 unk40;
     /* 0x44 */ s32 unk44;
@@ -28,7 +28,7 @@ typedef struct {
     /* 0x00 */ Elem2C8F0 elems[2];
     /* 0xC8 */ u8 padC8[0xC];
     /* 0xD4 */ u8 unkD4;
-    /* 0xD5 */ u8 unkD5;
+    /* 0xD5 */ u8 modelCount;
 } Struct2C8F0;
 
 INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BCF0_2C8F0);
@@ -44,11 +44,11 @@ void awaitStoryMapRareEventReady(Struct2C8F0 *arg0) {
 void nullStoryMapRareEventCallback(void) {
 }
 
-void func_8002BE94_2CA94(Struct2C8F0 *arg0) {
+void destroyStoryMapRareEventModels(Struct2C8F0 *arg0) {
     s32 i;
 
-    for (i = 0; i < arg0->unkD5; i++) {
-        arg0->elems[i].unk0 = destroySceneModel(arg0->elems[i].unk0);
+    for (i = 0; i < arg0->modelCount; i++) {
+        arg0->elems[i].model = destroySceneModel(arg0->elems[i].model);
     }
 }
 
@@ -111,7 +111,7 @@ void func_8002C798_2D398(Struct2C8F0 *arg0, s32 arg1) {
             elem->unk4C = &D_8008ED00_8F900;
             arg0->elems[0].unk44 = 0x300000;
             spawnSpriteEffectEx(
-                (s32)elem->unk0,
+                (s32)elem->model,
                 0,
                 0x1F,
                 D_8008EBE0_8F7E0[arg0->unkD4 * 2 + arg1] - 4,
