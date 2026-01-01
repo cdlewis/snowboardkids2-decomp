@@ -55,4 +55,4 @@ void updateStoryMapNpcStretch(Func297D8Arg *);
 void updateStoryMapNpcTalk(Func297D8Arg *);
 void func_8002A0DC_2ACDC(Func297D8Arg *);
 void updateStoryMapNpcIdle(Func297D8Arg *);
-void func_8002A044_2AC44(Func297D8Arg *);
+void playStoryMapNpcIdleSound(Func297D8Arg *);

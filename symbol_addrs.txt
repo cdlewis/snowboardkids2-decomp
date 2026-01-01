@@ -33,6 +33,7 @@ initStoryMapNpcTalk = 0x80029C40; // rom:0x2A840
 updateStoryMapNpcTalk = 0x80029C90; // rom:0x2A890
 initStoryMapNpcStretch = 0x80029E58; // rom:0x2AA58
 updateStoryMapNpcStretch = 0x80029EA8; // rom:0x2AAA8
+playStoryMapNpcIdleSound = 0x8002A044; // rom:0x2AC44
 gMenuLightColor = 0x8008DEF0; // rom:0x8EAF0
 gMenuAmbientColor = 0x8008DEF8; // rom:0x8EAF8
 storyMapCameraTask = 0x80017350; // rom:0x17F50

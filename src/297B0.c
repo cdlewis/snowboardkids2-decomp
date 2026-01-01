@@ -533,7 +533,7 @@ void updateStoryMapNpcIdle(Func297D8Arg *arg0) {
     if (arg0->unk5A != 0) {
         arg0->unk5A--;
         if (arg0->unk5A == 1) {
-            func_8002A044_2AC44(arg0);
+            playStoryMapNpcIdleSound(arg0);
         }
     }
 
@@ -769,7 +769,7 @@ void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
 extern u16 D_8008E568_8F168[];
 extern u16 D_8008E57C_8F17C[];
 
-void func_8002A044_2AC44(Func297D8Arg *arg0) {
+void playStoryMapNpcIdleSound(Func297D8Arg *arg0) {
     arg0->unk5A = 0;
 
     switch (arg0->unk5D) {
