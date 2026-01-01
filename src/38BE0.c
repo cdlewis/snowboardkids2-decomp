@@ -19,8 +19,8 @@ u8 isBoardUnlocked(u8 boardIndex) {
     return EepromSaveData->setting_50;
 }
 
-u8 func_80038058_38C58(u8 arg0) {
-    return EepromSaveData->character_or_settings[arg0];
+u8 getCharacterPaletteId(u8 characterIndex) {
+    return EepromSaveData->character_or_settings[characterIndex];
 }
 
 s32 func_80038070_38C70(void) {

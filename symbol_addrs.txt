@@ -2343,3 +2343,4 @@ checkStoryMapLocationSelection = 0x80036C20; // rom:0x37820
 setupStoryMapCharacterDialogue = 0x800371CC; // rom:0x37DCC
 isSaveSlotUnlocked = 0x80037FE0; // rom:0x38BE0
 isBoardUnlocked = 0x80038000; // rom:0x38C00
+getCharacterPaletteId = 0x80038058; // rom:0x38C58
