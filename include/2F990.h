@@ -44,23 +44,23 @@ typedef struct {
 } func_80030A00_31600_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
     s8 unkC;
     u8 unkD;
     s8 unkE;
     s8 unkF;
-} func_8002FA9C_3069C_item;
+} ScrollArrowSprite;
 
 typedef struct {
-    func_8002FA9C_3069C_item items[2];
-    s8 unk20;
-} func_8002FA9C_3069C_arg;
+    ScrollArrowSprite arrows[2];
+    s8 animationCounter;
+} UnlockScreenScrollArrowsState;
 
-void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0);
+void initUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arg0);
 void func_800304B8_310B8(func_800308FC_314FC_arg *arg0);
 void func_80030694_31294(ItemStatsDisplay *arg0);
 void func_800308C4_314C4(ItemStatsDisplay *arg0);

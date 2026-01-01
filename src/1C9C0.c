@@ -87,7 +87,7 @@ void unlockScreenScheduleDisplayTasks(void) {
     scheduleTask(func_80030A00_31600, 0, 0, 0x5A);
 
     if (allocation->unlockCount >= 2) {
-        scheduleTask(func_8002FA9C_3069C, 1, 0, 0x5A);
+        scheduleTask(initUnlockScreenScrollArrows, 1, 0, 0x5A);
     }
 
     setGameStateHandler(func_8001C2FC_1CEFC);

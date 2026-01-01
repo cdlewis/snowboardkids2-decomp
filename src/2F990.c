@@ -166,11 +166,11 @@ void destroySlideInStoryMapShopItemCard(StoryMapShopItemCardState *);
 void initStoryMapShopBackgroundRenderState(StoryMapShopBackgroundState *);
 void enqueueStoryMapShopBackgroundRender(void *);
 void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *);
-void func_8002FB40_30740(func_8002FA9C_3069C_arg *);
+void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *);
 void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0);
 void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *);
 void func_8002FF28_30B28(func_8002FF28_30B28_arg *);
-void func_8003006C_30C6C(func_8002FA9C_3069C_item *);
+void func_8003006C_30C6C(ScrollArrowSprite *);
 void func_80030194_30D94(func_8002FF28_30B28_arg *);
 void func_80030238_30E38(void *arg0);
 void func_80030280_30E80(func_8002FF28_30B28_arg *arg0);
@@ -590,75 +590,75 @@ void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *state) {
     state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
 }
 
-void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0) {
+void initUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *state) {
     s32 i;
     void *asset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
 
     setCleanupCallback(&func_8002FCA8_308A8);
 
     for (i = 0; i < 2; i++) {
-        arg0->items[i].unk0 = -0x40 + i * 0x60;
-        arg0->items[i].unk2 = -0x18;
-        arg0->items[i].unk8 = i;
-        arg0->items[i].unk4 = asset;
-        arg0->items[i].unkA = 0xFF;
-        arg0->items[i].unkD = 0;
-        arg0->items[i].unkC = 0;
+        state->arrows[i].x = -0x40 + i * 0x60;
+        state->arrows[i].y = -0x18;
+        state->arrows[i].spriteIndex = i;
+        state->arrows[i].asset = asset;
+        state->arrows[i].alpha = 0xFF;
+        state->arrows[i].unkD = 0;
+        state->arrows[i].unkC = 0;
     }
 
-    arg0->unk20 = 0;
+    state->animationCounter = 0;
 
-    setCallback(&func_8002FB40_30740);
+    setCallback(&updateUnlockScreenScrollArrows);
 }
 
-void func_8002FB40_30740(func_8002FA9C_3069C_arg *arg0) {
+void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arrowState) {
     GameState *state = getCurrentAllocation();
     s32 i;
 
     if (state->unk5C5 > 0 && state->unk5C5 < 4) {
         if (state->unk5C5 == 1) {
-            arg0->unk20++;
+            arrowState->animationCounter++;
             if (state->unk5C9 >= 3) {
-                if ((u8)(arg0->unk20) < 0x11) {
-                    arg0->items[0].unkA -= 8;
-                    arg0->items[1].unkA -= 8;
+                if ((u8)(arrowState->animationCounter) < 0x11) {
+                    arrowState->arrows[0].alpha -= 8;
+                    arrowState->arrows[1].alpha -= 8;
                 } else {
-                    arg0->items[0].unkA += 8;
-                    arg0->items[1].unkA += 8;
+                    arrowState->arrows[0].alpha += 8;
+                    arrowState->arrows[1].alpha += 8;
                 }
             } else if (state->unk5C9 == 2) {
-                if ((u8)(arg0->unk20) < 0x11) {
+                if ((u8)(arrowState->animationCounter) < 0x11) {
                     if (state->unk5C8 == 1) {
-                        arg0->items[1].unkA = 0xFF;
-                        arg0->items[0].unkA -= 8;
+                        arrowState->arrows[1].alpha = 0xFF;
+                        arrowState->arrows[0].alpha -= 8;
                     } else {
-                        arg0->items[0].unkA = 0xFF;
-                        arg0->items[1].unkA -= 8;
+                        arrowState->arrows[0].alpha = 0xFF;
+                        arrowState->arrows[1].alpha -= 8;
                     }
                 } else {
                     if (state->unk5C8 == 1) {
-                        arg0->items[1].unkA = 0xFF;
-                        arg0->items[0].unkA += 8;
+                        arrowState->arrows[1].alpha = 0xFF;
+                        arrowState->arrows[0].alpha += 8;
                     } else {
-                        arg0->items[0].unkA = 0xFF;
-                        arg0->items[1].unkA += 8;
+                        arrowState->arrows[0].alpha = 0xFF;
+                        arrowState->arrows[1].alpha += 8;
                     }
                 }
             } else {
-                arg0->unk20 = 0;
-                arg0->items[0].unkA = 0xFF;
-                arg0->items[1].unkA = 0xFF;
+                arrowState->animationCounter = 0;
+                arrowState->arrows[0].alpha = 0xFF;
+                arrowState->arrows[1].alpha = 0xFF;
             }
         } else {
-            arg0->unk20 = 0;
-            arg0->items[0].unkA = 0xFF;
-            arg0->items[1].unkA = 0xFF;
+            arrowState->animationCounter = 0;
+            arrowState->arrows[0].alpha = 0xFF;
+            arrowState->arrows[1].alpha = 0xFF;
         }
 
-        arg0->unk20 &= 0x1F;
+        arrowState->animationCounter &= 0x1F;
 
         for (i = 0; i < 2; i++) {
-            debugEnqueueCallback(8, 0, &func_80012004_12C04, &arg0->items[i]);
+            debugEnqueueCallback(8, 0, &func_80012004_12C04, &arrowState->arrows[i]);
         }
     }
 }
@@ -737,7 +737,7 @@ void func_8002FF28_30B28(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_8002FF54_30B54(func_8002FA9C_3069C_item *arg0) {
+void func_8002FF54_30B54(ScrollArrowSprite *arg0) {
     GameState *state;
     GameState *temp_s0;
     void *dmaResult;
@@ -747,29 +747,29 @@ void func_8002FF54_30B54(func_8002FA9C_3069C_item *arg0) {
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(func_80030194_30D94);
 
-    arg0->unk2 = -0x18;
+    arg0->y = -0x18;
 
     temp_s0 = (GameState *)((u8 *)state + state->unk5C8);
     itemValue = temp_s0->unk5CA[0];
 
     if (itemValue < 9) {
-        arg0->unk0 = 0x12;
-        arg0->unk8 = ((itemValue % 3) & 0xFF) + 0x24;
+        arg0->x = 0x12;
+        arg0->spriteIndex = ((itemValue % 3) & 0xFF) + 0x24;
     } else {
         s16 tableVal = D_8008F0B2_8FCB2[itemValue];
-        arg0->unk8 = 0x35;
-        arg0->unk0 = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
+        arg0->spriteIndex = 0x35;
+        arg0->x = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
     }
 
-    arg0->unkA = 0xFF;
+    arg0->alpha = 0xFF;
     arg0->unkC = 0;
     arg0->unkD = 0;
-    arg0->unk4 = dmaResult;
+    arg0->asset = dmaResult;
 
     setCallback(func_8003006C_30C6C);
 }
 
-void func_8003006C_30C6C(func_8002FA9C_3069C_item *arg0) {
+void func_8003006C_30C6C(ScrollArrowSprite *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
     u8 itemValue;
 
@@ -781,12 +781,12 @@ void func_8003006C_30C6C(func_8002FA9C_3069C_item *arg0) {
 
     if (state->unk5C5 != 0 && state->unk5C5 != 2) {
         if (itemValue < 9) {
-            arg0->unk0 = 0x12;
-            arg0->unk8 = ((itemValue & 0x1F) % 3) + 0x24;
+            arg0->x = 0x12;
+            arg0->spriteIndex = ((itemValue & 0x1F) % 3) + 0x24;
         } else {
             s16 tableVal = D_8008F0B2_8FCB2[itemValue];
-            arg0->unk8 = 0x35;
-            arg0->unk0 = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
+            arg0->spriteIndex = 0x35;
+            arg0->x = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
         }
 
         if (state->unk5C5 == 3) {
