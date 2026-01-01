@@ -162,7 +162,7 @@ void transitionStoryMapShopItemCard(StoryMapShopItemCardState *);
 void reloadStoryMapShopItemCard(SlidingItemCardState *);
 void slideStoryMapShopItemCard(SlidingItemCardState *);
 void awaitStoryMapShopItemCardIdle(DisplayListObject *);
-void func_8002F614_30214(StoryMapShopItemCardState *);
+void destroyStoryMapShopItemCard(StoryMapShopItemCardState *);
 void func_8002F72C_3032C(StoryMapShopItemCardState *);
 void func_8002F860_30460(DisplayListObject *);
 void func_8002F88C_3048C(StoryMapShopItemCardState *arg0);
@@ -343,7 +343,7 @@ void initStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     card->displayList.unk2C = loadAssetByIndex_95668(itemData / 3);
     card->updateCounter = 0;
 
-    setCleanupCallback(func_8002F614_30214);
+    setCleanupCallback(destroyStoryMapShopItemCard);
     setCallback(updateStoryMapShopItemCard);
 }
 
@@ -472,7 +472,7 @@ void awaitStoryMapShopItemCardIdle(DisplayListObject *displayList) {
     enqueueDisplayListObject(0, displayList);
 }
 
-void func_8002F614_30214(StoryMapShopItemCardState *card) {
+void destroyStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     card->displayList.unk24 = freeNodeMemory(card->displayList.unk24);
     card->displayList.unk28 = freeNodeMemory(card->displayList.unk28);
     card->displayList.unk2C = freeNodeMemory(card->displayList.unk2C);
