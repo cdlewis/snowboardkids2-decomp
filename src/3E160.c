@@ -57,7 +57,7 @@ extern s32 D_800904E0_910E0[];
 void func_80040420_41020(void);
 void func_800407B4_413B4(void);
 void parseRaceAssetData(void);
-void func_8003EEEC_3FAEC(void);
+void scheduleRaceTasks(void);
 void func_8003EFDC_3FBDC(void);
 void func_8003F0AC_3FCAC(void);
 void func_8003FB90_40790(void);
@@ -826,28 +826,28 @@ void loadPlayerAssets(void) {
     gs->unk1C = loadAsset_B7E70();
     gs->unk20 = loadAsset_216290();
 
-    func_8006983C_6A43C(&func_8003EEEC_3FAEC);
+    func_8006983C_6A43C(&scheduleRaceTasks);
 }
 
-void func_8003EEEC_3FAEC(void) {
-    GameState *temp_v0;
+void scheduleRaceTasks(void) {
+    GameState *gameState;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v0->unk60 = 0;
+    gameState = (GameState *)getCurrentAllocation();
+    gameState->unk60 = 0;
 
     scheduleTask(&D_800B0334, 0, 0, 1);
     scheduleTask(&D_800B7B7C, 0, 0, 0x64);
     scheduleTask(&func_8004E6F8_4F2F8, 0, 0, 0xC8);
 
-    func_800497FC_4A3FC(temp_v0->memoryPoolId);
-    func_80049CA8_4A8A8(temp_v0->memoryPoolId, temp_v0->unk5F);
+    func_800497FC_4A3FC(gameState->memoryPoolId);
+    func_80049CA8_4A8A8(gameState->memoryPoolId, gameState->unk5F);
     func_8005011C_50D1C();
 
-    if (temp_v0->unk7A == 9) {
+    if (gameState->unk7A == 9) {
         scheduleTask(&func_800BB2B0, 0, 0, 0xC8);
     }
 
-    if (temp_v0->unk7A >= 0xA) {
+    if (gameState->unk7A >= 0xA) {
         func_80040F6C_41B6C(0, 0x28, 0, 0, 0xC, 6);
     }
 
