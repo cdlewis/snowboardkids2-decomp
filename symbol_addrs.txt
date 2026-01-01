@@ -2211,3 +2211,4 @@ cleanupStoryMapShopSoldOutLabel = 0x800309D4; // rom:0x315D4
 initUnlockScreenItemIcons = 0x80030A00; // rom:0x31600
 drawUnlockScreenItemIcons = 0x80030AEC; // rom:0x316EC
 cleanupUnlockScreenItemIcons = 0x80030B70; // rom:0x31770
+getLockedShopItemIndices = 0x80030BA8; // rom:0x317A8

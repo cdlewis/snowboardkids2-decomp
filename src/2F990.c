@@ -1134,42 +1134,42 @@ void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsCleanupArg *arg0) {
     arg0->unk38 = freeNodeMemory(arg0->unk38);
 }
 
+// Cast to u8* to access EEPROM save data as raw bytes for offset-based access
 extern u8 *EepromSaveData;
 
-s32 func_80030BA8_317A8(u8 *buffer) {
-    s32 temp_t0;
+s32 getLockedShopItemIndices(u8 *buffer) {
+    s32 count;
     s32 i;
     s32 j;
 
-    // Clear 12 bytes
-    temp_t0 = 0;
+    count = 0;
     for (i = 11; i >= 0; i--) {
         buffer[i] = 0;
     }
 
-    // Check 3x3 grid
+    // Check character_or_settings 3x3 grid for first locked item per row
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
             if (EepromSaveData[i * 3 + (u64)j + 0x30] == 0) {
-                buffer[temp_t0] = i * 3 + j;
-                temp_t0++;
+                buffer[count] = i * 3 + j;
+                count++;
                 break;
             }
         }
     }
 
-    // Check setting_42 array entries
+    // Check setting_42 referenced items for any that are still locked
     for (i = 0; i < 9; i++) {
-        u8 value = EepromSaveData[(u64)i + 0x42];
-        if (value != 0) {
-            if (EepromSaveData[(u64)value + 0x30] == 0) {
-                buffer[temp_t0] = value;
-                temp_t0++;
+        u8 itemIndex = EepromSaveData[(u64)i + 0x42];
+        if (itemIndex != 0) {
+            if (EepromSaveData[(u64)itemIndex + 0x30] == 0) {
+                buffer[count] = itemIndex;
+                count++;
             }
         }
     }
 
-    return temp_t0 & 0xFF;
+    return count & 0xFF;
 }
 
 INCLUDE_RODATA("asm/nonmatchings/2F990", D_8009E47C_9F07C);
