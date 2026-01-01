@@ -2212,3 +2212,8 @@ initUnlockScreenItemIcons = 0x80030A00; // rom:0x31600
 drawUnlockScreenItemIcons = 0x80030AEC; // rom:0x316EC
 cleanupUnlockScreenItemIcons = 0x80030B70; // rom:0x31770
 getLockedShopItemIndices = 0x80030BA8; // rom:0x317A8
+
+initBoardShopPreviewWipe = 0x80030C70; // rom:0x31870
+waitBoardShopPreviewWipe = 0x80030E54; // rom:0x31A54
+animateBoardShopPreviewWipe = 0x80030EAC; // rom:0x31AAC
+cleanupBoardShopPreviewWipe = 0x80030F6C; // rom:0x31B6C

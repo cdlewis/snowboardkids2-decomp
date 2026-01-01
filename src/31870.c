@@ -355,9 +355,9 @@ void func_800323FC_32FFC(func_80032330_32F30_arg *arg0);
 void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0);
 void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0);
 void func_80032504_33104(func_80032504_33104_arg *arg0);
-void func_80030F6C_31B6C(func_80031510_32110_arg *arg0);
-void func_80030EAC_31AAC(func_80031510_32110_arg *arg0);
-void func_80030E54_31A54(func_80031510_32110_arg *arg0);
+void cleanupBoardShopPreviewWipe(func_80031510_32110_arg *arg0);
+void animateBoardShopPreviewWipe(func_80031510_32110_arg *arg0);
+void waitBoardShopPreviewWipe(func_80031510_32110_arg *arg0);
 void func_80032708_33308(func_800329A8_335A8_arg *arg0);
 
 extern u16 D_8008F16C_8FD6C[];
@@ -370,84 +370,84 @@ extern s32 identityMatrix;
 extern s16 D_8008F17C_8FD7C[];
 extern u16 D_8008F184_8FD84[];
 
-void func_80030C70_31870(func_80031510_32110_arg *arg0) {
-    s32 sp20[8];
-    Transform3D matrixA;
-    Transform3D matrixB;
+void initBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
+    s32 perspectiveParams[8];
+    Transform3D rotationYX;
+    Transform3D rotationZ;
 
-    u8 temp_s0;
-    s32 temp_s0_2;
-    u8 temp_s2;
-    void *temp_s3;
-    func_80032DE8_339E8_asset *asset;
-    Node_70B00 *temp_v0;
-    Transform3D *pMatrixB;
+    u8 charIndex;
+    s32 unused;
+    u8 paletteId;
+    void *transformMatrix;
+    func_80032DE8_339E8_asset *state;
+    Node_70B00 *cameraNode;
+    Transform3D *rotationZPtr;
 
-    pMatrixB = &matrixB;
+    rotationZPtr = &rotationZ;
 
-    asset = getCurrentAllocation();
-    temp_v0 = allocateNodeMemory(0x1D8);
-    arg0->unk0 = temp_v0;
-    initMenuCameraNode(temp_v0, 1, 0xB, 0);
+    state = getCurrentAllocation();
+    cameraNode = allocateNodeMemory(0x1D8);
+    arg0->unk0 = cameraNode;
+    initMenuCameraNode(cameraNode, 1, 0xB, 0);
     arg0->unk60 = -0x34;
     arg0->unk62 = 0x34;
-    asset->unk780 = (u16)arg0->unk60;
-    asset->unk782 = (u16)arg0->unk62;
+    state->unk780 = (u16)arg0->unk60;
+    state->unk782 = (u16)arg0->unk62;
 
     setModelCameraTransform(arg0->unk0, 0, 0, -0x98, arg0->unk60, 0x97, arg0->unk62);
-    func_8006BEDC_6CADC(sp20, 0, 0, 0x580000, 0, 0, 0);
-    func_8006FD3C_7093C(arg0->unk0->id, sp20);
+    func_8006BEDC_6CADC(perspectiveParams, 0, 0, 0x580000, 0, 0, 0);
+    func_8006FD3C_7093C(arg0->unk0->id, perspectiveParams);
 
-    temp_s3 = &arg0->unk40;
-    memcpy(temp_s3, &identityMatrix, 0x20);
-    memcpy(pMatrixB, temp_s3, 0x20);
-    memcpy(&matrixA, pMatrixB, 0x20);
+    transformMatrix = &arg0->unk40;
+    memcpy(transformMatrix, &identityMatrix, 0x20);
+    memcpy(rotationZPtr, transformMatrix, 0x20);
+    memcpy(&rotationYX, rotationZPtr, 0x20);
 
-    createRotationMatrixYX(&matrixA, 0x1000, 0x800);
-    createZRotationMatrix(pMatrixB, 0x1F00);
+    createRotationMatrixYX(&rotationYX, 0x1000, 0x800);
+    createZRotationMatrix(rotationZPtr, 0x1F00);
 
-    func_8006B084_6BC84(&matrixA, pMatrixB, temp_s3);
+    func_8006B084_6BC84(&rotationYX, rotationZPtr, transformMatrix);
 
     arg0->unk5C = 0xFFF80000;
-    temp_s0 = asset->unk7A2 + (asset->unk7A1 * 3);
-    temp_s2 = EepromSaveData->character_or_settings[temp_s0 & 0xFF];
+    charIndex = state->unk7A2 + (state->unk7A1 * 3);
+    paletteId = EepromSaveData->character_or_settings[charIndex & 0xFF];
 
-    memcpy(&arg0->unk4, temp_s3, 0x20);
+    memcpy(&arg0->unk4, transformMatrix, 0x20);
 
-    temp_s0 = temp_s0 & 0xFF;
-    arg0->unk24 = loadAssetByIndex_95728(temp_s0);
-    arg0->unk28 = loadAssetByIndex_95500(temp_s0);
-    arg0->unk2C = loadAssetByIndex_95590(temp_s0);
-    arg0->unk30 = loadAssetByIndex_95668(temp_s2 - 1);
+    charIndex = charIndex & 0xFF;
+    arg0->unk24 = loadAssetByIndex_95728(charIndex);
+    arg0->unk28 = loadAssetByIndex_95500(charIndex);
+    arg0->unk2C = loadAssetByIndex_95590(charIndex);
+    arg0->unk30 = loadAssetByIndex_95668(paletteId - 1);
 
-    setCleanupCallback(&func_80030F6C_31B6C);
+    setCleanupCallback(&cleanupBoardShopPreviewWipe);
     arg0->unk64 = 0xC;
-    setCallback(&func_80030E54_31A54);
+    setCallback(&waitBoardShopPreviewWipe);
 }
 
-void func_80030E54_31A54(func_80031510_32110_arg *arg0) {
-    u8 temp;
+void waitBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
+    u8 delayTimer;
     arg0->unk64--;
-    temp = arg0->unk64;
-    if (temp == 0) {
-        setCallback(&func_80030EAC_31AAC);
+    delayTimer = arg0->unk64;
+    if (delayTimer == 0) {
+        setCallback(&animateBoardShopPreviewWipe);
     }
     func_8006FED8_70AD8(arg0->unk0);
     enqueueDisplayListObject(1, (DisplayListObject *)&arg0->unk4);
 }
 
-void func_80030EAC_31AAC(func_80031510_32110_arg *arg0) {
-    func_80032DE8_339E8_asset *allocation = getCurrentAllocation();
+void animateBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
+    func_80032DE8_339E8_asset *state = getCurrentAllocation();
 
     arg0->unk60++;
     arg0->unk62--;
-    allocation->unk780 = arg0->unk60;
-    allocation->unk782 = arg0->unk62;
+    state->unk780 = arg0->unk60;
+    state->unk782 = arg0->unk62;
 
     setModelCameraTransform(arg0->unk0, 0, 0, -0x98, arg0->unk60, 0x97, arg0->unk62);
 
     if (arg0->unk60 == 0) {
-        allocation->unk77C = 1;
+        state->unk77C = 1;
         unlinkNode(arg0->unk0);
         func_80069CF8_6A8F8();
     } else {
@@ -456,7 +456,7 @@ void func_80030EAC_31AAC(func_80031510_32110_arg *arg0) {
     }
 }
 
-void func_80030F6C_31B6C(func_80031510_32110_arg *arg0) {
+void cleanupBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
     arg0->unk0 = (Node_70B00 *)freeNodeMemory(arg0->unk0);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
