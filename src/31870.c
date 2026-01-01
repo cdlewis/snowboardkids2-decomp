@@ -325,7 +325,7 @@ void animateBoardShopSnowParticles(void);
 void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
 void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void waitBoardShopCharacterPreview(void);
-void func_800313DC_31FDC(func_80031510_32110_arg *arg0);
+void animateBoardShopCharacterSlideIn(func_80031510_32110_arg *arg0);
 void func_80031458_32058(func_80031510_32110_arg *arg0);
 void func_80031510_32110(func_80031510_32110_arg *arg0);
 void func_800315C0_321C0(func_80031510_32110_arg *arg0);
@@ -552,11 +552,11 @@ void waitBoardShopCharacterPreview(void) {
 
     allocation = getCurrentAllocation();
     if (allocation->unk788[19] == 1) {
-        setCallbackWithContinue(func_800313DC_31FDC);
+        setCallbackWithContinue(animateBoardShopCharacterSlideIn);
     }
 }
 
-void func_800313DC_31FDC(func_80031510_32110_arg *arg0) {
+void animateBoardShopCharacterSlideIn(func_80031510_32110_arg *arg0) {
     func_80032DE8_339E8_asset *allocation;
 
     allocation = getCurrentAllocation();
