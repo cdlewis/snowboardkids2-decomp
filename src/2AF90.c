@@ -188,15 +188,15 @@ s16 signedAngleDifference(s16 fromAngle, s16 toAngle) {
 #pragma reorder_frequency
 #endif
 
-void func_8002B4E4_2C0E4(Func8002A390Arg *arg0) {
-    u16 val;
+void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
+    u16 dialogueIndex;
 
     if (arg0->unk5C == 4) {
         if (arg0->unk5D == 5) {
             arg0->unk4C = D_8008E768_8F368;
-            val = arg0->unk4C[0];
+            dialogueIndex = arg0->unk4C[0];
             arg0->unk37 = 0;
-            arg0->unk50 = val;
+            arg0->unk50 = dialogueIndex;
             arg0->unk4C += 1;
             func_80058220_58E20(0xBE, 1);
         }
@@ -204,9 +204,9 @@ void func_8002B4E4_2C0E4(Func8002A390Arg *arg0) {
     if (arg0->unk5C == 3) {
         if (arg0->unk5D == 8) {
             arg0->unk4C = D_8008E75C_8F35C;
-            val = arg0->unk4C[0];
+            dialogueIndex = arg0->unk4C[0];
             arg0->unk37 = 0;
-            arg0->unk50 = val;
+            arg0->unk50 = dialogueIndex;
             arg0->unk4C += 1;
             func_80058220_58E20(0xAA, 1);
         }
