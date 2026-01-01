@@ -997,14 +997,14 @@ void awaitBossResultAndFadeOut(void) {
     }
 }
 
-void func_8003FBE0_407E0(void) {
+void handleSkillGameResult(void) {
     GameState *state;
-    s32 counter;
+    s32 delayTimer;
 
     state = (GameState *)getCurrentAllocation();
-    counter = state->unk4C;
+    delayTimer = state->unk4C;
 
-    if (counter == 0) {
+    if (delayTimer == 0) {
         state->unk4C = 0xB4;
 
         if (state->unk7D == 0) {
@@ -1029,7 +1029,7 @@ void func_8003FBE0_407E0(void) {
             setGameStateHandler(&func_8003FD84_40984);
         }
     } else {
-        state->unk4C = counter - 1;
+        state->unk4C = delayTimer - 1;
     }
 }
 
