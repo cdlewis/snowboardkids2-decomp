@@ -2317,3 +2317,6 @@ updateStoryMapLocationIndicator = 0x80036274; // rom:0x36E74
 initStoryMapLocationMarker = 0x80036328; // rom:0x36F28
 updateStoryMapLocationMarker = 0x80036424; // rom:0x37024
 cleanupStoryMapLocationMarker = 0x80036848; // rom:0x37448
+initStoryMapSpecialLocationMarker = 0x80036880; // rom:0x37480
+updateStoryMapSpecialLocationMarker = 0x80036920; // rom:0x37520
+cleanupStoryMapSpecialLocationMarker = 0x80036A10; // rom:0x37610

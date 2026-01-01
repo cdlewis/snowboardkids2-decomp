@@ -20,7 +20,7 @@ typedef struct {
     u8 unk10;
     u8 unk11;
     u8 unk12;
-} func_80036920_37520_arg;
+} SpecialLocationMarkerUpdateState;
 
 typedef struct {
     u8 padding0[0x10];
@@ -113,7 +113,7 @@ typedef struct {
 typedef struct {
     char padding[4];
     s32 *unk4;
-} func_80036A10_37610_arg;
+} SpecialLocationMarkerCleanupState;
 
 typedef struct {
     u16 unk0;
@@ -127,7 +127,7 @@ typedef struct {
     u8 unk10;
     u8 unk11;
     u8 unk12;
-} func_80036880_37480_arg;
+} StoryMapSpecialLocationMarkerState;
 
 typedef struct {
     u8 padding0[0x34];
@@ -140,9 +140,9 @@ void updateStoryMapLocationIndicator(void *);
 void updateStoryMapLocationMarker(void *);
 void cleanupStoryMapLocationMarker(void *);
 void initStoryMapLocationMarker(StoryMapLocationMarkerState *);
-void func_80036880_37480(func_80036880_37480_arg *);
+void initStoryMapSpecialLocationMarker(StoryMapSpecialLocationMarkerState *);
 void func_80036A68_37668(void *);
-void func_80036A10_37610(void *);
+void cleanupStoryMapSpecialLocationMarker(void *);
 
 typedef struct {
     s32 unk0;
@@ -153,7 +153,7 @@ extern s32 func_80012004_12C04;
 extern void D_8008FAC0_906C0;
 extern u16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
-void func_80036920_37520(func_80036920_37520_arg *arg0);
+void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *arg0);
 
 void initStoryMapLocationIndicator(s8 *arg0) {
     *arg0 = 0;
@@ -174,7 +174,7 @@ void updateStoryMapLocationIndicator(void *arg0) {
                     temp_v0_2->unk73 = temp_v0->unk425;
                 }
             } else {
-                temp_v0_3 = scheduleTask(&func_80036880_37480, 0, 0, 0x64);
+                temp_v0_3 = scheduleTask(&initStoryMapSpecialLocationMarker, 0, 0, 0x64);
                 if (temp_v0_3 != NULL) {
                     temp_v0_3->unk10 = temp_v0->unk425;
                 }
@@ -238,11 +238,11 @@ void cleanupStoryMapLocationMarker(void *untypedArg) {
     arg0->unk58 = freeNodeMemory(arg0->unk58);
 }
 
-void func_80036880_37480(func_80036880_37480_arg *arg0) {
+void initStoryMapSpecialLocationMarker(StoryMapSpecialLocationMarkerState *arg0) {
     void *resource;
 
     resource = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
-    setCleanupCallback(&func_80036A10_37610);
+    setCleanupCallback(&cleanupStoryMapSpecialLocationMarker);
     arg0->unk8 = 8;
     arg0->unkA = 0xFF;
     arg0->unk0 = 0;
@@ -256,10 +256,10 @@ void func_80036880_37480(func_80036880_37480_arg *arg0) {
     }
     arg0->unk11 = 0;
     arg0->unk12 = 0;
-    setCallback(&func_80036920_37520);
+    setCallback(&updateStoryMapSpecialLocationMarker);
 }
 
-void func_80036920_37520(func_80036920_37520_arg *arg0) {
+void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *arg0) {
     Vec3i sp10;
     s32 sp20;
     s32 sp24;
@@ -295,8 +295,8 @@ void func_80036920_37520(func_80036920_37520_arg *arg0) {
     debugEnqueueCallback(8, 7, &func_80012004_12C04, arg0);
 }
 
-void func_80036A10_37610(void *untypedArg) {
-    func_80036A10_37610_arg *arg0 = (func_80036A10_37610_arg *)untypedArg;
+void cleanupStoryMapSpecialLocationMarker(void *untypedArg) {
+    SpecialLocationMarkerCleanupState *arg0 = (SpecialLocationMarkerCleanupState *)untypedArg;
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
