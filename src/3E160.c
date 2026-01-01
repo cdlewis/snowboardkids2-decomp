@@ -961,7 +961,7 @@ void handleBossRaceResult(void) {
     setGameStateHandler(func_8003FB90_40790);
 }
 
-void func_8003FB00_40700(void) {
+void handleBossDefeatResult(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     state->unk4C--;
