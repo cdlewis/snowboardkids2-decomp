@@ -102,7 +102,7 @@ void func_80037710_38310(func_80037710_38310_arg *arg0) {
     void *s1;
     void *s2;
 
-    s1 = func_80035F80_36B80(1);
+    s1 = loadTextRenderAsset(1);
     s2 = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
     setCleanupCallback(func_80037874_38474);
 
@@ -159,7 +159,7 @@ void func_800378AC_384AC(void *arg0) {
 
     getCurrentAllocation();
     s1 = loadCompressedData(&_4196E0_ROM_START, &_419C60_ROM_START, 0xBB8);
-    ARG0->unkD8 = func_80035F80_36B80(1);
+    ARG0->unkD8 = loadTextRenderAsset(1);
     setCleanupCallback(func_80037BC4_387C4);
 
     for (i = 0; i < 6; i++) {
@@ -276,7 +276,7 @@ void func_80037BFC_387FC(func_80037BFC_387FC_arg *arg0) {
 
     getCurrentAllocation();
     allocation = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
-    arg0->unk90 = func_80035F80_36B80(1);
+    arg0->unk90 = loadTextRenderAsset(1);
     setCleanupCallback(func_80037E40_38A40);
 
     i = 0;

@@ -1518,7 +1518,7 @@ void cleanupBoardShopSnowflakeSprite(SpriteDisplayState *arg0) {
 }
 
 void initBoardShopTitleText(BoardShopTitleTextState *arg0) {
-    void *textAsset = func_80035F80_36B80(1);
+    void *textAsset = loadTextRenderAsset(1);
     setCleanupCallback(&cleanupBoardShopTitleText);
     arg0->y = -0x60;
     arg0->textData = &D_8008F18C_8FD8C;

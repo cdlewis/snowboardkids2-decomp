@@ -195,7 +195,7 @@ void func_80036328_36F28(func_80036328_36F28_arg *arg0) {
     func_80036328_36F28_arg_item *var_v1;
 
     resource = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
-    temp_value = func_80035F80_36B80(1);
+    temp_value = loadTextRenderAsset(1);
 
     setCleanupCallback(&func_80036848_37448);
 

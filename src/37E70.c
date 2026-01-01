@@ -36,7 +36,7 @@ void initOptionsMenu(void) {
     func_8006FDA0_709A0(0, 0xFF, 0);
     func_8006FDA0_709A0(0, 0, 0x10);
     allocation->assetData = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
-    allocation->graphicsData = func_80035F80_36B80(1);
+    allocation->graphicsData = loadTextRenderAsset(1);
     allocation->frameCounter = 0;
     allocation->menuState = 0;
     allocation->selectedIndex = 0;

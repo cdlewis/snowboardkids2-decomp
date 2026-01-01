@@ -367,7 +367,7 @@ void initSaveSlotNameText(SaveSlotNameTextState *arg0) {
     void *temp_10;
 
     allocation = (u8 *)getCurrentAllocation();
-    arg0->textAsset = func_80035F80_36B80(1);
+    arg0->textAsset = loadTextRenderAsset(1);
     arg0->slotFlags = *(allocation + arg0->slotIndex + 0xACE);
     setCleanupCallback(cleanupSaveSlotNameText);
 
@@ -432,7 +432,7 @@ void initSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
     s16 hintY;
 
     allocation = getCurrentAllocation();
-    textAsset = func_80035F80_36B80(1);
+    textAsset = loadTextRenderAsset(1);
     setCleanupCallback(cleanupSaveSlotPromptText);
 
     arg0->mainTextX = -0x78;
@@ -668,7 +668,7 @@ void initSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
     temp_s0 = state;
     getCurrentAllocation();
     temp_s0->spriteAsset = loadAsset_34F7E0();
-    temp_s0->textAsset = func_80035F80_36B80(1);
+    temp_s0->textAsset = loadTextRenderAsset(1);
     setCleanupCallback(cleanupSaveSlotDeleteText);
     temp_s0->offsetX = 0;
     temp_s0->offsetY = 0;

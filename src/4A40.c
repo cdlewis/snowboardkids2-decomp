@@ -21,7 +21,7 @@ USE_ASSET(_63C9F0);
 USE_ASSET(_67E860)
 
 void *loadDmaAsset(s32);
-void *func_80035F80_36B80(s32);
+void *loadTextRenderAsset(s32);
 
 typedef struct {
     void *start;
@@ -245,7 +245,7 @@ void func_80003EE0_4AE0(void) {
     taskMemory->unk944 = 0;
     taskMemory->unk948 = &taskMemory->unk94C;
     taskMemory->unk94C = 0;
-    taskMemory->unk960 = func_80035F80_36B80(1);
+    taskMemory->unk960 = loadTextRenderAsset(1);
     taskMemory->unk964 = loadDmaAsset(1);
 
     taskMemory->unk968 = loadDmaAsset(3);

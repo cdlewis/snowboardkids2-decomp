@@ -180,7 +180,7 @@ void updateStoryMapShopSoldOutLabel(void *);
 void cleanupStoryMapShopSoldOutLabel(SpriteDisplayState *);
 void drawUnlockScreenItemIcons(void *);
 void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsCleanupArg *);
-void *func_80035F80_36B80(s32);
+void *loadTextRenderAsset(s32);
 void func_8006FF90_70B90(s32, s32, void *, void *);
 void updateDebugCameraYState(cameraState *arg0);
 
@@ -1093,7 +1093,7 @@ void initUnlockScreenItemIcons(UnlockScreenItemIconsState *arg0) {
     s32 i;
 
     iconAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
-    titleAsset = func_80035F80_36B80(1);
+    titleAsset = loadTextRenderAsset(1);
     setCleanupCallback(&cleanupUnlockScreenItemIcons);
 
     for (i = 0; i < 4; i++) {

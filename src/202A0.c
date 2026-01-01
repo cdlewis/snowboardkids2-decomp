@@ -753,7 +753,7 @@ void initCharacterDescriptionText(CharacterDescriptionTextState *state) {
     D_800AFE8C_type_202A0 *globalState;
     s32 idx;
 
-    textRenderAsset = func_80035F80_36B80(1);
+    textRenderAsset = loadTextRenderAsset(1);
     setCleanupCallback(&cleanupCharacterDescriptionText);
 
     state->priority = 5;
@@ -851,7 +851,7 @@ void initPrizeDisplay(PrizeDisplayState *arg0) {
     s16 spriteY;
 
     allocation = (Allocation_202A0 *)getCurrentAllocation();
-    textRenderAsset = func_80035F80_36B80(1);
+    textRenderAsset = loadTextRenderAsset(1);
     arg0->backgroundAsset = loadAsset_34F7E0();
     spriteAsset = loadCompressedData(&D_4237C0, &D_426EF0, 0x8A08);
     setCleanupCallback(cleanupPrizeDisplay);

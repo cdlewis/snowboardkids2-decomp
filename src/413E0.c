@@ -279,7 +279,7 @@ void func_80040D80_41980(func_80040D80_41980_arg *arg0) {
         arg0->unk4 = NULL;
         setCallback(&func_80040E00_41A00);
     } else {
-        arg0->unk4 = func_80035F80_36B80(1);
+        arg0->unk4 = loadTextRenderAsset(1);
         arg0->unk0 = loadAsset_34F7E0();
         arg0->unk10.asS16 = 0x80;
         arg0->unk12 = -8;

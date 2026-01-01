@@ -97,7 +97,7 @@ void initCutsceneWaitMenu(DC90TaskStruct *arg0) {
     arg0->state = 0;
     arg0->unk10 = 0;
     arg0->unk4 = loadAsset_34F7E0();
-    arg0->baseSpriteData = func_80035F80_36B80(1);
+    arg0->baseSpriteData = loadTextRenderAsset(1);
     arg0->unk8 = loadDmaAsset(2);
     arg0->animFrameX = 1;
     arg0->animFrameY = 1;

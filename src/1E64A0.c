@@ -190,7 +190,7 @@ void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->unk84 = 0;
     arg0->unk88 = 0;
     arg0->unk8 = loadSpriteAssetData(0);
-    arg0->unkA0 = func_80035F80_36B80(1);
+    arg0->unkA0 = loadTextRenderAsset(1);
     arg0->unkC = loadDmaAsset(0);
     setCleanupCallback(&func_800B9C20_1E6CD0);
     setCallback(&func_800B99A0_1E6A50);
