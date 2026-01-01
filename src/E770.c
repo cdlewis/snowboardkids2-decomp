@@ -492,7 +492,7 @@ u8 isGalleryItemUnlocked(u8 itemIndex) {
         case 1:
             return func_80038058_38C58(itemIndex) & 0xFF;
         case 2:
-            return func_80038000_38C00(itemIndex) & 0xFF;
+            return isBoardUnlocked(itemIndex) & 0xFF;
         case 3:
             unlockSlot = item->unlockSlotIndex;
             if (unlockSlot == -1) {

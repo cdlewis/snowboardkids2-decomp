@@ -69,7 +69,7 @@ void func_800B4B30_1E1BE0(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
 void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0);
 void func_80041518_42118(void *arg0);
 s32 isSaveSlotUnlocked(u8 slotIndex);
-u8 func_80038000_38C00(u8 arg0);
+u8 isBoardUnlocked(u8 boardIndex);
 u8 func_80038058_38C58(u8 arg0);
 s32 func_80038070_38C70(void);
 void func_80038090_38C90(s16 arg0);
