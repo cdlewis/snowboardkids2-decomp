@@ -38,13 +38,6 @@ typedef struct {
 } func_8002F658_30258_arg;
 
 typedef struct {
-    SceneModel *unk0;
-    s32 unk4;
-    u8 padding[0x1B];
-    s16 unk24;
-} func_8002EFD8_2FBD8_arg;
-
-typedef struct {
     u8 padding[0x2C];
     void *unk2C;
 } func_8002FA1C_3061C_arg;
@@ -161,9 +154,9 @@ extern s32 *D_800AFE8C_A71FC;
 void func_80030378_30F78(func_800302AC_30EAC_arg *);
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
 void func_80030540_31140(func_80030540_31140_arg *arg0);
-void func_8002EFD8_2FBD8(void *);
+void updateStoryMapShopFairyInitial(StoryMapShopFairyState *);
 void func_8002F024_2FC24(StoryMapShopFairyState *);
-void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
+void destroyStoryMapShopFairy(StoryMapShopFairyState *);
 void func_8002F290_2FE90(func_8002F658_30258_arg *);
 void func_8002F36C_2FF6C(func_8002F658_30258_arg *);
 void func_8002F3E4_2FFE4(func_8002F518_30118_arg *);
@@ -256,15 +249,14 @@ void initStoryMapShopFairyModel(StoryMapShopFairyState *arg0) {
     arg0->animationFrame = 4;
     arg0->animationType = 0;
     createYRotationMatrix(&arg0->transform, 0x1E00);
-    setCleanupCallback(func_8002F110_2FD10);
-    setCallback(func_8002EFD8_2FBD8);
+    setCleanupCallback(destroyStoryMapShopFairy);
+    setCallback(updateStoryMapShopFairyInitial);
 }
 
-void func_8002EFD8_2FBD8(void *untypedArg0) {
-    func_8002EFD8_2FBD8_arg *arg0 = (func_8002EFD8_2FBD8_arg *)untypedArg0;
-    applyTransformToModel(arg0->unk0, (void *)((s32)arg0 + 4));
-    setModelAnimation(arg0->unk0, arg0->unk24);
-    updateModelGeometry(arg0->unk0);
+void updateStoryMapShopFairyInitial(StoryMapShopFairyState *arg0) {
+    applyTransformToModel(arg0->model, &arg0->transform);
+    setModelAnimation(arg0->model, arg0->animationFrame);
+    updateModelGeometry(arg0->model);
     setCallback(&func_8002F024_2FC24);
 }
 
@@ -309,8 +301,8 @@ void func_8002F024_2FC24(StoryMapShopFairyState *arg0) {
     }
 }
 
-void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *arg0) {
-    destroySceneModel(arg0->unk0);
+void destroyStoryMapShopFairy(StoryMapShopFairyState *arg0) {
+    destroySceneModel(arg0->model);
 }
 
 void func_8002F12C_2FD2C(func_8002F658_30258_arg *arg0) {
