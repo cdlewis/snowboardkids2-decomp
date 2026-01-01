@@ -26,37 +26,6 @@ typedef struct {
     /* 0x63 */ s8 unk63;
 } Func8002CB88Arg_arg0;
 
-typedef struct {
-    /* 0x00 */ SceneModel *model;
-    /* 0x04 */ Transform3D matrix;
-    /* 0x24 */ u8 pad24[0x8];
-    /* 0x2C */ u16 rotation;
-    /* 0x2E */ u16 unk2E;
-    /* 0x30 */ u8 pad30[0x10];
-    /* 0x40 */ s32 unk40;
-    /* 0x44 */ s32 unk44;
-    /* 0x48 */ s32 unk48;
-    /* 0x4C */ u8 pad4C[0x4];
-    /* 0x50 */ s16 unk50;
-    /* 0x52 */ s16 unk52;
-    /* 0x54 */ u8 pad54[0x6];
-    /* 0x5A */ s16 unk5A;
-    /* 0x5C */ u8 unk5C;
-    /* 0x5D */ u8 pad5D[0x5];
-    /* 0x62 */ s8 unk62;
-    /* 0x63 */ s8 unk63;
-} Func8002CFACArg_Element;
-
-typedef struct Func8002CFACArg Func8002CFACArg;
-struct Func8002CFACArg {
-    /* 0x00 */ Func8002CFACArg_Element unk0[2];
-    /* 0xC8 */ void (*unkC8)(Func8002CFACArg *);
-    /* 0xCC */ u8 padCC[0x6];
-    /* 0xD2 */ u8 unkD2;
-    /* 0xD3 */ u8 padD3[0x2];
-    /* 0xD5 */ u8 unkD5;
-};
-
 typedef struct RareEventIdleState RareEventIdleState;
 struct RareEventIdleState {
     /* 0x00 */ Func8002CB88Arg_arg0 elements[2];
@@ -275,46 +244,46 @@ void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
     }
 }
 
-void func_8002CFAC_2DBAC(Func8002CFACArg *arg0) {
-    GameState *allocation;
-    s32 vec3[3];
+void initStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
+    GameState *gameState;
+    s32 effectOffset[3];
     s32 i;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
     arg0->unkD2 = 0;
-    arg0->unk0[0].unk5A = 0;
-    vec3[2] = 0;
-    vec3[0] = 0;
-    vec3[1] = 0x2C0000;
+    arg0->elements[0].unk5A = 0;
+    effectOffset[2] = 0;
+    effectOffset[0] = 0;
+    effectOffset[1] = 0x2C0000;
 
     for (i = 0; i < arg0->unkD5; i++) {
-        memcpy(&arg0->unk0[i].matrix, identityMatrix, sizeof(Transform3D));
-        arg0->unk0[i].unk62 = 0;
+        memcpy(&arg0->elements[i].matrix, identityMatrix, sizeof(Transform3D));
+        arg0->elements[i].unk62 = 0;
 
         if (i == 0) {
-            arg0->unk0[0].matrix.translation.x = 0xFFF50000;
-            arg0->unk0[0].matrix.translation.z = 0xFFB30000;
-            arg0->unk0[0].unk50 = 0;
-            memcpy(&arg0->unk0[0].unk40, vec3, 0xC);
-            setAnimationIndex(arg0->unk0[0].model, -1);
+            arg0->elements[0].matrix.translation.x = 0xFFF50000;
+            arg0->elements[0].matrix.translation.z = 0xFFB30000;
+            arg0->elements[0].unk50 = 0;
+            memcpy(&arg0->elements[0].unk40, effectOffset, 0xC);
+            setAnimationIndex(arg0->elements[0].model, -1);
         } else {
-            arg0->unk0[1].matrix.translation.x = 0x1B0000;
-            arg0->unk0[1].matrix.translation.z = 0xFFB30000;
-            arg0->unk0[1].unk50 = 0x1B;
-            memcpy(&arg0->unk0[1].unk40, vec3, 0xC);
-            setItemDisplayEnabled(arg0->unk0[1].model, 1);
-            setAnimationIndex(arg0->unk0[1].model, 4);
+            arg0->elements[1].matrix.translation.x = 0x1B0000;
+            arg0->elements[1].matrix.translation.z = 0xFFB30000;
+            arg0->elements[1].unk50 = 0x1B;
+            memcpy(&arg0->elements[1].unk40, effectOffset, 0xC);
+            setItemDisplayEnabled(arg0->elements[1].model, 1);
+            setAnimationIndex(arg0->elements[1].model, 4);
         }
 
-        arg0->unk0[i].rotation = 0x800 + i * 0x1000;
-        arg0->unk0[i].unk2E = 0x800 + i * 0x1000;
-        arg0->unk0[i].unk52 = arg0->unk0[i].unk50;
-        createYRotationMatrix(&arg0->unk0[i].matrix, arg0->unk0[i].rotation);
-        setupStoryMapNpcModel((Func297D8Arg *)&arg0->unk0[i]);
-        allocation->unk408[i] = arg0->unk0[i].matrix.translation.x;
-        allocation->unk410[i] = arg0->unk0[i].matrix.translation.z;
-        allocation->unk418[i] = D_8008EF70_8FB70[arg0->unk0[i].unk5C];
+        arg0->elements[i].rotation = 0x800 + i * 0x1000;
+        arg0->elements[i].unk2E = 0x800 + i * 0x1000;
+        arg0->elements[i].unk52 = arg0->elements[i].unk50;
+        createYRotationMatrix(&arg0->elements[i].matrix, arg0->elements[i].rotation);
+        setupStoryMapNpcModel(&arg0->elements[i]);
+        gameState->unk408[i] = arg0->elements[i].matrix.translation.x;
+        gameState->unk410[i] = arg0->elements[i].matrix.translation.z;
+        gameState->unk418[i] = D_8008EF70_8FB70[arg0->elements[i].unk5C];
     }
 
-    setCallback(func_8002D140_2DD40);
+    setCallback(updateStoryMapRareEventMagicShow);
 }

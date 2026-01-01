@@ -14,7 +14,7 @@ extern u16 D_8008EF70_8FB70[];
 
 void func_8002D668_2E268(Func2E024Arg *arg0);
 
-void func_8002D140_2DD40(Func2E024Arg *arg0) {
+void updateStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
     GameState *allocation;
     s32 i;
     Func297D8Arg *ptr;
@@ -132,7 +132,7 @@ void func_8002D140_2DD40(Func2E024Arg *arg0) {
             allocation->unk42E = 1;
         }
         func_8002EBB0_2F7B0(arg0);
-        arg0->callback = func_8002D140_2DD40;
+        arg0->callback = updateStoryMapRareEventMagicShow;
         setCallback(updateStoryMapNpcDialogue);
     }
 }

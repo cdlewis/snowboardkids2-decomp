@@ -17,7 +17,7 @@ struct Func2E024Arg {
     /* 0xD5 */ u8 unkD5;
 };
 
-void func_8002D140_2DD40(Func2E024Arg *);
+void updateStoryMapRareEventMagicShow(Func2E024Arg *);
 void func_8002EBB0_2F7B0(void *);
 s32 func_8002ED30_2F930(void);
 void func_8002ED40_2F940(s32 a0);
