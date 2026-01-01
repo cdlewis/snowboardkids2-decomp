@@ -1406,7 +1406,7 @@ void func_80040608_41208(void) {
     func_80057B1C_5871C(0x14);
     terminateSchedulerWithCallback(&func_800407B4_413B4);
     gControllerPollingEnabled = 1;
-    func_8003AF6C_3BB6C();
+    resumeMotorStates();
 }
 
 void func_800407B4_413B4(void) {

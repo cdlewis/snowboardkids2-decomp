@@ -484,21 +484,21 @@ void startMotorRumble(s32 controllerChannel) {
     }
 }
 
-void func_8003AF6C_3BB6C(void) {
-    u8 *var_v1;
+void resumeMotorStates(void) {
+    u8 *statePtr;
     u8 *end;
-    u8 a1 = 1;
+    u8 startState = 1;
     s32 i;
 
-    var_v1 = (u8 *)gMotorState.state;
-    end = var_v1 + 4;
+    statePtr = (u8 *)gMotorState.state;
+    end = statePtr + 4;
 
     do {
-        if (*var_v1 == 0) {
-            *var_v1 = a1;
+        if (*statePtr == 0) {
+            *statePtr = startState;
         }
-        var_v1++;
-    } while ((s32)var_v1 < (s32)end);
+        statePtr++;
+    } while ((s32)statePtr < (s32)end);
 }
 
 void func_8003AFA0_3BBA0(void) {

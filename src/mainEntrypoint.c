@@ -81,7 +81,7 @@ void mainThreadEntrypoint(void *arg) {
             func_8006E054_6EC54(messageData);
         } else {
             gControllerPollingEnabled = 1;
-            func_8003AF6C_3BB6C();
+            resumeMotorStates();
             motorUpdate();
         }
     }
