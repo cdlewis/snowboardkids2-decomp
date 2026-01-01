@@ -503,10 +503,10 @@ s32 func_800B3790_1E0840(void) {
     ptr = &D_800BA93C_1E79EC;
     D_800BA95C_1E7A0C = (StateEntry *)buffer;
     *ptr = (StateEntry *)D_800BAEB8_1E7F68;
-    ((void (*)(s32, StateEntry **))func_8003A284_3AE84)(0, ptr);
+    ((void (*)(s32, StateEntry **))controllerPackReadAsyncStub)(0, ptr);
 
     do {
-        result = func_8003A28C_3AE8C();
+        result = controllerPackReadPollStub();
     } while (result == -1);
 
     if (result == 0) {

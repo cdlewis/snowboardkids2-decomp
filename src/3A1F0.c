@@ -303,10 +303,10 @@ void initControllerPack(s32 channel) {
     osSendMesg(&D_800A1888_A2488, (OSMesg *)controllerPackStatus, OS_MESG_BLOCK);
 }
 
-void func_8003A284_3AE84(void) {
+void controllerPackReadAsyncStub(void) {
 }
 
-int func_8003A28C_3AE8C(void) {
+int controllerPackReadPollStub(void) {
     return 0;
 }
 

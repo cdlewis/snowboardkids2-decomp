@@ -41,8 +41,8 @@ void initControllerSubsystem(void);
 
 void func_80039C34_3A834(void);
 
-void func_8003A284_3AE84(void);
-int func_8003A28C_3AE8C(void);
+void controllerPackReadAsyncStub(void);
+int controllerPackReadPollStub(void);
 void func_8003A51C_3B11C(void);
 int func_8003A524_3B124(void);
 
