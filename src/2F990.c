@@ -164,10 +164,10 @@ void slideStoryMapShopItemCard(SlidingItemCardState *);
 void awaitStoryMapShopItemCardIdle(DisplayListObject *);
 void destroyStoryMapShopItemCard(StoryMapShopItemCardState *);
 void prepareSlideInStoryMapShopItemCard(StoryMapShopItemCardState *);
-void func_8002F860_30460(DisplayListObject *);
-void func_8002F88C_3048C(StoryMapShopItemCardState *arg0);
-void func_8002F948_30548(void);
-void func_8002F980_30580(StoryMapShopItemCardState *);
+void displaySlideInStoryMapShopItemCard(DisplayListObject *);
+void animateSlideInStoryMapShopItemCard(StoryMapShopItemCardState *arg0);
+void awaitSlideInStoryMapShopItemCardIdle(void);
+void destroySlideInStoryMapShopItemCard(StoryMapShopItemCardState *);
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 void func_8002FA44_30644(void *);
 void func_8002FA70_30670(func_8002FA70_30670_arg *);
@@ -498,7 +498,7 @@ void initSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     card->displayList.unk24 = NULL;
     card->displayList.unk28 = NULL;
     card->displayList.unk2C = 0;
-    setCleanupCallback(&func_8002F980_30580);
+    setCleanupCallback(&destroySlideInStoryMapShopItemCard);
     setCallback(&prepareSlideInStoryMapShopItemCard);
 }
 
@@ -535,16 +535,16 @@ void prepareSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
         card->displayList.unk24 = loadAssetByIndex_95500(itemId);
         card->displayList.unk28 = loadAssetByIndex_95590(itemId);
         card->displayList.unk2C = loadAssetByIndex_95668(itemData / 3);
-        setCallback(func_8002F860_30460);
+        setCallback(displaySlideInStoryMapShopItemCard);
     }
 }
 
-void func_8002F860_30460(DisplayListObject *arg0) {
+void displaySlideInStoryMapShopItemCard(DisplayListObject *arg0) {
     enqueueDisplayListObject(0, arg0);
-    setCallback(func_8002F88C_3048C);
+    setCallback(animateSlideInStoryMapShopItemCard);
 }
 
-void func_8002F88C_3048C(StoryMapShopItemCardState *card) {
+void animateSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     card->transform.translation.x += card->translationStep;
@@ -557,20 +557,20 @@ void func_8002F88C_3048C(StoryMapShopItemCardState *card) {
         card->displayList.unk24 = freeNodeMemory(card->displayList.unk24);
         card->displayList.unk28 = freeNodeMemory(card->displayList.unk28);
         card->displayList.unk2C = freeNodeMemory(card->displayList.unk2C);
-        setCallbackWithContinue(func_8002F948_30548);
+        setCallbackWithContinue(awaitSlideInStoryMapShopItemCardIdle);
     } else {
         enqueueDisplayListObject(0, &card->displayList);
     }
 }
 
-void func_8002F948_30548(void) {
+void awaitSlideInStoryMapShopItemCardIdle(void) {
     GameState *state = (GameState *)getCurrentAllocation();
     if (state->unk5C5 != 2) {
         setCallbackWithContinue(prepareSlideInStoryMapShopItemCard);
     }
 }
 
-void func_8002F980_30580(StoryMapShopItemCardState *card) {
+void destroySlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     card->displayList.unk24 = freeNodeMemory(card->displayList.unk24);
     card->displayList.unk28 = freeNodeMemory(card->displayList.unk28);
     card->displayList.unk2C = freeNodeMemory(card->displayList.unk2C);
