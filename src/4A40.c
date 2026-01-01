@@ -44,17 +44,17 @@ s32 creditsCharacterStartDepth = 0xB00000;
 
 s32 creditsCharacterScrollSpeed = 0xB000;
 
-s32 D_8008BFF8_8CBF8 = 0x0;
+s32 creditsCameraX = 0x0;
 
-s32 D_8008BFFC_8CBFC = 0x600333;
+s32 creditsCameraY = 0x600333;
 
 struct {
-    s32 unk0;
+    s32 depth;
     s16 unk4;
-    s16 unk6;
+    s16 pitch;
     s16 unk8;
-    s16 unkA;
-} D_8008C000_8CC00 = {
+    s16 yaw;
+} creditsCameraConfig = {
     0x1400000,
     0,
     0,
@@ -192,9 +192,9 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x2C];
-    s32 unk2C;
-    s32 unk30;
-} SceneModel30;
+    s32 zPosition;
+    s32 zOffset;
+} CreditsModelPosition;
 
 void updateCreditsCharacter(CreditsCharacter *character);
 void cleanupCreditsCharacter(CreditsCharacter *character);
@@ -389,19 +389,19 @@ void spawnCreditsCharacter(CreditsState *arg0) {
 }
 
 void initCreditsCharacter(CreditsCharacter *character) {
-    s32 buffer[8];
-    CreditsState *taskMemory;
+    s32 cameraTransform[8];
+    CreditsState *creditsState;
     CreditsCharacterConfig *config;
     s16 scale;
 
-    taskMemory = getCurrentAllocation();
+    creditsState = getCurrentAllocation();
     config = &creditsCharacterConfigs[character->configIndex];
     character->isCleanedUp = 0;
     character->animState = 0;
 
     character->model = allocateNodeMemory(0x160);
 
-    initializeGameEntity(character->model, config->modelId, &taskMemory->unk768, character->direction, -1, -1, -1);
+    initializeGameEntity(character->model, config->modelId, &creditsState->unk768, character->direction, -1, -1, -1);
 
     memcpy((void *)((u8 *)character->model + 0x18), identityMatrix, 0x20);
 
@@ -410,19 +410,27 @@ void initCreditsCharacter(CreditsCharacter *character) {
     scale = config->scale;
     scaleMatrix((Transform3D *)((u8 *)character->model + 0x18), scale, scale, scale);
 
-    ((SceneModel30 *)character->model)->unk2C = creditsCharacterStartDepth;
-    ((SceneModel30 *)character->model)->unk30 += config->depthOffset;
+    ((CreditsModelPosition *)character->model)->zPosition = creditsCharacterStartDepth;
+    ((CreditsModelPosition *)character->model)->zOffset += config->depthOffset;
 
     setModelActionMode(character->model, config->actionMode);
 
     {
-        s32 temp_a1 = D_8008BFF8_8CBF8;
-        s32 temp_a2 = D_8008BFFC_8CBFC;
-        s32 temp_a3 = D_8008C000_8CC00.unk0;
-        func_8006BEDC_6CADC(buffer, temp_a1, temp_a2, temp_a3, 0, D_8008C000_8CC00.unk6, D_8008C000_8CC00.unkA);
+        s32 camX = creditsCameraX;
+        s32 camY = creditsCameraY;
+        s32 camDepth = creditsCameraConfig.depth;
+        func_8006BEDC_6CADC(
+            cameraTransform,
+            camX,
+            camY,
+            camDepth,
+            0,
+            creditsCameraConfig.pitch,
+            creditsCameraConfig.yaw
+        );
     }
 
-    func_8006FD3C_7093C(taskMemory->unk768.id, buffer);
+    func_8006FD3C_7093C(creditsState->unk768.id, cameraTransform);
 
     setCleanupCallback(cleanupCreditsCharacter);
     setCallback(updateCreditsCharacter);
