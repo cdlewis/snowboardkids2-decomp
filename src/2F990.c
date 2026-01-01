@@ -104,14 +104,14 @@ typedef struct {
 } StoryMapShopFairyState;
 
 typedef struct {
-    DisplayListObject unk0;
-    void *unk3C;
+    DisplayListObject displayList;
+    void *baseTransform;
     u8 padding[0x10];
-    s32 unk50;
+    s32 translationX;
     u8 padding3[0xC];
-    u8 unk60;
-    s8 unk61;
-} func_8002F518_30118_arg;
+    u8 slideFrameCounter;
+    s8 nextItemIndex;
+} SlidingItemCardState;
 
 typedef struct {
     func_800308FC_314FC_arg items[7];
@@ -159,9 +159,9 @@ void updateStoryMapShopFairy(StoryMapShopFairyState *);
 void destroyStoryMapShopFairy(StoryMapShopFairyState *);
 void updateStoryMapShopItemCard(StoryMapShopItemCardState *);
 void transitionStoryMapShopItemCard(StoryMapShopItemCardState *);
-void func_8002F3E4_2FFE4(func_8002F518_30118_arg *);
-void func_8002F518_30118(func_8002F518_30118_arg *);
-void func_8002F5C8_301C8(DisplayListObject *);
+void reloadStoryMapShopItemCard(SlidingItemCardState *);
+void slideStoryMapShopItemCard(SlidingItemCardState *);
+void awaitStoryMapShopItemCardIdle(DisplayListObject *);
 void func_8002F614_30214(StoryMapShopItemCardState *);
 void func_8002F72C_3032C(StoryMapShopItemCardState *);
 void func_8002F860_30460(DisplayListObject *);
@@ -398,78 +398,78 @@ void transitionStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     }
     enqueueDisplayListObject(0, &card->displayList);
 end:
-    setCallback(&func_8002F3E4_2FFE4);
+    setCallback(&reloadStoryMapShopItemCard);
 }
 
-void func_8002F3E4_2FFE4(func_8002F518_30118_arg *arg0) {
+void reloadStoryMapShopItemCard(SlidingItemCardState *card) {
     volatile u8 padding[0x20];
     GameState *state = (GameState *)getCurrentAllocation();
-    s8 s0;
-    s8 s1;
+    s8 itemId;
+    s8 itemIndex;
 
-    if (arg0->unk60 == 1) {
+    if (card->slideFrameCounter == 1) {
         if (state->unk5C6 == 2) {
-            arg0->unk61 = state->unk5C8 + 1;
-            if (arg0->unk61 == state->unk5C9) {
-                arg0->unk61 = 0;
+            card->nextItemIndex = state->unk5C8 + 1;
+            if (card->nextItemIndex == state->unk5C9) {
+                card->nextItemIndex = 0;
             }
         } else {
-            arg0->unk61 = state->unk5C8 - 1;
-            if (arg0->unk61 < 0) {
-                arg0->unk61 = state->unk5C9 - 1;
+            card->nextItemIndex = state->unk5C8 - 1;
+            if (card->nextItemIndex < 0) {
+                card->nextItemIndex = state->unk5C9 - 1;
             }
         }
 
-        s0 = state->unk5CA[arg0->unk61] & 0x1F;
-        s1 = s0;
+        itemId = state->unk5CA[card->nextItemIndex] & 0x1F;
+        itemIndex = itemId;
 
-        memcpy(arg0, &arg0->unk3C, 0x20);
+        memcpy(card, &card->baseTransform, 0x20);
 
-        arg0->unk0.unk20 = loadAssetByIndex_95728(s1);
-        arg0->unk0.unk24 = loadAssetByIndex_95500(s1);
-        arg0->unk0.unk28 = loadAssetByIndex_95590(s1);
-        arg0->unk0.unk2C = loadAssetByIndex_95668(s0 / 3);
-        arg0->unk60 = 0;
+        card->displayList.unk20 = loadAssetByIndex_95728(itemIndex);
+        card->displayList.unk24 = loadAssetByIndex_95500(itemIndex);
+        card->displayList.unk28 = loadAssetByIndex_95590(itemIndex);
+        card->displayList.unk2C = loadAssetByIndex_95668(itemId / 3);
+        card->slideFrameCounter = 0;
     } else {
-        enqueueDisplayListObject(0, (DisplayListObject *)arg0);
+        enqueueDisplayListObject(0, (DisplayListObject *)card);
     }
 
-    setCallback(&func_8002F518_30118);
+    setCallback(&slideStoryMapShopItemCard);
 }
 
-void func_8002F518_30118(func_8002F518_30118_arg *s0) {
+void slideStoryMapShopItemCard(SlidingItemCardState *card) {
     volatile u8 padding[0x20];
-    u32 new_var;
-    GameState *s1 = (GameState *)getCurrentAllocation();
-    u32 offset;
-    new_var = s1->unk5C6;
+    u32 scrollDirection;
+    GameState *state = (GameState *)getCurrentAllocation();
+    u32 translationStep;
+    scrollDirection = state->unk5C6;
 
-    if (new_var == 2) {
-        offset = 0xFFF80000;
+    if (scrollDirection == 2) {
+        translationStep = 0xFFF80000;
     } else {
-        offset = 0x00080000;
+        translationStep = 0x00080000;
     }
 
-    s0->unk50 += offset;
+    card->translationX += translationStep;
 
-    memcpy(s0, (void *)((s32)s0 + 0x3C), 0x20);
+    memcpy(card, (void *)((s32)card + 0x3C), 0x20);
 
-    s0->unk60++;
-    if (s0->unk60 == 4) {
-        s0->unk60 = 0;
-        s1->unk5C7++;
-        setCallback(func_8002F5C8_301C8);
+    card->slideFrameCounter++;
+    if (card->slideFrameCounter == 4) {
+        card->slideFrameCounter = 0;
+        state->unk5C7++;
+        setCallback(awaitStoryMapShopItemCardIdle);
     }
 
-    enqueueDisplayListObject(0, &s0->unk0);
+    enqueueDisplayListObject(0, &card->displayList);
 }
 
-void func_8002F5C8_301C8(DisplayListObject *arg0) {
+void awaitStoryMapShopItemCardIdle(DisplayListObject *displayList) {
     volatile u8 pad[0x20];
     if (((GameState *)getCurrentAllocation())->unk5C5 == 1) {
         setCallback(&updateStoryMapShopItemCard);
     }
-    enqueueDisplayListObject(0, arg0);
+    enqueueDisplayListObject(0, displayList);
 }
 
 void func_8002F614_30214(StoryMapShopItemCardState *card) {
