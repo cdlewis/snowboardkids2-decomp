@@ -45,7 +45,7 @@ typedef struct {
     u8 unk42A;
     u8 padding8[0x2];
     u8 unk42D;
-} func_80036274_36E74_large_struct;
+} StoryMapAllocation;
 
 typedef struct {
     s16 unk0;
@@ -136,7 +136,7 @@ typedef struct {
     s32 unk3C;
 } func_80036C20_37820_arg;
 
-void func_80036274_36E74(void *);
+void updateStoryMapLocationIndicator(void *);
 void func_80036424_37024(void *);
 void func_80036848_37448(void *);
 void func_80036328_36F28(func_80036328_36F28_arg *);
@@ -157,13 +157,13 @@ void func_80036920_37520(func_80036920_37520_arg *arg0);
 
 void initStoryMapLocationIndicator(s8 *arg0) {
     *arg0 = 0;
-    setCallback(&func_80036274_36E74);
+    setCallback(&updateStoryMapLocationIndicator);
 }
 
-void func_80036274_36E74(void *arg0) {
+void updateStoryMapLocationIndicator(void *arg0) {
     func_800698BC_6A4BC_return *temp_v0;
-    func_80036274_36E74_large_struct *temp_v0_2;
-    func_80036274_36E74_large_struct *temp_v0_3;
+    StoryMapAllocation *temp_v0_2;
+    StoryMapAllocation *temp_v0_3;
 
     temp_v0 = (func_800698BC_6A4BC_return *)getCurrentAllocation();
     if (temp_v0->unk424 != 0) {
@@ -333,7 +333,7 @@ void func_80036A68_37668(void *arg0) {
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036AF8_376F8);
 
 s32 func_80036C20_37820(func_80036C20_37820_arg *arg0) {
-    func_80036274_36E74_large_struct *allocation;
+    StoryMapAllocation *allocation;
     struct {
         s32 distances[1];
         s32 maxDistance;
@@ -342,7 +342,7 @@ s32 func_80036C20_37820(func_80036C20_37820_arg *arg0) {
     s32 dx;
     s32 dy;
 
-    allocation = (func_80036274_36E74_large_struct *)getCurrentAllocation();
+    allocation = (StoryMapAllocation *)getCurrentAllocation();
     if (allocation->numEntries == 0) {
         return 0;
     }

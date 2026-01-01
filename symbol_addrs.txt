@@ -2313,3 +2313,4 @@ cleanupSaveSlotDeleteArrow = 0x80035234; // rom:0x35E34
 loadTextRenderAsset = 0x80035F80; // rom:0x36B80
 worldToScreenCoords = 0x80035FE0; // rom:0x36BE0
 initStoryMapLocationIndicator = 0x80036250; // rom:0x36E50
+updateStoryMapLocationIndicator = 0x80036274; // rom:0x36E74
