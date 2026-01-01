@@ -83,7 +83,7 @@ void func_80028C08_29808(Func297D8Arg *arg0) {
         }
     } else {
         if (func_8002A390_2AF90(arg0) != 0) {
-            setCallback(func_80028AEC_296EC);
+            setCallback(collectStoryMapItem);
             shouldSetCallback = 1;
         } else if (arg0->unk5E == 0) {
             if (arg0->unk5A >= 0) {
@@ -166,7 +166,7 @@ void func_80028DF0_299F0(Func297D8Arg *arg0) {
         }
     } else {
         if (func_8002A390_2AF90(arg0) != 0) {
-            setCallback(func_80028AEC_296EC);
+            setCallback(collectStoryMapItem);
             shouldSetCallback = 1;
         } else if (arg0->unk5E == 0) {
             if (arg0->unk5A >= 0) {
@@ -232,7 +232,7 @@ void func_8002900C_29C0C(Func297D8Arg *arg0) {
         }
     } else {
         if (func_8002A390_2AF90(arg0) != 0) {
-            setCallback(func_80028AEC_296EC);
+            setCallback(collectStoryMapItem);
             shouldSetCallback = 1;
         } else if (arg0->unk3A == 0x10) {
             if (arg0->unk5A >= 0) {
@@ -286,7 +286,7 @@ void func_800291CC_29DCC(Func297D8Arg *arg0) {
         }
     } else {
         if (func_8002A390_2AF90(arg0) != 0) {
-            setCallback(func_80028AEC_296EC);
+            setCallback(collectStoryMapItem);
             setCallbackFlag = 1;
         } else if (arg0->unk5E == 0) {
             arg0->unk5A++;
@@ -374,7 +374,7 @@ void func_80029360_29F60(Func297D8Arg *arg0) {
         }
     } else {
         if (func_8002A390_2AF90(arg0) != 0) {
-            setCallback(func_80028AEC_296EC);
+            setCallback(collectStoryMapItem);
             shouldSetCallback = 1;
         } else if (arg0->unk5E == 0) {
             if (arg0->unk5A >= 0) {
@@ -521,7 +521,7 @@ void func_80029954_2A554(Func297D8Arg *arg0) {
     setCallbackFlag = 0;
 
     if (func_8002A390_2AF90(arg0) != 0) {
-        setCallback(func_80028AEC_296EC);
+        setCallback(collectStoryMapItem);
         setCallbackFlag = 1;
     }
 
@@ -596,7 +596,7 @@ void func_80029AA4_2A6A4(Func297D8Arg *arg0) {
         }
     } else {
         if (func_8002A390_2AF90(arg0) != 0) {
-            setCallback(func_80028AEC_296EC);
+            setCallback(collectStoryMapItem);
             setCallbackFlag = 1;
         } else if (arg0->unk5E == 0) {
             arg0->unk5A = arg0->unk5A + 1;
@@ -668,7 +668,7 @@ void func_80029C90_2A890(Func297D8Arg *arg0) {
 
         default:
             if (func_8002A390_2AF90(arg0) != 0) {
-                setCallback(func_80028AEC_296EC);
+                setCallback(collectStoryMapItem);
             } else if (arg0->unk5E == 0) {
                 arg0->unk5A = arg0->unk5A + 1;
                 if (arg0->unk5A == 0x4B) {
@@ -737,7 +737,7 @@ void func_80029EA8_2AAA8(Func297D8Arg *arg0) {
         }
     } else {
         if (func_8002A390_2AF90(arg0) != 0) {
-            setCallback(func_80028AEC_296EC);
+            setCallback(collectStoryMapItem);
             shouldSetCallback = 1;
         } else if (arg0->unk5E == 0) {
             arg0->unk5A++;
@@ -809,7 +809,7 @@ void func_8002A154_2AD54(Func8002A154Arg *arg0) {
     AllocationData *alloc = getCurrentAllocation();
 
     if (func_8002A390_2AF90(arg0) != 0) {
-        setCallback(func_80028AEC_296EC);
+        setCallback(collectStoryMapItem);
     }
 
     func_8002A2D0_2AED0((Func297D8Arg *)arg0);

@@ -58,7 +58,7 @@ void initLevelSelectWithDetail(void);
 void initLevelSelectBasic(void);
 void func_80035260_35E60(void *arg0, void *arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
 void initCharSelectIcons(void *arg0);
-void func_80028AEC_296EC(void *arg0);
+void collectStoryMapItem(void *arg0);
 void func_8002AE80_2BA80(void *arg0);
 void func_8002B248_2BE48(void *arg0);
 s32 func_8002A390_2AF90(void *arg0);

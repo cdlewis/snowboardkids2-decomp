@@ -12,8 +12,8 @@ extern void func_800288D4_294D4(void *);
 
 void awaitStoryMapItemReady(void);
 
-void func_80028B44_29744(StoryMapItem *arg0);
-void func_80028B80_29780(StoryMapItem *arg0);
+void awaitStoryMapItemRespawn(StoryMapItem *arg0);
+void cleanupStoryMapItem(StoryMapItem *arg0);
 
 typedef struct {
     u8 pad0[0x418];
@@ -58,7 +58,7 @@ void initStoryMapItem(StoryMapItem *arg0) {
         alloc->unk421 = 1;
     }
 
-    setCleanupCallback(func_80028B80_29780);
+    setCleanupCallback(cleanupStoryMapItem);
     setCallback(awaitStoryMapItemReady);
 }
 
@@ -108,17 +108,17 @@ void awaitStoryMapItemReady(void) {
 
 INCLUDE_ASM("asm/nonmatchings/29200", func_800288D4_294D4);
 
-void func_80028AEC_296EC(StoryMapItem *arg0) {
+void collectStoryMapItem(StoryMapItem *arg0) {
     AllocationData29200 *alloc = getCurrentAllocation();
 
     alloc->unk422 = 1;
     alloc->unk42E = 1;
     arg0->model = destroySceneModel(arg0->model);
     arg0->respawnTimer = (randB() & 0x1F) + 0xF;
-    setCallback(func_80028B44_29744);
+    setCallback(awaitStoryMapItemRespawn);
 }
 
-void func_80028B44_29744(StoryMapItem *arg0) {
+void awaitStoryMapItemRespawn(StoryMapItem *arg0) {
     arg0->respawnTimer--;
     if (arg0->respawnTimer == 0) {
         arg0->respawnTimer = 0;
@@ -126,6 +126,6 @@ void func_80028B44_29744(StoryMapItem *arg0) {
     }
 }
 
-void func_80028B80_29780(StoryMapItem *arg0) {
+void cleanupStoryMapItem(StoryMapItem *arg0) {
     arg0->model = destroySceneModel(arg0->model);
 }
