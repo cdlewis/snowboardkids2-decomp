@@ -51,10 +51,10 @@ typedef struct {
 
 typedef struct {
     u8 pad[0x8];
-    void *unk8;
+    void *textAsset;
     u8 pad2[0xC];
-    void *unk18;
-} func_80037874_38474_arg;
+    void *spriteAsset;
+} OptionsMenuTitleCleanupArg;
 
 typedef struct {
     u8 pad0[0x4];
@@ -84,7 +84,7 @@ typedef struct {
     u8 unk1EC;
 } func_80037F14_alloc;
 
-extern u8 D_8008FD30_90930[];
+extern u8 optionsMenuTitleTextData[];
 extern void *D_8008FD8C_9098C;
 extern void *D_8008FD9C_9099C;
 extern void *D_8008FDAC_909AC;
@@ -93,45 +93,47 @@ extern void *D_8008FE54_90A54[];
 
 void func_80037E40_38A40(func_80037E40_38A40_arg *);
 void func_80037D18_38918(func_80037BFC_387FC_arg *);
-void func_80037874_38474(func_80037874_38474_arg *);
-void func_800377FC_383FC(u8 *);
+void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *);
+void updateOptionsMenuTitle(u8 *);
 void func_80037F14_38B14(Entry1 *);
 void func_80037FB0_38BB0(func_80037FB0_38BB0_arg *arg0);
 
-void func_80037710_38310(func_80037710_38310_arg *arg0) {
-    void *s1;
-    void *s2;
+void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
+    void *textAsset;
+    void *spriteAsset;
 
-    s1 = loadTextRenderAsset(1);
-    s2 = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
-    setCleanupCallback(func_80037874_38474);
+    textAsset = loadTextRenderAsset(1);
+    spriteAsset = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
+    setCleanupCallback(cleanupOptionsMenuTitle);
 
-    arg0->unk0 = -0x50;
-    arg0->unk2 = -0x58;
-    arg0->unk4 = D_8008FD30_90930;
-    arg0->unk8 = s1;
-    arg0->unkC = 0xFF;
-    arg0->unkE = 0xFF;
-    arg0->unk10 = 0;
-    arg0->unk14 = -0x90;
-    arg0->unk16 = -0x60;
-    arg0->unk18 = s2;
-    arg0->unk1C = 2;
-    arg0->unk1E = 0xFF;
-    arg0->unk20 = 1;
-    arg0->unk21 = 0;
-    arg0->unk24 = 0x58;
-    arg0->unk26 = -0x60;
-    arg0->unk28 = s2;
-    arg0->unk2C = 2;
-    arg0->unk2E = 0xFF;
-    arg0->unk30 = 0;
-    arg0->unk31 = 0;
+    arg0->titleText.x = -0x50;
+    arg0->titleText.y = -0x58;
+    arg0->titleText.textData = optionsMenuTitleTextData;
+    arg0->titleText.textAsset = textAsset;
+    arg0->titleText.primaryColor = 0xFF;
+    arg0->titleText.secondaryColor = 0xFF;
+    arg0->titleText.textStyle = 0;
 
-    setCallback(func_800377FC_383FC);
+    arg0->leftIcon.x = -0x90;
+    arg0->leftIcon.y = -0x60;
+    arg0->leftIcon.spriteAsset = spriteAsset;
+    arg0->leftIcon.frameIndex = 2;
+    arg0->leftIcon.alpha = 0xFF;
+    arg0->leftIcon.blinkState = 1;
+    arg0->leftIcon.unkD = 0;
+
+    arg0->rightIcon.x = 0x58;
+    arg0->rightIcon.y = -0x60;
+    arg0->rightIcon.spriteAsset = spriteAsset;
+    arg0->rightIcon.frameIndex = 2;
+    arg0->rightIcon.alpha = 0xFF;
+    arg0->rightIcon.blinkState = 0;
+    arg0->rightIcon.unkD = 0;
+
+    setCallback(updateOptionsMenuTitle);
 }
 
-void func_800377FC_383FC(u8 *arg0) {
+void updateOptionsMenuTitle(u8 *arg0) {
     s32 i;
 
     debugEnqueueCallback(8, 0, func_80035408_36008, arg0);
@@ -141,9 +143,9 @@ void func_800377FC_383FC(u8 *arg0) {
     }
 }
 
-void func_80037874_38474(func_80037874_38474_arg *arg0) {
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
-    arg0->unk18 = freeNodeMemory(arg0->unk18);
+void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *arg0) {
+    arg0->textAsset = freeNodeMemory(arg0->textAsset);
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
 void func_80037BC4_387C4(func_80037BC4_387C4_arg *);

@@ -47,7 +47,7 @@ void initOptionsMenu(void) {
         i--;
         ptr = (MenuAllocation *)((u8 *)ptr - 1);
     } while (i >= 0);
-    scheduleTask(func_80037710_38310, 0, 0, 0x5A);
+    scheduleTask(initOptionsMenuTitle, 0, 0, 0x5A);
     scheduleTask(func_800378AC_384AC, 0, 0, 0x5A);
     scheduleTask(func_80037BFC_387FC, 0, 0, 0x5A);
     scheduleTask(func_80037E78_38A78, 0, 0, 0x5A);

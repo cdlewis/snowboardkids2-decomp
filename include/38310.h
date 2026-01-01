@@ -3,30 +3,32 @@
 #include "common.h"
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    void *unk8;
-    s16 unkC;
-    s16 unkE;
-    u8 unk10;
-    u8 pad11[3];
-    s16 unk14;
-    s16 unk16;
-    void *unk18;
-    s16 unk1C;
-    s16 unk1E;
-    u8 unk20;
-    u8 unk21;
-    u8 pad22[2];
-    s16 unk24;
-    s16 unk26;
-    void *unk28;
-    s16 unk2C;
-    s16 unk2E;
-    u8 unk30;
-    u8 unk31;
-} func_80037710_38310_arg;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ void *textData;
+    /* 0x08 */ void *textAsset;
+    /* 0x0C */ s16 primaryColor;
+    /* 0x0E */ s16 secondaryColor;
+    /* 0x10 */ u8 textStyle;
+    /* 0x11 */ u8 pad11[3];
+} OptionsMenuTitleTextEntry;
+
+typedef struct {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ void *spriteAsset;
+    /* 0x08 */ s16 frameIndex;
+    /* 0x0A */ s16 alpha;
+    /* 0x0C */ u8 blinkState;
+    /* 0x0D */ u8 unkD;
+    /* 0x0E */ u8 padE[2];
+} OptionsMenuTitleIconEntry;
+
+typedef struct {
+    /* 0x00 */ OptionsMenuTitleTextEntry titleText;
+    /* 0x14 */ OptionsMenuTitleIconEntry leftIcon;
+    /* 0x24 */ OptionsMenuTitleIconEntry rightIcon;
+} OptionsMenuTitleState;
 
 typedef struct {
     s16 unk0;
@@ -56,6 +58,6 @@ typedef struct {
     void *unk90;
 } func_80037BFC_387FC_arg;
 
-void func_80037710_38310(func_80037710_38310_arg *arg0);
+void initOptionsMenuTitle(OptionsMenuTitleState *arg0);
 void func_800378AC_384AC(void *);
 void func_80037BFC_387FC(func_80037BFC_387FC_arg *arg0);
