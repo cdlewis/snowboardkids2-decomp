@@ -23,6 +23,6 @@ u8 getCharacterPaletteId(u8 characterIndex) {
     return EepromSaveData->character_or_settings[characterIndex];
 }
 
-s32 func_80038070_38C70(void) {
+s32 isCreditsUnlocked(void) {
     return EepromSaveData->save_slot_status[11] == 1;
 }

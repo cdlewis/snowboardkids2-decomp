@@ -71,7 +71,7 @@ void func_80041518_42118(void *arg0);
 s32 isSaveSlotUnlocked(u8 slotIndex);
 u8 isBoardUnlocked(u8 boardIndex);
 u8 getCharacterPaletteId(u8 characterIndex);
-s32 func_80038070_38C70(void);
+s32 isCreditsUnlocked(void);
 void func_80038090_38C90(s16 arg0);
 s16 func_80069810_6A410(void);
 void loadOverlay_1BBA0(void);

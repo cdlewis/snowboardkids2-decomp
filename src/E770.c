@@ -499,14 +499,14 @@ u8 isGalleryItemUnlocked(u8 itemIndex) {
                 return 1;
             }
             if (unlockSlot == -2) {
-                return func_80038070_38C70() & 0xFF;
+                return isCreditsUnlocked() & 0xFF;
             }
             return isSaveSlotUnlocked(unlockSlot & 0xFF) & 0xFF;
         case 0:
         case 4:
             return isSaveSlotUnlocked(itemIndex) & 0xFF;
         case 5:
-            return func_80038070_38C70() & 0xFF;
+            return isCreditsUnlocked() & 0xFF;
     }
     return 1;
 }
