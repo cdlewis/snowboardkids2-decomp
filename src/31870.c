@@ -280,15 +280,6 @@ typedef struct {
 } func_80032CB4_338B4_asset;
 
 typedef struct {
-    u8 unk0[4];
-    u8 unk4;
-} func_80031100_31D00_arg;
-
-typedef struct {
-    Node_70B00 *unk0;
-} func_80031248_31E48_arg;
-
-typedef struct {
     u8 padding[0x2C];
     void *unk2C;
 } func_8002FA1C_3061C_arg;
@@ -317,7 +308,20 @@ typedef struct {
     s16 unk77C;
 } func_80032628_alloc;
 
-void func_80031138_31D38(void);
+typedef struct {
+    s16 x;
+    s16 y;
+    void *sprite;
+    s16 speed;
+    s16 unkA;
+} SnowParticle;
+
+typedef struct {
+    SnowParticle *particles;
+    u8 delayTimer;
+} SnowParticleState;
+
+void animateBoardShopSnowParticles(void);
 void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
 void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void func_800313A4_31FA4(void);
@@ -347,8 +351,8 @@ void func_80032DBC_339BC(func_80032F90_33B90_arg *arg0);
 void func_800319C8_325C8(func_800319C8_325C8_arg *arg0);
 void func_80031944_32544(func_80031944_32544_arg *arg0);
 void func_80031CE8_328E8(void *arg0);
-void func_80031248_31E48(func_80031248_31E48_arg *arg0);
-void func_80031100_31D00(func_80031100_31D00_arg *arg0);
+void cleanupBoardShopSnowParticles(SnowParticleState *arg0);
+void waitBoardShopSnowParticles(SnowParticleState *arg0);
 void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0);
 void func_80032628_33228(func_80032628_arg *arg0);
 void func_800323FC_32FFC(func_80032330_32F30_arg *arg0);
@@ -463,72 +467,53 @@ void cleanupBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
     arg0->unk30 = freeNodeMemory(arg0->unk30);
 }
 
-typedef struct {
-    u8 padding[0x780];
-    u16 unk780;
-    u16 unk782;
-} func_80030FBC_31BBC_asset;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-} func_80030FBC_31BBC_arg_item;
-
-typedef struct {
-    func_80030FBC_31BBC_arg_item *unk0;
-    u8 unk4;
-} func_80030FBC_31BBC_arg;
-
-void func_80030FBC_31BBC(func_80030FBC_31BBC_arg *arg0) {
-    func_80030FBC_31BBC_asset *allocation;
-    void *asset;
+void initBoardShopSnowParticles(SnowParticleState *arg0) {
+    func_80032DE8_339E8_asset *state;
+    void *snowflakeSprite;
     s32 i;
     int new_var;
     s32 j;
-    s32 randVal;
+    s32 randOffset;
 
-    allocation = getCurrentAllocation();
-    asset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
-    arg0->unk0 = allocateNodeMemory(0xF0);
-    setCleanupCallback(func_80031248_31E48);
+    state = getCurrentAllocation();
+    snowflakeSprite = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    arg0->particles = allocateNodeMemory(0xF0);
+    setCleanupCallback(cleanupBoardShopSnowParticles);
 
     i = j = 0;
     while (i < 0x14) {
         if (i < 10) {
-            arg0->unk0[j].unk0 = -0x24 + (i * 6);
-            randVal = (randB() & 7) - 10;
-            arg0->unk0[j].unk2 = allocation->unk780 + randVal;
+            arg0->particles[j].x = -0x24 + (i * 6);
+            randOffset = (randB() & 7) - 10;
+            arg0->particles[j].y = state->unk780 + randOffset;
         } else {
-            arg0->unk0[j].unk0 = -0x60 + (i * 6);
-            arg0->unk0[j].unk2 = allocation->unk782 + (new_var = (randB() & 7) - 10);
+            arg0->particles[j].x = -0x60 + (i * 6);
+            arg0->particles[j].y = state->unk782 + (new_var = (randB() & 7) - 10);
         }
 
-        arg0->unk0[j].unk4 = asset;
-        arg0->unk0[j].unk8 = (randB() & 7) | 0x10;
+        arg0->particles[j].sprite = snowflakeSprite;
+        arg0->particles[j].speed = (randB() & 7) | 0x10;
 
         i++;
         j++;
     }
 
-    arg0->unk4 = 0xC;
-    setCallback(func_80031100_31D00);
+    arg0->delayTimer = 0xC;
+    setCallback(waitBoardShopSnowParticles);
 }
 
-void func_80031100_31D00(func_80031100_31D00_arg *arg0) {
-    arg0->unk4--;
-    if (arg0->unk4 == 0) {
-        setCallback(func_80031138_31D38);
+void waitBoardShopSnowParticles(SnowParticleState *arg0) {
+    arg0->delayTimer--;
+    if (arg0->delayTimer == 0) {
+        setCallback(animateBoardShopSnowParticles);
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", func_80031138_31D38);
+INCLUDE_ASM("asm/nonmatchings/31870", animateBoardShopSnowParticles);
 
-void func_80031248_31E48(func_80031248_31E48_arg *arg0) {
-    arg0->unk0->prev = freeNodeMemory(arg0->unk0->prev);
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+void cleanupBoardShopSnowParticles(SnowParticleState *arg0) {
+    ((Node_70B00 *)arg0->particles)->prev = freeNodeMemory(((Node_70B00 *)arg0->particles)->prev);
+    arg0->particles = freeNodeMemory(arg0->particles);
 }
 
 void func_80031288_31E88(func_80031510_32110_arg *arg0) {
