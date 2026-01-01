@@ -478,21 +478,21 @@ void destroyStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     card->displayList.unk2C = freeNodeMemory(card->displayList.unk2C);
 }
 
-void func_8002F658_30258(StoryMapShopItemCardState *card) {
-    Transform3D sp10;
-    Transform3D sp30;
-    Transform3D *new_var;
-    Transform3D *matrix;
+void initSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
+    Transform3D rotationYX;
+    Transform3D rotationZ;
+    Transform3D *rotationYXPtr;
+    Transform3D *cardTransform;
 
     getCurrentAllocation();
-    new_var = &sp10;
-    matrix = &card->transform;
-    memcpy(matrix, &identityMatrix, sizeof(Transform3D));
-    memcpy(&sp30, matrix, sizeof(Transform3D));
-    memcpy(new_var, &sp30, sizeof(Transform3D));
-    createRotationMatrixYX(&sp10, 0x1000, 0x800);
-    createZRotationMatrix(&sp30, 0x1F00);
-    func_8006B084_6BC84(&sp10, &sp30, matrix);
+    rotationYXPtr = &rotationYX;
+    cardTransform = &card->transform;
+    memcpy(cardTransform, &identityMatrix, sizeof(Transform3D));
+    memcpy(&rotationZ, cardTransform, sizeof(Transform3D));
+    memcpy(rotationYXPtr, &rotationZ, sizeof(Transform3D));
+    createRotationMatrixYX(&rotationYX, 0x1000, 0x800);
+    createZRotationMatrix(&rotationZ, 0x1F00);
+    func_8006B084_6BC84(&rotationYX, &rotationZ, cardTransform);
     card->updateCounter = 0;
     card->displayList.unk20 = NULL;
     card->displayList.unk24 = NULL;
