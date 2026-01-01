@@ -1873,8 +1873,8 @@ void updateCharSelectPreviewLighting(CharSelectPreviewModel *arg0, u8 arg1) {
     arg0->ambientB = val;
 }
 
-u8 func_80027C44_28844(u8 arg0) {
-    return D_8008DD8C_8E98C[arg0 * 3];
+u8 getItemStat1(u8 itemIndex) {
+    return D_8008DD8C_8E98C[itemIndex * 3];
 }
 
 u8 func_80027C60_28860(u8 arg0) {
