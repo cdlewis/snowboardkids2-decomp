@@ -69,22 +69,22 @@ typedef struct {
 } Func34ADCArg;
 
 typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ void *unk8;
-    /* 0x0C */ s16 unkC;
-    /* 0x0E */ s16 unkE;
-    /* 0x10 */ u8 unk10;
+    /* 0x00 */ s16 mainTextX;
+    /* 0x02 */ s16 mainTextY;
+    /* 0x04 */ void *mainText;
+    /* 0x08 */ void *mainTextAsset;
+    /* 0x0C */ s16 mainTextAlpha;
+    /* 0x0E */ s16 mainTextAlpha2;
+    /* 0x10 */ u8 mainTextFlag;
     /* 0x11 */ u8 pad11[0x3];
-    /* 0x14 */ s16 unk14;
-    /* 0x16 */ s16 unk16;
-    /* 0x18 */ void *unk18;
-    /* 0x1C */ void *unk1C;
-    /* 0x20 */ s16 unk20;
-    /* 0x22 */ s16 unk22;
-    /* 0x24 */ u8 unk24;
-} Func343FCArg;
+    /* 0x14 */ s16 hintTextX;
+    /* 0x16 */ s16 hintTextY;
+    /* 0x18 */ void *hintText;
+    /* 0x1C */ void *hintTextAsset;
+    /* 0x20 */ s16 hintTextAlpha;
+    /* 0x22 */ s16 hintTextAlpha2;
+    /* 0x24 */ u8 hintTextFlag;
+} SaveSlotPromptTextState;
 
 typedef struct {
     /* 0x000 */ u8 pad0[0xABC];
@@ -246,8 +246,8 @@ void func_80034A30_35630(void *arg0);
 void func_80034A94_35694(Func34574Arg *arg0);
 void func_8003513C_35D3C(Func350ACArg *arg0);
 void func_80035234_35E34(Func34574Arg *arg0);
-void func_80034640_35240(Func34574Arg *arg0);
-void func_800344A8_350A8(Func343FCArg *arg0);
+void cleanupSaveSlotPromptText(Func34574Arg *arg0);
+void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0);
 void cleanupSaveSlotItemIcons(Func34574Arg *arg0);
 
 void initSaveSlotStatSprites(SaveSlotStatSpritesState *state) {
@@ -425,85 +425,95 @@ void cleanupSaveSlotNumberLabels(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_800343FC_34FFC(Func343FCArg *arg0) {
+void initSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
     AllocationStruct *allocation;
-    void *temp_s1;
-    s16 temp_abe;
-    s16 temp_ac0;
+    void *textAsset;
+    s16 hintX;
+    s16 hintY;
 
     allocation = getCurrentAllocation();
-    temp_s1 = func_80035F80_36B80(1);
-    setCleanupCallback(func_80034640_35240);
+    textAsset = func_80035F80_36B80(1);
+    setCleanupCallback(cleanupSaveSlotPromptText);
 
-    arg0->unk0 = -0x78;
-    arg0->unk2 = -0x60;
-    arg0->unk8 = temp_s1;
-    arg0->unkC = 0xFF;
-    arg0->unk10 = 0;
-    arg0->unkE = 0xFF;
-    temp_abe = allocation->unkABE + 0xA;
-    arg0->unk14 = temp_abe;
-    temp_ac0 = allocation->unkAC0 + 0xA;
-    arg0->unk1C = temp_s1;
-    arg0->unk20 = 0xFF;
-    arg0->unk24 = 4;
-    arg0->unk22 = 0xFF;
-    arg0->unk16 = temp_ac0;
+    arg0->mainTextX = -0x78;
+    arg0->mainTextY = -0x60;
+    arg0->mainTextAsset = textAsset;
+    arg0->mainTextAlpha = 0xFF;
+    arg0->mainTextFlag = 0;
+    arg0->mainTextAlpha2 = 0xFF;
+    hintX = allocation->unkABE + 0xA;
+    arg0->hintTextX = hintX;
+    hintY = allocation->unkAC0 + 0xA;
+    arg0->hintTextAsset = textAsset;
+    arg0->hintTextAlpha = 0xFF;
+    arg0->hintTextFlag = 4;
+    arg0->hintTextAlpha2 = 0xFF;
+    arg0->hintTextY = hintY;
 
-    setCallback(func_800344A8_350A8);
+    setCallback(updateSaveSlotPromptText);
 }
 
-void func_800344A8_350A8(Func343FCArg *arg0) {
+void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
     AllocationStruct *alloc;
-    void *temp_a0;
-    s16 temp_a2;
-    u16 temp_v1;
-    u16 temp_v0;
-    s16 var_v0;
+    void *promptText;
+    s16 centeredX;
+    u16 screenState;
+    u16 screenState2;
+    s16 hintY;
 
     alloc = getCurrentAllocation();
 
     if ((alloc->unkAC6 < 0x3D) || (alloc->unkAC9 != 0)) {
-        temp_a0 = D_8008F7CC_903CC[alloc->unkACB];
-        arg0->unk4 = temp_a0;
-        temp_a2 = ((0x120 - getMaxLinePixelWidth(temp_a0)) / 2) - 0x90;
-        arg0->unk0 = temp_a2;
-        func_80035260_35E60(arg0->unk8, arg0->unk4, temp_a2, arg0->unk2, arg0->unkC, arg0->unkE, arg0->unk10, 8, 0);
+        promptText = D_8008F7CC_903CC[alloc->unkACB];
+        arg0->mainText = promptText;
+        centeredX = ((0x120 - getMaxLinePixelWidth(promptText)) / 2) - 0x90;
+        arg0->mainTextX = centeredX;
+        func_80035260_35E60(
+            arg0->mainTextAsset,
+            arg0->mainText,
+            centeredX,
+            arg0->mainTextY,
+            arg0->mainTextAlpha,
+            arg0->mainTextAlpha2,
+            arg0->mainTextFlag,
+            8,
+            0
+        );
 
-        temp_v1 = alloc->unkAC6;
-        if (temp_v1 >= 6) {
-            if (temp_v1 >= 0xA) {
-                arg0->unk18 = D_8008F7E0_903E0;
+        screenState = alloc->unkAC6;
+        if (screenState >= 6) {
+            if (screenState >= 0xA) {
+                arg0->hintText = D_8008F7E0_903E0;
             } else {
-                arg0->unk18 = D_8008F7DC_903DC;
+                arg0->hintText = D_8008F7DC_903DC;
             }
 
-            temp_v0 = alloc->unkAC6;
-            if (temp_v0 == 8 || temp_v0 == 0xB) {
-                var_v0 = alloc->unkAC2 + 0xA;
+            screenState2 = alloc->unkAC6;
+            if (screenState2 == 8 || screenState2 == 0xB) {
+                hintY = alloc->unkAC2 + 0xA;
             } else {
-                var_v0 = alloc->unkAC0 + 0xA;
+                hintY = alloc->unkAC0 + 0xA;
             }
-            arg0->unk16 = var_v0;
+            arg0->hintTextY = hintY;
 
             if ((u32)(alloc->unkAC6 - 9) < 2U) {
                 if (alloc->unkAC4 & 1) {
-                    arg0->unk24 = 0xFF;
+                    arg0->hintTextFlag = 0xFF;
                 } else {
-                    arg0->unk24 = 4;
+                    arg0->hintTextFlag = 4;
                 }
             } else {
-                arg0->unk24 = 4;
+                arg0->hintTextFlag = 4;
             }
 
             func_80035260_35E60(
-                arg0->unk1C,
-                arg0->unk18,
-                arg0->unk14,
-                arg0->unk16,
-                arg0->unk20,
-                arg0->unk22,
-                arg0->unk24,
+                arg0->hintTextAsset,
+                arg0->hintText,
+                arg0->hintTextX,
+                arg0->hintTextY,
+                arg0->hintTextAlpha,
+                arg0->hintTextAlpha2,
+                arg0->hintTextFlag,
                 8,
                 0
             );
@@ -511,7 +521,7 @@ void func_800344A8_350A8(Func343FCArg *arg0) {
     }
 }
 
-void func_80034640_35240(Func34574Arg *arg0) {
+void cleanupSaveSlotPromptText(Func34574Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
 }
 
