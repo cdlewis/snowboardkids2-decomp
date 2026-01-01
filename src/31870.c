@@ -279,25 +279,6 @@ typedef struct {
 } BoardShopBackgroundState;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s8 unk12;
-    s8 unk13;
-    s8 unk14;
-    u8 padding[0x3];
-} func_80032628_item;
-
-typedef struct {
-    func_80032628_item unk0[4];
-} func_80032628_arg;
-
-typedef struct {
     u8 padding[0x77C];
     s16 unk77C;
 } func_80032628_alloc;
@@ -348,7 +329,7 @@ void enqueueBoardShopBackgroundRender(void *arg0);
 void cleanupBoardShopSnowParticles(SnowParticleState *arg0);
 void waitBoardShopSnowParticles(SnowParticleState *arg0);
 void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0);
-void func_80032628_33228(func_80032628_arg *arg0);
+void animateBoardShopBoardIconsSlideIn(BoardShopBoardIconsState *arg0);
 void updateBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0);
 void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0);
 void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0);
@@ -365,7 +346,7 @@ extern s32 D_8008F200_8FE00[];
 extern u16 D_8008F20A_8FE0A[];
 extern u16 D_8008F20C_8FE0C;
 extern s32 identityMatrix;
-extern s16 D_8008F17C_8FD7C[];
+extern s16 boardIconTargetYPositions[];
 extern u16 D_8008F184_8FD84[];
 
 void initBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
@@ -1244,36 +1225,36 @@ void initBoardShopBoardIcons(BoardShopBoardIconsState *arg0) {
     arg0->priceTextPtr = &arg0->priceTextBuffer;
 
     setCleanupCallback(&func_80032DBC_339BC);
-    setCallback(&func_80032628_33228);
+    setCallback(&animateBoardShopBoardIconsSlideIn);
 }
 
-void func_80032628_33228(func_80032628_arg *arg0) {
+void animateBoardShopBoardIconsSlideIn(BoardShopBoardIconsState *arg0) {
     func_80032628_alloc *allocation;
-    s32 counter;
+    s32 animatingCount;
     s32 i;
-    s16 current;
+    s16 currentY;
     s32 delta;
-    s16 var_delta;
+    s16 absDelta;
 
     allocation = getCurrentAllocation();
-    counter = 0;
+    animatingCount = 0;
 
     for (i = 0; i < 4; i++) {
-        current = arg0->unk0[i].unk2;
-        if (current < D_8008F17C_8FD7C[i]) {
-            delta = D_8008F17C_8FD7C[i] - current;
-            var_delta = ABS(delta);
-            if (var_delta >= 20) {
-                arg0->unk0[i].unk2 = current + 20;
+        currentY = arg0->icons[i].y;
+        if (currentY < boardIconTargetYPositions[i]) {
+            delta = boardIconTargetYPositions[i] - currentY;
+            absDelta = ABS(delta);
+            if (absDelta >= 20) {
+                arg0->icons[i].y = currentY + 20;
             } else {
-                arg0->unk0[i].unk2 = current + var_delta;
+                arg0->icons[i].y = currentY + absDelta;
             }
-            counter++;
+            animatingCount++;
         }
-        debugEnqueueCallback(8, 0, func_800136E0_142E0, &arg0->unk0[i]);
+        debugEnqueueCallback(8, 0, func_800136E0_142E0, &arg0->icons[i]);
     }
 
-    if ((counter & 0xFF) == 0) {
+    if ((animatingCount & 0xFF) == 0) {
         allocation->unk77C = 1;
         setCallback(func_80032708_33308);
     }
