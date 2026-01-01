@@ -2083,3 +2083,4 @@ renderCharSelectScaledSprite = 0x80027B70; // rom:0x28770
 cleanupCharSelectScaledSprite = 0x80027B9C; // rom:0x2879C
 updateCharSelectPreviewLighting = 0x80027BC8; // rom:0x287C8
 getItemStat1 = 0x80027C44; // rom:0x28844
+getItemStat2 = 0x80027C60; // rom:0x28860

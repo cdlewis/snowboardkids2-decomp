@@ -1053,7 +1053,7 @@ void func_80030764_31364(ItemStatsDisplay *arg0) {
                 isValidItem = currentItem & 0xFF;
                 formatStr = "%2d";
                 sprintf(arg0->statBuffers[0], formatStr, getItemStat1(isValidItem) & 0xFF);
-                sprintf(arg0->statBuffers[1], formatStr, func_80027C60_28860(isValidItem) & 0xFF);
+                sprintf(arg0->statBuffers[1], formatStr, getItemStat2(isValidItem) & 0xFF);
                 sprintf(arg0->statBuffers[2], formatStr, func_80027C7C_2887C(isValidItem) & 0xFF);
 
                 labelIndex = 0;

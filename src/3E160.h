@@ -130,7 +130,7 @@ void func_80059A48_5A648(Player *arg0, s32 arg1);
 void func_80059A88_5A688(Player *arg0, s32 arg1);
 s32 func_80059AC4_5A6C4(Player *arg0);
 u8 getItemStat1(u8 itemIndex);
-u8 func_80027C60_28860(s32 arg0);
+u8 getItemStat2(s32 itemIndex);
 u8 func_80027C7C_2887C(s32 arg0);
 void *func_8005DC60_5E860(s32 index);
 void *loadAssetByIndex_5E990(s32 index);
