@@ -33,9 +33,9 @@ typedef struct {
     Transform3D transform;
     s32 translationStep;
     u8 updateCounter;
-    s8 unk61;
-    s8 unk62;
-} func_8002F658_30258_arg;
+    s8 itemIndex;
+    s8 slotPosition;
+} StoryMapShopItemCardState;
 
 typedef struct {
     u8 padding[0x2C];
@@ -157,17 +157,17 @@ void func_80030540_31140(func_80030540_31140_arg *arg0);
 void updateStoryMapShopFairyInitial(StoryMapShopFairyState *);
 void updateStoryMapShopFairy(StoryMapShopFairyState *);
 void destroyStoryMapShopFairy(StoryMapShopFairyState *);
-void func_8002F290_2FE90(func_8002F658_30258_arg *);
-void func_8002F36C_2FF6C(func_8002F658_30258_arg *);
+void func_8002F290_2FE90(StoryMapShopItemCardState *);
+void func_8002F36C_2FF6C(StoryMapShopItemCardState *);
 void func_8002F3E4_2FFE4(func_8002F518_30118_arg *);
 void func_8002F518_30118(func_8002F518_30118_arg *);
 void func_8002F5C8_301C8(DisplayListObject *);
-void func_8002F614_30214(func_8002F658_30258_arg *);
-void func_8002F72C_3032C(func_8002F658_30258_arg *);
+void func_8002F614_30214(StoryMapShopItemCardState *);
+void func_8002F72C_3032C(StoryMapShopItemCardState *);
 void func_8002F860_30460(DisplayListObject *);
-void func_8002F88C_3048C(func_8002F658_30258_arg *arg0);
+void func_8002F88C_3048C(StoryMapShopItemCardState *arg0);
 void func_8002F948_30548(void);
-void func_8002F980_30580(func_8002F658_30258_arg *);
+void func_8002F980_30580(StoryMapShopItemCardState *);
 void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
 void func_8002FA44_30644(void *);
 void func_8002FA70_30670(func_8002FA70_30670_arg *);
@@ -305,49 +305,49 @@ void destroyStoryMapShopFairy(StoryMapShopFairyState *arg0) {
     destroySceneModel(arg0->model);
 }
 
-void func_8002F12C_2FD2C(func_8002F658_30258_arg *arg0) {
-    Transform3D sp10;
-    Transform3D sp30;
-    s16 temp_s0;
-    u16 temp_s1;
-    Transform3D *temp_s3;
-    GameState *temp_s4;
-    Transform3D *sp30_ptr;
-    Transform3D *sp10_ptr;
+void initStoryMapShopItemCard(StoryMapShopItemCardState *card) {
+    Transform3D rotationYX;
+    Transform3D rotationZ;
+    s16 itemId;
+    u16 itemData;
+    Transform3D *cardTransform;
+    GameState *state;
+    Transform3D *rotationZPtr;
+    Transform3D *rotationYXPtr;
 
-    temp_s3 = &arg0->transform;
-    temp_s4 = (GameState *)getCurrentAllocation();
-    memcpy(temp_s3, identityMatrix, 0x20);
-    sp30_ptr = &sp30;
-    memcpy(sp30_ptr, temp_s3, 0x20);
-    sp10_ptr = &sp10;
-    memcpy(sp10_ptr, sp30_ptr, 0x20);
-    createRotationMatrixYX(sp10_ptr, 0x1000, 0x800);
-    createZRotationMatrix(sp30_ptr, 0x1F00);
-    func_8006B084_6BC84(sp10_ptr, sp30_ptr, temp_s3);
+    cardTransform = &card->transform;
+    state = (GameState *)getCurrentAllocation();
+    memcpy(cardTransform, identityMatrix, 0x20);
+    rotationZPtr = &rotationZ;
+    memcpy(rotationZPtr, cardTransform, 0x20);
+    rotationYXPtr = &rotationYX;
+    memcpy(rotationYXPtr, rotationZPtr, 0x20);
+    createRotationMatrixYX(rotationYXPtr, 0x1000, 0x800);
+    createZRotationMatrix(rotationZPtr, 0x1F00);
+    func_8006B084_6BC84(rotationYXPtr, rotationZPtr, cardTransform);
 
-    if (temp_s4->unk5C9 != 1) {
-        arg0->transform.translation.x = 0x200000 - ((2 - arg0->unk62) << 21);
+    if (state->unk5C9 != 1) {
+        card->transform.translation.x = 0x200000 - ((2 - card->slotPosition) << 21);
     }
 
-    temp_s1 = temp_s4->unk5CA[arg0->unk61];
-    memcpy(arg0, temp_s3, 0x20);
+    itemData = state->unk5CA[card->itemIndex];
+    memcpy(card, cardTransform, 0x20);
     do {
-        temp_s0 = temp_s1 & 0x1F;
-        temp_s1 = temp_s0;
+        itemId = itemData & 0x1F;
+        itemData = itemId;
     } while (0);
 
-    arg0->displayList.unk20 = loadAssetByIndex_95728(temp_s0);
-    arg0->displayList.unk24 = loadAssetByIndex_95500(temp_s0);
-    arg0->displayList.unk28 = loadAssetByIndex_95590(temp_s0);
-    arg0->displayList.unk2C = loadAssetByIndex_95668(temp_s1 / 3);
-    arg0->updateCounter = 0;
+    card->displayList.unk20 = loadAssetByIndex_95728(itemId);
+    card->displayList.unk24 = loadAssetByIndex_95500(itemId);
+    card->displayList.unk28 = loadAssetByIndex_95590(itemId);
+    card->displayList.unk2C = loadAssetByIndex_95668(itemData / 3);
+    card->updateCounter = 0;
 
     setCleanupCallback(func_8002F614_30214);
     setCallback(func_8002F290_2FE90);
 }
 
-void func_8002F290_2FE90(func_8002F658_30258_arg *arg0) {
+void func_8002F290_2FE90(StoryMapShopItemCardState *card) {
     volatile u8 padding[0x20];
     GameState *state;
 
@@ -355,48 +355,48 @@ void func_8002F290_2FE90(func_8002F658_30258_arg *arg0) {
 
     if (state->unk5C5 == 2) {
         if (state->unk5C6 == 2) {
-            if (arg0->unk62 == 0) {
-                arg0->unk62 = 2;
-                arg0->transform.translation.x = 0x400000;
-                arg0->updateCounter = 1;
+            if (card->slotPosition == 0) {
+                card->slotPosition = 2;
+                card->transform.translation.x = 0x400000;
+                card->updateCounter = 1;
                 goto end;
             }
         }
         if (state->unk5C6 == 1) {
-            if (arg0->unk62 == 2) {
-                arg0->transform.translation.x = 0xFFC00000;
-                arg0->unk62 = 0;
-                arg0->updateCounter = 1;
+            if (card->slotPosition == 2) {
+                card->transform.translation.x = 0xFFC00000;
+                card->slotPosition = 0;
+                card->updateCounter = 1;
                 goto end;
             }
         }
         if (state->unk5C6 == 2) {
-            arg0->unk62 = arg0->unk62 - 1;
+            card->slotPosition = card->slotPosition - 1;
         } else {
-            arg0->unk62 = arg0->unk62 + 1;
+            card->slotPosition = card->slotPosition + 1;
         }
-        arg0->updateCounter = 0;
+        card->updateCounter = 0;
 
     end:
         setCallback(&func_8002F36C_2FF6C);
     }
 
-    enqueueDisplayListObject(0, &arg0->displayList);
+    enqueueDisplayListObject(0, &card->displayList);
 }
 
-void func_8002F36C_2FF6C(func_8002F658_30258_arg *arg0) {
+void func_8002F36C_2FF6C(StoryMapShopItemCardState *card) {
     volatile u8 padding[0x20];
 
     getCurrentAllocation();
-    if (arg0->updateCounter != 0) {
-        arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
-        arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
-        arg0->displayList.unk2C = freeNodeMemory(arg0->displayList.unk2C);
-        if (arg0->updateCounter != 0) {
+    if (card->updateCounter != 0) {
+        card->displayList.unk24 = freeNodeMemory(card->displayList.unk24);
+        card->displayList.unk28 = freeNodeMemory(card->displayList.unk28);
+        card->displayList.unk2C = freeNodeMemory(card->displayList.unk2C);
+        if (card->updateCounter != 0) {
             goto end;
         }
     }
-    enqueueDisplayListObject(0, &arg0->displayList);
+    enqueueDisplayListObject(0, &card->displayList);
 end:
     setCallback(&func_8002F3E4_2FFE4);
 }
@@ -472,13 +472,13 @@ void func_8002F5C8_301C8(DisplayListObject *arg0) {
     enqueueDisplayListObject(0, arg0);
 }
 
-void func_8002F614_30214(func_8002F658_30258_arg *arg0) {
-    arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
-    arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
-    arg0->displayList.unk2C = freeNodeMemory(arg0->displayList.unk2C);
+void func_8002F614_30214(StoryMapShopItemCardState *card) {
+    card->displayList.unk24 = freeNodeMemory(card->displayList.unk24);
+    card->displayList.unk28 = freeNodeMemory(card->displayList.unk28);
+    card->displayList.unk2C = freeNodeMemory(card->displayList.unk2C);
 }
 
-void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
+void func_8002F658_30258(StoryMapShopItemCardState *card) {
     Transform3D sp10;
     Transform3D sp30;
     Transform3D *new_var;
@@ -486,23 +486,23 @@ void func_8002F658_30258(func_8002F658_30258_arg *arg0) {
 
     getCurrentAllocation();
     new_var = &sp10;
-    matrix = &arg0->transform;
+    matrix = &card->transform;
     memcpy(matrix, &identityMatrix, sizeof(Transform3D));
     memcpy(&sp30, matrix, sizeof(Transform3D));
     memcpy(new_var, &sp30, sizeof(Transform3D));
     createRotationMatrixYX(&sp10, 0x1000, 0x800);
     createZRotationMatrix(&sp30, 0x1F00);
     func_8006B084_6BC84(&sp10, &sp30, matrix);
-    arg0->updateCounter = 0;
-    arg0->displayList.unk20 = NULL;
-    arg0->displayList.unk24 = NULL;
-    arg0->displayList.unk28 = NULL;
-    arg0->displayList.unk2C = 0;
+    card->updateCounter = 0;
+    card->displayList.unk20 = NULL;
+    card->displayList.unk24 = NULL;
+    card->displayList.unk28 = NULL;
+    card->displayList.unk2C = 0;
     setCleanupCallback(&func_8002F980_30580);
     setCallback(&func_8002F72C_3032C);
 }
 
-void func_8002F72C_3032C(func_8002F658_30258_arg *arg0) {
+void func_8002F72C_3032C(StoryMapShopItemCardState *card) {
     GameState *state;
     s8 temp_v1;
     u8 temp_s1;
@@ -511,30 +511,30 @@ void func_8002F72C_3032C(func_8002F658_30258_arg *arg0) {
     state = (GameState *)getCurrentAllocation();
     if (state->unk5C5 == 2) {
         if (state->unk5C6 == 1) {
-            arg0->transform.translation.x = 0x200000;
-            arg0->translationStep = 0x80000;
+            card->transform.translation.x = 0x200000;
+            card->translationStep = 0x80000;
             temp_v1 = state->unk5C8 + 2;
-            arg0->unk61 = temp_v1;
+            card->itemIndex = temp_v1;
             if (temp_v1 >= (s32)state->unk5C9) {
-                arg0->unk61 = temp_v1 - state->unk5C9;
+                card->itemIndex = temp_v1 - state->unk5C9;
             }
         } else {
-            arg0->transform.translation.x = 0xFFE00000;
-            arg0->translationStep = 0xFFF80000;
+            card->transform.translation.x = 0xFFE00000;
+            card->translationStep = 0xFFF80000;
             temp_v1 = state->unk5C8 - 2;
-            arg0->unk61 = temp_v1;
+            card->itemIndex = temp_v1;
             if (temp_v1 < 0) {
-                arg0->unk61 = state->unk5C9 + temp_v1;
+                card->itemIndex = state->unk5C9 + temp_v1;
             }
         }
-        temp_s1 = state->unk5CA[arg0->unk61];
-        memcpy(arg0, &arg0->transform, 0x20);
+        temp_s1 = state->unk5CA[card->itemIndex];
+        memcpy(card, &card->transform, 0x20);
         temp_s1 &= 0x1F;
         s0 = temp_s1;
-        arg0->displayList.unk20 = loadAssetByIndex_95728(s0);
-        arg0->displayList.unk24 = loadAssetByIndex_95500(s0);
-        arg0->displayList.unk28 = loadAssetByIndex_95590(s0);
-        arg0->displayList.unk2C = loadAssetByIndex_95668(temp_s1 / 3);
+        card->displayList.unk20 = loadAssetByIndex_95728(s0);
+        card->displayList.unk24 = loadAssetByIndex_95500(s0);
+        card->displayList.unk28 = loadAssetByIndex_95590(s0);
+        card->displayList.unk2C = loadAssetByIndex_95668(temp_s1 / 3);
         setCallback(func_8002F860_30460);
     }
 }
@@ -544,22 +544,22 @@ void func_8002F860_30460(DisplayListObject *arg0) {
     setCallback(func_8002F88C_3048C);
 }
 
-void func_8002F88C_3048C(func_8002F658_30258_arg *arg0) {
+void func_8002F88C_3048C(StoryMapShopItemCardState *card) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    arg0->transform.translation.x += arg0->translationStep;
-    memcpy(arg0, &arg0->transform, sizeof(Transform3D));
+    card->transform.translation.x += card->translationStep;
+    memcpy(card, &card->transform, sizeof(Transform3D));
 
-    arg0->updateCounter++;
-    if (arg0->updateCounter == 4) {
+    card->updateCounter++;
+    if (card->updateCounter == 4) {
         state->unk5C7++;
-        arg0->updateCounter = 0;
-        arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
-        arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
-        arg0->displayList.unk2C = freeNodeMemory(arg0->displayList.unk2C);
+        card->updateCounter = 0;
+        card->displayList.unk24 = freeNodeMemory(card->displayList.unk24);
+        card->displayList.unk28 = freeNodeMemory(card->displayList.unk28);
+        card->displayList.unk2C = freeNodeMemory(card->displayList.unk2C);
         setCallbackWithContinue(func_8002F948_30548);
     } else {
-        enqueueDisplayListObject(0, &arg0->displayList);
+        enqueueDisplayListObject(0, &card->displayList);
     }
 }
 
@@ -570,10 +570,10 @@ void func_8002F948_30548(void) {
     }
 }
 
-void func_8002F980_30580(func_8002F658_30258_arg *arg0) {
-    arg0->displayList.unk24 = freeNodeMemory(arg0->displayList.unk24);
-    arg0->displayList.unk28 = freeNodeMemory(arg0->displayList.unk28);
-    arg0->displayList.unk2C = freeNodeMemory(arg0->displayList.unk2C);
+void func_8002F980_30580(StoryMapShopItemCardState *card) {
+    card->displayList.unk24 = freeNodeMemory(card->displayList.unk24);
+    card->displayList.unk28 = freeNodeMemory(card->displayList.unk28);
+    card->displayList.unk2C = freeNodeMemory(card->displayList.unk2C);
 }
 
 void func_8002F9C4_305C4(func_8002FA70_30670_arg *arg0) {
