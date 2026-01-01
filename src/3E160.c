@@ -62,7 +62,7 @@ void awaitRaceAssetsLoaded(void);
 void waitForFadeAndInitPlayers(void);
 void func_8003FB90_40790(void);
 void func_800401A0_40DA0(void);
-void func_8003F178_3FD78(void);
+void awaitPlayersAndPlayRaceMusic(void);
 void loadPlayerAssets(void);
 void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
@@ -907,23 +907,23 @@ void waitForFadeAndInitPlayers(void) {
                 state->unk79 = 1;
             }
 
-            setGameStateHandler(&func_8003F178_3FD78);
+            setGameStateHandler(&awaitPlayersAndPlayRaceMusic);
         }
     } else {
         state->unk4C = fadeDelay - 1;
     }
 }
 
-void func_8003F178_3FD78(void) {
+void awaitPlayersAndPlayRaceMusic(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     if ((state->unk79 == 0) || (state->unk7A == 0xB)) {
-        D_80090F90_91B90_item *ret = func_80055D10_56910(state->memoryPoolId);
+        D_80090F90_91B90_item *levelConfig = func_80055D10_56910(state->memoryPoolId);
 
         if (state->unk7A == 0xB) {
             func_800574A0_580A0(0x20);
         } else {
-            func_800574A0_580A0(ret->unk28);
+            func_800574A0_580A0(levelConfig->unk28);
         }
 
         setGameStateHandler(func_8003F368_3FF68);

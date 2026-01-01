@@ -473,6 +473,7 @@ loadPlayerAssets = 0x8003EE50; // rom:0x3FA50
 scheduleRaceTasks = 0x8003EEEC; // rom:0x3FAEC
 awaitRaceAssetsLoaded = 0x8003EFDC; // rom:0x3FBDC
 waitForFadeAndInitPlayers = 0x8003F0AC; // rom:0x3FCAC
+awaitPlayersAndPlayRaceMusic = 0x8003F178; // rom:0x3FD78
 D_800902D0_90ED0 = 0x800902D0; // type:s8 size:0x17F
 D_800BC468_ACC98 = 0x800BC468; // type:s16 rom:0xACC98 size:0x98
 sTimerFormatNormal = 0x8009E8C0;
