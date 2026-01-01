@@ -848,7 +848,7 @@ void func_8003EFDC_3FBDC(void) {
         }
 
         if ((state->unk5F == 1) && (state->unk7A < 10)) {
-            func_8003D0C8_3DCC8();
+            spawnOrbitCameraTask();
             state->unk79 = 2;
             func_800574A0_580A0(7);
         } else {

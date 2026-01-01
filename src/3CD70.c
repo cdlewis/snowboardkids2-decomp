@@ -27,8 +27,8 @@ typedef struct {
 } func_8003D210_3DE10_arg;
 
 typedef struct {
-    s16 unk0;
-} func_8003CF0C_arg;
+    s16 rotationAngle;
+} OrbitCameraState;
 
 typedef struct {
     s32 x;           /* 0x00 */
@@ -126,9 +126,9 @@ void spawnChaseCameraTask(u8 playerIdx) {
     }
 }
 
-void func_8003CF0C_3DB0C(func_8003CF0C_arg *arg0) {
+void initOrbitCamera(OrbitCameraState *camera) {
     getCurrentAllocation();
-    arg0->unk0 = 0;
+    camera->rotationAngle = 0;
     setCallbackWithContinue(func_8003CF40_3DB40);
 }
 
@@ -171,8 +171,8 @@ void func_8003CF40_3DB40(s16 *arg0) {
     func_8006FD3C_7093C(0x64, s2);
 }
 
-void func_8003D0C8_3DCC8(void) {
-    scheduleTask(func_8003CF0C_3DB0C, 1, 0, 0xF0);
+void spawnOrbitCameraTask(void) {
+    scheduleTask(initOrbitCamera, 1, 0, 0xF0);
 }
 
 extern u8 D_800901CC_90DCC[];
