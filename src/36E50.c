@@ -80,8 +80,8 @@ typedef struct {
 
 typedef struct {
     char padding[64];
-    void *unk40;
-} func_800371CC_37DCC_arg;
+    void *dialogueScript;
+} StoryMapDialogueState;
 
 typedef struct {
     u8 padding[1012];
@@ -383,12 +383,12 @@ s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036D54_37954);
 
-void func_800371CC_37DCC(func_800371CC_37DCC_arg *arg0) {
-    func_800698BC_6A4BC_return *temp_v0 = (func_800698BC_6A4BC_return *)getCurrentAllocation();
+void setupStoryMapCharacterDialogue(StoryMapDialogueState *state) {
+    func_800698BC_6A4BC_return *allocation = (func_800698BC_6A4BC_return *)getCurrentAllocation();
 
-    if (temp_v0->unk420 == 3 && temp_v0->unk42D == 8) {
-        arg0->unk40 = &D_8008FAC0_906C0;
+    if (allocation->unk420 == 3 && allocation->unk42D == 8) {
+        state->dialogueScript = &D_8008FAC0_906C0;
         func_80058220_58E20(D_8008FD10_90910[D_800AFE8C_A71FC->unk9[0]], 0);
-        temp_v0->unk403 = D_8008FD1C_9091C[D_800AFE8C_A71FC->unk9[0]];
+        allocation->unk403 = D_8008FD1C_9091C[D_800AFE8C_A71FC->unk9[0]];
     }
 }
