@@ -465,9 +465,9 @@ void updateCreditsCharacter(CreditsCharacter *character) {
             break;
     }
 
-    character->model->unk2C -= creditsCharacterScrollSpeed;
+    ((CreditsModelPosition *)character->model)->zPosition -= creditsCharacterScrollSpeed;
 
-    if (character->model->unk2C < -creditsCharacterStartDepth) {
+    if (((CreditsModelPosition *)character->model)->zPosition < -creditsCharacterStartDepth) {
         cleanupSceneModel(character->model);
         character->isCleanedUp = 1;
         func_80069CF8_6A8F8();
