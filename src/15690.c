@@ -157,7 +157,7 @@ void awaitRaceResult(void) {
 
             if ((result == 3) | (result == 5)) {
                 *(eepromBase + D_800AFE8C_A71FC->saveSlotIndex + 0x10) = 1;
-                func_80038090_38C90(result);
+                processRaceUnlocks(result);
             } else {
                 temp = eepromBase + D_800AFE8C_A71FC->saveSlotIndex;
                 if (*(temp + 0x10) != 1) {

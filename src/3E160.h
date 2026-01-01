@@ -72,7 +72,7 @@ s32 isSaveSlotUnlocked(u8 slotIndex);
 u8 isBoardUnlocked(u8 boardIndex);
 u8 getCharacterPaletteId(u8 characterIndex);
 s32 isCreditsUnlocked(void);
-void func_80038090_38C90(s16 arg0);
+void processRaceUnlocks(s16 raceResult);
 s16 func_80069810_6A410(void);
 void loadOverlay_1BBA0(void);
 void func_8005100C_51C0C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);

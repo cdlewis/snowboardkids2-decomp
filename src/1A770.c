@@ -188,7 +188,7 @@ void awaitStoryModeRaceResult(void) {
             do {
                 EepromSaveData->save_slot_status[saveSlotIndex] = 1;
             } while (0);
-            func_80038090_38C90(raceResult);
+            processRaceUnlocks(raceResult);
         } else {
             gameState = D_800AFE8C_A71FC;
             saveSlotIndex = gameState->saveSlotIndex;

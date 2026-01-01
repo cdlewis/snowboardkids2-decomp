@@ -207,6 +207,6 @@ void resetGameSession(void) {
     D_800AFE8C_A71FC->previousSaveSlot = 0;
     D_800AFE8C_A71FC->unk5 = 0;
     D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
-    D_800AFE8C_A71FC->unk24 = 0;
+    D_800AFE8C_A71FC->isStoryMode = 0;
     D_800AFE8C_A71FC->creditsCompleted = 0;
 }
