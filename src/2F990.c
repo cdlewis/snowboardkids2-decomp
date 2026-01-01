@@ -157,7 +157,7 @@ void func_80030540_31140(func_80030540_31140_arg *arg0);
 void updateStoryMapShopFairyInitial(StoryMapShopFairyState *);
 void updateStoryMapShopFairy(StoryMapShopFairyState *);
 void destroyStoryMapShopFairy(StoryMapShopFairyState *);
-void func_8002F290_2FE90(StoryMapShopItemCardState *);
+void updateStoryMapShopItemCard(StoryMapShopItemCardState *);
 void func_8002F36C_2FF6C(StoryMapShopItemCardState *);
 void func_8002F3E4_2FFE4(func_8002F518_30118_arg *);
 void func_8002F518_30118(func_8002F518_30118_arg *);
@@ -344,10 +344,10 @@ void initStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     card->updateCounter = 0;
 
     setCleanupCallback(func_8002F614_30214);
-    setCallback(func_8002F290_2FE90);
+    setCallback(updateStoryMapShopItemCard);
 }
 
-void func_8002F290_2FE90(StoryMapShopItemCardState *card) {
+void updateStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     volatile u8 padding[0x20];
     GameState *state;
 
@@ -467,7 +467,7 @@ void func_8002F518_30118(func_8002F518_30118_arg *s0) {
 void func_8002F5C8_301C8(DisplayListObject *arg0) {
     volatile u8 pad[0x20];
     if (((GameState *)getCurrentAllocation())->unk5C5 == 1) {
-        setCallback(&func_8002F290_2FE90);
+        setCallback(&updateStoryMapShopItemCard);
     }
     enqueueDisplayListObject(0, arg0);
 }
