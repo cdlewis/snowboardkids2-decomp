@@ -2291,3 +2291,4 @@ cleanupSaveSlotItemIcons = 0x80033E08; // rom:0x34A08
 initSaveSlotNameText = 0x80033E40; // rom:0x34A40
 updateSaveSlotNameText = 0x80033EDC; // rom:0x34ADC
 cleanupSaveSlotNameText = 0x80033F50; // rom:0x34B50
+cleanupSaveSlotNumberLabels = 0x800343D0; // rom:0x34FD0
