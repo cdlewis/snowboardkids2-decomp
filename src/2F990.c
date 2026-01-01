@@ -158,7 +158,7 @@ void updateStoryMapShopFairyInitial(StoryMapShopFairyState *);
 void updateStoryMapShopFairy(StoryMapShopFairyState *);
 void destroyStoryMapShopFairy(StoryMapShopFairyState *);
 void updateStoryMapShopItemCard(StoryMapShopItemCardState *);
-void func_8002F36C_2FF6C(StoryMapShopItemCardState *);
+void transitionStoryMapShopItemCard(StoryMapShopItemCardState *);
 void func_8002F3E4_2FFE4(func_8002F518_30118_arg *);
 void func_8002F518_30118(func_8002F518_30118_arg *);
 void func_8002F5C8_301C8(DisplayListObject *);
@@ -378,13 +378,13 @@ void updateStoryMapShopItemCard(StoryMapShopItemCardState *card) {
         card->updateCounter = 0;
 
     end:
-        setCallback(&func_8002F36C_2FF6C);
+        setCallback(&transitionStoryMapShopItemCard);
     }
 
     enqueueDisplayListObject(0, &card->displayList);
 }
 
-void func_8002F36C_2FF6C(StoryMapShopItemCardState *card) {
+void transitionStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     volatile u8 padding[0x20];
 
     getCurrentAllocation();
