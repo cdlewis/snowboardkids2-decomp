@@ -53,6 +53,6 @@ void updateStoryMapNpcFloatEffect(Func297D8Arg *);
 void updateStoryMapNpcThinkEffect(Func297D8Arg *);
 void updateStoryMapNpcStretch(Func297D8Arg *);
 void updateStoryMapNpcTalk(Func297D8Arg *);
-void func_8002A0DC_2ACDC(Func297D8Arg *);
+void playStoryMapNpcTalkSound(Func297D8Arg *);
 void updateStoryMapNpcIdle(Func297D8Arg *);
 void playStoryMapNpcIdleSound(Func297D8Arg *);

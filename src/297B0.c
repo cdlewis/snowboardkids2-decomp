@@ -682,7 +682,7 @@ void updateStoryMapNpcTalk(Func297D8Arg *arg0) {
                         setAnimationIndex(arg0->model, 0);
                     }
                 } else if (arg0->unk5A == 0x37) {
-                    func_8002A0DC_2ACDC(arg0);
+                    playStoryMapNpcTalkSound(arg0);
                 }
             }
             break;
@@ -790,7 +790,7 @@ void playStoryMapNpcIdleSound(Func297D8Arg *arg0) {
 
 extern u16 D_8008E590_8F190[];
 
-void func_8002A0DC_2ACDC(Func297D8Arg *arg0) {
+void playStoryMapNpcTalkSound(Func297D8Arg *arg0) {
     func_800585C8_591C8(D_8008E590_8F190[arg0->unk5C]);
 }
 
