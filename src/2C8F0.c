@@ -27,7 +27,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ Elem2C8F0 elems[2];
     /* 0xC8 */ u8 padC8[0xC];
-    /* 0xD4 */ u8 unkD4;
+    /* 0xD4 */ u8 eventTypeIndex;
     /* 0xD5 */ u8 modelCount;
 } Struct2C8F0;
 
@@ -37,7 +37,7 @@ void awaitStoryMapRareEventReady(Struct2C8F0 *arg0) {
     GameState *gameState = (GameState *)getCurrentAllocation();
 
     if (gameState->unk429 == 0) {
-        setCallback(D_8008EBF0_8F7F0[arg0->unkD4]);
+        setCallback(D_8008EBF0_8F7F0[arg0->eventTypeIndex]);
     }
 }
 
@@ -98,23 +98,23 @@ INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BFEC_2CBEC);
 
 INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002C570_2D170);
 
-void func_8002C798_2D398(Struct2C8F0 *arg0, s32 arg1) {
+void configureRareEventSpriteEffect(Struct2C8F0 *rareEvent, s32 elemIndex) {
     Elem2C8F0 *elem;
-    u8 d4;
+    u8 eventType;
     s32 offset;
 
-    d4 = arg0->unkD4;
+    eventType = rareEvent->eventTypeIndex;
 
-    if ((d4 == 1) & (arg1 == 0)) {
+    if ((eventType == 1) & (elemIndex == 0)) {
         if (D_800AFE8C_A71FC->unk9[0] == 3) {
-            elem = &arg0->elems[arg1];
+            elem = &rareEvent->elems[elemIndex];
             elem->unk4C = &D_8008ED00_8F900;
-            arg0->elems[0].unk44 = 0x300000;
+            rareEvent->elems[0].unk44 = 0x300000;
             spawnSpriteEffectEx(
                 (s32)elem->model,
                 0,
                 0x1F,
-                D_8008EBE0_8F7E0[arg0->unkD4 * 2 + arg1] - 4,
+                D_8008EBE0_8F7E0[rareEvent->eventTypeIndex * 2 + elemIndex] - 4,
                 &elem->unk40,
                 0x10000,
                 0,
@@ -126,10 +126,10 @@ void func_8002C798_2D398(Struct2C8F0 *arg0, s32 arg1) {
         }
     }
 
-    if ((arg0->unkD4 == 6) & (arg1 == 1)) {
+    if ((rareEvent->eventTypeIndex == 6) & (elemIndex == 1)) {
         if (D_800AFE8C_A71FC->unk9[0] == 3) {
-            offset = arg1 * 0x64;
-            ((Elem2C8F0 *)((u8 *)arg0 + offset))->unk4C = &D_8008ECF0_8F8F0;
+            offset = elemIndex * 0x64;
+            ((Elem2C8F0 *)((u8 *)rareEvent + offset))->unk4C = &D_8008ECF0_8F8F0;
         }
     }
 }

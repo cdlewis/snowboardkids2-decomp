@@ -2139,3 +2139,4 @@ updateParallaxPosition = 0x8002B94C; // rom:0x2C54C
 awaitStoryMapRareEventReady = 0x8002BE44; // rom:0x2CA44
 nullStoryMapRareEventCallback = 0x8002BE8C; // rom:0x2CA8C
 destroyStoryMapRareEventModels = 0x8002BE94; // rom:0x2CA94
+configureRareEventSpriteEffect = 0x8002C798; // rom:0x2D398
