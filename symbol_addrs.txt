@@ -44,6 +44,7 @@ updateStoryMapNpcModel = 0x8002A2D0; // rom:0x2AED0
 tryStoryMapNpcInteraction = 0x8002A390; // rom:0x2AF90
 isNpcFacingPlayer = 0x8002ACFC; // rom:0x2B8FC
 stepAngleTowardsTarget = 0x8002ADB4; // rom:0x2B9B4
+signedAngleDifference = 0x8002B4B8; // rom:0x2C0B8
 gMenuLightColor = 0x8008DEF0; // rom:0x8EAF0
 gMenuAmbientColor = 0x8008DEF8; // rom:0x8EAF8
 storyMapCameraTask = 0x80017350; // rom:0x17F50
