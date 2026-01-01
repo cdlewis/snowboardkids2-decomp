@@ -455,7 +455,7 @@ void initStoryMapNpcIdleWithEffect(Func297D8Arg *arg0) {
     setCallback(updateStoryMapNpcIdle);
 }
 
-void func_80029724_2A324(Func297D8Arg *arg0) {
+void initStoryMapNpcIdleWithEffect2(Func297D8Arg *arg0) {
     arg0->unk44 = 0x260000;
     arg0->unk5E = 0;
     arg0->unk61 = 0;
