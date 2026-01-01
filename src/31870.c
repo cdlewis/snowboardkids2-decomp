@@ -34,17 +34,17 @@ extern const char D_8009E480_9F080;
 
 typedef struct {
     s16 unk0;
-    s16 unk2;
+    s16 x;
     u8 padding[0x4];
-    s16 unk8;
+    s16 spriteIndex;
     u8 padding2[0xE];
-} func_80032B0C_3370C_arg_element;
+} BoardShopCharacterPortrait;
 
 typedef struct {
-    func_80032B0C_3370C_arg_element elements[4];
+    BoardShopCharacterPortrait portraits[4];
     u8 padding[0x24];
-    u8 unk84[4];
-} func_80032B0C_3370C_arg;
+    u8 animationFrameCounters[4];
+} BoardShopCharacterPortraitState;
 
 typedef struct {
     u8 padding[0x77C];
@@ -328,10 +328,10 @@ void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0);
 void enqueueBoardShopBackgroundRender(void *arg0);
 void cleanupBoardShopSnowParticles(SnowParticleState *arg0);
 void waitBoardShopSnowParticles(SnowParticleState *arg0);
-void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0);
+void animateBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg0);
 void animateBoardShopBoardIconsSlideIn(BoardShopBoardIconsState *arg0);
 void updateBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0);
-void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0);
+void initBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg0);
 void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0);
 void cleanupBoardShopGoldDisplay(BoardShopGoldDisplayCleanupArg *arg0);
 void cleanupBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
@@ -1313,7 +1313,7 @@ void updateBoardShopBoardIconSelection(BoardShopIconSelectionState *arg0) {
             arg0->icons[i].scaleX = new_var;
         }
 
-        setCallback(func_80032B0C_3370C);
+        setCallback(initBoardShopCharacterPortraitsSlideIn);
     } else {
         temp = state->unk788[state->unk784[state->selectedIconIndex]];
         sprintf(&arg0->priceTextBuffer, &D_8009E480_9F080, D_8008F150_8FD50[temp]);
@@ -1365,67 +1365,67 @@ void blinkBoardShopBoardIconConfirmation(BoardShopIconSelectionState *arg0) {
     }
 }
 
-void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0) {
+void initBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg0) {
     func_80032DE8_339E8_asset *allocation;
     s32 i;
-    s32 temp_a0;
-    s16 s2;
+    s32 startX;
+    s16 currentX;
 
     allocation = getCurrentAllocation();
 
     if (allocation->unk79C == 1) {
-        temp_a0 = -0x11;
+        startX = -0x11;
     } else {
-        temp_a0 = -0x61;
+        startX = -0x61;
     }
 
     i = 0;
-    s2 = temp_a0;
+    currentX = startX;
 
     for (i = 0; i < 4; i++) {
-        arg0->elements[i].unk2 = s2;
-        arg0->elements[i].unk8 = allocation->unk788[allocation->unk784[i]];
-        arg0->unk84[i] = 0;
-        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &arg0->elements[i]);
-        s2 += 0x28;
+        arg0->portraits[i].x = currentX;
+        arg0->portraits[i].spriteIndex = allocation->unk788[allocation->unk784[i]];
+        arg0->animationFrameCounters[i] = 0;
+        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &arg0->portraits[i]);
+        currentX += 0x28;
     }
 
-    setCallback(&func_80032BCC_337CC);
+    setCallback(&animateBoardShopCharacterPortraitsSlideIn);
 }
 
-void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0) {
+void animateBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg0) {
     func_80032DE8_339E8_asset *gameState;
-    s32 playerIndex;
-    func_80032B0C_3370C_arg_element *playerIcons;
+    s32 portraitIndex;
+    BoardShopCharacterPortrait *portraits;
 
     gameState = getCurrentAllocation();
-    playerIndex = 0;
-    playerIcons = arg0->elements;
+    portraitIndex = 0;
+    portraits = arg0->portraits;
 
-    while (playerIndex < 4) {
-        arg0->unk84[playerIndex]++;
+    while (portraitIndex < 4) {
+        arg0->animationFrameCounters[portraitIndex]++;
 
         if (gameState->unk79C == 1) {
-            playerIcons[playerIndex].unk2 -= 10;
+            portraits[portraitIndex].x -= 10;
         } else {
-            playerIcons[playerIndex].unk2 += 10;
+            portraits[portraitIndex].x += 10;
         }
 
-        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &playerIcons[playerIndex]);
-        playerIndex++;
+        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &portraits[portraitIndex]);
+        portraitIndex++;
     }
 
-    if (arg0->unk84[0] == 4) {
+    if (arg0->animationFrameCounters[0] == 4) {
         u8 *frameCounterPtr;
         gameState->unk788[19] = 0x10;
-        playerIndex = 3;
+        portraitIndex = 3;
         frameCounterPtr = (u8 *)arg0 + 3;
 
         do {
             frameCounterPtr[0x84] = 0;
-            playerIndex--;
+            portraitIndex--;
             frameCounterPtr--;
-        } while (playerIndex >= 0);
+        } while (portraitIndex >= 0);
 
         setCallback(&updateBoardShopBoardIconSelection);
     }
