@@ -248,7 +248,7 @@ void awaitBoardShopDmaComplete(void) {
 
 void awaitFadeLoadBoardShop(void) {
     if (func_8006FE10_70A10(0) == 0) {
-        scheduleTask(&func_80032330_32F30, 0, 0, 0x5A);
+        scheduleTask(&initBoardShopGoldDisplay, 0, 0, 0x5A);
         setGameStateHandler(&func_8001A478_1B078);
     }
 }

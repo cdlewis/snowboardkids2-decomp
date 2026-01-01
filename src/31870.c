@@ -182,7 +182,7 @@ typedef struct {
     void *unk4;
     char padding2[78];
     void *unk58;
-} func_80032504_33104_arg;
+} BoardShopGoldDisplayCleanupArg;
 
 typedef struct {
     u8 padding[0x79C];
@@ -349,10 +349,10 @@ void cleanupBoardShopSnowParticles(SnowParticleState *arg0);
 void waitBoardShopSnowParticles(SnowParticleState *arg0);
 void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0);
 void func_80032628_33228(func_80032628_arg *arg0);
-void func_800323FC_32FFC(func_80032330_32F30_arg *arg0);
+void updateBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0);
 void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0);
 void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0);
-void func_80032504_33104(func_80032504_33104_arg *arg0);
+void cleanupBoardShopGoldDisplay(BoardShopGoldDisplayCleanupArg *arg0);
 void cleanupBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void waitBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
@@ -1146,67 +1146,66 @@ void cleanupBoardShopExitOverlay(SpriteDisplayState *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80032330_32F30(func_80032330_32F30_arg *arg0) {
-    void *temp_v0 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    void *temp_v0_2 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+void initBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0) {
+    void *digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    void *iconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     s32 i;
-    s16 temp_a0;
 
-    setCleanupCallback(&func_80032504_33104);
+    setCleanupCallback(&cleanupBoardShopGoldDisplay);
 
     for (i = 0; i < 7; i++) {
-        arg0->elements[i].unk0 = 0x48 + (i * 8);
-        arg0->elements[i].unk2 = 0x58;
-        arg0->elements[i].unk4 = temp_v0;
+        arg0->digits[i].x = 0x48 + (i * 8);
+        arg0->digits[i].y = 0x58;
+        arg0->digits[i].asset = digitAsset;
     }
 
-    arg0->unk54 = 0x38;
-    arg0->unk56 = 0x58;
+    arg0->iconX = 0x38;
+    arg0->iconY = 0x58;
     arg0->unk5C = 0;
     arg0->unk5E = 0;
-    arg0->unk58 = temp_v0_2;
+    arg0->iconAsset = iconAsset;
 
-    setCallback(&func_800323FC_32FFC);
+    setCallback(&updateBoardShopGoldDisplay);
 }
 
-void func_800323FC_32FFC(func_80032330_32F30_arg *arg0) {
-    func_80032330_32F30_element *elem;
+void updateBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0) {
+    BoardShopGoldDigitState *digit;
     s32 space;
     s32 i;
-    s32 val;
+    s32 colorStyle;
 
     if (D_800AFE8C_A71FC->gold < 100) {
-        val = 1;
+        colorStyle = 1;
         i = 6;
         do {
-            arg0->elements[i].unkA = val;
+            arg0->digits[i].colorStyle = colorStyle;
         } while (--i >= 0);
     } else {
-        val = 2;
+        colorStyle = 2;
         i = 6;
         do {
-            arg0->elements[i].unkA = val;
+            arg0->digits[i].colorStyle = colorStyle;
         } while (--i >= 0);
     }
 
-    sprintf(arg0->unk60, D_8009E47C_9F07C, D_800AFE8C_A71FC->gold);
+    sprintf(arg0->goldString, D_8009E47C_9F07C, D_800AFE8C_A71FC->gold);
 
     i = 0;
     space = 0x20;
-    elem = arg0->elements;
+    digit = arg0->digits;
 
     for (; i < 7; i++) {
-        if (arg0->unk60[i] != space) {
-            elem->unk8 = arg0->unk60[i] - 0x30;
-            debugEnqueueCallback(9, 7, func_80010240_10E40, elem);
+        if (arg0->goldString[i] != space) {
+            digit->digitValue = arg0->goldString[i] - 0x30;
+            debugEnqueueCallback(9, 7, func_80010240_10E40, digit);
         }
-        elem++;
+        digit++;
     }
 
-    debugEnqueueCallback(9, 7, func_80010240_10E40, &arg0->unk54);
+    debugEnqueueCallback(9, 7, func_80010240_10E40, &arg0->iconX);
 }
 
-void func_80032504_33104(func_80032504_33104_arg *arg0) {
+void cleanupBoardShopGoldDisplay(BoardShopGoldDisplayCleanupArg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unk58 = freeNodeMemory(arg0->unk58);
 }

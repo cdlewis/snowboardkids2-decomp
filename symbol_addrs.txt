@@ -2254,3 +2254,6 @@ cleanupBoardShopColumnSelectorArrow = 0x80032218; // rom:0x32E18
 initBoardShopExitOverlay = 0x80032244; // rom:0x32E44
 updateBoardShopExitOverlay = 0x800322BC; // rom:0x32EBC
 cleanupBoardShopExitOverlay = 0x80032304; // rom:0x32F04
+initBoardShopGoldDisplay = 0x80032330; // rom:0x32F30
+updateBoardShopGoldDisplay = 0x800323FC; // rom:0x32FFC
+cleanupBoardShopGoldDisplay = 0x80032504; // rom:0x33104

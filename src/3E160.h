@@ -94,26 +94,26 @@ void func_8003B1F4_3BDF4(s32 arg0, void *arg1);
 void *func_8003B28C_3BE8C(void);
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 unkA;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 digitValue;
+    u8 colorStyle;
     u8 pad;
-} func_80032330_32F30_element;
+} BoardShopGoldDigitState;
 
 typedef struct {
-    func_80032330_32F30_element elements[7];
-    s16 unk54;
-    s16 unk56;
-    void *unk58;
+    BoardShopGoldDigitState digits[7];
+    s16 iconX;
+    s16 iconY;
+    void *iconAsset;
     s16 unk5C;
     u8 unk5E;
     u8 pad;
-    char unk60[8];
-} func_80032330_32F30_arg;
+    char goldString[8];
+} BoardShopGoldDisplayState;
 
-void func_80032330_32F30(func_80032330_32F30_arg *arg0);
+void initBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0);
 s32 abs(s32 n);
 void func_80058A10_59610(Player *arg0);
 void func_80058A3C_5963C(Player *arg0);
