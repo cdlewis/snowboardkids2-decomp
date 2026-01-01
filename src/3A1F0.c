@@ -56,7 +56,7 @@ void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[
 void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader *header);
 void controllerPackReadStatus(s32 arg0);
 void eepromProbe(void);
-void func_8003B2DC_3BEDC(s32 arg0, u8 *arg1);
+void eepromRead(s32 slotIndex, u8 *buffer);
 void func_8003B400_3C000(s32);
 void func_8003B560_3C160(u8 *);
 void controllerServiceThread(void *arg0);
@@ -244,7 +244,7 @@ void controllerServiceThread(void *arg0) {
                 continue;
 
             case 0xE0:
-                func_8003B2DC_3BEDC(cmd & 3, msg->arg);
+                eepromRead(cmd & 3, msg->arg);
                 continue;
 
             case 0xF0:
@@ -603,9 +603,9 @@ void *pollEepromReadAsync(void) {
     return status;
 }
 
-void func_8003B2DC_3BEDC(s32 arg0, u8 *arg1) {
-    u8 a1 = ((arg0 & 0xFF) * 0x10) & 0xF0;
-    osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromLongRead(&mainStack, a1, arg1, 0x58), OS_MESG_BLOCK);
+void eepromRead(s32 slotIndex, u8 *buffer) {
+    u8 blockAddress = ((slotIndex & 0xFF) * 0x10) & 0xF0;
+    osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromLongRead(&mainStack, blockAddress, buffer, 0x58), OS_MESG_BLOCK);
 }
 
 void func_8003B324_3BF24(s32 arg0) {
