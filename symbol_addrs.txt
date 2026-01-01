@@ -18,6 +18,7 @@ updateStoryMapNpcLookAround = 0x800291CC; // rom:0x29DCC
 initStoryMapNpcThinkEffect = 0x80029300; // rom:0x29F00
 updateStoryMapNpcThinkEffect = 0x80029360; // rom:0x29F60
 initStoryMapNpcIdle = 0x80029584; // rom:0x2A184
+initStoryMapNpcIdleNoAnim = 0x800295E0; // rom:0x2A1E0
 updateStoryMapNpcIdle = 0x80029954; // rom:0x2A554
 gMenuLightColor = 0x8008DEF0; // rom:0x8EAF0
 gMenuAmbientColor = 0x8008DEF8; // rom:0x8EAF8
