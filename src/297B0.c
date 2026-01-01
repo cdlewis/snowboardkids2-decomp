@@ -8,11 +8,11 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-typedef struct Func8002A154Arg Func8002A154Arg;
-void func_8002A154_2AD54(Func8002A154Arg *);
+typedef struct StoryMapNpcStillArg StoryMapNpcStillArg;
+void updateStoryMapNpcStill(StoryMapNpcStillArg *);
 void func_8002A200_2AE00(Func297D8Arg *);
 
-struct Func8002A154Arg {
+struct StoryMapNpcStillArg {
     /* 0x00 */ void *model;
     /* 0x04 */ Transform3D matrix;
     /* 0x24 */ u8 pad24[0xC];
@@ -794,16 +794,16 @@ void playStoryMapNpcTalkSound(Func297D8Arg *arg0) {
     func_800585C8_591C8(D_8008E590_8F190[arg0->unk5C]);
 }
 
-void func_8002A108_2AD08(Func297D8Arg *arg0) {
+void initStoryMapNpcStill(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
     arg0->unk61 = 0;
     arg0->unk62 = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_8002A154_2AD54);
+    setCallback(updateStoryMapNpcStill);
 }
 
-void func_8002A154_2AD54(Func8002A154Arg *arg0) {
+void updateStoryMapNpcStill(StoryMapNpcStillArg *arg0) {
     u16 savedUnk50;
     u8 savedState;
     AllocationData *alloc = getCurrentAllocation();
@@ -822,7 +822,7 @@ void func_8002A154_2AD54(Func8002A154Arg *arg0) {
         savedState = arg0->state;
         arg0->state = 0x14;
         arg0->unk50 = 0;
-        arg0->callback = func_8002A154_2AD54;
+        arg0->callback = updateStoryMapNpcStill;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedState;
         setCallback(func_8002A200_2AE00);
