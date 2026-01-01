@@ -2279,3 +2279,4 @@ boardIconTargetYPositions = 0x8008F17C; // rom:0x8FD7C
 initControllerMotors = 0x80033200; // rom:0x33E00
 gControllerPollingEnabled = 0x800AFCE2;
 gMotorInitCompleteMask = 0x800AFED0;
+onMotorInitComplete = 0x800333BC; // rom:0x33FBC

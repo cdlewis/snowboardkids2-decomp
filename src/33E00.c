@@ -23,6 +23,6 @@ void initControllerMotors(void) {
 
 INCLUDE_ASM("asm/nonmatchings/33E00", func_80033254_33E54);
 
-void func_800333BC_33FBC(void) {
+void onMotorInitComplete(void) {
     func_800697F4_6A3F4(1);
 }
