@@ -829,7 +829,7 @@ void updateStoryMapNpcStill(StoryMapNpcStillArg *arg0) {
     }
 }
 
-void func_8002A1F8_2ADF8(void) {
+void nullStoryMapNpcStillCallback(void) {
 }
 
 void func_8002A200_2AE00(Func297D8Arg *arg0) {

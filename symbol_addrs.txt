@@ -37,6 +37,7 @@ playStoryMapNpcIdleSound = 0x8002A044; // rom:0x2AC44
 playStoryMapNpcTalkSound = 0x8002A0DC; // rom:0x2ACDC
 initStoryMapNpcStill = 0x8002A108; // rom:0x2AD08
 updateStoryMapNpcStill = 0x8002A154; // rom:0x2AD54
+nullStoryMapNpcStillCallback = 0x8002A1F8; // rom:0x2ADF8
 gMenuLightColor = 0x8008DEF0; // rom:0x8EAF0
 gMenuAmbientColor = 0x8008DEF8; // rom:0x8EAF8
 storyMapCameraTask = 0x80017350; // rom:0x17F50
