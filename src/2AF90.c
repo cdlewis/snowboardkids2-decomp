@@ -14,7 +14,7 @@ extern s16 D_8009F242_9FE42;
 extern s32 D_800AB06C_A23DC;
 extern Vec3i D_800AFF20_A7290;
 
-s32 func_8002ACFC_2B8FC(s32, s32, s16);
+s32 isNpcFacingPlayer(s32, s32, s16);
 
 typedef struct {
     /* 0x00 */ void *model;
@@ -51,7 +51,7 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
             if (state->unk421 != 0) {
                 return 0;
             }
-            if (func_8002ACFC_2B8FC(arg0->matrix.translation.x, arg0->matrix.translation.z, arg0->unk2E) == 0) {
+            if (isNpcFacingPlayer(arg0->matrix.translation.x, arg0->matrix.translation.z, arg0->unk2E) == 0) {
                 return 0;
             }
             arg0->unk54 = arg0->unk50;
@@ -90,15 +90,15 @@ INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002A4AC_2B0AC);
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002A7CC_2B3CC);
 
-s32 func_8002ACFC_2B8FC(s32 arg0, s32 arg1, s16 arg2) {
+s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle) {
     GameState *state;
-    s16 angle;
+    s16 angleToNpc;
 
     state = getCurrentAllocation();
-    angle = func_8006D21C_6DE1C(state->unk3EC, state->unk3F0, arg0, arg1);
+    angleToNpc = func_8006D21C_6DE1C(state->unk3EC, state->unk3F0, npcX, npcZ);
 
-    if (arg2 - 0x238 < angle && angle < arg2 + 0x238) {
-        if (distance_2d(state->unk3EC - arg0, state->unk3F0 - arg1) <= 0x280000) {
+    if (npcFacingAngle - 0x238 < angleToNpc && angleToNpc < npcFacingAngle + 0x238) {
+        if (distance_2d(state->unk3EC - npcX, state->unk3F0 - npcZ) <= 0x280000) {
             return 1;
         }
     }
