@@ -2248,3 +2248,6 @@ cleanupBoardShopComparisonIcons = 0x80031F68; // rom:0x32B68
 initBoardShopRowSelectorArrow = 0x80031F94; // rom:0x32B94
 updateBoardShopRowSelectorArrow = 0x80032020; // rom:0x32C20
 cleanupBoardShopRowSelectorArrow = 0x800320B8; // rom:0x32CB8
+initBoardShopColumnSelectorArrow = 0x800320E4; // rom:0x32CE4
+updateBoardShopColumnSelectorArrow = 0x80032170; // rom:0x32D70
+cleanupBoardShopColumnSelectorArrow = 0x80032218; // rom:0x32E18
