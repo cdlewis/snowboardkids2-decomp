@@ -33,10 +33,10 @@ typedef struct {
 
 INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BCF0_2C8F0);
 
-void func_8002BE44_2CA44(Struct2C8F0 *arg0) {
-    GameState *allocation = (GameState *)getCurrentAllocation();
+void awaitStoryMapRareEventReady(Struct2C8F0 *arg0) {
+    GameState *gameState = (GameState *)getCurrentAllocation();
 
-    if (allocation->unk429 == 0) {
+    if (gameState->unk429 == 0) {
         setCallback(D_8008EBF0_8F7F0[arg0->unkD4]);
     }
 }
