@@ -35,7 +35,7 @@ void func_8003AF6C_3BB6C(void);
 
 void func_8003AC38_3B838(void);
 
-void func_80039B88_3A788(void);
+void startControllerRead(void);
 
 void initControllerSubsystem(void);
 

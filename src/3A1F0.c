@@ -258,7 +258,7 @@ void controllerServiceThread(void *arg0) {
     }
 }
 
-void func_80039B88_3A788(void) {
+void startControllerRead(void) {
     s16 temp_v0;
     s32 temp_a1;
 
