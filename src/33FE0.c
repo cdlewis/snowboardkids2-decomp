@@ -16,11 +16,11 @@ USE_ASSET(_4547D0);
 USE_ASSET(_459310);
 
 typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ s16 unkA;
-} Func358FCStruct;
+    /* 0x00 */ void *spriteAsset;
+    /* 0x04 */ void *textAsset;
+    /* 0x08 */ s16 offsetX;
+    /* 0x0A */ s16 offsetY;
+} SaveSlotDeleteTextState;
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -230,7 +230,7 @@ extern void *D_8008F7E0_903E0;
 extern s32 D_8008F7D8_903D8;
 extern u16 D_8009ADE0_9B9E0;
 
-void func_80034D58_35958(void);
+void updateSaveSlotDeleteText(void);
 void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
 void updateSaveSlotNameText(Func34ADCArg *arg0);
 void cleanupSaveSlotNameText(Func34574Arg *arg0);
@@ -239,7 +239,7 @@ void updateSaveSlotGoldDisplay(void);
 void updateSaveSlotSelectionParticles(SelectionParticleUpdateState *arg0);
 void cleanupSaveSlotSelectionParticles(Func34574Arg *arg0);
 void updateSaveSlotItemIcons(void);
-void func_80035074_35C74(Func358FCStruct *arg0);
+void cleanupSaveSlotDeleteText(SaveSlotDeleteTextState *arg0);
 void updateSaveSlotStatSprites(void);
 void cleanupSaveSlotStatSprites(Func34574Arg *arg0);
 void renderSaveSlotConfirmationIndicator(void *arg0);
@@ -662,24 +662,24 @@ void cleanupSaveSlotSelectionParticles(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80034CFC_358FC(Func358FCStruct *arg0) {
-    Func358FCStruct *temp_s0;
+void initSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
+    SaveSlotDeleteTextState *temp_s0;
 
-    temp_s0 = arg0;
+    temp_s0 = state;
     getCurrentAllocation();
-    temp_s0->unk0 = loadAsset_34F7E0();
-    temp_s0->unk4 = func_80035F80_36B80(1);
-    setCleanupCallback(func_80035074_35C74);
-    temp_s0->unk8 = 0;
-    temp_s0->unkA = 0;
-    setCallback(func_80034D58_35958);
+    temp_s0->spriteAsset = loadAsset_34F7E0();
+    temp_s0->textAsset = func_80035F80_36B80(1);
+    setCleanupCallback(cleanupSaveSlotDeleteText);
+    temp_s0->offsetX = 0;
+    temp_s0->offsetY = 0;
+    setCallback(updateSaveSlotDeleteText);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034D58_35958);
+INCLUDE_ASM("asm/nonmatchings/33FE0", updateSaveSlotDeleteText);
 
-void func_80035074_35C74(Func358FCStruct *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
+    state->textAsset = freeNodeMemory(state->textAsset);
 }
 
 void func_800350AC_35CAC(Func350ACArg *arg0) {

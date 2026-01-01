@@ -2304,3 +2304,6 @@ cleanupSaveSlotConfirmationIndicator = 0x80034A94; // rom:0x35694
 initSaveSlotSelectionParticles = 0x80034AC0; // rom:0x356C0
 updateSaveSlotSelectionParticles = 0x80034BD8; // rom:0x357D8
 cleanupSaveSlotSelectionParticles = 0x80034CD0; // rom:0x358D0
+initSaveSlotDeleteText = 0x80034CFC; // rom:0x358FC
+updateSaveSlotDeleteText = 0x80034D58; // rom:0x35958
+cleanupSaveSlotDeleteText = 0x80035074; // rom:0x35C74
