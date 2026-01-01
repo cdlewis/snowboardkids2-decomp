@@ -2195,3 +2195,7 @@ cleanupStoryMapShopExitOverlay = 0x80030280; // rom:0x30E80
 initStoryMapShopGoldDisplay = 0x800302AC; // rom:0x30EAC
 updateStoryMapShopGoldDisplay = 0x80030378; // rom:0x30F78
 cleanupStoryMapShopGoldDisplay = 0x80030480; // rom:0x31080
+
+initStoryMapShopItemPriceDisplay = 0x800304B8; // rom:0x310B8
+updateStoryMapShopItemPriceDisplay = 0x80030540; // rom:0x31140
+cleanupStoryMapShopItemPriceDisplay = 0x80030668; // rom:0x31268

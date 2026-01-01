@@ -61,7 +61,7 @@ typedef struct {
 } UnlockScreenScrollArrowsState;
 
 void initUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arg0);
-void func_800304B8_310B8(func_800308FC_314FC_arg *arg0);
+void initStoryMapShopItemPriceDisplay(func_800308FC_314FC_arg *arg0);
 void func_80030694_31294(ItemStatsDisplay *arg0);
 void func_800308C4_314C4(ItemStatsDisplay *arg0);
 void func_800308FC_314FC(func_800308FC_314FC_arg *arg0);

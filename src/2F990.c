@@ -86,10 +86,10 @@ typedef struct {
 } S0;
 
 typedef struct {
-    func_800308FC_314FC_arg items[6];
+    func_800308FC_314FC_arg digits[6];
     u8 unk48[0x18];
-    char unk60[8];
-} func_80030540_31140_arg;
+    char priceBuffer[8];
+} StoryMapShopItemPriceDisplayState;
 
 typedef struct {
     SceneModel *model;
@@ -148,7 +148,7 @@ extern s32 *D_800AFE8C_A71FC;
 
 void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *);
 void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0);
-void func_80030540_31140(func_80030540_31140_arg *arg0);
+void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0);
 void updateStoryMapShopFairyInitial(StoryMapShopFairyState *);
 void updateStoryMapShopFairy(StoryMapShopFairyState *);
 void destroyStoryMapShopFairy(StoryMapShopFairyState *);
@@ -895,41 +895,41 @@ void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     arg0->goldIconAsset = freeNodeMemory(arg0->goldIconAsset);
 }
 
-void func_80030668_31268(func_80030668_31268_arg *);
+void cleanupStoryMapShopItemPriceDisplay(func_80030668_31268_arg *);
 
-void func_800304B8_310B8(func_800308FC_314FC_arg *arg0) {
-    void *temp_s1;
+void initStoryMapShopItemPriceDisplay(func_800308FC_314FC_arg *arg0) {
+    void *digitSpriteAsset;
     s32 i;
-    s32 temp_a1;
-    s16 temp_v1;
+    s32 y;
+    s16 x;
 
-    temp_s1 = loadCompressedData(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
-    setCleanupCallback(func_80030668_31268);
+    digitSpriteAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    setCleanupCallback(cleanupStoryMapShopItemPriceDisplay);
 
     i = 0;
-    temp_a1 = 0x38;
-    temp_v1 = -0x1C;
+    y = 0x38;
+    x = -0x1C;
 
     do {
-        arg0[i].unk0 = temp_v1;
-        arg0[i].unk2 = temp_a1;
-        arg0[i].unk4 = temp_s1;
+        arg0[i].unk0 = x;
+        arg0[i].unk2 = y;
+        arg0[i].unk4 = digitSpriteAsset;
         i++;
-        temp_v1 += 8;
+        x += 8;
     } while (i < 6);
 
-    setCallback(func_80030540_31140);
+    setCallback(updateStoryMapShopItemPriceDisplay);
 }
 
 extern s32 D_8008F070_8FC70[];
 
-void func_80030540_31140(func_80030540_31140_arg *arg0) {
+void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
     s32 i;
     u8 itemValue;
-    s32 tableValue;
-    func_800308FC_314FC_arg *item;
-    s8 value;
+    s32 price;
+    func_800308FC_314FC_arg *digit;
+    s8 paletteIndex;
     s32 space;
 
     if (state->unk5C5 == 0x14) {
@@ -942,38 +942,38 @@ void func_80030540_31140(func_80030540_31140_arg *arg0) {
         return;
     }
 
-    tableValue = D_8008F070_8FC70[itemValue & 0x1F];
+    price = D_8008F070_8FC70[itemValue & 0x1F];
 
-    value = 1;
-    if (*D_800AFE8C_A71FC < tableValue) {
+    paletteIndex = 1;
+    if (*D_800AFE8C_A71FC < price) {
         i = 5;
         do {
-            arg0->items[i].unkA = value;
+            arg0->digits[i].unkA = paletteIndex;
         } while (--i >= 0);
     } else {
-        value = 2;
+        paletteIndex = 2;
         i = 5;
         do {
-            arg0->items[i].unkA = value;
+            arg0->digits[i].unkA = paletteIndex;
         } while (--i >= 0);
     }
 
-    sprintf(arg0->unk60, "%6d", tableValue);
+    sprintf(arg0->priceBuffer, "%6d", price);
 
     i = 0;
     space = ' ';
-    item = &arg0->items[0];
+    digit = &arg0->digits[0];
     do {
-        char c = arg0->unk60[i];
+        char c = arg0->priceBuffer[i];
         if (c != space) {
-            item->unk8 = c - '0';
-            debugEnqueueCallback(8, 0, &func_80010240_10E40, item);
+            digit->unk8 = c - '0';
+            debugEnqueueCallback(8, 0, &func_80010240_10E40, digit);
         }
-        item++;
+        digit++;
     } while (++i < 6);
 }
 
-void func_80030668_31268(func_80030668_31268_arg *arg0) {
+void cleanupStoryMapShopItemPriceDisplay(func_80030668_31268_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 

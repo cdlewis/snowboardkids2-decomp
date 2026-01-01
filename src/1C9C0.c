@@ -82,7 +82,7 @@ void unlockScreenScheduleDisplayTasks(void) {
     }
 
     allocation->unk5C5 = 0x14;
-    scheduleTask(func_800304B8_310B8, 1, 0, 0x5A);
+    scheduleTask(initStoryMapShopItemPriceDisplay, 1, 0, 0x5A);
     scheduleTask(func_80030694_31294, 1, 0, 0x5A);
     scheduleTask(func_80030A00_31600, 0, 0, 0x5A);
 
