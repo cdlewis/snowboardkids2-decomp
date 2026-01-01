@@ -693,17 +693,17 @@ void updateStoryMapNpcTalk(Func297D8Arg *arg0) {
     alloc->unk410 = arg0->matrix.translation.z;
 }
 
-void func_80029E58_2AA58(Func297D8Arg *arg0) {
+void initStoryMapNpcStretch(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
     arg0->unk61 = 0;
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029EA8_2AAA8);
+    setCallback(updateStoryMapNpcStretch);
 }
 
-void func_80029EA8_2AAA8(Func297D8Arg *arg0) {
+void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
     AllocationData *allocation;
     s32 shouldSetCallback;
     u16 savedUnk50;
@@ -759,7 +759,7 @@ void func_80029EA8_2AAA8(Func297D8Arg *arg0) {
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
         arg0->unk50 = 0;
-        arg0->callback = func_80029EA8_2AAA8;
+        arg0->callback = updateStoryMapNpcStretch;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
         setCallback(func_8002A200_2AE00);

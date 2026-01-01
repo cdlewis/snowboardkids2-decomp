@@ -51,7 +51,7 @@ void updateStoryMapNpcNod(Func297D8Arg *);
 void updateStoryMapNpcWave(Func297D8Arg *);
 void updateStoryMapNpcFloatEffect(Func297D8Arg *);
 void updateStoryMapNpcThinkEffect(Func297D8Arg *);
-void func_80029EA8_2AAA8(Func297D8Arg *);
+void updateStoryMapNpcStretch(Func297D8Arg *);
 void updateStoryMapNpcTalk(Func297D8Arg *);
 void func_8002A0DC_2ACDC(Func297D8Arg *);
 void updateStoryMapNpcIdle(Func297D8Arg *);
