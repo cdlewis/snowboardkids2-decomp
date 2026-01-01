@@ -2154,6 +2154,7 @@ updateStoryMapRareEventCheering = 0x8002E314; // rom:0x2EF14
 updateStoryMapRareEventSkating = 0x8002E8B4; // rom:0x2F4B4
 prepareStoryMapNpcDialogue = 0x8002EBB0; // rom:0x2F7B0
 getPlayerGold = 0x8002ED30; // rom:0x2F930
+initStoryMapShopFairyModel = 0x8002EF3C; // rom:0x2FB3C
 addPlayerGold = 0x8002ED40; // rom:0x2F940
 dialogueNpcFacesPlayer = 0x8008F044; // rom:0x8FC44
 dialogueNpcAnimations = 0x8008F054; // rom:0x8FC54

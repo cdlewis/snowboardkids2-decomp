@@ -104,11 +104,11 @@ typedef struct {
 } func_80030540_31140_arg;
 
 typedef struct {
-    void *unk0;
-    Transform3D unk4;
-    s16 unk24;
-    s8 unk26;
-} func_8002EF3C_2FB3C_arg;
+    SceneModel *model;
+    Transform3D transform;
+    s16 animationFrame;
+    s8 animationType;
+} StoryMapShopFairyState;
 
 typedef struct {
     DisplayListObject unk0;
@@ -162,7 +162,7 @@ void func_80030378_30F78(func_800302AC_30EAC_arg *);
 void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
 void func_80030540_31140(func_80030540_31140_arg *arg0);
 void func_8002EFD8_2FBD8(void *);
-void func_8002F024_2FC24(func_8002EF3C_2FB3C_arg *);
+void func_8002F024_2FC24(StoryMapShopFairyState *);
 void func_8002F110_2FD10(func_8002EFD8_2FBD8_arg *);
 void func_8002F290_2FE90(func_8002F658_30258_arg *);
 void func_8002F36C_2FF6C(func_8002F658_30258_arg *);
@@ -245,16 +245,17 @@ void updateDebugCameraYState(cameraState *arg0) {
     debugEnqueueCallback(8, 7, &renderTextPalette, ((void *)((s32)arg0)) + 0xC);
 }
 
-void func_8002EF3C_2FB3C(func_8002EF3C_2FB3C_arg *arg0) {
-    GameState *temp = (GameState *)getCurrentAllocation();
-    arg0->unk0 = createSceneModel(0x3A, temp);
-    memcpy(&arg0->unk4, identityMatrix, 0x20);
-    arg0->unk4.translation.x = 0x200000;
-    arg0->unk4.translation.y = 0xFFE00000;
-    arg0->unk4.translation.z = 0x80000;
-    arg0->unk24 = 4;
-    arg0->unk26 = 0;
-    createYRotationMatrix(&arg0->unk4, 0x1E00);
+void initStoryMapShopFairyModel(StoryMapShopFairyState *arg0) {
+    GameState *state = (GameState *)getCurrentAllocation();
+
+    arg0->model = createSceneModel(0x3A, state);
+    memcpy(&arg0->transform, identityMatrix, 0x20);
+    arg0->transform.translation.x = 0x200000;
+    arg0->transform.translation.y = 0xFFE00000;
+    arg0->transform.translation.z = 0x80000;
+    arg0->animationFrame = 4;
+    arg0->animationType = 0;
+    createYRotationMatrix(&arg0->transform, 0x1E00);
     setCleanupCallback(func_8002F110_2FD10);
     setCallback(func_8002EFD8_2FBD8);
 }
@@ -272,7 +273,7 @@ typedef struct {
     u8 unk5D6;
 } func_8002F024_2FC24_state;
 
-void func_8002F024_2FC24(func_8002EF3C_2FB3C_arg *arg0) {
+void func_8002F024_2FC24(StoryMapShopFairyState *arg0) {
     func_8002F024_2FC24_state *state;
     u8 animIndex;
     u16 frameCounter;
@@ -280,30 +281,30 @@ void func_8002F024_2FC24(func_8002EF3C_2FB3C_arg *arg0) {
     volatile u8 pad[8];
 
     state = (func_8002F024_2FC24_state *)getCurrentAllocation();
-    applyTransformToModel(arg0->unk0, &arg0->unk4);
+    applyTransformToModel(arg0->model, &arg0->transform);
     do {
-        if (clearModelRotation(arg0->unk0) != 0) {
-            animIndex = arg0->unk26;
+        if (clearModelRotation(arg0->model) != 0) {
+            animIndex = arg0->animationType;
             idx = animIndex * 2;
             if (animIndex != 0) {
-                frameCounter = arg0->unk24 + 1;
-                arg0->unk24 = frameCounter;
+                frameCounter = arg0->animationFrame + 1;
+                arg0->animationFrame = frameCounter;
                 if (frameCounter == (u16)(D_8008F0B4_8FCB4[idx] + D_8008F0B6_8FCB6[idx])) {
-                    arg0->unk26 = 0;
-                    arg0->unk24 = 4;
+                    arg0->animationType = 0;
+                    arg0->animationFrame = 4;
                 }
-                setModelAnimation(arg0->unk0, arg0->unk24);
+                setModelAnimation(arg0->model, arg0->animationFrame);
             }
         }
     } while (0);
-    updateModelGeometry(arg0->unk0);
+    updateModelGeometry(arg0->model);
     animIndex = state->unk5D6;
     if (animIndex != 0) {
         u16 start;
-        arg0->unk26 = animIndex;
+        arg0->animationType = animIndex;
         start = D_8008F0B4_8FCB4[state->unk5D6 * 2];
-        arg0->unk24 = start;
-        setModelAnimation(arg0->unk0, (s16)start);
+        arg0->animationFrame = start;
+        setModelAnimation(arg0->model, (s16)start);
         state->unk5D6 = 0;
     }
 }
