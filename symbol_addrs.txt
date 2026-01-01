@@ -2203,3 +2203,7 @@ cleanupStoryMapShopItemPriceDisplay = 0x80030668; // rom:0x31268
 initStoryMapShopItemStatsDisplay = 0x80030694; // rom:0x31294
 updateStoryMapShopItemStatsDisplay = 0x80030764; // rom:0x31364
 cleanupStoryMapShopItemStatsDisplay = 0x800308C4; // rom:0x314C4
+
+initStoryMapShopSoldOutLabel = 0x800308FC; // rom:0x314FC
+updateStoryMapShopSoldOutLabel = 0x80030974; // rom:0x31574
+cleanupStoryMapShopSoldOutLabel = 0x800309D4; // rom:0x315D4

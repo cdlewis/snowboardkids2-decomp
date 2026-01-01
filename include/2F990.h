@@ -24,16 +24,16 @@ typedef struct {
 } ItemStatsDisplay;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s8 unkA;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s8 paletteIndex;
     s8 unkB;
-} func_800308FC_314FC_arg;
+} SpriteDisplayState;
 
 typedef struct {
-    func_800308FC_314FC_arg items[4];
+    SpriteDisplayState items[4];
     s16 unk30;
     s16 unk32;
     void *unk34;
@@ -61,8 +61,8 @@ typedef struct {
 } UnlockScreenScrollArrowsState;
 
 void initUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arg0);
-void initStoryMapShopItemPriceDisplay(func_800308FC_314FC_arg *arg0);
+void initStoryMapShopItemPriceDisplay(SpriteDisplayState *arg0);
 void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
 void cleanupStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
-void func_800308FC_314FC(func_800308FC_314FC_arg *arg0);
+void initStoryMapShopSoldOutLabel(SpriteDisplayState *arg0);
 void func_80030A00_31600(func_80030A00_31600_arg *arg0);

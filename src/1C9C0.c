@@ -70,7 +70,7 @@ void unlockScreenAwaitFadeIn(void) {
         allocation->transitionState = 3;
         func_80058220_58E20(0xEE, 1);
         setGameStateHandler(unlockScreenAwaitUserDismiss);
-        scheduleTask(func_800308FC_314FC, 0, 0, 0x5A);
+        scheduleTask(initStoryMapShopSoldOutLabel, 0, 0, 0x5A);
     }
 }
 

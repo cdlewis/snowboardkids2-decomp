@@ -86,7 +86,7 @@ typedef struct {
 } S0;
 
 typedef struct {
-    func_800308FC_314FC_arg digits[6];
+    SpriteDisplayState digits[6];
     u8 unk48[0x18];
     char priceBuffer[8];
 } StoryMapShopItemPriceDisplayState;
@@ -109,7 +109,7 @@ typedef struct {
 } SlidingItemCardState;
 
 typedef struct {
-    func_800308FC_314FC_arg digits[7];
+    SpriteDisplayState digits[7];
     s16 goldIconX;
     s16 goldIconY;
     void *goldIconAsset;
@@ -176,8 +176,8 @@ void updateStoryMapShopExitOverlay(void *arg0);
 void cleanupStoryMapShopExitOverlay(func_8002FF28_30B28_arg *arg0);
 void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
 
-void func_80030974_31574(void *);
-void func_800309D4_315D4(func_800308FC_314FC_arg *);
+void updateStoryMapShopSoldOutLabel(void *);
+void cleanupStoryMapShopSoldOutLabel(SpriteDisplayState *);
 void func_80030AEC_316EC(void *);
 void func_80030B70_31770(func_80030B70_31770_arg *);
 void *func_80035F80_36B80(s32);
@@ -805,15 +805,15 @@ void cleanupStoryMapShopItemStatLabel(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void initStoryMapShopExitOverlay(func_800308FC_314FC_arg *arg0) {
+void initStoryMapShopExitOverlay(SpriteDisplayState *arg0) {
     void *overlayAsset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
 
     setCleanupCallback(&cleanupStoryMapShopExitOverlay);
 
-    arg0->unk0 = -0x2C;
-    arg0->unk2 = -0x14;
-    arg0->unk8 = 0xD;
-    arg0->unk4 = overlayAsset;
+    arg0->x = -0x2C;
+    arg0->y = -0x14;
+    arg0->spriteIndex = 0xD;
+    arg0->asset = overlayAsset;
 
     setCallback(&updateStoryMapShopExitOverlay);
 }
@@ -840,9 +840,9 @@ void initStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     goldIconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     setCleanupCallback(&cleanupStoryMapShopGoldDisplay);
     for (i = 0; i < 7; i++) {
-        arg0->digits[i].unk0 = 0x48 + (i * 8);
-        arg0->digits[i].unk2 = 0x58;
-        arg0->digits[i].unk4 = digitSpriteAsset;
+        arg0->digits[i].x = 0x48 + (i * 8);
+        arg0->digits[i].y = 0x58;
+        arg0->digits[i].asset = digitSpriteAsset;
     }
 
     arg0->goldIconX = 0x38;
@@ -855,7 +855,7 @@ void initStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
 
 void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     s32 i;
-    func_800308FC_314FC_arg *digit;
+    SpriteDisplayState *digit;
     s8 paletteIndex;
     s32 space;
 
@@ -863,13 +863,13 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
         paletteIndex = 1;
         i = 6;
         do {
-            arg0->digits[i].unkA = paletteIndex;
+            arg0->digits[i].paletteIndex = paletteIndex;
         } while (--i >= 0);
     } else {
         paletteIndex = 2;
         i = 6;
         do {
-            arg0->digits[i].unkA = paletteIndex;
+            arg0->digits[i].paletteIndex = paletteIndex;
         } while (--i >= 0);
     }
 
@@ -881,7 +881,7 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     do {
         char c = arg0->goldAmountBuffer[i];
         if (c != space) {
-            digit->unk8 = c - '0';
+            digit->spriteIndex = c - '0';
             debugEnqueueCallback(8, 0, &func_80010240_10E40, digit);
         }
         digit++;
@@ -891,13 +891,13 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
 }
 
 void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
-    arg0->digits[0].unk4 = freeNodeMemory(arg0->digits[0].unk4);
+    arg0->digits[0].asset = freeNodeMemory(arg0->digits[0].asset);
     arg0->goldIconAsset = freeNodeMemory(arg0->goldIconAsset);
 }
 
 void cleanupStoryMapShopItemPriceDisplay(func_80030668_31268_arg *);
 
-void initStoryMapShopItemPriceDisplay(func_800308FC_314FC_arg *arg0) {
+void initStoryMapShopItemPriceDisplay(SpriteDisplayState *arg0) {
     void *digitSpriteAsset;
     s32 i;
     s32 y;
@@ -911,9 +911,9 @@ void initStoryMapShopItemPriceDisplay(func_800308FC_314FC_arg *arg0) {
     x = -0x1C;
 
     do {
-        arg0[i].unk0 = x;
-        arg0[i].unk2 = y;
-        arg0[i].unk4 = digitSpriteAsset;
+        arg0[i].x = x;
+        arg0[i].y = y;
+        arg0[i].asset = digitSpriteAsset;
         i++;
         x += 8;
     } while (i < 6);
@@ -928,7 +928,7 @@ void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0)
     s32 i;
     u8 itemValue;
     s32 price;
-    func_800308FC_314FC_arg *digit;
+    SpriteDisplayState *digit;
     s8 paletteIndex;
     s32 space;
 
@@ -948,13 +948,13 @@ void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0)
     if (*D_800AFE8C_A71FC < price) {
         i = 5;
         do {
-            arg0->digits[i].unkA = paletteIndex;
+            arg0->digits[i].paletteIndex = paletteIndex;
         } while (--i >= 0);
     } else {
         paletteIndex = 2;
         i = 5;
         do {
-            arg0->digits[i].unkA = paletteIndex;
+            arg0->digits[i].paletteIndex = paletteIndex;
         } while (--i >= 0);
     }
 
@@ -966,7 +966,7 @@ void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0)
     do {
         char c = arg0->priceBuffer[i];
         if (c != space) {
-            digit->unk8 = c - '0';
+            digit->spriteIndex = c - '0';
             debugEnqueueCallback(8, 0, &func_80010240_10E40, digit);
         }
         digit++;
@@ -1061,20 +1061,20 @@ void cleanupStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
-void func_800308FC_314FC(func_800308FC_314FC_arg *arg0) {
+void initStoryMapShopSoldOutLabel(SpriteDisplayState *arg0) {
     void *temp_s1 = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
 
-    setCleanupCallback(&func_800309D4_315D4);
+    setCleanupCallback(&cleanupStoryMapShopSoldOutLabel);
 
-    arg0->unk0 = -0x2C;
-    arg0->unk2 = -0x18;
-    arg0->unk4 = temp_s1;
-    arg0->unk8 = 5;
+    arg0->x = -0x2C;
+    arg0->y = -0x18;
+    arg0->asset = temp_s1;
+    arg0->spriteIndex = 5;
 
-    setCallback(&func_80030974_31574);
+    setCallback(&updateStoryMapShopSoldOutLabel);
 }
 
-void func_80030974_31574(void *arg0) {
+void updateStoryMapShopSoldOutLabel(void *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
     s8 index = state->unk5C8;
 
@@ -1083,8 +1083,8 @@ void func_80030974_31574(void *arg0) {
     }
 }
 
-void func_800309D4_315D4(func_800308FC_314FC_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupStoryMapShopSoldOutLabel(SpriteDisplayState *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 void func_80030A00_31600(func_80030A00_31600_arg *arg0) {
@@ -1097,10 +1097,10 @@ void func_80030A00_31600(func_80030A00_31600_arg *arg0) {
     setCleanupCallback(&func_80030B70_31770);
 
     for (i = 0; i < 4; i++) {
-        arg0->items[i].unk0 = (i & 1) * 0x80 - 0x80;
-        arg0->items[i].unk2 = (i / 2) * 0x10 - 0x66;
-        arg0->items[i].unk4 = temp_s1;
-        arg0->items[i].unk8 = i;
+        arg0->items[i].x = (i & 1) * 0x80 - 0x80;
+        arg0->items[i].y = (i / 2) * 0x10 - 0x66;
+        arg0->items[i].asset = temp_s1;
+        arg0->items[i].spriteIndex = i;
     }
 
     arg0->unk30 = -0x68;
