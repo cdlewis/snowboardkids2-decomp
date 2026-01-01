@@ -625,17 +625,17 @@ void updateStoryMapNpcNod(Func297D8Arg *arg0) {
     }
 }
 
-void func_80029C40_2A840(Func297D8Arg *arg0) {
+void initStoryMapNpcTalk(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
     arg0->unk61 = 0;
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029C90_2A890);
+    setCallback(updateStoryMapNpcTalk);
 }
 
-void func_80029C90_2A890(Func297D8Arg *arg0) {
+void updateStoryMapNpcTalk(Func297D8Arg *arg0) {
     AllocationData *alloc = getCurrentAllocation();
 
     switch (arg0->unk5E) {
