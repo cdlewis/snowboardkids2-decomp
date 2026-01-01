@@ -108,7 +108,7 @@ extern s32 D_800A8D10_A0080;
 extern u8 gConnectedControllerMask;
 extern s8 gControllerPollingEnabled;
 
-void func_800395F0_3A1F0(void) {
+void initControllerSubsystem(void) {
     s32 result;
     s32 i;
     u8 controller_status;

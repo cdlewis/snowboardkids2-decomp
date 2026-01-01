@@ -29,7 +29,7 @@ void mainThreadEntrypoint(void *arg) {
         initialize_video_and_threads(0x1E);
     }
 
-    func_800395F0_3A1F0();
+    initControllerSubsystem();
     initializeMemoryAllocatorRegion();
     func_8006DC40_6E840();
     initPiManager();

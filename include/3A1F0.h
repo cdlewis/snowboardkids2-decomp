@@ -37,7 +37,7 @@ void func_8003AC38_3B838(void);
 
 void func_80039B88_3A788(void);
 
-void func_800395F0_3A1F0(void);
+void initControllerSubsystem(void);
 
 void func_80039C34_3A834(void);
 
