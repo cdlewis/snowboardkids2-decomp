@@ -516,33 +516,33 @@ void cleanupBoardShopSnowParticles(SnowParticleState *arg0) {
     arg0->particles = freeNodeMemory(arg0->particles);
 }
 
-void func_80031288_31E88(func_80031510_32110_arg *arg0) {
-    Transform3D matrixA;
-    Transform3D *pMatrixB;
-    Transform3D *pMatrixA;
-    Transform3D matrixB;
-    u8 temp_s0;
-    void *temp_s3;
+void initBoardShopCharacterPreview(func_80031510_32110_arg *arg0) {
+    Transform3D rotationYX;
+    Transform3D *pRotationZ;
+    Transform3D *pRotationYX;
+    Transform3D rotationZ;
+    u8 paletteIndex;
+    void *transformMatrix;
 
-    pMatrixB = &matrixB;
-    pMatrixA = &matrixA;
+    pRotationZ = &rotationZ;
+    pRotationYX = &rotationYX;
 
     getCurrentAllocation();
-    temp_s3 = &arg0->unk3C;
-    memcpy(temp_s3, &identityMatrix, 0x20);
-    memcpy(pMatrixB, temp_s3, 0x20);
-    memcpy(pMatrixA, pMatrixB, 0x20);
-    createRotationMatrixYX(pMatrixA, 0x1000, 0x800);
-    createZRotationMatrix(pMatrixB, 0x1F00);
-    func_8006B084_6BC84(pMatrixA, pMatrixB, temp_s3);
+    transformMatrix = &arg0->unk3C;
+    memcpy(transformMatrix, &identityMatrix, 0x20);
+    memcpy(pRotationZ, transformMatrix, 0x20);
+    memcpy(pRotationYX, pRotationZ, 0x20);
+    createRotationMatrixYX(pRotationYX, 0x1000, 0x800);
+    createZRotationMatrix(pRotationZ, 0x1F00);
+    func_8006B084_6BC84(pRotationYX, pRotationZ, transformMatrix);
     arg0->unk50 = 0x600000;
     arg0->unk58 = 0xFFF80000;
-    temp_s0 = EepromSaveData->character_or_settings[0];
-    memcpy(arg0, temp_s3, 0x20);
+    paletteIndex = EepromSaveData->character_or_settings[0];
+    memcpy(arg0, transformMatrix, 0x20);
     arg0->unk20 = loadAssetByIndex_95728(0);
     arg0->unk24 = loadAssetByIndex_95500(0);
     arg0->unk28 = loadAssetByIndex_95590(0);
-    arg0->unk2C = loadAssetByIndex_95668(temp_s0 - 1);
+    arg0->unk2C = loadAssetByIndex_95668(paletteIndex - 1);
     setCleanupCallback(&func_800317D4_323D4);
     setCallback(&func_800313A4_31FA4);
 }

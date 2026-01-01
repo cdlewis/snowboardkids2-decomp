@@ -2221,3 +2221,4 @@ initBoardShopSnowParticles = 0x80030FBC; // rom:0x31BBC
 waitBoardShopSnowParticles = 0x80031100; // rom:0x31D00
 animateBoardShopSnowParticles = 0x80031138; // rom:0x31D38
 cleanupBoardShopSnowParticles = 0x80031248; // rom:0x31E48
+initBoardShopCharacterPreview = 0x80031288; // rom:0x31E88
