@@ -121,14 +121,14 @@ typedef struct {
 } func_8003316C_33D6C_alloc;
 
 typedef struct {
-    SceneModel *unk0;
-    Transform3D unk4;
+    SceneModel *model;
+    Transform3D transform;
     union {
         SceneModel *unk20;
         s32 unk20_s32;
-        s16 unk20_s16;
-    } unk20_u;
-} func_80031ABC_326BC_arg;
+        s16 animationFrame;
+    } animFrameUnion;
+} BoardShopShopkeeperWaitState;
 
 typedef struct {
     s16 unk0;
@@ -149,12 +149,12 @@ typedef struct {
 } func_800330B4_33CB4_arg;
 
 typedef struct {
-    SceneModel *unk0;
-    Transform3D unk4;
-    s16 unk24;
-    u16 unk26;
-    u8 unk28;
-} func_80031A0C_3260C_arg;
+    SceneModel *model;
+    Transform3D transform;
+    s16 animationFrame;
+    u16 animationEndFrame;
+    u8 animationState;
+} BoardShopShopkeeperState;
 
 typedef struct {
     u8 padding[0x8];
@@ -332,9 +332,9 @@ void animateBoardShopCharacterSwitch(BoardShopCharacterPreviewState *arg0);
 void freeBoardShopPurchaseAssets(func_800319C8_325C8_arg *arg0);
 void animateBoardShopCharacterSlideOut(BoardShopCharacterPreviewState *arg0);
 void loadBoardShopPurchaseAssets(BoardShopCharacterPreviewState *arg0);
-void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
-void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
-void func_80031B30_32730(func_80031A0C_3260C_arg *arg0);
+void cleanupBoardShopShopkeeper(BoardShopShopkeeperState *arg0);
+void waitBoardShopShopkeeper(BoardShopShopkeeperWaitState *arg0);
+void updateBoardShopShopkeeper(BoardShopShopkeeperState *arg0);
 void func_80031CC0_328C0(func_8002FA1C_3061C_arg *arg0);
 void func_80031D14_32914(BoardShopCharacterPreviewState *arg0);
 void func_80032218_32E18(void *);
@@ -770,35 +770,35 @@ void freeBoardShopCharacterTransitionAssets(func_800319C8_325C8_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-void func_80031A0C_3260C(func_80031A0C_3260C_arg *arg0) {
-    arg0->unk0 = createSceneModelEx(0x3A, &((GameState *)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
+void initBoardShopShopkeeper(BoardShopShopkeeperState *arg0) {
+    arg0->model = createSceneModelEx(0x3A, &((GameState *)getCurrentAllocation())->audioPlayer2, 0, -1, 0, 0x12);
 
-    memcpy(&arg0->unk4, &identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->transform, &identityMatrix, sizeof(Transform3D));
 
-    arg0->unk4.translation.x = 0xFFE70000;
-    arg0->unk4.translation.y = 0xFFE00000;
-    arg0->unk4.translation.z = 0;
+    arg0->transform.translation.x = 0xFFE70000;
+    arg0->transform.translation.y = 0xFFE00000;
+    arg0->transform.translation.z = 0;
 
-    createYRotationMatrix(&arg0->unk4, 0x200);
+    createYRotationMatrix(&arg0->transform, 0x200);
 
-    arg0->unk24 = 0x10;
-    arg0->unk26 = 0x10;
-    arg0->unk28 = 0;
+    arg0->animationFrame = 0x10;
+    arg0->animationEndFrame = 0x10;
+    arg0->animationState = 0;
 
-    setCleanupCallback(&func_80031C4C_3284C);
-    setCallback(&func_80031ABC_326BC);
+    setCleanupCallback(&cleanupBoardShopShopkeeper);
+    setCallback(&waitBoardShopShopkeeper);
 }
 
-void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0) {
-    GameState *temp_s1;
+void waitBoardShopShopkeeper(BoardShopShopkeeperWaitState *arg0) {
+    GameState *state;
 
-    temp_s1 = (GameState *)getCurrentAllocation();
-    applyTransformToModel(arg0->unk0, &arg0->unk4);
-    setItemDisplayEnabled(arg0->unk0, 1);
-    setModelAnimation(arg0->unk0, arg0->unk20_u.unk20_s16);
-    updateModelGeometry(arg0->unk0);
-    if (temp_s1->unk79B != 0) {
-        setCallback(&func_80031B30_32730);
+    state = (GameState *)getCurrentAllocation();
+    applyTransformToModel(arg0->model, &arg0->transform);
+    setItemDisplayEnabled(arg0->model, 1);
+    setModelAnimation(arg0->model, arg0->animFrameUnion.animationFrame);
+    updateModelGeometry(arg0->model);
+    if (state->unk79B != 0) {
+        setCallback(&updateBoardShopShopkeeper);
     }
 }
 
@@ -809,55 +809,55 @@ typedef struct {
     u16 unk77E;
     u8 padding3[0x23];
     u8 unk7A3;
-} func_80031B30_allocation;
+} BoardShopUpdateAllocation;
 
-void func_80031B30_32730(func_80031A0C_3260C_arg *arg0) {
-    func_80031B30_allocation *allocation;
+void updateBoardShopShopkeeper(BoardShopShopkeeperState *arg0) {
+    BoardShopUpdateAllocation *allocation;
     s32 result;
-    s32 state;
-    u16 counter;
+    s32 animState;
+    u16 frame;
     volatile u8 pad[8];
 
-    allocation = (func_80031B30_allocation *)getCurrentAllocation();
-    state = arg0->unk28;
+    allocation = (BoardShopUpdateAllocation *)getCurrentAllocation();
+    animState = arg0->animationState;
 
-    if (state != 2) {
-        result = clearModelRotation(arg0->unk0);
-        state = arg0->unk28;
+    if (animState != 2) {
+        result = clearModelRotation(arg0->model);
+        animState = arg0->animationState;
 
-        if (state == 1) {
+        if (animState == 1) {
             if (result != NULL) {
-                counter = arg0->unk24 + 1;
-                arg0->unk24 = counter;
+                frame = arg0->animationFrame + 1;
+                arg0->animationFrame = frame;
 
-                if (arg0->unk26 < counter) {
-                    arg0->unk28 = 0;
-                    arg0->unk24 = 0x10;
+                if (arg0->animationEndFrame < frame) {
+                    arg0->animationState = 0;
+                    arg0->animationFrame = 0x10;
                 }
 
-                setModelAnimation(arg0->unk0, arg0->unk24);
-                state = arg0->unk28;
+                setModelAnimation(arg0->model, arg0->animationFrame);
+                animState = arg0->animationState;
             }
         }
     }
 
-    if (state != 1 || allocation->unk7A3 != 0) {
+    if (animState != 1 || allocation->unk7A3 != 0) {
         if (allocation->unk77E != 0) {
-            arg0->unk24 = D_8008F16C_8FD6C[allocation->unk77E * 2];
-            arg0->unk26 = D_8008F16E_8FD6E[allocation->unk77E * 2];
-            setModelAnimation(arg0->unk0, arg0->unk24);
+            arg0->animationFrame = D_8008F16C_8FD6C[allocation->unk77E * 2];
+            arg0->animationEndFrame = D_8008F16E_8FD6E[allocation->unk77E * 2];
+            setModelAnimation(arg0->model, arg0->animationFrame);
             allocation->unk77E = 0;
-            arg0->unk28 = 1;
+            arg0->animationState = 1;
             allocation->unk7A3 = 0;
         }
     }
 
     func_8006FED8_70AD8(&allocation->audioPlayer2);
-    updateModelGeometry(arg0->unk0);
+    updateModelGeometry(arg0->model);
 }
 
-void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0) {
-    destroySceneModel(arg0->unk0);
+void cleanupBoardShopShopkeeper(BoardShopShopkeeperState *arg0) {
+    destroySceneModel(arg0->model);
 }
 
 void func_80031C68_32868(func_8002FA1C_3061C_arg *arg0) {

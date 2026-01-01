@@ -2234,3 +2234,7 @@ freeBoardShopCharacterPreviewAssets = 0x800317D4; // rom:0x323D4
 initBoardShopCharacterTransition = 0x80031818; // rom:0x32418
 animateBoardShopCharacterTransition = 0x80031944; // rom:0x32544
 freeBoardShopCharacterTransitionAssets = 0x800319C8; // rom:0x325C8
+initBoardShopShopkeeper = 0x80031A0C; // rom:0x3260C
+waitBoardShopShopkeeper = 0x80031ABC; // rom:0x326BC
+updateBoardShopShopkeeper = 0x80031B30; // rom:0x32730
+cleanupBoardShopShopkeeper = 0x80031C4C; // rom:0x3284C
