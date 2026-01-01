@@ -14,40 +14,40 @@ USE_ASSET(_4237C0);
 USE_ASSET(_426EF0);
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 frameIndex;
+    s16 highlightValue;
     u8 unkC;
-    u8 unkD;
+    u8 displayFlags;
     u8 unkE;
     u8 unkF;
-} func_80037A64_Entry10;
+} OptionsMenuToggleIconEntry;
 
 typedef union {
     s16 asShort;
     u8 asBytes[2];
-} func_80037A64_UnkCUnion;
+} ToggleLabelUnion;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    void *unk8;
-    func_80037A64_UnkCUnion unkC;
-    s16 unkE;
-    u8 unk10;
+    s16 x;
+    s16 y;
+    void *textData;
+    void *textAsset;
+    ToggleLabelUnion highlight;
+    s16 alpha;
+    u8 textStyle;
     u8 unk11;
     u8 unk12;
     u8 unk13;
-} func_80037A64_Entry14;
+} OptionsMenuToggleLabelEntry;
 
 typedef struct {
-    func_80037A64_Entry10 entries10[6];
-    func_80037A64_Entry14 entries14[6];
-    void *unkD8;
-} func_80037A64_Arg0Struct;
+    OptionsMenuToggleIconEntry iconEntries[6];
+    OptionsMenuToggleLabelEntry labelEntries[6];
+    void *textRenderAsset;
+} OptionsMenuToggleState;
 
 typedef struct {
     u8 pad[0x8];
@@ -148,119 +148,119 @@ void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
-void func_80037BC4_387C4(func_80037BC4_387C4_arg *);
-void func_80037A64_38664(func_80037A64_Arg0Struct *);
+void cleanupOptionsMenuToggles(func_80037BC4_387C4_arg *);
+void updateOptionsMenuToggles(OptionsMenuToggleState *);
 
-#define ARG0 ((func_80037A64_Arg0Struct *)arg0)
+#define ARG0 ((OptionsMenuToggleState *)arg0)
 
-void func_800378AC_384AC(void *arg0) {
-    void *s1;
+void initOptionsMenuToggles(void *arg0) {
+    void *spriteAsset;
     s32 i;
-    s32 v1;
-    u8 temp;
+    s32 column;
+    u8 optionValue;
 
     getCurrentAllocation();
-    s1 = loadCompressedData(&_4196E0_ROM_START, &_419C60_ROM_START, 0xBB8);
-    ARG0->unkD8 = loadTextRenderAsset(1);
-    setCleanupCallback(func_80037BC4_387C4);
+    spriteAsset = loadCompressedData(&_4196E0_ROM_START, &_419C60_ROM_START, 0xBB8);
+    ARG0->textRenderAsset = loadTextRenderAsset(1);
+    setCleanupCallback(cleanupOptionsMenuToggles);
 
     for (i = 0; i < 6; i++) {
-        v1 = i & 1;
-        ARG0->entries10[i].unk0 = (v1 * 0x38) + 0x18;
-        ARG0->entries10[i].unk2 = ((i / 2) << 5) - 0x20;
-        ARG0->entries10[i].unk4 = s1;
-        ARG0->entries10[i].unk8 = 1;
-        ARG0->entries10[i].unkA = 0;
-        ARG0->entries10[i].unkC = 0;
+        column = i & 1;
+        ARG0->iconEntries[i].x = (column * 0x38) + 0x18;
+        ARG0->iconEntries[i].y = ((i / 2) << 5) - 0x20;
+        ARG0->iconEntries[i].spriteAsset = spriteAsset;
+        ARG0->iconEntries[i].frameIndex = 1;
+        ARG0->iconEntries[i].highlightValue = 0;
+        ARG0->iconEntries[i].unkC = 0;
 
         if (i < 2) {
-            temp = D_800AFE8C_A71FC->unk1F;
+            optionValue = D_800AFE8C_A71FC->unk1F;
         } else if (i < 4) {
-            temp = D_800AFE8C_A71FC->unk20;
+            optionValue = D_800AFE8C_A71FC->unk20;
         } else {
-            temp = (D_800AFE8C_A71FC->customLapEnabled + 1) & 1;
+            optionValue = (D_800AFE8C_A71FC->customLapEnabled + 1) & 1;
         }
-        v1 = i & 1;
-        ARG0->entries10[i].unkD = ((temp + v1) & 1) | 2;
+        column = i & 1;
+        ARG0->iconEntries[i].displayFlags = ((optionValue + column) & 1) | 2;
 
-        ARG0->entries14[i].unk0 = (v1 * 0x3A) + 0x16;
-        ARG0->entries14[i].unk2 = ARG0->entries10[i].unk2 + 2;
-        ARG0->entries14[i].unk8 = ARG0->unkD8;
-        ARG0->entries14[i].unkC.asShort = 0;
-        ARG0->entries14[i].unkE = 0xFF;
-        ARG0->entries14[i].unk10 = 5;
+        ARG0->labelEntries[i].x = (column * 0x3A) + 0x16;
+        ARG0->labelEntries[i].y = ARG0->iconEntries[i].y + 2;
+        ARG0->labelEntries[i].textAsset = ARG0->textRenderAsset;
+        ARG0->labelEntries[i].highlight.asShort = 0;
+        ARG0->labelEntries[i].alpha = 0xFF;
+        ARG0->labelEntries[i].textStyle = 5;
 
         if (i < 4) {
-            if (v1 != 0) {
-                ARG0->entries14[i].unk4 = &D_8008FD9C_9099C;
+            if (column != 0) {
+                ARG0->labelEntries[i].textData = &D_8008FD9C_9099C;
             } else {
-                ARG0->entries14[i].unk4 = &D_8008FD8C_9098C;
+                ARG0->labelEntries[i].textData = &D_8008FD8C_9098C;
             }
         } else {
-            if (v1 != 0) {
-                ARG0->entries14[i].unk4 = &D_8008FDBC_909BC;
+            if (column != 0) {
+                ARG0->labelEntries[i].textData = &D_8008FDBC_909BC;
             } else {
-                ARG0->entries14[i].unk4 = &D_8008FDAC_909AC;
+                ARG0->labelEntries[i].textData = &D_8008FDAC_909AC;
             }
         }
     }
 
-    setCallback(func_80037A64_38664);
+    setCallback(updateOptionsMenuToggles);
 }
 
 #undef ARG0
 
-void func_80037A64_38664(func_80037A64_Arg0Struct *arg0) {
+void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
     func_80037F14_alloc *alloc;
     s32 i;
-    u8 temp;
+    u8 optionValue;
 
     alloc = getCurrentAllocation();
 
     for (i = 0; i < 6; i++) {
         if (i < 2) {
-            temp = D_800AFE8C_A71FC->unk1F;
+            optionValue = D_800AFE8C_A71FC->unk1F;
         } else if (i < 4) {
-            temp = D_800AFE8C_A71FC->unk20;
+            optionValue = D_800AFE8C_A71FC->unk20;
         } else {
-            temp = (D_800AFE8C_A71FC->customLapEnabled + 1) & 1;
+            optionValue = (D_800AFE8C_A71FC->customLapEnabled + 1) & 1;
         }
 
-        arg0->entries10[i].unkD = ((temp + (i & 1)) & 1) | 2;
+        arg0->iconEntries[i].displayFlags = ((optionValue + (i & 1)) & 1) | 2;
 
         if (alloc->unk1E2 == 0) {
             u8 idx;
             s32 value;
             idx = alloc->unk1EC;
-            value = temp + (idx << 1);
+            value = optionValue + (idx << 1);
             if (value == i) {
-                arg0->entries10[i].unkA = alloc->unk1E8[idx];
-                arg0->entries14[i].unkC.asShort = alloc->unk1E8[alloc->unk1EC];
+                arg0->iconEntries[i].highlightValue = alloc->unk1E8[idx];
+                arg0->labelEntries[i].highlight.asShort = alloc->unk1E8[alloc->unk1EC];
             } else {
-                arg0->entries10[i].unkA = 0;
-                arg0->entries14[i].unkC.asShort = 0;
+                arg0->iconEntries[i].highlightValue = 0;
+                arg0->labelEntries[i].highlight.asShort = 0;
             }
         } else {
-            arg0->entries10[i].unkA = 0;
-            arg0->entries14[i].unkC.asShort = 0;
+            arg0->iconEntries[i].highlightValue = 0;
+            arg0->labelEntries[i].highlight.asShort = 0;
         }
 
-        debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0->entries10[i]);
+        debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0->iconEntries[i]);
 
         func_80035DE0_369E0(
-            arg0->unkD8,
-            arg0->entries14[i].unk4,
-            arg0->entries14[i].unk0,
-            arg0->entries14[i].unk2,
-            arg0->entries14[i].unkC.asBytes[1],
-            arg0->entries14[i].unk10,
+            arg0->textRenderAsset,
+            arg0->labelEntries[i].textData,
+            arg0->labelEntries[i].x,
+            arg0->labelEntries[i].y,
+            arg0->labelEntries[i].highlight.asBytes[1],
+            arg0->labelEntries[i].textStyle,
             (void *)8,
             1
         );
     }
 }
 
-void func_80037BC4_387C4(func_80037BC4_387C4_arg *arg0) {
+void cleanupOptionsMenuToggles(func_80037BC4_387C4_arg *arg0) {
     arg0->unkD8 = freeNodeMemory(arg0->unkD8);
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
