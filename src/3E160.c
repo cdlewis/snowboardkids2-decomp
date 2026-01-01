@@ -60,7 +60,7 @@ void parseRaceAssetData(void);
 void scheduleRaceTasks(void);
 void awaitRaceAssetsLoaded(void);
 void waitForFadeAndInitPlayers(void);
-void func_8003FB90_40790(void);
+void awaitBossResultAndFadeOut(void);
 void func_800401A0_40DA0(void);
 void awaitPlayersAndPlayRaceMusic(void);
 void loadPlayerAssets(void);
@@ -958,7 +958,7 @@ void handleBossRaceResult(void) {
     gs->unk4C = 0x96;
     gs->unk7B = 1;
 
-    setGameStateHandler(func_8003FB90_40790);
+    setGameStateHandler(awaitBossResultAndFadeOut);
 }
 
 void handleBossDefeatResult(void) {
@@ -980,17 +980,17 @@ void handleBossDefeatResult(void) {
     state->unk4C = 0x96;
     state->unk7B = 1;
 
-    setGameStateHandler(func_8003FB90_40790);
+    setGameStateHandler(awaitBossResultAndFadeOut);
 }
 
-void func_8003FB90_40790(void) {
-    s32 temp_v1;
-    GameState *temp_v0;
+void awaitBossResultAndFadeOut(void) {
+    s32 delayTimer;
+    GameState *state;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v1 = temp_v0->unk4C - 1;
-    temp_v0->unk4C = temp_v1;
-    if (temp_v1 == 0) {
+    state = (GameState *)getCurrentAllocation();
+    delayTimer = state->unk4C - 1;
+    state->unk4C = delayTimer;
+    if (delayTimer == 0) {
         func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         func_80057564_58164(0x3C);
         setGameStateHandler(&func_80040608_41208);
