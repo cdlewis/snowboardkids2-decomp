@@ -36,7 +36,7 @@ typedef struct {
     /* 0x61 */ u8 unk61;
 } Func8002A390Arg;
 
-s32 func_8002A390_2AF90(Func8002A390Arg *arg0) {
+s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
     GameState *state;
     s32 stateVal;
 

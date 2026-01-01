@@ -41,6 +41,7 @@ nullStoryMapNpcStillCallback = 0x8002A1F8; // rom:0x2ADF8
 updateStoryMapNpcTalking = 0x8002A200; // rom:0x2AE00
 setupStoryMapNpcModel = 0x8002A290; // rom:0x2AE90
 updateStoryMapNpcModel = 0x8002A2D0; // rom:0x2AED0
+tryStoryMapNpcInteraction = 0x8002A390; // rom:0x2AF90
 gMenuLightColor = 0x8008DEF0; // rom:0x8EAF0
 gMenuAmbientColor = 0x8008DEF8; // rom:0x8EAF8
 storyMapCameraTask = 0x80017350; // rom:0x17F50

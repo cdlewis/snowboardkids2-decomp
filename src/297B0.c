@@ -82,7 +82,7 @@ void updateStoryMapNpcJump(Func297D8Arg *arg0) {
                 break;
         }
     } else {
-        if (func_8002A390_2AF90(arg0) != 0) {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
             setCallback(collectStoryMapItem);
             shouldSetCallback = 1;
         } else if (arg0->unk5E == 0) {
@@ -165,7 +165,7 @@ void updateStoryMapNpcWave(Func297D8Arg *arg0) {
                 break;
         }
     } else {
-        if (func_8002A390_2AF90(arg0) != 0) {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
             setCallback(collectStoryMapItem);
             shouldSetCallback = 1;
         } else if (arg0->unk5E == 0) {
@@ -231,7 +231,7 @@ void updateStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
             arg0->unk24 = 0x1D000;
         }
     } else {
-        if (func_8002A390_2AF90(arg0) != 0) {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
             setCallback(collectStoryMapItem);
             shouldSetCallback = 1;
         } else if (arg0->unk3A == 0x10) {
@@ -285,7 +285,7 @@ void updateStoryMapNpcLookAround(Func297D8Arg *arg0) {
             arg0->unk50 = arg0->unk58;
         }
     } else {
-        if (func_8002A390_2AF90(arg0) != 0) {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
             setCallback(collectStoryMapItem);
             setCallbackFlag = 1;
         } else if (arg0->unk5E == 0) {
@@ -373,7 +373,7 @@ void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
                 break;
         }
     } else {
-        if (func_8002A390_2AF90(arg0) != 0) {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
             setCallback(collectStoryMapItem);
             shouldSetCallback = 1;
         } else if (arg0->unk5E == 0) {
@@ -520,7 +520,7 @@ void updateStoryMapNpcIdle(Func297D8Arg *arg0) {
     alloc = getCurrentAllocation();
     setCallbackFlag = 0;
 
-    if (func_8002A390_2AF90(arg0) != 0) {
+    if (tryStoryMapNpcInteraction(arg0) != 0) {
         setCallback(collectStoryMapItem);
         setCallbackFlag = 1;
     }
@@ -595,7 +595,7 @@ void updateStoryMapNpcNod(Func297D8Arg *arg0) {
                 break;
         }
     } else {
-        if (func_8002A390_2AF90(arg0) != 0) {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
             setCallback(collectStoryMapItem);
             setCallbackFlag = 1;
         } else if (arg0->unk5E == 0) {
@@ -667,7 +667,7 @@ void updateStoryMapNpcTalk(Func297D8Arg *arg0) {
             break;
 
         default:
-            if (func_8002A390_2AF90(arg0) != 0) {
+            if (tryStoryMapNpcInteraction(arg0) != 0) {
                 setCallback(collectStoryMapItem);
             } else if (arg0->unk5E == 0) {
                 arg0->unk5A = arg0->unk5A + 1;
@@ -736,7 +736,7 @@ void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
                 break;
         }
     } else {
-        if (func_8002A390_2AF90(arg0) != 0) {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
             setCallback(collectStoryMapItem);
             shouldSetCallback = 1;
         } else if (arg0->unk5E == 0) {
@@ -808,7 +808,7 @@ void updateStoryMapNpcStill(StoryMapNpcStillArg *arg0) {
     u8 savedState;
     AllocationData *alloc = getCurrentAllocation();
 
-    if (func_8002A390_2AF90(arg0) != 0) {
+    if (tryStoryMapNpcInteraction(arg0) != 0) {
         setCallback(collectStoryMapItem);
     }
 
