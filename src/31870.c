@@ -1,6 +1,7 @@
 #include "10AD0.h"
 #include "20F0.h"
 #include "288A0.h"
+#include "2F990.h"
 #include "33FE0.h"
 #include "36B80.h"
 #include "38C90.h"
@@ -129,13 +130,6 @@ typedef struct {
         s16 animationFrame;
     } animFrameUnion;
 } BoardShopShopkeeperWaitState;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-} func_80032244_32E44_arg;
 
 typedef struct {
     s16 unk0;
@@ -338,15 +332,15 @@ void updateBoardShopShopkeeper(BoardShopShopkeeperState *arg0);
 void initBoardShopBackgroundRenderState(BoardShopBackgroundState *arg0);
 void cleanupBoardShopBackground(BoardShopBackgroundState *arg0);
 void cleanupBoardShopColumnSelectorArrow(void *);
-void func_800322BC_32EBC(void *arg0);
-void func_80032304_32F04(func_80032244_32E44_arg *arg0);
+void updateBoardShopExitOverlay(void *arg0);
+void cleanupBoardShopExitOverlay(SpriteDisplayState *arg0);
 void func_8003316C_33D6C(func_800330B4_33CB4_arg *arg0);
 void func_800331CC_33DCC(func_800330B4_33CB4_arg *arg0);
 void func_80033014_33C14(func_80033014_33C14_arg *arg0);
 void func_80033088_33C88(func_80033088_33C88_arg *arg0);
 void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0);
 void func_80032EA4_33AA4(void *);
-void func_80032F64_33B64(func_80032244_32E44_arg *);
+void func_80032F64_33B64(SpriteDisplayState *);
 void func_80032DBC_339BC(func_80032F90_33B90_arg *arg0);
 void freeBoardShopCharacterTransitionAssets(func_800319C8_325C8_arg *arg0);
 void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0);
@@ -1129,17 +1123,17 @@ void cleanupBoardShopColumnSelectorArrow(void *arg0) {
     temp->asset = freeNodeMemory(temp->asset);
 }
 
-void func_80032244_32E44(func_80032244_32E44_arg *arg0) {
-    void *asset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
-    setCleanupCallback(&func_80032304_32F04);
-    arg0->unk0 = -0x2C;
-    arg0->unk2 = -0x14;
-    arg0->unk8 = 0xD;
-    arg0->unk4 = asset;
-    setCallback(&func_800322BC_32EBC);
+void initBoardShopExitOverlay(SpriteDisplayState *arg0) {
+    void *overlayAsset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    setCleanupCallback(&cleanupBoardShopExitOverlay);
+    arg0->x = -0x2C;
+    arg0->y = -0x14;
+    arg0->spriteIndex = 0xD;
+    arg0->asset = overlayAsset;
+    setCallback(&updateBoardShopExitOverlay);
 }
 
-void func_800322BC_32EBC(void *arg0) {
+void updateBoardShopExitOverlay(void *arg0) {
     func_80032DE8_339E8_asset *allocation;
 
     allocation = getCurrentAllocation();
@@ -1148,8 +1142,8 @@ void func_800322BC_32EBC(void *arg0) {
     }
 }
 
-void func_80032304_32F04(func_80032244_32E44_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupBoardShopExitOverlay(SpriteDisplayState *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 void func_80032330_32F30(func_80032330_32F30_arg *arg0) {
@@ -1539,8 +1533,8 @@ void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0) {
     }
 }
 
-void func_80032F64_33B64(func_80032244_32E44_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_80032F64_33B64(SpriteDisplayState *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 void func_80032F90_33B90(func_80032F90_33B90_arg *arg0) {

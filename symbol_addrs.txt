@@ -2251,3 +2251,6 @@ cleanupBoardShopRowSelectorArrow = 0x800320B8; // rom:0x32CB8
 initBoardShopColumnSelectorArrow = 0x800320E4; // rom:0x32CE4
 updateBoardShopColumnSelectorArrow = 0x80032170; // rom:0x32D70
 cleanupBoardShopColumnSelectorArrow = 0x80032218; // rom:0x32E18
+initBoardShopExitOverlay = 0x80032244; // rom:0x32E44
+updateBoardShopExitOverlay = 0x800322BC; // rom:0x32EBC
+cleanupBoardShopExitOverlay = 0x80032304; // rom:0x32F04
