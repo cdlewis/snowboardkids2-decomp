@@ -31,33 +31,33 @@ typedef struct {
 } OptionsMenuTitleState;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    u8 padE[2];
-} Entry1;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ void *spriteAsset;
+    /* 0x08 */ s16 frameIndex;
+    /* 0x0A */ s16 highlightValue;
+    /* 0x0C */ u8 unkC;
+    /* 0x0D */ u8 alpha;
+    /* 0x0E */ u8 padE[2];
+} OptionsMenuLabelIconEntry;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    void *unk8;
-    s16 unkC;
-    s16 unkE;
-    u8 unk10;
-    u8 pad11[3];
-} Entry2;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ void *textData;
+    /* 0x08 */ void *textAsset;
+    /* 0x0C */ s16 highlight;
+    /* 0x0E */ s16 alpha;
+    /* 0x10 */ u8 textStyle;
+    /* 0x11 */ u8 pad11[3];
+} OptionsMenuLabelTextEntry;
 
 typedef struct {
-    Entry1 entries1[4];
-    Entry2 entries2[4];
-    void *unk90;
-} func_80037BFC_387FC_arg;
+    /* 0x00 */ OptionsMenuLabelIconEntry iconEntries[4];
+    /* 0x40 */ OptionsMenuLabelTextEntry textEntries[4];
+    /* 0x90 */ void *textRenderAsset;
+} OptionsMenuLabelsState;
 
 void initOptionsMenuTitle(OptionsMenuTitleState *arg0);
 void initOptionsMenuToggles(void *);
-void func_80037BFC_387FC(func_80037BFC_387FC_arg *arg0);
+void initOptionsMenuLabels(OptionsMenuLabelsState *arg0);

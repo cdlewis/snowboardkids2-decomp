@@ -61,14 +61,14 @@ typedef struct {
     void *unk4;
     u8 pad[0xD0];
     void *unkD8;
-} func_80037BC4_387C4_arg;
+} OptionsMenuTogglesCleanupArg;
 
 typedef struct {
     void *unk0;
     void *unk4;
     u8 pad[0x40];
     void *unk48;
-} func_80037E40_38A40_arg;
+} OptionsMenuLabelsCleanupArg;
 
 typedef struct {
     u8 pad0[0x4];
@@ -89,13 +89,13 @@ extern void *D_8008FD8C_9098C;
 extern void *D_8008FD9C_9099C;
 extern void *D_8008FDAC_909AC;
 extern void *D_8008FDBC_909BC;
-extern void *D_8008FE54_90A54[];
+extern void *optionsMenuLabelTextData[];
 
-void func_80037E40_38A40(func_80037E40_38A40_arg *);
-void func_80037D18_38918(func_80037BFC_387FC_arg *);
+void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *);
+void updateOptionsMenuLabels(OptionsMenuLabelsState *);
 void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *);
 void updateOptionsMenuTitle(u8 *);
-void func_80037F14_38B14(Entry1 *);
+void func_80037F14_38B14(OptionsMenuLabelIconEntry *);
 void func_80037FB0_38BB0(func_80037FB0_38BB0_arg *arg0);
 
 void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
@@ -148,7 +148,7 @@ void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
-void cleanupOptionsMenuToggles(func_80037BC4_387C4_arg *);
+void cleanupOptionsMenuToggles(OptionsMenuTogglesCleanupArg *);
 void updateOptionsMenuToggles(OptionsMenuToggleState *);
 
 #define ARG0 ((OptionsMenuToggleState *)arg0)
@@ -260,60 +260,60 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
     }
 }
 
-void cleanupOptionsMenuToggles(func_80037BC4_387C4_arg *arg0) {
+void cleanupOptionsMenuToggles(OptionsMenuTogglesCleanupArg *arg0) {
     arg0->unkD8 = freeNodeMemory(arg0->unkD8);
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80037BFC_387FC(func_80037BFC_387FC_arg *arg0) {
-    void *allocation;
+void initOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
+    void *spriteAsset;
     s32 i;
     s32 minusE0;
     s16 temp;
-    s16 const1;
-    s16 const2;
-    s16 const3;
-    s16 const4;
-    u8 const5;
+    s16 iconX;
+    s16 initialAlpha;
+    s16 textX;
+    s16 textAlpha;
+    u8 textStyle;
 
     getCurrentAllocation();
-    allocation = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
-    arg0->unk90 = loadTextRenderAsset(1);
-    setCleanupCallback(func_80037E40_38A40);
+    spriteAsset = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
+    arg0->textRenderAsset = loadTextRenderAsset(1);
+    setCleanupCallback(cleanupOptionsMenuLabels);
 
     i = 0;
-    const1 = -0x80;
-    const2 = 1;
-    const3 = -0x7C;
-    const4 = 0xFF;
-    const5 = 5;
+    iconX = -0x80;
+    initialAlpha = 1;
+    textX = -0x7C;
+    textAlpha = 0xFF;
+    textStyle = 5;
     for (i = 0; i < 4; i++) {
-        arg0->entries1[i].unk0 = const1;
-        arg0->entries1[i].unk2 = -0x20 + 0x20 * i;
-        arg0->entries1[i].unk4 = allocation;
-        arg0->entries1[i].unk8 = 0;
-        arg0->entries1[i].unkA = 0;
-        arg0->entries1[i].unkC = 0;
-        arg0->entries1[i].unkD = const2;
+        arg0->iconEntries[i].x = iconX;
+        arg0->iconEntries[i].y = -0x20 + 0x20 * i;
+        arg0->iconEntries[i].spriteAsset = spriteAsset;
+        arg0->iconEntries[i].frameIndex = 0;
+        arg0->iconEntries[i].highlightValue = 0;
+        arg0->iconEntries[i].unkC = 0;
+        arg0->iconEntries[i].alpha = initialAlpha;
 
-        arg0->entries2[i].unk0 = const3;
-        arg0->entries2[i].unk2 = arg0->entries1[i].unk2;
-        arg0->entries2[i].unk4 = D_8008FE54_90A54[i];
-        arg0->entries2[i].unk8 = arg0->unk90;
-        arg0->entries2[i].unkC = 0;
-        arg0->entries2[i].unkE = const4;
-        arg0->entries2[i].unk10 = const5;
+        arg0->textEntries[i].x = textX;
+        arg0->textEntries[i].y = arg0->iconEntries[i].y;
+        arg0->textEntries[i].textData = optionsMenuLabelTextData[i];
+        arg0->textEntries[i].textAsset = arg0->textRenderAsset;
+        arg0->textEntries[i].highlight = 0;
+        arg0->textEntries[i].alpha = textAlpha;
+        arg0->textEntries[i].textStyle = textStyle;
     }
 
-    arg0->entries1[3].unk0 = -0x44;
-    arg0->entries1[3].unk2 = 0x48;
-    arg0->entries2[3].unk0 = -0x40;
-    arg0->entries2[3].unk2 = arg0->entries1[3].unk2 + 2;
+    arg0->iconEntries[3].x = -0x44;
+    arg0->iconEntries[3].y = 0x48;
+    arg0->textEntries[3].x = -0x40;
+    arg0->textEntries[3].y = arg0->iconEntries[3].y + 2;
 
-    setCallback(func_80037D18_38918);
+    setCallback(updateOptionsMenuLabels);
 }
 
-void func_80037D18_38918(func_80037BFC_387FC_arg *arg0) {
+void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
     func_80037F14_alloc *alloc;
     s32 i;
     do {
@@ -322,31 +322,31 @@ void func_80037D18_38918(func_80037BFC_387FC_arg *arg0) {
         for (i = 0; i < 4; i++) {
             if (alloc->unk1E2 == 0) {
                 if (alloc->unk1EC == i) {
-                    arg0->entries1[i].unkA = alloc->unk1E8[i];
-                    arg0->entries2[i].unkC = alloc->unk1E8[i];
+                    arg0->iconEntries[i].highlightValue = alloc->unk1E8[i];
+                    arg0->textEntries[i].highlight = alloc->unk1E8[i];
                 } else {
-                    arg0->entries1[i].unkA = 0;
-                    arg0->entries2[i].unkC = 0;
+                    arg0->iconEntries[i].highlightValue = 0;
+                    arg0->textEntries[i].highlight = 0;
                 }
             } else {
                 if (alloc->unk1E2 == 1 && alloc->unk1EC == i && (alloc->unk1E0 & 1)) {
-                    arg0->entries1[i].unkD = 0xFF;
+                    arg0->iconEntries[i].alpha = 0xFF;
                 } else {
-                    arg0->entries1[i].unkD = 1;
+                    arg0->iconEntries[i].alpha = 1;
                 }
-                arg0->entries1[i].unkA = 0;
-                arg0->entries2[i].unkC = 0;
+                arg0->iconEntries[i].highlightValue = 0;
+                arg0->textEntries[i].highlight = 0;
             }
 
-            debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0->entries1[i]);
+            debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0->iconEntries[i]);
 
             func_80035DE0_369E0(
-                arg0->unk90,
-                arg0->entries2[i].unk4,
-                arg0->entries2[i].unk0,
-                arg0->entries2[i].unk2,
-                (u8)arg0->entries2[i].unkC,
-                arg0->entries2[i].unk10,
+                arg0->textRenderAsset,
+                arg0->textEntries[i].textData,
+                arg0->textEntries[i].x,
+                arg0->textEntries[i].y,
+                (u8)arg0->textEntries[i].highlight,
+                arg0->textEntries[i].textStyle,
                 (void *)8,
                 1
             );
@@ -354,12 +354,12 @@ void func_80037D18_38918(func_80037BFC_387FC_arg *arg0) {
     } while (0);
 }
 
-void func_80037E40_38A40(func_80037E40_38A40_arg *arg0) {
+void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *arg0) {
     arg0->unk48 = freeNodeMemory(arg0->unk48);
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80037E78_38A78(Entry1 *arg0) {
+void func_80037E78_38A78(OptionsMenuLabelIconEntry *arg0) {
     void *allocation;
     s32 i;
     s32 minus32;
@@ -373,12 +373,12 @@ void func_80037E78_38A78(Entry1 *arg0) {
     minus32 = -32;
     val = 8;
     do {
-        arg0[i].unk0 = val;
-        arg0[i].unk2 = minus32;
-        arg0[i].unk4 = allocation;
-        arg0[i].unk8 = i;
-        arg0[i].unkA = 0;
-        arg0[i].unkD = 0;
+        arg0[i].x = val;
+        arg0[i].y = minus32;
+        arg0[i].spriteAsset = allocation;
+        arg0[i].frameIndex = i;
+        arg0[i].highlightValue = 0;
+        arg0[i].alpha = 0;
         arg0[i].unkC = 0;
         i++;
         val += 0x78;
@@ -387,7 +387,7 @@ void func_80037E78_38A78(Entry1 *arg0) {
     setCallback(func_80037F14_38B14);
 }
 
-void func_80037F14_38B14(Entry1 *arg0) {
+void func_80037F14_38B14(OptionsMenuLabelIconEntry *arg0) {
     func_80037F14_alloc *alloc = getCurrentAllocation();
     s32 i;
 
@@ -398,8 +398,8 @@ void func_80037F14_38B14(Entry1 *arg0) {
         if (alloc->unk1EC >= 3) {
             continue;
         }
-        arg0[i].unk2 = (alloc->unk1EC * 32) - 32;
-        arg0[i].unkA = alloc->unk1E8[alloc->unk1EC];
+        arg0[i].y = (alloc->unk1EC * 32) - 32;
+        arg0[i].highlightValue = alloc->unk1E8[alloc->unk1EC];
         debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0[i]);
     }
 }
