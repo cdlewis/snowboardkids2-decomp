@@ -1054,7 +1054,7 @@ void func_80030764_31364(ItemStatsDisplay *arg0) {
                 formatStr = "%2d";
                 sprintf(arg0->statBuffers[0], formatStr, getItemStat1(isValidItem) & 0xFF);
                 sprintf(arg0->statBuffers[1], formatStr, getItemStat2(isValidItem) & 0xFF);
-                sprintf(arg0->statBuffers[2], formatStr, func_80027C7C_2887C(isValidItem) & 0xFF);
+                sprintf(arg0->statBuffers[2], formatStr, getItemStat3(isValidItem) & 0xFF);
 
                 labelIndex = 0;
                 labelOffset = 0x10;

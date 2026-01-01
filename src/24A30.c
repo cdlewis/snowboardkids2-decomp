@@ -1881,6 +1881,6 @@ u8 getItemStat2(u8 itemIndex) {
     return D_8008DD8D_8E98D[itemIndex * 3];
 }
 
-u8 func_80027C7C_2887C(u8 arg0) {
-    return D_8008DD8E_8E98E[arg0 * 3];
+u8 getItemStat3(u8 itemIndex) {
+    return D_8008DD8E_8E98E[itemIndex * 3];
 }
