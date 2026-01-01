@@ -171,11 +171,11 @@ typedef struct {
 } func_80032F90_33B90_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
+    s16 x;
+    s16 y;
     u8 padding[0x80];
-    u8 unk84;
-} func_80032EDC_33ADC_arg;
+    u8 frameCounter;
+} BoardShopSnowflakeAnimState;
 
 typedef struct {
     char padding;
@@ -187,23 +187,23 @@ typedef struct {
 typedef struct {
     u8 padding[0x79C];
     u8 unk79C;
-} func_80032EDC_33ADC_asset;
+} BoardShopSnowflakeAnimAllocation;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 scaleX;
+    s16 scaleY;
+    s16 rotation;
+    s16 alpha;
     s8 unk12;
     s8 unk13;
-    s8 unk14;
+    s8 flipX;
     u8 padding[0x6F];
-    s8 unk84;
-} func_80032DE8_339E8_arg;
+    s8 frameCounter;
+} BoardShopSnowflakeSpriteState;
 
 typedef struct {
     u8 padding[0x77C];
@@ -220,7 +220,7 @@ typedef struct {
     u8 unk7A0;
     s8 unk7A1;
     u8 unk7A2;
-} func_80032DE8_339E8_asset;
+} BoardShopScreenAllocation;
 
 typedef struct {
     s16 x;
@@ -319,9 +319,9 @@ void func_8003316C_33D6C(func_800330B4_33CB4_arg *arg0);
 void func_800331CC_33DCC(func_800330B4_33CB4_arg *arg0);
 void func_80033014_33C14(func_80033014_33C14_arg *arg0);
 void func_80033088_33C88(func_80033088_33C88_arg *arg0);
-void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0);
-void func_80032EA4_33AA4(void *);
-void func_80032F64_33B64(SpriteDisplayState *);
+void animateBoardShopSnowflakeSlideIn(BoardShopSnowflakeAnimState *arg0);
+void queueBoardShopSnowflakeRender(void *);
+void cleanupBoardShopSnowflakeSprite(SpriteDisplayState *);
 void cleanupBoardShopBoardIcons(BoardShopBoardIconsState *arg0);
 void freeBoardShopCharacterTransitionAssets(func_800319C8_325C8_arg *arg0);
 void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0);
@@ -358,7 +358,7 @@ void initBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     s32 unused;
     u8 paletteId;
     void *transformMatrix;
-    func_80032DE8_339E8_asset *state;
+    BoardShopScreenAllocation *state;
     Node_70B00 *cameraNode;
     Transform3D *rotationZPtr;
 
@@ -416,7 +416,7 @@ void waitBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
 }
 
 void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
-    func_80032DE8_339E8_asset *state = getCurrentAllocation();
+    BoardShopScreenAllocation *state = getCurrentAllocation();
 
     arg0->unk60++;
     arg0->unk62--;
@@ -443,7 +443,7 @@ void cleanupBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
 }
 
 void initBoardShopSnowParticles(SnowParticleState *arg0) {
-    func_80032DE8_339E8_asset *state;
+    BoardShopScreenAllocation *state;
     void *snowflakeSprite;
     s32 i;
     int new_var;
@@ -523,7 +523,7 @@ void initBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0) {
 }
 
 void waitBoardShopCharacterPreview(void) {
-    func_80032DE8_339E8_asset *allocation;
+    BoardShopScreenAllocation *allocation;
 
     allocation = getCurrentAllocation();
     if (allocation->unk788[19] == 1) {
@@ -532,7 +532,7 @@ void waitBoardShopCharacterPreview(void) {
 }
 
 void animateBoardShopCharacterSlideIn(BoardShopCharacterPreviewState *arg0) {
-    func_80032DE8_339E8_asset *allocation;
+    BoardShopScreenAllocation *allocation;
 
     allocation = getCurrentAllocation();
 
@@ -549,7 +549,7 @@ void animateBoardShopCharacterSlideIn(BoardShopCharacterPreviewState *arg0) {
 }
 
 void updateBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0) {
-    func_80032DE8_339E8_asset *allocation;
+    BoardShopScreenAllocation *allocation;
     u8 state;
 
     allocation = getCurrentAllocation();
@@ -576,7 +576,7 @@ void updateBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0) {
 void loadBoardShopCharacterAssets(BoardShopCharacterPreviewState *arg0) {
     u8 paletteIndex;
     u8 temp_v1;
-    func_80032DE8_339E8_asset *allocation;
+    BoardShopScreenAllocation *allocation;
 
     allocation = getCurrentAllocation();
 
@@ -599,10 +599,10 @@ void loadBoardShopCharacterAssets(BoardShopCharacterPreviewState *arg0) {
 }
 
 void animateBoardShopCharacterSwitch(BoardShopCharacterPreviewState *arg0) {
-    func_80032DE8_339E8_asset *allocation;
+    BoardShopScreenAllocation *allocation;
     s32 slideSpeed;
 
-    allocation = (func_80032DE8_339E8_asset *)getCurrentAllocation();
+    allocation = (BoardShopScreenAllocation *)getCurrentAllocation();
 
     if (allocation->unk79C == 1) {
         slideSpeed = 0xFFF00000;
@@ -630,7 +630,7 @@ void freeBoardShopPurchaseAssets(func_800319C8_325C8_arg *arg0) {
 }
 
 void loadBoardShopPurchaseAssets(BoardShopCharacterPreviewState *arg0) {
-    func_80032DE8_339E8_asset *allocation;
+    BoardShopScreenAllocation *allocation;
     s16 assetIndex;
     int new_var;
     u8 characterIndex;
@@ -674,7 +674,7 @@ void freeBoardShopCharacterPreviewAssets(BoardShopCharacterPreviewState *arg0) {
 }
 
 void initBoardShopCharacterTransition(BoardShopCharacterPreviewState *arg0) {
-    func_80032DE8_339E8_asset *state;
+    BoardShopScreenAllocation *state;
     Transform3D rotationYX;
     Transform3D rotationZ;
     u8 characterIndex;
@@ -1115,7 +1115,7 @@ void initBoardShopExitOverlay(SpriteDisplayState *arg0) {
 }
 
 void updateBoardShopExitOverlay(void *arg0) {
-    func_80032DE8_339E8_asset *allocation;
+    BoardShopScreenAllocation *allocation;
 
     allocation = getCurrentAllocation();
     if (allocation->unk788[0x13] == 0x19) {
@@ -1192,7 +1192,7 @@ void cleanupBoardShopGoldDisplay(BoardShopGoldDisplayCleanupArg *arg0) {
 }
 
 void initBoardShopBoardIcons(BoardShopBoardIconsState *arg0) {
-    func_80032DE8_339E8_asset *state;
+    BoardShopScreenAllocation *state;
     void *spriteAsset;
     s32 i;
     u8 boardIndex;
@@ -1366,7 +1366,7 @@ void blinkBoardShopBoardIconConfirmation(BoardShopIconSelectionState *arg0) {
 }
 
 void initBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg0) {
-    func_80032DE8_339E8_asset *allocation;
+    BoardShopScreenAllocation *allocation;
     s32 i;
     s32 startX;
     s16 currentX;
@@ -1394,7 +1394,7 @@ void initBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg
 }
 
 void animateBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg0) {
-    func_80032DE8_339E8_asset *gameState;
+    BoardShopScreenAllocation *gameState;
     s32 portraitIndex;
     BoardShopCharacterPortrait *portraits;
 
@@ -1463,57 +1463,57 @@ void cleanupBoardShopBoardIcons(BoardShopBoardIconsState *arg0) {
     arg0->icons[0].asset = freeNodeMemory(arg0->icons[0].asset);
 }
 
-void func_80032DE8_339E8(func_80032DE8_339E8_arg *arg0) {
-    void *asset;
-    func_80032DE8_339E8_asset *temp_s0 = getCurrentAllocation();
+void initBoardShopSnowflakeSlideIn(BoardShopSnowflakeSpriteState *arg0) {
+    void *snowflakeAsset;
+    BoardShopScreenAllocation *allocation = getCurrentAllocation();
 
-    asset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    snowflakeAsset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
 
-    arg0->unk0 = 0x60;
-    arg0->unk8 = temp_s0->unk788[temp_s0->unk7A0];
-    arg0->unkA = 0x400;
-    arg0->unkC = 0x400;
-    arg0->unkE = 0;
-    arg0->unk10 = 0x80;
+    arg0->x = 0x60;
+    arg0->spriteIndex = allocation->unk788[allocation->unk7A0];
+    arg0->scaleX = 0x400;
+    arg0->scaleY = 0x400;
+    arg0->rotation = 0;
+    arg0->alpha = 0x80;
     arg0->unk13 = 0;
     arg0->unk12 = 0;
-    arg0->unk14 = 0;
-    arg0->unk4 = asset;
-    arg0->unk84 = 0;
+    arg0->flipX = 0;
+    arg0->asset = snowflakeAsset;
+    arg0->frameCounter = 0;
 
-    if (temp_s0->unk79C != 1) {
-        arg0->unk2 = 0x3F;
+    if (allocation->unk79C != 1) {
+        arg0->y = 0x3F;
     } else {
-        arg0->unk2 = -0x39;
+        arg0->y = -0x39;
     }
 
-    setCleanupCallback(&func_80032F64_33B64);
-    setCallback(&func_80032EA4_33AA4);
+    setCleanupCallback(&cleanupBoardShopSnowflakeSprite);
+    setCallback(&queueBoardShopSnowflakeRender);
 }
 
-void func_80032EA4_33AA4(void *arg0) {
+void queueBoardShopSnowflakeRender(void *arg0) {
     debugEnqueueCallback(8, 0, &func_800136E0_142E0, arg0);
-    setCallback(&func_80032EDC_33ADC);
+    setCallback(&animateBoardShopSnowflakeSlideIn);
 }
 
-void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0) {
-    func_80032EDC_33ADC_asset *temp_v0 = (func_80032EDC_33ADC_asset *)getCurrentAllocation();
+void animateBoardShopSnowflakeSlideIn(BoardShopSnowflakeAnimState *arg0) {
+    BoardShopSnowflakeAnimAllocation *allocation = (BoardShopSnowflakeAnimAllocation *)getCurrentAllocation();
 
-    arg0->unk84++;
-    if (temp_v0->unk79C == 1) {
-        arg0->unk2 = arg0->unk2 - 0x14;
+    arg0->frameCounter++;
+    if (allocation->unk79C == 1) {
+        arg0->y = arg0->y - 0x14;
     } else {
-        arg0->unk2 = arg0->unk2 + 0x14;
+        arg0->y = arg0->y + 0x14;
     }
 
     debugEnqueueCallback(8, 0, &func_800136E0_142E0, arg0);
 
-    if (arg0->unk84 == 4) {
+    if (arg0->frameCounter == 4) {
         func_80069CF8_6A8F8();
     }
 }
 
-void func_80032F64_33B64(SpriteDisplayState *arg0) {
+void cleanupBoardShopSnowflakeSprite(SpriteDisplayState *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
