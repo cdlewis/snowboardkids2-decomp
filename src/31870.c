@@ -223,31 +223,31 @@ typedef struct {
 } func_80032DE8_339E8_asset;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 scaleX;
+    s16 scaleY;
+    s16 rotation;
+    s16 alpha;
     s8 unk12;
     s8 unk13;
-    s8 unk14;
+    s8 flipX;
     u8 padding[0x3];
-} func_8003253C_3313C_arg_item;
+} BoardShopBoardIconState;
 
 typedef struct {
-    func_8003253C_3313C_arg_item unk0[4];
+    BoardShopBoardIconState icons[4];
     u8 padding2[0x18];
-    s16 unk78;
-    s16 unk7A;
-    s16 unk7C;
+    s16 priceTextX;
+    s16 priceTextY;
+    s16 priceTextStyle;
     u8 padding3[0x2];
-    void *unk80;
-    s8 unk84[4];
-    void *unk88;
-} func_8003253C_3313C_arg;
+    void *priceTextPtr;
+    s8 animationCounters[4];
+    void *priceTextBuffer;
+} BoardShopBoardIconsState;
 
 typedef struct {
     u8 padding[0x24];
@@ -1210,38 +1210,38 @@ void cleanupBoardShopGoldDisplay(BoardShopGoldDisplayCleanupArg *arg0) {
     arg0->unk58 = freeNodeMemory(arg0->unk58);
 }
 
-void func_8003253C_3313C(func_8003253C_3313C_arg *arg0) {
+void initBoardShopBoardIcons(BoardShopBoardIconsState *arg0) {
     func_80032DE8_339E8_asset *state;
-    void *asset;
+    void *spriteAsset;
     s32 i;
-    u8 temp;
+    u8 boardIndex;
 
     state = getCurrentAllocation();
-    asset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    spriteAsset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
 
     for (i = 0; i < 4; i++) {
-        arg0->unk0[i].unk0 = 0x60;
-        arg0->unk0[i].unk2 = -0x91;
+        arg0->icons[i].x = 0x60;
+        arg0->icons[i].y = -0x91;
 
-        temp = state->unk784[i];
-        temp = state->unk788[temp];
+        boardIndex = state->unk784[i];
+        boardIndex = state->unk788[boardIndex];
 
-        arg0->unk0[i].unk8 = temp;
-        arg0->unk0[i].unkA = 0x400;
-        arg0->unk0[i].unkC = 0x400;
-        arg0->unk0[i].unkE = 0;
-        arg0->unk0[i].unk10 = 0xFF;
-        arg0->unk0[i].unk13 = 0;
-        arg0->unk0[i].unk12 = 0;
-        arg0->unk0[i].unk14 = 0;
-        arg0->unk0[i].unk4 = asset;
-        arg0->unk84[i] = 0;
+        arg0->icons[i].spriteIndex = boardIndex;
+        arg0->icons[i].scaleX = 0x400;
+        arg0->icons[i].scaleY = 0x400;
+        arg0->icons[i].rotation = 0;
+        arg0->icons[i].alpha = 0xFF;
+        arg0->icons[i].unk13 = 0;
+        arg0->icons[i].unk12 = 0;
+        arg0->icons[i].flipX = 0;
+        arg0->icons[i].asset = spriteAsset;
+        arg0->animationCounters[i] = 0;
     }
 
-    arg0->unk78 = 0x58;
-    arg0->unk7A = -0x2A;
-    arg0->unk7C = 0;
-    arg0->unk80 = &arg0->unk88;
+    arg0->priceTextX = 0x58;
+    arg0->priceTextY = -0x2A;
+    arg0->priceTextStyle = 0;
+    arg0->priceTextPtr = &arg0->priceTextBuffer;
 
     setCleanupCallback(&func_80032DBC_339BC);
     setCallback(&func_80032628_33228);

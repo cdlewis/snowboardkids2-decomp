@@ -2257,3 +2257,4 @@ cleanupBoardShopExitOverlay = 0x80032304; // rom:0x32F04
 initBoardShopGoldDisplay = 0x80032330; // rom:0x32F30
 updateBoardShopGoldDisplay = 0x800323FC; // rom:0x32FFC
 cleanupBoardShopGoldDisplay = 0x80032504; // rom:0x33104
+initBoardShopBoardIcons = 0x8003253C; // rom:0x3313C
