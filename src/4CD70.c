@@ -1203,7 +1203,7 @@ void func_8004DDD0_4E9D0(Struct_func_8004DCFC *arg0) {
     arg0->unkE = (u8)arg0->unk14;
     debugEnqueueCallback(8, 6, func_80012518_13118, arg0);
 
-    sprintf(buf, D_8009E894_9F494, func_8002ED30_2F930());
+    sprintf(buf, D_8009E894_9F494, getPlayerGold());
 
     strLen = 0;
     ptr = &buf[1];

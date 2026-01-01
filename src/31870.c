@@ -1196,7 +1196,7 @@ void func_800323FC_32FFC(func_80032330_32F30_arg *arg0) {
     s32 i;
     s32 val;
 
-    if (D_800AFE8C_A71FC->padding < 100) {
+    if (D_800AFE8C_A71FC->gold < 100) {
         val = 1;
         i = 6;
         do {
@@ -1210,7 +1210,7 @@ void func_800323FC_32FFC(func_80032330_32F30_arg *arg0) {
         } while (--i >= 0);
     }
 
-    sprintf(arg0->unk60, D_8009E47C_9F07C, D_800AFE8C_A71FC->padding);
+    sprintf(arg0->unk60, D_8009E47C_9F07C, D_800AFE8C_A71FC->gold);
 
     i = 0;
     space = 0x20;

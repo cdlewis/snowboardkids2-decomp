@@ -1,7 +1,7 @@
 #include "common.h"
 
 typedef struct {
-    s32 padding;
+    s32 gold;
     u8 unk4;
     u8 unk5;
     char padding2[0x1];

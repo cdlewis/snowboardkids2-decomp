@@ -19,5 +19,5 @@ struct Func2E024Arg {
 
 void updateStoryMapRareEventMagicShow(Func2E024Arg *);
 void prepareStoryMapNpcDialogue(void *);
-s32 func_8002ED30_2F930(void);
-void func_8002ED40_2F940(s32 a0);
+s32 getPlayerGold(void);
+void addPlayerGold(s32 amount);

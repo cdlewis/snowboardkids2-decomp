@@ -1003,7 +1003,7 @@ void func_8003FBE0_407E0(void) {
             func_8004E6A4_4F2A4(0, 0);
             state->unk7B = 1;
             scheduleTask(&func_8004F820_50420, 1, 0, 0xE6);
-            func_8002ED40_2F940(0x1388);
+            addPlayerGold(0x1388);
             setGameStateHandler(&func_8003FCD8_408D8);
         } else {
             D_800A24A0_A30A0 = 6;
@@ -1093,7 +1093,7 @@ void func_8003FDD4_409D4(void) {
         }
 
         state->unk7B = 1;
-        func_8002ED40_2F940(score);
+        addPlayerGold(score);
         setGameStateHandler(&func_8003FF14_40B14);
     } else {
         D_800A24A0_A30A0 = 6;
@@ -1172,7 +1172,7 @@ void func_80040010_40C10(void) {
             }
 
             state->unk7B = 1;
-            func_8002ED40_2F940(score);
+            addPlayerGold(score);
             handler = func_8004013C_40D3C;
         } else {
             D_800A24A0_A30A0 = 6;
@@ -1267,18 +1267,18 @@ void func_80040304_40F04(void) {
 
     switch (player->unkBC4) {
         case 0:
-            func_8002ED40_2F940(player->unkB6C);
-            func_8002ED40_2F940(D_80090460_91060[gameState->memoryPoolId]);
+            addPlayerGold(player->unkB6C);
+            addPlayerGold(D_80090460_91060[gameState->memoryPoolId]);
             break;
 
         case 1:
-            func_8002ED40_2F940(player->unkB6C);
-            func_8002ED40_2F940(D_800904A0_910A0[gameState->memoryPoolId]);
+            addPlayerGold(player->unkB6C);
+            addPlayerGold(D_800904A0_910A0[gameState->memoryPoolId]);
             break;
 
         case 2:
-            func_8002ED40_2F940(player->unkB6C);
-            func_8002ED40_2F940(D_800904E0_910E0[gameState->memoryPoolId]);
+            addPlayerGold(player->unkB6C);
+            addPlayerGold(D_800904E0_910E0[gameState->memoryPoolId]);
             break;
 
         case 3:

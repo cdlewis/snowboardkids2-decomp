@@ -712,20 +712,20 @@ void prepareStoryMapNpcDialogue(void *ptr) {
     state->unkD3 = 0;
 }
 
-s32 func_8002ED30_2F930(void) {
-    return D_800AFE8C_A71FC->padding;
+s32 getPlayerGold(void) {
+    return D_800AFE8C_A71FC->gold;
 }
 
-void func_8002ED40_2F940(s32 a0) {
-    s32 new_var = 0x98967F;
+void addPlayerGold(s32 amount) {
+    s32 maxGold = 0x98967F;
 
-    D_800AFE8C_A71FC->padding += a0;
+    D_800AFE8C_A71FC->gold += amount;
 
-    if (D_800AFE8C_A71FC->padding > new_var) {
-        D_800AFE8C_A71FC->padding = new_var;
+    if (D_800AFE8C_A71FC->gold > maxGold) {
+        D_800AFE8C_A71FC->gold = maxGold;
     }
 
-    if (D_800AFE8C_A71FC->padding < 0) {
-        D_800AFE8C_A71FC->padding = 0;
+    if (D_800AFE8C_A71FC->gold < 0) {
+        D_800AFE8C_A71FC->gold = 0;
     }
 }
