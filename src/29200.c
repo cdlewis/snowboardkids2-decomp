@@ -10,7 +10,7 @@ extern s16 D_8008E0C0_8ECC0[];
 
 extern void func_800288D4_294D4(void *);
 
-void func_800288A0_294A0(void);
+void awaitStoryMapItemReady(void);
 
 void func_80028B44_29744(StoryMapItem *arg0);
 void func_80028B80_29780(StoryMapItem *arg0);
@@ -59,7 +59,7 @@ void initStoryMapItem(StoryMapItem *arg0) {
     }
 
     setCleanupCallback(func_80028B80_29780);
-    setCallback(func_800288A0_294A0);
+    setCallback(awaitStoryMapItemReady);
 }
 
 void respawnStoryMapItem(StoryMapItem *arg0) {
@@ -95,10 +95,10 @@ void respawnStoryMapItem(StoryMapItem *arg0) {
         alloc->unk421 = 1;
     }
 
-    setCallback(func_800288A0_294A0);
+    setCallback(awaitStoryMapItemReady);
 }
 
-void func_800288A0_294A0(void) {
+void awaitStoryMapItemReady(void) {
     AllocationData29200 *alloc = getCurrentAllocation();
 
     if (alloc->unk429 == 0) {
