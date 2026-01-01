@@ -300,7 +300,7 @@ void initTitleScreen(void) {
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     func_8006FAA4_706A4((Node_70B00 *)state, NULL, 8, 10, 0);
     setModelCameraTransform(state, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    func_80027CA0_288A0(node2, 0, 8, 0);
+    initMenuCameraNode(node2, 0, 8, 0);
     func_8006FA0C_7060C(node2, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     func_8006FD3C_7093C(node2->id, &gTitleCameraSettings);
     state->titleLogoData = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);

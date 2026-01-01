@@ -32,7 +32,7 @@ void initOptionsMenu(void) {
 
     allocation = allocateTaskMemory(0x1F0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    func_80027CA0_288A0((Node_70B00 *)allocation, 8, 0xF, 1);
+    initMenuCameraNode((Node_70B00 *)allocation, 8, 0xF, 1);
     func_8006FDA0_709A0(0, 0xFF, 0);
     func_8006FDA0_709A0(0, 0, 0x10);
     allocation->assetData = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);

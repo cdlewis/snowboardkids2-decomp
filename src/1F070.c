@@ -18,7 +18,7 @@ void initStoryMapExtraIntro(void) {
     StoryMapExtraIntroAllocation *temp_s0 = (StoryMapExtraIntroAllocation *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->waitCounter = 0;
-    func_80027CA0_288A0(&temp_s0->unk0, 0, 0xA, 0);
+    initMenuCameraNode(&temp_s0->unk0, 0, 0xA, 0);
     func_8006FDA0_709A0(0, 0, 8);
     scheduleTask(&storyMapLocationTextTask, 0, 0, 0x5A);
     setGameStateHandler(&awaitStoryMapExtraIntro);

@@ -1,3 +1,6 @@
+initMenuCameraNode = 0x80027CA0; // rom:0x288A0
+gMenuLightColor = 0x8008DEF0; // rom:0x8EAF0
+gMenuAmbientColor = 0x8008DEF8; // rom:0x8EAF8
 storyMapCameraTask = 0x80017350; // rom:0x17F50
 initStoryMapCamera = 0x80017384; // rom:0x17F84
 startStoryMapCameraTravel = 0x80017FE8; // rom:0x18BE8

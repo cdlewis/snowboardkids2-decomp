@@ -388,7 +388,7 @@ void func_80030C70_31870(func_80031510_32110_arg *arg0) {
     asset = getCurrentAllocation();
     temp_v0 = allocateNodeMemory(0x1D8);
     arg0->unk0 = temp_v0;
-    func_80027CA0_288A0(temp_v0, 1, 0xB, 0);
+    initMenuCameraNode(temp_v0, 1, 0xB, 0);
     arg0->unk60 = -0x34;
     arg0->unk62 = 0x34;
     asset->unk780 = (u16)arg0->unk60;

@@ -6,8 +6,8 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern ColorData D_8008DEF0_8EAF0;
-extern ColorData D_8008DEF8_8EAF8;
+extern ColorData gMenuLightColor;
+extern ColorData gMenuAmbientColor;
 
 extern u8 D_8008DF00_8EB00[][10];
 extern u8 D_8008DF3C_8EB3C[][8];
@@ -40,27 +40,27 @@ typedef struct {
     u8 unkD4;
 } TaskD4_288A0;
 
-void func_80027CA0_288A0(Node_70B00 *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    s8 sp20[0x20];
-    s32 temp_a3;
+void initMenuCameraNode(Node_70B00 *node, s32 slotIndex, s32 priority, s32 isSecondary) {
+    s8 lightSettings[0x20];
+    s32 secondaryFlag;
 
-    temp_a3 = arg3 & 0xFF;
-    if (temp_a3 == 0) {
-        func_8006FAA4_706A4(arg0, 0, arg1 & 0xFF, arg2 & 0xFF, 1);
+    secondaryFlag = isSecondary & 0xFF;
+    if (secondaryFlag == 0) {
+        func_8006FAA4_706A4(node, 0, slotIndex & 0xFF, priority & 0xFF, 1);
     } else {
-        func_8006FAA4_706A4(arg0, 0, arg1 & 0xFF, arg2 & 0xFF, 0);
+        func_8006FAA4_706A4(node, 0, slotIndex & 0xFF, priority & 0xFF, 0);
     }
 
-    func_8006F9BC_705BC(arg0, 1.0f, 1.0f);
-    func_8006FEF8_70AF8(arg0, ((arg1 & 0xFF) + 1));
-    setModelCameraTransform(arg0, 0, 0, -0x98, -0x70, 0x97, 0x6F);
-    func_8006FA0C_7060C(arg0, 50.0f, 1.3333334f, 10.0f, 4000.0f);
-    func_8006FE48_70A48(arg0->id, 0x3D4, 0x3E6, 0x64, 0x64, 0x64);
-    func_8006BEDC_6CADC(&sp20, 0, 0, 0x200000, 0, 0, 0);
-    func_8006FD3C_7093C(arg0->id, &sp20);
-    func_8006FE28_70A28(arg0, 0, 0, 0);
-    func_8006FDA0_709A0(arg0, 0, 0);
-    func_8006FC70_70870(arg0->id, 1, &D_8008DEF0_8EAF0, &D_8008DEF8_8EAF8);
+    func_8006F9BC_705BC(node, 1.0f, 1.0f);
+    func_8006FEF8_70AF8(node, ((slotIndex & 0xFF) + 1));
+    setModelCameraTransform(node, 0, 0, -0x98, -0x70, 0x97, 0x6F);
+    func_8006FA0C_7060C(node, 50.0f, 1.3333334f, 10.0f, 4000.0f);
+    func_8006FE48_70A48(node->id, 0x3D4, 0x3E6, 0x64, 0x64, 0x64);
+    func_8006BEDC_6CADC(&lightSettings, 0, 0, 0x200000, 0, 0, 0);
+    func_8006FD3C_7093C(node->id, &lightSettings);
+    func_8006FE28_70A28(node, 0, 0, 0);
+    func_8006FDA0_709A0(node, 0, 0);
+    func_8006FC70_70870(node->id, 1, &gMenuLightColor, &gMenuAmbientColor);
 }
 
 INCLUDE_ASM("asm/nonmatchings/288A0", func_80027E04_28A04);

@@ -83,8 +83,8 @@ void initializeGameState(void) {
         temp_s0->unk3FE = (s16)(D_8008D6B0_8E2B0 - (((s32)((((short)D_8008D6B0_8E2B0) / 10) << 0x10)) >> 0xF));
         temp_s0->unk403 = 0xFF;
         setupTaskSchedulerNodes(0x30, 0xA, 0x14, 0, 0, 0, 0, 0);
-        func_80027CA0_288A0(&temp_s0->node1, 0, 0xA, 0);
-        func_80027CA0_288A0(&temp_s0->node2, 8, 0xF, 1);
+        initMenuCameraNode(&temp_s0->node1, 0, 0xA, 0);
+        initMenuCameraNode(&temp_s0->node2, 8, 0xF, 1);
         scheduleTask(&storyMapCameraTask, 0, 0, 0x5A);
         scheduleTask(&func_80018800_19400, 0, 0, 0x5B);
         scheduleTask(&func_80028480_29080, 0, 0, 0x5B);

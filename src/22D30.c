@@ -73,7 +73,7 @@ void initPlayerCountSelectState(void) {
     if (numControllers < state->playerCount.selectedPlayerIndex + 1) {
         state->playerCount.selectedPlayerIndex = numControllers - 1;
     }
-    func_80027CA0_288A0(&state->node, 8, 0xA, 1);
+    initMenuCameraNode(&state->node, 8, 0xA, 1);
     func_8006FDA0_709A0(&state->node, 0xFF, 0);
     func_8006FDA0_709A0(&state->node, 0, 0x10);
     state->assetData1 = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);

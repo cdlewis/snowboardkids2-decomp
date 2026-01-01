@@ -343,7 +343,7 @@ void initStoryMapLocationIntro(void) {
     allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->unk1D8.unk0.callback_selector = 0;
-    func_80027CA0_288A0((Node_70B00 *)temp_s0, 0, 0xA, 0);
+    initMenuCameraNode((Node_70B00 *)temp_s0, 0, 0xA, 0);
     func_8006FDA0_709A0(0, 0, 8);
     scheduleTask(&storyMapLocationTextTask, 0U, 0U, 0x5AU);
     setGameStateHandler(&awaitStoryMapLocationIntro);

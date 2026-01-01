@@ -18,7 +18,7 @@ void initPostUnlockLocationIntro(void) {
     PostUnlockLocationIntroAllocation *allocation = (PostUnlockLocationIntroAllocation *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     allocation->waitCounter = 0;
-    func_80027CA0_288A0((Node_70B00 *)allocation, 0, 0xA, 0);
+    initMenuCameraNode((Node_70B00 *)allocation, 0, 0xA, 0);
     scheduleTask(&storyMapLocationTextTask, 0, 0, 0x5A);
     setGameStateHandler(&postUnlockLocationWaitForDismiss);
 }
