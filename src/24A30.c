@@ -1796,7 +1796,7 @@ INCLUDE_ASM("asm/nonmatchings/24A30", func_80027678_28278);
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_800277F4_283F4);
 
-void func_800279A8_285A8(SimpleSpriteEntry *arg0) {
+void cleanupCharSelectStats(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 

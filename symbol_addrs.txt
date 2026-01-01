@@ -2073,3 +2073,4 @@ setupCharSelectP2NamePositions = 0x80027348; // rom:0x27F48
 animateCharSelectP2NameReveal = 0x80027400; // rom:0x28000
 animateCharSelectP2NameHide = 0x80027544; // rom:0x28144
 cleanupCharSelectPlayer2NameSprites = 0x8002764C; // rom:0x2824C
+cleanupCharSelectStats = 0x800279A8; // rom:0x285A8
