@@ -57,7 +57,7 @@ void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHead
 void controllerPackReadStatus(s32 arg0);
 void eepromProbe(void);
 void eepromRead(s32 slotIndex, u8 *buffer);
-void func_8003B400_3C000(s32);
+void eepromWrite(s32);
 void func_8003B560_3C160(u8 *);
 void controllerServiceThread(void *arg0);
 
@@ -248,7 +248,7 @@ void controllerServiceThread(void *arg0) {
                 continue;
 
             case 0xF0:
-                func_8003B400_3C000(cmd & 3);
+                eepromWrite(cmd & 3);
                 continue;
 
             case 0x140:
@@ -636,33 +636,33 @@ void *pollEepromWriteAsync(void) {
     return status;
 }
 
-void func_8003B400_3C000(s32 arg0) {
-    u8 *ptr;
-    int new_var2;
-    s32 limit;
-    s32 sum;
-    s32 temp;
-    s32 counter;
-    s32 ret;
-    ptr = EepromSaveData->header_data;
-    new_var2 = 4;
-    limit = 0x58;
-    sum = 0;
+void eepromWrite(s32 slotIndex) {
+    u8 *dataPtr;
+    int shiftAmount;
+    s32 dataSize;
+    s32 checksum;
+    s32 byteValue;
+    s32 i;
+    s32 result;
+    dataPtr = EepromSaveData->header_data;
+    shiftAmount = 4;
+    dataSize = 0x58;
+    checksum = 0;
 
     EepromSaveData->checksum = 0;
 
-    for (counter = 0; counter < limit; counter++) {
-        temp = *ptr;
-        sum += temp;
-        ptr++;
+    for (i = 0; i < dataSize; i++) {
+        byteValue = *dataPtr;
+        checksum += byteValue;
+        dataPtr++;
     }
 
-    ret = (u8)arg0;
-    ret = ret << new_var2;
-    counter = ret;
-    EepromSaveData->checksum = sum;
-    ret = osEepromLongWrite(&mainStack, counter & 0xF0, (u8 *)EepromSaveData, limit);
-    osSendMesg(&D_800A1888_A2488, (OSMesg)ret, 1);
+    result = (u8)slotIndex;
+    result = result << shiftAmount;
+    i = result;
+    EepromSaveData->checksum = checksum;
+    result = osEepromLongWrite(&mainStack, i & 0xF0, (u8 *)EepromSaveData, dataSize);
+    osSendMesg(&D_800A1888_A2488, (OSMesg)result, 1);
 }
 
 void func_8003B47C_3C07C(void *arg0) {
