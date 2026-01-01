@@ -25,6 +25,7 @@ initStoryMapNpcIdleWithEffect2 = 0x80029724; // rom:0x2A324
 initStoryMapNpcIdleRandomDelay = 0x800297D8; // rom:0x2A3D8
 initStoryMapNpcIdleRandomDelayNoAnim = 0x80029840; // rom:0x2A440
 initStoryMapNpcIdleRandomDelayNoAnim2 = 0x8002989C; // rom:0x2A49C
+initStoryMapNpcIdleRandomDelayNoAnim3 = 0x800298F8; // rom:0x2A4F8
 updateStoryMapNpcIdle = 0x80029954; // rom:0x2A554
 gMenuLightColor = 0x8008DEF0; // rom:0x8EAF0
 gMenuAmbientColor = 0x8008DEF8; // rom:0x8EAF8
