@@ -25,8 +25,8 @@ USE_ASSET(_3F6BB0);
 
 typedef struct {
     u8 padding[0x2C];
-    s32 *unk2C;
-} func_8002FA70_30670_arg;
+    void *backgroundAsset;
+} StoryMapShopBackgroundState;
 
 typedef struct {
     DisplayListObject displayList;
@@ -36,11 +36,6 @@ typedef struct {
     s8 itemIndex;
     s8 slotPosition;
 } StoryMapShopItemCardState;
-
-typedef struct {
-    u8 padding[0x2C];
-    void *unk2C;
-} func_8002FA1C_3061C_arg;
 
 typedef struct {
     s16 unk0;
@@ -168,9 +163,9 @@ void displaySlideInStoryMapShopItemCard(DisplayListObject *);
 void animateSlideInStoryMapShopItemCard(StoryMapShopItemCardState *arg0);
 void awaitSlideInStoryMapShopItemCardIdle(void);
 void destroySlideInStoryMapShopItemCard(StoryMapShopItemCardState *);
-void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *);
-void func_8002FA44_30644(void *);
-void func_8002FA70_30670(func_8002FA70_30670_arg *);
+void initStoryMapShopBackgroundRenderState(StoryMapShopBackgroundState *);
+void enqueueStoryMapShopBackgroundRender(void *);
+void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *);
 void func_8002FB40_30740(func_8002FA9C_3069C_arg *);
 void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0);
 void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *);
@@ -576,23 +571,23 @@ void destroySlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     card->displayList.unk2C = freeNodeMemory(card->displayList.unk2C);
 }
 
-void func_8002F9C4_305C4(func_8002FA70_30670_arg *arg0) {
-    arg0->unk2C = loadCompressedData(&_42F1D0_ROM_START, &_42F1D0_ROM_END, 0x14410);
-    setCleanupCallback(&func_8002FA70_30670);
-    setCallback(&func_8002FA1C_3061C);
+void loadStoryMapShopBackground(StoryMapShopBackgroundState *state) {
+    state->backgroundAsset = loadCompressedData(&_42F1D0_ROM_START, &_42F1D0_ROM_END, 0x14410);
+    setCleanupCallback(&cleanupStoryMapShopBackground);
+    setCallback(&initStoryMapShopBackgroundRenderState);
 }
 
-void func_8002FA1C_3061C(func_8002FA1C_3061C_arg *arg0) {
-    func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
-    setCallback(&func_8002FA44_30644);
+void initStoryMapShopBackgroundRenderState(StoryMapShopBackgroundState *state) {
+    func_800394BC_3A0BC(state, (s32)state->backgroundAsset);
+    setCallback(&enqueueStoryMapShopBackgroundRender);
 }
 
-void func_8002FA44_30644(void *arg0) {
-    debugEnqueueCallback(1, 0, func_80038420_39020, arg0);
+void enqueueStoryMapShopBackgroundRender(void *state) {
+    debugEnqueueCallback(1, 0, func_80038420_39020, state);
 }
 
-void func_8002FA70_30670(func_8002FA70_30670_arg *arg0) {
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *state) {
+    state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
 }
 
 void func_8002FA9C_3069C(func_8002FA9C_3069C_arg *arg0) {
