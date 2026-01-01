@@ -317,7 +317,7 @@ void updateStoryMapNpcLookAround(Func297D8Arg *arg0) {
     }
 }
 
-void func_80029300_29F00(Func297D8Arg *arg0) {
+void initStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
     arg0->unk61 = 0;
     arg0->unk62 = 0;
@@ -327,10 +327,10 @@ void func_80029300_29F00(Func297D8Arg *arg0) {
     arg0->unk44 = 0x260000;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029360_29F60);
+    setCallback(updateStoryMapNpcThinkEffect);
 }
 
-void func_80029360_29F60(Func297D8Arg *arg0) {
+void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
     AllocationData *allocation;
     s32 shouldSetCallback;
     u8 temp;
@@ -402,7 +402,7 @@ void func_80029360_29F60(Func297D8Arg *arg0) {
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
         arg0->unk50 = 0;
-        arg0->callback = func_80029360_29F60;
+        arg0->callback = updateStoryMapNpcThinkEffect;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
         setCallback(func_8002A200_2AE00);
