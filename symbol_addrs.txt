@@ -2078,3 +2078,6 @@ initCharSelectBackgroundEffect = 0x800279D4; // rom:0x285D4
 setupCharSelectBackgroundEffect = 0x80027A28; // rom:0x28628
 updateCharSelectBackgroundEffect = 0x80027A50; // rom:0x28650
 cleanupCharSelectBackgroundEffect = 0x80027AAC; // rom:0x286AC
+initCharSelectScaledSprite = 0x80027AD8; // rom:0x286D8
+renderCharSelectScaledSprite = 0x80027B70; // rom:0x28770
+cleanupCharSelectScaledSprite = 0x80027B9C; // rom:0x2879C

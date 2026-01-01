@@ -92,18 +92,18 @@ typedef struct {
 } CharSelectIconTargetState;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 scaleX;
+    s16 scaleY;
+    s16 rotation;
+    s16 alpha;
     u8 unk12;
     u8 unk13;
     u8 unk14;
-} func_80027AD8_286D8_arg;
+} ScaledSpriteEntry;
 
 typedef struct {
     u8 padding[0x24];
@@ -316,8 +316,8 @@ void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0);
 void cleanupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state);
 void setupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state);
 void updateCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state);
-void func_80027B70_28770(void *);
-void func_80027B9C_2879C(SimpleSpriteEntry *);
+void renderCharSelectScaledSprite(void *);
+void cleanupCharSelectScaledSprite(ScaledSpriteEntry *);
 void updateCharSelectPostSlide(CharSelectSlideState *);
 void updateCharSelectSlide(CharSelectSlideState *);
 
@@ -1823,32 +1823,32 @@ void cleanupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
     state->effectAsset = freeNodeMemory(state->effectAsset);
 }
 
-void func_80027AD8_286D8(func_80027AD8_286D8_arg *arg0) {
+void initCharSelectScaledSprite(ScaledSpriteEntry *arg0) {
     void *dmaResult;
 
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_80027B9C_2879C);
+    setCleanupCallback(cleanupCharSelectScaledSprite);
 
-    arg0->unk8 = 6;
-    arg0->unkA = 0x300;
-    arg0->unkC = 0x300;
-    arg0->unk10 = 0xFF;
-    arg0->unk0 = 0;
-    arg0->unk2 = 0;
-    arg0->unkE = 0;
+    arg0->spriteIndex = 6;
+    arg0->scaleX = 0x300;
+    arg0->scaleY = 0x300;
+    arg0->alpha = 0xFF;
+    arg0->x = 0;
+    arg0->y = 0;
+    arg0->rotation = 0;
     arg0->unk13 = 0;
     arg0->unk12 = 0;
     arg0->unk14 = 0x80;
-    arg0->unk4 = dmaResult;
+    arg0->asset = dmaResult;
 
-    setCallback(func_80027B70_28770);
+    setCallback(renderCharSelectScaledSprite);
 }
 
-void func_80027B70_28770(void *arg0) {
+void renderCharSelectScaledSprite(void *arg0) {
     debugEnqueueCallback(0xC, 7, func_80011924_12524, arg0);
 }
 
-void func_80027B9C_2879C(SimpleSpriteEntry *arg0) {
+void cleanupCharSelectScaledSprite(ScaledSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
