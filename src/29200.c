@@ -62,7 +62,7 @@ void initStoryMapItem(StoryMapItem *arg0) {
     setCallback(func_800288A0_294A0);
 }
 
-void func_80028744_29344(StoryMapItem *arg0) {
+void respawnStoryMapItem(StoryMapItem *arg0) {
     AllocationData29200 *alloc;
     u8 temp;
     u32 itemType;
@@ -122,7 +122,7 @@ void func_80028B44_29744(StoryMapItem *arg0) {
     arg0->respawnTimer--;
     if (arg0->respawnTimer == 0) {
         arg0->respawnTimer = 0;
-        setCallback(func_80028744_29344);
+        setCallback(respawnStoryMapItem);
     }
 }
 
