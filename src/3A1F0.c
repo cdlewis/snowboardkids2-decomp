@@ -55,7 +55,7 @@ void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders)
 void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]);
 void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader *header);
 void controllerPackReadStatus(s32 arg0);
-void func_8003B1C0_3BDC0(void);
+void eepromProbe(void);
 void func_8003B2DC_3BEDC(s32 arg0, u8 *arg1);
 void func_8003B400_3C000(s32);
 void func_8003B560_3C160(u8 *);
@@ -240,7 +240,7 @@ void controllerServiceThread(void *arg0) {
                 continue;
 
             case 0xD0:
-                func_8003B1C0_3BDC0();
+                eepromProbe();
                 continue;
 
             case 0xE0:
@@ -542,14 +542,14 @@ void *pollMotorInitAsync(void) {
     return status;
 }
 
-void func_8003B0E8_3BCE8(void) {
+void eepromProbeAsync(void) {
     s16 temp_v0;
-    s32 temp_a1;
+    s32 queueIndex;
 
     D_8008FE8F_90A8F = 1;
-    temp_a1 = D_8008FE8C_90A8C;
-    D_800A1C20_A2820[temp_a1].command = 0xD0;
-    osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[temp_a1], OS_MESG_BLOCK);
+    queueIndex = D_8008FE8C_90A8C;
+    D_800A1C20_A2820[queueIndex].command = 0xD0;
+    osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[queueIndex], OS_MESG_BLOCK);
     temp_v0 = (u16)D_8008FE8C_90A8C + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -557,20 +557,20 @@ void func_8003B0E8_3BCE8(void) {
     }
 }
 
-void *func_8003B170_3BD70(void) {
-    void *sp10;
-    void *var_v0;
+void *pollEepromProbeAsync(void) {
+    void *result;
+    void *status;
 
-    sp10 = NULL;
-    var_v0 = (void *)-1;
-    if (osRecvMesg(&D_800A1888_A2488, &sp10, OS_MESG_NOBLOCK) == 0) {
+    result = NULL;
+    status = (void *)-1;
+    if (osRecvMesg(&D_800A1888_A2488, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
-        var_v0 = sp10;
+        status = result;
     }
-    return var_v0;
+    return status;
 }
 
-void func_8003B1C0_3BDC0(void) {
+void eepromProbe(void) {
     osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromProbe(&mainStack), OS_MESG_BLOCK);
 }
 
