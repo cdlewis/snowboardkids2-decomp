@@ -513,14 +513,14 @@ void initMotorStates(void) {
     }
 }
 
-void func_8003B000_3BC00(s32 arg0) {
+void motorInitAsync(s32 channel) {
     s16 temp_v0;
-    s32 temp_a1;
-    temp_v0 = arg0 + 0x80;
-    temp_a1 = D_8008FE8C_90A8C;
-    D_800A1C20_A2820[temp_a1].arg = &gMotorState;
-    D_800A1C20_A2820[temp_a1].command = temp_v0;
-    osSendMesg(&D_800A1820_A2420, (OSMesg *)(&D_800A1C20_A2820[temp_a1]), OS_MESG_BLOCK);
+    s32 queueIndex;
+    temp_v0 = channel + 0x80;
+    queueIndex = D_8008FE8C_90A8C;
+    D_800A1C20_A2820[queueIndex].arg = &gMotorState;
+    D_800A1C20_A2820[queueIndex].command = temp_v0;
+    osSendMesg(&D_800A1820_A2420, (OSMesg *)(&D_800A1C20_A2820[queueIndex]), OS_MESG_BLOCK);
     temp_v0 = ((u16)D_8008FE8C_90A8C) + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
