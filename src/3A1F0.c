@@ -96,7 +96,7 @@ extern u8 *gDmaCompressionBuffer;
 void piDmaHandlerThread(void *);
 void motorProcessState(MotorState *);
 
-void func_8003AFA0_3BBA0(void);
+void initMotorStates(void);
 extern OSContStatus D_8009F660_A0260;
 extern OSThread D_8009F670_A0270;
 extern s32 D_800A1838_A2438;
@@ -141,7 +141,7 @@ void initControllerSubsystem(void) {
             }
 
             D_800A1C98_A2898 = 0;
-            func_8003AFA0_3BBA0();
+            initMotorStates();
             gControllerPollingEnabled = 1;
             osCreateThread(&D_8009F670_A0270, 6, &controllerServiceThread, 0, &D_800A1820_A2420, 3);
             osStartThread(&D_8009F670_A0270);
@@ -501,7 +501,7 @@ void resumeMotorStates(void) {
     } while ((s32)statePtr < (s32)end);
 }
 
-void func_8003AFA0_3BBA0(void) {
+void initMotorStates(void) {
     s32 i;
 
     for (i = 0; i < 4; i++) {

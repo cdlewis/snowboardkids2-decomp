@@ -2,6 +2,7 @@ motorUpdate = 0x8003AC38; // rom:0x3B838
 motorProcessState = 0x8003AC58; // rom:0x3B858
 startMotorRumble = 0x8003AF38; // rom:0x3BB38
 resumeMotorStates = 0x8003AF6C; // rom:0x3BB6C
+initMotorStates = 0x8003AFA0; // rom:0x3BBA0
 initMenuCameraNode = 0x80027CA0; // rom:0x288A0
 initStoryMapRandomEvent = 0x80028480; // rom:0x29080
 nullRandomEventCallback = 0x800285EC; // rom:0x291EC
