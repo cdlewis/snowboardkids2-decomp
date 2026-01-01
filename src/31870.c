@@ -118,8 +118,8 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x7A4];
-    u8 unk7A4;
-} func_8003316C_33D6C_alloc;
+    u8 titleCornersVisible;
+} BoardShopTitleCornersAllocation;
 
 typedef struct {
     SceneModel *model;
@@ -132,15 +132,15 @@ typedef struct {
 } BoardShopShopkeeperWaitState;
 
 typedef struct {
-    s16 unk0;
-    u16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s8 unkC;
+    s16 x;
+    u16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
+    s8 visible;
     s8 unkD;
     s16 unkE;
-} func_800330B4_33CB4_arg;
+} BoardShopTitleCornerState;
 
 typedef struct {
     SceneModel *model;
@@ -315,8 +315,8 @@ void cleanupBoardShopBackground(BoardShopBackgroundState *arg0);
 void cleanupBoardShopColumnSelectorArrow(void *);
 void updateBoardShopExitOverlay(void *arg0);
 void cleanupBoardShopExitOverlay(SpriteDisplayState *arg0);
-void func_8003316C_33D6C(func_800330B4_33CB4_arg *arg0);
-void func_800331CC_33DCC(func_800330B4_33CB4_arg *arg0);
+void updateBoardShopTitleCorners(BoardShopTitleCornerState *arg0);
+void cleanupBoardShopTitleCorners(BoardShopTitleCornerState *arg0);
 void updateBoardShopTitleText(BoardShopTitleTextUpdateArg *arg0);
 void cleanupBoardShopTitleText(BoardShopTitleTextCleanupArg *arg0);
 void animateBoardShopSnowflakeSlideIn(BoardShopSnowflakeAnimState *arg0);
@@ -1531,10 +1531,10 @@ void initBoardShopTitleText(BoardShopTitleTextState *arg0) {
 }
 
 void updateBoardShopTitleText(BoardShopTitleTextUpdateArg *arg0) {
-    func_8003316C_33D6C_alloc *allocation = (func_8003316C_33D6C_alloc *)getCurrentAllocation();
-    if (allocation->unk7A4 != 0) {
-        arg0->textWidth = D_8008F20A_8FE0A[allocation->unk7A4];
-        arg0->textData = D_8008F200_8FE00[allocation->unk7A4];
+    BoardShopTitleCornersAllocation *allocation = (BoardShopTitleCornersAllocation *)getCurrentAllocation();
+    if (allocation->titleCornersVisible != 0) {
+        arg0->textWidth = D_8008F20A_8FE0A[allocation->titleCornersVisible];
+        arg0->textData = D_8008F200_8FE00[allocation->titleCornersVisible];
         debugEnqueueCallback(9, 7, &func_80035408_36008, arg0);
     }
 }
@@ -1543,41 +1543,41 @@ void cleanupBoardShopTitleText(BoardShopTitleTextCleanupArg *arg0) {
     arg0->textAsset = freeNodeMemory(arg0->textAsset);
 }
 
-void func_800330B4_33CB4(func_800330B4_33CB4_arg *arg0) {
+void initBoardShopTitleCorners(BoardShopTitleCornerState *arg0) {
     s32 i;
-    void *asset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
-    setCleanupCallback(&func_800331CC_33DCC);
+    void *cornerAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    setCleanupCallback(&cleanupBoardShopTitleCorners);
 
     for (i = 0; i < 4; i++) {
-        func_800330B4_33CB4_arg *j = &arg0[i];
+        BoardShopTitleCornerState *corner = &arg0[i];
 
         if (i % 2 != 0) {
-            j->unk0 = -0x80;
+            corner->x = -0x80;
         } else {
-            j->unk0 = 0;
+            corner->x = 0;
         }
 
-        j->unk2 = (s16)(((i / 2) * 0x10) - 0x66);
-        j->unk4 = asset;
-        j->unk8 = i;
-        j->unkA = 0xFF;
-        j->unkD = 0;
-        j->unkC = 1;
+        corner->y = (s16)(((i / 2) * 0x10) - 0x66);
+        corner->asset = cornerAsset;
+        corner->spriteIndex = i;
+        corner->alpha = 0xFF;
+        corner->unkD = 0;
+        corner->visible = 1;
     }
 
-    setCallback(&func_8003316C_33D6C);
+    setCallback(&updateBoardShopTitleCorners);
 }
 
-void func_8003316C_33D6C(func_800330B4_33CB4_arg *arg0) {
+void updateBoardShopTitleCorners(BoardShopTitleCornerState *arg0) {
     s32 i;
 
-    if (((func_8003316C_33D6C_alloc *)getCurrentAllocation())->unk7A4 != NULL) {
+    if (((BoardShopTitleCornersAllocation *)getCurrentAllocation())->titleCornersVisible != NULL) {
         for (i = 0; i < 4; i++) {
             debugEnqueueCallback(9, 1, &func_80012004_12C04, &arg0[i]);
         }
     }
 }
 
-void func_800331CC_33DCC(func_800330B4_33CB4_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupBoardShopTitleCorners(BoardShopTitleCornerState *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }

@@ -2272,4 +2272,7 @@ cleanupBoardShopSnowflakeSprite = 0x80032F64; // rom:0x33B64
 initBoardShopTitleText = 0x80032F90; // rom:0x33B90
 updateBoardShopTitleText = 0x80033014; // rom:0x33C14
 cleanupBoardShopTitleText = 0x80033088; // rom:0x33C88
+initBoardShopTitleCorners = 0x800330B4; // rom:0x33CB4
+updateBoardShopTitleCorners = 0x8003316C; // rom:0x33D6C
+cleanupBoardShopTitleCorners = 0x800331CC; // rom:0x33DCC
 boardIconTargetYPositions = 0x8008F17C; // rom:0x8FD7C
