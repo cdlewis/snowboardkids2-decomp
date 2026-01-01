@@ -11,7 +11,7 @@
 USE_ASSET(_4196E0);
 
 extern void func_800373E0_37FE0(void);
-void func_800373B0_37FB0(void);
+void onOptionsMenuFadeInComplete(void);
 void func_800376EC_382EC(void);
 
 typedef struct {
@@ -52,10 +52,10 @@ void initOptionsMenu(void) {
     scheduleTask(func_80037BFC_387FC, 0, 0, 0x5A);
     scheduleTask(func_80037E78_38A78, 0, 0, 0x5A);
     func_800574A0_580A0(6);
-    setGameStateHandler(func_800373B0_37FB0);
+    setGameStateHandler(onOptionsMenuFadeInComplete);
 }
 
-void func_800373B0_37FB0(void) {
+void onOptionsMenuFadeInComplete(void) {
     if (func_8006FE10_70A10(0) == 0) {
         setGameStateHandler(func_800373E0_37FE0);
     }
