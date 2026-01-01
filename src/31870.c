@@ -281,8 +281,8 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x2C];
-    void *unk2C;
-} func_8002FA1C_3061C_arg;
+    void *backgroundAsset;
+} BoardShopBackgroundState;
 
 typedef struct {
     s16 unk0;
@@ -335,8 +335,8 @@ void loadBoardShopPurchaseAssets(BoardShopCharacterPreviewState *arg0);
 void cleanupBoardShopShopkeeper(BoardShopShopkeeperState *arg0);
 void waitBoardShopShopkeeper(BoardShopShopkeeperWaitState *arg0);
 void updateBoardShopShopkeeper(BoardShopShopkeeperState *arg0);
-void func_80031CC0_328C0(func_8002FA1C_3061C_arg *arg0);
-void func_80031D14_32914(BoardShopCharacterPreviewState *arg0);
+void initBoardShopBackgroundRenderState(BoardShopBackgroundState *arg0);
+void cleanupBoardShopBackground(BoardShopBackgroundState *arg0);
 void func_80032218_32E18(void *);
 void func_800322BC_32EBC(void *arg0);
 void func_80032304_32F04(func_80032244_32E44_arg *arg0);
@@ -350,7 +350,7 @@ void func_80032F64_33B64(func_80032244_32E44_arg *);
 void func_80032DBC_339BC(func_80032F90_33B90_arg *arg0);
 void freeBoardShopCharacterTransitionAssets(func_800319C8_325C8_arg *arg0);
 void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0);
-void func_80031CE8_328E8(void *arg0);
+void enqueueBoardShopBackgroundRender(void *arg0);
 void cleanupBoardShopSnowParticles(SnowParticleState *arg0);
 void waitBoardShopSnowParticles(SnowParticleState *arg0);
 void func_80032BCC_337CC(func_80032B0C_3370C_arg *arg0);
@@ -860,23 +860,23 @@ void cleanupBoardShopShopkeeper(BoardShopShopkeeperState *arg0) {
     destroySceneModel(arg0->model);
 }
 
-void func_80031C68_32868(func_8002FA1C_3061C_arg *arg0) {
-    arg0->unk2C = loadCompressedData(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
-    setCleanupCallback(&func_80031D14_32914);
-    setCallback(&func_80031CC0_328C0);
+void loadBoardShopBackground(BoardShopBackgroundState *state) {
+    state->backgroundAsset = loadCompressedData(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
+    setCleanupCallback(&cleanupBoardShopBackground);
+    setCallback(&initBoardShopBackgroundRenderState);
 }
 
-void func_80031CC0_328C0(func_8002FA1C_3061C_arg *arg0) {
-    func_800394BC_3A0BC(arg0, (s32)arg0->unk2C);
-    setCallback(&func_80031CE8_328E8);
+void initBoardShopBackgroundRenderState(BoardShopBackgroundState *state) {
+    func_800394BC_3A0BC(state, (s32)state->backgroundAsset);
+    setCallback(&enqueueBoardShopBackgroundRender);
 }
 
-void func_80031CE8_328E8(void *arg0) {
-    debugEnqueueCallback(9, 0, &func_80038420_39020, arg0);
+void enqueueBoardShopBackgroundRender(void *state) {
+    debugEnqueueCallback(9, 0, &func_80038420_39020, state);
 }
 
-void func_80031D14_32914(BoardShopCharacterPreviewState *arg0) {
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupBoardShopBackground(BoardShopBackgroundState *state) {
+    state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
 }
 
 typedef struct {

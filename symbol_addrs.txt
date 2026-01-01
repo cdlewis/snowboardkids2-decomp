@@ -2238,3 +2238,7 @@ initBoardShopShopkeeper = 0x80031A0C; // rom:0x3260C
 waitBoardShopShopkeeper = 0x80031ABC; // rom:0x326BC
 updateBoardShopShopkeeper = 0x80031B30; // rom:0x32730
 cleanupBoardShopShopkeeper = 0x80031C4C; // rom:0x3284C
+loadBoardShopBackground = 0x80031C68; // rom:0x32868
+initBoardShopBackgroundRenderState = 0x80031CC0; // rom:0x328C0
+enqueueBoardShopBackgroundRender = 0x80031CE8; // rom:0x328E8
+cleanupBoardShopBackground = 0x80031D14; // rom:0x32914
