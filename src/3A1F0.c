@@ -51,7 +51,7 @@ extern OSContPad D_800A1C08_A2808[];
 void initControllerPack(s32);
 void func_8003A294_3AE94(s32, void *);
 void func_8003A52C_3B12C(s32, void *);
-void func_8003A864_3B464(s32, controllerPackFileHeader *);
+void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders);
 void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]);
 void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader *header);
 void controllerPackReadStatus(s32 arg0);
@@ -188,7 +188,7 @@ void controllerServiceThread(void *arg0) {
                 continue;
 
             case 0x50:
-                func_8003A864_3B464(cmd & 3, msg->arg);
+                controllerPackListFiles(cmd & 3, msg->arg);
                 continue;
 
             case 0x60:
@@ -328,49 +328,49 @@ int controllerPackListFilesPollStub(void) {
     return 0;
 }
 
-void func_8003A864_3B464(s32 arg0, controllerPackFileHeader *arg1) {
+void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders) {
     OSPfsState pfsState;
     s32 controllerPort;
-    s32 var_v0;
-    s32 i;
+    s32 err;
+    s32 fileIndex;
     s32 baseIndex;
-    s32 j;
+    s32 charIndex;
     u8 *gameName;
     u8 *extName;
     s32 packsOffset;
 
-    controllerPort = arg0 & 0xFFFF;
-    var_v0 = osPfsInitPak(&mainStack, &controllerPacks[controllerPort], controllerPort);
-    if (var_v0 == 0) {
-        i = 0;
+    controllerPort = channel & 0xFFFF;
+    err = osPfsInitPak(&mainStack, &controllerPacks[controllerPort], controllerPort);
+    if (err == 0) {
+        fileIndex = 0;
         packsOffset = (s32)&controllerPacks[controllerPort] - (s32)controllerPacks;
         gameName = (u8 *)pfsState.game_name;
         extName = (u8 *)pfsState.ext_name;
         baseIndex = controllerPort << 4;
         do {
-            if (osPfsFileState((OSPfs *)((s32)controllerPacks + packsOffset), i, &pfsState) != 0) {
-                arg1[baseIndex + i].gameCode = 0;
-                arg1[baseIndex + i].companyCode = 0;
+            if (osPfsFileState((OSPfs *)((s32)controllerPacks + packsOffset), fileIndex, &pfsState) != 0) {
+                fileHeaders[baseIndex + fileIndex].gameCode = 0;
+                fileHeaders[baseIndex + fileIndex].companyCode = 0;
             } else {
-                arg1[baseIndex + i].fileSize = pfsState.file_size;
-                j = 0;
-                arg1[baseIndex + i].gameCode = pfsState.game_code;
-                arg1[baseIndex + i].companyCode = pfsState.company_code;
+                fileHeaders[baseIndex + fileIndex].fileSize = pfsState.file_size;
+                charIndex = 0;
+                fileHeaders[baseIndex + fileIndex].gameCode = pfsState.game_code;
+                fileHeaders[baseIndex + fileIndex].companyCode = pfsState.company_code;
                 do {
-                    arg1[baseIndex + i].gameName[j] = gameName[j];
-                    j++;
-                } while (j < 16);
-                j = 0;
+                    fileHeaders[baseIndex + fileIndex].gameName[charIndex] = gameName[charIndex];
+                    charIndex++;
+                } while (charIndex < 16);
+                charIndex = 0;
                 do {
-                    arg1[baseIndex + i].extName[j] = extName[j];
-                    j++;
-                } while (j < 4);
+                    fileHeaders[baseIndex + fileIndex].extName[charIndex] = extName[charIndex];
+                    charIndex++;
+                } while (charIndex < 4);
             }
-            i++;
-        } while (i < 16);
-        var_v0 = 0;
+            fileIndex++;
+        } while (fileIndex < 16);
+        err = 0;
     }
-    osSendMesg(&D_800A1888_A2488, (OSMesg)var_v0, 1);
+    osSendMesg(&D_800A1888_A2488, (OSMesg)err, 1);
 }
 
 void func_8003A9DC_3B5DC(void) {
