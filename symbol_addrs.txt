@@ -2320,3 +2320,5 @@ cleanupStoryMapLocationMarker = 0x80036848; // rom:0x37448
 initStoryMapSpecialLocationMarker = 0x80036880; // rom:0x37480
 updateStoryMapSpecialLocationMarker = 0x80036920; // rom:0x37520
 cleanupStoryMapSpecialLocationMarker = 0x80036A10; // rom:0x37610
+initStoryMapSpecialLocationTrigger = 0x80036A3C; // rom:0x3763C
+updateStoryMapSpecialLocationTrigger = 0x80036A68; // rom:0x37668

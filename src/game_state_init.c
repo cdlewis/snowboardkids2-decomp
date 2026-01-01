@@ -22,7 +22,7 @@ extern void initStoryMapMiniCamera;
 extern void GenericTriggerInit;
 extern void initStoryMapRandomEvent;
 extern void initStoryMapLocationIndicator;
-extern void func_80036A3C_3763C;
+extern void initStoryMapSpecialLocationTrigger;
 extern void PhoneTriggerInit;
 
 void cleanupTransitionEffect(EffectState *);
@@ -100,7 +100,7 @@ void initializeGameState(void) {
         scheduleTask(&PhoneTriggerInit, 0, 0, 0x64);
     } while (0);
     scheduleTask(&ClocktowerTriggerInit, 0, 0, 0x64);
-    scheduleTask(&func_80036A3C_3763C, 0, 0, 0x64);
+    scheduleTask(&initStoryMapSpecialLocationTrigger, 0, 0, 0x64);
     scheduleTask(&initStoryMapLocationIndicator, 0, 0, 0x64);
     temp_s0->unk3E4 = loadUncompressedData(&_419440_ROM_START, &_419440_ROM_END);
     temp_s0->unk3DC = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);

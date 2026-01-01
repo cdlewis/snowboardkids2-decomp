@@ -106,9 +106,9 @@ typedef struct {
 } StoryMapLocationMarkerCleanupArg;
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-} func_80036A3C_3763C_arg;
+    u8 baseLocationIndex;
+    u8 padding;
+} StoryMapSpecialLocationTriggerState;
 
 typedef struct {
     char padding[4];
@@ -141,7 +141,7 @@ void updateStoryMapLocationMarker(void *);
 void cleanupStoryMapLocationMarker(void *);
 void initStoryMapLocationMarker(StoryMapLocationMarkerState *);
 void initStoryMapSpecialLocationMarker(StoryMapSpecialLocationMarkerState *);
-void func_80036A68_37668(void *);
+void updateStoryMapSpecialLocationTrigger(void *);
 void cleanupStoryMapSpecialLocationMarker(void *);
 
 typedef struct {
@@ -300,13 +300,13 @@ void cleanupStoryMapSpecialLocationMarker(void *untypedArg) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80036A3C_3763C(func_80036A3C_3763C_arg *arg0) {
-    arg0->unk0 = 0xA;
-    arg0->unk1 = 0;
-    setCallback(&func_80036A68_37668);
+void initStoryMapSpecialLocationTrigger(StoryMapSpecialLocationTriggerState *arg0) {
+    arg0->baseLocationIndex = 0xA;
+    arg0->padding = 0;
+    setCallback(&updateStoryMapSpecialLocationTrigger);
 }
 
-void func_80036A68_37668(void *arg0) {
+void updateStoryMapSpecialLocationTrigger(void *arg0) {
     s16 temp_v0_2;
     s16 var_v1;
     func_800698BC_6A4BC_return *temp_v0 = (func_800698BC_6A4BC_return *)getCurrentAllocation();
