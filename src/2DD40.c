@@ -587,54 +587,54 @@ void updateStoryMapRareEventCheering(Func2E024Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002E680_2F280);
 
-void func_8002E8B4_2F4B4(Func2E024Arg *arg0) {
-    GameState *allocation;
-    s32 incrementedCount;
+void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
+    GameState *gameState;
+    s32 completedCount;
     s32 i;
-    Func297D8Arg *ptr;
-    s32 sp10[3];
-    s32 sp20[3];
-    Transform3D sp30;
-    Transform3D sp50;
-    s16 var_v1;
-    s32 var_a0;
-    s32 tempAngle;
-    s32 count;
+    Func297D8Arg *element;
+    s32 newPosition[3];
+    s32 currentPosition[3];
+    Transform3D localMatrix;
+    Transform3D worldMatrix;
+    s16 movementSpeed;
+    s32 radiusFactor;
+    s32 facingAngle;
+    s32 unused;
 
-    allocation = getCurrentAllocation();
-    incrementedCount = 0;
+    gameState = getCurrentAllocation();
+    completedCount = 0;
 
     for (i = 0; i < arg0->unkD5; i++) {
-        ptr = &arg0->elements[i];
+        element = &arg0->elements[i];
 
-        memcpy(&sp30, identityMatrix, sizeof(Transform3D));
-        memcpy(&sp50, &ptr->matrix, sizeof(Transform3D));
+        memcpy(&localMatrix, identityMatrix, sizeof(Transform3D));
+        memcpy(&worldMatrix, &element->matrix, sizeof(Transform3D));
 
-        switch (ptr->unk5E) {
+        switch (element->unk5E) {
             case 0:
-                ptr->unk5A--;
-                if ((ptr->unk5A << 16) == 0) {
-                    ptr->unk5E = 1;
+                element->unk5A--;
+                if ((element->unk5A << 16) == 0) {
+                    element->unk5E = 1;
                 }
                 break;
             case 1:
-                memcpy(sp20, &ptr->matrix.translation, 0xC);
-                memcpy(sp10, sp20, 0xC);
+                memcpy(currentPosition, &element->matrix.translation, 0xC);
+                memcpy(newPosition, currentPosition, 0xC);
 
                 if (i == 0) {
-                    var_a0 = 0x5200;
-                    var_v1 = -0x28;
+                    radiusFactor = 0x5200;
+                    movementSpeed = -0x28;
                 } else {
-                    var_a0 = 0x4400;
-                    var_v1 = -0x18;
+                    radiusFactor = 0x4400;
+                    movementSpeed = -0x18;
                 }
 
-                sp10[0] += ((var_v1 * (sp20[2] >> 8)) / var_a0) << 12;
-                sp10[2] += ((-var_v1 * (sp20[0] >> 8)) / var_a0) << 12;
-                memcpy(&ptr->matrix.translation, sp10, 0xC);
+                newPosition[0] += ((movementSpeed * (currentPosition[2] >> 8)) / radiusFactor) << 12;
+                newPosition[2] += ((-movementSpeed * (currentPosition[0] >> 8)) / radiusFactor) << 12;
+                memcpy(&element->matrix.translation, newPosition, 0xC);
                 break;
             case 2:
-                incrementedCount++;
+                completedCount++;
                 break;
         }
 
@@ -660,19 +660,19 @@ void func_8002E8B4_2F4B4(Func2E024Arg *arg0) {
             }
         }
 
-        if (ptr->unk5E != 2) {
-            createYRotationMatrix(&sp30, ptr->rotation);
-            tempAngle = atan2Fixed(ptr->matrix.translation.x, ptr->matrix.translation.z);
-            createYRotationMatrix(&sp50, tempAngle & 0xFFFF);
-            memcpy(&sp50.translation, &ptr->matrix.translation, 0xC);
-            func_8006B084_6BC84(&sp30, &sp50, &ptr->matrix);
-            updateStoryMapNpcModel(ptr);
-            allocation->unk408[i] = ptr->matrix.translation.x;
-            allocation->unk410[i] = ptr->matrix.translation.z;
-            if (((u32)((tempAngle - 0x1001) & 0xFFFF) < 0x468)) {
-                ptr->unk5E = 2;
+        if (element->unk5E != 2) {
+            createYRotationMatrix(&localMatrix, element->rotation);
+            facingAngle = atan2Fixed(element->matrix.translation.x, element->matrix.translation.z);
+            createYRotationMatrix(&worldMatrix, facingAngle & 0xFFFF);
+            memcpy(&worldMatrix.translation, &element->matrix.translation, 0xC);
+            func_8006B084_6BC84(&localMatrix, &worldMatrix, &element->matrix);
+            updateStoryMapNpcModel(element);
+            gameState->unk408[i] = element->matrix.translation.x;
+            gameState->unk410[i] = element->matrix.translation.z;
+            if (((u32)((facingAngle - 0x1001) & 0xFFFF) < 0x468)) {
+                element->unk5E = 2;
             }
-        } else if ((incrementedCount & 0xFF) == ptr->unk5E) {
+        } else if ((completedCount & 0xFF) == element->unk5E) {
             func_80069CF8_6A8F8();
         }
     }
