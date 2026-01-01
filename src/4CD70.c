@@ -558,7 +558,7 @@ void func_8004CBF0_4D7F0(Struct_func_8004CBF0 *arg0) {
         sprintf(arg0->unk20, D_8009E878_9F478, val);
     }
 
-    func_8003BD60_3C960(arg0->unk20, arg0->unk4, arg0->unk6, 0xFF, arg0->unk0, arg0->unk2C + 8, 0);
+    drawNumericString(arg0->unk20, arg0->unk4, arg0->unk6, 0xFF, arg0->unk0, arg0->unk2C + 8, 0);
 
     arg0->unk2E++;
     if ((s16)arg0->unk2E >= 12) {
@@ -911,7 +911,7 @@ void func_8004D63C_4E23C(Struct_func_8004D784 *arg0) {
     debugEnqueueCallback(arg0->unk28 + 8, 6, func_8000FED0_10AD0, arg0);
 
     if (arg0->unk2E == 0) {
-        func_8003BD60_3C960(arg0->unk10, arg0->unk0 + 0x38, arg0->unk2, 0xFF, arg0->unkC, arg0->unk28 + 8, 6);
+        drawNumericString(arg0->unk10, arg0->unk0 + 0x38, arg0->unk2, 0xFF, arg0->unkC, arg0->unk28 + 8, 6);
     } else {
         arg0->unk1C = arg0->unk0 + 0x38;
         debugEnqueueCallback(arg0->unk28 + 8, 6, renderTextPalette, &arg0->unk1C);
@@ -1119,7 +1119,7 @@ void func_8004DB98_4E798(Struct_func_8004D9D0 *arg0) {
 
     a2val = arg0->unk2;
     a1val = arg0->unk0;
-    func_8003BD60_3C960(
+    drawNumericString(
         buf,
         (s16)(a1val + ((0x48 - (strLen << 3)) >> 1)),
         (s16)(a2val + 0x14),
@@ -1216,7 +1216,7 @@ void func_8004DDD0_4E9D0(Struct_func_8004DCFC *arg0) {
 
     a2val = arg0->unk2;
     a1val = arg0->unk0;
-    func_8003BD60_3C960(
+    drawNumericString(
         buf,
         (s16)(a1val + ((0x48 - (strLen << 3)) >> 1)),
         (s16)(a2val + 0x14),
@@ -1297,7 +1297,7 @@ void func_8004DFA0_4EBA0(Struct_func_8004DEF8 *arg0) {
 
     debugEnqueueCallback(arg0->unk18->unkBB8 + 8, 6, func_80012518_13118, arg0);
 
-    func_8003BD60_3C960(
+    drawNumericString(
         sp20,
         (s16)((u16)arg0->unk0 - 0x18),
         arg0->unk2,
@@ -1735,7 +1735,7 @@ void func_8004EAF0_4F6F0(Struct_func_8004EB90 *arg0) {
     char buf[16];
 
     sprintf(buf, D_8009E8A8_9F4A8, arg0->unk1C->unkBD3);
-    func_8003BD60_3C960(buf, -0x70, -0x54, 0xFF, arg0->unk18, arg0->unk1C->unkBB8 + 8, 0);
+    drawNumericString(buf, -0x70, -0x54, 0xFF, arg0->unk18, arg0->unk1C->unkBB8 + 8, 0);
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->unkC);
 }
@@ -1798,7 +1798,7 @@ void func_8004ECA4_4F8A4(Struct_func_8004FF28 *arg0) {
         arg0->unk10--;
     }
 
-    func_8003BD60_3C960(buffer, arg0->unk4 + 0x10, arg0->unk6 + 0x10, 0xFF, arg0->unk0, 8, 1);
+    drawNumericString(buffer, arg0->unk4 + 0x10, arg0->unk6 + 0x10, 0xFF, arg0->unk0, 8, 1);
 }
 
 void func_8004ED94_4F994(Struct_func_8004FF28 *arg0) {
@@ -1876,7 +1876,7 @@ void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0) {
 
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
 
-    func_8003BD60_3C960(buffer, 0x48, 0x50, 0xFF, arg0->unkC, 8, 0);
+    drawNumericString(buffer, 0x48, 0x50, 0xFF, arg0->unkC, 8, 0);
 }
 
 void func_8004F04C_4FC4C(Struct_func_8004F04C *arg0) {
@@ -2015,7 +2015,7 @@ void func_8004F27C_4FE7C(Struct_func_8004F1D4 *arg0) {
     y = arg0->unk2;
     x = arg0->unk0;
     z = ((Struct_func_8004F27C_unk14 *)&arg0->unk14)->unk16;
-    func_8003BD60_3C960(buf, (s16)(x + (0x50 - var * 8) / 2), (s16)(y + 0x14), z, arg0->unk10, 8, 6);
+    drawNumericString(buf, (s16)(x + (0x50 - var * 8) / 2), (s16)(y + 0x14), z, arg0->unk10, 8, 6);
 }
 
 void func_8004F3EC_4FFEC(Struct_func_8004DCC4 *arg0) {
@@ -2117,7 +2117,7 @@ after_7E:
     }
 
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
-    func_8003BD60_3C960(sp20, 0x68, 0x50, 0xFF, arg0->unkC, 8, 0);
+    drawNumericString(sp20, 0x68, 0x50, 0xFF, arg0->unkC, 8, 0);
 }
 
 void func_8004F69C_5029C(Struct_func_8004F04C *arg0) {
@@ -2224,7 +2224,7 @@ void func_8004F898_50498(Struct_func_8004F04C *arg0) {
     }
 
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
-    func_8003BD60_3C960(buf, -0x54, -0x28, 0xFF, arg0->unkC, 8, 0);
+    drawNumericString(buf, -0x54, -0x28, 0xFF, arg0->unkC, 8, 0);
 }
 
 void func_8004F9E8_505E8(Struct_func_8004F04C *arg0) {
@@ -2385,7 +2385,7 @@ void func_8004FDD0_509D0(Struct_func_8004FF28 *arg0) {
     }
 
     x = arg0->unk4 + 0x10;
-    func_8003BD60_3C960(buf, x - (strLen << 2), arg0->unk6 + 8, 0xFF, arg0->unk0, 8, 1);
+    drawNumericString(buf, x - (strLen << 2), arg0->unk6 + 8, 0xFF, arg0->unk0, 8, 1);
 }
 
 void func_8004FF28_50B28(Struct_func_8004FF28 *arg0) {

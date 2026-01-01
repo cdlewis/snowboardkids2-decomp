@@ -77,7 +77,7 @@ s16 func_80069810_6A410(void);
 void loadOverlay_1BBA0(void);
 void func_8005100C_51C0C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void func_800516B4_522B4(Player *player);
-void func_8003BD60_3C960(char *arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s16 arg5, s16 arg6);
+void drawNumericString(char *text, s16 x, s16 y, s16 z, void *texture, s16 priority, s16 layer);
 void func_800585C8_591C8(s32 arg0);
 void func_80058B30_59730(Player *arg0);
 s32 func_80058BB0_597B0(Player *arg0);

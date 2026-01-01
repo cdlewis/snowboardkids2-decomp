@@ -1037,6 +1037,7 @@ gPiDmaMsgQueue = 0x800A2130;
 gPiDmaMsgBuf = 0x800A2148;
 dmaStub = 0x8003BC58; // rom:0x3C858
 dmaLoadAndInvalidate = 0x8003BC60;
+drawNumericString = 0x8003BD60; // rom:0x3C960
 
 D_800A1C20_A2820 = 0x800A1C20; // type:u32 size:0x78
 
