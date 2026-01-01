@@ -2242,3 +2242,6 @@ loadBoardShopBackground = 0x80031C68; // rom:0x32868
 initBoardShopBackgroundRenderState = 0x80031CC0; // rom:0x328C0
 enqueueBoardShopBackgroundRender = 0x80031CE8; // rom:0x328E8
 cleanupBoardShopBackground = 0x80031D14; // rom:0x32914
+initBoardShopComparisonIcons = 0x80031D40; // rom:0x32940
+updateBoardShopComparisonIcons = 0x80031DE4; // rom:0x329E4
+cleanupBoardShopComparisonIcons = 0x80031F68; // rom:0x32B68

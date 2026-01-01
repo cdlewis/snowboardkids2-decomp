@@ -881,53 +881,53 @@ void cleanupBoardShopBackground(BoardShopBackgroundState *state) {
 
 typedef struct {
     void *unk0;
-    void *unk4;
-} func_80031F68_32B68_arg;
+    void *asset;
+} BoardShopComparisonIconsCleanupArg;
 
-void func_80031F68_32B68(func_80031F68_32B68_arg *arg0);
+void cleanupBoardShopComparisonIcons(BoardShopComparisonIconsCleanupArg *arg0);
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
     s8 unkC;
     s8 unkD;
     s16 unkE;
-} func_80031D40_32940_arg_element;
+} BoardShopComparisonIconState;
 
 typedef struct {
-    func_80031D40_32940_arg_element unk0[2];
-    u8 unk20;
-} func_80031D40_32940_arg;
+    BoardShopComparisonIconState icons[2];
+    u8 animationCounter;
+} BoardShopComparisonIconsState;
 
-void func_80031DE4_329E4(func_80031D40_32940_arg *arg0);
+void updateBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0);
 
-void func_80031D40_32940(func_80031D40_32940_arg *arg0) {
+void initBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0) {
     s32 i;
-    void *temp_s0;
+    void *spriteAsset;
 
-    temp_s0 = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(&func_80031F68_32B68);
+    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    setCleanupCallback(&cleanupBoardShopComparisonIcons);
 
     for (i = 0; i < 2; i++) {
-        arg0->unk0[i].unk0 = i * 0x50 + -0x30;
-        arg0->unk0[i].unk2 = -0x18;
-        arg0->unk0[i].unk8 = i;
-        arg0->unk0[i].unk4 = temp_s0;
-        arg0->unk0[i].unkA = 0xFF;
-        arg0->unk0[i].unkD = 0;
-        arg0->unk0[i].unkC = 0;
+        arg0->icons[i].x = i * 0x50 + -0x30;
+        arg0->icons[i].y = -0x18;
+        arg0->icons[i].spriteIndex = i;
+        arg0->icons[i].asset = spriteAsset;
+        arg0->icons[i].alpha = 0xFF;
+        arg0->icons[i].unkD = 0;
+        arg0->icons[i].unkC = 0;
     }
 
-    arg0->unk20 = 0;
-    setCallback(&func_80031DE4_329E4);
+    arg0->animationCounter = 0;
+    setCallback(&updateBoardShopComparisonIcons);
 }
 
-void func_80031DE4_329E4(func_80031D40_32940_arg *arg0) {
+void updateBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0) {
     func_800329A8_335A8_allocation *allocation;
-    func_80031D40_32940_arg_element *s0;
+    BoardShopComparisonIconState *icon;
     u8 state;
     s16 s4;
     s16 s3;
@@ -937,59 +937,59 @@ void func_80031DE4_329E4(func_80031D40_32940_arg *arg0) {
     if (allocation->unk79B < 15) {
         s4 = 0xFF;
         s3 = 8;
-        s0 = arg0->unk0;
+        icon = arg0->icons;
 
     loop:
         state = allocation->unk79B;
         if ((state == 2) | (state == 5)) {
-            if (arg0->unk20 < 16) {
-                s0->unkA = s0->unkA - 8;
+            if (arg0->animationCounter < 16) {
+                icon->alpha = icon->alpha - 8;
             } else {
-                s0->unkA = s0->unkA + 8;
+                icon->alpha = icon->alpha + 8;
             }
         } else {
-            arg0->unk20 = 0;
-            s0->unkA = s4;
+            arg0->animationCounter = 0;
+            icon->alpha = s4;
             state = allocation->unk79B;
             if ((state == 4) & (state == 7)) {
                 if (allocation->unk77C & 1) {
-                    s0->unkD = s4;
+                    icon->unkD = s4;
                 } else {
-                    s0->unkD = 0;
+                    icon->unkD = 0;
                 }
             }
         }
 
         state = allocation->unk79B;
         if (state >= 5) {
-            s0->unk2 = s3;
+            icon->y = s3;
         } else {
-            s0->unk2 = -24;
+            icon->y = -24;
         }
 
         if (allocation->unk79B == 3) {
             if (allocation->unk79D < 0) {
-                s0->unk2 = s3;
+                icon->y = s3;
             }
         }
 
-        debugEnqueueCallback(8, 0, func_80012004_12C04, s0);
-        s0++;
-        if ((s32)s0 < (s32)(arg0->unk0 + 2)) {
+        debugEnqueueCallback(8, 0, func_80012004_12C04, icon);
+        icon++;
+        if ((s32)icon < (s32)(arg0->icons + 2)) {
             goto loop;
         }
 
         state = allocation->unk79B;
         if ((state != 4) & (state != 7)) {
             if (state != 3) {
-                arg0->unk20 = (arg0->unk20 + 1) & 0x1F;
+                arg0->animationCounter = (arg0->animationCounter + 1) & 0x1F;
             }
         }
     }
 }
 
-void func_80031F68_32B68(func_80031F68_32B68_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupBoardShopComparisonIcons(BoardShopComparisonIconsCleanupArg *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 typedef struct {
