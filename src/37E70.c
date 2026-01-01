@@ -12,7 +12,7 @@ USE_ASSET(_4196E0);
 
 extern void func_800373E0_37FE0(void);
 void onOptionsMenuFadeInComplete(void);
-void func_800376EC_382EC(void);
+void onOptionsMenuExit(void);
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x1D8];
@@ -63,7 +63,7 @@ void onOptionsMenuFadeInComplete(void) {
 
 INCLUDE_ASM("asm/nonmatchings/37E70", func_800373E0_37FE0);
 
-void func_80037688_38288(void) {
+void onOptionsMenuFadeOutComplete(void) {
     MenuAllocation *allocation = (MenuAllocation *)getCurrentAllocation();
 
     if (func_8006FE10_70A10(NULL) != 0) {
@@ -73,9 +73,9 @@ void func_80037688_38288(void) {
     unlinkNode((Node_70B00 *)allocation);
     allocation->assetData = freeNodeMemory(allocation->assetData);
     allocation->graphicsData = freeNodeMemory(allocation->graphicsData);
-    terminateSchedulerWithCallback(func_800376EC_382EC);
+    terminateSchedulerWithCallback(onOptionsMenuExit);
 }
 
-void func_800376EC_382EC(void) {
+void onOptionsMenuExit(void) {
     func_800697F4_6A3F4(1);
 }
