@@ -31,18 +31,18 @@ typedef struct {
 } func_8003CF0C_arg;
 
 typedef struct {
-    s32 x;        /* 0x00 */
-    s32 y;        /* 0x04 */
-    s32 z;        /* 0x08 */
-    u8 playerIdx; /* 0x0C */
-    u8 padD[0x3]; /* 0x0D */
-    s32 unk10;    /* 0x10 */
-    s32 unk14;    /* 0x14 */
-    s32 unk18;    /* 0x18 */
-    s32 unk1C;    /* 0x1C */
-    s32 unk20;    /* 0x20 */
-    s32 unk24;    /* 0x24 */
-} NodeState;
+    s32 x;           /* 0x00 */
+    s32 y;           /* 0x04 */
+    s32 z;           /* 0x08 */
+    u8 playerIdx;    /* 0x0C */
+    u8 padD[0x3];    /* 0x0D */
+    s32 distance;    /* 0x10 */
+    s32 height;      /* 0x14 */
+    s32 targetY;     /* 0x18 */
+    s32 minDistance; /* 0x1C */
+    s32 unk20;       /* 0x20 */
+    s32 unk24;       /* 0x24 */
+} ChaseCameraState;
 
 typedef struct {
     u8 padding[0x434];
@@ -75,54 +75,54 @@ void func_8003CF40_3DB40(s16 *arg0);
 void func_8003D0F4_3DCF4(NodeExt *arg0);
 void func_8003D210_3DE10(func_8003D210_3DE10_arg *);
 
-void func_8003C170_3CD70(NodeState *node) {
+void initChaseCameraPosition(ChaseCameraState *camera) {
     Allocation *gameState;
     u8 playerIdx;
-    Vec3i inputOffset;
-    Vec3i transformedOffset;
+    Vec3i behindOffset;
+    Vec3i worldOffset;
     Transform3D rotationMatrix;
 
     gameState = (Allocation *)getCurrentAllocation();
 
-    inputOffset.y = 0;
-    inputOffset.x = 0;
-    inputOffset.z = 0xFFC00000;
+    behindOffset.y = 0;
+    behindOffset.x = 0;
+    behindOffset.z = 0xFFC00000;
 
-    playerIdx = node->playerIdx;
+    playerIdx = camera->playerIdx;
 
     createYRotationMatrix(&rotationMatrix, *(u16 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0xA94));
 
-    transformVector2(&inputOffset, &rotationMatrix, &transformedOffset);
+    transformVector2(&behindOffset, &rotationMatrix, &worldOffset);
 
-    playerIdx = node->playerIdx;
+    playerIdx = camera->playerIdx;
 
-    node->x = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x434) + transformedOffset.x;
+    camera->x = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x434) + worldOffset.x;
 
-    playerIdx = node->playerIdx;
+    playerIdx = camera->playerIdx;
 
-    node->y = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x438) + transformedOffset.y;
+    camera->y = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x438) + worldOffset.y;
 
-    playerIdx = node->playerIdx;
+    playerIdx = camera->playerIdx;
 
-    node->z = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x43C) + transformedOffset.z;
+    camera->z = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x43C) + worldOffset.z;
 
-    node->unk10 = 0x600000;
-    node->unk1C = 0x20000;
-    node->unk18 = 0x2C0000;
-    node->unk20 = 0;
-    node->unk24 = 0;
-    node->unk14 = 0x1E0000;
+    camera->distance = 0x600000;
+    camera->minDistance = 0x20000;
+    camera->targetY = 0x2C0000;
+    camera->unk20 = 0;
+    camera->unk24 = 0;
+    camera->height = 0x1E0000;
 
     setCallbackWithContinue(func_8003C2BC_3CEBC);
 }
 
 INCLUDE_ASM("asm/nonmatchings/3CD70", func_8003C2BC_3CEBC);
 
-void func_8003CEC4_3DAC4(u8 arg0) {
-    Node *node = scheduleTask(func_8003C170_3CD70, 1, 0, 0xD2);
+void spawnChaseCameraTask(u8 playerIdx) {
+    Node *node = scheduleTask(initChaseCameraPosition, 1, 0, 0xD2);
     if (node != NULL) {
-        node->unkC = arg0;
-        node->field_D = arg0;
+        node->unkC = playerIdx;
+        node->field_D = playerIdx;
     }
 }
 
