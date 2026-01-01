@@ -46,7 +46,7 @@ void waitForUnlocksAssetsReady(void) {
     }
 
     allocation->waitCounter = 2;
-    if (func_8003BB5C_3C75C() != 0) {
+    if (getPendingDmaCount() != 0) {
         return;
     }
 

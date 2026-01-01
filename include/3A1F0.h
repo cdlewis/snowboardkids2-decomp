@@ -27,7 +27,7 @@ void initPiManager(void);
 
 s32 *queueDirectDmaTransfer(void *romStart, void *romEnd, s32 size, s32 *dramAddr);
 
-s32 func_8003BB5C_3C75C(void);
+s32 getPendingDmaCount(void);
 
 void *pollEepromWriteAllAsync(void);
 

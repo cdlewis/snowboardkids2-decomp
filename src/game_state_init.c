@@ -115,7 +115,7 @@ void gameStateCountdownHandler(void) {
     if (gameState->unk429 != 0) {
         gameState->unk429--;
     } else {
-        if (func_8003BB5C_3C75C() == 0) {
+        if (getPendingDmaCount() == 0) {
             func_8006FDA0_709A0(NULL, 0, 0x10);
             setGameStateHandler(gameStateCleanupHandler);
         }

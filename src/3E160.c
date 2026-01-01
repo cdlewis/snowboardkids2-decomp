@@ -842,7 +842,7 @@ void func_8003EFDC_3FBDC(void) {
 
     state = getCurrentAllocation();
 
-    if (func_8003BB5C_3C75C() == 0) {
+    if (getPendingDmaCount() == 0) {
         if (state->unk7A < 9) {
             gControllerPollingEnabled = 0;
         }

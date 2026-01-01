@@ -114,7 +114,7 @@ void initLevelSelectTransition(void) {
     }
 
     allocation->transitionCounter = 2;
-    if (func_8003BB5C_3C75C() != 0) {
+    if (getPendingDmaCount() != 0) {
         return;
     }
 
@@ -441,7 +441,7 @@ void loadLevelPreview(void) {
     } else if (counter < 6) {
         allocation->previewLoadCounter = counter + 1;
     } else {
-        if (func_8003BB5C_3C75C() == 0) {
+        if (getPendingDmaCount() == 0) {
             func_8006FDA0_709A0(&allocation->unk588, 0, 0);
             func_8006FDA0_709A0(&allocation->previewNode, 0, 0x14);
         }

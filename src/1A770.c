@@ -240,7 +240,7 @@ void awaitBoardShopDmaComplete(void) {
         state->unk77C--;
         return;
     }
-    if (func_8003BB5C_3C75C() == 0) {
+    if (getPendingDmaCount() == 0) {
         func_8006FDA0_709A0(0, 0, 0x10);
         setGameStateHandler(&awaitFadeLoadBoardShop);
     }

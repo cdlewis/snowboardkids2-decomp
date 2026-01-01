@@ -926,7 +926,7 @@ void *queueCompressedDmaTransfer(void *romStart, void *romEnd, s32 size) {
     return allocatedSpaceStart;
 }
 
-s32 func_8003BB5C_3C75C(void) {
+s32 getPendingDmaCount(void) {
     return gPendingDmaCount;
 }
 

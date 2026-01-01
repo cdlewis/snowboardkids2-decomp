@@ -960,6 +960,7 @@ gDmaQueue = 0x800A248C;
 gDmaMsgQueue = 0x800A20F0;
 gDmaRequestCount = 0x800A2490;
 gPendingDmaCount = 0x8008FEA0;
+getPendingDmaCount = 0x8003BB5C; // rom:0x3C75C
 
 buildDisplayListSegment = 0x80063824;
 

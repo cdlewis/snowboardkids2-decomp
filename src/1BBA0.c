@@ -29,7 +29,7 @@ void storyMapInitFadeIn(void) {
         return;
     }
 
-    if (func_8003BB5C_3C75C() != 0) {
+    if (getPendingDmaCount() != 0) {
         return;
     }
 
