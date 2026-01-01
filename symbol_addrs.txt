@@ -2276,3 +2276,6 @@ initBoardShopTitleCorners = 0x800330B4; // rom:0x33CB4
 updateBoardShopTitleCorners = 0x8003316C; // rom:0x33D6C
 cleanupBoardShopTitleCorners = 0x800331CC; // rom:0x33DCC
 boardIconTargetYPositions = 0x8008F17C; // rom:0x8FD7C
+initControllerMotors = 0x80033200; // rom:0x33E00
+gControllerPollingEnabled = 0x800AFCE2;
+gMotorInitCompleteMask = 0x800AFED0;

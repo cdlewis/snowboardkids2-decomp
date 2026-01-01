@@ -12,7 +12,7 @@
 extern OSMesg mainMessageQueueBuffer[32];
 extern OSMesgQueue mainMessageQueue;
 extern u16 D_8009ADE0_9B9E0;
-extern u8 D_800AFCE2_A7052;
+extern u8 gControllerPollingEnabled;
 extern void D_800A32D0_A3ED0;
 
 void mainThreadEntrypoint(void *arg) {
@@ -80,7 +80,7 @@ void mainThreadEntrypoint(void *arg) {
             func_8003AC38_3B838();
             func_8006E054_6EC54(messageData);
         } else {
-            D_800AFCE2_A7052 = 1;
+            gControllerPollingEnabled = 1;
             func_8003AF6C_3BB6C();
             func_8003AC38_3B838();
         }

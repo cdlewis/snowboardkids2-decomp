@@ -49,7 +49,7 @@ extern u8 D_800A24A0_A30A0;
 extern void func_800404A8_410A8(void);
 extern void func_80040588_41188(void);
 extern void func_80040608_41208(void);
-extern s8 D_800AFCE2_A7052;
+extern s8 gControllerPollingEnabled;
 extern s32 D_80090460_91060[];
 extern s32 D_800904A0_910A0[];
 extern s32 D_800904E0_910E0[];
@@ -635,7 +635,7 @@ void initRace(void) {
             break;
     }
 
-    D_800AFCE2_A7052 = 1;
+    gControllerPollingEnabled = 1;
     func_8006FDA0_709A0(0, 0xFF, 0);
     func_8006983C_6A43C((void *)func_8003E4F0_3F0F0);
 }
@@ -844,7 +844,7 @@ void func_8003EFDC_3FBDC(void) {
 
     if (func_8003BB5C_3C75C() == 0) {
         if (state->unk7A < 9) {
-            D_800AFCE2_A7052 = 0;
+            gControllerPollingEnabled = 0;
         }
 
         if ((state->unk5F == 1) && (state->unk7A < 10)) {
@@ -1405,7 +1405,7 @@ void func_80040608_41208(void) {
     osViExtendVStart(0);
     func_80057B1C_5871C(0x14);
     terminateSchedulerWithCallback(&func_800407B4_413B4);
-    D_800AFCE2_A7052 = 1;
+    gControllerPollingEnabled = 1;
     func_8003AF6C_3BB6C();
 }
 

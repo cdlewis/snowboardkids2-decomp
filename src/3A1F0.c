@@ -90,7 +90,7 @@ extern u8 D_800A2168_A2D68[];
 extern u8 D_800AB090_A2400[];
 extern u8 D_800AB094_A2404[];
 extern u8 D_800AB098_A2408[];
-extern u8 D_800AFED0_A7240;
+extern u8 gMotorInitCompleteMask;
 extern u8 *gDmaCompressionBuffer;
 
 void piDmaHandlerThread(void *);
@@ -106,7 +106,7 @@ extern s32 D_800A18A0_A24A0;
 extern s32 D_800A18C0_A24C0;
 extern s32 D_800A8D10_A0080;
 extern u8 gConnectedControllerMask;
-extern s8 D_800AFCE2_A7052;
+extern s8 gControllerPollingEnabled;
 
 void func_800395F0_3A1F0(void) {
     s32 result;
@@ -142,14 +142,14 @@ void func_800395F0_3A1F0(void) {
 
             D_800A1C98_A2898 = 0;
             func_8003AFA0_3BBA0();
-            D_800AFCE2_A7052 = 1;
+            gControllerPollingEnabled = 1;
             osCreateThread(&D_8009F670_A0270, 6, &func_800397CC_3A3CC, 0, &D_800A1820_A2420, 3);
             osStartThread(&D_8009F670_A0270);
             return;
         }
 
         D_800A1C98_A2898 = 0;
-        D_800AFCE2_A7052 = 1;
+        gControllerPollingEnabled = 1;
     }
 }
 
@@ -478,7 +478,7 @@ void func_8003AF38_3BB38(s32 arg0) {
     s32 temp_v1;
     temp_v1 = arg0 & 0xFFFF;
 
-    if (((s32)D_800AFED0_A7240 >> temp_v1) & 1) {
+    if (((s32)gMotorInitCompleteMask >> temp_v1) & 1) {
         D_800AB078_A23E8.unk0[temp_v1] = 1;
     }
 }

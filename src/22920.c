@@ -131,7 +131,7 @@ void awaitVersusSaveDataLoad(void);
 void func_800220AC_22CAC(void);
 
 void loadVersusSaveData(void) {
-    createTaskQueue(func_80033200_33E00, 0x96);
+    createTaskQueue(initControllerMotors, 0x96);
     setGameStateHandler(awaitVersusSaveDataLoad);
 }
 

@@ -98,7 +98,7 @@ void func_80014C3C_1583C(void) {
 }
 
 void loadSaveData(void) {
-    createTaskQueue(func_80033200_33E00, 0x96);
+    createTaskQueue(initControllerMotors, 0x96);
     setGameStateHandler(awaitSaveDataLoad);
 }
 

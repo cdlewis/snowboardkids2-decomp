@@ -45,7 +45,7 @@ typedef struct {
 
 void func_80014480_15080(void);
 void func_8001452C_1512C(void);
-void func_80033200_33E00(void);
+void initControllerMotors(void);
 void initRace(void);
 void initLevelSelectBasicState(void);
 void initPlayerCountSelectState(void);

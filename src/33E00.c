@@ -3,18 +3,18 @@
 
 extern void func_80033254_33E54(void);
 
-extern u8 D_800AFCE2_A7052;
-extern u8 D_800AFED0_A7240;
+extern u8 gControllerPollingEnabled;
+extern u8 gMotorInitCompleteMask;
 
-void func_80033200_33E00(void) {
+void initControllerMotors(void) {
     u8 *ptr;
     s32 i;
 
     ptr = allocateTaskMemory(4);
     i = 3;
     ptr += 3;
-    D_800AFCE2_A7052 = 1;
-    D_800AFED0_A7240 = 0;
+    gControllerPollingEnabled = 1;
+    gMotorInitCompleteMask = 0;
     for (; i >= 0; i--) {
         *ptr-- = 0;
     }
