@@ -2187,3 +2187,7 @@ cleanupStoryMapShopItemIcon = 0x8002FF28; // rom:0x30B28
 initStoryMapShopItemStatLabel = 0x8002FF54; // rom:0x30B54
 updateStoryMapShopItemStatLabel = 0x8003006C; // rom:0x30C6C
 cleanupStoryMapShopItemStatLabel = 0x80030194; // rom:0x30D94
+
+initStoryMapShopExitOverlay = 0x800301C0; // rom:0x30DC0
+updateStoryMapShopExitOverlay = 0x80030238; // rom:0x30E38
+cleanupStoryMapShopExitOverlay = 0x80030280; // rom:0x30E80

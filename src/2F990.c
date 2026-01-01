@@ -172,8 +172,8 @@ void updateStoryMapShopItemIcon(StoryMapShopItemIconState *);
 void cleanupStoryMapShopItemIcon(StoryMapShopItemIconState *);
 void updateStoryMapShopItemStatLabel(ScrollArrowSprite *);
 void cleanupStoryMapShopItemStatLabel(func_8002FF28_30B28_arg *);
-void func_80030238_30E38(void *arg0);
-void func_80030280_30E80(func_8002FF28_30B28_arg *arg0);
+void updateStoryMapShopExitOverlay(void *arg0);
+void cleanupStoryMapShopExitOverlay(func_8002FF28_30B28_arg *arg0);
 void func_80030764_31364(ItemStatsDisplay *arg0);
 
 void func_80030974_31574(void *);
@@ -805,28 +805,28 @@ void cleanupStoryMapShopItemStatLabel(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_800301C0_30DC0(func_800308FC_314FC_arg *arg0) {
-    void *temp_s1 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+void initStoryMapShopExitOverlay(func_800308FC_314FC_arg *arg0) {
+    void *overlayAsset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
 
-    setCleanupCallback(&func_80030280_30E80);
+    setCleanupCallback(&cleanupStoryMapShopExitOverlay);
 
     arg0->unk0 = -0x2C;
     arg0->unk2 = -0x14;
     arg0->unk8 = 0xD;
-    arg0->unk4 = temp_s1;
+    arg0->unk4 = overlayAsset;
 
-    setCallback(&func_80030238_30E38);
+    setCallback(&updateStoryMapShopExitOverlay);
 }
 
-void func_80030238_30E38(void *arg0) {
-    GameState *allocation = getCurrentAllocation();
+void updateStoryMapShopExitOverlay(void *arg0) {
+    GameState *state = getCurrentAllocation();
 
-    if (allocation->unk5C5 == 4) {
+    if (state->unk5C5 == 4) {
         debugEnqueueCallback(8, 7, &func_8000FED0_10AD0, arg0);
     }
 }
 
-void func_80030280_30E80(func_8002FF28_30B28_arg *arg0) {
+void cleanupStoryMapShopExitOverlay(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
