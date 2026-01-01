@@ -100,7 +100,7 @@ typedef struct {
     s16 unk60;
     s16 unk62;
     s8 unk64;
-} func_80031510_32110_arg;
+} BoardShopCharacterPreviewState;
 
 typedef struct {
     DisplayListObject unk0;
@@ -323,20 +323,20 @@ typedef struct {
 
 void animateBoardShopSnowParticles(void);
 void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
-void func_800317D4_323D4(func_80031510_32110_arg *arg0);
+void func_800317D4_323D4(BoardShopCharacterPreviewState *arg0);
 void waitBoardShopCharacterPreview(void);
-void animateBoardShopCharacterSlideIn(func_80031510_32110_arg *arg0);
-void updateBoardShopCharacterPreview(func_80031510_32110_arg *arg0);
-void func_80031510_32110(func_80031510_32110_arg *arg0);
-void func_800315C0_321C0(func_80031510_32110_arg *arg0);
+void animateBoardShopCharacterSlideIn(BoardShopCharacterPreviewState *arg0);
+void updateBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0);
+void loadBoardShopCharacterAssets(BoardShopCharacterPreviewState *arg0);
+void animateBoardShopCharacterSwitch(BoardShopCharacterPreviewState *arg0);
 void func_8003165C_3225C(func_800319C8_325C8_arg *arg0);
-void func_80031758_32358(func_80031510_32110_arg *arg0);
-void func_800316AC_322AC(func_80031510_32110_arg *arg0);
+void func_80031758_32358(BoardShopCharacterPreviewState *arg0);
+void func_800316AC_322AC(BoardShopCharacterPreviewState *arg0);
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 void func_80031B30_32730(func_80031A0C_3260C_arg *arg0);
 void func_80031CC0_328C0(func_8002FA1C_3061C_arg *arg0);
-void func_80031D14_32914(func_80031510_32110_arg *arg0);
+void func_80031D14_32914(BoardShopCharacterPreviewState *arg0);
 void func_80032218_32E18(void *);
 void func_800322BC_32EBC(void *arg0);
 void func_80032304_32F04(func_80032244_32E44_arg *arg0);
@@ -359,9 +359,9 @@ void func_800323FC_32FFC(func_80032330_32F30_arg *arg0);
 void func_80032B0C_3370C(func_80032B0C_3370C_arg *arg0);
 void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0);
 void func_80032504_33104(func_80032504_33104_arg *arg0);
-void cleanupBoardShopPreviewWipe(func_80031510_32110_arg *arg0);
-void animateBoardShopPreviewWipe(func_80031510_32110_arg *arg0);
-void waitBoardShopPreviewWipe(func_80031510_32110_arg *arg0);
+void cleanupBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
+void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
+void waitBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void func_80032708_33308(func_800329A8_335A8_arg *arg0);
 
 extern u16 D_8008F16C_8FD6C[];
@@ -374,7 +374,7 @@ extern s32 identityMatrix;
 extern s16 D_8008F17C_8FD7C[];
 extern u16 D_8008F184_8FD84[];
 
-void initBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
+void initBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     s32 perspectiveParams[8];
     Transform3D rotationYX;
     Transform3D rotationZ;
@@ -429,7 +429,7 @@ void initBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
     setCallback(&waitBoardShopPreviewWipe);
 }
 
-void waitBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
+void waitBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     u8 delayTimer;
     arg0->unk64--;
     delayTimer = arg0->unk64;
@@ -440,7 +440,7 @@ void waitBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
     enqueueDisplayListObject(1, (DisplayListObject *)&arg0->unk4);
 }
 
-void animateBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
+void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     func_80032DE8_339E8_asset *state = getCurrentAllocation();
 
     arg0->unk60++;
@@ -460,7 +460,7 @@ void animateBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
     }
 }
 
-void cleanupBoardShopPreviewWipe(func_80031510_32110_arg *arg0) {
+void cleanupBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     arg0->unk0 = (Node_70B00 *)freeNodeMemory(arg0->unk0);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
@@ -516,7 +516,7 @@ void cleanupBoardShopSnowParticles(SnowParticleState *arg0) {
     arg0->particles = freeNodeMemory(arg0->particles);
 }
 
-void initBoardShopCharacterPreview(func_80031510_32110_arg *arg0) {
+void initBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0) {
     Transform3D rotationYX;
     Transform3D *pRotationZ;
     Transform3D *pRotationYX;
@@ -556,7 +556,7 @@ void waitBoardShopCharacterPreview(void) {
     }
 }
 
-void animateBoardShopCharacterSlideIn(func_80031510_32110_arg *arg0) {
+void animateBoardShopCharacterSlideIn(BoardShopCharacterPreviewState *arg0) {
     func_80032DE8_339E8_asset *allocation;
 
     allocation = getCurrentAllocation();
@@ -573,7 +573,7 @@ void animateBoardShopCharacterSlideIn(func_80031510_32110_arg *arg0) {
     enqueueDisplayListObject(0, (DisplayListObject *)arg0);
 }
 
-void updateBoardShopCharacterPreview(func_80031510_32110_arg *arg0) {
+void updateBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0) {
     func_80032DE8_339E8_asset *allocation;
     u8 state;
 
@@ -585,7 +585,7 @@ void updateBoardShopCharacterPreview(func_80031510_32110_arg *arg0) {
             arg0->unk24 = freeNodeMemory(arg0->unk24);
             arg0->unk28 = freeNodeMemory(arg0->unk28);
             arg0->unk2C = freeNodeMemory(arg0->unk2C);
-            setCallback(&func_80031510_32110);
+            setCallback(&loadBoardShopCharacterAssets);
         } else {
             setCallback(&func_8003165C_3225C);
             enqueueDisplayListObject(0, (DisplayListObject *)arg0);
@@ -598,44 +598,44 @@ void updateBoardShopCharacterPreview(func_80031510_32110_arg *arg0) {
     }
 }
 
-void func_80031510_32110(func_80031510_32110_arg *arg0) {
-    u8 assetIndex;
+void loadBoardShopCharacterAssets(BoardShopCharacterPreviewState *arg0) {
+    u8 paletteIndex;
     u8 temp_v1;
-    func_80032DE8_339E8_asset *state;
+    func_80032DE8_339E8_asset *allocation;
 
-    state = getCurrentAllocation();
+    allocation = getCurrentAllocation();
 
-    if (state->unk79C == 0) {
+    if (allocation->unk79C == 0) {
         arg0->unk50 = 0xFFA00000;
     } else {
         arg0->unk50 = 0x600000;
     }
 
-    assetIndex = EepromSaveData->character_or_settings[state->unk79E];
+    paletteIndex = EepromSaveData->character_or_settings[allocation->unk79E];
 
     memcpy(arg0, &arg0->unk3C, 0x20);
 
-    arg0->unk20 = loadAssetByIndex_95728(state->unk79E);
-    arg0->unk24 = loadAssetByIndex_95500(state->unk79E);
-    arg0->unk28 = loadAssetByIndex_95590(state->unk79E);
-    arg0->unk2C = loadAssetByIndex_95668(assetIndex - 1);
+    arg0->unk20 = loadAssetByIndex_95728(allocation->unk79E);
+    arg0->unk24 = loadAssetByIndex_95500(allocation->unk79E);
+    arg0->unk28 = loadAssetByIndex_95590(allocation->unk79E);
+    arg0->unk2C = loadAssetByIndex_95668(paletteIndex - 1);
 
-    setCallback(&func_800315C0_321C0);
+    setCallback(&animateBoardShopCharacterSwitch);
 }
 
-void func_800315C0_321C0(func_80031510_32110_arg *arg0) {
+void animateBoardShopCharacterSwitch(BoardShopCharacterPreviewState *arg0) {
     func_80032DE8_339E8_asset *allocation;
-    s32 temp;
+    s32 slideSpeed;
 
     allocation = (func_80032DE8_339E8_asset *)getCurrentAllocation();
 
     if (allocation->unk79C == 1) {
-        temp = 0xFFF00000;
+        slideSpeed = 0xFFF00000;
     } else {
-        temp = 0x100000;
+        slideSpeed = 0x100000;
     }
 
-    arg0->unk50 += temp;
+    arg0->unk50 += slideSpeed;
 
     memcpy(arg0, &arg0->unk3C, 0x20);
 
@@ -654,7 +654,7 @@ void func_8003165C_3225C(func_800319C8_325C8_arg *arg0) {
     setCallback(&func_800316AC_322AC);
 }
 
-void func_800316AC_322AC(func_80031510_32110_arg *arg0) {
+void func_800316AC_322AC(BoardShopCharacterPreviewState *arg0) {
     func_80032DE8_339E8_asset *allocation;
     s16 assetIndex;
     int new_var;
@@ -677,7 +677,7 @@ void func_800316AC_322AC(func_80031510_32110_arg *arg0) {
     setCallback(&updateBoardShopCharacterPreview);
 }
 
-void func_80031758_32358(func_80031510_32110_arg *arg0) {
+void func_80031758_32358(BoardShopCharacterPreviewState *arg0) {
     func_800329A8_335A8_allocation *allocation;
 
     allocation = getCurrentAllocation();
@@ -692,13 +692,13 @@ void func_80031758_32358(func_80031510_32110_arg *arg0) {
     }
 }
 
-void func_800317D4_323D4(func_80031510_32110_arg *arg0) {
+void func_800317D4_323D4(BoardShopCharacterPreviewState *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-void func_80031818_32418(func_80031510_32110_arg *arg0) {
+void func_80031818_32418(BoardShopCharacterPreviewState *arg0) {
     func_80032DE8_339E8_asset *state;
     Transform3D matrixB;
     Transform3D matrixA;
@@ -875,7 +875,7 @@ void func_80031CE8_328E8(void *arg0) {
     debugEnqueueCallback(9, 0, &func_80038420_39020, arg0);
 }
 
-void func_80031D14_32914(func_80031510_32110_arg *arg0) {
+void func_80031D14_32914(BoardShopCharacterPreviewState *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
