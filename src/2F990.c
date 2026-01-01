@@ -167,7 +167,7 @@ void initStoryMapShopBackgroundRenderState(StoryMapShopBackgroundState *);
 void enqueueStoryMapShopBackgroundRender(void *);
 void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *);
 void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *);
-void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0);
+void cleanupUnlockScreenScrollArrows(func_8002FF28_30B28_arg *arg0);
 void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *);
 void func_8002FF28_30B28(func_8002FF28_30B28_arg *);
 void func_8003006C_30C6C(ScrollArrowSprite *);
@@ -594,7 +594,7 @@ void initUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *state) {
     s32 i;
     void *asset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
 
-    setCleanupCallback(&func_8002FCA8_308A8);
+    setCleanupCallback(&cleanupUnlockScreenScrollArrows);
 
     for (i = 0; i < 2; i++) {
         state->arrows[i].x = -0x40 + i * 0x60;
@@ -663,7 +663,7 @@ void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arrowState) {
     }
 }
 
-void func_8002FCA8_308A8(func_8002FF28_30B28_arg *arg0) {
+void cleanupUnlockScreenScrollArrows(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
