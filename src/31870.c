@@ -329,9 +329,9 @@ void animateBoardShopCharacterSlideIn(BoardShopCharacterPreviewState *arg0);
 void updateBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0);
 void loadBoardShopCharacterAssets(BoardShopCharacterPreviewState *arg0);
 void animateBoardShopCharacterSwitch(BoardShopCharacterPreviewState *arg0);
-void func_8003165C_3225C(func_800319C8_325C8_arg *arg0);
+void freeBoardShopPurchaseAssets(func_800319C8_325C8_arg *arg0);
 void func_80031758_32358(BoardShopCharacterPreviewState *arg0);
-void func_800316AC_322AC(BoardShopCharacterPreviewState *arg0);
+void loadBoardShopPurchaseAssets(BoardShopCharacterPreviewState *arg0);
 void func_80031C4C_3284C(func_80031A0C_3260C_arg *arg0);
 void func_80031ABC_326BC(func_80031ABC_326BC_arg *arg0);
 void func_80031B30_32730(func_80031A0C_3260C_arg *arg0);
@@ -587,7 +587,7 @@ void updateBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0) {
             arg0->unk2C = freeNodeMemory(arg0->unk2C);
             setCallback(&loadBoardShopCharacterAssets);
         } else {
-            setCallback(&func_8003165C_3225C);
+            setCallback(&freeBoardShopPurchaseAssets);
             enqueueDisplayListObject(0, (DisplayListObject *)arg0);
         }
     } else if (state == 0x32) {
@@ -647,14 +647,14 @@ void animateBoardShopCharacterSwitch(BoardShopCharacterPreviewState *arg0) {
     enqueueDisplayListObject(0, (DisplayListObject *)arg0);
 }
 
-void func_8003165C_3225C(func_800319C8_325C8_arg *arg0) {
+void freeBoardShopPurchaseAssets(func_800319C8_325C8_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
-    setCallback(&func_800316AC_322AC);
+    setCallback(&loadBoardShopPurchaseAssets);
 }
 
-void func_800316AC_322AC(BoardShopCharacterPreviewState *arg0) {
+void loadBoardShopPurchaseAssets(BoardShopCharacterPreviewState *arg0) {
     func_80032DE8_339E8_asset *allocation;
     s16 assetIndex;
     int new_var;

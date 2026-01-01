@@ -2225,3 +2225,7 @@ initBoardShopCharacterPreview = 0x80031288; // rom:0x31E88
 waitBoardShopCharacterPreview = 0x800313A4; // rom:0x31FA4
 animateBoardShopCharacterSlideIn = 0x800313DC; // rom:0x31FDC
 updateBoardShopCharacterPreview = 0x80031458; // rom:0x32058
+loadBoardShopCharacterAssets = 0x80031510; // rom:0x32110
+animateBoardShopCharacterSwitch = 0x800315DC; // rom:0x321DC
+freeBoardShopPurchaseAssets = 0x8003165C; // rom:0x3225C
+loadBoardShopPurchaseAssets = 0x800316AC; // rom:0x322AC
