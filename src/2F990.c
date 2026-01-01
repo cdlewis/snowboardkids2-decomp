@@ -129,7 +129,7 @@ typedef struct {
     void *unk4;
     u8 _pad2[0x30];
     void *unk38;
-} func_80030B70_31770_arg;
+} UnlockScreenItemIconsCleanupArg;
 
 typedef struct {
     u8 _pad[0x4];
@@ -178,8 +178,8 @@ void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
 
 void updateStoryMapShopSoldOutLabel(void *);
 void cleanupStoryMapShopSoldOutLabel(SpriteDisplayState *);
-void func_80030AEC_316EC(void *);
-void func_80030B70_31770(func_80030B70_31770_arg *);
+void drawUnlockScreenItemIcons(void *);
+void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsCleanupArg *);
 void *func_80035F80_36B80(s32);
 void func_8006FF90_70B90(s32, s32, void *, void *);
 void updateDebugCameraYState(cameraState *arg0);
@@ -1087,35 +1087,35 @@ void cleanupStoryMapShopSoldOutLabel(SpriteDisplayState *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80030A00_31600(func_80030A00_31600_arg *arg0) {
-    void *temp_s1;
-    void *temp_s2;
+void initUnlockScreenItemIcons(UnlockScreenItemIconsState *arg0) {
+    void *iconAsset;
+    void *titleAsset;
     s32 i;
 
-    temp_s1 = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
-    temp_s2 = func_80035F80_36B80(1);
-    setCleanupCallback(&func_80030B70_31770);
+    iconAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    titleAsset = func_80035F80_36B80(1);
+    setCleanupCallback(&cleanupUnlockScreenItemIcons);
 
     for (i = 0; i < 4; i++) {
         arg0->items[i].x = (i & 1) * 0x80 - 0x80;
         arg0->items[i].y = (i / 2) * 0x10 - 0x66;
-        arg0->items[i].asset = temp_s1;
+        arg0->items[i].asset = iconAsset;
         arg0->items[i].spriteIndex = i;
     }
 
-    arg0->unk30 = -0x68;
-    arg0->unk32 = -0x60;
-    arg0->unk34 = &D_8008F110_8FD10;
-    arg0->unk38 = temp_s2;
-    arg0->unk3C = 0xFF;
-    arg0->unk3E = 0xFF;
-    arg0->unk40 = 5;
+    arg0->titleX = -0x68;
+    arg0->titleY = -0x60;
+    arg0->titleData = &D_8008F110_8FD10;
+    arg0->titleAsset = titleAsset;
+    arg0->titleAlpha1 = 0xFF;
+    arg0->titleAlpha2 = 0xFF;
+    arg0->titlePalette = 5;
 
-    setCallback(&func_80030AEC_316EC);
+    setCallback(&drawUnlockScreenItemIcons);
 }
 
-void func_80030AEC_316EC(void *untypedArg0) {
-    func_80030A00_31600_arg *arg0 = (func_80030A00_31600_arg *)untypedArg0;
+void drawUnlockScreenItemIcons(void *untypedArg0) {
+    UnlockScreenItemIconsState *arg0 = (UnlockScreenItemIconsState *)untypedArg0;
     GameState *alloc;
     s32 i;
 
@@ -1124,12 +1124,12 @@ void func_80030AEC_316EC(void *untypedArg0) {
     if (alloc->unk5D8 != 0) {
         for (i = 0; i < 4; i++) {
             debugEnqueueCallback(8, 0, &func_8000FED0_10AD0, &arg0->items[i]);
-            debugEnqueueCallback(8, 1, &func_80035408_36008, &arg0->unk30);
+            debugEnqueueCallback(8, 1, &func_80035408_36008, &arg0->titleX);
         }
     }
 }
 
-void func_80030B70_31770(func_80030B70_31770_arg *arg0) {
+void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsCleanupArg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unk38 = freeNodeMemory(arg0->unk38);
 }

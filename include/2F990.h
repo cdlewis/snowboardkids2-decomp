@@ -34,14 +34,14 @@ typedef struct {
 
 typedef struct {
     SpriteDisplayState items[4];
-    s16 unk30;
-    s16 unk32;
-    void *unk34;
-    void *unk38;
-    s16 unk3C;
-    s16 unk3E;
-    s8 unk40;
-} func_80030A00_31600_arg;
+    s16 titleX;
+    s16 titleY;
+    void *titleData;
+    void *titleAsset;
+    s16 titleAlpha1;
+    s16 titleAlpha2;
+    s8 titlePalette;
+} UnlockScreenItemIconsState;
 
 typedef struct {
     s16 x;
@@ -65,4 +65,4 @@ void initStoryMapShopItemPriceDisplay(SpriteDisplayState *arg0);
 void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
 void cleanupStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
 void initStoryMapShopSoldOutLabel(SpriteDisplayState *arg0);
-void func_80030A00_31600(func_80030A00_31600_arg *arg0);
+void initUnlockScreenItemIcons(UnlockScreenItemIconsState *arg0);

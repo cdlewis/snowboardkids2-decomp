@@ -2207,3 +2207,7 @@ cleanupStoryMapShopItemStatsDisplay = 0x800308C4; // rom:0x314C4
 initStoryMapShopSoldOutLabel = 0x800308FC; // rom:0x314FC
 updateStoryMapShopSoldOutLabel = 0x80030974; // rom:0x31574
 cleanupStoryMapShopSoldOutLabel = 0x800309D4; // rom:0x315D4
+
+initUnlockScreenItemIcons = 0x80030A00; // rom:0x31600
+drawUnlockScreenItemIcons = 0x80030AEC; // rom:0x316EC
+cleanupUnlockScreenItemIcons = 0x80030B70; // rom:0x31770
