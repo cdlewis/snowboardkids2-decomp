@@ -44,7 +44,7 @@ typedef struct {
 } func_8002A290_2AE90_arg;
 
 void func_8002A2D0_2AED0(Func297D8Arg *);
-void func_8002A290_2AE90(Func297D8Arg *);
+void setupStoryMapNpcModel(Func297D8Arg *);
 void updateStoryMapNpcJump(Func297D8Arg *);
 void updateStoryMapNpcLookAround(Func297D8Arg *);
 void updateStoryMapNpcNod(Func297D8Arg *);

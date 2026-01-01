@@ -45,7 +45,7 @@ void initStoryMapNpcJump(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = randB() & 0xF;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcJump);
 }
 
@@ -126,7 +126,7 @@ void initStoryMapNpcWave(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = arg0->unk5A + (randB() & 0xF);
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcWave);
 }
 
@@ -205,7 +205,7 @@ void initStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     arg0->unk48 = 0;
     arg0->unk40 = 0;
     arg0->unk44 = 0x280000;
@@ -266,7 +266,7 @@ void initStoryMapNpcLookAround(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcLookAround);
 }
 
@@ -326,7 +326,7 @@ void initStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
     arg0->unk40 = 0;
     arg0->unk44 = 0x260000;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcThinkEffect);
 }
 
@@ -416,7 +416,7 @@ void initStoryMapNpcIdle(Func297D8Arg *arg0) {
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     setAnimationIndex(arg0->model, 4);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcIdle);
 }
 
@@ -426,7 +426,7 @@ void initStoryMapNpcIdleNoAnim(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcIdle);
 }
 
@@ -436,7 +436,7 @@ void initStoryMapNpcIdleNoAnim2(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcIdle);
 }
 
@@ -451,7 +451,7 @@ void initStoryMapNpcIdleWithEffect(Func297D8Arg *arg0) {
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     setAnimationIndex(arg0->model, 1);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcIdle);
 }
 
@@ -468,7 +468,7 @@ void initStoryMapNpcIdleWithEffect2(Func297D8Arg *arg0) {
     if (arg0->unk5C == 1) {
         setAnimationIndex(arg0->model, 0);
     }
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcIdle);
 }
 
@@ -479,7 +479,7 @@ void initStoryMapNpcIdleRandomDelay(Func297D8Arg *arg0) {
     arg0->unk5A = (randB() & 0x1F) + 0x14;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     setAnimationIndex(arg0->model, 4);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcIdle);
 }
 
@@ -489,7 +489,7 @@ void initStoryMapNpcIdleRandomDelayNoAnim(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = (randB() & 0x1F) + 0x14;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcIdle);
 }
 
@@ -499,7 +499,7 @@ void initStoryMapNpcIdleRandomDelayNoAnim2(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = (randB() & 0x1F) + 0x14;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcIdle);
 }
 
@@ -509,7 +509,7 @@ void initStoryMapNpcIdleRandomDelayNoAnim3(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = (randB() & 0x1F) + 0x14;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcIdle);
 }
 
@@ -560,7 +560,7 @@ void initStoryMapNpcNod(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcNod);
 }
 
@@ -631,7 +631,7 @@ void initStoryMapNpcTalk(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcTalk);
 }
 
@@ -699,7 +699,7 @@ void initStoryMapNpcStretch(Func297D8Arg *arg0) {
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcStretch);
 }
 
@@ -799,7 +799,7 @@ void initStoryMapNpcStill(Func297D8Arg *arg0) {
     arg0->unk61 = 0;
     arg0->unk62 = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
-    func_8002A290_2AE90(arg0);
+    setupStoryMapNpcModel(arg0);
     setCallback(updateStoryMapNpcStill);
 }
 
@@ -853,7 +853,7 @@ void updateStoryMapNpcTalking(Func297D8Arg *arg0) {
     }
 }
 
-void func_8002A290_2AE90(Func297D8Arg *arg0) {
+void setupStoryMapNpcModel(Func297D8Arg *arg0) {
     applyTransformToModel(arg0->model, &arg0->matrix);
     setModelAnimation(arg0->model, arg0->unk50);
     updateModelGeometry(arg0->model);

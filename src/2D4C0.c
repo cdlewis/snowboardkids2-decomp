@@ -173,7 +173,7 @@ void func_8002CB88_2D788(Func8002CB88Arg *arg0) {
             arg0->unk0[i].unk40 += 0x60000;
         }
 
-        func_8002A290_2AE90((Func297D8Arg *)&arg0->unk0[i]);
+        setupStoryMapNpcModel((Func297D8Arg *)&arg0->unk0[i]);
         allocation->unk408[i] = arg0->unk0[i].unk4.translation.x;
         allocation->unk410[i] = arg0->unk0[i].unk4.translation.z;
         allocation->unk418[i] = D_8008EF70_8FB70[arg0->unk0[i].unk5C];
@@ -310,7 +310,7 @@ void func_8002CFAC_2DBAC(Func8002CFACArg *arg0) {
         arg0->unk0[i].unk2E = 0x800 + i * 0x1000;
         arg0->unk0[i].unk52 = arg0->unk0[i].unk50;
         createYRotationMatrix(&arg0->unk0[i].matrix, arg0->unk0[i].rotation);
-        func_8002A290_2AE90((Func297D8Arg *)&arg0->unk0[i]);
+        setupStoryMapNpcModel((Func297D8Arg *)&arg0->unk0[i]);
         allocation->unk408[i] = arg0->unk0[i].matrix.translation.x;
         allocation->unk410[i] = arg0->unk0[i].matrix.translation.z;
         allocation->unk418[i] = D_8008EF70_8FB70[arg0->unk0[i].unk5C];
