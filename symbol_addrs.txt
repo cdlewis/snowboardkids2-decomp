@@ -2301,3 +2301,6 @@ cleanupSaveSlotGoldDisplay = 0x8003498C; // rom:0x3558C
 initSaveSlotConfirmationIndicator = 0x800349B8; // rom:0x355B8
 renderSaveSlotConfirmationIndicator = 0x80034A30; // rom:0x35630
 cleanupSaveSlotConfirmationIndicator = 0x80034A94; // rom:0x35694
+initSaveSlotSelectionParticles = 0x80034AC0; // rom:0x356C0
+updateSaveSlotSelectionParticles = 0x80034BD8; // rom:0x357D8
+cleanupSaveSlotSelectionParticles = 0x80034CD0; // rom:0x358D0

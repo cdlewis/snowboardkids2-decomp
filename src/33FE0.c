@@ -103,20 +103,20 @@ typedef struct {
 } AllocationStruct;
 
 typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ u8 unkA;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ void *spriteAsset;
+    /* 0x08 */ s16 frameIndex;
+    /* 0x0A */ u8 frameDelay;
     /* 0x0B */ u8 padB;
-} Func356C0Entry; // size 0x0C
+} SaveSlotSelectionParticle; // size 0x0C
 
 typedef struct {
-    /* 0x00 */ Func356C0Entry entries[4]; // 0x00 - 0x2F
+    /* 0x00 */ SaveSlotSelectionParticle entries[4]; // 0x00 - 0x2F
     /* 0x30 */ u8 pad30[0x18];
-    /* 0x48 */ u8 unk48;
-    /* 0x49 */ u8 unk49;
-} Func356C0Arg;
+    /* 0x48 */ u8 isRightSide;
+    /* 0x49 */ u8 animToggle;
+} SaveSlotSelectionParticlesState;
 
 typedef struct {
     /* 0x00 */ s16 x;
@@ -206,20 +206,20 @@ typedef struct {
 } SaveSlotNameTextState;
 
 typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ u16 unk8;
-    /* 0x0A */ u8 unkA;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ void *spriteAsset;
+    /* 0x08 */ u16 frameIndex;
+    /* 0x0A */ u8 frameDelay;
     /* 0x0B */ u8 padB;
-} Func34BD8Entry;
+} SelectionParticleUpdateEntry;
 
 typedef struct {
-    /* 0x00 */ Func34BD8Entry entries[4];
+    /* 0x00 */ SelectionParticleUpdateEntry entries[4];
     /* 0x30 */ u8 pad30[0x18];
-    /* 0x48 */ u8 unk48;
-    /* 0x49 */ u8 unk49;
-} Func34BD8Arg;
+    /* 0x48 */ u8 isRightSide;
+    /* 0x49 */ u8 animToggle;
+} SelectionParticleUpdateState;
 
 extern u16 D_8008F2B8_8FEB8;
 extern u16 D_8008F2AC_8FEAC[];
@@ -236,8 +236,8 @@ void updateSaveSlotNameText(Func34ADCArg *arg0);
 void cleanupSaveSlotNameText(Func34574Arg *arg0);
 void cleanupSaveSlotGoldDisplay(Func34574Arg *arg0);
 void updateSaveSlotGoldDisplay(void);
-void func_80034BD8_357D8(Func34BD8Arg *arg0);
-void func_80034CD0_358D0(Func34574Arg *arg0);
+void updateSaveSlotSelectionParticles(SelectionParticleUpdateState *arg0);
+void cleanupSaveSlotSelectionParticles(Func34574Arg *arg0);
 void updateSaveSlotItemIcons(void);
 void func_80035074_35C74(Func358FCStruct *arg0);
 void updateSaveSlotStatSprites(void);
@@ -591,74 +591,74 @@ void cleanupSaveSlotConfirmationIndicator(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80034AC0_356C0(Func356C0Arg *arg0) {
+void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
     AllocationStruct *allocation;
-    void *asset;
+    void *snowflakeAsset;
     s32 i;
-    s16 temp_a0;
+    s16 baseX;
     s16 xOffset;
     s16 yOffset;
 
     allocation = getCurrentAllocation();
-    asset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
-    setCleanupCallback(func_80034CD0_358D0);
+    snowflakeAsset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    setCleanupCallback(cleanupSaveSlotSelectionParticles);
 
-    arg0->unk49 = 0;
+    state->animToggle = 0;
 
-    temp_a0 = allocation->unkABC - 6;
-    xOffset = temp_a0;
+    baseX = allocation->unkABC - 6;
+    xOffset = baseX;
     yOffset = (allocation->unkAC8 * 0x38) - 0x3C;
 
-    if (arg0->unk48 == 0) {
-        xOffset = -(s16)((temp_a0 << 16) >> 16);
+    if (state->isRightSide == 0) {
+        xOffset = -(s16)((baseX << 16) >> 16);
     }
 
     for (i = 0; i < 4; i++) {
-        arg0->entries[i].unk0 = xOffset + D_8008F2AC_8FEAC[i];
-        arg0->entries[i].unk2 = yOffset + (&D_8008F2B8_8FEB8)[i];
-        arg0->entries[i].unk8 = (i % 8) + 0x10;
-        arg0->entries[i].unkA = 0x12;
-        arg0->entries[i].unk4 = asset;
+        state->entries[i].x = xOffset + D_8008F2AC_8FEAC[i];
+        state->entries[i].y = yOffset + (&D_8008F2B8_8FEB8)[i];
+        state->entries[i].frameIndex = (i % 8) + 0x10;
+        state->entries[i].frameDelay = 0x12;
+        state->entries[i].spriteAsset = snowflakeAsset;
     }
 
-    setCallback(func_80034BD8_357D8);
+    setCallback(updateSaveSlotSelectionParticles);
 }
 
-void func_80034BD8_357D8(Func34BD8Arg *arg0) {
+void updateSaveSlotSelectionParticles(SelectionParticleUpdateState *state) {
     Func34BD8AllocationStruct *allocation;
     unsigned int new_var;
-    s16 baseVal;
+    s16 baseX;
     s32 i;
 
     allocation = (Func34BD8AllocationStruct *)getCurrentAllocation();
 
     if (allocation->unkABC != 0) {
-        baseVal = allocation->unkABC;
-        if (arg0->unk48 == 0) {
-            new_var = baseVal;
-            baseVal = -new_var;
+        baseX = allocation->unkABC;
+        if (state->isRightSide == 0) {
+            new_var = baseX;
+            baseX = -new_var;
         }
 
-        arg0->unk49 = (u8)((arg0->unk49 + 1) & 1);
+        state->animToggle = (u8)((state->animToggle + 1) & 1);
 
         for (i = 0; i < 4; i++) {
-            arg0->entries[i].unk0 = baseVal + D_8008F2AC_8FEAC[i];
+            state->entries[i].x = baseX + D_8008F2AC_8FEAC[i];
 
-            if (arg0->unk49 == 0) {
-                arg0->entries[i].unk8++;
-                if (arg0->entries[i].unk8 > 0x17) {
-                    arg0->entries[i].unk8 = 0x10;
+            if (state->animToggle == 0) {
+                state->entries[i].frameIndex++;
+                if (state->entries[i].frameIndex > 0x17) {
+                    state->entries[i].frameIndex = 0x10;
                 }
             }
 
-            debugEnqueueCallback(8, 0, func_80010240_10E40, (void *)&arg0->entries[i]);
+            debugEnqueueCallback(8, 0, func_80010240_10E40, (void *)&state->entries[i]);
         }
     } else {
         func_80069CF8_6A8F8();
     }
 }
 
-void func_80034CD0_358D0(Func34574Arg *arg0) {
+void cleanupSaveSlotSelectionParticles(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
