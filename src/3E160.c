@@ -58,7 +58,7 @@ void func_80040420_41020(void);
 void func_800407B4_413B4(void);
 void parseRaceAssetData(void);
 void scheduleRaceTasks(void);
-void func_8003EFDC_3FBDC(void);
+void awaitRaceAssetsLoaded(void);
 void func_8003F0AC_3FCAC(void);
 void func_8003FB90_40790(void);
 void func_800401A0_40DA0(void);
@@ -851,10 +851,10 @@ void scheduleRaceTasks(void) {
         func_80040F6C_41B6C(0, 0x28, 0, 0, 0xC, 6);
     }
 
-    setGameStateHandler(&func_8003EFDC_3FBDC);
+    setGameStateHandler(&awaitRaceAssetsLoaded);
 }
 
-void func_8003EFDC_3FBDC(void) {
+void awaitRaceAssetsLoaded(void) {
     GameState *state;
 
     state = getCurrentAllocation();
