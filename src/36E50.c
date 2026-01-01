@@ -155,7 +155,7 @@ extern u16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
 void func_80036920_37520(func_80036920_37520_arg *arg0);
 
-void func_80036250_36E50(s8 *arg0) {
+void initStoryMapLocationIndicator(s8 *arg0) {
     *arg0 = 0;
     setCallback(&func_80036274_36E74);
 }
