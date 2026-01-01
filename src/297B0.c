@@ -10,7 +10,7 @@
 
 typedef struct StoryMapNpcStillArg StoryMapNpcStillArg;
 void updateStoryMapNpcStill(StoryMapNpcStillArg *);
-void func_8002A200_2AE00(Func297D8Arg *);
+void updateStoryMapNpcTalking(Func297D8Arg *);
 
 struct StoryMapNpcStillArg {
     /* 0x00 */ void *model;
@@ -116,7 +116,7 @@ void updateStoryMapNpcJump(Func297D8Arg *arg0) {
         arg0->callback = updateStoryMapNpcJump;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
-        setCallback(func_8002A200_2AE00);
+        setCallback(updateStoryMapNpcTalking);
     }
 }
 
@@ -195,7 +195,7 @@ void updateStoryMapNpcWave(Func297D8Arg *arg0) {
         arg0->callback = updateStoryMapNpcWave;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
-        setCallback(func_8002A200_2AE00);
+        setCallback(updateStoryMapNpcTalking);
     }
 }
 
@@ -256,7 +256,7 @@ void updateStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
         arg0->callback = updateStoryMapNpcFloatEffect;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
-        setCallback(func_8002A200_2AE00);
+        setCallback(updateStoryMapNpcTalking);
     }
 }
 
@@ -313,7 +313,7 @@ void updateStoryMapNpcLookAround(Func297D8Arg *arg0) {
         arg0->callback = updateStoryMapNpcLookAround;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
-        setCallback(func_8002A200_2AE00);
+        setCallback(updateStoryMapNpcTalking);
     }
 }
 
@@ -405,7 +405,7 @@ void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
         arg0->callback = updateStoryMapNpcThinkEffect;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
-        setCallback(func_8002A200_2AE00);
+        setCallback(updateStoryMapNpcTalking);
     }
 }
 
@@ -546,7 +546,7 @@ void updateStoryMapNpcIdle(Func297D8Arg *arg0) {
         arg0->callback = updateStoryMapNpcIdle;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
-        setCallback(func_8002A200_2AE00);
+        setCallback(updateStoryMapNpcTalking);
     }
 
     if (arg0->unk5D == 9) {
@@ -621,7 +621,7 @@ void updateStoryMapNpcNod(Func297D8Arg *arg0) {
         arg0->callback = updateStoryMapNpcNod;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
-        setCallback(func_8002A200_2AE00);
+        setCallback(updateStoryMapNpcTalking);
     }
 }
 
@@ -762,7 +762,7 @@ void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
         arg0->callback = updateStoryMapNpcStretch;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
-        setCallback(func_8002A200_2AE00);
+        setCallback(updateStoryMapNpcTalking);
     }
 }
 
@@ -825,14 +825,14 @@ void updateStoryMapNpcStill(StoryMapNpcStillArg *arg0) {
         arg0->callback = updateStoryMapNpcStill;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedState;
-        setCallback(func_8002A200_2AE00);
+        setCallback(updateStoryMapNpcTalking);
     }
 }
 
 void nullStoryMapNpcStillCallback(void) {
 }
 
-void func_8002A200_2AE00(Func297D8Arg *arg0) {
+void updateStoryMapNpcTalking(Func297D8Arg *arg0) {
     AllocationData *alloc = getCurrentAllocation();
 
     switch (arg0->unk5E) {
