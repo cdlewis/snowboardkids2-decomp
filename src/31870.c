@@ -257,21 +257,21 @@ typedef struct {
 } func_800319C8_325C8_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
+    s16 x;
+    s16 y;
     u8 padding[0x14];
-} func_80032CB4_338B4_arg_item;
+} BoardShopSlideOutIconState;
 
 typedef struct {
-    func_80032CB4_338B4_arg_item substruct[4];
+    BoardShopSlideOutIconState icons[4];
     u8 padding2[0x24];
-    u8 unk84;
-} func_80032CB4_338B4_arg;
+    u8 slidingIconCount;
+} BoardShopBoardIconsSlideOutState;
 
 typedef struct {
     u8 padding[0x77C];
-    s16 unk77C;
-} func_80032CB4_338B4_asset;
+    s16 animationComplete;
+} BoardShopSlideOutAllocation;
 
 typedef struct {
     u8 padding[0x2C];
@@ -332,7 +332,7 @@ void animateBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *
 void animateBoardShopBoardIconsSlideIn(BoardShopBoardIconsState *arg0);
 void updateBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0);
 void initBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg0);
-void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0);
+void animateBoardShopBoardIconsSlideOut(BoardShopBoardIconsSlideOutState *arg0);
 void cleanupBoardShopGoldDisplay(BoardShopGoldDisplayCleanupArg *arg0);
 void cleanupBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
@@ -1306,7 +1306,7 @@ void updateBoardShopBoardIconSelection(BoardShopIconSelectionState *arg0) {
         }
 
         arg0->animationCounters[0] = 1;
-        setCallback(func_80032CB4_338B4);
+        setCallback(animateBoardShopBoardIconsSlideOut);
     } else if (state->shopState == 0x13) {
         new_var = 0x400;
         for (i = 3; i >= 0; i--) {
@@ -1431,30 +1431,30 @@ void animateBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *
     }
 }
 
-void func_80032CB4_338B4(func_80032CB4_338B4_arg *arg0) {
-    func_80032CB4_338B4_asset *s4;
-    func_80032CB4_338B4_arg_item *ptr;
-    u8 a1;
+void animateBoardShopBoardIconsSlideOut(BoardShopBoardIconsSlideOutState *arg0) {
+    BoardShopSlideOutAllocation *allocation;
+    BoardShopSlideOutIconState *icons;
+    u8 slideCount;
     s32 i;
 
-    s4 = (func_80032CB4_338B4_asset *)getCurrentAllocation();
+    allocation = (BoardShopSlideOutAllocation *)getCurrentAllocation();
 
-    ptr = &arg0->substruct[0];
+    icons = &arg0->icons[0];
     for (i = 0; i < 4; i++) {
-        if (i >= (4 - arg0->unk84)) {
-            ptr[i].unk2 -= 0x14;
+        if (i >= (4 - arg0->slidingIconCount)) {
+            icons[i].y -= 0x14;
             if (i != 0) {
-                a1 = arg0->unk84 & 0xFF;
-                if (arg0->substruct[4 - a1].unk2 == arg0->substruct[3 - a1].unk2) {
-                    arg0->unk84++;
+                slideCount = arg0->slidingIconCount & 0xFF;
+                if (arg0->icons[4 - slideCount].y == arg0->icons[3 - slideCount].y) {
+                    arg0->slidingIconCount++;
                 }
             }
         }
-        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &ptr[i]);
+        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &icons[i]);
     }
 
-    if (arg0->substruct[0].unk2 < (-0x88)) {
-        s4->unk77C = 1;
+    if (arg0->icons[0].y < (-0x88)) {
+        allocation->animationComplete = 1;
         func_80069CF8_6A8F8();
     }
 }

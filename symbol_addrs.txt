@@ -2263,4 +2263,5 @@ updateBoardShopBoardIconSelection = 0x80032708; // rom:0x33308
 blinkBoardShopBoardIconConfirmation = 0x800329A8; // rom:0x335A8
 initBoardShopCharacterPortraitsSlideIn = 0x80032B0C; // rom:0x3370C
 animateBoardShopCharacterPortraitsSlideIn = 0x80032BCC; // rom:0x337CC
+animateBoardShopBoardIconsSlideOut = 0x80032CB4; // rom:0x338B4
 boardIconTargetYPositions = 0x8008F17C; // rom:0x8FD7C
