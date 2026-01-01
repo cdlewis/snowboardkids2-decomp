@@ -50,14 +50,14 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ void *unk0;
-    /* 0x04 */ void *unk4;
+    /* 0x04 */ void *spriteSheet;
     /* 0x08 */ s32 unk8;
     /* 0x0C */ s32 unkC;
-} Func33FE0Entry; // size 0x10
+} SaveSlotStatSprite; // size 0x10
 
 typedef struct {
-    /* 0x00 */ Func33FE0Entry entries[13];
-} Func33FE0Arg;
+    /* 0x00 */ SaveSlotStatSprite entries[13];
+} SaveSlotStatSpritesState;
 
 typedef struct {
     /* 0x00 */ u8 pad0[0x8];
@@ -244,8 +244,8 @@ void func_80034BD8_357D8(Func34BD8Arg *arg0);
 void func_80034CD0_358D0(Func34574Arg *arg0);
 void func_80033AE4_346E4(void);
 void func_80035074_35C74(Func358FCStruct *arg0);
-void func_80033458_34058(void);
-void func_8003365C_3425C(Func34574Arg *arg0);
+void updateSaveSlotStatSprites(void);
+void cleanupSaveSlotStatSprites(Func34574Arg *arg0);
 void func_80034A30_35630(void *arg0);
 void func_80034A94_35694(Func34574Arg *arg0);
 void func_8003513C_35D3C(Func350ACArg *arg0);
@@ -254,24 +254,24 @@ void func_80034640_35240(Func34574Arg *arg0);
 void func_800344A8_350A8(Func343FCArg *arg0);
 void func_80033E08_34A08(Func34574Arg *arg0);
 
-void func_800333E0_33FE0(Func33FE0Arg *arg0) {
-    void *allocation;
+void initSaveSlotStatSprites(SaveSlotStatSpritesState *state) {
+    void *spriteSheet;
     s32 i;
 
     getCurrentAllocation();
-    allocation = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
-    setCleanupCallback(func_8003365C_3425C);
+    spriteSheet = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    setCleanupCallback(cleanupSaveSlotStatSprites);
 
     for (i = 12; i >= 0; i--) {
-        arg0->entries[i].unk4 = allocation;
+        state->entries[i].spriteSheet = spriteSheet;
     }
 
-    setCallback(func_80033458_34058);
+    setCallback(updateSaveSlotStatSprites);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033458_34058);
+INCLUDE_ASM("asm/nonmatchings/33FE0", updateSaveSlotStatSprites);
 
-void func_8003365C_3425C(Func34574Arg *arg0) {
+void cleanupSaveSlotStatSprites(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
