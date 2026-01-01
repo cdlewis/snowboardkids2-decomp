@@ -384,9 +384,9 @@ void updateStoryMapRareEventSnowman(Func2E024Arg *arg0) {
     }
 }
 
-void func_8002E314_2EF14(Func2E024Arg *);
+void updateStoryMapRareEventCheering(Func2E024Arg *);
 
-void func_8002E170_2ED70(Func2E024Arg *arg0) {
+void initStoryMapRareEventCheering(Func2E024Arg *arg0) {
     GameState *allocation;
     s32 i;
 
@@ -434,10 +434,10 @@ void func_8002E170_2ED70(Func2E024Arg *arg0) {
 
     arg0->unkCC[0] = (randB() & 0x1F) + 0x28;
     arg0->unkCC[1] = 0;
-    setCallback(func_8002E314_2EF14);
+    setCallback(updateStoryMapRareEventCheering);
 }
 
-void func_8002E314_2EF14(Func2E024Arg *arg0) {
+void updateStoryMapRareEventCheering(Func2E024Arg *arg0) {
     GameState *allocation;
     s32 i;
     Func297D8Arg *ptr;
@@ -579,7 +579,7 @@ void func_8002E314_2EF14(Func2E024Arg *arg0) {
             allocation->unk42E = 1;
             arg0->unkCC[0] = (randB() & 0x1F) + 0x28;
             arg0->unkCC[1] = 0;
-            arg0->callback = func_8002E314_2EF14;
+            arg0->callback = updateStoryMapRareEventCheering;
             setCallback(updateStoryMapNpcDialogue);
         }
     } while (0);
