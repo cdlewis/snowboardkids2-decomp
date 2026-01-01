@@ -152,23 +152,23 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x8];
-    void *unk8;
-} func_80033088_33C88_arg;
+    void *textAsset;
+} BoardShopTitleTextCleanupArg;
 
 typedef struct {
-    s16 unk0;
-    s32 unk4;
-} func_80033014_33C14_arg;
+    s16 textWidth;
+    s32 textData;
+} BoardShopTitleTextUpdateArg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    void *unk8;
-    s16 unkC;
-    s16 unkE;
-    s8 unk10;
-} func_80032F90_33B90_arg;
+    s16 textWidth;
+    s16 y;
+    void *textData;
+    void *textAsset;
+    s16 primaryColor;
+    s16 secondaryColor;
+    s8 textStyle;
+} BoardShopTitleTextState;
 
 typedef struct {
     s16 x;
@@ -317,8 +317,8 @@ void updateBoardShopExitOverlay(void *arg0);
 void cleanupBoardShopExitOverlay(SpriteDisplayState *arg0);
 void func_8003316C_33D6C(func_800330B4_33CB4_arg *arg0);
 void func_800331CC_33DCC(func_800330B4_33CB4_arg *arg0);
-void func_80033014_33C14(func_80033014_33C14_arg *arg0);
-void func_80033088_33C88(func_80033088_33C88_arg *arg0);
+void updateBoardShopTitleText(BoardShopTitleTextUpdateArg *arg0);
+void cleanupBoardShopTitleText(BoardShopTitleTextCleanupArg *arg0);
 void animateBoardShopSnowflakeSlideIn(BoardShopSnowflakeAnimState *arg0);
 void queueBoardShopSnowflakeRender(void *);
 void cleanupBoardShopSnowflakeSprite(SpriteDisplayState *);
@@ -1517,30 +1517,30 @@ void cleanupBoardShopSnowflakeSprite(SpriteDisplayState *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_80032F90_33B90(func_80032F90_33B90_arg *arg0) {
-    void *temp_s1 = func_80035F80_36B80(1);
-    setCleanupCallback(&func_80033088_33C88);
-    arg0->unk2 = -0x60;
-    arg0->unk4 = &D_8008F18C_8FD8C;
-    arg0->unkC = 0xFF;
-    arg0->unkE = 0xFF;
-    arg0->unk8 = temp_s1;
-    arg0->unk0 = D_8008F20C_8FE0C;
-    arg0->unk10 = 5;
-    setCallback(&func_80033014_33C14);
+void initBoardShopTitleText(BoardShopTitleTextState *arg0) {
+    void *textAsset = func_80035F80_36B80(1);
+    setCleanupCallback(&cleanupBoardShopTitleText);
+    arg0->y = -0x60;
+    arg0->textData = &D_8008F18C_8FD8C;
+    arg0->primaryColor = 0xFF;
+    arg0->secondaryColor = 0xFF;
+    arg0->textAsset = textAsset;
+    arg0->textWidth = D_8008F20C_8FE0C;
+    arg0->textStyle = 5;
+    setCallback(&updateBoardShopTitleText);
 }
 
-void func_80033014_33C14(func_80033014_33C14_arg *arg0) {
-    func_8003316C_33D6C_alloc *asset = (func_8003316C_33D6C_alloc *)getCurrentAllocation();
-    if (asset->unk7A4 != 0) {
-        arg0->unk0 = D_8008F20A_8FE0A[asset->unk7A4];
-        arg0->unk4 = D_8008F200_8FE00[asset->unk7A4];
+void updateBoardShopTitleText(BoardShopTitleTextUpdateArg *arg0) {
+    func_8003316C_33D6C_alloc *allocation = (func_8003316C_33D6C_alloc *)getCurrentAllocation();
+    if (allocation->unk7A4 != 0) {
+        arg0->textWidth = D_8008F20A_8FE0A[allocation->unk7A4];
+        arg0->textData = D_8008F200_8FE00[allocation->unk7A4];
         debugEnqueueCallback(9, 7, &func_80035408_36008, arg0);
     }
 }
 
-void func_80033088_33C88(func_80033088_33C88_arg *arg0) {
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
+void cleanupBoardShopTitleText(BoardShopTitleTextCleanupArg *arg0) {
+    arg0->textAsset = freeNodeMemory(arg0->textAsset);
 }
 
 void func_800330B4_33CB4(func_800330B4_33CB4_arg *arg0) {

@@ -2269,4 +2269,7 @@ initBoardShopSnowflakeSlideIn = 0x80032DE8; // rom:0x339E8
 queueBoardShopSnowflakeRender = 0x80032EA4; // rom:0x33AA4
 animateBoardShopSnowflakeSlideIn = 0x80032EDC; // rom:0x33ADC
 cleanupBoardShopSnowflakeSprite = 0x80032F64; // rom:0x33B64
+initBoardShopTitleText = 0x80032F90; // rom:0x33B90
+updateBoardShopTitleText = 0x80033014; // rom:0x33C14
+cleanupBoardShopTitleText = 0x80033088; // rom:0x33C88
 boardIconTargetYPositions = 0x8008F17C; // rom:0x8FD7C
