@@ -87,7 +87,7 @@ typedef struct {
     u8 unk7A;
 } GameState_temp;
 
-extern void func_8003EDA0_3F9A0(void);
+extern void loadRaceGameData(void);
 extern ColorData D_80090774_91374;
 extern ColorData D_8009077C_9137C;
 
@@ -782,15 +782,15 @@ void initRaceViewports(void) {
             break;
     }
 
-    func_8006983C_6A43C(&func_8003EDA0_3F9A0);
+    func_8006983C_6A43C(&loadRaceGameData);
 }
 
-void func_8003EDA0_3F9A0(void) {
-    GameState *temp_v0;
+void loadRaceGameData(void) {
+    GameState *gameState;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v0->gameData.dataStart = func_80055D34_56934(temp_v0->memoryPoolId);
-    temp_v0->unk28 = loadCompressedData(&_3FF010_ROM_START, &_3FF010_ROM_END, 0x16E0);
+    gameState = (GameState *)getCurrentAllocation();
+    gameState->gameData.dataStart = func_80055D34_56934(gameState->memoryPoolId);
+    gameState->unk28 = loadCompressedData(&_3FF010_ROM_START, &_3FF010_ROM_END, 0x16E0);
     func_8006983C_6A43C(&func_8003EDF8_3F9F8);
 }
 
