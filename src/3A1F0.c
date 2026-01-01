@@ -529,17 +529,17 @@ void motorInitAsync(s32 channel) {
     D_8008FE8F_90A8F = 1;
 }
 
-void *func_8003B098_3BC98(void) {
-    void *sp10;
-    void *var_v0;
+void *pollMotorInitAsync(void) {
+    void *result;
+    void *status;
 
-    sp10 = NULL;
-    var_v0 = (void *)-1;
-    if (osRecvMesg(&D_800A18A8_A24A8, &sp10, OS_MESG_NOBLOCK) == 0) {
+    result = NULL;
+    status = (void *)-1;
+    if (osRecvMesg(&D_800A18A8_A24A8, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
-        var_v0 = sp10;
+        status = result;
     }
-    return var_v0;
+    return status;
 }
 
 void func_8003B0E8_3BCE8(void) {
