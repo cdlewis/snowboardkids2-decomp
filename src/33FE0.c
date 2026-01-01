@@ -29,11 +29,11 @@ typedef struct {
 } Func34574Arg;
 
 typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ s16 unk8;
-} Func349B8Arg;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ void *spriteAsset;
+    /* 0x08 */ s16 frameIndex;
+} SaveSlotConfirmationIndicatorState;
 
 typedef struct {
     /* 0x00 */ s16 unk0;
@@ -242,8 +242,8 @@ void updateSaveSlotItemIcons(void);
 void func_80035074_35C74(Func358FCStruct *arg0);
 void updateSaveSlotStatSprites(void);
 void cleanupSaveSlotStatSprites(Func34574Arg *arg0);
-void func_80034A30_35630(void *arg0);
-void func_80034A94_35694(Func34574Arg *arg0);
+void renderSaveSlotConfirmationIndicator(void *arg0);
+void cleanupSaveSlotConfirmationIndicator(Func34574Arg *arg0);
 void func_8003513C_35D3C(Func350ACArg *arg0);
 void func_80035234_35E34(Func34574Arg *arg0);
 void cleanupSaveSlotPromptText(Func34574Arg *arg0);
@@ -562,20 +562,20 @@ void cleanupSaveSlotGoldDisplay(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_800349B8_355B8(Func349B8Arg *arg0) {
-    void *temp_s1 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+void initSaveSlotConfirmationIndicator(SaveSlotConfirmationIndicatorState *state) {
+    void *asset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
 
-    setCleanupCallback(&func_80034A94_35694);
+    setCleanupCallback(&cleanupSaveSlotConfirmationIndicator);
 
-    arg0->unk0 = -0x2C;
-    arg0->unk2 = -0x14;
-    arg0->unk8 = 0xD;
-    arg0->unk4 = temp_s1;
+    state->x = -0x2C;
+    state->y = -0x14;
+    state->frameIndex = 0xD;
+    state->spriteAsset = asset;
 
-    setCallback(&func_80034A30_35630);
+    setCallback(&renderSaveSlotConfirmationIndicator);
 }
 
-void func_80034A30_35630(void *arg0) {
+void renderSaveSlotConfirmationIndicator(void *arg0) {
     AllocationStruct *allocation;
     u16 val;
 
@@ -587,7 +587,7 @@ void func_80034A30_35630(void *arg0) {
     }
 }
 
-void func_80034A94_35694(Func34574Arg *arg0) {
+void cleanupSaveSlotConfirmationIndicator(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
