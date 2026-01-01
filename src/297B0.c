@@ -39,17 +39,17 @@ typedef struct {
     /* 0x42E */ u8 unk42E;
 } AllocationData;
 
-void func_80028BB0_297B0(Func297D8Arg *arg0) {
+void initStoryMapNpcJump(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
     arg0->unk61 = 0;
     arg0->unk62 = 0;
     arg0->unk5A = randB() & 0xF;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80028C08_29808);
+    setCallback(updateStoryMapNpcJump);
 }
 
-void func_80028C08_29808(Func297D8Arg *arg0) {
+void updateStoryMapNpcJump(Func297D8Arg *arg0) {
     AllocationData *allocation;
     s32 shouldSetCallback;
     u16 savedUnk50;
@@ -113,7 +113,7 @@ void func_80028C08_29808(Func297D8Arg *arg0) {
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
         arg0->unk50 = 0;
-        arg0->callback = func_80028C08_29808;
+        arg0->callback = updateStoryMapNpcJump;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
         setCallback(func_8002A200_2AE00);
