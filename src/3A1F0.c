@@ -437,10 +437,10 @@ void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHead
     osSendMesg(&D_800A1888_A2488, (void *)err, OS_MESG_BLOCK);
 }
 
-void func_8003AB74_3B774(void) {
+void controllerPackReadStatusAsyncStub(void) {
 }
 
-int func_8003AB7C_3B77C(void) {
+int controllerPackReadStatusPollStub(void) {
     return 0;
 }
 
