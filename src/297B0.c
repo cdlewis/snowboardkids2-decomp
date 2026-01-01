@@ -483,7 +483,7 @@ void initStoryMapNpcIdleRandomDelay(Func297D8Arg *arg0) {
     setCallback(updateStoryMapNpcIdle);
 }
 
-void func_80029840_2A440(Func297D8Arg *arg0) {
+void initStoryMapNpcIdleRandomDelayNoAnim(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
     arg0->unk61 = 0;
     arg0->unk62 = 0;
