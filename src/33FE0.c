@@ -326,7 +326,7 @@ void updateSaveSlotIconGrid(SaveSlotGridState *arg0) {
     debugEnqueueCallback(8U, 1U, func_8000FED0_10AD0, &arg0->unk4);
 }
 
-void func_80033974_34574(Func34574Arg *arg0) {
+void cleanupSaveSlotIconGrid(Func34574Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
