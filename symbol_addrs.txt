@@ -2346,5 +2346,6 @@ isBoardUnlocked = 0x80038000; // rom:0x38C00
 getCharacterPaletteId = 0x80038058; // rom:0x38C58
 isCreditsUnlocked = 0x80038070; // rom:0x38C70
 processRaceUnlocks = 0x80038090; // rom:0x38C90
+areCharacterPalettesUnlocked = 0x80038340; // rom:0x38F40
 tryAddUnlockedCutsceneId = 0x80038388; // rom:0x38F88
 tryAddUnlockedBoardId = 0x800383D8; // rom:0x38FD8

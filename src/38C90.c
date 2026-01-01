@@ -85,20 +85,20 @@ void processRaceUnlocks(s16 raceResult) {
     }
 }
 
-s32 func_80038340_38F40(s32 arg0) {
+s32 areCharacterPalettesUnlocked(s32 count) {
     s32 result = 1;
     s32 i = 0;
     u8 *base;
     s32 pad[2];
 
-    if (arg0 > 0) {
+    if (count > 0) {
         base = (u8 *)EepromSaveData;
         do {
             if ((base + i)[0x30] == 0) {
                 result = 0;
                 goto done;
             }
-        } while (++i < arg0);
+        } while (++i < count);
     }
 done:
     return result;
