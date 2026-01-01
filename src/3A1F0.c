@@ -574,15 +574,15 @@ void eepromProbe(void) {
     osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromProbe(&mainStack), OS_MESG_BLOCK);
 }
 
-void func_8003B1F4_3BDF4(s32 arg0, void *arg1) {
+void eepromReadAsync(s32 slotIndex, void *buffer) {
     s16 temp_v0;
-    s32 temp_v1;
+    s32 queueIndex;
 
     D_8008FE8F_90A8F = 1;
-    temp_v1 = D_8008FE8C_90A8C;
-    D_800A1C20_A2820[temp_v1].arg = arg1;
-    D_800A1C20_A2820[temp_v1].command = (arg0 & 0xFF) + 0xE0;
-    osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[temp_v1], OS_MESG_BLOCK);
+    queueIndex = D_8008FE8C_90A8C;
+    D_800A1C20_A2820[queueIndex].arg = buffer;
+    D_800A1C20_A2820[queueIndex].command = (slotIndex & 0xFF) + 0xE0;
+    osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[queueIndex], OS_MESG_BLOCK);
     temp_v0 = (u16)D_8008FE8C_90A8C + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -590,17 +590,17 @@ void func_8003B1F4_3BDF4(s32 arg0, void *arg1) {
     }
 }
 
-void *func_8003B28C_3BE8C(void) {
-    void *sp10;
-    void *var_v0;
+void *pollEepromReadAsync(void) {
+    void *result;
+    void *status;
 
-    sp10 = NULL;
-    var_v0 = (void *)-1;
-    if (osRecvMesg(&D_800A1888_A2488, &sp10, 0) == 0) {
+    result = NULL;
+    status = (void *)-1;
+    if (osRecvMesg(&D_800A1888_A2488, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
-        var_v0 = sp10;
+        status = result;
     }
-    return var_v0;
+    return status;
 }
 
 void func_8003B2DC_3BEDC(s32 arg0, u8 *arg1) {

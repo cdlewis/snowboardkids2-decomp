@@ -334,10 +334,10 @@ void verifySaveSlotChecksum(void) {
     retryCount = 0;
 
     while (retryCount < 3) {
-        func_8003B1F4_3BDF4(allocation->saveSlotIndex, saveBuffer);
+        eepromReadAsync(allocation->saveSlotIndex, saveBuffer);
 
         do {
-            result = func_8003B28C_3BE8C();
+            result = pollEepromReadAsync();
         } while (result == (void *)-1);
 
         if (result == 0) {

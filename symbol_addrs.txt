@@ -2377,3 +2377,5 @@ motorUpdateStub = 0x8003AC30; // rom:0x3B830
 eepromProbeAsync = 0x8003B0E8; // rom:0x3BCE8
 pollEepromProbeAsync = 0x8003B170; // rom:0x3BD70
 eepromProbe = 0x8003B1C0; // rom:0x3BDC0
+eepromReadAsync = 0x8003B1F4; // rom:0x3BDF4
+pollEepromReadAsync = 0x8003B28C; // rom:0x3BE8C

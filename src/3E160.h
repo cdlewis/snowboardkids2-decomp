@@ -90,8 +90,8 @@ void initTitleScreen(void);
 void initLogoScreen(void);
 void initVersusMode(void);
 void initOptionsMenu(void);
-void func_8003B1F4_3BDF4(s32 arg0, void *arg1);
-void *func_8003B28C_3BE8C(void);
+void eepromReadAsync(s32 slotIndex, void *buffer);
+void *pollEepromReadAsync(void);
 
 typedef struct {
     s16 x;
