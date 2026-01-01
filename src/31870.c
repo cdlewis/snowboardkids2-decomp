@@ -323,7 +323,7 @@ typedef struct {
 
 void animateBoardShopSnowParticles(void);
 void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
-void func_800317D4_323D4(BoardShopCharacterPreviewState *arg0);
+void freeBoardShopCharacterPreviewAssets(BoardShopCharacterPreviewState *arg0);
 void waitBoardShopCharacterPreview(void);
 void animateBoardShopCharacterSlideIn(BoardShopCharacterPreviewState *arg0);
 void updateBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0);
@@ -543,7 +543,7 @@ void initBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0) {
     arg0->unk24 = loadAssetByIndex_95500(0);
     arg0->unk28 = loadAssetByIndex_95590(0);
     arg0->unk2C = loadAssetByIndex_95668(paletteIndex - 1);
-    setCleanupCallback(&func_800317D4_323D4);
+    setCleanupCallback(&freeBoardShopCharacterPreviewAssets);
     setCallback(&waitBoardShopCharacterPreview);
 }
 
@@ -692,7 +692,7 @@ void animateBoardShopCharacterSlideOut(BoardShopCharacterPreviewState *arg0) {
     }
 }
 
-void func_800317D4_323D4(BoardShopCharacterPreviewState *arg0) {
+void freeBoardShopCharacterPreviewAssets(BoardShopCharacterPreviewState *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
