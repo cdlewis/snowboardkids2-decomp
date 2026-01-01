@@ -2307,3 +2307,6 @@ cleanupSaveSlotSelectionParticles = 0x80034CD0; // rom:0x358D0
 initSaveSlotDeleteText = 0x80034CFC; // rom:0x358FC
 updateSaveSlotDeleteText = 0x80034D58; // rom:0x35958
 cleanupSaveSlotDeleteText = 0x80035074; // rom:0x35C74
+initSaveSlotDeleteArrow = 0x800350AC; // rom:0x35CAC
+updateSaveSlotDeleteArrow = 0x8003513C; // rom:0x35D3C
+cleanupSaveSlotDeleteArrow = 0x80035234; // rom:0x35E34

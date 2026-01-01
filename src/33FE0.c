@@ -36,17 +36,17 @@ typedef struct {
 } SaveSlotConfirmationIndicatorState;
 
 typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ s16 unkA;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ void *spriteAsset;
+    /* 0x08 */ s16 frameIndex;
+    /* 0x0A */ s16 alpha;
     /* 0x0C */ u8 unkC;
-    /* 0x0D */ u8 unkD;
+    /* 0x0D */ u8 blinkAlpha;
     /* 0x0E */ u8 padE[2];
-    /* 0x10 */ u8 unk10;
-    /* 0x11 */ u8 unk11;
-} Func350ACArg;
+    /* 0x10 */ u8 animIndex;
+    /* 0x11 */ u8 animDelay;
+} SaveSlotDeleteArrowState;
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -244,8 +244,8 @@ void updateSaveSlotStatSprites(void);
 void cleanupSaveSlotStatSprites(Func34574Arg *arg0);
 void renderSaveSlotConfirmationIndicator(void *arg0);
 void cleanupSaveSlotConfirmationIndicator(Func34574Arg *arg0);
-void func_8003513C_35D3C(Func350ACArg *arg0);
-void func_80035234_35E34(Func34574Arg *arg0);
+void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state);
+void cleanupSaveSlotDeleteArrow(Func34574Arg *arg0);
 void cleanupSaveSlotPromptText(Func34574Arg *arg0);
 void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0);
 void cleanupSaveSlotItemIcons(Func34574Arg *arg0);
@@ -682,26 +682,26 @@ void cleanupSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
     state->textAsset = freeNodeMemory(state->textAsset);
 }
 
-void func_800350AC_35CAC(Func350ACArg *arg0) {
-    void *temp_s1;
+void initSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state) {
+    void *spriteAsset;
 
-    temp_s1 = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
-    setCleanupCallback(func_80035234_35E34);
+    spriteAsset = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    setCleanupCallback(cleanupSaveSlotDeleteArrow);
 
-    arg0->unk0 = -0x52;
-    arg0->unk2 = -0x14;
-    arg0->unk8 = 0xA;
-    arg0->unk10 = 0;
-    arg0->unk11 = 0;
-    arg0->unk4 = temp_s1;
-    arg0->unkA = 0xFF;
-    arg0->unkD = 0;
-    arg0->unkC = 0;
+    state->x = -0x52;
+    state->y = -0x14;
+    state->frameIndex = 0xA;
+    state->animIndex = 0;
+    state->animDelay = 0;
+    state->spriteAsset = spriteAsset;
+    state->alpha = 0xFF;
+    state->blinkAlpha = 0;
+    state->unkC = 0;
 
-    setCallback(func_8003513C_35D3C);
+    setCallback(updateSaveSlotDeleteArrow);
 }
 
-void func_8003513C_35D3C(Func350ACArg *arg0) {
+void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state) {
     AllocationStruct *allocation;
     u32 temp;
 
@@ -709,41 +709,41 @@ void func_8003513C_35D3C(Func350ACArg *arg0) {
 
     temp = allocation->unkAC6;
     if ((u32)(temp - 0x33) < 2U) {
-        arg0->unk2 = (allocation->unkAD6 * 3 * 8) - 0x14;
+        state->y = (allocation->unkAD6 * 3 * 8) - 0x14;
 
         if (allocation->unkAC6 == 0x34) {
             if (allocation->unkAC4 & 1) {
-                arg0->unkD = 0xFF;
+                state->blinkAlpha = 0xFF;
             } else {
-                arg0->unkD = 0;
+                state->blinkAlpha = 0;
             }
         } else {
-            arg0->unkD = 0;
+            state->blinkAlpha = 0;
         }
 
-        debugEnqueueCallback(8, 1, func_80012004_12C04, arg0);
+        debugEnqueueCallback(8, 1, func_80012004_12C04, state);
 
         if (allocation->unkAC6 == 0x33) {
-            arg0->unk11++;
-            arg0->unk11 &= 3;
-            if (arg0->unk11 == 0) {
-                arg0->unk10++;
-                arg0->unk10 &= 3;
-                arg0->unk8 = D_8008F2C4_8FEC4[arg0->unk10];
+            state->animDelay++;
+            state->animDelay &= 3;
+            if (state->animDelay == 0) {
+                state->animIndex++;
+                state->animIndex &= 3;
+                state->frameIndex = D_8008F2C4_8FEC4[state->animIndex];
             }
         } else {
-            arg0->unk11 = 0;
-            arg0->unk10 = 0;
-            arg0->unk8 = 0xA;
+            state->animDelay = 0;
+            state->animIndex = 0;
+            state->frameIndex = 0xA;
         }
     } else {
-        arg0->unk11 = 0;
-        arg0->unk10 = 0;
-        arg0->unk8 = 0xA;
+        state->animDelay = 0;
+        state->animIndex = 0;
+        state->frameIndex = 0xA;
     }
 }
 
-void func_80035234_35E34(Func34574Arg *arg0) {
+void cleanupSaveSlotDeleteArrow(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
