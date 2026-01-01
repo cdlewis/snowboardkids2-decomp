@@ -2366,3 +2366,4 @@ processRaceUnlocks = 0x80038090; // rom:0x38C90
 areCharacterPalettesUnlocked = 0x80038340; // rom:0x38F40
 tryAddUnlockedCutsceneId = 0x80038388; // rom:0x38F88
 tryAddUnlockedBoardId = 0x800383D8; // rom:0x38FD8
+motorUpdateStub = 0x8003AC30; // rom:0x3B830

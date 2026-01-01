@@ -466,7 +466,7 @@ void controllerPackReadStatus(s32 arg0) {
     osSendMesg(&D_800A1888_A2488, (OSMesg *)err, OS_MESG_BLOCK);
 }
 
-void func_8003AC30_3B830(void) {
+void motorUpdateStub(void) {
 }
 
 void func_8003AC38_3B838(void) {
