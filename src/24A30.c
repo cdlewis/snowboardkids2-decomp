@@ -446,15 +446,15 @@ after_rotation:
     }
 }
 
-void reloadCharSelectPreviewAssets(CharSelectPreviewModel *arg0) {
+void reloadCharSelectPreviewAssets(CharSelectPreviewModel *preview) {
     u8 paletteIndex;
 
-    paletteIndex = EepromSaveData->character_or_settings[arg0->charPaletteIndex] - 1;
+    paletteIndex = EepromSaveData->character_or_settings[preview->charPaletteIndex] - 1;
 
-    arg0->modelAsset = loadAssetByIndex_95728(arg0->charPaletteIndex);
-    arg0->animationAsset = loadAssetByIndex_95500(arg0->charPaletteIndex);
-    arg0->skeletonAsset = loadAssetByIndex_95590(arg0->charPaletteIndex);
-    arg0->paletteAsset = loadAssetByIndex_95668(paletteIndex);
+    preview->modelAsset = loadAssetByIndex_95728(preview->charPaletteIndex);
+    preview->animationAsset = loadAssetByIndex_95500(preview->charPaletteIndex);
+    preview->skeletonAsset = loadAssetByIndex_95590(preview->charPaletteIndex);
+    preview->paletteAsset = loadAssetByIndex_95668(paletteIndex);
 
     setCallback(updateCharSelectPreviewModel);
 }
