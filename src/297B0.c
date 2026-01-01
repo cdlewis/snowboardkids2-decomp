@@ -199,7 +199,7 @@ void updateStoryMapNpcWave(Func297D8Arg *arg0) {
     }
 }
 
-void func_80028FAC_29BAC(Func297D8Arg *arg0) {
+void initStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
     arg0->unk61 = 0;
     arg0->unk62 = 0;
@@ -209,10 +209,10 @@ void func_80028FAC_29BAC(Func297D8Arg *arg0) {
     arg0->unk48 = 0;
     arg0->unk40 = 0;
     arg0->unk44 = 0x280000;
-    setCallback(func_8002900C_29C0C);
+    setCallback(updateStoryMapNpcFloatEffect);
 }
 
-void func_8002900C_29C0C(Func297D8Arg *arg0) {
+void updateStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
     AllocationData *allocation;
     s32 shouldSetCallback;
     u16 savedUnk50;
@@ -253,7 +253,7 @@ void func_8002900C_29C0C(Func297D8Arg *arg0) {
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
         arg0->unk50 = 0;
-        arg0->callback = func_8002900C_29C0C;
+        arg0->callback = updateStoryMapNpcFloatEffect;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
         setCallback(func_8002A200_2AE00);

@@ -49,7 +49,7 @@ void updateStoryMapNpcJump(Func297D8Arg *);
 void func_800291CC_29DCC(Func297D8Arg *);
 void func_80029AA4_2A6A4(Func297D8Arg *);
 void updateStoryMapNpcWave(Func297D8Arg *);
-void func_8002900C_29C0C(Func297D8Arg *);
+void updateStoryMapNpcFloatEffect(Func297D8Arg *);
 void func_80029360_29F60(Func297D8Arg *);
 void func_80029EA8_2AAA8(Func297D8Arg *);
 void func_80029C90_2A890(Func297D8Arg *);
