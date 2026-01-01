@@ -133,36 +133,36 @@ typedef struct {
 } SaveSlotGridState;
 
 typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ s16 unk8;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ void *spriteSheet;
+    /* 0x08 */ s16 spriteIndex;
     /* 0x0A */ s16 unkA;
     /* 0x0C */ s16 unkC;
     /* 0x0E */ s16 unkE;
-    /* 0x10 */ s16 unk10;
+    /* 0x10 */ s16 alpha;
     /* 0x12 */ u8 unk12;
     /* 0x13 */ u8 unk13;
-} Func3466CElement14;
+} SaveSlotGoldIcon;
 
 typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
+    /* 0x00 */ s16 width;
+    /* 0x02 */ s16 height;
     /* 0x04 */ s16 unk4;
-    /* 0x06 */ s16 unk6;
-    /* 0x08 */ void *unk8;
-} Func3466CElement0C;
+    /* 0x06 */ s16 alpha;
+    /* 0x08 */ void *textBuffer;
+} SaveSlotGoldText;
 
 typedef struct {
     /* 0x00 */ u8 data[0xA];
-} Func3466CElement0A;
+} SaveSlotGoldTextBuffer;
 
 typedef struct {
-    /* 0x00 */ Func3466CElement14 arr00[4]; // 4 * 0x14 = 0x50
-    /* 0x50 */ Func3466CElement0C arr50[4]; // 4 * 0x0C = 0x30
-    /* 0x80 */ Func3466CElement0A arr80[4]; // 4 * 0x0A = 0x28
-    /* 0xA8 */ u8 arrA8[4];
-} Func3466CArg;
+    /* 0x00 */ SaveSlotGoldIcon icons[4];             // 4 * 0x14 = 0x50
+    /* 0x50 */ SaveSlotGoldText text[4];              // 4 * 0x0C = 0x30
+    /* 0x80 */ SaveSlotGoldTextBuffer textBuffers[4]; // 4 * 0x0A = 0x28
+    /* 0xA8 */ u8 animFrames[4];
+} SaveSlotGoldDisplayState;
 
 typedef struct {
     /* 0x000 */ u8 pad0[0xABC];
@@ -234,8 +234,8 @@ void func_80034D58_35958(void);
 void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
 void updateSaveSlotNameText(Func34ADCArg *arg0);
 void cleanupSaveSlotNameText(Func34574Arg *arg0);
-void func_8003498C_3558C(Func34574Arg *arg0);
-void func_80034750_35350(void);
+void cleanupSaveSlotGoldDisplay(Func34574Arg *arg0);
+void updateSaveSlotGoldDisplay(void);
 void func_80034BD8_357D8(Func34BD8Arg *arg0);
 void func_80034CD0_358D0(Func34574Arg *arg0);
 void updateSaveSlotItemIcons(void);
@@ -525,40 +525,40 @@ void cleanupSaveSlotPromptText(Func34574Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
 }
 
-void func_8003466C_3526C(Func3466CArg *arg0) {
-    void *temp_s1;
+void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0) {
+    void *goldIconAsset;
     s32 i;
 
-    temp_s1 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
-    setCleanupCallback(func_8003498C_3558C);
+    goldIconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    setCleanupCallback(cleanupSaveSlotGoldDisplay);
 
     for (i = 0; i < 4; i++) {
-        arg0->arr50[i].unk0 = 0x18;
-        arg0->arr50[i].unk2 = 0xC;
-        arg0->arr50[i].unk4 = 0;
-        arg0->arr50[i].unk6 = 0xFF;
-        arg0->arr50[i].unk8 = &arg0->arr80[i];
+        arg0->text[i].width = 0x18;
+        arg0->text[i].height = 0xC;
+        arg0->text[i].unk4 = 0;
+        arg0->text[i].alpha = 0xFF;
+        arg0->text[i].textBuffer = &arg0->textBuffers[i];
 
-        arg0->arr00[i].unk0 = 0x5C;
-        arg0->arr00[i].unk2 = 0x10;
-        arg0->arr00[i].unk4 = temp_s1;
-        arg0->arr00[i].unk8 = 0;
-        arg0->arr00[i].unkA = 0x555;
-        arg0->arr00[i].unkC = 0x555;
-        arg0->arr00[i].unkE = 0;
-        arg0->arr00[i].unk10 = 0xFF;
-        arg0->arr00[i].unk13 = 0;
-        arg0->arr00[i].unk12 = 0;
+        arg0->icons[i].x = 0x5C;
+        arg0->icons[i].y = 0x10;
+        arg0->icons[i].spriteSheet = goldIconAsset;
+        arg0->icons[i].spriteIndex = 0;
+        arg0->icons[i].unkA = 0x555;
+        arg0->icons[i].unkC = 0x555;
+        arg0->icons[i].unkE = 0;
+        arg0->icons[i].alpha = 0xFF;
+        arg0->icons[i].unk13 = 0;
+        arg0->icons[i].unk12 = 0;
 
-        arg0->arrA8[i] = 0;
+        arg0->animFrames[i] = 0;
     }
 
-    setCallback(func_80034750_35350);
+    setCallback(updateSaveSlotGoldDisplay);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80034750_35350);
+INCLUDE_ASM("asm/nonmatchings/33FE0", updateSaveSlotGoldDisplay);
 
-void func_8003498C_3558C(Func34574Arg *arg0) {
+void cleanupSaveSlotGoldDisplay(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 

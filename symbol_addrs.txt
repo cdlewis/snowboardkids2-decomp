@@ -2295,3 +2295,6 @@ cleanupSaveSlotNumberLabels = 0x800343D0; // rom:0x34FD0
 initSaveSlotPromptText = 0x800343FC; // rom:0x34FFC
 updateSaveSlotPromptText = 0x800344A8; // rom:0x350A8
 cleanupSaveSlotPromptText = 0x80034640; // rom:0x35240
+initSaveSlotGoldDisplay = 0x8003466C; // rom:0x3526C
+updateSaveSlotGoldDisplay = 0x80034750; // rom:0x35350
+cleanupSaveSlotGoldDisplay = 0x8003498C; // rom:0x3558C
