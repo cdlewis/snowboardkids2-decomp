@@ -142,7 +142,7 @@ typedef struct {
     u8 unkBBF;
     u8 unkBC0;
     u8 padBC1[3];
-    u8 unkBC4;
+    u8 finishPosition;
 } IceBossArg;
 
 void func_800BB2B0_B07A0(IceBossArg *arg0) {
@@ -165,7 +165,7 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
                        arg0->unk434.y - player->unk434.y,
                        arg0->unk434.z - player->unk434.z);
 
-    if ((arg0->unkBC4 == 0) & (dist > 0xE00000)) {
+    if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
         if (arg0->unkB84 & 0x400000) {
             arg0->unkAA4 = getCharacterBoardStatParam0(0, 4) + -0x8000;
         } else if (dist > 0x8C00000) {

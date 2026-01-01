@@ -2215,8 +2215,8 @@ s32 func_800488A0_494A0(Player *arg0, u8 *arg1) {
     u8 index;
     func_80048E34_49A34_arg *element;
 
-    randVal = getRand(*(arg1 + arg0->unkBC4 + 0x24)) & 0xFF;
-    index = arg0->unkBC4;
+    randVal = getRand(*(arg1 + arg0->finishPosition + 0x24)) & 0xFF;
+    index = arg0->finishPosition;
 
     for (i = 0; i < 5; i++) {
         if (D_80090CA8_918A8[index][i] >= randVal) {
@@ -2262,8 +2262,8 @@ s32 func_8004899C_4959C(Player *arg0, u8 *arg1) {
         return i + 1;
     }
 
-    randVal = getRand(*(arg1 + arg0->unkBC4 + 0x20)) & 0xFF;
-    index = arg0->unkBC4;
+    randVal = getRand(*(arg1 + arg0->finishPosition + 0x20)) & 0xFF;
+    index = arg0->finishPosition;
 
     for (i = 0; i < 9; i++) {
         if (D_80090CBC_918BC[index][i] >= randVal) {

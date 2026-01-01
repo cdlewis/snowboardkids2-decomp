@@ -185,7 +185,7 @@ typedef struct {
     u8 unkBC1;
     u8 unkBC2;
     u8 unkBC3;
-    u8 unkBC4;
+    u8 finishPosition;
     u8 unkBC5;
     u8 unkBC6;
     u8 unkBC7;

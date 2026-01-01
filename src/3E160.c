@@ -934,7 +934,7 @@ INCLUDE_ASM("asm/nonmatchings/3E160", func_8003F1F0_3FDF0);
 
 INCLUDE_ASM("asm/nonmatchings/3E160", func_8003F368_3FF68);
 
-void func_8003FA78_40678(void) {
+void handleBossRaceResult(void) {
     GameState *gs;
     Player *player;
 
@@ -947,7 +947,7 @@ void func_8003FA78_40678(void) {
 
     player = gs->players;
 
-    if (player->unkBC4 == 0) {
+    if (player->finishPosition == 0) {
         D_800A24A0_A30A0 = 3;
         func_800574A0_580A0(8);
     } else {
@@ -1249,7 +1249,7 @@ void func_80040238_40E38(void) {
         scheduleTask((void *)func_8004D8E4_4E4E4, 1, 0, 0xE6);
         allocation->unk4C = 0xB4;
 
-        if (allocation->players->unkBC4 == 0) {
+        if (allocation->players->finishPosition == 0) {
             D_800A24A0_A30A0 = 3;
             func_800574A0_580A0(8);
             func_8004E6A4_4F2A4(0, 0);
@@ -1282,7 +1282,7 @@ void func_80040304_40F04(void) {
     player = gameState->players;
     gameState->unk7C = 1;
 
-    switch (player->unkBC4) {
+    switch (player->finishPosition) {
         case 0:
             addPlayerGold(player->unkB6C);
             addPlayerGold(D_80090460_91060[gameState->memoryPoolId]);
@@ -1354,7 +1354,7 @@ void func_80040528_41128(void) {
     gs = (GameState *)getCurrentAllocation();
     gs->unk4C--;
     if (gs->unk4C == 0) {
-        new_var = gs->players->unkBC4 == 0;
+        new_var = gs->players->finishPosition == 0;
         D_800A24A0_A30A0 = (new_var) ? 3 : 4;
         func_800574A0_580A0(0xA);
         setGameStateHandler(&func_80040588_41188);

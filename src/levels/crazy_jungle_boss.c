@@ -129,7 +129,7 @@ typedef struct {
     u8 unkBC0;
     u8 unkBC1;
     u8 padBC2[0x2];
-    u8 unkBC4;
+    u8 finishPosition;
     u8 padBC5[0x4];
     u8 unkBC9;
     u8 unkBCA;
@@ -181,13 +181,13 @@ void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
         dist = distance_3d(arg0->unk434.x - player->unk434.x, arg0->unk434.y - player->unk434.y, arg0->unk434.z - player->unk434.z);
 
         if (alloc->unk86 != 0) {
-            if ((arg0->unkBC4 == 0) & (dist > 0xE00000)) {
+            if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
                 arg0->unkAA4 = getCharacterBoardStatParam0(0, 8) + 0x40000;
             } else {
                 arg0->unkAA4 = 0x180000;
             }
         } else {
-            if ((arg0->unkBC4 == 0) & (dist > 0xE00000)) {
+            if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
                 arg0->unkAA4 = getCharacterBoardStatParam0(0, 6) + -0x8000;
             } else {
                 arg0->unkAA4 = getCharacterBoardStatParam0(0, 6) + 0x18000;

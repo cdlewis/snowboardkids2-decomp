@@ -310,7 +310,7 @@ dma_and_callbacks:
 }
 
 void func_8004C254_4CE54(Struct_func_8004D8E4 *arg0) {
-    arg0->unk8 = arg0->unkC->unkBC4;
+    arg0->unk8 = arg0->unkC->finishPosition;
     debugEnqueueCallback((u16)(arg0->unk10 + 8), 0, func_8000FED0_10AD0, arg0);
 }
 
@@ -988,7 +988,7 @@ void func_8004D8E4_4E4E4(Struct_func_8004D8E4 *arg0) {
 }
 
 void func_8004D954_4E554(Struct_func_8004D8E4 *arg0) {
-    arg0->unk8 = arg0->unkC->unkBC4;
+    arg0->unk8 = arg0->unkC->finishPosition;
     debugEnqueueCallback(8, 6, &func_8000FED0_10AD0, arg0);
 }
 
@@ -1040,7 +1040,7 @@ void func_8004D9D0_4E5D0(Struct_func_8004D9D0 *arg0) {
             arg0->unk18 = temp_unkB70 * 0x32;
             break;
         default:
-            switch (allocation->players->unkBC4) {
+            switch (allocation->players->finishPosition) {
                 case 0:
                     arg0->unk18 = D_80090460_91060[allocation->memoryPoolId];
                     break;
@@ -1285,7 +1285,7 @@ void func_8004DFA0_4EBA0(Struct_func_8004DEF8 *arg0) {
     }
 
     player = arg0->unk18;
-    if (player->unkBC4 == 0 && (gFrameCounter & 1)) {
+    if (player->finishPosition == 0 && (gFrameCounter & 1)) {
         var_a2 = D_800AFE8C_A71FC->unk9[player->unkBB8 + 0x11];
         sprintf(sp20, D_8009E89C_9F49C, var_a2);
     } else {

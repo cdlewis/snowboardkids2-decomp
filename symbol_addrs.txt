@@ -2409,3 +2409,4 @@ eepromWrite = 0x8003B400; // rom:0x3C000
 eepromWriteAllAsync = 0x8003B47C; // rom:0x3C07C
 pollEepromWriteAllAsync = 0x8003B510; // rom:0x3C110
 eepromWriteAll = 0x8003B560; // rom:0x3C160
+handleBossRaceResult = 0x8003FA78; // rom:0x40678

@@ -1391,7 +1391,7 @@ s32 func_800B3CBC_A3B6C(Player *arg0) {
             case 1:
             case 8:
             case 9:
-                if (arg0->unkBC4 == 0) {
+                if (arg0->finishPosition == 0) {
                     var_s2 = 1;
                 }
                 break;

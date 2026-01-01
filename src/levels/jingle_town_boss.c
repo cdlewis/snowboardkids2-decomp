@@ -138,7 +138,7 @@ typedef struct {
     u8 unkBC0; /* 0xBC0 */
     u8 unkBC1; /* 0xBC1 */
     u8 padBC2[0x2];
-    u8 unkBC4; /* 0xBC4 */
+    u8 finishPosition; /* 0xBC4 */
     u8 padBC5[0x2];
     u8 unkBC7; /* 0xBC7 */
     u8 unkBC8; /* 0xBC8 */
@@ -207,7 +207,7 @@ void func_800BB2B0_B2870(Arg0Struct *arg0) {
         arg0->unk434.z - alloc->players->worldPos.z
     );
 
-    if ((arg0->unkBC4 == 0) && (temp > 0x1000000)) {
+    if ((arg0->finishPosition == 0) && (temp > 0x1000000)) {
         arg0->unkAA4 = getCharacterBoardStatParam0(0, 0) - 0x40000;
     } else {
         arg0->unkAA4 = getCharacterBoardStatParam0(0, 0) + 0x180000;
