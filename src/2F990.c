@@ -38,14 +38,14 @@ typedef struct {
 } StoryMapShopItemCardState;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
     s8 unkC;
     u8 unkD;
-} func_8002FDFC_309FC_arg;
+} StoryMapShopItemIconState;
 
 typedef struct {
     u8 padding[0x5C0];
@@ -168,8 +168,8 @@ void enqueueStoryMapShopBackgroundRender(void *);
 void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *);
 void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *);
 void cleanupUnlockScreenScrollArrows(func_8002FF28_30B28_arg *arg0);
-void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *);
-void func_8002FF28_30B28(func_8002FF28_30B28_arg *);
+void updateStoryMapShopItemIcon(StoryMapShopItemIconState *);
+void cleanupStoryMapShopItemIcon(StoryMapShopItemIconState *);
 void func_8003006C_30C6C(ScrollArrowSprite *);
 void func_80030194_30D94(func_8002FF28_30B28_arg *);
 void func_80030238_30E38(void *arg0);
@@ -667,41 +667,41 @@ void cleanupUnlockScreenScrollArrows(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_8002FCD4_308D4(func_8002FDFC_309FC_arg *arg0) {
+void initStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
     void *dmaResult;
     GameStateSub *state;
     u8 itemValue;
 
     state = getCurrentAllocation();
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_8002FF28_30B28);
+    setCleanupCallback(cleanupStoryMapShopItemIcon);
 
-    arg0->unk2 = -0x18;
+    iconState->y = -0x18;
 
     itemValue = state->unk5CA[state->unk5C8];
 
     if (itemValue < 9) {
         u8 tempValue;
-        arg0->unk0 = -0x30;
+        iconState->x = -0x30;
         tempValue = state->unk5CA[state->unk5C8];
-        arg0->unk8 = (tempValue / 3) + 0x1D;
+        iconState->spriteIndex = (tempValue / 3) + 0x1D;
     } else {
         s16 tableVal = D_8008F0B2_8FCB2[itemValue] + 0x18;
         s16 tableVal2 = D_8008F0C6_8FCC6[itemValue];
 
-        arg0->unk8 = itemValue + 0x23;
-        arg0->unk0 = ((0x120 - tableVal) / 2) - tableVal2 - 0x96;
+        iconState->spriteIndex = itemValue + 0x23;
+        iconState->x = ((0x120 - tableVal) / 2) - tableVal2 - 0x96;
     }
 
-    arg0->unkA = 0xFF;
-    arg0->unkC = 0;
-    arg0->unkD = 0;
-    arg0->unk4 = dmaResult;
+    iconState->alpha = 0xFF;
+    iconState->unkC = 0;
+    iconState->unkD = 0;
+    iconState->asset = dmaResult;
 
-    setCallback(func_8002FDFC_309FC);
+    setCallback(updateStoryMapShopItemIcon);
 }
 
-void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *arg0) {
+void updateStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
     GameStateSub *state;
     s32 pad;
     u8 itemValue;
@@ -712,29 +712,29 @@ void func_8002FDFC_309FC(func_8002FDFC_309FC_arg *arg0) {
             u8 masked = itemValue & 0x1F;
             itemValue = masked;
             if (itemValue < 9) {
-                arg0->unk0 = -0x30;
-                arg0->unk8 = (masked / 3) + 0x1D;
+                iconState->x = -0x30;
+                iconState->spriteIndex = (masked / 3) + 0x1D;
             } else {
                 s16 tableVal = D_8008F0B2_8FCB2[masked];
                 s16 tableVal2 = D_8008F0C6_8FCC6[masked];
-                arg0->unk8 = masked + 0x23;
-                arg0->unk0 = (((0x120 - ((s16)(tableVal + 0x18))) / 2) - tableVal2) - 0x96;
+                iconState->spriteIndex = masked + 0x23;
+                iconState->x = (((0x120 - ((s16)(tableVal + 0x18))) / 2) - tableVal2) - 0x96;
             }
             if (state->unk5C5 == 3) {
                 if (state->unk5C0 & 1) {
-                    arg0->unkD = 0xFF;
+                    iconState->unkD = 0xFF;
                 } else {
-                    arg0->unkD = 0;
+                    iconState->unkD = 0;
                 }
             }
             itemValue = 0;
-            debugEnqueueCallback(8, itemValue, &func_80012004_12C04, arg0);
+            debugEnqueueCallback(8, itemValue, &func_80012004_12C04, iconState);
         }
     }
 }
 
-void func_8002FF28_30B28(func_8002FF28_30B28_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
+    iconState->asset = freeNodeMemory(iconState->asset);
 }
 
 void func_8002FF54_30B54(ScrollArrowSprite *arg0) {

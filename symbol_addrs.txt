@@ -2181,3 +2181,6 @@ dialogueNpcAnimations = 0x8008F054; // rom:0x8FC54
 initUnlockScreenScrollArrows = 0x8002FA9C; // rom:0x3069C
 updateUnlockScreenScrollArrows = 0x8002FB40; // rom:0x30740
 cleanupUnlockScreenScrollArrows = 0x8002FCA8; // rom:0x308A8
+initStoryMapShopItemIcon = 0x8002FCD4; // rom:0x308D4
+updateStoryMapShopItemIcon = 0x8002FDFC; // rom:0x309FC
+cleanupStoryMapShopItemIcon = 0x8002FF28; // rom:0x30B28
