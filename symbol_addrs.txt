@@ -2152,3 +2152,6 @@ updateStoryMapRareEventSnowman = 0x8002E024; // rom:0x2EC24
 initStoryMapRareEventCheering = 0x8002E170; // rom:0x2ED70
 updateStoryMapRareEventCheering = 0x8002E314; // rom:0x2EF14
 updateStoryMapRareEventSkating = 0x8002E8B4; // rom:0x2F4B4
+prepareStoryMapNpcDialogue = 0x8002EBB0; // rom:0x2F7B0
+dialogueNpcFacesPlayer = 0x8008F044; // rom:0x8FC44
+dialogueNpcAnimations = 0x8008F054; // rom:0x8FC54

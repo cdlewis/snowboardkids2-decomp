@@ -131,7 +131,7 @@ void updateStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
         } else {
             allocation->unk42E = 1;
         }
-        func_8002EBB0_2F7B0(arg0);
+        prepareStoryMapNpcDialogue(arg0);
         arg0->callback = updateStoryMapRareEventMagicShow;
         setCallback(updateStoryMapNpcDialogue);
     }
@@ -259,7 +259,7 @@ void updateStoryMapRareEventJuggling(Func2E024Arg *arg0) {
         gameState->unk42E = 1;
         arg0->unkCC[0] = 1;
         arg0->unkCC[1] = 1;
-        func_8002EBB0_2F7B0(arg0);
+        prepareStoryMapNpcDialogue(arg0);
         arg0->callback = updateStoryMapRareEventJuggling;
         setCallback(updateStoryMapNpcDialogue);
     }
@@ -378,7 +378,7 @@ void updateStoryMapRareEventSnowman(Func2E024Arg *arg0) {
     }
 
     if (gameState->unk42A == 0x11) {
-        func_8002EBB0_2F7B0(arg0);
+        prepareStoryMapNpcDialogue(arg0);
         arg0->callback = updateStoryMapRareEventSnowman;
         setCallback(updateStoryMapNpcDialogue);
     }
@@ -575,7 +575,7 @@ void updateStoryMapRareEventCheering(Func2E024Arg *arg0) {
     }
     do {
         if (allocation->unk42A == 0x11) {
-            func_8002EBB0_2F7B0(arg0);
+            prepareStoryMapNpcDialogue(arg0);
             allocation->unk42E = 1;
             arg0->unkCC[0] = (randB() & 0x1F) + 0x28;
             arg0->unkCC[1] = 0;
@@ -678,38 +678,38 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
     }
 }
 
-extern u8 D_8008F044_8FC44[];
-extern s8 D_8008F054_8FC54[];
+extern u8 dialogueNpcFacesPlayer[];
+extern s8 dialogueNpcAnimations[];
 
-void func_8002EBB0_2F7B0(void *ptr) {
-    Func2E024Arg *arg0 = ptr;
+void prepareStoryMapNpcDialogue(void *ptr) {
+    Func2E024Arg *state = ptr;
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        arg0->elements[i].unk56 = arg0->elements[i].unk50;
-        arg0->elements[i].unk5F = getAnimationIndex(arg0->elements[i].model);
+        state->elements[i].unk56 = state->elements[i].unk50;
+        state->elements[i].unk5F = getAnimationIndex(state->elements[i].model);
 
-        if (((arg0->unkD4 == 1) & (i == 0)) && D_800AFE8C_A71FC->unk9[0] == 3) {
-            setAnimationIndex(arg0->elements[i].model, -1);
-            arg0->elements[i].unk48 = 0;
-            arg0->elements[i].unk40 = 0;
-            arg0->elements[i].unk44 = 0x240000;
-        } else if (((arg0->unkD4 == 6) & (i == 1)) && D_800AFE8C_A71FC->unk9[0] == 3) {
-            setAnimationIndex(arg0->elements[i].model, -1);
+        if (((state->unkD4 == 1) & (i == 0)) && D_800AFE8C_A71FC->unk9[0] == 3) {
+            setAnimationIndex(state->elements[i].model, -1);
+            state->elements[i].unk48 = 0;
+            state->elements[i].unk40 = 0;
+            state->elements[i].unk44 = 0x240000;
+        } else if (((state->unkD4 == 6) & (i == 1)) && D_800AFE8C_A71FC->unk9[0] == 3) {
+            setAnimationIndex(state->elements[i].model, -1);
         } else {
-            setAnimationIndex(arg0->elements[i].model, D_8008F054_8FC54[arg0->unkD4 * 2 + i]);
+            setAnimationIndex(state->elements[i].model, dialogueNpcAnimations[state->unkD4 * 2 + i]);
         }
 
-        if (D_8008F044_8FC44[arg0->unkD4 * 2 + i] != 0) {
-            arg0->elements[i].unk50 = 0;
-            arg0->ctrl[i] = 1;
+        if (dialogueNpcFacesPlayer[state->unkD4 * 2 + i] != 0) {
+            state->elements[i].unk50 = 0;
+            state->ctrl[i] = 1;
         } else {
-            arg0->elements[i].unk30 = arg0->elements[i].rotation;
-            arg0->ctrl[i] = 3;
+            state->elements[i].unk30 = state->elements[i].rotation;
+            state->ctrl[i] = 3;
         }
     }
 
-    arg0->unkD3 = 0;
+    state->unkD3 = 0;
 }
 
 s32 func_8002ED30_2F930(void) {

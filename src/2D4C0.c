@@ -97,7 +97,7 @@ void updateStoryMapRareEventWave(RareEventIdleState *arg0) {
     }
 
     if (allocation->unk42A == 0x11) {
-        func_8002EBB0_2F7B0(arg0);
+        prepareStoryMapNpcDialogue(arg0);
         arg0->callback = updateStoryMapRareEventWave;
         setCallback(updateStoryMapNpcDialogue);
     }
@@ -235,7 +235,7 @@ void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
     }
 
     if (allocation->unk42A == 0x11) {
-        func_8002EBB0_2F7B0(arg0);
+        prepareStoryMapNpcDialogue(arg0);
         arg0->callback = updateStoryMapRareEventIdle;
         allocation->unk42E = 1;
         arg0->effectDelay[0] = (randB() & 0x1F) + 0x28;
