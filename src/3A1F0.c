@@ -952,7 +952,7 @@ s32 *queueDirectDmaTransfer(void *romStart, void *romEnd, s32 size, s32 *dramAdd
     return dramAddr;
 }
 
-void func_8003BC58_3C858(void) {
+void dmaStub(void) {
 }
 
 void dmaLoadAndInvalidate(
