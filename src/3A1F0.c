@@ -373,10 +373,10 @@ void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders)
     osSendMesg(&D_800A1888_A2488, (OSMesg)err, 1);
 }
 
-void func_8003A9DC_3B5DC(void) {
+void controllerPackDeleteFileAsyncStub(void) {
 }
 
-int func_8003A9E4_3B5E4(void) {
+int controllerPackDeleteFilePollStub(void) {
     return 0;
 }
 

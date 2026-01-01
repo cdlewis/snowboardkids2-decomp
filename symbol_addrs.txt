@@ -1117,6 +1117,8 @@ controllerPackWriteAsyncStub = 0x8003A51C; // rom:0x3B11C
 controllerPackWritePollStub = 0x8003A524; // rom:0x3B124
 controllerPackListFilesAsyncStub = 0x8003A854; // rom:0x3B454
 controllerPackListFilesPollStub = 0x8003A85C; // rom:0x3B45C
+controllerPackDeleteFileAsyncStub = 0x8003A9DC; // rom:0x3B5DC
+controllerPackDeleteFilePollStub = 0x8003A9E4; // rom:0x3B5E4
 
 osViModeTable = 0x8009BE70; // defined:true
 
