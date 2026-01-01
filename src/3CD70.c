@@ -5,26 +5,28 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-} CameraData;
+    s16 duration; /* 0x00 */
+    s16 pad02;    /* 0x02 */
+    s32 x;        /* 0x04 */
+    s32 y;        /* 0x08 */
+    s32 z;        /* 0x0C */
+} CameraKeyframe;
 
 typedef struct {
-    s32 unk0;          /* 0x00 */
-    s32 unk4;          /* 0x04 */
-    s32 unk8;          /* 0x08 */
-    s32 unkC;          /* 0x0C */
-    s32 unk10;         /* 0x10 */
-    s32 unk14;         /* 0x14 */
-    CameraData *unk18; /* 0x18 */
-    CameraData *unk1C; /* 0x1C */
-    s16 unk20;         /* 0x20 */
-    s16 unk22;         /* 0x22 */
-    s8 unk24;          /* 0x24 */
-    s8 unk25;          /* 0x25 */
-} func_8003D210_3DE10_arg;
+    s32 posX;                     /* 0x00 */
+    s32 posY;                     /* 0x04 */
+    s32 posZ;                     /* 0x08 */
+    s32 targetX;                  /* 0x0C */
+    s32 targetY;                  /* 0x10 */
+    s32 targetZ;                  /* 0x14 */
+    CameraKeyframe *posKeyframes; /* 0x18 */
+    CameraKeyframe *tgtKeyframes; /* 0x1C */
+    s16 posFramesLeft;            /* 0x20 */
+    s16 tgtFramesLeft;            /* 0x22 */
+    s8 posMode;                   /* 0x24 */
+    s8 tgtMode;                   /* 0x25 */
+    s8 pathIndex;                 /* 0x26 */
+} ScriptedCameraState;
 
 typedef struct {
     s16 rotationAngle;
@@ -72,8 +74,8 @@ extern void func_8003C2BC_3CEBC(void);
 extern s32 D_8008FEB0_90AB0;
 extern u8 identityMatrix[];
 void updateOrbitCamera(OrbitCameraState *camera);
-void func_8003D0F4_3DCF4(NodeExt *arg0);
-void func_8003D210_3DE10(func_8003D210_3DE10_arg *);
+void initScriptedCamera(ScriptedCameraState *camera);
+void updateScriptedCamera(ScriptedCameraState *camera);
 
 void initChaseCameraPosition(ChaseCameraState *camera) {
     Allocation *gameState;
@@ -175,106 +177,106 @@ void spawnOrbitCameraTask(void) {
     scheduleTask(initOrbitCamera, 1, 0, 0xF0);
 }
 
-extern u8 D_800901CC_90DCC[];
-extern u8 D_800901CE_90DCE[];
-extern u8 D_800901D0_90DD0[];
-extern u8 D_800901D4_90DD4[];
+extern u8 sCameraPathPosMode[];
+extern u8 sCameraPathTgtMode[];
+extern u8 sCameraPathPosData[];
+extern u8 sCameraPathTgtData[];
 
-void func_8003D0F4_3DCF4(NodeExt *arg0) {
-    s8 temp_v1;
+void initScriptedCamera(ScriptedCameraState *camera) {
+    s8 pathIdx;
     s32 offset;
 
-    temp_v1 = arg0->unk26;
-    offset = temp_v1 * 12;
-    arg0->unk18 = *(void **)(D_800901D0_90DD0 + offset);
+    pathIdx = camera->pathIndex;
+    offset = pathIdx * 12;
+    camera->posKeyframes = *(void **)(sCameraPathPosData + offset);
 
-    temp_v1 = arg0->unk26;
-    offset = temp_v1 * 12;
-    arg0->unk1C = *(void **)(D_800901D4_90DD4 + offset);
+    pathIdx = camera->pathIndex;
+    offset = pathIdx * 12;
+    camera->tgtKeyframes = *(void **)(sCameraPathTgtData + offset);
 
-    temp_v1 = arg0->unk26;
-    offset = temp_v1 * 12;
-    arg0->unk24 = *(u16 *)(D_800901CC_90DCC + offset);
+    pathIdx = camera->pathIndex;
+    offset = pathIdx * 12;
+    camera->posMode = *(u16 *)(sCameraPathPosMode + offset);
 
-    temp_v1 = arg0->unk26;
-    offset = temp_v1 * 12;
-    arg0->unk25 = *(u16 *)(D_800901CE_90DCE + offset);
+    pathIdx = camera->pathIndex;
+    offset = pathIdx * 12;
+    camera->tgtMode = *(u16 *)(sCameraPathTgtMode + offset);
 
-    memcpy(arg0, (u8 *)arg0->unk18 + 4, 0xC);
+    memcpy(camera, (u8 *)camera->posKeyframes + 4, 0xC);
 
-    arg0->unk20 = *(u16 *)arg0->unk18;
-    if (arg0->unk20 == 0) {
-        arg0->unk18 = (u8 *)arg0->unk18 + 0x10;
-        arg0->unk20 = *(u16 *)arg0->unk18;
+    camera->posFramesLeft = *(u16 *)camera->posKeyframes;
+    if (camera->posFramesLeft == 0) {
+        camera->posKeyframes = (CameraKeyframe *)((u8 *)camera->posKeyframes + 0x10);
+        camera->posFramesLeft = *(u16 *)camera->posKeyframes;
     }
 
-    if (arg0->unk1C != NULL) {
-        memcpy(&arg0->unkC, (u8 *)arg0->unk1C + 4, 0xC);
-        arg0->unk22 = *(u16 *)arg0->unk1C;
-        if (arg0->unk22 == 0) {
-            arg0->unk1C = (u8 *)arg0->unk1C + 0x10;
-            arg0->unk22 = *(u16 *)arg0->unk1C;
+    if (camera->tgtKeyframes != NULL) {
+        memcpy(&camera->targetX, (u8 *)camera->tgtKeyframes + 4, 0xC);
+        camera->tgtFramesLeft = *(u16 *)camera->tgtKeyframes;
+        if (camera->tgtFramesLeft == 0) {
+            camera->tgtKeyframes = (CameraKeyframe *)((u8 *)camera->tgtKeyframes + 0x10);
+            camera->tgtFramesLeft = *(u16 *)camera->tgtKeyframes;
         }
     }
 
-    setCallbackWithContinue(func_8003D210_3DE10);
+    setCallbackWithContinue(updateScriptedCamera);
 }
 
-void func_8003D210_3DE10(func_8003D210_3DE10_arg *arg0) {
+void updateScriptedCamera(ScriptedCameraState *camera) {
     Allocation *allocation;
-    u8 sp10[0x30];
+    u8 cameraMatrix[0x30];
 
     allocation = getCurrentAllocation();
 
-    if (arg0->unk24 == 0) {
-        arg0->unk0 += ((arg0->unk18->unk8 - arg0->unk0) / arg0->unk20);
-        arg0->unk4 += ((arg0->unk18->unkC - arg0->unk4) / arg0->unk20);
-        arg0->unk8 += ((arg0->unk18->unk10 - arg0->unk8) / arg0->unk20);
-        arg0->unk20--;
-        if (arg0->unk20 == 0) {
-            arg0->unk18 = (CameraData *)((u8 *)arg0->unk18 + 0x10);
-            arg0->unk20 = *(s16 *)arg0->unk18;
+    if (camera->posMode == 0) {
+        camera->posX += ((camera->posKeyframes->x - camera->posX) / camera->posFramesLeft);
+        camera->posY += ((camera->posKeyframes->y - camera->posY) / camera->posFramesLeft);
+        camera->posZ += ((camera->posKeyframes->z - camera->posZ) / camera->posFramesLeft);
+        camera->posFramesLeft--;
+        if (camera->posFramesLeft == 0) {
+            camera->posKeyframes = (CameraKeyframe *)((u8 *)camera->posKeyframes + 0x10);
+            camera->posFramesLeft = *(s16 *)camera->posKeyframes;
         }
     }
 
-    switch (arg0->unk25) {
+    switch (camera->tgtMode) {
         case 0:
-            memcpy(&arg0->unkC, &allocation->players->unk434, 0xC);
-            arg0->unk10 += 0x200000;
+            memcpy(&camera->targetX, &allocation->players->unk434, 0xC);
+            camera->targetY += 0x200000;
             break;
         case 1:
-            arg0->unkC += ((arg0->unk1C->unk8 - arg0->unkC) / arg0->unk22);
-            arg0->unk10 += ((arg0->unk1C->unkC - arg0->unk10) / arg0->unk22);
-            arg0->unk14 += ((arg0->unk1C->unk10 - arg0->unk14) / arg0->unk22);
-            arg0->unk22--;
-            if (arg0->unk22 == 0) {
-                arg0->unk1C = (CameraData *)((u8 *)arg0->unk1C + 0x10);
-                arg0->unk22 = *(s16 *)arg0->unk1C;
+            camera->targetX += ((camera->tgtKeyframes->x - camera->targetX) / camera->tgtFramesLeft);
+            camera->targetY += ((camera->tgtKeyframes->y - camera->targetY) / camera->tgtFramesLeft);
+            camera->targetZ += ((camera->tgtKeyframes->z - camera->targetZ) / camera->tgtFramesLeft);
+            camera->tgtFramesLeft--;
+            if (camera->tgtFramesLeft == 0) {
+                camera->tgtKeyframes = (CameraKeyframe *)((u8 *)camera->tgtKeyframes + 0x10);
+                camera->tgtFramesLeft = *(s16 *)camera->tgtKeyframes;
             }
             break;
         case 2:
-            memcpy(&arg0->unkC, &allocation->players->unk1C04, 0xC);
-            arg0->unk10 += 0x200000;
+            memcpy(&camera->targetX, &allocation->players->unk1C04, 0xC);
+            camera->targetY += 0x200000;
             break;
         case 3:
-            memcpy(&arg0->unkC, &allocation->players->unk101C, 0xC);
-            arg0->unk10 += 0x200000;
+            memcpy(&camera->targetX, &allocation->players->unk101C, 0xC);
+            camera->targetY += 0x200000;
             break;
     }
 
-    computeLookAtMatrix(arg0, &arg0->unkC, sp10);
-    func_8006FD3C_7093C(0x64, sp10);
+    computeLookAtMatrix(camera, &camera->targetX, cameraMatrix);
+    func_8006FD3C_7093C(0x64, cameraMatrix);
 
     if (allocation->players->unkBCA == 0) {
-        func_800569A4_575A4(sp10, 0);
+        func_800569A4_575A4(cameraMatrix, 0);
     } else {
-        setBufferData(sp10, 0x30, 0);
+        setBufferData(cameraMatrix, 0x30, 0);
     }
 }
 
-void func_8003D51C_3E11C(u8 arg0) {
-    NodeExt *task = (NodeExt *)scheduleTask(func_8003D0F4_3DCF4, 0, 2, 0xF0);
+void spawnScriptedCameraTask(u8 pathIndex) {
+    ScriptedCameraState *task = (ScriptedCameraState *)scheduleTask(initScriptedCamera, 0, 2, 0xF0);
     if (task != NULL) {
-        task->unk26 = arg0;
+        task->pathIndex = pathIndex;
     }
 }

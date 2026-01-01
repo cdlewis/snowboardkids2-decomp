@@ -20,19 +20,6 @@ typedef struct Node {
     /* 0x28 */ void *payload;
 } Node;
 
-// Extended Node structure used by func_8003D0F4_3DCF4
-typedef struct {
-    u8 pad0[0xC];
-    u8 unkC[0xC];
-    void* unk18;
-    void* unk1C;
-    u16 unk20;
-    u16 unk22;
-    u8 unk24;
-    u8 unk25;
-    s8 unk26;
-} NodeExt;
-
 void setGameStateHandler(void *arg0);
 
 void *loadCompressedData(void *romStart, void *romEnd, s32 decompressedSize);
