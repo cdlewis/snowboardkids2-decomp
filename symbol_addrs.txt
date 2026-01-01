@@ -1,4 +1,6 @@
 initMenuCameraNode = 0x80027CA0; // rom:0x288A0
+initStoryMapRandomEvent = 0x80028480; // rom:0x29080
+nullRandomEventCallback = 0x800285EC; // rom:0x291EC
 gMenuLightColor = 0x8008DEF0; // rom:0x8EAF0
 gMenuAmbientColor = 0x8008DEF8; // rom:0x8EAF8
 storyMapCameraTask = 0x80017350; // rom:0x17F50

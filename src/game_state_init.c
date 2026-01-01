@@ -20,7 +20,7 @@ extern void storyMapCameraTask;
 extern void func_80018800_19400;
 extern void initStoryMapMiniCamera;
 extern void GenericTriggerInit;
-extern void func_80028480_29080;
+extern void initStoryMapRandomEvent;
 extern void func_80036250_36E50;
 extern void func_80036A3C_3763C;
 extern void PhoneTriggerInit;
@@ -87,7 +87,7 @@ void initializeGameState(void) {
         initMenuCameraNode(&temp_s0->node2, 8, 0xF, 1);
         scheduleTask(&storyMapCameraTask, 0, 0, 0x5A);
         scheduleTask(&func_80018800_19400, 0, 0, 0x5B);
-        scheduleTask(&func_80028480_29080, 0, 0, 0x5B);
+        scheduleTask(&initStoryMapRandomEvent, 0, 0, 0x5B);
         var_s1++;
         var_s1--;
         scheduleTask(&storyMapDecorModelTask, 0, 0, 0x5C);

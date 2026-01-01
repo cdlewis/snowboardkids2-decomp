@@ -20,25 +20,25 @@ typedef struct {
 
 extern GameConfigLocal_288A0 *D_800AFE8C_A71FC;
 
-void func_800285EC_291EC(void);
+void nullRandomEventCallback(void);
 
 typedef struct {
     u8 pad0[0x41C];
-    s32 unk41C;
-    u8 unk420;
+    s32 hasRandomEvent;
+    u8 regularEventType;
     u8 pad421[0xB];
-    u8 unk42C;
-} AllocationLocal_288A0;
+    u8 rareEventType;
+} StoryMapEventState;
 
 typedef struct {
     u8 pad0[0x5C];
-    u8 unk5C;
-} Task5C_288A0;
+    u8 eventTypeIndex;
+} RegularEventTask;
 
 typedef struct {
     u8 pad0[0xD4];
-    u8 unkD4;
-} TaskD4_288A0;
+    u8 eventTypeIndex;
+} RareEventTask;
 
 void initMenuCameraNode(Node_70B00 *node, s32 slotIndex, s32 priority, s32 isSecondary) {
     s8 lightSettings[0x20];
@@ -67,41 +67,41 @@ INCLUDE_ASM("asm/nonmatchings/288A0", func_80027E04_28A04);
 
 INCLUDE_ASM("asm/nonmatchings/288A0", func_80028074_28C74);
 
-void func_80028480_29080(u8 *arg0) {
-    AllocationLocal_288A0 *alloc;
-    u8 tableValue;
-    u8 randVal;
-    Task5C_288A0 *task;
-    TaskD4_288A0 *task2;
+void initStoryMapRandomEvent(u8 *eventTypeOut) {
+    StoryMapEventState *state;
+    u8 eventTypeIndex;
+    u8 randomIndex;
+    RegularEventTask *regularTask;
+    RareEventTask *rareTask;
 
-    alloc = getCurrentAllocation();
-    alloc->unk41C = 0;
-    alloc->unk420 = 0xFF;
+    state = getCurrentAllocation();
+    state->hasRandomEvent = 0;
+    state->regularEventType = 0xFF;
 
     if ((randA() & 7) == 7) {
-        randVal = randB();
-        *arg0 = D_8008DF00_8EB00[D_800AFE8C_A71FC->unk9][randVal % 10] - 1;
-        task2 = scheduleTask(func_8002BCF0_2C8F0, 0, 0, 0x5B);
-        task2->unkD4 = *arg0;
-        alloc->unk42C = *arg0;
-        goto check_s2;
+        randomIndex = randB();
+        *eventTypeOut = D_8008DF00_8EB00[D_800AFE8C_A71FC->unk9][randomIndex % 10] - 1;
+        rareTask = scheduleTask(func_8002BCF0_2C8F0, 0, 0, 0x5B);
+        rareTask->eventTypeIndex = *eventTypeOut;
+        state->rareEventType = *eventTypeOut;
+        goto check_event;
     }
 
-    tableValue = D_8008DF3C_8EB3C[D_800AFE8C_A71FC->unk9][D_8009ADE0_9B9E0 & 7];
-    if (tableValue != 0) {
-        task = scheduleTask(func_80028600_29200, 0, 0, 0x5B);
-        task->unk5C = tableValue - 1;
-        alloc->unk420 = tableValue - 1;
+    eventTypeIndex = D_8008DF3C_8EB3C[D_800AFE8C_A71FC->unk9][D_8009ADE0_9B9E0 & 7];
+    if (eventTypeIndex != 0) {
+        regularTask = scheduleTask(func_80028600_29200, 0, 0, 0x5B);
+        regularTask->eventTypeIndex = eventTypeIndex - 1;
+        state->regularEventType = eventTypeIndex - 1;
     }
 
-check_s2:
-    if (tableValue != 0) {
-        alloc->unk41C = 1;
-        setCallback(func_800285EC_291EC);
+check_event:
+    if (eventTypeIndex != 0) {
+        state->hasRandomEvent = 1;
+        setCallback(nullRandomEventCallback);
     } else {
         func_80069CF8_6A8F8();
     }
 }
 
-void func_800285EC_291EC(void) {
+void nullRandomEventCallback(void) {
 }
