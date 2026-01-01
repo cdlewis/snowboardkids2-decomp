@@ -58,7 +58,7 @@ void controllerPackReadStatus(s32 arg0);
 void eepromProbe(void);
 void eepromRead(s32 slotIndex, u8 *buffer);
 void eepromWrite(s32);
-void func_8003B560_3C160(u8 *);
+void eepromWriteAll(u8 *buffer);
 void controllerServiceThread(void *arg0);
 
 extern char piManagerThreadStack[0x8]; // this size seems wrong
@@ -252,7 +252,7 @@ void controllerServiceThread(void *arg0) {
                 continue;
 
             case 0x140:
-                func_8003B560_3C160(msg->arg);
+                eepromWriteAll(msg->arg);
                 continue;
         }
     }
@@ -665,42 +665,42 @@ void eepromWrite(s32 slotIndex) {
     osSendMesg(&D_800A1888_A2488, (OSMesg)result, 1);
 }
 
-void func_8003B47C_3C07C(void *arg0) {
-    u32 new_var;
-    s16 index;
-    s16 *addr;
+void eepromWriteAllAsync(void *buffer) {
+    u32 queueIndexCopy;
+    s16 queueIndex;
+    s16 *unused;
 
-    index = D_8008FE8C_90A8C;
-    new_var = index;
+    queueIndex = D_8008FE8C_90A8C;
+    queueIndexCopy = queueIndex;
     D_8008FE8F_90A8F = 1;
-    D_800A1C20_A2820[index].command = 0x140;
-    D_800A1C20_A2820[new_var].arg = arg0;
+    D_800A1C20_A2820[queueIndex].command = 0x140;
+    D_800A1C20_A2820[queueIndexCopy].arg = buffer;
 
-    osSendMesg(&D_800A1820_A2420, &D_800A1C20_A2820[index], OS_MESG_BLOCK);
+    osSendMesg(&D_800A1820_A2420, &D_800A1C20_A2820[queueIndex], OS_MESG_BLOCK);
 
-    index = D_8008FE8C_90A8C + 1;
-    D_8008FE8C_90A8C = index;
+    queueIndex = D_8008FE8C_90A8C + 1;
+    D_8008FE8C_90A8C = queueIndex;
 
-    if (index >= 0xF) {
+    if (queueIndex >= 0xF) {
         D_8008FE8C_90A8C = 0;
     }
 }
 
-void *func_8003B510_3C110(void) {
-    void *sp10;
-    void *var_v0;
+void *pollEepromWriteAllAsync(void) {
+    void *result;
+    void *status;
 
-    sp10 = NULL;
-    var_v0 = (void *)-1;
-    if (osRecvMesg(&D_800A1888_A2488, &sp10, OS_MESG_NOBLOCK) == 0) {
+    result = NULL;
+    status = (void *)-1;
+    if (osRecvMesg(&D_800A1888_A2488, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
-        var_v0 = sp10;
+        status = result;
     }
-    return var_v0;
+    return status;
 }
 
-void func_8003B560_3C160(u8 *arg0) {
-    osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromLongWrite(&mainStack, 0, arg0, 0x200), OS_MESG_BLOCK);
+void eepromWriteAll(u8 *buffer) {
+    osSendMesg(&D_800A1888_A2488, (OSMesg *)osEepromLongWrite(&mainStack, 0, buffer, 0x200), OS_MESG_BLOCK);
 }
 
 void initPiManager(void) {

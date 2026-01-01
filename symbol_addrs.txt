@@ -2383,3 +2383,6 @@ eepromRead = 0x8003B2DC; // rom:0x3BEDC
 eepromWriteAsync = 0x8003B324; // rom:0x3BF24
 pollEepromWriteAsync = 0x8003B3B0; // rom:0x3BFB0
 eepromWrite = 0x8003B400; // rom:0x3C000
+eepromWriteAllAsync = 0x8003B47C; // rom:0x3C07C
+pollEepromWriteAllAsync = 0x8003B510; // rom:0x3C110
+eepromWriteAll = 0x8003B560; // rom:0x3C160

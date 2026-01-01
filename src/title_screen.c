@@ -107,10 +107,10 @@ void writeSaveDataToEeprom(void) {
         buffer[i] = 0;
     }
 
-    func_8003B47C_3C07C(buffer);
+    eepromWriteAllAsync(buffer);
 
     do {
-        result = (s32)func_8003B510_3C110();
+        result = (s32)pollEepromWriteAllAsync();
     } while (result == -1);
 
     if (result == 0) {

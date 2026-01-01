@@ -29,7 +29,7 @@ s32 *queueDirectDmaTransfer(void *romStart, void *romEnd, s32 size, s32 *dramAdd
 
 s32 func_8003BB5C_3C75C(void);
 
-void *func_8003B510_3C110(void);
+void *pollEepromWriteAllAsync(void);
 
 void resumeMotorStates(void);
 
