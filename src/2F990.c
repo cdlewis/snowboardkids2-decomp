@@ -109,15 +109,15 @@ typedef struct {
 } SlidingItemCardState;
 
 typedef struct {
-    func_800308FC_314FC_arg items[7];
-    s16 unk54;
-    s16 unk56;
-    void *unk58;
+    func_800308FC_314FC_arg digits[7];
+    s16 goldIconX;
+    s16 goldIconY;
+    void *goldIconAsset;
     s16 unk5C;
     s8 unk5E;
     char pad5F;
-    char unk60[8];
-} func_800302AC_30EAC_arg;
+    char goldAmountBuffer[8];
+} StoryMapShopGoldDisplayState;
 
 typedef struct {
     u8 _pad[0x4];
@@ -146,8 +146,8 @@ extern u16 D_8008F0B6_8FCB6[];
 extern s16 D_8008F0C6_8FCC6[];
 extern s32 *D_800AFE8C_A71FC;
 
-void func_80030378_30F78(func_800302AC_30EAC_arg *);
-void func_80030480_31080(func_800302AC_30EAC_arg *arg0);
+void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *);
+void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0);
 void func_80030540_31140(func_80030540_31140_arg *arg0);
 void updateStoryMapShopFairyInitial(StoryMapShopFairyState *);
 void updateStoryMapShopFairy(StoryMapShopFairyState *);
@@ -830,69 +830,69 @@ void cleanupStoryMapShopExitOverlay(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_800302AC_30EAC(func_800302AC_30EAC_arg *arg0) {
-    void *asset2;
-    void *asset1;
+void initStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
+    void *goldIconAsset;
+    void *digitSpriteAsset;
     s32 i;
     s32 *new_var;
 
-    asset1 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    asset2 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
-    setCleanupCallback(&func_80030480_31080);
+    digitSpriteAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    goldIconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    setCleanupCallback(&cleanupStoryMapShopGoldDisplay);
     for (i = 0; i < 7; i++) {
-        arg0->items[i].unk0 = 0x48 + (i * 8);
-        arg0->items[i].unk2 = 0x58;
-        arg0->items[i].unk4 = asset1;
+        arg0->digits[i].unk0 = 0x48 + (i * 8);
+        arg0->digits[i].unk2 = 0x58;
+        arg0->digits[i].unk4 = digitSpriteAsset;
     }
 
-    arg0->unk54 = 0x38;
-    arg0->unk56 = 0x58;
+    arg0->goldIconX = 0x38;
+    arg0->goldIconY = 0x58;
     arg0->unk5C = 0;
     arg0->unk5E = 0;
-    arg0->unk58 = asset2;
-    setCallback(&func_80030378_30F78);
+    arg0->goldIconAsset = goldIconAsset;
+    setCallback(&updateStoryMapShopGoldDisplay);
 }
 
-void func_80030378_30F78(func_800302AC_30EAC_arg *arg0) {
+void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     s32 i;
-    func_800308FC_314FC_arg *item;
-    s8 value;
+    func_800308FC_314FC_arg *digit;
+    s8 paletteIndex;
     s32 space;
 
     if (*D_800AFE8C_A71FC < 100) {
-        value = 1;
+        paletteIndex = 1;
         i = 6;
         do {
-            arg0->items[i].unkA = value;
+            arg0->digits[i].unkA = paletteIndex;
         } while (--i >= 0);
     } else {
-        value = 2;
+        paletteIndex = 2;
         i = 6;
         do {
-            arg0->items[i].unkA = value;
+            arg0->digits[i].unkA = paletteIndex;
         } while (--i >= 0);
     }
 
-    sprintf(arg0->unk60, "%7d", *D_800AFE8C_A71FC);
+    sprintf(arg0->goldAmountBuffer, "%7d", *D_800AFE8C_A71FC);
 
     i = 0;
     space = ' ';
-    item = &arg0->items[0];
+    digit = &arg0->digits[0];
     do {
-        char c = arg0->unk60[i];
+        char c = arg0->goldAmountBuffer[i];
         if (c != space) {
-            item->unk8 = c - '0';
-            debugEnqueueCallback(8, 0, &func_80010240_10E40, item);
+            digit->unk8 = c - '0';
+            debugEnqueueCallback(8, 0, &func_80010240_10E40, digit);
         }
-        item++;
+        digit++;
     } while (++i < 7);
 
-    debugEnqueueCallback(8, 0, &func_80010240_10E40, &arg0->unk54);
+    debugEnqueueCallback(8, 0, &func_80010240_10E40, &arg0->goldIconX);
 }
 
-void func_80030480_31080(func_800302AC_30EAC_arg *arg0) {
-    arg0->items[0].unk4 = freeNodeMemory(arg0->items[0].unk4);
-    arg0->unk58 = freeNodeMemory(arg0->unk58);
+void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
+    arg0->digits[0].unk4 = freeNodeMemory(arg0->digits[0].unk4);
+    arg0->goldIconAsset = freeNodeMemory(arg0->goldIconAsset);
 }
 
 void func_80030668_31268(func_80030668_31268_arg *);
