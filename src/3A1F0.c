@@ -312,10 +312,10 @@ int controllerPackReadPollStub(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_8003A294_3AE94);
 
-void func_8003A51C_3B11C(void) {
+void controllerPackWriteAsyncStub(void) {
 }
 
-int func_8003A524_3B124(void) {
+int controllerPackWritePollStub(void) {
     return 0;
 }
 

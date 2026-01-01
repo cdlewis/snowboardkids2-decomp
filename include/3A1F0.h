@@ -43,7 +43,7 @@ void func_80039C34_3A834(void);
 
 void controllerPackReadAsyncStub(void);
 int controllerPackReadPollStub(void);
-void func_8003A51C_3B11C(void);
-int func_8003A524_3B124(void);
+void controllerPackWriteAsyncStub(void);
+int controllerPackWritePollStub(void);
 
 #endif // _3A1F0_H_
