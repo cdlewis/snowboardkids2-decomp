@@ -12,7 +12,7 @@ extern void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8
 extern u8 identityMatrix[];
 extern u16 D_8008EF70_8FB70[];
 
-void func_8002D668_2E268(Func2E024Arg *arg0);
+void updateStoryMapRareEventJuggling(Func2E024Arg *arg0);
 
 void updateStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
     GameState *allocation;
@@ -137,7 +137,7 @@ void updateStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
     }
 }
 
-void func_8002D46C_2E06C(Func2E024Arg *container) {
+void initStoryMapRareEventJuggling(Func2E024Arg *container) {
     GameState *gameState;
     s32 i;
     Func297D8Arg *characters;
@@ -204,10 +204,10 @@ void func_8002D46C_2E06C(Func2E024Arg *container) {
         gameState->unk418[i] = D_8008EF70_8FB70[characters[i].unk5C];
     }
 
-    setCallback(func_8002D668_2E268);
+    setCallback(updateStoryMapRareEventJuggling);
 }
 
-void func_8002D668_2E268(Func2E024Arg *arg0) {
+void updateStoryMapRareEventJuggling(Func2E024Arg *arg0) {
     GameState *gameState;
     s32 i;
     Func297D8Arg *elements;
@@ -260,7 +260,7 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
         arg0->unkCC[0] = 1;
         arg0->unkCC[1] = 1;
         func_8002EBB0_2F7B0(arg0);
-        arg0->callback = func_8002D668_2E268;
+        arg0->callback = updateStoryMapRareEventJuggling;
         setCallback(updateStoryMapNpcDialogue);
     }
 }

@@ -2145,3 +2145,5 @@ initStoryMapRareEventIdle = 0x8002CB88; // rom:0x2D788
 updateStoryMapRareEventIdle = 0x8002CD3C; // rom:0x2D93C
 initStoryMapRareEventMagicShow = 0x8002CFAC; // rom:0x2DBAC
 updateStoryMapRareEventMagicShow = 0x8002D140; // rom:0x2DD40
+initStoryMapRareEventJuggling = 0x8002D46C; // rom:0x2E06C
+updateStoryMapRareEventJuggling = 0x8002D668; // rom:0x2E268
