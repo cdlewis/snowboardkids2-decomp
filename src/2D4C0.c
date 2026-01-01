@@ -122,7 +122,7 @@ void func_8002CA8C_2D68C(Func8002CB88Arg *arg0) {
             }
         }
 
-        func_8002A2D0_2AED0((Func297D8Arg *)ptr);
+        updateStoryMapNpcModel((Func297D8Arg *)ptr);
         allocation->unk408[i] = ptr->unk4.translation.x;
         allocation->unk410[i] = ptr->unk4.translation.z;
     }
@@ -205,7 +205,7 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
                 break;
         }
 
-        func_8002A2D0_2AED0((Func297D8Arg *)ptr);
+        updateStoryMapNpcModel((Func297D8Arg *)ptr);
         allocation->unk408[i] = ptr->unk4.translation.x;
         allocation->unk410[i] = ptr->unk4.translation.z;
     }

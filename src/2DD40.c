@@ -120,7 +120,7 @@ void func_8002D140_2DD40(Func2E024Arg *arg0) {
 
     ptr = arg0->elements;
     for (i = 0; i < 2; i++) {
-        func_8002A2D0_2AED0(&ptr[i]);
+        updateStoryMapNpcModel(&ptr[i]);
         allocation->unk408[i] = ptr[i].matrix.translation.x;
         allocation->unk410[i] = ptr[i].matrix.translation.z;
     }
@@ -250,7 +250,7 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
         }
 
     cont:
-        func_8002A2D0_2AED0(&elements[i]);
+        updateStoryMapNpcModel(&elements[i]);
         gameState->unk408[i] = elements[i].matrix.translation.x;
         gameState->unk410[i] = elements[i].matrix.translation.z;
     }
@@ -372,7 +372,7 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
 
     elements = arg0->elements;
     for (i = 0; i < arg0->unkD5; i++) {
-        func_8002A2D0_2AED0(&elements[i]);
+        updateStoryMapNpcModel(&elements[i]);
         gameState->unk408[i] = elements[i].matrix.translation.x;
         gameState->unk410[i] = elements[i].matrix.translation.z;
     }
@@ -525,7 +525,7 @@ void func_8002E314_2EF14(Func2E024Arg *arg0) {
                 break;
         }
 
-        func_8002A2D0_2AED0(ptr);
+        updateStoryMapNpcModel(ptr);
         allocation->unk408[i] = ptr->matrix.translation.x;
         allocation->unk410[i] = ptr->matrix.translation.z;
     }
@@ -666,7 +666,7 @@ void func_8002E8B4_2F4B4(Func2E024Arg *arg0) {
             createYRotationMatrix(&sp50, tempAngle & 0xFFFF);
             memcpy(&sp50.translation, &ptr->matrix.translation, 0xC);
             func_8006B084_6BC84(&sp30, &sp50, &ptr->matrix);
-            func_8002A2D0_2AED0(ptr);
+            updateStoryMapNpcModel(ptr);
             allocation->unk408[i] = ptr->matrix.translation.x;
             allocation->unk410[i] = ptr->matrix.translation.z;
             if (((u32)((tempAngle - 0x1001) & 0xFFFF) < 0x468)) {

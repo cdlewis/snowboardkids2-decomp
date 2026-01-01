@@ -103,7 +103,7 @@ void updateStoryMapNpcJump(Func297D8Arg *arg0) {
         }
     }
 
-    func_8002A2D0_2AED0(arg0);
+    updateStoryMapNpcModel(arg0);
 
     allocation->unk408 = arg0->matrix.translation.x;
     allocation->unk410 = arg0->matrix.translation.z;
@@ -182,7 +182,7 @@ void updateStoryMapNpcWave(Func297D8Arg *arg0) {
         }
     }
 
-    func_8002A2D0_2AED0(arg0);
+    updateStoryMapNpcModel(arg0);
 
     allocation->unk408 = arg0->matrix.translation.x;
     allocation->unk410 = arg0->matrix.translation.z;
@@ -243,7 +243,7 @@ void updateStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
         }
     }
 
-    func_8002A2D0_2AED0(arg0);
+    updateStoryMapNpcModel(arg0);
 
     allocation->unk408 = arg0->matrix.translation.x;
     allocation->unk410 = arg0->matrix.translation.z;
@@ -300,7 +300,7 @@ void updateStoryMapNpcLookAround(Func297D8Arg *arg0) {
         }
     }
 
-    func_8002A2D0_2AED0(arg0);
+    updateStoryMapNpcModel(arg0);
 
     alloc->unk408 = arg0->matrix.translation.x;
     alloc->unk410 = arg0->matrix.translation.z;
@@ -391,7 +391,7 @@ void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
         }
     }
 
-    func_8002A2D0_2AED0(arg0);
+    updateStoryMapNpcModel(arg0);
 
     allocation->unk408 = arg0->matrix.translation.x;
     allocation->unk410 = arg0->matrix.translation.z;
@@ -525,7 +525,7 @@ void updateStoryMapNpcIdle(Func297D8Arg *arg0) {
         setCallbackFlag = 1;
     }
 
-    func_8002A2D0_2AED0(arg0);
+    updateStoryMapNpcModel(arg0);
 
     alloc->unk408 = arg0->matrix.translation.x;
     alloc->unk410 = arg0->matrix.translation.z;
@@ -608,7 +608,7 @@ void updateStoryMapNpcNod(Func297D8Arg *arg0) {
         }
     }
 
-    func_8002A2D0_2AED0(arg0);
+    updateStoryMapNpcModel(arg0);
 
     alloc->unk408 = arg0->matrix.translation.x;
     alloc->unk410 = arg0->matrix.translation.z;
@@ -688,7 +688,7 @@ void updateStoryMapNpcTalk(Func297D8Arg *arg0) {
             break;
     }
 
-    func_8002A2D0_2AED0(arg0);
+    updateStoryMapNpcModel(arg0);
     alloc->unk408 = arg0->matrix.translation.x;
     alloc->unk410 = arg0->matrix.translation.z;
 }
@@ -749,7 +749,7 @@ void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
         }
     }
 
-    func_8002A2D0_2AED0(arg0);
+    updateStoryMapNpcModel(arg0);
 
     allocation->unk408 = arg0->matrix.translation.x;
     allocation->unk410 = arg0->matrix.translation.z;
@@ -812,7 +812,7 @@ void updateStoryMapNpcStill(StoryMapNpcStillArg *arg0) {
         setCallback(collectStoryMapItem);
     }
 
-    func_8002A2D0_2AED0((Func297D8Arg *)arg0);
+    updateStoryMapNpcModel((Func297D8Arg *)arg0);
 
     alloc->unk408 = arg0->matrix.translation.x;
     alloc->unk410 = arg0->matrix.translation.z;
@@ -846,7 +846,7 @@ void updateStoryMapNpcTalking(Func297D8Arg *arg0) {
             break;
     }
 
-    func_8002A2D0_2AED0(arg0);
+    updateStoryMapNpcModel(arg0);
 
     if (alloc->unk42A == 0) {
         setCallback(arg0->callback);
@@ -859,7 +859,7 @@ void setupStoryMapNpcModel(Func297D8Arg *arg0) {
     updateModelGeometry(arg0->model);
 }
 
-void func_8002A2D0_2AED0(Func297D8Arg *arg0) {
+void updateStoryMapNpcModel(Func297D8Arg *arg0) {
     s32 result;
 
     getCurrentAllocation();

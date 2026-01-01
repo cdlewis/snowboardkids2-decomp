@@ -43,7 +43,7 @@ typedef struct {
     /* 0x50 */ s16 unk50;
 } func_8002A290_2AE90_arg;
 
-void func_8002A2D0_2AED0(Func297D8Arg *);
+void updateStoryMapNpcModel(Func297D8Arg *);
 void setupStoryMapNpcModel(Func297D8Arg *);
 void updateStoryMapNpcJump(Func297D8Arg *);
 void updateStoryMapNpcLookAround(Func297D8Arg *);
