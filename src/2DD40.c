@@ -269,9 +269,9 @@ INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002D814_2E414);
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002DA54_2E654);
 
-void func_8002E024_2EC24(Func2E024Arg *arg0);
+void updateStoryMapRareEventSnowman(Func2E024Arg *arg0);
 
-void func_8002DE44_2EA44(Func2E024Arg *container) {
+void initStoryMapRareEventSnowman(Func2E024Arg *container) {
     GameState *gameState;
     s32 i;
     Func297D8Arg *elements;
@@ -339,10 +339,10 @@ void func_8002DE44_2EA44(Func2E024Arg *container) {
         gameState->unk418[i] = D_8008EF70_8FB70[element->unk5C];
     }
 
-    setCallback(func_8002E024_2EC24);
+    setCallback(updateStoryMapRareEventSnowman);
 }
 
-void func_8002E024_2EC24(Func2E024Arg *arg0) {
+void updateStoryMapRareEventSnowman(Func2E024Arg *arg0) {
     GameState *gameState;
     s32 i;
     Func297D8Arg *elements;
@@ -379,7 +379,7 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
 
     if (gameState->unk42A == 0x11) {
         func_8002EBB0_2F7B0(arg0);
-        arg0->callback = func_8002E024_2EC24;
+        arg0->callback = updateStoryMapRareEventSnowman;
         setCallback(updateStoryMapNpcDialogue);
     }
 }
