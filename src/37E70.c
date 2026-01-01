@@ -50,7 +50,7 @@ void initOptionsMenu(void) {
     scheduleTask(initOptionsMenuTitle, 0, 0, 0x5A);
     scheduleTask(initOptionsMenuToggles, 0, 0, 0x5A);
     scheduleTask(initOptionsMenuLabels, 0, 0, 0x5A);
-    scheduleTask(func_80037E78_38A78, 0, 0, 0x5A);
+    scheduleTask(initOptionsMenuCursors, 0, 0, 0x5A);
     func_800574A0_580A0(6);
     setGameStateHandler(onOptionsMenuFadeInComplete);
 }

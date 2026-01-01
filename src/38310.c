@@ -72,17 +72,17 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x4];
-    void *unk4;
-} func_80037FB0_38BB0_arg;
+    void *cursorSpriteAsset;
+} OptionsMenuCursorsCleanupArg;
 
 typedef struct {
     u8 pad[0x1E0];
-    u16 unk1E0;
-    u16 unk1E2;
+    u16 frameCounter;
+    u16 menuState;
     u8 pad2[0x4];
-    u8 unk1E8[4];
-    u8 unk1EC;
-} func_80037F14_alloc;
+    u8 itemValues[4];
+    u8 selectedIndex;
+} OptionsMenuAllocation;
 
 extern u8 optionsMenuTitleTextData[];
 extern void *D_8008FD8C_9098C;
@@ -95,8 +95,8 @@ void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *);
 void updateOptionsMenuLabels(OptionsMenuLabelsState *);
 void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *);
 void updateOptionsMenuTitle(u8 *);
-void func_80037F14_38B14(OptionsMenuLabelIconEntry *);
-void func_80037FB0_38BB0(func_80037FB0_38BB0_arg *arg0);
+void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *);
+void cleanupOptionsMenuCursors(OptionsMenuCursorsCleanupArg *arg0);
 
 void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
     void *textAsset;
@@ -211,7 +211,7 @@ void initOptionsMenuToggles(void *arg0) {
 #undef ARG0
 
 void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
-    func_80037F14_alloc *alloc;
+    OptionsMenuAllocation *alloc;
     s32 i;
     u8 optionValue;
 
@@ -228,14 +228,14 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
 
         arg0->iconEntries[i].displayFlags = ((optionValue + (i & 1)) & 1) | 2;
 
-        if (alloc->unk1E2 == 0) {
+        if (alloc->menuState == 0) {
             u8 idx;
             s32 value;
-            idx = alloc->unk1EC;
+            idx = alloc->selectedIndex;
             value = optionValue + (idx << 1);
             if (value == i) {
-                arg0->iconEntries[i].highlightValue = alloc->unk1E8[idx];
-                arg0->labelEntries[i].highlight.asShort = alloc->unk1E8[alloc->unk1EC];
+                arg0->iconEntries[i].highlightValue = alloc->itemValues[idx];
+                arg0->labelEntries[i].highlight.asShort = alloc->itemValues[alloc->selectedIndex];
             } else {
                 arg0->iconEntries[i].highlightValue = 0;
                 arg0->labelEntries[i].highlight.asShort = 0;
@@ -314,22 +314,22 @@ void initOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
 }
 
 void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
-    func_80037F14_alloc *alloc;
+    OptionsMenuAllocation *alloc;
     s32 i;
     do {
-        alloc = (func_80037F14_alloc *)getCurrentAllocation();
+        alloc = (OptionsMenuAllocation *)getCurrentAllocation();
 
         for (i = 0; i < 4; i++) {
-            if (alloc->unk1E2 == 0) {
-                if (alloc->unk1EC == i) {
-                    arg0->iconEntries[i].highlightValue = alloc->unk1E8[i];
-                    arg0->textEntries[i].highlight = alloc->unk1E8[i];
+            if (alloc->menuState == 0) {
+                if (alloc->selectedIndex == i) {
+                    arg0->iconEntries[i].highlightValue = alloc->itemValues[i];
+                    arg0->textEntries[i].highlight = alloc->itemValues[i];
                 } else {
                     arg0->iconEntries[i].highlightValue = 0;
                     arg0->textEntries[i].highlight = 0;
                 }
             } else {
-                if (alloc->unk1E2 == 1 && alloc->unk1EC == i && (alloc->unk1E0 & 1)) {
+                if (alloc->menuState == 1 && alloc->selectedIndex == i && (alloc->frameCounter & 1)) {
                     arg0->iconEntries[i].alpha = 0xFF;
                 } else {
                     arg0->iconEntries[i].alpha = 1;
@@ -359,51 +359,51 @@ void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80037E78_38A78(OptionsMenuLabelIconEntry *arg0) {
-    void *allocation;
+void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
+    void *cursorSpriteAsset;
     s32 i;
-    s32 minus32;
-    s32 val;
+    s32 initialY;
+    s32 xPos;
 
     getCurrentAllocation();
-    allocation = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
-    setCleanupCallback(func_80037FB0_38BB0);
+    cursorSpriteAsset = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    setCleanupCallback(cleanupOptionsMenuCursors);
 
     i = 0;
-    minus32 = -32;
-    val = 8;
+    initialY = -32;
+    xPos = 8;
     do {
-        arg0[i].x = val;
-        arg0[i].y = minus32;
-        arg0[i].spriteAsset = allocation;
+        arg0[i].x = xPos;
+        arg0[i].y = initialY;
+        arg0[i].spriteAsset = cursorSpriteAsset;
         arg0[i].frameIndex = i;
         arg0[i].highlightValue = 0;
         arg0[i].alpha = 0;
         arg0[i].unkC = 0;
         i++;
-        val += 0x78;
+        xPos += 0x78;
     } while (i < 2);
 
-    setCallback(func_80037F14_38B14);
+    setCallback(updateOptionsMenuCursors);
 }
 
-void func_80037F14_38B14(OptionsMenuLabelIconEntry *arg0) {
-    func_80037F14_alloc *alloc = getCurrentAllocation();
+void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
+    OptionsMenuAllocation *alloc = getCurrentAllocation();
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        if (alloc->unk1E2 != 0) {
+        if (alloc->menuState != 0) {
             continue;
         }
-        if (alloc->unk1EC >= 3) {
+        if (alloc->selectedIndex >= 3) {
             continue;
         }
-        arg0[i].y = (alloc->unk1EC * 32) - 32;
-        arg0[i].highlightValue = alloc->unk1E8[alloc->unk1EC];
+        arg0[i].y = (alloc->selectedIndex * 32) - 32;
+        arg0[i].highlightValue = alloc->itemValues[alloc->selectedIndex];
         debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0[i]);
     }
 }
 
-void func_80037FB0_38BB0(func_80037FB0_38BB0_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupOptionsMenuCursors(OptionsMenuCursorsCleanupArg *arg0) {
+    arg0->cursorSpriteAsset = freeNodeMemory(arg0->cursorSpriteAsset);
 }
