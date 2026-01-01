@@ -170,8 +170,8 @@ void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *);
 void cleanupUnlockScreenScrollArrows(func_8002FF28_30B28_arg *arg0);
 void updateStoryMapShopItemIcon(StoryMapShopItemIconState *);
 void cleanupStoryMapShopItemIcon(StoryMapShopItemIconState *);
-void func_8003006C_30C6C(ScrollArrowSprite *);
-void func_80030194_30D94(func_8002FF28_30B28_arg *);
+void updateStoryMapShopItemStatLabel(ScrollArrowSprite *);
+void cleanupStoryMapShopItemStatLabel(func_8002FF28_30B28_arg *);
 void func_80030238_30E38(void *arg0);
 void func_80030280_30E80(func_8002FF28_30B28_arg *arg0);
 void func_80030764_31364(ItemStatsDisplay *arg0);
@@ -737,7 +737,7 @@ void cleanupStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
     iconState->asset = freeNodeMemory(iconState->asset);
 }
 
-void func_8002FF54_30B54(ScrollArrowSprite *arg0) {
+void initStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
     GameState *state;
     GameState *temp_s0;
     void *dmaResult;
@@ -745,7 +745,7 @@ void func_8002FF54_30B54(ScrollArrowSprite *arg0) {
 
     state = (GameState *)getCurrentAllocation();
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_80030194_30D94);
+    setCleanupCallback(cleanupStoryMapShopItemStatLabel);
 
     arg0->y = -0x18;
 
@@ -766,10 +766,10 @@ void func_8002FF54_30B54(ScrollArrowSprite *arg0) {
     arg0->unkD = 0;
     arg0->asset = dmaResult;
 
-    setCallback(func_8003006C_30C6C);
+    setCallback(updateStoryMapShopItemStatLabel);
 }
 
-void func_8003006C_30C6C(ScrollArrowSprite *arg0) {
+void updateStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
     u8 itemValue;
 
@@ -801,7 +801,7 @@ void func_8003006C_30C6C(ScrollArrowSprite *arg0) {
     }
 }
 
-void func_80030194_30D94(func_8002FF28_30B28_arg *arg0) {
+void cleanupStoryMapShopItemStatLabel(func_8002FF28_30B28_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 

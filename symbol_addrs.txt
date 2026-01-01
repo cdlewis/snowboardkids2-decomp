@@ -2184,3 +2184,6 @@ cleanupUnlockScreenScrollArrows = 0x8002FCA8; // rom:0x308A8
 initStoryMapShopItemIcon = 0x8002FCD4; // rom:0x308D4
 updateStoryMapShopItemIcon = 0x8002FDFC; // rom:0x309FC
 cleanupStoryMapShopItemIcon = 0x8002FF28; // rom:0x30B28
+initStoryMapShopItemStatLabel = 0x8002FF54; // rom:0x30B54
+updateStoryMapShopItemStatLabel = 0x8003006C; // rom:0x30C6C
+cleanupStoryMapShopItemStatLabel = 0x80030194; // rom:0x30D94
