@@ -475,12 +475,12 @@ void motorUpdate(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", motorProcessState);
 
-void func_8003AF38_3BB38(s32 arg0) {
-    s32 temp_v1;
-    temp_v1 = arg0 & 0xFFFF;
+void startMotorRumble(s32 controllerChannel) {
+    s32 channel;
+    channel = controllerChannel & 0xFFFF;
 
-    if (((s32)gMotorInitCompleteMask >> temp_v1) & 1) {
-        gMotorState.intensity[temp_v1] = 1;
+    if (((s32)gMotorInitCompleteMask >> channel) & 1) {
+        gMotorState.intensity[channel] = 1;
     }
 }
 
