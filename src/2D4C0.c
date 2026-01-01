@@ -102,7 +102,7 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *);
 
 INCLUDE_ASM("asm/nonmatchings/2D4C0", func_8002C8C0_2D4C0);
 
-void func_8002CA8C_2D68C(Func8002CB88Arg *arg0) {
+void updateStoryMapRareEventWave(Func8002CB88Arg *arg0) {
     GameState *allocation;
     s32 i;
     Func8002CB88Arg_arg0 *ptr;
@@ -129,7 +129,7 @@ void func_8002CA8C_2D68C(Func8002CB88Arg *arg0) {
 
     if (allocation->unk42A == 0x11) {
         func_8002EBB0_2F7B0(arg0);
-        arg0->unkC8 = func_8002CA8C_2D68C;
+        arg0->unkC8 = updateStoryMapRareEventWave;
         setCallback(updateStoryMapNpcDialogue);
     }
 }
