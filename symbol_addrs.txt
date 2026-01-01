@@ -2224,3 +2224,4 @@ cleanupBoardShopSnowParticles = 0x80031248; // rom:0x31E48
 initBoardShopCharacterPreview = 0x80031288; // rom:0x31E88
 waitBoardShopCharacterPreview = 0x800313A4; // rom:0x31FA4
 animateBoardShopCharacterSlideIn = 0x800313DC; // rom:0x31FDC
+updateBoardShopCharacterPreview = 0x80031458; // rom:0x32058

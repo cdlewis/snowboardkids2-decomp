@@ -326,7 +326,7 @@ void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
 void func_800317D4_323D4(func_80031510_32110_arg *arg0);
 void waitBoardShopCharacterPreview(void);
 void animateBoardShopCharacterSlideIn(func_80031510_32110_arg *arg0);
-void func_80031458_32058(func_80031510_32110_arg *arg0);
+void updateBoardShopCharacterPreview(func_80031510_32110_arg *arg0);
 void func_80031510_32110(func_80031510_32110_arg *arg0);
 void func_800315C0_321C0(func_80031510_32110_arg *arg0);
 void func_8003165C_3225C(func_800319C8_325C8_arg *arg0);
@@ -567,21 +567,21 @@ void animateBoardShopCharacterSlideIn(func_80031510_32110_arg *arg0) {
 
     if (arg0->unk50 == 0) {
         allocation->unk788[19] = 0xC;
-        setCallbackWithContinue(&func_80031458_32058);
+        setCallbackWithContinue(&updateBoardShopCharacterPreview);
     }
 
     enqueueDisplayListObject(0, (DisplayListObject *)arg0);
 }
 
-void func_80031458_32058(func_80031510_32110_arg *arg0) {
+void updateBoardShopCharacterPreview(func_80031510_32110_arg *arg0) {
     func_80032DE8_339E8_asset *allocation;
-    u8 assetType;
+    u8 state;
 
     allocation = getCurrentAllocation();
-    assetType = allocation->unk788[19];
+    state = allocation->unk788[19];
 
-    if (assetType == 3 || assetType == 0x1A) {
-        if (assetType == 3) {
+    if (state == 3 || state == 0x1A) {
+        if (state == 3) {
             arg0->unk24 = freeNodeMemory(arg0->unk24);
             arg0->unk28 = freeNodeMemory(arg0->unk28);
             arg0->unk2C = freeNodeMemory(arg0->unk2C);
@@ -590,7 +590,7 @@ void func_80031458_32058(func_80031510_32110_arg *arg0) {
             setCallback(&func_8003165C_3225C);
             enqueueDisplayListObject(0, (DisplayListObject *)arg0);
         }
-    } else if (assetType == 0x32) {
+    } else if (state == 0x32) {
         setCallback(&func_80031758_32358);
         enqueueDisplayListObject(0, (DisplayListObject *)arg0);
     } else {
@@ -641,7 +641,7 @@ void func_800315C0_321C0(func_80031510_32110_arg *arg0) {
 
     if (arg0->unk50 == 0) {
         allocation->unk79D--;
-        setCallback(&func_80031458_32058);
+        setCallback(&updateBoardShopCharacterPreview);
     }
 
     enqueueDisplayListObject(0, (DisplayListObject *)arg0);
@@ -674,7 +674,7 @@ void func_800316AC_322AC(func_80031510_32110_arg *arg0) {
     arg0->unk28 = loadAssetByIndex_95590(assetIndex);
     arg0->unk2C = loadAssetByIndex_95668(characterIndex);
 
-    setCallback(&func_80031458_32058);
+    setCallback(&updateBoardShopCharacterPreview);
 }
 
 void func_80031758_32358(func_80031510_32110_arg *arg0) {
