@@ -1109,6 +1109,8 @@ mainStack = 0x800AF490;
 initControllerSubsystem = 0x800395F0; // rom:0x3A1F0
 controllerServiceThread = 0x800397CC; // rom:0x3A3CC
 startControllerRead = 0x80039B88; // rom:0x3A788
+controllerPackInitAsyncStub = 0x8003A1DC; // rom:0x3ADDC
+controllerPackInitPollStub = 0x8003A1E4; // rom:0x3ADE4
 
 osViModeTable = 0x8009BE70; // defined:true
 

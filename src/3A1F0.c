@@ -277,10 +277,10 @@ void startControllerRead(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3A1F0", func_80039C34_3A834);
 
-void func_8003A1DC_3ADDC(void) {
+void controllerPackInitAsyncStub(void) {
 }
 
-int func_8003A1E4_3ADE4(void) {
+int controllerPackInitPollStub(void) {
     return 0;
 }
 
