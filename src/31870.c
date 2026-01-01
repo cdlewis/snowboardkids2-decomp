@@ -48,39 +48,39 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x77C];
-    u16 unk77C;
+    u16 frameCounter;
     u8 padding2[0x6];
     u8 unk784[4];
     u8 unk788[17];
-    u8 unk799;
+    u8 selectedIconIndex;
     u8 unk79A;
-    u8 unk79B;
+    u8 shopState;
     u8 unk79C;
     s8 unk79D;
-} func_800329A8_335A8_allocation;
+} BoardShopSelectionAllocation;
 
 typedef struct {
     u8 padding[0x8];
-    s16 unk8;
+    s16 spriteIndex;
     u8 padding2[0x2];
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
+    s16 scaleX;
+    s16 scaleY;
+    s16 alpha;
     s8 unk12;
     s8 unk13;
-    u8 unk14;
+    u8 flipX;
     u8 padding3[0x3];
-} func_800329A8_335A8_arg_item;
+} BoardShopIconDisplayState;
 
 typedef struct {
-    func_800329A8_335A8_arg_item unk0[4];
+    BoardShopIconDisplayState icons[4];
     u8 padding2[0x18];
-    s16 unk78;
-    s16 unk7A;
+    s16 priceTextX;
+    s16 priceTextY;
     u8 padding3[0x8];
-    s8 unk84[4];
-    char unk88;
-} func_800329A8_335A8_arg;
+    s8 animationCounters[4];
+    char priceTextBuffer;
+} BoardShopIconSelectionState;
 
 typedef struct {
     Node_70B00 *unk0;
@@ -297,7 +297,7 @@ typedef struct {
 } SnowParticleState;
 
 void animateBoardShopSnowParticles(void);
-void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
+void blinkBoardShopBoardIconConfirmation(BoardShopIconSelectionState *arg0);
 void freeBoardShopCharacterPreviewAssets(BoardShopCharacterPreviewState *arg0);
 void waitBoardShopCharacterPreview(void);
 void animateBoardShopCharacterSlideIn(BoardShopCharacterPreviewState *arg0);
@@ -337,7 +337,7 @@ void cleanupBoardShopGoldDisplay(BoardShopGoldDisplayCleanupArg *arg0);
 void cleanupBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void waitBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
-void updateBoardShopBoardIconSelection(func_800329A8_335A8_arg *arg0);
+void updateBoardShopBoardIconSelection(BoardShopIconSelectionState *arg0);
 
 extern u16 D_8008F16C_8FD6C[];
 extern u16 D_8008F16E_8FD6E[];
@@ -653,7 +653,7 @@ void loadBoardShopPurchaseAssets(BoardShopCharacterPreviewState *arg0) {
 }
 
 void animateBoardShopCharacterSlideOut(BoardShopCharacterPreviewState *arg0) {
-    func_800329A8_335A8_allocation *allocation;
+    BoardShopSelectionAllocation *allocation;
 
     allocation = getCurrentAllocation();
     arg0->unk50 += 0x100000;
@@ -901,7 +901,7 @@ void initBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0) {
 }
 
 void updateBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0) {
-    func_800329A8_335A8_allocation *allocation;
+    BoardShopSelectionAllocation *allocation;
     BoardShopComparisonIconState *icon;
     u8 state;
     s16 s4;
@@ -909,13 +909,13 @@ void updateBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0) {
 
     allocation = getCurrentAllocation();
 
-    if (allocation->unk79B < 15) {
+    if (allocation->shopState < 15) {
         s4 = 0xFF;
         s3 = 8;
         icon = arg0->icons;
 
     loop:
-        state = allocation->unk79B;
+        state = allocation->shopState;
         if ((state == 2) | (state == 5)) {
             if (arg0->animationCounter < 16) {
                 icon->alpha = icon->alpha - 8;
@@ -925,9 +925,9 @@ void updateBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0) {
         } else {
             arg0->animationCounter = 0;
             icon->alpha = s4;
-            state = allocation->unk79B;
+            state = allocation->shopState;
             if ((state == 4) & (state == 7)) {
-                if (allocation->unk77C & 1) {
+                if (allocation->frameCounter & 1) {
                     icon->unkD = s4;
                 } else {
                     icon->unkD = 0;
@@ -935,14 +935,14 @@ void updateBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0) {
             }
         }
 
-        state = allocation->unk79B;
+        state = allocation->shopState;
         if (state >= 5) {
             icon->y = s3;
         } else {
             icon->y = -24;
         }
 
-        if (allocation->unk79B == 3) {
+        if (allocation->shopState == 3) {
             if (allocation->unk79D < 0) {
                 icon->y = s3;
             }
@@ -954,7 +954,7 @@ void updateBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0) {
             goto loop;
         }
 
-        state = allocation->unk79B;
+        state = allocation->shopState;
         if ((state != 4) & (state != 7)) {
             if (state != 3) {
                 arg0->animationCounter = (arg0->animationCounter + 1) & 0x1F;
@@ -1260,73 +1260,73 @@ void animateBoardShopBoardIconsSlideIn(BoardShopBoardIconsState *arg0) {
     }
 }
 
-void updateBoardShopBoardIconSelection(func_800329A8_335A8_arg *arg0) {
-    func_800329A8_335A8_allocation *state;
+void updateBoardShopBoardIconSelection(BoardShopIconSelectionState *arg0) {
+    BoardShopSelectionAllocation *state;
     s32 i;
     int new_var;
     u8 temp;
     s16 adjustment;
     state = getCurrentAllocation();
     for (i = 0; i < 4; i++) {
-        if (state->unk799 == i) {
-            arg0->unk0[i].unk10 = 0xFF;
-            if (state->unk77C >= 5) {
-                temp = arg0->unk84[i];
+        if (state->selectedIconIndex == i) {
+            arg0->icons[i].alpha = 0xFF;
+            if (state->frameCounter >= 5) {
+                temp = arg0->animationCounters[i];
                 if (temp < 30) {
                     adjustment = D_8008F184_8FD84[temp / 10];
-                    arg0->unk0[i].unkC = arg0->unk0[i].unkC + adjustment;
+                    arg0->icons[i].scaleX = arg0->icons[i].scaleX + adjustment;
                 } else {
                     adjustment = D_8008F184_8FD84[2 - ((temp - 30) / 10)];
-                    arg0->unk0[i].unkC = arg0->unk0[i].unkC - adjustment;
+                    arg0->icons[i].scaleX = arg0->icons[i].scaleX - adjustment;
                 }
-                arg0->unk84[i]++;
-                temp = arg0->unk84[i];
+                arg0->animationCounters[i]++;
+                temp = arg0->animationCounters[i];
                 if (temp == 60) {
-                    arg0->unk84[i] = 0;
-                    arg0->unk0[i].unkC = 0x400;
+                    arg0->animationCounters[i] = 0;
+                    arg0->icons[i].scaleX = 0x400;
                 } else if (temp == 30) {
-                    arg0->unk0[i].unk14 = (arg0->unk0[i].unk14 + 1) & 1;
+                    arg0->icons[i].flipX = (arg0->icons[i].flipX + 1) & 1;
                 }
             }
         } else {
-            arg0->unk0[i].unk10 = 0x80;
-            arg0->unk84[i] = 0;
-            arg0->unk0[i].unk14 = 0;
-            arg0->unk0[i].unkC = 0x400;
+            arg0->icons[i].alpha = 0x80;
+            arg0->animationCounters[i] = 0;
+            arg0->icons[i].flipX = 0;
+            arg0->icons[i].scaleX = 0x400;
         }
-        debugEnqueueCallback(8, 0, func_800136E0_142E0, &arg0->unk0[i]);
+        debugEnqueueCallback(8, 0, func_800136E0_142E0, &arg0->icons[i]);
     }
 
-    if (state->unk79B == 0x11) {
+    if (state->shopState == 0x11) {
         for (i = 0; i < 4; i++) {
-            arg0->unk0[i].unk10 = 0x80;
-            arg0->unk0[i].unkC = 0x400;
-            arg0->unk0[i].unk14 = 0;
-            arg0->unk0[i].unk8 = state->unk788[state->unk784[i]];
+            arg0->icons[i].alpha = 0x80;
+            arg0->icons[i].scaleX = 0x400;
+            arg0->icons[i].flipX = 0;
+            arg0->icons[i].spriteIndex = state->unk788[state->unk784[i]];
         }
 
-        arg0->unk84[0] = 1;
+        arg0->animationCounters[0] = 1;
         setCallback(func_80032CB4_338B4);
-    } else if (state->unk79B == 0x13) {
+    } else if (state->shopState == 0x13) {
         new_var = 0x400;
         for (i = 3; i >= 0; i--) {
-            arg0->unk0[i].unkC = new_var;
+            arg0->icons[i].scaleX = new_var;
         }
 
         setCallback(func_80032B0C_3370C);
     } else {
-        temp = state->unk788[state->unk784[state->unk799]];
-        sprintf(&arg0->unk88, &D_8009E480_9F080, D_8008F150_8FD50[temp]);
-        arg0->unk7A = (state->unk799 * 0x28) - 0x2A;
-        debugEnqueueCallback(8, 7, renderTextPalette, &arg0->unk78);
-        if (state->unk79B == 0x14) {
-            setCallback(func_800329A8_335A8);
+        temp = state->unk788[state->unk784[state->selectedIconIndex]];
+        sprintf(&arg0->priceTextBuffer, &D_8009E480_9F080, D_8008F150_8FD50[temp]);
+        arg0->priceTextY = (state->selectedIconIndex * 0x28) - 0x2A;
+        debugEnqueueCallback(8, 7, renderTextPalette, &arg0->priceTextX);
+        if (state->shopState == 0x14) {
+            setCallback(blinkBoardShopBoardIconConfirmation);
         }
     }
 }
 
-void func_800329A8_335A8(func_800329A8_335A8_arg *arg0) {
-    func_800329A8_335A8_allocation *state;
+void blinkBoardShopBoardIconConfirmation(BoardShopIconSelectionState *arg0) {
+    BoardShopSelectionAllocation *state;
     s32 i;
     u8 temp;
     s16 temp2;
@@ -1334,33 +1334,33 @@ void func_800329A8_335A8(func_800329A8_335A8_arg *arg0) {
     state = getCurrentAllocation();
 
     for (i = 0; i < 4; i++) {
-        arg0->unk0[i].unkC = 0x400;
-        arg0->unk84[i] = 0;
+        arg0->icons[i].scaleX = 0x400;
+        arg0->animationCounters[i] = 0;
         temp2 = 0xFF;
 
-        if (state->unk799 == i) {
-            arg0->unk0[i].unk10 = 0xFF;
-            arg0->unk0[i].unk13 = 0;
-            if (state->unk79B == 0x14) {
-                if ((state->unk77C & 1) != 0) {
+        if (state->selectedIconIndex == i) {
+            arg0->icons[i].alpha = 0xFF;
+            arg0->icons[i].unk13 = 0;
+            if (state->shopState == 0x14) {
+                if ((state->frameCounter & 1) != 0) {
                     __asm__ volatile("" ::: "memory");
-                    arg0->unk0[i].unk13 = temp2;
+                    arg0->icons[i].unk13 = temp2;
                 }
             }
         } else {
-            arg0->unk0[i].unk10 = 0x80;
+            arg0->icons[i].alpha = 0x80;
         }
 
-        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &arg0->unk0[i]);
+        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &arg0->icons[i]);
     }
 
-    temp = state->unk784[state->unk799];
+    temp = state->unk784[state->selectedIconIndex];
     temp = state->unk788[temp];
 
-    sprintf(&arg0->unk88, &D_8009E480_9F080, D_8008F150_8FD50[temp]);
-    arg0->unk7A = state->unk799 * 0x28 - 0x2A;
-    debugEnqueueCallback(8, 7, &renderTextPalette, &arg0->unk78);
-    if (state->unk79B < 0x14) {
+    sprintf(&arg0->priceTextBuffer, &D_8009E480_9F080, D_8008F150_8FD50[temp]);
+    arg0->priceTextY = state->selectedIconIndex * 0x28 - 0x2A;
+    debugEnqueueCallback(8, 7, &renderTextPalette, &arg0->priceTextX);
+    if (state->shopState < 0x14) {
         setCallback(&updateBoardShopBoardIconSelection);
     }
 }

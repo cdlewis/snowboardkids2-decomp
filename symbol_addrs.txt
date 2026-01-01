@@ -2260,4 +2260,5 @@ cleanupBoardShopGoldDisplay = 0x80032504; // rom:0x33104
 initBoardShopBoardIcons = 0x8003253C; // rom:0x3313C
 animateBoardShopBoardIconsSlideIn = 0x80032628; // rom:0x33228
 updateBoardShopBoardIconSelection = 0x80032708; // rom:0x33308
+blinkBoardShopBoardIconConfirmation = 0x800329A8; // rom:0x335A8
 boardIconTargetYPositions = 0x8008F17C; // rom:0x8FD7C
