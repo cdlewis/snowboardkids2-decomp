@@ -54,5 +54,5 @@ void updateStoryMapNpcThinkEffect(Func297D8Arg *);
 void func_80029EA8_2AAA8(Func297D8Arg *);
 void func_80029C90_2A890(Func297D8Arg *);
 void func_8002A0DC_2ACDC(Func297D8Arg *);
-void func_80029954_2A554(Func297D8Arg *);
+void updateStoryMapNpcIdle(Func297D8Arg *);
 void func_8002A044_2AC44(Func297D8Arg *);

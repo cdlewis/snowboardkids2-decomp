@@ -409,7 +409,7 @@ void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
     }
 }
 
-void func_80029584_2A184(Func297D8Arg *arg0) {
+void initStoryMapNpcIdle(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
     arg0->unk61 = 0;
     arg0->unk62 = 0;
@@ -417,7 +417,7 @@ void func_80029584_2A184(Func297D8Arg *arg0) {
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     setAnimationIndex(arg0->model, 4);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029954_2A554);
+    setCallback(updateStoryMapNpcIdle);
 }
 
 void func_800295E0_2A1E0(Func297D8Arg *arg0) {
@@ -427,7 +427,7 @@ void func_800295E0_2A1E0(Func297D8Arg *arg0) {
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029954_2A554);
+    setCallback(updateStoryMapNpcIdle);
 }
 
 void func_80029630_2A230(Func297D8Arg *arg0) {
@@ -437,7 +437,7 @@ void func_80029630_2A230(Func297D8Arg *arg0) {
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029954_2A554);
+    setCallback(updateStoryMapNpcIdle);
 }
 
 void func_80029680_2A280(Func297D8Arg *arg0) {
@@ -452,7 +452,7 @@ void func_80029680_2A280(Func297D8Arg *arg0) {
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     setAnimationIndex(arg0->model, 1);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029954_2A554);
+    setCallback(updateStoryMapNpcIdle);
 }
 
 void func_80029724_2A324(Func297D8Arg *arg0) {
@@ -469,7 +469,7 @@ void func_80029724_2A324(Func297D8Arg *arg0) {
         setAnimationIndex(arg0->model, 0);
     }
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029954_2A554);
+    setCallback(updateStoryMapNpcIdle);
 }
 
 void func_800297D8_2A3D8(Func297D8Arg *arg0) {
@@ -480,7 +480,7 @@ void func_800297D8_2A3D8(Func297D8Arg *arg0) {
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     setAnimationIndex(arg0->model, 4);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029954_2A554);
+    setCallback(updateStoryMapNpcIdle);
 }
 
 void func_80029840_2A440(Func297D8Arg *arg0) {
@@ -490,7 +490,7 @@ void func_80029840_2A440(Func297D8Arg *arg0) {
     arg0->unk5A = (randB() & 0x1F) + 0x14;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029954_2A554);
+    setCallback(updateStoryMapNpcIdle);
 }
 
 void func_8002989C_2A49C(Func297D8Arg *arg0) {
@@ -500,7 +500,7 @@ void func_8002989C_2A49C(Func297D8Arg *arg0) {
     arg0->unk5A = (randB() & 0x1F) + 0x14;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029954_2A554);
+    setCallback(updateStoryMapNpcIdle);
 }
 
 void func_800298F8_2A4F8(Func297D8Arg *arg0) {
@@ -510,10 +510,10 @@ void func_800298F8_2A4F8(Func297D8Arg *arg0) {
     arg0->unk5A = (randB() & 0x1F) + 0x14;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029954_2A554);
+    setCallback(updateStoryMapNpcIdle);
 }
 
-void func_80029954_2A554(Func297D8Arg *arg0) {
+void updateStoryMapNpcIdle(Func297D8Arg *arg0) {
     s32 setCallbackFlag;
     AllocationData *alloc;
 
@@ -543,7 +543,7 @@ void func_80029954_2A554(Func297D8Arg *arg0) {
 
         arg0->unk5E = 0x14;
         arg0->unk50 = 0;
-        arg0->callback = func_80029954_2A554;
+        arg0->callback = updateStoryMapNpcIdle;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
         setCallback(func_8002A200_2AE00);
