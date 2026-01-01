@@ -994,20 +994,20 @@ void cleanupBoardShopComparisonIcons(BoardShopComparisonIconsCleanupArg *arg0) {
 
 typedef struct {
     void *unk0;
-    void *unk4;
-} func_800320B8_32CB8_arg;
+    void *asset;
+} BoardShopRowSelectorArrowCleanupArg;
 
-void func_800320B8_32CB8(func_800320B8_32CB8_arg *arg0);
+void cleanupBoardShopRowSelectorArrow(BoardShopRowSelectorArrowCleanupArg *arg0);
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
     s8 unkC;
     s8 unkD;
-} func_80031F94_32B94_arg;
+} BoardShopRowSelectorArrowState;
 
 typedef struct {
     u8 _pad[0x77C];
@@ -1017,35 +1017,35 @@ typedef struct {
     u8 _pad3[0x5];
     s8 unk7A1;
     s8 unk7A2;
-} func_80032020_32C20_allocation;
+} BoardShopRowSelectorArrowAllocation;
 
-void func_80032020_32C20(func_80031F94_32B94_arg *arg0);
+void updateBoardShopRowSelectorArrow(BoardShopRowSelectorArrowState *arg0);
 
-void func_80031F94_32B94(func_80031F94_32B94_arg *arg0) {
-    void *temp_s1;
+void initBoardShopRowSelectorArrow(BoardShopRowSelectorArrowState *arg0) {
+    void *asset;
 
     getCurrentAllocation();
-    temp_s1 = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(&func_800320B8_32CB8);
-    arg0->unk0 = -0x1C;
-    arg0->unk2 = -0x18;
-    arg0->unk8 = 0x1D;
-    arg0->unkA = 0xFF;
+    asset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    setCleanupCallback(&cleanupBoardShopRowSelectorArrow);
+    arg0->x = -0x1C;
+    arg0->y = -0x18;
+    arg0->spriteIndex = 0x1D;
+    arg0->alpha = 0xFF;
     arg0->unkC = 0;
     arg0->unkD = 0;
-    arg0->unk4 = temp_s1;
-    setCallback(&func_80032020_32C20);
+    arg0->asset = asset;
+    setCallback(&updateBoardShopRowSelectorArrow);
 }
 
-void func_80032020_32C20(func_80031F94_32B94_arg *arg0) {
-    func_80032020_32C20_allocation *allocation;
+void updateBoardShopRowSelectorArrow(BoardShopRowSelectorArrowState *arg0) {
+    BoardShopRowSelectorArrowAllocation *allocation;
     u8 temp;
 
     allocation = getCurrentAllocation();
 
     if (allocation->unk79B < 0xF) {
         if (allocation->unk79B != 3) {
-            arg0->unk8 = allocation->unk7A1 + 0x1D;
+            arg0->spriteIndex = allocation->unk7A1 + 0x1D;
 
             if (allocation->unk79B == 4) {
                 if (allocation->unk77C & 1) {
@@ -1061,8 +1061,8 @@ void func_80032020_32C20(func_80031F94_32B94_arg *arg0) {
     }
 }
 
-void func_800320B8_32CB8(func_800320B8_32CB8_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupBoardShopRowSelectorArrow(BoardShopRowSelectorArrowCleanupArg *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 typedef struct {
@@ -1094,7 +1094,7 @@ void func_800320E4_32CE4(func_800320E4_32CE4_arg *arg0) {
 }
 
 void func_80032170_32D70(func_800320E4_32CE4_arg *arg0) {
-    func_80032020_32C20_allocation *allocation;
+    BoardShopRowSelectorArrowAllocation *allocation;
     u8 state;
     u8 temp;
 
