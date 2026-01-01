@@ -219,77 +219,77 @@ INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B760_2C360);
 
 typedef struct {
     u8 pad0[0x14];
-    s16 unk14;
-    s16 unk16;
+    s16 screenX;
+    s16 screenXHi;
     u8 pad18[4];
-    s16 unk1C;
-    s16 unk1E;
-} Func8002B94CArg;
+    s16 screenZ;
+    s16 screenZHi;
+} ParallaxSprite;
 
-void func_8002B94C_2C54C(Func8002B94CArg *arg0) {
-    s32 target[3];
-    s32 source[3];
+void updateParallaxPosition(ParallaxSprite *sprite) {
+    s32 newPosition[3];
+    s32 currentPosition[3];
     s32 zAdjust;
     s32 xAdjust;
-    s32 arrayIndex;
+    s32 historyIndex;
     s32 nextIndex;
-    s16 *arrayBase;
-    s16 *arrayBase2;
-    s32 *sourcePtr;
-    s32 *targetPtr;
-    s32 coord14;
-    s32 coord1C;
-    s32 readVal14;
-    s32 readVal1C;
+    s16 *positionHistoryX;
+    s16 *positionHistoryZ;
+    s32 *currentPtr;
+    s32 *newPtr;
+    s32 xCoord;
+    s32 zCoord;
+    s32 readX;
+    s32 readZ;
     s32 xScaled;
     s32 multiplier;
 
-    arrayIndex = D_800AB06C_A23DC;
-    sourcePtr = source;
-    targetPtr = target;
-    arrayBase = &D_8009F242_9FE42;
-    coord14 = arg0->unk14;
-    arrayBase[arrayIndex * 2] = coord14;
-    arrayBase2 = arrayBase + 1;
-    coord1C = arg0->unk1C;
-    arrayBase2[arrayIndex * 2] = coord1C;
+    historyIndex = D_800AB06C_A23DC;
+    currentPtr = currentPosition;
+    newPtr = newPosition;
+    positionHistoryX = &D_8009F242_9FE42;
+    xCoord = sprite->screenX;
+    positionHistoryX[historyIndex * 2] = xCoord;
+    positionHistoryZ = positionHistoryX + 1;
+    zCoord = sprite->screenZ;
+    positionHistoryZ[historyIndex * 2] = zCoord;
 
-    memcpy(sourcePtr, &D_800AFF20_A7290, 12);
-    memcpy(target, sourcePtr, 12);
+    memcpy(currentPtr, &D_800AFF20_A7290, 12);
+    memcpy(newPosition, currentPtr, 12);
 
-    zAdjust = sourcePtr[2] >> 8;
+    zAdjust = currentPtr[2] >> 8;
     zAdjust = zAdjust * 8;
     zAdjust = zAdjust / 224;
-    coord1C = zAdjust;
-    targetPtr[0] += coord1C << 12;
+    zCoord = zAdjust;
+    newPtr[0] += zCoord << 12;
 
     multiplier = -8;
-    xScaled = sourcePtr[0] >> 8;
+    xScaled = currentPtr[0] >> 8;
     xAdjust = xScaled * multiplier;
     if (xAdjust < 0) {
         xAdjust += 0x7FF;
     }
     xAdjust >>= 11;
-    coord1C = xAdjust;
-    target[2] += coord1C << 12;
+    zCoord = xAdjust;
+    newPosition[2] += zCoord << 12;
 
-    memcpy(&D_800AFF20_A7290, target, 12);
+    memcpy(&D_800AFF20_A7290, newPosition, 12);
 
-    *(s32 *)&arg0->unk14 = target[0];
-    *(s32 *)&arg0->unk1C = target[2] - 0x440000;
+    *(s32 *)&sprite->screenX = newPosition[0];
+    *(s32 *)&sprite->screenZ = newPosition[2] - 0x440000;
 
     nextIndex = D_800AB06C_A23DC + 1;
     D_800AB06C_A23DC = nextIndex;
 
-    if (target[2] > 0) {
-        if ((u32)(target[0] - 0x100001) <= 0xFFFFE) {
+    if (newPosition[2] > 0) {
+        if ((u32)(newPosition[0] - 0x100001) <= 0xFFFFE) {
             do {
                 D_8009F240_9FE40 = nextIndex;
             } while (0);
-            readVal14 = arg0->unk14;
-            arrayBase[nextIndex * 2] = readVal14;
-            readVal1C = arg0->unk1C;
-            arrayBase2[nextIndex * 2] = readVal1C;
+            readX = sprite->screenX;
+            positionHistoryX[nextIndex * 2] = readX;
+            readZ = sprite->screenZ;
+            positionHistoryZ[nextIndex * 2] = readZ;
         }
     }
 }
