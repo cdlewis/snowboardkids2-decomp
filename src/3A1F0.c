@@ -406,10 +406,10 @@ void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[
     osSendMesg(&D_800A1888_A2488, (void *)err, OS_MESG_BLOCK);
 }
 
-void func_8003AAC4_3B6C4(void) {
+void controllerPackDeleteFileFromHeaderAsyncStub(void) {
 }
 
-int func_8003AACC_3B6CC(void) {
+int controllerPackDeleteFileFromHeaderPollStub(void) {
     return 0;
 }
 
