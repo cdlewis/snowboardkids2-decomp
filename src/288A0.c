@@ -89,7 +89,7 @@ void initStoryMapRandomEvent(u8 *eventTypeOut) {
 
     eventTypeIndex = D_8008DF3C_8EB3C[D_800AFE8C_A71FC->unk9][D_8009ADE0_9B9E0 & 7];
     if (eventTypeIndex != 0) {
-        regularTask = scheduleTask(func_80028600_29200, 0, 0, 0x5B);
+        regularTask = scheduleTask(initStoryMapItem, 0, 0, 0x5B);
         regularTask->eventTypeIndex = eventTypeIndex - 1;
         state->regularEventType = eventTypeIndex - 1;
     }

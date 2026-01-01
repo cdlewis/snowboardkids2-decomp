@@ -12,8 +12,8 @@ extern void func_800288D4_294D4(void *);
 
 void func_800288A0_294A0(void);
 
-void func_80028B44_29744(Func80028600Arg *arg0);
-void func_80028B80_29780(Func80028600Arg *arg0);
+void func_80028B44_29744(StoryMapItem *arg0);
+void func_80028B80_29780(StoryMapItem *arg0);
 
 typedef struct {
     u8 pad0[0x418];
@@ -28,33 +28,33 @@ typedef struct {
     u8 unk42E;
 } AllocationData29200;
 
-void func_80028600_29200(Func80028600Arg *arg0) {
+void initStoryMapItem(StoryMapItem *arg0) {
     AllocationData29200 *alloc;
     u8 temp;
     u32 itemType;
     s16 arg5;
 
     alloc = getCurrentAllocation();
-    alloc->unk418 = D_8008E19C_8ED9C[arg0->unk5C];
-    temp = D_8008E030_8EC30[arg0->unk5C][randB() & 0xF];
-    arg0->unk5D = temp;
+    alloc->unk418 = D_8008E19C_8ED9C[arg0->eventTypeIndex];
+    temp = D_8008E030_8EC30[arg0->eventTypeIndex][randB() & 0xF];
+    arg0->itemType = temp;
     alloc->unk42D = temp;
-    itemType = arg0->unk5D;
+    itemType = arg0->itemType;
     arg5 = 5;
 
     if (itemType == 5 || itemType == 0xB) {
         if (itemType == 5) {
-            arg0->model = createSceneModelEx(arg0->unk5C + 0x50, alloc, 0, -1, 0, itemType);
+            arg0->model = createSceneModelEx(arg0->eventTypeIndex + 0x50, alloc, 0, -1, 0, itemType);
             alloc->unk421 = 0;
         } else {
-            arg0->model = createSceneModelEx(arg0->unk5C + 0x50, alloc, 0, 0, 0, arg5);
+            arg0->model = createSceneModelEx(arg0->eventTypeIndex + 0x50, alloc, 0, 0, 0, arg5);
             alloc->unk421 = 1;
         }
     } else if (itemType < 0xBU || itemType == 0x10) {
-        arg0->model = createSceneModel(arg0->unk5C + 0x50, alloc);
+        arg0->model = createSceneModel(arg0->eventTypeIndex + 0x50, alloc);
         alloc->unk421 = 0;
     } else {
-        arg0->model = createSceneModelEx(arg0->unk5C + 0x50, alloc, 0, 0, 0, -1);
+        arg0->model = createSceneModelEx(arg0->eventTypeIndex + 0x50, alloc, 0, 0, 0, -1);
         alloc->unk421 = 1;
     }
 
@@ -62,7 +62,7 @@ void func_80028600_29200(Func80028600Arg *arg0) {
     setCallback(func_800288A0_294A0);
 }
 
-void func_80028744_29344(Func80028600Arg *arg0) {
+void func_80028744_29344(StoryMapItem *arg0) {
     AllocationData29200 *alloc;
     u8 temp;
     u32 itemType;
@@ -71,27 +71,27 @@ void func_80028744_29344(Func80028600Arg *arg0) {
     alloc = getCurrentAllocation();
 
     do {
-        temp = D_8008E030_8EC30[arg0->unk5C][randB() & 0xF];
-        arg0->unk5D = temp;
+        temp = D_8008E030_8EC30[arg0->eventTypeIndex][randB() & 0xF];
+        arg0->itemType = temp;
     } while (D_8008E0C0_8ECC0[temp] == 4);
 
     alloc->unk42D = temp;
-    itemType = arg0->unk5D;
+    itemType = arg0->itemType;
     arg5 = 5;
 
     if (itemType == 5 || itemType == 0xB) {
         if (itemType == 5) {
-            arg0->model = createSceneModelEx(arg0->unk5C + 0x50, alloc, 0, -1, 0, itemType);
+            arg0->model = createSceneModelEx(arg0->eventTypeIndex + 0x50, alloc, 0, -1, 0, itemType);
             alloc->unk421 = 0;
         } else {
-            arg0->model = createSceneModelEx(arg0->unk5C + 0x50, alloc, 0, 0, 0, arg5);
+            arg0->model = createSceneModelEx(arg0->eventTypeIndex + 0x50, alloc, 0, 0, 0, arg5);
             alloc->unk421 = 1;
         }
     } else if (itemType < 0xBU || itemType == 0x10) {
-        arg0->model = createSceneModel(arg0->unk5C + 0x50, alloc);
+        arg0->model = createSceneModel(arg0->eventTypeIndex + 0x50, alloc);
         alloc->unk421 = 0;
     } else {
-        arg0->model = createSceneModelEx(arg0->unk5C + 0x50, alloc, 0, 0, 0, -1);
+        arg0->model = createSceneModelEx(arg0->eventTypeIndex + 0x50, alloc, 0, 0, 0, -1);
         alloc->unk421 = 1;
     }
 
@@ -108,24 +108,24 @@ void func_800288A0_294A0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/29200", func_800288D4_294D4);
 
-void func_80028AEC_296EC(Func80028600Arg *arg0) {
+void func_80028AEC_296EC(StoryMapItem *arg0) {
     AllocationData29200 *alloc = getCurrentAllocation();
 
     alloc->unk422 = 1;
     alloc->unk42E = 1;
     arg0->model = destroySceneModel(arg0->model);
-    arg0->unk5A = (randB() & 0x1F) + 0xF;
+    arg0->respawnTimer = (randB() & 0x1F) + 0xF;
     setCallback(func_80028B44_29744);
 }
 
-void func_80028B44_29744(Func80028600Arg *arg0) {
-    arg0->unk5A--;
-    if (arg0->unk5A == 0) {
-        arg0->unk5A = 0;
+void func_80028B44_29744(StoryMapItem *arg0) {
+    arg0->respawnTimer--;
+    if (arg0->respawnTimer == 0) {
+        arg0->respawnTimer = 0;
         setCallback(func_80028744_29344);
     }
 }
 
-void func_80028B80_29780(Func80028600Arg *arg0) {
+void func_80028B80_29780(StoryMapItem *arg0) {
     arg0->model = destroySceneModel(arg0->model);
 }
