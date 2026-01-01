@@ -105,39 +105,39 @@ s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle) {
     return 0;
 }
 
-s16 func_8002ADB4_2B9B4(s16 arg0, s16 arg1) {
+s16 stepAngleTowardsTarget(s16 targetAngle, s16 currentAngle) {
     s16 target;
     s16 current;
     s32 diff;
     s16 absDiff;
     s16 direction;
 
-    target = arg0;
-    current = arg1;
+    target = targetAngle;
+    current = currentAngle;
 
-    if (arg0 == arg1) {
+    if (targetAngle == currentAngle) {
         goto done;
     }
 
     // Calculate absolute difference for wrap check
-    diff = arg0 - arg1;
+    diff = targetAngle - currentAngle;
     diff = ABS(diff);
 
     // If difference >= half circle, need to wrap
     if ((s16)diff >= 0x1001) {
-        if (arg1 < arg0) {
-            current = arg1 + 0x2000;
+        if (currentAngle < targetAngle) {
+            current = currentAngle + 0x2000;
         } else {
-            target = arg0 + 0x2000;
+            target = targetAngle + 0x2000;
         }
     }
 
     // Re-extract signed values
-    arg0 = target;
-    arg1 = current;
+    targetAngle = target;
+    currentAngle = current;
 
     // Calculate new difference after possible wrap
-    diff = arg0 - arg1;
+    diff = targetAngle - currentAngle;
     absDiff = ABS(diff);
 
     // Large diff: fixed large step
@@ -147,7 +147,7 @@ s16 func_8002ADB4_2B9B4(s16 arg0, s16 arg1) {
     }
 
     // Calculate direction
-    if (arg1 < arg0) {
+    if (currentAngle < targetAngle) {
         direction = 1;
     } else {
         direction = -1;
