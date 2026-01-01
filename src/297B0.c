@@ -554,17 +554,17 @@ void updateStoryMapNpcIdle(Func297D8Arg *arg0) {
     }
 }
 
-void func_80029A54_2A654(Func297D8Arg *arg0) {
+void initStoryMapNpcNod(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
     arg0->unk61 = 0;
     arg0->unk62 = 0;
     arg0->unk5A = 0;
     createYRotationMatrix(&arg0->matrix, arg0->rotation);
     func_8002A290_2AE90(arg0);
-    setCallback(func_80029AA4_2A6A4);
+    setCallback(updateStoryMapNpcNod);
 }
 
-void func_80029AA4_2A6A4(Func297D8Arg *arg0) {
+void updateStoryMapNpcNod(Func297D8Arg *arg0) {
     AllocationData *alloc;
     s32 setCallbackFlag;
 
@@ -618,7 +618,7 @@ void func_80029AA4_2A6A4(Func297D8Arg *arg0) {
         u8 savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
         arg0->unk50 = 0;
-        arg0->callback = func_80029AA4_2A6A4;
+        arg0->callback = updateStoryMapNpcNod;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
         setCallback(func_8002A200_2AE00);
