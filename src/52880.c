@@ -19,7 +19,7 @@ typedef struct {
     Vec3i unk4;
     u8 padding1[0x10];
     void *unk20;
-    Vec3i vel;         /* 0x24 */
+    Vec3i vel; /* 0x24 */
     /* 0x30 */ s32 unk30;
     /* 0x34 */ s32 unk34;
     /* 0x38 */ s32 unk38;
@@ -322,7 +322,8 @@ void func_80052128_52D28(Struct_52880 *arg0) {
 
         func_80051E90_52A90(arg0);
 
-        var_s3 = func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x3C00000, 0x1C0000);
+        var_s3 =
+            func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x3C00000, 0x1C0000);
 
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
@@ -533,7 +534,8 @@ void func_80052758_53358(Struct_52880 *arg0) {
 
         func_80052500_53100(arg0);
 
-        var_s3 = func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x3600000, 0x1C8000);
+        var_s3 =
+            func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x3600000, 0x1C8000);
 
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
@@ -749,7 +751,8 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
 
         func_80052B0C_5370C(arg0);
 
-        var_s3 = func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x3600000, 0x1D0000);
+        var_s3 =
+            func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x3600000, 0x1D0000);
 
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
@@ -939,11 +942,11 @@ void func_80053434_54034(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        func_80050604_51204(&arg0->unk4, (Vec3i*)&arg0->vel, 5);
+        func_80050604_51204(&arg0->unk4, (Vec3i *)&arg0->vel, 5);
 
         arg0->vel.y += 0xFFFC0000;
 
-        func_80051C80_52880((Vec3i*)&arg0->vel, 0x1E0000);
+        func_80051C80_52880((Vec3i *)&arg0->vel, 0x1E0000);
 
         memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
 
@@ -1002,7 +1005,7 @@ void func_80053434_54034(Struct_52880 *arg0) {
             }
 
             memcpy(&rotateVec, &arg0->vel, sizeof(Vec3i));
-            rotateVectorY(&rotateVec, var_s3, (Vec3i*)&arg0->vel);
+            rotateVectorY(&rotateVec, var_s3, (Vec3i *)&arg0->vel);
         }
 
         if (alloc->unk10[arg0->unk42].unkBD9 == 0) {
@@ -1192,7 +1195,8 @@ void func_80053B38_54738(Struct_52880 *arg0) {
 
         func_80053898_54498(arg0);
 
-        var_s3 = func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x1800000, 0x1B8000);
+        var_s3 =
+            func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x1800000, 0x1B8000);
 
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
@@ -1362,7 +1366,7 @@ void func_80054144_54D44(Struct_52880 *arg0) {
 
         arg0->vel.y += 0xFFFC0000;
 
-        func_80051C80_52880((Vec3i*)&arg0->vel, 0x198000);
+        func_80051C80_52880((Vec3i *)&arg0->vel, 0x198000);
 
         memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
 
@@ -1378,11 +1382,11 @@ void func_80054144_54D44(Struct_52880 *arg0) {
             arg0->unk4.x = arg0->unk4.x + sp18.x;
             arg0->unk4.z = arg0->unk4.z + sp18.z;
             temp_v0 = atan2Fixed(-sp18.x, -sp18.z);
-            rotateVectorY((Vec3i*)&arg0->vel, -temp_v0, &rotateVec);
+            rotateVectorY((Vec3i *)&arg0->vel, -temp_v0, &rotateVec);
             if (rotateVec.z < 0) {
                 rotateVec.z = -rotateVec.z;
             }
-            rotateVectorY(&rotateVec, temp_v0, (Vec3i*)&arg0->vel);
+            rotateVectorY(&rotateVec, temp_v0, (Vec3i *)&arg0->vel);
             arg0->unk42 = -1;
         } else {
             arg0->vel.x = arg0->unk4.x - savedVec.x;
@@ -1404,7 +1408,8 @@ void func_80054144_54D44(Struct_52880 *arg0) {
 
         func_80053EEC_54AEC(arg0);
 
-        var_s3 = func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x1200000, 0x198000);
+        var_s3 =
+            func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x1200000, 0x198000);
 
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
@@ -1420,8 +1425,8 @@ void func_80054144_54D44(Struct_52880 *arg0) {
                 var_s3 = -(s16)arg0->unk46;
             }
 
-            memcpy(&rotateVec, (Vec3i*)&arg0->vel, sizeof(Vec3i));
-            rotateVectorY(&rotateVec, var_s3, (Vec3i*)&arg0->vel);
+            memcpy(&rotateVec, (Vec3i *)&arg0->vel, sizeof(Vec3i));
+            rotateVectorY(&rotateVec, var_s3, (Vec3i *)&arg0->vel);
         }
 
         if ((s16)arg0->unk46 < 0x19) {
@@ -1511,7 +1516,7 @@ void func_80054658_55258(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        func_80050604_51204(&arg0->unk4, (Vec3i*)&arg0->vel, 6);
+        func_80050604_51204(&arg0->unk4, (Vec3i *)&arg0->vel, 6);
 
         arg0->vel.y -= 0x3000;
         s1 = &alloc->unk30;
@@ -1635,7 +1640,7 @@ void func_80054AE4_556E4(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        func_80050604_51204(&arg0->unk4, (Vec3i*)&arg0->vel, 6);
+        func_80050604_51204(&arg0->unk4, (Vec3i *)&arg0->vel, 6);
 
         s1 = &alloc->unk30;
         arg0->vel.y -= 0x8000;
