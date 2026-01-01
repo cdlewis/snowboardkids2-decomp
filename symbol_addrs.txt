@@ -2288,3 +2288,6 @@ cleanupSaveSlotIconGrid = 0x80033974; // rom:0x34574
 initSaveSlotItemIcons = 0x800339AC; // rom:0x345AC
 updateSaveSlotItemIcons = 0x80033AE4; // rom:0x346E4
 cleanupSaveSlotItemIcons = 0x80033E08; // rom:0x34A08
+initSaveSlotNameText = 0x80033E40; // rom:0x34A40
+updateSaveSlotNameText = 0x80033EDC; // rom:0x34ADC
+cleanupSaveSlotNameText = 0x80033F50; // rom:0x34B50

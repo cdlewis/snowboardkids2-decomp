@@ -190,20 +190,20 @@ typedef struct {
 } SaveSlotItemIconsState;
 
 typedef struct {
-    /* 0x00 */ void *unk0;
+    /* 0x00 */ void *textAsset;
     /* 0x04 */ u8 pad4[0x4];
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ s16 unkA;
+    /* 0x08 */ s16 x;
+    /* 0x0A */ s16 y;
     /* 0x0C */ s32 unkC;
     /* 0x10 */ void *unk10;
-    /* 0x14 */ s16 unk14;
-    /* 0x16 */ s16 unk16;
+    /* 0x14 */ s16 alpha;
+    /* 0x16 */ s16 alpha2;
     /* 0x18 */ u8 unk18;
     /* 0x19 */ u8 pad19[0x3];
-    /* 0x1C */ u8 unk1C;
+    /* 0x1C */ u8 slotIndex;
     /* 0x1D */ u8 unk1D;
-    /* 0x1E */ u8 unk1E;
-} Func34A40Arg;
+    /* 0x1E */ u8 slotFlags;
+} SaveSlotNameTextState;
 
 typedef struct {
     /* 0x00 */ s16 unk0;
@@ -232,8 +232,8 @@ extern u16 D_8009ADE0_9B9E0;
 
 void func_80034D58_35958(void);
 void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
-void func_80033EDC_34ADC(Func34ADCArg *arg0);
-void func_80033F50_34B50(Func34574Arg *arg0);
+void updateSaveSlotNameText(Func34ADCArg *arg0);
+void cleanupSaveSlotNameText(Func34574Arg *arg0);
 void func_8003498C_3558C(Func34574Arg *arg0);
 void func_80034750_35350(void);
 void func_80034BD8_357D8(Func34BD8Arg *arg0);
@@ -361,34 +361,34 @@ void cleanupSaveSlotItemIcons(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80033E40_34A40(Func34A40Arg *arg0) {
+void initSaveSlotNameText(SaveSlotNameTextState *arg0) {
     u8 *allocation;
     s32 temp_c;
     void *temp_10;
 
     allocation = (u8 *)getCurrentAllocation();
-    arg0->unk0 = func_80035F80_36B80(1);
-    arg0->unk1E = *(allocation + arg0->unk1C + 0xACE);
-    setCleanupCallback(func_80033F50_34B50);
+    arg0->textAsset = func_80035F80_36B80(1);
+    arg0->slotFlags = *(allocation + arg0->slotIndex + 0xACE);
+    setCleanupCallback(cleanupSaveSlotNameText);
 
-    *(volatile s16 *)&arg0->unk8 = -0x26;
-    *(volatile s16 *)&arg0->unkA = -4;
+    *(volatile s16 *)&arg0->x = -0x26;
+    *(volatile s16 *)&arg0->y = -4;
 
     temp_c = D_8008F7D8_903D8;
-    temp_10 = arg0->unk0;
+    temp_10 = arg0->textAsset;
 
-    arg0->unk14 = 0xFF;
+    arg0->alpha = 0xFF;
     arg0->unk18 = 0;
-    arg0->unk16 = 0xFF;
+    arg0->alpha2 = 0xFF;
     arg0->unk1D = 0;
 
     arg0->unkC = temp_c;
     arg0->unk10 = temp_10;
 
-    setCallback(func_80033EDC_34ADC);
+    setCallback(updateSaveSlotNameText);
 }
 
-void func_80033EDC_34ADC(Func34ADCArg *arg0) {
+void updateSaveSlotNameText(Func34ADCArg *arg0) {
     AllocationStruct *allocation;
     u16 temp;
 
@@ -413,7 +413,7 @@ end:
     debugEnqueueCallback(arg0->unk1C + 9, 0, func_80035408_36008, &arg0->unk8);
 }
 
-void func_80033F50_34B50(Func34574Arg *arg0) {
+void cleanupSaveSlotNameText(Func34574Arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
