@@ -57,14 +57,14 @@ struct Func8002CFACArg {
     /* 0xD5 */ u8 unkD5;
 };
 
-typedef struct Func8002CB88Arg Func8002CB88Arg;
-struct Func8002CB88Arg {
-    /* 0x00 */ Func8002CB88Arg_arg0 unk0[2];
-    /* 0xC8 */ void (*unkC8)(Func8002CB88Arg *);
-    /* 0xCC */ u16 unkCC[1];
-    /* 0xCE */ u16 unkCE;
+typedef struct RareEventIdleState RareEventIdleState;
+struct RareEventIdleState {
+    /* 0x00 */ Func8002CB88Arg_arg0 elements[2];
+    /* 0xC8 */ void (*callback)(RareEventIdleState *);
+    /* 0xCC */ u16 effectDelay[1];
+    /* 0xCE */ u16 effectDuration;
     /* 0xD0 */ u8 pad9[0x5];
-    /* 0xD5 */ u8 unkD5;
+    /* 0xD5 */ u8 npcCount;
 };
 
 extern u16 D_8009ADE0_9B9E0;
@@ -98,19 +98,19 @@ struct Func8002CD3CArg {
 extern u8 identityMatrix[];
 extern u16 D_8008EF70_8FB70[];
 
-void func_8002CD3C_2D93C(Func8002CB88Arg *);
+void updateStoryMapRareEventIdle(RareEventIdleState *);
 
 INCLUDE_ASM("asm/nonmatchings/2D4C0", func_8002C8C0_2D4C0);
 
-void updateStoryMapRareEventWave(Func8002CB88Arg *arg0) {
+void updateStoryMapRareEventWave(RareEventIdleState *arg0) {
     GameState *allocation;
     s32 i;
     Func8002CB88Arg_arg0 *ptr;
 
     allocation = getCurrentAllocation();
 
-    for (i = 0; i < arg0->unkD5; i++) {
-        ptr = &arg0->unk0[i];
+    for (i = 0; i < arg0->npcCount; i++) {
+        ptr = &arg0->elements[i];
 
         if (ptr->unk50 != 0x19) {
             if (ptr->unk50 == 0x1A) {
@@ -129,12 +129,12 @@ void updateStoryMapRareEventWave(Func8002CB88Arg *arg0) {
 
     if (allocation->unk42A == 0x11) {
         func_8002EBB0_2F7B0(arg0);
-        arg0->unkC8 = updateStoryMapRareEventWave;
+        arg0->callback = updateStoryMapRareEventWave;
         setCallback(updateStoryMapNpcDialogue);
     }
 }
 
-void func_8002CB88_2D788(Func8002CB88Arg *arg0) {
+void initStoryMapRareEventIdle(RareEventIdleState *arg0) {
     GameState *allocation;
     s32 vec3[3];
     s32 i;
@@ -144,46 +144,46 @@ void func_8002CB88_2D788(Func8002CB88Arg *arg0) {
     vec3[0] = 0;
     vec3[1] = 0x280000;
 
-    for (i = 0; i < arg0->unkD5; i++) {
-        memcpy(&arg0->unk0[i].unk4, identityMatrix, sizeof(Transform3D));
-        arg0->unk0[i].unk62 = 0;
-        arg0->unkCC[i] = 0;
+    for (i = 0; i < arg0->npcCount; i++) {
+        memcpy(&arg0->elements[i].unk4, identityMatrix, sizeof(Transform3D));
+        arg0->elements[i].unk62 = 0;
+        arg0->effectDelay[i] = 0;
         if (i == 0) {
-            arg0->unk0[0].unk4.translation.x = 0xFFF40000;
-            arg0->unk0[0].unk4.translation.z = 0xFFB80000;
+            arg0->elements[0].unk4.translation.x = 0xFFF40000;
+            arg0->elements[0].unk4.translation.z = 0xFFB80000;
         } else {
-            arg0->unk0[1].unk4.translation.x = 0x180000;
-            arg0->unk0[1].unk4.translation.z = 0xFFB80000;
+            arg0->elements[1].unk4.translation.x = 0x180000;
+            arg0->elements[1].unk4.translation.z = 0xFFB80000;
         }
 
-        arg0->unk0[i].unk2C = 0x800 + i * 0x1000;
-        arg0->unk0[i].unk50 = 0x13;
-        arg0->unk0[i].unk52 = 0x13;
-        arg0->unk0[i].unk2E = 0x800 + i * 0x1000;
+        arg0->elements[i].unk2C = 0x800 + i * 0x1000;
+        arg0->elements[i].unk50 = 0x13;
+        arg0->elements[i].unk52 = 0x13;
+        arg0->elements[i].unk2E = 0x800 + i * 0x1000;
 
-        createYRotationMatrix(&arg0->unk0[i].unk4, arg0->unk0[i].unk2C);
+        createYRotationMatrix(&arg0->elements[i].unk4, arg0->elements[i].unk2C);
 
-        memcpy(&arg0->unk0[i].unk40, vec3, 0xC);
+        memcpy(&arg0->elements[i].unk40, vec3, 0xC);
 
         if (i == 0) {
-            arg0->unk0[i].unk44 = 0x290000;
-            arg0->unk0[i].unk40 += 0xFFF70000;
+            arg0->elements[i].unk44 = 0x290000;
+            arg0->elements[i].unk40 += 0xFFF70000;
         } else {
-            arg0->unk0[i].unk44 = 0x240000;
-            arg0->unk0[i].unk40 += 0x60000;
+            arg0->elements[i].unk44 = 0x240000;
+            arg0->elements[i].unk40 += 0x60000;
         }
 
-        setupStoryMapNpcModel((Func297D8Arg *)&arg0->unk0[i]);
-        allocation->unk408[i] = arg0->unk0[i].unk4.translation.x;
-        allocation->unk410[i] = arg0->unk0[i].unk4.translation.z;
-        allocation->unk418[i] = D_8008EF70_8FB70[arg0->unk0[i].unk5C];
+        setupStoryMapNpcModel((Func297D8Arg *)&arg0->elements[i]);
+        allocation->unk408[i] = arg0->elements[i].unk4.translation.x;
+        allocation->unk410[i] = arg0->elements[i].unk4.translation.z;
+        allocation->unk418[i] = D_8008EF70_8FB70[arg0->elements[i].unk5C];
     }
 
-    arg0->unkCC[0] = (randB() & 0x1F) + 0x28;
-    setCallback(func_8002CD3C_2D93C);
+    arg0->effectDelay[0] = (randB() & 0x1F) + 0x28;
+    setCallback(updateStoryMapRareEventIdle);
 }
 
-void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
+void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
     GameState *allocation;
     s32 i;
     Func8002CB88Arg_arg0 *ptr;
@@ -191,8 +191,8 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
 
     allocation = getCurrentAllocation();
 
-    for (i = 0; i < arg0->unkD5; i++) {
-        ptr = &arg0->unk0[i];
+    for (i = 0; i < arg0->npcCount; i++) {
+        ptr = &arg0->elements[i];
 
         switch (ptr->unk50) {
             case 0x13:
@@ -210,19 +210,19 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
         allocation->unk410[i] = ptr->unk4.translation.z;
     }
 
-    if (arg0->unkCC[0] != 0) {
-        arg0->unkCC[0]--;
-        if (arg0->unkCC[0] == 0) {
+    if (arg0->effectDelay[0] != 0) {
+        arg0->effectDelay[0]--;
+        if (arg0->effectDelay[0] == 0) {
             temp_a0 = randB() & 0x1F;
-            arg0->unkCE = (u8)temp_a0 + 0x18;
+            arg0->effectDuration = (u8)temp_a0 + 0x18;
             if (D_8009ADE0_9B9E0 & 1) {
-                arg0->unk0[0].unk44 = 0x290000;
+                arg0->elements[0].unk44 = 0x290000;
                 spawnSpriteEffectEx(
-                    (SceneModel *)arg0->unk0[0].unk0,
+                    (SceneModel *)arg0->elements[0].unk0,
                     0,
                     8,
-                    (s16)(arg0->unkCE - 4),
-                    &arg0->unk0[0].unk40,
+                    (s16)(arg0->effectDuration - 4),
+                    &arg0->elements[0].unk40,
                     0x10000,
                     0,
                     2,
@@ -230,14 +230,14 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
                     0
                 );
             } else {
-                arg0->unkCE = (u8)temp_a0 + 0x2C;
-                arg0->unk0[0].unk44 = 0x290000;
+                arg0->effectDuration = (u8)temp_a0 + 0x2C;
+                arg0->elements[0].unk44 = 0x290000;
                 spawnSpriteEffectEx(
-                    (SceneModel *)arg0->unk0[0].unk0,
+                    (SceneModel *)arg0->elements[0].unk0,
                     0,
                     0x3E,
-                    (s16)(arg0->unkCE - 4),
-                    &arg0->unk0[0].unk40,
+                    (s16)(arg0->effectDuration - 4),
+                    &arg0->elements[0].unk40,
                     0x10000,
                     0,
                     2,
@@ -245,11 +245,11 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
                     0x400
                 );
                 spawnSpriteEffectEx(
-                    (SceneModel *)arg0->unk0[1].unk0,
+                    (SceneModel *)arg0->elements[1].unk0,
                     0,
                     0x3E,
-                    (s16)arg0->unkCE,
-                    &arg0->unk0[1].unk40,
+                    (s16)arg0->effectDuration,
+                    &arg0->elements[1].unk40,
                     0x10000,
                     0,
                     2,
@@ -259,18 +259,18 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
             }
         }
     } else {
-        arg0->unkCE--;
-        if (arg0->unkCE == 0) {
-            arg0->unkCC[0] = (randB() & 0x1F) + 0x28;
+        arg0->effectDuration--;
+        if (arg0->effectDuration == 0) {
+            arg0->effectDelay[0] = (randB() & 0x1F) + 0x28;
         }
     }
 
     if (allocation->unk42A == 0x11) {
         func_8002EBB0_2F7B0(arg0);
-        arg0->unkC8 = func_8002CD3C_2D93C;
+        arg0->callback = updateStoryMapRareEventIdle;
         allocation->unk42E = 1;
-        arg0->unkCC[0] = (randB() & 0x1F) + 0x28;
-        arg0->unkCE = 0;
+        arg0->effectDelay[0] = (randB() & 0x1F) + 0x28;
+        arg0->effectDuration = 0;
         setCallback(updateStoryMapNpcDialogue);
     }
 }

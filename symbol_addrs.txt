@@ -2141,3 +2141,5 @@ nullStoryMapRareEventCallback = 0x8002BE8C; // rom:0x2CA8C
 destroyStoryMapRareEventModels = 0x8002BE94; // rom:0x2CA94
 configureRareEventSpriteEffect = 0x8002C798; // rom:0x2D398
 updateStoryMapRareEventWave = 0x8002CA8C; // rom:0x2D68C
+initStoryMapRareEventIdle = 0x8002CB88; // rom:0x2D788
+updateStoryMapRareEventIdle = 0x8002CD3C; // rom:0x2D93C
