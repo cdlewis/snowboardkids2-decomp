@@ -59,7 +59,7 @@ void func_8003B1C0_3BDC0(void);
 void func_8003B2DC_3BEDC(s32 arg0, u8 *arg1);
 void func_8003B400_3C000(s32);
 void func_8003B560_3C160(u8 *);
-void func_800397CC_3A3CC(void *arg0);
+void controllerServiceThread(void *arg0);
 
 extern char piManagerThreadStack[0x8]; // this size seems wrong
 extern DmaTransferEntry *D_800A2108_A2D08;
@@ -143,7 +143,7 @@ void initControllerSubsystem(void) {
             D_800A1C98_A2898 = 0;
             func_8003AFA0_3BBA0();
             gControllerPollingEnabled = 1;
-            osCreateThread(&D_8009F670_A0270, 6, &func_800397CC_3A3CC, 0, &D_800A1820_A2420, 3);
+            osCreateThread(&D_8009F670_A0270, 6, &controllerServiceThread, 0, &D_800A1820_A2420, 3);
             osStartThread(&D_8009F670_A0270);
             return;
         }
@@ -153,9 +153,9 @@ void initControllerSubsystem(void) {
     }
 }
 
-void func_800397CC_3A3CC(void *arg0) {
+void controllerServiceThread(void *arg0) {
     OSPfs *motorPfs;
-    D_800AB078_A23E8_type *motorArg;
+    D_800AB078_A23E8_type *motorState;
     Entry *msg;
     OSMesg mesg2;
     char channel;
@@ -166,6 +166,7 @@ void func_800397CC_3A3CC(void *arg0) {
     while (TRUE) {
         osRecvMesg(&D_800A1820_A2420, (OSMesg *)(&msg), 1);
         cmd = msg->command;
+
         switch (cmd & 0x1F0) {
             case 0x10:
                 osContStartReadData(&mainStack);
@@ -203,39 +204,39 @@ void func_800397CC_3A3CC(void *arg0) {
                 continue;
 
             case 0x80:
-                motorArg = msg->arg;
+                motorState = msg->arg;
                 channel = cmd & 3;
-                motorArg->unk8[msg->command & 3] = osMotorInit(&mainStack, &D_800A1A68_A2668[channel], channel);
-                osSendMesg(&D_800A18A8_A24A8, (OSMesg)motorArg->unk8[msg->command & 3], 0);
+                motorState->unk8[msg->command & 3] = osMotorInit(&mainStack, &D_800A1A68_A2668[channel], channel);
+                osSendMesg(&D_800A18A8_A24A8, (OSMesg)motorState->unk8[msg->command & 3], 0);
                 continue;
 
             case 0x90:
-                motorArg = msg->arg;
+                motorState = msg->arg;
                 queue = &mainStack;
                 channel = cmd & 3;
-                motorArg->unk8[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2668[channel], channel);
+                motorState->unk8[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2668[channel], channel);
                 continue;
 
             case 0xA0:
-                motorArg = msg->arg;
+                motorState = msg->arg;
                 channel = cmd & 3;
-                if (motorArg->unk8[channel] != 0) {
+                if (motorState->unk8[channel] != 0) {
                     queue = &mainStack;
-                    motorArg->unk8[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2668[channel], channel);
+                    motorState->unk8[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2668[channel], channel);
                     continue;
                 }
-                (*motorArg).unk8[msg->command & 3] = osMotorStart(&D_800A1A68_A2668[channel]);
+                (*motorState).unk8[msg->command & 3] = osMotorStart(&D_800A1A68_A2668[channel]);
                 continue;
 
             case 0xB0:
-                motorArg = msg->arg;
+                motorState = msg->arg;
                 channel = cmd & 3;
-                if (motorArg->unk8[channel] == 0) {
-                    motorArg->unk8[msg->command & 3] = osMotorStop(&D_800A1A68_A2668[channel]);
+                if (motorState->unk8[channel] == 0) {
+                    motorState->unk8[msg->command & 3] = osMotorStop(&D_800A1A68_A2668[channel]);
                     continue;
                 }
                 queue = &mainStack;
-                motorArg->unk8[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2668[channel], channel);
+                motorState->unk8[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2668[channel], channel);
                 continue;
 
             case 0xD0:

@@ -1107,6 +1107,7 @@ mainThread = 0x800A27E0;
 mainThreadEntrypoint = 0x8006DA40;
 mainStack = 0x800AF490;
 initControllerSubsystem = 0x800395F0; // rom:0x3A1F0
+controllerServiceThread = 0x800397CC; // rom:0x3A3CC
 
 osViModeTable = 0x8009BE70; // defined:true
 
