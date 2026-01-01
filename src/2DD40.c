@@ -133,7 +133,7 @@ void func_8002D140_2DD40(Func2E024Arg *arg0) {
         }
         func_8002EBB0_2F7B0(arg0);
         arg0->callback = func_8002D140_2DD40;
-        setCallback(func_8002BEF4_2CAF4);
+        setCallback(updateStoryMapNpcDialogue);
     }
 }
 
@@ -261,7 +261,7 @@ void func_8002D668_2E268(Func2E024Arg *arg0) {
         arg0->unkCC[1] = 1;
         func_8002EBB0_2F7B0(arg0);
         arg0->callback = func_8002D668_2E268;
-        setCallback(func_8002BEF4_2CAF4);
+        setCallback(updateStoryMapNpcDialogue);
     }
 }
 
@@ -380,7 +380,7 @@ void func_8002E024_2EC24(Func2E024Arg *arg0) {
     if (gameState->unk42A == 0x11) {
         func_8002EBB0_2F7B0(arg0);
         arg0->callback = func_8002E024_2EC24;
-        setCallback(func_8002BEF4_2CAF4);
+        setCallback(updateStoryMapNpcDialogue);
     }
 }
 
@@ -580,7 +580,7 @@ void func_8002E314_2EF14(Func2E024Arg *arg0) {
             arg0->unkCC[0] = (randB() & 0x1F) + 0x28;
             arg0->unkCC[1] = 0;
             arg0->callback = func_8002E314_2EF14;
-            setCallback(func_8002BEF4_2CAF4);
+            setCallback(updateStoryMapNpcDialogue);
         }
     } while (0);
 }

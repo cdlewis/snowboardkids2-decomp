@@ -53,44 +53,44 @@ void destroyStoryMapRareEventModels(Struct2C8F0 *arg0) {
 }
 
 typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ Transform3D unk4;
+    /* 0x00 */ void *model;
+    /* 0x04 */ Transform3D matrix;
     /* 0x24 */ u8 pad24[0xC];
-    /* 0x30 */ u16 unk30;
+    /* 0x30 */ u16 targetRotation;
     /* 0x32 */ u8 pad32[0x96];
-    /* 0xC8 */ void *unkC8;
+    /* 0xC8 */ void *returnCallback;
     /* 0xCC */ u8 padCC[0x7];
-    /* 0xD3 */ u8 unkD3;
-} Func8002BEF4Arg;
+    /* 0xD3 */ u8 dialogueState;
+} StoryMapDialogueState;
 
-void func_8002BEF4_2CAF4(Func8002BEF4Arg *arg0) {
-    GameState *allocation;
+void updateStoryMapNpcDialogue(StoryMapDialogueState *arg0) {
+    GameState *gameState;
     s32 i;
-    Func8002BEF4Arg *ptr;
+    StoryMapDialogueState *npc;
 
-    allocation = (GameState *)getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
 
-    switch (arg0->unkD3) {
+    switch (arg0->dialogueState) {
         case 0:
             func_8002BFEC_2CBEC(arg0);
-            for (i = 0; i < allocation->unk41C; i++) {
-                ptr = (Func8002BEF4Arg *)((u8 *)arg0 + i * 0x64);
-                createYRotationMatrix(&ptr->unk4, ptr->unk30);
-                updateStoryMapNpcModel((Func297D8Arg *)ptr);
+            for (i = 0; i < gameState->unk41C; i++) {
+                npc = (StoryMapDialogueState *)((u8 *)arg0 + i * 0x64);
+                createYRotationMatrix(&npc->matrix, npc->targetRotation);
+                updateStoryMapNpcModel((Func297D8Arg *)npc);
             }
             break;
         case 1:
             func_8002C570_2D170(arg0);
-            for (i = 0; i < allocation->unk41C; i++) {
-                ptr = (Func8002BEF4Arg *)((u8 *)arg0 + i * 0x64);
-                createYRotationMatrix(&ptr->unk4, ptr->unk30);
-                updateStoryMapNpcModel((Func297D8Arg *)ptr);
+            for (i = 0; i < gameState->unk41C; i++) {
+                npc = (StoryMapDialogueState *)((u8 *)arg0 + i * 0x64);
+                createYRotationMatrix(&npc->matrix, npc->targetRotation);
+                updateStoryMapNpcModel((Func297D8Arg *)npc);
             }
             break;
     }
 
-    if (allocation->unk42A == 0) {
-        setCallback(arg0->unkC8);
+    if (gameState->unk42A == 0) {
+        setCallback(arg0->returnCallback);
     }
 }
 

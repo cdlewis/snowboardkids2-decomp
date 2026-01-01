@@ -130,7 +130,7 @@ void func_8002CA8C_2D68C(Func8002CB88Arg *arg0) {
     if (allocation->unk42A == 0x11) {
         func_8002EBB0_2F7B0(arg0);
         arg0->unkC8 = func_8002CA8C_2D68C;
-        setCallback(func_8002BEF4_2CAF4);
+        setCallback(updateStoryMapNpcDialogue);
     }
 }
 
@@ -271,7 +271,7 @@ void func_8002CD3C_2D93C(Func8002CB88Arg *arg0) {
         allocation->unk42E = 1;
         arg0->unkCC[0] = (randB() & 0x1F) + 0x28;
         arg0->unkCE = 0;
-        setCallback(func_8002BEF4_2CAF4);
+        setCallback(updateStoryMapNpcDialogue);
     }
 }
 
