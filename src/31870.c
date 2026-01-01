@@ -322,7 +322,7 @@ void func_80033088_33C88(func_80033088_33C88_arg *arg0);
 void func_80032EDC_33ADC(func_80032EDC_33ADC_arg *arg0);
 void func_80032EA4_33AA4(void *);
 void func_80032F64_33B64(SpriteDisplayState *);
-void func_80032DBC_339BC(func_80032F90_33B90_arg *arg0);
+void cleanupBoardShopBoardIcons(BoardShopBoardIconsState *arg0);
 void freeBoardShopCharacterTransitionAssets(func_800319C8_325C8_arg *arg0);
 void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0);
 void enqueueBoardShopBackgroundRender(void *arg0);
@@ -1224,7 +1224,7 @@ void initBoardShopBoardIcons(BoardShopBoardIconsState *arg0) {
     arg0->priceTextStyle = 0;
     arg0->priceTextPtr = &arg0->priceTextBuffer;
 
-    setCleanupCallback(&func_80032DBC_339BC);
+    setCleanupCallback(&cleanupBoardShopBoardIcons);
     setCallback(&animateBoardShopBoardIconsSlideIn);
 }
 
@@ -1459,8 +1459,8 @@ void animateBoardShopBoardIconsSlideOut(BoardShopBoardIconsSlideOutState *arg0) 
     }
 }
 
-void func_80032DBC_339BC(func_80032F90_33B90_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupBoardShopBoardIcons(BoardShopBoardIconsState *arg0) {
+    arg0->icons[0].asset = freeNodeMemory(arg0->icons[0].asset);
 }
 
 void func_80032DE8_339E8(func_80032DE8_339E8_arg *arg0) {
