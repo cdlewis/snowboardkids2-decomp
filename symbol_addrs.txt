@@ -2137,3 +2137,4 @@ getItemStat2 = 0x80027C60; // rom:0x28860
 getItemStat3 = 0x80027C7C; // rom:0x2887C
 updateParallaxPosition = 0x8002B94C; // rom:0x2C54C
 awaitStoryMapRareEventReady = 0x8002BE44; // rom:0x2CA44
+nullStoryMapRareEventCallback = 0x8002BE8C; // rom:0x2CA8C

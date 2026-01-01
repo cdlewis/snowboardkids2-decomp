@@ -41,7 +41,7 @@ void awaitStoryMapRareEventReady(Struct2C8F0 *arg0) {
     }
 }
 
-void func_8002BE8C_2CA8C(void) {
+void nullStoryMapRareEventCallback(void) {
 }
 
 void func_8002BE94_2CA94(Struct2C8F0 *arg0) {
