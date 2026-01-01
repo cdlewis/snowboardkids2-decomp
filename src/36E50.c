@@ -275,7 +275,7 @@ void func_80036920_37520(func_80036920_37520_arg *arg0) {
     sp10.y = 0x4B0000;
     sp10.z = temp_val;
 
-    func_80035FE0_36BE0(&sp20, &sp24, &sp10);
+    worldToScreenCoords(&sp20, &sp24, &sp10);
 
     arg0->unk0 = (s16)(sp20 - 0xA0);
     arg0->unk2 = (s16)(sp24 - 0x78);

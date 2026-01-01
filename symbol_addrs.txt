@@ -2311,3 +2311,4 @@ initSaveSlotDeleteArrow = 0x800350AC; // rom:0x35CAC
 updateSaveSlotDeleteArrow = 0x8003513C; // rom:0x35D3C
 cleanupSaveSlotDeleteArrow = 0x80035234; // rom:0x35E34
 loadTextRenderAsset = 0x80035F80; // rom:0x36B80
+worldToScreenCoords = 0x80035FE0; // rom:0x36BE0

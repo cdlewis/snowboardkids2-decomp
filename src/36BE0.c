@@ -4,6 +4,11 @@
 
 extern float __cosf(float);
 
+#define FIXED_POINT_SCALE 8192.0f
+#define FOV_HALF_ANGLE 0.43633232f
+#define SCREEN_CENTER_X 160
+#define SCREEN_CENTER_Y 120
+
 typedef struct {
     u8 pad[0x120];
     s16 m00;
@@ -16,62 +21,62 @@ typedef struct {
     s16 m21;
     s16 m22;
     s16 pad132;
-    s32 tx;
-    s32 ty;
-    s32 tz;
-} TransformData;
+    s32 camX;
+    s32 camY;
+    s32 camZ;
+} CameraTransform;
 
-void func_80035FE0_36BE0(s32 *outX, s32 *outY, Vec3i *pos) {
-    TransformData *data;
+void worldToScreenCoords(s32 *outX, s32 *outY, Vec3i *worldPos) {
+    CameraTransform *cam;
     f32 m00, m01, m02, m10, m11, m12, m20, m21, m22;
-    f32 dx, dy, dz;
-    f32 projX, projY, projZ;
-    f32 angle;
-    s32 iprojX, iprojY;
-    f32 fprojZ, invCos;
-    s32 py;
-    f32 tempY;
-    f32 new_var2;
-    s32 new_var;
+    f32 relX, relY, relZ;
+    f32 viewX, viewY, viewZ;
+    f32 fovAngle;
+    s32 iviewX, iviewY;
+    f32 fviewZ, perspectiveScale;
+    s32 posY;
+    f32 screenY;
+    f32 normalizedCoord;
+    s32 posZ;
 
-    data = (TransformData *)getCurrentAllocation();
-    m00 = data->m00 / 8192.0f;
-    m01 = data->m01 / 8192.0f;
-    m02 = data->m02 / 8192.0f;
-    m10 = data->m10 / 8192.0f;
+    cam = (CameraTransform *)getCurrentAllocation();
+    m00 = cam->m00 / FIXED_POINT_SCALE;
+    m01 = cam->m01 / FIXED_POINT_SCALE;
+    m02 = cam->m02 / FIXED_POINT_SCALE;
+    m10 = cam->m10 / FIXED_POINT_SCALE;
 
-    m11 = data->m11 / 8192.0f;
-    m12 = data->m12 / 8192.0f;
-    m20 = data->m20 / 8192.0f;
-    m22 = data->m22 / 8192.0f;
+    m11 = cam->m11 / FIXED_POINT_SCALE;
+    m12 = cam->m12 / FIXED_POINT_SCALE;
+    m20 = cam->m20 / FIXED_POINT_SCALE;
+    m22 = cam->m22 / FIXED_POINT_SCALE;
 
-    py = pos->y;
-    new_var = pos->z;
-    new_var = new_var - data->tz;
-    dx = pos->x - data->tx;
-    dy = py - data->ty;
-    dz = new_var;
+    posY = worldPos->y;
+    posZ = worldPos->z;
+    posZ = posZ - cam->camZ;
+    relX = worldPos->x - cam->camX;
+    relY = posY - cam->camY;
+    relZ = posZ;
 
-    projX = dx * m00 + dy * m01 + dz * m02;
-    projY = dx * m10 + dy * m11 + dz * m12;
+    viewX = relX * m00 + relY * m01 + relZ * m02;
+    viewY = relX * m10 + relY * m11 + relZ * m12;
 
-    m21 = data->m21 / 8192.0f;
+    m21 = cam->m21 / FIXED_POINT_SCALE;
 
-    projZ = dx * m20 + dy * m21 + dz * m22;
+    viewZ = relX * m20 + relY * m21 + relZ * m22;
 
-    iprojX = projX;
-    iprojY = projY;
+    iviewX = viewX;
+    iviewY = viewY;
 
-    angle = 0.43633232f;
-    fprojZ = (s32)projZ;
+    fovAngle = FOV_HALF_ANGLE;
+    fviewZ = (s32)viewZ;
 
-    invCos = fprojZ;
-    invCos = invCos * sinf(angle);
-    invCos = invCos / __cosf(angle);
-    new_var2 = -iprojY / invCos;
+    perspectiveScale = fviewZ;
+    perspectiveScale = perspectiveScale * sinf(fovAngle);
+    perspectiveScale = perspectiveScale / __cosf(fovAngle);
+    normalizedCoord = -iviewY / perspectiveScale;
 
-    tempY = new_var2 * 120.0f;
-    *outY = -(s32)tempY + 120;
-    new_var2 = iprojX / invCos;
-    *outX = -(s32)(new_var2 * 160.0f) + 160;
+    screenY = normalizedCoord * SCREEN_CENTER_Y;
+    *outY = -(s32)screenY + SCREEN_CENTER_Y;
+    normalizedCoord = iviewX / perspectiveScale;
+    *outX = -(s32)(normalizedCoord * SCREEN_CENTER_X) + SCREEN_CENTER_X;
 }
