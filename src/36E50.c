@@ -131,10 +131,10 @@ typedef struct {
 
 typedef struct {
     u8 padding0[0x34];
-    s32 unk34;
+    s32 positionX;
     u8 padding1[0x4];
-    s32 unk3C;
-} func_80036C20_37820_arg;
+    s32 positionZ;
+} StoryMapPlayerState;
 
 void updateStoryMapLocationIndicator(void *);
 void updateStoryMapLocationMarker(void *);
@@ -331,15 +331,15 @@ void updateStoryMapSpecialLocationTrigger(void *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/36E50", func_80036AF8_376F8);
 
-s32 func_80036C20_37820(func_80036C20_37820_arg *arg0) {
+s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
     StoryMapAllocation *allocation;
     struct {
         s32 distances[1];
         s32 maxDistance;
     } data;
     s32 i;
-    s32 dx;
-    s32 dy;
+    s32 deltaX;
+    s32 deltaZ;
 
     allocation = (StoryMapAllocation *)getCurrentAllocation();
     if (allocation->numEntries == 0) {
@@ -357,12 +357,12 @@ s32 func_80036C20_37820(func_80036C20_37820_arg *arg0) {
     data.maxDistance = 0x01000000;
     if (allocation->unk42A == 0) {
         for (i = 0; i < allocation->numEntries; i++) {
-            dx = allocation->unk408[i] - arg0->unk34;
-            dy = allocation->unk410[i] - arg0->unk3C;
-            dx = distance_2d(dx, dy);
-            data.distances[i] = dx;
+            deltaX = allocation->unk408[i] - player->positionX;
+            deltaZ = allocation->unk410[i] - player->positionZ;
+            deltaX = distance_2d(deltaX, deltaZ);
+            data.distances[i] = deltaX;
 
-            if (dx <= 0x37FFFF) {
+            if (deltaX <= 0x37FFFF) {
                 if (gControllerInputs & A_BUTTON) {
                     allocation->unk42A = 0x11;
                 }
