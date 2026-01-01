@@ -1,8 +1,8 @@
 #include "EepromSaveData_type.h"
 #include "common.h"
 
-s32 func_80037FE0_38BE0(u8 arg0) {
-    return EepromSaveData->save_slot_status[arg0] == 1;
+s32 isSaveSlotUnlocked(u8 slotIndex) {
+    return EepromSaveData->save_slot_status[slotIndex] == 1;
 }
 
 u8 func_80038000_38C00(u8 arg0) {

@@ -501,10 +501,10 @@ u8 isGalleryItemUnlocked(u8 itemIndex) {
             if (unlockSlot == -2) {
                 return func_80038070_38C70() & 0xFF;
             }
-            return func_80037FE0_38BE0(unlockSlot & 0xFF) & 0xFF;
+            return isSaveSlotUnlocked(unlockSlot & 0xFF) & 0xFF;
         case 0:
         case 4:
-            return func_80037FE0_38BE0(itemIndex) & 0xFF;
+            return isSaveSlotUnlocked(itemIndex) & 0xFF;
         case 5:
             return func_80038070_38C70() & 0xFF;
     }

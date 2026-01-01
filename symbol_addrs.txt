@@ -2341,3 +2341,4 @@ initStoryMapSpecialLocationTrigger = 0x80036A3C; // rom:0x3763C
 updateStoryMapSpecialLocationTrigger = 0x80036A68; // rom:0x37668
 checkStoryMapLocationSelection = 0x80036C20; // rom:0x37820
 setupStoryMapCharacterDialogue = 0x800371CC; // rom:0x37DCC
+isSaveSlotUnlocked = 0x80037FE0; // rom:0x38BE0
