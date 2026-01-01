@@ -99,7 +99,7 @@ typedef struct {
 
 typedef struct {
     u8 pad[0x210];
-    s32 unk210;
+    s32 renderFlags;
 } Func8000C268Arg;
 
 #ifndef STATE_ENTRY_DECLARED

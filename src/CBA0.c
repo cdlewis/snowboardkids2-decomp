@@ -111,11 +111,11 @@ void enqueueAuxBufferSetup(AuxBufferContext *ctx) {
 }
 
 void setAuxRenderEnabled(Func8000C268Arg *arg0) {
-    arg0->unk210 |= 1;
+    arg0->renderFlags |= 1;
 }
 
 void clearAuxRenderEnabled(Func8000C268Arg *arg0) {
-    arg0->unk210 &= ~1;
+    arg0->renderFlags &= ~1;
 }
 
 typedef struct {
@@ -219,7 +219,7 @@ typedef struct {
     ColorData lightColor;
     ColorData ambientColor;
     u8 pad1E8[0x28];
-    s32 unk210;
+    s32 renderFlags;
     u8 pad214[0x4];
     u8 renderMode;
 } SceneRenderNode;
@@ -254,7 +254,7 @@ void initSceneRenderNode(
 
     func_8006FC70_70870(node->base.id, 1, &node->lightColor, &node->ambientColor);
 
-    node->unk210 = 0;
+    node->renderFlags = 0;
     node->renderMode = renderMode;
 
     task = scheduleTask(func_8000C5AC_D1AC, taskArg1, taskArg2, 0);
