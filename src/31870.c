@@ -324,7 +324,7 @@ typedef struct {
 void animateBoardShopSnowParticles(void);
 void func_800329A8_335A8(func_800329A8_335A8_arg *arg0);
 void func_800317D4_323D4(func_80031510_32110_arg *arg0);
-void func_800313A4_31FA4(void);
+void waitBoardShopCharacterPreview(void);
 void func_800313DC_31FDC(func_80031510_32110_arg *arg0);
 void func_80031458_32058(func_80031510_32110_arg *arg0);
 void func_80031510_32110(func_80031510_32110_arg *arg0);
@@ -544,10 +544,10 @@ void initBoardShopCharacterPreview(func_80031510_32110_arg *arg0) {
     arg0->unk28 = loadAssetByIndex_95590(0);
     arg0->unk2C = loadAssetByIndex_95668(paletteIndex - 1);
     setCleanupCallback(&func_800317D4_323D4);
-    setCallback(&func_800313A4_31FA4);
+    setCallback(&waitBoardShopCharacterPreview);
 }
 
-void func_800313A4_31FA4(void) {
+void waitBoardShopCharacterPreview(void) {
     func_80032DE8_339E8_asset *allocation;
 
     allocation = getCurrentAllocation();
