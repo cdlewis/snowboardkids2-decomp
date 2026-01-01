@@ -466,6 +466,7 @@ sCameraPathTgtMode = 0x800901CE; // rom:0x90DCE
 sCameraPathPosData = 0x800901D0; // rom:0x90DD0
 sCameraPathTgtData = 0x800901D4; // rom:0x90DD4
 initRace = 0x8003D560;
+initRaceViewports = 0x8003E4F0; // rom:0x3F0F0
 D_800902D0_90ED0 = 0x800902D0; // type:s8 size:0x17F
 D_800BC468_ACC98 = 0x800BC468; // type:s16 rom:0xACC98 size:0x98
 sTimerFormatNormal = 0x8009E8C0;

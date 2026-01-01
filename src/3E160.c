@@ -17,18 +17,18 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-#define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                      \
-    do {                                                                        \
-        fov = 70.0f;                                                            \
-        aspect1 = (aspect_val);                                                 \
-        near = 20.0f;                                                           \
-        far1 = 10000.0f;                                                        \
-        if ((gs)->memoryPoolId != 0xB) {                                        \
-            func_8006FA0C_7060C(&(gs)->unk8[idx], fov, aspect1, near, 3000.0f); \
-        } else {                                                                \
-            func_8006FA0C_7060C(&(gs)->unk8[idx], fov, aspect1, near, 2000.0f); \
-        }                                                                       \
-        func_8006FA0C_7060C(&(gs)->unkC[idx], fov, aspect1, near, far1);        \
+#define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                     \
+    do {                                                                       \
+        fov = 70.0f;                                                           \
+        aspect = (aspect_val);                                                 \
+        near = 20.0f;                                                          \
+        far = 10000.0f;                                                        \
+        if ((gs)->memoryPoolId != 0xB) {                                       \
+            func_8006FA0C_7060C(&(gs)->unk8[idx], fov, aspect, near, 3000.0f); \
+        } else {                                                               \
+            func_8006FA0C_7060C(&(gs)->unk8[idx], fov, aspect, near, 2000.0f); \
+        }                                                                      \
+        func_8006FA0C_7060C(&(gs)->unkC[idx], fov, aspect, near, far);         \
     } while (0)
 
 typedef struct {
@@ -175,7 +175,7 @@ typedef struct {
     void *bssEnd;
 } OverlayEntry;
 
-extern void func_8003E4F0_3F0F0(void);
+extern void initRaceViewports(void);
 
 extern SessionConfig *D_800AFE8C_A71FC;
 
@@ -637,23 +637,23 @@ void initRace(void) {
 
     gControllerPollingEnabled = 1;
     func_8006FDA0_709A0(0, 0xFF, 0);
-    func_8006983C_6A43C((void *)func_8003E4F0_3F0F0);
+    func_8006983C_6A43C((void *)initRaceViewports);
 }
 
-void func_8003E4F0_3F0F0(void) {
+void initRaceViewports(void) {
     GameState_temp *gs;
-    VarData *v2;
+    VarData *levelConfig;
     s32 i;
     f32 new_var;
     s32 j;
-    s32 counter;
+    s32 playerIdx;
     f32 fov;
-    f32 aspect1;
+    f32 aspect;
     f32 near;
-    f32 far1;
+    f32 far;
 
     gs = (GameState_temp *)getCurrentAllocation();
-    v2 = (VarData *)func_80055D10_56910(gs->memoryPoolId);
+    levelConfig = (VarData *)func_80055D10_56910(gs->memoryPoolId);
     func_80056990_57590(0x60, 0x1400);
     func_8006FAA4_706A4(gs->audioPlayer0, 0, 0xC, 0x1E, 0);
     setModelCameraTransform(gs->audioPlayer0, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
@@ -668,13 +668,27 @@ void func_8003E4F0_3F0F0(void) {
         if (gs->unk7A == 0xB) {
             func_8006FC70_70870(i + 0x64, 1, &D_80090774_91374, &D_8009077C_9137C);
         } else {
-            func_8006FC70_70870(i + 0x64, 1, &v2->unk18, &v2->unk20);
+            func_8006FC70_70870(i + 0x64, 1, &levelConfig->unk18, &levelConfig->unk20);
         }
 
         if (gs->memoryPoolId != 0xB) {
-            func_8006FE48_70A48(i + 0x64, 0x3E3, 0x3E7, v2->unk20.r2, v2->unk20.g2, v2->unk20.b2);
+            func_8006FE48_70A48(
+                i + 0x64,
+                0x3E3,
+                0x3E7,
+                levelConfig->unk20.r2,
+                levelConfig->unk20.g2,
+                levelConfig->unk20.b2
+            );
         } else {
-            func_8006FE48_70A48(i + 0x64, 0x384, 0x3E7, v2->unk20.r2, v2->unk20.g2, v2->unk20.b2);
+            func_8006FE48_70A48(
+                i + 0x64,
+                0x384,
+                0x3E7,
+                levelConfig->unk20.r2,
+                levelConfig->unk20.g2,
+                levelConfig->unk20.b2
+            );
         }
     }
 
@@ -686,16 +700,16 @@ void func_8003E4F0_3F0F0(void) {
 
             if (gs->memoryPoolId != 0xB) {
                 near = 70.0f;
-                aspect1 = 4.0f / 3.0f;
+                aspect = 4.0f / 3.0f;
                 fov = 20.0f;
-                func_8006FA0C_7060C(gs->unk8, near, aspect1, fov, 3800.0f);
+                func_8006FA0C_7060C(gs->unk8, near, aspect, fov, 3800.0f);
             } else {
                 near = 70.0f;
-                aspect1 = 4.0f / 3.0f;
+                aspect = 4.0f / 3.0f;
                 fov = 20.0f;
-                func_8006FA0C_7060C(gs->unk8, near, aspect1, fov, 2000.0f);
+                func_8006FA0C_7060C(gs->unk8, near, aspect, fov, 2000.0f);
             }
-            func_8006FA0C_7060C(gs->unkC, near, aspect1, fov, 10000.0f);
+            func_8006FA0C_7060C(gs->unkC, near, aspect, fov, 10000.0f);
             break;
 
         case 2:
@@ -704,26 +718,26 @@ void func_8003E4F0_3F0F0(void) {
             setModelCameraTransform(&gs->unkC[0], 0, -0x35, -0xA0, -0x34, 0xA0, 0x34);
             setModelCameraTransform(&gs->unkC[1], 0, 0x35, -0xA0, -0x34, 0xA0, 0x34);
 
-            for (counter = 0, i = 0; i < 2; i++, counter++) {
-                setModelCameraTransform(&gs->unk8[counter], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
-                setModelCameraTransform(&gs->unk4[counter], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
-                func_8006F9BC_705BC(&gs->unk8[counter], 1.0f, 0.5f);
-                func_8006F9BC_705BC(&gs->unkC[counter], 1.0f, 0.5f);
+            for (playerIdx = 0, i = 0; i < 2; i++, playerIdx++) {
+                setModelCameraTransform(&gs->unk8[playerIdx], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
+                setModelCameraTransform(&gs->unk4[playerIdx], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
+                func_8006F9BC_705BC(&gs->unk8[playerIdx], 1.0f, 0.5f);
+                func_8006F9BC_705BC(&gs->unkC[playerIdx], 1.0f, 0.5f);
 
                 // SET_PLAYER_CAMERA_PERSPECTIVE should probably work here but it doesn't because
-                // the copy of far1 to new_var is essential here but breaks the 3 and 4 cases.
+                // the copy of far to new_var is essential here but breaks the 3 and 4 cases.
                 do {
                     fov = 70.0f;
-                    aspect1 = (4.0f / 3.0f) * 2.0f;
+                    aspect = (4.0f / 3.0f) * 2.0f;
                     near = 20.0f;
-                    far1 = 10000.0f;
-                    new_var = far1;
+                    far = 10000.0f;
+                    new_var = far;
                     if (gs->memoryPoolId != 0xB) {
-                        func_8006FA0C_7060C(&gs->unk8[counter], fov, aspect1, near, 3000.0f);
+                        func_8006FA0C_7060C(&gs->unk8[playerIdx], fov, aspect, near, 3000.0f);
                     } else {
-                        func_8006FA0C_7060C(&gs->unk8[counter], fov, aspect1, near, 2000.0f);
+                        func_8006FA0C_7060C(&gs->unk8[playerIdx], fov, aspect, near, 2000.0f);
                     }
-                    func_8006FA0C_7060C(&gs->unkC[counter], fov, aspect1, near, new_var);
+                    func_8006FA0C_7060C(&gs->unkC[playerIdx], fov, aspect, near, new_var);
                 } while (0);
             }
 
@@ -736,14 +750,14 @@ void func_8003E4F0_3F0F0(void) {
             setModelCameraTransform(&gs->unkC[1], -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
             setModelCameraTransform(&gs->unkC[2], 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
 
-            for (counter = 0, i = 0; i < 3; i++, counter++) {
-                setModelCameraTransform(&gs->unk8[counter], 0, 0, -0x48, -0x34, 0x48, 0x34);
+            for (playerIdx = 0, i = 0; i < 3; i++, playerIdx++) {
+                setModelCameraTransform(&gs->unk8[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
                 new_var = 0.5f;
-                setModelCameraTransform(&gs->unk4[counter], 0, 0, -0x48, -0x34, 0x48, 0x34);
-                func_8006F9BC_705BC(&gs->unk8[counter], 0.5f, 0.5f);
-                func_8006F9BC_705BC(&gs->unkC[counter], 0.5f, new_var);
+                setModelCameraTransform(&gs->unk4[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                func_8006F9BC_705BC(&gs->unk8[playerIdx], 0.5f, 0.5f);
+                func_8006F9BC_705BC(&gs->unkC[playerIdx], 0.5f, new_var);
 
-                SET_PLAYER_CAMERA_PERSPECTIVE(gs, counter, (4.0f / 3.0f));
+                SET_PLAYER_CAMERA_PERSPECTIVE(gs, playerIdx, (4.0f / 3.0f));
             }
 
             break;
@@ -756,13 +770,13 @@ void func_8003E4F0_3F0F0(void) {
             setModelCameraTransform(&gs->unkC[2], 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
             setModelCameraTransform(&gs->unkC[3], 0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
 
-            for (counter = 0, i = 0; i < 4; i++, counter++) {
-                setModelCameraTransform(&gs->unk8[counter], 0, 0, -0x48, -0x34, 0x48, 0x34);
-                setModelCameraTransform(&gs->unk4[counter], 0, 0, -0x48, -0x34, 0x48, 0x34);
-                func_8006F9BC_705BC(&gs->unk8[counter], 0.5f, 0.5f);
-                func_8006F9BC_705BC(&gs->unkC[counter], 0.5f, 0.5f);
+            for (playerIdx = 0, i = 0; i < 4; i++, playerIdx++) {
+                setModelCameraTransform(&gs->unk8[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                setModelCameraTransform(&gs->unk4[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                func_8006F9BC_705BC(&gs->unk8[playerIdx], 0.5f, 0.5f);
+                func_8006F9BC_705BC(&gs->unkC[playerIdx], 0.5f, 0.5f);
 
-                SET_PLAYER_CAMERA_PERSPECTIVE(gs, counter, (4.0f / 3.0f));
+                SET_PLAYER_CAMERA_PERSPECTIVE(gs, playerIdx, (4.0f / 3.0f));
             }
 
             break;
