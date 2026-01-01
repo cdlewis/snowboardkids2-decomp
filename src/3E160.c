@@ -67,7 +67,7 @@ void loadPlayerAssets(void);
 void func_8003F368_3FF68(void);
 void func_8003FD3C_4093C(void);
 void func_8003FF78_40B78(void);
-void func_8003FCD8_408D8(void);
+void awaitSkillWinAndPromptContinue(void);
 void func_8003FD84_40984(void);
 void func_8003FF14_40B14(void);
 void func_8003FFC0_40BC0(void);
@@ -1021,7 +1021,7 @@ void handleSkillGameResult(void) {
             state->unk7B = 1;
             scheduleTask(&func_8004F820_50420, 1, 0, 0xE6);
             addPlayerGold(0x1388);
-            setGameStateHandler(&func_8003FCD8_408D8);
+            setGameStateHandler(&awaitSkillWinAndPromptContinue);
         } else {
             D_800A24A0_A30A0 = 6;
             func_800574A0_580A0(9);
@@ -1033,15 +1033,15 @@ void handleSkillGameResult(void) {
     }
 }
 
-void func_8003FCD8_408D8(void) {
-    s32 temp_v0_2;
-    GameState *temp_v0;
+void awaitSkillWinAndPromptContinue(void) {
+    s32 delayTimer;
+    GameState *state;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v0_2 = temp_v0->unk4C - 1;
-    temp_v0->unk4C = temp_v0_2;
-    if (temp_v0_2 == 0) {
-        temp_v0->unk7C = 1;
+    state = (GameState *)getCurrentAllocation();
+    delayTimer = state->unk4C - 1;
+    state->unk4C = delayTimer;
+    if (delayTimer == 0) {
+        state->unk7C = 1;
         scheduleTask(&func_8004F1D4_4FDD4, 1, 0, 0xE6);
         func_800574A0_580A0(0xA);
         setGameStateHandler(&func_8003FD3C_4093C);
