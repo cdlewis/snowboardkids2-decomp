@@ -1476,83 +1476,83 @@ end:
     return 0;
 }
 
-s32 func_800B3F2C_A3DDC(Player *arg0) {
-    u32 temp_v0;
-    s32 temp_v1;
-    s32 temp_v0_2;
-    u8 state;
+s32 updateRaceFinishLoseStep(Player *player) {
+    u32 flags;
+    s32 velocityY;
     s32 temp;
+    u8 state;
+    s32 unkAE0;
 
-    temp_v0 = arg0->unkB84;
-    temp_v1 = arg0->unk44C.y;
+    flags = player->unkB84;
+    velocityY = player->unk44C.y;
 
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
+    player->unk44C.x = 0;
+    player->unk44C.z = 0;
 
-    temp_v0 |= 0x60;
-    temp_v1 += -0x6000;
+    flags |= 0x60;
+    velocityY += -0x6000;
 
-    arg0->unkB84 = temp_v0;
-    arg0->unk44C.y = temp_v1;
+    player->unkB84 = flags;
+    player->unk44C.y = velocityY;
 
-    func_800B40D4_A3F84(arg0);
-    applyClampedVelocityToPosition(arg0);
+    func_800B40D4_A3F84(player);
+    applyClampedVelocityToPosition(player);
 
-    temp = arg0->unkAE0;
-    if (!(0xDFFFF < temp)) {
-        arg0->unkAE0 = temp + 0x8000;
+    unkAE0 = player->unkAE0;
+    if (!(0xDFFFF < unkAE0)) {
+        player->unkAE0 = unkAE0 + 0x8000;
     }
 
-    state = arg0->unkBC0;
+    state = player->unkBC0;
 
     switch (state) {
         case 0:
-            if (func_8005D308_5DF08(arg0, 0x1E)) {
-                temp_v0_2 = arg0->unkBC0;
-                temp_v0_2++;
-                arg0->unkBC0 = temp_v0_2;
+            if (func_8005D308_5DF08(player, 0x1E)) {
+                temp = player->unkBC0;
+                temp++;
+                player->unkBC0 = temp;
             }
             break;
 
         case 1:
-            if (func_8005D308_5DF08(arg0, 0x20)) {
-                temp_v1 = 0x14;
-                temp_v0_2 = arg0->unkBC0;
-                arg0->unkB8C = temp_v1;
-                temp_v0_2++;
-                arg0->unkBC0 = temp_v0_2;
+            if (func_8005D308_5DF08(player, 0x20)) {
+                velocityY = 0x14;
+                temp = player->unkBC0;
+                player->unkB8C = velocityY;
+                temp++;
+                player->unkBC0 = temp;
             }
             break;
 
         case 2:
-            temp_v0_2 = arg0->unkB8C;
-            if (temp_v0_2 != 0) {
-                temp_v0_2--;
-                arg0->unkB8C = temp_v0_2;
+            temp = player->unkB8C;
+            if (temp != 0) {
+                temp--;
+                player->unkB8C = temp;
             } else {
-                temp_v0_2 = arg0->unkBC0;
-                temp_v0_2++;
-                arg0->unkBC0 = temp_v0_2;
+                temp = player->unkBC0;
+                temp++;
+                player->unkBC0 = temp;
             }
             break;
 
         case 3:
-            if (func_8005D308_5DF08(arg0, 0x1F)) {
-                temp_v0_2 = arg0->unkBC0;
-                temp_v0_2++;
-                arg0->unkBC0 = temp_v0_2;
+            if (func_8005D308_5DF08(player, 0x1F)) {
+                temp = player->unkBC0;
+                temp++;
+                player->unkBC0 = temp;
             }
             break;
 
         case 4:
-            if (func_8005D308_5DF08(arg0, 0x20)) {
-                arg0->unkBC0 = 2;
-                arg0->unkB8C = 0x14;
+            if (func_8005D308_5DF08(player, 0x20)) {
+                player->unkBC0 = 2;
+                player->unkB8C = 0x14;
             }
             break;
     }
 
-    func_8005D804_5E404(arg0, 4, 0);
+    func_8005D804_5E404(player, 4, 0);
 
     return 0;
 }

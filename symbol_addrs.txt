@@ -56,6 +56,7 @@ updateFlipSpinTrickAnimation = 0x800B3784; // rom:0xA3634
 dispatchRaceFinishBehaviorStep = 0x800B3950; // rom:0xA3800
 updateRaceFinishWaitingStep = 0x800B3CBC; // rom:0xA3B6C
 updateRaceFinishWinStep = 0x800B3DF0; // rom:0xA3CA0
+updateRaceFinishLoseStep = 0x800B3F2C; // rom:0xA3DDC
 raceFinishBehaviorStepHandlers = 0x800BAB68; // rom:0xAAA18
 trickScoreTable = 0x800BAB48; // rom:0xAA9F8
 trickBonusTable = 0x800BAB58; // rom:0xAAA08
