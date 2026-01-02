@@ -32,7 +32,7 @@ s32 tryFinalizeTrickLanding(Player *);
 void updateTrickFacingAngle(Player *);
 void updateFlipSpinTrickAnimation(Player *);
 void updateTrickRotationTransform(Player *);
-void func_800B419C_A404C(Player *);
+void decayPlayerAirborneAngles(Player *);
 void func_800B00FC_9FFAC(Player *);
 void decayPlayerSteeringAngles(Player *);
 void resetTrickScore(Player *);
@@ -259,7 +259,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
     player->unk44C.x = velocityX - (velocityX >> 7);
     player->unk44C.z = velocityZ - (velocityZ >> 7);
     if (player->unkBC0 >= 0xBU) {
-        func_800B419C_A404C(player);
+        decayPlayerAirborneAngles(player);
     }
     func_800B00FC_9FFAC(player);
     angleDelta = player->unkA92;
@@ -898,7 +898,7 @@ void updateTrickAirborneVelocity(Player *player) {
     player->unk44C.x = player->unk44C.x - (player->unk44C.x >> 7);
     player->unk44C.y = player->unk44C.y - player->unkAB8;
     player->unk44C.z = player->unk44C.z - (player->unk44C.z >> 7);
-    func_800B419C_A404C(player);
+    decayPlayerAirborneAngles(player);
     func_800B00FC_9FFAC(player);
 }
 
@@ -1629,76 +1629,76 @@ void decayPlayerSteeringAngles(Player *player) {
     player->unk990.translation.x = tiltOffset + tiltDecay;
 }
 
-void func_800B419C_A404C(Player *arg0) {
-    s16 temp;
-    s16 value;
-    s32 delta, value2;
-    s32 temp2, delta2, value3;
+void decayPlayerAirborneAngles(Player *player) {
+    s16 normalizedAngle;
+    s16 currentAngle;
+    s32 decayAmount, savedAngle;
+    s32 tiltOffset, tiltDecay, savedTilt;
     s16 result;
     s32 pad[5];
 
-    // Handle unkA92
-    temp = arg0->unkA92 & 0x1FFF;
-    arg0->unkA92 = temp;
-    if (!(temp < 0x1001)) {
-        arg0->unkA92 = temp - 0x2000;
+    // Decay unkA92
+    normalizedAngle = player->unkA92 & 0x1FFF;
+    player->unkA92 = normalizedAngle;
+    if (!(normalizedAngle < 0x1001)) {
+        player->unkA92 = normalizedAngle - 0x2000;
     }
 
-    value = arg0->unkA92;
-    delta = -value, value2 = value;
-    if (!(delta < 0x29)) {
-        delta = 0x28;
+    currentAngle = player->unkA92;
+    decayAmount = -currentAngle, savedAngle = currentAngle;
+    if (!(decayAmount < 0x29)) {
+        decayAmount = 0x28;
     }
-    if (delta < -0x28) {
-        delta = -0x28;
+    if (decayAmount < -0x28) {
+        decayAmount = -0x28;
     }
-    arg0->unkA92 = value2 + delta;
+    player->unkA92 = savedAngle + decayAmount;
 
-    // Handle unkA8E
-    temp = arg0->unkA8E & 0x1FFF;
-    arg0->unkA8E = temp;
-    if (!(temp < 0x1001)) {
-        arg0->unkA8E = temp - 0x2000;
-    }
-
-    value = arg0->unkA8E;
-    delta = -value, value2 = value;
-    if (!(delta < 0x29)) {
-        delta = 0x28;
-    }
-    if (delta < -0x28) {
-        delta = -0x28;
-    }
-    arg0->unkA8E = value2 + delta;
-
-    // Handle unkA90
-    temp = arg0->unkA90 & 0x1FFF;
-    arg0->unkA90 = temp;
-    if (!(temp < 0x1001)) {
-        arg0->unkA90 = temp - 0x2000;
+    // Decay unkA8E
+    normalizedAngle = player->unkA8E & 0x1FFF;
+    player->unkA8E = normalizedAngle;
+    if (!(normalizedAngle < 0x1001)) {
+        player->unkA8E = normalizedAngle - 0x2000;
     }
 
-    value = arg0->unkA90;
-    delta = -value, value2 = value;
-    if (!(delta < 0x29)) {
-        delta = 0x28;
+    currentAngle = player->unkA8E;
+    decayAmount = -currentAngle, savedAngle = currentAngle;
+    if (!(decayAmount < 0x29)) {
+        decayAmount = 0x28;
     }
-    if (delta < -0x28) {
-        delta = -0x28;
+    if (decayAmount < -0x28) {
+        decayAmount = -0x28;
     }
-    result = value2 + delta;
+    player->unkA8E = savedAngle + decayAmount;
 
-    // Handle unk9A4
-    temp2 = arg0->unk990.translation.x;
-    arg0->unkA90 = result;
-    delta2 = -temp2, value3 = temp2;
-    if (!(delta2 < 0x6001)) {
-        delta2 = 0x6000;
+    // Decay unkA90
+    normalizedAngle = player->unkA90 & 0x1FFF;
+    player->unkA90 = normalizedAngle;
+    if (!(normalizedAngle < 0x1001)) {
+        player->unkA90 = normalizedAngle - 0x2000;
     }
-    if (delta2 < -0x6000) {
-        delta2 = -0x6000;
+
+    currentAngle = player->unkA90;
+    decayAmount = -currentAngle, savedAngle = currentAngle;
+    if (!(decayAmount < 0x29)) {
+        decayAmount = 0x28;
     }
-    arg0->unk990.translation.x = value3 + delta2;
+    if (decayAmount < -0x28) {
+        decayAmount = -0x28;
+    }
+    result = savedAngle + decayAmount;
+
+    // Decay unk990.translation.x (tilt offset)
+    tiltOffset = player->unk990.translation.x;
+    player->unkA90 = result;
+    tiltDecay = -tiltOffset, savedTilt = tiltOffset;
+    if (!(tiltDecay < 0x6001)) {
+        tiltDecay = 0x6000;
+    }
+    if (tiltDecay < -0x6000) {
+        tiltDecay = -0x6000;
+    }
+    player->unk990.translation.x = savedTilt + tiltDecay;
 }
 
 extern s16 identityMatrix[];
@@ -1858,7 +1858,7 @@ s32 func_800B470C_A45BC(Player *arg0) {
     arg0->unk44C.x = vel1 - (vel1 >> 4);
     vel2 = arg0->unk44C.z;
     arg0->unk44C.z = vel2 - (vel2 >> 4);
-    func_800B419C_A404C(arg0);
+    decayPlayerAirborneAngles(arg0);
     applyClampedVelocityToPosition(arg0);
     if (func_8005D308_5DF08(arg0, 8) != 0) {
         arg0->unkAA8 = arg0->unkAA8 / 2;
@@ -1911,7 +1911,7 @@ s32 func_800B48AC_A475C(Player *arg0) {
     arg0->unk44C.x = vel1 - (vel1 >> 4);
     vel2 = arg0->unk44C.z;
     arg0->unk44C.z = vel2 - (vel2 >> 4);
-    func_800B419C_A404C(arg0);
+    decayPlayerAirborneAngles(arg0);
     applyClampedVelocityToPosition(arg0);
     if (func_8005D308_5DF08(arg0, 7) != 0) {
         arg0->unkAA8 = arg0->unkAA8 / 2;
@@ -2418,7 +2418,7 @@ s32 func_800B5A40_A58F0(Player *arg0) {
     arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 6);
     arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 6);
 
-    func_800B419C_A404C(arg0);
+    decayPlayerAirborneAngles(arg0);
 
     arg0->unkA94 += 0x40;
 
@@ -2698,7 +2698,7 @@ s32 func_800B62E4_A6194(Player *arg0) {
     arg0->unkB84 |= 0x20;
     arg0->unk44C.y = arg0->unkB8C;
     arg0->unkB8C = arg0->unkB8C + 0x8000;
-    func_800B419C_A404C(arg0);
+    decayPlayerAirborneAngles(arg0);
     arg0->unkA94 = (u16)arg0->unkA94 + 0x200;
     applyVelocityToPosition(arg0);
     if (arg0->unkB8C > 0x7FFFF) {
