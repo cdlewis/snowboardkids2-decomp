@@ -265,26 +265,13 @@ typedef struct {
     /* 0x1220 */ s32 cameraAnimationTimer;
 } CutsceneManager;
 
-typedef struct {
-    u8 padding[0xC];
-    void *unkC;
-    EffectState unk10;
-    u8 padding2[0x20];
-    s32 unkB8;
-    u8 padding3[0x2C];
-    u16 unkE8;
-    u8 padding4[0x6];
-    SceneModel *unkF0;
-    u8 padding5[0x0];
-} func_800B2C78_arg;
-
 void enableCutsceneSkip(CutsceneManager *arg0);
 void disableCutsceneSkipOnInput(CutsceneManager *arg0);
 void enableSlotUpdate(CutsceneManager *arg0, s16 arg1);
 void disableSlotUpdate(CutsceneManager *arg0, s16 arg1);
 CutsceneSlot *getCutsceneSlot(CutsceneManager *manager, s16 slotIndex);
 void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *shadowModel, void *reflectionModel);
-void func_800B2C78(func_800B2C78_arg *arg0);
+void cleanupCutsceneManager(CutsceneManager *manager);
 void func_800B2D04(CutsceneSlot *arg0);
 void func_800B2D68_1DFE18(CutsceneSlot *arg0);
 void func_800B2DCC_1DFE7C(CutsceneSlot *arg0);

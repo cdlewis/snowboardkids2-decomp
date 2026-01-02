@@ -1232,7 +1232,7 @@ func_800B99E0 = 0x800B99E0; // type:func rom:0xA9890
 initCutsceneManager = 0x800B2AA0; // type:func rom:0x1DF850
 func_800B2D04 = 0x800B2D04; // type:func rom:0x1DFDB4
 func_800B0760 = 0x800B0760; // type:func rom:0x1DC900
-func_800B2C78 = 0x800B2C78; // type:func rom:0x1DFD28
+cleanupCutsceneManager = 0x800B2C78; // type:func rom:0x1DFD28
 func_800B36C0 = 0x800B36C0; // type:func rom:0x1E0770
 
 Overlays = 0x80090534; // type:u32 size:0x240

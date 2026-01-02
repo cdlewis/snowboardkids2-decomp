@@ -122,20 +122,20 @@ void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *
     manager->cameraAnimationTimer = 0x10000;
 }
 
-void func_800B2C78(func_800B2C78_arg *arg0) {
+void cleanupCutsceneManager(CutsceneManager *manager) {
     s32 i;
 
-    n_alSeqpDelete((Node_70B00 *)&arg0[16].unkB8);
+    n_alSeqpDelete((Node_70B00 *)&manager->unkFF8);
 
-    func_800B5BFC_1E2CAC(arg0->unkC);
+    func_800B5BFC_1E2CAC(manager->sceneContext);
 
     for (i = 0; i < (getCutsceneSlotCount() & 0xFF); i++) {
-        if (arg0[i].unkF0 != 0) {
-            arg0[i].unkF0 = destroySceneModel(arg0[i].unkF0);
+        if (manager->slots[i].model != NULL) {
+            manager->slots[i].model = destroySceneModel(manager->slots[i].model);
         }
     }
 
-    freeEffectResources(&arg0->unk10);
+    freeEffectResources((EffectState *)&manager->unk10);
 }
 
 void func_800B2D04(CutsceneSlot *arg0) {
