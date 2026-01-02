@@ -335,53 +335,53 @@ s32 initSharpTurnSlidingStep(initSharpTurnSlidingStep_arg *player) {
 extern void func_800B65F8_A64A8(func_800B00D4_arg *);
 extern s32 func_800B42A8_A4158(Player *, s32, s32, s32);
 
-s32 func_800B2018_A1EC8(Player *arg0) {
-    s16 temp_v0;
-    s16 v1;
-    s32 temp;
+s32 updateSharpTurnSlidingStep(Player *player) {
+    s16 steeringAngle;
+    s16 clampedAngle;
+    s32 frameCounter;
 
-    if (arg0->unkB84 & 0x20000) {
-        setPlayerBehaviorPhase(arg0, 6);
+    if (player->unkB84 & 0x20000) {
+        setPlayerBehaviorPhase(player, 6);
         return 1;
     }
 
-    if (func_8005A9A8_5B5A8(arg0) != 0) {
-        func_800B65F8_A64A8((func_800B00D4_arg *)arg0);
+    if (func_8005A9A8_5B5A8(player) != 0) {
+        func_800B65F8_A64A8((func_800B00D4_arg *)player);
         return 1;
     }
 
-    if (arg0->unkB84 & 1) {
-        setPlayerBehaviorPhase(arg0, 1);
+    if (player->unkB84 & 1) {
+        setPlayerBehaviorPhase(player, 1);
         return 1;
     }
 
-    arg0->unk44C.y = arg0->unk44C.y - arg0->unkAB8;
-    func_800B40D4_A3F84(arg0);
-    func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
-    func_800B00FC_9FFAC(arg0);
+    player->unk44C.y = player->unk44C.y - player->unkAB8;
+    func_800B40D4_A3F84(player);
+    func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+    func_800B00FC_9FFAC(player);
 
-    temp_v0 = arg0->unkA92;
-    v1 = temp_v0;
-    if (temp_v0 >= 0) {
-        if (temp_v0 >= 0x401) {
-            v1 = 0x400;
+    steeringAngle = player->unkA92;
+    clampedAngle = steeringAngle;
+    if (steeringAngle >= 0) {
+        if (steeringAngle >= 0x401) {
+            clampedAngle = 0x400;
         }
-        func_8005D48C_5E08C(arg0, 2, v1 / 2);
+        func_8005D48C_5E08C(player, 2, clampedAngle / 2);
     } else {
-        v1 = -v1;
-        if (v1 >= 0x401) {
-            v1 = 0x400;
+        clampedAngle = -clampedAngle;
+        if (clampedAngle >= 0x401) {
+            clampedAngle = 0x400;
         }
-        func_8005D48C_5E08C(arg0, 1, v1 / 2);
+        func_8005D48C_5E08C(player, 1, clampedAngle / 2);
     }
 
-    temp = arg0->unkB8C - 1;
-    arg0->unkB8C = temp;
-    if (temp == 0) {
-        arg0->unkBBF = arg0->unkBBF + 1;
+    frameCounter = player->unkB8C - 1;
+    player->unkB8C = frameCounter;
+    if (frameCounter == 0) {
+        player->unkBBF = player->unkBBF + 1;
     }
 
-    func_80058CFC_598FC(arg0);
+    func_80058CFC_598FC(player);
     return 0;
 }
 
