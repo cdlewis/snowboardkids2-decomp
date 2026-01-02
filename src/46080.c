@@ -159,12 +159,6 @@ typedef struct {
 } func_8004BFBC_4CBBC_arg;
 
 typedef struct {
-    Transform3D unk0;
-    u8 _pad2[0x1C];
-    s32 unk3C;
-} func_8004728C_47E8C_arg;
-
-typedef struct {
     void *assetData;
     loadAssetMetadata_arg metadata;
     u8 _pad[0x4];
@@ -840,7 +834,7 @@ void cleanupPlayerSparkleTask(PlayerSparkleTask *arg0);
 void loadPlayerSparkleData(PlayerSparkleTask *);
 void updateCourseSceneryTask(CourseSceneryUpdateState *);
 void cleanupCourseSceneryTask(CourseSceneryCleanupArg *);
-void func_8004728C_47E8C(func_8004728C_47E8C_arg *);
+void resetFlyingSceneryPosition(FlyingSceneryState *);
 void func_80047590_48190(func_80047590_48190_arg *arg0);
 void func_80047660_48260(func_80047660_48260_arg *arg0);
 void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0);
@@ -1462,7 +1456,7 @@ void updateFlyingSceneryVerticalStep(FlyingSceneryState *state) {
         if (state->frameCounter != 0) {
             state->frameCounter -= 1;
         } else {
-            setCallback(&func_8004728C_47E8C);
+            setCallback(&resetFlyingSceneryPosition);
         }
     }
 
@@ -1471,20 +1465,20 @@ void updateFlyingSceneryVerticalStep(FlyingSceneryState *state) {
     }
 }
 
-void func_8004728C_47E8C(func_8004728C_47E8C_arg *arg0) {
+void resetFlyingSceneryPosition(FlyingSceneryState *state) {
     Vec3i vec;
     AllocationStruct *alloc;
     D_80090F90_91B90_item *matrix;
 
     alloc = (AllocationStruct *)getCurrentAllocation();
-    createYRotationMatrix(&arg0->unk0, 0x1000);
+    createYRotationMatrix(&state->displayListObject.transform, 0x1000);
     matrix = func_80055D10_56910(alloc->unk5C);
-    transformVector2(D_80090BC8_917C8, &arg0->unk0, &vec);
+    transformVector2(D_80090BC8_917C8, &state->displayListObject.transform, &vec);
 
-    arg0->unk0.translation.x = matrix->unkC.x + vec.x;
-    arg0->unk0.translation.y = matrix->unkC.y + vec.y;
-    arg0->unk0.translation.z = matrix->unkC.z + vec.z;
-    arg0->unk3C = 0x32;
+    state->displayListObject.transform.translation.x = matrix->unkC.x + vec.x;
+    state->displayListObject.transform.translation.y = matrix->unkC.y + vec.y;
+    state->displayListObject.transform.translation.z = matrix->unkC.z + vec.z;
+    state->frameCounter = 0x32;
 
     setCallbackWithContinue(func_80047330_47F30);
 }
