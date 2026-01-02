@@ -2649,4 +2649,5 @@ initGoldCoinsTask = 0x80047750; // rom:0x48350
 setupGoldCoinEntries = 0x800477E4; // rom:0x483E4
 updateGoldCoinsTask = 0x800478FC; // rom:0x484FC
 cleanupGoldCoinsTask = 0x80047A64; // rom:0x48664
+renderGoldCoins = 0x80047AA8; // rom:0x486A8
 scheduleGoldCoinsTask = 0x80047E7C; // rom:0x48A7C

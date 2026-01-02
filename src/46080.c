@@ -558,7 +558,7 @@ typedef struct {
     void *matrixBuffer;
     void *displayData;
     GoldCoinRenderEntry *entries;
-    DataTable_19E80 *unkC;
+    DataTable_19E80 *textureTable;
     s32 unk10;
     s16 unk14;
     s16 coinCount;
@@ -839,7 +839,7 @@ void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
 void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
 void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *);
 void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *);
-void func_80047AA8_486A8(GoldCoinRenderState *arg0);
+void renderGoldCoins(GoldCoinRenderState *state);
 void func_80048834_49434(Struct_func_80048834_49434 *arg0);
 void func_80048350_48F50(func_80048350_48F50_arg *arg0);
 void func_8004841C_4901C(func_80048350_48F50_arg *arg0);
@@ -1681,7 +1681,7 @@ void updateGoldCoinsTask(GoldCoinUpdateState *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 4, func_80047AA8_486A8, arg0);
+        debugEnqueueCallback((u16)i, 4, renderGoldCoins, arg0);
     }
 }
 
@@ -1691,13 +1691,12 @@ void cleanupGoldCoinsTask(GoldCoinsTaskState *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-void func_80047AA8_486A8(GoldCoinRenderState *arg0) {
+void renderGoldCoins(GoldCoinRenderState *state) {
     OutputStruct_19E80 tableEntry;
     s32 dxtBase;
     s32 new_var;
     u32 line;
     s32 lrs;
-    u16 dxt;
     u16 widthDiv16;
     Gfx *loadBlockCmd;
     long loadBlockWord;
@@ -1707,7 +1706,7 @@ void func_80047AA8_486A8(GoldCoinRenderState *arg0) {
     gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
     gGraphicsMode = -1;
 
-    getTableEntryByU16Index(arg0->unkC, arg0->animationFrame, &tableEntry);
+    getTableEntryByU16Index(state->textureTable, state->animationFrame, &tableEntry);
 
     gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
 
@@ -1806,21 +1805,21 @@ void func_80047AA8_486A8(GoldCoinRenderState *arg0) {
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    for (i = 0; i < arg0->coinCount; i++) {
-        if (isObjectCulled(&arg0->entries[i].position) == 0) {
-            arg0->entries[i].processed = 1;
-            if (arg0->entries[i].visible != 0) {
+    for (i = 0; i < state->coinCount; i++) {
+        if (isObjectCulled(&state->entries[i].position) == 0) {
+            state->entries[i].processed = 1;
+            if (state->entries[i].visible != 0) {
                 gSPMatrix(
                     gRegionAllocPtr++,
-                    (u8 *)arg0->matrixBuffer + (i << 6),
+                    (u8 *)state->matrixBuffer + (i << 6),
                     G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
                 );
                 gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-                gSPVertex(gRegionAllocPtr++, arg0->displayData, 4, 0);
+                gSPVertex(gRegionAllocPtr++, state->displayData, 4, 0);
                 gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
             }
         } else {
-            arg0->entries[i].processed &= 1;
+            state->entries[i].processed &= 1;
         }
     }
 }
