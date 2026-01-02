@@ -1,3 +1,4 @@
+#include "1DB7A0.h"
 #include "288A0.h"
 #include "6E840.h"
 #include "9FF70.h"
@@ -31,8 +32,6 @@ typedef struct {
 } PlayerCountSelectState;
 
 extern u8 D_8008DCC0_8E8C0[];
-extern void D_800B0690(void);
-extern void D_800B07A0(void);
 extern void *D_800B054C;
 extern void *D_800B08A8;
 extern u8 gConnectedControllerMask;
@@ -95,8 +94,8 @@ void func_80022304_22F04(void) {
     if (result == 0) {
         state->frameCounter = 0;
         setGameStateHandler(&handlePlayerCountSelectInput);
-        scheduleTask(&D_800B0690, 0, 0, 0x5A);
-        scheduleTask(&D_800B07A0, 0, 0, 0x5A);
+        scheduleTask(&func_800B0690_1DBD70, 0, 0, 0x5A);
+        scheduleTask(&func_800B07A0_1DBE80, 0, 0, 0x5A);
     } else {
         temp = state->frameCounter;
         if (temp < 4) {

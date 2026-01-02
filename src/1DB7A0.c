@@ -1,3 +1,4 @@
+#include "1DB7A0.h"
 #include "10AD0.h"
 #include "common.h"
 #include "overlay.h"
@@ -7,17 +8,6 @@ USE_ASSET(_426EF0);
 USE_ASSET(_42F1D0);
 USE_ASSET(_41A1D0);
 USE_ASSET(_426EF0);
-
-typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ s16 unkA;
-    /* 0x0C */ u8 unkC;
-    /* 0x0D */ u8 unkD;
-    /* 0x0E */ char pad[2];
-} func_800B07A0_1DBE80_arg; // size 0x10
 
 typedef struct {
     /* 0x00 */ s16 unk0;
@@ -53,13 +43,13 @@ extern s16 D_800B09A8_1DC088[];
 
 void func_800B0920_1DC000(void *);
 void func_800B0968_1DC048(func_800B07A0_1DBE80_arg *);
-
 void func_800B0804_1DBEE4(func_800B07A0_1DBE80_arg *);
 void func_800B0610_1DBCF0(func_800B07A0_1DBE80_arg *);
 void func_800B0664_1DBD44(func_800B07A0_1DBE80_arg *);
-
 void func_800B01B8_1DB898(func_800B00C0_Arg *);
 void func_800B0520_1DBC00(func_800B07A0_1DBE80_arg *);
+void func_800B070C_1DBDEC(func_800B07A0_1DBE80_arg *);
+void func_800B0774_1DBE54(func_800B07A0_1DBE80_arg *);
 
 void func_800B00C0_1DB7A0(func_800B00C0_Arg *arg0) {
     Allocation_1DB7A0 *allocation;
@@ -155,9 +145,6 @@ void func_800B0610_1DBCF0(func_800B07A0_1DBE80_arg *arg0) {
 void func_800B0664_1DBD44(func_800B07A0_1DBE80_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
-
-void func_800B070C_1DBDEC(func_800B07A0_1DBE80_arg *);
-void func_800B0774_1DBE54(func_800B07A0_1DBE80_arg *);
 
 void func_800B0690_1DBD70(func_800B07A0_1DBE80_arg *arg0) {
     void *temp;
