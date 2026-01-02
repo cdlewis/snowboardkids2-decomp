@@ -2597,3 +2597,4 @@ initCourseSceneryTask = 0x80046DCC; // rom:0x479CC
 updateCourseSceneryTask = 0x80046F44; // rom:0x47B44
 cleanupCourseSceneryTask = 0x80046FEC; // rom:0x47BEC
 initFlyingSceneryTask = 0x80047024; // rom:0x47C24
+updateFlyingSceneryHorizontalStep = 0x8004711C; // rom:0x47D1C

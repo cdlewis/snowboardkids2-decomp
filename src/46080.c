@@ -885,7 +885,7 @@ void renderScrollingSceneryOpaque(DisplayListObject *);
 void renderScrollingSceneryTransparent(DisplayListObject *);
 void renderScrollingSceneryOverlay(DisplayListObject *);
 void func_80047718_48318(func_80047718_48318_arg *);
-void func_8004711C_47D1C(FlyingSceneryState *);
+void updateFlyingSceneryHorizontalStep(FlyingSceneryState *);
 void func_800471D0_47DD0(FlyingSceneryState *arg0);
 void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *);
 void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
@@ -1416,32 +1416,32 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
     arg0->frameCounter = 0x30;
 
     setCleanupCallback(&func_80047718_48318);
-    setCallbackWithContinue(&func_8004711C_47D1C);
+    setCallbackWithContinue(&updateFlyingSceneryHorizontalStep);
 }
 
-void func_8004711C_47D1C(FlyingSceneryState *arg0) {
-    Vec3i vec;
+void updateFlyingSceneryHorizontalStep(FlyingSceneryState *state) {
+    Vec3i movement;
     s32 i;
-    Allocation_47D1C *alloc;
+    Allocation_47D1C *allocation;
 
-    alloc = (Allocation_47D1C *)getCurrentAllocation();
+    allocation = (Allocation_47D1C *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
-        transformVector2(D_80090B98_91798, arg0, &vec);
+    if (allocation->unk76 == 0) {
+        transformVector2(D_80090B98_91798, state, &movement);
 
-        arg0->displayListObject.transform.translation.x += vec.x;
-        arg0->displayListObject.transform.translation.z += vec.z;
+        state->displayListObject.transform.translation.x += movement.x;
+        state->displayListObject.transform.translation.z += movement.z;
 
-        if (arg0->frameCounter != 0) {
-            arg0->frameCounter--;
+        if (state->frameCounter != 0) {
+            state->frameCounter--;
         } else {
-            arg0->frameCounter = 0xB4;
+            state->frameCounter = 0xB4;
             setCallback(func_800471D0_47DD0);
         }
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
     }
 }
 
