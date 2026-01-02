@@ -137,15 +137,15 @@ extern s32 identityMatrix[];
 
 typedef struct {
     u8 _pad0[0x4];
-    loadAssetMetadata_arg unk4;
+    loadAssetMetadata_arg sprite;
     u8 _pad20[0x4];
     Func43CA4Unk28 *unk24;
     u8 _pad28[0x4];
     s16 unk2C[2];
-    s32 unk30;
+    s32 scale;
     u8 _pad34[0xE];
-    u8 unk42;
-} Func42C98Arg;
+    u8 playSoundFlag;
+} ExpandStarEffectState;
 
 typedef struct {
     u8 pad0[0x14]; /* 0x00 */
@@ -303,7 +303,7 @@ void func_80042D54_43954(StarEffectState *);
 void func_80043CA4_448A4(Func43CA4Arg *);
 void func_800439F4_445F4(Func4393CArg *);
 void updateStarEffect(StarEffectState *);
-void func_80042C98_43898(Func42C98Arg *);
+void expandStarEffect(ExpandStarEffectState *);
 void func_80042E40_43A40(Func42E40Arg *);
 void updateFallingEffect(FallingEffectState *);
 void animateFallingEffectDescent(FallingEffectState *);
@@ -1026,7 +1026,7 @@ void updateStarEffect(StarEffectState *arg0) {
             arg0->unk30 = 0x190000;
             setCallbackWithContinue(func_80042E40_43A40);
         } else {
-            setCallbackWithContinue(func_80042C98_43898);
+            setCallbackWithContinue(expandStarEffect);
         }
     } else {
         if (gameState->unk76 == 0) {
@@ -1035,29 +1035,29 @@ void updateStarEffect(StarEffectState *arg0) {
     }
 }
 
-void func_80042C98_43898(Func42C98Arg *arg0) {
+void expandStarEffect(ExpandStarEffectState *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        arg0->unk30 += 0x10000;
-        if (arg0->unk30 > 0x2FFFFF) {
+        arg0->scale += 0x10000;
+        if (arg0->scale > 0x2FFFFF) {
             setCallback(func_80042D54_43954);
         }
 
-        transformVector(arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk4.position);
+        transformVector(arg0->unk2C, arg0->unk24->unk9F0, &arg0->sprite.position);
 
-        if (arg0->unk42 != 0) {
-            arg0->unk42 = 0;
-            func_80056B7C_5777C(&arg0->unk4.position, 0x1A);
+        if (arg0->playSoundFlag != 0) {
+            arg0->playSoundFlag = 0;
+            func_80056B7C_5777C(&arg0->sprite.position, 0x1A);
         }
 
         updateStarEffectAnimation((StarEffectState *)arg0);
     }
 
     for (i = 0; i < 4; i++) {
-        func_800677C0_683C0(i, &arg0->unk4);
+        func_800677C0_683C0(i, &arg0->sprite);
     }
 }
 
