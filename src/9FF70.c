@@ -912,22 +912,22 @@ s32 updateBasicTrickAirborne(Player *player) {
     return 0;
 }
 
-void func_800B2E80_A2D30(Player *arg0) {
-    arg0->unkB8C = 0x200;
-    arg0->unkA96 = 0;
-    arg0->unkA98 = 0;
-    arg0->unkA9A = 0;
-    arg0->unkBCD = -1;
-    arg0->unkBC0++;
-    arg0->unkB84 |= 0x4000;
-    func_8005D810_5E410(arg0);
-    func_80056B7C_5777C(&arg0->worldPos, 0xB);
+void beginSpinTrick(Player *player) {
+    player->unkB8C = 0x200;
+    player->unkA96 = 0;
+    player->unkA98 = 0;
+    player->unkA9A = 0;
+    player->unkBCD = -1;
+    player->unkBC0++;
+    player->unkB84 |= 0x4000;
+    func_8005D810_5E410(player);
+    func_80056B7C_5777C(&player->worldPos, 0xB);
 }
 
 void func_800B2EE4_A2D94(Player *arg0, s8 arg1) {
     switch (arg0->unkBC0) {
         case 0:
-            func_800B2E80_A2D30(arg0);
+            beginSpinTrick(arg0);
             addTrickScore(arg0, arg1);
             break;
         case 1:
