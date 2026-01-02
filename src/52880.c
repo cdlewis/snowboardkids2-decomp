@@ -126,7 +126,7 @@ void func_80053434_54034(Struct_52880 *);
 void func_80052DB4_539B4(Struct_52880 *);
 void func_800523EC_52FEC(Struct_52880 *arg0);
 void loadSlapstickProjectileAsset(Struct_52880 *arg0);
-void func_80051FC4_52BC4(Struct_52880 *arg0);
+void launchSlapstickProjectile(Struct_52880 *arg0);
 void func_800524A4_530A4(Struct_52880 *arg0);
 void func_800525F4_531F4(Struct_52880 *arg0);
 void func_8005383C_5443C(Struct_52880 *arg0);
@@ -175,7 +175,7 @@ void loadSlapstickProjectileAsset(Struct_52880 *arg0) {
     arg0->hitCount = 0;
     arg0->unk46 = 0;
     arg0->unk0 = ptr;
-    setCallbackWithContinue(func_80051FC4_52BC4);
+    setCallbackWithContinue(launchSlapstickProjectile);
 }
 
 void checkSlapstickProjectileHit(Struct_52880 *arg0) {
@@ -227,13 +227,13 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
 
 void func_80052128_52D28(Struct_52880 *arg0);
 
-void func_80051FC4_52BC4(Struct_52880 *arg0) {
+void launchSlapstickProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s16 playerIdx;
-    s32 temp_v0;
-    s32 temp_v1;
-    s32 temp_a1;
-    s32 temp_a2;
+    s32 posX;
+    s32 posY;
+    s32 originY;
+    s32 originX;
     s32 i;
 
     alloc = getCurrentAllocation();
@@ -244,12 +244,12 @@ void func_80051FC4_52BC4(Struct_52880 *arg0) {
     playerIdx = arg0->ownerPlayerIdx;
     transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
 
-    temp_v0 = arg0->pos.x;
-    temp_a2 = arg0->vel.x;
-    temp_v1 = arg0->pos.y;
-    temp_a1 = arg0->vel.y;
-    arg0->vel.x = temp_v0 - temp_a2;
-    arg0->vel.y = temp_v1 - temp_a1;
+    posX = arg0->pos.x;
+    originX = arg0->vel.x;
+    posY = arg0->pos.y;
+    originY = arg0->vel.y;
+    arg0->vel.x = posX - originX;
+    arg0->vel.y = posY - originY;
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
     playerIdx = arg0->ownerPlayerIdx;
