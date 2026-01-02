@@ -2205,7 +2205,7 @@ void schedulePlayerHaloTask(Player *player) {
     }
 }
 
-s32 func_800488A0_494A0(Player *arg0, u8 *arg1) {
+s32 rollPrimaryItemDrop(Player *arg0, u8 *arg1) {
     s32 i;
     s32 randVal;
     u8 index;
@@ -2328,7 +2328,7 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
                             }
                             player->unkBD8 |= 2;
                         } else {
-                            player->unkBD2 = func_800488A0_494A0(player, (u8 *)arg1);
+                            player->unkBD2 = rollPrimaryItemDrop(player, (u8 *)arg1);
                             player->unkBD3 = 3;
                             player->unkBD8 |= 1;
                         }
