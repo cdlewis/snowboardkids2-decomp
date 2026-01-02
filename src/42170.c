@@ -85,16 +85,16 @@ typedef struct {
 
 typedef struct {
     s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-} Func4179CUnk20;
+    s32 displayList1;
+    s32 displayList2;
+    s32 displayList3;
+} ShieldEffectDisplayConfig;
 
 typedef struct {
-    u8 pad0[0x20]; /* 0x00 - matrix data copied via memcpy */
-    Func4179CUnk20 *unk20;
-    void *unk24;
-    void *unk28;
+    u8 matrix[0x20]; /* 0x00 - matrix data copied via memcpy */
+    ShieldEffectDisplayConfig *displayConfig;
+    void *displayAsset1;
+    void *displayAsset2;
     s32 unk2C;
     s32 unk30;     /* 0x30 */
     u8 pad34[0x8]; /* 0x34 */
@@ -106,12 +106,12 @@ typedef struct {
             s16 lo;
         } half;
     } scale; /* 0x40 */
-} Func4179CArg;
+} ShieldEffectState;
 
 typedef struct {
     DisplayListObject displayList;
     Player *player;
-} Func41A60Arg;
+} ShieldEffectRenderState;
 
 struct Func42D54Arg {
     u8 _pad0[0x4];
@@ -128,10 +128,10 @@ struct Func42D54Arg {
     u8 unk42;
 };
 
-void func_800419AC_425AC(Func4179CArg *);
-void func_80041A24_42624(Func41A60Arg *);
-void func_80041A60_42660(Func41A60Arg *);
-void func_80041A9C_4269C(Func41A60Arg *);
+void cleanupShieldEffect(ShieldEffectState *);
+void renderShieldLayer1(ShieldEffectRenderState *);
+void renderShieldLayer2(ShieldEffectRenderState *);
+void renderShieldLayer3(ShieldEffectRenderState *);
 
 extern s32 identityMatrix[];
 
@@ -397,22 +397,22 @@ void *createFallingEffect(void *arg0) {
     return task;
 }
 
-void func_80041810_42410(Func4179CArg *);
+void updateShieldEffect(ShieldEffectState *);
 void func_80041E10_42A10(Vec3i *);
 
-void func_8004179C_4239C(Func4179CArg *arg0) {
+void initShieldEffect(ShieldEffectState *arg0) {
     getCurrentAllocation();
-    arg0->unk20 = (Func4179CUnk20 *)&D_8009A6C0_9B2C0;
-    arg0->unk24 = loadAsset_B7E70();
-    arg0->unk28 = loadAsset_216290();
+    arg0->displayConfig = (ShieldEffectDisplayConfig *)&D_8009A6C0_9B2C0;
+    arg0->displayAsset1 = loadAsset_B7E70();
+    arg0->displayAsset2 = loadAsset_216290();
     arg0->unk2C = 0;
     arg0->scale.full = 0x400;
     func_80056B7C_5777C(&arg0->player->worldPos, 0x13);
-    setCleanupCallback(func_800419AC_425AC);
-    setCallbackWithContinue(func_80041810_42410);
+    setCleanupCallback(cleanupShieldEffect);
+    setCallbackWithContinue(updateShieldEffect);
 }
 
-void func_80041810_42410(Func4179CArg *arg0) {
+void updateShieldEffect(ShieldEffectState *arg0) {
     Vec3i effectPos;
     s32 scale;
     s16 scaleFactor;
@@ -446,47 +446,47 @@ void func_80041810_42410(Func4179CArg *arg0) {
     arg0->unk30 = 0;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->unk20->unk4 != 0) {
-            debugEnqueueCallback((u16)i, 1, func_80041A24_42624, arg0);
+        if (arg0->displayConfig->displayList1 != 0) {
+            debugEnqueueCallback((u16)i, 1, renderShieldLayer1, arg0);
         }
-        if (arg0->unk20->unk8 != 0) {
-            debugEnqueueCallback((u16)i, 3, func_80041A60_42660, arg0);
+        if (arg0->displayConfig->displayList2 != 0) {
+            debugEnqueueCallback((u16)i, 3, renderShieldLayer2, arg0);
         }
-        if (arg0->unk20->unkC != 0) {
-            debugEnqueueCallback((u16)i, 5, func_80041A9C_4269C, arg0);
+        if (arg0->displayConfig->displayList3 != 0) {
+            debugEnqueueCallback((u16)i, 5, renderShieldLayer3, arg0);
         }
     }
 }
 
-void func_800419AC_425AC(Func4179CArg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupShieldEffect(ShieldEffectState *arg0) {
+    arg0->displayAsset1 = freeNodeMemory(arg0->displayAsset1);
+    arg0->displayAsset2 = freeNodeMemory(arg0->displayAsset2);
 }
 
-void func_800419E4_425E4(void *arg0) {
-    Func4179CArg *task;
+void scheduleShieldEffect(void *arg0) {
+    ShieldEffectState *task;
 
-    task = scheduleTask(&func_8004179C_4239C, 0, 0, 0x63);
+    task = scheduleTask(&initShieldEffect, 0, 0, 0x63);
     if (task != NULL) {
         task->player = arg0;
     }
 }
 
-void func_80041A24_42624(Func41A60Arg *arg0) {
+void renderShieldLayer1(ShieldEffectRenderState *arg0) {
     arg0->displayList.transform.translation.x = arg0->player->worldPos.x;
     arg0->displayList.transform.translation.y = arg0->player->worldPos.y;
     arg0->displayList.transform.translation.z = arg0->player->worldPos.z;
     func_800634E8_640E8(&arg0->displayList);
 }
 
-void func_80041A60_42660(Func41A60Arg *arg0) {
+void renderShieldLayer2(ShieldEffectRenderState *arg0) {
     arg0->displayList.transform.translation.x = arg0->player->worldPos.x;
     arg0->displayList.transform.translation.y = arg0->player->worldPos.y;
     arg0->displayList.transform.translation.z = arg0->player->worldPos.z;
     func_80063534_64134(&arg0->displayList);
 }
 
-void func_80041A9C_4269C(Func41A60Arg *arg0) {
+void renderShieldLayer3(ShieldEffectRenderState *arg0) {
     arg0->displayList.transform.translation.x = arg0->player->worldPos.x;
     arg0->displayList.transform.translation.y = arg0->player->worldPos.y;
     arg0->displayList.transform.translation.z = arg0->player->worldPos.z;

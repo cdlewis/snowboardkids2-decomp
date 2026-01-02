@@ -2461,7 +2461,7 @@ s32 func_800B5B90_A5A40(Player *arg0) {
         func_8005D308_5DF08(arg0, 0xE);
     }
     if (arg0->unkBBF == 1) {
-        func_800419E4_425E4(arg0);
+        scheduleShieldEffect(arg0);
         arg0->unkBBF += 1;
     }
     arg0->unk44C.x = 0;
