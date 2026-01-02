@@ -2614,3 +2614,4 @@ updateFlyingSceneryVerticalStep = 0x800471D0; // rom:0x47DD0
 resetFlyingSceneryPosition = 0x8004728C; // rom:0x47E8C
 updateFlyingSceneryAscendingStep = 0x80047330; // rom:0x47F30
 updateFlyingSceneryGlidingStep = 0x800473F4; // rom:0x47FF4
+updateFlyingSceneryTurningStep = 0x800474B4; // rom:0x480B4

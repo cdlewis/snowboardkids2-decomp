@@ -811,7 +811,7 @@ void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
 void func_8004562C_4622C(void);
 void updateFlyingSceneryAscendingStep(FlyingSceneryState *state);
 void updateFlyingSceneryGlidingStep(FlyingSceneryState *state);
-void func_800474B4_480B4(FlyingSceneryState *state);
+void updateFlyingSceneryTurningStep(FlyingSceneryState *state);
 void cleanupPlayerSparkleTask(PlayerSparkleTask *arg0);
 void loadPlayerSparkleData(PlayerSparkleTask *);
 void updateCourseSceneryTask(CourseSceneryUpdateState *);
@@ -1508,7 +1508,7 @@ void updateFlyingSceneryGlidingStep(FlyingSceneryState *state) {
             state->frameCounter--;
         } else {
             state->rotationAngle = 0;
-            setCallback(func_800474B4_480B4);
+            setCallback(updateFlyingSceneryTurningStep);
         }
         i = 0;
     }
@@ -1519,7 +1519,7 @@ void updateFlyingSceneryGlidingStep(FlyingSceneryState *state) {
     } while (i < 4);
 }
 
-void func_800474B4_480B4(FlyingSceneryState *state) {
+void updateFlyingSceneryTurningStep(FlyingSceneryState *state) {
     AllocationData *allocation;
     Vec3i vector;
     s32 i;
