@@ -57,7 +57,11 @@ CC_CHECK := clang
 
 MACROS := -D_LANGUAGE_C -D_MIPS_SZLONG=32 -D_MIPS_SZINT=32 -D_MIPS_SZLONG=32 -D__USE_ISOC99 -DF3DEX_GBI_2 -DNDEBUG -D_FINALROM -DF3DEX_GBI_2
 ABIFLAG ?= -mabi=32 -mgp32 -mfp32
-CFLAGS := $(ABIFLAG) -mno-abicalls -nostdinc -fno-PIC -G 0 -Wa,-force-n64align -funsigned-char -w -mips3 -EB -O2 -fno-builtin
+CFLAGS_BASE := $(ABIFLAG) -mno-abicalls -nostdinc -fno-PIC -G 0 -Wa,-force-n64align -funsigned-char -w -mips3 -EB -fno-builtin
+CFLAGS := $(CFLAGS_BASE) -O2
+
+# Default optimization (can be overridden per-target)
+OPT_FLAGS := -O2
 IINC := -I include -I lib/ultralib/include -I lib/ultralib/include/PR -I lib/libmus/include/PR -I lib/libmus/src -I lib/f3dex2/PR
 
 MIPS_BUILTIN_DEFS := -D_MIPS_ISA_MIPS2=2 -D_MIPS_ISA=_MIPS_ISA_MIPS2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZPTR=32
@@ -136,11 +140,14 @@ $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/
 	$(PRINTF) "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
 	@$(LD) $(LD_FLAGS) $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) -o $@
 
+# Per-file optimization overrides
+$(BUILD_DIR)/src/39020.o: OPT_FLAGS := -O0
+
 $(BUILD_DIR)/src/%.o: src/%.c
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN)   c    $(NO_COL)]  $<\n"; \
 	$(CC_CHECK) $(CC_CHECK_FLAGS) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ $< 2>&1 | tee -a $(BUILD_LOG)
-	@$(CC) $(CFLAGS) -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -E $< | $(CC) -x c $(CFLAGS) -fno-asm -I $(dir $*) -c -o $@ -
+	@$(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -E $< | $(CC) -x c $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I $(dir $*) -c -o $@ -
 	$(OBJDUMP_CMD)
 
 $(BUILD_DIR)/%.o: %.s

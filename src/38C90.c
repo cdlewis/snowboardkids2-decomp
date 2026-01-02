@@ -140,7 +140,3 @@ void tryAddUnlockedBoardId(u8 boardId) {
         }
     }
 }
-
-INCLUDE_ASM("asm/nonmatchings/38C90", func_80038420_39020);
-
-INCLUDE_ASM("asm/nonmatchings/38C90", func_800394BC_3A0BC);
