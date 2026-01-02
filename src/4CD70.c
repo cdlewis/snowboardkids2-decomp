@@ -266,9 +266,9 @@ extern char D_8009E8A8_9F4A8[];
 extern char D_8009E928_9F528[];
 extern char D_8009E868_9F468[];
 
-extern s32 D_80090460_91060[];
-extern s32 D_800904A0_910A0[];
-extern s32 D_800904E0_910E0[];
+extern s32 gFirstPlaceGoldReward[];
+extern s32 gSecondPlaceGoldReward[];
+extern s32 gThirdPlaceGoldReward[];
 
 void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0) {
     GameState *state;
@@ -1035,61 +1035,61 @@ void initHudElementState(HudElementState *arg0) {
     arg0->unkA = 0xFF;
 }
 
-void func_8004DB98_4E798(Struct_func_8004D9D0 *arg0);
-void func_8004DCC4_4E8C4(Struct_func_8004DCC4 *arg0);
+void updateGoldAwardDisplay(GoldAwardDisplayState *arg0);
+void cleanupGoldAwardDisplayTask(GoldAwardDisplayState *arg0);
 
-void func_8004D9D0_4E5D0(Struct_func_8004D9D0 *arg0) {
-    GameState *allocation = (GameState *)getCurrentAllocation();
-    s32 temp;
-    u8 temp_unk5A;
-    s32 temp_unkB70;
+void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
+    GameState *gameState = (GameState *)getCurrentAllocation();
+    s32 totalGold;
+    u8 shotCrossScore;
+    s32 meterValue;
 
-    arg0->unk14 = 0;
-    arg0->unk4 = loadAsset_34CB50();
+    arg0->alpha = 0;
+    arg0->spriteAsset = loadAsset_34CB50();
     initHudElementState((HudElementState *)arg0);
-    arg0->unk8 = 0x14;
-    arg0->unk10 = loadCompressedData(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->spriteIndex = 0x14;
+    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
 
-    switch (allocation->unk7A) {
+    switch (gameState->unk7A) {
         case 5:
-            temp_unk5A = allocation->unk5A;
-            arg0->unk0 = 0x10;
-            arg0->unk2 = -0x48;
-            arg0->unk18 = temp_unk5A * 0x12C;
+            shotCrossScore = gameState->unk5A;
+            arg0->x = 0x10;
+            arg0->y = -0x48;
+            arg0->goldAmount = shotCrossScore * 0x12C;
             break;
         case 6:
-            temp_unkB70 = allocation->players->unkB70;
-            arg0->unk0 = 0x10;
-            arg0->unk2 = -0x48;
-            arg0->unk18 = temp_unkB70 * 0x32;
+            meterValue = gameState->players->unkB70;
+            arg0->x = 0x10;
+            arg0->y = -0x48;
+            arg0->goldAmount = meterValue * 0x32;
             break;
         default:
-            switch (allocation->players->finishPosition) {
+            switch (gameState->players->finishPosition) {
                 case 0:
-                    arg0->unk18 = D_80090460_91060[allocation->memoryPoolId];
+                    arg0->goldAmount = gFirstPlaceGoldReward[gameState->memoryPoolId];
                     break;
                 case 1:
-                    arg0->unk18 = D_800904A0_910A0[allocation->memoryPoolId];
+                    arg0->goldAmount = gSecondPlaceGoldReward[gameState->memoryPoolId];
                     break;
                 case 2:
-                    arg0->unk18 = D_800904E0_910E0[allocation->memoryPoolId];
+                    arg0->goldAmount = gThirdPlaceGoldReward[gameState->memoryPoolId];
                     break;
                 default:
-                    arg0->unk18 = 0;
+                    arg0->goldAmount = 0;
                     break;
             }
-            arg0->unk0 = 0x10;
-            arg0->unk2 = -0x3C;
-            temp = arg0->unk18 + allocation->players->unkB6C;
-            arg0->unk18 = temp;
-            if (temp > 0x1869F) {
-                arg0->unk18 = 0x1869F;
+            arg0->x = 0x10;
+            arg0->y = -0x3C;
+            totalGold = arg0->goldAmount + gameState->players->unkB6C;
+            arg0->goldAmount = totalGold;
+            if (totalGold > 0x1869F) {
+                arg0->goldAmount = 0x1869F;
             }
             break;
     }
 
-    setCleanupCallback(func_8004DCC4_4E8C4);
-    setCallback(func_8004DB98_4E798);
+    setCleanupCallback(cleanupGoldAwardDisplayTask);
+    setCallback(updateGoldAwardDisplay);
 }
 
 extern char D_8009E894_9F494[];
@@ -1097,26 +1097,26 @@ extern char D_8009E894_9F494[];
 typedef struct Struct_func_8004DCFC Struct_func_8004DCFC;
 extern void func_8004DCFC_4E8FC(Struct_func_8004DCFC *);
 
-void func_8004DB98_4E798(Struct_func_8004D9D0 *arg0) {
+void updateGoldAwardDisplay(GoldAwardDisplayState *arg0) {
     char buf[24];
     s32 strLen;
     char *ptr;
-    s32 temp;
-    s32 a2val;
-    s32 a1val;
-    GameState *allocation;
-    s32 unk7A_val;
+    s32 alphaVal;
+    s32 yPos;
+    s32 xPos;
+    GameState *gameState;
+    s32 gameMode;
 
-    allocation = (GameState *)getCurrentAllocation();
-    temp = arg0->unk14;
+    gameState = (GameState *)getCurrentAllocation();
+    alphaVal = arg0->alpha;
 
-    if (temp != 0xFF) {
-        temp = arg0->unk14 = temp + 0x10;
-        if (temp >= 0x100) {
-            arg0->unk14 = 0xFF;
-            unk7A_val = allocation->unk7A;
-            if (unk7A_val < 7) {
-                if (unk7A_val < 5) {
+    if (alphaVal != 0xFF) {
+        alphaVal = arg0->alpha = alphaVal + 0x10;
+        if (alphaVal >= 0x100) {
+            arg0->alpha = 0xFF;
+            gameMode = gameState->unk7A;
+            if (gameMode < 7) {
+                if (gameMode < 5) {
                     scheduleTask(func_8004DCFC_4E8FC, 1, 0, 0xE6);
                 } else {
                     scheduleTask(func_8004F1D4_4FDD4, 1, 0, 0xE6);
@@ -1127,10 +1127,10 @@ void func_8004DB98_4E798(Struct_func_8004D9D0 *arg0) {
         }
     }
 
-    arg0->padA[4] = (u8)arg0->unk14;
+    arg0->padA[4] = (u8)arg0->alpha;
     debugEnqueueCallback(8, 6, func_80012518_13118, arg0);
 
-    sprintf(buf, D_8009E894_9F494, arg0->unk18);
+    sprintf(buf, D_8009E894_9F494, arg0->goldAmount);
 
     strLen = 0;
     ptr = &buf[1];
@@ -1141,22 +1141,22 @@ void func_8004DB98_4E798(Struct_func_8004D9D0 *arg0) {
         } while (*ptr != 0);
     }
 
-    a2val = arg0->unk2;
-    a1val = arg0->unk0;
+    yPos = arg0->y;
+    xPos = arg0->x;
     drawNumericString(
         buf,
-        (s16)(a1val + ((0x48 - (strLen << 3)) >> 1)),
-        (s16)(a2val + 0x14),
-        (s16)arg0->unk14,
-        arg0->unk10,
+        (s16)(xPos + ((0x48 - (strLen << 3)) >> 1)),
+        (s16)(yPos + 0x14),
+        (s16)arg0->alpha,
+        arg0->digitAsset,
         8,
         6
     );
 }
 
-void func_8004DCC4_4E8C4(Struct_func_8004DCC4 *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk10 = freeNodeMemory(arg0->unk10);
+void cleanupGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
 struct Struct_func_8004DCFC {

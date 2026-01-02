@@ -50,9 +50,9 @@ extern void awaitBattleContinuePress(void);
 extern void awaitExpertRaceContinuePress(void);
 extern void cleanupGameSession(void);
 extern s8 gControllerPollingEnabled;
-extern s32 D_80090460_91060[];
-extern s32 D_800904A0_910A0[];
-extern s32 D_800904E0_910E0[];
+extern s32 gFirstPlaceGoldReward[];
+extern s32 gSecondPlaceGoldReward[];
+extern s32 gThirdPlaceGoldReward[];
 
 void func_80040420_41020(void);
 void onGameSessionTerminated(void);
@@ -1130,7 +1130,7 @@ void awaitShotCrossWinAndPromptContinue(void) {
     if (gs->unk4C == 0) {
         gs->unk7C = 1;
         func_800574A0_580A0(0xA);
-        scheduleTask(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
+        scheduleTask(&initGoldAwardDisplayTask, 1, 0, 0xE6);
         setGameStateHandler(&awaitShotCrossWinContinuePress);
     }
 }
@@ -1213,7 +1213,7 @@ void awaitMeterWinAndPromptContinue(void) {
     if (delayTimer == 0) {
         state->unk7C = 1;
         func_800574A0_580A0(0xA);
-        scheduleTask(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
+        scheduleTask(&initGoldAwardDisplayTask, 1, 0, 0xE6);
         setGameStateHandler(&awaitMeterWinContinuePress);
     }
 }
@@ -1284,17 +1284,17 @@ void awaitSpeedCrossAwardGold(void) {
     switch (player->finishPosition) {
         case 0:
             addPlayerGold(player->unkB6C);
-            addPlayerGold(D_80090460_91060[state->memoryPoolId]);
+            addPlayerGold(gFirstPlaceGoldReward[state->memoryPoolId]);
             break;
 
         case 1:
             addPlayerGold(player->unkB6C);
-            addPlayerGold(D_800904A0_910A0[state->memoryPoolId]);
+            addPlayerGold(gSecondPlaceGoldReward[state->memoryPoolId]);
             break;
 
         case 2:
             addPlayerGold(player->unkB6C);
-            addPlayerGold(D_800904E0_910E0[state->memoryPoolId]);
+            addPlayerGold(gThirdPlaceGoldReward[state->memoryPoolId]);
             break;
 
         case 3:
@@ -1305,7 +1305,7 @@ void awaitSpeedCrossAwardGold(void) {
             break;
     }
 
-    scheduleTask(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
+    scheduleTask(&initGoldAwardDisplayTask, 1, 0, 0xE6);
     func_800574A0_580A0(0xA);
     setGameStateHandler(&awaitSpeedCrossContinuePress);
 }
