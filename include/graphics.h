@@ -14,7 +14,7 @@ void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 duration
 void queueSoundAtPositionWithPriority(Vec3i *position, s32 soundId, s16 priority, s16 duration);
 void queueSoundAtPositionWithVolume(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration);
 void queueSoundAtPositionWithVolumeAndFlags(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration, s32 flags);
-void func_800570BC_57CBC(void);
+void incrementSoundSequence(void);
 void func_800570E0_57CE0(void *arg);
 void func_80057124_57D24(void);
 void func_800571D0_57DD0(void(callback)(void *));
