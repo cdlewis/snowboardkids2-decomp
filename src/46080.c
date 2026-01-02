@@ -280,14 +280,14 @@ typedef struct {
 } func_8004A6D4_4B2D4_arg;
 
 typedef struct {
-    DataTable_19E80 *unk0;
-    OutputStruct_19E80 unk4;
+    DataTable_19E80 *assetTable;
+    OutputStruct_19E80 textureEntry;
     u8 _pad10[0x30 - 0x4 - sizeof(OutputStruct_19E80)];
-    Mtx *unk30;
-    GameStateUnk44Unk2C0 *unk34;
-    s32 unk38;
-    s32 unk3C;
-} func_80049300_49F00_arg;
+    Mtx *transformMatrix;
+    GameStateUnk44Unk2C0 *renderEntry;
+    s32 frameIndex;
+    s32 isSecondaryBox;
+} ItemBoxBurstEffectState;
 
 typedef struct {
     void *unk0;
@@ -787,8 +787,8 @@ void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0);
 void func_8004AE58_4BA58(s32 **);
 void func_8004A96C_4B56C(s32 **);
 void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0);
-void func_80049300_49F00(func_80049300_49F00_arg *arg0);
-void func_8004934C_49F4C(func_80049300_49F00_arg *arg0);
+void setupItemBoxBurstTexture(ItemBoxBurstEffectState *arg0);
+void updateItemBoxBurstFrame(ItemBoxBurstEffectState *arg0);
 void func_80049404_4A004(Struct_func_80049404_4A004 *arg0);
 void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0);
 void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *);
@@ -842,7 +842,7 @@ void func_80049794_4A394(void *payload, s32 arg1);
 void func_80048F0C_49B0C(ItemBoxSystemState *arg0, s32 arg1);
 void initItemBoxPositions(ItemBoxSystemState *arg0);
 void cleanupItemBoxSystem(ItemBoxSystemState *);
-void func_80049430_4A030(func_80049300_49F00_arg *arg0);
+void renderItemBoxBurstEffect(ItemBoxBurstEffectState *arg0);
 void updateGoldCoinsTask(GoldCoinUpdateState *arg0);
 
 void initSkyRenderTask(SkyRenderTaskState *state) {
@@ -2481,43 +2481,43 @@ void scheduleItemBoxSystemTask(s32 courseId) {
 void initItemBoxBurstEffect(void **arg0) {
     *arg0 = load_3ECE40();
     setCleanupCallback(&func_80049404_4A004);
-    setCallbackWithContinue(&func_80049300_49F00);
+    setCallbackWithContinue(&setupItemBoxBurstTexture);
 }
 
-void func_80049300_49F00(func_80049300_49F00_arg *arg0) {
+void setupItemBoxBurstTexture(ItemBoxBurstEffectState *arg0) {
     u16 index;
 
-    if (arg0->unk3C == 0) {
+    if (arg0->isSecondaryBox == 0) {
         index = 0x33;
     } else {
         index = 0x34;
     }
 
-    getTableEntryByU16Index(arg0->unk0, index, &arg0->unk4);
-    arg0->unk38 = 0;
-    setCallbackWithContinue(&func_8004934C_49F4C);
+    getTableEntryByU16Index(arg0->assetTable, index, &arg0->textureEntry);
+    arg0->frameIndex = 0;
+    setCallbackWithContinue(&updateItemBoxBurstFrame);
 }
 
-void func_8004934C_49F4C(func_80049300_49F00_arg *arg0) {
+void updateItemBoxBurstFrame(ItemBoxBurstEffectState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
     GameStateUnk44Unk2C0 *entry;
     s32 i;
 
-    if (arg0->unk38 == 8) {
+    if (arg0->frameIndex == 8) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    entry = &allocation->unk44->unk2C0[arg0->unk38];
-    arg0->unk30 = 0;
-    arg0->unk34 = entry;
+    entry = &allocation->unk44->unk2C0[arg0->frameIndex];
+    arg0->transformMatrix = 0;
+    arg0->renderEntry = entry;
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback(i, 1, &func_80049430_4A030, arg0);
+        debugEnqueueCallback(i, 1, &renderItemBoxBurstEffect, arg0);
     }
 
     if (allocation->gamePaused == 0) {
-        arg0->unk38++;
+        arg0->frameIndex++;
     }
 }
 
@@ -2525,7 +2525,7 @@ void func_80049404_4A004(Struct_func_80049404_4A004 *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
+void renderItemBoxBurstEffect(ItemBoxBurstEffectState *arg0) {
     s32 var_a2;
     s32 new_var;
     u32 line;
@@ -2540,7 +2540,7 @@ void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
 
     gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, arg0->unk4.data_ptr);
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, arg0->textureEntry.data_ptr);
 
     gDPSetTile(
         gRegionAllocPtr++,
@@ -2563,12 +2563,12 @@ void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
     loadblock_ptr = gRegionAllocPtr++;
     loadblock_ptr->words.w0 = 0xF3000000;
     gGraphicsMode = -1;
-    width_div_16 = arg0->unk4.field1 >> 4;
+    width_div_16 = arg0->textureEntry.field1 >> 4;
     var_a2 = 0x800;
     if (width_div_16 != 0) {
         var_a2 = width_div_16 + 0x7FF;
     }
-    lrs = (((s32)((arg0->unk4.field1 * arg0->unk4.field2) + 3)) >> 2) - 1;
+    lrs = (((s32)((arg0->textureEntry.field1 * arg0->textureEntry.field2) + 3)) >> 2) - 1;
     if (lrs < 0x800) {
     } else {
         lrs = 0x7FF;
@@ -2585,7 +2585,7 @@ void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    line = (((arg0->unk4.field1 >> 1) + 7) >> 3) & 0x1FF;
+    line = (((arg0->textureEntry.field1 >> 1) + 7) >> 3) & 0x1FF;
     new_var = G_TX_NOMIRROR;
     gDPSetTile(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
 
@@ -2594,11 +2594,11 @@ void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
         G_TX_RENDERTILE,
         0,
         0,
-        (arg0->unk4.field1 - 1) << 2,
-        (arg0->unk4.field2 - 1) << 2
+        (arg0->textureEntry.field1 - 1) << 2,
+        (arg0->textureEntry.field2 - 1) << 2
     );
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, arg0->unk4.index_ptr);
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, arg0->textureEntry.index_ptr);
 
     gDPTileSync(gRegionAllocPtr++);
 
@@ -2624,21 +2624,21 @@ void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    if (arg0->unk30 == NULL) {
-        arg0->unk30 = arenaAlloc16(0x40);
-        if (arg0->unk30 == NULL) {
+    if (arg0->transformMatrix == NULL) {
+        arg0->transformMatrix = arenaAlloc16(0x40);
+        if (arg0->transformMatrix == NULL) {
             return;
         }
-        func_8006C130_6CD30((Transform3D *)&arg0->_pad10, arg0->unk30);
+        func_8006C130_6CD30((Transform3D *)&arg0->_pad10, arg0->transformMatrix);
     }
 
     gDPPipeSync(gRegionAllocPtr++);
 
     gDPSetTexturePersp(gRegionAllocPtr++, G_TP_PERSP);
 
-    gSPSegment(gRegionAllocPtr++, 0x02, arg0->unk34);
+    gSPSegment(gRegionAllocPtr++, 0x02, arg0->renderEntry);
 
-    gSPMatrix(gRegionAllocPtr++, arg0->unk30, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, arg0->transformMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
 
     gSPDisplayList(gRegionAllocPtr++, D_80090DB0_919B0);
 }
