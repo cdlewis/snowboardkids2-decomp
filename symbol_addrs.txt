@@ -2427,3 +2427,4 @@ awaitMeterLossAndFadeOut = 0x800401E8; // rom:0x40DE8
 handleSpeedCrossGameResult = 0x80040238; // rom:0x40E38
 awaitSpeedCrossAwardGold = 0x80040304; // rom:0x40F04
 awaitSpeedCrossContinuePress = 0x80040420; // rom:0x41020
+awaitBattleEndAndPromptContinue = 0x80040468; // rom:0x41068

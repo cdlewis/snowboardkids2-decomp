@@ -1318,14 +1318,14 @@ void awaitSpeedCrossContinuePress(void) {
     }
 }
 
-void func_80040468_41068(void) {
-    s32 temp_v1;
-    GameState *temp_v0;
+void awaitBattleEndAndPromptContinue(void) {
+    s32 delayTimer;
+    GameState *state;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v1 = temp_v0->unk4C - 1;
-    temp_v0->unk4C = temp_v1;
-    if (temp_v1 == 0) {
+    state = (GameState *)getCurrentAllocation();
+    delayTimer = state->unk4C - 1;
+    state->unk4C = delayTimer;
+    if (delayTimer == 0) {
         func_800574A0_580A0(0xA);
         setGameStateHandler(&func_800404A8_410A8);
     }
