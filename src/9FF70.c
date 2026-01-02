@@ -37,8 +37,8 @@ void func_800B00FC_9FFAC(Player *);
 void func_800B40D4_A3F84(Player *);
 void resetTrickScore(Player *);
 
-typedef void (*func_800B3950_callback)(void *);
-extern func_800B3950_callback D_800BAB68_AAA18[];
+typedef void (*RaceFinishBehaviorStepHandler)(void *);
+extern RaceFinishBehaviorStepHandler raceFinishBehaviorStepHandlers[];
 
 typedef void (*func_800B468C_callback)(void *);
 extern func_800B468C_callback D_800BAB78_AAA28[];
@@ -1348,8 +1348,8 @@ void updateFlipSpinTrickAnimation(Player *player) {
     }
 }
 
-void func_800B3950_A3800(func_800B00D4_arg *arg0) {
-    D_800BAB68_AAA18[arg0->unkBBF](arg0);
+void dispatchRaceFinishBehaviorStep(func_800B00D4_arg *arg0) {
+    raceFinishBehaviorStepHandlers[arg0->unkBBF](arg0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B3980_A3830);
