@@ -1160,130 +1160,130 @@ typedef struct {
     void *unk28;
 } Func432D8Arg;
 
-void func_800432D8_43ED8(Func432D8Arg *);
+void cleanupPlayerAuraEffect(Func432D8Arg *);
 void func_80044CA4_458A4(Func432D8Arg *);
 
 typedef struct {
-    u8 pad0[0x18];           /* 0x00 */
-    s32 unk18;               /* 0x18 */
-    u8 pad1C[0x4];           /* 0x1C */
-    void *unk20;             /* 0x20 */
-    void *unk24;             /* 0x24 */
-    void *unk28;             /* 0x28 */
-    s32 unk2C;               /* 0x2C */
-    u8 pad30[0xC];           /* 0x30 */
-    DisplayListObject unk3C; /* 0x3C */
-    Player *unk78;           /* 0x78 */
-    s32 unk7C;               /* 0x7C */
-    u16 unk80;               /* 0x80 */
-    u16 unk82;               /* 0x82 */
-    s16 unk84;               /* 0x84 */
-} Func43018State;
+    u8 pad0[0x18];              /* 0x00 */
+    s32 unk18;                  /* 0x18 */
+    u8 pad1C[0x4];              /* 0x1C */
+    void *unk20;                /* 0x20 */
+    void *unk24;                /* 0x24 */
+    void *unk28;                /* 0x28 */
+    s32 unk2C;                  /* 0x2C */
+    u8 pad30[0xC];              /* 0x30 */
+    DisplayListObject orbitObj; /* 0x3C */
+    Player *player;             /* 0x78 */
+    s32 fallVelocity;           /* 0x7C */
+    u16 yRotation;              /* 0x80 */
+    u16 orbitAngle;             /* 0x82 */
+    s16 scale;                  /* 0x84 */
+} PlayerAuraEffectState;
 
-void func_8004309C_43C9C(Func43018State *arg0);
-void func_8004320C_43E0C(Func43018State *arg0);
+void updatePlayerAuraEffect(PlayerAuraEffectState *state);
+void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state);
 
-void func_80043018_43C18(Func43018State *arg0) {
+void initPlayerAuraEffect(PlayerAuraEffectState *state) {
     getCurrentAllocation();
-    arg0->unk20 = &D_8009A710_9B310;
-    arg0->unk24 = loadAsset_B7E70();
-    arg0->unk28 = loadAsset_216290();
-    arg0->unk3C.unk20 = (DisplayLists *)&D_8009A720_9B320;
-    arg0->unk2C = 0;
-    arg0->unk3C.unk2C = 0;
-    arg0->unk84 = 0x200;
-    arg0->unk3C.unk24 = arg0->unk24;
-    arg0->unk3C.unk28 = arg0->unk28;
-    setCleanupCallback(func_800432D8_43ED8);
-    setCallbackWithContinue(func_8004309C_43C9C);
+    state->unk20 = &D_8009A710_9B310;
+    state->unk24 = loadAsset_B7E70();
+    state->unk28 = loadAsset_216290();
+    state->orbitObj.unk20 = (DisplayLists *)&D_8009A720_9B320;
+    state->unk2C = 0;
+    state->orbitObj.unk2C = 0;
+    state->scale = 0x200;
+    state->orbitObj.unk24 = state->unk24;
+    state->orbitObj.unk28 = state->unk28;
+    setCleanupCallback(cleanupPlayerAuraEffect);
+    setCallbackWithContinue(updatePlayerAuraEffect);
 }
 
-void func_8004309C_43C9C(Func43018State *arg0) {
+void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
     Func43CA4GameState *gameState;
     s32 i;
     Transform3D matrix;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
-    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
-    func_8006B084_6BC84(&D_8009A8B0_9B4B0, &arg0->unk78->unk3F8, arg0);
-    scaleMatrix((Transform3D *)arg0, arg0->unk84, arg0->unk84, arg0->unk84);
+    createYRotationMatrix(&D_8009A8B0_9B4B0, state->yRotation);
+    func_8006B084_6BC84(&D_8009A8B0_9B4B0, &state->player->unk3F8, state);
+    scaleMatrix((Transform3D *)state, state->scale, state->scale, state->scale);
 
-    arg0->unk82 += 0x300;
-    createZRotationMatrix(&matrix, arg0->unk82);
+    state->orbitAngle += 0x300;
+    createZRotationMatrix(&matrix, state->orbitAngle);
 
     matrix.translation.x = 0;
     matrix.translation.y = 0xBB333;
     matrix.translation.z = 0xFFEA0000;
 
-    func_8006B084_6BC84(&matrix, arg0, &arg0->unk3C);
+    func_8006B084_6BC84(&matrix, state, &state->orbitObj);
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
-        enqueueDisplayListWithFrustumCull(i, (&arg0->unk3C));
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
+        enqueueDisplayListWithFrustumCull(i, (&state->orbitObj));
     }
 
-    if (arg0->unk78->unkB84 & 0x80000) {
-        arg0->unk78->unkB9A = 0;
+    if (state->player->unkB84 & 0x80000) {
+        state->player->unkB9A = 0;
     }
 
-    if (arg0->unk78->unkB9A != 0) {
+    if (state->player->unkB9A != 0) {
         if (gameState->unk76 == 0) {
-            arg0->unk78->unkB9A--;
-            if (arg0->unk78->unkB9A == 0) {
-                if (arg0->unk78->unkBBB == 0x10) {
-                    arg0->unk78->unkB9A++;
+            state->player->unkB9A--;
+            if (state->player->unkB9A == 0) {
+                if (state->player->unkBBB == 0x10) {
+                    state->player->unkB9A++;
                 }
             }
-            if (arg0->unk84 != 0x2000) {
-                arg0->unk84 += 0x200;
+            if (state->scale != 0x2000) {
+                state->scale += 0x200;
             }
         }
     } else {
-        arg0->unk78->unkBD0 = 0;
-        arg0->unk7C = 0x40000;
-        setCallback(func_8004320C_43E0C);
+        state->player->unkBD0 = 0;
+        state->fallVelocity = 0x40000;
+        setCallback(fadeOutPlayerAuraEffect);
     }
 }
 
-void func_8004320C_43E0C(Func43018State *arg0) {
+void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state) {
     Func43CA4GameState *gameState;
     s32 i;
     Transform3D matrix;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        arg0->unk7C -= 0x8000;
-        if (arg0->unk7C <= (s32)0xFFF80000) {
+        state->fallVelocity -= 0x8000;
+        if (state->fallVelocity <= (s32)0xFFF80000) {
             func_80069CF8_6A8F8();
         }
-        arg0->unk18 += arg0->unk7C;
-        createZRotationMatrix(&matrix, arg0->unk82);
+        state->unk18 += state->fallVelocity;
+        createZRotationMatrix(&matrix, state->orbitAngle);
         matrix.translation.x = 0;
         matrix.translation.y = 0xBB333;
         matrix.translation.z = 0xFFEA0000;
-        func_8006B084_6BC84(&matrix, arg0, &arg0->unk3C);
+        func_8006B084_6BC84(&matrix, state, &state->orbitObj);
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
-        enqueueDisplayListWithFrustumCull(i, &arg0->unk3C);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
+        enqueueDisplayListWithFrustumCull(i, &state->orbitObj);
     }
 }
 
-void func_800432D8_43ED8(Func432D8Arg *arg0) {
+void cleanupPlayerAuraEffect(Func432D8Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void *func_80043310_43F10(Player *arg0) {
-    Func43018State *task;
+void *spawnPlayerAuraEffect(Player *player) {
+    PlayerAuraEffectState *task;
 
-    task = (Func43018State *)scheduleTask(func_80043018_43C18, 0, 0, 0xC8);
+    task = (PlayerAuraEffectState *)scheduleTask(initPlayerAuraEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        task->unk78 = arg0;
-        task->unk80 = 0;
-        if (arg0->unkB84 & 2) {
-            task->unk80 = 0x1000;
+        task->player = player;
+        task->yRotation = 0;
+        if (player->unkB84 & 2) {
+            task->yRotation = 0x1000;
         }
     }
     return task;

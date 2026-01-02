@@ -36,7 +36,7 @@ StarEffectTask *spawnStarEffectImmediate(void *arg0);
 void scheduleShieldEffect(void *arg0);
 void *createFallingEffect(void *arg0);
 void *spawnCrashEffect(void *arg0);
-void *func_80043310_43F10(Player *arg0);
+void *spawnPlayerAuraEffect(Player *arg0);
 void *func_80044050_44C50(Player *arg0);
 void *createLiftEffect(Player *player);
 void spawnBurstEffect(Vec3i *position);

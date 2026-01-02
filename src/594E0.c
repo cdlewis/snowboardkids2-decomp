@@ -170,7 +170,7 @@ s32 func_80058C10_59810(Player *arg0) {
 
 s32 func_80058C64_59864(Player *arg0) {
     if (arg0->unkBD0 == 0) {
-        if (func_80043310_43F10(arg0) != NULL) {
+        if (spawnPlayerAuraEffect(arg0) != NULL) {
             if (arg0->unkB84 & 2) {
                 arg0->unkBD0 = 2;
             } else {
