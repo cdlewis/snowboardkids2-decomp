@@ -40,8 +40,8 @@ void resetTrickScore(Player *);
 typedef void (*RaceFinishBehaviorStepHandler)(void *);
 extern RaceFinishBehaviorStepHandler raceFinishBehaviorStepHandlers[];
 
-typedef void (*func_800B468C_callback)(void *);
-extern func_800B468C_callback D_800BAB78_AAA28[];
+typedef void (*StunnedBehaviorPhaseHandler)(void *);
+extern StunnedBehaviorPhaseHandler stunnedBehaviorPhaseHandlers[];
 
 typedef void (*PostTrickLandingStepHandler)(void *);
 extern PostTrickLandingStepHandler postTrickLandingStepHandlers[];
@@ -1799,8 +1799,8 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     return localForwardVelocity;
 }
 
-void func_800B468C_A453C(func_800B00D4_arg *arg0) {
-    D_800BAB78_AAA28[arg0->unkBBE](arg0);
+void dispatchStunnedBehaviorPhase(func_800B00D4_arg *arg0) {
+    stunnedBehaviorPhaseHandlers[arg0->unkBBE](arg0);
 }
 
 void func_800B46BC_A456C(Player *arg0) {
