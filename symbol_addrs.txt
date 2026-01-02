@@ -2417,3 +2417,6 @@ awaitSkillWinAndPromptContinue = 0x8003FCD8; // rom:0x408D8
 awaitSkillWinContinuePress = 0x8003FD3C; // rom:0x4093C
 awaitSkillLossAndFadeOut = 0x8003FD84; // rom:0x40984
 handleShotCrossGameResult = 0x8003FDD4; // rom:0x409D4
+awaitShotCrossWinAndPromptContinue = 0x8003FF14; // rom:0x40B14
+awaitShotCrossWinContinuePress = 0x8003FF78; // rom:0x40B78
+awaitShotCrossLossAndFadeOut = 0x8003FFC0; // rom:0x40BC0

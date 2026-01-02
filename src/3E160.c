@@ -66,11 +66,11 @@ void awaitPlayersAndPlayRaceMusic(void);
 void loadPlayerAssets(void);
 void func_8003F368_3FF68(void);
 void awaitSkillWinContinuePress(void);
-void func_8003FF78_40B78(void);
+void awaitShotCrossWinContinuePress(void);
 void awaitSkillWinAndPromptContinue(void);
 void awaitSkillLossAndFadeOut(void);
-void func_8003FF14_40B14(void);
-void func_8003FFC0_40BC0(void);
+void awaitShotCrossWinAndPromptContinue(void);
+void awaitShotCrossLossAndFadeOut(void);
 void func_80040304_40F04(void);
 void func_8004013C_40D3C(void);
 void func_800401E8_40DE8(void);
@@ -1111,18 +1111,18 @@ void handleShotCrossGameResult(void) {
 
         state->unk7B = 1;
         addPlayerGold(score);
-        setGameStateHandler(&func_8003FF14_40B14);
+        setGameStateHandler(&awaitShotCrossWinAndPromptContinue);
     } else {
         D_800A24A0_A30A0 = 6;
         func_800574A0_580A0(9);
         state->unk7B = 1;
-        setGameStateHandler(&func_8003FFC0_40BC0);
+        setGameStateHandler(&awaitShotCrossLossAndFadeOut);
     }
 
     state->unk4C = 0xB4;
 }
 
-void func_8003FF14_40B14(void) {
+void awaitShotCrossWinAndPromptContinue(void) {
     GameState *gs = (GameState *)getCurrentAllocation();
     gs->unk4C--;
 
@@ -1130,26 +1130,24 @@ void func_8003FF14_40B14(void) {
         gs->unk7C = 1;
         func_800574A0_580A0(0xA);
         scheduleTask(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
-        setGameStateHandler(&func_8003FF78_40B78);
+        setGameStateHandler(&awaitShotCrossWinContinuePress);
     }
 }
 
-void func_8003FF78_40B78(void) {
-    if (gControllerInputs[0] & 0x8000) {
+void awaitShotCrossWinContinuePress(void) {
+    if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
         setGameStateHandler(&func_80040608_41208);
     }
 }
 
-void func_8003FFC0_40BC0(void) {
-    s32 temp_v1;
-    GameState *temp_v0;
+void awaitShotCrossLossAndFadeOut(void) {
+    GameState *state = (GameState *)getCurrentAllocation();
+    s32 delayTimer = state->unk4C - 1;
+    state->unk4C = delayTimer;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v1 = temp_v0->unk4C - 1;
-    temp_v0->unk4C = temp_v1;
-    if (temp_v1 == 0) {
+    if (delayTimer == 0) {
         func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         func_80057564_58164(0x3C);
         setGameStateHandler(&func_80040608_41208);
