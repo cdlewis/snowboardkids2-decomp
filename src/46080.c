@@ -282,7 +282,7 @@ typedef struct {
 typedef struct {
     DataTable_19E80 *assetTable;
     OutputStruct_19E80 textureEntry;
-    u8 _pad10[0x30 - 0x4 - sizeof(OutputStruct_19E80)];
+    Transform3D transform;
     Mtx *transformMatrix;
     GameStateUnk44Unk2C0 *renderEntry;
     s32 frameIndex;
@@ -838,7 +838,7 @@ void func_80049794_4A394(void *payload, s32 arg1);
 void func_80048F0C_49B0C(ItemBoxSystemState *arg0, s32 arg1);
 void initItemBoxPositions(ItemBoxSystemState *arg0);
 void cleanupItemBoxSystem(ItemBoxSystemState *);
-void renderItemBoxBurstEffect(ItemBoxBurstEffectState *arg0);
+void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state);
 void updateGoldCoinsTask(GoldCoinUpdateState *arg0);
 
 void initSkyRenderTask(SkyRenderTaskState *state) {
@@ -2521,22 +2521,22 @@ void cleanupItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
     state->assetTable = freeNodeMemory(state->assetTable);
 }
 
-void renderItemBoxBurstEffect(ItemBoxBurstEffectState *arg0) {
-    s32 var_a2;
+void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
+    s32 dxtBase;
     s32 new_var;
     u32 line;
     s32 lrs;
     u16 dxt;
-    u16 width_div_16;
-    Gfx *loadblock_ptr;
-    long loadblock_value;
+    u16 widthDiv16;
+    Gfx *loadBlockCmd;
+    long loadBlockWord;
     volatile u8 padding[0x10];
 
     gDPPipeSync(gRegionAllocPtr++);
 
     gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, arg0->textureEntry.data_ptr);
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, state->textureEntry.data_ptr);
 
     gDPSetTile(
         gRegionAllocPtr++,
@@ -2556,32 +2556,32 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *arg0) {
 
     gDPLoadSync(gRegionAllocPtr++);
 
-    loadblock_ptr = gRegionAllocPtr++;
-    loadblock_ptr->words.w0 = 0xF3000000;
+    loadBlockCmd = gRegionAllocPtr++;
+    loadBlockCmd->words.w0 = 0xF3000000;
     gGraphicsMode = -1;
-    width_div_16 = arg0->textureEntry.field1 >> 4;
-    var_a2 = 0x800;
-    if (width_div_16 != 0) {
-        var_a2 = width_div_16 + 0x7FF;
+    widthDiv16 = state->textureEntry.field1 >> 4;
+    dxtBase = 0x800;
+    if (widthDiv16 != 0) {
+        dxtBase = widthDiv16 + 0x7FF;
     }
-    lrs = (((s32)((arg0->textureEntry.field1 * arg0->textureEntry.field2) + 3)) >> 2) - 1;
+    lrs = (((s32)((state->textureEntry.field1 * state->textureEntry.field2) + 3)) >> 2) - 1;
     if (lrs < 0x800) {
     } else {
         lrs = 0x7FF;
     }
     line = lrs & 0xFFF;
     new_var = (line << 12) | 0x07000000;
-    loadblock_value = new_var;
-    if (width_div_16 != 0) {
-        loadblock_value |= (var_a2 / width_div_16) & 0xFFF;
+    loadBlockWord = new_var;
+    if (widthDiv16 != 0) {
+        loadBlockWord |= (dxtBase / widthDiv16) & 0xFFF;
     } else {
-        loadblock_value |= var_a2 & 0xFFF;
+        loadBlockWord |= dxtBase & 0xFFF;
     }
-    loadblock_ptr->words.w1 = loadblock_value;
+    loadBlockCmd->words.w1 = loadBlockWord;
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    line = (((arg0->textureEntry.field1 >> 1) + 7) >> 3) & 0x1FF;
+    line = (((state->textureEntry.field1 >> 1) + 7) >> 3) & 0x1FF;
     new_var = G_TX_NOMIRROR;
     gDPSetTile(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
 
@@ -2590,11 +2590,11 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *arg0) {
         G_TX_RENDERTILE,
         0,
         0,
-        (arg0->textureEntry.field1 - 1) << 2,
-        (arg0->textureEntry.field2 - 1) << 2
+        (state->textureEntry.field1 - 1) << 2,
+        (state->textureEntry.field2 - 1) << 2
     );
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, arg0->textureEntry.index_ptr);
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->textureEntry.index_ptr);
 
     gDPTileSync(gRegionAllocPtr++);
 
@@ -2620,21 +2620,21 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *arg0) {
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    if (arg0->transformMatrix == NULL) {
-        arg0->transformMatrix = arenaAlloc16(0x40);
-        if (arg0->transformMatrix == NULL) {
+    if (state->transformMatrix == NULL) {
+        state->transformMatrix = arenaAlloc16(0x40);
+        if (state->transformMatrix == NULL) {
             return;
         }
-        func_8006C130_6CD30((Transform3D *)&arg0->_pad10, arg0->transformMatrix);
+        func_8006C130_6CD30(&state->transform, state->transformMatrix);
     }
 
     gDPPipeSync(gRegionAllocPtr++);
 
     gDPSetTexturePersp(gRegionAllocPtr++, G_TP_PERSP);
 
-    gSPSegment(gRegionAllocPtr++, 0x02, arg0->renderEntry);
+    gSPSegment(gRegionAllocPtr++, 0x02, state->renderEntry);
 
-    gSPMatrix(gRegionAllocPtr++, arg0->transformMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, state->transformMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
 
     gSPDisplayList(gRegionAllocPtr++, D_80090DB0_919B0);
 }
