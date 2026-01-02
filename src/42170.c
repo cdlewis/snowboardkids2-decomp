@@ -1445,7 +1445,7 @@ s32 advanceAnimationFrame(void *arg0_void, void *animData_void) {
     return 1;
 }
 
-void func_800437C4_443C4(Func4393CArg *arg0, s8 *arg1) {
+void advanceAnimationFrameLooping(Func4393CArg *arg0, s8 *arg1) {
     s16 temp;
 
     temp = arg0->frameTimer - 1;
@@ -1536,7 +1536,7 @@ void func_800439F4_445F4(Func4393CArg *arg0) {
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        func_800437C4_443C4(arg0, &D_80090950_91550);
+        advanceAnimationFrameLooping(arg0, &D_80090950_91550);
         arg0->unk38 = arg0->unk38 + 0x8000;
         arg0->unk30 = arg0->unk30 + arg0->unk38;
         if (arg0->unk30 > 0x600000) {
@@ -1571,15 +1571,15 @@ void func_80043AB4_446B4(Func4393CArg *arg0) {
     arg0->unk30 = 0x700000 - (sinVal * 3 << 8);
 
     if (arg0->unk48 < 0x800) {
-        func_800437C4_443C4(arg0, &D_80090958_91558);
+        advanceAnimationFrameLooping(arg0, &D_80090958_91558);
     } else if (arg0->unk48 == 0x800) {
         arg0->animFrameIndex = 0;
         arg0->frameTimer = 1;
         arg0->unk3C = func_80059AC4_5A6C4((Player *)arg0->unk28);
         func_80059A48_5A648((Player *)arg0->unk28, -arg0->unk3C);
-        func_800437C4_443C4(arg0, &D_8009095C_9155C);
+        advanceAnimationFrameLooping(arg0, &D_8009095C_9155C);
     } else {
-        func_800437C4_443C4(arg0, &D_8009095C_9155C);
+        advanceAnimationFrameLooping(arg0, &D_8009095C_9155C);
     }
 
     if (arg0->unk48 == 0xC00) {
