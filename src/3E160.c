@@ -655,7 +655,7 @@ void initRaceViewports(void) {
 
     gs = (GameState_temp *)getCurrentAllocation();
     levelConfig = (VarData *)func_80055D10_56910(gs->memoryPoolId);
-    func_80056990_57590(0x60, 0x1400);
+    setAudioDistanceLimits(0x60, 0x1400);
     func_8006FAA4_706A4(gs->audioPlayer0, 0, 0xC, 0x1E, 0);
     setModelCameraTransform(gs->audioPlayer0, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
 

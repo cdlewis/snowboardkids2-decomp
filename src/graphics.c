@@ -60,8 +60,8 @@ typedef struct {
     /* 0x40C */ u8 bufferData[8][0x20];
     /* 0x50C */ s8 bufferIds[0x8];
     /* 0x514 */ s32 bufferFlags[8];
-    /* 0x534 */ s32 unk534;
-    /* 0x538 */ s32 unk538;
+    /* 0x534 */ s32 audioInnerDistance;
+    /* 0x538 */ s32 audioOuterDistance;
 } GraphicsManager;
 extern GraphicsManager *gGraphicsManager;
 
@@ -150,10 +150,10 @@ void initializeMusicSystem(void) {
         gGraphicsManager->unk24[i] = 0;
     }
 
-    gGraphicsManager->unk534 = 0x20;
+    gGraphicsManager->audioInnerDistance = 0x20;
     gGraphicsManager->renderQueueCount = 0;
     gGraphicsManager->bufferCount = 0;
-    gGraphicsManager->unk538 = 0xC80;
+    gGraphicsManager->audioOuterDistance = 0xC80;
     func_8005758C_5818C();
     func_8006983C_6A43C(&func_8005628C_56E8C);
 }
@@ -176,9 +176,9 @@ void queueAnonymousBufferData(void *source) {
     }
 }
 
-void func_80056990_57590(s32 arg0, s32 arg1) {
-    gGraphicsManager->unk538 = arg1;
-    gGraphicsManager->unk534 = arg0;
+void setAudioDistanceLimits(s32 innerDistance, s32 outerDistance) {
+    gGraphicsManager->audioOuterDistance = outerDistance;
+    gGraphicsManager->audioInnerDistance = innerDistance;
 }
 
 void func_800569A4_575A4(u8 *src_data, s8 search_id) {
