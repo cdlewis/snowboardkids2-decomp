@@ -400,11 +400,11 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x20];
-    DisplayLists *unk20;
+    DisplayLists *displayLists;
     u8 _pad2[0x3C - 0x24];
-    s32 unk3C;
-    s32 unk40;
-} func_800458AC_464AC_arg;
+    s32 playerIndex;
+    s32 pendingSyncFrames;
+} PlayerDisplayListState;
 
 typedef struct {
     s16 unk0;
@@ -829,7 +829,7 @@ void func_8004A634_4B234(func_8004A634_4B234_arg *arg0);
 void func_8004A850_4B450(func_8004A850_4B450_arg *arg0);
 void func_80047A64_48664(func_80047A64_48664_arg *arg0);
 void func_800477E4_483E4(func_800477E4_arg *arg0);
-void func_800458AC_464AC(func_800458AC_464AC_arg *arg0);
+void enqueuePlayerDisplayList(PlayerDisplayListState *arg0);
 void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
 void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
 void func_8004562C_4622C(void);
@@ -990,36 +990,36 @@ void initPlayerRenderTask(PlayerRenderTaskState *arg0) {
 void updatePlayerRenderCounter(void) {
     GameState *gs = (GameState *)getCurrentAllocation();
     gs->pendingPlayerRenderTasks -= 1;
-    setCallbackWithContinue(&func_800458AC_464AC);
+    setCallbackWithContinue(&enqueuePlayerDisplayList);
 }
 
-void func_800458AC_464AC(func_800458AC_464AC_arg *arg0) {
-    GameState *allocation;
-    s32 counter;
-    s32 index;
-    Player *data;
-    u8 val1;
-    u8 val2;
+void enqueuePlayerDisplayList(PlayerDisplayListState *state) {
+    GameState *gameState;
+    s32 pendingFrames;
+    s32 playerIndex;
+    Player *players;
+    u8 playerSyncValue;
+    u8 expectedSyncValue;
     func_80055E68_56A68_result *result;
 
-    allocation = (GameState *)getCurrentAllocation();
-    counter = arg0->unk40;
+    gameState = (GameState *)getCurrentAllocation();
+    pendingFrames = state->pendingSyncFrames;
 
-    if (counter != 0) {
-        index = arg0->unk3C;
-        data = allocation->players;
+    if (pendingFrames != 0) {
+        playerIndex = state->playerIndex;
+        players = gameState->players;
 
-        val1 = data[index].unkBC5;
-        val2 = allocation->unk74;
+        playerSyncValue = players[playerIndex].unkBC5;
+        expectedSyncValue = gameState->unk74;
 
-        if (val1 == val2) {
-            arg0->unk40 = counter - 1;
-            result = func_80055E68_56A68(allocation->memoryPoolId);
-            arg0->unk20 = &result->unk40;
+        if (playerSyncValue == expectedSyncValue) {
+            state->pendingSyncFrames = pendingFrames - 1;
+            result = func_80055E68_56A68(gameState->memoryPoolId);
+            state->displayLists = &result->unk40;
         }
     }
 
-    enqueueDisplayListObject(arg0->unk3C, (DisplayListObject *)arg0);
+    enqueueDisplayListObject(state->playerIndex, (DisplayListObject *)state);
 }
 
 void cleanupPlayerRenderTask(PlayerRenderTaskCleanupArg *arg0) {

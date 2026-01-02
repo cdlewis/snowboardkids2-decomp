@@ -2538,3 +2538,4 @@ dispatchSkyRenderCallback = 0x80045564; // rom:0x46164
 renderSkyDisplayLists = 0x800455BC; // rom:0x461BC
 cleanupSkyRenderTask = 0x80045768; // rom:0x46368
 scheduleSkyRenderTask = 0x800457A0; // rom:0x463A0
+enqueuePlayerDisplayList = 0x800458AC; // rom:0x464AC
