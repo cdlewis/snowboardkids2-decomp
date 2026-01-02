@@ -65,11 +65,11 @@ typedef struct {
 
 void func_800B46BC_A456C(Player *);
 
-void func_800B00C0_9FF70(Player *arg0, u8 arg1) {
-    arg0->unkBBD = arg1;
-    arg0->unkBBE = 0;
-    arg0->unkBBF = 0;
-    arg0->unkBC0 = 0;
+void setPlayerBehaviorMode(Player *player, u8 mode) {
+    player->unkBBD = mode;
+    player->unkBBE = 0;
+    player->unkBBF = 0;
+    player->unkBC0 = 0;
 }
 
 void func_800B00D4_9FF84(Player *arg0, s32 arg1) {

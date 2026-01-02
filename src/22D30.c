@@ -100,7 +100,7 @@ void func_80022304_22F04(void) {
         temp = state->frameCounter;
         if (temp < 4) {
             if (result == (0xC - (temp * 2))) {
-                task = (u8 *)scheduleTask(&func_800B00C0_9FF70, 0, 0, 0x5A);
+                task = (u8 *)scheduleTask(&setPlayerBehaviorMode, 0, 0, 0x5A);
                 task[0x2B] = (u8)state->frameCounter;
                 state->frameCounter = state->frameCounter + 1;
             }

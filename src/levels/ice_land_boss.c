@@ -306,7 +306,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
     gameState = (GameState *)getCurrentAllocation();
 
     if (arg0->unkB84 & 0x100000) {
-        func_800B00C0_9FF70(arg0, 3);
+        setPlayerBehaviorMode(arg0, 3);
         return 1;
     }
 
