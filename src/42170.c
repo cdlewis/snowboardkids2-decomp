@@ -1129,7 +1129,7 @@ void cleanupStarEffect(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void func_80042F58_43B58(void *arg0, void *arg1, s16 arg2) {
+void spawnStarEffect(void *arg0, void *arg1, s16 arg2) {
     StarEffectTask *task;
 
     task = (StarEffectTask *)scheduleTask(initStarEffect, 0, 0, 0xDC);
@@ -1141,7 +1141,7 @@ void func_80042F58_43B58(void *arg0, void *arg1, s16 arg2) {
     }
 }
 
-StarEffectTask *func_80042FC0_43BC0(void *arg0) {
+StarEffectTask *spawnStarEffectImmediate(void *arg0) {
     StarEffectTask *task;
 
     task = (StarEffectTask *)scheduleTask(initStarEffect, 0, 0, 0xDC);

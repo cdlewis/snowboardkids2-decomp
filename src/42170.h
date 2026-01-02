@@ -32,7 +32,7 @@ typedef struct {
 
 SparkleEffectState *spawnSparkleEffect(void *arg0);
 SparkleEffectState *spawnSparkleEffectWithPlayer(void *arg0, s32 arg1);
-StarEffectTask *func_80042FC0_43BC0(void *arg0);
+StarEffectTask *spawnStarEffectImmediate(void *arg0);
 void scheduleShieldEffect(void *arg0);
 void *createFallingEffect(void *arg0);
 void *spawnCrashEffect(void *arg0);

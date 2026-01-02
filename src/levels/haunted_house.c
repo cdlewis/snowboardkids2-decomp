@@ -298,7 +298,7 @@ void func_800BB620_AF310(func_800BB388_AF078_arg *arg0) {
 
     if (temp_a != NULL) {
         if (temp_a->unkBCF < 3) {
-            func_80042FC0_43BC0(temp_a);
+            spawnStarEffectImmediate(temp_a);
         }
 
         setCallback(func_800BB6F4_AF3E4);
