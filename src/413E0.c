@@ -53,12 +53,12 @@ typedef struct {
     void *unkA0;
     s32 unkA4;
     u8 pad3[0xC];
-    s16 unkB4;
-    s16 unkB6;
-    s16 unkB8;
-} func_80040B4C_4174C_arg;
+    s16 gateRotation;
+    s16 animationState;
+    s16 pauseTimer;
+} StartGate;
 
-void func_80040B4C_4174C(func_80040B4C_4174C_arg *);
+void updateStartGate(StartGate *);
 void func_80040E00_41A00(func_80040E00_41A00_arg *);
 void func_80040F34_41B34(PlayerIndicatorTask *);
 void func_800413E0_41FE0(PlayerIndicatorTask *arg0);
@@ -83,9 +83,9 @@ typedef struct {
     u8 _pad[0x24];
     void *unk24;
     void *unk28;
-} func_80040D48_41948_arg;
+} StartGateCleanupArg;
 
-void func_80040D48_41948(func_80040D48_41948_arg *);
+void cleanupStartGate(StartGateCleanupArg *);
 
 typedef struct {
     u8 high;
@@ -154,7 +154,7 @@ void spawnPlayerIndicatorTask(void *cleanupArg) {
     }
 }
 
-void func_800409B4_415B4(func_80040B4C_4174C_arg *obj) {
+void initStartGate(StartGate *gate) {
     s32 tempMatrix[8];
     s32 worldPos[4];
     s32 *transformMatrix;
@@ -164,111 +164,111 @@ void func_800409B4_415B4(func_80040B4C_4174C_arg *obj) {
 
     gameState = (GameState *)getCurrentAllocation();
     spawnData = func_80055D10_56910(gameState->memoryPoolId);
-    obj->unk20 = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x50);
-    obj->unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
-    obj->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
-    obj->unk2C = 0;
+    gate->unk20 = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x50);
+    gate->unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
+    gate->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
+    gate->unk2C = 0;
     trackAngle = func_800625A4_631A4((u8 *)gameState + 0x30, worldPos);
-    createYRotationMatrix(&obj->rotationMatrix, (trackAngle + spawnData->unk8) & 0xFFFF);
-    rotateVectorY(&D_800907EC_913EC, trackAngle + spawnData->unk8, &obj->rotationMatrix.translation);
-    obj->rotationMatrix.translation.x = obj->rotationMatrix.translation.x + spawnData->unk0;
-    obj->rotationMatrix.translation.z = obj->rotationMatrix.translation.z + spawnData->unk4;
-    obj->rotationMatrix.translation.y = worldPos[1];
-    obj->unk5C = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x60);
+    createYRotationMatrix(&gate->rotationMatrix, (trackAngle + spawnData->unk8) & 0xFFFF);
+    rotateVectorY(&D_800907EC_913EC, trackAngle + spawnData->unk8, &gate->rotationMatrix.translation);
+    gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + spawnData->unk0;
+    gate->rotationMatrix.translation.z = gate->rotationMatrix.translation.z + spawnData->unk4;
+    gate->rotationMatrix.translation.y = worldPos[1];
+    gate->unk5C = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x60);
     transformMatrix = tempMatrix;
-    obj->unk60 = obj->unk24;
-    obj->unk64 = obj->unk28;
-    obj->unk68 = obj->unk2C;
+    gate->unk60 = gate->unk24;
+    gate->unk64 = gate->unk28;
+    gate->unk68 = gate->unk2C;
     memcpy(transformMatrix, identityMatrix, 0x20);
     transformMatrix[6] = 0x180000;
-    func_8006B084_6BC84(transformMatrix, obj, &obj->unk3C);
-    obj->unk9C = obj->unk24;
-    obj->unkA0 = obj->unk28;
-    obj->unkA4 = obj->unk2C;
+    func_8006B084_6BC84(transformMatrix, gate, &gate->unk3C);
+    gate->unk9C = gate->unk24;
+    gate->unkA0 = gate->unk28;
+    gate->unkA4 = gate->unk2C;
     transformMatrix[6] = 0x160000;
     transformMatrix[7] = 0xA3333;
-    func_8006B084_6BC84(transformMatrix, obj, &obj->unk78);
-    obj->unkB4 = 0;
-    obj->unkB6 = 0;
-    setCleanupCallback(func_80040D48_41948);
-    setCallback(func_80040B4C_4174C);
+    func_8006B084_6BC84(transformMatrix, gate, &gate->unk78);
+    gate->gateRotation = 0;
+    gate->animationState = 0;
+    setCleanupCallback(cleanupStartGate);
+    setCallback(updateStartGate);
 }
 
-void func_80040B4C_4174C(func_80040B4C_4174C_arg *arg0) {
+void updateStartGate(StartGate *gate) {
     Transform3D sp10;
     Transform3D *s0;
-    GameState *s2;
+    GameState *gameState;
     s32 i;
 
-    s2 = (GameState *)getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
 
-    switch (arg0->unkB6) {
+    switch (gate->animationState) {
         case 0:
-            if (s2->unk63 != 3) {
+            if (gameState->unk63 != 3) {
                 goto block_else;
             }
-            arg0->unkB6++;
-            func_80056B7C_5777C(&arg0->rotationMatrix.translation, 0xA);
+            gate->animationState++;
+            func_80056B7C_5777C(&gate->rotationMatrix.translation, 0xA);
             /* fallthrough */
         case 1:
-            if (s2->gamePaused == 0) {
-                arg0->unkB4 -= 0x80;
+            if (gameState->gamePaused == 0) {
+                gate->gateRotation -= 0x80;
             }
-            if (arg0->unkB4 == -0x800) {
-                arg0->unkB8 = 0xA;
-                arg0->unkB6++;
+            if (gate->gateRotation == -0x800) {
+                gate->pauseTimer = 0xA;
+                gate->animationState++;
             }
-            createZRotationMatrix(&sp10, arg0->unkB4);
+            createZRotationMatrix(&sp10, gate->gateRotation);
             sp10.translation.x = 0;
             sp10.translation.y = 0xC0000;
             sp10.translation.z = 0;
-            func_8006B084_6BC84(&sp10, arg0, &arg0->unk3C);
+            func_8006B084_6BC84(&sp10, gate, &gate->unk3C);
             break;
         case 2:
-            if (s2->gamePaused == 0) {
-                arg0->unkB8--;
+            if (gameState->gamePaused == 0) {
+                gate->pauseTimer--;
             }
-            if (arg0->unkB8 == 0) {
-                arg0->unkB6++;
+            if (gate->pauseTimer == 0) {
+                gate->animationState++;
             }
             break;
         case 3:
-            if (s2->gamePaused == 0) {
-                arg0->unkB4 += 0x100;
+            if (gameState->gamePaused == 0) {
+                gate->gateRotation += 0x100;
             }
-            if (arg0->unkB4 == 0) {
-                arg0->unkB6++;
+            if (gate->gateRotation == 0) {
+                gate->animationState++;
             }
-            s0 = &arg0->unk3C;
-            createZRotationMatrix(s0, arg0->unkB4);
-            createZRotationMatrix(&sp10, arg0->unkB4);
+            s0 = &gate->unk3C;
+            createZRotationMatrix(s0, gate->gateRotation);
+            createZRotationMatrix(&sp10, gate->gateRotation);
             sp10.translation.x = 0;
             sp10.translation.y = 0xC0000;
             sp10.translation.z = 0;
-            func_8006B084_6BC84(&sp10, arg0, s0);
+            func_8006B084_6BC84(&sp10, gate, s0);
             break;
         case 4:
-            if (s2->unk63 != 3) {
-                arg0->unkB6 = 0;
+            if (gameState->unk63 != 3) {
+                gate->animationState = 0;
             }
             break;
     }
 
-    if (s2->unk63 == 3) {
-        arg0->unk98 = (s32)func_80055E68_56A68(s2->memoryPoolId) + 0x70;
+    if (gameState->unk63 == 3) {
+        gate->unk98 = (s32)func_80055E68_56A68(gameState->memoryPoolId) + 0x70;
     } else {
     block_else:
-        arg0->unk98 = (s32)func_80055E68_56A68(s2->memoryPoolId) + 0x80;
+        gate->unk98 = (s32)func_80055E68_56A68(gameState->memoryPoolId) + 0x80;
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->unk3C);
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->unk78);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)gate);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&gate->unk3C);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&gate->unk78);
     }
 }
 
-void func_80040D48_41948(func_80040D48_41948_arg *arg0) {
+void cleanupStartGate(StartGateCleanupArg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }

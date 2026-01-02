@@ -2437,3 +2437,6 @@ initPlayerIndicator = 0x800407E0; // rom:0x413E0
 awaitPlayerIndicatorReady = 0x8004083C; // rom:0x4143C
 cleanupPlayerIndicator = 0x80040948; // rom:0x41548
 spawnPlayerIndicatorTask = 0x80040974; // rom:0x41574
+initStartGate = 0x800409B4; // rom:0x415B4
+updateStartGate = 0x80040B4C; // rom:0x4174C
+cleanupStartGate = 0x80040D48; // rom:0x41948

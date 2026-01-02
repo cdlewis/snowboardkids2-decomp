@@ -2788,7 +2788,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             scheduleTask(&func_800BB814_B5114, 0, 0, 0xD3);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
             break;
@@ -2801,7 +2801,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             func_80046244_46E44(arg0, 4);
             func_80049BFC_4A7FC();
             break;
@@ -2819,7 +2819,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             }
             func_80046244_46E44(arg0, 3);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
         case JINGLE_TOWN_BOSS:
@@ -2834,7 +2834,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             } else {
                 func_80045434_46034(1);
             }
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
         case WENDYS_HOUSE:
@@ -2847,7 +2847,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800BB7F0_B5A00, 0, 0, 0x5E);
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
         case LINDAS_CASTLE:
@@ -2859,7 +2859,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80049C70_4A870(arg0);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             func_80046244_46E44(arg0, 6);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BBA28_AB8D8, 0, 0, 0x31);
             scheduleTask(&func_800BBAF8_AB9A8, 0, 0, 0xF0);
             func_80049BFC_4A7FC();
@@ -2877,7 +2877,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             func_800BBA98();
             func_80049BFC_4A7FC();
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
         case CRAZY_JUNGLE_BOSS:
@@ -2890,7 +2890,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 func_80049C70_4A870(arg0);
             }
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
         case STARLIGHT_HIGHWAY:
@@ -2900,7 +2900,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             }
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             func_800BBED8();
             scheduleTask(&func_800BC528_AE8E8, 0, 0, 0xC7);
@@ -2917,7 +2917,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80049C70_4A870(arg0);
             scheduleTask(&func_800BB74C_AF43C, 0, 0, 0xC8);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB8E8_AF5D8, 0, 0, 0x32);
             scheduleTask(&func_800BBE84_AFB74, 0, 0, 0x32);
             func_80044538_45138(6);
@@ -2939,7 +2939,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             }
             func_80044538_45138(4);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB688_B2408, 0, 0, 0xD3);
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
@@ -2957,7 +2957,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 func_80045434_46034(2);
             }
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             func_80041418_42018();
             func_80044538_45138(5);
             break;
@@ -2974,7 +2974,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 func_80045434_46034(3);
             }
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             break;
 
@@ -2990,7 +2990,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 func_800BBA50(arg0);
             }
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BBA90_AD510, 0, 0, 0xD3);
             break;
 
@@ -3004,7 +3004,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 func_80049C70_4A870(arg0);
             }
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
         case TRAINING:
@@ -3015,7 +3015,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            scheduleTask(&func_800409B4_415B4, 0, 0, 0xD3);
+            scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
     }
 }
