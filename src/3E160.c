@@ -46,7 +46,7 @@ extern s32 D_800B0334;
 extern s32 D_800B7B7C;
 extern s32 gControllerInputs[4];
 extern u8 D_800A24A0_A30A0;
-extern void func_800404A8_410A8(void);
+extern void awaitBattleContinuePress(void);
 extern void func_80040588_41188(void);
 extern void func_80040608_41208(void);
 extern s8 gControllerPollingEnabled;
@@ -1327,17 +1327,16 @@ void awaitBattleEndAndPromptContinue(void) {
     state->unk4C = delayTimer;
     if (delayTimer == 0) {
         func_800574A0_580A0(0xA);
-        setGameStateHandler(&func_800404A8_410A8);
+        setGameStateHandler(&awaitBattleContinuePress);
     }
 }
 
-void func_800404A8_410A8(void) {
+void awaitBattleContinuePress(void) {
     s32 i;
-    s32 *var_a0;
-    GameState *temp_v0;
+    GameState *state;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
-    for (i = 0; i < temp_v0->unk5F; i++) {
+    state = (GameState *)getCurrentAllocation();
+    for (i = 0; i < state->unk5F; i++) {
         if (gControllerInputs[i] & A_BUTTON) {
             func_8006FDA0_709A0(0, 0xFF, 0x10);
             func_80057564_58164(0x3C);
