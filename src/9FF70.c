@@ -31,7 +31,7 @@ extern s32 D_800BAB3C_AA9EC;
 s32 tryFinalizeTrickLanding(Player *);
 void updateTrickFacingAngle(Player *);
 void updateFlipSpinTrickAnimation(Player *);
-void func_800B4058_A3F08(Player *);
+void updateTrickRotationTransform(Player *);
 void func_800B419C_A404C(Player *);
 void func_800B00FC_9FFAC(Player *);
 void func_800B40D4_A3F84(Player *);
@@ -971,7 +971,7 @@ s32 updateRightSpinTrick(Player *player) {
                 player->unkBC0 = 0;
             }
         } else {
-            func_800B4058_A3F08(player);
+            updateTrickRotationTransform(player);
         }
     }
 
@@ -1006,7 +1006,7 @@ s32 updateLeftSpinTrick(Player *player) {
                 player->unkBC0 = 0;
             }
         } else {
-            func_800B4058_A3F08(player);
+            updateTrickRotationTransform(player);
         }
     }
 
@@ -1041,7 +1041,7 @@ s32 updateForwardFlipTrick(Player *player) {
                 player->unkBC0 = 0;
             }
         } else {
-            func_800B4058_A3F08(player);
+            updateTrickRotationTransform(player);
         }
     }
 
@@ -1076,7 +1076,7 @@ s32 updateBackwardFlipTrick(Player *player) {
                 player->unkBC0 = 0;
             }
         } else {
-            func_800B4058_A3F08(player);
+            updateTrickRotationTransform(player);
         }
     }
 
@@ -1112,7 +1112,7 @@ s32 updateRightForwardFlipTrick(Player *player) {
                 player->unkBC0 = 0;
             }
         } else {
-            func_800B4058_A3F08(player);
+            updateTrickRotationTransform(player);
         }
     }
 
@@ -1148,7 +1148,7 @@ s32 updateRightBackwardFlipTrick(Player *player) {
                 player->unkBC0 = 0;
             }
         } else {
-            func_800B4058_A3F08(player);
+            updateTrickRotationTransform(player);
         }
     }
 
@@ -1184,7 +1184,7 @@ s32 updateLeftForwardFlipTrick(Player *player) {
                 player->unkBC0 = 0;
             }
         } else {
-            func_800B4058_A3F08(player);
+            updateTrickRotationTransform(player);
         }
     }
 
@@ -1220,7 +1220,7 @@ s32 updateLeftBackwardFlipTrick(Player *player) {
                 player->unkBC0 = 0;
             }
         } else {
-            func_800B4058_A3F08(player);
+            updateTrickRotationTransform(player);
         }
     }
 
@@ -1562,22 +1562,22 @@ extern s32 D_8009A8A4_9B4A4;
 extern s32 D_8009A8A8_9B4A8;
 extern s32 D_8009A8AC_9B4AC;
 
-void func_800B4058_A3F08(Player *arg0) {
-    Transform3D sp10;
-    s16 *a98;
-    s16 *a96;
+void updateTrickRotationTransform(Player *player) {
+    Transform3D rotationMatrix;
+    s16 *flipAngle;
+    s16 *spinAngle;
 
     D_8009A8A4_9B4A4 = 0;
     D_8009A8A8_9B4A8 = 0xFFF00000;
     D_8009A8AC_9B4AC = 0;
-    a98 = &arg0->unkA98;
-    a96 = &arg0->unkA96;
-    createRotationMatrixYX(&sp10, *a98, *a96);
-    sp10.translation.x = 0;
-    sp10.translation.y = 0x100000;
-    sp10.translation.z = 0;
-    func_8006B084_6BC84(&D_8009A890_9B490, &sp10, &arg0->unk9B0.prev_position);
-    arg0->unkB84 |= 0x800;
+    flipAngle = &player->unkA98;
+    spinAngle = &player->unkA96;
+    createRotationMatrixYX(&rotationMatrix, *flipAngle, *spinAngle);
+    rotationMatrix.translation.x = 0;
+    rotationMatrix.translation.y = 0x100000;
+    rotationMatrix.translation.z = 0;
+    func_8006B084_6BC84(&D_8009A890_9B490, &rotationMatrix, &player->unk9B0.prev_position);
+    player->unkB84 |= 0x800;
 }
 
 void func_800B40D4_A3F84(Player *arg0) {

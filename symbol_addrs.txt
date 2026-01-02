@@ -2713,3 +2713,4 @@ initSpeedCrossFinishPositionTask = 0x8004D8E4; // rom:0x4E4E4
 updateSpeedCrossFinishPositionDisplay = 0x8004D954; // rom:0x4E554
 cleanupSpeedCrossFinishPositionTask = 0x8004D98C; // rom:0x4E58C
 allocateAudioResources = 0x80056080; // rom:0x56C80
+updateTrickRotationTransform = 0x800B4058; // rom:0xA3F08
