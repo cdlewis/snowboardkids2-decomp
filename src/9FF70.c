@@ -2404,7 +2404,7 @@ s32 func_800B5A40_A58F0(Player *arg0) {
         arg0->unk44C.y = arg0->unk44C.y - 0x8000;
     } else {
         if (arg0->unkBBF == 1) {
-            if (func_8004175C_4235C(arg0) != 0) {
+            if (createFallingEffect(arg0) != 0) {
                 arg0->unkBBF++;
             }
         }

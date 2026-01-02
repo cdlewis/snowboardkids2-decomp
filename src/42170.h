@@ -34,7 +34,7 @@ Func420E8State *func_80042340_42F40(void *arg0);
 Func420E8State *func_800423A4_42FA4(void *arg0, s32 arg1);
 Func42FC0TaskMem *func_80042FC0_43BC0(void *arg0);
 void func_800419E4_425E4(void *arg0);
-void *func_8004175C_4235C(void *arg0);
+void *createFallingEffect(void *arg0);
 void *func_800420A8_42CA8(void *arg0);
 void *func_80043310_43F10(Player *arg0);
 void *func_80044050_44C50(Player *arg0);

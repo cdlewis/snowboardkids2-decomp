@@ -67,21 +67,21 @@ typedef struct {
     s32 pos1F8;        /* 0x1F8 */
     u8 _pad1FC[0x98C]; /* 0x1FC */
     s32 unkB88;        /* 0xB88 */
-} Func41570StateUnk3C;
+} FallingEffectPlayer;
 
 typedef struct {
-    s16 matrix[3][3];           /* 0x00 (0x12 bytes: 9 * 2), offset 0x0E is matrix[2][1] */
-    u8 pad12[0x2];              /* 0x12 */
-    Vec3i unk14;                /* 0x14 */
-    void *unk20;                /* 0x20 */
-    void *unk24;                /* 0x24 */
-    void *unk28;                /* 0x28 */
-    s32 unk2C;                  /* 0x2C */
-    u8 pad30[0xC];              /* 0x30 */
-    Func41570StateUnk3C *unk3C; /* 0x3C */
-    s32 unk40;                  /* 0x40 */
-    s32 unk44;                  /* 0x44 */
-} Func41570State;
+    s16 matrix[3][3];            /* 0x00 (0x12 bytes: 9 * 2), offset 0x0E is matrix[2][1] */
+    u8 pad12[0x2];               /* 0x12 */
+    Vec3i position;              /* 0x14 */
+    void *displayData;           /* 0x20 */
+    void *asset1;                /* 0x24 */
+    void *asset2;                /* 0x28 */
+    s32 unk2C;                   /* 0x2C */
+    u8 pad30[0xC];               /* 0x30 */
+    FallingEffectPlayer *player; /* 0x3C */
+    s32 height;                  /* 0x40 */
+    s32 playSound;               /* 0x44 */
+} FallingEffectState;
 
 typedef struct {
     s32 unk0;
@@ -198,7 +198,7 @@ typedef struct {
     s16 unk46;     /* 0x46 */
 } Func42410State;
 
-void func_80041724_42324(Func41570State *);
+void cleanupFallingEffect(FallingEffectState *);
 
 typedef struct {
     u8 _pad0[0x30];
@@ -305,8 +305,8 @@ void func_800439F4_445F4(Func4393CArg *);
 void func_80042BA4_437A4(Func42BA4Arg *);
 void func_80042C98_43898(Func42C98Arg *);
 void func_80042E40_43A40(Func42E40Arg *);
-void func_800415E8_421E8(Func41570State *);
-void func_8004168C_4228C(Func41570State *);
+void updateFallingEffect(FallingEffectState *);
+void animateFallingEffectDescent(FallingEffectState *);
 void func_80042308_42F08(Func420E8State *);
 void func_80042160_42D60(Func420E8State *);
 void func_80042254_42E54(Func420E8State *);
@@ -322,33 +322,33 @@ extern s32 D_80090AA0_916A0;
 extern s32 D_80090AAC_916AC;
 extern s8 D_80090950_91550;
 
-void func_80041570_42170(Func41570State *arg0) {
+void initFallingEffect(FallingEffectState *arg0) {
     getCurrentAllocation();
     createXRotationMatrix(arg0->matrix, 0x800);
-    arg0->unk20 = &D_8009A6B0_9B2B0;
-    arg0->unk24 = loadAsset_B7E70();
-    arg0->unk28 = loadAsset_216290();
-    arg0->unk40 = 0x2000;
+    arg0->displayData = &D_8009A6B0_9B2B0;
+    arg0->asset1 = loadAsset_B7E70();
+    arg0->asset2 = loadAsset_216290();
+    arg0->height = 0x2000;
     arg0->unk2C = 0;
-    arg0->unk44 = 1;
-    setCleanupCallback(func_80041724_42324);
-    setCallbackWithContinue(func_800415E8_421E8);
+    arg0->playSound = 1;
+    setCleanupCallback(cleanupFallingEffect);
+    setCallbackWithContinue(updateFallingEffect);
 }
 
-void func_800415E8_421E8(Func41570State *arg0) {
+void updateFallingEffect(FallingEffectState *arg0) {
     s32 i;
 
-    arg0->unk14.x = arg0->unk3C->pos1F0;
-    arg0->unk14.y = arg0->unk3C->pos1F4;
-    arg0->unk14.z = arg0->unk3C->pos1F8;
+    arg0->position.x = arg0->player->pos1F0;
+    arg0->position.y = arg0->player->pos1F4;
+    arg0->position.z = arg0->player->pos1F8;
 
-    if ((arg0->unk3C->unkB88 & 0x20) == 0) {
-        setCallback(func_8004168C_4228C);
+    if ((arg0->player->unkB88 & 0x20) == 0) {
+        setCallback(animateFallingEffectDescent);
     }
 
-    if (arg0->unk44 != 0) {
-        arg0->unk44 = 0;
-        func_80056B7C_5777C(&arg0->unk14, 0xE);
+    if (arg0->playSound != 0) {
+        arg0->playSound = 0;
+        func_80056B7C_5777C(&arg0->position, 0xE);
     }
 
     for (i = 0; i < 4; i++) {
@@ -356,43 +356,43 @@ void func_800415E8_421E8(Func41570State *arg0) {
     }
 }
 
-void func_8004168C_4228C(Func41570State *arg0) {
+void animateFallingEffectDescent(FallingEffectState *arg0) {
     Func43CA4GameState *allocation;
     s32 i;
 
     allocation = (Func43CA4GameState *)getCurrentAllocation();
     if (allocation->unk76 == 0) {
-        arg0->unk40 -= 0x200;
+        arg0->height -= 0x200;
     }
 
-    if (arg0->unk40 == 0x200) {
+    if (arg0->height == 0x200) {
         func_80069CF8_6A8F8();
     }
 
-    arg0->matrix[2][1] = -arg0->unk40;
-    arg0->unk14.y += 0xFFFF0000;
+    arg0->matrix[2][1] = -arg0->height;
+    arg0->position.y += 0xFFFF0000;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
     }
 }
 
-void func_80041724_42324(Func41570State *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupFallingEffect(FallingEffectState *arg0) {
+    arg0->asset1 = freeNodeMemory(arg0->asset1);
+    arg0->asset2 = freeNodeMemory(arg0->asset2);
 }
 
 typedef struct {
     u8 _pad0[0x3C];
-    void *unk3C;
-} Func4175CTask;
+    void *player;
+} FallingEffectTask;
 
-void *func_8004175C_4235C(void *arg0) {
-    Func4175CTask *task;
+void *createFallingEffect(void *arg0) {
+    FallingEffectTask *task;
 
-    task = (Func4175CTask *)scheduleTask(&func_80041570_42170, 0, 0, 0xC8);
+    task = (FallingEffectTask *)scheduleTask(&initFallingEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        task->unk3C = arg0;
+        task->player = arg0;
     }
     return task;
 }
