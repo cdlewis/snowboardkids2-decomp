@@ -608,43 +608,43 @@ s32 updatePostTrickChargingStep(Player *player) {
     return 0;
 }
 
-s32 func_800B26D0_A2580(Player *arg0) {
-    s32 sp10[8];
-    s32 sp30[8];
-    Vec3i sp50;
-    s32 *ptr;
+s32 beginPostTrickLaunchStep(Player *player) {
+    s32 rotationTemp1[8];
+    s32 rotationTemp2[8];
+    Vec3i launchVelocity;
+    s32 *launchMagnitudePtr;
 
-    arg0->unkBC0 = 3;
-    arg0->unkBBF++;
-    D_800BAB40_AA9F0 = arg0->unkB8C + arg0->unkABC;
+    player->unkBC0 = 3;
+    player->unkBBF++;
+    D_800BAB40_AA9F0 = player->unkB8C + player->unkABC;
 
-    if (*(volatile s32 *)&arg0->unkB84 & 2) {
+    if (*(volatile s32 *)&player->unkB84 & 2) {
         D_800BAB44_AA9F4 = 0xFFFE0000;
     } else {
         D_800BAB44_AA9F4 = 0x20000;
     }
 
-    if (arg0->unkBDA != 0) {
-        if (arg0->unkBDC == 0) {
-            if (arg0->unkB98 != 0) {
-                ptr = &D_800BAB44_AA9F4;
-                *ptr = *ptr * 2;
+    if (player->unkBDA != 0) {
+        if (player->unkBDC == 0) {
+            if (player->unkB98 != 0) {
+                launchMagnitudePtr = &D_800BAB44_AA9F4;
+                *launchMagnitudePtr = *launchMagnitudePtr * 2;
             }
         }
     } else {
-        if (*(u16 *)&arg0->unkB7A == 7) {
-            ptr = &D_800BAB44_AA9F4;
-            *ptr = *ptr * 2;
+        if (*(u16 *)&player->unkB7A == 7) {
+            launchMagnitudePtr = &D_800BAB44_AA9F4;
+            *launchMagnitudePtr = *launchMagnitudePtr * 2;
         }
     }
 
-    func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, &arg0->unk970, sp10);
-    func_8006BDBC_6C9BC(&arg0->unk9B0, sp10, sp30);
-    transformVector2(&D_800BAB3C_AA9EC, sp30, &sp50);
+    func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&player->unk990, &player->unk970, rotationTemp1);
+    func_8006BDBC_6C9BC(&player->unk9B0, rotationTemp1, rotationTemp2);
+    transformVector2(&D_800BAB3C_AA9EC, rotationTemp2, &launchVelocity);
 
-    arg0->unk44C.x += sp50.x;
-    arg0->unk44C.y += sp50.y + arg0->unkAB8;
-    arg0->unk44C.z += sp50.z;
+    player->unk44C.x += launchVelocity.x;
+    player->unk44C.y += launchVelocity.y + player->unkAB8;
+    player->unk44C.z += launchVelocity.z;
 
     return 1;
 }

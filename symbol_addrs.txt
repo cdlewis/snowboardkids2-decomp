@@ -13,6 +13,7 @@ dispatchPostTrickLandingStep = 0x800B23AC; // rom:0xA225C
 beginPostTrickSlidingStep = 0x800B23DC; // rom:0xA228C
 updatePostTrickSlidingStep = 0x800B243C; // rom:0xA22EC
 updatePostTrickChargingStep = 0x800B255C; // rom:0xA240C
+beginPostTrickLaunchStep = 0x800B26D0; // rom:0xA2580
 sharpTurnBehaviorStepHandlers = 0x800BAAF4; // rom:0xAA9A4
 postTrickLandingStepHandlers = 0x800BAB04; // rom:0xAA9B4
 func_800B0690_1DBD70 = 0x800B0690; // rom:0x1DBD70
