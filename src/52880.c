@@ -118,11 +118,11 @@ void func_80055964_56564(Struct_52880 *arg0);
 void func_80055A84_56684(Struct_52880 *);
 s32 spawnParachuteProjectileTask(s32, s32);
 s32 spawnFryingPanProjectileTask(s32, s32);
-s32 func_800537B0_543B0(s32, s32);
+s32 spawnSnowmanProjectileTask(s32, s32);
 s32 func_80053DF0_549F0(s32, s32);
 s32 func_80054470_55070(s32, s32);
 s32 func_80055820_56420(s32, s32);
-void func_80053434_54034(Struct_52880 *);
+void updateSnowmanProjectile(Struct_52880 *);
 void updateFryingPanProjectile(Struct_52880 *);
 void cleanupSlapstickProjectileTask(Struct_52880 *arg0);
 void loadSlapstickProjectileAsset(Struct_52880 *arg0);
@@ -817,18 +817,18 @@ s32 spawnFryingPanProjectileTask(s32 arg0, s32 arg1) {
     return (s32)task;
 }
 
-void func_80053784_54384(Struct_52880 *arg0);
-void func_80053104_53D04(Struct_52880 *arg0);
-void func_80053254_53E54(Struct_52880 *arg0);
+void cleanupSnowmanProjectileTask(Struct_52880 *arg0);
+void loadSnowmanProjectileAsset(Struct_52880 *arg0);
+void launchSnowmanProjectile(Struct_52880 *arg0);
 
-void func_800530BC_53CBC(Struct_52880 *arg0) {
+void initSnowmanProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->assetData = load_3ECE40();
-    setCleanupCallback(func_80053784_54384);
-    setCallbackWithContinue(func_80053104_53D04);
+    setCleanupCallback(cleanupSnowmanProjectileTask);
+    setCallbackWithContinue(loadSnowmanProjectileAsset);
 }
 
-void func_80053104_53D04(Struct_52880 *arg0) {
+void loadSnowmanProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 5);
@@ -836,10 +836,10 @@ void func_80053104_53D04(Struct_52880 *arg0) {
     arg0->hitCount = 0;
     arg0->turnRate = 0;
     arg0->unk0 = ptr;
-    setCallbackWithContinue(func_80053254_53E54);
+    setCallbackWithContinue(launchSnowmanProjectile);
 }
 
-void func_80053160_53D60(Struct_52880 *arg0) {
+void checkSnowmanProjectileHit(Struct_52880 *arg0) {
     GameState *alloc;
     Player *result;
     void *s1;
@@ -881,7 +881,7 @@ void func_80053160_53D60(Struct_52880 *arg0) {
     }
 }
 
-void func_80053254_53E54(Struct_52880 *arg0) {
+void launchSnowmanProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s16 playerIdx;
     s32 temp_v0;
@@ -931,8 +931,8 @@ void func_80053254_53E54(Struct_52880 *arg0) {
 
     s0 = &arg0->pos;
     queueSoundAtPosition(s0, 0x10);
-    setCallback(func_80053434_54034);
-    func_80053160_53D60(arg0);
+    setCallback(updateSnowmanProjectile);
+    checkSnowmanProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
         func_80050ECC_51ACC(s0);
@@ -945,7 +945,7 @@ void func_80053254_53E54(Struct_52880 *arg0) {
     }
 }
 
-void func_80053434_54034(Struct_52880 *arg0) {
+void updateSnowmanProjectile(Struct_52880 *arg0) {
     Alloc_55650 *alloc;
     Vec3i sp18;
     Vec3i savedVec;
@@ -1003,7 +1003,7 @@ void func_80053434_54034(Struct_52880 *arg0) {
 
         arg0->vel.y = arg0->pos.y - savedVec.y;
 
-        func_80053160_53D60(arg0);
+        checkSnowmanProjectileHit(arg0);
 
         s0 = arg0->vel.z;
         var_s3 =
@@ -1044,14 +1044,14 @@ void func_80053434_54034(Struct_52880 *arg0) {
     }
 }
 
-void func_80053784_54384(Struct_52880 *arg0) {
+void cleanupSnowmanProjectileTask(Struct_52880 *arg0) {
     arg0->assetData = freeNodeMemory(arg0->assetData);
 }
 
-s32 func_800537B0_543B0(s32 arg0, s32 arg1) {
+s32 spawnSnowmanProjectileTask(s32 arg0, s32 arg1) {
     Struct_52880 *task;
 
-    task = scheduleTask(func_800530BC_53CBC, (arg0 + 4) & 0xFF, 0, 0x6F);
+    task = scheduleTask(initSnowmanProjectileTask, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
         task->ownerPlayerIdx = arg0;
     }
@@ -1494,7 +1494,7 @@ s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
         case 2:
             return spawnFryingPanProjectileTask(arg1, arg2);
         case 3:
-            return func_800537B0_543B0(arg1, arg2);
+            return spawnSnowmanProjectileTask(arg1, arg2);
         case 4:
             return func_80053DF0_549F0(arg1, arg2);
         case 5:
