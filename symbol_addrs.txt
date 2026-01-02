@@ -33,6 +33,7 @@ updateRightSpinTrick = 0x800B2FD0; // rom:0xA2E80
 updateLeftSpinTrick = 0x800B30B0; // rom:0xA2F60
 updateForwardFlipTrick = 0x800B3190; // rom:0xA3040
 updateBackwardFlipTrick = 0x800B3270; // rom:0xA3120
+updateRightForwardFlipTrick = 0x800B3350; // rom:0xA3200
 trickScoreTable = 0x800BAB48; // rom:0xAA9F8
 trickBonusTable = 0x800BAB58; // rom:0xAAA08
 sharpTurnBehaviorStepHandlers = 0x800BAAF4; // rom:0xAA9A4
