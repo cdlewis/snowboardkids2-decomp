@@ -30,7 +30,7 @@ extern s32 D_800BAB3C_AA9EC;
 
 s32 tryFinalizeTrickLanding(Player *);
 void updateTrickFacingAngle(Player *);
-void func_800B3784_A3634(Player *);
+void updateFlipSpinTrickAnimation(Player *);
 void func_800B4058_A3F08(Player *);
 void func_800B419C_A404C(Player *);
 void func_800B00FC_9FFAC(Player *);
@@ -907,7 +907,7 @@ s32 updateBasicTrickAirborne(Player *player) {
         return 1;
     }
     updateTrickAirborneVelocity(player);
-    func_800B3784_A3634(player);
+    updateFlipSpinTrickAnimation(player);
     updateTrickFacingAngle(player);
     return 0;
 }
@@ -975,7 +975,7 @@ s32 updateRightSpinTrick(Player *player) {
         }
     }
 
-    func_800B3784_A3634(player);
+    updateFlipSpinTrickAnimation(player);
     updateTrickFacingAngle(player);
     return 0;
 }
@@ -1010,7 +1010,7 @@ s32 updateLeftSpinTrick(Player *player) {
         }
     }
 
-    func_800B3784_A3634(player);
+    updateFlipSpinTrickAnimation(player);
     updateTrickFacingAngle(player);
     return 0;
 }
@@ -1045,7 +1045,7 @@ s32 updateForwardFlipTrick(Player *player) {
         }
     }
 
-    func_800B3784_A3634(player);
+    updateFlipSpinTrickAnimation(player);
     updateTrickFacingAngle(player);
     return 0;
 }
@@ -1080,7 +1080,7 @@ s32 updateBackwardFlipTrick(Player *player) {
         }
     }
 
-    func_800B3784_A3634(player);
+    updateFlipSpinTrickAnimation(player);
     updateTrickFacingAngle(player);
     return 0;
 }
@@ -1116,7 +1116,7 @@ s32 updateRightForwardFlipTrick(Player *player) {
         }
     }
 
-    func_800B3784_A3634(player);
+    updateFlipSpinTrickAnimation(player);
     updateTrickFacingAngle(player);
     return 0;
 }
@@ -1152,7 +1152,7 @@ s32 updateRightBackwardFlipTrick(Player *player) {
         }
     }
 
-    func_800B3784_A3634(player);
+    updateFlipSpinTrickAnimation(player);
     updateTrickFacingAngle(player);
     return 0;
 }
@@ -1188,7 +1188,7 @@ s32 updateLeftForwardFlipTrick(Player *player) {
         }
     }
 
-    func_800B3784_A3634(player);
+    updateFlipSpinTrickAnimation(player);
     updateTrickFacingAngle(player);
     return 0;
 }
@@ -1224,127 +1224,127 @@ s32 updateLeftBackwardFlipTrick(Player *player) {
         }
     }
 
-    func_800B3784_A3634(player);
+    updateFlipSpinTrickAnimation(player);
     updateTrickFacingAngle(player);
     return 0;
 }
 
-s32 func_800B36F0_A35A0(Player *arg0) {
-    u16 temp_a1 = arg0->unkB7E;
-    s32 var_v1;
+s32 getInputSpinTrickAnimId(Player *player) {
+    u16 buttonsPressed = player->unkB7E;
+    s32 animId;
 
-    if (temp_a1 & 0x8) {
-        var_v1 = 0x17;
+    if (buttonsPressed & 0x8) {
+        animId = 0x17;
     } else {
-        var_v1 = 0;
+        animId = 0;
     }
 
-    if (temp_a1 & 0x4) {
-        var_v1 = 0x19;
+    if (buttonsPressed & 0x4) {
+        animId = 0x19;
     }
 
-    if (temp_a1 & 0x1) {
-        var_v1 = 0x15;
-        if (arg0->unkB84 & 0x2) {
-            var_v1 = 0x13;
+    if (buttonsPressed & 0x1) {
+        animId = 0x15;
+        if (player->unkB84 & 0x2) {
+            animId = 0x13;
         }
     }
 
-    if ((arg0->unkB7E & 0x2)) {
-        var_v1 = 0x13;
-        if (arg0->unkB84 & 0x2) {
-            var_v1 = 0x15;
+    if ((player->unkB7E & 0x2)) {
+        animId = 0x13;
+        if (player->unkB84 & 0x2) {
+            animId = 0x15;
         }
     }
 
-    if (arg0->unkBDA != 0) {
-        u8 temp_a1_2 = arg0->unkBDC;
-        if (temp_a1_2 & 0x8) {
-            arg0->unkBDC = temp_a1_2 & 0xF7;
-            var_v1 = 0x15;
+    if (player->unkBDA != 0) {
+        u8 trickFlags = player->unkBDC;
+        if (trickFlags & 0x8) {
+            player->unkBDC = trickFlags & 0xF7;
+            animId = 0x15;
         }
     }
 
-    return var_v1;
+    return animId;
 }
 
-void func_800B3784_A3634(Player *arg0) {
-    s32 result;
+void updateFlipSpinTrickAnimation(Player *player) {
+    s32 animId;
     u8 temp;
 
-    switch (arg0->unkBD5) {
+    switch (player->unkBD5) {
         default:
             break;
 
         case 0:
-            arg0->unkBD5++;
-            arg0->unkBD6 = 4;
+            player->unkBD5++;
+            player->unkBD6 = 4;
         case 1:
-            result = func_800B36F0_A35A0(arg0);
-            if (result != 0) {
-                arg0->unkBD6 = result;
-                arg0->unkBD7 = 0;
-                arg0->unkBD5 = arg0->unkBD5 + 1;
-                arg0->unkB84 |= 0x8000;
+            animId = getInputSpinTrickAnimId(player);
+            if (animId != 0) {
+                player->unkBD6 = animId;
+                player->unkBD7 = 0;
+                player->unkBD5 = player->unkBD5 + 1;
+                player->unkB84 |= 0x8000;
             }
-            func_8005D308_5DF08(arg0, arg0->unkBD6);
+            func_8005D308_5DF08(player, player->unkBD6);
             break;
 
         case 2:
-            result = func_8005D308_5DF08(arg0, arg0->unkBD6);
-            if (result != 0) {
-                if (arg0->unkBD6 == 0x17) {
-                    addSpinTrickScore(arg0, 0);
+            animId = func_8005D308_5DF08(player, player->unkBD6);
+            if (animId != 0) {
+                if (player->unkBD6 == 0x17) {
+                    addSpinTrickScore(player, 0);
                 }
 
-                if (arg0->unkBD6 == 0x19) {
-                    addSpinTrickScore(arg0, 1);
+                if (player->unkBD6 == 0x19) {
+                    addSpinTrickScore(player, 1);
                 }
 
-                if (arg0->unkBD6 == 0x15) {
-                    addSpinTrickScore(arg0, 2);
+                if (player->unkBD6 == 0x15) {
+                    addSpinTrickScore(player, 2);
                 }
 
-                if (arg0->unkBD6 == 0x13) {
-                    addSpinTrickScore(arg0, 3);
+                if (player->unkBD6 == 0x13) {
+                    addSpinTrickScore(player, 3);
                 }
 
-                arg0->unkBD5++;
-                arg0->unkBD6++;
+                player->unkBD5++;
+                player->unkBD6++;
             }
 
-            result = func_800B36F0_A35A0(arg0);
-            if (result != 0) {
-                arg0->unkBD7 = result;
+            animId = getInputSpinTrickAnimId(player);
+            if (animId != 0) {
+                player->unkBD7 = animId;
             }
 
             break;
 
         case 3:
-            result = func_8005D308_5DF08(arg0, arg0->unkBD6);
-            if (result != 0) {
-                if (arg0->unkBD7 != 0) {
-                    arg0->unkBD5 = 2;
-                    arg0->unkBD6 = arg0->unkBD7;
-                    arg0->unkBD7 = 0;
+            animId = func_8005D308_5DF08(player, player->unkBD6);
+            if (animId != 0) {
+                if (player->unkBD7 != 0) {
+                    player->unkBD5 = 2;
+                    player->unkBD6 = player->unkBD7;
+                    player->unkBD7 = 0;
                     break;
                 } else {
-                    arg0->unkB84 &= 0xFFFF7FFF;
-                    arg0->unkBD5 = 1;
+                    player->unkB84 &= 0xFFFF7FFF;
+                    player->unkBD5 = 1;
                 }
             }
 
-            result = func_800B36F0_A35A0(arg0);
-            if (result != 0) {
-                arg0->unkBD7 = result;
+            animId = getInputSpinTrickAnimId(player);
+            if (animId != 0) {
+                player->unkBD7 = animId;
             }
             break;
     }
 
-    if (arg0->unkB84 & 0xC000) {
-        arg0->unkB84 |= 0x1000;
+    if (player->unkB84 & 0xC000) {
+        player->unkB84 |= 0x1000;
     } else {
-        arg0->unkB84 &= ~0x1000;
+        player->unkB84 &= ~0x1000;
     }
 }
 
