@@ -632,7 +632,7 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
             }
             memcpy(&sp30, &arg0->worldPos, sizeof(Vec3i));
             sp30.y += 0x300000;
-            func_800423A4_42FA4(&sp30, arg0->unkBB8);
+            spawnSparkleEffectWithPlayer(&sp30, arg0->unkBB8);
             func_800BB910_B0E00(arg0);
             arg0->unkBDB = 3;
             func_8005D180_5DD80(arg0, 2);

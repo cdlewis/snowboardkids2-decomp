@@ -307,9 +307,9 @@ void func_80042C98_43898(Func42C98Arg *);
 void func_80042E40_43A40(Func42E40Arg *);
 void updateFallingEffect(FallingEffectState *);
 void animateFallingEffectDescent(FallingEffectState *);
-void func_80042308_42F08(Func420E8State *);
-void func_80042160_42D60(Func420E8State *);
-void func_80042254_42E54(Func420E8State *);
+void cleanupSparkleEffect(SparkleEffectState *);
+void updateSparkleEffect(SparkleEffectState *);
+void fadeOutSparkleEffect(SparkleEffectState *);
 
 extern s8 D_80090928_91528[];
 extern s8 D_80090929_91529[];
@@ -610,21 +610,21 @@ void *spawnCrashEffect(void *arg0) {
     return task;
 }
 
-void func_800420E8_42CE8(Func420E8State *arg0) {
+void initSparkleEffect(SparkleEffectState *arg0) {
     getCurrentAllocation();
-    arg0->unk20 = &D_8009A6E0_9B2E0;
-    arg0->unk24 = loadAsset_B7E70();
-    arg0->unk28 = loadAsset_216290();
+    arg0->displayData = &D_8009A6E0_9B2E0;
+    arg0->asset1 = loadAsset_B7E70();
+    arg0->asset2 = loadAsset_216290();
     arg0->unk2C = 0;
-    arg0->unk40 = 0;
-    arg0->unk42 = 0;
-    arg0->unk44 = 0xFF;
-    func_80056B7C_5777C(&arg0->unk14, 0x14);
-    setCleanupCallback(func_80042308_42F08);
-    setCallbackWithContinue(func_80042160_42D60);
+    arg0->scale = 0;
+    arg0->rotation = 0;
+    arg0->opacity = 0xFF;
+    func_80056B7C_5777C(&arg0->position, 0x14);
+    setCleanupCallback(cleanupSparkleEffect);
+    setCallbackWithContinue(updateSparkleEffect);
 }
 
-void func_80042160_42D60(Func420E8State *arg0) {
+void updateSparkleEffect(SparkleEffectState *arg0) {
     Func43CA4GameState *gameState;
     s32 temp;
     s32 diff;
@@ -633,27 +633,27 @@ void func_80042160_42D60(Func420E8State *arg0) {
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        temp = arg0->unk40;
+        temp = arg0->scale;
         diff = 0x4000 - temp;
         if (diff < 0) {
             diff += 3;
         }
-        arg0->unk40 = temp + (diff >> 2);
+        arg0->scale = temp + (diff >> 2);
     }
 
-    if (arg0->unk40 == 0) {
-        arg0->unk40 = arg0->unk40 + 0x1000;
+    if (arg0->scale == 0) {
+        arg0->scale = arg0->scale + 0x1000;
     }
 
-    arg0->unk42 += 0x300;
-    createYRotationMatrix((Transform3D *)arg0, arg0->unk42);
+    arg0->rotation += 0x300;
+    createYRotationMatrix((Transform3D *)arg0, arg0->rotation);
 
-    temp = arg0->unk40;
+    temp = arg0->scale;
     scaleMatrix((Transform3D *)arg0, temp, temp, temp);
 
-    func_8005C250_5CE50((Vec3i *)&arg0->unk14, arg0->unk46, arg0->unk40 * 0xF0);
+    func_8005C250_5CE50((Vec3i *)&arg0->position, arg0->playerIndex, arg0->scale * 0xF0);
 
-    arg0->unk3B = (u8)arg0->unk44;
+    arg0->alpha = (u8)arg0->opacity;
 
     i = 0;
     do {
@@ -661,59 +661,59 @@ void func_80042160_42D60(Func420E8State *arg0) {
         i++;
     } while (i < 4);
 
-    if (arg0->unk40 >= 0x3C00) {
-        setCallback(func_80042254_42E54);
+    if (arg0->scale >= 0x3C00) {
+        setCallback(fadeOutSparkleEffect);
     }
 }
 
-void func_80042254_42E54(Func420E8State *arg0) {
+void fadeOutSparkleEffect(SparkleEffectState *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
     s32 pad[3];
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        arg0->unk44 -= 0x18;
+        arg0->opacity -= 0x18;
     }
 
-    if (arg0->unk44 < 0x18) {
+    if (arg0->opacity < 0x18) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    arg0->unk42 += 0x300;
-    createYRotationMatrix((Transform3D *)arg0, arg0->unk42);
-    scaleMatrix((Transform3D *)arg0, arg0->unk40, arg0->unk40, arg0->unk40);
-    arg0->unk3B = (u8)arg0->unk44;
+    arg0->rotation += 0x300;
+    createYRotationMatrix((Transform3D *)arg0, arg0->rotation);
+    scaleMatrix((Transform3D *)arg0, arg0->scale, arg0->scale, arg0->scale);
+    arg0->alpha = (u8)arg0->opacity;
 
     for (i = 0; i < 4; i++) {
         func_800639F8_645F8(i, (DisplayListObject *)arg0);
     }
 }
 
-void func_80042308_42F08(Func420E8State *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupSparkleEffect(SparkleEffectState *arg0) {
+    arg0->asset1 = freeNodeMemory(arg0->asset1);
+    arg0->asset2 = freeNodeMemory(arg0->asset2);
 }
 
-Func420E8State *func_80042340_42F40(void *arg0) {
-    Func420E8State *task;
+SparkleEffectState *spawnSparkleEffect(void *arg0) {
+    SparkleEffectState *task;
 
-    task = (Func420E8State *)scheduleTask(func_800420E8_42CE8, 0, 0, 0xC8);
+    task = (SparkleEffectState *)scheduleTask(initSparkleEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        memcpy(&task->unk14, arg0, 0xC);
-        task->unk46 = -1;
+        memcpy(&task->position, arg0, 0xC);
+        task->playerIndex = -1;
     }
     return task;
 }
 
-Func420E8State *func_800423A4_42FA4(void *arg0, s32 arg1) {
-    Func420E8State *task;
+SparkleEffectState *spawnSparkleEffectWithPlayer(void *arg0, s32 arg1) {
+    SparkleEffectState *task;
 
-    task = (Func420E8State *)scheduleTask(&func_800420E8_42CE8, 0, 0, 0xC8);
+    task = (SparkleEffectState *)scheduleTask(&initSparkleEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        memcpy(&task->unk14, arg0, 0xC);
-        task->unk46 = arg1;
+        memcpy(&task->position, arg0, 0xC);
+        task->playerIndex = arg1;
     }
     return task;
 }

@@ -1133,7 +1133,7 @@ void func_80053990_54590(Struct_52880 *arg0) {
     func_80053898_54498(arg0);
 
     if (arg0->unk4E != 0) {
-        func_80042340_42F40(&arg0->unk4);
+        spawnSparkleEffect(&arg0->unk4);
         func_80069CF8_6A8F8();
     }
 
@@ -1222,7 +1222,7 @@ void func_80053B38_54738(Struct_52880 *arg0) {
     }
 
     if (arg0->unk4E != 0) {
-        func_80042340_42F40(&arg0->unk4);
+        spawnSparkleEffect(&arg0->unk4);
         func_80069CF8_6A8F8();
     }
 
@@ -1544,7 +1544,7 @@ void func_80054658_55258(Struct_52880 *arg0) {
     }
 
     if (arg0->unk4E != 0) {
-        func_80042340_42F40(&arg0->unk4);
+        spawnSparkleEffect(&arg0->unk4);
         func_80069CF8_6A8F8();
     }
 
@@ -1668,7 +1668,7 @@ void func_80054AE4_556E4(Struct_52880 *arg0) {
     }
 
     if (arg0->unk4E != 0) {
-        func_800423A4_42FA4(&arg0->unk4, arg0->unk42);
+        spawnSparkleEffectWithPlayer(&arg0->unk4, arg0->unk42);
         func_80069CF8_6A8F8();
     }
 

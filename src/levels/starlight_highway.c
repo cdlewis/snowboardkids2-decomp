@@ -554,7 +554,7 @@ void func_800BC084_AE444(func_800BC3D0_AE790_arg *arg0) {
 
         posPtr = &arg0->unk14;
         if (func_8005C250_5CE50(posPtr, -1, 0x300000) != 0) {
-            func_80042340_42F40(posPtr);
+            spawnSparkleEffect(posPtr);
             func_80069CF8_6A8F8();
         }
 
@@ -624,7 +624,7 @@ void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *arg0) {
                     break;
                 case 7:
                 case 8:
-                    func_80042340_42F40(&arg0->unk14);
+                    spawnSparkleEffect(&arg0->unk14);
                     func_80069CF8_6A8F8();
                     break;
                 default:
@@ -658,12 +658,12 @@ void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *arg0) {
         arg0->unk48--;
 
         if (arg0->unk48 == 0) {
-            func_80042340_42F40(&arg0->unk14);
+            spawnSparkleEffect(&arg0->unk14);
             func_80069CF8_6A8F8();
         } else {
             posPtr = &arg0->unk14;
             if (func_8005C250_5CE50(posPtr, -1, 0x300000)) {
-                func_80042340_42F40(posPtr);
+                spawnSparkleEffect(posPtr);
                 func_80069CF8_6A8F8();
             }
         }

@@ -5,20 +5,20 @@
 #include "geometry.h"
 
 typedef struct {
-    u8 pad0[0x14]; /* 0x00 */
-    Vec3i unk14;   /* 0x14 */
-    void *unk20;   /* 0x20 */
-    void *unk24;   /* 0x24 */
-    void *unk28;   /* 0x28 */
-    s32 unk2C;     /* 0x2C */
-    u8 pad30[0xB]; /* 0x30 */
-    u8 unk3B;      /* 0x3B */
-    u8 pad3C[0x4]; /* 0x3C */
-    s16 unk40;     /* 0x40 */
-    u16 unk42;     /* 0x42 */
-    s16 unk44;     /* 0x44 */
-    s16 unk46;     /* 0x46 */
-} Func420E8State;
+    u8 pad0[0x14];    /* 0x00 */
+    Vec3i position;   /* 0x14 */
+    void *displayData;/* 0x20 */
+    void *asset1;     /* 0x24 */
+    void *asset2;     /* 0x28 */
+    s32 unk2C;        /* 0x2C */
+    u8 pad30[0xB];    /* 0x30 */
+    u8 alpha;         /* 0x3B */
+    u8 pad3C[0x4];    /* 0x3C */
+    s16 scale;        /* 0x40 */
+    u16 rotation;     /* 0x42 */
+    s16 opacity;      /* 0x44 */
+    s16 playerIndex;  /* 0x46 */
+} SparkleEffectState;
 
 typedef struct {
     u8 _pad0[0x24]; /* 0x00 */
@@ -30,8 +30,8 @@ typedef struct {
     u8 unk43;       /* 0x43 */
 } Func42FC0TaskMem;
 
-Func420E8State *func_80042340_42F40(void *arg0);
-Func420E8State *func_800423A4_42FA4(void *arg0, s32 arg1);
+SparkleEffectState *spawnSparkleEffect(void *arg0);
+SparkleEffectState *spawnSparkleEffectWithPlayer(void *arg0, s32 arg1);
 Func42FC0TaskMem *func_80042FC0_43BC0(void *arg0);
 void scheduleShieldEffect(void *arg0);
 void *createFallingEffect(void *arg0);
