@@ -964,10 +964,10 @@ void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *state) {
     state->unk28 = freeNodeMemory(state->unk28);
 }
 
-void func_800457A0_463A0(s32 arg0) {
+void scheduleSkyRenderTask(s32 skyType) {
     ScheduledTask *task = scheduleTask(initSkyRenderTask, 0, 0, 0xD2);
     if (task != NULL) {
-        task->skyType = arg0;
+        task->skyType = skyType;
     }
 }
 
@@ -2706,12 +2706,12 @@ void func_800497FC_4A3FC(s32 poolId) {
 
     switch (poolId) {
         case 0:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_80094DA0_959A0, poolId, 0, 4, 0x12, 0);
             func_80046244_46E44(poolId, 0);
             break;
         case 1:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_80094DE0_959E0, poolId, 4, 0, 0, 0);
             temp = 1;
             func_80046D38_47938(&D_80094DF0_959F0, poolId, 4, 0, temp, 0);
@@ -2719,67 +2719,67 @@ void func_800497FC_4A3FC(s32 poolId) {
             func_80046D38_47938(&D_80094E10_95A10, poolId, 0, 1, 2, temp);
             break;
         case 2:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_80094EE0_95AE0, poolId, 0, 4, 0, 0);
             func_80046D38_47938(&D_80094EF0_95AF0, poolId, 1, 0, 2, 0);
             break;
         case 3:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_80094FC0_95BC0, poolId, 0, 4, 0, 0);
             func_80046D38_47938(&D_80094FD0_95BD0, poolId, 1, 0, 2, 0);
             func_80046244_46E44(poolId, 5);
             break;
         case 4:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_800950B0_95CB0, poolId, -4, 0, 0, 0);
             func_80046244_46E44(poolId, 0xA);
             break;
         case 5:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             break;
         case 6:
             func_80046D38_47938(&D_80095360_95F60, poolId, 0, 4, 0, 0);
             func_80046D38_47938(&D_80095370_95F70, poolId, 0, 4, 1, 0);
             func_80046D38_47938(&D_80095380_95F80, poolId, 4, 0, 2, 0);
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046244_46E44(poolId, 1);
             break;
         case 7:
             func_80046D38_47938(&D_80095460_96060, poolId, 0, 4, 0, 0);
             func_80046D38_47938(&D_80095470_96070, poolId, 0, 4, 1, 0);
             func_80046D38_47938(&D_80095480_96080, poolId, 4, 0, 2, 0);
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046244_46E44(poolId, 2);
             break;
         case 8:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_800955C0_961C0, poolId, 4, 0, 1, 0);
             func_80046D38_47938(&D_800955D0_961D0, poolId, 0, 4, 2, 0);
             func_80046D38_47938(&D_800955E0_961E0, poolId, 4, 0, 3, 0);
             break;
         case 9:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046244_46E44(poolId, 0xB);
             break;
         case 10:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046244_46E44(poolId, 8);
             break;
         case 11:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046244_46E44(poolId, 9);
             break;
         case 12:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_80095860_96460, poolId, 0, -4, 0, 0);
             break;
         case 13:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_80095930_96530, poolId, 0, -4, 0, 0);
             break;
         case 14:
         case 15:
-            func_800457A0_463A0(poolId);
+            scheduleSkyRenderTask(poolId);
             func_80046244_46E44(poolId, 7);
             break;
     }
