@@ -25,12 +25,29 @@ typedef struct {
     s16 scaleY;
 } PushStartTextState;
 
+typedef struct {
+    u8 _pad[0x9F0];
+    s16 unk9F0;
+    u8 _pad2[0x1C6];
+    u8 unkBB8;
+    u8 _pad3[0x25];
+    u8 unkBDE;
+} func_8004083C_4143C_struct24;
+
+typedef struct {
+    DataTable_19E80 *unk0;
+    loadAssetMetadataByIndex_arg unk4;
+    u8 _pad1[0x24 - 4 - sizeof(loadAssetMetadataByIndex_arg)];
+    func_8004083C_4143C_struct24 *unk24;
+    u8 _pad2[0x10];
+    s32 unk38;
+} func_80040870_arg;
+
 extern s32 gFrameCounter;
 extern s32 D_800907F8_913F8;
 extern s32 D_800907EC_913EC[];
 extern s16 identityMatrix[];
-
-extern void func_80040870_41470(void);
+extern s16 D_800907E0_913E0;
 extern void *D_80090860_91460;
 extern void func_8004119C_41D9C(void);
 
@@ -60,18 +77,7 @@ typedef struct {
 
 void updateStartGate(StartGate *);
 void updatePushStartText(PushStartTextState *);
-
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    u8 _pad2[0x10];
-    s32 unk38;
-} func_8004083C_4143C_arg;
-
-typedef struct {
-    u8 _pad[0xBDE];
-    u8 unkBDE;
-} func_8004083C_4143C_struct24;
+void func_80040870_41470(func_80040870_arg *arg0);
 
 typedef struct {
     void *unk0;
@@ -118,8 +124,7 @@ typedef struct {
 
 void updatePushStartGraphic(PushStartPromptTask *);
 void cleanupPushStartPrompt(PushStartPromptTask *);
-
-void awaitPlayerIndicatorReady(func_8004083C_4143C_arg *arg0);
+void awaitPlayerIndicatorReady(func_80040870_arg *arg0);
 void cleanupPlayerIndicator(func_80040948_41548_arg *arg0);
 
 void initPlayerIndicator(PlayerIndicatorTask *task) {
@@ -130,7 +135,7 @@ void initPlayerIndicator(PlayerIndicatorTask *task) {
     setCallbackWithContinue(&awaitPlayerIndicatorReady);
 }
 
-void awaitPlayerIndicatorReady(func_8004083C_4143C_arg *arg0) {
+void awaitPlayerIndicatorReady(func_80040870_arg *arg0) {
     func_8004083C_4143C_struct24 *player;
 
     player = (func_8004083C_4143C_struct24 *)arg0->unk24;
@@ -140,7 +145,33 @@ void awaitPlayerIndicatorReady(func_8004083C_4143C_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_80040870_41470);
+void func_80040870_41470(func_80040870_arg *arg0) {
+    func_8004083C_4143C_struct24 *temp;
+    loadAssetMetadataByIndex_arg *temp_s0;
+    s32 temp_v0;
+
+    temp = arg0->unk24;
+    if (temp->unkBDE == 0) {
+        temp_v0 = arg0->unk38 - 1;
+        arg0->unk38 = temp_v0;
+        if (temp_v0 == 0) {
+            setCallback(awaitPlayerIndicatorReady);
+            return;
+        }
+    } else {
+        arg0->unk38 = 6;
+    }
+    transformVector(&D_800907E0_913E0, &arg0->unk24->unk9F0, &arg0->unk4.unk4);
+    temp_s0 = &arg0->unk4;
+    if (arg0->unk24->unkBDE >= 2 && (gFrameCounter & 1)) {
+        loadAssetMetadataByIndex(temp_s0, arg0->unk0, 0x60, 0x14);
+    } else {
+        temp_s0++;
+        temp_s0--;
+        loadAssetMetadataByIndex(temp_s0, arg0->unk0, 0x60, 0x13);
+    }
+    func_80066444_67044(arg0->unk24->unkBB8, (func_80066444_67044_arg1 *)temp_s0);
+}
 
 void cleanupPlayerIndicator(func_80040948_41548_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
