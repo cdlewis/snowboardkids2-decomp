@@ -433,23 +433,23 @@ typedef union {
 
 typedef struct {
     void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-} Struct_unk20;
+    void *opaqueDisplayList;
+    void *transparentDisplayList;
+    void *overlayDisplayList;
+} SceneryDisplayLists;
 
 typedef struct {
     u8 _pad[0x20];
-    Struct_unk20 *unk20;
+    SceneryDisplayLists *displayLists;
     u8 _pad2[0xC];
     s32 unk30;
     u8 _pad3[0x10];
-    HalfwordBytes unk44;
-    HalfwordBytes unk46;
+    HalfwordBytes scrollX;
+    HalfwordBytes scrollY;
     s16 unk48;
-    s16 unk4A;
-    s16 unk4C;
-} func_80046628_47228_arg;
+    s16 scrollSpeedX;
+    s16 scrollSpeedY;
+} ScrollingSceneryTaskState;
 
 typedef struct {
     u8 _pad[0x24];
@@ -459,10 +459,10 @@ typedef struct {
     u8 _pad2[0xC];
     void *unk3C;
     u8 _pad3[0x4];
-    HalfwordBytes unk44;
-    HalfwordBytes unk46;
-    s16 unk48;
-} func_80046708_47308_arg;
+    HalfwordBytes scrollX;
+    HalfwordBytes scrollY;
+    s16 assetPoolIndex;
+} ScrollingSceneryCleanupState;
 
 typedef struct {
     u8 _pad[0x76];
@@ -507,14 +507,14 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x20];
-    void *unk20;
+    void *displayLists;
     u8 _pad2[0x24];
-    s16 unk48;
-    s16 unk4A;
-    s16 unk4C;
+    s16 assetPoolIndex;
+    s16 scrollSpeedX;
+    s16 scrollSpeedY;
     s16 unk4E;
     s16 unk50;
-} func_80046D38_47938_Task;
+} ScrollingSceneryTask;
 
 typedef struct {
     u8 _pad[0x24];
@@ -873,15 +873,15 @@ void cleanupPlayerRenderTask(PlayerRenderTaskCleanupArg *);
 void cleanupSceneAnimationTask(SceneAnimationTask *);
 void setupSceneAnimationTask(SceneAnimationTask *);
 void updateSceneAnimationTask(SceneAnimationTaskNew *);
-void func_80046628_47228(func_80046628_47228_arg *);
-void func_80046708_47308(func_80046708_47308_arg *arg0);
+void updateScrollingSceneryTask(ScrollingSceneryTaskState *);
+void cleanupScrollingSceneryTask(ScrollingSceneryCleanupState *arg0);
 void updatePlayerSparkleWithStateCheck(PlayerSparkleTask *);
 void updatePlayerSparkle(PlayerSparkleTask *);
 void updatePlayerSparkleMovement(PlayerSparkleTask *);
 void func_8004674C_4734C(DisplayListObject *);
-void func_80046CB4_478B4(DisplayListObject *);
-void func_80046CE0_478E0(DisplayListObject *);
-void func_80046D0C_4790C(DisplayListObject *);
+void renderScrollingSceneryOpaque(DisplayListObject *);
+void renderScrollingSceneryTransparent(DisplayListObject *);
+void renderScrollingSceneryOverlay(DisplayListObject *);
 void func_80046F44_47B44(func_80046F44_47B44_arg *arg0);
 void func_80046FEC_47BEC(func_80046FEC_47BEC_arg_fwd *arg0);
 void func_80047718_48318(func_80047718_48318_arg *);
@@ -1241,49 +1241,49 @@ void cleanupPlayerSparkleTask(PlayerSparkleTask *task) {
     task->assetData = freeNodeMemory(task->assetData);
 }
 
-void func_800465A8_471A8(func_80046708_47308_arg *arg0) {
-    arg0->unk24 = func_80055DC4_569C4(arg0->unk48);
-    arg0->unk28 = func_80055DF8_569F8(arg0->unk48);
+void initScrollingSceneryTask(ScrollingSceneryCleanupState *arg0) {
+    arg0->unk24 = func_80055DC4_569C4(arg0->assetPoolIndex);
+    arg0->unk28 = func_80055DF8_569F8(arg0->assetPoolIndex);
     arg0->unk2C = NULL;
     memcpy(arg0, identityMatrix, 0x20);
-    arg0->unk3C = func_80055D7C_5697C(arg0->unk48);
-    arg0->unk44.halfword = 0;
-    arg0->unk46.halfword = 0;
-    setCleanupCallback(&func_80046708_47308);
-    setCallback(&func_80046628_47228);
+    arg0->unk3C = func_80055D7C_5697C(arg0->assetPoolIndex);
+    arg0->scrollX.halfword = 0;
+    arg0->scrollY.halfword = 0;
+    setCleanupCallback(&cleanupScrollingSceneryTask);
+    setCallback(&updateScrollingSceneryTask);
 }
 
-void func_80046628_47228(func_80046628_47228_arg *arg0) {
-    u8 byte_45;
-    u8 byte_47;
+void updateScrollingSceneryTask(ScrollingSceneryTaskState *arg0) {
+    u8 scrollXLow;
+    u8 scrollYLow;
     s32 i;
 
-    arg0->unk44.halfword = arg0->unk44.halfword + arg0->unk4A;
-    byte_45 = arg0->unk44.bytes.low;
+    arg0->scrollX.halfword = arg0->scrollX.halfword + arg0->scrollSpeedX;
+    scrollXLow = arg0->scrollX.bytes.low;
 
-    arg0->unk46.halfword = arg0->unk46.halfword + arg0->unk4C;
-    byte_47 = arg0->unk46.bytes.low;
+    arg0->scrollY.halfword = arg0->scrollY.halfword + arg0->scrollSpeedY;
+    scrollYLow = arg0->scrollY.bytes.low;
 
     arg0->unk30 = 0;
-    arg0->unk44.halfword = byte_45;
-    arg0->unk46.halfword = byte_47;
+    arg0->scrollX.halfword = scrollXLow;
+    arg0->scrollY.halfword = scrollYLow;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->unk20->unk4 != NULL) {
-            debugEnqueueCallback(i, 1, &func_80046CB4_478B4, arg0);
+        if (arg0->displayLists->opaqueDisplayList != NULL) {
+            debugEnqueueCallback(i, 1, &renderScrollingSceneryOpaque, arg0);
         }
 
-        if (arg0->unk20->unk8 != NULL) {
-            debugEnqueueCallback(i, 3, &func_80046CE0_478E0, arg0);
+        if (arg0->displayLists->transparentDisplayList != NULL) {
+            debugEnqueueCallback(i, 3, &renderScrollingSceneryTransparent, arg0);
         }
 
-        if (arg0->unk20->unkC != NULL) {
-            debugEnqueueCallback(i, 5, &func_80046D0C_4790C, arg0);
+        if (arg0->displayLists->overlayDisplayList != NULL) {
+            debugEnqueueCallback(i, 5, &renderScrollingSceneryOverlay, arg0);
         }
     }
 }
 
-void func_80046708_47308(func_80046708_47308_arg *arg0) {
+void cleanupScrollingSceneryTask(ScrollingSceneryCleanupState *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
@@ -1291,28 +1291,28 @@ void func_80046708_47308(func_80046708_47308_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004674C_4734C);
 
-void func_80046CB4_478B4(DisplayListObject *arg0) {
+void renderScrollingSceneryOpaque(DisplayListObject *arg0) {
     func_8004674C_4734C(arg0);
     func_8006300C_63C0C(arg0);
 }
 
-void func_80046CE0_478E0(DisplayListObject *arg0) {
+void renderScrollingSceneryTransparent(DisplayListObject *arg0) {
     func_8004674C_4734C(arg0);
     func_80063058_63C58(arg0);
 }
 
-void func_80046D0C_4790C(DisplayListObject *arg0) {
+void renderScrollingSceneryOverlay(DisplayListObject *arg0) {
     func_8004674C_4734C(arg0);
     func_800630A4_63CA4(arg0);
 }
 
-void func_80046D38_47938(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
-    func_80046D38_47938_Task *task = (func_80046D38_47938_Task *)scheduleTask(&func_800465A8_471A8, 0, 0, 0xD2);
+void scheduleScrollingSceneryTask(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    ScrollingSceneryTask *task = (ScrollingSceneryTask *)scheduleTask(&initScrollingSceneryTask, 0, 0, 0xD2);
     if (task != NULL) {
-        task->unk20 = arg0;
-        task->unk48 = arg1;
-        task->unk4A = arg2;
-        task->unk4C = arg3;
+        task->displayLists = arg0;
+        task->assetPoolIndex = arg1;
+        task->scrollSpeedX = arg2;
+        task->scrollSpeedY = arg3;
         task->unk4E = arg4;
         task->unk50 = arg5;
     }
@@ -2707,55 +2707,55 @@ void func_800497FC_4A3FC(s32 poolId) {
     switch (poolId) {
         case 0:
             scheduleSkyRenderTask(poolId);
-            func_80046D38_47938(&D_80094DA0_959A0, poolId, 0, 4, 0x12, 0);
+            scheduleScrollingSceneryTask(&D_80094DA0_959A0, poolId, 0, 4, 0x12, 0);
             scheduleSceneAnimationTask(poolId, 0);
             break;
         case 1:
             scheduleSkyRenderTask(poolId);
-            func_80046D38_47938(&D_80094DE0_959E0, poolId, 4, 0, 0, 0);
+            scheduleScrollingSceneryTask(&D_80094DE0_959E0, poolId, 4, 0, 0, 0);
             temp = 1;
-            func_80046D38_47938(&D_80094DF0_959F0, poolId, 4, 0, temp, 0);
-            func_80046D38_47938(&D_80094E00_95A00, poolId, 4, 0, 0, 0);
-            func_80046D38_47938(&D_80094E10_95A10, poolId, 0, 1, 2, temp);
+            scheduleScrollingSceneryTask(&D_80094DF0_959F0, poolId, 4, 0, temp, 0);
+            scheduleScrollingSceneryTask(&D_80094E00_95A00, poolId, 4, 0, 0, 0);
+            scheduleScrollingSceneryTask(&D_80094E10_95A10, poolId, 0, 1, 2, temp);
             break;
         case 2:
             scheduleSkyRenderTask(poolId);
-            func_80046D38_47938(&D_80094EE0_95AE0, poolId, 0, 4, 0, 0);
-            func_80046D38_47938(&D_80094EF0_95AF0, poolId, 1, 0, 2, 0);
+            scheduleScrollingSceneryTask(&D_80094EE0_95AE0, poolId, 0, 4, 0, 0);
+            scheduleScrollingSceneryTask(&D_80094EF0_95AF0, poolId, 1, 0, 2, 0);
             break;
         case 3:
             scheduleSkyRenderTask(poolId);
-            func_80046D38_47938(&D_80094FC0_95BC0, poolId, 0, 4, 0, 0);
-            func_80046D38_47938(&D_80094FD0_95BD0, poolId, 1, 0, 2, 0);
+            scheduleScrollingSceneryTask(&D_80094FC0_95BC0, poolId, 0, 4, 0, 0);
+            scheduleScrollingSceneryTask(&D_80094FD0_95BD0, poolId, 1, 0, 2, 0);
             scheduleSceneAnimationTask(poolId, 5);
             break;
         case 4:
             scheduleSkyRenderTask(poolId);
-            func_80046D38_47938(&D_800950B0_95CB0, poolId, -4, 0, 0, 0);
+            scheduleScrollingSceneryTask(&D_800950B0_95CB0, poolId, -4, 0, 0, 0);
             scheduleSceneAnimationTask(poolId, 0xA);
             break;
         case 5:
             scheduleSkyRenderTask(poolId);
             break;
         case 6:
-            func_80046D38_47938(&D_80095360_95F60, poolId, 0, 4, 0, 0);
-            func_80046D38_47938(&D_80095370_95F70, poolId, 0, 4, 1, 0);
-            func_80046D38_47938(&D_80095380_95F80, poolId, 4, 0, 2, 0);
+            scheduleScrollingSceneryTask(&D_80095360_95F60, poolId, 0, 4, 0, 0);
+            scheduleScrollingSceneryTask(&D_80095370_95F70, poolId, 0, 4, 1, 0);
+            scheduleScrollingSceneryTask(&D_80095380_95F80, poolId, 4, 0, 2, 0);
             scheduleSkyRenderTask(poolId);
             scheduleSceneAnimationTask(poolId, 1);
             break;
         case 7:
-            func_80046D38_47938(&D_80095460_96060, poolId, 0, 4, 0, 0);
-            func_80046D38_47938(&D_80095470_96070, poolId, 0, 4, 1, 0);
-            func_80046D38_47938(&D_80095480_96080, poolId, 4, 0, 2, 0);
+            scheduleScrollingSceneryTask(&D_80095460_96060, poolId, 0, 4, 0, 0);
+            scheduleScrollingSceneryTask(&D_80095470_96070, poolId, 0, 4, 1, 0);
+            scheduleScrollingSceneryTask(&D_80095480_96080, poolId, 4, 0, 2, 0);
             scheduleSkyRenderTask(poolId);
             scheduleSceneAnimationTask(poolId, 2);
             break;
         case 8:
             scheduleSkyRenderTask(poolId);
-            func_80046D38_47938(&D_800955C0_961C0, poolId, 4, 0, 1, 0);
-            func_80046D38_47938(&D_800955D0_961D0, poolId, 0, 4, 2, 0);
-            func_80046D38_47938(&D_800955E0_961E0, poolId, 4, 0, 3, 0);
+            scheduleScrollingSceneryTask(&D_800955C0_961C0, poolId, 4, 0, 1, 0);
+            scheduleScrollingSceneryTask(&D_800955D0_961D0, poolId, 0, 4, 2, 0);
+            scheduleScrollingSceneryTask(&D_800955E0_961E0, poolId, 4, 0, 3, 0);
             break;
         case 9:
             scheduleSkyRenderTask(poolId);
@@ -2771,11 +2771,11 @@ void func_800497FC_4A3FC(s32 poolId) {
             break;
         case 12:
             scheduleSkyRenderTask(poolId);
-            func_80046D38_47938(&D_80095860_96460, poolId, 0, -4, 0, 0);
+            scheduleScrollingSceneryTask(&D_80095860_96460, poolId, 0, -4, 0, 0);
             break;
         case 13:
             scheduleSkyRenderTask(poolId);
-            func_80046D38_47938(&D_80095930_96530, poolId, 0, -4, 0, 0);
+            scheduleScrollingSceneryTask(&D_80095930_96530, poolId, 0, -4, 0, 0);
             break;
         case 14:
         case 15:
