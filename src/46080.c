@@ -496,14 +496,14 @@ typedef struct {
     s32 unk90;
     u8 _pad4[4];
     void *unk98;
-} func_80046DCC_479CC_arg;
+} CourseSceneryTaskState;
 
 typedef struct {
     u8 _pad[0x3C];
     u8 unk3C[0x3C];
     u8 unk78[0x3C];
-    s16 unkB4;
-} func_80046F44_47B44_arg;
+    s16 rotationAngle;
+} CourseSceneryUpdateState;
 
 typedef struct {
     u8 _pad[0x20];
@@ -520,7 +520,7 @@ typedef struct {
     u8 _pad[0x24];
     void *unk24;
     void *unk28;
-} func_80046FEC_47BEC_arg_fwd;
+} CourseSceneryCleanupArg;
 
 typedef struct {
     u8 _pad[0x24];
@@ -838,6 +838,8 @@ void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
 void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0);
 void cleanupPlayerSparkleTask(PlayerSparkleTask *arg0);
 void loadPlayerSparkleData(PlayerSparkleTask *);
+void updateCourseSceneryTask(CourseSceneryUpdateState *);
+void cleanupCourseSceneryTask(CourseSceneryCleanupArg *);
 void func_8004728C_47E8C(func_8004728C_47E8C_arg *);
 void func_80047590_48190(func_80047590_48190_arg *arg0);
 void func_80047660_48260(func_80047660_48260_arg *arg0);
@@ -882,8 +884,6 @@ void func_8004674C_4734C(DisplayListObject *);
 void renderScrollingSceneryOpaque(DisplayListObject *);
 void renderScrollingSceneryTransparent(DisplayListObject *);
 void renderScrollingSceneryOverlay(DisplayListObject *);
-void func_80046F44_47B44(func_80046F44_47B44_arg *arg0);
-void func_80046FEC_47BEC(func_80046FEC_47BEC_arg_fwd *arg0);
 void func_80047718_48318(func_80047718_48318_arg *);
 void func_8004711C_47D1C(func_8004711C_47D1C_arg *);
 void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0);
@@ -1318,29 +1318,29 @@ void scheduleScrollingSceneryTask(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 
     }
 }
 
-void func_80046DCC_479CC(func_80046DCC_479CC_arg *arg0) {
+void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
     Vec3i sp10;
     GameState_46080 *allocation;
-    D_80090F90_91B90_item *s1;
+    D_80090F90_91B90_item *levelData;
     u16 rotation;
     func_80055E68_56A68_result *displayLists;
 
     allocation = (GameState_46080 *)getCurrentAllocation();
     rotation = func_800625A4_631A4(&allocation->unk30, &sp10) + 0x800;
-    s1 = func_80055D10_56910(allocation->unk5C);
+    levelData = func_80055D10_56910(allocation->unk5C);
 
     arg0->unk20 = func_80055E68_56A68(allocation->unk5C);
     arg0->unk24 = func_80055DC4_569C4(allocation->unk5C);
     arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
     arg0->unk2C = NULL;
 
-    createYRotationMatrix((Transform3D *)arg0, (u16)(rotation + s1->unk8));
+    createYRotationMatrix((Transform3D *)arg0, (u16)(rotation + levelData->unk8));
 
     arg0->unk18 = sp10.y;
     transformVector2(&D_80090B80_91780, arg0, &sp10);
 
-    arg0->unk14 = s1->unk0 + sp10.x;
-    arg0->unk1C = s1->unk4 + sp10.z;
+    arg0->unk14 = levelData->unk0 + sp10.x;
+    arg0->unk1C = levelData->unk4 + sp10.z;
 
     memcpy(arg0->unk3C, arg0, 0x3C);
 
@@ -1348,9 +1348,9 @@ void func_80046DCC_479CC(func_80046DCC_479CC_arg *arg0) {
     arg0->unk5C = (void *)((u32)displayLists + 0x20);
     createYRotationMatrix((Transform3D *)arg0->unk3C, 0x1000);
 
-    arg0->unk50 = s1->unkC.x;
-    arg0->unk54 = s1->unkC.y;
-    arg0->unk58 = s1->unkC.z;
+    arg0->unk50 = levelData->unkC.x;
+    arg0->unk54 = levelData->unkC.y;
+    arg0->unk58 = levelData->unkC.z;
 
     if (allocation->unk5C == 4) {
         memcpy(arg0->unk78, arg0, 0x3C);
@@ -1359,11 +1359,11 @@ void func_80046DCC_479CC(func_80046DCC_479CC_arg *arg0) {
         arg0->unk90 = arg0->unk90 + 0xAB0000;
     }
 
-    setCleanupCallback(func_80046FEC_47BEC);
-    setCallback(func_80046F44_47B44);
+    setCleanupCallback(cleanupCourseSceneryTask);
+    setCallback(updateCourseSceneryTask);
 }
 
-void func_80046F44_47B44(func_80046F44_47B44_arg *arg0) {
+void updateCourseSceneryTask(CourseSceneryUpdateState *arg0) {
     GameState_46080 *allocation;
     s32 i;
     s16 rotation;
@@ -1376,8 +1376,8 @@ void func_80046F44_47B44(func_80046F44_47B44_arg *arg0) {
     }
 
     if (allocation->unk5C == 4) {
-        rotation = arg0->unkB4 + 0x80;
-        arg0->unkB4 = rotation;
+        rotation = arg0->rotationAngle + 0x80;
+        arg0->rotationAngle = rotation;
         createYRotationMatrix((Transform3D *)&arg0->unk78, rotation);
 
         for (i = 0; i < 4; i++) {
@@ -1386,7 +1386,7 @@ void func_80046F44_47B44(func_80046F44_47B44_arg *arg0) {
     }
 }
 
-void func_80046FEC_47BEC(func_80046FEC_47BEC_arg_fwd *arg0) {
+void cleanupCourseSceneryTask(CourseSceneryCleanupArg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
@@ -2831,7 +2831,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             schedulePlayerSparkleTask();
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             scheduleTask(&func_800BB814_B5114, 0, 0, 0xD3);
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
@@ -2844,7 +2844,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             }
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleSceneAnimationTask(arg0, 4);
             schedulePlayerSparkleTask();
@@ -2862,7 +2862,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 schedulePlayerSparkleTask();
             }
             scheduleSceneAnimationTask(arg0, 3);
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
@@ -2871,7 +2871,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             if (temp_s1->unk7A == 8) {
                 func_80049C38_4A838(arg0);
                 func_80049C70_4A870(arg0);
@@ -2887,7 +2887,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 schedulePlayerRenderTask(s0);
             }
             scheduleTask(&func_800BB2B0, 0, 0, 0x32);
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&func_800BB7F0_B5A00, 0, 0, 0x5E);
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
@@ -2901,7 +2901,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             }
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleSceneAnimationTask(arg0, 6);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BBA28_AB8D8, 0, 0, 0x31);
@@ -2918,7 +2918,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             spawnPushZone(1);
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             func_800BBA98();
             schedulePlayerSparkleTask();
             scheduleTask(&initStartGate, 0, 0, 0xD3);
@@ -2933,7 +2933,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 func_80049C38_4A838(arg0);
                 func_80049C70_4A870(arg0);
             }
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
@@ -2960,7 +2960,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(&func_800BB74C_AF43C, 0, 0, 0xC8);
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB8E8_AF5D8, 0, 0, 0x32);
             scheduleTask(&func_800BBE84_AFB74, 0, 0, 0x32);
@@ -2982,7 +2982,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 schedulePlayerRenderTask(s0);
             }
             spawnPushZone(4);
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB688_B2408, 0, 0, 0xD3);
             func_80049C38_4A838(arg0);
@@ -3000,7 +3000,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             } else {
                 func_80045434_46034(2);
             }
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             func_80041418_42018();
             spawnPushZone(5);
@@ -3017,7 +3017,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             } else {
                 func_80045434_46034(3);
             }
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             break;
@@ -3033,7 +3033,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             } else {
                 func_800BBA50(arg0);
             }
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BBA90_AD510, 0, 0, 0xD3);
             break;
@@ -3047,7 +3047,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 func_80049C38_4A838(arg0);
                 func_80049C70_4A870(arg0);
             }
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
@@ -3058,7 +3058,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             }
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
-            scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
+            scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
     }

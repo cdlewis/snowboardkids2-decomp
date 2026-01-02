@@ -2582,3 +2582,6 @@ renderScrollingSceneryOpaque = 0x80046CB4; // rom:0x478B4
 renderScrollingSceneryTransparent = 0x80046CE0; // rom:0x478E0
 renderScrollingSceneryOverlay = 0x80046D0C; // rom:0x4790C
 scheduleScrollingSceneryTask = 0x80046D38; // rom:0x47938
+initCourseSceneryTask = 0x80046DCC; // rom:0x479CC
+updateCourseSceneryTask = 0x80046F44; // rom:0x47B44
+cleanupCourseSceneryTask = 0x80046FEC; // rom:0x47BEC
