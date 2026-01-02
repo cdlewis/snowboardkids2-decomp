@@ -27,8 +27,8 @@ typedef struct {
     u16 unk40;
     s16 ownerPlayerIdx;
     s16 unk44;
-    u16 unk46;
-    s16 unk48;
+    u16 turnRate;
+    s16 lifetime;
     s16 unk4A;
     s16 targetPlayerIdx;
     s8 hitCount;
@@ -86,8 +86,8 @@ typedef struct {
     u16 unk40;
     s16 ownerPlayerIdx;
     s16 unk44;
-    s16 unk46;
-    s16 unk48;
+    s16 turnRate;
+    s16 lifetime;
     s16 unk4A;
     s16 targetPlayerIdx;
     s8 hitCount;
@@ -173,7 +173,7 @@ void loadSlapstickProjectileAsset(Struct_52880 *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 2);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
-    arg0->unk46 = 0;
+    arg0->turnRate = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(launchSlapstickProjectile);
 }
@@ -225,7 +225,7 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
     }
 }
 
-void func_80052128_52D28(Struct_52880 *arg0);
+void updateSlapstickProjectile(Struct_52880 *arg0);
 
 void launchSlapstickProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
@@ -254,10 +254,10 @@ void launchSlapstickProjectile(Struct_52880 *arg0) {
 
     playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
-    arg0->unk48 = 0xF0;
+    arg0->lifetime = 0xF0;
 
     func_80056B7C_5777C(&arg0->pos, 0x10);
-    setCallback(func_80052128_52D28);
+    setCallback(updateSlapstickProjectile);
     checkSlapstickProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
@@ -271,14 +271,14 @@ void launchSlapstickProjectile(Struct_52880 *arg0) {
     }
 }
 
-void func_80052128_52D28(Struct_52880 *arg0) {
+void updateSlapstickProjectile(Struct_52880 *arg0) {
     Alloc_55650 *alloc;
-    Vec3i sp18;
-    Vec3i savedVec;
+    Vec3i collisionOffset;
+    Vec3i prevPos;
     Vec3i rotateVec;
     u8 pad1[32];
-    s16 var_s3;
-    s32 temp_v0;
+    s16 turnAngle;
+    s32 groundHeight;
     s32 i;
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
@@ -291,7 +291,7 @@ void func_80052128_52D28(Struct_52880 *arg0) {
 
         normalizeVelocityToSpeed(&arg0->vel, 0x1C0000);
 
-        memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
+        memcpy(&prevPos, &arg0->pos, sizeof(Vec3i));
 
         arg0->pos.x += arg0->vel.x;
         arg0->pos.y += arg0->vel.y;
@@ -299,32 +299,32 @@ void func_80052128_52D28(Struct_52880 *arg0) {
 
         arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
 
-        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
+        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &collisionOffset);
 
-        if ((sp18.x != 0) || (sp18.z != 0)) {
-            arg0->pos.x = arg0->pos.x + sp18.x;
-            arg0->pos.z = arg0->pos.z + sp18.z;
+        if ((collisionOffset.x != 0) || (collisionOffset.z != 0)) {
+            arg0->pos.x = arg0->pos.x + collisionOffset.x;
+            arg0->pos.z = arg0->pos.z + collisionOffset.z;
             arg0->hitCount = arg0->hitCount + 1;
         }
 
-        arg0->unk48--;
-        if (arg0->unk48 == 0) {
+        arg0->lifetime--;
+        if (arg0->lifetime == 0) {
             arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
+        groundHeight = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
-        if (arg0->pos.y < temp_v0 + 0x100000) {
-            arg0->pos.y = temp_v0 + 0x100000;
+        if (arg0->pos.y < groundHeight + 0x100000) {
+            arg0->pos.y = groundHeight + 0x100000;
         }
 
-        arg0->vel.x = arg0->pos.x - savedVec.x;
-        arg0->vel.y = arg0->pos.y - savedVec.y;
-        arg0->vel.z = arg0->pos.z - savedVec.z;
+        arg0->vel.x = arg0->pos.x - prevPos.x;
+        arg0->vel.y = arg0->pos.y - prevPos.y;
+        arg0->vel.z = arg0->pos.z - prevPos.z;
 
         checkSlapstickProjectileHit(arg0);
 
-        var_s3 = func_8005BF50_5CB50(
+        turnAngle = func_8005BF50_5CB50(
             &arg0->pos,
             atan2Fixed(arg0->vel.x, arg0->vel.z),
             arg0->ownerPlayerIdx,
@@ -332,26 +332,26 @@ void func_80052128_52D28(Struct_52880 *arg0) {
             0x1C0000
         );
 
-        if ((var_s3 << 16) != 0) {
-            var_s3 &= 0x1FFF;
-            if (var_s3 >= 0x1001) {
-                var_s3 |= 0xE000;
+        if ((turnAngle << 16) != 0) {
+            turnAngle &= 0x1FFF;
+            if (turnAngle >= 0x1001) {
+                turnAngle |= 0xE000;
             }
 
-            if ((s16)arg0->unk46 < var_s3) {
-                var_s3 = arg0->unk46;
+            if ((s16)arg0->turnRate < turnAngle) {
+                turnAngle = arg0->turnRate;
             }
 
-            if (var_s3 < -(s16)arg0->unk46) {
-                var_s3 = -(s16)arg0->unk46;
+            if (turnAngle < -(s16)arg0->turnRate) {
+                turnAngle = -(s16)arg0->turnRate;
             }
 
             memcpy(&rotateVec, &arg0->vel, sizeof(Vec3i));
-            rotateVectorY(&rotateVec, var_s3, &arg0->vel);
+            rotateVectorY(&rotateVec, turnAngle, &arg0->vel);
         }
 
-        if ((s16)arg0->unk46 < 0x2C) {
-            arg0->unk46 += 5;
+        if ((s16)arg0->turnRate < 0x2C) {
+            arg0->turnRate += 5;
         }
     }
 
@@ -395,7 +395,7 @@ void func_800524A4_530A4(Struct_52880 *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 3);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
-    arg0->unk46 = 0;
+    arg0->turnRate = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_800525F4_531F4);
 }
@@ -471,7 +471,7 @@ void func_800525F4_531F4(Struct_52880 *arg0) {
 
     playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
-    arg0->unk48 = 0xF0;
+    arg0->lifetime = 0xF0;
 
     func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80052758_53358);
@@ -524,8 +524,8 @@ void func_80052758_53358(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        arg0->unk48--;
-        if (arg0->unk48 == 0) {
+        arg0->lifetime--;
+        if (arg0->lifetime == 0) {
             arg0->hitCount++;
         }
 
@@ -555,20 +555,20 @@ void func_80052758_53358(Struct_52880 *arg0) {
                 var_s3 |= 0xE000;
             }
 
-            if ((s16)arg0->unk46 < var_s3) {
-                var_s3 = arg0->unk46;
+            if ((s16)arg0->turnRate < var_s3) {
+                var_s3 = arg0->turnRate;
             }
 
-            if (var_s3 < -(s16)arg0->unk46) {
-                var_s3 = -(s16)arg0->unk46;
+            if (var_s3 < -(s16)arg0->turnRate) {
+                var_s3 = -(s16)arg0->turnRate;
             }
 
             memcpy(&rotateVec, &arg0->vel, sizeof(Vec3i));
             rotateVectorY(&rotateVec, var_s3, &arg0->vel);
         }
 
-        if ((s16)arg0->unk46 < 0x20) {
-            arg0->unk46 += 4;
+        if ((s16)arg0->turnRate < 0x20) {
+            arg0->turnRate += 4;
         }
     }
 
@@ -611,7 +611,7 @@ void func_80052AB0_536B0(Struct_52880 *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 4);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
-    arg0->unk46 = 0;
+    arg0->turnRate = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80052C00_53800);
 }
@@ -693,7 +693,7 @@ void func_80052C00_53800(Struct_52880 *arg0) {
 
     playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
-    arg0->unk48 = 0xF0;
+    arg0->lifetime = 0xF0;
 
     func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80052DB4_539B4);
@@ -746,8 +746,8 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        arg0->unk48--;
-        if (arg0->unk48 == 0) {
+        arg0->lifetime--;
+        if (arg0->lifetime == 0) {
             arg0->hitCount++;
         }
 
@@ -777,20 +777,20 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
                 var_s3 |= 0xE000;
             }
 
-            if ((s16)arg0->unk46 < var_s3) {
-                var_s3 = arg0->unk46;
+            if ((s16)arg0->turnRate < var_s3) {
+                var_s3 = arg0->turnRate;
             }
 
-            if (var_s3 < -(s16)arg0->unk46) {
-                var_s3 = -(s16)arg0->unk46;
+            if (var_s3 < -(s16)arg0->turnRate) {
+                var_s3 = -(s16)arg0->turnRate;
             }
 
             memcpy(&rotateVec, &arg0->vel, sizeof(Vec3i));
             rotateVectorY(&rotateVec, var_s3, &arg0->vel);
         }
 
-        if ((s16)arg0->unk46 < 0x20) {
-            arg0->unk46 += 4;
+        if ((s16)arg0->turnRate < 0x20) {
+            arg0->turnRate += 4;
         }
     }
 
@@ -834,7 +834,7 @@ void func_80053104_53D04(Struct_52880 *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 5);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
-    arg0->unk46 = 0;
+    arg0->turnRate = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80053254_53E54);
 }
@@ -922,11 +922,11 @@ void func_80053254_53E54(Struct_52880 *arg0) {
 
     playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
-    arg0->unk48 = 0xF0;
+    arg0->lifetime = 0xF0;
 
     playerIdx = arg0->ownerPlayerIdx;
     if (alloc->unk10[playerIdx].unkBD9 != 0) {
-        arg0->unk48 = 0x78;
+        arg0->lifetime = 0x78;
     }
 
     s0 = &arg0->pos;
@@ -990,8 +990,8 @@ void func_80053434_54034(Struct_52880 *arg0) {
             arg0->vel.z = arg0->pos.z - savedVec.z;
         }
 
-        arg0->unk48--;
-        if (arg0->unk48 == 0) {
+        arg0->lifetime--;
+        if (arg0->lifetime == 0) {
             arg0->hitCount++;
         }
 
@@ -1014,12 +1014,12 @@ void func_80053434_54034(Struct_52880 *arg0) {
                 var_s3 |= 0xE000;
             }
 
-            if ((s16)arg0->unk46 < var_s3) {
-                var_s3 = arg0->unk46;
+            if ((s16)arg0->turnRate < var_s3) {
+                var_s3 = arg0->turnRate;
             }
 
-            if (var_s3 < -(s16)arg0->unk46) {
-                var_s3 = -(s16)arg0->unk46;
+            if (var_s3 < -(s16)arg0->turnRate) {
+                var_s3 = -(s16)arg0->turnRate;
             }
 
             memcpy(&rotateVec, &arg0->vel, sizeof(Vec3i));
@@ -1027,8 +1027,8 @@ void func_80053434_54034(Struct_52880 *arg0) {
         }
 
         if (alloc->unk10[arg0->ownerPlayerIdx].unkBD9 == 0) {
-            if ((s16)arg0->unk46 < 0x13) {
-                arg0->unk46 += 2;
+            if ((s16)arg0->turnRate < 0x13) {
+                arg0->turnRate += 2;
             }
         }
     }
@@ -1071,7 +1071,7 @@ void func_8005383C_5443C(Struct_52880 *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 6);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
-    arg0->unk46 = 0;
+    arg0->turnRate = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80053990_54590);
 }
@@ -1144,7 +1144,7 @@ void func_80053990_54590(Struct_52880 *arg0) {
 
     playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = ((Unk10Element_52880 *)((u8 *)alloc->unk10 + (playerIdx * 3048)))->unkB94;
-    arg0->unk48 = 0xF0;
+    arg0->lifetime = 0xF0;
 
     func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80053B38_54738);
@@ -1196,8 +1196,8 @@ void func_80053B38_54738(Struct_52880 *arg0) {
             arg0->hitCount = arg0->hitCount + 1;
         }
 
-        arg0->unk48--;
-        if (arg0->unk48 == 0) {
+        arg0->lifetime--;
+        if (arg0->lifetime == 0) {
             arg0->hitCount++;
         }
 
@@ -1227,20 +1227,20 @@ void func_80053B38_54738(Struct_52880 *arg0) {
                 var_s3 |= 0xE000;
             }
 
-            if ((s16)arg0->unk46 < var_s3) {
-                var_s3 = arg0->unk46;
+            if ((s16)arg0->turnRate < var_s3) {
+                var_s3 = arg0->turnRate;
             }
 
-            if (var_s3 < -(s16)arg0->unk46) {
-                var_s3 = -(s16)arg0->unk46;
+            if (var_s3 < -(s16)arg0->turnRate) {
+                var_s3 = -(s16)arg0->turnRate;
             }
 
             memcpy(&rotateVec, &arg0->vel, sizeof(Vec3i));
             rotateVectorY(&rotateVec, var_s3, (Vec3i *)&arg0->vel);
         }
 
-        if ((s16)arg0->unk46 < 0x19) {
-            arg0->unk46 += 3;
+        if ((s16)arg0->turnRate < 0x19) {
+            arg0->turnRate += 3;
         }
     }
 
@@ -1280,7 +1280,7 @@ void func_80053E90_54A90(Struct_52880 *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 7);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
-    arg0->unk46 = 0;
+    arg0->turnRate = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80053FE0_54BE0);
 }
@@ -1354,7 +1354,7 @@ void func_80053FE0_54BE0(Struct_52880 *arg0) {
 
     playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
-    arg0->unk48 = 0xF0;
+    arg0->lifetime = 0xF0;
 
     func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80054144_54D44);
@@ -1416,8 +1416,8 @@ void func_80054144_54D44(Struct_52880 *arg0) {
             arg0->vel.z = arg0->pos.z - savedVec.z;
         }
 
-        arg0->unk48--;
-        if (arg0->unk48 == 0) {
+        arg0->lifetime--;
+        if (arg0->lifetime == 0) {
             arg0->hitCount++;
         }
 
@@ -1445,20 +1445,20 @@ void func_80054144_54D44(Struct_52880 *arg0) {
                 var_s3 |= 0xE000;
             }
 
-            if ((s16)arg0->unk46 < var_s3) {
-                var_s3 = arg0->unk46;
+            if ((s16)arg0->turnRate < var_s3) {
+                var_s3 = arg0->turnRate;
             }
 
-            if (var_s3 < -(s16)arg0->unk46) {
-                var_s3 = -(s16)arg0->unk46;
+            if (var_s3 < -(s16)arg0->turnRate) {
+                var_s3 = -(s16)arg0->turnRate;
             }
 
             memcpy(&rotateVec, (Vec3i *)&arg0->vel, sizeof(Vec3i));
             rotateVectorY(&rotateVec, var_s3, (Vec3i *)&arg0->vel);
         }
 
-        if ((s16)arg0->unk46 < 0x19) {
-            arg0->unk46 += 3;
+        if ((s16)arg0->turnRate < 0x19) {
+            arg0->turnRate += 3;
         }
     }
 
@@ -1727,7 +1727,7 @@ void func_80054D0C_5590C(Struct_52880 *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 0x69);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
-    arg0->unk46 = 0;
+    arg0->turnRate = 0;
     arg0->unk0 = ptr;
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     setCallbackWithContinue(func_80054F44_55B44);
@@ -1838,7 +1838,7 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
     arg0->vel.z = temp_a0 - temp_a3;
 
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
-    arg0->unk48 = 0xF0;
+    arg0->lifetime = 0xF0;
 
     setCallback(func_800550B4_55CB4);
     func_80054D70_55970(arg0);
@@ -1895,8 +1895,8 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
             arg0->hitCount = arg0->hitCount + 1;
         }
 
-        arg0->unk48--;
-        if (arg0->unk48 == 0) {
+        arg0->lifetime--;
+        if (arg0->lifetime == 0) {
             arg0->hitCount++;
         }
 
@@ -1922,12 +1922,12 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
                 var_s3 |= 0xE000;
             }
 
-            if (arg0->unk46 < var_s3) {
-                var_s3 = arg0->unk46;
+            if (arg0->turnRate < var_s3) {
+                var_s3 = arg0->turnRate;
             }
 
-            if (var_s3 < -arg0->unk46) {
-                var_s3 = -arg0->unk46;
+            if (var_s3 < -arg0->turnRate) {
+                var_s3 = -arg0->turnRate;
             }
 
             memcpy(&rotateVec, &arg0->unk24, sizeof(Vec3i));
@@ -1935,12 +1935,12 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
         }
 
         if (alloc->unk86 != 0) {
-            if (arg0->unk46 < 0x20) {
-                arg0->unk46 += 4;
+            if (arg0->turnRate < 0x20) {
+                arg0->turnRate += 4;
             }
         } else {
-            if (arg0->unk46 < 0xC) {
-                arg0->unk46++;
+            if (arg0->turnRate < 0xC) {
+                arg0->turnRate++;
             }
         }
     }
@@ -1981,7 +1981,7 @@ void func_80055460_56060(Struct_52880 *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 0x6E);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
-    arg0->unk46 = 0;
+    arg0->turnRate = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_800554FC_560FC);
 }
@@ -2116,7 +2116,7 @@ void func_800558A4_564A4(Struct_52880 *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 4);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
-    arg0->unk46 = 0;
+    arg0->turnRate = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80055964_56564);
 }
@@ -2155,7 +2155,7 @@ void func_80055964_56564(Struct_52880 *arg0) {
     arg0->pos.z += localVec.z;
     s0 = &arg0->pos;
     arg0->unk40 = 60;
-    arg0->unk48 = 45;
+    arg0->lifetime = 45;
 
     func_80056B7C_5777C(s0, 16);
     setCallback(func_80055A84_56684);
@@ -2207,8 +2207,8 @@ void func_80055A84_56684(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        temp = arg0->unk48 - 1;
-        arg0->unk48 = temp;
+        temp = arg0->lifetime - 1;
+        arg0->lifetime = temp;
         if ((temp << 16) == 0) {
             arg0->hitCount++;
         }
