@@ -165,13 +165,13 @@ typedef struct {
 } func_8004728C_47E8C_arg;
 
 typedef struct {
-    void *unk0;
-    loadAssetMetadata_arg unk4;
+    void *assetData;
+    loadAssetMetadata_arg metadata;
     u8 _pad[0x4];
-    u16 unk24;
+    u16 animationCounter;
     u8 _pad2[0x2];
-    s32 unk28;
-} Struct_func_8004657C_4717C;
+    s32 velocity;
+} PlayerSparkleTask;
 
 typedef struct {
     u8 padding0[0x8];
@@ -836,8 +836,8 @@ void func_8004562C_4622C(void);
 void func_80047330_47F30(FunctionArg_80047330 *arg0);
 void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
 void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0);
-void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0);
-void func_800462D8_46ED8(Struct_func_8004657C_4717C *);
+void cleanupPlayerSparkleTask(PlayerSparkleTask *arg0);
+void loadPlayerSparkleData(PlayerSparkleTask *);
 void func_8004728C_47E8C(func_8004728C_47E8C_arg *);
 void func_80047590_48190(func_80047590_48190_arg *arg0);
 void func_80047660_48260(func_80047660_48260_arg *arg0);
@@ -875,9 +875,9 @@ void setupSceneAnimationTask(SceneAnimationTask *);
 void updateSceneAnimationTask(SceneAnimationTaskNew *);
 void func_80046628_47228(func_80046628_47228_arg *);
 void func_80046708_47308(func_80046708_47308_arg *arg0);
-void func_80046464_47064(Struct_func_8004657C_4717C *);
-void func_800463F4_46FF4(Struct_func_8004657C_4717C *);
-void func_800464F4_470F4(Struct_func_8004657C_4717C *);
+void updatePlayerSparkleWithStateCheck(PlayerSparkleTask *);
+void updatePlayerSparkle(PlayerSparkleTask *);
+void updatePlayerSparkleMovement(PlayerSparkleTask *);
 void func_8004674C_4734C(DisplayListObject *);
 void func_80046CB4_478B4(DisplayListObject *);
 void func_80046CE0_478E0(DisplayListObject *);
@@ -1136,109 +1136,109 @@ void scheduleSceneAnimationTask(s32 arg0, s16 arg1) {
     }
 }
 
-void func_80046298_46E98(Struct_func_8004657C_4717C *arg0) {
-    arg0->unk0 = loadAsset_34CB50();
-    setCleanupCallback(func_8004657C_4717C);
-    setCallback(func_800462D8_46ED8);
+void initPlayerSparkleTask(PlayerSparkleTask *task) {
+    task->assetData = loadAsset_34CB50();
+    setCleanupCallback(cleanupPlayerSparkleTask);
+    setCallback(loadPlayerSparkleData);
 }
 
-void func_800462D8_46ED8(Struct_func_8004657C_4717C *arg0) {
+void loadPlayerSparkleData(PlayerSparkleTask *task) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    loadAssetMetadata(&arg0->unk4, arg0->unk0, 0);
-    arg0->unk4.unk0 = (loadAssetMetadata_arg *)((u8 *)state->unk44 + 0x40);
+    loadAssetMetadata(&task->metadata, task->assetData, 0);
+    task->metadata.unk0 = (loadAssetMetadata_arg *)((u8 *)state->unk44 + 0x40);
 
     switch (state->memoryPoolId) {
         case 0:
-            memcpy(&arg0->unk4.position, state->unk48 + 0x24, sizeof(Vec3i));
-            setCallback(func_80046464_47064);
+            memcpy(&task->metadata.position, state->unk48 + 0x24, sizeof(Vec3i));
+            setCallback(updatePlayerSparkleWithStateCheck);
             break;
         case 6:
-            memcpy(&arg0->unk4.position, state->unk48 + 0x1C8, sizeof(Vec3i));
-            setCallback(func_800463F4_46FF4);
+            memcpy(&task->metadata.position, state->unk48 + 0x1C8, sizeof(Vec3i));
+            setCallback(updatePlayerSparkle);
             break;
         case 1:
-            memcpy(&arg0->unk4.position, state->unk48 + 0x1EC, sizeof(Vec3i));
-            setCallback(func_800463F4_46FF4);
+            memcpy(&task->metadata.position, state->unk48 + 0x1EC, sizeof(Vec3i));
+            setCallback(updatePlayerSparkle);
             break;
         case 2:
-            memcpy(&arg0->unk4.position, state->unk48 + 0x1F8, sizeof(Vec3i));
-            setCallback(func_800463F4_46FF4);
+            memcpy(&task->metadata.position, state->unk48 + 0x1F8, sizeof(Vec3i));
+            setCallback(updatePlayerSparkle);
             break;
         case 5:
-            memcpy(&arg0->unk4.position, state->unk48 + 0x204, sizeof(Vec3i));
-            setCallback(func_800463F4_46FF4);
+            memcpy(&task->metadata.position, state->unk48 + 0x204, sizeof(Vec3i));
+            setCallback(updatePlayerSparkle);
             break;
         case 8:
-            memcpy(&arg0->unk4.position, state->unk48 + 0x234, sizeof(Vec3i));
-            setCallback(func_800463F4_46FF4);
+            memcpy(&task->metadata.position, state->unk48 + 0x234, sizeof(Vec3i));
+            setCallback(updatePlayerSparkle);
             break;
         case 9:
-            memcpy(&arg0->unk4.position, state->unk48 + 0x240, sizeof(Vec3i));
-            setCallback(func_800463F4_46FF4);
+            memcpy(&task->metadata.position, state->unk48 + 0x240, sizeof(Vec3i));
+            setCallback(updatePlayerSparkle);
             break;
     }
 }
 
-void func_800463F4_46FF4(Struct_func_8004657C_4717C *arg0) {
+void updatePlayerSparkle(PlayerSparkleTask *task) {
     s32 i;
     u16 counter;
 
-    counter = arg0->unk24 + 1;
-    arg0->unk24 = counter & 0xF;
+    counter = task->animationCounter + 1;
+    task->animationCounter = counter & 0xF;
 
     if ((counter & 0x7) != 0) {
-        loadAssetMetadata(&arg0->unk4, arg0->unk0, (counter & 0xF) >> 3);
+        loadAssetMetadata(&task->metadata, task->assetData, (counter & 0xF) >> 3);
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&task->metadata);
     }
 }
 
-void func_80046464_47064(Struct_func_8004657C_4717C *arg0) {
+void updatePlayerSparkleWithStateCheck(PlayerSparkleTask *task) {
     GameState *state;
     s32 i;
 
     state = (GameState *)getCurrentAllocation();
-    func_800463F4_46FF4(arg0);
+    updatePlayerSparkle(task);
 
     for (i = 0; i < state->unk5F; i++) {
         if ((u32)(state->players[i].unkB94 - 6) < 5U) {
-            arg0->unk28 = 0xC0000;
-            setCallback(func_800464F4_470F4);
+            task->velocity = 0xC0000;
+            setCallback(updatePlayerSparkleMovement);
             return;
         }
     }
 }
 
-void func_800464F4_470F4(Struct_func_8004657C_4717C *arg0) {
+void updatePlayerSparkleMovement(PlayerSparkleTask *task) {
     s32 temp_v0;
     s32 temp_v1;
     s32 temp_a0;
     s32 temp_a1;
     s32 temp_a2;
 
-    temp_v0 = arg0->unk4.position.x + 0x27D76;
-    temp_v1 = arg0->unk4.position.z + 0x44DDE;
-    temp_a0 = arg0->unk28 + 0xFFFE8000;
-    temp_a1 = arg0->unk4.position.y + temp_a0;
+    temp_v0 = task->metadata.position.x + 0x27D76;
+    temp_v1 = task->metadata.position.z + 0x44DDE;
+    temp_a0 = task->velocity + 0xFFFE8000;
+    temp_a1 = task->metadata.position.y + temp_a0;
     temp_a2 = 0x2C150614 < temp_a1;
 
-    arg0->unk4.position.x = temp_v0;
-    arg0->unk4.position.z = temp_v1;
-    arg0->unk28 = temp_a0;
-    arg0->unk4.position.y = temp_a1;
+    task->metadata.position.x = temp_v0;
+    task->metadata.position.z = temp_v1;
+    task->velocity = temp_a0;
+    task->metadata.position.y = temp_a1;
 
     if (temp_a2 == 0) {
         func_80069CF8_6A8F8();
     }
 
-    func_800463F4_46FF4(arg0);
+    updatePlayerSparkle(task);
 }
 
-void func_8004657C_4717C(Struct_func_8004657C_4717C *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+void cleanupPlayerSparkleTask(PlayerSparkleTask *task) {
+    task->assetData = freeNodeMemory(task->assetData);
 }
 
 void func_800465A8_471A8(func_80046708_47308_arg *arg0) {
@@ -2785,10 +2785,10 @@ void func_800497FC_4A3FC(s32 poolId) {
     }
 }
 
-void func_80049BFC_4A7FC(void) {
+void schedulePlayerSparkleTask(void) {
     GameState *allocation = (GameState *)getCurrentAllocation();
     if (allocation->unk7A == 0) {
-        scheduleTask(&func_80046298_46E98, 0, 0, 0xD3);
+        scheduleTask(&initPlayerSparkleTask, 0, 0, 0xD3);
     }
 }
 
@@ -2828,7 +2828,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
-            func_80049BFC_4A7FC();
+            schedulePlayerSparkleTask();
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             scheduleTask(&func_800BB814_B5114, 0, 0, 0xD3);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
@@ -2847,7 +2847,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleSceneAnimationTask(arg0, 4);
-            func_80049BFC_4A7FC();
+            schedulePlayerSparkleTask();
             break;
 
         case JINGLE_TOWN:
@@ -2859,7 +2859,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 func_80049C38_4A838(arg0);
                 func_80049C70_4A870(arg0);
                 func_800BBB34();
-                func_80049BFC_4A7FC();
+                schedulePlayerSparkleTask();
             }
             scheduleSceneAnimationTask(arg0, 3);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
@@ -2906,7 +2906,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BBA28_AB8D8, 0, 0, 0x31);
             scheduleTask(&func_800BBAF8_AB9A8, 0, 0, 0xF0);
-            func_80049BFC_4A7FC();
+            schedulePlayerSparkleTask();
             break;
 
         case CRAZY_JUNGLE:
@@ -2920,7 +2920,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80049C70_4A870(arg0);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             func_800BBA98();
-            func_80049BFC_4A7FC();
+            schedulePlayerSparkleTask();
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
@@ -2949,7 +2949,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_800BBED8();
             scheduleTask(&func_800BC528_AE8E8, 0, 0, 0xC7);
             func_800BC9BC();
-            func_80049BFC_4A7FC();
+            schedulePlayerSparkleTask();
             break;
 
         case HAUNTED_HOUSE:
@@ -2973,7 +2973,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_800BC0FC(4);
             scheduleTask(&func_800BC13C_AFE2C, 0, 0, 0xD3);
             scheduleTask(&func_800BC72C_B041C, 0, 0, 0xD3);
-            func_80049BFC_4A7FC();
+            schedulePlayerSparkleTask();
             break;
 
         case ICE_LAND:
