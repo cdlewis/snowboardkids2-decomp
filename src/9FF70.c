@@ -28,7 +28,7 @@ extern s32 D_800BAB40_AA9F0;
 extern s32 D_800BAB44_AA9F4;
 extern s32 D_800BAB3C_AA9EC;
 
-s32 func_800B2C18_A2AC8(Player *);
+s32 tryFinalizeTrickLanding(Player *);
 void updateTrickFacingAngle(Player *);
 void func_800B3784_A3634(Player *);
 void func_800B4058_A3F08(Player *);
@@ -796,102 +796,101 @@ void updateTrickFacingAngle(Player *player) {
     }
 }
 
-s32 func_800B2C18_A2AC8(Player *arg0) {
+s32 tryFinalizeTrickLanding(Player *player) {
     GameState *state;
-    s32 flags;
-    u8 stateUnk7A;
-    s16 var_a0;
-    s16 var_v1;
-    s32 temp_v0;
+    s32 playerFlags;
+    u8 gameMode;
+    s16 soundId;
+    s16 scoreValue;
 
     state = getCurrentAllocation();
-    flags = arg0->unkB84;
+    playerFlags = player->unkB84;
 
-    if (flags & 1) {
+    if (playerFlags & 1) {
         return 0;
     }
 
-    if (flags & 0x1000) {
-        func_800B46BC_A456C(arg0);
+    if (playerFlags & 0x1000) {
+        func_800B46BC_A456C(player);
         return 1;
     }
 
-    if (flags & 0x80000) {
+    if (playerFlags & 0x80000) {
         goto skip_to_end;
     }
 
-    stateUnk7A = state->unk7A;
-    if (stateUnk7A != 0 && stateUnk7A != 8) {
-        if (!(stateUnk7A == 9 || stateUnk7A == 10)) {
-            arg0->trickScore = 0;
+    gameMode = state->unk7A;
+    if (gameMode != 0 && gameMode != 8) {
+        if (!(gameMode == 9 || gameMode == 10)) {
+            player->trickScore = 0;
         }
     }
 
-    if (arg0->trickScore != 0) {
-        func_80059A48_5A648(arg0, arg0->trickScore);
-        if (arg0->unkBC7 == 0) {
-            func_8004D890_4E490(arg0->unkBB8, arg0->trickScore);
+    if (player->trickScore != 0) {
+        func_80059A48_5A648(player, player->trickScore);
+        if (player->unkBC7 == 0) {
+            func_8004D890_4E490(player->unkBB8, player->trickScore);
 
-            var_v1 = arg0->trickScore;
-            if (var_v1 < 0x96) {
-                var_a0 = 0x11C;
+            scoreValue = player->trickScore;
+            if (scoreValue < 0x96) {
+                soundId = 0x11C;
             } else {
-                var_a0 = 0x11D;
+                soundId = 0x11D;
             }
 
-            if (var_v1 >= 0x12C) {
-                var_a0 = 0x11E;
+            if (scoreValue >= 0x12C) {
+                soundId = 0x11E;
             }
-            if (var_v1 >= 0x190) {
-                var_a0 = 0x11F;
+            if (scoreValue >= 0x190) {
+                soundId = 0x11F;
             }
-            if (var_v1 >= 0x1F4) {
-                var_a0 = 0x120;
+            if (scoreValue >= 0x1F4) {
+                soundId = 0x120;
             }
-            if (var_v1 >= 0xBB8) {
-                var_a0 = 0x121;
+            if (scoreValue >= 0xBB8) {
+                soundId = 0x121;
             }
 
-            func_80058530_59130(var_a0, 6);
+            func_80058530_59130(soundId, 6);
         }
     }
 
     if (state->unk7A == 6) {
-        if (arg0->trickPoints != 0) {
-            func_8004FCF0_508F0(arg0->trickPoints);
-            func_80059A88_5A688(arg0, arg0->trickPoints);
+        if (player->trickPoints != 0) {
+            func_8004FCF0_508F0(player->trickPoints);
+            func_80059A88_5A688(player, player->trickPoints);
 
-            var_v1 = arg0->trickPoints;
-            if (var_v1 < 0xF) {
-                var_a0 = 0x11C;
+            scoreValue = player->trickPoints;
+            if (scoreValue < 0xF) {
+                soundId = 0x11C;
             } else {
-                var_a0 = 0x11D;
+                soundId = 0x11D;
             }
 
-            if (var_v1 >= 0x1E) {
-                var_a0 = 0x11E;
+            if (scoreValue >= 0x1E) {
+                soundId = 0x11E;
             }
-            if (var_v1 >= 0x37) {
-                var_a0 = 0x11F;
+            if (scoreValue >= 0x37) {
+                soundId = 0x11F;
             }
-            if (var_v1 >= 0x5F) {
-                var_a0 = 0x120;
+            if (scoreValue >= 0x5F) {
+                soundId = 0x120;
             }
-            if (var_v1 >= 0x3E7) {
-                var_a0 = 0x121;
+            if (scoreValue >= 0x3E7) {
+                soundId = 0x121;
             }
 
-            func_80058530_59130(var_a0, 6);
+            func_80058530_59130(soundId, 6);
         }
     }
 
 skip_to_end:
-    if (arg0->tricksPerformedMask != 0) {
-        func_80059BD4_5A7D4(arg0);
-        func_8005D804_5E404(arg0, 1, 0xF);
+    if (player->tricksPerformedMask != 0) {
+        func_80059BD4_5A7D4(player);
+        func_8005D804_5E404(player, 1, 0xF);
     }
 
-    setPlayerBehaviorPhase(arg0, 3);
+    setPlayerBehaviorPhase(player, 3);
     return 1;
 }
 
@@ -904,7 +903,7 @@ void func_800B2DDC_A2C8C(Player *arg0) {
 }
 
 s32 func_800B2E38_A2CE8(void *arg0) {
-    if (func_800B2C18_A2AC8(arg0) != 0) {
+    if (tryFinalizeTrickLanding(arg0) != 0) {
         return 1;
     }
     func_800B2DDC_A2C8C(arg0);
@@ -947,7 +946,7 @@ void func_800B2EE4_A2D94(Player *arg0, s8 arg1) {
 }
 
 s32 func_800B2FD0_A2E80(Player *arg0) {
-    if (func_800B2C18_A2AC8(arg0) != 0) {
+    if (tryFinalizeTrickLanding(arg0) != 0) {
         return 1;
     }
 
@@ -982,7 +981,7 @@ s32 func_800B2FD0_A2E80(Player *arg0) {
 }
 
 s32 func_800B30B0_A2F60(Player *arg0) {
-    if (func_800B2C18_A2AC8(arg0) != 0) {
+    if (tryFinalizeTrickLanding(arg0) != 0) {
         return 1;
     }
 
@@ -1017,7 +1016,7 @@ s32 func_800B30B0_A2F60(Player *arg0) {
 }
 
 s32 func_800B3190_A3040(Player *arg0) {
-    if (func_800B2C18_A2AC8(arg0) != 0) {
+    if (tryFinalizeTrickLanding(arg0) != 0) {
         return 1;
     }
 
@@ -1052,7 +1051,7 @@ s32 func_800B3190_A3040(Player *arg0) {
 }
 
 s32 func_800B3270_A3120(Player *arg0) {
-    if (func_800B2C18_A2AC8(arg0) != 0) {
+    if (tryFinalizeTrickLanding(arg0) != 0) {
         return 1;
     }
 
@@ -1087,7 +1086,7 @@ s32 func_800B3270_A3120(Player *arg0) {
 }
 
 s32 func_800B3350_A3200(Player *arg0) {
-    if (func_800B2C18_A2AC8(arg0) != 0) {
+    if (tryFinalizeTrickLanding(arg0) != 0) {
         return 1;
     }
 
@@ -1123,7 +1122,7 @@ s32 func_800B3350_A3200(Player *arg0) {
 }
 
 s32 func_800B3438_A32E8(Player *arg0) {
-    if (func_800B2C18_A2AC8(arg0) != 0) {
+    if (tryFinalizeTrickLanding(arg0) != 0) {
         return 1;
     }
 
@@ -1159,7 +1158,7 @@ s32 func_800B3438_A32E8(Player *arg0) {
 }
 
 s32 func_800B3520_A33D0(Player *arg0) {
-    if (func_800B2C18_A2AC8(arg0) != 0) {
+    if (tryFinalizeTrickLanding(arg0) != 0) {
         return 1;
     }
 
@@ -1195,7 +1194,7 @@ s32 func_800B3520_A33D0(Player *arg0) {
 }
 
 s32 func_800B3608_A34B8(Player *arg0) {
-    if (func_800B2C18_A2AC8(arg0) != 0) {
+    if (tryFinalizeTrickLanding(arg0) != 0) {
         return 1;
     }
 
