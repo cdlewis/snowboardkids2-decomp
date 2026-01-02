@@ -849,7 +849,7 @@ void scheduleRaceTasks(void) {
     }
 
     if (gameState->unk7A >= 0xA) {
-        func_80040F6C_41B6C(0, 0x28, 0, 0, 0xC, 6);
+        spawnPushStartPrompt(0, 0x28, 0, 0, 0xC, 6);
     }
 
     setGameStateHandler(&awaitRaceAssetsLoaded);

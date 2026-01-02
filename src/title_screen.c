@@ -348,7 +348,7 @@ void initTitleScreen(void) {
     }
 
     scheduleTask(&initTitleEffectModel, 0, 0, 0x62);
-    func_80040F6C_41B6C(1, 0x20, 0, 0, 8, 7);
+    spawnPushStartPrompt(1, 0x20, 0, 0, 8, 7);
     setGameStateHandler(waitForTitleAssetsReady);
 }
 

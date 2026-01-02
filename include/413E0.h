@@ -2,5 +2,5 @@
 
 #include "common.h"
 
-void func_80040F6C_41B6C(s32, s32, s32, void *, s32, s32);
+void spawnPushStartPrompt(s32, s16, u8, u8, s16, s16);
 void initStartGate(void *arg0);

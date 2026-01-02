@@ -19,11 +19,11 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x8];
-    s16 unk8;
+    s16 yPosition;
     s16 padding2;
-    s16 unkC;
-    s16 unkE;
-} func_80040E00_41A00_arg;
+    s16 scaleX;
+    s16 scaleY;
+} PushStartTextState;
 
 extern s32 gFrameCounter;
 extern s32 D_800907F8_913F8;
@@ -59,8 +59,7 @@ typedef struct {
 } StartGate;
 
 void updateStartGate(StartGate *);
-void func_80040E00_41A00(func_80040E00_41A00_arg *);
-void func_80040F34_41B34(PlayerIndicatorTask *);
+void updatePushStartText(PushStartTextState *);
 void func_800413E0_41FE0(PlayerIndicatorTask *arg0);
 
 typedef struct {
@@ -108,17 +107,18 @@ typedef union {
 } S16OrBytesE;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    S16OrBytesC unkC;
-    S16OrBytesE unkE;
-    S16OrBytes unk10;
-    s16 unk12;
-} func_80040D80_41980_arg;
+    void *graphicAsset;
+    void *textAsset;
+    s16 yPosition;
+    s16 useGraphicMode;
+    S16OrBytesC scaleX;
+    S16OrBytesE scaleY;
+    S16OrBytes pulseAlpha;
+    s16 pulseDirection;
+} PushStartPromptTask;
 
-void func_80040E4C_41A4C(func_80040D80_41980_arg *);
+void updatePushStartGraphic(PushStartPromptTask *);
+void cleanupPushStartPrompt(PushStartPromptTask *);
 
 void awaitPlayerIndicatorReady(func_8004083C_4143C_arg *arg0);
 void cleanupPlayerIndicator(func_80040948_41548_arg *arg0);
@@ -273,90 +273,97 @@ void cleanupStartGate(StartGateCleanupArg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void func_80040D80_41980(func_80040D80_41980_arg *arg0) {
-    if (arg0->unkA == 0) {
-        arg0->unk0 = NULL;
-        arg0->unk4 = NULL;
-        setCallback(&func_80040E00_41A00);
+void initPushStartPrompt(PushStartPromptTask *task) {
+    if (task->useGraphicMode == 0) {
+        task->graphicAsset = NULL;
+        task->textAsset = NULL;
+        setCallback(&updatePushStartText);
     } else {
-        arg0->unk4 = loadTextRenderAsset(1);
-        arg0->unk0 = loadAsset_34F7E0();
-        arg0->unk10.asS16 = 0x80;
-        arg0->unk12 = -8;
-        setCallback(&func_80040E4C_41A4C);
+        task->textAsset = loadTextRenderAsset(1);
+        task->graphicAsset = loadAsset_34F7E0();
+        task->pulseAlpha.asS16 = 0x80;
+        task->pulseDirection = -8;
+        setCallback(&updatePushStartGraphic);
     }
-    setCleanupCallback(&func_80040F34_41B34);
+    setCleanupCallback(&cleanupPushStartPrompt);
 }
 
 const char pushStartButtonText[] = "PUSH START BUTTON";
 
-void func_80040E00_41A00(func_80040E00_41A00_arg *arg0) {
+void updatePushStartText(PushStartTextState *state) {
     if (gFrameCounter & 8) {
-        enqueueTextRender(-0x44, arg0->unk8, 0, (u8 *)&pushStartButtonText, (s32)arg0->unkC, (s32)arg0->unkE);
+        enqueueTextRender(
+            -0x44,
+            state->yPosition,
+            0,
+            (u8 *)&pushStartButtonText,
+            (s32)state->scaleX,
+            (s32)state->scaleY
+        );
     }
 }
 
-void func_80040E4C_41A4C(func_80040D80_41980_arg *arg0) {
+void updatePushStartGraphic(PushStartPromptTask *task) {
     func_80035260_35E60(
-        arg0->unk4,
+        task->textAsset,
         (void *)&D_800907F8_913F8,
         -0x68,
-        arg0->unk8,
+        task->yPosition,
         0xFF,
         0xFF,
         0,
-        arg0->unkC.asBytes.low,
-        arg0->unkE.asBytes.low
+        task->scaleX.asBytes.low,
+        task->scaleY.asBytes.low
     );
 
-    arg0->unk10.asS16 += arg0->unk12;
+    task->pulseAlpha.asS16 += task->pulseDirection;
 
-    if (arg0->unk10.asS16 == 0x20) {
-        arg0->unk12 = 8;
+    if (task->pulseAlpha.asS16 == 0x20) {
+        task->pulseDirection = 8;
     }
 
-    if (arg0->unk10.asS16 == 0x80) {
-        arg0->unk12 = -8;
+    if (task->pulseAlpha.asS16 == 0x80) {
+        task->pulseDirection = -8;
     }
 
     func_8006D4B8_6E0B8(
-        arg0->unk0,
+        task->graphicAsset,
         -0x68,
-        arg0->unk8,
+        task->yPosition,
         0xD,
         2,
         0,
-        arg0->unk10.asBytes.low,
+        task->pulseAlpha.asBytes.low,
         0xFF,
         0,
         0,
         0xC0,
-        arg0->unkC.asBytes.low,
-        arg0->unkE.asBytes.low
+        task->scaleX.asBytes.low,
+        task->scaleY.asBytes.low
     );
 }
 
-void func_80040F34_41B34(PlayerIndicatorTask *task) {
-    task->assetTable = freeNodeMemory(task->assetTable);
-    task->indicatorAsset = freeNodeMemory(task->indicatorAsset);
+void cleanupPushStartPrompt(PushStartPromptTask *task) {
+    task->graphicAsset = freeNodeMemory(task->graphicAsset);
+    task->textAsset = freeNodeMemory(task->textAsset);
 }
 
 extern u8 gConnectedControllerMask;
 
-void func_80040F6C_41B6C(s32 arg0, s16 arg1, u8 arg2, u8 arg3, s16 arg4, s16 arg5) {
-    func_80040D80_41980_arg *task;
+void spawnPushStartPrompt(s32 arg0, s16 yPosition, u8 arg2, u8 arg3, s16 scaleX, s16 scaleY) {
+    PushStartPromptTask *task;
 
     if (((s16)arg0 == 0) || !(gConnectedControllerMask & 1)) {
-        task = (func_80040D80_41980_arg *)scheduleTask(&func_80040D80_41980, arg2, arg3, 0xC8);
+        task = (PushStartPromptTask *)scheduleTask(&initPushStartPrompt, arg2, arg3, 0xC8);
         if (task != NULL) {
             if (gConnectedControllerMask & 1) {
-                task->unkA = 0;
+                task->useGraphicMode = 0;
             } else {
-                task->unkA = 1;
+                task->useGraphicMode = 1;
             }
-            task->unk8 = arg1;
-            task->unkC.asS16 = arg4;
-            task->unkE.asS16 = arg5;
+            task->yPosition = yPosition;
+            task->scaleX.asS16 = scaleX;
+            task->scaleY.asS16 = scaleY;
         }
     }
 }
