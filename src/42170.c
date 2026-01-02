@@ -29,7 +29,7 @@ extern s32 D_8009A8AC_9B4AC;
 extern Transform3D D_8009A8B0_9B4B0;
 extern s32 gFrameCounter;
 
-void func_80042F2C_43B2C(void **);
+void cleanupStarEffect(void **);
 
 typedef struct {
     u8 _pad0[0x9F0];
@@ -302,7 +302,7 @@ void func_80043F8C_44B8C(Func43DC0State *);
 void func_80042D54_43954(StarEffectState *);
 void func_80043CA4_448A4(Func43CA4Arg *);
 void func_800439F4_445F4(Func4393CArg *);
-void func_80042BA4_437A4(StarEffectState *);
+void updateStarEffect(StarEffectState *);
 void func_80042C98_43898(Func42C98Arg *);
 void func_80042E40_43A40(Func42E40Arg *);
 void updateFallingEffect(FallingEffectState *);
@@ -986,13 +986,13 @@ void updateStarEffectAnimation(StarEffectState *arg0) {
     }
 }
 
-void func_80042B64_43764(void **arg0) {
+void initStarEffect(void **arg0) {
     *arg0 = load_3ECE40();
-    setCleanupCallback(func_80042F2C_43B2C);
-    setCallbackWithContinue(func_80042BA4_437A4);
+    setCleanupCallback(cleanupStarEffect);
+    setCallbackWithContinue(updateStarEffect);
 }
 
-void func_80042BA4_437A4(StarEffectState *arg0) {
+void updateStarEffect(StarEffectState *arg0) {
     Func43CA4GameState *gameState;
     s16 startDelay;
     void *spriteBuffer;
@@ -1125,14 +1125,14 @@ void func_80042E40_43A40(Func42E40Arg *arg0) {
     }
 }
 
-void func_80042F2C_43B2C(void **arg0) {
+void cleanupStarEffect(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
 void func_80042F58_43B58(void *arg0, void *arg1, s16 arg2) {
     StarEffectTask *task;
 
-    task = (StarEffectTask *)scheduleTask(func_80042B64_43764, 0, 0, 0xDC);
+    task = (StarEffectTask *)scheduleTask(initStarEffect, 0, 0, 0xDC);
     if (task != NULL) {
         task->unk24 = arg0;
         task->player = arg1;
@@ -1144,7 +1144,7 @@ void func_80042F58_43B58(void *arg0, void *arg1, s16 arg2) {
 StarEffectTask *func_80042FC0_43BC0(void *arg0) {
     StarEffectTask *task;
 
-    task = (StarEffectTask *)scheduleTask(func_80042B64_43764, 0, 0, 0xDC);
+    task = (StarEffectTask *)scheduleTask(initStarEffect, 0, 0, 0xDC);
     if (task != NULL) {
         task->unk24 = arg0;
         task->player = arg0;
