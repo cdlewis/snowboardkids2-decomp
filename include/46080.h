@@ -1,7 +1,7 @@
 #include "common.h"
 #include "gamestate.h"
 
-void func_80048860_49460(Player *);
+void schedulePlayerHaloTask(Player *);
 
 void func_80049CA8_4A8A8(s32 arg0, s32 arg1);
 

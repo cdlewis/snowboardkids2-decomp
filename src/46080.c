@@ -639,21 +639,21 @@ typedef struct {
 
 typedef struct {
     u8 padding[0xA4];
-    void *unkA4;
-} Struct_func_80048860_49460_task;
+    Player *player;
+} PlayerHaloTaskParams;
 
 typedef struct {
     s32 unk0;
     s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    s32 posX;
+    s32 posY;
+    s32 posZ;
     u8 _pad14[0xC];
-} Element_80048720;
+} PlayerHaloElement;
 
 typedef struct {
-    void *unk0;
-} Struct_func_80048834_49434;
+    void *assetData;
+} PlayerHaloTask;
 
 typedef struct {
     u8 padding[0x64];
@@ -675,13 +675,13 @@ typedef struct {
 } AllocationStruct;
 
 typedef struct {
-    void *unk0;
+    void *assetData;
     AssetMetadata_46080 elements[5];
-    Player *unkA4;
-    s16 unkA8;
-    u16 unkAA;
-    s16 unkAC;
-} func_80048350_48F50_arg;
+    Player *player;
+    s16 frameTimer;
+    u16 animationIndex;
+    s16 animationAngle;
+} PlayerHaloState;
 
 typedef struct {
     void *unk0;
@@ -840,11 +840,11 @@ void updatePlayerAuraRising(PlayerAuraState *);
 void updatePlayerAuraDescending(PlayerAuraState *);
 void cleanupPlayerAuraTask(PlayerAuraCleanupState *);
 void renderGoldCoins(GoldCoinRenderState *state);
-void func_80048834_49434(Struct_func_80048834_49434 *arg0);
-void func_80048350_48F50(func_80048350_48F50_arg *arg0);
-void func_8004841C_4901C(func_80048350_48F50_arg *arg0);
-void func_80048720_49320(func_80048350_48F50_arg *arg0);
-void func_80048540_49140(func_80048350_48F50_arg *arg0);
+void cleanupPlayerHaloTask(PlayerHaloTask *arg0);
+void loadPlayerHaloData(PlayerHaloState *arg0);
+void updatePlayerHaloRising(PlayerHaloState *arg0);
+void updatePlayerHaloDescending(PlayerHaloState *arg0);
+void updatePlayerHaloAnimating(PlayerHaloState *arg0);
 void func_80049794_4A394(void *payload, s32 arg1);
 void func_80048F0C_49B0C(func_80048E34_49A34_arg *arg0, s32 arg1);
 void func_80049104_49D04(func_80048E34_49A34_arg *arg0);
@@ -2004,204 +2004,204 @@ void schedulePlayerAuraTask(void *player) {
     }
 }
 
-void func_80048310_48F10(Struct_func_80048834_49434 *arg0) {
-    arg0->unk0 = loadAsset_34CB50();
-    setCleanupCallback(&func_80048834_49434);
-    setCallbackWithContinue(&func_80048350_48F50);
+void initPlayerHaloTask(PlayerHaloTask *task) {
+    task->assetData = loadAsset_34CB50();
+    setCleanupCallback(&cleanupPlayerHaloTask);
+    setCallbackWithContinue(&loadPlayerHaloData);
 }
 
-void func_80048350_48F50(func_80048350_48F50_arg *arg0) {
+void loadPlayerHaloData(PlayerHaloState *state) {
     AllocationType_46080 *allocation;
     s32 i;
     s32 offset;
 
     allocation = (AllocationType_46080 *)getCurrentAllocation();
 
-    loadAssetMetadata(&arg0->elements[0].asset, arg0->unk0, 2);
-    loadAssetMetadata(&arg0->elements[1].asset, arg0->unk0, 3);
+    loadAssetMetadata(&state->elements[0].asset, state->assetData, 2);
+    loadAssetMetadata(&state->elements[1].asset, state->assetData, 3);
 
     for (i = 2; i < 5; i++) {
-        loadAssetMetadata(&arg0->elements[i].asset, arg0->unk0, 6);
+        loadAssetMetadata(&state->elements[i].asset, state->assetData, 6);
     }
 
-    arg0->unkAA = 0;
+    state->animationIndex = 0;
 
     i = 0;
     offset = 0x180;
     for (; i < 5; i++) {
-        arg0->elements[i].asset.unk0 = (loadAssetMetadata_arg *)(allocation->unk44 + offset);
+        state->elements[i].asset.unk0 = (loadAssetMetadata_arg *)(allocation->unk44 + offset);
         offset += 0x40;
     }
 
-    arg0->unkAC = 0;
-    setCallbackWithContinue(&func_8004841C_4901C);
+    state->animationAngle = 0;
+    setCallbackWithContinue(&updatePlayerHaloRising);
 }
 
-void func_8004841C_4901C(func_80048350_48F50_arg *arg0) {
+void updatePlayerHaloRising(PlayerHaloState *state) {
     Allocation_47D1C *allocation;
     s32 heightOffset;
     s32 sinVal;
     s32 j;
     s32 i;
-    Element_80048720 *elem;
+    PlayerHaloElement *elem;
 
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        arg0->unkAC += 0x40;
-        if (arg0->unkAC == 0x800) {
-            arg0->unkA8 = 0;
-            setCallback(&func_80048540_49140);
+        state->animationAngle += 0x40;
+        if (state->animationAngle == 0x800) {
+            state->frameTimer = 0;
+            setCallback(&updatePlayerHaloAnimating);
         }
     }
 
-    sinVal = approximateSin(arg0->unkAC);
+    sinVal = approximateSin(state->animationAngle);
     heightOffset = ((0x2000 - sinVal) << 10) + 0x200000;
     j = 0;
-    elem = (Element_80048720 *)arg0;
+    elem = (PlayerHaloElement *)state;
 
 loop:
-    elem->unk8 = arg0->unkA4->worldPos.x;
-    elem->unkC = arg0->unkA4->worldPos.y + heightOffset;
-    elem->unk10 = arg0->unkA4->worldPos.z;
+    elem->posX = state->player->worldPos.x;
+    elem->posY = state->player->worldPos.y + heightOffset;
+    elem->posZ = state->player->worldPos.z;
     j += 1;
     elem += 1;
     if (j < 5)
         goto loop;
 
     for (i = 0; i < 2; i++) {
-        func_80066444_67044(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+        func_80066444_67044(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
     }
 
     for (i = 2; i < 5; i++) {
-        func_800670A4_67CA4(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+        func_800670A4_67CA4(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
     }
 }
 
-void func_80048540_49140(func_80048350_48F50_arg *arg0) {
+void updatePlayerHaloAnimating(PlayerHaloState *state) {
     Allocation_47D1C *allocation;
     s32 i;
     s32 offset;
-    Element_80048720 *elem;
+    PlayerHaloElement *elem;
     s32 j;
-    s16 unkA8;
+    s16 frameTimer;
     u16 index;
     s32 tableIdx;
     s32 heightOffset;
 
-    unkA8 = arg0->unkA8;
-    if (unkA8 == 0) {
-        index = arg0->unkAA + 1;
-        arg0->unkAA = index;
-        arg0->unkA8 = D_80090C94_91894[(s16)index * 2];
+    frameTimer = state->frameTimer;
+    if (frameTimer == 0) {
+        index = state->animationIndex + 1;
+        state->animationIndex = index;
+        state->frameTimer = D_80090C94_91894[(s16)index * 2];
 
         i = 2;
         offset = 0x44;
     loop1:
         loadAssetMetadata(
-            (loadAssetMetadata_arg *)((u8 *)arg0 + offset),
-            arg0->unk0,
-            D_80090C95_91895[(s16)arg0->unkAA * 2]
+            (loadAssetMetadata_arg *)((u8 *)state + offset),
+            state->assetData,
+            D_80090C95_91895[(s16)state->animationIndex * 2]
         );
         offset += 0x20;
         i += 1;
         if (i < 5)
             goto loop1;
 
-        if (arg0->unkA8 == -1) {
+        if (state->frameTimer == -1) {
             allocation = (Allocation_47D1C *)getCurrentAllocation();
             allocation->unk79 = allocation->unk79 - 1;
-            setCallback(func_80048720_49320);
+            setCallback(updatePlayerHaloDescending);
         }
 
-        if (arg0->unkA4->unkBB8 != 0) {
+        if (state->player->unkBB8 != 0) {
             goto position_loop;
         }
-        tableIdx = (s16)arg0->unkAA * 2;
+        tableIdx = (s16)state->animationIndex * 2;
         if (D_80090C95_91895[tableIdx] == 7) {
             func_80058530_59130(0x116, 6);
         }
-        tableIdx = (s16)arg0->unkAA * 2;
+        tableIdx = (s16)state->animationIndex * 2;
         if (D_80090C95_91895[tableIdx] == 0xB) {
             func_80058530_59130(0x117, 6);
         }
         i = 0;
         goto position_loop;
     }
-    arg0->unkA8 = unkA8 - 1;
+    state->frameTimer = frameTimer - 1;
 
 position_loop:
     i = 0;
     heightOffset = 0x200000;
-    elem = (Element_80048720 *)arg0;
+    elem = (PlayerHaloElement *)state;
 loop2:
-    elem->unk8 = arg0->unkA4->worldPos.x;
-    elem->unkC = arg0->unkA4->worldPos.y + heightOffset;
-    elem->unk10 = arg0->unkA4->worldPos.z;
+    elem->posX = state->player->worldPos.x;
+    elem->posY = state->player->worldPos.y + heightOffset;
+    elem->posZ = state->player->worldPos.z;
     i += 1;
     elem += 1;
     if (i < 5)
         goto loop2;
 
     for (i = 0; i < 2; i++) {
-        func_80066444_67044(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+        func_80066444_67044(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
     }
 
     for (i = 2; i < 5; i++) {
-        func_800670A4_67CA4(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+        func_800670A4_67CA4(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
     }
 }
 
-void func_80048720_49320(func_80048350_48F50_arg *arg0) {
+void updatePlayerHaloDescending(PlayerHaloState *state) {
     Allocation_47D1C *allocation;
     s32 heightOffset;
     s32 sinVal;
     s32 j;
     s32 i;
-    Element_80048720 *elem;
+    PlayerHaloElement *elem;
 
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        arg0->unkAC -= 0x40;
-        if (arg0->unkAC == 0) {
+        state->animationAngle -= 0x40;
+        if (state->animationAngle == 0) {
             func_80069CF8_6A8F8();
         }
     }
 
-    sinVal = approximateSin(arg0->unkAC);
+    sinVal = approximateSin(state->animationAngle);
     heightOffset = ((0x2000 - sinVal) << 10) + 0x200000;
     j = 0;
-    elem = (Element_80048720 *)arg0;
+    elem = (PlayerHaloElement *)state;
 
 loop:
-    elem->unk8 = arg0->unkA4->worldPos.x;
-    elem->unkC = arg0->unkA4->worldPos.y + heightOffset;
-    elem->unk10 = arg0->unkA4->worldPos.z;
+    elem->posX = state->player->worldPos.x;
+    elem->posY = state->player->worldPos.y + heightOffset;
+    elem->posZ = state->player->worldPos.z;
     j += 1;
     elem += 1;
     if (j < 5)
         goto loop;
 
     for (i = 0; i < 2; i++) {
-        func_80066444_67044(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+        func_80066444_67044(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
     }
 
     for (i = 2; i < 5; i++) {
-        func_800670A4_67CA4(arg0->unkA4->unkBB8, (func_80066444_67044_arg1 *)&arg0->elements[i]);
+        func_800670A4_67CA4(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
     }
 }
 
-void func_80048834_49434(Struct_func_80048834_49434 *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+void cleanupPlayerHaloTask(PlayerHaloTask *task) {
+    task->assetData = freeNodeMemory(task->assetData);
 }
 
-void func_80048860_49460(Player *arg0) {
-    Struct_func_80048860_49460_task *task;
+void schedulePlayerHaloTask(Player *player) {
+    PlayerHaloTaskParams *task;
 
-    task = (Struct_func_80048860_49460_task *)scheduleTask(&func_80048310_48F10, 0, 0, 0xD4);
+    task = (PlayerHaloTaskParams *)scheduleTask(&initPlayerHaloTask, 0, 0, 0xD4);
     if (task != NULL) {
-        task->unkA4 = arg0;
+        task->player = player;
     }
 }
 

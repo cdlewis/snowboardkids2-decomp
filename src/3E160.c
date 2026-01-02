@@ -899,7 +899,7 @@ void waitForFadeAndInitPlayers(void) {
 
             if (state->unk7A < 0xA) {
                 for (i = 0; i < state->unk5F; i++) {
-                    func_80048860_49460(&state->players[i]);
+                    schedulePlayerHaloTask(&state->players[i]);
                     state->unk79++;
                 }
             }
