@@ -48,14 +48,14 @@ extern s32 gControllerInputs[4];
 extern u8 D_800A24A0_A30A0;
 extern void awaitBattleContinuePress(void);
 extern void awaitExpertRaceContinuePress(void);
-extern void func_80040608_41208(void);
+extern void cleanupGameSession(void);
 extern s8 gControllerPollingEnabled;
 extern s32 D_80090460_91060[];
 extern s32 D_800904A0_910A0[];
 extern s32 D_800904E0_910E0[];
 
 void func_80040420_41020(void);
-void func_800407B4_413B4(void);
+void onGameSessionTerminated(void);
 void parseRaceAssetData(void);
 void scheduleRaceTasks(void);
 void awaitRaceAssetsLoaded(void);
@@ -994,7 +994,7 @@ void awaitBossResultAndFadeOut(void) {
     if (delayTimer == 0) {
         func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        setGameStateHandler(&func_80040608_41208);
+        setGameStateHandler(&cleanupGameSession);
     }
 }
 
@@ -1053,7 +1053,7 @@ void awaitSkillWinContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        setGameStateHandler(&func_80040608_41208);
+        setGameStateHandler(&cleanupGameSession);
     }
 }
 
@@ -1065,7 +1065,7 @@ void awaitSkillLossAndFadeOut(void) {
     if (delayTimer == 0) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        setGameStateHandler(func_80040608_41208);
+        setGameStateHandler(cleanupGameSession);
     }
 }
 
@@ -1139,7 +1139,7 @@ void awaitShotCrossWinContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        setGameStateHandler(&func_80040608_41208);
+        setGameStateHandler(&cleanupGameSession);
     }
 }
 
@@ -1151,7 +1151,7 @@ void awaitShotCrossLossAndFadeOut(void) {
     if (delayTimer == 0) {
         func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        setGameStateHandler(&func_80040608_41208);
+        setGameStateHandler(&cleanupGameSession);
     }
 }
 
@@ -1222,7 +1222,7 @@ void awaitMeterWinContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        setGameStateHandler(func_80040608_41208);
+        setGameStateHandler(cleanupGameSession);
     }
 }
 
@@ -1233,7 +1233,7 @@ void awaitMeterLossAndFadeOut(void) {
     if (delayTimer == 0) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        setGameStateHandler(func_80040608_41208);
+        setGameStateHandler(cleanupGameSession);
     }
 }
 
@@ -1314,7 +1314,7 @@ void awaitSpeedCrossContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
-        setGameStateHandler(&func_80040608_41208);
+        setGameStateHandler(&cleanupGameSession);
     }
 }
 
@@ -1340,7 +1340,7 @@ void awaitBattleContinuePress(void) {
         if (gControllerInputs[i] & A_BUTTON) {
             func_8006FDA0_709A0(0, 0xFF, 0x10);
             func_80057564_58164(0x3C);
-            setGameStateHandler(&func_80040608_41208);
+            setGameStateHandler(&cleanupGameSession);
             return;
         }
     }
@@ -1369,13 +1369,13 @@ void awaitExpertRaceContinuePress(void) {
         if (gControllerInputs[i] & A_BUTTON) {
             func_8006FDA0_709A0(0, 0xFF, 0x10);
             func_80057564_58164(0x3C);
-            setGameStateHandler(&func_80040608_41208);
+            setGameStateHandler(&cleanupGameSession);
             return;
         }
     }
 }
 
-void func_80040608_41208(void) {
+void cleanupGameSession(void) {
     GameState *gameState;
     s32 i;
     s32 playerOffset;
@@ -1421,11 +1421,11 @@ void func_80040608_41208(void) {
 
     osViExtendVStart(0);
     func_80057B1C_5871C(0x14);
-    terminateSchedulerWithCallback(&func_800407B4_413B4);
+    terminateSchedulerWithCallback(&onGameSessionTerminated);
     gControllerPollingEnabled = 1;
     resumeMotorStates();
 }
 
-void func_800407B4_413B4(void) {
+void onGameSessionTerminated(void) {
     func_800697F4_6A3F4(D_800A24A0_A30A0);
 }
