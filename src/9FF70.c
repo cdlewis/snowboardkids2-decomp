@@ -452,21 +452,21 @@ s32 initPostTrickLandingStep(Player *player) {
     if (player->unkB84 & 0x20000) {
         setPlayerBehaviorPhase(player, 6);
         func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
-        func_80056B7C_5777C(&player->worldPos, 0x25);
+        queueSoundAtPosition(&player->worldPos, 0x25);
         return 1;
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
         func_800B65F8_A64A8((func_800B00D4_arg *)player);
         func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
-        func_80056B7C_5777C(&player->worldPos, 0x25);
+        queueSoundAtPosition(&player->worldPos, 0x25);
         return 1;
     }
 
     if (player->unkB84 & 1) {
         setPlayerBehaviorPhase(player, 1);
         func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
-        func_80056B7C_5777C(&player->worldPos, 0x25);
+        queueSoundAtPosition(&player->worldPos, 0x25);
         return 1;
     }
 
@@ -480,13 +480,13 @@ s32 initPostTrickLandingStep(Player *player) {
         player->unkBBF = ++behaviorStep;
         func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
         if ((player->unkBCC & 0xF) == 7) {
-            func_80056B7C_5777C(&player->worldPos, 0x29);
+            queueSoundAtPosition(&player->worldPos, 0x29);
         }
         if ((player->unkBCC & 0xF) == 3) {
             func_80051BB8_527B8(player);
-            func_80056B7C_5777C(&player->worldPos, 0xF);
+            queueSoundAtPosition(&player->worldPos, 0xF);
         } else {
-            func_80056B7C_5777C(&player->worldPos, 0x25);
+            queueSoundAtPosition(&player->worldPos, 0x25);
         }
     }
 
@@ -921,7 +921,7 @@ void beginSpinTrick(Player *player) {
     player->unkBC0++;
     player->unkB84 |= 0x4000;
     func_8005D810_5E410(player);
-    func_80056B7C_5777C(&player->worldPos, 0xB);
+    queueSoundAtPosition(&player->worldPos, 0xB);
 }
 
 void updateSpinTrickState(Player *player, s8 trickType) {
@@ -1837,7 +1837,7 @@ s32 func_800B470C_A45BC(Player *arg0) {
         stackVec.x += arg0->worldPos.x;
         stackVec.z += arg0->worldPos.z;
         stackVec.y = arg0->worldPos.y + 0x100000;
-        func_80056B7C_5777C(&arg0->worldPos, 0xD);
+        queueSoundAtPosition(&arg0->worldPos, 0xD);
         func_80050ECC_51ACC(&stackVec);
     }
 
@@ -1890,7 +1890,7 @@ s32 func_800B48AC_A475C(Player *arg0) {
         stackVec.x += arg0->worldPos.x;
         stackVec.z += arg0->worldPos.z;
         stackVec.y = arg0->worldPos.y + 0x100000;
-        func_80056B7C_5777C(&arg0->worldPos, 0xD);
+        queueSoundAtPosition(&arg0->worldPos, 0xD);
         func_80050ECC_51ACC(&stackVec);
     }
 
@@ -1964,7 +1964,7 @@ s32 func_800B4B08_A49B8(Player *arg0) {
         if (arg0->unkBC0 == 0) {
             arg0->unkBC0++;
             func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-            func_80056B7C_5777C(&arg0->worldPos, 0x25);
+            queueSoundAtPosition(&arg0->worldPos, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
         applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
@@ -2175,7 +2175,7 @@ s32 func_800B50C0_A4F70(Player *arg0) {
         stackVec.z += arg0->worldPos.z;
         stackVec.y = arg0->worldPos.y + 0x140000;
 
-        func_80056B7C_5777C(&arg0->worldPos, 0xD);
+        queueSoundAtPosition(&arg0->worldPos, 0xD);
         func_80050ECC_51ACC(&stackVec);
     }
 
@@ -2225,7 +2225,7 @@ s32 func_800B5234_A50E4(Player *arg0) {
         if (arg0->unkBC0 == 0) {
             arg0->unkBC0++;
             func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-            func_80056B7C_5777C(&arg0->worldPos, 0x25);
+            queueSoundAtPosition(&arg0->worldPos, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
         applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
@@ -2252,7 +2252,7 @@ s32 func_800B5234_A50E4(Player *arg0) {
 s32 func_800B5394_A5244(Player *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unkBBF = arg0->unkBBF + 1;
-        func_80056B7C_5777C(&arg0->worldPos, 0xD);
+        queueSoundAtPosition(&arg0->worldPos, 0xD);
     }
 
     arg0->unkB88 = 8;
@@ -2284,7 +2284,7 @@ s32 func_800B5478_A5328(Player *arg0) {
         arg0->unkB8C = 0x14;
         arg0->unkBBF = arg0->unkBBF + 1;
         if ((arg0->unkB84 & 1) == 0) {
-            func_80056B7C_5777C(&arg0->worldPos, 0x25);
+            queueSoundAtPosition(&arg0->worldPos, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
     }
@@ -2751,7 +2751,7 @@ s32 func_800B6488_A6338(Player *arg0) {
         arg0->unk44C.y = 0;
         arg0->unkA8C = 0xFFFF;
         func_8005D308_5DF08(arg0, 0xB);
-        func_80056B7C_5777C(&arg0->worldPos, 0x34);
+        queueSoundAtPosition(&arg0->worldPos, 0x34);
         if (!(arg0->unkB84 & 1)) {
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
@@ -3063,7 +3063,7 @@ s32 func_800B7108_A6FB8(Player *arg0) {
         tempB84 = tempB84 | 0x2000;
         arg0->unkB84 = tempB84;
         arg0->unkBBF = tempBBF;
-        func_80056B7C_5777C(&arg0->worldPos, 0x25);
+        queueSoundAtPosition(&arg0->worldPos, 0x25);
     }
     return 0;
 }
@@ -3189,7 +3189,7 @@ s32 func_800B74E4_A7394(Player *arg0) {
         arg0->unkB8C = 0;
         arg0->unkBBF = arg0->unkBBF + 1;
         func_800BBB90(0);
-        func_80056B7C_5777C(&arg0->worldPos, 0x26);
+        queueSoundAtPosition(&arg0->worldPos, 0x26);
     }
 
     return 0;
@@ -3243,7 +3243,7 @@ s32 func_800B75F4_A74A4(Player *arg0) {
         arg0->unkBBF = temp2;
         arg0->unkB84 = temp3;
         alloc->unk63 = alloc->unk63 & 2;
-        func_80056B7C_5777C(&arg0->worldPos, 0x4E);
+        queueSoundAtPosition(&arg0->worldPos, 0x4E);
     }
 
     return 0;
@@ -3345,7 +3345,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
             }
         }
 
-        func_80056B7C_5777C(&arg0->worldPos, 0x26);
+        queueSoundAtPosition(&arg0->worldPos, 0x26);
     }
 
     decayPlayerSteeringAngles(arg0);

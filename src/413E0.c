@@ -238,7 +238,7 @@ void updateStartGate(StartGate *gate) {
                 goto block_else;
             }
             gate->animationState++;
-            func_80056B7C_5777C(&gate->rotationMatrix.translation, 0xA);
+            queueSoundAtPosition(&gate->rotationMatrix.translation, 0xA);
             /* fallthrough */
         case 1:
             if (gameState->gamePaused == 0) {

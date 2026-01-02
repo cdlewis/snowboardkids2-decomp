@@ -115,7 +115,7 @@ void func_800B4BDC_1E1C8C(s16 arg0, s16 arg1, s16 arg2, CutsceneSlotData *arg3) 
     duration = arg2;
     if (duration <= 0) {
         soundId = func_800B4AFC_1E1BAC(arg0);
-        func_80056B7C_5777C(&position, soundId);
+        queueSoundAtPosition(&position, soundId);
         return;
     }
 

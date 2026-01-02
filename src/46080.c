@@ -1671,7 +1671,7 @@ void updateGoldCoinsTask(GoldCoinUpdateState *arg0) {
         } else {
             player = (Player *)func_8005B24C_5BE4C(&arg0->entries[i].position, -1, 0x100000);
             if (player != NULL) {
-                func_80056B7C_5777C(&arg0->entries[i].position, 7);
+                queueSoundAtPosition(&arg0->entries[i].position, 7);
                 arg0->entries[i].visible = 0;
                 arg0->entries[i].respawnTimer = 0x1E;
                 func_80059A48_5A648(player, 0x64);
@@ -2332,9 +2332,9 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                             player->unkBD3 = 3;
                             player->unkBD8 |= 1;
                         }
-                        func_80056B7C_5777C(&itemBox->displayList.transform.translation, 8);
+                        queueSoundAtPosition(&itemBox->displayList.transform.translation, 8);
                     } else {
-                        func_80056B7C_5777C(&itemBox->displayList.transform.translation, 9);
+                        queueSoundAtPosition(&itemBox->displayList.transform.translation, 9);
                     }
                 } else if (gameState->unk79 == 0) {
                     randB();
@@ -3115,7 +3115,7 @@ void func_8004A850_4B450(func_8004A850_4B450_arg *arg0) {
     s0 = func_8005B24C_5BE4C(s2, -1, 0x100000);
 
     if (s0 != NULL) {
-        func_80056B7C_5777C(s2, 7);
+        queueSoundAtPosition(s2, 7);
         func_80059A48_5A648(s0, 100);
         func_80069CF8_6A8F8();
     }
@@ -3182,7 +3182,7 @@ void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0) {
     memcpy(&arg0->unk24, &arg0->unk30->unk44C, sizeof(Vec3i));
     arg0->unk3A = 1;
     arg0->unk28 = arg0->unk28 + 0x28000;
-    func_80056B7C_5777C(temp_s1, 0x17);
+    queueSoundAtPosition(temp_s1, 0x17);
     setCallbackWithContinue(func_8004AB50_4B750);
 }
 
@@ -3232,7 +3232,7 @@ void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0) {
         temp_v0_3 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
         if (temp_v0_3 != NULL) {
             func_80050ECC_51ACC(s2);
-            func_80056B7C_5777C(s2, 0xD);
+            queueSoundAtPosition(s2, 0xD);
             func_80058924_59524(temp_v0_3);
             func_80069CF8_6A8F8();
             return;
@@ -3282,7 +3282,7 @@ void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0) {
         memcpy(s0, s2, 0xC);
         sp10.y = sp10.y + 0xA0000;
         func_80050ECC_51ACC(s0);
-        func_80056B7C_5777C(s0, 0xD);
+        queueSoundAtPosition(s0, 0xD);
         func_80058924_59524(s3);
         func_80069CF8_6A8F8();
     } else {
@@ -3345,7 +3345,7 @@ void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *arg0) {
     arg0->unk28 += rotatedVector.y;
     arg0->unk2C += rotatedVector.z;
 
-    func_80056B7C_5777C((Vec3i *)((s32)arg0 + 8), 0x17);
+    queueSoundAtPosition((Vec3i *)((s32)arg0 + 8), 0x17);
     setCallbackWithContinue(&func_8004AFF8_4BBF8);
 }
 
@@ -3429,7 +3429,7 @@ void func_8004B130_4BD30(func_8004B130_arg *arg0) {
             player->unkBD4 = (u8)arg0->unk36;
             player->unkBD8 |= 2;
         }
-        func_80056B7C_5777C((void *)&arg0->unk4 + 4, 8);
+        queueSoundAtPosition((void *)&arg0->unk4 + 4, 8);
         func_80069CF8_6A8F8();
     }
 
@@ -3519,7 +3519,7 @@ void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0) {
     arg0->velocity.y = arg0->velocity.y + arg0->unk24->unk450;
     arg0->velocity.z = arg0->velocity.z + arg0->unk24->unk454;
 
-    func_80056B7C_5777C(position, 0x1F);
+    queueSoundAtPosition(position, 0x1F);
 
     setCallbackWithContinue(&func_8004B4CC_4C0CC);
 }
@@ -3558,7 +3558,7 @@ void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0) {
 
     if (temp_s0 != NULL) {
         func_80050ECC_51ACC(s2);
-        func_80056B7C_5777C(s2, 0xD);
+        queueSoundAtPosition(s2, 0xD);
         func_80058924_59524(temp_s0);
         func_80069CF8_6A8F8();
         return;
@@ -3602,7 +3602,7 @@ void func_8004B648_4C248(func_8004B648_4C248_arg *arg0) {
         memcpy(s0, s2, sizeof(Vec3i));
         sp10.y = sp10.y + 0xA0000;
         func_80050ECC_51ACC(s0);
-        func_80056B7C_5777C(s0, 0xD);
+        queueSoundAtPosition(s0, 0xD);
         func_80058924_59524(s3);
         func_80069CF8_6A8F8();
     } else {
@@ -3718,7 +3718,7 @@ void func_8004B990_4C590(func_8004B990_4C590_arg *arg0) {
 
         if (temp_s0 != NULL) {
             func_80050ECC_51ACC(s2);
-            func_80056B7C_5777C(s2, 0xD);
+            queueSoundAtPosition(s2, 0xD);
             func_80058924_59524(temp_s0);
             func_80069CF8_6A8F8();
             return;
@@ -3761,7 +3761,7 @@ void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
         memcpy(s0, s2, 0xC);
         sp10.y = sp10.y + 0xA0000;
         func_80050ECC_51ACC(s0);
-        func_80056B7C_5777C(s0, 0xD);
+        queueSoundAtPosition(s0, 0xD);
         func_80058924_59524(s3);
         func_80069CF8_6A8F8();
     } else {
@@ -3823,7 +3823,7 @@ void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0) {
     arg0->velocity.x = arg0->velocity.x + arg0->unk24->unk44C;
     arg0->velocity.y = arg0->velocity.y + (arg0->unk24->unk450 + ((randA() & 0xFF) * 0x600));
     arg0->velocity.z = arg0->velocity.z + arg0->unk24->unk454;
-    func_80056B7C_5777C(temp_s2, 0x17);
+    queueSoundAtPosition(temp_s2, 0x17);
     setCallbackWithContinue(&func_8004BE40_4CA40);
 }
 
@@ -3861,7 +3861,7 @@ void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0) {
 
     if (temp_s0 != NULL) {
         func_80050ECC_51ACC(s2);
-        func_80056B7C_5777C(s2, 0xD);
+        queueSoundAtPosition(s2, 0xD);
         func_80058924_59524(temp_s0);
         func_80069CF8_6A8F8();
         return;
@@ -3905,7 +3905,7 @@ void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0) {
         memcpy(s0, s2, sizeof(Vec3i));
         sp10.y = sp10.y + 0xA0000;
         func_80050ECC_51ACC(s0);
-        func_80056B7C_5777C(s0, 0xD);
+        queueSoundAtPosition(s0, 0xD);
         func_80058924_59524(s3);
         func_80069CF8_6A8F8();
     } else {

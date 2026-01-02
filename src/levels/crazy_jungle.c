@@ -165,7 +165,7 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
                 if (isPlayerInRangeAndPull(&arg0->node2.transform.translation, 0x12A000, &gs->players[i]) != 0) {
                     if (isPlayerInRangeAndPull(&arg0->node2.transform.translation, 0x1E3000, &gs->players[i]) != 0) {
                         func_800589A0_595A0(&gs->players[i]);
-                        func_80056B7C_5777C(&arg0->node2.transform.translation, 0x2A);
+                        queueSoundAtPosition(&arg0->node2.transform.translation, 0x2A);
                         setCallback(func_800BB658_B7898);
                     }
                 }
@@ -284,7 +284,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
                         i = i + randVal;
                         i = i + 0x6C0;
                         func_800547E0_553E0(i, (((u8)randA()) << 12) | 0x100000);
-                        func_80056B7C_5777C(&arg0->node.transform.translation, 0x23);
+                        queueSoundAtPosition(&arg0->node.transform.translation, 0x23);
                         arg0->unk3C = 0x18;
                         arg0->unk3E++;
                         break;

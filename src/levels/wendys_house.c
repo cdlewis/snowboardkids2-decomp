@@ -102,7 +102,7 @@ void func_800BB350_B5560(func_800BB2B0_arg *arg0) {
 
     if (gameState->gamePaused == 0) {
         if ((arg0->unk3C & 0xFFF) == 0) {
-            func_80056B7C_5777C(&temp, 0x27);
+            queueSoundAtPosition(&temp, 0x27);
         }
     }
 
@@ -168,7 +168,7 @@ void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0) {
             if (arg0->unk3C.y < (s32)0xFFE80000) {
                 arg0->unk3C.y = 0xC0000;
                 arg0->unk4E += 1;
-                func_80056B7C_5777C(&arg0->unk14, 0x28);
+                queueSoundAtPosition(&arg0->unk14, 0x28);
             }
             arg0->unk4A += 0x100;
             for (i = 0; i < gameState->numPlayers; i++) {

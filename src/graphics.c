@@ -230,12 +230,12 @@ void setBufferData(void *source, u8 arg1, s32 arg2) {
     }
 }
 
-void func_80056B7C_5777C(Vec3i *position, s16 arg1) {
+void queueSoundAtPosition(Vec3i *position, s16 soundId) {
     s32 index = gGraphicsManager->renderQueueCount;
     if (index < 0x20) {
         RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
         memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
-        index = arg1;
+        index = soundId;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = index;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = -1;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = 4;

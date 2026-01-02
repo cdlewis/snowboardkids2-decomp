@@ -341,7 +341,7 @@ void updateFallingEffect(FallingEffectState *arg0) {
 
     if (arg0->playSound != 0) {
         arg0->playSound = 0;
-        func_80056B7C_5777C(&arg0->position, 0xE);
+        queueSoundAtPosition(&arg0->position, 0xE);
     }
 
     for (i = 0; i < 4; i++) {
@@ -400,7 +400,7 @@ void initShieldEffect(ShieldEffectState *arg0) {
     arg0->displayAsset2 = loadAsset_216290();
     arg0->unk2C = 0;
     arg0->scale.full = 0x400;
-    func_80056B7C_5777C(&arg0->player->worldPos, 0x13);
+    queueSoundAtPosition(&arg0->player->worldPos, 0x13);
     setCleanupCallback(cleanupShieldEffect);
     setCallbackWithContinue(updateShieldEffect);
 }
@@ -523,7 +523,7 @@ void spawnShieldBurstEffect(Vec3i *position) {
             ptr += 0x24;
         } while (i < 6);
         task[0xDC] = 0x2B;
-        func_80056B7C_5777C(position, 0x16);
+        queueSoundAtPosition(position, 0x16);
     }
 }
 
@@ -542,7 +542,7 @@ void spawnBurstEffect(Vec3i *position) {
             ptr += 0x24;
         } while (i < 6);
         task[0xDC] = 0x2F;
-        func_80056B7C_5777C(position, 0xE);
+        queueSoundAtPosition(position, 0xE);
     }
 }
 
@@ -580,7 +580,7 @@ void updateCrashEffect(CrashEffectState *arg0) {
 
     if (arg0->playSound != 0) {
         arg0->playSound = 0;
-        func_80056B7C_5777C(&arg0->position, 0x12);
+        queueSoundAtPosition(&arg0->position, 0x12);
     }
 
     for (i = 0; i < 4; i++) {
@@ -612,7 +612,7 @@ void initSparkleEffect(SparkleEffectState *arg0) {
     arg0->scale = 0;
     arg0->rotation = 0;
     arg0->opacity = 0xFF;
-    func_80056B7C_5777C(&arg0->position, 0x14);
+    queueSoundAtPosition(&arg0->position, 0x14);
     setCleanupCallback(cleanupSparkleEffect);
     setCallbackWithContinue(updateSparkleEffect);
 }
@@ -749,7 +749,7 @@ void updateLiftEffect(LiftEffectState *state) {
     state->position.y += 0xFFEC0000;
 
     if (state->playSound != 0) {
-        func_80056B7C_5777C(pos, 0x15);
+        queueSoundAtPosition(pos, 0x15);
         state->playSound = 0;
     }
 
@@ -896,7 +896,7 @@ void descendWarpEffect(WarpEffectState *state) {
 
         if (state->height == 0x220000) {
             func_80058B30_59730(state->player);
-            func_80056B7C_5777C(&state->position, 0x19);
+            queueSoundAtPosition(&state->position, 0x19);
         }
 
         if (state->height <= 0x10000) {
@@ -1043,7 +1043,7 @@ void expandStarEffect(ExpandStarEffectState *arg0) {
 
         if (arg0->playSoundFlag != 0) {
             arg0->playSoundFlag = 0;
-            func_80056B7C_5777C(&arg0->sprite.position, 0x1A);
+            queueSoundAtPosition(&arg0->sprite.position, 0x1A);
         }
 
         updateStarEffectAnimation((StarEffectState *)arg0);
@@ -1103,7 +1103,7 @@ void orbitStarEffect(OrbitStarEffectState *arg0) {
         transformVector((s16 *)&rotated, arg0->player->unk9F0, &arg0->sprite.position);
         if (arg0->playSoundFlag != 0) {
             arg0->playSoundFlag = 0;
-            func_80056B7C_5777C(&arg0->sprite.position, 0x1A);
+            queueSoundAtPosition(&arg0->sprite.position, 0x1A);
         }
         if (arg0->displayTimer != 0) {
             arg0->displayTimer--;
@@ -1517,7 +1517,7 @@ void animateGoldStealApproach(GoldStealEffectState *arg0) {
 
     if (arg0->unk4C != 0) {
         arg0->unk4C = 0;
-        func_80056B7C_5777C(&arg0->position, 0x12);
+        queueSoundAtPosition(&arg0->position, 0x12);
     }
 
     for (i = 0; i < 4; i++) {
@@ -1588,7 +1588,7 @@ transform_and_loop:
     transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->unk9F0, &arg0->position);
 
     if (arg0->swingAngle == 0x80) {
-        func_80056B7C_5777C(&arg0->position, 0x1C);
+        queueSoundAtPosition(&arg0->position, 0x1C);
     }
 
     for (i = 0; i < 4; i++) {
@@ -1605,7 +1605,7 @@ void animateGoldStealRetreat(GoldStealEffectState *arg0) {
         if (advanceAnimationFrame(arg0, &D_80090964_91564) != 0) {
             arg0->animFrameIndex = 0;
             arg0->frameTimer = 1;
-            func_80056B7C_5777C(&arg0->position, 0x12);
+            queueSoundAtPosition(&arg0->position, 0x12);
             setCallback(animateGoldStealFinish);
         }
     }
@@ -1674,7 +1674,7 @@ void updateGhostEffect(GhostEffectState *arg0) {
     func_8006B084_6BC84(&D_8009A8B0_9B4B0, (u8 *)arg0->player + 0x3F8, arg0);
 
     if (arg0->scale == 0x200) {
-        func_80056B7C_5777C(&arg0->position, 0x1D);
+        queueSoundAtPosition(&arg0->position, 0x1D);
     }
 
     if (arg0->scale != 0x2000) {
@@ -2209,7 +2209,7 @@ void func_80044EC4_45AC4(Func44D1CArg *arg0) {
                     }
                     player->unkBD8 = itemFlags;
                     ((ItemTriggerEntry *)(offset + (s32)arg0->items))->active = 0;
-                    func_80056B7C_5777C((Vec3i *)((s8 *)((s32)arg0->items + offset) + 4), 8);
+                    queueSoundAtPosition((Vec3i *)((s8 *)((s32)arg0->items + offset) + 4), 8);
                 }
             }
             i++;

@@ -389,7 +389,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
 
     arg0->unkB90++;
     if (arg0->unkB90 == 4 || arg0->unkB90 == 0xC) {
-        func_80056B7C_5777C(&arg0->unk434, 0x49);
+        queueSoundAtPosition(&arg0->unk434, 0x49);
     }
 
     if (arg0->unkB8C == 0) {
@@ -431,7 +431,7 @@ s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
         if (temp > 0) {
             arg0->unk44C.y = 0;
         }
-        func_80056B7C_5777C(&arg0->unk434, 0x21);
+        queueSoundAtPosition(&arg0->unk434, 0x21);
     }
 
     arg0->unkB8C--;
@@ -463,7 +463,7 @@ s32 func_800BBF3C_AC76C(Arg0Struct *arg0) {
         arg0->unkA8C = 0xFFFF;
         arg0->unk44C.y = 0x80000;
         arg0->unkBBF = arg0->unkBBF + 1;
-        func_80056B7C_5777C(&arg0->unk434, 0x21);
+        queueSoundAtPosition(&arg0->unk434, 0x21);
     }
 
     arg0->unkB88 = 0x200;

@@ -452,7 +452,7 @@ void func_800BBCFC_AE0BC(func_800BBC28_arg *arg0) {
             } while (var_s0 < (s32)allocation->numPlayers);
         }
         arg0->unk78 = 0x4000;
-        func_80056B7C_5777C(&arg0->mat1.translation, 0x4E);
+        queueSoundAtPosition(&arg0->mat1.translation, 0x4E);
     }
 
     temp_v0_2 = arg0->unk7A + 0x100;

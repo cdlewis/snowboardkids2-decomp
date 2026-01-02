@@ -186,7 +186,7 @@ s32 func_80058C64_59864(Player *arg0) {
 s32 func_80058CC4_598C4(Player *arg0) {
     if (arg0->unkBA4 == 0) {
         arg0->unkBA4 = 0x96;
-        func_80056B7C_5777C(&arg0->worldPos, 0x48);
+        queueSoundAtPosition(&arg0->worldPos, 0x48);
         return 1;
     }
     return 0;

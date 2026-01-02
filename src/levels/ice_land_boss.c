@@ -407,7 +407,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
 
         if (arg0->unkB90 == 4) {
             arg0->unkB90 = 0;
-            func_80056B7C_5777C(&arg0->worldPos, 0x4B);
+            queueSoundAtPosition(&arg0->worldPos, 0x4B);
         }
 
         if (arg0->unkB8C == 0) {
@@ -429,7 +429,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
         arg0->unkB90 = arg0->unkB90 + 1;
 
         if ((arg0->unkB90 == 4) || (arg0->unkB90 == 0xC)) {
-            func_80056B7C_5777C(&arg0->worldPos, 0x4A);
+            queueSoundAtPosition(&arg0->worldPos, 0x4A);
         }
 
         player = gameState->players;
@@ -552,11 +552,11 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
 
         if (!(arg0->unkB84 & 0x80000)) {
             if (arg0->unkBDB == 0) {
-                func_80056B7C_5777C(&arg0->worldPos, 0x4C);
+                queueSoundAtPosition(&arg0->worldPos, 0x4C);
             } else {
                 arg0->unkBDB -= 1;
                 if (arg0->unkBDB == 0) {
-                    func_80056B7C_5777C(&arg0->worldPos, 0x4C);
+                    queueSoundAtPosition(&arg0->worldPos, 0x4C);
                 }
             }
         }
