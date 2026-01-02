@@ -627,14 +627,14 @@ void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
 }
 
 typedef struct {
-    void *unk0;
+    void *goldIconAsset;
     u8 pad4[0x8];
-    void *unkC;
-} Struct_func_8004CD88;
+    void *digitSpriteAsset;
+} PlayerGoldDisplayCleanupArg;
 
-void func_8004CD88_4D988(Struct_func_8004CD88 *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
+void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0) {
+    arg0->goldIconAsset = freeNodeMemory(arg0->goldIconAsset);
+    arg0->digitSpriteAsset = freeNodeMemory(arg0->digitSpriteAsset);
 }
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CDC0_4D9C0);

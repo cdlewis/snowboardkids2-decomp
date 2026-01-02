@@ -23,6 +23,7 @@ updatePlayerLapCounterMultiplayer = 0x8004C9E8; // rom:0x4D5E8
 cleanupPlayerLapCounterTask = 0x8004CA58; // rom:0x4D658
 updatePlayerGoldDisplaySinglePlayer = 0x8004CBF0; // rom:0x4D7F0
 updatePlayerGoldDisplayMultiplayer = 0x8004CCC4; // rom:0x4D8C4
+cleanupPlayerGoldDisplayTask = 0x8004CD88; // rom:0x4D988
 sGoldFormatShort = 0x8009E870; // rom:0x9F470
 sGoldFormatLong = 0x8009E878; // rom:0x9F478
 cleanupConfettiEffect = 0x800413E0; // rom:0x41FE0
