@@ -728,37 +728,37 @@ void addSpinTrickScore(Player *player, s32 spinDirection) {
     }
 }
 
-s32 func_800B2A3C_A28EC(Player *arg0) {
+s32 updatePostTrickDescentStep(Player *player) {
     s32 pad[16];
 
-    if (arg0->unkB84 & 1) {
-        if (arg0->unkBC0 < 3) {
-            resetTrickScore(arg0);
-            if (arg0->unkBCD < 0) {
-                arg0->unkBC0 = 0;
-                arg0->unkBBF = arg0->unkBBF + 1;
+    if (player->unkB84 & 1) {
+        if (player->unkBC0 < 3) {
+            resetTrickScore(player);
+            if (player->unkBCD < 0) {
+                player->unkBC0 = 0;
+                player->unkBBF = player->unkBBF + 1;
                 return 1;
             } else {
-                arg0->unkBBF = arg0->unkBCD + 6;
-                arg0->unkBC0 = 0;
-                func_80059ADC_5A6DC(arg0);
+                player->unkBBF = player->unkBCD + 6;
+                player->unkBC0 = 0;
+                func_80059ADC_5A6DC(player);
                 return 1;
             }
         } else {
-            setPlayerBehaviorPhase(arg0, 1);
+            setPlayerBehaviorPhase(player, 1);
             return 1;
         }
     } else {
-        arg0->unk44C.y = arg0->unk44C.y - arg0->unkAB8;
-        func_800B40D4_A3F84(arg0);
-        func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
-        func_800B00FC_9FFAC(arg0);
-        arg0->unkBC0 = arg0->unkBC0 - 1;
-        if (arg0->unkBC0 == 0) {
-            setPlayerBehaviorPhase(arg0, 0);
+        player->unk44C.y = player->unk44C.y - player->unkAB8;
+        func_800B40D4_A3F84(player);
+        func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+        func_800B00FC_9FFAC(player);
+        player->unkBC0 = player->unkBC0 - 1;
+        if (player->unkBC0 == 0) {
+            setPlayerBehaviorPhase(player, 0);
         }
-        func_8005D308_5DF08(arg0, 3);
-        func_80058CFC_598FC(arg0);
+        func_8005D308_5DF08(player, 3);
+        func_80058CFC_598FC(player);
         return 0;
     }
 }
