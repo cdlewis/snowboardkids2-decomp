@@ -2747,3 +2747,5 @@ initItemBoxPositions = 0x80049104; // rom:0x49D04
 updateAllItemBoxes = 0x800491CC; // rom:0x49DCC
 enableCutsceneSkip = 0x800B29F0; // rom:0x1DFAA0
 disableCutsceneSkipOnInput = 0x800B29FC; // rom:0x1DFAAC
+enableSlotUpdate = 0x800B2A24; // rom:0x1DFAD4
+disableSlotUpdate = 0x800B2A50; // rom:0x1DFB00

@@ -66,12 +66,12 @@ void disableCutsceneSkipOnInput(CutsceneManager *arg0) {
     }
 }
 
-void func_800B2A24_1DFAD4(CutsceneManager *arg0, s16 arg1) {
-    arg0->slots[arg1].unk44 = 1;
+void enableSlotUpdate(CutsceneManager *arg0, s16 arg1) {
+    arg0->slots[arg1].needsUpdate = 1;
 }
 
-void func_800B2A50_1DFB00(CutsceneManager *arg0, s16 arg1) {
-    arg0->slots[arg1].unk44 = 0;
+void disableSlotUpdate(CutsceneManager *arg0, s16 arg1) {
+    arg0->slots[arg1].needsUpdate = 0;
 }
 
 CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1) {
@@ -229,7 +229,7 @@ void func_800B2F2C(CutsceneManager *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4
         temp_v1 = arg0->slots[var_s2].model;
         arg0->slots[var_s2].unk42 = 0xFF;
         arg0->slots[var_s2].unk43 = 0xFF;
-        arg0->slots[var_s2].unk44 = 0;
+        arg0->slots[var_s2].needsUpdate = 0;
         arg0->slots[var_s2].padding3[0] = 0;
         arg0->slots[var_s2].unk40 = temp_v0;
         if (temp_v1 != NULL) {

@@ -235,7 +235,7 @@ typedef struct {
     /* 0x40 */ u16 unk40;
     /* 0x42 */ u8 unk42;
     /* 0x43 */ u8 unk43;
-    /* 0x44 */ u8 unk44;
+    /* 0x44 */ u8 needsUpdate;
     /* 0x45 */ u8 padding3[0x3];
     /* 0x48 */ SceneModel *model;
     /* 0x4C */ CutsceneSlotData slotData;
@@ -280,8 +280,8 @@ typedef struct {
 
 void enableCutsceneSkip(CutsceneManager *arg0);
 void disableCutsceneSkipOnInput(CutsceneManager *arg0);
-void func_800B2A24_1DFAD4(CutsceneManager *arg0, s16 arg1);
-void func_800B2A50_1DFB00(CutsceneManager *arg0, s16 arg1);
+void enableSlotUpdate(CutsceneManager *arg0, s16 arg1);
+void disableSlotUpdate(CutsceneManager *arg0, s16 arg1);
 CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1);
 void func_800B2AA0(CutsceneManager *, Node_70B00 *arg1, void *arg2, void *arg3);
 void func_800B2C78(func_800B2C78_arg *arg0);

@@ -80,7 +80,7 @@ void cutsceneSysFlash_setup(func_800B2A24_1DFAD4_arg_item *arg0, CutsceneManager
     temp_v0->unk0.One.unkA = 0xFF;
     memcpy(&temp_v0->unk0.One.unk2[0], &arg0->unk0.One.unk2[0], 4);
     memcpy(&temp_v0->unk0.One.unk2[1], &arg0->unk0.One.unk2[1], 4);
-    func_800B2A24_1DFAD4(arg1, arg2);
+    enableSlotUpdate(arg1, arg2);
 }
 
 void cutsceneSysFlash_update(CutsceneManager *a0, s8 a1) {
@@ -114,7 +114,7 @@ void cutsceneSysFlash_update(CutsceneManager *a0, s8 a1) {
         s0->unk0.One.unk0--;
     } else {
         func_8006FDA0_709A0(a0->uiResource, 0, 0);
-        func_800B2A50_1DFB00(a0, a1);
+        disableSlotUpdate(a0, a1);
     }
 }
 
@@ -188,7 +188,7 @@ void cutsceneSysCurtain_exec(CurtainParams *params, CutsceneManager *cutsceneMan
         item->unk0.CurtainPayload.unk8 = params->unk4;
 
         if (item->unk0.CurtainPayload.unk4 != 0) {
-            func_800B2A24_1DFAD4(cutsceneManager, idx);
+            enableSlotUpdate(cutsceneManager, idx);
         } else {
             cutsceneManager->cameraAnimationTimer = item->unk0.CurtainPayload.unk0;
         }
@@ -209,12 +209,12 @@ void cutsceneSysCurtain_update(CutsceneManager *arg0, s8 arg1) {
     if (temp_a0->unk0.Two.unk4 > 0) {
         if (temp_a0->unk0.Two.unk0 < temp_v1) {
             arg0->cameraAnimationTimer = temp_a0->unk0.Two.unk0;
-            func_800B2A50_1DFB00(arg0, arg1);
+            disableSlotUpdate(arg0, arg1);
         }
     } else {
         if (temp_v1 < temp_a0->unk0.Two.unk0) {
             arg0->cameraAnimationTimer = temp_a0->unk0.Two.unk0;
-            func_800B2A50_1DFB00(arg0, arg1);
+            disableSlotUpdate(arg0, arg1);
         }
     }
 }

@@ -554,7 +554,7 @@ void cutsceneChrAlpha_exec(cutsceneChrAlpha_exec_arg *arg0, CutsceneManager *arg
         slot->unk0.ChrPayload.unk10 = currentAlpha << 16;
         slot->unk0.ChrPayload.unk24 = (slot->unk0.ChrPayload.unk20 - (currentAlpha << 16)) / slot->unk0.ChrPayload.unk0;
 
-        func_800B2A24_1DFAD4(arg1, arg2);
+        enableSlotUpdate(arg1, arg2);
     }
 }
 
@@ -584,7 +584,7 @@ void cutsceneChrAlpha_update(CutsceneManager *arg0, s8 arg1) {
             slot->unk0.ChrPayload.unk0 = 0;
         }
     } else {
-        func_800B2A50_1DFB00(arg0, arg1);
+        disableSlotUpdate(arg0, arg1);
     }
 }
 

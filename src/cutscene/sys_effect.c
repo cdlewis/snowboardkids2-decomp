@@ -149,7 +149,7 @@ void cutsceneEffectTrick_exec(cutsceneEffectTrick_exec_arg *arg0, CutsceneManage
     CutsceneSlot *temp_v0 = func_800B2A78_1DFB28(arg1, arg2);
     temp_v0->unk0.TrickPayload.unk0 = arg0->unk0;
     temp_v0->unk0.TrickPayload.unk2 = arg0->unk2;
-    func_800B2A24_1DFAD4(arg1, arg2);
+    enableSlotUpdate(arg1, arg2);
 }
 
 void cutsceneEffectTrick_update(CutsceneManager *arg0, s8 arg1) {
@@ -163,7 +163,7 @@ void cutsceneEffectTrick_update(CutsceneManager *arg0, s8 arg1) {
         func_800B523C_1E22EC(slot->model, temp_s0->unk0.TrickPayload.unk2);
         temp_s0->unk0.TrickPayload.unk0 -= 1;
     } else {
-        func_800B2A50_1DFB00(arg0, arg1);
+        disableSlotUpdate(arg0, arg1);
     }
 }
 

@@ -362,7 +362,7 @@ s32 updateSlotData(CutsceneManager *cutsceneManager, s8 index) {
 
     slot = &cutsceneManager->slots[index];
 
-    if (slot->unk44) {
+    if (slot->needsUpdate) {
         entry = getCommandEntry(slot->unk42, slot->unk43);
 
         if (entry->update) {
