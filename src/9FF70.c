@@ -390,18 +390,18 @@ typedef struct {
     s32 unkB84;
     u8 _padB88[0x37];
     u8 unkBBF;
-} func_800B214C_arg;
+} endSharpTurnSlidingStep_arg;
 
-s32 func_800B214C_A1FFC(func_800B214C_arg *arg0) {
-    s32 temp;
+s32 endSharpTurnSlidingStep(endSharpTurnSlidingStep_arg *player) {
+    s32 flags;
 
-    arg0->unkBBF = arg0->unkBBF + 1;
-    temp = arg0->unkB84;
+    player->unkBBF = player->unkBBF + 1;
+    flags = player->unkB84;
 
-    if (temp & 2) {
-        arg0->unkB84 = temp & ~2;
+    if (flags & 2) {
+        player->unkB84 = flags & ~2;
     } else {
-        arg0->unkB84 = temp | 2;
+        player->unkB84 = flags | 2;
     }
 
     return 1;
