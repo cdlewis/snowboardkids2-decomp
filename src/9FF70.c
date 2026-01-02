@@ -34,7 +34,7 @@ void updateFlipSpinTrickAnimation(Player *);
 void updateTrickRotationTransform(Player *);
 void func_800B419C_A404C(Player *);
 void func_800B00FC_9FFAC(Player *);
-void func_800B40D4_A3F84(Player *);
+void decayPlayerSteeringAngles(Player *);
 void resetTrickScore(Player *);
 
 typedef void (*RaceFinishBehaviorStepHandler)(void *);
@@ -356,7 +356,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
     }
 
     player->unk44C.y = player->unk44C.y - player->unkAB8;
-    func_800B40D4_A3F84(player);
+    decayPlayerSteeringAngles(player);
     func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
     func_800B00FC_9FFAC(player);
 
@@ -424,7 +424,7 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
     }
 
     player->unk44C.y = player->unk44C.y - player->unkAB8;
-    func_800B40D4_A3F84(player);
+    decayPlayerSteeringAngles(player);
     func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
     func_800B00FC_9FFAC(player);
 
@@ -471,7 +471,7 @@ s32 initPostTrickLandingStep(Player *player) {
     }
 
     player->unk44C.y -= player->unkAB8;
-    func_800B40D4_A3F84(player);
+    decayPlayerSteeringAngles(player);
     func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
     func_800B00FC_9FFAC(player);
 
@@ -532,7 +532,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
     }
 
     player->unk44C.y -= player->unkAB8;
-    func_800B40D4_A3F84(player);
+    decayPlayerSteeringAngles(player);
     steeringValue = func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
     func_800B00FC_9FFAC(player);
 
@@ -575,7 +575,7 @@ s32 updatePostTrickChargingStep(Player *player) {
     }
 
     player->unk44C.y -= player->unkAB8;
-    func_800B40D4_A3F84(player);
+    decayPlayerSteeringAngles(player);
     steeringValue = func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
     func_800B00FC_9FFAC(player);
 
@@ -750,7 +750,7 @@ s32 updatePostTrickDescentStep(Player *player) {
         }
     } else {
         player->unk44C.y = player->unk44C.y - player->unkAB8;
-        func_800B40D4_A3F84(player);
+        decayPlayerSteeringAngles(player);
         func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
         func_800B00FC_9FFAC(player);
         player->unkBC0 = player->unkBC0 - 1;
@@ -1381,7 +1381,7 @@ s32 updateRaceFinishWaitingStep(Player *player) {
     player->unk44C.x = 0;
     player->unk44C.z = 0;
     player->unk44C.y -= 0x6000;
-    func_800B40D4_A3F84(player);
+    decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
     func_8005D180_5DD80(player, 0);
     if (gameState->unk7B != 0) {
@@ -1430,7 +1430,7 @@ s32 updateRaceFinishWinStep(Player *player) {
     player->unk44C.x = 0;
     player->unk44C.z = 0;
     player->unk44C.y = player->unk44C.y - 0x6000;
-    func_800B40D4_A3F84(player);
+    decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
 
     if (player->unkAE0 <= 0xDFFFF) {
@@ -1495,7 +1495,7 @@ s32 updateRaceFinishLoseStep(Player *player) {
     player->unkB84 = flags;
     player->unk44C.y = velocityY;
 
-    func_800B40D4_A3F84(player);
+    decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
 
     unkAE0 = player->unkAE0;
@@ -1580,53 +1580,53 @@ void updateTrickRotationTransform(Player *player) {
     player->unkB84 |= 0x800;
 }
 
-void func_800B40D4_A3F84(Player *arg0) {
-    s32 temp;
-    s32 delta;
-    s32 value;
-    s32 value2;
-    s32 temp_a2;
-    s32 var_v1;
-    s32 sp[4];
+void decayPlayerSteeringAngles(Player *player) {
+    s32 normalizedAngle;
+    s32 decayAmount;
+    s32 currentAngle;
+    s32 savedAngle;
+    s32 tiltOffset;
+    s32 tiltDecay;
+    s32 pad[4];
 
-    temp = (u16)arg0->unkA92 & 0x1FFF;
-    arg0->unkA92 = temp;
-    if (temp >= 0x1001) {
-        arg0->unkA92 = temp - 0x2000;
+    normalizedAngle = (u16)player->unkA92 & 0x1FFF;
+    player->unkA92 = normalizedAngle;
+    if (normalizedAngle >= 0x1001) {
+        player->unkA92 = normalizedAngle - 0x2000;
     }
-    value = arg0->unkA92;
-    delta = -value, value2 = value;
-    if (delta >= 0x81) {
-        delta = 0x80;
+    currentAngle = player->unkA92;
+    decayAmount = -currentAngle, savedAngle = currentAngle;
+    if (decayAmount >= 0x81) {
+        decayAmount = 0x80;
     }
-    if (delta < -0x80) {
-        delta = -0x80;
+    if (decayAmount < -0x80) {
+        decayAmount = -0x80;
     }
-    arg0->unkA92 = value2 + delta;
+    player->unkA92 = savedAngle + decayAmount;
 
-    temp = (u16)arg0->unkA90 & 0x1FFF;
-    arg0->unkA90 = temp;
-    if (temp >= 0x1001) {
-        arg0->unkA90 = temp - 0x2000;
+    normalizedAngle = (u16)player->unkA90 & 0x1FFF;
+    player->unkA90 = normalizedAngle;
+    if (normalizedAngle >= 0x1001) {
+        player->unkA90 = normalizedAngle - 0x2000;
     }
-    value = arg0->unkA90;
-    delta = -value, value2 = value;
-    if (delta >= 0x81) {
-        delta = 0x80;
+    currentAngle = player->unkA90;
+    decayAmount = -currentAngle, savedAngle = currentAngle;
+    if (decayAmount >= 0x81) {
+        decayAmount = 0x80;
     }
-    if (delta < -0x80) {
-        delta = -0x80;
+    if (decayAmount < -0x80) {
+        decayAmount = -0x80;
     }
-    temp_a2 = arg0->unk990.translation.x;
-    arg0->unkA90 = value2 + delta;
-    var_v1 = -temp_a2;
-    if (var_v1 > 0x8000) {
-        var_v1 = 0x8000;
+    tiltOffset = player->unk990.translation.x;
+    player->unkA90 = savedAngle + decayAmount;
+    tiltDecay = -tiltOffset;
+    if (tiltDecay > 0x8000) {
+        tiltDecay = 0x8000;
     }
-    if (var_v1 < -0x8000) {
-        var_v1 = -0x8000;
+    if (tiltDecay < -0x8000) {
+        tiltDecay = -0x8000;
     }
-    arg0->unk990.translation.x = temp_a2 + var_v1;
+    player->unk990.translation.x = tiltOffset + tiltDecay;
 }
 
 void func_800B419C_A404C(Player *arg0) {
@@ -1927,7 +1927,7 @@ s32 func_800B4A4C_A48FC(Player *arg0) {
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 6);
     arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 6);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 9) != 0) {
@@ -1970,7 +1970,7 @@ s32 func_800B4B08_A49B8(Player *arg0) {
         func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
     }
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xA) != 0) {
@@ -2033,7 +2033,7 @@ s32 func_800B4CB8_A4B68(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y -= 0x6000;
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xB) != 0) {
@@ -2079,7 +2079,7 @@ s32 func_800B4DB8_A4C68(Player *arg0) {
         arg0->unkA94 += 0x1000;
     }
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0xC);
 
@@ -2130,7 +2130,7 @@ s32 func_800B4F5C_A4E0C(Player *arg0) {
         arg0->unkA94 = angle + 0x1000;
     }
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0xC);
 
@@ -2189,7 +2189,7 @@ s32 func_800B50C0_A4F70(Player *arg0) {
     vel2 = arg0->unk44C.z;
     arg0->unk44C.z = vel2 - (vel2 >> 6);
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xE) != 0) {
@@ -2231,7 +2231,7 @@ s32 func_800B5234_A50E4(Player *arg0) {
         func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
     }
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xF) != 0) {
@@ -2267,7 +2267,7 @@ s32 func_800B5394_A5244(Player *arg0) {
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
 
     func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xE) != 0) {
@@ -2301,7 +2301,7 @@ s32 func_800B5478_A5328(Player *arg0) {
     arg0->unk44C.z = arg0->unk44C.z / 2;
 
     func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xF) != 0) {
@@ -2331,7 +2331,7 @@ s32 func_800B58B8_A5768(Player *arg0) {
 
     arg0->unkB88 = 8;
     arg0->worldPos.y = arg0->worldPos.y + 0xFFFF0000;
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
     func_8005D804_5E404(arg0, 3, 0);
     return 0;
@@ -2376,7 +2376,7 @@ s32 func_800B5938_A57E8(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y -= 0x6000;
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0x10) != 0) {
@@ -2466,7 +2466,7 @@ s32 func_800B5B90_A5A40(Player *arg0) {
     arg0->unk44C.x = 0;
     arg0->unk44C.z = 0;
     arg0->unk44C.y -= 0x6000;
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
     if (arg0->unkBCE & 1) {
         arg0->unkB8C = 0;
@@ -2491,7 +2491,7 @@ s32 func_800B5CB8_A5B68(Player *arg0) {
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 6);
     arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 6);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xE) != 0) {
@@ -2518,7 +2518,7 @@ s32 func_800B5D68_A5C18(Player *arg0) {
 
     arg0->unkB88 = 0x80;
     arg0->unk44C.y = arg0->unk44C.y - arg0->unkAB8;
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
 
     if (arg0->unkB84 & 1) {
         arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 7);
@@ -2571,7 +2571,7 @@ s32 func_800B5E90_A5D40(Player *arg0) {
         arg0->unkA94 = angle + 0x1000;
     }
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0xC);
 
@@ -2614,7 +2614,7 @@ s32 func_800B5FC4_A5E74(Player *arg0) {
     arg0->unk44C.x -= arg0->unk44C.x >> 6;
     arg0->unk44C.z -= arg0->unk44C.z >> 6;
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 9) != 0) {
@@ -2657,7 +2657,7 @@ s32 func_800B6194_A6044(Player *arg0) {
         arg0->unkA94 = angle + 0x1000;
     }
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0xC);
 
@@ -2775,7 +2775,7 @@ s32 func_800B6488_A6338(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unkB84 |= 0x40;
     arg0->unk44C.y -= 0x6000;
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
 
     if (arg0->unkB8C == -1) {
@@ -2847,7 +2847,7 @@ s32 func_800B6688_A6538(Player *arg0) {
     temp_worldPosZ = arg0->worldPos.z;
     arg0->worldPos.z = temp_worldPosZ + ((item_unk4 - temp_worldPosZ) >> 2);
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     arg0->unkB8C -= 1;
 
     if (arg0->unkBC0 != 0) {
@@ -2877,7 +2877,7 @@ s32 func_800B67E4_A6694(Player *arg0) {
     arg0->worldPos.x = arg0->worldPos.x + ((item->unk0 - arg0->worldPos.x) >> 2);
     arg0->worldPos.z = arg0->worldPos.z + ((item->unk4 - arg0->worldPos.z) >> 2);
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
 
     if (func_8005D308_5DF08(arg0, 3) != 0) {
         arg0->unkBC0 = 0;
@@ -2895,7 +2895,7 @@ s32 func_800B6D14_A6BC4(Player *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     func_80055D10_56910(gameState->memoryPoolId);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
 
     if (arg0->unkB8C != 0) {
         arg0->unkB8C = arg0->unkB8C - 1;
@@ -2923,7 +2923,7 @@ s32 func_800B6DB8_A6C68(Player *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     func_80055D10_56910(gameState->memoryPoolId);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->unk44C);
     applyClampedVelocityToPosition(arg0);
 
@@ -2979,7 +2979,7 @@ s32 func_800B6E5C_A6D0C(Player *arg0) {
         }
     }
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->unk44C);
     applyClampedVelocityToPosition(arg0);
 
@@ -3000,7 +3000,7 @@ s32 func_800B6FE8_A6E98(Player *arg0) {
     func_80055D10_56910(gameState->memoryPoolId);
     transformVector2(&D_800BAC80_AAB30, &arg0->unk970, &arg0->unk44C);
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
 
     if (arg0->unkB8C != 0) {
         arg0->unkB8C = arg0->unkB8C - 1;
@@ -3018,7 +3018,7 @@ s32 func_800B7078_A6F28(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     func_8005D308_5DF08(arg0, 3);
 
     arg0->unkB8C = arg0->unkB8C - 1;
@@ -3053,7 +3053,7 @@ s32 func_800B7108_A6FB8(Player *arg0) {
     arg0->unkB8C = new_unkB8C;
     arg0->unk468 = arg0->unk468 - 0x6000;
     arg0->worldPos.y = new_unk474 + arg0->unk480;
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     func_8005D308_5DF08(arg0, 4);
     if (arg0->unkB8C == 16) {
         s32 tempB84 = arg0->unkB84;
@@ -3162,7 +3162,7 @@ s32 func_800B7444_A72F4(Player *arg0) {
 
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
 
     if (arg0->unkB8C != 0) {
         arg0->unkB8C = arg0->unkB8C - 1;
@@ -3180,7 +3180,7 @@ s32 func_800B74E4_A7394(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
 
     arg0->unkB8C = arg0->unkB8C - 1;
@@ -3200,7 +3200,7 @@ s32 func_800B756C_A741C(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
     arg0->unkA94 = arg0->unkA94 + arg0->unkB8C;
     arg0->unkB8C = arg0->unkB8C + 0x10;
@@ -3226,7 +3226,7 @@ s32 func_800B75F4_A74A4(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
     arg0->unkA94 = arg0->unkA94 + 0x400;
     temp = arg0->unkB8C - 1;
@@ -3263,7 +3263,7 @@ s32 func_800B76BC_A756C(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
 
     temp1 = arg0->unkBA0;
@@ -3298,7 +3298,7 @@ s32 func_800B7784_A7634(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
     arg0->unkA94 = arg0->unkA94 + 0x400;
 
@@ -3348,7 +3348,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
         func_80056B7C_5777C(&arg0->worldPos, 0x26);
     }
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
 
     arg0->unkBA0 += 0x400;
@@ -3369,7 +3369,7 @@ s32 func_800B7998_A7848(Player *arg0) {
     func_800B76BC_alloc *alloc = (func_800B76BC_alloc *)getCurrentAllocation();
     s32 temp;
 
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
 
     arg0->unkA94 = arg0->unkA94 + arg0->unkB8C;
@@ -3411,7 +3411,7 @@ s32 func_800B7A94_A7944(Player *arg0) {
     arg0->unkB84 = arg0->unkB84 | 0x10000;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
-    func_800B40D4_A3F84(arg0);
+    decayPlayerSteeringAngles(arg0);
 
     if (arg0->unkB8C != 0) {
         arg0->unkB8C = arg0->unkB8C - 1;
