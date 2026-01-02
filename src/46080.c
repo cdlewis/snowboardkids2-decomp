@@ -847,7 +847,7 @@ void updatePlayerHaloDescending(PlayerHaloState *arg0);
 void updatePlayerHaloAnimating(PlayerHaloState *arg0);
 void func_80049794_4A394(void *payload, s32 arg1);
 void func_80048F0C_49B0C(ItemBoxSystemState *arg0, s32 arg1);
-void func_80049104_49D04(ItemBoxSystemState *arg0);
+void initItemBoxPositions(ItemBoxSystemState *arg0);
 void func_80049230_49E30(func_80049230_49E30_arg *);
 void func_80049430_4A030(func_80049300_49F00_arg *arg0);
 void updateGoldCoinsTask(GoldCoinUpdateState *arg0);
@@ -2431,12 +2431,12 @@ loop:
         goto loop;
     }
 
-    setCallback(&func_80049104_49D04);
+    setCallback(&initItemBoxPositions);
 }
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048F0C_49B0C);
 
-void func_80049104_49D04(ItemBoxSystemState *state) {
+void initItemBoxPositions(ItemBoxSystemState *state) {
     ItemBoxPositionEntry *ptr;
     ItemBoxPositionEntry *base;
     s32 count;

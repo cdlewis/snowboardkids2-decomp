@@ -2735,6 +2735,7 @@ applyVelocityDeadzone = 0x800B42A8; // rom:0xA4158
 rollPrimaryItemDrop = 0x800488A0; // rom:0x494A0
 updateItemBox = 0x80048AE8; // rom:0x496E8
 initItemBoxSystem = 0x80048E34; // rom:0x49A34
+initItemBoxPositions = 0x80049104; // rom:0x49D04
 updateAllItemBoxes = 0x800491CC; // rom:0x49DCC
 enableCutsceneSkip = 0x800B29F0; // rom:0x1DFAA0
 disableCutsceneSkipOnInput = 0x800B29FC; // rom:0x1DFAAC
