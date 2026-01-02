@@ -60,7 +60,7 @@ void enableCutsceneSkip(CutsceneManager *arg0) {
     arg0->skipAnimation = TRUE;
 }
 
-void func_800B29FC_1DFAAC(CutsceneManager *arg0) {
+void disableCutsceneSkipOnInput(CutsceneManager *arg0) {
     if (arg0->skipAnimation != FALSE && (gButtonsPressed[0] & A_BUTTON)) {
         arg0->skipAnimation = FALSE;
     }

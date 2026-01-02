@@ -2737,3 +2737,4 @@ updateItemBox = 0x80048AE8; // rom:0x496E8
 initItemBoxSystem = 0x80048E34; // rom:0x49A34
 updateAllItemBoxes = 0x800491CC; // rom:0x49DCC
 enableCutsceneSkip = 0x800B29F0; // rom:0x1DFAA0
+disableCutsceneSkipOnInput = 0x800B29FC; // rom:0x1DFAAC

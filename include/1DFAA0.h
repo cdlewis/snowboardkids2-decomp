@@ -279,7 +279,7 @@ typedef struct {
 } func_800B2C78_arg;
 
 void enableCutsceneSkip(CutsceneManager *arg0);
-void func_800B29FC_1DFAAC(CutsceneManager *arg0);
+void disableCutsceneSkipOnInput(CutsceneManager *arg0);
 void func_800B2A24_1DFAD4(CutsceneManager *arg0, s16 arg1);
 void func_800B2A50_1DFB00(CutsceneManager *arg0, s16 arg1);
 CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1);
