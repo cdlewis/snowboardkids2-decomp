@@ -340,7 +340,7 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x14];
-    s32 unk14[3];
+    Vec3i position;
     void *unk20;
     void *unk24;
     void *unk28;
@@ -924,18 +924,18 @@ void scheduleSkyRenderTask(s32 skyType) {
     }
 }
 
-void initPlayerRenderTask(PlayerRenderTaskState *arg0) {
+void initPlayerRenderTask(PlayerRenderTaskState *state) {
     u16 rotation;
     GameState_46080 *allocation;
 
     allocation = (GameState_46080 *)getCurrentAllocation();
-    rotation = func_800625A4_631A4(&allocation->unk30, &arg0->unk14);
-    createYRotationMatrix((Transform3D *)arg0, rotation);
-    arg0->unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x30);
-    arg0->unk24 = func_80055DC4_569C4(allocation->unk5C);
-    arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
-    arg0->unk2C = NULL;
-    arg0->unk40 = 1;
+    rotation = func_800625A4_631A4(&allocation->unk30, &state->position);
+    createYRotationMatrix((Transform3D *)state, rotation);
+    state->unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x30);
+    state->unk24 = func_80055DC4_569C4(allocation->unk5C);
+    state->unk28 = func_80055DF8_569F8(allocation->unk5C);
+    state->unk2C = NULL;
+    state->unk40 = 1;
     setCleanupCallback(cleanupPlayerRenderTask);
     setCallback(updatePlayerRenderCounter);
 }
