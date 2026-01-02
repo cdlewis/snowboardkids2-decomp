@@ -834,7 +834,7 @@ void loadPlayerHaloData(PlayerHaloState *arg0);
 void updatePlayerHaloRising(PlayerHaloState *arg0);
 void updatePlayerHaloDescending(PlayerHaloState *arg0);
 void updatePlayerHaloAnimating(PlayerHaloState *arg0);
-void func_80049794_4A394(void *payload, s32 arg1);
+void spawnItemBoxBurstEffect(void *displayList, s32 isSecondaryBox);
 void func_80048F0C_49B0C(ItemBoxSystemState *arg0, s32 arg1);
 void initItemBoxPositions(ItemBoxSystemState *arg0);
 void cleanupItemBoxSystem(ItemBoxSystemState *);
@@ -2299,7 +2299,7 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                 player = (Player *)func_8005B24C_5BE4C(collisionPosPtr, -1, 0x100000);
                 if (player != NULL) {
                     itemBox->state = itemBox->state + 1;
-                    func_80049794_4A394(&itemBox->displayList, itemBox->isSecondaryItemBox);
+                    spawnItemBoxBurstEffect(&itemBox->displayList, itemBox->isSecondaryItemBox);
                     if ((player->unkB6C >= 100) || (player->unkBDA != 0)) {
                         func_80059A48_5A648(player, -100);
                         if (itemBox->isSecondaryItemBox != 0) {
@@ -2639,11 +2639,11 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
     gSPDisplayList(gRegionAllocPtr++, D_80090DB0_919B0);
 }
 
-void func_80049794_4A394(void *payload, s32 arg1) {
-    NodeWithPayload *temp_v0 = (NodeWithPayload *)scheduleTask(&initItemBoxBurstEffect, 0, 0, 0xEB);
-    if (temp_v0 != NULL) {
-        memcpy((void *)((s32)temp_v0 + 0x10), payload, 0x20);
-        temp_v0->unk3C = arg1;
+void spawnItemBoxBurstEffect(void *displayList, s32 isSecondaryBox) {
+    NodeWithPayload *task = (NodeWithPayload *)scheduleTask(&initItemBoxBurstEffect, 0, 0, 0xEB);
+    if (task != NULL) {
+        memcpy((void *)((s32)task + 0x10), displayList, 0x20);
+        task->unk3C = isSecondaryBox;
     }
 }
 
