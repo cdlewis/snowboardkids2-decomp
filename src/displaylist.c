@@ -95,8 +95,8 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80061D6C_6296C);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800620D0_62CD0);
 
-s16 func_80062254_62E54(GameDataLayout *gameData, u16 index) {
-    return ((func_80062C98_63898_arg *)gameData->section3Data)[index].unkA;
+s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index) {
+    return ((TrackSegmentEntry *)gameData->section3Data)[index].finishZoneFlag;
 }
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);
@@ -190,7 +190,7 @@ u16 func_80062B1C_6371C(void *arg0_void, u16 arg1, void *arg2_void, void *arg3_v
     return (func_8006D21C_6DE1C(vert0->x, vert0->z, vert1->x, vert1->z) - 0x1000) & 0xFFFF;
 }
 
-s32 func_80062C98_63898(func_80062C98_63898_arg **arg0, u16 index) {
+s32 func_80062C98_63898(TrackSegmentEntry **arg0, u16 index) {
     s16 temp_v0;
     s16 var_a1 = index;
 

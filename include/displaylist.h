@@ -164,8 +164,8 @@ u16 func_80062B1C_6371C(void *arg0, u16 arg1, void *arg2, void *arg3);
 typedef struct {
     s16 unk0;
     u8 _pad[0x8];
-    s16 unkA;
+    s16 finishZoneFlag;
     u8 _pad2[0x18];
-} func_80062C98_63898_arg;
+} TrackSegmentEntry;
 
-s16 func_80062254_62E54(GameDataLayout *gameData, u16 index);
+s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index);

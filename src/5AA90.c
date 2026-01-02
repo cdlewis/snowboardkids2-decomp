@@ -80,7 +80,7 @@ s32 func_8005A9A8_5B5A8(Player *arg0) {
         return 0;
     }
 
-    if (func_80062254_62E54(&allocation->gameData, arg0->unkB94) != 0) {
+    if (getTrackSegmentFinishZoneFlag(&allocation->gameData, arg0->unkB94) != 0) {
         return 0;
     }
 
@@ -110,7 +110,7 @@ s32 func_8005AA9C_5B69C(Player *arg0) {
 
     allocation = (GameState *)getCurrentAllocation();
 
-    if (func_80062254_62E54(&allocation->gameData, arg0->unkB94) == 0) {
+    if (getTrackSegmentFinishZoneFlag(&allocation->gameData, arg0->unkB94) == 0) {
         item = func_80055D10_56910(allocation->memoryPoolId);
 
         dx = arg0->worldPos.x - item->unk0;
