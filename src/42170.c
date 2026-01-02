@@ -1292,25 +1292,25 @@ void *spawnPlayerAuraEffect(Player *player) {
 extern void *D_8009A730_9B330;
 extern void *D_8009A740_9B340;
 extern void *D_8009A750_9B350;
-void func_8004367C_4427C(Func432D8Arg *);
-void func_800433EC_43FEC(Func43374State *);
-void func_800435F0_441F0(Func43374State *);
+void cleanupPlayerFlashEffect(Func432D8Arg *);
+void updatePlayerFlashEffect(PlayerFlashEffectState *);
+void fadeOutPlayerFlashEffect(PlayerFlashEffectState *);
 
-void func_80043374_43F74(Func43374State *arg0) {
+void initPlayerFlashEffect(PlayerFlashEffectState *state) {
     getCurrentAllocation();
-    arg0->unk20 = &D_8009A730_9B330;
-    arg0->unk24 = loadAsset_B7E70();
-    arg0->unk28 = loadAsset_216290();
-    arg0->unk2C = 0;
-    arg0->unk68 = 0;
-    arg0->unk82 = 0x200;
-    arg0->unk60 = arg0->unk24;
-    arg0->unk64 = arg0->unk28;
-    setCleanupCallback(func_8004367C_4427C);
-    setCallbackWithContinue(func_800433EC_43FEC);
+    state->unk20 = &D_8009A730_9B330;
+    state->unk24 = loadAsset_B7E70();
+    state->unk28 = loadAsset_216290();
+    state->unk2C = 0;
+    state->unk68 = 0;
+    state->scale = 0x200;
+    state->unk60 = state->unk24;
+    state->unk64 = state->unk28;
+    setCleanupCallback(cleanupPlayerFlashEffect);
+    setCallbackWithContinue(updatePlayerFlashEffect);
 }
 
-void func_800433EC_43FEC(Func43374State *arg0) {
+void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
     s32 pad[8];
     GameState *allocation;
     s32 *ptr;
@@ -1320,101 +1320,101 @@ void func_800433EC_43FEC(Func43374State *arg0) {
     s16 scale;
 
     allocation = (GameState *)getCurrentAllocation();
-    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
-    func_8006B084_6BC84(&D_8009A8B0_9B4B0, &arg0->unk78->unk3F8, arg0);
-    scale = arg0->unk82;
-    scaleMatrix((Transform3D *)arg0, scale, scale, scale);
+    createYRotationMatrix(&D_8009A8B0_9B4B0, state->yRotation);
+    func_8006B084_6BC84(&D_8009A8B0_9B4B0, &state->player->unk3F8, state);
+    scale = state->scale;
+    scaleMatrix((Transform3D *)state, scale, scale, scale);
 
     ptr = &D_8009A8A4_9B4A4;
     *ptr = 0;
     D_8009A8A8_9B4A8 = 0x9CCCC;
     D_8009A8AC_9B4AC = 0xFFE44CCD;
 
-    func_8006B084_6BC84(ptr - 5, arg0, arg0->unk3C);
+    func_8006B084_6BC84(ptr - 5, state, state->secondaryObj);
 
     if (gFrameCounter & 1) {
-        arg0->unk5C = &D_8009A740_9B340;
+        state->unk5C = &D_8009A740_9B340;
     } else {
-        arg0->unk5C = &D_8009A750_9B350;
+        state->unk5C = &D_8009A750_9B350;
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
-        if (arg0->unk82 == 0x2000) {
-            enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0->unk3C);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
+        if (state->scale == 0x2000) {
+            enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state->secondaryObj);
         }
     }
 
-    player = arg0->unk78;
+    player = state->player;
     if (player->unkBC9 == 3) {
         if (player->unkB9A != 0) {
             if (player->unkB9A < 0x3C) {
                 player->unkB9A = 0x3C;
             }
         }
-        player = arg0->unk78;
+        player = state->player;
     }
 
     if (player->unkB84 & 0x80000) {
         player->unkB9A = 0;
     }
 
-    player2 = arg0->unk78;
+    player2 = state->player;
     if (player2->unkB9A != 0) {
         if (allocation->gamePaused == 0) {
-            if (arg0->unk82 == 0x2000) {
+            if (state->scale == 0x2000) {
                 player2->unkB9A--;
-                player = arg0->unk78;
+                player = state->player;
                 if (player->unkB9A == 0 && player->unkBBB == 0x11) {
                     player->unkB9A++;
                 }
             } else {
-                arg0->unk82 = arg0->unk82 + 0x200;
-                if (arg0->unk82 == 0x2000) {
-                    arg0->unk78->unkBD0 += 2;
+                state->scale = state->scale + 0x200;
+                if (state->scale == 0x2000) {
+                    state->player->unkBD0 += 2;
                 }
             }
         }
     } else {
         player2->unkBD0 = 0;
-        arg0->unk7C = 0x40000;
-        setCallback(func_800435F0_441F0);
+        state->fallVelocity = 0x40000;
+        setCallback(fadeOutPlayerFlashEffect);
     }
 }
 
-void func_800435F0_441F0(Func43374State *arg0) {
+void fadeOutPlayerFlashEffect(PlayerFlashEffectState *state) {
     GameState *gameState;
     s32 i;
     s32 pad[7];
 
     gameState = (GameState *)getCurrentAllocation();
     if (gameState->gamePaused == 0) {
-        arg0->unk7C -= 0x8000;
-        if (arg0->unk7C <= (s32)0xFFF80000) {
+        state->fallVelocity -= 0x8000;
+        if (state->fallVelocity <= (s32)0xFFF80000) {
             func_80069CF8_6A8F8();
         }
-        arg0->unk18 += arg0->unk7C;
+        state->unk18 += state->fallVelocity;
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
     }
 }
 
-void func_8004367C_4427C(Func432D8Arg *arg0) {
+void cleanupPlayerFlashEffect(Func432D8Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-Func43374State *func_800436B4_442B4(Player *arg0) {
-    Func43374State *task;
+PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player) {
+    PlayerFlashEffectState *task;
 
-    task = (Func43374State *)scheduleTask(func_80043374_43F74, 0, 0, 0xC8);
+    task = (PlayerFlashEffectState *)scheduleTask(initPlayerFlashEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        task->unk78 = arg0;
-        task->unk80 = 0;
-        if (arg0->unkB84 & 2) {
-            task->unk80 = 0x1000;
+        task->player = player;
+        task->yRotation = 0;
+        if (player->unkB84 & 2) {
+            task->yRotation = 0x1000;
         }
     }
     return task;

@@ -144,7 +144,7 @@ void func_80058B94_59794(Player *arg0) {
 
 s32 func_80058BB0_597B0(Player *arg0) {
     if (arg0->unkBD0 == 0) {
-        if (func_800436B4_442B4(arg0) != 0) {
+        if (spawnPlayerFlashEffect(arg0) != 0) {
             if (arg0->unkB84 & 2) {
                 arg0->unkBD0 = 4;
             } else {

@@ -23,25 +23,25 @@ typedef struct {
 } func_80019CD0_1A8D0_arg;
 
 typedef struct {
-    u8 pad0[0x18];  /* 0x00 */
-    s32 unk18;      /* 0x18 */
-    u8 pad1C[0x4];  /* 0x1C */
-    void *unk20;    /* 0x20 */
-    void *unk24;    /* 0x24 */
-    void *unk28;    /* 0x28 */
-    s32 unk2C;      /* 0x2C */
-    u8 pad30[0xC];  /* 0x30 */
-    u8 unk3C[0x20]; /* 0x3C */
-    void *unk5C;    /* 0x5C */
-    void *unk60;    /* 0x60 */
-    void *unk64;    /* 0x64 */
-    s32 unk68;      /* 0x68 */
-    u8 pad6C[0xC];  /* 0x6C */
-    Player *unk78;  /* 0x78 */
-    s32 unk7C;      /* 0x7C */
-    u16 unk80;      /* 0x80 */
-    s16 unk82;      /* 0x82 */
-} Func43374State;
+    u8 pad0[0x18];      /* 0x00 */
+    s32 unk18;          /* 0x18 */
+    u8 pad1C[0x4];      /* 0x1C */
+    void *unk20;        /* 0x20 */
+    void *unk24;        /* 0x24 */
+    void *unk28;        /* 0x28 */
+    s32 unk2C;          /* 0x2C */
+    u8 pad30[0xC];      /* 0x30 */
+    u8 secondaryObj[0x20]; /* 0x3C - first 0x20 bytes of secondary DisplayListObject */
+    void *unk5C;        /* 0x5C */
+    void *unk60;        /* 0x60 */
+    void *unk64;        /* 0x64 */
+    s32 unk68;          /* 0x68 */
+    u8 pad6C[0xC];      /* 0x6C */
+    Player *player;     /* 0x78 */
+    s32 fallVelocity;   /* 0x7C */
+    u16 yRotation;      /* 0x80 */
+    s16 scale;          /* 0x82 */
+} PlayerFlashEffectState;
 
 void func_80014480_15080(void);
 void func_8001452C_1512C(void);
@@ -85,7 +85,7 @@ void eepromWriteAllAsync(void *buffer);
 void func_80044538_45138(s16 arg0);
 void func_80045434_46034(s16 arg0);
 void func_80041418_42018(void);
-Func43374State *func_800436B4_442B4(Player *arg0);
+PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player);
 void initTitleScreen(void);
 void initLogoScreen(void);
 void initVersusMode(void);
