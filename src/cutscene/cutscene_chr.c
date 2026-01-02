@@ -455,16 +455,23 @@ void cutsceneChrMove3_exec(cutsceneChrMove3_exec_arg *arg0, CutsceneManager *arg
     func_800B6FA4_1E4054(
         &currentSlot->slotData,
         currentSlot->model,
-        arg0->unk0,
-        arg0->unk4,
-        arg0->unk8,
-        arg0->unkE,
-        arg0->unkC
+        arg0->targetX,
+        arg0->targetY,
+        arg0->targetZ,
+        arg0->duration,
+        arg0->targetAngle
     );
 
-    setModelAnimationEx(currentSlot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1, arg0->unk16);
+    setModelAnimationEx(
+        currentSlot->model,
+        arg0->animIndex,
+        arg0->transitionAnimIndex,
+        arg0->loopCount,
+        -1,
+        arg0->animQueued
+    );
 
-    setModelActionMode(currentSlot->model, arg0->unk12);
+    setModelActionMode(currentSlot->model, arg0->actionMode);
 }
 
 s32 cutsceneChrMove3_isDone(void) {
