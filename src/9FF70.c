@@ -210,72 +210,72 @@ s32 updatePlayerSlidingConstrained(Player *player) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B1544_A13F4);
 
-s32 func_800B1DA0_A1C50(Player *arg0) {
-    s16 temp_v1;
-    s32 var_a3;
-    s32 temp_v1_3;
-    s32 temp_a0;
-    u8 temp;
+s32 updatePlayerGroundedSliding(Player *player) {
+    s16 currentAngle;
+    s32 angleDelta;
+    s32 velocityX;
+    s32 velocityZ;
+    u8 groundTimer;
 
-    if (arg0->unkB7C & 0xF) {
-        setPlayerBehaviorPhase(arg0, 4);
-        arg0->unkBBF = 5;
-        func_800B27FC_A26AC(arg0);
+    if (player->unkB7C & 0xF) {
+        setPlayerBehaviorPhase(player, 4);
+        player->unkBBF = 5;
+        func_800B27FC_A26AC(player);
         return 1;
     }
-    if (!(arg0->unkB84 & 1)) {
-        if (arg0->unkBC0 >= 0xBU) {
-            setPlayerBehaviorPhase(arg0, 3);
+    if (!(player->unkB84 & 1)) {
+        if (player->unkBC0 >= 0xBU) {
+            setPlayerBehaviorPhase(player, 3);
         } else {
-            setPlayerBehaviorPhase(arg0, 0);
+            setPlayerBehaviorPhase(player, 0);
         }
         return 1;
     }
-    temp = arg0->unkBC0;
-    if (temp < 0x64U) {
-        arg0->unkBC0 = temp + 1;
+    groundTimer = player->unkBC0;
+    if (groundTimer < 0x64U) {
+        player->unkBC0 = groundTimer + 1;
     }
-    if (arg0->unkBDA != 0) {
-        func_800B9B90_A9A40(arg0);
-        var_a3 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z);
-        temp_v1 = arg0->unkA94;
-        var_a3 = (var_a3 - temp_v1) & 0x1FFF;
-        if (var_a3 >= 0x1001) {
-            var_a3 -= 0x2000;
+    if (player->unkBDA != 0) {
+        func_800B9B90_A9A40(player);
+        angleDelta = func_8006D21C_6DE1C(player->unkA7C, player->unkA84, player->worldPos.x, player->worldPos.z);
+        currentAngle = player->unkA94;
+        angleDelta = (angleDelta - currentAngle) & 0x1FFF;
+        if (angleDelta >= 0x1001) {
+            angleDelta -= 0x2000;
         }
-        if (var_a3 >= 0x41) {
-            var_a3 = 0x40;
+        if (angleDelta >= 0x41) {
+            angleDelta = 0x40;
         }
-        if (var_a3 < -0x40) {
-            var_a3 = -0x40;
+        if (angleDelta < -0x40) {
+            angleDelta = -0x40;
         }
-        arg0->unkA94 = temp_v1 + var_a3;
+        player->unkA94 = currentAngle + angleDelta;
     } else {
-        arg0->unkA94 = (u16)arg0->unkA94 - (arg0->unkB7A * 4);
+        player->unkA94 = (u16)player->unkA94 - (player->unkB7A * 4);
     }
-    temp_v1_3 = arg0->unk44C.x;
-    temp_a0 = arg0->unk44C.z;
-    arg0->unk44C.y -= arg0->unkAB8;
-    arg0->unk44C.x = temp_v1_3 - (temp_v1_3 >> 7);
-    arg0->unk44C.z = temp_a0 - (temp_a0 >> 7);
-    if (arg0->unkBC0 >= 0xBU) {
-        func_800B419C_A404C(arg0);
+    velocityX = player->unk44C.x;
+    velocityZ = player->unk44C.z;
+    player->unk44C.y -= player->unkAB8;
+    player->unk44C.x = velocityX - (velocityX >> 7);
+    player->unk44C.z = velocityZ - (velocityZ >> 7);
+    if (player->unkBC0 >= 0xBU) {
+        func_800B419C_A404C(player);
     }
-    func_800B00FC_9FFAC(arg0);
-    var_a3 = arg0->unkA92;
-    if (var_a3 >= 0) {
-        if (var_a3 >= 0x401) {
-            var_a3 = 0x400;
+    func_800B00FC_9FFAC(player);
+    angleDelta = player->unkA92;
+    if (angleDelta >= 0) {
+        if (angleDelta >= 0x401) {
+            angleDelta = 0x400;
         }
-        func_8005D48C_5E08C(arg0, 2, var_a3 / 2);
+        func_8005D48C_5E08C(player, 2, angleDelta / 2);
     } else {
-        var_a3 = -var_a3;
-        if (var_a3 >= 0x401) {
-            var_a3 = 0x400;
+        angleDelta = -angleDelta;
+        if (angleDelta >= 0x401) {
+            angleDelta = 0x400;
         }
-        func_8005D48C_5E08C(arg0, 1, var_a3 / 2);
+        func_8005D48C_5E08C(player, 1, angleDelta / 2);
     }
-    func_80058CFC_598FC(arg0);
+    func_80058CFC_598FC(player);
     return 0;
 }
 
