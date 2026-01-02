@@ -11,7 +11,7 @@ void queueBufferDataNoFlags(u8 *source, s8 bufferId);
 void setBufferData(void *source, u8 arg1, s32 arg2);
 void queueSoundAtPosition(Vec3i *position, s16 soundId);
 void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 duration);
-void func_80056D64_57964(Vec3i *arg0, s32 arg1, s16 arg2, s16 arg3);
+void queueSoundAtPositionWithPriority(Vec3i *position, s32 soundId, s16 priority, s16 duration);
 void func_80056E64_57A64(Vec3i *arg0, s32 arg1, f32 arg2, s16 arg3, s32 arg4);
 void func_80056F8C_57B8C(Vec3i *arg0, s32 arg1, f32 arg2, s16 arg3, s32 arg4, s32 arg5);
 void func_800570BC_57CBC(void);
