@@ -52,8 +52,8 @@ extern func_800B65C8_callback D_800BAC10_AAAC0[];
 typedef void (*func_800B6610_callback)(void *);
 extern func_800B6610_callback D_800BAC14_AAAC4[];
 
-typedef void (*func_800B1FCC_callback)(void *);
-extern func_800B1FCC_callback D_800BAAF4_AA9A4[];
+typedef void (*SharpTurnBehaviorStepHandler)(void *);
+extern SharpTurnBehaviorStepHandler sharpTurnBehaviorStepHandlers[];
 
 typedef void (*DefaultBehaviorPhaseHandler)(void *);
 extern DefaultBehaviorPhaseHandler D_800BAAD4_AA984[];
@@ -315,8 +315,8 @@ end:
     return 0;
 }
 
-void func_800B1FCC_A1E7C(func_800B00D4_arg *arg0) {
-    D_800BAAF4_AA9A4[arg0->unkBBF](arg0);
+void dispatchSharpTurnBehaviorStep(func_800B00D4_arg *arg0) {
+    sharpTurnBehaviorStepHandlers[arg0->unkBBF](arg0);
 }
 
 typedef struct {
