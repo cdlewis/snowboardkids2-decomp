@@ -7,7 +7,7 @@ void allocateAudioResources(void);
 void initializeMusicSystem(void);
 void queueAnonymousBufferData(void *source);
 void setAudioDistanceLimits(s32 innerDistance, s32 outerDistance);
-void func_800569A4_575A4(u8 *src_data, s8 search_id);
+void queueBufferDataNoFlags(u8 *source, s8 bufferId);
 void setBufferData(void *source, u8 arg1, s32 arg2);
 void func_80056B7C_5777C(Vec3i *arg0, s16 arg1);
 void func_80056C6C_5786C(Vec3i *arg0, u32 arg1, s16 arg2);

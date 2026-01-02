@@ -181,23 +181,22 @@ void setAudioDistanceLimits(s32 innerDistance, s32 outerDistance) {
     gGraphicsManager->audioInnerDistance = innerDistance;
 }
 
-void func_800569A4_575A4(u8 *src_data, s8 search_id) {
+void queueBufferDataNoFlags(u8 *source, s8 bufferId) {
     s32 i;
-    void *bufferPtr;
+    void *dest;
 
     for (i = 0; i < gGraphicsManager->bufferCount; i++) {
-        if (gGraphicsManager->bufferIds[i] == search_id) {
-            bufferPtr = (void *)((i << 5) + (s32)gGraphicsManager + 0x40C);
-            memcpy(bufferPtr, src_data, 0x20);
+        if (gGraphicsManager->bufferIds[i] == bufferId) {
+            dest = (void *)((i << 5) + (s32)gGraphicsManager + 0x40C);
+            memcpy(dest, source, 0x20);
             return;
         }
     }
 
-    // write to the next available buffer if there's space
     if (gGraphicsManager->bufferCount < 8) {
-        gGraphicsManager->bufferIds[gGraphicsManager->bufferCount] = search_id;
-        bufferPtr = (void *)((gGraphicsManager->bufferCount << 5) + (s32)gGraphicsManager + 0x40C);
-        memcpy(bufferPtr, src_data, 0x20);
+        gGraphicsManager->bufferIds[gGraphicsManager->bufferCount] = bufferId;
+        dest = (void *)((gGraphicsManager->bufferCount << 5) + (s32)gGraphicsManager + 0x40C);
+        memcpy(dest, source, 0x20);
         gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = 0;
         gGraphicsManager->bufferCount++;
     }

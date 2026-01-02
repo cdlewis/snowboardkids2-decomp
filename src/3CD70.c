@@ -268,7 +268,7 @@ void updateScriptedCamera(ScriptedCameraState *camera) {
     func_8006FD3C_7093C(0x64, cameraMatrix);
 
     if (allocation->players->unkBCA == 0) {
-        func_800569A4_575A4(cameraMatrix, 0);
+        queueBufferDataNoFlags(cameraMatrix, 0);
     } else {
         setBufferData(cameraMatrix, 0x30, 0);
     }
