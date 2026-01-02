@@ -116,7 +116,7 @@ void func_80055650_56250(Struct_52880 *arg0);
 void func_800558A4_564A4(Struct_52880 *arg0);
 void func_80055964_56564(Struct_52880 *arg0);
 void func_80055A84_56684(Struct_52880 *);
-s32 func_80052A24_53624(s32, s32);
+s32 spawnParachuteProjectileTask(s32, s32);
 s32 func_80053078_53C78(s32, s32);
 s32 func_800537B0_543B0(s32, s32);
 s32 func_80053DF0_549F0(s32, s32);
@@ -127,8 +127,8 @@ void func_80052DB4_539B4(Struct_52880 *);
 void cleanupSlapstickProjectileTask(Struct_52880 *arg0);
 void loadSlapstickProjectileAsset(Struct_52880 *arg0);
 void launchSlapstickProjectile(Struct_52880 *arg0);
-void func_800524A4_530A4(Struct_52880 *arg0);
-void func_800525F4_531F4(Struct_52880 *arg0);
+void loadParachuteProjectileAsset(Struct_52880 *arg0);
+void launchParachuteProjectile(Struct_52880 *arg0);
 void func_8005383C_5443C(Struct_52880 *arg0);
 void func_800548C8_554C8(Struct_52880 *arg0);
 void func_80054AE4_556E4(Struct_52880 *arg0);
@@ -382,14 +382,14 @@ s32 spawnSlapstickProjectileTask(s32 playerIdx, s32 unused) {
     return (s32)task;
 }
 
-void func_8005245C_5305C(Struct_52880 *arg0) {
+void initParachuteProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->assetData = load_3ECE40();
     setCleanupCallback(cleanupSlapstickProjectileTask);
-    setCallbackWithContinue(func_800524A4_530A4);
+    setCallbackWithContinue(loadParachuteProjectileAsset);
 }
 
-void func_800524A4_530A4(Struct_52880 *arg0) {
+void loadParachuteProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 3);
@@ -397,10 +397,10 @@ void func_800524A4_530A4(Struct_52880 *arg0) {
     arg0->hitCount = 0;
     arg0->turnRate = 0;
     arg0->unk0 = ptr;
-    setCallbackWithContinue(func_800525F4_531F4);
+    setCallbackWithContinue(launchParachuteProjectile);
 }
 
-void func_80052500_53100(Struct_52880 *arg0) {
+void checkParachuteProjectileHit(Struct_52880 *arg0) {
     GameState *alloc;
     Player *result;
     void *s1;
@@ -442,9 +442,9 @@ void func_80052500_53100(Struct_52880 *arg0) {
     }
 }
 
-void func_80052758_53358(Struct_52880 *arg0);
+void updateParachuteProjectile(Struct_52880 *arg0);
 
-void func_800525F4_531F4(Struct_52880 *arg0) {
+void launchParachuteProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s16 playerIdx;
     s32 temp_v0;
@@ -474,8 +474,8 @@ void func_800525F4_531F4(Struct_52880 *arg0) {
     arg0->lifetime = 0xF0;
 
     func_80056B7C_5777C(&arg0->pos, 0x10);
-    setCallback(func_80052758_53358);
-    func_80052500_53100(arg0);
+    setCallback(updateParachuteProjectile);
+    checkParachuteProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
         func_80050ECC_51ACC(&arg0->pos);
@@ -488,7 +488,7 @@ void func_800525F4_531F4(Struct_52880 *arg0) {
     }
 }
 
-void func_80052758_53358(Struct_52880 *arg0) {
+void updateParachuteProjectile(Struct_52880 *arg0) {
     Alloc_55650 *alloc;
     Vec3i sp18;
     Vec3i savedVec;
@@ -539,7 +539,7 @@ void func_80052758_53358(Struct_52880 *arg0) {
         arg0->vel.y = arg0->pos.y - savedVec.y;
         arg0->vel.z = arg0->pos.z - savedVec.z;
 
-        func_80052500_53100(arg0);
+        checkParachuteProjectileHit(arg0);
 
         var_s3 = func_8005BF50_5CB50(
             &arg0->pos,
@@ -585,10 +585,10 @@ void func_80052758_53358(Struct_52880 *arg0) {
     } while (i < 4);
 }
 
-s32 func_80052A24_53624(s32 arg0, s32 arg1) {
+s32 spawnParachuteProjectileTask(s32 arg0, s32 arg1) {
     Struct_52880 *task;
 
-    task = scheduleTask(func_8005245C_5305C, (arg0 + 4) & 0xFF, 0, 0x6F);
+    task = scheduleTask(initParachuteProjectileTask, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
         task->ownerPlayerIdx = arg0;
     }
@@ -1490,7 +1490,7 @@ s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
         case 0:
             return spawnSlapstickProjectileTask(arg1, arg2);
         case 1:
-            return func_80052A24_53624(arg1, arg2);
+            return spawnParachuteProjectileTask(arg1, arg2);
         case 2:
             return func_80053078_53C78(arg1, arg2);
         case 3:
