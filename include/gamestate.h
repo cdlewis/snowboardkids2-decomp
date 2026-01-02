@@ -252,7 +252,7 @@ typedef struct {
     u8 unk5D;
     u8 numPlayers;
     u8 unk5F;
-    u8 unk60;
+    u8 pendingPlayerRenderTasks;
     u8 PAD_6[0x2];
     u8 unk63;
     u8 PAD_6B_2[0x10];

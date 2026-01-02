@@ -989,7 +989,7 @@ void initPlayerRenderTask(PlayerRenderTaskState *arg0) {
 
 void updatePlayerRenderCounter(void) {
     GameState *gs = (GameState *)getCurrentAllocation();
-    gs->unk60 -= 1;
+    gs->pendingPlayerRenderTasks -= 1;
     setCallbackWithContinue(&func_800458AC_464AC);
 }
 
@@ -2825,7 +2825,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
     switch (arg0) {
         case SUNNY_MOUNTAIN:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             func_80049BFC_4A7FC();
@@ -2839,7 +2839,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case TURTLE_ISLAND:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             func_80049C38_4A838(arg0);
@@ -2852,7 +2852,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case JINGLE_TOWN:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A != 0xB) {
@@ -2868,7 +2868,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case JINGLE_TOWN_BOSS:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
@@ -2883,7 +2883,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case WENDYS_HOUSE:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             scheduleTask(&func_800BB2B0, 0, 0, 0x32);
@@ -2896,7 +2896,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case LINDAS_CASTLE:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             func_80049C38_4A838(arg0);
@@ -2911,7 +2911,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case CRAZY_JUNGLE:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             spawnPushZone(0);
@@ -2939,7 +2939,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case STARLIGHT_HIGHWAY:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             func_80049C38_4A838(arg0);
@@ -2954,7 +2954,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case HAUNTED_HOUSE:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             func_80049C38_4A838(arg0);
@@ -2978,7 +2978,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case ICE_LAND:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             spawnPushZone(4);
@@ -2991,7 +2991,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case ICE_LAND_BOSS:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
@@ -3008,7 +3008,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case SNOWBOARD_STREET_SPEED_CROSS:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
@@ -3024,7 +3024,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case SNOWBOARD_STREET_SHOT_CROSS:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
@@ -3040,7 +3040,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case X_CROSS:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
@@ -3053,7 +3053,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
 
         case TRAINING:
             for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->unk60 = temp_s1->unk60 + 1;
+                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
             func_80049C38_4A838(arg0);

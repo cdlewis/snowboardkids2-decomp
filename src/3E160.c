@@ -834,7 +834,7 @@ void scheduleRaceTasks(void) {
     GameState *gameState;
 
     gameState = (GameState *)getCurrentAllocation();
-    gameState->unk60 = 0;
+    gameState->pendingPlayerRenderTasks = 0;
 
     scheduleTask(&D_800B0334, 0, 0, 1);
     scheduleTask(&D_800B7B7C, 0, 0, 0x64);
