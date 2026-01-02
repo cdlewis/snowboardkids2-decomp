@@ -2512,7 +2512,7 @@ s32 func_800B5D68_A5C18(Player *arg0) {
     }
 
     if (arg0->unkBBF == 1) {
-        if (func_800420A8_42CA8(arg0) != 0) {
+        if (spawnCrashEffect(arg0) != 0) {
             arg0->unkBBF = arg0->unkBBF + 1;
         }
     }

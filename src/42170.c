@@ -162,21 +162,21 @@ typedef struct {
 } Func43DC0State;
 
 typedef struct {
-    u8 pad0[0x14];    /* 0x00 */
-    Vec3i unk14;      /* 0x14 */
-    void *unk20;      /* 0x20 */
-    void *unk24;      /* 0x24 */
-    void *unk28;      /* 0x28 */
-    s32 unk2C;        /* 0x2C */
-    u8 pad30[0x0C];   /* 0x30 */
-    Player *unk3C;    /* 0x3C */
-    s16 matrix[3][3]; /* 0x40 - just the 9 s16 values (0x12 bytes) */
-    u8 pad52[2];      /* 0x52 - padding to 0x54 */
-    s32 unk54;        /* 0x54 */
-    s32 unk58;        /* 0x58 */
-    s32 unk5C;        /* 0x5C */
-    s32 unk60;        /* 0x60 */
-} Func41F38State;
+    u8 pad0[0x14];            /* 0x00 */
+    Vec3i position;           /* 0x14 */
+    void *displayData;        /* 0x20 */
+    void *asset1;             /* 0x24 */
+    void *asset2;             /* 0x28 */
+    s32 unk2C;                /* 0x2C */
+    u8 pad30[0x0C];           /* 0x30 */
+    Player *player;           /* 0x3C */
+    s16 rotationMatrix[3][3]; /* 0x40 - 3x3 rotation matrix (0x12 bytes) */
+    u8 pad52[2];              /* 0x52 - padding to 0x54 */
+    s32 unk54;                /* 0x54 */
+    s32 unk58;                /* 0x58 */
+    s32 unk5C;                /* 0x5C */
+    s32 playSound;            /* 0x60 */
+} CrashEffectState;
 
 typedef struct {
     u8 _pad0[0x3C]; /* 0x00 */
@@ -553,41 +553,41 @@ void spawnBurstEffect(Vec3i *position) {
     }
 }
 
-void func_80041FB4_42BB4(Func41F38State *);
-void func_80042070_42C70(Func41F38State *);
+void updateCrashEffect(CrashEffectState *);
+void cleanupCrashEffect(CrashEffectState *);
 
-void func_80041F38_42B38(Func41F38State *arg0) {
+void initCrashEffect(CrashEffectState *arg0) {
     getCurrentAllocation();
-    arg0->unk20 = &D_8009A6D0_9B2D0;
-    arg0->unk24 = loadAsset_B7E70();
-    arg0->unk28 = loadAsset_216290();
+    arg0->displayData = &D_8009A6D0_9B2D0;
+    arg0->asset1 = loadAsset_B7E70();
+    arg0->asset2 = loadAsset_216290();
     arg0->unk2C = 0;
-    createYRotationMatrix((Transform3D *)arg0->matrix, 0xF800);
+    createYRotationMatrix((Transform3D *)arg0->rotationMatrix, 0xF800);
     arg0->unk54 = 0;
     arg0->unk58 = 0;
     arg0->unk5C = 0;
-    arg0->unk60 = 1;
-    setCleanupCallback(func_80042070_42C70);
-    setCallbackWithContinue(func_80041FB4_42BB4);
+    arg0->playSound = 1;
+    setCleanupCallback(cleanupCrashEffect);
+    setCallbackWithContinue(updateCrashEffect);
 }
 
-void func_80041FB4_42BB4(Func41F38State *arg0) {
+void updateCrashEffect(CrashEffectState *arg0) {
     Vec3i pos;
     s32 i;
 
-    func_8006B084_6BC84(arg0->matrix, &arg0->unk3C->unk3F8, arg0);
+    func_8006B084_6BC84(arg0->rotationMatrix, &arg0->player->unk3F8, arg0);
 
-    if ((arg0->unk3C->unkB88 & 0x80) == 0) {
-        pos.x = arg0->unk3C->worldPos.x;
-        pos.y = arg0->unk3C->worldPos.y + 0x100000;
-        pos.z = arg0->unk3C->worldPos.z;
+    if ((arg0->player->unkB88 & 0x80) == 0) {
+        pos.x = arg0->player->worldPos.x;
+        pos.y = arg0->player->worldPos.y + 0x100000;
+        pos.z = arg0->player->worldPos.z;
         spawnBurstEffect(&pos);
         func_80069CF8_6A8F8();
     }
 
-    if (arg0->unk60 != 0) {
-        arg0->unk60 = 0;
-        func_80056B7C_5777C(&arg0->unk14, 0x12);
+    if (arg0->playSound != 0) {
+        arg0->playSound = 0;
+        func_80056B7C_5777C(&arg0->position, 0x12);
     }
 
     for (i = 0; i < 4; i++) {
@@ -595,17 +595,17 @@ void func_80041FB4_42BB4(Func41F38State *arg0) {
     }
 }
 
-void func_80042070_42C70(Func41F38State *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupCrashEffect(CrashEffectState *arg0) {
+    arg0->asset1 = freeNodeMemory(arg0->asset1);
+    arg0->asset2 = freeNodeMemory(arg0->asset2);
 }
 
-void *func_800420A8_42CA8(void *arg0) {
-    Func41F38State *task;
+void *spawnCrashEffect(void *arg0) {
+    CrashEffectState *task;
 
-    task = scheduleTask(&func_80041F38_42B38, 0, 0, 0xC8);
+    task = scheduleTask(&initCrashEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        task->unk3C = arg0;
+        task->player = arg0;
     }
     return task;
 }
