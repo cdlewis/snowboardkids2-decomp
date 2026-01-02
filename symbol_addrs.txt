@@ -1,6 +1,7 @@
 func_800B0690_1DBD70 = 0x800B0690; // rom:0x1DBD70
 initPlayerFinishPositionTask = 0x8004C170; // rom:0x4CD70
 updatePlayerFinishPositionDisplay = 0x8004C254; // rom:0x4CE54
+cleanupPlayerFinishPositionTask = 0x8004C294; // rom:0x4CE94
 cleanupConfettiEffect = 0x800413E0; // rom:0x41FE0
 initFallingEffect = 0x80041570; // rom:0x42170
 updateFallingEffect = 0x800415E8; // rom:0x421E8

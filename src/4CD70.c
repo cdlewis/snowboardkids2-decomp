@@ -247,7 +247,7 @@ void func_8004D338_4DF38(Struct_func_8004D134 *arg0);
 void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0);
 void initPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state);
-void func_8004C294_4CE94(Struct_func_8004F04C *arg0);
+void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void func_8004C2C0_4CEC0(Struct_func_8004C2C0 *arg0);
 void func_8004C728_4D328(Struct_func_8004C728 *arg0);
 void func_8004CA90_4D690(void);
@@ -305,7 +305,7 @@ void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0) {
 
 dma_and_callbacks:
     arg0->asset = loadCompressedData(romStart, romEnd, size);
-    setCleanupCallback(func_8004C294_4CE94);
+    setCleanupCallback(cleanupPlayerFinishPositionTask);
     setCallback(updatePlayerFinishPositionDisplay);
 }
 
@@ -314,8 +314,8 @@ void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state) {
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, state);
 }
 
-void func_8004C294_4CE94(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state) {
+    state->asset = freeNodeMemory(state->asset);
 }
 
 void func_8004C2C0_4CEC0(Struct_func_8004C2C0 *arg0) {
