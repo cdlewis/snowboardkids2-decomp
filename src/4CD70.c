@@ -234,7 +234,7 @@ typedef struct {
 
 void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
 void func_8004D464_4E064(Struct_func_8004D3A4 *);
-void func_8004D954_4E554(Struct_func_8004D8E4 *arg0);
+void func_8004D954_4E554(FinishPositionDisplayState *arg0);
 void func_8004D98C_4E58C(Struct_func_8004F04C *arg0);
 void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
 void func_8004D784_4E384(Struct_func_8004D784 *arg0);
@@ -245,8 +245,8 @@ void func_8004D23C_4DE3C(Struct_func_8004D134 *arg0);
 void func_8004D298_4DE98(Struct_func_8004D134 *arg0);
 void func_8004D338_4DF38(Struct_func_8004D134 *arg0);
 void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0);
-void func_8004C170_4CD70(Struct_func_8004D8E4 *arg0);
-void func_8004C254_4CE54(Struct_func_8004D8E4 *arg0);
+void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0);
+void func_8004C254_4CE54(FinishPositionDisplayState *arg0);
 void func_8004C294_4CE94(Struct_func_8004F04C *arg0);
 void func_8004C2C0_4CEC0(Struct_func_8004C2C0 *arg0);
 void func_8004C728_4D328(Struct_func_8004C728 *arg0);
@@ -270,25 +270,25 @@ extern s32 D_80090460_91060[];
 extern s32 D_800904A0_910A0[];
 extern s32 D_800904E0_910E0[];
 
-void func_8004C170_4CD70(Struct_func_8004D8E4 *arg0) {
-    GameState *allocation;
-    s32 playerIndex;
-    s32 temp_v1;
+void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0) {
+    GameState *state;
+    s32 index;
+    s32 numPlayers;
     void *romStart;
     void *romEnd;
     s32 size;
 
-    allocation = (GameState *)getCurrentAllocation();
-    playerIndex = arg0->unk10;
-    arg0->unkC = (Player *)((u8 *)allocation->players + playerIndex * 0xBE8);
+    state = (GameState *)getCurrentAllocation();
+    index = arg0->playerIndex;
+    arg0->player = (Player *)((u8 *)state->players + index * 0xBE8);
 
-    temp_v1 = allocation->unk5F;
-    if (temp_v1 < 3) {
-        if (temp_v1 != 0) {
-            arg0->unk0 = -0x88;
-            arg0->unk2 = 0x40;
-            if (allocation->unk5F == 2) {
-                arg0->unk2 = 0x10;
+    numPlayers = state->unk5F;
+    if (numPlayers < 3) {
+        if (numPlayers != 0) {
+            arg0->x = -0x88;
+            arg0->y = 0x40;
+            if (state->unk5F == 2) {
+                arg0->y = 0x10;
             }
             romStart = &_3F3940_ROM_START;
             romEnd = &_3F3D10_ROM_START;
@@ -300,18 +300,18 @@ void func_8004C170_4CD70(Struct_func_8004D8E4 *arg0) {
     romStart = &_3F3D10_ROM_START;
     romEnd = &_3F3EF0_ROM_START;
     size = 0x288;
-    arg0->unk0 = -0x44;
-    arg0->unk2 = 0x20;
+    arg0->x = -0x44;
+    arg0->y = 0x20;
 
 dma_and_callbacks:
-    arg0->unk4 = loadCompressedData(romStart, romEnd, size);
+    arg0->asset = loadCompressedData(romStart, romEnd, size);
     setCleanupCallback(func_8004C294_4CE94);
     setCallback(func_8004C254_4CE54);
 }
 
-void func_8004C254_4CE54(Struct_func_8004D8E4 *arg0) {
-    arg0->unk8 = arg0->unkC->finishPosition;
-    debugEnqueueCallback((u16)(arg0->unk10 + 8), 0, func_8000FED0_10AD0, arg0);
+void func_8004C254_4CE54(FinishPositionDisplayState *arg0) {
+    arg0->spriteIndex = arg0->player->finishPosition;
+    debugEnqueueCallback((u16)(arg0->playerIndex + 8), 0, func_8000FED0_10AD0, arg0);
 }
 
 void func_8004C294_4CE94(Struct_func_8004F04C *arg0) {
@@ -976,19 +976,19 @@ void func_8004D890_4E490(s32 arg0, s32 arg1) {
     }
 }
 
-void func_8004D8E4_4E4E4(Struct_func_8004D8E4 *arg0) {
-    GameState *allocation = (GameState *)getCurrentAllocation();
+void func_8004D8E4_4E4E4(FinishPositionDisplayState *arg0) {
+    GameState *state = (GameState *)getCurrentAllocation();
 
-    arg0->unkC = allocation->players;
-    arg0->unk4 = loadCompressedData(&_3F3940_ROM_START, &_3F3940_ROM_END, 0x888);
-    arg0->unk0 = -0x48;
-    arg0->unk2 = -0x38;
+    arg0->player = state->players;
+    arg0->asset = loadCompressedData(&_3F3940_ROM_START, &_3F3940_ROM_END, 0x888);
+    arg0->x = -0x48;
+    arg0->y = -0x38;
     setCleanupCallback(&func_8004D98C_4E58C);
     setCallback(&func_8004D954_4E554);
 }
 
-void func_8004D954_4E554(Struct_func_8004D8E4 *arg0) {
-    arg0->unk8 = arg0->unkC->finishPosition;
+void func_8004D954_4E554(FinishPositionDisplayState *arg0) {
+    arg0->spriteIndex = arg0->player->finishPosition;
     debugEnqueueCallback(8, 6, &func_8000FED0_10AD0, arg0);
 }
 
@@ -2495,7 +2495,7 @@ void func_8005011C_50D1C(void) {
             case 8:
             case 9:
             case 10:
-                SCHEDULE_AND_SET(func_8004C170_4CD70, 4, i);
+                SCHEDULE_AND_SET(initPlayerFinishPositionTask, 4, i);
                 SCHEDULE_AND_SET(func_8004C2C0_4CEC0, 14, i);
                 SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
                 SCHEDULE_AND_SET_SHORT(func_8004CA90_4D690, 22, i);
@@ -2503,7 +2503,7 @@ void func_8005011C_50D1C(void) {
                 break;
 
             case 1:
-                SCHEDULE_AND_SET(func_8004C170_4CD70, 4, i);
+                SCHEDULE_AND_SET(initPlayerFinishPositionTask, 4, i);
                 SCHEDULE_AND_SET(func_8004C2C0_4CEC0, 14, i);
                 SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);

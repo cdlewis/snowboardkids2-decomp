@@ -17,14 +17,14 @@ typedef struct {
 } Struct_func_8004E6F8;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
     u8 padA[0x2];
-    Player *unkC;
-    s32 unk10;
-} Struct_func_8004D8E4;
+    Player *player;
+    s32 playerIndex;
+} FinishPositionDisplayState;
 
 typedef struct {
     s16 unk0;
@@ -91,7 +91,7 @@ typedef struct {
 
 void func_8004D364_4DF64(s32 arg0);
 void func_8004D890_4E490(s32 arg0, s32 arg1);
-void func_8004D8E4_4E4E4(Struct_func_8004D8E4 *arg0);
+void func_8004D8E4_4E4E4(FinishPositionDisplayState *arg0);
 void func_8004D9D0_4E5D0(Struct_func_8004D9D0 *arg0);
 void func_8004E6A4_4F2A4(s16 arg0, s16 arg1);
 void func_8004E6F8_4F2F8(Struct_func_8004E6F8 *arg0);
