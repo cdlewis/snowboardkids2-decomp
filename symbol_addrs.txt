@@ -2507,5 +2507,6 @@ updatePlayerFlashEffect = 0x800433EC; // rom:0x43FEC
 fadeOutPlayerFlashEffect = 0x800435F0; // rom:0x441F0
 cleanupPlayerFlashEffect = 0x8004367C; // rom:0x4427C
 spawnPlayerFlashEffect = 0x800436B4; // rom:0x442B4
+advanceAnimationFrame = 0x80043718; // rom:0x44318
 starAnimFrameDurations = 0x80090928; // rom:0x91528
 starAnimFrameIndices = 0x80090929; // rom:0x91529

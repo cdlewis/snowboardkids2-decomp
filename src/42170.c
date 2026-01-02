@@ -247,8 +247,8 @@ typedef struct {
     Func43CA4Unk28 *unk28; /* 0x28 */
     s16 unk2C[3];          /* 0x2C */
     u8 _pad32[0xE];        /* 0x32 */
-    s16 unk40;             /* 0x40 */
-    s16 unk42;             /* 0x42 */
+    s16 animFrameIndex;    /* 0x40 */
+    s16 frameTimer;        /* 0x42 */
 } Func43CA4Arg;
 
 typedef struct {
@@ -263,8 +263,8 @@ typedef struct {
     s32 unk34;             /* 0x34 */
     s32 unk38;             /* 0x38 */
     s32 unk3C;             /* 0x3C */
-    s16 unk40;             /* 0x40 */
-    s16 unk42;             /* 0x42 */
+    s16 animFrameIndex;    /* 0x40 */
+    s16 frameTimer;        /* 0x42 */
     u8 _pad44[0x2];        /* 0x44 */
     s16 unk46;             /* 0x46 */
     s16 unk48;             /* 0x48 */
@@ -1420,44 +1420,48 @@ PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player) {
     return task;
 }
 
-s32 func_80043718_44318(void *arg0_void, void *arg1_void) {
-    Func4393CArg *arg0 = (Func4393CArg *)arg0_void;
-    u8 *arg1 = (u8 *)arg1_void;
-    s8 check;
+s32 advanceAnimationFrame(void *arg0_void, void *animData_void) {
+    Func4393CArg *state = (Func4393CArg *)arg0_void;
+    u8 *animData = (u8 *)animData_void;
+    s8 nextFrameDuration;
 
-    arg0->unk42--;
+    state->frameTimer--;
 
-    if (arg0->unk42 != 0) {
+    if (state->frameTimer != 0) {
         return 0;
     }
 
-    loadAssetMetadata((void *)((s32)arg0 + 4), (void *)arg0->unk0, (s8)arg1[arg0->unk40 * 2 + 1]);
+    loadAssetMetadata((void *)((s32)state + 4), (void *)state->unk0, (s8)animData[state->animFrameIndex * 2 + 1]);
 
-    arg0->unk42 = (s8)arg1[arg0->unk40 * 2];
-    arg0->unk40++;
+    state->frameTimer = (s8)animData[state->animFrameIndex * 2];
+    state->animFrameIndex++;
 
-    check = arg1[arg0->unk40 * 2];
-    if (check != 0) {
+    nextFrameDuration = animData[state->animFrameIndex * 2];
+    if (nextFrameDuration != 0) {
         return 0;
     }
 
-    arg0->unk40--;
+    state->animFrameIndex--;
     return 1;
 }
 
 void func_800437C4_443C4(Func4393CArg *arg0, s8 *arg1) {
     s16 temp;
 
-    temp = arg0->unk42 - 1;
-    arg0->unk42 = temp;
+    temp = arg0->frameTimer - 1;
+    arg0->frameTimer = temp;
 
     if ((temp << 16) == 0) {
-        loadAssetMetadata((loadAssetMetadata_arg *)((s32)arg0 + 4), (void *)arg0->unk0, arg1[arg0->unk40 * 2 + 1]);
-        arg0->unk42 = arg1[arg0->unk40 * 2];
-        temp = (u16)arg0->unk40 + 1;
-        arg0->unk40 = temp;
+        loadAssetMetadata(
+            (loadAssetMetadata_arg *)((s32)arg0 + 4),
+            (void *)arg0->unk0,
+            arg1[arg0->animFrameIndex * 2 + 1]
+        );
+        arg0->frameTimer = arg1[arg0->animFrameIndex * 2];
+        temp = (u16)arg0->animFrameIndex + 1;
+        arg0->animFrameIndex = temp;
         if (arg1[temp * 2] == 0) {
-            arg0->unk40 = 0;
+            arg0->animFrameIndex = 0;
         }
     }
 }
@@ -1479,23 +1483,23 @@ void func_800438A0_444A0(Func4393CArg *arg0) {
     void *ptr;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
-    temp = arg0->unk42;
+    temp = arg0->frameTimer;
 
     if (temp == 0) {
-        arg0->unk42 = 1;
+        arg0->frameTimer = 1;
         arg0->unk46 = 0;
         ptr = (void *)((u8 *)gameState->unk44 + 0xF40);
         arg0->unk30 = 0x300000;
         arg0->unk2C = 0;
         arg0->unk34 = 0;
-        arg0->unk40 = 0;
+        arg0->animFrameIndex = 0;
         arg0->unk4C = 1;
         arg0->unk4 = ptr;
-        func_80043718_44318(arg0, &D_8009093C_9153C);
+        advanceAnimationFrame(arg0, &D_8009093C_9153C);
         setCallbackWithContinue(func_8004393C_4453C);
     } else {
         if (gameState->unk76 == 0) {
-            arg0->unk42 = temp - 1;
+            arg0->frameTimer = temp - 1;
         }
     }
 }
@@ -1506,10 +1510,10 @@ void func_8004393C_4453C(Func4393CArg *arg0) {
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        if (func_80043718_44318(arg0, &D_8009093C_9153C) != 0) {
+        if (advanceAnimationFrame(arg0, &D_8009093C_9153C) != 0) {
             arg0->unk38 = 0;
-            arg0->unk40 = 0;
-            arg0->unk42 = 1;
+            arg0->animFrameIndex = 0;
+            arg0->frameTimer = 1;
             setCallback(func_800439F4_445F4);
         }
     }
@@ -1537,8 +1541,8 @@ void func_800439F4_445F4(Func4393CArg *arg0) {
         arg0->unk30 = arg0->unk30 + arg0->unk38;
         if (arg0->unk30 > 0x600000) {
             arg0->unk48 = 0;
-            arg0->unk40 = 0;
-            arg0->unk42 = 1;
+            arg0->animFrameIndex = 0;
+            arg0->frameTimer = 1;
             setCallback(func_80043AB4_446B4);
         }
     }
@@ -1569,8 +1573,8 @@ void func_80043AB4_446B4(Func4393CArg *arg0) {
     if (arg0->unk48 < 0x800) {
         func_800437C4_443C4(arg0, &D_80090958_91558);
     } else if (arg0->unk48 == 0x800) {
-        arg0->unk40 = 0;
-        arg0->unk42 = 1;
+        arg0->animFrameIndex = 0;
+        arg0->frameTimer = 1;
         arg0->unk3C = func_80059AC4_5A6C4((Player *)arg0->unk28);
         func_80059A48_5A648((Player *)arg0->unk28, -arg0->unk3C);
         func_800437C4_443C4(arg0, &D_8009095C_9155C);
@@ -1579,8 +1583,8 @@ void func_80043AB4_446B4(Func4393CArg *arg0) {
     }
 
     if (arg0->unk48 == 0xC00) {
-        arg0->unk40 = 0;
-        arg0->unk42 = 1;
+        arg0->animFrameIndex = 0;
+        arg0->frameTimer = 1;
         func_80059A48_5A648((Player *)arg0->unk24, arg0->unk3C);
         setCallback(func_80043C00_44800);
     }
@@ -1603,9 +1607,9 @@ void func_80043C00_44800(Func43CA4Arg *arg0) {
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        if (func_80043718_44318(arg0, &D_80090964_91564) != 0) {
-            arg0->unk40 = 0;
-            arg0->unk42 = 1;
+        if (advanceAnimationFrame(arg0, &D_80090964_91564) != 0) {
+            arg0->animFrameIndex = 0;
+            arg0->frameTimer = 1;
             func_80056B7C_5777C(&arg0->unk8, 0x12);
             setCallback(func_80043CA4_448A4);
         }
@@ -1624,7 +1628,7 @@ void func_80043CA4_448A4(Func43CA4Arg *arg0) {
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        if (func_80043718_44318(arg0, &D_80090974_91574) != 0) {
+        if (advanceAnimationFrame(arg0, &D_80090974_91574) != 0) {
             func_80069CF8_6A8F8();
         }
     }
@@ -1647,7 +1651,7 @@ void func_80043D5C_4495C(void *arg0, void *arg1, s16 arg2) {
     if (task != NULL) {
         task->unk24 = arg0;
         task->unk28 = arg1;
-        task->unk42 = arg2;
+        task->frameTimer = arg2;
     }
 }
 
