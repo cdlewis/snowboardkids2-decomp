@@ -184,19 +184,19 @@ typedef struct {
 } Func44538TaskMem;
 
 typedef struct {
-    u8 pad0[0x14]; /* 0x00 */
-    Vec3i unk14;   /* 0x14 */
-    void *unk20;   /* 0x20 */
-    void *unk24;   /* 0x24 */
-    void *unk28;   /* 0x28 */
-    s32 unk2C;     /* 0x2C */
-    u8 pad30[0xC]; /* 0x30 */
-    Player *unk3C; /* 0x3C */
-    s16 unk40;     /* 0x40 */
-    s16 unk42;     /* 0x42 - scale factor */
-    u16 unk44;     /* 0x44 - rotation angle */
-    s16 unk46;     /* 0x46 */
-} Func42410State;
+    u8 pad0[0x14];     /* 0x00 */
+    Vec3i position;    /* 0x14 */
+    void *displayData; /* 0x20 */
+    void *asset1;      /* 0x24 */
+    void *asset2;      /* 0x28 */
+    s32 unk2C;         /* 0x2C */
+    u8 pad30[0xC];     /* 0x30 */
+    Player *player;    /* 0x3C */
+    s16 unk40;         /* 0x40 */
+    s16 scaleFactor;   /* 0x42 */
+    u16 rotationAngle; /* 0x44 */
+    s16 playSound;     /* 0x46 */
+} LiftEffectState;
 
 void cleanupFallingEffect(FallingEffectState *);
 
@@ -718,23 +718,23 @@ SparkleEffectState *spawnSparkleEffectWithPlayer(void *arg0, s32 arg1) {
     return task;
 }
 
-void func_80042638_43238(Func42410State *);
-void func_8004247C_4307C(Func42410State *);
-void func_8004256C_4316C(Func42410State *);
+void cleanupLiftEffect(LiftEffectState *);
+void updateLiftEffect(LiftEffectState *);
+void fadeOutLiftEffect(LiftEffectState *);
 
-void func_80042410_43010(Func42410State *arg0) {
+void initLiftEffect(LiftEffectState *state) {
     getCurrentAllocation();
-    arg0->unk20 = &D_8009A6F0_9B2F0;
-    arg0->unk24 = loadAsset_B7E70();
-    arg0->unk28 = loadAsset_216290();
-    *(s32 *)&arg0->unk40 = 0x200;
-    arg0->unk2C = 0;
-    arg0->unk46 = 1;
-    setCleanupCallback(func_80042638_43238);
-    setCallbackWithContinue(func_8004247C_4307C);
+    state->displayData = &D_8009A6F0_9B2F0;
+    state->asset1 = loadAsset_B7E70();
+    state->asset2 = loadAsset_216290();
+    *(s32 *)&state->unk40 = 0x200;
+    state->unk2C = 0;
+    state->playSound = 1;
+    setCleanupCallback(cleanupLiftEffect);
+    setCallbackWithContinue(updateLiftEffect);
 }
 
-void func_8004247C_4307C(Func42410State *arg0) {
+void updateLiftEffect(LiftEffectState *state) {
     Func43CA4GameState *gameState;
     Player *player;
     Vec3i *pos;
@@ -742,70 +742,70 @@ void func_8004247C_4307C(Func42410State *arg0) {
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        if (*(s32 *)&arg0->unk40 != 0x2000) {
-            *(s32 *)&arg0->unk40 += 0x200;
+        if (*(s32 *)&state->unk40 != 0x2000) {
+            *(s32 *)&state->unk40 += 0x200;
         }
     }
 
-    arg0->unk44 += 0x300;
-    createYRotationMatrix((Transform3D *)arg0, arg0->unk44);
-    scaleMatrix((Transform3D *)arg0, arg0->unk42, arg0->unk42, arg0->unk42);
-    player = arg0->unk3C;
-    pos = &arg0->unk14;
+    state->rotationAngle += 0x300;
+    createYRotationMatrix((Transform3D *)state, state->rotationAngle);
+    scaleMatrix((Transform3D *)state, state->scaleFactor, state->scaleFactor, state->scaleFactor);
+    player = state->player;
+    pos = &state->position;
     memcpy(pos, &player->worldPos, 0xC);
-    arg0->unk14.y += 0xFFEC0000;
+    state->position.y += 0xFFEC0000;
 
-    if (arg0->unk46 != 0) {
+    if (state->playSound != 0) {
         func_80056B7C_5777C(pos, 0x15);
-        arg0->unk46 = 0;
+        state->playSound = 0;
     }
 
-    if ((arg0->unk3C->unkB88 & 0x400) == 0) {
-        setCallback(func_8004256C_4316C);
+    if ((state->player->unkB88 & 0x400) == 0) {
+        setCallback(fadeOutLiftEffect);
     }
 
     i = 0;
     do {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
         i++;
     } while (i < 4);
 }
 
-void func_8004256C_4316C(Func42410State *arg0) {
+void fadeOutLiftEffect(LiftEffectState *state) {
     Func43CA4GameState *gameState;
     s32 i;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        *(s32 *)&arg0->unk40 -= 0x200;
+        *(s32 *)&state->unk40 -= 0x200;
     }
 
-    if (*(s32 *)&arg0->unk40 == 0x200) {
+    if (*(s32 *)&state->unk40 == 0x200) {
         func_80069CF8_6A8F8();
     }
 
-    arg0->unk44 += 0x12C;
-    createYRotationMatrix((Transform3D *)arg0, arg0->unk44);
-    scaleMatrix((Transform3D *)arg0, arg0->unk42, arg0->unk42, arg0->unk42);
-    memcpy(&arg0->unk14, &arg0->unk3C->worldPos, 0xC);
-    arg0->unk14.y += 0xFFEC0000;
+    state->rotationAngle += 0x12C;
+    createYRotationMatrix((Transform3D *)state, state->rotationAngle);
+    scaleMatrix((Transform3D *)state, state->scaleFactor, state->scaleFactor, state->scaleFactor);
+    memcpy(&state->position, &state->player->worldPos, 0xC);
+    state->position.y += 0xFFEC0000;
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
     }
 }
 
-void func_80042638_43238(Func42410State *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupLiftEffect(LiftEffectState *state) {
+    state->asset1 = freeNodeMemory(state->asset1);
+    state->asset2 = freeNodeMemory(state->asset2);
 }
 
-void *func_80042670_43270(Player *arg0) {
-    Func42410State *task;
+void *createLiftEffect(Player *player) {
+    LiftEffectState *task;
 
-    task = (Func42410State *)scheduleTask(func_80042410_43010, 0, 0, 0xC8);
+    task = (LiftEffectState *)scheduleTask(initLiftEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        task->unk3C = arg0;
+        task->player = player;
     }
     return task;
 }

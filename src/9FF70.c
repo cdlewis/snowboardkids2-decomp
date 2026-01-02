@@ -2690,7 +2690,7 @@ s32 func_800B62E4_A6194(Player *arg0) {
         arg0->unkA8C = 0xFFFF;
         func_8005D308_5DF08(arg0, 0xE);
     }
-    if ((arg0->unkBBF == 1) && (func_80042670_43270(arg0) != 0)) {
+    if ((arg0->unkBBF == 1) && (createLiftEffect(arg0) != 0)) {
         arg0->unkBBF = arg0->unkBBF + 1;
     }
     arg0->unkB88 = 0x400;
