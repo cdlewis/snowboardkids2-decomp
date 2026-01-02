@@ -171,7 +171,7 @@ typedef struct {
     u16 unkBB2;
     u8 unkBB4;
     s8 trickCount;
-    u8 unkBB6;
+    u8 spinsPerformedMask;
     u8 unkBB7;
     u8 unkBB8;
     u8 unkBB9;

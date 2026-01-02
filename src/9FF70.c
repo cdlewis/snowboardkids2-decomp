@@ -655,7 +655,7 @@ void resetTrickScore(Player *player) {
     player->tricksPerformedMask = 0;
     player->trickCount = 0;
     player->unkBD5 = 0;
-    player->unkBB6 = 0;
+    player->spinsPerformedMask = 0;
 }
 
 void addTrickScore(Player *player, s8 trickType) {
@@ -693,38 +693,38 @@ void addTrickScore(Player *player, s8 trickType) {
     }
 }
 
-void func_800B2950_A2800(Player *arg0, s32 arg1) {
-    s8 temp_a0;
+void addSpinTrickScore(Player *player, s32 spinDirection) {
+    s8 currentMask;
     s8 temp_v1;
 
-    arg0->trickScore += 0x1E;
-    arg0->trickPoints += 1;
-    temp_a0 = arg0->unkBB6;
-    temp_v1 = temp_a0;
+    player->trickScore += 0x1E;
+    player->trickPoints += 1;
+    currentMask = player->spinsPerformedMask;
+    temp_v1 = currentMask;
 
-    if (temp_a0 == 0) {
-        arg0->unkBB6 = temp_v1 | (1 << arg1);
+    if (currentMask == 0) {
+        player->spinsPerformedMask = temp_v1 | (1 << spinDirection);
     } else {
-        if (!((temp_a0 >> (s8)arg1) & 1)) {
-            arg0->trickScore += 0x14;
-            arg0->trickPoints += 1;
+        if (!((currentMask >> (s8)spinDirection) & 1)) {
+            player->trickScore += 0x14;
+            player->trickPoints += 1;
         }
 
-        arg0->unkBB6 = arg0->unkBB6 | (1 << (s8)arg1);
+        player->spinsPerformedMask = player->spinsPerformedMask | (1 << (s8)spinDirection);
 
-        if ((s8)arg0->unkBB6 == 0xF) {
-            arg0->trickScore += 0x14;
-            arg0->trickPoints += 3;
-            arg0->unkBB6 |= 0x10;
+        if ((s8)player->spinsPerformedMask == 0xF) {
+            player->trickScore += 0x14;
+            player->trickPoints += 3;
+            player->spinsPerformedMask |= 0x10;
         }
     }
 
-    if (arg0->trickScore >= 10000) {
-        arg0->trickScore = 9999;
+    if (player->trickScore >= 10000) {
+        player->trickScore = 9999;
     }
 
-    if (arg0->trickPoints >= 1000) {
-        arg0->trickPoints = 999;
+    if (player->trickPoints >= 1000) {
+        player->trickPoints = 999;
     }
 }
 
@@ -1295,19 +1295,19 @@ void func_800B3784_A3634(Player *arg0) {
             result = func_8005D308_5DF08(arg0, arg0->unkBD6);
             if (result != 0) {
                 if (arg0->unkBD6 == 0x17) {
-                    func_800B2950_A2800(arg0, 0);
+                    addSpinTrickScore(arg0, 0);
                 }
 
                 if (arg0->unkBD6 == 0x19) {
-                    func_800B2950_A2800(arg0, 1);
+                    addSpinTrickScore(arg0, 1);
                 }
 
                 if (arg0->unkBD6 == 0x15) {
-                    func_800B2950_A2800(arg0, 2);
+                    addSpinTrickScore(arg0, 2);
                 }
 
                 if (arg0->unkBD6 == 0x13) {
-                    func_800B2950_A2800(arg0, 3);
+                    addSpinTrickScore(arg0, 3);
                 }
 
                 arg0->unkBD5++;
