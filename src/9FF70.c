@@ -324,11 +324,11 @@ typedef struct {
     s32 unkB8C;
     u8 _padB90[0x2F];
     u8 unkBBF;
-} func_800B1FFC_arg;
+} initSharpTurnSlidingStep_arg;
 
-s32 func_800B1FFC_A1EAC(func_800B1FFC_arg *arg0) {
-    arg0->unkB8C = 2;
-    arg0->unkBBF = arg0->unkBBF + 1;
+s32 initSharpTurnSlidingStep(initSharpTurnSlidingStep_arg *player) {
+    player->unkB8C = 2;
+    player->unkBBF = player->unkBBF + 1;
     return 1;
 }
 
