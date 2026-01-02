@@ -2,11 +2,11 @@
 #include "common.h"
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u16 unk4;
+    u8 reserved0;
+    u8 reserved1;
+    u8 reserved2;
+    u8 targetAlpha;
+    u16 duration;
 } cutsceneChrAlpha_exec_arg;
 
 typedef struct {

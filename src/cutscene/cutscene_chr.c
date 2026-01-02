@@ -537,17 +537,17 @@ void cutsceneChrAlpha_exec(cutsceneChrAlpha_exec_arg *arg0, CutsceneManager *arg
 
     slot = func_800B2A78_1DFB28(arg1, arg2);
     currentSlot = &arg1->slots[arg2];
-    slot->unk0.ChrPayload.unk0 = arg0->unk4;
+    slot->unk0.ChrPayload.unk0 = arg0->duration;
 
     currentAlpha = getModelAlpha(currentSlot->model);
 
-    if (slot->unk0.ChrPayload.unk0 == 0 || arg0->unk3 == currentAlpha) {
-        setModelAlpha(currentSlot->model, arg0->unk3);
+    if (slot->unk0.ChrPayload.unk0 == 0 || arg0->targetAlpha == currentAlpha) {
+        setModelAlpha(currentSlot->model, arg0->targetAlpha);
     } else {
-        slot->unk0.ChrPayload.unk14 = arg0->unk0 << 16;
-        slot->unk0.ChrPayload.unk18 = arg0->unk1 << 16;
-        slot->unk0.ChrPayload.unk1C = arg0->unk2 << 16;
-        slot->unk0.ChrPayload.unk20 = arg0->unk3 << 16;
+        slot->unk0.ChrPayload.unk14 = arg0->reserved0 << 16;
+        slot->unk0.ChrPayload.unk18 = arg0->reserved1 << 16;
+        slot->unk0.ChrPayload.unk1C = arg0->reserved2 << 16;
+        slot->unk0.ChrPayload.unk20 = arg0->targetAlpha << 16;
 
         currentAlpha = getModelAlpha(currentSlot->model);
 
