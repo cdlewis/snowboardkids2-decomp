@@ -2530,3 +2530,6 @@ advanceAnimationFrame = 0x80043718; // rom:0x44318
 advanceAnimationFrameLooping = 0x800437C4; // rom:0x443C4
 starAnimFrameDurations = 0x80090928; // rom:0x91528
 starAnimFrameIndices = 0x80090929; // rom:0x91529
+iceLandWaypoints1 = 0x800BB7B0; // rom:0xB2530
+iceLandWaypoints2 = 0x800BB860; // rom:0xB25E0
+iceLandWaypoints3 = 0x800BB910; // rom:0xB2690

@@ -6,17 +6,17 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    u8 padding[0x5C];
-    void (*callback)(void *);
-} ScheduledTask;
-
-typedef struct {
     u8 unk0;
     u8 pad1[3];
     s32 unk4;
     s32 unk8;
     s32 unkC;
 } WaypointEntry;
+
+typedef struct {
+    u8 padding[0x5C];
+    WaypointEntry *waypoints;
+} ScheduledTask;
 
 typedef struct {
     Transform3D unk0;
@@ -42,10 +42,51 @@ typedef struct {
     u8 memoryPoolId;
 } Allocation;
 
-extern void D_800BB7B0_B2530(void *);
-extern void D_800BB860_B25E0(void *);
-extern void D_800BB910_B2690(void *);
-extern void func_800BB3A0_B2120(void);
+WaypointEntry iceLandWaypoints1[] = {
+    { 0, { 0 }, 0xF0B2C5A7, 0x299EB9C0, 0x2CA726AB },
+    { 0, { 0 }, 0xEE729266, 0x2913033D, 0x2E4BB956 },
+    { 0, { 0 }, 0xEB2DD542, 0x28CC433D, 0x3039DEC8 },
+    { 0, { 0 }, 0xE7EB68A2, 0x283D833D, 0x2F348172 },
+    { 0, { 0 }, 0xE9125C02, 0x281FC33D, 0x2CBBBE24 },
+    { 0, { 0 }, 0xE7CE6DA4, 0x2792833D, 0x2A5485CA },
+    { 0, { 0 }, 0xE6B2762E, 0x26D4C33D, 0x28DA8968 },
+    { 0, { 0 }, 0xE534B0DC, 0x2650C33D, 0x27E2307A },
+    { 0, { 0 }, 0xE3E7EA22, 0x2521028F, 0x27C8BD88 },
+    { 0, { 0 }, 0xE1AEF454, 0x24C9E116, 0x288EC920 },
+    { 1, { 0 }, 0xDFC825C4, 0x23168E64, 0x29C722E4 },
+};
+
+WaypointEntry iceLandWaypoints2[] = {
+    { 0, { 0 }, 0xF0B2C5A7, 0x299EB9C0, 0x2CA726AB },
+    { 0, { 0 }, 0xEE729266, 0x2913033D, 0x2E4BB956 },
+    { 0, { 0 }, 0xEB2DD542, 0x28CC433D, 0x3039DEC8 },
+    { 0, { 0 }, 0xE7EB68A2, 0x283D833D, 0x2F348172 },
+    { 0, { 0 }, 0xE9125C02, 0x281FC33D, 0x2CBBBE24 },
+    { 0, { 0 }, 0xE7CE6DA4, 0x2792833D, 0x2A5485CA },
+    { 0, { 0 }, 0xE6B2762E, 0x26D4C33D, 0x28DA8968 },
+    { 0, { 0 }, 0xE43D4A70, 0x25FA52E9, 0x26DC1F5C },
+    { 0, { 0 }, 0xE321F9C4, 0x24E212E9, 0x26F4C3A8 },
+    { 0, { 0 }, 0xE0C26AE2, 0x24839F8B, 0x2771F2D6 },
+    { 1, { 0 }, 0xDDEFF7E2, 0x2272EF9C, 0x27C802AE },
+};
+
+WaypointEntry iceLandWaypoints3[] = {
+    { 0, { 0 }, 0xF0B2C5A7, 0x299EB9C0, 0x2CA726AB },
+    { 0, { 0 }, 0xEE729266, 0x2913033D, 0x2E4BB956 },
+    { 0, { 0 }, 0xEB2DD542, 0x28CC433D, 0x3039DEC8 },
+    { 0, { 0 }, 0xE7EB68A2, 0x283D833D, 0x2F348172 },
+    { 0, { 0 }, 0xE9125C02, 0x281FC33D, 0x2CBBBE24 },
+    { 0, { 0 }, 0xE7CE6DA4, 0x2792833D, 0x2A5485CA },
+    { 0, { 0 }, 0xE6B2762E, 0x26D4C33D, 0x28DA8968 },
+    { 0, { 0 }, 0xE309661A, 0x259483F2, 0x2567DD9C },
+    { 0, { 0 }, 0xE1FA575A, 0x2482C3F2, 0x25B2FAAC },
+    { 0, { 0 }, 0xDFC1B0D2, 0x2434FF30, 0x2633E7C4 },
+    { 1, { 0 }, 0xDD8A659C, 0x2217FF28, 0x278AD968 },
+};
+
+s32 D_800BB9C0_B2740[] = { 0, 0, 0x00080000, 0 };
+
+void func_800BB3A0_B2120(void);
 void func_800BB650_B23D0(B2030TaskPayload *arg0);
 void func_800BB6B4_B2434(B2030TaskPayload *arg0);
 
@@ -101,13 +142,13 @@ void func_800BB6B4_B2434(B2030TaskPayload *arg0) {
             if (task != NULL) {
                 switch (arg0->unk2) {
                     case 0:
-                        task->callback = D_800BB7B0_B2530;
+                        task->waypoints = iceLandWaypoints1;
                         break;
                     case 1:
-                        task->callback = D_800BB860_B25E0;
+                        task->waypoints = iceLandWaypoints2;
                         break;
                     case 2:
-                        task->callback = D_800BB910_B2690;
+                        task->waypoints = iceLandWaypoints3;
                         break;
                 }
                 arg0->unk2++;

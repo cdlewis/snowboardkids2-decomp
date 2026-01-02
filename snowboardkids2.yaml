@@ -818,7 +818,7 @@ segments:
     exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB2030, c, levels/ice_land]
-      - [0xB2530, data, levels/ice_land]
+      - [0xB2530, .data, levels/ice_land]
 
   - name: levels/snowboard_street_speed_cross
     type: code
