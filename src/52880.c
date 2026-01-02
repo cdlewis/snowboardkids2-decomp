@@ -125,7 +125,7 @@ s32 func_80055820_56420(s32, s32);
 void func_80053434_54034(Struct_52880 *);
 void func_80052DB4_539B4(Struct_52880 *);
 void func_800523EC_52FEC(Struct_52880 *arg0);
-void func_80051E34_52A34(Struct_52880 *arg0);
+void loadSlapstickProjectileAsset(Struct_52880 *arg0);
 void func_80051FC4_52BC4(Struct_52880 *arg0);
 void func_800524A4_530A4(Struct_52880 *arg0);
 void func_800525F4_531F4(Struct_52880 *arg0);
@@ -164,10 +164,10 @@ void initSlapstickProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
-    setCallbackWithContinue(func_80051E34_52A34);
+    setCallbackWithContinue(loadSlapstickProjectileAsset);
 }
 
-void func_80051E34_52A34(Struct_52880 *arg0) {
+void loadSlapstickProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 2);
