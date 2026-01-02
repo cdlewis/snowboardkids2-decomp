@@ -502,21 +502,21 @@ s32 cutsceneChrMoveSight_validate(void) {
     return 0;
 }
 
-void cutsceneChrMoveSight_exec(cutsceneChrMoveSight_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    s32 stackData[3];
+void cutsceneChrMoveSight_exec(cutsceneChrMoveSight_exec_arg *arg0, CutsceneManager *cutsceneManager, s8 slotIndex) {
+    s32 targetPosition[3];
     CutsceneSlot *slot;
 
-    stackData[0] = arg0->unk0;
-    stackData[1] = arg0->unk4;
-    stackData[2] = arg0->unk8;
+    targetPosition[0] = arg0->targetX;
+    targetPosition[1] = arg0->targetY;
+    targetPosition[2] = arg0->targetZ;
 
-    slot = &arg1->slots[arg2];
+    slot = &cutsceneManager->slots[slotIndex];
 
-    func_800B7B70_1E4C20(&slot->slotData, (s32 *)&stackData, arg0->unkE, arg0->unk18, arg0->unk1C);
+    func_800B7B70_1E4C20(&slot->slotData, (s32 *)&targetPosition, arg0->duration, arg0->verticalVelocity, arg0->unk1C);
 
-    setModelAnimationLooped(slot->model, arg0->unk10, arg0->unk14, arg0->unk13);
+    setModelAnimationLooped(slot->model, arg0->animIndex, arg0->transitionAnimIndex, arg0->loopCount);
 
-    setModelActionMode(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg0->actionMode);
 }
 
 s32 cutsceneChrMoveSight_isDone(void) {
