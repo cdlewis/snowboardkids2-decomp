@@ -980,38 +980,38 @@ s32 updateRightSpinTrick(Player *player) {
     return 0;
 }
 
-s32 func_800B30B0_A2F60(Player *arg0) {
-    if (tryFinalizeTrickLanding(arg0) != 0) {
+s32 updateLeftSpinTrick(Player *player) {
+    if (tryFinalizeTrickLanding(player) != 0) {
         return 1;
     }
 
-    updateSpinTrickState(arg0, 1);
-    updateTrickAirborneVelocity(arg0);
+    updateSpinTrickState(player, 1);
+    updateTrickAirborneVelocity(player);
 
-    if (arg0->unkB8C != 0) {
-        if (arg0->unkA96 < -0x1000) {
-            if (arg0->unkBCD == -1) {
-                arg0->unkB8C = arg0->unkB8C - 0x22;
+    if (player->unkB8C != 0) {
+        if (player->unkA96 < -0x1000) {
+            if (player->unkBCD == -1) {
+                player->unkB8C = player->unkB8C - 0x22;
             }
         }
 
-        arg0->unkA96 = arg0->unkA96 - arg0->unkB8C;
+        player->unkA96 = player->unkA96 - player->unkB8C;
 
-        if (arg0->unkA96 < -0x1FFF) {
-            arg0->unkB8C = 0;
-            if (arg0->unkBCD < 0) {
-                arg0->unkB84 = arg0->unkB84 & ~0x4000;
+        if (player->unkA96 < -0x1FFF) {
+            player->unkB8C = 0;
+            if (player->unkBCD < 0) {
+                player->unkB84 = player->unkB84 & ~0x4000;
             } else {
-                arg0->unkBBF = arg0->unkBCD + 6;
-                arg0->unkBC0 = 0;
+                player->unkBBF = player->unkBCD + 6;
+                player->unkBC0 = 0;
             }
         } else {
-            func_800B4058_A3F08(arg0);
+            func_800B4058_A3F08(player);
         }
     }
 
-    func_800B3784_A3634(arg0);
-    updateTrickFacingAngle(arg0);
+    func_800B3784_A3634(player);
+    updateTrickFacingAngle(player);
     return 0;
 }
 
