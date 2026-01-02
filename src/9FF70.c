@@ -924,22 +924,22 @@ void beginSpinTrick(Player *player) {
     func_80056B7C_5777C(&player->worldPos, 0xB);
 }
 
-void func_800B2EE4_A2D94(Player *arg0, s8 arg1) {
-    switch (arg0->unkBC0) {
+void updateSpinTrickState(Player *player, s8 trickType) {
+    switch (player->unkBC0) {
         case 0:
-            beginSpinTrick(arg0);
-            addTrickScore(arg0, arg1);
+            beginSpinTrick(player);
+            addTrickScore(player, trickType);
             break;
         case 1:
-            if (arg0->unkBDA != 0 || (arg0->unkB7C & 0x8000)) {
-                arg0->unkBC0 = arg0->unkBC0 + 1;
+            if (player->unkBDA != 0 || (player->unkB7C & 0x8000)) {
+                player->unkBC0 = player->unkBC0 + 1;
             }
             break;
         case 2:
-            if (arg0->unkBDA != 0 || (!(arg0->unkB7C & 0x8000) && arg0->unkB8C == 0x200)) {
-                arg0->unkBCD = func_8005D818_5E418(arg0);
-            } else if (arg0->unkB7C & 0x8000) {
-                func_8005D818_5E418(arg0);
+            if (player->unkBDA != 0 || (!(player->unkB7C & 0x8000) && player->unkB8C == 0x200)) {
+                player->unkBCD = func_8005D818_5E418(player);
+            } else if (player->unkB7C & 0x8000) {
+                func_8005D818_5E418(player);
             }
             break;
     }
@@ -950,7 +950,7 @@ s32 func_800B2FD0_A2E80(Player *arg0) {
         return 1;
     }
 
-    func_800B2EE4_A2D94(arg0, 0);
+    updateSpinTrickState(arg0, 0);
     updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -985,7 +985,7 @@ s32 func_800B30B0_A2F60(Player *arg0) {
         return 1;
     }
 
-    func_800B2EE4_A2D94(arg0, 1);
+    updateSpinTrickState(arg0, 1);
     updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -1020,7 +1020,7 @@ s32 func_800B3190_A3040(Player *arg0) {
         return 1;
     }
 
-    func_800B2EE4_A2D94(arg0, 2);
+    updateSpinTrickState(arg0, 2);
     updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -1055,7 +1055,7 @@ s32 func_800B3270_A3120(Player *arg0) {
         return 1;
     }
 
-    func_800B2EE4_A2D94(arg0, 3);
+    updateSpinTrickState(arg0, 3);
     updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -1090,7 +1090,7 @@ s32 func_800B3350_A3200(Player *arg0) {
         return 1;
     }
 
-    func_800B2EE4_A2D94(arg0, 4);
+    updateSpinTrickState(arg0, 4);
     updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -1126,7 +1126,7 @@ s32 func_800B3438_A32E8(Player *arg0) {
         return 1;
     }
 
-    func_800B2EE4_A2D94(arg0, 5);
+    updateSpinTrickState(arg0, 5);
     updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -1162,7 +1162,7 @@ s32 func_800B3520_A33D0(Player *arg0) {
         return 1;
     }
 
-    func_800B2EE4_A2D94(arg0, 6);
+    updateSpinTrickState(arg0, 6);
     updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -1198,7 +1198,7 @@ s32 func_800B3608_A34B8(Player *arg0) {
         return 1;
     }
 
-    func_800B2EE4_A2D94(arg0, 7);
+    updateSpinTrickState(arg0, 7);
     updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {

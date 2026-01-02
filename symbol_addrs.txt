@@ -28,6 +28,7 @@ tryFinalizeTrickLanding = 0x800B2C18; // rom:0xA2AC8
 updateTrickAirborneVelocity = 0x800B2DDC; // rom:0xA2C8C
 updateBasicTrickAirborne = 0x800B2E38; // rom:0xA2CE8
 beginSpinTrick = 0x800B2E80; // rom:0xA2D30
+updateSpinTrickState = 0x800B2EE4; // rom:0xA2D94
 trickScoreTable = 0x800BAB48; // rom:0xAA9F8
 trickBonusTable = 0x800BAB58; // rom:0xAAA08
 sharpTurnBehaviorStepHandlers = 0x800BAAF4; // rom:0xAA9A4
