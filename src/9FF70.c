@@ -894,19 +894,19 @@ skip_to_end:
     return 1;
 }
 
-void func_800B2DDC_A2C8C(Player *arg0) {
-    arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 7);
-    arg0->unk44C.y = arg0->unk44C.y - arg0->unkAB8;
-    arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 7);
-    func_800B419C_A404C(arg0);
-    func_800B00FC_9FFAC(arg0);
+void updateTrickAirborneVelocity(Player *player) {
+    player->unk44C.x = player->unk44C.x - (player->unk44C.x >> 7);
+    player->unk44C.y = player->unk44C.y - player->unkAB8;
+    player->unk44C.z = player->unk44C.z - (player->unk44C.z >> 7);
+    func_800B419C_A404C(player);
+    func_800B00FC_9FFAC(player);
 }
 
 s32 func_800B2E38_A2CE8(void *arg0) {
     if (tryFinalizeTrickLanding(arg0) != 0) {
         return 1;
     }
-    func_800B2DDC_A2C8C(arg0);
+    updateTrickAirborneVelocity(arg0);
     func_800B3784_A3634(arg0);
     updateTrickFacingAngle(arg0);
     return 0;
@@ -951,7 +951,7 @@ s32 func_800B2FD0_A2E80(Player *arg0) {
     }
 
     func_800B2EE4_A2D94(arg0, 0);
-    func_800B2DDC_A2C8C(arg0);
+    updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
         if (arg0->unkA96 >= 0x1001) {
@@ -986,7 +986,7 @@ s32 func_800B30B0_A2F60(Player *arg0) {
     }
 
     func_800B2EE4_A2D94(arg0, 1);
-    func_800B2DDC_A2C8C(arg0);
+    updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
         if (arg0->unkA96 < -0x1000) {
@@ -1021,7 +1021,7 @@ s32 func_800B3190_A3040(Player *arg0) {
     }
 
     func_800B2EE4_A2D94(arg0, 2);
-    func_800B2DDC_A2C8C(arg0);
+    updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
         if (arg0->unkA98 < -0x1000) {
@@ -1056,7 +1056,7 @@ s32 func_800B3270_A3120(Player *arg0) {
     }
 
     func_800B2EE4_A2D94(arg0, 3);
-    func_800B2DDC_A2C8C(arg0);
+    updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
         if (arg0->unkA98 >= 0x1001) {
@@ -1091,7 +1091,7 @@ s32 func_800B3350_A3200(Player *arg0) {
     }
 
     func_800B2EE4_A2D94(arg0, 4);
-    func_800B2DDC_A2C8C(arg0);
+    updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
         if (arg0->unkA96 >= 0x1001) {
@@ -1127,7 +1127,7 @@ s32 func_800B3438_A32E8(Player *arg0) {
     }
 
     func_800B2EE4_A2D94(arg0, 5);
-    func_800B2DDC_A2C8C(arg0);
+    updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
         if (arg0->unkA96 >= 0x1001) {
@@ -1163,7 +1163,7 @@ s32 func_800B3520_A33D0(Player *arg0) {
     }
 
     func_800B2EE4_A2D94(arg0, 6);
-    func_800B2DDC_A2C8C(arg0);
+    updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
         if (arg0->unkA96 < -0x1000) {
@@ -1199,7 +1199,7 @@ s32 func_800B3608_A34B8(Player *arg0) {
     }
 
     func_800B2EE4_A2D94(arg0, 7);
-    func_800B2DDC_A2C8C(arg0);
+    updateTrickAirborneVelocity(arg0);
 
     if (arg0->unkB8C != 0) {
         if (arg0->unkA96 < -0x1000) {
