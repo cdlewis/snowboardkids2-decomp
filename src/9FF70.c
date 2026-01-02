@@ -120,10 +120,10 @@ void dispatchDefaultBehaviorPhase(func_800B00D4_arg *arg0) {
     D_800BAAD4_AA984[arg0->unkBBE](arg0);
 }
 
-s32 func_800B12F0_A11A0(Player *arg0) {
-    GameState *alloc = getCurrentAllocation();
+s32 updatePlayerFinishWaiting(Player *arg0) {
+    GameState *gameState = getCurrentAllocation();
 
-    if (alloc->unk79 == 0) {
+    if (gameState->unk79 == 0) {
         arg0->unkAAC = 0;
         if (arg0->unkBBF != 0) {
             if (arg0->unkB8C < 9) {
@@ -134,7 +134,7 @@ s32 func_800B12F0_A11A0(Player *arg0) {
         return 1;
     }
 
-    if (alloc->unk7A < 10) {
+    if (gameState->unk7A < 10) {
         if (arg0->unkBBF == 0) {
             if (arg0->unkB7E & 0x4000) {
                 arg0->unkB8C = 0;
