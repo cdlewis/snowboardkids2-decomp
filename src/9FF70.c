@@ -407,33 +407,33 @@ s32 endSharpTurnSlidingStep(endSharpTurnSlidingStep_arg *player) {
     return 1;
 }
 
-s32 func_800B217C_A202C(Player *arg0) {
-    if (arg0->unkB84 & 0x20000) {
-        setPlayerBehaviorPhase(arg0, 6);
+s32 recoverSharpTurnSlidingStep(Player *player) {
+    if (player->unkB84 & 0x20000) {
+        setPlayerBehaviorPhase(player, 6);
         return 1;
     }
 
-    if (func_8005A9A8_5B5A8(arg0) != 0) {
-        func_800B65F8_A64A8((func_800B00D4_arg *)arg0);
+    if (func_8005A9A8_5B5A8(player) != 0) {
+        func_800B65F8_A64A8((func_800B00D4_arg *)player);
         return 1;
     }
 
-    if (arg0->unkB84 & 1) {
-        setPlayerBehaviorPhase(arg0, 1);
+    if (player->unkB84 & 1) {
+        setPlayerBehaviorPhase(player, 1);
         return 1;
     }
 
-    arg0->unk44C.y = arg0->unk44C.y - arg0->unkAB8;
-    func_800B40D4_A3F84(arg0);
-    func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
-    func_800B00FC_9FFAC(arg0);
+    player->unk44C.y = player->unk44C.y - player->unkAB8;
+    func_800B40D4_A3F84(player);
+    func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+    func_800B00FC_9FFAC(player);
 
-    if (func_8005D308_5DF08(arg0, 6) != 0) {
-        arg0->unkBC2 = 6;
-        setPlayerBehaviorPhase(arg0, 0);
+    if (func_8005D308_5DF08(player, 6) != 0) {
+        player->unkBC2 = 6;
+        setPlayerBehaviorPhase(player, 0);
     }
 
-    func_80058CFC_598FC(arg0);
+    func_80058CFC_598FC(player);
     return 0;
 }
 

@@ -7,6 +7,7 @@ dispatchSharpTurnBehaviorStep = 0x800B1FCC; // rom:0xA1E7C
 initSharpTurnSlidingStep = 0x800B1FFC; // rom:0xA1EAC
 updateSharpTurnSlidingStep = 0x800B2018; // rom:0xA1EC8
 endSharpTurnSlidingStep = 0x800B214C; // rom:0xA1FFC
+recoverSharpTurnSlidingStep = 0x800B217C; // rom:0xA202C
 sharpTurnBehaviorStepHandlers = 0x800BAAF4; // rom:0xAA9A4
 func_800B0690_1DBD70 = 0x800B0690; // rom:0x1DBD70
 initPlayerFinishPositionTask = 0x8004C170; // rom:0x4CD70
