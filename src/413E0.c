@@ -13,9 +13,9 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-} func_800407E0_413E0_arg;
+    void *assetTable;
+    void *indicatorAsset;
+} PlayerIndicatorTask;
 
 typedef struct {
     u8 padding[0x8];
@@ -60,8 +60,8 @@ typedef struct {
 
 void func_80040B4C_4174C(func_80040B4C_4174C_arg *);
 void func_80040E00_41A00(func_80040E00_41A00_arg *);
-void func_80040F34_41B34(func_800407E0_413E0_arg *);
-void func_800413E0_41FE0(func_800407E0_413E0_arg *arg0);
+void func_80040F34_41B34(PlayerIndicatorTask *);
+void func_800413E0_41FE0(PlayerIndicatorTask *arg0);
 
 typedef struct {
     u8 _pad[0x24];
@@ -120,22 +120,22 @@ typedef struct {
 
 void func_80040E4C_41A4C(func_80040D80_41980_arg *);
 
-void func_8004083C_4143C(func_8004083C_4143C_arg *arg0);
-void func_80040948_41548(func_80040948_41548_arg *arg0);
+void awaitPlayerIndicatorReady(func_8004083C_4143C_arg *arg0);
+void cleanupPlayerIndicator(func_80040948_41548_arg *arg0);
 
-void func_800407E0_413E0(func_800407E0_413E0_arg *arg0) {
-    GameState *temp_s0 = (GameState *)getCurrentAllocation();
-    arg0->unk0 = load_3ECE40();
-    arg0->unk4 = (u8 *)&temp_s0->unk44->unk1380;
-    setCleanupCallback(&func_80040948_41548);
-    setCallbackWithContinue(&func_8004083C_4143C);
+void initPlayerIndicator(PlayerIndicatorTask *task) {
+    GameState *gameState = (GameState *)getCurrentAllocation();
+    task->assetTable = load_3ECE40();
+    task->indicatorAsset = (u8 *)&gameState->unk44->unk1380;
+    setCleanupCallback(&cleanupPlayerIndicator);
+    setCallbackWithContinue(&awaitPlayerIndicatorReady);
 }
 
-void func_8004083C_4143C(func_8004083C_4143C_arg *arg0) {
-    func_8004083C_4143C_struct24 *temp;
+void awaitPlayerIndicatorReady(func_8004083C_4143C_arg *arg0) {
+    func_8004083C_4143C_struct24 *player;
 
-    temp = (func_8004083C_4143C_struct24 *)arg0->unk24;
-    if (temp->unkBDE != 0) {
+    player = (func_8004083C_4143C_struct24 *)arg0->unk24;
+    if (player->unkBDE != 0) {
         arg0->unk38 = 6;
         setCallback(func_80040870_41470);
     }
@@ -143,14 +143,14 @@ void func_8004083C_4143C(func_8004083C_4143C_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80040870_41470);
 
-void func_80040948_41548(func_80040948_41548_arg *arg0) {
+void cleanupPlayerIndicator(func_80040948_41548_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-void func_80040974_41574(void *arg0) {
-    Node *temp_v0 = scheduleTask(&func_800407E0_413E0, 0U, 0U, 0xF0U);
-    if (temp_v0 != NULL) {
-        temp_v0->cleanupCallback = arg0;
+void spawnPlayerIndicatorTask(void *cleanupArg) {
+    Node *task = scheduleTask(&initPlayerIndicator, 0U, 0U, 0xF0U);
+    if (task != NULL) {
+        task->cleanupCallback = cleanupArg;
     }
 }
 
@@ -336,9 +336,9 @@ void func_80040E4C_41A4C(func_80040D80_41980_arg *arg0) {
     );
 }
 
-void func_80040F34_41B34(func_800407E0_413E0_arg *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_80040F34_41B34(PlayerIndicatorTask *task) {
+    task->assetTable = freeNodeMemory(task->assetTable);
+    task->indicatorAsset = freeNodeMemory(task->indicatorAsset);
 }
 
 extern u8 gConnectedControllerMask;
@@ -416,9 +416,9 @@ void func_8004106C_41C6C(func_80041010_41C10_arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_8004119C_41D9C);
 
-void func_800413E0_41FE0(func_800407E0_413E0_arg *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_800413E0_41FE0(PlayerIndicatorTask *task) {
+    task->assetTable = freeNodeMemory(task->assetTable);
+    task->indicatorAsset = freeNodeMemory(task->indicatorAsset);
 }
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80041418_42018);

@@ -2433,3 +2433,7 @@ handleExpertRaceResult = 0x80040528; // rom:0x41128
 awaitExpertRaceContinuePress = 0x80040588; // rom:0x41188
 cleanupGameSession = 0x80040608; // rom:0x41208
 onGameSessionTerminated = 0x800407B4; // rom:0x413B4
+initPlayerIndicator = 0x800407E0; // rom:0x413E0
+awaitPlayerIndicatorReady = 0x8004083C; // rom:0x4143C
+cleanupPlayerIndicator = 0x80040948; // rom:0x41548
+spawnPlayerIndicatorTask = 0x80040974; // rom:0x41574
