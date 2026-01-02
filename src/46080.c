@@ -423,12 +423,6 @@ typedef struct {
     s16 unk18;
 } func_80046244_46E44_Task;
 
-typedef struct {
-    u8 _pad[0x3C];
-    u8 unk3C[0x20];
-    s32 unk5C;
-} func_800455BC_461BC_arg;
-
 typedef union {
     s16 halfword;
     struct {
@@ -873,7 +867,7 @@ void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0);
 void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0);
 void func_8004B648_4C248(func_8004B648_4C248_arg *arg0);
 void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0);
-void func_800455BC_461BC(func_800455BC_461BC_arg *arg0);
+void renderSkyDisplayLists(SkyRenderTaskState *arg0);
 void func_80045878_46478(void);
 void func_8004592C_4652C(func_8004592C_4652C_arg *);
 void func_80045C84_46884(func_80046244_46E44_Task *);
@@ -946,10 +940,10 @@ void dispatchSkyRenderCallback(ScheduledTask *task) {
             return;
         }
     }
-    setCallbackWithContinue(func_800455BC_461BC);
+    setCallbackWithContinue(renderSkyDisplayLists);
 }
 
-void func_800455BC_461BC(func_800455BC_461BC_arg *arg0) {
+void renderSkyDisplayLists(SkyRenderTaskState *arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
