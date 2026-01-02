@@ -16,7 +16,7 @@ void queueSoundAtPositionWithVolume(Vec3i *position, s32 soundId, f32 volume, s1
 void queueSoundAtPositionWithVolumeAndFlags(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration, s32 flags);
 void incrementSoundSequence(void);
 void checkMusicLoadRequest(void *arg);
-void func_80057124_57D24(void);
+void loadMusicTrackData(void);
 void func_800571D0_57DD0(void(callback)(void *));
 void func_80057214_57E14(void);
 void func_800572B0_57EB0(void *arg);

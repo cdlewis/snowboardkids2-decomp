@@ -40,8 +40,8 @@ typedef struct {
     /* 0x04 */ void *unk4;
     /* 0x08 */ void *unk8;
     /* 0x0C */ void *unkC;
-    /* 0x10 */ s16 unk10;
-    /* 0x12 */ u16 unk12;
+    /* 0x10 */ s16 pendingMusicId;
+    /* 0x12 */ u16 currentMusicId;
     /* 0x14 */ s16 unk14;
     /* 0x16 */ s16 unk16;
     /* 0x18 */ s16 flags;
@@ -141,8 +141,8 @@ void initializeMusicSystem(void) {
     D_80093BA5_947A5 = 1;
     negativeOne = -1;
     gGraphicsManager->unk1D = 0;
-    gGraphicsManager->unk10 = negativeOne;
-    gGraphicsManager->unk12 = 0xFFFF;
+    gGraphicsManager->pendingMusicId = negativeOne;
+    gGraphicsManager->currentMusicId = 0xFFFF;
     gGraphicsManager->unk14 = 0;
     scheduleTask(checkMusicLoadRequest, 0, 0, 0x64);
     gGraphicsManager->soundSequence = 0;
@@ -320,24 +320,24 @@ void incrementSoundSequence(void) {
 void checkMusicLoadRequest(void *arg) {
     setCleanupCallback(checkMusicLoadRequest);
     if (gGraphicsManager->unk1D != 0) {
-        setCallback(&func_80057124_57D24);
+        setCallback(&loadMusicTrackData);
     }
 }
 
-void func_80057124_57D24(void) {
-    gGraphicsManager->unk12 = gGraphicsManager->unk10;
+void loadMusicTrackData(void) {
+    gGraphicsManager->currentMusicId = gGraphicsManager->pendingMusicId;
 
     loadDataSegment(
-        D_800937E8_943E8[gGraphicsManager->unk12].start,
-        D_800937E8_943E8[gGraphicsManager->unk12].end,
-        D_800937E8_943E8[gGraphicsManager->unk12].size,
+        D_800937E8_943E8[gGraphicsManager->currentMusicId].start,
+        D_800937E8_943E8[gGraphicsManager->currentMusicId].end,
+        D_800937E8_943E8[gGraphicsManager->currentMusicId].size,
         gGraphicsManager->unk8
     );
 
     loadDataSegment(
-        D_80093974_94574[gGraphicsManager->unk12].start,
-        D_80093974_94574[gGraphicsManager->unk12].end,
-        D_80093974_94574[gGraphicsManager->unk12].size,
+        D_80093974_94574[gGraphicsManager->currentMusicId].start,
+        D_80093974_94574[gGraphicsManager->currentMusicId].end,
+        D_80093974_94574[gGraphicsManager->currentMusicId].size,
         gGraphicsManager->unk4
     );
 
@@ -345,7 +345,7 @@ void func_80057124_57D24(void) {
 }
 
 void func_800571D0_57DD0(void(callback)(void *)) {
-    func_800579E8_585E8(gGraphicsManager->unk4, (void *)*(&D_80093B00_94700 + (gGraphicsManager->unk12)));
+    func_800579E8_585E8(gGraphicsManager->unk4, (void *)*(&D_80093B00_94700 + (gGraphicsManager->currentMusicId)));
     setCallback(&func_80057214_57E14);
 }
 
@@ -353,7 +353,7 @@ void func_80057214_57E14(void) {
     s16 temp_a1;
     void *temp_v0;
 
-    if ((u16)gGraphicsManager->unk10 != gGraphicsManager->unk12) {
+    if ((u16)gGraphicsManager->pendingMusicId != gGraphicsManager->currentMusicId) {
         setCallbackWithContinue(checkMusicLoadRequest);
     } else if (gGraphicsManager->unk1D == 2) {
         temp_v0 = func_80057974_58574(gGraphicsManager->unk4, gGraphicsManager->unk8, (u8)gGraphicsManager->unk1C);
@@ -385,7 +385,7 @@ void func_800572B0_57EB0(void *arg) {
         }
     }
 
-    if ((u16)gGraphicsManager->unk10 != gGraphicsManager->unk12) {
+    if ((u16)gGraphicsManager->pendingMusicId != gGraphicsManager->currentMusicId) {
         gGraphicsManager->unk1E = 1;
         func_800578DC_584DC(gGraphicsManager->unkC, 8);
         setCallbackWithContinue(func_800573F8_57FF8);
@@ -421,7 +421,7 @@ void func_80057470_58070(void) {
 
 void func_800574A0_580A0(s32 arg0) {
     gGraphicsManager->unk1D = 2;
-    gGraphicsManager->unk10 = arg0;
+    gGraphicsManager->pendingMusicId = arg0;
     gGraphicsManager->unk16 = 0x80;
     gGraphicsManager->flags = 0x80;
     gGraphicsManager->unk1A = 0;
@@ -430,7 +430,7 @@ void func_800574A0_580A0(s32 arg0) {
 
 void func_800574E0_580E0(s16 arg0, s8 arg1) {
     gGraphicsManager->unk1D = 2;
-    gGraphicsManager->unk10 = arg0;
+    gGraphicsManager->pendingMusicId = arg0;
     gGraphicsManager->unk16 = 0x80;
     gGraphicsManager->flags = 0x80;
     gGraphicsManager->unk1A = 0;
@@ -440,7 +440,7 @@ void func_800574E0_580E0(s16 arg0, s8 arg1) {
 void func_80057514_58114(u32 arg0, u16 arg1, u16 arg2) {
     GraphicsManager *new_var;
     gGraphicsManager->unk1D = 2;
-    gGraphicsManager->unk10 = arg0;
+    gGraphicsManager->pendingMusicId = arg0;
     gGraphicsManager->unk16 = 0;
     gGraphicsManager->flags = arg1;
     gGraphicsManager->unk1A = arg2;

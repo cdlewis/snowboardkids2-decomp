@@ -14,6 +14,7 @@ queueSoundAtPositionWithVolume = 0x80056E64; // rom:0x57A64
 queueSoundAtPositionWithVolumeAndFlags = 0x80056F8C; // rom:0x57B8C
 incrementSoundSequence = 0x800570BC; // rom:0x57CBC
 checkMusicLoadRequest = 0x800570E0; // rom:0x57CE0
+loadMusicTrackData = 0x80057124; // rom:0x57D24
 normalizeVelocityToSpeed = 0x80051C80; // rom:0x52880
 initSlapstickProjectileTask = 0x80051DEC; // rom:0x529EC
 loadSlapstickProjectileAsset = 0x80051E34; // rom:0x52A34
