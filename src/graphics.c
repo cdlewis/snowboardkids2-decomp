@@ -25,11 +25,11 @@ typedef struct {
 extern GraphicsCommand D_800A2D10_A3910;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    f32 unk8;
+    s16 soundId;
+    s16 duration;
+    s16 priority;
+    s16 hasVolume;
+    f32 volume;
     Vec3i position;
     s16 flags;
     u8 padding[2];
@@ -236,10 +236,10 @@ void queueSoundAtPosition(Vec3i *position, s16 soundId) {
         RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
         memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
         index = soundId;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = index;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = -1;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = 4;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 0;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].soundId = index;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].duration = -1;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].priority = 4;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].hasVolume = 0;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
         gGraphicsManager->renderQueueCount++;
     }
@@ -251,10 +251,10 @@ void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 duration
 
         memcpy(&renderQueue[gGraphicsManager->renderQueueCount].position, position, sizeof(Vec3i));
 
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = soundId;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = duration;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = 4;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 0;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].soundId = soundId;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].duration = duration;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].priority = 4;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].hasVolume = 0;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
         gGraphicsManager->renderQueueCount++;
     }
@@ -267,41 +267,48 @@ void queueSoundAtPositionWithPriority(Vec3i *position, s32 soundId, s16 priority
         renderQueue = gGraphicsManager->renderQueue;
         memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
         index = soundId;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = index;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = duration;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = priority;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 0;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].soundId = index;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].duration = duration;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].priority = priority;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].hasVolume = 0;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
         gGraphicsManager->renderQueueCount += 1;
     }
 }
 
-void func_80056E64_57A64(Vec3i *arg0, s32 arg1, f32 arg2, s16 arg3, s32 arg4) {
+void queueSoundAtPositionWithVolume(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration) {
     RenderQueueItem(*dest)[32];
     if (gGraphicsManager->renderQueueCount < 0x20) {
         dest = &gGraphicsManager->renderQueue;
-        memcpy(&(*dest)[gGraphicsManager->renderQueueCount].position, arg0, sizeof(Vec3i));
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = arg1;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = (s16)arg4;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = arg3;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 1;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk8 = arg2;
+        memcpy(&(*dest)[gGraphicsManager->renderQueueCount].position, position, sizeof(Vec3i));
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].soundId = soundId;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].duration = (s16)duration;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].priority = priority;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].hasVolume = 1;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].volume = volume;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
         gGraphicsManager->renderQueueCount++;
     }
 }
 
-void func_80056F8C_57B8C(Vec3i *arg0, s32 arg1, f32 arg2, s16 arg3, s32 arg4, s32 arg5) {
+void queueSoundAtPositionWithVolumeAndFlags(
+    Vec3i *position,
+    s32 soundId,
+    f32 volume,
+    s16 priority,
+    s32 duration,
+    s32 flags
+) {
     s32 index = gGraphicsManager->renderQueueCount;
     if (index < 0x20) {
         RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
-        memcpy(&renderQueue[index].position, arg0, sizeof(Vec3i));
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = arg1;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = (s16)arg4;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = arg3;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 1;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk8 = arg2;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = (s16)arg5;
+        memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].soundId = soundId;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].duration = (s16)duration;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].priority = priority;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].hasVolume = 1;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].volume = volume;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = (s16)flags;
         gGraphicsManager->renderQueueCount++;
     }
 }

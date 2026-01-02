@@ -630,7 +630,7 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
         if (volume >= 0x81) {
             volume = 0x80;
         }
-        func_80056F8C_57B8C(&arg0->unk434, 1, 0, 2, arg0->unkBB8, volume);
+        queueSoundAtPositionWithVolumeAndFlags(&arg0->unk434, 1, 0, 2, arg0->unkBB8, volume);
     } else {
         func_80057ABC_586BC(arg0->unkBB8, 0);
     }
