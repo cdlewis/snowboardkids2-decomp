@@ -1868,56 +1868,56 @@ s32 updateStunnedAirbornePhase(Player *player) {
     return 0;
 }
 
-s32 func_800B48AC_A475C(Player *arg0) {
-    Vec3i stackVec;
-    GameState *allocation;
-    s16 angle;
-    s16 delta;
-    s32 vel1;
-    s32 vel2;
-    s16 rotAngle;
+s32 updateStunnedAirbornePhaseBoss(Player *player) {
+    Vec3i effectPos;
+    GameState *gameState;
+    s16 angleDiff;
+    s16 clampedDelta;
+    s32 velX;
+    s32 velZ;
+    s16 knockbackAngle;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    if (arg0->unkBBF == 0) {
-        arg0->unkA8C = 0xFFFF;
-        arg0->unkB88 = 0;
-        arg0->unk44C.x = arg0->unkAC8;
-        arg0->unk44C.z = arg0->unkAD0;
-        arg0->unkBBF++;
-        rotAngle = atan2Fixed(-arg0->unkAC8, -arg0->unkAD0);
-        rotateVectorY(allocation->unk48 + 0xE4, rotAngle, &stackVec);
-        stackVec.x += arg0->worldPos.x;
-        stackVec.z += arg0->worldPos.z;
-        stackVec.y = arg0->worldPos.y + 0x100000;
-        queueSoundAtPosition(&arg0->worldPos, 0xD);
-        func_80050ECC_51ACC(&stackVec);
+    if (player->unkBBF == 0) {
+        player->unkA8C = 0xFFFF;
+        player->unkB88 = 0;
+        player->unk44C.x = player->unkAC8;
+        player->unk44C.z = player->unkAD0;
+        player->unkBBF++;
+        knockbackAngle = atan2Fixed(-player->unkAC8, -player->unkAD0);
+        rotateVectorY(gameState->unk48 + 0xE4, knockbackAngle, &effectPos);
+        effectPos.x += player->worldPos.x;
+        effectPos.z += player->worldPos.z;
+        effectPos.y = player->worldPos.y + 0x100000;
+        queueSoundAtPosition(&player->worldPos, 0xD);
+        func_80050ECC_51ACC(&effectPos);
     }
 
-    angle = (func_8005CE98_5DA98(arg0) - arg0->unkA94) & 0x1FFF;
-    delta = angle;
-    if (angle >= 0x1001) {
-        delta = angle | 0xE000;
+    angleDiff = (func_8005CE98_5DA98(player) - player->unkA94) & 0x1FFF;
+    clampedDelta = angleDiff;
+    if (angleDiff >= 0x1001) {
+        clampedDelta = angleDiff | 0xE000;
     }
-    if (delta >= 0x101) {
-        delta = 0x100;
+    if (clampedDelta >= 0x101) {
+        clampedDelta = 0x100;
     }
-    if (delta < -0x100) {
-        delta = -0x100;
+    if (clampedDelta < -0x100) {
+        clampedDelta = -0x100;
     }
-    arg0->unkA94 = arg0->unkA94 + delta;
-    arg0->unk44C.y -= 0x6000;
-    vel1 = arg0->unk44C.x;
-    arg0->unk44C.x = vel1 - (vel1 >> 4);
-    vel2 = arg0->unk44C.z;
-    arg0->unk44C.z = vel2 - (vel2 >> 4);
-    decayPlayerAirborneAngles(arg0);
-    applyClampedVelocityToPosition(arg0);
-    if (func_8005D308_5DF08(arg0, 7) != 0) {
-        arg0->unkAA8 = arg0->unkAA8 / 2;
-        resetPlayerBehaviorToDefault(arg0);
+    player->unkA94 = player->unkA94 + clampedDelta;
+    player->unk44C.y -= 0x6000;
+    velX = player->unk44C.x;
+    player->unk44C.x = velX - (velX >> 4);
+    velZ = player->unk44C.z;
+    player->unk44C.z = velZ - (velZ >> 4);
+    decayPlayerAirborneAngles(player);
+    applyClampedVelocityToPosition(player);
+    if (func_8005D308_5DF08(player, 7) != 0) {
+        player->unkAA8 = player->unkAA8 / 2;
+        resetPlayerBehaviorToDefault(player);
     }
-    func_8005D804_5E404(arg0, 3, 0);
+    func_8005D804_5E404(player, 3, 0);
     return 0;
 }
 
