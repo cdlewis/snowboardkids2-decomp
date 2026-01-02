@@ -35,7 +35,7 @@ void func_800B4058_A3F08(Player *);
 void func_800B419C_A404C(Player *);
 void func_800B00FC_9FFAC(Player *);
 void func_800B40D4_A3F84(Player *);
-void func_800B27FC_A26AC(Player *);
+void resetTrickScore(Player *);
 
 typedef void (*func_800B3950_callback)(void *);
 extern func_800B3950_callback D_800BAB68_AAA18[];
@@ -220,7 +220,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
     if (player->unkB7C & 0xF) {
         setPlayerBehaviorPhase(player, 4);
         player->unkBBF = 5;
-        func_800B27FC_A26AC(player);
+        resetTrickScore(player);
         return 1;
     }
     if (!(player->unkB84 & 1)) {
@@ -649,13 +649,13 @@ s32 beginPostTrickLaunchStep(Player *player) {
     return 1;
 }
 
-void func_800B27FC_A26AC(Player *arg0) {
-    arg0->unkBAC = 0;
-    arg0->unkBAA = 0;
-    arg0->unkBAE = 0;
-    arg0->unkBB5 = 0;
-    arg0->unkBD5 = 0;
-    arg0->unkBB6 = 0;
+void resetTrickScore(Player *player) {
+    player->unkBAC = 0;
+    player->unkBAA = 0;
+    player->unkBAE = 0;
+    player->unkBB5 = 0;
+    player->unkBD5 = 0;
+    player->unkBB6 = 0;
 }
 
 void func_800B2818_A26C8(Player *arg0, s8 arg1) {
@@ -733,7 +733,7 @@ s32 func_800B2A3C_A28EC(Player *arg0) {
 
     if (arg0->unkB84 & 1) {
         if (arg0->unkBC0 < 3) {
-            func_800B27FC_A26AC(arg0);
+            resetTrickScore(arg0);
             if (arg0->unkBCD < 0) {
                 arg0->unkBC0 = 0;
                 arg0->unkBBF = arg0->unkBBF + 1;
