@@ -299,7 +299,7 @@ void func_80044C38_45838(Func44BBCArg *);
 void func_80044018_44C18(Func43DC0State *);
 void func_80043E24_44A24(Func43DC0State *);
 void func_80043F8C_44B8C(Func43DC0State *);
-void func_80042D54_43954(StarEffectState *);
+void contractStarEffect(StarEffectState *);
 void func_80043CA4_448A4(Func43CA4Arg *);
 void func_800439F4_445F4(Func4393CArg *);
 void updateStarEffect(StarEffectState *);
@@ -1043,7 +1043,7 @@ void expandStarEffect(ExpandStarEffectState *arg0) {
     if (gameState->unk76 == 0) {
         arg0->scale += 0x10000;
         if (arg0->scale > 0x2FFFFF) {
-            setCallback(func_80042D54_43954);
+            setCallback(contractStarEffect);
         }
 
         transformVector(arg0->unk2C, arg0->unk24->unk9F0, &arg0->sprite.position);
@@ -1061,38 +1061,38 @@ void expandStarEffect(ExpandStarEffectState *arg0) {
     }
 }
 
-void func_80042D54_43954(StarEffectState *arg0) {
+void contractStarEffect(StarEffectState *state) {
     Func43CA4GameState *gameState;
     s32 i;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        updateStarEffectAnimation(arg0);
-        transformVector((s16 *)&arg0->unk2C, arg0->unk24->unk9F0, &arg0->sprite.position);
+        updateStarEffectAnimation(state);
+        transformVector((s16 *)&state->unk2C, state->unk24->unk9F0, &state->sprite.position);
 
-        if (arg0->sprite.unk1A == 0x40) {
-            if (arg0->player->unkBD9 != 0) {
-                arg0->unk2C = 0x300000;
-                arg0->unk30 = 0x300000;
+        if (state->sprite.unk1A == 0x40) {
+            if (state->player->unkBD9 != 0) {
+                state->unk2C = 0x300000;
+                state->unk30 = 0x300000;
             } else {
-                arg0->unk2C = 0x140000;
-                arg0->unk30 = 0x190000;
+                state->unk2C = 0x140000;
+                state->unk30 = 0x190000;
             }
 
-            if (arg0->player->unkBBB == 0xC) {
-                arg0->displayTimer = 0x1E;
+            if (state->player->unkBBB == 0xC) {
+                state->displayTimer = 0x1E;
             } else {
-                arg0->displayTimer = 0x12C;
+                state->displayTimer = 0x12C;
             }
 
-            arg0->player->unkBCF++;
-            arg0->playSoundFlag = 1;
+            state->player->unkBCF++;
+            state->playSoundFlag = 1;
             setCallback(func_80042E40_43A40);
         }
     }
 
     for (i = 0; i < 4; i++) {
-        func_800677C0_683C0(i, &arg0->sprite);
+        func_800677C0_683C0(i, &state->sprite);
     }
 }
 
