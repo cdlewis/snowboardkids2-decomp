@@ -18,7 +18,7 @@ typedef struct {
     void *unk0;
     Vec3i pos;
     u8 padding1[0x10];
-    void *unk20;
+    void *assetData;
     Vec3i vel; /* 0x24 */
     /* 0x30 */ s32 unk30;
     /* 0x34 */ s32 unk34;
@@ -72,14 +72,14 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x20];
-    void *unk20;
+    void *assetData;
 } func_80055864_56464_arg;
 
 typedef struct {
     void *unk0;
     Vec3i pos;
     u8 padding1[0x10];
-    void *unk20;
+    void *assetData;
     Vec3i unk24;
     u8 padding2[0xC];
     s32 unk3C;
@@ -95,7 +95,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x20];
-    void *unk20;
+    void *assetData;
 } func_80054CCC_558CC_arg;
 
 void func_800545F8_551F8(Struct_52880 *arg0);
@@ -124,7 +124,7 @@ s32 func_80054470_55070(s32, s32);
 s32 func_80055820_56420(s32, s32);
 void func_80053434_54034(Struct_52880 *);
 void func_80052DB4_539B4(Struct_52880 *);
-void func_800523EC_52FEC(Struct_52880 *arg0);
+void cleanupSlapstickProjectileTask(Struct_52880 *arg0);
 void loadSlapstickProjectileAsset(Struct_52880 *arg0);
 void launchSlapstickProjectile(Struct_52880 *arg0);
 void func_800524A4_530A4(Struct_52880 *arg0);
@@ -162,15 +162,15 @@ void normalizeVelocityToSpeed(Vec3i *vel, s32 targetSpeed) {
 
 void initSlapstickProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
-    arg0->unk20 = load_3ECE40();
-    setCleanupCallback(func_800523EC_52FEC);
+    arg0->assetData = load_3ECE40();
+    setCleanupCallback(cleanupSlapstickProjectileTask);
     setCallbackWithContinue(loadSlapstickProjectileAsset);
 }
 
 void loadSlapstickProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 2);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 2);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
     arg0->turnRate = 0;
@@ -368,8 +368,8 @@ void updateSlapstickProjectile(Struct_52880 *arg0) {
     } while (i < 4);
 }
 
-void func_800523EC_52FEC(Struct_52880 *arg0) {
-    arg0->unk20 = freeNodeMemory(arg0->unk20);
+void cleanupSlapstickProjectileTask(Struct_52880 *arg0) {
+    arg0->assetData = freeNodeMemory(arg0->assetData);
 }
 
 s32 func_80052418_53018(s32 arg0, s32 arg1) {
@@ -384,15 +384,15 @@ s32 func_80052418_53018(s32 arg0, s32 arg1) {
 
 void func_8005245C_5305C(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
-    arg0->unk20 = load_3ECE40();
-    setCleanupCallback(func_800523EC_52FEC);
+    arg0->assetData = load_3ECE40();
+    setCleanupCallback(cleanupSlapstickProjectileTask);
     setCallbackWithContinue(func_800524A4_530A4);
 }
 
 void func_800524A4_530A4(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 3);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 3);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
     arg0->turnRate = 0;
@@ -600,15 +600,15 @@ void func_80052C00_53800(Struct_52880 *arg0);
 
 void func_80052A68_53668(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
-    arg0->unk20 = load_3ECE40();
-    setCleanupCallback(func_800523EC_52FEC);
+    arg0->assetData = load_3ECE40();
+    setCleanupCallback(cleanupSlapstickProjectileTask);
     setCallbackWithContinue(func_80052AB0_536B0);
 }
 
 void func_80052AB0_536B0(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 4);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 4);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
     arg0->turnRate = 0;
@@ -823,7 +823,7 @@ void func_80053254_53E54(Struct_52880 *arg0);
 
 void func_800530BC_53CBC(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
-    arg0->unk20 = load_3ECE40();
+    arg0->assetData = load_3ECE40();
     setCleanupCallback(func_80053784_54384);
     setCallbackWithContinue(func_80053104_53D04);
 }
@@ -831,7 +831,7 @@ void func_800530BC_53CBC(Struct_52880 *arg0) {
 void func_80053104_53D04(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 5);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 5);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
     arg0->turnRate = 0;
@@ -1045,7 +1045,7 @@ void func_80053434_54034(Struct_52880 *arg0) {
 }
 
 void func_80053784_54384(Struct_52880 *arg0) {
-    arg0->unk20 = freeNodeMemory(arg0->unk20);
+    arg0->assetData = freeNodeMemory(arg0->assetData);
 }
 
 s32 func_800537B0_543B0(s32 arg0, s32 arg1) {
@@ -1060,15 +1060,15 @@ s32 func_800537B0_543B0(s32 arg0, s32 arg1) {
 
 void func_800537F4_543F4(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
-    arg0->unk20 = load_3ECE40();
-    setCleanupCallback(func_800523EC_52FEC);
+    arg0->assetData = load_3ECE40();
+    setCleanupCallback(cleanupSlapstickProjectileTask);
     setCallbackWithContinue(func_8005383C_5443C);
 }
 
 void func_8005383C_5443C(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 6);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 6);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
     arg0->turnRate = 0;
@@ -1269,15 +1269,15 @@ s32 func_80053DF0_549F0(s32 arg0, s32 arg1) {
 
 void func_80053E48_54A48(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
-    arg0->unk20 = load_3ECE40();
-    setCleanupCallback(func_800523EC_52FEC);
+    arg0->assetData = load_3ECE40();
+    setCleanupCallback(cleanupSlapstickProjectileTask);
     setCallbackWithContinue(func_80053E90_54A90);
 }
 
 void func_80053E90_54A90(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 7);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 7);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
     arg0->turnRate = 0;
@@ -1514,8 +1514,8 @@ void func_80054568_55168(Struct_52880 *arg0) {
 
 void func_800545B0_551B0(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
-    arg0->unk20 = load_3ECE40();
-    setCleanupCallback(func_800523EC_52FEC);
+    arg0->assetData = load_3ECE40();
+    setCleanupCallback(cleanupSlapstickProjectileTask);
     setCallbackWithContinue(func_800545F8_551F8);
 }
 
@@ -1525,7 +1525,7 @@ void func_800545F8_551F8(Struct_52880 *arg0) {
     s32 pad[4];
 
     alloc = getCurrentAllocation();
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 6);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 6);
     ptr = alloc->unk44;
     arg0->unk40 = 0x65;
     arg0->hitCount = 0;
@@ -1600,8 +1600,8 @@ void func_800547E0_553E0(s16 arg0, s32 arg1) {
 
 void func_80054880_55480(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
-    arg0->unk20 = load_3ECE40();
-    setCleanupCallback(func_800523EC_52FEC);
+    arg0->assetData = load_3ECE40();
+    setCleanupCallback(cleanupSlapstickProjectileTask);
     setCallbackWithContinue(func_800548C8_554C8);
 }
 
@@ -1618,7 +1618,7 @@ void func_800548C8_554C8(Struct_52880 *arg0) {
     alloc = getCurrentAllocation();
     playerIdxPtr = &arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[arg0->ownerPlayerIdx].unkB94;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 6);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 6);
 
     arg0->unk0 = alloc->unk44;
     arg0->hitCount = 0;
@@ -1716,7 +1716,7 @@ s32 func_80054C8C_5588C(s16 arg0) {
 }
 
 void func_80054CCC_558CC(func_80054CCC_558CC_arg *arg0) {
-    arg0->unk20 = load_3ECE40();
+    arg0->assetData = load_3ECE40();
     setCleanupCallback(func_800553A8_55FA8);
     setCallbackWithContinue(func_80054D0C_5590C);
 }
@@ -1724,7 +1724,7 @@ void func_80054CCC_558CC(func_80054CCC_558CC_arg *arg0) {
 void func_80054D0C_5590C(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 0x69);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 0x69);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
     arg0->turnRate = 0;
@@ -1956,7 +1956,7 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
 }
 
 void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0) {
-    arg0->unk20 = freeNodeMemory(arg0->unk20);
+    arg0->assetData = freeNodeMemory(arg0->assetData);
 }
 
 s32 func_800553D4_55FD4(s32 arg0) {
@@ -1970,15 +1970,15 @@ s32 func_800553D4_55FD4(s32 arg0) {
 
 void func_80055418_56018(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
-    arg0->unk20 = load_3ECE40();
-    setCleanupCallback(func_800523EC_52FEC);
+    arg0->assetData = load_3ECE40();
+    setCleanupCallback(cleanupSlapstickProjectileTask);
     setCallbackWithContinue(func_80055460_56060);
 }
 
 void func_80055460_56060(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 0x6E);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 0x6E);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
     arg0->turnRate = 0;
@@ -2105,15 +2105,15 @@ s32 func_80055820_56420(s32 arg0, s32 arg1) {
 }
 
 void func_80055864_56464(func_80055864_56464_arg *arg0) {
-    arg0->unk20 = load_3ECE40();
-    setCleanupCallback(func_800523EC_52FEC);
+    arg0->assetData = load_3ECE40();
+    setCleanupCallback(cleanupSlapstickProjectileTask);
     setCallbackWithContinue(func_800558A4_564A4);
 }
 
 void func_800558A4_564A4(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
-    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 4);
+    loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 4);
     ptr = alloc->unk44;
     arg0->hitCount = 0;
     arg0->turnRate = 0;

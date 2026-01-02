@@ -4,6 +4,7 @@ loadSlapstickProjectileAsset = 0x80051E34; // rom:0x52A34
 checkSlapstickProjectileHit = 0x80051E90; // rom:0x52A90
 launchSlapstickProjectile = 0x80051FC4; // rom:0x52BC4
 updateSlapstickProjectile = 0x80052128; // rom:0x52D28
+cleanupSlapstickProjectileTask = 0x800523EC; // rom:0x52FEC
 D_80090CEC_918EC = 0x80090CEC; // rom:0x918EC size:0xC4
 gCourseSceneryOffset = 0x80090B80; // rom:0x91780
 gFlyingSceneryInitOffset = 0x80090B8C; // rom:0x9178C
