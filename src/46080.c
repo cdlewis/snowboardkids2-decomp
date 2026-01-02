@@ -788,7 +788,7 @@ void func_8004AE58_4BA58(s32 **);
 void func_8004A96C_4B56C(s32 **);
 void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0);
 void setupItemBoxBurstTexture(ItemBoxBurstEffectState *arg0);
-void updateItemBoxBurstFrame(ItemBoxBurstEffectState *arg0);
+void updateItemBoxBurstFrame(ItemBoxBurstEffectState *state);
 void func_80049404_4A004(Struct_func_80049404_4A004 *arg0);
 void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0);
 void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *);
@@ -2498,26 +2498,26 @@ void setupItemBoxBurstTexture(ItemBoxBurstEffectState *arg0) {
     setCallbackWithContinue(&updateItemBoxBurstFrame);
 }
 
-void updateItemBoxBurstFrame(ItemBoxBurstEffectState *arg0) {
-    GameState *allocation = (GameState *)getCurrentAllocation();
-    GameStateUnk44Unk2C0 *entry;
+void updateItemBoxBurstFrame(ItemBoxBurstEffectState *state) {
+    GameState *gameState = (GameState *)getCurrentAllocation();
+    GameStateUnk44Unk2C0 *frameData;
     s32 i;
 
-    if (arg0->frameIndex == 8) {
+    if (state->frameIndex == 8) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    entry = &allocation->unk44->unk2C0[arg0->frameIndex];
-    arg0->transformMatrix = 0;
-    arg0->renderEntry = entry;
+    frameData = &gameState->unk44->unk2C0[state->frameIndex];
+    state->transformMatrix = 0;
+    state->renderEntry = frameData;
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback(i, 1, &renderItemBoxBurstEffect, arg0);
+        debugEnqueueCallback(i, 1, &renderItemBoxBurstEffect, state);
     }
 
-    if (allocation->gamePaused == 0) {
-        arg0->frameIndex++;
+    if (gameState->gamePaused == 0) {
+        state->frameIndex++;
     }
 }
 
