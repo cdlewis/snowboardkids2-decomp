@@ -187,8 +187,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x3C];
-    s32 unk3C;
-} func_80045964_46564_node;
+    s32 playerIndex;
+} PlayerRenderTask;
 
 typedef struct {
     void *unk0;
@@ -390,13 +390,13 @@ typedef struct {
     void *unk2C;
     u8 _pad3[0x10];
     s32 unk40;
-} func_800457E0_463E0_arg;
+} PlayerRenderTaskState;
 
 typedef struct {
     u8 _pad[0x24];
     void *unk24;
     void *unk28;
-} func_8004592C_4652C_arg;
+} PlayerRenderTaskCleanupArg;
 
 typedef struct {
     u8 _pad[0x20];
@@ -868,8 +868,8 @@ void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0);
 void func_8004B648_4C248(func_8004B648_4C248_arg *arg0);
 void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0);
 void renderSkyDisplayLists(SkyRenderTaskState *arg0);
-void func_80045878_46478(void);
-void func_8004592C_4652C(func_8004592C_4652C_arg *);
+void updatePlayerRenderCounter(void);
+void cleanupPlayerRenderTask(PlayerRenderTaskCleanupArg *);
 void func_80045C84_46884(func_80046244_46E44_Task *);
 void func_80045A28_46628(func_80046244_46E44_Task *);
 void func_80045B3C_4673C(func_80046244_46E44_Task_New *);
@@ -971,7 +971,7 @@ void scheduleSkyRenderTask(s32 skyType) {
     }
 }
 
-void func_800457E0_463E0(func_800457E0_463E0_arg *arg0) {
+void initPlayerRenderTask(PlayerRenderTaskState *arg0) {
     u16 rotation;
     GameState_46080 *allocation;
 
@@ -983,11 +983,11 @@ void func_800457E0_463E0(func_800457E0_463E0_arg *arg0) {
     arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
     arg0->unk2C = NULL;
     arg0->unk40 = 1;
-    setCleanupCallback(func_8004592C_4652C);
-    setCallback(func_80045878_46478);
+    setCleanupCallback(cleanupPlayerRenderTask);
+    setCallback(updatePlayerRenderCounter);
 }
 
-void func_80045878_46478(void) {
+void updatePlayerRenderCounter(void) {
     GameState *gs = (GameState *)getCurrentAllocation();
     gs->unk60 -= 1;
     setCallbackWithContinue(&func_800458AC_464AC);
@@ -1022,15 +1022,15 @@ void func_800458AC_464AC(func_800458AC_464AC_arg *arg0) {
     enqueueDisplayListObject(arg0->unk3C, (DisplayListObject *)arg0);
 }
 
-void func_8004592C_4652C(func_8004592C_4652C_arg *arg0) {
+void cleanupPlayerRenderTask(PlayerRenderTaskCleanupArg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void func_80045964_46564(s32 arg0) {
-    func_80045964_46564_node *task = (func_80045964_46564_node *)scheduleTask(&func_800457E0_463E0, 0, 0, 0xD3);
+void schedulePlayerRenderTask(s32 playerIndex) {
+    PlayerRenderTask *task = (PlayerRenderTask *)scheduleTask(&initPlayerRenderTask, 0, 0, 0xD3);
     if (task != NULL) {
-        task->unk3C = arg0;
+        task->playerIndex = playerIndex;
     }
 }
 
@@ -2826,7 +2826,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case SUNNY_MOUNTAIN:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             func_80049BFC_4A7FC();
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
@@ -2840,7 +2840,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case TURTLE_ISLAND:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
@@ -2853,7 +2853,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case JINGLE_TOWN:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A != 0xB) {
                 func_80049C38_4A838(arg0);
@@ -2869,7 +2869,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case JINGLE_TOWN_BOSS:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             if (temp_s1->unk7A == 8) {
@@ -2884,7 +2884,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case WENDYS_HOUSE:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             scheduleTask(&func_800BB2B0, 0, 0, 0x32);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
@@ -2897,7 +2897,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case LINDAS_CASTLE:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
@@ -2912,7 +2912,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case CRAZY_JUNGLE:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             spawnPushZone(0);
             spawnPushZone(1);
@@ -2940,7 +2940,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case STARLIGHT_HIGHWAY:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
@@ -2955,7 +2955,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case HAUNTED_HOUSE:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
@@ -2979,7 +2979,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case ICE_LAND:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             spawnPushZone(4);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
@@ -2992,7 +2992,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case ICE_LAND_BOSS:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
                 func_80049C38_4A838(arg0);
@@ -3009,7 +3009,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case SNOWBOARD_STREET_SPEED_CROSS:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
                 func_80049C38_4A838(arg0);
@@ -3025,7 +3025,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case SNOWBOARD_STREET_SHOT_CROSS:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
                 func_80049C38_4A838(arg0);
@@ -3041,7 +3041,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case X_CROSS:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
                 func_80049C38_4A838(arg0);
@@ -3054,7 +3054,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case TRAINING:
             for (s0 = 0; s0 < arg1; s0++) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
-                func_80045964_46564(s0);
+                schedulePlayerRenderTask(s0);
             }
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
