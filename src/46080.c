@@ -228,16 +228,6 @@ typedef struct {
 } func_8004B834_4C434_arg;
 
 typedef struct {
-    u8 pad1[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    u8 pad2[0x1C];
-    s32 unk3C;
-    s32 unk40;
-} func_800473F4_47FF4_arg;
-
-typedef struct {
     s16 unk0;
     u8 _pad2[0x4];
     u16 unk6;
@@ -459,6 +449,7 @@ typedef struct {
 typedef struct {
     DisplayListObject displayListObject;
     s32 frameCounter;
+    s32 rotationAngle;
 } FlyingSceneryState;
 
 typedef struct {
@@ -819,8 +810,8 @@ void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
 void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
 void func_8004562C_4622C(void);
 void updateFlyingSceneryAscendingStep(FlyingSceneryState *state);
-void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0);
-void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0);
+void updateFlyingSceneryGlidingStep(FlyingSceneryState *state);
+void func_800474B4_480B4(FlyingSceneryState *state);
 void cleanupPlayerSparkleTask(PlayerSparkleTask *arg0);
 void loadPlayerSparkleData(PlayerSparkleTask *);
 void updateCourseSceneryTask(CourseSceneryUpdateState *);
@@ -1489,7 +1480,7 @@ void updateFlyingSceneryAscendingStep(FlyingSceneryState *state) {
             state->frameCounter--;
         } else {
             state->frameCounter = 0x2C;
-            setCallback(&func_800473F4_47FF4);
+            setCallback(&updateFlyingSceneryGlidingStep);
         }
     }
 
@@ -1498,37 +1489,37 @@ void updateFlyingSceneryAscendingStep(FlyingSceneryState *state) {
     }
 }
 
-void func_800473F4_47FF4(func_800473F4_47FF4_arg *arg0) {
+void updateFlyingSceneryGlidingStep(FlyingSceneryState *state) {
     Vec3i vec;
     s32 i;
-    AllocationData *temp_v0;
+    AllocationData *allocation;
 
-    temp_v0 = getCurrentAllocation();
+    allocation = getCurrentAllocation();
     i = 0;
 
-    if (temp_v0->unk76 == 0) {
-        transformVector2(D_80090B98_91798, arg0, &vec);
+    if (allocation->unk76 == 0) {
+        transformVector2(D_80090B98_91798, state, &vec);
 
-        arg0->unk14 += vec.x;
-        arg0->unk18 += vec.y;
-        arg0->unk1C += vec.z;
+        state->displayListObject.transform.translation.x += vec.x;
+        state->displayListObject.transform.translation.y += vec.y;
+        state->displayListObject.transform.translation.z += vec.z;
 
-        if (arg0->unk3C != 0) {
-            arg0->unk3C--;
+        if (state->frameCounter != 0) {
+            state->frameCounter--;
         } else {
-            arg0->unk40 = 0;
+            state->rotationAngle = 0;
             setCallback(func_800474B4_480B4);
         }
         i = 0;
     }
 
     do {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, &state->displayListObject);
         i++;
     } while (i < 4);
 }
 
-void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0) {
+void func_800474B4_480B4(FlyingSceneryState *state) {
     AllocationData *allocation;
     Vec3i vector;
     s32 i;
@@ -1538,24 +1529,24 @@ void func_800474B4_480B4(func_800473F4_47FF4_arg *arg0) {
     allocation = getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        rotation = arg0->unk40;
+        rotation = state->rotationAngle;
         angle = rotation + 0x1080;
-        arg0->unk40 = rotation + 0x80;
-        createYRotationMatrix((Transform3D *)arg0, angle);
-        transformVector2(&D_80090BB0_917B0, arg0, &vector);
+        state->rotationAngle = rotation + 0x80;
+        createYRotationMatrix(&state->displayListObject.transform, angle);
+        transformVector2(&D_80090BB0_917B0, state, &vector);
 
-        arg0->unk14 += vector.x;
-        arg0->unk18 += vector.y;
-        arg0->unk1C += vector.z;
+        state->displayListObject.transform.translation.x += vector.x;
+        state->displayListObject.transform.translation.y += vector.y;
+        state->displayListObject.transform.translation.z += vector.z;
 
-        if (arg0->unk40 == 0x1080) {
-            arg0->unk3C = 0x2C;
+        if (state->rotationAngle == 0x1080) {
+            state->frameCounter = 0x2C;
             setCallback(&func_80047590_48190);
         }
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, &state->displayListObject);
     }
 }
 
