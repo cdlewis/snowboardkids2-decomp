@@ -372,12 +372,12 @@ void cleanupSlapstickProjectileTask(Struct_52880 *arg0) {
     arg0->assetData = freeNodeMemory(arg0->assetData);
 }
 
-s32 func_80052418_53018(s32 arg0, s32 arg1) {
+s32 spawnSlapstickProjectileTask(s32 playerIdx, s32 unused) {
     Struct_52880 *task;
 
-    task = scheduleTask(initSlapstickProjectileTask, (arg0 + 4) & 0xFF, 0, 0x6E);
+    task = scheduleTask(initSlapstickProjectileTask, (playerIdx + 4) & 0xFF, 0, 0x6E);
     if (task != NULL) {
-        task->ownerPlayerIdx = arg0;
+        task->ownerPlayerIdx = playerIdx;
     }
     return (s32)task;
 }
@@ -1488,7 +1488,7 @@ s32 func_80054470_55070(s32 arg0, s32 arg1) {
 s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
     switch (arg0) {
         case 0:
-            return func_80052418_53018(arg1, arg2);
+            return spawnSlapstickProjectileTask(arg1, arg2);
         case 1:
             return func_80052A24_53624(arg1, arg2);
         case 2:
