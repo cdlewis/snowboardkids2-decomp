@@ -104,15 +104,15 @@ typedef struct {
 } Struct_func_8004EEB4_4FAB4;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+    s16 xPos;
+    s16 yOffset;
+    void *spriteAsset;
+    s16 spriteFrame;
     u8 padA[0x2];
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-} Struct_func_8004D134;
+    s32 playerIndex;
+    s32 holdFrames;
+    s32 animAngle;
+} GoalBannerState;
 
 typedef struct {
     u8 pad0[0x4];
@@ -240,10 +240,10 @@ void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
 void func_8004D784_4E384(Struct_func_8004D784 *arg0);
 void func_8004D6FC_4E2FC(Struct_func_8004D784 *arg0);
 void func_8004D858_4E458(Struct_func_8004F04C *arg0);
-void func_8004D19C_4DD9C(Struct_func_8004D134 *arg0);
-void func_8004D23C_4DE3C(Struct_func_8004D134 *arg0);
-void func_8004D298_4DE98(Struct_func_8004D134 *arg0);
-void func_8004D338_4DF38(Struct_func_8004D134 *arg0);
+void updateGoalBannerSlideIn(GoalBannerState *state);
+void updateGoalBannerHold(GoalBannerState *state);
+void updateGoalBannerSlideOut(GoalBannerState *state);
+void cleanupGoalBannerTask(GoalBannerState *state);
 void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0);
 void initPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state);
@@ -782,63 +782,63 @@ void cleanupRaceProgressIndicatorTask(RaceProgressIndicatorCleanupState *state) 
     state->baseAsset = freeNodeMemory(state->baseAsset);
 }
 
-void func_8004D134_4DD34(Struct_func_8004D134 *arg0) {
-    arg0->unk4 = loadAsset_34CB50();
-    arg0->unk8 = 0xD;
+void initGoalBannerTask(GoalBannerState *state) {
+    state->spriteAsset = loadAsset_34CB50();
+    state->spriteFrame = 0xD;
     func_80058530_59130(0x11B, 6);
-    arg0->unk10 = 0x2D;
-    arg0->unk14 = 0;
-    arg0->unk2 = -8;
-    setCleanupCallback(func_8004D338_4DF38);
-    setCallback(func_8004D19C_4DD9C);
+    state->holdFrames = 0x2D;
+    state->animAngle = 0;
+    state->yOffset = -8;
+    setCleanupCallback(cleanupGoalBannerTask);
+    setCallback(updateGoalBannerSlideIn);
 }
 
-void func_8004D19C_4DD9C(Struct_func_8004D134 *arg0) {
+void updateGoalBannerSlideIn(GoalBannerState *state) {
     s32 sinVal;
-    s32 temp;
+    s32 angle;
 
-    temp = arg0->unk14 + 0x80;
-    arg0->unk14 = temp;
-    sinVal = approximateSin((s16)temp);
-    arg0->unk0 = (0x2000 - sinVal) / 20 - 0x38;
-    if (arg0->unk14 == 0x800) {
-        setCallback(func_8004D23C_4DE3C);
+    angle = state->animAngle + 0x80;
+    state->animAngle = angle;
+    sinVal = approximateSin((s16)angle);
+    state->xPos = (0x2000 - sinVal) / 20 - 0x38;
+    if (state->animAngle == 0x800) {
+        setCallback(updateGoalBannerHold);
     }
-    debugEnqueueCallback((u16)(arg0->unkC + 8), 6, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, func_8000FED0_10AD0, state);
 }
 
-void func_8004D23C_4DE3C(Struct_func_8004D134 *arg0) {
-    arg0->unk10--;
-    if (arg0->unk10 == 0) {
-        setCallback(func_8004D298_4DE98);
+void updateGoalBannerHold(GoalBannerState *state) {
+    state->holdFrames--;
+    if (state->holdFrames == 0) {
+        setCallback(updateGoalBannerSlideOut);
     }
-    debugEnqueueCallback((u16)(arg0->unkC + 8), 6, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, func_8000FED0_10AD0, state);
 }
 
-void func_8004D298_4DE98(Struct_func_8004D134 *arg0) {
+void updateGoalBannerSlideOut(GoalBannerState *state) {
     s32 sinVal;
-    s32 temp;
+    s32 angle;
 
-    temp = arg0->unk14 + 0x80;
-    arg0->unk14 = temp;
-    sinVal = approximateSin((s16)temp);
-    arg0->unk0 = -((0x2000 - sinVal) / 20) - 0x38;
-    if (arg0->unk14 == 0x1000) {
+    angle = state->animAngle + 0x80;
+    state->animAngle = angle;
+    sinVal = approximateSin((s16)angle);
+    state->xPos = -((0x2000 - sinVal) / 20) - 0x38;
+    if (state->animAngle == 0x1000) {
         func_80069CF8_6A8F8();
     }
-    debugEnqueueCallback((u16)(arg0->unkC + 8), 6, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, func_8000FED0_10AD0, state);
 }
 
-void func_8004D338_4DF38(Struct_func_8004D134 *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupGoalBannerTask(GoalBannerState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
-void func_8004D364_4DF64(s32 arg0) {
-    Struct_func_8004D134 *task;
+void showGoalBanner(s32 playerIndex) {
+    GoalBannerState *task;
 
-    task = scheduleTask(func_8004D134_4DD34, 0, 0, 0xE6);
+    task = scheduleTask(initGoalBannerTask, 0, 0, 0xE6);
     if (task != NULL) {
-        task->unkC = arg0;
+        task->playerIndex = playerIndex;
     }
 }
 

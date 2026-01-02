@@ -2975,7 +2975,7 @@ s32 func_800B6E5C_A6D0C(Player *arg0) {
 
         if (arg0->unkBC7 == 0) {
             if (arg0->unkBC5 == gameState->unk74) {
-                func_8004D364_4DF64(arg0->unkBB8);
+                showGoalBanner(arg0->unkBB8);
             }
         }
     }
@@ -3110,7 +3110,7 @@ s32 func_800B724C_A70FC(Player *arg0) {
         arg0->unkBC3 = 1;
         func_8006FDC8_709C8(arg0->unkBB8, 0, 0x10);
         if (arg0->unkBC7 == 0 && arg0->unkBC5 == alloc->unk74) {
-            func_8004D364_4DF64(arg0->unkBB8);
+            showGoalBanner(arg0->unkBB8);
         }
     }
 
@@ -3342,7 +3342,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
 
         if (arg0->unkBC7 == 0) {
             if (arg0->unkBC5 == gameState->unk74) {
-                func_8004D364_4DF64(arg0->unkBB8);
+                showGoalBanner(arg0->unkBB8);
             }
         }
 

@@ -89,7 +89,7 @@ typedef struct {
     s32 playerIndex;
 } PlayerItemDisplayState;
 
-void func_8004D364_4DF64(s32 arg0);
+void showGoalBanner(s32 playerIndex);
 void func_8004D890_4E490(s32 arg0, s32 arg1);
 void func_8004D8E4_4E4E4(FinishPositionDisplayState *arg0);
 void func_8004D9D0_4E5D0(Struct_func_8004D9D0 *arg0);
