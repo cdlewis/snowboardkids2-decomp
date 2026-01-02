@@ -371,7 +371,7 @@ typedef struct {
     s32 unkA4;
     u8 _padA8[0xC];
     s16 unkB4;
-} func_80045480_46080_arg;
+} SkyRenderTaskState;
 
 typedef struct {
     u8 _pad[0x30];
@@ -911,29 +911,29 @@ void func_80049230_49E30(func_80049230_49E30_arg *);
 void func_80049430_4A030(func_80049300_49F00_arg *arg0);
 void func_800478FC_484FC(Arg_478FC *arg0);
 
-void func_80045480_46080(func_80045480_46080_arg *arg0) {
+void initSkyRenderTask(SkyRenderTaskState *state) {
     void *identity = identityMatrix;
 
-    memcpy(arg0, identity, 0x20);
+    memcpy(state, identity, 0x20);
 
-    arg0->unk20 = func_80055E40_56A40(arg0->unkB4);
-    arg0->unk24 = func_80055DC4_569C4(arg0->unkB4);
-    arg0->unk28 = func_80055DF8_569F8(arg0->unkB4);
-    arg0->unk2C = 0;
+    state->unk20 = func_80055E40_56A40(state->unkB4);
+    state->unk24 = func_80055DC4_569C4(state->unkB4);
+    state->unk28 = func_80055DF8_569F8(state->unkB4);
+    state->unk2C = 0;
 
-    memcpy(arg0->unk3C, identity, 0x20);
+    memcpy(state->unk3C, identity, 0x20);
 
-    arg0->unk5C = func_80055E54_56A54(arg0->unkB4);
-    arg0->unk68 = 0;
-    arg0->unk60 = arg0->unk24;
-    arg0->unk64 = arg0->unk28;
+    state->unk5C = func_80055E54_56A54(state->unkB4);
+    state->unk68 = 0;
+    state->unk60 = state->unk24;
+    state->unk64 = state->unk28;
 
-    memcpy(arg0->unk78, identity, 0x20);
+    memcpy(state->unk78, identity, 0x20);
 
-    arg0->unk98 = &D_80094DD0_959D0;
-    arg0->unkA4 = 0;
-    arg0->unk9C = arg0->unk24;
-    arg0->unkA0 = arg0->unk28;
+    state->unk98 = &D_80094DD0_959D0;
+    state->unkA4 = 0;
+    state->unk9C = state->unk24;
+    state->unkA0 = state->unk28;
 
     setCleanupCallback(&func_80045768_46368);
     setCallback(&func_80045564_46164);
@@ -971,7 +971,7 @@ void func_80045768_46368(func_80045768_46368_arg *arg0) {
 }
 
 void func_800457A0_463A0(s32 arg0) {
-    ScheduledTask *task = scheduleTask(func_80045480_46080, 0, 0, 0xD2);
+    ScheduledTask *task = scheduleTask(initSkyRenderTask, 0, 0, 0xD2);
     if (task != NULL) {
         task->unkB4 = arg0;
     }
