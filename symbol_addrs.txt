@@ -1,3 +1,6 @@
+D_80090CEC_918EC = 0x80090CEC; // rom:0x918EC size:0xC4
+D_80090AF0_916F0 = 0x80090AF0; // rom:0x916F0 size:0x90
+D_80090BD4_917D4 = 0x80090BD4; // rom:0x917D4 size:0xC0
 dispatchDefaultBehaviorPhase = 0x800B12C0; // rom:0xA1170
 updatePlayerFinishWaiting = 0x800B12F0; // rom:0xA11A0
 updatePlayerSlidingConstrained = 0x800B13D4; // rom:0xA1284

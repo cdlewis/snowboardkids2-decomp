@@ -719,6 +719,12 @@ typedef struct {
     u16 unk18;
 } Arg_478FC;
 
+typedef struct {
+    void *romStart;
+    void *romEnd;
+    s32 decompressedSize;
+} CompressedAsset;
+
 extern s8 D_80090C94_91894[];
 extern u8 D_80090C95_91895[];
 extern void *D_80094DA0_959A0;
@@ -744,17 +750,11 @@ extern void *D_80095860_96460;
 extern void *D_80095930_96530;
 extern Gfx D_8009A780_9B380[];
 extern s32 D_800A8B14_9FE84;
-extern void *D_80090BD4_917D4[];
-extern void *D_80090BD8_917D8[];
-extern s32 D_80090BDC_917DC[];
+extern CompressedAsset D_80090BD4_917D4[];
 extern s32 D_80090B8C_9178C[3];
-extern s32 D_80090AF0_916F0[];
-extern s32 D_80090AF4_916F4[];
-extern s32 D_80090AF8_916F8[];
+extern CompressedAsset D_80090AF0_916F0[];
 extern s32 D_8009A8A4_9B4A4;
-extern void *D_80090CEC_918EC[];
-extern void *D_80090CF0_918F0[];
-extern s32 D_80090CF4_918F4[];
+extern CompressedAsset D_80090CEC_918EC[];
 extern u8 D_80090CA8_918A8[][5];
 extern u8 D_80090CE0_918E0[];
 extern u8 D_80090CBC_918BC[][9];
@@ -988,14 +988,15 @@ void schedulePlayerRenderTask(s32 playerIndex) {
 }
 
 void initSceneAnimationTask(SceneAnimationTask *arg0) {
-    s16 temp_v1;
-    s32 index;
+    s16 courseID;
 
     arg0->assetData = func_80055D7C_5697C(arg0->assetIndex);
-    temp_v1 = arg0->dataIndex;
-    index = temp_v1 * 3;
-    arg0->loadedData =
-        loadCompressedData((void *)D_80090AF0_916F0[index], (void *)D_80090AF4_916F4[index], D_80090AF8_916F8[index]);
+    courseID = arg0->dataIndex;
+    arg0->loadedData = loadCompressedData(
+        D_80090AF0_916F0[courseID].romStart,
+        D_80090AF0_916F0[courseID].romEnd,
+        D_80090AF0_916F0[courseID].decompressedSize
+    );
     arg0->transformBuffer = 0;
     setCleanupCallback(cleanupSceneAnimationTask);
     setCallback(setupSceneAnimationTask);
@@ -1589,16 +1590,17 @@ void func_80047718_48318(func_80047718_48318_arg *arg0) {
 }
 
 void initGoldCoinsTask(GoldCoinsTaskState *arg0) {
-    s16 index;
-    s32 arrayOffset;
+    s16 courseIndex;
 
     arg0->unkC = loadCompressedData(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
 
-    index = arg0->courseIndex;
-    arrayOffset = index * 3;
+    courseIndex = arg0->courseIndex;
 
-    arg0->unk10 =
-        loadCompressedData(D_80090BD4_917D4[arrayOffset], D_80090BD8_917D8[arrayOffset], D_80090BDC_917DC[arrayOffset]);
+    arg0->unk10 = loadCompressedData(
+        D_80090BD4_917D4[courseIndex].romStart,
+        D_80090BD4_917D4[courseIndex].romEnd,
+        D_80090BD4_917D4[courseIndex].decompressedSize
+    );
 
     arg0->unk0 = 0;
     setCleanupCallback(cleanupGoldCoinsTask);
@@ -2402,15 +2404,19 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
 
 void func_80048E34_49A34(func_80048E34_49A34_arg *arg0) {
     s32 i;
-    s32 index;
+    s32 courseID;
     func_80048E34_49A34_arg *ptr;
 
     arg0->unk0 = loadAsset_B7E70();
     arg0->unk4 = loadAsset_216290();
 
-    index = arg0->unk14 * 3;
+    courseID = arg0->unk14;
 
-    arg0->unkC = loadCompressedData(D_80090CEC_918EC[index], D_80090CF0_918F0[index], D_80090CF4_918F4[index]);
+    arg0->unkC = loadCompressedData(
+        D_80090CEC_918EC[courseID].romStart,
+        D_80090CEC_918EC[courseID].romEnd,
+        D_80090CEC_918EC[courseID].decompressedSize
+    );
     arg0->unk8 = NULL;
 
     setCleanupCallback(&func_80049230_49E30);
@@ -2658,12 +2664,12 @@ void func_800497FC_4A3FC(s32 poolId) {
     s32 temp;
 
     switch (poolId) {
-        case 0:
+        case SUNNY_MOUNTAIN:
             scheduleSkyRenderTask(poolId);
             scheduleScrollingSceneryTask(&D_80094DA0_959A0, poolId, 0, 4, 0x12, 0);
             scheduleSceneAnimationTask(poolId, 0);
             break;
-        case 1:
+        case TURTLE_ISLAND:
             scheduleSkyRenderTask(poolId);
             scheduleScrollingSceneryTask(&D_80094DE0_959E0, poolId, 4, 0, 0, 0);
             temp = 1;
@@ -2671,67 +2677,67 @@ void func_800497FC_4A3FC(s32 poolId) {
             scheduleScrollingSceneryTask(&D_80094E00_95A00, poolId, 4, 0, 0, 0);
             scheduleScrollingSceneryTask(&D_80094E10_95A10, poolId, 0, 1, 2, temp);
             break;
-        case 2:
+        case JINGLE_TOWN:
             scheduleSkyRenderTask(poolId);
             scheduleScrollingSceneryTask(&D_80094EE0_95AE0, poolId, 0, 4, 0, 0);
             scheduleScrollingSceneryTask(&D_80094EF0_95AF0, poolId, 1, 0, 2, 0);
             break;
-        case 3:
+        case JINGLE_TOWN_BOSS:
             scheduleSkyRenderTask(poolId);
             scheduleScrollingSceneryTask(&D_80094FC0_95BC0, poolId, 0, 4, 0, 0);
             scheduleScrollingSceneryTask(&D_80094FD0_95BD0, poolId, 1, 0, 2, 0);
             scheduleSceneAnimationTask(poolId, 5);
             break;
-        case 4:
+        case WENDYS_HOUSE:
             scheduleSkyRenderTask(poolId);
             scheduleScrollingSceneryTask(&D_800950B0_95CB0, poolId, -4, 0, 0, 0);
             scheduleSceneAnimationTask(poolId, 0xA);
             break;
-        case 5:
+        case LINDAS_CASTLE:
             scheduleSkyRenderTask(poolId);
             break;
-        case 6:
+        case CRAZY_JUNGLE:
             scheduleScrollingSceneryTask(&D_80095360_95F60, poolId, 0, 4, 0, 0);
             scheduleScrollingSceneryTask(&D_80095370_95F70, poolId, 0, 4, 1, 0);
             scheduleScrollingSceneryTask(&D_80095380_95F80, poolId, 4, 0, 2, 0);
             scheduleSkyRenderTask(poolId);
             scheduleSceneAnimationTask(poolId, 1);
             break;
-        case 7:
+        case CRAZY_JUNGLE_BOSS:
             scheduleScrollingSceneryTask(&D_80095460_96060, poolId, 0, 4, 0, 0);
             scheduleScrollingSceneryTask(&D_80095470_96070, poolId, 0, 4, 1, 0);
             scheduleScrollingSceneryTask(&D_80095480_96080, poolId, 4, 0, 2, 0);
             scheduleSkyRenderTask(poolId);
             scheduleSceneAnimationTask(poolId, 2);
             break;
-        case 8:
+        case STARLIGHT_HIGHWAY:
             scheduleSkyRenderTask(poolId);
             scheduleScrollingSceneryTask(&D_800955C0_961C0, poolId, 4, 0, 1, 0);
             scheduleScrollingSceneryTask(&D_800955D0_961D0, poolId, 0, 4, 2, 0);
             scheduleScrollingSceneryTask(&D_800955E0_961E0, poolId, 4, 0, 3, 0);
             break;
-        case 9:
+        case HAUNTED_HOUSE:
             scheduleSkyRenderTask(poolId);
             scheduleSceneAnimationTask(poolId, 0xB);
             break;
-        case 10:
+        case ICE_LAND:
             scheduleSkyRenderTask(poolId);
             scheduleSceneAnimationTask(poolId, 8);
             break;
-        case 11:
+        case ICE_LAND_BOSS:
             scheduleSkyRenderTask(poolId);
             scheduleSceneAnimationTask(poolId, 9);
             break;
-        case 12:
+        case SNOWBOARD_STREET_SPEED_CROSS:
             scheduleSkyRenderTask(poolId);
             scheduleScrollingSceneryTask(&D_80095860_96460, poolId, 0, -4, 0, 0);
             break;
-        case 13:
+        case SNOWBOARD_STREET_SHOT_CROSS:
             scheduleSkyRenderTask(poolId);
             scheduleScrollingSceneryTask(&D_80095930_96530, poolId, 0, -4, 0, 0);
             break;
-        case 14:
-        case 15:
+        case X_CROSS:
+        case TRAINING:
             scheduleSkyRenderTask(poolId);
             scheduleSceneAnimationTask(poolId, 7);
             break;
