@@ -446,55 +446,55 @@ typedef struct {
 
 extern void func_800B7B44_A79F4(func_800B7B64_arg *, s32);
 
-s32 func_800B2254_A2104(Player *arg0) {
-    u8 temp_v0;
+s32 initPostTrickLandingStep(Player *player) {
+    u8 behaviorStep;
 
-    if (arg0->unkB84 & 0x20000) {
-        setPlayerBehaviorPhase(arg0, 6);
-        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-        func_80056B7C_5777C(&arg0->worldPos, 0x25);
+    if (player->unkB84 & 0x20000) {
+        setPlayerBehaviorPhase(player, 6);
+        func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
+        func_80056B7C_5777C(&player->worldPos, 0x25);
         return 1;
     }
 
-    if (func_8005A9A8_5B5A8(arg0) != 0) {
-        func_800B65F8_A64A8((func_800B00D4_arg *)arg0);
-        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-        func_80056B7C_5777C(&arg0->worldPos, 0x25);
+    if (func_8005A9A8_5B5A8(player) != 0) {
+        func_800B65F8_A64A8((func_800B00D4_arg *)player);
+        func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
+        func_80056B7C_5777C(&player->worldPos, 0x25);
         return 1;
     }
 
-    if (arg0->unkB84 & 1) {
-        setPlayerBehaviorPhase(arg0, 1);
-        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-        func_80056B7C_5777C(&arg0->worldPos, 0x25);
+    if (player->unkB84 & 1) {
+        setPlayerBehaviorPhase(player, 1);
+        func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
+        func_80056B7C_5777C(&player->worldPos, 0x25);
         return 1;
     }
 
-    arg0->unk44C.y -= arg0->unkAB8;
-    func_800B40D4_A3F84(arg0);
-    func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
-    func_800B00FC_9FFAC(arg0);
+    player->unk44C.y -= player->unkAB8;
+    func_800B40D4_A3F84(player);
+    func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+    func_800B00FC_9FFAC(player);
 
-    temp_v0 = arg0->unkBBF;
-    if (temp_v0 == 0) {
-        arg0->unkBBF = ++temp_v0;
-        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-        if ((arg0->unkBCC & 0xF) == 7) {
-            func_80056B7C_5777C(&arg0->worldPos, 0x29);
+    behaviorStep = player->unkBBF;
+    if (behaviorStep == 0) {
+        player->unkBBF = ++behaviorStep;
+        func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
+        if ((player->unkBCC & 0xF) == 7) {
+            func_80056B7C_5777C(&player->worldPos, 0x29);
         }
-        if ((arg0->unkBCC & 0xF) == 3) {
-            func_80051BB8_527B8(arg0);
-            func_80056B7C_5777C(&arg0->worldPos, 0xF);
+        if ((player->unkBCC & 0xF) == 3) {
+            func_80051BB8_527B8(player);
+            func_80056B7C_5777C(&player->worldPos, 0xF);
         } else {
-            func_80056B7C_5777C(&arg0->worldPos, 0x25);
+            func_80056B7C_5777C(&player->worldPos, 0x25);
         }
     }
 
-    if (func_8005D308_5DF08(arg0, 5) != 0) {
-        setPlayerBehaviorPhase(arg0, 0);
+    if (func_8005D308_5DF08(player, 5) != 0) {
+        setPlayerBehaviorPhase(player, 0);
     }
 
-    func_80058CFC_598FC(arg0);
+    func_80058CFC_598FC(player);
     return 0;
 }
 
