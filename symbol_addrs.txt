@@ -2493,6 +2493,7 @@ initStarEffect = 0x80042B64; // rom:0x43764
 updateStarEffect = 0x80042BA4; // rom:0x437A4
 expandStarEffect = 0x80042C98; // rom:0x43898
 contractStarEffect = 0x80042D54; // rom:0x43954
+orbitStarEffect = 0x80042E40; // rom:0x43A40
 cleanupStarEffect = 0x80042F2C; // rom:0x43B2C
 starAnimFrameDurations = 0x80090928; // rom:0x91528
 starAnimFrameIndices = 0x80090929; // rom:0x91529

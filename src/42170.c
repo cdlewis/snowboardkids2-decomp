@@ -274,20 +274,20 @@ typedef struct {
 
 typedef struct {
     void *unk0;
-    loadAssetMetadata_arg_base unk4;
+    loadAssetMetadata_arg_base sprite;
     u8 _pad1C[0x2];
-    u8 unk1E;
+    u8 animFrameIndex;
     u8 _pad1F[0x1];
     void *unk20;
     void *unk24;
-    Func43CA4Unk28 *unk28;
-    s16 unk2C[3];
+    Func43CA4Unk28 *player;
+    s16 orbitOffset[3];
     u8 _pad32[0xA];
-    s16 unk3C;
+    s16 displayTimer;
     u8 _pad3E[0x2];
-    u16 unk40;
-    u8 unk42;
-} Func42E40Arg;
+    u16 rotationAngle;
+    u8 playSoundFlag;
+} OrbitStarEffectState;
 
 void func_80044578_45178(Func44BBCArg *);
 void func_80044684_45284(Func44BBCArg *);
@@ -304,7 +304,7 @@ void func_80043CA4_448A4(Func43CA4Arg *);
 void func_800439F4_445F4(Func4393CArg *);
 void updateStarEffect(StarEffectState *);
 void expandStarEffect(ExpandStarEffectState *);
-void func_80042E40_43A40(Func42E40Arg *);
+void orbitStarEffect(OrbitStarEffectState *);
 void updateFallingEffect(FallingEffectState *);
 void animateFallingEffectDescent(FallingEffectState *);
 void cleanupSparkleEffect(SparkleEffectState *);
@@ -1024,7 +1024,7 @@ void updateStarEffect(StarEffectState *arg0) {
 
             arg0->unk2C = 0x140000;
             arg0->unk30 = 0x190000;
-            setCallbackWithContinue(func_80042E40_43A40);
+            setCallbackWithContinue(orbitStarEffect);
         } else {
             setCallbackWithContinue(expandStarEffect);
         }
@@ -1087,7 +1087,7 @@ void contractStarEffect(StarEffectState *state) {
 
             state->player->unkBCF++;
             state->playSoundFlag = 1;
-            setCallback(func_80042E40_43A40);
+            setCallback(orbitStarEffect);
         }
     }
 
@@ -1096,7 +1096,7 @@ void contractStarEffect(StarEffectState *state) {
     }
 }
 
-void func_80042E40_43A40(Func42E40Arg *arg0) {
+void orbitStarEffect(OrbitStarEffectState *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
     s32 pad;
@@ -1105,23 +1105,23 @@ void func_80042E40_43A40(Func42E40Arg *arg0) {
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
         updateStarEffectAnimation((StarEffectState *)arg0);
-        arg0->unk40 += 0x100;
-        rotateVectorY(arg0->unk2C, arg0->unk40, &rotated);
-        transformVector((s16 *)&rotated, arg0->unk28->unk9F0, &arg0->unk4.position);
-        if (arg0->unk42 != 0) {
-            arg0->unk42 = 0;
-            func_80056B7C_5777C(&arg0->unk4.position, 0x1A);
+        arg0->rotationAngle += 0x100;
+        rotateVectorY(arg0->orbitOffset, arg0->rotationAngle, &rotated);
+        transformVector((s16 *)&rotated, arg0->player->unk9F0, &arg0->sprite.position);
+        if (arg0->playSoundFlag != 0) {
+            arg0->playSoundFlag = 0;
+            func_80056B7C_5777C(&arg0->sprite.position, 0x1A);
         }
-        if (arg0->unk3C != 0) {
-            arg0->unk3C--;
-        } else if (arg0->unk1E == 0x40) {
-            arg0->unk28->unkBCF--;
+        if (arg0->displayTimer != 0) {
+            arg0->displayTimer--;
+        } else if (arg0->animFrameIndex == 0x40) {
+            arg0->player->unkBCF--;
             func_80069CF8_6A8F8();
         }
     }
 
     for (i = 0; i < 4; i++) {
-        func_800677C0_683C0(i, (loadAssetMetadata_arg *)&arg0->unk4);
+        func_800677C0_683C0(i, (loadAssetMetadata_arg *)&arg0->sprite);
     }
 }
 
