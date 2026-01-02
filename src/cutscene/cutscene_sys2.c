@@ -51,7 +51,7 @@ void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, CutsceneManager *ar
     s32 *ptr;
 
     ptr = (s32 *)((u8 *)arg1 + (arg2 * 244 + 0xA8));
-    func_800B29F0_1DFAA0(arg1);
+    enableCutsceneSkip(arg1);
 
     temp_v0 = (cutsceneSys2Wait_exec_asset *)scheduleTask(&func_800B993C_1E69EC, 1, 0, 0x64);
     if (temp_v0) {

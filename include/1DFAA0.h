@@ -68,7 +68,7 @@ typedef struct {
 typedef struct {
     u8 padding[0xFF7];
     s8 unkFF7;
-} func_800B29F0_1DFAA0_arg;
+} enableCutsceneSkip_arg;
 
 typedef struct {
     void *start;
@@ -278,7 +278,7 @@ typedef struct {
     u8 padding5[0x0];
 } func_800B2C78_arg;
 
-void func_800B29F0_1DFAA0(CutsceneManager *arg0);
+void enableCutsceneSkip(CutsceneManager *arg0);
 void func_800B29FC_1DFAAC(CutsceneManager *arg0);
 void func_800B2A24_1DFAD4(CutsceneManager *arg0, s16 arg1);
 void func_800B2A50_1DFB00(CutsceneManager *arg0, s16 arg1);
