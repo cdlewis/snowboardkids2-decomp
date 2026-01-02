@@ -11,12 +11,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern u8 D_80090E70_91A70[];
-extern s16 D_80090E80_91A80[];
-extern s16 D_80090E98_91A98[];
-extern s16 D_80090EB0_91AB0[];
-extern u16 D_8009ADE0_9B9E0;
-
 typedef struct {
     void *unk0;
     loadAssetMetadata_arg unk4;
@@ -206,7 +200,6 @@ typedef struct {
 
 void func_800504A0_510A0(func_800504A0_510A0_arg *);
 void func_800505D8_511D8(s32 **arg0);
-
 void func_80050740_51340(func_80050740_51340_arg *);
 void func_80050864_51464(func_80050864_51464_arg *);
 void func_800509CC_515CC(func_80050C00_51800_Task *);
@@ -224,10 +217,16 @@ void func_80051B8C_5278C(func_8005186C_5246C_arg *);
 void func_80050BD4_517D4(s32 **);
 void func_80050504_51104(func_80050504_51104_arg *);
 void func_80050AA8_516A8(func_80050C00_51800_Task *arg0);
+
 extern loadAssetMetadata_arg D_80090EC0_91AC0;
 extern loadAssetMetadata_arg D_80090F00_91B00;
 extern void *D_80090F40_91B40;
 extern void *D_80090F4C_91B4C;
+extern u8 D_80090E70_91A70[];
+extern s16 D_80090E80_91A80[];
+extern s16 D_80090E98_91A98[];
+extern s16 D_80090EB0_91AB0[];
+extern u16 D_8009ADE0_9B9E0;
 
 void func_80050460_51060(void **node) {
     *node = load_3ECE40();
@@ -861,8 +860,6 @@ void func_80051BB8_527B8(void *arg0) {
     }
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wuninitialized"
 void func_80051C08_52808(void *arg0, s32 arg1) {
     s32 temp_s0;
     func_80051BB8_527B8_task *task;
@@ -879,4 +876,3 @@ void func_80051C08_52808(void *arg0, s32 arg1) {
         task->unkD6 = 1;
     }
 }
-#pragma GCC diagnostic pop

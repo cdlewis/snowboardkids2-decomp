@@ -11,6 +11,56 @@
 USE_ASSET(_1FB4E0);
 USE_ASSET(_4C9E70);
 
+typedef struct {
+    u8 _pad0[0x20];
+    StateEntry *unk20;
+    StateEntry *unk24;
+    StateEntry *unk28;
+    u32 unk2C;
+    u8 _pad30[0x2C];
+    StateEntry *unk5C;
+    StateEntry *unk60;
+    StateEntry *unk64;
+    u32 unk68;
+    u8 _pad6C[0x18];
+    s16 unk84;
+} func_800B4CD0_1E1D80_arg;
+
+typedef struct {
+    u8 _pad0[0x18];
+    s32 unk18;
+    u8 _pad1C[0x20];
+    u8 unk3C[0x40];
+    s32 unk7C;
+    u8 _pad80[0x2];
+    u16 unk82;
+} func_800B4E7C_Struct;
+
+typedef struct {
+    u8 _pad0[0x3C];
+    u8 unk3C[0x3C];
+    void **unk78;
+    s32 unk7C;
+    u16 unk80;
+    u16 unk82;
+    s16 unk84;
+    s16 unk86;
+} func_800B4D74_1E1E24_arg;
+
+typedef struct {
+    u8 padding[0x78];
+    s32 unk78;
+    u8 padding2[4];
+    s16 unk80;
+    u8 padding3[4];
+    s16 unk86;
+} func_800B4F60_1E2010_task;
+
+void func_800B4D74_1E1E24(func_800B4D74_1E1E24_arg *);
+void func_800B4F28_1E1FD8(SceneModel_unk98 *);
+void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0);
+
+extern Transform3D D_8009A8B0_9B4B0;
 extern StateEntry D_80088650;
 extern StateEntry D_80088660;
 extern s16 D_800BAD0E_1E7DBE;
@@ -84,28 +134,6 @@ void func_800B4CB0_1E1D60(void) {
     func_80057ABC_586BC(0, 0);
 }
 
-typedef struct {
-    u8 _pad0[0x20];
-    StateEntry *unk20;
-    StateEntry *unk24;
-    StateEntry *unk28;
-    u32 unk2C;
-    u8 _pad30[0x2C];
-    StateEntry *unk5C;
-    StateEntry *unk60;
-    StateEntry *unk64;
-    u32 unk68;
-    u8 _pad6C[0x18];
-    s16 unk84;
-} func_800B4CD0_1E1D80_arg;
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstrict-prototypes"
-#pragma GCC diagnostic ignored "-Wdeprecated-non-prototype"
-void func_800B4D74_1E1E24();
-void func_800B4F28_1E1FD8();
-#pragma GCC diagnostic pop
-
 void func_800B4CD0_1E1D80(func_800B4CD0_1E1D80_arg *arg0) {
     StateEntry **temp_a1;
 
@@ -125,31 +153,6 @@ void func_800B4CD0_1E1D80(func_800B4CD0_1E1D80_arg *arg0) {
     setCleanupCallback(&func_800B4F28_1E1FD8);
     setCallbackWithContinue(&func_800B4D74_1E1E24);
 }
-
-extern Transform3D D_8009A8B0_9B4B0;
-
-typedef struct {
-    u8 _pad0[0x18];
-    s32 unk18;
-    u8 _pad1C[0x20];
-    u8 unk3C[0x40];
-    s32 unk7C;
-    u8 _pad80[0x2];
-    u16 unk82;
-} func_800B4E7C_Struct;
-
-void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0);
-
-typedef struct {
-    u8 _pad0[0x3C];
-    u8 unk3C[0x3C];
-    void **unk78;
-    s32 unk7C;
-    u16 unk80;
-    u16 unk82;
-    s16 unk84;
-    s16 unk86;
-} func_800B4D74_1E1E24_arg;
 
 void func_800B4D74_1E1E24(func_800B4D74_1E1E24_arg *arg0) {
     Transform3D sp10;
@@ -218,15 +221,6 @@ void func_800B4F28_1E1FD8(SceneModel_unk98 *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
-
-typedef struct {
-    u8 padding[0x78];
-    s32 unk78;
-    u8 padding2[4];
-    s16 unk80;
-    u8 padding3[4];
-    s16 unk86;
-} func_800B4F60_1E2010_task;
 
 void func_800B4F60_1E2010(s32 arg0, s16 arg1) {
     func_800B4F60_1E2010_task *task = (func_800B4F60_1E2010_task *)scheduleTask(&func_800B4CD0_1E1D80, 1, 0, 0x64);
