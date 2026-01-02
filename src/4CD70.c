@@ -589,41 +589,41 @@ void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
 
 typedef struct {
     u8 pad0[0x8];
-    s16 unk8;
+    s16 iconX;
     u8 padA[0x6];
-    s16 unk10;
+    s16 animFrame;
     u8 pad12[0x2];
-    s16 unk14;
+    s16 textX;
     u8 pad16[0x2];
-    s16 unk18;
+    s16 digitCount;
     u8 pad1A[0x6];
-    char unk20[8];
-    Player *unk28;
-    u16 unk2C;
-    u16 unk2E;
-} Struct_func_8004CCC4;
+    char goldTextBuffer[8];
+    Player *player;
+    u16 playerIndex;
+    u16 animCounter;
+} MultiplayerGoldDisplayState;
 
-void func_8004CCC4_4D8C4(Struct_func_8004CCC4 *arg0) {
-    s32 val = arg0->unk28->unkB6C;
+void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
+    s32 gold = state->player->unkB6C;
 
-    if (val < 100) {
-        arg0->unk18 = 1;
+    if (gold < 100) {
+        state->digitCount = 1;
     } else {
-        arg0->unk18 = 2;
+        state->digitCount = 2;
     }
 
-    sprintf(arg0->unk20, D_8009E880_9F480, arg0->unk28->unkB6C);
+    sprintf(state->goldTextBuffer, D_8009E880_9F480, state->player->unkB6C);
 
-    debugEnqueueCallback((u16)(arg0->unk2C + 8), 0, renderTextPalette, &arg0->unk14);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->textX);
 
-    arg0->unk2E++;
-    if ((s16)arg0->unk2E >= 12) {
-        arg0->unk2E = 0;
+    state->animCounter++;
+    if ((s16)state->animCounter >= 12) {
+        state->animCounter = 0;
     }
 
-    arg0->unk10 = (s16)arg0->unk2E >> 1;
+    state->animFrame = (s16)state->animCounter >> 1;
 
-    debugEnqueueCallback((u16)(arg0->unk2C + 8), 0, func_800105B0_111B0, &arg0->unk8);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_800105B0_111B0, &state->iconX);
 }
 
 typedef struct {
