@@ -1,6 +1,7 @@
 normalizeVelocityToSpeed = 0x80051C80; // rom:0x52880
 initSlapstickProjectileTask = 0x80051DEC; // rom:0x529EC
 loadSlapstickProjectileAsset = 0x80051E34; // rom:0x52A34
+checkSlapstickProjectileHit = 0x80051E90; // rom:0x52A90
 D_80090CEC_918EC = 0x80090CEC; // rom:0x918EC size:0xC4
 gCourseSceneryOffset = 0x80090B80; // rom:0x91780
 gFlyingSceneryInitOffset = 0x80090B8C; // rom:0x9178C

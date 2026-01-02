@@ -178,47 +178,49 @@ void loadSlapstickProjectileAsset(Struct_52880 *arg0) {
     setCallbackWithContinue(func_80051FC4_52BC4);
 }
 
-void func_80051E90_52A90(Struct_52880 *arg0) {
-    GameState *alloc;
-    Player *result;
-    Vec3i *s1;
-    s16 unk4C;
-    s32 v28;
-    s32 new_var;
-    s32 v2C;
-    s32 v24;
+void checkSlapstickProjectileHit(Struct_52880 *arg0) {
+    GameState *gameState;
+    Player *hitPlayer;
+    Vec3i *projectilePos;
+    s16 targetIdx;
+    s32 velY;
+    s32 velZ_temp;
+    s32 velZ;
+    s32 velX;
     s32 i;
-    u8 temp;
+    u8 playerIdx;
 
-    alloc = (GameState *)getCurrentAllocation();
-    s1 = &arg0->pos;
-    result = func_8005B548_5C148(s1, arg0->ownerPlayerIdx, 0x80000);
-    if (result != NULL) {
-        if (!(result->unkB84 & 0x1000)) {
-            func_80058A10_59610(result);
+    gameState = (GameState *)getCurrentAllocation();
+    projectilePos = &arg0->pos;
+    hitPlayer = func_8005B548_5C148(projectilePos, arg0->ownerPlayerIdx, 0x80000);
+    if (hitPlayer != NULL) {
+        if (!(hitPlayer->unkB84 & 0x1000)) {
+            /* Player has no shield - apply hit effects */
+            func_80058A10_59610(hitPlayer);
             for (i = 0; i < 3; i++) {
-                if (result->unkB6C >= 100) {
-                    func_8004A9A8_4B5A8(&result->worldPos.x, result->unkB94, &result->unk44C);
-                    func_80059A48_5A648(result, -100);
+                if (hitPlayer->unkB6C >= 100) {
+                    func_8004A9A8_4B5A8(&hitPlayer->worldPos.x, hitPlayer->unkB94, &hitPlayer->unk44C);
+                    func_80059A48_5A648(hitPlayer, -100);
                 }
             }
-            unk4C = arg0->targetPlayerIdx;
-            if (unk4C >= 0) {
-                func_80059C24_5A824(&alloc->players[unk4C]);
+            targetIdx = arg0->targetPlayerIdx;
+            if (targetIdx >= 0) {
+                func_80059C24_5A824(&gameState->players[targetIdx]);
             }
             arg0->hitCount = arg0->hitCount + 1;
         } else {
-            v28 = arg0->vel.y;
-            v2C = (new_var = arg0->vel.z);
-            arg0->ownerPlayerIdx = result->unkBB8;
-            temp = result->unkBB8;
-            arg0->vel.y = -v28;
-            v24 = arg0->vel.x;
-            arg0->vel.x = -v24;
-            arg0->vel.z = -v2C;
-            arg0->targetPlayerIdx = temp;
-            func_80050ECC_51ACC(s1);
-            func_80056B7C_5777C(s1, 0x20);
+            /* Player has shield - reflect projectile */
+            velY = arg0->vel.y;
+            velZ = (velZ_temp = arg0->vel.z);
+            arg0->ownerPlayerIdx = hitPlayer->unkBB8;
+            playerIdx = hitPlayer->unkBB8;
+            arg0->vel.y = -velY;
+            velX = arg0->vel.x;
+            arg0->vel.x = -velX;
+            arg0->vel.z = -velZ;
+            arg0->targetPlayerIdx = playerIdx;
+            func_80050ECC_51ACC(projectilePos);
+            func_80056B7C_5777C(projectilePos, 0x20);
         }
     }
 }
@@ -256,7 +258,7 @@ void func_80051FC4_52BC4(Struct_52880 *arg0) {
 
     func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80052128_52D28);
-    func_80051E90_52A90(arg0);
+    checkSlapstickProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
         func_80050ECC_51ACC(&arg0->pos);
@@ -320,7 +322,7 @@ void func_80052128_52D28(Struct_52880 *arg0) {
         arg0->vel.y = arg0->pos.y - savedVec.y;
         arg0->vel.z = arg0->pos.z - savedVec.z;
 
-        func_80051E90_52A90(arg0);
+        checkSlapstickProjectileHit(arg0);
 
         var_s3 = func_8005BF50_5CB50(
             &arg0->pos,
