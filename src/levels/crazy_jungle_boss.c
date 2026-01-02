@@ -299,7 +299,7 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     if (gameState->unk79 == 0) {
-        func_800B00D4_9FF84((Player *)arg0, 1);
+        setPlayerBehaviorPhase((Player *)arg0, 1);
         return 1;
     }
 
@@ -326,7 +326,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     gameState = getCurrentAllocation();
 
     if (arg0->padBC5[1] != 0) {
-        func_800B00D4_9FF84((Player *)arg0, 2);
+        setPlayerBehaviorPhase((Player *)arg0, 2);
         return 1;
     }
 

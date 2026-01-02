@@ -19,7 +19,7 @@ typedef struct {
 } func_800B00D4_arg;
 
 void setPlayerBehaviorMode(Player *player, u8 mode);
-void func_800B00D4_9FF84(Player *arg0, s32 arg1);
+void setPlayerBehaviorPhase(Player *player, s32 phase);
 void func_800B02AC_A015C(Player *arg0);
 void func_800B9500_A93B0(void *arg0);
 void func_800B99E0(void *arg0);
