@@ -78,24 +78,24 @@ const char sTimerFormatLow[];
 const char sTimerFormatNormal[];
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+    s16 x;
+    s16 y;
+    void *lapIconAsset;
+    s16 spriteIndex;
     u8 padA[0x2];
-    s16 unkC;
+    s16 digitX1;
     u8 padE[0x2];
     s16 unk10;
     u8 pad12[0x2];
-    s16 unk14;
+    s16 currentLap;
     u8 pad16[0x2];
-    s16 unk18;
+    s16 digitX2;
     u8 pad1A[0xA];
-    s16 unk24;
+    s16 digitX3;
     u8 pad26[0x1E];
-    Player *unk44;
-    s32 unk48;
-} Struct_func_8004C928;
+    Player *player;
+    s32 playerIndex;
+} LapCounterSinglePlayerState;
 
 typedef struct {
     u8 padC[0xC];
@@ -185,52 +185,52 @@ typedef struct {
     u8 pad0[0x10];
     void *players;
     u8 pad14[0x4B];
-    u8 unk5F;
+    u8 numPlayers;
     u8 pad60[0x14];
-    u8 unk74;
-} Allocation_C728;
+    u8 totalLaps;
+} LapCounterAllocation;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+    s16 x;
+    s16 y;
+    void *lapIconAsset;
+    s16 spriteIndex;
     u8 padA[0x2];
-    s16 unkC;
-    s16 unkE;
-    void *unk10;
+    s16 digitX1;
+    s16 digitY1;
+    void *digitsAsset;
     u8 pad14[0x2];
     u8 unk16;
     u8 pad17[0x1];
-    s16 unk18;
-    s16 unk1A;
+    s16 digitX2;
+    s16 digitY2;
     void *unk1C;
     s16 unk20;
     u8 pad22[0x2];
-    s16 unk24;
-    s16 unk26;
+    s16 digitX3;
+    s16 digitY3;
     void *unk28;
-    s16 unk2C;
+    s16 totalLaps;
     u8 unk2E;
     u8 pad2F[0x1];
-    s16 unk30;
-    s16 unk32;
+    s16 textX;
+    s16 textY;
     s16 unk34;
     u8 pad36[0x2];
-    char *unk38;
-    char unk3C[8];
-    void *unk44;
-    s32 unk48;
-} Struct_func_8004C728;
+    char *lapText;
+    char lapTextBuffer[8];
+    void *player;
+    s32 playerIndex;
+} LapCounterState;
 
 typedef struct {
     u8 pad0[0x30];
     TextData unk30;
     u8 unk3C;
     u8 pad3D[0x7];
-    Player *unk44;
-    s32 unk48;
-} Struct_func_8004C9E8;
+    Player *player;
+    s32 playerIndex;
+} LapCounterMultiplayerState;
 
 void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
 void func_8004D464_4E064(Struct_func_8004D3A4 *);
@@ -249,15 +249,15 @@ void initPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state);
 void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void initPlayerItemDisplayTask(PlayerItemDisplayState *state);
-void func_8004C728_4D328(Struct_func_8004C728 *arg0);
+void initPlayerLapCounterTask(LapCounterState *state);
 void func_8004CA90_4D690(void);
 void func_8004CDC0_4D9C0(void);
 void cleanupPlayerItemDisplayTask(Struct_func_8004C6F0 *arg0);
 void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state);
 void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state);
-void func_8004C928_4D528(Struct_func_8004C928 *arg0);
-void func_8004CA58_4D658(Struct_func_8004DCC4 *arg0);
-void func_8004C9E8_4D5E8(Struct_func_8004C9E8 *arg0);
+void updatePlayerLapCounterSinglePlayer(LapCounterSinglePlayerState *state);
+void cleanupPlayerLapCounterTask(Struct_func_8004DCC4 *arg0);
+void updatePlayerLapCounterMultiplayer(LapCounterMultiplayerState *state);
 
 static const char D_8009E880_9F480[] = "%5d";
 extern char D_8009E89C_9F49C[];
@@ -469,77 +469,80 @@ void cleanupPlayerItemDisplayTask(Struct_func_8004C6F0 *arg0) {
     arg0->unk1C = freeNodeMemory(arg0->unk1C);
 }
 
-void func_8004C728_4D328(Struct_func_8004C728 *arg0) {
-    Allocation_C728 *allocation;
-    char *temp_s0;
-    s16 new_var;
-    allocation = (Allocation_C728 *)getCurrentAllocation();
-    arg0->unk44 = (void *)(((u8 *)allocation->players) + (arg0->unk48 * 0xBE8));
-    if (allocation->unk5F == 1) {
-        arg0->unk0 = -0x88;
-        arg0->unk2 = -0x60;
-        arg0->unk4 = loadCompressedData(&_3F6420_ROM_START, &_3F6420_ROM_END, 0x168);
-        arg0->unk8 = 0;
-        arg0->unkC = ((u16)arg0->unk0) + 0x1C;
-        arg0->unkE = arg0->unk2;
-        arg0->unk10 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-        arg0->unk18 = ((u16)arg0->unkC) + 8;
-        arg0->unk16 = 1;
-        arg0->unk20 = 1;
-        arg0->unk1A = arg0->unk2;
-        arg0->unk1C = arg0->unk4;
-        new_var = arg0->unk18;
-        arg0->unk26 = arg0->unk2;
-        arg0->unk28 = arg0->unk10;
-        arg0->unk24 = ((u16)new_var) + 8;
-        arg0->unk2C = allocation->unk74 + 1;
-        arg0->unk2E = 3;
+void initPlayerLapCounterTask(LapCounterState *state) {
+    LapCounterAllocation *allocation;
+    char *textBuffer;
+    s16 temp;
+
+    allocation = (LapCounterAllocation *)getCurrentAllocation();
+    state->player = (void *)(((u8 *)allocation->players) + (state->playerIndex * 0xBE8));
+
+    if (allocation->numPlayers == 1) {
+        state->x = -0x88;
+        state->y = -0x60;
+        state->lapIconAsset = loadCompressedData(&_3F6420_ROM_START, &_3F6420_ROM_END, 0x168);
+        state->spriteIndex = 0;
+        state->digitX1 = ((u16)state->x) + 0x1C;
+        state->digitY1 = state->y;
+        state->digitsAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+        state->digitX2 = ((u16)state->digitX1) + 8;
+        state->unk16 = 1;
+        state->unk20 = 1;
+        state->digitY2 = state->y;
+        state->unk1C = state->lapIconAsset;
+        temp = state->digitX2;
+        state->digitY3 = state->y;
+        state->unk28 = state->digitsAsset;
+        state->digitX3 = ((u16)temp) + 8;
+        state->totalLaps = allocation->totalLaps + 1;
+        state->unk2E = 3;
     } else {
-        arg0->unk2 = -0x30;
-        if (allocation->unk5F == 2) {
-            arg0->unk0 = -0x18;
-            arg0->unk30 = 0;
-            arg0->unk32 = arg0->unk2;
+        state->y = -0x30;
+        if (allocation->numPlayers == 2) {
+            state->x = -0x18;
+            state->textX = 0;
+            state->textY = state->y;
         } else {
-            if (arg0->unk48 < 2) {
-                arg0->unk0 = -0x44;
+            if (state->playerIndex < 2) {
+                state->x = -0x44;
             } else {
-                arg0->unk0 = 0x2C;
+                state->x = 0x2C;
             }
-            arg0->unk30 = arg0->unk0;
-            arg0->unk32 = ((u16)arg0->unk2) + 8;
+            state->textX = state->x;
+            state->textY = ((u16)state->y) + 8;
         }
-        temp_s0 = arg0->unk3C;
-        arg0->unk4 = loadCompressedData(&_3F65C0_ROM_START, &_3F65C0_ROM_END, 0x98);
-        arg0->unk8 = 0;
-        arg0->unk10 = 0;
-        sprintf(temp_s0, D_8009E868_9F468, 1, allocation->unk74 + 1);
-        arg0->unk34 = 1;
-        arg0->unk38 = temp_s0;
+        textBuffer = state->lapTextBuffer;
+        state->lapIconAsset = loadCompressedData(&_3F65C0_ROM_START, &_3F65C0_ROM_END, 0x98);
+        state->spriteIndex = 0;
+        state->digitsAsset = 0;
+        sprintf(textBuffer, D_8009E868_9F468, 1, allocation->totalLaps + 1);
+        state->unk34 = 1;
+        state->lapText = textBuffer;
     }
-    setCleanupCallback(func_8004CA58_4D658);
-    if (allocation->unk5F == 1) {
-        setCallbackWithContinue(func_8004C928_4D528);
+
+    setCleanupCallback(cleanupPlayerLapCounterTask);
+    if (allocation->numPlayers == 1) {
+        setCallbackWithContinue(updatePlayerLapCounterSinglePlayer);
     } else {
-        setCallbackWithContinue(func_8004C9E8_4D5E8);
+        setCallbackWithContinue(updatePlayerLapCounterMultiplayer);
     }
 }
 
-void func_8004C928_4D528(Struct_func_8004C928 *arg0) {
-    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_8000FED0_10AD0, arg0);
-    arg0->unk14 = arg0->unk44->unkBC5 + 1;
-    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_80010240_10E40, &arg0->unkC);
-    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_8000FED0_10AD0, &arg0->unk18);
-    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_80010240_10E40, &arg0->unk24);
+void updatePlayerLapCounterSinglePlayer(LapCounterSinglePlayerState *state) {
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, state);
+    state->currentLap = state->player->unkBC5 + 1;
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010240_10E40, &state->digitX1);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, &state->digitX2);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010240_10E40, &state->digitX3);
 }
 
-void func_8004C9E8_4D5E8(Struct_func_8004C9E8 *arg0) {
-    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, func_8000FED0_10AD0, arg0);
-    arg0->unk3C = arg0->unk44->unkBC5 + 0x31;
-    debugEnqueueCallback((u16)(arg0->unk48 + 8), 0, renderTextPalette, &arg0->unk30);
+void updatePlayerLapCounterMultiplayer(LapCounterMultiplayerState *state) {
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, state);
+    state->unk3C = state->player->unkBC5 + 0x31;
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->unk30);
 }
 
-void func_8004CA58_4D658(Struct_func_8004DCC4 *arg0) {
+void cleanupPlayerLapCounterTask(Struct_func_8004DCC4 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
@@ -2511,7 +2514,7 @@ void func_8005011C_50D1C(void) {
             case 10:
                 SCHEDULE_AND_SET(initPlayerFinishPositionTask, 4, i);
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
-                SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
+                SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
                 SCHEDULE_AND_SET_SHORT(func_8004CA90_4D690, 22, i);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
                 break;
@@ -2519,20 +2522,20 @@ void func_8005011C_50D1C(void) {
             case 1:
                 SCHEDULE_AND_SET(initPlayerFinishPositionTask, 4, i);
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
-                SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
+                SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
                 break;
 
             case 2:
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
-                SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
+                SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
                 SCHEDULE_AND_SET_SHORT(func_8004E8BC_4F4BC, 60, 0xA);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
                 break;
 
             case 3:
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
-                SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
+                SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
                 SCHEDULE_AND_SET_SHORT(func_8004E8BC_4F4BC, 60, 0xB);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
                 break;
