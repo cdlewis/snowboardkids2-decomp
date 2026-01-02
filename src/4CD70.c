@@ -248,13 +248,13 @@ void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0);
 void initPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state);
 void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state);
-void func_8004C2C0_4CEC0(Struct_func_8004C2C0 *arg0);
+void initPlayerItemDisplayTask(PlayerItemDisplayState *state);
 void func_8004C728_4D328(Struct_func_8004C728 *arg0);
 void func_8004CA90_4D690(void);
 void func_8004CDC0_4D9C0(void);
-void func_8004C6F0_4D2F0(Struct_func_8004C6F0 *arg0);
-void func_8004C5A8_4D1A8(Struct_func_8004C2C0 *arg0);
-void func_8004C46C_4D06C(Struct_func_8004C2C0 *arg0);
+void cleanupPlayerItemDisplayTask(Struct_func_8004C6F0 *arg0);
+void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state);
+void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state);
 void func_8004C928_4D528(Struct_func_8004C928 *arg0);
 void func_8004CA58_4D658(Struct_func_8004DCC4 *arg0);
 void func_8004C9E8_4D5E8(Struct_func_8004C9E8 *arg0);
@@ -318,13 +318,13 @@ void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state) {
     state->asset = freeNodeMemory(state->asset);
 }
 
-void func_8004C2C0_4CEC0(Struct_func_8004C2C0 *arg0) {
-    GameState *allocation;
+void initPlayerItemDisplayTask(PlayerItemDisplayState *state) {
+    GameState *gameState;
     s32 playerMode;
 
-    allocation = (GameState *)getCurrentAllocation();
-    arg0->unk34 = &allocation->players[arg0->unk38];
-    playerMode = allocation->unk5F;
+    gameState = (GameState *)getCurrentAllocation();
+    state->player = &gameState->players[state->playerIndex];
+    playerMode = gameState->unk5F;
 
     if (playerMode >= 3) {
         goto else_branch;
@@ -334,123 +334,137 @@ void func_8004C2C0_4CEC0(Struct_func_8004C2C0 *arg0) {
     }
 
     if (playerMode == 1) {
-        arg0->unk0 = -0x20;
-        arg0->unk2 = -0x60;
-        arg0->unkC = 0;
-        arg0->unkE = -0x60;
+        state->primaryItemX = -0x20;
+        state->primaryItemY = -0x60;
+        state->secondaryItemX = 0;
+        state->secondaryItemY = -0x60;
     } else {
-        arg0->unk0 = -0x88;
-        arg0->unk2 = -0x30;
-        arg0->unkC = -0x68;
-        arg0->unkE = -0x30;
+        state->primaryItemX = -0x88;
+        state->primaryItemY = -0x30;
+        state->secondaryItemX = -0x68;
+        state->secondaryItemY = -0x30;
     }
-    arg0->unk10 = arg0->unk4 = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
-    arg0->unk18 = arg0->unk0 + 0x18;
-    arg0->unk1A = arg0->unk2 + 0x10;
-    arg0->unk1C = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    state->secondaryItemAsset = state->primaryItemAsset =
+        loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    state->itemCountX = state->primaryItemX + 0x18;
+    state->itemCountY = state->primaryItemY + 0x10;
+    state->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     goto callbacks;
 
 else_branch:
-    arg0->unk0 = -0x10;
-    arg0->unk2 = -0x30;
-    arg0->unkC = 0;
-    arg0->unkE = -0x30;
-    arg0->unk10 = arg0->unk4 = loadCompressedData(&_3F58E0_ROM_START, &_3F58E0_ROM_END, 0xB08);
-    arg0->unk28 = 0;
-    arg0->unk2C = &arg0->unk30;
-    arg0->unk24 = arg0->unk0 + 8;
-    arg0->unk26 = arg0->unk2 + 8;
-    arg0->unk1C = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
-    arg0->unk31 = 0;
+    state->primaryItemX = -0x10;
+    state->primaryItemY = -0x30;
+    state->secondaryItemX = 0;
+    state->secondaryItemY = -0x30;
+    state->secondaryItemAsset = state->primaryItemAsset =
+        loadCompressedData(&_3F58E0_ROM_START, &_3F58E0_ROM_END, 0xB08);
+    state->unk28 = 0;
+    state->charDisplayPtr = &state->charDisplayValue;
+    state->charDisplayX = state->primaryItemX + 8;
+    state->charDisplayY = state->primaryItemY + 8;
+    state->digitAsset = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    state->charDisplayFlag = 0;
 
 callbacks:
-    if (allocation->unk5F < 3) {
-        setCallbackWithContinue(func_8004C46C_4D06C);
+    if (gameState->unk5F < 3) {
+        setCallbackWithContinue(updatePlayerItemDisplaySinglePlayer);
     } else {
-        setCallbackWithContinue(func_8004C5A8_4D1A8);
+        setCallbackWithContinue(updatePlayerItemDisplayMultiplayer);
     }
-    setCleanupCallback(func_8004C6F0_4D2F0);
+    setCleanupCallback(cleanupPlayerItemDisplayTask);
 }
 
-void func_8004C46C_4D06C(Struct_func_8004C2C0 *arg0) {
-    Player *temp_v0;
-    Player *temp_v1;
-    u8 temp_v2;
+void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state) {
+    Player *player;
+    Player *playerRef;
+    u8 tempValue;
     void *callback;
 
-    temp_v0 = arg0->unk34;
-    temp_v2 = temp_v0->unkBD3;
-    if (temp_v2 != 0) {
-        arg0->unk20 = temp_v2;
-        debugEnqueueCallback((arg0->unk38 + 8) & 0xFFFF, 0, func_8000FED0_10AD0, &arg0->unk18);
+    player = state->player;
+    tempValue = player->unkBD3;
+    if (tempValue != 0) {
+        state->itemCountValue = tempValue;
+        debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, func_8000FED0_10AD0, &state->itemCountX);
     }
 
     callback = func_8000FED0_10AD0;
-    temp_v2 = arg0->unk34->unkBD2;
-    arg0->unk8 = temp_v2;
-    debugEnqueueCallback((arg0->unk38 + 8) & 0xFFFF, 0, callback, arg0);
+    tempValue = state->player->unkBD2;
+    state->primaryItemIndex = tempValue;
+    debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
 
-    temp_v0 = arg0->unk34;
-    if ((temp_v0->unkBD8 & 1) != 0) {
-        func_8005100C_51C0C((s32)arg0->unk0 - 8, (s32)arg0->unk2 - 8, 0, arg0->unk38 + 8, 0);
-        temp_v1 = arg0->unk34;
-        temp_v2 = temp_v1->unkBD8;
-        temp_v1->unkBD8 = temp_v2 & 0xFE;
+    player = state->player;
+    if ((player->unkBD8 & 1) != 0) {
+        func_8005100C_51C0C((s32)state->primaryItemX - 8, (s32)state->primaryItemY - 8, 0, state->playerIndex + 8, 0);
+        playerRef = state->player;
+        tempValue = playerRef->unkBD8;
+        playerRef->unkBD8 = tempValue & 0xFE;
     }
 
-    temp_v2 = arg0->unk34->unkBD4;
-    arg0->unk14 = temp_v2 + 7;
-    debugEnqueueCallback((arg0->unk38 + 8) & 0xFFFF, 0, callback, &arg0->unkC);
+    tempValue = state->player->unkBD4;
+    state->secondaryItemIndex = tempValue + 7;
+    debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, &state->secondaryItemX);
 
-    temp_v0 = arg0->unk34;
-    if ((temp_v0->unkBD8 & 2) != 0) {
-        func_8005100C_51C0C((s32)arg0->unkC - 8, (s32)arg0->unkE - 8, 1, arg0->unk38 + 8, 0);
-        temp_v1 = arg0->unk34;
-        temp_v2 = temp_v1->unkBD8;
-        temp_v1->unkBD8 = temp_v2 & 0xFD;
+    player = state->player;
+    if ((player->unkBD8 & 2) != 0) {
+        func_8005100C_51C0C(
+            (s32)state->secondaryItemX - 8,
+            (s32)state->secondaryItemY - 8,
+            1,
+            state->playerIndex + 8,
+            0
+        );
+        playerRef = state->player;
+        tempValue = playerRef->unkBD8;
+        playerRef->unkBD8 = tempValue & 0xFD;
     }
 }
 
-void func_8004C5A8_4D1A8(Struct_func_8004C2C0 *arg0) {
-    Player *temp_v0;
-    u8 temp_v2;
-    Player *temp_v1;
+void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
+    Player *player;
+    u8 tempValue;
+    Player *playerRef;
     void *callback;
 
-    temp_v0 = arg0->unk34;
-    temp_v2 = temp_v0->unkBD3;
-    if (temp_v2 != 0) {
-        arg0->unk30 = temp_v2 + 0x30;
-        debugEnqueueCallback((arg0->unk38 + 8) & 0xFFFF, 0, renderTextPalette, &arg0->unk24);
+    player = state->player;
+    tempValue = player->unkBD3;
+    if (tempValue != 0) {
+        state->charDisplayValue = tempValue + 0x30;
+        debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, renderTextPalette, &state->charDisplayX);
     }
 
     callback = func_8000FED0_10AD0;
-    temp_v2 = arg0->unk34->unkBD2;
-    arg0->unk8 = temp_v2;
-    debugEnqueueCallback((arg0->unk38 + 8) & 0xFFFF, 0, callback, arg0);
+    tempValue = state->player->unkBD2;
+    state->primaryItemIndex = tempValue;
+    debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
 
-    temp_v0 = arg0->unk34;
-    if ((temp_v0->unkBD8 & 1) != 0) {
-        func_8005100C_51C0C((s32)arg0->unk0 - 4, (s32)arg0->unk2 - 4, 0, arg0->unk38 + 8, 1);
-        temp_v1 = arg0->unk34;
-        temp_v2 = temp_v1->unkBD8;
-        temp_v1->unkBD8 = temp_v2 & 0xFE;
+    player = state->player;
+    if ((player->unkBD8 & 1) != 0) {
+        func_8005100C_51C0C((s32)state->primaryItemX - 4, (s32)state->primaryItemY - 4, 0, state->playerIndex + 8, 1);
+        playerRef = state->player;
+        tempValue = playerRef->unkBD8;
+        playerRef->unkBD8 = tempValue & 0xFE;
     }
 
-    temp_v2 = arg0->unk34->unkBD4;
-    arg0->unk14 = temp_v2 + 7;
-    debugEnqueueCallback((arg0->unk38 + 8) & 0xFFFF, 0, callback, &arg0->unkC);
+    tempValue = state->player->unkBD4;
+    state->secondaryItemIndex = tempValue + 7;
+    debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, &state->secondaryItemX);
 
-    temp_v0 = arg0->unk34;
-    if ((temp_v0->unkBD8 & 2) != 0) {
-        func_8005100C_51C0C((s32)arg0->unkC - 4, (s32)arg0->unkE - 4, 1, arg0->unk38 + 8, 1);
-        temp_v1 = arg0->unk34;
-        temp_v2 = temp_v1->unkBD8;
-        temp_v1->unkBD8 = temp_v2 & 0xFD;
+    player = state->player;
+    if ((player->unkBD8 & 2) != 0) {
+        func_8005100C_51C0C(
+            (s32)state->secondaryItemX - 4,
+            (s32)state->secondaryItemY - 4,
+            1,
+            state->playerIndex + 8,
+            1
+        );
+        playerRef = state->player;
+        tempValue = playerRef->unkBD8;
+        playerRef->unkBD8 = tempValue & 0xFD;
     }
 }
 
-void func_8004C6F0_4D2F0(Struct_func_8004C6F0 *arg0) {
+void cleanupPlayerItemDisplayTask(Struct_func_8004C6F0 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unk1C = freeNodeMemory(arg0->unk1C);
 }
@@ -2496,7 +2510,7 @@ void func_8005011C_50D1C(void) {
             case 9:
             case 10:
                 SCHEDULE_AND_SET(initPlayerFinishPositionTask, 4, i);
-                SCHEDULE_AND_SET(func_8004C2C0_4CEC0, 14, i);
+                SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
                 SCHEDULE_AND_SET_SHORT(func_8004CA90_4D690, 22, i);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
@@ -2504,20 +2518,20 @@ void func_8005011C_50D1C(void) {
 
             case 1:
                 SCHEDULE_AND_SET(initPlayerFinishPositionTask, 4, i);
-                SCHEDULE_AND_SET(func_8004C2C0_4CEC0, 14, i);
+                SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
                 break;
 
             case 2:
-                SCHEDULE_AND_SET(func_8004C2C0_4CEC0, 14, i);
+                SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
                 SCHEDULE_AND_SET_SHORT(func_8004E8BC_4F4BC, 60, 0xA);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
                 break;
 
             case 3:
-                SCHEDULE_AND_SET(func_8004C2C0_4CEC0, 14, i);
+                SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(func_8004C728_4D328, 18, i);
                 SCHEDULE_AND_SET_SHORT(func_8004E8BC_4F4BC, 60, 0xB);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
