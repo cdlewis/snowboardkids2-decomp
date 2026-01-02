@@ -65,7 +65,7 @@ void func_800401A0_40DA0(void);
 void awaitPlayersAndPlayRaceMusic(void);
 void loadPlayerAssets(void);
 void func_8003F368_3FF68(void);
-void func_8003FD3C_4093C(void);
+void awaitSkillWinContinuePress(void);
 void func_8003FF78_40B78(void);
 void awaitSkillWinAndPromptContinue(void);
 void func_8003FD84_40984(void);
@@ -1044,11 +1044,11 @@ void awaitSkillWinAndPromptContinue(void) {
         state->unk7C = 1;
         scheduleTask(&func_8004F1D4_4FDD4, 1, 0, 0xE6);
         func_800574A0_580A0(0xA);
-        setGameStateHandler(&func_8003FD3C_4093C);
+        setGameStateHandler(&awaitSkillWinContinuePress);
     }
 }
 
-void func_8003FD3C_4093C(void) {
+void awaitSkillWinContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(NULL, 0xFF, 0x10);
         func_80057564_58164(0x3C);

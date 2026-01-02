@@ -2414,3 +2414,4 @@ handleBossDefeatResult = 0x8003FB00; // rom:0x40700
 awaitBossResultAndFadeOut = 0x8003FB90; // rom:0x40790
 handleSkillGameResult = 0x8003FBE0; // rom:0x407E0
 awaitSkillWinAndPromptContinue = 0x8003FCD8; // rom:0x408D8
+awaitSkillWinContinuePress = 0x8003FD3C; // rom:0x4093C
