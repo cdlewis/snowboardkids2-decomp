@@ -1257,92 +1257,92 @@ void cleanupTotalGoldDisplayTask(Struct_func_8004DCC4 *arg0) {
 }
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteIndex;
     u8 padA[0x4];
     u8 unkE;
     u8 padF;
-    void *unk10;
-    s32 unk14;
-    Player *unk18;
-} Struct_func_8004DEF8;
+    void *digitAsset;
+    s32 alpha;
+    Player *player;
+} TotalLapDisplayState;
 
-void func_8004DFA0_4EBA0(Struct_func_8004DEF8 *arg0);
-void func_8004E0BC_4ECBC(Struct_func_8004DCC4 *);
+void updateTotalLapDisplay(TotalLapDisplayState *state);
+void cleanupTotalLapDisplayTask(Struct_func_8004DCC4 *);
 
-void func_8004DEF8_4EAF8(Struct_func_8004DEF8 *arg0) {
+void initTotalLapDisplayTask(TotalLapDisplayState *state) {
     D_800AFE8C_A71FC_type *global;
 
     getCurrentAllocation();
-    arg0->unk14 = 0;
-    arg0->unk4 = loadAsset_34CB50();
-    initHudElementState((HudElementState *)arg0);
+    state->alpha = 0;
+    state->spriteAsset = loadAsset_34CB50();
+    initHudElementState((HudElementState *)state);
     global = D_800AFE8C_A71FC;
-    arg0->unk8 = 0x16;
-    arg0->unk0 = 0;
+    state->spriteIndex = 0x16;
+    state->x = 0;
 
-    if (global->unk9[arg0->unk18->unkBB8 + 0x11] < 10) {
-        arg0->unk0 = -4;
+    if (global->unk9[state->player->unkBB8 + 0x11] < 10) {
+        state->x = -4;
     }
 
-    arg0->unk2 = 0x10;
-    arg0->unk10 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    setCleanupCallback(func_8004E0BC_4ECBC);
-    setCallback(func_8004DFA0_4EBA0);
+    state->y = 0x10;
+    state->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    setCleanupCallback(cleanupTotalLapDisplayTask);
+    setCallback(updateTotalLapDisplay);
 }
 
-void func_8004DFA0_4EBA0(Struct_func_8004DEF8 *arg0) {
-    char sp20[16];
-    s32 temp;
-    u8 var_a2;
+void updateTotalLapDisplay(TotalLapDisplayState *state) {
+    char buffer[16];
+    s32 alphaValue;
+    u8 lapCount;
     Player *player;
 
-    temp = arg0->unk14;
-    if (temp != 0xFF) {
-        temp += 0x10;
-        arg0->unk14 = temp;
-        if (temp >= 0x100) {
-            arg0->unk14 = 0xFF;
+    alphaValue = state->alpha;
+    if (alphaValue != 0xFF) {
+        alphaValue += 0x10;
+        state->alpha = alphaValue;
+        if (alphaValue >= 0x100) {
+            state->alpha = 0xFF;
         }
     }
 
-    player = arg0->unk18;
+    player = state->player;
     if (player->finishPosition == 0 && (gFrameCounter & 1)) {
-        var_a2 = D_800AFE8C_A71FC->unk9[player->unkBB8 + 0x11];
-        sprintf(sp20, D_8009E89C_9F49C, var_a2);
+        lapCount = D_800AFE8C_A71FC->unk9[player->unkBB8 + 0x11];
+        sprintf(buffer, D_8009E89C_9F49C, lapCount);
     } else {
-        var_a2 = D_800AFE8C_A71FC->unk9[arg0->unk18->unkBB8 + 0x11];
-        sprintf(sp20, D_8009E8A0_9F4A0, var_a2);
+        lapCount = D_800AFE8C_A71FC->unk9[state->player->unkBB8 + 0x11];
+        sprintf(buffer, D_8009E8A0_9F4A0, lapCount);
     }
 
-    arg0->unkE = (u8)arg0->unk14;
+    state->unkE = (u8)state->alpha;
 
-    debugEnqueueCallback(arg0->unk18->unkBB8 + 8, 6, func_80012518_13118, arg0);
+    debugEnqueueCallback(state->player->unkBB8 + 8, 6, func_80012518_13118, state);
 
     drawNumericString(
-        sp20,
-        (s16)((u16)arg0->unk0 - 0x18),
-        arg0->unk2,
-        arg0->unk14,
-        arg0->unk10,
-        (s16)(arg0->unk18->unkBB8 + 8),
+        buffer,
+        (s16)((u16)state->x - 0x18),
+        state->y,
+        state->alpha,
+        state->digitAsset,
+        (s16)(state->player->unkBB8 + 8),
         6
     );
 }
 
-void func_8004E0BC_4ECBC(Struct_func_8004DCC4 *arg0) {
+void cleanupTotalLapDisplayTask(Struct_func_8004DCC4 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-void func_8004E0F4_4ECF4(Player *arg0) {
+void spawnTotalLapDisplayTask(Player *player) {
     Node *task;
 
-    task = scheduleTask(func_8004DEF8_4EAF8, 1, 0, 0xE6);
+    task = scheduleTask(initTotalLapDisplayTask, 1, 0, 0xE6);
     if (task != NULL) {
-        task->unk18 = arg0;
+        task->unk18 = player;
     }
 }
 
