@@ -218,14 +218,14 @@ s32 cutsceneChrZoom_validate(void) {
 
 void cutsceneChrZoom_exec(cutsceneChrZoom_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlotData *slotData;
-    s32 value;
+    s32 scaleFixed;
 
     slotData = &arg1->slots[arg2].slotData;
-    value = (arg0->unk0 << 16) / 100;
+    scaleFixed = (arg0->scalePercent << 16) / 100;
 
-    func_800B7760_1E4810(slotData, value, arg0->unk4);
-    func_800B77C4_1E4874(slotData, value, arg0->unk4);
-    func_800B7828_1E48D8(slotData, value, arg0->unk4);
+    func_800B7760_1E4810(slotData, scaleFixed, arg0->duration);
+    func_800B77C4_1E4874(slotData, scaleFixed, arg0->duration);
+    func_800B7828_1E48D8(slotData, scaleFixed, arg0->duration);
 }
 
 s32 cutsceneChrZoom_isDone(void) {

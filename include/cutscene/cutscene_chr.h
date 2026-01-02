@@ -113,8 +113,8 @@ typedef struct {
 } cutsceneChrAnime2_exec_arg;
 
 typedef struct {
-    s32 unk0;
-    s16 unk4;
+    s32 scalePercent;
+    s16 duration;
 } cutsceneChrZoom_exec_arg;
 
 typedef struct {
