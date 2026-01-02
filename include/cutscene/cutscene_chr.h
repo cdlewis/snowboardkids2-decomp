@@ -141,15 +141,15 @@ typedef struct {
 } cutsceneChrRotate_exec_arg;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
+    s32 targetX;
+    s32 targetY;
+    s32 targetZ;
     s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s8 unk12;
-    s8 unk13;
-    s16 unk14;
+    s16 duration;
+    s16 animationId;
+    s8 actionMode;
+    s8 animationLoopCount;
+    s16 transitionAnimId;
 } cutsceneChrBack_exec_arg;
 
 typedef struct {

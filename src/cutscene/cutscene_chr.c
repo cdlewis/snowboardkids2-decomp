@@ -345,9 +345,9 @@ void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg0, CutsceneManager *arg1,
 
     slot = &arg1->slots[arg2];
 
-    func_800B7914_1E49C4(&slot->slotData, arg0->unk0, arg0->unk4, arg0->unk8, arg0->unkE);
-    setModelAnimationQueued(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1);
-    setModelActionMode(slot->model, arg0->unk12);
+    func_800B7914_1E49C4(&slot->slotData, arg0->targetX, arg0->targetY, arg0->targetZ, arg0->duration);
+    setModelAnimationQueued(slot->model, arg0->animationId, arg0->transitionAnimId, arg0->animationLoopCount, -1);
+    setModelActionMode(slot->model, arg0->actionMode);
 }
 
 s32 cutsceneChrBack_isDone(void) {
