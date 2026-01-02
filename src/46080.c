@@ -348,7 +348,7 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0xB4];
-    s16 unkB4;
+    s16 skyType;
 } ScheduledTask;
 
 typedef struct {
@@ -370,7 +370,7 @@ typedef struct {
     void *unkA0;
     s32 unkA4;
     u8 _padA8[0xC];
-    s16 unkB4;
+    s16 skyType;
 } SkyRenderTaskState;
 
 typedef struct {
@@ -856,7 +856,7 @@ void func_8004934C_49F4C(func_80049300_49F00_arg *arg0);
 void func_80049404_4A004(Struct_func_80049404_4A004 *arg0);
 void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0);
 void func_80045768_46368(func_80045768_46368_arg *);
-void func_80045564_46164(ScheduledTask *);
+void dispatchSkyRenderCallback(ScheduledTask *);
 void func_8004AFF8_4BBF8(func_8004AFF8_arg *);
 void func_80045CC8_468C8(void);
 void func_8004B758_4C358(func_8004B758_4C358_arg *);
@@ -916,14 +916,14 @@ void initSkyRenderTask(SkyRenderTaskState *state) {
 
     memcpy(state, identity, 0x20);
 
-    state->unk20 = func_80055E40_56A40(state->unkB4);
-    state->unk24 = func_80055DC4_569C4(state->unkB4);
-    state->unk28 = func_80055DF8_569F8(state->unkB4);
+    state->unk20 = func_80055E40_56A40(state->skyType);
+    state->unk24 = func_80055DC4_569C4(state->skyType);
+    state->unk28 = func_80055DF8_569F8(state->skyType);
     state->unk2C = 0;
 
     memcpy(state->unk3C, identity, 0x20);
 
-    state->unk5C = func_80055E54_56A54(state->unkB4);
+    state->unk5C = func_80055E54_56A54(state->skyType);
     state->unk68 = 0;
     state->unk60 = state->unk24;
     state->unk64 = state->unk28;
@@ -936,11 +936,11 @@ void initSkyRenderTask(SkyRenderTaskState *state) {
     state->unkA0 = state->unk28;
 
     setCleanupCallback(&func_80045768_46368);
-    setCallback(&func_80045564_46164);
+    setCallback(&dispatchSkyRenderCallback);
 }
 
-void func_80045564_46164(ScheduledTask *arg0) {
-    if (arg0->unkB4 == 1) {
+void dispatchSkyRenderCallback(ScheduledTask *task) {
+    if (task->skyType == 1) {
         if ((func_800698DC_6A4DC() & 0xFF) == 0x37) {
             setCallbackWithContinue(func_8004562C_4622C);
             return;
@@ -973,7 +973,7 @@ void func_80045768_46368(func_80045768_46368_arg *arg0) {
 void func_800457A0_463A0(s32 arg0) {
     ScheduledTask *task = scheduleTask(initSkyRenderTask, 0, 0, 0xD2);
     if (task != NULL) {
-        task->unkB4 = arg0;
+        task->skyType = arg0;
     }
 }
 
