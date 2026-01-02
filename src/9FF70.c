@@ -902,13 +902,13 @@ void updateTrickAirborneVelocity(Player *player) {
     func_800B00FC_9FFAC(player);
 }
 
-s32 func_800B2E38_A2CE8(void *arg0) {
-    if (tryFinalizeTrickLanding(arg0) != 0) {
+s32 updateBasicTrickAirborne(Player *player) {
+    if (tryFinalizeTrickLanding(player) != 0) {
         return 1;
     }
-    updateTrickAirborneVelocity(arg0);
-    func_800B3784_A3634(arg0);
-    updateTrickFacingAngle(arg0);
+    updateTrickAirborneVelocity(player);
+    func_800B3784_A3634(player);
+    updateTrickFacingAngle(player);
     return 0;
 }
 
