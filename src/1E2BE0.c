@@ -85,7 +85,7 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
 
     temp_s0 = &sp10;
     memcpy(arg0, temp_s0, 0x20);
-    func_80056914_57514(temp_s0);
+    queueAnonymousBufferData(temp_s0);
     func_8006FD3C_7093C(arg0->unk6E, temp_s0);
 }
 

@@ -56,7 +56,7 @@ typedef struct {
     /* 0x64 */ s16 unk64[0x10];
     /* 0x84 */ s32 renderQueueCount;
     /* 0x88 */ RenderQueueItem renderQueue[32];
-    /* 0x408 */ s32 unk408;
+    /* 0x408 */ s32 bufferCount;
     /* 0x40C */ u8 bufferData[8][0x20];
     /* 0x50C */ s8 bufferIds[0x8];
     /* 0x514 */ s32 bufferFlags[8];
@@ -152,7 +152,7 @@ void initializeMusicSystem(void) {
 
     gGraphicsManager->unk534 = 0x20;
     gGraphicsManager->renderQueueCount = 0;
-    gGraphicsManager->unk408 = 0;
+    gGraphicsManager->bufferCount = 0;
     gGraphicsManager->unk538 = 0xC80;
     func_8005758C_5818C();
     func_8006983C_6A43C(&func_8005628C_56E8C);
@@ -160,19 +160,19 @@ void initializeMusicSystem(void) {
 
 INCLUDE_ASM("asm/nonmatchings/graphics", func_8005628C_56E8C);
 
-void func_80056914_57514(void *source) {
-    if (gGraphicsManager->unk408 < 8) {
+void queueAnonymousBufferData(void *source) {
+    if (gGraphicsManager->bufferCount < 8) {
         u8(*dest)[0x20];
 
-        gGraphicsManager->bufferIds[gGraphicsManager->unk408] = -1;
-        dest = &gGraphicsManager->bufferData[gGraphicsManager->unk408];
+        gGraphicsManager->bufferIds[gGraphicsManager->bufferCount] = -1;
+        dest = &gGraphicsManager->bufferData[gGraphicsManager->bufferCount];
         dest++;
         dest--;
 
         memcpy(dest, source, 0x20);
 
-        gGraphicsManager->bufferFlags[gGraphicsManager->unk408] = 0;
-        gGraphicsManager->unk408 += 1;
+        gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = 0;
+        gGraphicsManager->bufferCount += 1;
     }
 }
 
@@ -185,7 +185,7 @@ void func_800569A4_575A4(u8 *src_data, s8 search_id) {
     s32 i;
     void *bufferPtr;
 
-    for (i = 0; i < gGraphicsManager->unk408; i++) {
+    for (i = 0; i < gGraphicsManager->bufferCount; i++) {
         if (gGraphicsManager->bufferIds[i] == search_id) {
             bufferPtr = (void *)((i << 5) + (s32)gGraphicsManager + 0x40C);
             memcpy(bufferPtr, src_data, 0x20);
@@ -194,12 +194,12 @@ void func_800569A4_575A4(u8 *src_data, s8 search_id) {
     }
 
     // write to the next available buffer if there's space
-    if (gGraphicsManager->unk408 < 8) {
-        gGraphicsManager->bufferIds[gGraphicsManager->unk408] = search_id;
-        bufferPtr = (void *)((gGraphicsManager->unk408 << 5) + (s32)gGraphicsManager + 0x40C);
+    if (gGraphicsManager->bufferCount < 8) {
+        gGraphicsManager->bufferIds[gGraphicsManager->bufferCount] = search_id;
+        bufferPtr = (void *)((gGraphicsManager->bufferCount << 5) + (s32)gGraphicsManager + 0x40C);
         memcpy(bufferPtr, src_data, 0x20);
-        gGraphicsManager->bufferFlags[gGraphicsManager->unk408] = 0;
-        gGraphicsManager->unk408++;
+        gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = 0;
+        gGraphicsManager->bufferCount++;
     }
 }
 
@@ -210,7 +210,7 @@ void setBufferData(void *source, u8 arg1, s32 arg2) {
 
     // Search for existing buffer
     id = arg2;
-    for (i = 0; i < gGraphicsManager->unk408; i++) {
+    for (i = 0; i < gGraphicsManager->bufferCount; i++) {
         if (gGraphicsManager->bufferIds[i] == id) {
             bufferPtr = (void *)((i << 5) + (s32)gGraphicsManager + 0x40C);
             memcpy(bufferPtr, source, 0x20);
@@ -219,15 +219,15 @@ void setBufferData(void *source, u8 arg1, s32 arg2) {
     }
 
     // Add new buffer if space available
-    if (gGraphicsManager->unk408 < 8) {
-        gGraphicsManager->bufferIds[gGraphicsManager->unk408] = id;
+    if (gGraphicsManager->bufferCount < 8) {
+        gGraphicsManager->bufferIds[gGraphicsManager->bufferCount] = id;
 
-        bufferPtr = (void *)(((gGraphicsManager->unk408) << 5) + (s32)gGraphicsManager + 0x40C);
+        bufferPtr = (void *)(((gGraphicsManager->bufferCount) << 5) + (s32)gGraphicsManager + 0x40C);
 
         memcpy(bufferPtr, source, 0x20);
 
-        gGraphicsManager->bufferFlags[gGraphicsManager->unk408] = arg1;
-        gGraphicsManager->unk408++;
+        gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = arg1;
+        gGraphicsManager->bufferCount++;
     }
 }
 
@@ -652,7 +652,7 @@ void func_80057B1C_5871C(s32 arg0) {
     osSendMesg(&gfxTaskQueue, (OSMesg *)6, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     gGraphicsManager->renderQueueCount = 0;
-    gGraphicsManager->unk408 = 0;
+    gGraphicsManager->bufferCount = 0;
 }
 
 void func_80057B70_58770(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 arg5, s32 arg6) {

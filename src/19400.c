@@ -215,7 +215,7 @@ void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
         arg0->yawAngle
     );
     func_8006B084_6BC84(arg0, &sp20, &sp40);
-    func_80056914_57514(&sp40);
+    queueAnonymousBufferData(&sp40);
     func_8006FD3C_7093C(allocation->unkDA, &sp40);
 }
 
