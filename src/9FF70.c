@@ -1993,51 +1993,51 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
     return 0;
 }
 
-s32 func_800B4CB8_A4B68(Player *arg0) {
-    s16 angle;
-    s16 diff;
-    s16 clampedDiff;
+s32 updateStunnedRecoveryFallingPhase(Player *player) {
+    s16 targetAngle;
+    s16 angleDiff;
+    s16 clampedDelta;
 
-    if (arg0->unkBBF == 0) {
-        arg0->unkB88 = 0;
-        arg0->unkB8C = 0xF;
-        arg0->unkBBF++;
-        if (arg0->unk44C.y > 0) {
-            arg0->unk44C.y = 0;
+    if (player->unkBBF == 0) {
+        player->unkB88 = 0;
+        player->unkB8C = 0xF;
+        player->unkBBF++;
+        if (player->unk44C.y > 0) {
+            player->unk44C.y = 0;
         }
     }
 
-    if (arg0->unkB8C != 0) {
-        arg0->unkB8C--;
-        arg0->unkB84 |= 0x40;
+    if (player->unkB8C != 0) {
+        player->unkB8C--;
+        player->unkB84 |= 0x40;
     }
 
-    angle = func_8005CE98_5DA98(arg0);
-    diff = angle - arg0->unkA94;
-    clampedDiff = diff & 0x1FFF;
+    targetAngle = func_8005CE98_5DA98(player);
+    angleDiff = targetAngle - player->unkA94;
+    clampedDelta = angleDiff & 0x1FFF;
 
-    if (clampedDiff >= 0x1001) {
-        clampedDiff |= 0xE000;
+    if (clampedDelta >= 0x1001) {
+        clampedDelta |= 0xE000;
     }
 
-    if (clampedDiff > 0x100) {
-        clampedDiff = 0x100;
+    if (clampedDelta > 0x100) {
+        clampedDelta = 0x100;
     }
 
-    if (clampedDiff < -0x100) {
-        clampedDiff = -0x100;
+    if (clampedDelta < -0x100) {
+        clampedDelta = -0x100;
     }
 
-    arg0->unkA94 += clampedDiff;
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y -= 0x6000;
+    player->unkA94 += clampedDelta;
+    player->unk44C.x = 0;
+    player->unk44C.z = 0;
+    player->unk44C.y -= 0x6000;
 
-    decayPlayerSteeringAngles(arg0);
-    applyClampedVelocityToPosition(arg0);
+    decayPlayerSteeringAngles(player);
+    applyClampedVelocityToPosition(player);
 
-    if (func_8005D308_5DF08(arg0, 0xB) != 0) {
-        resetPlayerBehaviorToDefault(arg0);
+    if (func_8005D308_5DF08(player, 0xB) != 0) {
+        resetPlayerBehaviorToDefault(player);
     }
 
     return 0;
