@@ -398,7 +398,7 @@ void *createFallingEffect(void *arg0) {
 }
 
 void updateShieldEffect(ShieldEffectState *);
-void func_80041E10_42A10(Vec3i *);
+void spawnShieldBurstEffect(Vec3i *);
 
 void initShieldEffect(ShieldEffectState *arg0) {
     getCurrentAllocation();
@@ -422,7 +422,7 @@ void updateShieldEffect(ShieldEffectState *arg0) {
         effectPos.x = arg0->player->worldPos.x;
         effectPos.y = arg0->player->worldPos.y + 0x100000;
         effectPos.z = arg0->player->worldPos.z;
-        func_80041E10_42A10(&effectPos);
+        spawnShieldBurstEffect(&effectPos);
         func_80069CF8_6A8F8();
         return;
     }
@@ -495,61 +495,61 @@ void renderShieldLayer3(ShieldEffectRenderState *arg0) {
 
 typedef struct {
     u8 pad0[0xD8];
-    void *unkD8;
-} Func41AD8Arg;
+    void *assetTable;
+} BurstEffectState;
 
-void func_80041B18_42718(void);
-void func_80041DE4_429E4(Func41AD8Arg *);
+void setupBurstParticles(void);
+void cleanupBurstEffect(BurstEffectState *);
 
-void func_80041AD8_426D8(Func41AD8Arg *arg0) {
-    arg0->unkD8 = load_3ECE40();
-    setCleanupCallback(func_80041DE4_429E4);
-    setCallbackWithContinue(func_80041B18_42718);
+void initBurstEffect(BurstEffectState *state) {
+    state->assetTable = load_3ECE40();
+    setCleanupCallback(cleanupBurstEffect);
+    setCallbackWithContinue(setupBurstParticles);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041B18_42718);
+INCLUDE_ASM("asm/nonmatchings/42170", setupBurstParticles);
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80041C28_42828);
+INCLUDE_ASM("asm/nonmatchings/42170", updateBurstParticles);
 
-void func_80041DE4_429E4(Func41AD8Arg *arg0) {
-    arg0->unkD8 = freeNodeMemory(arg0->unkD8);
+void cleanupBurstEffect(BurstEffectState *state) {
+    state->assetTable = freeNodeMemory(state->assetTable);
 }
 
-void func_80041E10_42A10(Vec3i *arg0) {
+void spawnShieldBurstEffect(Vec3i *position) {
     u8 *task;
     s32 i;
     u8 *ptr;
 
-    task = (u8 *)scheduleTask(func_80041AD8_426D8, 2, 0, 0xE7);
+    task = (u8 *)scheduleTask(initBurstEffect, 2, 0, 0xE7);
     if (task != NULL) {
         i = 0;
         ptr = task;
         do {
-            memcpy(ptr + 4, arg0, 0xC);
+            memcpy(ptr + 4, position, 0xC);
             i++;
             ptr += 0x24;
         } while (i < 6);
         task[0xDC] = 0x2B;
-        func_80056B7C_5777C(arg0, 0x16);
+        func_80056B7C_5777C(position, 0x16);
     }
 }
 
-void func_80041EA4_42AA4(Vec3i *arg0) {
+void spawnBurstEffect(Vec3i *position) {
     u8 *task;
     s32 i;
     u8 *ptr;
 
-    task = (u8 *)scheduleTask(func_80041AD8_426D8, 2, 0, 0xE7);
+    task = (u8 *)scheduleTask(initBurstEffect, 2, 0, 0xE7);
     if (task != NULL) {
         i = 0;
         ptr = task;
         do {
-            memcpy(ptr + 4, arg0, 0xC);
+            memcpy(ptr + 4, position, 0xC);
             i++;
             ptr += 0x24;
         } while (i < 6);
         task[0xDC] = 0x2F;
-        func_80056B7C_5777C(arg0, 0xE);
+        func_80056B7C_5777C(position, 0xE);
     }
 }
 
@@ -581,7 +581,7 @@ void func_80041FB4_42BB4(Func41F38State *arg0) {
         pos.x = arg0->unk3C->worldPos.x;
         pos.y = arg0->unk3C->worldPos.y + 0x100000;
         pos.z = arg0->unk3C->worldPos.z;
-        func_80041EA4_42AA4(&pos);
+        spawnBurstEffect(&pos);
         func_80069CF8_6A8F8();
     }
 

@@ -462,15 +462,15 @@ s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
         memcpy(&arg0->unk440, &arg0->unk434, 0xC);
         arg0->unkB84 |= 0x200000;
         transformVector((s16 *)D_800BCBA0_B4160[1], arg0->unk38, &sp20);
-        func_80041EA4_42AA4(&sp20);
+        spawnBurstEffect(&sp20);
         transformVector((s16 *)D_800BCBA0_B4160[2], arg0->unk38, &sp20);
-        func_80041EA4_42AA4(&sp20);
+        spawnBurstEffect(&sp20);
         transformVector((s16 *)D_800BCBA0_B4160[3], arg0->unk38, &sp20);
-        func_80041EA4_42AA4(&sp20);
+        spawnBurstEffect(&sp20);
         transformVector((s16 *)D_800BCBA0_B4160[4], arg0->unk38, &sp20);
-        func_80041EA4_42AA4(&sp20);
+        spawnBurstEffect(&sp20);
         transformVector((s16 *)D_800BCBA0_B4160[5], arg0->unk38, &sp20);
-        func_80041EA4_42AA4(&sp20);
+        spawnBurstEffect(&sp20);
         arg0->unk468 = 0x100;
     }
 
