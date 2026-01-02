@@ -3985,6 +3985,6 @@ void func_8004C10C_4CD0C(Player *arg0) {
 
 INCLUDE_RODATA("asm/nonmatchings/46080", D_8009E868_9F468);
 
-INCLUDE_RODATA("asm/nonmatchings/46080", D_8009E870_9F470);
+INCLUDE_RODATA("asm/nonmatchings/46080", sGoldFormatShort);
 
-INCLUDE_RODATA("asm/nonmatchings/46080", D_8009E878_9F478);
+INCLUDE_RODATA("asm/nonmatchings/46080", sGoldFormatLong);

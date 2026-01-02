@@ -549,42 +549,42 @@ void cleanupPlayerLapCounterTask(Struct_func_8004DCC4 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CA90_4D690);
 
-extern char D_8009E870_9F470[];
-extern char D_8009E878_9F478[];
+extern char sGoldFormatShort[];
+extern char sGoldFormatLong[];
 
 typedef struct {
-    void *unk0;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
+    void *digitsTexture;
+    s16 x;
+    s16 y;
+    s16 iconX;
     u8 padA[0x6];
-    s16 unk10;
+    s16 animFrame;
     u8 pad12[0xE];
-    char unk20[8];
-    Player *unk28;
-    u16 unk2C;
-    u16 unk2E;
-} Struct_func_8004CBF0;
+    char goldTextBuffer[8];
+    Player *player;
+    u16 playerIndex;
+    u16 animCounter;
+} PlayerGoldDisplayState;
 
-void func_8004CBF0_4D7F0(Struct_func_8004CBF0 *arg0) {
-    s32 val = arg0->unk28->unkB6C;
+void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
+    s32 gold = state->player->unkB6C;
 
-    if (val < 100) {
-        sprintf(arg0->unk20, D_8009E870_9F470, val);
+    if (gold < 100) {
+        sprintf(state->goldTextBuffer, sGoldFormatShort, gold);
     } else {
-        sprintf(arg0->unk20, D_8009E878_9F478, val);
+        sprintf(state->goldTextBuffer, sGoldFormatLong, gold);
     }
 
-    drawNumericString(arg0->unk20, arg0->unk4, arg0->unk6, 0xFF, arg0->unk0, arg0->unk2C + 8, 0);
+    drawNumericString(state->goldTextBuffer, state->x, state->y, 0xFF, state->digitsTexture, state->playerIndex + 8, 0);
 
-    arg0->unk2E++;
-    if ((s16)arg0->unk2E >= 12) {
-        arg0->unk2E = 0;
+    state->animCounter++;
+    if ((s16)state->animCounter >= 12) {
+        state->animCounter = 0;
     }
 
-    arg0->unk10 = (s16)arg0->unk2E >> 1;
+    state->animFrame = (s16)state->animCounter >> 1;
 
-    debugEnqueueCallback((u16)(arg0->unk2C + 8), 0, func_8000FED0_10AD0, &arg0->unk8);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, &state->iconX);
 }
 
 typedef struct {
