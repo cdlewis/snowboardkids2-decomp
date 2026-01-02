@@ -76,6 +76,7 @@ updateTrickScoreHold = 0x8004D784; // rom:0x4E384
 updateTrickScoreSlideOut = 0x8004D7D0; // rom:0x4E3D0
 cleanupTrickScoreDisplayTask = 0x8004D858; // rom:0x4E458
 showTrickScoreDisplay = 0x8004D890; // rom:0x4E490
+initHudElementState = 0x8004D9B8; // rom:0x4E5B8
 sGoldFormatShort = 0x8009E870; // rom:0x9F470
 sGoldFormatLong = 0x8009E878; // rom:0x9F478
 cleanupConfettiEffect = 0x800413E0; // rom:0x41FE0

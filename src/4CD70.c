@@ -1026,9 +1026,9 @@ typedef struct {
     u8 unkC;
     u8 unkD;
     u8 unkE;
-} Struct_func_8004D9B8;
+} HudElementState;
 
-void func_8004D9B8_4E5B8(Struct_func_8004D9B8 *arg0) {
+void initHudElementState(HudElementState *arg0) {
     arg0->unkC = 0;
     arg0->unkD = 0;
     arg0->unkE = 0;
@@ -1046,7 +1046,7 @@ void func_8004D9D0_4E5D0(Struct_func_8004D9D0 *arg0) {
 
     arg0->unk14 = 0;
     arg0->unk4 = loadAsset_34CB50();
-    func_8004D9B8_4E5B8((Struct_func_8004D9B8 *)arg0);
+    initHudElementState((HudElementState *)arg0);
     arg0->unk8 = 0x14;
     arg0->unk10 = loadCompressedData(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
 
@@ -1179,7 +1179,7 @@ void func_8004DCFC_4E8FC(Struct_func_8004DCFC *arg0) {
 
     arg0->unk14 = 0;
     arg0->unk4 = loadAsset_34CB50();
-    func_8004D9B8_4E5B8((Struct_func_8004D9B8 *)arg0);
+    initHudElementState((HudElementState *)arg0);
     arg0->unk8 = 0x15;
     arg0->unk10 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
 
@@ -1278,7 +1278,7 @@ void func_8004DEF8_4EAF8(Struct_func_8004DEF8 *arg0) {
     getCurrentAllocation();
     arg0->unk14 = 0;
     arg0->unk4 = loadAsset_34CB50();
-    func_8004D9B8_4E5B8((Struct_func_8004D9B8 *)arg0);
+    initHudElementState((HudElementState *)arg0);
     global = D_800AFE8C_A71FC;
     arg0->unk8 = 0x16;
     arg0->unk0 = 0;
@@ -1970,7 +1970,7 @@ void func_8004F1D4_4FDD4(Struct_func_8004F1D4 *arg0) {
 
     arg0->unk14 = 0;
     arg0->unk4 = loadAsset_34CB50();
-    func_8004D9B8_4E5B8((Struct_func_8004D9B8 *)arg0);
+    initHudElementState((HudElementState *)arg0);
     arg0->unk8 = 0x24;
     arg0->unk10 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     if (allocation->unk7A == 4) {
