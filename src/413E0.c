@@ -60,7 +60,6 @@ typedef struct {
 
 void updateStartGate(StartGate *);
 void updatePushStartText(PushStartTextState *);
-void func_800413E0_41FE0(PlayerIndicatorTask *arg0);
 
 typedef struct {
     u8 _pad[0x24];
@@ -378,6 +377,7 @@ typedef struct {
 } ConfettiEffectTask;
 
 void setupConfettiParticles(ConfettiEffectTask *task);
+void cleanupConfettiEffect(ConfettiEffectTask *task);
 
 void initConfettiEffect(ConfettiEffectTask *task) {
     s16 count;
@@ -385,7 +385,7 @@ void initConfettiEffect(ConfettiEffectTask *task) {
     task->particleAsset = func_80055D7C_5697C(0xB);
     count = task->particleCount;
     task->particles = allocateNodeMemory((count * 7) * 8);
-    setCleanupCallback(&func_800413E0_41FE0);
+    setCleanupCallback(&cleanupConfettiEffect);
     setCallbackWithContinue(&setupConfettiParticles);
 }
 
@@ -423,9 +423,9 @@ void setupConfettiParticles(ConfettiEffectTask *task) {
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_8004119C_41D9C);
 
-void func_800413E0_41FE0(PlayerIndicatorTask *task) {
-    task->assetTable = freeNodeMemory(task->assetTable);
-    task->indicatorAsset = freeNodeMemory(task->indicatorAsset);
+void cleanupConfettiEffect(ConfettiEffectTask *task) {
+    task->particleAsset = freeNodeMemory(task->particleAsset);
+    task->particles = freeNodeMemory(task->particles);
 }
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80041418_42018);
