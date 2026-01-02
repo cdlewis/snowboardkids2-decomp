@@ -941,8 +941,8 @@ void initPlayerRenderTask(PlayerRenderTaskState *state) {
 }
 
 void updatePlayerRenderCounter(void) {
-    GameState *gs = (GameState *)getCurrentAllocation();
-    gs->pendingPlayerRenderTasks -= 1;
+    GameState *gameState = (GameState *)getCurrentAllocation();
+    gameState->pendingPlayerRenderTasks -= 1;
     setCallbackWithContinue(&enqueuePlayerDisplayList);
 }
 
