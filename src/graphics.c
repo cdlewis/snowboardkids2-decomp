@@ -341,10 +341,10 @@ void loadMusicTrackData(void) {
         gGraphicsManager->unk4
     );
 
-    setCallback(&func_800571D0_57DD0);
+    setCallback(&initializeMusicPtrBank);
 }
 
-void func_800571D0_57DD0(void(callback)(void *)) {
+void initializeMusicPtrBank(void) {
     func_800579E8_585E8(gGraphicsManager->unk4, (void *)*(&D_80093B00_94700 + (gGraphicsManager->currentMusicId)));
     setCallback(&func_80057214_57E14);
 }
