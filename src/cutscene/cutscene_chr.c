@@ -395,11 +395,11 @@ void cutsceneChrUpDown_exec(cutsceneChrUpDown_exec_arg *arg0, CutsceneManager *a
 
     func_800B34B0_1E0560(arg2);
 
-    func_800B7A60_1E4B10(&slot->slotData, slot->model, arg0->unk0, arg0->unk4, arg0->unk8, arg0->unkE);
+    func_800B7A60_1E4B10(&slot->slotData, slot->model, arg0->targetX, arg0->targetY, arg0->targetZ, arg0->duration);
 
-    setModelAnimationEx(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1, arg0->unk16);
+    setModelAnimationEx(slot->model, arg0->animIndex, arg0->transitionAnimIndex, arg0->loopCount, -1, arg0->animQueued);
 
-    setModelActionMode(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg0->actionMode);
 }
 
 s32 cutsceneChrUpDown_isDone(void) {
