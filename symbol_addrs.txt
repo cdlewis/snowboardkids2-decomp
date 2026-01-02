@@ -1,6 +1,7 @@
 cleanupItemBoxSystem = 0x80049230; // rom:0x49E30
 scheduleItemBoxSystemTask = 0x80049280; // rom:0x49E80
 initItemBoxBurstEffect = 0x800492C0; // rom:0x49EC0
+cleanupItemBoxBurstEffect = 0x80049404; // rom:0x4A004
 initializeMusicSystem = 0x8005610C; // rom:0x56D0C
 queueAnonymousBufferData = 0x80056914; // rom:0x57514
 setAudioDistanceLimits = 0x80056990; // rom:0x57590

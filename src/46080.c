@@ -291,10 +291,6 @@ typedef struct {
 
 typedef struct {
     void *unk0;
-} Struct_func_80049404_4A004;
-
-typedef struct {
-    void *unk0;
 } func_8004B264_4BE64_arg;
 
 typedef struct {
@@ -789,7 +785,7 @@ void func_8004A96C_4B56C(s32 **);
 void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0);
 void setupItemBoxBurstTexture(ItemBoxBurstEffectState *arg0);
 void updateItemBoxBurstFrame(ItemBoxBurstEffectState *state);
-void func_80049404_4A004(Struct_func_80049404_4A004 *arg0);
+void cleanupItemBoxBurstEffect(ItemBoxBurstEffectState *arg0);
 void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0);
 void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *);
 void dispatchSkyRenderCallback(ScheduledTask *);
@@ -2480,7 +2476,7 @@ void scheduleItemBoxSystemTask(s32 courseId) {
 
 void initItemBoxBurstEffect(void **arg0) {
     *arg0 = load_3ECE40();
-    setCleanupCallback(&func_80049404_4A004);
+    setCleanupCallback(&cleanupItemBoxBurstEffect);
     setCallbackWithContinue(&setupItemBoxBurstTexture);
 }
 
@@ -2521,8 +2517,8 @@ void updateItemBoxBurstFrame(ItemBoxBurstEffectState *state) {
     }
 }
 
-void func_80049404_4A004(Struct_func_80049404_4A004 *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+void cleanupItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
+    state->assetTable = freeNodeMemory(state->assetTable);
 }
 
 void renderItemBoxBurstEffect(ItemBoxBurstEffectState *arg0) {
