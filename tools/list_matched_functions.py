@@ -2,16 +2,17 @@
 
 import json
 import os
+from collections import defaultdict
 from pathlib import Path
 
-def get_matched_functions():
-    """Get all matched functions from asm/matchings directory."""
+def get_matched_functions_by_file():
+    """Get unnamed matched functions from asm/matchings directory, grouped by source file."""
     matchings_dir = Path("asm/matchings")
 
     if not matchings_dir.exists():
-        return []
+        return {}
 
-    matched_functions = []
+    functions_by_file = defaultdict(list)
 
     # Walk through all files in asm/matchings and subdirectories
     for root, dirs, files in os.walk(matchings_dir):
@@ -19,16 +20,33 @@ def get_matched_functions():
             if file.endswith('.s'):
                 # Remove the .s extension to get the function name
                 function_name = file[:-2]
-                matched_functions.append(function_name)
+                # Only include unnamed functions (starting with func_)
+                if not function_name.startswith('func_'):
+                    continue
+                # Get the parent directory name (source file)
+                source_file = Path(root).name
+                functions_by_file[source_file].append(function_name)
 
-    # Sort with priority: functions starting with func_ first, then alphabetically
-    matched_functions.sort(key=lambda f: (0 if f.startswith('func_') else 1, f))
+    # Sort functions within each file alphabetically
+    for source_file in functions_by_file:
+        functions_by_file[source_file].sort()
 
-    return matched_functions
+    return dict(functions_by_file)
 
 def main():
-    functions = get_matched_functions()
-    # Output as JSON array for task-runner consumption
+    functions_by_file = get_matched_functions_by_file()
+
+    # Sort files by number of functions (descending) to show densest files first
+    sorted_files = sorted(
+        functions_by_file.items(),
+        key=lambda x: (-len(x[1]), x[0])
+    )
+
+    # Flatten into array, preserving file grouping order
+    functions = []
+    for _, funcs in sorted_files:
+        functions.extend(funcs)
+
     print(json.dumps(functions))
 
 if __name__ == '__main__':
