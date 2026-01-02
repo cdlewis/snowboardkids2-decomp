@@ -283,7 +283,7 @@ void disableCutsceneSkipOnInput(CutsceneManager *arg0);
 void enableSlotUpdate(CutsceneManager *arg0, s16 arg1);
 void disableSlotUpdate(CutsceneManager *arg0, s16 arg1);
 CutsceneSlot *getCutsceneSlot(CutsceneManager *manager, s16 slotIndex);
-void func_800B2AA0(CutsceneManager *, Node_70B00 *arg1, void *arg2, void *arg3);
+void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *shadowModel, void *reflectionModel);
 void func_800B2C78(func_800B2C78_arg *arg0);
 void func_800B2D04(CutsceneSlot *arg0);
 void func_800B2D68_1DFE18(CutsceneSlot *arg0);

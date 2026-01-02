@@ -18,7 +18,7 @@ typedef struct {
     void *unk2D8;
     void *unk2DC;
     s32 unk2E0;
-} func_800B2AA0_slot16;
+} InitCutsceneManager_slot16;
 
 typedef struct {
     void *unk0;
@@ -78,48 +78,48 @@ CutsceneSlot *getCutsceneSlot(CutsceneManager *manager, s16 slotIndex) {
     return &manager->slots[slotIndex];
 }
 
-void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *arg3) {
+void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *shadowModel, void *reflectionModel) {
     s32 i;
-    s16 initialValue = func_800B3490_1E0540();
-    s32 needsVisibility = initModelEntity((ModelEntity *)&arg0->unk10, initialValue, arg1);
+    s16 modelIndex = func_800B3490_1E0540();
+    s32 needsVisibility = initModelEntity((ModelEntity *)&manager->unk10, modelIndex, sceneNode);
 
-    setModelRenderMode(&arg0->unk10, 0);
+    setModelRenderMode(&manager->unk10, 0);
 
     for (i = 0; i < (getCutsceneSlotCount() & 0xFF); i++) {
         StateEntryItem *slot = func_800B34B0_1E0560(i);
-        arg0->slots[i].unk40 = slot->unk4;
+        manager->slots[i].unk40 = slot->unk4;
 
         if (slot->unk4 != -1) {
             if (isAssetGroupEmpty(slot->unk4)) {
-                arg0->slots[i].model =
-                    createSceneModelEx(slot->unk4, arg1, slot->unk6, slot->unk7, slot->unk8, slot->unk9);
+                manager->slots[i].model =
+                    createSceneModelEx(slot->unk4, sceneNode, slot->unk6, slot->unk7, slot->unk8, slot->unk9);
             } else {
-                arg0->slots[i].model = createSceneModel(slot->unk4, arg1);
+                manager->slots[i].model = createSceneModel(slot->unk4, sceneNode);
             }
 
             if (needsVisibility) {
-                enableEntityRendering(arg0->slots[i].model);
+                enableEntityRendering(manager->slots[i].model);
             }
         } else {
-            arg0->slots[i].model = NULL;
+            manager->slots[i].model = NULL;
         }
 
-        func_800B66B4_1E3764(&arg0->slots[i].slotData);
+        func_800B66B4_1E3764(&manager->slots[i].slotData);
     }
 
-    arg0->sceneContext = func_800B5B38_1E2BE8(arg1->id);
+    manager->sceneContext = func_800B5B38_1E2BE8(sceneNode->id);
 
     if (needsVisibility) {
-        scheduleDualAssetGroupLoad(arg0, 0, 0x8000, 1, 0x10000);
-        func_800B5B30_1E2BE0(arg0->sceneContext, 1);
+        scheduleDualAssetGroupLoad(manager, 0, 0x8000, 1, 0x10000);
+        func_800B5B30_1E2BE0(manager->sceneContext, 1);
     }
 
-    initSceneRenderNode(&arg0->unkFF8, 2, 0xC, arg1->id, 0, 2, 0);
-    clearAuxRenderEnabled(&arg0->unkFF8);
+    initSceneRenderNode(&manager->unkFF8, 2, 0xC, sceneNode->id, 0, 2, 0);
+    clearAuxRenderEnabled(&manager->unkFF8);
 
-    arg0->shadowModel = arg2;
-    arg0->reflectionModel = arg3;
-    arg0->cameraAnimationTimer = 0x10000;
+    manager->shadowModel = shadowModel;
+    manager->reflectionModel = reflectionModel;
+    manager->cameraAnimationTimer = 0x10000;
 }
 
 void func_800B2C78(func_800B2C78_arg *arg0) {
