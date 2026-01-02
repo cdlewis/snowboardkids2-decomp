@@ -234,8 +234,8 @@ typedef struct {
 
 void updateCenteredSpritePopup(CenteredSpritePopupState *);
 void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *);
-void func_8004D954_4E554(FinishPositionDisplayState *arg0);
-void func_8004D98C_4E58C(Struct_func_8004F04C *arg0);
+void updateSpeedCrossFinishPositionDisplay(FinishPositionDisplayState *arg0);
+void cleanupSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0);
 void updateTrickScoreSlideOut(TrickScoreDisplayState *state);
 void updateTrickScoreHold(TrickScoreDisplayState *state);
 void updateTrickScoreSlideIn(TrickScoreDisplayState *state);
@@ -1000,24 +1000,24 @@ void showTrickScoreDisplay(s32 playerIndex, s32 trickScore) {
     }
 }
 
-void func_8004D8E4_4E4E4(FinishPositionDisplayState *arg0) {
+void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     arg0->player = state->players;
     arg0->asset = loadCompressedData(&_3F3940_ROM_START, &_3F3940_ROM_END, 0x888);
     arg0->x = -0x48;
     arg0->y = -0x38;
-    setCleanupCallback(&func_8004D98C_4E58C);
-    setCallback(&func_8004D954_4E554);
+    setCleanupCallback(&cleanupSpeedCrossFinishPositionTask);
+    setCallback(&updateSpeedCrossFinishPositionDisplay);
 }
 
-void func_8004D954_4E554(FinishPositionDisplayState *arg0) {
+void updateSpeedCrossFinishPositionDisplay(FinishPositionDisplayState *arg0) {
     arg0->spriteIndex = arg0->player->finishPosition;
     debugEnqueueCallback(8, 6, &func_8000FED0_10AD0, arg0);
 }
 
-void func_8004D98C_4E58C(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0) {
+    arg0->asset = freeNodeMemory(arg0->asset);
 }
 
 typedef struct {

@@ -1245,7 +1245,7 @@ void handleSpeedCrossGameResult(void) {
     delayTimer = state->unk4C;
 
     if (delayTimer == 0) {
-        scheduleTask((void *)func_8004D8E4_4E4E4, 1, 0, 0xE6);
+        scheduleTask((void *)initSpeedCrossFinishPositionTask, 1, 0, 0xE6);
         state->unk4C = 0xB4;
 
         if (state->players->finishPosition == 0) {
