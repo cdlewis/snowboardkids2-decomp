@@ -513,46 +513,46 @@ s32 beginPostTrickSlidingStep(Player *player) {
     return 1;
 }
 
-s32 func_800B243C_A22EC(Player *arg0) {
-    s32 temp_s1;
+s32 updatePostTrickSlidingStep(Player *player) {
+    s32 steeringValue;
 
-    if (arg0->unkB84 & 0x20000) {
-        setPlayerBehaviorPhase(arg0, 6);
+    if (player->unkB84 & 0x20000) {
+        setPlayerBehaviorPhase(player, 6);
         return 1;
     }
 
-    if (func_8005A9A8_5B5A8(arg0) != 0) {
-        func_800B65F8_A64A8((func_800B00D4_arg *)arg0);
+    if (func_8005A9A8_5B5A8(player) != 0) {
+        func_800B65F8_A64A8((func_800B00D4_arg *)player);
         return 1;
     }
 
-    if (arg0->unkB84 & 1) {
-        setPlayerBehaviorPhase(arg0, 1);
+    if (player->unkB84 & 1) {
+        setPlayerBehaviorPhase(player, 1);
         return 1;
     }
 
-    arg0->unk44C.y -= arg0->unkAB8;
-    func_800B40D4_A3F84(arg0);
-    temp_s1 = func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
-    func_800B00FC_9FFAC(arg0);
+    player->unk44C.y -= player->unkAB8;
+    func_800B40D4_A3F84(player);
+    steeringValue = func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+    func_800B00FC_9FFAC(player);
 
-    if (!(arg0->unkB7C & 0x8000)) {
-        arg0->unkBC0 = 1;
+    if (!(player->unkB7C & 0x8000)) {
+        player->unkBC0 = 1;
     }
 
-    func_8005D818_5E418(arg0);
-    func_8005D308_5DF08(arg0, 3);
+    func_8005D818_5E418(player);
+    func_8005D308_5DF08(player, 3);
 
-    arg0->unkB8C -= 1;
-    if (arg0->unkB8C == 0) {
-        arg0->unkBBF += 1;
+    player->unkB8C -= 1;
+    if (player->unkB8C == 0) {
+        player->unkBBF += 1;
     }
 
-    if (shouldInitiateSharpTurn((shouldInitiateSharpTurn_arg *)arg0, temp_s1) != 0) {
-        setPlayerBehaviorPhase(arg0, 2);
+    if (shouldInitiateSharpTurn((shouldInitiateSharpTurn_arg *)player, steeringValue) != 0) {
+        setPlayerBehaviorPhase(player, 2);
     }
 
-    func_80058CFC_598FC(arg0);
+    func_80058CFC_598FC(player);
     return 0;
 }
 
