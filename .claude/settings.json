@@ -6,7 +6,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/pre-bash.sh"
+            "command": ".claude/hooks/block-unverified-commits.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-make-command.sh"
           }
         ]
       }
