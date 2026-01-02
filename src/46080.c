@@ -608,8 +608,8 @@ typedef struct {
 
 typedef struct {
     s8 unk0;
-    u8 unk1;
-    u8 _pad2[0x2];
+    s8 unk1;
+    s16 unk2;
     Vec3i position;
 } RenderEntry_486A8;
 
@@ -761,6 +761,17 @@ typedef struct {
     s32 unk34;
 } func_8004A634_4B234_arg;
 
+typedef struct {
+    void *unk0;
+    void *unk4;
+    RenderEntry_486A8 *unk8;
+    u8 _padC[0x4];
+    s32 *unk10;
+    u8 _pad14[0x2];
+    s16 unk16;
+    u16 unk18;
+} Arg_478FC;
+
 extern s8 D_80090C94_91894[];
 extern u8 D_80090C95_91895[];
 extern void *D_80094DA0_959A0;
@@ -887,7 +898,7 @@ void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
 void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
 void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *);
 void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *);
-void func_800478FC_484FC(void);
+void func_80047AA8_486A8(func_80047AA8_486A8_arg *arg0);
 void func_80048834_49434(Struct_func_80048834_49434 *arg0);
 void func_80048350_48F50(func_80048350_48F50_arg *arg0);
 void func_8004841C_4901C(func_80048350_48F50_arg *arg0);
@@ -898,6 +909,7 @@ void func_80048F0C_49B0C(func_80048E34_49A34_arg *arg0, s32 arg1);
 void func_80049104_49D04(func_80048E34_49A34_arg *arg0);
 void func_80049230_49E30(func_80049230_49E30_arg *);
 void func_80049430_4A030(func_80049300_49F00_arg *arg0);
+void func_800478FC_484FC(Arg_478FC *arg0);
 
 void func_80045480_46080(func_80045480_46080_arg *arg0) {
     void *identity = identityMatrix;
@@ -1690,7 +1702,45 @@ void func_800477E4_483E4(func_800477E4_arg *arg0) {
     setCallback(func_800478FC_484FC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_800478FC_484FC);
+void func_800478FC_484FC(Arg_478FC *arg0) {
+    s32 i;
+    Player *player;
+    s16 timer;
+
+    if (D_8009ADE0_9B9E0 & 1) {
+        arg0->unk18 = arg0->unk18 + 1;
+    }
+
+    if ((s16)arg0->unk18 >= 6) {
+        arg0->unk18 = 0;
+    }
+
+    timer = 0;
+    for (i = 0; i < arg0->unk16; i++) {
+        timer = arg0->unk8[i].unk0;
+        if (timer == 0) {
+            timer = arg0->unk8[i].unk2;
+            if (timer != 0) {
+                arg0->unk8[i].unk2 = timer - 1;
+            } else if (arg0->unk8[i].unk1 == 0) {
+                arg0->unk8[i].unk0 = 1;
+            }
+        } else {
+            player = (Player *)func_8005B24C_5BE4C(&arg0->unk8[i].position, -1, 0x100000);
+            if (player != NULL) {
+                func_80056B7C_5777C(&arg0->unk8[i].position, 7);
+                arg0->unk8[i].unk0 = 0;
+                arg0->unk8[i].unk2 = 0x1E;
+                func_80059A48_5A648(player, 0x64);
+            }
+        }
+        arg0->unk8[i].unk1 = 2;
+    }
+
+    for (i = 0; i < 4; i++) {
+        debugEnqueueCallback((u16)i, 4, func_80047AA8_486A8, arg0);
+    }
+}
 
 void func_80047A64_48664(func_80047A64_48664_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
