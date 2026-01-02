@@ -488,10 +488,10 @@ s32 cutsceneChrModelDisp_validate(void) {
 void cutsceneChrModelDisp_exec(cutsceneChrModelDisp_exec_arg *arg0, CutsceneManager *cutsceneManager, s8 index) {
     CutsceneSlot *slot = &cutsceneManager->slots[index];
 
-    if (arg0->unk2 != 0) {
-        setModelPartDisplayFlag(slot->model, arg0->unk1);
+    if (arg0->enabled != 0) {
+        setModelPartDisplayFlag(slot->model, arg0->partIndex);
     } else {
-        clearModelPartDisplayFlag(slot->model, arg0->unk1);
+        clearModelPartDisplayFlag(slot->model, arg0->partIndex);
     }
 }
 
