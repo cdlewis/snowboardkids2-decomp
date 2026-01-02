@@ -252,25 +252,25 @@ typedef struct {
 } Func43CA4Arg;
 
 typedef struct {
-    s32 unk0;              /* 0x00 */
-    void *unk4;            /* 0x04 */
-    Vec3i unk8;            /* 0x08 */
-    u8 _pad14[0x10];       /* 0x14 */
-    Func43CA4Unk28 *unk24; /* 0x24 */
-    Func43CA4Unk28 *unk28; /* 0x28 */
-    s32 unk2C;             /* 0x2C */
-    s32 unk30;             /* 0x30 */
-    s32 unk34;             /* 0x34 */
-    s32 unk38;             /* 0x38 */
-    s32 unk3C;             /* 0x3C */
-    s16 animFrameIndex;    /* 0x40 */
-    s16 frameTimer;        /* 0x42 */
-    u8 _pad44[0x2];        /* 0x44 */
-    s16 unk46;             /* 0x46 */
-    s16 unk48;             /* 0x48 */
-    u8 _pad4A[0x2];        /* 0x4A */
-    s32 unk4C;             /* 0x4C */
-} Func4393CArg;
+    s32 unk0;                        /* 0x00 */
+    void *unk4;                      /* 0x04 */
+    Vec3i position;                  /* 0x08 */
+    u8 _pad14[0x10];                 /* 0x14 */
+    Func43CA4Unk28 *recipientPlayer; /* 0x24 */
+    Func43CA4Unk28 *victimPlayer;    /* 0x28 */
+    s32 unk2C;                       /* 0x2C */
+    s32 unk30;                       /* 0x30 */
+    s32 unk34;                       /* 0x34 */
+    s32 unk38;                       /* 0x38 */
+    s32 stolenGold;                  /* 0x3C */
+    s16 animFrameIndex;              /* 0x40 */
+    s16 frameTimer;                  /* 0x42 */
+    u8 _pad44[0x2];                  /* 0x44 */
+    s16 unk46;                       /* 0x46 */
+    s16 swingAngle;                  /* 0x48 */
+    u8 _pad4A[0x2];                  /* 0x4A */
+    s32 unk4C;                       /* 0x4C */
+} GoldStealEffectState;
 
 typedef struct {
     void *unk0;
@@ -300,8 +300,6 @@ void func_80044018_44C18(Func43DC0State *);
 void func_80043E24_44A24(Func43DC0State *);
 void func_80043F8C_44B8C(Func43DC0State *);
 void contractStarEffect(StarEffectState *);
-void func_80043CA4_448A4(Func43CA4Arg *);
-void func_800439F4_445F4(Func4393CArg *);
 void updateStarEffect(StarEffectState *);
 void expandStarEffect(ExpandStarEffectState *);
 void orbitStarEffect(OrbitStarEffectState *);
@@ -1421,7 +1419,7 @@ PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player) {
 }
 
 s32 advanceAnimationFrame(void *arg0_void, void *animData_void) {
-    Func4393CArg *state = (Func4393CArg *)arg0_void;
+    GoldStealEffectState *state = (GoldStealEffectState *)arg0_void;
     u8 *animData = (u8 *)animData_void;
     s8 nextFrameDuration;
 
@@ -1445,7 +1443,7 @@ s32 advanceAnimationFrame(void *arg0_void, void *animData_void) {
     return 1;
 }
 
-void advanceAnimationFrameLooping(Func4393CArg *arg0, s8 *arg1) {
+void advanceAnimationFrameLooping(GoldStealEffectState *arg0, s8 *arg1) {
     s16 temp;
 
     temp = arg0->frameTimer - 1;
@@ -1466,18 +1464,20 @@ void advanceAnimationFrameLooping(Func4393CArg *arg0, s8 *arg1) {
     }
 }
 
-void func_80043D30_44930(void **);
-void func_8004393C_4453C(Func4393CArg *);
-void func_800438A0_444A0(Func4393CArg *);
-void func_80043AB4_446B4(Func4393CArg *);
+void cleanupGoldStealEffect(void **);
+void animateGoldStealApproach(GoldStealEffectState *);
+void prepareGoldStealEffect(GoldStealEffectState *);
+void animateGoldStealLoop(GoldStealEffectState *);
+void animateGoldStealTransfer(GoldStealEffectState *);
+void animateGoldStealFinish(GoldStealEffectState *);
 
-void func_80043860_44460(void **arg0) {
+void initGoldStealEffect(void **arg0) {
     *arg0 = load_3ECE40();
-    setCleanupCallback(func_80043D30_44930);
-    setCallbackWithContinue(func_800438A0_444A0);
+    setCleanupCallback(cleanupGoldStealEffect);
+    setCallbackWithContinue(prepareGoldStealEffect);
 }
 
-void func_800438A0_444A0(Func4393CArg *arg0) {
+void prepareGoldStealEffect(GoldStealEffectState *arg0) {
     Func43CA4GameState *gameState;
     s16 temp;
     void *ptr;
@@ -1496,7 +1496,7 @@ void func_800438A0_444A0(Func4393CArg *arg0) {
         arg0->unk4C = 1;
         arg0->unk4 = ptr;
         advanceAnimationFrame(arg0, &D_8009093C_9153C);
-        setCallbackWithContinue(func_8004393C_4453C);
+        setCallbackWithContinue(animateGoldStealApproach);
     } else {
         if (gameState->unk76 == 0) {
             arg0->frameTimer = temp - 1;
@@ -1504,7 +1504,7 @@ void func_800438A0_444A0(Func4393CArg *arg0) {
     }
 }
 
-void func_8004393C_4453C(Func4393CArg *arg0) {
+void animateGoldStealApproach(GoldStealEffectState *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
 
@@ -1514,15 +1514,15 @@ void func_8004393C_4453C(Func4393CArg *arg0) {
             arg0->unk38 = 0;
             arg0->animFrameIndex = 0;
             arg0->frameTimer = 1;
-            setCallback(func_800439F4_445F4);
+            setCallback(animateGoldStealLoop);
         }
     }
 
-    transformVector((s16 *)&arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk8);
+    transformVector((s16 *)&arg0->unk2C, arg0->recipientPlayer->unk9F0, &arg0->position);
 
     if (arg0->unk4C != 0) {
         arg0->unk4C = 0;
-        func_80056B7C_5777C(&arg0->unk8, 0x12);
+        func_80056B7C_5777C(&arg0->position, 0x12);
     }
 
     for (i = 0; i < 4; i++) {
@@ -1530,7 +1530,7 @@ void func_8004393C_4453C(Func4393CArg *arg0) {
     }
 }
 
-void func_800439F4_445F4(Func4393CArg *arg0) {
+void animateGoldStealLoop(GoldStealEffectState *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
 
@@ -1540,23 +1540,23 @@ void func_800439F4_445F4(Func4393CArg *arg0) {
         arg0->unk38 = arg0->unk38 + 0x8000;
         arg0->unk30 = arg0->unk30 + arg0->unk38;
         if (arg0->unk30 > 0x600000) {
-            arg0->unk48 = 0;
+            arg0->swingAngle = 0;
             arg0->animFrameIndex = 0;
             arg0->frameTimer = 1;
-            setCallback(func_80043AB4_446B4);
+            setCallback(animateGoldStealTransfer);
         }
     }
 
-    transformVector((s16 *)&arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk8);
+    transformVector((s16 *)&arg0->unk2C, arg0->recipientPlayer->unk9F0, &arg0->position);
 
     for (i = 0; i < 4; i++) {
         func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
 
-void func_80043C00_44800(Func43CA4Arg *);
+void animateGoldStealRetreat(GoldStealEffectState *);
 
-void func_80043AB4_446B4(Func4393CArg *arg0) {
+void animateGoldStealTransfer(GoldStealEffectState *arg0) {
     Func43CA4GameState *gameState;
     s32 sinVal;
     s32 i;
@@ -1566,34 +1566,34 @@ void func_80043AB4_446B4(Func4393CArg *arg0) {
         goto transform_and_loop;
     }
 
-    arg0->unk48 = arg0->unk48 + 0x80;
-    sinVal = approximateSin(arg0->unk48);
+    arg0->swingAngle = arg0->swingAngle + 0x80;
+    sinVal = approximateSin(arg0->swingAngle);
     arg0->unk30 = 0x700000 - (sinVal * 3 << 8);
 
-    if (arg0->unk48 < 0x800) {
+    if (arg0->swingAngle < 0x800) {
         advanceAnimationFrameLooping(arg0, &D_80090958_91558);
-    } else if (arg0->unk48 == 0x800) {
+    } else if (arg0->swingAngle == 0x800) {
         arg0->animFrameIndex = 0;
         arg0->frameTimer = 1;
-        arg0->unk3C = func_80059AC4_5A6C4((Player *)arg0->unk28);
-        func_80059A48_5A648((Player *)arg0->unk28, -arg0->unk3C);
+        arg0->stolenGold = func_80059AC4_5A6C4((Player *)arg0->victimPlayer);
+        func_80059A48_5A648((Player *)arg0->victimPlayer, -arg0->stolenGold);
         advanceAnimationFrameLooping(arg0, &D_8009095C_9155C);
     } else {
         advanceAnimationFrameLooping(arg0, &D_8009095C_9155C);
     }
 
-    if (arg0->unk48 == 0xC00) {
+    if (arg0->swingAngle == 0xC00) {
         arg0->animFrameIndex = 0;
         arg0->frameTimer = 1;
-        func_80059A48_5A648((Player *)arg0->unk24, arg0->unk3C);
-        setCallback(func_80043C00_44800);
+        func_80059A48_5A648((Player *)arg0->recipientPlayer, arg0->stolenGold);
+        setCallback(animateGoldStealRetreat);
     }
 
 transform_and_loop:
-    transformVector((s16 *)&arg0->unk2C, arg0->unk28->unk9F0, &arg0->unk8);
+    transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->unk9F0, &arg0->position);
 
-    if (arg0->unk48 == 0x80) {
-        func_80056B7C_5777C(&arg0->unk8, 0x1C);
+    if (arg0->swingAngle == 0x80) {
+        func_80056B7C_5777C(&arg0->position, 0x1C);
     }
 
     for (i = 0; i < 4; i++) {
@@ -1601,7 +1601,7 @@ transform_and_loop:
     }
 }
 
-void func_80043C00_44800(Func43CA4Arg *arg0) {
+void animateGoldStealRetreat(GoldStealEffectState *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
 
@@ -1610,19 +1610,19 @@ void func_80043C00_44800(Func43CA4Arg *arg0) {
         if (advanceAnimationFrame(arg0, &D_80090964_91564) != 0) {
             arg0->animFrameIndex = 0;
             arg0->frameTimer = 1;
-            func_80056B7C_5777C(&arg0->unk8, 0x12);
-            setCallback(func_80043CA4_448A4);
+            func_80056B7C_5777C(&arg0->position, 0x12);
+            setCallback(animateGoldStealFinish);
         }
     }
 
-    transformVector(arg0->unk2C, arg0->unk28->unk9F0, &arg0->unk8);
+    transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->unk9F0, &arg0->position);
 
     for (i = 0; i < 4; i++) {
         func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
 
-void func_80043CA4_448A4(Func43CA4Arg *arg0) {
+void animateGoldStealFinish(GoldStealEffectState *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
 
@@ -1633,24 +1633,24 @@ void func_80043CA4_448A4(Func43CA4Arg *arg0) {
         }
     }
 
-    transformVector(arg0->unk2C, arg0->unk28->unk9F0, &arg0->unk8);
+    transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->unk9F0, &arg0->position);
 
     for (i = 0; i < 4; i++) {
         func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
     }
 }
 
-void func_80043D30_44930(void **arg0) {
+void cleanupGoldStealEffect(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void func_80043D5C_4495C(void *arg0, void *arg1, s16 arg2) {
-    Func4393CArg *task;
+void spawnGoldStealEffect(void *arg0, void *arg1, s16 arg2) {
+    GoldStealEffectState *task;
 
-    task = (Func4393CArg *)scheduleTask(func_80043860_44460, 0, 0, 0xDC);
+    task = (GoldStealEffectState *)scheduleTask(initGoldStealEffect, 0, 0, 0xDC);
     if (task != NULL) {
-        task->unk24 = arg0;
-        task->unk28 = arg1;
+        task->recipientPlayer = arg0;
+        task->victimPlayer = arg1;
         task->frameTimer = arg2;
     }
 }
