@@ -133,10 +133,10 @@ typedef struct {
 } cutsceneChrTurn2_exec_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
+    s16 rotationSpeed;
+    s16 animationId;
+    s16 animationLoopCount;
+    s16 duration;
     s16 unk8;
 } cutsceneChrRotate_exec_arg;
 

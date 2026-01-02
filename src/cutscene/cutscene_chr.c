@@ -311,8 +311,8 @@ void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg0, CutsceneManager *a
 
     slot = &arg1->slots[arg2];
 
-    func_800B7620_1E46D0(&slot->slotData, arg0->unk0, arg0->unk6, arg0->unk8);
-    setModelAnimationLooped(slot->model, arg0->unk2, arg0->unk4, -1);
+    func_800B7620_1E46D0(&slot->slotData, arg0->rotationSpeed, arg0->duration, arg0->unk8);
+    setModelAnimationLooped(slot->model, arg0->animationId, arg0->animationLoopCount, -1);
 }
 
 s32 cutsceneChrRotate_isDone(void) {
