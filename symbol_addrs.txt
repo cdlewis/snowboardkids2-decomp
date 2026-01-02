@@ -2,6 +2,7 @@ dispatchDefaultBehaviorPhase = 0x800B12C0; // rom:0xA1170
 updatePlayerFinishWaiting = 0x800B12F0; // rom:0xA11A0
 updatePlayerSlidingConstrained = 0x800B13D4; // rom:0xA1284
 updatePlayerGroundedSliding = 0x800B1DA0; // rom:0xA1C50
+shouldInitiateSharpTurn = 0x800B1F60; // rom:0xA1E10
 func_800B0690_1DBD70 = 0x800B0690; // rom:0x1DBD70
 initPlayerFinishPositionTask = 0x8004C170; // rom:0x4CD70
 updatePlayerFinishPositionDisplay = 0x8004C254; // rom:0x4CE54

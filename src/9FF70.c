@@ -288,25 +288,25 @@ typedef struct {
     u8 unkBC2;
     u8 _padBC3[0x17]; // 0xBC3 to 0xBDA
     u8 unkBDA;
-} func_800B1F60_arg;
+} shouldInitiateSharpTurn_arg;
 
-s32 func_800B1F60_A1E10(func_800B1F60_arg *arg0, s32 arg1) {
-    if (arg0->unkBDA != 0) {
+s32 shouldInitiateSharpTurn(shouldInitiateSharpTurn_arg *player, s32 steeringValue) {
+    if (player->unkBDA != 0) {
         goto end;
     }
-    if (arg0->unkB98 == 0) {
+    if (player->unkB98 == 0) {
         goto end;
     }
-    if (arg0->unkBC2 != 0) {
+    if (player->unkBC2 != 0) {
         goto end;
     }
-    if (0x8000 < arg1) {
-        if (arg0->unkB84 & 2) {
+    if (0x8000 < steeringValue) {
+        if (player->unkB84 & 2) {
             return 1;
         }
     }
-    if (arg1 < -0x8000) {
-        if (arg0->unkB84 & 2) {
+    if (steeringValue < -0x8000) {
+        if (player->unkB84 & 2) {
             goto end;
         }
         return 1;
@@ -548,7 +548,7 @@ s32 func_800B243C_A22EC(Player *arg0) {
         arg0->unkBBF += 1;
     }
 
-    if (func_800B1F60_A1E10((func_800B1F60_arg *)arg0, temp_s1) != 0) {
+    if (shouldInitiateSharpTurn((shouldInitiateSharpTurn_arg *)arg0, temp_s1) != 0) {
         setPlayerBehaviorPhase(arg0, 2);
     }
 
@@ -600,7 +600,7 @@ s32 func_800B255C_A240C(Player *arg0) {
 
     func_8005D308_5DF08(arg0, 3);
 
-    if (func_800B1F60_A1E10((func_800B1F60_arg *)arg0, temp_s1) != 0) {
+    if (shouldInitiateSharpTurn((shouldInitiateSharpTurn_arg *)arg0, temp_s1) != 0) {
         setPlayerBehaviorPhase(arg0, 2);
     }
 
