@@ -1921,23 +1921,23 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
     return 0;
 }
 
-s32 func_800B4A4C_A48FC(Player *arg0) {
-    arg0->unkB88 = 1;
-    arg0->unkB84 = arg0->unkB84 | 0x20;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 6);
-    arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 6);
-    decayPlayerSteeringAngles(arg0);
-    applyClampedVelocityToPosition(arg0);
+s32 updateStunnedFallingPhase(Player *player) {
+    player->unkB88 = 1;
+    player->unkB84 |= 0x20;
+    player->unk44C.y -= 0x6000;
+    player->unk44C.x -= player->unk44C.x >> 6;
+    player->unk44C.z -= player->unk44C.z >> 6;
+    decayPlayerSteeringAngles(player);
+    applyClampedVelocityToPosition(player);
 
-    if (func_8005D308_5DF08(arg0, 9) != 0) {
-        if ((arg0->unkB84 & 1) == 0) {
-            setPlayerBehaviorPhase(arg0, 3);
+    if (func_8005D308_5DF08(player, 9) != 0) {
+        if ((player->unkB84 & 1) == 0) {
+            setPlayerBehaviorPhase(player, 3);
         }
     }
 
-    arg0->unkB84 = arg0->unkB84 | 0x10000;
-    func_8005D804_5E404(arg0, 3, 0);
+    player->unkB84 |= 0x10000;
+    func_8005D804_5E404(player, 3, 0);
     return 0;
 }
 
