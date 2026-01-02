@@ -16,7 +16,7 @@
 
 typedef struct {
     void *unk0;
-    Vec3i unk4;
+    Vec3i pos;
     u8 padding1[0x10];
     void *unk20;
     Vec3i vel; /* 0x24 */
@@ -25,13 +25,13 @@ typedef struct {
     /* 0x38 */ s32 unk38;
     s32 unk3C;
     u16 unk40;
-    s16 unk42;
+    s16 ownerPlayerIdx;
     s16 unk44;
     u16 unk46;
     s16 unk48;
     s16 unk4A;
-    s16 unk4C;
-    s8 unk4E;
+    s16 targetPlayerIdx;
+    s8 hitCount;
 } Struct_52880;
 
 typedef struct {
@@ -77,20 +77,20 @@ typedef struct {
 
 typedef struct {
     void *unk0;
-    Vec3i unk4;
+    Vec3i pos;
     u8 padding1[0x10];
     void *unk20;
     Vec3i unk24;
     u8 padding2[0xC];
     s32 unk3C;
     u16 unk40;
-    s16 unk42;
+    s16 ownerPlayerIdx;
     s16 unk44;
     s16 unk46;
     s16 unk48;
     s16 unk4A;
-    s16 unk4C;
-    s8 unk4E;
+    s16 targetPlayerIdx;
+    s8 hitCount;
 } func_800550B4_55CB4_arg;
 
 typedef struct {
@@ -160,8 +160,8 @@ void normalizeVelocityToSpeed(Vec3i *vel, s32 targetSpeed) {
     }
 }
 
-void func_80051DEC_529EC(Struct_52880 *arg0) {
-    arg0->unk4C = arg0->unk42;
+void initSlapstickProjectileTask(Struct_52880 *arg0) {
+    arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_80051E34_52A34);
@@ -172,7 +172,7 @@ void func_80051E34_52A34(Struct_52880 *arg0) {
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 2);
     ptr = alloc->unk44;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     arg0->unk46 = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80051FC4_52BC4);
@@ -191,8 +191,8 @@ void func_80051E90_52A90(Struct_52880 *arg0) {
     u8 temp;
 
     alloc = (GameState *)getCurrentAllocation();
-    s1 = &arg0->unk4;
-    result = func_8005B548_5C148(s1, arg0->unk42, 0x80000);
+    s1 = &arg0->pos;
+    result = func_8005B548_5C148(s1, arg0->ownerPlayerIdx, 0x80000);
     if (result != NULL) {
         if (!(result->unkB84 & 0x1000)) {
             func_80058A10_59610(result);
@@ -202,21 +202,21 @@ void func_80051E90_52A90(Struct_52880 *arg0) {
                     func_80059A48_5A648(result, -100);
                 }
             }
-            unk4C = arg0->unk4C;
+            unk4C = arg0->targetPlayerIdx;
             if (unk4C >= 0) {
                 func_80059C24_5A824(&alloc->players[unk4C]);
             }
-            arg0->unk4E = arg0->unk4E + 1;
+            arg0->hitCount = arg0->hitCount + 1;
         } else {
             v28 = arg0->vel.y;
             v2C = (new_var = arg0->vel.z);
-            arg0->unk42 = result->unkBB8;
+            arg0->ownerPlayerIdx = result->unkBB8;
             temp = result->unkBB8;
             arg0->vel.y = -v28;
             v24 = arg0->vel.x;
             arg0->vel.x = -v24;
             arg0->vel.z = -v2C;
-            arg0->unk4C = temp;
+            arg0->targetPlayerIdx = temp;
             func_80050ECC_51ACC(s1);
             func_80056B7C_5777C(s1, 0x20);
         }
@@ -236,31 +236,31 @@ void func_80051FC4_52BC4(Struct_52880 *arg0) {
 
     alloc = getCurrentAllocation();
 
-    playerIdx = arg0->unk42;
-    transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->unk4);
+    playerIdx = arg0->ownerPlayerIdx;
+    transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
 
-    temp_v0 = arg0->unk4.x;
+    temp_v0 = arg0->pos.x;
     temp_a2 = arg0->vel.x;
-    temp_v1 = arg0->unk4.y;
+    temp_v1 = arg0->pos.y;
     temp_a1 = arg0->vel.y;
     arg0->vel.x = temp_v0 - temp_a2;
     arg0->vel.y = temp_v1 - temp_a1;
-    arg0->vel.z = arg0->unk4.z - arg0->vel.z;
+    arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
     arg0->unk48 = 0xF0;
 
-    func_80056B7C_5777C(&arg0->unk4, 0x10);
+    func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80052128_52D28);
     func_80051E90_52A90(arg0);
 
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0x11);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0x11);
         func_80069CF8_6A8F8();
     }
 
@@ -283,47 +283,52 @@ void func_80052128_52D28(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->unk4, &arg0->vel, 2);
+        func_80050604_51204(&arg0->pos, &arg0->vel, 2);
 
         arg0->vel.y += 0xFFFC0000;
 
         normalizeVelocityToSpeed(&arg0->vel, 0x1C0000);
 
-        memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
+        memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
-        arg0->unk4.x += arg0->vel.x;
-        arg0->unk4.y += arg0->vel.y;
-        arg0->unk4.z += arg0->vel.z;
+        arg0->pos.x += arg0->vel.x;
+        arg0->pos.y += arg0->vel.y;
+        arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
+        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
 
-        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, &sp18);
+        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
         if ((sp18.x != 0) || (sp18.z != 0)) {
-            arg0->unk4.x = arg0->unk4.x + sp18.x;
-            arg0->unk4.z = arg0->unk4.z + sp18.z;
-            arg0->unk4E = arg0->unk4E + 1;
+            arg0->pos.x = arg0->pos.x + sp18.x;
+            arg0->pos.z = arg0->pos.z + sp18.z;
+            arg0->hitCount = arg0->hitCount + 1;
         }
 
         arg0->unk48--;
         if (arg0->unk48 == 0) {
-            arg0->unk4E++;
+            arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
-        if (arg0->unk4.y < temp_v0 + 0x100000) {
-            arg0->unk4.y = temp_v0 + 0x100000;
+        if (arg0->pos.y < temp_v0 + 0x100000) {
+            arg0->pos.y = temp_v0 + 0x100000;
         }
 
-        arg0->vel.x = arg0->unk4.x - savedVec.x;
-        arg0->vel.y = arg0->unk4.y - savedVec.y;
-        arg0->vel.z = arg0->unk4.z - savedVec.z;
+        arg0->vel.x = arg0->pos.x - savedVec.x;
+        arg0->vel.y = arg0->pos.y - savedVec.y;
+        arg0->vel.z = arg0->pos.z - savedVec.z;
 
         func_80051E90_52A90(arg0);
 
-        var_s3 =
-            func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x3C00000, 0x1C0000);
+        var_s3 = func_8005BF50_5CB50(
+            &arg0->pos,
+            atan2Fixed(arg0->vel.x, arg0->vel.z),
+            arg0->ownerPlayerIdx,
+            0x3C00000,
+            0x1C0000
+        );
 
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
@@ -348,9 +353,9 @@ void func_80052128_52D28(Struct_52880 *arg0) {
         }
     }
 
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0x11);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0x11);
         func_80069CF8_6A8F8();
     }
 
@@ -368,15 +373,15 @@ void func_800523EC_52FEC(Struct_52880 *arg0) {
 s32 func_80052418_53018(s32 arg0, s32 arg1) {
     Struct_52880 *task;
 
-    task = scheduleTask(func_80051DEC_529EC, (arg0 + 4) & 0xFF, 0, 0x6E);
+    task = scheduleTask(initSlapstickProjectileTask, (arg0 + 4) & 0xFF, 0, 0x6E);
     if (task != NULL) {
-        task->unk42 = arg0;
+        task->ownerPlayerIdx = arg0;
     }
     return (s32)task;
 }
 
 void func_8005245C_5305C(Struct_52880 *arg0) {
-    arg0->unk4C = arg0->unk42;
+    arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_800524A4_530A4);
@@ -387,7 +392,7 @@ void func_800524A4_530A4(Struct_52880 *arg0) {
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 3);
     ptr = alloc->unk44;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     arg0->unk46 = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_800525F4_531F4);
@@ -407,8 +412,8 @@ void func_80052500_53100(Struct_52880 *arg0) {
 
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
-    s1 = &arg0->unk4;
-    result = func_8005B548_5C148((Vec3i *)s1, new_var3->unk42, 0x80000);
+    s1 = &arg0->pos;
+    result = func_8005B548_5C148((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
     if (result == 0) {
         return;
     }
@@ -416,16 +421,16 @@ void func_80052500_53100(Struct_52880 *arg0) {
     new_var2 = result->unkB84 & 0x1000;
     if (new_var2 == 0) {
         func_80058A3C_5963C(result);
-        arg0->unk4E++;
-        unk4C = arg0->unk4C;
+        arg0->hitCount++;
+        unk4C = arg0->targetPlayerIdx;
         if (unk4C >= 0) {
             func_80059C24_5A824(&alloc->players[unk4C]);
         }
     } else {
         v28 = arg0->vel.y;
         v2C = (new_var = arg0->vel.z);
-        arg0->unk42 = result->unkBB8;
-        arg0->unk4C = result->unkBB8;
+        arg0->ownerPlayerIdx = result->unkBB8;
+        arg0->targetPlayerIdx = result->unkBB8;
         arg0->vel.y = -v28;
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
@@ -448,31 +453,31 @@ void func_800525F4_531F4(Struct_52880 *arg0) {
 
     alloc = getCurrentAllocation();
 
-    playerIdx = arg0->unk42;
-    transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->unk4);
+    playerIdx = arg0->ownerPlayerIdx;
+    transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
 
-    temp_v0 = arg0->unk4.x;
+    temp_v0 = arg0->pos.x;
     temp_a2 = arg0->vel.x;
-    temp_v1 = arg0->unk4.y;
+    temp_v1 = arg0->pos.y;
     temp_a1 = arg0->vel.y;
     arg0->vel.x = temp_v0 - temp_a2;
     arg0->vel.y = temp_v1 - temp_a1;
-    arg0->vel.z = arg0->unk4.z - arg0->vel.z;
+    arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
     arg0->unk48 = 0xF0;
 
-    func_80056B7C_5777C(&arg0->unk4, 0x10);
+    func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80052758_53358);
     func_80052500_53100(arg0);
 
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0xD);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
 
@@ -495,47 +500,52 @@ void func_80052758_53358(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->unk4, &arg0->vel, 3);
+        func_80050604_51204(&arg0->pos, &arg0->vel, 3);
 
         arg0->vel.y += 0xFFFC0000;
 
         normalizeVelocityToSpeed(&arg0->vel, 0x1C8000);
 
-        memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
+        memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
-        arg0->unk4.x += arg0->vel.x;
-        arg0->unk4.y += arg0->vel.y;
-        arg0->unk4.z += arg0->vel.z;
+        arg0->pos.x += arg0->vel.x;
+        arg0->pos.y += arg0->vel.y;
+        arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
+        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
 
-        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, &sp18);
+        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
         if ((sp18.x != 0) || (sp18.z != 0)) {
-            arg0->unk4.x = arg0->unk4.x + sp18.x;
-            arg0->unk4.z = arg0->unk4.z + sp18.z;
-            arg0->unk4E++;
+            arg0->pos.x = arg0->pos.x + sp18.x;
+            arg0->pos.z = arg0->pos.z + sp18.z;
+            arg0->hitCount++;
         }
 
         arg0->unk48--;
         if (arg0->unk48 == 0) {
-            arg0->unk4E++;
+            arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
-        if (arg0->unk4.y < temp_v0 + 0x100000) {
-            arg0->unk4.y = temp_v0 + 0x100000;
+        if (arg0->pos.y < temp_v0 + 0x100000) {
+            arg0->pos.y = temp_v0 + 0x100000;
         }
 
-        arg0->vel.x = arg0->unk4.x - savedVec.x;
-        arg0->vel.y = arg0->unk4.y - savedVec.y;
-        arg0->vel.z = arg0->unk4.z - savedVec.z;
+        arg0->vel.x = arg0->pos.x - savedVec.x;
+        arg0->vel.y = arg0->pos.y - savedVec.y;
+        arg0->vel.z = arg0->pos.z - savedVec.z;
 
         func_80052500_53100(arg0);
 
-        var_s3 =
-            func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x3600000, 0x1C8000);
+        var_s3 = func_8005BF50_5CB50(
+            &arg0->pos,
+            atan2Fixed(arg0->vel.x, arg0->vel.z),
+            arg0->ownerPlayerIdx,
+            0x3600000,
+            0x1C8000
+        );
 
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
@@ -560,9 +570,9 @@ void func_80052758_53358(Struct_52880 *arg0) {
         }
     }
 
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0xD);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
 
@@ -578,7 +588,7 @@ s32 func_80052A24_53624(s32 arg0, s32 arg1) {
 
     task = scheduleTask(func_8005245C_5305C, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
-        task->unk42 = arg0;
+        task->ownerPlayerIdx = arg0;
     }
     return (s32)task;
 }
@@ -587,7 +597,7 @@ void func_80052AB0_536B0(Struct_52880 *arg0);
 void func_80052C00_53800(Struct_52880 *arg0);
 
 void func_80052A68_53668(Struct_52880 *arg0) {
-    arg0->unk4C = arg0->unk42;
+    arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_80052AB0_536B0);
@@ -598,7 +608,7 @@ void func_80052AB0_536B0(Struct_52880 *arg0) {
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 4);
     ptr = alloc->unk44;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     arg0->unk46 = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80052C00_53800);
@@ -618,8 +628,8 @@ void func_80052B0C_5370C(Struct_52880 *arg0) {
 
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
-    s1 = &arg0->unk4;
-    result = func_8005B548_5C148((Vec3i *)s1, new_var3->unk42, 0x80000);
+    s1 = &arg0->pos;
+    result = func_8005B548_5C148((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
     if (result == 0) {
         return;
     }
@@ -627,16 +637,16 @@ void func_80052B0C_5370C(Struct_52880 *arg0) {
     new_var2 = result->unkB84 & 0x1000;
     if (new_var2 == 0) {
         func_80058A68_59668(result);
-        arg0->unk4E++;
-        unk4C = arg0->unk4C;
+        arg0->hitCount++;
+        unk4C = arg0->targetPlayerIdx;
         if (unk4C >= 0) {
             func_80059C24_5A824(&alloc->players[unk4C]);
         }
     } else {
         v28 = arg0->vel.y;
         v2C = (new_var = arg0->vel.z);
-        arg0->unk42 = result->unkBB8;
-        arg0->unk4C = result->unkBB8;
+        arg0->ownerPlayerIdx = result->unkBB8;
+        arg0->targetPlayerIdx = result->unkBB8;
         arg0->vel.y = -v28;
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
@@ -657,39 +667,39 @@ void func_80052C00_53800(Struct_52880 *arg0) {
 
     alloc = getCurrentAllocation();
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
 
     if (alloc->unk10[playerIdx].unkBD9 == 0) {
-        transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->unk4);
+        transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
 
-        playerIdx = arg0->unk42;
+        playerIdx = arg0->ownerPlayerIdx;
         transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
     } else {
-        transformVector(&alloc->unk48[48], &alloc->unk10[playerIdx].unk74, &arg0->unk4);
+        transformVector(&alloc->unk48[48], &alloc->unk10[playerIdx].unk74, &arg0->pos);
 
-        playerIdx = arg0->unk42;
+        playerIdx = arg0->ownerPlayerIdx;
         transformVector(&alloc->unk48[54], &alloc->unk10[playerIdx].unk74, &arg0->vel);
     }
 
-    temp_v0 = arg0->unk4.x;
+    temp_v0 = arg0->pos.x;
     temp_a2 = arg0->vel.x;
-    temp_v1 = arg0->unk4.y;
+    temp_v1 = arg0->pos.y;
     temp_a1 = arg0->vel.y;
     arg0->vel.x = temp_v0 - temp_a2;
     arg0->vel.y = temp_v1 - temp_a1;
-    arg0->vel.z = arg0->unk4.z - arg0->vel.z;
+    arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
     arg0->unk48 = 0xF0;
 
-    func_80056B7C_5777C(&arg0->unk4, 0x10);
+    func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80052DB4_539B4);
     func_80052B0C_5370C(arg0);
 
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0xD);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
 
@@ -712,47 +722,52 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->unk4, &arg0->vel, 4);
+        func_80050604_51204(&arg0->pos, &arg0->vel, 4);
 
         arg0->vel.y += 0xFFFC0000;
 
         normalizeVelocityToSpeed(&arg0->vel, 0x1D0000);
 
-        memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
+        memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
-        arg0->unk4.x += arg0->vel.x;
-        arg0->unk4.y += arg0->vel.y;
-        arg0->unk4.z += arg0->vel.z;
+        arg0->pos.x += arg0->vel.x;
+        arg0->pos.y += arg0->vel.y;
+        arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
+        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
 
-        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, &sp18);
+        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
         if ((sp18.x != 0) || (sp18.z != 0)) {
-            arg0->unk4.x = arg0->unk4.x + sp18.x;
-            arg0->unk4.z = arg0->unk4.z + sp18.z;
-            arg0->unk4E++;
+            arg0->pos.x = arg0->pos.x + sp18.x;
+            arg0->pos.z = arg0->pos.z + sp18.z;
+            arg0->hitCount++;
         }
 
         arg0->unk48--;
         if (arg0->unk48 == 0) {
-            arg0->unk4E++;
+            arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
-        if (arg0->unk4.y < temp_v0 + 0x100000) {
-            arg0->unk4.y = temp_v0 + 0x100000;
+        if (arg0->pos.y < temp_v0 + 0x100000) {
+            arg0->pos.y = temp_v0 + 0x100000;
         }
 
-        arg0->vel.x = arg0->unk4.x - savedVec.x;
-        arg0->vel.y = arg0->unk4.y - savedVec.y;
-        arg0->vel.z = arg0->unk4.z - savedVec.z;
+        arg0->vel.x = arg0->pos.x - savedVec.x;
+        arg0->vel.y = arg0->pos.y - savedVec.y;
+        arg0->vel.z = arg0->pos.z - savedVec.z;
 
         func_80052B0C_5370C(arg0);
 
-        var_s3 =
-            func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x3600000, 0x1D0000);
+        var_s3 = func_8005BF50_5CB50(
+            &arg0->pos,
+            atan2Fixed(arg0->vel.x, arg0->vel.z),
+            arg0->ownerPlayerIdx,
+            0x3600000,
+            0x1D0000
+        );
 
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
@@ -777,9 +792,9 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
         }
     }
 
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0xD);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
 
@@ -795,7 +810,7 @@ s32 func_80053078_53C78(s32 arg0, s32 arg1) {
 
     task = scheduleTask(func_80052A68_53668, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
-        task->unk42 = arg0;
+        task->ownerPlayerIdx = arg0;
     }
     return (s32)task;
 }
@@ -805,7 +820,7 @@ void func_80053104_53D04(Struct_52880 *arg0);
 void func_80053254_53E54(Struct_52880 *arg0);
 
 void func_800530BC_53CBC(Struct_52880 *arg0) {
-    arg0->unk4C = arg0->unk42;
+    arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_80053784_54384);
     setCallbackWithContinue(func_80053104_53D04);
@@ -816,7 +831,7 @@ void func_80053104_53D04(Struct_52880 *arg0) {
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 5);
     ptr = alloc->unk44;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     arg0->unk46 = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80053254_53E54);
@@ -836,8 +851,8 @@ void func_80053160_53D60(Struct_52880 *arg0) {
 
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
-    s1 = &arg0->unk4;
-    result = func_8005B548_5C148((Vec3i *)s1, new_var3->unk42, 0x80000);
+    s1 = &arg0->pos;
+    result = func_8005B548_5C148((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
     if (result == 0) {
         return;
     }
@@ -845,16 +860,16 @@ void func_80053160_53D60(Struct_52880 *arg0) {
     new_var2 = result->unkB84 & 0x1000;
     if (new_var2 == 0) {
         func_80058AC0_596C0(result);
-        arg0->unk4E++;
-        unk4C = arg0->unk4C;
+        arg0->hitCount++;
+        unk4C = arg0->targetPlayerIdx;
         if (unk4C >= 0) {
             func_80059C24_5A824(&alloc->players[unk4C]);
         }
     } else {
         v28 = arg0->vel.y;
         v2C = (new_var = arg0->vel.z);
-        arg0->unk42 = result->unkBB8;
-        arg0->unk4C = result->unkBB8;
+        arg0->ownerPlayerIdx = result->unkBB8;
+        arg0->targetPlayerIdx = result->unkBB8;
         arg0->vel.y = -v28;
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
@@ -878,46 +893,46 @@ void func_80053254_53E54(Struct_52880 *arg0) {
 
     alloc = getCurrentAllocation();
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
 
     if (alloc->unk10[playerIdx].unkBD9 == 0) {
-        transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->unk4);
+        transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
 
-        playerIdx = arg0->unk42;
+        playerIdx = arg0->ownerPlayerIdx;
         transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
     } else {
-        transformVector(&alloc->unk48[48], &alloc->unk10[playerIdx].unk74, &arg0->unk4);
+        transformVector(&alloc->unk48[48], &alloc->unk10[playerIdx].unk74, &arg0->pos);
 
-        playerIdx = arg0->unk42;
+        playerIdx = arg0->ownerPlayerIdx;
         transformVector(&alloc->unk48[54], &alloc->unk10[playerIdx].unk74, &arg0->vel);
     }
 
-    temp_v0 = arg0->unk4.x;
+    temp_v0 = arg0->pos.x;
     temp_a1 = arg0->vel.x;
-    temp_v1 = arg0->unk4.y;
+    temp_v1 = arg0->pos.y;
     temp_a2 = arg0->vel.y;
-    temp_a0 = arg0->unk4.z;
+    temp_a0 = arg0->pos.z;
     temp_a3 = arg0->vel.z;
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     arg0->vel.x = temp_v0 - temp_a1;
     arg0->vel.y = temp_v1 - temp_a2;
     arg0->vel.z = temp_a0 - temp_a3;
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
     arg0->unk48 = 0xF0;
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     if (alloc->unk10[playerIdx].unkBD9 != 0) {
         arg0->unk48 = 0x78;
     }
 
-    s0 = &arg0->unk4;
+    s0 = &arg0->pos;
     func_80056B7C_5777C(s0, 0x10);
     setCallback(func_80053434_54034);
     func_80053160_53D60(arg0);
 
-    if (arg0->unk4E != 0) {
+    if (arg0->hitCount != 0) {
         func_80050ECC_51ACC(s0);
         func_80056B7C_5777C(s0, 0xD);
         func_80069CF8_6A8F8();
@@ -942,54 +957,55 @@ void func_80053434_54034(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        func_80050604_51204(&arg0->unk4, (Vec3i *)&arg0->vel, 5);
+        func_80050604_51204(&arg0->pos, (Vec3i *)&arg0->vel, 5);
 
         arg0->vel.y += 0xFFFC0000;
 
         normalizeVelocityToSpeed((Vec3i *)&arg0->vel, 0x1E0000);
 
-        memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
+        memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
-        arg0->unk4.x += arg0->vel.x;
-        arg0->unk4.y += arg0->vel.y;
-        arg0->unk4.z += arg0->vel.z;
+        arg0->pos.x += arg0->vel.x;
+        arg0->pos.y += arg0->vel.y;
+        arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(alloc->unk30, arg0->unk40, &arg0->unk4);
+        arg0->unk40 = func_80060A3C_6163C(alloc->unk30, arg0->unk40, &arg0->pos);
 
-        func_80060CDC_618DC(alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, &sp18);
+        func_80060CDC_618DC(alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
         if ((sp18.x != 0) || (sp18.z != 0)) {
-            arg0->unk4.x = arg0->unk4.x + sp18.x;
-            arg0->unk4.z = arg0->unk4.z + sp18.z;
+            arg0->pos.x = arg0->pos.x + sp18.x;
+            arg0->pos.z = arg0->pos.z + sp18.z;
             s0 = atan2Fixed(-sp18.x, -sp18.z);
             rotateVectorY(&arg0->vel, -s0, &rotateVec);
             if (rotateVec.z < 0) {
                 rotateVec.z = -rotateVec.z;
             }
             rotateVectorY(&rotateVec, s0, &arg0->vel);
-            arg0->unk42 = -1;
+            arg0->ownerPlayerIdx = -1;
         } else {
-            arg0->vel.x = arg0->unk4.x - savedVec.x;
-            arg0->vel.z = arg0->unk4.z - savedVec.z;
+            arg0->vel.x = arg0->pos.x - savedVec.x;
+            arg0->vel.z = arg0->pos.z - savedVec.z;
         }
 
         arg0->unk48--;
         if (arg0->unk48 == 0) {
-            arg0->unk4E++;
+            arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
-        if (arg0->unk4.y < temp_v0 + 0x100000) {
-            arg0->unk4.y = temp_v0 + 0x100000;
+        if (arg0->pos.y < temp_v0 + 0x100000) {
+            arg0->pos.y = temp_v0 + 0x100000;
         }
 
-        arg0->vel.y = arg0->unk4.y - savedVec.y;
+        arg0->vel.y = arg0->pos.y - savedVec.y;
 
         func_80053160_53D60(arg0);
 
         s0 = arg0->vel.z;
-        var_s3 = func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, s0), arg0->unk42, 0x1E00000, 0x1E0000);
+        var_s3 =
+            func_8005BF50_5CB50(&arg0->pos, atan2Fixed(arg0->vel.x, s0), arg0->ownerPlayerIdx, 0x1E00000, 0x1E0000);
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
             if (var_s3 >= 0x1001) {
@@ -1008,16 +1024,16 @@ void func_80053434_54034(Struct_52880 *arg0) {
             rotateVectorY(&rotateVec, var_s3, (Vec3i *)&arg0->vel);
         }
 
-        if (alloc->unk10[arg0->unk42].unkBD9 == 0) {
+        if (alloc->unk10[arg0->ownerPlayerIdx].unkBD9 == 0) {
             if ((s16)arg0->unk46 < 0x13) {
                 arg0->unk46 += 2;
             }
         }
     }
 
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0xD);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
 
@@ -1035,13 +1051,13 @@ s32 func_800537B0_543B0(s32 arg0, s32 arg1) {
 
     task = scheduleTask(func_800530BC_53CBC, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
-        task->unk42 = arg0;
+        task->ownerPlayerIdx = arg0;
     }
     return (s32)task;
 }
 
 void func_800537F4_543F4(Struct_52880 *arg0) {
-    arg0->unk4C = arg0->unk42;
+    arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_8005383C_5443C);
@@ -1052,7 +1068,7 @@ void func_8005383C_5443C(Struct_52880 *arg0) {
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 6);
     ptr = alloc->unk44;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     arg0->unk46 = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80053990_54590);
@@ -1066,22 +1082,22 @@ void func_80053898_54498(Struct_52880 *arg0) {
     u8 temp;
 
     allocation = (GameState *)getCurrentAllocation();
-    s1 = &arg0->unk4;
-    player = func_8005C454_5D054(s1, arg0->unk42, 0xC0000, &localVec);
+    s1 = &arg0->pos;
+    player = func_8005C454_5D054(s1, arg0->ownerPlayerIdx, 0xC0000, &localVec);
     if (player != NULL) {
         if ((player->unkB84 & 0x1000) == 0) {
             func_80058AEC_596EC(player, &localVec);
-            arg0->unk4E++;
-            if (arg0->unk4C >= 0) {
-                func_80059C24_5A824(&allocation->players[arg0->unk4C]);
+            arg0->hitCount++;
+            if (arg0->targetPlayerIdx >= 0) {
+                func_80059C24_5A824(&allocation->players[arg0->targetPlayerIdx]);
             }
         } else {
-            arg0->unk42 = player->unkBB8;
+            arg0->ownerPlayerIdx = player->unkBB8;
             temp = player->unkBB8;
             arg0->vel.x = -arg0->vel.x;
             arg0->vel.y = -arg0->vel.y;
             arg0->vel.z = -arg0->vel.z;
-            arg0->unk4C = temp;
+            arg0->targetPlayerIdx = temp;
             func_80050ECC_51ACC(s1);
             func_80056B7C_5777C(s1, 0x20);
         }
@@ -1101,39 +1117,39 @@ void func_80053990_54590(Struct_52880 *arg0) {
     alloc = getCurrentAllocation();
 
     if (arg0->unk4A == 0) {
-        playerIdx = arg0->unk42;
+        playerIdx = arg0->ownerPlayerIdx;
         player = (void *)((u8 *)alloc->unk10 + (playerIdx * 3048) + 0x950);
-        transformVector(alloc->unk48, player, &arg0->unk4);
+        transformVector(alloc->unk48, player, &arg0->pos);
         arg0->unk3C = 0x1B8000;
     } else {
-        playerIdx = arg0->unk42;
+        playerIdx = arg0->ownerPlayerIdx;
         player = (void *)((u8 *)alloc->unk10 + (playerIdx * 3048) + 0x950);
-        transformVector((void *)((u8 *)alloc->unk48 + 0x18), player, &arg0->unk4);
+        transformVector((void *)((u8 *)alloc->unk48 + 0x18), player, &arg0->pos);
         arg0->unk3C = 0x1A8000;
     }
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     player = (void *)((u8 *)alloc->unk10 + (playerIdx * 3048) + 0x950);
     transformVector((void *)((u8 *)alloc->unk48 + 0xC), player, &arg0->vel);
 
-    temp_v0 = arg0->unk4.x;
+    temp_v0 = arg0->pos.x;
     temp_a2 = arg0->vel.x;
-    temp_v1 = arg0->unk4.y;
+    temp_v1 = arg0->pos.y;
     temp_a1 = arg0->vel.y;
     arg0->vel.x = temp_v0 - temp_a2;
     arg0->vel.y = temp_v1 - temp_a1;
-    arg0->vel.z = arg0->unk4.z - arg0->vel.z;
+    arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = ((Unk10Element_52880 *)((u8 *)alloc->unk10 + (playerIdx * 3048)))->unkB94;
     arg0->unk48 = 0xF0;
 
-    func_80056B7C_5777C(&arg0->unk4, 0x10);
+    func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80053B38_54738);
     func_80053898_54498(arg0);
 
-    if (arg0->unk4E != 0) {
-        spawnSparkleEffect(&arg0->unk4);
+    if (arg0->hitCount != 0) {
+        spawnSparkleEffect(&arg0->pos);
         func_80069CF8_6A8F8();
     }
 
@@ -1156,47 +1172,52 @@ void func_80053B38_54738(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->unk4, &arg0->vel, 6);
+        func_80050604_51204(&arg0->pos, &arg0->vel, 6);
 
         arg0->vel.y += 0xFFFC0000;
 
         normalizeVelocityToSpeed((Vec3i *)&arg0->vel, arg0->unk3C);
 
-        memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
+        memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
-        arg0->unk4.x += arg0->vel.x;
-        arg0->unk4.y += arg0->vel.y;
-        arg0->unk4.z += arg0->vel.z;
+        arg0->pos.x += arg0->vel.x;
+        arg0->pos.y += arg0->vel.y;
+        arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
+        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
 
-        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, &sp18);
+        func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
         if ((sp18.x != 0) || (sp18.z != 0)) {
-            arg0->unk4.x = arg0->unk4.x + sp18.x;
-            arg0->unk4.z = arg0->unk4.z + sp18.z;
-            arg0->unk4E = arg0->unk4E + 1;
+            arg0->pos.x = arg0->pos.x + sp18.x;
+            arg0->pos.z = arg0->pos.z + sp18.z;
+            arg0->hitCount = arg0->hitCount + 1;
         }
 
         arg0->unk48--;
         if (arg0->unk48 == 0) {
-            arg0->unk4E++;
+            arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
-        if (arg0->unk4.y < temp_v0 + 0x100000) {
-            arg0->unk4.y = temp_v0 + 0x100000;
+        if (arg0->pos.y < temp_v0 + 0x100000) {
+            arg0->pos.y = temp_v0 + 0x100000;
         }
 
-        arg0->vel.x = arg0->unk4.x - savedVec.x;
-        arg0->vel.y = arg0->unk4.y - savedVec.y;
-        arg0->vel.z = arg0->unk4.z - savedVec.z;
+        arg0->vel.x = arg0->pos.x - savedVec.x;
+        arg0->vel.y = arg0->pos.y - savedVec.y;
+        arg0->vel.z = arg0->pos.z - savedVec.z;
 
         func_80053898_54498(arg0);
 
-        var_s3 =
-            func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x1800000, 0x1B8000);
+        var_s3 = func_8005BF50_5CB50(
+            &arg0->pos,
+            atan2Fixed(arg0->vel.x, arg0->vel.z),
+            arg0->ownerPlayerIdx,
+            0x1800000,
+            0x1B8000
+        );
 
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
@@ -1221,8 +1242,8 @@ void func_80053B38_54738(Struct_52880 *arg0) {
         }
     }
 
-    if (arg0->unk4E != 0) {
-        spawnSparkleEffect(&arg0->unk4);
+    if (arg0->hitCount != 0) {
+        spawnSparkleEffect(&arg0->pos);
         func_80069CF8_6A8F8();
     }
 
@@ -1238,14 +1259,14 @@ s32 func_80053DF0_549F0(s32 arg0, s32 arg1) {
 
     task = scheduleTask(func_800537F4_543F4, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
-        task->unk42 = arg0;
+        task->ownerPlayerIdx = arg0;
         task->unk4A = arg1;
     }
     return (s32)task;
 }
 
 void func_80053E48_54A48(Struct_52880 *arg0) {
-    arg0->unk4C = arg0->unk42;
+    arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_80053E90_54A90);
@@ -1256,7 +1277,7 @@ void func_80053E90_54A90(Struct_52880 *arg0) {
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 7);
     ptr = alloc->unk44;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     arg0->unk46 = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80053FE0_54BE0);
@@ -1276,8 +1297,8 @@ void func_80053EEC_54AEC(Struct_52880 *arg0) {
 
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
-    s1 = &arg0->unk4;
-    result = func_8005B548_5C148((Vec3i *)s1, new_var3->unk42, 0x80000);
+    s1 = &arg0->pos;
+    result = func_8005B548_5C148((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
     if (result == 0) {
         return;
     }
@@ -1285,16 +1306,16 @@ void func_80053EEC_54AEC(Struct_52880 *arg0) {
     new_var2 = result->unkB84 & 0x1000;
     if (new_var2 == 0) {
         func_80058A94_59694(result);
-        arg0->unk4E++;
-        unk4C = arg0->unk4C;
+        arg0->hitCount++;
+        unk4C = arg0->targetPlayerIdx;
         if (unk4C >= 0) {
             func_80059C24_5A824(&alloc->players[unk4C]);
         }
     } else {
         v28 = arg0->vel.y;
         v2C = (new_var = arg0->vel.z);
-        arg0->unk42 = result->unkBB8;
-        arg0->unk4C = result->unkBB8;
+        arg0->ownerPlayerIdx = result->unkBB8;
+        arg0->targetPlayerIdx = result->unkBB8;
         arg0->vel.y = -v28;
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
@@ -1315,31 +1336,31 @@ void func_80053FE0_54BE0(Struct_52880 *arg0) {
 
     alloc = getCurrentAllocation();
 
-    playerIdx = arg0->unk42;
-    transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->unk4);
+    playerIdx = arg0->ownerPlayerIdx;
+    transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
 
-    temp_v0 = arg0->unk4.x;
+    temp_v0 = arg0->pos.x;
     temp_a2 = arg0->vel.x;
-    temp_v1 = arg0->unk4.y;
+    temp_v1 = arg0->pos.y;
     temp_a1 = arg0->vel.y;
     arg0->vel.x = temp_v0 - temp_a2;
     arg0->vel.y = temp_v1 - temp_a1;
-    arg0->vel.z = arg0->unk4.z - arg0->vel.z;
+    arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
     arg0->unk48 = 0xF0;
 
-    func_80056B7C_5777C(&arg0->unk4, 0x10);
+    func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80054144_54D44);
     func_80053EEC_54AEC(arg0);
 
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0xD);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
 
@@ -1362,54 +1383,59 @@ void func_80054144_54D44(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->unk4, (Vec3i *)&arg0->vel, 7);
+        func_80050604_51204(&arg0->pos, (Vec3i *)&arg0->vel, 7);
 
         arg0->vel.y += 0xFFFC0000;
 
         normalizeVelocityToSpeed((Vec3i *)&arg0->vel, 0x198000);
 
-        memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
+        memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
-        arg0->unk4.x += arg0->vel.x;
-        arg0->unk4.y += arg0->vel.y;
-        arg0->unk4.z += arg0->vel.z;
+        arg0->pos.x += arg0->vel.x;
+        arg0->pos.y += arg0->vel.y;
+        arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(alloc->unk30, arg0->unk40, &arg0->unk4);
+        arg0->unk40 = func_80060A3C_6163C(alloc->unk30, arg0->unk40, &arg0->pos);
 
-        func_80060CDC_618DC(alloc->unk30, arg0->unk40, &arg0->unk4, 0x80000, &sp18);
+        func_80060CDC_618DC(alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
         if ((sp18.x != 0) || (sp18.z != 0)) {
-            arg0->unk4.x = arg0->unk4.x + sp18.x;
-            arg0->unk4.z = arg0->unk4.z + sp18.z;
+            arg0->pos.x = arg0->pos.x + sp18.x;
+            arg0->pos.z = arg0->pos.z + sp18.z;
             temp_v0 = atan2Fixed(-sp18.x, -sp18.z);
             rotateVectorY((Vec3i *)&arg0->vel, -temp_v0, &rotateVec);
             if (rotateVec.z < 0) {
                 rotateVec.z = -rotateVec.z;
             }
             rotateVectorY(&rotateVec, temp_v0, (Vec3i *)&arg0->vel);
-            arg0->unk42 = -1;
+            arg0->ownerPlayerIdx = -1;
         } else {
-            arg0->vel.x = arg0->unk4.x - savedVec.x;
-            arg0->vel.z = arg0->unk4.z - savedVec.z;
+            arg0->vel.x = arg0->pos.x - savedVec.x;
+            arg0->vel.z = arg0->pos.z - savedVec.z;
         }
 
         arg0->unk48--;
         if (arg0->unk48 == 0) {
-            arg0->unk4E++;
+            arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+        temp_v0 = func_8005CFC0_5DBC0(alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
-        if (arg0->unk4.y < temp_v0 + 0x100000) {
-            arg0->unk4.y = temp_v0 + 0x100000;
+        if (arg0->pos.y < temp_v0 + 0x100000) {
+            arg0->pos.y = temp_v0 + 0x100000;
         }
 
-        arg0->vel.y = arg0->unk4.y - savedVec.y;
+        arg0->vel.y = arg0->pos.y - savedVec.y;
 
         func_80053EEC_54AEC(arg0);
 
-        var_s3 =
-            func_8005BF50_5CB50(&arg0->unk4, atan2Fixed(arg0->vel.x, arg0->vel.z), arg0->unk42, 0x1200000, 0x198000);
+        var_s3 = func_8005BF50_5CB50(
+            &arg0->pos,
+            atan2Fixed(arg0->vel.x, arg0->vel.z),
+            arg0->ownerPlayerIdx,
+            0x1200000,
+            0x198000
+        );
 
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
@@ -1434,9 +1460,9 @@ void func_80054144_54D44(Struct_52880 *arg0) {
         }
     }
 
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0xD);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
 
@@ -1452,7 +1478,7 @@ s32 func_80054470_55070(s32 arg0, s32 arg1) {
 
     task = scheduleTask(func_80053E48_54A48, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
-        task->unk42 = arg0;
+        task->ownerPlayerIdx = arg0;
     }
     return (s32)task;
 }
@@ -1479,13 +1505,13 @@ s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
 
 void func_80054568_55168(Struct_52880 *arg0) {
     getCurrentAllocation();
-    if (func_8005C250_5CE50((&arg0->unk4), arg0->unk42, 0xC0000)) {
-        arg0->unk4E++;
+    if (func_8005C250_5CE50((&arg0->pos), arg0->ownerPlayerIdx, 0xC0000)) {
+        arg0->hitCount++;
     }
 }
 
 void func_800545B0_551B0(Struct_52880 *arg0) {
-    arg0->unk4C = arg0->unk42;
+    arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_800545F8_551F8);
@@ -1500,7 +1526,7 @@ void func_800545F8_551F8(Struct_52880 *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 6);
     ptr = alloc->unk44;
     arg0->unk40 = 0x65;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80054658_55258);
 }
@@ -1516,35 +1542,35 @@ void func_80054658_55258(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        func_80050604_51204(&arg0->unk4, (Vec3i *)&arg0->vel, 6);
+        func_80050604_51204(&arg0->pos, (Vec3i *)&arg0->vel, 6);
 
         arg0->vel.y -= 0x3000;
         s1 = &alloc->unk30;
-        arg0->unk4.x += arg0->vel.x;
-        arg0->unk4.y += arg0->vel.y;
-        arg0->unk4.z += arg0->vel.z;
+        arg0->pos.x += arg0->vel.x;
+        arg0->pos.y += arg0->vel.y;
+        arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(s1, arg0->unk40, &arg0->unk4);
-        func_80060CDC_618DC(s1, arg0->unk40, &arg0->unk4, 0x80000, &sp18);
+        arg0->unk40 = func_80060A3C_6163C(s1, arg0->unk40, &arg0->pos);
+        func_80060CDC_618DC(s1, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
         if ((sp18.x != 0) || (sp18.z != 0)) {
-            arg0->unk4.x += sp18.x;
-            arg0->unk4.z += sp18.z;
-            arg0->unk4E++;
+            arg0->pos.x += sp18.x;
+            arg0->pos.z += sp18.z;
+            arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
-        if (arg0->unk4.y < temp_v0 + 0x100000) {
-            arg0->unk4.y = temp_v0 + 0x100000;
-            arg0->unk4E += 1;
+        if (arg0->pos.y < temp_v0 + 0x100000) {
+            arg0->pos.y = temp_v0 + 0x100000;
+            arg0->hitCount += 1;
         }
 
         func_80054568_55168(arg0);
     }
 
-    if (arg0->unk4E != 0) {
-        spawnSparkleEffect(&arg0->unk4);
+    if (arg0->hitCount != 0) {
+        spawnSparkleEffect(&arg0->pos);
         func_80069CF8_6A8F8();
     }
 
@@ -1563,15 +1589,15 @@ void func_800547E0_553E0(s16 arg0, s32 arg1) {
         vec.y = 0;
         vec.z = arg1;
         rotateVectorY(&vec, arg0, (Vec3i *)&task->vel.x);
-        task->unk4.x = 0xDD12D592;
-        task->unk4.y = 0x0B1D4CA3;
-        task->unk4.z = 0xE27836C1;
-        task->unk42 = -1;
+        task->pos.x = 0xDD12D592;
+        task->pos.y = 0x0B1D4CA3;
+        task->pos.z = 0xE27836C1;
+        task->ownerPlayerIdx = -1;
     }
 }
 
 void func_80054880_55480(Struct_52880 *arg0) {
-    arg0->unk4C = arg0->unk42;
+    arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_800548C8_554C8);
@@ -1588,18 +1614,18 @@ void func_800548C8_554C8(Struct_52880 *arg0) {
     s32 pad[4];
 
     alloc = getCurrentAllocation();
-    playerIdxPtr = &arg0->unk42;
-    arg0->unk40 = alloc->unk10[arg0->unk42].unkB94;
+    playerIdxPtr = &arg0->ownerPlayerIdx;
+    arg0->unk40 = alloc->unk10[arg0->ownerPlayerIdx].unkB94;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 6);
 
     arg0->unk0 = alloc->unk44;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     playerIdx = *playerIdxPtr;
-    players = (Unk10Element_52880 *)&arg0->unk4;
-    transformVector(D_80090F60_91B60, alloc->unk10[arg0->unk42].unk164, position = players);
+    players = (Unk10Element_52880 *)&arg0->pos;
+    transformVector(D_80090F60_91B60, alloc->unk10[arg0->ownerPlayerIdx].unk164, position = players);
 
-    playerIdx = arg0->unk42;
-    transformVectorRelative(alloc->unk10[0].unk434, alloc->unk10[arg0->unk42].unk164, velocity = &arg0->vel);
+    playerIdx = arg0->ownerPlayerIdx;
+    transformVectorRelative(alloc->unk10[0].unk434, alloc->unk10[arg0->ownerPlayerIdx].unk164, velocity = &arg0->vel);
 
     vel = arg0->vel.z;
     if (vel < 0) {
@@ -1617,11 +1643,11 @@ void func_800548C8_554C8(Struct_52880 *arg0) {
     D_80090F74_91B74 = D_80090F68_91B68 - arg0->vel.z;
 
     playerIdx = *playerIdxPtr;
-    transformVector(&D_80090F60_91B60[6], alloc->unk10[arg0->unk42].unk164, velocity);
+    transformVector(&D_80090F60_91B60[6], alloc->unk10[arg0->ownerPlayerIdx].unk164, velocity);
 
-    arg0->vel.x = arg0->unk4.x - arg0->vel.x;
-    arg0->vel.y = arg0->unk4.y - arg0->vel.y;
-    arg0->vel.z = arg0->unk4.z - arg0->vel.z;
+    arg0->vel.x = arg0->pos.x - arg0->vel.x;
+    arg0->vel.y = arg0->pos.y - arg0->vel.y;
+    arg0->vel.z = arg0->pos.z - arg0->vel.z;
     if ((!alloc->unk10[*playerIdxPtr].unkB94) && (!alloc->unk10[*playerIdxPtr].unkB94)) {}
     players = alloc->unk10;
     memcpy(&arg0->unk30, players[*playerIdxPtr].unk44C, 12);
@@ -1640,35 +1666,35 @@ void func_80054AE4_556E4(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        func_80050604_51204(&arg0->unk4, (Vec3i *)&arg0->vel, 6);
+        func_80050604_51204(&arg0->pos, (Vec3i *)&arg0->vel, 6);
 
         s1 = &alloc->unk30;
         arg0->vel.y -= 0x8000;
-        arg0->unk4.x += arg0->vel.x + arg0->unk30;
-        arg0->unk4.y += arg0->vel.y + arg0->unk34;
-        arg0->unk4.z += arg0->vel.z + arg0->unk38;
+        arg0->pos.x += arg0->vel.x + arg0->unk30;
+        arg0->pos.y += arg0->vel.y + arg0->unk34;
+        arg0->pos.z += arg0->vel.z + arg0->unk38;
 
-        arg0->unk40 = func_80060A3C_6163C(s1, arg0->unk40, &arg0->unk4);
-        func_80060CDC_618DC(s1, arg0->unk40, &arg0->unk4, 0x80000, &sp18);
+        arg0->unk40 = func_80060A3C_6163C(s1, arg0->unk40, &arg0->pos);
+        func_80060CDC_618DC(s1, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
         if ((sp18.x != 0) || (sp18.z != 0)) {
-            arg0->unk4.x += sp18.x;
-            arg0->unk4.z += sp18.z;
-            arg0->unk4E++;
+            arg0->pos.x += sp18.x;
+            arg0->pos.z += sp18.z;
+            arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
-        if (arg0->unk4.y < temp_v0 + 0x100000) {
-            arg0->unk4.y = temp_v0 + 0x100000;
-            arg0->unk4E += 1;
+        if (arg0->pos.y < temp_v0 + 0x100000) {
+            arg0->pos.y = temp_v0 + 0x100000;
+            arg0->hitCount += 1;
         }
 
         func_80054568_55168(arg0);
     }
 
-    if (arg0->unk4E != 0) {
-        spawnSparkleEffectWithPlayer(&arg0->unk4, arg0->unk42);
+    if (arg0->hitCount != 0) {
+        spawnSparkleEffectWithPlayer(&arg0->pos, arg0->ownerPlayerIdx);
         func_80069CF8_6A8F8();
     }
 
@@ -1683,7 +1709,7 @@ s32 func_80054C8C_5588C(s16 arg0) {
 
     task = scheduleTask(func_80054880_55480, 0, 0, 0x6F);
     if (task != NULL) {
-        task->unk42 = arg0;
+        task->ownerPlayerIdx = arg0;
     }
 }
 
@@ -1698,10 +1724,10 @@ void func_80054D0C_5590C(Struct_52880 *arg0) {
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 0x69);
     ptr = alloc->unk44;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     arg0->unk46 = 0;
     arg0->unk0 = ptr;
-    arg0->unk4C = arg0->unk42;
+    arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     setCallbackWithContinue(func_80054F44_55B44);
 }
 
@@ -1718,7 +1744,7 @@ void func_80054D70_55970(void *arg) {
 
     switch (randVal) {
         case 0:
-            player = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
                 func_80058A10_59610(player);
                 for (i = 0; i < 3; i++) {
@@ -1727,52 +1753,52 @@ void func_80054D70_55970(void *arg) {
                         func_80059A48_5A648(player, -100);
                     }
                 }
-                arg0->unk4E = arg0->unk4E + 1;
-                unk4C = arg0->unk4C;
+                arg0->hitCount = arg0->hitCount + 1;
+                unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
                     func_80059C24_5A824(&alloc->players[unk4C]);
                 }
             }
             break;
         case 1:
-            player = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
                 func_80058A3C_5963C(player);
-                arg0->unk4E = arg0->unk4E + 1;
-                unk4C = arg0->unk4C;
+                arg0->hitCount = arg0->hitCount + 1;
+                unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
                     func_80059C24_5A824(&alloc->players[unk4C]);
                 }
             }
             break;
         case 2:
-            player = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
                 func_80058A68_59668(player);
-                arg0->unk4E = arg0->unk4E + 1;
-                unk4C = arg0->unk4C;
+                arg0->hitCount = arg0->hitCount + 1;
+                unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
                     func_80059C24_5A824(&alloc->players[unk4C]);
                 }
             }
             break;
         case 3:
-            player = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
                 func_80058AC0_596C0(player);
-                arg0->unk4E = arg0->unk4E + 1;
-                unk4C = arg0->unk4C;
+                arg0->hitCount = arg0->hitCount + 1;
+                unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
                     func_80059C24_5A824(&alloc->players[unk4C]);
                 }
             }
             break;
         case 4:
-            player = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
+            player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
                 func_80058A94_59694(player);
-                arg0->unk4E = arg0->unk4E + 1;
-                unk4C = arg0->unk4C;
+                arg0->hitCount = arg0->hitCount + 1;
+                unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
                     func_80059C24_5A824(&alloc->players[unk4C]);
                 }
@@ -1794,17 +1820,17 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
     Vec3i *s1;
 
     alloc = getCurrentAllocation();
-    transformVector(D_80090F60_91B60, alloc->unk10[arg0->unk42].unk164, s1 = &arg0->unk4);
+    transformVector(D_80090F60_91B60, alloc->unk10[arg0->ownerPlayerIdx].unk164, s1 = &arg0->pos);
 
-    transformVector(&D_80090F60_91B60[12], alloc->unk10[arg0->unk42].unk164, &arg0->vel);
+    transformVector(&D_80090F60_91B60[12], alloc->unk10[arg0->ownerPlayerIdx].unk164, &arg0->vel);
 
-    temp_v0 = arg0->unk4.x;
+    temp_v0 = arg0->pos.x;
     temp_a1 = arg0->vel.x;
-    temp_v1 = arg0->unk4.y;
+    temp_v1 = arg0->pos.y;
     temp_a2 = arg0->vel.y;
-    temp_a0 = arg0->unk4.z;
+    temp_a0 = arg0->pos.z;
     temp_a3 = arg0->vel.z;
-    playerIdx = arg0->unk42;
+    playerIdx = arg0->ownerPlayerIdx;
     arg0->vel.x = temp_v0 - temp_a1;
     arg0->vel.y = temp_v1 - temp_a2;
     arg0->vel.z = temp_a0 - temp_a3;
@@ -1817,7 +1843,7 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
 
     func_80056B7C_5777C(s1, 0x23);
 
-    if (arg0->unk4E != 0) {
+    if (arg0->hitCount != 0) {
         func_80050ECC_51ACC(s1);
         func_80056B7C_5777C(s1, 0x11);
         func_80069CF8_6A8F8();
@@ -1844,49 +1870,49 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->unk4, &arg0->unk24, 0x6A);
+        func_80050604_51204(&arg0->pos, &arg0->unk24, 0x6A);
 
         arg0->unk24.y += 0xFFFC0000;
 
         normalizeVelocityToSpeed(&arg0->unk24, 0x1C0000);
 
-        memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
+        memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
-        arg0->unk4.x += arg0->unk24.x;
-        arg0->unk4.y += arg0->unk24.y;
-        arg0->unk4.z += arg0->unk24.z;
+        arg0->pos.x += arg0->unk24.x;
+        arg0->pos.y += arg0->unk24.y;
+        arg0->pos.z += arg0->unk24.z;
 
-        angle = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
+        angle = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
         arg0->unk40 = angle;
 
-        func_80060CDC_618DC(&alloc->unk30, angle, &arg0->unk4, 0x80000, &sp18);
+        func_80060CDC_618DC(&alloc->unk30, angle, &arg0->pos, 0x80000, &sp18);
 
         if (sp18.x != 0 || sp18.z != 0) {
-            arg0->unk4.x += sp18.x;
-            arg0->unk4.z += sp18.z;
-            arg0->unk4E = arg0->unk4E + 1;
+            arg0->pos.x += sp18.x;
+            arg0->pos.z += sp18.z;
+            arg0->hitCount = arg0->hitCount + 1;
         }
 
         arg0->unk48--;
         if (arg0->unk48 == 0) {
-            arg0->unk4E++;
+            arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
         temp_v1 = temp_v0 + 0x100000;
 
-        if (arg0->unk4.y < temp_v1) {
-            arg0->unk4.y = temp_v1;
+        if (arg0->pos.y < temp_v1) {
+            arg0->pos.y = temp_v1;
         }
 
-        arg0->unk24.x = arg0->unk4.x - savedVec.x;
-        arg0->unk24.y = arg0->unk4.y - savedVec.y;
-        arg0->unk24.z = arg0->unk4.z - savedVec.z;
+        arg0->unk24.x = arg0->pos.x - savedVec.x;
+        arg0->unk24.y = arg0->pos.y - savedVec.y;
+        arg0->unk24.z = arg0->pos.z - savedVec.z;
 
         func_80054D70_55970(arg0);
 
         angle = atan2Fixed(arg0->unk24.x, arg0->unk24.z);
-        var_s3 = func_8005BF50_5CB50(&arg0->unk4, angle, arg0->unk42, 0x3C00000, 0x1B0000);
+        var_s3 = func_8005BF50_5CB50(&arg0->pos, angle, arg0->ownerPlayerIdx, 0x3C00000, 0x1B0000);
 
         if (var_s3 != 0) {
             var_s3 &= 0x1FFF;
@@ -1916,9 +1942,9 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
             }
         }
     }
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0x11);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0x11);
         func_80069CF8_6A8F8();
     }
 
@@ -1936,12 +1962,12 @@ s32 func_800553D4_55FD4(s32 arg0) {
 
     task = scheduleTask(func_80054CCC_558CC, (arg0 + 4) & 0xFF, 0, 0x6E);
     if (task != NULL) {
-        task->unk42 = arg0;
+        task->ownerPlayerIdx = arg0;
     }
 }
 
 void func_80055418_56018(Struct_52880 *arg0) {
-    arg0->unk4C = arg0->unk42;
+    arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->unk20 = load_3ECE40();
     setCleanupCallback(func_800523EC_52FEC);
     setCallbackWithContinue(func_80055460_56060);
@@ -1952,15 +1978,15 @@ void func_80055460_56060(Struct_52880 *arg0) {
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 0x6E);
     ptr = alloc->unk44;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     arg0->unk46 = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_800554FC_560FC);
 }
 
 void func_800554BC_560BC(Struct_52880 *arg0) {
-    if (func_800BB504(&arg0->unk4, 0x80000)) {
-        arg0->unk4E++;
+    if (func_800BB504(&arg0->pos, 0x80000)) {
+        arg0->hitCount++;
     }
 }
 
@@ -1971,25 +1997,25 @@ void func_800554FC_560FC(Struct_52880 *arg0) {
 
     alloc = getCurrentAllocation();
 
-    index = arg0->unk42;
-    transformVector(alloc->unk48, &alloc->unk10[index].unk950, &arg0->unk4);
+    index = arg0->ownerPlayerIdx;
+    transformVector(alloc->unk48, &alloc->unk10[index].unk950, &arg0->pos);
 
-    index = arg0->unk42;
+    index = arg0->ownerPlayerIdx;
     transformVector(&alloc->unk48[6], &alloc->unk10[index].unk950, &arg0->vel);
 
-    arg0->vel.x = arg0->unk4.x - arg0->vel.x;
-    arg0->vel.y = arg0->unk4.y - arg0->vel.y;
-    arg0->vel.z = arg0->unk4.z - arg0->vel.z;
+    arg0->vel.x = arg0->pos.x - arg0->vel.x;
+    arg0->vel.y = arg0->pos.y - arg0->vel.y;
+    arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
-    index = arg0->unk42;
+    index = arg0->ownerPlayerIdx;
     arg0->unk40 = alloc->unk10[index].unkB94;
 
-    func_80056B7C_5777C(&arg0->unk4, 0x10);
+    func_80056B7C_5777C(&arg0->pos, 0x10);
     setCallback(func_80055650_56250);
     func_800554BC_560BC(arg0);
 
-    if (arg0->unk4E != 0) {
-        func_80056B7C_5777C(&arg0->unk4, 0x43);
+    if (arg0->hitCount != 0) {
+        func_80056B7C_5777C(&arg0->pos, 0x43);
         func_80069CF8_6A8F8();
     }
 
@@ -2016,7 +2042,7 @@ void func_80055650_56250(Struct_52880 *arg0) {
         goto skip_main;
     }
 
-    s1 = &arg0->unk4;
+    s1 = &arg0->pos;
     s0 = &arg0->vel;
 
     func_80050604_51204(s1, s0, 0x6E);
@@ -2027,9 +2053,9 @@ void func_80055650_56250(Struct_52880 *arg0) {
 
     memcpy(&savedVec, s1, sizeof(Vec3i));
 
-    arg0->unk4.x += arg0->vel.x;
-    arg0->unk4.y += arg0->vel.y;
-    arg0->unk4.z += arg0->vel.z;
+    arg0->pos.x += arg0->vel.x;
+    arg0->pos.y += arg0->vel.y;
+    arg0->pos.z += arg0->vel.z;
 
     temp_v0_sh = func_80060A3C_6163C(&s3->unk30, arg0->unk40, s1);
 
@@ -2038,26 +2064,26 @@ void func_80055650_56250(Struct_52880 *arg0) {
     func_80060CDC_618DC(&s3->unk30, temp_v0_sh & 0xFFFF, s1, 0x80000, &sp18);
 
     if ((sp18.x != 0) || (sp18.z != 0)) {
-        arg0->unk4.x += sp18.x;
-        arg0->unk4.z += sp18.z;
-        arg0->unk4E++;
+        arg0->pos.x += sp18.x;
+        arg0->pos.z += sp18.z;
+        arg0->hitCount++;
     }
 
-    temp_v0 = func_8005CFC0_5DBC0(&s3->unk30, arg0->unk40, &arg0->unk4, 0x100000);
+    temp_v0 = func_8005CFC0_5DBC0(&s3->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
-    if (arg0->unk4.y < (temp_v0 + 0x100000)) {
-        arg0->unk4.y = temp_v0 + 0x100000;
+    if (arg0->pos.y < (temp_v0 + 0x100000)) {
+        arg0->pos.y = temp_v0 + 0x100000;
     }
 
-    arg0->vel.x = arg0->unk4.x - savedVec.x;
-    arg0->vel.y = arg0->unk4.y - savedVec.y;
-    arg0->vel.z = arg0->unk4.z - savedVec.z;
+    arg0->vel.x = arg0->pos.x - savedVec.x;
+    arg0->vel.y = arg0->pos.y - savedVec.y;
+    arg0->vel.z = arg0->pos.z - savedVec.z;
 
     func_800554BC_560BC(arg0);
 
 skip_main:
-    if (arg0->unk4E != 0) {
-        func_80056B7C_5777C(&arg0->unk4, 0x43);
+    if (arg0->hitCount != 0) {
+        func_80056B7C_5777C(&arg0->pos, 0x43);
         func_80069CF8_6A8F8();
     }
 
@@ -2071,7 +2097,7 @@ s32 func_80055820_56420(s32 arg0, s32 arg1) {
 
     task = scheduleTask(func_80055418_56018, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
-        task->unk42 = arg0;
+        task->ownerPlayerIdx = arg0;
     }
     return (s32)task;
 }
@@ -2087,7 +2113,7 @@ void func_800558A4_564A4(Struct_52880 *arg0) {
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->unk20, 4);
     ptr = alloc->unk44;
-    arg0->unk4E = 0;
+    arg0->hitCount = 0;
     arg0->unk46 = 0;
     arg0->unk0 = ptr;
     setCallbackWithContinue(func_80055964_56564);
@@ -2097,11 +2123,11 @@ void func_80055900_56500(Struct_52880 *arg0) {
     Player *result;
 
     getCurrentAllocation();
-    result = func_8005B548_5C148((&arg0->unk4), arg0->unk42, 0x80000);
+    result = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
     if (result != NULL) {
         if ((result->unkB84 & 0x1000) == 0) {
             func_80058A68_59668(result);
-            arg0->unk4E++;
+            arg0->hitCount++;
         }
     }
 }
@@ -2122,10 +2148,10 @@ void func_80055964_56564(Struct_52880 *arg0) {
 
     rotateVectorY((u8 *)alloc->unk48 + 0x228, arg0->unk44, (Vec3i *)&arg0->vel);
 
-    arg0->unk4.x += localVec.x;
-    arg0->unk4.y += localVec.y;
-    arg0->unk4.z += localVec.z;
-    s0 = &arg0->unk4;
+    arg0->pos.x += localVec.x;
+    arg0->pos.y += localVec.y;
+    arg0->pos.z += localVec.z;
+    s0 = &arg0->pos;
     arg0->unk40 = 60;
     arg0->unk48 = 45;
 
@@ -2133,7 +2159,7 @@ void func_80055964_56564(Struct_52880 *arg0) {
     setCallback(func_80055A84_56684);
     func_80055900_56500(arg0);
 
-    if (arg0->unk4E != 0) {
+    if (arg0->hitCount != 0) {
         func_80050ECC_51ACC(s0);
         func_80056B7C_5777C(s0, 13);
         func_80069CF8_6A8F8();
@@ -2160,45 +2186,45 @@ void func_80055A84_56684(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
         vel = &arg0->vel;
-        func_80050604_51204(&arg0->unk4, vel, 4);
+        func_80050604_51204(&arg0->pos, vel, 4);
         arg0->vel.y += 0xFFFC0000;
         normalizeVelocityToSpeed(vel, 0x190000);
-        memcpy(&prevPos, &arg0->unk4, 0xC);
+        memcpy(&prevPos, &arg0->pos, 0xC);
 
-        arg0->unk4.x += arg0->vel.x;
-        arg0->unk4.y += arg0->vel.y;
-        arg0->unk4.z += arg0->vel.z;
+        arg0->pos.x += arg0->vel.x;
+        arg0->pos.y += arg0->vel.y;
+        arg0->pos.z += arg0->vel.z;
 
-        temp = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->unk4);
+        temp = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
         arg0->unk40 = temp;
-        func_80060CDC_618DC(&alloc->unk30, temp, &arg0->unk4, 0x80000, &offset);
+        func_80060CDC_618DC(&alloc->unk30, temp, &arg0->pos, 0x80000, &offset);
 
         if (offset.x != 0 || offset.z != 0) {
-            arg0->unk4.x += offset.x;
-            arg0->unk4.z += offset.z;
-            arg0->unk4E++;
+            arg0->pos.x += offset.x;
+            arg0->pos.z += offset.z;
+            arg0->hitCount++;
         }
 
         temp = arg0->unk48 - 1;
         arg0->unk48 = temp;
         if ((temp << 16) == 0) {
-            arg0->unk4E++;
+            arg0->hitCount++;
         }
 
-        floorHeight = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->unk4, 0x100000) + 0x100000;
-        if (arg0->unk4.y < floorHeight) {
-            arg0->unk4.y = floorHeight;
+        floorHeight = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000) + 0x100000;
+        if (arg0->pos.y < floorHeight) {
+            arg0->pos.y = floorHeight;
         }
 
-        arg0->vel.x = arg0->unk4.x - prevPos.x;
-        arg0->vel.y = arg0->unk4.y - prevPos.y;
-        arg0->vel.z = arg0->unk4.z - prevPos.z;
+        arg0->vel.x = arg0->pos.x - prevPos.x;
+        arg0->vel.y = arg0->pos.y - prevPos.y;
+        arg0->vel.z = arg0->pos.z - prevPos.z;
         func_80055900_56500(arg0);
     }
 
-    if (arg0->unk4E != 0) {
-        func_80050ECC_51ACC(&arg0->unk4);
-        func_80056B7C_5777C(&arg0->unk4, 0xD);
+    if (arg0->hitCount != 0) {
+        func_80050ECC_51ACC(&arg0->pos);
+        func_80056B7C_5777C(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
 
@@ -2214,10 +2240,10 @@ Struct_52880 *func_80055C80_56880(s32 arg0, s16 arg1, void *arg2) {
 
     task = scheduleTask(func_80055864_56464, 0, 0, 0x6F);
     if (task != NULL) {
-        task->unk42 = -1;
+        task->ownerPlayerIdx = -1;
         task->unk4A = arg0;
         task->unk44 = arg1;
-        memcpy(&task->unk4, arg2, sizeof(Vec3i));
+        memcpy(&task->pos, arg2, sizeof(Vec3i));
     }
     return task;
 }
