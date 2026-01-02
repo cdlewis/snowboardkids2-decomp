@@ -144,7 +144,7 @@ void initializeMusicSystem(void) {
     gGraphicsManager->unk10 = negativeOne;
     gGraphicsManager->unk12 = 0xFFFF;
     gGraphicsManager->unk14 = 0;
-    scheduleTask(func_800570E0_57CE0, 0, 0, 0x64);
+    scheduleTask(checkMusicLoadRequest, 0, 0, 0x64);
     gGraphicsManager->soundSequence = 0;
     for (i = 0xF; i >= 0; i--) {
         gGraphicsManager->unk24[i] = 0;
@@ -317,8 +317,8 @@ void incrementSoundSequence(void) {
     gGraphicsManager->soundSequence = (s32)((gGraphicsManager->soundSequence + 1) & 0xFFFFFF);
 }
 
-void func_800570E0_57CE0(void *arg) {
-    setCleanupCallback(func_800570E0_57CE0);
+void checkMusicLoadRequest(void *arg) {
+    setCleanupCallback(checkMusicLoadRequest);
     if (gGraphicsManager->unk1D != 0) {
         setCallback(&func_80057124_57D24);
     }
@@ -354,7 +354,7 @@ void func_80057214_57E14(void) {
     void *temp_v0;
 
     if ((u16)gGraphicsManager->unk10 != gGraphicsManager->unk12) {
-        setCallbackWithContinue(func_800570E0_57CE0);
+        setCallbackWithContinue(checkMusicLoadRequest);
     } else if (gGraphicsManager->unk1D == 2) {
         temp_v0 = func_80057974_58574(gGraphicsManager->unk4, gGraphicsManager->unk8, (u8)gGraphicsManager->unk1C);
         gGraphicsManager->unkC = temp_v0;
@@ -415,7 +415,7 @@ void func_800573F8_57FF8(void) {
 
 void func_80057470_58070(void) {
     if (func_80058638_59238() == NULL) {
-        setCallbackWithContinue(&func_800570E0_57CE0);
+        setCallbackWithContinue(&checkMusicLoadRequest);
     }
 }
 
