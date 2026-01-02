@@ -811,152 +811,152 @@ void *createLiftEffect(Player *player) {
 }
 
 typedef struct {
-    u8 pad0[0x434]; /* 0x00 */
-    s32 pos434[3];  /* 0x434 - position data (12 bytes) */
-} Func426B0Unk3C;
+    u8 pad0[0x434];        /* 0x00 */
+    s32 sourcePosition[3]; /* 0x434 - warp source position (12 bytes) */
+} WarpEffectSource;
 
 typedef struct {
-    s16 matrix[3][3];      /* 0x00 (0x12 bytes: 9 * s16) */
-    u8 pad12[0x2];         /* 0x12 */
-    Vec3i unk14;           /* 0x14 */
-    void *unk20;           /* 0x20 */
-    void *unk24;           /* 0x24 */
-    void *unk28;           /* 0x28 */
-    s32 unk2C;             /* 0x2C */
-    u8 pad30[0xC];         /* 0x30 */
-    Func426B0Unk3C *unk3C; /* 0x3C */
-    Player *unk40;         /* 0x40 */
-    s32 unk44;             /* 0x44 */
-    s32 unk48;             /* 0x48 */
-    s32 unk4C;             /* 0x4C */
-    s32 unk50;             /* 0x50 */
-} Func426B0State;
+    s16 matrix[3][3];         /* 0x00 (0x12 bytes: 9 * s16) */
+    u8 pad12[0x2];            /* 0x12 */
+    Vec3i position;           /* 0x14 */
+    void *displayData;        /* 0x20 */
+    void *asset1;             /* 0x24 */
+    void *asset2;             /* 0x28 */
+    s32 unk2C;                /* 0x2C */
+    u8 pad30[0xC];            /* 0x30 */
+    WarpEffectSource *source; /* 0x3C */
+    Player *player;           /* 0x40 */
+    s32 delayFrames;          /* 0x44 */
+    s32 scale;                /* 0x48 */
+    s32 height;               /* 0x4C */
+    s32 velocity;             /* 0x50 */
+} WarpEffectState;
 
 typedef struct {
     u8 pad0[0x24];
-    void *unk24;
-    void *unk28;
-} Func429C4Arg;
+    void *asset1;
+    void *asset2;
+} WarpEffectCleanupArg;
 
-void func_800429C4_435C4(Func429C4Arg *);
-void func_8004273C_4333C(Func426B0State *);
+void cleanupWarpEffect(WarpEffectCleanupArg *);
+void updateWarpEffect(WarpEffectState *);
 
-void func_800426B0_432B0(Func426B0State *arg0) {
-    if (arg0->unk44 == 0) {
+void initWarpEffect(WarpEffectState *state) {
+    if (state->delayFrames == 0) {
         getCurrentAllocation();
-        arg0->unk20 = &D_8009A700_9B300;
-        arg0->unk24 = loadAsset_B7E70();
-        arg0->unk28 = loadAsset_216290();
-        arg0->unk48 = 0x400;
-        arg0->unk2C = 0;
-        arg0->unk4C = 0x100000;
-        arg0->unk50 = 0;
-        setCleanupCallback(func_800429C4_435C4);
-        setCallbackWithContinue(func_8004273C_4333C);
+        state->displayData = &D_8009A700_9B300;
+        state->asset1 = loadAsset_B7E70();
+        state->asset2 = loadAsset_216290();
+        state->scale = 0x400;
+        state->unk2C = 0;
+        state->height = 0x100000;
+        state->velocity = 0;
+        setCleanupCallback(cleanupWarpEffect);
+        setCallbackWithContinue(updateWarpEffect);
     } else {
-        arg0->unk44 = arg0->unk44 - 1;
+        state->delayFrames = state->delayFrames - 1;
     }
 }
 
-void func_8004290C_4350C(Func426B0State *);
-void func_80042820_43420(Func426B0State *);
+void finishWarpEffect(WarpEffectState *);
+void descendWarpEffect(WarpEffectState *);
 
-void func_8004273C_4333C(Func426B0State *arg0) {
+void updateWarpEffect(WarpEffectState *state) {
     GameState *gameState;
     s16 scale;
     s32 i;
 
     gameState = getCurrentAllocation();
     if (gameState->gamePaused == 0) {
-        if (arg0->unk48 != 0x2000) {
-            arg0->unk48 += 0x400;
+        if (state->scale != 0x2000) {
+            state->scale += 0x400;
         }
 
-        arg0->unk50 += 0x20000;
-        arg0->unk4C += arg0->unk50;
+        state->velocity += 0x20000;
+        state->height += state->velocity;
 
-        if (arg0->unk4C > 0x500000) {
-            setCallback(func_80042820_43420);
+        if (state->height > 0x500000) {
+            setCallback(descendWarpEffect);
         }
     }
 
-    createXRotationMatrix(arg0->matrix, 0);
-    scale = (s16)arg0->unk48;
-    scaleMatrix((Transform3D *)arg0, scale, scale, scale);
-    memcpy(&arg0->unk14, arg0->unk3C->pos434, 0xC);
-    arg0->unk14.y += arg0->unk4C;
+    createXRotationMatrix(state->matrix, 0);
+    scale = (s16)state->scale;
+    scaleMatrix((Transform3D *)state, scale, scale, scale);
+    memcpy(&state->position, state->source->sourcePosition, 0xC);
+    state->position.y += state->height;
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
     }
 }
 
-void func_80042820_43420(Func426B0State *arg0) {
+void descendWarpEffect(WarpEffectState *state) {
     GameState *gameState;
     s32 i;
 
     gameState = getCurrentAllocation();
     if (gameState->gamePaused == 0) {
-        arg0->unk40->unkBDE |= 4;
-        arg0->unk50 += 0xFFFE0000;
-        arg0->unk4C += arg0->unk50;
+        state->player->unkBDE |= 4;
+        state->velocity += 0xFFFE0000;
+        state->height += state->velocity;
 
-        if (arg0->unk4C == 0x220000) {
-            func_80058B30_59730(arg0->unk40);
-            func_80056B7C_5777C(&arg0->unk14, 0x19);
+        if (state->height == 0x220000) {
+            func_80058B30_59730(state->player);
+            func_80056B7C_5777C(&state->position, 0x19);
         }
 
-        if (arg0->unk4C <= 0x10000) {
-            arg0->unk50 = 0x50000;
-            setCallback(func_8004290C_4350C);
+        if (state->height <= 0x10000) {
+            state->velocity = 0x50000;
+            setCallback(finishWarpEffect);
         }
     }
 
-    memcpy(&arg0->unk14, &arg0->unk40->worldPos, 0xC);
-    arg0->unk14.y += arg0->unk4C;
+    memcpy(&state->position, &state->player->worldPos, 0xC);
+    state->position.y += state->height;
 
     i = 0;
     do {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
         i++;
     } while (i < 4);
 }
 
-void func_8004290C_4350C(Func426B0State *arg0) {
+void finishWarpEffect(WarpEffectState *state) {
     GameState *gameState;
     s32 i;
 
     gameState = getCurrentAllocation();
     if (gameState->gamePaused == 0) {
-        arg0->unk50 = arg0->unk50 + (-0x8000);
-        arg0->unk4C = arg0->unk4C + arg0->unk50;
+        state->velocity = state->velocity + (-0x8000);
+        state->height = state->height + state->velocity;
 
-        if (arg0->unk4C < (s32)0xFFF00000 && arg0->unk50 < 0) {
+        if (state->height < (s32)0xFFF00000 && state->velocity < 0) {
             func_80069CF8_6A8F8();
         }
 
-        arg0->unk14.x = arg0->unk14.x + 0x20000;
-        arg0->unk14.y = arg0->unk14.y + arg0->unk50;
+        state->position.x = state->position.x + 0x20000;
+        state->position.y = state->position.y + state->velocity;
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
     }
 }
 
-void func_800429C4_435C4(Func429C4Arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupWarpEffect(WarpEffectCleanupArg *arg0) {
+    arg0->asset1 = freeNodeMemory(arg0->asset1);
+    arg0->asset2 = freeNodeMemory(arg0->asset2);
 }
 
-Func426B0State *func_800429FC_435FC(void *arg0, Player *arg1, s16 arg2) {
-    Func426B0State *task;
+WarpEffectState *createWarpEffect(WarpEffectSource *source, Player *player, s16 delayFrames) {
+    WarpEffectState *task;
 
-    task = (Func426B0State *)scheduleTask(func_800426B0_432B0, 0, 0, 0xC8);
+    task = (WarpEffectState *)scheduleTask(initWarpEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        task->unk3C = arg0;
-        task->unk40 = arg1;
-        task->unk44 = arg2;
+        task->source = source;
+        task->player = player;
+        task->delayFrames = delayFrames;
     }
     return task;
 }
