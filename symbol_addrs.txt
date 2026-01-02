@@ -70,6 +70,7 @@ updateFlipSpinTrickAnimation = 0x800B3784; // rom:0xA3634
 dispatchRaceFinishBehaviorStep = 0x800B3950; // rom:0xA3800
 dispatchStunnedBehaviorPhase = 0x800B468C; // rom:0xA453C
 initStunnedAirborneBehavior = 0x800B46BC; // rom:0xA456C
+updateStunnedAirbornePhase = 0x800B470C; // rom:0xA45BC
 updateRaceFinishWaitingStep = 0x800B3CBC; // rom:0xA3B6C
 updateRaceFinishWinStep = 0x800B3DF0; // rom:0xA3CA0
 updateRaceFinishLoseStep = 0x800B3F2C; // rom:0xA3DDC
