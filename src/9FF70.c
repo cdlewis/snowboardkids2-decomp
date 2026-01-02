@@ -63,7 +63,7 @@ typedef struct {
     u8 unk5C;
 } func_800B99E0_alloc;
 
-void func_800B46BC_A456C(Player *);
+void initStunnedAirborneBehavior(Player *);
 
 void setPlayerBehaviorMode(Player *player, u8 mode) {
     player->unkBBD = mode;
@@ -811,7 +811,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
     }
 
     if (playerFlags & 0x1000) {
-        func_800B46BC_A456C(player);
+        initStunnedAirborneBehavior(player);
         return 1;
     }
 
@@ -1803,16 +1803,16 @@ void dispatchStunnedBehaviorPhase(func_800B00D4_arg *arg0) {
     stunnedBehaviorPhaseHandlers[arg0->unkBBE](arg0);
 }
 
-void func_800B46BC_A456C(Player *arg0) {
-    arg0->unkBBD = 2;
-    arg0->unkBBE = 5;
-    arg0->unkBBF = 0;
-    arg0->unkBC0 = 0;
-    arg0->unkB9A = 0;
-    arg0->unkBA6 = 0;
-    arg0->unkBA4 = 0;
-    arg0->unkB84 = arg0->unkB84 & 0xFFFF2FFF;
-    func_80059D30_5A930(arg0);
+void initStunnedAirborneBehavior(Player *player) {
+    player->unkBBD = 2;
+    player->unkBBE = 5;
+    player->unkBBF = 0;
+    player->unkBC0 = 0;
+    player->unkB9A = 0;
+    player->unkBA6 = 0;
+    player->unkBA4 = 0;
+    player->unkB84 = player->unkB84 & 0xFFFF2FFF;
+    func_80059D30_5A930(player);
 }
 
 s32 func_800B470C_A45BC(Player *arg0) {
