@@ -28,6 +28,7 @@ spawnGhostEffect = 0x80044050; // rom:0x44C50
 initPushZone = 0x800440B4; // rom:0x44CB4
 cleanupPushZone = 0x80044500; // rom:0x45100
 spawnPushZone = 0x80044538; // rom:0x45138
+renderUfoEffectWithWings = 0x80044578; // rom:0x45178
 motorUpdate = 0x8003AC38; // rom:0x3B838
 motorProcessState = 0x8003AC58; // rom:0x3B858
 startMotorRumble = 0x8003AF38; // rom:0x3BB38

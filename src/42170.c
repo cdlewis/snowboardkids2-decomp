@@ -222,8 +222,8 @@ typedef struct {
     void *unk28;                   /* 0x28 */
     s32 unk2C;                     /* 0x2C */
     u8 _pad30[0xC];                /* 0x30 */
-    DisplayListObject unk3C;       /* 0x3C */
-    DisplayListObject unk78;       /* 0x78 */
+    DisplayListObject leftWing;    /* 0x3C */
+    DisplayListObject rightWing;   /* 0x78 */
     Func44BBCPointerTarget *unkB4; /* 0xB4 */
     s32 unkB8;                     /* 0xB8 */
     s32 unkBC;                     /* 0xBC */
@@ -231,8 +231,8 @@ typedef struct {
     s16 unkC4;                     /* 0xC4 - counter */
     s16 unkC6;                     /* 0xC6 - value copied to unkB74 */
     u16 unkC8;                     /* 0xC8 */
-    u16 unkCA;                     /* 0xCA */
-} Func44BBCArg;
+    u16 wingOscillationAngle;      /* 0xCA */
+} UfoEffectState;
 
 typedef struct {
     s32 unk0;
@@ -284,13 +284,13 @@ typedef struct {
     u8 playSoundFlag;
 } OrbitStarEffectState;
 
-void func_80044578_45178(Func44BBCArg *);
-void func_80044684_45284(Func44BBCArg *);
-void func_800447D4_453D4(Func44BBCArg *);
-void func_80044888_45488(Func44BBCArg *);
-void func_80044990_45590(Func44BBCArg *);
-void func_80044AB8_456B8(Func44BBCArg *);
-void func_80044C38_45838(Func44BBCArg *);
+void renderUfoEffectWithWings(UfoEffectState *);
+void func_80044684_45284(UfoEffectState *);
+void func_800447D4_453D4(UfoEffectState *);
+void func_80044888_45488(UfoEffectState *);
+void func_80044990_45590(UfoEffectState *);
+void func_80044AB8_456B8(UfoEffectState *);
+void func_80044C38_45838(UfoEffectState *);
 void cleanupGhostEffect(GhostEffectState *);
 void updateGhostEffect(GhostEffectState *);
 void fadeOutGhostEffect(GhostEffectState *);
@@ -1813,36 +1813,36 @@ void spawnPushZone(s16 zoneIndex) {
     }
 }
 
-void func_80044578_45178(Func44BBCArg *arg0) {
+void renderUfoEffectWithWings(UfoEffectState *arg0) {
     Transform3D matrix;
     s32 sinVal;
     s32 i;
 
-    arg0->unkCA = arg0->unkCA + 0x100;
-    sinVal = approximateSin((s16)arg0->unkCA);
+    arg0->wingOscillationAngle = arg0->wingOscillationAngle + 0x100;
+    sinVal = approximateSin((s16)arg0->wingOscillationAngle);
     createZRotationMatrix(&matrix, (sinVal >> 5) & 0xFFFF);
 
     matrix.translation.x = 0xFFF7490A;
     matrix.translation.y = 0xFFF98007;
     matrix.translation.z = 0xCB326;
-    func_8006B084_6BC84(&matrix, arg0, &arg0->unk3C);
+    func_8006B084_6BC84(&matrix, arg0, &arg0->leftWing);
 
-    sinVal = approximateSin(arg0->unkCA);
+    sinVal = approximateSin(arg0->wingOscillationAngle);
     createZRotationMatrix(&matrix, (-(sinVal >> 5)) & 0xFFFF);
 
     matrix.translation.x = 0x8B6F6;
     matrix.translation.y = 0xFFF98007;
     matrix.translation.z = 0xCB326;
-    func_8006B084_6BC84(&matrix, arg0, &arg0->unk78);
+    func_8006B084_6BC84(&matrix, arg0, &arg0->rightWing);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
-        enqueueDisplayListWithFrustumCull(i, &arg0->unk3C);
-        enqueueDisplayListWithFrustumCull(i, &arg0->unk78);
+        enqueueDisplayListWithFrustumCull(i, &arg0->leftWing);
+        enqueueDisplayListWithFrustumCull(i, &arg0->rightWing);
     }
 }
 
-void func_80044684_45284(Func44BBCArg *arg0) {
+void func_80044684_45284(UfoEffectState *arg0) {
     Vec3i posOutput;
     Vec3i transformOutput;
     Func43CA4GameState *allocation;
@@ -1860,15 +1860,15 @@ void func_80044684_45284(Func44BBCArg *arg0) {
     arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
     arg0->unk2C = 0;
 
-    arg0->unk3C.unk20 = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0x90);
-    arg0->unk3C.unk2C = 0;
-    arg0->unk3C.unk24 = arg0->unk24;
-    arg0->unk3C.unk28 = arg0->unk28;
+    arg0->leftWing.unk20 = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0x90);
+    arg0->leftWing.unk2C = 0;
+    arg0->leftWing.unk24 = arg0->unk24;
+    arg0->leftWing.unk28 = arg0->unk28;
 
-    arg0->unk78.unk20 = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0xA0);
-    arg0->unk78.unk2C = 0;
-    arg0->unk78.unk24 = arg0->unk24;
-    arg0->unk78.unk28 = arg0->unk28;
+    arg0->rightWing.unk20 = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0xA0);
+    arg0->rightWing.unk2C = 0;
+    arg0->rightWing.unk24 = arg0->unk24;
+    arg0->rightWing.unk28 = arg0->unk28;
 
     arg0->unkC8 = rotation + item->unk8;
     createYRotationMatrix((Transform3D *)arg0, arg0->unkC8);
@@ -1886,7 +1886,7 @@ void func_80044684_45284(Func44BBCArg *arg0) {
     setCallbackWithContinue(func_800447D4_453D4);
 }
 
-void func_800447D4_453D4(Func44BBCArg *arg0) {
+void func_800447D4_453D4(UfoEffectState *arg0) {
     Func43CA4GameState *gameState;
     Vec3i output;
 
@@ -1905,10 +1905,10 @@ void func_800447D4_453D4(Func44BBCArg *arg0) {
         }
     }
 
-    func_80044578_45178(arg0);
+    renderUfoEffectWithWings(arg0);
 }
 
-void func_80044888_45488(Func44BBCArg *arg0) {
+void func_80044888_45488(UfoEffectState *arg0) {
     Func43CA4GameState *gameState;
     Vec3i output;
 
@@ -1948,10 +1948,10 @@ void func_80044888_45488(Func44BBCArg *arg0) {
     }
 
 end:
-    func_80044578_45178(arg0);
+    renderUfoEffectWithWings(arg0);
 }
 
-void func_80044990_45590(Func44BBCArg *arg0) {
+void func_80044990_45590(UfoEffectState *arg0) {
     D_80090F90_91B90_item *temp_v0;
     Func44BBCPointerTarget *temp_a1;
     Vec3i output;
@@ -1989,9 +1989,9 @@ void func_80044990_45590(Func44BBCArg *arg0) {
     setCallbackWithContinue(func_80044AB8_456B8);
 }
 
-void func_80044BBC_457BC(Func44BBCArg *);
+void func_80044BBC_457BC(UfoEffectState *);
 
-void func_80044AB8_456B8(Func44BBCArg *arg0) {
+void func_80044AB8_456B8(UfoEffectState *arg0) {
     Func43CA4GameState *gameState;
     Vec3i output;
 
@@ -2030,10 +2030,10 @@ skip_rotation:
     }
 
 end:
-    func_80044578_45178(arg0);
+    renderUfoEffectWithWings(arg0);
 }
 
-void func_80044BBC_457BC(Func44BBCArg *arg0) {
+void func_80044BBC_457BC(UfoEffectState *arg0) {
     Func43CA4GameState *gameState = (Func43CA4GameState *)getCurrentAllocation();
     s32 pad[4];
 
@@ -2046,10 +2046,10 @@ void func_80044BBC_457BC(Func44BBCArg *arg0) {
         arg0->unkB4->unkB74 = arg0->unkC6;
     }
 
-    func_80044578_45178(arg0);
+    renderUfoEffectWithWings(arg0);
 }
 
-void func_80044C38_45838(Func44BBCArg *arg0) {
+void func_80044C38_45838(UfoEffectState *arg0) {
     Func43CA4GameState *gameState = (Func43CA4GameState *)getCurrentAllocation();
     s32 pad[4];
 
@@ -2061,7 +2061,7 @@ void func_80044C38_45838(Func44BBCArg *arg0) {
         arg0->unk14.y += arg0->unkBC;
     }
 
-    func_80044578_45178(arg0);
+    renderUfoEffectWithWings(arg0);
 }
 
 void func_80044CA4_458A4(Func432D8Arg *arg0) {
