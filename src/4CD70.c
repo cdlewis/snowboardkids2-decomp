@@ -762,24 +762,24 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
 }
 
 typedef struct {
-    void *unk0;
+    void *playerIconAsset;
     u8 pad4[0x10];
-} ArrayElement_D0D0; // size 0x14
+} RaceProgressIndicatorPlayerEntry; // size 0x14
 
 typedef struct {
     u8 pad0[0x4];
-    void *unk4;
+    void *baseAsset;
     u8 pad8[0x8];
-    ArrayElement_D0D0 arr[4]; // offset 0x10
-} Struct_func_8004D0D0;
+    RaceProgressIndicatorPlayerEntry playerEntries[4]; // offset 0x10
+} RaceProgressIndicatorCleanupState;
 
-void func_8004D0D0_4DCD0(Struct_func_8004D0D0 *arg0) {
+void cleanupRaceProgressIndicatorTask(RaceProgressIndicatorCleanupState *state) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        arg0->arr[i].unk0 = freeNodeMemory(arg0->arr[i].unk0);
+        state->playerEntries[i].playerIconAsset = freeNodeMemory(state->playerEntries[i].playerIconAsset);
     }
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+    state->baseAsset = freeNodeMemory(state->baseAsset);
 }
 
 void func_8004D134_4DD34(Struct_func_8004D134 *arg0) {
