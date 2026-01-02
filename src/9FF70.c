@@ -2043,57 +2043,58 @@ s32 updateStunnedRecoveryFallingPhase(Player *player) {
     return 0;
 }
 
-extern s32 D_800BABD4_AAA84[3];
-s32 func_800B4DB8_A4C68(Player *arg0) {
-    s32 dist;
-    s32 temp;
+extern s32 recoverySlideBaseVelocity[3];
 
-    if (arg0->unkBBF == 0) {
-        arg0->unkB8C = 0x1E;
-        arg0->unkBBF++;
+s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
+    s32 velocityMagnitude;
+    s32 timerDelta;
+
+    if (player->unkBBF == 0) {
+        player->unkB8C = 0x1E;
+        player->unkBBF++;
     }
 
-    arg0->unkB84 |= 0x60;
-    arg0->unk44C.y -= 0x6000;
-    arg0->unkB88 = 3;
+    player->unkB84 |= 0x60;
+    player->unk44C.y -= 0x6000;
+    player->unkB88 = 3;
 
-    if (arg0->unkB84 & 1) {
-        arg0->unk44C.x -= arg0->unk44C.x >> 5;
-        arg0->unk44C.z -= arg0->unk44C.z >> 5;
+    if (player->unkB84 & 1) {
+        player->unk44C.x -= player->unk44C.x >> 5;
+        player->unk44C.z -= player->unk44C.z >> 5;
     } else {
-        applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
-        func_80050C80_51880(arg0, arg0->unkBCC & 0xF);
+        applyVelocityDeadzone(player, 0x100, 0x100, 0x100);
+        func_80050C80_51880(player, player->unkBCC & 0xF);
     }
 
-    dist = distance_3d(arg0->unk44C.x, arg0->unk44C.y, arg0->unk44C.z);
-    if (dist <= 0xFFFF) {
-        if (arg0->unkB84 & 2) {
-            rotateVectorY(D_800BABD4_AAA84, arg0->unkA94 + 0x1000, &arg0->unk44C);
+    velocityMagnitude = distance_3d(player->unk44C.x, player->unk44C.y, player->unk44C.z);
+    if (velocityMagnitude <= 0xFFFF) {
+        if (player->unkB84 & 2) {
+            rotateVectorY(recoverySlideBaseVelocity, player->unkA94 + 0x1000, &player->unk44C);
         } else {
-            rotateVectorY(D_800BABD4_AAA84, arg0->unkA94, &arg0->unk44C);
+            rotateVectorY(recoverySlideBaseVelocity, player->unkA94, &player->unk44C);
         }
     }
 
-    arg0->unkA94 = atan2Fixed(-arg0->unk44C.x, -arg0->unk44C.z);
-    if (arg0->unkB84 & 2) {
-        arg0->unkA94 += 0x1000;
+    player->unkA94 = atan2Fixed(-player->unk44C.x, -player->unk44C.z);
+    if (player->unkB84 & 2) {
+        player->unkA94 += 0x1000;
     }
 
-    decayPlayerSteeringAngles(arg0);
-    applyClampedVelocityToPosition(arg0);
-    func_8005D180_5DD80(arg0, 0xC);
+    decayPlayerSteeringAngles(player);
+    applyClampedVelocityToPosition(player);
+    func_8005D180_5DD80(player, 0xC);
 
-    if (arg0->unkB8C == 0) {
-        setPlayerBehaviorPhase(arg0, 2);
+    if (player->unkB8C == 0) {
+        setPlayerBehaviorPhase(player, 2);
     } else {
-        temp = func_8005D8C8_5E4C8(arg0);
-        arg0->unkB8C -= temp;
-        if (arg0->unkB8C < 0) {
-            arg0->unkB8C = 0;
+        timerDelta = func_8005D8C8_5E4C8(player);
+        player->unkB8C -= timerDelta;
+        if (player->unkB8C < 0) {
+            player->unkB8C = 0;
         }
     }
 
-    func_8005D804_5E404(arg0, 3, 0);
+    func_8005D804_5E404(player, 3, 0);
 
     return 0;
 }
