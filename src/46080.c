@@ -589,20 +589,20 @@ typedef struct {
     Transform3D matrix;
     u8 padding[0x1C];
     DisplayListObject displayList;
-    s32 unk78;
-    s16 unk7C;
-    s16 unk7E;
-    s8 unk80;
-    s8 unk81;
+    s32 baseY;
+    s16 rotationAngle;
+    s16 stateTimer;
+    s8 state;
+    s8 isSecondaryItemBox;
     u8 padding4[0x2];
-} func_80048AE8_496E8_Element;
+} ItemBox;
 
 typedef struct {
     u8 _pad[0x8];
-    func_80048AE8_496E8_Element *unk8;
+    ItemBox *itemBoxes;
     u8 _pad2[0xA];
-    s16 unk16;
-} func_80048AE8_496E8_arg;
+    s16 itemBoxCount;
+} ItemBoxController;
 
 typedef struct {
     u8 padding[0x18];
@@ -771,7 +771,7 @@ extern s32 identityMatrix[];
 extern void *D_80094DD0_959D0;
 extern s32 D_80090E2C_91A2C;
 
-void func_800491CC_49DCC(func_80048AE8_496E8_arg *arg0);
+void updateAllItemBoxes(ItemBoxController *arg0);
 void func_8004A634_4B234(func_8004A634_4B234_arg *arg0);
 void func_8004A850_4B450(func_8004A850_4B450_arg *arg0);
 void cleanupGoldCoinsTask(GoldCoinsTaskState *arg0);
@@ -2289,9 +2289,9 @@ s32 rollSecondaryItemDrop(Player *arg0, u8 *arg1) {
     return i + 1;
 }
 
-void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_arg *arg1) {
-    Vec3i sp10;
-    Vec3i *sp10Ptr;
+void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
+    Vec3i collisionPos;
+    Vec3i *collisionPosPtr;
     GameState *gameState;
     Player *player;
     s32 i;
@@ -2299,25 +2299,25 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
     s32 sinResult;
 
     gameState = (GameState *)getCurrentAllocation();
-    state = arg0->unk80;
+    state = itemBox->state;
 
     switch (state) {
         case 0:
             if (gameState->gamePaused == 0) {
-                sp10Ptr = &sp10;
-                memcpy(sp10Ptr, &arg0->displayList.transform.translation, 0xC);
-                sp10.y += 0x100000;
-                player = (Player *)func_8005B24C_5BE4C(sp10Ptr, -1, 0x100000);
+                collisionPosPtr = &collisionPos;
+                memcpy(collisionPosPtr, &itemBox->displayList.transform.translation, 0xC);
+                collisionPos.y += 0x100000;
+                player = (Player *)func_8005B24C_5BE4C(collisionPosPtr, -1, 0x100000);
                 if (player != NULL) {
-                    arg0->unk80 = arg0->unk80 + 1;
-                    func_80049794_4A394(&arg0->displayList, arg0->unk81);
+                    itemBox->state = itemBox->state + 1;
+                    func_80049794_4A394(&itemBox->displayList, itemBox->isSecondaryItemBox);
                     if ((player->unkB6C >= 100) || (player->unkBDA != 0)) {
                         func_80059A48_5A648(player, -100);
-                        if (arg0->unk81 != 0) {
+                        if (itemBox->isSecondaryItemBox != 0) {
                             if (player->unkBD4 == 7) {
                                 gameState->unk5B = gameState->unk5B + 1;
                             }
-                            player->unkBD4 = rollSecondaryItemDrop(player, (u8 *)arg1);
+                            player->unkBD4 = rollSecondaryItemDrop(player, (u8 *)controller);
                             if (gameState->unk5B < 6) {
                                 if ((player->unkBD4 & 0xFF) == 7) {
                                     player->unkBD4 = 10;
@@ -2328,13 +2328,13 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
                             }
                             player->unkBD8 |= 2;
                         } else {
-                            player->unkBD2 = rollPrimaryItemDrop(player, (u8 *)arg1);
+                            player->unkBD2 = rollPrimaryItemDrop(player, (u8 *)controller);
                             player->unkBD3 = 3;
                             player->unkBD8 |= 1;
                         }
-                        func_80056B7C_5777C(&arg0->displayList.transform.translation, 8);
+                        func_80056B7C_5777C(&itemBox->displayList.transform.translation, 8);
                     } else {
-                        func_80056B7C_5777C(&arg0->displayList.transform.translation, 9);
+                        func_80056B7C_5777C(&itemBox->displayList.transform.translation, 9);
                     }
                 } else if (gameState->unk79 == 0) {
                     randB();
@@ -2342,59 +2342,60 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
             }
             break;
         case 1:
-            if (arg0->unk7C != 0x1000) {
+            if (itemBox->rotationAngle != 0x1000) {
                 if (gameState->gamePaused == 0) {
-                    arg0->unk7C = (arg0->unk7C + 0x100) & 0x1FFF;
+                    itemBox->rotationAngle = (itemBox->rotationAngle + 0x100) & 0x1FFF;
                 }
-                createYRotationMatrix(&arg0->matrix, arg0->unk7C);
+                createYRotationMatrix(&itemBox->matrix, itemBox->rotationAngle);
             } else {
-                arg0->unk80 = state + 1;
-                arg0->unk7E = 4;
+                itemBox->state = state + 1;
+                itemBox->stateTimer = 4;
             }
             break;
         case 2:
             if (gameState->gamePaused == 0) {
-                arg0->unk7E = arg0->unk7E - 1;
+                itemBox->stateTimer = itemBox->stateTimer - 1;
             }
-            if (arg0->unk7E == 0) {
-                arg0->unk80 = arg0->unk80 + 1;
+            if (itemBox->stateTimer == 0) {
+                itemBox->state = itemBox->state + 1;
             }
             break;
         case 3:
-            if (arg0->unk7C != 0) {
+            if (itemBox->rotationAngle != 0) {
                 if (gameState->gamePaused == 0) {
-                    arg0->unk7C = (arg0->unk7C + 0x100) & 0x1FFF;
+                    itemBox->rotationAngle = (itemBox->rotationAngle + 0x100) & 0x1FFF;
                 }
-                createYRotationMatrix(&arg0->matrix, arg0->unk7C);
+                createYRotationMatrix(&itemBox->matrix, itemBox->rotationAngle);
             } else {
-                arg0->unk80 = 0;
-                arg0->displayList.transform.translation.y = arg0->unk78 + 0x300000;
+                itemBox->state = 0;
+                itemBox->displayList.transform.translation.y = itemBox->baseY + 0x300000;
             }
             break;
     }
 
-    if (arg0->unk80 == 0) {
+    if (itemBox->state == 0) {
         if (gameState->gamePaused != 0) {
             i = 0;
-        } else if (arg0->displayList.transform.translation.y > arg0->unk78) {
-            arg0->displayList.transform.translation.y = arg0->displayList.transform.translation.y + (s32)0xFFFA0000;
+        } else if (itemBox->displayList.transform.translation.y > itemBox->baseY) {
+            itemBox->displayList.transform.translation.y =
+                itemBox->displayList.transform.translation.y + (s32)0xFFFA0000;
             i = 0;
         } else {
             i = 0;
         }
         do {
-            enqueueDisplayListWithFrustumCull(i, &arg0->displayList);
+            enqueueDisplayListWithFrustumCull(i, &itemBox->displayList);
             i++;
         } while (i < 4);
     }
 
-    arg0->matrix.translation.y = arg0->unk78;
+    itemBox->matrix.translation.y = itemBox->baseY;
     sinResult = approximateSin((D_8009ADE0_9B9E0 << 8) & 0x1F00);
     i = 0;
-    arg0->matrix.translation.y += 0x200000 + (sinResult << 5);
+    itemBox->matrix.translation.y += 0x200000 + (sinResult << 5);
 
     do {
-        func_8006417C_64D7C(i, (DisplayListObject *)arg0);
+        func_8006417C_64D7C(i, (DisplayListObject *)itemBox);
         i++;
     } while (i < 4);
 }
@@ -2459,14 +2460,14 @@ void func_80049104_49D04(func_80048E34_49A34_arg *arg0) {
         func_80048F0C_49B0C(arg0, i);
     }
 
-    setCallback(&func_800491CC_49DCC);
+    setCallback(&updateAllItemBoxes);
 }
 
-void func_800491CC_49DCC(func_80048AE8_496E8_arg *arg0) {
+void updateAllItemBoxes(ItemBoxController *controller) {
     s32 i;
 
-    for (i = 0; i < arg0->unk16; i++) {
-        func_80048AE8_496E8(&arg0->unk8[i], arg0);
+    for (i = 0; i < controller->itemBoxCount; i++) {
+        updateItemBox(&controller->itemBoxes[i], controller);
     }
 }
 

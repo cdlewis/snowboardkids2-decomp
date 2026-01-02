@@ -2718,3 +2718,5 @@ allocateAudioResources = 0x80056080; // rom:0x56C80
 updateTrickRotationTransform = 0x800B4058; // rom:0xA3F08
 decayPlayerSteeringAngles = 0x800B40D4; // rom:0xA3F84
 rollPrimaryItemDrop = 0x800488A0; // rom:0x494A0
+updateItemBox = 0x80048AE8; // rom:0x496E8
+updateAllItemBoxes = 0x800491CC; // rom:0x49DCC
