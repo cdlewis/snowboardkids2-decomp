@@ -655,7 +655,7 @@ s32 cutsceneChrKageDisp_validate(void) {
 void cutsceneChrKageDisp_exec(cutsceneChrKageDisp_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *slot = &arg1->slots[arg2];
 
-    if (arg0->unk0 != 0) {
+    if (arg0->hideShadow != 0) {
         disableModelShadow(slot->model);
     } else {
         enableModelShadow(slot->model);
