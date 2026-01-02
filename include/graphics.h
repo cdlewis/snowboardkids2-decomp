@@ -3,7 +3,7 @@
 #include "common.h"
 #include "geometry.h"
 
-void func_80056080_56C80(void);
+void allocateAudioResources(void);
 void func_8005610C_56D0C(void);
 void func_80056914_57514(void *source);
 void func_80056990_57590(s32 arg0, s32 arg1);

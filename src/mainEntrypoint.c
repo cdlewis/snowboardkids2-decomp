@@ -39,7 +39,7 @@ void mainThreadEntrypoint(void *arg) {
 
     addViConfig(&D_800A32D0_A3ED0, &mainMessageQueue, 2);
     func_800693C4_69FC4(&initializeOverlaySystem, 0x64);
-    func_800693C4_69FC4(&func_80056080_56C80, 0xFA);
+    func_800693C4_69FC4(&allocateAudioResources, 0xFA);
 
     while (TRUE) {
         osRecvMesg(&mainMessageQueue, (OSMesg *)&message, 1);

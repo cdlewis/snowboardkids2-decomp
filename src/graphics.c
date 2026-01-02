@@ -99,7 +99,7 @@ typedef struct {
 extern GraphicsDataSegment D_800937E8_943E8[];
 extern GraphicsDataSegment D_80093974_94574[];
 
-void func_80056080_56C80(void) {
+void allocateAudioResources(void) {
     u8 sp10;
 
     gGraphicsManager = allocateTaskMemory(0x53C);
