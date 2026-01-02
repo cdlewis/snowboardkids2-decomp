@@ -148,18 +148,18 @@ typedef struct {
 } ExpandStarEffectState;
 
 typedef struct {
-    u8 pad0[0x14]; /* 0x00 */
-    Vec3i unk14;   /* 0x14 */
-    void *unk20;   /* 0x20 */
-    void *unk24;   /* 0x24 */
-    void *unk28;   /* 0x28 */
-    s32 unk2C;     /* 0x2C */
-    u8 pad30[0xC]; /* 0x30 */
-    void *unk3C;   /* 0x3C */
-    s32 unk40;     /* 0x40 */
-    s16 unk44;     /* 0x44 */
-    s16 unk46;     /* 0x46 */
-} Func43DC0State;
+    u8 pad0[0x14];     /* 0x00 */
+    Vec3i position;    /* 0x14 */
+    void *displayData; /* 0x20 */
+    void *asset1;      /* 0x24 */
+    void *asset2;      /* 0x28 */
+    s32 unk2C;         /* 0x2C */
+    u8 pad30[0xC];     /* 0x30 */
+    Player *player;    /* 0x3C */
+    s32 velocityY;     /* 0x40 */
+    s16 rotation;      /* 0x44 */
+    s16 scale;         /* 0x46 */
+} GhostEffectState;
 
 typedef struct {
     u8 pad0[0x14];            /* 0x00 */
@@ -296,9 +296,9 @@ void func_80044888_45488(Func44BBCArg *);
 void func_80044990_45590(Func44BBCArg *);
 void func_80044AB8_456B8(Func44BBCArg *);
 void func_80044C38_45838(Func44BBCArg *);
-void func_80044018_44C18(Func43DC0State *);
-void func_80043E24_44A24(Func43DC0State *);
-void func_80043F8C_44B8C(Func43DC0State *);
+void cleanupGhostEffect(GhostEffectState *);
+void updateGhostEffect(GhostEffectState *);
+void fadeOutGhostEffect(GhostEffectState *);
 void contractStarEffect(StarEffectState *);
 void updateStarEffect(StarEffectState *);
 void expandStarEffect(ExpandStarEffectState *);
@@ -1655,18 +1655,18 @@ void spawnGoldStealEffect(void *arg0, void *arg1, s16 arg2) {
     }
 }
 
-void func_80043DC0_449C0(Func43DC0State *arg0) {
+void initGhostEffect(GhostEffectState *arg0) {
     getCurrentAllocation();
-    arg0->unk20 = &D_8009A760_9B360;
-    arg0->unk24 = loadAsset_B7E70();
-    arg0->unk28 = loadAsset_216290();
+    arg0->displayData = &D_8009A760_9B360;
+    arg0->asset1 = loadAsset_B7E70();
+    arg0->asset2 = loadAsset_216290();
     arg0->unk2C = 0;
-    arg0->unk46 = 0x200;
-    setCleanupCallback(func_80044018_44C18);
-    setCallbackWithContinue(func_80043E24_44A24);
+    arg0->scale = 0x200;
+    setCleanupCallback(cleanupGhostEffect);
+    setCallbackWithContinue(updateGhostEffect);
 }
 
-void func_80043E24_44A24(Func43DC0State *arg0) {
+void updateGhostEffect(GhostEffectState *arg0) {
     Func43CA4GameState *allocation;
     Player *player;
     Player *temp_player;
@@ -1675,23 +1675,23 @@ void func_80043E24_44A24(Func43DC0State *arg0) {
     s32 i;
 
     allocation = (Func43CA4GameState *)getCurrentAllocation();
-    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk44);
-    func_8006B084_6BC84(&D_8009A8B0_9B4B0, (u8 *)arg0->unk3C + 0x3F8, arg0);
+    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->rotation);
+    func_8006B084_6BC84(&D_8009A8B0_9B4B0, (u8 *)arg0->player + 0x3F8, arg0);
 
-    if (arg0->unk46 == 0x200) {
-        func_80056B7C_5777C(&arg0->unk14, 0x1D);
+    if (arg0->scale == 0x200) {
+        func_80056B7C_5777C(&arg0->position, 0x1D);
     }
 
-    if (arg0->unk46 != 0x2000) {
-        arg0->unk46 += 0x200;
+    if (arg0->scale != 0x2000) {
+        arg0->scale += 0x200;
     }
 
-    scaleMatrix((Transform3D *)arg0, arg0->unk46, arg0->unk46, arg0->unk46);
+    scaleMatrix((Transform3D *)arg0, arg0->scale, arg0->scale, arg0->scale);
 
     if (gFrameCounter & 4) {
-        arg0->unk20 = &D_8009A760_9B360;
+        arg0->displayData = &D_8009A760_9B360;
     } else {
-        arg0->unk20 = &D_8009A770_9B370;
+        arg0->displayData = &D_8009A770_9B370;
     }
 
     i = 0;
@@ -1700,17 +1700,17 @@ void func_80043E24_44A24(Func43DC0State *arg0) {
         i++;
     } while (i < 4);
 
-    player = arg0->unk3C;
+    player = arg0->player;
     if (player->unkB84 & 0x80000) {
         player->unkBA6 = 0;
     }
 
-    temp_player = arg0->unk3C;
+    temp_player = arg0->player;
     count = temp_player->unkBA6;
     if (count != 0) {
         if (allocation->unk76 == 0) {
             temp_player->unkBA6 = count - 1;
-            player = arg0->unk3C;
+            player = arg0->player;
             new_count = player->unkBA6;
             if (new_count == 0) {
                 if (player->unkBBB == 0x11) {
@@ -1720,23 +1720,23 @@ void func_80043E24_44A24(Func43DC0State *arg0) {
         }
     } else {
         temp_player->unkBD1 = 0;
-        arg0->unk40 = 0x40000;
-        setCallback(func_80043F8C_44B8C);
+        arg0->velocityY = 0x40000;
+        setCallback(fadeOutGhostEffect);
     }
 }
 
-void func_80043F8C_44B8C(Func43DC0State *arg0) {
+void fadeOutGhostEffect(GhostEffectState *arg0) {
     GameState *state;
     s32 i;
     s32 pad[8];
 
     state = getCurrentAllocation();
     if (state->gamePaused == 0) {
-        arg0->unk40 = arg0->unk40 - 0x8000;
-        if ((s32)0xFFF80000 >= arg0->unk40) {
+        arg0->velocityY = arg0->velocityY - 0x8000;
+        if ((s32)0xFFF80000 >= arg0->velocityY) {
             func_80069CF8_6A8F8();
         }
-        arg0->unk14.y = arg0->unk14.y + arg0->unk40;
+        arg0->position.y = arg0->position.y + arg0->velocityY;
     }
 
     for (i = 0; i < 4; i++) {
@@ -1744,20 +1744,20 @@ void func_80043F8C_44B8C(Func43DC0State *arg0) {
     }
 }
 
-void func_80044018_44C18(Func43DC0State *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupGhostEffect(GhostEffectState *arg0) {
+    arg0->asset1 = freeNodeMemory(arg0->asset1);
+    arg0->asset2 = freeNodeMemory(arg0->asset2);
 }
 
-void *func_80044050_44C50(Player *arg0) {
-    Func43DC0State *task;
+void *spawnGhostEffect(Player *arg0) {
+    GhostEffectState *task;
 
-    task = scheduleTask(func_80043DC0_449C0, 0, 0, 0xC8);
+    task = scheduleTask(initGhostEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        task->unk3C = arg0;
-        task->unk44 = 0;
+        task->player = arg0;
+        task->rotation = 0;
         if (arg0->unkB84 & 2) {
-            task->unk44 = 0x1000;
+            task->rotation = 0x1000;
         }
     }
     return task;
