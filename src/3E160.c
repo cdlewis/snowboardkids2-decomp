@@ -61,7 +61,7 @@ void scheduleRaceTasks(void);
 void awaitRaceAssetsLoaded(void);
 void waitForFadeAndInitPlayers(void);
 void awaitBossResultAndFadeOut(void);
-void func_800401A0_40DA0(void);
+void awaitMeterWinContinuePress(void);
 void awaitPlayersAndPlayRaceMusic(void);
 void loadPlayerAssets(void);
 void func_8003F368_3FF68(void);
@@ -72,8 +72,8 @@ void awaitSkillLossAndFadeOut(void);
 void awaitShotCrossWinAndPromptContinue(void);
 void awaitShotCrossLossAndFadeOut(void);
 void func_80040304_40F04(void);
-void func_8004013C_40D3C(void);
-void func_800401E8_40DE8(void);
+void awaitMeterWinAndPromptContinue(void);
+void awaitMeterLossAndFadeOut(void);
 
 typedef struct {
     Node_70B00 *audioPlayer0;
@@ -1154,10 +1154,10 @@ void awaitShotCrossLossAndFadeOut(void) {
     }
 }
 
-void func_80040010_40C10(void) {
+void handleMeterGameResult(void) {
     GameState *state;
-    s32 value;
-    s32 score;
+    s32 meterValue;
+    s32 goldReward;
     void (*handler)(void);
 
     state = (GameState *)getCurrentAllocation();
@@ -1167,16 +1167,16 @@ void func_80040010_40C10(void) {
             terminateTasksByTypeAndID(0, 1);
             func_8004FF60_50B60(1);
 
-            value = state->players->unkB70;
-            score = ((value * 2 + value) * 8 + value) * 2;
+            meterValue = state->players->unkB70;
+            goldReward = ((meterValue * 2 + meterValue) * 8 + meterValue) * 2;
 
-            if (value >= 0x12C) {
+            if (meterValue >= 0x12C) {
                 D_800A24A0_A30A0 = 5;
                 func_800574A0_580A0(8);
                 func_8004F194_4FD94(0x78);
                 func_8004E6A4_4F2A4(0, 0);
 
-                score += 0x1388;
+                goldReward += 0x1388;
 
                 if (state->players->unkB70 >= 0x258) {
                     D_800A24A0_A30A0 = 8;
@@ -1187,12 +1187,12 @@ void func_80040010_40C10(void) {
             }
 
             state->unk7B = 1;
-            addPlayerGold(score);
-            handler = func_8004013C_40D3C;
+            addPlayerGold(goldReward);
+            handler = awaitMeterWinAndPromptContinue;
         } else {
             D_800A24A0_A30A0 = 6;
             func_800574A0_580A0(9);
-            handler = func_800401E8_40DE8;
+            handler = awaitMeterLossAndFadeOut;
             state->unk7B = 1;
         }
         setGameStateHandler(handler);
@@ -1202,22 +1202,22 @@ void func_80040010_40C10(void) {
     }
 }
 
-void func_8004013C_40D3C(void) {
-    s32 temp_v0_2;
-    GameState *temp_v0;
+void awaitMeterWinAndPromptContinue(void) {
+    s32 delayTimer;
+    GameState *state;
 
-    temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v0_2 = temp_v0->unk4C - 1;
-    temp_v0->unk4C = temp_v0_2;
-    if (temp_v0_2 == 0) {
-        temp_v0->unk7C = 1;
+    state = (GameState *)getCurrentAllocation();
+    delayTimer = state->unk4C - 1;
+    state->unk4C = delayTimer;
+    if (delayTimer == 0) {
+        state->unk7C = 1;
         func_800574A0_580A0(0xA);
         scheduleTask(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
-        setGameStateHandler(&func_800401A0_40DA0);
+        setGameStateHandler(&awaitMeterWinContinuePress);
     }
 }
 
-void func_800401A0_40DA0(void) {
+void awaitMeterWinContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
@@ -1225,11 +1225,11 @@ void func_800401A0_40DA0(void) {
     }
 }
 
-void func_800401E8_40DE8(void) {
+void awaitMeterLossAndFadeOut(void) {
     GameState *state = (GameState *)getCurrentAllocation();
-    s32 temp = state->unk4C - 1;
-    state->unk4C = temp;
-    if (temp == 0) {
+    s32 delayTimer = state->unk4C - 1;
+    state->unk4C = delayTimer;
+    if (delayTimer == 0) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
         setGameStateHandler(func_80040608_41208);

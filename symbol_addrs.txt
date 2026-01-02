@@ -2420,3 +2420,7 @@ handleShotCrossGameResult = 0x8003FDD4; // rom:0x409D4
 awaitShotCrossWinAndPromptContinue = 0x8003FF14; // rom:0x40B14
 awaitShotCrossWinContinuePress = 0x8003FF78; // rom:0x40B78
 awaitShotCrossLossAndFadeOut = 0x8003FFC0; // rom:0x40BC0
+handleMeterGameResult = 0x80040010; // rom:0x40C10
+awaitMeterWinAndPromptContinue = 0x8004013C; // rom:0x40D3C
+awaitMeterWinContinuePress = 0x800401A0; // rom:0x40DA0
+awaitMeterLossAndFadeOut = 0x800401E8; // rom:0x40DE8
