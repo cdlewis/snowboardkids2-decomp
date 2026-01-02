@@ -1,3 +1,6 @@
+initPauseMenuDisplayTask = 0x8004E6F8; // rom:0x4F2F8
+renderPauseMenuDisplay = 0x8004E794; // rom:0x4F394
+cleanupPauseMenuDisplayTask = 0x8004E884; // rom:0x4F484
 cleanupItemBoxSystem = 0x80049230; // rom:0x49E30
 scheduleItemBoxSystemTask = 0x80049280; // rom:0x49E80
 initItemBoxBurstEffect = 0x800492C0; // rom:0x49EC0

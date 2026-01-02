@@ -1565,65 +1565,65 @@ void spawnVictorySnowflakes(s16 playerIndex, s16 useSmallSprite) {
 
 typedef struct {
     u8 pad0[0x4];
-    void *unk4;
+    void *spriteAsset;
     u8 pad8[0x1C];
-    void *unk24;
-} Struct_func_8004E884;
+    void *backgroundAsset;
+} PauseMenuCleanupState;
 
-void func_8004E794_4F394(Struct_func_8004E6F8 *);
-void func_8004E884_4F484(Struct_func_8004E884 *);
+void renderPauseMenuDisplay(PauseMenuDisplayState *);
+void cleanupPauseMenuDisplayTask(PauseMenuCleanupState *);
 
-void func_8004E6F8_4F2F8(Struct_func_8004E6F8 *arg0) {
+void initPauseMenuDisplayTask(PauseMenuDisplayState *state) {
     s32 i;
-    s16 unk0val;
-    s32 x;
+    s16 xPos;
+    s32 yPos;
 
     getCurrentAllocation();
-    arg0->unk24 = loadAsset_34F7E0();
-    arg0->elements[0].unk4 = loadAsset_34CB50();
+    state->backgroundAsset = loadAsset_34F7E0();
+    state->elements[0].spriteAsset = loadAsset_34CB50();
 
     i = 0;
-    unk0val = -0x1C;
-    x = -0xC;
+    xPos = -0x1C;
+    yPos = -0xC;
     do {
-        arg0->elements[i].unk0 = unk0val;
-        arg0->elements[i].unk2 = x;
-        arg0->elements[i].unk4 = arg0->elements[0].unk4;
-        x += 8;
+        state->elements[i].x = xPos;
+        state->elements[i].y = yPos;
+        state->elements[i].spriteAsset = state->elements[0].spriteAsset;
+        yPos += 8;
         i++;
     } while (i < 3);
 
-    arg0->elements[0].unk8 = 0x1B;
-    arg0->elements[1].unk8 = 0x1C;
-    arg0->elements[2].unk8 = 0x1D;
+    state->elements[0].spriteIndex = 0x1B;
+    state->elements[1].spriteIndex = 0x1C;
+    state->elements[2].spriteIndex = 0x1D;
 
-    setCleanupCallback(func_8004E884_4F484);
-    setCallback(func_8004E794_4F394);
+    setCleanupCallback(cleanupPauseMenuDisplayTask);
+    setCallback(renderPauseMenuDisplay);
 }
 
-void func_8004E794_4F394(Struct_func_8004E6F8 *arg0) {
-    GameState *allocation;
+void renderPauseMenuDisplay(PauseMenuDisplayState *state) {
+    GameState *gameState;
     s32 i;
 
-    allocation = (GameState *)getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
     i = 0;
-    if (allocation->gamePaused == 1) {
+    if (gameState->gamePaused == 1) {
         do {
-            if (allocation->unk77 == i) {
-                arg0->elements[i].padA[0] = 0x12;
+            if (gameState->pauseMenuSelection == i) {
+                state->elements[i].padA[0] = 0x12;
             } else {
-                arg0->elements[i].padA[0] = 0x11;
+                state->elements[i].padA[0] = 0x11;
             }
-            debugEnqueueCallback(0xC, 6, func_80010240_10E40, &arg0->elements[i]);
+            debugEnqueueCallback(0xC, 6, func_80010240_10E40, &state->elements[i]);
             i++;
         } while (i < 3);
-        func_8006D4B8_6E0B8(arg0->unk24, -0x20, -8, 4, 1, 0, 0x80, 0, 0, 0xFF, 0x80, 0xC, 6);
+        func_8006D4B8_6E0B8(state->backgroundAsset, -0x20, -8, 4, 1, 0, 0x80, 0, 0, 0xFF, 0x80, 0xC, 6);
     }
 }
 
-void func_8004E884_4F484(Struct_func_8004E884 *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
+void cleanupPauseMenuDisplayTask(PauseMenuCleanupState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
+    state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
 }
 
 typedef struct {

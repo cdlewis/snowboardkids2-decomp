@@ -259,7 +259,7 @@ typedef struct {
     u8 unk74;
     u8 PAD_6B[0x1];
     u8 gamePaused;
-    u8 unk77;
+    u8 pauseMenuSelection;
     u8 unk78;
     u8 unk79;
     u8 unk7A;
