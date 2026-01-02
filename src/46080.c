@@ -751,7 +751,7 @@ extern void *D_80095930_96530;
 extern Gfx D_8009A780_9B380[];
 extern s32 D_800A8B14_9FE84;
 extern CompressedAsset D_80090BD4_917D4[];
-extern s32 D_80090B8C_9178C[3];
+extern s32 gFlyingSceneryInitOffset[3];
 extern CompressedAsset D_80090AF0_916F0[];
 extern s32 D_8009A8A4_9B4A4;
 extern CompressedAsset D_80090CEC_918EC[];
@@ -1363,7 +1363,7 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
     createYRotationMatrix((Transform3D *)arg0, rotation + levelData->unk8);
     arg0->displayListObject.transform.translation.y = position.y;
 
-    transformVector2(&D_80090B8C_9178C, arg0, &position);
+    transformVector2(&gFlyingSceneryInitOffset, arg0, &position);
 
     arg0->displayListObject.transform.translation.x = levelData->unk0 + position.x;
     arg0->displayListObject.transform.translation.z = levelData->unk4 + position.z;
