@@ -886,7 +886,7 @@ void renderScrollingSceneryTransparent(DisplayListObject *);
 void renderScrollingSceneryOverlay(DisplayListObject *);
 void func_80047718_48318(func_80047718_48318_arg *);
 void updateFlyingSceneryHorizontalStep(FlyingSceneryState *);
-void func_800471D0_47DD0(FlyingSceneryState *arg0);
+void updateFlyingSceneryVerticalStep(FlyingSceneryState *state);
 void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *);
 void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
 void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
@@ -1436,7 +1436,7 @@ void updateFlyingSceneryHorizontalStep(FlyingSceneryState *state) {
             state->frameCounter--;
         } else {
             state->frameCounter = 0xB4;
-            setCallback(func_800471D0_47DD0);
+            setCallback(updateFlyingSceneryVerticalStep);
         }
     }
 
@@ -1445,29 +1445,29 @@ void updateFlyingSceneryHorizontalStep(FlyingSceneryState *state) {
     }
 }
 
-void func_800471D0_47DD0(FlyingSceneryState *arg0) {
+void updateFlyingSceneryVerticalStep(FlyingSceneryState *state) {
     Allocation_47D1C *allocation;
-    Vec3i stackVec;
+    Vec3i movement;
     s32 i;
 
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        transformVector2(D_80090BA4_917A4, arg0, &stackVec);
+        transformVector2(D_80090BA4_917A4, state, &movement);
 
-        arg0->displayListObject.transform.translation.x += stackVec.x;
-        arg0->displayListObject.transform.translation.y += stackVec.y;
-        arg0->displayListObject.transform.translation.z += stackVec.z;
+        state->displayListObject.transform.translation.x += movement.x;
+        state->displayListObject.transform.translation.y += movement.y;
+        state->displayListObject.transform.translation.z += movement.z;
 
-        if (arg0->frameCounter != 0) {
-            arg0->frameCounter -= 1;
+        if (state->frameCounter != 0) {
+            state->frameCounter -= 1;
         } else {
             setCallback(&func_8004728C_47E8C);
         }
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
     }
 }
 
