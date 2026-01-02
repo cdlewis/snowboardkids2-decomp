@@ -74,8 +74,8 @@ void disableSlotUpdate(CutsceneManager *arg0, s16 arg1) {
     arg0->slots[arg1].needsUpdate = 0;
 }
 
-CutsceneSlot *func_800B2A78_1DFB28(CutsceneManager *arg0, s16 arg1) {
-    return &arg0->slots[arg1];
+CutsceneSlot *getCutsceneSlot(CutsceneManager *manager, s16 slotIndex) {
+    return &manager->slots[slotIndex];
 }
 
 void func_800B2AA0(CutsceneManager *arg0, Node_70B00 *arg1, void *arg2, void *arg3) {

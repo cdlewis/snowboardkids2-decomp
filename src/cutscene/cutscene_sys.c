@@ -75,7 +75,7 @@ s32 cutsceneSysFlash_validate(void) {
 void cutsceneSysFlash_setup(func_800B2A24_1DFAD4_arg_item *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *temp_v0;
 
-    temp_v0 = func_800B2A78_1DFB28(arg1, arg2);
+    temp_v0 = getCutsceneSlot(arg1, arg2);
     temp_v0->unk0.One.unk0 = arg0->unk0.One.unk0;
     temp_v0->unk0.One.unkA = 0xFF;
     memcpy(&temp_v0->unk0.One.unk2[0], &arg0->unk0.One.unk2[0], 4);
@@ -89,7 +89,7 @@ void cutsceneSysFlash_update(CutsceneManager *a0, s8 a1) {
     s32 temp;
     u16 *check_ptr;
 
-    s0 = func_800B2A78_1DFB28(a0, a1);
+    s0 = getCutsceneSlot(a0, a1);
 
     if (s0->unk0.One.unk0 > 0) {
         temp = s0->unk0.One.unkA & 1;
@@ -178,7 +178,7 @@ s32 cutsceneSysCurtain_validate(void) {
 void cutsceneSysCurtain_exec(CurtainParams *params, CutsceneManager *cutsceneManager, s8 idx) {
     CutsceneSlot *item;
 
-    item = func_800B2A78_1DFB28(cutsceneManager, idx);
+    item = getCutsceneSlot(cutsceneManager, idx);
 
     item->unk0.CurtainPayload.unk0 = (params->unk0 << 16) / 100;
 
@@ -202,7 +202,7 @@ void cutsceneSysCurtain_update(CutsceneManager *arg0, s8 arg1) {
     s32 temp_v1;
     s32 temp_a0_val;
 
-    temp_a0 = func_800B2A78_1DFB28(arg0, arg1);
+    temp_a0 = getCutsceneSlot(arg0, arg1);
     temp_v1 = arg0->cameraAnimationTimer + temp_a0->unk0.Two.unk4;
     arg0->cameraAnimationTimer = temp_v1;
 

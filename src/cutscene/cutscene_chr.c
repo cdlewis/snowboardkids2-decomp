@@ -535,7 +535,7 @@ void cutsceneChrAlpha_exec(cutsceneChrAlpha_exec_arg *arg0, CutsceneManager *arg
     CutsceneSlot *currentSlot;
     u8 currentAlpha;
 
-    slot = func_800B2A78_1DFB28(arg1, arg2);
+    slot = getCutsceneSlot(arg1, arg2);
     currentSlot = &arg1->slots[arg2];
     slot->unk0.ChrPayload.unk0 = arg0->duration;
 
@@ -563,7 +563,7 @@ void cutsceneChrAlpha_update(CutsceneManager *arg0, s8 arg1) {
     CutsceneSlot *managerSlot;
     s32 newValue;
 
-    slot = func_800B2A78_1DFB28(arg0, arg1);
+    slot = getCutsceneSlot(arg0, arg1);
     managerSlot = &arg0->slots[arg1];
 
     if (slot->unk0.ChrPayload.unk0 > 0) {

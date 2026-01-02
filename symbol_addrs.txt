@@ -760,6 +760,7 @@ initializeSlotState = 0x800B0534; // rom:0x1DD5E4
 getStateEntry = 0x800B3F48; // rom:0x1E0FF8
 findEventAtFrame = 0x800B3C7C; // rom:0x1E0D2C
 getCutsceneSlotCount = 0x800B3460; // rom:0x1E0510
+getCutsceneSlot = 0x800B2A78; // rom:0x1DFB28
 processCutsceneFrame = 0x800B305C;
 
 EepromSaveData = 0x800A8D14;
