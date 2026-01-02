@@ -511,12 +511,12 @@ typedef struct {
 } AllocationData;
 
 typedef struct {
-    void *unk0;
-} Struct_func_800482A4_48EA4;
+    void *assetData;
+} PlayerAuraCleanupState;
 
 typedef struct {
-    void *unk0;
-} Struct_func_80047EBC_48ABC;
+    void *assetData;
+} PlayerAuraTask;
 
 typedef struct {
     u8 _pad0[0x44];
@@ -531,21 +531,21 @@ typedef struct {
 typedef struct {
     s32 unk0;
     s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    s32 posX;
+    s32 posY;
+    s32 posZ;
     u8 _pad14[0xC];
-} Element_80047F90;
+} PlayerAuraElement;
 
 typedef struct {
-    void *unk0;
-    AssetMetadata_46080 unk4;
-    AssetMetadata_46080 unk24;
-    AssetMetadata_46080 unk44;
-    Player *unk64;
-    s16 unk68;
-    s16 unk6A;
-} Struct_func_80047EFC_48AFC;
+    void *assetData;
+    AssetMetadata_46080 element0;
+    AssetMetadata_46080 element1;
+    AssetMetadata_46080 element2;
+    Player *player;
+    s16 holdTimer;
+    s16 animationAngle;
+} PlayerAuraState;
 
 typedef struct {
     s8 visible;
@@ -657,8 +657,8 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x64];
-    void *unk64;
-} Struct_func_800482D0_48ED0_task;
+    void *player;
+} PlayerAuraTaskParams;
 
 typedef struct {
     u8 _pad0[0x44];
@@ -834,11 +834,11 @@ void renderScrollingSceneryOverlay(DisplayListObject *);
 void cleanupFlyingSceneryTask(CourseSceneryCleanupArg *);
 void updateFlyingSceneryHorizontalStep(FlyingSceneryState *);
 void updateFlyingSceneryVerticalStep(FlyingSceneryState *state);
-void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *);
-void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
-void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
-void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *);
-void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *);
+void updatePlayerAuraHolding(PlayerAuraState *);
+void loadPlayerAuraData(PlayerAuraState *);
+void updatePlayerAuraRising(PlayerAuraState *);
+void updatePlayerAuraDescending(PlayerAuraState *);
+void cleanupPlayerAuraTask(PlayerAuraCleanupState *);
 void renderGoldCoins(GoldCoinRenderState *state);
 void func_80048834_49434(Struct_func_80048834_49434 *arg0);
 void func_80048350_48F50(func_80048350_48F50_arg *arg0);
@@ -1831,28 +1831,28 @@ void scheduleGoldCoinsTask(s16 courseIndex) {
     }
 }
 
-void func_80047EBC_48ABC(Struct_func_80047EBC_48ABC *arg0) {
-    arg0->unk0 = loadAsset_34CB50();
-    setCleanupCallback(&func_800482A4_48EA4);
-    setCallbackWithContinue(&func_80047EFC_48AFC);
+void initPlayerAuraTask(PlayerAuraTask *task) {
+    task->assetData = loadAsset_34CB50();
+    setCleanupCallback(&cleanupPlayerAuraTask);
+    setCallbackWithContinue(&loadPlayerAuraData);
 }
 
-void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *arg0) {
+void loadPlayerAuraData(PlayerAuraState *state) {
     AllocationType_46080 *alloc;
 
     alloc = (AllocationType_46080 *)getCurrentAllocation();
-    loadAssetMetadata(&arg0->unk4.asset, arg0->unk0, 2);
-    loadAssetMetadata(&arg0->unk24.asset, arg0->unk0, 3);
-    loadAssetMetadata(&arg0->unk44.asset, arg0->unk0, 4);
+    loadAssetMetadata(&state->element0.asset, state->assetData, 2);
+    loadAssetMetadata(&state->element1.asset, state->assetData, 3);
+    loadAssetMetadata(&state->element2.asset, state->assetData, 4);
 
-    arg0->unk4.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0xC0);
-    arg0->unk24.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0x100);
-    arg0->unk44.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0x140);
-    arg0->unk6A = 0;
-    setCallbackWithContinue(&func_80047F90_48B90);
+    state->element0.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0xC0);
+    state->element1.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0x100);
+    state->element2.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0x140);
+    state->animationAngle = 0;
+    setCallbackWithContinue(&updatePlayerAuraRising);
 }
 
-void func_80047F90_48B90(Struct_func_80047EFC_48AFC *arg0) {
+void updatePlayerAuraRising(PlayerAuraState *state) {
     GameState *allocation;
     s32 heightOffset;
     s32 sinVal;
@@ -1860,29 +1860,29 @@ void func_80047F90_48B90(Struct_func_80047EFC_48AFC *arg0) {
     s32 j;
     s16 temp;
     s32 offset;
-    Element_80047F90 *elem;
+    PlayerAuraElement *elem;
 
     allocation = (GameState *)getCurrentAllocation();
 
     if (allocation->gamePaused == 0) {
-        temp = arg0->unk6A + 0x40;
-        arg0->unk6A = temp;
+        temp = state->animationAngle + 0x40;
+        state->animationAngle = temp;
         if (temp == 0x800) {
-            arg0->unk68 = 0x1E;
-            loadAssetMetadata(&arg0->unk44.asset, arg0->unk0, 5);
-            setCallback(&func_800480A8_48CA8);
+            state->holdTimer = 0x1E;
+            loadAssetMetadata(&state->element2.asset, state->assetData, 5);
+            setCallback(&updatePlayerAuraHolding);
         }
     }
 
-    sinVal = approximateSin(arg0->unk6A);
+    sinVal = approximateSin(state->animationAngle);
     heightOffset = ((0x2000 - sinVal) << 10) + 0x190000;
     i = 0;
-    elem = (Element_80047F90 *)arg0;
+    elem = (PlayerAuraElement *)state;
 
 loop:
-    elem->unk8 = arg0->unk64->worldPos.x;
-    elem->unkC = arg0->unk64->worldPos.y + heightOffset;
-    elem->unk10 = arg0->unk64->worldPos.z;
+    elem->posX = state->player->worldPos.x;
+    elem->posY = state->player->worldPos.y + heightOffset;
+    elem->posZ = state->player->worldPos.z;
     i += 1;
     elem += 1;
     if (i < 3)
@@ -1893,7 +1893,7 @@ loop:
     do {
         offset = 4;
         do {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)((s32)arg0 + offset));
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)((s32)state + offset));
             j++;
             offset += 0x20;
         } while (j < 3);
@@ -1902,32 +1902,32 @@ loop:
     } while (i < 4);
 }
 
-void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *arg0) {
+void updatePlayerAuraHolding(PlayerAuraState *state) {
     GameState *allocation;
     s32 heightOffset;
     s32 i;
     s32 j;
     s32 offset;
-    Element_80047F90 *elem;
+    PlayerAuraElement *elem;
 
     allocation = (GameState *)getCurrentAllocation();
 
     if (allocation->gamePaused == 0) {
-        arg0->unk68 -= 1;
-        if (arg0->unk68 == 0) {
-            loadAssetMetadata(&arg0->unk44.asset, arg0->unk0, 4);
-            setCallback(func_800481A0_48DA0);
+        state->holdTimer -= 1;
+        if (state->holdTimer == 0) {
+            loadAssetMetadata(&state->element2.asset, state->assetData, 4);
+            setCallback(updatePlayerAuraDescending);
         }
     }
 
     i = 0;
     heightOffset = 0x190000;
-    elem = (Element_80047F90 *)arg0;
+    elem = (PlayerAuraElement *)state;
 
 loop:
-    elem->unk8 = arg0->unk64->worldPos.x;
-    elem->unkC = arg0->unk64->worldPos.y + heightOffset;
-    elem->unk10 = arg0->unk64->worldPos.z;
+    elem->posX = state->player->worldPos.x;
+    elem->posY = state->player->worldPos.y + heightOffset;
+    elem->posZ = state->player->worldPos.z;
     i += 1;
     elem += 1;
     if (i < 3)
@@ -1938,7 +1938,7 @@ loop:
     do {
         offset = 4;
         do {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)((s32)arg0 + offset));
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)((s32)state + offset));
             j++;
             offset += 0x20;
         } while (j < 3);
@@ -1947,31 +1947,31 @@ loop:
     } while (i < 4);
 }
 
-void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *arg0) {
+void updatePlayerAuraDescending(PlayerAuraState *state) {
     GameState *allocation;
     s32 heightOffset;
     s32 i;
     s32 j;
     s32 offset;
-    Element_80047F90 *elem;
+    PlayerAuraElement *elem;
 
     allocation = (GameState *)getCurrentAllocation();
 
     if (allocation->gamePaused == 0) {
-        arg0->unk6A -= 0x40;
-        if (arg0->unk6A == 0) {
+        state->animationAngle -= 0x40;
+        if (state->animationAngle == 0) {
             func_80069CF8_6A8F8();
         }
     }
 
-    heightOffset = ((0x2000 - approximateSin(arg0->unk6A)) * 5 * 256) + 0x190000;
+    heightOffset = ((0x2000 - approximateSin(state->animationAngle)) * 5 * 256) + 0x190000;
     i = 0;
-    elem = (Element_80047F90 *)arg0;
+    elem = (PlayerAuraElement *)state;
 
 loop:
-    elem->unk8 = arg0->unk64->worldPos.x;
-    elem->unkC = arg0->unk64->worldPos.y + heightOffset;
-    elem->unk10 = arg0->unk64->worldPos.z;
+    elem->posX = state->player->worldPos.x;
+    elem->posY = state->player->worldPos.y + heightOffset;
+    elem->posZ = state->player->worldPos.z;
     i += 1;
     elem += 1;
     if (i < 3)
@@ -1982,7 +1982,7 @@ loop:
     do {
         offset = 4;
         do {
-            func_80066444_67044(i, (void *)((s32)arg0 + offset));
+            func_80066444_67044(i, (void *)((s32)state + offset));
             j++;
             offset += 0x20;
         } while (j < 3);
@@ -1991,16 +1991,16 @@ loop:
     } while (i < 4);
 }
 
-void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+void cleanupPlayerAuraTask(PlayerAuraCleanupState *state) {
+    state->assetData = freeNodeMemory(state->assetData);
 }
 
-void func_800482D0_48ED0(void *arg0) {
-    Struct_func_800482D0_48ED0_task *task;
+void schedulePlayerAuraTask(void *player) {
+    PlayerAuraTaskParams *task;
 
-    task = (Struct_func_800482D0_48ED0_task *)scheduleTask(func_80047EBC_48ABC, 0, 0, 0xD4);
+    task = (PlayerAuraTaskParams *)scheduleTask(initPlayerAuraTask, 0, 0, 0xD4);
     if (task != NULL) {
-        task->unk64 = arg0;
+        task->player = player;
     }
 }
 
