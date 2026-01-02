@@ -1,0 +1,5 @@
+# Central task-runner configuration
+claude_command: "~/.claude/local/node_modules/.bin/claude"
+success_command: 'git add -A && git commit -m "task-runner: fix $CANDIDATE"'
+reset_command: "git reset --hard HEAD"
+verify_command: "./tools/build-and-verify.sh"

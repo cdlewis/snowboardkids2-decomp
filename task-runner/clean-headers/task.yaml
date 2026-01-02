@@ -1,0 +1,4 @@
+script: python3 tools/analyse_headers.py src --json
+template: template.md
+accept_best_effort: true
+claude_flags: --model opus

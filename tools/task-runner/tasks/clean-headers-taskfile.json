@@ -1,7 +1,0 @@
-{
-  "task_name": "clean_headers",
-  "script": "python3 tools/analyse_headers.py src --json",
-  "template": "tools/task-runner/tasks/clean-headers-template.md",
-  "accept_best_effort": true,
-  "claude_command": "~/.claude/local/node_modules/.bin/claude --model opus"
-}
