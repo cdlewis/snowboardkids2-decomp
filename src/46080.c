@@ -257,20 +257,20 @@ typedef struct {
     u8 _pad2[0x4];
     u16 unk6;
     u8 unk8[0xC];
-} Entry_46628_New;
+} SceneAnimationEntryNew;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    Entry_46628_New *unk8;
-    void *unkC;
-    void *unk10;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
+    void *transformBuffer;
+    void *headerData;
+    SceneAnimationEntryNew *entries;
+    void *assetData;
+    void *loadedData;
+    s16 assetIndex;
+    s16 dataIndex;
+    s16 entryCount;
     s16 unk1A;
-    s32 unk1C;
-} func_80046244_46E44_Task_New;
+    s32 frameCounter;
+} SceneAnimationTaskNew;
 
 typedef struct {
     u8 _pad0[0x4];
@@ -410,18 +410,18 @@ typedef struct {
     s16 unk0;
     u8 _pad2[0x6];
     u8 unk8[0xC];
-} Entry_46628;
+} SceneAnimationEntry;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    Entry_46628 *volatile unk8;
-    void *unkC;
-    void *unk10;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-} func_80046244_46E44_Task;
+    void *transformBuffer;
+    void *headerData;
+    SceneAnimationEntry *volatile entries;
+    void *assetData;
+    void *loadedData;
+    s16 assetIndex;
+    s16 dataIndex;
+    s16 entryCount;
+} SceneAnimationTask;
 
 typedef union {
     s16 halfword;
@@ -870,9 +870,9 @@ void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0);
 void renderSkyDisplayLists(SkyRenderTaskState *arg0);
 void updatePlayerRenderCounter(void);
 void cleanupPlayerRenderTask(PlayerRenderTaskCleanupArg *);
-void func_80045C84_46884(func_80046244_46E44_Task *);
-void func_80045A28_46628(func_80046244_46E44_Task *);
-void func_80045B3C_4673C(func_80046244_46E44_Task_New *);
+void cleanupSceneAnimationTask(SceneAnimationTask *);
+void setupSceneAnimationTask(SceneAnimationTask *);
+void updateSceneAnimationTask(SceneAnimationTaskNew *);
 void func_80046628_47228(func_80046628_47228_arg *);
 void func_80046708_47308(func_80046708_47308_arg *arg0);
 void func_80046464_47064(Struct_func_8004657C_4717C *);
@@ -1034,84 +1034,84 @@ void schedulePlayerRenderTask(s32 playerIndex) {
     }
 }
 
-void func_800459A4_465A4(func_80046244_46E44_Task *arg0) {
+void initSceneAnimationTask(SceneAnimationTask *arg0) {
     s16 temp_v1;
     s32 index;
 
-    arg0->unkC = func_80055D7C_5697C(arg0->unk14);
-    temp_v1 = arg0->unk16;
+    arg0->assetData = func_80055D7C_5697C(arg0->assetIndex);
+    temp_v1 = arg0->dataIndex;
     index = temp_v1 * 3;
-    arg0->unk10 =
+    arg0->loadedData =
         loadCompressedData((void *)D_80090AF0_916F0[index], (void *)D_80090AF4_916F4[index], D_80090AF8_916F8[index]);
-    arg0->unk0 = 0;
-    setCleanupCallback(func_80045C84_46884);
-    setCallback(func_80045A28_46628);
+    arg0->transformBuffer = 0;
+    setCleanupCallback(cleanupSceneAnimationTask);
+    setCallback(setupSceneAnimationTask);
 }
 
-void func_80045A28_46628(func_80046244_46E44_Task *arg0) {
+void setupSceneAnimationTask(SceneAnimationTask *arg0) {
     s32 i;
     s32 offset;
     s32 *ptr;
-    Entry_46628 *entries;
-    Entry_46628 *loop_ent;
+    SceneAnimationEntry *entryList;
+    SceneAnimationEntry *loop_ent;
     void *header;
     s32 sp10[2];
 
-    header = arg0->unk10;
-    arg0->unk4 = (void *)((s32)header + *(s32 *)header);
-    arg0->unk8 = (Entry_46628 *)((s32)arg0->unk10 + *(s32 *)((s32)arg0->unk10 + 4));
+    header = arg0->loadedData;
+    arg0->headerData = (void *)((s32)header + *(s32 *)header);
+    arg0->entries = (SceneAnimationEntry *)((s32)arg0->loadedData + *(s32 *)((s32)arg0->loadedData + 4));
 
-    entries = arg0->unk8;
-    arg0->unk18 = 0;
+    entryList = arg0->entries;
+    arg0->entryCount = 0;
 
-    if (entries->unk0 >= 0) {
-        loop_ent = entries;
+    if (entryList->unk0 >= 0) {
+        loop_ent = entryList;
         do {
-            arg0->unk18++;
-        } while (loop_ent[arg0->unk18].unk0 >= 0);
+            arg0->entryCount++;
+        } while (loop_ent[arg0->entryCount].unk0 >= 0);
     }
 
     i = 0;
-    arg0->unk0 = allocateNodeMemory(arg0->unk18 << 6);
+    arg0->transformBuffer = allocateNodeMemory(arg0->entryCount << 6);
 
-    if (arg0->unk18 > 0) {
+    if (arg0->entryCount > 0) {
         ptr = &D_8009A8A4_9B4A4;
         offset = 0;
         do {
-            memcpy(ptr, (u8 *)(offset + (s32)arg0->unk8) + 8, 0xC);
-            func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->unk0 + (i << 6));
+            memcpy(ptr, (u8 *)(offset + (s32)arg0->entries) + 8, 0xC);
+            func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->transformBuffer + (i << 6));
             i++;
             offset += 0x14;
-        } while (i < arg0->unk18);
+        } while (i < arg0->entryCount);
     }
 
-    setCallback(&func_80045B3C_4673C);
+    setCallback(&updateSceneAnimationTask);
 }
 
-void func_80045B3C_4673C(func_80046244_46E44_Task_New *arg0) {
+void updateSceneAnimationTask(SceneAnimationTaskNew *arg0) {
     s32 i;
 
-    arg0->unk1C = (arg0->unk1C + 1) & 0x7FFFFFFF;
+    arg0->frameCounter = (arg0->frameCounter + 1) & 0x7FFFFFFF;
 
-    for (i = 0; i < arg0->unk18; i++) {
-        if (arg0->unk8[i].unk6 == 0) {
+    for (i = 0; i < arg0->entryCount; i++) {
+        if (arg0->entries[i].unk6 == 0) {
             break;
         }
 
-        if (arg0->unk8[i].unk6 == 1) {
-            func_8005BCB8_5C8B8(arg0->unk8[i].unk8, 0x100000, 0xC00000);
+        if (arg0->entries[i].unk6 == 1) {
+            func_8005BCB8_5C8B8(arg0->entries[i].unk8, 0x100000, 0xC00000);
         }
 
-        if (arg0->unk8[i].unk6 == 2) {
-            func_8005BCB8_5C8B8(arg0->unk8[i].unk8, 0x100000, 0x680000);
+        if (arg0->entries[i].unk6 == 2) {
+            func_8005BCB8_5C8B8(arg0->entries[i].unk8, 0x100000, 0x680000);
         }
 
-        if (arg0->unk8[i].unk6 == 3) {
-            func_8005BCB8_5C8B8(arg0->unk8[i].unk8, 0x140000, 0x300000);
+        if (arg0->entries[i].unk6 == 3) {
+            func_8005BCB8_5C8B8(arg0->entries[i].unk8, 0x140000, 0x300000);
         }
 
-        if (arg0->unk8[i].unk6 == 4) {
-            func_8005BCB8_5C8B8(arg0->unk8[i].unk8, 0x120000, 0xC00000);
+        if (arg0->entries[i].unk6 == 4) {
+            func_8005BCB8_5C8B8(arg0->entries[i].unk8, 0x120000, 0xC00000);
         }
     }
 
@@ -1120,19 +1120,19 @@ void func_80045B3C_4673C(func_80046244_46E44_Task_New *arg0) {
     }
 }
 
-void func_80045C84_46884(func_80046244_46E44_Task *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
-    arg0->unk10 = freeNodeMemory(arg0->unk10);
+void cleanupSceneAnimationTask(SceneAnimationTask *arg0) {
+    arg0->transformBuffer = freeNodeMemory(arg0->transformBuffer);
+    arg0->assetData = freeNodeMemory(arg0->assetData);
+    arg0->loadedData = freeNodeMemory(arg0->loadedData);
 }
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80045CC8_468C8);
 
-void func_80046244_46E44(s32 arg0, s16 arg1) {
-    func_80046244_46E44_Task *task = (func_80046244_46E44_Task *)scheduleTask(func_800459A4_465A4, 0, 0, 0xD3);
+void scheduleSceneAnimationTask(s32 arg0, s16 arg1) {
+    SceneAnimationTask *task = (SceneAnimationTask *)scheduleTask(initSceneAnimationTask, 0, 0, 0xD3);
     if (task != NULL) {
-        task->unk14 = arg0;
-        task->unk16 = arg1;
+        task->assetIndex = arg0;
+        task->dataIndex = arg1;
     }
 }
 
@@ -2708,7 +2708,7 @@ void func_800497FC_4A3FC(s32 poolId) {
         case 0:
             scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_80094DA0_959A0, poolId, 0, 4, 0x12, 0);
-            func_80046244_46E44(poolId, 0);
+            scheduleSceneAnimationTask(poolId, 0);
             break;
         case 1:
             scheduleSkyRenderTask(poolId);
@@ -2727,12 +2727,12 @@ void func_800497FC_4A3FC(s32 poolId) {
             scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_80094FC0_95BC0, poolId, 0, 4, 0, 0);
             func_80046D38_47938(&D_80094FD0_95BD0, poolId, 1, 0, 2, 0);
-            func_80046244_46E44(poolId, 5);
+            scheduleSceneAnimationTask(poolId, 5);
             break;
         case 4:
             scheduleSkyRenderTask(poolId);
             func_80046D38_47938(&D_800950B0_95CB0, poolId, -4, 0, 0, 0);
-            func_80046244_46E44(poolId, 0xA);
+            scheduleSceneAnimationTask(poolId, 0xA);
             break;
         case 5:
             scheduleSkyRenderTask(poolId);
@@ -2742,14 +2742,14 @@ void func_800497FC_4A3FC(s32 poolId) {
             func_80046D38_47938(&D_80095370_95F70, poolId, 0, 4, 1, 0);
             func_80046D38_47938(&D_80095380_95F80, poolId, 4, 0, 2, 0);
             scheduleSkyRenderTask(poolId);
-            func_80046244_46E44(poolId, 1);
+            scheduleSceneAnimationTask(poolId, 1);
             break;
         case 7:
             func_80046D38_47938(&D_80095460_96060, poolId, 0, 4, 0, 0);
             func_80046D38_47938(&D_80095470_96070, poolId, 0, 4, 1, 0);
             func_80046D38_47938(&D_80095480_96080, poolId, 4, 0, 2, 0);
             scheduleSkyRenderTask(poolId);
-            func_80046244_46E44(poolId, 2);
+            scheduleSceneAnimationTask(poolId, 2);
             break;
         case 8:
             scheduleSkyRenderTask(poolId);
@@ -2759,15 +2759,15 @@ void func_800497FC_4A3FC(s32 poolId) {
             break;
         case 9:
             scheduleSkyRenderTask(poolId);
-            func_80046244_46E44(poolId, 0xB);
+            scheduleSceneAnimationTask(poolId, 0xB);
             break;
         case 10:
             scheduleSkyRenderTask(poolId);
-            func_80046244_46E44(poolId, 8);
+            scheduleSceneAnimationTask(poolId, 8);
             break;
         case 11:
             scheduleSkyRenderTask(poolId);
-            func_80046244_46E44(poolId, 9);
+            scheduleSceneAnimationTask(poolId, 9);
             break;
         case 12:
             scheduleSkyRenderTask(poolId);
@@ -2780,7 +2780,7 @@ void func_800497FC_4A3FC(s32 poolId) {
         case 14:
         case 15:
             scheduleSkyRenderTask(poolId);
-            func_80046244_46E44(poolId, 7);
+            scheduleSceneAnimationTask(poolId, 7);
             break;
     }
 }
@@ -2846,7 +2846,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80049C70_4A870(arg0);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
-            func_80046244_46E44(arg0, 4);
+            scheduleSceneAnimationTask(arg0, 4);
             func_80049BFC_4A7FC();
             break;
 
@@ -2861,7 +2861,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 func_800BBB34();
                 func_80049BFC_4A7FC();
             }
-            func_80046244_46E44(arg0, 3);
+            scheduleSceneAnimationTask(arg0, 3);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
@@ -2902,7 +2902,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
-            func_80046244_46E44(arg0, 6);
+            scheduleSceneAnimationTask(arg0, 6);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BBA28_AB8D8, 0, 0, 0x31);
             scheduleTask(&func_800BBAF8_AB9A8, 0, 0, 0xF0);
