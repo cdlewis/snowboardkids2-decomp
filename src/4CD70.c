@@ -122,13 +122,13 @@ typedef struct {
 } Struct_func_8004DCC4;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    u16 unk8;
+    s16 xPos;
+    s16 yPos;
+    void *spriteAsset;
+    u16 spriteIndex;
     u16 unkA;
-    u32 unkC;
-} Struct_func_8004D3A4;
+    u32 playerIndex;
+} CenteredSpritePopupState;
 
 typedef struct {
     void *unk0;
@@ -232,8 +232,8 @@ typedef struct {
     s32 playerIndex;
 } LapCounterMultiplayerState;
 
-void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *);
-void func_8004D464_4E064(Struct_func_8004D3A4 *);
+void updateCenteredSpritePopup(CenteredSpritePopupState *);
+void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *);
 void func_8004D954_4E554(FinishPositionDisplayState *arg0);
 void func_8004D98C_4E58C(Struct_func_8004F04C *arg0);
 void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
@@ -842,36 +842,36 @@ void showGoalBanner(s32 playerIndex) {
     }
 }
 
-void func_8004D3A4_4DFA4(Struct_func_8004D3A4 *arg0) {
-    arg0->unk4 = loadAsset_34CB50();
-    setCleanupCallback(func_8004D464_4E064);
-    setCallback(func_8004D3E4_4DFE4);
+void initCenteredSpritePopupTask(CenteredSpritePopupState *state) {
+    state->spriteAsset = loadAsset_34CB50();
+    setCleanupCallback(cleanupCenteredSpritePopupTask);
+    setCallback(updateCenteredSpritePopup);
 }
 
-void func_8004D3E4_4DFE4(Struct_func_8004D3A4 *arg0) {
+void updateCenteredSpritePopup(CenteredSpritePopupState *state) {
     OutputStruct_19E80 output;
 
-    getTableEntryByU16Index(arg0->unk4, arg0->unk8, &output);
-    arg0->unk0 = -output.field1 / 2;
-    arg0->unk2 = -output.field2 / 2;
-    debugEnqueueCallback((u16)(arg0->unkC + 8), 6, func_8000FED0_10AD0, arg0);
+    getTableEntryByU16Index(state->spriteAsset, state->spriteIndex, &output);
+    state->xPos = -output.field1 / 2;
+    state->yPos = -output.field2 / 2;
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, func_8000FED0_10AD0, state);
 }
 
-void func_8004D464_4E064(Struct_func_8004D3A4 *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
 extern u8 D_80090E60_91A60[];
 
-void func_8004D490_4E090(u32 arg0, s32 arg1) {
-    Struct_func_8004D3A4 *task;
+void showPlacementAnnouncement(u32 playerIndex, s32 placement) {
+    CenteredSpritePopupState *task;
 
-    task = scheduleTask(func_8004D3A4_4DFA4, 0, 1, 0xE6);
+    task = scheduleTask(initCenteredSpritePopupTask, 0, 1, 0xE6);
     if (task != NULL) {
-        task->unkC = arg0;
-        task->unk8 = D_80090E60_91A60[arg1];
+        task->playerIndex = playerIndex;
+        task->spriteIndex = D_80090E60_91A60[placement];
 
-        switch (arg1) {
+        switch (placement) {
             case 0:
                 func_80058530_59130(0x118, 6);
                 break;
