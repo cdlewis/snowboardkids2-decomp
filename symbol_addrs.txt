@@ -2467,3 +2467,7 @@ cleanupBurstEffect = 0x80041DE4; // rom:0x429E4
 spawnShieldBurstEffect = 0x80041E10; // rom:0x42A10
 spawnBurstEffect = 0x80041EA4; // rom:0x42AA4
 updateBurstParticles = 0x80041C28; // rom:0x42828
+initCrashEffect = 0x80041F38; // rom:0x42B38
+updateCrashEffect = 0x80041FB4; // rom:0x42BB4
+cleanupCrashEffect = 0x80042070; // rom:0x42C70
+spawnCrashEffect = 0x800420A8; // rom:0x42CA8
