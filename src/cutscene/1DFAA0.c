@@ -138,12 +138,12 @@ void cleanupCutsceneManager(CutsceneManager *manager) {
     freeEffectResources((EffectState *)&manager->unk10);
 }
 
-void func_800B2D04(CutsceneSlot *arg0) {
+void hideAllSlotModels(CutsceneSlot *slots) {
     s32 i;
 
     for (i = 0; i < getCutsceneSlotCount(); i++) {
-        if (arg0[i].slotData.unkA4.ptr != NULL) {
-            setModelVisibility(arg0[i].slotData.unkA4.ptr, 0);
+        if (slots[i].slotData.unkA4.ptr != NULL) {
+            setModelVisibility(slots[i].slotData.unkA4.ptr, 0);
         }
     }
 }
