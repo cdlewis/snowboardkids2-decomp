@@ -508,18 +508,13 @@ typedef struct {
     u8 _pad[0x8];
     void *unkC;
     void *unk10;
-    s16 unk14;
-} func_80047A64_48664_arg;
+    s16 courseIndex;
+} GoldCoinsTaskState;
 
 typedef struct {
     u8 _pad0[0x76];
     u8 unk76;
 } AllocationData;
-
-typedef struct {
-    u8 _pad[0x14];
-    s16 unk14;
-} func_80047E7C_48A7C_ScheduledTask;
 
 typedef struct {
     void *unk0;
@@ -785,7 +780,7 @@ extern s32 D_80090E2C_91A2C;
 void func_800491CC_49DCC(func_80048AE8_496E8_arg *arg0);
 void func_8004A634_4B234(func_8004A634_4B234_arg *arg0);
 void func_8004A850_4B450(func_8004A850_4B450_arg *arg0);
-void func_80047A64_48664(func_80047A64_48664_arg *arg0);
+void cleanupGoldCoinsTask(GoldCoinsTaskState *arg0);
 void func_800477E4_483E4(func_800477E4_arg *arg0);
 void enqueuePlayerDisplayList(PlayerDisplayListState *arg0);
 void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
@@ -1593,20 +1588,20 @@ void func_80047718_48318(func_80047718_48318_arg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void func_80047750_48350(func_80047A64_48664_arg *arg0) {
+void initGoldCoinsTask(GoldCoinsTaskState *arg0) {
     s16 index;
     s32 arrayOffset;
 
     arg0->unkC = loadCompressedData(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
 
-    index = arg0->unk14;
+    index = arg0->courseIndex;
     arrayOffset = index * 3;
 
     arg0->unk10 =
         loadCompressedData(D_80090BD4_917D4[arrayOffset], D_80090BD8_917D8[arrayOffset], D_80090BDC_917DC[arrayOffset]);
 
     arg0->unk0 = 0;
-    setCleanupCallback(func_80047A64_48664);
+    setCleanupCallback(cleanupGoldCoinsTask);
     setCallback(func_800477E4_483E4);
 }
 
@@ -1694,7 +1689,7 @@ void func_800478FC_484FC(Arg_478FC *arg0) {
     }
 }
 
-void func_80047A64_48664(func_80047A64_48664_arg *arg0) {
+void cleanupGoldCoinsTask(GoldCoinsTaskState *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
     arg0->unkC = freeNodeMemory(arg0->unkC);
     arg0->unk10 = freeNodeMemory(arg0->unk10);
@@ -1830,10 +1825,10 @@ void func_80047AA8_486A8(func_80047AA8_486A8_arg *arg0) {
     }
 }
 
-void func_80047E7C_48A7C(s16 arg0) {
-    func_80047E7C_48A7C_ScheduledTask *result = scheduleTask(func_80047750_48350, 0, 0, 0xD3);
+void scheduleGoldCoinsTask(s16 courseIndex) {
+    GoldCoinsTaskState *result = (GoldCoinsTaskState *)scheduleTask(initGoldCoinsTask, 0, 0, 0xD3);
     if (result != NULL) {
-        result->unk14 = arg0;
+        result->courseIndex = courseIndex;
     }
 }
 
@@ -2751,7 +2746,7 @@ void schedulePlayerSparkleTask(void) {
 }
 
 void func_80049C38_4A838(s32 arg0) {
-    void (*func_ptr)(s32) = (void (*)(s32))func_80047E7C_48A7C;
+    void (*func_ptr)(s32) = (void (*)(s32))scheduleGoldCoinsTask;
     GameState *allocation;
     u8 check;
 
