@@ -1022,9 +1022,9 @@ void enqueuePlayerDisplayList(PlayerDisplayListState *state) {
     enqueueDisplayListObject(state->playerIndex, (DisplayListObject *)state);
 }
 
-void cleanupPlayerRenderTask(PlayerRenderTaskCleanupArg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupPlayerRenderTask(PlayerRenderTaskCleanupArg *state) {
+    state->unk24 = freeNodeMemory(state->unk24);
+    state->unk28 = freeNodeMemory(state->unk28);
 }
 
 void schedulePlayerRenderTask(s32 playerIndex) {
