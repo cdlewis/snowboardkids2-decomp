@@ -579,13 +579,6 @@ typedef struct {
 } func_80049280_49E80_Task;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-} func_80049230_49E30_arg;
-
-typedef struct {
     Transform3D matrix;
     u8 padding[0x1C];
     DisplayListObject displayList;
@@ -848,7 +841,7 @@ void updatePlayerHaloAnimating(PlayerHaloState *arg0);
 void func_80049794_4A394(void *payload, s32 arg1);
 void func_80048F0C_49B0C(ItemBoxSystemState *arg0, s32 arg1);
 void initItemBoxPositions(ItemBoxSystemState *arg0);
-void func_80049230_49E30(func_80049230_49E30_arg *);
+void cleanupItemBoxSystem(ItemBoxSystemState *);
 void func_80049430_4A030(func_80049300_49F00_arg *arg0);
 void updateGoldCoinsTask(GoldCoinUpdateState *arg0);
 
@@ -2417,7 +2410,7 @@ void initItemBoxSystem(ItemBoxSystemState *state) {
     );
     state->itemBoxMemory = NULL;
 
-    setCleanupCallback(&func_80049230_49E30);
+    setCleanupCallback(&cleanupItemBoxSystem);
 
     i = 0;
 loop:
@@ -2471,11 +2464,11 @@ void updateAllItemBoxes(ItemBoxController *controller) {
     }
 }
 
-void func_80049230_49E30(func_80049230_49E30_arg *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
+void cleanupItemBoxSystem(ItemBoxSystemState *state) {
+    state->asset1 = freeNodeMemory(state->asset1);
+    state->asset2 = freeNodeMemory(state->asset2);
+    state->itemBoxMemory = freeNodeMemory(state->itemBoxMemory);
+    state->positionData = freeNodeMemory(state->positionData);
 }
 
 void func_80049280_49E80(s32 courseId) {
