@@ -1426,53 +1426,53 @@ s32 updateRaceFinishWaitingStep(Player *player) {
     return 0;
 }
 
-s32 func_800B3DF0_A3CA0(Player *arg0) {
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    func_800B40D4_A3F84(arg0);
-    applyClampedVelocityToPosition(arg0);
+s32 updateRaceFinishWinStep(Player *player) {
+    player->unk44C.x = 0;
+    player->unk44C.z = 0;
+    player->unk44C.y = player->unk44C.y - 0x6000;
+    func_800B40D4_A3F84(player);
+    applyClampedVelocityToPosition(player);
 
-    if (arg0->unkAE0 <= 0xDFFFF) {
-        arg0->unkAE0 = arg0->unkAE0 + 0x8000;
+    if (player->unkAE0 <= 0xDFFFF) {
+        player->unkAE0 = player->unkAE0 + 0x8000;
     }
 
-    switch (arg0->unkBC0) {
+    switch (player->unkBC0) {
         case 0:
-            if (func_8005D308_5DF08(arg0, 0x1B) != 0) {
-                arg0->unkBC0 = arg0->unkBC0 + 1;
-                func_80059CE0_5A8E0(arg0);
+            if (func_8005D308_5DF08(player, 0x1B) != 0) {
+                player->unkBC0 = player->unkBC0 + 1;
+                func_80059CE0_5A8E0(player);
             }
             break;
         case 1:
-            if (func_8005D308_5DF08(arg0, 0x1D) != 0) {
-                arg0->unkB8C = 0x14;
-                arg0->unkBC0 = arg0->unkBC0 + 1;
+            if (func_8005D308_5DF08(player, 0x1D) != 0) {
+                player->unkB8C = 0x14;
+                player->unkBC0 = player->unkBC0 + 1;
             }
             break;
         case 2:
-            if (arg0->unkB8C != 0) {
-                arg0->unkB8C = arg0->unkB8C - 1;
+            if (player->unkB8C != 0) {
+                player->unkB8C = player->unkB8C - 1;
             } else {
-                arg0->unkBC0 = arg0->unkBC0 + 1;
+                player->unkBC0 = player->unkBC0 + 1;
             }
             break;
         case 3:
-            if (func_8005D308_5DF08(arg0, 0x1C) == 0) {
+            if (func_8005D308_5DF08(player, 0x1C) == 0) {
                 goto end;
             }
-            arg0->unkBC0 = arg0->unkBC0 + 1;
+            player->unkBC0 = player->unkBC0 + 1;
             break;
         case 4:
-            if (func_8005D308_5DF08(arg0, 0x1D) != 0) {
-                arg0->unkBC0 = 2;
-                arg0->unkB8C = 0x14;
+            if (func_8005D308_5DF08(player, 0x1D) != 0) {
+                player->unkBC0 = 2;
+                player->unkB8C = 0x14;
             }
             break;
     }
 
 end:
-    func_8005D804_5E404(arg0, 1, 0);
+    func_8005D804_5E404(player, 1, 0);
     return 0;
 }
 
