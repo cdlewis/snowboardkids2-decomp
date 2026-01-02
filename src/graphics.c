@@ -245,14 +245,14 @@ void queueSoundAtPosition(Vec3i *position, s16 soundId) {
     }
 }
 
-void func_80056C6C_5786C(Vec3i *arg0, u32 arg1, s16 arg2) {
+void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 duration) {
     if (gGraphicsManager->renderQueueCount < 0x20) {
-        RenderQueueItem *arrayCopy = gGraphicsManager->renderQueue;
+        RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
 
-        memcpy(&arrayCopy[gGraphicsManager->renderQueueCount].position, arg0, sizeof(Vec3i));
+        memcpy(&renderQueue[gGraphicsManager->renderQueueCount].position, position, sizeof(Vec3i));
 
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = arg1;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = arg2;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk0 = soundId;
+        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk2 = duration;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk4 = 4;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].unk6 = 0;
         gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
