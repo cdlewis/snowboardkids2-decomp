@@ -68,7 +68,7 @@ void func_8003F368_3FF68(void);
 void awaitSkillWinContinuePress(void);
 void func_8003FF78_40B78(void);
 void awaitSkillWinAndPromptContinue(void);
-void func_8003FD84_40984(void);
+void awaitSkillLossAndFadeOut(void);
 void func_8003FF14_40B14(void);
 void func_8003FFC0_40BC0(void);
 void func_80040304_40F04(void);
@@ -1026,7 +1026,7 @@ void handleSkillGameResult(void) {
             D_800A24A0_A30A0 = 6;
             func_800574A0_580A0(9);
             state->unk7B = 1;
-            setGameStateHandler(&func_8003FD84_40984);
+            setGameStateHandler(&awaitSkillLossAndFadeOut);
         }
     } else {
         state->unk4C = delayTimer - 1;
@@ -1056,12 +1056,12 @@ void awaitSkillWinContinuePress(void) {
     }
 }
 
-void func_8003FD84_40984(void) {
-    GameState *gameState = (GameState *)getCurrentAllocation();
-    s32 temp = gameState->unk4C - 1;
-    gameState->unk4C = temp;
+void awaitSkillLossAndFadeOut(void) {
+    GameState *state = (GameState *)getCurrentAllocation();
+    s32 delayTimer = state->unk4C - 1;
+    state->unk4C = delayTimer;
 
-    if (temp == 0) {
+    if (delayTimer == 0) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
         setGameStateHandler(func_80040608_41208);
