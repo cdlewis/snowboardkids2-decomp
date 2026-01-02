@@ -21,18 +21,18 @@ typedef struct {
 } SparkleEffectState;
 
 typedef struct {
-    u8 _pad0[0x24]; /* 0x00 */
-    void *unk24;    /* 0x24 */
-    void *unk28;    /* 0x28 */
-    u8 _pad2C[0xE]; /* 0x2C */
-    s16 unk3A;      /* 0x3A */
-    u8 _pad3C[0x7]; /* 0x3C */
-    u8 unk43;       /* 0x43 */
-} Func42FC0TaskMem;
+    u8 _pad0[0x24];       /* 0x00 */
+    void *unk24;          /* 0x24 */
+    void *player;         /* 0x28 */
+    u8 _pad2C[0xE];       /* 0x2C */
+    s16 frameTimer;       /* 0x3A */
+    u8 _pad3C[0x7];       /* 0x3C */
+    u8 immediateMode;     /* 0x43 */
+} StarEffectTask;
 
 SparkleEffectState *spawnSparkleEffect(void *arg0);
 SparkleEffectState *spawnSparkleEffectWithPlayer(void *arg0, s32 arg1);
-Func42FC0TaskMem *func_80042FC0_43BC0(void *arg0);
+StarEffectTask *func_80042FC0_43BC0(void *arg0);
 void scheduleShieldEffect(void *arg0);
 void *createFallingEffect(void *arg0);
 void *spawnCrashEffect(void *arg0);

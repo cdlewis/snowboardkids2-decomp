@@ -2488,3 +2488,6 @@ descendWarpEffect = 0x80042820; // rom:0x43420
 finishWarpEffect = 0x8004290C; // rom:0x4350C
 cleanupWarpEffect = 0x800429C4; // rom:0x435C4
 createWarpEffect = 0x800429FC; // rom:0x435FC
+updateStarEffectAnimation = 0x80042A6C; // rom:0x4366C
+starAnimFrameDurations = 0x80090928; // rom:0x91528
+starAnimFrameIndices = 0x80090929; // rom:0x91529

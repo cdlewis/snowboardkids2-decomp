@@ -43,22 +43,22 @@ typedef struct {
 } Func43CA4Unk28;
 
 typedef struct {
-    void *unk0;
-    loadAssetMetadata_arg unk4;
+    void *assetData;
+    loadAssetMetadata_arg sprite;
     u8 padding[0x2];
     Func43CA4Unk28 *unk24;
-    Func43CA4Unk28 *unk28;
+    Func43CA4Unk28 *player;
     s32 unk2C;
     s32 unk30;
     s32 unk34;
-    s16 unk38;
-    s16 unk3A;
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
-    u8 unk42;
-    u8 unk43;
-} Func42BA4Arg;
+    s16 animFrameIndex;
+    s16 frameTimer;
+    s16 displayTimer;
+    s16 alphaPulseDir;
+    s16 rotationAngle;
+    u8 playSoundFlag;
+    u8 immediateMode;
+} StarEffectState;
 
 typedef struct {
     u8 _pad0[0x1F0];   /* 0x00 */
@@ -299,10 +299,10 @@ void func_80044C38_45838(Func44BBCArg *);
 void func_80044018_44C18(Func43DC0State *);
 void func_80043E24_44A24(Func43DC0State *);
 void func_80043F8C_44B8C(Func43DC0State *);
-void func_80042D54_43954(Func42BA4Arg *);
+void func_80042D54_43954(StarEffectState *);
 void func_80043CA4_448A4(Func43CA4Arg *);
 void func_800439F4_445F4(Func4393CArg *);
-void func_80042BA4_437A4(Func42BA4Arg *);
+void func_80042BA4_437A4(StarEffectState *);
 void func_80042C98_43898(Func42C98Arg *);
 void func_80042E40_43A40(Func42E40Arg *);
 void updateFallingEffect(FallingEffectState *);
@@ -311,8 +311,8 @@ void cleanupSparkleEffect(SparkleEffectState *);
 void updateSparkleEffect(SparkleEffectState *);
 void fadeOutSparkleEffect(SparkleEffectState *);
 
-extern s8 D_80090928_91528[];
-extern s8 D_80090929_91529[];
+extern s8 starAnimFrameDurations[];
+extern s8 starAnimFrameIndices[];
 extern s32 D_80090964_91564;
 extern s32 D_80090974_91574;
 extern s32 D_8009093C_9153C;
@@ -961,27 +961,27 @@ WarpEffectState *createWarpEffect(WarpEffectSource *source, Player *player, s16 
     return task;
 }
 
-void func_80042A6C_4366C(Func42BA4Arg *arg0) {
+void updateStarEffectAnimation(StarEffectState *arg0) {
     unsigned int new_var;
-    arg0->unk3A--;
-    if ((arg0->unk3A << 0x10) == 0) {
+    arg0->frameTimer--;
+    if ((arg0->frameTimer << 0x10) == 0) {
         new_var = 2;
-        loadAssetMetadata(&arg0->unk4, arg0->unk0, D_80090929_91529[arg0->unk38 * new_var]);
-        arg0->unk3A = D_80090928_91528[arg0->unk38 * 2];
-        arg0->unk38++;
-        if (D_80090928_91528[arg0->unk38 * new_var] == 0) {
-            arg0->unk38 = 0;
+        loadAssetMetadata(&arg0->sprite, arg0->assetData, starAnimFrameIndices[arg0->animFrameIndex * new_var]);
+        arg0->frameTimer = starAnimFrameDurations[arg0->animFrameIndex * 2];
+        arg0->animFrameIndex++;
+        if (starAnimFrameDurations[arg0->animFrameIndex * new_var] == 0) {
+            arg0->animFrameIndex = 0;
         }
     }
-    if (arg0->unk3E != 0) {
-        arg0->unk4.unk1A -= 0x10;
-        if (arg0->unk4.unk1A == 0x40) {
-            arg0->unk3E++;
+    if (arg0->alphaPulseDir != 0) {
+        arg0->sprite.unk1A -= 0x10;
+        if (arg0->sprite.unk1A == 0x40) {
+            arg0->alphaPulseDir++;
         }
     } else {
-        arg0->unk4.unk1A += 0x10;
-        if (arg0->unk4.unk1A == 0xE0) {
-            arg0->unk3E--;
+        arg0->sprite.unk1A += 0x10;
+        if (arg0->sprite.unk1A == 0xE0) {
+            arg0->alphaPulseDir--;
         }
     }
 }
@@ -992,34 +992,34 @@ void func_80042B64_43764(void **arg0) {
     setCallbackWithContinue(func_80042BA4_437A4);
 }
 
-void func_80042BA4_437A4(Func42BA4Arg *arg0) {
+void func_80042BA4_437A4(StarEffectState *arg0) {
     Func43CA4GameState *gameState;
     s16 startDelay;
     void *spriteBuffer;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
-    startDelay = arg0->unk3A;
+    startDelay = arg0->frameTimer;
 
     if (startDelay == 0) {
-        arg0->unk3A = 1;
-        arg0->unk3E = 0;
-        arg0->unk4.unk1A = 0;
+        arg0->frameTimer = 1;
+        arg0->alphaPulseDir = 0;
+        arg0->sprite.unk1A = 0;
         spriteBuffer = gameState->unk44;
         arg0->unk30 = 0x200000;
         arg0->unk2C = 0;
         arg0->unk34 = 0;
-        arg0->unk38 = 0;
-        arg0->unk42 = 1;
-        arg0->unk4.unk0 = (void *)((u8 *)spriteBuffer + 0xF00);
-        func_80042A6C_4366C(arg0);
+        arg0->animFrameIndex = 0;
+        arg0->playSoundFlag = 1;
+        arg0->sprite.unk0 = (void *)((u8 *)spriteBuffer + 0xF00);
+        updateStarEffectAnimation(arg0);
 
-        if (arg0->unk43 != 0) {
-            arg0->unk28->unkBCF++;
+        if (arg0->immediateMode != 0) {
+            arg0->player->unkBCF++;
 
-            if (arg0->unk28->unkBBB == 0xC) {
-                arg0->unk3C = 0x1E;
+            if (arg0->player->unkBBB == 0xC) {
+                arg0->displayTimer = 0x1E;
             } else {
-                arg0->unk3C = 0x12C;
+                arg0->displayTimer = 0x12C;
             }
 
             arg0->unk2C = 0x140000;
@@ -1030,7 +1030,7 @@ void func_80042BA4_437A4(Func42BA4Arg *arg0) {
         }
     } else {
         if (gameState->unk76 == 0) {
-            arg0->unk3A = startDelay - 1;
+            arg0->frameTimer = startDelay - 1;
         }
     }
 }
@@ -1053,7 +1053,7 @@ void func_80042C98_43898(Func42C98Arg *arg0) {
             func_80056B7C_5777C(&arg0->unk4.position, 0x1A);
         }
 
-        func_80042A6C_4366C((Func42BA4Arg *)arg0);
+        updateStarEffectAnimation((StarEffectState *)arg0);
     }
 
     for (i = 0; i < 4; i++) {
@@ -1061,17 +1061,17 @@ void func_80042C98_43898(Func42C98Arg *arg0) {
     }
 }
 
-void func_80042D54_43954(Func42BA4Arg *arg0) {
+void func_80042D54_43954(StarEffectState *arg0) {
     Func43CA4GameState *gameState;
     s32 i;
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        func_80042A6C_4366C(arg0);
-        transformVector((s16 *)&arg0->unk2C, arg0->unk24->unk9F0, &arg0->unk4.position);
+        updateStarEffectAnimation(arg0);
+        transformVector((s16 *)&arg0->unk2C, arg0->unk24->unk9F0, &arg0->sprite.position);
 
-        if (arg0->unk4.unk1A == 0x40) {
-            if (arg0->unk28->unkBD9 != 0) {
+        if (arg0->sprite.unk1A == 0x40) {
+            if (arg0->player->unkBD9 != 0) {
                 arg0->unk2C = 0x300000;
                 arg0->unk30 = 0x300000;
             } else {
@@ -1079,20 +1079,20 @@ void func_80042D54_43954(Func42BA4Arg *arg0) {
                 arg0->unk30 = 0x190000;
             }
 
-            if (arg0->unk28->unkBBB == 0xC) {
-                arg0->unk3C = 0x1E;
+            if (arg0->player->unkBBB == 0xC) {
+                arg0->displayTimer = 0x1E;
             } else {
-                arg0->unk3C = 0x12C;
+                arg0->displayTimer = 0x12C;
             }
 
-            arg0->unk28->unkBCF++;
-            arg0->unk42 = 1;
+            arg0->player->unkBCF++;
+            arg0->playSoundFlag = 1;
             setCallback(func_80042E40_43A40);
         }
     }
 
     for (i = 0; i < 4; i++) {
-        func_800677C0_683C0(i, &arg0->unk4);
+        func_800677C0_683C0(i, &arg0->sprite);
     }
 }
 
@@ -1104,7 +1104,7 @@ void func_80042E40_43A40(Func42E40Arg *arg0) {
 
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
-        func_80042A6C_4366C((Func42BA4Arg *)arg0);
+        updateStarEffectAnimation((StarEffectState *)arg0);
         arg0->unk40 += 0x100;
         rotateVectorY(arg0->unk2C, arg0->unk40, &rotated);
         transformVector((s16 *)&rotated, arg0->unk28->unk9F0, &arg0->unk4.position);
@@ -1130,26 +1130,26 @@ void func_80042F2C_43B2C(void **arg0) {
 }
 
 void func_80042F58_43B58(void *arg0, void *arg1, s16 arg2) {
-    Func42FC0TaskMem *task;
+    StarEffectTask *task;
 
-    task = (Func42FC0TaskMem *)scheduleTask(func_80042B64_43764, 0, 0, 0xDC);
+    task = (StarEffectTask *)scheduleTask(func_80042B64_43764, 0, 0, 0xDC);
     if (task != NULL) {
         task->unk24 = arg0;
-        task->unk28 = arg1;
-        task->unk3A = arg2;
-        task->unk43 = 0;
+        task->player = arg1;
+        task->frameTimer = arg2;
+        task->immediateMode = 0;
     }
 }
 
-Func42FC0TaskMem *func_80042FC0_43BC0(void *arg0) {
-    Func42FC0TaskMem *task;
+StarEffectTask *func_80042FC0_43BC0(void *arg0) {
+    StarEffectTask *task;
 
-    task = (Func42FC0TaskMem *)scheduleTask(func_80042B64_43764, 0, 0, 0xDC);
+    task = (StarEffectTask *)scheduleTask(func_80042B64_43764, 0, 0, 0xDC);
     if (task != NULL) {
         task->unk24 = arg0;
-        task->unk28 = arg0;
-        task->unk3A = 0;
-        task->unk43 = 1;
+        task->player = arg0;
+        task->frameTimer = 0;
+        task->immediateMode = 1;
     }
     return task;
 }
