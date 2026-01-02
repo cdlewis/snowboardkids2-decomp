@@ -609,7 +609,7 @@ typedef struct {
     u8 unk18;
     u8 _pad[0x7];
     u8 unk20;
-} func_8004899C_arg1_element;
+} SecondaryItemDropElement;
 
 typedef struct {
     s16 unk0;
@@ -2242,11 +2242,11 @@ s32 rollPrimaryItemDrop(Player *arg0, u8 *arg1) {
     return i + 1;
 }
 
-s32 func_8004899C_4959C(Player *arg0, u8 *arg1) {
+s32 rollSecondaryItemDrop(Player *arg0, u8 *arg1) {
     s32 i;
     s32 randVal;
     u8 index;
-    func_8004899C_arg1_element *element;
+    SecondaryItemDropElement *element;
 
     if (arg0->unkB84 & 0x1000000) {
         randVal = randB() & 0xFF;
@@ -2267,7 +2267,7 @@ s32 func_8004899C_4959C(Player *arg0, u8 *arg1) {
         }
     }
 
-    element = (func_8004899C_arg1_element *)(arg1 + index);
+    element = (SecondaryItemDropElement *)(arg1 + index);
 
     switch (element->unk18) {
         case 0:
@@ -2317,7 +2317,7 @@ void func_80048AE8_496E8(func_80048AE8_496E8_Element *arg0, func_80048AE8_496E8_
                             if (player->unkBD4 == 7) {
                                 gameState->unk5B = gameState->unk5B + 1;
                             }
-                            player->unkBD4 = func_8004899C_4959C(player, (u8 *)arg1);
+                            player->unkBD4 = rollSecondaryItemDrop(player, (u8 *)arg1);
                             if (gameState->unk5B < 6) {
                                 if ((player->unkBD4 & 0xFF) == 7) {
                                     player->unkBD4 = 10;
