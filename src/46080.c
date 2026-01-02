@@ -766,7 +766,7 @@ extern s32 D_80090BC8_917C8[3];
 extern s32 D_80090BBC_917BC[3];
 extern s32 D_80090B98_91798[];
 extern s32 D_80090BB0_917B0;
-extern s32 D_80090B80_91780;
+extern s32 gCourseSceneryOffset;
 extern s32 D_80090BA4_917A4[3];
 extern s32 gFrameCounter;
 extern u16 D_8009ADE0_9B9E0;
@@ -1291,7 +1291,7 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
     createYRotationMatrix((Transform3D *)arg0, (u16)(rotation + levelData->unk8));
 
     arg0->unk18 = sp10.y;
-    transformVector2(&D_80090B80_91780, arg0, &sp10);
+    transformVector2(&gCourseSceneryOffset, arg0, &sp10);
 
     arg0->unk14 = levelData->unk0 + sp10.x;
     arg0->unk1C = levelData->unk4 + sp10.z;
