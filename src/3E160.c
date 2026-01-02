@@ -1018,7 +1018,7 @@ void handleSkillGameResult(void) {
 
             func_800574A0_580A0(8);
             func_8004F194_4FD94(0x78);
-            func_8004E6A4_4F2A4(0, 0);
+            spawnVictorySnowflakes(0, 0);
             state->unk7B = 1;
             scheduleTask(&func_8004F820_50420, 1, 0, 0xE6);
             addPlayerGold(0x1388);
@@ -1104,7 +1104,7 @@ void handleShotCrossGameResult(void) {
             }
 
             func_8004F194_4FD94(0x78);
-            func_8004E6A4_4F2A4(0, 0);
+            spawnVictorySnowflakes(0, 0);
         } else {
             D_800A24A0_A30A0 = 6;
             func_800574A0_580A0(9);
@@ -1175,7 +1175,7 @@ void handleMeterGameResult(void) {
                 D_800A24A0_A30A0 = 5;
                 func_800574A0_580A0(8);
                 func_8004F194_4FD94(0x78);
-                func_8004E6A4_4F2A4(0, 0);
+                spawnVictorySnowflakes(0, 0);
 
                 goldReward += 0x1388;
 
@@ -1251,7 +1251,7 @@ void handleSpeedCrossGameResult(void) {
         if (state->players->finishPosition == 0) {
             D_800A24A0_A30A0 = 3;
             func_800574A0_580A0(8);
-            func_8004E6A4_4F2A4(0, 0);
+            spawnVictorySnowflakes(0, 0);
             func_8004F194_4FD94(0x78);
             terminateTasksByTypeAndID(0, 1);
         } else {

@@ -1347,219 +1347,219 @@ void spawnTotalLapDisplayTask(Player *player) {
 }
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 unkA;
+    s16 screenX;
+    s16 screenY;
+    void *spriteAsset;
+    s16 spriteFrame;
+    u8 lifetime;
     u8 padB;
-    s16 unkC;
-    s16 unkE;
-    u16 unk10;
-    s16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    s16 unk1A;
-    s16 unk1C;
-    s16 unk1E;
-} Struct_func_8004E134;
+    s16 playerIndex;
+    s16 useSmallSprite;
+    u16 animFrame;
+    s16 posX;
+    s16 posY;
+    s16 waveAmplitude;
+    s16 velocityX;
+    s16 velocityY;
+    s16 wavePhase;
+    s16 driftTimer;
+} VictorySnowflakeState;
 
-void func_8004E614_4F214(Struct_func_8004E134 *arg0);
-void func_8004E410_4F010(Struct_func_8004E134 *arg0);
-void func_8004E4EC_4F0EC(Struct_func_8004E134 *arg0);
-void func_8004E580_4F180(Struct_func_8004E134 *arg0);
-void func_8004E2D8_4EED8(Struct_func_8004E134 *arg0);
+void cleanupVictorySnowflake(VictorySnowflakeState *state);
+void updateVictorySnowflakeWave(VictorySnowflakeState *state);
+void renderVictorySnowflake(VictorySnowflakeState *state);
+void renderVictorySnowflakeSmall(VictorySnowflakeState *state);
+void updateVictorySnowflakeDrift(VictorySnowflakeState *state);
 
-void func_8004E134_4ED34(Struct_func_8004E134 *arg0) {
-    u8 temp;
+void initVictorySnowflake(VictorySnowflakeState *state) {
+    u8 movementType;
 
-    arg0->unk4 = loadAsset_34CB50();
-    temp = randA();
+    state->spriteAsset = loadAsset_34CB50();
+    movementType = randA();
 
-    switch (temp & 1) {
+    switch (movementType & 1) {
         case 0:
-            arg0->unk12 = ((randA() & 0xFF) - 0x80) << 4;
-            arg0->unk14 = -0x780;
-            arg0->unk16 = randA() & 0xF;
-            arg0->unk1C = (randA() & 0xFF) << 4;
+            state->posX = ((randA() & 0xFF) - 0x80) << 4;
+            state->posY = -0x780;
+            state->waveAmplitude = randA() & 0xF;
+            state->wavePhase = (randA() & 0xFF) << 4;
             if (randA() & 1) {
-                arg0->unk1A = (randA() & 7) | 0x40;
+                state->velocityY = (randA() & 7) | 0x40;
             } else {
-                arg0->unk1A = (randA() & 7) | 0x20;
+                state->velocityY = (randA() & 7) | 0x20;
             }
-            setCallback(func_8004E410_4F010);
+            setCallback(updateVictorySnowflakeWave);
             break;
         case 1:
-            arg0->unk12 = ((randA() & 0xFF) - 0x80) << 4;
-            arg0->unk14 = -0x780;
+            state->posX = ((randA() & 0xFF) - 0x80) << 4;
+            state->posY = -0x780;
             if (randA() & 1) {
-                arg0->unk1A = (randA() & 7) + 0x3C;
+                state->velocityY = (randA() & 7) + 0x3C;
             } else {
-                arg0->unk1A = (randA() & 7) + 0x22;
+                state->velocityY = (randA() & 7) + 0x22;
             }
-            arg0->unk1C = (randA() & 1) - 1;
-            arg0->unk18 = (-((randA() & 0xFF) << 3)) & 0xF;
-            arg0->unk1E = randA() & 0xF;
+            state->wavePhase = (randA() & 1) - 1;
+            state->velocityX = (-((randA() & 0xFF) << 3)) & 0xF;
+            state->driftTimer = randA() & 0xF;
             __asm__ volatile("" ::: "memory");
-            setCallback(func_8004E2D8_4EED8);
+            setCallback(updateVictorySnowflakeDrift);
             break;
     }
 
-    arg0->unkA = (randA() & 0xFF) % 5 + 12;
-    setCleanupCallback(func_8004E614_4F214);
+    state->lifetime = (randA() & 0xFF) % 5 + 12;
+    setCleanupCallback(cleanupVictorySnowflake);
 }
 
-void func_8004E2D8_4EED8(Struct_func_8004E134 *arg0) {
-    if (arg0->unk1C >= 0) {
-        if (arg0->unk1E != 0) {
+void updateVictorySnowflakeDrift(VictorySnowflakeState *state) {
+    if (state->wavePhase >= 0) {
+        if (state->driftTimer != 0) {
             __asm__ volatile("" ::: "memory");
-            arg0->unk18 += 3;
-            arg0->unk1E--;
+            state->velocityX += 3;
+            state->driftTimer--;
         } else {
-            arg0->unk18 -= 3;
-            if ((arg0->unk18 << 16) == 0) {
-                arg0->unk1E = (randA() & 0x1F) + 0x10;
-                arg0->unk1C = -1;
+            state->velocityX -= 3;
+            if ((state->velocityX << 16) == 0) {
+                state->driftTimer = (randA() & 0x1F) + 0x10;
+                state->wavePhase = -1;
             }
         }
     } else {
-        if (arg0->unk1E != 0) {
+        if (state->driftTimer != 0) {
             __asm__ volatile("" ::: "memory");
-            arg0->unk18 -= 3;
-            arg0->unk1E--;
+            state->velocityX -= 3;
+            state->driftTimer--;
         } else {
-            arg0->unk18 += 3;
-            if ((arg0->unk18 << 16) == 0) {
-                arg0->unk1E = (randA() & 0x1F) + 0x10;
-                arg0->unk1C = 1;
+            state->velocityX += 3;
+            if ((state->velocityX << 16) == 0) {
+                state->driftTimer = (randA() & 0x1F) + 0x10;
+                state->wavePhase = 1;
             }
         }
     }
 
-    arg0->unk12 += arg0->unk18;
-    arg0->unk14 += arg0->unk1A;
+    state->posX += state->velocityX;
+    state->posY += state->velocityY;
 
-    if (arg0->unk14 >= 0x6E1) {
+    if (state->posY >= 0x6E1) {
         func_80069CF8_6A8F8();
     }
 
-    if (arg0->unkE != 0) {
-        func_8004E580_4F180(arg0);
+    if (state->useSmallSprite != 0) {
+        renderVictorySnowflakeSmall(state);
     } else {
-        func_8004E4EC_4F0EC(arg0);
+        renderVictorySnowflake(state);
     }
 }
 
-void func_8004E410_4F010(Struct_func_8004E134 *arg0) {
+void updateVictorySnowflakeWave(VictorySnowflakeState *state) {
     s32 sinVal;
 
-    arg0->unk14 = arg0->unk14 + arg0->unk1A;
-    arg0->unk1C = (arg0->unk1C + 0x20) & 0x1FFF;
+    state->posY = state->posY + state->velocityY;
+    state->wavePhase = (state->wavePhase + 0x20) & 0x1FFF;
 
-    sinVal = approximateSin(arg0->unk1C);
+    sinVal = approximateSin(state->wavePhase);
 
-    arg0->unk12 = arg0->unk12 + (sinVal * (arg0->unk16 + 0x30)) / 8192;
+    state->posX = state->posX + (sinVal * (state->waveAmplitude + 0x30)) / 8192;
 
-    if (arg0->unk1C == 0 || arg0->unk1C == 0x1000) {
-        arg0->unk16 = randA() & 0xF;
+    if (state->wavePhase == 0 || state->wavePhase == 0x1000) {
+        state->waveAmplitude = randA() & 0xF;
     }
 
-    if (arg0->unk14 >= 0x6E1) {
+    if (state->posY >= 0x6E1) {
         func_80069CF8_6A8F8();
     }
 
-    if (arg0->unkE != 0) {
-        func_8004E580_4F180(arg0);
+    if (state->useSmallSprite != 0) {
+        renderVictorySnowflakeSmall(state);
     } else {
-        func_8004E4EC_4F0EC(arg0);
+        renderVictorySnowflake(state);
     }
 }
 
-void func_8004E4EC_4F0EC(Struct_func_8004E134 *arg0) {
+void renderVictorySnowflake(VictorySnowflakeState *state) {
     GameState *allocation = (GameState *)getCurrentAllocation();
-    s32 temp;
+    s32 animIndex;
     u8 poolId;
 
-    temp = (arg0->unk10 + 1) & 3;
-    arg0->unk10 = temp;
+    animIndex = (state->animFrame + 1) & 3;
+    state->animFrame = animIndex;
 
     poolId = allocation->memoryPoolId;
     if (poolId == 3) {
         goto set_26;
     }
     if (poolId != 8) {
-        arg0->unk8 = temp + 0x17;
+        state->spriteFrame = animIndex + 0x17;
     } else {
     set_26:
-        arg0->unk8 = temp + 0x26;
+        state->spriteFrame = animIndex + 0x26;
     }
 
-    arg0->unk0 = arg0->unk12 >> 4;
-    arg0->unk2 = arg0->unk14 >> 4;
-    debugEnqueueCallback((u16)(arg0->unkC + 8), 0, func_80010240_10E40, arg0);
+    state->screenX = state->posX >> 4;
+    state->screenY = state->posY >> 4;
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010240_10E40, state);
 }
 
-void func_8004E580_4F180(Struct_func_8004E134 *arg0) {
+void renderVictorySnowflakeSmall(VictorySnowflakeState *state) {
     GameState *allocation = (GameState *)getCurrentAllocation();
-    s32 temp;
+    s32 animIndex;
     u8 poolId;
 
-    temp = (arg0->unk10 + 1) & 3;
-    arg0->unk10 = temp;
+    animIndex = (state->animFrame + 1) & 3;
+    state->animFrame = animIndex;
 
     poolId = allocation->memoryPoolId;
     if (poolId == 3) {
         goto set_26;
     }
     if (poolId != 8) {
-        arg0->unk8 = temp + 0x17;
+        state->spriteFrame = animIndex + 0x17;
     } else {
     set_26:
-        arg0->unk8 = temp + 0x26;
+        state->spriteFrame = animIndex + 0x26;
     }
 
-    arg0->unk0 = arg0->unk12 >> 5;
-    arg0->unk2 = arg0->unk14 >> 5;
-    debugEnqueueCallback((u16)(arg0->unkC + 8), 0, func_80010924_11524, arg0);
+    state->screenX = state->posX >> 5;
+    state->screenY = state->posY >> 5;
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010924_11524, state);
 }
 
-void func_8004E614_4F214(Struct_func_8004E134 *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupVictorySnowflake(VictorySnowflakeState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-} func_8004E6A4_task;
+    s16 playerIndex;
+    s16 useSmallSprite;
+} VictorySnowflakeSpawnArgs;
 
 typedef struct {
     u8 pad0[0xC];
-    s16 unkC;
-    s16 unkE;
-} func_8004E640_task;
+    s16 playerIndex;
+    s16 useSmallSprite;
+} VictorySnowflakeTaskState;
 
 extern u16 D_8009ADE0_9B9E0;
 
-void func_8004E640_4F240(func_8004E6A4_task *arg0) {
-    func_8004E640_task *task;
+void conditionalSpawnVictorySnowflake(VictorySnowflakeSpawnArgs *args) {
+    VictorySnowflakeTaskState *task;
 
     if (D_8009ADE0_9B9E0 & 1) {
-        task = scheduleTask(func_8004E134_4ED34, 2, 0, 0xE6);
+        task = scheduleTask(initVictorySnowflake, 2, 0, 0xE6);
         if (task != NULL) {
-            task->unkC = arg0->unk0;
-            task->unkE = arg0->unk2;
+            task->playerIndex = args->playerIndex;
+            task->useSmallSprite = args->useSmallSprite;
         }
     }
 }
 
-void func_8004E6A4_4F2A4(s16 arg0, s16 arg1) {
-    func_8004E6A4_task *task;
+void spawnVictorySnowflakes(s16 playerIndex, s16 useSmallSprite) {
+    VictorySnowflakeSpawnArgs *task;
 
-    task = scheduleTask(&func_8004E640_4F240, 1, 0, 0xE5);
+    task = scheduleTask(&conditionalSpawnVictorySnowflake, 1, 0, 0xE5);
     if (task != NULL) {
-        task->unk0 = arg0;
-        task->unk2 = arg1;
+        task->playerIndex = playerIndex;
+        task->useSmallSprite = useSmallSprite;
     }
 }
 

@@ -93,7 +93,7 @@ void showGoalBanner(s32 playerIndex);
 void showTrickScoreDisplay(s32 playerIndex, s32 trickScore);
 void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0);
 void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0);
-void func_8004E6A4_4F2A4(s16 arg0, s16 arg1);
+void spawnVictorySnowflakes(s16 playerIndex, s16 useSmallSprite);
 void func_8004E6F8_4F2F8(Struct_func_8004E6F8 *arg0);
 void func_8004EDCC_4F9CC(s16 arg0);
 void func_8004F1D4_4FDD4(Struct_func_8004F1D4 *arg0);
