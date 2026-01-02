@@ -333,7 +333,7 @@ s32 initSharpTurnSlidingStep(initSharpTurnSlidingStep_arg *player) {
 }
 
 extern void func_800B65F8_A64A8(func_800B00D4_arg *);
-extern s32 func_800B42A8_A4158(Player *, s32, s32, s32);
+extern s32 applyVelocityDeadzone(Player *, s32, s32, s32);
 
 s32 updateSharpTurnSlidingStep(Player *player) {
     s16 steeringAngle;
@@ -357,7 +357,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
 
     player->unk44C.y = player->unk44C.y - player->unkAB8;
     decayPlayerSteeringAngles(player);
-    func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+    applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
     func_800B00FC_9FFAC(player);
 
     steeringAngle = player->unkA92;
@@ -425,7 +425,7 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
 
     player->unk44C.y = player->unk44C.y - player->unkAB8;
     decayPlayerSteeringAngles(player);
-    func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+    applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
     func_800B00FC_9FFAC(player);
 
     if (func_8005D308_5DF08(player, 6) != 0) {
@@ -472,7 +472,7 @@ s32 initPostTrickLandingStep(Player *player) {
 
     player->unk44C.y -= player->unkAB8;
     decayPlayerSteeringAngles(player);
-    func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+    applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
     func_800B00FC_9FFAC(player);
 
     behaviorStep = player->unkBBF;
@@ -533,7 +533,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
 
     player->unk44C.y -= player->unkAB8;
     decayPlayerSteeringAngles(player);
-    steeringValue = func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+    steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
     func_800B00FC_9FFAC(player);
 
     if (!(player->unkB7C & 0x8000)) {
@@ -576,7 +576,7 @@ s32 updatePostTrickChargingStep(Player *player) {
 
     player->unk44C.y -= player->unkAB8;
     decayPlayerSteeringAngles(player);
-    steeringValue = func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+    steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
     func_800B00FC_9FFAC(player);
 
     if (!(player->unkB7C & 0x8000)) {
@@ -751,7 +751,7 @@ s32 updatePostTrickDescentStep(Player *player) {
     } else {
         player->unk44C.y = player->unk44C.y - player->unkAB8;
         decayPlayerSteeringAngles(player);
-        func_800B42A8_A4158(player, 0x200, 0x200, player->unkAB0);
+        applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
         func_800B00FC_9FFAC(player);
         player->unkBC0 = player->unkBC0 - 1;
         if (player->unkBC0 == 0) {
@@ -1703,100 +1703,100 @@ void decayPlayerAirborneAngles(Player *player) {
 
 extern s16 identityMatrix[];
 
-s32 func_800B42A8_A4158(Player *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    Vec3i sp10;
-    Vec3i sp20;
-    Vec3i sp30;
-    Transform3D sp40;
-    Transform3D sp60;
-    Transform3D sp80;
-    Transform3D spA0;
-    s32 temp;
-    s32 temp2;
-    s32 resultY;
+s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadzone, s32 lateralDeadzone) {
+    Vec3i tempVec;
+    Vec3i localVelocity;
+    Vec3i forwardDir;
+    Transform3D yawRotation;
+    Transform3D pitchMatrix;
+    Transform3D slopeMatrix;
+    Transform3D combinedTransform;
+    s32 magnitude;
+    s32 sqrtResult;
+    s32 localForwardVelocity;
 
-    createYRotationMatrix(&sp40, arg0->unkA90 + arg0->unkA94);
+    createYRotationMatrix(&yawRotation, player->unkA90 + player->unkA94);
 
-    sp30.x = sp40.m[2][0];
-    sp30.y = sp40.m[2][1];
-    sp30.z = sp40.m[2][2];
+    forwardDir.x = yawRotation.m[2][0];
+    forwardDir.y = yawRotation.m[2][1];
+    forwardDir.z = yawRotation.m[2][2];
 
-    memcpy(&sp60, identityMatrix, 0x20);
-    memcpy(&sp80, identityMatrix, 0x20);
+    memcpy(&pitchMatrix, identityMatrix, 0x20);
+    memcpy(&slopeMatrix, identityMatrix, 0x20);
 
-    temp2 = approximate_sqrt(arg0->unk458 * arg0->unk458 + arg0->unk460 * arg0->unk460);
-    temp = temp2 & 0xFFFF;
+    sqrtResult = approximate_sqrt(player->unk458 * player->unk458 + player->unk460 * player->unk460);
+    magnitude = sqrtResult & 0xFFFF;
 
-    if (temp != 0) {
-        sp80.m[0][0] = (arg0->unk460 << 13) / temp;
-        sp80.m[0][2] = (arg0->unk458 << 13) / temp;
-        sp80.m[2][0] = (-arg0->unk458 << 13) / temp;
-        sp80.m[2][2] = (arg0->unk460 << 13) / temp;
+    if (magnitude != 0) {
+        slopeMatrix.m[0][0] = (player->unk460 << 13) / magnitude;
+        slopeMatrix.m[0][2] = (player->unk458 << 13) / magnitude;
+        slopeMatrix.m[2][0] = (-player->unk458 << 13) / magnitude;
+        slopeMatrix.m[2][2] = (player->unk460 << 13) / magnitude;
     }
 
-    sp60.m[1][1] = arg0->unk45C;
-    sp60.m[1][2] = -temp;
-    sp60.m[2][1] = temp;
-    sp60.m[2][2] = arg0->unk45C;
+    pitchMatrix.m[1][1] = player->unk45C;
+    pitchMatrix.m[1][2] = -magnitude;
+    pitchMatrix.m[2][1] = magnitude;
+    pitchMatrix.m[2][2] = player->unk45C;
 
-    func_8006BDBC_6C9BC((void *)&sp80, &sp60, &spA0);
-    transformVector2(&arg0->unk44C.x, &spA0, &sp10);
+    func_8006BDBC_6C9BC((void *)&slopeMatrix, &pitchMatrix, &combinedTransform);
+    transformVector2(&player->unk44C.x, &combinedTransform, &tempVec);
 
-    if (sp10.y < 0) {
-        sp10.y = 0;
+    if (tempVec.y < 0) {
+        tempVec.y = 0;
     }
 
-    transformVector2(&sp30, &spA0, &sp20);
-    memcpy(&sp80, identityMatrix, 0x20);
+    transformVector2(&forwardDir, &combinedTransform, &localVelocity);
+    memcpy(&slopeMatrix, identityMatrix, 0x20);
 
-    temp2 = approximate_sqrt(sp20.x * sp20.x + sp20.z * sp20.z);
-    temp = temp2 & 0xFFFF;
+    sqrtResult = approximate_sqrt(localVelocity.x * localVelocity.x + localVelocity.z * localVelocity.z);
+    magnitude = sqrtResult & 0xFFFF;
 
-    if (temp != 0) {
-        sp80.m[0][0] = (sp20.z << 13) / temp;
-        sp80.m[2][2] = (sp20.z << 13) / temp;
-        sp80.m[0][2] = (sp20.x << 13) / temp;
-        sp80.m[2][0] = (-sp20.x << 13) / temp;
+    if (magnitude != 0) {
+        slopeMatrix.m[0][0] = (localVelocity.z << 13) / magnitude;
+        slopeMatrix.m[2][2] = (localVelocity.z << 13) / magnitude;
+        slopeMatrix.m[0][2] = (localVelocity.x << 13) / magnitude;
+        slopeMatrix.m[2][0] = (-localVelocity.x << 13) / magnitude;
     }
 
-    transformVector2(&sp10, &sp80, &sp20);
+    transformVector2(&tempVec, &slopeMatrix, &localVelocity);
 
-    if (sp20.x > 0) {
-        if (arg3 < sp20.x) {
-            sp20.x = sp20.x - arg3;
+    if (localVelocity.x > 0) {
+        if (lateralDeadzone < localVelocity.x) {
+            localVelocity.x = localVelocity.x - lateralDeadzone;
         } else {
-            sp20.x = 0;
+            localVelocity.x = 0;
         }
     } else {
-        if (sp20.x < -arg3) {
-            sp20.x = sp20.x + arg3;
+        if (localVelocity.x < -lateralDeadzone) {
+            localVelocity.x = localVelocity.x + lateralDeadzone;
         } else {
-            sp20.x = 0;
+            localVelocity.x = 0;
         }
     }
 
-    if (sp20.z > 0) {
-        if (arg1 < sp20.z) {
-            sp20.z = sp20.z - arg1;
+    if (localVelocity.z > 0) {
+        if (forwardDeadzone < localVelocity.z) {
+            localVelocity.z = localVelocity.z - forwardDeadzone;
         } else {
-            sp20.z = 0;
+            localVelocity.z = 0;
         }
     } else {
-        if (sp20.z < -arg2) {
-            sp20.z = sp20.z + arg2;
+        if (localVelocity.z < -backwardDeadzone) {
+            localVelocity.z = localVelocity.z + backwardDeadzone;
         } else {
-            sp20.z = 0;
+            localVelocity.z = 0;
         }
     }
 
-    resultY = sp20.z;
-    transformVector3(&sp20, &sp80, &sp10);
-    transformVector3(&sp10, &spA0, &sp20);
+    localForwardVelocity = localVelocity.z;
+    transformVector3(&localVelocity, &slopeMatrix, &tempVec);
+    transformVector3(&tempVec, &combinedTransform, &localVelocity);
 
-    arg0->unk44C.x = sp20.x;
-    arg0->unk44C.z = sp20.z;
+    player->unk44C.x = localVelocity.x;
+    player->unk44C.z = localVelocity.z;
 
-    return resultY;
+    return localForwardVelocity;
 }
 
 void func_800B468C_A453C(func_800B00D4_arg *arg0) {
@@ -1967,7 +1967,7 @@ s32 func_800B4B08_A49B8(Player *arg0) {
             func_80056B7C_5777C(&arg0->worldPos, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
-        func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
+        applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
     }
 
     decayPlayerSteeringAngles(arg0);
@@ -2061,7 +2061,7 @@ s32 func_800B4DB8_A4C68(Player *arg0) {
         arg0->unk44C.x -= arg0->unk44C.x >> 5;
         arg0->unk44C.z -= arg0->unk44C.z >> 5;
     } else {
-        func_800B42A8_A4158(arg0, 0x100, 0x100, 0x100);
+        applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
         func_80050C80_51880(arg0, arg0->unkBCC & 0xF);
     }
 
@@ -2119,7 +2119,7 @@ s32 func_800B4F5C_A4E0C(Player *arg0) {
         arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 5);
         arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 5);
     } else {
-        func_800B42A8_A4158(arg0, 0x100, 0x100, 0x100);
+        applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
         func_80050C80_51880(arg0, arg0->unkBCC & 0xF);
     }
 
@@ -2228,7 +2228,7 @@ s32 func_800B5234_A50E4(Player *arg0) {
             func_80056B7C_5777C(&arg0->worldPos, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
         }
-        func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
+        applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
     }
 
     decayPlayerSteeringAngles(arg0);
@@ -2266,7 +2266,7 @@ s32 func_800B5394_A5244(Player *arg0) {
     arg0->unk44C.z = arg0->unk44C.z / 2;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
 
-    func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
+    applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
@@ -2300,7 +2300,7 @@ s32 func_800B5478_A5328(Player *arg0) {
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     arg0->unk44C.z = arg0->unk44C.z / 2;
 
-    func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
+    applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
@@ -2524,7 +2524,7 @@ s32 func_800B5D68_A5C18(Player *arg0) {
         arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 7);
         arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 7);
     } else {
-        func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
+        applyVelocityDeadzone(arg0, 0x200, 0x200, arg0->unkAB0);
     }
 
     applyClampedVelocityToPosition(arg0);
@@ -2561,7 +2561,7 @@ s32 func_800B5E90_A5D40(Player *arg0) {
         arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 5);
         arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 5);
     } else {
-        func_800B42A8_A4158(arg0, 0x100, 0x100, 0x100);
+        applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
     }
 
     angle = atan2Fixed(-arg0->unk44C.x, -arg0->unk44C.z);
@@ -2647,7 +2647,7 @@ s32 func_800B6194_A6044(Player *arg0) {
         arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 5);
         arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 5);
     } else {
-        func_800B42A8_A4158(arg0, 0x100, 0x100, 0x100);
+        applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
     }
 
     angle = atan2Fixed(-arg0->unk44C.x, -arg0->unk44C.z);
