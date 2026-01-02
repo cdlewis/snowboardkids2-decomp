@@ -10,11 +10,11 @@ typedef struct {
 } cutsceneChrAlpha_exec_arg;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s16 unkC;
-    s16 unkE;
+    s32 horizontalSpeed;
+    s32 verticalVelocity;
+    s32 gravity;
+    s16 animationId;
+    s16 animationLoopCount;
 } cutsceneChrHop_exec_arg;
 
 typedef struct {
@@ -229,7 +229,7 @@ void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg0, CutsceneManager *a
 s32 cutsceneChrRotate_isDone(void);
 void cutsceneChrHop_init(void);
 s32 cutsceneChrHop_validate(void);
-void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *a0, CutsceneManager *a1, s8 a2);
+void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 void cutsceneChrBack_init(void);
 s32 cutsceneChrBack_validate(void);
 void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
