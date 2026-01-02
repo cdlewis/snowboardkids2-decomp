@@ -2593,3 +2593,4 @@ scheduleScrollingSceneryTask = 0x80046D38; // rom:0x47938
 initCourseSceneryTask = 0x80046DCC; // rom:0x479CC
 updateCourseSceneryTask = 0x80046F44; // rom:0x47B44
 cleanupCourseSceneryTask = 0x80046FEC; // rom:0x47BEC
+initFlyingSceneryTask = 0x80047024; // rom:0x47C24

@@ -473,8 +473,8 @@ typedef struct {
 
 typedef struct {
     DisplayListObject displayListObject;
-    s32 unk3C;
-} func_8004711C_47D1C_arg;
+    s32 frameCounter;
+} FlyingSceneryState;
 
 typedef struct {
     u8 unk0[0x14];
@@ -885,8 +885,8 @@ void renderScrollingSceneryOpaque(DisplayListObject *);
 void renderScrollingSceneryTransparent(DisplayListObject *);
 void renderScrollingSceneryOverlay(DisplayListObject *);
 void func_80047718_48318(func_80047718_48318_arg *);
-void func_8004711C_47D1C(func_8004711C_47D1C_arg *);
-void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0);
+void func_8004711C_47D1C(FlyingSceneryState *);
+void func_800471D0_47DD0(FlyingSceneryState *arg0);
 void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *);
 void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
 void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
@@ -1391,35 +1391,35 @@ void cleanupCourseSceneryTask(CourseSceneryCleanupArg *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void func_80047024_47C24(func_8004711C_47D1C_arg *arg0) {
-    Vec3i spStack;
-    GameState_46080 *temp_s0;
-    u16 temp_s2;
-    D_80090F90_91B90_item *temp_s3;
+void initFlyingSceneryTask(FlyingSceneryState *arg0) {
+    Vec3i position;
+    GameState_46080 *allocation;
+    u16 rotation;
+    D_80090F90_91B90_item *levelData;
 
-    temp_s0 = (GameState_46080 *)getCurrentAllocation();
-    temp_s2 = func_800625A4_631A4(&temp_s0->unk30, &spStack) + 0x800;
-    temp_s3 = func_80055D10_56910(temp_s0->unk5C);
+    allocation = (GameState_46080 *)getCurrentAllocation();
+    rotation = func_800625A4_631A4(&allocation->unk30, &position) + 0x800;
+    levelData = func_80055D10_56910(allocation->unk5C);
 
-    arg0->displayListObject.unk20 = (void *)((u32)func_80055E68_56A68(temp_s0->unk5C) + 0x10);
-    arg0->displayListObject.unk24 = func_80055DC4_569C4(temp_s0->unk5C);
-    arg0->displayListObject.unk28 = func_80055DF8_569F8(temp_s0->unk5C);
+    arg0->displayListObject.unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x10);
+    arg0->displayListObject.unk24 = func_80055DC4_569C4(allocation->unk5C);
+    arg0->displayListObject.unk28 = func_80055DF8_569F8(allocation->unk5C);
     arg0->displayListObject.unk2C = 0;
 
-    createYRotationMatrix((Transform3D *)arg0, temp_s2 + temp_s3->unk8);
-    arg0->displayListObject.transform.translation.y = spStack.y;
+    createYRotationMatrix((Transform3D *)arg0, rotation + levelData->unk8);
+    arg0->displayListObject.transform.translation.y = position.y;
 
-    transformVector2(&D_80090B8C_9178C, arg0, &spStack);
+    transformVector2(&D_80090B8C_9178C, arg0, &position);
 
-    arg0->displayListObject.transform.translation.x = temp_s3->unk0 + spStack.x;
-    arg0->displayListObject.transform.translation.z = temp_s3->unk4 + spStack.z;
-    arg0->unk3C = 0x30;
+    arg0->displayListObject.transform.translation.x = levelData->unk0 + position.x;
+    arg0->displayListObject.transform.translation.z = levelData->unk4 + position.z;
+    arg0->frameCounter = 0x30;
 
     setCleanupCallback(&func_80047718_48318);
     setCallbackWithContinue(&func_8004711C_47D1C);
 }
 
-void func_8004711C_47D1C(func_8004711C_47D1C_arg *arg0) {
+void func_8004711C_47D1C(FlyingSceneryState *arg0) {
     Vec3i vec;
     s32 i;
     Allocation_47D1C *alloc;
@@ -1432,10 +1432,10 @@ void func_8004711C_47D1C(func_8004711C_47D1C_arg *arg0) {
         arg0->displayListObject.transform.translation.x += vec.x;
         arg0->displayListObject.transform.translation.z += vec.z;
 
-        if (arg0->unk3C != 0) {
-            arg0->unk3C--;
+        if (arg0->frameCounter != 0) {
+            arg0->frameCounter--;
         } else {
-            arg0->unk3C = 0xB4;
+            arg0->frameCounter = 0xB4;
             setCallback(func_800471D0_47DD0);
         }
     }
@@ -1445,7 +1445,7 @@ void func_8004711C_47D1C(func_8004711C_47D1C_arg *arg0) {
     }
 }
 
-void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0) {
+void func_800471D0_47DD0(FlyingSceneryState *arg0) {
     Allocation_47D1C *allocation;
     Vec3i stackVec;
     s32 i;
@@ -1459,8 +1459,8 @@ void func_800471D0_47DD0(func_8004711C_47D1C_arg *arg0) {
         arg0->displayListObject.transform.translation.y += stackVec.y;
         arg0->displayListObject.transform.translation.z += stackVec.z;
 
-        if (arg0->unk3C != 0) {
-            arg0->unk3C -= 1;
+        if (arg0->frameCounter != 0) {
+            arg0->frameCounter -= 1;
         } else {
             setCallback(&func_8004728C_47E8C);
         }
