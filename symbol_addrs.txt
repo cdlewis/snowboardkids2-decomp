@@ -2536,3 +2536,4 @@ iceLandWaypoints3 = 0x800BB910; // rom:0xB2690
 initSkyRenderTask = 0x80045480; // rom:0x46080
 dispatchSkyRenderCallback = 0x80045564; // rom:0x46164
 renderSkyDisplayLists = 0x800455BC; // rom:0x461BC
+cleanupSkyRenderTask = 0x80045768; // rom:0x46368

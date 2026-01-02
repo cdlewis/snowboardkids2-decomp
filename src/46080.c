@@ -344,7 +344,7 @@ typedef struct {
     u8 _pad[0x24];
     void *unk24;
     void *unk28;
-} func_80045768_46368_arg;
+} SkyRenderTaskCleanupArg;
 
 typedef struct {
     u8 _pad[0xB4];
@@ -849,7 +849,7 @@ void func_80049300_49F00(func_80049300_49F00_arg *arg0);
 void func_8004934C_49F4C(func_80049300_49F00_arg *arg0);
 void func_80049404_4A004(Struct_func_80049404_4A004 *arg0);
 void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0);
-void func_80045768_46368(func_80045768_46368_arg *);
+void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *);
 void dispatchSkyRenderCallback(ScheduledTask *);
 void func_8004AFF8_4BBF8(func_8004AFF8_arg *);
 void func_80045CC8_468C8(void);
@@ -929,7 +929,7 @@ void initSkyRenderTask(SkyRenderTaskState *state) {
     state->unk9C = state->unk24;
     state->unkA0 = state->unk28;
 
-    setCleanupCallback(&func_80045768_46368);
+    setCleanupCallback(&cleanupSkyRenderTask);
     setCallback(&dispatchSkyRenderCallback);
 }
 
@@ -959,9 +959,9 @@ void renderSkyDisplayLists(SkyRenderTaskState *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_8004562C_4622C);
 
-void func_80045768_46368(func_80045768_46368_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *state) {
+    state->unk24 = freeNodeMemory(state->unk24);
+    state->unk28 = freeNodeMemory(state->unk28);
 }
 
 void func_800457A0_463A0(s32 arg0) {
