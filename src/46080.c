@@ -481,12 +481,6 @@ typedef struct {
 } CourseSceneryCleanupArg;
 
 typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_80047718_48318_arg;
-
-typedef struct {
     s8 unk0;
     u8 _pad1[0x3];
     u8 unk4[0xC];
@@ -837,7 +831,7 @@ void func_8004674C_4734C(DisplayListObject *);
 void renderScrollingSceneryOpaque(DisplayListObject *);
 void renderScrollingSceneryTransparent(DisplayListObject *);
 void renderScrollingSceneryOverlay(DisplayListObject *);
-void func_80047718_48318(func_80047718_48318_arg *);
+void cleanupFlyingSceneryTask(CourseSceneryCleanupArg *);
 void updateFlyingSceneryHorizontalStep(FlyingSceneryState *);
 void updateFlyingSceneryVerticalStep(FlyingSceneryState *state);
 void func_800480A8_48CA8(Struct_func_80047EFC_48AFC *);
@@ -1369,7 +1363,7 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
     arg0->displayListObject.transform.translation.z = levelData->unk4 + position.z;
     arg0->frameCounter = 0x30;
 
-    setCleanupCallback(&func_80047718_48318);
+    setCleanupCallback(&cleanupFlyingSceneryTask);
     setCallbackWithContinue(&updateFlyingSceneryHorizontalStep);
 }
 
@@ -1584,7 +1578,7 @@ void updateFlyingSceneryDescendingStep(FlyingSceneryState *state) {
     }
 }
 
-void func_80047718_48318(func_80047718_48318_arg *arg0) {
+void cleanupFlyingSceneryTask(CourseSceneryCleanupArg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
