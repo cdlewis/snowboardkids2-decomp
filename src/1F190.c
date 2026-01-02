@@ -436,7 +436,7 @@ void loadLevelPreview(void) {
         }
 
         scheduleTask(&initLevelPreviewCharacter, 0, 0, 0x5B);
-        func_800497FC_4A3FC(poolIdRaw);
+        scheduleLevelEnvironmentTasks(poolIdRaw);
         allocation->previewLoadCounter = allocation->previewLoadCounter + 1;
     } else if (counter < 6) {
         allocation->previewLoadCounter = counter + 1;

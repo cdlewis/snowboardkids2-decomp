@@ -5,7 +5,7 @@ void schedulePlayerHaloTask(Player *);
 
 void func_80049CA8_4A8A8(s32 arg0, s32 arg1);
 
-void func_800497FC_4A3FC(s32 poolId);
+void scheduleLevelEnvironmentTasks(s32 poolId);
 
 void func_8004B794_4C394(void *arg0);
 

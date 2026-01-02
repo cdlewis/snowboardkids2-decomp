@@ -2647,7 +2647,7 @@ void spawnItemBoxBurstEffect(void *displayList, s32 isSecondaryBox) {
     }
 }
 
-void func_800497FC_4A3FC(s32 poolId) {
+void scheduleLevelEnvironmentTasks(s32 poolId) {
     s32 temp;
 
     switch (poolId) {
