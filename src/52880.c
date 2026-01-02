@@ -137,26 +137,26 @@ extern s16 D_80090F60_91B60[];
 extern s32 D_80090F68_91B68;
 extern s32 D_80090F74_91B74;
 
-void func_80051C80_52880(Vec3i *arg0, s32 arg1) {
+void normalizeVelocityToSpeed(Vec3i *vel, s32 targetSpeed) {
     s32 dist;
 
-    dist = distance_2d(arg0->x, arg0->z);
+    dist = distance_2d(vel->x, vel->z);
 
     if (!(dist >= 0x20000)) {
         if (dist != 0) {
-            arg0->x = (s64)((s64)arg0->x * 0x20000) / dist;
-            arg0->z = (s64)((s64)arg0->z * 0x20000) / dist;
+            vel->x = (s64)((s64)vel->x * 0x20000) / dist;
+            vel->z = (s64)((s64)vel->z * 0x20000) / dist;
         } else {
-            arg0->z = 0x20000;
+            vel->z = 0x20000;
         }
     }
 
-    dist = distance_3d(arg0->x, arg0->y, arg0->z);
+    dist = distance_3d(vel->x, vel->y, vel->z);
 
     if (dist != 0) {
-        arg0->x = (s64)((s64)arg0->x * arg1) / dist;
-        arg0->y = (s64)((s64)arg0->y * arg1) / dist;
-        arg0->z = (s64)((s64)arg0->z * arg1) / dist;
+        vel->x = (s64)((s64)vel->x * targetSpeed) / dist;
+        vel->y = (s64)((s64)vel->y * targetSpeed) / dist;
+        vel->z = (s64)((s64)vel->z * targetSpeed) / dist;
     }
 }
 
@@ -287,7 +287,7 @@ void func_80052128_52D28(Struct_52880 *arg0) {
 
         arg0->vel.y += 0xFFFC0000;
 
-        func_80051C80_52880(&arg0->vel, 0x1C0000);
+        normalizeVelocityToSpeed(&arg0->vel, 0x1C0000);
 
         memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
 
@@ -499,7 +499,7 @@ void func_80052758_53358(Struct_52880 *arg0) {
 
         arg0->vel.y += 0xFFFC0000;
 
-        func_80051C80_52880(&arg0->vel, 0x1C8000);
+        normalizeVelocityToSpeed(&arg0->vel, 0x1C8000);
 
         memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
 
@@ -716,7 +716,7 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
 
         arg0->vel.y += 0xFFFC0000;
 
-        func_80051C80_52880(&arg0->vel, 0x1D0000);
+        normalizeVelocityToSpeed(&arg0->vel, 0x1D0000);
 
         memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
 
@@ -946,7 +946,7 @@ void func_80053434_54034(Struct_52880 *arg0) {
 
         arg0->vel.y += 0xFFFC0000;
 
-        func_80051C80_52880((Vec3i *)&arg0->vel, 0x1E0000);
+        normalizeVelocityToSpeed((Vec3i *)&arg0->vel, 0x1E0000);
 
         memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
 
@@ -1160,7 +1160,7 @@ void func_80053B38_54738(Struct_52880 *arg0) {
 
         arg0->vel.y += 0xFFFC0000;
 
-        func_80051C80_52880((Vec3i *)&arg0->vel, arg0->unk3C);
+        normalizeVelocityToSpeed((Vec3i *)&arg0->vel, arg0->unk3C);
 
         memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
 
@@ -1366,7 +1366,7 @@ void func_80054144_54D44(Struct_52880 *arg0) {
 
         arg0->vel.y += 0xFFFC0000;
 
-        func_80051C80_52880((Vec3i *)&arg0->vel, 0x198000);
+        normalizeVelocityToSpeed((Vec3i *)&arg0->vel, 0x198000);
 
         memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
 
@@ -1848,7 +1848,7 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
 
         arg0->unk24.y += 0xFFFC0000;
 
-        func_80051C80_52880(&arg0->unk24, 0x1C0000);
+        normalizeVelocityToSpeed(&arg0->unk24, 0x1C0000);
 
         memcpy(&savedVec, &arg0->unk4, sizeof(Vec3i));
 
@@ -2023,7 +2023,7 @@ void func_80055650_56250(Struct_52880 *arg0) {
 
     arg0->vel.y += 0xFFFC0000;
 
-    func_80051C80_52880(s0, 0x1D0000);
+    normalizeVelocityToSpeed(s0, 0x1D0000);
 
     memcpy(&savedVec, s1, sizeof(Vec3i));
 
@@ -2162,7 +2162,7 @@ void func_80055A84_56684(Struct_52880 *arg0) {
         vel = &arg0->vel;
         func_80050604_51204(&arg0->unk4, vel, 4);
         arg0->vel.y += 0xFFFC0000;
-        func_80051C80_52880(vel, 0x190000);
+        normalizeVelocityToSpeed(vel, 0x190000);
         memcpy(&prevPos, &arg0->unk4, 0xC);
 
         arg0->unk4.x += arg0->vel.x;
