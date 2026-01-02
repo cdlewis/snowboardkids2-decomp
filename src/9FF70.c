@@ -153,57 +153,57 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
     return 0;
 }
 
-s32 func_800B13D4_A1284(Player *arg0) {
-    Vec3i sp10;
+s32 updatePlayerSlidingConstrained(Player *player) {
+    Vec3i rotatedVelocity;
 
-    if (!(arg0->unkB84 & 0x20000)) {
-        resetPlayerBehaviorToDefault(arg0);
+    if (!(player->unkB84 & 0x20000)) {
+        resetPlayerBehaviorToDefault(player);
         return 1;
     }
 
-    if (arg0->unkBBF == 0) {
-        arg0->unkBBF++;
-        if (arg0->unk44C.y > 0) {
-            arg0->unk44C.y = 0;
+    if (player->unkBBF == 0) {
+        player->unkBBF++;
+        if (player->unk44C.y > 0) {
+            player->unk44C.y = 0;
         }
-        arg0->unkB8C = 0;
+        player->unkB8C = 0;
     }
 
-    if (arg0->unkB8C < 4) {
-        arg0->unkB8C++;
-    } else if (arg0->unkB8C == 4) {
-        func_80059BD4_5A7D4(arg0);
-        arg0->unkB8C++;
+    if (player->unkB8C < 4) {
+        player->unkB8C++;
+    } else if (player->unkB8C == 4) {
+        func_80059BD4_5A7D4(player);
+        player->unkB8C++;
     }
 
-    arg0->unkA90 = 0;
-    arg0->unkA92 = 0;
-    arg0->unk990.translation.x = 0;
+    player->unkA90 = 0;
+    player->unkA92 = 0;
+    player->unk990.translation.x = 0;
 
-    if (arg0->unkB84 & 2) {
-        arg0->unkA8E = arg0->unkBB0;
-        arg0->unkA94 = arg0->unkBB2;
+    if (player->unkB84 & 2) {
+        player->unkA8E = player->unkBB0;
+        player->unkA94 = player->unkBB2;
     } else {
-        arg0->unkA8E = -arg0->unkBB0;
-        arg0->unkA94 = arg0->unkBB2 + 0x1000;
+        player->unkA8E = -player->unkBB0;
+        player->unkA94 = player->unkBB2 + 0x1000;
     }
 
-    rotateVectorY(&arg0->unk44C.x, -arg0->unkBB2, &sp10);
-    sp10.x = 0;
-    rotateVectorY(&sp10, arg0->unkBB2, &arg0->unk44C);
+    rotateVectorY(&player->unk44C.x, -player->unkBB2, &rotatedVelocity);
+    rotatedVelocity.x = 0;
+    rotateVectorY(&rotatedVelocity, player->unkBB2, &player->unk44C);
 
-    arg0->unk44C.y = arg0->unk44C.y - arg0->unkAB8;
-    applyClampedVelocityToPosition(arg0);
+    player->unk44C.y = player->unk44C.y - player->unkAB8;
+    applyClampedVelocityToPosition(player);
 
-    if (arg0->unkBC0 == 0) {
-        if (func_8005D308_5DF08(arg0, 0x21) != 0) {
-            arg0->unkBC0++;
+    if (player->unkBC0 == 0) {
+        if (func_8005D308_5DF08(player, 0x21) != 0) {
+            player->unkBC0++;
         }
     } else {
-        func_8005D180_5DD80(arg0, 0x22);
+        func_8005D180_5DD80(player, 0x22);
     }
 
-    func_8005D804_5E404(arg0, 1, 0);
+    func_8005D804_5E404(player, 1, 0);
 
     return 0;
 }
