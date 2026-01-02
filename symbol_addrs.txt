@@ -2610,3 +2610,4 @@ initFlyingSceneryTask = 0x80047024; // rom:0x47C24
 updateFlyingSceneryHorizontalStep = 0x8004711C; // rom:0x47D1C
 updateFlyingSceneryVerticalStep = 0x800471D0; // rom:0x47DD0
 resetFlyingSceneryPosition = 0x8004728C; // rom:0x47E8C
+updateFlyingSceneryAscendingStep = 0x80047330; // rom:0x47F30
