@@ -71,7 +71,8 @@ void awaitSkillWinAndPromptContinue(void);
 void awaitSkillLossAndFadeOut(void);
 void awaitShotCrossWinAndPromptContinue(void);
 void awaitShotCrossLossAndFadeOut(void);
-void func_80040304_40F04(void);
+void awaitSpeedCrossAwardGold(void);
+void awaitSpeedCrossContinuePress(void);
 void awaitMeterWinAndPromptContinue(void);
 void awaitMeterLossAndFadeOut(void);
 
@@ -1236,18 +1237,18 @@ void awaitMeterLossAndFadeOut(void) {
     }
 }
 
-void func_80040238_40E38(void) {
-    GameState *allocation;
-    s32 counter;
+void handleSpeedCrossGameResult(void) {
+    GameState *state;
+    s32 delayTimer;
 
-    allocation = (GameState *)getCurrentAllocation();
-    counter = allocation->unk4C;
+    state = (GameState *)getCurrentAllocation();
+    delayTimer = state->unk4C;
 
-    if (counter == 0) {
+    if (delayTimer == 0) {
         scheduleTask((void *)func_8004D8E4_4E4E4, 1, 0, 0xE6);
-        allocation->unk4C = 0xB4;
+        state->unk4C = 0xB4;
 
-        if (allocation->players->finishPosition == 0) {
+        if (state->players->finishPosition == 0) {
             D_800A24A0_A30A0 = 3;
             func_800574A0_580A0(8);
             func_8004E6A4_4F2A4(0, 0);
@@ -1259,41 +1260,41 @@ void func_80040238_40E38(void) {
             terminateTasksByTypeAndID(0, 1);
         }
 
-        allocation->unk7B = 1;
-        setGameStateHandler((void *)func_80040304_40F04);
+        state->unk7B = 1;
+        setGameStateHandler((void *)awaitSpeedCrossAwardGold);
     } else {
-        allocation->unk4C = counter - 1;
+        state->unk4C = delayTimer - 1;
     }
 }
 
-void func_80040304_40F04(void) {
-    GameState *gameState;
+void awaitSpeedCrossAwardGold(void) {
+    GameState *state;
     Player *player;
 
-    gameState = (GameState *)getCurrentAllocation();
-    gameState->unk4C--;
+    state = (GameState *)getCurrentAllocation();
+    state->unk4C--;
 
-    if (gameState->unk4C != 0) {
+    if (state->unk4C != 0) {
         return;
     }
 
-    player = gameState->players;
-    gameState->unk7C = 1;
+    player = state->players;
+    state->unk7C = 1;
 
     switch (player->finishPosition) {
         case 0:
             addPlayerGold(player->unkB6C);
-            addPlayerGold(D_80090460_91060[gameState->memoryPoolId]);
+            addPlayerGold(D_80090460_91060[state->memoryPoolId]);
             break;
 
         case 1:
             addPlayerGold(player->unkB6C);
-            addPlayerGold(D_800904A0_910A0[gameState->memoryPoolId]);
+            addPlayerGold(D_800904A0_910A0[state->memoryPoolId]);
             break;
 
         case 2:
             addPlayerGold(player->unkB6C);
-            addPlayerGold(D_800904E0_910E0[gameState->memoryPoolId]);
+            addPlayerGold(D_800904E0_910E0[state->memoryPoolId]);
             break;
 
         case 3:
@@ -1306,10 +1307,10 @@ void func_80040304_40F04(void) {
 
     scheduleTask(&func_8004D9D0_4E5D0, 1, 0, 0xE6);
     func_800574A0_580A0(0xA);
-    setGameStateHandler(&func_80040420_41020);
+    setGameStateHandler(&awaitSpeedCrossContinuePress);
 }
 
-void func_80040420_41020(void) {
+void awaitSpeedCrossContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_80057564_58164(0x3C);
