@@ -150,7 +150,7 @@ s16 func_8005D818_5E418(Player *arg0) {
         temp_v1 = arg0->unkBDC & 7;
         if (temp_v1 != 0) {
             ptr = D_800941C4_94DC4;
-            off = arg0->unkBB5;
+            off = arg0->trickCount;
             return *(ptr + ((s32)temp_v1 << 3) + off);
         }
         goto block_17;

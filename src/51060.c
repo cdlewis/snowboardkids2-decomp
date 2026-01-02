@@ -718,7 +718,7 @@ void func_80051348_51F48(SkiTrailTask *task) {
     task->particleIndex = -1;
 
     do {
-        if ((task->player->unkBAE >> i) & 1) {
+        if ((task->player->tricksPerformedMask >> i) & 1) {
             task->particleIndex++;
         }
         i++;

@@ -164,13 +164,13 @@ typedef struct {
     u16 unkBA4;
     s16 unkBA6;
     u8 _padBA8[0x2];
-    s16 unkBAA;
-    s16 unkBAC;
-    s16 unkBAE;
+    s16 trickPoints;
+    s16 trickScore;
+    s16 tricksPerformedMask;
     u16 unkBB0;
     u16 unkBB2;
     u8 unkBB4;
-    s8 unkBB5;
+    s8 trickCount;
     u8 unkBB6;
     u8 unkBB7;
     u8 unkBB8;

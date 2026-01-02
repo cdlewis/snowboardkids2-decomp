@@ -19,8 +19,8 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern u16 D_800BAB48_AA9F8[];
-extern u16 D_800BAB58_AAA08[];
+extern u16 trickScoreTable[];
+extern u16 trickBonusTable[];
 
 extern s32 D_800BA348_AA1F8;
 extern s32 D_800BA350_AA200;
@@ -508,7 +508,7 @@ s32 beginPostTrickSlidingStep(Player *player) {
     player->unkA94 += player->unkA90;
     player->unkA90 = 0;
     func_8005D810_5E410(player);
-    player->unkBB5 = 0;
+    player->trickCount = 0;
     player->unkBCD = -1;
     return 1;
 }
@@ -650,46 +650,46 @@ s32 beginPostTrickLaunchStep(Player *player) {
 }
 
 void resetTrickScore(Player *player) {
-    player->unkBAC = 0;
-    player->unkBAA = 0;
-    player->unkBAE = 0;
-    player->unkBB5 = 0;
+    player->trickScore = 0;
+    player->trickPoints = 0;
+    player->tricksPerformedMask = 0;
+    player->trickCount = 0;
     player->unkBD5 = 0;
     player->unkBB6 = 0;
 }
 
-void func_800B2818_A26C8(Player *arg0, s8 arg1) {
-    arg0->unkBAC = arg0->unkBAC + D_800BAB48_AA9F8[arg0->unkBB5];
-    arg0->unkBAA = arg0->unkBAA + D_800BAB58_AAA08[arg0->unkBB5];
+void addTrickScore(Player *player, s8 trickType) {
+    player->trickScore = player->trickScore + trickScoreTable[player->trickCount];
+    player->trickPoints = player->trickPoints + trickBonusTable[player->trickCount];
 
-    if (arg0->unkBAE == 0) {
-        arg0->unkBAE = arg0->unkBAE | (1 << arg1);
+    if (player->tricksPerformedMask == 0) {
+        player->tricksPerformedMask = player->tricksPerformedMask | (1 << trickType);
     } else {
-        if (!((arg0->unkBAE >> arg1) & 1)) {
-            arg0->unkBAC += 100;
-            arg0->unkBAA += 10;
+        if (!((player->tricksPerformedMask >> trickType) & 1)) {
+            player->trickScore += 100;
+            player->trickPoints += 10;
         }
 
-        arg0->unkBAE |= (1 << arg1);
+        player->tricksPerformedMask |= (1 << trickType);
 
-        if (arg0->unkBAE == 0xFF) {
-            arg0->unkBAC += 1300;
-            arg0->unkBAA += 565;
-            arg0->unkBAE |= 0x100;
+        if (player->tricksPerformedMask == 0xFF) {
+            player->trickScore += 1300;
+            player->trickPoints += 565;
+            player->tricksPerformedMask |= 0x100;
         }
     }
 
-    arg0->unkBB5++;
-    if (arg0->unkBB5 >= 8) {
-        arg0->unkBB5 = 7;
+    player->trickCount++;
+    if (player->trickCount >= 8) {
+        player->trickCount = 7;
     }
 
-    if (arg0->unkBAC >= 10000) {
-        arg0->unkBAC = 9999;
+    if (player->trickScore >= 10000) {
+        player->trickScore = 9999;
     }
 
-    if (arg0->unkBAA >= 1000) {
-        arg0->unkBAA = 999;
+    if (player->trickPoints >= 1000) {
+        player->trickPoints = 999;
     }
 }
 
@@ -697,8 +697,8 @@ void func_800B2950_A2800(Player *arg0, s32 arg1) {
     s8 temp_a0;
     s8 temp_v1;
 
-    arg0->unkBAC += 0x1E;
-    arg0->unkBAA += 1;
+    arg0->trickScore += 0x1E;
+    arg0->trickPoints += 1;
     temp_a0 = arg0->unkBB6;
     temp_v1 = temp_a0;
 
@@ -706,25 +706,25 @@ void func_800B2950_A2800(Player *arg0, s32 arg1) {
         arg0->unkBB6 = temp_v1 | (1 << arg1);
     } else {
         if (!((temp_a0 >> (s8)arg1) & 1)) {
-            arg0->unkBAC += 0x14;
-            arg0->unkBAA += 1;
+            arg0->trickScore += 0x14;
+            arg0->trickPoints += 1;
         }
 
         arg0->unkBB6 = arg0->unkBB6 | (1 << (s8)arg1);
 
         if ((s8)arg0->unkBB6 == 0xF) {
-            arg0->unkBAC += 0x14;
-            arg0->unkBAA += 3;
+            arg0->trickScore += 0x14;
+            arg0->trickPoints += 3;
             arg0->unkBB6 |= 0x10;
         }
     }
 
-    if (arg0->unkBAC >= 10000) {
-        arg0->unkBAC = 9999;
+    if (arg0->trickScore >= 10000) {
+        arg0->trickScore = 9999;
     }
 
-    if (arg0->unkBAA >= 1000) {
-        arg0->unkBAA = 999;
+    if (arg0->trickPoints >= 1000) {
+        arg0->trickPoints = 999;
     }
 }
 
@@ -823,16 +823,16 @@ s32 func_800B2C18_A2AC8(Player *arg0) {
     stateUnk7A = state->unk7A;
     if (stateUnk7A != 0 && stateUnk7A != 8) {
         if (!(stateUnk7A == 9 || stateUnk7A == 10)) {
-            arg0->unkBAC = 0;
+            arg0->trickScore = 0;
         }
     }
 
-    if (arg0->unkBAC != 0) {
-        func_80059A48_5A648(arg0, arg0->unkBAC);
+    if (arg0->trickScore != 0) {
+        func_80059A48_5A648(arg0, arg0->trickScore);
         if (arg0->unkBC7 == 0) {
-            func_8004D890_4E490(arg0->unkBB8, arg0->unkBAC);
+            func_8004D890_4E490(arg0->unkBB8, arg0->trickScore);
 
-            var_v1 = arg0->unkBAC;
+            var_v1 = arg0->trickScore;
             if (var_v1 < 0x96) {
                 var_a0 = 0x11C;
             } else {
@@ -857,11 +857,11 @@ s32 func_800B2C18_A2AC8(Player *arg0) {
     }
 
     if (state->unk7A == 6) {
-        if (arg0->unkBAA != 0) {
-            func_8004FCF0_508F0(arg0->unkBAA);
-            func_80059A88_5A688(arg0, arg0->unkBAA);
+        if (arg0->trickPoints != 0) {
+            func_8004FCF0_508F0(arg0->trickPoints);
+            func_80059A88_5A688(arg0, arg0->trickPoints);
 
-            var_v1 = arg0->unkBAA;
+            var_v1 = arg0->trickPoints;
             if (var_v1 < 0xF) {
                 var_a0 = 0x11C;
             } else {
@@ -886,7 +886,7 @@ s32 func_800B2C18_A2AC8(Player *arg0) {
     }
 
 skip_to_end:
-    if (arg0->unkBAE != 0) {
+    if (arg0->tricksPerformedMask != 0) {
         func_80059BD4_5A7D4(arg0);
         func_8005D804_5E404(arg0, 1, 0xF);
     }
@@ -929,7 +929,7 @@ void func_800B2EE4_A2D94(Player *arg0, s8 arg1) {
     switch (arg0->unkBC0) {
         case 0:
             func_800B2E80_A2D30(arg0);
-            func_800B2818_A26C8(arg0, arg1);
+            addTrickScore(arg0, arg1);
             break;
         case 1:
             if (arg0->unkBDA != 0 || (arg0->unkB7C & 0x8000)) {
