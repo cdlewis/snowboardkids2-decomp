@@ -117,13 +117,13 @@ void func_800558A4_564A4(Struct_52880 *arg0);
 void func_80055964_56564(Struct_52880 *arg0);
 void func_80055A84_56684(Struct_52880 *);
 s32 spawnParachuteProjectileTask(s32, s32);
-s32 func_80053078_53C78(s32, s32);
+s32 spawnFryingPanProjectileTask(s32, s32);
 s32 func_800537B0_543B0(s32, s32);
 s32 func_80053DF0_549F0(s32, s32);
 s32 func_80054470_55070(s32, s32);
 s32 func_80055820_56420(s32, s32);
 void func_80053434_54034(Struct_52880 *);
-void func_80052DB4_539B4(Struct_52880 *);
+void updateFryingPanProjectile(Struct_52880 *);
 void cleanupSlapstickProjectileTask(Struct_52880 *arg0);
 void loadSlapstickProjectileAsset(Struct_52880 *arg0);
 void launchSlapstickProjectile(Struct_52880 *arg0);
@@ -595,17 +595,17 @@ s32 spawnParachuteProjectileTask(s32 arg0, s32 arg1) {
     return (s32)task;
 }
 
-void func_80052AB0_536B0(Struct_52880 *arg0);
-void func_80052C00_53800(Struct_52880 *arg0);
+void loadFryingPanProjectileAsset(Struct_52880 *arg0);
+void launchFryingPanProjectile(Struct_52880 *arg0);
 
-void func_80052A68_53668(Struct_52880 *arg0) {
+void initFryingPanProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->assetData = load_3ECE40();
     setCleanupCallback(cleanupSlapstickProjectileTask);
-    setCallbackWithContinue(func_80052AB0_536B0);
+    setCallbackWithContinue(loadFryingPanProjectileAsset);
 }
 
-void func_80052AB0_536B0(Struct_52880 *arg0) {
+void loadFryingPanProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 4);
@@ -613,10 +613,10 @@ void func_80052AB0_536B0(Struct_52880 *arg0) {
     arg0->hitCount = 0;
     arg0->turnRate = 0;
     arg0->unk0 = ptr;
-    setCallbackWithContinue(func_80052C00_53800);
+    setCallbackWithContinue(launchFryingPanProjectile);
 }
 
-void func_80052B0C_5370C(Struct_52880 *arg0) {
+void checkFryingPanProjectileHit(Struct_52880 *arg0) {
     GameState *alloc;
     Player *result;
     void *s1;
@@ -658,7 +658,7 @@ void func_80052B0C_5370C(Struct_52880 *arg0) {
     }
 }
 
-void func_80052C00_53800(Struct_52880 *arg0) {
+void launchFryingPanProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s16 playerIdx;
     s32 temp_v0;
@@ -696,8 +696,8 @@ void func_80052C00_53800(Struct_52880 *arg0) {
     arg0->lifetime = 0xF0;
 
     queueSoundAtPosition(&arg0->pos, 0x10);
-    setCallback(func_80052DB4_539B4);
-    func_80052B0C_5370C(arg0);
+    setCallback(updateFryingPanProjectile);
+    checkFryingPanProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
         func_80050ECC_51ACC(&arg0->pos);
@@ -710,7 +710,7 @@ void func_80052C00_53800(Struct_52880 *arg0) {
     }
 }
 
-void func_80052DB4_539B4(Struct_52880 *arg0) {
+void updateFryingPanProjectile(Struct_52880 *arg0) {
     Alloc_55650 *alloc;
     Vec3i sp18;
     Vec3i savedVec;
@@ -761,7 +761,7 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
         arg0->vel.y = arg0->pos.y - savedVec.y;
         arg0->vel.z = arg0->pos.z - savedVec.z;
 
-        func_80052B0C_5370C(arg0);
+        checkFryingPanProjectileHit(arg0);
 
         var_s3 = func_8005BF50_5CB50(
             &arg0->pos,
@@ -807,10 +807,10 @@ void func_80052DB4_539B4(Struct_52880 *arg0) {
     } while (i < 4);
 }
 
-s32 func_80053078_53C78(s32 arg0, s32 arg1) {
+s32 spawnFryingPanProjectileTask(s32 arg0, s32 arg1) {
     Struct_52880 *task;
 
-    task = scheduleTask(func_80052A68_53668, (arg0 + 4) & 0xFF, 0, 0x6F);
+    task = scheduleTask(initFryingPanProjectileTask, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
         task->ownerPlayerIdx = arg0;
     }
@@ -1492,7 +1492,7 @@ s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
         case 1:
             return spawnParachuteProjectileTask(arg1, arg2);
         case 2:
-            return func_80053078_53C78(arg1, arg2);
+            return spawnFryingPanProjectileTask(arg1, arg2);
         case 3:
             return func_800537B0_543B0(arg1, arg2);
         case 4:
