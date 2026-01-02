@@ -99,17 +99,17 @@ typedef struct {
 } cutsceneChrMoveSight_exec_arg;
 
 typedef struct {
-    s16 unk0;
-    s8 unk2;
-    s8 unk3;
-    s16 unk4;
+    s16 animIndex;
+    s8 actionMode;
+    s8 loopCount;
+    s16 transitionAnimIndex;
 } cutsceneChrAnime_exec_arg;
 
 typedef struct {
-    s16 unk0;
-    s8 unk2;
-    s8 unk3;
-    s16 unk4;
+    s16 animIndex;
+    s8 actionMode;
+    s8 loopCount;
+    s16 transitionAnimIndex;
 } cutsceneChrAnime2_exec_arg;
 
 typedef struct {
