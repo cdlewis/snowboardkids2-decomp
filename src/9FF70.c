@@ -78,7 +78,7 @@ void setPlayerBehaviorPhase(Player *player, s32 phase) {
     player->unkBC0 = 0;
 }
 
-void func_800B00E4_9FF94(void *arg) {
+void resetPlayerBehaviorToDefault(void *arg) {
     func_800B00D4_arg *arg0 = arg;
     arg0->unkBBD = 1;
     arg0->unkBBE = 0;
@@ -130,7 +130,7 @@ s32 func_800B12F0_A11A0(Player *arg0) {
                 func_80058BB0_597B0(arg0);
             }
         }
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
         return 1;
     }
 
@@ -157,7 +157,7 @@ s32 func_800B13D4_A1284(Player *arg0) {
     Vec3i sp10;
 
     if (!(arg0->unkB84 & 0x20000)) {
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
         return 1;
     }
 
@@ -1863,7 +1863,7 @@ s32 func_800B470C_A45BC(Player *arg0) {
     func_800B02AC_A015C(arg0);
     if (func_8005D308_5DF08(arg0, 8) != 0) {
         arg0->unkAA8 = arg0->unkAA8 / 2;
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
     }
     func_8005D804_5E404(arg0, 3, 0);
     return 0;
@@ -1916,7 +1916,7 @@ s32 func_800B48AC_A475C(Player *arg0) {
     func_800B02AC_A015C(arg0);
     if (func_8005D308_5DF08(arg0, 7) != 0) {
         arg0->unkAA8 = arg0->unkAA8 / 2;
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
     }
     func_8005D804_5E404(arg0, 3, 0);
     return 0;
@@ -2038,7 +2038,7 @@ s32 func_800B4CB8_A4B68(Player *arg0) {
     func_800B02AC_A015C(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xB) != 0) {
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
     }
 
     return 0;
@@ -2326,7 +2326,7 @@ s32 func_800B58B8_A5768(Player *arg0) {
 
     if (arg0->unkB8C == 0) {
         arg0->unkB88 = 0;
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
         return 1;
     }
 
@@ -2381,7 +2381,7 @@ s32 func_800B5938_A57E8(Player *arg0) {
     func_800B02AC_A015C(arg0);
 
     if (func_8005D308_5DF08(arg0, 0x10) != 0) {
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
     }
 
     return 0;
@@ -2534,7 +2534,7 @@ s32 func_800B5D68_A5C18(Player *arg0) {
     if (arg0->unkB8C == 0) {
         arg0->unkB88 = 0;
         func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 4);
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
         return 0;
     } else {
         arg0->unkB8C = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
@@ -3007,7 +3007,7 @@ s32 func_800B6FE8_A6E98(Player *arg0) {
         arg0->unkB8C = arg0->unkB8C - 1;
     } else {
         arg0->unkB84 = arg0->unkB84 & ~0x2380;
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
     }
 
     func_8005D308_5DF08(arg0, 0xD);
@@ -3169,7 +3169,7 @@ s32 func_800B7444_A72F4(Player *arg0) {
         arg0->unkB8C = arg0->unkB8C - 1;
     } else {
         arg0->unkB84 = arg0->unkB84 & ~0x2380;
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
     }
 
     func_8005D308_5DF08(arg0, 4);
@@ -3418,7 +3418,7 @@ s32 func_800B7A94_A7944(Player *arg0) {
         arg0->unkB8C = arg0->unkB8C - 1;
     } else {
         arg0->unkB84 = arg0->unkB84 & 0xFFFFDC7F;
-        func_800B00E4_9FF94(arg0);
+        resetPlayerBehaviorToDefault(arg0);
     }
 
     func_8005D308_5DF08(arg0, 4);

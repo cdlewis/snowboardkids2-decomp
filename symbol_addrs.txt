@@ -615,6 +615,7 @@ initializeCutsceneCommand = 0x800B0328; // rom:0x1DD3D8
 
 setPlayerBehaviorMode = 0x800B00C0; // rom:0x9FF70
 setPlayerBehaviorPhase = 0x800B00D4; // rom:0x9FF84
+resetPlayerBehaviorToDefault = 0x800B00E4; // rom:0x9FF94
 getCommandEntry = 0x800B00C0; // type:func rom:0x1DD170
 getCommandEntryMasked = 0x800B00F4; // rom:0x1DD1A4
 getCommandUnk7Field = 0x800B0114; 
