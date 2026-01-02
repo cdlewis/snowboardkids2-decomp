@@ -2738,15 +2738,15 @@ void schedulePlayerSparkleTask(void) {
     }
 }
 
-void func_80049C38_4A838(s32 arg0) {
+void scheduleGoldCoinsIfEnabled(s32 courseIndex) {
     void (*func_ptr)(s32) = (void (*)(s32))scheduleGoldCoinsTask;
-    GameState *allocation;
-    u8 check;
+    GameState *gameState;
+    u8 goldCoinsDisabled;
 
-    allocation = (GameState *)getCurrentAllocation();
-    check = allocation->unk83;
-    if (check == 0) {
-        func_ptr(arg0);
+    gameState = (GameState *)getCurrentAllocation();
+    goldCoinsDisabled = gameState->unk83;
+    if (goldCoinsDisabled == 0) {
+        func_ptr(courseIndex);
     }
 }
 
@@ -2779,7 +2779,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800BB814_B5114, 0, 0, 0xD3);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
-            func_80049C38_4A838(arg0);
+            scheduleGoldCoinsIfEnabled(arg0);
             func_80049C70_4A870(arg0);
             break;
 
@@ -2788,7 +2788,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
-            func_80049C38_4A838(arg0);
+            scheduleGoldCoinsIfEnabled(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
@@ -2802,7 +2802,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A != 0xB) {
-                func_80049C38_4A838(arg0);
+                scheduleGoldCoinsIfEnabled(arg0);
                 func_80049C70_4A870(arg0);
                 func_800BBB34();
                 schedulePlayerSparkleTask();
@@ -2819,7 +2819,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             if (temp_s1->unk7A == 8) {
-                func_80049C38_4A838(arg0);
+                scheduleGoldCoinsIfEnabled(arg0);
                 func_80049C70_4A870(arg0);
             } else {
                 func_80045434_46034(1);
@@ -2835,7 +2835,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&func_800BB2B0, 0, 0, 0x32);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&func_800BB7F0_B5A00, 0, 0, 0x5E);
-            func_80049C38_4A838(arg0);
+            scheduleGoldCoinsIfEnabled(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
@@ -2845,7 +2845,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
-            func_80049C38_4A838(arg0);
+            scheduleGoldCoinsIfEnabled(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleSceneAnimationTask(arg0, 6);
@@ -2862,7 +2862,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             }
             spawnPushZone(0);
             spawnPushZone(1);
-            func_80049C38_4A838(arg0);
+            scheduleGoldCoinsIfEnabled(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             func_800BBA98();
@@ -2876,7 +2876,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             if (temp_s1->unk7A != 8) {
                 func_80045434_46034(0);
             } else {
-                func_80049C38_4A838(arg0);
+                scheduleGoldCoinsIfEnabled(arg0);
                 func_80049C70_4A870(arg0);
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
@@ -2888,7 +2888,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
-            func_80049C38_4A838(arg0);
+            scheduleGoldCoinsIfEnabled(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
@@ -2903,7 +2903,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
-            func_80049C38_4A838(arg0);
+            scheduleGoldCoinsIfEnabled(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(&func_800BB74C_AF43C, 0, 0, 0xC8);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
@@ -2931,7 +2931,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB688_B2408, 0, 0, 0xD3);
-            func_80049C38_4A838(arg0);
+            scheduleGoldCoinsIfEnabled(arg0);
             func_80049C70_4A870(arg0);
             break;
 
@@ -2941,7 +2941,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
-                func_80049C38_4A838(arg0);
+                scheduleGoldCoinsIfEnabled(arg0);
                 func_80049C70_4A870(arg0);
             } else {
                 func_80045434_46034(2);
@@ -2958,7 +2958,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
-                func_80049C38_4A838(arg0);
+                scheduleGoldCoinsIfEnabled(arg0);
                 func_80049C70_4A870(arg0);
             } else {
                 func_80045434_46034(3);
@@ -2974,7 +2974,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
-                func_80049C38_4A838(arg0);
+                scheduleGoldCoinsIfEnabled(arg0);
                 func_80049C70_4A870(arg0);
             } else {
                 func_800BBA50(arg0);
@@ -2990,7 +2990,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 schedulePlayerRenderTask(s0);
             }
             if (temp_s1->unk7A == 8) {
-                func_80049C38_4A838(arg0);
+                scheduleGoldCoinsIfEnabled(arg0);
                 func_80049C70_4A870(arg0);
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
@@ -3002,7 +3002,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(s0);
             }
-            func_80049C38_4A838(arg0);
+            scheduleGoldCoinsIfEnabled(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
