@@ -18,6 +18,7 @@ resetTrickScore = 0x800B27FC; // rom:0xA26AC
 addTrickScore = 0x800B2818; // rom:0xA26C8
 addSpinTrickScore = 0x800B2950; // rom:0xA2800
 updatePostTrickDescentStep = 0x800B2A3C; // rom:0xA28EC
+updateTrickFacingAngle = 0x800B2B3C; // rom:0xA29EC
 trickScoreTable = 0x800BAB48; // rom:0xAA9F8
 trickBonusTable = 0x800BAB58; // rom:0xAAA08
 sharpTurnBehaviorStepHandlers = 0x800BAAF4; // rom:0xAA9A4

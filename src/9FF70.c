@@ -29,7 +29,7 @@ extern s32 D_800BAB44_AA9F4;
 extern s32 D_800BAB3C_AA9EC;
 
 s32 func_800B2C18_A2AC8(Player *);
-void func_800B2B3C_A29EC(Player *);
+void updateTrickFacingAngle(Player *);
 void func_800B3784_A3634(Player *);
 void func_800B4058_A3F08(Player *);
 void func_800B419C_A404C(Player *);
@@ -763,36 +763,36 @@ s32 updatePostTrickDescentStep(Player *player) {
     }
 }
 
-void func_800B2B3C_A29EC(Player *arg0) {
-    s32 temp_v1;
-    u16 temp_a1;
-    s16 var_v1;
+void updateTrickFacingAngle(Player *player) {
+    s32 playerFlags;
+    u16 currentAngle;
+    s16 angleDelta;
 
-    temp_v1 = arg0->unkB84;
-    if (!(temp_v1 & 0x1000)) {
-        if (arg0->unkBDA != 0) {
-            func_800B9B90_A9A40(arg0);
-            var_v1 = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z);
-            temp_a1 = (u16)arg0->unkA94;
-            var_v1 = (var_v1 - temp_a1) & 0x1FFF;
-            if (var_v1 >= 0x1001) {
-                var_v1 = var_v1 | 0xE000;
+    playerFlags = player->unkB84;
+    if (!(playerFlags & 0x1000)) {
+        if (player->unkBDA != 0) {
+            func_800B9B90_A9A40(player);
+            angleDelta = func_8006D21C_6DE1C(player->unkA7C, player->unkA84, player->worldPos.x, player->worldPos.z);
+            currentAngle = (u16)player->unkA94;
+            angleDelta = (angleDelta - currentAngle) & 0x1FFF;
+            if (angleDelta >= 0x1001) {
+                angleDelta = angleDelta | 0xE000;
             }
-            if (var_v1 >= 0x41) {
-                var_v1 = 0x40;
+            if (angleDelta >= 0x41) {
+                angleDelta = 0x40;
             }
-            if (var_v1 < -0x40) {
-                var_v1 = -0x40;
+            if (angleDelta < -0x40) {
+                angleDelta = -0x40;
             }
-            arg0->unkA94 = temp_a1 + var_v1;
+            player->unkA94 = currentAngle + angleDelta;
         } else {
-            arg0->unkA94 = (u16)arg0->unkA94 - (arg0->unkB7A * 4);
+            player->unkA94 = (u16)player->unkA94 - (player->unkB7A * 4);
         }
-        func_80058CFC_598FC(arg0);
+        func_80058CFC_598FC(player);
         return;
     }
-    if (temp_v1 & 0x4000) {
-        func_800516B4_522B4(arg0);
+    if (playerFlags & 0x4000) {
+        func_800516B4_522B4(player);
     }
 }
 
@@ -909,7 +909,7 @@ s32 func_800B2E38_A2CE8(void *arg0) {
     }
     func_800B2DDC_A2C8C(arg0);
     func_800B3784_A3634(arg0);
-    func_800B2B3C_A29EC(arg0);
+    updateTrickFacingAngle(arg0);
     return 0;
 }
 
@@ -977,7 +977,7 @@ s32 func_800B2FD0_A2E80(Player *arg0) {
     }
 
     func_800B3784_A3634(arg0);
-    func_800B2B3C_A29EC(arg0);
+    updateTrickFacingAngle(arg0);
     return 0;
 }
 
@@ -1012,7 +1012,7 @@ s32 func_800B30B0_A2F60(Player *arg0) {
     }
 
     func_800B3784_A3634(arg0);
-    func_800B2B3C_A29EC(arg0);
+    updateTrickFacingAngle(arg0);
     return 0;
 }
 
@@ -1047,7 +1047,7 @@ s32 func_800B3190_A3040(Player *arg0) {
     }
 
     func_800B3784_A3634(arg0);
-    func_800B2B3C_A29EC(arg0);
+    updateTrickFacingAngle(arg0);
     return 0;
 }
 
@@ -1082,7 +1082,7 @@ s32 func_800B3270_A3120(Player *arg0) {
     }
 
     func_800B3784_A3634(arg0);
-    func_800B2B3C_A29EC(arg0);
+    updateTrickFacingAngle(arg0);
     return 0;
 }
 
@@ -1118,7 +1118,7 @@ s32 func_800B3350_A3200(Player *arg0) {
     }
 
     func_800B3784_A3634(arg0);
-    func_800B2B3C_A29EC(arg0);
+    updateTrickFacingAngle(arg0);
     return 0;
 }
 
@@ -1154,7 +1154,7 @@ s32 func_800B3438_A32E8(Player *arg0) {
     }
 
     func_800B3784_A3634(arg0);
-    func_800B2B3C_A29EC(arg0);
+    updateTrickFacingAngle(arg0);
     return 0;
 }
 
@@ -1190,7 +1190,7 @@ s32 func_800B3520_A33D0(Player *arg0) {
     }
 
     func_800B3784_A3634(arg0);
-    func_800B2B3C_A29EC(arg0);
+    updateTrickFacingAngle(arg0);
     return 0;
 }
 
@@ -1226,7 +1226,7 @@ s32 func_800B3608_A34B8(Player *arg0) {
     }
 
     func_800B3784_A3634(arg0);
-    func_800B2B3C_A29EC(arg0);
+    updateTrickFacingAngle(arg0);
     return 0;
 }
 
