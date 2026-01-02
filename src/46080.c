@@ -575,8 +575,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x14];
-    s16 unk14;
-} func_80049280_49E80_Task;
+    s16 courseId;
+} ItemBoxSystemTaskParams;
 
 typedef struct {
     Transform3D matrix;
@@ -2471,10 +2471,10 @@ void cleanupItemBoxSystem(ItemBoxSystemState *state) {
     state->positionData = freeNodeMemory(state->positionData);
 }
 
-void func_80049280_49E80(s32 courseId) {
-    func_80049280_49E80_Task *task = (func_80049280_49E80_Task *)scheduleTask(&initItemBoxSystem, 0, 0, 0xEA);
+void scheduleItemBoxSystemTask(s32 courseId) {
+    ItemBoxSystemTaskParams *task = (ItemBoxSystemTaskParams *)scheduleTask(&initItemBoxSystem, 0, 0, 0xEA);
     if (task != NULL) {
-        task->unk14 = courseId;
+        task->courseId = courseId;
     }
 }
 
@@ -2763,7 +2763,7 @@ void func_80049C70_4A870(s32 arg0) {
     if (check != 0) {
         return;
     }
-    func_80049280_49E80(arg0);
+    scheduleItemBoxSystemTask(arg0);
 }
 
 void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
