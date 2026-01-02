@@ -1941,55 +1941,55 @@ s32 updateStunnedFallingPhase(Player *player) {
     return 0;
 }
 
-s32 func_800B4B08_A49B8(Player *arg0) {
+s32 updateStunnedLandingBouncePhase(Player *player) {
     s64 distSq;
     s32 dist;
 
-    if (arg0->unkBBF == 0) {
-        arg0->unkB8C = 0x14;
-        arg0->unkBBF++;
+    if (player->unkBBF == 0) {
+        player->unkB8C = 0x14;
+        player->unkBBF++;
     }
 
-    arg0->unkB84 |= 0x60;
-    arg0->unk44C.y -= 0x6000;
-    arg0->unkB88 = 1;
+    player->unkB84 |= 0x60;
+    player->unk44C.y -= 0x6000;
+    player->unkB88 = 1;
 
-    if (arg0->unkB84 & 1) {
-        arg0->unkA8C = -1;
-        arg0->unkB8C = 0xA;
-        arg0->unkBC0 = 0;
-        arg0->unk44C.x -= (arg0->unk44C.x >> 5);
-        arg0->unk44C.z -= (arg0->unk44C.z >> 5);
+    if (player->unkB84 & 1) {
+        player->unkA8C = -1;
+        player->unkB8C = 0xA;
+        player->unkBC0 = 0;
+        player->unk44C.x -= (player->unk44C.x >> 5);
+        player->unk44C.z -= (player->unk44C.z >> 5);
     } else {
-        if (arg0->unkBC0 == 0) {
-            arg0->unkBC0++;
-            func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
-            queueSoundAtPosition(&arg0->worldPos, 0x25);
-            func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
+        if (player->unkBC0 == 0) {
+            player->unkBC0++;
+            func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
+            queueSoundAtPosition(&player->worldPos, 0x25);
+            func_80051C08_52808(player, player->unkBCC & 0xF);
         }
-        applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
+        applyVelocityDeadzone(player, 0x8000, 0x8000, 0x8000);
     }
 
-    decayPlayerSteeringAngles(arg0);
-    applyClampedVelocityToPosition(arg0);
+    decayPlayerSteeringAngles(player);
+    applyClampedVelocityToPosition(player);
 
-    if (func_8005D308_5DF08(arg0, 0xA) != 0) {
-        if ((arg0->unkB84 & 1) == 0) {
-            if (arg0->unkB8C == 0) {
-                distSq = (s64)arg0->unk44C.x * arg0->unk44C.x + (s64)arg0->unk44C.z * arg0->unk44C.z;
+    if (func_8005D308_5DF08(player, 0xA) != 0) {
+        if ((player->unkB84 & 1) == 0) {
+            if (player->unkB8C == 0) {
+                distSq = (s64)player->unk44C.x * player->unk44C.x + (s64)player->unk44C.z * player->unk44C.z;
                 dist = isqrt64(distSq);
 
                 if (dist <= 0x1FFFF) {
-                    arg0->unkB88 = 0;
-                    setPlayerBehaviorPhase(arg0, 4);
+                    player->unkB88 = 0;
+                    setPlayerBehaviorPhase(player, 4);
                 }
             } else {
-                arg0->unkB8C--;
+                player->unkB8C--;
             }
         }
     }
 
-    func_8005D804_5E404(arg0, 3, 0);
+    func_8005D804_5E404(player, 3, 0);
     return 0;
 }
 
