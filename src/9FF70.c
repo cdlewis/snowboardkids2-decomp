@@ -502,14 +502,14 @@ void dispatchPostTrickLandingStep(func_800B00D4_arg *arg0) {
     postTrickLandingStepHandlers[arg0->unkBBF](arg0);
 }
 
-s32 func_800B23DC_A228C(Player *arg0) {
-    arg0->unkB8C = 4;
-    arg0->unkBBF += 1;
-    arg0->unkA94 += arg0->unkA90;
-    arg0->unkA90 = 0;
-    func_8005D810_5E410(arg0);
-    arg0->unkBB5 = 0;
-    arg0->unkBCD = -1;
+s32 beginPostTrickSlidingStep(Player *player) {
+    player->unkB8C = 4;
+    player->unkBBF += 1;
+    player->unkA94 += player->unkA90;
+    player->unkA90 = 0;
+    func_8005D810_5E410(player);
+    player->unkBB5 = 0;
+    player->unkBCD = -1;
     return 1;
 }
 
