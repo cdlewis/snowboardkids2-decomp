@@ -212,7 +212,47 @@ void func_800B2E48_1DFEF8(CutsceneManager *manager) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B2F2C);
+void func_800B2F2C(CutsceneManager *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4, u8 arg5) {
+    SceneModel *temp_v1;
+    s32 var_s2;
+    u16 temp_v0;
+
+    var_s2 = 0;
+    *(s32 *)&arg0->uiResource = arg1;
+    *(s32 *)&arg0->pad4[0] = arg2;
+    *(s32 *)&arg0->pad4[4] = arg3;
+    arg0->currentFrame = 0;
+    arg0->maxFrame = arg4;
+    arg0->endFrame = func_800B34D0_1E0580();
+    do {
+        temp_v0 = func_800B34B0_1E0560(var_s2)->unk4;
+        temp_v1 = arg0->slots[var_s2].model;
+        arg0->slots[var_s2].unk42 = 0xFF;
+        arg0->slots[var_s2].unk43 = 0xFF;
+        arg0->slots[var_s2].unk44 = 0;
+        arg0->slots[var_s2].padding3[0] = 0;
+        arg0->slots[var_s2].unk40 = temp_v0;
+        if (temp_v1 != NULL) {
+            temp_v1->unk14 = -1;
+            arg0->slots[var_s2].model->unk16 = -1;
+            setModelDisplayEnabled(arg0->slots[var_s2].model, 1);
+            setItemDisplayEnabled(arg0->slots[var_s2].model, 0);
+            setAnimationIndex(arg0->slots[var_s2].model, -1);
+            clearModelAnimationState(arg0->slots[var_s2].model);
+        }
+        var_s2 += 1;
+    } while (var_s2 < 0x10);
+    *(s16 *)&arg0->textRenderer = -0x90;
+    *((s16 *)&arg0->textRenderer + 1) = 0x68;
+    *(s16 *)&arg0->padFEC[0] = 0;
+    *(s32 *)&arg0->padFEC[4] = (s32)&arg0->debugText[0];
+    arg0->showDebugInfo = arg5;
+    arg0->enableTransparency = 0;
+    arg0->skipAnimation = 0;
+    func_800B2D68_1DFE18((CutsceneSlot *)arg0);
+    func_800B2E48_1DFEF8(arg0);
+    clearAuxRenderEnabled(&arg0->unkFF8);
+}
 
 s32 processCutsceneFrame(CutsceneManager *uiManager) {
     s32 slotIndex;

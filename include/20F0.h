@@ -272,6 +272,7 @@ s32 setModelRotation(SceneModel *, s16);
 
 void setAnimationIndex(SceneModel *arg0, s8 arg1);
 s8 getModelAnimationCount(SceneModel *arg0);
+void clearModelAnimationState(SceneModel *model);
 
 void disableEntityRendering(GameEntity *arg0);
 void enableEntityRendering(SceneModel *arg0);
