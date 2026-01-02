@@ -2478,7 +2478,7 @@ void scheduleItemBoxSystemTask(s32 courseId) {
     }
 }
 
-void func_800492C0_49EC0(void **arg0) {
+void initItemBoxBurstEffect(void **arg0) {
     *arg0 = load_3ECE40();
     setCleanupCallback(&func_80049404_4A004);
     setCallbackWithContinue(&func_80049300_49F00);
@@ -2644,7 +2644,7 @@ void func_80049430_4A030(func_80049300_49F00_arg *arg0) {
 }
 
 void func_80049794_4A394(void *payload, s32 arg1) {
-    NodeWithPayload *temp_v0 = (NodeWithPayload *)scheduleTask(&func_800492C0_49EC0, 0, 0, 0xEB);
+    NodeWithPayload *temp_v0 = (NodeWithPayload *)scheduleTask(&initItemBoxBurstEffect, 0, 0, 0xEB);
     if (temp_v0 != NULL) {
         memcpy((void *)((s32)temp_v0 + 0x10), payload, 0x20);
         temp_v0->unk3C = arg1;
