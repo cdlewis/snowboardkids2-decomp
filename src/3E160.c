@@ -1068,10 +1068,10 @@ void awaitSkillLossAndFadeOut(void) {
     }
 }
 
-void func_8003FDD4_409D4(void) {
+void handleShotCrossGameResult(void) {
     GameState *state;
     s32 score;
-    u8 unk5AValue;
+    u8 itemsCollected;
 
     state = (GameState *)getCurrentAllocation();
 
@@ -1088,10 +1088,10 @@ void func_8003FDD4_409D4(void) {
         terminateTasksByTypeAndID(0, 1);
         func_8004EDCC_4F9CC(1);
 
-        unk5AValue = state->unk5A;
-        score = unk5AValue * 300;
+        itemsCollected = state->unk5A;
+        score = itemsCollected * 300;
 
-        if (unk5AValue == 0x14) {
+        if (itemsCollected == 0x14) {
             D_800A24A0_A30A0 = 5;
             func_800574A0_580A0(8);
 
