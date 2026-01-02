@@ -82,7 +82,7 @@ void func_800585C8_591C8(s32 arg0);
 void func_80058B30_59730(Player *arg0);
 s32 func_80058BB0_597B0(Player *arg0);
 void eepromWriteAllAsync(void *buffer);
-void func_80044538_45138(s16 arg0);
+void spawnPushZone(s16 zoneIndex);
 void func_80045434_46034(s16 arg0);
 void func_80041418_42018(void);
 PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player);

@@ -2870,8 +2870,8 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
             }
-            func_80044538_45138(0);
-            func_80044538_45138(1);
+            spawnPushZone(0);
+            spawnPushZone(1);
             func_80049C38_4A838(arg0);
             func_80049C70_4A870(arg0);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
@@ -2881,8 +2881,8 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             break;
 
         case CRAZY_JUNGLE_BOSS:
-            func_80044538_45138(2);
-            func_80044538_45138(3);
+            spawnPushZone(2);
+            spawnPushZone(3);
             if (temp_s1->unk7A != 8) {
                 func_80045434_46034(0);
             } else {
@@ -2920,8 +2920,8 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB8E8_AF5D8, 0, 0, 0x32);
             scheduleTask(&func_800BBE84_AFB74, 0, 0, 0x32);
-            func_80044538_45138(6);
-            func_80044538_45138(7);
+            spawnPushZone(6);
+            spawnPushZone(7);
             func_800BC0FC(0);
             func_800BC0FC(1);
             func_800BC0FC(2);
@@ -2937,7 +2937,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
                 temp_s1->unk60 = temp_s1->unk60 + 1;
                 func_80045964_46564(s0);
             }
-            func_80044538_45138(4);
+            spawnPushZone(4);
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB688_B2408, 0, 0, 0xD3);
@@ -2959,7 +2959,7 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             scheduleTask(func_80046DCC_479CC, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             func_80041418_42018();
-            func_80044538_45138(5);
+            spawnPushZone(5);
             break;
 
         case SNOWBOARD_STREET_SPEED_CROSS:

@@ -179,11 +179,6 @@ typedef struct {
 } CrashEffectState;
 
 typedef struct {
-    u8 _pad0[0x3C]; /* 0x00 */
-    s16 unk3C;      /* 0x3C */
-} Func44538TaskMem;
-
-typedef struct {
     u8 pad0[0x14];     /* 0x00 */
     Vec3i position;    /* 0x14 */
     void *displayData; /* 0x20 */
@@ -1782,39 +1777,39 @@ typedef struct {
     void *unk28;   /* 0x28 */
     s32 unk2C;     /* 0x2C */
     u8 pad30[0xC]; /* 0x30 */
-    s16 unk3C;     /* 0x3C */
-} Func44CB4State;
+    s16 zoneIndex; /* 0x3C */
+} PushZoneState;
 
-void func_80044500_45100(Func432D8Arg *);
-void func_800441A4_44DA4(Func44CB4State *);
+void cleanupPushZone(Func432D8Arg *);
+void func_800441A4_44DA4(PushZoneState *);
 
-void func_800440B4_44CB4(Func44CB4State *arg0) {
+void initPushZone(PushZoneState *arg0) {
     Func44CB4Allocation *allocation;
     s32 offset;
 
     allocation = getCurrentAllocation();
-    offset = arg0->unk3C * 9;
+    offset = arg0->zoneIndex * 9;
     createCombinedRotationMatrix(arg0, *(u16 *)&D_80090994_91594[offset], *(u16 *)&D_80090996_91596[offset]);
-    memcpy(&arg0->unk14, &D_80090988_91588[arg0->unk3C * 9], 0xC);
-    arg0->unk20 = (void *)(D_80090980_91580[arg0->unk3C * 9] + (D_80090984_91584[arg0->unk3C * 9] << 4));
+    memcpy(&arg0->unk14, &D_80090988_91588[arg0->zoneIndex * 9], 0xC);
+    arg0->unk20 = (void *)(D_80090980_91580[arg0->zoneIndex * 9] + (D_80090984_91584[arg0->zoneIndex * 9] << 4));
     arg0->unk24 = func_80055DC4_569C4(allocation->unk5C);
     arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
     arg0->unk2C = 0;
-    setCleanupCallback(func_80044500_45100);
+    setCleanupCallback(cleanupPushZone);
     setCallbackWithContinue(func_800441A4_44DA4);
 }
 
 INCLUDE_ASM("asm/nonmatchings/42170", func_800441A4_44DA4);
 
-void func_80044500_45100(Func432D8Arg *arg0) {
+void cleanupPushZone(Func432D8Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void func_80044538_45138(s16 arg0) {
-    Func44538TaskMem *task = (Func44538TaskMem *)scheduleTask(func_800440B4_44CB4, 0, 0, 0x32);
+void spawnPushZone(s16 zoneIndex) {
+    PushZoneState *task = (PushZoneState *)scheduleTask(initPushZone, 0, 0, 0x32);
     if (task != NULL) {
-        task->unk3C = arg0;
+        task->zoneIndex = zoneIndex;
     }
 }
 
