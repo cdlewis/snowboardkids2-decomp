@@ -97,17 +97,17 @@ typedef struct {
     s32 unk454;
 } func_800B0300_arg;
 
-void func_800B02AC_A015C(Player *arg0) {
-    func_8005D03C_5DC3C(arg0);
-    arg0->worldPos.x = arg0->worldPos.x + arg0->unk44C.x;
-    arg0->worldPos.y = arg0->worldPos.y + arg0->unk44C.y;
-    arg0->worldPos.z = arg0->worldPos.z + arg0->unk44C.z;
+void applyClampedVelocityToPosition(Player *player) {
+    func_8005D03C_5DC3C(player);
+    player->worldPos.x = player->worldPos.x + player->unk44C.x;
+    player->worldPos.y = player->worldPos.y + player->unk44C.y;
+    player->worldPos.z = player->worldPos.z + player->unk44C.z;
 }
 
-void func_800B0300_A01B0(Player *arg0) {
-    arg0->worldPos.x = arg0->worldPos.x + arg0->unk44C.x;
-    arg0->worldPos.y = arg0->worldPos.y + arg0->unk44C.y;
-    arg0->worldPos.z = arg0->worldPos.z + arg0->unk44C.z;
+void applyVelocityToPosition(Player *player) {
+    player->worldPos.x = player->worldPos.x + player->unk44C.x;
+    player->worldPos.y = player->worldPos.y + player->unk44C.y;
+    player->worldPos.z = player->worldPos.z + player->unk44C.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B0334_A01E4);
@@ -148,7 +148,7 @@ s32 func_800B12F0_A11A0(Player *arg0) {
     arg0->unk44C.x = 0;
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - arg0->unkAB8;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0);
     return 0;
 }
@@ -193,7 +193,7 @@ s32 func_800B13D4_A1284(Player *arg0) {
     rotateVectorY(&sp10, arg0->unkBB2, &arg0->unk44C);
 
     arg0->unk44C.y = arg0->unk44C.y - arg0->unkAB8;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (arg0->unkBC0 == 0) {
         if (func_8005D308_5DF08(arg0, 0x21) != 0) {
@@ -1383,7 +1383,7 @@ s32 func_800B3CBC_A3B6C(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y -= 0x6000;
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0);
     if (temp_s0->unk7B != 0) {
         switch (temp_s0->unk7A) {
@@ -1432,7 +1432,7 @@ s32 func_800B3DF0_A3CA0(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (arg0->unkAE0 <= 0xDFFFF) {
         arg0->unkAE0 = arg0->unkAE0 + 0x8000;
@@ -1497,7 +1497,7 @@ s32 func_800B3F2C_A3DDC(Player *arg0) {
     arg0->unk44C.y = temp_v1;
 
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     temp = arg0->unkAE0;
     if (!(0xDFFFF < temp)) {
@@ -1860,7 +1860,7 @@ s32 func_800B470C_A45BC(Player *arg0) {
     vel2 = arg0->unk44C.z;
     arg0->unk44C.z = vel2 - (vel2 >> 4);
     func_800B419C_A404C(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     if (func_8005D308_5DF08(arg0, 8) != 0) {
         arg0->unkAA8 = arg0->unkAA8 / 2;
         resetPlayerBehaviorToDefault(arg0);
@@ -1913,7 +1913,7 @@ s32 func_800B48AC_A475C(Player *arg0) {
     vel2 = arg0->unk44C.z;
     arg0->unk44C.z = vel2 - (vel2 >> 4);
     func_800B419C_A404C(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     if (func_8005D308_5DF08(arg0, 7) != 0) {
         arg0->unkAA8 = arg0->unkAA8 / 2;
         resetPlayerBehaviorToDefault(arg0);
@@ -1929,7 +1929,7 @@ s32 func_800B4A4C_A48FC(Player *arg0) {
     arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 6);
     arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 6);
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 9) != 0) {
         if ((arg0->unkB84 & 1) == 0) {
@@ -1972,7 +1972,7 @@ s32 func_800B4B08_A49B8(Player *arg0) {
     }
 
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xA) != 0) {
         if ((arg0->unkB84 & 1) == 0) {
@@ -2035,7 +2035,7 @@ s32 func_800B4CB8_A4B68(Player *arg0) {
     arg0->unk44C.y -= 0x6000;
 
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xB) != 0) {
         resetPlayerBehaviorToDefault(arg0);
@@ -2081,7 +2081,7 @@ s32 func_800B4DB8_A4C68(Player *arg0) {
     }
 
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0xC);
 
     if (arg0->unkB8C == 0) {
@@ -2132,7 +2132,7 @@ s32 func_800B4F5C_A4E0C(Player *arg0) {
     }
 
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0xC);
 
     if (arg0->unkBC9 != 1) {
@@ -2191,7 +2191,7 @@ s32 func_800B50C0_A4F70(Player *arg0) {
     arg0->unk44C.z = vel2 - (vel2 >> 6);
 
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xE) != 0) {
         if ((arg0->unkB84 & 1) == 0) {
@@ -2233,7 +2233,7 @@ s32 func_800B5234_A50E4(Player *arg0) {
     }
 
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xF) != 0) {
         if (!(arg0->unkB84 & 1)) {
@@ -2269,7 +2269,7 @@ s32 func_800B5394_A5244(Player *arg0) {
 
     func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xE) != 0) {
         setPlayerBehaviorPhase(arg0, 0xA);
@@ -2303,7 +2303,7 @@ s32 func_800B5478_A5328(Player *arg0) {
 
     func_800B42A8_A4158(arg0, 0x8000, 0x8000, 0x8000);
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xF) != 0) {
         if ((arg0->unkB84 & 1) == 0) {
@@ -2378,7 +2378,7 @@ s32 func_800B5938_A57E8(Player *arg0) {
     arg0->unk44C.y -= 0x6000;
 
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0x10) != 0) {
         resetPlayerBehaviorToDefault(arg0);
@@ -2423,7 +2423,7 @@ s32 func_800B5A40_A58F0(Player *arg0) {
 
     arg0->unkA94 += 0x40;
 
-    func_800B0300_A01B0(arg0);
+    applyVelocityToPosition(arg0);
     func_8005D308_5DF08(arg0, 9);
 
     if (arg0->unkB8C != 0) {
@@ -2468,7 +2468,7 @@ s32 func_800B5B90_A5A40(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y -= 0x6000;
     func_800B40D4_A3F84(arg0);
-    func_800B0300_A01B0(arg0);
+    applyVelocityToPosition(arg0);
     if (arg0->unkBCE & 1) {
         arg0->unkB8C = 0;
     }
@@ -2493,7 +2493,7 @@ s32 func_800B5CB8_A5B68(Player *arg0) {
     arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 6);
     arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 6);
     func_800B40D4_A3F84(arg0);
-    func_800B0300_A01B0(arg0);
+    applyVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 0xE) != 0) {
         if ((arg0->unkB84 & 1) == 0) {
@@ -2528,7 +2528,7 @@ s32 func_800B5D68_A5C18(Player *arg0) {
         func_800B42A8_A4158(arg0, 0x200, 0x200, arg0->unkAB0);
     }
 
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_8005D308_5DF08(arg0, 0);
 
     if (arg0->unkB8C == 0) {
@@ -2573,7 +2573,7 @@ s32 func_800B5E90_A5D40(Player *arg0) {
     }
 
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0xC);
 
     if (arg0->unkB8C == 0) {
@@ -2616,7 +2616,7 @@ s32 func_800B5FC4_A5E74(Player *arg0) {
     arg0->unk44C.z -= arg0->unk44C.z >> 6;
 
     func_800B40D4_A3F84(arg0);
-    func_800B0300_A01B0(arg0);
+    applyVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 9) != 0) {
         if ((arg0->unkB84 & 1) == 0) {
@@ -2659,7 +2659,7 @@ s32 func_800B6194_A6044(Player *arg0) {
     }
 
     func_800B40D4_A3F84(arg0);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0xC);
 
     if (arg0->unkB8C == 0) {
@@ -2701,7 +2701,7 @@ s32 func_800B62E4_A6194(Player *arg0) {
     arg0->unkB8C = arg0->unkB8C + 0x8000;
     func_800B419C_A404C(arg0);
     arg0->unkA94 = (u16)arg0->unkA94 + 0x200;
-    func_800B0300_A01B0(arg0);
+    applyVelocityToPosition(arg0);
     if (arg0->unkB8C > 0x7FFFF) {
         if (arg0->unkBD4 != 0) {
             if (arg0->unkBD2 != 0) {
@@ -2777,7 +2777,7 @@ s32 func_800B6488_A6338(Player *arg0) {
     arg0->unkB84 |= 0x40;
     arg0->unk44C.y -= 0x6000;
     func_800B40D4_A3F84(arg0);
-    func_800B0300_A01B0(arg0);
+    applyVelocityToPosition(arg0);
 
     if (arg0->unkB8C == -1) {
         arg0->unkB88 = 0;
@@ -2847,7 +2847,7 @@ s32 func_800B6688_A6538(Player *arg0) {
     item_unk4 = item->unk4;
     temp_worldPosZ = arg0->worldPos.z;
     arg0->worldPos.z = temp_worldPosZ + ((item_unk4 - temp_worldPosZ) >> 2);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
     arg0->unkB8C -= 1;
 
@@ -2877,7 +2877,7 @@ s32 func_800B67E4_A6694(Player *arg0) {
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
     arg0->worldPos.x = arg0->worldPos.x + ((item->unk0 - arg0->worldPos.x) >> 2);
     arg0->worldPos.z = arg0->worldPos.z + ((item->unk4 - arg0->worldPos.z) >> 2);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
 
     if (func_8005D308_5DF08(arg0, 3) != 0) {
@@ -2910,7 +2910,7 @@ s32 func_800B6D14_A6BC4(Player *arg0) {
         transformVector2(&D_800BAC80_AAB30, &arg0->unk970, &arg0->unk44C);
     }
 
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_8005D308_5DF08(arg0, 0xD);
 
     return 0;
@@ -2926,7 +2926,7 @@ s32 func_800B6DB8_A6C68(Player *arg0) {
     func_80055D10_56910(gameState->memoryPoolId);
     func_800B40D4_A3F84(arg0);
     transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->unk44C);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (arg0->unkB8C != 0) {
         arg0->unkB8C = arg0->unkB8C - 1;
@@ -2982,7 +2982,7 @@ s32 func_800B6E5C_A6D0C(Player *arg0) {
 
     func_800B40D4_A3F84(arg0);
     transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->unk44C);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (arg0->unkB8C != 0) {
         arg0->unkB8C--;
@@ -3000,7 +3000,7 @@ s32 func_800B6FE8_A6E98(Player *arg0) {
 
     func_80055D10_56910(gameState->memoryPoolId);
     transformVector2(&D_800BAC80_AAB30, &arg0->unk970, &arg0->unk44C);
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -3018,7 +3018,7 @@ s32 func_800B7078_A6F28(Player *arg0) {
     arg0->unk44C.x = 0;
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
     func_8005D308_5DF08(arg0, 3);
 
@@ -3162,7 +3162,7 @@ s32 func_800B7444_A72F4(Player *arg0) {
     }
 
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -3180,7 +3180,7 @@ s32 func_800B74E4_A7394(Player *arg0) {
     arg0->unk44C.x = 0;
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
     func_8005D180_5DD80(arg0, 0);
 
@@ -3200,7 +3200,7 @@ s32 func_800B756C_A741C(Player *arg0) {
     arg0->unk44C.x = 0;
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
     func_8005D180_5DD80(arg0, 0);
     arg0->unkA94 = arg0->unkA94 + arg0->unkB8C;
@@ -3226,7 +3226,7 @@ s32 func_800B75F4_A74A4(Player *arg0) {
     arg0->unk44C.x = 0;
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
     func_8005D180_5DD80(arg0, 0);
     arg0->unkA94 = arg0->unkA94 + 0x400;
@@ -3263,7 +3263,7 @@ s32 func_800B76BC_A756C(Player *arg0) {
     arg0->unk44C.x = 0;
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
     func_8005D180_5DD80(arg0, 0);
 
@@ -3298,7 +3298,7 @@ s32 func_800B7784_A7634(Player *arg0) {
     arg0->unk44C.x = 0;
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
     func_8005D180_5DD80(arg0, 0);
     arg0->unkA94 = arg0->unkA94 + 0x400;
@@ -3411,7 +3411,7 @@ s32 func_800B7A94_A7944(Player *arg0) {
 
     arg0->unkB84 = arg0->unkB84 | 0x10000;
     arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800B40D4_A3F84(arg0);
 
     if (arg0->unkB8C != 0) {

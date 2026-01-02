@@ -283,7 +283,7 @@ s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
     arg0->unk44C.x -= arg0->unk44C.x / 8;
     arg0->unk44C.z -= arg0->unk44C.z / 8;
     arg0->unk44C.y += -0x8000;
-    func_800B02AC_A015C((Player *)arg0);
+    applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkB84 & 0x400000) {
         func_8005D180_5DD80(arg0, 2);
@@ -377,7 +377,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
     }
 
     arg0->unk44C.y -= 0x10000;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_800BC61C_B1B0C(arg0);
 
     transformVectorRelative(&gameState->players->worldPos.x, arg0->unk164, &sp40);
@@ -519,7 +519,7 @@ s32 func_800BC008_B14F8(func_800BC4AC_arg *arg0) {
     arg0->unk44C.x -= arg0->unk44C.x / 8;
     arg0->unk44C.z -= arg0->unk44C.z / 8;
     arg0->unk44C.y += -0x8000;
-    func_800B02AC_A015C((Player *)arg0);
+    applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkB84 & 0x400000) {
         func_8005D180_5DD80(arg0, 2);
@@ -617,7 +617,7 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
     }
 
     arg0->unk44C.y += -0x10000;
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 4) != 0) {
         arg0->unkB88 = 0;
@@ -661,7 +661,7 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y + (-0x8000);
 
-    func_800B02AC_A015C(arg0);
+    applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 5);
 
     if ((D_8009ADE0_9B9E0 & 0xF) == 0) {
@@ -694,7 +694,7 @@ s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
     getCurrentAllocation();
 
     arg0->unk44C.y += -0x8000;
-    func_800B02AC_A015C((Player *)arg0);
+    applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkBBF == 0) {
         if (func_8005D308_5DF08(arg0, 6) != 0) {

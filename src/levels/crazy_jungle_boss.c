@@ -306,7 +306,7 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
     arg0->unk44C.x -= arg0->unk44C.x / 8;
     arg0->unk44C.z -= arg0->unk44C.z / 8;
     arg0->unk44C.y += -0x8000;
-    func_800B02AC_A015C((Player *)arg0);
+    applyClampedVelocityToPosition((Player *)arg0);
     func_8005D180_5DD80(arg0, 0);
 
     return 0;
@@ -382,7 +382,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     }
     arg0->unk44C.y += -0x10000;
 
-    func_800B02AC_A015C((Player *)arg0);
+    applyClampedVelocityToPosition((Player *)arg0);
     if (func_8005D180_5DD80(arg0, 1) != 0) {
         arg0->unkB90 = 0;
     }
@@ -413,7 +413,7 @@ s32 func_800BBD98_AC5C8(Arg0Struct *arg0) {
     arg0->unk44C.x -= arg0->unk44C.x / 8;
     arg0->unk44C.z -= arg0->unk44C.z / 8;
     arg0->unk44C.y += -0x8000;
-    func_800B02AC_A015C((Player *)arg0);
+    applyClampedVelocityToPosition((Player *)arg0);
     func_8005D180_5DD80(arg0, 0);
 
     return 0;
@@ -445,7 +445,7 @@ s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
     arg0->unk44C.x = 0;
     arg0->unk44C.z = 0;
     arg0->unk44C.y += -0x8000;
-    func_800B02AC_A015C((Player *)arg0);
+    applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkB8C == -1) {
         arg0->unkB88 = 0;
@@ -470,7 +470,7 @@ s32 func_800BBF3C_AC76C(Arg0Struct *arg0) {
     arg0->unk44C.x = 0;
     arg0->unk44C.z = 0;
     arg0->unk44C.y = arg0->unk44C.y + -0x8000;
-    func_800B02AC_A015C((Player *)arg0);
+    applyClampedVelocityToPosition((Player *)arg0);
     func_8005D180_5DD80(arg0, 2);
 
     if (arg0->unkB84 & 1) {
