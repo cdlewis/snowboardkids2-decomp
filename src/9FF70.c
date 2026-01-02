@@ -829,7 +829,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
     if (player->trickScore != 0) {
         func_80059A48_5A648(player, player->trickScore);
         if (player->unkBC7 == 0) {
-            func_8004D890_4E490(player->unkBB8, player->trickScore);
+            showTrickScoreDisplay(player->unkBB8, player->trickScore);
 
             scoreValue = player->trickScore;
             if (scoreValue < 0x96) {

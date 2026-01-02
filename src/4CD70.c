@@ -155,24 +155,24 @@ typedef struct {
 } Struct_func_8004FFB8;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+    s16 xPos;
+    s16 yPos;
+    void *spriteAsset;
+    s16 spriteFrame;
     u8 padA[0x2];
-    void *unkC;
-    char unk10[8];
-    s32 unk18;
-    s16 unk1C;
-    s16 unk1E;
-    s16 unk20;
+    void *digitsTexture;
+    char scoreText[8];
+    s32 score;
+    s16 textX;
+    s16 textY;
+    s16 textScale;
     u8 pad22[0x2];
-    void *unk24;
-    u16 unk28;
-    u16 unk2A;
-    s16 unk2C;
-    s16 unk2E;
-} Struct_func_8004D784;
+    void *textPtr;
+    u16 playerIndex;
+    u16 holdTimer;
+    s16 animAngle;
+    s16 useGoldFormat;
+} TrickScoreDisplayState;
 
 typedef struct {
     u8 pad0[0x4];
@@ -236,10 +236,10 @@ void updateCenteredSpritePopup(CenteredSpritePopupState *);
 void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *);
 void func_8004D954_4E554(FinishPositionDisplayState *arg0);
 void func_8004D98C_4E58C(Struct_func_8004F04C *arg0);
-void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0);
-void func_8004D784_4E384(Struct_func_8004D784 *arg0);
-void func_8004D6FC_4E2FC(Struct_func_8004D784 *arg0);
-void func_8004D858_4E458(Struct_func_8004F04C *arg0);
+void updateTrickScoreSlideOut(TrickScoreDisplayState *state);
+void updateTrickScoreHold(TrickScoreDisplayState *state);
+void updateTrickScoreSlideIn(TrickScoreDisplayState *state);
+void cleanupTrickScoreDisplayTask(Struct_func_8004F04C *state);
 void updateGoalBannerSlideIn(GoalBannerState *state);
 void updateGoalBannerHold(GoalBannerState *state);
 void updateGoalBannerSlideOut(GoalBannerState *state);
@@ -894,101 +894,109 @@ extern char D_8009E884_9F484[];
 
 static const char D_8009E88C_9F48C[] = "%4dG";
 
-void func_8004D544_4E144(Struct_func_8004D784 *arg0) {
-    GameState *allocation = (GameState *)getCurrentAllocation();
+void initTrickScoreDisplayTask(TrickScoreDisplayState *state) {
+    GameState *gameState = (GameState *)getCurrentAllocation();
 
-    if (allocation->unk5F == 1) {
-        arg0->unk2E = 0;
+    if (gameState->unk5F == 1) {
+        state->useGoldFormat = 0;
     } else {
-        arg0->unk2E = 1;
+        state->useGoldFormat = 1;
     }
-    arg0->unk4 = loadAsset_34CB50();
-    if (arg0->unk2E == 0) {
-        arg0->unk2 = -0x20;
-        arg0->unk8 = 0xF;
-        arg0->unkC = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-        sprintf(arg0->unk10, D_8009E884_9F484, arg0->unk18);
+    state->spriteAsset = loadAsset_34CB50();
+    if (state->useGoldFormat == 0) {
+        state->yPos = -0x20;
+        state->spriteFrame = 0xF;
+        state->digitsTexture = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+        sprintf(state->scoreText, D_8009E884_9F484, state->score);
     } else {
-        arg0->unk2 = -0x18;
-        arg0->unk8 = 0x10;
-        arg0->unkC = 0;
-        arg0->unk20 = 4;
-        arg0->unk24 = arg0->unk10;
-        arg0->unk1E = arg0->unk2;
-        sprintf(arg0->unk10, D_8009E88C_9F48C, arg0->unk18);
+        state->yPos = -0x18;
+        state->spriteFrame = 0x10;
+        state->digitsTexture = 0;
+        state->textScale = 4;
+        state->textPtr = state->scoreText;
+        state->textY = state->yPos;
+        sprintf(state->scoreText, D_8009E88C_9F48C, state->score);
     }
-    arg0->unk2C = 0;
-    arg0->unk2A = 0x1E;
-    setCleanupCallback(func_8004D858_4E458);
-    setCallback(func_8004D6FC_4E2FC);
+    state->animAngle = 0;
+    state->holdTimer = 0x1E;
+    setCleanupCallback(cleanupTrickScoreDisplayTask);
+    setCallback(updateTrickScoreSlideIn);
 }
 
-void func_8004D63C_4E23C(Struct_func_8004D784 *arg0) {
-    debugEnqueueCallback(arg0->unk28 + 8, 6, func_8000FED0_10AD0, arg0);
+void renderTrickScoreDisplay(TrickScoreDisplayState *state) {
+    debugEnqueueCallback(state->playerIndex + 8, 6, func_8000FED0_10AD0, state);
 
-    if (arg0->unk2E == 0) {
-        drawNumericString(arg0->unk10, arg0->unk0 + 0x38, arg0->unk2, 0xFF, arg0->unkC, arg0->unk28 + 8, 6);
+    if (state->useGoldFormat == 0) {
+        drawNumericString(
+            state->scoreText,
+            state->xPos + 0x38,
+            state->yPos,
+            0xFF,
+            state->digitsTexture,
+            state->playerIndex + 8,
+            6
+        );
     } else {
-        arg0->unk1C = arg0->unk0 + 0x38;
-        debugEnqueueCallback(arg0->unk28 + 8, 6, renderTextPalette, &arg0->unk1C);
+        state->textX = state->xPos + 0x38;
+        debugEnqueueCallback(state->playerIndex + 8, 6, renderTextPalette, &state->textX);
     }
 }
 
-void func_8004D6FC_4E2FC(Struct_func_8004D784 *arg0) {
+void updateTrickScoreSlideIn(TrickScoreDisplayState *state) {
     s32 sinVal;
     s16 angle;
 
-    angle = arg0->unk2C + 0x80;
-    arg0->unk2C = angle;
+    angle = state->animAngle + 0x80;
+    state->animAngle = angle;
     sinVal = approximateSin(angle);
-    arg0->unk0 = (0x2000 - sinVal) / 20 - 0x30;
-    if (arg0->unk2C == 0x800) {
-        setCallback(func_8004D784_4E384);
+    state->xPos = (0x2000 - sinVal) / 20 - 0x30;
+    if (state->animAngle == 0x800) {
+        setCallback(updateTrickScoreHold);
     }
-    func_8004D63C_4E23C(arg0);
+    renderTrickScoreDisplay(state);
 }
 
-void func_8004D784_4E384(Struct_func_8004D784 *arg0) {
-    arg0->unk2A--;
-    if ((s16)arg0->unk2A == 0) {
-        setCallback(func_8004D7D0_4E3D0);
+void updateTrickScoreHold(TrickScoreDisplayState *state) {
+    state->holdTimer--;
+    if ((s16)state->holdTimer == 0) {
+        setCallback(updateTrickScoreSlideOut);
     }
-    func_8004D63C_4E23C(arg0);
+    renderTrickScoreDisplay(state);
 }
 
-void func_8004D7D0_4E3D0(Struct_func_8004D784 *arg0) {
+void updateTrickScoreSlideOut(TrickScoreDisplayState *state) {
     s32 sinVal;
     s16 angle;
 
-    angle = arg0->unk2C + 0x80;
-    arg0->unk2C = angle;
+    angle = state->animAngle + 0x80;
+    state->animAngle = angle;
     sinVal = approximateSin(angle);
-    arg0->unk0 = -((0x2000 - sinVal) / 20) - 0x30;
-    if (arg0->unk2C == 0x1000) {
+    state->xPos = -((0x2000 - sinVal) / 20) - 0x30;
+    if (state->animAngle == 0x1000) {
         func_80069CF8_6A8F8();
     }
-    func_8004D63C_4E23C(arg0);
+    renderTrickScoreDisplay(state);
 }
 
-void func_8004D858_4E458(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
+void cleanupTrickScoreDisplayTask(Struct_func_8004F04C *state) {
+    state->unk4 = freeNodeMemory(state->unk4);
+    state->unkC = freeNodeMemory(state->unkC);
 }
 
 typedef struct {
     u8 pad0[0x18];
-    s32 unk18;
+    s32 score;
     u8 pad1C[0xC];
-    s16 unk28;
-} func_8004D890_task;
+    s16 playerIndex;
+} TrickScoreDisplaySpawnState;
 
-void func_8004D890_4E490(s32 arg0, s32 arg1) {
-    func_8004D890_task *task;
+void showTrickScoreDisplay(s32 playerIndex, s32 trickScore) {
+    TrickScoreDisplaySpawnState *task;
 
-    task = scheduleTask(func_8004D544_4E144, 0, 0, 0xE6);
+    task = scheduleTask(initTrickScoreDisplayTask, 0, 0, 0xE6);
     if (task != NULL) {
-        task->unk28 = (s16)arg0;
-        task->unk18 = arg1;
+        task->playerIndex = (s16)playerIndex;
+        task->score = trickScore;
     }
 }
 
