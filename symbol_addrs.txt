@@ -2429,3 +2429,5 @@ awaitSpeedCrossAwardGold = 0x80040304; // rom:0x40F04
 awaitSpeedCrossContinuePress = 0x80040420; // rom:0x41020
 awaitBattleEndAndPromptContinue = 0x80040468; // rom:0x41068
 awaitBattleContinuePress = 0x800404A8; // rom:0x410A8
+handleExpertRaceResult = 0x80040528; // rom:0x41128
+awaitExpertRaceContinuePress = 0x80040588; // rom:0x41188

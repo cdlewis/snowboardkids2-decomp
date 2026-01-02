@@ -47,7 +47,7 @@ extern s32 D_800B7B7C;
 extern s32 gControllerInputs[4];
 extern u8 D_800A24A0_A30A0;
 extern void awaitBattleContinuePress(void);
-extern void func_80040588_41188(void);
+extern void awaitExpertRaceContinuePress(void);
 extern void func_80040608_41208(void);
 extern s8 gControllerPollingEnabled;
 extern s32 D_80090460_91060[];
@@ -1346,24 +1346,26 @@ void awaitBattleContinuePress(void) {
     }
 }
 
-void func_80040528_41128(void) {
+void handleExpertRaceResult(void) {
     GameState *gs;
-    s32 new_var;
+    s32 playerWon;
+
     gs = (GameState *)getCurrentAllocation();
     gs->unk4C--;
+
     if (gs->unk4C == 0) {
-        new_var = gs->players->finishPosition == 0;
-        D_800A24A0_A30A0 = (new_var) ? 3 : 4;
+        playerWon = gs->players->finishPosition == 0;
+        D_800A24A0_A30A0 = playerWon ? 3 : 4;
         func_800574A0_580A0(0xA);
-        setGameStateHandler(&func_80040588_41188);
+        setGameStateHandler(&awaitExpertRaceContinuePress);
     }
 }
 
-void func_80040588_41188(void) {
+void awaitExpertRaceContinuePress(void) {
     s32 i;
-    GameState *temp_v0 = (GameState *)getCurrentAllocation();
+    GameState *state = (GameState *)getCurrentAllocation();
 
-    for (i = 0; i < (s32)temp_v0->unk5F; i++) {
+    for (i = 0; i < (s32)state->unk5F; i++) {
         if (gControllerInputs[i] & A_BUTTON) {
             func_8006FDA0_709A0(0, 0xFF, 0x10);
             func_80057564_58164(0x3C);
