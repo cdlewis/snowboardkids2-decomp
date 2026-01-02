@@ -47,6 +47,7 @@ updateLeftBackwardFlipTrick = 0x800B3608; // rom:0xA34B8
 getInputSpinTrickAnimId = 0x800B36F0; // rom:0xA35A0
 updateFlipSpinTrickAnimation = 0x800B3784; // rom:0xA3634
 dispatchRaceFinishBehaviorStep = 0x800B3950; // rom:0xA3800
+updateRaceFinishWaitingStep = 0x800B3CBC; // rom:0xA3B6C
 raceFinishBehaviorStepHandlers = 0x800BAB68; // rom:0xAAA18
 trickScoreTable = 0x800BAB48; // rom:0xAA9F8
 trickBonusTable = 0x800BAB58; // rom:0xAAA08

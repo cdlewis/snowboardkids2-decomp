@@ -1373,55 +1373,55 @@ typedef struct {
     u8 unk7D;
 } GameStateLocal;
 
-s32 func_800B3CBC_A3B6C(Player *arg0) {
-    s32 var_s2 = 0;
-    GameStateLocal *temp_s0;
+s32 updateRaceFinishWaitingStep(Player *player) {
+    s32 playerWon = 0;
+    GameStateLocal *gameState;
 
-    temp_s0 = getCurrentAllocation();
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y -= 0x6000;
-    func_800B40D4_A3F84(arg0);
-    applyClampedVelocityToPosition(arg0);
-    func_8005D180_5DD80(arg0, 0);
-    if (temp_s0->unk7B != 0) {
-        switch (temp_s0->unk7A) {
+    gameState = getCurrentAllocation();
+    player->unk44C.x = 0;
+    player->unk44C.z = 0;
+    player->unk44C.y -= 0x6000;
+    func_800B40D4_A3F84(player);
+    applyClampedVelocityToPosition(player);
+    func_8005D180_5DD80(player, 0);
+    if (gameState->unk7B != 0) {
+        switch (gameState->unk7A) {
             case 0:
             case 1:
             case 8:
             case 9:
-                if (arg0->finishPosition == 0) {
-                    var_s2 = 1;
+                if (player->finishPosition == 0) {
+                    playerWon = 1;
                 }
                 break;
             case 2:
             case 3:
-                if (temp_s0->unk10->unk176C & 0x100000) {
-                    var_s2 = 1;
+                if (gameState->unk10->unk176C & 0x100000) {
+                    playerWon = 1;
                 }
                 break;
             case 4:
-                if (temp_s0->unk7D == 0) {
-                    var_s2 = 1;
+                if (gameState->unk7D == 0) {
+                    playerWon = 1;
                 }
                 break;
             case 5:
-                if ((temp_s0->unk7D == 0) && (temp_s0->unk5A == 0x14)) {
-                    var_s2 = 1;
+                if ((gameState->unk7D == 0) && (gameState->unk5A == 0x14)) {
+                    playerWon = 1;
                 }
                 break;
             case 6:
-                if ((temp_s0->unk7D == 0) && (arg0->unkB70 >= 0x12C)) {
-                    var_s2 = 1;
+                if ((gameState->unk7D == 0) && (player->unkB70 >= 0x12C)) {
+                    playerWon = 1;
                 }
                 break;
         }
-        if (var_s2 != 0) {
-            arg0->unkBBF = 2;
+        if (playerWon != 0) {
+            player->unkBBF = 2;
         } else {
-            arg0->unkBBF = 3;
+            player->unkBBF = 3;
         }
-        arg0->unkBC0 = 0;
+        player->unkBC0 = 0;
     }
     return 0;
 }
