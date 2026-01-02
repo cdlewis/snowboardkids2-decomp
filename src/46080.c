@@ -614,28 +614,28 @@ typedef struct {
 typedef struct {
     s16 unk0;
     u8 _pad[14];
-} func_80049104_49D04_DataElement;
+} ItemBoxPositionEntry;
 
 typedef struct {
     s32 offset;
-} func_80049104_49D04_DataBlock;
+} ItemBoxPositionBlock;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    func_80049104_49D04_DataBlock *unkC;
-    func_80049104_49D04_DataElement *unk10;
-    s16 unk14;
-    s16 unk16;
-    u8 unk18;
+    void *asset1;
+    void *asset2;
+    void *itemBoxMemory;
+    ItemBoxPositionBlock *positionData;
+    ItemBoxPositionEntry *positionEntries;
+    s16 courseId;
+    s16 itemBoxCount;
+    u8 secondaryDropMode;
     u8 _pad3[0x3];
-    u8 unk1C;
+    u8 primaryDropMode;
     u8 _pad4[0x3];
-    u8 unk20;
+    u8 secondaryDropSeed;
     u8 _pad5[0x3];
-    u8 unk24;
-} func_80048E34_49A34_arg;
+    u8 primaryDropSeed;
+} ItemBoxSystemState;
 
 typedef struct {
     u8 padding[0xA4];
@@ -846,8 +846,8 @@ void updatePlayerHaloRising(PlayerHaloState *arg0);
 void updatePlayerHaloDescending(PlayerHaloState *arg0);
 void updatePlayerHaloAnimating(PlayerHaloState *arg0);
 void func_80049794_4A394(void *payload, s32 arg1);
-void func_80048F0C_49B0C(func_80048E34_49A34_arg *arg0, s32 arg1);
-void func_80049104_49D04(func_80048E34_49A34_arg *arg0);
+void func_80048F0C_49B0C(ItemBoxSystemState *arg0, s32 arg1);
+void func_80049104_49D04(ItemBoxSystemState *arg0);
 void func_80049230_49E30(func_80049230_49E30_arg *);
 void func_80049430_4A030(func_80049300_49F00_arg *arg0);
 void updateGoldCoinsTask(GoldCoinUpdateState *arg0);
@@ -2209,7 +2209,7 @@ s32 rollPrimaryItemDrop(Player *arg0, u8 *arg1) {
     s32 i;
     s32 randVal;
     u8 index;
-    func_80048E34_49A34_arg *element;
+    ItemBoxSystemState *element;
 
     randVal = getRand(*(arg1 + arg0->finishPosition + 0x24)) & 0xFF;
     index = arg0->finishPosition;
@@ -2220,20 +2220,20 @@ s32 rollPrimaryItemDrop(Player *arg0, u8 *arg1) {
         }
     }
 
-    element = (func_80048E34_49A34_arg *)(arg1 + index);
+    element = (ItemBoxSystemState *)(arg1 + index);
 
-    switch (element->unk1C) {
+    switch (element->primaryDropMode) {
         case 0:
-            element->unk24 = element->unk24 + 1;
+            element->primaryDropSeed = element->primaryDropSeed + 1;
             break;
         case 1:
-            element->unk24 = element->unk24 - 1;
+            element->primaryDropSeed = element->primaryDropSeed - 1;
             break;
         case 2:
-            element->unk24 = element->unk24 + 3;
+            element->primaryDropSeed = element->primaryDropSeed + 3;
             break;
         case 3:
-            element->unk24 = element->unk24 - 3;
+            element->primaryDropSeed = element->primaryDropSeed - 3;
             break;
         default:
             return i + 1;
@@ -2400,32 +2400,32 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
     } while (i < 4);
 }
 
-void func_80048E34_49A34(func_80048E34_49A34_arg *arg0) {
+void initItemBoxSystem(ItemBoxSystemState *state) {
     s32 i;
     s32 courseID;
-    func_80048E34_49A34_arg *ptr;
+    ItemBoxSystemState *ptr;
 
-    arg0->unk0 = loadAsset_B7E70();
-    arg0->unk4 = loadAsset_216290();
+    state->asset1 = loadAsset_B7E70();
+    state->asset2 = loadAsset_216290();
 
-    courseID = arg0->unk14;
+    courseID = state->courseId;
 
-    arg0->unkC = loadCompressedData(
+    state->positionData = loadCompressedData(
         D_80090CEC_918EC[courseID].romStart,
         D_80090CEC_918EC[courseID].romEnd,
         D_80090CEC_918EC[courseID].decompressedSize
     );
-    arg0->unk8 = NULL;
+    state->itemBoxMemory = NULL;
 
     setCleanupCallback(&func_80049230_49E30);
 
     i = 0;
 loop:
-    ptr = (func_80048E34_49A34_arg *)((u8 *)arg0 + i);
-    ptr->unk18 = randA() & 3;
-    ptr->unk1C = randA() & 3;
-    ptr->unk20 = randA();
-    ptr->unk24 = randA();
+    ptr = (ItemBoxSystemState *)((u8 *)state + i);
+    ptr->secondaryDropMode = randA() & 3;
+    ptr->primaryDropMode = randA() & 3;
+    ptr->secondaryDropSeed = randA();
+    ptr->primaryDropSeed = randA();
     i++;
     if (i < 4) {
         goto loop;
@@ -2436,28 +2436,28 @@ loop:
 
 INCLUDE_ASM("asm/nonmatchings/46080", func_80048F0C_49B0C);
 
-void func_80049104_49D04(func_80048E34_49A34_arg *arg0) {
-    func_80049104_49D04_DataElement *ptr;
-    func_80049104_49D04_DataElement *base;
+void func_80049104_49D04(ItemBoxSystemState *state) {
+    ItemBoxPositionEntry *ptr;
+    ItemBoxPositionEntry *base;
     s32 count;
     s32 i;
 
-    arg0->unk10 = (func_80049104_49D04_DataElement *)((s32)arg0->unkC + arg0->unkC->offset);
-    arg0->unk16 = 0;
-    ptr = arg0->unk10;
+    state->positionEntries = (ItemBoxPositionEntry *)((s32)state->positionData + state->positionData->offset);
+    state->itemBoxCount = 0;
+    ptr = state->positionEntries;
 
     if (ptr->unk0 != -1) {
         base = ptr;
         do {
-            arg0->unk16++;
-        } while (base[arg0->unk16].unk0 != -1);
+            state->itemBoxCount++;
+        } while (base[state->itemBoxCount].unk0 != -1);
     }
 
-    count = arg0->unk16;
-    arg0->unk8 = allocateNodeMemory(count * 132);
+    count = state->itemBoxCount;
+    state->itemBoxMemory = allocateNodeMemory(count * 132);
 
-    for (i = 0; i < arg0->unk16; i++) {
-        func_80048F0C_49B0C(arg0, i);
+    for (i = 0; i < state->itemBoxCount; i++) {
+        func_80048F0C_49B0C(state, i);
     }
 
     setCallback(&updateAllItemBoxes);
@@ -2478,10 +2478,10 @@ void func_80049230_49E30(func_80049230_49E30_arg *arg0) {
     arg0->unkC = freeNodeMemory(arg0->unkC);
 }
 
-void func_80049280_49E80(s32 arg0) {
-    func_80049280_49E80_Task *task = (func_80049280_49E80_Task *)scheduleTask(&func_80048E34_49A34, 0, 0, 0xEA);
+void func_80049280_49E80(s32 courseId) {
+    func_80049280_49E80_Task *task = (func_80049280_49E80_Task *)scheduleTask(&initItemBoxSystem, 0, 0, 0xEA);
     if (task != NULL) {
-        task->unk14 = arg0;
+        task->unk14 = courseId;
     }
 }
 
