@@ -4,7 +4,7 @@
 #include "geometry.h"
 
 void allocateAudioResources(void);
-void func_8005610C_56D0C(void);
+void initializeMusicSystem(void);
 void func_80056914_57514(void *source);
 void func_80056990_57590(s32 arg0, s32 arg1);
 void func_800569A4_575A4(u8 *src_data, s8 search_id);

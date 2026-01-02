@@ -106,10 +106,10 @@ void allocateAudioResources(void) {
     gGraphicsManager->unk0 = loadCompressedData(&_6A83F0_ROM_START, &_6A83F0_ROM_END, 0xCFD8);
     gGraphicsManager->unk8 = allocateMemoryNode(0, 0x9000, &sp10);
     gGraphicsManager->unk4 = allocateMemoryNode(0, 0x8000, &sp10);
-    func_8006983C_6A43C(&func_8005610C_56D0C);
+    func_8006983C_6A43C(&initializeMusicSystem);
 }
 
-void func_8005610C_56D0C(void) {
+void initializeMusicSystem(void) {
     musConfig config;
     GraphicsManager *mgr;
     u16 negativeOne;

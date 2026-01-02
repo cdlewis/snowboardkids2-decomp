@@ -1,3 +1,4 @@
+initializeMusicSystem = 0x8005610C; // rom:0x56D0C
 normalizeVelocityToSpeed = 0x80051C80; // rom:0x52880
 initSlapstickProjectileTask = 0x80051DEC; // rom:0x529EC
 loadSlapstickProjectileAsset = 0x80051E34; // rom:0x52A34
