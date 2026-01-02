@@ -31,9 +31,15 @@ If suitable name thing already exists -- or the name essentially conveys the pur
 
 Avoid renaming functions that correspond to standard library functions. If a function is from the standard library then it is extremely valuable to maintain that naming convention.
 
+## When function names don't match the input name
+
+It's possible that the function name does not match the name listed in the assembly file, and consequently the function name that your asked to clean up. For example you may be asked to clean up func_8004E6F8_4F2F8 only to find that it's called initPauseMenuDisplayTask in the C code. This happens when a function has been renamed without updating symbol_addrs.txt.
+
+You should update symbol_addrs.txt to reflect the new name.
+
 # How to rename a global variable or function
 
-Global variables and function names are mapped to specific addresses in memory through the symbol_addrs.txt file at the root of the project. Each symbol should only appear at most once. If a symbol is not present it will be given a default name (usually starting with `func_` or `D_`).
+Global variables and function names are mapped to specific addresses in memory through the symbol*addrs.txt file at the root of the project. Each symbol should only appear at most once. If a symbol is not present it will be given a default name (usually starting with `func_`or`D_`).
 
 So at a minimum this file will need to be updated when attempting to rename a variable. However additional steps may also be needed.
 
