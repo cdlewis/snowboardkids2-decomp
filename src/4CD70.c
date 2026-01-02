@@ -1094,8 +1094,8 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
 
 extern char D_8009E894_9F494[];
 
-typedef struct Struct_func_8004DCFC Struct_func_8004DCFC;
-extern void func_8004DCFC_4E8FC(Struct_func_8004DCFC *);
+typedef struct TotalGoldDisplayState TotalGoldDisplayState;
+extern void initTotalGoldDisplayTask(TotalGoldDisplayState *);
 
 void updateGoldAwardDisplay(GoldAwardDisplayState *arg0) {
     char buf[24];
@@ -1117,12 +1117,12 @@ void updateGoldAwardDisplay(GoldAwardDisplayState *arg0) {
             gameMode = gameState->unk7A;
             if (gameMode < 7) {
                 if (gameMode < 5) {
-                    scheduleTask(func_8004DCFC_4E8FC, 1, 0, 0xE6);
+                    scheduleTask(initTotalGoldDisplayTask, 1, 0, 0xE6);
                 } else {
                     scheduleTask(func_8004F1D4_4FDD4, 1, 0, 0xE6);
                 }
             } else {
-                scheduleTask(func_8004DCFC_4E8FC, 1, 0, 0xE6);
+                scheduleTask(initTotalGoldDisplayTask, 1, 0, 0xE6);
             }
         }
     }
@@ -1159,38 +1159,38 @@ void cleanupGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-struct Struct_func_8004DCFC {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+struct TotalGoldDisplayState {
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteIndex;
     u8 padA[0x4];
     u8 unkE;
     u8 padF;
-    void *unk10;
-    s32 unk14;
+    void *digitAsset;
+    s32 alpha;
 };
 
-void func_8004DDD0_4E9D0(Struct_func_8004DCFC *arg0);
-void func_8004DEC0_4EAC0(Struct_func_8004DCC4 *);
+void updateTotalGoldDisplay(TotalGoldDisplayState *arg0);
+void cleanupTotalGoldDisplayTask(Struct_func_8004DCC4 *);
 
-void func_8004DCFC_4E8FC(Struct_func_8004DCFC *arg0) {
+void initTotalGoldDisplayTask(TotalGoldDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
-    arg0->unk14 = 0;
-    arg0->unk4 = loadAsset_34CB50();
+    arg0->alpha = 0;
+    arg0->spriteAsset = loadAsset_34CB50();
     initHudElementState((HudElementState *)arg0);
-    arg0->unk8 = 0x15;
-    arg0->unk10 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->spriteIndex = 0x15;
+    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
 
     switch (allocation->unk7A) {
         case 5:
-            arg0->unk0 = 0x10;
-            arg0->unk2 = 8;
+            arg0->x = 0x10;
+            arg0->y = 8;
             break;
         case 6:
-            arg0->unk0 = 0x10;
-            arg0->unk2 = 8;
+            arg0->x = 0x10;
+            arg0->y = 8;
             break;
         case 0:
         case 1:
@@ -1198,33 +1198,33 @@ void func_8004DCFC_4E8FC(Struct_func_8004DCFC *arg0) {
         case 3:
         case 4:
         default:
-            arg0->unk0 = 0x10;
-            arg0->unk2 = -0x10;
+            arg0->x = 0x10;
+            arg0->y = -0x10;
             break;
     }
 
-    setCleanupCallback(func_8004DEC0_4EAC0);
-    setCallback(func_8004DDD0_4E9D0);
+    setCleanupCallback(cleanupTotalGoldDisplayTask);
+    setCallback(updateTotalGoldDisplay);
 }
 
-void func_8004DDD0_4E9D0(Struct_func_8004DCFC *arg0) {
+void updateTotalGoldDisplay(TotalGoldDisplayState *arg0) {
     char buf[24];
     s32 strLen;
     char *ptr;
-    s32 temp;
-    s32 a2val;
-    s32 a1val;
+    s32 alphaVal;
+    s32 yPos;
+    s32 xPos;
 
-    temp = arg0->unk14;
-    if (temp != 0xFF) {
-        temp += 0x10;
-        arg0->unk14 = temp;
-        if (temp >= 0x100) {
-            arg0->unk14 = 0xFF;
+    alphaVal = arg0->alpha;
+    if (alphaVal != 0xFF) {
+        alphaVal += 0x10;
+        arg0->alpha = alphaVal;
+        if (alphaVal >= 0x100) {
+            arg0->alpha = 0xFF;
         }
     }
 
-    arg0->unkE = (u8)arg0->unk14;
+    arg0->unkE = (u8)arg0->alpha;
     debugEnqueueCallback(8, 6, func_80012518_13118, arg0);
 
     sprintf(buf, D_8009E894_9F494, getPlayerGold());
@@ -1238,20 +1238,20 @@ void func_8004DDD0_4E9D0(Struct_func_8004DCFC *arg0) {
         } while (*ptr != 0);
     }
 
-    a2val = arg0->unk2;
-    a1val = arg0->unk0;
+    yPos = arg0->y;
+    xPos = arg0->x;
     drawNumericString(
         buf,
-        (s16)(a1val + ((0x48 - (strLen << 3)) >> 1)),
-        (s16)(a2val + 0x14),
-        (s16)arg0->unk14,
-        arg0->unk10,
+        (s16)(xPos + ((0x48 - (strLen << 3)) >> 1)),
+        (s16)(yPos + 0x14),
+        (s16)arg0->alpha,
+        arg0->digitAsset,
         8,
         6
     );
 }
 
-void func_8004DEC0_4EAC0(Struct_func_8004DCC4 *arg0) {
+void cleanupTotalGoldDisplayTask(Struct_func_8004DCC4 *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
@@ -2004,7 +2004,7 @@ void func_8004F27C_4FE7C(Struct_func_8004F1D4 *arg0) {
         arg0->unk14 = arg0->unk14 + 0x10;
         if (arg0->unk14 >= 0x100) {
             arg0->unk14 = 0xFF;
-            scheduleTask(func_8004DCFC_4E8FC, 1, 0, 0xE6);
+            scheduleTask(initTotalGoldDisplayTask, 1, 0, 0xE6);
         }
     }
 
