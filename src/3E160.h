@@ -67,7 +67,7 @@ void func_8006BEDC_6CADC(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
 void func_80057ABC_586BC(s32 arg0, s32 arg1);
 void func_800B4B30_1E1BE0(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
 void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0);
-void func_80041518_42118(void *arg0);
+void spawnConfettiEffect(void *cameraNode);
 s32 isSaveSlotUnlocked(u8 slotIndex);
 u8 isBoardUnlocked(u8 boardIndex);
 u8 getCharacterPaletteId(u8 characterIndex);

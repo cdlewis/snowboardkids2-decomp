@@ -369,55 +369,55 @@ void spawnPushStartPrompt(s32 arg0, s16 yPosition, u8 arg2, u8 arg3, s16 scaleX,
 }
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    u8 unkC[12];
-    s16 unk18;
-    s16 unk1A;
-} func_80041010_41C10_arg;
+    void *particleAsset;
+    void *particles;
+    void *cameraNode;
+    u8 lastCameraPos[12];
+    s16 frameCounter;
+    s16 particleCount;
+} ConfettiEffectTask;
 
-void func_8004106C_41C6C(func_80041010_41C10_arg *arg0);
+void setupConfettiParticles(ConfettiEffectTask *task);
 
-void func_80041010_41C10(func_80041010_41C10_arg *arg0) {
-    s16 temp;
+void initConfettiEffect(ConfettiEffectTask *task) {
+    s16 count;
 
-    arg0->unk0 = func_80055D7C_5697C(0xB);
-    temp = arg0->unk1A;
-    arg0->unk4 = allocateNodeMemory((temp * 7) * 8);
+    task->particleAsset = func_80055D7C_5697C(0xB);
+    count = task->particleCount;
+    task->particles = allocateNodeMemory((count * 7) * 8);
     setCleanupCallback(&func_800413E0_41FE0);
-    setCallbackWithContinue(&func_8004106C_41C6C);
+    setCallbackWithContinue(&setupConfettiParticles);
 }
 
-void func_8004106C_41C6C(func_80041010_41C10_arg *arg0) {
+void setupConfettiParticles(ConfettiEffectTask *task) {
     s32 pad[2];
     s32 offset;
     s32 i;
-    s32 constant;
+    s32 gravity;
     void *extPtr;
 
     do {
         (void)pad;
         i = 0;
-        if (arg0->unk1A > 0) {
-            constant = 0x40000;
+        if (task->particleCount > 0) {
+            gravity = 0x40000;
             extPtr = &D_80090860_91460;
             offset = 0;
             do {
                 i++;
-                *(s32 *)(offset + (s32)arg0->unk4 + 0x20) = (randA() & 0xFF) << 17;
-                *(s32 *)(offset + (s32)arg0->unk4 + 0x24) = (randA() & 0xFF) << 17;
-                *(s32 *)(offset + (s32)arg0->unk4 + 0x28) = (randA() & 0xFF) << 17;
-                *(s32 *)(offset + (s32)arg0->unk4 + 0x2C) = constant;
-                *(s32 *)(offset + (s32)arg0->unk4 + 0x30) = -((randA() & 0xFF) << 8) - constant;
-                *(s32 *)(offset + (s32)arg0->unk4 + 0x34) = 0;
-                loadAssetMetadata((loadAssetMetadata_arg *)(arg0->unk4 + offset), arg0->unk0, 0);
-                *(void **)(offset + (s32)arg0->unk4) = extPtr;
+                *(s32 *)(offset + (s32)task->particles + 0x20) = (randA() & 0xFF) << 17;
+                *(s32 *)(offset + (s32)task->particles + 0x24) = (randA() & 0xFF) << 17;
+                *(s32 *)(offset + (s32)task->particles + 0x28) = (randA() & 0xFF) << 17;
+                *(s32 *)(offset + (s32)task->particles + 0x2C) = gravity;
+                *(s32 *)(offset + (s32)task->particles + 0x30) = -((randA() & 0xFF) << 8) - gravity;
+                *(s32 *)(offset + (s32)task->particles + 0x34) = 0;
+                loadAssetMetadata((loadAssetMetadata_arg *)(task->particles + offset), task->particleAsset, 0);
+                *(void **)(offset + (s32)task->particles) = extPtr;
                 offset += 0x38;
-            } while (i < arg0->unk1A);
+            } while (i < task->particleCount);
         }
     } while (0);
-    memcpy(arg0->unkC, (u8 *)arg0->unk8 + 0x134, 0xC);
+    memcpy(task->lastCameraPos, (u8 *)task->cameraNode + 0x134, 0xC);
     setCallbackWithContinue(&func_8004119C_41D9C);
 }
 
@@ -432,22 +432,22 @@ INCLUDE_ASM("asm/nonmatchings/413E0", func_80041418_42018);
 
 typedef struct {
     u8 _pad[0x8];
-    void *freeNext;
+    void *cameraNode;
     u8 _pad2[0xC];
-    s16 unk18;
-    s16 unk1A;
-    u8 unk1C;
-} func_80041518_42118_Node;
+    s16 frameCounter;
+    s16 particleCount;
+    u8 pauseWhenPaused;
+} ConfettiSpawnArgs;
 
-void func_80041518_42118(void *arg0) {
-    func_80041518_42118_Node *task;
+void spawnConfettiEffect(void *cameraNode) {
+    ConfettiSpawnArgs *task;
 
-    task = (func_80041518_42118_Node *)scheduleTask(&func_80041010_41C10, 0, 0, 0xF0);
+    task = (ConfettiSpawnArgs *)scheduleTask(&initConfettiEffect, 0, 0, 0xF0);
 
     if (task != NULL) {
-        task->unk18 = 0;
-        task->freeNext = arg0;
-        task->unk1A = 0x64;
-        task->unk1C = 0;
+        task->frameCounter = 0;
+        task->cameraNode = cameraNode;
+        task->particleCount = 0x64;
+        task->pauseWhenPaused = 0;
     }
 }
