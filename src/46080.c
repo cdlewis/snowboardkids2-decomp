@@ -481,21 +481,21 @@ typedef struct {
 } CourseSceneryCleanupArg;
 
 typedef struct {
-    s8 unk0;
+    s8 visible;
     u8 _pad1[0x3];
-    u8 unk4[0xC];
-} Entry_800477E4;
+    u8 positionData[0xC];
+} GoldCoinEntry;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    Entry_800477E4 *unk8;
+    void *matrixBuffer;
+    void *displayData;
+    GoldCoinEntry *entries;
     u8 _padC[0x4];
-    s32 *unk10;
+    s32 *compressedData;
     u8 _pad14[0x2];
-    s16 unk16;
-    s16 unk18;
-} func_800477E4_arg;
+    s16 coinCount;
+    s16 animationFrame;
+} GoldCoinSetupState;
 
 typedef struct {
     void *unk0;
@@ -548,22 +548,22 @@ typedef struct {
 } Struct_func_80047EFC_48AFC;
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    s16 unk2;
+    s8 visible;
+    s8 processed;
+    s16 respawnTimer;
     Vec3i position;
-} RenderEntry_486A8;
+} GoldCoinRenderEntry;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    RenderEntry_486A8 *unk8;
+    void *matrixBuffer;
+    void *displayData;
+    GoldCoinRenderEntry *entries;
     DataTable_19E80 *unkC;
     s32 unk10;
     s16 unk14;
-    s16 unk16;
-    u16 unk18;
-} func_80047AA8_486A8_arg;
+    s16 coinCount;
+    u16 animationFrame;
+} GoldCoinRenderState;
 
 typedef struct {
     Node n;
@@ -662,8 +662,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x44];
-    s32 unk44;
-} Alloc_800477E4;
+    s32 displayListBase;
+} GoldCoinAllocation;
 
 typedef struct {
     u8 _pad[0xC];
@@ -703,15 +703,15 @@ typedef struct {
 } func_8004A634_4B234_arg;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    RenderEntry_486A8 *unk8;
+    void *matrixBuffer;
+    void *displayData;
+    GoldCoinRenderEntry *entries;
     u8 _padC[0x4];
-    s32 *unk10;
+    s32 *compressedData;
     u8 _pad14[0x2];
-    s16 unk16;
-    u16 unk18;
-} Arg_478FC;
+    s16 coinCount;
+    u16 animationFrame;
+} GoldCoinUpdateState;
 
 typedef struct {
     void *romStart;
@@ -775,7 +775,7 @@ void func_800491CC_49DCC(func_80048AE8_496E8_arg *arg0);
 void func_8004A634_4B234(func_8004A634_4B234_arg *arg0);
 void func_8004A850_4B450(func_8004A850_4B450_arg *arg0);
 void cleanupGoldCoinsTask(GoldCoinsTaskState *arg0);
-void func_800477E4_483E4(func_800477E4_arg *arg0);
+void setupGoldCoinEntries(GoldCoinSetupState *arg0);
 void enqueuePlayerDisplayList(PlayerDisplayListState *arg0);
 void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
 void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
@@ -839,7 +839,7 @@ void func_80047EFC_48AFC(Struct_func_80047EFC_48AFC *);
 void func_80047F90_48B90(Struct_func_80047EFC_48AFC *);
 void func_800481A0_48DA0(Struct_func_80047EFC_48AFC *);
 void func_800482A4_48EA4(Struct_func_800482A4_48EA4 *);
-void func_80047AA8_486A8(func_80047AA8_486A8_arg *arg0);
+void func_80047AA8_486A8(GoldCoinRenderState *arg0);
 void func_80048834_49434(Struct_func_80048834_49434 *arg0);
 void func_80048350_48F50(func_80048350_48F50_arg *arg0);
 void func_8004841C_4901C(func_80048350_48F50_arg *arg0);
@@ -850,7 +850,7 @@ void func_80048F0C_49B0C(func_80048E34_49A34_arg *arg0, s32 arg1);
 void func_80049104_49D04(func_80048E34_49A34_arg *arg0);
 void func_80049230_49E30(func_80049230_49E30_arg *);
 void func_80049430_4A030(func_80049300_49F00_arg *arg0);
-void func_800478FC_484FC(Arg_478FC *arg0);
+void updateGoldCoinsTask(GoldCoinUpdateState *arg0);
 
 void initSkyRenderTask(SkyRenderTaskState *state) {
     void *identity = identityMatrix;
@@ -1598,11 +1598,11 @@ void initGoldCoinsTask(GoldCoinsTaskState *arg0) {
 
     arg0->unk0 = 0;
     setCleanupCallback(cleanupGoldCoinsTask);
-    setCallback(func_800477E4_483E4);
+    setCallback(setupGoldCoinEntries);
 }
 
-void func_800477E4_483E4(func_800477E4_arg *arg0) {
-    Alloc_800477E4 *alloc;
+void setupGoldCoinEntries(GoldCoinSetupState *arg0) {
+    GoldCoinAllocation *alloc;
     s32 *ptr;
     s32 i;
     s32 *globalBuf;
@@ -1612,72 +1612,72 @@ void func_800477E4_483E4(func_800477E4_arg *arg0) {
 
     (void)sp10;
 
-    alloc = (Alloc_800477E4 *)getCurrentAllocation();
-    arg0->unk4 = (void *)(alloc->unk44 + 0x80);
+    alloc = (GoldCoinAllocation *)getCurrentAllocation();
+    arg0->displayData = (void *)(alloc->displayListBase + 0x80);
 
-    ptr = arg0->unk10;
-    arg0->unk8 = (Entry_800477E4 *)((u8 *)ptr + *ptr);
+    ptr = arg0->compressedData;
+    arg0->entries = (GoldCoinEntry *)((u8 *)ptr + *ptr);
 
-    arg0->unk18 = 0;
-    arg0->unk16 = 0;
+    arg0->animationFrame = 0;
+    arg0->coinCount = 0;
 
-    if (arg0->unk8[0].unk0 >= 0) {
+    if (arg0->entries[0].visible >= 0) {
         do {
-            arg0->unk16++;
-        } while (arg0->unk8[arg0->unk16].unk0 >= 0);
+            arg0->coinCount++;
+        } while (arg0->entries[arg0->coinCount].visible >= 0);
     }
 
     i = 0;
-    arg0->unk0 = allocateNodeMemory(arg0->unk16 << 6);
+    arg0->matrixBuffer = allocateNodeMemory(arg0->coinCount << 6);
 
-    if (arg0->unk16 > 0) {
+    if (arg0->coinCount > 0) {
         one = 1;
         globalBuf = &D_8009A8A4_9B4A4;
         do {
             offset = i * 16;
-            *(s8 *)(offset + (s32)arg0->unk8) = one;
-            memcpy(globalBuf, (u8 *)(offset + (s32)arg0->unk8) + 4, 0xC);
-            func_8006BFB8_6CBB8(globalBuf - 5, (u8 *)arg0->unk0 + (i << 6));
+            *(s8 *)(offset + (s32)arg0->entries) = one;
+            memcpy(globalBuf, (u8 *)(offset + (s32)arg0->entries) + 4, 0xC);
+            func_8006BFB8_6CBB8(globalBuf - 5, (u8 *)arg0->matrixBuffer + (i << 6));
             i++;
-        } while (i < arg0->unk16);
+        } while (i < arg0->coinCount);
     }
 
-    setCallback(func_800478FC_484FC);
+    setCallback(updateGoldCoinsTask);
 }
 
-void func_800478FC_484FC(Arg_478FC *arg0) {
+void updateGoldCoinsTask(GoldCoinUpdateState *arg0) {
     s32 i;
     Player *player;
     s16 timer;
 
     if (D_8009ADE0_9B9E0 & 1) {
-        arg0->unk18 = arg0->unk18 + 1;
+        arg0->animationFrame = arg0->animationFrame + 1;
     }
 
-    if ((s16)arg0->unk18 >= 6) {
-        arg0->unk18 = 0;
+    if ((s16)arg0->animationFrame >= 6) {
+        arg0->animationFrame = 0;
     }
 
     timer = 0;
-    for (i = 0; i < arg0->unk16; i++) {
-        timer = arg0->unk8[i].unk0;
+    for (i = 0; i < arg0->coinCount; i++) {
+        timer = arg0->entries[i].visible;
         if (timer == 0) {
-            timer = arg0->unk8[i].unk2;
+            timer = arg0->entries[i].respawnTimer;
             if (timer != 0) {
-                arg0->unk8[i].unk2 = timer - 1;
-            } else if (arg0->unk8[i].unk1 == 0) {
-                arg0->unk8[i].unk0 = 1;
+                arg0->entries[i].respawnTimer = timer - 1;
+            } else if (arg0->entries[i].processed == 0) {
+                arg0->entries[i].visible = 1;
             }
         } else {
-            player = (Player *)func_8005B24C_5BE4C(&arg0->unk8[i].position, -1, 0x100000);
+            player = (Player *)func_8005B24C_5BE4C(&arg0->entries[i].position, -1, 0x100000);
             if (player != NULL) {
-                func_80056B7C_5777C(&arg0->unk8[i].position, 7);
-                arg0->unk8[i].unk0 = 0;
-                arg0->unk8[i].unk2 = 0x1E;
+                func_80056B7C_5777C(&arg0->entries[i].position, 7);
+                arg0->entries[i].visible = 0;
+                arg0->entries[i].respawnTimer = 0x1E;
                 func_80059A48_5A648(player, 0x64);
             }
         }
-        arg0->unk8[i].unk1 = 2;
+        arg0->entries[i].processed = 2;
     }
 
     for (i = 0; i < 4; i++) {
@@ -1691,7 +1691,7 @@ void cleanupGoldCoinsTask(GoldCoinsTaskState *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-void func_80047AA8_486A8(func_80047AA8_486A8_arg *arg0) {
+void func_80047AA8_486A8(GoldCoinRenderState *arg0) {
     OutputStruct_19E80 tableEntry;
     s32 dxtBase;
     s32 new_var;
@@ -1707,7 +1707,7 @@ void func_80047AA8_486A8(func_80047AA8_486A8_arg *arg0) {
     gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
     gGraphicsMode = -1;
 
-    getTableEntryByU16Index(arg0->unkC, arg0->unk18, &tableEntry);
+    getTableEntryByU16Index(arg0->unkC, arg0->animationFrame, &tableEntry);
 
     gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
 
@@ -1806,17 +1806,21 @@ void func_80047AA8_486A8(func_80047AA8_486A8_arg *arg0) {
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    for (i = 0; i < arg0->unk16; i++) {
-        if (isObjectCulled(&arg0->unk8[i].position) == 0) {
-            arg0->unk8[i].unk1 = 1;
-            if (arg0->unk8[i].unk0 != 0) {
-                gSPMatrix(gRegionAllocPtr++, (u8 *)arg0->unk0 + (i << 6), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    for (i = 0; i < arg0->coinCount; i++) {
+        if (isObjectCulled(&arg0->entries[i].position) == 0) {
+            arg0->entries[i].processed = 1;
+            if (arg0->entries[i].visible != 0) {
+                gSPMatrix(
+                    gRegionAllocPtr++,
+                    (u8 *)arg0->matrixBuffer + (i << 6),
+                    G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
+                );
                 gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-                gSPVertex(gRegionAllocPtr++, arg0->unk4, 4, 0);
+                gSPVertex(gRegionAllocPtr++, arg0->displayData, 4, 0);
                 gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
             }
         } else {
-            arg0->unk8[i].unk1 &= 1;
+            arg0->entries[i].processed &= 1;
         }
     }
 }

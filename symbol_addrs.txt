@@ -2644,5 +2644,7 @@ updateFlyingSceneryReturnGlideStep = 0x80047590; // rom:0x48190
 updateFlyingSceneryDescendingStep = 0x80047660; // rom:0x48260
 cleanupFlyingSceneryTask = 0x80047718; // rom:0x48318
 initGoldCoinsTask = 0x80047750; // rom:0x48350
+setupGoldCoinEntries = 0x800477E4; // rom:0x483E4
+updateGoldCoinsTask = 0x800478FC; // rom:0x484FC
 cleanupGoldCoinsTask = 0x80047A64; // rom:0x48664
 scheduleGoldCoinsTask = 0x80047E7C; // rom:0x48A7C
