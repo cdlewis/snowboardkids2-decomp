@@ -641,75 +641,74 @@ INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CDC0_4D9C0);
 
 typedef struct {
     u8 pad0[0x10];
-    void *unk10;
+    void *players;
     u8 pad14[0x4A];
-    u8 unk5E;
+    u8 numPlayers;
     u8 pad5F[0x5];
-    u8 unk64[4]; // player indices
-} CEC4_Allocation;
+    u8 playerIndices[4];
+} RaceProgressIndicatorAllocation;
 
 typedef struct {
     u8 pad0[0xB88];
-    s32 unkB88;
+    s32 playerStateFlags;
     u8 padB8C[0xC];
-    s16 unkB98;
+    s16 raceProgress;
     u8 padB9A[0x35];
-    u8 unkBCF;
-} CEC4_PlayerData;
+    u8 activeEffectCount;
+} RaceProgressPlayerData;
 
-// Element size is 0x14
 typedef struct {
-    s16 unk0;
-    s16 unk2;
+    s16 x;
+    s16 y;
     u8 pad4[0x4];
-    s16 unk8;
-    u8 unkA;
+    s16 spriteFrame;
+    u8 hasActiveEffect;
     u8 unkB;
-    u8 unkC;
-    s8 unkD;
+    u8 flashCounter;
+    s8 flashState;
     u8 padE[0x2];
-    s16 unk10;
+    s16 positionOffset;
     u8 pad12[0x2];
-} CEC4_Element;
+} RaceProgressIndicatorElement;
 
 typedef struct {
     u8 pad0[0x2];
-    s16 unk2;
+    s16 baseY;
     u8 pad4[0x8];
-    CEC4_Element elements[4];
-} CEC4_Arg0Struct;
+    RaceProgressIndicatorElement elements[4];
+} RaceProgressIndicatorState;
 
-void func_8004CEC4_4DAC4(CEC4_Arg0Struct *arg0) {
-    CEC4_Allocation *allocation;
+void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
+    RaceProgressIndicatorAllocation *allocation;
     s32 i;
     u8 playerIndex;
-    CEC4_PlayerData *playerData;
-    CEC4_Element *elem;
-    s32 temp;
+    RaceProgressPlayerData *playerData;
+    RaceProgressIndicatorElement *elem;
+    s32 targetPosition;
     s32 delta;
-    s8 state;
-    s16 baseVal;
-    s32 count;
+    s8 flashState;
+    s16 currentPosition;
+    s32 playerCount;
     u8 pad[0x8];
 
     allocation = getCurrentAllocation();
 
-    count = allocation->unk5E;
+    playerCount = allocation->numPlayers;
     i = 0;
-    if (count > 0) {
+    if (playerCount > 0) {
         do {
-            playerIndex = allocation->unk64[i];
-            playerData = (CEC4_PlayerData *)((u8 *)allocation->unk10 + playerIndex * 0xBE8);
+            playerIndex = allocation->playerIndices[i];
+            playerData = (RaceProgressPlayerData *)((u8 *)allocation->players + playerIndex * 0xBE8);
 
-            temp = (0x2000 - playerData->unkB98) * 0x8C;
-            elem = &arg0->elements[playerIndex];
+            targetPosition = (0x2000 - playerData->raceProgress) * 0x8C;
+            elem = &state->elements[playerIndex];
 
-            if (temp < 0) {
-                temp += 0x1FFF;
+            if (targetPosition < 0) {
+                targetPosition += 0x1FFF;
             }
 
-            baseVal = elem->unk10;
-            delta = (temp >> 13) - baseVal;
+            currentPosition = elem->positionOffset;
+            delta = (targetPosition >> 13) - currentPosition;
 
             if (delta < -4) {
                 delta = -4;
@@ -718,48 +717,48 @@ void func_8004CEC4_4DAC4(CEC4_Arg0Struct *arg0) {
                 delta = 4;
             }
 
-            elem->unk10 = baseVal + delta;
-            state = elem->unkD;
+            elem->positionOffset = currentPosition + delta;
+            flashState = elem->flashState;
 
-            switch (state) {
+            switch (flashState) {
                 case 0:
-                    if (playerData->unkB88 & 0x10) {
-                        elem->unkD = state + 1;
+                    if (playerData->playerStateFlags & 0x10) {
+                        elem->flashState = flashState + 1;
                         case 1:
-                            elem->unkC++;
-                            if ((s8)elem->unkC == 2) {
-                                elem->unkD = elem->unkD + 1;
+                            elem->flashCounter++;
+                            if ((s8)elem->flashCounter == 2) {
+                                elem->flashState = elem->flashState + 1;
                             }
                     }
                     break;
                 case 2:
-                    if (!(playerData->unkB88 & 0x10)) {
-                        elem->unkD = state + 1;
+                    if (!(playerData->playerStateFlags & 0x10)) {
+                        elem->flashState = flashState + 1;
                         case 3:
-                            elem->unkC--;
-                            if ((elem->unkC << 24) == 0) {
-                                elem->unkD = 0;
+                            elem->flashCounter--;
+                            if ((elem->flashCounter << 24) == 0) {
+                                elem->flashState = 0;
                             }
                     }
                     break;
             }
 
-            elem->unk2 = (u16)elem->unk10 + arg0->unk2 - 4;
-            elem->unk8 = (s8)elem->unkC;
+            elem->y = (u16)elem->positionOffset + state->baseY - 4;
+            elem->spriteFrame = (s8)elem->flashCounter;
 
-            if (playerData->unkBCF != 0) {
-                elem->unkA = 1;
+            if (playerData->activeEffectCount != 0) {
+                elem->hasActiveEffect = 1;
             } else {
-                elem->unkA = 0;
+                elem->hasActiveEffect = 0;
             }
 
             debugEnqueueCallback(0xC, 0, func_80010240_10E40, elem);
             i++;
-            count = allocation->unk5E;
-        } while (i < count);
+            playerCount = allocation->numPlayers;
+        } while (i < playerCount);
     }
 
-    debugEnqueueCallback(0xC, 0, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(0xC, 0, func_8000FED0_10AD0, state);
 }
 
 typedef struct {
