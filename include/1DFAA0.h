@@ -273,7 +273,7 @@ CutsceneSlot *getCutsceneSlot(CutsceneManager *manager, s16 slotIndex);
 void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *shadowModel, void *reflectionModel);
 void cleanupCutsceneManager(CutsceneManager *manager);
 void hideAllSlotModels(CutsceneSlot *slots);
-void func_800B2D68_1DFE18(CutsceneSlot *arg0);
+void showAllSlotModels(CutsceneSlot *slots);
 void func_800B2DCC_1DFE7C(CutsceneSlot *arg0);
 void func_800B2E48_1DFEF8(CutsceneManager *manager);
 s32 processCutsceneFrame(CutsceneManager *uiManager);

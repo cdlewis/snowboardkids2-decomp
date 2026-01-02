@@ -148,12 +148,12 @@ void hideAllSlotModels(CutsceneSlot *slots) {
     }
 }
 
-void func_800B2D68_1DFE18(CutsceneSlot *arg0) {
+void showAllSlotModels(CutsceneSlot *slots) {
     s32 i;
 
     for (i = 0; i < getCutsceneSlotCount(); i++) {
-        if (arg0[i].slotData.unkA4.ptr != NULL) {
-            setModelVisibility(arg0[i].slotData.unkA4.ptr, 1);
+        if (slots[i].slotData.unkA4.ptr != NULL) {
+            setModelVisibility(slots[i].slotData.unkA4.ptr, 1);
         }
     }
 }
@@ -249,7 +249,7 @@ void func_800B2F2C(CutsceneManager *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4
     arg0->showDebugInfo = arg5;
     arg0->enableTransparency = 0;
     arg0->skipAnimation = 0;
-    func_800B2D68_1DFE18((CutsceneSlot *)arg0);
+    showAllSlotModels((CutsceneSlot *)arg0);
     func_800B2E48_1DFEF8(arg0);
     clearAuxRenderEnabled(&arg0->unkFF8);
 }
