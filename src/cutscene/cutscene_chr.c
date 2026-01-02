@@ -629,9 +629,16 @@ void cutsceneChrTurn3_exec(cutsceneChrTurn3_exec_arg *arg0, CutsceneManager *arg
 
     func_800B34B0_1E0560(arg2);
 
-    func_800B75C4_1E4674(&currentSlot->slotData, currentSlot->model, arg0->unk0, arg0->unk8, arg0->unk6, arg0->unkA);
+    func_800B75C4_1E4674(
+        &currentSlot->slotData,
+        currentSlot->model,
+        arg0->targetAngle,
+        arg0->rotationStep,
+        arg0->duration,
+        arg0->rotationMultiplier
+    );
 
-    setModelAnimationQueued(currentSlot->model, arg0->unk2, arg0->unk4, -1, -1);
+    setModelAnimationQueued(currentSlot->model, arg0->animationIndex, arg0->transitionAnimIndex, -1, -1);
 }
 
 s32 cutsceneChrTurn3_isDone(void) {

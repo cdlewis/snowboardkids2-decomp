@@ -18,12 +18,12 @@ typedef struct {
 } cutsceneChrHop_exec_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
+    s16 targetAngle;
+    s16 animationIndex;
+    s16 transitionAnimIndex;
+    s16 duration;
+    s16 rotationStep;
+    s16 rotationMultiplier;
 } cutsceneChrTurn3_exec_arg;
 
 typedef struct {
