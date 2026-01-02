@@ -43,8 +43,8 @@ extern func_800B3950_callback D_800BAB68_AAA18[];
 typedef void (*func_800B468C_callback)(void *);
 extern func_800B468C_callback D_800BAB78_AAA28[];
 
-typedef void (*func_800B23AC_callback)(void *);
-extern func_800B23AC_callback D_800BAB04_AA9B4[];
+typedef void (*PostTrickLandingStepHandler)(void *);
+extern PostTrickLandingStepHandler postTrickLandingStepHandlers[];
 
 typedef void (*func_800B65C8_callback)(void *);
 extern func_800B65C8_callback D_800BAC10_AAAC0[];
@@ -498,8 +498,8 @@ s32 initPostTrickLandingStep(Player *player) {
     return 0;
 }
 
-void func_800B23AC_A225C(func_800B00D4_arg *arg0) {
-    D_800BAB04_AA9B4[arg0->unkBBF](arg0);
+void dispatchPostTrickLandingStep(func_800B00D4_arg *arg0) {
+    postTrickLandingStepHandlers[arg0->unkBBF](arg0);
 }
 
 s32 func_800B23DC_A228C(Player *arg0) {
