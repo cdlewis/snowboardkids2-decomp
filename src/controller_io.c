@@ -17,14 +17,6 @@ typedef struct {
     u8 duration[4];
 } MotorState;
 
-extern OSMesgQueue D_800A1820_A2420;
-extern OSMesgQueue D_800A1868_A2468;
-extern OSMesgQueue D_800A1888_A2488;
-extern OSMesgQueue D_800A18A8_A24A8;
-extern OSMesgQueue mainStack;
-extern OSPfs D_800A1A68_A2668[];
-extern OSContPad D_800A1C08_A2808[];
-
 void initControllerPack(s32);
 void func_8003A294_3AE94(s32, void *);
 void func_8003A52C_3B12C(s32, void *);
@@ -37,33 +29,39 @@ void eepromRead(s32 slotIndex, u8 *buffer);
 void eepromWrite(s32);
 void eepromWriteAll(u8 *buffer);
 void controllerServiceThread(void *arg0);
-
-extern Entry D_800A1C20_A2820[];
-
-extern OSPfs controllerPacks[];
-extern OSThread D_800A1DC0_A29C0;
-extern s16 D_8008FE8C_90A8C;
-extern MotorState gMotorState;
-extern s32 gControllerPackFileCount;
-extern s32 gControllerPackFreeBlockCount;
-extern u8 D_8008FE8E_90A8E;
-extern u8 D_8008FE8F_90A8F;
-extern u8 D_800A1C98_A2898;
-extern u8 gMotorInitCompleteMask;
-
 void motorProcessState(MotorState *);
-
 void initMotorStates(void);
-extern OSContStatus D_8009F660_A0260;
-extern OSThread D_8009F670_A0270;
-extern s32 D_800A1838_A2438;
 
+// Data
+extern u8 D_8008FE8F_90A8F;
+extern u8 D_8008FE8E_90A8E;
+extern s16 D_8008FE8C_90A8C;
+
+// Bss
+extern OSMesgQueue D_800A1820_A2420;
+extern OSMesgQueue D_800A1868_A2468;
+extern OSMesgQueue D_800A1888_A2488;
+extern OSMesgQueue D_800A18A8_A24A8;
+extern OSMesgQueue mainStack;
+extern OSPfs D_800A1A68_A2668[];
+extern OSContPad D_800A1C08_A2808[];
 extern s32 D_800A1880_A2480;
 extern s32 D_800A18A0_A24A0;
 extern s32 D_800A18C0_A24C0;
 extern s32 D_800A8D10_A0080;
 extern u8 gConnectedControllerMask;
 extern s8 gControllerPollingEnabled;
+extern OSContStatus D_8009F660_A0260;
+extern OSThread D_8009F670_A0270;
+extern s32 D_800A1838_A2438;
+extern u8 D_800A1C98_A2898;
+extern u8 gMotorInitCompleteMask;
+extern MotorState gMotorState;
+extern s32 gControllerPackFileCount;
+extern s32 gControllerPackFreeBlockCount;
+extern OSPfs controllerPacks[];
+extern OSThread D_800A1DC0_A29C0;
+extern Entry D_800A1C20_A2820[];
 
 void initControllerSubsystem(void) {
     s32 result;
