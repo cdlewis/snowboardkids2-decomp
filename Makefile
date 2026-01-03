@@ -100,8 +100,7 @@ dirs:
 	@rm -f $(BUILD_LOG)
 
 verify: $(TARGET).z64
-	@status=0; \
-	shasum --check $(BASENAME).sha1 || status=$$?
+	@shasum --check $(BASENAME).sha1
 
 no_verify: $(TARGET).z64
 	@echo "Skipping SHA1SUM check, updating CRC"
