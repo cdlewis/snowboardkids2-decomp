@@ -3,6 +3,7 @@
 set -e
 
 INPUT="$(realpath "$1")"
+OPT_FLAG="$2"
 OBJECT_OUTPUT="$(realpath "${1//.c/.o}")"
 ANNOTATED_OUTPUT="$(realpath "${1//.c/_annotated.s}")"
 OBJECT_DUMP="${1//.c/_object_dump.s}"
@@ -33,8 +34,8 @@ mkdir -p "src/claude"
 
 # Move target file to src directory to leverage existing make rule
 cp "$INPUT" "src/claude/$1"
-make "build/src/claude/${1//.c/.o}"
-make "build/src/claude/${1//.c/_annotated.s}"
+make ${OPT_FLAG:+OPT_FLAGS=$OPT_FLAG} "build/src/claude/${1//.c/.o}"
+make ${OPT_FLAG:+OPT_FLAGS=$OPT_FLAG} "build/src/claude/${1//.c/_annotated.s}"
 
 # Move output back to working directory and clean up
 rm "src/claude/$1"

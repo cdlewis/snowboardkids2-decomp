@@ -97,6 +97,16 @@ Do not be intimidated by large functions (hundreds of lines of assembly)! These 
 - Large structs are easy. Often there will be significant gaps between fields so size isn't that important anyway. Just try to get those field accesses correct.
 - Look for clues in how the function is called and/or how it calls other functions.
 
+### Functions with different compiler flags
+
+99% of functions use the default compiler flags but some have been identified that use a lower level of optimization. If you determine from the assembly code that a lower optimization level is being used, you can adjust it via a command-line flag to build.sh. For example, to select -O0:
+
+```
+./build.sh base.c -O0
+```
+
+For such functions, attempt to match 100% and note in the output that they require human intervention to change the optimization level. Integrating a successful match will generally not be possible.
+
 ### Functions using gRegionAllocPtr
 
 gRegionAllocPtr is indicative of a dynamically constructed Fast3DEX2 (also known as f3dex2) display list commands. Fast3DEX2 display list commands are microcode that are passed to the RSP for rendering. They are all 8 bytes long.
