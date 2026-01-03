@@ -1,9 +1,9 @@
-#include "3E160.h"
 #include "42170.h"
 #include "5DBC0.h"
 #include "common.h"
 #include "gamestate.h"
 #include "graphics.h"
+#include "race_session.h"
 #include "rand.h"
 
 extern u16 D_80093F90_94B90[];

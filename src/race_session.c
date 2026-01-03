@@ -1,3 +1,4 @@
+#include "race_session.h"
 #include "2DD40.h"
 #include "3CD70.h"
 #include "413E0.h"
@@ -31,50 +32,16 @@
         func_8006FA0C_7060C(&(gs)->unkC[idx], fov, aspect, near, far);         \
     } while (0)
 
-typedef struct {
-    u8 unk0[0x18];
-    ColorData unk18;
-    ColorData unk20;
-} VarData;
-
 USE_ASSET(_34CB50);
 USE_ASSET(_3FF010);
 USE_ASSET(_40E870);
 USE_OVERLAY(_9FF70);
 
-extern s32 D_800B0334;
-extern s32 D_800B7B7C;
-extern s32 gControllerInputs[4];
-extern u8 D_800A24A0_A30A0;
-extern void awaitBattleContinuePress(void);
-extern void awaitExpertRaceContinuePress(void);
-extern void cleanupGameSession(void);
-extern s8 gControllerPollingEnabled;
-extern s32 gFirstPlaceGoldReward[];
-extern s32 gSecondPlaceGoldReward[];
-extern s32 gThirdPlaceGoldReward[];
-
-void func_80040420_41020(void);
-void onGameSessionTerminated(void);
-void parseRaceAssetData(void);
-void scheduleRaceTasks(void);
-void awaitRaceAssetsLoaded(void);
-void waitForFadeAndInitPlayers(void);
-void awaitBossResultAndFadeOut(void);
-void awaitMeterWinContinuePress(void);
-void awaitPlayersAndPlayRaceMusic(void);
-void loadPlayerAssets(void);
-void func_8003F368_3FF68(void);
-void awaitSkillWinContinuePress(void);
-void awaitShotCrossWinContinuePress(void);
-void awaitSkillWinAndPromptContinue(void);
-void awaitSkillLossAndFadeOut(void);
-void awaitShotCrossWinAndPromptContinue(void);
-void awaitShotCrossLossAndFadeOut(void);
-void awaitSpeedCrossAwardGold(void);
-void awaitSpeedCrossContinuePress(void);
-void awaitMeterWinAndPromptContinue(void);
-void awaitMeterLossAndFadeOut(void);
+typedef struct {
+    u8 unk0[0x18];
+    ColorData unk18;
+    ColorData unk20;
+} VarData;
 
 typedef struct {
     Node_70B00 *audioPlayer0;
@@ -87,10 +54,6 @@ typedef struct {
     u8 padding2[0x7A - 0x5E];
     u8 unk7A;
 } GameState_temp;
-
-extern void loadRaceGameData(void);
-extern ColorData D_80090774_91374;
-extern ColorData D_8009077C_9137C;
 
 typedef struct {
     u8 unk0[4];
@@ -176,48 +139,58 @@ typedef struct {
     void *bssEnd;
 } OverlayEntry;
 
-extern void initRaceViewports(void);
-
-extern SessionConfig *D_800AFE8C_A71FC;
-
-extern OverlayEntry Overlays[];
-
-extern u8 D_80090280_90E80[4][4]; // unknown first (4) size
-extern u8 D_800902C0_90EC0[];
-
 typedef struct {
     u8 unk0;
     u8 unk1;
     u8 unk2;
     u8 unk3;
 } Unk800902D0_90ED0;
-extern Unk800902D0_90ED0 D_800902D0_90ED0[16][6]; // unknown size (16)
+
+// Data
+extern s32 gThirdPlaceGoldReward[];
+extern s32 gFirstPlaceGoldReward[];
+extern s32 gSecondPlaceGoldReward[];
 extern u8 D_80090450_91050[];
+extern Unk800902D0_90ED0 D_800902D0_90ED0[16][6]; // unknown size (16)
+extern u8 D_800902C0_90EC0[];
+extern u8 D_80090280_90E80[4][4]; // unknown first (4) size
+extern OverlayEntry Overlays[];
+extern ColorData D_8009077C_9137C;
+extern ColorData D_80090774_91374;
 extern u8 D_80090520_91120[];
 
-extern u32 D_800BAA30;
+// Bss
+extern s8 gControllerPollingEnabled;
+extern u8 D_800A24A0_A30A0;
+extern s32 gControllerInputs[4];
+extern SessionConfig *D_800AFE8C_A71FC;
 
-enum GameMode {
-    GAME_MODE_STORY = 0,
-    GAME_MODE_BATTLE = 1,
-    GAME_MODE_DEMO = 2,
-    GAME_MODE_INTRO = 3,
-};
-
-enum RaceType {
-    RACE_TYPE_STANDARD = 0,
-    RACE_TYPE_BOSS_JUNGLE = 1,
-    RACE_TYPE_BOSS_JINGLE = 2,
-    RACE_TYPE_BOSS_ICE = 3,
-    RACE_TYPE_SPEED_CROSS = 4,
-    RACE_TYPE_SHOT_CROSS = 5,
-    RACE_TYPE_X_CROSS = 6,
-    RACE_TYPE_UNUSED_7 = 7,
-    RACE_TYPE_BATTLE = 8,
-    RACE_TYPE_TRAINING = 9,
-    RACE_TYPE_DEMO = 10,
-    RACE_TYPE_INTRO = 11,
-};
+void initRaceViewports(void);
+void func_80040420_41020(void);
+void onGameSessionTerminated(void);
+void parseRaceAssetData(void);
+void scheduleRaceTasks(void);
+void awaitRaceAssetsLoaded(void);
+void waitForFadeAndInitPlayers(void);
+void awaitBossResultAndFadeOut(void);
+void awaitMeterWinContinuePress(void);
+void awaitPlayersAndPlayRaceMusic(void);
+void loadPlayerAssets(void);
+void func_8003F368_3FF68(void);
+void awaitSkillWinContinuePress(void);
+void awaitShotCrossWinContinuePress(void);
+void awaitSkillWinAndPromptContinue(void);
+void awaitSkillLossAndFadeOut(void);
+void awaitShotCrossWinAndPromptContinue(void);
+void awaitShotCrossLossAndFadeOut(void);
+void awaitSpeedCrossAwardGold(void);
+void awaitSpeedCrossContinuePress(void);
+void awaitMeterWinAndPromptContinue(void);
+void awaitMeterLossAndFadeOut(void);
+void awaitBattleContinuePress(void);
+void awaitExpertRaceContinuePress(void);
+void cleanupGameSession(void);
+void loadRaceGameData(void);
 
 void initRace(void) {
     RaceState *raceState;
@@ -836,8 +809,8 @@ void scheduleRaceTasks(void) {
     gameState = (GameState *)getCurrentAllocation();
     gameState->pendingPlayerRenderTasks = 0;
 
-    scheduleTask(&D_800B0334, 0, 0, 1);
-    scheduleTask(&D_800B7B7C, 0, 0, 0x64);
+    scheduleTask(&func_800B0334_A01E4, 0, 0, 1);
+    scheduleTask(&func_800B7B7C_A7A2C, 0, 0, 0x64);
     scheduleTask(&initPauseMenuDisplayTask, 0, 0, 0xC8);
 
     scheduleLevelEnvironmentTasks(gameState->memoryPoolId);
@@ -931,9 +904,9 @@ void awaitPlayersAndPlayRaceMusic(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003F1F0_3FDF0);
+INCLUDE_ASM("asm/nonmatchings/race_session", func_8003F1F0_3FDF0);
 
-INCLUDE_ASM("asm/nonmatchings/3E160", func_8003F368_3FF68);
+INCLUDE_ASM("asm/nonmatchings/race_session", func_8003F368_3FF68);
 
 void handleBossRaceResult(void) {
     GameState *gs;

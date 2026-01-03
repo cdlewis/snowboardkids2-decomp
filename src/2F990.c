@@ -3,7 +3,6 @@
 #include "20F0.h"
 #include "33FE0.h"
 #include "38C90.h"
-#include "3E160.h"
 #include "56910.h"
 #include "5E590.h"
 #include "68CF0.h"
@@ -12,6 +11,7 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 

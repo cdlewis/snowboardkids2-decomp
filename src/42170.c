@@ -1,5 +1,4 @@
 #include "42170.h"
-#include "3E160.h"
 #include "56910.h"
 #include "5AA90.h"
 #include "5E590.h"
@@ -8,6 +7,7 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 

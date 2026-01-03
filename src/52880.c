@@ -1,4 +1,3 @@
-#include "3E160.h"
 #include "42170.h"
 #include "51060.h"
 #include "594E0.h"
@@ -11,6 +10,7 @@
 #include "geometry.h"
 #include "graphics.h"
 #include "levels/starlight_highway.h"
+#include "race_session.h"
 #include "rand.h"
 #include "task_scheduler.h"
 

@@ -1,7 +1,7 @@
 #include "1DFAA0.h"
 #include "1E1BA0.h"
-#include "3E160.h"
 #include "common.h"
+#include "race_session.h"
 #include "task_scheduler.h"
 
 extern s8 D_800BAF08_1E7FB8;

@@ -1,11 +1,11 @@
 #include "1DFAA0.h"
 #include "1E60D0.h"
-#include "3E160.h"
 #include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 

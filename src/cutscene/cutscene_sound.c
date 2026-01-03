@@ -1,7 +1,7 @@
 #include "cutscene/cutscene_sound.h"
 #include "1E1BA0.h"
 #include "1E2890.h"
-#include "3E160.h"
+#include "race_session.h"
 
 extern s32 gControllerInputs[4];
 

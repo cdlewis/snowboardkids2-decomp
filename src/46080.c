@@ -1,5 +1,4 @@
 #include "19E80.h"
-#include "3E160.h"
 #include "413E0.h"
 #include "51060.h"
 #include "56910.h"
@@ -22,6 +21,7 @@
 #include "levels/starlight_highway.h"
 #include "levels/sunny_mountain.h"
 #include "levels/wendys_house.h"
+#include "race_session.h"
 #include "rand.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"

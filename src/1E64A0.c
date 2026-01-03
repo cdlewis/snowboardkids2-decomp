@@ -1,10 +1,10 @@
 #include "1E64A0.h"
 #include "36B80.h"
-#include "3E160.h"
 #include "90F0.h"
 #include "B040.h"
 #include "common.h"
 #include "cutscene/cutscene_sys2.h"
+#include "race_session.h"
 #include "task_scheduler.h"
 
 extern void func_800B99A0_1E6A50(void);

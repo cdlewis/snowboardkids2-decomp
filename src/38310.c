@@ -2,9 +2,9 @@
 #include "10AD0.h"
 #include "33FE0.h"
 #include "36B80.h"
-#include "3E160.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
+#include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 

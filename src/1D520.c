@@ -1,8 +1,8 @@
-#include "3E160.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "race_session.h"
 #include "task_scheduler.h"
 
 extern void func_8001CD90_1D990(void);

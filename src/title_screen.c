@@ -1,7 +1,6 @@
 #include "10AD0.h"
 #include "16FA0.h"
 #include "288A0.h"
-#include "3E160.h"
 #include "4050.h"
 #include "413E0.h"
 #include "6E840.h"
@@ -11,6 +10,7 @@
 #include "controller_io.h"
 #include "gamestate.h"
 #include "graphics.h"
+#include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 

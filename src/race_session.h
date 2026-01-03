@@ -23,24 +23,24 @@ typedef struct {
 } func_80019CD0_1A8D0_arg;
 
 typedef struct {
-    u8 pad0[0x18];      /* 0x00 */
-    s32 unk18;          /* 0x18 */
-    u8 pad1C[0x4];      /* 0x1C */
-    void *unk20;        /* 0x20 */
-    void *unk24;        /* 0x24 */
-    void *unk28;        /* 0x28 */
-    s32 unk2C;          /* 0x2C */
-    u8 pad30[0xC];      /* 0x30 */
+    u8 pad0[0x18];         /* 0x00 */
+    s32 unk18;             /* 0x18 */
+    u8 pad1C[0x4];         /* 0x1C */
+    void *unk20;           /* 0x20 */
+    void *unk24;           /* 0x24 */
+    void *unk28;           /* 0x28 */
+    s32 unk2C;             /* 0x2C */
+    u8 pad30[0xC];         /* 0x30 */
     u8 secondaryObj[0x20]; /* 0x3C - first 0x20 bytes of secondary DisplayListObject */
-    void *unk5C;        /* 0x5C */
-    void *unk60;        /* 0x60 */
-    void *unk64;        /* 0x64 */
-    s32 unk68;          /* 0x68 */
-    u8 pad6C[0xC];      /* 0x6C */
-    Player *player;     /* 0x78 */
-    s32 fallVelocity;   /* 0x7C */
-    u16 yRotation;      /* 0x80 */
-    s16 scale;          /* 0x82 */
+    void *unk5C;           /* 0x5C */
+    void *unk60;           /* 0x60 */
+    void *unk64;           /* 0x64 */
+    s32 unk68;             /* 0x68 */
+    u8 pad6C[0xC];         /* 0x6C */
+    Player *player;        /* 0x78 */
+    s32 fallVelocity;      /* 0x7C */
+    u16 yRotation;         /* 0x80 */
+    s16 scale;             /* 0x82 */
 } PlayerFlashEffectState;
 
 void func_80014480_15080(void);
@@ -137,3 +137,25 @@ void *loadAssetByIndex_5E990(s32 index);
 MemoryAllocatorNode *func_8005DE04_5EA04(s16 groupIndex, s16 entityIndex);
 MemoryAllocatorNode *func_8005DE30_5EA30(s16 groupIndex, s16 entityIndex);
 s32 loadSpriteAsset(SpriteAssetState *arg0, s16 arg1);
+
+enum GameMode {
+    GAME_MODE_STORY = 0,
+    GAME_MODE_BATTLE = 1,
+    GAME_MODE_DEMO = 2,
+    GAME_MODE_INTRO = 3,
+};
+
+enum RaceType {
+    RACE_TYPE_STANDARD = 0,
+    RACE_TYPE_BOSS_JUNGLE = 1,
+    RACE_TYPE_BOSS_JINGLE = 2,
+    RACE_TYPE_BOSS_ICE = 3,
+    RACE_TYPE_SPEED_CROSS = 4,
+    RACE_TYPE_SHOT_CROSS = 5,
+    RACE_TYPE_X_CROSS = 6,
+    RACE_TYPE_UNUSED_7 = 7,
+    RACE_TYPE_BATTLE = 8,
+    RACE_TYPE_TRAINING = 9,
+    RACE_TYPE_DEMO = 10,
+    RACE_TYPE_INTRO = 11,
+};

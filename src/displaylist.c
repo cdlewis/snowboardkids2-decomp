@@ -1,7 +1,6 @@
 #include "displaylist.h"
 
 #include "19E80.h"
-#include "3E160.h"
 #include "5AA90.h"
 #include "68CF0.h"
 #include "6E840.h"
@@ -9,6 +8,7 @@
 #include "gamestate.h"
 #include "gbi.h"
 #include "geometry.h"
+#include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 

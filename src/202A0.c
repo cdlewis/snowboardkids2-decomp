@@ -4,7 +4,6 @@
 #include "33FE0.h"
 #include "36B80.h"
 #include "38C90.h"
-#include "3E160.h"
 #include "56910.h"
 #include "6E840.h"
 #include "B040.h"
@@ -12,6 +11,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
+#include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 

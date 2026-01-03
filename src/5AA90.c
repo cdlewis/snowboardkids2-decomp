@@ -1,5 +1,4 @@
 #include "5AA90.h"
-#include "3E160.h"
 #include "56910.h"
 #include "594E0.h"
 #include "5DBC0.h"
@@ -7,6 +6,7 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "race_session.h"
 #include "task_scheduler.h"
 
 typedef struct {
