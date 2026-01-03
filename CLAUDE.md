@@ -26,6 +26,7 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 - `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
 - `python3 tools/check_pointer_arithmetic.py <file or directory>` detect pointer arithmetic with casts that should be replaced with struct field access. Use `--strict` to fail on violations.
 - `python3 tools/project_status.py` shows functions that are currently non-matching. Use this if `./tools/build-and-verify.sh` is failing and you're not sure which function is the problem.
+- `python3 tools/find_similar_functions.py <function id>` returns a list of similar functions to <function id>. This can provide a useful reference when trying to match code.
 
 ## Tasks
 
