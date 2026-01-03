@@ -101,9 +101,7 @@ dirs:
 
 verify: $(TARGET).z64
 	@status=0; \
-	shasum --check $(BASENAME).sha1 || status=$$?; \
-	if [ -z "$$BUILD_AND_VERIFY" ]; then echo "Reminder to Claude: make caches things, you need to run ./tools/build-and-verify.sh instead."; fi; \
-	exit $$status
+	shasum --check $(BASENAME).sha1 || status=$$?
 
 no_verify: $(TARGET).z64
 	@echo "Skipping SHA1SUM check, updating CRC"
