@@ -1,8 +1,39 @@
 #!/bin/bash
 
+# Parse arguments
+SOURCE_FILE="src/temp.c"
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --source-file)
+            SOURCE_FILE="$2"
+            shift 2
+            ;;
+        -s)
+            SOURCE_FILE="$2"
+            shift 2
+            ;;
+        -*)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [--source-file <path>] <function_name_or_path_or_scratch_id>"
+            exit 1
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
+# Restore positional arguments
+set -- "${POSITIONAL_ARGS[@]}"
+
 # Check if argument is provided
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 <function_name_or_path_or_scratch_id>"
+    echo "Usage: $0 [--source-file <path>] <function_name_or_path_or_scratch_id>"
+    echo "Options:"
+    echo "  --source-file, -s <path>  Use specified source file instead of src/temp.c"
     exit 1
 fi
 
@@ -82,8 +113,10 @@ else
     echo "Found: $ASM_PATH"
 fi
 
-# Clean up temp files from previous runs
-rm -f src/temp.c src/ctx.c
+# Clean up temp files from previous runs (only if using default temp.c)
+if [ "$SOURCE_FILE" = "src/temp.c" ]; then
+    rm -f src/temp.c src/ctx.c
+fi
 
 # Prepare source code for import
 if [ "$USE_SCRATCH_SOURCE" = true ]; then
@@ -101,11 +134,18 @@ if [ "$USE_SCRATCH_SOURCE" = true ]; then
         echo "$SOURCE_CODE" > src/temp.c
     fi
     echo "Using source code from decomp.me scratch"
+    SOURCE_FILE="src/temp.c"
+fi
+
+# Check that source file exists
+if [ ! -f "$SOURCE_FILE" ]; then
+    echo "Error: Source file not found: $SOURCE_FILE"
+    exit 1
 fi
 
 # Run the import scripts with the found path
-echo "Importing..."
-IMPORT_OUTPUT=$(./tools/decomp-permuter/import.py src/temp.c "$ASM_PATH" 2>&1)
+echo "Importing from $SOURCE_FILE..."
+IMPORT_OUTPUT=$(./tools/decomp-permuter/import.py "$SOURCE_FILE" "$ASM_PATH" 2>&1)
 IMPORT_EXIT_CODE=$?
 
 echo "$IMPORT_OUTPUT"
