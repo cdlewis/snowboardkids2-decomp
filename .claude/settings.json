@@ -33,6 +33,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/block-ctx-file.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-asm-edits.sh"
           }
         ]
       },
@@ -42,6 +46,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/block-ctx-file.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-asm-edits.sh"
           }
         ]
       }
