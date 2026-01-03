@@ -27,7 +27,7 @@ Or use the Write tool to create `src/temp.c` with the full contents of your best
 
 ### Step 2: Run the permuter
 
-Run `timeout 120s ./tools/permuter <function name>`. This will automatically create a permuter environment and run the permuter for 120 seconds. You can tweak this number to an appropriate time. If you fail to use the `timeout` command the permuter will run forever.
+Run `timeout 300s ./tools/permuter <function name>`. This will automatically create a permuter environment and run the permuter for 300 seconds. You can tweak this number to an appropriate time. If you fail to use the `timeout` command the permuter will run forever.
 
 The permuter will report match improvements. These will be located in `nonmatchings/function-name-<optional number>/output-<score>-<optional number>`. The full C code will be in `source.c`. A `diff.txt` file is also available with the changes the permuter made.
 
