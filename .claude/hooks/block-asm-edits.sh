@@ -13,4 +13,10 @@ if [[ "$file_path" == */asm/* ]]; then
   exit 2
 fi
 
+# Block edits to snowboardkids2.sha1
+if [[ "$file_path" == *snowboardkids2.sha1 ]]; then
+  echo "Blocked: snowboardkids2.sha1 is a reference checksum file and should not be edited." 1>&2
+  exit 2
+fi
+
 exit 0
