@@ -559,7 +559,100 @@ s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005BCB8_5C8B8);
+/**
+ * Checks 2D collision (xz-plane) between a point and all players.
+ * Pushes players out of collision and may call func_800589CC_595CC.
+ *
+ * @param arg0 Position to check collision against (Vec3i*)
+ * @param arg1 Radius to add to player's collision radius
+ * @param arg2 Maximum height difference for collision
+ * @return Always returns 0
+ */
+s32 func_8005BCB8_5C8B8(void *arg0, s32 arg1, s32 arg2) {
+    Vec3i deltaPos;
+    s64 unused;
+    GameState *allocation;
+    Vec3i *deltaPosPtr;
+    s32 combinedRadius;
+    s32 playerIndex;
+    Player *targetPlayer;
+    int new_var;
+    s32 dist;
+    s32 negRadius;
+    s32 deltaX;
+    s32 deltaZ;
+
+    allocation = (GameState *)getCurrentAllocation();
+    playerIndex = 0;
+    new_var = 0;
+
+    if ((s32)allocation->numPlayers > new_var) {
+        deltaPosPtr = &deltaPos;
+        do {
+            targetPlayer = &allocation->players[playerIndex];
+
+            memcpy(deltaPosPtr, &targetPlayer->unkAD4, 0xC);
+
+            deltaPos.x += targetPlayer->worldPos.x;
+            deltaPos.y += targetPlayer->worldPos.y;
+            deltaPos.z += targetPlayer->worldPos.z;
+
+            deltaPos.x -= ((Vec3i *)arg0)->x;
+            deltaPos.y -= ((Vec3i *)arg0)->y;
+            deltaPos.z -= ((Vec3i *)arg0)->z;
+
+            if (deltaPos.y <= 0) {
+                goto next;
+            }
+            if (deltaPos.y >= arg2) {
+                goto next;
+            }
+
+            combinedRadius = targetPlayer->unkAE0 + arg1;
+            negRadius = -combinedRadius;
+
+            if ((negRadius >= deltaPos.x) || (deltaPos.x >= combinedRadius)) {
+                goto next;
+            }
+            if ((negRadius >= deltaPos.z) || (deltaPos.z >= combinedRadius)) {
+                goto next;
+            }
+
+            dist = isqrt64(((s64)deltaPos.x * deltaPos.x) + ((s64)deltaPos.z * deltaPos.z));
+
+            if (dist >= combinedRadius) {
+                goto next;
+            }
+
+            if (dist == 0) {
+                dist = 1;
+            }
+
+            deltaX = deltaPos.x;
+            deltaZ = deltaPos.z;
+            deltaPos.x = (((s64)deltaX * combinedRadius) / dist) - deltaX;
+            deltaPos.z = (((s64)deltaZ * combinedRadius) / dist) - deltaZ;
+
+            if (targetPlayer->unkB84 & 0x80) {
+                goto next;
+            }
+
+            targetPlayer->worldPos.x += deltaPos.x;
+            targetPlayer->worldPos.z += deltaPos.z;
+
+            dist = isqrt64(((s64)deltaPos.x * deltaPos.x) + ((s64)deltaPos.z * deltaPos.z));
+
+            if (dist > 0x40000) {
+                deltaPos.y = 0;
+                func_800589CC_595CC(targetPlayer, deltaPosPtr);
+            }
+        next:
+            playerIndex++;
+        } while (playerIndex < allocation->numPlayers);
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005BF50_5CB50);
 
