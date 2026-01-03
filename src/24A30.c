@@ -17,6 +17,7 @@ USE_ASSET(_458E30);
 USE_ASSET(_459310);
 USE_ASSET(_4237C0);
 USE_ASSET(_41A1D0);
+USE_ASSET(_426EF0);
 
 typedef struct {
     u8 padding[0x24];
@@ -261,7 +262,8 @@ extern u8 D_8008DD8E_8E98E[];
 extern s32 identityMatrix[];
 extern s32 D_8008DD2C_8E92C[];
 extern Vec3s D_8008DD4E_8E94E[];
-extern Vec3s D_8008DD6C_8E96C;
+extern Vec3s D_8008DD6C_8E96C[];
+extern Vec3s D_8008DD72_8E972[];
 
 void func_80025418_26018(void *);
 void cleanupCharSelectIcons(SimpleSpriteEntry *);
@@ -310,6 +312,8 @@ void renderCharSelectScaledSprite(void *);
 void cleanupCharSelectScaledSprite(ScaledSpriteEntry *);
 void updateCharSelectPostSlide(CharSelectSlideState *);
 void updateCharSelectSlide(CharSelectSlideState *);
+void hideCharSelectIcons(CharSelectIconHideState *);
+void cleanupCharSelectIconHideAsset(SimpleSpriteEntry *);
 
 void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     Transform3D sp10;
@@ -980,7 +984,66 @@ void cleanupCharSelectIcons(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_800256A8_262A8);
+void func_800256A8_262A8(CharSelectIconHideState *arg0) {
+    void *dmaResult;
+    u8 numPlayers;
+    s32 i;
+    s32 iconBaseIndex;
+    u16 x;
+    u16 y;
+    s32 yIncrement;
+    volatile P2NameSpriteEntry *ptr;
+    u8 *table;
+    s32 pad[4];
+
+    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    setCleanupCallback(cleanupCharSelectIconHideAsset);
+
+    numPlayers = D_800AFE8C_A71FC->numPlayers;
+    iconBaseIndex = 0xC;
+    if (numPlayers == 1) {
+        iconBaseIndex = 0x11;
+    }
+
+    x = D_8008DD6C_8E96C[numPlayers].y;
+    i = 0;
+    do {
+    } while (0);
+    yIncrement = D_8008DD72_8E972[numPlayers].x;
+    table = D_8008DD8C_8E98C;
+    y = D_8008DD6C_8E96C[numPlayers].z;
+    ptr = (volatile P2NameSpriteEntry *)arg0;
+
+    do {
+        D_800AFE8C_A71FC_type *global;
+        u8 charIndex;
+        u8 tableValue;
+        s32 offset;
+
+        global = D_800AFE8C_A71FC;
+        ptr->unk0 = x;
+        ptr->unk2 = y;
+
+        charIndex = ((u8 *)global + arg0->playerIndex)[0xD];
+        offset = charIndex * 3 + i;
+        tableValue = *(u8 *)(offset + (s32)table);
+
+        ptr->unk8 = iconBaseIndex + (tableValue - 1) / 2;
+
+        global = D_800AFE8C_A71FC;
+        charIndex = ((u8 *)global + arg0->playerIndex)[0xD];
+        offset = charIndex * 3 + i;
+        tableValue = *(u8 *)(offset + (s32)table);
+
+        y += yIncrement;
+        i += 1;
+        ptr->unk4 = dmaResult;
+        ptr->unkA = (u8)(((tableValue - 1) / 2 + 7) & 0xFF) % 11;
+        ptr++;
+    } while (i < 3);
+
+    setCallback(hideCharSelectIcons);
+}
 
 void hideCharSelectIcons(CharSelectIconHideState *arg0) {
     func_80027348_entry *entry;
@@ -1158,9 +1221,9 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
     arg0->numEntries = 3;
 
     if (D_800AFE8C_A71FC->unk4 == 0) {
-        x = D_8008DD6C_8E96C.x;
-        y = D_8008DD6C_8E96C.y;
-        xIncrement = D_8008DD6C_8E96C.z;
+        x = D_8008DD6C_8E96C[0].x;
+        y = D_8008DD6C_8E96C[0].y;
+        xIncrement = D_8008DD6C_8E96C[0].z;
         spriteIndexBase = 6;
         arg0->numEntries = 2;
     } else {
