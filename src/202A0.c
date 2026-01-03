@@ -12,7 +12,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 extern u8 identityMatrix[];

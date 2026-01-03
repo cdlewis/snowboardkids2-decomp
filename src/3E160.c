@@ -1,5 +1,4 @@
 #include "2DD40.h"
-#include "3A1F0.h"
 #include "3CD70.h"
 #include "413E0.h"
 #include "46080.h"
@@ -8,13 +7,14 @@
 #include "6E840.h"
 #include "9FF70.h"
 #include "common.h"
+#include "controller_io.h"
 #include "course.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "graphics.h"
 #include "levels/lindas_castle.h"
-#include "overlay.h"
 #include "rand.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 #define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                     \

@@ -1,7 +1,6 @@
 #include "10AD0.h"
 #include "16FA0.h"
 #include "288A0.h"
-#include "3A1F0.h"
 #include "3E160.h"
 #include "4050.h"
 #include "413E0.h"
@@ -9,9 +8,10 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "controller_io.h"
 #include "gamestate.h"
 #include "graphics.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 typedef struct {

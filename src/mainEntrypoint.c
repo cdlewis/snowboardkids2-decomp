@@ -1,11 +1,12 @@
 #include "mainEntrypoint.h"
-#include "3A1F0.h"
 #include "6E840.h"
 #include "PRinternal/viint.h"
 #include "common.h"
+#include "controller_io.h"
 #include "displaylist.h"
 #include "graphics.h"
 #include "memory_allocator.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 #include "thread_manager.h"
 

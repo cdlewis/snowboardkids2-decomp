@@ -9,7 +9,7 @@
 #include "gamestate.h"
 #include "gbi.h"
 #include "geometry.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_OVERLAY(rand);

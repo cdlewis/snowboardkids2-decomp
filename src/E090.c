@@ -3,7 +3,7 @@
 #include "3E160.h"
 #include "6E840.h"
 #include "common.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_67AB10);

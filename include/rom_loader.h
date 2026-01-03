@@ -1,5 +1,25 @@
-#include "3A1F0.h"
+#pragma once
+
 #include "common.h"
+
+void initPiManager(void);
+
+void dmaLoadAndInvalidate(
+    void *romStart,
+    void *romEnd,
+    void *ramStart,
+    void *icacheStart,
+    void *icacheEnd,
+    void *dcacheStart,
+    void *dcacheEnd,
+    void *bssStart,
+    void *bssEnd
+);
+
+void *queueCompressedDmaTransfer(void *romStart, void *romEnd, s32 decompressedSize);
+void *queueUncompressedDmaTransfer(void *start, void *end);
+s32 *queueDirectDmaTransfer(void *romStart, void *romEnd, s32 size, s32 *dramAddr);
+s32 getPendingDmaCount(void);
 
 #define USE_ASSET(id)           \
     extern u32 *id##_ROM_START; \

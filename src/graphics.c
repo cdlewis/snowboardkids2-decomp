@@ -1,8 +1,8 @@
 #include "graphics.h"
 #include "common.h"
 #include "displaylist.h"
-#include "overlay.h"
 #include "player.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_6A83F0);

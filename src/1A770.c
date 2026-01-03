@@ -3,7 +3,6 @@
 #include "15690.h"
 #include "20F0.h"
 #include "288A0.h"
-#include "3A1F0.h"
 #include "3E160.h"
 #include "4050.h"
 #include "68CF0.h"
@@ -13,6 +12,7 @@
 #include "common.h"
 #include "gamestate.h"
 #include "graphics.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 typedef struct {

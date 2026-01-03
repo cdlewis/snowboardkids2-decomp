@@ -5,7 +5,7 @@
 #include "3E160.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_4196E0);

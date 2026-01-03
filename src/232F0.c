@@ -1,9 +1,9 @@
-#include "3A1F0.h"
 #include "3E160.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 typedef struct {

@@ -1,7 +1,7 @@
 #include "5520.h"
 #include "common.h"
 #include "geometry.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_2151D0);

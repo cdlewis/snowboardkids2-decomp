@@ -15,8 +15,8 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "overlay.h"
 #include "rand.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_419C60);

@@ -1,7 +1,7 @@
 #include "task_scheduler.h"
 
-#include "3A1F0.h"
 #include "gamestate.h"
+#include "rom_loader.h"
 
 #define SCHEDULER_STATE_INACTIVE 0
 #define SCHEDULER_STATE_RUNNING 1

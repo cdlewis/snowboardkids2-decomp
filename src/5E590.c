@@ -1,6 +1,6 @@
 #include "20F0.h"
 #include "common.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_3ECE40);

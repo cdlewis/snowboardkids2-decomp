@@ -1,5 +1,4 @@
 #include "202A0.h"
-#include "3A1F0.h"
 #include "3E160.h"
 #include "56910.h"
 #include "6E840.h"
@@ -7,6 +6,7 @@
 #include "EepromSaveData_type.h"
 #include "common.h"
 #include "graphics.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 typedef struct {

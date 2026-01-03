@@ -1,14 +1,13 @@
 #include "1A770.h"
 #include "288A0.h"
 #include "36B80.h"
-#include "3A1F0.h"
 #include "6E840.h"
 #include "clocktrigger_tower.h"
 #include "common.h"
 #include "gamestate.h"
 #include "graphics.h"
 #include "main.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_419440);

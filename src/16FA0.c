@@ -6,7 +6,7 @@
 #include "common.h"
 #include "gamestate.h"
 #include "main.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_414CF0);

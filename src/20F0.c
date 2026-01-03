@@ -6,7 +6,7 @@
 #include "D6F0.h"
 #include "displaylist.h"
 #include "graphics.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_646850);

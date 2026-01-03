@@ -1,7 +1,7 @@
 #include "1DB7A0.h"
 #include "10AD0.h"
 #include "common.h"
-#include "overlay.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_426EF0);

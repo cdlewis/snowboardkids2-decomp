@@ -22,8 +22,8 @@
 #include "levels/starlight_highway.h"
 #include "levels/sunny_mountain.h"
 #include "levels/wendys_house.h"
-#include "overlay.h"
 #include "rand.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 USE_ASSET(_3F6670);

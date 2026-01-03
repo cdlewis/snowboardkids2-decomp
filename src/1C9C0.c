@@ -1,8 +1,8 @@
 #include "2F990.h"
-#include "3A1F0.h"
 #include "6E840.h"
 #include "common.h"
 #include "graphics.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 extern s32 gControllerInputs;
