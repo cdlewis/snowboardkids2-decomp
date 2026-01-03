@@ -283,7 +283,8 @@ void animateCharSelectP2NameReveal(P2NameAnimationState *);
 void animateCharSelectP2NameHide(P2NameHideState *);
 void func_800269C8_275C8(void *);
 void func_80026BAC_277AC(SimpleSpriteEntry *);
-void func_80025904_26504(void);
+void func_80025904_26504(CharSelectIconHideState *);
+void showCharSelectIcons(CharSelectIconHideState *);
 void updateCharSelectSecondarySlide(CharSelectSecondarySlot *);
 void cleanupCharSelectSecondaryAssets(func_8002494C_arg *);
 void func_80024D40_25940(CharSelectBoardPreview *);
@@ -1019,7 +1020,58 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80025904_26504);
+void func_80025904_26504(CharSelectIconHideState *arg0) {
+    GameState *state;
+    s32 i;
+    func_80027348_entry *entry;
+    u16 stateVal;
+    s32 iconBaseIndex;
+    u8 charIndex;
+    u8 paletteIndex;
+    s32 tableOffset;
+    u8 *tableBase;
+    u8 *tablePtr;
+
+    state = (GameState *)getCurrentAllocation();
+
+    i = 0;
+    entry = (func_80027348_entry *)arg0;
+    do {
+        debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010240_10E40, entry);
+        entry++;
+        i++;
+    } while (i < 3);
+
+    stateVal = state->unk1898[arg0->playerIndex];
+
+    if (stateVal == 0xA) {
+        setCallback(showCharSelectIcons);
+        return;
+    }
+
+    if (stateVal < 3) {
+        iconBaseIndex = 0xC;
+        if (D_800AFE8C_A71FC->numPlayers == 1) {
+            iconBaseIndex = 0x11;
+        }
+
+        charIndex = state->unk18A8[arg0->playerIndex];
+        i = 0;
+        tableBase = D_8008DD8C_8E98C;
+        paletteIndex = state->unk18B0[arg0->playerIndex];
+        entry = (func_80027348_entry *)arg0;
+        tableOffset = ((u8)(paletteIndex + charIndex * 3)) * 3;
+
+        do {
+            tablePtr = (u8 *)((tableOffset + i) + (u32)tableBase);
+            ((func_80027348_entry *)arg0)[i].unk8 = iconBaseIndex + (*tablePtr - 1) / 2;
+            ((func_80027348_entry *)arg0)[i].unkA = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
+            i++;
+        } while (i < 3);
+
+        setCallback(hideCharSelectIcons);
+    }
+}
 
 void showCharSelectIcons(CharSelectIconHideState *arg0) {
     GameState *state;
