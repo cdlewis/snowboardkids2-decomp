@@ -85,7 +85,10 @@ typedef struct {
     u8 pad9D0[0x9F0 - 0x9D0];
     u8 unk9F0[0x20];       /* 0x9F0 - 0xA0F */
     UnkA10Entry unkA10[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
-    u8 padA7C[0xA8C - 0xA7C];
+    s32 unkA7C; /* 0xA7C */
+    u8 padA80[4];
+    s32 unkA84; /* 0xA84 */
+    u8 padA88[4];
     u16 unkA8C; /* 0xA8C */
     u16 unkA8E; /* 0xA8E */
     u16 unkA90; /* 0xA90 */
@@ -173,6 +176,7 @@ extern FuncPtr D_800BCB74_B4134[];
 extern s16 D_800BCB7C_B413C[];
 extern u16 D_800BCB7E_B413E[];
 extern s32 D_800BCBA0_B4160[][3];
+extern Vec3i D_800BCB68_B4128;
 void func_800BC474_B3A34(Arg0Struct *);
 
 void func_800BB2B0_B2870(Arg0Struct *arg0) {
@@ -307,7 +311,204 @@ s32 func_800BB89C_B2E5C(Arg0Struct *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BB930_B2EF0);
+s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
+    Transform3D sp10;
+    Vec3i sp30;
+    Transform3D *temp_s0;
+    Vec3i *temp_s1;
+    s16 angleDiff;
+    GameState *gameState;
+
+    gameState = getCurrentAllocation();
+
+    if (arg0->unkB84 & 0x100000) {
+        setPlayerBehaviorMode((Player *)arg0, 3);
+        return 1;
+    }
+
+    if (arg0->unkB84 & 0x80000) {
+        setPlayerBehaviorPhase((Player *)arg0, 2);
+        return 1;
+    }
+
+    if (arg0->unkBBF == 0) {
+        if ((u32)gameState->unk50 < 0x1E) {
+            arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x69;
+        } else {
+            arg0->unkB8C = (randA() & 0xFF) >> 1;
+        }
+        arg0->unkBBF++;
+    }
+
+    angleDiff = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->unk434.x, arg0->unk434.z) - arg0->unkA94;
+    angleDiff = angleDiff & 0x1FFF;
+
+    if (angleDiff >= 0x1001) {
+        angleDiff = angleDiff | 0xE000;
+    }
+
+    if (angleDiff >= 0x39) {
+        angleDiff = 0x38;
+    }
+
+    if (angleDiff < -0x38) {
+        angleDiff = -0x38;
+    }
+
+    arg0->unkA94 = arg0->unkA94 + angleDiff;
+
+    if (!(arg0->unkB84 & 1)) {
+        temp_s0 = &arg0->unk970;
+        createYRotationMatrix(temp_s0, arg0->unkA94);
+        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, temp_s0, &sp10);
+        temp_s1 = (Vec3i *)&arg0->unk44C;
+        transformVector3(temp_s1, &sp10, &sp30);
+        sp30.x = 0;
+        transformVector2(&sp30, &sp10, temp_s1);
+        transformVector2(&D_800BCB68_B4128, &sp10, &sp30);
+
+        if (sp30.y > 0) {
+            sp30.y = 0;
+        }
+
+        arg0->unk44C += sp30.x;
+        arg0->unk450 += sp30.y;
+        arg0->unk454 += sp30.z;
+    } else {
+        arg0->unk44C -= arg0->unk44C / 16;
+        arg0->unk454 -= arg0->unk454 / 16;
+    }
+
+    if (arg0->unk450 > 0) {
+        arg0->unk450 = 0;
+    }
+
+    arg0->unk450 -= 0x8000;
+    applyClampedVelocityToPosition((Player *)arg0);
+
+    switch (arg0->unkBC0) {
+    case 0:
+        func_800BC474_B3A34(arg0);
+        transformVectorRelative(&gameState->players->worldPos.x, arg0->unk74, &sp30);
+
+        angleDiff = atan2Fixed(-sp30.x, -sp30.z) & 0x1FFF;
+
+        if (angleDiff >= 0x1000) {
+            angleDiff = angleDiff | 0xE000;
+        }
+
+        if (angleDiff >= 0x81) {
+            angleDiff = 0x80;
+        }
+
+        if (angleDiff < -0x80) {
+            angleDiff = -0x80;
+        }
+
+        arg0->unkA9E = (arg0->unkA9E + angleDiff) & 0x1FFF;
+
+        angleDiff = atan2Fixed(sp30.y, -distance_2d(sp30.x, sp30.z)) & 0x1FFF;
+
+        if (angleDiff >= 0x1000) {
+            angleDiff = angleDiff | 0xE000;
+        }
+
+        if (angleDiff >= 0x41) {
+            angleDiff = 0x40;
+        }
+
+        if (angleDiff < -0x40) {
+            angleDiff = -0x40;
+        }
+
+        {
+            short temp = (arg0->unkA9C + angleDiff) & 0x1FFF;
+            arg0->unkA9C = temp;
+            if (temp >= 0x1000) {
+                arg0->unkA9C = temp - 0x2000;
+            }
+        }
+
+        if ((s16)arg0->unkA9C >= 0x201) {
+            arg0->unkA9C = 0x200;
+        }
+
+        if ((s16)arg0->unkA9C < -0x200) {
+            s16 negVal = -0x200;
+            arg0->unkA9C = negVal;
+        }
+
+        if (arg0->unkB8C != 0) {
+            arg0->unkB8C--;
+        } else {
+            if (gameState->players->unkB88 != 0) {
+                return 0;
+            }
+
+            if ((randA() & 3) == 0) {
+                arg0->unkB8C = 0x20;
+                arg0->unkBC0 = 5;
+            } else {
+                arg0->unkB8C = 4;
+                arg0->unkBC0 = 1;
+            }
+        }
+        break;
+
+    case 1:
+        arg0->unkA9E = arg0->unkA9E - 0x100;
+        arg0->unkB8C--;
+        if (arg0->unkB8C == 0) {
+            func_800544B4_550B4(2, arg0->unkBB8, 0);
+            arg0->unkB8C = 4;
+            arg0->unkBC0++;
+        }
+        break;
+
+    case 2:
+        arg0->unkA9E = arg0->unkA9E + 0x100;
+        arg0->unkB8C--;
+        if (arg0->unkB8C == 0) {
+            arg0->unkB8C = 4;
+            arg0->unkBC0++;
+            func_800544B4_550B4(3, arg0->unkBB8, 0);
+            return 0;
+        }
+        break;
+
+    case 3:
+        arg0->unkA9E = arg0->unkA9E + 0x100;
+        arg0->unkB8C--;
+        if (arg0->unkB8C == 0) {
+            func_800544B4_550B4(2, arg0->unkBB8, 0);
+            arg0->unkBC0 = 0;
+            if (gameState->unk86 != 0) {
+                arg0->unkB8C = (randA() & 0xF) + 8;
+            } else {
+                arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x3C;
+            }
+        }
+        break;
+
+    case 5:
+        if ((arg0->unkB8C & 3) == 0) {
+            func_800544B4_550B4(3, arg0->unkBB8, 0);
+        }
+        arg0->unkA9E = arg0->unkA9E - 0x100;
+        arg0->unkB8C--;
+        if (arg0->unkB8C == 0) {
+            arg0->unkBC0 = 0;
+            if (gameState->unk86 != 0) {
+                arg0->unkB8C = (randA() & 0xF) + 8;
+            } else {
+                arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
+            }
+        }
+        break;
+    }
+
+    return 0;
+}
 
 void func_800BBE68_B3428(Arg0Struct *arg0) {
     s16 val;
