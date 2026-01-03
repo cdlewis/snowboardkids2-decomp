@@ -68,8 +68,59 @@ extern u8 identityMatrix[];
 extern u16 D_8008EF70_8FB70[];
 
 void updateStoryMapRareEventIdle(RareEventIdleState *);
+void updateStoryMapRareEventWave(RareEventIdleState *);
 
-INCLUDE_ASM("asm/nonmatchings/2D4C0", func_8002C8C0_2D4C0);
+void func_8002C8C0_2D4C0(Func2E024Arg *arg0) {
+    GameState *allocation;
+    s32 vec3[3];
+    s32 i;
+    Func297D8Arg *elements;
+
+    allocation = getCurrentAllocation();
+    vec3[2] = 0;
+    vec3[0] = 0;
+    vec3[1] = 0x2C0000;
+
+    elements = arg0->elements;
+    for (i = 0; i < arg0->unkD5; i++) {
+        memcpy(&elements[i].matrix, identityMatrix, sizeof(Transform3D));
+        elements[i].unk62 = 0;
+
+        if (i == 0) {
+            arg0->elements[0].matrix.translation.x = -0x60000;
+            arg0->elements[0].matrix.translation.z = -0x4A0000;
+            setAnimationIndex(arg0->elements[0].model, 1);
+        } else {
+            arg0->elements[1].matrix.translation.x = 0x1A0000;
+            arg0->elements[1].matrix.translation.z = -0x4A0000;
+            setAnimationIndex(arg0->elements[1].model, 1);
+        }
+
+        elements[i].rotation = i * 0x1000;
+        elements[i].rotation = 0x800 + elements[i].rotation;
+        elements[i].unk50 = 0x19;
+        elements[i].unk52 = 0x19;
+        elements[i].unk2E = 0x800 + i * 0x1000;
+
+        createYRotationMatrix(&elements[i].matrix, elements[i].rotation);
+
+        memcpy(&elements[i].unk40, vec3, 0xC);
+
+        if (i != 0) {
+            elements[i].unk40 += 0x30000;
+        } else {
+            arg0->elements[0].unk40 += -0x60000;
+        }
+
+        spawnSpriteEffectEx(elements[i].model, 0, 0x29, -1, &elements[i].unk40, 0x10000, 0, 2, 0, 0);
+        setupStoryMapNpcModel(&elements[i]);
+        allocation->unk408[i] = elements[i].matrix.translation.x;
+        allocation->unk410[i] = elements[i].matrix.translation.z;
+        allocation->unk418[i] = D_8008EF70_8FB70[elements[i].unk5C];
+    }
+
+    setCallback(updateStoryMapRareEventWave);
+}
 
 void updateStoryMapRareEventWave(RareEventIdleState *arg0) {
     GameState *allocation;
