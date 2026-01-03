@@ -11,6 +11,37 @@
           {
             "type": "command",
             "command": ".claude/hooks/block-make-command.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-ctx-file.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-ctx-file.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-ctx-file.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-ctx-file.sh"
           }
         ]
       }
