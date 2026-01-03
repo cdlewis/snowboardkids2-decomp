@@ -1,6 +1,6 @@
 # Instructions
 
-Your job is to carefully analyse $ARGUMENT, think about what the original developers intended, understand its purpose and update it to better reflect this purpose.
+Your job is to carefully analyse $INPUT, think about what the original developers intended, understand its purpose and update it to better reflect this purpose.
 
 Specifically you should:
 
