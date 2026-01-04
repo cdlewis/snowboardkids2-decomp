@@ -1,4 +1,5 @@
 #include "levels/starlight_highway.h"
+#include "19E80.h"
 #include "42170.h"
 #include "56910.h"
 #include "5AA90.h"
@@ -11,6 +12,8 @@
 #include "task_scheduler.h"
 
 extern s32 gFrameCounter;
+extern Gfx *gRegionAllocPtr;
+extern s16 gGraphicsMode;
 
 typedef struct {
     u8 _pad[0x80];
@@ -352,7 +355,160 @@ void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *arg0) {
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/starlight_highway", func_800BB75C_ADB1C);
+typedef struct {
+    /* 0x00 */ u8 _pad0[0x3C];
+    /* 0x3C */ DataTable_19E80 *unk3C;
+    /* 0x40 */ u8 _pad40[4];
+    /* 0x44 */ u16 unk44;
+    /* 0x46 */ u16 unk46;
+    /* 0x48 */ u8 _pad48[4];
+    /* 0x4C */ u16 unk4C;
+    /* 0x4E */ u8 _pad4E[3];
+    /* 0x51 */ u8 unk51;
+} func_800BB75C_arg;
+
+void func_800BB75C_ADB1C(void *arg) {
+    func_800BB75C_arg *arg0 = (func_800BB75C_arg *)arg;
+    OutputStruct_19E80 tableEntry;
+    s32 dxtBase;
+    s32 lrs;
+    u16 widthDiv16;
+    Gfx *loadBlockCmd;
+    long loadBlockWord;
+    s32 new_var;
+    s32 widthShift;
+    s32 heightShift;
+    s32 tempWidth;
+    s32 tempHeight;
+    u32 tileLine;
+
+    gDPPipeSync(gRegionAllocPtr++);
+    gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
+    gGraphicsMode = -1;
+
+    getTableEntryByU16Index(arg0->unk3C, arg0->unk4C, &tableEntry);
+
+    tempWidth = tableEntry.field1;
+    widthShift = 0;
+loop_1:
+    if (!(tempWidth & 1)) {
+        do { widthShift += 1; if (widthShift < 0x10) { tempWidth >>= 1; goto loop_1; } } while (0);
+    }
+
+    tempHeight = tableEntry.field2;
+    heightShift = 0;
+loop_2:
+    if (!(tempHeight & 1)) {
+        do { heightShift += 1; if (heightShift < 0x10) { tempHeight >>= 1; goto loop_2; } } while (0);
+    }
+
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
+
+    gDPSetTile(
+        gRegionAllocPtr++,
+        G_IM_FMT_CI,
+        G_IM_SIZ_16b,
+        0,
+        0x0000,
+        G_TX_LOADTILE,
+        0,
+        0,
+        heightShift,
+        0,
+        0,
+        widthShift,
+        0
+    );
+
+    gDPLoadSync(gRegionAllocPtr++);
+
+    loadBlockCmd = gRegionAllocPtr++;
+    loadBlockCmd->words.w0 = 0xF3000000;
+    widthDiv16 = tableEntry.field1 >> 4;
+    dxtBase = 0x800;
+    if (widthDiv16 != 0) {
+        dxtBase = widthDiv16 + 0x7FF;
+    }
+    lrs = (((s32)((tableEntry.field1 * tableEntry.field2) + 3)) >> 2) - 1;
+    if (lrs >= 0x800) {
+        lrs = 0x7FF;
+    }
+    new_var = ((lrs & 0xFFF) << 12) | 0x07000000;
+    loadBlockWord = new_var;
+    if (widthDiv16 != 0) {
+        loadBlockWord |= (dxtBase / widthDiv16) & 0xFFF;
+    } else {
+        loadBlockWord |= dxtBase & 0xFFF;
+    }
+    loadBlockCmd->words.w1 = loadBlockWord;
+
+    gDPPipeSync(gRegionAllocPtr++);
+
+    tileLine = (((tableEntry.field1 >> 1) + 7) >> 3) & 0x1FF;
+    gDPSetTile(
+        gRegionAllocPtr++,
+        G_IM_FMT_CI,
+        G_IM_SIZ_4b,
+        tileLine,
+        0,
+        G_TX_RENDERTILE,
+        0,
+        0,
+        heightShift,
+        0,
+        0,
+        widthShift,
+        0
+    );
+
+    new_var = 15;
+
+    gDPSetTileSize(
+        gRegionAllocPtr++,
+        G_TX_RENDERTILE,
+        0,
+        0,
+        (tableEntry.field1 - 1) << 2,
+        (tableEntry.field2 - 1) << 2
+    );
+
+    gDPSetTileSize(
+        gRegionAllocPtr++,
+        G_TX_RENDERTILE,
+        arg0->unk44 & 0xFFF,
+        arg0->unk46 & 0xFFF,
+        ((tableEntry.field1 + (s16)arg0->unk44 - 1) << 2) & 0xFFF,
+        ((tableEntry.field2 + (s16)arg0->unk46 - 1) << 2) & 0xFFF
+    );
+
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
+
+    gDPTileSync(gRegionAllocPtr++);
+
+    gDPSetTile(
+        gRegionAllocPtr++,
+        G_IM_FMT_RGBA,
+        G_IM_SIZ_4b,
+        0,
+        0x0100,
+        G_TX_LOADTILE,
+        0,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMASK,
+        G_TX_NOLOD,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMASK,
+        G_TX_NOLOD
+    );
+
+    gDPLoadSync(gRegionAllocPtr++);
+
+    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, new_var);
+
+    gDPPipeSync(gRegionAllocPtr++);
+
+    gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, arg0->unk51);
+}
 
 void func_800BBB0C_ADECC(void *arg0) {
     func_800BB75C_ADB1C(arg0);
