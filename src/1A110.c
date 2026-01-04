@@ -48,7 +48,63 @@ s32 checkStoryMapHotspotCollision(s32 posX, s32 posY, s16 collisionRadius) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1A110", func_8001960C_1A20C);
+typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+} StoryMapPosition;
+
+void func_8001960C_1A20C(StoryMapPosition *position, s16 collisionRadius, s32 hotspotIndex) {
+    s16 *hotspotY;
+    StoryMapHotspot *hotspot;
+    s16 *base;
+    s16 angle;
+    s32 offset;
+    s16 *baseY;
+    StoryMapPosition *pos;
+    s16 *radiusPtr;
+    s32 combinedRadius;
+    s32 yOffset;
+    s32 zValue;
+    s32 pushScale;
+    s32 sinComponent;
+    s32 cosComponent;
+    s32 sinTemp;
+
+    getCurrentAllocation();
+    hotspotIndex = hotspotIndex - 1;
+    base = (s16 *)storyMapHotspots;
+    hotspot = (StoryMapHotspot *)(base + (hotspotIndex * 3));
+    offset = hotspotIndex * 3;
+    baseY = base;
+    yOffset = 1;
+    hotspotY = offset + (baseY + yOffset);
+    pos = position;
+    sinComponent = pos->x;
+    base = &hotspot->x;
+    angle = func_8006D21C_6DE1C(*base << 16, *hotspotY << 16, sinComponent, position->z);
+    radiusPtr = &(storyMapHotspots + hotspotIndex)->radius;
+    combinedRadius = *radiusPtr + collisionRadius;
+    combinedRadius <<= 16;
+    sinTemp = approximateSin(angle);
+    combinedRadius = -(combinedRadius >> 8);
+    pushScale = combinedRadius;
+    sinTemp = sinTemp * pushScale;
+    if (sinTemp < 0) {
+        sinTemp += 0x1FFF;
+    }
+    sinComponent = (sinTemp >> 13) << 8;
+    cosComponent = approximateCos(angle);
+    cosComponent = cosComponent * pushScale;
+    pushScale = 0;
+    if (cosComponent < pushScale) {
+        cosComponent += 0x1FFF;
+    }
+    sinComponent += hotspot->x << 16;
+    zValue = ((cosComponent >> 13) << 8) + (*hotspotY << 16);
+    position->x = sinComponent;
+    position->z = zValue;
+}
 
 s32 checkStoryMapCharacterCollision(s32 posX, s32 posY, s32 characterIndex) {
     GameState *state;
@@ -67,12 +123,6 @@ s32 checkStoryMapCharacterCollision(s32 posX, s32 posY, s32 characterIndex) {
     }
     return 0;
 }
-
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-} StoryMapPosition;
 
 typedef struct {
     u8 padding[0x4C];
