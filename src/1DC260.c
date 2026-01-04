@@ -3,6 +3,17 @@
 #include "common.h"
 
 typedef struct {
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
+    s8 unkC;
+    s8 unkD;
+    u8 pad[2];
+} SpriteElement16;
+
+typedef struct {
     s8 unk0;
     u8 padding[1];
     s16 unk2;
@@ -53,29 +64,75 @@ typedef struct {
     u8 padding9F[0x4];
     void *unk9B8[6];
     u8 padding11[0x41C];
-    void *unkDEC;
+    void *volatile unkDEC;
     s32 unkDF0;
     s32 unkDF4;
     s32 unkDF8;
     s32 unkDFC;
-    u8 unkE00[0xA];
-    s16 unkE0A;
-    u8 paddingE0C[0x4];
-    u8 unkE10[0xA];
-    s16 unkE1A;
-    u8 paddingE1C[0x4];
-    u8 unkE20[0xA];
-    s16 unkE2A;
-    u8 paddingE2C[0x4];
-    u8 unkE30[0xA];
-    s16 unkE3A;
-    u8 paddingE3C[0x4];
+    SpriteElement16 unkE00;
+    SpriteElement16 unkE10;
+    SpriteElement16 unkE20;
+    SpriteElement16 unkE30;
     s16 unkE40;
     s16 unkE42;
     ColorData unkE44[3];
 } func_80003EE0_4AE0_task_memory;
 
-INCLUDE_ASM("asm/nonmatchings/1DC260", func_800B00C0_1DC260);
+void func_800B00C0_1DC260(volatile func_80003EE0_4AE0_task_memory *state) {
+    void *asset0;
+    void *asset1;
+    void *asset2;
+    void *asset3;
+    s16 negX;
+    s16 negY;
+    s16 new_var;
+    s16 alpha;
+
+    asset0 = state->unkDEC;
+    asset1 = state->unkDEC;
+    asset2 = state->unkDEC;
+    asset3 = state->unkDEC;
+    negX = -0x40;
+    negY = -0x10;
+    alpha = 0xFF;
+
+    do {
+        state->unkE10.spriteIndex = 1;
+        state->unkE20.spriteIndex = 2;
+        state->unkDF0 = 0;
+        state->unkDF4 = 0;
+        state->unkDF8 = 0;
+        state->unkDFC = 0;
+        state->unkE00.x = negX;
+        state->unkE00.y = negY;
+        state->unkE00.spriteIndex = 0;
+        state->unkE00.alpha = alpha;
+        state->unkE00.unkC = 0;
+        new_var = alpha;
+        state->unkE00.unkD = 0;
+        state->unkE10.x = negX;
+        state->unkE10.y = 0;
+        state->unkE10.alpha = new_var;
+        state->unkE10.unkC = 0;
+        state->unkE10.unkD = 0;
+        state->unkE20.x = negX;
+        state->unkE20.y = negY;
+        state->unkE20.alpha = new_var;
+        state->unkE20.unkC = 0;
+        state->unkE20.unkD = 0;
+        state->unkE30.x = negX;
+        state->unkE30.y = 0;
+        state->unkE30.spriteIndex = 3;
+        state->unkE00.asset = asset0;
+        state->unkE10.asset = asset1;
+        state->unkE20.asset = asset2;
+    } while (0);
+
+    state->unkE30.asset = asset3;
+    state->unkE30.alpha = new_var;
+    state->unkE30.unkC = 0;
+    state->unkE30.unkD = 0;
+}
 
 void func_800B016C(void *arg0) {
     func_80003EE0_4AE0_task_memory *state = (func_80003EE0_4AE0_task_memory *)arg0;
@@ -125,19 +182,19 @@ void func_800B016C(void *arg0) {
     if (temp_v0 != 0) {
         s16 shortVal = temp_v0 >> 16;
         void *callback = func_80012004_12C04;
-        state->unkE1A = shortVal;
-        state->unkE0A = shortVal;
-        debugEnqueueCallback(1, 4, callback, state->unkE00);
-        debugEnqueueCallback(1, 4, callback, state->unkE10);
+        state->unkE10.alpha = shortVal;
+        state->unkE00.alpha = shortVal;
+        debugEnqueueCallback(1, 4, callback, &state->unkE00);
+        debugEnqueueCallback(1, 4, callback, &state->unkE10);
     }
 
     temp_v0 = state->unkDF8;
     if (temp_v0 != 0) {
         s16 shortVal = temp_v0 >> 16;
         void *callback = func_80012004_12C04;
-        state->unkE3A = shortVal;
-        state->unkE2A = shortVal;
-        debugEnqueueCallback(1, 4, callback, state->unkE20);
-        debugEnqueueCallback(1, 4, callback, state->unkE30);
+        state->unkE30.alpha = shortVal;
+        state->unkE20.alpha = shortVal;
+        debugEnqueueCallback(1, 4, callback, &state->unkE20);
+        debugEnqueueCallback(1, 4, callback, &state->unkE30);
     }
 }
