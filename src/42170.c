@@ -1,7 +1,9 @@
 #include "42170.h"
+#include "19E80.h"
 #include "56910.h"
 #include "5AA90.h"
 #include "5E590.h"
+#include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -2090,7 +2092,7 @@ extern s32 D_80090AC0_916C0[];
 typedef struct {
     s8 active;      /* 0x00 - 1 when active, set to 0 when processed */
     s8 type;        /* 0x01 - 0 for primary item, non-zero for secondary */
-    u16 itemId;     /* 0x02 - item ID to give to the player */
+    s16 itemId;     /* 0x02 - item ID to give to the player */
     Vec3i position; /* 0x04 - world position for player detection */
 } ItemTriggerEntry; /* size: 0x10 */
 
@@ -2098,7 +2100,7 @@ typedef struct {
     void *unk0;              /* 0x00 */
     void *unk4;              /* 0x04 */
     ItemTriggerEntry *items; /* 0x08 - array of item trigger entries */
-    void *unkC;              /* 0x0C */
+    DataTable_19E80 *unkC;   /* 0x0C */
     s32 *unk10;              /* 0x10 */
     s16 unk14;               /* 0x14 */
     s16 numItems;            /* 0x16 - number of item trigger entries */
@@ -2121,7 +2123,7 @@ void func_80044D1C_4591C(Func44D1CArg *arg0) {
     setCallback(func_80044DB0_459B0);
 }
 
-extern void func_80045054_45C54(Func44D1CArg *);
+void func_80045054_45C54(Func44D1CArg *);
 
 void func_80044DB0_459B0(Func44D1CArg *arg0) {
     s32 i;
@@ -2236,7 +2238,158 @@ void func_80045010_45C10(Func45010Arg *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", func_80045054_45C54);
+extern Gfx D_8009A780_9B380[];
+extern s32 D_800A8B14_9FE84;
+extern s16 gGraphicsMode;
+extern Gfx *gRegionAllocPtr;
+
+void func_80045054_45C54(Func44D1CArg *arg0) {
+    OutputStruct_19E80 tableEntry;
+    s32 prevTextureIndex;
+    s32 i;
+    s32 offset;
+    s32 dxtBase;
+    s32 new_var;
+    u32 line;
+    s32 lrs;
+    u16 widthDiv16;
+    Gfx *loadBlockCmd;
+    long loadBlockWord;
+    u32 tileLine;
+    ItemTriggerEntry *entry;
+    s32 textureIndex;
+
+    prevTextureIndex = -1;
+    gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+    gGraphicsMode = -1;
+
+    for (i = 0; i < arg0->numItems; i++) {
+        offset = i << 4;
+
+        if (isObjectCulled(&arg0->items[i].position) == 0) {
+            entry = (ItemTriggerEntry *)(offset + (s32)arg0->items);
+
+            if (entry->active != 0) {
+                if (entry->type == 0) {
+                    textureIndex = entry->itemId;
+                } else {
+                    textureIndex = entry->itemId + 7;
+                }
+
+                if (textureIndex != prevTextureIndex) {
+                    getTableEntryByU16Index(arg0->unkC, textureIndex & 0xFFFF, &tableEntry);
+
+                    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
+
+                    gDPSetTile(
+                        gRegionAllocPtr++,
+                        G_IM_FMT_CI,
+                        G_IM_SIZ_16b,
+                        0,
+                        0x0000,
+                        G_TX_LOADTILE,
+                        0,
+                        G_TX_CLAMP,
+                        G_TX_NOMASK,
+                        G_TX_NOLOD,
+                        G_TX_CLAMP,
+                        G_TX_NOMASK,
+                        G_TX_NOLOD
+                    );
+
+                    gDPLoadSync(gRegionAllocPtr++);
+
+                    loadBlockCmd = gRegionAllocPtr++;
+                    loadBlockCmd->words.w0 = 0xF3000000;
+                    widthDiv16 = tableEntry.field1 >> 4;
+                    dxtBase = 0x800;
+                    if (widthDiv16 != 0) {
+                        dxtBase = widthDiv16 + 0x7FF;
+                    }
+                    lrs = (((s32)((tableEntry.field1 * tableEntry.field2) + 3)) >> 2) - 1;
+                    if (lrs < 0x800) {
+                    } else {
+                        lrs = 0x7FF;
+                    }
+                    line = lrs & 0xFFF;
+                    new_var = (line << 12) | 0x07000000;
+                    loadBlockWord = new_var;
+                    if (widthDiv16 != 0) {
+                        loadBlockWord |= (dxtBase / widthDiv16) & 0xFFF;
+                    } else {
+                        loadBlockWord |= dxtBase & 0xFFF;
+                    }
+                    loadBlockCmd->words.w1 = loadBlockWord;
+
+                    gDPPipeSync(gRegionAllocPtr++);
+
+                    tileLine = (((tableEntry.field1 >> 1) + 7) >> 3) & 0x1FF;
+                    new_var = G_TX_NOMIRROR;
+                    gDPSetTile(
+                        gRegionAllocPtr++,
+                        G_IM_FMT_CI,
+                        G_IM_SIZ_4b,
+                        tileLine,
+                        0,
+                        G_TX_RENDERTILE,
+                        0,
+                        G_TX_CLAMP,
+                        G_TX_NOMASK,
+                        G_TX_NOLOD,
+                        G_TX_CLAMP,
+                        G_TX_NOMASK,
+                        G_TX_NOLOD
+                    );
+
+                    gDPSetTileSize(
+                        gRegionAllocPtr++,
+                        G_TX_RENDERTILE,
+                        0,
+                        0,
+                        (tableEntry.field1 - 1) << 2,
+                        (tableEntry.field2 - 1) << 2
+                    );
+
+                    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
+
+                    gDPTileSync(gRegionAllocPtr++);
+
+                    gDPSetTile(
+                        gRegionAllocPtr++,
+                        G_IM_FMT_RGBA,
+                        G_IM_SIZ_4b,
+                        0,
+                        0x0100,
+                        G_TX_LOADTILE,
+                        0,
+                        G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMASK,
+                        G_TX_NOLOD,
+                        G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMASK,
+                        G_TX_NOLOD
+                    );
+
+                    gDPLoadSync(gRegionAllocPtr++);
+
+                    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, 15);
+
+                    gDPPipeSync(gRegionAllocPtr++);
+
+                    prevTextureIndex = textureIndex;
+                }
+
+                gSPMatrix(gRegionAllocPtr++, (u8 *)arg0->unk0 + (i << 6), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+
+                gSPVertex(gRegionAllocPtr++, arg0->unk4, 4, 0);
+
+                gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+            }
+        }
+    }
+}
 
 typedef struct {
     u8 _pad0[0x14];
