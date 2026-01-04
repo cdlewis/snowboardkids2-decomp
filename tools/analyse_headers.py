@@ -473,15 +473,15 @@ class CProjectAnalyzer:
                 if issue['type'] == 'missing_header_declaration':
                     # Add references for each extern use
                     for extern_decl in issue['extern_uses']:
-                        references.append(f"MISSING_HEADER_DECLARATION:{extern_decl.file}:{extern_decl.line}")
+                        references.append(["MISSING_HEADER_DECLARATION", extern_decl.file, extern_decl.line])
                 elif issue['type'] == 'missing_include':
                     # Add reference for the extern use
                     extern_use = issue['extern_use']
-                    references.append(f"MISSING_INCLUDE:{extern_use.file}:{extern_use.line}")
+                    references.append(["MISSING_INCLUDE", extern_use.file, extern_use.line])
                 elif issue['type'] == 'declaration_should_be_in_header':
                     # Add reference for the declaration
                     declaration = issue['declaration']
-                    references.append(f"DECLARATION_SHOULD_BE_IN_HEADER:{declaration.file}:{declaration.line}")
+                    references.append(["DECLARATION_SHOULD_BE_IN_HEADER", declaration.file, declaration.line])
 
             # Apply limit if specified
             if limit is not None:

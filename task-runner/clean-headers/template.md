@@ -11,7 +11,7 @@ At a minimum we should maintain the following standards:
 
 ## Instructions
 
-Look at $INPUT. Determine which one of the header rules is being violated.
+Address the $INPUT[0] error in $INPUT[1] at line $INPUT[2].
 
 Attempt to address the underlying issue. This may be as simple as moving a function definition. But watch out! Consolidating header definitions can reveal inconsistencies between different C files.
 
