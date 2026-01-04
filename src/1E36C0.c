@@ -11,7 +11,71 @@ s16 func_800B6610_1E36C0(cutsceneSys2Wait_exec_asset *arg0) {
     return arg0->unk86;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B6618_1E36C8);
+s16 func_800B6618_1E36C8(CutsceneSlotData *unused, s16 arg1, s16 arg2, s16 arg3) {
+    s16 target;
+    s16 current;
+    s16 rawDiff;
+    s16 maskedDiff;
+    s16 savedRaw;
+    s16 result;
+    s16 adjusted;
+
+    target = arg2 & 0x1FFF;
+    current = arg3 & 0x1FFF;
+    rawDiff = target - current;
+    maskedDiff = rawDiff & 0x1FFF;
+    result = maskedDiff;
+    savedRaw = rawDiff;
+
+    if (arg1 == 0) {
+        goto handle_zero;
+    }
+    if (arg1 > 0) {
+        goto handle_positive;
+    }
+    if (arg1 == -1) {
+        goto handle_negative;
+    }
+    goto end;
+
+handle_positive:
+    if (arg1 == 1) {
+        goto handle_positive_one;
+    }
+    goto end;
+
+handle_zero:
+    if (maskedDiff < 0x1001) {
+        goto end;
+    }
+    if (current < target) {
+        adjusted = current + 0x2000;
+        result = target - adjusted;
+    } else {
+        result = savedRaw;
+    }
+    goto end;
+
+handle_positive_one:
+    if (current >= target) {
+        adjusted = current - 0x2000;
+        result = target - adjusted;
+    } else {
+        result = savedRaw;
+    }
+    goto end;
+
+handle_negative:
+    if (target < current) {
+        result = savedRaw;
+    } else {
+        adjusted = current + 0x2000;
+        result = target - adjusted;
+    }
+
+end:
+    return (s16)(result << 16 >> 16);
+}
 
 extern u8 identityMatrix[];
 
@@ -186,8 +250,6 @@ void func_800B6910_1E39C0(CutsceneSlotData *arg0, func_800B5E64_1E2F14_arg0 *arg
     arg0->unk20_u.unk20_s32 = arg0->unk20_u.unk20_s32 + ((temp_v0 * temp_a0) + (temp_s0 * temp_v1));
     arg0->unk2C = arg0->unk2C + ((-temp_s0 * temp_a0) + (temp_v0 * temp_v1));
 }
-
-extern s16 func_800B6618_1E36C8(CutsceneSlotData *, s16, s16, s16);
 
 void func_800B6AB8_1E3B68(CutsceneSlotData *arg0, s16 arg1) {
     s32 temp;
