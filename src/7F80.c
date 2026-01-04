@@ -38,20 +38,8 @@ typedef struct {
     /* 0x38 */ void *segmentData;
 } PalettedTextureState;
 
-void setupModelTransitionVariant(ModelTransitionEffectState *);
-void updateModelTransitionEffect(ModelTransitionEffectState *);
-void cleanupModelTransitionEffect(ModelTransitionEffectState *);
-void func_800073E0_7FE0(void);
-void cleanupCameraRotationTask(void);
-void renderPalettedTexture(PalettedTextureState *);
-
-extern u8 identityMatrix[];
-extern s32 D_8008C200_8CE00[];
-extern s16 gGraphicsMode;
-extern Gfx *gRegionAllocPtr;
-
 typedef struct {
-    s32 unk0;
+    SceneModel *model;
     s16 rotationX;
     s16 rotationY;
     s16 rotationZ;
@@ -63,6 +51,23 @@ typedef struct {
     s16 angularVelocityZ;
     s16 unk16;
 } CameraRotationTaskState;
+
+void setupModelTransitionVariant(ModelTransitionEffectState *);
+void updateModelTransitionEffect(ModelTransitionEffectState *);
+void cleanupModelTransitionEffect(ModelTransitionEffectState *);
+void func_800073E0_7FE0(CameraRotationTaskState *);
+void cleanupCameraRotationTask(void);
+void renderPalettedTexture(PalettedTextureState *);
+
+extern u8 identityMatrix[];
+extern s32 D_8008C200_8CE00[];
+extern s16 gGraphicsMode;
+extern Gfx *gRegionAllocPtr;
+
+extern s32 D_8009A8A4_9B4A4;
+extern s32 D_8009A8A8_9B4A8;
+extern s32 D_8009A8AC_9B4AC;
+void createRotationMatrixXYZ(Transform3D *, u16, u16, u16);
 
 void initCameraRotationTask(CameraRotationTaskState *arg0) {
     setCleanupCallback(&cleanupCameraRotationTask);
@@ -78,7 +83,67 @@ void initCameraRotationTask(CameraRotationTaskState *arg0) {
     setCallback(&func_800073E0_7FE0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/7F80", func_800073E0_7FE0);
+void func_800073E0_7FE0(CameraRotationTaskState *state) {
+    Transform3D rotationMatrix;
+    s16 velocity;
+    s32 *positionPtr;
+
+    if (state->model->isDestroyed == 1) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    switch (state->model->actionMode) {
+        default:
+        case 0:
+            state->rotationZ = 0;
+            state->rotationY = 0;
+            state->rotationX = 0;
+            state->unkE = 0;
+            state->unkC = 0;
+            state->unkA = 0;
+            state->angularVelocityZ = 0;
+            state->angularVelocityY = 0;
+            state->angularVelocityX = 0;
+            break;
+        case 1:
+            if (state->angularVelocityZ > 0) {
+                if (state->rotationZ >= 0xE4) {
+                    state->angularVelocityZ = -0x5B;
+                }
+            } else if (state->angularVelocityZ < 0) {
+                if (state->rotationZ < -0xE3) {
+                    state->angularVelocityZ = 0x5B;
+                }
+            } else {
+                state->angularVelocityZ = 0x44;
+            }
+            break;
+        case 2:
+            state->angularVelocityZ = 0x222;
+            break;
+        case 3:
+            state->angularVelocityZ = -0x222;
+            break;
+    }
+
+    state->rotationX = (u16)state->rotationX + (u16)state->angularVelocityX;
+    state->rotationY = (u16)state->rotationY + (u16)state->angularVelocityY;
+    state->rotationZ = (u16)state->rotationZ + (u16)state->angularVelocityZ;
+
+    positionPtr = &D_8009A8A4_9B4A4;
+    *positionPtr = 0;
+    *(positionPtr + 1) = (s32)0xFFFB3334;
+    *(positionPtr + 2) = 0;
+
+    createRotationMatrixXYZ(&rotationMatrix, state->rotationX, state->rotationY, state->rotationZ);
+
+    rotationMatrix.translation.x = 0;
+    rotationMatrix.translation.y = 0x4CCCC;
+    rotationMatrix.translation.z = 0;
+
+    func_8006B084_6BC84(positionPtr - 5, &rotationMatrix, (u8 *)state->model + 0xF0);
+}
 
 void cleanupCameraRotationTask(void) {
 }
