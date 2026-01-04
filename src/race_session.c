@@ -176,7 +176,16 @@ void awaitBossResultAndFadeOut(void);
 void awaitMeterWinContinuePress(void);
 void awaitPlayersAndPlayRaceMusic(void);
 void loadPlayerAssets(void);
+void func_8003F1F0_3FDF0(void);
 void func_8003F368_3FF68(void);
+void handleBossRaceResult(void);
+void handleBossDefeatResult(void);
+void handleSkillGameResult(void);
+void handleShotCrossGameResult(void);
+void handleMeterGameResult(void);
+void handleSpeedCrossGameResult(void);
+void awaitBattleEndAndPromptContinue(void);
+void handleExpertRaceResult(void);
 void awaitSkillWinContinuePress(void);
 void awaitShotCrossWinContinuePress(void);
 void awaitSkillWinAndPromptContinue(void);
@@ -906,7 +915,302 @@ void awaitPlayersAndPlayRaceMusic(void) {
 
 INCLUDE_ASM("asm/nonmatchings/race_session", func_8003F1F0_3FDF0);
 
-INCLUDE_ASM("asm/nonmatchings/race_session", func_8003F368_3FF68);
+typedef struct {
+    u16 frame;
+    u16 unk2;
+} IntroFrameData;
+
+typedef struct {
+    u16 frame;
+    s16 value;
+} IntroFrameData2;
+
+extern IntroFrameData D_80090780_91380[];
+extern IntroFrameData2 D_8009079C_9139C[];
+extern void spawnScriptedCameraTask(s16);
+
+void func_8003F368_3FF68(void) {
+    GameState *gs;
+    s32 i;
+    s32 inputMask;
+    s32 aPressed;
+    void (*handler)(void);
+    s32 count;
+    s16 temp;
+    s32 unk7FTemp;
+    s32 playerFlags;
+    volatile u8 padding[0x1C];
+
+    gs = (GameState *)getCurrentAllocation();
+
+    if (gs->unk7A == 0xA)
+        goto handleA;
+    if (gs->unk7A == 0xB)
+        goto handleB;
+
+    inputMask = 0;
+    for (i = 0; i < gs->unk5F; i++) {
+        inputMask |= gControllerInputs[i];
+    }
+
+    if (gs->gamePaused != 0) {
+        switch (gs->gamePaused) {
+            case 1:
+                if (inputMask & 0x20400) {
+                    if ((gs->pauseMenuSelection & 0xFF) != 2) {
+                        gs->pauseMenuSelection++;
+                    } else {
+                        gs->pauseMenuSelection = 0;
+                    }
+                    func_800585C8_591C8(0x2B);
+                }
+                if (inputMask & 0x10800) {
+                    if (gs->pauseMenuSelection == 0) {
+                        gs->pauseMenuSelection = 2;
+                    } else {
+                        gs->pauseMenuSelection--;
+                    }
+                    func_800585C8_591C8(0x2B);
+                }
+                aPressed = inputMask & 0x1000;
+                if (aPressed) {
+                    switch (gs->pauseMenuSelection) {
+                        case 0:
+                            gs->gamePaused = 0;
+                            break;
+                        case 1:
+                            D_800A24A0_A30A0 = 1;
+                        case 2:
+                            func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+                            func_80057564_58164(0x3C);
+                            setGameStateHandler(cleanupGameSession);
+                            func_800585C8_591C8(0x2E);
+                            return;
+                        case 3:
+                            gs->gamePaused = 3;
+                            break;
+                        case 4:
+                            gs->gamePaused = 4;
+                            break;
+                        case 5:
+                            gs->gamePaused = 5;
+                            break;
+                        case 6:
+                            gs->gamePaused = 6;
+                            break;
+                        case 7:
+                            gs->gamePaused = 7;
+                            break;
+                        case 8:
+                            gs->gamePaused = 8;
+                            break;
+                        case 9:
+                            gs->gamePaused = 9;
+                            break;
+                        case 10:
+                            gs->gamePaused = 10;
+                            break;
+                        case 11:
+                            gs->gamePaused = 11;
+                            break;
+                    }
+                }
+                break;
+            default:
+                if (gControllerInputs[0] & 0x1000) {
+                    gs->gamePaused = 0;
+                }
+                break;
+            case 12:
+                if (gs->unk78 == -1) {
+                    gs->gamePaused = 0;
+                    gs->unk78 = 0;
+                }
+                break;
+        }
+    } else {
+        gs->unk50++;
+        switch (gs->unk7A) {
+            case 0:
+                count = 0;
+                for (i = 0; i < gs->unk5F; i++) {
+                    playerFlags = gs->players[i].unkB84 & 0x80000;
+                    count += playerFlags != 0;
+                }
+                if (gs->unk5F == count) {
+                    gs->unk4C = 0x3C;
+                    handler = handleSpeedCrossGameResult;
+                    setGameStateHandler(handler);
+                    return;
+                }
+                break;
+            case 1:
+                if (gs->players->unkB84 & 0x80000) {
+                    func_80057564_58164(0x3C);
+                    gs->unk4C = 0x1E;
+                    handler = handleBossRaceResult;
+                    setGameStateHandler(handler);
+                    return;
+                }
+                break;
+            case 2:
+            case 3:
+                if (gs->players->unkB84 & 0x80000) {
+                    func_80057564_58164(0x3C);
+                    gs->unk4C = 0x1E;
+                    handler = handleBossDefeatResult;
+                    setGameStateHandler(handler);
+                    return;
+                }
+                break;
+            case 8:
+                count = 0;
+                for (i = 0; i < gs->unk5F; i++) {
+                    playerFlags = gs->players[i].unkB84 & 0x80000;
+                    count += playerFlags != 0;
+                }
+                if (gs->unk5F == count) {
+                    gs->unk4C = 0x1E;
+                    func_80057564_58164(0x3C);
+                    handler = awaitBattleEndAndPromptContinue;
+                    setGameStateHandler(handler);
+                    return;
+                }
+                break;
+            case 9:
+                count = 0;
+                for (i = 0; i < gs->unk5F; i++) {
+                    playerFlags = gs->players[i].unkB84 & 0x80000;
+                    count += playerFlags != 0;
+                }
+                if (gs->unk5F == count) {
+                    gs->unk4C = 0x1E;
+                    func_80057564_58164(0x3C);
+                    handler = handleExpertRaceResult;
+                    setGameStateHandler(handler);
+                    return;
+                }
+                break;
+            case 4:
+                if (gs->players->unkB84 & 0x80000) {
+                    if (gs->unk7D != 0) {
+                        gs->unk7B = 1;
+                    }
+                    gs->unk4C = 0x3C;
+                    func_80057564_58164(0x3C);
+                    handler = handleSkillGameResult;
+                    setGameStateHandler(handler);
+                    return;
+                }
+                break;
+            case 5:
+                if (gs->players->unkB84 & 0x80000) {
+                    if (gs->unk7D != 0) {
+                        gs->unk7B = 1;
+                    }
+                    gs->unk4C = 0x3C;
+                    func_80057564_58164(0x3C);
+                    handler = handleShotCrossGameResult;
+                    setGameStateHandler(handler);
+                    return;
+                }
+                break;
+            case 6:
+                if (gs->players->unkB84 & 0x80000) {
+                    if (gs->unk7D != 0) {
+                        gs->unk7B = 1;
+                    }
+                    gs->unk4C = 0x3C;
+                    func_80057564_58164(0x3C);
+                    handler = handleMeterGameResult;
+                    setGameStateHandler(handler);
+                    return;
+                }
+                break;
+        }
+        aPressed = inputMask & 0x1000;
+        if (aPressed) {
+            gs->pauseMenuSelection = 0;
+            gs->gamePaused = (gs->gamePaused == 0);
+            func_800585C8_591C8(0x2B);
+            resumeMotorStates();
+        }
+        if (gs->unk78 == 1) {
+            gs->gamePaused = 0xC;
+            gs->pauseMenuSelection = 0;
+        }
+    }
+    return;
+
+handleA:
+    gs->unk50++;
+    if (gs->unk50 >= 0x349) {
+        D_800A24A0_A30A0 = 1;
+        func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+        func_80057564_58164(0x3C);
+        setGameStateHandler(cleanupGameSession);
+        return;
+    }
+    if (gControllerInputs[0] & 0x1000) {
+        D_800A24A0_A30A0 = 2;
+        func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+        func_80057564_58164(0x3C);
+        setGameStateHandler(cleanupGameSession);
+    }
+    return;
+
+handleB:
+    if (gs->gamePaused == 0) {
+        if (gs->unk50 == 0) {
+            func_8006FDA0_709A0(NULL, 0, 8);
+        }
+        gs->unk50++;
+    }
+    unk7FTemp = gs->unk7F;
+    gs->unk79 = 0;
+    if (unk7FTemp < 0) {
+        return;
+    }
+    if (unk7FTemp >= 2) {
+        return;
+    }
+    if (D_80090780_91380[gs->unk82].frame == gs->unk50) {
+        func_8003F1F0_3FDF0();
+        gs->unk82++;
+    }
+    if (D_8009079C_9139C[gs->unk85].frame == gs->unk50) {
+        terminateTasksByTypeAndID(0, 2);
+        temp = D_8009079C_9139C[gs->unk85].value;
+        if (temp >= 0) {
+            spawnScriptedCameraTask(temp);
+        }
+        gs->unk85++;
+    }
+    switch (gs->unk61) {
+        case 0:
+            if (gs->unk50 >= 0x39E) {
+                D_800A24A0_A30A0 = 2;
+                func_8006FE28_70A28(NULL, 0xFF, 0xFF, 0xFF);
+                func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+                func_80057564_58164(0x20);
+                setGameStateHandler(cleanupGameSession);
+                return;
+            }
+            if (gControllerInputs[0] & 0x1000) {
+                D_800A24A0_A30A0 = 2;
+                func_8006FE28_70A28(NULL, 0, 0, 0);
+                func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+                func_80057564_58164(0x20);
+                gs->unk61++;
+            }
+            break;
+        case 1:
+            if (func_8006FE10_70A10(NULL) == 0) {
+                setGameStateHandler(cleanupGameSession);
+            }
+            break;
+    }
+}
 
 void handleBossRaceResult(void) {
     GameState *gs;
