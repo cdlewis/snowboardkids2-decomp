@@ -10,6 +10,8 @@ extern void func_8002BFEC_2CBEC(void *);
 extern void func_8002C570_2D170(void *);
 
 extern void spawnSpriteEffectEx(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
+extern u8 D_8008EAE0_8F6E0[];
+extern u8 D_8008EB10_8F710[];
 extern u8 D_8008EBE0_8F7E0[];
 extern void *D_8008ECF0_8F8F0;
 extern void *D_8008ED00_8F900;
@@ -21,7 +23,9 @@ typedef struct {
     /* 0x44 */ s32 unk44;
     /* 0x48 */ u8 pad48[0x4];
     /* 0x4C */ void *unk4C;
-    /* 0x50 */ u8 pad50[0x14];
+    /* 0x50 */ u8 pad50[0xC];
+    /* 0x5C */ u8 characterIndex;
+    /* 0x5D */ u8 pad5D[0x7];
 } Elem2C8F0; // size 0x64
 
 typedef struct {
@@ -31,7 +35,41 @@ typedef struct {
     /* 0xD5 */ u8 modelCount;
 } Struct2C8F0;
 
-INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BCF0_2C8F0);
+void awaitStoryMapRareEventReady(Struct2C8F0 *arg0);
+void destroyStoryMapRareEventModels(Struct2C8F0 *arg0);
+
+void func_8002BCF0_2C8F0(Struct2C8F0 *arg0) {
+    GameState *gameState;
+    s32 i;
+    u8 modelCount;
+    u8 characterIndex;
+
+    gameState = getCurrentAllocation();
+
+    modelCount = D_8008EAE0_8F6E0[arg0->eventTypeIndex * 3];
+    arg0->modelCount = modelCount;
+    gameState->unk41C = modelCount;
+
+    gameState->unk421 = D_8008EB10_8F710[arg0->eventTypeIndex];
+
+    for (i = 0; i < arg0->modelCount; i++) {
+        characterIndex = D_8008EAE0_8F6E0[arg0->eventTypeIndex * 3 + i + 1];
+        arg0->elems[i].characterIndex = characterIndex;
+
+        if (gameState->unk421 == 0) {
+            if ((arg0->eventTypeIndex == 2) & (i == 1)) {
+                arg0->elems[i].model = createSceneModelEx(characterIndex + 0x50, gameState, 0, -1, 0, 5);
+            } else {
+                arg0->elems[i].model = createSceneModel(characterIndex + 0x50, gameState);
+            }
+        } else {
+            arg0->elems[i].model = createSceneModelEx(characterIndex + 0x50, gameState, 0, 0, 0, -1);
+        }
+    }
+
+    setCleanupCallback(destroyStoryMapRareEventModels);
+    setCallback(awaitStoryMapRareEventReady);
+}
 
 void awaitStoryMapRareEventReady(Struct2C8F0 *arg0) {
     GameState *gameState = (GameState *)getCurrentAllocation();
