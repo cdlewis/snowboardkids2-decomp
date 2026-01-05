@@ -399,7 +399,27 @@ void cleanupScalingSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
-void func_8000AD88_B988(void);
+typedef struct {
+    /* 0x00 */ SpriteEffectPositionSource *positionSource;
+    /* 0x04 */ s16 layer;
+    /* 0x06 */ u8 _pad6[2];
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
+    /* 0x0B */ s8 state;
+    /* 0x0C */ s32 targetScale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ s16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ TableLookupContext spriteState;
+    u8 unk32[0x6C - (0x20 + sizeof(TableLookupContext))];
+    /* 0x6C */ s16 bobPhaseHi;
+    /* 0x6E */ s16 bobPhaseLo;
+    /* 0x70 */ s32 currentScale;
+} RadialBurstSpriteEffectState;
+
+void func_8000AD88_B988(RadialBurstSpriteEffectState *arg0);
 void cleanupRadialBurstSpriteEffect(SpriteEffectTaskState *);
 
 void initRadialBurstSpriteEffect(SpriteEffectTaskState *arg0) {
@@ -409,7 +429,98 @@ void initRadialBurstSpriteEffect(SpriteEffectTaskState *arg0) {
     setCallback(func_8000AD88_B988);
 }
 
-INCLUDE_ASM("asm/nonmatchings/B040", func_8000AD88_B988);
+void func_8000AD88_B988(RadialBurstSpriteEffectState *arg0) {
+    SpriteEffectPosition *pos;
+    s32 scale;
+    s32 cosResult;
+    s32 targetScale;
+    s32 yOffsetFactor;
+    s32 xOffset;
+    s32 yOffset;
+    s32 baseX;
+    s32 baseY;
+    s32 baseZ;
+    s32 currentScale;
+    s32 decrement;
+    s32 zOffset;
+    SpriteEffectPosition *temp_pos;
+
+    scale = arg0->targetScale;
+    targetScale = ((scale >> 8) * 273) * 9;
+    yOffsetFactor = (scale >> 8) * 0xF5;
+
+    if (updateSpriteAnimation(&arg0->spriteState, 0x10000) == 2) {
+        func_80069CF8_6A8F8();
+        return;
+    }
+
+    temp_pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
+    pos = temp_pos;
+    {
+        s32 posX = pos->unk14;
+        s32 phase;
+        baseX = posX + arg0->offsetX;
+        baseY = pos->unk18 + arg0->offsetY;
+        baseZ = pos->unk1C + arg0->offsetZ;
+        phase = (*(s32 *)&arg0->bobPhaseHi - 0xAA) & 0x1FFF;
+        *(s32 *)&arg0->bobPhaseHi = phase;
+        xOffset = (arg0->currentScale >> 8) * ((approximateSin(phase) << 3) >> 8);
+    }
+
+    yOffset = (yOffsetFactor >> 8) * ((approximateSin((s16)(*(s32 *)&arg0->bobPhaseHi * 3)) << 3) >> 8);
+    cosResult = approximateCos(arg0->bobPhaseLo) << 3;
+    currentScale = arg0->currentScale;
+    zOffset = (currentScale >> 8) * (cosResult >> 8);
+
+    switch (arg0->state) {
+        case 0: {
+            s32 diff = targetScale - currentScale;
+            if (diff < 0) {
+                diff += 3;
+            }
+            diff >>= 2;
+            decrement = diff;
+            if (decrement != 0) {
+                arg0->currentScale = currentScale + decrement;
+            } else {
+                arg0->currentScale = targetScale;
+                arg0->state = 1;
+            }
+            break;
+        }
+        case 1:
+            if (arg0->duration == 0) {
+                arg0->state = 2;
+            }
+            break;
+        case 2:
+            decrement = -targetScale / 10;
+            yOffset = 0;
+            if (currentScale <= 0) {
+                func_80069CF8_6A8F8();
+                return;
+            }
+            arg0->currentScale = currentScale + decrement;
+            scale = (arg0->targetScale * (currentScale >> 8)) / (targetScale >> 8);
+            break;
+    }
+
+    renderOpaqueSprite(
+        &arg0->spriteState,
+        arg0->layer,
+        baseX + xOffset,
+        baseY + yOffset,
+        baseZ + zOffset,
+        scale,
+        scale,
+        arg0->rotation,
+        arg0->opacity
+    );
+
+    if (arg0->duration > 0) {
+        arg0->duration = arg0->duration - 1;
+    }
+}
 
 void cleanupRadialBurstSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
