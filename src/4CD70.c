@@ -37,6 +37,7 @@ extern s32 gFrameCounter;
 
 USE_ASSET(_3F3940);
 USE_ASSET(_3F3D10);
+USE_ASSET(_3F6670);
 USE_ASSET(_3F6950);
 USE_ASSET(_3F6BB0);
 USE_ASSET(_3F3EF0);
@@ -250,7 +251,8 @@ void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state);
 void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void initPlayerItemDisplayTask(PlayerItemDisplayState *state);
 void initPlayerLapCounterTask(LapCounterState *state);
-void func_8004CA90_4D690(void);
+typedef struct GoldDisplayState_s GoldDisplayState;
+void func_8004CA90_4D690(GoldDisplayState *);
 void func_8004CDC0_4D9C0(void);
 void cleanupPlayerItemDisplayTask(Struct_func_8004C6F0 *arg0);
 void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state);
@@ -547,11 +549,7 @@ void cleanupPlayerLapCounterTask(Struct_func_8004DCC4 *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CA90_4D690);
-
-extern char sGoldFormatShort[];
-extern char sGoldFormatLong[];
-
+// Callback struct types (needed for forward declarations)
 typedef struct {
     void *digitsTexture;
     s16 x;
@@ -565,6 +563,113 @@ typedef struct {
     u16 playerIndex;
     u16 animCounter;
 } PlayerGoldDisplayState;
+
+typedef struct {
+    u8 pad0[0x8];
+    s16 iconX;
+    u8 padA[0x6];
+    s16 animFrame;
+    u8 pad12[0x2];
+    s16 textX;
+    u8 pad16[0x2];
+    s16 digitCount;
+    u8 pad1A[0x6];
+    char goldTextBuffer[8];
+    Player *player;
+    u16 playerIndex;
+    u16 animCounter;
+} MultiplayerGoldDisplayState;
+
+typedef struct {
+    void *goldIconAsset;
+    u8 pad4[0x8];
+    void *digitSpriteAsset;
+} PlayerGoldDisplayCleanupArg;
+
+// Forward declarations for callbacks
+void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state);
+void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state);
+void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0);
+
+struct GoldDisplayState_s {
+    void *digitsTexture;    // 0x0
+    s16 x;                  // 0x4 (singleplayer)
+    s16 y;                  // 0x6 (singleplayer)
+    s16 iconX;              // 0x8
+    s16 iconY;              // 0xA
+    void *iconAsset;        // 0xC
+    s16 animFrame;          // 0x10
+    u8 pad12[0x2];          // 0x12
+    s16 textX;              // 0x14 (multiplayer)
+    s16 textY;              // 0x16 (multiplayer)
+    s16 digitCount;         // 0x18 (multiplayer)
+    u8 pad1A[0x2];          // 0x1A
+    char *textPtr;          // 0x1C (multiplayer)
+    char goldTextBuffer[8]; // 0x20
+    Player *player;         // 0x28
+    s16 playerIndex;        // 0x2C
+    u16 animCounter;        // 0x2E
+};
+
+void func_8004CA90_4D690(GoldDisplayState *state) {
+    GameState *allocation;
+    void *digitsAsset;
+    s32 playerMode;
+
+    allocation = getCurrentAllocation();
+    state->player = (Player *)((u8 *)allocation->players + state->playerIndex * 0xBE8);
+
+    playerMode = allocation->unk5F;
+    if (playerMode >= 3) {
+        state->textX = 0x12;
+        goto multiplayer;
+    }
+    digitsAsset = &_3F6950_ROM_START;
+    if (playerMode == 0) {
+        goto multiplayer_setup;
+    }
+
+    // Singleplayer path
+    state->x = 0x50;
+    if (allocation->unk5F == 1) {
+        state->y = 0x50;
+    } else {
+        if (state->playerIndex == 0) {
+            state->y = -0x30;
+        } else {
+            state->y = 0x20;
+        }
+    }
+    state->digitsTexture = loadCompressedData(digitsAsset, &_3F6BB0_ROM_START, 0x508);
+    state->iconX = state->x + 0x28;
+    state->iconY = state->y;
+    state->iconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
+    goto common;
+
+multiplayer_setup:
+    state->textX = 0x12;
+multiplayer:
+    state->textY = 0x28;
+    state->digitsTexture = 0;
+    state->digitCount = 1;
+    state->textPtr = state->goldTextBuffer;
+    state->iconX = state->textX + 0x28;
+    state->iconY = state->textY;
+    state->iconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
+
+common:
+    state->animCounter = 0;
+    setCleanupCallback(cleanupPlayerGoldDisplayTask);
+
+    if (allocation->unk5F < 3) {
+        setCallbackWithContinue(updatePlayerGoldDisplaySinglePlayer);
+    } else {
+        setCallbackWithContinue(updatePlayerGoldDisplayMultiplayer);
+    }
+}
+
+extern char sGoldFormatShort[];
+extern char sGoldFormatLong[];
 
 void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
     s32 gold = state->player->unkB6C;
@@ -586,22 +691,6 @@ void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
 
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, &state->iconX);
 }
-
-typedef struct {
-    u8 pad0[0x8];
-    s16 iconX;
-    u8 padA[0x6];
-    s16 animFrame;
-    u8 pad12[0x2];
-    s16 textX;
-    u8 pad16[0x2];
-    s16 digitCount;
-    u8 pad1A[0x6];
-    char goldTextBuffer[8];
-    Player *player;
-    u16 playerIndex;
-    u16 animCounter;
-} MultiplayerGoldDisplayState;
 
 void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
     s32 gold = state->player->unkB6C;
@@ -625,12 +714,6 @@ void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
 
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_800105B0_111B0, &state->iconX);
 }
-
-typedef struct {
-    void *goldIconAsset;
-    u8 pad4[0x8];
-    void *digitSpriteAsset;
-} PlayerGoldDisplayCleanupArg;
 
 void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0) {
     arg0->goldIconAsset = freeNodeMemory(arg0->goldIconAsset);
