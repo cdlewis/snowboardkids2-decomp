@@ -93,14 +93,6 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80061A64_62664);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80061D6C_6296C);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800620D0_62CD0);
-
-s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index) {
-    return ((TrackSegmentEntry *)gameData->section3Data)[index].finishZoneFlag;
-}
-
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);
-
 typedef struct {
     s16 x;
     s16 y;
@@ -121,7 +113,68 @@ typedef struct {
     Vertex6 *unk4;
     void *unk8;
     Element24 *unkC;
-} func_80062B1C_arg0;
+} TrackGeometryData;
+
+typedef struct {
+    s16 x;
+    u8 pad[6];
+    s16 z;
+} PositionXZ;
+
+s32 func_800620D0_62CD0(TrackGeometryData *arg0, u16 arg1, PositionXZ *arg2) {
+    s32 dz;
+    s32 dx;
+    Vertex6 *verts;
+    s32 temp;
+    s32 roundUp;
+    Vertex6 *vertsTemp;
+    u16 idx0;
+    u16 idx1;
+    s32 distSq;
+    s32 dist;
+    s32 unitX;
+    s32 unitZ;
+    s32 result;
+
+    idx0 = arg0->unkC[arg1].unk16;
+    verts = arg0->unk4;
+    idx1 = arg0->unkC[arg1].unk1C;
+
+    dx = verts[idx0].x - verts[idx1].x;
+    dz = verts[idx0].z - verts[idx1].z;
+
+    distSq = (dx * dx) + (dz * dz);
+    dist = isqrt64(distSq);
+
+    unitX = (dx << 13) / dist;
+    temp = (dz << 13) / dist;
+    unitZ = temp;
+
+    idx1 = arg0->unkC[arg1].unk1C;
+    temp = arg2->x;
+    dx = temp;
+    vertsTemp = arg0->unk4;
+    roundUp = 0x1FFF;
+    verts = vertsTemp;
+    dx = dx - verts[idx1].x;
+    dz = arg2->z - verts[idx1].z;
+
+    result = (unitX * dx) + (unitZ * dz);
+
+    if (result < 0) {
+        result += roundUp;
+    }
+
+    return (result << 3) >> 16;
+}
+
+s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index) {
+    return ((TrackSegmentEntry *)gameData->section3Data)[index].finishZoneFlag;
+}
+
+INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);
+
+typedef TrackGeometryData func_80062B1C_arg0;
 
 u16 func_800625A4_631A4(void *arg0, void *arg1) {
     s32 var_v1;
