@@ -8,7 +8,7 @@
 extern s32 gControllerInputs;
 
 void unlockScreenScheduleDisplayTasks(void);
-void func_8001C2FC_1CEFC(void);
+void updateUnlockScreen(void);
 
 void onUnlockScreenExit(void);
 void unlockScreenCleanupAndExit(void);
@@ -16,58 +16,58 @@ void unlockScreenAwaitUserDismiss(void);
 void unlockScreenAwaitFadeIn(void);
 
 typedef struct {
-    /* 0x000 */ u8 pad0[0x1D8];
-    /* 0x1D8 */ u8 pad1D8[0x1D8];
-    /* 0x3B0 */ u8 pad3B0[0x1D8];
-    /* 0x588 */ void *unk588;
-    /* 0x58C */ void *unk58C;
-    /* 0x590 */ void *unk590;
-    /* 0x594 */ void *unk594;
-    /* 0x598 */ void *unk598;
-    /* 0x59C */ void *unk59C;
-    /* 0x5A0 */ u8 pad5A0[0x20];
-    /* 0x5C0 */ u16 waitCounter;
+    /* 0x000 */ u8 cameraNode0[0x1D8];
+    /* 0x1D8 */ u8 cameraNode1[0x1D8];
+    /* 0x3B0 */ u8 cameraNode2[0x1D8];
+    /* 0x588 */ void *arrowSpriteAsset;
+    /* 0x58C */ void *backgroundAsset;
+    /* 0x590 */ void *itemIconAsset;
+    /* 0x594 */ void *digitSpriteAsset;
+    /* 0x598 */ void *goldIconAsset;
+    /* 0x59C */ void *itemLabelAsset;
+    /* 0x5A0 */ u8 rotationMatrix[0x20];
+    /* 0x5C0 */ u16 frameCounter;
     /* 0x5C2 */ u8 pad5C2[0x3];
-    /* 0x5C5 */ u8 unk5C5;
+    /* 0x5C5 */ u8 statePhase;
     /* 0x5C6 */ u8 pad5C6[0x3];
     /* 0x5C9 */ u8 unlockCount;
     /* 0x5CA */ u8 pad5CA[0xC];
     /* 0x5D6 */ u8 transitionState;
-} Allocation_1C9C0;
+} UnlockScreenState;
 
-INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001BDC0_1C9C0);
+INCLUDE_ASM("asm/nonmatchings/1C9C0", initUnlockScreen);
 
 void waitForUnlocksAssetsReady(void) {
-    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+    UnlockScreenState *state = (UnlockScreenState *)getCurrentAllocation();
 
-    allocation->waitCounter++;
-    if (allocation->waitCounter < 3) {
+    state->frameCounter++;
+    if (state->frameCounter < 3) {
         return;
     }
 
-    allocation->waitCounter = 2;
+    state->frameCounter = 2;
     if (getPendingDmaCount() != 0) {
         return;
     }
 
-    allocation->waitCounter = 0;
+    state->frameCounter = 0;
     func_8006FDA0_709A0(0, 0, 0xE);
     setGameStateHandler(unlockScreenAwaitFadeIn);
 }
 
 void unlockScreenAwaitFadeIn(void) {
-    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+    UnlockScreenState *state = (UnlockScreenState *)getCurrentAllocation();
 
     if (func_8006FE10_70A10(NULL) != 0) {
         return;
     }
 
-    if (allocation->unlockCount != 0) {
-        allocation->transitionState = 1;
+    if (state->unlockCount != 0) {
+        state->transitionState = 1;
         func_80058220_58E20(0xEA, 1);
         setGameStateHandler(unlockScreenScheduleDisplayTasks);
     } else {
-        allocation->transitionState = 3;
+        state->transitionState = 3;
         func_80058220_58E20(0xEE, 1);
         setGameStateHandler(unlockScreenAwaitUserDismiss);
         scheduleTask(initStoryMapShopSoldOutLabel, 0, 0, 0x5A);
@@ -75,72 +75,72 @@ void unlockScreenAwaitFadeIn(void) {
 }
 
 void unlockScreenScheduleDisplayTasks(void) {
-    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+    UnlockScreenState *state = (UnlockScreenState *)getCurrentAllocation();
 
-    if (allocation->transitionState != 0) {
+    if (state->transitionState != 0) {
         return;
     }
 
-    allocation->unk5C5 = 0x14;
+    state->statePhase = 0x14;
     scheduleTask(initStoryMapShopItemPriceDisplay, 1, 0, 0x5A);
     scheduleTask(initStoryMapShopItemStatsDisplay, 1, 0, 0x5A);
     scheduleTask(initUnlockScreenItemIcons, 0, 0, 0x5A);
 
-    if (allocation->unlockCount >= 2) {
+    if (state->unlockCount >= 2) {
         scheduleTask(initUnlockScreenScrollArrows, 1, 0, 0x5A);
     }
 
-    setGameStateHandler(func_8001C2FC_1CEFC);
+    setGameStateHandler(updateUnlockScreen);
 }
 
 void unlockScreenAwaitUserDismiss(void) {
-    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+    UnlockScreenState *state = (UnlockScreenState *)getCurrentAllocation();
 
-    if (allocation->transitionState != 0) {
+    if (state->transitionState != 0) {
         return;
     }
 
     if (gControllerInputs & 0xD000) {
         func_80058220_58E20(0xED, 1);
-        allocation->transitionState = 2;
+        state->transitionState = 2;
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         setGameStateHandler(unlockScreenCleanupAndExit);
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1C9C0", func_8001C2FC_1CEFC);
+INCLUDE_ASM("asm/nonmatchings/1C9C0", updateUnlockScreen);
 
 void unlockScreenCountdownToExit(void) {
-    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+    UnlockScreenState *state = (UnlockScreenState *)getCurrentAllocation();
 
-    allocation->waitCounter--;
-    if (allocation->waitCounter == 0) {
+    state->frameCounter--;
+    if (state->frameCounter == 0) {
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         setGameStateHandler(unlockScreenCleanupAndExit);
     }
 
-    if (allocation->transitionState != 0) {
-        allocation->transitionState = 0;
+    if (state->transitionState != 0) {
+        state->transitionState = 0;
     }
 }
 
 void unlockScreenCleanupAndExit(void) {
-    Allocation_1C9C0 *allocation = (Allocation_1C9C0 *)getCurrentAllocation();
+    UnlockScreenState *state = (UnlockScreenState *)getCurrentAllocation();
 
     if (func_8006FE10_70A10(NULL) != 0) {
         return;
     }
 
-    unlinkNode((Node_70B00 *)allocation);
-    unlinkNode((Node_70B00 *)&allocation->pad1D8);
-    unlinkNode((Node_70B00 *)&allocation->pad3B0);
+    unlinkNode((Node_70B00 *)state);
+    unlinkNode((Node_70B00 *)&state->cameraNode1);
+    unlinkNode((Node_70B00 *)&state->cameraNode2);
 
-    allocation->unk588 = freeNodeMemory(allocation->unk588);
-    allocation->unk58C = freeNodeMemory(allocation->unk58C);
-    allocation->unk590 = freeNodeMemory(allocation->unk590);
-    allocation->unk594 = freeNodeMemory(allocation->unk594);
-    allocation->unk598 = freeNodeMemory(allocation->unk598);
-    allocation->unk59C = freeNodeMemory(allocation->unk59C);
+    state->arrowSpriteAsset = freeNodeMemory(state->arrowSpriteAsset);
+    state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
+    state->itemIconAsset = freeNodeMemory(state->itemIconAsset);
+    state->digitSpriteAsset = freeNodeMemory(state->digitSpriteAsset);
+    state->goldIconAsset = freeNodeMemory(state->goldIconAsset);
+    state->itemLabelAsset = freeNodeMemory(state->itemLabelAsset);
 
     terminateSchedulerWithCallback(onUnlockScreenExit);
 }
