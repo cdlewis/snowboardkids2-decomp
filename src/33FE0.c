@@ -181,6 +181,31 @@ typedef struct {
 } SaveSlotItemIcon; // size 0x10
 
 typedef struct {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ s16 unk4;
+    /* 0x06 */ s16 alpha;
+    /* 0x08 */ char *text;
+} SaveSlotNumberLabelText; // size 0x0C
+
+typedef struct {
+    /* 0x00 */ SaveSlotItemIcon sprites[6];      // 0x00 - 0x5F
+    /* 0x60 */ SaveSlotNumberLabelText texts[9]; // 0x60 - 0xCB
+    /* 0xCC */ char textBuffers[9][4];           // 0xCC - 0xEF
+    /* 0xF0 */ u8 slotIndex;
+} SaveSlotNumberLabelsState;
+
+typedef struct {
+    /* 0x00 */ u8 itemFlags[15];
+    /* 0x0F */ u8 pad0F[0x4D];
+} SaveSlotSaveData; // size 0x5C
+
+typedef struct {
+    /* 0x000 */ u8 pad0[0x948];
+    /* 0x948 */ SaveSlotSaveData slots[4];
+} NumberLabelsAllocation;
+
+typedef struct {
     /* 0x00 */ void *spriteSheet;
     /* 0x04 */ SaveSlotItemIcon *icons;
     /* 0x08 */ u8 pad8[0x14];
@@ -229,7 +254,10 @@ extern void *D_8008F7DC_903DC;
 extern void *D_8008F7E0_903E0;
 extern s32 D_8008F7D8_903D8;
 extern u16 D_8009ADE0_9B9E0;
+extern char D_8009E488_9F088[];
 
+void func_800340F4_34CF4(void);
+void cleanupSaveSlotNumberLabels(Func34574Arg *);
 void updateSaveSlotDeleteText(void);
 void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
 void updateSaveSlotNameText(Func34ADCArg *arg0);
@@ -417,7 +445,41 @@ void cleanupSaveSlotNameText(Func34574Arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", func_80033F7C_34B7C);
+void func_80033F7C_34B7C(SaveSlotNumberLabelsState *arg0) {
+    NumberLabelsAllocation *alloc;
+    s16 temp_s2;
+    void *asset;
+    s32 i;
+    char *outputString;
+
+    alloc = (NumberLabelsAllocation *)getCurrentAllocation();
+    asset = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    setCleanupCallback(cleanupSaveSlotNumberLabels);
+
+    for (i = 0; i < 15; i++) {
+        temp_s2 = (alloc->slots[arg0->slotIndex].itemFlags[i] == 0) ? -0x90 : 0;
+        outputString = arg0->textBuffers[i];
+
+        if (i < 9) {
+            sprintf(outputString, D_8009E488_9F088, i + 1);
+            arg0->texts[i].x = -0x70 + i * 0x10;
+            arg0->texts[i].y = temp_s2;
+            arg0->texts[i].text = outputString;
+            arg0->texts[i].unk4 = 0;
+            arg0->texts[i].alpha = 0xFF;
+        } else {
+            arg0->sprites[i - 9].x = -0x78 + i * 0x10;
+            arg0->sprites[i - 9].y = temp_s2;
+            arg0->sprites[i - 9].spriteSheet = asset;
+            arg0->sprites[i - 9].spriteIndex = i + 4;
+            arg0->sprites[i - 9].alpha = 0xFF;
+            arg0->sprites[i - 9].unkD = 0;
+            arg0->sprites[i - 9].unkC = 0;
+        }
+    }
+
+    setCallback(func_800340F4_34CF4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_800340F4_34CF4);
 
