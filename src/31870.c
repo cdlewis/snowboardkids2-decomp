@@ -284,11 +284,10 @@ typedef struct {
 } func_80032628_alloc;
 
 typedef struct {
-    s16 x;
-    s16 y;
+    u16 x;
+    u16 y;
     void *sprite;
-    s16 speed;
-    s16 unkA;
+    u16 speed;
 } SnowParticle;
 
 typedef struct {
@@ -296,7 +295,7 @@ typedef struct {
     u8 delayTimer;
 } SnowParticleState;
 
-void animateBoardShopSnowParticles(void);
+void animateBoardShopSnowParticles(SnowParticleState *);
 void blinkBoardShopBoardIconConfirmation(BoardShopIconSelectionState *arg0);
 void freeBoardShopCharacterPreviewAssets(BoardShopCharacterPreviewState *arg0);
 void waitBoardShopCharacterPreview(void);
@@ -484,7 +483,42 @@ void waitBoardShopSnowParticles(SnowParticleState *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/31870", animateBoardShopSnowParticles);
+void animateBoardShopSnowParticles(SnowParticleState *arg0) {
+    BoardShopScreenAllocation *state;
+    s32 i;
+    u16 baseY;
+    s16 randVal;
+    SnowParticle *particle;
+    s16 newSpeed;
+    s32 new_var;
+
+    state = getCurrentAllocation();
+
+    arg0->delayTimer = (arg0->delayTimer + 1) & 3;
+
+    for (i = 0; i < 0x14; i++) {
+        if (i < 0xA) {
+            randVal = randB() % 8 - 10;
+            arg0->particles[i].y = state->unk780 + randVal;
+        } else {
+            arg0->particles[i].y = state->unk782 + ((new_var = randB() % 8) - 10);
+        }
+
+        if (arg0->delayTimer == 0) {
+            arg0->particles[i].speed++;
+
+            if (arg0->particles[i].speed >= 0x18) {
+                arg0->particles[i].speed = 0x10;
+            }
+        }
+
+        debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->particles[i]);
+    };
+
+    if ((s16)state->unk780 == 0) {
+        func_80069CF8_6A8F8();
+    }
+}
 
 void cleanupBoardShopSnowParticles(SnowParticleState *arg0) {
     ((Node_70B00 *)arg0->particles)->prev = freeNodeMemory(((Node_70B00 *)arg0->particles)->prev);
