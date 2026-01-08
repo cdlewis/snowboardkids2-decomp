@@ -1,7 +1,7 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-extern void func_80033254_33E54(void);
+extern void updateControllerMotorInit(void);
 
 extern u8 gControllerPollingEnabled;
 extern u8 gMotorInitCompleteMask;
@@ -18,10 +18,10 @@ void initControllerMotors(void) {
     for (; i >= 0; i--) {
         *ptr-- = 0;
     }
-    setGameStateHandler(func_80033254_33E54);
+    setGameStateHandler(updateControllerMotorInit);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33E00", func_80033254_33E54);
+INCLUDE_ASM("asm/nonmatchings/33E00", updateControllerMotorInit);
 
 void onMotorInitComplete(void) {
     func_800697F4_6A3F4(1);

@@ -2558,6 +2558,7 @@ boardIconTargetYPositions = 0x8008F17C; // rom:0x8FD7C
 initControllerMotors = 0x80033200; // rom:0x33E00
 gControllerPollingEnabled = 0x800AFCE2;
 gMotorInitCompleteMask = 0x800AFED0;
+updateControllerMotorInit = 0x80033254; // rom:0x33E54
 onMotorInitComplete = 0x800333BC; // rom:0x33FBC
 initSaveSlotStatSprites = 0x800333E0; // rom:0x33FE0
 updateSaveSlotStatSprites = 0x80033458; // rom:0x34058
