@@ -67,7 +67,7 @@ void clearSpriteAssetEnabled(SpriteAssetState *state) {
     state->flags &= 0xFE;
 }
 
-s32 func_80009E2C_AA2C(SpriteAssetState *state) {
+s32 isSpriteAssetEnabled(SpriteAssetState *state) {
     return state->flags & 1;
 }
 
@@ -119,33 +119,33 @@ void releaseNodeMemoryRef(void **ptr) {
     }
 }
 
-void setSpriteAnimation(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
+void setSpriteAnimation(void *arg0, s32 arg1, s32 animIndex, s32 arg3) {
     SpriteAssetState *state = (SpriteAssetState *)arg0;
     s32 *entry;
-    s16 saved = arg2;
-    s16 index = arg2;
-    u16 t16;
-    void *t0;
-    u16 t7;
+    s16 savedAnimIndex = animIndex;
+    s16 index = animIndex;
+    u16 timer;
+    void *table;
+    u16 delay;
 
     if (index == -1) {
-        state->unk8 = NULL;
+        state->animSet = NULL;
         return;
     }
 
     entry = &D_8008C920_8D520[state->assetIndex * 5];
     if (index < *(s16 *)(&entry[4])) {
-        state->unk8 = (AnimSetEntry *)entry[3] + index;
-        state->unkC = state->unk8->entries;
-        state->unk10 = saved;
-        state->unk12 = state->unkC->unk4;
-        state->unk14 = 0;
-        t16 = state->unkC->unk6;
-        state->unk16 = t16;
-        t0 = state->spriteData;
-        t7 = state->unk8->initialDelay;
-        state->unk28 = t0;
-        state->unk7 = t7;
+        state->animSet = (AnimSetEntry *)entry[3] + index;
+        state->frameEntries = state->animSet->entries;
+        state->animIndex = savedAnimIndex;
+        state->currentSpriteFrame = state->frameEntries->unk4;
+        state->frameIndex = 0;
+        timer = state->frameEntries->unk6;
+        state->frameTimer = timer;
+        table = state->spriteData;
+        delay = state->animSet->initialDelay;
+        state->spriteTable = table;
+        state->initialDelay = delay;
     }
 }
 
@@ -242,10 +242,10 @@ void setupAndEnqueueSprite(
     s32 posZ,
     s32 scaleX,
     s32 scaleY,
-    s16 arg7,
+    s16 renderMode,
     u8 flipH,
     u8 alpha,
-    u16 arg10
+    u16 renderFlags
 ) {
     OutputStruct_19E80 sp10;
     SpriteEntry *entry;
@@ -254,54 +254,54 @@ void setupAndEnqueueSprite(
     s32 offsetX;
 
     sign = -(flipH != 0) | 1;
-    entry = state->unkC + state->unk14;
-    offsetX = entry->unk0;
-    state->unk1C = posX + ((offsetX * sign) << 16);
-    state->unk20 = posY + (entry->unk1 << 16);
-    state->unk24 = posZ;
-    state->unk2C = entry->unk4;
-    state->unk2F = flipH;
-    state->unk48 = arg7;
-    state->unk40 = scaleX >> 4;
-    state->unk44 = scaleY >> 4;
-    state->unk2E = alpha;
-    state->unk4A = arg10;
+    entry = state->spriteEntries + state->currentFrame;
+    offsetX = entry->offsetX;
+    state->positionX = posX + ((offsetX * sign) << 16);
+    state->positionY = posY + (entry->offsetY << 16);
+    state->positionZ = posZ;
+    state->textureIndex = entry->textureIndex;
+    state->flipHorizontal = flipH;
+    state->renderMode = renderMode;
+    state->scaleX = scaleX >> 4;
+    state->scaleY = scaleY >> 4;
+    state->alpha = alpha;
+    state->renderFlags = renderFlags;
 
-    getTableEntryByU16Index(state->unk28, state->unk2C, &sp10);
+    getTableEntryByU16Index(state->spriteTable, state->textureIndex, &sp10);
 
     dimensions = (sp10.field1 << 16) | sp10.field2;
 
     switch (dimensions) {
         case 0x80008:
-            state->unk18 = &D_8008C9E8_8D5E8;
+            state->displayListData = &D_8008C9E8_8D5E8;
             break;
         case 0x100010:
-            state->unk18 = &D_8008CA28_8D628;
+            state->displayListData = &D_8008CA28_8D628;
             break;
         case 0x100020:
-            state->unk18 = &D_8008CA68_8D668;
+            state->displayListData = &D_8008CA68_8D668;
             break;
         case 0x200010:
-            state->unk18 = &D_8008CAA8_8D6A8;
+            state->displayListData = &D_8008CAA8_8D6A8;
             break;
         case 0x200020:
-            state->unk18 = &D_8008CAE8_8D6E8;
+            state->displayListData = &D_8008CAE8_8D6E8;
             break;
         case 0x400020:
-            state->unk18 = &D_8008CB28_8D728;
+            state->displayListData = &D_8008CB28_8D728;
             break;
         case 0x200040:
-            state->unk18 = &D_8008CB68_8D768;
+            state->displayListData = &D_8008CB68_8D768;
             break;
         case 0x400040:
-            state->unk18 = &D_8008CBA8_8D7A8;
+            state->displayListData = &D_8008CBA8_8D7A8;
             break;
     }
 
     if ((alpha & 0xFF) == 0xFF) {
-        ((void (*)(s32, Node *))enqueueOpaqueSprite)(slot, (Node *)&state->unk18);
+        ((void (*)(s32, Node *))enqueueOpaqueSprite)(slot, (Node *)&state->displayListData);
     } else {
-        ((void (*)(s32, Node *))enqueueTranslucentSprite)(slot, (Node *)&state->unk18);
+        ((void (*)(s32, Node *))enqueueTranslucentSprite)(slot, (Node *)&state->displayListData);
     }
 }
 
