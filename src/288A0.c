@@ -81,7 +81,7 @@ void initStoryMapRandomEvent(u8 *eventTypeOut) {
     if ((randA() & 7) == 7) {
         randomIndex = randB();
         *eventTypeOut = D_8008DF00_8EB00[D_800AFE8C_A71FC->unk9][randomIndex % 10] - 1;
-        rareTask = scheduleTask(func_8002BCF0_2C8F0, 0, 0, 0x5B);
+        rareTask = scheduleTask(initStoryMapRareEvent, 0, 0, 0x5B);
         rareTask->eventTypeIndex = *eventTypeOut;
         state->rareEventType = *eventTypeOut;
         goto check_event;

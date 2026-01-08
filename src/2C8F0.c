@@ -19,51 +19,51 @@ extern void *D_8008ED00_8F900;
 typedef struct {
     /* 0x00 */ SceneModel *model;
     /* 0x04 */ u8 pad4[0x3C];
-    /* 0x40 */ s32 unk40;
-    /* 0x44 */ s32 unk44;
+    /* 0x40 */ s32 spriteEffectPosX;
+    /* 0x44 */ s32 spriteEffectPosY;
     /* 0x48 */ u8 pad48[0x4];
-    /* 0x4C */ void *unk4C;
+    /* 0x4C */ void *spriteEffectParams;
     /* 0x50 */ u8 pad50[0xC];
     /* 0x5C */ u8 characterIndex;
     /* 0x5D */ u8 pad5D[0x7];
-} Elem2C8F0; // size 0x64
+} StoryMapRareEventNpc; // size 0x64
 
 typedef struct {
-    /* 0x00 */ Elem2C8F0 elems[2];
+    /* 0x00 */ StoryMapRareEventNpc npcs[2];
     /* 0xC8 */ u8 padC8[0xC];
     /* 0xD4 */ u8 eventTypeIndex;
-    /* 0xD5 */ u8 modelCount;
-} Struct2C8F0;
+    /* 0xD5 */ u8 npcCount;
+} StoryMapRareEventState;
 
-void awaitStoryMapRareEventReady(Struct2C8F0 *arg0);
-void destroyStoryMapRareEventModels(Struct2C8F0 *arg0);
+void awaitStoryMapRareEventReady(StoryMapRareEventState *arg0);
+void destroyStoryMapRareEventModels(StoryMapRareEventState *arg0);
 
-void func_8002BCF0_2C8F0(Struct2C8F0 *arg0) {
+void initStoryMapRareEvent(StoryMapRareEventState *arg0) {
     GameState *gameState;
     s32 i;
-    u8 modelCount;
+    u8 npcCount;
     u8 characterIndex;
 
     gameState = getCurrentAllocation();
 
-    modelCount = D_8008EAE0_8F6E0[arg0->eventTypeIndex * 3];
-    arg0->modelCount = modelCount;
-    gameState->unk41C = modelCount;
+    npcCount = D_8008EAE0_8F6E0[arg0->eventTypeIndex * 3];
+    arg0->npcCount = npcCount;
+    gameState->unk41C = npcCount;
 
     gameState->unk421 = D_8008EB10_8F710[arg0->eventTypeIndex];
 
-    for (i = 0; i < arg0->modelCount; i++) {
+    for (i = 0; i < arg0->npcCount; i++) {
         characterIndex = D_8008EAE0_8F6E0[arg0->eventTypeIndex * 3 + i + 1];
-        arg0->elems[i].characterIndex = characterIndex;
+        arg0->npcs[i].characterIndex = characterIndex;
 
         if (gameState->unk421 == 0) {
             if ((arg0->eventTypeIndex == 2) & (i == 1)) {
-                arg0->elems[i].model = createSceneModelEx(characterIndex + 0x50, gameState, 0, -1, 0, 5);
+                arg0->npcs[i].model = createSceneModelEx(characterIndex + 0x50, gameState, 0, -1, 0, 5);
             } else {
-                arg0->elems[i].model = createSceneModel(characterIndex + 0x50, gameState);
+                arg0->npcs[i].model = createSceneModel(characterIndex + 0x50, gameState);
             }
         } else {
-            arg0->elems[i].model = createSceneModelEx(characterIndex + 0x50, gameState, 0, 0, 0, -1);
+            arg0->npcs[i].model = createSceneModelEx(characterIndex + 0x50, gameState, 0, 0, 0, -1);
         }
     }
 
@@ -71,7 +71,7 @@ void func_8002BCF0_2C8F0(Struct2C8F0 *arg0) {
     setCallback(awaitStoryMapRareEventReady);
 }
 
-void awaitStoryMapRareEventReady(Struct2C8F0 *arg0) {
+void awaitStoryMapRareEventReady(StoryMapRareEventState *arg0) {
     GameState *gameState = (GameState *)getCurrentAllocation();
 
     if (gameState->unk429 == 0) {
@@ -82,11 +82,11 @@ void awaitStoryMapRareEventReady(Struct2C8F0 *arg0) {
 void nullStoryMapRareEventCallback(void) {
 }
 
-void destroyStoryMapRareEventModels(Struct2C8F0 *arg0) {
+void destroyStoryMapRareEventModels(StoryMapRareEventState *arg0) {
     s32 i;
 
-    for (i = 0; i < arg0->modelCount; i++) {
-        arg0->elems[i].model = destroySceneModel(arg0->elems[i].model);
+    for (i = 0; i < arg0->npcCount; i++) {
+        arg0->npcs[i].model = destroySceneModel(arg0->npcs[i].model);
     }
 }
 
@@ -136,24 +136,24 @@ INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002BFEC_2CBEC);
 
 INCLUDE_ASM("asm/nonmatchings/2C8F0", func_8002C570_2D170);
 
-void configureRareEventSpriteEffect(Struct2C8F0 *rareEvent, s32 elemIndex) {
-    Elem2C8F0 *elem;
+void configureRareEventSpriteEffect(StoryMapRareEventState *rareEvent, s32 npcIndex) {
+    StoryMapRareEventNpc *npc;
     u8 eventType;
     s32 offset;
 
     eventType = rareEvent->eventTypeIndex;
 
-    if ((eventType == 1) & (elemIndex == 0)) {
+    if ((eventType == 1) & (npcIndex == 0)) {
         if (D_800AFE8C_A71FC->unk9[0] == 3) {
-            elem = &rareEvent->elems[elemIndex];
-            elem->unk4C = &D_8008ED00_8F900;
-            rareEvent->elems[0].unk44 = 0x300000;
+            npc = &rareEvent->npcs[npcIndex];
+            npc->spriteEffectParams = &D_8008ED00_8F900;
+            rareEvent->npcs[0].spriteEffectPosY = 0x300000;
             spawnSpriteEffectEx(
-                (s32)elem->model,
+                (s32)npc->model,
                 0,
                 0x1F,
-                D_8008EBE0_8F7E0[rareEvent->eventTypeIndex * 2 + elemIndex] - 4,
-                &elem->unk40,
+                D_8008EBE0_8F7E0[rareEvent->eventTypeIndex * 2 + npcIndex] - 4,
+                &npc->spriteEffectPosX,
                 0x10000,
                 0,
                 2,
@@ -164,10 +164,10 @@ void configureRareEventSpriteEffect(Struct2C8F0 *rareEvent, s32 elemIndex) {
         }
     }
 
-    if ((rareEvent->eventTypeIndex == 6) & (elemIndex == 1)) {
+    if ((rareEvent->eventTypeIndex == 6) & (npcIndex == 1)) {
         if (D_800AFE8C_A71FC->unk9[0] == 3) {
-            offset = elemIndex * 0x64;
-            ((Elem2C8F0 *)((u8 *)rareEvent + offset))->unk4C = &D_8008ECF0_8F8F0;
+            offset = npcIndex * 0x64;
+            ((StoryMapRareEventNpc *)((u8 *)rareEvent + offset))->spriteEffectParams = &D_8008ECF0_8F8F0;
         }
     }
 }
