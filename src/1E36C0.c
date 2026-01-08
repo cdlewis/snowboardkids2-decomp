@@ -7,11 +7,11 @@ extern s8 D_800AB048_A23B8;
 extern s32 gButtonsPressed;
 extern s32 gControllerInputs;
 
-s16 func_800B6610_1E36C0(cutsceneSys2Wait_exec_asset *arg0) {
+s16 getSlotMoveDuration(cutsceneSys2Wait_exec_asset *arg0) {
     return arg0->unk86;
 }
 
-s16 func_800B6618_1E36C8(CutsceneSlotData *unused, s16 arg1, s16 arg2, s16 arg3) {
+s16 calcAngleDiff(CutsceneSlotData *unused, s16 direction, s16 targetAngle, s16 currentAngle) {
     s16 target;
     s16 current;
     s16 rawDiff;
@@ -20,26 +20,26 @@ s16 func_800B6618_1E36C8(CutsceneSlotData *unused, s16 arg1, s16 arg2, s16 arg3)
     s16 result;
     s16 adjusted;
 
-    target = arg2 & 0x1FFF;
-    current = arg3 & 0x1FFF;
+    target = targetAngle & 0x1FFF;
+    current = currentAngle & 0x1FFF;
     rawDiff = target - current;
     maskedDiff = rawDiff & 0x1FFF;
     result = maskedDiff;
     savedRaw = rawDiff;
 
-    if (arg1 == 0) {
+    if (direction == 0) {
         goto handle_zero;
     }
-    if (arg1 > 0) {
+    if (direction > 0) {
         goto handle_positive;
     }
-    if (arg1 == -1) {
+    if (direction == -1) {
         goto handle_negative;
     }
     goto end;
 
 handle_positive:
-    if (arg1 == 1) {
+    if (direction == 1) {
         goto handle_positive_one;
     }
     goto end;
@@ -79,698 +79,721 @@ end:
 
 extern u8 identityMatrix[];
 
-void func_800B66B4_1E3764(CutsceneSlotData *arg0) {
-    memcpy(&arg0->unk04, identityMatrix, 0x20);
+void initSlotData(CutsceneSlotData *slot) {
+    memcpy(&slot->unk04, identityMatrix, 0x20);
 
-    arg0->unk0.bytes[0] = 0;
-    arg0->unk20_u.unk20_s32 = 0;
-    arg0->unk28 = 0;
-    arg0->unk2C = 0;
-    arg0->unk30 = 0;
-    arg0->unk34 = 0;
-    arg0->unk38 = 0;
-    arg0->unk3C = 0;
-    arg0->unk40 = 0;
-    arg0->unk44 = 0;
+    slot->unk0.bytes[0] = 0;
+    slot->unk20_u.unk20_s32 = 0;
+    slot->unk28 = 0;
+    slot->unk2C = 0;
+    slot->unk30 = 0;
+    slot->unk34 = 0;
+    slot->unk38 = 0;
+    slot->unk3C = 0;
+    slot->unk40 = 0;
+    slot->unk44 = 0;
 
-    arg0->unk54 = 0x10000;
-    arg0->unk58 = 0x10000;
-    arg0->unk5C = 0x10000;
-    arg0->unk60 = 0x10000;
-    arg0->unk64 = 0x10000;
-    arg0->unk68 = 0x10000;
+    slot->unk54 = 0x10000;
+    slot->unk58 = 0x10000;
+    slot->unk5C = 0x10000;
+    slot->unk60 = 0x10000;
+    slot->unk64 = 0x10000;
+    slot->unk68 = 0x10000;
 
-    arg0->unk6C = 0;
-    arg0->unk70 = 0;
-    arg0->unk74 = 0;
+    slot->unk6C = 0;
+    slot->unk70 = 0;
+    slot->unk74 = 0;
 
-    arg0->unk78 = 0;
-    arg0->unk7A = 0;
-    arg0->unk7C = 0;
-    arg0->unk84 = 0;
-    arg0->unk86 = 0;
-    arg0->unk80 = 0;
-    arg0->unk82 = 0;
+    slot->unk78 = 0;
+    slot->unk7A = 0;
+    slot->unk7C = 0;
+    slot->unk84 = 0;
+    slot->unk86 = 0;
+    slot->unk80 = 0;
+    slot->unk82 = 0;
 
-    arg0->unk0.bytes[1] = 0;
+    slot->unk0.bytes[1] = 0;
 
-    arg0->unk88 = 0;
-    arg0->angle = 0;
+    slot->unk88 = 0;
+    slot->angle = 0;
 }
 
-s32 setupSlotTransform(CutsceneSlotData *arg0) {
-    Transform3D sp10;
-    Transform3D sp30;
-    Transform3D sp50;
-    Transform3D sp70;
-    Transform3D sp90;
-    Transform3D spB0;
-    Transform3D *pB0;
-    s16 angle;
-    s16 unk8A;
-    s16 var_a1;
+s32 setupSlotTransform(CutsceneSlotData *slot) {
+    Transform3D rotY;
+    Transform3D rotZ;
+    Transform3D rotX;
+    Transform3D tempYZ;
+    Transform3D tempXYZ;
+    Transform3D scaleMat;
+    Transform3D *pScale;
+    s16 tilt;
+    s16 turnVel;
+    s16 zRot;
     s32 scaleX;
     s32 scaleY;
     s32 scaleZ;
     s32 retval;
-    s16 a1, a2, a3;
+    s16 sx, sy, sz;
 
-    memcpy(&sp10, identityMatrix, 0x20U);
-    memcpy(&sp30, identityMatrix, 0x20U);
-    memcpy(&sp50, identityMatrix, 0x20U);
-    memcpy(&sp70, identityMatrix, 0x20U);
-    memcpy(&sp90, identityMatrix, 0x20U);
-    memcpy(&spB0, identityMatrix, 0x20U);
+    memcpy(&rotY, identityMatrix, 0x20U);
+    memcpy(&rotZ, identityMatrix, 0x20U);
+    memcpy(&rotX, identityMatrix, 0x20U);
+    memcpy(&tempYZ, identityMatrix, 0x20U);
+    memcpy(&tempXYZ, identityMatrix, 0x20U);
+    memcpy(&scaleMat, identityMatrix, 0x20U);
 
-    angle = arg0->angle;
-    var_a1 = 0;
-    if (angle != 0) {
-        unk8A = arg0->unk8A;
-        if (unk8A < 0) {
-            var_a1 = angle;
-        } else if (unk8A > 0) {
-            var_a1 = -angle;
+    tilt = slot->angle;
+    zRot = 0;
+    if (tilt != 0) {
+        turnVel = slot->unk8A;
+        if (turnVel < 0) {
+            zRot = tilt;
+        } else if (turnVel > 0) {
+            zRot = -tilt;
         }
     } else {
-        var_a1 = (s16)(u16)arg0->unk82;
+        zRot = (s16)(u16)slot->unk82;
     }
 
-    createZRotationMatrix(&sp30, var_a1 & 0xFFFF);
-    createYRotationMatrix(&sp10, (u16)arg0->unk78);
-    createXRotationMatrix(sp50.m, (u16)arg0->unk80);
-    func_8006B084_6BC84(&sp30, &sp10, &sp90);
-    func_8006B084_6BC84(&sp50, &sp90, &sp70);
+    createZRotationMatrix(&rotZ, zRot & 0xFFFF);
+    createYRotationMatrix(&rotY, (u16)slot->unk78);
+    createXRotationMatrix(rotX.m, (u16)slot->unk80);
+    func_8006B084_6BC84(&rotZ, &rotY, &tempXYZ);
+    func_8006B084_6BC84(&rotX, &tempXYZ, &tempYZ);
 
-    scaleX = arg0->unk54;
-    pB0 = &spB0;
+    scaleX = slot->unk54;
+    pScale = &scaleMat;
     if (scaleX >= 0) {
         goto skip1;
     }
     scaleX += 7;
 skip1:
-    scaleY = arg0->unk58;
-    a1 = (s16)((scaleX << 0xD) >> 0x10);
+    scaleY = slot->unk58;
+    sx = (s16)((scaleX << 0xD) >> 0x10);
     if (scaleY >= 0) {
         goto skip2;
     }
     scaleY += 7;
 skip2:
-    scaleZ = arg0->unk5C;
-    a2 = (s16)((scaleY << 0xD) >> 0x10);
+    scaleZ = slot->unk5C;
+    sy = (s16)((scaleY << 0xD) >> 0x10);
     if (scaleZ >= 0) {
         goto skip3;
     }
     scaleZ += 7;
 skip3:
-    a3 = (s16)((scaleZ << 0xD) >> 0x10);
+    sz = (s16)((scaleZ << 0xD) >> 0x10);
 
-    scaleMatrix(pB0, a1, a2, a3);
-    func_8006B084_6BC84(pB0, &sp70, &arg0->unk04);
+    scaleMatrix(pScale, sx, sy, sz);
+    func_8006B084_6BC84(pScale, &tempYZ, &slot->unk04);
 
-    retval = arg0->unk20_u.unk20_s32;
-    arg0->unk04.translation.x = retval;
-    arg0->unk04.translation.y = arg0->unk28;
-    arg0->unk04.translation.z = arg0->unk2C;
+    retval = slot->unk20_u.unk20_s32;
+    slot->unk04.translation.x = retval;
+    slot->unk04.translation.y = slot->unk28;
+    slot->unk04.translation.z = slot->unk2C;
 
     return retval;
 }
 
-void func_800B68F4_1E39A4(unk_func_800B68F4_1E39A4 *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    arg0->unk60 = arg1;
-    arg0->unk54 = arg1;
-    arg0->unk64 = arg2;
-    arg0->unk58 = arg2;
-    arg0->unk68 = arg3;
-    arg0->unk5C = arg3;
+void setSlotScale(unk_func_800B68F4_1E39A4 *slot, s32 scaleX, s32 scaleY, s32 scaleZ) {
+    slot->unk60 = scaleX;
+    slot->unk54 = scaleX;
+    slot->unk64 = scaleY;
+    slot->unk58 = scaleY;
+    slot->unk68 = scaleZ;
+    slot->unk5C = scaleZ;
 }
 
-void func_800B6910_1E39C0(CutsceneSlotData *arg0, func_800B5E64_1E2F14_arg0 *arg1) {
-    s32 temp_s0;
-    s32 temp_v0;
-    s32 temp_a0;
-    s32 temp_v1;
-    u16 temp_angle;
-    s16 *p80;
-    s16 *p82;
+void handleSlotDebugInput(CutsceneSlotData *slot, func_800B5E64_1E2F14_arg0 *camera) {
+    s32 sinVal;
+    s32 cosVal;
+    s32 inputX;
+    s32 inputZ;
+    u16 newAngle;
+    s16 *pRotX;
+    s16 *pRotZ;
 
     if (((gButtonsPressed & (L_TRIG + R_TRIG)) == (L_TRIG + R_TRIG)) && (gControllerInputs & Z_TRIG)) {
-        temp_angle = (arg0->unk78 + 0x800) & 0x1FFF;
-        arg0->unk78 = temp_angle;
-        arg0->unk7A = temp_angle;
+        newAngle = (slot->unk78 + 0x800) & 0x1FFF;
+        slot->unk78 = newAngle;
+        slot->unk7A = newAngle;
         return;
     }
     if ((gButtonsPressed & (Z_TRIG + R_TRIG)) == (Z_TRIG + R_TRIG)) {
-        arg0->unk28 = 0;
-        arg0->unk80 = 0;
-        arg0->unk82 = 0;
+        slot->unk28 = 0;
+        slot->unk80 = 0;
+        slot->unk82 = 0;
         return;
     }
     if (gButtonsPressed & Z_TRIG) {
-        arg0->unk78 = arg0->unk78 - (D_800AB048_A23B8 * 4);
+        slot->unk78 = slot->unk78 - (D_800AB048_A23B8 * 4);
         return;
     }
     if (gButtonsPressed & R_TRIG) {
-        arg0->unk28 = arg0->unk28 + (D_800AB044_A23B4 << 12);
+        slot->unk28 = slot->unk28 + (D_800AB044_A23B4 << 12);
         return;
     }
     if (gButtonsPressed & L_TRIG) {
-        p80 = &arg0->unk80;
-        *p80 = (u16)(*p80 + (D_800AB044_A23B4 * 4));
-        p82 = &arg0->unk82;
-        *p82 = (u16)(*p82 + (D_800AB048_A23B8 * 4));
+        pRotX = &slot->unk80;
+        *pRotX = (u16)(*pRotX + (D_800AB044_A23B4 * 4));
+        pRotZ = &slot->unk82;
+        *pRotZ = (u16)(*pRotZ + (D_800AB048_A23B8 * 4));
         return;
     }
 
-    temp_s0 = approximateSin(arg1->unk22) * 4;
-    temp_v0 = (approximateCos(arg1->unk22) * 4) >> 8;
-    temp_a0 = D_800AB048_A23B8 * 16;
-    temp_v1 = -D_800AB044_A23B4 * 16;
-    temp_s0 = temp_s0 >> 8;
+    sinVal = approximateSin(camera->unk22) * 4;
+    cosVal = (approximateCos(camera->unk22) * 4) >> 8;
+    inputX = D_800AB048_A23B8 * 16;
+    inputZ = -D_800AB044_A23B4 * 16;
+    sinVal = sinVal >> 8;
 
-    arg0->unk20_u.unk20_s32 = arg0->unk20_u.unk20_s32 + ((temp_v0 * temp_a0) + (temp_s0 * temp_v1));
-    arg0->unk2C = arg0->unk2C + ((-temp_s0 * temp_a0) + (temp_v0 * temp_v1));
+    slot->unk20_u.unk20_s32 = slot->unk20_u.unk20_s32 + ((cosVal * inputX) + (sinVal * inputZ));
+    slot->unk2C = slot->unk2C + ((-sinVal * inputX) + (cosVal * inputZ));
 }
 
-void func_800B6AB8_1E3B68(CutsceneSlotData *arg0, s16 arg1) {
-    s32 temp;
+void updateSlotRotVelocity(CutsceneSlotData *slot, s16 speedMode) {
+    s32 diff;
     s16 delta;
 
-    temp = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+    diff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
 
-    if (arg1 == 1)
+    if (speedMode == 1)
         goto set_aa;
 
-    if (arg1 < 2) {
-        if (arg1 == 0) {
+    if (speedMode < 2) {
+        if (speedMode == 0) {
             delta = 0x100;
         }
     }
-    goto check_temp;
+    goto check_diff;
 
 set_aa:
     delta = 0xAA;
 
-check_temp:
-    if (temp > 0) {
-        arg0->unk7C = delta;
-        arg0->unk78 -= delta;
-    } else if (temp < 0) {
-        arg0->unk7C = -delta;
-        arg0->unk78 += delta;
+check_diff:
+    if (diff > 0) {
+        slot->unk7C = delta;
+        slot->unk78 -= delta;
+    } else if (diff < 0) {
+        slot->unk7C = -delta;
+        slot->unk78 += delta;
     } else {
-        arg0->unk7C = 0;
+        slot->unk7C = 0;
     }
 }
 
-void func_800B6B6C_1E3C1C(CutsceneSlotData *arg0) {
-    s16 temp;
+void updateSlotRotVelocityFixed(CutsceneSlotData *slot) {
+    s16 diff;
 
-    temp = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+    diff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
 
-    if (temp > 0) {
-        arg0->unk7C = 0xAA;
-        arg0->unk78 -= 0xAA;
-    } else if (temp < 0) {
-        arg0->unk7C = -0xAA;
-        arg0->unk78 += 0xAA;
+    if (diff > 0) {
+        slot->unk7C = 0xAA;
+        slot->unk78 -= 0xAA;
+    } else if (diff < 0) {
+        slot->unk7C = -0xAA;
+        slot->unk78 += 0xAA;
     } else {
-        arg0->unk7C = 0;
+        slot->unk7C = 0;
     }
 }
 
-void func_800B6BDC_1E3C8C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4) {
-    func_800B6C04_1E3CB4(arg0, arg1, arg2, arg3, arg4, 0, 0);
+void initSlotPosition(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY) {
+    initSlotPositionEx(slot, x, y, z, rotY, 0, 0);
 }
 
-void func_800B6C04_1E3CB4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6) {
-    s16 temp_v0;
+void initSlotPositionEx(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY, s16 rotX, s16 rotZ) {
+    s16 maskedRotY;
 
-    temp_v0 = arg4 & 0x1FFF;
+    maskedRotY = rotY & 0x1FFF;
 
-    arg0->unk20_u.unk20_s32 = arg1;
-    arg0->unk30 = arg1;
-    arg0->unk0.bytes[0] = 0;
-    arg0->unk28 = arg2;
-    arg0->unk2C = arg3;
-    arg0->unk34 = arg2;
-    arg0->unk38 = arg3;
-    arg0->unk3C = 0;
-    arg0->unk40 = 0;
-    arg0->unk44 = 0;
-    arg0->unk6C = 0;
-    arg0->unk70 = 0;
-    arg0->unk74 = 0;
-    arg0->unk7C = 0;
-    arg0->unk84 = 0;
-    arg0->unk86 = 0;
-    arg0->unk0.bytes[1] = 0;
-    arg0->unk88 = 0;
-    arg0->angle = 0;
-    arg0->unk78 = temp_v0;
-    arg0->unk7A = temp_v0;
-    arg0->unk80 = arg5;
-    arg0->unk82 = arg6;
+    slot->unk20_u.unk20_s32 = x;
+    slot->unk30 = x;
+    slot->unk0.bytes[0] = 0;
+    slot->unk28 = y;
+    slot->unk2C = z;
+    slot->unk34 = y;
+    slot->unk38 = z;
+    slot->unk3C = 0;
+    slot->unk40 = 0;
+    slot->unk44 = 0;
+    slot->unk6C = 0;
+    slot->unk70 = 0;
+    slot->unk74 = 0;
+    slot->unk7C = 0;
+    slot->unk84 = 0;
+    slot->unk86 = 0;
+    slot->unk0.bytes[1] = 0;
+    slot->unk88 = 0;
+    slot->angle = 0;
+    slot->unk78 = maskedRotY;
+    slot->unk7A = maskedRotY;
+    slot->unk80 = rotX;
+    slot->unk82 = rotZ;
 
-    func_800B6AB8_1E3B68(arg0, 0);
+    updateSlotRotVelocity(slot, 0);
 }
 
-s32 func_800B6C8C_1E3D3C(CutsceneSlotData *arg0, SceneModel *arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
-    return func_800B6CD8_1E3D88(arg0, arg1, arg2, arg3, arg4, arg5, arg6, 0, 1);
+s32 setupSlotMoveTo(
+    CutsceneSlotData *slot,
+    SceneModel *model,
+    s32 targetX,
+    s32 targetY,
+    s32 targetZ,
+    s16 duration,
+    s16 fallbackRotY
+) {
+    return setupSlotMoveToEx(slot, model, targetX, targetY, targetZ, duration, fallbackRotY, 0, 1);
 }
 
-s32 func_800B6CD8_1E3D88(
-    CutsceneSlotData *arg0,
-    SceneModel *arg1,
-    s32 arg2,
-    s32 arg3,
-    s32 arg4,
-    s16 arg5,
-    s16 arg6,
-    s32 arg7,
-    s32 arg8
+s32 setupSlotMoveToEx(
+    CutsceneSlotData *slot,
+    SceneModel *model,
+    s32 targetX,
+    s32 targetY,
+    s32 targetZ,
+    s16 duration,
+    s16 fallbackRotY,
+    s32 moveMode,
+    s32 decelRate
 ) {
     s16 temp_v0;
-    s16 var_t0;
-    s32 temp_a3;
-    s32 temp_a1;
-    s32 temp_a2;
-    s32 var_s1;
-    s16 temp_result;
-    u16 temp_v0_3;
-    u16 temp_arg6;
-    s8 temp_arg7;
-    u8 temp_arg8;
+    s16 frames;
+    s32 deltaX;
+    s32 deltaY;
+    s32 deltaZ;
+    s32 turnDir;
+    s16 angleDiff;
+    u16 savedRotVel;
+    u16 rotYParam;
+    s8 moveModeS8;
+    u8 decelRateU8;
 
-    temp_arg6 = (u16)arg6;
-    temp_arg7 = (s8)arg7;
-    temp_arg8 = (u8)arg8;
-    var_s1 = 0;
-    temp_v0 = arg5 + 1;
-    var_t0 = temp_v0;
+    rotYParam = (u16)fallbackRotY;
+    moveModeS8 = (s8)moveMode;
+    decelRateU8 = (u8)decelRate;
+    turnDir = 0;
+    temp_v0 = duration + 1;
+    frames = temp_v0;
     if ((s32)(temp_v0 << 16) <= 0) {
-        var_t0 = 1;
+        frames = 1;
     }
-    arg0->unk30 = arg2;
-    arg0->unk34 = arg3;
-    arg0->unk38 = arg4;
-    arg0->unk84 = var_t0;
-    arg0->unk86 = var_t0;
-    temp_a3 = arg0->unk30 - arg0->unk20_u.unk20_s32;
-    temp_a1 = arg0->unk34 - arg0->unk28;
-    temp_a2 = arg0->unk38 - arg0->unk2C;
-    arg0->angle = 0;
-    if (temp_arg7 == 0) {
-        arg0->unk0.Two = 1;
-        arg0->unk3C = temp_a3 / var_t0;
-        arg0->unk40 = temp_a1 / var_t0;
-        arg0->unk44 = temp_a2 / var_t0;
-    } else if (temp_arg7 == 1) {
-        arg0->unk0.Two = 5;
-        arg0->unk0.bytes[3] = temp_arg8;
-        arg0->unk48 = temp_a3 / var_t0;
-        arg0->unk4C = temp_a1 / var_t0;
-        arg0->unk50 = temp_a2 / var_t0;
+    slot->unk30 = targetX;
+    slot->unk34 = targetY;
+    slot->unk38 = targetZ;
+    slot->unk84 = frames;
+    slot->unk86 = frames;
+    deltaX = slot->unk30 - slot->unk20_u.unk20_s32;
+    deltaY = slot->unk34 - slot->unk28;
+    deltaZ = slot->unk38 - slot->unk2C;
+    slot->angle = 0;
+    if (moveModeS8 == 0) {
+        slot->unk0.Two = 1;
+        slot->unk3C = deltaX / frames;
+        slot->unk40 = deltaY / frames;
+        slot->unk44 = deltaZ / frames;
+    } else if (moveModeS8 == 1) {
+        slot->unk0.Two = 5;
+        slot->unk0.bytes[3] = decelRateU8;
+        slot->unk48 = deltaX / frames;
+        slot->unk4C = deltaY / frames;
+        slot->unk50 = deltaZ / frames;
     }
-    if ((temp_a3 == 0) && (temp_a2 == 0)) {
-        arg0->unk7A = (s16)temp_arg6;
+    if ((deltaX == 0) && (deltaZ == 0)) {
+        slot->unk7A = (s16)rotYParam;
     } else {
-        arg0->unk7A = (atan2Fixed(temp_a3, temp_a2) + 0x1000) & 0x1FFF;
+        slot->unk7A = (atan2Fixed(deltaX, deltaZ) + 0x1000) & 0x1FFF;
     }
-    temp_result = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+    angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
 
-    if ((temp_result >= 0 ? temp_result : -temp_result) >= 0xAAB) {
-        var_s1 = 2;
-        arg0->unk78 = ((u16)arg0->unk78 + 0x1000) & 0x1FFF;
-        if (temp_result > 0) {
-            var_s1 = 1;
+    if ((angleDiff >= 0 ? angleDiff : -angleDiff) >= 0xAAB) {
+        turnDir = 2;
+        slot->unk78 = ((u16)slot->unk78 + 0x1000) & 0x1FFF;
+        if (angleDiff > 0) {
+            turnDir = 1;
         }
     }
-    func_800B6AB8_1E3B68(arg0, 0);
-    if (temp_arg7 == 1) {
-        temp_v0_3 = (u16)arg0->unk7C;
-        arg0->unk7C = 0;
-        arg0->unk7E = (s16)temp_v0_3;
+    updateSlotRotVelocity(slot, 0);
+    if (moveModeS8 == 1) {
+        savedRotVel = (u16)slot->unk7C;
+        slot->unk7C = 0;
+        slot->unk7E = (s16)savedRotVel;
     }
-    return var_s1;
+    return turnDir;
 }
 
-s32 func_800B6FA4_1E4054(CutsceneSlotData *arg0, SceneModel *unused, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
+s32 setupSlotMoveToWithRotation(
+    CutsceneSlotData *slot,
+    SceneModel *unused,
+    s32 targetX,
+    s32 targetY,
+    s32 targetZ,
+    s16 duration,
+    s16 targetRotY
+) {
     s16 temp_v0;
-    s16 var_t0;
-    s16 temp_lo;
+    s16 frames;
+    s16 rotVel;
 
-    temp_v0 = arg5 + 1;
-    var_t0 = temp_v0;
+    temp_v0 = duration + 1;
+    frames = temp_v0;
     if ((s32)(temp_v0 << 16) <= 0) {
-        var_t0 = 1;
+        frames = 1;
     }
 
-    arg0->unk30 = arg2;
-    arg0->unk34 = arg3;
-    arg0->unk38 = arg4;
+    slot->unk30 = targetX;
+    slot->unk34 = targetY;
+    slot->unk38 = targetZ;
 
-    arg0->unk84 = var_t0;
-    arg0->unk86 = var_t0;
-    arg0->angle = 0;
-    arg0->unk7A = arg6;
-    arg0->unk0.Two = 1;
+    slot->unk84 = frames;
+    slot->unk86 = frames;
+    slot->angle = 0;
+    slot->unk7A = targetRotY;
+    slot->unk0.Two = 1;
 
-    arg0->unk3C = (arg0->unk30 - arg0->unk20_u.unk20_s32) / var_t0;
-    arg0->unk40 = (arg0->unk34 - arg0->unk28) / var_t0;
-    arg0->unk44 = (arg0->unk38 - arg0->unk2C) / var_t0;
+    slot->unk3C = (slot->unk30 - slot->unk20_u.unk20_s32) / frames;
+    slot->unk40 = (slot->unk34 - slot->unk28) / frames;
+    slot->unk44 = (slot->unk38 - slot->unk2C) / frames;
 
-    temp_lo = func_800B6618_1E36C8(arg0, 0, arg6, arg0->unk78) / var_t0;
-    arg0->unk7C = temp_lo;
-    arg0->unk7E = temp_lo;
+    rotVel = calcAngleDiff(slot, 0, targetRotY, slot->unk78) / frames;
+    slot->unk7C = rotVel;
+    slot->unk7E = rotVel;
 
     return 0;
 }
 
-void func_800B7128_1E41D8(
-    CutsceneSlotData *arg0,
-    SceneModel *arg1,
-    s32 arg2,
-    s32 arg3,
-    s32 arg4,
-    s16 arg5,
-    s16 arg6,
-    s16 arg7,
-    s8 arg8,
-    s8 arg9
+void setupSlotWalkTo(
+    CutsceneSlotData *slot,
+    SceneModel *model,
+    s32 targetX,
+    s32 targetY,
+    s32 targetZ,
+    s16 duration,
+    s16 finalRotY,
+    s16 walkAnim,
+    s8 turnAnimFlag,
+    s8 decelMode
 ) {
-    volatile s32 *ptr30;
-    volatile s32 *ptr34;
-    volatile s32 *ptr38;
+    volatile s32 *pTargetX;
+    volatile s32 *pTargetY;
+    volatile s32 *pTargetZ;
     s16 temp_v0;
-    s16 var_t0;
-    s32 temp_t1;
-    s32 temp_a3;
-    s32 div1, div2, div3;
-    s32 var_v1;
-    s32 var_v0;
+    s16 frames;
+    s32 deltaX;
+    s32 deltaZ;
+    s32 velX, velY, velZ;
+    s32 finalAngleDiff;
+    s32 absDiff;
 
-    temp_v0 = arg5 + 1;
-    var_t0 = temp_v0;
+    temp_v0 = duration + 1;
+    frames = temp_v0;
     if ((s32)(temp_v0 << 16) <= 0) {
-        var_t0 = 1;
+        frames = 1;
     }
 
-    ptr30 = &arg0->unk30;
-    *ptr30 = arg2;
-    temp_t1 = *ptr30 - arg0->unk20_u.unk20_s32;
-    div1 = temp_t1 / var_t0;
+    pTargetX = &slot->unk30;
+    *pTargetX = targetX;
+    deltaX = *pTargetX - slot->unk20_u.unk20_s32;
+    velX = deltaX / frames;
 
-    ptr34 = &arg0->unk34;
-    *ptr34 = arg3;
-    div2 = (*ptr34 - arg0->unk28) / var_t0;
+    pTargetY = &slot->unk34;
+    *pTargetY = targetY;
+    velY = (*pTargetY - slot->unk28) / frames;
 
-    ptr38 = &arg0->unk38;
-    *ptr38 = arg4;
-    temp_a3 = *ptr38 - arg0->unk2C;
-    div3 = temp_a3 / var_t0;
+    pTargetZ = &slot->unk38;
+    *pTargetZ = targetZ;
+    deltaZ = *pTargetZ - slot->unk2C;
+    velZ = deltaZ / frames;
 
-    arg0->unk0.bytes[1] = 0;
-    arg0->unk84 = var_t0;
-    arg0->unk86 = var_t0;
-    arg0->unk88 = arg6;
-    arg0->angle = 0;
-    arg0->unk90 = arg7;
-    arg0->unk0.bytes[2] = arg8;
-    arg0->unkA4.byte = arg9;
-    arg0->unk0.Two = 3;
+    slot->unk0.bytes[1] = 0;
+    slot->unk84 = frames;
+    slot->unk86 = frames;
+    slot->unk88 = finalRotY;
+    slot->angle = 0;
+    slot->unk90 = walkAnim;
+    slot->unk0.bytes[2] = turnAnimFlag;
+    slot->unkA4.byte = decelMode;
+    slot->unk0.Two = 3;
 
-    arg0->unk3C = div1;
-    arg0->unk40 = div2;
-    arg0->unk44 = div3;
+    slot->unk3C = velX;
+    slot->unk40 = velY;
+    slot->unk44 = velZ;
 
-    if ((u32)temp_t1 < 1 && (u32)temp_a3 < 1) {
+    if ((u32)deltaX < 1 && (u32)deltaZ < 1) {
     } else {
-        arg0->unk7A = (atan2Fixed(temp_t1, temp_a3) + 0x1000) & 0x1FFF;
+        slot->unk7A = (atan2Fixed(deltaX, deltaZ) + 0x1000) & 0x1FFF;
     }
 
-    func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
-    func_800B6AB8_1E3B68(arg0, 1);
+    calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
+    updateSlotRotVelocity(slot, 1);
 
-    var_v1 = func_800B6618_1E36C8(arg0, 0, arg0->unk88, arg0->unk7A);
-    var_v0 = var_v1 >= 0 ? var_v1 : -var_v1;
-    if (var_v0 >= 0x1001) {
-        var_v1 = arg0->unk78 - arg0->unk7A;
+    finalAngleDiff = calcAngleDiff(slot, 0, slot->unk88, slot->unk7A);
+    absDiff = finalAngleDiff >= 0 ? finalAngleDiff : -finalAngleDiff;
+    if (absDiff >= 0x1001) {
+        finalAngleDiff = slot->unk78 - slot->unk7A;
     }
 
-    if (var_v1 > 0) {
-        arg0->unk8A = 0x55;
-        arg0->unk8C = (var_v1 >= 0 ? var_v1 : -var_v1) / 85;
-    } else if (var_v1 < 0) {
-        arg0->unk8A = -0x55;
-        arg0->unk8C = (var_v1 >= 0 ? var_v1 : -var_v1) / 85;
+    if (finalAngleDiff > 0) {
+        slot->unk8A = 0x55;
+        slot->unk8C = (finalAngleDiff >= 0 ? finalAngleDiff : -finalAngleDiff) / 85;
+    } else if (finalAngleDiff < 0) {
+        slot->unk8A = -0x55;
+        slot->unk8C = (finalAngleDiff >= 0 ? finalAngleDiff : -finalAngleDiff) / 85;
     } else {
-        arg0->unk8C = 0;
+        slot->unk8C = 0;
     }
 }
 
-s32 func_800B734C_1E43FC(CutsceneSlotData *arg0, SceneModel *unused, s16 arg1) {
-    s32 retval;
-    s32 temp;
-    s16 var_v1;
+s32 setupSlotRotateTo(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY) {
+    s32 turnDir;
+    s32 angleDiff;
+    s16 rotVel;
 
-    retval = 0;
-    arg0->unk7A = arg1;
-    arg0->unk0.Two = 4;
-    arg0->unk3C = 0;
-    arg0->unk40 = 0;
-    arg0->unk44 = 0;
-    temp = func_800B6618_1E36C8(arg0, 0, arg1, arg0->unk78);
+    turnDir = 0;
+    slot->unk7A = targetRotY;
+    slot->unk0.Two = 4;
+    slot->unk3C = 0;
+    slot->unk40 = 0;
+    slot->unk44 = 0;
+    angleDiff = calcAngleDiff(slot, 0, targetRotY, slot->unk78);
 
-    if ((temp >= 0 ? temp : -temp) >= 0xAAB) {
-        retval = 2;
-        arg0->unk78 = ((u16)arg0->unk78 + 0x1000) & 0x1FFF;
-        if (temp > 0) {
-            retval = 1;
+    if ((angleDiff >= 0 ? angleDiff : -angleDiff) >= 0xAAB) {
+        turnDir = 2;
+        slot->unk78 = ((u16)slot->unk78 + 0x1000) & 0x1FFF;
+        if (angleDiff > 0) {
+            turnDir = 1;
         }
     }
-    func_800B6AB8_1E3B68(arg0, 0);
-    var_v1 = arg0->unk7C;
-    if (var_v1 != 0) {
-        arg0->unk84 = (temp >= 0 ? temp : -temp) / (var_v1 >= 0 ? var_v1 : -var_v1);
+    updateSlotRotVelocity(slot, 0);
+    rotVel = slot->unk7C;
+    if (rotVel != 0) {
+        slot->unk84 = (angleDiff >= 0 ? angleDiff : -angleDiff) / (rotVel >= 0 ? rotVel : -rotVel);
     } else {
-        arg0->unk84 = 0;
+        slot->unk84 = 0;
     }
-    arg0->unk86 = arg0->unk84;
-    return retval;
+    slot->unk86 = slot->unk84;
+    return turnDir;
 }
 
-s32 func_800B7450_1E4500(CutsceneSlotData *arg0, SceneModel *unused, s16 arg2, s16 arg3, s16 arg4) {
-    s32 temp_v0;
-    s32 temp_a1;
-    s32 var_s2;
-    s32 temp_lo;
-    s32 abs_lo;
-    s32 temp_v0_2;
-    s16 arg4_s16;
+s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY, s16 direction, s16 duration) {
+    s32 initialDiff;
+    s32 angleDiff;
+    s32 turnDir;
+    s32 rotVel;
+    s32 absRotVel;
+    s32 absDiff;
+    s16 durationS16;
 
-    var_s2 = 0;
-    arg0->unk0.Two = 4;
-    arg0->unk3C = 0;
-    arg0->unk40 = 0;
-    arg0->unk44 = 0;
-    arg0->unk7A = arg2;
-    temp_v0 = func_800B6618_1E36C8(arg0, arg3, arg2, arg0->unk78);
+    turnDir = 0;
+    slot->unk0.Two = 4;
+    slot->unk3C = 0;
+    slot->unk40 = 0;
+    slot->unk44 = 0;
+    slot->unk7A = targetRotY;
+    initialDiff = calcAngleDiff(slot, direction, targetRotY, slot->unk78);
 
-    if ((temp_v0 >= 0 ? temp_v0 : -temp_v0) >= 0xAAB) {
-        var_s2 = 2;
-        arg0->unk78 = ((u16)arg0->unk78 + 0x1000) & 0x1FFF;
-        if (temp_v0 > 0) {
-            var_s2 = 1;
+    if ((initialDiff >= 0 ? initialDiff : -initialDiff) >= 0xAAB) {
+        turnDir = 2;
+        slot->unk78 = ((u16)slot->unk78 + 0x1000) & 0x1FFF;
+        if (initialDiff > 0) {
+            turnDir = 1;
         }
     }
-    temp_a1 = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
-    arg4_s16 = arg4;
-    arg0->unk84 = arg4;
-    arg0->unk86 = arg4;
-    if (arg4_s16 != 0) {
-        temp_lo = temp_a1 / arg4_s16;
-        arg0->unk7C = temp_lo;
-        abs_lo = (s16)temp_lo >= 0 ? (s16)temp_lo : -(s16)temp_lo;
-        if (abs_lo >= 0x101) {
+    angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
+    durationS16 = duration;
+    slot->unk84 = duration;
+    slot->unk86 = duration;
+    if (durationS16 != 0) {
+        rotVel = angleDiff / durationS16;
+        slot->unk7C = rotVel;
+        absRotVel = (s16)rotVel >= 0 ? (s16)rotVel : -(s16)rotVel;
+        if (absRotVel >= 0x101) {
             s16 result;
-            if ((s16)temp_lo != 0) {
-                result = (((s32)(temp_lo << 0x10) >> 0x1F) & ~0xFF) | 0x100;
+            if ((s16)rotVel != 0) {
+                result = (((s32)(rotVel << 0x10) >> 0x1F) & ~0xFF) | 0x100;
             } else {
                 result = 0;
             }
-            arg0->unk7C = result;
-            temp_v0_2 = temp_a1 >= 0 ? temp_a1 : -temp_a1;
-            if (temp_v0_2 < 0) {
-                temp_v0_2 += 0xFF;
+            slot->unk7C = result;
+            absDiff = angleDiff >= 0 ? angleDiff : -angleDiff;
+            if (absDiff < 0) {
+                absDiff += 0xFF;
             }
-            temp_v0_2 = temp_v0_2 >> 8;
-            arg0->unk84 = temp_v0_2;
-            arg0->unk86 = temp_v0_2;
+            absDiff = absDiff >> 8;
+            slot->unk84 = absDiff;
+            slot->unk86 = absDiff;
         }
     } else {
-        arg0->unk7C = 0;
+        slot->unk7C = 0;
     }
-    return var_s2;
+    return turnDir;
 }
 
-s32 func_800B75C4_1E4674(CutsceneSlotData *arg0, SceneModel *arg1, s16 arg2, s32 arg3, s32 arg4, s32 arg5) {
-    s16 temp_v0;
+s32 setupSlotRotateWithSpeed(
+    CutsceneSlotData *slot,
+    SceneModel *model,
+    s16 targetRotY,
+    s32 speedMult,
+    s32 duration,
+    s32 direction
+) {
+    s16 durationS16;
 
-    temp_v0 = arg4;
+    durationS16 = duration;
 
-    arg0->unk0.Two = 0xB;
-    arg0->unk3C = 0;
-    arg0->unk40 = 0;
-    arg0->unk44 = 0;
-    arg0->unk7A = arg2;
-    arg0->unk84 = temp_v0;
-    arg0->unk86 = temp_v0;
+    slot->unk0.Two = 0xB;
+    slot->unk3C = 0;
+    slot->unk40 = 0;
+    slot->unk44 = 0;
+    slot->unk7A = targetRotY;
+    slot->unk84 = durationS16;
+    slot->unk86 = durationS16;
 
-    if (temp_v0 != 0) {
-        arg0->unk7C = arg5 * arg3;
+    if (durationS16 != 0) {
+        slot->unk7C = direction * speedMult;
     } else {
-        arg0->unk7C = 0;
+        slot->unk7C = 0;
     }
 
     return 0;
 }
 
-void func_800B7620_1E46D0(CutsceneSlotData *arg0, s32 arg1, s16 arg2, s16 arg3) {
-    s32 temp_a0;
-    s32 temp_v0;
-    s32 temp_v1;
-    s32 var_v0;
-    s32 var_v1;
+void setupSlotOrbit(CutsceneSlotData *slot, s32 orbitDir, s16 duration, s16 orbitSpeed) {
+    s32 angle;
+    s32 orbitDirLocal;
+    s32 cosVal;
+    s32 radius;
+    s32 radiusAlt;
 
-    arg0->unk0.Two = 6;
-    arg0->unk94 = arg1;
-    arg0->unk92 = arg3;
-    arg0->unk84 = arg2;
-    arg0->unk86 = arg2;
-    temp_a0 = ((s16)atan2Fixed(arg0->unk20_u.unk20_s32, arg0->unk2C) + 0x1000) & 0x1FFF;
-    arg0->unk9C_u.unk9C_s32 = temp_a0;
-    temp_v1 = approximateCos(temp_a0) << 2;
-    if (temp_v1 == 0) {
-        var_v1 = (arg0->unk20_u.unk20_s32 << 8) / ((approximateSin(arg0->unk9C_u.s.unk9E) << 2) >> 8);
-        var_v1 = (var_v1 > 0) ? var_v1 : -var_v1;
-        arg0->unk98 = var_v1;
+    slot->unk0.Two = 6;
+    slot->unk94 = orbitDir;
+    slot->unk92 = orbitSpeed;
+    slot->unk84 = duration;
+    slot->unk86 = duration;
+    angle = ((s16)atan2Fixed(slot->unk20_u.unk20_s32, slot->unk2C) + 0x1000) & 0x1FFF;
+    slot->unk9C_u.unk9C_s32 = angle;
+    cosVal = approximateCos(angle) << 2;
+    if (cosVal == 0) {
+        radiusAlt = (slot->unk20_u.unk20_s32 << 8) / ((approximateSin(slot->unk9C_u.s.unk9E) << 2) >> 8);
+        radiusAlt = (radiusAlt > 0) ? radiusAlt : -radiusAlt;
+        slot->unk98 = radiusAlt;
     } else {
-        var_v0 = (arg0->unk2C << 8) / (temp_v1 >> 8);
-        var_v0 = (var_v0 > 0) ? var_v0 : -var_v0;
-        arg0->unk98 = var_v0;
+        radius = (slot->unk2C << 8) / (cosVal >> 8);
+        radius = (radius > 0) ? radius : -radius;
+        slot->unk98 = radius;
     }
-    temp_v0 = arg0->unk94;
-    if (temp_v0 > 0) {
-        arg0->unk7A = (arg0->unk9C_u.unk9C_s32 + 0x800) & 0x1FFF;
-    } else if (temp_v0 < 0) {
-        arg0->unk7A = (arg0->unk9C_u.unk9C_s32 - 0x800) & 0x1FFF;
+    orbitDirLocal = slot->unk94;
+    if (orbitDirLocal > 0) {
+        slot->unk7A = (slot->unk9C_u.unk9C_s32 + 0x800) & 0x1FFF;
+    } else if (orbitDirLocal < 0) {
+        slot->unk7A = (slot->unk9C_u.unk9C_s32 - 0x800) & 0x1FFF;
     }
 }
 
-void func_800B7760_1E4810(CutsceneSlotData *arg0, s32 arg1, s16 arg2) {
+void interpolateSlotScaleX(CutsceneSlotData *slot, s32 targetScaleX, s16 duration) {
     s32 diff;
-    s32 delta;
+    s32 vel;
 
-    if (arg2 > 0) {
-        diff = arg1 - arg0->unk54;
-        delta = diff / arg2;
-        arg0->unk60 = arg1;
-        arg0->unk6C = delta;
+    if (duration > 0) {
+        diff = targetScaleX - slot->unk54;
+        vel = diff / duration;
+        slot->unk60 = targetScaleX;
+        slot->unk6C = vel;
     } else {
-        arg0->unk54 = arg1;
-        arg0->unk60 = arg1;
-        arg0->unk6C = 0;
+        slot->unk54 = targetScaleX;
+        slot->unk60 = targetScaleX;
+        slot->unk6C = 0;
     }
 }
 
-void func_800B77C4_1E4874(CutsceneSlotData *arg0, s32 arg1, s16 arg2) {
-    if (arg2 > 0) {
-        arg0->unk64 = arg1;
-        arg0->unk70 = (arg1 - arg0->unk58) / arg2;
+void interpolateSlotScaleY(CutsceneSlotData *slot, s32 targetScaleY, s16 duration) {
+    if (duration > 0) {
+        slot->unk64 = targetScaleY;
+        slot->unk70 = (targetScaleY - slot->unk58) / duration;
     } else {
-        arg0->unk58 = arg1;
-        arg0->unk64 = arg1;
-        arg0->unk70 = 0;
+        slot->unk58 = targetScaleY;
+        slot->unk64 = targetScaleY;
+        slot->unk70 = 0;
     }
 }
 
-void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2) {
-    s32 delta;
+void interpolateSlotScaleZ(CutsceneSlotData *slot, s32 targetScaleZ, s16 duration) {
+    s32 vel;
 
-    if (arg2 > 0) {
-        delta = arg1 - arg0->unk5C;
-        arg0->unk68 = arg1;
-        arg0->unk74 = delta / arg2;
+    if (duration > 0) {
+        vel = targetScaleZ - slot->unk5C;
+        slot->unk68 = targetScaleZ;
+        slot->unk74 = vel / duration;
     } else {
-        arg0->unk5C = arg1;
-        arg0->unk68 = arg1;
-        arg0->unk74 = 0;
+        slot->unk5C = targetScaleZ;
+        slot->unk68 = targetScaleZ;
+        slot->unk74 = 0;
     }
 }
 
-void func_800B788C_1E493C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3) {
+void setupSlotProjectile(CutsceneSlotData *slot, s32 speed, s32 velY, s32 gravity) {
     s32 sinResult;
     s32 cosResult;
-    s32 scaledArg1;
+    s32 scaledSpeed;
 
-    arg0->unk0.bytes[0] = 7;
+    slot->unk0.bytes[0] = 7;
 
-    sinResult = approximateSin(arg0->unk78);
-    scaledArg1 = arg1 >> 8;
-    arg0->unk3C = (scaledArg1 * (sinResult >> 4));
+    sinResult = approximateSin(slot->unk78);
+    scaledSpeed = speed >> 8;
+    slot->unk3C = (scaledSpeed * (sinResult >> 4));
 
-    arg0->unk40 = arg2;
+    slot->unk40 = velY;
 
-    cosResult = approximateCos(arg0->unk78);
-    arg0->unk44 = (scaledArg1 * (cosResult >> 4));
+    cosResult = approximateCos(slot->unk78);
+    slot->unk44 = (scaledSpeed * (cosResult >> 4));
 
-    arg0->unkA0 = arg3;
+    slot->unkA0 = gravity;
 }
 
-void func_800B7914_1E49C4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    volatile s32 *ptr30;
-    volatile s32 *ptr34;
-    volatile s32 *ptr38;
+void setupSlotMoveToFacing(CutsceneSlotData *slot, s32 targetX, s32 targetY, s32 targetZ, s32 duration) {
+    volatile s32 *pTargetX;
+    volatile s32 *pTargetY;
+    volatile s32 *pTargetZ;
     s16 temp_v0;
-    s16 var_t0;
-    s32 temp_a3;
-    s32 temp_t1;
-    s32 temp_a1;
-    s32 div1, div2, div3;
+    s16 frames;
+    s32 deltaZ;
+    s32 deltaX;
+    s32 deltaY;
+    s32 velX, velY, velZ;
 
-    temp_v0 = arg4 + 1;
-    var_t0 = temp_v0;
+    temp_v0 = duration + 1;
+    frames = temp_v0;
     if ((s32)(temp_v0 << 16) <= 0) {
-        var_t0 = 1;
+        frames = 1;
     }
-    ptr30 = &arg0->unk30;
-    *ptr30 = arg1;
-    temp_t1 = *ptr30 - arg0->unk20_u.unk20_s32;
-    div1 = temp_t1 / var_t0;
-    ptr34 = &arg0->unk34;
-    *ptr34 = arg2;
-    temp_a1 = *ptr34 - arg0->unk28;
-    div2 = temp_a1 / var_t0;
-    ptr38 = &arg0->unk38;
-    *ptr38 = arg3;
-    temp_a3 = *ptr38 - arg0->unk2C;
-    div3 = temp_a3 / var_t0;
-    arg0->unk84 = var_t0;
-    arg0->unk86 = var_t0;
-    arg0->angle = 0;
-    arg0->unk0.Two = 8;
-    arg0->unk3C = div1;
-    arg0->unk40 = div2;
-    arg0->unk44 = div3;
-    if ((u32)temp_t1 < 1 && (u32)temp_a3 < 1) {
+    pTargetX = &slot->unk30;
+    *pTargetX = targetX;
+    deltaX = *pTargetX - slot->unk20_u.unk20_s32;
+    velX = deltaX / frames;
+    pTargetY = &slot->unk34;
+    *pTargetY = targetY;
+    deltaY = *pTargetY - slot->unk28;
+    velY = deltaY / frames;
+    pTargetZ = &slot->unk38;
+    *pTargetZ = targetZ;
+    deltaZ = *pTargetZ - slot->unk2C;
+    velZ = deltaZ / frames;
+    slot->unk84 = frames;
+    slot->unk86 = frames;
+    slot->angle = 0;
+    slot->unk0.Two = 8;
+    slot->unk3C = velX;
+    slot->unk40 = velY;
+    slot->unk44 = velZ;
+    if ((u32)deltaX < 1 && (u32)deltaZ < 1) {
     } else {
-        arg0->unk7A = atan2Fixed(temp_t1, temp_a3) & 0x1FFF;
+        slot->unk7A = atan2Fixed(deltaX, deltaZ) & 0x1FFF;
     }
-    func_800B6AB8_1E3B68(arg0, 0);
+    updateSlotRotVelocity(slot, 0);
 }
 
-void func_800B7A60_1E4B10(
-    CutsceneSlotData *arg0,
+void setupSlotMoveToNoRotation(
+    CutsceneSlotData *slot,
     SceneModel *unused,
     s32 targetX,
     s32 targetY,
@@ -778,130 +801,130 @@ void func_800B7A60_1E4B10(
     s16 duration
 ) {
     s16 temp_v0;
-    s16 var_t1;
+    s16 frames;
 
     temp_v0 = duration + 1;
-    var_t1 = temp_v0;
+    frames = temp_v0;
     if ((temp_v0 << 16) <= 0) {
-        var_t1 = 1;
+        frames = 1;
     }
 
-    arg0->unk30 = targetX;
-    arg0->unk34 = targetY;
-    arg0->unk38 = targetZ;
+    slot->unk30 = targetX;
+    slot->unk34 = targetY;
+    slot->unk38 = targetZ;
 
-    arg0->unk3C = (arg0->unk30 - arg0->unk20_u.unk20_s32) / var_t1;
-    arg0->unk40 = (arg0->unk34 - arg0->unk28) / var_t1;
-    arg0->unk44 = (arg0->unk38 - arg0->unk2C) / var_t1;
+    slot->unk3C = (slot->unk30 - slot->unk20_u.unk20_s32) / frames;
+    slot->unk40 = (slot->unk34 - slot->unk28) / frames;
+    slot->unk44 = (slot->unk38 - slot->unk2C) / frames;
 
-    arg0->unk84 = var_t1;
-    arg0->unk86 = var_t1;
-    arg0->angle = 0;
-    arg0->unk7C = 0;
-    arg0->unk7E = 0;
-    arg0->unk0.bytes[0] = 1;
-    arg0->unk7A = arg0->unk78;
+    slot->unk84 = frames;
+    slot->unk86 = frames;
+    slot->angle = 0;
+    slot->unk7C = 0;
+    slot->unk7E = 0;
+    slot->unk0.bytes[0] = 1;
+    slot->unk7A = slot->unk78;
 }
 
-void func_800B7B70_1E4C20(CutsceneSlotData *arg0, s32 *arg1, s16 arg2, s32 arg3, s32 arg4) {
-    s16 duration;
-    s32 delta_x, delta_z;
+void setupSlotMoveToWithBounce(CutsceneSlotData *slot, s32 *targetPos, s16 duration, s32 bounceVelY, s32 gravity) {
+    s16 frames;
+    s32 deltaX, deltaZ;
 
-    if (arg2 == 0) {
-        arg2 = 1;
+    if (duration == 0) {
+        duration = 1;
     }
 
-    duration = arg2;
+    frames = duration;
 
-    arg0->unk86 = duration;
-    arg0->unk84 = duration;
-    arg0->unk0.Two = 10;
+    slot->unk86 = frames;
+    slot->unk84 = frames;
+    slot->unk0.Two = 10;
 
-    arg0->unk30 = arg1[0];
-    arg0->unk34 = arg1[1];
-    arg0->unk38 = arg1[2];
+    slot->unk30 = targetPos[0];
+    slot->unk34 = targetPos[1];
+    slot->unk38 = targetPos[2];
 
-    delta_x = arg1[0] - arg0->unk20_u.unk20_s32;
-    arg0->unk3C = delta_x / duration;
-    arg0->unk48 = delta_x / duration;
+    deltaX = targetPos[0] - slot->unk20_u.unk20_s32;
+    slot->unk3C = deltaX / frames;
+    slot->unk48 = deltaX / frames;
 
-    arg0->unk40 = arg3;
-    arg0->unk4C = arg3;
+    slot->unk40 = bounceVelY;
+    slot->unk4C = bounceVelY;
 
-    delta_z = arg1[2] - arg0->unk2C;
-    arg0->unk44 = delta_z / duration;
-    arg0->unk50 = delta_z / duration;
+    deltaZ = targetPos[2] - slot->unk2C;
+    slot->unk44 = deltaZ / frames;
+    slot->unk50 = deltaZ / frames;
 
-    arg0->unkA0 = arg4;
+    slot->unkA0 = gravity;
 }
 
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7C48_1E4CF8);
 
 extern s32 func_800B7C48_1E4CF8(CutsceneSlotData *, SceneModel *);
 
-s16 func_800B826C_1E531C(CutsceneSlotData *arg0, SceneModel *arg1) {
-    s16 temp_v0;
-    s16 temp_a0;
-    s32 var_s2;
+s16 updateSlotLinearMove(CutsceneSlotData *slot, SceneModel *model) {
+    s16 angleDiff;
+    s16 rotVel;
+    s32 moving;
 
-    var_s2 = 0;
-    if (arg0->unk84 > 0) {
-        arg0->unk20_u.unk20_s32 += arg0->unk3C;
-        arg0->unk28 += arg0->unk40;
-        arg0->unk2C += arg0->unk44;
-        arg0->unk78 += arg0->unk7C;
+    moving = 0;
+    if (slot->unk84 > 0) {
+        slot->unk20_u.unk20_s32 += slot->unk3C;
+        slot->unk28 += slot->unk40;
+        slot->unk2C += slot->unk44;
+        slot->unk78 += slot->unk7C;
 
-        temp_v0 = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
-        temp_a0 = arg0->unk7C;
+        angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
+        rotVel = slot->unk7C;
 
-        if (((temp_a0 > 0) & (temp_v0 < 0)) || ((temp_a0 < 0) & (temp_v0 > 0))) {
-            arg0->unk7C = 0;
-            arg0->unk78 = arg0->unk7A;
-        } else if (temp_a0 == 0) {
-            arg0->unk78 = arg0->unk7A;
+        if (((rotVel > 0) & (angleDiff < 0)) || ((rotVel < 0) & (angleDiff > 0))) {
+            slot->unk7C = 0;
+            slot->unk78 = slot->unk7A;
+        } else if (rotVel == 0) {
+            slot->unk78 = slot->unk7A;
         }
 
-        var_s2 = 1;
-        arg0->unk84--;
+        moving = 1;
+        slot->unk84--;
     } else {
-        arg0->unk3C = 0;
-        arg0->unk40 = 0;
-        arg0->unk44 = 0;
-        arg0->unk7C = 0;
-        arg0->unk78 = arg0->unk7A;
+        slot->unk3C = 0;
+        slot->unk40 = 0;
+        slot->unk44 = 0;
+        slot->unk7C = 0;
+        slot->unk78 = slot->unk7A;
 
-        if ((arg1->unk38 != -1) && (arg1->unk3E <= 0)) {
-            setModelAnimation(arg1, arg1->unk38);
+        if ((model->unk38 != -1) && (model->unk3E <= 0)) {
+            setModelAnimation(model, model->unk38);
         }
-        arg0->unk0.Two = 0;
+        slot->unk0.Two = 0;
     }
-    return var_s2 | func_800B7C48_1E4CF8(arg0, arg1);
+    return moving | func_800B7C48_1E4CF8(slot, model);
 }
 
-s32 func_800B83B8_1E5468(CutsceneSlotData *arg0, StateEntry *arg1) {
+s32 updateSlotRotation(CutsceneSlotData *slot, StateEntry *state) {
     s32 result;
     s16 nextIndex;
 
     result = 0;
-    if (arg0->unk84 > 0) {
-        arg0->unk78 += arg0->unk7C;
-        arg0->unk84--;
+    if (slot->unk84 > 0) {
+        slot->unk78 += slot->unk7C;
+        slot->unk84--;
         result = 1;
     } else {
-        arg0->unk7C = 0;
-        nextIndex = arg1->next_index;
-        if ((nextIndex == -1) || ((s8)arg1->unk3E > 0)) {
-            arg0->unk0.bytes[0] = 0;
+        slot->unk7C = 0;
+        nextIndex = state->next_index;
+        if ((nextIndex == -1) || ((s8)state->unk3E > 0)) {
+            slot->unk0.bytes[0] = 0;
         } else {
-            setModelAnimation((SceneModel *)arg1, nextIndex);
-            arg0->unk0.bytes[0] = 0;
+            setModelAnimation((SceneModel *)state, nextIndex);
+            slot->unk0.bytes[0] = 0;
         }
     }
-    arg0->unk7A = arg0->unk78;
+    slot->unk7A = slot->unk78;
     return result;
 }
 
-s16 func_800B844C_1E54FC(CutsceneSlotData *arg0, SceneModel *arg1) {
+s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
     s16 temp_v0;
     s16 temp_v0_2;
     s16 temp_v0_3;
@@ -945,7 +968,7 @@ s16 func_800B844C_1E54FC(CutsceneSlotData *arg0, SceneModel *arg1) {
             if (unk84_val > unk8C_val) {
                 temp_v0 = (u16)arg0->unk78 + (u16)arg0->unk7C;
                 arg0->unk78 = temp_v0;
-                temp_v0_2 = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, temp_v0);
+                temp_v0_2 = calcAngleDiff(arg0, 0, arg0->unk7A, temp_v0);
                 temp_a0 = arg0->unk7C;
                 if (((temp_a0 > 0) & (temp_v0_2 < 0)) || ((temp_a0 < 0) & (temp_v0_2 > 0))) {
                     arg0->unk7C = 0;
@@ -969,7 +992,7 @@ s16 func_800B844C_1E54FC(CutsceneSlotData *arg0, SceneModel *arg1) {
             if (arg0->unk84 > 0) {
                 temp_v0_4 = arg0->unk78 + arg0->unk8A;
                 arg0->unk78 = (u16)temp_v0_4;
-                temp_v0_5 = func_800B6618_1E36C8(arg0, 0, arg0->unk88, temp_v0_4);
+                temp_v0_5 = calcAngleDiff(arg0, 0, arg0->unk88, temp_v0_4);
                 temp_a1 = arg0->unk8A;
                 if (((temp_a1 > 0) & (temp_v0_5 < 0)) || ((temp_a1 < 0) & (temp_v0_5 > 0))) {
                     arg0->unk8A = 0;
@@ -1071,31 +1094,31 @@ s16 func_800B844C_1E54FC(CutsceneSlotData *arg0, SceneModel *arg1) {
     return (s16)(var_s2 | func_800B7C48_1E4CF8(arg0, arg1));
 }
 
-s32 func_800B8874_1E5924(CutsceneSlotData *arg0, SceneModel *arg1) {
+s32 updateSlotDecelMove(CutsceneSlotData *slot, SceneModel *model) {
     s32 absX;
     s32 absY;
     s32 absZ;
     s16 animIndex;
     s32 delta;
-    s16 result;
+    s16 angleDiff;
     s16 temp7C;
 
-    if (arg0->unk84 != 0) {
+    if (slot->unk84 != 0) {
         goto update_position;
     }
 
-    arg0->unk50 = 0;
-    arg0->unk4C = 0;
+    slot->unk50 = 0;
+    slot->unk4C = 0;
 
-    absX = ABS(arg0->unk3C);
+    absX = ABS(slot->unk3C);
 
-    arg0->unk48 = 0;
+    slot->unk48 = 0;
 
     if (absX >= 0x2000) {
         goto update_position;
     }
 
-    absY = arg0->unk40;
+    absY = slot->unk40;
     if (absY < 0) {
         absY = -absY;
     }
@@ -1103,7 +1126,7 @@ s32 func_800B8874_1E5924(CutsceneSlotData *arg0, SceneModel *arg1) {
         goto update_position;
     }
 
-    absZ = arg0->unk44;
+    absZ = slot->unk44;
     if (absZ < 0) {
         absZ = -absZ;
     }
@@ -1111,190 +1134,183 @@ s32 func_800B8874_1E5924(CutsceneSlotData *arg0, SceneModel *arg1) {
         goto update_position;
     }
 
-    animIndex = arg1->unk38;
-    if (animIndex != -1 && arg1->unk3E <= 0) {
-        setModelAnimation(arg1, animIndex);
+    animIndex = model->unk38;
+    if (animIndex != -1 && model->unk3E <= 0) {
+        setModelAnimation(model, animIndex);
     }
 
-    arg0->unk0.Two = 0;
+    slot->unk0.Two = 0;
     return 0;
 
 update_position:
-    arg0->unk3C += (arg0->unk48 - arg0->unk3C) / arg0->unk0.bytes[3];
-    arg0->unk40 += (arg0->unk4C - arg0->unk40) / arg0->unk0.bytes[3];
-    arg0->unk44 += (arg0->unk50 - arg0->unk44) / arg0->unk0.bytes[3];
+    slot->unk3C += (slot->unk48 - slot->unk3C) / slot->unk0.bytes[3];
+    slot->unk40 += (slot->unk4C - slot->unk40) / slot->unk0.bytes[3];
+    slot->unk44 += (slot->unk50 - slot->unk44) / slot->unk0.bytes[3];
 
-    arg0->unk7C += (arg0->unk7E - arg0->unk7C) / 32;
+    slot->unk7C += (slot->unk7E - slot->unk7C) / 32;
 
-    arg0->unk20_u.unk20_s32 += arg0->unk3C;
-    arg0->unk28 += arg0->unk40;
-    arg0->unk2C += arg0->unk44;
-    arg0->unk78 += arg0->unk7C;
+    slot->unk20_u.unk20_s32 += slot->unk3C;
+    slot->unk28 += slot->unk40;
+    slot->unk2C += slot->unk44;
+    slot->unk78 += slot->unk7C;
 
-    result = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+    angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
 
-    if ((arg0->unk7C > 0 && result < 0) || (arg0->unk7C < 0 && result > 0)) {
-        arg0->unk7C = 0;
-        arg0->unk78 = arg0->unk7A;
-    } else if (arg0->unk7C == 0) {
-        arg0->unk78 = arg0->unk7A;
+    if ((slot->unk7C > 0 && angleDiff < 0) || (slot->unk7C < 0 && angleDiff > 0)) {
+        slot->unk7C = 0;
+        slot->unk78 = slot->unk7A;
+    } else if (slot->unk7C == 0) {
+        slot->unk78 = slot->unk7A;
     }
 
-    if (arg0->unk84 > 0) {
-        arg0->unk84--;
+    if (slot->unk84 > 0) {
+        slot->unk84--;
     }
 
     return 1;
 }
 
-s32 func_800B8AC4_1E5B74(CutsceneSlotData *arg0, SceneModel *arg1) {
-    s32 angle_new;
+s32 updateSlotOrbit(CutsceneSlotData *slot, SceneModel *model) {
+    s32 newAngle;
     s32 cosVal;
     s32 sinVal;
     s32 scaledCos;
     s32 scaledSin;
-    s32 rotResult;
-    s32 *anglePtr = &arg0->unk9C_u.unk9C_s32;
-    s16 temp;
+    s32 angleDiff;
+    s32 *anglePtr = &slot->unk9C_u.unk9C_s32;
+    s16 animIndex;
 
-    if (arg0->unk84 > 0 || arg0->unk86 == -1) {
+    if (slot->unk84 > 0 || slot->unk86 == -1) {
         sinVal = *anglePtr;
-        *anglePtr = (angle_new = sinVal + arg0->unk94);
-        cosVal = approximateCos((s16)angle_new);
+        *anglePtr = (newAngle = sinVal + slot->unk94);
+        cosVal = approximateCos((s16)newAngle);
         scaledCos = cosVal << 2;
         scaledCos = scaledCos >> 8;
-        sinVal = approximateSin(arg0->unk9C_u.s.unk9E);
+        sinVal = approximateSin(slot->unk9C_u.s.unk9E);
         scaledSin = (sinVal << 2) >> 8;
 
-        // Store scaled results
-        arg0->unk2C = scaledCos * (arg0->unk98 >> 8);
-        arg0->unk20_u.unk20_s32 = scaledSin * (arg0->unk98 >> 8);
+        slot->unk2C = scaledCos * (slot->unk98 >> 8);
+        slot->unk20_u.unk20_s32 = scaledSin * (slot->unk98 >> 8);
 
-        // Update target angle based on direction
-        if (arg0->unk94 > 0) {
-            angle_new = *anglePtr + 0x800;
-            arg0->unk7A = angle_new & 0x1FFF;
-        } else if (arg0->unk94 < 0) {
-            angle_new = *anglePtr - 0x800;
-            arg0->unk7A = angle_new & 0x1FFF;
+        if (slot->unk94 > 0) {
+            newAngle = *anglePtr + 0x800;
+            slot->unk7A = newAngle & 0x1FFF;
+        } else if (slot->unk94 < 0) {
+            newAngle = *anglePtr - 0x800;
+            slot->unk7A = newAngle & 0x1FFF;
         }
 
-        // Update rotation and check result
-        arg0->unk78 += arg0->unk7C;
-        rotResult = func_800B6618_1E36C8(arg0, 0, arg0->unk7A, arg0->unk78);
+        slot->unk78 += slot->unk7C;
+        angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
 
-        // Check for rotation completion
-        if ((arg0->unk7C > 0 && rotResult < 0) || (arg0->unk7C < 0 && rotResult > 0)) {
-            arg0->unk7C = 0;
-            arg0->unk78 = arg0->unk7A;
-        } else if (arg0->unk7C == 0) {
-            arg0->unk78 = arg0->unk7A;
+        if ((slot->unk7C > 0 && angleDiff < 0) || (slot->unk7C < 0 && angleDiff > 0)) {
+            slot->unk7C = 0;
+            slot->unk78 = slot->unk7A;
+        } else if (slot->unk7C == 0) {
+            slot->unk78 = slot->unk7A;
         }
     } else {
-        temp = arg1->unk38;
-        if (temp != -1) {
-            setModelAnimation(arg1, temp);
+        animIndex = model->unk38;
+        if (animIndex != -1) {
+            setModelAnimation(model, animIndex);
         }
-        arg0->unk0.bytes[0] = 0;
+        slot->unk0.bytes[0] = 0;
     }
 
-    if (arg0->unk84 > 0) {
-        arg0->unk84--;
+    if (slot->unk84 > 0) {
+        slot->unk84--;
     }
 
     return 1;
 }
 
-void func_800B8C3C_1E5CEC(CutsceneSlotData *arg0) {
-    s32 temp;
+void updateSlotScale(CutsceneSlotData *slot) {
+    s32 vel;
 
-    // First section: unk54 with velocity unk6C and max unk60
-    temp = arg0->unk6C;
-    if (temp > 0) {
-        arg0->unk54 += temp;
-        if (arg0->unk54 > arg0->unk60) {
-            arg0->unk54 = arg0->unk60;
-            arg0->unk6C = 0;
+    vel = slot->unk6C;
+    if (vel > 0) {
+        slot->unk54 += vel;
+        if (slot->unk54 > slot->unk60) {
+            slot->unk54 = slot->unk60;
+            slot->unk6C = 0;
         }
-    } else if (temp < 0) {
-        arg0->unk54 += temp;
-        if (arg0->unk54 < arg0->unk60) {
-            arg0->unk54 = arg0->unk60;
-            arg0->unk6C = 0;
+    } else if (vel < 0) {
+        slot->unk54 += vel;
+        if (slot->unk54 < slot->unk60) {
+            slot->unk54 = slot->unk60;
+            slot->unk6C = 0;
         }
     }
 
-    // Second section: unk58 with velocity unk70 and max unk64
-    temp = arg0->unk70;
-    if (temp > 0) {
-        arg0->unk58 += temp;
-        if (arg0->unk58 > arg0->unk64) {
-            arg0->unk58 = arg0->unk64;
-            arg0->unk70 = 0;
+    vel = slot->unk70;
+    if (vel > 0) {
+        slot->unk58 += vel;
+        if (slot->unk58 > slot->unk64) {
+            slot->unk58 = slot->unk64;
+            slot->unk70 = 0;
         }
-    } else if (temp < 0) {
-        arg0->unk58 += temp;
-        if (arg0->unk58 < arg0->unk64) {
-            arg0->unk58 = arg0->unk64;
-            arg0->unk70 = 0;
+    } else if (vel < 0) {
+        slot->unk58 += vel;
+        if (slot->unk58 < slot->unk64) {
+            slot->unk58 = slot->unk64;
+            slot->unk70 = 0;
         }
     }
 
-    // Third section: unk5C with velocity unk74 and max unk68
-    temp = arg0->unk74;
-    if (temp > 0) {
-        arg0->unk5C += temp;
-        if (arg0->unk5C > arg0->unk68) {
-            arg0->unk5C = arg0->unk68;
-            arg0->unk74 = 0;
+    vel = slot->unk74;
+    if (vel > 0) {
+        slot->unk5C += vel;
+        if (slot->unk5C > slot->unk68) {
+            slot->unk5C = slot->unk68;
+            slot->unk74 = 0;
         }
-    } else if (temp < 0) {
-        arg0->unk5C += temp;
-        if (arg0->unk5C < arg0->unk68) {
-            arg0->unk5C = arg0->unk68;
-            arg0->unk74 = 0;
+    } else if (vel < 0) {
+        slot->unk5C += vel;
+        if (slot->unk5C < slot->unk68) {
+            slot->unk5C = slot->unk68;
+            slot->unk74 = 0;
         }
     }
 }
 
-s32 func_800B8D34_1E5DE4(CutsceneSlotData *arg0) {
-    arg0->unk20_u.unk20_s32 += arg0->unk3C;
-    arg0->unk28 += arg0->unk40;
-    arg0->unk2C += arg0->unk44;
+s32 updateSlotProjectile(CutsceneSlotData *slot) {
+    slot->unk20_u.unk20_s32 += slot->unk3C;
+    slot->unk28 += slot->unk40;
+    slot->unk2C += slot->unk44;
 
-    if (arg0->unk40 < 0) {
-        if (arg0->unk28 < 0) {
-            arg0->unk3C = 0;
-            arg0->unk40 = 0;
-            arg0->unk44 = 0;
-            arg0->unk28 = 0;
-            arg0->unkA0 = 0;
+    if (slot->unk40 < 0) {
+        if (slot->unk28 < 0) {
+            slot->unk3C = 0;
+            slot->unk40 = 0;
+            slot->unk44 = 0;
+            slot->unk28 = 0;
+            slot->unkA0 = 0;
         }
     }
 
-    arg0->unk40 += arg0->unkA0;
+    slot->unk40 += slot->unkA0;
     return 1;
 }
 
-s32 func_800B8DA8_1E5E58(CutsceneSlotData *arg0) {
-    arg0->unk20_u.unk20_s32 += arg0->unk3C;
-    arg0->unk28 += arg0->unk40;
-    arg0->unk2C += arg0->unk44;
+s32 updateSlotProjectileTimed(CutsceneSlotData *slot) {
+    slot->unk20_u.unk20_s32 += slot->unk3C;
+    slot->unk28 += slot->unk40;
+    slot->unk2C += slot->unk44;
 
-    if (arg0->unk40 < 0) {
-        if (arg0->unk28 < 0) {
-            arg0->unk40 = 0;
-            arg0->unk28 = 0;
-            arg0->unkA0 = 0;
+    if (slot->unk40 < 0) {
+        if (slot->unk28 < 0) {
+            slot->unk40 = 0;
+            slot->unk28 = 0;
+            slot->unkA0 = 0;
         }
     }
 
-    arg0->unk40 += arg0->unkA0;
+    slot->unk40 += slot->unkA0;
 
-    if (arg0->unk84 == 0) {
-        arg0->unk0.bytes[0] = 0;
+    if (slot->unk84 == 0) {
+        slot->unk0.bytes[0] = 0;
     } else {
-        arg0->unk84--;
+        slot->unk84--;
     }
 
     return 1;

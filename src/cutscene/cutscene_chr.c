@@ -19,7 +19,7 @@ void cutsceneChrPosition_exec(cutsceneChrPosition_exec_arg *arg0, CutsceneManage
     slot = &arg1->slots[arg2];
     slotData = &slot->slotData;
 
-    func_800B6BDC_1E3C8C(slotData, arg0->unk0, arg0->unk4, arg0->unk8, temp);
+    initSlotPosition(slotData, arg0->unk0, arg0->unk4, arg0->unk8, temp);
     setupSlotTransform(slotData);
     applyTransformToModel(slot->model, &slot->slotData.unk04);
     setModelAnimationEx(slot->model, arg0->unkE, arg0->unk12, arg0->unk11, -1, arg0->unk14);
@@ -52,7 +52,7 @@ void cutsceneChrMove_exec(cutsceneChrMove_exec_arg *arg0, CutsceneManager *arg1,
     temp_s0 = 1;
     animId = -1;
 
-    result = func_800B6CD8_1E3D88(
+    result = setupSlotMoveToEx(
         &slot->slotData,
         slot->model,
         arg0->unk0,
@@ -144,7 +144,7 @@ void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1,
 
     temp_s0 = func_800B34B0_1E0560(arg2)->unk4;
 
-    result = func_800B734C_1E43FC(&slot->slotData, slot->model, temp_arg0->unk0);
+    result = setupSlotRotateTo(&slot->slotData, slot->model, temp_arg0->unk0);
 
     switch (result) {
         case 1:
@@ -179,7 +179,7 @@ void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg
     temp_s0 = 1;
     animId = -1;
 
-    result = func_800B6CD8_1E3D88(
+    result = setupSlotMoveToEx(
         &slot->slotData,
         slot->model,
         arg0->unk0,
@@ -223,9 +223,9 @@ void cutsceneChrZoom_exec(cutsceneChrZoom_exec_arg *arg0, CutsceneManager *arg1,
     slotData = &arg1->slots[arg2].slotData;
     scaleFixed = (arg0->scalePercent << 16) / 100;
 
-    func_800B7760_1E4810(slotData, scaleFixed, arg0->duration);
-    func_800B77C4_1E4874(slotData, scaleFixed, arg0->duration);
-    func_800B7828_1E48D8(slotData, scaleFixed, arg0->duration);
+    interpolateSlotScaleX(slotData, scaleFixed, arg0->duration);
+    interpolateSlotScaleY(slotData, scaleFixed, arg0->duration);
+    interpolateSlotScaleZ(slotData, scaleFixed, arg0->duration);
 }
 
 s32 cutsceneChrZoom_isDone(void) {
@@ -244,7 +244,7 @@ void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager 
 
     func_800B34B0_1E0560(arg2);
 
-    func_800B7128_1E41D8(
+    setupSlotWalkTo(
         &slot->slotData,
         slot->model,
         arg0->unk0,
@@ -285,7 +285,7 @@ void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg0, CutsceneManager *arg
 
     animId = -1;
 
-    result = func_800B7450_1E4500(&slot->slotData, slot->model, arg0->unk0, arg0->unk8, arg0->unk6);
+    result = setupSlotRotateToWithDir(&slot->slotData, slot->model, arg0->unk0, arg0->unk8, arg0->unk6);
 
     switch (result) {
         case 1:
@@ -311,7 +311,7 @@ void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg0, CutsceneManager *a
 
     slot = &arg1->slots[arg2];
 
-    func_800B7620_1E46D0(&slot->slotData, arg0->rotationSpeed, arg0->duration, arg0->unk8);
+    setupSlotOrbit(&slot->slotData, arg0->rotationSpeed, arg0->duration, arg0->unk8);
     setModelAnimationLooped(slot->model, arg0->animationId, arg0->animationLoopCount, -1);
 }
 
@@ -329,7 +329,7 @@ s32 cutsceneChrHop_validate(void) {
 void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *slot = &arg1->slots[arg2];
 
-    func_800B788C_1E493C(&slot->slotData, arg0->horizontalSpeed, arg0->verticalVelocity, arg0->gravity);
+    setupSlotProjectile(&slot->slotData, arg0->horizontalSpeed, arg0->verticalVelocity, arg0->gravity);
     setModelAnimationLooped(slot->model, arg0->animationId, arg0->animationLoopCount, 1);
 }
 
@@ -345,7 +345,7 @@ void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg0, CutsceneManager *arg1,
 
     slot = &arg1->slots[arg2];
 
-    func_800B7914_1E49C4(&slot->slotData, arg0->targetX, arg0->targetY, arg0->targetZ, arg0->duration);
+    setupSlotMoveToFacing(&slot->slotData, arg0->targetX, arg0->targetY, arg0->targetZ, arg0->duration);
     setModelAnimationQueued(slot->model, arg0->animationId, arg0->transitionAnimId, arg0->animationLoopCount, -1);
     setModelActionMode(slot->model, arg0->actionMode);
 }
@@ -372,9 +372,9 @@ void cutsceneChrZoom2_exec(cutsceneChrZoom2_exec_arg *arg0, CutsceneManager *arg
     scaleFixedY = (arg0->scalePercentY << 16) / 100;
     scaleFixedZ = (arg0->scalePercentZ << 16) / 100;
 
-    func_800B7760_1E4810(slotData, scaleFixedX, arg0->duration);
-    func_800B77C4_1E4874(slotData, scaleFixedY, arg0->duration);
-    func_800B7828_1E48D8(slotData, scaleFixedZ, arg0->duration);
+    interpolateSlotScaleX(slotData, scaleFixedX, arg0->duration);
+    interpolateSlotScaleY(slotData, scaleFixedY, arg0->duration);
+    interpolateSlotScaleZ(slotData, scaleFixedZ, arg0->duration);
 }
 
 s32 cutsceneChrZoom2_isDone(void) {
@@ -395,7 +395,14 @@ void cutsceneChrUpDown_exec(cutsceneChrUpDown_exec_arg *arg0, CutsceneManager *a
 
     func_800B34B0_1E0560(arg2);
 
-    func_800B7A60_1E4B10(&slot->slotData, slot->model, arg0->targetX, arg0->targetY, arg0->targetZ, arg0->duration);
+    setupSlotMoveToNoRotation(
+        &slot->slotData,
+        slot->model,
+        arg0->targetX,
+        arg0->targetY,
+        arg0->targetZ,
+        arg0->duration
+    );
 
     setModelAnimationEx(slot->model, arg0->animIndex, arg0->transitionAnimIndex, arg0->loopCount, -1, arg0->animQueued);
 
@@ -452,7 +459,7 @@ void cutsceneChrMove3_exec(cutsceneChrMove3_exec_arg *arg0, CutsceneManager *arg
 
     func_800B34B0_1E0560(arg2);
 
-    func_800B6FA4_1E4054(
+    setupSlotMoveToWithRotation(
         &currentSlot->slotData,
         currentSlot->model,
         arg0->targetX,
@@ -512,7 +519,13 @@ void cutsceneChrMoveSight_exec(cutsceneChrMoveSight_exec_arg *arg0, CutsceneMana
 
     slot = &cutsceneManager->slots[slotIndex];
 
-    func_800B7B70_1E4C20(&slot->slotData, (s32 *)&targetPosition, arg0->duration, arg0->verticalVelocity, arg0->unk1C);
+    setupSlotMoveToWithBounce(
+        &slot->slotData,
+        (s32 *)&targetPosition,
+        arg0->duration,
+        arg0->verticalVelocity,
+        arg0->unk1C
+    );
 
     setModelAnimationLooped(slot->model, arg0->animIndex, arg0->transitionAnimIndex, arg0->loopCount);
 
@@ -606,7 +619,7 @@ void cutsceneChrPosition2_exec(cutsceneChrPosition2_exec_arg *arg0, CutsceneMana
     slot = &arg1->slots[arg2];
     slotData = &slot->slotData;
 
-    func_800B6C04_1E3CB4(slotData, arg0->unk0, arg0->unk4, arg0->unk8, arg0->unkC, arg0->unk16, arg0->unk18);
+    initSlotPositionEx(slotData, arg0->unk0, arg0->unk4, arg0->unk8, arg0->unkC, arg0->unk16, arg0->unk18);
     setupSlotTransform(slotData);
     applyTransformToModel(slot->model, &slot->slotData.unk04);
     setModelAnimationEx(slot->model, arg0->unkE, arg0->unk12, arg0->unk11, -1, arg0->unk14);
@@ -629,7 +642,7 @@ void cutsceneChrTurn3_exec(cutsceneChrTurn3_exec_arg *arg0, CutsceneManager *arg
 
     func_800B34B0_1E0560(arg2);
 
-    func_800B75C4_1E4674(
+    setupSlotRotateWithSpeed(
         &currentSlot->slotData,
         currentSlot->model,
         arg0->targetAngle,

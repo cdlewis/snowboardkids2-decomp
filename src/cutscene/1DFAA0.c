@@ -104,7 +104,7 @@ void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *
             manager->slots[i].model = NULL;
         }
 
-        func_800B66B4_1E3764(&manager->slots[i].slotData);
+        initSlotData(&manager->slots[i].slotData);
     }
 
     manager->sceneContext = func_800B5B38_1E2BE8(sceneNode->id);
@@ -199,9 +199,9 @@ void func_800B2E48_1DFEF8(CutsceneManager *manager) {
             slotAddr = (u8 *)manager + slotOffset;
             slotData = (CutsceneSlotData *)(slotAddr + 0x4C);
 
-            func_800B7760_1E4810(slotData, 0x10000, 0);
-            func_800B77C4_1E4874(slotData, 0x10000, 0);
-            func_800B7828_1E48D8(slotData, 0x10000, 0);
+            interpolateSlotScaleX(slotData, 0x10000, 0);
+            interpolateSlotScaleY(slotData, 0x10000, 0);
+            interpolateSlotScaleZ(slotData, 0x10000, 0);
             setupSlotTransform(slotData);
             applyTransformToModel(model, (Transform3D *)(slotAddr + 0x50));
         }

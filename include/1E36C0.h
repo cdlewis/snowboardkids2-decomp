@@ -3,6 +3,7 @@
 #include "common.h"
 #include "cutscene/cutscene_sys2.h"
 #include "1DFAA0.h"
+#include "1E2BE0.h"
 
 typedef struct {
     u8 pad[0x54];
@@ -14,31 +15,37 @@ typedef struct {
     s32 unk68;
 } unk_func_800B68F4_1E39A4;
 
-s16 func_800B6610_1E36C0(cutsceneSys2Wait_exec_asset *arg0);
-void func_800B66B4_1E3764(CutsceneSlotData *arg0);
-s32 setupSlotTransform(CutsceneSlotData *arg0);
+s16 getSlotMoveDuration(cutsceneSys2Wait_exec_asset *slot);
+s16 calcAngleDiff(CutsceneSlotData *unused, s16 direction, s16 targetAngle, s16 currentAngle);
+void initSlotData(CutsceneSlotData *slot);
+s32 setupSlotTransform(CutsceneSlotData *slot);
 s32 syncModelFromSlot(void *, void *);
-void func_800B68F4_1E39A4(unk_func_800B68F4_1E39A4 *arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_800B6AB8_1E3B68(CutsceneSlotData *arg0, s16 arg1);
-void func_800B6B6C_1E3C1C(CutsceneSlotData *arg0);
-void func_800B6BDC_1E3C8C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4);
-void func_800B6C04_1E3CB4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6);
-s32 func_800B6C8C_1E3D3C(CutsceneSlotData *arg0, SceneModel *arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6);
-s32 func_800B6CD8_1E3D88(CutsceneSlotData *arg0, SceneModel *arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6, s32 arg7, s32 arg8);
-s32 func_800B6FA4_1E4054(CutsceneSlotData *arg0, SceneModel *unused, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6);
-void func_800B7128_1E41D8(CutsceneSlotData *arg0, SceneModel *arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6, s16 arg7, s8 arg8, s8 arg9);
-s32 func_800B734C_1E43FC(CutsceneSlotData *arg0, SceneModel *arg1, s16 arg2);
-s32 func_800B7450_1E4500(CutsceneSlotData *arg0, SceneModel *arg1, s16 arg2, s16 arg3, s16 arg4);
-s32 func_800B75C4_1E4674(CutsceneSlotData *arg0, SceneModel *arg1, s16 arg2, s32 arg3, s32 arg4, s32 arg5);
-void func_800B7620_1E46D0(CutsceneSlotData *arg0, s32 arg1, s16 arg2, s16 arg3);
-void func_800B7760_1E4810(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
-void func_800B77C4_1E4874(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
-void func_800B7828_1E48D8(CutsceneSlotData *arg0, s32 arg1, s16 arg2);
-void func_800B788C_1E493C(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_800B7914_1E49C4(CutsceneSlotData *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void func_800B7A60_1E4B10(CutsceneSlotData *arg0, SceneModel *unused, s32 targetX, s32 targetY, s32 targetZ, s16 duration);
-void func_800B7B70_1E4C20(CutsceneSlotData *arg0, s32 *arg1, s16 arg2, s32 arg3, s32 arg4);
-s32 func_800B83B8_1E5468(CutsceneSlotData *arg0, StateEntry *arg1);
-void func_800B8C3C_1E5CEC(CutsceneSlotData *arg0);
-s32 func_800B8D34_1E5DE4(CutsceneSlotData *arg0);
-s32 func_800B8DA8_1E5E58(CutsceneSlotData *arg0);
+void setSlotScale(unk_func_800B68F4_1E39A4 *slot, s32 scaleX, s32 scaleY, s32 scaleZ);
+void handleSlotDebugInput(CutsceneSlotData *slot, func_800B5E64_1E2F14_arg0 *camera);
+void updateSlotRotVelocity(CutsceneSlotData *slot, s16 speedMode);
+void updateSlotRotVelocityFixed(CutsceneSlotData *slot);
+void initSlotPosition(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY);
+void initSlotPositionEx(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY, s16 rotX, s16 rotZ);
+s32 setupSlotMoveTo(CutsceneSlotData *slot, SceneModel *model, s32 targetX, s32 targetY, s32 targetZ, s16 duration, s16 fallbackRotY);
+s32 setupSlotMoveToEx(CutsceneSlotData *slot, SceneModel *model, s32 targetX, s32 targetY, s32 targetZ, s16 duration, s16 fallbackRotY, s32 moveMode, s32 decelRate);
+s32 setupSlotMoveToWithRotation(CutsceneSlotData *slot, SceneModel *unused, s32 targetX, s32 targetY, s32 targetZ, s16 duration, s16 targetRotY);
+void setupSlotWalkTo(CutsceneSlotData *slot, SceneModel *model, s32 targetX, s32 targetY, s32 targetZ, s16 duration, s16 finalRotY, s16 walkAnim, s8 turnAnimFlag, s8 decelMode);
+s32 setupSlotRotateTo(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY);
+s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY, s16 direction, s16 duration);
+s32 setupSlotRotateWithSpeed(CutsceneSlotData *slot, SceneModel *model, s16 targetRotY, s32 speedMult, s32 duration, s32 direction);
+void setupSlotOrbit(CutsceneSlotData *slot, s32 orbitDir, s16 duration, s16 orbitSpeed);
+void interpolateSlotScaleX(CutsceneSlotData *slot, s32 targetScaleX, s16 duration);
+void interpolateSlotScaleY(CutsceneSlotData *slot, s32 targetScaleY, s16 duration);
+void interpolateSlotScaleZ(CutsceneSlotData *slot, s32 targetScaleZ, s16 duration);
+void setupSlotProjectile(CutsceneSlotData *slot, s32 speed, s32 velY, s32 gravity);
+void setupSlotMoveToFacing(CutsceneSlotData *slot, s32 targetX, s32 targetY, s32 targetZ, s32 duration);
+void setupSlotMoveToNoRotation(CutsceneSlotData *slot, SceneModel *unused, s32 targetX, s32 targetY, s32 targetZ, s16 duration);
+void setupSlotMoveToWithBounce(CutsceneSlotData *slot, s32 *targetPos, s16 duration, s32 bounceVelY, s32 gravity);
+s16 updateSlotLinearMove(CutsceneSlotData *slot, SceneModel *model);
+s32 updateSlotRotation(CutsceneSlotData *slot, StateEntry *state);
+s16 updateSlotWalk(CutsceneSlotData *slot, SceneModel *model);
+s32 updateSlotDecelMove(CutsceneSlotData *slot, SceneModel *model);
+s32 updateSlotOrbit(CutsceneSlotData *slot, SceneModel *model);
+void updateSlotScale(CutsceneSlotData *slot);
+s32 updateSlotProjectile(CutsceneSlotData *slot);
+s32 updateSlotProjectileTimed(CutsceneSlotData *slot);
