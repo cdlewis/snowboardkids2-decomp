@@ -49,7 +49,7 @@ typedef struct {
     u8 padding1[0x20];
     u8 cutsceneBuffer;
     u8 padding[0x122F];
-    func_800B9020_arg unk17E0;
+    ScreenTransitionState transitionState;
 } CutsceneTaskMemory;
 
 void awaitCutsceneTransitionComplete(void);
@@ -137,7 +137,7 @@ void runCutsceneFrame(void) {
     if (taskMemory->frameCount >= func_800B3360(D_800AB070_A23E0, D_800AFEF0_A7260) || taskMemory->exitRequested != 0) {
         if (D_800AB070_A23E0 == 0xB && D_800AFEF0_A7260 == 1) {
             func_8006FDA0_709A0(&taskMemory->overlayNode, 0, 0);
-            func_800B9020(&taskMemory->unk17E0);
+            initScreenTransition(&taskMemory->transitionState);
             setGameStateHandler(&awaitCutsceneTransitionComplete);
 
             return;
@@ -164,7 +164,7 @@ void awaitCutsceneTransitionComplete(void) {
     CutsceneTaskMemory *taskMemory;
 
     taskMemory = (CutsceneTaskMemory *)getCurrentAllocation();
-    if (taskMemory->unk17E0.unk0 != 0) {
+    if (taskMemory->transitionState.isComplete != 0) {
         unlinkNode(&taskMemory->uiNode);
         unlinkNode(&taskMemory->overlayNode);
         unlinkNode(&taskMemory->sceneNode);

@@ -7,21 +7,21 @@
 USE_ASSET(_646910);
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    s8 unk2;
-    s8 unk3;
-} func_800B9020_arg;
+    s8 isComplete;
+    s8 activeLayerCount;
+    s8 layersRemaining;
+    s8 fadeOutTriggered;
+} ScreenTransitionState;
 
 typedef struct {
-    void *unk0;
-} func_800B9020_arg_task;
+    void *state;
+} ScreenTransitionTask;
 
 typedef struct {
     u8 padding[0x4];
-    void *unk4;
-    s32 unk8;
-    s16 unkC;
+    void *assetData;
+    s32 alpha;
+    s16 layerIndex;
     s16 unkE;
     s16 unk10;
     s16 unk12;
@@ -33,204 +33,198 @@ typedef struct {
     s16 unk20;
     s8 unk22;
     s8 unk23;
-    s8 unk24;
-} func_800B90DC_1E618C_arg;
+    s8 alphaValue;
+} TransitionLayerState;
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
+    s8 isComplete;
+    s8 activeLayerCount;
     s32 unk4;
-} func_800B9264_1E6314_input;
+} TransitionCleanupData;
 
 typedef struct {
     s32 unk0;
-    func_800B9264_1E6314_input *unk4;
-} func_800B93CC_1E647C_arg;
+    TransitionCleanupData *cleanupData;
+} TransitionSpawnerCleanupArg;
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    s8 unk2;
-    s8 unk3;
-} func_800B9180_1E6230_arg_unk0;
-typedef struct {
-    func_800B9180_1E6230_arg_unk0 *unk0;
+    ScreenTransitionState *state;
     u8 padding[0x4];
     union {
         s32 word;
         s16 halfword;
-    } unk8;
+    } delayTimer;
     s32 unkC;
     s32 unk10;
     u8 padding2[0x10];
-    s8 unk24;
-} func_800B9180_1E6230_arg;
+    s8 alphaValue;
+} TransitionSpawnerState;
 
 typedef struct {
     s32 unk0;
-    void *unk4;
-    s16 unk8;
-} func_800B9290_1E6340_arg;
+    void *assetData;
+    s16 delayTimer;
+} TransitionInitState;
 
 typedef struct {
-    void *unk0;
+    void *state;
     s32 unk4;
     s32 unk8;
-    s16 unkC;
-} func_800B92D4_1E6384_task;
+    s16 layerIndex;
+} TransitionLayerTask;
 
 extern s8 D_800BADE0_1E7E90[];
 
-void func_800B90B0_1E6160(func_800B9264_1E6314_input **);
-void func_800B91E4_1E6294(func_800B9180_1E6230_arg *);
-void func_800B9180_1E6230(func_800B9180_1E6230_arg *);
-void func_800B92D4_1E6384(func_800B9180_1E6230_arg *);
-void func_800B93CC_1E647C(func_800B93CC_1E647C_arg *);
-void func_800B9290_1E6340(func_800B9290_1E6340_arg *);
-void func_800B9264_1E6314(func_800B9264_1E6314_input **);
+void freeTransitionData(TransitionCleanupData **);
+void updateTransitionFadeIn(TransitionSpawnerState *);
+void updateTransitionFadeOut(TransitionSpawnerState *);
+void updateTransitionSpawner(TransitionSpawnerState *);
+void cleanupTransitionSpawner(TransitionSpawnerCleanupArg *);
+void initTransitionTask(TransitionInitState *);
+void cleanupTransitionLayer(TransitionCleanupData **);
 
-void func_800B9020(func_800B9020_arg *arg0) {
-    func_800B9020_arg_task *temp_v0;
+void initScreenTransition(ScreenTransitionState *state) {
+    ScreenTransitionTask *task;
 
-    arg0->unk0 = 0;
-    arg0->unk1 = 0;
-    arg0->unk2 = 3;
-    arg0->unk3 = 0;
-    temp_v0 = (func_800B9020_arg_task *)scheduleTask(&func_800B9290_1E6340, 0, 0, 0);
-    if (temp_v0 != NULL) {
-        temp_v0->unk0 = arg0;
+    state->isComplete = 0;
+    state->activeLayerCount = 0;
+    state->layersRemaining = 3;
+    state->fadeOutTriggered = 0;
+    task = (ScreenTransitionTask *)scheduleTask(&initTransitionTask, 0, 0, 0);
+    if (task != NULL) {
+        task->state = state;
     }
 }
 
-void func_800B9074_1E6124(void **arg0) {
-    *arg0 = loadCompressedData(&_646910_ROM_START, &_646910_ROM_END, 0x658);
+void loadTransitionAsset(void **assetData) {
+    *assetData = loadCompressedData(&_646910_ROM_START, &_646910_ROM_END, 0x658);
 }
 
-void func_800B90B0_1E6160(func_800B9264_1E6314_input **arg0) {
-    *arg0 = freeNodeMemory(*arg0);
+void freeTransitionData(TransitionCleanupData **data) {
+    *data = freeNodeMemory(*data);
 }
 
-void func_800B90DC_1E618C(func_800B90DC_1E618C_arg *arg0) {
-    s8 new_var2;
+void initTransitionLayer(TransitionLayerState *layer) {
+    s8 initialY;
     s32 temp;
 
-    setCleanupCallback(&func_800B9264_1E6314);
-    func_800B9074_1E6124(&arg0->unk4);
+    setCleanupCallback(&cleanupTransitionLayer);
+    loadTransitionAsset(&layer->assetData);
 
-    arg0->unk12 = 0;
-    temp = arg0->unkC - 1;
-    arg0->unk10 = temp << 5;
-    arg0->unk14 = arg0->unk4;
+    layer->unk12 = 0;
+    temp = layer->layerIndex - 1;
+    layer->unk10 = temp << 5;
+    layer->unk14 = layer->assetData;
 
-    new_var2 = D_800BADE0_1E7E90[arg0->unkC];
+    initialY = D_800BADE0_1E7E90[layer->layerIndex];
 
-    arg0->unk1C = 0x400;
-    arg0->unk1A = 0x400;
-    arg0->unk1E = 0;
-    arg0->unk20 = 0xFF;
-    arg0->unk22 = 0;
-    arg0->unk23 = 0;
-    arg0->unk24 = 0;
-    arg0->unk8 = 0;
-    arg0->unk18 = new_var2;
+    layer->unk1C = 0x400;
+    layer->unk1A = 0x400;
+    layer->unk1E = 0;
+    layer->unk20 = 0xFF;
+    layer->unk22 = 0;
+    layer->unk23 = 0;
+    layer->alphaValue = 0;
+    layer->alpha = 0;
+    layer->unk18 = initialY;
 
-    setCallback(&func_800B91E4_1E6294);
+    setCallback(&updateTransitionFadeIn);
 }
 
-void func_800B9180_1E6230(func_800B9180_1E6230_arg *arg0) {
-    s32 value;
+void updateTransitionFadeOut(TransitionSpawnerState *state) {
+    s32 alpha;
     s32 new_var;
 
-    value = arg0->unk8.word;
-    if (value <= 0) {
+    alpha = state->delayTimer.word;
+    if (alpha <= 0) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    value -= 0xA0000;
-    new_var = value;
-    arg0->unk8.word = value;
-    if (value < 0) {
-        arg0->unk8.word = 0;
+    alpha -= 0xA0000;
+    new_var = alpha;
+    state->delayTimer.word = alpha;
+    if (alpha < 0) {
+        state->delayTimer.word = 0;
     }
 
-    value = arg0->unk8.halfword;
-    new_var = value;
-    arg0->unk24 = (s8)new_var;
+    alpha = state->delayTimer.halfword;
+    new_var = alpha;
+    state->alphaValue = (s8)new_var;
 
-    debugEnqueueCallback(1, 0, &func_80011924_12524, &arg0->unk10);
+    debugEnqueueCallback(1, 0, &func_80011924_12524, &state->unk10);
 }
 
-void func_800B91E4_1E6294(func_800B9180_1E6230_arg *arg0) {
-    s32 temp_v0;
+void updateTransitionFadeIn(TransitionSpawnerState *state) {
+    s32 alpha;
 
-    if (arg0->unk0->unk3 == 1) {
-        setCallback(&func_800B9180_1E6230);
+    if (state->state->fadeOutTriggered == 1) {
+        setCallback(&updateTransitionFadeOut);
     }
 
-    temp_v0 = arg0->unk8.word + 0xA0000;
-    arg0->unk8.word = temp_v0;
-    if (temp_v0 > 0xFF0000) {
-        arg0->unk8.word = 0xFF0000;
+    alpha = state->delayTimer.word + 0xA0000;
+    state->delayTimer.word = alpha;
+    if (alpha > 0xFF0000) {
+        state->delayTimer.word = 0xFF0000;
     }
 
-    temp_v0 = arg0->unk8.halfword;
-    arg0->unk24 = (s8)temp_v0;
+    alpha = state->delayTimer.halfword;
+    state->alphaValue = (s8)alpha;
 
-    debugEnqueueCallback(1, 0, &func_80011924_12524, &arg0->unk10);
+    debugEnqueueCallback(1, 0, &func_80011924_12524, &state->unk10);
 }
 
-void func_800B9264_1E6314(func_800B9264_1E6314_input **arg0) {
-    func_800B9264_1E6314_input *temp_v1 = *arg0;
-    temp_v1->unk1--;
-    func_800B90B0_1E6160(arg0 + 1);
+void cleanupTransitionLayer(TransitionCleanupData **data) {
+    TransitionCleanupData *cleanupData = *data;
+    cleanupData->activeLayerCount--;
+    freeTransitionData(data + 1);
 }
 
-void func_800B9290_1E6340(func_800B9290_1E6340_arg *arg0) {
-    func_800B9074_1E6124(&arg0->unk4);
-    arg0->unk8 = 0;
-    setCleanupCallback(&func_800B93CC_1E647C);
-    setCallback(&func_800B92D4_1E6384);
+void initTransitionTask(TransitionInitState *state) {
+    loadTransitionAsset(&state->assetData);
+    state->delayTimer = 0;
+    setCleanupCallback(&cleanupTransitionSpawner);
+    setCallback(&updateTransitionSpawner);
 }
 
-void func_800B92D4_1E6384(func_800B9180_1E6230_arg *arg0) {
-    func_800B9180_1E6230_arg_unk0 *unk0;
-    func_800B92D4_1E6384_task *temp_v0;
+void updateTransitionSpawner(TransitionSpawnerState *state) {
+    ScreenTransitionState *transitionState;
+    TransitionLayerTask *layerTask;
 
-    unk0 = arg0->unk0;
-    if (unk0->unk2 == 0) {
-        if (arg0->unk8.halfword == 0) {
-            unk0->unk3 = 1;
+    transitionState = state->state;
+    if (transitionState->layersRemaining == 0) {
+        if (state->delayTimer.halfword == 0) {
+            transitionState->fadeOutTriggered = 1;
 
-            if (arg0->unk0->unk1 != 0) {
+            if (state->state->activeLayerCount != 0) {
                 return;
             }
-            arg0->unk0->unk0 = 1;
+            state->state->isComplete = 1;
             func_80069CF8_6A8F8();
             return;
         } else {
-            arg0->unk8.halfword--;
+            state->delayTimer.halfword--;
         }
-    } else if (arg0->unk8.halfword == 0) {
-        temp_v0 = (func_800B92D4_1E6384_task *)scheduleTask(&func_800B90DC_1E618C, 0, 0, 0);
-        if (temp_v0 != 0) {
-            temp_v0->unk0 = (void *)arg0->unk0;
-            temp_v0->unkC = (s16)(3 - ((s8)((u8)arg0->unk0->unk2)));
-            arg0->unk0->unk1++;
+    } else if (state->delayTimer.halfword == 0) {
+        layerTask = (TransitionLayerTask *)scheduleTask(&initTransitionLayer, 0, 0, 0);
+        if (layerTask != 0) {
+            layerTask->state = (void *)state->state;
+            layerTask->layerIndex = (s16)(3 - ((s8)((u8)state->state->layersRemaining)));
+            state->state->activeLayerCount++;
         }
 
-        arg0->unk0->unk2--;
+        state->state->layersRemaining--;
 
-        if (arg0->unk0->unk2 == 0) {
-            arg0->unk8.halfword = 0x78;
+        if (state->state->layersRemaining == 0) {
+            state->delayTimer.halfword = 0x78;
         } else {
-            arg0->unk8.halfword = 0x14;
+            state->delayTimer.halfword = 0x14;
         }
     } else {
-        arg0->unk8.halfword--;
+        state->delayTimer.halfword--;
     }
 }
 
-void func_800B93CC_1E647C(func_800B93CC_1E647C_arg *arg0) {
-    func_800B90B0_1E6160(&arg0->unk4);
+void cleanupTransitionSpawner(TransitionSpawnerCleanupArg *arg) {
+    freeTransitionData(&arg->cleanupData);
 }
