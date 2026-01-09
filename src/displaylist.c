@@ -1400,11 +1400,7 @@ void func_80066444_67044(s32 arg0, func_80066444_67044_arg1 *arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80066474_67074);
 
-typedef struct {
-    u8 padding[0x30];
-    s32 unk30;
-} func_80066AC0_676C0_arg;
-void func_80066AC0_676C0(s32 arg0, func_80066AC0_676C0_arg *arg1) {
+void func_80066AC0_676C0(s32 arg0, MatrixEntry_202A0 *arg1) {
     arg1->unk30 = 0;
     debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80066474_67074, arg1);
 }

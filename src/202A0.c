@@ -125,6 +125,28 @@ typedef struct {
     volatile s32 unk1C;
 } Mat2WithTemp;
 
+typedef struct {
+    u8 _pad0[0x8];
+    s16 frameIndex;
+    u8 _padA[2];
+} LevelPreviewPortraitEntry_202A0;
+
+typedef struct {
+    u8 _pad0[0x18];
+    MatrixEntry_202A0 matrices[4];
+    u8 _padE8[8];
+    u16 rotations[4];
+} LevelPreviewPortraitState_202A0;
+
+typedef struct {
+    u8 _pad0[0xB2F];
+    u8 unkB2F;
+    u8 unkB30;
+    u8 _padB31;
+    u8 unkB32;
+} Allocation_func_80020A00;
+
+extern u16 D_8008DAA8_8E6A8[];
 extern u8 D_8008D9F0_8E5F0[];
 
 void cleanupLevelPreviewCharacter(LevelPreviewCharacterState *arg0);
@@ -464,7 +486,32 @@ void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020924_21524);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80020A00_21600);
+void func_80020A00_21600(LevelPreviewPortraitState_202A0 *arg0) {
+    Allocation_func_80020A00 *allocation;
+    s32 i;
+    s32 rotation;
+    s16 rotationDelta;
+    u16 val;
+
+    allocation = (Allocation_func_80020A00 *)getCurrentAllocation();
+    rotationDelta = (allocation->unkB32 != 0) ? 0x200 : -0x200;
+
+    for (i = 0; i < 4; i++) {
+        rotation = (arg0->rotations[i] + rotationDelta) & 0x1FFF;
+        arg0->rotations[i] = rotation;
+        createXRotationMatrix(arg0->matrices[i].matrix, rotation);
+        func_80066AC0_676C0(9, &arg0->matrices[i]);
+    }
+
+    val = arg0->rotations[0];
+    if (val == 0 || val == 0x1000) {
+        allocation->unkB2F = 0;
+        for (i = 0; i < 2; i++) {
+            ((LevelPreviewPortraitEntry_202A0 *)arg0)[i].frameIndex = D_8008DAA8_8E6A8[allocation->unkB30] + i;
+        }
+        setCallback(renderLevelPreviewPortraits);
+    }
+}
 
 void cleanupLevelPreviewPortraits(LevelPreviewPortraitState *state) {
     state->portraitAsset = freeNodeMemory(state->portraitAsset);
