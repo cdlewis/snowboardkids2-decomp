@@ -451,7 +451,109 @@ Player *func_8005B548_5C148(Vec3i *arg0, s32 arg1, s32 arg2) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005B730_5C330);
+void func_8005B730_5C330(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
+    Vec3i deltaPos;
+    Vec3i rotatedPos;
+    s32 negAngle;
+    s32 pad1;
+    s32 pad2;
+    s32 sp40;
+    s32 sp44;
+    GameState *allocation;
+    s32 combinedRadius;
+    s32 playerIndex;
+    Player *player;
+    s32 dist;
+    s32 numPlayersToCheck;
+
+    allocation = (GameState *)getCurrentAllocation();
+    for (playerIndex = 0; playerIndex < allocation->numPlayers; playerIndex++) {
+        negAngle = (s16)-arg3;
+
+        player = &allocation->players[playerIndex];
+
+        /* Use max of arg1, arg2 for combined radius */
+        if (arg1 < arg2) {
+            combinedRadius = arg2;
+        } else {
+            combinedRadius = arg1;
+        }
+        combinedRadius += player->unkAE0;
+
+        /* Calculate delta position */
+        deltaPos.x = (player->unkAD4[0] + player->worldPos.x) - arg0->x;
+        deltaPos.y = (player->unkAD4[1] + player->worldPos.y) - arg0->y;
+        deltaPos.z = (player->unkAD4[2] + player->worldPos.z) - arg0->z;
+
+        /* AABB check */
+        if (deltaPos.x >= combinedRadius) {
+            continue;
+        }
+        if (-combinedRadius >= deltaPos.x) {
+            continue;
+        }
+        if (deltaPos.y >= combinedRadius) {
+            continue;
+        }
+        if (-combinedRadius >= deltaPos.y) {
+            continue;
+        }
+        if (deltaPos.z >= combinedRadius) {
+            continue;
+        }
+        if (-combinedRadius >= deltaPos.z) {
+            continue;
+        }
+
+        /* Rotate delta position by negative angle */
+        rotateVectorY(&deltaPos, negAngle, &rotatedPos);
+
+        /* Compute 2D distance in XY plane */
+        dist = isqrt64((s64)rotatedPos.x * rotatedPos.x + (s64)rotatedPos.y * rotatedPos.y);
+
+        if (dist >= arg1) {
+            continue;
+        }
+
+        /* Check z direction and apply push */
+        if (rotatedPos.z >= 0) {
+            /* Forward collision */
+            if (rotatedPos.z >= arg2 + player->unkAE0) {
+                continue;
+            }
+
+            deltaPos.y = 0;
+            deltaPos.x = 0;
+            deltaPos.z = (arg2 + player->unkAE0) - rotatedPos.z;
+
+            rotateVectorY(&deltaPos, arg3, &rotatedPos);
+
+            player->worldPos.x += rotatedPos.x;
+            player->worldPos.y += rotatedPos.y;
+            player->worldPos.z += rotatedPos.z;
+
+            func_80058950_59550(player, negAngle, deltaPos.z);
+        } else {
+            /* Backward collision - condition uses unkAE0 */
+            if (-(arg2 + player->unkAE0) >= rotatedPos.z) {
+                continue;
+            }
+
+            deltaPos.y = 0;
+            deltaPos.x = 0;
+            /* Push calculation uses field at offset 0xB64 */
+            deltaPos.z = -(arg2 + *(s32 *)((u8 *)player + 0xB64)) - rotatedPos.z;
+
+            rotateVectorY(&deltaPos, arg3, &rotatedPos);
+
+            player->worldPos.x += rotatedPos.x;
+            player->worldPos.y += rotatedPos.y;
+            player->worldPos.z += rotatedPos.z;
+
+            func_800589CC_595CC(player, &rotatedPos);
+        }
+    }
+}
 
 /**
  * Checks 2D collision (xz-plane) between a point and all players.
