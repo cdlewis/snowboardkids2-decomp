@@ -1,3 +1,4 @@
+D_8008D3C0_8DFC0 = 0x8008D3C0; // rom:0x8DFC0 size:0x10
 D_8009079C_9139C = 0x8009079C; // rom:0x9139C size:0x44
 initPauseMenuDisplayTask = 0x8004E6F8; // rom:0x4F2F8
 renderPauseMenuDisplay = 0x8004E794; // rom:0x4F394
