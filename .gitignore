@@ -3,6 +3,7 @@ snowboardkids2.eeprom
 tools/gcc_kmc
 __pycache__
 compile_commands.json
+.cache/*
 
 # task-runner
 tools/task-runner/logs
