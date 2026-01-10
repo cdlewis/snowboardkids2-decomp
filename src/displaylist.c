@@ -151,6 +151,22 @@ typedef struct {
 } Vertex6;
 
 typedef struct {
+    u16 unk0;
+    u16 unk2;
+    u16 unk4;
+    u8 unk6;
+    u8 unk7;
+} Face8;
+
+typedef struct {
+    s16 unk0;
+    u8 padding[0xA];
+    u16 unkC;
+    u16 unkE;
+    u8 padding2[0x14];
+} Element24_Face;
+
+typedef struct {
     s16 unk0;
     u8 padding[0x14];
     u16 unk16;
@@ -165,6 +181,13 @@ typedef struct {
     void *unk8;
     Element24 *unkC;
 } TrackGeometryData;
+
+struct TrackGeometryFaceData {
+    void *unk0;
+    Vertex6 *unk4;
+    Face8 *unk8;
+    Element24_Face *unkC;
+};
 
 typedef struct {
     s16 x;
@@ -265,7 +288,66 @@ u16 func_800625A4_631A4(void *arg0, void *arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800626C4_632C4);
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062918_63518);
+void func_80062918_63518(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 *arg3, u8 *arg4) {
+    s32 sp24;
+    s32 sp2C;
+    s32 temp_fp;
+    s32 temp_s4;
+    s32 temp_s5;
+    s32 temp_s6;
+    s32 temp_s7;
+    s32 var_s2;
+    s32 var_s3;
+    Face8 *temp_a0;
+    Vertex6 *temp_a1;
+    Vertex6 *temp_v0_2;
+    Vertex6 *temp_v0_3;
+    Vertex6 *temp_v0_4;
+    Element24_Face *temp_v0;
+    Element24_Face *temp_v0_5;
+    s32 temp_v1;
+    s32 idx;
+    Element24_Face *base;
+
+    idx = arg1;
+    base = arg0->unkC;
+    temp_v1 = ((idx << 3) + idx) << 2;
+    temp_v0 = (Element24_Face *)(temp_v1 + (s32)base);
+    var_s3 = temp_v0->unkC;
+    sp2C = temp_v1;
+    var_s2 = var_s3 << 3;
+    if (var_s3 < (var_s3 + temp_v0->unkE)) {
+        do {
+            temp_a0 = (Face8 *)(var_s2 + (s32)arg0->unk8);
+            temp_a1 = arg0->unk4;
+            temp_v0_2 = (Vertex6 *)((temp_a0->unk0 * 6) + (s32)temp_a1);
+            temp_fp = (s32)temp_v0_2->x;
+            sp24 = (s32)temp_v0_2->z;
+            temp_v0_3 = (Vertex6 *)((temp_a0->unk2 * 6) + (s32)temp_a1);
+            temp_s4 = (s32)temp_v0_3->x;
+            temp_s5 = (s32)temp_v0_3->z;
+            temp_v0_4 = (Vertex6 *)((temp_a0->unk4 * 6) + (s32)temp_a1);
+            temp_s6 = (s32)temp_v0_4->x;
+            temp_s7 = (s32)temp_v0_4->z;
+            if ((temp_a0->unk6 & 1) ||
+                (cross2d(arg2->x, arg2->z, temp_fp << 0x10, sp24 << 0x10, temp_s4 << 0x10, temp_s5 << 0x10) >= 0)) {
+                if ((((Face8 *)(var_s2 + (s32)arg0->unk8))->unk6 & 2) ||
+                    (cross2d(arg2->x, arg2->z, temp_s4 << 0x10, temp_s5 << 0x10, temp_s6 << 0x10, temp_s7 << 0x10) >= 0
+                    )) {
+                    if (cross2d(arg2->x, arg2->z, temp_s6 << 0x10, temp_s7 << 0x10, temp_fp << 0x10, sp24 << 0x10) >=
+                        0) {
+                        *arg3 = ((Face8 *)(var_s2 + (s32)arg0->unk8))->unk6 >> 2;
+                        *arg4 = ((Face8 *)(var_s2 + (s32)arg0->unk8))->unk7;
+                        return;
+                    }
+                }
+            }
+            temp_v0_5 = (Element24_Face *)(sp2C + (s32)arg0->unkC);
+            var_s3 += 1;
+            var_s2 += 8;
+        } while (var_s3 < (temp_v0_5->unkC + temp_v0_5->unkE));
+    }
+}
 
 u16 func_80062B1C_6371C(void *arg0_void, u16 arg1, void *arg2_void, void *arg3_void) {
     func_80062B1C_arg0 *arg0 = (func_80062B1C_arg0 *)arg0_void;
