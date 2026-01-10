@@ -334,8 +334,8 @@ void func_80062918_63518(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 
             if ((temp_a0->unk6 & 1) ||
                 (cross2d(arg2->x, arg2->z, temp_fp << 0x10, sp24 << 0x10, temp_s4 << 0x10, temp_s5 << 0x10) >= 0)) {
                 if ((((Face8 *)(var_s2 + (s32)arg0->unk8))->unk6 & 2) ||
-                    (cross2d(arg2->x, arg2->z, temp_s4 << 0x10, temp_s5 << 0x10, temp_s6 << 0x10, temp_s7 << 0x10) >=
-                     0)) {
+                    (cross2d(arg2->x, arg2->z, temp_s4 << 0x10, temp_s5 << 0x10, temp_s6 << 0x10, temp_s7 << 0x10) >= 0
+                    )) {
                     if (cross2d(arg2->x, arg2->z, temp_s6 << 0x10, temp_s7 << 0x10, temp_fp << 0x10, sp24 << 0x10) >=
                         0) {
                         *arg3 = ((Face8 *)(var_s2 + (s32)arg0->unk8))->unk6 >> 2;
