@@ -131,6 +131,7 @@ void func_800B05DC_1DAB7C(func_800B08FC_arg *);
 void func_800B0964_1DAF04(func_800B08FC_arg *);
 void func_800B0638_1DABD8(func_800B08FC_arg *);
 void func_800B0720_1DACC0(func_800B08FC_arg *);
+void func_800B08FC_1DAE9C(func_800B08FC_arg *);
 void func_800B0A54_1DAFF4(func_800B0980_container *);
 void func_800B0BC0_1DB160(func_800B0FE0_arg *);
 void func_800B0E94_1DB434(void *);
@@ -151,6 +152,7 @@ extern u8 identityMatrix[];
 extern void *D_800B1140_1DB6E0;
 extern char D_800B115C_1DB6FC[];
 extern s32 gButtonsPressed;
+extern u8 D_800B1150_1DB6F0[];
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
 
@@ -325,7 +327,76 @@ void func_800B0638_1DABD8(func_800B08FC_arg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B0720_1DACC0);
+void func_800B0720_1DACC0(func_800B08FC_arg *arg0) {
+    func_800B0A54_allocation *allocation;
+    D_800AFE8C_A71FC_type *ptr;
+    s32 i;
+    s32 count;
+    s32 clearResult;
+    u8 counter;
+    u16 index;
+    s32 pad[2];
+
+    allocation = (func_800B0A54_allocation *)getCurrentAllocation();
+    clearResult = clearModelRotation(arg0->unk0);
+
+    counter = arg0->unk29;
+
+    if (counter < D_800B1150_1DB6F0[arg0->unk24]) {
+        arg0->unk29 = counter + 1;
+        if ((u8)(counter + 1) == D_800B1150_1DB6F0[arg0->unk24]) {
+            arg0->unk26 = 1;
+            setModelAnimation(arg0->unk0, 1);
+            index = arg0->unk24;
+            if ((index < 4) || (index == 6)) {
+                setAnimationIndex(arg0->unk0, 0);
+            } else if (index == 4) {
+                setAnimationIndex(arg0->unk0, 4);
+            } else {
+                setAnimationIndex(arg0->unk0, -1);
+            }
+        }
+    } else if (clearResult != 0) {
+        arg0->unk26 = 2;
+        setModelAnimation(arg0->unk0, 2);
+    }
+
+    updateModelGeometry(arg0->unk0);
+
+    ptr = D_800AFE8C_A71FC;
+    count = ptr->numPlayers;
+    i = 0;
+    if (count > 0) {
+        D_800AFE8C_A71FC_type *localPtr = ptr;
+        u16 localIndex = arg0->unk24;
+        u8 localCount = count;
+        do {
+            if (localPtr->unk9[i] != localIndex) {
+                i++;
+            } else {
+                u8 state = allocation->unk59A[i];
+                if (state == 1 || state == 3) {
+                    break;
+                }
+                i++;
+            }
+        } while (i < localCount);
+    }
+
+    if (i == D_800AFE8C_A71FC->numPlayers) {
+        arg0->unk26 = 3;
+        setModelAnimation(arg0->unk0, 3);
+        index = arg0->unk24;
+        if (index == 6) {
+            setAnimationIndex(arg0->unk0, 2);
+        } else if (index == 7) {
+            setAnimationIndex(arg0->unk0, 0);
+        } else {
+            setAnimationIndex(arg0->unk0, -1);
+        }
+        setCallback(func_800B08FC_1DAE9C);
+    }
+}
 
 void func_800B08FC_1DAE9C(func_800B08FC_arg *arg0) {
     s32 result;
