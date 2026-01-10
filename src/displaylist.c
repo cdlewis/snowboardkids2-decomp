@@ -94,7 +94,7 @@ void func_800659E4_665E4(DisplayListObject *arg0);
 void func_80065DD8_669D8(TexturedSpriteState *);
 void func_80066474_67074(ExtendedSpriteState *);
 void func_800677F0_683F0(AlphaSpriteState *);
-void func_800670D4_67CD4(void);
+void func_800670D4_67CD4(AlphaSpriteState *);
 void func_800680C4_68CC4(void);
 void func_80064CF4_658F4(DisplayListObject *);
 void func_80062CF0_638F0(DisplayListObject *);
@@ -1614,7 +1614,91 @@ void func_800670A4_67CA4(u16 arg0, func_80066444_67044_arg1 *arg1) {
     debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80066AF0_676F0, arg1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_800670D4_67CD4);
+void func_800670D4_67CD4(AlphaSpriteState *state) {
+    if ((u32)((D_800AB068_A23D8->unk134 - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+        return;
+    }
+    if ((u32)((D_800AB068_A23D8->unk13C - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+        return;
+    }
+    if ((u32)((D_800AB068_A23D8->unk138 - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+        return;
+    }
+
+    if (state->matrix == NULL) {
+        state->matrix = arenaAlloc16(0x40);
+        if (state->matrix == NULL) {
+            return;
+        }
+        memcpy(&D_8009A8A4_9B4A4, &state->posX, 0xC);
+        func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, state->matrix);
+    }
+
+    if (gGraphicsMode != 7) {
+        gGraphicsMode = 7;
+
+        gSPDisplayList(gRegionAllocPtr++, D_8009A7D0_9B3D0);
+
+        gDPLoadTextureBlock_4b(
+            gRegionAllocPtr++,
+            state->textureData,
+            G_IM_FMT_CI,
+            state->width,
+            state->height,
+            0,
+            G_TX_CLAMP,
+            G_TX_CLAMP,
+            G_TX_NOMASK,
+            G_TX_NOMASK,
+            G_TX_NOLOD,
+            G_TX_NOLOD
+        );
+
+        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+
+        gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
+
+        D_800A2D4C_A394C = (u32)state->textureData;
+        D_800A2D50_A3950 = (u32)state->paletteData;
+        D_800A2D54_A3954 = state->alpha;
+    } else {
+        if (D_800A2D4C_A394C != (u32)state->textureData) {
+            gDPLoadTextureBlock_4b(
+                gRegionAllocPtr++,
+                state->textureData,
+                G_IM_FMT_CI,
+                state->width,
+                state->height,
+                0,
+                G_TX_CLAMP,
+                G_TX_CLAMP,
+                G_TX_NOMASK,
+                G_TX_NOMASK,
+                G_TX_NOLOD,
+                G_TX_NOLOD
+            );
+
+            D_800A2D4C_A394C = (u32)state->textureData;
+        }
+
+        if (D_800A2D50_A3950 != (u32)state->paletteData) {
+            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+
+            D_800A2D50_A3950 = (u32)state->paletteData;
+        }
+
+        if (state->alpha != D_800A2D54_A3954) {
+            gDPPipeSync(gRegionAllocPtr++);
+            gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
+            D_800A2D54_A3954 = state->alpha;
+        }
+    }
+
+    gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPVertex(gRegionAllocPtr++, state->unk0, 4, 0);
+    gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+}
 
 void func_800677C0_683C0(s32 arg0, loadAssetMetadata_arg *arg1) {
     (arg1 + 1)->unk0 = 0;
