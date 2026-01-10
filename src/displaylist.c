@@ -86,6 +86,8 @@ extern Gfx D_8009A7D0_9B3D0[];
 extern u32 D_800A2D4C_A394C;
 extern u32 D_800A2D50_A3950;
 extern u8 D_800A2D54_A3954;
+extern u32 D_800A2D4C_A394C;
+extern u32 D_800A2D50_A3950;
 
 void func_80065150_65D50(DisplayListObject *displayObjects);
 void func_800653E0_65FE0(DisplayListObject *displayObjects);
@@ -332,8 +334,8 @@ void func_80062918_63518(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 
             if ((temp_a0->unk6 & 1) ||
                 (cross2d(arg2->x, arg2->z, temp_fp << 0x10, sp24 << 0x10, temp_s4 << 0x10, temp_s5 << 0x10) >= 0)) {
                 if ((((Face8 *)(var_s2 + (s32)arg0->unk8))->unk6 & 2) ||
-                    (cross2d(arg2->x, arg2->z, temp_s4 << 0x10, temp_s5 << 0x10, temp_s6 << 0x10, temp_s7 << 0x10) >= 0
-                    )) {
+                    (cross2d(arg2->x, arg2->z, temp_s4 << 0x10, temp_s5 << 0x10, temp_s6 << 0x10, temp_s7 << 0x10) >=
+                     0)) {
                     if (cross2d(arg2->x, arg2->z, temp_s6 << 0x10, temp_s7 << 0x10, temp_fp << 0x10, sp24 << 0x10) >=
                         0) {
                         *arg3 = ((Face8 *)(var_s2 + (s32)arg0->unk8))->unk6 >> 2;
