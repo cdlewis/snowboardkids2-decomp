@@ -69,8 +69,8 @@ typedef struct loadAssetMetadata_arg {
     /* 0x4 */ Vec3i position;
     /* 0x10 */ u8 *data_ptr;
     /* 0x14 */ TableEntry_19E80 *index_ptr;
-    s8 unk18;
-    s8 unk19;
+    u8 unk18;
+    u8 unk19;
     u8 unk1A;
 } loadAssetMetadata_arg;
 
