@@ -45,6 +45,20 @@ typedef struct {
     /* 0x1C */ Mtx *matrix;
 } TexturedSpriteState;
 
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ u8 unk4[0x14];
+    /* 0x18 */ s32 posX;
+    /* 0x1C */ s32 posY;
+    /* 0x20 */ s32 posZ;
+    /* 0x24 */ u8 *textureData;
+    /* 0x28 */ u8 *paletteData;
+    /* 0x2C */ u8 width;
+    /* 0x2D */ u8 height;
+    /* 0x2E */ u8 padding2[2];
+    /* 0x30 */ Mtx *matrix;
+} ExtendedSpriteState;
+
 extern s32 D_800A8B14_9FE84;
 extern D_800AB068_A23D8_arg *D_800AB068_A23D8;
 extern Gfx *gRegionAllocPtr;
@@ -62,7 +76,7 @@ void func_800653E0_65FE0(DisplayListObject *displayObjects);
 void func_80065670_66270(DisplayListObject *displayObjects);
 void func_800659E4_665E4(DisplayListObject *arg0);
 void func_80065DD8_669D8(TexturedSpriteState *);
-void func_80066474_67074(void);
+void func_80066474_67074(ExtendedSpriteState *);
 void func_800670D4_67CD4(void);
 void func_800680C4_68CC4(void);
 void func_80064CF4_658F4(DisplayListObject *);
@@ -1493,7 +1507,81 @@ void func_80066444_67044(s32 arg0, func_80066444_67044_arg1 *arg1) {
     debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80065DD8_669D8, arg1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80066474_67074);
+void func_80066474_67074(ExtendedSpriteState *state) {
+    if ((u32)((D_800AB068_A23D8->unk134 - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+        return;
+    }
+    if ((u32)((D_800AB068_A23D8->unk13C - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+        return;
+    }
+    if ((u32)((D_800AB068_A23D8->unk138 - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+        return;
+    }
+
+    if (state->matrix == NULL) {
+        state->matrix = arenaAlloc16(0x40);
+        if (state->matrix == NULL) {
+            return;
+        }
+        func_8006BFB8_6CBB8(&state->unk4, state->matrix);
+    }
+
+    if (gGraphicsMode != 6) {
+        gGraphicsMode = 6;
+
+        gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+
+        gDPLoadTextureBlock_4b(
+            gRegionAllocPtr++,
+            state->textureData,
+            G_IM_FMT_CI,
+            state->width,
+            state->height,
+            0,
+            G_TX_CLAMP,
+            G_TX_CLAMP,
+            G_TX_NOMASK,
+            G_TX_NOMASK,
+            G_TX_NOLOD,
+            G_TX_NOLOD
+        );
+
+        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+
+        D_800A2D4C_A394C = (u32)state->textureData;
+        D_800A2D50_A3950 = (u32)state->paletteData;
+    } else {
+        if (D_800A2D4C_A394C != (u32)state->textureData) {
+            gDPLoadTextureBlock_4b(
+                gRegionAllocPtr++,
+                state->textureData,
+                G_IM_FMT_CI,
+                state->width,
+                state->height,
+                0,
+                G_TX_CLAMP,
+                G_TX_CLAMP,
+                G_TX_NOMASK,
+                G_TX_NOMASK,
+                G_TX_NOLOD,
+                G_TX_NOLOD
+            );
+
+            D_800A2D4C_A394C = (u32)state->textureData;
+        }
+
+        if (D_800A2D50_A3950 != (u32)state->paletteData) {
+            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+
+            D_800A2D50_A3950 = (u32)state->paletteData;
+        }
+    }
+
+    gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPVertex(gRegionAllocPtr++, state->unk0, 4, 0);
+    gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+}
 
 void func_80066AC0_676C0(s32 arg0, MatrixEntry_202A0 *arg1) {
     arg1->unk30 = 0;
