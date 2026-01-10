@@ -102,12 +102,7 @@ typedef struct {
     s32 renderFlags;
 } Func8000C268Arg;
 
-#ifndef STATE_ENTRY_DECLARED
-#define STATE_ENTRY_DECLARED
-typedef struct StateEntry StateEntry;
-#endif
-
-struct StateEntry {
+typedef struct {
     u8 padding0[0xC];
     /* 0xC */ u16 current_index;
     u8 padding[0x2];
@@ -127,7 +122,7 @@ struct StateEntry {
     s16 unk3C;
     u8 unk3E;
     u8 unk3F;
-};
+} StateEntry;
 
 typedef struct {
     u8 padding[0x16];
