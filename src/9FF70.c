@@ -86,7 +86,66 @@ void resetPlayerBehaviorToDefault(void *arg) {
     arg0->unkBC0 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B00FC_9FFAC);
+void func_800B00FC_9FFAC(Player *player) {
+    Vec3i result;
+    GameState *gameState;
+
+    gameState = getCurrentAllocation();
+
+    switch (player->unkBD0) {
+        case 1:
+        case 7:
+            if (player->unkBC9 == 3) {
+                transformVector2(gameState->unk48 + 0x1D4, (u8 *)player + 0x9F0, &result);
+            } else {
+                transformVector2(gameState->unk48 + 0xB4, (u8 *)player + 0x9F0, &result);
+            }
+            player->unk44C.x += result.x;
+            player->unk44C.y += result.y;
+            player->unk44C.z += result.z;
+            break;
+        case 2:
+        case 8:
+            if (player->unkBC9 == 3) {
+                transformVector2(gameState->unk48 + 0x1E0, (u8 *)player + 0x9F0, &result);
+            } else {
+                transformVector2(gameState->unk48 + 0xC0, (u8 *)player + 0x9F0, &result);
+            }
+            player->unk44C.x += result.x;
+            player->unk44C.y += result.y;
+            player->unk44C.z += result.z;
+            break;
+        case 5: {
+            s32 velZ;
+            s32 resultZ;
+            transformVector2(gameState->unk48 + 0xCC, (u8 *)player + 0x9F0, &result);
+            player->unk44C.x += result.x;
+            player->unk44C.y += result.y;
+            velZ = player->unk44C.z;
+            resultZ = result.z;
+            player->unkBD0 = 7;
+            player->unk44C.z = velZ + resultZ;
+            break;
+        }
+        case 6: {
+            s32 velZ;
+            s32 resultZ;
+            transformVector2(gameState->unk48 + 0xD8, (u8 *)player + 0x9F0, &result);
+            player->unk44C.x += result.x;
+            player->unk44C.y += result.y;
+            velZ = player->unk44C.z;
+            resultZ = result.z;
+            player->unkBD0 = 8;
+            player->unk44C.z = velZ + resultZ;
+            break;
+        }
+    }
+
+    func_8005D03C_5DC3C(player);
+    player->worldPos.x += player->unk44C.x;
+    player->worldPos.y += player->unk44C.y;
+    player->worldPos.z += player->unk44C.z;
+}
 
 typedef struct {
     u8 _pad0[0x434];
