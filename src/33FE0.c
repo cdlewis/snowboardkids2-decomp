@@ -2,6 +2,7 @@
 #include "10AD0.h"
 #include "36B80.h"
 #include "56910.h"
+#include "6DE50.h"
 #include "6E840.h"
 #include "B040.h"
 #include "common.h"
@@ -14,6 +15,27 @@ USE_ASSET(_41A1D0);
 USE_ASSET(_3F6670);
 USE_ASSET(_4547D0);
 USE_ASSET(_459310);
+
+typedef struct {
+    /* 0x000 */ u8 pad0[0xABC];
+    /* 0xABC */ u16 unkABC;
+    /* 0xABE */ u16 unkABE;
+    /* 0xAC0 */ u16 unkAC0;
+    /* 0xAC2 */ u16 unkAC2;
+    /* 0xAC4 */ u16 unkAC4;
+    /* 0xAC6 */ u16 unkAC6;
+    /* 0xAC8 */ u8 unkAC8;
+    /* 0xAC9 */ u8 unkAC9;
+    /* 0xACA */ u8 unkACA;
+    /* 0xACB */ u8 unkACB;
+    /* 0xACC */ u8 unkACC;
+    /* 0xACD */ u8 unkACD;
+    /* 0xACE */ u8 padACE[0x5];
+    /* 0xAD3 */ u8 unkAD3;
+    /* 0xAD4 */ u8 unkAD4;
+    /* 0xAD5 */ u8 unkAD5;
+    /* 0xAD6 */ u8 unkAD6;
+} DeleteTextAllocationStruct;
 
 typedef struct {
     /* 0x00 */ void *spriteAsset;
@@ -255,10 +277,14 @@ extern void *D_8008F7E0_903E0;
 extern s32 D_8008F7D8_903D8;
 extern u16 D_8009ADE0_9B9E0;
 extern char D_8009E488_9F088[];
+extern void *D_8008F5F0_901F0;
+extern void *D_8008F79C_9039C[];
+extern void *D_8008F7C4_903C4[];
 
+void func_80035260_35E60(void *arg0, void *arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
 void func_800340F4_34CF4(void);
 void cleanupSaveSlotNumberLabels(Func34574Arg *);
-void updateSaveSlotDeleteText(void);
+void updateSaveSlotDeleteText(SaveSlotDeleteTextState *);
 void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
 void updateSaveSlotNameText(Func34ADCArg *arg0);
 void cleanupSaveSlotNameText(Func34574Arg *arg0);
@@ -737,7 +763,125 @@ void initSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
     setCallback(updateSaveSlotDeleteText);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", updateSaveSlotDeleteText);
+void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
+    DeleteTextAllocationStruct *allocation;
+    s16 offsetX;
+    s16 offsetY;
+    s32 loopCount;
+    s32 i;
+    s32 alphaArg;
+    s32 flagArg;
+    s32 temp;
+
+    allocation = (DeleteTextAllocationStruct *)getCurrentAllocation();
+
+    if (allocation->unkAC6 < 0x32) {
+        return;
+    }
+
+    if (allocation->unkAD5 == 0xA) {
+        state->offsetX = -(allocation->unkAD4 * 24);
+    } else {
+        state->offsetX = -(allocation->unkAD4 * 16);
+    }
+
+    offsetY = -(allocation->unkAD4 * 8);
+    state->offsetY = offsetY;
+
+    func_8006D7B0_6E3B0(
+        state->spriteAsset,
+        state->offsetX,
+        offsetY,
+        allocation->unkAD3,
+        allocation->unkAD4,
+        0,
+        0x60,
+        0xB0,
+        8,
+        0
+    );
+
+    if ((u32)(allocation->unkAC6 - 0x33) >= 4) {
+        return;
+    }
+
+    if (allocation->unkAD5 < 8) {
+        func_80035260_35E60(state->textAsset, &D_8008F5F0_901F0, -0x24, -0x30, 0xFF, 0xFF, 5, 8, 7);
+
+        loopCount = (-(allocation->unkAD5 != 2) & 3) | 2;
+        if (loopCount == 0) {
+            return;
+        }
+
+        temp = 0xFFF00000;
+        for (i = 0; i < loopCount; i++) {
+            flagArg = 5;
+            if (allocation->unkAD6 == i) {
+                alphaArg = 0xFF;
+                if (allocation->unkAC6 == 0x34) {
+                    flagArg = (-(allocation->unkAC4 & 1) & 0xFF) | 5;
+                }
+            } else {
+                alphaArg = 0x60;
+            }
+
+            func_80035260_35E60(
+                state->textAsset,
+                D_8008F79C_9039C[(allocation->unkAD5 * 3) + i],
+                -0x40,
+                (s16)((temp + i * 0x180000) >> 16),
+                alphaArg,
+                0xFF,
+                flagArg,
+                8,
+                7
+            );
+        }
+    } else if (allocation->unkAD5 == 0xA) {
+        for (i = 0; i < 2; i++) {
+            flagArg = 5;
+            if (allocation->unkAD6 == i) {
+                alphaArg = 0xFF;
+                if (allocation->unkAC6 == 0x34) {
+                    flagArg = (-(allocation->unkAC4 & 1) & 0xFF) | 5;
+                }
+            } else {
+                alphaArg = 0x60;
+            }
+
+            func_80035260_35E60(
+                state->textAsset,
+                D_8008F7C4_903C4[i],
+                -0x40,
+                (s16)((0xFFF00000 + i * 0x180000) >> 16),
+                alphaArg,
+                0xFF,
+                flagArg,
+                8,
+                7
+            );
+        }
+    } else {
+        s16 xOffset;
+        if (allocation->unkACD != 0x62) {
+            xOffset = -0x58 | -0x60;
+        } else {
+            xOffset = -0x60;
+        }
+
+        func_80035260_35E60(
+            state->textAsset,
+            D_8008F79C_9039C[allocation->unkAD5],
+            xOffset,
+            -0x20,
+            0xFF,
+            0xFF,
+            5,
+            8,
+            7
+        );
+    }
+}
 
 void cleanupSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
