@@ -489,11 +489,32 @@ void renderShieldLayer3(ShieldEffectRenderState *arg0) {
 }
 
 typedef struct {
-    u8 pad0[0xD8];
-    void *assetTable;
+    loadAssetMetadata_arg *unk0; // 0x00
+    Vec3i position;              // 0x04-0x0F
+    u8 *data_ptr;                // 0x10
+    void *index_ptr;             // 0x14
+    u8 unk18;                    // 0x18
+    u8 unk19;                    // 0x19
+    u8 unk1A;                    // 0x1A
+    u8 pad1B;                    // 0x1B
+    u8 pad1C[0x4];               // 0x1C-0x1F
+    s32 unk20;                   // 0x20-0x23
+} BurstParticle;                 // size 0x24
+
+typedef struct {
+    BurstParticle particles[6]; // 0x00-0xD7
+    void *assetTable;           // 0xD8
+    s8 particleType;            // 0xDC
+    u8 unkDD;                   // 0xDD
 } BurstEffectState;
 
-void setupBurstParticles(void);
+extern loadAssetMetadata_arg D_800908A0_914A0;
+extern s32 D_800908E0_914E0;
+extern s32 D_800908E4_914E4;
+extern s32 D_800908E8_914E8;
+
+void updateBurstParticles(BurstEffectState *);
+void setupBurstParticles(BurstEffectState *);
 void cleanupBurstEffect(BurstEffectState *);
 
 void initBurstEffect(BurstEffectState *state) {
@@ -502,7 +523,51 @@ void initBurstEffect(BurstEffectState *state) {
     setCallbackWithContinue(setupBurstParticles);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", setupBurstParticles);
+void setupBurstParticles(BurstEffectState *state) {
+    s32 i;
+    loadAssetMetadata_arg *assetA0;
+    volatile BurstParticle *particle;
+    s32 *yPtr;
+    s32 offset;
+
+    i = 0;
+    assetA0 = &D_800908A0_914A0;
+    particle = (volatile BurstParticle *)state;
+    yPtr = &D_800908E4_914E4;
+    offset = 0;
+
+    do {
+        s32 temp;
+        loadAssetMetadata((loadAssetMetadata_arg *)particle, state->assetTable, state->particleType);
+        particle->unk20 = *yPtr;
+        particle->position.x += *(s32 *)((u8 *)&D_800908E0_914E0 + offset);
+        i++;
+        particle->position.y += *yPtr;
+        temp = particle->position.z;
+        temp += *(s32 *)((u8 *)&D_800908E8_914E8 + offset);
+        yPtr = (s32 *)((u8 *)yPtr + 0xC);
+        offset += 0xC;
+        particle->unk0 = assetA0;
+        particle->position.z = temp;
+        particle++;
+    } while (i < 6);
+
+    if (state->particleType != 0x2F) {
+        u8 *ptr;
+        u8 val;
+        val = 0xC0;
+        i = 5;
+        ptr = (u8 *)state + 0xB4;
+        do {
+            *(ptr + 0x1A) = val;
+            i--;
+            ptr -= 0x24;
+        } while (i >= 0);
+    }
+
+    state->unkDD = 0;
+    setCallbackWithContinue(updateBurstParticles);
+}
 
 INCLUDE_ASM("asm/nonmatchings/42170", updateBurstParticles);
 
