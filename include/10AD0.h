@@ -36,7 +36,7 @@ typedef struct {
 } SpriteRenderArg;
 
 void func_80010240_10E40(void);
-void func_800105B0_111B0(void);
+void func_800105B0_111B0(SpriteRenderArg *arg0);
 void func_80010C98_11898(void *arg0);
 void func_80012FA8_13BA8(void);
 void initDefaultFontPalette(void);
