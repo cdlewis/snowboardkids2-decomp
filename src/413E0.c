@@ -49,7 +49,6 @@ extern s32 D_800907EC_913EC[];
 extern s16 identityMatrix[];
 extern s16 D_800907E0_913E0;
 extern void *D_80090860_91460;
-extern void func_8004119C_41D9C(void);
 
 typedef struct {
     Transform3D rotationMatrix; // 0x00-0x1F, with position at 0x14-0x1F
@@ -402,13 +401,17 @@ typedef struct {
     void *particleAsset;
     void *particles;
     void *cameraNode;
-    u8 lastCameraPos[12];
+    s32 lastCameraX;
+    s32 lastCameraY;
+    s32 lastCameraZ;
     s16 frameCounter;
     s16 particleCount;
+    u8 pauseWhenPaused;
 } ConfettiEffectTask;
 
 void setupConfettiParticles(ConfettiEffectTask *task);
 void cleanupConfettiEffect(ConfettiEffectTask *task);
+void func_8004119C_41D9C(ConfettiEffectTask *task);
 
 void initConfettiEffect(ConfettiEffectTask *task) {
     s16 count;
@@ -448,11 +451,83 @@ void setupConfettiParticles(ConfettiEffectTask *task) {
             } while (i < task->particleCount);
         }
     } while (0);
-    memcpy(task->lastCameraPos, (u8 *)task->cameraNode + 0x134, 0xC);
+    memcpy(&task->lastCameraX, (u8 *)task->cameraNode + 0x134, 0xC);
     setCallbackWithContinue(&func_8004119C_41D9C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/413E0", func_8004119C_41D9C);
+void func_8004119C_41D9C(ConfettiEffectTask *task) {
+    s32 pad[2];
+    s32 i;
+    s32 offset;
+    s32 running;
+    s32 mask;
+    s32 cameraOffset;
+
+    (void)pad;
+    running = 1;
+    i = 0;
+    if (task->particleCount > 0) {
+        mask = 0x1FFFFFF;
+        cameraOffset = 0xFF000000;
+        offset = 0;
+        do {
+            if (task->pauseWhenPaused != 0) {
+                running &= -(*(u8 *)((u8 *)getCurrentAllocation() + 0x76) == 0);
+            }
+            if (running != 0) {
+                {
+                    s32 *particle = (s32 *)(offset + (s32)task->particles);
+                    particle[8] += particle[0xB];
+                }
+                {
+                    s32 *particle = (s32 *)(offset + (s32)task->particles);
+                    particle[9] += particle[0xC];
+                }
+                if (*(s32 *)(offset + (s32)task->particles + 0x24) < 0) {
+                    *(s32 *)(offset + (s32)task->particles + 0x20) = (randA() & 0xFF) << 17;
+                    *(s32 *)(offset + (s32)task->particles + 0x24) = 0x02000000;
+                    *(s32 *)(offset + (s32)task->particles + 0x28) = (randA() & 0xFF) << 17;
+                    *(s32 *)(offset + (s32)task->particles + 0x30) = 0xFFFC0000 - ((randA() & 0xFF) << 8);
+                }
+            }
+            {
+                s32 *particle = (s32 *)(offset + (s32)task->particles);
+                particle[8] -= *(s32 *)((u8 *)task->cameraNode + 0x134) - task->lastCameraX;
+            }
+            {
+                s32 *particle = (s32 *)(offset + (s32)task->particles);
+                particle[8] &= mask;
+            }
+            {
+                s32 *particle = (s32 *)(offset + (s32)task->particles);
+                particle[0xA] -= *(s32 *)((u8 *)task->cameraNode + 0x13C) - task->lastCameraZ;
+            }
+            {
+                s32 *particle = (s32 *)(offset + (s32)task->particles);
+                particle[0xA] &= mask;
+            }
+            {
+                s32 *particle = (s32 *)(offset + (s32)task->particles);
+                s32 camX = *(s32 *)((u8 *)task->cameraNode + 0x134) + cameraOffset;
+                particle[1] = particle[8] + camX;
+            }
+            {
+                s32 *particle = (s32 *)(offset + (s32)task->particles);
+                s32 camY = *(s32 *)((u8 *)task->cameraNode + 0x138) + cameraOffset;
+                particle[2] = particle[9] + camY;
+            }
+            {
+                s32 *particle = (s32 *)(offset + (s32)task->particles);
+                s32 camZ = *(s32 *)((u8 *)task->cameraNode + 0x13C) + cameraOffset;
+                particle[3] = particle[0xA] + camZ;
+            }
+            func_80066444_67044(task->frameCounter, (void *)((s32)task->particles + offset));
+            i++;
+            offset += 0x38;
+        } while (i < task->particleCount);
+    }
+    memcpy(&task->lastCameraX, (u8 *)task->cameraNode + 0x134, 0xC);
+}
 
 void cleanupConfettiEffect(ConfettiEffectTask *task) {
     task->particleAsset = freeNodeMemory(task->particleAsset);
