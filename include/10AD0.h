@@ -40,7 +40,7 @@ void func_800105B0_111B0(SpriteRenderArg *arg0);
 void func_80010C98_11898(void *arg0);
 void func_80012FA8_13BA8(void);
 void initDefaultFontPalette(void);
-void func_8000FED0_10AD0(void);
+void func_8000FED0_10AD0(SpriteRenderArg *arg0);
 void func_80013EA0_14AA0(s32, u16, u16, u16, s32);
 void func_80012518_13118(void);
 void func_800136E0_142E0(void);
