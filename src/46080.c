@@ -768,7 +768,7 @@ void setupGoldCoinEntries(GoldCoinSetupState *arg0);
 void enqueuePlayerDisplayList(PlayerDisplayListState *arg0);
 void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
 void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
-void func_8004562C_4622C(void);
+void func_8004562C_4622C(SkyRenderTaskState *);
 void updateFlyingSceneryAscendingStep(FlyingSceneryState *state);
 void updateFlyingSceneryGlidingStep(FlyingSceneryState *state);
 void updateFlyingSceneryTurningStep(FlyingSceneryState *state);
@@ -893,7 +893,60 @@ void renderSkyDisplayLists(SkyRenderTaskState *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004562C_4622C);
+void func_8004562C_4622C(SkyRenderTaskState *arg0) {
+    s32 id;
+    s32 viewportId;
+    GameState *state;
+    s32 playerOffset;
+    s32 i;
+    D_80090F90_91B90_item *levelData;
+    u8 r;
+    u16 a0val;
+    s32 constR;
+    s32 constB;
+    Player *player;
+
+    state = (GameState *)getCurrentAllocation();
+
+    i = 0;
+    if (i < state->unk5F) {
+    loop1:
+        func_800630F0_63CF0(i, arg0);
+        i++;
+        if (i < state->unk5F) {
+            goto loop1;
+        }
+    }
+
+    i = 0;
+    if (i < state->unk5F) {
+        constR = 0x10;
+        constB = 0x30;
+        id = 0x64;
+        viewportId = 4;
+        playerOffset = 0;
+    loop2:
+        player = (Player *)(playerOffset + (s32)state->players);
+        if (player->unkB94 < 0x39) {
+            func_80065DA8_669A8(viewportId, (DisplayListObject *)&arg0->unk3C);
+            levelData = func_80055D10_56910(state->memoryPoolId);
+            r = levelData->unk20.r2;
+            a0val = id;
+            func_8006FE48_70A48(a0val, 0x3E3, 0x3E7, r, levelData->unk20.g2, levelData->unk20.b2);
+        } else {
+            func_80065DA8_669A8(viewportId, (DisplayListObject *)&arg0->unk78);
+            a0val = id;
+            func_8006FE48_70A48(a0val, 0x3E3, 0x3E7, 0x10, constR, constB);
+        }
+        id++;
+        viewportId++;
+        i++;
+        playerOffset += 0xBE8;
+        if (i < state->unk5F) {
+            goto loop2;
+        }
+    }
+}
 
 void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *state) {
     state->unk24 = freeNodeMemory(state->unk24);
