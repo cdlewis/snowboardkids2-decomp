@@ -14,6 +14,7 @@ extern u16 D_8008EF70_8FB70[];
 
 void updateStoryMapRareEventJuggling(Func2E024Arg *arg0);
 void func_8002DA54_2E654(void);
+void updateStoryMapRareEventSkating(Func2E024Arg *);
 
 void updateStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
     GameState *allocation;
@@ -661,7 +662,71 @@ void updateStoryMapRareEventCheering(Func2E024Arg *arg0) {
     } while (0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002E680_2F280);
+void func_8002E680_2F280(Func2E024Arg *arg0) {
+    Transform3D localMatrix;
+    Transform3D worldMatrix;
+    GameState *allocation;
+    Transform3D *localMatrixPtr;
+    s32 i;
+    s32 radius;
+    s32 negRadius;
+    s32 result;
+    s16 angle;
+    Transform3D *new_var;
+
+    allocation = (GameState *)getCurrentAllocation();
+    angle = 0xB98;
+
+    for (i = 0; i < arg0->unkD5; i++) {
+        new_var = &worldMatrix;
+        localMatrixPtr = &localMatrix;
+
+        memcpy(&worldMatrix, identityMatrix, sizeof(Transform3D));
+        memcpy(&localMatrix, new_var, sizeof(Transform3D));
+        memcpy(&arg0->elements[i].matrix, localMatrixPtr, sizeof(Transform3D));
+
+        radius = 0x4400;
+        if (i == 0) {
+            radius = 0x5200;
+            arg0->elements[0].unk50 = 9;
+            arg0->unkCC[0] = 0x3C;
+        } else {
+            arg0->elements[i].unk50 = 0x12;
+            setAnimationIndex(arg0->elements[i].model, 2);
+            arg0->unkCC[1] = 0x78;
+        }
+
+        negRadius = -radius;
+        result = approximateSin(angle) * negRadius;
+        if (result < 0) {
+            result += 0x1FFF;
+        }
+        arg0->elements[i].matrix.translation.x = (result >> 13) << 8;
+
+        result = approximateCos(angle) * negRadius;
+        if (result < 0) {
+            result += 0x1FFF;
+        }
+        arg0->elements[i].matrix.translation.z = (result >> 13) << 8;
+
+        arg0->elements[i].unk5A = (randB() & 0x1F) + 1;
+        arg0->elements[i].unk5E = 0;
+        arg0->elements[i].rotation = 0x800;
+        arg0->elements[i].unk2E = 0x800;
+        arg0->elements[i].unk52 = arg0->elements[i].unk50;
+        memcpy(&worldMatrix.translation, &arg0->elements[i].matrix.translation, 0xC);
+        createYRotationMatrix(&localMatrix, arg0->elements[i].rotation);
+        angle = atan2Fixed(worldMatrix.translation.x, worldMatrix.translation.z);
+        createYRotationMatrix(&worldMatrix, angle & 0xFFFF);
+        func_8006B084_6BC84(&localMatrix, new_var, &arg0->elements[i].matrix);
+        setupStoryMapNpcModel(&arg0->elements[i]);
+        allocation->unk408[i] = arg0->elements[i].matrix.translation.x;
+        allocation->unk410[i] = arg0->elements[i].matrix.translation.z;
+        allocation->unk418[i] = D_8008EF70_8FB70[arg0->elements[i].unk5C];
+    }
+
+    setCallback(updateStoryMapRareEventSkating);
+}
 
 void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
     GameState *gameState;
