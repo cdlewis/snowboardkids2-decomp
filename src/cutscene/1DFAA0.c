@@ -55,6 +55,7 @@ extern u8 identityMatrix[];
 extern CutsceneAssetTable D_800BA7BC_1E786C[];
 
 extern void *func_800B5B38_1E2BE8(u16);
+extern void initializeCutsceneCommand(void *, void *, s32, s32, s32);
 
 void enableCutsceneSkip(CutsceneManager *arg0) {
     arg0->skipAnimation = TRUE;
@@ -592,7 +593,110 @@ void func_800B388C_1E093C(s32 arg0) {
     temp->unk3F = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", initializeCutsceneSystem);
+void initializeCutsceneSystem(void *arg0) {
+    u8 *base;
+    s32 i;
+    s32 next;
+    s32 j;
+    u16 index;
+    s32 neg1;
+    u16 ffff;
+
+    D_800BAEB8_1E7F68 = 0x78E0;
+    D_800BAEBC_1E7F6C = allocateNodeMemory(0x78E0);
+    i = 0;
+    do {
+        StateEntry *ptr;
+        s32 shift;
+        s32 prev;
+
+        ptr = D_800BAEBC_1E7F6C;
+        shift = i << 6;
+        next = i + 1;
+        prev = i - 1;
+        base = (u8 *)ptr + shift;
+        *(s16 *)(base + 0xF8) = next;
+        *(s16 *)(base + 0xFA) = prev;
+        func_800B388C_1E093C(i);
+        i = next;
+    } while (next < 0x1E0);
+
+    {
+        StateEntry *v1ptr = D_800BAEBC_1E7F6C;
+        StateEntry *a0ptr;
+        v1ptr->padding0[4] = 0x45;
+        a0ptr = D_800BAEBC_1E7F6C;
+        *(u16 *)((u8 *)v1ptr + 0xFA) = 0xFFFF;
+        *(u16 *)((u8 *)v1ptr + 0x78B8) = 0xFFFF;
+        *(s32 *)v1ptr = 0;
+        a0ptr->padding0[5] = 0x44;
+    }
+    D_800BAEBC_1E7F6C->padding0[6] = 0x41;
+    D_800BAEBC_1E7F6C->padding0[7] = 0x54;
+    D_800BAEBC_1E7F6C->padding0[8] = 0x30;
+    D_800BAEBC_1E7F6C->padding0[9] = 0x30;
+    D_800BAEBC_1E7F6C->padding0[0xA] = 0x30;
+    i = 0;
+    D_800BAEBC_1E7F6C->padding0[0xB] = 0x31;
+    {
+        StateEntry *v1ptr2 = D_800BAEBC_1E7F6C;
+        StateEntry *a0ptr2;
+        neg1 = -1;
+        v1ptr2->unk12 = 0x38;
+        a0ptr2 = D_800BAEBC_1E7F6C;
+        ffff = 0xFFFF;
+        *(s16 *)((u8 *)v1ptr2 + 0xE) = 0x1DF;
+        v1ptr2->current_index = 0;
+        v1ptr2->unk10 = 0;
+        a0ptr2->unk13 = 0x10;
+    }
+    {
+        StateEntry *v1Reg = D_800BAEBC_1E7F6C;
+        j = 0;
+        v1Reg->unk14 = 0x8000;
+        v1Reg->unk16 = 0x1E0;
+        v1Reg->unk18 = 0;
+        v1Reg->unk1A = 0x64;
+        v1Reg->unk1C = 0;
+    }
+    do {
+        u8 *itemBase;
+        u8 *itemBase2;
+        u8 *entryBase;
+        s32 a1;
+        s32 shift2;
+
+        D_800BAEBC_1E7F6C->unk10 += 1;
+        index = func_800B384C_1E08FC();
+        itemBase = (u8 *)D_800BAEBC_1E7F6C;
+        a1 = i << 24;
+        itemBase += j;
+        itemBase[0x26] = 0;
+        itemBase2 = (u8 *)D_800BAEBC_1E7F6C + j;
+        i++;
+        a1 >>= 24;
+        *(s16 *)(itemBase + 0x20) = index;
+        *(s16 *)(itemBase + 0x24) = neg1;
+        itemBase2[0x27] = neg1;
+        ((u8 *)D_800BAEBC_1E7F6C + j)[0x28] = 0;
+        shift2 = (index & 0xFFFF) << 6;
+        ((u8 *)D_800BAEBC_1E7F6C + j)[0x29] = neg1;
+        {
+            u8 *ptr = (u8 *)D_800BAEBC_1E7F6C;
+            s32 cmdOffset = shift2 + 0xC0;
+            j += 0xA;
+            entryBase = ptr + shift2;
+            *(u16 *)(entryBase + 0xF8) = ffff;
+            *(u16 *)(entryBase + 0xFA) = ffff;
+            initializeCutsceneCommand(ptr + cmdOffset, arg0, 0, 0, a1);
+        }
+    } while (i < 0x10);
+
+    D_800BAEB0_1E7F60 = 0;
+    D_800BAEC0_1E7F70 = -1;
+    D_800BAEB2_1E7F62 = -1;
+    D_800BAEB4_1E7F64 = 0;
+}
 
 void func_800B3B40(void) {
     if (D_800BAEBC_1E7F6C != NULL) {
