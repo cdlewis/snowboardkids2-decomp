@@ -386,19 +386,19 @@ s16 getCutsceneFrameCount(s16 slotIndex, s16 cutsceneType) {
     return result;
 }
 
-void *func_800B3420_1E04D0(void) {
+void *getCutsceneDataMagicPrimary(void) {
     return &D_800BAEBC_1E7F6C->padding0[4];
 }
 
-void *func_800B3430_1E04E0(void) {
+void *getCutsceneDataMagicSecondary(void) {
     return &D_800BAEBC_1E7F6C->padding0[8];
 }
 
-u16 func_800B3440_1E04F0(void) {
+u16 getCutsceneAllocatedEventCount(void) {
     return D_800BAEBC_1E7F6C->unk10;
 }
 
-u8 func_800B3450_1E0500(void) {
+u8 getCutsceneStateEntryItemSize(void) {
     return D_800BAEBC_1E7F6C->unk12;
 }
 
@@ -406,11 +406,11 @@ u8 getCutsceneSlotCount(void) {
     return D_800BAEBC_1E7F6C->unk13;
 }
 
-u16 func_800B3470_1E0520(void) {
+u16 getCutsceneFrameMask(void) {
     return D_800BAEBC_1E7F6C->unk14;
 }
 
-u16 func_800B3480_1E0530(void) {
+u16 getCutsceneMaxStateEntries(void) {
     return D_800BAEBC_1E7F6C->unk16;
 }
 
