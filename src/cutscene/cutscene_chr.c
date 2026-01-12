@@ -47,7 +47,7 @@ void cutsceneChrMove_exec(cutsceneChrMove_exec_arg *arg0, CutsceneManager *arg1,
 
     slot = &arg1->slots[arg2];
 
-    temp_s4 = func_800B34B0_1E0560(arg2)->unk4;
+    temp_s4 = getCurrentStateEntryItem(arg2)->unk4;
 
     temp_s0 = 1;
     animId = -1;
@@ -142,7 +142,7 @@ void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1,
     animId = -1;
     slot = &arg1->slots[arg2];
 
-    temp_s0 = func_800B34B0_1E0560(arg2)->unk4;
+    temp_s0 = getCurrentStateEntryItem(arg2)->unk4;
 
     result = setupSlotRotateTo(&slot->slotData, slot->model, temp_arg0->unk0);
 
@@ -174,7 +174,7 @@ void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg
 
     slot = &arg1->slots[arg2];
 
-    temp_s4 = func_800B34B0_1E0560(arg2)->unk4;
+    temp_s4 = getCurrentStateEntryItem(arg2)->unk4;
 
     temp_s0 = 1;
     animId = -1;
@@ -242,7 +242,7 @@ s32 cutsceneChrBoardMove_validate(void) {
 void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *slot = &arg1->slots[arg2];
 
-    func_800B34B0_1E0560(arg2);
+    getCurrentStateEntryItem(arg2);
 
     setupSlotWalkTo(
         &slot->slotData,
@@ -281,7 +281,7 @@ void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg0, CutsceneManager *arg
 
     slot = &arg1->slots[arg2];
 
-    temp_s3 = func_800B34B0_1E0560(arg2)->unk4;
+    temp_s3 = getCurrentStateEntryItem(arg2)->unk4;
 
     animId = -1;
 
@@ -393,7 +393,7 @@ void cutsceneChrUpDown_exec(cutsceneChrUpDown_exec_arg *arg0, CutsceneManager *a
 
     slot = &arg1->slots[arg2];
 
-    func_800B34B0_1E0560(arg2);
+    getCurrentStateEntryItem(arg2);
 
     setupSlotMoveToNoRotation(
         &slot->slotData,
@@ -457,7 +457,7 @@ s32 cutsceneChrMove3_validate(void) {
 void cutsceneChrMove3_exec(cutsceneChrMove3_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *currentSlot = &arg1->slots[arg2];
 
-    func_800B34B0_1E0560(arg2);
+    getCurrentStateEntryItem(arg2);
 
     setupSlotMoveToWithRotation(
         &currentSlot->slotData,
@@ -640,7 +640,7 @@ s32 cutsceneChrTurn3_validate(void) {
 void cutsceneChrTurn3_exec(cutsceneChrTurn3_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *currentSlot = &arg1->slots[arg2];
 
-    func_800B34B0_1E0560(arg2);
+    getCurrentStateEntryItem(arg2);
 
     setupSlotRotateWithSpeed(
         &currentSlot->slotData,

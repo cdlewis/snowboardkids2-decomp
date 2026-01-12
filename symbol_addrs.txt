@@ -1337,6 +1337,7 @@ getCutsceneInitModelIndex = 0x800B3490; // type:func rom:0x1DFAA0
 setCutsceneInitModelIndex = 0x800B34A0; // type:func rom:0x1DFAA0
 getCutsceneDefaultEndFrame = 0x800B34D0; // type:func rom:0x1DFAA0
 setCutsceneDefaultEndFrame = 0x800B34E0; // type:func rom:0x1DFAA0
+getCurrentStateEntryItem = 0x800B34B0; // type:func rom:0x1E0560
 func_800B3570 = 0x800B3570; // type:func rom:0x1DFAA0
 func_800BC0FC = 0x800BC0FC; // type:func rom:0xAEFA0
 func_800B99E0 = 0x800B99E0; // type:func rom:0xA9890

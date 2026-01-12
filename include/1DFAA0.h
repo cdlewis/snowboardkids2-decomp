@@ -283,7 +283,7 @@ u16 getCutsceneFrameMask(void);
 u16 getCutsceneMaxStateEntries(void);
 s16 getCutsceneInitModelIndex(void);
 void setCutsceneInitModelIndex(s16 arg0);
-StateEntryItem *func_800B34B0_1E0560(s32 arg0);
+StateEntryItem *getCurrentStateEntryItem(s32 itemIndex);
 s16 getCutsceneDefaultEndFrame(void);
 void setCutsceneDefaultEndFrame(s16 arg0);
 u8 func_800B34F0(void);

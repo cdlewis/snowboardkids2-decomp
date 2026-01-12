@@ -87,7 +87,7 @@ void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *
     setModelRenderMode(&manager->unk10, 0);
 
     for (i = 0; i < (getCutsceneSlotCount() & 0xFF); i++) {
-        StateEntryItem *slot = func_800B34B0_1E0560(i);
+        StateEntryItem *slot = getCurrentStateEntryItem(i);
         manager->slots[i].unk40 = slot->unk4;
 
         if (slot->unk4 != -1) {
@@ -163,7 +163,7 @@ void resetAllSlotModels(CutsceneSlot *slots) {
     s32 i;
 
     for (i = 0; i < getCutsceneSlotCount(); i++) {
-        func_800B34B0_1E0560(i);
+        getCurrentStateEntryItem(i);
 
         if (slots[i].slotData.unkA4.ptr != NULL) {
             applyTransformToModel(slots[i].slotData.unkA4.ptr, (Transform3D *)identityMatrix);
@@ -186,7 +186,7 @@ void resetAllSlotTransforms(CutsceneManager *manager) {
     byteOffset = 0;
 
     while (i < (getCutsceneSlotCount() & 0xFF)) {
-        func_800B34B0_1E0560(i);
+        getCurrentStateEntryItem(i);
         model = ((CutsceneSlot *)((u8 *)iterPtr + 0xA8))->model;
 
         if (model != NULL) {
@@ -227,7 +227,7 @@ void prepareCutsceneForPlayback(
     manager->maxFrame = maxFrame;
     manager->endFrame = getCutsceneDefaultEndFrame();
     do {
-        modelId = func_800B34B0_1E0560(i)->unk4;
+        modelId = getCurrentStateEntryItem(i)->unk4;
         model = manager->slots[i].model;
         manager->slots[i].unk42 = 0xFF;
         manager->slots[i].unk43 = 0xFF;
@@ -422,8 +422,8 @@ void setCutsceneInitModelIndex(s16 arg0) {
     D_800BAEBC_1E7F6C->initModelIndex = arg0;
 }
 
-StateEntryItem *func_800B34B0_1E0560(s32 arg0) {
-    return &D_800BAEBC_1E7F6C->items[arg0];
+StateEntryItem *getCurrentStateEntryItem(s32 itemIndex) {
+    return &D_800BAEBC_1E7F6C->items[itemIndex];
 }
 
 s16 getCutsceneDefaultEndFrame(void) {
@@ -1083,7 +1083,7 @@ void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
     u8 masked_arg0 = arg0 & 0xFF;
 
     new_var = D_800BAEC8_1E7F78;
-    temp_s0 = (-((~func_800B34B0_1E0560(masked_arg0)->unk4) != 0)) | 1;
+    temp_s0 = (-((~getCurrentStateEntryItem(masked_arg0)->unk4) != 0)) | 1;
 
     if (D_800BAEB0_1E7F60 != 0 && getCategorySkipValue(D_800BAF06_1E7FB6) != temp_s0) {
         s32 var_a0 = findEventAtFrame(masked_arg0, arg1);
