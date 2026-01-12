@@ -252,7 +252,7 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);
 
 typedef TrackGeometryData func_80062B1C_arg0;
 
-u16 func_800625A4_631A4(void *arg0, void *arg1) {
+u16 getTrackEndInfo(void *arg0, void *arg1) {
     s32 var_v1;
     s32 temp_v0;
     TrackSegmentElement *elements;

@@ -143,7 +143,7 @@ void func_8006417C_64D7C(s32 arg0, DisplayListObject *arg1);
 
 void func_80065DA8_669A8(s32 arg0, DisplayListObject *arg1);
 
-u16 func_800625A4_631A4(void *arg0, void *arg1);
+u16 getTrackEndInfo(void *arg0, void *arg1);
 
 u16 func_80060A3C_6163C(void *arg0, u16 arg1, void *arg2);
 

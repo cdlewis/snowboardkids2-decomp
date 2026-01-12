@@ -965,7 +965,7 @@ void initPlayerRenderTask(PlayerRenderTaskState *state) {
     GameState_46080 *allocation;
 
     allocation = (GameState_46080 *)getCurrentAllocation();
-    rotation = func_800625A4_631A4(&allocation->unk30, &state->position);
+    rotation = getTrackEndInfo(&allocation->unk30, &state->position);
     createYRotationMatrix((Transform3D *)state, rotation);
     state->unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x30);
     state->unk24 = func_80055DC4_569C4(allocation->unk5C);
@@ -1316,7 +1316,7 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
     func_80055E68_56A68_result *displayLists;
 
     allocation = (GameState_46080 *)getCurrentAllocation();
-    rotation = func_800625A4_631A4(&allocation->unk30, &sp10) + 0x800;
+    rotation = getTrackEndInfo(&allocation->unk30, &sp10) + 0x800;
     levelData = func_80055D10_56910(allocation->unk5C);
 
     arg0->unk20 = func_80055E68_56A68(allocation->unk5C);
@@ -1388,7 +1388,7 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
     D_80090F90_91B90_item *levelData;
 
     allocation = (GameState_46080 *)getCurrentAllocation();
-    rotation = func_800625A4_631A4(&allocation->unk30, &position) + 0x800;
+    rotation = getTrackEndInfo(&allocation->unk30, &position) + 0x800;
     levelData = func_80055D10_56910(allocation->unk5C);
 
     arg0->displayListObject.unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x10);

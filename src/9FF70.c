@@ -2890,7 +2890,7 @@ s32 func_800B6688_A6538(Player *arg0) {
 
     alloc = getCurrentAllocation();
     item = func_80055D10_56910(alloc->memoryPoolId);
-    temp = item->unk8 + func_800625A4_631A4(&alloc->gameData, sp10) + 0x1000;
+    temp = item->unk8 + getTrackEndInfo(&alloc->gameData, sp10) + 0x1000;
     unkA94 = arg0->unkA94;
     angle = (temp - unkA94) & 0x1FFF;
     temp_angle = angle;

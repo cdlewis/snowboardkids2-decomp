@@ -197,7 +197,7 @@ void initStartGate(StartGate *gate) {
     gate->unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
     gate->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
     gate->unk2C = 0;
-    trackAngle = func_800625A4_631A4((u8 *)gameState + 0x30, worldPos);
+    trackAngle = getTrackEndInfo((u8 *)gameState + 0x30, worldPos);
     createYRotationMatrix(&gate->rotationMatrix, (trackAngle + spawnData->unk8) & 0xFFFF);
     rotateVectorY(&D_800907EC_913EC, trackAngle + spawnData->unk8, &gate->rotationMatrix.translation);
     gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + spawnData->unk0;

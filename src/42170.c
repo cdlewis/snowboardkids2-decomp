@@ -1918,7 +1918,7 @@ void func_80044684_45284(UfoEffectState *arg0) {
     s32 temp_unk18;
 
     allocation = (Func43CA4GameState *)getCurrentAllocation();
-    rotation = func_800625A4_631A4(&allocation->unk30, &posOutput) + 0x800;
+    rotation = getTrackEndInfo(&allocation->unk30, &posOutput) + 0x800;
     item = func_80055D10_56910(allocation->unk5C);
 
     arg0->unk20 = (u8 *)func_80055E68_56A68(allocation->unk5C) + 0x10;
