@@ -99,7 +99,92 @@ void func_8000FED0_10AD0(SpriteRenderArg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/10AD0", func_80010240_10E40);
+void func_80010240_10E40(SpriteRenderArg *arg0) {
+    s32 left;
+    s32 top;
+    s32 right;
+    s32 bottom;
+    s32 clipOffsetX;
+    s32 clipOffsetY;
+    s32 paletteBase;
+    s32 paletteCacheAddr;
+    u16 paletteMode;
+    u16 format;
+    u8 paletteIndex;
+    SpriteSheetData *spriteData;
+    SpriteFrameEntry *frameEntry;
+
+    clipOffsetX = 0;
+    clipOffsetY = 0;
+    spriteData = arg0->spriteData;
+    frameEntry = spriteData->frames;
+    left = arg0->x + gTextClipAndOffsetData.offsetX;
+    paletteBase = (s32)frameEntry + (spriteData->numFrames * 0x10);
+    top = arg0->y + gTextClipAndOffsetData.offsetY;
+    frameEntry = &frameEntry[arg0->frameIndex];
+    paletteIndex = arg0->paletteIndex;
+    paletteMode = D_8008D3B0_8DFB0[frameEntry->paletteTableIndex];
+    format = D_8008D3B8_8DFB8[frameEntry->formatIndex];
+    right = left + frameEntry->width;
+    bottom = top + frameEntry->height;
+
+    if (left < gTextClipAndOffsetData.clipLeft) {
+        clipOffsetX = gTextClipAndOffsetData.clipLeft - left;
+        left = gTextClipAndOffsetData.clipLeft;
+    }
+
+    if (top < gTextClipAndOffsetData.clipTop) {
+        clipOffsetY = gTextClipAndOffsetData.clipTop - top;
+        top = gTextClipAndOffsetData.clipTop;
+    }
+
+    if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
+        (top < bottom)) {
+
+        if (gGraphicsMode != 0x100) {
+            gGraphicsMode = 0x100;
+            D_800A8A80_9FDF0 = 0;
+            D_800AFCD0_A7040 = 0;
+            gSPDisplayList(gRegionAllocPtr++, D_8008D3D0_8DFD0);
+        }
+
+        if (D_800AFCD0_A7040 != (s32)arg0->spriteData + frameEntry->textureOffset) {
+            D_800AFCD0_A7040 = (s32)arg0->spriteData + frameEntry->textureOffset;
+            func_80013EA0_14AA0(
+                (s32)arg0->spriteData + frameEntry->textureOffset,
+                frameEntry->width,
+                frameEntry->height,
+                format,
+                paletteMode
+            );
+        }
+
+        paletteCacheAddr = paletteBase + (paletteIndex << 5);
+        if (paletteCacheAddr != D_800A8A80_9FDF0) {
+            D_800A8A80_9FDF0 = paletteCacheAddr;
+            if ((paletteMode & 0xFFFF) == 2) {
+                if (format == 0) {
+                    gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteCacheAddr);
+                } else {
+                    gDPLoadTLUT_pal256(gRegionAllocPtr++, paletteCacheAddr);
+                }
+            }
+        }
+
+        gSPTextureRectangle(
+            gRegionAllocPtr++,
+            left << 2,
+            top << 2,
+            right << 2,
+            bottom << 2,
+            G_TX_RENDERTILE,
+            clipOffsetX << 5,
+            clipOffsetY << 5,
+            0x0400,
+            0x0400
+        );
+    }
+}
 
 void func_800105B0_111B0(SpriteRenderArg *arg0) {
     s32 clipOffsetY;
