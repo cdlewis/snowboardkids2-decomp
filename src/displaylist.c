@@ -250,8 +250,6 @@ s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);
 
-typedef TrackGeometryData func_80062B1C_arg0;
-
 u16 getTrackEndInfo(void *arg0, void *arg1) {
     s32 var_v1;
     s32 temp_v0;
@@ -263,7 +261,7 @@ u16 getTrackEndInfo(void *arg0, void *arg1) {
     Vertex6 *vert1;
 
     var_v1 = 0;
-    elements = ((func_80062B1C_arg0 *)arg0)->elements;
+    elements = ((TrackGeometryData *)arg0)->elements;
 
     while (1) {
         temp_v0 = elements[var_v1].nextElementIdx;
@@ -273,15 +271,15 @@ u16 getTrackEndInfo(void *arg0, void *arg1) {
         var_v1 = temp_v0;
     }
 
-    ((Vec3i *)arg1)->x = ((func_80062B1C_arg0 *)arg0)->vertices[(elements + var_v1)->vertexIdx2].x << 16;
+    ((Vec3i *)arg1)->x = ((TrackGeometryData *)arg0)->vertices[(elements + var_v1)->vertexIdx2].x << 16;
     ((Vec3i *)arg1)->y =
-        ((func_80062B1C_arg0 *)arg0)->vertices[(((func_80062B1C_arg0 *)arg0)->elements + var_v1)->vertexIdx2].y << 16;
+        ((TrackGeometryData *)arg0)->vertices[(((TrackGeometryData *)arg0)->elements + var_v1)->vertexIdx2].y << 16;
     ((Vec3i *)arg1)->z =
-        ((func_80062B1C_arg0 *)arg0)->vertices[(((func_80062B1C_arg0 *)arg0)->elements + var_v1)->vertexIdx2].z << 16;
+        ((TrackGeometryData *)arg0)->vertices[(((TrackGeometryData *)arg0)->elements + var_v1)->vertexIdx2].z << 16;
 
-    idx0 = (((func_80062B1C_arg0 *)arg0)->elements + var_v1)->vertexIdx1;
-    verts = ((func_80062B1C_arg0 *)arg0)->vertices;
-    idx1 = (((func_80062B1C_arg0 *)arg0)->elements + var_v1)->vertexIdx2;
+    idx0 = (((TrackGeometryData *)arg0)->elements + var_v1)->vertexIdx1;
+    verts = ((TrackGeometryData *)arg0)->vertices;
+    idx1 = (((TrackGeometryData *)arg0)->elements + var_v1)->vertexIdx2;
     vert0 = (Vertex6 *)((s32)idx0 * sizeof(Vertex6) + (s32)verts);
     vert1 = (Vertex6 *)((s32)idx1 * sizeof(Vertex6) + (s32)verts);
 
@@ -351,31 +349,31 @@ void findTrackFaceAtPosition(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2,
     }
 }
 
-u16 func_80062B1C_6371C(void *arg0_void, u16 arg1, void *arg2_void, void *arg3_void) {
-    func_80062B1C_arg0 *arg0 = (func_80062B1C_arg0 *)arg0_void;
-    Vec3i *arg2 = (Vec3i *)arg2_void;
-    Vec3i *arg3 = (Vec3i *)arg3_void;
+u16 getTrackSegmentWaypoints(void *arg0_void, u16 waypointIdx, void *waypointStart, void *waypointEnd) {
+    TrackGeometryData *trackGeom = (TrackGeometryData *)arg0_void;
+    Vec3i *startPos = (Vec3i *)waypointStart;
+    Vec3i *endPos = (Vec3i *)waypointEnd;
     Vertex6 *verts;
-    u16 idx0;
-    u16 idx1;
-    Vertex6 *vert0;
-    Vertex6 *vert1;
+    u16 startVertexIdx;
+    u16 endVertexIdx;
+    Vertex6 *startVert;
+    Vertex6 *endVert;
 
-    arg2->x = arg0->vertices[arg0->elements[arg1].vertexIdx1].x << 16;
-    arg2->y = arg0->vertices[arg0->elements[arg1].vertexIdx1].y << 16;
-    arg2->z = arg0->vertices[arg0->elements[arg1].vertexIdx1].z << 16;
+    startPos->x = trackGeom->vertices[trackGeom->elements[waypointIdx].vertexIdx1].x << 16;
+    startPos->y = trackGeom->vertices[trackGeom->elements[waypointIdx].vertexIdx1].y << 16;
+    startPos->z = trackGeom->vertices[trackGeom->elements[waypointIdx].vertexIdx1].z << 16;
 
-    arg3->x = arg0->vertices[arg0->elements[arg1].vertexIdx2].x << 16;
-    arg3->y = arg0->vertices[arg0->elements[arg1].vertexIdx2].y << 16;
-    arg3->z = arg0->vertices[arg0->elements[arg1].vertexIdx2].z << 16;
+    endPos->x = trackGeom->vertices[trackGeom->elements[waypointIdx].vertexIdx2].x << 16;
+    endPos->y = trackGeom->vertices[trackGeom->elements[waypointIdx].vertexIdx2].y << 16;
+    endPos->z = trackGeom->vertices[trackGeom->elements[waypointIdx].vertexIdx2].z << 16;
 
-    idx0 = arg0->elements[arg1].vertexIdx1;
-    verts = arg0->vertices;
-    idx1 = arg0->elements[arg1].vertexIdx2;
-    vert0 = (Vertex6 *)((s32)idx0 * sizeof(Vertex6) + (s32)verts);
-    vert1 = (Vertex6 *)((s32)idx1 * sizeof(Vertex6) + (s32)verts);
+    startVertexIdx = trackGeom->elements[waypointIdx].vertexIdx1;
+    verts = trackGeom->vertices;
+    endVertexIdx = trackGeom->elements[waypointIdx].vertexIdx2;
+    startVert = (Vertex6 *)((s32)startVertexIdx * sizeof(Vertex6) + (s32)verts);
+    endVert = (Vertex6 *)((s32)endVertexIdx * sizeof(Vertex6) + (s32)verts);
 
-    return (func_8006D21C_6DE1C(vert0->x, vert0->z, vert1->x, vert1->z) - 0x1000) & 0xFFFF;
+    return (func_8006D21C_6DE1C(startVert->x, startVert->z, endVert->x, endVert->z) - 0x1000) & 0xFFFF;
 }
 
 s32 func_80062C98_63898(TrackSegmentEntry **arg0, u16 index) {

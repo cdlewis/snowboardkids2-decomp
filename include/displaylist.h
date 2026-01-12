@@ -160,7 +160,7 @@ void findTrackFaceAtPosition(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2,
 
 void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1);
 
-u16 func_80062B1C_6371C(void *arg0, u16 arg1, void *arg2, void *arg3);
+u16 getTrackSegmentWaypoints(void *trackGeom, u16 waypointIdx, void *waypointStart, void *waypointEnd);
 
 typedef struct {
     s16 unk0;

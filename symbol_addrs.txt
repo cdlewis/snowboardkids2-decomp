@@ -2801,3 +2801,4 @@ initStoryMapRareEvent = 0x8002BCF0; // rom:0x2C8F0
 projectPositionOntoTrackSegment = 0x800620D0; // rom:0x62CD0
 getTrackEndInfo = 0x800625A4; // rom:0x631A4
 findTrackFaceAtPosition = 0x80062918; // rom:0x63518
+getTrackSegmentWaypoints = 0x80062B1C; // rom:0x6371C

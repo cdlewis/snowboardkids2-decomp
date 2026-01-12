@@ -236,7 +236,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     allocation = (Allocation_F7C8 *)getCurrentAllocation();
     parseGameDataLayout((GameDataLayout *)state->gameData);
 
-    func_80062B1C_6371C(state->gameData, state->startWaypoint, waypointStart, waypointEnd);
+    getTrackSegmentWaypoints(state->gameData, state->startWaypoint, waypointStart, waypointEnd);
 
     memcpy(&state->transform, identityMatrix, sizeof(Transform3D));
     memcpy(state, waypointEnd, 0xC);
@@ -323,7 +323,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
     waypoint = func_80060A3C_6163C(gameData, state->startWaypoint, state);
     state->startWaypoint = waypoint;
 
-    func_80062B1C_6371C(gameData, waypoint, waypointStart, waypointEnd);
+    getTrackSegmentWaypoints(gameData, waypoint, waypointStart, waypointEnd);
 
     state->targetRotation =
         (func_8006D21C_6DE1C(waypointEnd[0], waypointEnd[2], state->posX, state->posZ) - 0x1000) & 0x1FFF;
@@ -371,7 +371,7 @@ void resumeLevelPreviewAfterHold(Func80020418Arg *arg0) {
         temp = func_80060A3C_6163C(unk18, arg0->unk52, arg0);
         arg0->unk52 = temp;
 
-        func_80062B1C_6371C(unk18, temp, pos1, pos2);
+        getTrackSegmentWaypoints(unk18, temp, pos1, pos2);
 
         arg0->unk5A = (func_8006D21C_6DE1C(pos1[0], pos1[2], arg0->unk0, arg0->unk8) - 0x1000) & 0x1FFF;
 
