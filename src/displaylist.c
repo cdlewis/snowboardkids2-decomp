@@ -169,19 +169,19 @@ typedef struct {
 } Element24_Face;
 
 typedef struct {
-    s16 unk0;
-    u8 padding[0x14];
-    u16 unk16;
-    u8 padding2[0x4];
-    u16 unk1C;
-    u8 padding3[0x6];
-} Element24;
+    /* 0x00 */ s16 nextElementIdx;
+    /* 0x02 */ u8 padding[0x14];
+    /* 0x16 */ u16 vertexIdx1;
+    /* 0x18 */ u8 padding2[0x4];
+    /* 0x1C */ u16 vertexIdx2;
+    /* 0x1E */ u8 padding3[0x6];
+} TrackSegmentElement;
 
 typedef struct {
-    void *unk0;
-    Vertex6 *unk4;
-    void *unk8;
-    Element24 *unkC;
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ Vertex6 *vertices;
+    /* 0x08 */ void *unk8;
+    /* 0x0C */ TrackSegmentElement *elements;
 } TrackGeometryData;
 
 struct TrackGeometryFaceData {
@@ -197,7 +197,7 @@ typedef struct {
     s16 z;
 } PositionXZ;
 
-s32 func_800620D0_62CD0(TrackGeometryData *arg0, u16 arg1, PositionXZ *arg2) {
+s32 projectPositionOntoTrackSegment(TrackGeometryData *arg0, u16 arg1, PositionXZ *arg2) {
     s32 dz;
     s32 dx;
     Vertex6 *verts;
@@ -212,9 +212,9 @@ s32 func_800620D0_62CD0(TrackGeometryData *arg0, u16 arg1, PositionXZ *arg2) {
     s32 unitZ;
     s32 result;
 
-    idx0 = arg0->unkC[arg1].unk16;
-    verts = arg0->unk4;
-    idx1 = arg0->unkC[arg1].unk1C;
+    idx0 = arg0->elements[arg1].vertexIdx1;
+    verts = arg0->vertices;
+    idx1 = arg0->elements[arg1].vertexIdx2;
 
     dx = verts[idx0].x - verts[idx1].x;
     dz = verts[idx0].z - verts[idx1].z;
@@ -226,10 +226,10 @@ s32 func_800620D0_62CD0(TrackGeometryData *arg0, u16 arg1, PositionXZ *arg2) {
     temp = (dz << 13) / dist;
     unitZ = temp;
 
-    idx1 = arg0->unkC[arg1].unk1C;
+    idx1 = arg0->elements[arg1].vertexIdx2;
     temp = arg2->x;
     dx = temp;
-    vertsTemp = arg0->unk4;
+    vertsTemp = arg0->vertices;
     roundUp = 0x1FFF;
     verts = vertsTemp;
     dx = dx - verts[idx1].x;
@@ -255,7 +255,7 @@ typedef TrackGeometryData func_80062B1C_arg0;
 u16 func_800625A4_631A4(void *arg0, void *arg1) {
     s32 var_v1;
     s32 temp_v0;
-    Element24 *elements;
+    TrackSegmentElement *elements;
     Vertex6 *verts;
     u16 idx0;
     u16 idx1;
@@ -263,25 +263,25 @@ u16 func_800625A4_631A4(void *arg0, void *arg1) {
     Vertex6 *vert1;
 
     var_v1 = 0;
-    elements = ((func_80062B1C_arg0 *)arg0)->unkC;
+    elements = ((func_80062B1C_arg0 *)arg0)->elements;
 
     while (1) {
-        temp_v0 = elements[var_v1].unk0;
+        temp_v0 = elements[var_v1].nextElementIdx;
         if (temp_v0 < 0) {
             break;
         }
         var_v1 = temp_v0;
     }
 
-    ((Vec3i *)arg1)->x = ((func_80062B1C_arg0 *)arg0)->unk4[(elements + var_v1)->unk1C].x << 16;
-    ((Vec3i *)arg1)->y = ((func_80062B1C_arg0 *)arg0)->unk4[(((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk1C].y
-                         << 16;
-    ((Vec3i *)arg1)->z = ((func_80062B1C_arg0 *)arg0)->unk4[(((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk1C].z
-                         << 16;
+    ((Vec3i *)arg1)->x = ((func_80062B1C_arg0 *)arg0)->vertices[(elements + var_v1)->vertexIdx2].x << 16;
+    ((Vec3i *)arg1)->y =
+        ((func_80062B1C_arg0 *)arg0)->vertices[(((func_80062B1C_arg0 *)arg0)->elements + var_v1)->vertexIdx2].y << 16;
+    ((Vec3i *)arg1)->z =
+        ((func_80062B1C_arg0 *)arg0)->vertices[(((func_80062B1C_arg0 *)arg0)->elements + var_v1)->vertexIdx2].z << 16;
 
-    idx0 = (((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk16;
-    verts = ((func_80062B1C_arg0 *)arg0)->unk4;
-    idx1 = (((func_80062B1C_arg0 *)arg0)->unkC + var_v1)->unk1C;
+    idx0 = (((func_80062B1C_arg0 *)arg0)->elements + var_v1)->vertexIdx1;
+    verts = ((func_80062B1C_arg0 *)arg0)->vertices;
+    idx1 = (((func_80062B1C_arg0 *)arg0)->elements + var_v1)->vertexIdx2;
     vert0 = (Vertex6 *)((s32)idx0 * sizeof(Vertex6) + (s32)verts);
     vert1 = (Vertex6 *)((s32)idx1 * sizeof(Vertex6) + (s32)verts);
 
@@ -361,17 +361,17 @@ u16 func_80062B1C_6371C(void *arg0_void, u16 arg1, void *arg2_void, void *arg3_v
     Vertex6 *vert0;
     Vertex6 *vert1;
 
-    arg2->x = arg0->unk4[arg0->unkC[arg1].unk16].x << 16;
-    arg2->y = arg0->unk4[arg0->unkC[arg1].unk16].y << 16;
-    arg2->z = arg0->unk4[arg0->unkC[arg1].unk16].z << 16;
+    arg2->x = arg0->vertices[arg0->elements[arg1].vertexIdx1].x << 16;
+    arg2->y = arg0->vertices[arg0->elements[arg1].vertexIdx1].y << 16;
+    arg2->z = arg0->vertices[arg0->elements[arg1].vertexIdx1].z << 16;
 
-    arg3->x = arg0->unk4[arg0->unkC[arg1].unk1C].x << 16;
-    arg3->y = arg0->unk4[arg0->unkC[arg1].unk1C].y << 16;
-    arg3->z = arg0->unk4[arg0->unkC[arg1].unk1C].z << 16;
+    arg3->x = arg0->vertices[arg0->elements[arg1].vertexIdx2].x << 16;
+    arg3->y = arg0->vertices[arg0->elements[arg1].vertexIdx2].y << 16;
+    arg3->z = arg0->vertices[arg0->elements[arg1].vertexIdx2].z << 16;
 
-    idx0 = arg0->unkC[arg1].unk16;
-    verts = arg0->unk4;
-    idx1 = arg0->unkC[arg1].unk1C;
+    idx0 = arg0->elements[arg1].vertexIdx1;
+    verts = arg0->vertices;
+    idx1 = arg0->elements[arg1].vertexIdx2;
     vert0 = (Vertex6 *)((s32)idx0 * sizeof(Vertex6) + (s32)verts);
     vert1 = (Vertex6 *)((s32)idx1 * sizeof(Vertex6) + (s32)verts);
 
