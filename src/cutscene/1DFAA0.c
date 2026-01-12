@@ -172,13 +172,13 @@ void resetAllSlotModels(CutsceneSlot *slots) {
     }
 }
 
-void func_800B2E48_1DFEF8(CutsceneManager *manager) {
+void resetAllSlotTransforms(CutsceneManager *manager) {
     s32 i;
     CutsceneManager *iterPtr;
     s32 byteOffset;
     SceneModel *model;
     s32 slotOffset;
-    u8 *slotAddr;
+    CutsceneSlot *slot;
     CutsceneSlotData *slotData;
 
     i = 0;
@@ -191,14 +191,14 @@ void func_800B2E48_1DFEF8(CutsceneManager *manager) {
 
         if (model != NULL) {
             slotOffset = byteOffset + 0xA8;
-            slotAddr = (u8 *)manager + slotOffset;
-            slotData = (CutsceneSlotData *)(slotAddr + 0x4C);
+            slot = (CutsceneSlot *)((u8 *)manager + slotOffset);
+            slotData = &slot->slotData;
 
             interpolateSlotScaleX(slotData, 0x10000, 0);
             interpolateSlotScaleY(slotData, 0x10000, 0);
             interpolateSlotScaleZ(slotData, 0x10000, 0);
             setupSlotTransform(slotData);
-            applyTransformToModel(model, (Transform3D *)(slotAddr + 0x50));
+            applyTransformToModel(model, &slotData->unk04);
         }
 
         iterPtr = (CutsceneManager *)((u8 *)iterPtr + 0xF4);
@@ -245,7 +245,7 @@ void func_800B2F2C(CutsceneManager *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4
     arg0->enableTransparency = 0;
     arg0->skipAnimation = 0;
     showAllSlotModels((CutsceneSlot *)arg0);
-    func_800B2E48_1DFEF8(arg0);
+    resetAllSlotTransforms(arg0);
     clearAuxRenderEnabled(&arg0->unkFF8);
 }
 

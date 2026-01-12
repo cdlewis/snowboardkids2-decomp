@@ -270,7 +270,7 @@ void cleanupCutsceneManager(CutsceneManager *manager);
 void hideAllSlotModels(CutsceneSlot *slots);
 void showAllSlotModels(CutsceneSlot *slots);
 void resetAllSlotModels(CutsceneSlot *slots);
-void func_800B2E48_1DFEF8(CutsceneManager *manager);
+void resetAllSlotTransforms(CutsceneManager *manager);
 s32 processCutsceneFrame(CutsceneManager *uiManager);
 s16 func_800B3360(s16, s16);
 void *func_800B3420_1E04D0(void);
