@@ -252,7 +252,7 @@ void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void initPlayerItemDisplayTask(PlayerItemDisplayState *state);
 void initPlayerLapCounterTask(LapCounterState *state);
 typedef struct GoldDisplayState_s GoldDisplayState;
-void func_8004CA90_4D690(GoldDisplayState *);
+void initPlayerGoldDisplayTask(GoldDisplayState *state);
 void func_8004CDC0_4D9C0(void);
 void cleanupPlayerItemDisplayTask(Struct_func_8004C6F0 *arg0);
 void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state);
@@ -611,27 +611,27 @@ struct GoldDisplayState_s {
     u16 animCounter;        // 0x2E
 };
 
-void func_8004CA90_4D690(GoldDisplayState *state) {
-    GameState *allocation;
-    void *digitsAsset;
-    s32 playerMode;
+void initPlayerGoldDisplayTask(GoldDisplayState *state) {
+    GameState *gameState;
+    void *digitsRomStart;
+    s32 numPlayers;
 
-    allocation = getCurrentAllocation();
-    state->player = (Player *)((u8 *)allocation->players + state->playerIndex * 0xBE8);
+    gameState = getCurrentAllocation();
+    state->player = (Player *)((u8 *)gameState->players + state->playerIndex * 0xBE8);
 
-    playerMode = allocation->unk5F;
-    if (playerMode >= 3) {
+    numPlayers = gameState->unk5F;
+    if (numPlayers >= 3) {
         state->textX = 0x12;
         goto multiplayer;
     }
-    digitsAsset = &_3F6950_ROM_START;
-    if (playerMode == 0) {
+    digitsRomStart = &_3F6950_ROM_START;
+    if (numPlayers == 0) {
         goto multiplayer_setup;
     }
 
     // Singleplayer path
     state->x = 0x50;
-    if (allocation->unk5F == 1) {
+    if (gameState->unk5F == 1) {
         state->y = 0x50;
     } else {
         if (state->playerIndex == 0) {
@@ -640,7 +640,7 @@ void func_8004CA90_4D690(GoldDisplayState *state) {
             state->y = 0x20;
         }
     }
-    state->digitsTexture = loadCompressedData(digitsAsset, &_3F6BB0_ROM_START, 0x508);
+    state->digitsTexture = loadCompressedData(digitsRomStart, &_3F6BB0_ROM_START, 0x508);
     state->iconX = state->x + 0x28;
     state->iconY = state->y;
     state->iconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
@@ -661,7 +661,7 @@ common:
     state->animCounter = 0;
     setCleanupCallback(cleanupPlayerGoldDisplayTask);
 
-    if (allocation->unk5F < 3) {
+    if (gameState->unk5F < 3) {
         setCallbackWithContinue(updatePlayerGoldDisplaySinglePlayer);
     } else {
         setCallbackWithContinue(updatePlayerGoldDisplayMultiplayer);
@@ -2605,7 +2605,7 @@ void func_8005011C_50D1C(void) {
                 SCHEDULE_AND_SET(initPlayerFinishPositionTask, 4, i);
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
-                SCHEDULE_AND_SET_SHORT(func_8004CA90_4D690, 22, i);
+                SCHEDULE_AND_SET_SHORT(initPlayerGoldDisplayTask, 22, i);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
                 break;
 
