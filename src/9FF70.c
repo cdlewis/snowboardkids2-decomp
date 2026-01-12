@@ -2647,21 +2647,21 @@ s32 updateStunnedBounceLaunchPhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800B5FC4_A5E74(Player *arg0) {
-    u8 temp;
-    s32 velZ;
-    s32 dist;
+s32 updateKnockbackAirbornePhase(Player *arg0) {
+    u8 step;
+    s32 knockbackVelZ;
+    s32 horizontalSpeed;
 
-    temp = arg0->unkBBF;
-    if (temp == 0) {
+    step = arg0->unkBBF;
+    if (step == 0) {
         arg0->velocity.x = arg0->unkAC8;
-        velZ = arg0->unkAD0;
-        arg0->unkBBF = temp + 1;
-        arg0->velocity.z = velZ;
-        dist = isqrt64((s64)arg0->velocity.x * arg0->velocity.x + (s64)velZ * velZ);
-        if (dist > 0x60000) {
-            arg0->velocity.x = (s64)arg0->velocity.x * 0x60000 / dist;
-            arg0->velocity.z = (s64)arg0->velocity.z * 0x60000 / dist;
+        knockbackVelZ = arg0->unkAD0;
+        arg0->unkBBF = step + 1;
+        arg0->velocity.z = knockbackVelZ;
+        horizontalSpeed = isqrt64((s64)arg0->velocity.x * arg0->velocity.x + (s64)knockbackVelZ * knockbackVelZ);
+        if (horizontalSpeed > 0x60000) {
+            arg0->velocity.x = (s64)arg0->velocity.x * 0x60000 / horizontalSpeed;
+            arg0->velocity.z = (s64)arg0->velocity.z * 0x60000 / horizontalSpeed;
         }
         arg0->velocity.y = 0x90000;
         arg0->unkA8C = 0xFFFF;
