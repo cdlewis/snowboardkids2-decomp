@@ -406,7 +406,7 @@ void updateMusicVolumeFadeIn(void *arg) {
             );
             setCallbackWithContinue(handleMusicFadeOutTransition);
         }
-        if (func_80057A34_58634(gGraphicsManager->currentAudioChannel) == NULL) {
+        if (getAudioChannelActiveState(gGraphicsManager->currentAudioChannel) == NULL) {
             gGraphicsManager->musicFadeState = 0;
             setCallbackWithContinue(checkNoActiveAudioChannels);
         }
@@ -414,7 +414,7 @@ void updateMusicVolumeFadeIn(void *arg) {
 }
 
 void handleMusicFadeOutTransition(void) {
-    if (func_80057A34_58634(gGraphicsManager->currentAudioChannel) == 0) {
+    if (getAudioChannelActiveState(gGraphicsManager->currentAudioChannel) == 0) {
         setCallbackWithContinue(&checkNoActiveAudioChannels);
         return;
     }
@@ -633,10 +633,10 @@ void initializeMusicPtrBankAsync(void *ptrBank, void *waveBank) {
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
 
-void *func_80057A34_58634(void *arg0) {
+void *getAudioChannelActiveState(void *audioChannel) {
     void *message;
 
-    D_800A2D10_A3910.audioChannel = arg0;
+    D_800A2D10_A3910.audioChannel = audioChannel;
     osSendMesg(&gfxTaskQueue, (OSMesg *)9, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     return message;

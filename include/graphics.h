@@ -35,7 +35,7 @@ void setAudioChannelVolume(void *audioChannel, s32 volume);
 void *startMusicPlaybackWithVoice(void *musicDataBuffer, void *musicBankBuffer, s32 voiceIndex);
 void *startMusicPlayback(void *musicDataBuffer, void *musicBankBuffer);
 void initializeMusicPtrBankAsync(void *ptrBank, void *waveBank);
-void *func_80057A34_58634(void *arg0);
+void *getAudioChannelActiveState(void *audioChannel);
 void *func_80057A7C_5867C(void);
 void func_80057ABC_586BC(s32 arg0, s32 arg1);
 void func_80057B1C_5871C(s32 arg0);
