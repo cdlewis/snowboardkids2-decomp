@@ -2396,7 +2396,7 @@ s32 updateStunnedRecoveryEndPhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800B5938_A57E8(Player *arg0) {
+s32 updateStunnedRecoveryStandUpPhase(Player *arg0) {
     s16 angle;
     s16 angleDelta;
 
