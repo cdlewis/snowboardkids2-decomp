@@ -133,7 +133,7 @@ s32 cutsceneSysIntMode_validate(void) {
 }
 
 void cutsceneSysIntMode_exec(cutsceneSysIntMode_exec_arg *arg0) {
-    osViExtendVStart(arg0->unk0);
+    osViExtendVStart(arg0->vStartExtension);
 }
 
 void cutsceneSysWipeColor_init(void) {

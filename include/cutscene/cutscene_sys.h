@@ -40,7 +40,7 @@ s32 cutsceneSysFlash_isDone(void);
 void cutsceneSysIntMode_init(void);
 s32 cutsceneSysIntMode_validate(void);
 typedef struct {
-    s8 unk0;
+    s8 vStartExtension;
 } cutsceneSysIntMode_exec_arg;
 void cutsceneSysIntMode_exec(cutsceneSysIntMode_exec_arg *arg0);
 void cutsceneSysWipeColor_init(void);
