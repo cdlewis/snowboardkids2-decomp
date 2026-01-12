@@ -272,7 +272,7 @@ typedef struct {
     u8 PAD_80[0x2];
     u8 unk82;
     /* 0x83 */ u8 unk83;
-    /* 0x84 */ u8 unk84;
+    /* 0x84 */ u8 itemBoxesDisabled;
     u8 unk85;
     u8 unk86;
     u8 PAD_7B[0x53];
