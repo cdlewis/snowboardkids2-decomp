@@ -10,15 +10,15 @@ typedef struct {
 } cutsceneSysDisp_exec_arg;
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    s8 unk2;
+    s8 unused;
+    s8 fadeMode;
+    s8 brightnessIndex;
 } cutsceneSysFadeIn_exec_arg;
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    u8 unk2;
+    s8 unused;
+    s8 fadeMode;
+    u8 brightnessIndex;
 } cutsceneSysFadeOut_exec_arg;
 
 void cutsceneSysDisp_init(void);
