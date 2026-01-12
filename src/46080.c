@@ -2439,7 +2439,7 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
     itemBox->matrix.translation.y += 0x200000 + (sinResult << 5);
 
     do {
-        func_8006417C_64D7C(i, (DisplayListObject *)itemBox);
+        enqueueBillboardedDisplayListObject(i, (DisplayListObject *)itemBox);
         i++;
     } while (i < 4);
 }

@@ -140,7 +140,7 @@ void func_80067EDC_68ADC(s32, loadAssetMetadata_arg *);
 
 void buildOverlayDisplayListSegment(DisplayListObject *obj);
 
-void func_8006417C_64D7C(s32 arg0, DisplayListObject *arg1);
+void enqueueBillboardedDisplayListObject(s32 arg0, DisplayListObject *arg1);
 
 void func_80065DA8_669A8(s32 arg0, DisplayListObject *arg1);
 

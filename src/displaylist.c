@@ -101,7 +101,7 @@ void func_800680C4_68CC4(void);
 void func_80064CF4_658F4(DisplayListObject *);
 void prepareDisplayListRenderState(DisplayListObject *);
 void setupDisplayListMatrix(DisplayListObject *);
-void func_80063A94_64694(DisplayListObject *);
+void setupBillboardDisplayListMatrix(DisplayListObject *);
 void func_800648EC_654EC(DisplayListObject *);
 void func_80064F74_65B74(DisplayListObject *);
 void func_80068060_68C60(void);
@@ -694,7 +694,7 @@ void enqueueDisplayListObjectWithSegments(s32 arg0, DisplayListObject *arg1) {
     }
 }
 
-void func_80063A94_64694(DisplayListObject *obj) {
+void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
     Mtx lookAtMatrix;
     f32 eyeX;
     f32 eyeY;
@@ -819,40 +819,40 @@ void func_80063A94_64694(DisplayListObject *obj) {
     gSPMatrix(gRegionAllocPtr++, &obj->unk30[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 }
 
-void func_8006405C_64C5C(DisplayListObject *arg0) {
+void renderBillboardedOpaqueDisplayList(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
-        func_80063A94_64694(arg0);
+        setupBillboardDisplayListMatrix(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
     }
 }
 
-void func_800640BC_64CBC(DisplayListObject *arg0) {
+void renderBillboardedTransparentDisplayList(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
-        func_80063A94_64694(arg0);
+        setupBillboardDisplayListMatrix(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
     }
 }
 
-void func_8006411C_64D1C(DisplayListObject *arg0) {
+void renderBillboardedOverlayDisplayList(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
-        func_80063A94_64694(arg0);
+        setupBillboardDisplayListMatrix(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
     }
 }
 
-void func_8006417C_64D7C(s32 arg0, DisplayListObject *arg1) {
+void enqueueBillboardedDisplayListObject(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
 
     if (arg1->displayLists->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 1, &func_8006405C_64C5C, arg1);
+        debugEnqueueCallback(arg0, 1, &renderBillboardedOpaqueDisplayList, arg1);
     }
 
     if (arg1->displayLists->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 3, &func_800640BC_64CBC, arg1);
+        debugEnqueueCallback(arg0, 3, &renderBillboardedTransparentDisplayList, arg1);
     }
 
     if (arg1->displayLists->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 5, &func_8006411C_64D1C, arg1);
+        debugEnqueueCallback(arg0, 5, &renderBillboardedOverlayDisplayList, arg1);
     }
 }
 

@@ -1135,6 +1135,11 @@ loadAssetMetadataByIndex = 0x80067F5C;
 loadAssetMetadata = 0x80067F0C;
 enqueueMultiPartDisplayList = 0x80065900;
 enqueueDisplayListWithFrustumCull = 0x80063788;
+setupBillboardDisplayListMatrix = 0x80063A94; // rom:0x64694
+renderBillboardedOpaqueDisplayList = 0x8006405C; // rom:0x64C5C
+renderBillboardedTransparentDisplayList = 0x800640BC; // rom:0x64CBC
+renderBillboardedOverlayDisplayList = 0x8006411C; // rom:0x64D1C
+enqueueBillboardedDisplayListObject = 0x8006417C; // rom:0x64D7C
 enqueueDisplayListObject = 0x800635CC;
 setupDisplayListMatrix = 0x8006318C;
 
