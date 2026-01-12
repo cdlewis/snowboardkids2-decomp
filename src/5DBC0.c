@@ -16,7 +16,7 @@ s32 func_8005CFDC_5DBDC(void *arg0, u16 arg1, void *arg2, s32 arg3, s32 arg4) {
 }
 
 void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4) {
-    func_80062918_63518(arg0, arg1, arg2, arg3, arg4);
+    findTrackFaceAtPosition(arg0, arg1, arg2, arg3, arg4);
 }
 
 s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3) {

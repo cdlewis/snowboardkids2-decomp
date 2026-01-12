@@ -156,7 +156,7 @@ s32 func_80061D6C_6296C(void *arg0, u16 arg1, void *arg2, s32 arg3);
 s32 func_80062274_62E74(void *arg0, u16 arg1);
 
 typedef struct TrackGeometryFaceData TrackGeometryFaceData;
-void func_80062918_63518(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 *arg3, u8 *arg4);
+void findTrackFaceAtPosition(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 *arg3, u8 *arg4);
 
 void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1);
 

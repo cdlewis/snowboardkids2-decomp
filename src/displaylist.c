@@ -153,20 +153,20 @@ typedef struct {
 } Vertex6;
 
 typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u8 unk6;
-    u8 unk7;
-} Face8;
+    u16 v0;
+    u16 v1;
+    u16 v2;
+    u8 flags;
+    u8 surfaceIndex;
+} TrackFace;
 
 typedef struct {
     s16 unk0;
     u8 padding[0xA];
-    u16 unkC;
-    u16 unkE;
+    u16 baseIndex;
+    u16 count;
     u8 padding2[0x14];
-} Element24_Face;
+} TrackFaceGroup;
 
 typedef struct {
     /* 0x00 */ s16 nextElementIdx;
@@ -186,9 +186,9 @@ typedef struct {
 
 struct TrackGeometryFaceData {
     void *unk0;
-    Vertex6 *unk4;
-    Face8 *unk8;
-    Element24_Face *unkC;
+    Vertex6 *vertices;
+    TrackFace *faces;
+    TrackFaceGroup *faceGroups;
 };
 
 typedef struct {
@@ -290,7 +290,7 @@ u16 getTrackEndInfo(void *arg0, void *arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800626C4_632C4);
 
-void func_80062918_63518(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 *arg3, u8 *arg4) {
+void findTrackFaceAtPosition(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 *arg3, u8 *arg4) {
     s32 sp24;
     s32 sp2C;
     s32 temp_fp;
@@ -300,54 +300,54 @@ void func_80062918_63518(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 
     s32 temp_s7;
     s32 var_s2;
     s32 var_s3;
-    Face8 *temp_a0;
+    TrackFace *temp_a0;
     Vertex6 *temp_a1;
     Vertex6 *temp_v0_2;
     Vertex6 *temp_v0_3;
     Vertex6 *temp_v0_4;
-    Element24_Face *temp_v0;
-    Element24_Face *temp_v0_5;
+    TrackFaceGroup *temp_v0;
+    TrackFaceGroup *temp_v0_5;
     s32 temp_v1;
     s32 idx;
-    Element24_Face *base;
+    TrackFaceGroup *base;
 
     idx = arg1;
-    base = arg0->unkC;
+    base = arg0->faceGroups;
     temp_v1 = ((idx << 3) + idx) << 2;
-    temp_v0 = (Element24_Face *)(temp_v1 + (s32)base);
-    var_s3 = temp_v0->unkC;
+    temp_v0 = (TrackFaceGroup *)(temp_v1 + (s32)base);
+    var_s3 = temp_v0->baseIndex;
     sp2C = temp_v1;
     var_s2 = var_s3 << 3;
-    if (var_s3 < (var_s3 + temp_v0->unkE)) {
+    if (var_s3 < (var_s3 + temp_v0->count)) {
         do {
-            temp_a0 = (Face8 *)(var_s2 + (s32)arg0->unk8);
-            temp_a1 = arg0->unk4;
-            temp_v0_2 = (Vertex6 *)((temp_a0->unk0 * 6) + (s32)temp_a1);
+            temp_a0 = (TrackFace *)(var_s2 + (s32)arg0->faces);
+            temp_a1 = arg0->vertices;
+            temp_v0_2 = (Vertex6 *)((temp_a0->v0 * 6) + (s32)temp_a1);
             temp_fp = (s32)temp_v0_2->x;
             sp24 = (s32)temp_v0_2->z;
-            temp_v0_3 = (Vertex6 *)((temp_a0->unk2 * 6) + (s32)temp_a1);
+            temp_v0_3 = (Vertex6 *)((temp_a0->v1 * 6) + (s32)temp_a1);
             temp_s4 = (s32)temp_v0_3->x;
             temp_s5 = (s32)temp_v0_3->z;
-            temp_v0_4 = (Vertex6 *)((temp_a0->unk4 * 6) + (s32)temp_a1);
+            temp_v0_4 = (Vertex6 *)((temp_a0->v2 * 6) + (s32)temp_a1);
             temp_s6 = (s32)temp_v0_4->x;
             temp_s7 = (s32)temp_v0_4->z;
-            if ((temp_a0->unk6 & 1) ||
+            if ((temp_a0->flags & 1) ||
                 (cross2d(arg2->x, arg2->z, temp_fp << 0x10, sp24 << 0x10, temp_s4 << 0x10, temp_s5 << 0x10) >= 0)) {
-                if ((((Face8 *)(var_s2 + (s32)arg0->unk8))->unk6 & 2) ||
+                if ((((TrackFace *)(var_s2 + (s32)arg0->faces))->flags & 2) ||
                     (cross2d(arg2->x, arg2->z, temp_s4 << 0x10, temp_s5 << 0x10, temp_s6 << 0x10, temp_s7 << 0x10) >= 0
                     )) {
                     if (cross2d(arg2->x, arg2->z, temp_s6 << 0x10, temp_s7 << 0x10, temp_fp << 0x10, sp24 << 0x10) >=
                         0) {
-                        *arg3 = ((Face8 *)(var_s2 + (s32)arg0->unk8))->unk6 >> 2;
-                        *arg4 = ((Face8 *)(var_s2 + (s32)arg0->unk8))->unk7;
+                        *arg3 = ((TrackFace *)(var_s2 + (s32)arg0->faces))->flags >> 2;
+                        *arg4 = ((TrackFace *)(var_s2 + (s32)arg0->faces))->surfaceIndex;
                         return;
                     }
                 }
             }
-            temp_v0_5 = (Element24_Face *)(sp2C + (s32)arg0->unkC);
+            temp_v0_5 = (TrackFaceGroup *)(sp2C + (s32)arg0->faceGroups);
             var_s3 += 1;
             var_s2 += 8;
-        } while (var_s3 < (temp_v0_5->unkC + temp_v0_5->unkE));
+        } while (var_s3 < (temp_v0_5->baseIndex + temp_v0_5->count));
     }
 }
 
