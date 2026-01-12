@@ -55,7 +55,7 @@ void mainThreadEntrypoint(void *arg) {
                     break;
                 case 0xA:
                     isPaused = 1;
-                    func_80057870_58470(0x14);
+                    sendStopAudioChannelsCommand(0x14);
                     break;
                 case 0:
                 case 1:

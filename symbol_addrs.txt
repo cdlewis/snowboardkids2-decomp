@@ -44,6 +44,7 @@ playMusicTrackWithVoice = 0x800574E0; // rom:0x580E0
 setMusicFadeOut = 0x80057564; // rom:0x58164
 initializeGfxCommThread = 0x8005758C; // rom:0x5818C
 gfxCommThreadFunc = 0x80057614; // rom:0x58214
+sendStopAudioChannelsCommand = 0x80057870; // rom:0x58470
 initSprayEffectTask = 0x80050460; // rom:0x51060
 loadFirstSprayParticle = 0x800504A0; // rom:0x510A0
 updateSprayEffect = 0x80050504; // rom:0x51104

@@ -580,12 +580,12 @@ void gfxCommThreadFunc(void *arg0) {
     }
 }
 
-void func_80057870_58470(s32 arg0) {
+void sendStopAudioChannelsCommand(s32 stoppingSpeed) {
     void *message;
 
     if ((D_80093BA5_947A5 != NULL) && (D_80093BA6_947A6 == NULL)) {
         D_80093BA6_947A6++;
-        D_800A2D10_A3910.unk20 = arg0;
+        D_800A2D10_A3910.unk20 = stoppingSpeed;
         osSendMesg(&gfxTaskQueue, (OSMesg *)0xD, OS_MESG_BLOCK);
         osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     }
