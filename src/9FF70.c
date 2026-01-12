@@ -2157,7 +2157,7 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
     return 0;
 }
 
-s32 func_800B4F5C_A4E0C(Player *arg0) {
+s32 updateStunnedRecoveryGetUpPhase(Player *arg0) {
     s16 angle;
 
     if (arg0->unkBBF != 0) {
