@@ -285,7 +285,7 @@ void updateSlapstickProjectile(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->pos, &arg0->vel, 2);
+        spawnSprayEffect(&arg0->pos, &arg0->vel, 2);
 
         arg0->vel.y += 0xFFFC0000;
 
@@ -502,7 +502,7 @@ void updateParachuteProjectile(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->pos, &arg0->vel, 3);
+        spawnSprayEffect(&arg0->pos, &arg0->vel, 3);
 
         arg0->vel.y += 0xFFFC0000;
 
@@ -724,7 +724,7 @@ void updateFryingPanProjectile(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->pos, &arg0->vel, 4);
+        spawnSprayEffect(&arg0->pos, &arg0->vel, 4);
 
         arg0->vel.y += 0xFFFC0000;
 
@@ -959,7 +959,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        func_80050604_51204(&arg0->pos, (Vec3i *)&arg0->vel, 5);
+        spawnSprayEffect(&arg0->pos, (Vec3i *)&arg0->vel, 5);
 
         arg0->vel.y += 0xFFFC0000;
 
@@ -1174,7 +1174,7 @@ void func_80053B38_54738(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->pos, &arg0->vel, 6);
+        spawnSprayEffect(&arg0->pos, &arg0->vel, 6);
 
         arg0->vel.y += 0xFFFC0000;
 
@@ -1385,7 +1385,7 @@ void func_80054144_54D44(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->pos, (Vec3i *)&arg0->vel, 7);
+        spawnSprayEffect(&arg0->pos, (Vec3i *)&arg0->vel, 7);
 
         arg0->vel.y += 0xFFFC0000;
 
@@ -1544,7 +1544,7 @@ void func_80054658_55258(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        func_80050604_51204(&arg0->pos, (Vec3i *)&arg0->vel, 6);
+        spawnSprayEffect(&arg0->pos, (Vec3i *)&arg0->vel, 6);
 
         arg0->vel.y -= 0x3000;
         s1 = &alloc->unk30;
@@ -1668,7 +1668,7 @@ void func_80054AE4_556E4(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        func_80050604_51204(&arg0->pos, (Vec3i *)&arg0->vel, 6);
+        spawnSprayEffect(&arg0->pos, (Vec3i *)&arg0->vel, 6);
 
         s1 = &alloc->unk30;
         arg0->vel.y -= 0x8000;
@@ -1872,7 +1872,7 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        func_80050604_51204(&arg0->pos, &arg0->unk24, 0x6A);
+        spawnSprayEffect(&arg0->pos, &arg0->unk24, 0x6A);
 
         arg0->unk24.y += 0xFFFC0000;
 
@@ -2047,7 +2047,7 @@ void func_80055650_56250(Struct_52880 *arg0) {
     s1 = &arg0->pos;
     s0 = &arg0->vel;
 
-    func_80050604_51204(s1, s0, 0x6E);
+    spawnSprayEffect(s1, s0, 0x6E);
 
     arg0->vel.y += 0xFFFC0000;
 
@@ -2188,7 +2188,7 @@ void func_80055A84_56684(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
         vel = &arg0->vel;
-        func_80050604_51204(&arg0->pos, vel, 4);
+        spawnSprayEffect(&arg0->pos, vel, 4);
         arg0->vel.y += 0xFFFC0000;
         normalizeVelocityToSpeed(vel, 0x190000);
         memcpy(&prevPos, &arg0->pos, 0xC);

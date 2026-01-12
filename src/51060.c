@@ -12,24 +12,24 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    void *unk0;
-    loadAssetMetadata_arg unk4;
+    DataTable_19E80 *assetTable;
+    loadAssetMetadata_arg particle;
     u8 padding2[0x10];
-    s32 unk30;
-    s32 unk34;
-    s32 unk44;
-} func_800504A0_510A0_arg;
+    s32 particleType;
+    s32 iteration;
+    s32 velX;
+} SprayEffectTask;
 
 typedef struct {
-    s32 unk0;
-    loadAssetMetadata_arg unk4;
+    s32 padding0;
+    loadAssetMetadata_arg particle;
     s32 padding2;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
+    s32 velX;
+    s32 velY;
+    s32 velZ;
     s32 padding3;
-    s32 unk34;
-} func_80050504_51104_arg;
+    s32 iteration;
+} SprayEffectUpdateTask;
 
 typedef struct {
     loadAssetMetadata_arg lam;
@@ -123,7 +123,7 @@ typedef struct {
     s32 unk0;
     s32 unk4;
     s32 unk8;
-} func_80050604_51204_arg;
+} SprayEffectSpawnTask;
 
 typedef struct {
     void *unk0;
@@ -198,8 +198,9 @@ typedef struct {
     u8 unkD6;
 } func_800518AC_524AC_arg;
 
-void func_800504A0_510A0(func_800504A0_510A0_arg *);
-void func_800505D8_511D8(s32 **arg0);
+void loadFirstSprayParticle(SprayEffectTask *);
+void cleanupSprayEffect(void **);
+void updateSprayEffect(SprayEffectUpdateTask *);
 void func_80050740_51340(func_80050740_51340_arg *);
 void func_80050864_51464(func_80050864_51464_arg *);
 void func_800509CC_515CC(func_80050C00_51800_Task *);
@@ -215,7 +216,6 @@ void func_80051800_52400(func_800516F4_522F4_arg *);
 void func_800518AC_524AC(func_800518AC_524AC_arg *);
 void func_80051B8C_5278C(func_8005186C_5246C_arg *);
 void func_80050BD4_517D4(s32 **);
-void func_80050504_51104(func_80050504_51104_arg *);
 void func_80050AA8_516A8(func_80050C00_51800_Task *arg0);
 
 extern loadAssetMetadata_arg D_80090EC0_91AC0;
@@ -228,22 +228,22 @@ extern s16 D_80090E98_91A98[];
 extern s16 D_80090EB0_91AB0[];
 extern u16 D_8009ADE0_9B9E0;
 
-void func_80050460_51060(void **node) {
+void initSprayEffectTask(void **node) {
     *node = load_3ECE40();
-    setCleanupCallback(&func_800505D8_511D8);
-    setCallbackWithContinue(&func_800504A0_510A0);
+    setCleanupCallback(&cleanupSprayEffect);
+    setCallbackWithContinue(&loadFirstSprayParticle);
 }
 
-void func_800504A0_510A0(func_800504A0_510A0_arg *arg0) {
+void loadFirstSprayParticle(SprayEffectTask *arg0) {
     GameState *gs = (GameState *)getCurrentAllocation();
-    loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk30);
-    arg0->unk4.unk1A = 0xE0;
-    arg0->unk4.unk0 = &gs->unk44->unkFC0->asset;
-    arg0->unk34 = 0;
-    setCallbackWithContinue(&func_80050504_51104);
+    loadAssetMetadata(&arg0->particle, arg0->assetTable, arg0->particleType);
+    arg0->particle.unk1A = 0xE0;
+    arg0->particle.unk0 = &gs->unk44->unkFC0->asset;
+    arg0->iteration = 0;
+    setCallbackWithContinue(&updateSprayEffect);
 }
 
-void func_80050504_51104(func_80050504_51104_arg *arg0) {
+void updateSprayEffect(SprayEffectUpdateTask *arg0) {
     GameState *gs;
     s32 i;
     gs = (GameState *)getCurrentAllocation();
@@ -253,30 +253,30 @@ void func_80050504_51104(func_80050504_51104_arg *arg0) {
         GameStateUnk44 *base;
 
         base = gs->unk44;
-        arg0->unk4.unk0 = &base->unkFC0[arg0->unk34].asset;
+        arg0->particle.unk0 = &base->unkFC0[arg0->iteration].asset;
 
-        arg0->unk34 = arg0->unk34 + 1;
-        if (arg0->unk34 == 4) {
+        arg0->iteration = arg0->iteration + 1;
+        if (arg0->iteration == 4) {
             func_80069CF8_6A8F8();
             return;
         }
-        arg0->unk4.unk1A = arg0->unk4.unk1A - 0x30;
-        arg0->unk4.position.x += arg0->unk24;
-        arg0->unk4.position.y += arg0->unk28;
-        arg0->unk4.position.z += arg0->unk2C;
+        arg0->particle.unk1A = arg0->particle.unk1A - 0x30;
+        arg0->particle.position.x += arg0->velX;
+        arg0->particle.position.y += arg0->velY;
+        arg0->particle.position.z += arg0->velZ;
     }
 
     for (i = 0; i < 4; i++) {
-        func_800677C0_683C0(i, &arg0->unk4);
+        func_800677C0_683C0(i, &arg0->particle);
     }
 }
 
-void func_800505D8_511D8(s32 **arg0) {
+void cleanupSprayEffect(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void func_80050604_51204(Vec3i *arg0, Vec3i *arg1, s32 arg2) {
-    NodeWithPayload *task = (NodeWithPayload *)scheduleTask(&func_80050460_51060, 2, 0, 0xDC);
+void spawnSprayEffect(Vec3i *arg0, Vec3i *arg1, s32 arg2) {
+    NodeWithPayload *task = (NodeWithPayload *)scheduleTask(&initSprayEffectTask, 2, 0, 0xDC);
     if (task != NULL) {
         memcpy((void *)&task->n.freeNext, arg0, sizeof(Vec3i));
         task->unk30 = arg2;
