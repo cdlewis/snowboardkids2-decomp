@@ -51,7 +51,7 @@ void initOptionsMenu(void) {
     scheduleTask(initOptionsMenuToggles, 0, 0, 0x5A);
     scheduleTask(initOptionsMenuLabels, 0, 0, 0x5A);
     scheduleTask(initOptionsMenuCursors, 0, 0, 0x5A);
-    func_800574A0_580A0(6);
+    playMusicTrack(6);
     setGameStateHandler(onOptionsMenuFadeInComplete);
 }
 

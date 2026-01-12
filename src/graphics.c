@@ -79,7 +79,7 @@ USE_ASSET(wavetables);
 
 extern void *D_800A2CE8_A38E8;
 extern void *D_800A2D08_A3908;
-extern u8 D_80093B84_94784[];
+extern u8 gMusicTrackVoiceMap[];
 extern u8 D_80093BA5_947A5;
 extern u8 D_80093BA6_947A6;
 extern OSThread D_800A2998_A3598;
@@ -430,13 +430,13 @@ void checkNoActiveAudioChannels(void) {
     }
 }
 
-void func_800574A0_580A0(s32 arg0) {
+void playMusicTrack(s32 musicTrackId) {
     gGraphicsManager->musicFadeState = 2;
-    gGraphicsManager->pendingMusicId = arg0;
+    gGraphicsManager->pendingMusicId = musicTrackId;
     gGraphicsManager->currentMusicVolume = 0x80;
     gGraphicsManager->targetMusicVolume = 0x80;
     gGraphicsManager->fadeCounter = 0;
-    gGraphicsManager->musicVoiceIndex = (s8)D_80093B84_94784[arg0];
+    gGraphicsManager->musicVoiceIndex = (s8)gMusicTrackVoiceMap[musicTrackId];
 }
 
 void func_800574E0_580E0(s16 arg0, s8 arg1) {
@@ -455,7 +455,7 @@ void func_80057514_58114(u32 arg0, u16 arg1, u16 arg2) {
     gGraphicsManager->currentMusicVolume = 0;
     gGraphicsManager->targetMusicVolume = arg1;
     gGraphicsManager->fadeCounter = arg2;
-    gGraphicsManager->musicVoiceIndex = D_80093B84_94784[arg0];
+    gGraphicsManager->musicVoiceIndex = gMusicTrackVoiceMap[arg0];
 }
 
 void func_80057550_58150(u16 arg0, u16 arg1) {

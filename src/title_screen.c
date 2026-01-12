@@ -138,7 +138,7 @@ void handleTitleMenuInput(void) {
         soundDelay--;
         state->initialSoundDelay = soundDelay;
         if (soundDelay == 0) {
-            func_800574A0_580A0(0x1C);
+            playMusicTrack(0x1C);
         }
     }
 

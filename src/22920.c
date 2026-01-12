@@ -20,7 +20,7 @@ void initVersusMode(void) {
 void awaitPlayerCountSelect(void);
 
 void loadPlayerCountSelect(void) {
-    func_800574A0_580A0(2);
+    playMusicTrack(2);
     createTaskQueue(initPlayerCountSelectState, 100);
     setGameStateHandler(awaitPlayerCountSelect);
 }
@@ -107,7 +107,7 @@ void awaitVersusLevelSelect(void) {
 }
 
 void loadVersusCharacterSelect(void) {
-    func_800574A0_580A0(2);
+    playMusicTrack(2);
     createTaskQueue(func_800226F0_232F0, 100);
     setGameStateHandler(awaitVersusCharacterSelect);
 }

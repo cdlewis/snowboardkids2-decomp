@@ -850,7 +850,7 @@ void awaitRaceAssetsLoaded(void) {
         if ((state->unk5F == 1) && (state->unk7A < 10)) {
             spawnOrbitCameraTask();
             state->unk79 = 2;
-            func_800574A0_580A0(7);
+            playMusicTrack(7);
         } else {
             state->unk79 = 1;
         }
@@ -904,9 +904,9 @@ void awaitPlayersAndPlayRaceMusic(void) {
         D_80090F90_91B90_item *levelConfig = func_80055D10_56910(state->memoryPoolId);
 
         if (state->unk7A == 0xB) {
-            func_800574A0_580A0(0x20);
+            playMusicTrack(0x20);
         } else {
-            func_800574A0_580A0(levelConfig->unk28);
+            playMusicTrack(levelConfig->unk28);
         }
 
         setGameStateHandler(func_8003F368_3FF68);
@@ -1227,10 +1227,10 @@ void handleBossRaceResult(void) {
 
     if (player->finishPosition == 0) {
         D_800A24A0_A30A0 = 3;
-        func_800574A0_580A0(8);
+        playMusicTrack(8);
     } else {
         D_800A24A0_A30A0 = 4;
-        func_800574A0_580A0(9);
+        playMusicTrack(9);
     }
 
     gs->unk4C = 0x96;
@@ -1249,10 +1249,10 @@ void handleBossDefeatResult(void) {
 
     if (state->players[1].unkB84 & 0x100000) {
         D_800A24A0_A30A0 = 3;
-        func_800574A0_580A0(8);
+        playMusicTrack(8);
     } else {
         D_800A24A0_A30A0 = 4;
-        func_800574A0_580A0(9);
+        playMusicTrack(9);
     }
 
     state->unk4C = 0x96;
@@ -1293,7 +1293,7 @@ void handleSkillGameResult(void) {
                 D_800A24A0_A30A0 = 9;
             }
 
-            func_800574A0_580A0(8);
+            playMusicTrack(8);
             func_8004F194_4FD94(0x78);
             spawnVictorySnowflakes(0, 0);
             state->unk7B = 1;
@@ -1302,7 +1302,7 @@ void handleSkillGameResult(void) {
             setGameStateHandler(&awaitSkillWinAndPromptContinue);
         } else {
             D_800A24A0_A30A0 = 6;
-            func_800574A0_580A0(9);
+            playMusicTrack(9);
             state->unk7B = 1;
             setGameStateHandler(&awaitSkillLossAndFadeOut);
         }
@@ -1321,7 +1321,7 @@ void awaitSkillWinAndPromptContinue(void) {
     if (delayTimer == 0) {
         state->unk7C = 1;
         scheduleTask(&func_8004F1D4_4FDD4, 1, 0, 0xE6);
-        func_800574A0_580A0(0xA);
+        playMusicTrack(0xA);
         setGameStateHandler(&awaitSkillWinContinuePress);
     }
 }
@@ -1371,7 +1371,7 @@ void handleShotCrossGameResult(void) {
 
         if (itemsCollected == 0x14) {
             D_800A24A0_A30A0 = 5;
-            func_800574A0_580A0(8);
+            playMusicTrack(8);
 
             if (state->players->unkBD3 == 0xA) {
                 D_800A24A0_A30A0 = 7;
@@ -1384,7 +1384,7 @@ void handleShotCrossGameResult(void) {
             spawnVictorySnowflakes(0, 0);
         } else {
             D_800A24A0_A30A0 = 6;
-            func_800574A0_580A0(9);
+            playMusicTrack(9);
         }
 
         state->unk7B = 1;
@@ -1392,7 +1392,7 @@ void handleShotCrossGameResult(void) {
         setGameStateHandler(&awaitShotCrossWinAndPromptContinue);
     } else {
         D_800A24A0_A30A0 = 6;
-        func_800574A0_580A0(9);
+        playMusicTrack(9);
         state->unk7B = 1;
         setGameStateHandler(&awaitShotCrossLossAndFadeOut);
     }
@@ -1406,7 +1406,7 @@ void awaitShotCrossWinAndPromptContinue(void) {
 
     if (gs->unk4C == 0) {
         gs->unk7C = 1;
-        func_800574A0_580A0(0xA);
+        playMusicTrack(0xA);
         scheduleTask(&initGoldAwardDisplayTask, 1, 0, 0xE6);
         setGameStateHandler(&awaitShotCrossWinContinuePress);
     }
@@ -1450,7 +1450,7 @@ void handleMeterGameResult(void) {
 
             if (meterValue >= 0x12C) {
                 D_800A24A0_A30A0 = 5;
-                func_800574A0_580A0(8);
+                playMusicTrack(8);
                 func_8004F194_4FD94(0x78);
                 spawnVictorySnowflakes(0, 0);
 
@@ -1461,7 +1461,7 @@ void handleMeterGameResult(void) {
                 }
             } else {
                 D_800A24A0_A30A0 = 6;
-                func_800574A0_580A0(9);
+                playMusicTrack(9);
             }
 
             state->unk7B = 1;
@@ -1469,7 +1469,7 @@ void handleMeterGameResult(void) {
             handler = awaitMeterWinAndPromptContinue;
         } else {
             D_800A24A0_A30A0 = 6;
-            func_800574A0_580A0(9);
+            playMusicTrack(9);
             handler = awaitMeterLossAndFadeOut;
             state->unk7B = 1;
         }
@@ -1489,7 +1489,7 @@ void awaitMeterWinAndPromptContinue(void) {
     state->unk4C = delayTimer;
     if (delayTimer == 0) {
         state->unk7C = 1;
-        func_800574A0_580A0(0xA);
+        playMusicTrack(0xA);
         scheduleTask(&initGoldAwardDisplayTask, 1, 0, 0xE6);
         setGameStateHandler(&awaitMeterWinContinuePress);
     }
@@ -1527,13 +1527,13 @@ void handleSpeedCrossGameResult(void) {
 
         if (state->players->finishPosition == 0) {
             D_800A24A0_A30A0 = 3;
-            func_800574A0_580A0(8);
+            playMusicTrack(8);
             spawnVictorySnowflakes(0, 0);
             func_8004F194_4FD94(0x78);
             terminateTasksByTypeAndID(0, 1);
         } else {
             D_800A24A0_A30A0 = 4;
-            func_800574A0_580A0(9);
+            playMusicTrack(9);
             terminateTasksByTypeAndID(0, 1);
         }
 
@@ -1583,7 +1583,7 @@ void awaitSpeedCrossAwardGold(void) {
     }
 
     scheduleTask(&initGoldAwardDisplayTask, 1, 0, 0xE6);
-    func_800574A0_580A0(0xA);
+    playMusicTrack(0xA);
     setGameStateHandler(&awaitSpeedCrossContinuePress);
 }
 
@@ -1603,7 +1603,7 @@ void awaitBattleEndAndPromptContinue(void) {
     delayTimer = state->unk4C - 1;
     state->unk4C = delayTimer;
     if (delayTimer == 0) {
-        func_800574A0_580A0(0xA);
+        playMusicTrack(0xA);
         setGameStateHandler(&awaitBattleContinuePress);
     }
 }
@@ -1633,7 +1633,7 @@ void handleExpertRaceResult(void) {
     if (gs->unk4C == 0) {
         playerWon = gs->players->finishPosition == 0;
         D_800A24A0_A30A0 = playerWon ? 3 : 4;
-        func_800574A0_580A0(0xA);
+        playMusicTrack(0xA);
         setGameStateHandler(&awaitExpertRaceContinuePress);
     }
 }

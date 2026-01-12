@@ -65,7 +65,7 @@ void initializeGameState(void) {
     task_memory_430 *temp_s0;
     volatile u8 padding[0x20];
     temp_s0 = (task_memory_430 *)allocateTaskMemory(0x430);
-    func_800574A0_580A0(4);
+    playMusicTrack(4);
     temp_s0->unk3E8 = 0;
     temp_s0->unk428 = 0;
     temp_s0->unk427 = 0;

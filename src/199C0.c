@@ -21,7 +21,7 @@ void initStoryMapLocation(void) {
     state->frameCounter = 0;
 
     if (storyMapLocationIndex != 4) {
-        func_800574A0_580A0(2);
+        playMusicTrack(2);
     }
 
     createTaskQueue(storyMapLocationHandlers[storyMapLocationIndex], 0x5A);
