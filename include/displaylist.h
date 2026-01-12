@@ -14,7 +14,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ Transform3D transform;
-    /* 0x20 */ DisplayLists *unk20;
+    /* 0x20 */ DisplayLists *displayLists;
     /* 0x24 */ void *unk24;
     /* 0x28 */ void *unk28;
     /* 0x2C */ void *unk2C;
@@ -137,7 +137,7 @@ void loadAssetMetadataByIndex(
 
 void func_80067EDC_68ADC(s32, loadAssetMetadata_arg *);
 
-void func_8006395C_6455C(DisplayListObject *arg0);
+void buildOverlayDisplayListSegment(DisplayListObject *obj);
 
 void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1);
 

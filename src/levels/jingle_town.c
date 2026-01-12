@@ -95,7 +95,7 @@ void func_800BB454_B43E4(B4240FuncArg *arg0) {
 
     alloc = getCurrentAllocation();
     temp = func_80055E68_56A68(alloc->unk5C);
-    arg0->node.unk20 = &temp->unk90;
+    arg0->node.displayLists = &temp->unk90;
     arg0->node.unk24 = func_80055DC4_569C4(alloc->unk5C);
     arg0->node.unk28 = func_80055DF8_569F8(alloc->unk5C);
     arg0->node.unk2C = 0;

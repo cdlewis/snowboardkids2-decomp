@@ -418,7 +418,7 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
         func_8006BFB8_6CBB8(obj, obj->unk30);
     }
 
-    if (obj->unk20->flags & 1) {
+    if (obj->displayLists->flags & 1) {
         lookAt = (LookAt *)arenaAlloc16(0x20);
         if (lookAt == NULL) {
             return;
@@ -469,31 +469,31 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
 
 void renderOpaqueDisplayList(DisplayListObject *arg0) {
     prepareDisplayListRenderState(arg0);
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
+    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
 }
 
 void renderTransparentDisplayList(DisplayListObject *arg0) {
     prepareDisplayListRenderState(arg0);
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
+    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
 }
 
 void renderOverlayDisplayList(DisplayListObject *arg0) {
     prepareDisplayListRenderState(arg0);
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
+    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
 }
 
 void enqueueDisplayListObjectWithFullRenderState(s32 arg0, void *arg1) {
     ((DisplayListObject *)arg1)->unk30 = 0;
 
-    if (((DisplayListObject *)arg1)->unk20->opaqueDisplayList != NULL) {
+    if (((DisplayListObject *)arg1)->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0, 1, renderOpaqueDisplayList, arg1);
     }
 
-    if (((DisplayListObject *)arg1)->unk20->transparentDisplayList != NULL) {
+    if (((DisplayListObject *)arg1)->displayLists->transparentDisplayList != NULL) {
         debugEnqueueCallback(arg0, 3, renderTransparentDisplayList, arg1);
     }
 
-    if (((DisplayListObject *)arg1)->unk20->overlayDisplayList != NULL) {
+    if (((DisplayListObject *)arg1)->displayLists->overlayDisplayList != NULL) {
         debugEnqueueCallback(arg0, 5, renderOverlayDisplayList, arg1);
     }
 }
@@ -516,7 +516,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
         func_8006C130_6CD30((Transform3D *)arg0, arg0->unk30);
     }
 
-    if (arg0->unk20->flags & 1) {
+    if (arg0->displayLists->flags & 1) {
         temp_v0 = (LookAt *)arenaAlloc16(0x20);
         if (temp_v0 == NULL) {
             return;
@@ -576,28 +576,28 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
 
 void renderOpaqueDisplayListCallback(DisplayListObject *obj) {
     setupDisplayListMatrix(obj);
-    gSPDisplayList(gRegionAllocPtr++, obj->unk20->opaqueDisplayList);
+    gSPDisplayList(gRegionAllocPtr++, obj->displayLists->opaqueDisplayList);
 }
 
 void renderTransparentDisplayListCallback(DisplayListObject *obj) {
     setupDisplayListMatrix(obj);
-    gSPDisplayList(gRegionAllocPtr++, obj->unk20->transparentDisplayList);
+    gSPDisplayList(gRegionAllocPtr++, obj->displayLists->transparentDisplayList);
 }
 
 void renderOverlayDisplayListCallback(DisplayListObject *obj) {
     setupDisplayListMatrix(obj);
-    gSPDisplayList(gRegionAllocPtr++, obj->unk20->overlayDisplayList);
+    gSPDisplayList(gRegionAllocPtr++, obj->displayLists->overlayDisplayList);
 }
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
-    if (arg1->unk20->opaqueDisplayList != NULL) {
+    if (arg1->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, renderOpaqueDisplayListCallback, arg1);
     }
-    if (arg1->unk20->transparentDisplayList != NULL) {
+    if (arg1->displayLists->transparentDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 3, renderTransparentDisplayListCallback, arg1);
     }
-    if (arg1->unk20->overlayDisplayList != NULL) {
+    if (arg1->displayLists->overlayDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 5, renderOverlayDisplayListCallback, arg1);
     }
 }
@@ -605,14 +605,14 @@ void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1) {
 void renderOpaqueDisplayListWithFrustumCull(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
+        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
     }
 }
 
 void renderTransparentDisplayListWithFrustumCull(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
+        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
     }
 }
 
@@ -621,19 +621,19 @@ void renderOverlayDisplayListWithFrustumCull(DisplayListObject *arg0) {
 
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
+        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
     }
 }
 
 void enqueueDisplayListWithFrustumCull(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
-    if (arg1->unk20->opaqueDisplayList != NULL) {
+    if (arg1->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0, 1, &renderOpaqueDisplayListWithFrustumCull, arg1);
     }
-    if (arg1->unk20->transparentDisplayList != NULL) {
+    if (arg1->displayLists->transparentDisplayList != NULL) {
         debugEnqueueCallback(arg0, 3, &renderTransparentDisplayListWithFrustumCull, arg1);
     }
-    if (arg1->unk20->overlayDisplayList != NULL) {
+    if (arg1->displayLists->overlayDisplayList != NULL) {
         debugEnqueueCallback(arg0, 5, &renderOverlayDisplayListWithFrustumCull, arg1);
     }
 }
@@ -646,7 +646,7 @@ void buildDisplayListSegment(DisplayListObject *arg0) {
 
         gDPSetColor(gRegionAllocPtr++, 0xFB, arg0->envColorAlpha | ~0xFF);
 
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
+        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
     }
 }
 
@@ -667,30 +667,30 @@ void buildTransparentDisplayListSegment(DisplayListObject *arg0) {
 
         gRegionAllocPtr += 1;
         dl[2].words.w0 = 0xDE000000;
-        dl[2].words.w1 = (u32)arg0->unk20->transparentDisplayList;
+        dl[2].words.w1 = (u32)arg0->displayLists->transparentDisplayList;
     }
 }
 
-void func_8006395C_6455C(DisplayListObject *arg0) {
-    if (!isObjectCulled(&arg0->transform.translation)) {
-        setupDisplayListMatrix(arg0);
+void buildOverlayDisplayListSegment(DisplayListObject *obj) {
+    if (!isObjectCulled(&obj->transform.translation)) {
+        setupDisplayListMatrix(obj);
 
         gDPPipeSync(gRegionAllocPtr++);
-        gDPSetColor(gRegionAllocPtr++, 0xFB, arg0->envColorAlpha | ~0xFF);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
+        gDPSetColor(gRegionAllocPtr++, 0xFB, obj->envColorAlpha | ~0xFF);
+        gSPDisplayList(gRegionAllocPtr++, obj->displayLists->overlayDisplayList);
     }
 }
 
 void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
-    if (arg1->unk20->opaqueDisplayList != NULL) {
+    if (arg1->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &buildDisplayListSegment, arg1);
     }
-    if (arg1->unk20->transparentDisplayList != NULL) {
+    if (arg1->displayLists->transparentDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 3, &buildTransparentDisplayListSegment, arg1);
     }
-    if (arg1->unk20->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_8006395C_6455C, arg1);
+    if (arg1->displayLists->overlayDisplayList != NULL) {
+        debugEnqueueCallback(arg0 & 0xFFFF, 5, &buildOverlayDisplayListSegment, arg1);
     }
 }
 
@@ -762,7 +762,7 @@ void func_80063A94_64694(DisplayListObject *obj) {
         ((s32 *)obj->unk30)[31] = 0;
     }
 
-    if (obj->unk20->flags & 1) {
+    if (obj->displayLists->flags & 1) {
         lookAt = arenaAlloc16(0x20);
         if (lookAt == NULL) {
             return;
@@ -827,36 +827,36 @@ void func_80063A94_64694(DisplayListObject *obj) {
 void func_8006405C_64C5C(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         func_80063A94_64694(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
+        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
     }
 }
 
 void func_800640BC_64CBC(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         func_80063A94_64694(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
+        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
     }
 }
 
 void func_8006411C_64D1C(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         func_80063A94_64694(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
+        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
     }
 }
 
 void func_8006417C_64D7C(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
 
-    if (arg1->unk20->opaqueDisplayList != NULL) {
+    if (arg1->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0, 1, &func_8006405C_64C5C, arg1);
     }
 
-    if (arg1->unk20->transparentDisplayList != NULL) {
+    if (arg1->displayLists->transparentDisplayList != NULL) {
         debugEnqueueCallback(arg0, 3, &func_800640BC_64CBC, arg1);
     }
 
-    if (arg1->unk20->overlayDisplayList != NULL) {
+    if (arg1->displayLists->overlayDisplayList != NULL) {
         debugEnqueueCallback(arg0, 5, &func_8006411C_64D1C, arg1);
     }
 }
@@ -938,7 +938,7 @@ void func_800643AC_64FAC(DisplayListObject *arg0, s32 arg1) {
 
     obj = (DisplayListObject *)(arg1 * sizeof(DisplayListObject) + (s32)arg0);
 
-    if (obj->unk20->flags & 1) {
+    if (obj->displayLists->flags & 1) {
         lookat = arenaAlloc16(0x20);
         if (lookat == NULL) {
             return;
@@ -989,11 +989,11 @@ void func_80064628_65228(DisplayListObject *displayObjects) {
 
     for (i = 0; i < displayObjects->unk37; i++) {
         currentObject = &displayObjects[i];
-        if (currentObject->unk20->opaqueDisplayList != NULL) {
+        if (currentObject->displayLists->opaqueDisplayList != NULL) {
             func_800643AC_64FAC(displayObjects, i);
             displayListCmd = gRegionAllocPtr;
             displayListCmd->words.w0 = 0xDE000000;
-            displayListCmd->words.w1 = (u32)currentObject->unk20->opaqueDisplayList;
+            displayListCmd->words.w1 = (u32)currentObject->displayLists->opaqueDisplayList;
             gRegionAllocPtr = displayListCmd + 1;
         }
     }
@@ -1013,11 +1013,11 @@ void func_800646C8_652C8(DisplayListObject *displayObjects) {
         currentObject = displayObjects;
         i = 0;
         do {
-            if (currentObject[i].unk20->transparentDisplayList != NULL) {
+            if (currentObject[i].displayLists->transparentDisplayList != NULL) {
                 func_800643AC_64FAC(displayObjects, i);
                 displayListCmd = gRegionAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
-                displayListCmd->words.w1 = (u32)currentObject[i].unk20->transparentDisplayList;
+                displayListCmd->words.w1 = (u32)currentObject[i].displayLists->transparentDisplayList;
                 gRegionAllocPtr = displayListCmd + 1;
             }
             i++;
@@ -1040,11 +1040,11 @@ void func_80064768_65368(DisplayListObject *displayObjects) {
         currentObject = displayObjects;
         i = 0;
         do {
-            if (currentObject[i].unk20->overlayDisplayList != NULL) {
+            if (currentObject[i].displayLists->overlayDisplayList != NULL) {
                 func_800643AC_64FAC(displayObjects, i);
                 displayListCmd = gRegionAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
-                displayListCmd->words.w1 = (u32)currentObject[i].unk20->overlayDisplayList;
+                displayListCmd->words.w1 = (u32)currentObject[i].displayLists->overlayDisplayList;
                 gRegionAllocPtr = displayListCmd + 1;
             }
             i++;
@@ -1114,7 +1114,7 @@ void func_800648EC_654EC(DisplayListObject *arg0) {
         func_8006C130_6CD30((Transform3D *)arg0, arg0->unk30);
     }
 
-    if (arg0->unk20->flags & 1) {
+    if (arg0->displayLists->flags & 1) {
         lookat = arenaAlloc16(0x20);
         if (lookat == NULL) {
             return;
@@ -1168,7 +1168,7 @@ void func_800648EC_654EC(DisplayListObject *arg0) {
 void func_80064CF4_658F4(DisplayListObject *arg0) {
     func_800648EC_654EC(arg0);
 
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
+    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
 
     gSPLightColor(
         gRegionAllocPtr++,
@@ -1186,7 +1186,7 @@ void func_80064CF4_658F4(DisplayListObject *arg0) {
 void func_80064E34_65A34(DisplayListObject *arg0) {
     func_800648EC_654EC(arg0);
 
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
+    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
 
     gSPLightColor(
         gRegionAllocPtr++,
@@ -1204,7 +1204,7 @@ void func_80064E34_65A34(DisplayListObject *arg0) {
 void func_80064F74_65B74(DisplayListObject *arg0) {
     func_800648EC_654EC(arg0);
 
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
+    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
 
     gSPLightColor(
         gRegionAllocPtr++,
@@ -1222,15 +1222,15 @@ void func_80064F74_65B74(DisplayListObject *arg0) {
 void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
 
-    if (arg1->unk20->opaqueDisplayList != NULL) {
+    if (arg1->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0, 1, &func_80064CF4_658F4, arg1);
     }
 
-    if (arg1->unk20->transparentDisplayList != NULL) {
+    if (arg1->displayLists->transparentDisplayList != NULL) {
         debugEnqueueCallback(arg0, 3, &func_80064E34_65A34, arg1);
     }
 
-    if (arg1->unk20->overlayDisplayList != NULL) {
+    if (arg1->displayLists->overlayDisplayList != NULL) {
         debugEnqueueCallback(arg0, 5, &func_80064F74_65B74, arg1);
     }
 }
@@ -1261,11 +1261,11 @@ void func_80065150_65D50(DisplayListObject *displayObjects) {
     if (objectCount > 0) {
         currentObject = displayObjects;
         do {
-            if (currentObject[i].unk20->opaqueDisplayList != NULL) {
+            if (currentObject[i].displayLists->opaqueDisplayList != NULL) {
                 func_800643AC_64FAC(displayObjects, i);
                 displayListCmd = gRegionAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
-                displayListCmd->words.w1 = (u32)currentObject[i].unk20->opaqueDisplayList;
+                displayListCmd->words.w1 = (u32)currentObject[i].displayLists->opaqueDisplayList;
                 gRegionAllocPtr = displayListCmd + 1;
             }
             i += 1;
@@ -1311,11 +1311,11 @@ void func_800653E0_65FE0(DisplayListObject *displayObjects) {
     if (objectCount > 0) {
         currentObject = displayObjects;
         do {
-            if (currentObject[i].unk20->transparentDisplayList != NULL) {
+            if (currentObject[i].displayLists->transparentDisplayList != NULL) {
                 func_800643AC_64FAC(displayObjects, i);
                 displayListCmd = gRegionAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
-                displayListCmd->words.w1 = (u32)currentObject[i].unk20->transparentDisplayList;
+                displayListCmd->words.w1 = (u32)currentObject[i].displayLists->transparentDisplayList;
                 gRegionAllocPtr = displayListCmd + 1;
             }
             i += 1;
@@ -1361,11 +1361,11 @@ void func_80065670_66270(DisplayListObject *displayObjects) {
     if (objectCount > 0) {
         currentObject = displayObjects;
         do {
-            if (currentObject[i].unk20->overlayDisplayList != NULL) {
+            if (currentObject[i].displayLists->overlayDisplayList != NULL) {
                 func_800643AC_64FAC(displayObjects, i);
                 displayListCmd = gRegionAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
-                displayListCmd->words.w1 = (u32)currentObject[i].unk20->overlayDisplayList;
+                displayListCmd->words.w1 = (u32)currentObject[i].displayLists->overlayDisplayList;
                 gRegionAllocPtr = displayListCmd + 1;
             }
             i += 1;
@@ -1444,7 +1444,7 @@ void func_800659E4_665E4(DisplayListObject *arg0) {
     memcpy(&D_8009A8A4_9B4A4, &D_800AB068_A23D8->padding2[0x10], 0xC);
     func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, arg0->unk30);
 
-    if (arg0->unk20->flags & 1) {
+    if (arg0->displayLists->flags & 1) {
         temp_v0 = arenaAlloc16(0x20);
         if (temp_v0 == NULL) {
             return;
@@ -1492,16 +1492,16 @@ void func_800659E4_665E4(DisplayListObject *arg0) {
 
     gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 
-    if (arg0->unk20->opaqueDisplayList != 0) {
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
+    if (arg0->displayLists->opaqueDisplayList != 0) {
+        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
     }
 
-    if (arg0->unk20->transparentDisplayList != 0) {
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
+    if (arg0->displayLists->transparentDisplayList != 0) {
+        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
     }
 
-    if (arg0->unk20->overlayDisplayList != 0) {
-        gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
+    if (arg0->displayLists->overlayDisplayList != 0) {
+        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
     }
 }
 

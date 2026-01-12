@@ -81,15 +81,15 @@ void renderOverlayScrollingTexture(DisplayListObject *arg0) {
 void enqueueScrollingTextureRender(u16 renderLayer, DisplayListObject *displayListObj) {
     displayListObj->unk30 = 0;
 
-    if (displayListObj->unk20->opaqueDisplayList != NULL) {
+    if (displayListObj->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(renderLayer, 1, &renderOpaqueScrollingTexture, displayListObj);
     }
 
-    if (displayListObj->unk20->transparentDisplayList != NULL) {
+    if (displayListObj->displayLists->transparentDisplayList != NULL) {
         debugEnqueueCallback(renderLayer, 3, &renderTransparentScrollingTexture, displayListObj);
     }
 
-    if (displayListObj->unk20->overlayDisplayList != NULL) {
+    if (displayListObj->displayLists->overlayDisplayList != NULL) {
         debugEnqueueCallback(renderLayer, 5, &renderOverlayScrollingTexture, displayListObj);
     }
 }
@@ -108,7 +108,7 @@ void renderTransparentTiledTexture(s32 arg0) {
 
 void renderOverlayTiledTexture(s32 arg0) {
     func_80005094_5C94();
-    func_8006395C_6455C((DisplayListObject *)arg0);
+    buildOverlayDisplayListSegment((DisplayListObject *)arg0);
 }
 
 void enqueueTiledTextureRender(s32 arg0, func_800B5500_Task *arg1) {

@@ -332,7 +332,7 @@ void initStoryMapShopItemCard(StoryMapShopItemCardState *card) {
         itemData = itemId;
     } while (0);
 
-    card->displayList.unk20 = loadAssetByIndex_95728(itemId);
+    card->displayList.displayLists = loadAssetByIndex_95728(itemId);
     card->displayList.unk24 = loadAssetByIndex_95500(itemId);
     card->displayList.unk28 = loadAssetByIndex_95590(itemId);
     card->displayList.unk2C = loadAssetByIndex_95668(itemData / 3);
@@ -420,7 +420,7 @@ void reloadStoryMapShopItemCard(SlidingItemCardState *card) {
 
         memcpy(card, &card->baseTransform, 0x20);
 
-        card->displayList.unk20 = loadAssetByIndex_95728(itemIndex);
+        card->displayList.displayLists = loadAssetByIndex_95728(itemIndex);
         card->displayList.unk24 = loadAssetByIndex_95500(itemIndex);
         card->displayList.unk28 = loadAssetByIndex_95590(itemIndex);
         card->displayList.unk2C = loadAssetByIndex_95668(itemId / 3);
@@ -489,7 +489,7 @@ void initSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     createZRotationMatrix(&rotationZ, 0x1F00);
     func_8006B084_6BC84(&rotationYX, &rotationZ, cardTransform);
     card->updateCounter = 0;
-    card->displayList.unk20 = NULL;
+    card->displayList.displayLists = NULL;
     card->displayList.unk24 = NULL;
     card->displayList.unk28 = NULL;
     card->displayList.unk2C = 0;
@@ -526,7 +526,7 @@ void prepareSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
         memcpy(card, &card->transform, 0x20);
         itemData &= 0x1F;
         itemId = itemData;
-        card->displayList.unk20 = loadAssetByIndex_95728(itemId);
+        card->displayList.displayLists = loadAssetByIndex_95728(itemId);
         card->displayList.unk24 = loadAssetByIndex_95500(itemId);
         card->displayList.unk28 = loadAssetByIndex_95590(itemId);
         card->displayList.unk2C = loadAssetByIndex_95668(itemData / 3);

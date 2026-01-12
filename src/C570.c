@@ -74,9 +74,9 @@ void updateRocketEffect(RocketEffectUpdateData *arg0) {
     func_8006B084_6BC84(ptr - 5, arg0, &arg0->unk3C);
 
     if (gFrameCounter & 1) {
-        arg0->unk3C.unk20 = (DisplayLists *)&D_80088680_89280;
+        arg0->unk3C.displayLists = (DisplayLists *)&D_80088680_89280;
     } else {
-        arg0->unk3C.unk20 = (DisplayLists *)&D_80088690_89290;
+        arg0->unk3C.displayLists = (DisplayLists *)&D_80088690_89290;
     }
 
     enqueueDisplayListObject(0, &arg0->unk0);

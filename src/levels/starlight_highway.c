@@ -224,25 +224,25 @@ void func_800BB368_AD728(func_800BB368_AD728_arg *arg0) {
     if (allocation->unk80 != 0) {
         if (gFrameCounter & 1) {
             result = func_80055E68_56A68(8);
-            arg0->node1.unk20 = (DisplayLists *)((u32)result + 0x10);
+            arg0->node1.displayLists = (DisplayLists *)((u32)result + 0x10);
         } else {
             result = func_80055E68_56A68(8);
-            arg0->node1.unk20 = (DisplayLists *)((u32)result + 0x20);
+            arg0->node1.displayLists = (DisplayLists *)((u32)result + 0x20);
         }
     } else {
-        arg0->node1.unk20 = (DisplayLists *)func_80055E68_56A68(8);
+        arg0->node1.displayLists = (DisplayLists *)func_80055E68_56A68(8);
     }
 
     if (allocation->unk81 != 0) {
         if (gFrameCounter & 1) {
             result = func_80055E68_56A68(8);
-            arg0->node2.unk20 = (DisplayLists *)((u32)result + 0x10);
+            arg0->node2.displayLists = (DisplayLists *)((u32)result + 0x10);
         } else {
             result = func_80055E68_56A68(8);
-            arg0->node2.unk20 = (DisplayLists *)((u32)result + 0x20);
+            arg0->node2.displayLists = (DisplayLists *)((u32)result + 0x20);
         }
     } else {
-        arg0->node2.unk20 = (DisplayLists *)func_80055E68_56A68(8);
+        arg0->node2.displayLists = (DisplayLists *)func_80055E68_56A68(8);
     }
 
     for (i = 0; i < 4; i++) {

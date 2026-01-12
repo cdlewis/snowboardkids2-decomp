@@ -83,9 +83,9 @@ void func_800BB2B0_B74F0(TrackHazard *arg0) {
 
     arg0->unkA6 += (temp & 1);
     result = func_80055E68_56A68(gameState->memoryPoolId);
-    arg0->node1.unk20 = &result->unk90;
+    arg0->node1.displayLists = &result->unk90;
     result = func_80055E68_56A68(gameState->memoryPoolId);
-    arg0->node2.unk20 = &result->unkA0;
+    arg0->node2.displayLists = &result->unkA0;
     arg0->node1.unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
     arg0->node1.unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
     arg0->node1.unk2C = 0;
@@ -277,7 +277,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
 
                 for (i = 0; i < numPlayers; i++) {
                     if ((u32)gameState->players[i].unkB94 - 0x60 < 6) {
-                        arg0->node.unk20 = &func_80055E68_56A68(gameState->memoryPoolId)->unkC0;
+                        arg0->node.displayLists = &func_80055E68_56A68(gameState->memoryPoolId)->unkC0;
                         randVal = (u8)randA();
                         randVal = randVal - 0x60;
                         i = randVal << 1;
@@ -297,7 +297,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
                 arg0->unk3C--;
                 if ((arg0->unk3C << 16) == 0) {
                     arg0->unk3E = 0;
-                    arg0->node.unk20 = &func_80055E68_56A68(gameState->memoryPoolId)->unkB0;
+                    arg0->node.displayLists = &func_80055E68_56A68(gameState->memoryPoolId)->unkB0;
                     arg0->unk3C = 0x14;
                 }
             }

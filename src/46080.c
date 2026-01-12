@@ -1391,7 +1391,7 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
     rotation = getTrackEndInfo(&allocation->unk30, &position) + 0x800;
     levelData = func_80055D10_56910(allocation->unk5C);
 
-    arg0->displayListObject.unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x10);
+    arg0->displayListObject.displayLists = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x10);
     arg0->displayListObject.unk24 = func_80055DC4_569C4(allocation->unk5C);
     arg0->displayListObject.unk28 = func_80055DF8_569F8(allocation->unk5C);
     arg0->displayListObject.unk2C = 0;

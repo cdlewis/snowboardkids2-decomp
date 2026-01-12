@@ -1248,7 +1248,7 @@ void initPlayerAuraEffect(PlayerAuraEffectState *state) {
     state->unk20 = &D_8009A710_9B310;
     state->unk24 = loadAsset_B7E70();
     state->unk28 = loadAsset_216290();
-    state->orbitObj.unk20 = (DisplayLists *)&D_8009A720_9B320;
+    state->orbitObj.displayLists = (DisplayLists *)&D_8009A720_9B320;
     state->unk2C = 0;
     state->orbitObj.unk2C = 0;
     state->scale = 0x200;
@@ -1927,12 +1927,12 @@ void func_80044684_45284(UfoEffectState *arg0) {
     arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
     arg0->unk2C = 0;
 
-    arg0->leftWing.unk20 = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0x90);
+    arg0->leftWing.displayLists = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0x90);
     arg0->leftWing.unk2C = 0;
     arg0->leftWing.unk24 = arg0->unk24;
     arg0->leftWing.unk28 = arg0->unk28;
 
-    arg0->rightWing.unk20 = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0xA0);
+    arg0->rightWing.displayLists = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0xA0);
     arg0->rightWing.unk2C = 0;
     arg0->rightWing.unk24 = arg0->unk24;
     arg0->rightWing.unk28 = arg0->unk28;
