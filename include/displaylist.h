@@ -88,13 +88,13 @@ void func_80063534_64134(DisplayListObject *);
 
 void func_800634E8_640E8(DisplayListObject *arg0);
 
-void func_800630F0_63CF0(s32, void *);
+void enqueueDisplayListObjectWithFullRenderState(s32 arg0, void *arg1);
 
-void func_8006300C_63C0C(DisplayListObject *arg0);
+void renderOpaqueDisplayList(DisplayListObject *arg0);
 
-void func_80063058_63C58(DisplayListObject *arg0);
+void renderTransparentDisplayList(DisplayListObject *arg0);
 
-void func_800630A4_63CA4(DisplayListObject *arg0);
+void renderOverlayDisplayList(DisplayListObject *arg0);
 
 typedef struct {
     s32 unk0;

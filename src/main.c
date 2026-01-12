@@ -381,7 +381,7 @@ void renderModelEntity(ModelEntityRenderState *state) {
             enqueueDisplayListObject(state->parent->slotIndex, &state->primaryDisplayList);
         }
         if (state->hasSecondaryDisplayList != 0) {
-            func_800630F0_63CF0(state->parent->slotIndex, &state->secondaryDisplayList);
+            enqueueDisplayListObjectWithFullRenderState(state->parent->slotIndex, &state->secondaryDisplayList);
         }
     }
 }

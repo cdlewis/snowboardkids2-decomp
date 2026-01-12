@@ -616,7 +616,7 @@ void func_800B100C_1DB5AC(func_800B100C_arg *arg0) {
 
 void func_800B10D4_1DB674(void *arg0) {
     getCurrentAllocation();
-    func_800630F0_63CF0(0, arg0);
+    enqueueDisplayListObjectWithFullRenderState(0, arg0);
 }
 
 void func_800B1104_1DB6A4(func_800B1104_arg *arg0) {

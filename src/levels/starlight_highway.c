@@ -512,17 +512,17 @@ loop_2:
 
 void func_800BBB0C_ADECC(void *arg0) {
     func_800BB75C_ADB1C(arg0);
-    func_8006300C_63C0C(arg0);
+    renderOpaqueDisplayList(arg0);
 }
 
 void func_800BBB38_ADEF8(void *arg0) {
     func_800BB75C_ADB1C(arg0);
-    func_80063058_63C58(arg0);
+    renderTransparentDisplayList(arg0);
 }
 
 void func_800BBB64_ADF24(void *arg0) {
     func_800BB75C_ADB1C(arg0);
-    func_800630A4_63CA4(arg0);
+    renderOverlayDisplayList(arg0);
 }
 
 void func_800BBB90(s16 arg0) {

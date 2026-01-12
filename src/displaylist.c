@@ -467,34 +467,34 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
     gSPMatrix(gRegionAllocPtr++, obj->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
-void func_8006300C_63C0C(DisplayListObject *arg0) {
+void renderOpaqueDisplayList(DisplayListObject *arg0) {
     prepareDisplayListRenderState(arg0);
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
 }
 
-void func_80063058_63C58(DisplayListObject *arg0) {
+void renderTransparentDisplayList(DisplayListObject *arg0) {
     prepareDisplayListRenderState(arg0);
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
 }
 
-void func_800630A4_63CA4(DisplayListObject *arg0) {
+void renderOverlayDisplayList(DisplayListObject *arg0) {
     prepareDisplayListRenderState(arg0);
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
 }
 
-void func_800630F0_63CF0(s32 arg0, void *arg1) {
+void enqueueDisplayListObjectWithFullRenderState(s32 arg0, void *arg1) {
     ((DisplayListObject *)arg1)->unk30 = 0;
 
     if (((DisplayListObject *)arg1)->unk20->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 1, func_8006300C_63C0C, arg1);
+        debugEnqueueCallback(arg0, 1, renderOpaqueDisplayList, arg1);
     }
 
     if (((DisplayListObject *)arg1)->unk20->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 3, func_80063058_63C58, arg1);
+        debugEnqueueCallback(arg0, 3, renderTransparentDisplayList, arg1);
     }
 
     if (((DisplayListObject *)arg1)->unk20->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 5, func_800630A4_63CA4, arg1);
+        debugEnqueueCallback(arg0, 5, renderOverlayDisplayList, arg1);
     }
 }
 

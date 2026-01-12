@@ -883,7 +883,7 @@ void renderSkyDisplayLists(SkyRenderTaskState *arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        func_800630F0_63CF0(i, arg0);
+        enqueueDisplayListObjectWithFullRenderState(i, arg0);
     }
 
     if (arg0->unk5C != 0) {
@@ -911,7 +911,7 @@ void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *arg0) {
     i = 0;
     if (i < state->unk5F) {
     loop1:
-        func_800630F0_63CF0(i, arg0);
+        enqueueDisplayListObjectWithFullRenderState(i, arg0);
         i++;
         if (i < state->unk5F) {
             goto loop1;
@@ -1283,17 +1283,17 @@ INCLUDE_ASM("asm/nonmatchings/46080", func_8004674C_4734C);
 
 void renderScrollingSceneryOpaque(DisplayListObject *arg0) {
     func_8004674C_4734C(arg0);
-    func_8006300C_63C0C(arg0);
+    renderOpaqueDisplayList(arg0);
 }
 
 void renderScrollingSceneryTransparent(DisplayListObject *arg0) {
     func_8004674C_4734C(arg0);
-    func_80063058_63C58(arg0);
+    renderTransparentDisplayList(arg0);
 }
 
 void renderScrollingSceneryOverlay(DisplayListObject *arg0) {
     func_8004674C_4734C(arg0);
-    func_800630A4_63CA4(arg0);
+    renderOverlayDisplayList(arg0);
 }
 
 void scheduleScrollingSceneryTask(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
