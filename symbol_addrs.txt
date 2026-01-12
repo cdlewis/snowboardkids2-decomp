@@ -2877,6 +2877,7 @@ enableCutsceneSkip = 0x800B29F0; // rom:0x1DFAA0
 disableCutsceneSkipOnInput = 0x800B29FC; // rom:0x1DFAAC
 enableSlotUpdate = 0x800B2A24; // rom:0x1DFAD4
 disableSlotUpdate = 0x800B2A50; // rom:0x1DFB00
+skipCutsceneOnInputCallback = 0x800B2550; // rom:0x1DF600
 scheduleLevelEnvironmentTasks = 0x800497FC; // rom:0x4A3FC
 getTrackSegmentFinishZoneFlag = 0x80062254; // rom:0x62E54
 showAllSlotModels = 0x800B2D68; // rom:0x1DFE18

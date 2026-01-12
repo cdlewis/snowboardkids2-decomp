@@ -15,8 +15,8 @@ typedef struct {
 
 typedef struct {
     u8 padding[0xFF7];
-    /* 0xFF7 */ s8 unkFF7;
-} func_800B2550_1DF600_arg;
+    /* 0xFF7 */ s8 skipAnimation;
+} skipCutsceneCallback_arg;
 
 void cutsceneSysDisp_init(void) {
 }
@@ -147,10 +147,10 @@ void cutsceneSysWipeColor_exec(cutsceneSysWipeColor_exec_arg0 *arg0, cutsceneSys
     setNodeWipeColor((NodeWipeColorArg *)&arg1->wipeColorNode, arg0->r, arg0->g, arg0->b);
 }
 
-void func_800B2550_1DF600(func_800B2550_1DF600_arg **arg0) {
-    func_800B2550_1DF600_arg *temp_a0 = *arg0;
-    if ((temp_a0->unkFF7 != 0) && (gButtonsPressed[0] & A_BUTTON)) {
-        temp_a0->unkFF7 = 0;
+void skipCutsceneOnInputCallback(skipCutsceneCallback_arg **arg0) {
+    skipCutsceneCallback_arg *taskPayload = *arg0;
+    if ((taskPayload->skipAnimation != 0) && (gButtonsPressed[0] & A_BUTTON)) {
+        taskPayload->skipAnimation = 0;
         func_80069CF8_6A8F8();
     }
 }
