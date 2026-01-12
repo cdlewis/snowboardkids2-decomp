@@ -3,28 +3,37 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
+// Defines circular collision zones for town objects (lampposts/stations)
+// Note: y corresponds to the depth axis (z in 3D space)
 typedef struct {
     s16 x;
-    s16 y;
-    s16 radius;
-} StoryMapHotspot;
+    s16 y;      // depth/forward-backward position
+    s16 radius; // collision boundary radius
+} TownLamppost;
 
 typedef struct {
     s32 x;
     s32 y;
     s32 z;
-} StoryMapPosition;
+} TownPosition;
 
-StoryMapHotspot storyMapHotspots[] = {
+// Two lamppost/station bases in the town.
+// Positioned between the player and the back wall (y = -83 is forward depth).
+// Left station (-56) is a level entry point; right station (56) is decorative/functional.
+TownLamppost g_TownLampposts[] = {
     { .x = -56, .y = -83, .radius = 4 },
     { .x = 56,  .y = -83, .radius = 4 },
 };
 
-s32 checkStoryMapHotspotCollision(s32 posX, s32 posY, s16 collisionRadius) {
+// Checks if the player is colliding with any lamppost/station in the town.
+// Returns 1-based lamppost index (1 or 2) if colliding, 0 if no collision.
+// posX, posY: player position in 16.16 fixed point
+// collisionRadius: player's collision radius
+s32 checkTownLamppostCollision(s32 posX, s32 posY, s16 collisionRadius) {
     s32 index;
-    s16 *hotspotX;
-    s16 *hotspotY;
-    s16 *hotspotRadius;
+    s16 *lamppostX;
+    s16 *lamppostY;
+    s16 *lamppostRadius;
     s32 extraRadius;
     s32 dx;
     s32 dy;
@@ -36,35 +45,40 @@ s32 checkStoryMapHotspotCollision(s32 posX, s32 posY, s16 collisionRadius) {
 
     index = 0;
     extraRadius = collisionRadius;
-    base = (s16 *)storyMapHotspots;
-    hotspotRadius = base + 2;
-    hotspotY = base + 1;
-    hotspotX = base;
+    base = (s16 *)g_TownLampposts;
+    lamppostRadius = base + 2;
+    lamppostY = base + 1;
+    lamppostX = base;
 
     do {
-        dx = posX - (*hotspotX << 16);
-        dy = posY - (*hotspotY << 16);
+        dx = posX - (*lamppostX << 16);
+        dy = posY - (*lamppostY << 16);
         dist = isqrt64((s64)dx * dx + (s64)dy * dy);
-        threshold = (*hotspotRadius + extraRadius) << 16;
+        threshold = (*lamppostRadius + extraRadius) << 16;
         if (dist < threshold) {
             return index + 1;
         }
-        hotspotRadius += 3;
-        hotspotY += 3;
+        lamppostRadius += 3;
+        lamppostY += 3;
         index += 1;
-        hotspotX += 3;
+        lamppostX += 3;
     } while (index < 2);
     return 0;
 }
 
-void func_8001960C_1A20C(StoryMapPosition *position, s16 collisionRadius, s32 hotspotIndex) {
-    s16 *hotspotY;
-    StoryMapHotspot *hotspot;
+// Resolves collision between player and a lamppost/station in the town.
+// Pushes the player to the edge of the collision boundary (bumper effect).
+// position: player position (will be modified)
+// collisionRadius: player's collision radius
+// lamppostIndex: 1-based index of lamppost being collided with
+void resolveTownLamppostCollision(TownPosition *position, s16 collisionRadius, s32 lamppostIndex) {
+    s16 *lamppostY;
+    TownLamppost *lamppost;
     s16 *base;
     s16 angle;
     s32 offset;
     s16 *baseY;
-    StoryMapPosition *pos;
+    TownPosition *pos;
     s16 *radiusPtr;
     s32 combinedRadius;
     s32 yOffset;
@@ -75,18 +89,18 @@ void func_8001960C_1A20C(StoryMapPosition *position, s16 collisionRadius, s32 ho
     s32 sinTemp;
 
     getCurrentAllocation();
-    hotspotIndex = hotspotIndex - 1;
-    base = (s16 *)storyMapHotspots;
-    hotspot = (StoryMapHotspot *)(base + (hotspotIndex * 3));
-    offset = hotspotIndex * 3;
+    lamppostIndex = lamppostIndex - 1;
+    base = (s16 *)g_TownLampposts;
+    lamppost = (TownLamppost *)(base + (lamppostIndex * 3));
+    offset = lamppostIndex * 3;
     baseY = base;
     yOffset = 1;
-    hotspotY = offset + (baseY + yOffset);
+    lamppostY = offset + (baseY + yOffset);
     pos = position;
     sinComponent = pos->x;
-    base = &hotspot->x;
-    angle = func_8006D21C_6DE1C(*base << 16, *hotspotY << 16, sinComponent, position->z);
-    radiusPtr = &(storyMapHotspots + hotspotIndex)->radius;
+    base = &lamppost->x;
+    angle = func_8006D21C_6DE1C(*base << 16, *lamppostY << 16, sinComponent, position->z);
+    radiusPtr = &(g_TownLampposts + lamppostIndex)->radius;
     combinedRadius = *radiusPtr + collisionRadius;
     combinedRadius <<= 16;
     sinTemp = approximateSin(angle);
@@ -103,13 +117,17 @@ void func_8001960C_1A20C(StoryMapPosition *position, s16 collisionRadius, s32 ho
     if (cosComponent < pushScale) {
         cosComponent += 0x1FFF;
     }
-    sinComponent += hotspot->x << 16;
-    zValue = ((cosComponent >> 13) << 8) + (*hotspotY << 16);
+    sinComponent += lamppost->x << 16;
+    zValue = ((cosComponent >> 13) << 8) + (*lamppostY << 16);
     position->x = sinComponent;
     position->z = zValue;
 }
 
-s32 checkStoryMapCharacterCollision(s32 posX, s32 posY, s32 characterIndex) {
+// Checks if the player is colliding with an NPC in the town.
+// Returns 1-based character index if colliding, 0 if no collision.
+// posX, posY: player position in 16.16 fixed point
+// characterIndex: which NPC to check against
+s32 checkTownNPCCollision(s32 posX, s32 posY, s32 characterIndex) {
     GameState *state;
     s32 dx;
     s32 dy;
@@ -130,9 +148,14 @@ s32 checkStoryMapCharacterCollision(s32 posX, s32 posY, s32 characterIndex) {
 typedef struct {
     u8 padding[0x4C];
     s32 distanceFromOrigin;
-} StoryMapController;
+} TownController;
 
-void resolveStoryMapCharacterCollision(StoryMapController *controller, StoryMapPosition *position, s32 characterIndex) {
+// Resolves collision between player and an NPC in the town.
+// Pushes the player to the edge of the NPC's collision boundary.
+// controller: town controller state (distanceFromOrigin will be updated)
+// position: player position (will be modified)
+// characterIndex: 1-based index of NPC being collided with
+void resolveTownNPCCollision(TownController *controller, TownPosition *position, s32 characterIndex) {
     GameState *state;
     s16 angle;
     s32 combinedRadius;
@@ -170,7 +193,11 @@ void resolveStoryMapCharacterCollision(StoryMapController *controller, StoryMapP
     controller->distanceFromOrigin = distance_2d(position->x, offsetZ);
 }
 
-s32 checkStoryMapPlayerCollision(s32 posX, s32 posZ, u8 characterIndex) {
+// Checks if an NPC is colliding with the player in the town.
+// Returns true if NPC is within collision range of player.
+// posX, posZ: NPC position in 16.16 fixed point
+// characterIndex: which NPC's radius to use for collision check
+s32 checkTownPlayerCollision(s32 posX, s32 posZ, u8 characterIndex) {
     GameState *state;
     s32 dx;
     s32 dz;
