@@ -18,7 +18,7 @@ void incrementSoundSequence(void);
 void checkMusicLoadRequest(void *arg);
 void loadMusicTrackData(void);
 void initializeMusicPtrBank(void);
-void func_80057214_57E14(void);
+void startMusicPlaybackWithFadeIn(void);
 void func_800572B0_57EB0(void *arg);
 void func_800573F8_57FF8(void);
 void func_80057470_58070(void);

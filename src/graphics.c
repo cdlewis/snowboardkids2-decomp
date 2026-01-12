@@ -36,19 +36,19 @@ typedef struct {
 } RenderQueueItem;
 
 typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ void *unk8;
-    /* 0x0C */ void *unkC;
+    /* 0x00 */ void *ptrBank;
+    /* 0x04 */ void *musicDataBuffer;
+    /* 0x08 */ void *musicBankBuffer;
+    /* 0x0C */ void *currentAudioChannel;
     /* 0x10 */ s16 pendingMusicId;
     /* 0x12 */ u16 currentMusicId;
-    /* 0x14 */ s16 unk14;
-    /* 0x16 */ s16 unk16;
-    /* 0x18 */ s16 flags;
-    /* 0x1A */ s16 unk1A;
-    /* 0x1C */ s8 unk1C;
-    /* 0x1D */ u8 unk1D;
-    /* 0x1E */ u8 unk1E;
+    /* 0x14 */ s16 musicFadeOutDuration;
+    /* 0x16 */ s16 currentMusicVolume;
+    /* 0x18 */ s16 targetMusicVolume;
+    /* 0x1A */ s16 fadeCounter;
+    /* 0x1C */ s8 musicVoiceIndex;
+    /* 0x1D */ u8 musicFadeState;
+    /* 0x1E */ u8 isFadingOut;
     /* 0x1F */ u8 unk1F;
     /* 0x20 */ s32 soundSequence;
     /* 0x24 */ void *unk24[0xF];
@@ -103,9 +103,9 @@ void allocateAudioResources(void) {
     u8 sp10;
 
     gGraphicsManager = allocateTaskMemory(0x53C);
-    gGraphicsManager->unk0 = loadCompressedData(&_6A83F0_ROM_START, &_6A83F0_ROM_END, 0xCFD8);
-    gGraphicsManager->unk8 = allocateMemoryNode(0, 0x9000, &sp10);
-    gGraphicsManager->unk4 = allocateMemoryNode(0, 0x8000, &sp10);
+    gGraphicsManager->ptrBank = loadCompressedData(&_6A83F0_ROM_START, &_6A83F0_ROM_END, 0xCFD8);
+    gGraphicsManager->musicBankBuffer = allocateMemoryNode(0, 0x9000, &sp10);
+    gGraphicsManager->musicDataBuffer = allocateMemoryNode(0, 0x8000, &sp10);
     func_8006983C_6A43C(&initializeMusicSystem);
 }
 
@@ -126,7 +126,7 @@ void initializeMusicSystem(void) {
     config.heap_length = 0x37A20;
     mgr = gGraphicsManager;
     config.fifo_length = 0x40;
-    config.ptr = mgr->unk0;
+    config.ptr = mgr->ptrBank;
     config.wbk = (u8 *)&wavetables_ROM_START;
     config.sched = &D_80092E28_93A28;
     config.default_fxbank = &D_80093308_93F08;
@@ -140,10 +140,10 @@ void initializeMusicSystem(void) {
 
     D_80093BA5_947A5 = 1;
     negativeOne = -1;
-    gGraphicsManager->unk1D = 0;
+    gGraphicsManager->musicFadeState = 0;
     gGraphicsManager->pendingMusicId = negativeOne;
     gGraphicsManager->currentMusicId = 0xFFFF;
-    gGraphicsManager->unk14 = 0;
+    gGraphicsManager->musicFadeOutDuration = 0;
     scheduleTask(checkMusicLoadRequest, 0, 0, 0x64);
     gGraphicsManager->soundSequence = 0;
     for (i = 0xF; i >= 0; i--) {
@@ -319,7 +319,7 @@ void incrementSoundSequence(void) {
 
 void checkMusicLoadRequest(void *arg) {
     setCleanupCallback(checkMusicLoadRequest);
-    if (gGraphicsManager->unk1D != 0) {
+    if (gGraphicsManager->musicFadeState != 0) {
         setCallback(&loadMusicTrackData);
     }
 }
@@ -331,85 +331,96 @@ void loadMusicTrackData(void) {
         D_800937E8_943E8[gGraphicsManager->currentMusicId].start,
         D_800937E8_943E8[gGraphicsManager->currentMusicId].end,
         D_800937E8_943E8[gGraphicsManager->currentMusicId].size,
-        gGraphicsManager->unk8
+        gGraphicsManager->musicBankBuffer
     );
 
     loadDataSegment(
         D_80093974_94574[gGraphicsManager->currentMusicId].start,
         D_80093974_94574[gGraphicsManager->currentMusicId].end,
         D_80093974_94574[gGraphicsManager->currentMusicId].size,
-        gGraphicsManager->unk4
+        gGraphicsManager->musicDataBuffer
     );
 
     setCallback(&initializeMusicPtrBank);
 }
 
 void initializeMusicPtrBank(void) {
-    func_800579E8_585E8(gGraphicsManager->unk4, (void *)*(&D_80093B00_94700 + (gGraphicsManager->currentMusicId)));
-    setCallback(&func_80057214_57E14);
+    func_800579E8_585E8(
+        gGraphicsManager->musicDataBuffer,
+        (void *)*(&D_80093B00_94700 + (gGraphicsManager->currentMusicId))
+    );
+    setCallback(&startMusicPlaybackWithFadeIn);
 }
 
-void func_80057214_57E14(void) {
-    s16 temp_a1;
-    void *temp_v0;
+void startMusicPlaybackWithFadeIn(void) {
+    s16 initialVolume;
+    void *audioChannel;
 
     if ((u16)gGraphicsManager->pendingMusicId != gGraphicsManager->currentMusicId) {
         setCallbackWithContinue(checkMusicLoadRequest);
-    } else if (gGraphicsManager->unk1D == 2) {
-        temp_v0 = func_80057974_58574(gGraphicsManager->unk4, gGraphicsManager->unk8, (u8)gGraphicsManager->unk1C);
-        gGraphicsManager->unkC = temp_v0;
-        if (temp_v0 != 0) {
-            temp_a1 = gGraphicsManager->unk16;
-            if (temp_a1 != 0x80) {
-                func_80057928_58528(temp_v0, temp_a1);
+    } else if (gGraphicsManager->musicFadeState == 2) {
+        audioChannel = func_80057974_58574(
+            gGraphicsManager->musicDataBuffer,
+            gGraphicsManager->musicBankBuffer,
+            (u8)gGraphicsManager->musicVoiceIndex
+        );
+        gGraphicsManager->currentAudioChannel = audioChannel;
+        if (audioChannel != 0) {
+            initialVolume = gGraphicsManager->currentMusicVolume;
+            if (initialVolume != 0x80) {
+                func_80057928_58528(audioChannel, initialVolume);
             }
-            gGraphicsManager->unk1E = 0;
+            gGraphicsManager->isFadingOut = 0;
             setCallbackWithContinue(func_800572B0_57EB0);
         }
     }
 }
 
 void func_800572B0_57EB0(void *arg) {
-    s16 temp_a1;
+    s16 targetVolume;
 
-    temp_a1 = gGraphicsManager->flags;
-    if (gGraphicsManager->unk16 != temp_a1) {
-        if ((u16)gGraphicsManager->unk1A != 0) {
-            gGraphicsManager->unk16 = gGraphicsManager->unk16 +
-                                      ((s32)(temp_a1 - gGraphicsManager->unk16) / (s32)(u16)gGraphicsManager->unk1A);
-            func_80057928_58528(gGraphicsManager->unkC, (s32)gGraphicsManager->unk16);
-            gGraphicsManager->unk1A = (u16)gGraphicsManager->unk1A - 1;
+    targetVolume = gGraphicsManager->targetMusicVolume;
+    if (gGraphicsManager->currentMusicVolume != targetVolume) {
+        if ((u16)gGraphicsManager->fadeCounter != 0) {
+            gGraphicsManager->currentMusicVolume =
+                gGraphicsManager->currentMusicVolume +
+                ((s32)(targetVolume - gGraphicsManager->currentMusicVolume) / (s32)(u16)gGraphicsManager->fadeCounter);
+            func_80057928_58528(gGraphicsManager->currentAudioChannel, (s32)gGraphicsManager->currentMusicVolume);
+            gGraphicsManager->fadeCounter = (u16)gGraphicsManager->fadeCounter - 1;
         } else {
-            gGraphicsManager->unk16 = temp_a1;
-            func_80057928_58528(gGraphicsManager->unkC, (s32)temp_a1);
+            gGraphicsManager->currentMusicVolume = targetVolume;
+            func_80057928_58528(gGraphicsManager->currentAudioChannel, (s32)targetVolume);
         }
     }
 
     if ((u16)gGraphicsManager->pendingMusicId != gGraphicsManager->currentMusicId) {
-        gGraphicsManager->unk1E = 1;
-        func_800578DC_584DC(gGraphicsManager->unkC, 8);
+        gGraphicsManager->isFadingOut = 1;
+        func_800578DC_584DC(gGraphicsManager->currentAudioChannel, 8);
         setCallbackWithContinue(func_800573F8_57FF8);
     } else {
-        if (gGraphicsManager->unk1D == 0) {
-            gGraphicsManager->unk1E = 1;
-            func_800578DC_584DC(gGraphicsManager->unkC, (s32)(u16)gGraphicsManager->unk14);
+        if (gGraphicsManager->musicFadeState == 0) {
+            gGraphicsManager->isFadingOut = 1;
+            func_800578DC_584DC(
+                gGraphicsManager->currentAudioChannel,
+                (s32)(u16)gGraphicsManager->musicFadeOutDuration
+            );
             setCallbackWithContinue(func_800573F8_57FF8);
         }
-        if (func_80057A34_58634(gGraphicsManager->unkC) == NULL) {
-            gGraphicsManager->unk1D = 0;
+        if (func_80057A34_58634(gGraphicsManager->currentAudioChannel) == NULL) {
+            gGraphicsManager->musicFadeState = 0;
             setCallbackWithContinue(func_80057470_58070);
         }
     }
 }
 
 void func_800573F8_57FF8(void) {
-    if (func_80057A34_58634(gGraphicsManager->unkC) == 0) {
+    if (func_80057A34_58634(gGraphicsManager->currentAudioChannel) == 0) {
         setCallbackWithContinue(&func_80057470_58070);
         return;
     }
-    if ((gGraphicsManager->unk1D != 0) && (gGraphicsManager->unk1E == 0)) {
-        gGraphicsManager->unk1E = 1;
-        func_800578DC_584DC(gGraphicsManager->unkC, 8);
+    if ((gGraphicsManager->musicFadeState != 0) && (gGraphicsManager->isFadingOut == 0)) {
+        gGraphicsManager->isFadingOut = 1;
+        func_800578DC_584DC(gGraphicsManager->currentAudioChannel, 8);
     }
 }
 
@@ -420,36 +431,36 @@ void func_80057470_58070(void) {
 }
 
 void func_800574A0_580A0(s32 arg0) {
-    gGraphicsManager->unk1D = 2;
+    gGraphicsManager->musicFadeState = 2;
     gGraphicsManager->pendingMusicId = arg0;
-    gGraphicsManager->unk16 = 0x80;
-    gGraphicsManager->flags = 0x80;
-    gGraphicsManager->unk1A = 0;
-    gGraphicsManager->unk1C = (s8)D_80093B84_94784[arg0];
+    gGraphicsManager->currentMusicVolume = 0x80;
+    gGraphicsManager->targetMusicVolume = 0x80;
+    gGraphicsManager->fadeCounter = 0;
+    gGraphicsManager->musicVoiceIndex = (s8)D_80093B84_94784[arg0];
 }
 
 void func_800574E0_580E0(s16 arg0, s8 arg1) {
-    gGraphicsManager->unk1D = 2;
+    gGraphicsManager->musicFadeState = 2;
     gGraphicsManager->pendingMusicId = arg0;
-    gGraphicsManager->unk16 = 0x80;
-    gGraphicsManager->flags = 0x80;
-    gGraphicsManager->unk1A = 0;
-    gGraphicsManager->unk1C = arg1;
+    gGraphicsManager->currentMusicVolume = 0x80;
+    gGraphicsManager->targetMusicVolume = 0x80;
+    gGraphicsManager->fadeCounter = 0;
+    gGraphicsManager->musicVoiceIndex = arg1;
 }
 
 void func_80057514_58114(u32 arg0, u16 arg1, u16 arg2) {
     GraphicsManager *new_var;
-    gGraphicsManager->unk1D = 2;
+    gGraphicsManager->musicFadeState = 2;
     gGraphicsManager->pendingMusicId = arg0;
-    gGraphicsManager->unk16 = 0;
-    gGraphicsManager->flags = arg1;
-    gGraphicsManager->unk1A = arg2;
-    gGraphicsManager->unk1C = D_80093B84_94784[arg0];
+    gGraphicsManager->currentMusicVolume = 0;
+    gGraphicsManager->targetMusicVolume = arg1;
+    gGraphicsManager->fadeCounter = arg2;
+    gGraphicsManager->musicVoiceIndex = D_80093B84_94784[arg0];
 }
 
 void func_80057550_58150(u16 arg0, u16 arg1) {
-    gGraphicsManager->flags = arg0;
-    gGraphicsManager->unk1A = arg1;
+    gGraphicsManager->targetMusicVolume = arg0;
+    gGraphicsManager->fadeCounter = arg1;
 }
 
 void func_80057564_58164(s32 arg0) {
@@ -459,8 +470,8 @@ void func_80057564_58164(s32 arg0) {
     if (arg0 < 8) {
         var_a0 = 8;
     }
-    gGraphicsManager->unk1D = 0;
-    (new_var = gGraphicsManager)->unk14 = var_a0;
+    gGraphicsManager->musicFadeState = 0;
+    (new_var = gGraphicsManager)->musicFadeOutDuration = var_a0;
 }
 
 void func_8005758C_5818C(void) {
