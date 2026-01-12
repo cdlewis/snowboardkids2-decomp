@@ -695,26 +695,22 @@ void enqueueDisplayListObjectWithSegments(s32 arg0, DisplayListObject *arg1) {
 }
 
 void func_80063A94_64694(DisplayListObject *obj) {
-    Mtx tempMtx;
+    Mtx lookAtMatrix;
     f32 eyeX;
     f32 eyeY;
-    int fracMask;
-    s32 unused;
+    s32 frac16Mask;
     f32 eyeZ;
     f32 upX;
     f32 upY;
     f32 upZ;
     LookAt *lookAt;
-    Mtx *matrices;
-    Gfx *dl;
-    s32 posXInt;
-    s32 posZInt;
-    s16 *rotationMatrix = (s16 *)obj;
+    Mtx *matrixPair;
+    s16 *rotationData = (s16 *)&obj->transform;
 
     if (obj->unk30 == NULL) {
-        matrices = arenaAlloc16(0x80);
-        obj->unk30 = matrices;
-        if (matrices == NULL) {
+        matrixPair = arenaAlloc16(0x80);
+        obj->unk30 = matrixPair;
+        if (matrixPair == NULL) {
             return;
         }
         /* First matrix: translation matrix */
@@ -736,28 +732,27 @@ void func_80063A94_64694(DisplayListObject *obj) {
         ((s32 *)obj->unk30)[12] = 0;
         ((s32 *)obj->unk30)[13] = 0;
         ((s32 *)obj->unk30)[14] = (obj->transform.translation.x << 16) + ((u16 *)&obj->transform.translation.y)[1];
-        fracMask = 0xFFFF;
+        frac16Mask = 0xFFFF;
         ((s32 *)obj->unk30)[15] = obj->transform.translation.z << 16;
-        /* Second matrix: rotation matrix built from Transform3D at offset 0 */
+        /* Second matrix: rotation matrix built from Transform3D rotation data at offset 0 */
         /* Integer portion (s32[16-23]) - extracts high bits from s15 rotation values */
         ((s32 *)obj->unk30)[16] =
-            ((rotationMatrix[0] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationMatrix[1] >> 15) & fracMask);
-        ((s32 *)obj->unk30)[17] = (rotationMatrix[2] * 2) & 0xFFFF0000;
+            ((rotationData[0] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationData[1] >> 15) & frac16Mask);
+        ((s32 *)obj->unk30)[17] = (rotationData[2] * 2) & 0xFFFF0000;
         ((s32 *)obj->unk30)[18] =
-            ((rotationMatrix[3] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationMatrix[4] >> 15) & fracMask);
-        ((s32 *)obj->unk30)[19] = (rotationMatrix[5] * 2) & 0xFFFF0000;
-        ((s32 *)obj->unk30)[20] =
-            ((rotationMatrix[6] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationMatrix[7] >> 15) & 0xFFFF);
-        ((s32 *)obj->unk30)[21] = (rotationMatrix[8] * 2) & 0xFFFF0000;
+            ((rotationData[3] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationData[4] >> 15) & frac16Mask);
+        ((s32 *)obj->unk30)[19] = (rotationData[5] * 2) & 0xFFFF0000;
+        ((s32 *)obj->unk30)[20] = ((rotationData[6] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationData[7] >> 15) & 0xFFFF);
+        ((s32 *)obj->unk30)[21] = (rotationData[8] * 2) & 0xFFFF0000;
         ((s32 *)obj->unk30)[22] = 0;
         ((s32 *)obj->unk30)[23] = 1;
         /* Fractional portion (s32[24-31]) - extracts low bits from s15 rotation values */
-        ((s32 *)obj->unk30)[24] = ((rotationMatrix[0] << 17) & 0xFFFF0000) + ((rotationMatrix[1] * 2) & fracMask);
-        ((s32 *)obj->unk30)[25] = (rotationMatrix[2] << 17) & 0xFFFF0000;
-        ((s32 *)obj->unk30)[26] = ((rotationMatrix[3] << 17) & 0xFFFF0000) + ((rotationMatrix[4] * 2) & fracMask);
-        ((s32 *)obj->unk30)[27] = (rotationMatrix[5] << 17) & 0xFFFF0000;
-        ((s32 *)obj->unk30)[28] = ((rotationMatrix[6] << 17) & 0xFFFF0000) + ((rotationMatrix[7] * 2) & fracMask);
-        ((s32 *)obj->unk30)[29] = (rotationMatrix[8] << 17) & 0xFFFF0000;
+        ((s32 *)obj->unk30)[24] = ((rotationData[0] << 17) & 0xFFFF0000) + ((rotationData[1] * 2) & frac16Mask);
+        ((s32 *)obj->unk30)[25] = (rotationData[2] << 17) & 0xFFFF0000;
+        ((s32 *)obj->unk30)[26] = ((rotationData[3] << 17) & 0xFFFF0000) + ((rotationData[4] * 2) & frac16Mask);
+        ((s32 *)obj->unk30)[27] = (rotationData[5] << 17) & 0xFFFF0000;
+        ((s32 *)obj->unk30)[28] = ((rotationData[6] << 17) & 0xFFFF0000) + ((rotationData[7] * 2) & frac16Mask);
+        ((s32 *)obj->unk30)[29] = (rotationData[8] << 17) & 0xFFFF0000;
         ((s32 *)obj->unk30)[30] = 0;
         ((s32 *)obj->unk30)[31] = 0;
     }
@@ -769,7 +764,7 @@ void func_80063A94_64694(DisplayListObject *obj) {
         }
 
         matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)obj, &eyeX, &eyeY, &eyeZ, &upX, &upY, &upZ);
-        guLookAtReflect(&tempMtx, lookAt, 0.0f, 0.0f, 0.0f, eyeX, eyeY, eyeZ, upX, upY, upZ);
+        guLookAtReflect(&lookAtMatrix, lookAt, 0.0f, 0.0f, 0.0f, eyeX, eyeY, eyeZ, upX, upY, upZ);
         gSPLookAt(gRegionAllocPtr++, lookAt);
     }
 
