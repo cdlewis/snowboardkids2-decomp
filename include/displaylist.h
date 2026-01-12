@@ -26,7 +26,7 @@ typedef struct {
     /* 0x38 */ u8 unk38;
     /* 0x39 */ u8 unk39;
     /* 0x3A */ u8 unk3A;
-    /* 0x3B */ u8 unk3B;
+    /* 0x3B */ u8 envColorAlpha;
 } DisplayListObject;
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1);
@@ -82,7 +82,7 @@ void renderOpaqueDisplayListWithFrustumCull(DisplayListObject *arg0);
 
 void buildDisplayListSegment(DisplayListObject *);
 
-void func_800638C0_644C0(DisplayListObject *);
+void buildTransparentDisplayListSegment(DisplayListObject *);
 
 void renderOverlayDisplayListCallback(DisplayListObject *obj);
 

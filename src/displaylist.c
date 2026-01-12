@@ -644,13 +644,13 @@ void buildDisplayListSegment(DisplayListObject *arg0) {
 
         gDPPipeSync(gRegionAllocPtr++);
 
-        gDPSetColor(gRegionAllocPtr++, 0xFB, arg0->unk3B | ~0xFF);
+        gDPSetColor(gRegionAllocPtr++, 0xFB, arg0->envColorAlpha | ~0xFF);
 
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
     }
 }
 
-void func_800638C0_644C0(DisplayListObject *arg0) {
+void buildTransparentDisplayListSegment(DisplayListObject *arg0) {
     Gfx *dl;
 
     if (!isObjectCulled(&arg0->transform.translation)) {
@@ -663,7 +663,7 @@ void func_800638C0_644C0(DisplayListObject *arg0) {
 
         gRegionAllocPtr += 1;
         dl[1].words.w0 = 0xFB000000;
-        dl[1].words.w1 = arg0->unk3B | 0xFFFFFF00;
+        dl[1].words.w1 = arg0->envColorAlpha | 0xFFFFFF00;
 
         gRegionAllocPtr += 1;
         dl[2].words.w0 = 0xDE000000;
@@ -676,7 +676,7 @@ void func_8006395C_6455C(DisplayListObject *arg0) {
         setupDisplayListMatrix(arg0);
 
         gDPPipeSync(gRegionAllocPtr++);
-        gDPSetColor(gRegionAllocPtr++, 0xFB, arg0->unk3B | ~0xFF);
+        gDPSetColor(gRegionAllocPtr++, 0xFB, arg0->envColorAlpha | ~0xFF);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
     }
 }
@@ -687,7 +687,7 @@ void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &buildDisplayListSegment, arg1);
     }
     if (arg1->unk20->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 3, &func_800638C0_644C0, arg1);
+        debugEnqueueCallback(arg0 & 0xFFFF, 3, &buildTransparentDisplayListSegment, arg1);
     }
     if (arg1->unk20->overlayDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_8006395C_6455C, arg1);

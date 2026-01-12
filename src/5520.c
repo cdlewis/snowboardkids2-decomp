@@ -103,7 +103,7 @@ void renderOpaqueTiledTexture(DisplayListObject *arg0) {
 
 void renderTransparentTiledTexture(s32 arg0) {
     func_80005094_5C94();
-    func_800638C0_644C0((DisplayListObject *)arg0);
+    buildTransparentDisplayListSegment((DisplayListObject *)arg0);
 }
 
 void renderOverlayTiledTexture(s32 arg0) {
