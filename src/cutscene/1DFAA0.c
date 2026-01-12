@@ -81,7 +81,7 @@ CutsceneSlot *getCutsceneSlot(CutsceneManager *manager, s16 slotIndex) {
 
 void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *shadowModel, void *reflectionModel) {
     s32 i;
-    s16 modelIndex = func_800B3490_1E0540();
+    s16 modelIndex = getCutsceneInitModelIndex();
     s32 needsVisibility = initModelEntity((ModelEntity *)&manager->unk10, modelIndex, sceneNode);
 
     setModelRenderMode(&manager->unk10, 0);
@@ -225,7 +225,7 @@ void prepareCutsceneForPlayback(
     *(s32 *)&manager->pad4[4] = pad4_4;
     manager->currentFrame = 0;
     manager->maxFrame = maxFrame;
-    manager->endFrame = func_800B34D0_1E0580();
+    manager->endFrame = getCutsceneDefaultEndFrame();
     do {
         modelId = func_800B34B0_1E0560(i)->unk4;
         model = manager->slots[i].model;
@@ -414,24 +414,24 @@ u16 getCutsceneMaxStateEntries(void) {
     return D_800BAEBC_1E7F6C->unk16;
 }
 
-s16 func_800B3490_1E0540(void) {
-    return D_800BAEBC_1E7F6C->unk18;
+s16 getCutsceneInitModelIndex(void) {
+    return D_800BAEBC_1E7F6C->initModelIndex;
 }
 
-void func_800B34A0_1E0550(s16 arg0) {
-    D_800BAEBC_1E7F6C->unk18 = arg0;
+void setCutsceneInitModelIndex(s16 arg0) {
+    D_800BAEBC_1E7F6C->initModelIndex = arg0;
 }
 
 StateEntryItem *func_800B34B0_1E0560(s32 arg0) {
     return &D_800BAEBC_1E7F6C->items[arg0];
 }
 
-s16 func_800B34D0_1E0580(void) {
-    return D_800BAEBC_1E7F6C->unk1A;
+s16 getCutsceneDefaultEndFrame(void) {
+    return D_800BAEBC_1E7F6C->defaultEndFrame;
 }
 
-void func_800B34E0_1E0590(s16 arg0) {
-    D_800BAEBC_1E7F6C->unk1A = arg0;
+void setCutsceneDefaultEndFrame(s16 arg0) {
+    D_800BAEBC_1E7F6C->defaultEndFrame = arg0;
 }
 
 u8 func_800B34F0(void) {
@@ -661,8 +661,8 @@ void initializeCutsceneSystem(void *arg0) {
         j = 0;
         v1Reg->unk14 = 0x8000;
         v1Reg->unk16 = 0x1E0;
-        v1Reg->unk18 = 0;
-        v1Reg->unk1A = 0x64;
+        v1Reg->initModelIndex = 0;
+        v1Reg->defaultEndFrame = 0x64;
         v1Reg->unk1C = 0;
     }
     do {
