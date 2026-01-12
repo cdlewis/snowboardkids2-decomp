@@ -2445,58 +2445,58 @@ s32 updateStunnedRecoveryStandUpPhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800B5A40_A58F0(Player *arg0) {
-    s32 temp;
+s32 updateKnockbackAirborneLaunchPhase(Player *player) {
+    s32 prevFlags;
 
-    if (!arg0->unkBBF) {
-        temp = arg0->unkB84;
-        arg0->unkBBF++;
-        arg0->velocity.y = 0xA0000;
-        arg0->unkB88 = 0x20;
-        arg0->unkB8C = 5;
-        arg0->unkA8C = 0xFFFF;
-        arg0->unkB84 = temp | 0x20;
+    if (!player->unkBBF) {
+        prevFlags = player->unkB84;
+        player->unkBBF++;
+        player->velocity.y = 0xA0000;
+        player->unkB88 = 0x20;
+        player->unkB8C = 5;
+        player->unkA8C = 0xFFFF;
+        player->unkB84 = prevFlags | 0x20;
     }
 
-    if (arg0->velocity.y > 0) {
-        arg0->velocity.y = arg0->velocity.y - 0x8000;
+    if (player->velocity.y > 0) {
+        player->velocity.y = player->velocity.y - 0x8000;
     } else {
-        if (arg0->unkBBF == 1) {
-            if (createFallingEffect(arg0) != 0) {
-                arg0->unkBBF++;
+        if (player->unkBBF == 1) {
+            if (createFallingEffect(player) != 0) {
+                player->unkBBF++;
             }
         }
 
-        arg0->velocity.y -= 0x800;
+        player->velocity.y -= 0x800;
 
-        if (func_8005D8C8_5E4C8(arg0) != 1) {
-            arg0->velocity.y += 0x100;
+        if (func_8005D8C8_5E4C8(player) != 1) {
+            player->velocity.y += 0x100;
         }
     }
 
-    arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 6);
-    arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 6);
+    player->velocity.x = player->velocity.x - (player->velocity.x >> 6);
+    player->velocity.z = player->velocity.z - (player->velocity.z >> 6);
 
-    decayPlayerAirborneAngles(arg0);
+    decayPlayerAirborneAngles(player);
 
-    arg0->unkA94 += 0x40;
+    player->unkA94 += 0x40;
 
-    applyVelocityToPosition(arg0);
-    func_8005D308_5DF08(arg0, 9);
+    applyVelocityToPosition(player);
+    func_8005D308_5DF08(player, 9);
 
-    if (arg0->unkB8C != 0) {
-        arg0->unkB8C--;
-        if (arg0->unkB8C != 0) {
+    if (player->unkB8C != 0) {
+        player->unkB8C--;
+        if (player->unkB8C != 0) {
             goto skip;
         }
     }
 
-    if ((arg0->unkB84 & 1) == 0) {
-        setPlayerBehaviorPhase(arg0, 4);
+    if ((player->unkB84 & 1) == 0) {
+        setPlayerBehaviorPhase(player, 4);
     }
 
 skip:
-    func_8005D804_5E404(arg0, 3, 0);
+    func_8005D804_5E404(player, 3, 0);
 
     return 0;
 }

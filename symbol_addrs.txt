@@ -847,6 +847,7 @@ setPlayerBehaviorPhase = 0x800B00D4; // rom:0x9FF84
 resetPlayerBehaviorToDefault = 0x800B00E4; // rom:0x9FF94
 updateStunnedRecoveryEndPhase = 0x800B58B8; // rom:0xA5768
 updateStunnedRecoveryStandUpPhase = 0x800B5938; // rom:0xA57E8
+updateKnockbackAirborneLaunchPhase = 0x800B5A40; // rom:0xA58F0
 applyBoostVelocity = 0x800B00FC; // rom:0x9FFAC
 getCommandEntry = 0x800B00C0; // type:func rom:0x1DD170
 getCommandEntryMasked = 0x800B00F4; // rom:0x1DD1A4
