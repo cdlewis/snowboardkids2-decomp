@@ -439,13 +439,13 @@ void playMusicTrack(s32 musicTrackId) {
     gGraphicsManager->musicVoiceIndex = (s8)gMusicTrackVoiceMap[musicTrackId];
 }
 
-void func_800574E0_580E0(s16 arg0, s8 arg1) {
+void playMusicTrackWithVoice(s16 musicTrackId, s8 voiceIndex) {
     gGraphicsManager->musicFadeState = 2;
-    gGraphicsManager->pendingMusicId = arg0;
+    gGraphicsManager->pendingMusicId = musicTrackId;
     gGraphicsManager->currentMusicVolume = 0x80;
     gGraphicsManager->targetMusicVolume = 0x80;
     gGraphicsManager->fadeCounter = 0;
-    gGraphicsManager->musicVoiceIndex = arg1;
+    gGraphicsManager->musicVoiceIndex = voiceIndex;
 }
 
 void func_80057514_58114(u32 arg0, u16 arg1, u16 arg2) {

@@ -23,7 +23,7 @@ void updateMusicVolumeFadeIn(void *arg);
 void handleMusicFadeOutTransition(void);
 void checkNoActiveAudioChannels(void);
 void playMusicTrack(s32 musicTrackId);
-void func_800574E0_580E0(s16 arg0, s8 arg1);
+void playMusicTrackWithVoice(s16 musicTrackId, s8 voiceIndex);
 void func_80057514_58114(u32 arg0, u16 arg1, u16 arg2);
 void func_80057550_58150(u16 arg0, u16 arg1);
 void func_80057564_58164(s32 arg0);

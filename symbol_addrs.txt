@@ -34,6 +34,7 @@ updateMusicVolumeFadeIn = 0x800572B0; // rom:0x57EB0
 handleMusicFadeOutTransition = 0x800573F8; // rom:0x57FF8
 checkNoActiveAudioChannels = 0x80057470; // rom:0x58070
 playMusicTrack = 0x800574A0; // rom:0x580A0
+playMusicTrackWithVoice = 0x800574E0; // rom:0x580E0
 normalizeVelocityToSpeed = 0x80051C80; // rom:0x52880
 initSlapstickProjectileTask = 0x80051DEC; // rom:0x529EC
 loadSlapstickProjectileAsset = 0x80051E34; // rom:0x52A34
