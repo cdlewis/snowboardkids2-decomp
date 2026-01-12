@@ -368,7 +368,7 @@ void startMusicPlaybackWithFadeIn(void) {
         if (audioChannel != 0) {
             initialVolume = gGraphicsManager->currentMusicVolume;
             if (initialVolume != 0x80) {
-                func_80057928_58528(audioChannel, initialVolume);
+                setAudioChannelVolume(audioChannel, initialVolume);
             }
             gGraphicsManager->isFadingOut = 0;
             setCallbackWithContinue(updateMusicVolumeFadeIn);
@@ -385,11 +385,11 @@ void updateMusicVolumeFadeIn(void *arg) {
             gGraphicsManager->currentMusicVolume =
                 gGraphicsManager->currentMusicVolume +
                 ((s32)(targetVolume - gGraphicsManager->currentMusicVolume) / (s32)(u16)gGraphicsManager->fadeCounter);
-            func_80057928_58528(gGraphicsManager->currentAudioChannel, (s32)gGraphicsManager->currentMusicVolume);
+            setAudioChannelVolume(gGraphicsManager->currentAudioChannel, (s32)gGraphicsManager->currentMusicVolume);
             gGraphicsManager->fadeCounter = (u16)gGraphicsManager->fadeCounter - 1;
         } else {
             gGraphicsManager->currentMusicVolume = targetVolume;
-            func_80057928_58528(gGraphicsManager->currentAudioChannel, (s32)targetVolume);
+            setAudioChannelVolume(gGraphicsManager->currentAudioChannel, (s32)targetVolume);
         }
     }
 
@@ -600,11 +600,11 @@ void stopAudioChannelWithSpeed(void *audioChannel, s32 stoppingSpeed) {
     osRecvMesg(&gfxResultQueue, &result, OS_MESG_BLOCK);
 }
 
-void func_80057928_58528(void *arg0, s32 arg1) {
+void setAudioChannelVolume(void *audioChannel, s32 volume) {
     void *message;
 
-    D_800A2D10_A3910.unk1C = arg0;
-    D_800A2D10_A3910.unk14 = arg1;
+    D_800A2D10_A3910.unk1C = audioChannel;
+    D_800A2D10_A3910.unk14 = volume;
     osSendMesg(&gfxTaskQueue, (OSMesg *)0xC, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
