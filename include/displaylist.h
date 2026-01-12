@@ -30,6 +30,7 @@ typedef struct {
 } DisplayListObject;
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1);
+void enqueueDisplayListObjectWithSegments(s32 arg0, DisplayListObject *arg1);
 
 typedef struct {
     u8 padding[0x20];
@@ -138,8 +139,6 @@ void loadAssetMetadataByIndex(
 void func_80067EDC_68ADC(s32, loadAssetMetadata_arg *);
 
 void buildOverlayDisplayListSegment(DisplayListObject *obj);
-
-void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1);
 
 void func_8006417C_64D7C(s32 arg0, DisplayListObject *arg1);
 

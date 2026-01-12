@@ -717,7 +717,7 @@ void updateSparkleEffect(SparkleEffectState *arg0) {
 
     i = 0;
     do {
-        func_800639F8_645F8(i, (DisplayListObject *)arg0);
+        enqueueDisplayListObjectWithSegments(i, (DisplayListObject *)arg0);
         i++;
     } while (i < 4);
 
@@ -747,7 +747,7 @@ void fadeOutSparkleEffect(SparkleEffectState *arg0) {
     arg0->alpha = (u8)arg0->opacity;
 
     for (i = 0; i < 4; i++) {
-        func_800639F8_645F8(i, (DisplayListObject *)arg0);
+        enqueueDisplayListObjectWithSegments(i, (DisplayListObject *)arg0);
     }
 }
 

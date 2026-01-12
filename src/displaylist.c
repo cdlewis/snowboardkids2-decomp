@@ -681,7 +681,7 @@ void buildOverlayDisplayListSegment(DisplayListObject *obj) {
     }
 }
 
-void func_800639F8_645F8(s32 arg0, DisplayListObject *arg1) {
+void enqueueDisplayListObjectWithSegments(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
     if (arg1->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &buildDisplayListSegment, arg1);
