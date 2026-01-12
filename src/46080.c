@@ -31,38 +31,38 @@ USE_ASSET(_3F6950);
 USE_ASSET(_3F3EF0);
 
 typedef struct {
-    void *unk0;
-    loadAssetMetadata_arg unk4;
+    void *assetTable;
+    loadAssetMetadata_arg metadata;
     u8 _pad20[0x4];
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    Player *unk30;
-    u16 unk34;
+    s32 velX;
+    s32 velY;
+    s32 velZ;
+    Player *player;
+    u16 sectorIndex;
     u8 _pad36[0x2];
-    s16 unk38;
-    s16 unk3A;
-} func_8004AA90_4B690_arg;
+    s16 playerIndex;
+    s16 initFlag;
+} PanelProjectileInitArg;
 
 typedef struct {
     u8 _pad0[0x4];
-    u8 unk4[0x4];
-    Vec3i unk8;
+    u8 metadataPad[0x4];
+    Vec3i position;
     u8 _pad14[0x10];
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
+    s32 velX;
+    s32 velY;
+    s32 velZ;
     u8 _pad30[0x4];
-    u16 unk34;
-    s16 unk36;
-    s16 unk38;
-    s16 unk3A;
-} func_8004AB50_4B750_arg;
+    u16 sectorIndex;
+    s16 timer;
+    s16 playerIndex;
+    s16 initFlag;
+} PanelProjectileUpdateArg;
 
 typedef struct {
     u8 _pad0[0x4];
-    func_80066444_67044_arg1 unk4;
-} func_8004AD18_4B918_arg;
+    func_80066444_67044_arg1 metadata;
+} PanelProjectileImpactArg;
 
 typedef struct {
     u8 padding[0x5B];
@@ -780,7 +780,7 @@ void resetFlyingSceneryPosition(FlyingSceneryState *);
 void updateFlyingSceneryReturnGlideStep(FlyingSceneryState *state);
 void updateFlyingSceneryDescendingStep(FlyingSceneryState *state);
 void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0);
-void func_8004AE58_4BA58(s32 **);
+void cleanupPanelProjectileTask(s32 **);
 void cleanupHomingProjectileTask(s32 **);
 void updateHomingProjectileMovement(HomingProjectileUpdateArg *arg0);
 void setupItemBoxBurstTexture(ItemBoxBurstEffectState *arg0);
@@ -793,9 +793,9 @@ void func_8004AFF8_4BBF8(func_8004AFF8_arg *);
 void func_80045CC8_468C8(void);
 void func_8004B758_4C358(func_8004B758_4C358_arg *);
 void func_8004B130_4BD30(func_8004B130_arg *);
-void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0);
-void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0);
-void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0);
+void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0);
+void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0);
+void initPanelProjectileMovement(PanelProjectileInitArg *arg0);
 void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0);
 void func_8004B834_4C434(func_8004B834_4C434_arg *);
 void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *);
@@ -3203,34 +3203,34 @@ void spawnHomingProjectile(void *arg0, s32 arg1, void *arg2) {
     }
 }
 
-void func_8004AA50_4B650(s32 *arg0) {
+void initPanelProjectileTask(s32 *arg0) {
     *arg0 = (s32)load_3ECE40();
-    setCleanupCallback(func_8004AE58_4BA58);
-    setCallbackWithContinue(&func_8004AA90_4B690);
+    setCleanupCallback(cleanupPanelProjectileTask);
+    setCallbackWithContinue(&initPanelProjectileMovement);
 }
 
-void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0) {
+void initPanelProjectileMovement(PanelProjectileInitArg *arg0) {
     GameState *gs;
     Player *player;
     Vec3i *temp_s1;
     s32 pad[4];
 
     gs = (GameState *)getCurrentAllocation();
-    arg0->unk4.unk0 = (loadAssetMetadata_arg *)((u8 *)gs->unk44 + 0xEC0);
-    loadAssetMetadata(&arg0->unk4, arg0->unk0, 0x3F);
-    player = arg0->unk30;
-    temp_s1 = &arg0->unk4.position;
+    arg0->metadata.unk0 = (loadAssetMetadata_arg *)((u8 *)gs->unk44 + 0xEC0);
+    loadAssetMetadata(&arg0->metadata, arg0->assetTable, 0x3F);
+    player = arg0->player;
+    temp_s1 = &arg0->metadata.position;
     memcpy(temp_s1, &player->unk31C, sizeof(Vec3i));
-    arg0->unk34 = arg0->unk30->unkB94;
-    arg0->unk38 = (s16)arg0->unk30->unkBB8;
-    memcpy(&arg0->unk24, &arg0->unk30->velocity, sizeof(Vec3i));
-    arg0->unk3A = 1;
-    arg0->unk28 = arg0->unk28 + 0x28000;
+    arg0->sectorIndex = arg0->player->unkB94;
+    arg0->playerIndex = (s16)arg0->player->unkBB8;
+    memcpy(&arg0->velX, &arg0->player->velocity, sizeof(Vec3i));
+    arg0->initFlag = 1;
+    arg0->velY = arg0->velY + 0x28000;
     queueSoundAtPosition(temp_s1, 0x17);
-    setCallbackWithContinue(func_8004AB50_4B750);
+    setCallbackWithContinue(updatePanelProjectileMovement);
 }
 
-void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0) {
+void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0) {
     Vec3i sp;
     GameState_46080 *s0;
     void *temp_s0;
@@ -3245,35 +3245,35 @@ void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0) {
 
     s0 = (GameState_46080 *)getCurrentAllocation();
     if (s0->unk76 == 0) {
-        if (arg0->unk3A != 0) {
-            arg0->unk3A = 0;
+        if (arg0->initFlag != 0) {
+            arg0->initFlag = 0;
         } else {
-            temp_a0 = arg0->unk24;
+            temp_a0 = arg0->velX;
             var_v0 = temp_a0;
             if (temp_a0 < 0) {
                 var_v0 = temp_a0 + 7;
             }
-            temp_v1 = arg0->unk28;
-            temp_a1 = arg0->unk2C;
-            arg0->unk24 = temp_a0 - (var_v0 >> 3);
+            temp_v1 = arg0->velY;
+            temp_a1 = arg0->velZ;
+            arg0->velX = temp_a0 - (var_v0 >> 3);
             var_v0_2 = temp_a1;
-            arg0->unk28 = temp_v1 - 0x3000;
+            arg0->velY = temp_v1 - 0x3000;
             if (temp_a1 < 0) {
                 var_v0_2 = temp_a1 + 7;
             }
-            arg0->unk2C = temp_a1 - (var_v0_2 >> 3);
-            arg0->unk8.x = arg0->unk8.x + arg0->unk24;
-            arg0->unk8.y = arg0->unk8.y + arg0->unk28;
-            arg0->unk8.z = arg0->unk8.z + arg0->unk2C;
+            arg0->velZ = temp_a1 - (var_v0_2 >> 3);
+            arg0->position.x = arg0->position.x + arg0->velX;
+            arg0->position.y = arg0->position.y + arg0->velY;
+            arg0->position.z = arg0->position.z + arg0->velZ;
         }
         temp_s0 = &s0->unk30;
-        s2 = &arg0->unk8;
-        arg0->unk34 = func_80060A3C_6163C(temp_s0, arg0->unk34, s2);
-        func_80060CDC_618DC(temp_s0, arg0->unk34, s2, 0x100000, &sp);
-        arg0->unk8.x = arg0->unk8.x + sp.x;
-        arg0->unk8.z = arg0->unk8.z + sp.z;
-        sp.y = func_80061A64_62664(temp_s0, arg0->unk34, s2);
-        temp_v0_3 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
+        s2 = &arg0->position;
+        arg0->sectorIndex = func_80060A3C_6163C(temp_s0, arg0->sectorIndex, s2);
+        func_80060CDC_618DC(temp_s0, arg0->sectorIndex, s2, 0x100000, &sp);
+        arg0->position.x = arg0->position.x + sp.x;
+        arg0->position.z = arg0->position.z + sp.z;
+        sp.y = func_80061A64_62664(temp_s0, arg0->sectorIndex, s2);
+        temp_v0_3 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
         if (temp_v0_3 != NULL) {
             func_80050ECC_51ACC(s2);
             queueSoundAtPosition(s2, 0xD);
@@ -3281,18 +3281,18 @@ void func_8004AB50_4B750(func_8004AB50_4B750_arg *arg0) {
             func_80069CF8_6A8F8();
             return;
         }
-        if (arg0->unk8.y < sp.y) {
-            arg0->unk8.y = sp.y;
-            arg0->unk36 = 0x1518;
-            setCallback(func_8004AD18_4B918);
+        if (arg0->position.y < sp.y) {
+            arg0->position.y = sp.y;
+            arg0->timer = 0x1518;
+            setCallback(updatePanelProjectileImpact);
         }
     }
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->metadataPad);
     }
 }
 
-void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0) {
+void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0) {
     Vec3i sp10;
     Vec3i *s0;
     Vec3i *s2;
@@ -3304,18 +3304,18 @@ void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0) {
 
     if (alloc->unk76 == 0) {
         if (alloc->availableHomingProjectileSlots < 10) {
-            if (arg0->unk4.unk36 < 0x1194) {
-                if (arg0->unk4.unk36 >= 0x1F) {
-                    arg0->unk4.unk36 = 0x1E;
+            if (arg0->metadata.unk36 < 0x1194) {
+                if (arg0->metadata.unk36 >= 0x1F) {
+                    arg0->metadata.unk36 = 0x1E;
                 }
             }
         }
-        arg0->unk4.unk36--;
+        arg0->metadata.unk36--;
     }
 
-    s2 = &arg0->unk4.unk4;
+    s2 = &arg0->metadata.unk4;
 
-    if (arg0->unk4.unk36 == 0) {
+    if (arg0->metadata.unk36 == 0) {
         func_80069CF8_6A8F8();
     }
 
@@ -3331,18 +3331,18 @@ void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0) {
         func_80069CF8_6A8F8();
     } else {
         i = 0;
-        if (arg0->unk4.unk36 < 0x1F) {
+        if (arg0->metadata.unk36 < 0x1F) {
             if ((gFrameCounter & 1) == 0) {
                 return;
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, &arg0->unk4);
+            func_80066444_67044(i, &arg0->metadata);
         }
     }
 }
 
-void func_8004AE58_4BA58(s32 **arg0) {
+void cleanupPanelProjectileTask(s32 **arg0) {
     GameState *temp_v0;
 
     temp_v0 = (GameState *)getCurrentAllocation();
@@ -3350,11 +3350,11 @@ void func_8004AE58_4BA58(s32 **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void func_8004AE94_4BA94(s32 arg0) {
+void spawnPanelProjectile(s32 arg0) {
     NodeWithPayload *temp_v0;
 
     getCurrentAllocation();
-    temp_v0 = (NodeWithPayload *)scheduleTask(&func_8004AA50_4B650, 3, 0, 0xEFU);
+    temp_v0 = (NodeWithPayload *)scheduleTask(&initPanelProjectileTask, 3, 0, 0xEFU);
     if (temp_v0 != NULL) {
         temp_v0->unk30 = arg0;
     }
