@@ -376,16 +376,16 @@ u16 getTrackSegmentWaypoints(void *arg0_void, u16 waypointIdx, void *waypointSta
     return (func_8006D21C_6DE1C(startVert->x, startVert->z, endVert->x, endVert->z) - 0x1000) & 0xFFFF;
 }
 
-s32 func_80062C98_63898(TrackSegmentEntry **arg0, u16 index) {
-    s16 temp_v0;
-    s16 var_a1 = index;
+s32 resolveTrackSegmentIndex(TrackSegmentEntry **arg0, u16 index) {
+    s16 linkedIdx;
+    s16 result = index;
 
-    temp_v0 = arg0[3][index].unk0;
+    linkedIdx = arg0[3][index].linkedSegmentIdx;
 
-    if (temp_v0 >= 0) {
-        var_a1 = temp_v0;
+    if (linkedIdx >= 0) {
+        result = linkedIdx;
     }
-    return var_a1 & 0xFFFF;
+    return result & 0xFFFF;
 }
 
 s32 func_80062CD0_638D0(s32 arg0) {

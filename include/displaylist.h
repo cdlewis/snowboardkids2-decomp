@@ -163,13 +163,15 @@ void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1);
 u16 getTrackSegmentWaypoints(void *trackGeom, u16 waypointIdx, void *waypointStart, void *waypointEnd);
 
 typedef struct {
-    s16 unk0;
+    s16 linkedSegmentIdx;
     u8 _pad[0x8];
     s16 finishZoneFlag;
     u8 _pad2[0x18];
 } TrackSegmentEntry;
 
 s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index);
+
+s32 resolveTrackSegmentIndex(TrackSegmentEntry **arg0, u16 index);
 
 typedef struct {
     u8 _pad0[0x4];
