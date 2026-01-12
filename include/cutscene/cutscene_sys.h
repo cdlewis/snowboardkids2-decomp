@@ -30,7 +30,7 @@ void cutsceneSysFadeIn_exec(cutsceneSysFadeIn_exec_arg *arg0, Node_70B00 *arg1);
 s32 cutsceneSysFadeIn_isDone(void);
 void cutsceneSysFadeOut_init(void);
 s32 cutsceneSysFadeOut_validate(void);
-void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *, Node_70B00 *);
+void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *fadeArgs, Node_70B00 *node);
 s32 cutsceneSysFadeOut_isDone(void);
 void cutsceneSysFlash_init(void);
 s32 cutsceneSysFlash_validate(void);

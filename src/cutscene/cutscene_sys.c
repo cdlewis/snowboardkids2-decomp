@@ -53,10 +53,10 @@ s32 cutsceneSysFadeOut_validate(void) {
     return 0;
 }
 
-void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *arg0, Node_70B00 *arg1) {
-    u8 brightness = gCutsceneFadeBrightnessTable[arg0->brightnessIndex];
-    func_8006FE28_70A28(arg1->unk0.next, brightness, brightness, brightness);
-    func_8006FDA0_709A0(arg1->unk0.next, 0xFF, arg0->fadeMode);
+void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *fadeArgs, Node_70B00 *node) {
+    u8 brightness = gCutsceneFadeBrightnessTable[fadeArgs->brightnessIndex];
+    func_8006FE28_70A28(node->unk0.next, brightness, brightness, brightness);
+    func_8006FDA0_709A0(node->unk0.next, 0xFF, fadeArgs->fadeMode);
 }
 
 s32 cutsceneSysFadeOut_isDone(void) {
