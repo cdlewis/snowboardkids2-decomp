@@ -30,7 +30,7 @@ void setMusicFadeOut(s32 fadeOutDuration);
 void initializeGfxCommThread(void);
 void gfxCommThreadFunc(void *arg0);
 void sendStopAudioChannelsCommand(s32 stoppingSpeed);
-void func_800578DC_584DC(void *arg0, s32 arg1);
+void stopAudioChannelWithSpeed(void *audioChannel, s32 stoppingSpeed);
 void func_80057928_58528(void *arg0, s32 arg1);
 void *func_80057974_58574(void *arg0, void *arg1, s32 arg2);
 void *func_800579CC_585CC(void *arg0, void *arg1);

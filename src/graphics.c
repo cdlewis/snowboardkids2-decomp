@@ -395,12 +395,12 @@ void updateMusicVolumeFadeIn(void *arg) {
 
     if ((u16)gGraphicsManager->pendingMusicId != gGraphicsManager->currentMusicId) {
         gGraphicsManager->isFadingOut = 1;
-        func_800578DC_584DC(gGraphicsManager->currentAudioChannel, 8);
+        stopAudioChannelWithSpeed(gGraphicsManager->currentAudioChannel, 8);
         setCallbackWithContinue(handleMusicFadeOutTransition);
     } else {
         if (gGraphicsManager->musicFadeState == 0) {
             gGraphicsManager->isFadingOut = 1;
-            func_800578DC_584DC(
+            stopAudioChannelWithSpeed(
                 gGraphicsManager->currentAudioChannel,
                 (s32)(u16)gGraphicsManager->musicFadeOutDuration
             );
@@ -420,7 +420,7 @@ void handleMusicFadeOutTransition(void) {
     }
     if ((gGraphicsManager->musicFadeState != 0) && (gGraphicsManager->isFadingOut == 0)) {
         gGraphicsManager->isFadingOut = 1;
-        func_800578DC_584DC(gGraphicsManager->currentAudioChannel, 8);
+        stopAudioChannelWithSpeed(gGraphicsManager->currentAudioChannel, 8);
     }
 }
 
@@ -591,13 +591,13 @@ void sendStopAudioChannelsCommand(s32 stoppingSpeed) {
     }
 }
 
-void func_800578DC_584DC(void *arg0, s32 arg1) {
-    void *message;
+void stopAudioChannelWithSpeed(void *audioChannel, s32 stoppingSpeed) {
+    void *result;
 
-    D_800A2D10_A3910.unk1C = arg0;
-    D_800A2D10_A3910.unk20 = arg1;
+    D_800A2D10_A3910.unk1C = audioChannel;
+    D_800A2D10_A3910.unk20 = stoppingSpeed;
     osSendMesg(&gfxTaskQueue, (OSMesg *)7, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+    osRecvMesg(&gfxResultQueue, &result, OS_MESG_BLOCK);
 }
 
 void func_80057928_58528(void *arg0, s32 arg1) {

@@ -1096,6 +1096,7 @@ gfxCommThread = 0x800A2998; // size:0x338
 gGraphicsManager = 0x800A2990;
 
 D_800A2D10_A3910 = 0x800A2D10; // size:0x30
+stopAudioChannelWithSpeed = 0x800578DC; // rom:0x584DC
 
 setBufferData = 0x80056A88;
 
