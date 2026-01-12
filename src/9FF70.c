@@ -2308,7 +2308,7 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800B5394_A5244(Player *arg0) {
+s32 updateStunnedRecoverySlidePhase(Player *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unkBBF = arg0->unkBBF + 1;
         queueSoundAtPosition(&arg0->worldPos, 0xD);
