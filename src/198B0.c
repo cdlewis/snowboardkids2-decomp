@@ -5,23 +5,23 @@
 
 extern u8 D_8008D714_8E314[];
 
-void GenericTriggerCheck(EventTrigger *);
+void checkGenericLocationDiscovery(LocationDiscoveryTrigger *);
 
-void GenericTriggerInit(EventTrigger *arg0) {
-    u8 eventId = arg0->eventId;
+void initGenericDiscoveryTrigger(LocationDiscoveryTrigger *arg0) {
+    u8 eventId = arg0->locationId;
     arg0->unk1 = 0;
     arg0->unk4 = 0;
     arg0->unk6 = -0x68;
     arg0->unk8 = 0;
-    arg0->unkC = &D_8008D714_8E314[eventId * 20];
-    setCallback(GenericTriggerCheck);
+    arg0->locationLabel = &D_8008D714_8E314[eventId * 20];
+    setCallback(checkGenericLocationDiscovery);
 }
 
-void GenericTriggerCheck(EventTrigger *trigger) {
+void checkGenericLocationDiscovery(LocationDiscoveryTrigger *trigger) {
     GameState *state = (GameState *)getCurrentAllocation();
     s16 rawAngle;
     s16 playerAngle;
-    u8 eventId;
+    u8 locationId;
     s16 minAngle;
     s16 maxAngle;
 
@@ -35,14 +35,14 @@ void GenericTriggerCheck(EventTrigger *trigger) {
         playerAngle -= 0x2000;
     }
 
-    eventId = trigger->eventId;
-    minAngle = ((s16 *)D_8008D6C4_8E2C4)[eventId * 2];
+    locationId = trigger->locationId;
+    minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
     if (playerAngle < minAngle) {
-        maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(eventId * 2) + 1];
+        maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];
         if (maxAngle < playerAngle) {
             if (((u16)(state->unk3FC - 0xC01)) < 0x7FF) {
-                state->unk424 = 1;
-                state->unk425 = trigger->eventId;
+                state->locationDiscovered = 1;
+                state->discoveredLocationId = trigger->locationId;
             }
         }
     }

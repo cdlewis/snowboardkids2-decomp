@@ -322,8 +322,8 @@ typedef struct {
     u8 unk421;
     u8 unk422;
     u8 unk423;
-    u8 unk424;
-    s8 unk425;
+    u8 locationDiscovered;
+    s8 discoveredLocationId;
     u8 unk426;
     u8 unk427;
     u8 unk428;

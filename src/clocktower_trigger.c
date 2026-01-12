@@ -3,27 +3,27 @@
 #include "gamestate.h"
 #include "task_scheduler.h"
 
-void ClocktowerTriggerCheck(EventTrigger *);
+void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *);
 
 char ClocktowerLabel[] = "CLOCKTOWER";
 s32 D_8008D7FC_8E3FC = 0;
 
-void ClocktowerTriggerInit(EventTrigger *trigger) {
-    trigger->eventId = CLOCKTOWER_EVENT_ID;
+void initClocktowerDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
+    trigger->locationId = CLOCKTOWER_EVENT_ID;
     trigger->unk6 = -0x68;
     trigger->unk1 = 0;
     trigger->unk4 = 0;
     trigger->unk8 = 0;
-    trigger->unkC = &ClocktowerLabel;
-    setCallback(&ClocktowerTriggerCheck);
+    trigger->locationLabel = &ClocktowerLabel;
+    setCallback(&checkClocktowerLocationDiscovery);
 }
 
-void ClocktowerTriggerCheck(EventTrigger *trigger) {
+void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *trigger) {
     GameState *state = (GameState *)getCurrentAllocation();
     u32 positionCheck;
     s16 rawAngle;
     s16 playerAngle;
-    u8 eventId;
+    u8 locationId;
     s16 minAngle;
     s16 maxAngle;
 
@@ -38,14 +38,14 @@ void ClocktowerTriggerCheck(EventTrigger *trigger) {
         playerAngle -= 0x2000;
     }
 
-    eventId = trigger->eventId;
-    minAngle = ((s16 *)D_8008D6C4_8E2C4)[eventId * 2];
+    locationId = trigger->locationId;
+    minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
     if (playerAngle < minAngle) {
-        maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(eventId * 2) + 1];
+        maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];
         if (maxAngle < playerAngle) {
             if (((u16)(state->unk3FC - 0xC01)) < 0x7FF) {
-                state->unk424 = 1;
-                state->unk425 = trigger->eventId;
+                state->locationDiscovered = 1;
+                state->discoveredLocationId = trigger->locationId;
             }
         }
     }

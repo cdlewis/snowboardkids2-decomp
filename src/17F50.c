@@ -63,7 +63,7 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
     state->unk400 = 4;
 
     if (storyMapLocationIndex != 0) {
-        state->unk425 = storyMapLocationIndex - 1;
+        state->discoveredLocationId = storyMapLocationIndex - 1;
         setCallbackWithContinue(&initStoryMapCameraAtLocation);
         return;
     }
@@ -141,7 +141,7 @@ typedef struct {
     u8 pad[0x3B0];
     u8 unk3B0[0x20];
     u8 pad3D0[0x55];
-    u8 unk425;
+    u8 discoveredLocationId;
 } TempState17F50;
 
 void updateStoryMapCameraTravel(StoryMapCameraState *camera);
@@ -155,8 +155,8 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
 
     state = getCurrentAllocation();
 
-    targetX = D_8008D6EC_8E2EC[state->unk425].x;
-    targetZ = D_8008D6EC_8E2EC[state->unk425].z;
+    targetX = D_8008D6EC_8E2EC[state->discoveredLocationId].x;
+    targetZ = D_8008D6EC_8E2EC[state->discoveredLocationId].z;
     targetX <<= 16;
     targetZ <<= 16;
 
@@ -232,8 +232,8 @@ void updateStoryMapCameraTravel(StoryMapCameraState *camera) {
     state->unk3F0 = camera->cameraZ;
 
     if (func_8006FE10_70A10(0) == 0) {
-        storyMapLocationIndex = state->unk425;
-        state->unk427 = state->unk425 + 1;
+        storyMapLocationIndex = state->discoveredLocationId;
+        state->unk427 = state->discoveredLocationId + 1;
         setCallback(&storyMapCameraTravelComplete);
     }
 }
@@ -242,8 +242,8 @@ void finalizeStoryMapCameraTravel(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     if (func_8006FE10_70A10(0) == 0) {
-        storyMapLocationIndex = state->unk425;
-        state->unk427 = state->unk425 + 1;
+        storyMapLocationIndex = state->discoveredLocationId;
+        state->unk427 = state->discoveredLocationId + 1;
         setCallback(&storyMapCameraTravelComplete);
     }
 }
@@ -263,8 +263,8 @@ void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
     memcpy(&camera->orientMatrix, identityMatrix, 0x20);
     memcpy(camera, identityMatrix, 0x20);
 
-    camera->cameraX = D_8008D6EC_8E2EC[(u8)state->unk425].x;
-    camera->cameraZ = D_8008D6EC_8E2EC[(u8)state->unk425].z;
+    camera->cameraX = D_8008D6EC_8E2EC[(u8)state->discoveredLocationId].x;
+    camera->cameraZ = D_8008D6EC_8E2EC[(u8)state->discoveredLocationId].z;
 
     camera->cameraX <<= 16;
     camera->cameraZ <<= 16;

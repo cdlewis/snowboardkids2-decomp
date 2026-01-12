@@ -18,11 +18,11 @@ extern u8 storyMapLocationIndex;
 extern void storyMapCameraTask;
 extern void func_80018800_19400;
 extern void initStoryMapMiniCamera;
-extern void GenericTriggerInit;
+extern void initGenericDiscoveryTrigger;
 extern void initStoryMapRandomEvent;
-extern void initStoryMapLocationIndicator;
-extern void initStoryMapSpecialLocationTrigger;
-extern void PhoneTriggerInit;
+extern void initDiscoveryDisplaySystem;
+extern void initTownExitTrigger;
+extern void initPhoneDiscoveryTrigger;
 
 void cleanupTransitionEffect(EffectState *);
 void gameStateCleanupHandler(void);
@@ -49,8 +49,8 @@ typedef struct {
     u8 padding4[0x3];
     u8 unk403;
     u8 padding5[0x20];
-    u8 unk424;
-    u8 unk425;
+    u8 locationDiscovered;
+    u8 discoveredLocationId;
     u8 unk426;
     u8 unk427;
     u8 unk428;
@@ -70,8 +70,8 @@ void initializeGameState(void) {
     temp_s0->unk428 = 0;
     temp_s0->unk427 = 0;
     temp_s0->unk429 = 0x63;
-    temp_s0->unk425 = 0;
-    temp_s0->unk424 = 0;
+    temp_s0->discoveredLocationId = 0;
+    temp_s0->locationDiscovered = 0;
     temp_s0->unk42E = 0;
     temp_s0->unk3D0 = 0;
     temp_s0->unk3D4 = 0;
@@ -93,14 +93,14 @@ void initializeGameState(void) {
         scheduleTask(&setupGameStateTransition, 0, 0, 0x5D);
         scheduleTask(&initStoryMapMiniCamera, 0, 0, 0x62);
         do {
-            *(s8 *)scheduleTask(&GenericTriggerInit, 0, 0, 0x64) = var_s1;
+            *(s8 *)scheduleTask(&initGenericDiscoveryTrigger, 0, 0, 0x64) = var_s1;
             var_s1 += 1;
         } while (var_s1 < 6);
-        scheduleTask(&PhoneTriggerInit, 0, 0, 0x64);
+        scheduleTask(&initPhoneDiscoveryTrigger, 0, 0, 0x64);
     } while (0);
-    scheduleTask(&ClocktowerTriggerInit, 0, 0, 0x64);
-    scheduleTask(&initStoryMapSpecialLocationTrigger, 0, 0, 0x64);
-    scheduleTask(&initStoryMapLocationIndicator, 0, 0, 0x64);
+    scheduleTask(&initClocktowerDiscoveryTrigger, 0, 0, 0x64);
+    scheduleTask(&initTownExitTrigger, 0, 0, 0x64);
+    scheduleTask(&initDiscoveryDisplaySystem, 0, 0, 0x64);
     temp_s0->unk3E4 = loadUncompressedData(&_419440_ROM_START, &_419440_ROM_END);
     temp_s0->unk3DC = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
     temp_s0->unk3E0 = loadTextRenderAsset(1);
@@ -146,7 +146,7 @@ void gameStateCleanupHandler(void) {
         if (gs->unk427 == 0xFF) {
             terminateSchedulerWithCallback(transitionToMainMenu);
         } else {
-            u8 tmp = gs->unk425 + 1;
+            u8 tmp = gs->discoveredLocationId + 1;
             storyMapLocationIndex = tmp;
             terminateSchedulerWithCallback(transitionToNextGameMode);
         }

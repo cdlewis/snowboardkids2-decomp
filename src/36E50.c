@@ -39,8 +39,8 @@ typedef struct {
     u8 unk421;
     u8 unk422;
     u8 padding6[0x1];
-    u8 unk424;
-    u8 unk425;
+    u8 locationDiscovered;
+    u8 discoveredLocationId;
     u8 padding7[0x4];
     u8 unk42A;
     u8 padding8[0x2];
@@ -92,8 +92,8 @@ typedef struct {
     u8 padding3[28];
     u8 unk420;
     u8 padding5[3];
-    u8 unk424;
-    u8 unk425;
+    u8 locationDiscovered;
+    u8 discoveredLocationId;
     u8 padding4[7];
     u8 unk42D;
 } func_800698BC_6A4BC_return;
@@ -136,13 +136,13 @@ typedef struct {
     s32 positionZ;
 } StoryMapPlayerState;
 
-void updateStoryMapLocationIndicator(void *);
+void updateDiscoveryMarkerDisplay(void *);
 void updateStoryMapLocationMarker(void *);
-void cleanupStoryMapLocationMarker(void *);
-void initStoryMapLocationMarker(StoryMapLocationMarkerState *);
-void initStoryMapSpecialLocationMarker(StoryMapSpecialLocationMarkerState *);
-void updateStoryMapSpecialLocationTrigger(void *);
-void cleanupStoryMapSpecialLocationMarker(void *);
+void cleanupDiscoveryLocationMarker(void *);
+void initDiscoveryLocationMarker(StoryMapLocationMarkerState *);
+void initTownExitMarker(StoryMapSpecialLocationMarkerState *);
+void checkTownExitTrigger(void *);
+void cleanupTownExitMarker(void *);
 
 typedef struct {
     s32 unk0;
@@ -155,28 +155,28 @@ extern u16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
 void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *arg0);
 
-void initStoryMapLocationIndicator(s8 *arg0) {
+void initDiscoveryDisplaySystem(s8 *arg0) {
     *arg0 = 0;
-    setCallback(&updateStoryMapLocationIndicator);
+    setCallback(&updateDiscoveryMarkerDisplay);
 }
 
-void updateStoryMapLocationIndicator(void *arg0) {
+void updateDiscoveryMarkerDisplay(void *arg0) {
     func_800698BC_6A4BC_return *temp_v0;
     StoryMapAllocation *temp_v0_2;
     StoryMapAllocation *temp_v0_3;
 
     temp_v0 = (func_800698BC_6A4BC_return *)getCurrentAllocation();
-    if (temp_v0->unk424 != 0) {
+    if (temp_v0->locationDiscovered != 0) {
         if (*((u8 *)arg0) == 0) {
-            if (temp_v0->unk425 < 0xAU) {
-                temp_v0_2 = scheduleTask(&initStoryMapLocationMarker, 0, 0, 0x64);
+            if (temp_v0->discoveredLocationId < 0xAU) {
+                temp_v0_2 = scheduleTask(&initDiscoveryLocationMarker, 0, 0, 0x64);
                 if (temp_v0_2 != NULL) {
-                    temp_v0_2->unk73 = temp_v0->unk425;
+                    temp_v0_2->unk73 = temp_v0->discoveredLocationId;
                 }
             } else {
-                temp_v0_3 = scheduleTask(&initStoryMapSpecialLocationMarker, 0, 0, 0x64);
+                temp_v0_3 = scheduleTask(&initTownExitMarker, 0, 0, 0x64);
                 if (temp_v0_3 != NULL) {
-                    temp_v0_3->unk10 = temp_v0->unk425;
+                    temp_v0_3->unk10 = temp_v0->discoveredLocationId;
                 }
             }
             *(u8 *)arg0 = 1;
@@ -186,7 +186,7 @@ void updateStoryMapLocationIndicator(void *arg0) {
     }
 }
 
-void initStoryMapLocationMarker(StoryMapLocationMarkerState *arg0) {
+void initDiscoveryLocationMarker(StoryMapLocationMarkerState *arg0) {
     void *resource;
     void *temp_value;
     s32 i;
@@ -197,7 +197,7 @@ void initStoryMapLocationMarker(StoryMapLocationMarkerState *arg0) {
     resource = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
     temp_value = loadTextRenderAsset(1);
 
-    setCleanupCallback(&cleanupStoryMapLocationMarker);
+    setCleanupCallback(&cleanupDiscoveryLocationMarker);
 
     arg0->unk6E = 0x2CC;
     arg0->unk70 = 0x2CC;
@@ -232,17 +232,17 @@ void initStoryMapLocationMarker(StoryMapLocationMarkerState *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/36E50", updateStoryMapLocationMarker);
 
-void cleanupStoryMapLocationMarker(void *untypedArg) {
+void cleanupDiscoveryLocationMarker(void *untypedArg) {
     StoryMapLocationMarkerCleanupArg *arg0 = (StoryMapLocationMarkerCleanupArg *)untypedArg;
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unk58 = freeNodeMemory(arg0->unk58);
 }
 
-void initStoryMapSpecialLocationMarker(StoryMapSpecialLocationMarkerState *arg0) {
+void initTownExitMarker(StoryMapSpecialLocationMarkerState *arg0) {
     void *resource;
 
     resource = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
-    setCleanupCallback(&cleanupStoryMapSpecialLocationMarker);
+    setCleanupCallback(&cleanupTownExitMarker);
     arg0->unk8 = 8;
     arg0->unkA = 0xFF;
     arg0->unk0 = 0;
@@ -287,7 +287,7 @@ void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *arg0)
 
     arg0->unk8 = (s16)(arg0->unk11 + 8);
 
-    if (temp_v0->unk424 == 0) {
+    if (temp_v0->locationDiscovered == 0) {
         func_80069CF8_6A8F8();
         return;
     }
@@ -295,18 +295,18 @@ void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *arg0)
     debugEnqueueCallback(8, 7, &func_80012004_12C04, arg0);
 }
 
-void cleanupStoryMapSpecialLocationMarker(void *untypedArg) {
+void cleanupTownExitMarker(void *untypedArg) {
     SpecialLocationMarkerCleanupState *arg0 = (SpecialLocationMarkerCleanupState *)untypedArg;
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void initStoryMapSpecialLocationTrigger(StoryMapSpecialLocationTriggerState *arg0) {
+void initTownExitTrigger(StoryMapSpecialLocationTriggerState *arg0) {
     arg0->baseLocationIndex = 0xA;
     arg0->padding = 0;
-    setCallback(&updateStoryMapSpecialLocationTrigger);
+    setCallback(&checkTownExitTrigger);
 }
 
-void updateStoryMapSpecialLocationTrigger(void *arg0) {
+void checkTownExitTrigger(void *arg0) {
     s16 temp_v0_2;
     s16 var_v1;
     func_800698BC_6A4BC_return *temp_v0 = (func_800698BC_6A4BC_return *)getCurrentAllocation();
@@ -318,13 +318,13 @@ void updateStoryMapSpecialLocationTrigger(void *arg0) {
             var_v1 -= 0x2000;
         }
         if (var_v1 >= 0x821) {
-            temp_v0->unk424 = 1;
-            temp_v0->unk425 = *(u8 *)arg0;
+            temp_v0->locationDiscovered = 1;
+            temp_v0->discoveredLocationId = *(u8 *)arg0;
             return;
         }
         if (var_v1 < -0x844) {
-            temp_v0->unk424 = 1;
-            temp_v0->unk425 = *((u8 *)arg0) + 1;
+            temp_v0->locationDiscovered = 1;
+            temp_v0->discoveredLocationId = *((u8 *)arg0) + 1;
         }
     }
 }
