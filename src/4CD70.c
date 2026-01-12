@@ -1711,75 +1711,75 @@ void cleanupPauseMenuDisplayTask(PauseMenuCleanupState *state) {
 
 typedef struct {
     u8 pad0[0x10];
-    void *unk10;
-} Struct_func_8004E8BC_alloc;
+    void *gameState;
+} ShotScoreDisplayAllocation;
 
 typedef struct {
     u8 pad0[0x17C3];
-    u8 unk17C3;
-} Struct_func_8004E8BC_unk10_target;
+    u8 itemCount;
+} ShotScoreData;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-} Struct_func_8004E8BC_element;
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteFrame;
+    s16 padA;
+} ShotScoreElement;
 
 typedef struct {
-    Struct_func_8004E8BC_element elements[10];
-    s16 unk78;
-    s16 unk7A;
-    s16 unk7C;
-} Struct_func_8004E8BC;
+    ShotScoreElement elements[10];
+    s16 spriteGroupIndex;
+    s16 displayedCount;
+    s16 animDelayCounter;
+} ShotScoreDisplayState;
 
-void func_8004E940_4F540(Struct_func_8004E8BC *);
-void func_8004EA28_4F628(Struct_func_8004F04C *);
+void updateShotScoreDisplay(ShotScoreDisplayState *);
+void cleanupShotScoreDisplayTask(ShotScoreDisplayState *);
 
-void func_8004E8BC_4F4BC(Struct_func_8004E8BC *arg0) {
-    Struct_func_8004E8BC_alloc *allocation = (Struct_func_8004E8BC_alloc *)getCurrentAllocation();
+void initShotScoreDisplayTask(ShotScoreDisplayState *arg0) {
+    ShotScoreDisplayAllocation *allocation = (ShotScoreDisplayAllocation *)getCurrentAllocation();
     s32 i;
     u8 val;
     void *p;
 
-    val = ((Struct_func_8004E8BC_unk10_target *)allocation->unk10)->unk17C3;
-    arg0->unk7C = 0;
-    arg0->unk7A = val;
-    arg0->elements[0].unk4 = loadAssetByIndex_95470(arg0->unk78);
+    val = ((ShotScoreData *)allocation->gameState)->itemCount;
+    arg0->animDelayCounter = 0;
+    arg0->displayedCount = val;
+    arg0->elements[0].spriteAsset = loadAssetByIndex_95470(arg0->spriteGroupIndex);
 
     for (i = 0; i < 10; i++) {
-        p = arg0->elements[0].unk4;
-        arg0->elements[i].unk8 = 0;
-        arg0->elements[i].unk2 = 0x58;
-        arg0->elements[i].unk4 = p;
+        p = arg0->elements[0].spriteAsset;
+        arg0->elements[i].spriteFrame = 0;
+        arg0->elements[i].y = 0x58;
+        arg0->elements[i].spriteAsset = p;
     }
 
-    setCleanupCallback(func_8004EA28_4F628);
-    setCallback(func_8004E940_4F540);
+    setCleanupCallback(cleanupShotScoreDisplayTask);
+    setCallback(updateShotScoreDisplay);
 }
 
-void func_8004E940_4F540(Struct_func_8004E8BC *arg0) {
-    Struct_func_8004E8BC_alloc *allocation;
+void updateShotScoreDisplay(ShotScoreDisplayState *arg0) {
+    ShotScoreDisplayAllocation *allocation;
     s32 i;
     s16 xPos;
     s16 currentVal;
 
-    allocation = (Struct_func_8004E8BC_alloc *)getCurrentAllocation();
-    currentVal = arg0->unk7A;
-    i = ((Struct_func_8004E8BC_unk10_target *)allocation->unk10)->unk17C3 - currentVal;
+    allocation = (ShotScoreDisplayAllocation *)getCurrentAllocation();
+    currentVal = arg0->displayedCount;
+    i = ((ShotScoreData *)allocation->gameState)->itemCount - currentVal;
 
     if (i != 0) {
         xPos = 0x40;
         if (i < 0) {
-            arg0->unk7A = currentVal - 1;
-            arg0->unk7C = 0;
+            arg0->displayedCount = currentVal - 1;
+            arg0->animDelayCounter = 0;
         } else {
-            if (arg0->unk7C == 0) {
-                arg0->unk7A = currentVal + 1;
-                arg0->unk7C = 4;
+            if (arg0->animDelayCounter == 0) {
+                arg0->displayedCount = currentVal + 1;
+                arg0->animDelayCounter = 4;
             } else {
-                arg0->unk7C--;
+                arg0->animDelayCounter--;
             }
         }
         xPos = 0x40;
@@ -1788,21 +1788,21 @@ void func_8004E940_4F540(Struct_func_8004E8BC *arg0) {
     xPos = 0x40;
 
     for (i = 0; i < 10; i++) {
-        if (i >= arg0->unk7A) {
-            arg0->elements[i].unk8 = 2;
+        if (i >= arg0->displayedCount) {
+            arg0->elements[i].spriteFrame = 2;
         } else {
-            arg0->elements[i].unk8 = 0;
+            arg0->elements[i].spriteFrame = 0;
         }
 
-        arg0->elements[i].unk0 = xPos;
+        arg0->elements[i].x = xPos;
         xPos -= 0x10;
 
         debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->elements[i]);
     }
 }
 
-void func_8004EA28_4F628(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupShotScoreDisplayTask(ShotScoreDisplayState *arg0) {
+    arg0->elements[0].spriteAsset = freeNodeMemory(arg0->elements[0].spriteAsset);
 }
 
 typedef struct {
@@ -2619,14 +2619,14 @@ void func_8005011C_50D1C(void) {
             case 2:
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
-                SCHEDULE_AND_SET_SHORT(func_8004E8BC_4F4BC, 60, 0xA);
+                SCHEDULE_AND_SET_SHORT(initShotScoreDisplayTask, 60, 0xA);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
                 break;
 
             case 3:
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
-                SCHEDULE_AND_SET_SHORT(func_8004E8BC_4F4BC, 60, 0xB);
+                SCHEDULE_AND_SET_SHORT(initShotScoreDisplayTask, 60, 0xB);
                 scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
                 break;
 
