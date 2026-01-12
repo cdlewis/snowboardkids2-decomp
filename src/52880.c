@@ -103,8 +103,8 @@ void func_80054658_55258(Struct_52880 *arg0);
 void func_80054144_54D44(Struct_52880 *arg0);
 void func_80053FE0_54BE0(Struct_52880 *arg0);
 void func_80053E90_54A90(Struct_52880 *arg0);
-void func_80053B38_54738(Struct_52880 *arg0);
-void func_80053990_54590(Struct_52880 *arg0);
+void updateStarProjectile(Struct_52880 *arg0);
+void launchStarProjectile(Struct_52880 *arg0);
 void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0);
 void func_80054D0C_5590C(Struct_52880 *arg0);
 void func_80054F44_55B44(Struct_52880 *arg0);
@@ -119,7 +119,7 @@ void func_80055A84_56684(Struct_52880 *);
 s32 spawnParachuteProjectileTask(s32, s32);
 s32 spawnFryingPanProjectileTask(s32, s32);
 s32 spawnSnowmanProjectileTask(s32, s32);
-s32 func_80053DF0_549F0(s32, s32);
+s32 spawnStarProjectileTask(s32, s32);
 s32 func_80054470_55070(s32, s32);
 s32 func_80055820_56420(s32, s32);
 void updateSnowmanProjectile(Struct_52880 *);
@@ -129,7 +129,8 @@ void loadSlapstickProjectileAsset(Struct_52880 *arg0);
 void launchSlapstickProjectile(Struct_52880 *arg0);
 void loadParachuteProjectileAsset(Struct_52880 *arg0);
 void launchParachuteProjectile(Struct_52880 *arg0);
-void func_8005383C_5443C(Struct_52880 *arg0);
+void loadStarProjectileAsset(Struct_52880 *arg0);
+void checkStarProjectileHit(Struct_52880 *arg0);
 void func_800548C8_554C8(Struct_52880 *arg0);
 void func_80054AE4_556E4(Struct_52880 *arg0);
 
@@ -1058,14 +1059,14 @@ s32 spawnSnowmanProjectileTask(s32 arg0, s32 arg1) {
     return (s32)task;
 }
 
-void func_800537F4_543F4(Struct_52880 *arg0) {
+void initStarProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->assetData = load_3ECE40();
     setCleanupCallback(cleanupSlapstickProjectileTask);
-    setCallbackWithContinue(func_8005383C_5443C);
+    setCallbackWithContinue(loadStarProjectileAsset);
 }
 
-void func_8005383C_5443C(Struct_52880 *arg0) {
+void loadStarProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 6);
@@ -1073,10 +1074,10 @@ void func_8005383C_5443C(Struct_52880 *arg0) {
     arg0->hitCount = 0;
     arg0->turnRate = 0;
     arg0->unk0 = ptr;
-    setCallbackWithContinue(func_80053990_54590);
+    setCallbackWithContinue(launchStarProjectile);
 }
 
-void func_80053898_54498(Struct_52880 *arg0) {
+void checkStarProjectileHit(Struct_52880 *arg0) {
     GameState *allocation;
     Player *player;
     Vec3i localVec;
@@ -1106,7 +1107,7 @@ void func_80053898_54498(Struct_52880 *arg0) {
     }
 }
 
-void func_80053990_54590(Struct_52880 *arg0) {
+void launchStarProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s16 playerIdx;
     void *player;
@@ -1147,8 +1148,8 @@ void func_80053990_54590(Struct_52880 *arg0) {
     arg0->lifetime = 0xF0;
 
     queueSoundAtPosition(&arg0->pos, 0x10);
-    setCallback(func_80053B38_54738);
-    func_80053898_54498(arg0);
+    setCallback(updateStarProjectile);
+    checkStarProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
         spawnSparkleEffect(&arg0->pos);
@@ -1160,7 +1161,7 @@ void func_80053990_54590(Struct_52880 *arg0) {
     }
 }
 
-void func_80053B38_54738(Struct_52880 *arg0) {
+void updateStarProjectile(Struct_52880 *arg0) {
     Alloc_55650 *alloc;
     Vec3i sp18;
     Vec3i savedVec;
@@ -1211,7 +1212,7 @@ void func_80053B38_54738(Struct_52880 *arg0) {
         arg0->vel.y = arg0->pos.y - savedVec.y;
         arg0->vel.z = arg0->pos.z - savedVec.z;
 
-        func_80053898_54498(arg0);
+        checkStarProjectileHit(arg0);
 
         var_s3 = func_8005BF50_5CB50(
             &arg0->pos,
@@ -1256,10 +1257,10 @@ void func_80053B38_54738(Struct_52880 *arg0) {
     } while (i < 4);
 }
 
-s32 func_80053DF0_549F0(s32 arg0, s32 arg1) {
+s32 spawnStarProjectileTask(s32 arg0, s32 arg1) {
     Struct_52880 *task;
 
-    task = scheduleTask(func_800537F4_543F4, (arg0 + 4) & 0xFF, 0, 0x6F);
+    task = scheduleTask(initStarProjectileTask, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
         task->ownerPlayerIdx = arg0;
         task->unk4A = arg1;
@@ -1496,7 +1497,7 @@ s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
         case 3:
             return spawnSnowmanProjectileTask(arg1, arg2);
         case 4:
-            return func_80053DF0_549F0(arg1, arg2);
+            return spawnStarProjectileTask(arg1, arg2);
         case 5:
             return func_80054470_55070(arg1, arg2);
         case 6:
