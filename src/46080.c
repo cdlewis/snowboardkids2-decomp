@@ -768,7 +768,7 @@ void setupGoldCoinEntries(GoldCoinSetupState *arg0);
 void enqueuePlayerDisplayList(PlayerDisplayListState *arg0);
 void func_8004AF2C_4BB2C(func_8004AF2C_4BB2C_arg *);
 void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
-void func_8004562C_4622C(SkyRenderTaskState *);
+void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *);
 void updateFlyingSceneryAscendingStep(FlyingSceneryState *state);
 void updateFlyingSceneryGlidingStep(FlyingSceneryState *state);
 void updateFlyingSceneryTurningStep(FlyingSceneryState *state);
@@ -872,7 +872,7 @@ void initSkyRenderTask(SkyRenderTaskState *state) {
 void dispatchSkyRenderCallback(ScheduledTask *task) {
     if (task->skyType == 1) {
         if ((func_800698DC_6A4DC() & 0xFF) == 0x37) {
-            setCallbackWithContinue(func_8004562C_4622C);
+            setCallbackWithContinue(renderSkyDisplayListsWithCourseFog);
             return;
         }
     }
@@ -893,17 +893,17 @@ void renderSkyDisplayLists(SkyRenderTaskState *arg0) {
     }
 }
 
-void func_8004562C_4622C(SkyRenderTaskState *arg0) {
-    s32 id;
+void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *arg0) {
+    s32 nodeId;
     s32 viewportId;
     GameState *state;
     s32 playerOffset;
     s32 i;
     D_80090F90_91B90_item *levelData;
-    u8 r;
-    u16 a0val;
-    s32 constR;
-    s32 constB;
+    u8 fogR;
+    u16 fogNodeId;
+    s32 fogG;
+    s32 fogB;
     Player *player;
 
     state = (GameState *)getCurrentAllocation();
@@ -920,9 +920,9 @@ void func_8004562C_4622C(SkyRenderTaskState *arg0) {
 
     i = 0;
     if (i < state->unk5F) {
-        constR = 0x10;
-        constB = 0x30;
-        id = 0x64;
+        fogG = 0x10;
+        fogB = 0x30;
+        nodeId = 0x64;
         viewportId = 4;
         playerOffset = 0;
     loop2:
@@ -930,15 +930,15 @@ void func_8004562C_4622C(SkyRenderTaskState *arg0) {
         if (player->unkB94 < 0x39) {
             func_80065DA8_669A8(viewportId, (DisplayListObject *)&arg0->unk3C);
             levelData = func_80055D10_56910(state->memoryPoolId);
-            r = levelData->unk20.r2;
-            a0val = id;
-            func_8006FE48_70A48(a0val, 0x3E3, 0x3E7, r, levelData->unk20.g2, levelData->unk20.b2);
+            fogR = levelData->unk20.r2;
+            fogNodeId = nodeId;
+            func_8006FE48_70A48(fogNodeId, 0x3E3, 0x3E7, fogR, levelData->unk20.g2, levelData->unk20.b2);
         } else {
             func_80065DA8_669A8(viewportId, (DisplayListObject *)&arg0->unk78);
-            a0val = id;
-            func_8006FE48_70A48(a0val, 0x3E3, 0x3E7, 0x10, constR, constB);
+            fogNodeId = nodeId;
+            func_8006FE48_70A48(fogNodeId, 0x3E3, 0x3E7, 0x10, fogG, fogB);
         }
-        id++;
+        nodeId++;
         viewportId++;
         i++;
         playerOffset += 0xBE8;
