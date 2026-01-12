@@ -143,12 +143,12 @@ void func_80058B94_59794(Player *arg0) {
 }
 
 s32 func_80058BB0_597B0(Player *arg0) {
-    if (arg0->unkBD0 == 0) {
+    if (arg0->boostState == 0) {
         if (spawnPlayerFlashEffect(arg0) != 0) {
             if (arg0->unkB84 & 2) {
-                arg0->unkBD0 = 4;
+                arg0->boostState = 4;
             } else {
-                arg0->unkBD0 = 3;
+                arg0->boostState = 3;
             }
             arg0->unkB9A = 0x5A;
             return 1;
@@ -169,12 +169,12 @@ s32 func_80058C10_59810(Player *arg0) {
 }
 
 s32 func_80058C64_59864(Player *arg0) {
-    if (arg0->unkBD0 == 0) {
+    if (arg0->boostState == 0) {
         if (spawnPlayerAuraEffect(arg0) != NULL) {
             if (arg0->unkB84 & 2) {
-                arg0->unkBD0 = 2;
+                arg0->boostState = 2;
             } else {
-                arg0->unkBD0 = 1;
+                arg0->boostState = 1;
             }
             arg0->unkB9A = 0xB4;
             return 1;

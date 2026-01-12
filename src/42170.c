@@ -1299,7 +1299,7 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
             }
         }
     } else {
-        state->player->unkBD0 = 0;
+        state->player->boostState = 0;
         state->fallVelocity = 0x40000;
         setCallback(fadeOutPlayerAuraEffect);
     }
@@ -1431,12 +1431,12 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
             } else {
                 state->scale = state->scale + 0x200;
                 if (state->scale == 0x2000) {
-                    state->player->unkBD0 += 2;
+                    state->player->boostState += 2;
                 }
             }
         }
     } else {
-        player2->unkBD0 = 0;
+        player2->boostState = 0;
         state->fallVelocity = 0x40000;
         setCallback(fadeOutPlayerFlashEffect);
     }

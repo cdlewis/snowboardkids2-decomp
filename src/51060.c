@@ -165,7 +165,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x44C];
-    s32 unk44C;
+    s32 velocity;
     s32 unk450;
     s32 unk454;
 } func_80050C80_51880_arg0;
@@ -494,9 +494,9 @@ void func_80050C80_51880(Player *arg0, s32 arg1) {
         temp2 = D_80090E70_91A70[arg1];
         task->unk4.unk1A = 0x80;
         task->unk24 = temp2;
-        task->unk28 = arg0->unk44C.x / 2;
-        task->unk2C = arg0->unk44C.y / 2;
-        task->unk30 = arg0->unk44C.z / 2;
+        task->unk28 = arg0->velocity.x / 2;
+        task->unk2C = arg0->velocity.y / 2;
+        task->unk30 = arg0->velocity.z / 2;
         task->unk38 = -1;
         task->unk4.unk0 = (void *)((u32)allocation->unk44 + 0x1440);
     }

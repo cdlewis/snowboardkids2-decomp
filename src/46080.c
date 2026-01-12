@@ -204,7 +204,7 @@ typedef struct {
     s32 unk50;
     s32 unk54;
     u8 _pad58[0x3F4];
-    s32 unk44C;
+    s32 velocity;
     s32 unk450;
     s32 unk454;
     u8 _pad458[0x63C];
@@ -3221,7 +3221,7 @@ void func_8004AA90_4B690(func_8004AA90_4B690_arg *arg0) {
     memcpy(temp_s1, &player->unk31C, sizeof(Vec3i));
     arg0->unk34 = arg0->unk30->unkB94;
     arg0->unk38 = (s16)arg0->unk30->unkBB8;
-    memcpy(&arg0->unk24, &arg0->unk30->unk44C, sizeof(Vec3i));
+    memcpy(&arg0->unk24, &arg0->unk30->velocity, sizeof(Vec3i));
     arg0->unk3A = 1;
     arg0->unk28 = arg0->unk28 + 0x28000;
     queueSoundAtPosition(temp_s1, 0x17);
@@ -3557,7 +3557,7 @@ void func_8004B3B0_4BFB0(func_8004B834_4C434_arg *arg0) {
 
     rotateVectorY(&D_80090E2C_91A2C, arg0->unk24->unkA94 + rotationAngle, &arg0->velocity);
 
-    arg0->velocity.x = arg0->velocity.x + arg0->unk24->unk44C;
+    arg0->velocity.x = arg0->velocity.x + arg0->unk24->velocity;
     arg0->velocity.y = arg0->velocity.y + arg0->unk24->unk450;
     arg0->velocity.z = arg0->velocity.z + arg0->unk24->unk454;
 
@@ -3717,7 +3717,7 @@ void func_8004B834_4C434(func_8004B834_4C434_arg *arg0) {
     *addr = (randomValue3 & 0xFF) * 7 * 256;
     rotateVectorY(addr - 2, rotationAngle, &arg0->velocity);
 
-    arg0->velocity.x = arg0->velocity.x + arg0->unk24->unk44C;
+    arg0->velocity.x = arg0->velocity.x + arg0->unk24->velocity;
 
     randomValue4 = randA();
     arg0->velocity.y = arg0->velocity.y + (arg0->unk24->unk450 + (((randomValue4 & 0xFF) * 5) << 9));
@@ -3862,7 +3862,7 @@ void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0) {
     addr = &D_80090E4C_91A4C;
     *addr = (randA() & 0xFF) * 0x580;
     rotateVectorY(addr - 2, rotationAngle, (Vec3i *)((s32)arg0 + 0x28));
-    arg0->velocity.x = arg0->velocity.x + arg0->unk24->unk44C;
+    arg0->velocity.x = arg0->velocity.x + arg0->unk24->velocity;
     arg0->velocity.y = arg0->velocity.y + (arg0->unk24->unk450 + ((randA() & 0xFF) * 0x600));
     arg0->velocity.z = arg0->velocity.z + arg0->unk24->unk454;
     queueSoundAtPosition(temp_s2, 0x17);

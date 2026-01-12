@@ -70,7 +70,7 @@ typedef struct {
     s32 unk440; /* 0x440 */
     s32 unk444; /* 0x444 */
     s32 unk448; /* 0x448 */
-    s32 unk44C; /* 0x44C */
+    s32 velocity; /* 0x44C */
     s32 unk450; /* 0x450 */
     s32 unk454; /* 0x454 */
     u8 pad458[0x10];
@@ -200,7 +200,7 @@ void func_800BB2B0_B2870(Arg0Struct *arg0) {
         arg0->unkB7E = arg0->unkB7C & ~arg0->unkB82;
     }
 
-    arg0->unk44C = arg0->unk434.x - arg0->unk440;
+    arg0->velocity = arg0->unk434.x - arg0->unk440;
     arg0->unk450 = arg0->unk434.y - arg0->unk444;
     arg0->unk454 = arg0->unk434.z - arg0->unk448;
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
@@ -303,7 +303,7 @@ s32 func_800BB89C_B2E5C(Arg0Struct *arg0) {
         return 1;
     }
 
-    arg0->unk44C -= arg0->unk44C / 8;
+    arg0->velocity -= arg0->velocity / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
@@ -361,7 +361,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         temp_s0 = &arg0->unk970;
         createYRotationMatrix(temp_s0, arg0->unkA94);
         func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, temp_s0, &sp10);
-        temp_s1 = (Vec3i *)&arg0->unk44C;
+        temp_s1 = (Vec3i *)&arg0->velocity;
         transformVector3(temp_s1, &sp10, &sp30);
         sp30.x = 0;
         transformVector2(&sp30, &sp10, temp_s1);
@@ -371,11 +371,11 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             sp30.y = 0;
         }
 
-        arg0->unk44C += sp30.x;
+        arg0->velocity += sp30.x;
         arg0->unk450 += sp30.y;
         arg0->unk454 += sp30.z;
     } else {
-        arg0->unk44C -= arg0->unk44C / 16;
+        arg0->velocity -= arg0->velocity / 16;
         arg0->unk454 -= arg0->unk454 / 16;
     }
 
@@ -537,7 +537,7 @@ s32 func_800BBEBC_B347C(Arg0Struct *arg0) {
 
     func_800BBE68_B3428(arg0);
     arg0->unkA9E -= 0x100;
-    arg0->unk44C -= arg0->unk44C / 8;
+    arg0->velocity -= arg0->velocity / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
@@ -574,7 +574,7 @@ s32 func_800BBF70_B3530(Arg0Struct *arg0) {
     }
 
     arg0->unkB88 = 0x10;
-    arg0->unk44C = 0;
+    arg0->velocity = 0;
     arg0->unk454 = 0;
     arg0->unk450 -= 0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
@@ -613,7 +613,7 @@ s32 func_800BC094_B3654(Arg0Struct *arg0) {
 
     func_800BBE68_B3428(arg0);
 
-    arg0->unk44C = 0;
+    arg0->velocity = 0;
     arg0->unk454 = 0;
     arg0->unkA9E = (arg0->unkA9E + 0x100) & 0x1FFF;
 
@@ -675,7 +675,7 @@ s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
         arg0->unk468 = 0x100;
     }
 
-    arg0->unk44C -= arg0->unk44C / 8;
+    arg0->velocity -= arg0->velocity / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
     func_800BBE68_B3428(arg0);
@@ -825,7 +825,7 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
     if (!(arg0->unkB84 & 0x10000)) {
         volume =
             isqrt64(
-                (s64)arg0->unk44C * arg0->unk44C + (s64)arg0->unk450 * arg0->unk450 + (s64)arg0->unk454 * arg0->unk454
+                (s64)arg0->velocity * arg0->velocity + (s64)arg0->unk450 * arg0->unk450 + (s64)arg0->unk454 * arg0->unk454
             ) >>
             12;
         if (volume >= 0x81) {
@@ -838,11 +838,11 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
 
     if (!(arg0->unkB84 & 1)) {
         if (isqrt64(
-                (s64)arg0->unk44C * arg0->unk44C + (s64)arg0->unk450 * arg0->unk450 + (s64)arg0->unk454 * arg0->unk454
+                (s64)arg0->velocity * arg0->velocity + (s64)arg0->unk450 * arg0->unk450 + (s64)arg0->unk454 * arg0->unk454
             ) > 0x40000) {
             s32 temp;
 
-            angle = atan2Fixed(-arg0->unk44C, -arg0->unk454);
+            angle = atan2Fixed(-arg0->velocity, -arg0->unk454);
             temp = randA();
             inputVec = &sp58;
             sp58.x = (temp & 0xFF) << 13;
@@ -864,7 +864,7 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
             temp = arg0->unkBCC & 0xF;
             if (temp >= 0) {
                 if (temp < 2) {
-                    func_8005127C_51E7C(outVec1, outVec2, (Vec3i *)&arg0->unk44C, 0);
+                    func_8005127C_51E7C(outVec1, outVec2, (Vec3i *)&arg0->velocity, 0);
                 }
             }
         }

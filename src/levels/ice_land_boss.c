@@ -43,7 +43,7 @@ typedef struct {
     u8 _pad328[0x434 - 0x328];
     Vec3i unk434;
     u8 _pad440[0x44C - 0x440];
-    Vec3i unk44C;
+    Vec3i velocity;
     u8 _pad458[0x984 - 0x458];
     u8 unk984[0xC];
     u8 _pad990[0xAE0 - 0x990];
@@ -111,7 +111,7 @@ typedef struct {
     u8 pad134[0x434 - 0x134];
     Vec3i unk434;
     Vec3i unk440;
-    Vec3i unk44C;
+    Vec3i velocity;
     u8 pad458[0x970 - 0x458];
     Transform3D unk970;
     Transform3D unk990;
@@ -155,9 +155,9 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
 
     alloc = getCurrentAllocation();
 
-    arg0->unk44C.x = arg0->unk434.x - arg0->unk440.x;
-    arg0->unk44C.y = arg0->unk434.y - arg0->unk440.y;
-    arg0->unk44C.z = arg0->unk434.z - arg0->unk440.z;
+    arg0->velocity.x = arg0->unk434.x - arg0->unk440.x;
+    arg0->velocity.y = arg0->unk434.y - arg0->unk440.y;
+    arg0->velocity.z = arg0->unk434.z - arg0->unk440.z;
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
 
     player = (IceBossArg *)alloc->players;
@@ -280,9 +280,9 @@ s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
         return 1;
     }
 
-    arg0->unk44C.x -= arg0->unk44C.x / 8;
-    arg0->unk44C.z -= arg0->unk44C.z / 8;
-    arg0->unk44C.y += -0x8000;
+    arg0->velocity.x -= arg0->velocity.x / 8;
+    arg0->velocity.z -= arg0->velocity.z / 8;
+    arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkB84 & 0x400000) {
@@ -355,28 +355,28 @@ s32 func_800BBA54_B0F44(Player *arg0) {
     if (!(arg0->unkB84 & 0x1)) {
         createYRotationMatrix(&arg0->unk970, arg0->unkA94);
         func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, &arg0->unk970, &sp10);
-        transformVector3(&arg0->unk44C, &sp10, &sp30);
+        transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
-        transformVector2(&sp30, &sp10, &arg0->unk44C);
+        transformVector2(&sp30, &sp10, &arg0->velocity);
         transformVector2(&D_800BCA50_B1F40, &sp10, &sp30);
 
         if (sp30.y > 0) {
             sp30.y = 0;
         }
 
-        arg0->unk44C.x += sp30.x;
-        arg0->unk44C.y += sp30.y;
-        arg0->unk44C.z += sp30.z;
+        arg0->velocity.x += sp30.x;
+        arg0->velocity.y += sp30.y;
+        arg0->velocity.z += sp30.z;
     } else {
-        arg0->unk44C.x -= arg0->unk44C.x / 16;
-        arg0->unk44C.z -= arg0->unk44C.z / 16;
+        arg0->velocity.x -= arg0->velocity.x / 16;
+        arg0->velocity.z -= arg0->velocity.z / 16;
     }
 
-    if (arg0->unk44C.y > 0) {
-        arg0->unk44C.y = 0;
+    if (arg0->velocity.y > 0) {
+        arg0->velocity.y = 0;
     }
 
-    arg0->unk44C.y -= 0x10000;
+    arg0->velocity.y -= 0x10000;
     applyClampedVelocityToPosition(arg0);
     func_800BC61C_B1B0C(arg0);
 
@@ -516,9 +516,9 @@ s32 func_800BC008_B14F8(func_800BC4AC_arg *arg0) {
 
     getCurrentAllocation();
 
-    arg0->unk44C.x -= arg0->unk44C.x / 8;
-    arg0->unk44C.z -= arg0->unk44C.z / 8;
-    arg0->unk44C.y += -0x8000;
+    arg0->velocity.x -= arg0->velocity.x / 8;
+    arg0->velocity.z -= arg0->velocity.z / 8;
+    arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkB84 & 0x400000) {
@@ -594,7 +594,7 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
         temp_s0 = &arg0->unk970;
         createYRotationMatrix(temp_s0, arg0->unkA94);
         func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, temp_s0, &sp10);
-        temp_s1 = &arg0->unk44C;
+        temp_s1 = &arg0->velocity;
         transformVector3(temp_s1, &sp10, &sp30);
         sp30.x = 0;
         transformVector2(&sp30, &sp10, temp_s1);
@@ -604,19 +604,19 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
             sp30.y = 0;
         }
 
-        arg0->unk44C.x += sp30.x;
-        arg0->unk44C.y += sp30.y;
-        arg0->unk44C.z += sp30.z;
+        arg0->velocity.x += sp30.x;
+        arg0->velocity.y += sp30.y;
+        arg0->velocity.z += sp30.z;
     } else {
-        arg0->unk44C.x -= arg0->unk44C.x / 16;
-        arg0->unk44C.z -= arg0->unk44C.z / 16;
+        arg0->velocity.x -= arg0->velocity.x / 16;
+        arg0->velocity.z -= arg0->velocity.z / 16;
     }
 
-    if (arg0->unk44C.y > 0) {
-        arg0->unk44C.y = 0;
+    if (arg0->velocity.y > 0) {
+        arg0->velocity.y = 0;
     }
 
-    arg0->unk44C.y += -0x10000;
+    arg0->velocity.y += -0x10000;
     applyClampedVelocityToPosition(arg0);
 
     if (func_8005D308_5DF08(arg0, 4) != 0) {
@@ -648,7 +648,7 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
     temp = arg0->unkBBF;
     if (temp == 0) {
         arg0->unkBBF = temp + 1;
-        arg0->unk44C.y = 0x80000;
+        arg0->velocity.y = 0x80000;
         if (!(arg0->unkB84 & 0x80000)) {
             if (arg0->unkBDB != 0) {
                 arg0->unkBDB = arg0->unkBDB - 1;
@@ -657,9 +657,9 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
     }
 
     arg0->unkB88 = 0x200;
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y + (-0x8000);
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y = arg0->velocity.y + (-0x8000);
 
     applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 5);
@@ -668,7 +668,7 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
         func_8004C10C_4CD0C(arg0);
     }
 
-    if (arg0->unk44C.y < 0) {
+    if (arg0->velocity.y < 0) {
         if (!(arg0->unkB84 & 0x1)) {
             temp = arg0->unkBDB;
             arg0->unkB88 = 0;
@@ -693,7 +693,7 @@ s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
 
     getCurrentAllocation();
 
-    arg0->unk44C.y += -0x8000;
+    arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkBBF == 0) {

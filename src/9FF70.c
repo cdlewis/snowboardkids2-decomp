@@ -33,7 +33,7 @@ void updateTrickFacingAngle(Player *);
 void updateFlipSpinTrickAnimation(Player *);
 void updateTrickRotationTransform(Player *);
 void decayPlayerAirborneAngles(Player *);
-void func_800B00FC_9FFAC(Player *);
+void applyBoostVelocity(Player *);
 void decayPlayerSteeringAngles(Player *);
 void resetTrickScore(Player *);
 
@@ -86,13 +86,13 @@ void resetPlayerBehaviorToDefault(void *arg) {
     arg0->unkBC0 = 0;
 }
 
-void func_800B00FC_9FFAC(Player *player) {
+void applyBoostVelocity(Player *player) {
     Vec3i result;
     GameState *gameState;
 
     gameState = getCurrentAllocation();
 
-    switch (player->unkBD0) {
+    switch (player->boostState) {
         case 1:
         case 7:
             if (player->unkBC9 == 3) {
@@ -100,9 +100,9 @@ void func_800B00FC_9FFAC(Player *player) {
             } else {
                 transformVector2(gameState->unk48 + 0xB4, (u8 *)player + 0x9F0, &result);
             }
-            player->unk44C.x += result.x;
-            player->unk44C.y += result.y;
-            player->unk44C.z += result.z;
+            player->velocity.x += result.x;
+            player->velocity.y += result.y;
+            player->velocity.z += result.z;
             break;
         case 2:
         case 8:
@@ -111,62 +111,61 @@ void func_800B00FC_9FFAC(Player *player) {
             } else {
                 transformVector2(gameState->unk48 + 0xC0, (u8 *)player + 0x9F0, &result);
             }
-            player->unk44C.x += result.x;
-            player->unk44C.y += result.y;
-            player->unk44C.z += result.z;
+            player->velocity.x += result.x;
+            player->velocity.y += result.y;
+            player->velocity.z += result.z;
             break;
         case 5: {
             s32 velZ;
             s32 resultZ;
             transformVector2(gameState->unk48 + 0xCC, (u8 *)player + 0x9F0, &result);
-            player->unk44C.x += result.x;
-            player->unk44C.y += result.y;
-            velZ = player->unk44C.z;
+            player->velocity.x += result.x;
+            player->velocity.y += result.y;
+            velZ = player->velocity.z;
             resultZ = result.z;
-            player->unkBD0 = 7;
-            player->unk44C.z = velZ + resultZ;
+            player->boostState = 7;
+            player->velocity.z = velZ + resultZ;
             break;
         }
         case 6: {
             s32 velZ;
             s32 resultZ;
             transformVector2(gameState->unk48 + 0xD8, (u8 *)player + 0x9F0, &result);
-            player->unk44C.x += result.x;
-            player->unk44C.y += result.y;
-            velZ = player->unk44C.z;
+            player->velocity.x += result.x;
+            player->velocity.y += result.y;
+            velZ = player->velocity.z;
             resultZ = result.z;
-            player->unkBD0 = 8;
-            player->unk44C.z = velZ + resultZ;
+            player->boostState = 8;
+            player->velocity.z = velZ + resultZ;
             break;
         }
     }
 
     func_8005D03C_5DC3C(player);
-    player->worldPos.x += player->unk44C.x;
-    player->worldPos.y += player->unk44C.y;
-    player->worldPos.z += player->unk44C.z;
+    player->worldPos.x += player->velocity.x;
+    player->worldPos.y += player->velocity.y;
+    player->worldPos.z += player->velocity.z;
 }
 
 typedef struct {
     u8 _pad0[0x434];
     Vec3i worldPos;
     u8 _pad440[0xC];
-    s32 unk44C;
-    s32 unk450;
-    s32 unk454;
+    Vec3i velocity;
+    s32 unk458;
 } func_800B0300_arg;
 
 void applyClampedVelocityToPosition(Player *player) {
     func_8005D03C_5DC3C(player);
-    player->worldPos.x = player->worldPos.x + player->unk44C.x;
-    player->worldPos.y = player->worldPos.y + player->unk44C.y;
-    player->worldPos.z = player->worldPos.z + player->unk44C.z;
+    player->worldPos.x = player->worldPos.x + player->velocity.x;
+    player->worldPos.y = player->worldPos.y + player->velocity.y;
+    player->worldPos.z = player->worldPos.z + player->velocity.z;
 }
 
 void applyVelocityToPosition(Player *player) {
-    player->worldPos.x = player->worldPos.x + player->unk44C.x;
-    player->worldPos.y = player->worldPos.y + player->unk44C.y;
-    player->worldPos.z = player->worldPos.z + player->unk44C.z;
+    player->worldPos.x = player->worldPos.x + player->velocity.x;
+    player->worldPos.y = player->worldPos.y + player->velocity.y;
+    player->worldPos.z = player->worldPos.z + player->velocity.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B0334_A01E4);
@@ -204,9 +203,9 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
         }
     }
 
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y - arg0->unkAB8;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y = arg0->velocity.y - arg0->unkAB8;
     applyClampedVelocityToPosition(arg0);
     func_8005D180_5DD80(arg0, 0);
     return 0;
@@ -222,8 +221,8 @@ s32 updatePlayerSlidingConstrained(Player *player) {
 
     if (player->unkBBF == 0) {
         player->unkBBF++;
-        if (player->unk44C.y > 0) {
-            player->unk44C.y = 0;
+        if (player->velocity.y > 0) {
+            player->velocity.y = 0;
         }
         player->unkB8C = 0;
     }
@@ -247,11 +246,11 @@ s32 updatePlayerSlidingConstrained(Player *player) {
         player->unkA94 = player->unkBB2 + 0x1000;
     }
 
-    rotateVectorY(&player->unk44C.x, -player->unkBB2, &rotatedVelocity);
+    rotateVectorY(&player->velocity.x, -player->unkBB2, &rotatedVelocity);
     rotatedVelocity.x = 0;
-    rotateVectorY(&rotatedVelocity, player->unkBB2, &player->unk44C);
+    rotateVectorY(&rotatedVelocity, player->unkBB2, &player->velocity);
 
-    player->unk44C.y = player->unk44C.y - player->unkAB8;
+    player->velocity.y = player->velocity.y - player->unkAB8;
     applyClampedVelocityToPosition(player);
 
     if (player->unkBC0 == 0) {
@@ -312,15 +311,15 @@ s32 updatePlayerGroundedSliding(Player *player) {
     } else {
         player->unkA94 = (u16)player->unkA94 - (player->unkB7A * 4);
     }
-    velocityX = player->unk44C.x;
-    velocityZ = player->unk44C.z;
-    player->unk44C.y -= player->unkAB8;
-    player->unk44C.x = velocityX - (velocityX >> 7);
-    player->unk44C.z = velocityZ - (velocityZ >> 7);
+    velocityX = player->velocity.x;
+    velocityZ = player->velocity.z;
+    player->velocity.y -= player->unkAB8;
+    player->velocity.x = velocityX - (velocityX >> 7);
+    player->velocity.z = velocityZ - (velocityZ >> 7);
     if (player->unkBC0 >= 0xBU) {
         decayPlayerAirborneAngles(player);
     }
-    func_800B00FC_9FFAC(player);
+    applyBoostVelocity(player);
     angleDelta = player->unkA92;
     if (angleDelta >= 0) {
         if (angleDelta >= 0x401) {
@@ -414,10 +413,10 @@ s32 updateSharpTurnSlidingStep(Player *player) {
         return 1;
     }
 
-    player->unk44C.y = player->unk44C.y - player->unkAB8;
+    player->velocity.y = player->velocity.y - player->unkAB8;
     decayPlayerSteeringAngles(player);
     applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
-    func_800B00FC_9FFAC(player);
+    applyBoostVelocity(player);
 
     steeringAngle = player->unkA92;
     clampedAngle = steeringAngle;
@@ -482,10 +481,10 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
         return 1;
     }
 
-    player->unk44C.y = player->unk44C.y - player->unkAB8;
+    player->velocity.y = player->velocity.y - player->unkAB8;
     decayPlayerSteeringAngles(player);
     applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
-    func_800B00FC_9FFAC(player);
+    applyBoostVelocity(player);
 
     if (func_8005D308_5DF08(player, 6) != 0) {
         player->unkBC2 = 6;
@@ -529,10 +528,10 @@ s32 initPostTrickLandingStep(Player *player) {
         return 1;
     }
 
-    player->unk44C.y -= player->unkAB8;
+    player->velocity.y -= player->unkAB8;
     decayPlayerSteeringAngles(player);
     applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
-    func_800B00FC_9FFAC(player);
+    applyBoostVelocity(player);
 
     behaviorStep = player->unkBBF;
     if (behaviorStep == 0) {
@@ -590,10 +589,10 @@ s32 updatePostTrickSlidingStep(Player *player) {
         return 1;
     }
 
-    player->unk44C.y -= player->unkAB8;
+    player->velocity.y -= player->unkAB8;
     decayPlayerSteeringAngles(player);
     steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
-    func_800B00FC_9FFAC(player);
+    applyBoostVelocity(player);
 
     if (!(player->unkB7C & 0x8000)) {
         player->unkBC0 = 1;
@@ -633,10 +632,10 @@ s32 updatePostTrickChargingStep(Player *player) {
         return 1;
     }
 
-    player->unk44C.y -= player->unkAB8;
+    player->velocity.y -= player->unkAB8;
     decayPlayerSteeringAngles(player);
     steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
-    func_800B00FC_9FFAC(player);
+    applyBoostVelocity(player);
 
     if (!(player->unkB7C & 0x8000)) {
         if (player->unkBDA != 0 && player->unkBDC != 0) {
@@ -701,9 +700,9 @@ s32 beginPostTrickLaunchStep(Player *player) {
     func_8006BDBC_6C9BC(&player->unk9B0, rotationTemp1, rotationTemp2);
     transformVector2(&D_800BAB3C_AA9EC, rotationTemp2, &launchVelocity);
 
-    player->unk44C.x += launchVelocity.x;
-    player->unk44C.y += launchVelocity.y + player->unkAB8;
-    player->unk44C.z += launchVelocity.z;
+    player->velocity.x += launchVelocity.x;
+    player->velocity.y += launchVelocity.y + player->unkAB8;
+    player->velocity.z += launchVelocity.z;
 
     return 1;
 }
@@ -808,10 +807,10 @@ s32 updatePostTrickDescentStep(Player *player) {
             return 1;
         }
     } else {
-        player->unk44C.y = player->unk44C.y - player->unkAB8;
+        player->velocity.y = player->velocity.y - player->unkAB8;
         decayPlayerSteeringAngles(player);
         applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
-        func_800B00FC_9FFAC(player);
+        applyBoostVelocity(player);
         player->unkBC0 = player->unkBC0 - 1;
         if (player->unkBC0 == 0) {
             setPlayerBehaviorPhase(player, 0);
@@ -954,11 +953,11 @@ skip_to_end:
 }
 
 void updateTrickAirborneVelocity(Player *player) {
-    player->unk44C.x = player->unk44C.x - (player->unk44C.x >> 7);
-    player->unk44C.y = player->unk44C.y - player->unkAB8;
-    player->unk44C.z = player->unk44C.z - (player->unk44C.z >> 7);
+    player->velocity.x = player->velocity.x - (player->velocity.x >> 7);
+    player->velocity.y = player->velocity.y - player->unkAB8;
+    player->velocity.z = player->velocity.z - (player->velocity.z >> 7);
     decayPlayerAirborneAngles(player);
-    func_800B00FC_9FFAC(player);
+    applyBoostVelocity(player);
 }
 
 s32 updateBasicTrickAirborne(Player *player) {
@@ -1437,9 +1436,9 @@ s32 updateRaceFinishWaitingStep(Player *player) {
     GameStateLocal *gameState;
 
     gameState = getCurrentAllocation();
-    player->unk44C.x = 0;
-    player->unk44C.z = 0;
-    player->unk44C.y -= 0x6000;
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->velocity.y -= 0x6000;
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
     func_8005D180_5DD80(player, 0);
@@ -1486,9 +1485,9 @@ s32 updateRaceFinishWaitingStep(Player *player) {
 }
 
 s32 updateRaceFinishWinStep(Player *player) {
-    player->unk44C.x = 0;
-    player->unk44C.z = 0;
-    player->unk44C.y = player->unk44C.y - 0x6000;
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->velocity.y = player->velocity.y - 0x6000;
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
 
@@ -1543,16 +1542,16 @@ s32 updateRaceFinishLoseStep(Player *player) {
     s32 unkAE0;
 
     flags = player->unkB84;
-    velocityY = player->unk44C.y;
+    velocityY = player->velocity.y;
 
-    player->unk44C.x = 0;
-    player->unk44C.z = 0;
+    player->velocity.x = 0;
+    player->velocity.z = 0;
 
     flags |= 0x60;
     velocityY += -0x6000;
 
     player->unkB84 = flags;
-    player->unk44C.y = velocityY;
+    player->velocity.y = velocityY;
 
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
@@ -1799,7 +1798,7 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     pitchMatrix.m[2][2] = player->unk45C;
 
     func_8006BDBC_6C9BC((void *)&slopeMatrix, &pitchMatrix, &combinedTransform);
-    transformVector2(&player->unk44C.x, &combinedTransform, &tempVec);
+    transformVector2(&player->velocity.x, &combinedTransform, &tempVec);
 
     if (tempVec.y < 0) {
         tempVec.y = 0;
@@ -1852,8 +1851,8 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     transformVector3(&localVelocity, &slopeMatrix, &tempVec);
     transformVector3(&tempVec, &combinedTransform, &localVelocity);
 
-    player->unk44C.x = localVelocity.x;
-    player->unk44C.z = localVelocity.z;
+    player->velocity.x = localVelocity.x;
+    player->velocity.z = localVelocity.z;
 
     return localForwardVelocity;
 }
@@ -1888,8 +1887,8 @@ s32 updateStunnedAirbornePhase(Player *player) {
     if (player->unkBBF == 0) {
         player->unkA8C = 0xFFFF;
         player->unkB88 = 0;
-        player->unk44C.x = player->unkAC8;
-        player->unk44C.z = player->unkAD0;
+        player->velocity.x = player->unkAC8;
+        player->velocity.z = player->unkAD0;
         player->unkBBF++;
         knockbackAngle = atan2Fixed(-player->unkAC8, -player->unkAD0);
         rotateVectorY(gameState->unk48 + 0xE4, knockbackAngle, &effectPos);
@@ -1912,11 +1911,11 @@ s32 updateStunnedAirbornePhase(Player *player) {
         clampedDelta = -0x100;
     }
     player->unkA94 = player->unkA94 + clampedDelta;
-    player->unk44C.y -= 0x6000;
-    velX = player->unk44C.x;
-    player->unk44C.x = velX - (velX >> 4);
-    velZ = player->unk44C.z;
-    player->unk44C.z = velZ - (velZ >> 4);
+    player->velocity.y -= 0x6000;
+    velX = player->velocity.x;
+    player->velocity.x = velX - (velX >> 4);
+    velZ = player->velocity.z;
+    player->velocity.z = velZ - (velZ >> 4);
     decayPlayerAirborneAngles(player);
     applyClampedVelocityToPosition(player);
     if (func_8005D308_5DF08(player, 8) != 0) {
@@ -1941,8 +1940,8 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
     if (player->unkBBF == 0) {
         player->unkA8C = 0xFFFF;
         player->unkB88 = 0;
-        player->unk44C.x = player->unkAC8;
-        player->unk44C.z = player->unkAD0;
+        player->velocity.x = player->unkAC8;
+        player->velocity.z = player->unkAD0;
         player->unkBBF++;
         knockbackAngle = atan2Fixed(-player->unkAC8, -player->unkAD0);
         rotateVectorY(gameState->unk48 + 0xE4, knockbackAngle, &effectPos);
@@ -1965,11 +1964,11 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
         clampedDelta = -0x100;
     }
     player->unkA94 = player->unkA94 + clampedDelta;
-    player->unk44C.y -= 0x6000;
-    velX = player->unk44C.x;
-    player->unk44C.x = velX - (velX >> 4);
-    velZ = player->unk44C.z;
-    player->unk44C.z = velZ - (velZ >> 4);
+    player->velocity.y -= 0x6000;
+    velX = player->velocity.x;
+    player->velocity.x = velX - (velX >> 4);
+    velZ = player->velocity.z;
+    player->velocity.z = velZ - (velZ >> 4);
     decayPlayerAirborneAngles(player);
     applyClampedVelocityToPosition(player);
     if (func_8005D308_5DF08(player, 7) != 0) {
@@ -1983,9 +1982,9 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
 s32 updateStunnedFallingPhase(Player *player) {
     player->unkB88 = 1;
     player->unkB84 |= 0x20;
-    player->unk44C.y -= 0x6000;
-    player->unk44C.x -= player->unk44C.x >> 6;
-    player->unk44C.z -= player->unk44C.z >> 6;
+    player->velocity.y -= 0x6000;
+    player->velocity.x -= player->velocity.x >> 6;
+    player->velocity.z -= player->velocity.z >> 6;
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
 
@@ -2010,15 +2009,15 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
     }
 
     player->unkB84 |= 0x60;
-    player->unk44C.y -= 0x6000;
+    player->velocity.y -= 0x6000;
     player->unkB88 = 1;
 
     if (player->unkB84 & 1) {
         player->unkA8C = -1;
         player->unkB8C = 0xA;
         player->unkBC0 = 0;
-        player->unk44C.x -= (player->unk44C.x >> 5);
-        player->unk44C.z -= (player->unk44C.z >> 5);
+        player->velocity.x -= (player->velocity.x >> 5);
+        player->velocity.z -= (player->velocity.z >> 5);
     } else {
         if (player->unkBC0 == 0) {
             player->unkBC0++;
@@ -2035,7 +2034,7 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
     if (func_8005D308_5DF08(player, 0xA) != 0) {
         if ((player->unkB84 & 1) == 0) {
             if (player->unkB8C == 0) {
-                distSq = (s64)player->unk44C.x * player->unk44C.x + (s64)player->unk44C.z * player->unk44C.z;
+                distSq = (s64)player->velocity.x * player->velocity.x + (s64)player->velocity.z * player->velocity.z;
                 dist = isqrt64(distSq);
 
                 if (dist <= 0x1FFFF) {
@@ -2061,8 +2060,8 @@ s32 updateStunnedRecoveryFallingPhase(Player *player) {
         player->unkB88 = 0;
         player->unkB8C = 0xF;
         player->unkBBF++;
-        if (player->unk44C.y > 0) {
-            player->unk44C.y = 0;
+        if (player->velocity.y > 0) {
+            player->velocity.y = 0;
         }
     }
 
@@ -2088,9 +2087,9 @@ s32 updateStunnedRecoveryFallingPhase(Player *player) {
     }
 
     player->unkA94 += clampedDelta;
-    player->unk44C.x = 0;
-    player->unk44C.z = 0;
-    player->unk44C.y -= 0x6000;
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->velocity.y -= 0x6000;
 
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
@@ -2114,27 +2113,27 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
     }
 
     player->unkB84 |= 0x60;
-    player->unk44C.y -= 0x6000;
+    player->velocity.y -= 0x6000;
     player->unkB88 = 3;
 
     if (player->unkB84 & 1) {
-        player->unk44C.x -= player->unk44C.x >> 5;
-        player->unk44C.z -= player->unk44C.z >> 5;
+        player->velocity.x -= player->velocity.x >> 5;
+        player->velocity.z -= player->velocity.z >> 5;
     } else {
         applyVelocityDeadzone(player, 0x100, 0x100, 0x100);
         func_80050C80_51880(player, player->unkBCC & 0xF);
     }
 
-    velocityMagnitude = distance_3d(player->unk44C.x, player->unk44C.y, player->unk44C.z);
+    velocityMagnitude = distance_3d(player->velocity.x, player->velocity.y, player->velocity.z);
     if (velocityMagnitude <= 0xFFFF) {
         if (player->unkB84 & 2) {
-            rotateVectorY(recoverySlideBaseVelocity, player->unkA94 + 0x1000, &player->unk44C);
+            rotateVectorY(recoverySlideBaseVelocity, player->unkA94 + 0x1000, &player->velocity);
         } else {
-            rotateVectorY(recoverySlideBaseVelocity, player->unkA94, &player->unk44C);
+            rotateVectorY(recoverySlideBaseVelocity, player->unkA94, &player->velocity);
         }
     }
 
-    player->unkA94 = atan2Fixed(-player->unk44C.x, -player->unk44C.z);
+    player->unkA94 = atan2Fixed(-player->velocity.x, -player->velocity.z);
     if (player->unkB84 & 2) {
         player->unkA94 += 0x1000;
     }
@@ -2169,21 +2168,21 @@ s32 func_800B4F5C_A4E0C(Player *arg0) {
     arg0->unkB88 = 7;
     arg0->unkB84 |= 0x60;
 
-    if (arg0->unk44C.y > 0) {
-        arg0->unk44C.y = 0;
+    if (arg0->velocity.y > 0) {
+        arg0->velocity.y = 0;
     }
 
-    arg0->unk44C.y -= 0x6000;
+    arg0->velocity.y -= 0x6000;
 
     if (arg0->unkB84 & 1) {
-        arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 5);
-        arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 5);
+        arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 5);
+        arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 5);
     } else {
         applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
         func_80050C80_51880(arg0, arg0->unkBCC & 0xF);
     }
 
-    angle = atan2Fixed(-arg0->unk44C.x, -arg0->unk44C.z);
+    angle = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);
     arg0->unkA94 = angle;
 
     if (arg0->unkB84 & 2) {
@@ -2223,7 +2222,7 @@ s32 func_800B50C0_A4F70(Player *arg0) {
         arg0->unkBBF++;
         angle = arg0->unkAC4;
         arg0->unkA94 = angle;
-        rotateVectorY(&arg0->unkAC8, angle, &arg0->unk44C);
+        rotateVectorY(&arg0->unkAC8, angle, &arg0->velocity);
 
         if (arg0->unkB84 & 2) {
             arg0->unkA94 += 0x1000;
@@ -2241,13 +2240,13 @@ s32 func_800B50C0_A4F70(Player *arg0) {
 
     arg0->unkB88 = 1;
     arg0->unkB84 |= 0x20;
-    arg0->unk44C.y -= 0x6000;
+    arg0->velocity.y -= 0x6000;
 
-    vel1 = arg0->unk44C.x;
-    arg0->unk44C.x = vel1 - (vel1 >> 6);
+    vel1 = arg0->velocity.x;
+    arg0->velocity.x = vel1 - (vel1 >> 6);
 
-    vel2 = arg0->unk44C.z;
-    arg0->unk44C.z = vel2 - (vel2 >> 6);
+    vel2 = arg0->velocity.z;
+    arg0->velocity.z = vel2 - (vel2 >> 6);
 
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
@@ -2266,21 +2265,21 @@ s32 func_800B50C0_A4F70(Player *arg0) {
 
 s32 func_800B5234_A50E4(Player *arg0) {
     if (arg0->unkBBF == 0) {
-        arg0->unk44C.y = 0;
+        arg0->velocity.y = 0;
         arg0->unkB8C = 0x14;
         arg0->unkBBF = arg0->unkBBF + 1;
     }
 
     arg0->unkB84 = arg0->unkB84 | 0x60;
     arg0->unkB88 = 1;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
 
     if (arg0->unkB84 & 1) {
         arg0->unkA8C = 0xFFFF;
         arg0->unkB8C = 0xA;
         arg0->unkBC0 = 0;
-        arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 5);
-        arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 5);
+        arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 5);
+        arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 5);
     } else {
         if (arg0->unkBC0 == 0) {
             arg0->unkBC0++;
@@ -2318,13 +2317,13 @@ s32 func_800B5394_A5244(Player *arg0) {
     arg0->unkB88 = 8;
     arg0->unkB84 = arg0->unkB84 | 0x20;
 
-    if (arg0->unk44C.y > 0) {
-        arg0->unk44C.y = 0;
+    if (arg0->velocity.y > 0) {
+        arg0->velocity.y = 0;
     }
 
-    arg0->unk44C.x = arg0->unk44C.x / 2;
-    arg0->unk44C.z = arg0->unk44C.z / 2;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.x = arg0->velocity.x / 2;
+    arg0->velocity.z = arg0->velocity.z / 2;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
 
     applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
     decayPlayerSteeringAngles(arg0);
@@ -2340,7 +2339,7 @@ s32 func_800B5394_A5244(Player *arg0) {
 
 s32 func_800B5478_A5328(Player *arg0) {
     if (arg0->unkBBF == 0) {
-        arg0->unk44C.y = 0;
+        arg0->velocity.y = 0;
         arg0->unkB8C = 0x14;
         arg0->unkBBF = arg0->unkBBF + 1;
         if ((arg0->unkB84 & 1) == 0) {
@@ -2352,13 +2351,13 @@ s32 func_800B5478_A5328(Player *arg0) {
     arg0->unkB88 = 8;
     arg0->unkB84 = arg0->unkB84 | 0x60;
 
-    if (arg0->unk44C.y > 0) {
-        arg0->unk44C.y = 0;
+    if (arg0->velocity.y > 0) {
+        arg0->velocity.y = 0;
     }
 
-    arg0->unk44C.x = arg0->unk44C.x / 2;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    arg0->unk44C.z = arg0->unk44C.z / 2;
+    arg0->velocity.x = arg0->velocity.x / 2;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
+    arg0->velocity.z = arg0->velocity.z / 2;
 
     applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
     decayPlayerSteeringAngles(arg0);
@@ -2405,8 +2404,8 @@ s32 func_800B5938_A57E8(Player *arg0) {
         arg0->unkB88 = 0;
         arg0->unkB8C = 0xF;
         arg0->unkBBF++;
-        if (arg0->unk44C.y > 0) {
-            arg0->unk44C.y = 0;
+        if (arg0->velocity.y > 0) {
+            arg0->velocity.y = 0;
         }
         arg0->unkA8C = 0xFFFF;
     }
@@ -2432,9 +2431,9 @@ s32 func_800B5938_A57E8(Player *arg0) {
     }
 
     arg0->unkA94 += angleDelta;
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y -= 0x6000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y -= 0x6000;
 
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
@@ -2452,15 +2451,15 @@ s32 func_800B5A40_A58F0(Player *arg0) {
     if (!arg0->unkBBF) {
         temp = arg0->unkB84;
         arg0->unkBBF++;
-        arg0->unk44C.y = 0xA0000;
+        arg0->velocity.y = 0xA0000;
         arg0->unkB88 = 0x20;
         arg0->unkB8C = 5;
         arg0->unkA8C = 0xFFFF;
         arg0->unkB84 = temp | 0x20;
     }
 
-    if (arg0->unk44C.y > 0) {
-        arg0->unk44C.y = arg0->unk44C.y - 0x8000;
+    if (arg0->velocity.y > 0) {
+        arg0->velocity.y = arg0->velocity.y - 0x8000;
     } else {
         if (arg0->unkBBF == 1) {
             if (createFallingEffect(arg0) != 0) {
@@ -2468,15 +2467,15 @@ s32 func_800B5A40_A58F0(Player *arg0) {
             }
         }
 
-        arg0->unk44C.y -= 0x800;
+        arg0->velocity.y -= 0x800;
 
         if (func_8005D8C8_5E4C8(arg0) != 1) {
-            arg0->unk44C.y += 0x100;
+            arg0->velocity.y += 0x100;
         }
     }
 
-    arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 6);
-    arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 6);
+    arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 6);
+    arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 6);
 
     decayPlayerAirborneAngles(arg0);
 
@@ -2509,8 +2508,8 @@ s32 func_800B5B90_A5A40(Player *arg0) {
     temp_v0 = arg0->unkBBF;
     if (temp_v0 == 0) {
         arg0->unkBBF = temp_v0 + 1;
-        if (arg0->unk44C.y > 0) {
-            arg0->unk44C.y = 0;
+        if (arg0->velocity.y > 0) {
+            arg0->velocity.y = 0;
         }
         arg0->unkB88 = 0x40;
         arg0->unkB8C = 0x1E;
@@ -2523,9 +2522,9 @@ s32 func_800B5B90_A5A40(Player *arg0) {
         scheduleShieldEffect(arg0);
         arg0->unkBBF += 1;
     }
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y -= 0x6000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y -= 0x6000;
     decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
     if (arg0->unkBCE & 1) {
@@ -2548,9 +2547,9 @@ s32 func_800B5B90_A5A40(Player *arg0) {
 s32 func_800B5CB8_A5B68(Player *arg0) {
     arg0->unkB88 = 1;
     arg0->unkB84 = arg0->unkB84 | 0x20;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
-    arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 6);
-    arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 6);
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
+    arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 6);
+    arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 6);
     decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
 
@@ -2577,12 +2576,12 @@ s32 func_800B5D68_A5C18(Player *arg0) {
     }
 
     arg0->unkB88 = 0x80;
-    arg0->unk44C.y = arg0->unk44C.y - arg0->unkAB8;
+    arg0->velocity.y = arg0->velocity.y - arg0->unkAB8;
     decayPlayerSteeringAngles(arg0);
 
     if (arg0->unkB84 & 1) {
-        arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 7);
-        arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 7);
+        arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 7);
+        arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 7);
     } else {
         applyVelocityDeadzone(arg0, 0x200, 0x200, arg0->unkAB0);
     }
@@ -2615,16 +2614,16 @@ s32 func_800B5E90_A5D40(Player *arg0) {
 
     arg0->unkB84 = arg0->unkB84 | 0x60;
     arg0->unkB88 = 0x102;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
 
     if (arg0->unkB84 & 1) {
-        arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 5);
-        arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 5);
+        arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 5);
+        arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 5);
     } else {
         applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
     }
 
-    angle = atan2Fixed(-arg0->unk44C.x, -arg0->unk44C.z);
+    angle = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);
     arg0->unkA94 = angle;
 
     if (arg0->unkB84 & 2) {
@@ -2655,24 +2654,24 @@ s32 func_800B5FC4_A5E74(Player *arg0) {
 
     temp = arg0->unkBBF;
     if (temp == 0) {
-        arg0->unk44C.x = arg0->unkAC8;
+        arg0->velocity.x = arg0->unkAC8;
         velZ = arg0->unkAD0;
         arg0->unkBBF = temp + 1;
-        arg0->unk44C.z = velZ;
-        dist = isqrt64((s64)arg0->unk44C.x * arg0->unk44C.x + (s64)velZ * velZ);
+        arg0->velocity.z = velZ;
+        dist = isqrt64((s64)arg0->velocity.x * arg0->velocity.x + (s64)velZ * velZ);
         if (dist > 0x60000) {
-            arg0->unk44C.x = (s64)arg0->unk44C.x * 0x60000 / dist;
-            arg0->unk44C.z = (s64)arg0->unk44C.z * 0x60000 / dist;
+            arg0->velocity.x = (s64)arg0->velocity.x * 0x60000 / dist;
+            arg0->velocity.z = (s64)arg0->velocity.z * 0x60000 / dist;
         }
-        arg0->unk44C.y = 0x90000;
+        arg0->velocity.y = 0x90000;
         arg0->unkA8C = 0xFFFF;
     }
 
     arg0->unkB88 = 0x200;
     arg0->unkB84 |= 0x20;
-    arg0->unk44C.y += 0xFFFF7000;
-    arg0->unk44C.x -= arg0->unk44C.x >> 6;
-    arg0->unk44C.z -= arg0->unk44C.z >> 6;
+    arg0->velocity.y += 0xFFFF7000;
+    arg0->velocity.x -= arg0->velocity.x >> 6;
+    arg0->velocity.z -= arg0->velocity.z >> 6;
 
     decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
@@ -2700,17 +2699,17 @@ s32 func_800B6194_A6044(Player *arg0) {
     }
 
     arg0->unkB84 = arg0->unkB84 | 0x60;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
     arg0->unkB88 = 0x202;
 
     if (arg0->unkB84 & 1) {
-        arg0->unk44C.x = arg0->unk44C.x - (arg0->unk44C.x >> 5);
-        arg0->unk44C.z = arg0->unk44C.z - (arg0->unk44C.z >> 5);
+        arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 5);
+        arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 5);
     } else {
         applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
     }
 
-    angle = atan2Fixed(-arg0->unk44C.x, -arg0->unk44C.z);
+    angle = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);
     arg0->unkA94 = angle;
 
     if (arg0->unkB84 & 2) {
@@ -2753,10 +2752,10 @@ s32 func_800B62E4_A6194(Player *arg0) {
         arg0->unkBBF = arg0->unkBBF + 1;
     }
     arg0->unkB88 = 0x400;
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
     arg0->unkB84 |= 0x20;
-    arg0->unk44C.y = arg0->unkB8C;
+    arg0->velocity.y = arg0->unkB8C;
     arg0->unkB8C = arg0->unkB8C + 0x8000;
     decayPlayerAirborneAngles(arg0);
     arg0->unkA94 = (u16)arg0->unkA94 + 0x200;
@@ -2765,13 +2764,13 @@ s32 func_800B62E4_A6194(Player *arg0) {
         if (arg0->unkBD4 != 0) {
             if (arg0->unkBD2 != 0) {
                 if (randA() & 1) {
-                    if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->unk44C.x, 0, arg0->unkBD2) != 0) {
+                    if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 0, arg0->unkBD2) != 0) {
                         arg0->unkBD2 = 0;
                         arg0->unkBD3 = 0;
                     }
                     goto block_end;
                 }
-                if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->unk44C.x, 1, arg0->unkBD4) != 0) {
+                if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 1, arg0->unkBD4) != 0) {
                     arg0->unkBD4 = 0;
                 }
                 goto block_end;
@@ -2779,14 +2778,14 @@ s32 func_800B62E4_A6194(Player *arg0) {
             goto block_check_BD4;
         }
         if (arg0->unkBD2 != 0) {
-            if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->unk44C.x, 0, arg0->unkBD2) != 0) {
+            if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 0, arg0->unkBD2) != 0) {
                 arg0->unkBD2 = 0;
                 arg0->unkBD3 = 0;
             }
         } else {
         block_check_BD4:
             if (arg0->unkBD4 != 0) {
-                if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->unk44C.x, 1, arg0->unkBD4) != 0) {
+                if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 1, arg0->unkBD4) != 0) {
                     arg0->unkBD4 = 0;
                 }
             }
@@ -2808,7 +2807,7 @@ s32 func_800B6488_A6338(Player *arg0) {
     if (temp_v0 == 0) {
         arg0->unkBBF = temp_v0 + 1;
         arg0->unkB8C = 0;
-        arg0->unk44C.y = 0;
+        arg0->velocity.y = 0;
         arg0->unkA8C = 0xFFFF;
         func_8005D308_5DF08(arg0, 0xB);
         queueSoundAtPosition(&arg0->worldPos, 0x34);
@@ -2831,10 +2830,10 @@ s32 func_800B6488_A6338(Player *arg0) {
     }
 
     arg0->unkB88 = 0x10;
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
     arg0->unkB84 |= 0x40;
-    arg0->unk44C.y -= 0x6000;
+    arg0->velocity.y -= 0x6000;
     decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
 
@@ -2897,10 +2896,10 @@ s32 func_800B6688_A6538(Player *arg0) {
     if (angle >= 0x1001) {
         temp_angle = angle | 0xE000;
     }
-    arg0->unk44C.y -= 0x6000;
+    arg0->velocity.y -= 0x6000;
     temp_worldPosX = arg0->worldPos.x;
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
     arg0->unkA94 = unkA94 + (temp_angle / arg0->unkB8C);
     arg0->worldPos.x = temp_worldPosX + ((item->unk0 - temp_worldPosX) >> 2);
     item_unk4 = item->unk4;
@@ -2931,9 +2930,9 @@ s32 func_800B67E4_A6694(Player *arg0) {
 
     item = func_80055D10_56910(gameState->memoryPoolId);
 
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
     arg0->worldPos.x = arg0->worldPos.x + ((item->unk0 - arg0->worldPos.x) >> 2);
     arg0->worldPos.z = arg0->worldPos.z + ((item->unk4 - arg0->worldPos.z) >> 2);
     applyClampedVelocityToPosition(arg0);
@@ -2966,7 +2965,7 @@ s32 func_800B6D14_A6BC4(Player *arg0) {
 
     if (arg0->unkB8C < 0x12) {
         arg0->unkB84 = arg0->unkB84 | 0x2000;
-        transformVector2(&D_800BAC80_AAB30, &arg0->unk970, &arg0->unk44C);
+        transformVector2(&D_800BAC80_AAB30, &arg0->unk970, &arg0->velocity);
     }
 
     applyClampedVelocityToPosition(arg0);
@@ -2984,7 +2983,7 @@ s32 func_800B6DB8_A6C68(Player *arg0) {
 
     func_80055D10_56910(gameState->memoryPoolId);
     decayPlayerSteeringAngles(arg0);
-    transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->unk44C);
+    transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->velocity);
     applyClampedVelocityToPosition(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -3040,7 +3039,7 @@ s32 func_800B6E5C_A6D0C(Player *arg0) {
     }
 
     decayPlayerSteeringAngles(arg0);
-    transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->unk44C);
+    transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->velocity);
     applyClampedVelocityToPosition(arg0);
 
     if (arg0->unkB8C != 0) {
@@ -3058,7 +3057,7 @@ s32 func_800B6FE8_A6E98(Player *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     func_80055D10_56910(gameState->memoryPoolId);
-    transformVector2(&D_800BAC80_AAB30, &arg0->unk970, &arg0->unk44C);
+    transformVector2(&D_800BAC80_AAB30, &arg0->unk970, &arg0->velocity);
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
 
@@ -3074,9 +3073,9 @@ s32 func_800B6FE8_A6E98(Player *arg0) {
 }
 
 s32 func_800B7078_A6F28(Player *arg0) {
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
     func_8005D308_5DF08(arg0, 3);
@@ -3214,13 +3213,13 @@ s32 func_800B73CC_A727C(Player *arg0) {
 
 s32 func_800B7444_A72F4(Player *arg0) {
     if (arg0->unkBC0 == 0) {
-        arg0->unk44C.z = 0xFFF80000;
-        arg0->unk44C.x = 0;
-        arg0->unk44C.y = 0x30000;
+        arg0->velocity.z = 0xFFF80000;
+        arg0->velocity.x = 0;
+        arg0->velocity.y = 0x30000;
         arg0->unkBC0 = arg0->unkBC0 + 1;
     }
 
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
 
@@ -3236,9 +3235,9 @@ s32 func_800B7444_A72F4(Player *arg0) {
 }
 
 s32 func_800B74E4_A7394(Player *arg0) {
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
@@ -3256,9 +3255,9 @@ s32 func_800B74E4_A7394(Player *arg0) {
 }
 
 s32 func_800B756C_A741C(Player *arg0) {
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
@@ -3282,9 +3281,9 @@ s32 func_800B75F4_A74A4(Player *arg0) {
     func_800B75F4_alloc *alloc = (func_800B75F4_alloc *)getCurrentAllocation();
     s32 temp;
 
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
@@ -3319,9 +3318,9 @@ s32 func_800B76BC_A756C(Player *arg0) {
     u16 temp1;
     u16 temp2;
 
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
@@ -3354,9 +3353,9 @@ s32 func_800B7784_A7634(Player *arg0) {
     func_800B7784_alloc *alloc = (func_800B7784_alloc *)getCurrentAllocation();
     s32 temp;
 
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
@@ -3462,14 +3461,14 @@ s32 func_800B7A30_A78E0(Player *arg0) {
 
 s32 func_800B7A94_A7944(Player *arg0) {
     if (arg0->unkBC0 == 0) {
-        arg0->unk44C.z = 0xFFF80000;
-        arg0->unk44C.x = 0;
-        arg0->unk44C.y = 0x30000;
+        arg0->velocity.z = 0xFFF80000;
+        arg0->velocity.x = 0;
+        arg0->velocity.y = 0x30000;
         arg0->unkBC0 = arg0->unkBC0 + 1;
     }
 
     arg0->unkB84 = arg0->unkB84 | 0x10000;
-    arg0->unk44C.y = arg0->unk44C.y - 0x6000;
+    arg0->velocity.y = arg0->velocity.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
 

@@ -79,7 +79,7 @@ typedef struct {
     s32 unk440;
     s32 unk444;
     s32 unk448;
-    Vec3i unk44C; /* 0x44C */
+    Vec3i velocity; /* 0x44C */
     s32 unk458;
     s32 unk45C;
     s32 unk460;
@@ -197,7 +197,7 @@ typedef struct {
     s8 unkBCD;
     u8 unkBCE;
     u8 unkBCF;
-    u8 unkBD0;
+    u8 boostState;
     u8 unkBD1;
     u8 unkBD2;
     u8 unkBD3;

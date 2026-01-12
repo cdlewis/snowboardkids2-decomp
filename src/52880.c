@@ -42,7 +42,7 @@ typedef struct {
     u8 padding_170_434[0x2C4];
     s32 unk434[3];
     u8 padding_440_44C[0xC];
-    s32 unk44C[3];
+    s32 velocity[3];
     u8 padding_458_950[0x4F8];
     s16 unk950;
     u8 padding2[0x242];
@@ -199,7 +199,7 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
             func_80058A10_59610(hitPlayer);
             for (i = 0; i < 3; i++) {
                 if (hitPlayer->unkB6C >= 100) {
-                    func_8004A9A8_4B5A8(&hitPlayer->worldPos.x, hitPlayer->unkB94, &hitPlayer->unk44C);
+                    func_8004A9A8_4B5A8(&hitPlayer->worldPos.x, hitPlayer->unkB94, &hitPlayer->velocity);
                     func_80059A48_5A648(hitPlayer, -100);
                 }
             }
@@ -1652,7 +1652,7 @@ void func_800548C8_554C8(Struct_52880 *arg0) {
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
     if ((!alloc->unk10[*playerIdxPtr].unkB94) && (!alloc->unk10[*playerIdxPtr].unkB94)) {}
     players = alloc->unk10;
-    memcpy(&arg0->unk30, players[*playerIdxPtr].unk44C, 12);
+    memcpy(&arg0->unk30, players[*playerIdxPtr].velocity, 12);
     queueSoundAtPosition(position, 0x23);
     setCallbackWithContinue(func_80054AE4_556E4);
 }
@@ -1751,7 +1751,7 @@ void func_80054D70_55970(void *arg) {
                 func_80058A10_59610(player);
                 for (i = 0; i < 3; i++) {
                     if (player->unkB6C >= 100) {
-                        func_8004A9A8_4B5A8(&player->worldPos.x, player->unkB94, &player->unk44C);
+                        func_8004A9A8_4B5A8(&player->worldPos.x, player->unkB94, &player->velocity);
                         func_80059A48_5A648(player, -100);
                     }
                 }

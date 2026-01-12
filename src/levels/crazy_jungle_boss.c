@@ -60,7 +60,7 @@ typedef struct {
     s32 unk440;
     s32 unk444;
     s32 unk448;
-    Vec3i unk44C;
+    Vec3i velocity;
     u8 pad458[0x10];
     s32 unk468;
     u8 pad46C[0x8];
@@ -169,9 +169,9 @@ void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
     alloc = getCurrentAllocation();
     func_800B9B90_A9A40((Player *)arg0);
 
-    arg0->unk44C.x = arg0->unk434.x - arg0->unk440;
-    arg0->unk44C.y = arg0->unk434.y - arg0->unk444;
-    arg0->unk44C.z = arg0->unk434.z - arg0->unk448;
+    arg0->velocity.x = arg0->unk434.x - arg0->unk440;
+    arg0->velocity.y = arg0->unk434.y - arg0->unk444;
+    arg0->velocity.z = arg0->unk434.z - arg0->unk448;
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
 
     if (arg0->unkB94 < 0x16) {
@@ -303,9 +303,9 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
         return 1;
     }
 
-    arg0->unk44C.x -= arg0->unk44C.x / 8;
-    arg0->unk44C.z -= arg0->unk44C.z / 8;
-    arg0->unk44C.y += -0x8000;
+    arg0->velocity.x -= arg0->velocity.x / 8;
+    arg0->velocity.z -= arg0->velocity.z / 8;
+    arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
     func_8005D180_5DD80(arg0, 0);
 
@@ -360,27 +360,27 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     if (!(arg0->unkB84 & 1)) {
         createYRotationMatrix(&arg0->unk970, arg0->unkA94);
         func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, &arg0->unk970, &sp10);
-        transformVector3(&arg0->unk44C, &sp10, &sp30);
+        transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
-        transformVector2(&sp30, &sp10, &arg0->unk44C);
+        transformVector2(&sp30, &sp10, &arg0->velocity);
         transformVector2((s32 *)(gameState->unk48 + 0x144), &sp10, &sp30);
         if (sp30.y > 0) {
             sp30.y = 0;
         }
-        arg0->unk44C.x += sp30.x;
-        arg0->unk44C.y += sp30.y;
-        arg0->unk44C.z += sp30.z;
+        arg0->velocity.x += sp30.x;
+        arg0->velocity.y += sp30.y;
+        arg0->velocity.z += sp30.z;
     } else {
-        temp = arg0->unk44C.x;
-        arg0->unk44C.x = temp - (temp / 16);
-        temp2 = arg0->unk44C.z;
-        arg0->unk44C.z = temp2 - (temp2 / 16);
+        temp = arg0->velocity.x;
+        arg0->velocity.x = temp - (temp / 16);
+        temp2 = arg0->velocity.z;
+        arg0->velocity.z = temp2 - (temp2 / 16);
     }
 
-    if (arg0->unk44C.y > 0) {
-        arg0->unk44C.y = 0;
+    if (arg0->velocity.y > 0) {
+        arg0->velocity.y = 0;
     }
-    arg0->unk44C.y += -0x10000;
+    arg0->velocity.y += -0x10000;
 
     applyClampedVelocityToPosition((Player *)arg0);
     if (func_8005D180_5DD80(arg0, 1) != 0) {
@@ -410,9 +410,9 @@ s32 func_800BBD98_AC5C8(Arg0Struct *arg0) {
     s32 pad[3];
     getCurrentAllocation();
 
-    arg0->unk44C.x -= arg0->unk44C.x / 8;
-    arg0->unk44C.z -= arg0->unk44C.z / 8;
-    arg0->unk44C.y += -0x8000;
+    arg0->velocity.x -= arg0->velocity.x / 8;
+    arg0->velocity.z -= arg0->velocity.z / 8;
+    arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
     func_8005D180_5DD80(arg0, 0);
 
@@ -425,11 +425,11 @@ void func_800BBE1C_AC64C(Arg0Struct *arg0) {
 
 s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
     if (arg0->unkBBF == 0) {
-        s32 temp = arg0->unk44C.y;
+        s32 temp = arg0->velocity.y;
         arg0->unkBBF++;
         arg0->unkB8C = 1;
         if (temp > 0) {
-            arg0->unk44C.y = 0;
+            arg0->velocity.y = 0;
         }
         queueSoundAtPosition(&arg0->unk434, 0x21);
     }
@@ -442,9 +442,9 @@ s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
     }
 
     arg0->unkB88 = 0x10;
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y += -0x8000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkB8C == -1) {
@@ -461,15 +461,15 @@ s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
 s32 func_800BBF3C_AC76C(Arg0Struct *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unkA8C = 0xFFFF;
-        arg0->unk44C.y = 0x80000;
+        arg0->velocity.y = 0x80000;
         arg0->unkBBF = arg0->unkBBF + 1;
         queueSoundAtPosition(&arg0->unk434, 0x21);
     }
 
     arg0->unkB88 = 0x200;
-    arg0->unk44C.x = 0;
-    arg0->unk44C.z = 0;
-    arg0->unk44C.y = arg0->unk44C.y + -0x8000;
+    arg0->velocity.x = 0;
+    arg0->velocity.z = 0;
+    arg0->velocity.y = arg0->velocity.y + -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
     func_8005D180_5DD80(arg0, 2);
 
