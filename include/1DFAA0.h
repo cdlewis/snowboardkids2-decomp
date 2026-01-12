@@ -15,10 +15,10 @@ typedef struct {
 typedef struct {
     union {
         struct {
-            s16 unk0;
-            RGBColor unk2[2];
-            u8 unkA;
-        } One;
+            s16 frameCounter;
+            RGBColor colors[2];
+            u8 colorToggle;
+        } FlashPayload;
         struct {
             s32 unk0;
             s32 unk4;
@@ -194,10 +194,10 @@ typedef struct {
 typedef struct {
     union {
         struct {
-            s16 unk0;
-            RGBColor unk2[2];
-            u8 unkA;
-        } One;
+            s16 frameCounter;
+            RGBColor colors[2];
+            u8 colorToggle;
+        } FlashPayload;
         struct {
             s32 unk0;
             s32 unk4;

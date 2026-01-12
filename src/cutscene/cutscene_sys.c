@@ -74,10 +74,10 @@ void cutsceneSysFlash_setup(func_800B2A24_1DFAD4_arg_item *srcItem, CutsceneMana
     CutsceneSlot *slot;
 
     slot = getCutsceneSlot(cutsceneManager, slotIndex);
-    slot->unk0.One.unk0 = srcItem->unk0.One.unk0;
-    slot->unk0.One.unkA = 0xFF;
-    memcpy(&slot->unk0.One.unk2[0], &srcItem->unk0.One.unk2[0], 4);
-    memcpy(&slot->unk0.One.unk2[1], &srcItem->unk0.One.unk2[1], 4);
+    slot->unk0.FlashPayload.frameCounter = srcItem->unk0.FlashPayload.frameCounter;
+    slot->unk0.FlashPayload.colorToggle = 0xFF;
+    memcpy(&slot->unk0.FlashPayload.colors[0], &srcItem->unk0.FlashPayload.colors[0], 4);
+    memcpy(&slot->unk0.FlashPayload.colors[1], &srcItem->unk0.FlashPayload.colors[1], 4);
     enableSlotUpdate(cutsceneManager, slotIndex);
 }
 
@@ -89,27 +89,27 @@ void cutsceneSysFlash_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
 
     slot = getCutsceneSlot(cutsceneManager, slotIndex);
 
-    if (slot->unk0.One.unk0 > 0) {
-        colorIndex = slot->unk0.One.unkA & 1;
+    if (slot->unk0.FlashPayload.frameCounter > 0) {
+        colorIndex = slot->unk0.FlashPayload.colorToggle & 1;
         func_8006FE28_70A28(
             cutsceneManager->uiResource,
-            slot->unk0.One.unk2[colorIndex].unk0,
-            slot->unk0.One.unk2[colorIndex].unk1,
-            slot->unk0.One.unk2[colorIndex].unk2
+            slot->unk0.FlashPayload.colors[colorIndex].unk0,
+            slot->unk0.FlashPayload.colors[colorIndex].unk1,
+            slot->unk0.FlashPayload.colors[colorIndex].unk2
         );
 
-        if (slot->unk0.One.unkA != 0) {
-            slot->unk0.One.unkA = 0;
-            color1Check = (u16 *)&slot->unk0.One.unk2[1];
+        if (slot->unk0.FlashPayload.colorToggle != 0) {
+            slot->unk0.FlashPayload.colorToggle = 0;
+            color1Check = (u16 *)&slot->unk0.FlashPayload.colors[1];
             if (*color1Check == 0) {
                 transparency = -(slot->unk0.Two.unk8 != 0);
             }
         } else {
-            slot->unk0.One.unkA = transparency;
+            slot->unk0.FlashPayload.colorToggle = transparency;
         }
 
         func_8006FDA0_709A0(cutsceneManager->uiResource, transparency & 0xFF, 0);
-        slot->unk0.One.unk0--;
+        slot->unk0.FlashPayload.frameCounter--;
     } else {
         func_8006FDA0_709A0(cutsceneManager->uiResource, 0, 0);
         disableSlotUpdate(cutsceneManager, slotIndex);
