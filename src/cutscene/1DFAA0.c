@@ -256,78 +256,83 @@ void prepareCutsceneForPlayback(
     clearAuxRenderEnabled(&manager->unkFF8);
 }
 
-s32 processCutsceneFrame(CutsceneManager *uiManager) {
-    s32 slotIndex;
+s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
+    s32 slotBitmask;
     SceneModel *currentModel;
     s32 i;
     CutsceneSlotData *slotData;
-    s16 xOffset;
-    s32 zScale;
-    StateEntry *stateEntry;
-    s32 shouldInit;
-    u16 temp;
-    s32 animTimer;
-    u16 frameResult;
-    u8 tempByte;
+    s16 cameraOffsetX;
+    s32 cameraScaleZ;
+    StateEntry *eventEntry;
+    s32 shouldInitializeSlot;
+    u16 commandType;
+    s32 cameraAnimTimer;
+    u16 eventIndex;
+    u8 eventType;
 
-    if (uiManager->showDebugInfo) {
-        sprintf((char *)uiManager->debugText, (const char *)D_800BAE00_1E7EB0, uiManager->currentFrame);
-        debugEnqueueCallback(uiManager->uiResource->slot_index, 6, &renderTextPalette, &uiManager->textRenderer);
+    if (cutsceneManager->showDebugInfo) {
+        sprintf((char *)cutsceneManager->debugText, (const char *)D_800BAE00_1E7EB0, cutsceneManager->currentFrame);
+        debugEnqueueCallback(
+            cutsceneManager->uiResource->slot_index,
+            6,
+            &renderTextPalette,
+            &cutsceneManager->textRenderer
+        );
     }
 
-    while (uiManager->currentFrame <= uiManager->maxFrame && !uiManager->skipAnimation) {
-        for (i = 0, slotIndex = 0; i < getCutsceneSlotCount(); i++) {
-            currentModel = uiManager->slots[i].model;
-            slotData = &uiManager->slots[i].slotData;
+    while (cutsceneManager->currentFrame <= cutsceneManager->maxFrame && !cutsceneManager->skipAnimation) {
+        for (i = 0, slotBitmask = 0; i < getCutsceneSlotCount(); i++) {
+            currentModel = cutsceneManager->slots[i].model;
+            slotData = &cutsceneManager->slots[i].slotData;
 
-            frameResult = findEventAtFrame(i, uiManager->currentFrame);
-            if ((frameResult & 0xFFFF) != 0xFFFF) {
-                stateEntry = getStateEntry(frameResult);
-                shouldInit = 1;
+            eventIndex = findEventAtFrame(i, cutsceneManager->currentFrame);
+            if ((eventIndex & 0xFFFF) != 0xFFFF) {
+                eventEntry = getStateEntry(eventIndex);
+                shouldInitializeSlot = 1;
 
-                if (uiManager->currentFrame < uiManager->maxFrame) {
-                    tempByte = stateEntry->unk3E - 4;
+                if (cutsceneManager->currentFrame < cutsceneManager->maxFrame) {
+                    eventType = eventEntry->unk3E - 4;
 
-                    if (tempByte < 2) {
-                        shouldInit = 0;
+                    if (eventType < 2) {
+                        shouldInitializeSlot = 0;
                     } else {
-                        temp = *(u16 *)&stateEntry->unk3E;
-                        if (temp == 0x801) {
-                            temp = 0;
-                            shouldInit = temp;
+                        commandType = *(u16 *)&eventEntry->unk3E;
+                        if (commandType == 0x801) {
+                            commandType = 0;
+                            shouldInitializeSlot = commandType;
                         }
                     }
                 }
 
-                if (shouldInit) {
-                    initializeSlotState(stateEntry, uiManager, slotIndex >> 24);
+                if (shouldInitializeSlot) {
+                    initializeSlotState(eventEntry, cutsceneManager, slotBitmask >> 24);
                 }
             }
 
-            updateSlotData(uiManager, slotIndex >> 24);
+            updateSlotData(cutsceneManager, slotBitmask >> 24);
             syncModelFromSlot(slotData, currentModel);
 
-            slotIndex += 0x1000000;
+            slotBitmask += 0x1000000;
         }
 
-        uiManager->currentFrame++;
-        advanceSceneManager(uiManager->sceneContext);
+        cutsceneManager->currentFrame++;
+        advanceSceneManager(cutsceneManager->sceneContext);
     }
 
-    finalizeAnimationLoop(uiManager->sceneContext);
+    finalizeAnimationLoop(cutsceneManager->sceneContext);
 
-    if (!uiManager->skipAnimation) {
-        uiManager->maxFrame++;
+    if (!cutsceneManager->skipAnimation) {
+        cutsceneManager->maxFrame++;
     }
 
     for (i = 0; i < getCutsceneSlotCount(); i++) {
-        currentModel = uiManager->slots[i].model;
-        slotData = &uiManager->slots[i].slotData;
+        currentModel = cutsceneManager->slots[i].model;
+        slotData = &cutsceneManager->slots[i].slotData;
 
         if (currentModel) {
             setupSlotTransform(slotData);
             applyTransformToModel(currentModel, &slotData->unk04);
-            if (uiManager->enableTransparency) {
+            if (cutsceneManager->enableTransparency) {
                 setModelVisibility(currentModel, 1);
             } else {
                 setModelVisibility(currentModel, 0);
@@ -343,16 +348,16 @@ s32 processCutsceneFrame(CutsceneManager *uiManager) {
         }
     }
 
-    animTimer = uiManager->cameraAnimationTimer;
-    xOffset = -((animTimer * 120) >> 16);
-    zScale = (animTimer * 119) >> 16;
+    cameraAnimTimer = cutsceneManager->cameraAnimationTimer;
+    cameraOffsetX = -((cameraAnimTimer * 120) >> 16);
+    cameraScaleZ = (cameraAnimTimer * 119) >> 16;
 
-    setModelRenderMode(&uiManager->unk10, uiManager->enableTransparency);
-    setModelCameraTransform(uiManager->uiResource, 0, 0, -0xA0, xOffset, 0x9F, zScale);
-    setModelCameraTransform(uiManager->shadowModel, 0, 0, -0xA0, xOffset, 0x9F, zScale);
-    setModelCameraTransform(uiManager->reflectionModel, 0, 0, -0xA0, xOffset, 0x9F, zScale);
+    setModelRenderMode(&cutsceneManager->unk10, cutsceneManager->enableTransparency);
+    setModelCameraTransform(cutsceneManager->uiResource, 0, 0, -0xA0, cameraOffsetX, 0x9F, cameraScaleZ);
+    setModelCameraTransform(cutsceneManager->shadowModel, 0, 0, -0xA0, cameraOffsetX, 0x9F, cameraScaleZ);
+    setModelCameraTransform(cutsceneManager->reflectionModel, 0, 0, -0xA0, cameraOffsetX, 0x9F, cameraScaleZ);
 
-    return (uiManager->currentFrame <= uiManager->endFrame) ? 1 : 0;
+    return (cutsceneManager->currentFrame <= cutsceneManager->endFrame) ? 1 : 0;
 }
 
 s16 func_800B3360(s16 arg0, s16 arg1) {
