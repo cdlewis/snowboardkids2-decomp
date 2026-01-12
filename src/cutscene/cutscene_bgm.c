@@ -9,7 +9,7 @@ s32 cutsceneBgmPlay_validate(void) {
 }
 
 void cutsceneBgmPlay_exec(cutsceneBgmPlay_exec_arg0 *arg0) {
-    func_80057514_58114(arg0->unk0, arg0->unk4, arg0->unk2);
+    playMusicTrackWithFadeIn(arg0->unk0, arg0->unk4, arg0->unk2);
 }
 
 void cutsceneBgmFadeOut_init(void) {

@@ -286,7 +286,7 @@ void func_80003EE0_4AE0(void) {
     func_8006FDA0_709A0(&taskMemory->unk3B8, 0, 0);
     func_8006FDA0_709A0(&taskMemory->unk590, 0, 0);
     func_8006FDA0_709A0(&taskMemory->unk768, 0, 0);
-    func_80057514_58114(0xB, 0x80, 0);
+    playMusicTrackWithFadeIn(0xB, 0x80, 0);
     initSceneLighting(taskMemory);
     setGameStateHandler(&updateCreditsSequence);
 }

@@ -69,7 +69,7 @@ typedef struct {
 void playBgmTrack(E770_struct *arg0, s16 bgmId) {
     gCurrentBgmId = bgmId;
     arg0->unk10 = 0x28;
-    func_80057514_58114(bgmId, 0x80, 0);
+    playMusicTrackWithFadeIn(bgmId, 0x80, 0);
 }
 
 void beginMenuFadeOut(E770_struct *arg0) {
