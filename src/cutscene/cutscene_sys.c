@@ -70,49 +70,49 @@ s32 cutsceneSysFlash_validate(void) {
     return 0;
 }
 
-void cutsceneSysFlash_setup(func_800B2A24_1DFAD4_arg_item *arg0, CutsceneManager *arg1, s8 arg2) {
-    CutsceneSlot *temp_v0;
+void cutsceneSysFlash_setup(func_800B2A24_1DFAD4_arg_item *srcItem, CutsceneManager *cutsceneManager, s8 slotIndex) {
+    CutsceneSlot *slot;
 
-    temp_v0 = getCutsceneSlot(arg1, arg2);
-    temp_v0->unk0.One.unk0 = arg0->unk0.One.unk0;
-    temp_v0->unk0.One.unkA = 0xFF;
-    memcpy(&temp_v0->unk0.One.unk2[0], &arg0->unk0.One.unk2[0], 4);
-    memcpy(&temp_v0->unk0.One.unk2[1], &arg0->unk0.One.unk2[1], 4);
-    enableSlotUpdate(arg1, arg2);
+    slot = getCutsceneSlot(cutsceneManager, slotIndex);
+    slot->unk0.One.unk0 = srcItem->unk0.One.unk0;
+    slot->unk0.One.unkA = 0xFF;
+    memcpy(&slot->unk0.One.unk2[0], &srcItem->unk0.One.unk2[0], 4);
+    memcpy(&slot->unk0.One.unk2[1], &srcItem->unk0.One.unk2[1], 4);
+    enableSlotUpdate(cutsceneManager, slotIndex);
 }
 
-void cutsceneSysFlash_update(CutsceneManager *a0, s8 a1) {
-    CutsceneSlot *s0;
-    s32 s1 = 0xFF;
-    s32 temp;
-    u16 *check_ptr;
+void cutsceneSysFlash_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
+    CutsceneSlot *slot;
+    s32 transparency = 0xFF;
+    s32 colorIndex;
+    u16 *color1Check;
 
-    s0 = getCutsceneSlot(a0, a1);
+    slot = getCutsceneSlot(cutsceneManager, slotIndex);
 
-    if (s0->unk0.One.unk0 > 0) {
-        temp = s0->unk0.One.unkA & 1;
+    if (slot->unk0.One.unk0 > 0) {
+        colorIndex = slot->unk0.One.unkA & 1;
         func_8006FE28_70A28(
-            a0->uiResource,
-            s0->unk0.One.unk2[temp].unk0,
-            s0->unk0.One.unk2[temp].unk1,
-            s0->unk0.One.unk2[temp].unk2
+            cutsceneManager->uiResource,
+            slot->unk0.One.unk2[colorIndex].unk0,
+            slot->unk0.One.unk2[colorIndex].unk1,
+            slot->unk0.One.unk2[colorIndex].unk2
         );
 
-        if (s0->unk0.One.unkA != 0) {
-            s0->unk0.One.unkA = 0;
-            check_ptr = (u16 *)&s0->unk0.One.unk2[1];
-            if (*check_ptr == 0) {
-                s1 = -(s0->unk0.Two.unk8 != 0);
+        if (slot->unk0.One.unkA != 0) {
+            slot->unk0.One.unkA = 0;
+            color1Check = (u16 *)&slot->unk0.One.unk2[1];
+            if (*color1Check == 0) {
+                transparency = -(slot->unk0.Two.unk8 != 0);
             }
         } else {
-            s0->unk0.One.unkA = s1;
+            slot->unk0.One.unkA = transparency;
         }
 
-        func_8006FDA0_709A0(a0->uiResource, s1 & 0xFF, 0);
-        s0->unk0.One.unk0--;
+        func_8006FDA0_709A0(cutsceneManager->uiResource, transparency & 0xFF, 0);
+        slot->unk0.One.unk0--;
     } else {
-        func_8006FDA0_709A0(a0->uiResource, 0, 0);
-        disableSlotUpdate(a0, a1);
+        func_8006FDA0_709A0(cutsceneManager->uiResource, 0, 0);
+        disableSlotUpdate(cutsceneManager, slotIndex);
     }
 }
 

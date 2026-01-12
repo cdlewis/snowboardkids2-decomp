@@ -10,13 +10,13 @@ typedef struct {
     u8 unk1;
     u8 unk2;
     u8 unk3;
-} PackedData;
+} RGBColor;
 
 typedef struct {
     union {
         struct {
             s16 unk0;
-            PackedData unk2[2];
+            RGBColor unk2[2];
             u8 unkA;
         } One;
         struct {
@@ -195,7 +195,7 @@ typedef struct {
     union {
         struct {
             s16 unk0;
-            PackedData unk2[2];
+            RGBColor unk2[2];
             u8 unkA;
         } One;
         struct {
