@@ -23,7 +23,7 @@ typedef struct {
 
 void cutsceneSysDisp_init(void);
 s32 cutsceneSysDisp_validate(void);
-void cutsceneSysDisp_exec(u8 *arg0, cutsceneSysDisp_exec_arg *arg1);
+void cutsceneSysDisp_exec(u8 *enableTransparencyValue, cutsceneSysDisp_exec_arg *displayArgs);
 void cutsceneSysFadeIn_init(void);
 s32 cutsceneSysFadeIn_validate(void);
 void cutsceneSysFadeIn_exec(cutsceneSysFadeIn_exec_arg *arg0, Node_70B00 *arg1);
