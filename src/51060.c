@@ -48,24 +48,24 @@ typedef struct {
 } func_80050740_51340_arg;
 
 typedef struct {
-    MemoryAllocatorNode *unk0;
-    void *unk4;
-    Vec3i unk8;
-    u8 padding[0xA];
-    s8 unk1E;
+    MemoryAllocatorNode *assetTable;
+    void *particleSlot;
+    Vec3i pos1;
+    u8 padding1[0xA];
+    s8 alpha1;
     u8 padding2[0x5];
-    void *unk24;
-    Vec3i unk28;
+    void *particleSlot2;
+    Vec3i pos2;
     u8 padding3[0xA];
-    s8 unk3E;
+    s8 alpha2;
     u8 padding4[0x5];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    s16 unk50;
-    s16 unk52;
-    s16 unk54;
-} func_800506B4_512B4_arg;
+    s32 velX;
+    s32 velY;
+    s32 velZ;
+    s16 frameCounter;
+    s16 slotIndex;
+    s16 particleType;
+} DualSnowSprayTask;
 
 typedef struct {
     s16 unk0;
@@ -201,6 +201,8 @@ typedef struct {
 void loadFirstSprayParticle(SprayEffectTask *);
 void cleanupSprayEffect(void **);
 void updateSprayEffect(SprayEffectUpdateTask *);
+void initDualSnowSprayTask(DualSnowSprayTask *);
+void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *);
 void func_80050740_51340(func_80050740_51340_arg *);
 void func_80050864_51464(func_80050864_51464_arg *);
 void func_800509CC_515CC(func_80050C00_51800_Task *);
@@ -210,7 +212,7 @@ void func_80050EA0_51AA0(void **);
 void func_80050F64_51B64(func_80050F18_51B18_arg *);
 void func_80050FE0_51BE0(func_80050F18_51B18_arg *);
 void func_80051124_51D24(func_80050740_51340_arg *);
-void func_80051250_51E50(func_800506B4_512B4_arg *);
+void cleanupDualSnowSprayTask(DualSnowSprayTask *);
 void func_80051760_52360(func_800516F4_522F4_arg *);
 void func_80051800_52400(func_800516F4_522F4_arg *);
 void func_800518AC_524AC(func_800518AC_524AC_arg *);
@@ -286,14 +288,14 @@ void spawnSprayEffect(Vec3i *arg0, Vec3i *arg1, s32 arg2) {
     }
 }
 
-void func_800506B4_512B4(func_800506B4_512B4_arg *arg0) {
-    GameState *temp_s1 = (GameState *)getCurrentAllocation();
-    arg0->unk0 = load_3ECE40();
-    arg0->unk4 = &temp_s1->unk44->unk1080[arg0->unk52];
-    arg0->unk1E = (u8)((randA() & 0x1F) + 0x70);
-    arg0->unk50 = 0;
-    arg0->unk24 = arg0->unk4;
-    arg0->unk3E = (u8)arg0->unk1E;
+void initDualSnowSprayTask(DualSnowSprayTask *arg0) {
+    GameState *gs = (GameState *)getCurrentAllocation();
+    arg0->assetTable = load_3ECE40();
+    arg0->particleSlot = &gs->unk44->unk1080[arg0->slotIndex];
+    arg0->alpha1 = (u8)((randA() & 0x1F) + 0x70);
+    arg0->frameCounter = 0;
+    arg0->particleSlot2 = arg0->particleSlot;
+    arg0->alpha2 = (u8)arg0->alpha1;
     setCleanupCallback(&func_80050864_51464);
     setCallbackWithContinue(&func_80050740_51340);
 }
@@ -335,49 +337,49 @@ void func_80050864_51464(func_80050864_51464_arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-void func_80050890_51490(void *arg0, void *arg1, Vec3i *arg2, s16 arg3, s32 arg4) {
-    func_800506B4_512B4_arg *task;
-    s32 temp_v0;
-    s32 temp_v0_2;
-    s32 temp_v0_3;
-    u32 temp_v1;
-    u32 temp_v1_2;
-    u32 temp_v1_3;
-    u8 temp_v0_4;
+void spawnDualSnowSprayEffect(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s16 slotIndex, s32 characterId) {
+    DualSnowSprayTask *task;
+    s32 velX;
+    s32 velY;
+    s32 velZ;
+    u32 signX;
+    u32 signY;
+    u32 signZ;
+    u8 particleType;
 
-    if (D_80090E70_91A70[arg4] == 0xFF) {
+    if (D_80090E70_91A70[characterId] == 0xFF) {
         return;
     }
 
-    task = (func_800506B4_512B4_arg *)scheduleTask(&func_800506B4_512B4, 2, 0, 0xDD);
+    task = (DualSnowSprayTask *)scheduleTask(&initDualSnowSprayTask, 2, 0, 0xDD);
     if (task == NULL) {
         return;
     }
 
-    memcpy(&task->unk8, arg0, 0xC);
-    memcpy(&task->unk28, arg1, 0xC);
+    memcpy(&task->pos1, pos1, 0xC);
+    memcpy(&task->pos2, pos2, 0xC);
 
-    temp_v0_4 = D_80090E70_91A70[arg4];
-    task->unk52 = arg3;
-    task->unk54 = temp_v0_4;
+    particleType = D_80090E70_91A70[characterId];
+    task->slotIndex = slotIndex;
+    task->particleType = particleType;
 
-    temp_v0 = arg2->x;
-    temp_v1 = (u32)temp_v0 >> 31;
-    temp_v0 += temp_v1;
-    temp_v0 >>= 1;
-    task->unk44 = temp_v0;
+    velX = velocity->x;
+    signX = (u32)velX >> 31;
+    velX += signX;
+    velX >>= 1;
+    task->velX = velX;
 
-    temp_v0_2 = arg2->y;
-    temp_v1_2 = (u32)temp_v0_2 >> 31;
-    temp_v0_2 += temp_v1_2;
-    temp_v0_2 >>= 1;
-    task->unk48 = temp_v0_2;
+    velY = velocity->y;
+    signY = (u32)velY >> 31;
+    velY += signY;
+    velY >>= 1;
+    task->velY = velY;
 
-    temp_v0_3 = arg2->z;
-    temp_v1_3 = (u32)temp_v0_3 >> 31;
-    temp_v0_3 += temp_v1_3;
-    temp_v0_3 >>= 1;
-    task->unk4C = temp_v0_3;
+    velZ = velocity->z;
+    signZ = (u32)velZ >> 31;
+    velZ += signZ;
+    velZ >>= 1;
+    task->velZ = velZ;
 }
 
 void func_8005098C_5158C(MemoryAllocatorNode **node) {
@@ -601,15 +603,15 @@ void func_8005100C_51C0C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     }
 }
 
-void func_800510A4_51CA4(func_800506B4_512B4_arg *arg0) {
-    GameState *temp_s1 = (GameState *)getCurrentAllocation();
-    arg0->unk0 = load_3ECE40();
-    arg0->unk4 = &temp_s1->unk44->unk1340;
-    arg0->unk1E = (u8)((randA() & 0x1F) + 0x70);
-    arg0->unk50 = 0;
-    arg0->unk24 = (u8 *)arg0->unk4;
-    arg0->unk3E = (u8)arg0->unk1E;
-    setCleanupCallback(&func_80051250_51E50);
+void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *arg0) {
+    GameState *gs = (GameState *)getCurrentAllocation();
+    arg0->assetTable = load_3ECE40();
+    arg0->particleSlot = &gs->unk44->unk1340;
+    arg0->alpha1 = (u8)((randA() & 0x1F) + 0x70);
+    arg0->frameCounter = 0;
+    arg0->particleSlot2 = arg0->particleSlot;
+    arg0->alpha2 = (u8)arg0->alpha1;
+    setCleanupCallback(&cleanupDualSnowSprayTask);
     setCallbackWithContinue(&func_80051124_51D24);
 }
 
@@ -646,19 +648,19 @@ void func_80051124_51D24(func_80050740_51340_arg *arg0) {
     }
 }
 
-void func_80051250_51E50(func_800506B4_512B4_arg *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+void cleanupDualSnowSprayTask(DualSnowSprayTask *arg0) {
+    arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
-void func_8005127C_51E7C(void *arg0, void *arg1, Vec3i *arg2, s32 arg3) {
-    func_800506B4_512B4_arg *task = (func_800506B4_512B4_arg *)scheduleTask(&func_800510A4_51CA4, 2, 0, 0xDD);
+void spawnDualSnowSprayEffect_SingleSlot(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s32 particleType) {
+    DualSnowSprayTask *task = (DualSnowSprayTask *)scheduleTask(&initDualSnowSprayTask_SingleSlot, 2, 0, 0xDD);
     if (task != NULL) {
-        memcpy(&task->unk8, arg0, 0xC);
-        memcpy(&task->unk28, arg1, 0xC);
-        task->unk54 = arg3;
-        task->unk44 = (s32)(arg2->x / 2);
-        task->unk48 = (s32)(arg2->y / 2);
-        task->unk4C = (s32)(arg2->z / 2);
+        memcpy(&task->pos1, pos1, 0xC);
+        memcpy(&task->pos2, pos2, 0xC);
+        task->particleType = particleType;
+        task->velX = (s32)(velocity->x / 2);
+        task->velY = (s32)(velocity->y / 2);
+        task->velZ = (s32)(velocity->z / 2);
     }
 }
 

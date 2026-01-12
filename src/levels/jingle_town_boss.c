@@ -864,7 +864,7 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
             temp = arg0->unkBCC & 0xF;
             if (temp >= 0) {
                 if (temp < 2) {
-                    func_8005127C_51E7C(outVec1, outVec2, (Vec3i *)&arg0->velocity, 0);
+                    spawnDualSnowSprayEffect_SingleSlot(outVec1, outVec2, (Vec3i *)&arg0->velocity, 0);
                 }
             }
         }
