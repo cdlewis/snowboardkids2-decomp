@@ -35,5 +35,5 @@ s32 cutsceneBgmVolume_validate(void) {
 }
 
 void cutsceneBgmVolume_exec(cutsceneBgmPlay_exec_arg0 *arg0) {
-    func_80057550_58150(arg0->unk2, arg0->unk0);
+    setMusicVolumeFade(arg0->unk2, arg0->unk0);
 }

@@ -457,9 +457,9 @@ void playMusicTrackWithFadeIn(u32 musicTrackId, u16 targetVolume, u16 fadeDurati
     gGraphicsManager->musicVoiceIndex = gMusicTrackVoiceMap[musicTrackId];
 }
 
-void func_80057550_58150(u16 arg0, u16 arg1) {
-    gGraphicsManager->targetMusicVolume = arg0;
-    gGraphicsManager->fadeCounter = arg1;
+void setMusicVolumeFade(u16 targetVolume, u16 fadeDuration) {
+    gGraphicsManager->targetMusicVolume = targetVolume;
+    gGraphicsManager->fadeCounter = fadeDuration;
 }
 
 void func_80057564_58164(s32 arg0) {
