@@ -95,7 +95,7 @@ void handleStoryMapLocationComplete(void) {
     result = func_80069810_6A410();
 
     if (result != 0) {
-        func_80057564_58164(0xA);
+        setMusicFadeOut(0xA);
         if (result == 0x44) {
             terminateSchedulerWithCallback(onStoryMapExitToLevelSelect);
         } else if (result == 1) {

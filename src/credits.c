@@ -298,7 +298,7 @@ void updateCreditsSequence(void) {
 
     if (state->unk2 == 0x1C98) {
         state->unk2 = 0x1C98;
-        func_80057564_58164(4);
+        setMusicFadeOut(4);
         func_8006FDA0_709A0(&state->unk8, 0xFF, 0x1E);
         func_8006FDA0_709A0(&state->unk1E0, 0xFF, 0x1E);
         func_8006FDA0_709A0(&state->unk3B8, 0xFF, 0x1E);

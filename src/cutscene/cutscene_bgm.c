@@ -21,9 +21,9 @@ s32 cutsceneBgmFadeOut_validate(void) {
 
 void cutsceneBgmFadeOut_exec(s16 *arg0) {
     if (*arg0 < 4) {
-        func_80057564_58164(4);
+        setMusicFadeOut(4);
     } else {
-        func_80057564_58164(*arg0);
+        setMusicFadeOut(*arg0);
     }
 }
 

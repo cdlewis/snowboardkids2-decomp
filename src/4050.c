@@ -144,7 +144,7 @@ void runCutsceneFrame(void) {
             return;
         }
 
-        func_80057564_58164(2);
+        setMusicFadeOut(2);
         unlinkNode(&taskMemory->uiNode);
         unlinkNode(&taskMemory->overlayNode);
         unlinkNode(&taskMemory->sceneNode);

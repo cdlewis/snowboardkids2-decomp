@@ -79,7 +79,7 @@ void awaitVersusMapScreen(void) {
     result = func_80069810_6A410();
 
     if (result == 0xFF) {
-        func_80057564_58164(0x14);
+        setMusicFadeOut(0x14);
         terminateSchedulerWithCallback(exitVersusMode);
     } else if (result == 1) {
         setGameStateHandler(func_80021EFC_22AFC);
@@ -119,7 +119,7 @@ void awaitVersusCharacterSelect(void) {
 
     if (result != 0) {
         if (result == 1) {
-            func_80057564_58164(0x10);
+            setMusicFadeOut(0x10);
             setGameStateHandler(loadVersusRace);
         } else if (result == 0xFF) {
             setGameStateHandler(func_80021EFC_22AFC);

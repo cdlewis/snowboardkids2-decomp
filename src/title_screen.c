@@ -194,14 +194,14 @@ case_0:
             state->menuMode = 1;
             goto end;
         }
-        func_80057564_58164(0x20);
+        setMusicFadeOut(0x20);
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_8006983C_6A43C(cleanupTitleAndTransition);
         goto end;
     }
 
     if (state->frameCounter == 0x384) {
-        func_80057564_58164(0x20);
+        setMusicFadeOut(0x20);
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         func_8006983C_6A43C(cleanupTitleAndTransition);
     }
@@ -253,7 +253,7 @@ case1_done_nav:
             }
         }
         func_80058220_58E20(0x2C, 1);
-        func_80057564_58164(0x20);
+        setMusicFadeOut(0x20);
         func_8006FDA0_709A0(0, 0xFF, 8);
         func_8006983C_6A43C(cleanupTitleAndTransition);
     }

@@ -324,7 +324,7 @@ void handleLevelSelectInput(void) {
     }
 
     if (allocation->exitMode != 0) {
-        func_80057564_58164(0xA);
+        setMusicFadeOut(0xA);
         if (allocation->exitMode == 2) {
             func_8006FDA0_709A0(NULL, 0xFF, 8);
         } else {

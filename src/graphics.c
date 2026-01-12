@@ -462,15 +462,15 @@ void setMusicVolumeFade(u16 targetVolume, u16 fadeDuration) {
     gGraphicsManager->fadeCounter = fadeDuration;
 }
 
-void func_80057564_58164(s32 arg0) {
-    int var_a0;
-    GraphicsManager *new_var;
-    var_a0 = arg0;
-    if (arg0 < 8) {
-        var_a0 = 8;
+void setMusicFadeOut(s32 fadeOutDuration) {
+    s32 duration;
+
+    duration = fadeOutDuration;
+    if (fadeOutDuration < 8) {
+        duration = 8;
     }
     gGraphicsManager->musicFadeState = 0;
-    (new_var = gGraphicsManager)->musicFadeOutDuration = var_a0;
+    gGraphicsManager->musicFadeOutDuration = duration;
 }
 
 void func_8005758C_5818C(void) {

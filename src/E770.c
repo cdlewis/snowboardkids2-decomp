@@ -171,7 +171,7 @@ void handleGalleryMenuInput(E770_struct *arg0) {
     if (inputs & A_BUTTON) {
         beginMenuFadeOut(arg0);
         if (arg0->selectedOption == 5) {
-            func_80057564_58164(10);
+            setMusicFadeOut(10);
             func_8006FDA0_709A0(0, 0xFF, 10);
         }
         setMenuAnimation(arg0, 0x15A, 0x15B, 1, 0x14);
@@ -339,7 +339,7 @@ s32 completeGalleryMenuExit(E770_struct *arg0) {
     s16 temp;
 
     if (arg0->fadeTimer == 8) {
-        func_80057564_58164(8);
+        setMusicFadeOut(8);
     }
     temp = arg0->fadeTimer;
     if (temp == 0) {

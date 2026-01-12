@@ -26,7 +26,7 @@ void playMusicTrack(s32 musicTrackId);
 void playMusicTrackWithVoice(s16 musicTrackId, s8 voiceIndex);
 void playMusicTrackWithFadeIn(u32 musicTrackId, u16 targetVolume, u16 fadeDuration);
 void setMusicVolumeFade(u16 targetVolume, u16 fadeDuration);
-void func_80057564_58164(s32 arg0);
+void setMusicFadeOut(s32 fadeOutDuration);
 void func_8005758C_5818C(void);
 void func_80057614_58214(void *arg0);
 void func_80057870_58470(s32 arg0);

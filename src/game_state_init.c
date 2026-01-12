@@ -135,7 +135,7 @@ void gameStateCleanupHandler(void) {
     }
 
     if (gs->unk427 != 0) {
-        func_80057564_58164(10);
+        setMusicFadeOut(10);
         unlinkNode(&gs->node1);
         unlinkNode(&gs->node2);
 

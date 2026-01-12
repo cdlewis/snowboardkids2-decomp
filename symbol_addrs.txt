@@ -35,6 +35,7 @@ handleMusicFadeOutTransition = 0x800573F8; // rom:0x57FF8
 checkNoActiveAudioChannels = 0x80057470; // rom:0x58070
 playMusicTrack = 0x800574A0; // rom:0x580A0
 playMusicTrackWithVoice = 0x800574E0; // rom:0x580E0
+setMusicFadeOut = 0x80057564; // rom:0x58164
 initSprayEffectTask = 0x80050460; // rom:0x51060
 loadFirstSprayParticle = 0x800504A0; // rom:0x510A0
 updateSprayEffect = 0x80050504; // rom:0x51104

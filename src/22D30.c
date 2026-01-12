@@ -171,7 +171,7 @@ void handlePlayerCountSelectInput(void) {
     }
 
     if (state->menuResult != 0) {
-        func_80057564_58164(0xA);
+        setMusicFadeOut(0xA);
         if (state->menuResult == 0x63) {
             func_8006FDA0_709A0((Node_70B00 *)state, 0xFF, 8);
         } else {
