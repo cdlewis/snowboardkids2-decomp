@@ -199,7 +199,7 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
             func_80058A10_59610(hitPlayer);
             for (i = 0; i < 3; i++) {
                 if (hitPlayer->unkB6C >= 100) {
-                    func_8004A9A8_4B5A8(&hitPlayer->worldPos.x, hitPlayer->unkB94, &hitPlayer->velocity);
+                    spawnHomingProjectile(&hitPlayer->worldPos.x, hitPlayer->unkB94, &hitPlayer->velocity);
                     func_80059A48_5A648(hitPlayer, -100);
                 }
             }
@@ -1751,7 +1751,7 @@ void func_80054D70_55970(void *arg) {
                 func_80058A10_59610(player);
                 for (i = 0; i < 3; i++) {
                     if (player->unkB6C >= 100) {
-                        func_8004A9A8_4B5A8(&player->worldPos.x, player->unkB94, &player->velocity);
+                        spawnHomingProjectile(&player->worldPos.x, player->unkB94, &player->velocity);
                         func_80059A48_5A648(player, -100);
                     }
                 }

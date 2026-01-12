@@ -66,7 +66,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x5B];
-    u8 unk5B;
+    u8 availableHomingProjectileSlots;
     u8 padding2[0x1A];
     u8 unk76;
 } allocation_46080;
@@ -169,15 +169,13 @@ typedef struct {
 
 typedef struct {
     u8 padding0[0x8];
-    s32 unk8;
-    u8 padding2[0x18];
-    s16 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 padding[2];
-    s32 unk3C;
-} func_8004A9A8_4B5A8_node;
+    Vec3i pos;         /* 0x8 - Position (x, y, z) - 12 bytes */
+    u8 padding2[0x10]; /* 0x14 - Padding (16 bytes) to reach 0x24 */
+    s16 playerIndex;   /* 0x24 - Player index (unkB94) - 2 bytes */
+    s16 padding26;     /* 0x26 - Padding (2 bytes) */
+    s32 timer;         /* 0x28 - Impact timer (4 bytes) */
+    Vec3i vel;         /* 0x2C - Velocity (x, y, z) - 12 bytes */
+} HomingProjectileTask;
 
 typedef struct {
     u8 _pad[0x3C];
@@ -264,20 +262,20 @@ typedef struct {
 } func_8004C0D0_4CCD0_arg;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    void *assetData; /* 0x0 - Asset data pointer */
+    void *metadata;  /* 0x4 - Asset metadata pointer */
+    s32 posX;        /* 0x8 - X position */
+    s32 posY;        /* 0xC - Y position */
+    s32 posZ;        /* 0x10 - Z position */
     u8 _pad14[0x10];
-    u16 unk24;
-    u16 unk26;
-    s16 unk28;
+    u16 sectorIndex; /* 0x24 - Course sector index */
+    u16 animFrame;   /* 0x26 - Animation frame */
+    s16 timer;       /* 0x28 - Impact timer */
     u8 _pad2A[0x2];
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-} func_8004A6D4_4B2D4_arg;
+    s32 velX; /* 0x2C - X velocity */
+    s32 velY; /* 0x30 - Y velocity */
+    s32 velZ; /* 0x34 - Z velocity */
+} HomingProjectileUpdateArg;
 
 typedef struct {
     DataTable_19E80 *assetTable;
@@ -673,23 +671,25 @@ typedef struct {
 } PlayerHaloState;
 
 typedef struct {
-    void *unk0;
-    loadAssetMetadata_arg unk4;
-    u8 _pad20[0x6];
-    s16 unk26;
-    s16 unk28;
-} func_8004A850_4B450_arg;
+    void *assetData;                /* 0x0 - Asset data pointer */
+    loadAssetMetadata_arg metadata; /* 0x4 - Asset metadata (28 bytes) */
+    u8 _pad20[0x6];                 /* 0x20 - Padding to reach 0x26 */
+    s16 animFrame;                  /* 0x26 - Animation frame */
+    s16 timer;                      /* 0x28 - Impact timer */
+} HomingProjectileImpactArg;
+
+/* Note: HomingProjectileUpdateArg uses individual fields to maintain exact memory layout */
 
 typedef struct {
-    void *unk0;
-    void *unk4;
+    void *assetData;   /* 0x0 - Asset data pointer */
+    void *metadataPtr; /* 0x4 - Metadata pointer */
     u8 _pad[0x1E];
-    s16 unk26;
+    s16 animFrame; /* 0x26 - Animation frame */
     u8 _pad2[0x4];
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-} func_8004A634_4B234_arg;
+    s32 velX; /* 0x2C - X velocity */
+    s32 velY; /* 0x30 - Y velocity */
+    s32 velZ; /* 0x34 - Z velocity */
+} HomingProjectileInitArg;
 
 typedef struct {
     void *matrixBuffer;
@@ -761,8 +761,8 @@ extern void *D_80094DD0_959D0;
 extern s32 D_80090E2C_91A2C;
 
 void updateAllItemBoxes(ItemBoxController *arg0);
-void func_8004A634_4B234(func_8004A634_4B234_arg *arg0);
-void func_8004A850_4B450(func_8004A850_4B450_arg *arg0);
+void initHomingProjectileMovement(HomingProjectileInitArg *arg0);
+void updateHomingProjectileImpact(HomingProjectileImpactArg *arg0);
 void cleanupGoldCoinsTask(GoldCoinsTaskState *arg0);
 void setupGoldCoinEntries(GoldCoinSetupState *arg0);
 void enqueuePlayerDisplayList(PlayerDisplayListState *arg0);
@@ -781,8 +781,8 @@ void updateFlyingSceneryReturnGlideStep(FlyingSceneryState *state);
 void updateFlyingSceneryDescendingStep(FlyingSceneryState *state);
 void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0);
 void func_8004AE58_4BA58(s32 **);
-void func_8004A96C_4B56C(s32 **);
-void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0);
+void cleanupHomingProjectileTask(s32 **);
+void updateHomingProjectileMovement(HomingProjectileUpdateArg *arg0);
 void setupItemBoxBurstTexture(ItemBoxBurstEffectState *arg0);
 void updateItemBoxBurstFrame(ItemBoxBurstEffectState *state);
 void cleanupItemBoxBurstEffect(ItemBoxBurstEffectState *arg0);
@@ -2357,16 +2357,18 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                         func_80059A48_5A648(player, -100);
                         if (itemBox->isSecondaryItemBox != 0) {
                             if (player->unkBD4 == 7) {
-                                gameState->unk5B = gameState->unk5B + 1;
+                                gameState->availableHomingProjectileSlots =
+                                    gameState->availableHomingProjectileSlots + 1;
                             }
                             player->unkBD4 = rollSecondaryItemDrop(player, (u8 *)controller);
-                            if (gameState->unk5B < 6) {
+                            if (gameState->availableHomingProjectileSlots < 6) {
                                 if ((player->unkBD4 & 0xFF) == 7) {
                                     player->unkBD4 = 10;
                                 }
                             }
                             if (player->unkBD4 == 7) {
-                                gameState->unk5B = gameState->unk5B - 1;
+                                gameState->availableHomingProjectileSlots =
+                                    gameState->availableHomingProjectileSlots - 1;
                             }
                             player->unkBD8 |= 2;
                         } else {
@@ -3063,37 +3065,37 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
     }
 }
 
-void func_8004A5E0_4B1E0(void **arg0) {
+void initHomingProjectileTask(void **arg0) {
     *arg0 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
-    setCleanupCallback(&func_8004A96C_4B56C);
-    setCallbackWithContinue(&func_8004A634_4B234);
+    setCleanupCallback(&cleanupHomingProjectileTask);
+    setCallbackWithContinue(&initHomingProjectileMovement);
 }
 
-void func_8004A634_4B234(func_8004A634_4B234_arg *arg0) {
+void initHomingProjectileMovement(HomingProjectileInitArg *arg0) {
     Vec3i rotatedVector;
     GameState *allocation;
     void *temp;
     u8 randomValue;
 
     allocation = (GameState *)getCurrentAllocation();
-    arg0->unk26 = 0;
+    arg0->animFrame = 0;
 
     temp = (void *)((s32)allocation->unk44 + 0x80);
-    arg0->unk4 = temp;
+    arg0->metadataPtr = temp;
 
-    loadAssetMetadata((void *)((s32)arg0 + 4), arg0->unk0, arg0->unk26);
+    loadAssetMetadata((void *)((s32)arg0 + 4), arg0->assetData, arg0->animFrame);
 
     randomValue = randA();
     rotateVectorY(&D_80090E20_91A20, (randomValue & 0xFF) << 5, &rotatedVector);
 
-    arg0->unk2C += rotatedVector.x;
-    arg0->unk30 += rotatedVector.y;
-    arg0->unk34 += rotatedVector.z;
+    arg0->velX += rotatedVector.x;
+    arg0->velY += rotatedVector.y;
+    arg0->velZ += rotatedVector.z;
 
-    setCallbackWithContinue(func_8004A6D4_4B2D4);
+    setCallbackWithContinue(updateHomingProjectileMovement);
 }
 
-void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0) {
+void updateHomingProjectileMovement(HomingProjectileUpdateArg *arg0) {
     Vec3i sp;
     GameState_46080 *s0;
     void *temp_s0;
@@ -3102,43 +3104,43 @@ void func_8004A6D4_4B2D4(func_8004A6D4_4B2D4_arg *arg0) {
 
     s0 = (GameState_46080 *)getCurrentAllocation();
     if (s0->unk76 == 0) {
-        arg0->unk8 = arg0->unk8 + arg0->unk2C;
-        arg0->unkC = arg0->unkC + arg0->unk30;
-        arg0->unk10 = arg0->unk10 + arg0->unk34;
-        arg0->unk30 = arg0->unk30 + 0xFFFF0000;
+        arg0->posX = arg0->posX + arg0->velX;
+        arg0->posY = arg0->posY + arg0->velY;
+        arg0->posZ = arg0->posZ + arg0->velZ;
+        arg0->velY = arg0->velY + 0xFFFF0000;
 
         temp_s0 = &s0->unk30;
-        s2 = &arg0->unk8;
+        s2 = &arg0->posX;
 
-        arg0->unk24 = func_80060A3C_6163C(temp_s0, arg0->unk24, s2);
+        arg0->sectorIndex = func_80060A3C_6163C(temp_s0, arg0->sectorIndex, s2);
 
-        func_80060CDC_618DC(temp_s0, arg0->unk24, s2, 0x100000, &sp);
+        func_80060CDC_618DC(temp_s0, arg0->sectorIndex, s2, 0x100000, &sp);
 
-        arg0->unk8 = arg0->unk8 + sp.x;
-        arg0->unk10 = arg0->unk10 + sp.z;
+        arg0->posX = arg0->posX + sp.x;
+        arg0->posZ = arg0->posZ + sp.z;
 
-        sp.y = func_80061A64_62664(temp_s0, arg0->unk24, s2);
+        sp.y = func_80061A64_62664(temp_s0, arg0->sectorIndex, s2);
 
-        if (arg0->unkC < sp.y) {
-            arg0->unkC = sp.y;
-            arg0->unk28 = 0x5A;
-            setCallback(&func_8004A850_4B450);
+        if (arg0->posY < sp.y) {
+            arg0->posY = sp.y;
+            arg0->timer = 0x5A;
+            setCallback(&updateHomingProjectileImpact);
         }
 
         if (D_8009ADE0_9B9E0 & 1) {
-            arg0->unk26 = arg0->unk26 + 1;
-            if ((s16)arg0->unk26 >= 6) {
-                arg0->unk26 = 0;
+            arg0->animFrame = arg0->animFrame + 1;
+            if ((s16)arg0->animFrame >= 6) {
+                arg0->animFrame = 0;
             }
-            loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, (s16)arg0->unk26);
+            loadAssetMetadata((loadAssetMetadata_arg *)&arg0->metadata, arg0->assetData, (s16)arg0->animFrame);
         }
     }
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->metadata);
     }
 }
 
-void func_8004A850_4B450(func_8004A850_4B450_arg *arg0) {
+void updateHomingProjectileImpact(HomingProjectileImpactArg *arg0) {
     GameState *allocation;
     void *s2;
     void *s0;
@@ -3146,10 +3148,10 @@ void func_8004A850_4B450(func_8004A850_4B450_arg *arg0) {
 
     allocation = (GameState *)getCurrentAllocation();
     if (allocation->gamePaused == 0) {
-        arg0->unk28--;
+        arg0->timer--;
     }
 
-    if (arg0->unk28 == 0) {
+    if (arg0->timer == 0) {
         func_80069CF8_6A8F8();
     }
 
@@ -3163,40 +3165,40 @@ void func_8004A850_4B450(func_8004A850_4B450_arg *arg0) {
     }
 
     if (D_8009ADE0_9B9E0 & 1) {
-        arg0->unk26++;
-        if (arg0->unk26 >= 6) {
-            arg0->unk26 = 0;
+        arg0->animFrame++;
+        if (arg0->animFrame >= 6) {
+            arg0->animFrame = 0;
         }
-        loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk26);
+        loadAssetMetadata(&arg0->metadata, arg0->assetData, arg0->animFrame);
     }
 
-    if (arg0->unk28 >= 0x1F || (gFrameCounter & 1)) {
+    if (arg0->timer >= 0x1F || (gFrameCounter & 1)) {
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->metadata);
         }
     }
 }
 
-void func_8004A96C_4B56C(s32 **arg0) {
+void cleanupHomingProjectileTask(s32 **arg0) {
     GameState *temp_v0;
 
     temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v0->unk5B += 1;
+    temp_v0->availableHomingProjectileSlots += 1;
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void func_8004A9A8_4B5A8(void *arg0, s32 arg1, void *arg2) {
+void spawnHomingProjectile(void *arg0, s32 arg1, void *arg2) {
     GameState *gs;
-    func_8004A9A8_4B5A8_node *node;
+    HomingProjectileTask *node;
 
     gs = (GameState *)getCurrentAllocation();
-    if (gs->unk5B != 0) {
-        node = (func_8004A9A8_4B5A8_node *)scheduleTask(&func_8004A5E0_4B1E0, 3U, 0U, 0xEFU);
+    if (gs->availableHomingProjectileSlots != 0) {
+        node = (HomingProjectileTask *)scheduleTask(&initHomingProjectileTask, 3U, 0U, 0xEFU);
         if (node != NULL) {
-            gs->unk5B -= 1;
-            memcpy(&node->unk8, arg0, 0xC);
-            memcpy(&node->unk2C, arg2, 0xC);
-            node->unk24 = arg1;
+            gs->availableHomingProjectileSlots -= 1;
+            memcpy(&node->pos, arg0, 0xC);
+            memcpy(&node->vel, arg2, 0xC);
+            node->playerIndex = arg1;
         }
     }
 }
@@ -3301,7 +3303,7 @@ void func_8004AD18_4B918(func_8004AD18_4B918_arg *arg0) {
     alloc = (allocation_46080 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        if (alloc->unk5B < 10) {
+        if (alloc->availableHomingProjectileSlots < 10) {
             if (arg0->unk4.unk36 < 0x1194) {
                 if (arg0->unk4.unk36 >= 0x1F) {
                     arg0->unk4.unk36 = 0x1E;
@@ -3344,7 +3346,7 @@ void func_8004AE58_4BA58(s32 **arg0) {
     GameState *temp_v0;
 
     temp_v0 = (GameState *)getCurrentAllocation();
-    temp_v0->unk5B += 1;
+    temp_v0->availableHomingProjectileSlots += 1;
     *arg0 = freeNodeMemory(*arg0);
 }
 
@@ -3451,7 +3453,7 @@ void func_8004B130_4BD30(func_8004B130_arg *arg0) {
     if (arg0->unk34 == 0) {
         if (arg0->unk38 == 1) {
             if (arg0->unk36 == 7) {
-                allocation->unk5B--;
+                allocation->availableHomingProjectileSlots--;
             }
         }
         func_80069CF8_6A8F8();
@@ -3491,7 +3493,7 @@ void func_8004B264_4BE64(func_8004B264_4BE64_arg *arg0) {
     GameState *allocation;
 
     allocation = (GameState *)getCurrentAllocation();
-    allocation->unk5B++;
+    allocation->availableHomingProjectileSlots++;
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
@@ -3501,7 +3503,7 @@ void *func_8004B2A0_4BEA0(void *arg0, u32 arg1, void *arg2, s16 arg3, s32 arg4) 
 
     allocation = (GameState *)getCurrentAllocation();
 
-    if (allocation->unk5B == 0) {
+    if (allocation->availableHomingProjectileSlots == 0) {
         goto end;
     }
 
@@ -3511,7 +3513,7 @@ void *func_8004B2A0_4BEA0(void *arg0, u32 arg1, void *arg2, s16 arg3, s32 arg4) 
         goto end;
     }
 
-    allocation->unk5B--;
+    allocation->availableHomingProjectileSlots--;
 
     memcpy((u8 *)task + 8, arg0, 0xC);
     memcpy((u8 *)task + 0x24, arg2, 0xC);
@@ -3664,7 +3666,7 @@ void func_8004B758_4C358(func_8004B758_4C358_arg *arg0) {
     GameState *allocation;
 
     allocation = (GameState *)getCurrentAllocation();
-    allocation->unk5B++;
+    allocation->availableHomingProjectileSlots++;
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
@@ -3677,7 +3679,7 @@ void func_8004B794_4C394(void *arg0) {
 
     if (task != NULL) {
         task->unk24 = arg0;
-        allocation->unk5B -= 1;
+        allocation->availableHomingProjectileSlots -= 1;
     }
 }
 
@@ -3821,7 +3823,7 @@ void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
 
 void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
-    allocation->unk5B++;
+    allocation->availableHomingProjectileSlots++;
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
@@ -3834,7 +3836,7 @@ void func_8004BC5C_4C85C(Player *arg0) {
 
     if (task != NULL) {
         task->unk24 = arg0;
-        allocation->unk5B -= 1;
+        allocation->availableHomingProjectileSlots -= 1;
     }
 }
 
@@ -3965,7 +3967,7 @@ void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0) {
 
 void func_8004C0D0_4CCD0(func_8004C0D0_4CCD0_arg *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
-    allocation->unk5B++;
+    allocation->availableHomingProjectileSlots++;
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
@@ -3978,7 +3980,7 @@ void func_8004C10C_4CD0C(Player *arg0) {
 
     if (task != NULL) {
         task->cleanupCallback = (void (*)(void *))arg0;
-        allocation->unk5B--;
+        allocation->availableHomingProjectileSlots--;
     }
 }
 
