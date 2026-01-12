@@ -2859,6 +2859,7 @@ enqueueDisplayListObjectWithFullRenderState = 0x800630F0; // rom:0x63CF0
 renderOpaqueDisplayListCallback = 0x800634E8; // rom:0x640E8
 renderTransparentDisplayListCallback = 0x80063534; // rom:0x64134
 renderOverlayDisplayListCallback = 0x80063580; // rom:0x64180
+renderOpaqueDisplayListWithFrustumCull = 0x80063668; // rom:0x64268
 scheduleCourseTasks = 0x80049CA8; // rom:0x4A8A8
 getCutsceneDataMagicPrimary = 0x800B3420; // rom:0x1E04D0
 getCutsceneDataMagicSecondary = 0x800B3430; // rom:0x1E04E0
