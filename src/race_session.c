@@ -1364,7 +1364,7 @@ void handleShotCrossGameResult(void) {
 
     if (state->unk7D == 0) {
         terminateTasksByTypeAndID(0, 1);
-        func_8004EDCC_4F9CC(1);
+        spawnShotCrossItemCountDisplayTask(1);
 
         itemsCollected = state->unk5A;
         score = itemsCollected * 300;
@@ -1443,7 +1443,7 @@ void handleMeterGameResult(void) {
     if (state->unk4C == 0) {
         if (state->unk7D == 0) {
             terminateTasksByTypeAndID(0, 1);
-            func_8004FF60_50B60(1);
+            spawnShotCrossSkillMeterDisplayTask(1);
 
             meterValue = state->players->unkB70;
             goldReward = ((meterValue * 2 + meterValue) * 8 + meterValue) * 2;

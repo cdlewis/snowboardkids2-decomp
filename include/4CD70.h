@@ -104,6 +104,18 @@ typedef struct {
     Player *player;
 } ShotCrossScoreDisplayState;
 
+typedef struct {
+    void *digitAsset;
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteIndex;
+    u8 padE[0x2];
+    s16 flashCounter;
+    s16 cachedItemCount;
+    s16 displayMode;
+} ShotCrossItemCountDisplayState;
+
 void showGoalBanner(s32 playerIndex);
 void showTrickScoreDisplay(s32 playerIndex, s32 trickScore);
 void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0);
@@ -112,10 +124,10 @@ void spawnShotCrossScoreDisplayTask(void *arg0);
 void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0);
 void spawnVictorySnowflakes(s16 playerIndex, s16 useSmallSprite);
 void initPauseMenuDisplayTask(PauseMenuDisplayState *arg0);
-void func_8004EDCC_4F9CC(s16 arg0);
+void spawnShotCrossItemCountDisplayTask(s16 arg0);
 void func_8004F1D4_4FDD4(Struct_func_8004F1D4 *arg0);
 void func_8004F194_4FD94(s16 arg0);
 void func_8004F820_50420(Struct_func_8004F04C *arg0);
 void func_8004FCF0_508F0(s32 arg0);
-void func_8004FF60_50B60(s16 arg0);
+void spawnShotCrossSkillMeterDisplayTask(s16 arg0);
 void func_8005011C_50D1C(void);

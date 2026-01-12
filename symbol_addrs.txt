@@ -2881,3 +2881,12 @@ getCutsceneAllocatedEventCount = 0x800B3440; // rom:0x1E04F0
 getCutsceneStateEntryItemSize = 0x800B3450; // rom:0x1E0500
 getCutsceneFrameMask = 0x800B3470; // rom:0x1E0520
 getCutsceneMaxStateEntries = 0x800B3480; // rom:0x1E0530
+
+initShotCrossItemCountDisplayTask = 0x8004EC08; // rom:0x4F808
+updateShotCrossItemCountDisplay = 0x8004ECA4; // rom:0x4F8A4
+cleanupShotCrossItemCountDisplayTask = 0x8004ED94; // rom:0x4F994
+spawnShotCrossItemCountDisplayTask = 0x8004EDCC; // rom:0x4F9CC
+initShotCrossSkillMeterDisplayTask = 0x8004FD30; // rom:0x50930
+updateShotCrossSkillMeterDisplay = 0x8004FDD0; // rom:0x509D0
+cleanupShotCrossSkillMeterDisplayTask = 0x8004FF28; // rom:0x50B28
+spawnShotCrossSkillMeterDisplayTask = 0x8004FF60; // rom:0x50B60
