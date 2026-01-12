@@ -359,7 +359,7 @@ void startMusicPlaybackWithFadeIn(void) {
     if ((u16)gGraphicsManager->pendingMusicId != gGraphicsManager->currentMusicId) {
         setCallbackWithContinue(checkMusicLoadRequest);
     } else if (gGraphicsManager->musicFadeState == 2) {
-        audioChannel = func_80057974_58574(
+        audioChannel = startMusicPlaybackWithVoice(
             gGraphicsManager->musicDataBuffer,
             gGraphicsManager->musicBankBuffer,
             (u8)gGraphicsManager->musicVoiceIndex
@@ -609,19 +609,19 @@ void setAudioChannelVolume(void *audioChannel, s32 volume) {
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
 
-void *func_80057974_58574(void *arg0, void *arg1, s32 arg2) {
-    void *sp10;
+void *startMusicPlaybackWithVoice(void *musicDataBuffer, void *musicBankBuffer, s32 voiceIndex) {
+    void *musicHandle;
 
-    D_800A2D10_A3910.unk4 = arg0;
-    D_800A2D10_A3910.unk0 = arg1;
-    D_800A2D10_A3910.unk28 = arg2;
+    D_800A2D10_A3910.unk4 = musicDataBuffer;
+    D_800A2D10_A3910.unk0 = musicBankBuffer;
+    D_800A2D10_A3910.unk28 = voiceIndex;
     osSendMesg(&gfxTaskQueue, (void *)0xB, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &sp10, OS_MESG_BLOCK);
-    return sp10;
+    osRecvMesg(&gfxResultQueue, &musicHandle, OS_MESG_BLOCK);
+    return musicHandle;
 }
 
-void *func_800579CC_585CC(void *arg0, void *arg1) {
-    return func_80057974_58574(arg0, arg1, 0);
+void *startMusicPlayback(void *musicDataBuffer, void *musicBankBuffer) {
+    return startMusicPlaybackWithVoice(musicDataBuffer, musicBankBuffer, 0);
 }
 
 void func_800579E8_585E8(void *arg0, void *arg1) {
