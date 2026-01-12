@@ -2209,7 +2209,7 @@ skip:
     return 0;
 }
 
-s32 func_800B50C0_A4F70(Player *arg0) {
+s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
     Vec3i stackVec;
     GameState *allocation;
     u16 angle;
