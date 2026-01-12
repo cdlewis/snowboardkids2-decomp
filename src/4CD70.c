@@ -1805,59 +1805,44 @@ void cleanupShotScoreDisplayTask(ShotScoreDisplayState *arg0) {
     arg0->elements[0].spriteAsset = freeNodeMemory(arg0->elements[0].spriteAsset);
 }
 
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 padA[0x2];
-    s16 unkC;
-    s16 unkE;
-    void *unk10;
-    s16 unk14;
-    u8 pad16[0x2];
-    void *unk18;
-    Player *unk1C;
-} Struct_func_8004EB90;
+void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0);
+void cleanupShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0);
 
-void func_8004EAF0_4F6F0(Struct_func_8004EB90 *arg0);
-void func_8004EB90_4F790(Struct_func_8004EB90 *arg0);
-
-void func_8004EA54_4F654(Struct_func_8004EB90 *arg0) {
+void initShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
     getCurrentAllocation();
-    arg0->unk4 = loadAsset_34F9A0();
-    arg0->unk8 = 2;
-    arg0->unk0 = -0x88;
-    arg0->unk2 = -0x60;
-    arg0->unk14 = 3;
-    arg0->unkC = -0x84;
-    arg0->unkE = -0x54;
-    arg0->unk10 = arg0->unk4;
-    arg0->unk18 = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    setCleanupCallback(func_8004EB90_4F790);
-    setCallback(func_8004EAF0_4F6F0);
+    arg0->spriteAsset = loadAsset_34F9A0();
+    arg0->spriteIndex = 2;
+    arg0->spriteX = -0x88;
+    arg0->spriteY = -0x60;
+    arg0->spriteCount = 3;
+    arg0->hudX = -0x84;
+    arg0->hudY = -0x54;
+    arg0->spriteAssetCopy = arg0->spriteAsset;
+    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    setCleanupCallback(cleanupShotCrossScoreDisplayTask);
+    setCallback(updateShotCrossScoreDisplay);
 }
 
-void func_8004EAF0_4F6F0(Struct_func_8004EB90 *arg0) {
+void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0) {
     char buf[16];
 
-    sprintf(buf, D_8009E8A8_9F4A8, arg0->unk1C->unkBD3);
-    drawNumericString(buf, -0x70, -0x54, 0xFF, arg0->unk18, arg0->unk1C->unkBB8 + 8, 0);
+    sprintf(buf, D_8009E8A8_9F4A8, arg0->player->unkBD3);
+    drawNumericString(buf, -0x70, -0x54, 0xFF, arg0->digitAsset, arg0->player->unkBB8 + 8, 0);
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->unkC);
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->hudX);
 }
 
-void func_8004EB90_4F790(Struct_func_8004EB90 *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk18 = freeNodeMemory(arg0->unk18);
+void cleanupShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-void func_8004EBC8_4F7C8(void *arg0) {
-    Struct_func_8004EB90 *task;
+void spawnShotCrossScoreDisplayTask(void *arg0) {
+    ShotCrossScoreDisplayState *task;
 
-    task = scheduleTask(func_8004EA54_4F654, 0, 1, 0xE6);
+    task = scheduleTask(initShotCrossScoreDisplayTask, 0, 1, 0xE6);
     if (task != NULL) {
-        task->unk1C = arg0;
+        task->player = arg0;
     }
 }
 
@@ -2637,7 +2622,7 @@ void func_8005011C_50D1C(void) {
                 break;
 
             case 5:
-                func_8004EBC8_4F7C8(allocation->unk10);
+                spawnShotCrossScoreDisplayTask(allocation->unk10);
                 func_8004EDCC_4F9CC(0);
                 scheduleTask(func_8004EE24_4FA24, 0, 1, 0xF0);
                 scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);

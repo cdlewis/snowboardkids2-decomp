@@ -89,9 +89,26 @@ typedef struct {
     s32 playerIndex;
 } PlayerItemDisplayState;
 
+typedef struct {
+    s16 spriteX;
+    s16 spriteY;
+    void *spriteAsset;
+    s16 spriteIndex;
+    u8 padA[0x2];
+    s16 hudX;
+    s16 hudY;
+    void *spriteAssetCopy;
+    s16 spriteCount;
+    u8 pad16[0x2];
+    void *digitAsset;
+    Player *player;
+} ShotCrossScoreDisplayState;
+
 void showGoalBanner(s32 playerIndex);
 void showTrickScoreDisplay(s32 playerIndex, s32 trickScore);
 void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0);
+void initShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0);
+void spawnShotCrossScoreDisplayTask(void *arg0);
 void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0);
 void spawnVictorySnowflakes(s16 playerIndex, s16 useSmallSprite);
 void initPauseMenuDisplayTask(PauseMenuDisplayState *arg0);
