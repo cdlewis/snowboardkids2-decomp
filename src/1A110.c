@@ -9,7 +9,16 @@ typedef struct {
     s16 radius;
 } StoryMapHotspot;
 
-extern StoryMapHotspot storyMapHotspots[];
+typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+} StoryMapPosition;
+
+StoryMapHotspot storyMapHotspots[] = {
+    { .x = -56, .y = -83, .radius = 4 },
+    { .x = 56,  .y = -83, .radius = 4 },
+};
 
 s32 checkStoryMapHotspotCollision(s32 posX, s32 posY, s16 collisionRadius) {
     s32 index;
@@ -47,12 +56,6 @@ s32 checkStoryMapHotspotCollision(s32 posX, s32 posY, s16 collisionRadius) {
     } while (index < 2);
     return 0;
 }
-
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-} StoryMapPosition;
 
 void func_8001960C_1A20C(StoryMapPosition *position, s16 collisionRadius, s32 hotspotIndex) {
     s16 *hotspotY;

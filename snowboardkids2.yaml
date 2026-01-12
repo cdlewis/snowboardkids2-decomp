@@ -355,7 +355,7 @@ segments:
       - [0x8E360, data]
       - [0x8E3C0, .data, "phone_trigger"]
       - [0x8E3D0, .data, "wall_newspaper_trigger"]
-      - [0x8E3E0, data, 1A110]
+      - [0x8E3E0, .data, 1A110]
       - [0x8E3F0, .data, "clocktower_trigger"]
       - [0x8E400, .data, "trick_trigger"]
       - [0x8E410, .data, "unused_triggers"]
