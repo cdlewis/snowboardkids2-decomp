@@ -19,7 +19,7 @@ void checkMusicLoadRequest(void *arg);
 void loadMusicTrackData(void);
 void initializeMusicPtrBank(void);
 void startMusicPlaybackWithFadeIn(void);
-void func_800572B0_57EB0(void *arg);
+void updateMusicVolumeFadeIn(void *arg);
 void func_800573F8_57FF8(void);
 void func_80057470_58070(void);
 void func_800574A0_580A0(s32 arg0);

@@ -371,12 +371,12 @@ void startMusicPlaybackWithFadeIn(void) {
                 func_80057928_58528(audioChannel, initialVolume);
             }
             gGraphicsManager->isFadingOut = 0;
-            setCallbackWithContinue(func_800572B0_57EB0);
+            setCallbackWithContinue(updateMusicVolumeFadeIn);
         }
     }
 }
 
-void func_800572B0_57EB0(void *arg) {
+void updateMusicVolumeFadeIn(void *arg) {
     s16 targetVolume;
 
     targetVolume = gGraphicsManager->targetMusicVolume;
