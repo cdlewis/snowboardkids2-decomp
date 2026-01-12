@@ -6,7 +6,7 @@
 
 typedef struct {
     u8 padding[0xFF5];
-    u8 unkFF5;
+    /* 0xFF5 */ u8 enableTransparency;
 } cutsceneSysDisp_exec_arg;
 
 typedef struct {

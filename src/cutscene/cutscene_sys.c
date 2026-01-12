@@ -26,7 +26,7 @@ s32 cutsceneSysDisp_validate(void) {
 }
 
 void cutsceneSysDisp_exec(u8 *arg0, cutsceneSysDisp_exec_arg *arg1) {
-    arg1->unkFF5 = (*arg0);
+    arg1->enableTransparency = (*arg0);
 }
 
 void cutsceneSysFadeIn_init(void) {
