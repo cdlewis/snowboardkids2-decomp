@@ -2604,7 +2604,7 @@ s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800B5E90_A5D40(Player *arg0) {
+s32 updateStunnedBounceLaunchPhase(Player *arg0) {
     s16 angle;
 
     if (arg0->unkBBF == 0) {

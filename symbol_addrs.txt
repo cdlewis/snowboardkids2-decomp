@@ -2904,3 +2904,4 @@ updateShotCrossSkillMeterDisplay = 0x8004FDD0; // rom:0x509D0
 cleanupShotCrossSkillMeterDisplayTask = 0x8004FF28; // rom:0x50B28
 spawnShotCrossSkillMeterDisplayTask = 0x8004FF60; // rom:0x50B60
 updateStunnedBounceFallRecoverPhase = 0x800B5D68; // rom:0xA5C18
+updateStunnedBounceLaunchPhase = 0x800B5E90; // rom:0xA5D40
