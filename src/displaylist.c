@@ -609,14 +609,14 @@ void renderOpaqueDisplayListWithFrustumCull(DisplayListObject *arg0) {
     }
 }
 
-void func_800636C8_642C8(DisplayListObject *arg0) {
+void renderTransparentDisplayListWithFrustumCull(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
         gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
     }
 }
 
-void func_80063728_64328(DisplayListObject *arg0) {
+void renderOverlayDisplayListWithFrustumCull(DisplayListObject *arg0) {
     s32 *temp_v1;
 
     if (!isObjectCulled(&arg0->transform.translation)) {
@@ -631,10 +631,10 @@ void enqueueDisplayListWithFrustumCull(s32 arg0, DisplayListObject *arg1) {
         debugEnqueueCallback(arg0, 1, &renderOpaqueDisplayListWithFrustumCull, arg1);
     }
     if (arg1->unk20->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 3, &func_800636C8_642C8, arg1);
+        debugEnqueueCallback(arg0, 3, &renderTransparentDisplayListWithFrustumCull, arg1);
     }
     if (arg1->unk20->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 5, &func_80063728_64328, arg1);
+        debugEnqueueCallback(arg0, 5, &renderOverlayDisplayListWithFrustumCull, arg1);
     }
 }
 
