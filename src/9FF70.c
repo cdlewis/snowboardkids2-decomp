@@ -2544,12 +2544,12 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800B5CB8_A5B68(Player *arg0) {
+s32 updateStunnedBounceFallPhase(Player *arg0) {
     arg0->unkB88 = 1;
-    arg0->unkB84 = arg0->unkB84 | 0x20;
-    arg0->velocity.y = arg0->velocity.y - 0x6000;
-    arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 6);
-    arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 6);
+    arg0->unkB84 |= 0x20;
+    arg0->velocity.y -= 0x6000;
+    arg0->velocity.x -= arg0->velocity.x >> 6;
+    arg0->velocity.z -= arg0->velocity.z >> 6;
     decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
 
