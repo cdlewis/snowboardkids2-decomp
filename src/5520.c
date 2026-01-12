@@ -65,17 +65,17 @@ INCLUDE_ASM("asm/nonmatchings/5520", func_80004920_5520);
 
 void renderOpaqueScrollingTexture(DisplayListObject *arg0) {
     func_80004920_5520();
-    func_800634E8_640E8(arg0);
+    renderOpaqueDisplayListCallback(arg0);
 }
 
 void renderTransparentScrollingTexture(DisplayListObject *arg0) {
     func_80004920_5520();
-    func_80063534_64134(arg0);
+    renderTransparentDisplayListCallback(arg0);
 }
 
 void renderOverlayScrollingTexture(DisplayListObject *arg0) {
     func_80004920_5520();
-    func_80063580_64180(arg0);
+    renderOverlayDisplayListCallback(arg0);
 }
 
 void enqueueScrollingTextureRender(u16 renderLayer, DisplayListObject *displayListObj) {

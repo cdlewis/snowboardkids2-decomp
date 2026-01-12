@@ -471,21 +471,21 @@ void renderShieldLayer1(ShieldEffectRenderState *arg0) {
     arg0->displayList.transform.translation.x = arg0->player->worldPos.x;
     arg0->displayList.transform.translation.y = arg0->player->worldPos.y;
     arg0->displayList.transform.translation.z = arg0->player->worldPos.z;
-    func_800634E8_640E8(&arg0->displayList);
+    renderOpaqueDisplayListCallback(&arg0->displayList);
 }
 
 void renderShieldLayer2(ShieldEffectRenderState *arg0) {
     arg0->displayList.transform.translation.x = arg0->player->worldPos.x;
     arg0->displayList.transform.translation.y = arg0->player->worldPos.y;
     arg0->displayList.transform.translation.z = arg0->player->worldPos.z;
-    func_80063534_64134(&arg0->displayList);
+    renderTransparentDisplayListCallback(&arg0->displayList);
 }
 
 void renderShieldLayer3(ShieldEffectRenderState *arg0) {
     arg0->displayList.transform.translation.x = arg0->player->worldPos.x;
     arg0->displayList.transform.translation.y = arg0->player->worldPos.y;
     arg0->displayList.transform.translation.z = arg0->player->worldPos.z;
-    func_80063580_64180(&arg0->displayList);
+    renderOverlayDisplayListCallback(&arg0->displayList);
 }
 
 typedef struct {

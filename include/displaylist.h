@@ -82,11 +82,11 @@ void buildDisplayListSegment(DisplayListObject *);
 
 void func_800638C0_644C0(DisplayListObject *);
 
-void func_80063580_64180(DisplayListObject *);
+void renderOverlayDisplayListCallback(DisplayListObject *obj);
 
-void func_80063534_64134(DisplayListObject *);
+void renderTransparentDisplayListCallback(DisplayListObject *obj);
 
-void func_800634E8_640E8(DisplayListObject *arg0);
+void renderOpaqueDisplayListCallback(DisplayListObject *obj);
 
 void enqueueDisplayListObjectWithFullRenderState(s32 arg0, void *arg1);
 

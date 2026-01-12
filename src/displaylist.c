@@ -574,45 +574,31 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
     gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
-void func_800634E8_640E8(DisplayListObject *arg0) {
-    setupDisplayListMatrix(arg0);
-    gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
+void renderOpaqueDisplayListCallback(DisplayListObject *obj) {
+    setupDisplayListMatrix(obj);
+    gSPDisplayList(gRegionAllocPtr++, obj->unk20->opaqueDisplayList);
 }
 
-void func_80063534_64134(DisplayListObject *arg0) {
-    DisplayListObject *obj = arg0;
-    Gfx *dl;
-
+void renderTransparentDisplayListCallback(DisplayListObject *obj) {
     setupDisplayListMatrix(obj);
-
-    dl = gRegionAllocPtr;
-    dl->words.w0 = 0xDE000000;
-    dl->words.w1 = (u32)obj->unk20->transparentDisplayList;
-    gRegionAllocPtr = dl + 1;
+    gSPDisplayList(gRegionAllocPtr++, obj->unk20->transparentDisplayList);
 }
 
-void func_80063580_64180(DisplayListObject *arg0) {
-    DisplayListObject *obj = arg0;
-    Gfx *dl;
-
+void renderOverlayDisplayListCallback(DisplayListObject *obj) {
     setupDisplayListMatrix(obj);
-
-    dl = gRegionAllocPtr;
-    dl->words.w0 = 0xDE000000;
-    dl->words.w1 = (u32)obj->unk20->overlayDisplayList;
-    gRegionAllocPtr = dl + 1;
+    gSPDisplayList(gRegionAllocPtr++, obj->unk20->overlayDisplayList);
 }
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1) {
     arg1->unk30 = 0;
     if (arg1->unk20->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 1, &func_800634E8_640E8, arg1);
+        debugEnqueueCallback(arg0 & 0xFFFF, 1, renderOpaqueDisplayListCallback, arg1);
     }
     if (arg1->unk20->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 3, &func_80063534_64134, arg1);
+        debugEnqueueCallback(arg0 & 0xFFFF, 3, renderTransparentDisplayListCallback, arg1);
     }
     if (arg1->unk20->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_80063580_64180, arg1);
+        debugEnqueueCallback(arg0 & 0xFFFF, 5, renderOverlayDisplayListCallback, arg1);
     }
 }
 
