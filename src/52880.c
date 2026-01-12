@@ -100,9 +100,9 @@ typedef struct {
 
 void func_800545F8_551F8(Struct_52880 *arg0);
 void func_80054658_55258(Struct_52880 *arg0);
-void func_80054144_54D44(Struct_52880 *arg0);
-void func_80053FE0_54BE0(Struct_52880 *arg0);
-void func_80053E90_54A90(Struct_52880 *arg0);
+void updateHomingPanelProjectile(Struct_52880 *arg0);
+void launchHomingPanelProjectile(Struct_52880 *arg0);
+void loadHomingPanelProjectileAsset(Struct_52880 *arg0);
 void updateStarProjectile(Struct_52880 *arg0);
 void launchStarProjectile(Struct_52880 *arg0);
 void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0);
@@ -120,7 +120,7 @@ s32 spawnParachuteProjectileTask(s32, s32);
 s32 spawnFryingPanProjectileTask(s32, s32);
 s32 spawnSnowmanProjectileTask(s32, s32);
 s32 spawnStarProjectileTask(s32, s32);
-s32 func_80054470_55070(s32, s32);
+s32 spawnHomingPanelProjectileTask(s32, s32);
 s32 func_80055820_56420(s32, s32);
 void updateSnowmanProjectile(Struct_52880 *);
 void updateFryingPanProjectile(Struct_52880 *);
@@ -1268,14 +1268,14 @@ s32 spawnStarProjectileTask(s32 arg0, s32 arg1) {
     return (s32)task;
 }
 
-void func_80053E48_54A48(Struct_52880 *arg0) {
+void initHomingPanelProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->assetData = load_3ECE40();
     setCleanupCallback(cleanupSlapstickProjectileTask);
-    setCallbackWithContinue(func_80053E90_54A90);
+    setCallbackWithContinue(loadHomingPanelProjectileAsset);
 }
 
-void func_80053E90_54A90(Struct_52880 *arg0) {
+void loadHomingPanelProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 7);
@@ -1283,10 +1283,10 @@ void func_80053E90_54A90(Struct_52880 *arg0) {
     arg0->hitCount = 0;
     arg0->turnRate = 0;
     arg0->unk0 = ptr;
-    setCallbackWithContinue(func_80053FE0_54BE0);
+    setCallbackWithContinue(launchHomingPanelProjectile);
 }
 
-void func_80053EEC_54AEC(Struct_52880 *arg0) {
+void checkHomingPanelProjectileHit(Struct_52880 *arg0) {
     GameState *alloc;
     Player *result;
     void *s1;
@@ -1328,7 +1328,7 @@ void func_80053EEC_54AEC(Struct_52880 *arg0) {
     }
 }
 
-void func_80053FE0_54BE0(Struct_52880 *arg0) {
+void launchHomingPanelProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s16 playerIdx;
     s32 temp_v0;
@@ -1358,8 +1358,8 @@ void func_80053FE0_54BE0(Struct_52880 *arg0) {
     arg0->lifetime = 0xF0;
 
     queueSoundAtPosition(&arg0->pos, 0x10);
-    setCallback(func_80054144_54D44);
-    func_80053EEC_54AEC(arg0);
+    setCallback(updateHomingPanelProjectile);
+    checkHomingPanelProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
         func_80050ECC_51ACC(&arg0->pos);
@@ -1372,7 +1372,7 @@ void func_80053FE0_54BE0(Struct_52880 *arg0) {
     }
 }
 
-void func_80054144_54D44(Struct_52880 *arg0) {
+void updateHomingPanelProjectile(Struct_52880 *arg0) {
     Alloc_55650 *alloc;
     Vec3i sp18;
     Vec3i savedVec;
@@ -1430,7 +1430,7 @@ void func_80054144_54D44(Struct_52880 *arg0) {
 
         arg0->vel.y = arg0->pos.y - savedVec.y;
 
-        func_80053EEC_54AEC(arg0);
+        checkHomingPanelProjectileHit(arg0);
 
         var_s3 = func_8005BF50_5CB50(
             &arg0->pos,
@@ -1476,10 +1476,10 @@ void func_80054144_54D44(Struct_52880 *arg0) {
     } while (i < 4);
 }
 
-s32 func_80054470_55070(s32 arg0, s32 arg1) {
+s32 spawnHomingPanelProjectileTask(s32 arg0, s32 arg1) {
     Struct_52880 *task;
 
-    task = scheduleTask(func_80053E48_54A48, (arg0 + 4) & 0xFF, 0, 0x6F);
+    task = scheduleTask(initHomingPanelProjectileTask, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
         task->ownerPlayerIdx = arg0;
     }
@@ -1499,7 +1499,7 @@ s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
         case 4:
             return spawnStarProjectileTask(arg1, arg2);
         case 5:
-            return func_80054470_55070(arg1, arg2);
+            return spawnHomingPanelProjectileTask(arg1, arg2);
         case 6:
             return func_80055820_56420(arg1, arg2);
     }
