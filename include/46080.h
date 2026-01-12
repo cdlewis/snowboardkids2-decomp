@@ -3,7 +3,7 @@
 
 void schedulePlayerHaloTask(Player *);
 
-void func_80049CA8_4A8A8(s32 arg0, s32 arg1);
+void scheduleCourseTasks(s32 courseId, s32 playerCount);
 
 void scheduleLevelEnvironmentTasks(s32 poolId);
 

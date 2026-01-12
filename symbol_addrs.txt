@@ -2818,3 +2818,4 @@ renderOpaqueDisplayList = 0x8006300C; // rom:0x63C0C
 renderTransparentDisplayList = 0x80063058; // rom:0x63C58
 renderOverlayDisplayList = 0x800630A4; // rom:0x63CA4
 enqueueDisplayListObjectWithFullRenderState = 0x800630F0; // rom:0x63CF0
+scheduleCourseTasks = 0x80049CA8; // rom:0x4A8A8

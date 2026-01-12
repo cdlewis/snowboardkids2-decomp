@@ -823,7 +823,7 @@ void scheduleRaceTasks(void) {
     scheduleTask(&initPauseMenuDisplayTask, 0, 0, 0xC8);
 
     scheduleLevelEnvironmentTasks(gameState->memoryPoolId);
-    func_80049CA8_4A8A8(gameState->memoryPoolId, gameState->unk5F);
+    scheduleCourseTasks(gameState->memoryPoolId, gameState->unk5F);
     func_8005011C_50D1C();
 
     if (gameState->unk7A == 9) {

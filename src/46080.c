@@ -2815,65 +2815,65 @@ void scheduleItemBoxSystemTaskIfEnabled(s32 courseIndex) {
     scheduleItemBoxSystemTask(courseIndex);
 }
 
-void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
-    GameState *temp_s1;
-    s32 s0;
+void scheduleCourseTasks(s32 courseId, s32 playerCount) {
+    GameState *gs;
+    s32 i;
 
-    temp_s1 = (GameState *)getCurrentAllocation();
+    gs = (GameState *)getCurrentAllocation();
 
-    switch (arg0) {
+    switch (courseId) {
         case SUNNY_MOUNTAIN:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
             schedulePlayerSparkleTask();
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             scheduleTask(&func_800BB814_B5114, 0, 0, 0xD3);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
-            scheduleGoldCoinsIfEnabled(arg0);
-            scheduleItemBoxSystemTaskIfEnabled(arg0);
+            scheduleGoldCoinsIfEnabled(courseId);
+            scheduleItemBoxSystemTaskIfEnabled(courseId);
             break;
 
         case TURTLE_ISLAND:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
-            scheduleGoldCoinsIfEnabled(arg0);
-            scheduleItemBoxSystemTaskIfEnabled(arg0);
+            scheduleGoldCoinsIfEnabled(courseId);
+            scheduleItemBoxSystemTaskIfEnabled(courseId);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
-            scheduleSceneAnimationTask(arg0, 4);
+            scheduleSceneAnimationTask(courseId, 4);
             schedulePlayerSparkleTask();
             break;
 
         case JINGLE_TOWN:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
-            if (temp_s1->unk7A != 0xB) {
-                scheduleGoldCoinsIfEnabled(arg0);
-                scheduleItemBoxSystemTaskIfEnabled(arg0);
+            if (gs->unk7A != 0xB) {
+                scheduleGoldCoinsIfEnabled(courseId);
+                scheduleItemBoxSystemTaskIfEnabled(courseId);
                 func_800BBB34();
                 schedulePlayerSparkleTask();
             }
-            scheduleSceneAnimationTask(arg0, 3);
+            scheduleSceneAnimationTask(courseId, 3);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
         case JINGLE_TOWN_BOSS:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
-            if (temp_s1->unk7A == 8) {
-                scheduleGoldCoinsIfEnabled(arg0);
-                scheduleItemBoxSystemTaskIfEnabled(arg0);
+            if (gs->unk7A == 8) {
+                scheduleGoldCoinsIfEnabled(courseId);
+                scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
                 func_80045434_46034(1);
             }
@@ -2881,27 +2881,27 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             break;
 
         case WENDYS_HOUSE:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
             scheduleTask(&func_800BB2B0, 0, 0, 0x32);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&func_800BB7F0_B5A00, 0, 0, 0x5E);
-            scheduleGoldCoinsIfEnabled(arg0);
-            scheduleItemBoxSystemTaskIfEnabled(arg0);
+            scheduleGoldCoinsIfEnabled(courseId);
+            scheduleItemBoxSystemTaskIfEnabled(courseId);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
         case LINDAS_CASTLE:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
-            scheduleGoldCoinsIfEnabled(arg0);
-            scheduleItemBoxSystemTaskIfEnabled(arg0);
+            scheduleGoldCoinsIfEnabled(courseId);
+            scheduleItemBoxSystemTaskIfEnabled(courseId);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
-            scheduleSceneAnimationTask(arg0, 6);
+            scheduleSceneAnimationTask(courseId, 6);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BBA28_AB8D8, 0, 0, 0x31);
             scheduleTask(&func_800BBAF8_AB9A8, 0, 0, 0xF0);
@@ -2909,14 +2909,14 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             break;
 
         case CRAZY_JUNGLE:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
             spawnPushZone(0);
             spawnPushZone(1);
-            scheduleGoldCoinsIfEnabled(arg0);
-            scheduleItemBoxSystemTaskIfEnabled(arg0);
+            scheduleGoldCoinsIfEnabled(courseId);
+            scheduleItemBoxSystemTaskIfEnabled(courseId);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             func_800BBA98();
             schedulePlayerSparkleTask();
@@ -2926,23 +2926,23 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
         case CRAZY_JUNGLE_BOSS:
             spawnPushZone(2);
             spawnPushZone(3);
-            if (temp_s1->unk7A != 8) {
+            if (gs->unk7A != 8) {
                 func_80045434_46034(0);
             } else {
-                scheduleGoldCoinsIfEnabled(arg0);
-                scheduleItemBoxSystemTaskIfEnabled(arg0);
+                scheduleGoldCoinsIfEnabled(courseId);
+                scheduleItemBoxSystemTaskIfEnabled(courseId);
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
         case STARLIGHT_HIGHWAY:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
-            scheduleGoldCoinsIfEnabled(arg0);
-            scheduleItemBoxSystemTaskIfEnabled(arg0);
+            scheduleGoldCoinsIfEnabled(courseId);
+            scheduleItemBoxSystemTaskIfEnabled(courseId);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             func_800BBED8();
@@ -2952,12 +2952,12 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             break;
 
         case HAUNTED_HOUSE:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
-            scheduleGoldCoinsIfEnabled(arg0);
-            scheduleItemBoxSystemTaskIfEnabled(arg0);
+            scheduleGoldCoinsIfEnabled(courseId);
+            scheduleItemBoxSystemTaskIfEnabled(courseId);
             scheduleTask(&func_800BB74C_AF43C, 0, 0, 0xC8);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
@@ -2976,26 +2976,26 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             break;
 
         case ICE_LAND:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
             spawnPushZone(4);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB688_B2408, 0, 0, 0xD3);
-            scheduleGoldCoinsIfEnabled(arg0);
-            scheduleItemBoxSystemTaskIfEnabled(arg0);
+            scheduleGoldCoinsIfEnabled(courseId);
+            scheduleItemBoxSystemTaskIfEnabled(courseId);
             break;
 
         case ICE_LAND_BOSS:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
-            if (temp_s1->unk7A == 8) {
-                scheduleGoldCoinsIfEnabled(arg0);
-                scheduleItemBoxSystemTaskIfEnabled(arg0);
+            if (gs->unk7A == 8) {
+                scheduleGoldCoinsIfEnabled(courseId);
+                scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
                 func_80045434_46034(2);
             }
@@ -3006,13 +3006,13 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             break;
 
         case SNOWBOARD_STREET_SPEED_CROSS:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
-            if (temp_s1->unk7A == 8) {
-                scheduleGoldCoinsIfEnabled(arg0);
-                scheduleItemBoxSystemTaskIfEnabled(arg0);
+            if (gs->unk7A == 8) {
+                scheduleGoldCoinsIfEnabled(courseId);
+                scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
                 func_80045434_46034(3);
             }
@@ -3022,15 +3022,15 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             break;
 
         case SNOWBOARD_STREET_SHOT_CROSS:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
-            if (temp_s1->unk7A == 8) {
-                scheduleGoldCoinsIfEnabled(arg0);
-                scheduleItemBoxSystemTaskIfEnabled(arg0);
+            if (gs->unk7A == 8) {
+                scheduleGoldCoinsIfEnabled(courseId);
+                scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
-                func_800BBA50(arg0);
+                func_800BBA50(courseId);
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
@@ -3038,25 +3038,25 @@ void func_80049CA8_4A8A8(s32 arg0, s32 arg1) {
             break;
 
         case X_CROSS:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
-            if (temp_s1->unk7A == 8) {
-                scheduleGoldCoinsIfEnabled(arg0);
-                scheduleItemBoxSystemTaskIfEnabled(arg0);
+            if (gs->unk7A == 8) {
+                scheduleGoldCoinsIfEnabled(courseId);
+                scheduleItemBoxSystemTaskIfEnabled(courseId);
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
 
         case TRAINING:
-            for (s0 = 0; s0 < arg1; s0++) {
-                temp_s1->pendingPlayerRenderTasks = temp_s1->pendingPlayerRenderTasks + 1;
-                schedulePlayerRenderTask(s0);
+            for (i = 0; i < playerCount; i++) {
+                gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
+                schedulePlayerRenderTask(i);
             }
-            scheduleGoldCoinsIfEnabled(arg0);
-            scheduleItemBoxSystemTaskIfEnabled(arg0);
+            scheduleGoldCoinsIfEnabled(courseId);
+            scheduleItemBoxSystemTaskIfEnabled(courseId);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
