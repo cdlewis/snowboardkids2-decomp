@@ -271,6 +271,7 @@ void hideAllSlotModels(CutsceneSlot *slots);
 void showAllSlotModels(CutsceneSlot *slots);
 void resetAllSlotModels(CutsceneSlot *slots);
 void resetAllSlotTransforms(CutsceneManager *manager);
+void prepareCutsceneForPlayback(CutsceneManager *manager, s32 uiResource, s32 pad4_0, s32 pad4_4, u16 maxFrame, u8 showDebugInfo);
 s32 processCutsceneFrame(CutsceneManager *uiManager);
 s16 func_800B3360(s16, s16);
 void *func_800B3420_1E04D0(void);

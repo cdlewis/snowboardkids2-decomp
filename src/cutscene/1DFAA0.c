@@ -207,46 +207,53 @@ void resetAllSlotTransforms(CutsceneManager *manager) {
     }
 }
 
-void func_800B2F2C(CutsceneManager *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4, u8 arg5) {
-    SceneModel *temp_v1;
-    s32 var_s2;
-    u16 temp_v0;
+void prepareCutsceneForPlayback(
+    CutsceneManager *manager,
+    s32 uiResource,
+    s32 pad4_0,
+    s32 pad4_4,
+    u16 maxFrame,
+    u8 showDebugInfo
+) {
+    SceneModel *model;
+    s32 i;
+    u16 modelId;
 
-    var_s2 = 0;
-    *(s32 *)&arg0->uiResource = arg1;
-    *(s32 *)&arg0->pad4[0] = arg2;
-    *(s32 *)&arg0->pad4[4] = arg3;
-    arg0->currentFrame = 0;
-    arg0->maxFrame = arg4;
-    arg0->endFrame = func_800B34D0_1E0580();
+    i = 0;
+    *(s32 *)&manager->uiResource = uiResource;
+    *(s32 *)&manager->pad4[0] = pad4_0;
+    *(s32 *)&manager->pad4[4] = pad4_4;
+    manager->currentFrame = 0;
+    manager->maxFrame = maxFrame;
+    manager->endFrame = func_800B34D0_1E0580();
     do {
-        temp_v0 = func_800B34B0_1E0560(var_s2)->unk4;
-        temp_v1 = arg0->slots[var_s2].model;
-        arg0->slots[var_s2].unk42 = 0xFF;
-        arg0->slots[var_s2].unk43 = 0xFF;
-        arg0->slots[var_s2].needsUpdate = 0;
-        arg0->slots[var_s2].padding3[0] = 0;
-        arg0->slots[var_s2].unk40 = temp_v0;
-        if (temp_v1 != NULL) {
-            temp_v1->unk14 = -1;
-            arg0->slots[var_s2].model->unk16 = -1;
-            setModelDisplayEnabled(arg0->slots[var_s2].model, 1);
-            setItemDisplayEnabled(arg0->slots[var_s2].model, 0);
-            setAnimationIndex(arg0->slots[var_s2].model, -1);
-            clearModelAnimationState(arg0->slots[var_s2].model);
+        modelId = func_800B34B0_1E0560(i)->unk4;
+        model = manager->slots[i].model;
+        manager->slots[i].unk42 = 0xFF;
+        manager->slots[i].unk43 = 0xFF;
+        manager->slots[i].needsUpdate = 0;
+        manager->slots[i].padding3[0] = 0;
+        manager->slots[i].unk40 = modelId;
+        if (model != NULL) {
+            model->unk14 = -1;
+            manager->slots[i].model->unk16 = -1;
+            setModelDisplayEnabled(manager->slots[i].model, 1);
+            setItemDisplayEnabled(manager->slots[i].model, 0);
+            setAnimationIndex(manager->slots[i].model, -1);
+            clearModelAnimationState(manager->slots[i].model);
         }
-        var_s2 += 1;
-    } while (var_s2 < 0x10);
-    *(s16 *)&arg0->textRenderer = -0x90;
-    *((s16 *)&arg0->textRenderer + 1) = 0x68;
-    *(s16 *)&arg0->padFEC[0] = 0;
-    *(s32 *)&arg0->padFEC[4] = (s32)&arg0->debugText[0];
-    arg0->showDebugInfo = arg5;
-    arg0->enableTransparency = 0;
-    arg0->skipAnimation = 0;
-    showAllSlotModels((CutsceneSlot *)arg0);
-    resetAllSlotTransforms(arg0);
-    clearAuxRenderEnabled(&arg0->unkFF8);
+        i += 1;
+    } while (i < 0x10);
+    *(s16 *)&manager->textRenderer = -0x90;
+    *((s16 *)&manager->textRenderer + 1) = 0x68;
+    *(s16 *)&manager->padFEC[0] = 0;
+    *(s32 *)&manager->padFEC[4] = (s32)&manager->debugText[0];
+    manager->showDebugInfo = showDebugInfo;
+    manager->enableTransparency = 0;
+    manager->skipAnimation = 0;
+    showAllSlotModels((CutsceneSlot *)manager);
+    resetAllSlotTransforms(manager);
+    clearAuxRenderEnabled(&manager->unkFF8);
 }
 
 s32 processCutsceneFrame(CutsceneManager *uiManager) {
