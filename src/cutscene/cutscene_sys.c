@@ -4,7 +4,7 @@
 #include "CBA0.h"
 #include "DC90.h"
 #include "task_scheduler.h"
-extern u8 D_800BA5C0_1E7670[];
+extern u8 gCutsceneFadeBrightnessTable[];
 extern s32 gButtonsPressed[];
 
 typedef struct {
@@ -37,7 +37,7 @@ s32 cutsceneSysFadeIn_validate(void) {
 }
 
 void cutsceneSysFadeIn_exec(cutsceneSysFadeIn_exec_arg *arg0, Node_70B00 *arg1) {
-    u8 temp_a1 = D_800BA5C0_1E7670[arg0->unk2];
+    u8 temp_a1 = gCutsceneFadeBrightnessTable[arg0->unk2];
     func_8006FE28_70A28(arg1->unk0.next, temp_a1, temp_a1, temp_a1);
     func_8006FDA0_709A0(arg1->unk0.next, 0, arg0->unk1);
 }
@@ -56,7 +56,7 @@ s32 cutsceneSysFadeOut_validate(void) {
 void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *arg0, Node_70B00 *arg1) {
     u8 temp_a1;
 
-    temp_a1 = D_800BA5C0_1E7670[arg0->unk2];
+    temp_a1 = gCutsceneFadeBrightnessTable[arg0->unk2];
     func_8006FE28_70A28(arg1->unk0.next, temp_a1, temp_a1, temp_a1);
     func_8006FDA0_709A0(arg1->unk0.next, 0xFF, arg0->unk1);
 }
