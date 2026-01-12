@@ -99,7 +99,7 @@ void func_800677F0_683F0(AlphaSpriteState *);
 void func_800670D4_67CD4(AlphaSpriteState *);
 void func_800680C4_68CC4(void);
 void func_80064CF4_658F4(DisplayListObject *);
-void func_80062CF0_638F0(DisplayListObject *);
+void prepareDisplayListRenderState(DisplayListObject *);
 void setupDisplayListMatrix(DisplayListObject *);
 void func_80063A94_64694(DisplayListObject *);
 void func_800648EC_654EC(DisplayListObject *);
@@ -400,33 +400,33 @@ s32 normalizeSurfaceType(s32 surfaceType) {
     return surfaceType;
 }
 
-void func_80062CF0_638F0(DisplayListObject *arg0) {
-    Mtx sp30;
-    f32 sp70;
-    f32 sp74;
-    f32 sp78;
-    f32 sp7C;
-    f32 sp80;
-    f32 sp84;
-    LookAt *temp_v0;
+void prepareDisplayListRenderState(DisplayListObject *obj) {
+    Mtx tempMatrix;
+    f32 lookAtX;
+    f32 lookAtY;
+    f32 lookAtZ;
+    f32 upX;
+    f32 upY;
+    f32 upZ;
+    LookAt *lookAt;
 
-    if (arg0->unk30 == NULL) {
-        arg0->unk30 = arenaAlloc16(0x40);
-        if (arg0->unk30 == NULL) {
+    if (obj->unk30 == NULL) {
+        obj->unk30 = arenaAlloc16(0x40);
+        if (obj->unk30 == NULL) {
             return;
         }
-        func_8006BFB8_6CBB8(arg0, arg0->unk30);
+        func_8006BFB8_6CBB8(obj, obj->unk30);
     }
 
-    if (arg0->unk20->flags & 1) {
-        temp_v0 = (LookAt *)arenaAlloc16(0x20);
-        if (temp_v0 == NULL) {
+    if (obj->unk20->flags & 1) {
+        lookAt = (LookAt *)arenaAlloc16(0x20);
+        if (lookAt == NULL) {
             return;
         }
 
-        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
-        guLookAtReflect(&sp30, temp_v0, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
-        gSPLookAt(gRegionAllocPtr++, temp_v0);
+        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)obj, &lookAtX, &lookAtY, &lookAtZ, &upX, &upY, &upZ);
+        guLookAtReflect(&tempMatrix, lookAt, 0.0f, 0.0f, 0.0f, lookAtX, lookAtY, lookAtZ, upX, upY, upZ);
+        gSPLookAt(gRegionAllocPtr++, lookAt);
     }
 
     if (gGraphicsMode != 3) {
@@ -435,50 +435,50 @@ void func_80062CF0_638F0(DisplayListObject *arg0) {
 
         gGraphicsMode = 3;
 
-        if (arg0->unk24 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        if (obj->unk24 != 0) {
+            gSPSegment(gRegionAllocPtr++, 1, obj->unk24);
         }
 
-        if (arg0->unk28 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        if (obj->unk28 != 0) {
+            gSPSegment(gRegionAllocPtr++, 2, obj->unk28);
         }
 
-        if (arg0->unk2C != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        if (obj->unk2C != 0) {
+            gSPSegment(gRegionAllocPtr++, 3, obj->unk2C);
         }
     } else {
-        if (arg0->unk24 != 0 && arg0->unk24 != D_800A2D40_A3940) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        if (obj->unk24 != 0 && obj->unk24 != D_800A2D40_A3940) {
+            gSPSegment(gRegionAllocPtr++, 1, obj->unk24);
         }
 
-        if (arg0->unk28 != 0 && arg0->unk28 != D_800A2D44_A3944) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        if (obj->unk28 != 0 && obj->unk28 != D_800A2D44_A3944) {
+            gSPSegment(gRegionAllocPtr++, 2, obj->unk28);
         }
 
-        if (arg0->unk2C != 0 && arg0->unk2C != D_800A2D48_A3948) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        if (obj->unk2C != 0 && obj->unk2C != D_800A2D48_A3948) {
+            gSPSegment(gRegionAllocPtr++, 3, obj->unk2C);
         }
     }
 
-    D_800A2D40_A3940 = arg0->unk24;
-    D_800A2D44_A3944 = arg0->unk28;
-    D_800A2D48_A3948 = arg0->unk2C;
+    D_800A2D40_A3940 = obj->unk24;
+    D_800A2D44_A3944 = obj->unk28;
+    D_800A2D48_A3948 = obj->unk2C;
 
-    gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(gRegionAllocPtr++, obj->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
 void func_8006300C_63C0C(DisplayListObject *arg0) {
-    func_80062CF0_638F0(arg0);
+    prepareDisplayListRenderState(arg0);
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->opaqueDisplayList);
 }
 
 void func_80063058_63C58(DisplayListObject *arg0) {
-    func_80062CF0_638F0(arg0);
+    prepareDisplayListRenderState(arg0);
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->transparentDisplayList);
 }
 
 void func_800630A4_63CA4(DisplayListObject *arg0) {
-    func_80062CF0_638F0(arg0);
+    prepareDisplayListRenderState(arg0);
     gSPDisplayList(gRegionAllocPtr++, arg0->unk20->overlayDisplayList);
 }
 

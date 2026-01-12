@@ -2806,3 +2806,7 @@ findTrackFaceAtPosition = 0x80062918; // rom:0x63518
 getTrackSegmentWaypoints = 0x80062B1C; // rom:0x6371C
 resolveTrackSegmentIndex = 0x80062C98; // rom:0x63898
 normalizeSurfaceType = 0x80062CD0; // rom:0x638D0
+gCachedSegment1 = 0x800A2D40; // rom:0xA3940
+gCachedSegment2 = 0x800A2D44; // rom:0xA3944
+gCachedSegment3 = 0x800A2D48; // rom:0xA3948
+prepareDisplayListRenderState = 0x80062CF0; // rom:0x638F0
