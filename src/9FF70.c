@@ -2563,7 +2563,7 @@ s32 updateStunnedBounceFallPhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800B5D68_A5C18(Player *arg0) {
+s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->unkB8C = 0x78;
         arg0->unkBBF = arg0->unkBBF + 1;
