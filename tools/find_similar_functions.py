@@ -431,8 +431,8 @@ def find_similar_functions(query: ParsedFunction, candidates: List[ParsedFunctio
         if result.total_score >= threshold:
             results.append(result)
 
-    # Sort by total score descending
-    results.sort(key=lambda r: r.total_score, reverse=True)
+    # Sort by total score descending, then by name for tie-breaking (deterministic)
+    results.sort(key=lambda r: (-r.total_score, r.function.name))
 
     return results[:top_n]
 
