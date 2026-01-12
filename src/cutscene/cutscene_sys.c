@@ -83,34 +83,39 @@ void cutsceneSysFlash_setup(func_800B2A24_1DFAD4_arg_item *srcItem, CutsceneMana
 
 void cutsceneSysFlash_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
     CutsceneSlot *slot;
-    s32 transparency = 0xFF;
-    s32 colorIndex;
-    u16 *color1Check;
+    s32 screenAlpha = 0xFF;
+    s32 currentColorIndex;
+    u16 *secondColorIsNull;
 
     slot = getCutsceneSlot(cutsceneManager, slotIndex);
 
     if (slot->unk0.FlashPayload.frameCounter > 0) {
-        colorIndex = slot->unk0.FlashPayload.colorToggle & 1;
+        // Toggle between the two colors each frame
+        currentColorIndex = slot->unk0.FlashPayload.colorToggle & 1;
         func_8006FE28_70A28(
             cutsceneManager->uiResource,
-            slot->unk0.FlashPayload.colors[colorIndex].unk0,
-            slot->unk0.FlashPayload.colors[colorIndex].unk1,
-            slot->unk0.FlashPayload.colors[colorIndex].unk2
+            slot->unk0.FlashPayload.colors[currentColorIndex].unk0,
+            slot->unk0.FlashPayload.colors[currentColorIndex].unk1,
+            slot->unk0.FlashPayload.colors[currentColorIndex].unk2
         );
 
+        // Alternate colorToggle between 0xFF and 0
         if (slot->unk0.FlashPayload.colorToggle != 0) {
             slot->unk0.FlashPayload.colorToggle = 0;
-            color1Check = (u16 *)&slot->unk0.FlashPayload.colors[1];
-            if (*color1Check == 0) {
-                transparency = -(slot->unk0.Two.unk8 != 0);
+            // Check if the second color is null (all zeros)
+            secondColorIsNull = (u16 *)&slot->unk0.FlashPayload.colors[1];
+            if (*secondColorIsNull == 0) {
+                // When second color is null, set alpha based on Two.unk8 (overlaps with colors[1].unk2)
+                screenAlpha = -(slot->unk0.Two.unk8 != 0);
             }
         } else {
-            slot->unk0.FlashPayload.colorToggle = transparency;
+            slot->unk0.FlashPayload.colorToggle = screenAlpha;
         }
 
-        func_8006FDA0_709A0(cutsceneManager->uiResource, transparency & 0xFF, 0);
+        func_8006FDA0_709A0(cutsceneManager->uiResource, screenAlpha & 0xFF, 0);
         slot->unk0.FlashPayload.frameCounter--;
     } else {
+        // Flash effect complete - clear the screen overlay
         func_8006FDA0_709A0(cutsceneManager->uiResource, 0, 0);
         disableSlotUpdate(cutsceneManager, slotIndex);
     }
