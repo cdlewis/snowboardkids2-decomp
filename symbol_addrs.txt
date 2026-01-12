@@ -36,6 +36,8 @@ checkNoActiveAudioChannels = 0x80057470; // rom:0x58070
 playMusicTrack = 0x800574A0; // rom:0x580A0
 playMusicTrackWithVoice = 0x800574E0; // rom:0x580E0
 setMusicFadeOut = 0x80057564; // rom:0x58164
+initializeGfxCommThread = 0x8005758C; // rom:0x5818C
+gfxCommThreadFunc = 0x80057614; // rom:0x58214
 initSprayEffectTask = 0x80050460; // rom:0x51060
 loadFirstSprayParticle = 0x800504A0; // rom:0x510A0
 updateSprayEffect = 0x80050504; // rom:0x51104
@@ -1077,6 +1079,9 @@ queueDirectDmaTransfer = 0x8003BB68;
 
 gfxResultQueue = 0x800A2CF0;
 gfxTaskQueue = 0x800A2CD0;
+gfxTaskQueueBuffer = 0x800A2CE8; // size:0x8
+gfxResultQueueBuffer = 0x800A2D08; // size:0x8
+gfxCommThread = 0x800A2998; // size:0x338
 
 gGraphicsManager = 0x800A2990;
 

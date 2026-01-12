@@ -77,12 +77,12 @@ extern s32 D_80093308_93F08;
 
 USE_ASSET(wavetables);
 
-extern void *D_800A2CE8_A38E8;
-extern void *D_800A2D08_A3908;
+extern OSMesg gfxTaskQueueBuffer;
+extern OSMesg gfxResultQueueBuffer;
 extern u8 gMusicTrackVoiceMap[];
 extern u8 D_80093BA5_947A5;
 extern u8 D_80093BA6_947A6;
-extern OSThread D_800A2998_A3598;
+extern OSThread gfxCommThread;
 
 void func_8005628C_56E8C(void);
 
@@ -154,7 +154,7 @@ void initializeMusicSystem(void) {
     gGraphicsManager->renderQueueCount = 0;
     gGraphicsManager->bufferCount = 0;
     gGraphicsManager->audioOuterDistance = 0xC80;
-    func_8005758C_5818C();
+    initializeGfxCommThread();
     func_8006983C_6A43C(&func_8005628C_56E8C);
 }
 
@@ -473,16 +473,16 @@ void setMusicFadeOut(s32 fadeOutDuration) {
     gGraphicsManager->musicFadeOutDuration = duration;
 }
 
-void func_8005758C_5818C(void) {
+void initializeGfxCommThread(void) {
     OSMesgQueue *queue = &gfxTaskQueue;
-    osCreateMesgQueue(queue, &D_800A2CE8_A38E8, OS_MESG_BLOCK);
+    osCreateMesgQueue(queue, &gfxTaskQueueBuffer, OS_MESG_BLOCK);
     queue = &gfxResultQueue;
-    osCreateMesgQueue(queue, &D_800A2D08_A3908, OS_MESG_BLOCK);
-    osCreateThread(&D_800A2998_A3598, 0xB, func_80057614_58214, 0, &gfxTaskQueue, 6);
-    osStartThread(&D_800A2998_A3598);
+    osCreateMesgQueue(queue, &gfxResultQueueBuffer, OS_MESG_BLOCK);
+    osCreateThread(&gfxCommThread, 0xB, gfxCommThreadFunc, 0, &gfxTaskQueue, 6);
+    osStartThread(&gfxCommThread);
 }
 
-void func_80057614_58214(void *arg0) {
+void gfxCommThreadFunc(void *arg0) {
     void *message;
     void *result;
 
