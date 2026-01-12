@@ -2690,50 +2690,50 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800B6194_A6044(Player *arg0) {
+s32 updateKnockbackBounceLaunchPhase(Player *player) {
     s16 angle;
 
-    if (arg0->unkBBF == 0) {
-        arg0->unkB8C = 0x1E;
-        arg0->unkBBF = arg0->unkBBF + 1;
+    if (player->unkBBF == 0) {
+        player->unkB8C = 0x1E;
+        player->unkBBF = player->unkBBF + 1;
     }
 
-    arg0->unkB84 = arg0->unkB84 | 0x60;
-    arg0->velocity.y = arg0->velocity.y - 0x6000;
-    arg0->unkB88 = 0x202;
+    player->unkB84 = player->unkB84 | 0x60;
+    player->velocity.y = player->velocity.y - 0x6000;
+    player->unkB88 = 0x202;
 
-    if (arg0->unkB84 & 1) {
-        arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 5);
-        arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 5);
+    if (player->unkB84 & 1) {
+        player->velocity.x = player->velocity.x - (player->velocity.x >> 5);
+        player->velocity.z = player->velocity.z - (player->velocity.z >> 5);
     } else {
-        applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
+        applyVelocityDeadzone(player, 0x100, 0x100, 0x100);
     }
 
-    angle = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);
-    arg0->unkA94 = angle;
+    angle = atan2Fixed(-player->velocity.x, -player->velocity.z);
+    player->unkA94 = angle;
 
-    if (arg0->unkB84 & 2) {
-        arg0->unkA94 = angle + 0x1000;
+    if (player->unkB84 & 2) {
+        player->unkA94 = angle + 0x1000;
     }
 
-    decayPlayerSteeringAngles(arg0);
-    applyClampedVelocityToPosition(arg0);
-    func_8005D180_5DD80(arg0, 0xC);
+    decayPlayerSteeringAngles(player);
+    applyClampedVelocityToPosition(player);
+    func_8005D180_5DD80(player, 0xC);
 
-    if (arg0->unkB8C == 0) {
-        setPlayerBehaviorPhase(arg0, 2);
+    if (player->unkB8C == 0) {
+        setPlayerBehaviorPhase(player, 2);
     } else {
-        arg0->unkB8C = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
-        if (arg0->unkB8C < 0) {
-            arg0->unkB8C = 0;
+        player->unkB8C = player->unkB8C - func_8005D8C8_5E4C8(player);
+        if (player->unkB8C < 0) {
+            player->unkB8C = 0;
         }
     }
 
     if (randA() & 1) {
-        func_80050C00_51800(arg0);
+        func_80050C00_51800(player);
     }
 
-    func_8005D804_5E404(arg0, 3, 0);
+    func_8005D804_5E404(player, 3, 0);
     return 0;
 }
 
