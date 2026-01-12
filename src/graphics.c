@@ -396,7 +396,7 @@ void updateMusicVolumeFadeIn(void *arg) {
     if ((u16)gGraphicsManager->pendingMusicId != gGraphicsManager->currentMusicId) {
         gGraphicsManager->isFadingOut = 1;
         func_800578DC_584DC(gGraphicsManager->currentAudioChannel, 8);
-        setCallbackWithContinue(func_800573F8_57FF8);
+        setCallbackWithContinue(handleMusicFadeOutTransition);
     } else {
         if (gGraphicsManager->musicFadeState == 0) {
             gGraphicsManager->isFadingOut = 1;
@@ -404,18 +404,18 @@ void updateMusicVolumeFadeIn(void *arg) {
                 gGraphicsManager->currentAudioChannel,
                 (s32)(u16)gGraphicsManager->musicFadeOutDuration
             );
-            setCallbackWithContinue(func_800573F8_57FF8);
+            setCallbackWithContinue(handleMusicFadeOutTransition);
         }
         if (func_80057A34_58634(gGraphicsManager->currentAudioChannel) == NULL) {
             gGraphicsManager->musicFadeState = 0;
-            setCallbackWithContinue(func_80057470_58070);
+            setCallbackWithContinue(checkNoActiveAudioChannels);
         }
     }
 }
 
-void func_800573F8_57FF8(void) {
+void handleMusicFadeOutTransition(void) {
     if (func_80057A34_58634(gGraphicsManager->currentAudioChannel) == 0) {
-        setCallbackWithContinue(&func_80057470_58070);
+        setCallbackWithContinue(&checkNoActiveAudioChannels);
         return;
     }
     if ((gGraphicsManager->musicFadeState != 0) && (gGraphicsManager->isFadingOut == 0)) {
@@ -424,7 +424,7 @@ void func_800573F8_57FF8(void) {
     }
 }
 
-void func_80057470_58070(void) {
+void checkNoActiveAudioChannels(void) {
     if (func_80058638_59238() == NULL) {
         setCallbackWithContinue(&checkMusicLoadRequest);
     }
