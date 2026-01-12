@@ -114,6 +114,7 @@ updateStunnedRecoveryBouncePhase = 0x800B50C0; // rom:0xA4F70
 updateEdgeFallRecoveryGetUpPhase = 0x800B4F5C; // rom:0xA4E0C
 updateStunnedRecoveryBounceFallPhase = 0x800B5234; // rom:0xA50E4
 updateStunnedRecoverySlidePhase = 0x800B5394; // rom:0xA5244
+updateStunnedRecoverySlideBouncePhase = 0x800B5478; // rom:0xA5328
 recoverySlideBaseVelocity = 0x800BABD4; // rom:0xAAA84
 updateRaceFinishWaitingStep = 0x800B3CBC; // rom:0xA3B6C
 updateRaceFinishWinStep = 0x800B3DF0; // rom:0xA3CA0

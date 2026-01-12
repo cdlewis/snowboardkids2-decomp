@@ -2337,7 +2337,7 @@ s32 updateStunnedRecoverySlidePhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800B5478_A5328(Player *arg0) {
+s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
     if (arg0->unkBBF == 0) {
         arg0->velocity.y = 0;
         arg0->unkB8C = 0x14;
