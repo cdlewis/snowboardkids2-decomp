@@ -2501,13 +2501,13 @@ skip:
     return 0;
 }
 
-s32 func_800B5B90_A5A40(Player *arg0) {
-    s32 temp_v1;
-    u8 temp_v0;
+s32 updateStunnedPanelHitFallPhase(Player *arg0) {
+    s32 newTimer;
+    u8 step;
 
-    temp_v0 = arg0->unkBBF;
-    if (temp_v0 == 0) {
-        arg0->unkBBF = temp_v0 + 1;
+    step = arg0->unkBBF;
+    if (step == 0) {
+        arg0->unkBBF = step + 1;
         if (arg0->velocity.y > 0) {
             arg0->velocity.y = 0;
         }
@@ -2534,9 +2534,9 @@ s32 func_800B5B90_A5A40(Player *arg0) {
         func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 4);
         setPlayerBehaviorPhase(arg0, 0x10);
     } else {
-        temp_v1 = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
-        arg0->unkB8C = temp_v1;
-        if (temp_v1 < 0) {
+        newTimer = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
+        arg0->unkB8C = newTimer;
+        if (newTimer < 0) {
             arg0->unkB8C = 0;
         }
     }
