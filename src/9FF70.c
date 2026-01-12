@@ -2379,7 +2379,7 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B55B4_A5464);
 
-s32 func_800B58B8_A5768(Player *arg0) {
+s32 updateStunnedRecoveryEndPhase(Player *arg0) {
     arg0->unkB8C -= 1;
 
     if (arg0->unkB8C == 0) {
