@@ -159,22 +159,16 @@ void showAllSlotModels(CutsceneSlot *slots) {
     }
 }
 
-void func_800B2DCC_1DFE7C(CutsceneSlot *arg0) {
+void resetAllSlotModels(CutsceneSlot *slots) {
     s32 i;
-    CutsceneSlot *ptr;
 
-    i = 0;
-    ptr = arg0;
-
-    while (i < (getCutsceneSlotCount() & 0xFF)) {
+    for (i = 0; i < getCutsceneSlotCount(); i++) {
         func_800B34B0_1E0560(i);
 
-        if (ptr[i].slotData.unkA4.ptr != NULL) {
-            applyTransformToModel(ptr[i].slotData.unkA4.ptr, (Transform3D *)identityMatrix);
-            setModelAnimation(ptr[i].slotData.unkA4.ptr, 0);
+        if (slots[i].slotData.unkA4.ptr != NULL) {
+            applyTransformToModel(slots[i].slotData.unkA4.ptr, (Transform3D *)identityMatrix);
+            setModelAnimation(slots[i].slotData.unkA4.ptr, 0);
         }
-
-        i++;
     }
 }
 
