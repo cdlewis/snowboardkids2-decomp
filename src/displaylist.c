@@ -388,16 +388,16 @@ s32 resolveTrackSegmentIndex(TrackSegmentEntry **arg0, u16 index) {
     return result & 0xFFFF;
 }
 
-s32 func_80062CD0_638D0(s32 arg0) {
-    arg0 &= 0xF;
+s32 normalizeSurfaceType(s32 surfaceType) {
+    surfaceType &= 0xF;
 
-    if (arg0 == 1) {
+    if (surfaceType == 1) {
         return 1;
     }
-    if (arg0 == 2) {
+    if (surfaceType == 2) {
         return 1;
     }
-    return arg0;
+    return surfaceType;
 }
 
 void func_80062CF0_638F0(DisplayListObject *arg0) {
