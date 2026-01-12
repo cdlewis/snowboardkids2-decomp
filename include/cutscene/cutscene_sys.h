@@ -46,14 +46,14 @@ void cutsceneSysIntMode_exec(cutsceneSysIntMode_exec_arg *arg0);
 void cutsceneSysWipeColor_init(void);
 s32 cutsceneSysWipeColor_validate(void);
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
+    u8 r;
+    u8 g;
+    u8 b;
 } cutsceneSysWipeColor_exec_arg0;
 
 typedef struct {
     u8 padding[0xFF8];
-    s32 unkFF8;
+    s32 wipeColorNode;
 } cutsceneSysWipeColor_exec_arg1;
 void cutsceneSysWipeColor_exec(cutsceneSysWipeColor_exec_arg0 *arg0, cutsceneSysWipeColor_exec_arg1 *arg1);
 void cutsceneSysWait_init(void);
