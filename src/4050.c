@@ -134,7 +134,8 @@ void initCutsceneRenderer(void) {
 void runCutsceneFrame(void) {
     CutsceneTaskMemory *taskMemory = (CutsceneTaskMemory *)getCurrentAllocation();
 
-    if (taskMemory->frameCount >= func_800B3360(D_800AB070_A23E0, D_800AFEF0_A7260) || taskMemory->exitRequested != 0) {
+    if (taskMemory->frameCount >= getCutsceneFrameCount(D_800AB070_A23E0, D_800AFEF0_A7260) ||
+        taskMemory->exitRequested != 0) {
         if (D_800AB070_A23E0 == 0xB && D_800AFEF0_A7260 == 1) {
             func_8006FDA0_709A0(&taskMemory->overlayNode, 0, 0);
             initScreenTransition(&taskMemory->transitionState);

@@ -28,13 +28,13 @@ typedef struct {
 
 typedef struct {
     DmaInfo *array0;
-    s16 count0;
+    s16 introFrameCount;
     s16 pad06;
     DmaInfo *array1;
-    s16 count1;
+    s16 winFrameCount;
     s16 pad0E;
     DmaInfo *array2;
-    s16 count2;
+    s16 loseFrameCount;
     s16 pad16;
 } CutsceneAssetTable;
 
@@ -52,7 +52,7 @@ extern s16 D_800BAEC0_1E7F70;
 extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
 extern s8 D_800BAE00_1E7EB0[];
 extern u8 identityMatrix[];
-extern CutsceneAssetTable D_800BA7BC_1E786C[];
+extern CutsceneAssetTable gCutsceneAssetTable[];
 
 extern void *func_800B5B38_1E2BE8(u16);
 extern void initializeCutsceneCommand(void *, void *, s32, s32, s32);
@@ -360,11 +360,11 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
     return (cutsceneManager->currentFrame <= cutsceneManager->endFrame) ? 1 : 0;
 }
 
-s16 func_800B3360(s16 arg0, s16 arg1) {
-    s16 new_var;
+s16 getCutsceneFrameCount(s16 slotIndex, s16 cutsceneType) {
+    s16 masked;
     s16 result;
-    new_var = 0xFFFFFFFFu;
-    if ((((((((((((arg1 & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & new_var) &
+    masked = -1;
+    if ((((((((((((cutsceneType & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & masked) &
              0xFFFFFFFFu) &
             0xFFFFFFFFu) &
            0xFFFFFFFFu) &
@@ -372,16 +372,16 @@ s16 func_800B3360(s16 arg0, s16 arg1) {
          0xFFFFFFFFu) >= ((u64)3)) {
         return 0;
     }
-    if (arg0 >= 0x10) {
+    if (slotIndex >= 0x10) {
         return 0;
     }
-    if (arg1 == 0) {
-        result = D_800BA7BC_1E786C[arg0].count0;
-    } else if (arg1 == 1) {
-        result = D_800BA7BC_1E786C[arg0].count1;
+    if (cutsceneType == 0) {
+        result = gCutsceneAssetTable[slotIndex].introFrameCount;
+    } else if (cutsceneType == 1) {
+        result = gCutsceneAssetTable[slotIndex].winFrameCount;
     }
-    if (arg1 == 2) {
-        result = D_800BA7BC_1E786C[arg0].count2;
+    if (cutsceneType == 2) {
+        result = gCutsceneAssetTable[slotIndex].loseFrameCount;
     }
     return result;
 }
@@ -471,21 +471,21 @@ void *func_800B3570(s16 arg0, s16 arg1, s16 arg2) {
     }
 
     tableOffset = arg0 * 0x18;
-    tableEntry = &D_800BA7BC_1E786C[arg0];
+    tableEntry = &gCutsceneAssetTable[arg0];
 
     if (clampedArg1 == 0) {
-        if (arg2 < tableEntry->count0) {
-            dmaInfo = &D_800BA7BC_1E786C[arg0].array0[arg2];
+        if (arg2 < tableEntry->introFrameCount) {
+            dmaInfo = &gCutsceneAssetTable[arg0].array0[arg2];
         }
     } else if (clampedArg1 == 1) {
-        if (arg2 < tableEntry->count1) {
-            dmaInfo = &D_800BA7BC_1E786C[arg0].array1[arg2];
+        if (arg2 < tableEntry->winFrameCount) {
+            dmaInfo = &gCutsceneAssetTable[arg0].array1[arg2];
         }
     }
 
     if (clampedArg1 == 2) {
-        if (arg2 < tableEntry->count2) {
-            dmaInfo = &D_800BA7BC_1E786C[arg0].array2[arg2];
+        if (arg2 < tableEntry->loseFrameCount) {
+            dmaInfo = &gCutsceneAssetTable[arg0].array2[arg2];
         }
     }
 
