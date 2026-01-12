@@ -8,17 +8,17 @@
 USE_ASSET(_6A83F0);
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    void *unk1C;
-    s32 unk20;
-    f32 unk24;
-    s32 unk28;
+    void *musicBankBuffer;
+    void *ptrBank;
+    void *waveBank;
+    s32 soundId;
+    s32 soundSequence;
+    s32 volume;
+    s32 pan;
+    void *audioChannel;
+    s32 stoppingSpeed;
+    f32 position;
+    s32 voiceIndex;
     s32 unk2C;
     s32 unk30;
 } GraphicsCommand;
@@ -345,7 +345,7 @@ void loadMusicTrackData(void) {
 }
 
 void initializeMusicPtrBank(void) {
-    func_800579E8_585E8(
+    initializeMusicPtrBankAsync(
         gGraphicsManager->musicDataBuffer,
         (void *)*(&D_80093B00_94700 + (gGraphicsManager->currentMusicId))
     );
@@ -495,80 +495,80 @@ void gfxCommThreadFunc(void *arg0) {
                     break;
                 case 1:
                     result = func_800725F4_731F4(
-                        D_800A2D10_A3910.unkC,
-                        D_800A2D10_A3910.unk14,
-                        D_800A2D10_A3910.unk18,
+                        D_800A2D10_A3910.soundId,
+                        D_800A2D10_A3910.volume,
+                        D_800A2D10_A3910.pan,
                         0,
-                        D_800A2D10_A3910.unk10
+                        D_800A2D10_A3910.soundSequence
                     );
-                    if (D_800A2D10_A3910.unk28 != 0) {
-                        func_80072C38_73838(result, D_800A2D10_A3910.unk28);
+                    if (D_800A2D10_A3910.voiceIndex != 0) {
+                        func_80072C38_73838(result, D_800A2D10_A3910.voiceIndex);
                     }
                     break;
                 case 2:
-                    func_80072960_73560(D_800A2D10_A3910.unk1C, 0);
+                    func_80072960_73560(D_800A2D10_A3910.audioChannel, 0);
                     result = func_800725F4_731F4(
-                        D_800A2D10_A3910.unkC,
-                        D_800A2D10_A3910.unk14,
-                        D_800A2D10_A3910.unk18,
+                        D_800A2D10_A3910.soundId,
+                        D_800A2D10_A3910.volume,
+                        D_800A2D10_A3910.pan,
                         0,
-                        D_800A2D10_A3910.unk10
+                        D_800A2D10_A3910.soundSequence
                     );
-                    if (D_800A2D10_A3910.unk28 != 0) {
-                        func_80072C38_73838(result, D_800A2D10_A3910.unk28);
+                    if (D_800A2D10_A3910.voiceIndex != 0) {
+                        func_80072C38_73838(result, D_800A2D10_A3910.voiceIndex);
                     }
                     break;
                 case 3:
-                    result = func_80072960_73560(D_800A2D10_A3910.unk1C, 0);
+                    result = func_80072960_73560(D_800A2D10_A3910.audioChannel, 0);
                     break;
                 case 4:
-                    func_80072960_73560(D_800A2D10_A3910.unk1C, 0);
+                    func_80072960_73560(D_800A2D10_A3910.audioChannel, 0);
                     result = func_800725F4_731F4(
-                        D_800A2D10_A3910.unkC,
-                        D_800A2D10_A3910.unk14,
-                        D_800A2D10_A3910.unk18,
+                        D_800A2D10_A3910.soundId,
+                        D_800A2D10_A3910.volume,
+                        D_800A2D10_A3910.pan,
                         0,
-                        D_800A2D10_A3910.unk10
+                        D_800A2D10_A3910.soundSequence
                     );
-                    func_80072B3C_7373C(result, D_800A2D10_A3910.unk24);
-                    if (D_800A2D10_A3910.unk28 != 0) {
-                        func_80072C38_73838(result, D_800A2D10_A3910.unk28);
+                    func_80072B3C_7373C(result, D_800A2D10_A3910.position);
+                    if (D_800A2D10_A3910.voiceIndex != 0) {
+                        func_80072C38_73838(result, D_800A2D10_A3910.voiceIndex);
                     }
                     break;
                 case 5:
-                    func_80072A6C_7366C(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk14);
-                    func_80072ACC_736CC(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk18);
-                    func_80072B3C_7373C(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk24);
-                    if (D_800A2D10_A3910.unk28 != 0) {
-                        func_80072C38_73838(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk28);
+                    func_80072A6C_7366C(D_800A2D10_A3910.audioChannel, D_800A2D10_A3910.volume);
+                    func_80072ACC_736CC(D_800A2D10_A3910.audioChannel, D_800A2D10_A3910.pan);
+                    func_80072B3C_7373C(D_800A2D10_A3910.audioChannel, D_800A2D10_A3910.position);
+                    if (D_800A2D10_A3910.voiceIndex != 0) {
+                        func_80072C38_73838(D_800A2D10_A3910.audioChannel, D_800A2D10_A3910.voiceIndex);
                     }
                     break;
                 case 6:
-                    func_80072814_73414(1, D_800A2D10_A3910.unk20);
+                    func_80072814_73414(1, D_800A2D10_A3910.stoppingSpeed);
                     break;
                 case 7:
-                    result = func_80072960_73560(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk20);
+                    result = func_80072960_73560(D_800A2D10_A3910.audioChannel, D_800A2D10_A3910.stoppingSpeed);
                     break;
                 case 8:
                     result = (void *)func_800728E0_734E0(1);
                     break;
                 case 9:
-                    result = func_80072A14_73614(D_800A2D10_A3910.unk1C);
+                    result = func_80072A14_73614(D_800A2D10_A3910.audioChannel);
                     break;
                 case 10:
-                    func_80072CC0_738C0(D_800A2D10_A3910.unk4, D_800A2D10_A3910.unk8);
+                    func_80072CC0_738C0(D_800A2D10_A3910.ptrBank, D_800A2D10_A3910.waveBank);
                     break;
                 case 11:
-                    result = func_80072CDC_738DC(D_800A2D10_A3910.unk4, D_800A2D10_A3910.unk0);
-                    if (D_800A2D10_A3910.unk28 != 0) {
-                        func_80072C38_73838(result, D_800A2D10_A3910.unk28);
+                    result = func_80072CDC_738DC(D_800A2D10_A3910.ptrBank, D_800A2D10_A3910.musicBankBuffer);
+                    if (D_800A2D10_A3910.voiceIndex != 0) {
+                        func_80072C38_73838(result, D_800A2D10_A3910.voiceIndex);
                     }
                     break;
                 case 12:
-                    func_80072A6C_7366C(D_800A2D10_A3910.unk1C, D_800A2D10_A3910.unk14);
+                    func_80072A6C_7366C(D_800A2D10_A3910.audioChannel, D_800A2D10_A3910.volume);
                     break;
                 case 13:
-                    func_80072814_73414(3, D_800A2D10_A3910.unk20);
+                    func_80072814_73414(3, D_800A2D10_A3910.stoppingSpeed);
                     break;
                 case 14:
                     result = (void *)func_800728E0_734E0(2);
@@ -585,7 +585,7 @@ void sendStopAudioChannelsCommand(s32 stoppingSpeed) {
 
     if ((D_80093BA5_947A5 != NULL) && (D_80093BA6_947A6 == NULL)) {
         D_80093BA6_947A6++;
-        D_800A2D10_A3910.unk20 = stoppingSpeed;
+        D_800A2D10_A3910.stoppingSpeed = stoppingSpeed;
         osSendMesg(&gfxTaskQueue, (OSMesg *)0xD, OS_MESG_BLOCK);
         osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     }
@@ -594,8 +594,8 @@ void sendStopAudioChannelsCommand(s32 stoppingSpeed) {
 void stopAudioChannelWithSpeed(void *audioChannel, s32 stoppingSpeed) {
     void *result;
 
-    D_800A2D10_A3910.unk1C = audioChannel;
-    D_800A2D10_A3910.unk20 = stoppingSpeed;
+    D_800A2D10_A3910.audioChannel = audioChannel;
+    D_800A2D10_A3910.stoppingSpeed = stoppingSpeed;
     osSendMesg(&gfxTaskQueue, (OSMesg *)7, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &result, OS_MESG_BLOCK);
 }
@@ -603,8 +603,8 @@ void stopAudioChannelWithSpeed(void *audioChannel, s32 stoppingSpeed) {
 void setAudioChannelVolume(void *audioChannel, s32 volume) {
     void *message;
 
-    D_800A2D10_A3910.unk1C = audioChannel;
-    D_800A2D10_A3910.unk14 = volume;
+    D_800A2D10_A3910.audioChannel = audioChannel;
+    D_800A2D10_A3910.volume = volume;
     osSendMesg(&gfxTaskQueue, (OSMesg *)0xC, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
@@ -612,9 +612,9 @@ void setAudioChannelVolume(void *audioChannel, s32 volume) {
 void *startMusicPlaybackWithVoice(void *musicDataBuffer, void *musicBankBuffer, s32 voiceIndex) {
     void *musicHandle;
 
-    D_800A2D10_A3910.unk4 = musicDataBuffer;
-    D_800A2D10_A3910.unk0 = musicBankBuffer;
-    D_800A2D10_A3910.unk28 = voiceIndex;
+    D_800A2D10_A3910.ptrBank = musicDataBuffer;
+    D_800A2D10_A3910.musicBankBuffer = musicBankBuffer;
+    D_800A2D10_A3910.voiceIndex = voiceIndex;
     osSendMesg(&gfxTaskQueue, (void *)0xB, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &musicHandle, OS_MESG_BLOCK);
     return musicHandle;
@@ -624,11 +624,11 @@ void *startMusicPlayback(void *musicDataBuffer, void *musicBankBuffer) {
     return startMusicPlaybackWithVoice(musicDataBuffer, musicBankBuffer, 0);
 }
 
-void func_800579E8_585E8(void *arg0, void *arg1) {
+void initializeMusicPtrBankAsync(void *ptrBank, void *waveBank) {
     void *message;
 
-    D_800A2D10_A3910.unk4 = arg0;
-    D_800A2D10_A3910.unk8 = arg1;
+    D_800A2D10_A3910.ptrBank = ptrBank;
+    D_800A2D10_A3910.waveBank = waveBank;
     osSendMesg(&gfxTaskQueue, (OSMesg *)0xA, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
@@ -636,7 +636,7 @@ void func_800579E8_585E8(void *arg0, void *arg1) {
 void *func_80057A34_58634(void *arg0) {
     void *message;
 
-    D_800A2D10_A3910.unk1C = arg0;
+    D_800A2D10_A3910.audioChannel = arg0;
     osSendMesg(&gfxTaskQueue, (OSMesg *)9, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     return message;
@@ -655,8 +655,8 @@ void func_80057ABC_586BC(s32 arg0, s32 arg1) {
     OSMesg message;
 
     temp = gGraphicsManager->unk24[arg0];
-    D_800A2D10_A3910.unk20 = arg1;
-    D_800A2D10_A3910.unk1C = temp;
+    D_800A2D10_A3910.stoppingSpeed = arg1;
+    D_800A2D10_A3910.audioChannel = temp;
     osSendMesg(&gfxTaskQueue, (OSMesg *)7, 1);
     osRecvMesg(&gfxResultQueue, &message, 1);
 }
@@ -664,7 +664,7 @@ void func_80057ABC_586BC(s32 arg0, s32 arg1) {
 void func_80057B1C_5871C(s32 arg0) {
     void *message;
 
-    D_800A2D10_A3910.unk20 = arg0;
+    D_800A2D10_A3910.stoppingSpeed = arg0;
     osSendMesg(&gfxTaskQueue, (OSMesg *)6, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     gGraphicsManager->renderQueueCount = 0;
@@ -674,16 +674,16 @@ void func_80057B1C_5871C(s32 arg0) {
 void func_80057B70_58770(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 arg5, s32 arg6) {
     void *message;
 
-    D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg5];
+    D_800A2D10_A3910.audioChannel = gGraphicsManager->unk24[arg5];
     if (arg1 > 0) {
-        D_800A2D10_A3910.unk18 = arg2;
-        D_800A2D10_A3910.unk14 = arg1;
-        D_800A2D10_A3910.unk24 = arg3;
-        D_800A2D10_A3910.unk28 = arg6;
+        D_800A2D10_A3910.pan = arg2;
+        D_800A2D10_A3910.volume = arg1;
+        D_800A2D10_A3910.position = arg3;
+        D_800A2D10_A3910.voiceIndex = arg6;
 
         if (gGraphicsManager->unk24[arg5] == 0 || gGraphicsManager->unk64[arg5] != arg0) {
-            D_800A2D10_A3910.unkC = arg0;
-            D_800A2D10_A3910.unk10 = gGraphicsManager->soundSequence + (arg4 << 0x18);
+            D_800A2D10_A3910.soundId = arg0;
+            D_800A2D10_A3910.soundSequence = gGraphicsManager->soundSequence + (arg4 << 0x18);
             osSendMesg(&gfxTaskQueue, (void *)4, 1);
             osRecvMesg(&gfxResultQueue, &message, 1);
             gGraphicsManager->unk24[arg5] = message;
@@ -707,13 +707,13 @@ void func_80057CB4_588B4(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 a
 void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     void *message;
 
-    D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg4];
+    D_800A2D10_A3910.audioChannel = gGraphicsManager->unk24[arg4];
     if (arg1 > 0) {
-        D_800A2D10_A3910.unkC = arg0;
-        D_800A2D10_A3910.unk14 = arg1;
-        D_800A2D10_A3910.unk18 = arg2;
-        D_800A2D10_A3910.unk28 = arg5;
-        D_800A2D10_A3910.unk10 = gGraphicsManager->soundSequence + (arg3 << 0x18);
+        D_800A2D10_A3910.soundId = arg0;
+        D_800A2D10_A3910.volume = arg1;
+        D_800A2D10_A3910.pan = arg2;
+        D_800A2D10_A3910.voiceIndex = arg5;
+        D_800A2D10_A3910.soundSequence = gGraphicsManager->soundSequence + (arg3 << 0x18);
         osSendMesg(&gfxTaskQueue, (void *)2, OS_MESG_BLOCK);
         osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
         gGraphicsManager->unk24[arg4] = message;
@@ -734,16 +734,16 @@ void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 *new_var3;
     void *sp10;
 
-    D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg3];
+    D_800A2D10_A3910.audioChannel = gGraphicsManager->unk24[arg3];
     new_var3 = &gGraphicsManager->soundSequence;
 
     if (arg1 > 0) {
-        D_800A2D10_A3910.unkC = arg0;
-        D_800A2D10_A3910.unk14 = arg1;
-        D_800A2D10_A3910.unk18 = 0x80;
+        D_800A2D10_A3910.soundId = arg0;
+        D_800A2D10_A3910.volume = arg1;
+        D_800A2D10_A3910.pan = 0x80;
         new_var = *new_var3;
-        D_800A2D10_A3910.unk28 = arg4;
-        D_800A2D10_A3910.unk10 = new_var + (arg2 << 0x18);
+        D_800A2D10_A3910.voiceIndex = arg4;
+        D_800A2D10_A3910.soundSequence = new_var + (arg2 << 0x18);
         osSendMesg(&gfxTaskQueue, (void *)2, 1);
         osRecvMesg(&gfxResultQueue, &sp10, 1);
         gGraphicsManager->unk24[arg3] = sp10;
@@ -763,13 +763,13 @@ void func_80057F28_58B28(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 void func_80057F48_58B48(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     void *message;
 
-    D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg2];
+    D_800A2D10_A3910.audioChannel = gGraphicsManager->unk24[arg2];
     if (arg1 > 0) {
-        D_800A2D10_A3910.unkC = arg0;
-        D_800A2D10_A3910.unk14 = arg1;
-        D_800A2D10_A3910.unk18 = 0x80;
-        D_800A2D10_A3910.unk10 = gGraphicsManager->soundSequence;
-        D_800A2D10_A3910.unk28 = arg3;
+        D_800A2D10_A3910.soundId = arg0;
+        D_800A2D10_A3910.volume = arg1;
+        D_800A2D10_A3910.pan = 0x80;
+        D_800A2D10_A3910.soundSequence = gGraphicsManager->soundSequence;
+        D_800A2D10_A3910.voiceIndex = arg3;
         osSendMesg(&gfxTaskQueue, (void *)2, OS_MESG_BLOCK);
         osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
         gGraphicsManager->unk24[arg2] = message;
@@ -788,12 +788,12 @@ void func_80058048_58C48(s32 arg0, s32 arg1, s32 arg2) {
 void func_80058064_58C64(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     void *message;
 
-    D_800A2D10_A3910.unkC = arg0;
-    D_800A2D10_A3910.unk14 = 0x80;
-    D_800A2D10_A3910.unk18 = 0x80;
-    D_800A2D10_A3910.unk10 = gGraphicsManager->soundSequence + (arg1 << 0x18);
-    D_800A2D10_A3910.unk1C = gGraphicsManager->unk24[arg2];
-    D_800A2D10_A3910.unk28 = arg3;
+    D_800A2D10_A3910.soundId = arg0;
+    D_800A2D10_A3910.volume = 0x80;
+    D_800A2D10_A3910.pan = 0x80;
+    D_800A2D10_A3910.soundSequence = gGraphicsManager->soundSequence + (arg1 << 0x18);
+    D_800A2D10_A3910.audioChannel = gGraphicsManager->unk24[arg2];
+    D_800A2D10_A3910.voiceIndex = arg3;
     osSendMesg(&gfxTaskQueue, (OSMesg *)2, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     gGraphicsManager->unk24[arg2] = message;
@@ -812,16 +812,16 @@ void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
     void *temp_v0;
 
     temp_v1 = gGraphicsManager;
-    D_800A2D10_A3910.unkC = arg0;
-    D_800A2D10_A3910.unk14 = 0x80;
-    D_800A2D10_A3910.unk18 = 0x80;
+    D_800A2D10_A3910.soundId = arg0;
+    D_800A2D10_A3910.volume = 0x80;
+    D_800A2D10_A3910.pan = 0x80;
 
     new_var2 = &temp_v1->soundSequence;
     temp_v0 = (void *)*new_var2;
-    D_800A2D10_A3910.unk10 = temp_v1->soundSequence;
+    D_800A2D10_A3910.soundSequence = temp_v1->soundSequence;
     temp_v0 = temp_v1->unk24[arg1];
-    D_800A2D10_A3910.unk28 = arg2;
-    D_800A2D10_A3910.unk1C = temp_v0;
+    D_800A2D10_A3910.voiceIndex = arg2;
+    D_800A2D10_A3910.audioChannel = temp_v0;
 
     osSendMesg(&gfxTaskQueue, (OSMesg *)2, 1);
     osRecvMesg(&gfxResultQueue, (OSMesg *)&message, 1);
@@ -840,13 +840,13 @@ void func_8005823C_58E3C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     void *message;
     GraphicsManager *new_var;
     s32 *new_var2;
-    D_800A2D10_A3910.unkC = arg0;
-    D_800A2D10_A3910.unk14 = arg1;
-    D_800A2D10_A3910.unk18 = 0x80;
+    D_800A2D10_A3910.soundId = arg0;
+    D_800A2D10_A3910.volume = arg1;
+    D_800A2D10_A3910.pan = 0x80;
     new_var = gGraphicsManager;
     new_var2 = &new_var->soundSequence;
-    D_800A2D10_A3910.unk10 = (*new_var2) + (arg2 << 0x18);
-    D_800A2D10_A3910.unk28 = arg3;
+    D_800A2D10_A3910.soundSequence = (*new_var2) + (arg2 << 0x18);
+    D_800A2D10_A3910.voiceIndex = arg3;
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     incrementSoundSequence();
@@ -859,11 +859,11 @@ void func_800582C0_58EC0(s32 arg0, s32 arg1, s32 arg2) {
 void func_800582DC_58EDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     void *message;
 
-    D_800A2D10_A3910.unkC = arg0;
-    D_800A2D10_A3910.unk14 = arg1;
-    D_800A2D10_A3910.unk18 = arg2;
-    D_800A2D10_A3910.unk10 = gGraphicsManager->soundSequence + (arg3 << 0x18);
-    D_800A2D10_A3910.unk28 = arg4;
+    D_800A2D10_A3910.soundId = arg0;
+    D_800A2D10_A3910.volume = arg1;
+    D_800A2D10_A3910.pan = arg2;
+    D_800A2D10_A3910.soundSequence = gGraphicsManager->soundSequence + (arg3 << 0x18);
+    D_800A2D10_A3910.voiceIndex = arg4;
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     incrementSoundSequence();
@@ -877,13 +877,13 @@ void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 *new_var;
     void *message;
     s32 new_var2;
-    D_800A2D10_A3910.unkC = arg0;
-    D_800A2D10_A3910.unk14 = arg1;
-    D_800A2D10_A3910.unk18 = arg2;
+    D_800A2D10_A3910.soundId = arg0;
+    D_800A2D10_A3910.volume = arg1;
+    D_800A2D10_A3910.pan = arg2;
     new_var = &gGraphicsManager->soundSequence;
     new_var2 = *new_var;
-    D_800A2D10_A3910.unk28 = arg3;
-    D_800A2D10_A3910.unk10 = new_var2;
+    D_800A2D10_A3910.voiceIndex = arg3;
+    D_800A2D10_A3910.soundSequence = new_var2;
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     incrementSoundSequence();
@@ -897,13 +897,13 @@ void func_80058414_59014(s32 arg0, s32 arg1, s32 arg2) {
     void *sp10;
     s32 *new_var;
     s32 new_var2;
-    D_800A2D10_A3910.unkC = arg0;
-    D_800A2D10_A3910.unk14 = arg1;
-    D_800A2D10_A3910.unk18 = 0x80;
+    D_800A2D10_A3910.soundId = arg0;
+    D_800A2D10_A3910.volume = arg1;
+    D_800A2D10_A3910.pan = 0x80;
     new_var = &gGraphicsManager->soundSequence;
     new_var2 = *new_var;
-    D_800A2D10_A3910.unk28 = arg2;
-    D_800A2D10_A3910.unk10 = new_var2;
+    D_800A2D10_A3910.voiceIndex = arg2;
+    D_800A2D10_A3910.soundSequence = new_var2;
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     incrementSoundSequence();
@@ -917,12 +917,12 @@ void func_800584AC_590AC(s32 arg0, s32 arg1, s32 arg2) {
     s32 v0;
     s32 mesg;
 
-    D_800A2D10_A3910.unkC = arg0;
-    D_800A2D10_A3910.unk14 = 0x80;
-    D_800A2D10_A3910.unk18 = 0x80;
+    D_800A2D10_A3910.soundId = arg0;
+    D_800A2D10_A3910.volume = 0x80;
+    D_800A2D10_A3910.pan = 0x80;
     v0 = *(s32 *)((s32)gGraphicsManager + 0x20);
-    D_800A2D10_A3910.unk28 = arg2;
-    D_800A2D10_A3910.unk10 = v0 + (arg1 << 24);
+    D_800A2D10_A3910.voiceIndex = arg2;
+    D_800A2D10_A3910.soundSequence = v0 + (arg1 << 24);
 
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, (OSMesg *)&mesg, OS_MESG_BLOCK);
@@ -938,12 +938,12 @@ void func_8005854C_5914C(s32 arg0, s32 arg1) {
     s32 *new_var;
     void *sp10;
 
-    D_800A2D10_A3910.unkC = arg0;
-    D_800A2D10_A3910.unk14 = 0x80;
-    D_800A2D10_A3910.unk18 = 0x80;
+    D_800A2D10_A3910.soundId = arg0;
+    D_800A2D10_A3910.volume = 0x80;
+    D_800A2D10_A3910.pan = 0x80;
     new_var2 = *(new_var = &gGraphicsManager->soundSequence);
-    D_800A2D10_A3910.unk28 = arg1;
-    D_800A2D10_A3910.unk10 = new_var2;
+    D_800A2D10_A3910.voiceIndex = arg1;
+    D_800A2D10_A3910.soundSequence = new_var2;
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     incrementSoundSequence();

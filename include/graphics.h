@@ -34,7 +34,7 @@ void stopAudioChannelWithSpeed(void *audioChannel, s32 stoppingSpeed);
 void setAudioChannelVolume(void *audioChannel, s32 volume);
 void *startMusicPlaybackWithVoice(void *musicDataBuffer, void *musicBankBuffer, s32 voiceIndex);
 void *startMusicPlayback(void *musicDataBuffer, void *musicBankBuffer);
-void func_800579E8_585E8(void *arg0, void *arg1);
+void initializeMusicPtrBankAsync(void *ptrBank, void *waveBank);
 void *func_80057A34_58634(void *arg0);
 void *func_80057A7C_5867C(void);
 void func_80057ABC_586BC(s32 arg0, s32 arg1);
