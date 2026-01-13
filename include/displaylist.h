@@ -15,17 +15,17 @@ typedef struct {
 typedef struct {
     /* 0x00 */ Transform3D transform;
     /* 0x20 */ DisplayLists *displayLists;
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
-    /* 0x2C */ void *unk2C;
-    /* 0x30 */ Mtx *unk30;
-    /* 0x34 */ u8 unk34;
-    /* 0x35 */ u8 unk35;
-    /* 0x36 */ u8 unk36;
+    /* 0x24 */ void *segment1;
+    /* 0x28 */ void *segment2;
+    /* 0x2C */ void *segment3;
+    /* 0x30 */ Mtx *transformMatrix;
+    /* 0x34 */ u8 light1R;
+    /* 0x35 */ u8 light1G;
+    /* 0x36 */ u8 light1B;
     /* 0x37 */ u8 unk37;
-    /* 0x38 */ u8 unk38;
-    /* 0x39 */ u8 unk39;
-    /* 0x3A */ u8 unk3A;
+    /* 0x38 */ u8 light2R;
+    /* 0x39 */ u8 light2G;
+    /* 0x3A */ u8 light2B;
     /* 0x3B */ u8 envColorAlpha;
 } DisplayListObject;
 
@@ -160,7 +160,11 @@ s32 func_80062274_62E74(void *arg0, u16 arg1);
 typedef struct TrackGeometryFaceData TrackGeometryFaceData;
 void findTrackFaceAtPosition(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 *arg3, u8 *arg4);
 
-void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1);
+void prepareDisplayListRenderStateWithLights(DisplayListObject *obj);
+void renderOpaqueDisplayListWithLights(DisplayListObject *obj);
+void renderTransparentDisplayListWithLights(DisplayListObject *obj);
+void renderOverlayDisplayListWithLights(DisplayListObject *obj);
+void enqueueDisplayListObjectWithLights(u16 renderLayer, DisplayListObject *displayListObj);
 
 u16 getTrackSegmentWaypoints(void *trackGeom, u16 waypointIdx, void *waypointStart, void *waypointEnd);
 

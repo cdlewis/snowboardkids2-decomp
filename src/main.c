@@ -377,7 +377,7 @@ void freeEffectResources(EffectState *state) {
 
 void renderModelEntity(ModelEntityRenderState *state) {
     if (state->isVisible != 0) {
-        if (state->primaryDisplayList.unk24 != 0) {
+        if (state->primaryDisplayList.segment1 != 0) {
             enqueueDisplayListObject(state->parent->slotIndex, &state->primaryDisplayList);
         }
         if (state->hasSecondaryDisplayList != 0) {

@@ -2289,6 +2289,7 @@ distance_3d = 0x8006C5E0;
 computeLookAtMatrix = 0x8006C654;
 matrixToEulerAngles = 0x8006C8FC;
 atan2Fixed = 0x8006CF7C;
+enqueueDisplayListObjectWithLights = 0x800650B4; // rom:0x65CB4
 
 handleLevelSelectInput = 0x8001EB4C; // rom:0x1F74C
 

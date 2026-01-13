@@ -435,7 +435,7 @@ after_rotation:
             arg0->paletteAsset = freeNodeMemory(arg0->paletteAsset);
             setCallback(reloadCharSelectPreviewAssets);
         } else {
-            func_800650B4_65CB4(arg0->playerIndex, (DisplayListObject *)arg0);
+            enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
         }
     }
 }
@@ -529,7 +529,7 @@ void updateCharSelectSlide(CharSelectSlideState *arg0) {
     func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
     func_8006B084_6BC84(localPtr, &arg0->worldMatrix, arg0);
 
-    func_800650B4_65CB4(arg0->playerIndex, (DisplayListObject *)arg0);
+    enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
 
     if (arg0->worldMatrix.translation.x == 0) {
         state->unk18C0[arg0->playerIndex + 4]++;
@@ -556,7 +556,7 @@ void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
     func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
     func_8006B084_6BC84(localPtr, &arg0->worldMatrix, arg0);
 
-    func_800650B4_65CB4(arg0->playerIndex, (DisplayListObject *)arg0);
+    enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
 
     val = base->unk1898[arg0->playerIndex];
     if (val != 4 && val != 9) {

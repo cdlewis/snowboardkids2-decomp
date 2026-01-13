@@ -79,7 +79,7 @@ void renderOverlayScrollingTexture(DisplayListObject *arg0) {
 }
 
 void enqueueScrollingTextureRender(u16 renderLayer, DisplayListObject *displayListObj) {
-    displayListObj->unk30 = 0;
+    displayListObj->transformMatrix = 0;
 
     if (displayListObj->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(renderLayer, 1, &renderOpaqueScrollingTexture, displayListObj);

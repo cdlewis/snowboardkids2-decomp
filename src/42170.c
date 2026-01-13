@@ -1250,10 +1250,10 @@ void initPlayerAuraEffect(PlayerAuraEffectState *state) {
     state->unk28 = loadAsset_216290();
     state->orbitObj.displayLists = (DisplayLists *)&D_8009A720_9B320;
     state->unk2C = 0;
-    state->orbitObj.unk2C = 0;
+    state->orbitObj.segment3 = 0;
     state->scale = 0x200;
-    state->orbitObj.unk24 = state->unk24;
-    state->orbitObj.unk28 = state->unk28;
+    state->orbitObj.segment1 = state->unk24;
+    state->orbitObj.segment2 = state->unk28;
     setCleanupCallback(cleanupPlayerAuraEffect);
     setCallbackWithContinue(updatePlayerAuraEffect);
 }
@@ -1928,14 +1928,14 @@ void func_80044684_45284(UfoEffectState *arg0) {
     arg0->unk2C = 0;
 
     arg0->leftWing.displayLists = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0x90);
-    arg0->leftWing.unk2C = 0;
-    arg0->leftWing.unk24 = arg0->unk24;
-    arg0->leftWing.unk28 = arg0->unk28;
+    arg0->leftWing.segment3 = 0;
+    arg0->leftWing.segment1 = arg0->unk24;
+    arg0->leftWing.segment2 = arg0->unk28;
 
     arg0->rightWing.displayLists = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0xA0);
-    arg0->rightWing.unk2C = 0;
-    arg0->rightWing.unk24 = arg0->unk24;
-    arg0->rightWing.unk28 = arg0->unk28;
+    arg0->rightWing.segment3 = 0;
+    arg0->rightWing.segment1 = arg0->unk24;
+    arg0->rightWing.segment2 = arg0->unk28;
 
     arg0->unkC8 = rotation + item->unk8;
     createYRotationMatrix((Transform3D *)arg0, arg0->unkC8);

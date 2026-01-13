@@ -98,12 +98,9 @@ void func_80066474_67074(ExtendedSpriteState *);
 void func_800677F0_683F0(AlphaSpriteState *);
 void func_800670D4_67CD4(AlphaSpriteState *);
 void func_800680C4_68CC4(void);
-void func_80064CF4_658F4(DisplayListObject *);
 void prepareDisplayListRenderState(DisplayListObject *);
 void setupDisplayListMatrix(DisplayListObject *);
 void setupBillboardDisplayListMatrix(DisplayListObject *);
-void func_800648EC_654EC(DisplayListObject *);
-void func_80064F74_65B74(DisplayListObject *);
 void func_80068060_68C60(void);
 
 void parseGameDataLayout(GameDataLayout *gameData) {
@@ -410,12 +407,12 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
     f32 upZ;
     LookAt *lookAt;
 
-    if (obj->unk30 == NULL) {
-        obj->unk30 = arenaAlloc16(0x40);
-        if (obj->unk30 == NULL) {
+    if (obj->transformMatrix == NULL) {
+        obj->transformMatrix = arenaAlloc16(0x40);
+        if (obj->transformMatrix == NULL) {
             return;
         }
-        func_8006BFB8_6CBB8(obj, obj->unk30);
+        func_8006BFB8_6CBB8(obj, obj->transformMatrix);
     }
 
     if (obj->displayLists->flags & 1) {
@@ -435,36 +432,36 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
 
         gGraphicsMode = 3;
 
-        if (obj->unk24 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, obj->unk24);
+        if (obj->segment1 != 0) {
+            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
         }
 
-        if (obj->unk28 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, obj->unk28);
+        if (obj->segment2 != 0) {
+            gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
         }
 
-        if (obj->unk2C != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, obj->unk2C);
+        if (obj->segment3 != 0) {
+            gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
         }
     } else {
-        if (obj->unk24 != 0 && obj->unk24 != D_800A2D40_A3940) {
-            gSPSegment(gRegionAllocPtr++, 1, obj->unk24);
+        if (obj->segment1 != 0 && obj->segment1 != D_800A2D40_A3940) {
+            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
         }
 
-        if (obj->unk28 != 0 && obj->unk28 != D_800A2D44_A3944) {
-            gSPSegment(gRegionAllocPtr++, 2, obj->unk28);
+        if (obj->segment2 != 0 && obj->segment2 != D_800A2D44_A3944) {
+            gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
         }
 
-        if (obj->unk2C != 0 && obj->unk2C != D_800A2D48_A3948) {
-            gSPSegment(gRegionAllocPtr++, 3, obj->unk2C);
+        if (obj->segment3 != 0 && obj->segment3 != D_800A2D48_A3948) {
+            gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
         }
     }
 
-    D_800A2D40_A3940 = obj->unk24;
-    D_800A2D44_A3944 = obj->unk28;
-    D_800A2D48_A3948 = obj->unk2C;
+    D_800A2D40_A3940 = obj->segment1;
+    D_800A2D44_A3944 = obj->segment2;
+    D_800A2D48_A3948 = obj->segment3;
 
-    gSPMatrix(gRegionAllocPtr++, obj->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(gRegionAllocPtr++, obj->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
 void renderOpaqueDisplayList(DisplayListObject *arg0) {
@@ -483,7 +480,7 @@ void renderOverlayDisplayList(DisplayListObject *arg0) {
 }
 
 void enqueueDisplayListObjectWithFullRenderState(s32 arg0, void *arg1) {
-    ((DisplayListObject *)arg1)->unk30 = 0;
+    ((DisplayListObject *)arg1)->transformMatrix = 0;
 
     if (((DisplayListObject *)arg1)->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0, 1, renderOpaqueDisplayList, arg1);
@@ -508,12 +505,12 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
     f32 sp84;
     LookAt *temp_v0;
 
-    if (arg0->unk30 == NULL) {
-        arg0->unk30 = arenaAlloc16(0x40);
-        if (arg0->unk30 == NULL) {
+    if (arg0->transformMatrix == NULL) {
+        arg0->transformMatrix = arenaAlloc16(0x40);
+        if (arg0->transformMatrix == NULL) {
             return;
         }
-        func_8006C130_6CD30((Transform3D *)arg0, arg0->unk30);
+        func_8006C130_6CD30((Transform3D *)arg0, arg0->transformMatrix);
     }
 
     if (arg0->displayLists->flags & 1) {
@@ -533,45 +530,45 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
 
         gGraphicsMode = 3;
 
-        if (arg0->unk24 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        if (arg0->segment1 != 0) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
         }
 
-        if (arg0->unk28 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        if (arg0->segment2 != 0) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
         }
 
-        if (arg0->unk2C != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        if (arg0->segment3 != 0) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
         }
 
-        D_800A2D40_A3940 = arg0->unk24;
-        D_800A2D44_A3944 = arg0->unk28;
-        D_800A2D48_A3948 = arg0->unk2C;
+        D_800A2D40_A3940 = arg0->segment1;
+        D_800A2D44_A3944 = arg0->segment2;
+        D_800A2D48_A3948 = arg0->segment3;
     } else {
-        if (arg0->unk24 != D_800A2D40_A3940) {
-            if (arg0->unk24 != 0) {
-                gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        if (arg0->segment1 != D_800A2D40_A3940) {
+            if (arg0->segment1 != 0) {
+                gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
             }
-            D_800A2D40_A3940 = arg0->unk24;
+            D_800A2D40_A3940 = arg0->segment1;
         }
 
-        if (arg0->unk28 != D_800A2D44_A3944) {
-            if (arg0->unk28 != 0) {
-                gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        if (arg0->segment2 != D_800A2D44_A3944) {
+            if (arg0->segment2 != 0) {
+                gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
             }
-            D_800A2D44_A3944 = arg0->unk28;
+            D_800A2D44_A3944 = arg0->segment2;
         }
 
-        if (arg0->unk2C != D_800A2D48_A3948) {
-            if (arg0->unk2C != 0) {
-                gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        if (arg0->segment3 != D_800A2D48_A3948) {
+            if (arg0->segment3 != 0) {
+                gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
             }
-            D_800A2D48_A3948 = arg0->unk2C;
+            D_800A2D48_A3948 = arg0->segment3;
         }
     }
 
-    gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(gRegionAllocPtr++, arg0->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
 void renderOpaqueDisplayListCallback(DisplayListObject *obj) {
@@ -590,7 +587,7 @@ void renderOverlayDisplayListCallback(DisplayListObject *obj) {
 }
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1) {
-    arg1->unk30 = 0;
+    arg1->transformMatrix = 0;
     if (arg1->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, renderOpaqueDisplayListCallback, arg1);
     }
@@ -626,7 +623,7 @@ void renderOverlayDisplayListWithFrustumCull(DisplayListObject *arg0) {
 }
 
 void enqueueDisplayListWithFrustumCull(s32 arg0, DisplayListObject *arg1) {
-    arg1->unk30 = 0;
+    arg1->transformMatrix = 0;
     if (arg1->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0, 1, &renderOpaqueDisplayListWithFrustumCull, arg1);
     }
@@ -682,7 +679,7 @@ void buildOverlayDisplayListSegment(DisplayListObject *obj) {
 }
 
 void enqueueDisplayListObjectWithSegments(s32 arg0, DisplayListObject *arg1) {
-    arg1->unk30 = 0;
+    arg1->transformMatrix = 0;
     if (arg1->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &buildDisplayListSegment, arg1);
     }
@@ -707,54 +704,60 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
     Mtx *matrixPair;
     s16 *rotationData = (s16 *)&obj->transform;
 
-    if (obj->unk30 == NULL) {
+    if (obj->transformMatrix == NULL) {
         matrixPair = arenaAlloc16(0x80);
-        obj->unk30 = matrixPair;
+        obj->transformMatrix = matrixPair;
         if (matrixPair == NULL) {
             return;
         }
         /* First matrix: translation matrix */
         /* Integer portion (s32[0-7]) */
-        ((s32 *)obj->unk30)[0] = 0x10000; /* m[0][0] = 1.0 (integer part: 1, high; 0, low) */
-        ((s32 *)obj->unk30)[1] = 0;       /* m[0][1] = 0, m[0][2] = 0 */
-        ((s32 *)obj->unk30)[2] = 1;       /* m[0][3] = 0 (int=0, frac packed), m[1][0] = 0 (int=1 for perspective) */
-        ((s32 *)obj->unk30)[3] = 0;       /* m[1][1] = 0, m[1][2] = 0 */
-        ((s32 *)obj->unk30)[4] = 0;       /* m[1][3] = 0, m[2][0] = 0 */
-        ((s32 *)obj->unk30)[5] = 0x10000; /* m[2][1] = 0, m[2][2] = 1.0 (integer part) */
-        ((s32 *)obj->unk30)[6] =
+        ((s32 *)obj->transformMatrix)[0] = 0x10000; /* m[0][0] = 1.0 (integer part: 1, high; 0, low) */
+        ((s32 *)obj->transformMatrix)[1] = 0;       /* m[0][1] = 0, m[0][2] = 0 */
+        ((s32 *)obj->transformMatrix)[2] =
+            1; /* m[0][3] = 0 (int=0, frac packed), m[1][0] = 0 (int=1 for perspective) */
+        ((s32 *)obj->transformMatrix)[3] = 0;       /* m[1][1] = 0, m[1][2] = 0 */
+        ((s32 *)obj->transformMatrix)[4] = 0;       /* m[1][3] = 0, m[2][0] = 0 */
+        ((s32 *)obj->transformMatrix)[5] = 0x10000; /* m[2][1] = 0, m[2][2] = 1.0 (integer part) */
+        ((s32 *)obj->transformMatrix)[6] =
             (obj->transform.translation.x & 0xFFFF0000) + ((u16 *)&obj->transform.translation.y)[0];
-        ((s32 *)obj->unk30)[7] = (obj->transform.translation.z & 0xFFFF0000) + 1;
+        ((s32 *)obj->transformMatrix)[7] = (obj->transform.translation.z & 0xFFFF0000) + 1;
         /* Fractional portion (s32[8-15]) */
-        ((s32 *)obj->unk30)[8] = 0;
-        ((s32 *)obj->unk30)[9] = 0;
-        ((s32 *)obj->unk30)[10] = 0;
-        ((s32 *)obj->unk30)[11] = 0;
-        ((s32 *)obj->unk30)[12] = 0;
-        ((s32 *)obj->unk30)[13] = 0;
-        ((s32 *)obj->unk30)[14] = (obj->transform.translation.x << 16) + ((u16 *)&obj->transform.translation.y)[1];
+        ((s32 *)obj->transformMatrix)[8] = 0;
+        ((s32 *)obj->transformMatrix)[9] = 0;
+        ((s32 *)obj->transformMatrix)[10] = 0;
+        ((s32 *)obj->transformMatrix)[11] = 0;
+        ((s32 *)obj->transformMatrix)[12] = 0;
+        ((s32 *)obj->transformMatrix)[13] = 0;
+        ((s32 *)obj->transformMatrix)[14] =
+            (obj->transform.translation.x << 16) + ((u16 *)&obj->transform.translation.y)[1];
         frac16Mask = 0xFFFF;
-        ((s32 *)obj->unk30)[15] = obj->transform.translation.z << 16;
+        ((s32 *)obj->transformMatrix)[15] = obj->transform.translation.z << 16;
         /* Second matrix: rotation matrix built from Transform3D rotation data at offset 0 */
         /* Integer portion (s32[16-23]) - extracts high bits from s15 rotation values */
-        ((s32 *)obj->unk30)[16] =
+        ((s32 *)obj->transformMatrix)[16] =
             ((rotationData[0] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationData[1] >> 15) & frac16Mask);
-        ((s32 *)obj->unk30)[17] = (rotationData[2] * 2) & 0xFFFF0000;
-        ((s32 *)obj->unk30)[18] =
+        ((s32 *)obj->transformMatrix)[17] = (rotationData[2] * 2) & 0xFFFF0000;
+        ((s32 *)obj->transformMatrix)[18] =
             ((rotationData[3] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationData[4] >> 15) & frac16Mask);
-        ((s32 *)obj->unk30)[19] = (rotationData[5] * 2) & 0xFFFF0000;
-        ((s32 *)obj->unk30)[20] = ((rotationData[6] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationData[7] >> 15) & 0xFFFF);
-        ((s32 *)obj->unk30)[21] = (rotationData[8] * 2) & 0xFFFF0000;
-        ((s32 *)obj->unk30)[22] = 0;
-        ((s32 *)obj->unk30)[23] = 1;
+        ((s32 *)obj->transformMatrix)[19] = (rotationData[5] * 2) & 0xFFFF0000;
+        ((s32 *)obj->transformMatrix)[20] =
+            ((rotationData[6] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationData[7] >> 15) & 0xFFFF);
+        ((s32 *)obj->transformMatrix)[21] = (rotationData[8] * 2) & 0xFFFF0000;
+        ((s32 *)obj->transformMatrix)[22] = 0;
+        ((s32 *)obj->transformMatrix)[23] = 1;
         /* Fractional portion (s32[24-31]) - extracts low bits from s15 rotation values */
-        ((s32 *)obj->unk30)[24] = ((rotationData[0] << 17) & 0xFFFF0000) + ((rotationData[1] * 2) & frac16Mask);
-        ((s32 *)obj->unk30)[25] = (rotationData[2] << 17) & 0xFFFF0000;
-        ((s32 *)obj->unk30)[26] = ((rotationData[3] << 17) & 0xFFFF0000) + ((rotationData[4] * 2) & frac16Mask);
-        ((s32 *)obj->unk30)[27] = (rotationData[5] << 17) & 0xFFFF0000;
-        ((s32 *)obj->unk30)[28] = ((rotationData[6] << 17) & 0xFFFF0000) + ((rotationData[7] * 2) & frac16Mask);
-        ((s32 *)obj->unk30)[29] = (rotationData[8] << 17) & 0xFFFF0000;
-        ((s32 *)obj->unk30)[30] = 0;
-        ((s32 *)obj->unk30)[31] = 0;
+        ((s32 *)obj->transformMatrix)[24] =
+            ((rotationData[0] << 17) & 0xFFFF0000) + ((rotationData[1] * 2) & frac16Mask);
+        ((s32 *)obj->transformMatrix)[25] = (rotationData[2] << 17) & 0xFFFF0000;
+        ((s32 *)obj->transformMatrix)[26] =
+            ((rotationData[3] << 17) & 0xFFFF0000) + ((rotationData[4] * 2) & frac16Mask);
+        ((s32 *)obj->transformMatrix)[27] = (rotationData[5] << 17) & 0xFFFF0000;
+        ((s32 *)obj->transformMatrix)[28] =
+            ((rotationData[6] << 17) & 0xFFFF0000) + ((rotationData[7] * 2) & frac16Mask);
+        ((s32 *)obj->transformMatrix)[29] = (rotationData[8] << 17) & 0xFFFF0000;
+        ((s32 *)obj->transformMatrix)[30] = 0;
+        ((s32 *)obj->transformMatrix)[31] = 0;
     }
 
     if (obj->displayLists->flags & 1) {
@@ -774,49 +777,49 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
 
         gGraphicsMode = 3;
 
-        if (obj->unk24 != NULL) {
-            gSPSegment(gRegionAllocPtr++, 1, obj->unk24);
+        if (obj->segment1 != NULL) {
+            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
         }
 
-        if (obj->unk28 != NULL) {
-            gSPSegment(gRegionAllocPtr++, 2, obj->unk28);
+        if (obj->segment2 != NULL) {
+            gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
         }
 
-        if (obj->unk2C != NULL) {
-            gSPSegment(gRegionAllocPtr++, 3, obj->unk2C);
+        if (obj->segment3 != NULL) {
+            gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
         }
 
-        D_800A2D40_A3940 = obj->unk24;
-        D_800A2D44_A3944 = obj->unk28;
-        D_800A2D48_A3948 = obj->unk2C;
+        D_800A2D40_A3940 = obj->segment1;
+        D_800A2D44_A3944 = obj->segment2;
+        D_800A2D48_A3948 = obj->segment3;
     } else {
-        if (obj->unk24 != D_800A2D40_A3940) {
-            if (obj->unk24 != NULL) {
-                gSPSegment(gRegionAllocPtr++, 1, obj->unk24);
+        if (obj->segment1 != D_800A2D40_A3940) {
+            if (obj->segment1 != NULL) {
+                gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
             }
-            D_800A2D40_A3940 = obj->unk24;
+            D_800A2D40_A3940 = obj->segment1;
         }
 
-        if (obj->unk28 != D_800A2D44_A3944) {
-            if (obj->unk28 != NULL) {
-                gSPSegment(gRegionAllocPtr++, 2, obj->unk28);
+        if (obj->segment2 != D_800A2D44_A3944) {
+            if (obj->segment2 != NULL) {
+                gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
             }
-            D_800A2D44_A3944 = obj->unk28;
+            D_800A2D44_A3944 = obj->segment2;
         }
 
-        if (obj->unk2C != D_800A2D48_A3948) {
-            if (obj->unk2C != NULL) {
-                gSPSegment(gRegionAllocPtr++, 3, obj->unk2C);
+        if (obj->segment3 != D_800A2D48_A3948) {
+            if (obj->segment3 != NULL) {
+                gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
             }
-            D_800A2D48_A3948 = obj->unk2C;
+            D_800A2D48_A3948 = obj->segment3;
         }
     }
 
-    gSPMatrix(gRegionAllocPtr++, obj->unk30, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, obj->transformMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-    gSPMatrix(gRegionAllocPtr++, &obj->unk30[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, &obj->transformMatrix[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 }
 
 void renderBillboardedOpaqueDisplayList(DisplayListObject *arg0) {
@@ -841,7 +844,7 @@ void renderBillboardedOverlayDisplayList(DisplayListObject *arg0) {
 }
 
 void enqueueBillboardedDisplayListObject(s32 arg0, DisplayListObject *arg1) {
-    arg1->unk30 = 0;
+    arg1->transformMatrix = 0;
 
     if (arg1->displayLists->opaqueDisplayList != NULL) {
         debugEnqueueCallback(arg0, 1, &renderBillboardedOpaqueDisplayList, arg1);
@@ -865,9 +868,9 @@ void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
     s32 objectCount;
     volatile u8 padding[0x44];
 
-    if (arg0->unk30 == NULL) {
-        arg0->unk30 = arenaAlloc16(arg0->unk37 << 6);
-        if (arg0->unk30 == NULL) {
+    if (arg0->transformMatrix == NULL) {
+        arg0->transformMatrix = arenaAlloc16(arg0->unk37 << 6);
+        if (arg0->transformMatrix == NULL) {
             return;
         }
         objectCount = arg0->unk37;
@@ -875,8 +878,8 @@ void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
         if (objectCount > 0) {
             currentObject = arg0;
             do {
-                currentObject->unk30 = arg0->unk30 + matrixIndex;
-                func_8006C130_6CD30((Transform3D *)currentObject, currentObject->unk30);
+                currentObject->transformMatrix = arg0->transformMatrix + matrixIndex;
+                func_8006C130_6CD30((Transform3D *)currentObject, currentObject->transformMatrix);
                 matrixIndex += 1;
                 currentObject++;
             } while (matrixIndex < arg0->unk37);
@@ -889,32 +892,32 @@ void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
 
     gDPPipeSync(gRegionAllocPtr++);
     gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
-    segment1 = arg0->unk24;
+    segment1 = arg0->segment1;
     gGraphicsMode = 3;
 
     if (segment1 != NULL) {
-        gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
     }
 
-    if (arg0->unk28 != NULL) {
+    if (arg0->segment2 != NULL) {
         gfxCmd = gRegionAllocPtr;
         gfxCmd->words.w0 = 0xDB060008;
-        segmentValue = arg0->unk28;
+        segmentValue = arg0->segment2;
         gRegionAllocPtr = gfxCmd + 1;
         gfxCmd->words.w1 = (u32)segmentValue;
     }
 
-    if (arg0->unk2C != 0) {
+    if (arg0->segment3 != 0) {
         gfxCmd = gRegionAllocPtr;
         gfxCmd->words.w0 = 0xDB06000C;
-        segmentValue = arg0->unk2C;
+        segmentValue = arg0->segment3;
         gRegionAllocPtr = gfxCmd + 1;
         gfxCmd->words.w1 = (u32)segmentValue;
     }
 
-    D_800A2D40_A3940 = arg0->unk24;
-    D_800A2D44_A3944 = arg0->unk28;
-    D_800A2D48_A3948 = arg0->unk2C;
+    D_800A2D40_A3940 = arg0->segment1;
+    D_800A2D44_A3944 = arg0->segment2;
+    D_800A2D48_A3948 = arg0->segment3;
 }
 
 void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
@@ -945,33 +948,33 @@ void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
         gSPLookAt(gRegionAllocPtr++, lookat);
     }
 
-    temp = obj->unk24;
+    temp = obj->segment1;
     if (temp != D_800A2D40_A3940) {
         if (temp != NULL) {
-            gSPSegment(gRegionAllocPtr++, 1, obj->unk24);
+            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
         }
-        D_800A2D40_A3940 = obj->unk24;
+        D_800A2D40_A3940 = obj->segment1;
     }
 
     elem = (DisplayListObject *)(arg1 * sizeof(DisplayListObject) + (s32)arg0);
-    temp = elem->unk28;
+    temp = elem->segment2;
     if (temp != D_800A2D44_A3944) {
         if (temp != NULL) {
-            gSPSegment(gRegionAllocPtr++, 2, elem->unk28);
+            gSPSegment(gRegionAllocPtr++, 2, elem->segment2);
         }
-        D_800A2D44_A3944 = elem->unk28;
+        D_800A2D44_A3944 = elem->segment2;
     }
 
     elem = (DisplayListObject *)(arg1 * sizeof(DisplayListObject) + (s32)arg0);
-    temp = elem->unk2C;
+    temp = elem->segment3;
     if (temp != D_800A2D48_A3948) {
         if (temp != NULL) {
-            gSPSegment(gRegionAllocPtr++, 3, elem->unk2C);
+            gSPSegment(gRegionAllocPtr++, 3, elem->segment3);
         }
-        D_800A2D48_A3948 = elem->unk2C;
+        D_800A2D48_A3948 = elem->segment3;
     }
 
-    gSPMatrix(gRegionAllocPtr++, (arg1 + arg0)->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(gRegionAllocPtr++, (arg1 + arg0)->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
 void renderMultiPartOpaqueDisplayLists(DisplayListObject *displayObjects) {
@@ -1091,7 +1094,7 @@ void enqueuePreLitMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg
     }
 }
 
-void func_800648EC_654EC(DisplayListObject *arg0) {
+void prepareDisplayListRenderStateWithLights(DisplayListObject *arg0) {
     Mtx sp30;
     f32 sp70;
     f32 sp74;
@@ -1101,12 +1104,12 @@ void func_800648EC_654EC(DisplayListObject *arg0) {
     f32 sp84;
     LookAt *lookat;
 
-    if (arg0->unk30 == NULL) {
-        arg0->unk30 = arenaAlloc16(0x40);
-        if (arg0->unk30 == NULL) {
+    if (arg0->transformMatrix == NULL) {
+        arg0->transformMatrix = arenaAlloc16(0x40);
+        if (arg0->transformMatrix == NULL) {
             return;
         }
-        func_8006C130_6CD30((Transform3D *)arg0, arg0->unk30);
+        func_8006C130_6CD30((Transform3D *)arg0, arg0->transformMatrix);
     }
 
     if (arg0->displayLists->flags & 1) {
@@ -1126,42 +1129,42 @@ void func_800648EC_654EC(DisplayListObject *arg0) {
 
         gGraphicsMode = 3;
 
-        if (arg0->unk24 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        if (arg0->segment1 != 0) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
         }
 
-        if (arg0->unk28 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        if (arg0->segment2 != 0) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
         }
 
-        if (arg0->unk2C != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        if (arg0->segment3 != 0) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
         }
     } else {
-        if (arg0->unk24 != 0 && arg0->unk24 != D_800A2D40_A3940) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        if (arg0->segment1 != 0 && arg0->segment1 != D_800A2D40_A3940) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
         }
 
-        if (arg0->unk28 != 0 && arg0->unk28 != D_800A2D44_A3944) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        if (arg0->segment2 != 0 && arg0->segment2 != D_800A2D44_A3944) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
         }
 
-        if (arg0->unk2C != 0 && arg0->unk2C != D_800A2D48_A3948) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        if (arg0->segment3 != 0 && arg0->segment3 != D_800A2D48_A3948) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
         }
     }
 
-    D_800A2D40_A3940 = arg0->unk24;
-    D_800A2D44_A3944 = arg0->unk28;
-    D_800A2D48_A3948 = arg0->unk2C;
+    D_800A2D40_A3940 = arg0->segment1;
+    D_800A2D44_A3944 = arg0->segment2;
+    D_800A2D48_A3948 = arg0->segment3;
 
-    gSPLightColor(gRegionAllocPtr++, LIGHT_1, arg0->unk34 << 24 | arg0->unk35 << 16 | arg0->unk36 << 8);
-    gSPLightColor(gRegionAllocPtr++, LIGHT_2, arg0->unk38 << 24 | arg0->unk39 << 16 | arg0->unk3A << 8);
-    gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPLightColor(gRegionAllocPtr++, LIGHT_1, arg0->light1R << 24 | arg0->light1G << 16 | arg0->light1B << 8);
+    gSPLightColor(gRegionAllocPtr++, LIGHT_2, arg0->light2R << 24 | arg0->light2G << 16 | arg0->light2B << 8);
+    gSPMatrix(gRegionAllocPtr++, arg0->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
-void func_80064CF4_658F4(DisplayListObject *arg0) {
-    func_800648EC_654EC(arg0);
+void renderOpaqueDisplayListWithLights(DisplayListObject *arg0) {
+    prepareDisplayListRenderStateWithLights(arg0);
 
     gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
 
@@ -1178,8 +1181,8 @@ void func_80064CF4_658F4(DisplayListObject *arg0) {
     );
 }
 
-void func_80064E34_65A34(DisplayListObject *arg0) {
-    func_800648EC_654EC(arg0);
+void renderTransparentDisplayListWithLights(DisplayListObject *arg0) {
+    prepareDisplayListRenderStateWithLights(arg0);
 
     gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
 
@@ -1196,8 +1199,8 @@ void func_80064E34_65A34(DisplayListObject *arg0) {
     );
 }
 
-void func_80064F74_65B74(DisplayListObject *arg0) {
-    func_800648EC_654EC(arg0);
+void renderOverlayDisplayListWithLights(DisplayListObject *arg0) {
+    prepareDisplayListRenderStateWithLights(arg0);
 
     gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
 
@@ -1214,19 +1217,19 @@ void func_80064F74_65B74(DisplayListObject *arg0) {
     );
 }
 
-void func_800650B4_65CB4(u16 arg0, DisplayListObject *arg1) {
-    arg1->unk30 = 0;
+void enqueueDisplayListObjectWithLights(u16 arg0, DisplayListObject *arg1) {
+    arg1->transformMatrix = 0;
 
     if (arg1->displayLists->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 1, &func_80064CF4_658F4, arg1);
+        debugEnqueueCallback(arg0, 1, &renderOpaqueDisplayListWithLights, arg1);
     }
 
     if (arg1->displayLists->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 3, &func_80064E34_65A34, arg1);
+        debugEnqueueCallback(arg0, 3, &renderTransparentDisplayListWithLights, arg1);
     }
 
     if (arg1->displayLists->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 5, &func_80064F74_65B74, arg1);
+        debugEnqueueCallback(arg0, 5, &renderOverlayDisplayListWithLights, arg1);
     }
 }
 
@@ -1242,13 +1245,13 @@ void func_80065150_65D50(DisplayListObject *displayObjects) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        displayObjects->unk34 << 0x18 | displayObjects->unk35 << 0x10 | displayObjects->unk36 << 8
+        displayObjects->light1R << 0x18 | displayObjects->light1G << 0x10 | displayObjects->light1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        displayObjects->unk38 << 0x18 | displayObjects->unk39 << 0x10 | displayObjects->unk3A << 8
+        displayObjects->light2R << 0x18 | displayObjects->light2G << 0x10 | displayObjects->light2B << 8
     );
 
     i = 0;
@@ -1292,13 +1295,13 @@ void func_800653E0_65FE0(DisplayListObject *displayObjects) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        displayObjects->unk34 << 0x18 | displayObjects->unk35 << 0x10 | displayObjects->unk36 << 8
+        displayObjects->light1R << 0x18 | displayObjects->light1G << 0x10 | displayObjects->light1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        displayObjects->unk38 << 0x18 | displayObjects->unk39 << 0x10 | displayObjects->unk3A << 8
+        displayObjects->light2R << 0x18 | displayObjects->light2G << 0x10 | displayObjects->light2B << 8
     );
 
     i = 0;
@@ -1342,13 +1345,13 @@ void func_80065670_66270(DisplayListObject *displayObjects) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        displayObjects->unk34 << 0x18 | displayObjects->unk35 << 0x10 | displayObjects->unk36 << 8
+        displayObjects->light1R << 0x18 | displayObjects->light1G << 0x10 | displayObjects->light1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        displayObjects->unk38 << 0x18 | displayObjects->unk39 << 0x10 | displayObjects->unk3A << 8
+        displayObjects->light2R << 0x18 | displayObjects->light2G << 0x10 | displayObjects->light2B << 8
     );
 
     i = 0;
@@ -1431,13 +1434,13 @@ void func_800659E4_665E4(DisplayListObject *arg0) {
     LookAt *temp_v0;
     void *alloc;
 
-    arg0->unk30 = arenaAlloc16(0x40);
-    if (arg0->unk30 == NULL) {
+    arg0->transformMatrix = arenaAlloc16(0x40);
+    if (arg0->transformMatrix == NULL) {
         return;
     }
 
     memcpy(&D_8009A8A4_9B4A4, &D_800AB068_A23D8->padding2[0x10], 0xC);
-    func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, arg0->unk30);
+    func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, arg0->transformMatrix);
 
     if (arg0->displayLists->flags & 1) {
         temp_v0 = arenaAlloc16(0x20);
@@ -1456,36 +1459,36 @@ void func_800659E4_665E4(DisplayListObject *arg0) {
 
         gGraphicsMode = 3;
 
-        if (arg0->unk24 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        if (arg0->segment1 != 0) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
         }
 
-        if (arg0->unk28 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        if (arg0->segment2 != 0) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
         }
 
-        if (arg0->unk2C != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        if (arg0->segment3 != 0) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
         }
     } else {
-        if (arg0->unk24 != 0 && arg0->unk24 != D_800A2D40_A3940) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
+        if (arg0->segment1 != 0 && arg0->segment1 != D_800A2D40_A3940) {
+            gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
         }
 
-        if (arg0->unk28 != 0 && arg0->unk28 != D_800A2D44_A3944) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->unk28);
+        if (arg0->segment2 != 0 && arg0->segment2 != D_800A2D44_A3944) {
+            gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
         }
 
-        if (arg0->unk2C != 0 && arg0->unk2C != D_800A2D48_A3948) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->unk2C);
+        if (arg0->segment3 != 0 && arg0->segment3 != D_800A2D48_A3948) {
+            gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
         }
     }
 
-    D_800A2D40_A3940 = arg0->unk24;
-    D_800A2D44_A3944 = arg0->unk28;
-    D_800A2D48_A3948 = arg0->unk2C;
+    D_800A2D40_A3940 = arg0->segment1;
+    D_800A2D44_A3944 = arg0->segment2;
+    D_800A2D48_A3948 = arg0->segment3;
 
-    gSPMatrix(gRegionAllocPtr++, arg0->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(gRegionAllocPtr++, arg0->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 
     if (arg0->displayLists->opaqueDisplayList != 0) {
         gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
@@ -1501,7 +1504,7 @@ void func_800659E4_665E4(DisplayListObject *arg0) {
 }
 
 void func_80065DA8_669A8(s32 arg0, DisplayListObject *arg1) {
-    arg1->unk30 = 0;
+    arg1->transformMatrix = 0;
     debugEnqueueCallback(arg0 & 0xFFFF, 0, &func_800659E4_665E4, arg1);
 }
 

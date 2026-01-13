@@ -1392,9 +1392,9 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
     levelData = func_80055D10_56910(allocation->unk5C);
 
     arg0->displayListObject.displayLists = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x10);
-    arg0->displayListObject.unk24 = func_80055DC4_569C4(allocation->unk5C);
-    arg0->displayListObject.unk28 = func_80055DF8_569F8(allocation->unk5C);
-    arg0->displayListObject.unk2C = 0;
+    arg0->displayListObject.segment1 = func_80055DC4_569C4(allocation->unk5C);
+    arg0->displayListObject.segment2 = func_80055DF8_569F8(allocation->unk5C);
+    arg0->displayListObject.segment3 = 0;
 
     createYRotationMatrix((Transform3D *)arg0, rotation + levelData->unk8);
     arg0->displayListObject.transform.translation.y = position.y;
