@@ -125,9 +125,9 @@ extern Gfx *gRegionAllocPtr;
 
 void func_800BB388_AF078(AnimatedGhostEntity *);
 void cleanupAnimatedGhost(void **);
-void func_800BB5B0_AF2A0(AnimatedGhostEntity *);
-void func_800BB620_AF310(AnimatedGhostEntity *);
-void func_800BB6F4_AF3E4(AnimatedGhostEntity *);
+void fadeInGhost(AnimatedGhostEntity *);
+void oscillateGhostFade(AnimatedGhostEntity *);
+void fadeOutGhost(AnimatedGhostEntity *);
 void func_800BB778_AF468(void);
 void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *);
 void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *);
@@ -202,7 +202,7 @@ void func_800BB388_AF078(AnimatedGhostEntity *ghost) {
     ghost->lifetime = 0x3C;
 
     setCleanupCallback(cleanupAnimatedGhost);
-    setCallbackWithContinue(func_800BB5B0_AF2A0);
+    setCallbackWithContinue(fadeInGhost);
 }
 
 void cleanupAnimatedGhost(void **arg0) {
@@ -260,22 +260,22 @@ s32 updateGhostPositionAndCheckEnd(AnimatedGhostEntity *ghost) {
     return shouldEnd;
 }
 
-void func_800BB5B0_AF2A0(AnimatedGhostEntity *ghost) {
+void fadeInGhost(AnimatedGhostEntity *ghost) {
     ghost->alpha += 0x10;
 
     if (ghost->alpha == 0xE0) {
         ghost->fadeDirection = 1;
-        setCallback(func_800BB620_AF310);
+        setCallback(oscillateGhostFade);
     }
 
     if (updateGhostPositionAndCheckEnd(ghost)) {
-        setCallback(func_800BB6F4_AF3E4);
+        setCallback(fadeOutGhost);
     }
 
     updateGhostAnimation(ghost);
 }
 
-void func_800BB620_AF310(AnimatedGhostEntity *ghost) {
+void oscillateGhostFade(AnimatedGhostEntity *ghost) {
     u8 unused;
     Player *nearbyPlayer;
 
@@ -292,7 +292,7 @@ void func_800BB620_AF310(AnimatedGhostEntity *ghost) {
     }
 
     if (updateGhostPositionAndCheckEnd(ghost) != 0) {
-        setCallback(func_800BB6F4_AF3E4);
+        setCallback(fadeOutGhost);
     }
 
     nearbyPlayer = func_8005B548_5C148(&ghost->posX, -1, 0x100000);
@@ -302,13 +302,13 @@ void func_800BB620_AF310(AnimatedGhostEntity *ghost) {
             spawnStarEffectImmediate(nearbyPlayer);
         }
 
-        setCallback(func_800BB6F4_AF3E4);
+        setCallback(fadeOutGhost);
     }
 
     updateGhostAnimation(ghost);
 }
 
-void func_800BB6F4_AF3E4(AnimatedGhostEntity *ghost) {
+void fadeOutGhost(AnimatedGhostEntity *ghost) {
     ghost->alpha -= 0x10;
 
     if (ghost->alpha == 0) {
