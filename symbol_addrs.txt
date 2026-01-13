@@ -220,6 +220,7 @@ knockbackBehaviorStepHandlers = 0x800BAC14; // rom:0xAAAC4
 slideDuringKnockbackRecoveryStep = 0x800B6D14; // rom:0xA6BC4
 slideDiagonallyDuringKnockbackRecoveryStep = 0x800B6DB8; // rom:0xA6C68
 respawnAtFinishLineAndSlideStep = 0x800B6E5C; // rom:0xA6D0C
+slideForwardAndResetStep = 0x800B6FE8; // rom:0xA6E98
 g_KnockbackDiagonalSlideVelocity = 0x800BAC8C; // rom:0xAAB3C size:0xC
 g_FinishLineRespawnOffset = 0x800BAC98; // rom:0xAAB48 size:0xC
 g_KnockbackRecoveryForwardVelocity = 0x800BAC80; // rom:0xAAB30 size:0xC

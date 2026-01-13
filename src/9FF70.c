@@ -3076,22 +3076,22 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
     return 0;
 }
 
-s32 func_800B6FE8_A6E98(Player *arg0) {
+s32 slideForwardAndResetStep(Player *player) {
     GameState *gameState = getCurrentAllocation();
 
     func_80055D10_56910(gameState->memoryPoolId);
-    transformVector2(&g_KnockbackRecoveryForwardVelocity, &arg0->unk970, &arg0->velocity);
-    applyClampedVelocityToPosition(arg0);
-    decayPlayerSteeringAngles(arg0);
+    transformVector2(&g_KnockbackRecoveryForwardVelocity, &player->unk970, &player->velocity);
+    applyClampedVelocityToPosition(player);
+    decayPlayerSteeringAngles(player);
 
-    if (arg0->unkB8C != 0) {
-        arg0->unkB8C = arg0->unkB8C - 1;
+    if (player->unkB8C != 0) {
+        player->unkB8C = player->unkB8C - 1;
     } else {
-        arg0->unkB84 = arg0->unkB84 & ~0x2380;
-        resetPlayerBehaviorToDefault(arg0);
+        player->unkB84 = player->unkB84 & ~0x2380;
+        resetPlayerBehaviorToDefault(player);
     }
 
-    func_8005D308_5DF08(arg0, 0xD);
+    func_8005D308_5DF08(player, 0xD);
     return 0;
 }
 
