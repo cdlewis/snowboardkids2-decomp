@@ -283,7 +283,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
                         i = randVal << 1;
                         i = i + randVal;
                         i = i + 0x6C0;
-                        func_800547E0_553E0(i, (((u8)randA()) << 12) | 0x100000);
+                        spawnFallingStarProjectile(i, (((u8)randA()) << 12) | 0x100000);
                         queueSoundAtPosition(&arg0->node.transform.translation, 0x23);
                         arg0->unk3C = 0x18;
                         arg0->unk3E++;

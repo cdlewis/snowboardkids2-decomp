@@ -98,8 +98,10 @@ typedef struct {
     void *assetData;
 } func_80054CCC_558CC_arg;
 
-void func_800545F8_551F8(Struct_52880 *arg0);
-void func_80054658_55258(Struct_52880 *arg0);
+void loadFallingStarProjectileAsset(Struct_52880 *arg0);
+void updateFallingStarProjectile(Struct_52880 *arg0);
+void initFallingStarProjectileTask(Struct_52880 *arg0);
+void spawnFallingStarProjectile(s16 angle, s32 speed);
 void updateHomingPanelProjectile(Struct_52880 *arg0);
 void launchHomingPanelProjectile(Struct_52880 *arg0);
 void loadHomingPanelProjectileAsset(Struct_52880 *arg0);
@@ -1513,14 +1515,14 @@ void checkInvincibleStarProjectileCollision(Struct_52880 *projectile) {
     }
 }
 
-void func_800545B0_551B0(Struct_52880 *arg0) {
+void initFallingStarProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->assetData = load_3ECE40();
     setCleanupCallback(cleanupSlapstickProjectileTask);
-    setCallbackWithContinue(func_800545F8_551F8);
+    setCallbackWithContinue(loadFallingStarProjectileAsset);
 }
 
-void func_800545F8_551F8(Struct_52880 *arg0) {
+void loadFallingStarProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     void *ptr;
     s32 pad[4];
@@ -1531,10 +1533,10 @@ void func_800545F8_551F8(Struct_52880 *arg0) {
     arg0->unk40 = 0x65;
     arg0->hitCount = 0;
     arg0->unk0 = ptr;
-    setCallbackWithContinue(func_80054658_55258);
+    setCallbackWithContinue(updateFallingStarProjectile);
 }
 
-void func_80054658_55258(Struct_52880 *arg0) {
+void updateFallingStarProjectile(Struct_52880 *arg0) {
     Alloc_55650 *alloc;
     Vec3i sp18;
     s32 pad1[15]; /* 60 bytes of padding */
@@ -1582,16 +1584,16 @@ void func_80054658_55258(Struct_52880 *arg0) {
     }
 }
 
-void func_800547E0_553E0(s16 arg0, s32 arg1) {
+void spawnFallingStarProjectile(s16 angle, s32 speed) {
     Struct_52880 *task;
     Vec3i vec;
 
-    task = scheduleTask(func_800545B0_551B0, 0, 0, 0x6F);
+    task = scheduleTask(initFallingStarProjectileTask, 0, 0, 0x6F);
     if (task != NULL) {
         vec.x = 0;
         vec.y = 0;
-        vec.z = arg1;
-        rotateVectorY(&vec, arg0, (Vec3i *)&task->vel.x);
+        vec.z = speed;
+        rotateVectorY(&vec, angle, (Vec3i *)&task->vel.x);
         task->pos.x = 0xDD12D592;
         task->pos.y = 0x0B1D4CA3;
         task->pos.z = 0xE27836C1;
