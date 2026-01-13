@@ -979,12 +979,12 @@ s32 stopChannelsByHandle(u32 handle, s32 stopSpeed) {
     return count;
 }
 
-void *func_80072A14_73614(musHandle arg0) {
+s32 countChannelsByHandle(u32 handle) {
     s32 i;
     channel_t *channel;
     s32 count;
 
-    if (!arg0) {
+    if (!handle) {
         return 0;
     }
 
@@ -994,13 +994,13 @@ void *func_80072A14_73614(musHandle arg0) {
 
     while (i < max_channels) {
         i++;
-        if (channel->handle == arg0) {
+        if (channel->handle == handle) {
             count++;
         }
         channel++;
     }
 
-    return (void *)count;
+    return count;
 }
 
 s32 func_80072A6C_7366C(void *handle, s32 volume) {

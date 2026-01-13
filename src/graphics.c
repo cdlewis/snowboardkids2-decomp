@@ -87,7 +87,7 @@ extern OSThread gfxCommThread;
 void func_8005628C_56E8C(void);
 
 void *startSoundEffect(s32, s32, s32, s32, s32);
-void *func_80072A14_73614(void *);
+s32 countChannelsByHandle(u32 handle);
 void *func_80072CDC_738DC(void *, void *);
 
 typedef struct {
@@ -553,7 +553,7 @@ void gfxCommThreadFunc(void *arg0) {
                     result = (void *)getActiveChannelCount(1);
                     break;
                 case 9:
-                    result = func_80072A14_73614(gGraphicsCommand.audioChannel);
+                    result = (void *)countChannelsByHandle((u32)gGraphicsCommand.audioChannel);
                     break;
                 case 10:
                     func_80072CC0_738C0(gGraphicsCommand.ptrBank, gGraphicsCommand.waveBank);
