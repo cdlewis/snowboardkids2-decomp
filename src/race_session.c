@@ -1321,7 +1321,7 @@ void awaitSkillWinAndPromptContinue(void) {
     state->unk4C = delayTimer;
     if (delayTimer == 0) {
         state->unk7C = 1;
-        scheduleTask(&func_8004F1D4_4FDD4, 1, 0, 0xE6);
+        scheduleTask(initBonusGoldDisplayTask, 1, 0, 0xE6);
         playMusicTrack(0xA);
         setGameStateHandler(&awaitSkillWinContinuePress);
     }

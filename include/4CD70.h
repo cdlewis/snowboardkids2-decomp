@@ -27,18 +27,18 @@ typedef struct {
 } FinishPositionDisplayState;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteFrame;
+    s16 padA;
     u8 unkC;
     u8 unkD;
-    u8 unkE;
+    u8 alpha;
     u8 padF;
-    void *unk10;
-    s32 unk14;
-} Struct_func_8004F1D4;
+    void *digitAsset;
+    s32 alphaValue;
+} BonusGoldDisplayState;
 
 typedef struct {
     s16 x;
@@ -131,7 +131,9 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0);
 void spawnVictorySnowflakes(s16 playerIndex, s16 useSmallSprite);
 void initPauseMenuDisplayTask(PauseMenuDisplayState *arg0);
 void spawnShotCrossItemCountDisplayTask(s16 arg0);
-void func_8004F1D4_4FDD4(Struct_func_8004F1D4 *arg0);
+void initBonusGoldDisplayTask(BonusGoldDisplayState *arg0);
+void updateBonusGoldDisplay(BonusGoldDisplayState *arg0);
+void cleanupBonusGoldDisplayTask(BonusGoldDisplayState *arg0);
 void spawnSuccessMessageDisplayTask(s16 delayFrames);
 void func_8004F820_50420(ShotCrossCountdownTimerState *arg0);
 void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
