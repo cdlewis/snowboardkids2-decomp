@@ -706,7 +706,7 @@ void initializeCutsceneSystem(void *arg0) {
     D_800BAEB4_1E7F64 = 0;
 }
 
-void func_800B3B40(void) {
+void cleanupCutsceneSystem(void) {
     if (gCutsceneStateTable != NULL) {
         freeNodeMemory(gCutsceneStateTable);
     }

@@ -1410,7 +1410,7 @@ updateDebugDisplayListDecay = 0x800BB6C0; // type:func rom:0xADE80
 cleanupDebugDisplayListTask = 0x800BB718; // type:func rom:0xADAD8
 gDebugDisplayConfig = 0x800955B0; // rom:0x1DB740
 
-func_800B3B40 = 0x800B3B40; // type:func rom:0x1E0BF0
+cleanupCutsceneSystem = 0x800B3B40; // type:func rom:0x1E0BF0
 func_800B02E0 = 0x800B02E0; // type:func rom:0x1DC480
 func_800BBED8 = 0x800BBED8; // type:func rom:0xAE298
 func_800BBB90 = 0x800BBB90; // type:func rom:0xADF50

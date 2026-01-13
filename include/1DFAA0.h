@@ -297,7 +297,7 @@ s32 loadCutsceneStateTableFromControllerPak(void);
 u16 allocateStateEntry(void);
 void resetScriptState(u8 *arg0);
 void initializeStateEntry(s32 arg0);
-void func_800B3B40(void);
+void cleanupCutsceneSystem(void);
 u16 func_800B3B68_1E0C18(u8 arg0, u16 arg1, s32 arg2);
 s32 findEventAtFrame(u8 a0, u16 a1);
 s32 func_800B3D24_1E0DD4(u8, u16);
