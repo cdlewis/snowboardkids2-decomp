@@ -641,7 +641,7 @@ void checkFryingPanProjectileHit(Struct_52880 *arg0) {
 
     new_var2 = result->unkB84 & 0x1000;
     if (new_var2 == 0) {
-        func_80058A68_59668(result);
+        setPlayerShrinkState(result);
         arg0->hitCount++;
         unk4C = arg0->targetPlayerIdx;
         if (unk4C >= 0) {
@@ -1779,7 +1779,7 @@ void func_80054D70_55970(void *arg) {
         case 2:
             player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
-                func_80058A68_59668(player);
+                setPlayerShrinkState(player);
                 arg0->hitCount = arg0->hitCount + 1;
                 unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
@@ -2131,7 +2131,7 @@ void func_80055900_56500(Struct_52880 *arg0) {
     result = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
     if (result != NULL) {
         if ((result->unkB84 & 0x1000) == 0) {
-            func_80058A68_59668(result);
+            setPlayerShrinkState(result);
             arg0->hitCount++;
         }
     }

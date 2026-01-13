@@ -85,7 +85,7 @@ void setPlayerParachuteState(Player *player) {
     }
 }
 
-void func_80058A68_59668(Player *arg0) {
+void setPlayerShrinkState(Player *arg0) {
     if (arg0->unkAC2 < 0x35) {
         if (!(arg0->unkB88 & 0xD8)) {
             arg0->unkAC2 = 0x35;

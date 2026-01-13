@@ -117,7 +117,7 @@ void initBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0);
 s32 abs(s32 n);
 void setPlayerHomingProjectileRetaliationState(Player *player);
 void setPlayerParachuteState(Player *player);
-void func_80058A68_59668(Player *arg0);
+void setPlayerShrinkState(Player *arg0);
 void func_80058AC0_596C0(Player *arg0);
 void func_80059C24_5A824(Player *arg0);
 void func_80059D30_5A930(Player *arg0);
