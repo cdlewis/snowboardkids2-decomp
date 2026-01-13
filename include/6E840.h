@@ -103,7 +103,7 @@ void *arenaAlloc16(s32 size);
 
 void *advanceLinearAlloc(s32 size);
 
-void func_8006E02C_6EC2C(void);
+void tryProcessDisplayFrameUpdate(void);
 
 void processDisplayFrameUpdate(void);
 

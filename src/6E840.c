@@ -116,7 +116,7 @@ void handleFrameBufferComplete(s32 bufferIndex) {
     gBufferedFrameCounter = gFrameBufferCounters[index];
 }
 
-void func_8006E02C_6EC2C(void) {
+void tryProcessDisplayFrameUpdate(void) {
     if (gDisplayFramePending != 0) {
         processDisplayFrameUpdate();
     }

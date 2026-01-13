@@ -61,7 +61,7 @@ void mainThreadEntrypoint(void *arg) {
                 case 1:
                     handleFrameBufferComplete(message);
                     if (hasSpecialMessage == FALSE) {
-                        func_8006E02C_6EC2C();
+                        tryProcessDisplayFrameUpdate();
                     }
                     break;
             }
