@@ -889,25 +889,25 @@ u32 startSoundEffectWithHandle(s32 number, s32 volume, s32 pan, s32 handle, s32 
     return 0;
 }
 
-void func_80072814_73414(s32 arg0, s32 arg1) {
+void stopChannelsByFlags(s32 channelFlags, s32 stopSpeed) {
     channel_t *cp;
     s32 i;
     s32 speed;
 
-    speed = arg1;
-    if (arg1 == 0) {
+    speed = stopSpeed;
+    if (stopSpeed == 0) {
         speed = 1;
     }
 
     cp = mus_channels;
     for (i = 0; i < max_channels; i++, cp++) {
         if (cp->fx_addr != 0) {
-            if (arg0 & 1) {
+            if (channelFlags & 1) {
                 goto check_pdata;
             }
             continue;
         }
-        if (!(arg0 & 2)) {
+        if (!(channelFlags & 2)) {
             continue;
         }
 
@@ -926,7 +926,7 @@ void func_80072814_73414(s32 arg0, s32 arg1) {
             cp->flags &= ~1;
         } else {
             cp->stopping_speed = speed;
-            cp->stopping = arg1;
+            cp->stopping = stopSpeed;
         }
     }
 }

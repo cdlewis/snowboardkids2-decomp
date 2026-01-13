@@ -544,7 +544,7 @@ void gfxCommThreadFunc(void *arg0) {
                     }
                     break;
                 case 6:
-                    func_80072814_73414(1, gGraphicsCommand.stoppingSpeed);
+                    stopChannelsByFlags(1, gGraphicsCommand.stoppingSpeed);
                     break;
                 case 7:
                     result = func_80072960_73560(gGraphicsCommand.audioChannel, gGraphicsCommand.stoppingSpeed);
@@ -568,7 +568,7 @@ void gfxCommThreadFunc(void *arg0) {
                     func_80072A6C_7366C(gGraphicsCommand.audioChannel, gGraphicsCommand.volume);
                     break;
                 case 13:
-                    func_80072814_73414(3, gGraphicsCommand.stoppingSpeed);
+                    stopChannelsByFlags(3, gGraphicsCommand.stoppingSpeed);
                     break;
                 case 14:
                     result = (void *)func_800728E0_734E0(2);
