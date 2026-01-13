@@ -496,33 +496,35 @@ void *loadCutsceneFrameData(s16 slotIndex, s16 cutsceneType, s16 frameIndex) {
     return loadCompressedData(frameInfo->romStart, frameInfo->romEnd, frameInfo->decompressedSize);
 }
 
-s32 func_800B36C0(void *arg0) {
-    s32 result;
-    s32 *src;
-    s32 *arg0_int;
+s32 verifyAndLoadCutsceneState(void *stateBuffer) {
+    s32 success;
+    s32 *globalState;
+    s32 *inputState;
 
-    arg0_int = (s32 *)arg0;
-    src = (s32 *)D_800BAEBC_1E7F6C;
+    inputState = (s32 *)stateBuffer;
+    globalState = (s32 *)D_800BAEBC_1E7F6C;
 
-    result = 1;
+    success = 1;
 
-    if (src[1] != arg0_int[1]) {
+    // Verify magic values at offsets 0x4 and 0x8 before loading state
+    // These are part of the "EDDAT001" signature (0x45='E' at offset 4, 0x30='0' at offset 8)
+    if (globalState[1] != inputState[1]) {
         goto skip_copy;
     }
 
-    if (src[2] != arg0_int[2]) {
+    if (globalState[2] != inputState[2]) {
         goto skip_copy;
     }
 
-    memcpy(D_800BAEBC_1E7F6C, arg0, 0x78C0);
+    memcpy(D_800BAEBC_1E7F6C, stateBuffer, 0x78C0);
     goto done;
 
 skip_copy:
-    result = 0;
+    success = 0;
 
 done:
-    freeNodeMemory(arg0);
-    return result;
+    freeNodeMemory(stateBuffer);
+    return success;
 }
 
 void func_800B3734_1E07E4(void) {

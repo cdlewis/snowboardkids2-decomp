@@ -1401,7 +1401,7 @@ hideAllSlotModels = 0x800B2D04; // type:func rom:0x1DFDB4
 resetAllSlotModels = 0x800B2DCC; // rom:0x1DFE7C
 func_800B0760 = 0x800B0760; // type:func rom:0x1DC900
 cleanupCutsceneManager = 0x800B2C78; // type:func rom:0x1DFD28
-func_800B36C0 = 0x800B36C0; // type:func rom:0x1E0770
+verifyAndLoadCutsceneState = 0x800B36C0; // type:func rom:0x1E0770
 
 Overlays = 0x80090534; // type:u32 size:0x240
 
