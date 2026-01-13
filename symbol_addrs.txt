@@ -1177,6 +1177,7 @@ initializeOverlaySystem = 0x80067FB0;
 loadAssetMetadataByIndex = 0x80067F5C;
 loadAssetMetadata = 0x80067F0C;
 enqueueMultiPartDisplayList = 0x80065900;
+enqueuePreLitMultiPartDisplayList = 0x80064808;
 enqueueDisplayListWithFrustumCull = 0x80063788;
 setupBillboardDisplayListMatrix = 0x80063A94; // rom:0x64694
 renderBillboardedOpaqueDisplayList = 0x8006405C; // rom:0x64C5C

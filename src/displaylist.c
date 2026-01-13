@@ -1048,45 +1048,45 @@ void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects) {
     }
 }
 
-void func_80064808_65408(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2) {
+void enqueuePreLitMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2) {
     enqueueMultiPartDisplayList_arg1 *new_var;
-    s32 var_a1;
-    s32 var_s0;
-    s32 *temp_v1;
-    enqueueMultiPartDisplayList_arg1 *var_a0;
+    s32 i;
+    s32 renderFlags;
+    s32 *dlPtrs;
+    enqueueMultiPartDisplayList_arg1 *currentPart;
     volatile u8 padding[0x1];
 
-    var_a1 = 0;
-    var_s0 = 0;
+    i = 0;
+    renderFlags = 0;
     arg1->unk37 = arg2;
 
     if (arg2 > 0) {
-        var_a0 = arg1;
+        currentPart = arg1;
         do {
-            temp_v1 = var_a0->unk20;
-            (new_var = var_a0)->unk30 = 0;
-            if (temp_v1[1] != 0) {
-                var_s0 |= 1;
+            dlPtrs = currentPart->unk20;
+            (new_var = currentPart)->unk30 = 0;
+            if (dlPtrs[1] != 0) {
+                renderFlags |= 1;
             }
-            if (temp_v1[2] != 0) {
-                var_s0 |= 2;
+            if (dlPtrs[2] != 0) {
+                renderFlags |= 2;
             }
-            if (temp_v1[0x3] != 0) {
-                var_s0 |= 4;
+            if (dlPtrs[0x3] != 0) {
+                renderFlags |= 4;
             }
-            var_a1 += 1;
-            var_a0 = (enqueueMultiPartDisplayList_arg1 *)(((s32)var_a0) + 0x3C);
-        } while (var_a1 < arg2);
+            i += 1;
+            currentPart = (enqueueMultiPartDisplayList_arg1 *)(((s32)currentPart) + 0x3C);
+        } while (i < arg2);
     }
 
-    if (var_s0 & 1) {
+    if (renderFlags & 1) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderMultiPartOpaqueDisplayLists, arg1);
     }
     new_var = arg1;
-    if (var_s0 & 2) {
+    if (renderFlags & 2) {
         debugEnqueueCallback((arg0 & 0xFFFF) ^ 0, 3, &renderMultiPartTransparentDisplayLists, new_var);
     }
-    if (var_s0 & 4) {
+    if (renderFlags & 4) {
         debugEnqueueCallback(arg0 & 0xFFFF, 5, &renderMultiPartOverlayDisplayLists, arg1);
     }
 }

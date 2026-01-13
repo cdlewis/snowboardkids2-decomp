@@ -749,7 +749,7 @@ void func_800BC7A8_B1C98(Player *arg0) {
 
     if (index == 0) {
         for (i = 0; i < 4; i++) {
-            func_80064808_65408(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
+            enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
         }
     } else {
         arg0->unk6C = D_800BACC8_AAB78[index].unk0;

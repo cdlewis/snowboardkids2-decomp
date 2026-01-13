@@ -784,11 +784,11 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
     if (index == 0) {
         if (arg0->unkB84 & 0x200000) {
             for (i = 0; i < 4; i++) {
-                func_80064808_65408(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk74, 2);
+                enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk74, 2);
             }
         } else {
             for (i = 0; i < 4; i++) {
-                func_80064808_65408(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk38, 3);
+                enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk38, 3);
             }
         }
     } else {
