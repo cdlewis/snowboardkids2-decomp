@@ -301,7 +301,7 @@ void func_8005AE8C_5BA8C(Player *player) {
                     if ((targetPlayer->unkBD9 == 2) & (boxIndex == 0)) {
                         dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.z * deltaPos.z);
                         if (dist > 0x30000) {
-                            func_80058950_59550(
+                            setPlayerCollisionKnockbackState(
                                 player,
                                 func_8006D21C_6DE1C(
                                     targetPlayer->worldPos.x,
@@ -532,7 +532,7 @@ void func_8005B730_5C330(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
             player->worldPos.y += rotatedPos.y;
             player->worldPos.z += rotatedPos.z;
 
-            func_80058950_59550(player, negAngle, deltaPos.z);
+            setPlayerCollisionKnockbackState(player, negAngle, deltaPos.z);
         } else {
             /* Backward collision - condition uses unkAE0 */
             if (-(arg2 + player->unkAE0) >= rotatedPos.z) {
@@ -649,7 +649,7 @@ s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
         dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.z * deltaPos.z);
 
         if (dist > 0x30000) {
-            func_80058950_59550(
+            setPlayerCollisionKnockbackState(
                 targetPlayer,
                 func_8006D21C_6DE1C(arg0->x, arg0->z, targetPlayer->worldPos.x, targetPlayer->worldPos.z),
                 dist

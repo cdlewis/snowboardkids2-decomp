@@ -37,17 +37,17 @@ void setPlayerProjectileHitState(Player *player) {
     }
 }
 
-void func_80058950_59550(Player *arg0, s16 arg1, s32 arg2) {
-    if (arg0->unkAC2 < 4) {
-        if ((arg0->unkB88 & 0x77F) == 0) {
-            arg0->unkAC2 = 4;
-            arg0->unkAC4 = arg1;
-            arg0->unkAC8 = 0;
-            arg0->unkACC = 0;
-            if (arg2 > 0x60000) {
-                arg2 = 0x60000;
+void setPlayerCollisionKnockbackState(Player *player, s16 knockbackAngle, s32 knockbackStrength) {
+    if (player->unkAC2 < 4) {
+        if ((player->unkB88 & 0x77F) == 0) {
+            player->unkAC2 = 4;
+            player->unkAC4 = knockbackAngle;
+            player->unkAC8 = 0;
+            player->unkACC = 0;
+            if (knockbackStrength > 0x60000) {
+                knockbackStrength = 0x60000;
             }
-            arg0->unkAD0 = -arg2;
+            player->unkAD0 = -knockbackStrength;
         }
     }
 }
