@@ -164,6 +164,7 @@ dispatchRaceFinishBehaviorStep = 0x800B3950; // rom:0xA3800
 dispatchStunnedBehaviorPhase = 0x800B468C; // rom:0xA453C
 dispatchKnockbackBehaviorPhase = 0x800B65C8; // rom:0xA6478
 initKnockbackBehavior = 0x800B65F8; // rom:0xA64A8
+beginKnockbackRecoveryStep = 0x800B6640; // rom:0xA64F0
 initStunnedAirborneBehavior = 0x800B46BC; // rom:0xA456C
 updateStunnedAirbornePhase = 0x800B470C; // rom:0xA45BC
 updateStunnedAirbornePhaseBoss = 0x800B48AC; // rom:0xA475C

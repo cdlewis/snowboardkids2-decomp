@@ -2885,16 +2885,16 @@ void dispatchKnockbackBehaviorStep(func_800B00D4_arg *arg0) {
     knockbackBehaviorStepHandlers[arg0->behaviorStep](arg0);
 }
 
-s32 func_800B6640_A64F0(Player *arg0) {
-    arg0->unkB8C = 10;
-    arg0->unkB84 = arg0->unkB84 | 0x180;
+s32 beginKnockbackRecoveryStep(Player *player) {
+    player->unkB8C = 10;
+    player->unkB84 |= 0x180;
 
-    if (arg0->unkB84 & 2) {
-        arg0->behaviorCounter = 1;
-        arg0->unkB84 = arg0->unkB84 & ~2;
+    if (player->unkB84 & 2) {
+        player->behaviorCounter = 1;
+        player->unkB84 &= ~2;
     }
 
-    arg0->behaviorStep = arg0->behaviorStep + 1;
+    player->behaviorStep++;
     return 1;
 }
 
