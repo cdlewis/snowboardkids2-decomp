@@ -5,6 +5,7 @@
 #include "59290.h"
 #include "5AA90.h"
 #include "5DBC0.h"
+#include "5E590.h"
 #include "9FF70.h"
 #include "A9A40.h"
 #include "common.h"
@@ -14,6 +15,9 @@
 #include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
+
+extern void spawnChaseCameraTask(u8 playerIdx);
+extern s32 D_800BCB54_B4114[];
 
 typedef void (*FuncPtr)(void *);
 
@@ -163,6 +167,15 @@ typedef struct {
     s32 unk1C;
 } LocalMat;
 
+typedef struct {
+    Transform3D transform;
+    u8 pad20[0x58 - 0x20];
+    void *ptr;
+    s32 unk5C;
+    s32 unk60;
+    s32 unk64;
+} Element0x3C;
+
 typedef s32 (*StateFunc)(void *);
 
 extern s8 D_800AB044_A23B4[];
@@ -177,6 +190,7 @@ extern s16 D_800BCB7C_B413C[];
 extern u16 D_800BCB7E_B413E[];
 extern s32 D_800BCBA0_B4160[][3];
 extern Vec3i D_800BCB68_B4128;
+extern s32 D_800BCB54_B4114[];
 void func_800BC474_B3A34(Arg0Struct *);
 
 void func_800BB2B0_B2870(Arg0Struct *arg0) {
@@ -288,7 +302,60 @@ void func_800BB2B0_B2870(Arg0Struct *arg0) {
     arg0->unkAF8 -= arg0->unk970.translation.z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BB66C_B2C2C);
+s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
+    Vec3i sp10;
+    Vec3i sp20;
+    void *alloc;
+
+    alloc = getCurrentAllocation();
+    memcpy((u8 *)arg0 + 0x970, identityMatrix, sizeof(Transform3D));
+    createYRotationMatrix((Transform3D *)((u8 *)arg0 + 0x970), *(u16 *)((u8 *)arg0 + 0xA94));
+    memcpy((u8 *)arg0 + 0x990, identityMatrix, sizeof(Transform3D));
+    memcpy((u8 *)arg0 + 0x9B0, identityMatrix, sizeof(Transform3D));
+
+    *(s32 *)((u8 *)arg0 + 0x434) = D_800BCB54_B4114[*(u8 *)((u8 *)arg0 + 0xBB8)];
+    getTrackSegmentWaypoints((u8 *)alloc + 0x30, 0, &sp10, &sp20);
+    *(s32 *)((u8 *)arg0 + 0x43C) = *(s32 *)((u8 *)&sp10 + 8) + 0x200000;
+    *(u16 *)((u8 *)arg0 + 0xB94) = func_80059E90_5AA90(arg0, (u8 *)alloc + 0x30, 0, (Vec3i *)((u8 *)arg0 + 0x434));
+    *(s32 *)((u8 *)arg0 + 0x438) = func_8005CFC0_5DBC0((u8 *)alloc + 0x30, *(u16 *)((u8 *)arg0 + 0xB94) & 0xFFFF, (Vec3i *)((u8 *)arg0 + 0x434), 0x100000);
+    memcpy((u8 *)arg0 + 0x440, (u8 *)arg0 + 0x434, 0xC);
+    *(s32 *)((u8 *)arg0 + 0x44C) = 0;
+    *(s32 *)((u8 *)arg0 + 0x450) = 0;
+    *(s32 *)((u8 *)arg0 + 0x454) = 0;
+    *(u16 *)((u8 *)arg0 + 0xA94) = 0x1000;
+
+    {
+        s32 i;
+        u8 *elem;
+
+        for (i = 0; i < 3; i++) {
+            elem = (u8 *)arg0 + i * 0x3C;
+            memcpy(elem + 0x38, identityMatrix, sizeof(Transform3D));
+            *(s32 *)(elem + 0x5C) = *(s32 *)((u8 *)arg0 + 4);
+            *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)arg0 + 8);
+            *(s32 *)(elem + 0x64) = 0;
+            *(void **)(elem + 0x58) = (void *)(loadAssetByIndex_953B0(*(u8 *)((u8 *)arg0 + 0xBB9), *(u8 *)((u8 *)arg0 + 0xBBA)) + i * 0x10);
+        }
+    }
+
+    *(u8 *)((u8 *)arg0 + 0xBBD) = 1;
+    *(s32 *)((u8 *)arg0 + 0xB30) = 0x180000;
+    *(u8 *)((u8 *)arg0 + 0xBB4) = 2;
+    *(u8 *)((u8 *)arg0 + 0xBBE) = 0;
+    *(s32 *)((u8 *)arg0 + 0xB2C) = 0x1EC000;
+    *(s32 *)((u8 *)arg0 + 0xAE0) = 0x1EC000;
+    *(s32 *)((u8 *)arg0 + 0xB54) = (s32)((u8 *)arg0 + 0x434);
+    *(s32 *)((u8 *)arg0 + 0xB64) = 0x1EC000;
+    *(u8 *)((u8 *)arg0 + 0xB68) = *(u8 *)((u8 *)arg0 + 0xBB8);
+    if (*(u8 *)((u8 *)arg0 + 0xBC7) == 0) {
+        spawnChaseCameraTask(*(u8 *)((u8 *)arg0 + 0xBB8));
+    }
+    *(u8 *)((u8 *)arg0 + 0xBDB) = 0xA;
+    if (*(s32 *)((u8 *)arg0 + 0x1C) != 0) {
+        *(s32 *)((u8 *)arg0 + 0x28) = *(s32 *)((u8 *)arg0 + 0x1C) + ((s32 *)*(s32 *)((u8 *)arg0 + 0x1C))[*(u8 *)((u8 *)arg0 + 0xBB8)];
+    }
+    return 1;
+}
 
 void func_800BB86C_B2E2C(Arg0Struct *arg0) {
     D_800BCB5C_B411C[arg0->behaviorPhase](arg0);
