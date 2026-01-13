@@ -1506,10 +1506,10 @@ s32 spawnAttackProjectile(s32 projectileType, s32 playerIdx, s32 arg2) {
     return 0;
 }
 
-void func_80054568_55168(Struct_52880 *arg0) {
+void checkInvincibleStarProjectileCollision(Struct_52880 *projectile) {
     getCurrentAllocation();
-    if (func_8005C250_5CE50((&arg0->pos), arg0->ownerPlayerIdx, 0xC0000)) {
-        arg0->hitCount++;
+    if (func_8005C250_5CE50(&projectile->pos, projectile->ownerPlayerIdx, 0xC0000)) {
+        projectile->hitCount++;
     }
 }
 
@@ -1569,7 +1569,7 @@ void func_80054658_55258(Struct_52880 *arg0) {
             arg0->hitCount += 1;
         }
 
-        func_80054568_55168(arg0);
+        checkInvincibleStarProjectileCollision(arg0);
     }
 
     if (arg0->hitCount != 0) {
@@ -1693,7 +1693,7 @@ void func_80054AE4_556E4(Struct_52880 *arg0) {
             arg0->hitCount += 1;
         }
 
-        func_80054568_55168(arg0);
+        checkInvincibleStarProjectileCollision(arg0);
     }
 
     if (arg0->hitCount != 0) {
