@@ -146,7 +146,7 @@ void buildOverlayDisplayListSegment(DisplayListObject *obj);
 
 void enqueueBillboardedDisplayListObject(s32 arg0, DisplayListObject *arg1);
 
-void func_80065DA8_669A8(s32 arg0, DisplayListObject *arg1);
+void enqueueCameraRelativeDisplayList(s32 arg0, DisplayListObject *arg1);
 
 u16 getTrackEndInfo(void *arg0, void *arg1);
 

@@ -17,11 +17,11 @@ USE_ASSET(_215D70);
 
 typedef struct {
     u8 padding[0x120];
-    s32 unk120;
+    s32 cameraRotationMatrix;
     u8 padding2[0x10];
-    s32 unk134;
-    s32 unk138;
-    s32 unk13C;
+    s32 cameraX;
+    s32 cameraY;
+    s32 cameraZ;
     u8 padding3[0x8];
     u8 defaultLight1R;
     u8 defaultLight1G;
@@ -92,7 +92,7 @@ extern u32 D_800A2D50_A3950;
 void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects);
-void func_800659E4_665E4(DisplayListObject *arg0);
+void renderCameraRelativeDisplayList(DisplayListObject *arg0);
 void func_80065DD8_669D8(TexturedSpriteState *);
 void func_80066474_67074(ExtendedSpriteState *);
 void func_800677F0_683F0(AlphaSpriteState *);
@@ -421,7 +421,16 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
             return;
         }
 
-        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)obj, &lookAtX, &lookAtY, &lookAtZ, &upX, &upY, &upZ);
+        matrixToEulerAngles(
+            &D_800AB068_A23D8->cameraRotationMatrix,
+            (s32 *)obj,
+            &lookAtX,
+            &lookAtY,
+            &lookAtZ,
+            &upX,
+            &upY,
+            &upZ
+        );
         guLookAtReflect(&tempMatrix, lookAt, 0.0f, 0.0f, 0.0f, lookAtX, lookAtY, lookAtZ, upX, upY, upZ);
         gSPLookAt(gRegionAllocPtr++, lookAt);
     }
@@ -519,7 +528,16 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
             return;
         }
 
-        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
+        matrixToEulerAngles(
+            &D_800AB068_A23D8->cameraRotationMatrix,
+            (s32 *)arg0,
+            &sp70,
+            &sp74,
+            &sp78,
+            &sp7C,
+            &sp80,
+            &sp84
+        );
         guLookAtReflect(&sp30, temp_v0, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
         gSPLookAt(gRegionAllocPtr++, temp_v0);
     }
@@ -766,7 +784,7 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
             return;
         }
 
-        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)obj, &eyeX, &eyeY, &eyeZ, &upX, &upY, &upZ);
+        matrixToEulerAngles(&D_800AB068_A23D8->cameraRotationMatrix, (s32 *)obj, &eyeX, &eyeY, &eyeZ, &upX, &upY, &upZ);
         guLookAtReflect(&lookAtMatrix, lookAt, 0.0f, 0.0f, 0.0f, eyeX, eyeY, eyeZ, upX, upY, upZ);
         gSPLookAt(gRegionAllocPtr++, lookAt);
     }
@@ -942,7 +960,16 @@ void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
             return;
         }
 
-        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
+        matrixToEulerAngles(
+            &D_800AB068_A23D8->cameraRotationMatrix,
+            (s32 *)arg0,
+            &sp70,
+            &sp74,
+            &sp78,
+            &sp7C,
+            &sp80,
+            &sp84
+        );
         guLookAtReflect(&sp30, lookat, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
 
         gSPLookAt(gRegionAllocPtr++, lookat);
@@ -1118,7 +1145,16 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *arg0) {
             return;
         }
 
-        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
+        matrixToEulerAngles(
+            &D_800AB068_A23D8->cameraRotationMatrix,
+            (s32 *)arg0,
+            &sp70,
+            &sp74,
+            &sp78,
+            &sp7C,
+            &sp80,
+            &sp84
+        );
         guLookAtReflect(&sp30, lookat, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
         gSPLookAt(gRegionAllocPtr++, lookat);
     }
@@ -1435,7 +1471,7 @@ void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg
     }
 }
 
-void func_800659E4_665E4(DisplayListObject *arg0) {
+void renderCameraRelativeDisplayList(DisplayListObject *arg0) {
     Mtx sp30;
     f32 sp70;
     f32 sp74;
@@ -1451,7 +1487,7 @@ void func_800659E4_665E4(DisplayListObject *arg0) {
         return;
     }
 
-    memcpy(&D_8009A8A4_9B4A4, &D_800AB068_A23D8->padding2[0x10], 0xC);
+    memcpy(&D_8009A8A4_9B4A4, &D_800AB068_A23D8->cameraX, 0xC);
     func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, arg0->transformMatrix);
 
     if (arg0->displayLists->flags & 1) {
@@ -1460,7 +1496,16 @@ void func_800659E4_665E4(DisplayListObject *arg0) {
             return;
         }
 
-        matrixToEulerAngles(&D_800AB068_A23D8->unk120, (s32 *)arg0, &sp70, &sp74, &sp78, &sp7C, &sp80, &sp84);
+        matrixToEulerAngles(
+            &D_800AB068_A23D8->cameraRotationMatrix,
+            (s32 *)arg0,
+            &sp70,
+            &sp74,
+            &sp78,
+            &sp7C,
+            &sp80,
+            &sp84
+        );
         guLookAtReflect(&sp30, temp_v0, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
         gSPLookAt(gRegionAllocPtr++, temp_v0);
     }
@@ -1515,19 +1560,19 @@ void func_800659E4_665E4(DisplayListObject *arg0) {
     }
 }
 
-void func_80065DA8_669A8(s32 arg0, DisplayListObject *arg1) {
+void enqueueCameraRelativeDisplayList(s32 arg0, DisplayListObject *arg1) {
     arg1->transformMatrix = 0;
-    debugEnqueueCallback(arg0 & 0xFFFF, 0, &func_800659E4_665E4, arg1);
+    debugEnqueueCallback(arg0 & 0xFFFF, 0, &renderCameraRelativeDisplayList, arg1);
 }
 
 void func_80065DD8_669D8(TexturedSpriteState *state) {
-    if ((u32)((D_800AB068_A23D8->unk134 - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->unk13C - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->unk138 - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
 
@@ -1603,13 +1648,13 @@ void func_80066444_67044(s32 arg0, func_80066444_67044_arg1 *arg1) {
 }
 
 void func_80066474_67074(ExtendedSpriteState *state) {
-    if ((u32)((D_800AB068_A23D8->unk134 - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->unk13C - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->unk138 - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
 
@@ -1684,13 +1729,13 @@ void func_80066AC0_676C0(s32 arg0, MatrixEntry_202A0 *arg1) {
 }
 
 void func_80066AF0_676F0(TexturedSpriteState *state) {
-    if ((u32)((D_800AB068_A23D8->unk134 - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->unk13C - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->unk138 - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
 
@@ -1774,13 +1819,13 @@ void func_800670A4_67CA4(u16 arg0, func_80066444_67044_arg1 *arg1) {
 }
 
 void func_800670D4_67CD4(AlphaSpriteState *state) {
-    if ((u32)((D_800AB068_A23D8->unk134 - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->unk13C - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->unk138 - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
 
@@ -1865,13 +1910,13 @@ void func_800677C0_683C0(s32 arg0, loadAssetMetadata_arg *arg1) {
 }
 
 void func_800677F0_683F0(AlphaSpriteState *state) {
-    if ((u32)((D_800AB068_A23D8->unk134 - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->unk13C - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->unk138 - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((D_800AB068_A23D8->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
 
