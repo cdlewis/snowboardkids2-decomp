@@ -79,5 +79,5 @@ typedef struct {
     s8 envColorGreen;
     s8 envColorBlue;
 } cutsceneSysFilter_exec_arg;
-void cutsceneSysFilter_exec(cutsceneSysFilter_exec_arg *arg0, Node_70B00 *arg1);
+void cutsceneSysFilter_exec(cutsceneSysFilter_exec_arg *filterArgs, Node_70B00 *sceneNode);
 s32 cutsceneSysFilter_isDone(void);
