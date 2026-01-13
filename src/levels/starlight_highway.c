@@ -53,9 +53,9 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_800BB45C_AD81C_arg;
+    void *segment1;
+    void *segment2;
+} DualSegmentCleanupState;
 
 typedef struct {
     /* 0x00 */ u8 _pad0[0x20];
@@ -166,13 +166,13 @@ extern s32 D_800BCBA0_AEF60[][3];
 extern s16 D_800BCBB0_AEF70[];
 extern void *D_800955B0;
 
-void func_800BC984_AED44(func_800BB45C_AD81C_arg *);
+void func_800BC984_AED44(DualSegmentCleanupState *);
 void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *);
 void func_800BB5FC_AD9BC(func_800BB664_arg *);
 void renderStarlightHighwayBuildings(StarlightBuildingRenderData *);
-void func_800BB45C_AD81C(func_800BB45C_AD81C_arg *);
+void cleanupStarlightHighwayBuildingTask(DualSegmentCleanupState *);
 void func_800BB75C_ADB1C(void *);
-void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *);
+void func_800BBEA0_AE260(DualSegmentCleanupState *);
 void func_800BBCFC_AE0BC(func_800BBC28_arg *);
 void func_800BC084_AE444(func_800BC3D0_AE790_arg *);
 void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *);
@@ -196,7 +196,7 @@ void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
     arg0->node2.translation.x = 0;
     arg0->node2.translation.y = 0x30000000;
     arg0->node2.translation.z = 0x30458CB2;
-    setCleanupCallback(&func_800BB45C_AD81C);
+    setCleanupCallback(&cleanupStarlightHighwayBuildingTask);
     setCallback(&renderStarlightHighwayBuildings);
 }
 
@@ -237,9 +237,9 @@ void renderStarlightHighwayBuildings(StarlightBuildingRenderData *arg0) {
     }
 }
 
-void func_800BB45C_AD81C(func_800BB45C_AD81C_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupStarlightHighwayBuildingTask(DualSegmentCleanupState *arg0) {
+    arg0->segment1 = freeNodeMemory(arg0->segment1);
+    arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
 void func_800BB494_AD854(func_800BB494_AD854_arg *arg0) {
@@ -630,9 +630,9 @@ common:
     } while (var_s0 < 4);
 }
 
-void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void func_800BBEA0_AE260(DualSegmentCleanupState *arg0) {
+    arg0->segment1 = freeNodeMemory(arg0->segment1);
+    arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
 void func_800BBED8(void) {
@@ -960,9 +960,9 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
     (void)pad;
 }
 
-void func_800BC984_AED44(func_800BB45C_AD81C_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void func_800BC984_AED44(DualSegmentCleanupState *arg0) {
+    arg0->segment1 = freeNodeMemory(arg0->segment1);
+    arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
 void func_800BC9BC(void) {
