@@ -2764,13 +2764,20 @@ s32 func_800B62E4_A6194(Player *arg0) {
         if (arg0->unkBD4 != 0) {
             if (arg0->unkBD2 != 0) {
                 if (randA() & 1) {
-                    if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 0, arg0->unkBD2) != 0) {
+                    if (spawnItemHomingProjectile(
+                            &arg0->worldPos.x,
+                            arg0->unkB94,
+                            &arg0->velocity.x,
+                            0,
+                            arg0->unkBD2
+                        ) != 0) {
                         arg0->unkBD2 = 0;
                         arg0->unkBD3 = 0;
                     }
                     goto block_end;
                 }
-                if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 1, arg0->unkBD4) != 0) {
+                if (spawnItemHomingProjectile(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 1, arg0->unkBD4) !=
+                    0) {
                     arg0->unkBD4 = 0;
                 }
                 goto block_end;
@@ -2778,14 +2785,15 @@ s32 func_800B62E4_A6194(Player *arg0) {
             goto block_check_BD4;
         }
         if (arg0->unkBD2 != 0) {
-            if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 0, arg0->unkBD2) != 0) {
+            if (spawnItemHomingProjectile(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 0, arg0->unkBD2) != 0) {
                 arg0->unkBD2 = 0;
                 arg0->unkBD3 = 0;
             }
         } else {
         block_check_BD4:
             if (arg0->unkBD4 != 0) {
-                if (func_8004B2A0_4BEA0(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 1, arg0->unkBD4) != 0) {
+                if (spawnItemHomingProjectile(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 1, arg0->unkBD4) !=
+                    0) {
                     arg0->unkBD4 = 0;
                 }
             }
