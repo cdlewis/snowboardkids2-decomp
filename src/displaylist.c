@@ -917,7 +917,7 @@ void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
     D_800A2D48_A3948 = arg0->unk2C;
 }
 
-void func_800643AC_64FAC(DisplayListObject *arg0, s32 arg1) {
+void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
     Mtx sp30;
     f32 sp70;
     f32 sp74;
@@ -985,7 +985,7 @@ void func_80064628_65228(DisplayListObject *displayObjects) {
     for (i = 0; i < displayObjects->unk37; i++) {
         currentObject = &displayObjects[i];
         if (currentObject->displayLists->opaqueDisplayList != NULL) {
-            func_800643AC_64FAC(displayObjects, i);
+            setupMultiPartObjectRenderState(displayObjects, i);
             displayListCmd = gRegionAllocPtr;
             displayListCmd->words.w0 = 0xDE000000;
             displayListCmd->words.w1 = (u32)currentObject->displayLists->opaqueDisplayList;
@@ -1009,7 +1009,7 @@ void func_800646C8_652C8(DisplayListObject *displayObjects) {
         i = 0;
         do {
             if (currentObject[i].displayLists->transparentDisplayList != NULL) {
-                func_800643AC_64FAC(displayObjects, i);
+                setupMultiPartObjectRenderState(displayObjects, i);
                 displayListCmd = gRegionAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
                 displayListCmd->words.w1 = (u32)currentObject[i].displayLists->transparentDisplayList;
@@ -1036,7 +1036,7 @@ void func_80064768_65368(DisplayListObject *displayObjects) {
         i = 0;
         do {
             if (currentObject[i].displayLists->overlayDisplayList != NULL) {
-                func_800643AC_64FAC(displayObjects, i);
+                setupMultiPartObjectRenderState(displayObjects, i);
                 displayListCmd = gRegionAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
                 displayListCmd->words.w1 = (u32)currentObject[i].displayLists->overlayDisplayList;
@@ -1257,7 +1257,7 @@ void func_80065150_65D50(DisplayListObject *displayObjects) {
         currentObject = displayObjects;
         do {
             if (currentObject[i].displayLists->opaqueDisplayList != NULL) {
-                func_800643AC_64FAC(displayObjects, i);
+                setupMultiPartObjectRenderState(displayObjects, i);
                 displayListCmd = gRegionAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
                 displayListCmd->words.w1 = (u32)currentObject[i].displayLists->opaqueDisplayList;
@@ -1307,7 +1307,7 @@ void func_800653E0_65FE0(DisplayListObject *displayObjects) {
         currentObject = displayObjects;
         do {
             if (currentObject[i].displayLists->transparentDisplayList != NULL) {
-                func_800643AC_64FAC(displayObjects, i);
+                setupMultiPartObjectRenderState(displayObjects, i);
                 displayListCmd = gRegionAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
                 displayListCmd->words.w1 = (u32)currentObject[i].displayLists->transparentDisplayList;
@@ -1357,7 +1357,7 @@ void func_80065670_66270(DisplayListObject *displayObjects) {
         currentObject = displayObjects;
         do {
             if (currentObject[i].displayLists->overlayDisplayList != NULL) {
-                func_800643AC_64FAC(displayObjects, i);
+                setupMultiPartObjectRenderState(displayObjects, i);
                 displayListCmd = gRegionAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
                 displayListCmd->words.w1 = (u32)currentObject[i].displayLists->overlayDisplayList;
