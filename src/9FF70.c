@@ -2737,71 +2737,87 @@ s32 updateKnockbackBounceLaunchPhase(Player *player) {
     return 0;
 }
 
-s32 func_800B62E4_A6194(Player *arg0) {
-    u8 temp_v0;
+s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
+    u8 step;
 
-    temp_v0 = arg0->unkBBF;
-    if (temp_v0 == 0) {
-        temp_v0 += 1;
-        arg0->unkBBF = temp_v0;
-        arg0->unkB8C = 0x8000;
-        arg0->unkA8C = 0xFFFF;
-        func_8005D308_5DF08(arg0, 0xE);
+    step = player->unkBBF;
+    if (step == 0) {
+        step += 1;
+        player->unkBBF = step;
+        player->unkB8C = 0x8000;
+        player->unkA8C = 0xFFFF;
+        func_8005D308_5DF08(player, 0xE);
     }
-    if ((arg0->unkBBF == 1) && (createLiftEffect(arg0) != 0)) {
-        arg0->unkBBF = arg0->unkBBF + 1;
+    if ((player->unkBBF == 1) && (createLiftEffect(player) != 0)) {
+        player->unkBBF = player->unkBBF + 1;
     }
-    arg0->unkB88 = 0x400;
-    arg0->velocity.x = 0;
-    arg0->velocity.z = 0;
-    arg0->unkB84 |= 0x20;
-    arg0->velocity.y = arg0->unkB8C;
-    arg0->unkB8C = arg0->unkB8C + 0x8000;
-    decayPlayerAirborneAngles(arg0);
-    arg0->unkA94 = (u16)arg0->unkA94 + 0x200;
-    applyVelocityToPosition(arg0);
-    if (arg0->unkB8C > 0x7FFFF) {
-        if (arg0->unkBD4 != 0) {
-            if (arg0->unkBD2 != 0) {
+    player->unkB88 = 0x400;
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->unkB84 |= 0x20;
+    player->velocity.y = player->unkB8C;
+    player->unkB8C = player->unkB8C + 0x8000;
+    decayPlayerAirborneAngles(player);
+    player->unkA94 = (u16)player->unkA94 + 0x200;
+    applyVelocityToPosition(player);
+    if (player->unkB8C > 0x7FFFF) {
+        if (player->unkBD4 != 0) {
+            if (player->unkBD2 != 0) {
                 if (randA() & 1) {
                     if (spawnItemHomingProjectile(
-                            &arg0->worldPos.x,
-                            arg0->unkB94,
-                            &arg0->velocity.x,
+                            &player->worldPos.x,
+                            player->unkB94,
+                            &player->velocity.x,
                             0,
-                            arg0->unkBD2
+                            player->unkBD2
                         ) != 0) {
-                        arg0->unkBD2 = 0;
-                        arg0->unkBD3 = 0;
+                        player->unkBD2 = 0;
+                        player->unkBD3 = 0;
                     }
-                    goto block_end;
+                    goto spawn_done;
                 }
-                if (spawnItemHomingProjectile(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 1, arg0->unkBD4) !=
-                    0) {
-                    arg0->unkBD4 = 0;
+                if (spawnItemHomingProjectile(
+                        &player->worldPos.x,
+                        player->unkB94,
+                        &player->velocity.x,
+                        1,
+                        player->unkBD4
+                    ) != 0) {
+                    player->unkBD4 = 0;
                 }
-                goto block_end;
+                goto spawn_done;
             }
-            goto block_check_BD4;
+            goto check_secondary_item;
         }
-        if (arg0->unkBD2 != 0) {
-            if (spawnItemHomingProjectile(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 0, arg0->unkBD2) != 0) {
-                arg0->unkBD2 = 0;
-                arg0->unkBD3 = 0;
+        if (player->unkBD2 != 0) {
+            if (spawnItemHomingProjectile(
+                    &player->worldPos.x,
+                    player->unkB94,
+                    &player->velocity.x,
+                    0,
+                    player->unkBD2
+                ) != 0) {
+                player->unkBD2 = 0;
+                player->unkBD3 = 0;
             }
         } else {
-        block_check_BD4:
-            if (arg0->unkBD4 != 0) {
-                if (spawnItemHomingProjectile(&arg0->worldPos.x, arg0->unkB94, &arg0->velocity.x, 1, arg0->unkBD4) !=
-                    0) {
-                    arg0->unkBD4 = 0;
+        check_secondary_item:
+            if (player->unkBD4 != 0) {
+                if (spawnItemHomingProjectile(
+                        &player->worldPos.x,
+                        player->unkB94,
+                        &player->velocity.x,
+                        1,
+                        player->unkBD4
+                    ) != 0) {
+                    player->unkBD4 = 0;
                 }
             }
         }
-    block_end:
-        setPlayerBehaviorPhase(arg0, 0x10);
+    spawn_done:
+        setPlayerBehaviorPhase(player, 0x10);
     }
-    func_8005D804_5E404(arg0, 3, 0);
+    func_8005D804_5E404(player, 3, 0);
     return 0;
 }
 
