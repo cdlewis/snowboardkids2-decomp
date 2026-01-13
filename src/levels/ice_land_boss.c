@@ -441,7 +441,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
             if (arg0->behaviorCounter != 0) {
                 if (arg0->behaviorStep == 2) {
                     arg0->behaviorCounter = arg0->behaviorCounter - 1;
-                    if (func_80054C8C_5588C(arg0->unkBB8) != 0) {
+                    if (spawnPlayerGuidedStarProjectile(arg0->unkBB8) != 0) {
                         func_8005182C_5242C(arg0);
                     }
 
@@ -474,7 +474,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                         arg0->worldPos.z - player->worldPos.z
                     ) <= 0xDFFFFF) {
                     // Close range
-                    if (func_80054C8C_5588C(arg0->unkBB8) != 0) {
+                    if (spawnPlayerGuidedStarProjectile(arg0->unkBB8) != 0) {
                         func_8005182C_5242C(arg0);
                     }
 

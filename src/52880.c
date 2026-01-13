@@ -133,12 +133,12 @@ void loadParachuteProjectileAsset(Struct_52880 *arg0);
 void launchParachuteProjectile(Struct_52880 *arg0);
 void loadStarProjectileAsset(Struct_52880 *arg0);
 void checkStarProjectileHit(Struct_52880 *arg0);
-void func_800548C8_554C8(Struct_52880 *arg0);
-void func_80054AE4_556E4(Struct_52880 *arg0);
+void loadPlayerGuidedStarProjectile(Struct_52880 *arg0);
+void updatePlayerGuidedStarProjectile(Struct_52880 *arg0);
 
-extern s16 D_80090F60_91B60[];
-extern s32 D_80090F68_91B68;
-extern s32 D_80090F74_91B74;
+extern s16 gPlayerGuidedStarTransform[];
+extern s32 gPlayerGuidedStarBaseVelocity;
+extern s32 gPlayerGuidedStarVelocityOffset;
 
 void normalizeVelocityToSpeed(Vec3i *vel, s32 targetSpeed) {
     s32 dist;
@@ -1601,14 +1601,14 @@ void spawnFallingStarProjectile(s16 angle, s32 speed) {
     }
 }
 
-void func_80054880_55480(Struct_52880 *arg0) {
+void initPlayerGuidedStarProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->assetData = load_3ECE40();
     setCleanupCallback(cleanupSlapstickProjectileTask);
-    setCallbackWithContinue(func_800548C8_554C8);
+    setCallbackWithContinue(loadPlayerGuidedStarProjectile);
 }
 
-void func_800548C8_554C8(Struct_52880 *arg0) {
+void loadPlayerGuidedStarProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s16 playerIdx;
     s32 vel;
@@ -1627,7 +1627,7 @@ void func_800548C8_554C8(Struct_52880 *arg0) {
     arg0->hitCount = 0;
     playerIdx = *playerIdxPtr;
     players = (Unk10Element_52880 *)&arg0->pos;
-    transformVector(D_80090F60_91B60, alloc->unk10[arg0->ownerPlayerIdx].unk164, position = players);
+    transformVector(gPlayerGuidedStarTransform, alloc->unk10[arg0->ownerPlayerIdx].unk164, position = players);
 
     playerIdx = arg0->ownerPlayerIdx;
     transformVectorRelative(alloc->unk10[0].unk434, alloc->unk10[arg0->ownerPlayerIdx].unk164, velocity = &arg0->vel);
@@ -1645,10 +1645,10 @@ void func_800548C8_554C8(Struct_52880 *arg0) {
         arg0->vel.z = 0x300000;
     }
 
-    D_80090F74_91B74 = D_80090F68_91B68 - arg0->vel.z;
+    gPlayerGuidedStarVelocityOffset = gPlayerGuidedStarBaseVelocity - arg0->vel.z;
 
     playerIdx = *playerIdxPtr;
-    transformVector(&D_80090F60_91B60[6], alloc->unk10[arg0->ownerPlayerIdx].unk164, velocity);
+    transformVector(&gPlayerGuidedStarTransform[6], alloc->unk10[arg0->ownerPlayerIdx].unk164, velocity);
 
     arg0->vel.x = arg0->pos.x - arg0->vel.x;
     arg0->vel.y = arg0->pos.y - arg0->vel.y;
@@ -1657,10 +1657,10 @@ void func_800548C8_554C8(Struct_52880 *arg0) {
     players = alloc->unk10;
     memcpy(&arg0->unk30, players[*playerIdxPtr].velocity, 12);
     queueSoundAtPosition(position, 0x23);
-    setCallbackWithContinue(func_80054AE4_556E4);
+    setCallbackWithContinue(updatePlayerGuidedStarProjectile);
 }
 
-void func_80054AE4_556E4(Struct_52880 *arg0) {
+void updatePlayerGuidedStarProjectile(Struct_52880 *arg0) {
     Alloc_55650 *alloc;
     Vec3i sp18;
     s32 pad1[15];
@@ -1708,14 +1708,15 @@ void func_80054AE4_556E4(Struct_52880 *arg0) {
     }
 }
 
-s32 func_80054C8C_5588C(s16 arg0) {
+s32 spawnPlayerGuidedStarProjectile(s16 arg0) {
     Struct_52880 *task;
     s32 pad[4];
 
-    task = scheduleTask(func_80054880_55480, 0, 0, 0x6F);
+    task = scheduleTask(initPlayerGuidedStarProjectileTask, 0, 0, 0x6F);
     if (task != NULL) {
         task->ownerPlayerIdx = arg0;
     }
+    return (s32)task;
 }
 
 void func_80054CCC_558CC(func_80054CCC_558CC_arg *arg0) {
@@ -1825,9 +1826,9 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
     Vec3i *s1;
 
     alloc = getCurrentAllocation();
-    transformVector(D_80090F60_91B60, alloc->unk10[arg0->ownerPlayerIdx].unk164, s1 = &arg0->pos);
+    transformVector(gPlayerGuidedStarTransform, alloc->unk10[arg0->ownerPlayerIdx].unk164, s1 = &arg0->pos);
 
-    transformVector(&D_80090F60_91B60[12], alloc->unk10[arg0->ownerPlayerIdx].unk164, &arg0->vel);
+    transformVector(&gPlayerGuidedStarTransform[12], alloc->unk10[arg0->ownerPlayerIdx].unk164, &arg0->vel);
 
     temp_v0 = arg0->pos.x;
     temp_a1 = arg0->vel.x;
