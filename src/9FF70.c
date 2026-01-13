@@ -1895,7 +1895,7 @@ s32 updateStunnedAirbornePhase(Player *player) {
         effectPos.z += player->worldPos.z;
         effectPos.y = player->worldPos.y + 0x100000;
         queueSoundAtPosition(&player->worldPos, 0xD);
-        func_80050ECC_51ACC(&effectPos);
+        spawnImpactStar(&effectPos);
     }
 
     angleDiff = (func_8005CE98_5DA98(player) - player->unkA94) & 0x1FFF;
@@ -1948,7 +1948,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
         effectPos.z += player->worldPos.z;
         effectPos.y = player->worldPos.y + 0x100000;
         queueSoundAtPosition(&player->worldPos, 0xD);
-        func_80050ECC_51ACC(&effectPos);
+        spawnImpactStar(&effectPos);
     }
 
     angleDiff = (func_8005CE98_5DA98(player) - player->unkA94) & 0x1FFF;
@@ -2234,7 +2234,7 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
         stackVec.y = arg0->worldPos.y + 0x140000;
 
         queueSoundAtPosition(&arg0->worldPos, 0xD);
-        func_80050ECC_51ACC(&stackVec);
+        spawnImpactStar(&stackVec);
     }
 
     arg0->unkB88 = 1;

@@ -3276,7 +3276,7 @@ void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0) {
         sp.y = func_80061A64_62664(temp_s0, arg0->sectorIndex, s2);
         temp_v0_3 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
         if (temp_v0_3 != NULL) {
-            func_80050ECC_51ACC(s2);
+            spawnImpactStar(s2);
             queueSoundAtPosition(s2, 0xD);
             setPlayerProjectileHitState(temp_v0_3);
             func_80069CF8_6A8F8();
@@ -3326,7 +3326,7 @@ void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0) {
     if (s3 != NULL) {
         memcpy(s0, s2, 0xC);
         sp10.y = sp10.y + 0xA0000;
-        func_80050ECC_51ACC(s0);
+        spawnImpactStar(s0);
         queueSoundAtPosition(s0, 0xD);
         setPlayerProjectileHitState(s3);
         func_80069CF8_6A8F8();
@@ -3602,7 +3602,7 @@ void updateBossHomingProjectile(BossHomingProjectile *projectile) {
     hitPlayer = func_8005B24C_5BE4C(position, projectile->playerIndex, 0xA0000);
 
     if (hitPlayer != NULL) {
-        func_80050ECC_51ACC(position);
+        spawnImpactStar(position);
         queueSoundAtPosition(position, 0xD);
         setPlayerProjectileHitState(hitPlayer);
         func_80069CF8_6A8F8();
@@ -3646,7 +3646,7 @@ void bounceBossHomingProjectile(BossHomingProjectileBounceArg *arg0) {
     if (hitPlayer != NULL) {
         memcpy(copyPtr, position, sizeof(Vec3i));
         bouncePosition.y = bouncePosition.y + 0xA0000;
-        func_80050ECC_51ACC(copyPtr);
+        spawnImpactStar(copyPtr);
         queueSoundAtPosition(copyPtr, 0xD);
         setPlayerProjectileHitState(hitPlayer);
         func_80069CF8_6A8F8();
@@ -3762,7 +3762,7 @@ void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *a
         temp_s0 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
 
         if (temp_s0 != NULL) {
-            func_80050ECC_51ACC(s2);
+            spawnImpactStar(s2);
             queueSoundAtPosition(s2, 0xD);
             setPlayerProjectileHitState(temp_s0);
             func_80069CF8_6A8F8();
@@ -3805,7 +3805,7 @@ void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *a
     if (s3 != NULL) {
         memcpy(s0, s2, 0xC);
         sp10.y = sp10.y + 0xA0000;
-        func_80050ECC_51ACC(s0);
+        spawnImpactStar(s0);
         queueSoundAtPosition(s0, 0xD);
         setPlayerProjectileHitState(s3);
         func_80069CF8_6A8F8();
@@ -3905,7 +3905,7 @@ void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0) {
     temp_s0 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
 
     if (temp_s0 != NULL) {
-        func_80050ECC_51ACC(s2);
+        spawnImpactStar(s2);
         queueSoundAtPosition(s2, 0xD);
         setPlayerProjectileHitState(temp_s0);
         func_80069CF8_6A8F8();
@@ -3949,7 +3949,7 @@ void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0) {
     if (s3 != NULL) {
         memcpy(s0, s2, sizeof(Vec3i));
         sp10.y = sp10.y + 0xA0000;
-        func_80050ECC_51ACC(s0);
+        spawnImpactStar(s0);
         queueSoundAtPosition(s0, 0xD);
         setPlayerProjectileHitState(s3);
         func_80069CF8_6A8F8();

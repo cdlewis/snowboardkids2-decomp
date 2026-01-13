@@ -222,7 +222,7 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
             arg0->vel.x = -velX;
             arg0->vel.z = -velZ;
             arg0->targetPlayerIdx = playerIdx;
-            func_80050ECC_51ACC(projectilePos);
+            spawnImpactStar(projectilePos);
             queueSoundAtPosition(projectilePos, 0x20);
         }
     }
@@ -264,7 +264,7 @@ void launchSlapstickProjectile(Struct_52880 *arg0) {
     checkSlapstickProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0x11);
         func_80069CF8_6A8F8();
     }
@@ -359,7 +359,7 @@ void updateSlapstickProjectile(Struct_52880 *arg0) {
     }
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0x11);
         func_80069CF8_6A8F8();
     }
@@ -440,7 +440,7 @@ void checkParachuteProjectileHit(Struct_52880 *arg0) {
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
         arg0->vel.z = -v2C;
-        func_80050ECC_51ACC(s1);
+        spawnImpactStar(s1);
         queueSoundAtPosition(s1, 0x20);
     }
 }
@@ -481,7 +481,7 @@ void launchParachuteProjectile(Struct_52880 *arg0) {
     checkParachuteProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
@@ -576,7 +576,7 @@ void updateParachuteProjectile(Struct_52880 *arg0) {
     }
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
@@ -656,7 +656,7 @@ void checkFryingPanProjectileHit(Struct_52880 *arg0) {
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
         arg0->vel.z = -v2C;
-        func_80050ECC_51ACC(s1);
+        spawnImpactStar(s1);
         queueSoundAtPosition(s1, 0x20);
     }
 }
@@ -703,7 +703,7 @@ void launchFryingPanProjectile(Struct_52880 *arg0) {
     checkFryingPanProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
@@ -798,7 +798,7 @@ void updateFryingPanProjectile(Struct_52880 *arg0) {
     }
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
@@ -879,7 +879,7 @@ void checkSnowmanProjectileHit(Struct_52880 *arg0) {
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
         arg0->vel.z = -v2C;
-        func_80050ECC_51ACC(s1);
+        spawnImpactStar(s1);
         queueSoundAtPosition(s1, 0x20);
     }
 }
@@ -938,7 +938,7 @@ void launchSnowmanProjectile(Struct_52880 *arg0) {
     checkSnowmanProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(s0);
+        spawnImpactStar(s0);
         queueSoundAtPosition(s0, 0xD);
         func_80069CF8_6A8F8();
     }
@@ -1037,7 +1037,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
     }
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
@@ -1103,7 +1103,7 @@ void checkStarProjectileHit(Struct_52880 *arg0) {
             arg0->vel.y = -arg0->vel.y;
             arg0->vel.z = -arg0->vel.z;
             arg0->targetPlayerIdx = temp;
-            func_80050ECC_51ACC(s1);
+            spawnImpactStar(s1);
             queueSoundAtPosition(s1, 0x20);
         }
     }
@@ -1325,7 +1325,7 @@ void checkHomingPanelProjectileHit(Struct_52880 *arg0) {
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
         arg0->vel.z = -v2C;
-        func_80050ECC_51ACC(s1);
+        spawnImpactStar(s1);
         queueSoundAtPosition(s1, 0x20);
     }
 }
@@ -1364,7 +1364,7 @@ void launchHomingPanelProjectile(Struct_52880 *arg0) {
     checkHomingPanelProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
@@ -1466,7 +1466,7 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
     }
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }
@@ -1850,7 +1850,7 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
     queueSoundAtPosition(s1, 0x23);
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(s1);
+        spawnImpactStar(s1);
         queueSoundAtPosition(s1, 0x11);
         func_80069CF8_6A8F8();
     }
@@ -1949,7 +1949,7 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
         }
     }
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0x11);
         func_80069CF8_6A8F8();
     }
@@ -2166,7 +2166,7 @@ void func_80055964_56564(Struct_52880 *arg0) {
     func_80055900_56500(arg0);
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(s0);
+        spawnImpactStar(s0);
         queueSoundAtPosition(s0, 13);
         func_80069CF8_6A8F8();
     }
@@ -2229,7 +2229,7 @@ void func_80055A84_56684(Struct_52880 *arg0) {
     }
 
     if (arg0->hitCount != 0) {
-        func_80050ECC_51ACC(&arg0->pos);
+        spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
         func_80069CF8_6A8F8();
     }

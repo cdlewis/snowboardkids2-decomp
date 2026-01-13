@@ -553,7 +553,7 @@ void func_80050EA0_51AA0(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void func_80050ECC_51ACC(Vec3i *arg0) {
+void spawnImpactStar(Vec3i *arg0) {
     Node *task;
 
     task = scheduleTask(&func_80050D70_51970, 2, 0, 0xFA);

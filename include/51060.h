@@ -6,7 +6,7 @@
 
 void spawnCharacterTrailParticle(void *arg0);
 void spawnPlayerCharacterTrailParticle(Player *player, s32 characterId);
-void func_80050ECC_51ACC(Vec3i *arg0);
+void spawnImpactStar(Vec3i *arg0);
 void func_80051978_52578(void);
 void func_80051BB8_527B8(void *arg0);
 void func_80051C08_52808(void *arg0, s32 arg1);
