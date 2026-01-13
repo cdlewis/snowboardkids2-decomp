@@ -1959,56 +1959,57 @@ void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
 }
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteFrame;
     u8 padA[0x2];
-    s16 unkC;
-} Struct_func_8004F084;
+    s16 flashState;
+} SuccessMessageDisplayState;
 
-void func_8004F104_4FD04(Struct_func_8004F084 *);
-void func_8004F168_4FD68(ShotCrossCountdownTimerState *);
+void updateSuccessMessageDisplay(SuccessMessageDisplayState *);
+void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *);
 
-void func_8004F084_4FC84(Struct_func_8004F084 *arg0) {
-    if (arg0->unkC == 0) {
-        arg0->unk4 = loadAsset_34CB50();
-        arg0->unk8 = 0x1E;
-        arg0->unk0 = -0x48;
-        arg0->unk2 = -0x10;
-        arg0->unkC = 1;
-        setCleanupCallback(func_8004F168_4FD68);
-        setCallback(func_8004F104_4FD04);
+void initSuccessMessageDisplayTask(SuccessMessageDisplayState *arg0) {
+    if (arg0->flashState == 0) {
+        arg0->spriteAsset = loadAsset_34CB50();
+        arg0->spriteFrame = 0x1E;
+        arg0->x = -0x48;
+        arg0->y = -0x10;
+        arg0->flashState = 1;
+        setCleanupCallback(cleanupSuccessMessageDisplayTask);
+        setCallback(updateSuccessMessageDisplay);
     } else {
-        arg0->unkC = arg0->unkC - 1;
+        arg0->flashState = arg0->flashState - 1;
     }
 }
 
-void func_8004F104_4FD04(Struct_func_8004F084 *arg0) {
-    if (arg0->unkC == 0) {
-        arg0->unkC = 1;
-        if ((u16)arg0->unk8 != 0x22) {
-            arg0->unk8 = arg0->unk8 + 1;
+void updateSuccessMessageDisplay(SuccessMessageDisplayState *arg0) {
+    if (arg0->flashState == 0) {
+        arg0->flashState = 1;
+        if ((u16)arg0->spriteFrame != 0x22) {
+            arg0->spriteFrame = arg0->spriteFrame + 1;
         }
     } else {
-        arg0->unkC = arg0->unkC - 1;
+        arg0->flashState = arg0->flashState - 1;
     }
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
 }
 
-void func_8004F168_4FD68(ShotCrossCountdownTimerState *arg0) {
+void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
 typedef struct {
     u8 _pad[0xC];
-    s16 unkC;
-} func_8004F194_task;
+    s16 initDelay;
+} SuccessMessageSpawnState;
 
-void func_8004F194_4FD94(s16 arg0) {
-    func_8004F194_task *task = (func_8004F194_task *)scheduleTask(&func_8004F084_4FC84, 1, 1, 0xE6);
+void spawnSuccessMessageDisplayTask(s16 delayFrames) {
+    SuccessMessageSpawnState *task =
+        (SuccessMessageSpawnState *)scheduleTask(&initSuccessMessageDisplayTask, 1, 1, 0xE6);
     if (task != NULL) {
-        task->unkC = arg0;
+        task->initDelay = delayFrames;
     }
 }
 

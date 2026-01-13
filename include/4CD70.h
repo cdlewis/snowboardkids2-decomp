@@ -132,7 +132,7 @@ void spawnVictorySnowflakes(s16 playerIndex, s16 useSmallSprite);
 void initPauseMenuDisplayTask(PauseMenuDisplayState *arg0);
 void spawnShotCrossItemCountDisplayTask(s16 arg0);
 void func_8004F1D4_4FDD4(Struct_func_8004F1D4 *arg0);
-void func_8004F194_4FD94(s16 arg0);
+void spawnSuccessMessageDisplayTask(s16 delayFrames);
 void func_8004F820_50420(ShotCrossCountdownTimerState *arg0);
 void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
 void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0);
