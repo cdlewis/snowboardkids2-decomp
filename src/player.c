@@ -189,7 +189,7 @@ extern u16 mus_master_volume_songs;
 
 u32 __muscontrol_flag;
 fx_t *D_800A64F4_A70F4;
-s32 *D_800A64F8_A70F8;
+s32 *gDefaultSoundEffectPriorityTable;
 ALHeap audio_heap;
 // FIFO command queue variables (ring buffer)
 s32 D_800A6520_A7120;     // fifo_start (read index)
@@ -224,7 +224,7 @@ void __MusIntFifoOpen(s32);
 void __MusIntMemSet(void *, unsigned char, int);
 void __MusIntMemMove(u8 *, u8 *, s32);
 s32 func_80073058_73C58(u8 *);
-u32 func_800725F4_731F4(s32, s32, s32, s32, s32);
+u32 startSoundEffect(s32, s32, s32, s32, s32);
 s32 __MusIntRandom(s32);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
@@ -613,7 +613,7 @@ u8 *Fstartfx(channel_t *cp, u8 *ptr) {
     if (number >= 0x80)
         number = ((number & 0x7f) << 8) + (*(ptr++));
 
-    new_handle = func_800725F4_731F4(number, cp->volume, cp->pan, 0, cp->priority++);
+    new_handle = startSoundEffect(number, cp->volume, cp->pan, 0, cp->priority++);
     cp->priority--;
 
     if (new_handle) {
@@ -669,7 +669,7 @@ s32 MusInitialize(musConfig *config) {
     max_channels = config->channels;
 
     D_800A64F4_A70F4 = config->sched;
-    D_800A64F8_A70F8 = (s32 *)config->default_fxbank;
+    gDefaultSoundEffectPriorityTable = (s32 *)config->default_fxbank;
 
     if (osTvType == OS_TV_PAL) {
         mus_vsyncs_per_second = 50;
@@ -791,7 +791,7 @@ u32 __MusIntFindChannelAndStart(s32 number) {
     channel_t *cp;
     channel_t *current_cp;
 
-    priority = D_800A64F8_A70F8[number];
+    priority = gDefaultSoundEffectPriorityTable[number];
     current_priority = priority + 1;
 
     for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
@@ -812,17 +812,17 @@ u32 __MusIntFindChannelAndStart(s32 number) {
     return 0;
 }
 
-u32 func_800725F4_731F4(s32 number, s32 volume, s32 pan, s32 arg3, s32 priority) {
+u32 startSoundEffect(s32 number, s32 volume, s32 pan, s32 restartExistingEffect, s32 priority) {
     s32 i;
     s32 current_priority;
     channel_t *cp;
     channel_t *current_cp;
 
     if (priority == -1) {
-        priority = D_800A64F8_A70F8[number];
+        priority = gDefaultSoundEffectPriorityTable[number];
     }
 
-    if (arg3 != 0) {
+    if (restartExistingEffect != 0) {
         for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
             if (cp->fx_addr == number) {
                 return __MusIntStartEffect(cp, number, volume, pan, priority);
@@ -857,7 +857,7 @@ u32 func_80072704_73304(s32 number, s32 volume, s32 pan, s32 handle, s32 priorit
     channel_t *current_cp;
 
     if (priority == -1) {
-        priority = D_800A64F8_A70F8[number];
+        priority = gDefaultSoundEffectPriorityTable[number];
     }
 
     if (handle != 0) {
@@ -1161,7 +1161,7 @@ musHandle func_80072D64_73964(fx_header_t *arg0, s32 arg1, s32 arg2, s32 arg3, s
         }
     }
 
-    result = func_800725F4_731F4(arg1, arg2, arg3, arg4, arg5);
+    result = startSoundEffect(arg1, arg2, arg3, arg4, arg5);
     libmus_fxheader_single = libmus_fxheader_current;
 
     return result;

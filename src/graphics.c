@@ -86,7 +86,7 @@ extern OSThread gfxCommThread;
 
 void func_8005628C_56E8C(void);
 
-void *func_800725F4_731F4(s32, s32, s32, s32, s32);
+void *startSoundEffect(s32, s32, s32, s32, s32);
 void *func_80072960_73560(void *, s32);
 void *func_80072A14_73614(void *);
 void *func_80072CDC_738DC(void *, void *);
@@ -494,7 +494,7 @@ void gfxCommThreadFunc(void *arg0) {
                     result = (void *)func_800728E0_734E0(3);
                     break;
                 case 1:
-                    result = func_800725F4_731F4(
+                    result = startSoundEffect(
                         gGraphicsCommand.soundId,
                         gGraphicsCommand.volume,
                         gGraphicsCommand.pan,
@@ -507,7 +507,7 @@ void gfxCommThreadFunc(void *arg0) {
                     break;
                 case 2:
                     func_80072960_73560(gGraphicsCommand.audioChannel, 0);
-                    result = func_800725F4_731F4(
+                    result = startSoundEffect(
                         gGraphicsCommand.soundId,
                         gGraphicsCommand.volume,
                         gGraphicsCommand.pan,
@@ -523,7 +523,7 @@ void gfxCommThreadFunc(void *arg0) {
                     break;
                 case 4:
                     func_80072960_73560(gGraphicsCommand.audioChannel, 0);
-                    result = func_800725F4_731F4(
+                    result = startSoundEffect(
                         gGraphicsCommand.soundId,
                         gGraphicsCommand.volume,
                         gGraphicsCommand.pan,
