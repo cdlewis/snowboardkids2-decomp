@@ -7,20 +7,20 @@
 
 typedef struct {
     u8 pad[0x54];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
-    s32 unk68;
-} unk_func_800B68F4_1E39A4;
+    s32 scaleCurrentX;
+    s32 scaleCurrentY;
+    s32 scaleCurrentZ;
+    s32 scaleTargetX;
+    s32 scaleTargetY;
+    s32 scaleTargetZ;
+} CutsceneSlotScaleData;
 
 s16 getSlotMoveDuration(cutsceneSys2Wait_exec_asset *slot);
 s16 calcAngleDiff(CutsceneSlotData *unused, s16 direction, s16 targetAngle, s16 currentAngle);
 void initSlotData(CutsceneSlotData *slot);
 s32 setupSlotTransform(CutsceneSlotData *slot);
 s32 syncModelFromSlot(void *, void *);
-void setSlotScale(unk_func_800B68F4_1E39A4 *slot, s32 scaleX, s32 scaleY, s32 scaleZ);
+void setSlotScale(CutsceneSlotScaleData *slot, s32 scaleX, s32 scaleY, s32 scaleZ);
 void handleSlotDebugInput(CutsceneSlotData *slot, func_800B5E64_1E2F14_arg0 *camera);
 void updateSlotRotVelocity(CutsceneSlotData *slot, s16 speedMode);
 void updateSlotRotVelocityFixed(CutsceneSlotData *slot);

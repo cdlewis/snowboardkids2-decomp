@@ -93,16 +93,16 @@ void initSlotData(CutsceneSlotData *slot) {
     slot->unk40 = 0;
     slot->unk44 = 0;
 
-    slot->unk54 = 0x10000;
-    slot->unk58 = 0x10000;
-    slot->unk5C = 0x10000;
-    slot->unk60 = 0x10000;
-    slot->unk64 = 0x10000;
-    slot->unk68 = 0x10000;
+    slot->scaleCurrentX = 0x10000;
+    slot->scaleCurrentY = 0x10000;
+    slot->scaleCurrentZ = 0x10000;
+    slot->scaleTargetX = 0x10000;
+    slot->scaleTargetY = 0x10000;
+    slot->scaleTargetZ = 0x10000;
 
-    slot->unk6C = 0;
-    slot->unk70 = 0;
-    slot->unk74 = 0;
+    slot->scaleVelX = 0;
+    slot->scaleVelY = 0;
+    slot->scaleVelZ = 0;
 
     slot->unk78 = 0;
     slot->unk7A = 0;
@@ -161,21 +161,21 @@ s32 setupSlotTransform(CutsceneSlotData *slot) {
     func_8006B084_6BC84(&rotZ, &rotY, &tempXYZ);
     func_8006B084_6BC84(&rotX, &tempXYZ, &tempYZ);
 
-    scaleX = slot->unk54;
+    scaleX = slot->scaleCurrentX;
     pScale = &scaleMat;
     if (scaleX >= 0) {
         goto skip1;
     }
     scaleX += 7;
 skip1:
-    scaleY = slot->unk58;
+    scaleY = slot->scaleCurrentY;
     sx = (s16)((scaleX << 0xD) >> 0x10);
     if (scaleY >= 0) {
         goto skip2;
     }
     scaleY += 7;
 skip2:
-    scaleZ = slot->unk5C;
+    scaleZ = slot->scaleCurrentZ;
     sy = (s16)((scaleY << 0xD) >> 0x10);
     if (scaleZ >= 0) {
         goto skip3;
@@ -195,13 +195,13 @@ skip3:
     return retval;
 }
 
-void setSlotScale(unk_func_800B68F4_1E39A4 *slot, s32 scaleX, s32 scaleY, s32 scaleZ) {
-    slot->unk60 = scaleX;
-    slot->unk54 = scaleX;
-    slot->unk64 = scaleY;
-    slot->unk58 = scaleY;
-    slot->unk68 = scaleZ;
-    slot->unk5C = scaleZ;
+void setSlotScale(CutsceneSlotScaleData *slot, s32 scaleX, s32 scaleY, s32 scaleZ) {
+    slot->scaleTargetX = scaleX;
+    slot->scaleCurrentX = scaleX;
+    slot->scaleTargetY = scaleY;
+    slot->scaleCurrentY = scaleY;
+    slot->scaleTargetZ = scaleZ;
+    slot->scaleCurrentZ = scaleZ;
 }
 
 void handleSlotDebugInput(CutsceneSlotData *slot, func_800B5E64_1E2F14_arg0 *camera) {
@@ -317,9 +317,9 @@ void initSlotPositionEx(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY, s
     slot->unk3C = 0;
     slot->unk40 = 0;
     slot->unk44 = 0;
-    slot->unk6C = 0;
-    slot->unk70 = 0;
-    slot->unk74 = 0;
+    slot->scaleVelX = 0;
+    slot->scaleVelY = 0;
+    slot->scaleVelZ = 0;
     slot->unk7C = 0;
     slot->unk84 = 0;
     slot->unk86 = 0;
@@ -695,25 +695,25 @@ void interpolateSlotScaleX(CutsceneSlotData *slot, s32 targetScaleX, s16 duratio
     s32 vel;
 
     if (duration > 0) {
-        diff = targetScaleX - slot->unk54;
+        diff = targetScaleX - slot->scaleCurrentX;
         vel = diff / duration;
-        slot->unk60 = targetScaleX;
-        slot->unk6C = vel;
+        slot->scaleTargetX = targetScaleX;
+        slot->scaleVelX = vel;
     } else {
-        slot->unk54 = targetScaleX;
-        slot->unk60 = targetScaleX;
-        slot->unk6C = 0;
+        slot->scaleCurrentX = targetScaleX;
+        slot->scaleTargetX = targetScaleX;
+        slot->scaleVelX = 0;
     }
 }
 
 void interpolateSlotScaleY(CutsceneSlotData *slot, s32 targetScaleY, s16 duration) {
     if (duration > 0) {
-        slot->unk64 = targetScaleY;
-        slot->unk70 = (targetScaleY - slot->unk58) / duration;
+        slot->scaleTargetY = targetScaleY;
+        slot->scaleVelY = (targetScaleY - slot->scaleCurrentY) / duration;
     } else {
-        slot->unk58 = targetScaleY;
-        slot->unk64 = targetScaleY;
-        slot->unk70 = 0;
+        slot->scaleCurrentY = targetScaleY;
+        slot->scaleTargetY = targetScaleY;
+        slot->scaleVelY = 0;
     }
 }
 
@@ -721,13 +721,13 @@ void interpolateSlotScaleZ(CutsceneSlotData *slot, s32 targetScaleZ, s16 duratio
     s32 vel;
 
     if (duration > 0) {
-        vel = targetScaleZ - slot->unk5C;
-        slot->unk68 = targetScaleZ;
-        slot->unk74 = vel / duration;
+        vel = targetScaleZ - slot->scaleCurrentZ;
+        slot->scaleTargetZ = targetScaleZ;
+        slot->scaleVelZ = vel / duration;
     } else {
-        slot->unk5C = targetScaleZ;
-        slot->unk68 = targetScaleZ;
-        slot->unk74 = 0;
+        slot->scaleCurrentZ = targetScaleZ;
+        slot->scaleTargetZ = targetScaleZ;
+        slot->scaleVelZ = 0;
     }
 }
 
@@ -1227,48 +1227,48 @@ s32 updateSlotOrbit(CutsceneSlotData *slot, SceneModel *model) {
 void updateSlotScale(CutsceneSlotData *slot) {
     s32 vel;
 
-    vel = slot->unk6C;
+    vel = slot->scaleVelX;
     if (vel > 0) {
-        slot->unk54 += vel;
-        if (slot->unk54 > slot->unk60) {
-            slot->unk54 = slot->unk60;
-            slot->unk6C = 0;
+        slot->scaleCurrentX += vel;
+        if (slot->scaleCurrentX > slot->scaleTargetX) {
+            slot->scaleCurrentX = slot->scaleTargetX;
+            slot->scaleVelX = 0;
         }
     } else if (vel < 0) {
-        slot->unk54 += vel;
-        if (slot->unk54 < slot->unk60) {
-            slot->unk54 = slot->unk60;
-            slot->unk6C = 0;
+        slot->scaleCurrentX += vel;
+        if (slot->scaleCurrentX < slot->scaleTargetX) {
+            slot->scaleCurrentX = slot->scaleTargetX;
+            slot->scaleVelX = 0;
         }
     }
 
-    vel = slot->unk70;
+    vel = slot->scaleVelY;
     if (vel > 0) {
-        slot->unk58 += vel;
-        if (slot->unk58 > slot->unk64) {
-            slot->unk58 = slot->unk64;
-            slot->unk70 = 0;
+        slot->scaleCurrentY += vel;
+        if (slot->scaleCurrentY > slot->scaleTargetY) {
+            slot->scaleCurrentY = slot->scaleTargetY;
+            slot->scaleVelY = 0;
         }
     } else if (vel < 0) {
-        slot->unk58 += vel;
-        if (slot->unk58 < slot->unk64) {
-            slot->unk58 = slot->unk64;
-            slot->unk70 = 0;
+        slot->scaleCurrentY += vel;
+        if (slot->scaleCurrentY < slot->scaleTargetY) {
+            slot->scaleCurrentY = slot->scaleTargetY;
+            slot->scaleVelY = 0;
         }
     }
 
-    vel = slot->unk74;
+    vel = slot->scaleVelZ;
     if (vel > 0) {
-        slot->unk5C += vel;
-        if (slot->unk5C > slot->unk68) {
-            slot->unk5C = slot->unk68;
-            slot->unk74 = 0;
+        slot->scaleCurrentZ += vel;
+        if (slot->scaleCurrentZ > slot->scaleTargetZ) {
+            slot->scaleCurrentZ = slot->scaleTargetZ;
+            slot->scaleVelZ = 0;
         }
     } else if (vel < 0) {
-        slot->unk5C += vel;
-        if (slot->unk5C < slot->unk68) {
-            slot->unk5C = slot->unk68;
-            slot->unk74 = 0;
+        slot->scaleCurrentZ += vel;
+        if (slot->scaleCurrentZ < slot->scaleTargetZ) {
+            slot->scaleCurrentZ = slot->scaleTargetZ;
+            slot->scaleVelZ = 0;
         }
     }
 }
