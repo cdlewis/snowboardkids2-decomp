@@ -946,7 +946,7 @@ s32 getActiveChannelCount(u32 flags) {
     return count;
 }
 
-s32 func_80072960_73560(u32 handle, s32 stopSpeed) {
+s32 stopChannelsByHandle(u32 handle, s32 stopSpeed) {
     channel_t *channel;
     s32 count;
     s32 i;

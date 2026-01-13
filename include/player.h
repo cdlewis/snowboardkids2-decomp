@@ -34,4 +34,6 @@ s32 func_80072A6C_7366C(void *, s32);
 
 void stopChannelsByFlags(s32 channelFlags, s32 stopSpeed);
 
+s32 stopChannelsByHandle(u32 handle, s32 stopSpeed);
+
 s32 getActiveChannelCount(u32 flags);
