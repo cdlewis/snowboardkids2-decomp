@@ -856,13 +856,13 @@ void enqueueBillboardedDisplayListObject(s32 arg0, DisplayListObject *arg1) {
     }
 }
 
-void func_80064218_64E18(DisplayListObject *arg0) {
-    DisplayListObject *var_s0;
-    Gfx *temp_v1;
-    s32 var_s1;
-    void *v1_temp;
-    void *temp_a0_val;
-    s32 count;
+void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
+    DisplayListObject *currentObject;
+    Gfx *gfxCmd;
+    s32 matrixIndex;
+    void *segment1;
+    void *segmentValue;
+    s32 objectCount;
     volatile u8 padding[0x44];
 
     if (arg0->unk30 == NULL) {
@@ -870,16 +870,16 @@ void func_80064218_64E18(DisplayListObject *arg0) {
         if (arg0->unk30 == NULL) {
             return;
         }
-        count = arg0->unk37;
-        var_s1 = 0;
-        if (count > 0) {
-            var_s0 = arg0;
+        objectCount = arg0->unk37;
+        matrixIndex = 0;
+        if (objectCount > 0) {
+            currentObject = arg0;
             do {
-                var_s0->unk30 = arg0->unk30 + var_s1;
-                func_8006C130_6CD30((Transform3D *)var_s0, var_s0->unk30);
-                var_s1 += 1;
-                var_s0++;
-            } while (var_s1 < arg0->unk37);
+                currentObject->unk30 = arg0->unk30 + matrixIndex;
+                func_8006C130_6CD30((Transform3D *)currentObject, currentObject->unk30);
+                matrixIndex += 1;
+                currentObject++;
+            } while (matrixIndex < arg0->unk37);
         }
     }
 
@@ -889,27 +889,27 @@ void func_80064218_64E18(DisplayListObject *arg0) {
 
     gDPPipeSync(gRegionAllocPtr++);
     gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
-    v1_temp = arg0->unk24;
+    segment1 = arg0->unk24;
     gGraphicsMode = 3;
 
-    if (v1_temp != NULL) {
+    if (segment1 != NULL) {
         gSPSegment(gRegionAllocPtr++, 1, arg0->unk24);
     }
 
     if (arg0->unk28 != NULL) {
-        temp_v1 = gRegionAllocPtr;
-        temp_v1->words.w0 = 0xDB060008;
-        temp_a0_val = arg0->unk28;
-        gRegionAllocPtr = temp_v1 + 1;
-        temp_v1->words.w1 = (u32)temp_a0_val;
+        gfxCmd = gRegionAllocPtr;
+        gfxCmd->words.w0 = 0xDB060008;
+        segmentValue = arg0->unk28;
+        gRegionAllocPtr = gfxCmd + 1;
+        gfxCmd->words.w1 = (u32)segmentValue;
     }
 
     if (arg0->unk2C != 0) {
-        temp_v1 = gRegionAllocPtr;
-        temp_v1->words.w0 = 0xDB06000C;
-        temp_a0_val = arg0->unk2C;
-        gRegionAllocPtr = temp_v1 + 1;
-        temp_v1->words.w1 = (u32)temp_a0_val;
+        gfxCmd = gRegionAllocPtr;
+        gfxCmd->words.w0 = 0xDB06000C;
+        segmentValue = arg0->unk2C;
+        gRegionAllocPtr = gfxCmd + 1;
+        gfxCmd->words.w1 = (u32)segmentValue;
     }
 
     D_800A2D40_A3940 = arg0->unk24;
@@ -980,7 +980,7 @@ void func_80064628_65228(DisplayListObject *displayObjects) {
     Gfx *displayListCmd;
     volatile u8 padding[0x40];
 
-    func_80064218_64E18(displayObjects);
+    initializeMultiPartDisplayListObjects(displayObjects);
 
     for (i = 0; i < displayObjects->unk37; i++) {
         currentObject = &displayObjects[i];
@@ -1001,7 +1001,7 @@ void func_800646C8_652C8(DisplayListObject *displayObjects) {
     s32 objectCount;
     u8 pad[0x48];
 
-    func_80064218_64E18(displayObjects);
+    initializeMultiPartDisplayListObjects(displayObjects);
 
     objectCount = displayObjects->unk37;
     if (objectCount > 0) {
@@ -1028,7 +1028,7 @@ void func_80064768_65368(DisplayListObject *displayObjects) {
     s32 objectCount;
     u8 pad[0x48];
 
-    func_80064218_64E18(displayObjects);
+    initializeMultiPartDisplayListObjects(displayObjects);
 
     objectCount = displayObjects->unk37;
     if (objectCount > 0) {
@@ -1237,7 +1237,7 @@ void func_80065150_65D50(DisplayListObject *displayObjects) {
     s32 objectCount;
     u8 pad[0x44];
 
-    func_80064218_64E18(displayObjects);
+    initializeMultiPartDisplayListObjects(displayObjects);
 
     gSPLightColor(
         gRegionAllocPtr++,
@@ -1287,7 +1287,7 @@ void func_800653E0_65FE0(DisplayListObject *displayObjects) {
     s32 objectCount;
     u8 pad[0x44];
 
-    func_80064218_64E18(displayObjects);
+    initializeMultiPartDisplayListObjects(displayObjects);
 
     gSPLightColor(
         gRegionAllocPtr++,
@@ -1337,7 +1337,7 @@ void func_80065670_66270(DisplayListObject *displayObjects) {
     s32 objectCount;
     u8 pad[0x44];
 
-    func_80064218_64E18(displayObjects);
+    initializeMultiPartDisplayListObjects(displayObjects);
 
     gSPLightColor(
         gRegionAllocPtr++,
