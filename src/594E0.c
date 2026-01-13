@@ -77,10 +77,10 @@ void setPlayerHomingProjectileRetaliationState(Player *player) {
     }
 }
 
-void func_80058A3C_5963C(Player *arg0) {
-    if (arg0->unkAC2 < 0x34) {
-        if (!(arg0->unkB88 & 0x4BC)) {
-            arg0->unkAC2 = 0x34;
+void setPlayerParachuteState(Player *player) {
+    if (player->unkAC2 < 0x34) {
+        if (!(player->unkB88 & 0x4BC)) {
+            player->unkAC2 = 0x34;
         }
     }
 }

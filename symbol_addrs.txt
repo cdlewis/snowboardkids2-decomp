@@ -3016,6 +3016,7 @@ renderTexturedTransparentSprite = 0x80064E34; // rom:0x65A34
 renderTexturedOverlaySprite = 0x80064F74; // rom:0x65B74
 setPlayerState50 = 0x800589A0; // rom:0x595A0
 setPlayerHomingProjectileRetaliationState = 0x80058A10; // rom:0x59610
+setPlayerParachuteState = 0x80058A3C; // rom:0x5963C
 saveCutsceneStateTableToControllerPak = 0x800B3734; // rom:0x1E07E4
 loadCutsceneStateTableFromControllerPak = 0x800B3790; // rom:0x1E0840
 gControllerPakTransferPointer = 0x800BA93C; // rom:0x1E79EC
