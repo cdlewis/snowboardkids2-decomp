@@ -393,7 +393,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     }
 
     if (arg0->unkB8C == 0) {
-        func_8004B794_4C394(arg0);
+        spawnBossHomingProjectileTask(arg0);
         if (gameState->unk86 != 0) {
             arg0->unkB8C = arg0->unkB8C + (0xF + ((randA() & 0xFF) >> 4));
         } else {

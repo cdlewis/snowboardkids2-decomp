@@ -7,7 +7,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount);
 
 void scheduleLevelEnvironmentTasks(s32 poolId);
 
-void func_8004B794_4C394(void *arg0);
+void spawnBossHomingProjectileTask(void *arg0);
 
 void *spawnItemHomingProjectile(void *, u32, void *, s16, s32);
 
