@@ -1486,22 +1486,22 @@ s32 spawnHomingPanelProjectileTask(s32 arg0, s32 arg1) {
     return (s32)task;
 }
 
-s32 func_800544B4_550B4(s32 arg0, s32 arg1, s32 arg2) {
-    switch (arg0) {
+s32 spawnAttackProjectile(s32 projectileType, s32 playerIdx, s32 arg2) {
+    switch (projectileType) {
         case 0:
-            return spawnSlapstickProjectileTask(arg1, arg2);
+            return spawnSlapstickProjectileTask(playerIdx, arg2);
         case 1:
-            return spawnParachuteProjectileTask(arg1, arg2);
+            return spawnParachuteProjectileTask(playerIdx, arg2);
         case 2:
-            return spawnFryingPanProjectileTask(arg1, arg2);
+            return spawnFryingPanProjectileTask(playerIdx, arg2);
         case 3:
-            return spawnSnowmanProjectileTask(arg1, arg2);
+            return spawnSnowmanProjectileTask(playerIdx, arg2);
         case 4:
-            return spawnStarProjectileTask(arg1, arg2);
+            return spawnStarProjectileTask(playerIdx, arg2);
         case 5:
-            return spawnHomingPanelProjectileTask(arg1, arg2);
+            return spawnHomingPanelProjectileTask(playerIdx, arg2);
         case 6:
-            return func_80055820_56420(arg1, arg2);
+            return func_80055820_56420(playerIdx, arg2);
     }
     return 0;
 }

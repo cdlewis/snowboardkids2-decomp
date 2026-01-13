@@ -459,7 +459,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         arg0->unkA9E = arg0->unkA9E - 0x100;
         arg0->unkB8C--;
         if (arg0->unkB8C == 0) {
-            func_800544B4_550B4(2, arg0->unkBB8, 0);
+            spawnAttackProjectile(2, arg0->unkBB8, 0);
             arg0->unkB8C = 4;
             arg0->behaviorCounter++;
         }
@@ -471,7 +471,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         if (arg0->unkB8C == 0) {
             arg0->unkB8C = 4;
             arg0->behaviorCounter++;
-            func_800544B4_550B4(3, arg0->unkBB8, 0);
+            spawnAttackProjectile(3, arg0->unkBB8, 0);
             return 0;
         }
         break;
@@ -480,7 +480,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         arg0->unkA9E = arg0->unkA9E + 0x100;
         arg0->unkB8C--;
         if (arg0->unkB8C == 0) {
-            func_800544B4_550B4(2, arg0->unkBB8, 0);
+            spawnAttackProjectile(2, arg0->unkBB8, 0);
             arg0->behaviorCounter = 0;
             if (gameState->unk86 != 0) {
                 arg0->unkB8C = (randA() & 0xF) + 8;
@@ -492,7 +492,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
 
     case 5:
         if ((arg0->unkB8C & 3) == 0) {
-            func_800544B4_550B4(3, arg0->unkBB8, 0);
+            spawnAttackProjectile(3, arg0->unkBB8, 0);
         }
         arg0->unkA9E = arg0->unkA9E - 0x100;
         arg0->unkB8C--;
@@ -620,7 +620,7 @@ s32 func_800BC094_B3654(Arg0Struct *arg0) {
     if (arg0->unkB8C == 0) {
         u8 rand_val = randA();
         s32 param = (rand_val & 1) | 2;
-        func_800544B4_550B4(param, arg0->unkBB8, 0);
+        spawnAttackProjectile(param, arg0->unkBB8, 0);
         arg0->unkB8C = 4;
     } else {
         arg0->unkB8C--;
