@@ -46,8 +46,8 @@ extern StunnedBehaviorPhaseHandler stunnedBehaviorPhaseHandlers[];
 typedef void (*PostTrickLandingStepHandler)(void *);
 extern PostTrickLandingStepHandler postTrickLandingStepHandlers[];
 
-typedef void (*func_800B65C8_callback)(void *);
-extern func_800B65C8_callback D_800BAC10_AAAC0[];
+typedef void (*KnockbackBehaviorPhaseHandler)(void *);
+extern KnockbackBehaviorPhaseHandler knockbackBehaviorPhaseHandlers[];
 
 typedef void (*func_800B6610_callback)(void *);
 extern func_800B6610_callback D_800BAC14_AAAC4[];
@@ -2871,8 +2871,8 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
     return 0;
 }
 
-void func_800B65C8_A6478(func_800B00D4_arg *arg0) {
-    D_800BAC10_AAAC0[arg0->unkBBE](arg0);
+void dispatchKnockbackBehaviorPhase(Player *player) {
+    knockbackBehaviorPhaseHandlers[player->unkBBE](player);
 }
 
 void func_800B65F8_A64A8(func_800B00D4_arg *arg0) {
