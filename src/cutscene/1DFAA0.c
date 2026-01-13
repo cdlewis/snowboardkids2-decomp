@@ -952,12 +952,12 @@ u16 getMaxCutsceneFrameNumber(void) {
     return maxFrameNumber;
 }
 
-u16 func_800B4258_1E1308(u8 arg0) {
-    u16 temp;
+u16 getSlotLastFrameNumber(u8 slotIndex) {
+    u16 entryIndex;
     StateEntry *entry;
 
-    temp = findStateEntryIndex(arg0, 0x8000, 1);
-    entry = getStateEntry(temp);
+    entryIndex = findStateEntryIndex(slotIndex, 0x8000, 1);
+    entry = getStateEntry(entryIndex);
     return entry->frameNumber;
 }
 

@@ -304,7 +304,7 @@ s32 insertCutsceneEvent(u8 slotIndex, u16 frameNumber);
 void reorderCutsceneEvent(u16 eventIndex, u16 oldPreviousIndex, u16 newPreviousIndex);
 StateEntry *getStateEntry(u16 arg0);
 u16 getMaxCutsceneFrameNumber(void);
-u16 func_800B4258_1E1308(u8 arg0);
+u16 getSlotLastFrameNumber(u8 slotIndex);
 StateEntry *func_800B4288_1E1338(void);
 u8 *func_800B4294_1E1344(void);
 u16 func_800B42B0_1E1360(u16 arg0);
