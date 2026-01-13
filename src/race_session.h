@@ -118,7 +118,7 @@ s32 abs(s32 n);
 void setPlayerHomingProjectileRetaliationState(Player *player);
 void setPlayerParachuteState(Player *player);
 void setPlayerShrinkState(Player *arg0);
-void func_80058AC0_596C0(Player *arg0);
+void setPlayerFrozenState(Player *player);
 void func_80059C24_5A824(Player *arg0);
 void func_80059D30_5A930(Player *arg0);
 Player *func_8005B548_5C148(Vec3i *arg0, s32 arg1, s32 arg2);

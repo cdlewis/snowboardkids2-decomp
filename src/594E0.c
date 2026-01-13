@@ -101,10 +101,10 @@ void setPlayerPanelHitState(Player *arg0) {
     }
 }
 
-void func_80058AC0_596C0(Player *arg0) {
-    if (arg0->unkAC2 < 0x3C) {
-        if (!(arg0->unkB88 & 0x9C)) {
-            arg0->unkAC2 = 0x3C;
+void setPlayerFrozenState(Player *player) {
+    if (player->unkAC2 < 0x3C) {
+        if (!(player->unkB88 & 0x9C)) {
+            player->unkAC2 = 0x3C;
         }
     }
 }
