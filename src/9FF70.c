@@ -2971,28 +2971,28 @@ s32 fallToTrackCenterStep(Player *player) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B6890_A6740);
 
-extern s32 D_800BAC80_AAB30;
+extern Vec3i g_KnockbackRecoveryForwardVelocity;
 
-s32 func_800B6D14_A6BC4(Player *arg0) {
+s32 slideDuringKnockbackRecoveryStep(Player *player) {
     GameState *gameState = getCurrentAllocation();
 
     func_80055D10_56910(gameState->memoryPoolId);
-    decayPlayerSteeringAngles(arg0);
+    decayPlayerSteeringAngles(player);
 
-    if (arg0->unkB8C != 0) {
-        arg0->unkB8C = arg0->unkB8C - 1;
+    if (player->unkB8C != 0) {
+        player->unkB8C = player->unkB8C - 1;
     } else {
-        arg0->unkB8C = 0xB4;
-        arg0->behaviorStep = arg0->behaviorStep + 1;
+        player->unkB8C = 0xB4;
+        player->behaviorStep = player->behaviorStep + 1;
     }
 
-    if (arg0->unkB8C < 0x12) {
-        arg0->unkB84 = arg0->unkB84 | 0x2000;
-        transformVector2(&D_800BAC80_AAB30, &arg0->unk970, &arg0->velocity);
+    if (player->unkB8C < 0x12) {
+        player->unkB84 = player->unkB84 | 0x2000;
+        transformVector2(&g_KnockbackRecoveryForwardVelocity, &player->unk970, &player->velocity);
     }
 
-    applyClampedVelocityToPosition(arg0);
-    func_8005D308_5DF08(arg0, 0xD);
+    applyClampedVelocityToPosition(player);
+    func_8005D308_5DF08(player, 0xD);
 
     return 0;
 }
@@ -3080,7 +3080,7 @@ s32 func_800B6FE8_A6E98(Player *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     func_80055D10_56910(gameState->memoryPoolId);
-    transformVector2(&D_800BAC80_AAB30, &arg0->unk970, &arg0->velocity);
+    transformVector2(&g_KnockbackRecoveryForwardVelocity, &arg0->unk970, &arg0->velocity);
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
 
