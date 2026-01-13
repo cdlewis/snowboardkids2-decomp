@@ -171,7 +171,7 @@ void cleanupDebugDisplayListTask(DebugDisplayListCleanupState *);
 void updateDebugDisplayListGrowth(DebugDisplayListRenderState *);
 void renderStarlightHighwayBuildings(StarlightBuildingRenderData *);
 void cleanupStarlightHighwayBuildingTask(DualSegmentCleanupState *);
-void func_800BB75C_ADB1C(void *);
+void loadColorIndexedTexture(void *);
 void func_800BBEA0_AE260(DualSegmentCleanupState *);
 void func_800BBCFC_AE0BC(func_800BBC28_arg *);
 void func_800BC084_AE444(func_800BC3D0_AE790_arg *);
@@ -343,25 +343,25 @@ void cleanupDebugDisplayListTask(DebugDisplayListCleanupState *arg0) {
 
 typedef struct {
     /* 0x00 */ u8 _pad0[0x3C];
-    /* 0x3C */ DataTable_19E80 *unk3C;
+    /* 0x3C */ DataTable_19E80 *textureTable;
     /* 0x40 */ u8 _pad40[4];
-    /* 0x44 */ u16 unk44;
-    /* 0x46 */ u16 unk46;
+    /* 0x44 */ u16 tileULow;
+    /* 0x46 */ u16 tileVLow;
     /* 0x48 */ u8 _pad48[4];
-    /* 0x4C */ u16 unk4C;
+    /* 0x4C */ u16 textureIndex;
     /* 0x4E */ u8 _pad4E[3];
-    /* 0x51 */ u8 unk51;
-} func_800BB75C_arg;
+    /* 0x51 */ u8 alpha;
+} TextureRenderState;
 
-void func_800BB75C_ADB1C(void *arg) {
-    func_800BB75C_arg *arg0 = (func_800BB75C_arg *)arg;
+void loadColorIndexedTexture(void *arg) {
+    TextureRenderState *state = (TextureRenderState *)arg;
     OutputStruct_19E80 tableEntry;
     s32 dxtBase;
     s32 lrs;
     u16 widthDiv16;
     Gfx *loadBlockCmd;
     long loadBlockWord;
-    s32 new_var;
+    s32 loadTileParams;
     s32 widthShift;
     s32 heightShift;
     s32 tempWidth;
@@ -372,7 +372,7 @@ void func_800BB75C_ADB1C(void *arg) {
     gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
     gGraphicsMode = -1;
 
-    getTableEntryByU16Index(arg0->unk3C, arg0->unk4C, &tableEntry);
+    getTableEntryByU16Index(state->textureTable, state->textureIndex, &tableEntry);
 
     tempWidth = tableEntry.field1;
     widthShift = 0;
@@ -419,8 +419,8 @@ loop_2:
     if (lrs >= 0x800) {
         lrs = 0x7FF;
     }
-    new_var = ((lrs & 0xFFF) << 12) | 0x07000000;
-    loadBlockWord = new_var;
+    loadTileParams = ((lrs & 0xFFF) << 12) | 0x07000000;
+    loadBlockWord = loadTileParams;
     if (widthDiv16 != 0) {
         loadBlockWord |= (dxtBase / widthDiv16) & 0xFFF;
     } else {
@@ -447,7 +447,7 @@ loop_2:
         0
     );
 
-    new_var = 15;
+    loadTileParams = 15;
 
     gDPSetTileSize(
         gRegionAllocPtr++,
@@ -461,10 +461,10 @@ loop_2:
     gDPSetTileSize(
         gRegionAllocPtr++,
         G_TX_RENDERTILE,
-        arg0->unk44 & 0xFFF,
-        arg0->unk46 & 0xFFF,
-        ((tableEntry.field1 + (s16)arg0->unk44 - 1) << 2) & 0xFFF,
-        ((tableEntry.field2 + (s16)arg0->unk46 - 1) << 2) & 0xFFF
+        state->tileULow & 0xFFF,
+        state->tileVLow & 0xFFF,
+        ((tableEntry.field1 + (s16)state->tileULow - 1) << 2) & 0xFFF,
+        ((tableEntry.field2 + (s16)state->tileVLow - 1) << 2) & 0xFFF
     );
 
     gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
@@ -489,25 +489,28 @@ loop_2:
 
     gDPLoadSync(gRegionAllocPtr++);
 
-    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, new_var);
+    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, loadTileParams);
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, arg0->unk51);
+    gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
 }
 
+// Keep original name for auto-generated data file references
+void func_800BB75C_ADB1C(void *arg) __attribute__((alias("loadColorIndexedTexture")));
+
 void func_800BBB0C_ADECC(void *arg0) {
-    func_800BB75C_ADB1C(arg0);
+    loadColorIndexedTexture(arg0);
     renderOpaqueDisplayList(arg0);
 }
 
 void func_800BBB38_ADEF8(void *arg0) {
-    func_800BB75C_ADB1C(arg0);
+    loadColorIndexedTexture(arg0);
     renderTransparentDisplayList(arg0);
 }
 
 void func_800BBB64_ADF24(void *arg0) {
-    func_800BB75C_ADB1C(arg0);
+    loadColorIndexedTexture(arg0);
     renderOverlayDisplayList(arg0);
 }
 
