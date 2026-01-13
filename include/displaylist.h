@@ -42,6 +42,9 @@ typedef struct {
 } enqueueMultiPartDisplayList_arg1;
 
 void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects);
+void renderTexturedOpaqueSprite(DisplayListObject *arg0);
+void renderTexturedTransparentSprite(DisplayListObject *arg0);
+void renderTexturedOverlaySprite(DisplayListObject *arg0);
 void enqueuePreLitMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2);
 void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2);
 
