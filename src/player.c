@@ -1022,7 +1022,7 @@ s32 setVolumeScaleByHandle(void *handle, s32 volume) {
     return count;
 }
 
-s32 func_80072ACC_736CC(void *handle, s32 pan) {
+s32 setPanScaleByHandle(void *handle, s32 pan) {
     s32 i;
     s32 count;
     channel_t *cp;

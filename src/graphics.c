@@ -536,7 +536,7 @@ void gfxCommThreadFunc(void *arg0) {
                     break;
                 case 5:
                     setVolumeScaleByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.volume);
-                    func_80072ACC_736CC(gGraphicsCommand.audioChannel, gGraphicsCommand.pan);
+                    setPanScaleByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.pan);
                     func_80072B3C_7373C(gGraphicsCommand.audioChannel, gGraphicsCommand.position);
                     if (gGraphicsCommand.voiceIndex != 0) {
                         func_80072C38_73838(gGraphicsCommand.audioChannel, gGraphicsCommand.voiceIndex);
