@@ -1536,51 +1536,51 @@ void loadFallingStarProjectileAsset(Struct_52880 *arg0) {
     setCallbackWithContinue(updateFallingStarProjectile);
 }
 
-void updateFallingStarProjectile(Struct_52880 *arg0) {
+void updateFallingStarProjectile(Struct_52880 *projectile) {
     Alloc_55650 *alloc;
-    Vec3i sp18;
+    Vec3i collisionOffset;
     s32 pad1[15]; /* 60 bytes of padding */
     void *s1;
-    s32 temp_v0;
+    s32 groundHeight;
     s32 i;
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        spawnSprayEffect(&arg0->pos, (Vec3i *)&arg0->vel, 6);
+        spawnSprayEffect(&projectile->pos, &projectile->vel, 6);
 
-        arg0->vel.y -= 0x3000;
+        projectile->vel.y -= 0x3000;
         s1 = &alloc->unk30;
-        arg0->pos.x += arg0->vel.x;
-        arg0->pos.y += arg0->vel.y;
-        arg0->pos.z += arg0->vel.z;
+        projectile->pos.x += projectile->vel.x;
+        projectile->pos.y += projectile->vel.y;
+        projectile->pos.z += projectile->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(s1, arg0->unk40, &arg0->pos);
-        func_80060CDC_618DC(s1, arg0->unk40, &arg0->pos, 0x80000, &sp18);
+        projectile->unk40 = func_80060A3C_6163C(s1, projectile->unk40, &projectile->pos);
+        func_80060CDC_618DC(s1, projectile->unk40, &projectile->pos, 0x80000, &collisionOffset);
 
-        if ((sp18.x != 0) || (sp18.z != 0)) {
-            arg0->pos.x += sp18.x;
-            arg0->pos.z += sp18.z;
-            arg0->hitCount++;
+        if ((collisionOffset.x != 0) || (collisionOffset.z != 0)) {
+            projectile->pos.x += collisionOffset.x;
+            projectile->pos.z += collisionOffset.z;
+            projectile->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
+        groundHeight = func_8005CFC0_5DBC0(&alloc->unk30, projectile->unk40, &projectile->pos, 0x100000);
 
-        if (arg0->pos.y < temp_v0 + 0x100000) {
-            arg0->pos.y = temp_v0 + 0x100000;
-            arg0->hitCount += 1;
+        if (projectile->pos.y < groundHeight + 0x100000) {
+            projectile->pos.y = groundHeight + 0x100000;
+            projectile->hitCount += 1;
         }
 
-        checkInvincibleStarProjectileCollision(arg0);
+        checkInvincibleStarProjectileCollision(projectile);
     }
 
-    if (arg0->hitCount != 0) {
-        spawnSparkleEffect(&arg0->pos);
+    if (projectile->hitCount != 0) {
+        spawnSparkleEffect(&projectile->pos);
         func_80069CF8_6A8F8();
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)projectile);
     }
 }
 
