@@ -69,20 +69,20 @@ typedef struct {
 } func_800B0BEC_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    u8 _padE[2];
-} func_800B0980_element;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ void *spriteData;
+    /* 0x08 */ s16 frameIndex;
+    /* 0x0A */ s16 scale;
+    /* 0x0C */ u8 flags;
+    /* 0x0D */ u8 alpha;
+    /* 0x0E */ u8 _pad[2];
+} CharacterSelectSprite;
 
 typedef struct {
-    func_800B0980_element elements[4];
-    u8 unk40[8];
-} func_800B0980_container;
+    CharacterSelectSprite sprites[4];
+    u8 animTimers[8];
+} CharacterSelectSprites;
 
 typedef struct {
     s16 m[9];
@@ -124,7 +124,7 @@ typedef struct {
 extern void *renderTextPalette;
 
 void func_800B00C0_1DA660(void);
-void func_800B0218(func_800B0980_element *, u8);
+void positionCharacterSelectSprite(CharacterSelectSprite *, u8);
 void func_800B0DF8_1DB398(void *);
 void func_800B0598_1DAB38(func_800B08FC_arg *);
 void func_800B05DC_1DAB7C(func_800B08FC_arg *);
@@ -132,7 +132,7 @@ void func_800B0964_1DAF04(func_800B08FC_arg *);
 void func_800B0638_1DABD8(func_800B08FC_arg *);
 void func_800B0720_1DACC0(func_800B08FC_arg *);
 void func_800B08FC_1DAE9C(func_800B08FC_arg *);
-void func_800B0A54_1DAFF4(func_800B0980_container *);
+void updateCharacterSelectSprites(CharacterSelectSprites *);
 void func_800B0BC0_1DB160(func_800B0FE0_arg *);
 void func_800B0E94_1DB434(void *);
 void func_800B0EEC_1DB48C(func_800B0FE0_arg *);
@@ -156,7 +156,7 @@ extern u8 D_800B1150_1DB6F0[];
 
 INCLUDE_ASM("asm/nonmatchings/1DA660", func_800B00C0_1DA660);
 
-void func_800B0218_1DA7B8(func_800B0980_element *arg0, u8 arg1) {
+void positionCharacterSelectSprite(CharacterSelectSprite *arg0, u8 arg1) {
     LocalGameState *allocation;
     u8 playerState;
     u8 count;
@@ -165,15 +165,15 @@ void func_800B0218_1DA7B8(func_800B0980_element *arg0, u8 arg1) {
 
     allocation = (LocalGameState *)getCurrentAllocation();
 
-    arg0->unk0 = D_800B11A0_1DB740[allocation->unk592[arg1]].x;
-    arg0->unk2 = D_800B11A0_1DB740[allocation->unk592[arg1]].y;
+    arg0->x = D_800B11A0_1DB740[allocation->unk592[arg1]].x;
+    arg0->y = D_800B11A0_1DB740[allocation->unk592[arg1]].y;
 
     if (allocation->unk5A2[arg1] >= 3) {
-        arg0->unk0 += 0x10;
+        arg0->x += 0x10;
     }
 
     if (!(allocation->unk5A2[arg1] & 1)) {
-        arg0->unk2 += 0x10;
+        arg0->y += 0x10;
     }
 
     count = 0;
@@ -185,11 +185,11 @@ void func_800B0218_1DA7B8(func_800B0980_element *arg0, u8 arg1) {
 
     playerState = allocation->unk5A2[arg1];
     if ((playerState == 3) && (count == 3)) {
-        arg0->unk2 += 0x10;
+        arg0->y += 0x10;
     }
 
     count--;
-    arg0->unk8 = D_800B11C2_1DB762[count * 4 + allocation->unk5A2[arg1]] + arg1;
+    arg0->frameIndex = D_800B11C2_1DB762[count * 4 + allocation->unk5A2[arg1]] + arg1;
 }
 
 void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
@@ -416,7 +416,7 @@ void func_800B0964_1DAF04(func_800B08FC_arg *arg0) {
     destroySceneModel(arg0->unk0);
 }
 
-void func_800B0980_1DAF20(func_800B0980_container *arg0) {
+void initCharacterSelectSprites(CharacterSelectSprites *arg0) {
     s32 i;
     void *allocation;
 
@@ -424,19 +424,19 @@ void func_800B0980_1DAF20(func_800B0980_container *arg0) {
     allocation = loadCompressedData(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        arg0->elements[i].unk4 = allocation;
-        arg0->elements[i].unkA = 0xFF;
-        arg0->elements[i].unkD = 0;
-        arg0->elements[i].unkC = 0;
-        arg0->unk40[i] = 0;
-        func_800B0218_1DA7B8(&arg0->elements[i], i);
+        arg0->sprites[i].spriteData = allocation;
+        arg0->sprites[i].scale = 0xFF;
+        arg0->sprites[i].alpha = 0;
+        arg0->sprites[i].flags = 0;
+        arg0->animTimers[i] = 0;
+        positionCharacterSelectSprite(&arg0->sprites[i], i);
     }
 
     setCleanupCallback(func_800B0BC0_1DB160);
-    setCallback(func_800B0A54_1DAFF4);
+    setCallback(updateCharacterSelectSprites);
 }
 
-void func_800B0A54_1DAFF4(func_800B0980_container *arg0) {
+void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
     func_800B0A54_allocation *allocation;
     s32 i;
     u8 state;
@@ -445,38 +445,38 @@ void func_800B0A54_1DAFF4(func_800B0980_container *arg0) {
     func_800B00C0_1DA660();
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        func_800B0218_1DA7B8(&arg0->elements[i], i);
+        positionCharacterSelectSprite(&arg0->sprites[i], i);
         state = allocation->unk59A[i];
 
         if (state == 10) {
-            arg0->elements[i].unkA = 0xFF;
-            arg0->unk40[i] = 0;
+            arg0->sprites[i].scale = 0xFF;
+            arg0->animTimers[i] = 0;
             if (allocation->unk5C1[i] & 1) {
-                arg0->elements[i].unkD = 0xFF;
+                arg0->sprites[i].alpha = 0xFF;
             } else {
-                arg0->elements[i].unkD = 0;
+                arg0->sprites[i].alpha = 0;
             }
         } else if (state == 0) {
-            arg0->unk40[i] = arg0->unk40[i] % 30;
-            if (arg0->unk40[i] < 15) {
-                arg0->elements[i].unkA = arg0->elements[i].unkA - 8;
+            arg0->animTimers[i] = arg0->animTimers[i] % 30;
+            if (arg0->animTimers[i] < 15) {
+                arg0->sprites[i].scale = arg0->sprites[i].scale - 8;
             } else {
-                arg0->elements[i].unkA = arg0->elements[i].unkA + 8;
+                arg0->sprites[i].scale = arg0->sprites[i].scale + 8;
             }
-            arg0->unk40[i] = arg0->unk40[i] + 1;
+            arg0->animTimers[i] = arg0->animTimers[i] + 1;
         } else {
-            arg0->unk40[i] = 0;
-            arg0->elements[i].unkA = 0xFF;
+            arg0->animTimers[i] = 0;
+            arg0->sprites[i].scale = 0xFF;
         }
 
         if (allocation->unk59A[i] == 2) {
             allocation->unk5C1[i] = 0;
-            arg0->elements[i].unkD = 0;
-            arg0->unk40[i] = 0;
-            arg0->elements[i].unkA = 0xFF;
+            arg0->sprites[i].alpha = 0;
+            arg0->animTimers[i] = 0;
+            arg0->sprites[i].scale = 0xFF;
         }
 
-        debugEnqueueCallback(8, 0, func_80012004_12C04, &arg0->elements[i]);
+        debugEnqueueCallback(8, 0, func_80012004_12C04, &arg0->sprites[i]);
     }
 }
 
