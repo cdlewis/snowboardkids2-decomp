@@ -211,19 +211,19 @@ typedef struct {
     u16 unkB94;
     u8 _padB96[0x22];
     u8 unkBB8;
-} func_8004B834_Player;
+} BossEntity;
 
 typedef struct {
-    void *unk0;
+    void *projectileAsset;
     void *unk4;
     Vec3i position;
     u8 _pad14[0x10];
-    func_8004B834_Player *unk24;
+    BossEntity *boss;
     Vec3i velocity;
-    s16 unk34;
-    s16 unk36;
-    s16 unk38;
-} func_8004B834_4C434_arg;
+    s16 sectorIndex;
+    s16 bounceTimer;
+    s16 playerIndex;
+} BossHomingProjectileSpawnArg;
 
 typedef struct {
     s16 unk0;
@@ -741,7 +741,7 @@ extern CompressedAsset D_80090CEC_918EC[];
 extern u8 D_80090CA8_918A8[][5];
 extern u8 D_80090CE0_918E0[];
 extern u8 D_80090CBC_918BC[][9];
-extern s32 D_80090E20_91A20;
+extern s32 itemHomingProjectileBaseVector;
 extern s32 D_80090E40_91A40;
 extern s32 D_80090E4C_91A4C;
 extern s16 D_80090E50_91A50;
@@ -758,7 +758,7 @@ extern s16 gGraphicsMode;
 extern Gfx D_80090DB0_919B0[];
 extern s32 identityMatrix[];
 extern void *D_80094DD0_959D0;
-extern s32 D_80090E2C_91A2C;
+extern s32 bossHomingProjectileBaseVector;
 
 void updateAllItemBoxes(ItemBoxController *arg0);
 void initHomingProjectileMovement(HomingProjectileInitArg *arg0);
@@ -798,12 +798,12 @@ void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0);
 void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0);
 void initPanelProjectileMovement(PanelProjectileInitArg *arg0);
 void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0);
-void func_8004B834_4C434(func_8004B834_4C434_arg *);
+void func_8004B834_4C434(BossHomingProjectileSpawnArg *);
 void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *);
-void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0);
+void func_8004BCFC_4C8FC(BossHomingProjectileSpawnArg *arg0);
 void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0);
 void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0);
-void spawnBossHomingProjectile(func_8004B834_4C434_arg *arg0);
+void spawnBossHomingProjectile(BossHomingProjectileSpawnArg *arg0);
 void bounceBossHomingProjectile(func_8004B648_4C248_arg *arg0);
 void updateBossHomingProjectile(BossHomingProjectile *arg0);
 void renderSkyDisplayLists(SkyRenderTaskState *arg0);
@@ -3087,7 +3087,7 @@ void initHomingProjectileMovement(HomingProjectileInitArg *arg0) {
     loadAssetMetadata((void *)((s32)arg0 + 4), arg0->assetData, arg0->animFrame);
 
     randomValue = randA();
-    rotateVectorY(&D_80090E20_91A20, (randomValue & 0xFF) << 5, &rotatedVector);
+    rotateVectorY(&itemHomingProjectileBaseVector, (randomValue & 0xFF) << 5, &rotatedVector);
 
     arg0->velX += rotatedVector.x;
     arg0->velY += rotatedVector.y;
@@ -3384,7 +3384,7 @@ void initItemHomingProjectileMovement(ItemHomingProjectileInitArg *arg0) {
     loadAssetMetadata((void *)((s32)arg0 + 4), arg0->assetData, arg0->animFrame);
 
     randomValue = randA();
-    rotateVectorY(&D_80090E20_91A20, (randomValue & 0xFF) << 5, &rotatedVector);
+    rotateVectorY(&itemHomingProjectileBaseVector, (randomValue & 0xFF) << 5, &rotatedVector);
 
     arg0->velOffsetX += rotatedVector.x;
     arg0->velOffsetY += rotatedVector.y;
@@ -3533,36 +3533,36 @@ void initBossHomingProjectileTask(BossHomingProjectileTask *arg0) {
     setCallbackWithContinue(&spawnBossHomingProjectile);
 }
 
-void spawnBossHomingProjectile(func_8004B834_4C434_arg *arg0) {
+void spawnBossHomingProjectile(BossHomingProjectileSpawnArg *arg0) {
     GameState *gameState;
     s32 pad[4];
     s32 rotationAngle;
     s16 randomOffset;
     Vec3i *position;
-    func_8004B834_Player *player;
+    BossEntity *boss;
 
     gameState = (GameState *)getCurrentAllocation();
     arg0->unk4 = (void *)((s32)gameState->unk44 + 0x1300);
 
-    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, 3);
+    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->projectileAsset, 3);
 
-    player = arg0->unk24;
+    boss = arg0->boss;
     position = &arg0->position;
-    memcpy(position, (u8 *)player + 0x358, sizeof(Vec3i));
+    memcpy(position, (u8 *)boss + 0x358, sizeof(Vec3i));
 
     arg0->position.y = arg0->position.y + (s32)0xFFF10000;
 
-    arg0->unk34 = arg0->unk24->unkB94;
-    arg0->unk38 = arg0->unk24->unkBB8;
+    arg0->sectorIndex = arg0->boss->unkB94;
+    arg0->playerIndex = arg0->boss->unkBB8;
 
     randomOffset = randA() & 0xFF;
     rotationAngle = ((randomOffset - 0x80) * 6) - -0x1000;
 
-    rotateVectorY(&D_80090E2C_91A2C, arg0->unk24->unkA94 + rotationAngle, &arg0->velocity);
+    rotateVectorY(&bossHomingProjectileBaseVector, arg0->boss->unkA94 + rotationAngle, &arg0->velocity);
 
-    arg0->velocity.x = arg0->velocity.x + arg0->unk24->velocity;
-    arg0->velocity.y = arg0->velocity.y + arg0->unk24->unk450;
-    arg0->velocity.z = arg0->velocity.z + arg0->unk24->unk454;
+    arg0->velocity.x = arg0->velocity.x + arg0->boss->velocity;
+    arg0->velocity.y = arg0->velocity.y + arg0->boss->unk450;
+    arg0->velocity.z = arg0->velocity.z + arg0->boss->unk454;
 
     queueSoundAtPosition(position, 0x1F);
 
@@ -3690,7 +3690,7 @@ void func_8004B7F4_4C3F4(MemoryAllocatorNode **arg0) {
     setCallbackWithContinue(&func_8004B834_4C434);
 }
 
-void func_8004B834_4C434(func_8004B834_4C434_arg *arg0) {
+void func_8004B834_4C434(BossHomingProjectileSpawnArg *arg0) {
     GameState *allocation;
     u8 randomValue;
     s32 rotationAngle;
@@ -3703,28 +3703,28 @@ void func_8004B834_4C434(func_8004B834_4C434_arg *arg0) {
     arg0->unk4 = (void *)((s32)allocation->unk44 + 0x1400);
 
     randomValue = randA();
-    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, (randomValue % 3) + 0x6B);
+    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->projectileAsset, (randomValue % 3) + 0x6B);
 
-    memcpy(&arg0->position.x, (void *)((s32)arg0->unk24 + 0x4C), 0xC);
+    memcpy(&arg0->position.x, (void *)((s32)arg0->boss + 0x4C), 0xC);
 
     arg0->position.y = arg0->position.y + (s32)0xFFF10000;
 
-    arg0->unk34 = arg0->unk24->unkB94;
-    arg0->unk38 = arg0->unk24->unkBB8;
+    arg0->sectorIndex = arg0->boss->unkB94;
+    arg0->playerIndex = arg0->boss->unkBB8;
 
     randomValue = randA();
-    rotationAngle = ((randomValue & 0xFF) << 5) + arg0->unk24->unkA94;
+    rotationAngle = ((randomValue & 0xFF) << 5) + arg0->boss->unkA94;
 
     randomValue3 = randA();
     addr = &D_80090E40_91A40;
     *addr = (randomValue3 & 0xFF) * 7 * 256;
     rotateVectorY(addr - 2, rotationAngle, &arg0->velocity);
 
-    arg0->velocity.x = arg0->velocity.x + arg0->unk24->velocity;
+    arg0->velocity.x = arg0->velocity.x + arg0->boss->velocity;
 
     randomValue4 = randA();
-    arg0->velocity.y = arg0->velocity.y + (arg0->unk24->unk450 + (((randomValue4 & 0xFF) * 5) << 9));
-    arg0->velocity.z = arg0->velocity.z + arg0->unk24->unk454;
+    arg0->velocity.y = arg0->velocity.y + (arg0->boss->unk450 + (((randomValue4 & 0xFF) * 5) << 9));
+    arg0->velocity.z = arg0->velocity.z + arg0->boss->unk454;
 
     setCallbackWithContinue(&func_8004B990_4C590);
 }
@@ -3847,7 +3847,7 @@ void func_8004BCBC_4C8BC(MemoryAllocatorNode **arg0) {
     setCallbackWithContinue(&func_8004BCFC_4C8FC);
 }
 
-void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0) {
+void func_8004BCFC_4C8FC(BossHomingProjectileSpawnArg *arg0) {
     GameState *allocation;
     Vec3i *temp_s2;
     s32 rotationAngle;
@@ -3856,18 +3856,18 @@ void func_8004BCFC_4C8FC(func_8004B834_4C434_arg *arg0) {
 
     allocation = (GameState *)getCurrentAllocation();
     arg0->unk4 = (void *)((s32)allocation->unk44 + 0xEC0);
-    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, 0x3F);
-    arg0->unk34 = arg0->unk24->unkB94;
+    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->projectileAsset, 0x3F);
+    arg0->sectorIndex = arg0->boss->unkB94;
     temp_s2 = (Vec3i *)((s32)arg0 + 8);
-    transformVector(&D_80090E50_91A50, (s16 *)((s32)arg0->unk24 + 0x164), temp_s2);
-    arg0->unk38 = arg0->unk24->unkBB8;
-    rotationAngle = ((randA() & 0xFF) << 5) + arg0->unk24->unkA94;
+    transformVector(&D_80090E50_91A50, (s16 *)((s32)arg0->boss + 0x164), temp_s2);
+    arg0->playerIndex = arg0->boss->unkBB8;
+    rotationAngle = ((randA() & 0xFF) << 5) + arg0->boss->unkA94;
     addr = &D_80090E4C_91A4C;
     *addr = (randA() & 0xFF) * 0x580;
     rotateVectorY(addr - 2, rotationAngle, (Vec3i *)((s32)arg0 + 0x28));
-    arg0->velocity.x = arg0->velocity.x + arg0->unk24->velocity;
-    arg0->velocity.y = arg0->velocity.y + (arg0->unk24->unk450 + ((randA() & 0xFF) * 0x600));
-    arg0->velocity.z = arg0->velocity.z + arg0->unk24->unk454;
+    arg0->velocity.x = arg0->velocity.x + arg0->boss->velocity;
+    arg0->velocity.y = arg0->velocity.y + (arg0->boss->unk450 + ((randA() & 0xFF) * 0x600));
+    arg0->velocity.z = arg0->velocity.z + arg0->boss->unk454;
     queueSoundAtPosition(temp_s2, 0x17);
     setCallbackWithContinue(&func_8004BE40_4CA40);
 }
