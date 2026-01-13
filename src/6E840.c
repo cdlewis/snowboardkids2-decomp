@@ -213,7 +213,7 @@ void linearAllocSelectRegion(s32 region) {
     gRegionAllocEnd = temp_v0 + 0x10000;
 }
 
-s32 func_8006F6D8_702D8(void) {
+s32 isRegionAllocSpaceLow(void) {
     return (u32)(gRegionAllocEnd - gRegionAllocPtr) < 0x1AE1U;
 }
 

@@ -1393,6 +1393,7 @@ gRegionAllocPtr = 0x800A8A84;
 gLinearArenaRegions = 0x800A3580;
 linearAllocSelectRegion = 0x8006F6AC;
 advanceLinearAlloc = 0x8006F644;
+isRegionAllocSpaceLow = 0x8006F6D8; // rom:0x702D8
 gArenaBasePtr = 0x800A3574;
 resetLinearAllocator = 0x8006F5EC;
 gLinearAllocEnd = 0x800A357C;
