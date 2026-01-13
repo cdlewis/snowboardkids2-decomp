@@ -869,11 +869,11 @@ void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
     volatile u8 padding[0x44];
 
     if (arg0->transformMatrix == NULL) {
-        arg0->transformMatrix = arenaAlloc16(arg0->unk37 << 6);
+        arg0->transformMatrix = arenaAlloc16(arg0->numParts << 6);
         if (arg0->transformMatrix == NULL) {
             return;
         }
-        objectCount = arg0->unk37;
+        objectCount = arg0->numParts;
         matrixIndex = 0;
         if (objectCount > 0) {
             currentObject = arg0;
@@ -882,7 +882,7 @@ void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
                 func_8006C130_6CD30((Transform3D *)currentObject, currentObject->transformMatrix);
                 matrixIndex += 1;
                 currentObject++;
-            } while (matrixIndex < arg0->unk37);
+            } while (matrixIndex < arg0->numParts);
         }
     }
 
@@ -985,7 +985,7 @@ void renderMultiPartOpaqueDisplayLists(DisplayListObject *displayObjects) {
 
     initializeMultiPartDisplayListObjects(displayObjects);
 
-    for (i = 0; i < displayObjects->unk37; i++) {
+    for (i = 0; i < displayObjects->numParts; i++) {
         currentObject = &displayObjects[i];
         if (currentObject->displayLists->opaqueDisplayList != NULL) {
             setupMultiPartObjectRenderState(displayObjects, i);
@@ -1006,7 +1006,7 @@ void renderMultiPartTransparentDisplayLists(DisplayListObject *displayObjects) {
 
     initializeMultiPartDisplayListObjects(displayObjects);
 
-    objectCount = displayObjects->unk37;
+    objectCount = displayObjects->numParts;
     if (objectCount > 0) {
         currentObject = displayObjects;
         i = 0;
@@ -1019,7 +1019,7 @@ void renderMultiPartTransparentDisplayLists(DisplayListObject *displayObjects) {
                 gRegionAllocPtr = displayListCmd + 1;
             }
             i++;
-            objectCount = displayObjects->unk37;
+            objectCount = displayObjects->numParts;
         } while (i < objectCount);
     }
 }
@@ -1033,7 +1033,7 @@ void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects) {
 
     initializeMultiPartDisplayListObjects(displayObjects);
 
-    objectCount = displayObjects->unk37;
+    objectCount = displayObjects->numParts;
     if (objectCount > 0) {
         currentObject = displayObjects;
         i = 0;
@@ -1046,7 +1046,7 @@ void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects) {
                 gRegionAllocPtr = displayListCmd + 1;
             }
             i++;
-            objectCount = displayObjects->unk37;
+            objectCount = displayObjects->numParts;
         } while (i < objectCount);
     }
 }
@@ -1061,7 +1061,7 @@ void enqueuePreLitMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg
 
     i = 0;
     renderFlags = 0;
-    arg1->unk37 = arg2;
+    arg1->numParts = arg2;
 
     if (arg2 > 0) {
         currentPart = arg1;
@@ -1255,7 +1255,7 @@ void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjec
     );
 
     i = 0;
-    objectCount = displayObjects->unk37;
+    objectCount = displayObjects->numParts;
     if (objectCount > 0) {
         currentObject = displayObjects;
         do {
@@ -1267,7 +1267,7 @@ void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjec
                 gRegionAllocPtr = displayListCmd + 1;
             }
             i += 1;
-        } while (i < (s32)displayObjects->unk37);
+        } while (i < (s32)displayObjects->numParts);
     }
 
     gSPLightColor(
@@ -1305,7 +1305,7 @@ void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *display
     );
 
     i = 0;
-    objectCount = displayObjects->unk37;
+    objectCount = displayObjects->numParts;
     if (objectCount > 0) {
         currentObject = displayObjects;
         do {
@@ -1317,7 +1317,7 @@ void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *display
                 gRegionAllocPtr = displayListCmd + 1;
             }
             i += 1;
-        } while (i < (s32)displayObjects->unk37);
+        } while (i < (s32)displayObjects->numParts);
     }
 
     gSPLightColor(
@@ -1355,7 +1355,7 @@ void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObje
     );
 
     i = 0;
-    objectCount = displayObjects->unk37;
+    objectCount = displayObjects->numParts;
     if (objectCount > 0) {
         currentObject = displayObjects;
         do {
@@ -1367,7 +1367,7 @@ void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObje
                 gRegionAllocPtr = displayListCmd + 1;
             }
             i += 1;
-        } while (i < (s32)displayObjects->unk37);
+        } while (i < (s32)displayObjects->numParts);
     }
 
     gSPLightColor(
@@ -1392,7 +1392,7 @@ void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg
     volatile u8 padding[0x1];
     var_a1 = 0;
     var_s0 = 0;
-    arg1->unk37 = arg2;
+    arg1->numParts = arg2;
     if (arg2 > 0) {
         var_a0 = arg1;
         do {

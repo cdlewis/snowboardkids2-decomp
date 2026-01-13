@@ -22,7 +22,7 @@ typedef struct {
     /* 0x34 */ u8 light1R;
     /* 0x35 */ u8 light1G;
     /* 0x36 */ u8 light1B;
-    /* 0x37 */ u8 unk37;
+    /* 0x37 */ u8 numParts;
     /* 0x38 */ u8 light2R;
     /* 0x39 */ u8 light2G;
     /* 0x3A */ u8 light2B;
@@ -38,7 +38,7 @@ typedef struct {
     u8 padding3[0x9];
     s32 unk30;
     u8 padding2[0x3];
-    s8 unk37;
+    s8 numParts;
 } enqueueMultiPartDisplayList_arg1;
 
 void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects);
@@ -168,6 +168,9 @@ void renderOpaqueDisplayListWithLights(DisplayListObject *obj);
 void renderTransparentDisplayListWithLights(DisplayListObject *obj);
 void renderOverlayDisplayListWithLights(DisplayListObject *obj);
 void enqueueDisplayListObjectWithLights(u16 renderLayer, DisplayListObject *displayListObj);
+void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjects);
+void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *displayObjects);
+void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects);
 
 u16 getTrackSegmentWaypoints(void *trackGeom, u16 waypointIdx, void *waypointStart, void *waypointEnd);
 
