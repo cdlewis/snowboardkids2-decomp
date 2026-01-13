@@ -434,12 +434,12 @@ void setCutsceneDefaultEndFrame(s16 arg0) {
     D_800BAEBC_1E7F6C->defaultEndFrame = arg0;
 }
 
-u8 func_800B34F0(void) {
-    return D_800BAEBC_1E7F6C->unk1C;
+u8 getCutsceneConfigByte(void) {
+    return D_800BAEBC_1E7F6C->configByte;
 }
 
-void func_800B3500_1E05B0(u8 arg0) {
-    D_800BAEBC_1E7F6C->unk1C = arg0;
+void setCutsceneConfigByte(u8 arg0) {
+    D_800BAEBC_1E7F6C->configByte = arg0;
 }
 
 s32 func_800B3510_1E05C0(void) {
@@ -663,7 +663,7 @@ void initializeCutsceneSystem(void *arg0) {
         v1Reg->unk16 = 0x1E0;
         v1Reg->initModelIndex = 0;
         v1Reg->defaultEndFrame = 0x64;
-        v1Reg->unk1C = 0;
+        v1Reg->configByte = 0;
     }
     do {
         u8 *itemBase;
