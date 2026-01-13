@@ -792,7 +792,7 @@ void dispatchSkyRenderCallback(ScheduledTask *);
 void updateItemHomingProjectileMovement(ItemHomingProjectileMoveArg *);
 void func_80045CC8_468C8(void);
 void cleanupBossHomingProjectileTask(BossHomingProjectileCleanupArg *);
-void spawnBossHomingProjectileTask(void *arg0);
+void spawnBossHomingProjectileTask(void *boss);
 void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *);
 void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0);
 void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0);
@@ -3671,16 +3671,16 @@ void cleanupBossHomingProjectileTask(BossHomingProjectileCleanupArg *arg0) {
     arg0->projectileAsset = freeNodeMemory(arg0->projectileAsset);
 }
 
-void spawnBossHomingProjectileTask(void *arg0) {
-    GameState *allocation;
+void spawnBossHomingProjectileTask(void *boss) {
+    GameState *gameState;
     BossHomingProjectileSpawnTask *task;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
     task = (BossHomingProjectileSpawnTask *)scheduleTask(&initBossHomingProjectileTask, 3, 0, 0xEF);
 
     if (task != NULL) {
-        task->player = arg0;
-        allocation->availableHomingProjectileSlots -= 1;
+        task->player = boss;
+        gameState->availableHomingProjectileSlots--;
     }
 }
 
