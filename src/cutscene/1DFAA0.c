@@ -21,19 +21,19 @@ typedef struct {
 } InitCutsceneManager_slot16;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    s32 unk8;
-} DmaInfo;
+    void *romStart;
+    void *romEnd;
+    s32 decompressedSize;
+} CutsceneFrameInfo;
 
 typedef struct {
-    DmaInfo *array0;
+    CutsceneFrameInfo *introFrames;
     s16 introFrameCount;
     s16 pad06;
-    DmaInfo *array1;
+    CutsceneFrameInfo *winFrames;
     s16 winFrameCount;
     s16 pad0E;
-    DmaInfo *array2;
+    CutsceneFrameInfo *loseFrames;
     s16 loseFrameCount;
     s16 pad16;
 } CutsceneAssetTable;
@@ -452,48 +452,48 @@ s32 loadCutsceneStateTableStub(void) {
     return 1;
 }
 
-void *func_800B3570(s16 arg0, s16 arg1, s16 arg2) {
-    s16 clampedArg1;
-    DmaInfo *dmaInfo;
-    CutsceneAssetTable *tableEntry;
+void *loadCutsceneFrameData(s16 slotIndex, s16 cutsceneType, s16 frameIndex) {
+    s16 cutsceneTypeClamped;
+    CutsceneFrameInfo *frameInfo;
+    CutsceneAssetTable *assetEntry;
     s32 tableOffset;
 
-    dmaInfo = NULL;
+    frameInfo = NULL;
 
-    if (arg1 >= 3) {
-        clampedArg1 = 2;
+    if (cutsceneType >= 3) {
+        cutsceneTypeClamped = 2;
     } else {
-        clampedArg1 = arg1 & (~arg1 >> 31);
+        cutsceneTypeClamped = cutsceneType & (~cutsceneType >> 31);
     }
 
-    if (arg0 >= 16) {
+    if (slotIndex >= 16) {
         return NULL;
     }
 
-    tableOffset = arg0 * 0x18;
-    tableEntry = &gCutsceneAssetTable[arg0];
+    tableOffset = slotIndex * 0x18;
+    assetEntry = &gCutsceneAssetTable[slotIndex];
 
-    if (clampedArg1 == 0) {
-        if (arg2 < tableEntry->introFrameCount) {
-            dmaInfo = &gCutsceneAssetTable[arg0].array0[arg2];
+    if (cutsceneTypeClamped == 0) {
+        if (frameIndex < assetEntry->introFrameCount) {
+            frameInfo = &gCutsceneAssetTable[slotIndex].introFrames[frameIndex];
         }
-    } else if (clampedArg1 == 1) {
-        if (arg2 < tableEntry->winFrameCount) {
-            dmaInfo = &gCutsceneAssetTable[arg0].array1[arg2];
-        }
-    }
-
-    if (clampedArg1 == 2) {
-        if (arg2 < tableEntry->loseFrameCount) {
-            dmaInfo = &gCutsceneAssetTable[arg0].array2[arg2];
+    } else if (cutsceneTypeClamped == 1) {
+        if (frameIndex < assetEntry->winFrameCount) {
+            frameInfo = &gCutsceneAssetTable[slotIndex].winFrames[frameIndex];
         }
     }
 
-    if (dmaInfo == NULL) {
+    if (cutsceneTypeClamped == 2) {
+        if (frameIndex < assetEntry->loseFrameCount) {
+            frameInfo = &gCutsceneAssetTable[slotIndex].loseFrames[frameIndex];
+        }
+    }
+
+    if (frameInfo == NULL) {
         return NULL;
     }
 
-    return loadCompressedData(dmaInfo->unk0, dmaInfo->unk4, dmaInfo->unk8);
+    return loadCompressedData(frameInfo->romStart, frameInfo->romEnd, frameInfo->decompressedSize);
 }
 
 s32 func_800B36C0(void *arg0) {

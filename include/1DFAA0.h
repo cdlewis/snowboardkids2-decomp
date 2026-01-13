@@ -290,6 +290,7 @@ u8 getCutsceneConfigByte(void);
 void setCutsceneConfigByte(u8 arg0);
 s32 saveCutsceneStateTableStub(void);
 s32 loadCutsceneStateTableStub(void);
+void *loadCutsceneFrameData(s16 slotIndex, s16 cutsceneType, s16 frameIndex);
 s32 func_800B36C0(void *arg0);
 s32 func_800B3790_1E0840(void);
 u16 func_800B384C_1E08FC(void);
