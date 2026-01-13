@@ -818,7 +818,7 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
     }
 
     if (alloc->gamePaused != 0) {
-        func_80057ABC_586BC(arg0->unkBB8, 0);
+        stopSoundEffectChannel(arg0->unkBB8, 0);
         return;
     }
 
@@ -833,7 +833,7 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
         }
         queueSoundAtPositionWithVolumeAndFlags(&arg0->unk434, 1, 0, 2, arg0->unkBB8, volume);
     } else {
-        func_80057ABC_586BC(arg0->unkBB8, 0);
+        stopSoundEffectChannel(arg0->unkBB8, 0);
     }
 
     if (!(arg0->unkB84 & 1)) {

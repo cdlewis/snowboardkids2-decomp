@@ -131,7 +131,7 @@ void func_800B4C80_1E1D30(s16 arg0) {
 }
 
 void func_800B4CB0_1E1D60(void) {
-    func_80057ABC_586BC(0, 0);
+    stopSoundEffectChannel(0, 0);
 }
 
 void func_800B4CD0_1E1D80(func_800B4CD0_1E1D80_arg *arg0) {

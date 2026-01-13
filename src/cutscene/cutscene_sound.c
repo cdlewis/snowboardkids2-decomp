@@ -66,5 +66,5 @@ s32 cutsceneSeStop_validate(void) {
 }
 
 void cutsceneSeStop_exec(cutsceneSePlay_exec_arg *arg0) {
-    func_80057ABC_586BC(arg0->unk2, arg0->unk0);
+    stopSoundEffectChannel(arg0->unk2, arg0->unk0);
 }
