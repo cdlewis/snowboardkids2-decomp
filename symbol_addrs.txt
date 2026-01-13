@@ -1,4 +1,7 @@
 D_800BBB50_B5450 = 0x800BBB50; // rom:0xB5450 size:0x18
+g_GhostDefaultAssetMetadata = 0x800BC7F0; // rom:0xB04E0
+g_GhostBaseDirection = 0x800BCAA0; // rom:0xB0790
+func_800BB388_AF078 = 0x800BB388; // rom:0xAF078
 D_8008D3C0_8DFC0 = 0x8008D3C0; // rom:0x8DFC0 size:0x10
 D_8009079C_9139C = 0x8009079C; // rom:0x9139C size:0x44
 itemHomingProjectileBaseVector = 0x80090E20; // rom:0x91A20

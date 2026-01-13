@@ -101,8 +101,8 @@ typedef struct {
 } func_800BBF4C_AFC3C_arg;
 
 extern s32 D_8009A8A4_9B4A4;
-extern void *D_800BC7F0_B04E0;
-extern Vec3i D_800BCAA0_B0790;
+extern void *g_GhostDefaultAssetMetadata;
+extern Vec3i g_GhostBaseDirection;
 extern AnimationData D_800BC830_B0520[];
 extern void *D_800BC8C8_B05B8;
 extern s8 D_800BC908_B05F8[12];
@@ -123,6 +123,7 @@ extern s32 D_800A8B14_9FE84;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 
+void func_800BB388_AF078(AnimatedGhostEntity *);
 void func_800BB45C_AF14C(void **);
 void func_800BB5B0_AF2A0(AnimatedGhostEntity *);
 void func_800BB620_AF310(AnimatedGhostEntity *);
@@ -173,12 +174,12 @@ void func_800BB388_AF078(AnimatedGhostEntity *ghost) {
     s32 rotationAngle;
 
     directionPtr = &direction;
-    memcpy(directionPtr, &D_800BCAA0_B0790, sizeof(Vec3i));
+    memcpy(directionPtr, &g_GhostBaseDirection, sizeof(Vec3i));
 
     getCurrentAllocation();
 
     ghost->assetData = load_3ECE40();
-    ghost->assetMetadata = &D_800BC7F0_B04E0;
+    ghost->assetMetadata = &g_GhostDefaultAssetMetadata;
     ghost->alpha = 0;
 
     randomSpeed = randA() & 0xFF;
