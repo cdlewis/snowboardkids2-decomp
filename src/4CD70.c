@@ -1970,30 +1970,30 @@ typedef struct {
 void updateSuccessMessageDisplay(SuccessMessageDisplayState *);
 void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *);
 
-void initSuccessMessageDisplayTask(SuccessMessageDisplayState *arg0) {
-    if (arg0->flashState == 0) {
-        arg0->spriteAsset = loadAsset_34CB50();
-        arg0->spriteFrame = 0x1E;
-        arg0->x = -0x48;
-        arg0->y = -0x10;
-        arg0->flashState = 1;
+void initSuccessMessageDisplayTask(SuccessMessageDisplayState *state) {
+    if (state->flashState == 0) {
+        state->spriteAsset = loadAsset_34CB50();
+        state->spriteFrame = 0x1E;
+        state->x = -0x48;
+        state->y = -0x10;
+        state->flashState = 1;
         setCleanupCallback(cleanupSuccessMessageDisplayTask);
         setCallback(updateSuccessMessageDisplay);
     } else {
-        arg0->flashState = arg0->flashState - 1;
+        state->flashState = state->flashState - 1;
     }
 }
 
-void updateSuccessMessageDisplay(SuccessMessageDisplayState *arg0) {
-    if (arg0->flashState == 0) {
-        arg0->flashState = 1;
-        if ((u16)arg0->spriteFrame != 0x22) {
-            arg0->spriteFrame = arg0->spriteFrame + 1;
+void updateSuccessMessageDisplay(SuccessMessageDisplayState *state) {
+    if (state->flashState == 0) {
+        state->flashState = 1;
+        if ((u16)state->spriteFrame != 0x22) {
+            state->spriteFrame = state->spriteFrame + 1;
         }
     } else {
-        arg0->flashState = arg0->flashState - 1;
+        state->flashState = state->flashState - 1;
     }
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, state);
 }
 
 void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *arg0) {
