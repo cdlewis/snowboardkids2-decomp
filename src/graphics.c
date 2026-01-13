@@ -529,7 +529,7 @@ void gfxCommThreadFunc(void *arg0) {
                         0,
                         gGraphicsCommand.soundSequence
                     );
-                    func_80072B3C_7373C(result, gGraphicsCommand.position);
+                    setFrequencyOffsetByHandle(result, gGraphicsCommand.position);
                     if (gGraphicsCommand.voiceIndex != 0) {
                         func_80072C38_73838(result, gGraphicsCommand.voiceIndex);
                     }
@@ -537,7 +537,7 @@ void gfxCommThreadFunc(void *arg0) {
                 case 5:
                     setVolumeScaleByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.volume);
                     setPanScaleByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.pan);
-                    func_80072B3C_7373C(gGraphicsCommand.audioChannel, gGraphicsCommand.position);
+                    setFrequencyOffsetByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.position);
                     if (gGraphicsCommand.voiceIndex != 0) {
                         func_80072C38_73838(gGraphicsCommand.audioChannel, gGraphicsCommand.voiceIndex);
                     }

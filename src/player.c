@@ -1042,7 +1042,7 @@ s32 setPanScaleByHandle(void *handle, s32 pan) {
     return count;
 }
 
-s32 func_80072B3C_7373C(void *handle, f32 offset) {
+s32 setFrequencyOffsetByHandle(void *handle, f32 offset) {
     s32 i;
     s32 count;
     channel_t *cp;
