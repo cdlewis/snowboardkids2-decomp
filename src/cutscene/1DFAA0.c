@@ -291,12 +291,12 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
                 shouldInitializeSlot = 1;
 
                 if (cutsceneManager->currentFrame < cutsceneManager->maxFrame) {
-                    eventType = eventEntry->unk3E - 4;
+                    eventType = eventEntry->commandCategory - 4;
 
                     if (eventType < 2) {
                         shouldInitializeSlot = 0;
                     } else {
-                        commandType = *(u16 *)&eventEntry->unk3E;
+                        commandType = *(u16 *)&eventEntry->commandCategory;
                         if (commandType == 0x801) {
                             commandType = 0;
                             shouldInitializeSlot = commandType;
@@ -395,7 +395,7 @@ void *getCutsceneDataMagicSecondary(void) {
 }
 
 u16 getCutsceneAllocatedEventCount(void) {
-    return gCutsceneStateTable->unk10;
+    return gCutsceneStateTable->allocatedEventCount;
 }
 
 u8 getCutsceneStateEntryItemSize(void) {
@@ -595,10 +595,10 @@ void initializeStateEntry(s32 arg0) {
     temp->frameNumber = 0;
 
     temp = gCutsceneStateTable + arg0 + 3;
-    temp->unk3E = 0;
+    temp->commandCategory = 0;
 
     temp = gCutsceneStateTable + arg0 + 3;
-    temp->unk3F = 0;
+    temp->commandType = 0;
 }
 
 void initializeCutsceneSystem(void *arg0) {
@@ -655,7 +655,7 @@ void initializeCutsceneSystem(void *arg0) {
         ffff = 0xFFFF;
         *(s16 *)((u8 *)v1ptr2 + 0xE) = 0x1DF;
         v1ptr2->current_index = 0;
-        v1ptr2->unk10 = 0;
+        v1ptr2->allocatedEventCount = 0;
         a0ptr2->unk13 = 0x10;
     }
     {
@@ -674,7 +674,7 @@ void initializeCutsceneSystem(void *arg0) {
         s32 a1;
         s32 shift2;
 
-        gCutsceneStateTable->unk10 += 1;
+        gCutsceneStateTable->allocatedEventCount += 1;
         index = allocateStateEntry();
         itemBase = (u8 *)gCutsceneStateTable;
         a1 = i << 24;
@@ -795,7 +795,7 @@ s32 findEventAtFrame(u8 a0, u16 a1) {
     return 0xFFFF;
 }
 
-s32 func_800B3D24_1E0DD4(u8 slotIndex, u16 frameNumber) {
+s32 insertCutsceneEvent(u8 slotIndex, u16 frameNumber) {
     StateEntry *eventTable;
     u16 insertAfterIndex;
     u16 entryIndex;
@@ -804,7 +804,7 @@ s32 func_800B3D24_1E0DD4(u8 slotIndex, u16 frameNumber) {
     StateEntry *entry;
     StateEntry *entryPtr;
 
-    if (gCutsceneStateTable->unk10 >= 0x1E0) {
+    if (gCutsceneStateTable->allocatedEventCount >= 0x1E0) {
         goto ret_ffff;
     }
 
@@ -847,17 +847,17 @@ do_work:
 
     initializeStateEntry(entryIndex);
 
-    gCutsceneStateTable->unk10++;
+    gCutsceneStateTable->allocatedEventCount++;
 
     if (entryIndex != 0xFFFF) {
         entry = getStateEntry(entryIndex);
         entry->frameNumber = frameNumber;
 
         entry = getStateEntry(entryIndex);
-        entry->unk3E = 0;
+        entry->commandCategory = 0;
 
         entry = getStateEntry(entryIndex);
-        entry->unk3F = 0;
+        entry->commandType = 0;
     }
 
     return entryIndex;
@@ -1054,7 +1054,7 @@ void func_800B4378_1E1428(u8 slotIndex, s16 frameNumber) {
     D_800BAEC0_1E7F70 = slotIndex;
     D_800BAEB2_1E7F62 = frameNumber;
     D_800BAEB4_1E7F64 = 1;
-    gCutsceneStateTable->unk10 -= 1;
+    gCutsceneStateTable->allocatedEventCount -= 1;
 }
 
 void func_800B44A8_1E1558(u8 arg0, u16 arg1) {
@@ -1079,11 +1079,11 @@ void func_800B44A8_1E1558(u8 arg0, u16 arg1) {
             dstBytes[i] = srcBytes[i];
         }
 
-        dst->unk3E = src->unk3E;
-        temp = src->unk3F;
+        dst->commandCategory = src->commandCategory;
+        temp = src->commandType;
         D_800BAEB0_1E7F60 = 1;
         D_800BAEB4_1E7F64 = 0;
-        dst->unk3F = temp;
+        dst->commandType = temp;
     }
 }
 
@@ -1100,7 +1100,7 @@ void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
     if (D_800BAEB0_1E7F60 != 0 && getCategorySkipValue(D_800BAF06_1E7FB6) != temp_s0) {
         s32 var_a0 = findEventAtFrame(masked_arg0, arg1);
         if ((var_a0 & 0xFFFF) == 0xFFFF) {
-            var_a0 = func_800B3D24_1E0DD4(masked_arg0, arg1);
+            var_a0 = insertCutsceneEvent(masked_arg0, arg1);
         }
 
         dest = getStateEntry(var_a0);
@@ -1108,8 +1108,8 @@ void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
             dest->padding0[i] = new_var->padding0[i];
         }
 
-        dest->unk3E = new_var->unk3E;
-        dest->unk3F = new_var->unk3F;
+        dest->commandCategory = new_var->commandCategory;
+        dest->commandType = new_var->commandType;
 
         D_800BAEB4_1E7F64 = 0;
     }

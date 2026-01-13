@@ -913,7 +913,7 @@ s32 updateSlotRotation(CutsceneSlotData *slot, StateEntry *state) {
     } else {
         slot->unk7C = 0;
         nextIndex = state->next_index;
-        if ((nextIndex == -1) || ((s8)state->unk3E > 0)) {
+        if ((nextIndex == -1) || ((s8)state->commandCategory > 0)) {
             slot->unk0.bytes[0] = 0;
         } else {
             setModelAnimation((SceneModel *)state, nextIndex);

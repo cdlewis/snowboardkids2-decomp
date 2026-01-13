@@ -331,14 +331,14 @@ s32 initializeSlotState(StateEntry *state, CutsceneManager *cutsceneManager, s8 
     activeSlot = &cutsceneManager->slots[index];
     didRun = FALSE;
     shouldExecute = 1;
-    commandEntry = getCommandEntry(state->unk3E, state->unk3F);
+    commandEntry = getCommandEntry(state->commandCategory, state->commandType);
 
     if (commandEntry->exec != NULL) {
-        activeSlot->unk42 = state->unk3E;
-        activeSlot->unk43 = state->unk3F;
+        activeSlot->unk42 = state->commandCategory;
+        activeSlot->unk43 = state->commandType;
 
         if (!cutsceneManager->slots[index].model) {
-            shouldExecute = commandCategories[state->unk3E].unk6 != 1;
+            shouldExecute = commandCategories[state->commandCategory].unk6 != 1;
         }
 
         if (shouldExecute) {

@@ -106,7 +106,7 @@ typedef struct {
     u8 padding0[0xC];
     /* 0xC */ u16 current_index;
     u8 padding[0x2];
-    /* 0x10 */ u16 unk10;
+    /* 0x10 */ u16 allocatedEventCount;
     /* 0x12 */ u8 unk12;
     /* 0x13 */ u8 unk13;
     /* 0x14 */ u16 unk14;
@@ -120,8 +120,8 @@ typedef struct {
     /* 0x38 */ u16 next_index;
     /* 0x3A */ u16 prev_index;
     u16 frameNumber;
-    u8 unk3E;
-    u8 unk3F;
+    u8 commandCategory;
+    u8 commandType;
 } StateEntry;
 
 typedef struct {
@@ -300,7 +300,7 @@ void initializeStateEntry(s32 arg0);
 void cleanupCutsceneSystem(void);
 u16 findStateEntryIndex(u8 slotIndex, u16 frameNumber, s32 findInsertionPoint);
 s32 findEventAtFrame(u8 a0, u16 a1);
-s32 func_800B3D24_1E0DD4(u8, u16);
+s32 insertCutsceneEvent(u8 slotIndex, u16 frameNumber);
 void func_800B3E58_1E0F08(u16 entryIndex, u16 oldPrevIndex, u16 newPrevIndex);
 StateEntry *getStateEntry(u16 arg0);
 u16 func_800B41E0_1E1290(void);
