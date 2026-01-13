@@ -179,45 +179,42 @@ s32 cutsceneSysCurtain_validate(void) {
 }
 
 void cutsceneSysCurtain_exec(CurtainParams *params, CutsceneManager *cutsceneManager, s8 idx) {
-    CutsceneSlot *item;
+    CutsceneSlot *slot;
 
-    item = getCutsceneSlot(cutsceneManager, idx);
+    slot = getCutsceneSlot(cutsceneManager, idx);
 
-    item->unk0.CurtainPayload.unk0 = (params->unk0 << 16) / 100;
+    slot->unk0.CurtainPayload.targetTimer = (params->targetPercent << 16) / 100;
 
-    if (params->unk4) {
-        item->unk0.CurtainPayload.unk4 =
-            (item->unk0.CurtainPayload.unk0 - cutsceneManager->cameraAnimationTimer) / params->unk4;
-        item->unk0.CurtainPayload.unk8 = params->unk4;
+    if (params->duration) {
+        slot->unk0.CurtainPayload.step =
+            (slot->unk0.CurtainPayload.targetTimer - cutsceneManager->cameraAnimationTimer) / params->duration;
+        slot->unk0.CurtainPayload.remainingDuration = params->duration;
 
-        if (item->unk0.CurtainPayload.unk4 != 0) {
+        if (slot->unk0.CurtainPayload.step != 0) {
             enableSlotUpdate(cutsceneManager, idx);
         } else {
-            cutsceneManager->cameraAnimationTimer = item->unk0.CurtainPayload.unk0;
+            cutsceneManager->cameraAnimationTimer = slot->unk0.CurtainPayload.targetTimer;
         }
     } else {
-        cutsceneManager->cameraAnimationTimer = item->unk0.CurtainPayload.unk0;
+        cutsceneManager->cameraAnimationTimer = slot->unk0.CurtainPayload.targetTimer;
     }
 }
 
-void cutsceneSysCurtain_update(CutsceneManager *arg0, s8 arg1) {
-    CutsceneSlot *temp_a0;
-    s32 temp_v1;
-    s32 temp_a0_val;
+void cutsceneSysCurtain_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
+    CutsceneSlot *slot;
 
-    temp_a0 = getCutsceneSlot(arg0, arg1);
-    temp_v1 = arg0->cameraAnimationTimer + temp_a0->unk0.Two.unk4;
-    arg0->cameraAnimationTimer = temp_v1;
+    slot = getCutsceneSlot(cutsceneManager, slotIndex);
+    cutsceneManager->cameraAnimationTimer += slot->unk0.CurtainPayload.step;
 
-    if (temp_a0->unk0.Two.unk4 > 0) {
-        if (temp_a0->unk0.Two.unk0 < temp_v1) {
-            arg0->cameraAnimationTimer = temp_a0->unk0.Two.unk0;
-            disableSlotUpdate(arg0, arg1);
+    if (slot->unk0.CurtainPayload.step > 0) {
+        if (slot->unk0.CurtainPayload.targetTimer < cutsceneManager->cameraAnimationTimer) {
+            cutsceneManager->cameraAnimationTimer = slot->unk0.CurtainPayload.targetTimer;
+            disableSlotUpdate(cutsceneManager, slotIndex);
         }
     } else {
-        if (temp_v1 < temp_a0->unk0.Two.unk0) {
-            arg0->cameraAnimationTimer = temp_a0->unk0.Two.unk0;
-            disableSlotUpdate(arg0, arg1);
+        if (cutsceneManager->cameraAnimationTimer < slot->unk0.CurtainPayload.targetTimer) {
+            cutsceneManager->cameraAnimationTimer = slot->unk0.CurtainPayload.targetTimer;
+            disableSlotUpdate(cutsceneManager, slotIndex);
         }
     }
 }

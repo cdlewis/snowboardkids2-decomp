@@ -62,11 +62,11 @@ void cutsceneSysWait_exec(u16 *waitFrames, CutsceneManager *cutsceneManager);
 void cutsceneSysCurtain_init(void);
 s32 cutsceneSysCurtain_validate(void);
 typedef struct {
-    s32 unk0;
-    u16 unk4;
+    s32 targetPercent;
+    u16 duration;
 } CurtainParams;
 void cutsceneSysCurtain_exec(CurtainParams *params, CutsceneManager *cutsceneManager, s8 idx);
-void cutsceneSysCurtain_update(CutsceneManager *arg0, s8 arg1);
+void cutsceneSysCurtain_update(CutsceneManager *cutsceneManager, s8 slotIndex);
 s32 cutsceneSysCurtain_isDone(void);
 void cutsceneSysFilter_init(void);
 s32 cutsceneSysFilter_validate(void);
