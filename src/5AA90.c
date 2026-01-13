@@ -807,7 +807,7 @@ s32 func_8005C250_5CE50(Vec3i *arg0, s32 arg1, s32 arg2) {
                         if (dist < combinedRadius) {
                             u8 index = node->id;
                             result = 1;
-                            func_80058AEC_596EC(
+                            setPlayerStarHitState(
                                 (Player *)((u8 *)allocation->dataArray + ((index * 3 * 128) - (index * 3)) * 8),
                                 posPtr
                             );

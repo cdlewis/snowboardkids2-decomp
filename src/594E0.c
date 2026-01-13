@@ -109,11 +109,11 @@ void setPlayerFrozenState(Player *player) {
     }
 }
 
-void func_80058AEC_596EC(Player *arg0, void *arg1) {
-    if (arg0->unkAC2 < 0x3C) {
-        if (!(arg0->unkB88 & 0x218)) {
-            arg0->unkAC2 = 0x3D;
-            memcpy(&arg0->unkAC8, arg1, 0xC);
+void setPlayerStarHitState(Player *player, Vec3i *hitPosition) {
+    if (player->unkAC2 < 0x3C) {
+        if (!(player->unkB88 & 0x218)) {
+            player->unkAC2 = 0x3D;
+            memcpy(&player->unkAC8, hitPosition, 0xC);
         }
     }
 }

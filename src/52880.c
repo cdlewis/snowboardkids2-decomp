@@ -1091,7 +1091,7 @@ void checkStarProjectileHit(Struct_52880 *arg0) {
     player = func_8005C454_5D054(s1, arg0->ownerPlayerIdx, 0xC0000, &localVec);
     if (player != NULL) {
         if ((player->unkB84 & 0x1000) == 0) {
-            func_80058AEC_596EC(player, &localVec);
+            setPlayerStarHitState(player, &localVec);
             arg0->hitCount++;
             if (arg0->targetPlayerIdx >= 0) {
                 func_80059C24_5A824(&allocation->players[arg0->targetPlayerIdx]);
