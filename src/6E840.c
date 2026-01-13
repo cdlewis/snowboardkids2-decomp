@@ -231,7 +231,7 @@ void restoreViewportOffsets(void) {
     D_800A3410_A4010.originY = D_800A8A9A_9FE0A;
 }
 
-void func_8006F718_70318(void) {
+void initGraphicsSystem(void) {
     s32 i;
     s32 *ptr;
 
