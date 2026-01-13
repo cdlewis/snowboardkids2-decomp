@@ -186,11 +186,11 @@ void cutsceneSysCurtain_exec(CurtainParams *params, CutsceneManager *cutsceneMan
     slot->unk0.CurtainPayload.targetTimer = (params->targetPercent << 16) / 100;
 
     if (params->duration) {
-        slot->unk0.CurtainPayload.step =
+        slot->unk0.CurtainPayload.stepDelta =
             (slot->unk0.CurtainPayload.targetTimer - cutsceneManager->cameraAnimationTimer) / params->duration;
-        slot->unk0.CurtainPayload.remainingDuration = params->duration;
+        slot->unk0.CurtainPayload.framesRemaining = params->duration;
 
-        if (slot->unk0.CurtainPayload.step != 0) {
+        if (slot->unk0.CurtainPayload.stepDelta != 0) {
             enableSlotUpdate(cutsceneManager, idx);
         } else {
             cutsceneManager->cameraAnimationTimer = slot->unk0.CurtainPayload.targetTimer;
@@ -204,9 +204,9 @@ void cutsceneSysCurtain_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
     CutsceneSlot *slot;
 
     slot = getCutsceneSlot(cutsceneManager, slotIndex);
-    cutsceneManager->cameraAnimationTimer += slot->unk0.CurtainPayload.step;
+    cutsceneManager->cameraAnimationTimer += slot->unk0.CurtainPayload.stepDelta;
 
-    if (slot->unk0.CurtainPayload.step > 0) {
+    if (slot->unk0.CurtainPayload.stepDelta > 0) {
         if (slot->unk0.CurtainPayload.targetTimer < cutsceneManager->cameraAnimationTimer) {
             cutsceneManager->cameraAnimationTimer = slot->unk0.CurtainPayload.targetTimer;
             disableSlotUpdate(cutsceneManager, slotIndex);

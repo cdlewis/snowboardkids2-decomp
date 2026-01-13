@@ -28,9 +28,9 @@ typedef struct {
         } Two;
         struct {
             s32 targetTimer;
-            s32 step;
-            s16 remainingDuration;
-            s8 unkA;
+            s32 stepDelta;
+            s16 framesRemaining;
+            s8 padding;
         } CurtainPayload;
         struct {
             s16 unk0;
@@ -207,9 +207,9 @@ typedef struct {
         } Two;
         struct {
             s32 targetTimer;
-            s32 step;
-            s16 remainingDuration;
-            s8 unkA;
+            s32 stepDelta;
+            s16 framesRemaining;
+            s8 padding;
         } CurtainPayload;
         struct {
             s16 unk0;
