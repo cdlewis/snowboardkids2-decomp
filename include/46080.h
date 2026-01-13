@@ -9,8 +9,8 @@ void scheduleLevelEnvironmentTasks(s32 poolId);
 
 void spawnBossHomingProjectileTask(void *boss);
 
-void *spawnItemHomingProjectile(void *, u32, void *, s16, s32);
+void spawnBossHomingProjectileVariant1Task(Player *);
 
-void func_8004BC5C_4C85C(Player *);
+void *spawnItemHomingProjectile(void *, u32, void *, s16, s32);
 
 void func_8004C10C_4CD0C(Player *);

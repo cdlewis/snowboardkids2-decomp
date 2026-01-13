@@ -131,13 +131,13 @@ typedef struct {
 } BossHomingProjectileSpawnTask;
 
 typedef struct {
-    void *unk0;
-} func_8004BC20_4C820_arg;
+    void *taskNode;
+} BossHomingProjectileVariant1CleanupArg;
 
 typedef struct {
     u8 pad[0x24];
-    Player *unk24;
-} func_8004BC5C_4C85C_Task;
+    Player *boss;
+} BossHomingProjectileVariant1Task;
 
 typedef struct {
     u8 _pad0[0x4];
@@ -247,15 +247,15 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x4];
-    func_80066444_67044_arg1 unk4;
-    s16 unk38;
-} func_8004BB0C_4C70C_arg;
+    func_80066444_67044_arg1 displayListState;
+    s16 playerIndex;
+} BossHomingProjectileVariant1BounceArg;
 
 typedef struct {
     s32 unk0;
-    func_80066444_67044_arg1 unk4;
-    s16 unk38;
-} func_8004B990_4C590_arg;
+    func_80066444_67044_arg1 displayListState;
+    s16 playerIndex;
+} BossHomingProjectileVariant1UpdateArg;
 
 typedef struct {
     void *unk0;
@@ -767,7 +767,7 @@ void cleanupGoldCoinsTask(GoldCoinsTaskState *arg0);
 void setupGoldCoinEntries(GoldCoinSetupState *arg0);
 void enqueuePlayerDisplayList(PlayerDisplayListState *arg0);
 void initItemHomingProjectileMovement(ItemHomingProjectileInitArg *);
-void func_8004B990_4C590(func_8004B990_4C590_arg *arg0);
+void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *arg0);
 void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *);
 void updateFlyingSceneryAscendingStep(FlyingSceneryState *state);
 void updateFlyingSceneryGlidingStep(FlyingSceneryState *state);
@@ -797,9 +797,9 @@ void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *);
 void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0);
 void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0);
 void initPanelProjectileMovement(PanelProjectileInitArg *arg0);
-void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0);
-void func_8004B834_4C434(BossHomingProjectileSpawnArg *);
-void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *);
+void cleanupBossHomingProjectileVariant1Task(BossHomingProjectileVariant1CleanupArg *arg0);
+void spawnBossHomingProjectileVariant1(BossHomingProjectileSpawnArg *);
+void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *);
 void func_8004BCFC_4C8FC(BossHomingProjectileSpawnArg *arg0);
 void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0);
 void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0);
@@ -3684,13 +3684,13 @@ void spawnBossHomingProjectileTask(void *boss) {
     }
 }
 
-void func_8004B7F4_4C3F4(MemoryAllocatorNode **arg0) {
+void initBossHomingProjectileVariant1Task(MemoryAllocatorNode **arg0) {
     *arg0 = load_3ECE40();
-    setCleanupCallback(&func_8004BC20_4C820);
-    setCallbackWithContinue(&func_8004B834_4C434);
+    setCleanupCallback(&cleanupBossHomingProjectileVariant1Task);
+    setCallbackWithContinue(&spawnBossHomingProjectileVariant1);
 }
 
-void func_8004B834_4C434(BossHomingProjectileSpawnArg *arg0) {
+void spawnBossHomingProjectileVariant1(BossHomingProjectileSpawnArg *arg0) {
     GameState *allocation;
     u8 randomValue;
     s32 rotationAngle;
@@ -3726,10 +3726,10 @@ void func_8004B834_4C434(BossHomingProjectileSpawnArg *arg0) {
     arg0->velocity.y = arg0->velocity.y + (arg0->boss->unk450 + (((randomValue4 & 0xFF) * 5) << 9));
     arg0->velocity.z = arg0->velocity.z + arg0->boss->unk454;
 
-    setCallbackWithContinue(&func_8004B990_4C590);
+    setCallbackWithContinue(&updateBossHomingProjectileVariant1);
 }
 
-void func_8004B990_4C590(func_8004B990_4C590_arg *arg0) {
+void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *arg0) {
     Vec3i sp;
     GameState_46080 *alloc;
     void *s0;
@@ -3743,23 +3743,23 @@ void func_8004B990_4C590(func_8004B990_4C590_arg *arg0) {
         s0 = NULL;
     } else {
         s0 = &alloc->unk30;
-        s2 = &arg0->unk4.unk4;
+        s2 = &arg0->displayListState.unk4;
 
-        arg0->unk4.unk28 -= 0x6000;
-        arg0->unk4.unk4.x += arg0->unk4.unk24;
-        arg0->unk4.unk4.y += arg0->unk4.unk28;
-        arg0->unk4.unk4.z += arg0->unk4.unk2C;
+        arg0->displayListState.unk28 -= 0x6000;
+        arg0->displayListState.unk4.x += arg0->displayListState.unk24;
+        arg0->displayListState.unk4.y += arg0->displayListState.unk28;
+        arg0->displayListState.unk4.z += arg0->displayListState.unk2C;
 
-        arg0->unk4.unk30 = func_80060A3C_6163C(s0, arg0->unk4.unk30, s2);
+        arg0->displayListState.unk30 = func_80060A3C_6163C(s0, arg0->displayListState.unk30, s2);
 
-        func_80060CDC_618DC(s0, arg0->unk4.unk30, s2, 0x100000, &sp);
+        func_80060CDC_618DC(s0, arg0->displayListState.unk30, s2, 0x100000, &sp);
 
-        arg0->unk4.unk4.x += sp.x;
-        arg0->unk4.unk4.z += sp.z;
+        arg0->displayListState.unk4.x += sp.x;
+        arg0->displayListState.unk4.z += sp.z;
 
-        sp.y = func_80061A64_62664(s0, arg0->unk4.unk30, s2);
+        sp.y = func_80061A64_62664(s0, arg0->displayListState.unk30, s2);
 
-        temp_s0 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
+        temp_s0 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
 
         if (temp_s0 != NULL) {
             func_80050ECC_51ACC(s2);
@@ -3769,21 +3769,21 @@ void func_8004B990_4C590(func_8004B990_4C590_arg *arg0) {
             return;
         }
 
-        if (arg0->unk4.unk4.y < sp.y) {
-            arg0->unk4.unk4.y = sp.y;
-            arg0->unk4.unk36 = 0x96;
-            setCallback(&func_8004BB0C_4C70C);
+        if (arg0->displayListState.unk4.y < sp.y) {
+            arg0->displayListState.unk4.y = sp.y;
+            arg0->displayListState.unk36 = 0x96;
+            setCallback(&bounceBossHomingProjectileVariant1);
         }
 
         s0 = NULL;
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, &arg0->unk4);
+        func_80066444_67044(i, &arg0->displayListState);
     }
 }
 
-void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
+void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *arg0) {
     Vec3i sp10;
     Vec3i *s0;
     Vec3i *s2;
@@ -3791,15 +3791,15 @@ void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
     s32 i;
 
     if (((GameState *)getCurrentAllocation())->gamePaused == 0) {
-        arg0->unk4.unk36--;
+        arg0->displayListState.unk36--;
     }
 
-    if (arg0->unk4.unk36 == 0) {
+    if (arg0->displayListState.unk36 == 0) {
         func_80069CF8_6A8F8();
     }
 
-    s2 = &arg0->unk4.unk4;
-    s3 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
+    s2 = &arg0->displayListState.unk4;
+    s3 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
     s0 = &sp10;
 
     if (s3 != NULL) {
@@ -3810,33 +3810,33 @@ void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
         setPlayerProjectileHitState(s3);
         func_80069CF8_6A8F8();
     } else {
-        if (arg0->unk4.unk36 < 0x1F) {
+        if (arg0->displayListState.unk36 < 0x1F) {
             i = 0;
             if ((gFrameCounter & 1) == 0) {
                 return;
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, &arg0->unk4);
+            func_80066444_67044(i, &arg0->displayListState);
         }
     }
 }
 
-void func_8004BC20_4C820(func_8004BC20_4C820_arg *arg0) {
+void cleanupBossHomingProjectileVariant1Task(BossHomingProjectileVariant1CleanupArg *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
     allocation->availableHomingProjectileSlots++;
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+    arg0->taskNode = freeNodeMemory(arg0->taskNode);
 }
 
-void func_8004BC5C_4C85C(Player *arg0) {
+void spawnBossHomingProjectileVariant1Task(Player *arg0) {
     GameState *allocation;
-    func_8004BC5C_4C85C_Task *task;
+    BossHomingProjectileVariant1Task *task;
 
     allocation = (GameState *)getCurrentAllocation();
-    task = (func_8004BC5C_4C85C_Task *)scheduleTask(func_8004B7F4_4C3F4, 3, 0, 0xEF);
+    task = (BossHomingProjectileVariant1Task *)scheduleTask(initBossHomingProjectileVariant1Task, 3, 0, 0xEF);
 
     if (task != NULL) {
-        task->unk24 = arg0;
+        task->boss = arg0;
         allocation->availableHomingProjectileSlots -= 1;
     }
 }

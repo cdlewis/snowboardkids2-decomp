@@ -565,10 +565,10 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
     arg0->unkB8C += 1;
 
     if ((arg0->unkB8C == 5) || (arg0->unkB8C == 0xF)) {
-        func_8004BC5C_4C85C(arg0);
-        func_8004BC5C_4C85C(arg0);
-        func_8004BC5C_4C85C(arg0);
-        func_8004BC5C_4C85C(arg0);
+        spawnBossHomingProjectileVariant1Task(arg0);
+        spawnBossHomingProjectileVariant1Task(arg0);
+        spawnBossHomingProjectileVariant1Task(arg0);
+        spawnBossHomingProjectileVariant1Task(arg0);
     }
 
     arg0->unkB88 = 0x200;
@@ -628,7 +628,7 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
 
         if (arg0->unkBDB == 0) {
             for (i = 0; i < 0x1E; i++) {
-                func_8004BC5C_4C85C(arg0);
+                spawnBossHomingProjectileVariant1Task(arg0);
             }
             memcpy(&sp30, &arg0->worldPos, sizeof(Vec3i));
             sp30.y += 0x300000;
