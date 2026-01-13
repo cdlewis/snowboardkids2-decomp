@@ -128,10 +128,10 @@ void setPlayerBouncedBackState(Player *player) {
     }
 }
 
-void func_80058B68_59768(Player *arg0) {
-    if (arg0->unkAC2 < 0x50) {
-        if (!(arg0->unkB88 & 0x1C)) {
-            arg0->unkAC2 = 0x50;
+void setPlayerState80(Player *player) {
+    if (player->unkAC2 < 0x50) {
+        if (!(player->unkB88 & 0x1C)) {
+            player->unkAC2 = 0x50;
         }
     }
 }

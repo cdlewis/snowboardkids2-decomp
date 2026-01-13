@@ -3084,4 +3084,5 @@ updateImpactStar = 0x80050E08; // rom:0x51A08
 cleanupImpactStar = 0x80050EA0; // rom:0x51AA0
 spawnImpactStar = 0x80050ECC; // rom:0x51ACC
 setPlayerBouncedBackState = 0x80058B30; // rom:0x59730
+setPlayerState80 = 0x80058B68; // rom:0x59768
 enqueueDisplayListWithLightsSlot0 = 0x80065DA8; // rom:0x669A8
