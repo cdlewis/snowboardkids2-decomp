@@ -60,8 +60,8 @@ void playSoundEffectAtPosition(
 void playSoundEffectOnChannelWithVoice(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex, s32 voiceIndex);
 // Play sound effect on specified channel with default voice
 void playSoundEffectOnChannel(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex);
-void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void func_80057F28_58B28(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void playOrStopSoundEffectOnChannelWithVoice(s32 soundId, s32 volume, s32 priority, s32 channelIndex, s32 voiceIndex);
+void playOrStopSoundEffectOnChannel(s32 soundId, s32 volume, s32 priority, s32 channelIndex);
 void func_80057F48_58B48(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void func_80058048_58C48(s32 arg0, s32 arg1, s32 arg2);
 void func_80058064_58C64(s32 arg0, s32 arg1, s32 arg2, s32 arg3);

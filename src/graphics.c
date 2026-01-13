@@ -748,35 +748,33 @@ void playSoundEffectOnChannel(s32 soundId, s32 volume, s32 pan, s32 priority, s3
     playSoundEffectOnChannelWithVoice(soundId, volume, pan, priority, channelIndex, 0xC);
 }
 
-void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    s32 new_var;
-    s32 *new_var3;
-    void *sp10;
+void playOrStopSoundEffectOnChannelWithVoice(s32 soundId, s32 volume, s32 priority, s32 channelIndex, s32 voiceIndex) {
+    void *message;
+    s32 soundSequence;
 
-    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[arg3];
-    new_var3 = &gGraphicsManager->soundSequence;
+    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[channelIndex];
 
-    if (arg1 > 0) {
-        gGraphicsCommand.soundId = arg0;
-        gGraphicsCommand.volume = arg1;
+    if (volume > 0) {
+        gGraphicsCommand.soundId = soundId;
+        gGraphicsCommand.volume = volume;
         gGraphicsCommand.pan = 0x80;
-        new_var = *new_var3;
-        gGraphicsCommand.voiceIndex = arg4;
-        gGraphicsCommand.soundSequence = new_var + (arg2 << 0x18);
+        soundSequence = gGraphicsManager->soundSequence;
+        gGraphicsCommand.voiceIndex = voiceIndex;
+        gGraphicsCommand.soundSequence = soundSequence + (priority << 0x18);
         osSendMesg(&gfxTaskQueue, (void *)2, 1);
-        osRecvMesg(&gfxResultQueue, &sp10, 1);
-        gGraphicsManager->soundEffectChannels[arg3] = sp10;
-        gGraphicsManager->soundEffectIds[arg3] = (s16)arg0;
+        osRecvMesg(&gfxResultQueue, &message, 1);
+        gGraphicsManager->soundEffectChannels[channelIndex] = message;
+        gGraphicsManager->soundEffectIds[channelIndex] = (s16)soundId;
         incrementSoundSequence();
         return;
     }
 
     osSendMesg(&gfxTaskQueue, (void *)3, 1);
-    osRecvMesg(&gfxResultQueue, &sp10, 1);
+    osRecvMesg(&gfxResultQueue, &message, 1);
 }
 
-void func_80057F28_58B28(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    func_80057E18_58A18(arg0, arg1, arg2, arg3, 0xC);
+void playOrStopSoundEffectOnChannel(s32 soundId, s32 volume, s32 priority, s32 channelIndex) {
+    playOrStopSoundEffectOnChannelWithVoice(soundId, volume, priority, channelIndex, 0xC);
 }
 
 void func_80057F48_58B48(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
