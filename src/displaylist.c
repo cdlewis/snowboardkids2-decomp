@@ -974,7 +974,7 @@ void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
     gSPMatrix(gRegionAllocPtr++, (arg1 + arg0)->unk30, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
-void func_80064628_65228(DisplayListObject *displayObjects) {
+void renderMultiPartOpaqueDisplayLists(DisplayListObject *displayObjects) {
     s32 i;
     DisplayListObject *currentObject;
     Gfx *displayListCmd;
@@ -1080,7 +1080,7 @@ void func_80064808_65408(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 a
     }
 
     if (var_s0 & 1) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 1, &func_80064628_65228, arg1);
+        debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderMultiPartOpaqueDisplayLists, arg1);
     }
     new_var = arg1;
     if (var_s0 & 2) {
