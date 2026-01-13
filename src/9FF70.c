@@ -2898,50 +2898,50 @@ s32 beginKnockbackRecoveryStep(Player *player) {
     return 1;
 }
 
-s32 func_800B6688_A6538(Player *arg0) {
-    s32 sp10[4];
-    GameState *alloc;
-    D_80090F90_91B90_item *item;
-    s16 angle;
-    s16 temp_angle;
-    u16 unkA94;
-    s32 temp_worldPosX;
-    s32 item_unk4;
-    s32 temp_worldPosZ;
-    s16 temp;
+s32 updateKnockbackRecoveryStep(Player *player) {
+    s32 trackInfoBuffer[4];
+    GameState *gameState;
+    D_80090F90_91B90_item *levelData;
+    s16 angleDelta;
+    s16 clampedAngleDelta;
+    s16 currentYaw;
+    s32 currentPosX;
+    s32 targetPosZ;
+    s32 currentPosZ;
+    s16 targetYaw;
 
-    alloc = getCurrentAllocation();
-    item = func_80055D10_56910(alloc->memoryPoolId);
-    temp = item->unk8 + getTrackEndInfo(&alloc->gameData, sp10) + 0x1000;
-    unkA94 = arg0->unkA94;
-    angle = (temp - unkA94) & 0x1FFF;
-    temp_angle = angle;
-    if (angle >= 0x1001) {
-        temp_angle = angle | 0xE000;
+    gameState = getCurrentAllocation();
+    levelData = func_80055D10_56910(gameState->memoryPoolId);
+    targetYaw = levelData->unk8 + getTrackEndInfo(&gameState->gameData, trackInfoBuffer) + 0x1000;
+    currentYaw = player->unkA94;
+    angleDelta = (targetYaw - currentYaw) & 0x1FFF;
+    clampedAngleDelta = angleDelta;
+    if (angleDelta >= 0x1001) {
+        clampedAngleDelta = angleDelta | 0xE000;
     }
-    arg0->velocity.y -= 0x6000;
-    temp_worldPosX = arg0->worldPos.x;
-    arg0->velocity.x = 0;
-    arg0->velocity.z = 0;
-    arg0->unkA94 = unkA94 + (temp_angle / arg0->unkB8C);
-    arg0->worldPos.x = temp_worldPosX + ((item->unk0 - temp_worldPosX) >> 2);
-    item_unk4 = item->unk4;
-    temp_worldPosZ = arg0->worldPos.z;
-    arg0->worldPos.z = temp_worldPosZ + ((item_unk4 - temp_worldPosZ) >> 2);
-    applyClampedVelocityToPosition(arg0);
-    decayPlayerSteeringAngles(arg0);
-    arg0->unkB8C -= 1;
+    player->velocity.y -= 0x6000;
+    currentPosX = player->worldPos.x;
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->unkA94 = currentYaw + (clampedAngleDelta / player->unkB8C);
+    player->worldPos.x = currentPosX + ((levelData->unk0 - currentPosX) >> 2);
+    targetPosZ = levelData->unk4;
+    currentPosZ = player->worldPos.z;
+    player->worldPos.z = currentPosZ + ((targetPosZ - currentPosZ) >> 2);
+    applyClampedVelocityToPosition(player);
+    decayPlayerSteeringAngles(player);
+    player->unkB8C -= 1;
 
-    if (arg0->behaviorCounter != 0) {
-        if (func_8005D308_5DF08(arg0, 6) != 0) {
-            arg0->behaviorCounter = 0;
+    if (player->behaviorCounter != 0) {
+        if (func_8005D308_5DF08(player, 6) != 0) {
+            player->behaviorCounter = 0;
         }
     } else {
-        func_8005D180_5DD80(arg0, 0);
+        func_8005D180_5DD80(player, 0);
     }
 
-    if (arg0->unkB8C == 0) {
-        arg0->behaviorStep += 1;
+    if (player->unkB8C == 0) {
+        player->behaviorStep += 1;
     }
 
     return 0;
