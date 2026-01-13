@@ -64,8 +64,8 @@ void playOrStopSoundEffectOnChannelWithVoice(s32 soundId, s32 volume, s32 priori
 void playOrStopSoundEffectOnChannel(s32 soundId, s32 volume, s32 priority, s32 channelIndex);
 void playOrStopSoundEffectNoPriorityWithVoice(s32 soundId, s32 volume, s32 channelIndex, s32 voiceIndex);
 void playOrStopSoundEffectNoPriority(s32 soundId, s32 volume, s32 channelIndex);
-void func_80058064_58C64(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_80058138_58D38(s32 arg0, s32 arg1, s32 arg2);
+void playSoundEffectOnChannelWithPriorityAndVoice(s32 soundId, s32 priority, s32 channelIndex, s32 voiceIndex);
+void playSoundEffectOnChannelWithPriority(s32 soundId, s32 priority, s32 channelIndex);
 void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2);
 void func_80058220_58E20(s32 arg0, s32 arg1);
 void func_8005823C_58E3C(s32 arg0, s32 arg1, s32 arg2, s32 arg3);

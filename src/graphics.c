@@ -802,24 +802,24 @@ void playOrStopSoundEffectNoPriority(s32 soundId, s32 volume, s32 channelIndex) 
     playOrStopSoundEffectNoPriorityWithVoice(soundId, volume, channelIndex, 0xC);
 }
 
-void func_80058064_58C64(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void playSoundEffectOnChannelWithPriorityAndVoice(s32 soundId, s32 priority, s32 channelIndex, s32 voiceIndex) {
     void *message;
 
-    gGraphicsCommand.soundId = arg0;
+    gGraphicsCommand.soundId = soundId;
     gGraphicsCommand.volume = 0x80;
     gGraphicsCommand.pan = 0x80;
-    gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (arg1 << 0x18);
-    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[arg2];
-    gGraphicsCommand.voiceIndex = arg3;
+    gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (priority << 0x18);
+    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[channelIndex];
+    gGraphicsCommand.voiceIndex = voiceIndex;
     osSendMesg(&gfxTaskQueue, (OSMesg *)2, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
-    gGraphicsManager->soundEffectChannels[arg2] = message;
-    gGraphicsManager->soundEffectIds[arg2] = (s16)arg0;
+    gGraphicsManager->soundEffectChannels[channelIndex] = message;
+    gGraphicsManager->soundEffectIds[channelIndex] = (s16)soundId;
     incrementSoundSequence();
 }
 
-void func_80058138_58D38(s32 arg0, s32 arg1, s32 arg2) {
-    func_80058064_58C64(arg0, arg1, arg2, 0xC);
+void playSoundEffectOnChannelWithPriority(s32 soundId, s32 priority, s32 channelIndex) {
+    playSoundEffectOnChannelWithPriorityAndVoice(soundId, priority, channelIndex, 0xC);
 }
 
 void func_80058154_58D54(s32 arg0, s32 arg1, s32 arg2) {
