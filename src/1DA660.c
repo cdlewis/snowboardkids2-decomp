@@ -21,13 +21,13 @@ typedef struct {
 } func_800B0DD0_arg;
 
 typedef struct {
-    SceneModel *unk0;
+    SceneModel *model;
     Transform3D matrix;
-    u16 unk24;
-    s16 unk26;
-    u8 unk28;
-    u8 unk29;
-} func_800B08FC_arg;
+    u16 characterIndex;
+    s16 animationState;
+    u8 displayMode;
+    u8 timer;
+} CharacterPreviewState;
 
 typedef struct {
     u8 _pad[0x24];
@@ -126,12 +126,12 @@ extern void *renderTextPalette;
 void func_800B00C0_1DA660(void);
 void positionCharacterSelectSprite(CharacterSelectSprite *, u8);
 void func_800B0DF8_1DB398(void *);
-void func_800B0598_1DAB38(func_800B08FC_arg *);
-void func_800B05DC_1DAB7C(func_800B08FC_arg *);
-void func_800B0964_1DAF04(func_800B08FC_arg *);
-void func_800B0638_1DABD8(func_800B08FC_arg *);
-void func_800B0720_1DACC0(func_800B08FC_arg *);
-void func_800B08FC_1DAE9C(func_800B08FC_arg *);
+void awaitCharacterPreviewReady(CharacterPreviewState *);
+void updateCharacterPreviewAnimation(CharacterPreviewState *);
+void cleanupCharacterPreview(CharacterPreviewState *);
+void checkCharacterPreviewState(CharacterPreviewState *);
+void animateCharacterPreview(CharacterPreviewState *);
+void awaitCharacterPreviewRotationReset(CharacterPreviewState *);
 void updateCharacterSelectSprites(CharacterSelectSprites *);
 void func_800B0BC0_1DB160(func_800B0FE0_arg *);
 void func_800B0E94_1DB434(void *);
@@ -192,42 +192,42 @@ void positionCharacterSelectSprite(CharacterSelectSprite *arg0, u8 arg1) {
     arg0->frameIndex = D_800B11C2_1DB762[count * 4 + allocation->unk5A2[arg1]] + arg1;
 }
 
-void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
+void initCharacterPreview(CharacterPreviewState *arg0) {
     GameState *allocation;
     Transform3D *matrix;
     u16 modelIndex;
     s32 pad[2];
 
     allocation = getCurrentAllocation();
-    modelIndex = arg0->unk24 + 0x32;
-    arg0->unk28 = 0;
+    modelIndex = arg0->characterIndex + 0x32;
+    arg0->displayMode = 0;
 
-    if (arg0->unk24 == 6) {
+    if (arg0->characterIndex == 6) {
         if (allocation->unk5B2 == -1) {
-            arg0->unk28 = 2;
+            arg0->displayMode = 2;
         }
     }
 
-    if (arg0->unk24 == 7) {
+    if (arg0->characterIndex == 7) {
         if (allocation->unk5AE == -1) {
-            arg0->unk28 = 1;
+            arg0->displayMode = 1;
             modelIndex = 0xF;
         }
     }
 
-    if (arg0->unk24 == 8) {
+    if (arg0->characterIndex == 8) {
         if (allocation->unk5AD == -1) {
-            arg0->unk28 = 1;
+            arg0->displayMode = 1;
             modelIndex = 0xF;
         }
     }
 
     matrix = &arg0->matrix;
-    arg0->unk0 = createSceneModel(modelIndex, allocation);
+    arg0->model = createSceneModel(modelIndex, allocation);
     memcpy(matrix, identityMatrix, 0x20);
 
-    arg0->matrix.translation.x = D_800B1160_1DB700[arg0->unk24 * 2] << 16;
-    arg0->matrix.translation.z = D_800B1162_1DB702[arg0->unk24 * 2] << 16;
+    arg0->matrix.translation.x = D_800B1160_1DB700[arg0->characterIndex * 2] << 16;
+    arg0->matrix.translation.z = D_800B1162_1DB702[arg0->characterIndex * 2] << 16;
 
     if (arg0->matrix.translation.z == (s32)0xFF900000) {
         arg0->matrix.translation.y = (s32)0xFFE80000;
@@ -235,33 +235,33 @@ void func_800B0368_1DA908(func_800B08FC_arg *arg0) {
 
     createYRotationMatrix(matrix, atan2Fixed(arg0->matrix.translation.x, arg0->matrix.translation.z));
 
-    if (arg0->unk28 != 2) {
-        setModelHeight(arg0->unk0, arg0->matrix.translation.y);
-        enableEntityRendering(arg0->unk0);
+    if (arg0->displayMode != 2) {
+        setModelHeight(arg0->model, arg0->matrix.translation.y);
+        enableEntityRendering(arg0->model);
     }
 
-    if (arg0->unk24 == 0) {
+    if (arg0->characterIndex == 0) {
         createXRotationMatrix((s16(*)[3])matrix, 0x100);
-    } else if (arg0->unk24 == 4) {
+    } else if (arg0->characterIndex == 4) {
         arg0->matrix.translation.z = arg0->matrix.translation.z - 0x10;
-    } else if (arg0->unk24 == 7) {
-        if (arg0->unk28 == 0) {
+    } else if (arg0->characterIndex == 7) {
+        if (arg0->displayMode == 0) {
             arg0->matrix.translation.z = arg0->matrix.translation.z + 0x40000;
         } else {
-            arg0->unk26 = 0x90;
-            goto after_unk26;
+            arg0->animationState = 0x90;
+            goto after_animationState;
         }
     }
 
-    if (arg0->unk28 == 0) {
-        arg0->unk26 = 0;
+    if (arg0->displayMode == 0) {
+        arg0->animationState = 0;
     } else {
-        arg0->unk26 = 0x90;
+        arg0->animationState = 0x90;
     }
 
-after_unk26:
-    if (arg0->unk24 >= 7 && arg0->unk28 != 0) {
-        if (arg0->unk24 == 8) {
+after_animationState:
+    if (arg0->characterIndex >= 7 && arg0->displayMode != 0) {
+        if (arg0->characterIndex == 8) {
             scaleMatrix(&arg0->matrix, 0x1000, 0x1000, 0x1000);
             arg0->matrix.translation.x = arg0->matrix.translation.x + 0x80000;
         } else {
@@ -269,29 +269,29 @@ after_unk26:
         }
     }
 
-    setCleanupCallback(func_800B0964_1DAF04);
-    setCallback(func_800B0598_1DAB38);
+    setCleanupCallback(cleanupCharacterPreview);
+    setCallback(awaitCharacterPreviewReady);
 }
 
-void func_800B0598_1DAB38(func_800B08FC_arg *arg0) {
+void awaitCharacterPreviewReady(CharacterPreviewState *arg0) {
     GameState *allocation = getCurrentAllocation();
 
-    if (arg0->unk24 == 6) {
+    if (arg0->characterIndex == 6) {
         allocation->isStoryMapInitializing = 0;
     }
-    setCallback(func_800B05DC_1DAB7C);
+    setCallback(updateCharacterPreviewAnimation);
 }
 
-void func_800B05DC_1DAB7C(func_800B08FC_arg *arg0) {
-    applyTransformToModel(arg0->unk0, &arg0->matrix);
-    if (arg0->unk28 != 2) {
-        setModelAnimation(arg0->unk0, arg0->unk26);
-        updateModelGeometry(arg0->unk0);
+void updateCharacterPreviewAnimation(CharacterPreviewState *arg0) {
+    applyTransformToModel(arg0->model, &arg0->matrix);
+    if (arg0->displayMode != 2) {
+        setModelAnimation(arg0->model, arg0->animationState);
+        updateModelGeometry(arg0->model);
     }
-    setCallback(func_800B0638_1DABD8);
+    setCallback(checkCharacterPreviewState);
 }
 
-void func_800B0638_1DABD8(func_800B08FC_arg *arg0) {
+void checkCharacterPreviewState(CharacterPreviewState *arg0) {
     GameState *allocation;
     s32 i;
     D_800AFE8C_A71FC_type *ptr;
@@ -300,23 +300,23 @@ void func_800B0638_1DABD8(func_800B08FC_arg *arg0) {
 
     allocation = getCurrentAllocation();
 
-    if (arg0->unk28 != 2) {
-        applyTransformToModel(arg0->unk0, &arg0->matrix);
-        clearModelRotation(arg0->unk0);
-        updateModelGeometry(arg0->unk0);
+    if (arg0->displayMode != 2) {
+        applyTransformToModel(arg0->model, &arg0->matrix);
+        clearModelRotation(arg0->model);
+        updateModelGeometry(arg0->model);
     }
 
-    if (arg0->unk28 == 0) {
+    if (arg0->displayMode == 0) {
         ptr = D_800AFE8C_A71FC;
         count = ptr->numPlayers;
         if (count > 0) {
             i = 0;
             do {
-                if (ptr->unk9[i] == arg0->unk24) {
+                if (ptr->unk9[i] == arg0->characterIndex) {
                     u8 state = allocation->unk59A[i];
                     if (state == 1 || state == 3) {
-                        arg0->unk29 = 0;
-                        setCallback(func_800B0720_1DACC0);
+                        arg0->timer = 0;
+                        setCallback(animateCharacterPreview);
                         return;
                     }
                 }
@@ -327,7 +327,7 @@ void func_800B0638_1DABD8(func_800B08FC_arg *arg0) {
     }
 }
 
-void func_800B0720_1DACC0(func_800B08FC_arg *arg0) {
+void animateCharacterPreview(CharacterPreviewState *arg0) {
     func_800B0A54_allocation *allocation;
     D_800AFE8C_A71FC_type *ptr;
     s32 i;
@@ -338,37 +338,37 @@ void func_800B0720_1DACC0(func_800B08FC_arg *arg0) {
     s32 pad[2];
 
     allocation = (func_800B0A54_allocation *)getCurrentAllocation();
-    clearResult = clearModelRotation(arg0->unk0);
+    clearResult = clearModelRotation(arg0->model);
 
-    counter = arg0->unk29;
+    counter = arg0->timer;
 
-    if (counter < D_800B1150_1DB6F0[arg0->unk24]) {
-        arg0->unk29 = counter + 1;
-        if ((u8)(counter + 1) == D_800B1150_1DB6F0[arg0->unk24]) {
-            arg0->unk26 = 1;
-            setModelAnimation(arg0->unk0, 1);
-            index = arg0->unk24;
+    if (counter < D_800B1150_1DB6F0[arg0->characterIndex]) {
+        arg0->timer = counter + 1;
+        if ((u8)(counter + 1) == D_800B1150_1DB6F0[arg0->characterIndex]) {
+            arg0->animationState = 1;
+            setModelAnimation(arg0->model, 1);
+            index = arg0->characterIndex;
             if ((index < 4) || (index == 6)) {
-                setAnimationIndex(arg0->unk0, 0);
+                setAnimationIndex(arg0->model, 0);
             } else if (index == 4) {
-                setAnimationIndex(arg0->unk0, 4);
+                setAnimationIndex(arg0->model, 4);
             } else {
-                setAnimationIndex(arg0->unk0, -1);
+                setAnimationIndex(arg0->model, -1);
             }
         }
     } else if (clearResult != 0) {
-        arg0->unk26 = 2;
-        setModelAnimation(arg0->unk0, 2);
+        arg0->animationState = 2;
+        setModelAnimation(arg0->model, 2);
     }
 
-    updateModelGeometry(arg0->unk0);
+    updateModelGeometry(arg0->model);
 
     ptr = D_800AFE8C_A71FC;
     count = ptr->numPlayers;
     i = 0;
     if (count > 0) {
         D_800AFE8C_A71FC_type *localPtr = ptr;
-        u16 localIndex = arg0->unk24;
+        u16 localIndex = arg0->characterIndex;
         u8 localCount = count;
         do {
             if (localPtr->unk9[i] != localIndex) {
@@ -384,36 +384,36 @@ void func_800B0720_1DACC0(func_800B08FC_arg *arg0) {
     }
 
     if (i == D_800AFE8C_A71FC->numPlayers) {
-        arg0->unk26 = 3;
-        setModelAnimation(arg0->unk0, 3);
-        index = arg0->unk24;
+        arg0->animationState = 3;
+        setModelAnimation(arg0->model, 3);
+        index = arg0->characterIndex;
         if (index == 6) {
-            setAnimationIndex(arg0->unk0, 2);
+            setAnimationIndex(arg0->model, 2);
         } else if (index == 7) {
-            setAnimationIndex(arg0->unk0, 0);
+            setAnimationIndex(arg0->model, 0);
         } else {
-            setAnimationIndex(arg0->unk0, -1);
+            setAnimationIndex(arg0->model, -1);
         }
-        setCallback(func_800B08FC_1DAE9C);
+        setCallback(awaitCharacterPreviewRotationReset);
     }
 }
 
-void func_800B08FC_1DAE9C(func_800B08FC_arg *arg0) {
+void awaitCharacterPreviewRotationReset(CharacterPreviewState *arg0) {
     s32 result;
 
-    result = clearModelRotation(arg0->unk0);
-    updateModelGeometry(arg0->unk0);
+    result = clearModelRotation(arg0->model);
+    updateModelGeometry(arg0->model);
 
     if (result != 0) {
-        arg0->unk26 = 0;
-        setModelAnimation(arg0->unk0, 0);
-        setAnimationIndex(arg0->unk0, -1);
-        setCallback(func_800B0638_1DABD8);
+        arg0->animationState = 0;
+        setModelAnimation(arg0->model, 0);
+        setAnimationIndex(arg0->model, -1);
+        setCallback(checkCharacterPreviewState);
     }
 }
 
-void func_800B0964_1DAF04(func_800B08FC_arg *arg0) {
-    destroySceneModel(arg0->unk0);
+void cleanupCharacterPreview(CharacterPreviewState *arg0) {
+    destroySceneModel(arg0->model);
 }
 
 void initCharacterSelectSprites(CharacterSelectSprites *arg0) {
