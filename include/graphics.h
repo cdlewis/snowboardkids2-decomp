@@ -39,8 +39,23 @@ void *getAudioChannelActiveState(void *audioChannel);
 void *getActiveEffectChannelCount(void);
 void stopSoundEffectChannel(s32 channelIndex, s32 stoppingSpeed);
 void stopAllSoundEffectsAndClearQueues(s32 stoppingSpeed);
-void func_80057B70_58770(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 arg5, s32 arg6);
-void func_80057CB4_588B4(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 arg5);
+void playSoundEffectAtPositionWithPriority(
+    s32 soundId,
+    s32 volume,
+    s32 pan,
+    f32 position,
+    s32 priority,
+    s32 channelIndex,
+    s32 voiceIndex
+);
+void playSoundEffectAtPosition(
+    s32 soundId,
+    s32 volume,
+    s32 pan,
+    f32 position,
+    s32 priority,
+    s32 channelIndex
+);
 void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
 void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void func_80057F28_58B28(s32 arg0, s32 arg1, s32 arg2, s32 arg3);

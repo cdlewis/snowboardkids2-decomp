@@ -671,23 +671,32 @@ void stopAllSoundEffectsAndClearQueues(s32 stoppingSpeed) {
     gGraphicsManager->bufferCount = 0;
 }
 
-void func_80057B70_58770(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+void playSoundEffectAtPositionWithPriority(
+    s32 soundId,
+    s32 volume,
+    s32 pan,
+    f32 position,
+    s32 priority,
+    s32 channelIndex,
+    s32 voiceIndex
+) {
     void *message;
 
-    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[arg5];
-    if (arg1 > 0) {
-        gGraphicsCommand.pan = arg2;
-        gGraphicsCommand.volume = arg1;
-        gGraphicsCommand.position = arg3;
-        gGraphicsCommand.voiceIndex = arg6;
+    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[channelIndex];
+    if (volume > 0) {
+        gGraphicsCommand.pan = pan;
+        gGraphicsCommand.volume = volume;
+        gGraphicsCommand.position = position;
+        gGraphicsCommand.voiceIndex = voiceIndex;
 
-        if (gGraphicsManager->soundEffectChannels[arg5] == 0 || gGraphicsManager->soundEffectIds[arg5] != arg0) {
-            gGraphicsCommand.soundId = arg0;
-            gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (arg4 << 0x18);
+        if (gGraphicsManager->soundEffectChannels[channelIndex] == 0 ||
+            gGraphicsManager->soundEffectIds[channelIndex] != soundId) {
+            gGraphicsCommand.soundId = soundId;
+            gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (priority << 0x18);
             osSendMesg(&gfxTaskQueue, (void *)4, 1);
             osRecvMesg(&gfxResultQueue, &message, 1);
-            gGraphicsManager->soundEffectChannels[arg5] = message;
-            gGraphicsManager->soundEffectIds[arg5] = (s16)arg0;
+            gGraphicsManager->soundEffectChannels[channelIndex] = message;
+            gGraphicsManager->soundEffectIds[channelIndex] = (s16)soundId;
             incrementSoundSequence();
             return;
         }
@@ -700,8 +709,8 @@ void func_80057B70_58770(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 a
     }
 }
 
-void func_80057CB4_588B4(s32 arg0, s32 arg1, s32 arg2, f32 arg3, s32 arg4, s32 arg5) {
-    func_80057B70_58770(arg0, arg1, arg2, arg3, arg4, arg5, 0xC);
+void playSoundEffectAtPosition(s32 soundId, s32 volume, s32 pan, f32 position, s32 priority, s32 channelIndex) {
+    playSoundEffectAtPositionWithPriority(soundId, volume, pan, position, priority, channelIndex, 0xC);
 }
 
 void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
