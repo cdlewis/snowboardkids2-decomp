@@ -22,9 +22,9 @@ typedef struct {
 } func_800BB8E8_AF5D8_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-} func_800BB74C_AF43C_arg;
+    s16 ghostType;
+    s16 spawnTimer;
+} GhostSpawnerTask;
 
 typedef struct {
     void *ghostSlotData;
@@ -33,7 +33,7 @@ typedef struct {
 
 void func_800BC0FC(s16 arg0);
 
-void func_800BB74C_AF43C(func_800BB74C_AF43C_arg *arg0);
+void initGhostSpawnerTask(GhostSpawnerTask *arg0);
 
 void func_800BB8E8_AF5D8(func_800BB8E8_AF5D8_arg *arg0);
 

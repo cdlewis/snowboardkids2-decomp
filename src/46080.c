@@ -2961,7 +2961,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             }
             scheduleGoldCoinsIfEnabled(courseId);
             scheduleItemBoxSystemTaskIfEnabled(courseId);
-            scheduleTask(&func_800BB74C_AF43C, 0, 0, 0xC8);
+            scheduleTask(&initGhostSpawnerTask, 0, 0, 0xC8);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB8E8_AF5D8, 0, 0, 0x32);

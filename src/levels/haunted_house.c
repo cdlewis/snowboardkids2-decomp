@@ -319,9 +319,9 @@ void fadeOutGhost(AnimatedGhostEntity *ghost) {
     }
 }
 
-void func_800BB74C_AF43C(func_800BB74C_AF43C_arg *arg0) {
-    arg0->unk0 = 0;
-    arg0->unk2 = 0x14;
+void initGhostSpawnerTask(GhostSpawnerTask *arg0) {
+    arg0->ghostType = 0;
+    arg0->spawnTimer = 0x14;
     setCallback(func_800BB778_AF468);
 }
 
