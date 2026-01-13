@@ -33,7 +33,7 @@ typedef struct {
 } D_800AB068_A23D8_arg;
 
 typedef struct {
-    /* 0x00 */ s32 unk0;
+    /* 0x00 */ s32 vertices;
     /* 0x04 */ s32 posX;
     /* 0x08 */ s32 posY;
     /* 0x0C */ s32 posZ;
@@ -46,7 +46,7 @@ typedef struct {
 } TexturedSpriteState;
 
 typedef struct {
-    /* 0x00 */ void *unk0;
+    /* 0x00 */ s32 vertices;
     /* 0x04 */ u8 unk4[0x14];
     /* 0x18 */ s32 posX;
     /* 0x1C */ s32 posY;
@@ -60,7 +60,7 @@ typedef struct {
 } ExtendedSpriteState;
 
 typedef struct {
-    /* 0x00 */ s32 unk0;
+    /* 0x00 */ s32 vertices;
     /* 0x04 */ s32 posX;
     /* 0x08 */ s32 posY;
     /* 0x0C */ s32 posZ;
@@ -86,14 +86,12 @@ extern Gfx D_8009A7D0_9B3D0[];
 extern u32 D_800A2D4C_A394C;
 extern u32 D_800A2D50_A3950;
 extern u8 D_800A2D54_A3954;
-extern u32 D_800A2D4C_A394C;
-extern u32 D_800A2D50_A3950;
 
 void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderCameraRelativeDisplayList(DisplayListObject *arg0);
-void func_80065DD8_669D8(TexturedSpriteState *);
+void renderTexturedBillboardSprite(TexturedSpriteState *);
 void func_80066474_67074(ExtendedSpriteState *);
 void func_800677F0_683F0(AlphaSpriteState *);
 void func_800670D4_67CD4(AlphaSpriteState *);
@@ -1565,7 +1563,7 @@ void enqueueCameraRelativeDisplayList(s32 arg0, DisplayListObject *arg1) {
     debugEnqueueCallback(arg0 & 0xFFFF, 0, &renderCameraRelativeDisplayList, arg1);
 }
 
-void func_80065DD8_669D8(TexturedSpriteState *state) {
+void renderTexturedBillboardSprite(TexturedSpriteState *state) {
     if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
@@ -1638,13 +1636,13 @@ void func_80065DD8_669D8(TexturedSpriteState *state) {
 
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gRegionAllocPtr++, state->unk0, 4, 0);
+    gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
 void func_80066444_67044(s32 arg0, func_80066444_67044_arg1 *arg1) {
     arg1->unk1C = 0;
-    debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80065DD8_669D8, arg1);
+    debugEnqueueCallback(arg0 & 0xFFFF, 4, &renderTexturedBillboardSprite, arg1);
 }
 
 void func_80066474_67074(ExtendedSpriteState *state) {
@@ -1719,7 +1717,7 @@ void func_80066474_67074(ExtendedSpriteState *state) {
 
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gRegionAllocPtr++, state->unk0, 4, 0);
+    gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
@@ -1809,7 +1807,7 @@ void func_80066AF0_676F0(TexturedSpriteState *state) {
 
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gRegionAllocPtr++, state->unk0, 4, 0);
+    gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
@@ -1900,7 +1898,7 @@ void func_800670D4_67CD4(AlphaSpriteState *state) {
 
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gRegionAllocPtr++, state->unk0, 4, 0);
+    gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
@@ -1991,7 +1989,7 @@ void func_800677F0_683F0(AlphaSpriteState *state) {
 
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gRegionAllocPtr++, state->unk0, 4, 0);
+    gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
