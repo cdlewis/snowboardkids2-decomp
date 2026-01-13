@@ -2947,23 +2947,23 @@ s32 updateKnockbackRecoveryStep(Player *player) {
     return 0;
 }
 
-s32 func_800B67E4_A6694(Player *arg0) {
-    D_80090F90_91B90_item *item;
+s32 fallToTrackCenterStep(Player *player) {
+    D_80090F90_91B90_item *levelData;
     GameState *gameState = (GameState *)getCurrentAllocation();
 
-    item = func_80055D10_56910(gameState->memoryPoolId);
+    levelData = func_80055D10_56910(gameState->memoryPoolId);
 
-    arg0->velocity.x = 0;
-    arg0->velocity.z = 0;
-    arg0->velocity.y = arg0->velocity.y - 0x6000;
-    arg0->worldPos.x = arg0->worldPos.x + ((item->unk0 - arg0->worldPos.x) >> 2);
-    arg0->worldPos.z = arg0->worldPos.z + ((item->unk4 - arg0->worldPos.z) >> 2);
-    applyClampedVelocityToPosition(arg0);
-    decayPlayerSteeringAngles(arg0);
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->velocity.y = player->velocity.y - 0x6000;
+    player->worldPos.x = player->worldPos.x + ((levelData->unk0 - player->worldPos.x) >> 2);
+    player->worldPos.z = player->worldPos.z + ((levelData->unk4 - player->worldPos.z) >> 2);
+    applyClampedVelocityToPosition(player);
+    decayPlayerSteeringAngles(player);
 
-    if (func_8005D308_5DF08(arg0, 3) != 0) {
-        arg0->behaviorCounter = 0;
-        arg0->behaviorStep = arg0->behaviorStep + 1;
+    if (func_8005D308_5DF08(player, 3) != 0) {
+        player->behaviorCounter = 0;
+        player->behaviorStep = player->behaviorStep + 1;
     }
 
     return 0;

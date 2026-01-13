@@ -3013,6 +3013,7 @@ updateKnockbackBounceLaunchPhase = 0x800B6194; // rom:0xA6044
 updateKnockbackLaunchWithHomingProjectilesPhase = 0x800B62E4; // rom:0xA6194
 updateKnockbackHomingBouncePhase = 0x800B6488; // rom:0xA6338
 updateKnockbackRecoveryStep = 0x800B6688; // rom:0xA6538
+fallToTrackCenterStep = 0x800B67E4; // rom:0xA6694
 knockbackHomingBounceTimers = 0x800BABEC; // rom:0xAAA9C
 knockbackHomingBounceScales = 0x800BABEE; // rom:0xAAA9E
 renderMultiPartTransparentDisplayLists = 0x800646C8; // rom:0x652C8
