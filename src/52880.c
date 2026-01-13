@@ -1310,7 +1310,7 @@ void checkHomingPanelProjectileHit(Struct_52880 *arg0) {
 
     new_var2 = result->unkB84 & 0x1000;
     if (new_var2 == 0) {
-        func_80058A94_59694(result);
+        setPlayerPanelHitState(result);
         arg0->hitCount++;
         unk4C = arg0->targetPlayerIdx;
         if (unk4C >= 0) {
@@ -1802,7 +1802,7 @@ void func_80054D70_55970(void *arg) {
         case 4:
             player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
-                func_80058A94_59694(player);
+                setPlayerPanelHitState(player);
                 arg0->hitCount = arg0->hitCount + 1;
                 unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {

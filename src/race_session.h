@@ -125,7 +125,7 @@ Player *func_8005B548_5C148(Vec3i *arg0, s32 arg1, s32 arg2);
 s16 func_8005CE98_5DA98(Player *arg0);
 void spawnHomingProjectile(void *arg0, s32 arg1, void *arg2);
 void func_80058AEC_596EC(Player *arg0, void *arg1);
-void func_80058A94_59694(Player *arg0);
+void setPlayerPanelHitState(Player *arg0);
 void func_80059A48_5A648(Player *arg0, s32 arg1);
 void func_80059A88_5A688(Player *arg0, s32 arg1);
 s32 func_80059AC4_5A6C4(Player *arg0);

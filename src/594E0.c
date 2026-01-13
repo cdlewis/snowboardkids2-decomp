@@ -93,7 +93,7 @@ void setPlayerShrinkState(Player *arg0) {
     }
 }
 
-void func_80058A94_59694(Player *arg0) {
+void setPlayerPanelHitState(Player *arg0) {
     if (arg0->unkAC2 < 0x36) {
         if (!(arg0->unkB88 & 0x49C)) {
             arg0->unkAC2 = 0x36;
