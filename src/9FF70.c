@@ -2997,29 +2997,29 @@ s32 slideDuringKnockbackRecoveryStep(Player *player) {
     return 0;
 }
 
-extern s32 D_800BAC8C_AAB3C;
-extern s32 D_800BAC98_AAB48;
+extern Vec3i g_KnockbackDiagonalSlideVelocity;
+extern Vec3i D_800BAC98_AAB48;
 
-s32 func_800B6DB8_A6C68(Player *arg0) {
+s32 slideDiagonallyDuringKnockbackRecoveryStep(Player *player) {
     s32 pad[12];
     GameState *gameState = getCurrentAllocation();
 
     func_80055D10_56910(gameState->memoryPoolId);
-    decayPlayerSteeringAngles(arg0);
-    transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->velocity);
-    applyClampedVelocityToPosition(arg0);
+    decayPlayerSteeringAngles(player);
+    transformVector2(&g_KnockbackDiagonalSlideVelocity, &player->unk970, &player->velocity);
+    applyClampedVelocityToPosition(player);
 
-    if (arg0->unkB8C != 0) {
-        arg0->unkB8C = arg0->unkB8C - 1;
-        if (arg0->unkB8C == 0x11) {
-            func_8006FDC8_709C8(arg0->unkBB8, 0xFF, 0x10);
+    if (player->unkB8C != 0) {
+        player->unkB8C--;
+        if (player->unkB8C == 0x11) {
+            func_8006FDC8_709C8(player->unkBB8, 0xFF, 0x10);
         }
     } else {
-        arg0->behaviorStep = arg0->behaviorStep + 1;
-        arg0->behaviorCounter = 0;
+        player->behaviorStep++;
+        player->behaviorCounter = 0;
     }
 
-    func_8005D308_5DF08(arg0, 0xD);
+    func_8005D308_5DF08(player, 0xD);
     return 0;
 }
 
@@ -3062,7 +3062,7 @@ s32 func_800B6E5C_A6D0C(Player *arg0) {
     }
 
     decayPlayerSteeringAngles(arg0);
-    transformVector2(&D_800BAC8C_AAB3C, &arg0->unk970, &arg0->velocity);
+    transformVector2(&g_KnockbackDiagonalSlideVelocity, &arg0->unk970, &arg0->velocity);
     applyClampedVelocityToPosition(arg0);
 
     if (arg0->unkB8C != 0) {
