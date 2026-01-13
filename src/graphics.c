@@ -425,7 +425,7 @@ void handleMusicFadeOutTransition(void) {
 }
 
 void checkNoActiveAudioChannels(void) {
-    if (func_80058638_59238() == NULL) {
+    if (getActiveSongChannelCount() == NULL) {
         setCallbackWithContinue(&checkMusicLoadRequest);
     }
 }
@@ -642,12 +642,12 @@ void *getAudioChannelActiveState(void *audioChannel) {
     return message;
 }
 
-void *func_80057A7C_5867C(void) {
-    void *message;
+void *getActiveEffectChannelCount(void) {
+    void *channelCount;
 
     osSendMesg(&gfxTaskQueue, (OSMesg *)8, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
-    return message;
+    osRecvMesg(&gfxResultQueue, &channelCount, OS_MESG_BLOCK);
+    return channelCount;
 }
 
 void func_80057ABC_586BC(s32 arg0, s32 arg1) {
@@ -953,26 +953,26 @@ void func_800585C8_591C8(s32 arg0) {
     func_8005854C_5914C(arg0, 0xC);
 }
 
-void *func_800585E4_591E4(void) {
-    void *result;
+void *getActiveAudioChannelCount(void) {
+    void *channelCount;
 
     if (D_80093BA5_947A5 != 0) {
         osSendMesg(&gfxTaskQueue, 0, OS_MESG_BLOCK);
-        osRecvMesg(&gfxResultQueue, &result, OS_MESG_BLOCK);
-        return result;
+        osRecvMesg(&gfxResultQueue, &channelCount, OS_MESG_BLOCK);
+        return channelCount;
     }
 
     return 0;
 }
 
-void *func_80058638_59238(void) {
-    void *message;
+void *getActiveSongChannelCount(void) {
+    void *channelCount;
 
     if (D_80093BA5_947A5 != NULL) {
         osSendMesg(&gfxTaskQueue, (OSMesg *)0xE, OS_MESG_BLOCK);
-        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+        osRecvMesg(&gfxResultQueue, &channelCount, OS_MESG_BLOCK);
 
-        return message;
+        return channelCount;
     }
 
     return NULL;
