@@ -10,7 +10,7 @@ extern s32 gButtonsPressed[];
 typedef struct {
     CutsceneManager *cutsceneManager;
     u8 padding[0xA];
-    s16 waitFramesIndex;
+    s16 waitFrameCount;
 } cutsceneSysWait_exec_task;
 
 typedef struct {
@@ -167,7 +167,7 @@ void cutsceneSysWait_exec(u16 *waitFrames, CutsceneManager *cutsceneManager) {
     if (task != NULL) {
         enableCutsceneSkip(cutsceneManager);
         task->cutsceneManager = cutsceneManager;
-        task->waitFramesIndex = (*waitFrames);
+        task->waitFrameCount = *waitFrames;
     }
 }
 
