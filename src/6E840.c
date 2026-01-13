@@ -20,13 +20,13 @@ typedef struct {
 } Item_A4188;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-} ViewportStruct;
+    s16 originX;
+    s16 originY;
+    s16 left;
+    s16 top;
+    s16 right;
+    s16 bottom;
+} Viewport;
 
 typedef struct {
     u8 padding[0x134];
@@ -46,7 +46,7 @@ typedef struct {
 
 extern D_800AB068_A23D8_type *D_800AB068_A23D8;
 
-extern ViewportStruct D_800A3410_A4010;
+extern Viewport D_800A3410_A4010;
 extern s8 D_800A3429_A4029;
 extern s8 D_800A342A_A402A;
 extern s8 D_800A342B_A402B;
@@ -86,7 +86,7 @@ extern s32 gFrameCounter;
 extern s16 identityMatrix[];
 
 void *LinearAlloc(size_t size);
-void func_8006F6F4_702F4(void);
+void restoreViewportOffsets(void);
 void func_8006FA58_70658(Node_70B00 *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
@@ -226,9 +226,9 @@ s32 isRegionAllocSpaceLow(void) {
     return (u32)(gRegionAllocEnd - gRegionAllocPtr) < 0x1AE1U;
 }
 
-void func_8006F6F4_702F4(void) {
-    D_800A3410_A4010.unk0 = D_800AB478_A27E8;
-    D_800A3410_A4010.unk2 = D_800A8A9A_9FE0A;
+void restoreViewportOffsets(void) {
+    D_800A3410_A4010.originX = D_800AB478_A27E8;
+    D_800A3410_A4010.originY = D_800A8A9A_9FE0A;
 }
 
 void func_8006F718_70318(void) {
@@ -237,17 +237,17 @@ void func_8006F718_70318(void) {
 
     D_800A3370_A3F70.unk0.next = NULL;
     D_800A3370_A3F70.slot_index = 0xFFFF;
-    D_800A3410_A4010.unk4 = -0xA0;
-    D_800A3410_A4010.unk6 = -0x78;
-    D_800A3410_A4010.unk8 = 0xA0;
+    D_800A3410_A4010.left = -0xA0;
+    D_800A3410_A4010.top = -0x78;
+    D_800A3410_A4010.right = 0xA0;
     D_800A3370_A3F70.prev = NULL;
     D_800A3370_A3F70.unk8.list2_next = NULL;
     D_800A3370_A3F70.list2_prev = NULL;
     D_800A3370_A3F70.list3_next = NULL;
     D_800A3370_A3F70.unk14 = 0;
-    D_800A3410_A4010.unk0 = 0;
-    D_800A3410_A4010.unk2 = 0;
-    D_800A3410_A4010.unkA = 0x78;
+    D_800A3410_A4010.originX = 0;
+    D_800A3410_A4010.originY = 0;
+    D_800A3410_A4010.bottom = 0x78;
     D_800A342C_A402C = 0;
     D_800A342D_A402D = 0;
     D_800A342E_A402E = 0;
@@ -260,7 +260,7 @@ void func_8006F718_70318(void) {
     D_800A342B_A402B = 0;
     func_8006FA58_70658(&D_800A3370_A3F70);
     resetLinearAllocator();
-    func_8006F6F4_702F4();
+    restoreViewportOffsets();
 
     i = 0x10;
     ptr = &D_800A35C8_A41C8[0];
