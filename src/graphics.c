@@ -713,20 +713,22 @@ void playSoundEffectAtPosition(s32 soundId, s32 volume, s32 pan, f32 position, s
     playSoundEffectAtPositionWithPriority(soundId, volume, pan, position, priority, channelIndex, 0xC);
 }
 
-void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+// Play sound effect on specified channel with voice control
+// Called by non-matching assembly func_8005628C_56E8C
+void func_80057CE4_588E4(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex, s32 voiceIndex) {
     void *message;
 
-    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[arg4];
-    if (arg1 > 0) {
-        gGraphicsCommand.soundId = arg0;
-        gGraphicsCommand.volume = arg1;
-        gGraphicsCommand.pan = arg2;
-        gGraphicsCommand.voiceIndex = arg5;
-        gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (arg3 << 0x18);
+    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[channelIndex];
+    if (volume > 0) {
+        gGraphicsCommand.soundId = soundId;
+        gGraphicsCommand.volume = volume;
+        gGraphicsCommand.pan = pan;
+        gGraphicsCommand.voiceIndex = voiceIndex;
+        gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (priority << 0x18);
         osSendMesg(&gfxTaskQueue, (void *)2, OS_MESG_BLOCK);
         osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
-        gGraphicsManager->soundEffectChannels[arg4] = message;
-        gGraphicsManager->soundEffectIds[arg4] = (s16)arg0;
+        gGraphicsManager->soundEffectChannels[channelIndex] = message;
+        gGraphicsManager->soundEffectIds[channelIndex] = (s16)soundId;
         incrementSoundSequence();
         return;
     }
@@ -734,8 +736,9 @@ void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 a
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
 
-void func_80057DF0_589F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    func_80057CE4_588E4(arg0, arg1, arg2, arg3, arg4, 0xC);
+// Wrapper that uses default voice (0xC)
+void func_80057DF0_589F0(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex) {
+    func_80057CE4_588E4(soundId, volume, pan, priority, channelIndex, 0xC);
 }
 
 void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {

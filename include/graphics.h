@@ -56,7 +56,10 @@ void playSoundEffectAtPosition(
     s32 priority,
     s32 channelIndex
 );
-void func_80057CE4_588E4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
+// Play sound effect on specified channel with voice control
+void func_80057CE4_588E4(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex, s32 voiceIndex);
+// Wrapper that uses default voice (0xC)
+void func_80057DF0_589F0(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex);
 void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void func_80057F28_58B28(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void func_80057F48_58B48(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -79,4 +82,3 @@ void func_8005854C_5914C(s32 arg0, s32 arg1);
 void func_800585C8_591C8(s32 arg0);
 void *getActiveAudioChannelCount(void);
 void *getActiveSongChannelCount(void);
-void func_80057DF0_589F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
