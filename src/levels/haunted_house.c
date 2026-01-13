@@ -124,7 +124,7 @@ extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 
 void func_800BB388_AF078(AnimatedGhostEntity *);
-void func_800BB45C_AF14C(void **);
+void cleanupAnimatedGhost(void **);
 void func_800BB5B0_AF2A0(AnimatedGhostEntity *);
 void func_800BB620_AF310(AnimatedGhostEntity *);
 void func_800BB6F4_AF3E4(AnimatedGhostEntity *);
@@ -201,11 +201,11 @@ void func_800BB388_AF078(AnimatedGhostEntity *ghost) {
     ghost->animFrameIndex = 0;
     ghost->lifetime = 0x3C;
 
-    setCleanupCallback(func_800BB45C_AF14C);
+    setCleanupCallback(cleanupAnimatedGhost);
     setCallbackWithContinue(func_800BB5B0_AF2A0);
 }
 
-void func_800BB45C_AF14C(void **arg0) {
+void cleanupAnimatedGhost(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
