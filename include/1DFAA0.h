@@ -303,7 +303,7 @@ s32 findEventAtFrame(u8 a0, u16 a1);
 s32 insertCutsceneEvent(u8 slotIndex, u16 frameNumber);
 void reorderCutsceneEvent(u16 eventIndex, u16 oldPreviousIndex, u16 newPreviousIndex);
 StateEntry *getStateEntry(u16 arg0);
-u16 func_800B41E0_1E1290(void);
+u16 getMaxCutsceneFrameNumber(void);
 u16 func_800B4258_1E1308(u8 arg0);
 StateEntry *func_800B4288_1E1338(void);
 u8 *func_800B4294_1E1344(void);
