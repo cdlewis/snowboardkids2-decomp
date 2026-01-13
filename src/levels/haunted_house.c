@@ -16,22 +16,22 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    void *unk00;
-    void *unk04;
-    s8 unk08[0x16];
-    u8 unk1E;
-    s8 unk1F[0x5];
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    Vec3i unk30;
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
-    s16 unk42;
-    s16 unk44;
-    u8 unk46;
-} func_800BB388_AF078_arg;
+    /* 0x00 */ void *assetData;
+    /* 0x04 */ void *assetMetadata;
+    /* 0x08 */ s8 renderPositionBuffer[0x16];
+    /* 0x1E */ u8 alpha;
+    /* 0x1F */ s8 pad1F[0x5];
+    /* 0x24 */ s32 posX;
+    /* 0x28 */ s32 posY;
+    /* 0x2C */ s32 posZ;
+    /* 0x30 */ Vec3i velocity;
+    /* 0x3C */ s16 entityType;
+    /* 0x3E */ s16 collisionHeight;
+    /* 0x40 */ s16 animTimer;
+    /* 0x42 */ s16 lifetime;
+    /* 0x44 */ s16 animFrameIndex;
+    /* 0x46 */ u8 fadeDirection;
+} AnimatedGhostEntity;
 
 typedef struct {
     u8 pad[0x30];
@@ -74,8 +74,8 @@ typedef struct {
 } func_800BBC64_AF954_arg;
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
+    s8 frameDuration;
+    s8 assetIndex;
 } AnimationData;
 
 typedef struct {
@@ -124,9 +124,9 @@ extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 
 void func_800BB45C_AF14C(void **);
-void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *);
-void func_800BB620_AF310(func_800BB388_AF078_arg *);
-void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *);
+void func_800BB5B0_AF2A0(AnimatedGhostEntity *);
+void func_800BB620_AF310(AnimatedGhostEntity *);
+void func_800BB6F4_AF3E4(AnimatedGhostEntity *);
 void func_800BB778_AF468(void);
 void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *);
 void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *);
@@ -138,67 +138,67 @@ void func_800BC184_AFE74(GhostManager *);
 void func_800BC220_AFF10(u8 *ghostSlots);
 void func_800BC340_B0030(GhostManager *);
 void func_800BC750_B0440(s16 *);
-void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *);
+void updateGhostAnimation(AnimatedGhostEntity *);
 void func_800BC378_B0068(GhostRenderState *);
 extern void func_800BC0D0_AFDC0(void **);
 void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *);
 
-void func_800BB2B0_AEFA0(func_800BB388_AF078_arg *arg0) {
-    s32 i;
+void updateGhostAnimation(AnimatedGhostEntity *ghost) {
+    s32 viewport;
 
-    arg0->unk40--;
+    ghost->animTimer--;
 
-    if (arg0->unk40 == 0) {
-        loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk04, arg0->unk00, D_800BC830_B0520[arg0->unk44].unk1);
+    if (ghost->animTimer == 0) {
+        loadAssetMetadata((loadAssetMetadata_arg *)&ghost->assetMetadata, ghost->assetData, D_800BC830_B0520[ghost->animFrameIndex].assetIndex);
 
-        arg0->unk40 = D_800BC830_B0520[arg0->unk44].unk0;
-        arg0->unk44++;
+        ghost->animTimer = D_800BC830_B0520[ghost->animFrameIndex].frameDuration;
+        ghost->animFrameIndex++;
 
-        if (D_800BC830_B0520[arg0->unk44].unk0 == 0) {
-            arg0->unk44 = 0;
+        if (D_800BC830_B0520[ghost->animFrameIndex].frameDuration == 0) {
+            ghost->animFrameIndex = 0;
         }
     }
 
-    memcpy(&arg0->unk08, &arg0->unk24, 0xC);
+    memcpy(&ghost->renderPositionBuffer, &ghost->posX, 0xC);
 
-    for (i = 0; i < 4; i++) {
-        func_800677C0_683C0(i, (loadAssetMetadata_arg *)&arg0->unk04);
+    for (viewport = 0; viewport < 4; viewport++) {
+        func_800677C0_683C0(viewport, (loadAssetMetadata_arg *)&ghost->assetMetadata);
     }
 }
 
-void func_800BB388_AF078(func_800BB388_AF078_arg *entity) {
-    Vec3i vector;
-    Vec3i *vector_ptr;
-    s32 random_value;
-    s32 rotation_angle;
+void func_800BB388_AF078(AnimatedGhostEntity *ghost) {
+    Vec3i direction;
+    Vec3i *directionPtr;
+    s32 randomSpeed;
+    s32 rotationAngle;
 
-    vector_ptr = &vector;
-    memcpy(vector_ptr, &D_800BCAA0_B0790, sizeof(Vec3i));
+    directionPtr = &direction;
+    memcpy(directionPtr, &D_800BCAA0_B0790, sizeof(Vec3i));
 
     getCurrentAllocation();
 
-    entity->unk00 = load_3ECE40();
-    entity->unk04 = &D_800BC7F0_B04E0;
-    entity->unk1E = 0;
+    ghost->assetData = load_3ECE40();
+    ghost->assetMetadata = &D_800BC7F0_B04E0;
+    ghost->alpha = 0;
 
-    random_value = randA() & 0xFF;
-    random_value = random_value << 10;
-    vector.z = random_value + 0x20000;
+    randomSpeed = randA() & 0xFF;
+    randomSpeed = randomSpeed << 10;
+    direction.z = randomSpeed + 0x20000;
 
-    rotation_angle = randA() & 0xFF;
-    rotation_angle = rotation_angle << 5;
+    rotationAngle = randA() & 0xFF;
+    rotationAngle = rotationAngle << 5;
 
-    rotateVectorY(vector_ptr, rotation_angle, &entity->unk30);
+    rotateVectorY(directionPtr, rotationAngle, &ghost->velocity);
 
-    if (entity->unk3C == 0) {
-        entity->unk3E = 0x1A;
+    if (ghost->entityType == 0) {
+        ghost->collisionHeight = 0x1A;
     } else {
-        entity->unk3E = 0x58;
+        ghost->collisionHeight = 0x58;
     }
 
-    entity->unk40 = 1;
-    entity->unk44 = 0;
-    entity->unk42 = 0x3C;
+    ghost->animTimer = 1;
+    ghost->animFrameIndex = 0;
+    ghost->lifetime = 0x3C;
 
     setCleanupCallback(func_800BB45C_AF14C);
     setCallbackWithContinue(func_800BB5B0_AF2A0);
@@ -208,113 +208,113 @@ void func_800BB45C_AF14C(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-s32 func_800BB488_AF178(func_800BB388_AF078_arg *arg0) {
-    Vec3i sp18;
+s32 func_800BB488_AF178(AnimatedGhostEntity *ghost) {
+    Vec3i surfaceNormal;
     Allocation *allocation;
-    void *allocationUnk30;
-    s32 *argPos;
-    s32 result;
-    u16 temp;
+    void *collisionContext;
+    s32 *posPtr;
+    s32 shouldEnd;
+    u16 newHeight;
 
-    result = 0;
+    shouldEnd = 0;
     allocation = (Allocation *)getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        allocationUnk30 = &allocation->unk30;
+        collisionContext = &allocation->unk30;
 
-        arg0->unk24 = arg0->unk24 + arg0->unk30.x;
-        arg0->unk2C = arg0->unk2C + arg0->unk30.z;
+        ghost->posX = ghost->posX + ghost->velocity.x;
+        ghost->posZ = ghost->posZ + ghost->velocity.z;
 
-        argPos = &arg0->unk24;
+        posPtr = &ghost->posX;
 
-        temp = func_80060A3C_6163C(allocationUnk30, arg0->unk3E, argPos);
-        arg0->unk3E = temp;
+        newHeight = func_80060A3C_6163C(collisionContext, ghost->collisionHeight, posPtr);
+        ghost->collisionHeight = newHeight;
 
-        func_80060CDC_618DC(allocationUnk30, temp, argPos, 0x80000, &sp18);
+        func_80060CDC_618DC(collisionContext, newHeight, posPtr, 0x80000, &surfaceNormal);
 
-        arg0->unk28 = func_8005CFC0_5DBC0(allocationUnk30, (u16)arg0->unk3E, argPos, 0x100000) + 0x180000;
+        ghost->posY = func_8005CFC0_5DBC0(collisionContext, (u16)ghost->collisionHeight, posPtr, 0x100000) + 0x180000;
 
-        if (arg0->unk3C == 0) {
-            result = (arg0->unk3E != 0x1A);
+        if (ghost->entityType == 0) {
+            shouldEnd = (ghost->collisionHeight != 0x1A);
         } else {
-            u16 v = arg0->unk3E;
-            if ((u16)(v - 0x58) >= 2) {
-                result = 1;
+            u16 height = ghost->collisionHeight;
+            if ((u16)(height - 0x58) >= 2) {
+                shouldEnd = 1;
             }
         }
 
-        if (sp18.x != 0) {
-            result = 1;
-        } else if (sp18.z != 0) {
-            result = 1;
+        if (surfaceNormal.x != 0) {
+            shouldEnd = 1;
+        } else if (surfaceNormal.z != 0) {
+            shouldEnd = 1;
         }
 
-        if (arg0->unk42 == 0) {
-            result = 1;
+        if (ghost->lifetime == 0) {
+            shouldEnd = 1;
         } else {
-            arg0->unk42 = arg0->unk42 - 1;
+            ghost->lifetime = ghost->lifetime - 1;
         }
     }
 
-    return result;
+    return shouldEnd;
 }
 
-void func_800BB5B0_AF2A0(func_800BB388_AF078_arg *arg0) {
-    arg0->unk1E += 0x10;
+void func_800BB5B0_AF2A0(AnimatedGhostEntity *ghost) {
+    ghost->alpha += 0x10;
 
-    if (arg0->unk1E == 0xE0) {
-        arg0->unk46 = 1;
+    if (ghost->alpha == 0xE0) {
+        ghost->fadeDirection = 1;
         setCallback(func_800BB620_AF310);
     }
 
-    if (func_800BB488_AF178(arg0)) {
+    if (func_800BB488_AF178(ghost)) {
         setCallback(func_800BB6F4_AF3E4);
     }
 
-    func_800BB2B0_AEFA0(arg0);
+    updateGhostAnimation(ghost);
 }
 
-void func_800BB620_AF310(func_800BB388_AF078_arg *arg0) {
-    u8 temp;
-    Player *temp_a;
+void func_800BB620_AF310(AnimatedGhostEntity *ghost) {
+    u8 unused;
+    Player *nearbyPlayer;
 
-    if (arg0->unk46 != 0) {
-        arg0->unk1E -= 0x10;
-        if (arg0->unk1E < 0x41) {
-            arg0->unk46 = 0;
+    if (ghost->fadeDirection != 0) {
+        ghost->alpha -= 0x10;
+        if (ghost->alpha < 0x41) {
+            ghost->fadeDirection = 0;
         }
     } else {
-        arg0->unk1E += 0x10;
-        if (arg0->unk1E >= 0xE0) {
-            arg0->unk46 = 1;
+        ghost->alpha += 0x10;
+        if (ghost->alpha >= 0xE0) {
+            ghost->fadeDirection = 1;
         }
     }
 
-    if (func_800BB488_AF178(arg0) != 0) {
+    if (func_800BB488_AF178(ghost) != 0) {
         setCallback(func_800BB6F4_AF3E4);
     }
 
-    temp_a = func_8005B548_5C148(&arg0->unk24, -1, 0x100000);
+    nearbyPlayer = func_8005B548_5C148(&ghost->posX, -1, 0x100000);
 
-    if (temp_a != NULL) {
-        if (temp_a->unkBCF < 3) {
-            spawnStarEffectImmediate(temp_a);
+    if (nearbyPlayer != NULL) {
+        if (nearbyPlayer->unkBCF < 3) {
+            spawnStarEffectImmediate(nearbyPlayer);
         }
 
         setCallback(func_800BB6F4_AF3E4);
     }
 
-    func_800BB2B0_AEFA0(arg0);
+    updateGhostAnimation(ghost);
 }
 
-void func_800BB6F4_AF3E4(func_800BB388_AF078_arg *arg0) {
-    arg0->unk1E -= 0x10;
+void func_800BB6F4_AF3E4(AnimatedGhostEntity *ghost) {
+    ghost->alpha -= 0x10;
 
-    if (arg0->unk1E == 0) {
+    if (ghost->alpha == 0) {
         func_80069CF8_6A8F8();
     } else {
-        func_800BB488_AF178(arg0);
-        func_800BB2B0_AEFA0(arg0);
+        func_800BB488_AF178(ghost);
+        updateGhostAnimation(ghost);
     }
 }
 
