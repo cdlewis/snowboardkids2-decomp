@@ -156,7 +156,7 @@ void *arenaAlloc16(s32 size) {
     return result;
 }
 
-void func_8006F5C0_701C0(void) {
+void initLinearAllocator(void) {
     void *result;
     u8 nodeExists;
 
