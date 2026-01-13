@@ -715,7 +715,14 @@ void playSoundEffectAtPosition(s32 soundId, s32 volume, s32 pan, f32 position, s
 
 // Play sound effect on specified channel with voice control
 // Called by non-matching assembly func_8005628C_56E8C
-void func_80057CE4_588E4(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex, s32 voiceIndex) {
+void playSoundEffectOnChannelWithVoice(
+    s32 soundId,
+    s32 volume,
+    s32 pan,
+    s32 priority,
+    s32 channelIndex,
+    s32 voiceIndex
+) {
     void *message;
 
     gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[channelIndex];
@@ -736,9 +743,9 @@ void func_80057CE4_588E4(s32 soundId, s32 volume, s32 pan, s32 priority, s32 cha
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
 }
 
-// Wrapper that uses default voice (0xC)
-void func_80057DF0_589F0(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex) {
-    func_80057CE4_588E4(soundId, volume, pan, priority, channelIndex, 0xC);
+// Play sound effect on specified channel with default voice
+void playSoundEffectOnChannel(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex) {
+    playSoundEffectOnChannelWithVoice(soundId, volume, pan, priority, channelIndex, 0xC);
 }
 
 void func_80057E18_58A18(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
