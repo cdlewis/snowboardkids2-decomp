@@ -3664,10 +3664,10 @@ void bounceBossHomingProjectile(BossHomingProjectileBounceArg *arg0) {
 }
 
 void cleanupBossHomingProjectileTask(BossHomingProjectileCleanupArg *arg0) {
-    GameState *allocation;
+    GameState *gameState;
 
-    allocation = (GameState *)getCurrentAllocation();
-    allocation->availableHomingProjectileSlots++;
+    gameState = (GameState *)getCurrentAllocation();
+    gameState->availableHomingProjectileSlots++;
     arg0->projectileAsset = freeNodeMemory(arg0->projectileAsset);
 }
 
