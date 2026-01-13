@@ -36,59 +36,11 @@ typedef struct {
 } Allocation_202A0;
 
 typedef struct {
-    SceneModel *model;
-    Transform3D transform;
-    s16 animationIndex;
-    s16 unk22;
-} MenuCharacterModelState;
-
-typedef struct {
-    u16 rotationX;
-    u16 rotationY;
-    u8 _pad4[0x28];
-    void *effectAsset;
-} MenuBackgroundEffectState;
-
-typedef struct {
-    u8 _pad0[0x2C];
-    void *imageAsset;
-    s16 x;
-    s16 y;
-    void *spriteSheetAsset;
-    u16 frameIndex;
-} UnlockNotificationState;
-
-typedef struct {
-    u8 high;
-    u8 low;
-} ColorBytes;
-
-typedef union {
-    s16 asS16;
-    ColorBytes asBytes;
-} ColorValue;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *textString;
-    void *textRenderAsset;
-    ColorValue color1;
-    ColorValue color2;
-    u8 priority;
-} CharacterDescriptionTextState;
-
-typedef struct {
     void *unk0;
     void *portraitAsset;
     u8 _pad8[0x98];
     void *spriteSheetAsset;
 } CharacterSelectionIconState;
-
-typedef struct {
-    u8 _pad0[0xF8];
-    void *portraitAsset;
-} LevelPreviewPortraitState;
 
 typedef struct {
     u8 _pad0[0x48A];
@@ -146,11 +98,38 @@ typedef struct {
     u8 unkB32;
 } Allocation_func_80020A00;
 
+typedef struct {
+    u8 _pad0[0x48A];
+    u16 unk48A;
+    u8 _pad48C[0x6A0];
+    s8 unkB2C;
+    u8 _padB2D[0x6];
+    u8 unkB33[12];
+} Allocation_F7C8;
+
+typedef struct {
+    u8 _pad[0xC];
+} LevelPreviewPortraitEntry;
+
+typedef struct {
+    u8 _pad0[0x4];
+    u8 unk4;
+    u8 _pad5[0x2];
+    u8 unk7;
+} D_800AFE8C_type_202A0;
+
+extern u32 D_4237C0;
+extern u32 D_426EF0;
+extern u16 D_8008DC38_8E838;
+extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
+extern u16 D_8009ADE0_9B9E0;
+extern u16 D_8008DAC0_8E6C0[];
+extern u16 D_8008DAB0_8E6B0[];
+extern u16 D_8008DAB8_8E6B8[];
+extern u16 D_8008DAC8_8E6C8[];
+extern void *D_8008DC2C_8E82C[];
 extern u16 D_8008DAA8_8E6A8[];
 extern u8 D_8008D9F0_8E5F0[];
-
-void cleanupLevelPreviewCharacter(LevelPreviewCharacterState *arg0);
-void setupLevelPreviewCamera(LevelPreviewCharacterState *arg0);
 
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     Allocation_80020418 *allocation;
@@ -213,15 +192,6 @@ void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     setCleanupCallback(&cleanupLevelPreviewCharacter);
     setCallback(&setupLevelPreviewCamera);
 }
-
-typedef struct {
-    u8 _pad0[0x48A];
-    u16 unk48A;
-    u8 _pad48C[0x6A0];
-    s8 unkB2C;
-    u8 _padB2D[0x6];
-    u8 unkB33[12];
-} Allocation_F7C8;
 
 void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     Allocation_F7C8 *allocation;
@@ -292,8 +262,6 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FA00_20600);
-
-void updateLevelPreviewCamera(LevelPreviewCharacterState *state);
 
 void holdLevelPreviewCamera(LevelPreviewCharacterState *state) {
     getCurrentAllocation();
@@ -450,9 +418,6 @@ s32 sampleMaxSurroundingTerrainHeight(LevelPreviewCharacterState *state) {
     return maxHeight;
 }
 
-void func_80020708_21308(void);
-void cleanupLevelPreviewPortraits(LevelPreviewPortraitState *state);
-
 void initLevelPreviewPortraits(LevelPreviewPortraitState *state) {
     s32 pad[4];
     state->portraitAsset = loadCompressedData(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
@@ -461,12 +426,6 @@ void initLevelPreviewPortraits(LevelPreviewPortraitState *state) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020708_21308);
-
-typedef struct {
-    u8 _pad[0xC];
-} LevelPreviewPortraitEntry;
-
-extern void func_80020924_21524(void);
 
 void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
     Allocation_202A0 *allocation;
@@ -526,16 +485,6 @@ void cleanupCharacterSelectionIcons(CharacterSelectionIconState *state) {
     state->spriteSheetAsset = freeNodeMemory(state->spriteSheetAsset);
 }
 
-typedef struct {
-    s16 x;
-    s16 y;
-    void *spriteAsset;
-    s16 frameIndex;
-} ConfirmationIndicatorState;
-
-void renderConfirmationIndicator(void *arg0);
-void cleanupConfirmationIndicator(ConfirmationIndicatorState *state);
-
 void initConfirmationIndicator(ConfirmationIndicatorState *state) {
     void *asset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
 
@@ -560,21 +509,6 @@ void renderConfirmationIndicator(void *arg0) {
 void cleanupConfirmationIndicator(ConfirmationIndicatorState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
-
-typedef struct {
-    u8 _pad0[0x4];
-    u8 unk4;
-    u8 _pad5[0x2];
-    u8 unk7;
-} D_800AFE8C_type_202A0;
-
-extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
-
-extern u16 D_8009ADE0_9B9E0;
-
-void renderUnlockNotification(UnlockNotificationState *state);
-void initUnlockNotificationSprite(UnlockNotificationState *state);
-void cleanupUnlockNotification(UnlockNotificationState *state);
 
 void initUnlockNotification(UnlockNotificationState *state) {
     void *spriteSheet;
@@ -622,14 +556,6 @@ void cleanupUnlockNotification(UnlockNotificationState *state) {
     state->spriteSheetAsset = freeNodeMemory(state->spriteSheetAsset);
 }
 
-extern u16 D_8008DAC0_8E6C0[];
-extern u16 D_8008DAB0_8E6B0[];
-extern u16 D_8008DAB8_8E6B8[];
-extern u16 D_8008DAC8_8E6C8[];
-
-void cleanupMenuCharacterModel(MenuCharacterModelState *state);
-void setupMenuCharacterModel(MenuCharacterModelState *state);
-
 void initMenuCharacterModel(MenuCharacterModelState *state) {
     Allocation_202A0 *allocation;
     u16 modelIndex;
@@ -675,10 +601,6 @@ void initMenuCharacterModel(MenuCharacterModelState *state) {
     setCleanupCallback(&cleanupMenuCharacterModel);
     setCallback(&setupMenuCharacterModel);
 }
-
-void updateMenuCharacterModel(MenuCharacterModelState *state);
-void handleMenuCharacterAnimationEnd(MenuCharacterModelState *state);
-void setMenuCharacterAnimation(u8 animationType, MenuCharacterModelState *state);
 
 void setupMenuCharacterModel(MenuCharacterModelState *state) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
@@ -759,10 +681,6 @@ void handleMenuCharacterAnimationEnd(MenuCharacterModelState *state) {
     }
 }
 
-void cleanupMenuBackgroundEffect(MenuBackgroundEffectState *state);
-void setupMenuBackgroundEffect(MenuBackgroundEffectState *state);
-void updateMenuBackgroundEffect(MenuBackgroundEffectState *state);
-
 void initMenuBackgroundEffect(MenuBackgroundEffectState *state) {
     state->effectAsset = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
     setCleanupCallback(&cleanupMenuBackgroundEffect);
@@ -789,11 +707,6 @@ void updateMenuBackgroundEffect(MenuBackgroundEffectState *state) {
 void cleanupMenuBackgroundEffect(MenuBackgroundEffectState *state) {
     state->effectAsset = freeNodeMemory(state->effectAsset);
 }
-
-extern void *D_8008DC2C_8E82C[];
-
-void renderCharacterDescriptionText(CharacterDescriptionTextState *state);
-void cleanupCharacterDescriptionText(CharacterDescriptionTextState *state);
 
 void initCharacterDescriptionText(CharacterDescriptionTextState *state) {
     void *textRenderAsset;
@@ -837,50 +750,6 @@ void renderCharacterDescriptionText(CharacterDescriptionTextState *state) {
 void cleanupCharacterDescriptionText(CharacterDescriptionTextState *state) {
     state->textRenderAsset = freeNodeMemory(state->textRenderAsset);
 }
-
-extern u32 D_4237C0;
-extern u32 D_426EF0;
-extern u16 D_8008DC38_8E838;
-
-typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteAsset;
-    /* 0x08 */ s16 frameIndex;
-    /* 0x0A */ s16 alpha;
-    /* 0x0C */ u8 unkC;
-    /* 0x0D */ u8 unkD;
-    /* 0x0E */ u8 _padE[2];
-} PrizeSpriteEntry;
-
-typedef struct {
-    /* 0x00 */ PrizeSpriteEntry spriteEntries[2];
-    /* 0x20 */ u8 _pad20[0xC];
-    /* 0x2C */ s16 titleX;
-    /* 0x2E */ s16 titleY;
-    /* 0x30 */ u16 *titleText;
-    /* 0x34 */ void *textRenderAsset;
-    /* 0x38 */ s16 titleColor1;
-    /* 0x3A */ s16 titleColor2;
-    /* 0x3C */ u8 titlePriority;
-    /* 0x3D */ u8 _pad3D[3];
-    /* 0x40 */ s16 counterX;
-    /* 0x42 */ s16 counterY;
-    /* 0x44 */ void *counterValuePtr;
-    /* 0x48 */ void *counterRenderAsset;
-    /* 0x4C */ s16 counterColor1;
-    /* 0x4E */ s16 counterColor2;
-    /* 0x50 */ u8 counterPriority;
-    /* 0x51 */ u8 _pad51[3];
-    /* 0x54 */ void *backgroundAsset;
-    /* 0x58 */ s16 prizeCount;
-    /* 0x5A */ u16 previousCount;
-    /* 0x5C */ u8 _pad5C[4];
-    /* 0x60 */ u8 animationTimer;
-} PrizeDisplayState;
-
-void updatePrizeDisplay(PrizeDisplayState *state);
-void cleanupPrizeDisplay(PrizeDisplayState *state);
 
 void initPrizeDisplay(PrizeDisplayState *arg0) {
     Allocation_202A0 *allocation;
