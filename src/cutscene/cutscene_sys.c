@@ -8,9 +8,9 @@ extern u8 gCutsceneFadeBrightnessTable[];
 extern s32 gButtonsPressed[];
 
 typedef struct {
-    CutsceneManager *unk0;
+    CutsceneManager *cutsceneManager;
     u8 padding[0xA];
-    s16 unkE;
+    s16 waitFramesIndex;
 } cutsceneSysWait_exec_task;
 
 typedef struct {
@@ -162,12 +162,12 @@ s32 cutsceneSysWait_validate(void) {
     return 0;
 }
 
-void cutsceneSysWait_exec(u16 *arg0, CutsceneManager *arg1) {
-    cutsceneSysWait_exec_task *temp_v0 = scheduleTask(&initCutsceneWaitMenu, 1, 0, 0x64);
-    if (temp_v0 != NULL) {
-        enableCutsceneSkip(arg1);
-        temp_v0->unk0 = arg1;
-        temp_v0->unkE = (*arg0);
+void cutsceneSysWait_exec(u16 *waitFrames, CutsceneManager *cutsceneManager) {
+    cutsceneSysWait_exec_task *task = scheduleTask(&initCutsceneWaitMenu, 1, 0, 0x64);
+    if (task != NULL) {
+        enableCutsceneSkip(cutsceneManager);
+        task->cutsceneManager = cutsceneManager;
+        task->waitFramesIndex = (*waitFrames);
     }
 }
 
