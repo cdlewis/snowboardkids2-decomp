@@ -89,9 +89,9 @@ extern u8 D_800A2D54_A3954;
 extern u32 D_800A2D4C_A394C;
 extern u32 D_800A2D50_A3950;
 
-void func_80065150_65D50(DisplayListObject *displayObjects);
-void func_800653E0_65FE0(DisplayListObject *displayObjects);
-void func_80065670_66270(DisplayListObject *displayObjects);
+void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjects);
+void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *displayObjects);
+void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects);
 void func_800659E4_665E4(DisplayListObject *arg0);
 void func_80065DD8_669D8(TexturedSpriteState *);
 void func_80066474_67074(ExtendedSpriteState *);
@@ -1233,7 +1233,7 @@ void enqueueDisplayListObjectWithLights(u16 arg0, DisplayListObject *arg1) {
     }
 }
 
-void func_80065150_65D50(DisplayListObject *displayObjects) {
+void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjects) {
     DisplayListObject *currentObject;
     s32 i;
     Gfx *displayListCmd;
@@ -1283,7 +1283,7 @@ void func_80065150_65D50(DisplayListObject *displayObjects) {
     );
 }
 
-void func_800653E0_65FE0(DisplayListObject *displayObjects) {
+void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *displayObjects) {
     DisplayListObject *currentObject;
     s32 i;
     Gfx *displayListCmd;
@@ -1333,7 +1333,7 @@ void func_800653E0_65FE0(DisplayListObject *displayObjects) {
     );
 }
 
-void func_80065670_66270(DisplayListObject *displayObjects) {
+void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects) {
     DisplayListObject *currentObject;
     s32 i;
     Gfx *displayListCmd;
@@ -1412,14 +1412,14 @@ void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg
         } while (var_a1 < arg2);
     }
     if (var_s0 & 1) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 1, &func_80065150_65D50, arg1);
+        debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderMultiPartOpaqueDisplayListsWithLights, arg1);
     }
     new_var = arg1;
     if (var_s0 & 2) {
-        debugEnqueueCallback((arg0 & 0xFFFF) ^ 0, 3, &func_800653E0_65FE0, new_var);
+        debugEnqueueCallback((arg0 & 0xFFFF) ^ 0, 3, &renderMultiPartTransparentDisplayListsWithLights, new_var);
     }
     if (var_s0 & 4) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_80065670_66270, arg1);
+        debugEnqueueCallback(arg0 & 0xFFFF, 5, &renderMultiPartOverlayDisplayListsWithLights, arg1);
     }
 }
 
