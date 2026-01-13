@@ -3277,7 +3277,7 @@ void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0) {
         if (temp_v0_3 != NULL) {
             func_80050ECC_51ACC(s2);
             queueSoundAtPosition(s2, 0xD);
-            func_80058924_59524(temp_v0_3);
+            setPlayerProjectileHitState(temp_v0_3);
             func_80069CF8_6A8F8();
             return;
         }
@@ -3327,7 +3327,7 @@ void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0) {
         sp10.y = sp10.y + 0xA0000;
         func_80050ECC_51ACC(s0);
         queueSoundAtPosition(s0, 0xD);
-        func_80058924_59524(s3);
+        setPlayerProjectileHitState(s3);
         func_80069CF8_6A8F8();
     } else {
         i = 0;
@@ -3603,7 +3603,7 @@ void func_8004B4CC_4C0CC(func_8004B4CC_4C0CC_arg *arg0) {
     if (temp_s0 != NULL) {
         func_80050ECC_51ACC(s2);
         queueSoundAtPosition(s2, 0xD);
-        func_80058924_59524(temp_s0);
+        setPlayerProjectileHitState(temp_s0);
         func_80069CF8_6A8F8();
         return;
     }
@@ -3647,7 +3647,7 @@ void func_8004B648_4C248(func_8004B648_4C248_arg *arg0) {
         sp10.y = sp10.y + 0xA0000;
         func_80050ECC_51ACC(s0);
         queueSoundAtPosition(s0, 0xD);
-        func_80058924_59524(s3);
+        setPlayerProjectileHitState(s3);
         func_80069CF8_6A8F8();
     } else {
         if (arg0->unk4.unk36 < 0x1F) {
@@ -3763,7 +3763,7 @@ void func_8004B990_4C590(func_8004B990_4C590_arg *arg0) {
         if (temp_s0 != NULL) {
             func_80050ECC_51ACC(s2);
             queueSoundAtPosition(s2, 0xD);
-            func_80058924_59524(temp_s0);
+            setPlayerProjectileHitState(temp_s0);
             func_80069CF8_6A8F8();
             return;
         }
@@ -3806,7 +3806,7 @@ void func_8004BB0C_4C70C(func_8004BB0C_4C70C_arg *arg0) {
         sp10.y = sp10.y + 0xA0000;
         func_80050ECC_51ACC(s0);
         queueSoundAtPosition(s0, 0xD);
-        func_80058924_59524(s3);
+        setPlayerProjectileHitState(s3);
         func_80069CF8_6A8F8();
     } else {
         if (arg0->unk4.unk36 < 0x1F) {
@@ -3906,7 +3906,7 @@ void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0) {
     if (temp_s0 != NULL) {
         func_80050ECC_51ACC(s2);
         queueSoundAtPosition(s2, 0xD);
-        func_80058924_59524(temp_s0);
+        setPlayerProjectileHitState(temp_s0);
         func_80069CF8_6A8F8();
         return;
     }
@@ -3950,7 +3950,7 @@ void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0) {
         sp10.y = sp10.y + 0xA0000;
         func_80050ECC_51ACC(s0);
         queueSoundAtPosition(s0, 0xD);
-        func_80058924_59524(s3);
+        setPlayerProjectileHitState(s3);
         func_80069CF8_6A8F8();
     } else {
         if (arg0->unk4.unk36 < 0x1F) {

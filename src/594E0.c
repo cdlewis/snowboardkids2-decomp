@@ -29,10 +29,10 @@ void setPlayerHitStunState(Player *player, s16 hitState, void *knockbackData) {
     memcpy(&player->unkAC8, knockbackData, 0xC);
 }
 
-void func_80058924_59524(Player *arg0) {
-    if (arg0->unkAC2 < 3) {
-        if (!(arg0->unkB88 & 0x77F)) {
-            arg0->unkAC2 = 3;
+void setPlayerProjectileHitState(Player *player) {
+    if (player->unkAC2 < 3) {
+        if (!(player->unkB88 & 0x77F)) {
+            player->unkAC2 = 3;
         }
     }
 }
