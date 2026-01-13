@@ -52,10 +52,10 @@ void setPlayerCollisionKnockbackState(Player *player, s16 knockbackAngle, s32 kn
     }
 }
 
-void func_800589A0_595A0(Player *arg0) {
-    if (arg0->unkAC2 < 0x32) {
-        if (!(arg0->unkB88 & 0x71F)) {
-            arg0->unkAC2 = 0x32;
+void setPlayerState50(Player *player) {
+    if (player->unkAC2 < 0x32) {
+        if (!(player->unkB88 & 0x71F)) {
+            player->unkAC2 = 0x32;
         }
     }
 }

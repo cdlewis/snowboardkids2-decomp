@@ -2959,3 +2959,4 @@ knockbackHomingBounceTimers = 0x800BABEC; // rom:0xAAA9C
 knockbackHomingBounceScales = 0x800BABEE; // rom:0xAAA9E
 renderMultiPartTransparentDisplayLists = 0x800646C8; // rom:0x652C8
 renderMultiPartOverlayDisplayLists = 0x80064768; // rom:0x65368
+setPlayerState50 = 0x800589A0; // rom:0x595A0

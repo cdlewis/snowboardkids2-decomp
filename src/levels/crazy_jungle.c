@@ -164,7 +164,7 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
             for (i = 0; i < gs->numPlayers; i++) {
                 if (isPlayerInRangeAndPull(&arg0->node2.transform.translation, 0x12A000, &gs->players[i]) != 0) {
                     if (isPlayerInRangeAndPull(&arg0->node2.transform.translation, 0x1E3000, &gs->players[i]) != 0) {
-                        func_800589A0_595A0(&gs->players[i]);
+                        setPlayerState50(&gs->players[i]);
                         queueSoundAtPosition(&arg0->node2.transform.translation, 0x2A);
                         setCallback(func_800BB658_B7898);
                     }
