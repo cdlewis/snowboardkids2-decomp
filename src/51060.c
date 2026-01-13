@@ -126,8 +126,8 @@ typedef struct {
 } SprayEffectSpawnTask;
 
 typedef struct {
-    void *unk0;
-} func_80050864_51464_arg;
+    MemoryAllocatorNode *assetTable;
+} DualSnowSprayAssetNode;
 
 typedef struct {
     u8 padding[0xC4];
@@ -204,7 +204,7 @@ void updateSprayEffect(SprayEffectUpdateTask *);
 void initDualSnowSprayTask(DualSnowSprayTask *);
 void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *);
 void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *);
-void func_80050864_51464(func_80050864_51464_arg *);
+void cleanupDualSnowSprayAssetNode(DualSnowSprayAssetNode *);
 void func_800509CC_515CC(func_80050C00_51800_Task *);
 void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
 void func_80050E08_51A08(func_80050DB0_519B0_arg *);
@@ -296,7 +296,7 @@ void initDualSnowSprayTask(DualSnowSprayTask *arg0) {
     arg0->frameCounter = 0;
     arg0->particleSlot2 = arg0->particleSlot;
     arg0->alpha2 = (u8)arg0->alpha1;
-    setCleanupCallback(&func_80050864_51464);
+    setCleanupCallback(&cleanupDualSnowSprayAssetNode);
     setCallbackWithContinue(&updateDualSnowSprayParticles);
 }
 
@@ -333,8 +333,8 @@ void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *arg0) {
     }
 }
 
-void func_80050864_51464(func_80050864_51464_arg *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+void cleanupDualSnowSprayAssetNode(DualSnowSprayAssetNode *arg0) {
+    arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
 void spawnDualSnowSprayEffect(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s16 slotIndex, s32 characterId) {
