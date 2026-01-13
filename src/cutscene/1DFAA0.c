@@ -863,61 +863,61 @@ do_work:
     return entryIndex;
 }
 
-void func_800B3E58_1E0F08(u16 entryIndex, u16 oldPrevIndex, u16 newPrevIndex) {
+void reorderCutsceneEvent(u16 eventIndex, u16 oldPreviousIndex, u16 newPreviousIndex) {
     u8 *entryPtr;
-    u32 oldPrevOffset;
-    u16 newPrevIndexMasked;
-    u16 entryIndexMasked;
-    u16 oldPrevIndexMasked;
-    u32 entryOffset;
-    u16 oldNextIndex;
-    u16 entryPrevIndex;
+    u32 oldPreviousOffset;
+    u16 newPreviousIndexMasked;
+    u16 eventIndexMasked;
+    u16 oldPreviousIndexMasked;
+    u32 eventOffset;
+    u16 originalNextIndex;
+    u16 eventPreviousIndex;
     u8 *eventTable;
     u8 *tablePtr;
-    u32 newPrevOffset;
+    u32 newPreviousOffset;
 
-    entryIndexMasked = entryIndex;
-    oldPrevIndexMasked = oldPrevIndex;
-    newPrevIndexMasked = newPrevIndex & 0xFFFF;
-    getStateEntry(newPrevIndexMasked);
+    eventIndexMasked = eventIndex;
+    oldPreviousIndexMasked = oldPreviousIndex;
+    newPreviousIndexMasked = newPreviousIndex & 0xFFFF;
+    getStateEntry(newPreviousIndexMasked);
 
-    entryOffset = entryIndexMasked & 0xFFFF;
-    getStateEntry(entryOffset);
+    eventOffset = eventIndexMasked & 0xFFFF;
+    getStateEntry(eventOffset);
 
-    oldPrevOffset = oldPrevIndexMasked & 0xFFFF;
-    getStateEntry(oldPrevOffset);
+    oldPreviousOffset = oldPreviousIndexMasked & 0xFFFF;
+    getStateEntry(oldPreviousOffset);
 
     eventTable = (u8 *)gCutsceneStateTable;
 
-    oldPrevOffset = oldPrevOffset << 6;
-    entryOffset = entryOffset << 6;
+    oldPreviousOffset = oldPreviousOffset << 6;
+    eventOffset = eventOffset << 6;
 
     /* Read next_index from old prev entry and prev_index from entry being moved */
-    oldNextIndex = *(u16 *)(eventTable + oldPrevOffset + 0xF8);
-    entryPtr = eventTable + entryOffset;
-    entryPrevIndex = *(u16 *)(entryPtr + 0xFA);
+    originalNextIndex = *(u16 *)(eventTable + oldPreviousOffset + 0xF8);
+    entryPtr = eventTable + eventOffset;
+    eventPreviousIndex = *(u16 *)(entryPtr + 0xFA);
 
     /* Unlink entry from current position: update next entry's prev_index */
-    if ((oldNextIndex & 0xFFFF) != 0xFFFF) {
-        *(u16 *)(eventTable + ((oldNextIndex & 0xFFFF) << 6) + 0xFA) = entryPrevIndex;
+    if ((originalNextIndex & 0xFFFF) != 0xFFFF) {
+        *(u16 *)(eventTable + ((originalNextIndex & 0xFFFF) << 6) + 0xFA) = eventPreviousIndex;
     }
 
     /* Unlink entry from current position: update prev entry's next_index */
-    if ((entryPrevIndex & 0xFFFF) != 0xFFFF) {
+    if ((eventPreviousIndex & 0xFFFF) != 0xFFFF) {
         u8 *temp = (u8 *)gCutsceneStateTable;
-        *(u16 *)(temp + ((entryPrevIndex & 0xFFFF) << 6) + 0xF8) = oldNextIndex;
+        *(u16 *)(temp + ((eventPreviousIndex & 0xFFFF) << 6) + 0xF8) = originalNextIndex;
     }
 
-    /* Insert entry after newPrevIndex */
+    /* Insert entry after newPreviousIndex */
     tablePtr = (u8 *)gCutsceneStateTable;
-    newPrevOffset = newPrevIndexMasked << 6;
-    oldNextIndex = *(u16 *)(tablePtr + newPrevOffset + 0xF8);
-    *(u16 *)(tablePtr + newPrevOffset + 0xF8) = entryIndexMasked;
-    *(u16 *)(tablePtr + oldPrevOffset + 0xF8) = oldNextIndex;
+    newPreviousOffset = newPreviousIndexMasked << 6;
+    originalNextIndex = *(u16 *)(tablePtr + newPreviousOffset + 0xF8);
+    *(u16 *)(tablePtr + newPreviousOffset + 0xF8) = eventIndexMasked;
+    *(u16 *)(tablePtr + oldPreviousOffset + 0xF8) = originalNextIndex;
 
     /* Update the next entry's prev_index to point to the old prev */
-    if ((oldNextIndex & 0xFFFF) != 0xFFFF) {
-        *(u16 *)(tablePtr + ((oldNextIndex & 0xFFFF) << 6) + 0xFA) = oldPrevIndexMasked;
+    if ((originalNextIndex & 0xFFFF) != 0xFFFF) {
+        *(u16 *)(tablePtr + ((originalNextIndex & 0xFFFF) << 6) + 0xFA) = oldPreviousIndexMasked;
     }
 }
 

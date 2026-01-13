@@ -301,7 +301,7 @@ void cleanupCutsceneSystem(void);
 u16 findStateEntryIndex(u8 slotIndex, u16 frameNumber, s32 findInsertionPoint);
 s32 findEventAtFrame(u8 a0, u16 a1);
 s32 insertCutsceneEvent(u8 slotIndex, u16 frameNumber);
-void func_800B3E58_1E0F08(u16 entryIndex, u16 oldPrevIndex, u16 newPrevIndex);
+void reorderCutsceneEvent(u16 eventIndex, u16 oldPreviousIndex, u16 newPreviousIndex);
 StateEntry *getStateEntry(u16 arg0);
 u16 func_800B41E0_1E1290(void);
 u16 func_800B4258_1E1308(u8 arg0);
