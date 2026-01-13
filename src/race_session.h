@@ -115,7 +115,7 @@ typedef struct {
 
 void initBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0);
 s32 abs(s32 n);
-void func_80058A10_59610(Player *arg0);
+void setPlayerHomingProjectileRetaliationState(Player *player);
 void func_80058A3C_5963C(Player *arg0);
 void func_80058A68_59668(Player *arg0);
 void func_80058AC0_596C0(Player *arg0);

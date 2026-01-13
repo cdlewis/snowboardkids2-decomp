@@ -199,7 +199,7 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
     if (hitPlayer != NULL) {
         if (!(hitPlayer->unkB84 & 0x1000)) {
             /* Player has no shield - apply hit effects */
-            func_80058A10_59610(hitPlayer);
+            setPlayerHomingProjectileRetaliationState(hitPlayer);
             for (i = 0; i < 3; i++) {
                 if (hitPlayer->unkB6C >= 100) {
                     spawnHomingProjectile(&hitPlayer->worldPos.x, hitPlayer->unkB94, &hitPlayer->velocity);
@@ -1751,7 +1751,7 @@ void func_80054D70_55970(void *arg) {
         case 0:
             player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
-                func_80058A10_59610(player);
+                setPlayerHomingProjectileRetaliationState(player);
                 for (i = 0; i < 3; i++) {
                     if (player->unkB6C >= 100) {
                         spawnHomingProjectile(&player->worldPos.x, player->unkB94, &player->velocity);

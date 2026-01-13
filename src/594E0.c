@@ -69,10 +69,10 @@ void setPlayerPullState(Player *player, void *pullTarget) {
     }
 }
 
-void func_80058A10_59610(Player *arg0) {
-    if (arg0->unkAC2 < 0x33) {
-        if (!(arg0->unkB88 & 0x59F)) {
-            arg0->unkAC2 = 0x33;
+void setPlayerHomingProjectileRetaliationState(Player *player) {
+    if (player->unkAC2 < 0x33) {
+        if (!(player->unkB88 & 0x59F)) {
+            player->unkAC2 = 0x33;
         }
     }
 }
