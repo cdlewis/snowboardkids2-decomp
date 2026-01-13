@@ -1251,6 +1251,7 @@ hasModelGraphicsData = 0x800018F4; // rom:0x24F4
 isAssetGroupEmpty = 0x80001904; // rom:0x2504
 __MusIntStartEffect = 0x80074704;
 startSoundEffect = 0x800725F4;
+startSoundEffectWithHandle = 0x80072704; // rom:0x73304
 __MusIntFindChannelAndStart = 0x80072540;
 __MusIntRemapPtrs = 0x800746CC;
 __muscontrol_flag = 0x800AB480;

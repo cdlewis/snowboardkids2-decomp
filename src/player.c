@@ -225,6 +225,7 @@ void __MusIntMemSet(void *, unsigned char, int);
 void __MusIntMemMove(u8 *, u8 *, s32);
 s32 func_80073058_73C58(u8 *);
 u32 startSoundEffect(s32, s32, s32, s32, s32);
+u32 startSoundEffectWithHandle(s32, s32, s32, s32, s32);
 s32 __MusIntRandom(s32);
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
@@ -850,7 +851,7 @@ u32 startSoundEffect(s32 number, s32 volume, s32 pan, s32 restartExistingEffect,
     return 0;
 }
 
-u32 func_80072704_73304(s32 number, s32 volume, s32 pan, s32 handle, s32 priority) {
+u32 startSoundEffectWithHandle(s32 number, s32 volume, s32 pan, s32 handle, s32 priority) {
     s32 i;
     s32 current_priority;
     channel_t *cp;
