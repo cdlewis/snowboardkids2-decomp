@@ -38,7 +38,7 @@ typedef struct {
     s16 pad16;
 } CutsceneAssetTable;
 
-extern StateEntry *D_800BAEBC_1E7F6C;
+extern StateEntry *gCutsceneStateTable;
 extern s32 gCutsceneStateTableSize;
 extern StateEntry *gControllerPakTransferPointer;
 extern StateEntry *gControllerPakStateTablePointer;
@@ -387,68 +387,68 @@ s16 getCutsceneFrameCount(s16 slotIndex, s16 cutsceneType) {
 }
 
 void *getCutsceneDataMagicPrimary(void) {
-    return &D_800BAEBC_1E7F6C->padding0[4];
+    return &gCutsceneStateTable->padding0[4];
 }
 
 void *getCutsceneDataMagicSecondary(void) {
-    return &D_800BAEBC_1E7F6C->padding0[8];
+    return &gCutsceneStateTable->padding0[8];
 }
 
 u16 getCutsceneAllocatedEventCount(void) {
-    return D_800BAEBC_1E7F6C->unk10;
+    return gCutsceneStateTable->unk10;
 }
 
 u8 getCutsceneStateEntryItemSize(void) {
-    return D_800BAEBC_1E7F6C->unk12;
+    return gCutsceneStateTable->unk12;
 }
 
 u8 getCutsceneSlotCount(void) {
-    return D_800BAEBC_1E7F6C->unk13;
+    return gCutsceneStateTable->unk13;
 }
 
 u16 getCutsceneFrameMask(void) {
-    return D_800BAEBC_1E7F6C->unk14;
+    return gCutsceneStateTable->unk14;
 }
 
 u16 getCutsceneMaxStateEntries(void) {
-    return D_800BAEBC_1E7F6C->unk16;
+    return gCutsceneStateTable->unk16;
 }
 
 s16 getCutsceneInitModelIndex(void) {
-    return D_800BAEBC_1E7F6C->initModelIndex;
+    return gCutsceneStateTable->initModelIndex;
 }
 
 void setCutsceneInitModelIndex(s16 arg0) {
-    D_800BAEBC_1E7F6C->initModelIndex = arg0;
+    gCutsceneStateTable->initModelIndex = arg0;
 }
 
 StateEntryItem *getCurrentStateEntryItem(s32 itemIndex) {
-    return &D_800BAEBC_1E7F6C->items[itemIndex];
+    return &gCutsceneStateTable->items[itemIndex];
 }
 
 s16 getCutsceneDefaultEndFrame(void) {
-    return D_800BAEBC_1E7F6C->defaultEndFrame;
+    return gCutsceneStateTable->defaultEndFrame;
 }
 
 void setCutsceneDefaultEndFrame(s16 arg0) {
-    D_800BAEBC_1E7F6C->defaultEndFrame = arg0;
+    gCutsceneStateTable->defaultEndFrame = arg0;
 }
 
 u8 getCutsceneConfigByte(void) {
-    return D_800BAEBC_1E7F6C->configByte;
+    return gCutsceneStateTable->configByte;
 }
 
 void setCutsceneConfigByte(u8 arg0) {
-    D_800BAEBC_1E7F6C->configByte = arg0;
+    gCutsceneStateTable->configByte = arg0;
 }
 
 s32 saveCutsceneStateTableStub(void) {
-    nullsub_s32(D_800BAEBC_1E7F6C, gCutsceneStateTableSize, 0);
+    nullsub_s32(gCutsceneStateTable, gCutsceneStateTableSize, 0);
     return 1;
 }
 
 s32 loadCutsceneStateTableStub(void) {
-    nullsub_s32_2(D_800BAEBC_1E7F6C, gCutsceneStateTableSize, 0);
+    nullsub_s32_2(gCutsceneStateTable, gCutsceneStateTableSize, 0);
     return 1;
 }
 
@@ -502,7 +502,7 @@ s32 verifyAndLoadCutsceneState(void *stateBuffer) {
     s32 *inputState;
 
     inputState = (s32 *)stateBuffer;
-    globalState = (s32 *)D_800BAEBC_1E7F6C;
+    globalState = (s32 *)gCutsceneStateTable;
 
     success = 1;
 
@@ -516,7 +516,7 @@ s32 verifyAndLoadCutsceneState(void *stateBuffer) {
         goto skip_copy;
     }
 
-    memcpy(D_800BAEBC_1E7F6C, stateBuffer, 0x78C0);
+    memcpy(gCutsceneStateTable, stateBuffer, 0x78C0);
     goto done;
 
 skip_copy:
@@ -532,7 +532,7 @@ void saveCutsceneStateTableToControllerPak(void) {
 
     ptr = &gControllerPakTransferPointer;
     *ptr = (StateEntry *)gCutsceneStateTableSize;
-    gControllerPakStateTablePointer = D_800BAEBC_1E7F6C;
+    gControllerPakStateTablePointer = gCutsceneStateTable;
     ((void (*)(s32, StateEntry **))controllerPackWriteAsyncStub)(0, ptr);
     do { } while (controllerPackWritePollStub() == -1); }
 
@@ -559,9 +559,9 @@ s32 loadCutsceneStateTableFromControllerPak(void) {
     } while (result == -1);
 
     if (result == 0) {
-        compareData = (SaveDataBuffer *)D_800BAEBC_1E7F6C;
+        compareData = (SaveDataBuffer *)gCutsceneStateTable;
         if (compareData->unk4 == buffer->unk4 && compareData->unk8 == buffer->unk8) {
-            memcpy(D_800BAEBC_1E7F6C, buffer, 0x78C0);
+            memcpy(gCutsceneStateTable, buffer, 0x78C0);
         }
     }
 
@@ -569,11 +569,11 @@ s32 loadCutsceneStateTableFromControllerPak(void) {
     return result;
 }
 
-u16 func_800B384C_1E08FC(void) {
-    u16 index = D_800BAEBC_1E7F6C->current_index;
-    StateEntry *currentEntry = &D_800BAEBC_1E7F6C[index];
+u16 allocateStateEntry(void) {
+    u16 index = gCutsceneStateTable->current_index;
+    StateEntry *currentEntry = &gCutsceneStateTable[index];
 
-    D_800BAEBC_1E7F6C->current_index = currentEntry[3].next_index;
+    gCutsceneStateTable->current_index = currentEntry[3].next_index;
 
     return index;
 }
@@ -586,18 +586,18 @@ void resetScriptState(u8 *arg0) {
     }
 }
 
-void func_800B388C_1E093C(s32 arg0) {
+void initializeStateEntry(s32 arg0) {
     StateEntry *temp;
 
-    resetScriptState(D_800BAEBC_1E7F6C[arg0 + 3].padding0);
+    resetScriptState(gCutsceneStateTable[arg0 + 3].padding0);
 
-    temp = (D_800BAEBC_1E7F6C + arg0 + 3);
+    temp = (gCutsceneStateTable + arg0 + 3);
     temp->unk3C = 0;
 
-    temp = D_800BAEBC_1E7F6C + arg0 + 3;
+    temp = gCutsceneStateTable + arg0 + 3;
     temp->unk3E = 0;
 
-    temp = D_800BAEBC_1E7F6C + arg0 + 3;
+    temp = gCutsceneStateTable + arg0 + 3;
     temp->unk3F = 0;
 }
 
@@ -611,47 +611,47 @@ void initializeCutsceneSystem(void *arg0) {
     u16 ffff;
 
     gCutsceneStateTableSize = 0x78E0;
-    D_800BAEBC_1E7F6C = allocateNodeMemory(0x78E0);
+    gCutsceneStateTable = allocateNodeMemory(0x78E0);
     i = 0;
     do {
         StateEntry *ptr;
         s32 shift;
         s32 prev;
 
-        ptr = D_800BAEBC_1E7F6C;
+        ptr = gCutsceneStateTable;
         shift = i << 6;
         next = i + 1;
         prev = i - 1;
         base = (u8 *)ptr + shift;
         *(s16 *)(base + 0xF8) = next;
         *(s16 *)(base + 0xFA) = prev;
-        func_800B388C_1E093C(i);
+        initializeStateEntry(i);
         i = next;
     } while (next < 0x1E0);
 
     {
-        StateEntry *v1ptr = D_800BAEBC_1E7F6C;
+        StateEntry *v1ptr = gCutsceneStateTable;
         StateEntry *a0ptr;
         v1ptr->padding0[4] = 0x45;
-        a0ptr = D_800BAEBC_1E7F6C;
+        a0ptr = gCutsceneStateTable;
         *(u16 *)((u8 *)v1ptr + 0xFA) = 0xFFFF;
         *(u16 *)((u8 *)v1ptr + 0x78B8) = 0xFFFF;
         *(s32 *)v1ptr = 0;
         a0ptr->padding0[5] = 0x44;
     }
-    D_800BAEBC_1E7F6C->padding0[6] = 0x41;
-    D_800BAEBC_1E7F6C->padding0[7] = 0x54;
-    D_800BAEBC_1E7F6C->padding0[8] = 0x30;
-    D_800BAEBC_1E7F6C->padding0[9] = 0x30;
-    D_800BAEBC_1E7F6C->padding0[0xA] = 0x30;
+    gCutsceneStateTable->padding0[6] = 0x41;
+    gCutsceneStateTable->padding0[7] = 0x54;
+    gCutsceneStateTable->padding0[8] = 0x30;
+    gCutsceneStateTable->padding0[9] = 0x30;
+    gCutsceneStateTable->padding0[0xA] = 0x30;
     i = 0;
-    D_800BAEBC_1E7F6C->padding0[0xB] = 0x31;
+    gCutsceneStateTable->padding0[0xB] = 0x31;
     {
-        StateEntry *v1ptr2 = D_800BAEBC_1E7F6C;
+        StateEntry *v1ptr2 = gCutsceneStateTable;
         StateEntry *a0ptr2;
         neg1 = -1;
         v1ptr2->unk12 = 0x38;
-        a0ptr2 = D_800BAEBC_1E7F6C;
+        a0ptr2 = gCutsceneStateTable;
         ffff = 0xFFFF;
         *(s16 *)((u8 *)v1ptr2 + 0xE) = 0x1DF;
         v1ptr2->current_index = 0;
@@ -659,7 +659,7 @@ void initializeCutsceneSystem(void *arg0) {
         a0ptr2->unk13 = 0x10;
     }
     {
-        StateEntry *v1Reg = D_800BAEBC_1E7F6C;
+        StateEntry *v1Reg = gCutsceneStateTable;
         j = 0;
         v1Reg->unk14 = 0x8000;
         v1Reg->unk16 = 0x1E0;
@@ -674,23 +674,23 @@ void initializeCutsceneSystem(void *arg0) {
         s32 a1;
         s32 shift2;
 
-        D_800BAEBC_1E7F6C->unk10 += 1;
-        index = func_800B384C_1E08FC();
-        itemBase = (u8 *)D_800BAEBC_1E7F6C;
+        gCutsceneStateTable->unk10 += 1;
+        index = allocateStateEntry();
+        itemBase = (u8 *)gCutsceneStateTable;
         a1 = i << 24;
         itemBase += j;
         itemBase[0x26] = 0;
-        itemBase2 = (u8 *)D_800BAEBC_1E7F6C + j;
+        itemBase2 = (u8 *)gCutsceneStateTable + j;
         i++;
         a1 >>= 24;
         *(s16 *)(itemBase + 0x20) = index;
         *(s16 *)(itemBase + 0x24) = neg1;
         itemBase2[0x27] = neg1;
-        ((u8 *)D_800BAEBC_1E7F6C + j)[0x28] = 0;
+        ((u8 *)gCutsceneStateTable + j)[0x28] = 0;
         shift2 = (index & 0xFFFF) << 6;
-        ((u8 *)D_800BAEBC_1E7F6C + j)[0x29] = neg1;
+        ((u8 *)gCutsceneStateTable + j)[0x29] = neg1;
         {
-            u8 *ptr = (u8 *)D_800BAEBC_1E7F6C;
+            u8 *ptr = (u8 *)gCutsceneStateTable;
             s32 cmdOffset = shift2 + 0xC0;
             j += 0xA;
             entryBase = ptr + shift2;
@@ -707,8 +707,8 @@ void initializeCutsceneSystem(void *arg0) {
 }
 
 void func_800B3B40(void) {
-    if (D_800BAEBC_1E7F6C != NULL) {
-        freeNodeMemory(D_800BAEBC_1E7F6C);
+    if (gCutsceneStateTable != NULL) {
+        freeNodeMemory(gCutsceneStateTable);
     }
 }
 
@@ -721,7 +721,7 @@ u16 func_800B3B68_1E0C18(u8 arg0, u16 arg1, s32 arg2) {
     s32 arg2Copy;
     u16 ffff;
 
-    current = D_800BAEBC_1E7F6C->items[arg0].unk0;
+    current = gCutsceneStateTable->items[arg0].unk0;
     arg2Copy = arg2;
 
     entry = getStateEntry(current);
@@ -764,7 +764,7 @@ s32 findEventAtFrame(u8 a0, u16 a1) {
     StateEntry *temp;
     u16 current;
 
-    base = D_800BAEBC_1E7F6C;
+    base = gCutsceneStateTable;
     current = base->items[a0].unk0;
 
     while (current != 0xFFFF) {
@@ -794,7 +794,7 @@ s32 func_800B3D24_1E0DD4(u8 slotIndex, u16 frameNumber) {
     StateEntry *entry;
     StateEntry *entryPtr;
 
-    if (D_800BAEBC_1E7F6C->unk10 >= 0x1E0) {
+    if (gCutsceneStateTable->unk10 >= 0x1E0) {
         goto ret_ffff;
     }
 
@@ -814,8 +814,8 @@ ret_ffff:
     return 0xFFFF;
 
 do_work:
-    allocatedIndex = func_800B384C_1E08FC();
-    eventTable = D_800BAEBC_1E7F6C;
+    allocatedIndex = allocateStateEntry();
+    eventTable = gCutsceneStateTable;
 
     /* Read next_index from entry at entryIndex */
     originalNextIndex = *(u16 *)((u8 *)eventTable + (u32)(entryIndex << 6) + 0xF8);
@@ -827,7 +827,7 @@ do_work:
         *(u16 *)((u8 *)eventTable + (u32)(originalNextIndex << 6) + 0xFA) = allocatedIndex;
     }
 
-    entryPtr = D_800BAEBC_1E7F6C;
+    entryPtr = gCutsceneStateTable;
     entryIndex = allocatedIndex;
     entryPtr = (StateEntry *)((u8 *)entryPtr + (u32)(entryIndex << 6));
     /* Set prev_index of new entry to point to insert-after entry */
@@ -835,9 +835,9 @@ do_work:
     /* Set next_index of new entry to point to original next entry */
     *(u16 *)((u8 *)entryPtr + 0xF8) = originalNextIndex;
 
-    func_800B388C_1E093C(entryIndex);
+    initializeStateEntry(entryIndex);
 
-    D_800BAEBC_1E7F6C->unk10++;
+    gCutsceneStateTable->unk10++;
 
     if (entryIndex != 0xFFFF) {
         entry = getStateEntry(entryIndex);
@@ -877,7 +877,7 @@ void func_800B3E58_1E0F08(u16 entryIndex, u16 oldPrevIndex, u16 newPrevIndex) {
     oldPrevOffset = oldPrevIndexMasked & 0xFFFF;
     getStateEntry(oldPrevOffset);
 
-    eventTable = (u8 *)D_800BAEBC_1E7F6C;
+    eventTable = (u8 *)gCutsceneStateTable;
 
     oldPrevOffset = oldPrevOffset << 6;
     entryOffset = entryOffset << 6;
@@ -894,12 +894,12 @@ void func_800B3E58_1E0F08(u16 entryIndex, u16 oldPrevIndex, u16 newPrevIndex) {
 
     /* Unlink entry from current position: update prev entry's next_index */
     if ((entryPrevIndex & 0xFFFF) != 0xFFFF) {
-        u8 *temp = (u8 *)D_800BAEBC_1E7F6C;
+        u8 *temp = (u8 *)gCutsceneStateTable;
         *(u16 *)(temp + ((entryPrevIndex & 0xFFFF) << 6) + 0xF8) = oldNextIndex;
     }
 
     /* Insert entry after newPrevIndex */
-    tablePtr = (u8 *)D_800BAEBC_1E7F6C;
+    tablePtr = (u8 *)gCutsceneStateTable;
     newPrevOffset = newPrevIndexMasked << 6;
     oldNextIndex = *(u16 *)(tablePtr + newPrevOffset + 0xF8);
     *(u16 *)(tablePtr + newPrevOffset + 0xF8) = entryIndexMasked;
@@ -912,7 +912,7 @@ void func_800B3E58_1E0F08(u16 entryIndex, u16 oldPrevIndex, u16 newPrevIndex) {
 }
 
 StateEntry *getStateEntry(u16 arg0) {
-    return &D_800BAEBC_1E7F6C[arg0 + 3];
+    return &gCutsceneStateTable[arg0 + 3];
 }
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3F64_1E1014);
@@ -952,11 +952,11 @@ u16 func_800B4258_1E1308(u8 arg0) {
 }
 
 StateEntry *func_800B4288_1E1338(void) {
-    return D_800BAEBC_1E7F6C;
+    return gCutsceneStateTable;
 }
 
 u8 *func_800B4294_1E1344(void) {
-    return &D_800BAEBC_1E7F6C->padding0[gCutsceneStateTableSize] - 1;
+    return &gCutsceneStateTable->padding0[gCutsceneStateTableSize] - 1;
 }
 
 u16 func_800B42B0_1E1360(u16 arg0) {
@@ -1024,7 +1024,7 @@ void func_800B4378_1E1428(u8 slotIndex, s16 frameNumber) {
 
     memcpy(D_800BAEC8_1E7F78, getStateEntry(entryIndex), 0x40);
 
-    base = D_800BAEBC_1E7F6C;
+    base = gCutsceneStateTable;
     freeListHead = *(u16 *)((u8 *)base + 0xE);
     entryNextIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xF8);
     entryPrevIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xFA);
@@ -1037,14 +1037,14 @@ void func_800B4378_1E1428(u8 slotIndex, s16 frameNumber) {
     }
 
     if ((entryNextIndex & 0xFFFF) != 0xFFFF) {
-        *(u16 *)((u8 *)D_800BAEBC_1E7F6C + (entryNextIndex << 6) + 0xFA) = entryPrevIndex;
+        *(u16 *)((u8 *)gCutsceneStateTable + (entryNextIndex << 6) + 0xFA) = entryPrevIndex;
     }
 
     D_800BAEB0_1E7F60 = 1;
     D_800BAEC0_1E7F70 = slotIndex;
     D_800BAEB2_1E7F62 = frameNumber;
     D_800BAEB4_1E7F64 = 1;
-    D_800BAEBC_1E7F6C->unk10 -= 1;
+    gCutsceneStateTable->unk10 -= 1;
 }
 
 void func_800B44A8_1E1558(u8 arg0, u16 arg1) {
