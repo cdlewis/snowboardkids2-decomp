@@ -661,10 +661,10 @@ void stopSoundEffectChannel(s32 channelIndex, s32 stoppingSpeed) {
     osRecvMesg(&gfxResultQueue, &message, 1);
 }
 
-void func_80057B1C_5871C(s32 arg0) {
+void stopAllSoundEffectsAndClearQueues(s32 stoppingSpeed) {
     void *message;
 
-    gGraphicsCommand.stoppingSpeed = arg0;
+    gGraphicsCommand.stoppingSpeed = stoppingSpeed;
     osSendMesg(&gfxTaskQueue, (OSMesg *)6, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     gGraphicsManager->renderQueueCount = 0;

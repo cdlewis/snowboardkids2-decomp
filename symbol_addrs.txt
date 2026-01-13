@@ -54,6 +54,7 @@ gfxCommThreadFunc = 0x80057614; // rom:0x58214
 sendStopAudioChannelsCommand = 0x80057870; // rom:0x58470
 getAudioChannelActiveState = 0x80057A34; // rom:0x58634
 getActiveEffectChannelCount = 0x80057A7C; // rom:0x5867C
+stopAllSoundEffectsAndClearQueues = 0x80057B1C; // rom:0x5871C
 getActiveAudioChannelCount = 0x800585E4; // rom:0x591E4
 getActiveSongChannelCount = 0x80058638; // rom:0x59238
 initSprayEffectTask = 0x80050460; // rom:0x51060

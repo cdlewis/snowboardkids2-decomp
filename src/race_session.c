@@ -1697,7 +1697,7 @@ void cleanupGameSession(void) {
     freeNodeMemory(gameState->unk14);
 
     osViExtendVStart(0);
-    func_80057B1C_5871C(0x14);
+    stopAllSoundEffectsAndClearQueues(0x14);
     terminateSchedulerWithCallback(&onGameSessionTerminated);
     gControllerPollingEnabled = 1;
     resumeMotorStates();
