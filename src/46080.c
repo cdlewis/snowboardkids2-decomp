@@ -122,8 +122,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x4];
-    func_80066444_67044_arg1 unk4;
-} func_8004B648_4C248_arg;
+    func_80066444_67044_arg1 displayListState;
+} BossHomingProjectileBounceArg;
 
 typedef struct {
     u8 pad[0x24];
@@ -804,7 +804,7 @@ void func_8004BCFC_4C8FC(BossHomingProjectileSpawnArg *arg0);
 void func_8004BE40_4CA40(func_8004BE40_4CA40_arg *arg0);
 void func_8004BFBC_4CBBC(func_8004BFBC_4CBBC_arg *arg0);
 void spawnBossHomingProjectile(BossHomingProjectileSpawnArg *arg0);
-void bounceBossHomingProjectile(func_8004B648_4C248_arg *arg0);
+void bounceBossHomingProjectile(BossHomingProjectileBounceArg *arg0);
 void updateBossHomingProjectile(BossHomingProjectile *arg0);
 void renderSkyDisplayLists(SkyRenderTaskState *arg0);
 void updatePlayerRenderCounter(void);
@@ -3569,96 +3569,96 @@ void spawnBossHomingProjectile(BossHomingProjectileSpawnArg *arg0) {
     setCallbackWithContinue(&updateBossHomingProjectile);
 }
 
-void updateBossHomingProjectile(BossHomingProjectile *arg0) {
-    Vec3i sp;
-    GameState_46080 *s0;
-    Vec3i *s2;
+void updateBossHomingProjectile(BossHomingProjectile *projectile) {
+    Vec3i groundOffset;
+    GameState_46080 *gameState;
+    Vec3i *position;
     s32 i;
-    void *temp_s0;
+    Player *hitPlayer;
 
-    s0 = getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    if (s0->unk76 != 0) {
-        s0 = NULL;
+    if (gameState->unk76 != 0) {
+        gameState = NULL;
         goto exit_loop;
     }
 
-    s2 = &arg0->position;
+    position = &projectile->position;
 
-    arg0->velocityY -= 0x4000;
-    arg0->position.x += arg0->velocityX;
-    arg0->position.y += arg0->velocityY;
-    arg0->position.z += arg0->velocityZ;
+    projectile->velocityY -= 0x4000;
+    projectile->position.x += projectile->velocityX;
+    projectile->position.y += projectile->velocityY;
+    projectile->position.z += projectile->velocityZ;
 
-    arg0->sectorIndex = func_80060A3C_6163C(&s0->unk30, arg0->sectorIndex, s2);
+    projectile->sectorIndex = func_80060A3C_6163C(&gameState->unk30, projectile->sectorIndex, position);
 
-    func_80060CDC_618DC(&s0->unk30, arg0->sectorIndex, s2, 0x100000, &sp);
+    func_80060CDC_618DC(&gameState->unk30, projectile->sectorIndex, position, 0x100000, &groundOffset);
 
-    arg0->position.x += sp.x;
-    arg0->position.z += sp.z;
+    projectile->position.x += groundOffset.x;
+    projectile->position.z += groundOffset.z;
 
-    sp.y = func_80061A64_62664(&s0->unk30, arg0->sectorIndex, s2);
+    groundOffset.y = func_80061A64_62664(&gameState->unk30, projectile->sectorIndex, position);
 
-    temp_s0 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
+    hitPlayer = func_8005B24C_5BE4C(position, projectile->playerIndex, 0xA0000);
 
-    if (temp_s0 != NULL) {
-        func_80050ECC_51ACC(s2);
-        queueSoundAtPosition(s2, 0xD);
-        setPlayerProjectileHitState(temp_s0);
+    if (hitPlayer != NULL) {
+        func_80050ECC_51ACC(position);
+        queueSoundAtPosition(position, 0xD);
+        setPlayerProjectileHitState(hitPlayer);
         func_80069CF8_6A8F8();
         return;
     }
 
-    if (arg0->position.y < sp.y) {
-        arg0->position.y = sp.y;
-        arg0->bounceTimer = 0x1E0;
+    if (projectile->position.y < groundOffset.y) {
+        projectile->position.y = groundOffset.y;
+        projectile->bounceTimer = 0x1E0;
         setCallback(&bounceBossHomingProjectile);
     }
 
-    s0 = NULL;
+    gameState = NULL;
 
 exit_loop:
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->metadata);
+        func_80066444_67044(i, (func_80066444_67044_arg1 *)&projectile->metadata);
     }
 }
 
-void bounceBossHomingProjectile(func_8004B648_4C248_arg *arg0) {
-    Vec3i sp10;
-    Vec3i *s0;
-    Vec3i *s2;
-    void *s3;
+void bounceBossHomingProjectile(BossHomingProjectileBounceArg *arg0) {
+    Vec3i bouncePosition;
+    Vec3i *copyPtr;
+    Vec3i *position;
+    Player *hitPlayer;
     s32 i;
 
     if (((GameState *)getCurrentAllocation())->gamePaused == 0) {
-        arg0->unk4.unk36--;
+        arg0->displayListState.unk36--;
     }
 
-    s2 = &arg0->unk4.unk4;
+    position = &arg0->displayListState.unk4;
 
-    if (arg0->unk4.unk36 == 0) {
+    if (arg0->displayListState.unk36 == 0) {
         func_80069CF8_6A8F8();
     }
 
-    s3 = func_8005B24C_5BE4C(s2, -1, 0xA0000);
-    s0 = &sp10;
+    hitPlayer = func_8005B24C_5BE4C(position, -1, 0xA0000);
+    copyPtr = &bouncePosition;
 
-    if (s3 != NULL) {
-        memcpy(s0, s2, sizeof(Vec3i));
-        sp10.y = sp10.y + 0xA0000;
-        func_80050ECC_51ACC(s0);
-        queueSoundAtPosition(s0, 0xD);
-        setPlayerProjectileHitState(s3);
+    if (hitPlayer != NULL) {
+        memcpy(copyPtr, position, sizeof(Vec3i));
+        bouncePosition.y = bouncePosition.y + 0xA0000;
+        func_80050ECC_51ACC(copyPtr);
+        queueSoundAtPosition(copyPtr, 0xD);
+        setPlayerProjectileHitState(hitPlayer);
         func_80069CF8_6A8F8();
     } else {
-        if (arg0->unk4.unk36 < 0x1F) {
+        if (arg0->displayListState.unk36 < 0x1F) {
             i = 0;
             if ((gFrameCounter & 1) == 0) {
                 return;
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, &arg0->unk4);
+            func_80066444_67044(i, &arg0->displayListState);
         }
     }
 }
