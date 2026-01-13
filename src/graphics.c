@@ -491,7 +491,7 @@ void gfxCommThreadFunc(void *arg0) {
         if ((u32)message < 0xF) {
             switch ((s32)message) {
                 case 0:
-                    result = (void *)func_800728E0_734E0(3);
+                    result = (void *)getActiveChannelCount(3);
                     break;
                 case 1:
                     result = startSoundEffect(
@@ -550,7 +550,7 @@ void gfxCommThreadFunc(void *arg0) {
                     result = func_80072960_73560(gGraphicsCommand.audioChannel, gGraphicsCommand.stoppingSpeed);
                     break;
                 case 8:
-                    result = (void *)func_800728E0_734E0(1);
+                    result = (void *)getActiveChannelCount(1);
                     break;
                 case 9:
                     result = func_80072A14_73614(gGraphicsCommand.audioChannel);
@@ -571,7 +571,7 @@ void gfxCommThreadFunc(void *arg0) {
                     stopChannelsByFlags(3, gGraphicsCommand.stoppingSpeed);
                     break;
                 case 14:
-                    result = (void *)func_800728E0_734E0(2);
+                    result = (void *)getActiveChannelCount(2);
                     break;
             }
         }

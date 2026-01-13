@@ -1266,6 +1266,7 @@ __MusIntStartEffect = 0x80074704;
 startSoundEffect = 0x800725F4;
 startSoundEffectWithHandle = 0x80072704; // rom:0x73304
 stopChannelsByFlags = 0x80072814; // rom:0x73414
+getActiveChannelCount = 0x800728E0; // rom:0x734E0
 __MusIntFindChannelAndStart = 0x80072540;
 __MusIntRemapPtrs = 0x800746CC;
 __muscontrol_flag = 0x800AB480;
