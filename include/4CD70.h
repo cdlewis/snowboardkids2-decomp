@@ -41,14 +41,20 @@ typedef struct {
 } Struct_func_8004F1D4;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteIndex;
     u8 padA[0x2];
-    void *unkC;
-    s16 unk10;
-} Struct_func_8004F04C;
+    void *digitAsset;
+    s16 timeRemaining;
+} ShotCrossCountdownTimerState;
+
+typedef struct {
+    u8 pad0[0xC];
+    void *digitAsset;
+    s16 timeRemaining;
+} ShotCrossCountdownTimerUpdateState;
 
 typedef struct {
     s16 x;
@@ -127,7 +133,10 @@ void initPauseMenuDisplayTask(PauseMenuDisplayState *arg0);
 void spawnShotCrossItemCountDisplayTask(s16 arg0);
 void func_8004F1D4_4FDD4(Struct_func_8004F1D4 *arg0);
 void func_8004F194_4FD94(s16 arg0);
-void func_8004F820_50420(Struct_func_8004F04C *arg0);
+void func_8004F820_50420(ShotCrossCountdownTimerState *arg0);
+void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
+void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0);
+void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
 void func_8004FCF0_508F0(s32 arg0);
 void spawnShotCrossSkillMeterDisplayTask(s16 arg0);
 void func_8005011C_50D1C(void);

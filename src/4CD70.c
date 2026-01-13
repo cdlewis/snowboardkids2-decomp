@@ -99,12 +99,6 @@ typedef struct {
 } LapCounterSinglePlayerState;
 
 typedef struct {
-    u8 padC[0xC];
-    void *unkC;
-    s16 timeRemaining;
-} Struct_func_8004EEB4_4FAB4;
-
-typedef struct {
     s16 xPos;
     s16 yOffset;
     void *spriteAsset;
@@ -228,12 +222,12 @@ void cleanupSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0);
 void updateTrickScoreSlideOut(TrickScoreDisplayState *state);
 void updateTrickScoreHold(TrickScoreDisplayState *state);
 void updateTrickScoreSlideIn(TrickScoreDisplayState *state);
-void cleanupTrickScoreDisplayTask(Struct_func_8004F04C *state);
+void cleanupTrickScoreDisplayTask(TrickScoreDisplayState *state);
 void updateGoalBannerSlideIn(GoalBannerState *state);
 void updateGoalBannerHold(GoalBannerState *state);
 void updateGoalBannerSlideOut(GoalBannerState *state);
 void cleanupGoalBannerTask(GoalBannerState *state);
-void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0);
+void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0);
 void initPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state);
 void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state);
@@ -1049,9 +1043,9 @@ void updateTrickScoreSlideOut(TrickScoreDisplayState *state) {
     renderTrickScoreDisplay(state);
 }
 
-void cleanupTrickScoreDisplayTask(Struct_func_8004F04C *state) {
-    state->unk4 = freeNodeMemory(state->unk4);
-    state->unkC = freeNodeMemory(state->unkC);
+void cleanupTrickScoreDisplayTask(TrickScoreDisplayState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
+    state->digitsTexture = freeNodeMemory(state->digitsTexture);
 }
 
 typedef struct {
@@ -1899,26 +1893,26 @@ void spawnShotCrossItemCountDisplayTask(s16 arg0) {
     }
 }
 
-void func_8004F04C_4FC4C(Struct_func_8004F04C *);
+void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
 
-void func_8004EE24_4FA24(Struct_func_8004F04C *arg0) {
+void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
     if (allocation->unk7A == 6) {
-        arg0->unk10 = 0xA8C;
+        arg0->timeRemaining = 0xA8C;
     } else {
-        arg0->unk10 = 0x1194;
+        arg0->timeRemaining = 0x1194;
     }
-    arg0->unkC = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    arg0->unk4 = loadAsset_34CB50();
-    arg0->unk8 = 0x23;
-    arg0->unk0 = 0x68;
-    arg0->unk2 = 0x48;
-    setCleanupCallback(func_8004F04C_4FC4C);
-    setCallback(func_8004EEB4_4FAB4);
+    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->spriteAsset = loadAsset_34CB50();
+    arg0->spriteIndex = 0x23;
+    arg0->x = 0x68;
+    arg0->y = 0x48;
+    setCleanupCallback(cleanupShotCrossCountdownTimerTask);
+    setCallback(updateShotCrossCountdownTimer);
 }
 
-void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0) {
+void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0) {
     char buffer[16];
     Allocation *allocation;
     s32 timeValue;
@@ -1956,12 +1950,12 @@ void func_8004EEB4_4FAB4(Struct_func_8004EEB4_4FAB4 *arg0) {
 
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
 
-    drawNumericString(buffer, 0x48, 0x50, 0xFF, arg0->unkC, 8, 0);
+    drawNumericString(buffer, 0x48, 0x50, 0xFF, arg0->digitAsset, 8, 0);
 }
 
-void func_8004F04C_4FC4C(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
+void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
 typedef struct {
@@ -1974,7 +1968,7 @@ typedef struct {
 } Struct_func_8004F084;
 
 void func_8004F104_4FD04(Struct_func_8004F084 *);
-void func_8004F168_4FD68(Struct_func_8004F04C *);
+void func_8004F168_4FD68(ShotCrossCountdownTimerState *);
 
 void func_8004F084_4FC84(Struct_func_8004F084 *arg0) {
     if (arg0->unkC == 0) {
@@ -2002,8 +1996,8 @@ void func_8004F104_4FD04(Struct_func_8004F084 *arg0) {
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
 }
 
-void func_8004F168_4FD68(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_8004F168_4FD68(ShotCrossCountdownTimerState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
 typedef struct {
@@ -2115,7 +2109,7 @@ typedef struct {
 } Struct_func_8004F424;
 
 void func_8004F4A8_500A8(Struct_func_8004F424 *arg0);
-void func_8004F69C_5029C(Struct_func_8004F04C *arg0);
+void func_8004F69C_5029C(ShotCrossCountdownTimerState *arg0);
 
 extern char D_8009E8D4_9F4D4[];
 extern char D_8009E8E0_9F4E0[];
@@ -2200,12 +2194,12 @@ after_7E:
     drawNumericString(sp20, 0x68, 0x50, 0xFF, arg0->unkC, 8, 0);
 }
 
-void func_8004F69C_5029C(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
+void func_8004F69C_5029C(ShotCrossCountdownTimerState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-void func_8004F7F4_503F4(Struct_func_8004F04C *arg0);
+void func_8004F7F4_503F4(ShotCrossCountdownTimerState *arg0);
 
 typedef struct {
     s16 unk0;
@@ -2247,12 +2241,12 @@ void func_8004F760_50360(Struct_func_8004F6D4 *arg0) {
     }
 }
 
-void func_8004F7F4_503F4(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_8004F7F4_503F4(ShotCrossCountdownTimerState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
-void func_8004F898_50498(Struct_func_8004F04C *);
-void func_8004F9E8_505E8(Struct_func_8004F04C *);
+void func_8004F898_50498(ShotCrossCountdownTimerState *);
+void func_8004F9E8_505E8(ShotCrossCountdownTimerState *);
 
 extern char D_8009E904_9F504[];
 extern char D_8009E914_9F514[];
@@ -2262,18 +2256,18 @@ typedef struct {
     s32 unk54;
 } AllocationStruct_8004F898;
 
-void func_8004F820_50420(Struct_func_8004F04C *arg0) {
-    arg0->unkC = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    arg0->unk4 = loadAsset_34CB50();
-    arg0->unk8 = 0x23;
-    arg0->unk0 = -0x4C;
-    arg0->unk2 = -0x30;
-    arg0->unk10 = 0;
+void func_8004F820_50420(ShotCrossCountdownTimerState *arg0) {
+    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->spriteAsset = loadAsset_34CB50();
+    arg0->spriteIndex = 0x23;
+    arg0->x = -0x4C;
+    arg0->y = -0x30;
+    arg0->timeRemaining = 0;
     setCleanupCallback(func_8004F9E8_505E8);
     setCallback(func_8004F898_50498);
 }
 
-void func_8004F898_50498(Struct_func_8004F04C *arg0) {
+void func_8004F898_50498(ShotCrossCountdownTimerState *arg0) {
     char buf[16];
     AllocationStruct_8004F898 *allocation;
     s32 time;
@@ -2289,13 +2283,13 @@ void func_8004F898_50498(Struct_func_8004F04C *arg0) {
     seconds = (time % 32400) / 540;
     frames = ((time % 32400) % 540) / 9;
 
-    temp = (u16)arg0->unk10 + 1;
-    arg0->unk10 = temp;
+    temp = (u16)arg0->timeRemaining + 1;
+    arg0->timeRemaining = temp;
     if (temp == 0x28) {
-        arg0->unk10 = 0;
+        arg0->timeRemaining = 0;
     }
 
-    if (arg0->unk10 < 0x14) {
+    if (arg0->timeRemaining < 0x14) {
         formatStr = D_8009E904_9F504;
         sprintf(buf, formatStr, minutes, seconds, frames);
     } else {
@@ -2304,12 +2298,12 @@ void func_8004F898_50498(Struct_func_8004F04C *arg0) {
     }
 
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
-    drawNumericString(buf, -0x54, -0x28, 0xFF, arg0->unkC, 8, 0);
+    drawNumericString(buf, -0x54, -0x28, 0xFF, arg0->digitAsset, 8, 0);
 }
 
-void func_8004F9E8_505E8(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
+void func_8004F9E8_505E8(ShotCrossCountdownTimerState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
 extern char D_8009E924_9F524[];
@@ -2328,7 +2322,7 @@ typedef struct {
     s16 unk20;
 } Struct_func_8004FA20;
 
-void func_8004FCB8_508B8(Struct_func_8004F04C *arg0);
+void func_8004FCB8_508B8(ShotCrossCountdownTimerState *arg0);
 void func_8004FB64_50764(Struct_func_8004FA20 *arg0);
 void func_8004FAB4_506B4(void *);
 void func_8004FC34_50834(Struct_func_8004FA20 *arg0);
@@ -2386,9 +2380,9 @@ void func_8004FC34_50834(Struct_func_8004FA20 *arg0) {
     func_8004FAB4_506B4(arg0);
 }
 
-void func_8004FCB8_508B8(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
+void func_8004FCB8_508B8(ShotCrossCountdownTimerState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
 void func_8004FCF0_508F0(s32 arg0) {
@@ -2487,7 +2481,7 @@ void spawnShotCrossSkillMeterDisplayTask(s16 arg0) {
 }
 
 void func_80050098_50C98(Struct_func_8004FFB8 *);
-void func_800500F0_50CF0(Struct_func_8004F04C *);
+void func_800500F0_50CF0(ShotCrossCountdownTimerState *);
 
 void func_8004FFB8_50BB8(Struct_func_8004FFB8 *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
@@ -2523,8 +2517,8 @@ void func_80050098_50C98(Struct_func_8004FFB8 *arg0) {
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
 }
 
-void func_800500F0_50CF0(Struct_func_8004F04C *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_800500F0_50CF0(ShotCrossCountdownTimerState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
 INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E894_9F494);
@@ -2612,14 +2606,14 @@ void func_8005011C_50D1C(void) {
             case 5:
                 spawnShotCrossScoreDisplayTask(allocation->unk10);
                 spawnShotCrossItemCountDisplayTask(0);
-                scheduleTask(func_8004EE24_4FA24, 0, 1, 0xF0);
+                scheduleTask(initShotCrossCountdownTimerTask, 0, 1, 0xF0);
                 scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);
                 break;
 
             case 6:
                 spawnShotCrossSkillMeterDisplayTask(0);
                 scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);
-                scheduleTask(func_8004EE24_4FA24, 0, 1, 0xF0);
+                scheduleTask(initShotCrossCountdownTimerTask, 0, 1, 0xF0);
                 break;
         }
 
