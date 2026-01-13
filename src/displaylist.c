@@ -1021,7 +1021,7 @@ void renderMultiPartTransparentDisplayLists(DisplayListObject *displayObjects) {
     }
 }
 
-void func_80064768_65368(DisplayListObject *displayObjects) {
+void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects) {
     DisplayListObject *currentObject;
     s32 i;
     Gfx *displayListCmd;
@@ -1087,7 +1087,7 @@ void func_80064808_65408(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 a
         debugEnqueueCallback((arg0 & 0xFFFF) ^ 0, 3, &renderMultiPartTransparentDisplayLists, new_var);
     }
     if (var_s0 & 4) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 5, &func_80064768_65368, arg1);
+        debugEnqueueCallback(arg0 & 0xFFFF, 5, &renderMultiPartOverlayDisplayLists, arg1);
     }
 }
 

@@ -41,6 +41,7 @@ typedef struct {
     s8 unk37;
 } enqueueMultiPartDisplayList_arg1;
 
+void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects);
 void func_80064808_65408(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2);
 void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2);
 
