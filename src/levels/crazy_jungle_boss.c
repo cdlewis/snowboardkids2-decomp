@@ -123,10 +123,10 @@ typedef struct {
     u8 unkBB7;
     u8 unkBB8;
     u8 padBB9[0xBBD - 0xBB9];
-    u8 unkBBD;
-    u8 unkBBE;
-    u8 unkBBF;
-    u8 unkBC0;
+    u8 behaviorMode;
+    u8 behaviorPhase;
+    u8 behaviorStep;
+    u8 behaviorCounter;
     u8 unkBC1;
     u8 padBC2[0x2];
     u8 finishPosition;
@@ -219,27 +219,27 @@ void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
     arg0->unkAA8 = arg0->unkAA8 + diff;
     arg0->unkB84 &= 0xFFFBFFFF;
 
-    if (arg0->unkBBD != 3) {
+    if (arg0->behaviorMode != 3) {
         if (arg0->unkAC2 != 0) {
             if (arg0->unkAC2 != 0x3D) {
                 if (arg0->unkAC2 == 0x3E) {
-                    arg0->unkBBD = 2;
-                    arg0->unkBBE = 0;
-                    arg0->unkBBF = 0;
-                    arg0->unkBC0 = 0;
+                    arg0->behaviorMode = 2;
+                    arg0->behaviorPhase = 0;
+                    arg0->behaviorStep = 0;
+                    arg0->behaviorCounter = 0;
                 }
             } else {
-                arg0->unkBBD = 2;
-                arg0->unkBBE = 1;
-                arg0->unkBBF = 0;
-                arg0->unkBC0 = 0;
+                arg0->behaviorMode = 2;
+                arg0->behaviorPhase = 1;
+                arg0->behaviorStep = 0;
+                arg0->behaviorCounter = 0;
             }
         }
     }
     arg0->unkAC2 = 0;
 
     do {
-    } while (D_800BC440_ACC70[arg0->unkBBD](arg0) != 0);
+    } while (D_800BC440_ACC70[arg0->behaviorMode](arg0) != 0);
 
     createZRotationMatrix(&arg0->unk9B0, arg0->unkA92);
     createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
@@ -291,7 +291,7 @@ void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
 INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BB754_ABF84);
 
 void func_800BB9E8_AC218(Arg0Struct *arg0) {
-    D_800BC454_ACC84[arg0->unkBBE](arg0);
+    D_800BC454_ACC84[arg0->behaviorPhase](arg0);
 }
 
 s32 func_800BBA18_AC248(Arg0Struct *arg0) {
@@ -332,7 +332,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
 
     arg0->unkB84 |= 0x40000;
 
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         if ((u32)gameState->unk50 < 0x1EU) {
             arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
         } else {
@@ -340,7 +340,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
         }
         arg0->unkB90 = 0;
         arg0->unkA8C = 0xFFFF;
-        arg0->unkBBF++;
+        arg0->behaviorStep++;
     }
 
     clampedAngle = (s16)func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->unk434.x, arg0->unk434.z);
@@ -420,13 +420,13 @@ s32 func_800BBD98_AC5C8(Arg0Struct *arg0) {
 }
 
 void func_800BBE1C_AC64C(Arg0Struct *arg0) {
-    D_800BC460_ACC90[arg0->unkBBE](arg0);
+    D_800BC460_ACC90[arg0->behaviorPhase](arg0);
 }
 
 s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         s32 temp = arg0->velocity.y;
-        arg0->unkBBF++;
+        arg0->behaviorStep++;
         arg0->unkB8C = 1;
         if (temp > 0) {
             arg0->velocity.y = 0;
@@ -436,9 +436,9 @@ s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
 
     arg0->unkB8C--;
     if (arg0->unkB8C == 0) {
-        arg0->unkB8C = D_800BC468_ACC98[arg0->unkBC0].unk0;
-        arg0->unkB9E = D_800BC468_ACC98[arg0->unkBC0].unk2;
-        arg0->unkBC0++;
+        arg0->unkB8C = D_800BC468_ACC98[arg0->behaviorCounter].unk0;
+        arg0->unkB9E = D_800BC468_ACC98[arg0->behaviorCounter].unk2;
+        arg0->behaviorCounter++;
     }
 
     arg0->unkB88 = 0x10;
@@ -449,20 +449,20 @@ s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
 
     if (arg0->unkB8C == -1) {
         arg0->unkB88 = 0;
-        arg0->unkBBD = 1;
-        arg0->unkBBE = 1;
-        arg0->unkBBF = 0;
-        arg0->unkBC0 = 0;
+        arg0->behaviorMode = 1;
+        arg0->behaviorPhase = 1;
+        arg0->behaviorStep = 0;
+        arg0->behaviorCounter = 0;
     }
 
     return 0;
 }
 
 s32 func_800BBF3C_AC76C(Arg0Struct *arg0) {
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         arg0->unkA8C = 0xFFFF;
         arg0->velocity.y = 0x80000;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
         queueSoundAtPosition(&arg0->unk434, 0x21);
     }
 
@@ -476,10 +476,10 @@ s32 func_800BBF3C_AC76C(Arg0Struct *arg0) {
     if (arg0->unkB84 & 1) {
     } else {
         arg0->unkB88 = 0;
-        arg0->unkBBD = 1;
-        arg0->unkBBE = 1;
-        arg0->unkBBF = 0;
-        arg0->unkBC0 = 0;
+        arg0->behaviorMode = 1;
+        arg0->behaviorPhase = 1;
+        arg0->behaviorStep = 0;
+        arg0->behaviorCounter = 0;
     }
     return 0;
 }

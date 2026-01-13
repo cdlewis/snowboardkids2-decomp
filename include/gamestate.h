@@ -178,10 +178,10 @@ typedef struct {
     u8 unkBBA;
     u8 unkBBB;
     u8 unkBBC;
-    u8 unkBBD;
-    u8 unkBBE;
-    u8 unkBBF;
-    u8 unkBC0;
+    u8 behaviorMode;
+    u8 behaviorPhase;
+    u8 behaviorStep;
+    u8 behaviorCounter;
     u8 unkBC1;
     u8 unkBC2;
     u8 unkBC3;

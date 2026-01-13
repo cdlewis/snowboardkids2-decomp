@@ -66,24 +66,24 @@ typedef struct {
 void initStunnedAirborneBehavior(Player *);
 
 void setPlayerBehaviorMode(Player *player, u8 mode) {
-    player->unkBBD = mode;
-    player->unkBBE = 0;
-    player->unkBBF = 0;
-    player->unkBC0 = 0;
+    player->behaviorMode = mode;
+    player->behaviorPhase = 0;
+    player->behaviorStep = 0;
+    player->behaviorCounter = 0;
 }
 
 void setPlayerBehaviorPhase(Player *player, s32 phase) {
-    player->unkBBE = phase;
-    player->unkBBF = 0;
-    player->unkBC0 = 0;
+    player->behaviorPhase = phase;
+    player->behaviorStep = 0;
+    player->behaviorCounter = 0;
 }
 
 void resetPlayerBehaviorToDefault(void *arg) {
     func_800B00D4_arg *arg0 = arg;
-    arg0->unkBBD = 1;
-    arg0->unkBBE = 0;
-    arg0->unkBBF = 0;
-    arg0->unkBC0 = 0;
+    arg0->behaviorMode = 1;
+    arg0->behaviorPhase = 0;
+    arg0->behaviorStep = 0;
+    arg0->behaviorCounter = 0;
 }
 
 void applyBoostVelocity(Player *player) {
@@ -175,7 +175,7 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B05B8_A0468);
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B0F14_A0DC4);
 
 void dispatchDefaultBehaviorPhase(func_800B00D4_arg *arg0) {
-    D_800BAAD4_AA984[arg0->unkBBE](arg0);
+    D_800BAAD4_AA984[arg0->behaviorPhase](arg0);
 }
 
 s32 updatePlayerFinishWaiting(Player *arg0) {
@@ -183,7 +183,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
 
     if (gameState->unk79 == 0) {
         arg0->unkAAC = 0;
-        if (arg0->unkBBF != 0) {
+        if (arg0->behaviorStep != 0) {
             if (arg0->unkB8C < 9) {
                 func_80058BB0_597B0(arg0);
             }
@@ -193,10 +193,10 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
     }
 
     if (gameState->unk7A < 10) {
-        if (arg0->unkBBF == 0) {
+        if (arg0->behaviorStep == 0) {
             if (arg0->unkB7E & 0x4000) {
                 arg0->unkB8C = 0;
-                arg0->unkBBF = arg0->unkBBF + 1;
+                arg0->behaviorStep = arg0->behaviorStep + 1;
             }
         } else {
             arg0->unkB8C = arg0->unkB8C + 1;
@@ -219,8 +219,8 @@ s32 updatePlayerSlidingConstrained(Player *player) {
         return 1;
     }
 
-    if (player->unkBBF == 0) {
-        player->unkBBF++;
+    if (player->behaviorStep == 0) {
+        player->behaviorStep++;
         if (player->velocity.y > 0) {
             player->velocity.y = 0;
         }
@@ -253,9 +253,9 @@ s32 updatePlayerSlidingConstrained(Player *player) {
     player->velocity.y = player->velocity.y - player->unkAB8;
     applyClampedVelocityToPosition(player);
 
-    if (player->unkBC0 == 0) {
+    if (player->behaviorCounter == 0) {
         if (func_8005D308_5DF08(player, 0x21) != 0) {
-            player->unkBC0++;
+            player->behaviorCounter++;
         }
     } else {
         func_8005D180_5DD80(player, 0x22);
@@ -277,21 +277,21 @@ s32 updatePlayerGroundedSliding(Player *player) {
 
     if (player->unkB7C & 0xF) {
         setPlayerBehaviorPhase(player, 4);
-        player->unkBBF = 5;
+        player->behaviorStep = 5;
         resetTrickScore(player);
         return 1;
     }
     if (!(player->unkB84 & 1)) {
-        if (player->unkBC0 >= 0xBU) {
+        if (player->behaviorCounter >= 0xBU) {
             setPlayerBehaviorPhase(player, 3);
         } else {
             setPlayerBehaviorPhase(player, 0);
         }
         return 1;
     }
-    groundTimer = player->unkBC0;
+    groundTimer = player->behaviorCounter;
     if (groundTimer < 0x64U) {
-        player->unkBC0 = groundTimer + 1;
+        player->behaviorCounter = groundTimer + 1;
     }
     if (player->unkBDA != 0) {
         func_800B9B90_A9A40(player);
@@ -316,7 +316,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
     player->velocity.y -= player->unkAB8;
     player->velocity.x = velocityX - (velocityX >> 7);
     player->velocity.z = velocityZ - (velocityZ >> 7);
-    if (player->unkBC0 >= 0xBU) {
+    if (player->behaviorCounter >= 0xBU) {
         decayPlayerAirborneAngles(player);
     }
     applyBoostVelocity(player);
@@ -374,23 +374,22 @@ end:
 }
 
 void dispatchSharpTurnBehaviorStep(func_800B00D4_arg *arg0) {
-    sharpTurnBehaviorStepHandlers[arg0->unkBBF](arg0);
+    sharpTurnBehaviorStepHandlers[arg0->behaviorStep](arg0);
 }
 
 typedef struct {
     u8 _pad0[0xB8C];
     s32 unkB8C;
     u8 _padB90[0x2F];
-    u8 unkBBF;
+    u8 behaviorStep;
 } initSharpTurnSlidingStep_arg;
 
 s32 initSharpTurnSlidingStep(initSharpTurnSlidingStep_arg *player) {
     player->unkB8C = 2;
-    player->unkBBF = player->unkBBF + 1;
+    player->behaviorStep = player->behaviorStep + 1;
     return 1;
 }
 
-extern void func_800B65F8_A64A8(func_800B00D4_arg *);
 extern s32 applyVelocityDeadzone(Player *, s32, s32, s32);
 
 s32 updateSharpTurnSlidingStep(Player *player) {
@@ -404,7 +403,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
-        func_800B65F8_A64A8((func_800B00D4_arg *)player);
+        initKnockbackBehavior((func_800B00D4_arg *)player);
         return 1;
     }
 
@@ -436,7 +435,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
     frameCounter = player->unkB8C - 1;
     player->unkB8C = frameCounter;
     if (frameCounter == 0) {
-        player->unkBBF = player->unkBBF + 1;
+        player->behaviorStep = player->behaviorStep + 1;
     }
 
     func_80058CFC_598FC(player);
@@ -447,13 +446,13 @@ typedef struct {
     u8 _pad0[0xB84];
     s32 unkB84;
     u8 _padB88[0x37];
-    u8 unkBBF;
+    u8 behaviorStep;
 } endSharpTurnSlidingStep_arg;
 
 s32 endSharpTurnSlidingStep(endSharpTurnSlidingStep_arg *player) {
     s32 flags;
 
-    player->unkBBF = player->unkBBF + 1;
+    player->behaviorStep = player->behaviorStep + 1;
     flags = player->unkB84;
 
     if (flags & 2) {
@@ -472,7 +471,7 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
-        func_800B65F8_A64A8((func_800B00D4_arg *)player);
+        initKnockbackBehavior((func_800B00D4_arg *)player);
         return 1;
     }
 
@@ -515,7 +514,7 @@ s32 initPostTrickLandingStep(Player *player) {
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
-        func_800B65F8_A64A8((func_800B00D4_arg *)player);
+        initKnockbackBehavior((func_800B00D4_arg *)player);
         func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
         queueSoundAtPosition(&player->worldPos, 0x25);
         return 1;
@@ -533,9 +532,9 @@ s32 initPostTrickLandingStep(Player *player) {
     applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
     applyBoostVelocity(player);
 
-    behaviorStep = player->unkBBF;
+    behaviorStep = player->behaviorStep;
     if (behaviorStep == 0) {
-        player->unkBBF = ++behaviorStep;
+        player->behaviorStep = ++behaviorStep;
         func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
         if ((player->unkBCC & 0xF) == 7) {
             queueSoundAtPosition(&player->worldPos, 0x29);
@@ -557,12 +556,12 @@ s32 initPostTrickLandingStep(Player *player) {
 }
 
 void dispatchPostTrickLandingStep(func_800B00D4_arg *arg0) {
-    postTrickLandingStepHandlers[arg0->unkBBF](arg0);
+    postTrickLandingStepHandlers[arg0->behaviorStep](arg0);
 }
 
 s32 beginPostTrickSlidingStep(Player *player) {
     player->unkB8C = 4;
-    player->unkBBF += 1;
+    player->behaviorStep += 1;
     player->unkA94 += player->unkA90;
     player->unkA90 = 0;
     func_8005D810_5E410(player);
@@ -580,7 +579,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
-        func_800B65F8_A64A8((func_800B00D4_arg *)player);
+        initKnockbackBehavior((func_800B00D4_arg *)player);
         return 1;
     }
 
@@ -595,7 +594,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
     applyBoostVelocity(player);
 
     if (!(player->unkB7C & 0x8000)) {
-        player->unkBC0 = 1;
+        player->behaviorCounter = 1;
     }
 
     func_8005D818_5E418(player);
@@ -603,7 +602,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
 
     player->unkB8C -= 1;
     if (player->unkB8C == 0) {
-        player->unkBBF += 1;
+        player->behaviorStep += 1;
     }
 
     if (shouldInitiateSharpTurn((shouldInitiateSharpTurn_arg *)player, steeringValue) != 0) {
@@ -623,7 +622,7 @@ s32 updatePostTrickChargingStep(Player *player) {
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
-        func_800B65F8_A64A8((func_800B00D4_arg *)player);
+        initKnockbackBehavior((func_800B00D4_arg *)player);
         return 1;
     }
 
@@ -641,7 +640,7 @@ s32 updatePostTrickChargingStep(Player *player) {
         if (player->unkBDA != 0 && player->unkBDC != 0) {
             player->unkB8C = 0x10000;
         }
-        player->unkBC0 = 1;
+        player->behaviorCounter = 1;
         if (player->unkB8C > 0xFFFF) {
             player->unkBCD = func_8005D818_5E418(player);
         }
@@ -652,8 +651,8 @@ s32 updatePostTrickChargingStep(Player *player) {
         }
     }
 
-    if (player->unkBC0 != 0) {
-        player->unkBBF += 1;
+    if (player->behaviorCounter != 0) {
+        player->behaviorStep += 1;
     }
 
     func_8005D308_5DF08(player, 3);
@@ -672,8 +671,8 @@ s32 beginPostTrickLaunchStep(Player *player) {
     Vec3i launchVelocity;
     s32 *launchMagnitudePtr;
 
-    player->unkBC0 = 3;
-    player->unkBBF++;
+    player->behaviorCounter = 3;
+    player->behaviorStep++;
     D_800BAB40_AA9F0 = player->unkB8C + player->unkABC;
 
     if (*(volatile s32 *)&player->unkB84 & 2) {
@@ -790,15 +789,15 @@ s32 updatePostTrickDescentStep(Player *player) {
     s32 pad[16];
 
     if (player->unkB84 & 1) {
-        if (player->unkBC0 < 3) {
+        if (player->behaviorCounter < 3) {
             resetTrickScore(player);
             if (player->unkBCD < 0) {
-                player->unkBC0 = 0;
-                player->unkBBF = player->unkBBF + 1;
+                player->behaviorCounter = 0;
+                player->behaviorStep = player->behaviorStep + 1;
                 return 1;
             } else {
-                player->unkBBF = player->unkBCD + 6;
-                player->unkBC0 = 0;
+                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorCounter = 0;
                 func_80059ADC_5A6DC(player);
                 return 1;
             }
@@ -811,8 +810,8 @@ s32 updatePostTrickDescentStep(Player *player) {
         decayPlayerSteeringAngles(player);
         applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
         applyBoostVelocity(player);
-        player->unkBC0 = player->unkBC0 - 1;
-        if (player->unkBC0 == 0) {
+        player->behaviorCounter = player->behaviorCounter - 1;
+        if (player->behaviorCounter == 0) {
             setPlayerBehaviorPhase(player, 0);
         }
         func_8005D308_5DF08(player, 3);
@@ -976,21 +975,21 @@ void beginSpinTrick(Player *player) {
     player->unkA98 = 0;
     player->unkA9A = 0;
     player->unkBCD = -1;
-    player->unkBC0++;
+    player->behaviorCounter++;
     player->unkB84 |= 0x4000;
     func_8005D810_5E410(player);
     queueSoundAtPosition(&player->worldPos, 0xB);
 }
 
 void updateSpinTrickState(Player *player, s8 trickType) {
-    switch (player->unkBC0) {
+    switch (player->behaviorCounter) {
         case 0:
             beginSpinTrick(player);
             addTrickScore(player, trickType);
             break;
         case 1:
             if (player->unkBDA != 0 || (player->unkB7C & 0x8000)) {
-                player->unkBC0 = player->unkBC0 + 1;
+                player->behaviorCounter = player->behaviorCounter + 1;
             }
             break;
         case 2:
@@ -1025,8 +1024,8 @@ s32 updateRightSpinTrick(Player *player) {
             if (player->unkBCD < 0) {
                 player->unkB84 = player->unkB84 & ~0x4000;
             } else {
-                player->unkBBF = player->unkBCD + 6;
-                player->unkBC0 = 0;
+                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorCounter = 0;
             }
         } else {
             updateTrickRotationTransform(player);
@@ -1060,8 +1059,8 @@ s32 updateLeftSpinTrick(Player *player) {
             if (player->unkBCD < 0) {
                 player->unkB84 = player->unkB84 & ~0x4000;
             } else {
-                player->unkBBF = player->unkBCD + 6;
-                player->unkBC0 = 0;
+                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorCounter = 0;
             }
         } else {
             updateTrickRotationTransform(player);
@@ -1095,8 +1094,8 @@ s32 updateForwardFlipTrick(Player *player) {
             if (player->unkBCD < 0) {
                 player->unkB84 = player->unkB84 & ~0x4000;
             } else {
-                player->unkBBF = player->unkBCD + 6;
-                player->unkBC0 = 0;
+                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorCounter = 0;
             }
         } else {
             updateTrickRotationTransform(player);
@@ -1130,8 +1129,8 @@ s32 updateBackwardFlipTrick(Player *player) {
             if (player->unkBCD < 0) {
                 player->unkB84 = player->unkB84 & ~0x4000;
             } else {
-                player->unkBBF = player->unkBCD + 6;
-                player->unkBC0 = 0;
+                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorCounter = 0;
             }
         } else {
             updateTrickRotationTransform(player);
@@ -1166,8 +1165,8 @@ s32 updateRightForwardFlipTrick(Player *player) {
             if (player->unkBCD < 0) {
                 player->unkB84 = player->unkB84 & ~0x4000;
             } else {
-                player->unkBBF = player->unkBCD + 6;
-                player->unkBC0 = 0;
+                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorCounter = 0;
             }
         } else {
             updateTrickRotationTransform(player);
@@ -1202,8 +1201,8 @@ s32 updateRightBackwardFlipTrick(Player *player) {
             if (player->unkBCD < 0) {
                 player->unkB84 = player->unkB84 & ~0x4000;
             } else {
-                player->unkBBF = player->unkBCD + 6;
-                player->unkBC0 = 0;
+                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorCounter = 0;
             }
         } else {
             updateTrickRotationTransform(player);
@@ -1238,8 +1237,8 @@ s32 updateLeftForwardFlipTrick(Player *player) {
             if (player->unkBCD < 0) {
                 player->unkB84 = player->unkB84 & ~0x4000;
             } else {
-                player->unkBBF = player->unkBCD + 6;
-                player->unkBC0 = 0;
+                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorCounter = 0;
             }
         } else {
             updateTrickRotationTransform(player);
@@ -1274,8 +1273,8 @@ s32 updateLeftBackwardFlipTrick(Player *player) {
             if (player->unkBCD < 0) {
                 player->unkB84 = player->unkB84 & ~0x4000;
             } else {
-                player->unkBBF = player->unkBCD + 6;
-                player->unkBC0 = 0;
+                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorCounter = 0;
             }
         } else {
             updateTrickRotationTransform(player);
@@ -1407,7 +1406,7 @@ void updateFlipSpinTrickAnimation(Player *player) {
 }
 
 void dispatchRaceFinishBehaviorStep(func_800B00D4_arg *arg0) {
-    raceFinishBehaviorStepHandlers[arg0->unkBBF](arg0);
+    raceFinishBehaviorStepHandlers[arg0->behaviorStep](arg0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B3980_A3830);
@@ -1475,11 +1474,11 @@ s32 updateRaceFinishWaitingStep(Player *player) {
                 break;
         }
         if (playerWon != 0) {
-            player->unkBBF = 2;
+            player->behaviorStep = 2;
         } else {
-            player->unkBBF = 3;
+            player->behaviorStep = 3;
         }
-        player->unkBC0 = 0;
+        player->behaviorCounter = 0;
     }
     return 0;
 }
@@ -1495,35 +1494,35 @@ s32 updateRaceFinishWinStep(Player *player) {
         player->unkAE0 = player->unkAE0 + 0x8000;
     }
 
-    switch (player->unkBC0) {
+    switch (player->behaviorCounter) {
         case 0:
             if (func_8005D308_5DF08(player, 0x1B) != 0) {
-                player->unkBC0 = player->unkBC0 + 1;
+                player->behaviorCounter = player->behaviorCounter + 1;
                 func_80059CE0_5A8E0(player);
             }
             break;
         case 1:
             if (func_8005D308_5DF08(player, 0x1D) != 0) {
                 player->unkB8C = 0x14;
-                player->unkBC0 = player->unkBC0 + 1;
+                player->behaviorCounter = player->behaviorCounter + 1;
             }
             break;
         case 2:
             if (player->unkB8C != 0) {
                 player->unkB8C = player->unkB8C - 1;
             } else {
-                player->unkBC0 = player->unkBC0 + 1;
+                player->behaviorCounter = player->behaviorCounter + 1;
             }
             break;
         case 3:
             if (func_8005D308_5DF08(player, 0x1C) == 0) {
                 goto end;
             }
-            player->unkBC0 = player->unkBC0 + 1;
+            player->behaviorCounter = player->behaviorCounter + 1;
             break;
         case 4:
             if (func_8005D308_5DF08(player, 0x1D) != 0) {
-                player->unkBC0 = 2;
+                player->behaviorCounter = 2;
                 player->unkB8C = 0x14;
             }
             break;
@@ -1561,24 +1560,24 @@ s32 updateRaceFinishLoseStep(Player *player) {
         player->unkAE0 = unkAE0 + 0x8000;
     }
 
-    state = player->unkBC0;
+    state = player->behaviorCounter;
 
     switch (state) {
         case 0:
             if (func_8005D308_5DF08(player, 0x1E)) {
-                temp = player->unkBC0;
+                temp = player->behaviorCounter;
                 temp++;
-                player->unkBC0 = temp;
+                player->behaviorCounter = temp;
             }
             break;
 
         case 1:
             if (func_8005D308_5DF08(player, 0x20)) {
                 velocityY = 0x14;
-                temp = player->unkBC0;
+                temp = player->behaviorCounter;
                 player->unkB8C = velocityY;
                 temp++;
-                player->unkBC0 = temp;
+                player->behaviorCounter = temp;
             }
             break;
 
@@ -1588,23 +1587,23 @@ s32 updateRaceFinishLoseStep(Player *player) {
                 temp--;
                 player->unkB8C = temp;
             } else {
-                temp = player->unkBC0;
+                temp = player->behaviorCounter;
                 temp++;
-                player->unkBC0 = temp;
+                player->behaviorCounter = temp;
             }
             break;
 
         case 3:
             if (func_8005D308_5DF08(player, 0x1F)) {
-                temp = player->unkBC0;
+                temp = player->behaviorCounter;
                 temp++;
-                player->unkBC0 = temp;
+                player->behaviorCounter = temp;
             }
             break;
 
         case 4:
             if (func_8005D308_5DF08(player, 0x20)) {
-                player->unkBC0 = 2;
+                player->behaviorCounter = 2;
                 player->unkB8C = 0x14;
             }
             break;
@@ -1858,14 +1857,14 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
 }
 
 void dispatchStunnedBehaviorPhase(func_800B00D4_arg *arg0) {
-    stunnedBehaviorPhaseHandlers[arg0->unkBBE](arg0);
+    stunnedBehaviorPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
 void initStunnedAirborneBehavior(Player *player) {
-    player->unkBBD = 2;
-    player->unkBBE = 5;
-    player->unkBBF = 0;
-    player->unkBC0 = 0;
+    player->behaviorMode = 2;
+    player->behaviorPhase = 5;
+    player->behaviorStep = 0;
+    player->behaviorCounter = 0;
     player->unkB9A = 0;
     player->unkBA6 = 0;
     player->unkBA4 = 0;
@@ -1884,12 +1883,12 @@ s32 updateStunnedAirbornePhase(Player *player) {
 
     gameState = getCurrentAllocation();
 
-    if (player->unkBBF == 0) {
+    if (player->behaviorStep == 0) {
         player->unkA8C = 0xFFFF;
         player->unkB88 = 0;
         player->velocity.x = player->unkAC8;
         player->velocity.z = player->unkAD0;
-        player->unkBBF++;
+        player->behaviorStep++;
         knockbackAngle = atan2Fixed(-player->unkAC8, -player->unkAD0);
         rotateVectorY(gameState->unk48 + 0xE4, knockbackAngle, &effectPos);
         effectPos.x += player->worldPos.x;
@@ -1937,12 +1936,12 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
 
     gameState = getCurrentAllocation();
 
-    if (player->unkBBF == 0) {
+    if (player->behaviorStep == 0) {
         player->unkA8C = 0xFFFF;
         player->unkB88 = 0;
         player->velocity.x = player->unkAC8;
         player->velocity.z = player->unkAD0;
-        player->unkBBF++;
+        player->behaviorStep++;
         knockbackAngle = atan2Fixed(-player->unkAC8, -player->unkAD0);
         rotateVectorY(gameState->unk48 + 0xE4, knockbackAngle, &effectPos);
         effectPos.x += player->worldPos.x;
@@ -2003,9 +2002,9 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
     s64 distSq;
     s32 dist;
 
-    if (player->unkBBF == 0) {
+    if (player->behaviorStep == 0) {
         player->unkB8C = 0x14;
-        player->unkBBF++;
+        player->behaviorStep++;
     }
 
     player->unkB84 |= 0x60;
@@ -2015,12 +2014,12 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
     if (player->unkB84 & 1) {
         player->unkA8C = -1;
         player->unkB8C = 0xA;
-        player->unkBC0 = 0;
+        player->behaviorCounter = 0;
         player->velocity.x -= (player->velocity.x >> 5);
         player->velocity.z -= (player->velocity.z >> 5);
     } else {
-        if (player->unkBC0 == 0) {
-            player->unkBC0++;
+        if (player->behaviorCounter == 0) {
+            player->behaviorCounter++;
             func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
             queueSoundAtPosition(&player->worldPos, 0x25);
             func_80051C08_52808(player, player->unkBCC & 0xF);
@@ -2056,10 +2055,10 @@ s32 updateStunnedRecoveryFallingPhase(Player *player) {
     s16 angleDiff;
     s16 clampedDelta;
 
-    if (player->unkBBF == 0) {
+    if (player->behaviorStep == 0) {
         player->unkB88 = 0;
         player->unkB8C = 0xF;
-        player->unkBBF++;
+        player->behaviorStep++;
         if (player->velocity.y > 0) {
             player->velocity.y = 0;
         }
@@ -2107,9 +2106,9 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
     s32 velocityMagnitude;
     s32 timerDelta;
 
-    if (player->unkBBF == 0) {
+    if (player->behaviorStep == 0) {
         player->unkB8C = 0x1E;
-        player->unkBBF++;
+        player->behaviorStep++;
     }
 
     player->unkB84 |= 0x60;
@@ -2160,9 +2159,9 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
 s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
     s16 angle;
 
-    if (arg0->unkBBF != 0) {
+    if (arg0->behaviorStep != 0) {
         arg0->unkB8C = 0;
-        arg0->unkBBF++;
+        arg0->behaviorStep++;
     }
 
     arg0->unkB88 = 7;
@@ -2218,8 +2217,8 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
 
     allocation = getCurrentAllocation();
 
-    if (arg0->unkBBF == 0) {
-        arg0->unkBBF++;
+    if (arg0->behaviorStep == 0) {
+        arg0->behaviorStep++;
         angle = arg0->unkAC4;
         arg0->unkA94 = angle;
         rotateVectorY(&arg0->unkAC8, angle, &arg0->velocity);
@@ -2264,10 +2263,10 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
 }
 
 s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         arg0->velocity.y = 0;
         arg0->unkB8C = 0x14;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
     arg0->unkB84 = arg0->unkB84 | 0x60;
@@ -2277,12 +2276,12 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
     if (arg0->unkB84 & 1) {
         arg0->unkA8C = 0xFFFF;
         arg0->unkB8C = 0xA;
-        arg0->unkBC0 = 0;
+        arg0->behaviorCounter = 0;
         arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 5);
         arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 5);
     } else {
-        if (arg0->unkBC0 == 0) {
-            arg0->unkBC0++;
+        if (arg0->behaviorCounter == 0) {
+            arg0->behaviorCounter++;
             func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
             queueSoundAtPosition(&arg0->worldPos, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
@@ -2309,8 +2308,8 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
 }
 
 s32 updateStunnedRecoverySlidePhase(Player *arg0) {
-    if (arg0->unkBBF == 0) {
-        arg0->unkBBF = arg0->unkBBF + 1;
+    if (arg0->behaviorStep == 0) {
+        arg0->behaviorStep = arg0->behaviorStep + 1;
         queueSoundAtPosition(&arg0->worldPos, 0xD);
     }
 
@@ -2338,10 +2337,10 @@ s32 updateStunnedRecoverySlidePhase(Player *arg0) {
 }
 
 s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         arg0->velocity.y = 0;
         arg0->unkB8C = 0x14;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
         if ((arg0->unkB84 & 1) == 0) {
             queueSoundAtPosition(&arg0->worldPos, 0x25);
             func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
@@ -2400,10 +2399,10 @@ s32 updateStunnedRecoveryStandUpPhase(Player *arg0) {
     s16 angle;
     s16 angleDelta;
 
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         arg0->unkB88 = 0;
         arg0->unkB8C = 0xF;
-        arg0->unkBBF++;
+        arg0->behaviorStep++;
         if (arg0->velocity.y > 0) {
             arg0->velocity.y = 0;
         }
@@ -2448,9 +2447,9 @@ s32 updateStunnedRecoveryStandUpPhase(Player *arg0) {
 s32 updateKnockbackAirborneLaunchPhase(Player *player) {
     s32 prevFlags;
 
-    if (!player->unkBBF) {
+    if (!player->behaviorStep) {
         prevFlags = player->unkB84;
-        player->unkBBF++;
+        player->behaviorStep++;
         player->velocity.y = 0xA0000;
         player->unkB88 = 0x20;
         player->unkB8C = 5;
@@ -2461,9 +2460,9 @@ s32 updateKnockbackAirborneLaunchPhase(Player *player) {
     if (player->velocity.y > 0) {
         player->velocity.y = player->velocity.y - 0x8000;
     } else {
-        if (player->unkBBF == 1) {
+        if (player->behaviorStep == 1) {
             if (createFallingEffect(player) != 0) {
-                player->unkBBF++;
+                player->behaviorStep++;
             }
         }
 
@@ -2505,9 +2504,9 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
     s32 newTimer;
     u8 step;
 
-    step = arg0->unkBBF;
+    step = arg0->behaviorStep;
     if (step == 0) {
-        arg0->unkBBF = step + 1;
+        arg0->behaviorStep = step + 1;
         if (arg0->velocity.y > 0) {
             arg0->velocity.y = 0;
         }
@@ -2518,9 +2517,9 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
         arg0->unkBCE &= 0xFE;
         func_8005D308_5DF08(arg0, 0xE);
     }
-    if (arg0->unkBBF == 1) {
+    if (arg0->behaviorStep == 1) {
         scheduleShieldEffect(arg0);
-        arg0->unkBBF += 1;
+        arg0->behaviorStep += 1;
     }
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
@@ -2564,14 +2563,14 @@ s32 updateStunnedBounceFallPhase(Player *arg0) {
 }
 
 s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         arg0->unkB8C = 0x78;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
-    if (arg0->unkBBF == 1) {
+    if (arg0->behaviorStep == 1) {
         if (spawnCrashEffect(arg0) != 0) {
-            arg0->unkBBF = arg0->unkBBF + 1;
+            arg0->behaviorStep = arg0->behaviorStep + 1;
         }
     }
 
@@ -2607,9 +2606,9 @@ s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
 s32 updateStunnedBounceLaunchPhase(Player *arg0) {
     s16 angle;
 
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         arg0->unkB8C = 0x1E;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
     arg0->unkB84 = arg0->unkB84 | 0x60;
@@ -2652,11 +2651,11 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
     s32 knockbackVelZ;
     s32 horizontalSpeed;
 
-    step = arg0->unkBBF;
+    step = arg0->behaviorStep;
     if (step == 0) {
         arg0->velocity.x = arg0->unkAC8;
         knockbackVelZ = arg0->unkAD0;
-        arg0->unkBBF = step + 1;
+        arg0->behaviorStep = step + 1;
         arg0->velocity.z = knockbackVelZ;
         horizontalSpeed = isqrt64((s64)arg0->velocity.x * arg0->velocity.x + (s64)knockbackVelZ * knockbackVelZ);
         if (horizontalSpeed > 0x60000) {
@@ -2693,9 +2692,9 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
 s32 updateKnockbackBounceLaunchPhase(Player *player) {
     s16 angle;
 
-    if (player->unkBBF == 0) {
+    if (player->behaviorStep == 0) {
         player->unkB8C = 0x1E;
-        player->unkBBF = player->unkBBF + 1;
+        player->behaviorStep = player->behaviorStep + 1;
     }
 
     player->unkB84 = player->unkB84 | 0x60;
@@ -2740,16 +2739,16 @@ s32 updateKnockbackBounceLaunchPhase(Player *player) {
 s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
     u8 step;
 
-    step = player->unkBBF;
+    step = player->behaviorStep;
     if (step == 0) {
         step += 1;
-        player->unkBBF = step;
+        player->behaviorStep = step;
         player->unkB8C = 0x8000;
         player->unkA8C = 0xFFFF;
         func_8005D308_5DF08(player, 0xE);
     }
-    if ((player->unkBBF == 1) && (createLiftEffect(player) != 0)) {
-        player->unkBBF = player->unkBBF + 1;
+    if ((player->behaviorStep == 1) && (createLiftEffect(player) != 0)) {
+        player->behaviorStep = player->behaviorStep + 1;
     }
     player->unkB88 = 0x400;
     player->velocity.x = 0;
@@ -2827,9 +2826,9 @@ extern u16 knockbackHomingBounceScales;
 s32 updateKnockbackHomingBouncePhase(Player *arg0) {
     u8 temp_v0;
 
-    temp_v0 = arg0->unkBBF;
+    temp_v0 = arg0->behaviorStep;
     if (temp_v0 == 0) {
-        arg0->unkBBF = temp_v0 + 1;
+        arg0->behaviorStep = temp_v0 + 1;
         arg0->unkB8C = 0;
         arg0->velocity.y = 0;
         arg0->unkA8C = 0xFFFF;
@@ -2841,9 +2840,9 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
     }
 
     if (arg0->unkB8C == 0) {
-        arg0->unkB8C = *(&knockbackHomingBounceTimers + (arg0->unkBC0 * 2));
-        arg0->unkB9E = *(&knockbackHomingBounceScales + (arg0->unkBC0 * 2));
-        arg0->unkBC0 += 1;
+        arg0->unkB8C = *(&knockbackHomingBounceTimers + (arg0->behaviorCounter * 2));
+        arg0->unkB9E = *(&knockbackHomingBounceScales + (arg0->behaviorCounter * 2));
+        arg0->behaviorCounter += 1;
     } else {
         s32 temp_v1;
         temp_v1 = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
@@ -2872,18 +2871,18 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
 }
 
 void dispatchKnockbackBehaviorPhase(Player *player) {
-    knockbackBehaviorPhaseHandlers[player->unkBBE](player);
+    knockbackBehaviorPhaseHandlers[player->behaviorPhase](player);
 }
 
-void func_800B65F8_A64A8(func_800B00D4_arg *arg0) {
-    arg0->unkBBD = 3;
-    arg0->unkBBE = 0;
-    arg0->unkBBF = 0;
-    arg0->unkBC0 = 0;
+void initKnockbackBehavior(func_800B00D4_arg *arg0) {
+    arg0->behaviorMode = 3;
+    arg0->behaviorPhase = 0;
+    arg0->behaviorStep = 0;
+    arg0->behaviorCounter = 0;
 }
 
 void func_800B6610_A64C0(func_800B00D4_arg *arg0) {
-    D_800BAC14_AAAC4[arg0->unkBBF](arg0);
+    D_800BAC14_AAAC4[arg0->behaviorStep](arg0);
 }
 
 s32 func_800B6640_A64F0(Player *arg0) {
@@ -2891,11 +2890,11 @@ s32 func_800B6640_A64F0(Player *arg0) {
     arg0->unkB84 = arg0->unkB84 | 0x180;
 
     if (arg0->unkB84 & 2) {
-        arg0->unkBC0 = 1;
+        arg0->behaviorCounter = 1;
         arg0->unkB84 = arg0->unkB84 & ~2;
     }
 
-    arg0->unkBBF = arg0->unkBBF + 1;
+    arg0->behaviorStep = arg0->behaviorStep + 1;
     return 1;
 }
 
@@ -2933,16 +2932,16 @@ s32 func_800B6688_A6538(Player *arg0) {
     decayPlayerSteeringAngles(arg0);
     arg0->unkB8C -= 1;
 
-    if (arg0->unkBC0 != 0) {
+    if (arg0->behaviorCounter != 0) {
         if (func_8005D308_5DF08(arg0, 6) != 0) {
-            arg0->unkBC0 = 0;
+            arg0->behaviorCounter = 0;
         }
     } else {
         func_8005D180_5DD80(arg0, 0);
     }
 
     if (arg0->unkB8C == 0) {
-        arg0->unkBBF += 1;
+        arg0->behaviorStep += 1;
     }
 
     return 0;
@@ -2963,8 +2962,8 @@ s32 func_800B67E4_A6694(Player *arg0) {
     decayPlayerSteeringAngles(arg0);
 
     if (func_8005D308_5DF08(arg0, 3) != 0) {
-        arg0->unkBC0 = 0;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorCounter = 0;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
     return 0;
@@ -2984,7 +2983,7 @@ s32 func_800B6D14_A6BC4(Player *arg0) {
         arg0->unkB8C = arg0->unkB8C - 1;
     } else {
         arg0->unkB8C = 0xB4;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
     if (arg0->unkB8C < 0x12) {
@@ -3016,8 +3015,8 @@ s32 func_800B6DB8_A6C68(Player *arg0) {
             func_8006FDC8_709C8(arg0->unkBB8, 0xFF, 0x10);
         }
     } else {
-        arg0->unkBBF = arg0->unkBBF + 1;
-        arg0->unkBC0 = 0;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
+        arg0->behaviorCounter = 0;
     }
 
     func_8005D308_5DF08(arg0, 0xD);
@@ -3033,12 +3032,12 @@ s32 func_800B6E5C_A6D0C(Player *arg0) {
     gameState = getCurrentAllocation();
     item = func_80055D10_56910(gameState->memoryPoolId);
 
-    if (arg0->unkBC0 == 0) {
+    if (arg0->behaviorCounter == 0) {
         arg0->unkA94 = 0x1000;
         arg0->unkB9C = 0;
         arg0->unkB94 = 0;
         arg0->unkB84 = arg0->unkB84 | 0x200;
-        arg0->unkBC0++;
+        arg0->behaviorCounter++;
         arg0->unkBC5++;
 
         createYRotationMatrix(&arg0->unk970, 0x1000);
@@ -3070,7 +3069,7 @@ s32 func_800B6E5C_A6D0C(Player *arg0) {
         arg0->unkB8C--;
     } else {
         arg0->unkB8C = 0x2C;
-        arg0->unkBBF++;
+        arg0->behaviorStep++;
     }
 
     func_8005D308_5DF08(arg0, 0xD);
@@ -3106,8 +3105,8 @@ s32 func_800B7078_A6F28(Player *arg0) {
 
     arg0->unkB8C = arg0->unkB8C - 1;
     if (arg0->unkB8C == 0) {
-        arg0->unkBC0 = 0;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorCounter = 0;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
         memcpy(&arg0->unk470, &arg0->worldPos.x, 0xC);
         arg0->unk480 = 0;
         arg0->unk468 = 0x30000;
@@ -3140,12 +3139,12 @@ s32 func_800B7108_A6FB8(Player *arg0) {
     func_8005D308_5DF08(arg0, 4);
     if (arg0->unkB8C == 16) {
         s32 tempB84 = arg0->unkB84;
-        u8 tempBBF = arg0->unkBBF;
-        arg0->unkBC0 = 0;
+        u8 tempBBF = arg0->behaviorStep;
+        arg0->behaviorCounter = 0;
         tempBBF = tempBBF + 1;
         tempB84 = tempB84 | 0x2000;
         arg0->unkB84 = tempB84;
-        arg0->unkBBF = tempBBF;
+        arg0->behaviorStep = tempBBF;
         queueSoundAtPosition(&arg0->worldPos, 0x25);
     }
     return 0;
@@ -3158,8 +3157,8 @@ s32 func_800B71E4_A7094(Player *arg0) {
     arg0->unkA8E = arg0->unkB74;
 
     if (func_8005D308_5DF08(arg0, 5) != 0) {
-        arg0->unkBC0 = 0;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorCounter = 0;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
     return 0;
@@ -3185,7 +3184,7 @@ s32 func_800B724C_A70FC(Player *arg0) {
         arg0->unkA94 = 0x1000;
         arg0->unkB9C = 0;
         arg0->unkB94 = 0;
-        arg0->unkBBF++;
+        arg0->behaviorStep++;
         arg0->unkB84 |= 0x200;
         arg0->unkBC5++;
         memcpy(&arg0->unk440, &arg0->worldPos.x, 0xC);
@@ -3211,7 +3210,7 @@ s32 func_800B735C_A720C(Player *arg0) {
 
     if (arg0->unkBCE & 0x4) {
         arg0->unkB8C = 6;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
     return 0;
@@ -3228,19 +3227,19 @@ s32 func_800B73CC_A727C(Player *arg0) {
     arg0->unkB8C = arg0->unkB8C - 1;
     if (arg0->unkB8C == 0) {
         arg0->unkB8C = 0xE;
-        arg0->unkBC0 = 0;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorCounter = 0;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
     return 0;
 }
 
 s32 func_800B7444_A72F4(Player *arg0) {
-    if (arg0->unkBC0 == 0) {
+    if (arg0->behaviorCounter == 0) {
         arg0->velocity.z = 0xFFF80000;
         arg0->velocity.x = 0;
         arg0->velocity.y = 0x30000;
-        arg0->unkBC0 = arg0->unkBC0 + 1;
+        arg0->behaviorCounter = arg0->behaviorCounter + 1;
     }
 
     arg0->velocity.y = arg0->velocity.y - 0x6000;
@@ -3268,9 +3267,9 @@ s32 func_800B74E4_A7394(Player *arg0) {
 
     arg0->unkB8C = arg0->unkB8C - 1;
     if (arg0->unkB8C == 0) {
-        arg0->unkBC0 = 0;
+        arg0->behaviorCounter = 0;
         arg0->unkB8C = 0;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
         func_800BBB90(0);
         queueSoundAtPosition(&arg0->worldPos, 0x26);
     }
@@ -3290,7 +3289,7 @@ s32 func_800B756C_A741C(Player *arg0) {
 
     if (arg0->unkB8C == 0x400) {
         arg0->unkB8C = 10;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
     return 0;
@@ -3316,14 +3315,14 @@ s32 func_800B75F4_A74A4(Player *arg0) {
     arg0->unkB8C = temp;
 
     if (temp == 0) {
-        u8 temp2 = arg0->unkBBF;
+        u8 temp2 = arg0->behaviorStep;
         s32 temp3 = arg0->unkB84;
         arg0->unkBA0 = 0x2000;
         arg0->unkBA2 = 0x2000;
         arg0->unkB8C = 10;
         temp2 = temp2 + 1;
         temp3 = temp3 | 0x800000;
-        arg0->unkBBF = temp2;
+        arg0->behaviorStep = temp2;
         arg0->unkB84 = temp3;
         alloc->unk63 = alloc->unk63 & 2;
         queueSoundAtPosition(&arg0->worldPos, 0x4E);
@@ -3359,7 +3358,7 @@ s32 func_800B76BC_A756C(Player *arg0) {
 
     if (arg0->unkBA0 == 0) {
         arg0->unkB8C = 0x11;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
         func_8006FDC8_709C8(arg0->unkBB8, 0xFF, 0x10);
         alloc->unk81 = alloc->unk81 + 1;
         func_800BBB90(1);
@@ -3388,7 +3387,7 @@ s32 func_800B7784_A7634(Player *arg0) {
     temp = arg0->unkB8C - 1;
     arg0->unkB8C = temp;
     if (temp == 0) {
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
         alloc->unk80 = alloc->unk80 - 1;
     }
 
@@ -3403,12 +3402,12 @@ s32 func_800B781C_A76CC(Player *arg0) {
     gameState = getCurrentAllocation();
     item = func_80055D10_56910(gameState->memoryPoolId);
 
-    if (arg0->unkBC0 == 0) {
+    if (arg0->behaviorCounter == 0) {
         arg0->unkA94 = 0xE00;
         arg0->unkB9C = 0;
         arg0->unkB94 = 0;
         arg0->unkB84 |= 0x200;
-        arg0->unkBC0++;
+        arg0->behaviorCounter++;
         arg0->unkBC5++;
 
         createYRotationMatrix(&arg0->unk970, 0xE00);
@@ -3441,7 +3440,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
 
     if (arg0->unkBA0 == 0x2000) {
         arg0->unkB84 &= 0xFF7FFFFF;
-        arg0->unkBBF++;
+        arg0->behaviorStep++;
     }
 
     arg0->unkB84 |= 0x10000;
@@ -3461,7 +3460,7 @@ s32 func_800B7998_A7848(Player *arg0) {
 
     if (temp == 0) {
         arg0->unkB8C = 6;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
         alloc->unk81 = alloc->unk81 - 1;
     }
 
@@ -3475,8 +3474,8 @@ s32 func_800B7A30_A78E0(Player *arg0) {
     arg0->unkB8C = arg0->unkB8C - 1;
     if (arg0->unkB8C == 0) {
         arg0->unkB8C = 0xE;
-        arg0->unkBC0 = 0;
-        arg0->unkBBF = arg0->unkBBF + 1;
+        arg0->behaviorCounter = 0;
+        arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
     arg0->unkB84 = arg0->unkB84 | 0x10000;
@@ -3484,11 +3483,11 @@ s32 func_800B7A30_A78E0(Player *arg0) {
 }
 
 s32 func_800B7A94_A7944(Player *arg0) {
-    if (arg0->unkBC0 == 0) {
+    if (arg0->behaviorCounter == 0) {
         arg0->velocity.z = 0xFFF80000;
         arg0->velocity.x = 0;
         arg0->velocity.y = 0x30000;
-        arg0->unkBC0 = arg0->unkBC0 + 1;
+        arg0->behaviorCounter = arg0->behaviorCounter + 1;
     }
 
     arg0->unkB84 = arg0->unkB84 | 0x10000;

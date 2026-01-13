@@ -63,10 +63,10 @@ typedef struct {
     u8 unkBB9;
     u8 unkBBA;
     u8 _padBBB[0xBBD - 0xBBB];
-    u8 unkBBD;
-    u8 unkBBE;
-    u8 unkBBF;
-    u8 unkBC0;
+    u8 behaviorMode;
+    u8 behaviorPhase;
+    u8 behaviorStep;
+    u8 behaviorCounter;
     u8 _padBC1[0xBC9 - 0xBC1];
     u8 unkBC9;
     u8 unkBCA;
@@ -137,10 +137,10 @@ typedef struct {
     u8 padB6C[0xB84 - 0xB6C];
     s32 unkB84;
     u8 padB88[0xBBD - 0xB88];
-    u8 unkBBD;
-    u8 unkBBE;
-    u8 unkBBF;
-    u8 unkBC0;
+    u8 behaviorMode;
+    u8 behaviorPhase;
+    u8 behaviorStep;
+    u8 behaviorCounter;
     u8 padBC1[3];
     u8 finishPosition;
 } IceBossArg;
@@ -192,15 +192,15 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
     arg0->unkAA8 = arg0->unkAA8 + diff;
     arg0->unkB84 &= 0xFFFBFFFF;
 
-    if (arg0->unkBBD != 3) {
+    if (arg0->behaviorMode != 3) {
         if (arg0->unkAC2 != 0) {
             if (arg0->unkAC2 == 0x3D) {
-                arg0->unkBBD = 2;
-                arg0->unkBBE = 0;
-                arg0->unkBBF = 0;
-                arg0->unkBC0 = 0;
+                arg0->behaviorMode = 2;
+                arg0->behaviorPhase = 0;
+                arg0->behaviorStep = 0;
+                arg0->behaviorCounter = 0;
                 if (arg0->unkB84 & 0x400000) {
-                    arg0->unkBBE = 1;
+                    arg0->behaviorPhase = 1;
                 }
             }
         }
@@ -208,7 +208,7 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
     arg0->unkAC2 = 0;
 
     do {
-    } while (D_800BCA14_B1F04[arg0->unkBBD](arg0) != 0);
+    } while (D_800BCA14_B1F04[arg0->behaviorMode](arg0) != 0);
 
     createZRotationMatrix(&arg0->unk9B0, arg0->unkA92);
     createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
@@ -253,7 +253,7 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BB66C_B0B5C);
 
 void func_800BB8E0_B0DD0(func_800BC4AC_arg *arg0) {
-    D_800BCA44_B1F34[arg0->unkBBE](arg0);
+    D_800BCA44_B1F34[arg0->behaviorPhase](arg0);
 }
 
 void func_800BB910_B0E00(Player *arg0) {
@@ -319,8 +319,8 @@ s32 func_800BBA54_B0F44(Player *arg0) {
         func_800BB910_B0E00(arg0);
     }
 
-    if (arg0->unkBBF == 0) {
-        arg0->unkBBF++;
+    if (arg0->behaviorStep == 0) {
+        arg0->behaviorStep++;
 
         if (gameState->unk50 < 0x1EU) {
             arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
@@ -438,14 +438,14 @@ s32 func_800BBA54_B0F44(Player *arg0) {
         }
 
         if (arg0->unkB8C == 0) {
-            if (arg0->unkBC0 != 0) {
-                if (arg0->unkBBF == 2) {
-                    arg0->unkBC0 = arg0->unkBC0 - 1;
+            if (arg0->behaviorCounter != 0) {
+                if (arg0->behaviorStep == 2) {
+                    arg0->behaviorCounter = arg0->behaviorCounter - 1;
                     if (func_80054C8C_5588C(arg0->unkBB8) != 0) {
                         func_8005182C_5242C(arg0);
                     }
 
-                    if (arg0->unkBC0 == 0) {
+                    if (arg0->behaviorCounter == 0) {
                         if (gameState->unk86 != 0) {
                             arg0->unkB8C = (randA() & 0xF) + 8;
                         } else {
@@ -455,12 +455,12 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                         arg0->unkB8C = 0xA;
                     }
                 } else {
-                    arg0->unkBC0 = arg0->unkBC0 - 1;
+                    arg0->behaviorCounter = arg0->behaviorCounter - 1;
                     if (func_800553D4_55FD4(arg0->unkBB8) != 0) {
                         func_8005182C_5242C(arg0);
                     }
 
-                    if (arg0->unkBC0 == 0) {
+                    if (arg0->behaviorCounter == 0) {
                         arg0->unkB8C = ((u32)(randA() & 0xFF) >> 1) + 0x1E;
                     } else {
                         arg0->unkB8C = 0xA;
@@ -478,10 +478,10 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                         func_8005182C_5242C(arg0);
                     }
 
-                    arg0->unkBC0 = randA() & 0x3;
+                    arg0->behaviorCounter = randA() & 0x3;
 
-                    if (arg0->unkBC0 != 0) {
-                        arg0->unkBBF = 2;
+                    if (arg0->behaviorCounter != 0) {
+                        arg0->behaviorStep = 2;
                         arg0->unkB8C = 0xA;
                     } else {
                         if (gameState->unk86 != 0) {
@@ -531,7 +531,7 @@ s32 func_800BC008_B14F8(func_800BC4AC_arg *arg0) {
 }
 
 void func_800BC0A8_B1598(func_800BC4AC_arg *arg0) {
-    D_800BCA5C_B1F4C[arg0->unkBBE](arg0);
+    D_800BCA5C_B1F4C[arg0->behaviorPhase](arg0);
 }
 
 s32 func_800BC0D8_B15C8(Player *arg0) {
@@ -545,10 +545,10 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
 
     getCurrentAllocation();
 
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         arg0->unkA8C = 0xFFFF;
         arg0->unkB8C = 0;
-        arg0->unkBBF += 1;
+        arg0->behaviorStep += 1;
 
         if (!(arg0->unkB84 & 0x80000)) {
             if (arg0->unkBDB == 0) {
@@ -621,10 +621,10 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
 
     if (func_8005D308_5DF08(arg0, 4) != 0) {
         arg0->unkB88 = 0;
-        arg0->unkBBD = 1;
-        arg0->unkBBE = 1;
-        arg0->unkBBF = 0;
-        arg0->unkBC0 = 0;
+        arg0->behaviorMode = 1;
+        arg0->behaviorPhase = 1;
+        arg0->behaviorStep = 0;
+        arg0->behaviorCounter = 0;
 
         if (arg0->unkBDB == 0) {
             for (i = 0; i < 0x1E; i++) {
@@ -645,9 +645,9 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
 s32 func_800BC3B8_B18A8(Player *arg0) {
     u8 temp;
 
-    temp = arg0->unkBBF;
+    temp = arg0->behaviorStep;
     if (temp == 0) {
-        arg0->unkBBF = temp + 1;
+        arg0->behaviorStep = temp + 1;
         arg0->velocity.y = 0x80000;
         if (!(arg0->unkB84 & 0x80000)) {
             if (arg0->unkBDB != 0) {
@@ -672,10 +672,10 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
         if (!(arg0->unkB84 & 0x1)) {
             temp = arg0->unkBDB;
             arg0->unkB88 = 0;
-            arg0->unkBBD = 1;
-            arg0->unkBBE = 1;
-            arg0->unkBBF = 0;
-            arg0->unkBC0 = 0;
+            arg0->behaviorMode = 1;
+            arg0->behaviorPhase = 1;
+            arg0->behaviorStep = 0;
+            arg0->behaviorCounter = 0;
 
             if (temp == 0) {
                 arg0->unkB84 = arg0->unkB84 | 0x100000;
@@ -696,9 +696,9 @@ s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
     arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         if (func_8005D308_5DF08(arg0, 6) != 0) {
-            arg0->unkBBF = arg0->unkBBF + 1;
+            arg0->behaviorStep = arg0->behaviorStep + 1;
         }
         return 0;
     }

@@ -12,15 +12,16 @@ typedef struct {
     s16 unkBA4;
     s16 unkBA6;
     u8 _padBA8[0x15]; // 0xBA8 to 0xBBD
-    u8 unkBBD;
-    u8 unkBBE;
-    u8 unkBBF;
-    u8 unkBC0;
+    u8 behaviorMode;
+    u8 behaviorPhase;
+    u8 behaviorStep;
+    u8 behaviorCounter;
 } func_800B00D4_arg;
 
 void setPlayerBehaviorMode(Player *player, u8 mode);
 void setPlayerBehaviorPhase(Player *player, s32 phase);
 void resetPlayerBehaviorToDefault(void *arg);
+void initKnockbackBehavior(func_800B00D4_arg *arg0);
 void applyClampedVelocityToPosition(Player *player);
 void func_800B9500_A93B0(void *arg0);
 void func_800B99E0(void *arg0);

@@ -135,10 +135,10 @@ typedef struct {
     u8 padBA0[0xBB8 - 0xBA0];
     u8 unkBB8; /* 0xBB8 */
     u8 padBB9[0xBBD - 0xBB9];
-    u8 unkBBD; /* 0xBBD */
-    u8 unkBBE; /* 0xBBE */
-    u8 unkBBF; /* 0xBBF */
-    u8 unkBC0; /* 0xBC0 */
+    u8 behaviorMode; /* 0xBBD */
+    u8 behaviorPhase; /* 0xBBE */
+    u8 behaviorStep; /* 0xBBF */
+    u8 behaviorCounter; /* 0xBC0 */
     u8 unkBC1; /* 0xBC1 */
     u8 padBC2[0x2];
     u8 finishPosition; /* 0xBC4 */
@@ -236,22 +236,22 @@ void func_800BB2B0_B2870(Arg0Struct *arg0) {
 
     arg0->unkB84 &= 0xFFFBFFFF;
 
-    if (arg0->unkBBD != 3) {
+    if (arg0->behaviorMode != 3) {
         itemId = arg0->unkAC2;
         if (itemId != 0) {
             if (itemId != 0x3D) {
                 if (itemId == 0x3E) {
-                    arg0->unkBBD = 2;
-                    arg0->unkBBE = 0;
-                    arg0->unkBBF = 0;
-                    arg0->unkBC0 = 0;
+                    arg0->behaviorMode = 2;
+                    arg0->behaviorPhase = 0;
+                    arg0->behaviorStep = 0;
+                    arg0->behaviorCounter = 0;
                     arg0->unk474 = 0;
                 }
             } else {
-                arg0->unkBBD = 2;
-                arg0->unkBBE = 1;
-                arg0->unkBBF = 0;
-                arg0->unkBC0 = 0;
+                arg0->behaviorMode = 2;
+                arg0->behaviorPhase = 1;
+                arg0->behaviorStep = 0;
+                arg0->behaviorCounter = 0;
                 arg0->unk474 = 0;
             }
         }
@@ -259,7 +259,7 @@ void func_800BB2B0_B2870(Arg0Struct *arg0) {
     arg0->unkAC2 = 0;
 
     do {
-    } while (D_800BCB20_B40E0[arg0->unkBBD](arg0) != 0);
+    } while (D_800BCB20_B40E0[arg0->behaviorMode](arg0) != 0);
 
     createZRotationMatrix(&arg0->unk9B0, arg0->unkA92);
     createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
@@ -291,7 +291,7 @@ void func_800BB2B0_B2870(Arg0Struct *arg0) {
 INCLUDE_ASM("asm/nonmatchings/levels/jingle_town_boss", func_800BB66C_B2C2C);
 
 void func_800BB86C_B2E2C(Arg0Struct *arg0) {
-    D_800BCB5C_B411C[arg0->unkBBE](arg0);
+    D_800BCB5C_B411C[arg0->behaviorPhase](arg0);
 }
 
 s32 func_800BB89C_B2E5C(Arg0Struct *arg0) {
@@ -331,13 +331,13 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         return 1;
     }
 
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         if ((u32)gameState->unk50 < 0x1E) {
             arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x69;
         } else {
             arg0->unkB8C = (randA() & 0xFF) >> 1;
         }
-        arg0->unkBBF++;
+        arg0->behaviorStep++;
     }
 
     angleDiff = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->unk434.x, arg0->unk434.z) - arg0->unkA94;
@@ -386,7 +386,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
     arg0->unk450 -= 0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
-    switch (arg0->unkBC0) {
+    switch (arg0->behaviorCounter) {
     case 0:
         func_800BC474_B3A34(arg0);
         transformVectorRelative(&gameState->players->worldPos.x, arg0->unk74, &sp30);
@@ -447,10 +447,10 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
 
             if ((randA() & 3) == 0) {
                 arg0->unkB8C = 0x20;
-                arg0->unkBC0 = 5;
+                arg0->behaviorCounter = 5;
             } else {
                 arg0->unkB8C = 4;
-                arg0->unkBC0 = 1;
+                arg0->behaviorCounter = 1;
             }
         }
         break;
@@ -461,7 +461,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         if (arg0->unkB8C == 0) {
             func_800544B4_550B4(2, arg0->unkBB8, 0);
             arg0->unkB8C = 4;
-            arg0->unkBC0++;
+            arg0->behaviorCounter++;
         }
         break;
 
@@ -470,7 +470,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         arg0->unkB8C--;
         if (arg0->unkB8C == 0) {
             arg0->unkB8C = 4;
-            arg0->unkBC0++;
+            arg0->behaviorCounter++;
             func_800544B4_550B4(3, arg0->unkBB8, 0);
             return 0;
         }
@@ -481,7 +481,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         arg0->unkB8C--;
         if (arg0->unkB8C == 0) {
             func_800544B4_550B4(2, arg0->unkBB8, 0);
-            arg0->unkBC0 = 0;
+            arg0->behaviorCounter = 0;
             if (gameState->unk86 != 0) {
                 arg0->unkB8C = (randA() & 0xF) + 8;
             } else {
@@ -497,7 +497,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         arg0->unkA9E = arg0->unkA9E - 0x100;
         arg0->unkB8C--;
         if (arg0->unkB8C == 0) {
-            arg0->unkBC0 = 0;
+            arg0->behaviorCounter = 0;
             if (gameState->unk86 != 0) {
                 arg0->unkB8C = (randA() & 0xF) + 8;
             } else {
@@ -545,15 +545,15 @@ s32 func_800BBEBC_B347C(Arg0Struct *arg0) {
 }
 
 void func_800BBF40_B3500(Arg0Struct *arg0) {
-    D_800BCB74_B4134[arg0->unkBBE](arg0);
+    D_800BCB74_B4134[arg0->behaviorPhase](arg0);
 }
 
 s32 func_800BBF70_B3530(Arg0Struct *arg0) {
     u8 temp_v1;
 
-    temp_v1 = arg0->unkBBF;
+    temp_v1 = arg0->behaviorStep;
     if (temp_v1 == 0) {
-        arg0->unkBBF = temp_v1 + 1;
+        arg0->behaviorStep = temp_v1 + 1;
         arg0->unkB8C = 1;
         if (arg0->unk450 > 0) {
             arg0->unk450 = 0;
@@ -568,9 +568,9 @@ s32 func_800BBF70_B3530(Arg0Struct *arg0) {
 
     arg0->unkB8C--;
     if (arg0->unkB8C == 0) {
-        arg0->unkB8C = D_800BCB7C_B413C[arg0->unkBC0 * 2];
-        arg0->unkB9E = D_800BCB7E_B413E[arg0->unkBC0 * 2];
-        arg0->unkBC0++;
+        arg0->unkB8C = D_800BCB7C_B413C[arg0->behaviorCounter * 2];
+        arg0->unkB9E = D_800BCB7E_B413E[arg0->behaviorCounter * 2];
+        arg0->behaviorCounter++;
     }
 
     arg0->unkB88 = 0x10;
@@ -581,10 +581,10 @@ s32 func_800BBF70_B3530(Arg0Struct *arg0) {
 
     if (arg0->unkB8C == -1) {
         arg0->unkB88 = 0;
-        arg0->unkBBD = 1;
-        arg0->unkBBE = 1;
-        arg0->unkBBF = 0;
-        arg0->unkBC0 = 0;
+        arg0->behaviorMode = 1;
+        arg0->behaviorPhase = 1;
+        arg0->behaviorStep = 0;
+        arg0->behaviorCounter = 0;
         arg0->unk474 = 0;
         if (arg0->unkBDB == 0) {
             arg0->unkB84 |= 0x100000;
@@ -595,9 +595,9 @@ s32 func_800BBF70_B3530(Arg0Struct *arg0) {
 }
 
 s32 func_800BC094_B3654(Arg0Struct *arg0) {
-    if (arg0->unkBBF == 0) {
+    if (arg0->behaviorStep == 0) {
         s32 temp_v1 = arg0->unkB84;
-        arg0->unkBBF++;
+        arg0->behaviorStep++;
         arg0->unk468 = 0x80000;
         arg0->unkB8C = 4;
         if ((temp_v1 & 0x80000) == 0) {
@@ -632,10 +632,10 @@ s32 func_800BC094_B3654(Arg0Struct *arg0) {
 
     if (arg0->unk474 == 0) {
         arg0->unkB88 = 0;
-        arg0->unkBBD = 1;
-        arg0->unkBBE = 1;
-        arg0->unkBBF = 0;
-        arg0->unkBC0 = 0;
+        arg0->behaviorMode = 1;
+        arg0->behaviorPhase = 1;
+        arg0->behaviorStep = 0;
+        arg0->behaviorCounter = 0;
         arg0->unk474 = 0;
 
         if (arg0->unkBDB == 0) {
@@ -653,9 +653,9 @@ s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
 
     getCurrentAllocation();
 
-    temp_v0 = arg0->unkBBE;
+    temp_v0 = arg0->behaviorPhase;
     if (temp_v0 == 0) {
-        arg0->unkBBE++;
+        arg0->behaviorPhase++;
         transformVector2((s16 *)D_800BCBA0_B4160[0], arg0->unk38, &sp10);
         arg0->unk434.x += sp10.x;
         arg0->unk434.y += sp10.y;
