@@ -64,12 +64,12 @@ extern void *gLinearAllocEnd;
 extern s32 gFrameBufferFlags[];
 extern s32 gFrameBufferCounters[];
 extern s32 gBufferedFrameCounter;
-extern void *D_800A3564_A4164;
-extern u32 D_800A3568_A4168;
+extern void *gGraphicsArenaCurr;
+extern u32 gGraphicsArenaEnd;
 extern void *gLinearArenaBuffer;
 extern u8 gDisplayFramePending;
-extern void *D_800A355C_A415C[];
-extern void *D_800A3560_A4160;
+extern void *gGraphicsArenaPtrs[];
+extern void *gGraphicsArena0;
 extern s32 gCurrentDoubleBufferIndex;
 extern s32 gCurrentDisplayBufferIndex;
 extern void *gDisplayBufferMsgs;
@@ -128,31 +128,31 @@ void osViExtendVStart(u32 arg0) {
     __additional_scanline_0 = arg0;
 }
 
-void func_8006F504_70104(void) {
+void initGraphicsArenas(void) {
     u8 exists;
 
-    D_800A355C_A415C[0] = allocateMemoryNode(0, 0x18000, &exists);
-    D_800A3560_A4160 = allocateMemoryNode(0, 0x18000, &exists);
+    gGraphicsArenaPtrs[0] = allocateMemoryNode(0, 0x18000, &exists);
+    gGraphicsArena0 = allocateMemoryNode(0, 0x18000, &exists);
 }
 
-void func_8006F550_70150(s32 arg0) {
-    void *temp_v0 = D_800A355C_A415C[arg0];
-    D_800A3564_A4164 = temp_v0;
-    D_800A3568_A4168 = (s32)temp_v0 + 0x18000;
+void selectGraphicsArena(s32 arg0) {
+    void *temp_v0 = gGraphicsArenaPtrs[arg0];
+    gGraphicsArenaCurr = temp_v0;
+    gGraphicsArenaEnd = (s32)temp_v0 + 0x18000;
 }
 
 void *arenaAlloc16(s32 size) {
     void *result;
     u32 alignedSize = (size + 0xF) & ~0xF;
-    u32 *cur = (u32 *)D_800A3564_A4164;
-    u32 *end = (u32 *)D_800A3568_A4168;
+    u32 *cur = (u32 *)gGraphicsArenaCurr;
+    u32 *end = (u32 *)gGraphicsArenaEnd;
 
     if ((u32 *)((u8 *)cur + alignedSize) > end) {
         return NULL;
     }
 
     result = cur;
-    D_800A3564_A4164 = (void *)((u8 *)cur + alignedSize);
+    gGraphicsArenaCurr = (void *)((u8 *)cur + alignedSize);
     return result;
 }
 
