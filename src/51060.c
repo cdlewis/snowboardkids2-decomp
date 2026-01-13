@@ -151,17 +151,17 @@ typedef struct {
 } func_80050C00_51800_Task_unk34;
 
 typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ loadAssetMetadata_arg unk4;
+    /* 0x00 */ void *assetTable;
+    /* 0x04 */ loadAssetMetadata_arg particle;
     /* 0x20 */ u8 padding_20[0x4];
-    /* 0x24 */ s16 unk24;
-    /* 0x26 */ u16 unk26;
-    /* 0x28 */ s32 unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ s32 unk30;
-    /* 0x34 */ func_80050C00_51800_Task_unk34 *unk34;
-    /* 0x38 */ s16 unk38;
-} func_80050C00_51800_Task;
+    /* 0x24 */ s16 particleType;
+    /* 0x26 */ u16 animFrame;
+    /* 0x28 */ s32 velX;
+    /* 0x2C */ s32 velY;
+    /* 0x30 */ s32 velZ;
+    /* 0x34 */ func_80050C00_51800_Task_unk34 *sourceObj;
+    /* 0x38 */ s16 positionSelector;
+} CharacterTrailParticleTask;
 
 typedef struct {
     u8 padding[0x44C];
@@ -205,7 +205,12 @@ void initDualSnowSprayTask(DualSnowSprayTask *);
 void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *);
 void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *);
 void cleanupDualSnowSprayAssetNode(DualSnowSprayAssetNode *);
-void func_800509CC_515CC(func_80050C00_51800_Task *);
+void initCharacterTrailParticleTask(MemoryAllocatorNode **);
+void loadCharacterTrailParticleAsset(CharacterTrailParticleTask *);
+void updateCharacterTrailParticle(CharacterTrailParticleTask *);
+void cleanupCharacterTrailParticleTask(s32 **);
+void spawnCharacterTrailParticle(void *);
+void spawnPlayerCharacterTrailParticle(Player *, s32);
 void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
 void func_80050E08_51A08(func_80050DB0_519B0_arg *);
 void func_80050EA0_51AA0(void **);
@@ -217,8 +222,6 @@ void func_80051760_52360(func_800516F4_522F4_arg *);
 void func_80051800_52400(func_800516F4_522F4_arg *);
 void func_800518AC_524AC(func_800518AC_524AC_arg *);
 void func_80051B8C_5278C(func_8005186C_5246C_arg *);
-void func_80050BD4_517D4(s32 **);
-void func_80050AA8_516A8(func_80050C00_51800_Task *arg0);
 
 extern loadAssetMetadata_arg D_80090EC0_91AC0;
 extern loadAssetMetadata_arg D_80090F00_91B00;
@@ -382,37 +385,37 @@ void spawnDualSnowSprayEffect(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s16 slo
     task->velZ = velZ;
 }
 
-void func_8005098C_5158C(MemoryAllocatorNode **node) {
+void initCharacterTrailParticleTask(MemoryAllocatorNode **node) {
     *node = load_3ECE40();
-    setCleanupCallback(&func_80050BD4_517D4);
-    setCallbackWithContinue(&func_800509CC_515CC);
+    setCleanupCallback(&cleanupCharacterTrailParticleTask);
+    setCallbackWithContinue(&loadCharacterTrailParticleAsset);
 }
 
-void func_800509CC_515CC(func_80050C00_51800_Task *arg0) {
+void loadCharacterTrailParticleAsset(CharacterTrailParticleTask *arg0) {
     s32 temp;
     s32 shift9;
     int new_var2;
     s32 new_var;
     getCurrentAllocation();
-    if (arg0->unk38 >= 0) {
-        memcpy(&arg0->unk4.position, &arg0->unk34->unk4C, sizeof(Vec3i));
+    if (arg0->positionSelector >= 0) {
+        memcpy(&arg0->particle.position, &arg0->sourceObj->unk4C, sizeof(Vec3i));
     } else {
-        memcpy(&arg0->unk4.position, &arg0->unk34->unk434, sizeof(Vec3i));
-        arg0->unk4.position.y += 0x80000;
+        memcpy(&arg0->particle.position, &arg0->sourceObj->unk434, sizeof(Vec3i));
+        arg0->particle.position.y += 0x80000;
     }
     temp = (randA() & 0xFF) - 0x80;
     shift9 = (new_var = temp << 9);
-    arg0->unk4.position.x += ((temp << 11) + shift9) << 1;
+    arg0->particle.position.x += ((temp << 11) + shift9) << 1;
     new_var2 = (randA() & 0xFF) - 0x80;
     temp = new_var2;
     shift9 = temp << 9;
-    arg0->unk26 = 0;
-    arg0->unk4.position.z += ((temp << 11) + shift9) << 1;
-    loadAssetMetadata(&arg0->unk4, arg0->unk0, arg0->unk24);
-    setCallbackWithContinue(func_80050AA8_516A8);
+    arg0->animFrame = 0;
+    arg0->particle.position.z += ((temp << 11) + shift9) << 1;
+    loadAssetMetadata(&arg0->particle, arg0->assetTable, arg0->particleType);
+    setCallbackWithContinue(updateCharacterTrailParticle);
 }
 
-void func_80050AA8_516A8(func_80050C00_51800_Task *arg0) {
+void updateCharacterTrailParticle(CharacterTrailParticleTask *arg0) {
     GameState *gs;
     s32 i;
     s16 temp;
@@ -420,61 +423,61 @@ void func_80050AA8_516A8(func_80050C00_51800_Task *arg0) {
     gs = (GameState *)getCurrentAllocation();
 
     if (gs->gamePaused == 0) {
-        temp = arg0->unk26;
+        temp = arg0->animFrame;
 
         if (temp % 3 == 0) {
-            loadAssetMetadata((&arg0->unk4), arg0->unk0, arg0->unk24 + (temp >> 2));
+            loadAssetMetadata((&arg0->particle), arg0->assetTable, arg0->particleType + (temp >> 2));
         }
 
-        arg0->unk26++;
-        if ((s16)arg0->unk26 >= 0xF) {
+        arg0->animFrame++;
+        if ((s16)arg0->animFrame >= 0xF) {
             func_80069CF8_6A8F8();
         }
 
-        arg0->unk4.position.x += arg0->unk28;
-        arg0->unk4.position.y += arg0->unk2C;
-        arg0->unk4.position.z += arg0->unk30;
+        arg0->particle.position.x += arg0->velX;
+        arg0->particle.position.y += arg0->velY;
+        arg0->particle.position.z += arg0->velZ;
     }
 
     i = 0;
-    if (arg0->unk4.unk1A == 0xFF) {
+    if (arg0->particle.unk1A == 0xFF) {
         do {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->particle);
             i++;
         } while (i < 4);
     } else {
         do {
-            func_800677C0_683C0(i, (&arg0->unk4));
+            func_800677C0_683C0(i, (&arg0->particle));
             i++;
         } while (i < 4);
     }
 }
 
-void func_80050BD4_517D4(s32 **arg0) {
+void cleanupCharacterTrailParticleTask(s32 **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void func_80050C00_51800(void *arg0) {
+void spawnCharacterTrailParticle(void *arg0) {
     GameState *allocation;
-    func_80050C00_51800_Task *task;
+    CharacterTrailParticleTask *task;
 
     allocation = (GameState *)getCurrentAllocation();
-    task = (func_80050C00_51800_Task *)scheduleTask(&func_8005098C_5158C, 2, 0, 0xEA);
+    task = (CharacterTrailParticleTask *)scheduleTask(&initCharacterTrailParticleTask, 2, 0, 0xEA);
     if (task != NULL) {
-        task->unk24 = 0x35;
-        task->unk34 = arg0;
-        task->unk4.unk1A = 0xFF;
-        task->unk28 = 0;
-        task->unk2C = 0;
-        task->unk30 = 0;
-        task->unk38 = 0;
-        task->unk4.unk0 = (loadAssetMetadata_arg *)&allocation->unk44->unkFC0;
+        task->particleType = 0x35;
+        task->sourceObj = arg0;
+        task->particle.unk1A = 0xFF;
+        task->velX = 0;
+        task->velY = 0;
+        task->velZ = 0;
+        task->positionSelector = 0;
+        task->particle.unk0 = (loadAssetMetadata_arg *)&allocation->unk44->unkFC0;
     }
 }
 
-void func_80050C80_51880(Player *arg0, s32 arg1) {
+void spawnPlayerCharacterTrailParticle(Player *arg0, s32 arg1) {
     func_80050C80_51880_allocation *allocation;
-    func_80050C00_51800_Task *task;
+    CharacterTrailParticleTask *task;
     u8 temp;
 
     allocation = (func_80050C80_51880_allocation *)getCurrentAllocation();
@@ -488,19 +491,19 @@ void func_80050C80_51880(Player *arg0, s32 arg1) {
         return;
     }
 
-    task = (func_80050C00_51800_Task *)scheduleTask(&func_8005098C_5158C, 2, 0, 0xEA);
+    task = (CharacterTrailParticleTask *)scheduleTask(&initCharacterTrailParticleTask, 2, 0, 0xEA);
 
     if (task != NULL) {
         u8 temp2;
-        task->unk34 = (func_80050C00_51800_Task_unk34 *)arg0;
+        task->sourceObj = (func_80050C00_51800_Task_unk34 *)arg0;
         temp2 = D_80090E70_91A70[arg1];
-        task->unk4.unk1A = 0x80;
-        task->unk24 = temp2;
-        task->unk28 = arg0->velocity.x / 2;
-        task->unk2C = arg0->velocity.y / 2;
-        task->unk30 = arg0->velocity.z / 2;
-        task->unk38 = -1;
-        task->unk4.unk0 = (void *)((u32)allocation->unk44 + 0x1440);
+        task->particle.unk1A = 0x80;
+        task->particleType = temp2;
+        task->velX = arg0->velocity.x / 2;
+        task->velY = arg0->velocity.y / 2;
+        task->velZ = arg0->velocity.z / 2;
+        task->positionSelector = -1;
+        task->particle.unk0 = (void *)((u32)allocation->unk44 + 0x1440);
     }
 }
 

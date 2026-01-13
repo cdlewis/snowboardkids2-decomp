@@ -4,8 +4,8 @@
 #include "gamestate.h"
 #include "geometry.h"
 
-void func_80050C00_51800(void *arg0);
-void func_80050C80_51880(Player *arg0, s32 arg1);
+void spawnCharacterTrailParticle(void *arg0);
+void spawnPlayerCharacterTrailParticle(Player *player, s32 characterId);
 void func_80050ECC_51ACC(Vec3i *arg0);
 void func_80051978_52578(void);
 void func_80051BB8_527B8(void *arg0);

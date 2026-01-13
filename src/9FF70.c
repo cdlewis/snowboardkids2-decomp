@@ -2120,7 +2120,7 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
         player->velocity.z -= player->velocity.z >> 5;
     } else {
         applyVelocityDeadzone(player, 0x100, 0x100, 0x100);
-        func_80050C80_51880(player, player->unkBCC & 0xF);
+        spawnPlayerCharacterTrailParticle(player, player->unkBCC & 0xF);
     }
 
     velocityMagnitude = distance_3d(player->velocity.x, player->velocity.y, player->velocity.z);
@@ -2178,7 +2178,7 @@ s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
         arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 5);
     } else {
         applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
-        func_80050C80_51880(arg0, arg0->unkBCC & 0xF);
+        spawnPlayerCharacterTrailParticle(arg0, arg0->unkBCC & 0xF);
     }
 
     angle = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);
@@ -2682,7 +2682,7 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
     }
 
     if (randA() & 1) {
-        func_80050C00_51800(arg0);
+        spawnCharacterTrailParticle(arg0);
     }
 
     func_8005D804_5E404(arg0, 3, 0);
@@ -2729,7 +2729,7 @@ s32 updateKnockbackBounceLaunchPhase(Player *player) {
     }
 
     if (randA() & 1) {
-        func_80050C00_51800(player);
+        spawnCharacterTrailParticle(player);
     }
 
     func_8005D804_5E404(player, 3, 0);
