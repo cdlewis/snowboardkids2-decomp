@@ -14,6 +14,7 @@
 #include "gamestate.h"
 #include "graphics.h"
 #include "levels/lindas_castle.h"
+#include "levels/starlight_highway.h"
 #include "rand.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
@@ -827,7 +828,7 @@ void scheduleRaceTasks(void) {
     func_8005011C_50D1C();
 
     if (gameState->unk7A == 9) {
-        scheduleTask(&func_800BB2B0, 0, 0, 0xC8);
+        scheduleTask(&initStarlightHighwayBuildingTask, 0, 0, 0xC8);
     }
 
     if (gameState->unk7A >= 0xA) {

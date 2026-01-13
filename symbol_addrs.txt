@@ -1347,7 +1347,7 @@ updateDebugCameraYState = 0x8002EDEC;
 D_80090520_91120 = 0x80090520; // type:u32
 
 // wrong but hopefully it doesn't matter which overlay its mapped to (yet)
-func_800BB2B0 = 0x800BB2B0; // type:func rom:0xAB160
+initStarlightHighwayBuildingTask = 0x800BB2B0; // type:func rom:0xAB160
 
 func_800B3B40 = 0x800B3B40; // type:func rom:0x1E0BF0
 func_800B02E0 = 0x800B02E0; // type:func rom:0x1DC480

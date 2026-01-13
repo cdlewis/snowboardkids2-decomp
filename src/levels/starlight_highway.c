@@ -52,20 +52,6 @@ typedef struct {
 } func_800BB718_ADAD8_arg;
 
 typedef struct {
-    /* 0x00 */ Transform3D node1;
-    /* 0x20 */ u8 _pad20[4];
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ u8 _pad30[0xC];
-    /* 0x3C */ Transform3D node2;
-    /* 0x5C */ u8 _pad5C[4];
-    /* 0x60 */ void *unk60;
-    /* 0x64 */ void *unk64;
-    /* 0x68 */ s32 unk68;
-} func_800BB2B0_AD670_arg;
-
-typedef struct {
     u8 _pad[0x24];
     void *unk24;
     void *unk28;
@@ -195,7 +181,7 @@ void func_800BC4F0_AE8B0(func_800BC4F0_AE8B0_arg *);
 void func_800BC550_AE910(s16 *arg0);
 void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0);
 
-void func_800BB2B0_AD670(func_800BB2B0_AD670_arg *arg0) {
+void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
     arg0->unk24 = func_80055DC4_569C4(8);
     arg0->unk28 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
