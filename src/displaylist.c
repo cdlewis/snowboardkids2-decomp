@@ -23,13 +23,13 @@ typedef struct {
     s32 unk138;
     s32 unk13C;
     u8 padding3[0x8];
-    u8 unk148;
-    u8 unk149;
-    u8 unk14A;
+    u8 defaultLight1R;
+    u8 defaultLight1G;
+    u8 defaultLight1B;
     u8 padding4[0xD];
-    u8 unk158;
-    u8 unk159;
-    u8 unk15A;
+    u8 defaultLight2R;
+    u8 defaultLight2G;
+    u8 defaultLight2B;
 } D_800AB068_A23D8_arg;
 
 typedef struct {
@@ -1171,13 +1171,15 @@ void renderOpaqueDisplayListWithLights(DisplayListObject *arg0) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8
+        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
+            D_800AB068_A23D8->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8
+        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
+            D_800AB068_A23D8->defaultLight2B << 8
     );
 }
 
@@ -1189,13 +1191,15 @@ void renderTransparentDisplayListWithLights(DisplayListObject *arg0) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8
+        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
+            D_800AB068_A23D8->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8
+        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
+            D_800AB068_A23D8->defaultLight2B << 8
     );
 }
 
@@ -1207,13 +1211,15 @@ void renderOverlayDisplayListWithLights(DisplayListObject *arg0) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8
+        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
+            D_800AB068_A23D8->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8
+        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
+            D_800AB068_A23D8->defaultLight2B << 8
     );
 }
 
@@ -1273,13 +1279,15 @@ void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjec
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8
+        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
+            D_800AB068_A23D8->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8
+        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
+            D_800AB068_A23D8->defaultLight2B << 8
     );
 }
 
@@ -1323,13 +1331,15 @@ void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *display
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8
+        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
+            D_800AB068_A23D8->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8
+        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
+            D_800AB068_A23D8->defaultLight2B << 8
     );
 }
 
@@ -1373,13 +1383,15 @@ void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObje
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->unk148 << 0x18 | D_800AB068_A23D8->unk149 << 0x10 | D_800AB068_A23D8->unk14A << 8
+        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
+            D_800AB068_A23D8->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->unk158 << 0x18 | D_800AB068_A23D8->unk159 << 0x10 | D_800AB068_A23D8->unk15A << 8
+        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
+            D_800AB068_A23D8->defaultLight2B << 8
     );
 }
 

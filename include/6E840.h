@@ -6,17 +6,17 @@
 #include "geometry.h"
 
 typedef struct {
-    u8 unk148;
-    u8 unk149;
-    u8 unk14A;
-    u8 unk14B;
-    u8 unk14C;
-    u8 unk14D;
-    u8 unk14E;
+    u8 light1R;
+    u8 light1G;
+    u8 light1B;
+    u8 pad14B;
+    u8 light1R_dup;
+    u8 light1G_dup;
+    u8 light1B_dup;
     u8 unk14F;
-    u8 unk150;
-    u8 unk151;
-    u8 unk152;
+    u8 light2R;
+    u8 light2G;
+    u8 light2B;
     u8 padding[0x5];
 } Node_70B00_ColorData;
 typedef struct PoolEntry {
