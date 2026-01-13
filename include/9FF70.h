@@ -16,12 +16,12 @@ typedef struct {
     u8 behaviorPhase;
     u8 behaviorStep;
     u8 behaviorCounter;
-} func_800B00D4_arg;
+} BehaviorState;
 
 void setPlayerBehaviorMode(Player *player, u8 mode);
 void setPlayerBehaviorPhase(Player *player, s32 phase);
 void resetPlayerBehaviorToDefault(void *arg);
-void initKnockbackBehavior(func_800B00D4_arg *arg0);
+void initKnockbackBehavior(BehaviorState *arg0);
 void applyClampedVelocityToPosition(Player *player);
 void func_800B9500_A93B0(void *arg0);
 void func_800B99E0(void *arg0);

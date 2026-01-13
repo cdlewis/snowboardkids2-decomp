@@ -79,7 +79,7 @@ void setPlayerBehaviorPhase(Player *player, s32 phase) {
 }
 
 void resetPlayerBehaviorToDefault(void *arg) {
-    func_800B00D4_arg *arg0 = arg;
+    BehaviorState *arg0 = arg;
     arg0->behaviorMode = 1;
     arg0->behaviorPhase = 0;
     arg0->behaviorStep = 0;
@@ -174,7 +174,7 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B05B8_A0468);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B0F14_A0DC4);
 
-void dispatchDefaultBehaviorPhase(func_800B00D4_arg *arg0) {
+void dispatchDefaultBehaviorPhase(BehaviorState *arg0) {
     D_800BAAD4_AA984[arg0->behaviorPhase](arg0);
 }
 
@@ -373,7 +373,7 @@ end:
     return 0;
 }
 
-void dispatchSharpTurnBehaviorStep(func_800B00D4_arg *arg0) {
+void dispatchSharpTurnBehaviorStep(BehaviorState *arg0) {
     sharpTurnBehaviorStepHandlers[arg0->behaviorStep](arg0);
 }
 
@@ -403,7 +403,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
-        initKnockbackBehavior((func_800B00D4_arg *)player);
+        initKnockbackBehavior((BehaviorState *)player);
         return 1;
     }
 
@@ -471,7 +471,7 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
-        initKnockbackBehavior((func_800B00D4_arg *)player);
+        initKnockbackBehavior((BehaviorState *)player);
         return 1;
     }
 
@@ -514,7 +514,7 @@ s32 initPostTrickLandingStep(Player *player) {
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
-        initKnockbackBehavior((func_800B00D4_arg *)player);
+        initKnockbackBehavior((BehaviorState *)player);
         func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
         queueSoundAtPosition(&player->worldPos, 0x25);
         return 1;
@@ -555,7 +555,7 @@ s32 initPostTrickLandingStep(Player *player) {
     return 0;
 }
 
-void dispatchPostTrickLandingStep(func_800B00D4_arg *arg0) {
+void dispatchPostTrickLandingStep(BehaviorState *arg0) {
     postTrickLandingStepHandlers[arg0->behaviorStep](arg0);
 }
 
@@ -579,7 +579,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
-        initKnockbackBehavior((func_800B00D4_arg *)player);
+        initKnockbackBehavior((BehaviorState *)player);
         return 1;
     }
 
@@ -622,7 +622,7 @@ s32 updatePostTrickChargingStep(Player *player) {
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
-        initKnockbackBehavior((func_800B00D4_arg *)player);
+        initKnockbackBehavior((BehaviorState *)player);
         return 1;
     }
 
@@ -1405,7 +1405,7 @@ void updateFlipSpinTrickAnimation(Player *player) {
     }
 }
 
-void dispatchRaceFinishBehaviorStep(func_800B00D4_arg *arg0) {
+void dispatchRaceFinishBehaviorStep(BehaviorState *arg0) {
     raceFinishBehaviorStepHandlers[arg0->behaviorStep](arg0);
 }
 
@@ -1856,7 +1856,7 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     return localForwardVelocity;
 }
 
-void dispatchStunnedBehaviorPhase(func_800B00D4_arg *arg0) {
+void dispatchStunnedBehaviorPhase(BehaviorState *arg0) {
     stunnedBehaviorPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
@@ -2874,14 +2874,14 @@ void dispatchKnockbackBehaviorPhase(Player *player) {
     knockbackBehaviorPhaseHandlers[player->behaviorPhase](player);
 }
 
-void initKnockbackBehavior(func_800B00D4_arg *arg0) {
+void initKnockbackBehavior(BehaviorState *arg0) {
     arg0->behaviorMode = 3;
     arg0->behaviorPhase = 0;
     arg0->behaviorStep = 0;
     arg0->behaviorCounter = 0;
 }
 
-void dispatchKnockbackBehaviorStep(func_800B00D4_arg *arg0) {
+void dispatchKnockbackBehaviorStep(BehaviorState *arg0) {
     knockbackBehaviorStepHandlers[arg0->behaviorStep](arg0);
 }
 
