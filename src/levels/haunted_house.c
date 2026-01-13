@@ -40,13 +40,13 @@ typedef struct {
 
 typedef struct {
     u8 pad[0x10];
-    Player *unk10;
+    Player *players;
     u8 pad14[0x1C];
-    void *unk30;
+    void *gameData;
     u8 pad34[0x2A];
-    u8 unk5E;
+    u8 memoryPoolId;
     u8 pad5F[0x17];
-    u8 unk76;
+    u8 gamePaused;
 } Allocation;
 
 typedef struct {
@@ -209,7 +209,7 @@ void cleanupAnimatedGhost(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-s32 func_800BB488_AF178(AnimatedGhostEntity *ghost) {
+s32 updateGhostPositionAndCheckEnd(AnimatedGhostEntity *ghost) {
     Vec3i surfaceNormal;
     Allocation *allocation;
     void *collisionContext;
@@ -220,8 +220,8 @@ s32 func_800BB488_AF178(AnimatedGhostEntity *ghost) {
     shouldEnd = 0;
     allocation = (Allocation *)getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
-        collisionContext = &allocation->unk30;
+    if (allocation->gamePaused == 0) {
+        collisionContext = &allocation->gameData;
 
         ghost->posX = ghost->posX + ghost->velocity.x;
         ghost->posZ = ghost->posZ + ghost->velocity.z;
@@ -268,7 +268,7 @@ void func_800BB5B0_AF2A0(AnimatedGhostEntity *ghost) {
         setCallback(func_800BB620_AF310);
     }
 
-    if (func_800BB488_AF178(ghost)) {
+    if (updateGhostPositionAndCheckEnd(ghost)) {
         setCallback(func_800BB6F4_AF3E4);
     }
 
@@ -291,7 +291,7 @@ void func_800BB620_AF310(AnimatedGhostEntity *ghost) {
         }
     }
 
-    if (func_800BB488_AF178(ghost) != 0) {
+    if (updateGhostPositionAndCheckEnd(ghost) != 0) {
         setCallback(func_800BB6F4_AF3E4);
     }
 
@@ -314,7 +314,7 @@ void func_800BB6F4_AF3E4(AnimatedGhostEntity *ghost) {
     if (ghost->alpha == 0) {
         func_80069CF8_6A8F8();
     } else {
-        func_800BB488_AF178(ghost);
+        updateGhostPositionAndCheckEnd(ghost);
         updateGhostAnimation(ghost);
     }
 }
@@ -362,7 +362,7 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
 
     allocation = (Allocation *)getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->gamePaused == 0) {
         switch (arg0->unk48) {
             case 0:
                 arg0->unk4E--;
@@ -401,11 +401,11 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
         arg0->unk4C += 0x40;
 
         i = 0;
-        if (allocation->unk5E > i) {
+        if (allocation->memoryPoolId > i) {
             do {
-                isPlayerInRangeAndPull(&arg0->unk14, 0x200000, allocation->unk10 + i);
+                isPlayerInRangeAndPull(&arg0->unk14, 0x200000, allocation->players + i);
                 i += 1;
-            } while (i < allocation->unk5E);
+            } while (i < allocation->memoryPoolId);
         }
 
         createYRotationMatrix((Transform3D *)arg0, (arg0->unk4A + 0x2A0) & 0xFFFF);
@@ -413,14 +413,14 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
         if (arg0->unk50 == 0) {
             arg0->unk50 = (randA() & 0xF) + 0xF;
 
-            for (i = 0; i < allocation->unk5E; i++) {
-                player = allocation->unk10 + i;
+            for (i = 0; i < allocation->memoryPoolId; i++) {
+                player = allocation->players + i;
                 if ((u16)(player->unkB94 - 0x38) < 5) {
                     break;
                 }
             }
 
-            if (i < allocation->unk5E) {
+            if (i < allocation->memoryPoolId) {
                 pos = &arg0->unk14;
                 func_80055C80_56880(0, (s16)(arg0->unk4A + 0x2A0), pos);
                 func_80055C80_56880(1, (s16)(arg0->unk4A + 0x2A0), pos);
@@ -468,7 +468,7 @@ void func_800BBD14_AFA04(func_800BBC64_AF954_arg *arg0) {
 
     allocation = getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->gamePaused == 0) {
         arg0->unk28 -= 1;
 
         if (arg0->unk28 == 0) {
@@ -505,7 +505,7 @@ void func_800BBEAC_AFB9C(s16 *arg0) {
     s32 value;
 
     allocation = (Allocation *)getCurrentAllocation();
-    if (allocation->unk76 != 0) {
+    if (allocation->gamePaused != 0) {
         return;
     }
 
@@ -550,7 +550,7 @@ void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *arg0) {
 
     allocation = (Allocation *)getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->gamePaused == 0) {
         index = arg0->unk24;
         arg0->unk26 += D_800BC9F4_B06E4[index];
     }
