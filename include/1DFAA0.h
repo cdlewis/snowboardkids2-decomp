@@ -88,7 +88,7 @@ typedef struct {
 } TaskData;
 
 typedef struct {
-    s16 unk0;
+    s16 headIndex;
     s16 unk2;
     s16 unk4;
     s8 unk6;
@@ -119,7 +119,7 @@ typedef struct {
     s32 unk34;
     /* 0x38 */ u16 next_index;
     /* 0x3A */ u16 prev_index;
-    s16 unk3C;
+    u16 frameNumber;
     u8 unk3E;
     u8 unk3F;
 } StateEntry;
@@ -298,7 +298,7 @@ u16 allocateStateEntry(void);
 void resetScriptState(u8 *arg0);
 void initializeStateEntry(s32 arg0);
 void cleanupCutsceneSystem(void);
-u16 func_800B3B68_1E0C18(u8 arg0, u16 arg1, s32 arg2);
+u16 findStateEntryIndex(u8 slotIndex, u16 frameNumber, s32 findInsertionPoint);
 s32 findEventAtFrame(u8 a0, u16 a1);
 s32 func_800B3D24_1E0DD4(u8, u16);
 void func_800B3E58_1E0F08(u16 entryIndex, u16 oldPrevIndex, u16 newPrevIndex);

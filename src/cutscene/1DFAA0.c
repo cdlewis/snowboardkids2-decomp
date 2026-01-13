@@ -592,7 +592,7 @@ void initializeStateEntry(s32 arg0) {
     resetScriptState(gCutsceneStateTable[arg0 + 3].padding0);
 
     temp = (gCutsceneStateTable + arg0 + 3);
-    temp->unk3C = 0;
+    temp->frameNumber = 0;
 
     temp = gCutsceneStateTable + arg0 + 3;
     temp->unk3E = 0;
@@ -712,46 +712,56 @@ void cleanupCutsceneSystem(void) {
     }
 }
 
-u16 func_800B3B68_1E0C18(u8 arg0, u16 arg1, s32 arg2) {
+/**
+ * Find a state entry for a given slot and frame number.
+ *
+ * This function searches through the linked list of state entries for a given slot.
+ * The entries are sorted by frame number.
+ *
+ * @param slotIndex The slot index to search (0-15)
+ * @param frameNumber The frame number to search for
+ * @param findInsertionPoint If non-zero, finds where to insert a new entry.
+ *                           If zero, requires an exact match.
+ * @return The index of the found entry, or 0xFFFF if not found
+ */
+u16 findStateEntryIndex(u8 slotIndex, u16 frameNumber, s32 findInsertionPoint) {
     StateEntry *entry;
     u16 current;
     u16 next;
-    u16 nextMasked;
-    u16 arg1Masked;
-    s32 arg2Copy;
-    u16 ffff;
+    u16 nextIdx;
+    u16 targetFrame;
+    s32 mode;
 
-    current = gCutsceneStateTable->items[arg0].unk0;
-    arg2Copy = arg2;
+    current = gCutsceneStateTable->items[slotIndex].headIndex;
+    mode = findInsertionPoint;
 
     entry = getStateEntry(current);
     next = entry->next_index;
 
     if (next != 0xFFFF) {
-        arg1Masked = arg1;
-        ffff = 0xFFFF;
+        targetFrame = frameNumber;
         do {
             entry = getStateEntry(current);
-            nextMasked = next;
-            if ((u16)entry->unk3C == arg1Masked) {
-                if ((arg2Copy & 0xFF) != 0) {
+            nextIdx = next;
+            if (entry->frameNumber == targetFrame) {
+                if ((mode & 0xFF) != 0) {
                     return 0xFFFF;
                 }
             }
 
-            entry = getStateEntry(nextMasked);
-            if (arg1Masked < (u16)entry->unk3C) {
+            entry = getStateEntry(nextIdx);
+            if (targetFrame < (u16)entry->frameNumber) {
                 break;
             }
             current = next;
-            entry = getStateEntry(nextMasked);
+            entry = getStateEntry(nextIdx);
             next = entry->next_index;
-        } while (next != ffff);
+        } while (next != 0xFFFF);
     }
 
-    if ((arg2Copy & 0xFF) == 0) {
+    if ((mode & 0xFF) == 0) {
         entry = getStateEntry(current);
-        if ((u16)entry->unk3C != arg1) {
+        if ((u16)entry->frameNumber != frameNumber) {
             return 0xFFFF;
         }
     }
@@ -765,16 +775,16 @@ s32 findEventAtFrame(u8 a0, u16 a1) {
     u16 current;
 
     base = gCutsceneStateTable;
-    current = base->items[a0].unk0;
+    current = base->items[a0].headIndex;
 
     while (current != 0xFFFF) {
         temp = getStateEntry(current);
-        if (a1 < (u16)temp->unk3C) {
+        if (a1 < (u16)temp->frameNumber) {
             return 0xFFFF;
         }
 
         temp = getStateEntry(current);
-        if ((u16)temp->unk3C == a1) {
+        if ((u16)temp->frameNumber == a1) {
             return current;
         }
 
@@ -798,7 +808,7 @@ s32 func_800B3D24_1E0DD4(u8 slotIndex, u16 frameNumber) {
         goto ret_ffff;
     }
 
-    insertAfterIndex = func_800B3B68_1E0C18(slotIndex & 0xFF, frameNumber, 1);
+    insertAfterIndex = findStateEntryIndex(slotIndex & 0xFF, frameNumber, 1);
     entryIndex = insertAfterIndex;
 
     if (entryIndex == 0xFFFF) {
@@ -806,7 +816,7 @@ s32 func_800B3D24_1E0DD4(u8 slotIndex, u16 frameNumber) {
     }
 
     entry = getStateEntry(entryIndex);
-    if ((u16)entry->unk3C != frameNumber) {
+    if ((u16)entry->frameNumber != frameNumber) {
         goto do_work;
     }
 
@@ -841,7 +851,7 @@ do_work:
 
     if (entryIndex != 0xFFFF) {
         entry = getStateEntry(entryIndex);
-        entry->unk3C = frameNumber;
+        entry->frameNumber = frameNumber;
 
         entry = getStateEntry(entryIndex);
         entry->unk3E = 0;
@@ -930,9 +940,9 @@ u16 func_800B41E0_1E1290(void) {
     slot = 0;
 
     while (slot < getCutsceneSlotCount()) {
-        index = func_800B3B68_1E0C18(slot, 0x8000, 1);
+        index = findStateEntryIndex(slot, 0x8000, 1);
         entry = getStateEntry(index);
-        value = entry->unk3C;
+        value = entry->frameNumber;
         if (max_value < value) {
             max_value = value;
         }
@@ -946,9 +956,9 @@ u16 func_800B4258_1E1308(u8 arg0) {
     u16 temp;
     StateEntry *entry;
 
-    temp = func_800B3B68_1E0C18(arg0, 0x8000, 1);
+    temp = findStateEntryIndex(arg0, 0x8000, 1);
     entry = getStateEntry(temp);
-    return entry->unk3C;
+    return entry->frameNumber;
 }
 
 StateEntry *func_800B4288_1E1338(void) {
@@ -1011,14 +1021,14 @@ void func_800B4378_1E1428(u8 slotIndex, s16 frameNumber) {
     u16 freeListHead;
     StateEntry *base;
 
-    searchResult = func_800B3B68_1E0C18(slotIndex, frameNumber & 0xFFFF, 0);
+    searchResult = findStateEntryIndex(slotIndex, frameNumber & 0xFFFF, 0);
     entryIndex = searchResult & 0xFFFF;
 
     if (entryIndex == 0xFFFF) {
         return;
     }
 
-    if ((u16)getStateEntry(entryIndex)->unk3C == 0) {
+    if ((u16)getStateEntry(entryIndex)->frameNumber == 0) {
         return;
     }
 
@@ -1109,11 +1119,11 @@ void func_800B462C_1E16DC(u8 arg0, u16 arg1, s32 arg2) {
     u16 result;
     StateEntry *entry;
 
-    result = func_800B3B68_1E0C18(arg0, arg1, 0);
+    result = findStateEntryIndex(arg0, arg1, 0);
 
     if (result != 0xFFFF) {
         entry = getStateEntry(result);
-        entry->unk3C += arg2;
+        entry->frameNumber += arg2;
     }
 }
 
