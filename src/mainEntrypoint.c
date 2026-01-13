@@ -59,7 +59,7 @@ void mainThreadEntrypoint(void *arg) {
                     break;
                 case 0:
                 case 1:
-                    func_8006E000_6EC00(message);
+                    handleFrameBufferComplete(message);
                     if (hasSpecialMessage == FALSE) {
                         func_8006E02C_6EC2C();
                     }

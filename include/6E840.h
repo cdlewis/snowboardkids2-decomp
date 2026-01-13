@@ -107,7 +107,7 @@ void func_8006E02C_6EC2C(void);
 
 void processDisplayFrameUpdate(void);
 
-void func_8006E000_6EC00(s32 arg0);
+void handleFrameBufferComplete(s32 bufferIndex);
 
 void func_8006FE28_70A28(Node_70B00 *arg0, u8 arg1, u8 arg2, u8 arg3);
 

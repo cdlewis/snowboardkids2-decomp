@@ -1080,6 +1080,7 @@ gDisplayBufferMsgs = 0x800A3570;
 gDisplayFramePending = 0x800A356C;
 gFrameBufferCounters = 0x800A3550; // size:0x8
 gFrameBufferFlags = 0x800A3548; // size:0x8
+handleFrameBufferComplete = 0x8006E000; // rom:0x6EC00
 processDisplayFrameUpdate = 0x8006DEE4; // rom:0x6EAE4
 
 getRand = 0x800AFF94; // type:func rom:0x9FE54

@@ -110,10 +110,10 @@ void processDisplayFrameUpdate(void) {
     sendMessageToThreadSyncQueue((OSMesg)((u8 *)gDisplayBufferMsgs + (gCurrentDisplayBufferIndex * 0x150)));
 }
 
-void func_8006E000_6EC00(s32 arg0) {
-    s32 temp_a0 = arg0 & 0xF;
-    gFrameBufferFlags[temp_a0] = 0;
-    gBufferedFrameCounter = gFrameBufferCounters[temp_a0];
+void handleFrameBufferComplete(s32 bufferIndex) {
+    s32 index = bufferIndex & 0xF;
+    gFrameBufferFlags[index] = 0;
+    gBufferedFrameCounter = gFrameBufferCounters[index];
 }
 
 void func_8006E02C_6EC2C(void) {
