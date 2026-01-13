@@ -60,11 +60,11 @@ void setPlayerState50(Player *player) {
     }
 }
 
-void func_800589CC_595CC(Player *arg0, void *arg1) {
-    if (arg0->unkAC2 < 0x31) {
-        if (!(arg0->unkB88 & 0x71F)) {
-            arg0->unkAC2 = 0x31;
-            memcpy(&arg0->unkAC8, arg1, 0xC);
+void setPlayerPullState(Player *player, void *pullTarget) {
+    if (player->unkAC2 < 0x31) {
+        if (!(player->unkB88 & 0x71F)) {
+            player->unkAC2 = 0x31;
+            memcpy(&player->unkAC8, pullTarget, 0xC);
         }
     }
 }

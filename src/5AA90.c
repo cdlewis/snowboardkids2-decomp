@@ -550,7 +550,7 @@ void func_8005B730_5C330(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
             player->worldPos.y += rotatedPos.y;
             player->worldPos.z += rotatedPos.z;
 
-            func_800589CC_595CC(player, &rotatedPos);
+            setPlayerPullState(player, &rotatedPos);
         }
     }
 }
@@ -663,7 +663,7 @@ s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
 
 /**
  * Checks 2D collision (xz-plane) between a point and all players.
- * Pushes players out of collision and may call func_800589CC_595CC.
+ * Pushes players out of collision and may call setPlayerPullState.
  *
  * @param arg0 Position to check collision against (Vec3i*)
  * @param arg1 Radius to add to player's collision radius
@@ -746,7 +746,7 @@ s32 func_8005BCB8_5C8B8(void *arg0, s32 arg1, s32 arg2) {
 
             if (dist > 0x40000) {
                 deltaPos.y = 0;
-                func_800589CC_595CC(targetPlayer, deltaPosPtr);
+                setPlayerPullState(targetPlayer, deltaPosPtr);
             }
         next:
             playerIndex++;

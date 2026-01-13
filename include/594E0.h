@@ -5,7 +5,7 @@
 
 void setPlayerProjectileHitState(Player *player);
 void setPlayerState50(Player *player);
-void func_800589CC_595CC(Player *arg0, void *arg1);
+void setPlayerPullState(Player *player, void *pullTarget);
 void setPlayerCollisionKnockbackState(Player *player, s16 knockbackAngle, s32 knockbackStrength);
 void func_80058CFC_598FC(void *arg0);
 

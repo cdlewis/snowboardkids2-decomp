@@ -89,7 +89,7 @@ void func_800BB320_AB1D0(func_800BB2B0_arg *arg0) {
             target[0] = ((player->worldPos.x + player->unkAD4[0] - pos.x) / 2) + pos.x;
             target[1] = ((player->worldPos.y + player->unkAD4[1] - pos.x) / 2) + pos.y;
             target[2] = ((player->worldPos.z + player->unkAD4[2] - pos.x) / 2) + pos.z;
-            func_800589CC_595CC(&gs->players[i], &target[0]);
+            setPlayerPullState(&gs->players[i], &target[0]);
         }
     }
 }
