@@ -37,15 +37,15 @@ typedef struct {
 } AssetWrapper;
 
 typedef struct {
-    MemoryAllocatorNode *unk0;
+    MemoryAllocatorNode *assetTable;
     AssetWrapper assets[2];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    s16 unk50;
-    s16 unk52;
-    s16 unk54;
-} func_80050740_51340_arg;
+    s32 velX;
+    s32 velY;
+    s32 velZ;
+    s16 frameCounter;
+    s16 padding;
+    s16 particleType;
+} DualSnowSprayUpdateTask;
 
 typedef struct {
     MemoryAllocatorNode *assetTable;
@@ -203,7 +203,7 @@ void cleanupSprayEffect(void **);
 void updateSprayEffect(SprayEffectUpdateTask *);
 void initDualSnowSprayTask(DualSnowSprayTask *);
 void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *);
-void func_80050740_51340(func_80050740_51340_arg *);
+void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *);
 void func_80050864_51464(func_80050864_51464_arg *);
 void func_800509CC_515CC(func_80050C00_51800_Task *);
 void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
@@ -211,7 +211,7 @@ void func_80050E08_51A08(func_80050DB0_519B0_arg *);
 void func_80050EA0_51AA0(void **);
 void func_80050F64_51B64(func_80050F18_51B18_arg *);
 void func_80050FE0_51BE0(func_80050F18_51B18_arg *);
-void func_80051124_51D24(func_80050740_51340_arg *);
+void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *);
 void cleanupDualSnowSprayTask(DualSnowSprayTask *);
 void func_80051760_52360(func_800516F4_522F4_arg *);
 void func_80051800_52400(func_800516F4_522F4_arg *);
@@ -297,15 +297,15 @@ void initDualSnowSprayTask(DualSnowSprayTask *arg0) {
     arg0->particleSlot2 = arg0->particleSlot;
     arg0->alpha2 = (u8)arg0->alpha1;
     setCleanupCallback(&func_80050864_51464);
-    setCallbackWithContinue(&func_80050740_51340);
+    setCallbackWithContinue(&updateDualSnowSprayParticles);
 }
 
-void func_80050740_51340(func_80050740_51340_arg *arg0) {
+void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *arg0) {
     GameState *gs;
     s32 i;
 
     gs = (GameState *)getCurrentAllocation();
-    loadAssetMetadata(&arg0->assets[0].lam, arg0->unk0, arg0->unk54 + arg0->unk50);
+    loadAssetMetadata(&arg0->assets[0].lam, arg0->assetTable, arg0->particleType + arg0->frameCounter);
 
     arg0->assets[1].lam.data_ptr = arg0->assets[0].lam.data_ptr;
     arg0->assets[1].lam.index_ptr = arg0->assets[0].lam.index_ptr;
@@ -318,16 +318,16 @@ void func_80050740_51340(func_80050740_51340_arg *arg0) {
     }
 
     if (gs->gamePaused == 0) {
-        if (arg0->unk50 != 0) {
+        if (arg0->frameCounter != 0) {
             for (i = 0; i < 2; i++) {
-                arg0->assets[i].lam.position.x += arg0->unk44;
-                arg0->assets[i].lam.position.y += arg0->unk48;
-                arg0->assets[i].lam.position.z += arg0->unk4C;
+                arg0->assets[i].lam.position.x += arg0->velX;
+                arg0->assets[i].lam.position.y += arg0->velY;
+                arg0->assets[i].lam.position.z += arg0->velZ;
             }
         }
 
-        arg0->unk50++;
-        if (arg0->unk50 == 5) {
+        arg0->frameCounter++;
+        if (arg0->frameCounter == 5) {
             func_80069CF8_6A8F8();
         }
     }
@@ -612,15 +612,15 @@ void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *arg0) {
     arg0->particleSlot2 = arg0->particleSlot;
     arg0->alpha2 = (u8)arg0->alpha1;
     setCleanupCallback(&cleanupDualSnowSprayTask);
-    setCallbackWithContinue(&func_80051124_51D24);
+    setCallbackWithContinue(&updateDualSnowSprayParticles_SingleSlot);
 }
 
-void func_80051124_51D24(func_80050740_51340_arg *arg0) {
+void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *arg0) {
     GameState *gs;
     s32 i;
 
     gs = (GameState *)getCurrentAllocation();
-    loadAssetMetadata(&arg0->assets[0].lam, arg0->unk0, (arg0->unk50 / 4) + 8);
+    loadAssetMetadata(&arg0->assets[0].lam, arg0->assetTable, (arg0->frameCounter / 4) + 8);
 
     arg0->assets[1].lam.data_ptr = arg0->assets[0].lam.data_ptr;
     arg0->assets[1].lam.index_ptr = arg0->assets[0].lam.index_ptr;
@@ -633,16 +633,16 @@ void func_80051124_51D24(func_80050740_51340_arg *arg0) {
     }
 
     if (gs->gamePaused == 0) {
-        if (arg0->unk50 != 0) {
+        if (arg0->frameCounter != 0) {
             for (i = 0; i < 2; i++) {
-                arg0->assets[i].lam.position.x += arg0->unk44;
-                arg0->assets[i].lam.position.y += arg0->unk48;
-                arg0->assets[i].lam.position.z += arg0->unk4C;
+                arg0->assets[i].lam.position.x += arg0->velX;
+                arg0->assets[i].lam.position.y += arg0->velY;
+                arg0->assets[i].lam.position.z += arg0->velZ;
             }
         }
 
-        arg0->unk50++;
-        if (arg0->unk50 == 0x14) {
+        arg0->frameCounter++;
+        if (arg0->frameCounter == 0x14) {
             func_80069CF8_6A8F8();
         }
     }
