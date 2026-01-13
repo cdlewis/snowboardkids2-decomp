@@ -39,9 +39,9 @@ typedef struct {
 } CutsceneAssetTable;
 
 extern StateEntry *D_800BAEBC_1E7F6C;
-extern s32 D_800BAEB8_1E7F68;
-extern StateEntry *D_800BA93C_1E79EC;
-extern StateEntry *D_800BA95C_1E7A0C;
+extern s32 gCutsceneStateTableSize;
+extern StateEntry *gControllerPakTransferPointer;
+extern StateEntry *gControllerPakStateTablePointer;
 extern s32 gButtonsPressed[];
 extern StateEntry D_800BAEC8_1E7F78[];
 extern u8 D_800BAF06_1E7FB6;
@@ -443,12 +443,12 @@ void setCutsceneConfigByte(u8 arg0) {
 }
 
 s32 saveCutsceneStateTableStub(void) {
-    nullsub_s32(D_800BAEBC_1E7F6C, D_800BAEB8_1E7F68, 0);
+    nullsub_s32(D_800BAEBC_1E7F6C, gCutsceneStateTableSize, 0);
     return 1;
 }
 
 s32 loadCutsceneStateTableStub(void) {
-    nullsub_s32_2(D_800BAEBC_1E7F6C, D_800BAEB8_1E7F68, 0);
+    nullsub_s32_2(D_800BAEBC_1E7F6C, gCutsceneStateTableSize, 0);
     return 1;
 }
 
@@ -527,12 +527,12 @@ done:
     return success;
 }
 
-void func_800B3734_1E07E4(void) {
+void saveCutsceneStateTableToControllerPak(void) {
     StateEntry **ptr;
 
-    ptr = &D_800BA93C_1E79EC;
-    *ptr = (StateEntry *)D_800BAEB8_1E7F68;
-    D_800BA95C_1E7A0C = D_800BAEBC_1E7F6C;
+    ptr = &gControllerPakTransferPointer;
+    *ptr = (StateEntry *)gCutsceneStateTableSize;
+    gControllerPakStateTablePointer = D_800BAEBC_1E7F6C;
     ((void (*)(s32, StateEntry **))controllerPackWriteAsyncStub)(0, ptr);
     do { } while (controllerPackWritePollStub() == -1); }
 
@@ -542,16 +542,16 @@ typedef struct {
     s32 unk8;
 } SaveDataBuffer;
 
-s32 func_800B3790_1E0840(void) {
+s32 loadCutsceneStateTableFromControllerPak(void) {
     SaveDataBuffer *buffer;
     s32 result;
     SaveDataBuffer *compareData;
     StateEntry **ptr;
 
-    buffer = allocateNodeMemory(D_800BAEB8_1E7F68);
-    ptr = &D_800BA93C_1E79EC;
-    D_800BA95C_1E7A0C = (StateEntry *)buffer;
-    *ptr = (StateEntry *)D_800BAEB8_1E7F68;
+    buffer = allocateNodeMemory(gCutsceneStateTableSize);
+    ptr = &gControllerPakTransferPointer;
+    gControllerPakStateTablePointer = (StateEntry *)buffer;
+    *ptr = (StateEntry *)gCutsceneStateTableSize;
     ((void (*)(s32, StateEntry **))controllerPackReadAsyncStub)(0, ptr);
 
     do {
@@ -610,7 +610,7 @@ void initializeCutsceneSystem(void *arg0) {
     s32 neg1;
     u16 ffff;
 
-    D_800BAEB8_1E7F68 = 0x78E0;
+    gCutsceneStateTableSize = 0x78E0;
     D_800BAEBC_1E7F6C = allocateNodeMemory(0x78E0);
     i = 0;
     do {
@@ -956,7 +956,7 @@ StateEntry *func_800B4288_1E1338(void) {
 }
 
 u8 *func_800B4294_1E1344(void) {
-    return &D_800BAEBC_1E7F6C->padding0[D_800BAEB8_1E7F68] - 1;
+    return &D_800BAEBC_1E7F6C->padding0[gCutsceneStateTableSize] - 1;
 }
 
 u16 func_800B42B0_1E1360(u16 arg0) {
