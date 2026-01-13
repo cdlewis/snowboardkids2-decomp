@@ -7,7 +7,7 @@
 
 extern Gfx *volatile gRegionAllocPtr;
 extern u8 D_8016A000[];
-extern s32 D_8009AFCC_9BBCC;
+extern s32 gCurrentDisplayBufferIndex;
 extern u8 gMemoryHeapEnd[];
 extern Gfx D_8008CD20_8D920[];
 
@@ -36,7 +36,7 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
 
     node = arg0->node;
     gfx = gRegionAllocPtr;
-    frameIdx = D_8009AFCC_9BBCC;
+    frameIdx = gCurrentDisplayBufferIndex;
 
     gfx->words.w0 = 0xFF10013F;
     gfx->words.w1 = (u32)(gMemoryHeapEnd + frameIdx * 0x25800);

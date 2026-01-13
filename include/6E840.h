@@ -45,7 +45,7 @@ typedef struct Node_70B00 {
     /* 0x18 */ PoolEntry pool[7];
     /* 0x88 */ void *unk88;
     u8 padding2[0x10];
-    /* 0x9C */ s32 unk9C;
+    /* 0x9C */ void *frameCallbackMsg;
     /* 0xA0 */ s16 unkA0;
     /* 0xA2 */ s16 unkA2;
     /* 0xA4 */ s16 unkA4;
@@ -104,6 +104,8 @@ void *arenaAlloc16(s32 size);
 void *advanceLinearAlloc(s32 size);
 
 void func_8006E02C_6EC2C(void);
+
+void processDisplayFrameUpdate(void);
 
 void func_8006E000_6EC00(s32 arg0);
 

@@ -61,18 +61,18 @@ extern void *gLinearAllocEnd;
 
 // Array view of arena regions [gLinearArenaRegions, gLinearArenaBuffer]
 #define gLinearArenaRegionsArray ((s32 *)&gLinearArenaRegions)
-extern s32 D_800A3548_A4148[];
-extern s32 D_800A3550_A4150[];
+extern s32 gFrameBufferFlags[];
+extern s32 gFrameBufferCounters[];
 extern s32 gBufferedFrameCounter;
 extern void *D_800A3564_A4164;
 extern u32 D_800A3568_A4168;
 extern void *gLinearArenaBuffer;
-extern u8 D_800A356C_A416C;
+extern u8 gDisplayFramePending;
 extern void *D_800A355C_A415C[];
 extern void *D_800A3560_A4160;
-extern s32 D_8009AFC8_9BBC8;
-extern s32 D_8009AFCC_9BBCC;
-extern void *D_800A3570_A4170;
+extern s32 gCurrentDoubleBufferIndex;
+extern s32 gCurrentDisplayBufferIndex;
+extern void *gDisplayBufferMsgs;
 extern s32 gFrameCounter;
 extern s16 identityMatrix[];
 
@@ -82,43 +82,43 @@ void func_8006FA58_70658(Node_70B00 *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
 
-void func_8006DEE4_6EAE4(void) {
+void processDisplayFrameUpdate(void) {
     Node_70B00 *node;
     Node_70B00 *temp;
 
     temp = D_800A3370_A3F70.list3_next;
-    D_800A356C_A416C = 0;
+    gDisplayFramePending = 0;
     if (temp == NULL) {
         temp = &D_800A3370_A3F70;
     }
     node = temp;
     if (node != NULL) {
         do {
-            if (node->unk9C != 0) {
-                D_800A3548_A4148[D_8009AFC8_9BBC8] = 1;
-                sendMessageToThreadSyncQueue((OSMesg)node->unk9C);
+            if (node->frameCallbackMsg != 0) {
+                gFrameBufferFlags[gCurrentDoubleBufferIndex] = 1;
+                sendMessageToThreadSyncQueue((OSMesg)node->frameCallbackMsg);
             }
             node = node->list3_next;
         } while (node != NULL);
     }
     gFrameCounter = (gFrameCounter + 1) & 0x0FFFFFFF;
-    D_8009AFC8_9BBC8 = (D_8009AFC8_9BBC8 + 1) & 1;
-    D_8009AFCC_9BBCC = D_8009AFCC_9BBCC + 1;
-    if (D_8009AFCC_9BBCC >= 3) {
-        D_8009AFCC_9BBCC = 0;
+    gCurrentDoubleBufferIndex = (gCurrentDoubleBufferIndex + 1) & 1;
+    gCurrentDisplayBufferIndex = gCurrentDisplayBufferIndex + 1;
+    if (gCurrentDisplayBufferIndex >= 3) {
+        gCurrentDisplayBufferIndex = 0;
     }
-    sendMessageToThreadSyncQueue((OSMesg)((u8 *)D_800A3570_A4170 + (D_8009AFCC_9BBCC * 0x150)));
+    sendMessageToThreadSyncQueue((OSMesg)((u8 *)gDisplayBufferMsgs + (gCurrentDisplayBufferIndex * 0x150)));
 }
 
 void func_8006E000_6EC00(s32 arg0) {
     s32 temp_a0 = arg0 & 0xF;
-    D_800A3548_A4148[temp_a0] = 0;
-    gBufferedFrameCounter = D_800A3550_A4150[temp_a0];
+    gFrameBufferFlags[temp_a0] = 0;
+    gBufferedFrameCounter = gFrameBufferCounters[temp_a0];
 }
 
 void func_8006E02C_6EC2C(void) {
-    if (D_800A356C_A416C != 0) {
-        func_8006DEE4_6EAE4();
+    if (gDisplayFramePending != 0) {
+        processDisplayFrameUpdate();
     }
 }
 

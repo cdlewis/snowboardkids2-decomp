@@ -1066,6 +1066,13 @@ identityMatrix = 0x8009A870; // type:s16 size:0x20
 
 gBufferedFrameCounter = 0x800AB12C;
 gFrameCounter = 0x800AB064;
+gCurrentDisplayBufferIndex = 0x8009AFCC;
+gCurrentDoubleBufferIndex = 0x8009AFC8;
+gDisplayBufferMsgs = 0x800A3570;
+gDisplayFramePending = 0x800A356C;
+gFrameBufferCounters = 0x800A3550; // size:0x8
+gFrameBufferFlags = 0x800A3548; // size:0x8
+processDisplayFrameUpdate = 0x8006DEE4; // rom:0x6EAE4
 
 getRand = 0x800AFF94; // type:func rom:0x9FE54
 randA = 0x800AFF44;
