@@ -962,7 +962,7 @@ void descendWarpEffect(WarpEffectState *state) {
         state->height += state->velocity;
 
         if (state->height == 0x220000) {
-            func_80058B30_59730(state->player);
+            setPlayerBouncedBackState(state->player);
             queueSoundAtPosition(&state->position, 0x19);
         }
 

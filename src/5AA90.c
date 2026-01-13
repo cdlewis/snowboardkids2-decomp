@@ -272,13 +272,13 @@ void func_8005AE8C_5BA8C(Player *player) {
                     /* Check for special knockback on collision boxes 4-5 when target is in state 1 */
                     if (targetPlayer->unkBD9 == 1) {
                         if ((targetPlayer->unkB84 & 0x40000) && (u32)(boxIndex - 4) < 2U) {
-                            func_80058B30_59730(player);
+                            setPlayerBouncedBackState(player);
                             goto next;
                         }
                     }
                     /* Check for special knockback on collision boxes 1-2 when target is in state 3 */
                     if (targetPlayer->unkBD9 == 3 && (targetPlayer->unkB84 & 0x40000) && (u32)(boxIndex - 1) < 2U) {
-                        func_80058B30_59730(player);
+                        setPlayerBouncedBackState(player);
                         goto next;
                     }
 

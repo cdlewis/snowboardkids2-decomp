@@ -79,7 +79,7 @@ void func_8005100C_51C0C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void func_800516B4_522B4(Player *player);
 void drawNumericString(char *text, s16 x, s16 y, s16 z, void *texture, s16 priority, s16 layer);
 void func_800585C8_591C8(s32 arg0);
-void func_80058B30_59730(Player *arg0);
+void setPlayerBouncedBackState(Player *player);
 s32 func_80058BB0_597B0(Player *arg0);
 void eepromWriteAllAsync(void *buffer);
 void spawnPushZone(s16 zoneIndex);

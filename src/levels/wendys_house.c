@@ -173,7 +173,7 @@ void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0) {
             arg0->unk4A += 0x100;
             for (i = 0; i < gameState->numPlayers; i++) {
                 if (func_8005B400_5C000(&gameState->players[i], (Vec3i *)&arg0->unk14, 0x180000) != 0) {
-                    func_80058B30_59730(&gameState->players[i]);
+                    setPlayerBouncedBackState(&gameState->players[i]);
                 }
             }
             break;

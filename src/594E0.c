@@ -118,11 +118,11 @@ void setPlayerStarHitState(Player *player, Vec3i *hitPosition) {
     }
 }
 
-void func_80058B30_59730(Player *arg0) {
-    if (arg0->unkAC2 < 0x3C) {
-        if (arg0->unkBA4 == 0) {
-            if (!(arg0->unkB88 & 0x18)) {
-                arg0->unkAC2 = 0x3E;
+void setPlayerBouncedBackState(Player *player) {
+    if (player->unkAC2 < 0x3C) {
+        if (player->unkBA4 == 0) {
+            if (!(player->unkB88 & 0x18)) {
+                player->unkAC2 = 0x3E;
             }
         }
     }

@@ -3076,3 +3076,4 @@ loadImpactStarAsset = 0x80050DB0; // rom:0x519B0
 updateImpactStar = 0x80050E08; // rom:0x51A08
 cleanupImpactStar = 0x80050EA0; // rom:0x51AA0
 spawnImpactStar = 0x80050ECC; // rom:0x51ACC
+setPlayerBouncedBackState = 0x80058B30; // rom:0x59730
