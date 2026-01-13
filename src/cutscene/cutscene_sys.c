@@ -231,8 +231,8 @@ s32 cutsceneSysFilter_validate(void) {
 }
 
 void cutsceneSysFilter_exec(cutsceneSysFilter_exec_arg *arg0, Node_70B00 *arg1) {
-    func_8006FE28_70A28(arg1->unk0.next, arg0->unk4, arg0->unk5, arg0->unk6);
-    func_8006FDA0_709A0(arg1->unk0.next, arg0->unk3, arg0->unk1);
+    func_8006FE28_70A28(arg1->unk0.next, arg0->envColorRed, arg0->envColorGreen, arg0->envColorBlue);
+    func_8006FDA0_709A0(arg1->unk0.next, arg0->cameraFilterParam, arg0->cameraFilterEnable);
 }
 
 s32 cutsceneSysFilter_isDone(void) {
