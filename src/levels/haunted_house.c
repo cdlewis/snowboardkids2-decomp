@@ -129,7 +129,7 @@ void fadeInGhost(AnimatedGhostEntity *);
 void oscillateGhostFade(AnimatedGhostEntity *);
 void fadeOutGhost(AnimatedGhostEntity *);
 void func_800BB778_AF468(void);
-void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *);
+void updateSwingingPendulumTrap(SwingingPendulumTrap *);
 void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *);
 void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
 void func_800BBEAC_AFB9C(s16 *);
@@ -327,33 +327,33 @@ void initGhostSpawnerTask(GhostSpawnerTask *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BB778_AF468);
 
-void func_800BB8E8_AF5D8(func_800BB8E8_AF5D8_arg *arg0) {
+void initSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
     func_80055E68_56A68_result *temp_v0_3;
     u16 temp_a1;
 
-    arg0->unk24 = func_80055DC4_569C4(9);
-    arg0->unk28 = func_80055DF8_569F8(9);
-    arg0->unk2C = 0;
+    arg0->uncompressedAsset = func_80055DC4_569C4(9);
+    arg0->compressedAsset = func_80055DF8_569F8(9);
+    arg0->animationFrame = 0;
 
     temp_v0_3 = func_80055E68_56A68(9);
-    arg0->unk20 = &temp_v0_3->unk90;
+    arg0->displayListState = &temp_v0_3->unk90;
 
-    arg0->unk4E = 0xF;
-    arg0->unk3C = 0xFD71ABE1;
-    arg0->unk40 = 0x1E37049C;
-    arg0->unk44 = 0xF61F3676;
-    arg0->unk4C = 0;
-    arg0->unk48 = 0;
-    arg0->unk4A = 0x400;
-    arg0->unk50 = 0x1E;
+    arg0->phaseTimer = 0xF;
+    arg0->pivotX = 0xFD71ABE1;
+    arg0->pivotY = 0x1E37049C;
+    arg0->pivotZ = 0xF61F3676;
+    arg0->bobPhase = 0;
+    arg0->swingPhase = 0;
+    arg0->swingAngle = 0x400;
+    arg0->fireProjectileCooldown = 0x1E;
 
-    temp_a1 = arg0->unk4A + 0x2A0;
+    temp_a1 = arg0->swingAngle + 0x2A0;
     createYRotationMatrix((Transform3D *)arg0, temp_a1 & 0xFFFF);
     setCleanupCallback(func_800BBC2C_AF91C);
-    setCallback(func_800BB9A4_AF694);
+    setCallback(updateSwingingPendulumTrap);
 }
 
-void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
+void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
     Allocation *allocation;
     s32 i;
     s32 offset;
@@ -363,55 +363,55 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
     allocation = (Allocation *)getCurrentAllocation();
 
     if (allocation->gamePaused == 0) {
-        switch (arg0->unk48) {
+        switch (arg0->swingPhase) {
             case 0:
-                arg0->unk4E--;
-                if (arg0->unk4E != 0) {
+                arg0->phaseTimer--;
+                if (arg0->phaseTimer != 0) {
                     break;
                 }
-                arg0->unk48++;
+                arg0->swingPhase++;
                 /* fallthrough */
             case 1:
-                arg0->unk50--;
-                arg0->unk4A -= 0x10;
-                if ((s16)arg0->unk4A != -0x400) {
+                arg0->fireProjectileCooldown--;
+                arg0->swingAngle -= 0x10;
+                if ((s16)arg0->swingAngle != -0x400) {
                     break;
                 }
-                arg0->unk4E = 0xF;
-                arg0->unk48++;
+                arg0->phaseTimer = 0xF;
+                arg0->swingPhase++;
                 /* fallthrough */
             case 2:
-                arg0->unk4E--;
-                if (arg0->unk4E != 0) {
+                arg0->phaseTimer--;
+                if (arg0->phaseTimer != 0) {
                     break;
                 }
-                arg0->unk48++;
+                arg0->swingPhase++;
                 /* fallthrough */
             case 3:
-                arg0->unk50--;
-                arg0->unk4A += 0x10;
-                if ((s16)arg0->unk4A != 0x400) {
+                arg0->fireProjectileCooldown--;
+                arg0->swingAngle += 0x10;
+                if ((s16)arg0->swingAngle != 0x400) {
                     break;
                 }
-                arg0->unk48 = 0;
-                arg0->unk4E = 0xF;
+                arg0->swingPhase = 0;
+                arg0->phaseTimer = 0xF;
                 break;
         }
 
-        arg0->unk4C += 0x40;
+        arg0->bobPhase += 0x40;
 
         i = 0;
         if (allocation->memoryPoolId > i) {
             do {
-                isPlayerInRangeAndPull(&arg0->unk14, 0x200000, allocation->players + i);
+                isPlayerInRangeAndPull(&arg0->position, 0x200000, allocation->players + i);
                 i += 1;
             } while (i < allocation->memoryPoolId);
         }
 
-        createYRotationMatrix((Transform3D *)arg0, (arg0->unk4A + 0x2A0) & 0xFFFF);
+        createYRotationMatrix((Transform3D *)arg0, (arg0->swingAngle + 0x2A0) & 0xFFFF);
 
-        if (arg0->unk50 == 0) {
-            arg0->unk50 = (randA() & 0xF) + 0xF;
+        if (arg0->fireProjectileCooldown == 0) {
+            arg0->fireProjectileCooldown = (randA() & 0xF) + 0xF;
 
             for (i = 0; i < allocation->memoryPoolId; i++) {
                 player = allocation->players + i;
@@ -421,15 +421,15 @@ void func_800BB9A4_AF694(func_800BB8E8_AF5D8_arg *arg0) {
             }
 
             if (i < allocation->memoryPoolId) {
-                pos = &arg0->unk14;
-                func_80055C80_56880(0, (s16)(arg0->unk4A + 0x2A0), pos);
-                func_80055C80_56880(1, (s16)(arg0->unk4A + 0x2A0), pos);
+                pos = &arg0->position;
+                func_80055C80_56880(0, (s16)(arg0->swingAngle + 0x2A0), pos);
+                func_80055C80_56880(1, (s16)(arg0->swingAngle + 0x2A0), pos);
             }
         }
     }
 
-    memcpy(&arg0->unk14, &arg0->unk3C, 0xC);
-    arg0->unk14.y = arg0->unk14.y + approximateSin(arg0->unk4C) * 0x1C0;
+    memcpy(&arg0->position, &arg0->pivotX, 0xC);
+    arg0->position.y = arg0->position.y + approximateSin(arg0->bobPhase) * 0x1C0;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);

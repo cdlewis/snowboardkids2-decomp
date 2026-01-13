@@ -2964,7 +2964,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             scheduleTask(&initGhostSpawnerTask, 0, 0, 0xC8);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
-            scheduleTask(&func_800BB8E8_AF5D8, 0, 0, 0x32);
+            scheduleTask(&initSwingingPendulumTrap, 0, 0, 0x32);
             scheduleTask(&func_800BBE84_AFB74, 0, 0, 0x32);
             spawnPushZone(6);
             spawnPushZone(7);

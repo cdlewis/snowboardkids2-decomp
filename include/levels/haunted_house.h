@@ -5,21 +5,21 @@
 
 typedef struct {
     /* 0x00 */ u8 pad[0x14];
-    /* 0x14 */ Vec3i unk14;
-    /* 0x20 */ void *unk20;
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
-    /* 0x2C */ s32 unk2C;
+    /* 0x14 */ Vec3i position;
+    /* 0x20 */ void *displayListState;
+    /* 0x24 */ void *uncompressedAsset;
+    /* 0x28 */ void *compressedAsset;
+    /* 0x2C */ s32 animationFrame;
     /* 0x30 */ u8 pad30[0xC];
-    /* 0x3C */ s32 unk3C;
-    /* 0x40 */ s32 unk40;
-    /* 0x44 */ s32 unk44;
-    /* 0x48 */ s16 unk48;
-    /* 0x4A */ s16 unk4A;
-    /* 0x4C */ s16 unk4C;
-    /* 0x4E */ s16 unk4E;
-    /* 0x50 */ s16 unk50;
-} func_800BB8E8_AF5D8_arg;
+    /* 0x3C */ s32 pivotX;
+    /* 0x40 */ s32 pivotY;
+    /* 0x44 */ s32 pivotZ;
+    /* 0x48 */ s16 swingPhase;
+    /* 0x4A */ s16 swingAngle;
+    /* 0x4C */ s16 bobPhase;
+    /* 0x4E */ s16 phaseTimer;
+    /* 0x50 */ s16 fireProjectileCooldown;
+} SwingingPendulumTrap;
 
 typedef struct {
     s16 ghostType;
@@ -35,7 +35,7 @@ void func_800BC0FC(s16 arg0);
 
 void initGhostSpawnerTask(GhostSpawnerTask *arg0);
 
-void func_800BB8E8_AF5D8(func_800BB8E8_AF5D8_arg *arg0);
+void initSwingingPendulumTrap(SwingingPendulumTrap *arg0);
 
 void func_800BBE84_AFB74(s16 *arg0);
 
