@@ -18,15 +18,15 @@ extern u16 D_80094030_94C30[];
 extern u16 D_80094044_94C44[];
 extern u16 D_80094058_94C58[];
 
-void func_800588E0_594E0(Player *arg0, s16 arg1, void *arg2) {
-    if (arg0->unkAC2 != 0) {
+void setPlayerHitStunState(Player *player, s16 hitState, void *knockbackData) {
+    if (player->unkAC2 != 0) {
         return;
     }
-    if (arg0->unkB88 & ~0x80) {
+    if (player->unkB88 & ~0x80) {
         return;
     }
-    arg0->unkAC2 = arg1;
-    memcpy(&arg0->unkAC8, arg2, 0xC);
+    player->unkAC2 = hitState;
+    memcpy(&player->unkAC8, knockbackData, 0xC);
 }
 
 void func_80058924_59524(Player *arg0) {
