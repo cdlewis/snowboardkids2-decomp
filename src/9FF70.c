@@ -2821,10 +2821,10 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
     return 0;
 }
 
-extern s16 D_800BABEC_AAA9C;
-extern u16 D_800BABEE_AAA9E;
+extern s16 knockbackHomingBounceTimers;
+extern u16 knockbackHomingBounceScales;
 
-s32 func_800B6488_A6338(Player *arg0) {
+s32 updateKnockbackHomingBouncePhase(Player *arg0) {
     u8 temp_v0;
 
     temp_v0 = arg0->unkBBF;
@@ -2841,8 +2841,8 @@ s32 func_800B6488_A6338(Player *arg0) {
     }
 
     if (arg0->unkB8C == 0) {
-        arg0->unkB8C = *(&D_800BABEC_AAA9C + (arg0->unkBC0 * 2));
-        arg0->unkB9E = *(&D_800BABEE_AAA9E + (arg0->unkBC0 * 2));
+        arg0->unkB8C = *(&knockbackHomingBounceTimers + (arg0->unkBC0 * 2));
+        arg0->unkB9E = *(&knockbackHomingBounceScales + (arg0->unkBC0 * 2));
         arg0->unkBC0 += 1;
     } else {
         s32 temp_v1;
