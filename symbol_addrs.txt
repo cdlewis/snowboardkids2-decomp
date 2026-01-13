@@ -3058,3 +3058,4 @@ gControllerPakTransferPointer = 0x800BA93C; // rom:0x1E79EC
 gControllerPakStateTablePointer = 0x800BA95C; // rom:0x1E7A0C
 gCutsceneStateTable = 0x800BAEBC; // rom:0x1E7F6C
 gCutsceneStateTableSize = 0x800BAEB8; // rom:0x1E7F68
+setVolumeScaleByHandle = 0x80072A6C; // rom:0x7366C

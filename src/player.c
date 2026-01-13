@@ -1003,7 +1003,7 @@ s32 countChannelsByHandle(u32 handle) {
     return count;
 }
 
-s32 func_80072A6C_7366C(void *handle, s32 volume) {
+s32 setVolumeScaleByHandle(void *handle, s32 volume) {
     s32 i;
     s32 count;
     channel_t *cp;
