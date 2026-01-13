@@ -45,11 +45,11 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
+    void *displayListMemory1;
+    void *displayListMemory2;
     u8 _pad2[0x10];
-    void *unk3C;
-} func_800BB718_ADAD8_arg;
+    void *displayListMemory3;
+} DebugDisplayListCleanupState;
 
 typedef struct {
     u8 _pad[0x24];
@@ -59,46 +59,46 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 _pad0[0x20];
-    /* 0x20 */ void *unk20;
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
+    /* 0x20 */ void *config;
+    /* 0x24 */ void *displayListMemory1;
+    /* 0x28 */ void *displayListMemory2;
     /* 0x2C */ s32 unk2C;
     /* 0x30 */ u8 _pad30[0xC];
-    /* 0x3C */ void *unk3C;
+    /* 0x3C */ void *displayListMemory3;
     /* 0x40 */ u8 _pad40[0x4];
-    /* 0x44 */ s16 unk44;
-    /* 0x46 */ s16 unk46;
-    /* 0x48 */ s16 unk48;
-    /* 0x4A */ s16 unk4A;
+    /* 0x44 */ s16 uOffset;
+    /* 0x46 */ s16 vOffset;
+    /* 0x48 */ s16 uSpeed;
+    /* 0x4A */ s16 vSpeed;
     /* 0x4C */ s16 unk4C;
     /* 0x4E */ u8 _pad4E[0x2];
-    /* 0x50 */ s16 unk50;
-} func_800BB494_AD854_arg;
+    /* 0x50 */ s16 animationTimer;
+} DebugDisplayListTaskState;
 
 typedef struct {
     u8 unk00[0x20];
     struct {
         s32 unk00;
-        s32 unk04;
-        s32 unk08;
-        s32 unk0C;
-    } *unk20;
+        s32 renderOpaque;
+        s32 renderTransparent;
+        s32 renderOverlay;
+    } *config;
     u8 unk24[0xC];
     s32 unk30;
     u8 unk34[0x10];
-    u16 unk44;
-    u16 unk46;
-    u16 unk48;
-    u16 unk4A;
+    u16 uOffset;
+    u16 vOffset;
+    u16 uSpeed;
+    u16 vSpeed;
     s32 unk4C;
-    s16 unk50;
-    s16 unk52;
-} func_800BB664_arg;
+    s16 animationTimer;
+    s16 sustainTimer;
+} DebugDisplayListRenderState;
 
 typedef struct {
     u8 pad[0x76];
     u8 unk76;
-} Allocation_ADA24;
+} DebugDisplayListAllocation;
 
 typedef struct {
     /* 0x00 */ Transform3D mat;
@@ -164,11 +164,11 @@ extern s32 D_800BCB98_AEF58[][3];
 extern s32 D_800BCB9C_AEF5C[][3];
 extern s32 D_800BCBA0_AEF60[][3];
 extern s16 D_800BCBB0_AEF70[];
-extern void *D_800955B0;
+extern void *gDebugDisplayConfig;
 
 void func_800BC984_AED44(DualSegmentCleanupState *);
-void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *);
-void func_800BB5FC_AD9BC(func_800BB664_arg *);
+void cleanupDebugDisplayListTask(DebugDisplayListCleanupState *);
+void updateDebugDisplayListGrowth(DebugDisplayListRenderState *);
 void renderStarlightHighwayBuildings(StarlightBuildingRenderData *);
 void cleanupStarlightHighwayBuildingTask(DualSegmentCleanupState *);
 void func_800BB75C_ADB1C(void *);
@@ -242,46 +242,49 @@ void cleanupStarlightHighwayBuildingTask(DualSegmentCleanupState *arg0) {
     arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
-void func_800BB494_AD854(func_800BB494_AD854_arg *arg0) {
-    arg0->unk24 = func_80055DC4_569C4(8);
-    arg0->unk28 = func_80055DF8_569F8(8);
+void initDebugDisplayListTask(DebugDisplayListTaskState *arg0) {
+    arg0->displayListMemory1 = func_80055DC4_569C4(8);
+    arg0->displayListMemory2 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
-    arg0->unk3C = func_80055D7C_5697C(8);
-    arg0->unk20 = &D_800955B0;
+    arg0->displayListMemory3 = func_80055D7C_5697C(8);
+    arg0->config = &gDebugDisplayConfig;
     arg0->unk4C = 0;
-    arg0->unk48 = 8;
-    arg0->unk4A = 0;
-    arg0->unk44 = 0;
-    arg0->unk46 = 0;
-    arg0->unk50 = 0;
-    setCleanupCallback(&func_800BB718_ADAD8);
-    setCallback(&func_800BB5FC_AD9BC);
+    arg0->uSpeed = 8;
+    arg0->vSpeed = 0;
+    arg0->uOffset = 0;
+    arg0->vOffset = 0;
+    arg0->animationTimer = 0;
+    setCleanupCallback(&cleanupDebugDisplayListTask);
+    setCallback(&updateDebugDisplayListGrowth);
 }
 
 void func_800BBB0C_ADECC(void *);
 void func_800BBB38_ADEF8(void *);
 void func_800BBB64_ADF24(void *);
+void renderDebugDisplayLists(DebugDisplayListRenderState *arg0);
+void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0);
+void updateDebugDisplayListDecay(DebugDisplayListRenderState *arg0);
 
-void func_800BB51C_AD8DC(func_800BB664_arg *arg0) {
+void renderDebugDisplayLists(DebugDisplayListRenderState *arg0) {
     s32 i;
 
-    arg0->unk44 += arg0->unk48;
-    arg0->unk46 = arg0->unk46 + arg0->unk4A;
+    arg0->uOffset += arg0->uSpeed;
+    arg0->vOffset = arg0->vOffset + arg0->vSpeed;
     arg0->unk30 = 0;
-    arg0->unk44 = arg0->unk44 & 0xFF;
-    arg0->unk46 = arg0->unk46 & 0xFF;
+    arg0->uOffset = arg0->uOffset & 0xFF;
+    arg0->vOffset = arg0->vOffset & 0xFF;
     ;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->unk20->unk04 != 0) {
+        if (arg0->config->renderOpaque != 0) {
             debugEnqueueCallback(i & 0xFFFF, 1, func_800BBB0C_ADECC, arg0);
         }
 
-        if (arg0->unk20->unk08 != 0) {
+        if (arg0->config->renderTransparent != 0) {
             debugEnqueueCallback(i & 0xFFFF, 3, func_800BBB38_ADEF8, arg0);
         }
 
-        if (arg0->unk20->unk0C == 0) {
+        if (arg0->config->renderOverlay == 0) {
             continue;
         }
 
@@ -289,56 +292,53 @@ void func_800BB51C_AD8DC(func_800BB664_arg *arg0) {
     }
 }
 
-extern void func_800BB6C0_ADA80(func_800BB664_arg *);
-void func_800BB664_ADA24(func_800BB664_arg *);
-
-void func_800BB5FC_AD9BC(func_800BB664_arg *arg0) {
-    Allocation_ADA24 *allocation = getCurrentAllocation();
+void updateDebugDisplayListGrowth(DebugDisplayListRenderState *arg0) {
+    DebugDisplayListAllocation *allocation = getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        arg0->unk50 += 0x10;
+        arg0->animationTimer += 0x10;
     }
 
-    if (arg0->unk50 == 0xC0) {
-        setCallback(&func_800BB664_ADA24);
-        arg0->unk52 = 0x40;
+    if (arg0->animationTimer == 0xC0) {
+        setCallback(&updateDebugDisplayListSustain);
+        arg0->sustainTimer = 0x40;
     }
 
-    func_800BB51C_AD8DC(arg0);
+    renderDebugDisplayLists(arg0);
 }
 
-void func_800BB664_ADA24(func_800BB664_arg *arg0) {
-    Allocation_ADA24 *allocation = getCurrentAllocation();
+void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0) {
+    DebugDisplayListAllocation *allocation = getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        arg0->unk52--;
+        arg0->sustainTimer--;
     }
 
-    if (arg0->unk52 == 0) {
-        setCallback(&func_800BB6C0_ADA80);
+    if (arg0->sustainTimer == 0) {
+        setCallback(&updateDebugDisplayListDecay);
     }
 
-    func_800BB51C_AD8DC(arg0);
+    renderDebugDisplayLists(arg0);
 }
 
-void func_800BB6C0_ADA80(func_800BB664_arg *arg0) {
-    Allocation_ADA24 *allocation = getCurrentAllocation();
+void updateDebugDisplayListDecay(DebugDisplayListRenderState *arg0) {
+    DebugDisplayListAllocation *allocation = getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        arg0->unk50 -= 0x10;
+        arg0->animationTimer -= 0x10;
     }
 
-    if (arg0->unk50 == 0) {
+    if (arg0->animationTimer == 0) {
         func_80069CF8_6A8F8();
     }
 
-    func_800BB51C_AD8DC(arg0);
+    renderDebugDisplayLists(arg0);
 }
 
-void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
-    arg0->unk3C = freeNodeMemory(arg0->unk3C);
+void cleanupDebugDisplayListTask(DebugDisplayListCleanupState *arg0) {
+    arg0->displayListMemory1 = freeNodeMemory(arg0->displayListMemory1);
+    arg0->displayListMemory2 = freeNodeMemory(arg0->displayListMemory2);
+    arg0->displayListMemory3 = freeNodeMemory(arg0->displayListMemory3);
 }
 
 typedef struct {
@@ -511,10 +511,10 @@ void func_800BBB64_ADF24(void *arg0) {
     renderOverlayDisplayList(arg0);
 }
 
-void func_800BBB90(s16 arg0) {
+void spawnDebugDisplayListTask(s16 arg0) {
     func_800BBB90_task *task;
 
-    task = scheduleTask(func_800BB494_AD854, 0, 0, 0xD2);
+    task = scheduleTask(initDebugDisplayListTask, 0, 0, 0xD2);
     if (task != NULL) {
         if (arg0 == 0) {
             createYRotationMatrix(&task->mat, 0x98A);
@@ -529,6 +529,9 @@ void func_800BBB90(s16 arg0) {
         }
     }
 }
+
+// Keep original name for auto-generated data file references
+void func_800BBB90(s16 arg0) __attribute__((alias("spawnDebugDisplayListTask")));
 
 void func_800BBC28_ADFE8(func_800BBC28_arg *arg0) {
     arg0->unk24 = func_80055DC4_569C4(8);

@@ -1359,6 +1359,13 @@ D_80090520_91120 = 0x80090520; // type:u32
 // wrong but hopefully it doesn't matter which overlay its mapped to (yet)
 initStarlightHighwayBuildingTask = 0x800BB2B0; // type:func rom:0xAB160
 renderStarlightHighwayBuildings = 0x800BB368; // type:func rom:0xAD728
+initDebugDisplayListTask = 0x800BB494; // type:func rom:0xAD854
+renderDebugDisplayLists = 0x800BB51C; // type:func rom:0xAD8DC
+updateDebugDisplayListGrowth = 0x800BB5FC; // type:func rom:0xAD9BC
+updateDebugDisplayListSustain = 0x800BB664; // type:func rom:0xADA24
+updateDebugDisplayListDecay = 0x800BB6C0; // type:func rom:0xADE80
+cleanupDebugDisplayListTask = 0x800BB718; // type:func rom:0xADAD8
+gDebugDisplayConfig = 0x800955B0; // rom:0x1DB740
 
 func_800B3B40 = 0x800B3B40; // type:func rom:0x1E0BF0
 func_800B02E0 = 0x800B02E0; // type:func rom:0x1DC480

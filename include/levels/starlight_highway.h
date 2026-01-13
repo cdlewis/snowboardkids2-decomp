@@ -22,6 +22,7 @@ typedef struct {
 } StarlightBuildingTaskState;
 
 s32 func_800BB504(Vec3i *arg0, s32 arg1);
+void spawnDebugDisplayListTask(s16 arg0);
 void func_800BBB90(s16 arg0);
 void func_800BBED8(void);
 void func_800BC9BC(void);
