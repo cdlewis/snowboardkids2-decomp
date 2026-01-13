@@ -49,8 +49,8 @@ extern PostTrickLandingStepHandler postTrickLandingStepHandlers[];
 typedef void (*KnockbackBehaviorPhaseHandler)(void *);
 extern KnockbackBehaviorPhaseHandler knockbackBehaviorPhaseHandlers[];
 
-typedef void (*func_800B6610_callback)(void *);
-extern func_800B6610_callback D_800BAC14_AAAC4[];
+typedef void (*KnockbackBehaviorStepHandler)(void *);
+extern KnockbackBehaviorStepHandler knockbackBehaviorStepHandlers[];
 
 typedef void (*SharpTurnBehaviorStepHandler)(void *);
 extern SharpTurnBehaviorStepHandler sharpTurnBehaviorStepHandlers[];
@@ -2881,8 +2881,8 @@ void initKnockbackBehavior(func_800B00D4_arg *arg0) {
     arg0->behaviorCounter = 0;
 }
 
-void func_800B6610_A64C0(func_800B00D4_arg *arg0) {
-    D_800BAC14_AAAC4[arg0->behaviorStep](arg0);
+void dispatchKnockbackBehaviorStep(func_800B00D4_arg *arg0) {
+    knockbackBehaviorStepHandlers[arg0->behaviorStep](arg0);
 }
 
 s32 func_800B6640_A64F0(Player *arg0) {
