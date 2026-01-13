@@ -17,14 +17,14 @@ extern s16 gGraphicsMode;
 
 typedef struct {
     u8 _pad[0x80];
-    u8 unk80;
-    u8 unk81;
-} Allocation_AD728;
+    u8 animateNode1;
+    u8 animateNode2;
+} StarlightBuildingAllocation;
 
 typedef struct {
     DisplayListObject node1;
     DisplayListObject node2;
-} func_800BB368_AD728_arg;
+} StarlightBuildingRenderData;
 
 typedef struct {
     /* 0x00 */ Transform3D node1;
@@ -169,7 +169,7 @@ extern void *D_800955B0;
 void func_800BC984_AED44(func_800BB45C_AD81C_arg *);
 void func_800BB718_ADAD8(func_800BB718_ADAD8_arg *);
 void func_800BB5FC_AD9BC(func_800BB664_arg *);
-void func_800BB368_AD728(func_800BB368_AD728_arg *);
+void renderStarlightHighwayBuildings(StarlightBuildingRenderData *);
 void func_800BB45C_AD81C(func_800BB45C_AD81C_arg *);
 void func_800BB75C_ADB1C(void *);
 void func_800BBEA0_AE260(func_800BB45C_AD81C_arg *);
@@ -197,35 +197,35 @@ void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
     arg0->node2.translation.y = 0x30000000;
     arg0->node2.translation.z = 0x30458CB2;
     setCleanupCallback(&func_800BB45C_AD81C);
-    setCallback(&func_800BB368_AD728);
+    setCallback(&renderStarlightHighwayBuildings);
 }
 
-void func_800BB368_AD728(func_800BB368_AD728_arg *arg0) {
-    Allocation_AD728 *allocation;
+void renderStarlightHighwayBuildings(StarlightBuildingRenderData *arg0) {
+    StarlightBuildingAllocation *allocation;
     s32 i;
-    func_80055E68_56A68_result *result;
+    func_80055E68_56A68_result *displayListResult;
 
-    allocation = (Allocation_AD728 *)getCurrentAllocation();
+    allocation = (StarlightBuildingAllocation *)getCurrentAllocation();
 
-    if (allocation->unk80 != 0) {
+    if (allocation->animateNode1 != 0) {
         if (gFrameCounter & 1) {
-            result = func_80055E68_56A68(8);
-            arg0->node1.displayLists = (DisplayLists *)((u32)result + 0x10);
+            displayListResult = func_80055E68_56A68(8);
+            arg0->node1.displayLists = (DisplayLists *)((u32)displayListResult + 0x10);
         } else {
-            result = func_80055E68_56A68(8);
-            arg0->node1.displayLists = (DisplayLists *)((u32)result + 0x20);
+            displayListResult = func_80055E68_56A68(8);
+            arg0->node1.displayLists = (DisplayLists *)((u32)displayListResult + 0x20);
         }
     } else {
         arg0->node1.displayLists = (DisplayLists *)func_80055E68_56A68(8);
     }
 
-    if (allocation->unk81 != 0) {
+    if (allocation->animateNode2 != 0) {
         if (gFrameCounter & 1) {
-            result = func_80055E68_56A68(8);
-            arg0->node2.displayLists = (DisplayLists *)((u32)result + 0x10);
+            displayListResult = func_80055E68_56A68(8);
+            arg0->node2.displayLists = (DisplayLists *)((u32)displayListResult + 0x10);
         } else {
-            result = func_80055E68_56A68(8);
-            arg0->node2.displayLists = (DisplayLists *)((u32)result + 0x20);
+            displayListResult = func_80055E68_56A68(8);
+            arg0->node2.displayLists = (DisplayLists *)((u32)displayListResult + 0x20);
         }
     } else {
         arg0->node2.displayLists = (DisplayLists *)func_80055E68_56A68(8);
