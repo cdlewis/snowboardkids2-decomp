@@ -442,12 +442,12 @@ void setCutsceneConfigByte(u8 arg0) {
     D_800BAEBC_1E7F6C->configByte = arg0;
 }
 
-s32 func_800B3510_1E05C0(void) {
+s32 saveCutsceneStateTableStub(void) {
     nullsub_s32(D_800BAEBC_1E7F6C, D_800BAEB8_1E7F68, 0);
     return 1;
 }
 
-s32 func_800B3540_1E05F0(void) {
+s32 loadCutsceneStateTableStub(void) {
     nullsub_s32_2(D_800BAEBC_1E7F6C, D_800BAEB8_1E7F68, 0);
     return 1;
 }
