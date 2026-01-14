@@ -1137,17 +1137,16 @@ musHandle startSongWithSingleFxBank(fx_header_t *fxBank, void *songAddr) {
     return result;
 }
 
-musHandle func_80072D20_73920(fx_header_t *arg0, s32 arg1) {
+musHandle startSoundEffectWithSingleFxBank(fx_header_t *fxBank, s32 fxNumber) {
     musHandle result;
 
-    if (arg0 != NULL) {
-        s32 temp = (s32)arg0->ptr_addr;
-        if (temp < 0) {
-            libmus_fxheader_single = arg0;
+    if (fxBank != NULL) {
+        if ((s32)fxBank->ptr_addr < 0) {
+            libmus_fxheader_single = fxBank;
         }
     }
 
-    result = __MusIntFindChannelAndStart(arg1);
+    result = __MusIntFindChannelAndStart(fxNumber);
     libmus_fxheader_single = libmus_fxheader_current;
 
     return result;
