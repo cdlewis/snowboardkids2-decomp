@@ -2955,7 +2955,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             scheduleItemBoxSystemTaskIfEnabled(courseId);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
-            func_800BBED8();
+            spawnStarlightItems();
             scheduleTask(&func_800BC528_AE8E8, 0, 0, 0xC7);
             func_800BC9BC();
             schedulePlayerSparkleTask();

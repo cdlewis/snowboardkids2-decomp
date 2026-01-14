@@ -52,12 +52,6 @@ typedef struct {
 } DebugDisplayListCleanupState;
 
 typedef struct {
-    u8 _pad[0x24];
-    void *segment1;
-    void *segment2;
-} DualSegmentCleanupState;
-
-typedef struct {
     /* 0x00 */ u8 _pad0[0x20];
     /* 0x20 */ void *config;
     /* 0x24 */ void *displayListMemory1;
@@ -104,24 +98,6 @@ typedef struct {
     /* 0x00 */ Transform3D mat;
     /* 0x20 */ u8 _pad20[0x5C];
 } DebugDisplayListPosition;
-
-typedef struct {
-    /* 0x00 */ Transform3D mat1;
-    /* 0x20 */ DisplayLists *unk20;
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ u8 _pad30[0xC];
-    /* 0x3C */ Transform3D mat2;
-    /* 0x5C */ DisplayLists *unk5C;
-    /* 0x60 */ void *unk60;
-    /* 0x64 */ void *unk64;
-    /* 0x68 */ s32 unk68;
-    /* 0x6C */ u8 _pad6C[0xC];
-    /* 0x78 */ s16 unk78;
-    /* 0x7A */ u16 unk7A;
-    /* 0x7C */ u8 unk7C;
-} func_800BBC28_arg;
 
 typedef struct {
     u8 _pad[0x76];
@@ -172,8 +148,6 @@ void updateDebugDisplayListGrowth(DebugDisplayListRenderState *);
 void renderStarlightHighwayBuildings(StarlightBuildingRenderData *);
 void cleanupStarlightHighwayBuildingTask(DualSegmentCleanupState *);
 void loadColorIndexedTexture(void *);
-void func_800BBEA0_AE260(DualSegmentCleanupState *);
-void func_800BBCFC_AE0BC(func_800BBC28_arg *);
 void func_800BC084_AE444(func_800BC3D0_AE790_arg *);
 void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *);
 void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *);
@@ -536,25 +510,25 @@ void spawnDebugDisplayListTask(s16 arg0) {
 // Keep original name for auto-generated data file references
 void func_800BBB90(s16 arg0) __attribute__((alias("spawnDebugDisplayListTask")));
 
-void func_800BBC28_ADFE8(func_800BBC28_arg *arg0) {
-    arg0->unk24 = func_80055DC4_569C4(8);
-    arg0->unk28 = func_80055DF8_569F8(8);
+void initStarlightItemTask(StarlightItemTaskState *arg0) {
+    arg0->segment1 = func_80055DC4_569C4(8);
+    arg0->segment2 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
-    memcpy(&arg0->mat1.translation, &D_800BCA30_AEDF0[arg0->unk7C], sizeof(Vec3i));
+    memcpy(&arg0->mat1.translation, &D_800BCA30_AEDF0[arg0->positionIndex], sizeof(Vec3i));
     arg0->unk68 = 0;
     arg0->mat1.translation.y += 0x100000;
-    arg0->unk60 = arg0->unk24;
-    arg0->unk64 = arg0->unk28;
+    arg0->unk60 = arg0->segment1;
+    arg0->unk64 = arg0->segment2;
     createYRotationMatrix(&arg0->mat2, 0);
-    arg0->unk78 = 0x2000;
+    arg0->scale = 0x2000;
     arg0->mat2.translation.x = arg0->mat1.translation.x;
     arg0->mat2.translation.y = arg0->mat1.translation.y + 0x180000;
     arg0->mat2.translation.z = arg0->mat1.translation.z;
-    setCleanupCallback(&func_800BBEA0_AE260);
-    setCallback(&func_800BBCFC_AE0BC);
+    setCleanupCallback(&cleanupStarlightItemTask);
+    setCallback(&updateStarlightItemTask);
 }
 
-void func_800BBCFC_AE0BC(func_800BBC28_arg *arg0) {
+void updateStarlightItemTask(StarlightItemTaskState *arg0) {
     GameState *allocation;
     s32 var_s0;
     s32 var_s1;
@@ -585,7 +559,7 @@ void func_800BBCFC_AE0BC(func_800BBC28_arg *arg0) {
         }
     }
 
-    if ((var_s0 != allocation->numPlayers) && (arg0->unk78 == 0x2000)) {
+    if ((var_s0 != allocation->numPlayers) && (arg0->scale == 0x2000)) {
         var_s0 = 0;
         if (allocation->numPlayers != 0) {
             var_s1 = 0;
@@ -599,32 +573,32 @@ void func_800BBCFC_AE0BC(func_800BBC28_arg *arg0) {
                 var_s1 += 0xBE8;
             } while (var_s0 < (s32)allocation->numPlayers);
         }
-        arg0->unk78 = 0x4000;
+        arg0->scale = 0x4000;
         queueSoundAtPosition(&arg0->mat1.translation, 0x4E);
     }
 
-    temp_v0_2 = arg0->unk7A + 0x100;
-    arg0->unk7A = temp_v0_2;
+    temp_v0_2 = arg0->rotation + 0x100;
+    arg0->rotation = temp_v0_2;
     createYRotationMatrix(&arg0->mat1, temp_v0_2 & 0xFFFF);
 
-    temp_v0 = arg0->unk78;
+    temp_v0 = arg0->scale;
     if (temp_v0 != 0x2000) {
         if (allocation->gamePaused == 0) {
-            arg0->unk78 = (s16)(temp_v0 - 0x800);
+            arg0->scale = (s16)(temp_v0 - 0x800);
         }
-        temp_a1 = arg0->unk78;
+        temp_a1 = arg0->scale;
         scaleMatrix(&arg0->mat1, temp_a1, 0x2000, temp_a1);
-        if (arg0->unk78 != 0x2000) {
+        if (arg0->scale != 0x2000) {
             goto block_c0f0;
         }
     }
     // D0/E0 block
-    arg0->unk5C = (DisplayLists *)((arg0->unk20 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xD0)),
+    arg0->displayLists2 = (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xD0)),
                                    (s32)func_80055E68_56A68(8) + 0xE0);
     goto common;
 
 block_c0f0:
-    arg0->unk5C = (DisplayLists *)((arg0->unk20 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xC0)),
+    arg0->displayLists2 = (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xC0)),
                                    (s32)func_80055E68_56A68(8) + 0xF0);
 
 common:
@@ -636,18 +610,18 @@ common:
     } while (var_s0 < 4);
 }
 
-void func_800BBEA0_AE260(DualSegmentCleanupState *arg0) {
+void cleanupStarlightItemTask(DualSegmentCleanupState *arg0) {
     arg0->segment1 = freeNodeMemory(arg0->segment1);
     arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
-void func_800BBED8(void) {
+void spawnStarlightItems(void) {
     s32 i;
 
     for (i = 0; i < 7; i++) {
-        func_800BBC28_arg *task = scheduleTask(func_800BBC28_ADFE8, 0, 0, 0x32);
+        StarlightItemTaskState *task = scheduleTask(initStarlightItemTask, 0, 0, 0x32);
         if (task != NULL) {
-            task->unk7C = i;
+            task->positionIndex = i;
         }
     }
 }
