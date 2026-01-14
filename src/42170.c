@@ -209,31 +209,31 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0xB44];
-    u8 storedPos[0xC]; /* 0xB44 */
+    u8 storedPos[0xC]; /* 0xB44 - stored player position during abduction */
     u8 _padB50[0x24];  /* 0xB50 */
-    s16 storedRotY;    /* 0xB74 */
+    s16 storedRotY;    /* 0xB74 - stored player Y rotation during abduction */
     u8 _padB76[0x58];  /* 0xB76 to 0xBCE */
-    u8 unkBCE;         /* 0xBCE */
-} Func44BBCPointerTarget;
+    u8 flags;          /* 0xBCE - abduction state flags */
+} UfoAbductionPlayerState;
 
 typedef struct {
-    u8 _pad0[0x14];                /* 0x00 */
-    Vec3i unk14;                   /* 0x14 */
-    void *unk20;                   /* 0x20 */
-    void *unk24;                   /* 0x24 */
-    void *unk28;                   /* 0x28 */
-    s32 unk2C;                     /* 0x2C */
-    u8 _pad30[0xC];                /* 0x30 */
-    DisplayListObject leftWing;    /* 0x3C */
-    DisplayListObject rightWing;   /* 0x78 */
-    Func44BBCPointerTarget *unkB4; /* 0xB4 */
-    s32 unkB8;                     /* 0xB8 */
-    s32 unkBC;                     /* 0xBC */
-    s32 unkC0;                     /* 0xC0 */
-    s16 unkC4;                     /* 0xC4 - counter */
-    s16 unkC6;                     /* 0xC6 - value copied to storedRotY */
-    u16 unkC8;                     /* 0xC8 */
-    u16 wingOscillationAngle;      /* 0xCA */
+    u8 _pad0[0x14];                  /* 0x00 */
+    Vec3i unk14;                     /* 0x14 - UFO world position */
+    void *unk20;                     /* 0x20 - main body display lists */
+    void *unk24;                     /* 0x24 - wing segment 1 asset */
+    void *unk28;                     /* 0x28 - wing segment 2 asset */
+    s32 unk2C;                       /* 0x2C */
+    u8 _pad30[0xC];                  /* 0x30 */
+    DisplayListObject leftWing;      /* 0x3C */
+    DisplayListObject rightWing;     /* 0x78 */
+    UfoAbductionPlayerState *target; /* 0xB4 - player being abducted */
+    s32 movementOffset;              /* 0xB8 - movement vector component */
+    s32 fallVelocity;                /* 0xBC - vertical velocity for fade out */
+    s32 flyAwayDistance;             /* 0xC0 - accumulated fly-away distance */
+    s16 phaseTimer;                  /* 0xC4 - countdown timer for phase transitions */
+    s16 yRotation;                   /* 0xC6 - current Y rotation */
+    u16 baseRotation;                /* 0xC8 - base rotation angle */
+    u16 wingOscillationAngle;        /* 0xCA */
 } UfoEffectState;
 
 typedef struct {
@@ -287,12 +287,14 @@ typedef struct {
 } OrbitStarEffectState;
 
 void renderUfoEffectWithWings(UfoEffectState *);
-void func_80044684_45284(UfoEffectState *);
-void func_800447D4_453D4(UfoEffectState *);
-void func_80044888_45488(UfoEffectState *);
-void func_80044990_45590(UfoEffectState *);
-void func_80044AB8_456B8(UfoEffectState *);
-void func_80044C38_45838(UfoEffectState *);
+void initUfoEffect(UfoEffectState *);
+void flyInUfoEffect(UfoEffectState *);
+void descendUfoEffect(UfoEffectState *);
+void setupUfoFlyAway(UfoEffectState *);
+void flyAwayUfoEffect(UfoEffectState *);
+void holdUfoEffect(UfoEffectState *);
+void fadeOutUfoEffect(UfoEffectState *);
+void cleanupUfoEffect(void *);
 void cleanupGhostEffect(GhostEffectState *);
 void updateGhostEffect(GhostEffectState *);
 void fadeOutGhostEffect(GhostEffectState *);
@@ -1909,7 +1911,7 @@ void renderUfoEffectWithWings(UfoEffectState *arg0) {
     }
 }
 
-void func_80044684_45284(UfoEffectState *arg0) {
+void initUfoEffect(UfoEffectState *arg0) {
     Vec3i posOutput;
     Vec3i transformOutput;
     Func43CA4GameState *allocation;
@@ -1937,23 +1939,23 @@ void func_80044684_45284(UfoEffectState *arg0) {
     arg0->rightWing.segment1 = arg0->unk24;
     arg0->rightWing.segment2 = arg0->unk28;
 
-    arg0->unkC8 = rotation + item->unk8;
-    createYRotationMatrix((Transform3D *)arg0, arg0->unkC8);
+    arg0->baseRotation = rotation + item->unk8;
+    createYRotationMatrix((Transform3D *)arg0, arg0->baseRotation);
 
-    arg0->unkC6 = 0;
+    arg0->yRotation = 0;
     transformVector2(&D_80090AA0_916A0, arg0, &transformOutput);
 
     arg0->unk14.x = item->unk0 + transformOutput.x;
     arg0->unk14.z = item->unk4 + transformOutput.z;
     temp_unk18 = posOutput.y + transformOutput.y;
-    arg0->unkC4 = 0x30;
+    arg0->phaseTimer = 0x30;
     arg0->unk14.y = temp_unk18;
 
-    setCleanupCallback(func_80044CA4_458A4);
-    setCallbackWithContinue(func_800447D4_453D4);
+    setCleanupCallback(cleanupUfoEffect);
+    setCallbackWithContinue(flyInUfoEffect);
 }
 
-void func_800447D4_453D4(UfoEffectState *arg0) {
+void flyInUfoEffect(UfoEffectState *arg0) {
     Func43CA4GameState *gameState;
     Vec3i output;
 
@@ -1962,20 +1964,20 @@ void func_800447D4_453D4(UfoEffectState *arg0) {
         transformVector2(&D_80090AAC_916AC, arg0, &output);
         arg0->unk14.x = arg0->unk14.x + output.x;
         arg0->unk14.z = arg0->unk14.z + output.z;
-        memcpy(&arg0->unkB4->storedPos, &arg0->unk14, 0xC);
-        arg0->unkB4->storedRotY = arg0->unkC6;
-        if (arg0->unkC4 != 0) {
-            arg0->unkC4 = arg0->unkC4 - 1;
+        memcpy(&arg0->target->storedPos, &arg0->unk14, 0xC);
+        arg0->target->storedRotY = arg0->yRotation;
+        if (arg0->phaseTimer != 0) {
+            arg0->phaseTimer = arg0->phaseTimer - 1;
         } else {
-            arg0->unkC4 = 0xB4;
-            setCallback(func_80044888_45488);
+            arg0->phaseTimer = 0xB4;
+            setCallback(descendUfoEffect);
         }
     }
 
     renderUfoEffectWithWings(arg0);
 }
 
-void func_80044888_45488(UfoEffectState *arg0) {
+void descendUfoEffect(UfoEffectState *arg0) {
     Func43CA4GameState *gameState;
     Vec3i output;
 
@@ -1985,32 +1987,32 @@ void func_80044888_45488(UfoEffectState *arg0) {
     }
 
     {
-        s16 temp = arg0->unkC6;
+        s16 temp = arg0->yRotation;
         if (temp != -0x400) {
-            arg0->unkC6 = temp - 0x10;
+            arg0->yRotation = temp - 0x10;
         }
     }
 
-    createCombinedRotationMatrix(arg0, arg0->unkC6, arg0->unkC8);
+    createCombinedRotationMatrix(arg0, arg0->yRotation, arg0->baseRotation);
     transformVector2(&D_80090AAC_916AC, arg0, &output);
 
     arg0->unk14.x = arg0->unk14.x + output.x;
     arg0->unk14.y = arg0->unk14.y + output.y;
     arg0->unk14.z = arg0->unk14.z + output.z;
 
-    memcpy(&arg0->unkB4->storedPos, &arg0->unk14, 0xC);
-    arg0->unkB4->storedRotY = arg0->unkC6;
+    memcpy(&arg0->target->storedPos, &arg0->unk14, 0xC);
+    arg0->target->storedRotY = arg0->yRotation;
 
     {
-        s16 temp = arg0->unkC4;
+        s16 temp = arg0->phaseTimer;
         if (temp != 0) {
             s16 temp2 = temp - 1;
-            arg0->unkC4 = temp2;
+            arg0->phaseTimer = temp2;
             if (temp2 == 0x12) {
-                arg0->unkB4->unkBCE |= 8;
+                arg0->target->flags |= 8;
             }
         } else {
-            setCallback(func_80044990_45590);
+            setCallback(setupUfoFlyAway);
         }
     }
 
@@ -2018,47 +2020,45 @@ end:
     renderUfoEffectWithWings(arg0);
 }
 
-void func_80044990_45590(UfoEffectState *arg0) {
+void setupUfoFlyAway(UfoEffectState *arg0) {
     D_80090F90_91B90_item *temp_v0;
-    Func44BBCPointerTarget *temp_a1;
+    UfoAbductionPlayerState *temp_a1;
     Vec3i output;
     Vec3i input;
     s32 i;
     s32 temp_unk14;
 
     temp_v0 = func_80055D10_56910(((Func43CA4GameState *)getCurrentAllocation())->unk5C);
-    temp_a1 = arg0->unkB4;
-    temp_a1->unkBCE |= 2;
-    arg0->unkC6 = -0x300;
-    arg0->unkC4 = 0x5A;
-    arg0->unkC8 = 0x1000;
-    createCombinedRotationMatrix(arg0, (u16)arg0->unkC6, 0x1000);
+    temp_a1 = arg0->target;
+    temp_a1->flags |= 2;
+    arg0->yRotation = -0x300;
+    arg0->phaseTimer = 0x5A;
+    arg0->baseRotation = 0x1000;
+    createCombinedRotationMatrix(arg0, (u16)arg0->yRotation, 0x1000);
     arg0->unk14.x = temp_v0->unkC.x + 0xFFD00000;
     arg0->unk14.y = temp_v0->unkC.y;
     temp_unk14 = temp_v0->unkC.z;
     i = 0;
-    arg0->unkC0 = 0;
-    arg0->unkBC = 0;
-    arg0->unkB8 = 0;
+    arg0->flyAwayDistance = 0;
+    arg0->fallVelocity = 0;
+    arg0->movementOffset = 0;
     arg0->unk14.z = temp_unk14 + 0x200000;
     input.x = 0;
     input.y = 0;
     input.z = 0;
     do {
-        arg0->unkC0 += 0x2000;
+        arg0->flyAwayDistance += 0x2000;
         i++;
-        input.z += arg0->unkC0;
+        input.z += arg0->flyAwayDistance;
     } while (i < 0x5A);
     transformVector2(&input, arg0, &output);
     arg0->unk14.x -= output.x;
     arg0->unk14.y -= output.y;
     arg0->unk14.z -= output.z;
-    setCallbackWithContinue(func_80044AB8_456B8);
+    setCallbackWithContinue(flyAwayUfoEffect);
 }
 
-void func_80044BBC_457BC(UfoEffectState *);
-
-void func_80044AB8_456B8(UfoEffectState *arg0) {
+void flyAwayUfoEffect(UfoEffectState *arg0) {
     Func43CA4GameState *gameState;
     Vec3i output;
 
@@ -2067,86 +2067,87 @@ void func_80044AB8_456B8(UfoEffectState *arg0) {
         goto end;
     }
 
-    if (arg0->unkC0 > 0x20000) {
+    if (arg0->flyAwayDistance > 0x20000) {
         goto skip_rotation;
     }
 
     {
-        s16 temp = arg0->unkC6;
+        s16 temp = arg0->yRotation;
         if (temp != 0) {
-            arg0->unkC6 = temp + 0x40;
+            arg0->yRotation = temp + 0x40;
         }
     }
 
-    createCombinedRotationMatrix(arg0, arg0->unkC6, arg0->unkC8);
+    createCombinedRotationMatrix(arg0, arg0->yRotation, arg0->baseRotation);
 
 skip_rotation:
-    transformVector2(&arg0->unkB8, arg0, &output);
+    transformVector2(&arg0->movementOffset, arg0, &output);
     arg0->unk14.x = arg0->unk14.x + output.x;
     arg0->unk14.y = arg0->unk14.y + output.y;
     arg0->unk14.z = arg0->unk14.z + output.z;
-    memcpy(arg0->unkB4->storedPos, &arg0->unk14, 0xC);
-    arg0->unkB4->storedRotY = arg0->unkC6;
+    memcpy(arg0->target->storedPos, &arg0->unk14, 0xC);
+    arg0->target->storedRotY = arg0->yRotation;
 
-    if (arg0->unkC0 != 0) {
-        arg0->unkC0 = arg0->unkC0 - 0x2000;
+    if (arg0->flyAwayDistance != 0) {
+        arg0->flyAwayDistance = arg0->flyAwayDistance - 0x2000;
     } else {
-        arg0->unkC4 = 4;
-        arg0->unkB4->unkBCE |= 4;
-        setCallback(func_80044BBC_457BC);
+        arg0->phaseTimer = 4;
+        arg0->target->flags |= 4;
+        setCallback(holdUfoEffect);
     }
 
 end:
     renderUfoEffectWithWings(arg0);
 }
 
-void func_80044BBC_457BC(UfoEffectState *arg0) {
+void holdUfoEffect(UfoEffectState *arg0) {
     Func43CA4GameState *gameState = (Func43CA4GameState *)getCurrentAllocation();
     s32 pad[4];
 
     if (gameState->unk76 == 0) {
-        arg0->unkC4--;
-        if (arg0->unkC4 == 0) {
-            setCallback(func_80044C38_45838);
+        arg0->phaseTimer--;
+        if (arg0->phaseTimer == 0) {
+            setCallback(fadeOutUfoEffect);
         }
-        memcpy(&arg0->unkB4->storedPos, &arg0->unk14, 0xC);
-        arg0->unkB4->storedRotY = arg0->unkC6;
+        memcpy(&arg0->target->storedPos, &arg0->unk14, 0xC);
+        arg0->target->storedRotY = arg0->yRotation;
     }
 
     renderUfoEffectWithWings(arg0);
 }
 
-void func_80044C38_45838(UfoEffectState *arg0) {
+void fadeOutUfoEffect(UfoEffectState *arg0) {
     Func43CA4GameState *gameState = (Func43CA4GameState *)getCurrentAllocation();
     s32 pad[4];
 
     if (gameState->unk76 == 0) {
-        arg0->unkBC -= 0x8000;
-        if (arg0->unkBC < (s32)0xFFF00000) {
+        arg0->fallVelocity -= 0x8000;
+        if (arg0->fallVelocity < (s32)0xFFF00000) {
             func_80069CF8_6A8F8();
         }
-        arg0->unk14.y += arg0->unkBC;
+        arg0->unk14.y += arg0->fallVelocity;
     }
 
     renderUfoEffectWithWings(arg0);
 }
 
-void func_80044CA4_458A4(Func432D8Arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupUfoEffect(void *arg0) {
+    Func432D8Arg *cleanupArg = (Func432D8Arg *)arg0;
+    cleanupArg->unk24 = freeNodeMemory(cleanupArg->unk24);
+    cleanupArg->unk28 = freeNodeMemory(cleanupArg->unk28);
 }
 
 typedef struct {
     u8 _pad0[0xB4];
-    void *unkB4;
-} Func44CDCTaskMem;
+    void *target;
+} UfoEffectTaskMem;
 
-void func_80044CDC_458DC(void *arg0) {
-    Func44CDCTaskMem *task;
+void spawnUfoEffect(void *arg0) {
+    UfoEffectTaskMem *task;
 
-    task = (Func44CDCTaskMem *)scheduleTask(func_80044684_45284, 0, 0, 0x32);
+    task = (UfoEffectTaskMem *)scheduleTask(initUfoEffect, 0, 0, 0x32);
     if (task != NULL) {
-        task->unkB4 = arg0;
+        task->target = arg0;
     }
 }
 
