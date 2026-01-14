@@ -103,7 +103,7 @@ typedef struct {
 } Func8000C268Arg;
 
 typedef struct {
-    u8 padding0[0xC];
+    u8 scriptData[0xC];
     /* 0xC */ u16 current_index;
     u8 padding[0x2];
     /* 0x10 */ u16 allocatedEventCount;
@@ -306,7 +306,7 @@ StateEntry *getStateEntry(u16 arg0);
 u16 getMaxCutsceneFrameNumber(void);
 u16 getSlotLastFrameNumber(u8 slotIndex);
 StateEntry *getCutsceneStateTable(void);
-u8 *func_800B4294_1E1344(void);
+u8 *getCutsceneStateTableLastBytePtr(void);
 u16 func_800B42B0_1E1360(u16 arg0);
 u16 func_800B42E8_1E1398(u16 arg0);
 void func_800B4320_1E13D0(void);

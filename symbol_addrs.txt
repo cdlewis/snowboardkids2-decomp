@@ -1474,6 +1474,7 @@ func_800B016C = 0x800B016C; // type:func rom:0x1DC30C
 func_800B46E0 = 0x800B46E0; // type:func rom:0x1E1790
 getSlotLastFrameNumber = 0x800B4258; // rom:0x1E1308
 getCutsceneStateTable = 0x800B4288; // rom:0x1E1338
+getCutsceneStateTableLastBytePtr = 0x800B4294; // rom:0x1E1344
 func_800B9AE0 = 0x800B9AE0; // type:func rom:0xA9990
 func_800BC9BC = 0x800BC9BC; // type:func rom:0xAED7C
 updateFloatingBillboard = 0x800BBD14; // rom:0xAFA04

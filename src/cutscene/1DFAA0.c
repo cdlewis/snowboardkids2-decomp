@@ -387,11 +387,11 @@ s16 getCutsceneFrameCount(s16 slotIndex, s16 cutsceneType) {
 }
 
 void *getCutsceneDataMagicPrimary(void) {
-    return &gCutsceneStateTable->padding0[4];
+    return &gCutsceneStateTable->scriptData[4];
 }
 
 void *getCutsceneDataMagicSecondary(void) {
-    return &gCutsceneStateTable->padding0[8];
+    return &gCutsceneStateTable->scriptData[8];
 }
 
 u16 getCutsceneAllocatedEventCount(void) {
@@ -589,7 +589,7 @@ void resetScriptState(u8 *arg0) {
 void initializeStateEntry(s32 arg0) {
     StateEntry *temp;
 
-    resetScriptState(gCutsceneStateTable[arg0 + 3].padding0);
+    resetScriptState(gCutsceneStateTable[arg0 + 3].scriptData);
 
     temp = (gCutsceneStateTable + arg0 + 3);
     temp->frameNumber = 0;
@@ -632,20 +632,20 @@ void initializeCutsceneSystem(void *arg0) {
     {
         StateEntry *v1ptr = gCutsceneStateTable;
         StateEntry *a0ptr;
-        v1ptr->padding0[4] = 0x45;
+        v1ptr->scriptData[4] = 0x45;
         a0ptr = gCutsceneStateTable;
         *(u16 *)((u8 *)v1ptr + 0xFA) = 0xFFFF;
         *(u16 *)((u8 *)v1ptr + 0x78B8) = 0xFFFF;
         *(s32 *)v1ptr = 0;
-        a0ptr->padding0[5] = 0x44;
+        a0ptr->scriptData[5] = 0x44;
     }
-    gCutsceneStateTable->padding0[6] = 0x41;
-    gCutsceneStateTable->padding0[7] = 0x54;
-    gCutsceneStateTable->padding0[8] = 0x30;
-    gCutsceneStateTable->padding0[9] = 0x30;
-    gCutsceneStateTable->padding0[0xA] = 0x30;
+    gCutsceneStateTable->scriptData[6] = 0x41;
+    gCutsceneStateTable->scriptData[7] = 0x54;
+    gCutsceneStateTable->scriptData[8] = 0x30;
+    gCutsceneStateTable->scriptData[9] = 0x30;
+    gCutsceneStateTable->scriptData[0xA] = 0x30;
     i = 0;
-    gCutsceneStateTable->padding0[0xB] = 0x31;
+    gCutsceneStateTable->scriptData[0xB] = 0x31;
     {
         StateEntry *v1ptr2 = gCutsceneStateTable;
         StateEntry *a0ptr2;
@@ -965,8 +965,8 @@ StateEntry *getCutsceneStateTable(void) {
     return gCutsceneStateTable;
 }
 
-u8 *func_800B4294_1E1344(void) {
-    return &gCutsceneStateTable->padding0[gCutsceneStateTableSize] - 1;
+u8 *getCutsceneStateTableLastBytePtr(void) {
+    return &gCutsceneStateTable->scriptData[gCutsceneStateTableSize] - 1;
 }
 
 u16 func_800B42B0_1E1360(u16 arg0) {
@@ -1105,7 +1105,7 @@ void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
 
         dest = getStateEntry(var_a0);
         for (i = 0; i < 0x38; i++) {
-            dest->padding0[i] = new_var->padding0[i];
+            dest->scriptData[i] = new_var->scriptData[i];
         }
 
         dest->commandCategory = new_var->commandCategory;
