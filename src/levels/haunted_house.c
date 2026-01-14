@@ -85,22 +85,22 @@ typedef struct {
 } func_800BC0FC_Task;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    void *spriteAsset;
+    void *spriteMetadata;
+    s32 posX;
+    s32 posY;
+    s32 posZ;
     u8 pad14[0x10];
-    s16 unk24;
-    s16 unk26;
-} func_800BBF4C_AFC3C_arg;
+    s16 variantIndex;
+    s16 animPhase;
+} FloatingSpriteEntity;
 
 extern s32 D_8009A8A4_9B4A4;
 extern void *g_GhostDefaultAssetMetadata;
 extern Vec3i g_GhostBaseDirection;
 extern AnimationData D_800BC830_B0520[];
 extern void *D_800BC8C8_B05B8;
-extern s8 D_800BC908_B05F8[12];
+extern s8 g_FloatingBillboardInitialPos[12];
 extern void *D_800BC920_B0610;
 extern void *D_800BC960_B0650;
 extern s32 D_800BC9A0_B0690[];
@@ -108,10 +108,9 @@ extern s16 D_800BC9DC_B06CC[];
 extern s16 D_800BC9E8_B06D8[];
 extern s16 D_800BC9F4_B06E4[];
 extern Vec3i D_800BCA00_B06F0[];
-extern s32 D_800BC914_B0604;
-extern s32 D_800BC918_B0608;
-extern s32 D_800BC91C_B060C;
-extern Vec3i D_800BCA00_B06F0[];
+extern s32 g_FloatingBillboardTargetX;
+extern s32 g_FloatingBillboardTargetY;
+extern s32 g_FloatingBillboardTargetZ;
 extern Gfx D_8009A780_9B380[];
 extern Gfx D_800BCA60_B0750[];
 extern s32 D_800A8B14_9FE84;
@@ -130,6 +129,8 @@ void initFloatingBillboard(FloatingBillboard *);
 void updateFloatingBillboardSpawner(s16 *);
 void freeFloatingBillboard(void **);
 void updateFloatingBillboard(FloatingBillboard *);
+void initFloatingSpriteEntity(FloatingSpriteEntity *);
+void updateFloatingSpriteEntity(FloatingSpriteEntity *);
 void func_800BC184_AFE74(GhostManager *);
 void func_800BC220_AFF10(u8 *ghostSlots);
 void func_800BC340_B0030(GhostManager *);
@@ -137,7 +138,6 @@ void func_800BC750_B0440(s16 *);
 void updateGhostAnimation(AnimatedGhostEntity *);
 void func_800BC378_B0068(GhostRenderState *);
 extern void func_800BC0D0_AFDC0(void **);
-void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *);
 
 void updateGhostAnimation(AnimatedGhostEntity *ghost) {
     s32 viewport;
@@ -442,7 +442,7 @@ void initFloatingBillboard(FloatingBillboard *billboard) {
     billboard->spriteAsset = func_80055D7C_5697C(9);
     billboard->spriteMetadata = &D_800BC8C8_B05B8;
     billboard->alpha = 0xFF;
-    memcpy(&billboard->currentX, &D_800BC908_B05F8, 12);
+    memcpy(&billboard->currentX, &g_FloatingBillboardInitialPos, 12);
     initialY = billboard->currentY + billboard->yOffset;
     billboard->lifetime = 0xB4;
     billboard->currentY = initialY;
@@ -472,13 +472,13 @@ void updateFloatingBillboard(FloatingBillboard *arg0) {
         }
 
         ptr8 = &arg0->currentX;
-        *ptr8 += (D_800BC914_B0604 - *ptr8) / arg0->lifetime;
+        *ptr8 += (g_FloatingBillboardTargetX - *ptr8) / arg0->lifetime;
 
         ptrC = &arg0->currentY;
-        *ptrC += (D_800BC918_B0608 - (*ptrC + arg0->yOffset)) / arg0->lifetime;
+        *ptrC += (g_FloatingBillboardTargetY - (*ptrC + arg0->yOffset)) / arg0->lifetime;
 
         ptr10 = &arg0->currentZ;
-        *ptr10 += (D_800BC91C_B060C - *ptr10) / arg0->lifetime;
+        *ptr10 += (g_FloatingBillboardTargetZ - *ptr10) / arg0->lifetime;
     }
 
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->spriteMetadata, arg0->spriteAsset, 5);
@@ -520,22 +520,22 @@ void updateFloatingBillboardSpawner(s16 *spawnTimer) {
     *spawnTimer = rand + 0xB4;
 }
 
-void func_800BBF4C_AFC3C(func_800BBF4C_AFC3C_arg *arg0) {
+void initFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
     s16 index;
 
-    arg0->unk0 = func_80055D7C_5697C(9);
-    arg0->unk4 = &D_800BC920_B0610;
+    arg0->spriteAsset = func_80055D7C_5697C(9);
+    arg0->spriteMetadata = &D_800BC920_B0610;
 
-    index = arg0->unk24;
+    index = arg0->variantIndex;
     if (D_800BC9DC_B06CC[index] == 7) {
-        arg0->unk4 = &D_800BC960_B0650;
+        arg0->spriteMetadata = &D_800BC960_B0650;
     }
 
     setCleanupCallback(func_800BC0D0_AFDC0);
-    setCallback(func_800BBFC8_AFCB8);
+    setCallback(updateFloatingSpriteEntity);
 }
 
-void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *arg0) {
+void updateFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
     Allocation *allocation;
     s32 i;
     s16 index;
@@ -546,27 +546,27 @@ void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *arg0) {
     allocation = (Allocation *)getCurrentAllocation();
 
     if (allocation->gamePaused == 0) {
-        index = arg0->unk24;
-        arg0->unk26 += D_800BC9F4_B06E4[index];
+        index = arg0->variantIndex;
+        arg0->animPhase += D_800BC9F4_B06E4[index];
     }
 
-    index = arg0->unk24;
+    index = arg0->variantIndex;
     src = D_800BC9A0_B0690;
-    memcpy(&arg0->unk8, &src[index * 3], 0xC);
+    memcpy(&arg0->posX, &src[index * 3], 0xC);
 
-    sinResult = approximateSin(arg0->unk26);
+    sinResult = approximateSin(arg0->animPhase);
 
-    index = arg0->unk24;
+    index = arg0->variantIndex;
     multiplier = D_800BC9E8_B06D8[index];
-    arg0->unkC += sinResult * multiplier;
+    arg0->posY += sinResult * multiplier;
 
-    index = arg0->unk24;
-    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, D_800BC9DC_B06CC[index]);
+    index = arg0->variantIndex;
+    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->spriteMetadata, arg0->spriteAsset, D_800BC9DC_B06CC[index]);
 
-    func_8005BCB8_5C8B8(&arg0->unk8, 0x140000, 0x300000);
+    func_8005BCB8_5C8B8(&arg0->posX, 0x140000, 0x300000);
 
     for (i = 0; i < 4; i++) {
-        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->spriteMetadata);
     }
 }
 
@@ -575,7 +575,7 @@ void func_800BC0D0_AFDC0(void **arg0) {
 }
 
 void func_800BC0FC(s16 arg0) {
-    func_800BC0FC_Task *task = (func_800BC0FC_Task *)scheduleTask(func_800BBF4C_AFC3C, 0, 0, 0xC8);
+    func_800BC0FC_Task *task = (func_800BC0FC_Task *)scheduleTask(initFloatingSpriteEntity, 0, 0, 0xC8);
     if (task != NULL) {
         task->unk24 = arg0;
     }
