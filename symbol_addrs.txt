@@ -1206,6 +1206,7 @@ loadAsset_34F7E0 = 0x80055F80;
 loadAsset_34F9A0 = 0x80055EFC;
 loadAsset_350140 = 0x80055F28;
 loadAsset_3505F0 = 0x80055F54;
+createBoneRotMatrix = 0x8005DF10; // rom:0x5EB10
 loadAssetByIndex_5E990 = 0x8005DD90;
 loadAssetByIndex_94F90 = 0x8005D990;
 loadAssetByIndex_95200 = 0x8005D9D0;

@@ -30,7 +30,7 @@ void initBoneAnimationState(void *animData, s32 tableIndex, s32 boneIndex, BoneA
     state->flags = *(u16 *)boneAnimData + 0x8000;
 }
 
-void func_8005DF10_5EB10(s16 arg0, s16 arg1, s16 arg2, s16 *arg3) {
+void createBoneRotMatrix(s16 arg0, s16 arg1, s16 arg2, s16 *arg3) {
     s32 spVars[3];
     s16 temp_s0;
     s16 temp_s1;
@@ -166,7 +166,7 @@ s32 func_8005E22C_5EE2C(BoneAnimationState *arg0) {
     if (flags & 0x8000) {
         s16 *animation_data = arg0->animation_data;
         arg0->flags = flags & 0x7FFF;
-        func_8005DF10_5EB10(animation_data[1], animation_data[2], animation_data[3], arg0->values);
+        createBoneRotMatrix(animation_data[1], animation_data[2], animation_data[3], arg0->values);
 
         frame_idx = arg0->animation_data[4];
         arg0->position[0] = arg0->frame_data[frame_idx * 3] << 10;
@@ -194,7 +194,7 @@ s32 func_8005E22C_5EE2C(BoneAnimationState *arg0) {
     {
         s16 *animation_data = arg0->animation_data;
         if (animation_data[3] != (arg0->counter & 0xFFFF)) {
-            func_8005DF10_5EB10(animation_data[1], animation_data[2], animation_data[3] - arg0->counter, stack_data);
+            createBoneRotMatrix(animation_data[1], animation_data[2], animation_data[3] - arg0->counter, stack_data);
             func_8006BDBC_6C9BC(arg0, stack_data, arg0->prev_position);
         }
     }
@@ -243,7 +243,7 @@ s32 func_8005E500_5F100(BoneAnimationState *arg0) {
     if (flags & 0x8000) {
         s16 *animation_data = arg0->animation_data;
         arg0->flags = flags & 0x7FFF;
-        func_8005DF10_5EB10(animation_data[1], -animation_data[2], -animation_data[3], arg0->values);
+        createBoneRotMatrix(animation_data[1], -animation_data[2], -animation_data[3], arg0->values);
 
         frame_idx = arg0->animation_data[4];
         arg0->position[0] = -arg0->frame_data[frame_idx * 3] << 10;
@@ -271,7 +271,7 @@ s32 func_8005E500_5F100(BoneAnimationState *arg0) {
     {
         s16 *animation_data = arg0->animation_data;
         if (animation_data[3] != (arg0->counter & 0xFFFF)) {
-            func_8005DF10_5EB10(animation_data[1], -animation_data[2], arg0->counter - animation_data[3], stack_data);
+            createBoneRotMatrix(animation_data[1], -animation_data[2], arg0->counter - animation_data[3], stack_data);
             func_8006BDBC_6C9BC(arg0, stack_data, arg0->prev_position);
         }
     }
@@ -315,7 +315,7 @@ void func_8005E800_5F400(BoneAnimationState *entity, u16 param_2) {
 
     if (entity->flags & 0x8000) {
         entity->flags &= 0x7FFF;
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             entity->animation_data[1],
             entity->animation_data[2],
             entity->animation_data[3],
@@ -353,7 +353,7 @@ void func_8005E800_5F400(BoneAnimationState *entity, u16 param_2) {
         entity->counter = result >> 9;
 
         if (entity->counter & 0xFFFF) {
-            func_8005DF10_5EB10(entity->animation_data[1], entity->animation_data[2], entity->counter, stack_data);
+            createBoneRotMatrix(entity->animation_data[1], entity->animation_data[2], entity->counter, stack_data);
             func_8006BDBC_6C9BC(entity, stack_data, entity->prev_position);
         }
     }
@@ -405,7 +405,7 @@ void func_8005EA44_5F644(BoneAnimationState *entity, u16 param_2) {
 
     if (entity->flags & 0x8000) {
         entity->flags &= 0x7FFF;
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             entity->animation_data[1],
             -entity->animation_data[2],
             -entity->animation_data[3],
@@ -436,7 +436,7 @@ void func_8005EA44_5F644(BoneAnimationState *entity, u16 param_2) {
     entity->counter = result >> 9;
 
     if (entity->counter & 0xFFFF) {
-        func_8005DF10_5EB10(entity->animation_data[1], -entity->animation_data[2], -entity->counter, stack_data);
+        createBoneRotMatrix(entity->animation_data[1], -entity->animation_data[2], -entity->counter, stack_data);
         func_8006BDBC_6C9BC(entity, stack_data, entity->prev_position);
     }
 
@@ -482,7 +482,7 @@ s32 func_8005ECB8_5F8B8(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
     if (flags & 0x8000) {
         s16 *animation_data = arg3->animation_data;
         arg3->flags = flags & 0x7FFF;
-        func_8005DF10_5EB10(animation_data[1], animation_data[2], animation_data[3], arg3->values);
+        createBoneRotMatrix(animation_data[1], animation_data[2], animation_data[3], arg3->values);
 
         frame_idx = arg3->animation_data[4];
         arg3->position[0] = arg3->frame_data[frame_idx * 3] << 10;
@@ -510,7 +510,7 @@ s32 func_8005ECB8_5F8B8(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
     {
         s16 *animation_data = arg3->animation_data;
         if (animation_data[3] != (arg3->counter & 0xFFFF)) {
-            func_8005DF10_5EB10(animation_data[1], animation_data[2], animation_data[3] - arg3->counter, stack_data);
+            createBoneRotMatrix(animation_data[1], animation_data[2], animation_data[3] - arg3->counter, stack_data);
             func_8006BDBC_6C9BC(arg3, stack_data, arg3->prev_position);
         }
     }
@@ -567,7 +567,7 @@ s32 func_8005EFC4_5FBC4(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
     if (flags & 0x8000) {
         s16 *animation_data = arg3->animation_data;
         arg3->flags = flags & 0x7FFF;
-        func_8005DF10_5EB10(animation_data[1], -animation_data[2], -animation_data[3], arg3->values);
+        createBoneRotMatrix(animation_data[1], -animation_data[2], -animation_data[3], arg3->values);
 
         frame_idx = arg3->animation_data[4];
         arg3->position[0] = -arg3->frame_data[frame_idx * 3] << 10;
@@ -595,7 +595,7 @@ s32 func_8005EFC4_5FBC4(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
     {
         s16 *animation_data = arg3->animation_data;
         if (animation_data[3] != (arg3->counter & 0xFFFF)) {
-            func_8005DF10_5EB10(animation_data[1], -animation_data[2], arg3->counter - animation_data[3], stack_data);
+            createBoneRotMatrix(animation_data[1], -animation_data[2], arg3->counter - animation_data[3], stack_data);
             func_8006BDBC_6C9BC(arg3, stack_data, arg3->prev_position);
         }
     }
@@ -678,7 +678,7 @@ s32 func_8005F344_5FF44(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
         state->flags = flags & 0x7FFF;
 
         idx = state->animation_index;
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             animation_data[idx * 5 + 1],
             animation_data[idx * 5 + 2],
             animation_data[idx * 5 + 3],
@@ -713,7 +713,7 @@ s32 func_8005F344_5FF44(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
 
     idx = state->animation_index;
     if ((s16)animation_data[idx * 5 + 3] != (state->counter & 0xFFFF)) {
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             animation_data[idx * 5 + 1],
             animation_data[idx * 5 + 2],
             (s16)animation_data[idx * 5 + 3] - state->counter,
@@ -775,7 +775,7 @@ s32 func_8005F6DC_602DC(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
         state->flags = flags & 0x7FFF;
 
         idx = state->animation_index;
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             animation_data[idx * 5 + 1],
             -animation_data[idx * 5 + 2],
             -animation_data[idx * 5 + 3],
@@ -810,7 +810,7 @@ s32 func_8005F6DC_602DC(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
 
     idx = state->animation_index;
     if ((s16)animation_data[idx * 5 + 3] != (state->counter & 0xFFFF)) {
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             animation_data[idx * 5 + 1],
             -animation_data[idx * 5 + 2],
             state->counter - (s16)animation_data[idx * 5 + 3],
@@ -882,7 +882,7 @@ void func_8005FAA0_606A0(void *arg0, s16 arg1, s16 arg2, func_8005FAA0_606A0_arg
         entity->flags &= 0x7FFF;
 
         idx = entity->animation_index;
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             animation_data[idx * 5 + 1],
             animation_data[idx * 5 + 2],
             animation_data[idx * 5 + 3],
@@ -915,7 +915,7 @@ void func_8005FAA0_606A0(void *arg0, s16 arg1, s16 arg2, func_8005FAA0_606A0_arg
 
     if (entity->counter != 0) {
         idx = entity->animation_index;
-        func_8005DF10_5EB10(animation_data[idx * 5 + 1], animation_data[idx * 5 + 2], entity->counter, stack_data);
+        createBoneRotMatrix(animation_data[idx * 5 + 1], animation_data[idx * 5 + 2], entity->counter, stack_data);
         func_8006BDBC_6C9BC((void *)entity, stack_data, entity->prev_position);
     }
 
@@ -973,7 +973,7 @@ void func_8005FDAC_609AC(void *arg0, s16 arg1, s16 arg2, func_8005FDAC_609AC_arg
         entity->flags &= 0x7FFF;
 
         idx = entity->animation_index;
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             animation_data[idx * 5 + 1],
             -animation_data[idx * 5 + 2],
             -animation_data[idx * 5 + 3],
@@ -1006,7 +1006,7 @@ void func_8005FDAC_609AC(void *arg0, s16 arg1, s16 arg2, func_8005FDAC_609AC_arg
 
     if (entity->counter != 0) {
         idx = entity->animation_index;
-        func_8005DF10_5EB10(animation_data[idx * 5 + 1], -animation_data[idx * 5 + 2], -entity->counter, stack_data);
+        createBoneRotMatrix(animation_data[idx * 5 + 1], -animation_data[idx * 5 + 2], -entity->counter, stack_data);
         func_8006BDBC_6C9BC((void *)entity, stack_data, entity->prev_position);
     }
 
@@ -1059,7 +1059,7 @@ s32 func_800600E4_60CE4(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
         state->flags = flags & 0x7FFF;
 
         idx = state->animation_index;
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             animation_data[idx * 5 + 1],
             animation_data[idx * 5 + 2],
             animation_data[idx * 5 + 3],
@@ -1095,7 +1095,7 @@ s32 func_800600E4_60CE4(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
     idx = state->animation_index;
     diff = (s16)animation_data[idx * 5 + 3];
     if (diff != (state->counter & 0xFFFF)) {
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             animation_data[idx * 5 + 1],
             animation_data[idx * 5 + 2],
             diff - state->counter,
@@ -1165,7 +1165,7 @@ s32 func_80060504_61104(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
         state->flags = flags & 0x7FFF;
 
         idx = state->animation_index;
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             animation_data[idx * 5 + 1],
             -(s16)animation_data[idx * 5 + 2],
             -(s16)animation_data[idx * 5 + 3],
@@ -1201,7 +1201,7 @@ s32 func_80060504_61104(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
     idx = state->animation_index;
     diff = (s16)animation_data[idx * 5 + 3];
     if (diff != (state->counter & 0xFFFF)) {
-        func_8005DF10_5EB10(
+        createBoneRotMatrix(
             animation_data[idx * 5 + 1],
             -(s16)animation_data[idx * 5 + 2],
             state->counter - diff,

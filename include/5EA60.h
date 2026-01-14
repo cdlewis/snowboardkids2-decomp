@@ -4,6 +4,8 @@
 void *getAnimationFrameData(void *animData);
 u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 boneIndex);
 
+void createBoneRotMatrix(s16 angleX, s16 angleY, s16 angleZ, s16 *matrix);
+
 typedef struct {
     u8 padding[0x8];
     u32 countOffset;
