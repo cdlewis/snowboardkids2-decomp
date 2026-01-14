@@ -450,7 +450,7 @@ void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s3
     initViewportCallbackPool(arg0);
 }
 
-void func_8006FC68_70868(void) {
+void nullViewportFunction(void) {
 }
 
 void func_8006FC70_70870(u16 searchId, u16 colorCount, ColorData *srcColors, ColorData *finalColor) {
