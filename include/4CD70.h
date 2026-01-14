@@ -122,6 +122,17 @@ typedef struct {
     s16 displayMode;
 } ShotCrossItemCountDisplayState;
 
+typedef struct {
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteIndex;
+    u8 padA[0x2];
+    void *digitAsset;
+    s32 elapsedTicks;
+    s16 blinkCounter;
+} RaceTimerState;
+
 void showGoalBanner(s32 playerIndex);
 void showTrickScoreDisplay(s32 playerIndex, s32 trickScore);
 void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0);

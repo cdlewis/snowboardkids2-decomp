@@ -2098,38 +2098,27 @@ void cleanupBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 padA[0x2];
-    void *unkC;
-    s32 unk10;
-    s16 unk14;
-} Struct_func_8004F424;
-
-void func_8004F4A8_500A8(Struct_func_8004F424 *arg0);
-void func_8004F69C_5029C(ShotCrossCountdownTimerState *arg0);
+void updateRaceTimerDisplay(RaceTimerState *arg0);
+void cleanupRaceTimerDisplay(ShotCrossCountdownTimerState *arg0);
 
 extern char D_8009E8D4_9F4D4[];
 extern char D_8009E8E0_9F4E0[];
 extern char D_8009E8EC_9F4EC[];
 extern char D_8009E8F8_9F4F8[];
 
-void func_8004F424_50024(Struct_func_8004F424 *arg0) {
-    arg0->unk10 = 0x4293C;
-    arg0->unkC = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    arg0->unk4 = loadAsset_34CB50();
-    arg0->unk8 = 0x23;
-    arg0->unk0 = 0x68;
-    arg0->unk2 = 0x48;
-    arg0->unk14 = 0;
-    setCleanupCallback(func_8004F69C_5029C);
-    setCallback(func_8004F4A8_500A8);
+void initRaceTimerDisplay(RaceTimerState *arg0) {
+    arg0->elapsedTicks = 0x4293C;
+    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->spriteAsset = loadAsset_34CB50();
+    arg0->spriteIndex = 0x23;
+    arg0->x = 0x68;
+    arg0->y = 0x48;
+    arg0->blinkCounter = 0;
+    setCleanupCallback(cleanupRaceTimerDisplay);
+    setCallback(updateRaceTimerDisplay);
 }
 
-void func_8004F4A8_500A8(Struct_func_8004F424 *arg0) {
+void updateRaceTimerDisplay(RaceTimerState *arg0) {
     char sp20[0x10];
     Allocation *alloc;
     s32 minutes;
@@ -2146,11 +2135,11 @@ void func_8004F4A8_500A8(Struct_func_8004F424 *arg0) {
     if (alloc->timeRemaining->unkB84 & 0x80000) {
         goto set_7E;
     }
-    if (arg0->unk10 == 0x433C8) {
+    if (arg0->elapsedTicks == 0x433C8) {
         goto check_time_flag;
     }
-    arg0->unk10++;
-    if (arg0->unk10 != 0x433C8) {
+    arg0->elapsedTicks++;
+    if (arg0->elapsedTicks != 0x433C8) {
         goto check_time_flag;
     }
     alloc->timerExpired = 1;
@@ -2161,30 +2150,30 @@ check_time_flag:
         goto after_7E;
     }
 set_7E:
-    if (arg0->unk10 > 0x4309E) {
+    if (arg0->elapsedTicks > 0x4309E) {
         goto after_7E;
     }
     alloc->unk7E = 1;
 
 after_7E:
-    alloc->unk54 = arg0->unk10;
+    alloc->unk54 = arg0->elapsedTicks;
 
-    minutes = arg0->unk10 / 32400;
-    seconds = (arg0->unk10 % 32400) / 540;
+    minutes = arg0->elapsedTicks / 32400;
+    seconds = (arg0->elapsedTicks % 32400) / 540;
 
-    arg0->unk14++;
-    if (arg0->unk14 == 0x28) {
-        arg0->unk14 = 0;
+    arg0->blinkCounter++;
+    if (arg0->blinkCounter == 0x28) {
+        arg0->blinkCounter = 0;
     }
 
-    if (arg0->unk10 > 0x431AB) {
-        if (arg0->unk14 < 0x14) {
+    if (arg0->elapsedTicks > 0x431AB) {
+        if (arg0->blinkCounter < 0x14) {
             sprintf(sp20, D_8009E8D4_9F4D4, minutes, seconds);
         } else {
             sprintf(sp20, D_8009E8E0_9F4E0, minutes, seconds);
         }
     } else {
-        if (arg0->unk14 < 0x14) {
+        if (arg0->blinkCounter < 0x14) {
             sprintf(sp20, D_8009E8EC_9F4EC, minutes, seconds);
         } else {
             sprintf(sp20, D_8009E8F8_9F4F8, minutes, seconds);
@@ -2192,10 +2181,10 @@ after_7E:
     }
 
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
-    drawNumericString(sp20, 0x68, 0x50, 0xFF, arg0->unkC, 8, 0);
+    drawNumericString(sp20, 0x68, 0x50, 0xFF, arg0->digitAsset, 8, 0);
 }
 
-void func_8004F69C_5029C(ShotCrossCountdownTimerState *arg0) {
+void cleanupRaceTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
@@ -2599,7 +2588,7 @@ void func_8005011C_50D1C(void) {
                 break;
 
             case 4:
-                scheduleTask(func_8004F424_50024, 0, 1, 0xF0);
+                scheduleTask(initRaceTimerDisplay, 0, 1, 0xF0);
                 SCHEDULE_AND_SET(func_8004F6D4_502D4, 4, i);
                 scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);
                 break;
