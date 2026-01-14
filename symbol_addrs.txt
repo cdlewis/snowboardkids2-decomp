@@ -806,6 +806,7 @@ applyCharacterBoardStats = 0x80058690;
 getCharacterBoardStatParam0 = 0x80058804;
 setPlayerHitStunState = 0x800588E0; // rom:0x594E0
 setPlayerPullState = 0x800589CC; // rom:0x595CC
+setPlayerState100 = 0x80058B94; // rom:0x59794
 gMusicTrackVoiceMap = 0x80093B84; // rom:0x94784
 gBoardStatsTable = 0x80093BB0;
 D_800BBBC0_ABA70 = 0x800BBBC0; // size:0x70 rom:0xABA70

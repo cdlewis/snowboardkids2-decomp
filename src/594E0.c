@@ -136,9 +136,9 @@ void setPlayerState80(Player *player) {
     }
 }
 
-void func_80058B94_59794(Player *arg0) {
-    if (!(arg0->unkB88 & 8)) {
-        arg0->unkAC2 = 100;
+void setPlayerState100(Player *player) {
+    if (!(player->unkB88 & 8)) {
+        player->unkAC2 = 100;
     }
 }
 
