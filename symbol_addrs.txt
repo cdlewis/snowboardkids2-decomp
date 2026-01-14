@@ -55,6 +55,7 @@ cleanupBossHomingProjectileVariant2Task = 0x8004C0D0; // rom:0x4CCD0
 spawnBossHomingProjectileVariant2Task = 0x8004C10C; // rom:0x4CD0C
 initializeMusicSystem = 0x8005610C; // rom:0x56D0C
 setPanScaleByHandle = 0x80072ACC; // rom:0x736CC
+initMusicPtrBank = 0x80072CC0; // rom:0x738C0
 queueAnonymousBufferData = 0x80056914; // rom:0x57514
 setAudioDistanceLimits = 0x80056990; // rom:0x57590
 queueBufferDataNoFlags = 0x800569A4; // rom:0x575A4

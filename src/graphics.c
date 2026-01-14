@@ -556,7 +556,7 @@ void gfxCommThreadFunc(void *arg0) {
                     result = (void *)countChannelsByHandle((u32)gGraphicsCommand.audioChannel);
                     break;
                 case 10:
-                    func_80072CC0_738C0(gGraphicsCommand.ptrBank, gGraphicsCommand.waveBank);
+                    initMusicPtrBank(gGraphicsCommand.ptrBank, gGraphicsCommand.waveBank);
                     break;
                 case 11:
                     result = func_80072CDC_738DC(gGraphicsCommand.ptrBank, gGraphicsCommand.musicBankBuffer);

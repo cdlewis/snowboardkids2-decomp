@@ -22,7 +22,7 @@ typedef struct {
 
 s32 MusInitialize(musConfig *config);
 
-void func_80072CC0_738C0(void *pbank, void *wbank);
+void initMusicPtrBank(void *pbank, void *wbank);
 
 s32 setFrequencyOffsetByHandle(void *, f32);
 
