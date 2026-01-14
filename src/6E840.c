@@ -7,10 +7,10 @@
 
 typedef struct Node {
     struct Node *next;
-    void *unk4;
-    void *unk8;
+    void *callback;
+    void *callbackData;
     u8 padding[0x3];
-    u8 unkF;
+    u8 poolIndex;
 } Node;
 
 typedef struct {
@@ -87,7 +87,7 @@ extern s16 identityMatrix[];
 
 void *LinearAlloc(size_t size);
 void restoreViewportOffsets(void);
-void func_8006FA58_70658(Node_70B00 *arg0);
+void initViewportCallbackPool(Node_70B00 *arg0);
 
 INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
 
@@ -258,7 +258,7 @@ void initGraphicsSystem(void) {
     D_800A3429_A4029 = 0;
     D_800A342A_A402A = 0;
     D_800A342B_A402B = 0;
-    func_8006FA58_70658(&D_800A3370_A3F70);
+    initViewportCallbackPool(&D_800A3370_A3F70);
     resetLinearAllocator();
     restoreViewportOffsets();
 
@@ -355,22 +355,22 @@ void func_8006FA0C_7060C(Node_70B00 *node, f32 fov, f32 aspect, f32 near, f32 fa
     guPerspective(&node->perspectiveMatrix, &node->perspNorm, fov, aspect, near, far, 1.0f);
 }
 
-void func_8006FA58_70658(Node_70B00 *arg0) {
+void initViewportCallbackPool(Node_70B00 *node) {
     s32 i;
 
     i = 7;
     while (i >= 0) {
-        arg0->pool[i].unk4 = NULL;
+        node->pool[i].callback = NULL;
         i--;
     }
 
     i = 1;
     while (i < 8) {
-        arg0->pool[i - 1].next = &arg0->pool[i];
+        node->pool[i - 1].next = &node->pool[i];
         i++;
     }
 
-    arg0->unk88 = NULL;
+    node->unk88 = NULL;
 }
 
 void func_8006FAA4_706A4(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s32 arg4) {
@@ -447,7 +447,7 @@ void func_8006FAA4_706A4(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3,
     arg0->unkBF = 0;
     arg0->unkC1 = 0;
     arg0->scaleY = 1.0f;
-    func_8006FA58_70658(arg0);
+    initViewportCallbackPool(arg0);
 }
 
 void func_8006FC68_70868(void) {
@@ -634,9 +634,9 @@ void debugEnqueueCallback(u16 index, u8 slotIndex, void *callback, void *callbac
         if (block != NULL) {
             slot = &manager[slotIndex];
             block->next = slot[1].unk8;
-            block->unk4 = callback;
-            block->unk8 = callbackData;
-            block->unkF = slotIndex;
+            block->callback = callback;
+            block->callbackData = callbackData;
+            block->poolIndex = slotIndex;
             slot[1].unk8 = block;
         }
     }
@@ -649,9 +649,9 @@ void func_8007001C_70C1C(Node_70B00 *arg0, u8 arg1, void *arg2, void *arg3) {
     entry = (PoolEntry *)linearAlloc(0x10);
     if (entry != NULL) {
         prev = arg0->pool[arg1].next;
-        entry->unk4 = arg2;
-        entry->unk8 = arg3;
-        entry->unkF = arg1;
+        entry->callback = arg2;
+        entry->callbackData = arg3;
+        entry->poolIndex = arg1;
         entry->next = prev;
         arg0->pool[arg1].next = entry;
     }
@@ -671,9 +671,9 @@ void func_80070094_70C94(u16 id, u8 listIndex, void *data1, void *data2) {
             if (newNode != NULL) {
                 listPtr = (u8 *)mgr + (listIndex << 4);
                 oldHead = *(Node **)(listPtr + 0x18);
-                newNode->unk4 = data1;
-                newNode->unk8 = data2;
-                newNode->unkF = listIndex;
+                newNode->callback = data1;
+                newNode->callbackData = data2;
+                newNode->poolIndex = listIndex;
                 newNode->next = oldHead;
                 *(Node **)(listPtr + 0x18) = newNode;
             }

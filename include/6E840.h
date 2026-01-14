@@ -21,10 +21,10 @@ typedef struct {
 } Node_70B00_ColorData;
 typedef struct PoolEntry {
     struct PoolEntry *next;
-    void *unk4;
-    void *unk8;
+    void *callback;
+    void *callbackData;
     u8 _padC[3];
-    u8 unkF;
+    u8 poolIndex;
 } PoolEntry;
 
 typedef struct Node_70B00 {
