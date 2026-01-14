@@ -43,12 +43,12 @@ extern s32 gCutsceneStateTableSize;
 extern StateEntry *gControllerPakTransferPointer;
 extern StateEntry *gControllerPakStateTablePointer;
 extern s32 gButtonsPressed[];
-extern StateEntry D_800BAEC8_1E7F78[];
+extern StateEntry gCutsceneEntryBuffer[];
 extern u8 D_800BAF06_1E7FB6;
-extern u8 D_800BAEB0_1E7F60;
-extern s16 D_800BAEB2_1E7F62;
-extern s8 D_800BAEB4_1E7F64;
-extern s16 D_800BAEC0_1E7F70;
+extern u8 gCutsceneEntryCopyFlag;
+extern s16 gCutsceneEntryBufferFrameNumber;
+extern s8 gCutsceneEntryCutFlag;
+extern s16 gCutsceneEntryBufferSlotIndex;
 extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
 extern s8 D_800BAE00_1E7EB0[];
 extern u8 identityMatrix[];
@@ -700,10 +700,10 @@ void initializeCutsceneSystem(void *arg0) {
         }
     } while (i < 0x10);
 
-    D_800BAEB0_1E7F60 = 0;
-    D_800BAEC0_1E7F70 = -1;
-    D_800BAEB2_1E7F62 = -1;
-    D_800BAEB4_1E7F64 = 0;
+    gCutsceneEntryCopyFlag = 0;
+    gCutsceneEntryBufferSlotIndex = -1;
+    gCutsceneEntryBufferFrameNumber = -1;
+    gCutsceneEntryCutFlag = 0;
 }
 
 void cleanupCutsceneSystem(void) {
@@ -969,51 +969,47 @@ u8 *getCutsceneStateTableLastBytePtr(void) {
     return &gCutsceneStateTable->scriptData[gCutsceneStateTableSize] - 1;
 }
 
-u16 func_800B42B0_1E1360(u16 arg0) {
-    u16 var_a1;
-    s16 temp_v1;
-
-    if (D_800BAEB4_1E7F64 != 0) {
-        temp_v1 = D_800BAEC0_1E7F70;
-        if (temp_v1 != -1) {
-            var_a1 = temp_v1;
-            return var_a1;
+u16 getCutEntryBufferSlotIndex(u16 defaultSlotIndex) {
+    if (gCutsceneEntryCutFlag != 0) {
+        s16 storedSlotIndex = gCutsceneEntryBufferSlotIndex;
+        if (storedSlotIndex != -1) {
+            return storedSlotIndex;
         }
     }
-    return arg0;
+    return defaultSlotIndex;
 }
 
-u16 func_800B42E8_1E1398(u16 arg0) {
-    if (D_800BAEB4_1E7F64 == 0) {
-        return arg0;
+u16 getCutEntryBufferFrameNumber(u16 defaultFrameNumber) {
+    if (gCutsceneEntryCutFlag == 0) {
+        return defaultFrameNumber;
     }
-    if (D_800BAEB2_1E7F62 == -1) {
-        return arg0;
+    if (gCutsceneEntryBufferFrameNumber == -1) {
+        return defaultFrameNumber;
     }
-    return D_800BAEB2_1E7F62;
+    return gCutsceneEntryBufferFrameNumber;
 }
 
-void func_800B4320_1E13D0(void) {
-    s16 temp_v0;
-    s16 temp_v0_2;
-    u8 masked_arg0;
-    u16 masked_arg1;
+void pasteCutsceneEntry(void) {
+    s16 storedSlotIndex;
+    s16 storedFrameNumber;
+    u8 slotIndex;
+    u16 frameNumber;
 
-    if (D_800BAEB4_1E7F64 != 0) {
-        temp_v0 = D_800BAEC0_1E7F70;
-        if (temp_v0 != -1) {
-            temp_v0_2 = D_800BAEB2_1E7F62;
-            if (temp_v0_2 != -1) {
-                masked_arg0 = temp_v0;
-                masked_arg1 = temp_v0_2;
-                func_800B4534_1E15E4(masked_arg0, masked_arg1);
+    if (gCutsceneEntryCutFlag != 0) {
+        storedSlotIndex = gCutsceneEntryBufferSlotIndex;
+        if (storedSlotIndex != -1) {
+            storedFrameNumber = gCutsceneEntryBufferFrameNumber;
+            if (storedFrameNumber != -1) {
+                slotIndex = storedSlotIndex;
+                frameNumber = storedFrameNumber;
+                pasteCutsceneEntryToSlot(slotIndex, frameNumber);
             }
         }
     }
-    D_800BAEB4_1E7F64 = 0;
+    gCutsceneEntryCutFlag = 0;
 }
 
-void func_800B4378_1E1428(u8 slotIndex, s16 frameNumber) {
+void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
     u16 searchResult;
     u16 entryIndex;
     u16 entryNextIndex;
@@ -1032,7 +1028,7 @@ void func_800B4378_1E1428(u8 slotIndex, s16 frameNumber) {
         return;
     }
 
-    memcpy(D_800BAEC8_1E7F78, getStateEntry(entryIndex), 0x40);
+    memcpy(gCutsceneEntryBuffer, getStateEntry(entryIndex), 0x40);
 
     base = gCutsceneStateTable;
     freeListHead = *(u16 *)((u8 *)base + 0xE);
@@ -1050,14 +1046,14 @@ void func_800B4378_1E1428(u8 slotIndex, s16 frameNumber) {
         *(u16 *)((u8 *)gCutsceneStateTable + (entryNextIndex << 6) + 0xFA) = entryPrevIndex;
     }
 
-    D_800BAEB0_1E7F60 = 1;
-    D_800BAEC0_1E7F70 = slotIndex;
-    D_800BAEB2_1E7F62 = frameNumber;
-    D_800BAEB4_1E7F64 = 1;
+    gCutsceneEntryCopyFlag = 1;
+    gCutsceneEntryBufferSlotIndex = slotIndex;
+    gCutsceneEntryBufferFrameNumber = frameNumber;
+    gCutsceneEntryCutFlag = 1;
     gCutsceneStateTable->allocatedEventCount -= 1;
 }
 
-void func_800B44A8_1E1558(u8 arg0, u16 arg1) {
+void copyCutsceneEntry(u8 slotIndex, u16 frameNumber) {
     u16 eventId;
     StateEntry *src;
     StateEntry *dst;
@@ -1066,12 +1062,12 @@ void func_800B44A8_1E1558(u8 arg0, u16 arg1) {
     s32 i;
     u8 temp;
 
-    eventId = findEventAtFrame(arg0, arg1);
+    eventId = findEventAtFrame(slotIndex, frameNumber);
 
-    // Copy the current entry to D_800BAEC8_1E7F78
+    // Copy the current entry to gCutsceneEntryBuffer
     if (eventId != 0xFFFF) {
         src = getStateEntry(eventId);
-        dst = &D_800BAEC8_1E7F78[0];
+        dst = &gCutsceneEntryBuffer[0];
         srcBytes = (u8 *)src;
         dstBytes = (u8 *)dst;
 
@@ -1081,58 +1077,57 @@ void func_800B44A8_1E1558(u8 arg0, u16 arg1) {
 
         dst->commandCategory = src->commandCategory;
         temp = src->commandType;
-        D_800BAEB0_1E7F60 = 1;
-        D_800BAEB4_1E7F64 = 0;
+        gCutsceneEntryCopyFlag = 1;
+        gCutsceneEntryCutFlag = 0;
         dst->commandType = temp;
     }
 }
 
-void func_800B4534_1E15E4(s32 arg0, s32 arg1) {
-    s32 temp_s0;
+void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber) {
+    s32 categorySkip;
     StateEntry *dest;
-    StateEntry *new_var;
+    StateEntry *srcEntry;
     s32 i;
-    u8 masked_arg0 = arg0 & 0xFF;
 
-    new_var = D_800BAEC8_1E7F78;
-    temp_s0 = (-((~getCurrentStateEntryItem(masked_arg0)->unk4) != 0)) | 1;
+    srcEntry = gCutsceneEntryBuffer;
+    categorySkip = (-((~getCurrentStateEntryItem(slotIndex)->unk4) != 0)) | 1;
 
-    if (D_800BAEB0_1E7F60 != 0 && getCategorySkipValue(D_800BAF06_1E7FB6) != temp_s0) {
-        s32 var_a0 = findEventAtFrame(masked_arg0, arg1);
-        if ((var_a0 & 0xFFFF) == 0xFFFF) {
-            var_a0 = insertCutsceneEvent(masked_arg0, arg1);
+    if (gCutsceneEntryCopyFlag != 0 && getCategorySkipValue(D_800BAF06_1E7FB6) != categorySkip) {
+        s32 eventIndex = findEventAtFrame(slotIndex, frameNumber);
+        if ((eventIndex & 0xFFFF) == 0xFFFF) {
+            eventIndex = insertCutsceneEvent(slotIndex, frameNumber);
         }
 
-        dest = getStateEntry(var_a0);
+        dest = getStateEntry(eventIndex);
         for (i = 0; i < 0x38; i++) {
-            dest->scriptData[i] = new_var->scriptData[i];
+            dest->scriptData[i] = srcEntry->scriptData[i];
         }
 
-        dest->commandCategory = new_var->commandCategory;
-        dest->commandType = new_var->commandType;
+        dest->commandCategory = srcEntry->commandCategory;
+        dest->commandType = srcEntry->commandType;
 
-        D_800BAEB4_1E7F64 = 0;
+        gCutsceneEntryCutFlag = 0;
     }
 }
 
-void func_800B462C_1E16DC(u8 arg0, u16 arg1, s32 arg2) {
+void shiftCutsceneEntryFrame(u8 slotIndex, u16 frameNumber, s32 frameDelta) {
     u16 result;
     StateEntry *entry;
 
-    result = findStateEntryIndex(arg0, arg1, 0);
+    result = findStateEntryIndex(slotIndex, frameNumber, 0);
 
     if (result != 0xFFFF) {
         entry = getStateEntry(result);
-        entry->frameNumber += arg2;
+        entry->frameNumber += frameDelta;
     }
 }
 
-void *func_800B4680_1E1730(s8 arg0) {
+void *loadCutsceneSlotAsset(s8 slotIndex) {
     D_800BA960_1E7A10_node *node;
 
-    if (arg0 < 0x10) {
-        node = &D_800BA960_1E7A10[arg0];
-        if (D_800BA960_1E7A10[arg0].start != NULL) {
+    if (slotIndex < 0x10) {
+        node = &D_800BA960_1E7A10[slotIndex];
+        if (D_800BA960_1E7A10[slotIndex].start != NULL) {
             return loadCompressedData(node->start, node->end, node->size);
         }
     }
