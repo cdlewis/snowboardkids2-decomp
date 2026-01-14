@@ -258,9 +258,9 @@ void initDebugDisplayListTask(DebugDisplayListTaskState *arg0) {
     setCallback(&updateDebugDisplayListGrowth);
 }
 
-void func_800BBB0C_ADECC(void *);
-void func_800BBB38_ADEF8(void *);
-void func_800BBB64_ADF24(void *);
+void renderColorIndexedOpaqueDisplayList(void *);
+void renderColorIndexedTransparentDisplayList(void *);
+void renderColorIndexedOverlayDisplayList(void *);
 void renderDebugDisplayLists(DebugDisplayListRenderState *arg0);
 void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0);
 void updateDebugDisplayListDecay(DebugDisplayListRenderState *arg0);
@@ -277,18 +277,18 @@ void renderDebugDisplayLists(DebugDisplayListRenderState *arg0) {
 
     for (i = 0; i < 4; i++) {
         if (arg0->config->renderOpaque != 0) {
-            debugEnqueueCallback(i & 0xFFFF, 1, func_800BBB0C_ADECC, arg0);
+            debugEnqueueCallback(i & 0xFFFF, 1, renderColorIndexedOpaqueDisplayList, arg0);
         }
 
         if (arg0->config->renderTransparent != 0) {
-            debugEnqueueCallback(i & 0xFFFF, 3, func_800BBB38_ADEF8, arg0);
+            debugEnqueueCallback(i & 0xFFFF, 3, renderColorIndexedTransparentDisplayList, arg0);
         }
 
         if (arg0->config->renderOverlay == 0) {
             continue;
         }
 
-        debugEnqueueCallback(i & 0xFFFF, 5, func_800BBB64_ADF24, arg0);
+        debugEnqueueCallback(i & 0xFFFF, 5, renderColorIndexedOverlayDisplayList, arg0);
     }
 }
 
@@ -499,17 +499,17 @@ loop_2:
 // Keep original name for auto-generated data file references
 void func_800BB75C_ADB1C(void *arg) __attribute__((alias("loadColorIndexedTexture")));
 
-void func_800BBB0C_ADECC(void *arg0) {
+void renderColorIndexedOpaqueDisplayList(void *arg0) {
     loadColorIndexedTexture(arg0);
     renderOpaqueDisplayList(arg0);
 }
 
-void func_800BBB38_ADEF8(void *arg0) {
+void renderColorIndexedTransparentDisplayList(void *arg0) {
     loadColorIndexedTexture(arg0);
     renderTransparentDisplayList(arg0);
 }
 
-void func_800BBB64_ADF24(void *arg0) {
+void renderColorIndexedOverlayDisplayList(void *arg0) {
     loadColorIndexedTexture(arg0);
     renderOverlayDisplayList(arg0);
 }
