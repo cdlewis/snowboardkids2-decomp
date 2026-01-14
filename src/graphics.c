@@ -88,7 +88,7 @@ void func_8005628C_56E8C(void);
 
 void *startSoundEffect(s32, s32, s32, s32, s32);
 s32 countChannelsByHandle(u32 handle);
-void *func_80072CDC_738DC(void *, void *);
+void *startSongWithSingleFxBank(void *, void *);
 
 typedef struct {
     void *start;
@@ -559,7 +559,7 @@ void gfxCommThreadFunc(void *arg0) {
                     initMusicPtrBank(gGraphicsCommand.ptrBank, gGraphicsCommand.waveBank);
                     break;
                 case 11:
-                    result = func_80072CDC_738DC(gGraphicsCommand.ptrBank, gGraphicsCommand.musicBankBuffer);
+                    result = startSongWithSingleFxBank(gGraphicsCommand.ptrBank, gGraphicsCommand.musicBankBuffer);
                     if (gGraphicsCommand.voiceIndex != 0) {
                         setReverbScaleByHandle(result, gGraphicsCommand.voiceIndex);
                     }

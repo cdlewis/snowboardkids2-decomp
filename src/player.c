@@ -1121,17 +1121,17 @@ void initMusicPtrBank(void *pbank, void *wbank) {
     MusPtrBankInitialize(pbank, wbank);
 }
 
-musHandle func_80072CDC_738DC(fx_header_t *arg0, void *arg1) {
+musHandle startSongWithSingleFxBank(fx_header_t *fxBank, void *songAddr) {
     musHandle result;
 
-    if (arg0 != NULL) {
-        s32 temp = (s32)arg0->ptr_addr;
+    if (fxBank != NULL) {
+        s32 temp = (s32)fxBank->ptr_addr;
         if (temp < 0) {
-            libmus_fxheader_single = arg0;
+            libmus_fxheader_single = fxBank;
         }
     }
 
-    result = ((s32(*)(void *))__MusIntStartSong)(arg1);
+    result = ((s32(*)(void *))__MusIntStartSong)(songAddr);
     libmus_fxheader_single = libmus_fxheader_current;
 
     return result;
