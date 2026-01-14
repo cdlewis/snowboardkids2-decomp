@@ -2,7 +2,7 @@
 #include "geometry.h"
 
 void *getAnimationFrameData(void *animData);
-u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 subIndex);
+u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 boneIndex);
 
 typedef struct {
     u8 padding[0x8];

@@ -6,11 +6,11 @@ void *getAnimationFrameData(void *animData) {
     return (void *)((s8 *)animData + *(s32 *)((s8 *)animData + 4));
 }
 
-u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 subIndex) {
-    void *offsetTable;
+u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 boneIndex) {
+    void *boneDataTable;
 
-    offsetTable = animData + *(s32 *)((s8 *)animData + tableIndex * 4 + 8);
-    return offsetTable + *(u16 *)((s8 *)offsetTable + subIndex * 2 + 4);
+    boneDataTable = animData + *(s32 *)((s8 *)animData + tableIndex * 4 + 8);
+    return boneDataTable + *(u16 *)((s8 *)boneDataTable + boneIndex * 2 + 4);
 }
 
 void func_8005DE98_5EA98(void *animData, s32 tableIndex, s32 boneIndex, func_8005E800_5F400_arg *state) {
