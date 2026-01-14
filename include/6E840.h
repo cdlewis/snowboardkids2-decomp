@@ -125,7 +125,7 @@ void func_8006FD3C_7093C(u16, void *);
 
 void func_8006FAA4_706A4(Node_70B00 *, Node_70B00 *, s32, s32, s32);
 
-void func_8006FA0C_7060C(Node_70B00 *, f32, f32, f32, f32);
+void func_8006FA0C_7060C(Node_70B00 *node, f32 fov, f32 aspect, f32 near, f32 far);
 
 void setModelCameraTransform(void *, s16, s16, s16, s16, s16, s16);
 

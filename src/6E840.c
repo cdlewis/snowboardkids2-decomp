@@ -351,8 +351,8 @@ void setViewportScale(Node_70B00 *arg0, f32 scaleX, f32 scaleY) {
     arg0->viewportHeight = (s16)(scaleY * 480.0f);
 }
 
-void func_8006FA0C_7060C(Node_70B00 *arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
-    guPerspective(&arg0->perspectiveMatrix, &arg0->perspNorm, arg1, arg2, arg3, arg4, 1.0f);
+void func_8006FA0C_7060C(Node_70B00 *node, f32 fov, f32 aspect, f32 near, f32 far) {
+    guPerspective(&node->perspectiveMatrix, &node->perspNorm, fov, aspect, near, far, 1.0f);
 }
 
 void func_8006FA58_70658(Node_70B00 *arg0) {
