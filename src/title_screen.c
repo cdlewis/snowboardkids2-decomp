@@ -181,7 +181,7 @@ case_0:
     state->frameCounter = frameCounter;
 
     if (menuSelection != state->menuSelection) {
-        func_80058220_58E20(0x2B, 1);
+        playSoundEffectOnChannelNoPriority(0x2B, 1);
         frameCounter = state->frameCounter;
         if (frameCounter >= 0x2D1) {
             state->frameCounter = 0x2D0;
@@ -189,7 +189,7 @@ case_0:
     }
 
     if ((gControllerInputs & (A_BUTTON | START_BUTTON)) != 0) {
-        func_80058220_58E20(0x2C, 1);
+        playSoundEffectOnChannelNoPriority(0x2C, 1);
         if (state->menuSelection == 0) {
             state->menuMode = 1;
             goto end;
@@ -232,7 +232,7 @@ case1_check2:
 
 case1_done_nav:
     if (menuSelection != state->menuSelection) {
-        func_80058220_58E20(0x2B, 1);
+        playSoundEffectOnChannelNoPriority(0x2B, 1);
     }
 
     temp = gControllerInputs;
@@ -252,7 +252,7 @@ case1_done_nav:
                 unlockPartialContent();
             }
         }
-        func_80058220_58E20(0x2C, 1);
+        playSoundEffectOnChannelNoPriority(0x2C, 1);
         setMusicFadeOut(0x20);
         func_8006FDA0_709A0(0, 0xFF, 8);
         func_8006983C_6A43C(cleanupTitleAndTransition);
@@ -266,7 +266,7 @@ end:
 void onTitleFadeInComplete(void) {
     if (func_8006FE10_70A10(0) == 0) {
         func_8006FE28_70A28(0, 0, 0, 0);
-        func_80058220_58E20(0x135, 0);
+        playSoundEffectOnChannelNoPriority(0x135, 0);
         setGameStateHandler(handleTitleMenuInput);
     }
 }

@@ -356,7 +356,7 @@ void handleLevelSelectInput(void) {
                             D_800AFE8C_A71FC->unk9[0xC] = D_8008D9C0_8E5C0[D_800AFE8C_A71FC->saveSlotIndex];
                         }
                         applyLevelSelection();
-                        func_80058220_58E20(0x2D, 0);
+                        playSoundEffectOnChannelNoPriority(0x2D, 0);
                     }
                 }
             }

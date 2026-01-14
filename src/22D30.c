@@ -124,21 +124,21 @@ void handlePlayerCountSelectInput(void) {
                 if (inputs & 0x40100) {
                     if (state->playerCount.selectedPlayerIndex < (state->connectedControllerCount - 1)) {
                         state->playerCount.selectedPlayerIndex = state->playerCount.selectedPlayerIndex + 1;
-                        func_80058220_58E20(0x2B, 0);
+                        playSoundEffectOnChannelNoPriority(0x2B, 0);
                         break;
                     }
                 }
                 if (gControllerInputs & 0x80200) {
                     if (state->playerCount.selectedPlayerIndex != 0) {
                         state->playerCount.selectedPlayerIndex = state->playerCount.selectedPlayerIndex - 1;
-                        func_80058220_58E20(0x2B, 0);
+                        playSoundEffectOnChannelNoPriority(0x2B, 0);
                         break;
                     }
                 }
                 if (gControllerInputs & A_BUTTON) {
                     state->menuState = 1;
                     state->frameCounter = 0;
-                    func_80058220_58E20(0x2C, 0);
+                    playSoundEffectOnChannelNoPriority(0x2C, 0);
                 }
             }
             break;
@@ -155,7 +155,7 @@ void handlePlayerCountSelectInput(void) {
                 goto common_exit;
             } else if (inputs & A_BUTTON) {
                 state->menuResult = 1;
-                func_80058220_58E20(0x2D, 0);
+                playSoundEffectOnChannelNoPriority(0x2D, 0);
             }
             break;
         case 0xA:

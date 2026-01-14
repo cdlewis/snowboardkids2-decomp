@@ -64,11 +64,11 @@ void unlockScreenAwaitFadeIn(void) {
 
     if (state->unlockCount != 0) {
         state->transitionState = 1;
-        func_80058220_58E20(0xEA, 1);
+        playSoundEffectOnChannelNoPriority(0xEA, 1);
         setGameStateHandler(unlockScreenScheduleDisplayTasks);
     } else {
         state->transitionState = 3;
-        func_80058220_58E20(0xEE, 1);
+        playSoundEffectOnChannelNoPriority(0xEE, 1);
         setGameStateHandler(unlockScreenAwaitUserDismiss);
         scheduleTask(initStoryMapShopSoldOutLabel, 0, 0, 0x5A);
     }
@@ -101,7 +101,7 @@ void unlockScreenAwaitUserDismiss(void) {
     }
 
     if (gControllerInputs & 0xD000) {
-        func_80058220_58E20(0xED, 1);
+        playSoundEffectOnChannelNoPriority(0xED, 1);
         state->transitionState = 2;
         func_8006FDA0_709A0(0, 0xFF, 0x10);
         setGameStateHandler(unlockScreenCleanupAndExit);

@@ -198,7 +198,7 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
             arg0->unk37 = 0;
             arg0->unk50 = dialogueIndex;
             arg0->unk4C += 1;
-            func_80058220_58E20(0xBE, 1);
+            playSoundEffectOnChannelNoPriority(0xBE, 1);
         }
     }
     if (arg0->unk5C == 3) {
@@ -208,7 +208,7 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
             arg0->unk37 = 0;
             arg0->unk50 = dialogueIndex;
             arg0->unk4C += 1;
-            func_80058220_58E20(0xAA, 1);
+            playSoundEffectOnChannelNoPriority(0xAA, 1);
         }
     }
 }

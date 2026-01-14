@@ -822,7 +822,7 @@ void playSoundEffectOnChannelWithPriority(s32 soundId, s32 priority, s32 channel
     playSoundEffectOnChannelWithPriorityAndVoice(soundId, priority, channelIndex, 0xC);
 }
 
-void func_80058154_58D54(s32 soundId, s32 channelIndex, s32 voiceIndex) {
+void playSoundEffectOnChannelNoPriorityWithVoice(s32 soundId, s32 channelIndex, s32 voiceIndex) {
     GraphicsManager *mgr;
     void *newChannel;
     void *existingChannel;
@@ -845,8 +845,8 @@ void func_80058154_58D54(s32 soundId, s32 channelIndex, s32 voiceIndex) {
     incrementSoundSequence();
 }
 
-void func_80058220_58E20(s32 soundId, s32 channelIndex) {
-    func_80058154_58D54(soundId, channelIndex, 0xC);
+void playSoundEffectOnChannelNoPriority(s32 soundId, s32 channelIndex) {
+    playSoundEffectOnChannelNoPriorityWithVoice(soundId, channelIndex, 0xC);
 }
 
 void func_8005823C_58E3C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {

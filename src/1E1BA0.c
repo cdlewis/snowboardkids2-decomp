@@ -127,7 +127,7 @@ void func_800B4C80_1E1D30(s16 arg0) {
     s16 temp;
 
     temp = func_800B4AFC_1E1BAC(arg0);
-    func_80058220_58E20(temp, 0);
+    playSoundEffectOnChannelNoPriority(temp, 0);
 }
 
 void func_800B4CB0_1E1D60(void) {
