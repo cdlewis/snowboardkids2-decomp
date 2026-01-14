@@ -1174,17 +1174,17 @@ musHandle startSoundEffectWithSingleFxBankEx(
     return result;
 }
 
-fx_header_t *func_80072DBC_739BC(s32 handle) {
+fx_header_t *MusGetHandleFxBank(s32 handle) {
     s32 i;
-    channel_t *sp;
+    channel_t *channel;
 
     if (handle == 0) {
         return NULL;
     }
 
-    for (i = 0, sp = mus_channels; i < max_channels; i++, sp++) {
-        if (sp->handle == handle) {
-            return sp->sample_bank;
+    for (i = 0, channel = mus_channels; i < max_channels; i++, channel++) {
+        if (channel->handle == handle) {
+            return channel->sample_bank;
         }
     }
 
