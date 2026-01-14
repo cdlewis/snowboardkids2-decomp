@@ -54,11 +54,6 @@ typedef struct {
     s32 unk24;
 } Task;
 
-typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_800BBC2C_AF91C_arg;
 
 typedef struct {
     void *unk0;
@@ -130,7 +125,7 @@ void oscillateGhostFade(AnimatedGhostEntity *);
 void fadeOutGhost(AnimatedGhostEntity *);
 void func_800BB778_AF468(void);
 void updateSwingingPendulumTrap(SwingingPendulumTrap *);
-void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *);
+void freeSwingingPendulumTrapAssets(SwingingPendulumTrap *);
 void func_800BBC64_AF954(func_800BBC64_AF954_arg *);
 void func_800BBEAC_AFB9C(s16 *);
 void func_800BBCE8_AF9D8(void **);
@@ -349,7 +344,7 @@ void initSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
 
     temp_a1 = arg0->swingAngle + 0x2A0;
     createYRotationMatrix((Transform3D *)arg0, temp_a1 & 0xFFFF);
-    setCleanupCallback(func_800BBC2C_AF91C);
+    setCleanupCallback(freeSwingingPendulumTrapAssets);
     setCallback(updateSwingingPendulumTrap);
 }
 
@@ -436,9 +431,9 @@ void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
     }
 }
 
-void func_800BBC2C_AF91C(func_800BBC2C_AF91C_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void freeSwingingPendulumTrapAssets(SwingingPendulumTrap *trap) {
+    trap->uncompressedAsset = freeNodeMemory(trap->uncompressedAsset);
+    trap->compressedAsset = freeNodeMemory(trap->compressedAsset);
 }
 
 void func_800BBC64_AF954(func_800BBC64_AF954_arg *arg0) {
