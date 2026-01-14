@@ -3078,6 +3078,7 @@ renderMultiPartOverlayDisplayLists = 0x80064768; // rom:0x65368
 renderMultiPartOpaqueDisplayListsWithLights = 0x80065D50; // rom:0x65D50
 renderMultiPartTransparentDisplayListsWithLights = 0x800653E0; // rom:0x65FE0
 renderMultiPartOverlayDisplayListsWithLights = 0x80066270; // rom:0x66270
+enqueueTexturedBillboardSprite = 0x80066444; // rom:0x67044
 renderTexturedOpaqueSprite = 0x80064CF4; // rom:0x658F4
 renderTexturedTransparentSprite = 0x80064E34; // rom:0x65A34
 renderTexturedOverlaySprite = 0x80064F74; // rom:0x65B74

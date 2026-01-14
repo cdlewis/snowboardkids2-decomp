@@ -270,7 +270,7 @@ void launchSlapstickProjectile(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -366,7 +366,7 @@ void updateSlapstickProjectile(Struct_52880 *arg0) {
 
     i = 0;
     do {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
         i++;
     } while (i < 4);
 }
@@ -487,7 +487,7 @@ void launchParachuteProjectile(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -583,7 +583,7 @@ void updateParachuteProjectile(Struct_52880 *arg0) {
 
     i = 0;
     do {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
         i++;
     } while (i < 4);
 }
@@ -709,7 +709,7 @@ void launchFryingPanProjectile(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -805,7 +805,7 @@ void updateFryingPanProjectile(Struct_52880 *arg0) {
 
     i = 0;
     do {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
         i++;
     } while (i < 4);
 }
@@ -944,7 +944,7 @@ void launchSnowmanProjectile(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -1043,7 +1043,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (void *)arg0);
+        enqueueTexturedBillboardSprite(i, (void *)arg0);
     }
 }
 
@@ -1159,7 +1159,7 @@ void launchStarProjectile(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -1254,7 +1254,7 @@ void updateStarProjectile(Struct_52880 *arg0) {
 
     i = 0;
     do {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
         i++;
     } while (i < 4);
 }
@@ -1370,7 +1370,7 @@ void launchHomingPanelProjectile(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -1473,7 +1473,7 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
 
     i = 0;
     do {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
         i++;
     } while (i < 4);
 }
@@ -1580,7 +1580,7 @@ void updateFallingStarProjectile(Struct_52880 *projectile) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)projectile);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)projectile);
     }
 }
 
@@ -1704,7 +1704,7 @@ void updatePlayerGuidedStarProjectile(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -1856,7 +1856,7 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -1955,7 +1955,7 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -2026,7 +2026,7 @@ void func_800554FC_560FC(Struct_52880 *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -2094,7 +2094,7 @@ skip_main:
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
     }
 }
 
@@ -2173,7 +2173,7 @@ void func_80055964_56564(Struct_52880 *arg0) {
     i = 0;
 
     do {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
         i++;
     } while (i < 4);
 }
@@ -2236,7 +2236,7 @@ void func_80055A84_56684(Struct_52880 *arg0) {
 
     i = 0;
     do {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)arg0);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
         i++;
     } while (i < 4);
 }

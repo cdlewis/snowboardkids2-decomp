@@ -61,7 +61,7 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x4];
-    func_80066444_67044_arg1 metadata;
+    TexturedBillboardSprite metadata;
 } PanelProjectileImpactArg;
 
 typedef struct {
@@ -122,7 +122,7 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x4];
-    func_80066444_67044_arg1 displayListState;
+    TexturedBillboardSprite displayListState;
 } BossHomingProjectileBounceArg;
 
 typedef struct {
@@ -254,13 +254,13 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x4];
-    func_80066444_67044_arg1 displayListState;
+    TexturedBillboardSprite displayListState;
     s16 playerIndex;
 } BossHomingProjectileVariant1BounceArg;
 
 typedef struct {
     s32 unk0;
-    func_80066444_67044_arg1 displayListState;
+    TexturedBillboardSprite displayListState;
     s16 playerIndex;
 } BossHomingProjectileVariant1UpdateArg;
 
@@ -1190,7 +1190,7 @@ void updatePlayerSparkle(PlayerSparkleTask *task) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&task->metadata);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&task->metadata);
     }
 }
 
@@ -1943,7 +1943,7 @@ loop:
     do {
         offset = 4;
         do {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)((s32)state + offset));
+            enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)((s32)state + offset));
             j++;
             offset += 0x20;
         } while (j < 3);
@@ -1988,7 +1988,7 @@ loop:
     do {
         offset = 4;
         do {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)((s32)state + offset));
+            enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)((s32)state + offset));
             j++;
             offset += 0x20;
         } while (j < 3);
@@ -2032,7 +2032,7 @@ loop:
     do {
         offset = 4;
         do {
-            func_80066444_67044(i, (void *)((s32)state + offset));
+            enqueueTexturedBillboardSprite(i, (void *)((s32)state + offset));
             j++;
             offset += 0x20;
         } while (j < 3);
@@ -2120,11 +2120,11 @@ loop:
         goto loop;
 
     for (i = 0; i < 2; i++) {
-        func_80066444_67044(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
+        enqueueTexturedBillboardSprite(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
     }
 
     for (i = 2; i < 5; i++) {
-        func_800670A4_67CA4(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
+        func_800670A4_67CA4(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
     }
 }
 
@@ -2194,11 +2194,11 @@ loop2:
         goto loop2;
 
     for (i = 0; i < 2; i++) {
-        func_80066444_67044(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
+        enqueueTexturedBillboardSprite(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
     }
 
     for (i = 2; i < 5; i++) {
-        func_800670A4_67CA4(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
+        func_800670A4_67CA4(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
     }
 }
 
@@ -2234,11 +2234,11 @@ loop:
         goto loop;
 
     for (i = 0; i < 2; i++) {
-        func_80066444_67044(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
+        enqueueTexturedBillboardSprite(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
     }
 
     for (i = 2; i < 5; i++) {
-        func_800670A4_67CA4(state->player->unkBB8, (func_80066444_67044_arg1 *)&state->elements[i]);
+        func_800670A4_67CA4(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
     }
 }
 
@@ -3144,7 +3144,7 @@ void updateHomingProjectileMovement(HomingProjectileUpdateArg *arg0) {
         }
     }
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->metadata);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->metadata);
     }
 }
 
@@ -3182,7 +3182,7 @@ void updateHomingProjectileImpact(HomingProjectileImpactArg *arg0) {
 
     if (arg0->timer >= 0x1F || (gFrameCounter & 1)) {
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->metadata);
+            enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->metadata);
         }
     }
 }
@@ -3296,7 +3296,7 @@ void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0) {
         }
     }
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->metadataPad);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->metadataPad);
     }
 }
 
@@ -3312,18 +3312,18 @@ void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0) {
 
     if (alloc->unk76 == 0) {
         if (alloc->availableHomingProjectileSlots < 10) {
-            if (arg0->metadata.unk36 < 0x1194) {
-                if (arg0->metadata.unk36 >= 0x1F) {
-                    arg0->metadata.unk36 = 0x1E;
+            if (arg0->metadata.unk32 < 0x1194) {
+                if (arg0->metadata.unk32 >= 0x1F) {
+                    arg0->metadata.unk32 = 0x1E;
                 }
             }
         }
-        arg0->metadata.unk36--;
+        arg0->metadata.unk32--;
     }
 
-    s2 = &arg0->metadata.unk4;
+    s2 = &arg0->metadata.position;
 
-    if (arg0->metadata.unk36 == 0) {
+    if (arg0->metadata.unk32 == 0) {
         func_80069CF8_6A8F8();
     }
 
@@ -3339,13 +3339,13 @@ void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0) {
         func_80069CF8_6A8F8();
     } else {
         i = 0;
-        if (arg0->metadata.unk36 < 0x1F) {
+        if (arg0->metadata.unk32 < 0x1F) {
             if ((gFrameCounter & 1) == 0) {
                 return;
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, &arg0->metadata);
+            enqueueTexturedBillboardSprite(i, &arg0->metadata);
         }
     }
 }
@@ -3443,7 +3443,7 @@ void updateItemHomingProjectileMovement(ItemHomingProjectileMoveArg *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->metadataPtr);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->metadataPtr);
     }
 }
 
@@ -3493,7 +3493,7 @@ void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->metadataPtr);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->metadataPtr);
     }
 }
 
@@ -3626,7 +3626,7 @@ void updateBossHomingProjectile(BossHomingProjectile *projectile) {
 
 exit_loop:
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&projectile->metadata);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&projectile->metadata);
     }
 }
 
@@ -3638,12 +3638,12 @@ void bounceBossHomingProjectile(BossHomingProjectileBounceArg *arg0) {
     s32 i;
 
     if (((GameState *)getCurrentAllocation())->gamePaused == 0) {
-        arg0->displayListState.unk36--;
+        arg0->displayListState.unk32--;
     }
 
-    position = &arg0->displayListState.unk4;
+    position = &arg0->displayListState.position;
 
-    if (arg0->displayListState.unk36 == 0) {
+    if (arg0->displayListState.unk32 == 0) {
         func_80069CF8_6A8F8();
     }
 
@@ -3658,14 +3658,14 @@ void bounceBossHomingProjectile(BossHomingProjectileBounceArg *arg0) {
         setPlayerProjectileHitState(hitPlayer);
         func_80069CF8_6A8F8();
     } else {
-        if (arg0->displayListState.unk36 < 0x1F) {
+        if (arg0->displayListState.unk32 < 0x1F) {
             i = 0;
             if ((gFrameCounter & 1) == 0) {
                 return;
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, &arg0->displayListState);
+            enqueueTexturedBillboardSprite(i, &arg0->displayListState);
         }
     }
 }
@@ -3750,19 +3750,19 @@ void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *a
         s0 = NULL;
     } else {
         s0 = &alloc->unk30;
-        s2 = &arg0->displayListState.unk4;
+        s2 = &arg0->displayListState.position;
 
         arg0->displayListState.unk28 -= 0x6000;
-        arg0->displayListState.unk4.x += arg0->displayListState.unk24;
-        arg0->displayListState.unk4.y += arg0->displayListState.unk28;
-        arg0->displayListState.unk4.z += arg0->displayListState.unk2C;
+        arg0->displayListState.position.x += arg0->displayListState.unk24;
+        arg0->displayListState.position.y += arg0->displayListState.unk28;
+        arg0->displayListState.position.z += arg0->displayListState.unk2C;
 
         arg0->displayListState.unk30 = func_80060A3C_6163C(s0, arg0->displayListState.unk30, s2);
 
         func_80060CDC_618DC(s0, arg0->displayListState.unk30, s2, 0x100000, &sp);
 
-        arg0->displayListState.unk4.x += sp.x;
-        arg0->displayListState.unk4.z += sp.z;
+        arg0->displayListState.position.x += sp.x;
+        arg0->displayListState.position.z += sp.z;
 
         sp.y = func_80061A64_62664(s0, arg0->displayListState.unk30, s2);
 
@@ -3776,9 +3776,9 @@ void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *a
             return;
         }
 
-        if (arg0->displayListState.unk4.y < sp.y) {
-            arg0->displayListState.unk4.y = sp.y;
-            arg0->displayListState.unk36 = 0x96;
+        if (arg0->displayListState.position.y < sp.y) {
+            arg0->displayListState.position.y = sp.y;
+            arg0->displayListState.unk32 = 0x96;
             setCallback(&bounceBossHomingProjectileVariant1);
         }
 
@@ -3786,7 +3786,7 @@ void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *a
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, &arg0->displayListState);
+        enqueueTexturedBillboardSprite(i, &arg0->displayListState);
     }
 }
 
@@ -3798,14 +3798,14 @@ void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *a
     s32 i;
 
     if (((GameState *)getCurrentAllocation())->gamePaused == 0) {
-        arg0->displayListState.unk36--;
+        arg0->displayListState.unk32--;
     }
 
-    if (arg0->displayListState.unk36 == 0) {
+    if (arg0->displayListState.unk32 == 0) {
         func_80069CF8_6A8F8();
     }
 
-    s2 = &arg0->displayListState.unk4;
+    s2 = &arg0->displayListState.position;
     s3 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
     s0 = &sp10;
 
@@ -3817,14 +3817,14 @@ void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *a
         setPlayerProjectileHitState(s3);
         func_80069CF8_6A8F8();
     } else {
-        if (arg0->displayListState.unk36 < 0x1F) {
+        if (arg0->displayListState.unk32 < 0x1F) {
             i = 0;
             if ((gFrameCounter & 1) == 0) {
                 return;
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, &arg0->displayListState);
+            enqueueTexturedBillboardSprite(i, &arg0->displayListState);
         }
     }
 }
@@ -3929,7 +3929,7 @@ void updateBossHomingProjectileVariant2(BossHomingProjectileVariant2UpdateArg *a
 
 exit_loop:
     do {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
         i++;
     } while (i < 4);
 }
@@ -3968,7 +3968,7 @@ void bounceBossHomingProjectileVariant2(BossHomingProjectileVariant2BounceArg *a
             }
         }
         for (i = 0; i < 4; i++) {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+            enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
         }
     }
 }

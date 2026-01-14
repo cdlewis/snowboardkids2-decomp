@@ -489,7 +489,7 @@ void func_800BBD14_AFA04(func_800BBC64_AF954_arg *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, 5);
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
     }
 }
 
@@ -571,7 +571,7 @@ void func_800BBFC8_AFCB8(func_800BBF4C_AFC3C_arg *arg0) {
     func_8005BCB8_5C8B8(&arg0->unk8, 0x140000, 0x300000);
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
     }
 }
 

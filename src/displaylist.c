@@ -1640,8 +1640,8 @@ void renderTexturedBillboardSprite(TexturedSpriteState *state) {
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
-void func_80066444_67044(s32 arg0, func_80066444_67044_arg1 *arg1) {
-    arg1->unk1C = 0;
+void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1) {
+    arg1->matrix = NULL;
     debugEnqueueCallback(arg0 & 0xFFFF, 4, &renderTexturedBillboardSprite, arg1);
 }
 
@@ -1811,8 +1811,8 @@ void func_80066AF0_676F0(TexturedSpriteState *state) {
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
-void func_800670A4_67CA4(u16 arg0, func_80066444_67044_arg1 *arg1) {
-    arg1->unk1C = 0;
+void func_800670A4_67CA4(u16 arg0, TexturedBillboardSprite *arg1) {
+    arg1->matrix = NULL;
     debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80066AF0_676F0, arg1);
 }
 

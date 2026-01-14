@@ -104,22 +104,26 @@ void renderTransparentDisplayList(DisplayListObject *arg0);
 void renderOverlayDisplayList(DisplayListObject *arg0);
 
 typedef struct {
-    s32 unk0;
-    Vec3i unk4;
-    u8 padding[0xC];
-    s32 unk1C;
-    u8 padding2[0x4];
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s16 unk30;
-    s16 unk36;
-} func_80066444_67044_arg1;
+    /* 0x00 */ s32 vertices;
+    /* 0x04 */ Vec3i position;
+    /* 0x10 */ u8 *textureData;
+    /* 0x14 */ u8 *paletteData;
+    /* 0x18 */ u8 width;
+    /* 0x19 */ u8 height;
+    /* 0x1A */ u8 pad1A[2];
+    /* 0x1C */ Mtx *matrix;
+    /* 0x20 */ s32 unk20;
+    /* 0x24 */ s32 unk24;
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ s16 unk30;
+    /* 0x32 */ s16 unk32;
+} TexturedBillboardSprite;
 
-void func_80066444_67044(s32 arg0, func_80066444_67044_arg1 *arg1);
+void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1);
 void func_800677C0_683C0(s32 arg0, loadAssetMetadata_arg *arg1);
 
-void func_800670A4_67CA4(u16 arg0, func_80066444_67044_arg1 *arg1);
+void func_800670A4_67CA4(u16 arg0, TexturedBillboardSprite *arg1);
 
 typedef struct {
     u8 padding0[4];

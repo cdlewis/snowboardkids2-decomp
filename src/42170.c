@@ -1588,7 +1588,7 @@ void animateGoldStealApproach(GoldStealEffectState *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
     }
 }
 
@@ -1612,7 +1612,7 @@ void animateGoldStealLoop(GoldStealEffectState *arg0) {
     transformVector((s16 *)&arg0->unk2C, arg0->recipientPlayer->unk9F0, &arg0->position);
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
     }
 }
 
@@ -1659,7 +1659,7 @@ transform_and_loop:
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
     }
 }
 
@@ -1680,7 +1680,7 @@ void animateGoldStealRetreat(GoldStealEffectState *arg0) {
     transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->unk9F0, &arg0->position);
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
     }
 }
 
@@ -1698,7 +1698,7 @@ void animateGoldStealFinish(GoldStealEffectState *arg0) {
     transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->unk9F0, &arg0->position);
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
     }
 }
 

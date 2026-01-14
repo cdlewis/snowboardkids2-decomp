@@ -169,7 +169,7 @@ void func_80040870_41470(func_80040870_arg *arg0) {
         temp_s0--;
         loadAssetMetadataByIndex(temp_s0, arg0->unk0, 0x60, 0x13);
     }
-    func_80066444_67044(arg0->unk24->unkBB8, (func_80066444_67044_arg1 *)temp_s0);
+    enqueueTexturedBillboardSprite(arg0->unk24->unkBB8, (TexturedBillboardSprite *)temp_s0);
 }
 
 void cleanupPlayerIndicator(func_80040948_41548_arg *arg0) {
@@ -521,7 +521,7 @@ void func_8004119C_41D9C(ConfettiEffectTask *task) {
                 s32 camZ = *(s32 *)((u8 *)task->cameraNode + 0x13C) + cameraOffset;
                 particle[3] = particle[0xA] + camZ;
             }
-            func_80066444_67044(task->frameCounter, (void *)((s32)task->particles + offset));
+            enqueueTexturedBillboardSprite(task->frameCounter, (void *)((s32)task->particles + offset));
             i++;
             offset += 0x38;
         } while (i < task->particleCount);

@@ -442,7 +442,7 @@ void updateCharacterTrailParticle(CharacterTrailParticleTask *arg0) {
     i = 0;
     if (arg0->particle.unk1A == 0xFF) {
         do {
-            func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->particle);
+            enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->particle);
             i++;
         } while (i < 4);
     } else {
@@ -545,7 +545,7 @@ void func_80050E08_51A08(func_80050DB0_519B0_arg *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_80066444_67044(i, (func_80066444_67044_arg1 *)&arg0->unk4);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
     }
 }
 
