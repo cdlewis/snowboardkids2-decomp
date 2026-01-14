@@ -528,14 +528,16 @@ void initStarlightItemTask(StarlightItemTaskState *arg0) {
     setCallback(&updateStarlightItemTask);
 }
 
+// Update and render the starlight item (power-up) on Starlight Highway
+// Checks for player proximity, handles collection animation, and renders the item with shadow
 void updateStarlightItemTask(StarlightItemTaskState *arg0) {
     GameState *allocation;
-    s32 var_s0;
-    s32 var_s1;
-    s16 temp_v0;
-    s16 temp_a1;
-    u16 temp_v0_2;
-    s32 temp;
+    s32 var_s0;      // playersChecked - counter for players that have been checked
+    s32 var_s1;      // playerOffset - byte offset into player array
+    s16 temp_v0;     // currentScale - holds the current scale value
+    s16 temp_a1;     // scaleForMatrix - scale value to pass to scaleMatrix
+    u16 temp_v0_2;   // newRotation - new rotation value after increment
+    s32 temp;        // numPlayers - number of players in the game
     u8 pad[0x10];
 
     (void)pad;
@@ -545,7 +547,8 @@ void updateStarlightItemTask(StarlightItemTaskState *arg0) {
     temp = allocation->numPlayers;
     if (temp > 0) {
         var_s1 = 0;
-    loop_2:
+    // Check each player to see if any are in range (0x200000 = close range)
+    check_player_range:
         if (isPlayerInRangeAndPull(
                 (Vec3i *)&arg0->mat1.translation.x,
                 0x200000,
@@ -554,16 +557,18 @@ void updateStarlightItemTask(StarlightItemTaskState *arg0) {
             var_s0 += 1;
             var_s1 += 0xBE8;
             if (var_s0 < (s32)allocation->numPlayers) {
-                goto loop_2;
+                goto check_player_range;
             }
         }
     }
 
+    // If a player is in range and item is at base scale, trigger collection animation
     if ((var_s0 != allocation->numPlayers) && (arg0->scale == 0x2000)) {
         var_s0 = 0;
         if (allocation->numPlayers != 0) {
             var_s1 = 0;
             do {
+                // Pull players closer (0x500000 = attraction range)
                 isPlayerInRangeAndPull(
                     (Vec3i *)&arg0->mat1.translation.x,
                     0x500000,
@@ -577,10 +582,12 @@ void updateStarlightItemTask(StarlightItemTaskState *arg0) {
         queueSoundAtPosition(&arg0->mat1.translation, 0x4E);
     }
 
+    // Rotate the item
     temp_v0_2 = arg0->rotation + 0x100;
     arg0->rotation = temp_v0_2;
     createYRotationMatrix(&arg0->mat1, temp_v0_2 & 0xFFFF);
 
+    // Handle shrinking animation if item was collected
     temp_v0 = arg0->scale;
     if (temp_v0 != 0x2000) {
         if (allocation->gamePaused == 0) {
@@ -589,19 +596,20 @@ void updateStarlightItemTask(StarlightItemTaskState *arg0) {
         temp_a1 = arg0->scale;
         scaleMatrix(&arg0->mat1, temp_a1, 0x2000, temp_a1);
         if (arg0->scale != 0x2000) {
-            goto block_c0f0;
+            goto shrinking_animation;
         }
     }
-    // D0/E0 block
+    // Full-size display lists (normal state)
     arg0->displayLists2 = (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xD0)),
                                    (s32)func_80055E68_56A68(8) + 0xE0);
-    goto common;
+    goto render;
 
-block_c0f0:
+shrinking_animation:
+    // Shrinking display lists (collected state)
     arg0->displayLists2 = (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xC0)),
                                    (s32)func_80055E68_56A68(8) + 0xF0);
 
-common:
+render:
     var_s0 = 0;
     do {
         enqueueDisplayListWithFrustumCull(var_s0, (DisplayListObject *)&arg0->mat1);
