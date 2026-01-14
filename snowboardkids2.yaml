@@ -1233,6 +1233,86 @@ segments:
 
   - [0x4062B0, bin]
 
+  - name: _406F00
+    type: bin
+    vram: 0
+    start: 0x406F00
+
+  - name: _407160
+    type: bin
+    vram: 0
+    start: 0x407160
+
+  - name: _407490
+    type: bin
+    vram: 0
+    start: 0x407490
+
+  - name: _407860
+    type: bin
+    vram: 0
+    start: 0x407860
+
+  - name: _407C10
+    type: bin
+    vram: 0
+    start: 0x407C10
+
+  - name: _407FD0
+    type: bin
+    vram: 0
+    start: 0x407FD0
+
+  - name: _408440
+    type: bin
+    vram: 0
+    start: 0x408440
+
+  - name: _408830
+    type: bin
+    vram: 0
+    start: 0x408830
+
+  - name: _408C00
+    type: bin
+    vram: 0
+    start: 0x408C00
+
+  - name: _409010
+    type: bin
+    vram: 0
+    start: 0x409010
+
+  - name: _4093D0
+    type: bin
+    vram: 0
+    start: 0x4093D0
+
+  - name: _409770
+    type: bin
+    vram: 0
+    start: 0x409770
+
+  - name: _409B20
+    type: bin
+    vram: 0
+    start: 0x409B20
+
+  - name: _409E10
+    type: bin
+    vram: 0
+    start: 0x409E10
+
+  - name: _40A140
+    type: bin
+    vram: 0
+    start: 0x40A140
+
+  - name: _40A370
+    type: bin
+    vram: 0
+    start: 0x40A370
+
   - name: _40A450
     type: bin
     vram: 0
@@ -1248,7 +1328,60 @@ segments:
     vram: 0
     start: 0x40A760
 
-  - [0x40A930, bin]
+  - name: _40A930
+    type: bin
+    vram: 0
+    start: 0x40A930
+
+  - name: _40AC00
+    type: bin
+    vram: 0
+    start: 0x40AC00
+
+  - name: _40AF90
+    type: bin
+    vram: 0
+    start: 0x40AF90
+
+  - name: _40B220
+    type: bin
+    vram: 0
+    start: 0x40B220
+
+  - name: _40B4D0
+    type: bin
+    vram: 0
+    start: 0x40B4D0
+
+  - name: _40B730
+    type: bin
+    vram: 0
+    start: 0x40B730
+
+  - name: _40BA40
+    type: bin
+    vram: 0
+    start: 0x40BA40
+
+  - name: _40BCF0
+    type: bin
+    vram: 0
+    start: 0x40BCF0
+
+  - name: _40C690
+    type: bin
+    vram: 0
+    start: 0x40C690
+
+  - name: _40CF20
+    type: bin
+    vram: 0
+    start: 0x40CF20
+
+  - name: _40D7C0
+    type: bin
+    vram: 0
+    start: 0x40D7C0
 
   - name: _40E1C0
     type: bin
