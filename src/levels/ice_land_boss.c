@@ -411,7 +411,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
         }
 
         if (arg0->unkB8C == 0) {
-            func_8004C10C_4CD0C(arg0);
+            spawnBossHomingProjectileVariant2Task(arg0);
 
             if (gameState->unk86 != 0) {
                 arg0->unkB8C = ((u32)(randA() & 0xFF) >> 1) + 0x1E;
@@ -665,7 +665,7 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
     func_8005D180_5DD80(arg0, 5);
 
     if ((D_8009ADE0_9B9E0 & 0xF) == 0) {
-        func_8004C10C_4CD0C(arg0);
+        spawnBossHomingProjectileVariant2Task(arg0);
     }
 
     if (arg0->velocity.y < 0) {

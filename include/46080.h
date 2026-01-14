@@ -11,6 +11,6 @@ void spawnBossHomingProjectileTask(void *boss);
 
 void spawnBossHomingProjectileVariant1Task(Player *);
 
-void *spawnItemHomingProjectile(void *, u32, void *, s16, s32);
+void spawnBossHomingProjectileVariant2Task(Player *);
 
-void func_8004C10C_4CD0C(Player *);
+void *spawnItemHomingProjectile(void *, u32, void *, s16, s32);
