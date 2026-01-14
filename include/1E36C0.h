@@ -26,6 +26,8 @@ void updateSlotRotVelocity(CutsceneSlotData *slot, s16 speedMode);
 void updateSlotRotVelocityFixed(CutsceneSlotData *slot);
 void initSlotPosition(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY);
 void initSlotPositionEx(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY, s16 rotX, s16 rotZ);
+void initSlotPositionEx2(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY, s16 rotX, s16 rotZ);
+void initSlotPositionFromStack(CutsceneSlotData *slot, s32 x, s32 y, s32 z);
 s32 setupSlotMoveTo(CutsceneSlotData *slot, SceneModel *model, s32 targetX, s32 targetY, s32 targetZ, s16 duration, s16 fallbackRotY);
 s32 setupSlotMoveToEx(CutsceneSlotData *slot, SceneModel *model, s32 targetX, s32 targetY, s32 targetZ, s16 duration, s16 fallbackRotY, s32 moveMode, s32 decelRate);
 s32 setupSlotMoveToWithRotation(CutsceneSlotData *slot, SceneModel *unused, s32 targetX, s32 targetY, s32 targetZ, s16 duration, s16 targetRotY);
