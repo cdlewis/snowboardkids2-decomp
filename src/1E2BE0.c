@@ -10,15 +10,15 @@ void setAnimationLoopMode(func_800B5E64_1E2F14_arg0 *arg0, s8 mode) {
     arg0->inputMode = mode;
 }
 
-void func_800B5B7C_1E2C2C(func_800B5E64_1E2F14_arg0 *, u16);
+void initAnimationLoopState(func_800B5E64_1E2F14_arg0 *, u16);
 
 void *func_800B5B38_1E2BE8(u16 arg0) {
     func_800B5E64_1E2F14_arg0 *temp = allocateNodeMemory(0x74);
-    func_800B5B7C_1E2C2C(temp, arg0);
+    initAnimationLoopState(temp, arg0);
     return temp;
 }
 
-void func_800B5B7C_1E2C2C(func_800B5E64_1E2F14_arg0 *arg0, u16 arg1) {
+void initAnimationLoopState(func_800B5E64_1E2F14_arg0 *arg0, u16 arg1) {
     arg0->unk20 = 0;
     arg0->unk22 = 0;
     arg0->unk24 = 0;
@@ -47,7 +47,7 @@ void func_800B5B7C_1E2C2C(func_800B5E64_1E2F14_arg0 *arg0, u16 arg1) {
     arg0->unk64 = 0;
     arg0->unk68 = 0;
     arg0->unk6C = 0;
-    arg0->unk6E = arg1;
+    arg0->nodeId = arg1;
     arg0->unk70 = 0;
     arg0->inputMode = 0;
 }
@@ -86,7 +86,7 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     temp_s0 = &sp10;
     memcpy(arg0, temp_s0, 0x20);
     queueAnonymousBufferData(temp_s0);
-    func_8006FD3C_7093C(arg0->unk6E, temp_s0);
+    func_8006FD3C_7093C(arg0->nodeId, temp_s0);
 }
 
 extern s32 gControllerInputs[];

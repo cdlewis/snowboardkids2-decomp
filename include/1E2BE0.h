@@ -32,7 +32,7 @@ typedef struct {
     s32 unk64;
     s32 unk68;
     s16 unk6C;
-    s16 unk6E;
+    s16 nodeId;
     s8 unk70;
     s8 inputMode;
 } func_800B5E64_1E2F14_arg0;
