@@ -496,8 +496,8 @@ void initFloatingBillboardSpawner(s16 *spawnTimer) {
 void updateFloatingBillboardSpawner(s16 *spawnTimer) {
     Allocation *allocation;
     Task *task;
-    u8 rand;
-    s32 value;
+    u8 randYOffset;
+    s32 yOffset;
 
     allocation = (Allocation *)getCurrentAllocation();
     if (allocation->gamePaused != 0) {
@@ -511,13 +511,13 @@ void updateFloatingBillboardSpawner(s16 *spawnTimer) {
 
     task = (Task *)scheduleTask(initFloatingBillboard, 0, 0, 0xC8);
     if (task != NULL) {
-        rand = randA() & 0xFF;
-        value = (rand * 5) << 13;
-        task->unk24 = value;
+        randYOffset = randA() & 0xFF;
+        yOffset = (randYOffset * 5) << 13;
+        task->unk24 = yOffset;
     }
 
-    rand = randA() & 0x1F;
-    *spawnTimer = rand + 0xB4;
+    randYOffset = randA() & 0x1F;
+    *spawnTimer = randYOffset + 0xB4;
 }
 
 void initFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
