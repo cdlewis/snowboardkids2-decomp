@@ -80,9 +80,9 @@ typedef struct {
 } GhostRenderState;
 
 typedef struct {
-    u8 _pad[0x24];
-    s16 unk24;
-} func_800BC0FC_Task;
+    /* 0x00 */ u8 _pad[0x24];
+    /* 0x24 */ s16 variantIndex;
+} FloatingSpriteTask;
 
 typedef struct {
     void *spriteAsset;
@@ -574,10 +574,10 @@ void cleanupFloatingSpriteEntity(void **entity) {
     *entity = freeNodeMemory(*entity);
 }
 
-void func_800BC0FC(s16 arg0) {
-    func_800BC0FC_Task *task = (func_800BC0FC_Task *)scheduleTask(initFloatingSpriteEntity, 0, 0, 0xC8);
+void scheduleFloatingSpriteEntity(s16 variantIndex) {
+    FloatingSpriteTask *task = (FloatingSpriteTask *)scheduleTask(initFloatingSpriteEntity, 0, 0, 0xC8);
     if (task != NULL) {
-        task->unk24 = arg0;
+        task->variantIndex = variantIndex;
     }
 }
 

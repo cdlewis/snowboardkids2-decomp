@@ -2975,11 +2975,11 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             scheduleTask(&initFloatingBillboardSpawner, 0, 0, 0x32);
             spawnPushZone(6);
             spawnPushZone(7);
-            func_800BC0FC(0);
-            func_800BC0FC(1);
-            func_800BC0FC(2);
-            func_800BC0FC(3);
-            func_800BC0FC(4);
+            scheduleFloatingSpriteEntity(0);
+            scheduleFloatingSpriteEntity(1);
+            scheduleFloatingSpriteEntity(2);
+            scheduleFloatingSpriteEntity(3);
+            scheduleFloatingSpriteEntity(4);
             scheduleTask(&func_800BC13C_AFE2C, 0, 0, 0xD3);
             scheduleTask(&func_800BC72C_B041C, 0, 0, 0xD3);
             schedulePlayerSparkleTask();

@@ -31,7 +31,7 @@ typedef struct {
     void *unk4;
 } GhostManager;
 
-void func_800BC0FC(s16 arg0);
+void scheduleFloatingSpriteEntity(s16 variantIndex);
 
 void initGhostSpawnerTask(GhostSpawnerTask *arg0);
 
