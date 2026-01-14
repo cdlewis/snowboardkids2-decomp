@@ -644,7 +644,7 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
 
         if (arg1 == -1) {
             for (i = 0; i < s3; i++) {
-                s4 |= func_8005ECB8_5F8B8(arg0->unk8, temp, (s16)i, &arg0->unk4[i]);
+                s4 |= advanceBoneAnimation(arg0->unk8, temp, (s16)i, &arg0->unk4[i]);
                 s6 |= 1 << i;
                 arg0->unk90 |= s4 << i;
             }
