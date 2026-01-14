@@ -862,8 +862,8 @@ void playSoundEffectWithPriorityAndVoice(s32 soundId, s32 volume, s32 priority, 
     incrementSoundSequence();
 }
 
-void func_800582C0_58EC0(s32 arg0, s32 arg1, s32 arg2) {
-    playSoundEffectWithPriorityAndVoice(arg0, arg1, arg2, 0xC);
+void playSoundEffectWithPriority(s32 soundId, s32 volume, s32 priority) {
+    playSoundEffectWithPriorityAndVoice(soundId, volume, priority, 0xC);
 }
 
 void func_800582DC_58EDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
