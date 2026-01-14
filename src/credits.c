@@ -224,7 +224,7 @@ void initSceneLighting(CreditsState *arg0) {
     arg0->unkE44[2].b2 = 0;
     arg0->unkE44[3].g = 0x90;
 
-    func_8006FC70_70870(arg0->unk768.id, 3, &arg0->unkE44[0], &arg0->unkE44[3]);
+    setViewportLightColors(arg0->unk768.id, 3, &arg0->unkE44[0], &arg0->unkE44[3]);
 }
 
 void func_80003EE0_4AE0(void) {

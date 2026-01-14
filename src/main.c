@@ -297,7 +297,7 @@ void setupModelEntityLighting(ModelEntity *entity, ColorData *lightColors, Color
     ambientColor[0].r = config->ambientColorR;
     ambientColor[0].g = config->ambientColorG;
     ambientColor[0].b = config->ambientColorB;
-    func_8006FC70_70870(entity->parent->unkDA, 3, lightColors, ambientColor);
+    setViewportLightColors(entity->parent->unkDA, 3, lightColors, ambientColor);
 }
 
 typedef struct {

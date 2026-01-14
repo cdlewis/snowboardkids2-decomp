@@ -453,37 +453,35 @@ void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s3
 void nullViewportFunction(void) {
 }
 
-void func_8006FC70_70870(u16 searchId, u16 colorCount, ColorData *srcColors, ColorData *finalColor) {
-    Node_70B00 *node;
+void setViewportLightColors(u16 viewportId, u16 colorCount, ColorData *lightColors, ColorData *ambientColor) {
+    Node_70B00 *viewport;
     s32 i;
-    Node_70B00_ColorData *dst;
 
-    node = D_800A3370_A3F70.unk8.list2_next;
+    viewport = D_800A3370_A3F70.unk8.list2_next;
 
-    if (node == NULL) {
+    if (viewport == NULL) {
         return;
     }
 
-    while (node != NULL) {
-        if (node->id == searchId) {
-            dst = &node->unk148[0];
+    while (viewport != NULL) {
+        if (viewport->id == viewportId) {
             for (i = 0; i < colorCount; i++) {
-                node->unk148[i].light1R = node->unk148[i].light1R_dup = srcColors[i].r;
-                node->unk148[i].light1G = node->unk148[i].light1G_dup = srcColors[i].g;
-                node->unk148[i].light1B = node->unk148[i].light1B_dup = srcColors[i].b;
-                node->unk148[i].light2R = srcColors[i].r2;
-                node->unk148[i].light2G = srcColors[i].g2;
-                node->unk148[i].light2B = srcColors[i].b2;
+                viewport->unk148[i].light1R = viewport->unk148[i].light1R_dup = lightColors[i].r;
+                viewport->unk148[i].light1G = viewport->unk148[i].light1G_dup = lightColors[i].g;
+                viewport->unk148[i].light1B = viewport->unk148[i].light1B_dup = lightColors[i].b;
+                viewport->unk148[i].light2R = lightColors[i].r2;
+                viewport->unk148[i].light2G = lightColors[i].g2;
+                viewport->unk148[i].light2B = lightColors[i].b2;
             }
 
-            node->unk148[i].light1R = node->unk148[i].light1R_dup = finalColor[0].r;
-            node->unk148[i].light1G = node->unk148[i].light1G_dup = finalColor[0].g;
-            node->unk148[i].light1B = node->unk148[i].light1B_dup = finalColor[0].b;
+            viewport->unk148[i].light1R = viewport->unk148[i].light1R_dup = ambientColor[0].r;
+            viewport->unk148[i].light1G = viewport->unk148[i].light1G_dup = ambientColor[0].g;
+            viewport->unk148[i].light1B = viewport->unk148[i].light1B_dup = ambientColor[0].b;
 
-            node->unk140 = colorCount;
+            viewport->unk140 = colorCount;
         }
 
-        node = node->unk8.list2_next;
+        viewport = viewport->unk8.list2_next;
     }
 }
 

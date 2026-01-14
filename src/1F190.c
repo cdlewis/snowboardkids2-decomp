@@ -564,7 +564,7 @@ void loadLevelPreview(void) {
         poolId = poolIdRaw;
         item = func_80055D10_56910(poolId);
 
-        func_8006FC70_70870(100, 1, &item->unk18, &item->unk20);
+        setViewportLightColors(100, 1, &item->unk18, &item->unk20);
 
         if (poolId == 11) {
             node = &allocation->previewNode;

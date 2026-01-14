@@ -165,4 +165,4 @@ typedef struct {
     /* 0x7 */ u8 pad2;
 } ColorData;
 
-void func_8006FC70_70870(u16 searchId, u16 colorCount, ColorData *srcColors, ColorData *finalColor);
+void setViewportLightColors(u16 viewportId, u16 colorCount, ColorData *lightColors, ColorData *ambientColor);

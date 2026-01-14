@@ -60,7 +60,7 @@ void initMenuCameraNode(Node_70B00 *node, s32 slotIndex, s32 priority, s32 isSec
     func_8006FD3C_7093C(node->id, &lightSettings);
     func_8006FE28_70A28(node, 0, 0, 0);
     func_8006FDA0_709A0(node, 0, 0);
-    func_8006FC70_70870(node->id, 1, &gMenuLightColor, &gMenuAmbientColor);
+    setViewportLightColors(node->id, 1, &gMenuLightColor, &gMenuAmbientColor);
 }
 
 INCLUDE_ASM("asm/nonmatchings/288A0", func_80027E04_28A04);

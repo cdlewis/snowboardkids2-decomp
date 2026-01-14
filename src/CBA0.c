@@ -252,7 +252,7 @@ void initSceneRenderNode(
     node->ambientColor.g = 0;
     node->ambientColor.b = 0;
 
-    func_8006FC70_70870(node->base.id, 1, &node->lightColor, &node->ambientColor);
+    setViewportLightColors(node->base.id, 1, &node->lightColor, &node->ambientColor);
 
     node->renderFlags = 0;
     node->renderMode = renderMode;

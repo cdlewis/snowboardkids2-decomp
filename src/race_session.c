@@ -650,9 +650,9 @@ void initRaceViewports(void) {
         func_8006FEF8_70AF8(&gs->unkC[i], (u16)(i + 0x64));
 
         if (gs->unk7A == 0xB) {
-            func_8006FC70_70870(i + 0x64, 1, &D_80090774_91374, &D_8009077C_9137C);
+            setViewportLightColors(i + 0x64, 1, &D_80090774_91374, &D_8009077C_9137C);
         } else {
-            func_8006FC70_70870(i + 0x64, 1, &levelConfig->unk18, &levelConfig->unk20);
+            setViewportLightColors(i + 0x64, 1, &levelConfig->unk18, &levelConfig->unk20);
         }
 
         if (gs->memoryPoolId != 0xB) {

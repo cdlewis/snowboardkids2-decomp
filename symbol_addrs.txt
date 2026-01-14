@@ -3189,3 +3189,4 @@ tryActivateGhostEffect = 0x80058C10; // rom:0x59810
 initViewportCallbackPool = 0x8006FA58; // rom:0x70658
 initViewportNode = 0x8006FAA4; // rom:0x706A4
 nullViewportFunction = 0x8006FC68; // rom:0x70868
+setViewportLightColors = 0x8006FC70; // rom:0x70870
