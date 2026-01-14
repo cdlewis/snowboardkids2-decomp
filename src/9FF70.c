@@ -3116,36 +3116,36 @@ s32 dropDownwardStep(Player *player) {
     return 0;
 }
 
-s32 func_800B7108_A6FB8(Player *arg0) {
-    s32 var_v0;
-    s32 temp_a1;
-    s32 new_unk474;
-    s32 new_unkB8C;
+s32 jumpUpwardStep(Player *player) {
+    s32 yOffsetDelta;
+    s32 prevYOffset;
+    s32 updatedYOffset;
+    s32 nextFrameCounter;
 
-    var_v0 = arg0->unkB48;
-    temp_a1 = arg0->unk474;
-    var_v0 = (var_v0 - temp_a1) * arg0->unkB8C;
-    if (var_v0 < 0) {
-        var_v0 += 0xF;
+    yOffsetDelta = player->unkB48;
+    prevYOffset = player->unk474;
+    yOffsetDelta = (yOffsetDelta - prevYOffset) * player->unkB8C;
+    if (yOffsetDelta < 0) {
+        yOffsetDelta += 0xF;
     }
-    arg0->unk474 = (var_v0 >> 4) + temp_a1;
-    arg0->unk480 = arg0->unk480 + arg0->unk468;
-    new_unk474 = arg0->unk474;
-    new_unkB8C = arg0->unkB8C + 1;
-    arg0->unkB8C = new_unkB8C;
-    arg0->unk468 = arg0->unk468 - 0x6000;
-    arg0->worldPos.y = new_unk474 + arg0->unk480;
-    decayPlayerSteeringAngles(arg0);
-    func_8005D308_5DF08(arg0, 4);
-    if (arg0->unkB8C == 16) {
-        s32 tempB84 = arg0->unkB84;
-        u8 tempBBF = arg0->behaviorStep;
-        arg0->behaviorCounter = 0;
-        tempBBF = tempBBF + 1;
-        tempB84 = tempB84 | 0x2000;
-        arg0->unkB84 = tempB84;
-        arg0->behaviorStep = tempBBF;
-        queueSoundAtPosition(&arg0->worldPos, 0x25);
+    player->unk474 = (yOffsetDelta >> 4) + prevYOffset;
+    player->unk480 = player->unk480 + player->unk468;
+    updatedYOffset = player->unk474;
+    nextFrameCounter = player->unkB8C + 1;
+    player->unkB8C = nextFrameCounter;
+    player->unk468 = player->unk468 - 0x6000;
+    player->worldPos.y = updatedYOffset + player->unk480;
+    decayPlayerSteeringAngles(player);
+    func_8005D308_5DF08(player, 4);
+    if (player->unkB8C == 16) {
+        s32 flags = player->unkB84;
+        u8 step = player->behaviorStep;
+        player->behaviorCounter = 0;
+        step = step + 1;
+        flags = flags | 0x2000;
+        player->unkB84 = flags;
+        player->behaviorStep = step;
+        queueSoundAtPosition(&player->worldPos, 0x25);
     }
     return 0;
 }
