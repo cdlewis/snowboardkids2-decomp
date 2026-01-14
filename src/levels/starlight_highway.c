@@ -91,7 +91,7 @@ typedef struct {
 
 typedef struct {
     u8 pad[0x76];
-    u8 unk76;
+    u8 paused;
 } DebugDisplayListAllocation;
 
 typedef struct {
@@ -101,8 +101,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x76];
-    u8 unk76;
-} Allocation_AE790;
+    u8 paused;
+} TaskAllocationState;
 
 typedef struct {
     /* 0x00 */ u8 _pad0[0x14];
@@ -269,7 +269,7 @@ void renderDebugDisplayLists(DebugDisplayListRenderState *arg0) {
 void updateDebugDisplayListGrowth(DebugDisplayListRenderState *arg0) {
     DebugDisplayListAllocation *allocation = getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->paused == 0) {
         arg0->animationTimer += 0x10;
     }
 
@@ -284,7 +284,7 @@ void updateDebugDisplayListGrowth(DebugDisplayListRenderState *arg0) {
 void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0) {
     DebugDisplayListAllocation *allocation = getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->paused == 0) {
         arg0->sustainTimer--;
     }
 
@@ -298,7 +298,7 @@ void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0) {
 void updateDebugDisplayListDecay(DebugDisplayListRenderState *arg0) {
     DebugDisplayListAllocation *allocation = getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->paused == 0) {
         arg0->animationTimer -= 0x10;
     }
 
@@ -665,13 +665,13 @@ void initStarlightFireworkTask(StarlightFireworkTaskState *arg0) {
 }
 
 void updateStarlightFireworkSimple(StarlightFireworkTaskState *arg0) {
-    Allocation_AE790 *allocation;
+    TaskAllocationState *allocation;
     s32 i;
     void *posPtr;
 
     allocation = getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->paused == 0) {
         arg0->pos.x += arg0->velocity.x;
         arg0->pos.y += arg0->velocity.y;
         arg0->pos.z += arg0->velocity.z;
@@ -700,7 +700,7 @@ void updateStarlightFireworkSimple(StarlightFireworkTaskState *arg0) {
 }
 
 void updateStarlightFireworkComplex(StarlightFireworkTaskState *arg0) {
-    Allocation_AE790 *allocation;
+    TaskAllocationState *allocation;
     s32 i;
     s16 rotation[3][3];
     s16 pad2[4];
@@ -713,7 +713,7 @@ void updateStarlightFireworkComplex(StarlightFireworkTaskState *arg0) {
 
     allocation = getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->paused == 0) {
         if (arg0->lifetime != 0) {
             arg0->pos.x = arg0->pos.x + arg0->velocity.x;
             arg0->pos.y = arg0->pos.y + arg0->velocity.y;
@@ -775,13 +775,13 @@ void updateStarlightFireworkComplex(StarlightFireworkTaskState *arg0) {
 }
 
 void updateStarlightFirework(StarlightFireworkTaskState *arg0) {
-    Allocation_AE790 *allocation;
+    TaskAllocationState *allocation;
     s32 i;
     void *posPtr;
 
     allocation = getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->paused == 0) {
         arg0->pos.x += arg0->velocity.x;
         arg0->pos.y += arg0->velocity.y;
         arg0->pos.z += arg0->velocity.z;
@@ -820,14 +820,14 @@ void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0) {
 }
 
 void func_800BC550_AE910(s16 *arg0) {
-    Allocation_AE790 *allocation;
+    TaskAllocationState *allocation;
     StarlightFireworkTaskState *task;
     s32 new_var;
     s32 new_var2;
     u32 s2;
 
     allocation = getCurrentAllocation();
-    if (allocation->unk76 != 0) {
+    if (allocation->paused != 0) {
         return;
     }
 
