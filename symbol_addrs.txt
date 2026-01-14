@@ -918,6 +918,7 @@ finalizeAnimationLoop = 0x800B5C18; // rom:0x1E2CC8
 initSlotData = 0x800B66B4; // rom:0x1E3764
 calcAngleDiff = 0x800B6618; // rom:0x1E36C8
 updateSlotRotVelocity = 0x800B6AB8; // rom:0x1E3B68
+updateSlotRotVelocityFixed = 0x800B6B6C; // rom:0x1E3C1C
 advanceSceneManager = 0x800B6590; // rom:0x1E3640
 syncModelFromSlot = 0x800B8E38; // rom:0x1E5EE8
 updateSlotLinearMove = 0x800B826C; // rom:0x1E531C
