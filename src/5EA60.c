@@ -235,30 +235,30 @@ ret0:
     return 0;
 }
 
-s32 func_8005E500_5F100(BoneAnimationState *arg0) {
+s32 updateBoneAnimationMirrored(BoneAnimationState *state) {
     s16 stack_data[16];
     u16 flags;
-    u16 frame_idx;
+    u16 frameIndex;
 
-    flags = arg0->flags;
+    flags = state->flags;
 
     if (flags & 0x8000) {
-        s16 *animation_data = arg0->animation_data;
-        arg0->flags = flags & 0x7FFF;
-        createBoneRotMatrix(animation_data[1], -animation_data[2], -animation_data[3], arg0->values);
+        s16 *animation_data = state->animation_data;
+        state->flags = flags & 0x7FFF;
+        createBoneRotMatrix(animation_data[1], -animation_data[2], -animation_data[3], state->values);
 
-        frame_idx = arg0->animation_data[4];
-        arg0->position[0] = -arg0->frame_data[frame_idx * 3] << 10;
+        frameIndex = state->animation_data[4];
+        state->position[0] = -state->frame_data[frameIndex * 3] << 10;
 
-        frame_idx = arg0->animation_data[4];
-        arg0->position[1] = arg0->frame_data[frame_idx * 3 + 1] << 10;
+        frameIndex = state->animation_data[4];
+        state->position[1] = state->frame_data[frameIndex * 3 + 1] << 10;
 
-        frame_idx = arg0->animation_data[4];
-        arg0->position[2] = arg0->frame_data[frame_idx * 3 + 2] << 10;
+        frameIndex = state->animation_data[4];
+        state->position[2] = state->frame_data[frameIndex * 3 + 2] << 10;
 
-        memcpy(arg0->prev_position, arg0->values, 0x20);
+        memcpy(state->prev_position, state->values, 0x20);
 
-        if (arg0->flags == 0) {
+        if (state->flags == 0) {
             goto ret0;
         }
         goto advance_animation;
@@ -268,44 +268,46 @@ s32 func_8005E500_5F100(BoneAnimationState *arg0) {
         return 1;
     }
 
-    arg0->counter = arg0->counter - (arg0->counter / flags);
+    state->counter = state->counter - (state->counter / flags);
 
     {
-        s16 *animation_data = arg0->animation_data;
-        if (animation_data[3] != (arg0->counter & 0xFFFF)) {
-            createBoneRotMatrix(animation_data[1], -animation_data[2], arg0->counter - animation_data[3], stack_data);
-            func_8006BDBC_6C9BC(arg0, stack_data, arg0->prev_position);
+        s16 *animation_data = state->animation_data;
+        if (animation_data[3] != (state->counter & 0xFFFF)) {
+            createBoneRotMatrix(animation_data[1], -animation_data[2], state->counter - animation_data[3], stack_data);
+            func_8006BDBC_6C9BC(state, stack_data, state->prev_position);
         }
     }
 
-    frame_idx = arg0->animation_data[4];
-    arg0->interpolated[0] =
-        arg0->interpolated[0] + ((-arg0->frame_data[frame_idx * 3] << 10) - arg0->interpolated[0]) / (s32)arg0->flags;
+    frameIndex = state->animation_data[4];
+    state->interpolated[0] = state->interpolated[0] +
+                             ((-state->frame_data[frameIndex * 3] << 10) - state->interpolated[0]) / (s32)state->flags;
 
-    frame_idx = arg0->animation_data[4];
-    arg0->interpolated[1] = arg0->interpolated[1] +
-                            ((arg0->frame_data[frame_idx * 3 + 1] << 10) - arg0->interpolated[1]) / (s32)arg0->flags;
+    frameIndex = state->animation_data[4];
+    state->interpolated[1] =
+        state->interpolated[1] +
+        ((state->frame_data[frameIndex * 3 + 1] << 10) - state->interpolated[1]) / (s32)state->flags;
 
-    frame_idx = arg0->animation_data[4];
-    arg0->interpolated[2] = arg0->interpolated[2] +
-                            ((arg0->frame_data[frame_idx * 3 + 2] << 10) - arg0->interpolated[2]) / (s32)arg0->flags;
+    frameIndex = state->animation_data[4];
+    state->interpolated[2] =
+        state->interpolated[2] +
+        ((state->frame_data[frameIndex * 3 + 2] << 10) - state->interpolated[2]) / (s32)state->flags;
 
-    arg0->flags--;
-    if ((arg0->flags & 0xFFFF) != 0) {
+    state->flags--;
+    if ((state->flags & 0xFFFF) != 0) {
         goto ret0;
     }
 
-    arg0->flags = arg0->animation_data[0];
-    memcpy(arg0->values, arg0->prev_position, 0x20);
+    state->flags = state->animation_data[0];
+    memcpy(state->values, state->prev_position, 0x20);
 
-    if (arg0->flags == 0) {
+    if (state->flags == 0) {
         return 1;
     }
 
 advance_animation: {
-    s16 *animation_data = arg0->animation_data;
-    arg0->animation_data = animation_data + 5;
-    arg0->counter = animation_data[8];
+    s16 *animation_data = state->animation_data;
+    state->animation_data = animation_data + 5;
+    state->counter = animation_data[8];
 }
 
 ret0:
