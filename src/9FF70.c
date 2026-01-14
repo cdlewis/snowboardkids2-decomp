@@ -3095,22 +3095,22 @@ s32 slideForwardAndResetStep(Player *player) {
     return 0;
 }
 
-s32 func_800B7078_A6F28(Player *arg0) {
-    arg0->velocity.x = 0;
-    arg0->velocity.z = 0;
-    arg0->velocity.y = arg0->velocity.y - 0x6000;
-    applyClampedVelocityToPosition(arg0);
-    decayPlayerSteeringAngles(arg0);
-    func_8005D308_5DF08(arg0, 3);
+s32 dropDownwardStep(Player *player) {
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->velocity.y -= 0x6000;
+    applyClampedVelocityToPosition(player);
+    decayPlayerSteeringAngles(player);
+    func_8005D308_5DF08(player, 3);
 
-    arg0->unkB8C = arg0->unkB8C - 1;
-    if (arg0->unkB8C == 0) {
-        arg0->behaviorCounter = 0;
-        arg0->behaviorStep = arg0->behaviorStep + 1;
-        memcpy(&arg0->unk470, &arg0->worldPos.x, 0xC);
-        arg0->unk480 = 0;
-        arg0->unk468 = 0x30000;
-        arg0->unkB8C = 0;
+    player->unkB8C--;
+    if (player->unkB8C == 0) {
+        player->behaviorCounter = 0;
+        player->behaviorStep++;
+        memcpy(&player->unk470, &player->worldPos.x, 0xC);
+        player->unk480 = 0;
+        player->unk468 = 0x30000;
+        player->unkB8C = 0;
     }
 
     return 0;
