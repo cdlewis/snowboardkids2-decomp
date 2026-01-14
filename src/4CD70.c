@@ -2233,18 +2233,18 @@ void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0) {
     setCleanupCallback(cleanupSecondaryItemDisplayTask);
 }
 
-void updateSecondaryItemDisplay(SecondaryItemDisplayState *arg0) {
-    arg0->itemIndex = arg0->player->unkBD4 + 7;
-    debugEnqueueCallback((u16)(arg0->playerIndex + 8), 0, func_8000FED0_10AD0, arg0);
+void updateSecondaryItemDisplay(SecondaryItemDisplayState *state) {
+    state->itemIndex = state->player->unkBD4 + 7;
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, state);
 
-    if (arg0->player->unkBD8 & 2) {
-        spawnFloatingItemSprite(arg0->itemX - 8, arg0->itemY - 8, 1, arg0->playerIndex + 8, 0);
-        arg0->player->unkBD8 &= ~2;
+    if (state->player->unkBD8 & 2) {
+        spawnFloatingItemSprite(state->itemX - 8, state->itemY - 8, 1, state->playerIndex + 8, 0);
+        state->player->unkBD8 &= ~2;
     }
 }
 
-void cleanupSecondaryItemDisplayTask(ShotCrossCountdownTimerState *arg0) {
-    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+void cleanupSecondaryItemDisplayTask(ShotCrossCountdownTimerState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
 void func_8004F898_50498(ShotCrossCountdownTimerState *);
