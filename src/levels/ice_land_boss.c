@@ -456,7 +456,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                     }
                 } else {
                     arg0->behaviorCounter = arg0->behaviorCounter - 1;
-                    if (func_800553D4_55FD4(arg0->unkBB8) != 0) {
+                    if (spawnRandomEffectProjectile(arg0->unkBB8) != 0) {
                         func_8005182C_5242C(arg0);
                     }
 
@@ -492,7 +492,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                     }
                 } else {
                     // Far range
-                    if (func_800553D4_55FD4(arg0->unkBB8) != 0) {
+                    if (spawnRandomEffectProjectile(arg0->unkBB8) != 0) {
                         func_8005182C_5242C(arg0);
                     }
 

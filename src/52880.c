@@ -73,14 +73,14 @@ typedef struct {
 typedef struct {
     u8 padding[0x20];
     void *assetData;
-} func_80055864_56464_arg;
+} ShrinkProjectileTask; /* Used for func_80055864_56464 - spawn shrinking projectile */
 
 typedef struct {
     void *unk0;
     Vec3i pos;
     u8 padding1[0x10];
     void *assetData;
-    Vec3i unk24;
+    Vec3i unk24; /* velocity in updateRandomEffectProjectile context */
     u8 padding2[0xC];
     s32 unk3C;
     u16 unk40;
@@ -91,12 +91,12 @@ typedef struct {
     s16 unk4A;
     s16 targetPlayerIdx;
     s8 hitCount;
-} func_800550B4_55CB4_arg;
+} RandomEffectProjectileUpdate;
 
 typedef struct {
     u8 padding[0x20];
     void *assetData;
-} func_80054CCC_558CC_arg;
+} RandomEffectProjectile;
 
 void loadFallingStarProjectileAsset(Struct_52880 *arg0);
 void updateFallingStarProjectile(Struct_52880 *arg0);
@@ -107,11 +107,11 @@ void launchHomingPanelProjectile(Struct_52880 *arg0);
 void loadHomingPanelProjectileAsset(Struct_52880 *arg0);
 void updateStarProjectile(Struct_52880 *arg0);
 void launchStarProjectile(Struct_52880 *arg0);
-void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0);
-void func_80054D0C_5590C(Struct_52880 *arg0);
-void func_80054F44_55B44(Struct_52880 *arg0);
-void func_80054D70_55970(void *arg0);
-void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0);
+void cleanupRandomEffectProjectile(RandomEffectProjectile *arg0);
+void loadRandomEffectProjectileAsset(Struct_52880 *arg0);
+void launchRandomEffectProjectile(Struct_52880 *arg0);
+void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0);
+void updateRandomEffectProjectile(RandomEffectProjectileUpdate *arg0);
 void func_80055460_56060(Struct_52880 *arg0);
 void func_800554FC_560FC(Struct_52880 *arg0);
 void func_80055650_56250(Struct_52880 *arg0);
@@ -1719,13 +1719,13 @@ s32 spawnPlayerGuidedStarProjectile(s16 arg0) {
     return (s32)task;
 }
 
-void func_80054CCC_558CC(func_80054CCC_558CC_arg *arg0) {
+void initRandomEffectProjectileTask(RandomEffectProjectile *arg0) {
     arg0->assetData = load_3ECE40();
-    setCleanupCallback(func_800553A8_55FA8);
-    setCallbackWithContinue(func_80054D0C_5590C);
+    setCleanupCallback(cleanupRandomEffectProjectile);
+    setCallbackWithContinue(loadRandomEffectProjectileAsset);
 }
 
-void func_80054D0C_5590C(Struct_52880 *arg0) {
+void loadRandomEffectProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 0x69);
@@ -1734,11 +1734,10 @@ void func_80054D0C_5590C(Struct_52880 *arg0) {
     arg0->turnRate = 0;
     arg0->unk0 = ptr;
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
-    setCallbackWithContinue(func_80054F44_55B44);
+    setCallbackWithContinue(launchRandomEffectProjectile);
 }
 
-void func_80054D70_55970(void *arg) {
-    Struct_52880 *arg0 = arg;
+void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
     GameState *alloc;
     Player *player;
     s32 i;
@@ -1813,7 +1812,7 @@ void func_80054D70_55970(void *arg) {
     }
 }
 
-void func_80054F44_55B44(Struct_52880 *arg0) {
+void launchRandomEffectProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s32 playerIdx;
     s32 temp_v0;
@@ -1844,8 +1843,8 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
     arg0->unk40 = alloc->unk10[playerIdx].unkB94;
     arg0->lifetime = 0xF0;
 
-    setCallback(func_800550B4_55CB4);
-    func_80054D70_55970(arg0);
+    setCallback(updateRandomEffectProjectile);
+    checkRandomEffectProjectileHit((RandomEffectProjectileUpdate *)arg0);
 
     queueSoundAtPosition(s1, 0x23);
 
@@ -1860,7 +1859,7 @@ void func_80054F44_55B44(Struct_52880 *arg0) {
     }
 }
 
-void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
+void updateRandomEffectProjectile(RandomEffectProjectileUpdate *arg0) {
     Alloc_55650 *alloc;
     Vec3i sp18;
     Vec3i savedVec;
@@ -1915,7 +1914,7 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
         arg0->unk24.y = arg0->pos.y - savedVec.y;
         arg0->unk24.z = arg0->pos.z - savedVec.z;
 
-        func_80054D70_55970(arg0);
+        checkRandomEffectProjectileHit(arg0);
 
         angle = atan2Fixed(arg0->unk24.x, arg0->unk24.z);
         var_s3 = func_8005BF50_5CB50(&arg0->pos, angle, arg0->ownerPlayerIdx, 0x3C00000, 0x1B0000);
@@ -1959,17 +1958,18 @@ void func_800550B4_55CB4(func_800550B4_55CB4_arg *arg0) {
     }
 }
 
-void func_800553A8_55FA8(func_80054CCC_558CC_arg *arg0) {
+void cleanupRandomEffectProjectile(RandomEffectProjectile *arg0) {
     arg0->assetData = freeNodeMemory(arg0->assetData);
 }
 
-s32 func_800553D4_55FD4(s32 arg0) {
+s32 spawnRandomEffectProjectile(s32 arg0) {
     Struct_52880 *task;
 
-    task = scheduleTask(func_80054CCC_558CC, (arg0 + 4) & 0xFF, 0, 0x6E);
+    task = scheduleTask(initRandomEffectProjectileTask, (arg0 + 4) & 0xFF, 0, 0x6E);
     if (task != NULL) {
         task->ownerPlayerIdx = arg0;
     }
+    return (s32)task;
 }
 
 void func_80055418_56018(Struct_52880 *arg0) {
@@ -2108,7 +2108,7 @@ s32 func_80055820_56420(s32 arg0, s32 arg1) {
     return (s32)task;
 }
 
-void func_80055864_56464(func_80055864_56464_arg *arg0) {
+void func_80055864_56464(ShrinkProjectileTask *arg0) {
     arg0->assetData = load_3ECE40();
     setCleanupCallback(cleanupSlapstickProjectileTask);
     setCallbackWithContinue(func_800558A4_564A4);
