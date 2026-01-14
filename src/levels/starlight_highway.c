@@ -105,37 +105,37 @@ typedef struct {
 } Allocation_AE790;
 
 typedef struct {
-    u8 _pad0[0x14];
-    Vec3i unk14;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    s32 unk2C;
-    u8 _pad30[0xC];
-    Vec3i unk3C;
-    s16 unk48;
-    u16 unk4A;
-    u16 unk4C;
-    u8 unk4E;
-} func_800BC3D0_AE790_arg;
+    /* 0x00 */ u8 _pad0[0x14];
+    /* 0x14 */ Vec3i pos;
+    /* 0x20 */ void *displayList;
+    /* 0x24 */ void *segment1;
+    /* 0x28 */ void *segment2;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 _pad30[0xC];
+    /* 0x3C */ Vec3i velocity;
+    /* 0x48 */ s16 lifetime;
+    /* 0x4A */ u16 rotX;
+    /* 0x4C */ u16 rotY;
+    /* 0x4E */ u8 type;
+} StarlightFireworkTaskState;
 
 typedef struct {
     u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_800BC4F0_AE8B0_arg;
+    void *segment1;
+    void *segment2;
+} StarlightFireworkCleanupState;
 
 typedef struct {
     s16 rotation[3][3];
     u8 pad2[0xE];
-} func_800BBF28_StackLocals;
+} FireworkInitRotationMatrix;
 
 extern Vec3i D_800BCA30_AEDF0[];
-extern s32 D_800BCA84_AEE44[][3];
-extern s16 D_800BCAF0_AEEB0[];
-extern s32 D_800BCB04_AEEC4[][3];
-extern s16 D_800BCB70_AEF30[];
-extern s16 D_800BCB84_AEF44[];
+extern s32 gStarlightFireworkPositions[][3];
+extern s16 gStarlightFireworkXRotations[];
+extern s32 gStarlightFireworkDirections[][3];
+extern s16 gStarlightFireworkRotXSpeeds[];
+extern s16 gStarlightFireworkRotYSpeeds[];
 extern s32 D_800BCB98_AEF58[][3];
 extern s32 D_800BCB9C_AEF5C[][3];
 extern s32 D_800BCBA0_AEF60[][3];
@@ -148,10 +148,10 @@ void updateDebugDisplayListGrowth(DebugDisplayListRenderState *);
 void renderStarlightHighwayBuildings(StarlightBuildingRenderData *);
 void cleanupStarlightHighwayBuildingTask(DualSegmentCleanupState *);
 void loadColorIndexedTexture(void *);
-void func_800BC084_AE444(func_800BC3D0_AE790_arg *);
-void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *);
-void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *);
-void func_800BC4F0_AE8B0(func_800BC4F0_AE8B0_arg *);
+void updateStarlightFireworkSimple(StarlightFireworkTaskState *);
+void updateStarlightFireworkComplex(StarlightFireworkTaskState *);
+void updateStarlightFirework(StarlightFireworkTaskState *);
+void cleanupStarlightFireworkTask(StarlightFireworkCleanupState *);
 void func_800BC550_AE910(s16 *arg0);
 void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0);
 
@@ -634,37 +634,37 @@ void spawnStarlightItems(void) {
     }
 }
 
-void func_800BBF28_AE2E8(func_800BC3D0_AE790_arg *arg0) {
+void initStarlightFireworkTask(StarlightFireworkTaskState *arg0) {
     u8 pad[0x20];
-    func_800BBF28_StackLocals stack;
+    FireworkInitRotationMatrix stack;
     s16(*rotPtr)[3];
-    void (*callback)(func_800BC3D0_AE790_arg *);
+    void (*callback)(StarlightFireworkTaskState *);
 
     (void)pad;
 
-    arg0->unk24 = func_80055DC4_569C4(8);
-    arg0->unk28 = func_80055DF8_569F8(8);
+    arg0->segment1 = func_80055DC4_569C4(8);
+    arg0->segment2 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
-    arg0->unk20 = (void *)((u32)func_80055E68_56A68(8) + 0x90);
-    memcpy(&arg0->unk14, D_800BCA84_AEE44[arg0->unk4E], 0xC);
+    arg0->displayList = (void *)((u32)func_80055E68_56A68(8) + 0x90);
+    memcpy(&arg0->pos, gStarlightFireworkPositions[arg0->type], 0xC);
     rotPtr = stack.rotation;
-    createXRotationMatrix(rotPtr, D_800BCAF0_AEEB0[arg0->unk4E]);
-    transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotPtr, &arg0->unk3C);
-    arg0->unk14.x = arg0->unk14.x - arg0->unk3C.x * 0x78;
-    arg0->unk14.y = arg0->unk14.y - arg0->unk3C.y * 0x78;
-    arg0->unk14.z = arg0->unk14.z - arg0->unk3C.z * 0x78;
-    setCleanupCallback(func_800BC4F0_AE8B0);
-    if (arg0->unk4E < 3) {
-        callback = func_800BC084_AE444;
-        arg0->unk48 = 0xF0;
+    createXRotationMatrix(rotPtr, gStarlightFireworkXRotations[arg0->type]);
+    transformVector2(gStarlightFireworkDirections[arg0->type], rotPtr, &arg0->velocity);
+    arg0->pos.x = arg0->pos.x - arg0->velocity.x * 0x78;
+    arg0->pos.y = arg0->pos.y - arg0->velocity.y * 0x78;
+    arg0->pos.z = arg0->pos.z - arg0->velocity.z * 0x78;
+    setCleanupCallback(cleanupStarlightFireworkTask);
+    if (arg0->type < 3) {
+        callback = updateStarlightFireworkSimple;
+        arg0->lifetime = 0xF0;
     } else {
-        arg0->unk48 = 0x78;
-        callback = func_800BC1AC_AE56C;
+        arg0->lifetime = 0x78;
+        callback = updateStarlightFireworkComplex;
     }
     setCallback(callback);
 }
 
-void func_800BC084_AE444(func_800BC3D0_AE790_arg *arg0) {
+void updateStarlightFireworkSimple(StarlightFireworkTaskState *arg0) {
     Allocation_AE790 *allocation;
     s32 i;
     void *posPtr;
@@ -672,39 +672,39 @@ void func_800BC084_AE444(func_800BC3D0_AE790_arg *arg0) {
     allocation = getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        arg0->unk14.x += arg0->unk3C.x;
-        arg0->unk14.y += arg0->unk3C.y;
-        arg0->unk14.z += arg0->unk3C.z;
-        arg0->unk48--;
+        arg0->pos.x += arg0->velocity.x;
+        arg0->pos.y += arg0->velocity.y;
+        arg0->pos.z += arg0->velocity.z;
+        arg0->lifetime--;
 
-        if (arg0->unk48 == 0) {
+        if (arg0->lifetime == 0) {
             func_80069CF8_6A8F8();
             return;
         }
 
-        posPtr = &arg0->unk14;
+        posPtr = &arg0->pos;
         if (func_8005C250_5CE50(posPtr, -1, 0x300000) != 0) {
             spawnSparkleEffect(posPtr);
             func_80069CF8_6A8F8();
         }
 
-        arg0->unk4A += D_800BCB70_AEF30[arg0->unk4E];
-        arg0->unk4C += D_800BCB84_AEF44[arg0->unk4E];
+        arg0->rotX += gStarlightFireworkRotXSpeeds[arg0->type];
+        arg0->rotY += gStarlightFireworkRotYSpeeds[arg0->type];
     }
 
-    createCombinedRotationMatrix(arg0, arg0->unk4A, arg0->unk4C);
+    createCombinedRotationMatrix(arg0, arg0->rotX, arg0->rotY);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
     }
 }
 
-void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *arg0) {
+void updateStarlightFireworkComplex(StarlightFireworkTaskState *arg0) {
     Allocation_AE790 *allocation;
     s32 i;
     s16 rotation[3][3];
     s16 pad2[4];
-    void (*callback)(func_800BC3D0_AE790_arg *);
+    void (*callback)(StarlightFireworkTaskState *);
     s16 timer;
     u8 state;
     void *posPtr;
@@ -714,67 +714,67 @@ void func_800BC1AC_AE56C(func_800BC3D0_AE790_arg *arg0) {
     allocation = getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        if (arg0->unk48 != 0) {
-            arg0->unk14.x = arg0->unk14.x + arg0->unk3C.x;
-            arg0->unk14.y = arg0->unk14.y + arg0->unk3C.y;
-            arg0->unk14.z = arg0->unk14.z + arg0->unk3C.z;
-            arg0->unk48--;
+        if (arg0->lifetime != 0) {
+            arg0->pos.x = arg0->pos.x + arg0->velocity.x;
+            arg0->pos.y = arg0->pos.y + arg0->velocity.y;
+            arg0->pos.z = arg0->pos.z + arg0->velocity.z;
+            arg0->lifetime--;
         } else {
-            state = arg0->unk4E;
+            state = arg0->type;
             switch (state) {
                 case 3:
                     createXRotationMatrix(rotation, 0xF300);
-                    transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
-                    callback = func_800BC084_AE444;
+                    transformVector2(gStarlightFireworkDirections[arg0->type], rotation, &arg0->velocity);
+                    callback = updateStarlightFireworkSimple;
                     timer = 0x78;
-                    arg0->unk48 = timer;
+                    arg0->lifetime = timer;
                     setCallbackWithContinue(callback);
                     break;
                 case 4:
                     createXRotationMatrix(rotation, 0xE00);
-                    transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
-                    callback = func_800BC3D0_AE790;
-                    arg0->unk48 = 0xA;
+                    transformVector2(gStarlightFireworkDirections[arg0->type], rotation, &arg0->velocity);
+                    callback = updateStarlightFirework;
+                    arg0->lifetime = 0xA;
                     setCallbackWithContinue(callback);
                     break;
                 case 5:
                     createXRotationMatrix(rotation, 0xFC00);
-                    transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
-                    callback = func_800BC084_AE444;
+                    transformVector2(gStarlightFireworkDirections[arg0->type], rotation, &arg0->velocity);
+                    callback = updateStarlightFireworkSimple;
                     timer = 0x78;
-                    arg0->unk48 = timer;
+                    arg0->lifetime = timer;
                     setCallbackWithContinue(callback);
                     break;
                 case 6:
                     createXRotationMatrix(rotation, 0);
-                    transformVector2(D_800BCB04_AEEC4[arg0->unk4E], rotation, &arg0->unk3C);
-                    callback = func_800BC3D0_AE790;
-                    arg0->unk48 = 0xA;
+                    transformVector2(gStarlightFireworkDirections[arg0->type], rotation, &arg0->velocity);
+                    callback = updateStarlightFirework;
+                    arg0->lifetime = 0xA;
                     setCallbackWithContinue(callback);
                     break;
                 case 7:
                 case 8:
-                    spawnSparkleEffect(&arg0->unk14);
+                    spawnSparkleEffect(&arg0->pos);
                     func_80069CF8_6A8F8();
                     break;
                 default:
                     break;
             }
         }
-        posPtr = &arg0->unk14;
+        posPtr = &arg0->pos;
         func_8005C250_5CE50(posPtr, -1, 0x300000);
-        arg0->unk4A += D_800BCB70_AEF30[arg0->unk4E];
-        arg0->unk4C += D_800BCB84_AEF44[arg0->unk4E];
+        arg0->rotX += gStarlightFireworkRotXSpeeds[arg0->type];
+        arg0->rotY += gStarlightFireworkRotYSpeeds[arg0->type];
     }
 
-    createCombinedRotationMatrix(arg0, arg0->unk4A, arg0->unk4C);
+    createCombinedRotationMatrix(arg0, arg0->rotX, arg0->rotY);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
     }
 }
 
-void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *arg0) {
+void updateStarlightFirework(StarlightFireworkTaskState *arg0) {
     Allocation_AE790 *allocation;
     s32 i;
     void *posPtr;
@@ -782,36 +782,36 @@ void func_800BC3D0_AE790(func_800BC3D0_AE790_arg *arg0) {
     allocation = getCurrentAllocation();
 
     if (allocation->unk76 == 0) {
-        arg0->unk14.x += arg0->unk3C.x;
-        arg0->unk14.y += arg0->unk3C.y;
-        arg0->unk14.z += arg0->unk3C.z;
-        arg0->unk48--;
+        arg0->pos.x += arg0->velocity.x;
+        arg0->pos.y += arg0->velocity.y;
+        arg0->pos.z += arg0->velocity.z;
+        arg0->lifetime--;
 
-        if (arg0->unk48 == 0) {
-            spawnSparkleEffect(&arg0->unk14);
+        if (arg0->lifetime == 0) {
+            spawnSparkleEffect(&arg0->pos);
             func_80069CF8_6A8F8();
         } else {
-            posPtr = &arg0->unk14;
+            posPtr = &arg0->pos;
             if (func_8005C250_5CE50(posPtr, -1, 0x300000)) {
                 spawnSparkleEffect(posPtr);
                 func_80069CF8_6A8F8();
             }
         }
 
-        arg0->unk4A += D_800BCB70_AEF30[arg0->unk4E];
-        arg0->unk4C += D_800BCB84_AEF44[arg0->unk4E];
+        arg0->rotX += gStarlightFireworkRotXSpeeds[arg0->type];
+        arg0->rotY += gStarlightFireworkRotYSpeeds[arg0->type];
     }
 
-    createCombinedRotationMatrix(arg0, arg0->unk4A, arg0->unk4C);
+    createCombinedRotationMatrix(arg0, arg0->rotX, arg0->rotY);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
     }
 }
 
-void func_800BC4F0_AE8B0(func_800BC4F0_AE8B0_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupStarlightFireworkTask(StarlightFireworkCleanupState *arg0) {
+    arg0->segment1 = freeNodeMemory(arg0->segment1);
+    arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
 void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0) {
@@ -821,7 +821,7 @@ void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0) {
 
 void func_800BC550_AE910(s16 *arg0) {
     Allocation_AE790 *allocation;
-    func_800BC3D0_AE790_arg *task;
+    StarlightFireworkTaskState *task;
     s32 new_var;
     s32 new_var2;
     u32 s2;
@@ -833,9 +833,9 @@ void func_800BC550_AE910(s16 *arg0) {
 
     *arg0 -= 1;
     if ((s16)*arg0 == 0x78) {
-        task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
+        task = scheduleTask(initStarlightFireworkTask, 0, 0, 0xC8);
         if (task != NULL) {
-            task->unk4E = (u32)(randA() & 0xFF) % 3U;
+            task->type = (u32)(randA() & 0xFF) % 3U;
         }
     }
 
@@ -844,16 +844,16 @@ void func_800BC550_AE910(s16 *arg0) {
             s2 = 2;
             s2 = (u8)((u32)(randA() & 0xFF) % 3U) * s2;
             new_var2 = s2 + 3;
-            task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
+            task = scheduleTask(initStarlightFireworkTask, 0, 0, 0xC8);
             if (task != NULL) {
                 do {
-                    task->unk4E = (new_var = new_var2);
+                    task->type = (new_var = new_var2);
                 } while (0);
             }
 
-            task = scheduleTask(func_800BBF28_AE2E8, 0, 0, 0xC8);
+            task = scheduleTask(initStarlightFireworkTask, 0, 0, 0xC8);
             if (task != NULL) {
-                task->unk4E = s2 + 4;
+                task->type = s2 + 4;
             }
         }
 
