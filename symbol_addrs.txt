@@ -3,6 +3,7 @@ addPlayerRaceGold = 0x80059A48; // rom:0x5A648
 addPlayerSkillPoints = 0x80059A88; // rom:0x5A688
 getPlayerRaceGold = 0x80059AC4; // rom:0x5A6C4
 getOrUpdatePlayerSectorIndex = 0x80059E90; // rom:0x5AA90
+isPlayerNearShortcut = 0x8005AA9C; // rom:0x5B69C
 initFloatingItemSpriteTask = 0x80050F18; // rom:0x51B18
 updateFloatingItemSprite = 0x80050F64; // rom:0x51B64
 cleanupFloatingItemSpriteTask = 0x80050FE0; // rom:0x51BE0

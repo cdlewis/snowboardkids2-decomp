@@ -121,21 +121,28 @@ s32 func_8005A9A8_5B5A8(Player *player) {
     return 1;
 }
 
-s32 func_8005AA9C_5B69C(Player *arg0) {
-    GameState *allocation;
-    D_80090F90_91B90_item *item;
-    s32 dx, dz;
+/**
+ * Checks if a player is near the shortcut position (but not at finish zone).
+ * This is a proximity-only check and does not activate the shortcut.
+ *
+ * @param player The player to check
+ * @return 1 if player is near shortcut, 0 otherwise
+ */
+s32 isPlayerNearShortcut(Player *player) {
+    GameState *gameState;
+    D_80090F90_91B90_item *levelItem;
+    s32 deltaX, deltaZ;
     s64 distSq;
 
-    allocation = (GameState *)getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
 
-    if (getTrackSegmentFinishZoneFlag(&allocation->gameData, arg0->sectorIndex) == 0) {
-        item = func_80055D10_56910(allocation->memoryPoolId);
+    if (getTrackSegmentFinishZoneFlag(&gameState->gameData, player->sectorIndex) == 0) {
+        levelItem = func_80055D10_56910(gameState->memoryPoolId);
 
-        dx = arg0->worldPos.x - item->shortcutPosX;
-        dz = arg0->worldPos.z - item->shortcutPosZ;
+        deltaX = player->worldPos.x - levelItem->shortcutPosX;
+        deltaZ = player->worldPos.z - levelItem->shortcutPosZ;
 
-        distSq = (s64)dx * dx + (s64)dz * dz;
+        distSq = (s64)deltaX * deltaX + (s64)deltaZ * deltaZ;
 
         if (!(0x1FFFFF < isqrt64(distSq))) {
             return 1;
