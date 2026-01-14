@@ -378,7 +378,13 @@ void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state) {
 
     player = state->player;
     if ((player->unkBD8 & 1) != 0) {
-        func_8005100C_51C0C((s32)state->primaryItemX - 8, (s32)state->primaryItemY - 8, 0, state->playerIndex + 8, 0);
+        spawnFloatingItemSprite(
+            (s32)state->primaryItemX - 8,
+            (s32)state->primaryItemY - 8,
+            0,
+            state->playerIndex + 8,
+            0
+        );
         playerRef = state->player;
         tempValue = playerRef->unkBD8;
         playerRef->unkBD8 = tempValue & 0xFE;
@@ -390,7 +396,7 @@ void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state) {
 
     player = state->player;
     if ((player->unkBD8 & 2) != 0) {
-        func_8005100C_51C0C(
+        spawnFloatingItemSprite(
             (s32)state->secondaryItemX - 8,
             (s32)state->secondaryItemY - 8,
             1,
@@ -423,7 +429,13 @@ void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
 
     player = state->player;
     if ((player->unkBD8 & 1) != 0) {
-        func_8005100C_51C0C((s32)state->primaryItemX - 4, (s32)state->primaryItemY - 4, 0, state->playerIndex + 8, 1);
+        spawnFloatingItemSprite(
+            (s32)state->primaryItemX - 4,
+            (s32)state->primaryItemY - 4,
+            0,
+            state->playerIndex + 8,
+            1
+        );
         playerRef = state->player;
         tempValue = playerRef->unkBD8;
         playerRef->unkBD8 = tempValue & 0xFE;
@@ -435,7 +447,7 @@ void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
 
     player = state->player;
     if ((player->unkBD8 & 2) != 0) {
-        func_8005100C_51C0C(
+        spawnFloatingItemSprite(
             (s32)state->secondaryItemX - 4,
             (s32)state->secondaryItemY - 4,
             1,
@@ -2226,7 +2238,7 @@ void func_8004F760_50360(Struct_func_8004F6D4 *arg0) {
     debugEnqueueCallback((u16)(arg0->unk10 + 8), 0, func_8000FED0_10AD0, arg0);
 
     if (arg0->unkC->unkBD8 & 2) {
-        func_8005100C_51C0C(arg0->unk0 - 8, arg0->unk2 - 8, 1, arg0->unk10 + 8, 0);
+        spawnFloatingItemSprite(arg0->unk0 - 8, arg0->unk2 - 8, 1, arg0->unk10 + 8, 0);
         arg0->unkC->unkBD8 &= ~2;
     }
 }

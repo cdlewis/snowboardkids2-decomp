@@ -68,17 +68,17 @@ typedef struct {
 } DualSnowSprayTask;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    MemoryAllocatorNode *unk4;
-    s16 unk8;
-    s8 unkA;
+    s16 x;
+    s16 y;
+    MemoryAllocatorNode *assetTable;
+    s16 baseAssetIndex;
+    s8 assetType;
     u8 paddingB;
-    s32 unkC;
-    s32 unk10;
-    u16 unk14;
-    s16 unk16;
-} func_80050F18_51B18_arg;
+    s32 paddingC;
+    s32 frameCounter;
+    u16 renderPriority;
+    s16 halfSizeRender;
+} FloatingItemSpriteTask;
 
 typedef struct {
     u8 padding[0x164];
@@ -214,8 +214,8 @@ void spawnPlayerCharacterTrailParticle(Player *, s32);
 void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
 void func_80050E08_51A08(func_80050DB0_519B0_arg *);
 void func_80050EA0_51AA0(void **);
-void func_80050F64_51B64(func_80050F18_51B18_arg *);
-void func_80050FE0_51BE0(func_80050F18_51B18_arg *);
+void updateFloatingItemSprite(FloatingItemSpriteTask *);
+void cleanupFloatingItemSpriteTask(FloatingItemSpriteTask *);
 void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *);
 void cleanupDualSnowSprayTask(DualSnowSprayTask *);
 void func_80051760_52360(func_800516F4_522F4_arg *);
@@ -562,47 +562,47 @@ void spawnImpactStar(Vec3i *arg0) {
     }
 }
 
-void func_80050F18_51B18(func_80050F18_51B18_arg *arg0) {
-    arg0->unk4 = load_3ECE40();
-    arg0->unk8 = 0x45;
-    arg0->unk10 = 0;
-    setCleanupCallback(&func_80050FE0_51BE0);
-    setCallbackWithContinue(&func_80050F64_51B64);
+void initFloatingItemSpriteTask(FloatingItemSpriteTask *arg0) {
+    arg0->assetTable = load_3ECE40();
+    arg0->baseAssetIndex = 0x45;
+    arg0->frameCounter = 0;
+    setCleanupCallback(&cleanupFloatingItemSpriteTask);
+    setCallbackWithContinue(&updateFloatingItemSprite);
 }
 
-void func_80050F64_51B64(func_80050F18_51B18_arg *arg0) {
-    arg0->unk8 = (arg0->unk10 >> 1) + 0x45;
-    arg0->unk10 = arg0->unk10 + 1;
+void updateFloatingItemSprite(FloatingItemSpriteTask *arg0) {
+    arg0->baseAssetIndex = (arg0->frameCounter >> 1) + 0x45;
+    arg0->frameCounter = arg0->frameCounter + 1;
 
-    if (arg0->unk10 == 0x10) {
+    if (arg0->frameCounter == 0x10) {
         func_80069CF8_6A8F8();
     }
 
-    if (arg0->unk16 == 0) {
-        debugEnqueueCallback(arg0->unk14, 1, func_80010240_10E40, arg0);
+    if (arg0->halfSizeRender == 0) {
+        debugEnqueueCallback(arg0->renderPriority, 1, func_80010240_10E40, arg0);
     } else {
-        debugEnqueueCallback(arg0->unk14, 1, func_80010924_11524, arg0);
+        debugEnqueueCallback(arg0->renderPriority, 1, func_80010924_11524, arg0);
     }
 }
 
-void func_80050FE0_51BE0(func_80050F18_51B18_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupFloatingItemSpriteTask(FloatingItemSpriteTask *arg0) {
+    arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
-void func_8005100C_51C0C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    func_80050F18_51B18_arg *task;
+void spawnFloatingItemSprite(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    FloatingItemSpriteTask *task;
 
-    task = (func_80050F18_51B18_arg *)scheduleTask(&func_80050F18_51B18, 2, 0, 0xE6);
+    task = (FloatingItemSpriteTask *)scheduleTask(&initFloatingItemSpriteTask, 2, 0, 0xE6);
     if (task != NULL) {
-        task->unk0 = arg0;
-        task->unk2 = arg1;
+        task->x = arg0;
+        task->y = arg1;
         if (arg2 != 0) {
-            task->unkA = 0x11;
+            task->assetType = 0x11;
         } else {
-            task->unkA = 0x10;
+            task->assetType = 0x10;
         }
-        task->unk14 = arg3;
-        task->unk16 = arg4;
+        task->renderPriority = arg3;
+        task->halfSizeRender = arg4;
     }
 }
 
