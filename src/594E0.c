@@ -198,7 +198,7 @@ INCLUDE_ASM("asm/nonmatchings/594E0", func_80059394_59F94);
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_800597C0_5A3C0);
 
-void func_80059A48_5A648(Player *player, s32 amount) {
+void addPlayerRaceGold(Player *player, s32 amount) {
     if (player->unkBC6 != 0) {
         return;
     }
@@ -227,7 +227,7 @@ void addPlayerSkillPoints(Player *player, s32 amount) {
     }
 }
 
-s32 func_80059AC4_5A6C4(Player *player) {
+s32 getPlayerRaceGold(Player *player) {
     if (!player->unkBC6) {
         return player->raceGold;
     }

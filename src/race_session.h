@@ -127,11 +127,9 @@ s16 func_8005CE98_5DA98(Player *arg0);
 void spawnHomingProjectile(void *arg0, s32 arg1, void *arg2);
 void setPlayerStarHitState(Player *player, Vec3i *hitPosition);
 void setPlayerPanelHitState(Player *arg0);
-void func_80059A48_5A648(Player *player, s32 amount);
-#define addPlayerRaceGold func_80059A48_5A648  // Readable alias
+void addPlayerRaceGold(Player *player, s32 amount);
 void addPlayerSkillPoints(Player *player, s32 amount);
-s32 func_80059AC4_5A6C4(Player *player);
-#define getPlayerRaceGold func_80059AC4_5A6C4  // Readable alias
+s32 getPlayerRaceGold(Player *player);
 u8 getItemStat1(u8 itemIndex);
 u8 getItemStat2(s32 itemIndex);
 u8 getItemStat3(s32 itemIndex);
