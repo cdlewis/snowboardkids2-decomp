@@ -65,40 +65,58 @@ void func_8005A930_5B530(Player *player) {
     }
 }
 
-s32 func_8005A9A8_5B5A8(Player *arg0) {
-    GameState *allocation;
-    D_80090F90_91B90_item *item;
-    s32 dx, dz;
+/**
+ * Checks if player is in shortcut activation zone and activates the shortcut.
+ * The shortcut is activated when:
+ * - Shortcut gate state is 0 (not yet activated)
+ * - Player is not on the final lap
+ * - Player is not at the finish zone
+ * - Player is within range of the shortcut position
+ *
+ * @param player The player to check
+ * @return 1 if shortcut was activated, 0 otherwise
+ */
+s32 func_8005A9A8_5B5A8(Player *player) {
+    GameState *gameState;
+    D_80090F90_91B90_item *levelItem;
+    s32 deltaX, deltaZ;
     s64 distSq;
 
-    allocation = (GameState *)getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
 
-    if (allocation->unk63 != 0) {
+    // Skip if shortcut already activated
+    if (gameState->shortcutGateState != 0) {
         return 0;
     }
 
-    if (arg0->currentLap == allocation->unk74) {
+    // Skip if player is on final lap
+    if (player->currentLap == gameState->finalLapNumber) {
         return 0;
     }
 
-    if (getTrackSegmentFinishZoneFlag(&allocation->gameData, arg0->sectorIndex) != 0) {
+    // Skip if player is at finish zone
+    if (getTrackSegmentFinishZoneFlag(&gameState->gameData, player->sectorIndex) != 0) {
         return 0;
     }
 
-    item = func_80055D10_56910(allocation->memoryPoolId);
+    // Get level item containing shortcut position
+    levelItem = func_80055D10_56910(gameState->memoryPoolId);
 
-    dx = arg0->worldPos.x - item->unk0;
-    dz = arg0->worldPos.z - item->unk4;
+    // Calculate 2D distance to shortcut position
+    deltaX = player->worldPos.x - levelItem->shortcutPosX;
+    deltaZ = player->worldPos.z - levelItem->shortcutPosZ;
 
-    distSq = (s64)dx * dx + (s64)dz * dz;
+    distSq = (s64)deltaX * deltaX + (s64)deltaZ * deltaZ;
 
+    // Check if player is within activation range (0x2FFFFF in fixed point)
     if (0x2FFFFF < isqrt64(distSq)) {
         return 0;
     }
 
-    allocation->unk63 = 3;
-    arg0->unkB9C = allocation->unk58;
-    allocation->unk58--;
+    // Activate the shortcut
+    gameState->shortcutGateState = 3;
+    player->shortcutLapCount = gameState->shortcutActivationCounter;
+    gameState->shortcutActivationCounter--;
 
     return 1;
 }
@@ -114,8 +132,8 @@ s32 func_8005AA9C_5B69C(Player *arg0) {
     if (getTrackSegmentFinishZoneFlag(&allocation->gameData, arg0->sectorIndex) == 0) {
         item = func_80055D10_56910(allocation->memoryPoolId);
 
-        dx = arg0->worldPos.x - item->unk0;
-        dz = arg0->worldPos.z - item->unk4;
+        dx = arg0->worldPos.x - item->shortcutPosX;
+        dz = arg0->worldPos.z - item->shortcutPosZ;
 
         distSq = (s64)dx * dx + (s64)dz * dz;
 
@@ -932,14 +950,14 @@ s16 func_8005CE98_5DA98(Player *arg0) {
     elem = (Section3Element *)(arg0->sectorIndex * 0x24 + (u32)allocation->gameData.section3Data);
 
     if (elem->unk0 < 0) {
-        if (allocation->unk74 == arg0->currentLap) {
+        if (allocation->finalLapNumber == arg0->currentLap) {
             Section1Element *section1Data = (Section1Element *)allocation->gameData.section1Data;
             Section1Element *v1 = (Section1Element *)(elem->unk1C * 6 + (u32)section1Data);
             Section1Element *v2 = (Section1Element *)(elem->unk16 * 6 + (u32)section1Data);
             result = func_8006D21C_6DE1C(v1->unk0, v1->unk4, v2->unk0, v2->unk4) + 0x800;
         } else {
             D_80090F90_91B90_item *item = func_80055D10_56910(allocation->memoryPoolId);
-            result = func_8006D21C_6DE1C(item->unk0, item->unk4, arg0->worldPos.x, arg0->worldPos.z);
+            result = func_8006D21C_6DE1C(item->shortcutPosX, item->shortcutPosZ, arg0->worldPos.x, arg0->worldPos.z);
             if (arg0->unkB84 & 2) {
                 result += 0x1000;
             }

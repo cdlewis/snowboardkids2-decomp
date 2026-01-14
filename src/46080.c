@@ -1007,7 +1007,7 @@ void enqueuePlayerDisplayList(PlayerDisplayListState *state) {
         players = gameState->players;
 
         playerSyncValue = players[playerIndex].currentLap;
-        expectedSyncValue = gameState->unk74;
+        expectedSyncValue = gameState->finalLapNumber;
 
         if (playerSyncValue == expectedSyncValue) {
             state->pendingSyncFrames = pendingFrames - 1;
@@ -1337,8 +1337,8 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
     arg0->unk18 = sp10.y;
     transformVector2(&gCourseSceneryOffset, arg0, &sp10);
 
-    arg0->unk14 = levelData->unk0 + sp10.x;
-    arg0->unk1C = levelData->unk4 + sp10.z;
+    arg0->unk14 = levelData->shortcutPosX + sp10.x;
+    arg0->unk1C = levelData->shortcutPosZ + sp10.z;
 
     memcpy(arg0->unk3C, arg0, 0x3C);
 
@@ -1409,8 +1409,8 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
 
     transformVector2(&gFlyingSceneryInitOffset, arg0, &position);
 
-    arg0->displayListObject.transform.translation.x = levelData->unk0 + position.x;
-    arg0->displayListObject.transform.translation.z = levelData->unk4 + position.z;
+    arg0->displayListObject.transform.translation.x = levelData->shortcutPosX + position.x;
+    arg0->displayListObject.transform.translation.z = levelData->shortcutPosZ + position.z;
     arg0->frameCounter = 0x30;
 
     setCleanupCallback(&cleanupFlyingSceneryTask);

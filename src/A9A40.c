@@ -43,8 +43,8 @@ void func_800B9B90_A9A40(Player *player) {
 
     if (courseData->waypoints[sectorIndex].next < 0) {
         defaultPos = func_80055D10_56910(courseData->defaultPosIndex);
-        player->unkA7C = defaultPos->unk0;
-        player->unkA84 = defaultPos->unk4;
+        player->unkA7C = defaultPos->shortcutPosX;
+        player->unkA84 = defaultPos->shortcutPosZ;
         return;
     }
 

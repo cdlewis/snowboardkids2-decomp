@@ -200,8 +200,8 @@ void initStartGate(StartGate *gate) {
     trackAngle = getTrackEndInfo((u8 *)gameState + 0x30, worldPos);
     createYRotationMatrix(&gate->rotationMatrix, (trackAngle + spawnData->unk8) & 0xFFFF);
     rotateVectorY(&D_800907EC_913EC, trackAngle + spawnData->unk8, &gate->rotationMatrix.translation);
-    gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + spawnData->unk0;
-    gate->rotationMatrix.translation.z = gate->rotationMatrix.translation.z + spawnData->unk4;
+    gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + spawnData->shortcutPosX;
+    gate->rotationMatrix.translation.z = gate->rotationMatrix.translation.z + spawnData->shortcutPosZ;
     gate->rotationMatrix.translation.y = worldPos[1];
     gate->unk5C = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x60);
     transformMatrix = tempMatrix;
@@ -233,7 +233,7 @@ void updateStartGate(StartGate *gate) {
 
     switch (gate->animationState) {
         case 0:
-            if (gameState->unk63 != 3) {
+            if (gameState->shortcutGateState != 3) {
                 goto block_else;
             }
             gate->animationState++;
@@ -277,13 +277,13 @@ void updateStartGate(StartGate *gate) {
             func_8006B084_6BC84(&sp10, gate, s0);
             break;
         case 4:
-            if (gameState->unk63 != 3) {
+            if (gameState->shortcutGateState != 3) {
                 gate->animationState = 0;
             }
             break;
     }
 
-    if (gameState->unk63 == 3) {
+    if (gameState->shortcutGateState == 3) {
         gate->unk98 = (s32)func_80055E68_56A68(gameState->memoryPoolId) + 0x70;
     } else {
     block_else:

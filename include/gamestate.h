@@ -157,7 +157,7 @@ typedef struct {
     u8 _padB96[0x2];
     s16 unkB98;
     s16 boostTimer;
-    s16 unkB9C;
+    s16 shortcutLapCount;
     s16 unkB9E;
     u16 unkBA0;
     s16 unkBA2;
@@ -245,7 +245,7 @@ typedef struct {
     u8 unk55;
     u8 unk56;
     u8 unk57;
-    u16 unk58;
+    u16 shortcutActivationCounter;
     u8 unk5A;
     u8 availableHomingProjectileSlots;
     u8 memoryPoolId;
@@ -255,9 +255,9 @@ typedef struct {
     u8 pendingPlayerRenderTasks;
     u8 unk61;
     u8 PAD_62[0x1];
-    u8 unk63;
+    u8 shortcutGateState;
     u8 PAD_6B_2[0x10];
-    u8 unk74;
+    u8 finalLapNumber;
     u8 PAD_6B[0x1];
     u8 gamePaused;
     u8 pauseMenuSelection;

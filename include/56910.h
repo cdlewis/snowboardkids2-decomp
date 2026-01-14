@@ -15,8 +15,8 @@ typedef struct {
 } AssetWithoutSize;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
+    s32 shortcutPosX;
+    s32 shortcutPosZ;
     u16 unk8;
     u8 padding[2];
     Vec3i unkC;      /* 0x0C */

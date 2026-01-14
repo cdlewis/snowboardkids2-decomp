@@ -1945,8 +1945,8 @@ void initUfoEffect(UfoEffectState *arg0) {
     arg0->yRotation = 0;
     transformVector2(&D_80090AA0_916A0, arg0, &transformOutput);
 
-    arg0->unk14.x = item->unk0 + transformOutput.x;
-    arg0->unk14.z = item->unk4 + transformOutput.z;
+    arg0->unk14.x = item->shortcutPosX + transformOutput.x;
+    arg0->unk14.z = item->shortcutPosZ + transformOutput.z;
     temp_unk18 = posOutput.y + transformOutput.y;
     arg0->phaseTimer = 0x30;
     arg0->unk14.y = temp_unk18;

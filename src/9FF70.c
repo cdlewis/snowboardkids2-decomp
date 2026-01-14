@@ -2924,8 +2924,8 @@ s32 updateKnockbackRecoveryStep(Player *player) {
     player->velocity.x = 0;
     player->velocity.z = 0;
     player->unkA94 = currentYaw + (clampedAngleDelta / player->unkB8C);
-    player->worldPos.x = currentPosX + ((levelData->unk0 - currentPosX) >> 2);
-    targetPosZ = levelData->unk4;
+    player->worldPos.x = currentPosX + ((levelData->shortcutPosX - currentPosX) >> 2);
+    targetPosZ = levelData->shortcutPosZ;
     currentPosZ = player->worldPos.z;
     player->worldPos.z = currentPosZ + ((targetPosZ - currentPosZ) >> 2);
     applyClampedVelocityToPosition(player);
@@ -2956,8 +2956,8 @@ s32 fallToTrackCenterStep(Player *player) {
     player->velocity.x = 0;
     player->velocity.z = 0;
     player->velocity.y = player->velocity.y - 0x6000;
-    player->worldPos.x = player->worldPos.x + ((levelData->unk0 - player->worldPos.x) >> 2);
-    player->worldPos.z = player->worldPos.z + ((levelData->unk4 - player->worldPos.z) >> 2);
+    player->worldPos.x = player->worldPos.x + ((levelData->shortcutPosX - player->worldPos.x) >> 2);
+    player->worldPos.z = player->worldPos.z + ((levelData->shortcutPosZ - player->worldPos.z) >> 2);
     applyClampedVelocityToPosition(player);
     decayPlayerSteeringAngles(player);
 
@@ -3034,7 +3034,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
 
     if (player->behaviorCounter == 0) {
         player->unkA94 = 0x1000;
-        player->unkB9C = 0;
+        player->shortcutLapCount = 0;
         player->sectorIndex = 0;
         player->unkB84 = player->unkB84 | 0x200;
         player->behaviorCounter++;
@@ -3055,7 +3055,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
         func_8006FDC8_709C8(player->playerIndex, 0, 0x10);
 
         if (player->isBossRacer == 0) {
-            if (player->currentLap == gameState->unk74) {
+            if (player->currentLap == gameState->finalLapNumber) {
                 showGoalBanner(player->playerIndex);
             }
         }
@@ -3182,7 +3182,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
 
     if (player->ufoFlags & 2) {
         player->unkA94 = 0x1000;
-        player->unkB9C = 0;
+        player->shortcutLapCount = 0;
         player->sectorIndex = 0;
         player->behaviorStep++;
         player->unkB84 |= 0x200;
@@ -3190,7 +3190,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
         memcpy(&player->unk440, &player->worldPos.x, 0xC);
         player->finishAnimState = 1;
         func_8006FDC8_709C8(player->playerIndex, 0, 0x10);
-        if (player->isBossRacer == 0 && player->currentLap == gameState->unk74) {
+        if (player->isBossRacer == 0 && player->currentLap == gameState->finalLapNumber) {
             showGoalBanner(player->playerIndex);
         }
     }
@@ -3404,7 +3404,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
 
     if (arg0->behaviorCounter == 0) {
         arg0->unkA94 = 0xE00;
-        arg0->unkB9C = 0;
+        arg0->shortcutLapCount = 0;
         arg0->sectorIndex = 0;
         arg0->unkB84 |= 0x200;
         arg0->behaviorCounter++;
@@ -3422,7 +3422,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
         func_8006FDC8_709C8(arg0->playerIndex, 0, 0x10);
 
         if (arg0->isBossRacer == 0) {
-            if (arg0->currentLap == gameState->unk74) {
+            if (arg0->currentLap == gameState->finalLapNumber) {
                 showGoalBanner(arg0->playerIndex);
             }
         }
