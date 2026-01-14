@@ -123,7 +123,7 @@ typedef struct {
 void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1);
 void func_800677C0_683C0(s32 arg0, loadAssetMetadata_arg *arg1);
 
-void func_800670A4_67CA4(u16 arg0, TexturedBillboardSprite *arg1);
+void enqueueTexturedBillboardSpriteTile(u16 arg0, TexturedBillboardSprite *arg1);
 
 typedef struct {
     u8 padding0[4];

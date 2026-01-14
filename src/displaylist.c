@@ -93,6 +93,7 @@ void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *display
 void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderCameraRelativeDisplayList(DisplayListObject *arg0);
 void renderTexturedBillboardSprite(TexturedSpriteState *);
+void renderTexturedBillboardSpriteTile(TexturedSpriteState *);
 void renderRotatedBillboardSprite(RotatedBillboardSprite *);
 void func_800677F0_683F0(AlphaSpriteState *);
 void func_800670D4_67CD4(AlphaSpriteState *);
@@ -1727,7 +1728,7 @@ void enqueueRotatedBillboardSprite(s32 arg0, MatrixEntry_202A0 *arg1) {
     debugEnqueueCallback(arg0 & 0xFFFF, 4, &renderRotatedBillboardSprite, arg1);
 }
 
-void func_80066AF0_676F0(TexturedSpriteState *state) {
+void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
     if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
@@ -1812,9 +1813,9 @@ void func_80066AF0_676F0(TexturedSpriteState *state) {
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
-void func_800670A4_67CA4(u16 arg0, TexturedBillboardSprite *arg1) {
+void enqueueTexturedBillboardSpriteTile(u16 arg0, TexturedBillboardSprite *arg1) {
     arg1->matrix = NULL;
-    debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80066AF0_676F0, arg1);
+    debugEnqueueCallback(arg0 & 0xFFFF, 4, &renderTexturedBillboardSpriteTile, arg1);
 }
 
 void func_800670D4_67CD4(AlphaSpriteState *state) {

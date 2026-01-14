@@ -2124,7 +2124,7 @@ loop:
     }
 
     for (i = 2; i < 5; i++) {
-        func_800670A4_67CA4(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
+        enqueueTexturedBillboardSpriteTile(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
     }
 }
 
@@ -2198,7 +2198,7 @@ loop2:
     }
 
     for (i = 2; i < 5; i++) {
-        func_800670A4_67CA4(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
+        enqueueTexturedBillboardSpriteTile(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
     }
 }
 
@@ -2238,7 +2238,7 @@ loop:
     }
 
     for (i = 2; i < 5; i++) {
-        func_800670A4_67CA4(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
+        enqueueTexturedBillboardSpriteTile(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
     }
 }
 
