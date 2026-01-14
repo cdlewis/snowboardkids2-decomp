@@ -133,6 +133,16 @@ typedef struct {
     s16 blinkCounter;
 } RaceTimerState;
 
+typedef struct {
+    s16 itemX;
+    s16 itemY;
+    void *spriteAsset;
+    s16 itemIndex;
+    u8 padA[0x2];
+    Player *player;
+    s32 playerIndex;
+} SecondaryItemDisplayState;
+
 void showGoalBanner(s32 playerIndex);
 void showTrickScoreDisplay(s32 playerIndex, s32 trickScore);
 void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0);
@@ -153,3 +163,6 @@ void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
 void func_8004FCF0_508F0(s32 arg0);
 void spawnShotCrossSkillMeterDisplayTask(s16 arg0);
 void func_8005011C_50D1C(void);
+void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0);
+void updateSecondaryItemDisplay(SecondaryItemDisplayState *arg0);
+void cleanupSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0);

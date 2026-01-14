@@ -2201,20 +2201,6 @@ void cleanupRaceTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-void cleanupSecondaryItemDisplayTask(ShotCrossCountdownTimerState *arg0);
-
-typedef struct {
-    s16 itemX;
-    s16 itemY;
-    void *spriteAsset;
-    s16 itemIndex;
-    u8 padA[0x2];
-    Player *player;
-    s32 playerIndex;
-} SecondaryItemDisplayState;
-
-void updateSecondaryItemDisplay(SecondaryItemDisplayState *arg0);
-
 typedef struct {
     u8 pad0[0x10];
     void *players;
@@ -2243,7 +2229,7 @@ void updateSecondaryItemDisplay(SecondaryItemDisplayState *state) {
     }
 }
 
-void cleanupSecondaryItemDisplayTask(ShotCrossCountdownTimerState *state) {
+void cleanupSecondaryItemDisplayTask(SecondaryItemDisplayState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
