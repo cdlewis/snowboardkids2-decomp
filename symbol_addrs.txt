@@ -261,6 +261,7 @@ jumpUpwardStep = 0x800B7108; // rom:0xA6FB8
 restoreStoredPositionStep = 0x800B71E4; // rom:0xA7094
 handleUfoStoredPositionStep = 0x800B724C; // rom:0xA70FC
 handleUfoAbductionRecoveryStep = 0x800B735C; // rom:0xA720C
+waitAtStoredPositionStep = 0x800B73CC; // rom:0xA727C
 g_KnockbackDiagonalSlideVelocity = 0x800BAC8C; // rom:0xAAB3C size:0xC
 g_FinishLineRespawnOffset = 0x800BAC98; // rom:0xAAB48 size:0xC
 g_KnockbackRecoveryForwardVelocity = 0x800BAC80; // rom:0xAAB30 size:0xC
