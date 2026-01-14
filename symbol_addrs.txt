@@ -3128,3 +3128,4 @@ setPlayerState80 = 0x80058B68; // rom:0x59768
 enqueueDisplayListWithLightsSlot0 = 0x80065DA8; // rom:0x669A8
 renderTexturedBillboardSprite = 0x80065DD8; // rom:0x669D8
 tryActivateFinishBoost = 0x80058BB0;
+setViewportScale = 0x8006F9BC; // rom:0x705BC

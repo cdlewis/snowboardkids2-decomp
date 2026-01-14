@@ -192,7 +192,7 @@ void loadLogoScreenAssets(void) {
 
     node = &logoScreen->unk8;
     func_8006FAA4_706A4(node, 0, 0, 10, 0);
-    func_8006F9BC_705BC(node, 1.0f, 1.0f);
+    setViewportScale(node, 1.0f, 1.0f);
     setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_8006FEF8_70AF8(node, 1);
     func_8006BEDC_6CADC(&nodeParams, 0, 0, 0x01000000, 0, 0, 0);

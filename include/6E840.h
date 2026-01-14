@@ -66,8 +66,8 @@ typedef struct Node_70B00 {
     u8 unkC0;
     u8 unkC1;
     u8 padding8[0x6];
-    s16 unkC8;
-    s16 unkCA;
+    s16 viewportWidth;
+    s16 viewportHeight;
     /* 0xCC */ s16 unkCC;
     /* 0xCE */ s16 unkCE;
     /* 0xD0 */ s16 unkD0;
@@ -88,7 +88,7 @@ typedef struct Node_70B00 {
     u8 unk1CD;
     u8 unk1CE;
     u8 padding1CF;
-    f32 unk1D0;
+    f32 scaleY;
     u8 padding5[0x2];
 } Node_70B00;
 extern Node_70B00 D_800A3370_A3F70;
@@ -113,7 +113,7 @@ void func_8006FE28_70A28(Node_70B00 *arg0, u8 arg1, u8 arg2, u8 arg3);
 
 void func_8006FE48_70A48(u16 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5);
 
-void func_8006F9BC_705BC(Node_70B00 *arg0, f32 arg1, f32 arg2);
+void setViewportScale(Node_70B00 *arg0, f32 scaleX, f32 scaleY);
 
 void func_8006E054_6EC54(u16);
 

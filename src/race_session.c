@@ -705,8 +705,8 @@ void initRaceViewports(void) {
             for (playerIdx = 0, i = 0; i < 2; i++, playerIdx++) {
                 setModelCameraTransform(&gs->unk8[playerIdx], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
                 setModelCameraTransform(&gs->unk4[playerIdx], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
-                func_8006F9BC_705BC(&gs->unk8[playerIdx], 1.0f, 0.5f);
-                func_8006F9BC_705BC(&gs->unkC[playerIdx], 1.0f, 0.5f);
+                setViewportScale(&gs->unk8[playerIdx], 1.0f, 0.5f);
+                setViewportScale(&gs->unkC[playerIdx], 1.0f, 0.5f);
 
                 // SET_PLAYER_CAMERA_PERSPECTIVE should probably work here but it doesn't because
                 // the copy of far to new_var is essential here but breaks the 3 and 4 cases.
@@ -738,8 +738,8 @@ void initRaceViewports(void) {
                 setModelCameraTransform(&gs->unk8[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
                 new_var = 0.5f;
                 setModelCameraTransform(&gs->unk4[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
-                func_8006F9BC_705BC(&gs->unk8[playerIdx], 0.5f, 0.5f);
-                func_8006F9BC_705BC(&gs->unkC[playerIdx], 0.5f, new_var);
+                setViewportScale(&gs->unk8[playerIdx], 0.5f, 0.5f);
+                setViewportScale(&gs->unkC[playerIdx], 0.5f, new_var);
 
                 SET_PLAYER_CAMERA_PERSPECTIVE(gs, playerIdx, (4.0f / 3.0f));
             }
@@ -757,8 +757,8 @@ void initRaceViewports(void) {
             for (playerIdx = 0, i = 0; i < 4; i++, playerIdx++) {
                 setModelCameraTransform(&gs->unk8[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
                 setModelCameraTransform(&gs->unk4[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
-                func_8006F9BC_705BC(&gs->unk8[playerIdx], 0.5f, 0.5f);
-                func_8006F9BC_705BC(&gs->unkC[playerIdx], 0.5f, 0.5f);
+                setViewportScale(&gs->unk8[playerIdx], 0.5f, 0.5f);
+                setViewportScale(&gs->unkC[playerIdx], 0.5f, 0.5f);
 
                 SET_PLAYER_CAMERA_PERSPECTIVE(gs, playerIdx, (4.0f / 3.0f));
             }

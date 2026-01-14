@@ -51,7 +51,7 @@ void initMenuCameraNode(Node_70B00 *node, s32 slotIndex, s32 priority, s32 isSec
         func_8006FAA4_706A4(node, 0, slotIndex & 0xFF, priority & 0xFF, 0);
     }
 
-    func_8006F9BC_705BC(node, 1.0f, 1.0f);
+    setViewportScale(node, 1.0f, 1.0f);
     func_8006FEF8_70AF8(node, ((slotIndex & 0xFF) + 1));
     setModelCameraTransform(node, 0, 0, -0x98, -0x70, 0x97, 0x6F);
     func_8006FA0C_7060C(node, 50.0f, 1.3333334f, 10.0f, 4000.0f);

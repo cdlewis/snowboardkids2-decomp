@@ -345,10 +345,10 @@ void setModelCameraTransform(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4,
     node->unkAA = arg6;
 }
 
-void func_8006F9BC_705BC(Node_70B00 *arg0, f32 arg1, f32 arg2) {
-    arg0->unk1D0 = arg2;
-    arg0->unkC8 = (s16)(arg1 * 640.0f);
-    arg0->unkCA = (s16)(arg2 * 480.0f);
+void setViewportScale(Node_70B00 *arg0, f32 scaleX, f32 scaleY) {
+    arg0->scaleY = scaleY;
+    arg0->viewportWidth = (s16)(scaleX * 640.0f);
+    arg0->viewportHeight = (s16)(scaleY * 480.0f);
 }
 
 void func_8006FA0C_7060C(Node_70B00 *arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
@@ -425,8 +425,8 @@ void func_8006FAA4_706A4(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3,
     arg0->padding2b[0] = 0;
     arg0->id = 0;
     arg0->unk140 = 0;
-    arg0->unkC8 = 0x280;
-    arg0->unkCA = 0x1E0;
+    arg0->viewportWidth = 0x280;
+    arg0->viewportHeight = 0x1E0;
     arg0->unkCC = 0x1FF;
     arg0->unkCE = 0;
     arg0->unkD0 = 0x280;
@@ -446,7 +446,7 @@ void func_8006FAA4_706A4(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3,
     arg0->unkBE = 0;
     arg0->unkBF = 0;
     arg0->unkC1 = 0;
-    arg0->unk1D0 = 1.0f;
+    arg0->scaleY = 1.0f;
     func_8006FA58_70658(arg0);
 }
 
