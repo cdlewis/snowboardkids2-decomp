@@ -46,21 +46,22 @@ INCLUDE_ASM("asm/nonmatchings/5AA90", func_80059ED0_5AAD0);
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005A26C_5AE6C);
 
-void func_8005A930_5B530(Player *arg0) {
-    Allocation5AA90 *allocation;
-    void *sp0;
-    void *sp1;
-    u16 temp;
-    s32 result;
+// Updates player's sector index and clamps Y position to track height
+void func_8005A930_5B530(Player *player) {
+    GameState *gameState;
+    GameDataLayout *gameData;
+    Vec3i *playerPos;
+    u16 newSectorIndex;
+    s32 trackHeight;
 
-    allocation = getCurrentAllocation();
-    sp0 = &allocation->unk30;
-    sp1 = (void *)&arg0->worldPos.x;
-    temp = getOrUpdatePlayerSectorIndex(arg0, sp0, arg0->sectorIndex, sp1);
-    arg0->sectorIndex = temp;
-    result = func_8005D020_5DC20(sp0, temp, sp1, 0x200000);
-    if (result < arg0->worldPos.y) {
-        arg0->worldPos.y = result;
+    gameState = (GameState *)getCurrentAllocation();
+    gameData = &gameState->gameData;
+    playerPos = &player->worldPos;
+    newSectorIndex = getOrUpdatePlayerSectorIndex(player, gameData, player->sectorIndex, playerPos);
+    player->sectorIndex = newSectorIndex;
+    trackHeight = func_8005D020_5DC20(gameData, newSectorIndex, playerPos, 0x200000);
+    if (trackHeight < player->worldPos.y) {
+        player->worldPos.y = trackHeight;
     }
 }
 
