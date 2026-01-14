@@ -46,9 +46,9 @@ void initMenuCameraNode(Node_70B00 *node, s32 slotIndex, s32 priority, s32 isSec
 
     secondaryFlag = isSecondary & 0xFF;
     if (secondaryFlag == 0) {
-        func_8006FAA4_706A4(node, 0, slotIndex & 0xFF, priority & 0xFF, 1);
+        initViewportNode(node, 0, slotIndex & 0xFF, priority & 0xFF, 1);
     } else {
-        func_8006FAA4_706A4(node, 0, slotIndex & 0xFF, priority & 0xFF, 0);
+        initViewportNode(node, 0, slotIndex & 0xFF, priority & 0xFF, 0);
     }
 
     setViewportScale(node, 1.0f, 1.0f);

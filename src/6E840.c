@@ -373,7 +373,7 @@ void initViewportCallbackPool(Node_70B00 *node) {
     node->unk88 = NULL;
 }
 
-void func_8006FAA4_706A4(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s32 arg4) {
+void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     Node_70B00 *temp_v0;
     Node_70B00 *var_a0;
     u8 arg4_byte = (u8)arg4;

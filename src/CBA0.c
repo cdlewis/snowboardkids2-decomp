@@ -236,7 +236,7 @@ void initSceneRenderNode(
     void *task;
     s32 pad[8];
 
-    func_8006FAA4_706A4(&node->base, NULL, slotIndex, priority, 1);
+    initViewportNode(&node->base, NULL, slotIndex, priority, 1);
     setViewportScale(&node->base, 1.0f, 1.0f);
     func_8006FEF8_70AF8(&node->base, sceneId);
     setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);

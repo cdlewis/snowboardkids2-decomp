@@ -99,7 +99,7 @@ void initCutsceneRenderer(void) {
     setupTaskSchedulerNodes(0x40, 0x30, 4, 4, 4, 0, 0, 0);
 
     nodePtr = &s.taskMemory->sceneNode;
-    func_8006FAA4_706A4(nodePtr, 0, 0, 10, scale);
+    initViewportNode(nodePtr, 0, 0, 10, scale);
     setViewportScale(nodePtr, scale, scale);
     func_8006FEF8_70AF8(nodePtr, 1);
     setModelCameraTransform(nodePtr, 0, 0, -160, -120, 159, 119);
@@ -111,7 +111,7 @@ void initCutsceneRenderer(void) {
     func_8006FDA0_709A0(NULL, 0, 0);
 
     nodePtr = overlayNodePtr;
-    func_8006FAA4_706A4(nodePtr, 0, 1, 11, 0);
+    initViewportNode(nodePtr, 0, 1, 11, 0);
     setViewportScale(nodePtr, scale, scale);
 
     func_8006FEF8_70AF8(nodePtr, 1);
@@ -121,7 +121,7 @@ void initCutsceneRenderer(void) {
     func_8006FDA0_709A0(nodePtr, 0, 8);
 
     uiNodePtr = &s.taskMemory->uiNode;
-    func_8006FAA4_706A4(uiNodePtr, 0, 3, 8, 0);
+    initViewportNode(uiNodePtr, 0, 3, 8, 0);
     setViewportScale(uiNodePtr, scale, scale);
     func_8006FEF8_70AF8(uiNodePtr, 1);
     setModelCameraTransform(uiNodePtr, 0, 0, -160, -120, 159, 119);

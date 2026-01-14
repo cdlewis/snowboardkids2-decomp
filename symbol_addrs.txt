@@ -3164,3 +3164,4 @@ tryActivateBoost = 0x80058C64; // rom:0x59864
 setViewportScale = 0x8006F9BC; // rom:0x705BC
 tryActivateGhostEffect = 0x80058C10; // rom:0x59810
 initViewportCallbackPool = 0x8006FA58; // rom:0x70658
+initViewportNode = 0x8006FAA4; // rom:0x706A4

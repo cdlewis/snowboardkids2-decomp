@@ -298,7 +298,7 @@ void initTitleScreen(void) {
     node2 = &state->node2;
     initDefaultFontPalette();
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    func_8006FAA4_706A4((Node_70B00 *)state, NULL, 8, 10, 0);
+    initViewportNode((Node_70B00 *)state, NULL, 8, 10, 0);
     setModelCameraTransform(state, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     initMenuCameraNode(node2, 0, 8, 0);
     func_8006FA0C_7060C(node2, 40.0f, 1.3333334f, 10.0f, 10000.0f);

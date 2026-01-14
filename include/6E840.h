@@ -123,7 +123,7 @@ void func_8006FEF8_70AF8(Node_70B00 *, u16);
 
 void func_8006FD3C_7093C(u16, void *);
 
-void func_8006FAA4_706A4(Node_70B00 *, Node_70B00 *, s32, s32, s32);
+void initViewportNode(Node_70B00 *node, Node_70B00 *parent, s32 slotIndex, s32 priority, s32 flags);
 
 void func_8006FA0C_7060C(Node_70B00 *node, f32 fov, f32 aspect, f32 near, f32 far);
 

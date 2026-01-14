@@ -639,13 +639,13 @@ void initRaceViewports(void) {
     gs = (GameState_temp *)getCurrentAllocation();
     levelConfig = (VarData *)func_80055D10_56910(gs->memoryPoolId);
     setAudioDistanceLimits(0x60, 0x1400);
-    func_8006FAA4_706A4(gs->audioPlayer0, 0, 0xC, 0x1E, 0);
+    initViewportNode(gs->audioPlayer0, 0, 0xC, 0x1E, 0);
     setModelCameraTransform(gs->audioPlayer0, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
 
     for (i = 0; i < gs->numPlayers; i++) {
-        func_8006FAA4_706A4(&gs->unkC[i], 0, (u16)(i + 4), 5, 1);
-        func_8006FAA4_706A4(&gs->unk8[i], &gs->unkC[i], (u16)i, 0xA, 1);
-        func_8006FAA4_706A4(&gs->unk4[i], &gs->unk8[i], (u16)(i + 8), 0x14, 0);
+        initViewportNode(&gs->unkC[i], 0, (u16)(i + 4), 5, 1);
+        initViewportNode(&gs->unk8[i], &gs->unkC[i], (u16)i, 0xA, 1);
+        initViewportNode(&gs->unk4[i], &gs->unk8[i], (u16)(i + 8), 0x14, 0);
         func_8006FEF8_70AF8(&gs->unk8[i], (u16)(i + 0x64));
         func_8006FEF8_70AF8(&gs->unkC[i], (u16)(i + 0x64));
 

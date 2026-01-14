@@ -257,23 +257,23 @@ void func_80003EE0_4AE0(void) {
             loadCompressedData(D_8008BFA0_8CBA0[i].start, D_8008BFA0_8CBA0[i].end, D_8008BFA0_8CBA0[i].size);
     }
 
-    func_8006FAA4_706A4(&taskMemory->unk8, 0, 0, 0xB, 0);
+    initViewportNode(&taskMemory->unk8, 0, 0, 0xB, 0);
     setViewportScale(&taskMemory->unk8, 1.0f, 1.0f);
     setModelCameraTransform(&taskMemory->unk8, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_8006FEF8_70AF8(&taskMemory->unk8, 1);
-    func_8006FAA4_706A4(&taskMemory->unk1E0, 0, 1, 0xC, 0);
+    initViewportNode(&taskMemory->unk1E0, 0, 1, 0xC, 0);
     setViewportScale(&taskMemory->unk1E0, 1.0f, 1.0f);
     func_8006FEF8_70AF8(&taskMemory->unk1E0, 1);
     setModelCameraTransform(&taskMemory->unk1E0, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    func_8006FAA4_706A4(&taskMemory->unk3B8, 0, 2, 0xB, 0);
+    initViewportNode(&taskMemory->unk3B8, 0, 2, 0xB, 0);
     setViewportScale(&taskMemory->unk3B8, 1.0f, 1.0f);
     func_8006FEF8_70AF8(&taskMemory->unk3B8, 1);
     setModelCameraTransform(&taskMemory->unk3B8, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    func_8006FAA4_706A4(&taskMemory->unk590, 0, 3, 0xB, 0);
+    initViewportNode(&taskMemory->unk590, 0, 3, 0xB, 0);
     setViewportScale(&taskMemory->unk590, 1.0f, 1.0f);
     setModelCameraTransform(&taskMemory->unk590, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_8006FEF8_70AF8(&taskMemory->unk590, 1);
-    func_8006FAA4_706A4(&taskMemory->unk768, 0, 4, 0xD, 1);
+    initViewportNode(&taskMemory->unk768, 0, 4, 0xD, 1);
     setViewportScale(&taskMemory->unk768, 1.0f, 1.0f);
     setModelCameraTransform(&taskMemory->unk768, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_8006FEF8_70AF8(&taskMemory->unk768, 1);
