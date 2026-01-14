@@ -168,7 +168,7 @@ s32 tryActivateGhostEffect(Player *player) {
     return 0;
 }
 
-s32 func_80058C64_59864(Player *arg0) {
+s32 tryActivateBoost(Player *arg0) {
     if (arg0->boostState == 0) {
         if (spawnPlayerAuraEffect(arg0) != NULL) {
             if (arg0->unkB84 & 2) {
