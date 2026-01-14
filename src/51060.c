@@ -316,8 +316,8 @@ void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *arg0) {
     arg0->assets[1].lam.unk19 = arg0->assets[0].lam.unk19;
 
     for (i = 0; i < 4; i++) {
-        func_80067EDC_68ADC(i, &arg0->assets[0].lam);
-        func_80067EDC_68ADC(i, &arg0->assets[1].lam);
+        enqueueAlphaSprite(i, &arg0->assets[0].lam);
+        enqueueAlphaSprite(i, &arg0->assets[1].lam);
     }
 
     if (gs->gamePaused == 0) {
@@ -631,8 +631,8 @@ void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *arg0) {
     arg0->assets[1].lam.unk19 = arg0->assets[0].lam.unk19;
 
     for (i = 0; i < 4; i++) {
-        func_80067EDC_68ADC(i, &arg0->assets[0].lam);
-        func_80067EDC_68ADC(i, &arg0->assets[1].lam);
+        enqueueAlphaSprite(i, &arg0->assets[0].lam);
+        enqueueAlphaSprite(i, &arg0->assets[1].lam);
     }
 
     if (gs->gamePaused == 0) {
@@ -759,8 +759,8 @@ void func_8005152C_5212C(SkiTrailTask *task) {
     task->particleRight.position.z = task->skiOffsets[1].z + task->player->worldPos.z;
 
     for (i = 0; i < 4; i++) {
-        func_80067EDC_68ADC(i, &task->particleLeft);
-        func_80067EDC_68ADC(i, &task->particleRight);
+        enqueueAlphaSprite(i, &task->particleLeft);
+        enqueueAlphaSprite(i, &task->particleRight);
     }
 
     if (gs->gamePaused == 0) {
@@ -802,7 +802,7 @@ void func_80051760_52360(func_800516F4_522F4_arg *arg0) {
     transformVector((s16 *)&D_80090EB0_91AB0, (s16 *)&arg0->unk0->unk164, &arg0->unk8.position);
 
     for (i = 0; i < 4; i++) {
-        func_80067EDC_68ADC(i, &arg0->unk8);
+        enqueueAlphaSprite(i, &arg0->unk8);
     }
 
     if (gs->gamePaused == 0) {

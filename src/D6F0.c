@@ -98,8 +98,8 @@ void updateSpriteEffectTask(SpriteEffectUpdateData *task) {
     task->sprite2.unk18 = task->sprite1.unk18;
     task->sprite2.unk19 = task->sprite1.unk19;
 
-    func_80067EDC_68ADC(0, &task->sprite1);
-    func_80067EDC_68ADC(0, &task->sprite2);
+    enqueueAlphaSprite(0, &task->sprite1);
+    enqueueAlphaSprite(0, &task->sprite2);
 
     if (task->frameCounter != 0) {
         s32 i;

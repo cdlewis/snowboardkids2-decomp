@@ -144,7 +144,7 @@ void loadAssetMetadataByIndex(
     s32 sub_index
 );
 
-void func_80067EDC_68ADC(s32, loadAssetMetadata_arg *);
+void enqueueAlphaSprite(s32, loadAssetMetadata_arg *);
 
 void buildOverlayDisplayListSegment(DisplayListObject *obj);
 

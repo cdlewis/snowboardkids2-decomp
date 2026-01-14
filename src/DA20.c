@@ -89,8 +89,8 @@ void updateStaticSpriteEffectTask(StaticSpriteEffectUpdateData *arg0) {
     arg0->sprite2.unk18 = arg0->sprite1.unk18;
     arg0->sprite2.unk19 = arg0->sprite1.unk19;
 
-    func_80067EDC_68ADC(0, sprite1_ptr);
-    func_80067EDC_68ADC(0, &arg0->sprite2);
+    enqueueAlphaSprite(0, sprite1_ptr);
+    enqueueAlphaSprite(0, &arg0->sprite2);
 
     if (arg0->frameCounter != 0) {
         StaticSpriteEffectPositionNode *node = (StaticSpriteEffectPositionNode *)arg0;
