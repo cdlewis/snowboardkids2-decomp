@@ -161,7 +161,7 @@ typedef struct {
     s16 unkB9E;
     u16 unkBA0;
     s16 unkBA2;
-    u16 unkBA4;
+    u16 invincibilityTimer;
     s16 ghostEffectTimer;
     u8 _padBA8[0x2];
     s16 trickPoints;

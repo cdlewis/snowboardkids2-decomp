@@ -3170,6 +3170,7 @@ enqueueDisplayListWithLightsSlot0 = 0x80065DA8; // rom:0x669A8
 renderTexturedBillboardSprite = 0x80065DD8; // rom:0x669D8
 tryActivateFinishBoost = 0x80058BB0;
 tryActivateBoost = 0x80058C64; // rom:0x59864
+grantInvincibilityWithSound = 0x80058CC4; // rom:0x598C4
 setViewportScale = 0x8006F9BC; // rom:0x705BC
 tryActivateGhostEffect = 0x80058C10; // rom:0x59810
 initViewportCallbackPool = 0x8006FA58; // rom:0x70658

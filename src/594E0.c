@@ -120,7 +120,7 @@ void setPlayerStarHitState(Player *player, Vec3i *hitPosition) {
 
 void setPlayerBouncedBackState(Player *player) {
     if (player->unkAC2 < 0x3C) {
-        if (player->unkBA4 == 0) {
+        if (player->invincibilityTimer == 0) {
             if (!(player->unkB88 & 0x18)) {
                 player->unkAC2 = 0x3E;
             }
@@ -183,10 +183,10 @@ s32 tryActivateBoost(Player *arg0) {
     return 0;
 }
 
-s32 func_80058CC4_598C4(Player *arg0) {
-    if (arg0->unkBA4 == 0) {
-        arg0->unkBA4 = 0x96;
-        queueSoundAtPosition(&arg0->worldPos, 0x48);
+s32 grantInvincibilityWithSound(Player *player) {
+    if (player->invincibilityTimer == 0) {
+        player->invincibilityTimer = 0x96;
+        queueSoundAtPosition(&player->worldPos, 0x48);
         return 1;
     }
     return 0;

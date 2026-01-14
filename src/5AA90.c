@@ -419,7 +419,7 @@ Player *func_8005B548_5C148(Vec3i *arg0, s32 arg1, s32 arg2) {
             continue;
         }
 
-        if (playerData->unkBA4 != 0) {
+        if (playerData->invincibilityTimer != 0) {
             continue;
         }
 
@@ -783,7 +783,7 @@ s32 func_8005C250_5CE50(Vec3i *arg0, s32 arg1, s32 arg2) {
 
                 if (playerData->unkB88 & 0x10) {
                     ;
-                } else if (playerData->unkBA4 != 0) {
+                } else if (playerData->invincibilityTimer != 0) {
                     ;
                 } else {
                     memcpy(posPtr, &node->localPos, 0xC);
@@ -826,7 +826,7 @@ typedef struct {
     u8 padding[0xB88];
     s32 unkB88;
     u8 padding3[0x18];
-    u16 unkBA4;
+    u16 invincibilityTimer;
 } PlayerData;
 
 void *func_8005C454_5D054(Vec3i *arg0, s32 arg1, s32 arg2, Vec3i *arg3) {
@@ -847,7 +847,7 @@ void *func_8005C454_5D054(Vec3i *arg0, s32 arg1, s32 arg2, Vec3i *arg3) {
             continue;
         }
         new_var = 0xC;
-        if (((PlayerData *)(((u8 *)allocation->dataArray) + (index * 0xBE8)))->unkBA4 != 0) {
+        if (((PlayerData *)(((u8 *)allocation->dataArray) + (index * 0xBE8)))->invincibilityTimer != 0) {
             continue;
         }
         memcpy(arg3, &node->localPos, new_var);
