@@ -6,8 +6,8 @@
 
 extern Transform3D D_8009A890_9B490;
 
-void func_800B5B30_1E2BE0(func_800B5E64_1E2F14_arg0 *arg0, s8 arg1) {
-    arg0->unk71 = arg1;
+void setAnimationLoopMode(func_800B5E64_1E2F14_arg0 *arg0, s8 mode) {
+    arg0->inputMode = mode;
 }
 
 void func_800B5B7C_1E2C2C(func_800B5E64_1E2F14_arg0 *, u16);
@@ -49,7 +49,7 @@ void func_800B5B7C_1E2C2C(func_800B5E64_1E2F14_arg0 *arg0, u16 arg1) {
     arg0->unk6C = 0;
     arg0->unk6E = arg1;
     arg0->unk70 = 0;
-    arg0->unk71 = 0;
+    arg0->inputMode = 0;
 }
 
 void func_800B5BFC_1E2CAC(void *arg0) {
@@ -96,7 +96,7 @@ extern s8 D_800AB044_A23B4;
 extern u8 D_800AB048_A23B8;
 
 void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
-    s8 mode = arg0->unk71;
+    s8 mode = arg0->inputMode;
     s32 temp;
     s32 buttonCheck;
 
@@ -327,7 +327,7 @@ s16 advanceSceneManager(func_800B5E64_1E2F14_arg0 *arg0) {
     s16 result = 0;
     s8 temp;
 
-    if (arg0->unk71 == 1) {
+    if (arg0->inputMode == 1) {
         arg0->unk44 = 0x166666;
         arg0->unk38 = 0x166666;
     }

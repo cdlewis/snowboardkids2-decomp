@@ -34,7 +34,7 @@ typedef struct {
     s16 unk6C;
     s16 unk6E;
     s8 unk70;
-    s8 unk71;
+    s8 inputMode;
 } func_800B5E64_1E2F14_arg0;
 
 typedef func_800B5E64_1E2F14_arg0 AnimationLoopArg;
@@ -48,7 +48,7 @@ typedef struct {
     u8 unk71;
 } func_800B6180_1E3230_arg0;
 
-void func_800B5B30_1E2BE0(func_800B5E64_1E2F14_arg0 *arg0, s8 arg1);
+void setAnimationLoopMode(func_800B5E64_1E2F14_arg0 *arg0, s8 mode);
 void func_800B5BFC_1E2CAC(void *arg0);
 void func_800B5EC4_1E2F74(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4, s32 arg5);
 void func_800B5F2C_1E2FDC(func_800B5E64_1E2F14_arg0 *, s16, s16);

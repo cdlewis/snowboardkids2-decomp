@@ -112,7 +112,7 @@ void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *
 
     if (needsVisibility) {
         scheduleDualAssetGroupLoad(manager, 0, 0x8000, 1, 0x10000);
-        func_800B5B30_1E2BE0(manager->sceneContext, 1);
+        setAnimationLoopMode(manager->sceneContext, 1);
     }
 
     initSceneRenderNode(&manager->unkFF8, 2, 0xC, sceneNode->id, 0, 2, 0);

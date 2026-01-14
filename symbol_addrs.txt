@@ -998,6 +998,7 @@ resetPlayerBehaviorToDefault = 0x800B00E4; // rom:0x9FF94
 updateStunnedRecoveryEndPhase = 0x800B58B8; // rom:0xA5768
 updateStunnedRecoveryStandUpPhase = 0x800B5938; // rom:0xA57E8
 updateKnockbackAirborneLaunchPhase = 0x800B5A40; // rom:0xA58F0
+setAnimationLoopMode = 0x800B5B30; // rom:0x1E2BE0
 updateStunnedPanelHitFallPhase = 0x800B5B90; // rom:0xA5A40
 updateStunnedBounceFallPhase = 0x800B5CB8; // rom:0xA5B68
 updateStunnedBounceFallRecoverPhase = 0x800B5D68; // rom:0xA5C18
