@@ -1,3 +1,4 @@
+#include "3CD70.h"
 #include "42170.h"
 #include "46080.h"
 #include "51060.h"
@@ -6,6 +7,7 @@
 #include "5AA90.h"
 #include "5DBC0.h"
 #include "5E590.h"
+#include "5EA60.h"
 #include "9FF70.h"
 #include "A9A40.h"
 #include "common.h"
@@ -17,11 +19,6 @@
 #include "task_scheduler.h"
 
 typedef void (*FuncPtr)(void *);
-
-extern s32 D_800BCA50_B1F40;
-extern s32 gControllerInputs[];
-extern s32 D_800BC054_B1544;
-extern s32 D_800BC05C_B154C;
 
 typedef struct {
     /* 0x0 */ void *ptr;
@@ -76,10 +73,159 @@ typedef struct {
     u8 unkBDB;
 } func_800BC4AC_arg;
 
-extern FuncPtr D_800BCA44_B1F34[];
-extern FuncPtr D_800BCA5C_B1F4C[];
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+    void *unk10;
+    void *unk14;
+    void *unk18;
+    void *unk1C;
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 padding[12];
+} Unk0x3CElem;
 
-extern u16 D_8009ADE0_9B9E0;
+typedef struct {
+    Transform3D unk38;
+    void *unk58;
+    s32 unk5C;
+    s32 unk60;
+    s32 unk64;
+} Unk0x3CElemExtra;
+
+typedef struct {
+    Unk0x3CElem unk0_3C[12];
+    u8 padding3C[0x434 - (12 * 60)];
+    s32 unk434;
+    s32 unk438;
+    s32 unk43C;
+    s32 unk440;
+    s32 unk444;
+    s32 unk448;
+    Vec3i velocity;
+    s32 unk458;
+    s32 unk45C;
+    s32 unk460;
+    u8 padding464[0x4];
+    s32 unk468;
+    s32 unk46C;
+    void *unk470;
+    s32 unk474;
+    s32 unk478;
+    s32 unk47C;
+    s32 unk480;
+    u8 padding484[0x4];
+    func_8005F2FC_5FEFC_arg unk488[12];
+    u8 padding888[0x4EC - 0x4 - 0x48 * 12];
+    Transform3D unk970;
+    Transform3D unk990;
+    Transform3D unk9B0;
+    u8 paddingA88[0xA8C - 0x9D0];
+    u16 unkA8C;
+    s16 unkA8E;
+    s16 unkA90;
+    s16 unkA92;
+    s16 unkA94;
+    s16 unkA96;
+    s16 unkA98;
+    s16 unkA9A;
+    u8 padding9E[0x2];
+    s16 unkA9E;
+    s32 unkAA0;
+    s32 unkAA4;
+    s32 unkAA8;
+    s32 unkAAC;
+    s32 unkAB0;
+    s32 unkAB4;
+    s32 unkAB8;
+    s32 unkABC;
+    u8 unkAC0;
+    u8 unkAC1;
+    s16 unkAC2;
+    s16 unkAC4;
+    u8 paddingAC6[0x2];
+    s32 unkAC8;
+    s32 unkACC;
+    s32 unkAD0;
+    s32 unkAD4[3];
+    s32 unkAE0;
+    Vec3i unkAE4[6];
+    s32 unkB2C;
+    s32 unkB30;
+    s32 unkB34;
+    s32 unkB38;
+    s32 unkB3C;
+    s32 unkB40;
+    s32 unkB44;
+    s32 unkB48;
+    s32 unkB4C;
+    s32 unkB50;
+    void *unkB54;
+    s32 unkB58;
+    s32 unkB5C;
+    s32 unkB60;
+    s32 unkB64;
+    u8 unkB68;
+    u8 paddingB69[0x3];
+    s32 unkB6C;
+    s32 unkB70;
+    u16 unkB74;
+    u8 paddingB76[0x2];
+    s16 unkB78;
+    s8 unkB7A;
+    s8 unkB7B;
+    s16 unkB7C;
+    u16 unkB7E;
+    s8 unkB80;
+    s8 unkB81;
+    u8 paddingB82[0x2];
+    s32 unkB84;
+    s32 unkB88;
+    s32 unkB8C;
+    s32 unkB90;
+    u16 unkB94;
+    u8 paddingB96[0x2];
+    s16 unkB98;
+    s16 boostTimer;
+    s16 unkB9C;
+    s16 unkB9E;
+    u16 unkBA0;
+    s16 unkBA2;
+    u16 unkBA4;
+    s16 unkBA6;
+    u8 paddingBA8[0x2];
+    s16 trickPoints;
+    s16 trickScore;
+    s16 tricksPerformedMask;
+    u16 unkBB0;
+    u16 unkBB2;
+    u8 unkBB4;
+    s8 trickCount;
+    u8 spinsPerformedMask;
+    u8 unkBB7;
+    u8 unkBB8;
+    u8 unkBB9;
+    u8 unkBBA;
+    u8 unkBBB;
+    u8 unkBBC;
+    u8 behaviorMode;
+    u8 behaviorPhase;
+    u8 behaviorStep;
+    u8 behaviorCounter;
+    u8 unkBC1;
+    u8 unkBC2;
+    u8 unkBC3;
+    u8 finishPosition;
+    u8 unkBC5;
+    u8 unkBC6;
+    u8 unkBC7;
+    u8 paddingBC8[0xBDB - 0xBC8];
+    u8 unkBDB;
+} func_800BB66C_B0B5C_arg;
 
 typedef struct {
     u8 unk0;
@@ -91,15 +237,6 @@ typedef struct {
     u8 unk6;
     u8 unk7;
 } D_800BACC8_AAB78_type;
-extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
-
-void func_800BC61C_B1B0C(Player *);
-
-typedef s32 (*StateFunc)(void *);
-extern StateFunc D_800BCA14_B1F04[];
-extern s16 D_800BC9F0_B1EE0[];
-extern s16 D_800BCA24_B1F14[];
-extern s16 D_800BCA30_B1F20[];
 
 typedef struct {
     u8 pad[0x38];
@@ -145,6 +282,24 @@ typedef struct {
     u8 finishPosition;
 } IceBossArg;
 
+void func_800BC61C_B1B0C(Player *);
+
+typedef s32 (*StateFunc)(void *);
+extern StateFunc D_800BCA14_B1F04[];
+extern s16 D_800BC9F0_B1EE0[];
+extern s16 D_800BCA24_B1F14[];
+extern s16 D_800BCA30_B1F20[];
+extern FuncPtr D_800BCA44_B1F34[];
+extern FuncPtr D_800BCA5C_B1F4C[];
+extern u16 D_8009ADE0_9B9E0;
+extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
+extern s32 identityMatrix[];
+extern s32 D_800BCA50_B1F40;
+extern s32 gControllerInputs[];
+extern s32 D_800BC054_B1544;
+extern s32 D_800BC05C_B154C;
+extern s32 D_800BCA3C_B1F2C[];
+
 void func_800BB2B0_B07A0(IceBossArg *arg0) {
     Transform3D sp10;
     Transform3D sp30;
@@ -161,9 +316,11 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
 
     player = (IceBossArg *)alloc->players;
-    dist = distance_3d(arg0->unk434.x - player->unk434.x,
-                       arg0->unk434.y - player->unk434.y,
-                       arg0->unk434.z - player->unk434.z);
+    dist = distance_3d(
+        arg0->unk434.x - player->unk434.x,
+        arg0->unk434.y - player->unk434.y,
+        arg0->unk434.z - player->unk434.z
+    );
 
     if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
         if (arg0->unkB84 & 0x400000) {
@@ -250,7 +407,71 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BB66C_B0B5C);
+s32 func_800BB66C_B0B5C(func_800BB66C_B0B5C_arg *arg0) {
+    Vec3i sp10;
+    Vec3i sp20;
+    GameState *state;
+    s32 i;
+    u16 trackIdx;
+    s32 temp;
+
+    state = getCurrentAllocation();
+    memcpy(&arg0->unk970, identityMatrix, sizeof(Transform3D));
+    createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+    memcpy(&arg0->unk990, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk9B0, identityMatrix, sizeof(Transform3D));
+
+    arg0->unk434 = D_800BCA3C_B1F2C[arg0->unkBB8];
+    getTrackSegmentWaypoints(&state->gameData, 0, &sp10, &sp20);
+    arg0->unk43C = sp10.z + 0x200000;
+    trackIdx = func_80059E90_5AA90(arg0, &state->gameData, 0, (Vec3i *)&arg0->unk434);
+    arg0->unkB94 = trackIdx;
+    arg0->unk438 = func_8005CFC0_5DBC0(&state->gameData, trackIdx, (Vec3i *)&arg0->unk434, 0x100000);
+    memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
+    arg0->velocity.x = 0;
+    arg0->velocity.y = 0;
+    arg0->velocity.z = 0;
+    arg0->unkA94 = 0x1000;
+
+    for (i = 0; i < 12; i++) {
+        Unk0x3CElemExtra *extra = (Unk0x3CElemExtra *)((u8 *)&arg0->unk0_3C[i] + 0x38);
+        memcpy(&extra->unk38, identityMatrix, sizeof(Transform3D));
+        extra->unk5C = (s32)arg0->unk0_3C[0].unk4;
+        extra->unk60 = (s32)arg0->unk0_3C[0].unk8;
+        temp = i * 0x10;
+        extra->unk64 = 0;
+        extra->unk58 = (void *)(loadAssetByIndex_953B0(arg0->unkBB9, arg0->unkBBA) + temp);
+    }
+
+    arg0->unkA8C = 0;
+    arg0->unkBB7 = func_8006097C_6157C(arg0->unk0_3C[0].unk0, 0);
+    for (i = 0; i < arg0->unkBB7; i++) {
+        func_8005F2FC_5FEFC(arg0->unk0_3C[0].unk0, arg0->unkA8C, i, &arg0->unk488[i]);
+    }
+
+    arg0->behaviorMode = 1;
+    arg0->unkB2C = 0x240000;
+    arg0->unkBB4 = 3;
+    arg0->unkB54 = (void *)&arg0->unk434;
+    arg0->behaviorPhase = 0;
+    arg0->unkB30 = 0x11C000;
+    arg0->unkB34 = 0x11C000;
+    arg0->unkB64 = 0x150000;
+    arg0->unkB68 = arg0->unkBB8;
+    if (arg0->unkBC7 == 0) {
+        spawnChaseCameraTask(arg0->unkBB8);
+    }
+
+    arg0->unkAA0 = ((s32 *)state->players)[0xAA0 / 4] - 0x10000;
+
+    if (arg0->unk0_3C[0].unk1C != 0) {
+        arg0->unk0_3C[0].unk28 = arg0->unk0_3C[0].unk1C + ((s32 *)arg0->unk0_3C[0].unk1C)[arg0->unkBB8];
+    }
+
+    arg0->unkBDB = 0xA;
+
+    return 1;
+}
 
 void func_800BB8E0_B0DD0(func_800BC4AC_arg *arg0) {
     D_800BCA44_B1F34[arg0->behaviorPhase](arg0);
@@ -574,7 +795,8 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
     arg0->unkB88 = 0x200;
     func_800B9B90_A9A40(arg0);
 
-    angleDiff = (func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->unkA94) & 0x1FFF;
+    angleDiff =
+        (func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->unkA94) & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
         angleDiff = angleDiff | 0xE000;
@@ -791,12 +1013,16 @@ void func_800BC89C_B1D8C(Player *boss) {
     do {
         if (boss->unkB84 & isFlying) {
             // Flying mode: use flying joint offsets
-            *(volatile s32 *)(jointWritePtr + 0xA10) = boss->unk970.translation.x + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x18 + jointOffset);
-            *(volatile s32 *)(jointWritePtr + 0xA18) = boss->unk970.translation.z + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x20 + jointOffset);
+            *(volatile s32 *)(jointWritePtr + 0xA10) =
+                boss->unk970.translation.x + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x18 + jointOffset);
+            *(volatile s32 *)(jointWritePtr + 0xA18) =
+                boss->unk970.translation.z + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x20 + jointOffset);
         } else {
             // Ground mode: use ground joint offsets
-            *(volatile s32 *)(jointWritePtr + 0xA10) = boss->unk970.translation.x + *(s32 *)((u8 *)&D_800BC054_B1544 + jointOffset);
-            *(volatile s32 *)(jointWritePtr + 0xA18) = boss->unk970.translation.z + *(s32 *)((u8 *)&D_800BC05C_B154C + jointOffset);
+            *(volatile s32 *)(jointWritePtr + 0xA10) =
+                boss->unk970.translation.x + *(s32 *)((u8 *)&D_800BC054_B1544 + jointOffset);
+            *(volatile s32 *)(jointWritePtr + 0xA18) =
+                boss->unk970.translation.z + *(s32 *)((u8 *)&D_800BC05C_B154C + jointOffset);
         }
 
         jointPos = (JointPosition *)((u8 *)boss + jointOffset);

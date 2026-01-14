@@ -1,4 +1,5 @@
 #include "36BE0.h"
+#include "3CD70.h"
 #include "42170.h"
 #include "51060.h"
 #include "52880.h"
@@ -16,9 +17,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern void spawnChaseCameraTask(u8 playerIdx);
-extern s32 D_800BCB54_B4114[];
-
 typedef void (*FuncPtr)(void *);
 
 extern s16 identityMatrix[];
@@ -26,6 +24,7 @@ extern Transform3D D_8009A890_9B490;
 extern s32 D_8009A8A4_9B4A4;
 extern s32 D_8009A8A8_9B4A8;
 extern s32 D_8009A8AC_9B4AC;
+extern s32 D_800BCB54_B4114[];
 
 typedef struct {
     s32 unk0;
@@ -43,8 +42,6 @@ typedef struct {
     u8 unk6;
     u8 unk7;
 } D_800BACC8_AAB78_type;
-
-extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
 typedef struct {
     u8 pad[0x38];
@@ -71,12 +68,12 @@ typedef struct {
     u8 unkB0[0x20]; /* 0xB0 - 0xCF */
     u8 padD0[0x434 - 0xD0];
     Vec3i unk434; /* 0x434 */
-    s32 unk440; /* 0x440 */
-    s32 unk444; /* 0x444 */
-    s32 unk448; /* 0x448 */
+    s32 unk440;   /* 0x440 */
+    s32 unk444;   /* 0x444 */
+    s32 unk448;   /* 0x448 */
     s32 velocity; /* 0x44C */
-    s32 unk450; /* 0x450 */
-    s32 unk454; /* 0x454 */
+    s32 unk450;   /* 0x450 */
+    s32 unk454;   /* 0x454 */
     u8 pad458[0x10];
     s32 unk468; /* 0x468 */
     u8 pad46C[0x8];
@@ -89,7 +86,7 @@ typedef struct {
     u8 pad9D0[0x9F0 - 0x9D0];
     u8 unk9F0[0x20];       /* 0x9F0 - 0xA0F */
     UnkA10Entry unkA10[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
-    s32 unkA7C; /* 0xA7C */
+    s32 unkA7C;            /* 0xA7C */
     u8 padA80[4];
     s32 unkA84; /* 0xA84 */
     u8 padA88[4];
@@ -139,11 +136,11 @@ typedef struct {
     u8 padBA0[0xBB8 - 0xBA0];
     u8 unkBB8; /* 0xBB8 */
     u8 padBB9[0xBBD - 0xBB9];
-    u8 behaviorMode; /* 0xBBD */
-    u8 behaviorPhase; /* 0xBBE */
-    u8 behaviorStep; /* 0xBBF */
+    u8 behaviorMode;    /* 0xBBD */
+    u8 behaviorPhase;   /* 0xBBE */
+    u8 behaviorStep;    /* 0xBBF */
     u8 behaviorCounter; /* 0xBC0 */
-    u8 unkBC1; /* 0xBC1 */
+    u8 unkBC1;          /* 0xBC1 */
     u8 padBC2[0x2];
     u8 finishPosition; /* 0xBC4 */
     u8 padBC5[0x2];
@@ -192,6 +189,7 @@ extern s32 D_800BCBA0_B4160[][3];
 extern Vec3i D_800BCB68_B4128;
 extern s32 D_800BCB54_B4114[];
 void func_800BC474_B3A34(Arg0Struct *);
+extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
 void func_800BB2B0_B2870(Arg0Struct *arg0) {
     Transform3D sp10;
@@ -317,7 +315,12 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     getTrackSegmentWaypoints((u8 *)alloc + 0x30, 0, &sp10, &sp20);
     *(s32 *)((u8 *)arg0 + 0x43C) = *(s32 *)((u8 *)&sp10 + 8) + 0x200000;
     *(u16 *)((u8 *)arg0 + 0xB94) = func_80059E90_5AA90(arg0, (u8 *)alloc + 0x30, 0, (Vec3i *)((u8 *)arg0 + 0x434));
-    *(s32 *)((u8 *)arg0 + 0x438) = func_8005CFC0_5DBC0((u8 *)alloc + 0x30, *(u16 *)((u8 *)arg0 + 0xB94) & 0xFFFF, (Vec3i *)((u8 *)arg0 + 0x434), 0x100000);
+    *(s32 *)((u8 *)arg0 + 0x438) = func_8005CFC0_5DBC0(
+        (u8 *)alloc + 0x30,
+        *(u16 *)((u8 *)arg0 + 0xB94) & 0xFFFF,
+        (Vec3i *)((u8 *)arg0 + 0x434),
+        0x100000
+    );
     memcpy((u8 *)arg0 + 0x440, (u8 *)arg0 + 0x434, 0xC);
     *(s32 *)((u8 *)arg0 + 0x44C) = 0;
     *(s32 *)((u8 *)arg0 + 0x450) = 0;
@@ -334,7 +337,8 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
             *(s32 *)(elem + 0x5C) = *(s32 *)((u8 *)arg0 + 4);
             *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)arg0 + 8);
             *(s32 *)(elem + 0x64) = 0;
-            *(void **)(elem + 0x58) = (void *)(loadAssetByIndex_953B0(*(u8 *)((u8 *)arg0 + 0xBB9), *(u8 *)((u8 *)arg0 + 0xBBA)) + i * 0x10);
+            *(void **)(elem + 0x58) =
+                (void *)(loadAssetByIndex_953B0(*(u8 *)((u8 *)arg0 + 0xBB9), *(u8 *)((u8 *)arg0 + 0xBBA)) + i * 0x10);
         }
     }
 
@@ -352,7 +356,8 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     }
     *(u8 *)((u8 *)arg0 + 0xBDB) = 0xA;
     if (*(s32 *)((u8 *)arg0 + 0x1C) != 0) {
-        *(s32 *)((u8 *)arg0 + 0x28) = *(s32 *)((u8 *)arg0 + 0x1C) + ((s32 *)*(s32 *)((u8 *)arg0 + 0x1C))[*(u8 *)((u8 *)arg0 + 0xBB8)];
+        *(s32 *)((u8 *)arg0 + 0x28) =
+            *(s32 *)((u8 *)arg0 + 0x1C) + ((s32 *)*(s32 *)((u8 *)arg0 + 0x1C))[*(u8 *)((u8 *)arg0 + 0xBB8)];
     }
     return 1;
 }
@@ -454,124 +459,124 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
     applyClampedVelocityToPosition((Player *)arg0);
 
     switch (arg0->behaviorCounter) {
-    case 0:
-        func_800BC474_B3A34(arg0);
-        transformVectorRelative(&gameState->players->worldPos.x, arg0->unk74, &sp30);
+        case 0:
+            func_800BC474_B3A34(arg0);
+            transformVectorRelative(&gameState->players->worldPos.x, arg0->unk74, &sp30);
 
-        angleDiff = atan2Fixed(-sp30.x, -sp30.z) & 0x1FFF;
+            angleDiff = atan2Fixed(-sp30.x, -sp30.z) & 0x1FFF;
 
-        if (angleDiff >= 0x1000) {
-            angleDiff = angleDiff | 0xE000;
-        }
-
-        if (angleDiff >= 0x81) {
-            angleDiff = 0x80;
-        }
-
-        if (angleDiff < -0x80) {
-            angleDiff = -0x80;
-        }
-
-        arg0->unkA9E = (arg0->unkA9E + angleDiff) & 0x1FFF;
-
-        angleDiff = atan2Fixed(sp30.y, -distance_2d(sp30.x, sp30.z)) & 0x1FFF;
-
-        if (angleDiff >= 0x1000) {
-            angleDiff = angleDiff | 0xE000;
-        }
-
-        if (angleDiff >= 0x41) {
-            angleDiff = 0x40;
-        }
-
-        if (angleDiff < -0x40) {
-            angleDiff = -0x40;
-        }
-
-        {
-            short temp = (arg0->unkA9C + angleDiff) & 0x1FFF;
-            arg0->unkA9C = temp;
-            if (temp >= 0x1000) {
-                arg0->unkA9C = temp - 0x2000;
+            if (angleDiff >= 0x1000) {
+                angleDiff = angleDiff | 0xE000;
             }
-        }
 
-        if ((s16)arg0->unkA9C >= 0x201) {
-            arg0->unkA9C = 0x200;
-        }
+            if (angleDiff >= 0x81) {
+                angleDiff = 0x80;
+            }
 
-        if ((s16)arg0->unkA9C < -0x200) {
-            s16 negVal = -0x200;
-            arg0->unkA9C = negVal;
-        }
+            if (angleDiff < -0x80) {
+                angleDiff = -0x80;
+            }
 
-        if (arg0->unkB8C != 0) {
+            arg0->unkA9E = (arg0->unkA9E + angleDiff) & 0x1FFF;
+
+            angleDiff = atan2Fixed(sp30.y, -distance_2d(sp30.x, sp30.z)) & 0x1FFF;
+
+            if (angleDiff >= 0x1000) {
+                angleDiff = angleDiff | 0xE000;
+            }
+
+            if (angleDiff >= 0x41) {
+                angleDiff = 0x40;
+            }
+
+            if (angleDiff < -0x40) {
+                angleDiff = -0x40;
+            }
+
+            {
+                short temp = (arg0->unkA9C + angleDiff) & 0x1FFF;
+                arg0->unkA9C = temp;
+                if (temp >= 0x1000) {
+                    arg0->unkA9C = temp - 0x2000;
+                }
+            }
+
+            if ((s16)arg0->unkA9C >= 0x201) {
+                arg0->unkA9C = 0x200;
+            }
+
+            if ((s16)arg0->unkA9C < -0x200) {
+                s16 negVal = -0x200;
+                arg0->unkA9C = negVal;
+            }
+
+            if (arg0->unkB8C != 0) {
+                arg0->unkB8C--;
+            } else {
+                if (gameState->players->unkB88 != 0) {
+                    return 0;
+                }
+
+                if ((randA() & 3) == 0) {
+                    arg0->unkB8C = 0x20;
+                    arg0->behaviorCounter = 5;
+                } else {
+                    arg0->unkB8C = 4;
+                    arg0->behaviorCounter = 1;
+                }
+            }
+            break;
+
+        case 1:
+            arg0->unkA9E = arg0->unkA9E - 0x100;
             arg0->unkB8C--;
-        } else {
-            if (gameState->players->unkB88 != 0) {
+            if (arg0->unkB8C == 0) {
+                spawnAttackProjectile(2, arg0->unkBB8, 0);
+                arg0->unkB8C = 4;
+                arg0->behaviorCounter++;
+            }
+            break;
+
+        case 2:
+            arg0->unkA9E = arg0->unkA9E + 0x100;
+            arg0->unkB8C--;
+            if (arg0->unkB8C == 0) {
+                arg0->unkB8C = 4;
+                arg0->behaviorCounter++;
+                spawnAttackProjectile(3, arg0->unkBB8, 0);
                 return 0;
             }
+            break;
 
-            if ((randA() & 3) == 0) {
-                arg0->unkB8C = 0x20;
-                arg0->behaviorCounter = 5;
-            } else {
-                arg0->unkB8C = 4;
-                arg0->behaviorCounter = 1;
+        case 3:
+            arg0->unkA9E = arg0->unkA9E + 0x100;
+            arg0->unkB8C--;
+            if (arg0->unkB8C == 0) {
+                spawnAttackProjectile(2, arg0->unkBB8, 0);
+                arg0->behaviorCounter = 0;
+                if (gameState->unk86 != 0) {
+                    arg0->unkB8C = (randA() & 0xF) + 8;
+                } else {
+                    arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x3C;
+                }
             }
-        }
-        break;
+            break;
 
-    case 1:
-        arg0->unkA9E = arg0->unkA9E - 0x100;
-        arg0->unkB8C--;
-        if (arg0->unkB8C == 0) {
-            spawnAttackProjectile(2, arg0->unkBB8, 0);
-            arg0->unkB8C = 4;
-            arg0->behaviorCounter++;
-        }
-        break;
-
-    case 2:
-        arg0->unkA9E = arg0->unkA9E + 0x100;
-        arg0->unkB8C--;
-        if (arg0->unkB8C == 0) {
-            arg0->unkB8C = 4;
-            arg0->behaviorCounter++;
-            spawnAttackProjectile(3, arg0->unkBB8, 0);
-            return 0;
-        }
-        break;
-
-    case 3:
-        arg0->unkA9E = arg0->unkA9E + 0x100;
-        arg0->unkB8C--;
-        if (arg0->unkB8C == 0) {
-            spawnAttackProjectile(2, arg0->unkBB8, 0);
-            arg0->behaviorCounter = 0;
-            if (gameState->unk86 != 0) {
-                arg0->unkB8C = (randA() & 0xF) + 8;
-            } else {
-                arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x3C;
+        case 5:
+            if ((arg0->unkB8C & 3) == 0) {
+                spawnAttackProjectile(3, arg0->unkBB8, 0);
             }
-        }
-        break;
-
-    case 5:
-        if ((arg0->unkB8C & 3) == 0) {
-            spawnAttackProjectile(3, arg0->unkBB8, 0);
-        }
-        arg0->unkA9E = arg0->unkA9E - 0x100;
-        arg0->unkB8C--;
-        if (arg0->unkB8C == 0) {
-            arg0->behaviorCounter = 0;
-            if (gameState->unk86 != 0) {
-                arg0->unkB8C = (randA() & 0xF) + 8;
-            } else {
-                arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
+            arg0->unkA9E = arg0->unkA9E - 0x100;
+            arg0->unkB8C--;
+            if (arg0->unkB8C == 0) {
+                arg0->behaviorCounter = 0;
+                if (gameState->unk86 != 0) {
+                    arg0->unkB8C = (randA() & 0xF) + 8;
+                } else {
+                    arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
+                }
             }
-        }
-        break;
+            break;
     }
 
     return 0;
@@ -890,11 +895,11 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
     }
 
     if (!(arg0->unkB84 & 0x10000)) {
-        volume =
-            isqrt64(
-                (s64)arg0->velocity * arg0->velocity + (s64)arg0->unk450 * arg0->unk450 + (s64)arg0->unk454 * arg0->unk454
-            ) >>
-            12;
+        volume = isqrt64(
+                     (s64)arg0->velocity * arg0->velocity + (s64)arg0->unk450 * arg0->unk450 +
+                     (s64)arg0->unk454 * arg0->unk454
+                 ) >>
+                 12;
         if (volume >= 0x81) {
             volume = 0x80;
         }
@@ -905,7 +910,8 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
 
     if (!(arg0->unkB84 & 1)) {
         if (isqrt64(
-                (s64)arg0->velocity * arg0->velocity + (s64)arg0->unk450 * arg0->unk450 + (s64)arg0->unk454 * arg0->unk454
+                (s64)arg0->velocity * arg0->velocity + (s64)arg0->unk450 * arg0->unk450 +
+                (s64)arg0->unk454 * arg0->unk454
             ) > 0x40000) {
             s32 temp;
 

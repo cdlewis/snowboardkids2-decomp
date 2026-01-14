@@ -15,6 +15,14 @@ typedef struct {
     func_8006097C_6157C_arg_item data[0];
 } func_8006097C_6157C_arg;
 
+typedef struct {
+    u8 padding[0x40];
+    s16 unk40;
+    s16 padding2;
+    s16 unk44;
+    s16 _pad2;
+} func_8005F2FC_5FEFC_arg;
+
 s32 func_8006097C_6157C(func_8006097C_6157C_arg *, s32);
 
 void initBoneAnimationState(void *animData, s32 tableIndex, s32 boneIndex, BoneAnimationState *state);
@@ -23,5 +31,7 @@ s32 updateBoneAnimation(BoneAnimationState *state);
 
 void func_8005E800_5F400(BoneAnimationState *entity, u16 param_2);
 
+void func_8005DE98_5EA98(void *animData, s32 tableIndex, s32 boneIndex, BoneAnimationState *state);
 s32 func_8005ECB8_5F8B8(void *arg0, s32 arg1, s32 arg2, void *arg3);
 s32 func_8005EFC4_5FBC4(void *arg0, s32 arg1, s32 arg2, void *arg3);
+void func_8005F2FC_5FEFC(void *arg0, s16 arg1, s16 arg2, func_8005F2FC_5FEFC_arg *arg3);

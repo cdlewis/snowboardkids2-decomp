@@ -639,12 +639,6 @@ ret0:
     return 0;
 }
 
-typedef struct {
-    u8 padding[0x40];
-    s16 unk40;
-    s16 padding2;
-    s16 unk44;
-} func_8005F2FC_5FEFC_arg;
 void func_8005F2FC_5FEFC(void *arg0, s16 arg1, s16 arg2, func_8005F2FC_5FEFC_arg *arg3) {
     u16 new_var;
 
