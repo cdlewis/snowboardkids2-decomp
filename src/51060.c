@@ -272,7 +272,7 @@ void updateSprayEffect(SprayEffectUpdateTask *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_800677C0_683C0(i, &arg0->particle);
+        enqueueAlphaBillboardSprite(i, &arg0->particle);
     }
 }
 
@@ -447,7 +447,7 @@ void updateCharacterTrailParticle(CharacterTrailParticleTask *arg0) {
         } while (i < 4);
     } else {
         do {
-            func_800677C0_683C0(i, (&arg0->particle));
+            enqueueAlphaBillboardSprite(i, (&arg0->particle));
             i++;
         } while (i < 4);
     }

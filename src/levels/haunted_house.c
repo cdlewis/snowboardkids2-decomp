@@ -158,7 +158,7 @@ void updateGhostAnimation(AnimatedGhostEntity *ghost) {
     memcpy(&ghost->renderPositionBuffer, &ghost->posX, 0xC);
 
     for (viewport = 0; viewport < 4; viewport++) {
-        func_800677C0_683C0(viewport, (loadAssetMetadata_arg *)&ghost->assetMetadata);
+        enqueueAlphaBillboardSprite(viewport, (loadAssetMetadata_arg *)&ghost->assetMetadata);
     }
 }
 

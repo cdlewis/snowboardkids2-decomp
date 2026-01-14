@@ -1117,7 +1117,7 @@ void expandStarEffect(ExpandStarEffectState *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_800677C0_683C0(i, &arg0->sprite);
+        enqueueAlphaBillboardSprite(i, &arg0->sprite);
     }
 }
 
@@ -1152,7 +1152,7 @@ void contractStarEffect(StarEffectState *state) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_800677C0_683C0(i, &state->sprite);
+        enqueueAlphaBillboardSprite(i, &state->sprite);
     }
 }
 
@@ -1181,7 +1181,7 @@ void orbitStarEffect(OrbitStarEffectState *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        func_800677C0_683C0(i, (loadAssetMetadata_arg *)&arg0->sprite);
+        enqueueAlphaBillboardSprite(i, (loadAssetMetadata_arg *)&arg0->sprite);
     }
 }
 
