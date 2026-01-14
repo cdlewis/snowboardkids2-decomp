@@ -1235,8 +1235,8 @@ int MusSetFxType(int fxtype) {
     return func_80073058_73C58(&locals.byte_at_10);
 }
 
-void func_80072E94_73A94(int onoff) {
-    int changed = 1;
+s32 MusSetSongFxChange(s32 onoff) {
+    s32 changed = 1;
 
     if (onoff == 0) {
         changed = MusSetFxType(mus_last_fxtype);
@@ -1245,6 +1245,7 @@ void func_80072E94_73A94(int onoff) {
     if (changed) {
         mus_songfxchange_flag = onoff;
     }
+    return changed;
 }
 
 void __MusIntFifoOpen(s32 commands) {

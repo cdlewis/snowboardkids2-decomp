@@ -39,3 +39,7 @@ void stopChannelsByFlags(s32 channelFlags, s32 stopSpeed);
 s32 stopChannelsByHandle(u32 handle, s32 stopSpeed);
 
 s32 getActiveChannelCount(u32 flags);
+
+int MusSetFxType(int fxtype);
+
+s32 MusSetSongFxChange(s32 onoff);

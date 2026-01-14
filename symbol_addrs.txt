@@ -2258,6 +2258,7 @@ checkCharacterPreviewState = 0x800B0638; // rom:0x1DABD8
 animateCharacterPreview = 0x800B0720; // rom:0x1DACC0
 awaitCharacterPreviewRotationReset = 0x800B08FC; // rom:0x1DAE9C
 cleanupCharacterPreview = 0x800B0964; // rom:0x1DAF04
+MusSetSongFxChange = 0x80072E94; // rom:0x73A94
 mus_songfxchange_flag = 0x800A6518;
 mus_last_fxtype = 0x800A651C;
 recvmesg_text_0104 = 0x800764B4;
