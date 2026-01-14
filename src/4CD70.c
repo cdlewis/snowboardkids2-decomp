@@ -666,7 +666,7 @@ extern char sGoldFormatShort[];
 extern char sGoldFormatLong[];
 
 void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
-    s32 gold = state->player->unkB6C;
+    s32 gold = state->player->raceGold;
 
     if (gold < 100) {
         sprintf(state->goldTextBuffer, sGoldFormatShort, gold);
@@ -687,7 +687,7 @@ void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
 }
 
 void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
-    s32 gold = state->player->unkB6C;
+    s32 gold = state->player->raceGold;
 
     if (gold < 100) {
         state->digitCount = 1;
@@ -695,7 +695,7 @@ void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
         state->digitCount = 2;
     }
 
-    sprintf(state->goldTextBuffer, D_8009E880_9F480, state->player->unkB6C);
+    sprintf(state->goldTextBuffer, D_8009E880_9F480, state->player->raceGold);
 
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->textX);
 
@@ -1157,7 +1157,7 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
             }
             arg0->x = 0x10;
             arg0->y = -0x3C;
-            totalGold = arg0->goldAmount + gameState->players->unkB6C;
+            totalGold = arg0->goldAmount + gameState->players->raceGold;
             arg0->goldAmount = totalGold;
             if (totalGold > 0x1869F) {
                 arg0->goldAmount = 0x1869F;

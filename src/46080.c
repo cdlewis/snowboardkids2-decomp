@@ -1724,7 +1724,7 @@ void updateGoldCoinsTask(GoldCoinUpdateState *arg0) {
                 queueSoundAtPosition(&arg0->entries[i].position, 7);
                 arg0->entries[i].visible = 0;
                 arg0->entries[i].respawnTimer = 0x1E;
-                func_80059A48_5A648(player, 0x64);
+                addPlayerRaceGold(player, 0x64);
             }
         }
         arg0->entries[i].processed = 2;
@@ -2361,8 +2361,8 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                 if (player != NULL) {
                     itemBox->state = itemBox->state + 1;
                     spawnItemBoxBurstEffect(&itemBox->displayList, itemBox->isSecondaryItemBox);
-                    if ((player->unkB6C >= 100) || (player->unkBDA != 0)) {
-                        func_80059A48_5A648(player, -100);
+                    if ((player->raceGold >= 100) || (player->unkBDA != 0)) {
+                        addPlayerRaceGold(player, -100);
                         if (itemBox->isSecondaryItemBox != 0) {
                             if (player->unkBD4 == 7) {
                                 gameState->availableHomingProjectileSlots =
@@ -3168,7 +3168,7 @@ void updateHomingProjectileImpact(HomingProjectileImpactArg *arg0) {
 
     if (s0 != NULL) {
         queueSoundAtPosition(s2, 7);
-        func_80059A48_5A648(s0, 100);
+        addPlayerRaceGold(s0, 100);
         func_80069CF8_6A8F8();
     }
 

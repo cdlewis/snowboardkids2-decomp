@@ -884,7 +884,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
     }
 
     if (player->trickScore != 0) {
-        func_80059A48_5A648(player, player->trickScore);
+        addPlayerRaceGold(player, player->trickScore);
         if (player->isBossRacer == 0) {
             showTrickScoreDisplay(player->playerIndex, player->trickScore);
 

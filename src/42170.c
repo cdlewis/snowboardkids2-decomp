@@ -1637,8 +1637,8 @@ void animateGoldStealTransfer(GoldStealEffectState *arg0) {
     } else if (arg0->swingAngle == 0x800) {
         arg0->animFrameIndex = 0;
         arg0->frameTimer = 1;
-        arg0->stolenGold = func_80059AC4_5A6C4((Player *)arg0->victimPlayer);
-        func_80059A48_5A648((Player *)arg0->victimPlayer, -arg0->stolenGold);
+        arg0->stolenGold = getPlayerRaceGold((Player *)arg0->victimPlayer);
+        addPlayerRaceGold((Player *)arg0->victimPlayer, -arg0->stolenGold);
         advanceAnimationFrameLooping(arg0, &D_8009095C_9155C);
     } else {
         advanceAnimationFrameLooping(arg0, &D_8009095C_9155C);
@@ -1647,7 +1647,7 @@ void animateGoldStealTransfer(GoldStealEffectState *arg0) {
     if (arg0->swingAngle == 0xC00) {
         arg0->animFrameIndex = 0;
         arg0->frameTimer = 1;
-        func_80059A48_5A648((Player *)arg0->recipientPlayer, arg0->stolenGold);
+        addPlayerRaceGold((Player *)arg0->recipientPlayer, arg0->stolenGold);
         setCallback(animateGoldStealRetreat);
     }
 

@@ -201,9 +201,9 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
             /* Player has no shield - apply hit effects */
             setPlayerHomingProjectileRetaliationState(hitPlayer);
             for (i = 0; i < 3; i++) {
-                if (hitPlayer->unkB6C >= 100) {
+                if (hitPlayer->raceGold >= 100) {
                     spawnHomingProjectile(&hitPlayer->worldPos.x, hitPlayer->unkB94, &hitPlayer->velocity);
-                    func_80059A48_5A648(hitPlayer, -100);
+                    addPlayerRaceGold(hitPlayer, -100);
                 }
             }
             targetIdx = arg0->targetPlayerIdx;
@@ -1753,9 +1753,9 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
             if (player != NULL) {
                 setPlayerHomingProjectileRetaliationState(player);
                 for (i = 0; i < 3; i++) {
-                    if (player->unkB6C >= 100) {
+                    if (player->raceGold >= 100) {
                         spawnHomingProjectile(&player->worldPos.x, player->unkB94, &player->velocity);
-                        func_80059A48_5A648(player, -100);
+                        addPlayerRaceGold(player, -100);
                     }
                 }
                 arg0->hitCount = arg0->hitCount + 1;

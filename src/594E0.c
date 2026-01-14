@@ -198,19 +198,19 @@ INCLUDE_ASM("asm/nonmatchings/594E0", func_80059394_59F94);
 
 INCLUDE_ASM("asm/nonmatchings/594E0", func_800597C0_5A3C0);
 
-void func_80059A48_5A648(Player *arg0, s32 arg1) {
-    if (arg0->unkBC6 != 0) {
+void func_80059A48_5A648(Player *player, s32 amount) {
+    if (player->unkBC6 != 0) {
         return;
     }
 
-    arg0->unkB6C += arg1;
+    player->raceGold += amount;
 
-    if (arg0->unkB6C > 99999) {
-        arg0->unkB6C = 99999;
+    if (player->raceGold > 99999) {
+        player->raceGold = 99999;
     }
 
-    if (arg0->unkB6C < 0) {
-        arg0->unkB6C = 0;
+    if (player->raceGold < 0) {
+        player->raceGold = 0;
     }
 }
 
@@ -227,9 +227,9 @@ void func_80059A88_5A688(Player *arg0, s32 arg1) {
     }
 }
 
-s32 func_80059AC4_5A6C4(Player *arg0) {
-    if (!arg0->unkBC6) {
-        return arg0->unkB6C;
+s32 func_80059AC4_5A6C4(Player *player) {
+    if (!player->unkBC6) {
+        return player->raceGold;
     }
     return 0;
 }
