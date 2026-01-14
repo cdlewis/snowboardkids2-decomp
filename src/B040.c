@@ -13,18 +13,18 @@ typedef enum {
     ANIM_STATE_EASE_OUT
 } AnimState;
 
-#define FILL_STRUCT(v)       \
-    (v)->unk0 = arg0;        \
-    (v)->unk4 = arg1;        \
-    (v)->unk6 = arg2;        \
-    (v)->unk8 = arg3;        \
-    (v)->unkA = arg6;        \
-    (v)->unkB = 0;           \
-    (v)->unk10 = arg4->unk0; \
-    (v)->unk14 = arg4->unk4; \
-    (v)->unk18 = arg4->unk8; \
-    (v)->unkC = arg5;        \
-    (v)->unk1C = arg9;       \
+#define FILL_STRUCT(v)                \
+    (v)->unk0 = arg0;                 \
+    (v)->unk4 = arg1;                 \
+    (v)->unk6 = arg2;                 \
+    (v)->unk8 = arg3;                 \
+    (v)->unkA = arg6;                 \
+    (v)->unkB = 0;                    \
+    (v)->unk10 = arg4->animDuration1; \
+    (v)->unk14 = arg4->animDuration2; \
+    (v)->unk18 = arg4->animDuration3; \
+    (v)->unkC = arg5;                 \
+    (v)->unk1C = arg9;                \
     (v)->unk1E = arg10;
 
 typedef union {

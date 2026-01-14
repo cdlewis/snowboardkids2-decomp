@@ -25,31 +25,31 @@ s32 cutsceneEffectDisp_validate(void) {
 }
 
 void cutsceneEffectDisp_exec(cutsceneEffectDisp_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    Node_70B00 *temp_v0;
-    s16 temp_t0;
-    s16 temp_t1;
-    s16 temp_a3;
+    Node_70B00 *uiResource;
+    s16 slotIdx;
+    s16 posX;
+    s16 posY;
     CutsceneSlot *slots;
 
-    temp_v0 = arg1->uiResource;
-    temp_t1 = arg0->unkC;
-    temp_a3 = arg0->unkE;
-    temp_t0 = temp_v0->slot_index;
+    uiResource = arg1->uiResource;
+    posX = arg0->posX;
+    posY = arg0->posY;
+    slotIdx = uiResource->slot_index;
 
     slots = (CutsceneSlot *)arg1;
 
     spawnSpriteEffectInternal(
         slots[arg2].slotData.unkA4.ptr,
-        temp_t0,
-        temp_t1,
-        temp_a3,
+        slotIdx,
+        posX,
+        posY,
         arg0,
-        (s32)(arg0->unk10 << 16) / 100,
-        arg0->unk13,
+        (s32)(arg0->scale << 16) / 100,
+        arg0->effectType,
         1,
         0,
-        arg0->unk14,
-        arg0->unk16
+        arg0->param1,
+        arg0->param2
     );
 }
 

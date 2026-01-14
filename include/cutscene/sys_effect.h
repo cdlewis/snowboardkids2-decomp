@@ -26,16 +26,16 @@ typedef struct {
 } cutsceneEffectMLight_exec_arg;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u8 unk12;
-    s8 unk13;
-    s16 unk14;
-    s16 unk16;
+    s32 animDuration1;
+    s32 animDuration2;
+    s32 animDuration3;
+    s16 posX;
+    s16 posY;
+    s16 scale;
+    u8 pad12;
+    s8 effectType;
+    s16 param1;
+    s16 param2;
 } cutsceneEffectDisp_exec_arg;
 
 void cutsceneEffectDisp_init(void);
