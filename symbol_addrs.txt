@@ -3203,3 +3203,6 @@ gStarlightFireworkXRotations = 0x800BCAF0; // rom:0xAEEB0
 gStarlightFireworkDirections = 0x800BCB04; // rom:0xAEEC4
 gStarlightFireworkRotXSpeeds = 0x800BCB70; // rom:0xAEF30
 gStarlightFireworkRotYSpeeds = 0x800BCB84; // rom:0xAEF44
+updateStarlightFireworkSimple = 0x800BC084; // rom:0xAE444
+updateStarlightFireworkComplex = 0x800BC1AC; // rom:0xAE56C
+updateStarlightFirework = 0x800BC3D0; // rom:0xAE790

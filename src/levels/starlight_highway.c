@@ -699,78 +699,68 @@ void updateStarlightFireworkSimple(StarlightFireworkTaskState *arg0) {
     }
 }
 
-void updateStarlightFireworkComplex(StarlightFireworkTaskState *arg0) {
+void updateStarlightFireworkComplex(StarlightFireworkTaskState *firework) {
     TaskAllocationState *allocation;
     s32 i;
     s16 rotation[3][3];
     s16 pad2[4];
-    void (*callback)(StarlightFireworkTaskState *);
-    s16 timer;
-    u8 state;
-    void *posPtr;
+    u8 fireworkType;
 
     (void)pad2;
 
     allocation = getCurrentAllocation();
 
     if (allocation->paused == 0) {
-        if (arg0->lifetime != 0) {
-            arg0->pos.x = arg0->pos.x + arg0->velocity.x;
-            arg0->pos.y = arg0->pos.y + arg0->velocity.y;
-            arg0->pos.z = arg0->pos.z + arg0->velocity.z;
-            arg0->lifetime--;
+        if (firework->lifetime != 0) {
+            firework->pos.x = firework->pos.x + firework->velocity.x;
+            firework->pos.y = firework->pos.y + firework->velocity.y;
+            firework->pos.z = firework->pos.z + firework->velocity.z;
+            firework->lifetime--;
         } else {
-            state = arg0->type;
-            switch (state) {
+            fireworkType = firework->type;
+            switch (fireworkType) {
                 case 3:
                     createXRotationMatrix(rotation, 0xF300);
-                    transformVector2(gStarlightFireworkDirections[arg0->type], rotation, &arg0->velocity);
-                    callback = updateStarlightFireworkSimple;
-                    timer = 0x78;
-                    arg0->lifetime = timer;
-                    setCallbackWithContinue(callback);
+                    transformVector2(gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
+                    firework->lifetime = 0x78;
+                    setCallbackWithContinue(updateStarlightFireworkSimple);
                     break;
                 case 4:
                     createXRotationMatrix(rotation, 0xE00);
-                    transformVector2(gStarlightFireworkDirections[arg0->type], rotation, &arg0->velocity);
-                    callback = updateStarlightFirework;
-                    arg0->lifetime = 0xA;
-                    setCallbackWithContinue(callback);
+                    transformVector2(gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
+                    firework->lifetime = 0xA;
+                    setCallbackWithContinue(updateStarlightFirework);
                     break;
                 case 5:
                     createXRotationMatrix(rotation, 0xFC00);
-                    transformVector2(gStarlightFireworkDirections[arg0->type], rotation, &arg0->velocity);
-                    callback = updateStarlightFireworkSimple;
-                    timer = 0x78;
-                    arg0->lifetime = timer;
-                    setCallbackWithContinue(callback);
+                    transformVector2(gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
+                    firework->lifetime = 0x78;
+                    setCallbackWithContinue(updateStarlightFireworkSimple);
                     break;
                 case 6:
                     createXRotationMatrix(rotation, 0);
-                    transformVector2(gStarlightFireworkDirections[arg0->type], rotation, &arg0->velocity);
-                    callback = updateStarlightFirework;
-                    arg0->lifetime = 0xA;
-                    setCallbackWithContinue(callback);
+                    transformVector2(gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
+                    firework->lifetime = 0xA;
+                    setCallbackWithContinue(updateStarlightFirework);
                     break;
                 case 7:
                 case 8:
-                    spawnSparkleEffect(&arg0->pos);
+                    spawnSparkleEffect(&firework->pos);
                     func_80069CF8_6A8F8();
                     break;
                 default:
                     break;
             }
         }
-        posPtr = &arg0->pos;
-        func_8005C250_5CE50(posPtr, -1, 0x300000);
-        arg0->rotX += gStarlightFireworkRotXSpeeds[arg0->type];
-        arg0->rotY += gStarlightFireworkRotYSpeeds[arg0->type];
+        func_8005C250_5CE50(&firework->pos, -1, 0x300000);
+        firework->rotX += gStarlightFireworkRotXSpeeds[firework->type];
+        firework->rotY += gStarlightFireworkRotYSpeeds[firework->type];
     }
 
-    createCombinedRotationMatrix(arg0, arg0->rotX, arg0->rotY);
+    createCombinedRotationMatrix(firework, firework->rotX, firework->rotY);
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)firework);
     }
 }
 
