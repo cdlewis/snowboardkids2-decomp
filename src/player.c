@@ -1152,16 +1152,23 @@ musHandle startSoundEffectWithSingleFxBank(fx_header_t *fxBank, s32 fxNumber) {
     return result;
 }
 
-musHandle func_80072D64_73964(fx_header_t *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+musHandle startSoundEffectWithSingleFxBankEx(
+    fx_header_t *fxBank,
+    s32 fxNumber,
+    s32 volume,
+    s32 pan,
+    s32 restartExistingEffect,
+    s32 priority
+) {
     musHandle result;
 
-    if (arg0 != NULL) {
-        if ((s32)arg0->ptr_addr < 0) {
-            libmus_fxheader_single = arg0;
+    if (fxBank != NULL) {
+        if ((s32)fxBank->ptr_addr < 0) {
+            libmus_fxheader_single = fxBank;
         }
     }
 
-    result = startSoundEffect(arg1, arg2, arg3, arg4, arg5);
+    result = startSoundEffect(fxNumber, volume, pan, restartExistingEffect, priority);
     libmus_fxheader_single = libmus_fxheader_current;
 
     return result;
