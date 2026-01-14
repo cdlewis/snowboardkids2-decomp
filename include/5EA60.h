@@ -19,6 +19,8 @@ s32 func_8006097C_6157C(func_8006097C_6157C_arg *, s32);
 
 void initBoneAnimationState(void *animData, s32 tableIndex, s32 boneIndex, BoneAnimationState *state);
 
+s32 updateBoneAnimation(BoneAnimationState *state);
+
 void func_8005E800_5F400(BoneAnimationState *entity, u16 param_2);
 
 s32 func_8005ECB8_5F8B8(void *arg0, s32 arg1, s32 arg2, void *arg3);
