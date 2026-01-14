@@ -170,7 +170,7 @@ void updateOrbitCamera(OrbitCameraState *camera) {
     cameraMatrix.translation.x = cameraMatrix.translation.x + translationOffset.x;
     cameraMatrix.translation.y = cameraMatrix.translation.y + translationOffset.y;
     cameraMatrix.translation.z = cameraMatrix.translation.z + translationOffset.z;
-    func_8006FD3C_7093C(0x64, cameraMatrixPtr);
+    setViewportTransformById(0x64, cameraMatrixPtr);
 }
 
 void spawnOrbitCameraTask(void) {
@@ -265,7 +265,7 @@ void updateScriptedCamera(ScriptedCameraState *camera) {
     }
 
     computeLookAtMatrix(camera, &camera->targetX, cameraMatrix);
-    func_8006FD3C_7093C(0x64, cameraMatrix);
+    setViewportTransformById(0x64, cameraMatrix);
 
     if (allocation->players->unkBCA == 0) {
         queueBufferDataNoFlags(cameraMatrix, 0);

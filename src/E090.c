@@ -196,7 +196,7 @@ void loadLogoScreenAssets(void) {
     setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     func_8006FEF8_70AF8(node, 1);
     func_8006BEDC_6CADC(&nodeParams, 0, 0, 0x01000000, 0, 0, 0);
-    func_8006FD3C_7093C(logoScreen->unk8.id, &nodeParams);
+    setViewportTransformById(logoScreen->unk8.id, &nodeParams);
     func_8006FE28_70A28(node, 0, 0, 0);
     func_8006FDA0_709A0(node, 0xFF, 0);
     setGameStateHandler(updateLogoScreen);

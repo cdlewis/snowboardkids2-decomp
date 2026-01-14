@@ -184,7 +184,7 @@ void func_8001E5EC_1F1EC(void) {
     initMenuCameraNode(&alloc->unk0, 9, 0x14, 0);
     setModelCameraTransform(&alloc->unk0, 0, -8, -0x98, -0x70, 0x97, 0x6F);
     func_8006BEDC_6CADC(sp20Ptr, 0, 0, 0x800000, 0, 0, 0);
-    func_8006FD3C_7093C(alloc->unk0.id, sp20Ptr);
+    setViewportTransformById(alloc->unk0.id, sp20Ptr);
 
     initMenuCameraNode(&alloc->unk1D8, 8, 0xF, 1);
     setModelCameraTransform(&alloc->unk1D8, 0, -8, -0x98, -0x70, 0x97, 0x6F);

@@ -257,7 +257,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     offsetTransform.translation.z = state->cameraDistance;
 
     func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
-    func_8006FD3C_7093C(allocation->unk48A, &cameraTransform);
+    setViewportTransformById(allocation->unk48A, &cameraTransform);
     setCallback(func_8001FA00_20600);
 }
 
@@ -313,7 +313,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     func_8006B084_6BC84(&offsetTransform, lookAtTransform, cameraTransform);
 
-    func_8006FD3C_7093C(allocation->unk48A, cameraTransform);
+    setViewportTransformById(allocation->unk48A, cameraTransform);
 
     setCallback(&func_8001FFE4_20BE4);
 }

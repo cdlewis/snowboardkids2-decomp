@@ -77,7 +77,7 @@ typedef struct Node_70B00 {
     /* 0xD8 */ u16 perspNorm;
     /* 0xDA */ u16 id;
     /* 0xE0 */ Mtx perspectiveMatrix;
-    u8 padding4[0x20];
+    u8 modelingMatrix[0x20];
     u16 unk140;
     u8 padding140[6];
     Node_70B00_ColorData unk148[1];
@@ -121,7 +121,7 @@ void func_8006DC40_6E840(void);
 
 void func_8006FEF8_70AF8(Node_70B00 *, u16);
 
-void func_8006FD3C_7093C(u16, void *);
+void setViewportTransformById(u16 viewportId, void *transformMatrix);
 
 void initViewportNode(Node_70B00 *node, Node_70B00 *parent, s32 slotIndex, s32 priority, s32 flags);
 

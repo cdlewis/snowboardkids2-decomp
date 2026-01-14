@@ -86,7 +86,7 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     temp_s0 = &sp10;
     memcpy(arg0, temp_s0, 0x20);
     queueAnonymousBufferData(temp_s0);
-    func_8006FD3C_7093C(arg0->nodeId, temp_s0);
+    setViewportTransformById(arg0->nodeId, temp_s0);
 }
 
 extern s32 gControllerInputs[];

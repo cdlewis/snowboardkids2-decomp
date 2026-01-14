@@ -302,7 +302,7 @@ void initTitleScreen(void) {
     setModelCameraTransform(state, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     initMenuCameraNode(node2, 0, 8, 0);
     func_8006FA0C_7060C(node2, 40.0f, 1.3333334f, 10.0f, 10000.0f);
-    func_8006FD3C_7093C(node2->id, &gTitleCameraSettings);
+    setViewportTransformById(node2->id, &gTitleCameraSettings);
     state->titleLogoData = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
     dmaResult = loadCompressedData(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
     state->menuSelection = 0;

@@ -107,7 +107,7 @@ void initCutsceneRenderer(void) {
     func_8006BEDC_6CADC(lightBuffer, 0, 0, 0x01000000, 0, 0, 0);
 
     overlayNodePtr = &s.taskMemory->overlayNode;
-    func_8006FD3C_7093C(s.taskMemory->sceneNode.id, lightBuffer);
+    setViewportTransformById(s.taskMemory->sceneNode.id, lightBuffer);
     func_8006FDA0_709A0(NULL, 0, 0);
 
     nodePtr = overlayNodePtr;

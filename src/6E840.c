@@ -433,7 +433,7 @@ void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s3
     arg0->unkD2 = 0x1E0;
     arg0->unkD4 = 0x1FF;
     arg0->unkD6 = 0;
-    memcpy(arg0->padding4, identityMatrix, 0x20);
+    memcpy(arg0->modelingMatrix, identityMatrix, 0x20);
     guPerspective(&arg0->perspectiveMatrix, &arg0->perspNorm, 30.0f, 1.3333334f, 20.0f, 2000.0f, 1.0f);
     arg0->padding1CF = 0xFF;
     arg0->unk1C8 = 0x3DE;
@@ -485,14 +485,14 @@ void setViewportLightColors(u16 viewportId, u16 colorCount, ColorData *lightColo
     }
 }
 
-void func_8006FD3C_7093C(u16 arg0, void *arg1) {
+void setViewportTransformById(u16 viewportId, void *transformMatrix) {
     Node_70B00 *node;
 
     node = D_800A3370_A3F70.unk8.list2_next;
 
     while (node != NULL) {
-        if (node->id == arg0) {
-            memcpy(node->padding4, arg1, 0x20);
+        if (node->id == viewportId) {
+            memcpy(node->modelingMatrix, transformMatrix, 0x20);
         }
         node = node->unk8.list2_next;
     }

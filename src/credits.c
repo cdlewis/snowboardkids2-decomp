@@ -279,7 +279,7 @@ void func_80003EE0_4AE0(void) {
     func_8006FEF8_70AF8(&taskMemory->unk768, 1);
     func_8006FA0C_7060C(&taskMemory->unk768, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     func_8006BEDC_6CADC(buffer, 0, 0, 0x01400000, 0, 0, 0);
-    func_8006FD3C_7093C(taskMemory->unk768.id, buffer);
+    setViewportTransformById(taskMemory->unk768.id, buffer);
     func_8006FE28_70A28(&taskMemory->unk8, 0, 0, 0);
     func_8006FDA0_709A0(&taskMemory->unk8, 0, 0);
     func_8006FDA0_709A0(&taskMemory->unk1E0, 0, 0);
@@ -430,7 +430,7 @@ void initCreditsCharacter(CreditsCharacter *character) {
         );
     }
 
-    func_8006FD3C_7093C(creditsState->unk768.id, cameraTransform);
+    setViewportTransformById(creditsState->unk768.id, cameraTransform);
 
     setCleanupCallback(cleanupCreditsCharacter);
     setCallback(updateCreditsCharacter);

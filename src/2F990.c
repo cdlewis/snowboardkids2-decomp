@@ -220,7 +220,7 @@ void updateDebugCameraYState(cameraState *arg0) {
         arg0->cameraY++;
     }
     func_8006BEDC_6CADC(&sp20, 0, arg0->cameraY << 0x10, 0x600000, 0, (s32)(arg0->cameraRotation), 0);
-    func_8006FD3C_7093C(temp_s0->unkDA, &sp20);
+    setViewportTransformById(temp_s0->unkDA, &sp20);
 
     cameraYString = &arg0->unk3E;
     sprintf(cameraYString, "CAMERA Y = %d", arg0->cameraY);
