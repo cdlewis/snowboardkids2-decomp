@@ -2972,7 +2972,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleTask(&initSwingingPendulumTrap, 0, 0, 0x32);
-            scheduleTask(&func_800BBE84_AFB74, 0, 0, 0x32);
+            scheduleTask(&initFloatingBillboardSpawner, 0, 0, 0x32);
             spawnPushZone(6);
             spawnPushZone(7);
             func_800BC0FC(0);

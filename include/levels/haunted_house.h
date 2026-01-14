@@ -37,7 +37,7 @@ void initGhostSpawnerTask(GhostSpawnerTask *arg0);
 
 void initSwingingPendulumTrap(SwingingPendulumTrap *arg0);
 
-void func_800BBE84_AFB74(s16 *arg0);
+void initFloatingBillboardSpawner(s16 *spawnTimer);
 
 void func_800BC13C_AFE2C(GhostManager *ghostManager);
 
