@@ -157,11 +157,11 @@ s32 tryActivateFinishBoost(Player *arg0) {
     return 0;
 }
 
-s32 func_80058C10_59810(Player *arg0) {
-    if (arg0->unkBD1 == 0) {
-        if (spawnGhostEffect(arg0) != NULL) {
-            arg0->unkBD1 = 1;
-            arg0->unkBA6 = 300;
+s32 tryActivateGhostEffect(Player *player) {
+    if (player->ghostEffectState == 0) {
+        if (spawnGhostEffect(player) != NULL) {
+            player->ghostEffectState = 1;
+            player->ghostEffectTimer = 300;
             return 1;
         }
     }

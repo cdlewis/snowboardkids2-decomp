@@ -1764,24 +1764,24 @@ void updateGhostEffect(GhostEffectState *arg0) {
 
     player = arg0->player;
     if (player->unkB84 & 0x80000) {
-        player->unkBA6 = 0;
+        player->ghostEffectTimer = 0;
     }
 
     temp_player = arg0->player;
-    count = temp_player->unkBA6;
+    count = temp_player->ghostEffectTimer;
     if (count != 0) {
         if (allocation->unk76 == 0) {
-            temp_player->unkBA6 = count - 1;
+            temp_player->ghostEffectTimer = count - 1;
             player = arg0->player;
-            new_count = player->unkBA6;
+            new_count = player->ghostEffectTimer;
             if (new_count == 0) {
                 if (player->unkBBB == 0x11) {
-                    player->unkBA6 = new_count + 1;
+                    player->ghostEffectTimer = new_count + 1;
                 }
             }
         }
     } else {
-        temp_player->unkBD1 = 0;
+        temp_player->ghostEffectState = 0;
         arg0->velocityY = 0x40000;
         setCallback(fadeOutGhostEffect);
     }

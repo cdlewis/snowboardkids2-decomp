@@ -162,7 +162,7 @@ typedef struct {
     u16 unkBA0;
     s16 unkBA2;
     u16 unkBA4;
-    s16 unkBA6;
+    s16 ghostEffectTimer;
     u8 _padBA8[0x2];
     s16 trickPoints;
     s16 trickScore;
@@ -198,7 +198,7 @@ typedef struct {
     u8 unkBCE;
     u8 unkBCF;
     u8 boostState;
-    u8 unkBD1;
+    u8 ghostEffectState;
     u8 unkBD2;
     u8 unkBD3;
     u8 unkBD4;
