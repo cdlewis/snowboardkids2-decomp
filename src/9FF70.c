@@ -885,8 +885,8 @@ s32 tryFinalizeTrickLanding(Player *player) {
 
     if (player->trickScore != 0) {
         func_80059A48_5A648(player, player->trickScore);
-        if (player->unkBC7 == 0) {
-            showTrickScoreDisplay(player->unkBB8, player->trickScore);
+        if (player->isBossRacer == 0) {
+            showTrickScoreDisplay(player->playerIndex, player->trickScore);
 
             scoreValue = player->trickScore;
             if (scoreValue < 0x96) {
@@ -2514,7 +2514,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
         arg0->unkB8C = 0x1E;
         arg0->unkA8C = 0xFFFF;
         arg0->unkB84 |= 0x20;
-        arg0->unkBCE &= 0xFE;
+        arg0->ufoFlags &= 0xFE;
         func_8005D308_5DF08(arg0, 0xE);
     }
     if (arg0->behaviorStep == 1) {
@@ -2526,7 +2526,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
     arg0->velocity.y -= 0x6000;
     decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
-    if (arg0->unkBCE & 1) {
+    if (arg0->ufoFlags & 1) {
         arg0->unkB8C = 0;
     }
     if (arg0->unkB8C == 0) {
@@ -3012,7 +3012,7 @@ s32 slideDiagonallyDuringKnockbackRecoveryStep(Player *player) {
     if (player->unkB8C != 0) {
         player->unkB8C--;
         if (player->unkB8C == 0x11) {
-            func_8006FDC8_709C8(player->unkBB8, 0xFF, 0x10);
+            func_8006FDC8_709C8(player->playerIndex, 0xFF, 0x10);
         }
     } else {
         player->behaviorStep++;
@@ -3038,7 +3038,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
         player->unkB94 = 0;
         player->unkB84 = player->unkB84 | 0x200;
         player->behaviorCounter++;
-        player->unkBC5++;
+        player->currentLap++;
 
         createYRotationMatrix(&player->unk970, 0x1000);
         transformVector2(&g_FinishLineRespawnOffset, &player->unk970, &sp10);
@@ -3049,14 +3049,14 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
 
         memcpy(&player->unk440, &player->worldPos, sizeof(Vec3i));
 
-        player->unkBC3 = 1;
+        player->finishAnimState = 1;
         player->unkB8C = 0x32;
 
-        func_8006FDC8_709C8(player->unkBB8, 0, 0x10);
+        func_8006FDC8_709C8(player->playerIndex, 0, 0x10);
 
-        if (player->unkBC7 == 0) {
-            if (player->unkBC5 == gameState->unk74) {
-                showGoalBanner(player->unkBB8);
+        if (player->isBossRacer == 0) {
+            if (player->currentLap == gameState->unk74) {
+                showGoalBanner(player->playerIndex);
             }
         }
     }
@@ -3164,38 +3164,38 @@ s32 restoreStoredPositionStep(Player *arg0) {
     return 0;
 }
 
-s32 func_800B724C_A70FC(Player *arg0) {
-    GameState *alloc;
+s32 handleUfoStoredPositionStep(Player *player) {
+    GameState *gameState;
     u8 flags;
 
-    alloc = (GameState *)getCurrentAllocation();
-    arg0->worldPos.x = arg0->storedPosX;
-    arg0->worldPos.y = arg0->storedPosY;
-    arg0->worldPos.z = arg0->storedPosZ;
-    arg0->unkA8E = arg0->storedRotY;
-    flags = arg0->unkBCE;
+    gameState = getCurrentAllocation();
+    player->worldPos.x = player->storedPosX;
+    player->worldPos.y = player->storedPosY;
+    player->worldPos.z = player->storedPosZ;
+    player->unkA8E = player->storedRotY;
+    flags = player->ufoFlags;
 
     if (flags & 8) {
-        arg0->unkBCE = flags & 0xF7;
-        func_8006FDC8_709C8(arg0->unkBB8, 0xFF, 0x10);
+        player->ufoFlags = flags & 0xF7;
+        func_8006FDC8_709C8(player->playerIndex, 0xFF, 0x10);
     }
 
-    if (arg0->unkBCE & 2) {
-        arg0->unkA94 = 0x1000;
-        arg0->unkB9C = 0;
-        arg0->unkB94 = 0;
-        arg0->behaviorStep++;
-        arg0->unkB84 |= 0x200;
-        arg0->unkBC5++;
-        memcpy(&arg0->unk440, &arg0->worldPos.x, 0xC);
-        arg0->unkBC3 = 1;
-        func_8006FDC8_709C8(arg0->unkBB8, 0, 0x10);
-        if (arg0->unkBC7 == 0 && arg0->unkBC5 == alloc->unk74) {
-            showGoalBanner(arg0->unkBB8);
+    if (player->ufoFlags & 2) {
+        player->unkA94 = 0x1000;
+        player->unkB9C = 0;
+        player->unkB94 = 0;
+        player->behaviorStep++;
+        player->unkB84 |= 0x200;
+        player->currentLap++;
+        memcpy(&player->unk440, &player->worldPos.x, 0xC);
+        player->finishAnimState = 1;
+        func_8006FDC8_709C8(player->playerIndex, 0, 0x10);
+        if (player->isBossRacer == 0 && player->currentLap == gameState->unk74) {
+            showGoalBanner(player->playerIndex);
         }
     }
 
-    func_8005D308_5DF08(arg0, 0);
+    func_8005D308_5DF08(player, 0);
 
     return 0;
 }
@@ -3208,7 +3208,7 @@ s32 func_800B735C_A720C(Player *arg0) {
 
     func_8005D308_5DF08(arg0, 0);
 
-    if (arg0->unkBCE & 0x4) {
+    if (arg0->ufoFlags & 0x4) {
         arg0->unkB8C = 6;
         arg0->behaviorStep = arg0->behaviorStep + 1;
     }
@@ -3359,7 +3359,7 @@ s32 func_800B76BC_A756C(Player *arg0) {
     if (arg0->unkBA0 == 0) {
         arg0->unkB8C = 0x11;
         arg0->behaviorStep = arg0->behaviorStep + 1;
-        func_8006FDC8_709C8(arg0->unkBB8, 0xFF, 0x10);
+        func_8006FDC8_709C8(arg0->playerIndex, 0xFF, 0x10);
         alloc->unk81 = alloc->unk81 + 1;
         func_800BBB90(1);
     }
@@ -3408,7 +3408,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
         arg0->unkB94 = 0;
         arg0->unkB84 |= 0x200;
         arg0->behaviorCounter++;
-        arg0->unkBC5++;
+        arg0->currentLap++;
 
         createYRotationMatrix(&arg0->unk970, 0xE00);
 
@@ -3418,12 +3418,12 @@ s32 func_800B781C_A76CC(Player *arg0) {
 
         memcpy(&arg0->unk440, &arg0->worldPos.x, 0xC);
 
-        arg0->unkBC3 = 2;
-        func_8006FDC8_709C8(arg0->unkBB8, 0, 0x10);
+        arg0->finishAnimState = 2;
+        func_8006FDC8_709C8(arg0->playerIndex, 0, 0x10);
 
-        if (arg0->unkBC7 == 0) {
-            if (arg0->unkBC5 == gameState->unk74) {
-                showGoalBanner(arg0->unkBB8);
+        if (arg0->isBossRacer == 0) {
+            if (arg0->currentLap == gameState->unk74) {
+                showGoalBanner(arg0->playerIndex);
             }
         }
 
@@ -3596,7 +3596,7 @@ void func_800B99E0(void *varg0) {
 
     arg0->unk18 = load_3ECE40();
 
-    if (arg0->unkBC7 != 0) {
+    if (arg0->isBossRacer != 0) {
         arg0->unk1C = func_8005DC60_5E860(alloc->unk5C);
     }
 

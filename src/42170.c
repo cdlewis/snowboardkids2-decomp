@@ -435,8 +435,8 @@ void updateShieldEffect(ShieldEffectState *arg0) {
     effectPos.z = arg0->player->worldPos.z;
     effectPos.y = effectPos.y + 0xFFFE0000;
 
-    if (func_8005B9E4_5C5E4(&effectPos, 0x180000, 0x320000, arg0->player->unkBB8) != 0) {
-        arg0->player->unkBCE |= 1;
+    if (func_8005B9E4_5C5E4(&effectPos, 0x180000, 0x320000, arg0->player->playerIndex) != 0) {
+        arg0->player->ufoFlags |= 1;
     }
     arg0->unk30 = 0;
 

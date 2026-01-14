@@ -326,7 +326,7 @@ void func_800BBB1C_AB9CC(s16 *arg0) {
     s32 i;
 
     for (i = 0; i < gameState->unk5F; i++) {
-        if (gameState->players[i].unkBC5 == *arg0) {
+        if (gameState->players[i].currentLap == *arg0) {
             if ((u16)(gameState->players[i].unkB94 - 0x95) < 0xD) {
                 *arg0 = *arg0 + 1;
                 func_80058530_59130(0x4D, 6);

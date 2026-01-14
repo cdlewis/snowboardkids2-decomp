@@ -441,7 +441,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
             if (arg0->behaviorCounter != 0) {
                 if (arg0->behaviorStep == 2) {
                     arg0->behaviorCounter = arg0->behaviorCounter - 1;
-                    if (spawnPlayerGuidedStarProjectile(arg0->unkBB8) != 0) {
+                    if (spawnPlayerGuidedStarProjectile(arg0->playerIndex) != 0) {
                         func_8005182C_5242C(arg0);
                     }
 
@@ -456,7 +456,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                     }
                 } else {
                     arg0->behaviorCounter = arg0->behaviorCounter - 1;
-                    if (spawnRandomEffectProjectile(arg0->unkBB8) != 0) {
+                    if (spawnRandomEffectProjectile(arg0->playerIndex) != 0) {
                         func_8005182C_5242C(arg0);
                     }
 
@@ -474,7 +474,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                         arg0->worldPos.z - player->worldPos.z
                     ) <= 0xDFFFFF) {
                     // Close range
-                    if (spawnPlayerGuidedStarProjectile(arg0->unkBB8) != 0) {
+                    if (spawnPlayerGuidedStarProjectile(arg0->playerIndex) != 0) {
                         func_8005182C_5242C(arg0);
                     }
 
@@ -492,7 +492,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                     }
                 } else {
                     // Far range
-                    if (spawnRandomEffectProjectile(arg0->unkBB8) != 0) {
+                    if (spawnRandomEffectProjectile(arg0->playerIndex) != 0) {
                         func_8005182C_5242C(arg0);
                     }
 
@@ -632,7 +632,7 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
             }
             memcpy(&sp30, &arg0->worldPos, sizeof(Vec3i));
             sp30.y += 0x300000;
-            spawnSparkleEffectWithPlayer(&sp30, arg0->unkBB8);
+            spawnSparkleEffectWithPlayer(&sp30, arg0->playerIndex);
             func_800BB910_B0E00(arg0);
             arg0->unkBDB = 3;
             func_8005D180_5DD80(arg0, 2);

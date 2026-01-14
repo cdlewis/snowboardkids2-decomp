@@ -1006,7 +1006,7 @@ void enqueuePlayerDisplayList(PlayerDisplayListState *state) {
         playerIndex = state->playerIndex;
         players = gameState->players;
 
-        playerSyncValue = players[playerIndex].unkBC5;
+        playerSyncValue = players[playerIndex].currentLap;
         expectedSyncValue = gameState->unk74;
 
         if (playerSyncValue == expectedSyncValue) {
@@ -2120,11 +2120,11 @@ loop:
         goto loop;
 
     for (i = 0; i < 2; i++) {
-        enqueueTexturedBillboardSprite(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
+        enqueueTexturedBillboardSprite(state->player->playerIndex, (TexturedBillboardSprite *)&state->elements[i]);
     }
 
     for (i = 2; i < 5; i++) {
-        enqueueTexturedBillboardSpriteTile(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
+        enqueueTexturedBillboardSpriteTile(state->player->playerIndex, (TexturedBillboardSprite *)&state->elements[i]);
     }
 }
 
@@ -2164,7 +2164,7 @@ void updatePlayerHaloAnimating(PlayerHaloState *state) {
             setCallback(updatePlayerHaloDescending);
         }
 
-        if (state->player->unkBB8 != 0) {
+        if (state->player->playerIndex != 0) {
             goto position_loop;
         }
         tableIdx = (s16)state->animationIndex * 2;
@@ -2194,11 +2194,11 @@ loop2:
         goto loop2;
 
     for (i = 0; i < 2; i++) {
-        enqueueTexturedBillboardSprite(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
+        enqueueTexturedBillboardSprite(state->player->playerIndex, (TexturedBillboardSprite *)&state->elements[i]);
     }
 
     for (i = 2; i < 5; i++) {
-        enqueueTexturedBillboardSpriteTile(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
+        enqueueTexturedBillboardSpriteTile(state->player->playerIndex, (TexturedBillboardSprite *)&state->elements[i]);
     }
 }
 
@@ -2234,11 +2234,11 @@ loop:
         goto loop;
 
     for (i = 0; i < 2; i++) {
-        enqueueTexturedBillboardSprite(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
+        enqueueTexturedBillboardSprite(state->player->playerIndex, (TexturedBillboardSprite *)&state->elements[i]);
     }
 
     for (i = 2; i < 5; i++) {
-        enqueueTexturedBillboardSpriteTile(state->player->unkBB8, (TexturedBillboardSprite *)&state->elements[i]);
+        enqueueTexturedBillboardSpriteTile(state->player->playerIndex, (TexturedBillboardSprite *)&state->elements[i]);
     }
 }
 
@@ -3230,7 +3230,7 @@ void initPanelProjectileMovement(PanelProjectileInitArg *arg0) {
     temp_s1 = &arg0->metadata.position;
     memcpy(temp_s1, &player->unk31C, sizeof(Vec3i));
     arg0->sectorIndex = arg0->player->unkB94;
-    arg0->playerIndex = (s16)arg0->player->unkBB8;
+    arg0->playerIndex = (s16)arg0->player->playerIndex;
     memcpy(&arg0->velX, &arg0->player->velocity, sizeof(Vec3i));
     arg0->initFlag = 1;
     arg0->velY = arg0->velY + 0x28000;

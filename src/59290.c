@@ -265,7 +265,7 @@ void applyCharacterBoardStats(Player *player) {
     player->unkAC1 = boardStats[charId].param2 + 1;
     player->unkAB0 = (boardStats[charId].param3 << 15) / 100 + 0x1000;
 
-    if (player->unkBC7 != 0) {
+    if (player->isBossRacer != 0) {
         player->unkAB0 = 0xC000;
     }
 

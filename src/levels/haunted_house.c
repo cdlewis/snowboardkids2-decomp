@@ -749,7 +749,7 @@ void func_800BC750_B0440(s16 *targetLap) {
         player = (Player *)((u32)playerOffset + (u32)gameState->players);
         lapValue = *targetLap;
 
-        if (player->unkBC5 == lapValue) {
+        if (player->currentLap == lapValue) {
             if ((u32)(player->unkB94 - 7) < 4) {
                 *targetLap = lapValue + 1;
                 func_80058530_59130(0xC, 6);

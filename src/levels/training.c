@@ -117,7 +117,7 @@ void func_800BB320_B5C00(func_800BB5CC_state *arg0) {
             }
             goto do_action;
         case 12:
-            if ((state->players->unkBC5 == 0) || (state->players->unkB94 == 0)) {
+            if ((state->players->currentLap == 0) || (state->players->unkB94 == 0)) {
                 break;
             }
             goto do_action;

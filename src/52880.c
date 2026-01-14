@@ -215,8 +215,8 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
             /* Player has shield - reflect projectile */
             velY = arg0->vel.y;
             velZ = (velZ_temp = arg0->vel.z);
-            arg0->ownerPlayerIdx = hitPlayer->unkBB8;
-            playerIdx = hitPlayer->unkBB8;
+            arg0->ownerPlayerIdx = hitPlayer->playerIndex;
+            playerIdx = hitPlayer->playerIndex;
             arg0->vel.y = -velY;
             velX = arg0->vel.x;
             arg0->vel.x = -velX;
@@ -434,8 +434,8 @@ void checkParachuteProjectileHit(Struct_52880 *arg0) {
     } else {
         v28 = arg0->vel.y;
         v2C = (new_var = arg0->vel.z);
-        arg0->ownerPlayerIdx = result->unkBB8;
-        arg0->targetPlayerIdx = result->unkBB8;
+        arg0->ownerPlayerIdx = result->playerIndex;
+        arg0->targetPlayerIdx = result->playerIndex;
         arg0->vel.y = -v28;
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
@@ -650,8 +650,8 @@ void checkFryingPanProjectileHit(Struct_52880 *arg0) {
     } else {
         v28 = arg0->vel.y;
         v2C = (new_var = arg0->vel.z);
-        arg0->ownerPlayerIdx = result->unkBB8;
-        arg0->targetPlayerIdx = result->unkBB8;
+        arg0->ownerPlayerIdx = result->playerIndex;
+        arg0->targetPlayerIdx = result->playerIndex;
         arg0->vel.y = -v28;
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
@@ -873,8 +873,8 @@ void checkSnowmanProjectileHit(Struct_52880 *arg0) {
     } else {
         v28 = arg0->vel.y;
         v2C = (new_var = arg0->vel.z);
-        arg0->ownerPlayerIdx = result->unkBB8;
-        arg0->targetPlayerIdx = result->unkBB8;
+        arg0->ownerPlayerIdx = result->playerIndex;
+        arg0->targetPlayerIdx = result->playerIndex;
         arg0->vel.y = -v28;
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;
@@ -1097,8 +1097,8 @@ void checkStarProjectileHit(Struct_52880 *arg0) {
                 func_80059C24_5A824(&allocation->players[arg0->targetPlayerIdx]);
             }
         } else {
-            arg0->ownerPlayerIdx = player->unkBB8;
-            temp = player->unkBB8;
+            arg0->ownerPlayerIdx = player->playerIndex;
+            temp = player->playerIndex;
             arg0->vel.x = -arg0->vel.x;
             arg0->vel.y = -arg0->vel.y;
             arg0->vel.z = -arg0->vel.z;
@@ -1319,8 +1319,8 @@ void checkHomingPanelProjectileHit(Struct_52880 *arg0) {
     } else {
         v28 = arg0->vel.y;
         v2C = (new_var = arg0->vel.z);
-        arg0->ownerPlayerIdx = result->unkBB8;
-        arg0->targetPlayerIdx = result->unkBB8;
+        arg0->ownerPlayerIdx = result->playerIndex;
+        arg0->targetPlayerIdx = result->playerIndex;
         arg0->vel.y = -v28;
         v24 = arg0->vel.x;
         arg0->vel.x = -v24;

@@ -526,7 +526,7 @@ void initPlayerLapCounterTask(LapCounterState *state) {
 
 void updatePlayerLapCounterSinglePlayer(LapCounterSinglePlayerState *state) {
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, state);
-    state->currentLap = state->player->unkBC5 + 1;
+    state->currentLap = state->player->currentLap + 1;
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010240_10E40, &state->digitX1);
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, &state->digitX2);
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010240_10E40, &state->digitX3);
@@ -534,7 +534,7 @@ void updatePlayerLapCounterSinglePlayer(LapCounterSinglePlayerState *state) {
 
 void updatePlayerLapCounterMultiplayer(LapCounterMultiplayerState *state) {
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, state);
-    state->unk3C = state->player->unkBC5 + 0x31;
+    state->unk3C = state->player->currentLap + 0x31;
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->unk30);
 }
 
@@ -1360,7 +1360,7 @@ void initTotalLapDisplayTask(TotalLapDisplayState *state) {
     state->spriteIndex = 0x16;
     state->x = 0;
 
-    if (global->unk9[state->player->unkBB8 + 0x11] < 10) {
+    if (global->unk9[state->player->playerIndex + 0x11] < 10) {
         state->x = -4;
     }
 
@@ -1387,16 +1387,16 @@ void updateTotalLapDisplay(TotalLapDisplayState *state) {
 
     player = state->player;
     if (player->finishPosition == 0 && (gFrameCounter & 1)) {
-        lapCount = D_800AFE8C_A71FC->unk9[player->unkBB8 + 0x11];
+        lapCount = D_800AFE8C_A71FC->unk9[player->playerIndex + 0x11];
         sprintf(buffer, D_8009E89C_9F49C, lapCount);
     } else {
-        lapCount = D_800AFE8C_A71FC->unk9[state->player->unkBB8 + 0x11];
+        lapCount = D_800AFE8C_A71FC->unk9[state->player->playerIndex + 0x11];
         sprintf(buffer, D_8009E8A0_9F4A0, lapCount);
     }
 
     state->unkE = (u8)state->alpha;
 
-    debugEnqueueCallback(state->player->unkBB8 + 8, 6, func_80012518_13118, state);
+    debugEnqueueCallback(state->player->playerIndex + 8, 6, func_80012518_13118, state);
 
     drawNumericString(
         buffer,
@@ -1404,7 +1404,7 @@ void updateTotalLapDisplay(TotalLapDisplayState *state) {
         state->y,
         state->alpha,
         state->digitAsset,
-        (s16)(state->player->unkBB8 + 8),
+        (s16)(state->player->playerIndex + 8),
         6
     );
 }
@@ -1821,7 +1821,7 @@ void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0) {
     char buf[16];
 
     sprintf(buf, D_8009E8A8_9F4A8, arg0->player->unkBD3);
-    drawNumericString(buf, -0x70, -0x54, 0xFF, arg0->digitAsset, arg0->player->unkBB8 + 8, 0);
+    drawNumericString(buf, -0x70, -0x54, 0xFF, arg0->digitAsset, arg0->player->playerIndex + 8, 0);
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->hudX);
 }

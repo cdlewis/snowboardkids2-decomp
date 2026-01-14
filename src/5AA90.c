@@ -76,7 +76,7 @@ s32 func_8005A9A8_5B5A8(Player *arg0) {
         return 0;
     }
 
-    if (arg0->unkBC5 == allocation->unk74) {
+    if (arg0->currentLap == allocation->unk74) {
         return 0;
     }
 
@@ -141,7 +141,7 @@ void func_8005AB58_5B758(Player *player) {
         targetPlayer = &allocation->players[playerIndex];
 
         /* Skip collision if players are on the same team */
-        if (player->unkBB8 == targetPlayer->unkBB8) {
+        if (player->playerIndex == targetPlayer->playerIndex) {
             continue;
         }
 
@@ -229,7 +229,7 @@ void func_8005AE8C_5BA8C(Player *player) {
     targetPlayer = players + 1;
 
     /* Skip collision if players are on the same team */
-    if (player->unkBB8 == targetPlayer->unkBB8) {
+    if (player->playerIndex == targetPlayer->playerIndex) {
         return;
     }
     /* Skip if either player has collision disabled (flag 0x10) */
@@ -581,7 +581,7 @@ s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
         targetPlayer = &allocation->players[playerIndex];
 
         /* Skip collision if players are on the same team */
-        if (arg3 == targetPlayer->unkBB8) {
+        if (arg3 == targetPlayer->playerIndex) {
             continue;
         }
 
@@ -931,7 +931,7 @@ s16 func_8005CE98_5DA98(Player *arg0) {
     elem = (Section3Element *)(arg0->unkB94 * 0x24 + (u32)allocation->gameData.section3Data);
 
     if (elem->unk0 < 0) {
-        if (allocation->unk74 == arg0->unkBC5) {
+        if (allocation->unk74 == arg0->currentLap) {
             Section1Element *section1Data = (Section1Element *)allocation->gameData.section1Data;
             Section1Element *v1 = (Section1Element *)(elem->unk1C * 6 + (u32)section1Data);
             Section1Element *v2 = (Section1Element *)(elem->unk16 * 6 + (u32)section1Data);
