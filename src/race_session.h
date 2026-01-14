@@ -129,7 +129,7 @@ void setPlayerStarHitState(Player *player, Vec3i *hitPosition);
 void setPlayerPanelHitState(Player *arg0);
 void func_80059A48_5A648(Player *player, s32 amount);
 #define addPlayerRaceGold func_80059A48_5A648  // Readable alias
-void func_80059A88_5A688(Player *arg0, s32 arg1);
+void addPlayerSkillPoints(Player *player, s32 amount);
 s32 func_80059AC4_5A6C4(Player *player);
 #define getPlayerRaceGold func_80059AC4_5A6C4  // Readable alias
 u8 getItemStat1(u8 itemIndex);

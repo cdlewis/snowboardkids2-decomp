@@ -1446,7 +1446,7 @@ void handleMeterGameResult(void) {
             terminateTasksByTypeAndID(0, 1);
             spawnShotCrossSkillMeterDisplayTask(1);
 
-            meterValue = state->players->unkB70;
+            meterValue = state->players->skillPoints;
             goldReward = ((meterValue * 2 + meterValue) * 8 + meterValue) * 2;
 
             if (meterValue >= 0x12C) {
@@ -1457,7 +1457,7 @@ void handleMeterGameResult(void) {
 
                 goldReward += 0x1388;
 
-                if (state->players->unkB70 >= 0x258) {
+                if (state->players->skillPoints >= 0x258) {
                     D_800A24A0_A30A0 = 8;
                 }
             } else {

@@ -915,7 +915,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
     if (state->unk7A == 6) {
         if (player->trickPoints != 0) {
             func_8004FCF0_508F0(player->trickPoints);
-            func_80059A88_5A688(player, player->trickPoints);
+            addPlayerSkillPoints(player, player->trickPoints);
 
             scoreValue = player->trickPoints;
             if (scoreValue < 0xF) {
@@ -1468,7 +1468,7 @@ s32 updateRaceFinishWaitingStep(Player *player) {
                 }
                 break;
             case 6:
-                if ((gameState->unk7D == 0) && (player->unkB70 >= 0x12C)) {
+                if ((gameState->unk7D == 0) && (player->skillPoints >= 0x12C)) {
                     playerWon = 1;
                 }
                 break;

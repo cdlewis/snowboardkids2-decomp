@@ -214,16 +214,16 @@ void func_80059A48_5A648(Player *player, s32 amount) {
     }
 }
 
-void func_80059A88_5A688(Player *arg0, s32 arg1) {
-    if (arg0->unkBC6 != 0) {
+void addPlayerSkillPoints(Player *player, s32 amount) {
+    if (player->unkBC6 != 0) {
         return;
     }
-    arg0->unkB70 += arg1;
-    if (arg0->unkB70 >= 10000) {
-        arg0->unkB70 = 9999;
+    player->skillPoints += amount;
+    if (player->skillPoints >= 10000) {
+        player->skillPoints = 9999;
     }
-    if (arg0->unkB70 < 0) {
-        arg0->unkB70 = 0;
+    if (player->skillPoints < 0) {
+        player->skillPoints = 0;
     }
 }
 

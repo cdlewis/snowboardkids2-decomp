@@ -1135,7 +1135,7 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
             arg0->goldAmount = shotCrossScore * 0x12C;
             break;
         case 6:
-            meterValue = gameState->players->unkB70;
+            meterValue = gameState->players->skillPoints;
             arg0->x = 0x10;
             arg0->y = -0x48;
             arg0->goldAmount = meterValue * 0x32;
@@ -2078,7 +2078,7 @@ void updateBonusGoldDisplay(BonusGoldDisplayState *arg0) {
     if (allocation->unk7A == 4) {
         var = 0x1388;
     } else if (allocation->unk7A == 6) {
-        if (allocation->players->unkB70 >= 0x12C) {
+        if (allocation->players->skillPoints >= 0x12C) {
             var = 0x1388;
         }
     } else if (allocation->unk5A == 0x14) {
@@ -2386,7 +2386,7 @@ void cleanupShotCrossSkillMeterDisplayTask(ShotCrossItemCountDisplayState *);
 void initShotCrossSkillMeterDisplayTask(ShotCrossItemCountDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
-    arg0->cachedItemCount = allocation->players->unkB70;
+    arg0->cachedItemCount = allocation->players->skillPoints;
     arg0->spriteAsset = loadAsset_3505F0();
     arg0->spriteIndex = 3;
     if (arg0->displayMode == 0) {
@@ -2413,13 +2413,13 @@ void updateShotCrossSkillMeterDisplay(ShotCrossItemCountDisplayState *arg0) {
     allocation = (GameState *)getCurrentAllocation();
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->x);
 
-    if (arg0->cachedItemCount != allocation->players->unkB70) {
+    if (arg0->cachedItemCount != allocation->players->skillPoints) {
         arg0->flashCounter = 9;
-        arg0->cachedItemCount = allocation->players->unkB70;
+        arg0->cachedItemCount = allocation->players->skillPoints;
     }
 
     if (arg0->flashCounter & 1) {
-        sprintf(buf, D_8009E8A8_9F4A8, allocation->players->unkB70);
+        sprintf(buf, D_8009E8A8_9F4A8, allocation->players->skillPoints);
         strLen = 0;
         ptr = buf;
         if (*ptr != 0) {
@@ -2429,7 +2429,7 @@ void updateShotCrossSkillMeterDisplay(ShotCrossItemCountDisplayState *arg0) {
             } while (*ptr != 0);
         }
     } else {
-        sprintf(buf, D_8009E928_9F528, allocation->players->unkB70);
+        sprintf(buf, D_8009E928_9F528, allocation->players->skillPoints);
         strLen = 0;
         ptr = buf;
         if (*ptr != 0) {

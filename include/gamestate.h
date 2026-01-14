@@ -138,7 +138,7 @@ typedef struct {
     s32 storedPosZ;
     u8 padding2c_2[0x1C];
     s32 raceGold;
-    s32 unkB70;
+    s32 skillPoints;
     u16 storedRotY;
     u8 padding2c_3[0x2];
     s16 unkB78;
