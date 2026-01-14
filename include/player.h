@@ -24,9 +24,9 @@ s32 MusInitialize(musConfig *config);
 
 void func_80072CC0_738C0(void *pbank, void *wbank);
 
-s32 func_80072C38_73838(void *, s32);
-
 s32 setFrequencyOffsetByHandle(void *, f32);
+
+s32 setReverbScaleByHandle(void *, s32);
 
 s32 setPanScaleByHandle(void *, s32);
 

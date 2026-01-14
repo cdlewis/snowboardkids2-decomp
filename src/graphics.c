@@ -501,7 +501,7 @@ void gfxCommThreadFunc(void *arg0) {
                         gGraphicsCommand.soundSequence
                     );
                     if (gGraphicsCommand.voiceIndex != 0) {
-                        func_80072C38_73838(result, gGraphicsCommand.voiceIndex);
+                        setReverbScaleByHandle(result, gGraphicsCommand.voiceIndex);
                     }
                     break;
                 case 2:
@@ -514,7 +514,7 @@ void gfxCommThreadFunc(void *arg0) {
                         gGraphicsCommand.soundSequence
                     );
                     if (gGraphicsCommand.voiceIndex != 0) {
-                        func_80072C38_73838(result, gGraphicsCommand.voiceIndex);
+                        setReverbScaleByHandle(result, gGraphicsCommand.voiceIndex);
                     }
                     break;
                 case 3:
@@ -531,7 +531,7 @@ void gfxCommThreadFunc(void *arg0) {
                     );
                     setFrequencyOffsetByHandle(result, gGraphicsCommand.position);
                     if (gGraphicsCommand.voiceIndex != 0) {
-                        func_80072C38_73838(result, gGraphicsCommand.voiceIndex);
+                        setReverbScaleByHandle(result, gGraphicsCommand.voiceIndex);
                     }
                     break;
                 case 5:
@@ -539,7 +539,7 @@ void gfxCommThreadFunc(void *arg0) {
                     setPanScaleByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.pan);
                     setFrequencyOffsetByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.position);
                     if (gGraphicsCommand.voiceIndex != 0) {
-                        func_80072C38_73838(gGraphicsCommand.audioChannel, gGraphicsCommand.voiceIndex);
+                        setReverbScaleByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.voiceIndex);
                     }
                     break;
                 case 6:
@@ -561,7 +561,7 @@ void gfxCommThreadFunc(void *arg0) {
                 case 11:
                     result = func_80072CDC_738DC(gGraphicsCommand.ptrBank, gGraphicsCommand.musicBankBuffer);
                     if (gGraphicsCommand.voiceIndex != 0) {
-                        func_80072C38_73838(result, gGraphicsCommand.voiceIndex);
+                        setReverbScaleByHandle(result, gGraphicsCommand.voiceIndex);
                     }
                     break;
                 case 12:

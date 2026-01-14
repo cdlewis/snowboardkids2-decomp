@@ -136,7 +136,7 @@ typedef struct {
     /* 0x0C4 */ u8 env_release_speed;
     /* 0x0C5 */ u8 playing;
     /* 0x0C6 */ u8 reverb;
-    u8 padding11;
+    /* 0x0C7 */ u8 reverb_scale;
     /* 0x0C8 */ u8 old_reverb;
     /* 0x0C9 */ u8 release_start_vol;
     /* 0x0CA */ u8 wobble_on_speed;
@@ -1090,26 +1090,26 @@ s32 setTempoScaleByHandle(void *handle, s32 tempoScale) {
     return count;
 }
 
-s32 func_80072C38_73838(void *arg0, s32 arg1) {
+s32 setReverbScaleByHandle(void *handle, s32 reverbScale) {
     s32 count;
     s32 i;
     channel_t *cp;
 
-    if (arg0 == NULL) {
+    if (handle == NULL) {
         return 0;
     }
 
-    if (arg1 < 0) {
-        arg1 = 0;
-    } else if (arg1 >= 0x80) {
-        arg1 = 0x7F;
+    if (reverbScale < 0) {
+        reverbScale = 0;
+    } else if (reverbScale >= 0x80) {
+        reverbScale = 0x7F;
     }
 
     count = 0;
     for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
-        if ((void *)cp->handle == arg0) {
+        if ((void *)cp->handle == handle) {
             count++;
-            cp->padding11 = arg1;
+            cp->reverb_scale = reverbScale;
             cp->old_reverb = 0xFF;
         }
     }
