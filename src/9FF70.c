@@ -3270,7 +3270,7 @@ s32 func_800B74E4_A7394(Player *arg0) {
         arg0->behaviorCounter = 0;
         arg0->unkB8C = 0;
         arg0->behaviorStep = arg0->behaviorStep + 1;
-        func_800BBB90(0);
+        spawnDebugDisplayListTask(0);
         queueSoundAtPosition(&arg0->worldPos, 0x26);
     }
 
@@ -3361,7 +3361,7 @@ s32 func_800B76BC_A756C(Player *arg0) {
         arg0->behaviorStep = arg0->behaviorStep + 1;
         func_8006FDC8_709C8(arg0->playerIndex, 0xFF, 0x10);
         alloc->unk81 = alloc->unk81 + 1;
-        func_800BBB90(1);
+        spawnDebugDisplayListTask(1);
     }
 
     return 0;

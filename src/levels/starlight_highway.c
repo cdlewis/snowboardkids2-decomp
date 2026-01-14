@@ -103,7 +103,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ Transform3D mat;
     /* 0x20 */ u8 _pad20[0x5C];
-} func_800BBB90_task;
+} DebugDisplayListPosition;
 
 typedef struct {
     /* 0x00 */ Transform3D mat1;
@@ -515,7 +515,7 @@ void renderColorIndexedOverlayDisplayList(void *arg0) {
 }
 
 void spawnDebugDisplayListTask(s16 arg0) {
-    func_800BBB90_task *task;
+    DebugDisplayListPosition *task;
 
     task = scheduleTask(initDebugDisplayListTask, 0, 0, 0xD2);
     if (task != NULL) {
