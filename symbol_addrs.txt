@@ -1,4 +1,5 @@
 D_800BBB50_B5450 = 0x800BBB50; // rom:0xB5450 size:0x18
+enqueueRotatedBillboardSpriteCI = 0x80066AC0; // rom:0x676C0
 renderColorIndexedOpaqueDisplayList = 0x800BBB0C; // rom:0xADECC
 renderColorIndexedTransparentDisplayList = 0x800BBB38; // rom:0xADEF8
 renderColorIndexedOverlayDisplayList = 0x800BBB64; // rom:0xADF24
