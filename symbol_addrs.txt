@@ -896,6 +896,7 @@ isObjectCulled = 0x80070140;
 D_8008F810_90410 = 0x8008F810; // size:0x60
 gMotorState = 0x800AB078; // size:0x24
 gCutsceneState = 0x8008BF90; // size:0x10
+updateViewportBounds = 0x8006F82C; // rom:0x7042C
 setModelCameraTransform = 0x8006F994; // rom:0x70594
 setModelRenderMode = 0x80000450; // rom:0x1050
 clearModelRotation = 0x80002468; // rom:0x3068

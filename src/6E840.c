@@ -271,64 +271,64 @@ void initGraphicsSystem(void) {
     } while (i >= 0);
 }
 
-void func_8006F82C_7042C(void) {
-    Node_70B00 *temp_v0;
+void updateViewportBounds(void) {
+    Node_70B00 *childNode;
     Node_70B00 *node;
-    u16 var_s0;
-    u16 var_t9;
-    u16 var_t8;
-    u16 var_t7;
-    u16 var_t6;
-    u16 var_t5;
-    s16 temp_b0;
-    s16 temp_b2;
+    u16 inheritedCenterX;
+    u16 inheritedCenterY;
+    u16 inheritedMinX;
+    u16 inheritedMinY;
+    u16 inheritedMaxX;
+    u16 inheritedMaxY;
+    s16 computedLeft;
+    s16 computedTop;
 
-    var_s0 = 0xA0;
-    var_t9 = 0x78;
-    var_t8 = 0;
-    var_t7 = 0;
-    var_t6 = 0x13F;
+    inheritedCenterX = 0xA0; // screen width / 2 (320 / 2)
+    inheritedCenterY = 0x78; // screen height / 2 (240 / 2)
+    inheritedMinX = 0;
+    inheritedMinY = 0;
+    inheritedMaxX = 0x13F; // screen width - 1 (320 - 1)
     node = &D_800A3370_A3F70;
-    var_t5 = 0xEF;
+    inheritedMaxY = 0xEF; // screen height - 1 (240 - 1)
 
     if (node != NULL) {
         do {
-            temp_v0 = node->unk0.next;
-            if (temp_v0 != NULL) {
-                var_s0 = temp_v0->unkAC;
-                var_t9 = temp_v0->unkAE;
-                var_t8 = temp_v0->unkB0;
-                var_t7 = temp_v0->unkB2;
-                var_t6 = temp_v0->unkB4;
-                var_t5 = temp_v0->unkB6;
+            childNode = node->unk0.next;
+            if (childNode != NULL) {
+                inheritedCenterX = childNode->unkAC;
+                inheritedCenterY = childNode->unkAE;
+                inheritedMinX = childNode->unkB0;
+                inheritedMinY = childNode->unkB2;
+                inheritedMaxX = childNode->unkB4;
+                inheritedMaxY = childNode->unkB6;
             }
-            node->unkAC = var_s0 + (u16)node->unkA0;
-            node->unkAE = var_t9 + (u16)node->unkA2;
+            node->unkAC = inheritedCenterX + (u16)node->unkA0;
+            node->unkAE = inheritedCenterY + (u16)node->unkA2;
             node->unkD0 = node->unkAC * 4;
             node->unkD2 = node->unkAE * 4;
             node->unkB0 = (u16)node->unkAC + (u16)node->unkA4;
             node->unkB2 = (u16)node->unkAE + (u16)node->unkA6;
             node->unkB4 = (u16)node->unkAC + (u16)node->unkA8;
             node->unkB6 = (u16)node->unkAE + (u16)node->unkAA;
-            if (node->unkB0 < (s16)var_t8) {
-                node->unkB0 = var_t8;
+            if (node->unkB0 < (s16)inheritedMinX) {
+                node->unkB0 = inheritedMinX;
             }
-            if (node->unkB2 < (s16)var_t7) {
-                node->unkB2 = var_t7;
+            if (node->unkB2 < (s16)inheritedMinY) {
+                node->unkB2 = inheritedMinY;
             }
-            if ((s16)var_t6 < node->unkB4) {
-                node->unkB4 = var_t6;
+            if ((s16)inheritedMaxX < node->unkB4) {
+                node->unkB4 = inheritedMaxX;
             }
-            if ((s16)var_t5 < node->unkB6) {
-                node->unkB6 = var_t5;
+            if ((s16)inheritedMaxY < node->unkB6) {
+                node->unkB6 = inheritedMaxY;
             }
-            temp_b0 = node->unkB0;
-            if (node->unkB4 < temp_b0) {
-                node->unkB4 = temp_b0;
+            computedLeft = node->unkB0;
+            if (node->unkB4 < computedLeft) {
+                node->unkB4 = computedLeft;
             }
-            temp_b2 = node->unkB2;
-            if (node->unkB6 < temp_b2) {
-                node->unkB6 = temp_b2;
+            computedTop = node->unkB2;
+            if (node->unkB6 < computedTop) {
+                node->unkB6 = computedTop;
             }
             node = node->unk8.list2_next;
         } while (node != NULL);
