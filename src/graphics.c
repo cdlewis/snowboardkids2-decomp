@@ -849,24 +849,21 @@ void playSoundEffectOnChannelNoPriority(s32 soundId, s32 channelIndex) {
     playSoundEffectOnChannelNoPriorityWithVoice(soundId, channelIndex, 0xC);
 }
 
-void func_8005823C_58E3C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void playSoundEffectWithPriorityAndVoice(s32 soundId, s32 volume, s32 priority, s32 voiceIndex) {
     void *message;
-    GraphicsManager *new_var;
-    s32 *new_var2;
-    gGraphicsCommand.soundId = arg0;
-    gGraphicsCommand.volume = arg1;
+
+    gGraphicsCommand.soundId = soundId;
+    gGraphicsCommand.volume = volume;
     gGraphicsCommand.pan = 0x80;
-    new_var = gGraphicsManager;
-    new_var2 = &new_var->soundSequence;
-    gGraphicsCommand.soundSequence = (*new_var2) + (arg2 << 0x18);
-    gGraphicsCommand.voiceIndex = arg3;
+    gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (priority << 0x18);
+    gGraphicsCommand.voiceIndex = voiceIndex;
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
 void func_800582C0_58EC0(s32 arg0, s32 arg1, s32 arg2) {
-    func_8005823C_58E3C(arg0, arg1, arg2, 0xC);
+    playSoundEffectWithPriorityAndVoice(arg0, arg1, arg2, 0xC);
 }
 
 void func_800582DC_58EDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {

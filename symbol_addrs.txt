@@ -102,6 +102,7 @@ playSoundEffectOnChannelWithPriorityAndVoice = 0x80058064; // rom:0x58C64
 playSoundEffectOnChannelWithPriority = 0x80058138; // rom:0x58D38
 playSoundEffectOnChannelNoPriorityWithVoice = 0x80058154; // rom:0x58D54
 playSoundEffectOnChannelNoPriority = 0x80058220; // rom:0x58E20
+playSoundEffectWithPriorityAndVoice = 0x8005823C; // rom:0x58E3C
 getActiveAudioChannelCount = 0x800585E4; // rom:0x591E4
 getActiveSongChannelCount = 0x80058638; // rom:0x59238
 initSprayEffectTask = 0x80050460; // rom:0x51060
