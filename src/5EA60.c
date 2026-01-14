@@ -2,15 +2,15 @@
 #include "common.h"
 #include "geometry.h"
 
-void *func_8005DE60_5EA60(void *arg0) {
-    return (void *)((s8 *)arg0 + *(s32 *)((s8 *)arg0 + 4));
+void *getAnimationFrameData(void *animData) {
+    return (void *)((s8 *)animData + *(s32 *)((s8 *)animData + 4));
 }
 
-u16 *func_8005DE6C_5EA6C(void *base, s16 tableIndex, s16 subIndex) {
-    void *temp;
+u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 subIndex) {
+    void *offsetTable;
 
-    temp = base + *(s32 *)(base + tableIndex * 4 + 8);
-    return temp + *(u16 *)(temp + subIndex * 2 + 4);
+    offsetTable = animData + *(s32 *)((s8 *)animData + tableIndex * 4 + 8);
+    return offsetTable + *(u16 *)((s8 *)offsetTable + subIndex * 2 + 4);
 }
 
 void func_8005DE98_5EA98(void *animData, s32 tableIndex, s32 boneIndex, func_8005E800_5F400_arg *state) {
@@ -18,13 +18,13 @@ void func_8005DE98_5EA98(void *animData, s32 tableIndex, s32 boneIndex, func_800
     s16 tableIdx;
     s16 boneIdx;
 
-    animPtr = func_8005DE60_5EA60(animData);
+    animPtr = getAnimationFrameData(animData);
     state->frame_data = animPtr;
 
     tableIdx = (s16)(tableIndex << 16 >> 16);
     boneIdx = (s16)(boneIndex << 16 >> 16);
 
-    animPtr = func_8005DE6C_5EA6C(animData, tableIdx, boneIdx);
+    animPtr = getAnimationDataByIndex(animData, tableIdx, boneIdx);
     state->animation_data = animPtr;
 
     state->flags = *(u16 *)animPtr + 0x8000;
@@ -647,7 +647,7 @@ void func_8005F2FC_5FEFC(void *arg0, s16 arg1, s16 arg2, func_8005F2FC_5FEFC_arg
     u16 new_var;
 
     arg3->unk44 = 0;
-    new_var = *func_8005DE6C_5EA6C(arg0, arg1, arg2);
+    new_var = *getAnimationDataByIndex(arg0, arg1, arg2);
     arg3->unk40 = (s16)(new_var + 0x8000);
 }
 
@@ -670,8 +670,8 @@ s32 func_8005F344_5FF44(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
     u16 frame_idx;
     u16 temp;
 
-    animation_data = func_8005DE6C_5EA6C(arg0, arg1, arg2);
-    frame_data = func_8005DE60_5EA60(arg0);
+    animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
+    frame_data = getAnimationFrameData(arg0);
     flags = state->flags;
 
     if (flags & 0x8000) {
@@ -767,8 +767,8 @@ s32 func_8005F6DC_602DC(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
     u16 frame_idx;
     u16 temp;
 
-    animation_data = func_8005DE6C_5EA6C(arg0, arg1, arg2);
-    frame_data = func_8005DE60_5EA60(arg0);
+    animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
+    frame_data = getAnimationFrameData(arg0);
     flags = state->flags;
 
     if (flags & 0x8000) {
@@ -875,8 +875,8 @@ void func_8005FAA0_606A0(void *arg0, s16 arg1, s16 arg2, func_8005FAA0_606A0_arg
     s32 dest_val;
     s32 result;
 
-    animation_data = func_8005DE6C_5EA6C(arg0, arg1, arg2);
-    frame_data = func_8005DE60_5EA60(arg0);
+    animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
+    frame_data = getAnimationFrameData(arg0);
 
     if (entity->flags & 0x8000) {
         entity->flags &= 0x7FFF;
@@ -966,8 +966,8 @@ void func_8005FDAC_609AC(void *arg0, s16 arg1, s16 arg2, func_8005FDAC_609AC_arg
     s32 dest_val;
     s32 result;
 
-    animation_data = func_8005DE6C_5EA6C(arg0, arg1, arg2);
-    frame_data = func_8005DE60_5EA60(arg0);
+    animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
+    frame_data = getAnimationFrameData(arg0);
 
     if (entity->flags & 0x8000) {
         entity->flags &= 0x7FFF;
@@ -1046,12 +1046,12 @@ s32 func_800600E4_60CE4(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
     u16 flags;
     s16 diff;
 
-    animation_data = func_8005DE6C_5EA6C(arg0, arg1, arg2);
-    frame_data = func_8005DE60_5EA60(arg0);
+    animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
+    frame_data = getAnimationFrameData(arg0);
 
     if ((state->flags < 2) && (animation_data[state->animation_index * 5] == 0)) {
         func_8005F2FC_5FEFC(arg0, arg1, arg2, (func_8005F2FC_5FEFC_arg *)state);
-        animation_data = func_8005DE6C_5EA6C(arg0, arg1, arg2);
+        animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
     }
 
     flags = state->flags;
@@ -1152,12 +1152,12 @@ s32 func_80060504_61104(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
     u16 flags;
     s16 diff;
 
-    animation_data = func_8005DE6C_5EA6C(arg0, arg1, arg2);
-    frame_data = func_8005DE60_5EA60(arg0);
+    animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
+    frame_data = getAnimationFrameData(arg0);
 
     if ((state->flags < 2) && (animation_data[state->animation_index * 5] == 0)) {
         func_8005F2FC_5FEFC(arg0, arg1, arg2, (func_8005F2FC_5FEFC_arg *)state);
-        animation_data = func_8005DE6C_5EA6C(arg0, arg1, arg2);
+        animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
     }
 
     flags = state->flags;

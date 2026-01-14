@@ -1,6 +1,9 @@
 #include "common.h"
 #include "geometry.h"
 
+void *getAnimationFrameData(void *animData);
+u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 subIndex);
+
 typedef struct {
     u8 padding[0x8];
     u32 countOffset;
