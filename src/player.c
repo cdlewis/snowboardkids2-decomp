@@ -192,10 +192,10 @@ fx_t *D_800A64F4_A70F4;
 s32 *gDefaultSoundEffectPriorityTable;
 ALHeap audio_heap;
 // FIFO command queue variables (ring buffer)
-s32 D_800A6520_A7120;     // fifo_start (read index)
-s32 D_800A6524_A7124;     // fifo_current (write index)
-s32 D_800A6528_A7128;     // fifo_limit (capacity)
-fifo_t *D_800A652C_A712C; // fifo_addr (buffer)
+s32 gFifoReadIdx;    // fifo_start (read index)
+s32 gFifoWriteIdx;   // fifo_current (write index)
+s32 gFifoCapacity;   // fifo_limit (capacity)
+fifo_t *gFifoBuffer; // fifo_addr (buffer)
 
 void __MusIntFifoProcess(void);
 void func_80073738_74338(channel_t *cp, int x);
@@ -223,7 +223,7 @@ void MusPtrBankInitialize(void *, u8 *);
 void __MusIntFifoOpen(s32);
 void __MusIntMemSet(void *, unsigned char, int);
 void __MusIntMemMove(u8 *, u8 *, s32);
-s32 func_80073058_73C58(u8 *);
+s32 musFifoEnqueue(u8 *);
 u32 startSoundEffect(s32, s32, s32, s32, s32);
 u32 startSoundEffectWithHandle(s32, s32, s32, s32, s32);
 s32 __MusIntRandom(s32);
@@ -1202,7 +1202,7 @@ void MusHandlePause(s32 arg0) {
     prevent_opt = &locals.word_at_14;
     *prevent_opt = arg0;
     locals.byte_at_10 = 0;
-    func_80073058_73C58(&locals.byte_at_10);
+    musFifoEnqueue(&locals.byte_at_10);
 }
 
 void MusHandleUnPause(musHandle arg0) {
@@ -1216,7 +1216,7 @@ void MusHandleUnPause(musHandle arg0) {
     prevent_opt = &locals.word_at_14;
     *prevent_opt = arg0;
     locals.byte_at_10 = 1;
-    func_80073058_73C58(&locals.byte_at_10);
+    musFifoEnqueue(&locals.byte_at_10);
 }
 
 int MusSetFxType(int fxtype) {
@@ -1232,7 +1232,7 @@ int MusSetFxType(int fxtype) {
     mus_last_fxtype = fxtype;
     locals.byte_at_10 = 2;
 
-    return func_80073058_73C58(&locals.byte_at_10);
+    return musFifoEnqueue(&locals.byte_at_10);
 }
 
 s32 MusSetSongFxChange(s32 onoff) {
@@ -1258,18 +1258,18 @@ void __MusIntFifoOpen(s32 commands) {
     }
 
     temp = alHeapDBAlloc(0, 0, &audio_heap, 1, commands * 8);
-    D_800A652C_A712C = temp;
-    D_800A6528_A7128 = commands;
-    D_800A6524_A7124 = 0;
-    D_800A6520_A7120 = 0;
+    gFifoBuffer = temp;
+    gFifoCapacity = commands;
+    gFifoWriteIdx = 0;
+    gFifoReadIdx = 0;
 }
 
 void __MusIntFifoProcess(void) {
-    while (D_800A6520_A7120 != D_800A6524_A7124) {
-        __MusIntFifoProcessCommand(&D_800A652C_A712C[D_800A6520_A7120]);
-        D_800A6520_A7120++;
-        if (D_800A6520_A7120 == D_800A6528_A7128) {
-            D_800A6520_A7120 = 0;
+    while (gFifoReadIdx != gFifoWriteIdx) {
+        __MusIntFifoProcessCommand(&gFifoBuffer[gFifoReadIdx]);
+        gFifoReadIdx++;
+        if (gFifoReadIdx == gFifoCapacity) {
+            gFifoReadIdx = 0;
         }
     }
 }
@@ -1288,19 +1288,19 @@ void __MusIntFifoProcessCommand(fifo_t *command) {
     }
 }
 
-s32 func_80073058_73C58(u8 *arg0) {
-    s32 next_idx;
-    s32 current_idx;
+s32 musFifoEnqueue(u8 *arg0) {
+    s32 nextIdx;
+    s32 currentIdx;
 
-    current_idx = D_800A6524_A7124;
-    next_idx = (current_idx + 1) % D_800A6528_A7128;
+    currentIdx = gFifoWriteIdx;
+    nextIdx = (currentIdx + 1) % gFifoCapacity;
 
-    if (next_idx == D_800A6520_A7120) {
+    if (nextIdx == gFifoReadIdx) {
         return 0;
     }
 
-    __MusIntMemMove(arg0, (u8 *)&D_800A652C_A712C[current_idx], 8);
-    D_800A6524_A7124 = next_idx;
+    __MusIntMemMove(arg0, (u8 *)&gFifoBuffer[currentIdx], 8);
+    gFifoWriteIdx = nextIdx;
 
     return 1;
 }
