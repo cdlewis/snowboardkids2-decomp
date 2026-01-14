@@ -1510,6 +1510,7 @@ initFloatingBillboardSpawner = 0x800BBE94; // rom:0xAFB84
 updateFloatingBillboardSpawner = 0x800BBEAC; // rom:0xAFB9C
 initFloatingSpriteEntity = 0x800BBF4C; // rom:0xAFC3C
 updateFloatingSpriteEntity = 0x800BBFC8; // rom:0xAFCB8
+cleanupFloatingSpriteEntity = 0x800BC0D0; // rom:0xAFDC0
 g_FloatingBillboardInitialPos = 0x800BC908; // rom:0xB05F8 size:0xC
 g_FloatingBillboardTargetX = 0x800BC914; // rom:0xB0604
 g_FloatingBillboardTargetY = 0x800BC918; // rom:0xB0608

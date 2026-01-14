@@ -137,7 +137,7 @@ void func_800BC340_B0030(GhostManager *);
 void func_800BC750_B0440(s16 *);
 void updateGhostAnimation(AnimatedGhostEntity *);
 void func_800BC378_B0068(GhostRenderState *);
-extern void func_800BC0D0_AFDC0(void **);
+extern void cleanupFloatingSpriteEntity(void **);
 
 void updateGhostAnimation(AnimatedGhostEntity *ghost) {
     s32 viewport;
@@ -531,7 +531,7 @@ void initFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
         arg0->spriteMetadata = &D_800BC960_B0650;
     }
 
-    setCleanupCallback(func_800BC0D0_AFDC0);
+    setCleanupCallback(cleanupFloatingSpriteEntity);
     setCallback(updateFloatingSpriteEntity);
 }
 
@@ -570,8 +570,8 @@ void updateFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
     }
 }
 
-void func_800BC0D0_AFDC0(void **arg0) {
-    *arg0 = freeNodeMemory(*arg0);
+void cleanupFloatingSpriteEntity(void **entity) {
+    *entity = freeNodeMemory(*entity);
 }
 
 void func_800BC0FC(s16 arg0) {
