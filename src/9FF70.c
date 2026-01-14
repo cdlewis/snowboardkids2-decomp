@@ -3234,26 +3234,26 @@ s32 waitAtStoredPositionStep(Player *arg0) {
     return 0;
 }
 
-s32 func_800B7444_A72F4(Player *arg0) {
-    if (arg0->behaviorCounter == 0) {
-        arg0->velocity.z = 0xFFF80000;
-        arg0->velocity.x = 0;
-        arg0->velocity.y = 0x30000;
-        arg0->behaviorCounter = arg0->behaviorCounter + 1;
+s32 handleFallFromUfoStep(Player *player) {
+    if (player->behaviorCounter == 0) {
+        player->velocity.z = 0xFFF80000;
+        player->velocity.x = 0;
+        player->velocity.y = 0x30000;
+        player->behaviorCounter++;
     }
 
-    arg0->velocity.y = arg0->velocity.y - 0x6000;
-    applyClampedVelocityToPosition(arg0);
-    decayPlayerSteeringAngles(arg0);
+    player->velocity.y -= 0x6000;
+    applyClampedVelocityToPosition(player);
+    decayPlayerSteeringAngles(player);
 
-    if (arg0->unkB8C != 0) {
-        arg0->unkB8C = arg0->unkB8C - 1;
+    if (player->unkB8C != 0) {
+        player->unkB8C--;
     } else {
-        arg0->unkB84 = arg0->unkB84 & ~0x2380;
-        resetPlayerBehaviorToDefault(arg0);
+        player->unkB84 &= ~0x2380;
+        resetPlayerBehaviorToDefault(player);
     }
 
-    func_8005D308_5DF08(arg0, 4);
+    func_8005D308_5DF08(player, 4);
     return 0;
 }
 
