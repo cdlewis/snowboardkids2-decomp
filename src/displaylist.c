@@ -47,7 +47,8 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ s32 vertices;
-    /* 0x04 */ u8 unk4[0x14];
+    /* 0x04 */ s16 rotation[3][3];
+    /* 0x16 */ u16 padding;
     /* 0x18 */ s32 posX;
     /* 0x1C */ s32 posY;
     /* 0x20 */ s32 posZ;
@@ -57,7 +58,7 @@ typedef struct {
     /* 0x2D */ u8 height;
     /* 0x2E */ u8 padding2[2];
     /* 0x30 */ Mtx *matrix;
-} ExtendedSpriteState;
+} RotatedBillboardSprite;
 
 typedef struct {
     /* 0x00 */ s32 vertices;
@@ -92,7 +93,7 @@ void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *display
 void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderCameraRelativeDisplayList(DisplayListObject *arg0);
 void renderTexturedBillboardSprite(TexturedSpriteState *);
-void func_80066474_67074(ExtendedSpriteState *);
+void renderRotatedBillboardSprite(RotatedBillboardSprite *);
 void func_800677F0_683F0(AlphaSpriteState *);
 void func_800670D4_67CD4(AlphaSpriteState *);
 void func_800680C4_68CC4(void);
@@ -1645,7 +1646,7 @@ void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1) {
     debugEnqueueCallback(arg0 & 0xFFFF, 4, &renderTexturedBillboardSprite, arg1);
 }
 
-void func_80066474_67074(ExtendedSpriteState *state) {
+void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
     if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
@@ -1661,7 +1662,7 @@ void func_80066474_67074(ExtendedSpriteState *state) {
         if (state->matrix == NULL) {
             return;
         }
-        func_8006BFB8_6CBB8(&state->unk4, state->matrix);
+        func_8006BFB8_6CBB8(&state->rotation, state->matrix);
     }
 
     if (gGraphicsMode != 6) {
@@ -1721,9 +1722,9 @@ void func_80066474_67074(ExtendedSpriteState *state) {
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
-void func_80066AC0_676C0(s32 arg0, MatrixEntry_202A0 *arg1) {
+void enqueueRotatedBillboardSprite(s32 arg0, MatrixEntry_202A0 *arg1) {
     arg1->unk30 = 0;
-    debugEnqueueCallback(arg0 & 0xFFFF, 4, &func_80066474_67074, arg1);
+    debugEnqueueCallback(arg0 & 0xFFFF, 4, &renderRotatedBillboardSprite, arg1);
 }
 
 void func_80066AF0_676F0(TexturedSpriteState *state) {

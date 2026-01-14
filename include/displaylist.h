@@ -195,4 +195,4 @@ typedef struct {
     u8 _pad16[0x1A];
     s32 unk30;
 } MatrixEntry_202A0;
-void func_80066AC0_676C0(s32 arg0, MatrixEntry_202A0 *arg1);
+void enqueueRotatedBillboardSprite(s32 arg0, MatrixEntry_202A0 *arg1);

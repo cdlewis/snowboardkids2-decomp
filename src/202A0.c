@@ -459,7 +459,7 @@ void func_80020A00_21600(LevelPreviewPortraitState_202A0 *arg0) {
         rotation = (arg0->rotations[i] + rotationDelta) & 0x1FFF;
         arg0->rotations[i] = rotation;
         createXRotationMatrix(arg0->matrices[i].matrix, rotation);
-        func_80066AC0_676C0(9, &arg0->matrices[i]);
+        enqueueRotatedBillboardSprite(9, &arg0->matrices[i]);
     }
 
     val = arg0->rotations[0];
