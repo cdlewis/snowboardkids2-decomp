@@ -114,7 +114,7 @@ void initSlotData(CutsceneSlotData *slot) {
 
     slot->unk0.bytes[1] = 0;
 
-    slot->unk88 = 0;
+    slot->finalRotY = 0;
     slot->angle = 0;
 }
 
@@ -324,7 +324,7 @@ void initSlotPositionEx(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY, s
     slot->unk84 = 0;
     slot->unk86 = 0;
     slot->unk0.bytes[1] = 0;
-    slot->unk88 = 0;
+    slot->finalRotY = 0;
     slot->angle = 0;
     slot->unk78 = maskedRotY;
     slot->unk7A = maskedRotY;
@@ -508,9 +508,9 @@ void setupSlotWalkTo(
     slot->unk0.bytes[1] = 0;
     slot->unk84 = frames;
     slot->unk86 = frames;
-    slot->unk88 = finalRotY;
+    slot->finalRotY = finalRotY;
     slot->angle = 0;
-    slot->unk90 = walkAnim;
+    slot->walkAnimIndex = walkAnim;
     slot->unk0.bytes[2] = turnAnimFlag;
     slot->unkA4.byte = decelMode;
     slot->unk0.Two = 3;
@@ -527,7 +527,7 @@ void setupSlotWalkTo(
     calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
     updateSlotRotVelocity(slot, 1);
 
-    finalAngleDiff = calcAngleDiff(slot, 0, slot->unk88, slot->unk7A);
+    finalAngleDiff = calcAngleDiff(slot, 0, slot->finalRotY, slot->unk7A);
     absDiff = finalAngleDiff >= 0 ? finalAngleDiff : -finalAngleDiff;
     if (absDiff >= 0x1001) {
         finalAngleDiff = slot->unk78 - slot->unk7A;
@@ -992,11 +992,11 @@ s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
             if (arg0->unk84 > 0) {
                 temp_v0_4 = arg0->unk78 + arg0->unk8A;
                 arg0->unk78 = (u16)temp_v0_4;
-                temp_v0_5 = calcAngleDiff(arg0, 0, arg0->unk88, temp_v0_4);
+                temp_v0_5 = calcAngleDiff(arg0, 0, arg0->finalRotY, temp_v0_4);
                 temp_a1 = arg0->unk8A;
                 if (((temp_a1 > 0) & (temp_v0_5 < 0)) || ((temp_a1 < 0) & (temp_v0_5 > 0))) {
                     arg0->unk8A = 0;
-                    arg0->unk78 = arg0->unk88;
+                    arg0->unk78 = arg0->finalRotY;
                 } else if (arg0->unk84 < 6) {
                     temp_v0_6 = arg0->angle;
                     var_v0_angle = -temp_v0_6;
@@ -1018,7 +1018,7 @@ s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
                 var_s2 = 1;
                 arg0->unk84 = (u16)arg0->unk84 - 1;
             } else {
-                temp_v1 = (u16)arg0->unk88;
+                temp_v1 = (u16)arg0->finalRotY;
                 arg0->unk0.bytes[0] = 9;
                 arg0->unk78 = (s16)temp_v1;
                 arg0->unk7A = (s16)temp_v1;
@@ -1086,7 +1086,7 @@ s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
     } else {
     block_51:
         if ((arg1->unk16 != 0x71) || (arg1->unk95 != 0)) {
-            var_a1 = arg0->unk90;
+            var_a1 = arg0->walkAnimIndex;
             setModelAnimationQueued(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
         }
     }
