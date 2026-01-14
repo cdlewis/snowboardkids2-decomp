@@ -53,20 +53,20 @@ typedef struct {
 } func_800B0FE0_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
+    s16 coordX;
+    s16 coordY;
+    s16 textDisplayX;
+    s16 textDisplayY;
+    s16 timer;
     u8 _padA[2];
-    char *unkC;
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
+    char *textBuffer;
+    s16 secondDisplayX;
+    s16 secondDisplayY;
+    s16 counter;
     u8 _pad16[2];
-    char *unk18;
-    char unk1C[16];
-} func_800B0BEC_arg;
+    char *formatString;
+    char formattedText[16];
+} CoordinateDisplayTaskState;
 
 typedef struct {
     /* 0x00 */ s16 x;
@@ -141,9 +141,9 @@ void func_800B0FE0_1DB580(func_800B0FE0_arg *);
 void func_800B0DD0_1DB370(func_800B0DD0_arg *);
 void func_800B10D4_1DB674(void *);
 void func_800B1104_1DB6A4(func_800B1104_arg *);
-void func_800B0C54_1DB1F4(func_800B0BEC_arg *);
+void updateCoordinateDisplayTask(CoordinateDisplayTaskState *);
 
-extern char D_800B11F0_1DB790[];
+extern char gCoordDisplayFormatString[];
 extern s16 D_800B1160_1DB700[];
 extern s16 D_800B1162_1DB702[];
 extern Vec2s D_800B11A0_1DB740[];
@@ -484,44 +484,44 @@ void cleanupCharacterSelectSprites(CharacterSelectSprites *arg0) {
     arg0->sprites[0].spriteData = freeNodeMemory(arg0->sprites[0].spriteData);
 }
 
-void func_800B0BEC_1DB18C(func_800B0BEC_arg *arg0) {
-    arg0->unk0 = -7;
-    arg0->unk2 = -7;
-    arg0->unk4 = -120;
-    arg0->unk6 = -104;
-    arg0->unkC = arg0->unk1C;
-    arg0->unk8 = 0;
-    arg0->unk14 = 0;
-    arg0->unk18 = D_800B115C_1DB6FC;
-    arg0->unk10 = arg0->unk0;
-    arg0->unk12 = arg0->unk2;
-    setCallback(func_800B0C54_1DB1F4);
+void initCoordinateDisplayTask(CoordinateDisplayTaskState *arg0) {
+    arg0->coordX = -7;
+    arg0->coordY = -7;
+    arg0->textDisplayX = -120;
+    arg0->textDisplayY = -104;
+    arg0->textBuffer = arg0->formattedText;
+    arg0->timer = 0;
+    arg0->counter = 0;
+    arg0->formatString = D_800B115C_1DB6FC;
+    arg0->secondDisplayX = arg0->coordX;
+    arg0->secondDisplayY = arg0->coordY;
+    setCallback(updateCoordinateDisplayTask);
 }
 
-void func_800B0C54_1DB1F4(func_800B0BEC_arg *arg0) {
+void updateCoordinateDisplayTask(CoordinateDisplayTaskState *arg0) {
     s32 *buttons = &gButtonsPressed;
 
     if (*buttons & U_JPAD) {
-        arg0->unk2--;
+        arg0->coordY--;
     }
     if (*buttons & D_JPAD) {
-        arg0->unk2++;
+        arg0->coordY++;
     }
     if (*buttons & R_JPAD) {
-        arg0->unk0++;
+        arg0->coordX++;
     }
     if (*buttons & L_JPAD) {
-        arg0->unk0--;
+        arg0->coordX--;
     }
 
-    sprintf(arg0->unk1C, D_800B11F0_1DB790, arg0->unk0 + 7, arg0->unk2 + 7);
+    sprintf(arg0->formattedText, gCoordDisplayFormatString, arg0->coordX + 7, arg0->coordY + 7);
 
-    debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->unk4);
+    debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->textDisplayX);
 
-    arg0->unk10 = arg0->unk0;
-    arg0->unk12 = arg0->unk2;
+    arg0->secondDisplayX = arg0->coordX;
+    arg0->secondDisplayY = arg0->coordY;
 
-    debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->unk10);
+    debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->secondDisplayX);
 }
 
 void func_800B0D4C_1DB2EC(func_800B0D4C_arg *arg0) {
