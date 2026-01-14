@@ -276,7 +276,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
                 numPlayers = gameState->numPlayers;
 
                 for (i = 0; i < numPlayers; i++) {
-                    if ((u32)gameState->players[i].unkB94 - 0x60 < 6) {
+                    if ((u32)gameState->players[i].sectorIndex - 0x60 < 6) {
                         arg0->node.displayLists = &func_80055E68_56A68(gameState->memoryPoolId)->unkC0;
                         randVal = (u8)randA();
                         randVal = randVal - 0x60;

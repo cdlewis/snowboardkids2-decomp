@@ -153,7 +153,7 @@ typedef struct {
     s32 unkB88;
     s32 unkB8C;
     s32 unkB90;
-    u16 unkB94;
+    u16 sectorIndex;
     u8 _padB96[0x2];
     s16 unkB98;
     s16 boostTimer;

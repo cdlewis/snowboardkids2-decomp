@@ -116,7 +116,7 @@ typedef struct {
     s32 unkB88;
     s32 unkB8C;
     s32 unkB90;
-    u16 unkB94;
+    u16 sectorIndex;
     u8 padding[0x8];
     u16 unkB9E;
     u8 padB96[0xBB7 - 0xBA0];
@@ -174,7 +174,7 @@ void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
     arg0->velocity.z = arg0->unk434.z - arg0->unk448;
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
 
-    if (arg0->unkB94 < 0x16) {
+    if (arg0->sectorIndex < 0x16) {
         arg0->unkAA4 = 0x180000;
     } else {
         player = (Arg0Struct *)alloc->players;
@@ -495,8 +495,8 @@ void func_800BBFEC_AC81C(Arg0Struct *arg0) {
     alloc = getCurrentAllocation();
     memcpy(&arg0->unk970.translation.x, &arg0->unk434, 0xC);
     allocPlus30 = &alloc->gameData;
-    temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
-    arg0->unkB94 = temp;
+    temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->sectorIndex, &arg0->unk434);
+    arg0->sectorIndex = temp;
     func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, &sp38);
     arg0->unk434.x = arg0->unk434.x + sp38.x;
     arg0->unk434.z = arg0->unk434.z + sp38.z;
@@ -505,7 +505,7 @@ void func_800BBFEC_AC81C(Arg0Struct *arg0) {
     if (arg0->unkB84 & 0x10000) {
         arg0->unkBC9 = 0;
     } else {
-        func_8005CFFC_5DBFC(allocPlus30, arg0->unkB94, &arg0->unk434, &arg0->unkBC9, &arg0->unkBCC);
+        func_8005CFFC_5DBFC(allocPlus30, arg0->sectorIndex, &arg0->unk434, &arg0->unkBC9, &arg0->unkBCC);
         arg0->unkBCA = arg0->unkBC9 >> 4;
         arg0->unkBC9 = arg0->unkBC9 & 0xF;
     }
@@ -561,7 +561,7 @@ void func_800BC330_ACB60(Arg0Struct *arg0) {
         arg0->unkA10[i].unk0 = arg0->unk970.translation.x + D_800BBA7C_AC2AC[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_0];
         arg0->unkA10[i].unk8 = arg0->unk970.translation.z + D_800BBA84_AC2B4[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_2 + 2];
         posPtr = &arg0->unkA10[i].unk0;
-        temp = func_80059E90_5AA90(arg0, temp_s5, arg0->unkB94, posPtr);
+        temp = func_80059E90_5AA90(arg0, temp_s5, arg0->sectorIndex, posPtr);
         arg0->unkA10[i].unk4 = func_8005CFC0_5DBC0(temp_s5, temp, posPtr, 0x100000);
         i++;
     } while (i < 9);

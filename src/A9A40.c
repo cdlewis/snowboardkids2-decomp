@@ -33,23 +33,23 @@ void func_800B9B90_A9A40(Player *player) {
     Waypoint *waypoint;
     D_80090F90_91B90_item *defaultPos;
     s32 *pathFlags;
-    s32 unkB94;
+    s32 sectorIndex;
     s16 angle;
     s32 distance;
     s32 maxDist;
 
     courseData = (CourseData *)((u8 *)getCurrentAllocation() + 0x30);
-    unkB94 = player->unkB94;
+    sectorIndex = player->sectorIndex;
 
-    if (courseData->waypoints[unkB94].next < 0) {
+    if (courseData->waypoints[sectorIndex].next < 0) {
         defaultPos = func_80055D10_56910(courseData->defaultPosIndex);
         player->unkA7C = defaultPos->unk0;
         player->unkA84 = defaultPos->unk4;
         return;
     }
 
-    func_800BA4B8_AA368(player, courseData, (s16)unkB94, &waypointPos);
-    func_800B9EF0_A9DA0(player, courseData, (s16)unkB94, &nextWaypointPos);
+    func_800BA4B8_AA368(player, courseData, (s16)sectorIndex, &waypointPos);
+    func_800B9EF0_A9DA0(player, courseData, (s16)sectorIndex, &nextWaypointPos);
 
     targetPos.x = player->worldPos.x - waypointPos.x;
     targetPos.z = player->worldPos.z - waypointPos.z;
@@ -63,7 +63,7 @@ void func_800B9B90_A9A40(Player *player) {
     targetPos.z += waypointPos.z;
 
     while (TRUE) {
-        func_800B9EF0_A9DA0(player, courseData, (s16)unkB94, &nextWaypointPos);
+        func_800B9EF0_A9DA0(player, courseData, (s16)sectorIndex, &nextWaypointPos);
 
         dir.x = nextWaypointPos.x - targetPos.x;
         dir.z = nextWaypointPos.z - targetPos.z;
@@ -77,30 +77,30 @@ void func_800B9B90_A9A40(Player *player) {
             break;
         }
 
-        if (courseData->waypoints[unkB94].next < 0) {
+        if (courseData->waypoints[sectorIndex].next < 0) {
             break;
         }
 
         pathFlags = (s32 *)player->unk28;
         if (pathFlags != NULL) {
-            if (*(s8 *)&pathFlags[unkB94] == -1) {
-                unkB94 = courseData->waypoints[unkB94].alt;
+            if (*(s8 *)&pathFlags[sectorIndex] == -1) {
+                sectorIndex = courseData->waypoints[sectorIndex].alt;
             }
-            if (*(s8 *)&pathFlags[unkB94] == 0) {
-                unkB94 = courseData->waypoints[unkB94].next;
+            if (*(s8 *)&pathFlags[sectorIndex] == 0) {
+                sectorIndex = courseData->waypoints[sectorIndex].next;
             }
-            if (*(s8 *)&pathFlags[unkB94] == 1) {
-                unkB94 = courseData->waypoints[unkB94].alt2;
+            if (*(s8 *)&pathFlags[sectorIndex] == 1) {
+                sectorIndex = courseData->waypoints[sectorIndex].alt2;
             }
         } else {
-            unkB94 = courseData->waypoints[unkB94].next;
+            sectorIndex = courseData->waypoints[sectorIndex].next;
         }
     }
 
     dir.x += targetPos.x;
     dir.z += targetPos.z;
 
-    func_800BA4B8_AA368(player, courseData, (s16)unkB94, &waypointPos);
+    func_800BA4B8_AA368(player, courseData, (s16)sectorIndex, &waypointPos);
 
     dir.x -= waypointPos.x;
     dir.z -= waypointPos.z;
@@ -165,15 +165,15 @@ s8 func_800BA694_AA544(Player *player) {
 
     gs = getCurrentAllocation();
 
-    if (player->unk28 != NULL && ((AIPathPreference *)player->unk28)[player->unkB94].pathPreference != 0) {
-        trackStartIdx = SEC3(gs)[player->unkB94].unk14;
-        trackEndIdx = SEC3(gs)[player->unkB94].unk18;
+    if (player->unk28 != NULL && ((AIPathPreference *)player->unk28)[player->sectorIndex].pathPreference != 0) {
+        trackStartIdx = SEC3(gs)[player->sectorIndex].unk14;
+        trackEndIdx = SEC3(gs)[player->sectorIndex].unk18;
         trackDirX = SEC1(gs)[trackStartIdx].x - SEC1(gs)[trackEndIdx].x;
         sv.tempX = trackDirX;
 
-        trackStartIdx = SEC3(gs)[player->unkB94].unk14;
+        trackStartIdx = SEC3(gs)[player->sectorIndex].unk14;
         trackLengthSq = trackDirX * trackDirX;
-        trackEndIdx = SEC3(gs)[player->unkB94].unk18;
+        trackEndIdx = SEC3(gs)[player->sectorIndex].unk18;
         trackDirZ = SEC1(gs)[trackStartIdx].z - SEC1(gs)[trackEndIdx].z;
         sv.tempZ = trackDirZ;
         trackLengthSq += trackDirZ * trackDirZ;
@@ -182,11 +182,11 @@ s8 func_800BA694_AA544(Player *player) {
         normalizedDirX = (sv.tempX << 13) / trackLength;
         normalizedDirZ = (sv.tempZ << 13) / trackLength;
 
-        trackStartIdx = SEC3(gs)[player->unkB94].unk14;
+        trackStartIdx = SEC3(gs)[player->sectorIndex].unk14;
         playerToStartX = player->worldPos.x - (SEC1(gs)[trackStartIdx].x << 16);
         sv.tempX = playerToStartX;
 
-        trackStartIdx = SEC3(gs)[player->unkB94].unk14;
+        trackStartIdx = SEC3(gs)[player->sectorIndex].unk14;
         playerToStartZ = player->worldPos.z - (SEC1(gs)[trackStartIdx].z << 16);
         sv.tempZ = playerToStartZ;
 
@@ -194,7 +194,7 @@ s8 func_800BA694_AA544(Player *player) {
             (((s64)(-((s16)normalizedDirZ))) * playerToStartX) + (((s64)((s16)normalizedDirX)) * playerToStartZ);
         trackLength = -((s32)(lateralOffset / 0x2000));
         if (trackLength < (player->unkAA8 * 6)) {
-            return ((AIPathPreference *)player->unk28)[player->unkB94].pathPreference;
+            return ((AIPathPreference *)player->unk28)[player->sectorIndex].pathPreference;
         }
     }
 

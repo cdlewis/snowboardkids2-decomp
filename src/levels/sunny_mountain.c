@@ -121,7 +121,7 @@ void func_800BB3D8_B4CD8(s32 *arg0) {
     s32 i;
 
     for (i = 0; i < state->unk5F; i++) {
-        if (state->players[i].unkB94 >= 0x3D) {
+        if (state->players[i].sectorIndex >= 0x3D) {
             arg0[0] = 0x1C84A5B9;
             arg0[1] = 0x0B1F0000;
             arg0[2] = 0x02C792C4;

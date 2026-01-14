@@ -410,7 +410,7 @@ void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
 
             for (i = 0; i < allocation->memoryPoolId; i++) {
                 player = allocation->players + i;
-                if ((u16)(player->unkB94 - 0x38) < 5) {
+                if ((u16)(player->sectorIndex - 0x38) < 5) {
                     break;
                 }
             }
@@ -631,7 +631,7 @@ void func_800BC220_AFF10(u8 *ghostSlots) {
         playerCount = numPlayersToCheck;
         player = gameState->players;
         do {
-            raceState = player->unkB94;
+            raceState = player->sectorIndex;
             if ((u32)(raceState - 7) < 5U) {
                 raceState &= 0xFFFF;
                 if (maxRaceState < raceState) {
@@ -750,7 +750,7 @@ void func_800BC750_B0440(s16 *targetLap) {
         lapValue = *targetLap;
 
         if (player->currentLap == lapValue) {
-            if ((u32)(player->unkB94 - 7) < 4) {
+            if ((u32)(player->sectorIndex - 7) < 4) {
                 *targetLap = lapValue + 1;
                 func_80058530_59130(0xC, 6);
             }

@@ -903,7 +903,7 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
         numPlayers = tempS;
         player = allocation->players;
         do {
-            if (player->unkB94 == D_800BCBB0_AEF70[arg0->unk7C]) {
+            if (player->sectorIndex == D_800BCBB0_AEF70[arg0->unk7C]) {
                 found = 1;
             }
             i++;

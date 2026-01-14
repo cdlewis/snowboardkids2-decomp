@@ -34,12 +34,12 @@ typedef struct {
     /* 0x1E */ u8 pad3[0x6];
 } Section3Element;
 
-s32 func_80059E90_5AA90(void *arg0, void *arg1, u16 arg2, void *arg3) {
-    Player *player = (Player *)arg0;
+s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position) {
+    Player *player = (Player *)entity;
     if (!(player->unkB84 & 0x100)) {
-        return func_80060A3C_6163C(arg1, arg2, arg3);
+        return func_80060A3C_6163C(gameData, currentSectorIndex, position);
     }
-    return player->unkB94;
+    return player->sectorIndex;
 }
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_80059ED0_5AAD0);
@@ -56,8 +56,8 @@ void func_8005A930_5B530(Player *arg0) {
     allocation = getCurrentAllocation();
     sp0 = &allocation->unk30;
     sp1 = (void *)&arg0->worldPos.x;
-    temp = func_80059E90_5AA90(arg0, sp0, arg0->unkB94, sp1);
-    arg0->unkB94 = temp;
+    temp = getOrUpdatePlayerSectorIndex(arg0, sp0, arg0->sectorIndex, sp1);
+    arg0->sectorIndex = temp;
     result = func_8005D020_5DC20(sp0, temp, sp1, 0x200000);
     if (result < arg0->worldPos.y) {
         arg0->worldPos.y = result;
@@ -80,7 +80,7 @@ s32 func_8005A9A8_5B5A8(Player *arg0) {
         return 0;
     }
 
-    if (getTrackSegmentFinishZoneFlag(&allocation->gameData, arg0->unkB94) != 0) {
+    if (getTrackSegmentFinishZoneFlag(&allocation->gameData, arg0->sectorIndex) != 0) {
         return 0;
     }
 
@@ -110,7 +110,7 @@ s32 func_8005AA9C_5B69C(Player *arg0) {
 
     allocation = (GameState *)getCurrentAllocation();
 
-    if (getTrackSegmentFinishZoneFlag(&allocation->gameData, arg0->unkB94) == 0) {
+    if (getTrackSegmentFinishZoneFlag(&allocation->gameData, arg0->sectorIndex) == 0) {
         item = func_80055D10_56910(allocation->memoryPoolId);
 
         dx = arg0->worldPos.x - item->unk0;
@@ -928,7 +928,7 @@ s16 func_8005CE98_5DA98(Player *arg0) {
     s16 result;
 
     allocation = (GameState *)getCurrentAllocation();
-    elem = (Section3Element *)(arg0->unkB94 * 0x24 + (u32)allocation->gameData.section3Data);
+    elem = (Section3Element *)(arg0->sectorIndex * 0x24 + (u32)allocation->gameData.section3Data);
 
     if (elem->unk0 < 0) {
         if (allocation->unk74 == arg0->currentLap) {

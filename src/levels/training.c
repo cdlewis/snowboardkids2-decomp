@@ -62,62 +62,62 @@ void func_800BB320_B5C00(func_800BB5CC_state *arg0) {
             }
             goto do_action;
         case 1:
-            if ((state->players->unkB94 < 3) || (state->players->unkB84 & 1)) {
+            if ((state->players->sectorIndex < 3) || (state->players->unkB84 & 1)) {
                 break;
             }
             goto do_action;
         case 2:
-            if (state->players->unkB94 < 0xE) {
+            if (state->players->sectorIndex < 0xE) {
                 break;
             }
             goto do_action;
         case 3:
-            if ((state->players->unkB94 < 0x12) || (state->players->unkB84 & 1)) {
+            if ((state->players->sectorIndex < 0x12) || (state->players->unkB84 & 1)) {
                 break;
             }
             goto do_action;
         case 4:
-            if (state->players->unkB94 < 0x14) {
+            if (state->players->sectorIndex < 0x14) {
                 break;
             }
             goto do_action;
         case 5:
-            if (state->players->unkB94 < 0x1A) {
+            if (state->players->sectorIndex < 0x1A) {
                 break;
             }
             goto do_action;
         case 6:
-            if (state->players->unkB94 < 0x28) {
+            if (state->players->sectorIndex < 0x28) {
                 break;
             }
             goto do_action;
         case 7:
-            if (state->players->unkB94 < 0x2D) {
+            if (state->players->sectorIndex < 0x2D) {
                 break;
             }
             goto do_action;
         case 8:
-            if (state->players->unkB94 < 0x30) {
+            if (state->players->sectorIndex < 0x30) {
                 break;
             }
             goto do_action;
         case 9:
-            if (state->players->unkB94 < 0x32) {
+            if (state->players->sectorIndex < 0x32) {
                 break;
             }
             goto do_action;
         case 10:
-            if (state->players->unkB94 < 0x35) {
+            if (state->players->sectorIndex < 0x35) {
                 break;
             }
             goto do_action;
         case 11:
-            if (state->players->unkB94 < 0x38) {
+            if (state->players->sectorIndex < 0x38) {
                 break;
             }
             goto do_action;
         case 12:
-            if ((state->players->currentLap == 0) || (state->players->unkB94 == 0)) {
+            if ((state->players->currentLap == 0) || (state->players->sectorIndex == 0)) {
                 break;
             }
             goto do_action;

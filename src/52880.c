@@ -46,7 +46,7 @@ typedef struct {
     u8 padding_458_950[0x4F8];
     s16 unk950;
     u8 padding2[0x242];
-    u16 unkB94;
+    u16 sectorIndex;
     u8 padding3[0x43];
     u8 unkBD9;
     u8 padding4[0xE];
@@ -202,7 +202,7 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
             setPlayerHomingProjectileRetaliationState(hitPlayer);
             for (i = 0; i < 3; i++) {
                 if (hitPlayer->raceGold >= 100) {
-                    spawnHomingProjectile(&hitPlayer->worldPos.x, hitPlayer->unkB94, &hitPlayer->velocity);
+                    spawnHomingProjectile(&hitPlayer->worldPos.x, hitPlayer->sectorIndex, &hitPlayer->velocity);
                     addPlayerRaceGold(hitPlayer, -100);
                 }
             }
@@ -256,7 +256,7 @@ void launchSlapstickProjectile(Struct_52880 *arg0) {
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
     playerIdx = arg0->ownerPlayerIdx;
-    arg0->unk40 = alloc->unk10[playerIdx].unkB94;
+    arg0->unk40 = alloc->unk10[playerIdx].sectorIndex;
     arg0->lifetime = 0xF0;
 
     queueSoundAtPosition(&arg0->pos, 0x10);
@@ -473,7 +473,7 @@ void launchParachuteProjectile(Struct_52880 *arg0) {
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
     playerIdx = arg0->ownerPlayerIdx;
-    arg0->unk40 = alloc->unk10[playerIdx].unkB94;
+    arg0->unk40 = alloc->unk10[playerIdx].sectorIndex;
     arg0->lifetime = 0xF0;
 
     queueSoundAtPosition(&arg0->pos, 0x10);
@@ -695,7 +695,7 @@ void launchFryingPanProjectile(Struct_52880 *arg0) {
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
     playerIdx = arg0->ownerPlayerIdx;
-    arg0->unk40 = alloc->unk10[playerIdx].unkB94;
+    arg0->unk40 = alloc->unk10[playerIdx].sectorIndex;
     arg0->lifetime = 0xF0;
 
     queueSoundAtPosition(&arg0->pos, 0x10);
@@ -924,7 +924,7 @@ void launchSnowmanProjectile(Struct_52880 *arg0) {
     arg0->vel.z = temp_a0 - temp_a3;
 
     playerIdx = arg0->ownerPlayerIdx;
-    arg0->unk40 = alloc->unk10[playerIdx].unkB94;
+    arg0->unk40 = alloc->unk10[playerIdx].sectorIndex;
     arg0->lifetime = 0xF0;
 
     playerIdx = arg0->ownerPlayerIdx;
@@ -1146,7 +1146,7 @@ void launchStarProjectile(Struct_52880 *arg0) {
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
     playerIdx = arg0->ownerPlayerIdx;
-    arg0->unk40 = ((Unk10Element_52880 *)((u8 *)alloc->unk10 + (playerIdx * 3048)))->unkB94;
+    arg0->unk40 = ((Unk10Element_52880 *)((u8 *)alloc->unk10 + (playerIdx * 3048)))->sectorIndex;
     arg0->lifetime = 0xF0;
 
     queueSoundAtPosition(&arg0->pos, 0x10);
@@ -1356,7 +1356,7 @@ void launchHomingPanelProjectile(Struct_52880 *arg0) {
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
     playerIdx = arg0->ownerPlayerIdx;
-    arg0->unk40 = alloc->unk10[playerIdx].unkB94;
+    arg0->unk40 = alloc->unk10[playerIdx].sectorIndex;
     arg0->lifetime = 0xF0;
 
     queueSoundAtPosition(&arg0->pos, 0x10);
@@ -1620,7 +1620,7 @@ void loadPlayerGuidedStarProjectile(Struct_52880 *arg0) {
 
     alloc = getCurrentAllocation();
     playerIdxPtr = &arg0->ownerPlayerIdx;
-    arg0->unk40 = alloc->unk10[arg0->ownerPlayerIdx].unkB94;
+    arg0->unk40 = alloc->unk10[arg0->ownerPlayerIdx].sectorIndex;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 6);
 
     arg0->unk0 = alloc->unk44;
@@ -1653,7 +1653,7 @@ void loadPlayerGuidedStarProjectile(Struct_52880 *arg0) {
     arg0->vel.x = arg0->pos.x - arg0->vel.x;
     arg0->vel.y = arg0->pos.y - arg0->vel.y;
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
-    if ((!alloc->unk10[*playerIdxPtr].unkB94) && (!alloc->unk10[*playerIdxPtr].unkB94)) {}
+    if ((!alloc->unk10[*playerIdxPtr].sectorIndex) && (!alloc->unk10[*playerIdxPtr].sectorIndex)) {}
     players = alloc->unk10;
     memcpy(&arg0->unk30, players[*playerIdxPtr].velocity, 12);
     queueSoundAtPosition(position, 0x23);
@@ -1754,7 +1754,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
                 setPlayerHomingProjectileRetaliationState(player);
                 for (i = 0; i < 3; i++) {
                     if (player->raceGold >= 100) {
-                        spawnHomingProjectile(&player->worldPos.x, player->unkB94, &player->velocity);
+                        spawnHomingProjectile(&player->worldPos.x, player->sectorIndex, &player->velocity);
                         addPlayerRaceGold(player, -100);
                     }
                 }
@@ -1840,7 +1840,7 @@ void launchRandomEffectProjectile(Struct_52880 *arg0) {
     arg0->vel.y = temp_v1 - temp_a2;
     arg0->vel.z = temp_a0 - temp_a3;
 
-    arg0->unk40 = alloc->unk10[playerIdx].unkB94;
+    arg0->unk40 = alloc->unk10[playerIdx].sectorIndex;
     arg0->lifetime = 0xF0;
 
     setCallback(updateRandomEffectProjectile);
@@ -2014,7 +2014,7 @@ void func_800554FC_560FC(Struct_52880 *arg0) {
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
 
     index = arg0->ownerPlayerIdx;
-    arg0->unk40 = alloc->unk10[index].unkB94;
+    arg0->unk40 = alloc->unk10[index].sectorIndex;
 
     queueSoundAtPosition(&arg0->pos, 0x10);
     setCallback(func_80055650_56250);

@@ -178,7 +178,7 @@ typedef struct {
     u8 padding0[0x8];
     Vec3i pos;         /* 0x8 - Position (x, y, z) - 12 bytes */
     u8 padding2[0x10]; /* 0x14 - Padding (16 bytes) to reach 0x24 */
-    s16 playerIndex;   /* 0x24 - Player index (unkB94) - 2 bytes */
+    s16 playerIndex;   /* 0x24 - Player index (from Player->sectorIndex) - 2 bytes */
     s16 padding26;     /* 0x26 - Padding (2 bytes) */
     s32 timer;         /* 0x28 - Impact timer (4 bytes) */
     Vec3i vel;         /* 0x2C - Velocity (x, y, z) - 12 bytes */
@@ -215,7 +215,7 @@ typedef struct {
     u8 _pad458[0x63C];
     u16 unkA94;
     u8 _padA96[0xFE];
-    u16 unkB94;
+    u16 sectorIndex;
     u8 _padB96[0x22];
     u8 unkBB8;
 } BossEntity;
@@ -935,7 +935,7 @@ void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *arg0) {
         playerOffset = 0;
     loop2:
         player = (Player *)(playerOffset + (s32)state->players);
-        if (player->unkB94 < 0x39) {
+        if (player->sectorIndex < 0x39) {
             enqueueCameraRelativeDisplayList(viewportId, (DisplayListObject *)&arg0->unk3C);
             levelData = func_80055D10_56910(state->memoryPoolId);
             fogR = levelData->unk20.r2;
@@ -1202,7 +1202,7 @@ void updatePlayerSparkleWithStateCheck(PlayerSparkleTask *task) {
     updatePlayerSparkle(task);
 
     for (i = 0; i < state->unk5F; i++) {
-        if ((u32)(state->players[i].unkB94 - 6) < 5U) {
+        if ((u32)(state->players[i].sectorIndex - 6) < 5U) {
             task->velocity = 0xC0000;
             setCallback(updatePlayerSparkleMovement);
             return;
@@ -3229,7 +3229,7 @@ void initPanelProjectileMovement(PanelProjectileInitArg *arg0) {
     player = arg0->player;
     temp_s1 = &arg0->metadata.position;
     memcpy(temp_s1, &player->unk31C, sizeof(Vec3i));
-    arg0->sectorIndex = arg0->player->unkB94;
+    arg0->sectorIndex = arg0->player->sectorIndex;
     arg0->playerIndex = (s16)arg0->player->playerIndex;
     memcpy(&arg0->velX, &arg0->player->velocity, sizeof(Vec3i));
     arg0->initFlag = 1;
@@ -3559,7 +3559,7 @@ void spawnBossHomingProjectile(BossHomingProjectileSpawnArg *arg0) {
 
     arg0->position.y = arg0->position.y + (s32)0xFFF10000;
 
-    arg0->sectorIndex = arg0->boss->unkB94;
+    arg0->sectorIndex = arg0->boss->sectorIndex;
     arg0->playerIndex = arg0->boss->unkBB8;
 
     randomOffset = randA() & 0xFF;
@@ -3716,7 +3716,7 @@ void spawnBossHomingProjectileVariant1(BossHomingProjectileSpawnArg *arg0) {
 
     arg0->position.y = arg0->position.y + (s32)0xFFF10000;
 
-    arg0->sectorIndex = arg0->boss->unkB94;
+    arg0->sectorIndex = arg0->boss->sectorIndex;
     arg0->playerIndex = arg0->boss->unkBB8;
 
     randomValue = randA();
@@ -3864,7 +3864,7 @@ void spawnBossHomingProjectileVariant2(BossHomingProjectileSpawnArg *arg0) {
     allocation = (GameState *)getCurrentAllocation();
     arg0->unk4 = (void *)((s32)allocation->unk44 + 0xEC0);
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->projectileAsset, 0x3F);
-    arg0->sectorIndex = arg0->boss->unkB94;
+    arg0->sectorIndex = arg0->boss->sectorIndex;
     temp_s2 = (Vec3i *)((s32)arg0 + 8);
     transformVector(&D_80090E50_91A50, (s16 *)((s32)arg0->boss + 0x164), temp_s2);
     arg0->playerIndex = arg0->boss->unkBB8;

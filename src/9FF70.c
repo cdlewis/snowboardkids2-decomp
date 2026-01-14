@@ -2765,7 +2765,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
                 if (randA() & 1) {
                     if (spawnItemHomingProjectile(
                             &player->worldPos.x,
-                            player->unkB94,
+                            player->sectorIndex,
                             &player->velocity.x,
                             0,
                             player->unkBD2
@@ -2777,7 +2777,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
                 }
                 if (spawnItemHomingProjectile(
                         &player->worldPos.x,
-                        player->unkB94,
+                        player->sectorIndex,
                         &player->velocity.x,
                         1,
                         player->unkBD4
@@ -2791,7 +2791,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
         if (player->unkBD2 != 0) {
             if (spawnItemHomingProjectile(
                     &player->worldPos.x,
-                    player->unkB94,
+                    player->sectorIndex,
                     &player->velocity.x,
                     0,
                     player->unkBD2
@@ -2804,7 +2804,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
             if (player->unkBD4 != 0) {
                 if (spawnItemHomingProjectile(
                         &player->worldPos.x,
-                        player->unkB94,
+                        player->sectorIndex,
                         &player->velocity.x,
                         1,
                         player->unkBD4
@@ -3035,7 +3035,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
     if (player->behaviorCounter == 0) {
         player->unkA94 = 0x1000;
         player->unkB9C = 0;
-        player->unkB94 = 0;
+        player->sectorIndex = 0;
         player->unkB84 = player->unkB84 | 0x200;
         player->behaviorCounter++;
         player->currentLap++;
@@ -3183,7 +3183,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
     if (player->ufoFlags & 2) {
         player->unkA94 = 0x1000;
         player->unkB9C = 0;
-        player->unkB94 = 0;
+        player->sectorIndex = 0;
         player->behaviorStep++;
         player->unkB84 |= 0x200;
         player->currentLap++;
@@ -3405,7 +3405,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
     if (arg0->behaviorCounter == 0) {
         arg0->unkA94 = 0xE00;
         arg0->unkB9C = 0;
-        arg0->unkB94 = 0;
+        arg0->sectorIndex = 0;
         arg0->unkB84 |= 0x200;
         arg0->behaviorCounter++;
         arg0->currentLap++;
@@ -3550,7 +3550,7 @@ void func_800B98CC_A977C(Player *player) {
         *(volatile s32 *)(jointWritePtr + 0xA18) =
             player->unk970.translation.z + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
 
-        sectorIndex = func_80059E90_5AA90((void *)player, gameData, player->unkB94, jointPos);
+        sectorIndex = func_80059E90_5AA90((void *)player, gameData, player->sectorIndex, jointPos);
         *(volatile s32 *)(jointWritePtr + 0xA14) = func_8005CFC0_5DBC0(gameData, sectorIndex, jointPos, 0x100000);
 
         i++;

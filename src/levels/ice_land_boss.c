@@ -51,7 +51,7 @@ typedef struct {
     s32 unkB84;
     s32 unkB88;
     u8 _padB8C[0xB94 - 0xB8C];
-    u16 unkB94;
+    u16 sectorIndex;
     u8 _padB96[0xBB4 - 0xB96];
     u8 unkBB4;
     u8 _padBB5[0xBB7 - 0xBB5];
@@ -187,7 +187,7 @@ typedef struct {
     s32 unkB88;
     s32 unkB8C;
     s32 unkB90;
-    u16 unkB94;
+    u16 sectorIndex;
     u8 paddingB96[0x2];
     s16 unkB98;
     s16 boostTimer;
@@ -425,7 +425,7 @@ s32 func_800BB66C_B0B5C(func_800BB66C_B0B5C_arg *arg0) {
     getTrackSegmentWaypoints(&state->gameData, 0, &sp10, &sp20);
     arg0->unk43C = sp10.z + 0x200000;
     trackIdx = func_80059E90_5AA90(arg0, &state->gameData, 0, (Vec3i *)&arg0->unk434);
-    arg0->unkB94 = trackIdx;
+    arg0->sectorIndex = trackIdx;
     arg0->unk438 = func_8005CFC0_5DBC0(&state->gameData, trackIdx, (Vec3i *)&arg0->unk434, 0x100000);
     memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
     arg0->velocity.x = 0;
@@ -941,8 +941,8 @@ void func_800BC520_B1A10(func_800BC4AC_arg *arg0) {
     alloc = getCurrentAllocation();
     memcpy(arg0->unk984, &arg0->unk434, 0xC);
     allocPlus30 = &alloc->gameData;
-    temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->unkB94, &arg0->unk434);
-    arg0->unkB94 = temp;
+    temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->sectorIndex, &arg0->unk434);
+    arg0->sectorIndex = temp;
     func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, &sp38);
     arg0->unk434.x = arg0->unk434.x + sp38.x;
     arg0->unk434.z = arg0->unk434.z + sp38.z;
@@ -951,7 +951,7 @@ void func_800BC520_B1A10(func_800BC4AC_arg *arg0) {
     if (arg0->unkB84 & 0x10000) {
         arg0->unkBC9 = 0;
     } else {
-        func_8005CFFC_5DBFC(allocPlus30, arg0->unkB94, &arg0->unk434, &arg0->unkBC9, &arg0->unkBCC);
+        func_8005CFFC_5DBFC(allocPlus30, arg0->sectorIndex, &arg0->unk434, &arg0->unkBC9, &arg0->unkBCC);
         arg0->unkBCA = arg0->unkBC9 >> 4;
         arg0->unkBC9 = arg0->unkBC9 & 0xF;
     }
@@ -1026,7 +1026,7 @@ void func_800BC89C_B1D8C(Player *boss) {
         }
 
         jointPos = (JointPosition *)((u8 *)boss + jointOffset);
-        sectorIndex = func_80059E90_5AA90((void *)boss, gameData, boss->unkB94, jointPos);
+        sectorIndex = func_80059E90_5AA90((void *)boss, gameData, boss->sectorIndex, jointPos);
         jointOffset += 0xC;
         jointIndex += 1;
         // Compute terrain height at joint position
