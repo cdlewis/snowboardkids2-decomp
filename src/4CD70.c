@@ -2201,49 +2201,49 @@ void cleanupRaceTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-void func_8004F7F4_503F4(ShotCrossCountdownTimerState *arg0);
+void cleanupSecondaryItemDisplayTask(ShotCrossCountdownTimerState *arg0);
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+    s16 itemX;
+    s16 itemY;
+    void *spriteAsset;
+    s16 itemIndex;
     u8 padA[0x2];
-    Player *unkC;
-    s32 unk10;
-} Struct_func_8004F6D4;
+    Player *player;
+    s32 playerIndex;
+} SecondaryItemDisplayState;
 
-void func_8004F760_50360(Struct_func_8004F6D4 *arg0);
+void updateSecondaryItemDisplay(SecondaryItemDisplayState *arg0);
 
 typedef struct {
     u8 pad0[0x10];
-    void *unk10;
-} AllocationStruct_8004F6D4;
+    void *players;
+} SecondaryItemAllocation;
 
-void func_8004F6D4_502D4(Struct_func_8004F6D4 *arg0) {
-    AllocationStruct_8004F6D4 *alloc = getCurrentAllocation();
-    s32 index = arg0->unk10;
-    void *base = alloc->unk10;
+void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0) {
+    SecondaryItemAllocation *alloc = getCurrentAllocation();
+    s32 index = arg0->playerIndex;
+    void *base = alloc->players;
 
-    arg0->unk0 = -0x10;
-    arg0->unk2 = -0x60;
-    arg0->unkC = (Player *)((u8 *)base + index * 3048);
-    arg0->unk4 = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
-    setCallbackWithContinue(func_8004F760_50360);
-    setCleanupCallback(func_8004F7F4_503F4);
+    arg0->itemX = -0x10;
+    arg0->itemY = -0x60;
+    arg0->player = (Player *)((u8 *)base + index * 3048);
+    arg0->spriteAsset = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    setCallbackWithContinue(updateSecondaryItemDisplay);
+    setCleanupCallback(cleanupSecondaryItemDisplayTask);
 }
 
-void func_8004F760_50360(Struct_func_8004F6D4 *arg0) {
-    arg0->unk8 = arg0->unkC->unkBD4 + 7;
-    debugEnqueueCallback((u16)(arg0->unk10 + 8), 0, func_8000FED0_10AD0, arg0);
+void updateSecondaryItemDisplay(SecondaryItemDisplayState *arg0) {
+    arg0->itemIndex = arg0->player->unkBD4 + 7;
+    debugEnqueueCallback((u16)(arg0->playerIndex + 8), 0, func_8000FED0_10AD0, arg0);
 
-    if (arg0->unkC->unkBD8 & 2) {
-        spawnFloatingItemSprite(arg0->unk0 - 8, arg0->unk2 - 8, 1, arg0->unk10 + 8, 0);
-        arg0->unkC->unkBD8 &= ~2;
+    if (arg0->player->unkBD8 & 2) {
+        spawnFloatingItemSprite(arg0->itemX - 8, arg0->itemY - 8, 1, arg0->playerIndex + 8, 0);
+        arg0->player->unkBD8 &= ~2;
     }
 }
 
-void func_8004F7F4_503F4(ShotCrossCountdownTimerState *arg0) {
+void cleanupSecondaryItemDisplayTask(ShotCrossCountdownTimerState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
@@ -2601,7 +2601,7 @@ void func_8005011C_50D1C(void) {
 
             case 4:
                 scheduleTask(initRaceTimerDisplay, 0, 1, 0xF0);
-                SCHEDULE_AND_SET(func_8004F6D4_502D4, 4, i);
+                SCHEDULE_AND_SET(initSecondaryItemDisplayTask, 4, i);
                 scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);
                 break;
 
