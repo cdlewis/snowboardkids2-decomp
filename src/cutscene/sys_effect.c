@@ -111,16 +111,16 @@ void cutsceneEffectMLight_exec(cutsceneEffectMLight_exec_arg *arg0, CutsceneMana
 
     memcpy(&sp30, (u8 *)slot->model + 0x18, 0x20);
 
-    transformVector((s16 *)&arg0->unk4, (s16 *)&sp30, sp70);
+    transformVector((s16 *)&arg0->positionVec, (s16 *)&sp30, sp70);
 
-    switch (arg0->unk10) {
+    switch (arg0->effectMode) {
         case 0:
             memcpy(&sp50, &sp30, 0x20);
             sp50.u.vec.x = sp70[0];
             sp50.u.vec.y = sp70[1];
             sp50.u.vec.z = sp70[2];
             resource = *(UIResource **)((u8 *)slot->model + 0x10);
-            func_800B5290_1E2340(resource->unk16, &sp50, arg0->unk0, arg0->unk10);
+            func_800B5290_1E2340(resource->unk16, &sp50, arg0->colorIndex, arg0->effectMode);
             break;
         case 1:
             createZRotationMatrix(rotMatrix, 0x1000);
@@ -129,7 +129,7 @@ void cutsceneEffectMLight_exec(cutsceneEffectMLight_exec_arg *arg0, CutsceneMana
             sp50.u.vec.y = sp70[1];
             sp50.u.vec.z = sp70[2];
             resource = *(UIResource **)((u8 *)slot->model + 0x10);
-            func_800B5500_1E25B0(resource->unk16, &sp50, arg0->unk0, 0x4000);
+            func_800B5500_1E25B0(resource->unk16, &sp50, arg0->colorIndex, 0x4000);
             break;
     }
 }

@@ -17,12 +17,12 @@ typedef struct {
 } cutsceneEffectRocket_exec_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s16 unk10;
+    s16 colorIndex;     // color/palette index for the light effect
+    s16 duration;       // display duration in frames
+    s32 positionVec;    // position vector (cast to s32[3] for x,y,z access)
+    s32 unk8;           // unused parameter
+    s32 unkC;           // unused parameter
+    s16 effectMode;     // 0 = direct positioning, 1 = with rotation
 } cutsceneEffectMLight_exec_arg;
 
 typedef struct {
