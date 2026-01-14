@@ -92,7 +92,7 @@ void func_800B4B30_1E1BE0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
 
     if (arg3 <= 0) {
         temp = func_800B4AFC_1E1BAC(arg0);
-        func_80058360_58F60(temp, arg1, arg2 + 0x80, 0);
+        playSoundEffectWithPriorityAndPan(temp, arg1, arg2 + 0x80, 0);
     } else {
         temp = func_800B4AFC_1E1BAC(arg0);
         playSoundEffectOnChannel(temp, arg1, arg2 + 0x80, 0, arg3);

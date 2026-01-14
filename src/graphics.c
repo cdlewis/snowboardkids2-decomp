@@ -866,21 +866,21 @@ void playSoundEffectWithPriority(s32 soundId, s32 volume, s32 priority) {
     playSoundEffectWithPriorityAndVoice(soundId, volume, priority, 0xC);
 }
 
-void func_800582DC_58EDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void playSoundEffectWithPriorityPanAndVoice(s32 soundId, s32 volume, s32 pan, s32 priority, s32 voiceIndex) {
     void *message;
 
-    gGraphicsCommand.soundId = arg0;
-    gGraphicsCommand.volume = arg1;
-    gGraphicsCommand.pan = arg2;
-    gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (arg3 << 0x18);
-    gGraphicsCommand.voiceIndex = arg4;
+    gGraphicsCommand.soundId = soundId;
+    gGraphicsCommand.volume = volume;
+    gGraphicsCommand.pan = pan;
+    gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (priority << 0x18);
+    gGraphicsCommand.voiceIndex = voiceIndex;
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
-void func_80058360_58F60(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    func_800582DC_58EDC(arg0, arg1, arg2, arg3, 0xC);
+void playSoundEffectWithPriorityAndPan(s32 soundId, s32 volume, s32 pan, s32 priority) {
+    playSoundEffectWithPriorityPanAndVoice(soundId, volume, pan, priority, 0xC);
 }
 
 void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
