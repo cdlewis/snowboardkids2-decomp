@@ -858,46 +858,6 @@ void setupSlotMoveToWithBounce(CutsceneSlotData *slot, s32 *targetPos, s16 durat
     slot->unkA0 = gravity;
 }
 
-s32 setupSlotMoveToWithRotationFromArgs(
-    CutsceneSlotData *slot,
-    SceneModel *model,
-    s32 targetX,
-    s32 targetY,
-    s32 targetZ,
-    s16 duration,
-    s16 targetAngle
-) {
-    s16 frames;
-    s16 temp;
-    s16 rotVel;
-
-    temp = duration + 1;
-    frames = temp;
-    if ((s32)(temp << 16) <= 0) {
-        frames = 1;
-    }
-
-    slot->unk30 = targetX;
-    slot->unk34 = targetY;
-    slot->unk38 = targetZ;
-
-    slot->unk84 = frames;
-    slot->unk86 = frames;
-    slot->angle = 0;
-    slot->unk7A = targetAngle;
-    slot->unk0.Two = 1;
-
-    slot->unk3C = (slot->unk30 - slot->unk04.translation.x) / frames;
-    slot->unk40 = (slot->unk34 - slot->unk28) / frames;
-    slot->unk44 = (slot->unk38 - slot->unk2C) / frames;
-
-    rotVel = calcAngleDiff(slot, 0, targetAngle, slot->unk78) / frames;
-    slot->unk7C = rotVel;
-    slot->unk7E = rotVel;
-
-    return 0;
-}
-
 INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7C48_1E4CF8);
 
 extern s32 func_800B7C48_1E4CF8(CutsceneSlotData *, SceneModel *);
