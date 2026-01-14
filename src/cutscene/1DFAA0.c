@@ -961,7 +961,7 @@ u16 getSlotLastFrameNumber(u8 slotIndex) {
     return entry->frameNumber;
 }
 
-StateEntry *func_800B4288_1E1338(void) {
+StateEntry *getCutsceneStateTable(void) {
     return gCutsceneStateTable;
 }
 
