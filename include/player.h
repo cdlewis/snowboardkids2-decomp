@@ -30,6 +30,8 @@ s32 setFrequencyOffsetByHandle(void *, f32);
 
 s32 setPanScaleByHandle(void *, s32);
 
+s32 setTempoScaleByHandle(void *, s32);
+
 s32 setVolumeScaleByHandle(void *, s32);
 
 void stopChannelsByFlags(s32 channelFlags, s32 stopSpeed);

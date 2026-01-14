@@ -1061,29 +1061,29 @@ s32 setFrequencyOffsetByHandle(void *handle, f32 offset) {
     return count;
 }
 
-s32 func_80072BAC_737AC(void *arg0, s32 arg1) {
+s32 setTempoScaleByHandle(void *handle, s32 tempoScale) {
     s32 count;
     s32 i;
     channel_t *cp;
-    u16 temp;
+    u16 savedTempo;
 
-    if (arg0 == NULL) {
+    if (handle == NULL) {
         return 0;
     }
 
-    if (arg1 <= 0) {
-        arg1 = 1;
-    } else if (arg1 > 0x100) {
-        arg1 = 0x100;
+    if (tempoScale <= 0) {
+        tempoScale = 1;
+    } else if (tempoScale > 0x100) {
+        tempoScale = 0x100;
     }
 
     count = 0;
     for (i = 0, cp = mus_channels; i < max_channels; i++, cp++) {
-        if ((void *)cp->handle == arg0) {
+        if ((void *)cp->handle == handle) {
             count++;
-            cp->temscale = arg1;
-            temp = cp->channel_tempo_save;
-            cp->channel_tempo = (temp * arg1) >> 7;
+            cp->temscale = tempoScale;
+            savedTempo = cp->channel_tempo_save;
+            cp->channel_tempo = (savedTempo * tempoScale) >> 7;
         }
     }
 
