@@ -9,7 +9,7 @@ typedef struct {
 } cutsceneEffectTrick_exec_arg;
 
 typedef struct {
-    s16 unk0;
+    s16 displayDuration;
 } cutsceneEffectFan_exec_arg;
 
 typedef struct {

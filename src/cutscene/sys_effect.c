@@ -65,7 +65,7 @@ s32 cutsceneEffectFan_validate(void) {
 }
 
 void cutsceneEffectFan_exec(cutsceneEffectFan_exec_arg *arg0, CutsceneSlot *arg1, s8 arg2) {
-    func_800B4F60_1E2010(arg1[arg2].slotData.unkA4.ptr, arg0->unk0);
+    spawnFanEffect(arg1[arg2].slotData.unkA4.ptr, arg0->displayDuration);
 }
 
 s32 cutsceneEffectFan_isDone(void) {

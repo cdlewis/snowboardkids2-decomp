@@ -24,7 +24,7 @@ typedef struct {
     u32 unk68;
     u8 _pad6C[0x18];
     s16 unk84;
-} func_800B4CD0_1E1D80_arg;
+} FanEffectTaskState;
 
 typedef struct {
     u8 _pad0[0x18];
@@ -34,7 +34,7 @@ typedef struct {
     s32 unk7C;
     u8 _pad80[0x2];
     u16 unk82;
-} func_800B4E7C_Struct;
+} FanEffectFadeState;
 
 typedef struct {
     u8 _pad0[0x3C];
@@ -45,7 +45,7 @@ typedef struct {
     u16 unk82;
     s16 unk84;
     s16 unk86;
-} func_800B4D74_1E1E24_arg;
+} FanEffectGrowState;
 
 typedef struct {
     u8 padding[0x78];
@@ -54,11 +54,11 @@ typedef struct {
     s16 unk80;
     u8 padding3[4];
     s16 unk86;
-} func_800B4F60_1E2010_task;
+} FanEffectTask;
 
-void func_800B4D74_1E1E24(func_800B4D74_1E1E24_arg *);
-void func_800B4F28_1E1FD8(SceneModel_unk98 *);
-void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0);
+void updateFanEffectGrow(FanEffectGrowState *);
+void cleanupFanEffectTask(SceneModel_unk98 *);
+void updateFanEffectFade(FanEffectFadeState *arg0);
 
 extern Transform3D D_8009A8B0_9B4B0;
 extern StateEntry D_80088650;
@@ -134,7 +134,7 @@ void func_800B4CB0_1E1D60(void) {
     stopSoundEffectChannel(0, 0);
 }
 
-void func_800B4CD0_1E1D80(func_800B4CD0_1E1D80_arg *arg0) {
+void initFanEffectTask(FanEffectTaskState *arg0) {
     StateEntry **temp_a1;
 
     arg0->unk20 = &D_80088650;
@@ -150,11 +150,11 @@ void func_800B4CD0_1E1D80(func_800B4CD0_1E1D80_arg *arg0) {
     arg0->unk60 = *temp_a1;
     arg0->unk64 = arg0->unk28;
 
-    setCleanupCallback(&func_800B4F28_1E1FD8);
-    setCallbackWithContinue(&func_800B4D74_1E1E24);
+    setCleanupCallback(&cleanupFanEffectTask);
+    setCallbackWithContinue(&updateFanEffectGrow);
 }
 
-void func_800B4D74_1E1E24(func_800B4D74_1E1E24_arg *arg0) {
+void updateFanEffectGrow(FanEffectGrowState *arg0) {
     Transform3D sp10;
     void *temp_v0;
     s16 temp_v0_2;
@@ -190,11 +190,11 @@ void func_800B4D74_1E1E24(func_800B4D74_1E1E24_arg *arg0) {
         }
     } else {
         arg0->unk7C = 0x40000;
-        setCallback(&func_800B4E7C_1E1F2C);
+        setCallback(&updateFanEffectFade);
     }
 }
 
-void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0) {
+void updateFanEffectFade(FanEffectFadeState *arg0) {
     Transform3D matrix;
     s32 temp_v0;
 
@@ -217,13 +217,13 @@ void func_800B4E7C_1E1F2C(func_800B4E7C_Struct *arg0) {
     enqueueDisplayListObject(0, (DisplayListObject *)&arg0->unk3C);
 }
 
-void func_800B4F28_1E1FD8(SceneModel_unk98 *arg0) {
+void cleanupFanEffectTask(SceneModel_unk98 *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void func_800B4F60_1E2010(s32 arg0, s16 arg1) {
-    func_800B4F60_1E2010_task *task = (func_800B4F60_1E2010_task *)scheduleTask(&func_800B4CD0_1E1D80, 1, 0, 0x64);
+void spawnFanEffect(s32 arg0, s16 arg1) {
+    FanEffectTask *task = (FanEffectTask *)scheduleTask(&initFanEffectTask, 1, 0, 0x64);
 
     if (task != NULL) {
         task->unk78 = arg0;
