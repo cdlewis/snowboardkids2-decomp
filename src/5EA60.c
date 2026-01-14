@@ -314,88 +314,84 @@ ret0:
     return 0;
 }
 
-void func_8005E800_5F400(BoneAnimationState *entity, u16 param_2) {
-    s16 stack_data[0x10];
+void interpolateBoneAnimation(BoneAnimationState *state, u16 progress) {
+    s16 rotMatrix[0x10];
 
-    if (entity->flags & 0x8000) {
-        entity->flags &= 0x7FFF;
+    if (state->flags & 0x8000) {
+        state->flags &= 0x7FFF;
         createBoneRotMatrix(
-            entity->animation_data[1],
-            entity->animation_data[2],
-            entity->animation_data[3],
-            entity->values
+            state->animation_data[1],
+            state->animation_data[2],
+            state->animation_data[3],
+            state->values
         );
         {
-            u16 idx;
-            s16 temp_val;
+            u16 frameIndex;
 
-            idx = entity->animation_data[4];
-            temp_val = entity->frame_data[idx * 3];
-            entity->position[0] = temp_val << 10;
+            frameIndex = state->animation_data[4];
+            state->position[0] = state->frame_data[frameIndex * 3] << 10;
 
-            idx = entity->animation_data[4];
-            temp_val = entity->frame_data[(idx * 3) + 1];
-            entity->position[1] = temp_val << 10;
+            frameIndex = state->animation_data[4];
+            state->position[1] = state->frame_data[frameIndex * 3 + 1] << 10;
 
-            idx = entity->animation_data[4];
-            temp_val = entity->frame_data[(idx * 3) + 2];
-            entity->position[2] = temp_val << 10;
+            frameIndex = state->animation_data[4];
+            state->position[2] = state->frame_data[frameIndex * 3 + 2] << 10;
 
-            memcpy(entity->prev_position, entity->values, 0x20);
-            entity->animation_data += 5;
-            entity->counter = entity->animation_data[3];
+            memcpy(state->prev_position, state->values, 0x20);
+            state->animation_data += 5;
+            state->counter = state->animation_data[3];
         }
     }
 
     {
-        s32 result;
+        s32 interpCounter;
 
-        result = entity->animation_data[3] * (param_2 & 0xFFFF);
-        if (result < 0) {
-            result += 0x1FF;
+        interpCounter = state->animation_data[3] * progress;
+        if (interpCounter < 0) {
+            interpCounter += 0x1FF;
         }
-        entity->counter = result >> 9;
+        state->counter = interpCounter >> 9;
 
-        if (entity->counter & 0xFFFF) {
-            createBoneRotMatrix(entity->animation_data[1], entity->animation_data[2], entity->counter, stack_data);
-            func_8006BDBC_6C9BC(entity, stack_data, entity->prev_position);
+        if (state->counter & 0xFFFF) {
+            createBoneRotMatrix(state->animation_data[1], state->animation_data[2], state->counter, rotMatrix);
+            func_8006BDBC_6C9BC(state, rotMatrix, state->prev_position);
         }
     }
 
     {
-        u16 idx;
-        s32 source_val;
-        s32 dest_val;
-        s32 result;
+        u16 frameIndex;
+        s32 targetPos;
+        s32 currentPos;
+        s32 delta;
 
-        /* First interpolation */
-        idx = entity->animation_data[4];
-        source_val = entity->frame_data[idx * 3] << 10;
-        dest_val = entity->position[0];
-        result = (source_val - dest_val) * param_2;
-        if (result < 0) {
-            result += 0x1FF;
+        /* Interpolate X position */
+        frameIndex = state->animation_data[4];
+        targetPos = state->frame_data[frameIndex * 3] << 10;
+        currentPos = state->position[0];
+        delta = (targetPos - currentPos) * progress;
+        if (delta < 0) {
+            delta += 0x1FF;
         }
-        entity->interpolated[0] = (result >> 9) + dest_val;
+        state->interpolated[0] = (delta >> 9) + currentPos;
 
-        /* Second interpolation */
-        idx = entity->animation_data[4];
-        source_val = entity->frame_data[(idx * 3) + 1] << 10;
-        dest_val = entity->position[1];
-        result = (source_val - dest_val) * param_2;
-        if (result < 0) {
-            result += 0x1FF;
+        /* Interpolate Y position */
+        frameIndex = state->animation_data[4];
+        targetPos = state->frame_data[frameIndex * 3 + 1] << 10;
+        currentPos = state->position[1];
+        delta = (targetPos - currentPos) * progress;
+        if (delta < 0) {
+            delta += 0x1FF;
         }
-        entity->interpolated[1] = (result >> 9) + dest_val;
+        state->interpolated[1] = (delta >> 9) + currentPos;
 
-        /* Third interpolation */
-        idx = entity->animation_data[4];
-        source_val = entity->frame_data[(idx * 3) + 2] << 10;
-        result = (source_val - entity->position[2]) * param_2;
-        if (result < 0) {
-            result += 0x1FF;
+        /* Interpolate Z position */
+        frameIndex = state->animation_data[4];
+        targetPos = state->frame_data[frameIndex * 3 + 2] << 10;
+        delta = (targetPos - state->position[2]) * progress;
+        if (delta < 0) {
+            delta += 0x1FF;
         }
-        entity->interpolated[2] = (result >> 9) + entity->position[2];
+        state->interpolated[2] = (delta >> 9) + state->position[2];
     }
 }
 

@@ -650,7 +650,7 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
             }
         } else {
             for (i = 0; i < s3; i++) {
-                func_8005E800_5F400(&arg0->unk4[i], arg1 & 0xFFFF);
+                interpolateBoneAnimation(&arg0->unk4[i], arg1 & 0xFFFF);
             }
         }
     } else if (arg0->unk38 != -1) {
