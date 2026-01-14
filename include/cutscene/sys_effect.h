@@ -4,8 +4,8 @@
 #include "common.h"
 
 typedef struct {
-    u16 unk0;
-    u16 unk2;
+    u16 frameCount;   // Number of frames to play the trick effect
+    u16 effectParam;  // Effect parameter (passed to trick effect function)
 } cutsceneEffectTrick_exec_arg;
 
 typedef struct {

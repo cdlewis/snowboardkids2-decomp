@@ -33,8 +33,8 @@ typedef struct {
             s8 padding;
         } CurtainPayload;
         struct {
-            s16 unk0;
-            s16 unk2;
+            s16 frameCount;   // Number of frames remaining for trick effect
+            s16 effectParam;  // Effect parameter passed to trick effect function
         } TrickPayload;
         struct {
             s16 unk0;
@@ -212,8 +212,8 @@ typedef struct {
             s8 padding;
         } CurtainPayload;
         struct {
-            s16 unk0;
-            s16 unk2;
+            s16 frameCount;   // Number of frames remaining for trick effect
+            s16 effectParam;  // Effect parameter passed to trick effect function
         } TrickPayload;
         struct {
             s16 unk0;

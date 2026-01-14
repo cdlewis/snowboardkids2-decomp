@@ -147,8 +147,8 @@ s32 cutsceneEffectTrick_validate(void) {
 
 void cutsceneEffectTrick_exec(cutsceneEffectTrick_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
     CutsceneSlot *temp_v0 = getCutsceneSlot(arg1, arg2);
-    temp_v0->unk0.TrickPayload.unk0 = arg0->unk0;
-    temp_v0->unk0.TrickPayload.unk2 = arg0->unk2;
+    temp_v0->unk0.TrickPayload.frameCount = arg0->frameCount;
+    temp_v0->unk0.TrickPayload.effectParam = arg0->effectParam;
     enableSlotUpdate(arg1, arg2);
 }
 
@@ -159,9 +159,9 @@ void cutsceneEffectTrick_update(CutsceneManager *arg0, s8 arg1) {
     slot = &arg0->slots[arg1];
     temp_s0 = getCutsceneSlot(arg0, arg1);
 
-    if (temp_s0->unk0.TrickPayload.unk0 > 0) {
-        func_800B523C_1E22EC(slot->model, temp_s0->unk0.TrickPayload.unk2);
-        temp_s0->unk0.TrickPayload.unk0 -= 1;
+    if (temp_s0->unk0.TrickPayload.frameCount > 0) {
+        func_800B523C_1E22EC(slot->model, temp_s0->unk0.TrickPayload.effectParam);
+        temp_s0->unk0.TrickPayload.frameCount -= 1;
     } else {
         disableSlotUpdate(arg0, arg1);
     }
