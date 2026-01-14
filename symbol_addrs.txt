@@ -1030,7 +1030,7 @@ cutsceneEffectFan_isDone = 0x800B1D9C;
 cutsceneEffectRocket_validate = 0x800B1DAC;
 cutsceneEffectRocket_isDone = 0x800B1DF4;
 cutsceneEffectMLight_validate = 0x800B1E04;
-cutsceneEffectMLight_isDone = 0x800B1F94;
+cutsceneEffectMLight_isDone = 0x800B1F94; // rom:0x1DF044
 cutsceneEffectTrick_validate = 0x800B1FA4;
 cutsceneEffectTrick_isDone = 0x800B20A8;
 
