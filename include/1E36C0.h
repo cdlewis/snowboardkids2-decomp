@@ -42,6 +42,7 @@ void interpolateSlotScaleZ(CutsceneSlotData *slot, s32 targetScaleZ, s16 duratio
 void setupSlotProjectile(CutsceneSlotData *slot, s32 speed, s32 velY, s32 gravity);
 void setupSlotMoveToFacing(CutsceneSlotData *slot, s32 targetX, s32 targetY, s32 targetZ, s32 duration);
 void setupSlotMoveToNoRotation(CutsceneSlotData *slot, SceneModel *unused, s32 targetX, s32 targetY, s32 targetZ, s16 duration);
+s32 setupSlotMoveToWithRotationFromArgs(CutsceneSlotData *slot, SceneModel *model, s32 targetX, s32 targetY, s32 targetZ, s16 duration, s16 targetAngle);
 void setupSlotMoveToWithBounce(CutsceneSlotData *slot, s32 *targetPos, s16 duration, s32 bounceVelY, s32 gravity);
 s16 updateSlotLinearMove(CutsceneSlotData *slot, SceneModel *model);
 s32 updateSlotRotation(CutsceneSlotData *slot, StateEntry *state);
