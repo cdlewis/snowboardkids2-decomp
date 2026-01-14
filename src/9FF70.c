@@ -3122,7 +3122,7 @@ s32 jumpUpwardStep(Player *player) {
     s32 updatedYOffset;
     s32 nextFrameCounter;
 
-    yOffsetDelta = player->unkB48;
+    yOffsetDelta = player->storedPosY;
     prevYOffset = player->unk474;
     yOffsetDelta = (yOffsetDelta - prevYOffset) * player->unkB8C;
     if (yOffsetDelta < 0) {
@@ -3150,11 +3150,11 @@ s32 jumpUpwardStep(Player *player) {
     return 0;
 }
 
-s32 func_800B71E4_A7094(Player *arg0) {
-    arg0->worldPos.x = arg0->unkB44;
-    arg0->worldPos.y = arg0->unkB48;
-    arg0->worldPos.z = arg0->unkB4C;
-    arg0->unkA8E = arg0->unkB74;
+s32 restoreStoredPositionStep(Player *arg0) {
+    arg0->worldPos.x = arg0->storedPosX;
+    arg0->worldPos.y = arg0->storedPosY;
+    arg0->worldPos.z = arg0->storedPosZ;
+    arg0->unkA8E = arg0->storedRotY;
 
     if (func_8005D308_5DF08(arg0, 5) != 0) {
         arg0->behaviorCounter = 0;
@@ -3169,10 +3169,10 @@ s32 func_800B724C_A70FC(Player *arg0) {
     u8 flags;
 
     alloc = (GameState *)getCurrentAllocation();
-    arg0->worldPos.x = arg0->unkB44;
-    arg0->worldPos.y = arg0->unkB48;
-    arg0->worldPos.z = arg0->unkB4C;
-    arg0->unkA8E = arg0->unkB74;
+    arg0->worldPos.x = arg0->storedPosX;
+    arg0->worldPos.y = arg0->storedPosY;
+    arg0->worldPos.z = arg0->storedPosZ;
+    arg0->unkA8E = arg0->storedRotY;
     flags = arg0->unkBCE;
 
     if (flags & 8) {
@@ -3201,10 +3201,10 @@ s32 func_800B724C_A70FC(Player *arg0) {
 }
 
 s32 func_800B735C_A720C(Player *arg0) {
-    arg0->worldPos.x = arg0->unkB44;
-    arg0->worldPos.y = arg0->unkB48;
-    arg0->worldPos.z = arg0->unkB4C;
-    arg0->unkA8E = arg0->unkB74;
+    arg0->worldPos.x = arg0->storedPosX;
+    arg0->worldPos.y = arg0->storedPosY;
+    arg0->worldPos.z = arg0->storedPosZ;
+    arg0->unkA8E = arg0->storedRotY;
 
     func_8005D308_5DF08(arg0, 0);
 
@@ -3217,10 +3217,10 @@ s32 func_800B735C_A720C(Player *arg0) {
 }
 
 s32 func_800B73CC_A727C(Player *arg0) {
-    arg0->worldPos.x = arg0->unkB44;
-    arg0->worldPos.y = arg0->unkB48;
-    arg0->worldPos.z = arg0->unkB4C;
-    arg0->unkA8E = arg0->unkB74;
+    arg0->worldPos.x = arg0->storedPosX;
+    arg0->worldPos.y = arg0->storedPosY;
+    arg0->worldPos.z = arg0->storedPosZ;
+    arg0->unkA8E = arg0->storedRotY;
 
     func_8005D308_5DF08(arg0, 3);
 

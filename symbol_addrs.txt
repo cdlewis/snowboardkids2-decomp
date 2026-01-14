@@ -249,6 +249,7 @@ respawnAtFinishLineAndSlideStep = 0x800B6E5C; // rom:0xA6D0C
 slideForwardAndResetStep = 0x800B6FE8; // rom:0xA6E98
 dropDownwardStep = 0x800B7078; // rom:0xA6F28
 jumpUpwardStep = 0x800B7108; // rom:0xA6FB8
+restoreStoredPositionStep = 0x800B71E4; // rom:0xA7094
 g_KnockbackDiagonalSlideVelocity = 0x800BAC8C; // rom:0xAAB3C size:0xC
 g_FinishLineRespawnOffset = 0x800BAC98; // rom:0xAAB48 size:0xC
 g_KnockbackRecoveryForwardVelocity = 0x800BAC80; // rom:0xAAB30 size:0xC

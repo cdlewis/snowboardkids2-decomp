@@ -133,13 +133,13 @@ typedef struct {
     s32 unkB2C;
     u8 paddingB30[0xB40 - 0xB30];
     s32 unkB40;
-    s32 unkB44;
-    s32 unkB48;
-    s32 unkB4C;
+    s32 storedPosX;
+    s32 storedPosY;
+    s32 storedPosZ;
     u8 padding2c_2[0x1C];
     s32 unkB6C;
     s32 unkB70;
-    u16 unkB74;
+    u16 storedRotY;
     u8 padding2c_3[0x2];
     s16 unkB78;
     s8 unkB7A;

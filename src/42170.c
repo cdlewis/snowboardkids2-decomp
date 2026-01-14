@@ -209,11 +209,11 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0xB44];
-    u8 unkB44[0xC];   /* 0xB44 */
-    u8 _padB50[0x24]; /* 0xB50 */
-    s16 unkB74;       /* 0xB74 */
-    u8 _padB76[0x58]; /* 0xB76 to 0xBCE */
-    u8 unkBCE;        /* 0xBCE */
+    u8 storedPos[0xC]; /* 0xB44 */
+    u8 _padB50[0x24];  /* 0xB50 */
+    s16 storedRotY;    /* 0xB74 */
+    u8 _padB76[0x58];  /* 0xB76 to 0xBCE */
+    u8 unkBCE;         /* 0xBCE */
 } Func44BBCPointerTarget;
 
 typedef struct {
@@ -231,7 +231,7 @@ typedef struct {
     s32 unkBC;                     /* 0xBC */
     s32 unkC0;                     /* 0xC0 */
     s16 unkC4;                     /* 0xC4 - counter */
-    s16 unkC6;                     /* 0xC6 - value copied to unkB74 */
+    s16 unkC6;                     /* 0xC6 - value copied to storedRotY */
     u16 unkC8;                     /* 0xC8 */
     u16 wingOscillationAngle;      /* 0xCA */
 } UfoEffectState;
@@ -1962,8 +1962,8 @@ void func_800447D4_453D4(UfoEffectState *arg0) {
         transformVector2(&D_80090AAC_916AC, arg0, &output);
         arg0->unk14.x = arg0->unk14.x + output.x;
         arg0->unk14.z = arg0->unk14.z + output.z;
-        memcpy(&arg0->unkB4->unkB44, &arg0->unk14, 0xC);
-        arg0->unkB4->unkB74 = arg0->unkC6;
+        memcpy(&arg0->unkB4->storedPos, &arg0->unk14, 0xC);
+        arg0->unkB4->storedRotY = arg0->unkC6;
         if (arg0->unkC4 != 0) {
             arg0->unkC4 = arg0->unkC4 - 1;
         } else {
@@ -1998,8 +1998,8 @@ void func_80044888_45488(UfoEffectState *arg0) {
     arg0->unk14.y = arg0->unk14.y + output.y;
     arg0->unk14.z = arg0->unk14.z + output.z;
 
-    memcpy(&arg0->unkB4->unkB44, &arg0->unk14, 0xC);
-    arg0->unkB4->unkB74 = arg0->unkC6;
+    memcpy(&arg0->unkB4->storedPos, &arg0->unk14, 0xC);
+    arg0->unkB4->storedRotY = arg0->unkC6;
 
     {
         s16 temp = arg0->unkC4;
@@ -2085,8 +2085,8 @@ skip_rotation:
     arg0->unk14.x = arg0->unk14.x + output.x;
     arg0->unk14.y = arg0->unk14.y + output.y;
     arg0->unk14.z = arg0->unk14.z + output.z;
-    memcpy(arg0->unkB4->unkB44, &arg0->unk14, 0xC);
-    arg0->unkB4->unkB74 = arg0->unkC6;
+    memcpy(arg0->unkB4->storedPos, &arg0->unk14, 0xC);
+    arg0->unkB4->storedRotY = arg0->unkC6;
 
     if (arg0->unkC0 != 0) {
         arg0->unkC0 = arg0->unkC0 - 0x2000;
@@ -2109,8 +2109,8 @@ void func_80044BBC_457BC(UfoEffectState *arg0) {
         if (arg0->unkC4 == 0) {
             setCallback(func_80044C38_45838);
         }
-        memcpy(&arg0->unkB4->unkB44, &arg0->unk14, 0xC);
-        arg0->unkB4->unkB74 = arg0->unkC6;
+        memcpy(&arg0->unkB4->storedPos, &arg0->unk14, 0xC);
+        arg0->unkB4->storedRotY = arg0->unkC6;
     }
 
     renderUfoEffectWithWings(arg0);
