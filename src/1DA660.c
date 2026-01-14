@@ -133,7 +133,7 @@ void checkCharacterPreviewState(CharacterPreviewState *);
 void animateCharacterPreview(CharacterPreviewState *);
 void awaitCharacterPreviewRotationReset(CharacterPreviewState *);
 void updateCharacterSelectSprites(CharacterSelectSprites *);
-void func_800B0BC0_1DB160(func_800B0FE0_arg *);
+void cleanupCharacterSelectSprites(CharacterSelectSprites *);
 void func_800B0E94_1DB434(void *);
 void func_800B0EEC_1DB48C(func_800B0FE0_arg *);
 void func_800B0F88_1DB528(void *);
@@ -432,7 +432,7 @@ void initCharacterSelectSprites(CharacterSelectSprites *arg0) {
         positionCharacterSelectSprite(&arg0->sprites[i], i);
     }
 
-    setCleanupCallback(func_800B0BC0_1DB160);
+    setCleanupCallback(cleanupCharacterSelectSprites);
     setCallback(updateCharacterSelectSprites);
 }
 
@@ -480,8 +480,8 @@ void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
     }
 }
 
-void func_800B0BC0_1DB160(func_800B0FE0_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupCharacterSelectSprites(CharacterSelectSprites *arg0) {
+    arg0->sprites[0].spriteData = freeNodeMemory(arg0->sprites[0].spriteData);
 }
 
 void func_800B0BEC_1DB18C(func_800B0BEC_arg *arg0) {
