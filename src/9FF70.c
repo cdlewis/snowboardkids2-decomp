@@ -3200,7 +3200,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
     return 0;
 }
 
-s32 func_800B735C_A720C(Player *arg0) {
+s32 handleUfoAbductionRecoveryStep(Player *arg0) {
     arg0->worldPos.x = arg0->storedPosX;
     arg0->worldPos.y = arg0->storedPosY;
     arg0->worldPos.z = arg0->storedPosZ;
