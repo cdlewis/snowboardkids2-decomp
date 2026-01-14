@@ -23,7 +23,7 @@ typedef struct {
     /* 0x44 */ s16 *frame_data;
     /* 0x48 */ u16 flags;
     /* 0x4A */ u16 counter;
-} func_8005E800_5F400_arg;
+} BoneAnimationState;
 
 typedef struct {
     s16 m[9];
@@ -39,7 +39,7 @@ void createYRotationMatrix(Transform3D *, u16 angle);
 void createZRotationMatrix(Transform3D *, u16 angle);
 void createXRotationMatrix(s16 matrix[3][3], u16 angle);
 
-void func_8006BDBC_6C9BC(func_8005E800_5F400_arg *, void *, void *);
+void func_8006BDBC_6C9BC(BoneAnimationState *, void *, void *);
 
 void func_8006B084_6BC84(void *, void *, void *);
 

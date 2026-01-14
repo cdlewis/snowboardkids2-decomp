@@ -427,7 +427,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
     if (!(arg0->unkB84 & 1)) {
         temp_s0 = &arg0->unk970;
         createYRotationMatrix(temp_s0, arg0->unkA94);
-        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, temp_s0, &sp10);
+        func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, temp_s0, &sp10);
         temp_s1 = (Vec3i *)&arg0->velocity;
         transformVector3(temp_s1, &sp10, &sp30);
         sp30.x = 0;

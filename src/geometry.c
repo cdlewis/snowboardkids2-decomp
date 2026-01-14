@@ -371,7 +371,7 @@ INCLUDE_ASM("asm/nonmatchings/geometry", transformVectorRelative);
 
 INCLUDE_ASM("asm/nonmatchings/geometry", rotateVectorY);
 
-void func_8006BDBC_6C9BC(func_8005E800_5F400_arg *arg0, void *arg1, void *arg2) {
+void func_8006BDBC_6C9BC(BoneAnimationState *arg0, void *arg1, void *arg2) {
     Transform3D *mat1 = arg1;
     Transform3D *mat2 = arg2;
     s32 row;

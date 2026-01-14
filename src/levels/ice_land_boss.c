@@ -354,7 +354,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
 
     if (!(arg0->unkB84 & 0x1)) {
         createYRotationMatrix(&arg0->unk970, arg0->unkA94);
-        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, &arg0->unk970, &sp10);
+        func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, &arg0->unk970, &sp10);
         transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
         transformVector2(&sp30, &sp10, &arg0->velocity);
@@ -593,7 +593,7 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
     if (!(arg0->unkB84 & 1)) {
         temp_s0 = &arg0->unk970;
         createYRotationMatrix(temp_s0, arg0->unkA94);
-        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&arg0->unk990, temp_s0, &sp10);
+        func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, temp_s0, &sp10);
         temp_s1 = &arg0->velocity;
         transformVector3(temp_s1, &sp10, &sp30);
         sp30.x = 0;

@@ -1212,6 +1212,8 @@ loadAssetByIndex_95500 = 0x8005DB48;
 loadAssetByIndex_95668 = 0x8005DBD0;
 loadAssetByIndex_95728 = 0x8005DC48;
 
+initBoneAnimationState = 0x8005DE98; // rom:0x5EA98
+
 D_80091450_92050 = 0x80091450; // size:0xC0
 D_80091310_91F10 = 0x80091310; // size:0xC0
 D_800913D0_91FD0 = 0x800913D0; // size:0x80

@@ -113,7 +113,7 @@ typedef struct {
 
 typedef struct {
     SceneModel_unk0 *unk0;
-    func_8005E800_5F400_arg *unk4;
+    BoneAnimationState *unk4;
     void *unk8;
     /* 0xC */ s16 index;
     u8 paddingA[0x06];

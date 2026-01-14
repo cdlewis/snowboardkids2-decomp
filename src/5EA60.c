@@ -13,21 +13,21 @@ u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 boneIndex) {
     return boneDataTable + *(u16 *)((s8 *)boneDataTable + boneIndex * 2 + 4);
 }
 
-void func_8005DE98_5EA98(void *animData, s32 tableIndex, s32 boneIndex, func_8005E800_5F400_arg *state) {
-    s16 *animPtr;
+void initBoneAnimationState(void *animData, s32 tableIndex, s32 boneIndex, BoneAnimationState *state) {
+    s16 *boneAnimData;
     s16 tableIdx;
     s16 boneIdx;
 
-    animPtr = getAnimationFrameData(animData);
-    state->frame_data = animPtr;
+    boneAnimData = getAnimationFrameData(animData);
+    state->frame_data = boneAnimData;
 
     tableIdx = (s16)(tableIndex << 16 >> 16);
     boneIdx = (s16)(boneIndex << 16 >> 16);
 
-    animPtr = getAnimationDataByIndex(animData, tableIdx, boneIdx);
-    state->animation_data = animPtr;
+    boneAnimData = getAnimationDataByIndex(animData, tableIdx, boneIdx);
+    state->animation_data = boneAnimData;
 
-    state->flags = *(u16 *)animPtr + 0x8000;
+    state->flags = *(u16 *)boneAnimData + 0x8000;
 }
 
 void func_8005DF10_5EB10(s16 arg0, s16 arg1, s16 arg2, s16 *arg3) {
@@ -156,7 +156,7 @@ void func_8005DF10_5EB10(s16 arg0, s16 arg1, s16 arg2, s16 *arg3) {
     arg3[1] = (s16)(temp_t2 + temp_v1_3);
 }
 
-s32 func_8005E22C_5EE2C(func_8005E800_5F400_arg *arg0) {
+s32 func_8005E22C_5EE2C(BoneAnimationState *arg0) {
     s16 stack_data[16];
     u16 flags;
     u16 frame_idx;
@@ -233,7 +233,7 @@ ret0:
     return 0;
 }
 
-s32 func_8005E500_5F100(func_8005E800_5F400_arg *arg0) {
+s32 func_8005E500_5F100(BoneAnimationState *arg0) {
     s16 stack_data[16];
     u16 flags;
     u16 frame_idx;
@@ -310,7 +310,7 @@ ret0:
     return 0;
 }
 
-void func_8005E800_5F400(func_8005E800_5F400_arg *entity, u16 param_2) {
+void func_8005E800_5F400(BoneAnimationState *entity, u16 param_2) {
     s16 stack_data[0x10];
 
     if (entity->flags & 0x8000) {
@@ -395,7 +395,7 @@ void func_8005E800_5F400(func_8005E800_5F400_arg *entity, u16 param_2) {
     }
 }
 
-void func_8005EA44_5F644(func_8005E800_5F400_arg *entity, u16 param_2) {
+void func_8005EA44_5F644(BoneAnimationState *entity, u16 param_2) {
     s16 stack_data[16];
     u16 idx;
     s16 temp_val;
@@ -468,13 +468,13 @@ void func_8005EA44_5F644(func_8005E800_5F400_arg *entity, u16 param_2) {
 }
 
 s32 func_8005ECB8_5F8B8(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
-    func_8005E800_5F400_arg *arg3 = (func_8005E800_5F400_arg *)arg3_void;
+    BoneAnimationState *arg3 = (BoneAnimationState *)arg3_void;
     s16 stack_data[16];
     u16 flags;
     u16 frame_idx;
 
     if ((arg3->flags < 2) && (*(u16 *)arg3->animation_data == 0)) {
-        func_8005DE98_5EA98(arg0, (s16)arg1, (s16)arg2, arg3);
+        initBoneAnimationState(arg0, (s16)arg1, (s16)arg2, arg3);
     }
 
     flags = arg3->flags;
@@ -553,13 +553,13 @@ ret0:
 }
 
 s32 func_8005EFC4_5FBC4(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
-    func_8005E800_5F400_arg *arg3 = (func_8005E800_5F400_arg *)arg3_void;
+    BoneAnimationState *arg3 = (BoneAnimationState *)arg3_void;
     s16 stack_data[16];
     u16 flags;
     u16 frame_idx;
 
     if ((arg3->flags < 2) && (*(u16 *)arg3->animation_data == 0)) {
-        func_8005DE98_5EA98(arg0, (s16)arg1, (s16)arg2, arg3);
+        initBoneAnimationState(arg0, (s16)arg1, (s16)arg2, arg3);
     }
 
     flags = arg3->flags;
@@ -719,7 +719,7 @@ s32 func_8005F344_5FF44(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
             (s16)animation_data[idx * 5 + 3] - state->counter,
             stack_data
         );
-        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)state, stack_data, state->prev_position);
+        func_8006BDBC_6C9BC((BoneAnimationState *)state, stack_data, state->prev_position);
     }
 
     idx = state->animation_index;
@@ -816,7 +816,7 @@ s32 func_8005F6DC_602DC(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
             state->counter - (s16)animation_data[idx * 5 + 3],
             stack_data
         );
-        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)state, stack_data, state->prev_position);
+        func_8006BDBC_6C9BC((BoneAnimationState *)state, stack_data, state->prev_position);
     }
 
     idx = state->animation_index;
@@ -1101,7 +1101,7 @@ s32 func_800600E4_60CE4(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
             diff - state->counter,
             stack_data
         );
-        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)state, stack_data, state->prev_position);
+        func_8006BDBC_6C9BC((BoneAnimationState *)state, stack_data, state->prev_position);
     }
 
     idx = state->animation_index;
@@ -1207,7 +1207,7 @@ s32 func_80060504_61104(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
             state->counter - diff,
             stack_data
         );
-        func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)state, stack_data, state->prev_position);
+        func_8006BDBC_6C9BC((BoneAnimationState *)state, stack_data, state->prev_position);
     }
 
     idx = state->animation_index;

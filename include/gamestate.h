@@ -94,7 +94,7 @@ typedef struct {
     u8 padding2a_3[0x4EC];
     Transform3D unk970;
     Transform3D unk990;
-    func_8005E800_5F400_arg unk9B0;
+    BoneAnimationState unk9B0;
     u8 padding9FC[0x14];
     JointPosition jointPositions[9];
     s32 unkA7C;

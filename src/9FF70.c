@@ -695,7 +695,7 @@ s32 beginPostTrickLaunchStep(Player *player) {
         }
     }
 
-    func_8006BDBC_6C9BC((func_8005E800_5F400_arg *)&player->unk990, &player->unk970, rotationTemp1);
+    func_8006BDBC_6C9BC((BoneAnimationState *)&player->unk990, &player->unk970, rotationTemp1);
     func_8006BDBC_6C9BC(&player->unk9B0, rotationTemp1, rotationTemp2);
     transformVector2(&D_800BAB3C_AA9EC, rotationTemp2, &launchVelocity);
 
