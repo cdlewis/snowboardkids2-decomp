@@ -1283,15 +1283,15 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
     }
 
     if (state->player->unkB84 & 0x80000) {
-        state->player->unkB9A = 0;
+        state->player->boostTimer = 0;
     }
 
-    if (state->player->unkB9A != 0) {
+    if (state->player->boostTimer != 0) {
         if (gameState->unk76 == 0) {
-            state->player->unkB9A--;
-            if (state->player->unkB9A == 0) {
+            state->player->boostTimer--;
+            if (state->player->boostTimer == 0) {
                 if (state->player->unkBBB == 0x10) {
-                    state->player->unkB9A++;
+                    state->player->boostTimer++;
                 }
             }
             if (state->scale != 0x2000) {
@@ -1407,26 +1407,26 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
 
     player = state->player;
     if (player->unkBC9 == 3) {
-        if (player->unkB9A != 0) {
-            if (player->unkB9A < 0x3C) {
-                player->unkB9A = 0x3C;
+        if (player->boostTimer != 0) {
+            if (player->boostTimer < 0x3C) {
+                player->boostTimer = 0x3C;
             }
         }
         player = state->player;
     }
 
     if (player->unkB84 & 0x80000) {
-        player->unkB9A = 0;
+        player->boostTimer = 0;
     }
 
     player2 = state->player;
-    if (player2->unkB9A != 0) {
+    if (player2->boostTimer != 0) {
         if (allocation->gamePaused == 0) {
             if (state->scale == 0x2000) {
-                player2->unkB9A--;
+                player2->boostTimer--;
                 player = state->player;
-                if (player->unkB9A == 0 && player->unkBBB == 0x11) {
-                    player->unkB9A++;
+                if (player->boostTimer == 0 && player->unkBBB == 0x11) {
+                    player->boostTimer++;
                 }
             } else {
                 state->scale = state->scale + 0x200;

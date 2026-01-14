@@ -185,7 +185,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
         arg0->unkAAC = 0;
         if (arg0->behaviorStep != 0) {
             if (arg0->unkB8C < 9) {
-                func_80058BB0_597B0(arg0);
+                tryActivateFinishBoost(arg0);
             }
         }
         resetPlayerBehaviorToDefault(arg0);
@@ -1865,7 +1865,7 @@ void initStunnedAirborneBehavior(Player *player) {
     player->behaviorPhase = 5;
     player->behaviorStep = 0;
     player->behaviorCounter = 0;
-    player->unkB9A = 0;
+    player->boostTimer = 0;
     player->unkBA6 = 0;
     player->unkBA4 = 0;
     player->unkB84 = player->unkB84 & 0xFFFF2FFF;

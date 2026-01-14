@@ -142,7 +142,7 @@ void setPlayerState100(Player *player) {
     }
 }
 
-s32 func_80058BB0_597B0(Player *arg0) {
+s32 tryActivateFinishBoost(Player *arg0) {
     if (arg0->boostState == 0) {
         if (spawnPlayerFlashEffect(arg0) != 0) {
             if (arg0->unkB84 & 2) {
@@ -150,7 +150,7 @@ s32 func_80058BB0_597B0(Player *arg0) {
             } else {
                 arg0->boostState = 3;
             }
-            arg0->unkB9A = 0x5A;
+            arg0->boostTimer = 0x5A;
             return 1;
         }
     }
@@ -176,7 +176,7 @@ s32 func_80058C64_59864(Player *arg0) {
             } else {
                 arg0->boostState = 1;
             }
-            arg0->unkB9A = 0xB4;
+            arg0->boostTimer = 0xB4;
             return 1;
         }
     }

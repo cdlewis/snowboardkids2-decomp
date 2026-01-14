@@ -156,7 +156,7 @@ typedef struct {
     u16 unkB94;
     u8 _padB96[0x2];
     s16 unkB98;
-    s16 unkB9A;
+    s16 boostTimer;
     s16 unkB9C;
     s16 unkB9E;
     u16 unkBA0;
