@@ -9,12 +9,12 @@
 #include "task_scheduler.h"
 
 extern void func_800B99A0_1E6A50(void);
-extern s16 D_800BADF0_1E7EA0;
-extern s16 D_800BADF2_1E7EA2;
+extern s16 gWipeOffsetX[];
+extern s16 gWipeOffsetY[];
 
 void func_800B9C20_1E6CD0(cutsceneSys2Wait_exec_asset *arg0);
 
-s32 func_800B93F0_1E64A0(s32 arg0) {
+s32 calculateZoomScaleFactor(s32 arg0) {
     s32 result;
 
     if (arg0 == 0) {
@@ -40,8 +40,8 @@ void func_800B9440_1E64F0(cutsceneSys2Wait_exec_asset *arg0) {
     offset = 0;
 
     do {
-        arg0->slots[i].unkA = func_800B93F0_1E64A0(arg0->unk74);
-        arg0->slots[i].unkC = func_800B93F0_1E64A0(arg0->unk78);
+        arg0->slots[i].unkA = calculateZoomScaleFactor(arg0->unk74);
+        arg0->slots[i].unkC = calculateZoomScaleFactor(arg0->unk78);
 
         if (arg0->slots[i].unkA == 0) {
             arg0->slots[i].unkA = one;
@@ -50,10 +50,8 @@ void func_800B9440_1E64F0(cutsceneSys2Wait_exec_asset *arg0) {
             arg0->slots[i].unkC = one;
         }
 
-        arg0->slots[i].unk0 =
-            arg0->unk10 + ((((s16 *)((u8 *)&D_800BADF0_1E7EA0 + offset))[0]) << 10) / arg0->slots[i].unkA;
-        arg0->slots[i].unk2 =
-            arg0->unk12 + ((((s16 *)((u8 *)&D_800BADF2_1E7EA2 + offset))[0]) << 10) / arg0->slots[i].unkC;
+        arg0->slots[i].unk0 = arg0->unk10 + ((((s16 *)((u8 *)gWipeOffsetX + offset))[0]) << 10) / arg0->slots[i].unkA;
+        arg0->slots[i].unk2 = arg0->unk12 + ((((s16 *)((u8 *)gWipeOffsetY + offset))[0]) << 10) / arg0->slots[i].unkC;
 
         i++;
         offset += 4;
