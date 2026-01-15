@@ -107,7 +107,7 @@ extern s32 D_800BC9A0_B0690[];
 extern s16 D_800BC9DC_B06CC[];
 extern s16 D_800BC9E8_B06D8[];
 extern s16 D_800BC9F4_B06E4[];
-extern Vec3i D_800BCA00_B06F0[];
+extern Vec3i g_GhostSpawnPositions[];
 extern s32 g_FloatingBillboardTargetX;
 extern s32 g_FloatingBillboardTargetY;
 extern s32 g_FloatingBillboardTargetZ;
@@ -131,8 +131,8 @@ void freeFloatingBillboard(void **);
 void updateFloatingBillboard(FloatingBillboard *);
 void initFloatingSpriteEntity(FloatingSpriteEntity *);
 void updateFloatingSpriteEntity(FloatingSpriteEntity *);
-void func_800BC184_AFE74(GhostManager *);
-void func_800BC220_AFF10(u8 *ghostSlots);
+void initGhostTransformations(GhostManager *);
+void updateGhostSlotStates(u8 *ghostSlots);
 void func_800BC340_B0030(GhostManager *);
 void func_800BC750_B0440(s16 *);
 void updateGhostAnimation(AnimatedGhostEntity *);
@@ -585,31 +585,31 @@ void initGhostManager(GhostManager *ghostManager) {
     ghostManager->ghostSpriteAsset = func_80055D7C_5697C(9);
     ghostManager->ghostSlotData = 0;
     setCleanupCallback(func_800BC340_B0030);
-    setCallback(func_800BC184_AFE74);
+    setCallback(initGhostTransformations);
 }
 
-void func_800BC184_AFE74(GhostManager *ghostManager) {
-    s32 ghostIndex;
-    s32 *tempPosition;
-    Vec3i *spawnPositions;
+void initGhostTransformations(GhostManager *ghostManager) {
+    s32 slotIndex;
+    s32 *transformSrc;
+    Vec3i *spawnPos;
 
     ghostManager->ghostSlotData = allocateNodeMemory(0x200);
 
-    ghostIndex = 0;
-    tempPosition = &D_8009A8A4_9B4A4;
-    spawnPositions = D_800BCA00_B06F0;
+    slotIndex = 0;
+    transformSrc = &D_8009A8A4_9B4A4;
+    spawnPos = g_GhostSpawnPositions;
 
-    while (ghostIndex < 8) {
-        memcpy(tempPosition, spawnPositions, 0xC);
-        func_8006BFB8_6CBB8(tempPosition - 5, (void *)((u8 *)ghostManager->ghostSlotData + (ghostIndex << 6)));
-        spawnPositions++;
-        ghostIndex++;
+    while (slotIndex < 8) {
+        memcpy(transformSrc, spawnPos, 0xC);
+        func_8006BFB8_6CBB8(transformSrc - 5, (void *)((u8 *)ghostManager->ghostSlotData + (slotIndex << 6)));
+        spawnPos++;
+        slotIndex++;
     }
 
-    setCallback(func_800BC220_AFF10);
+    setCallback(updateGhostSlotStates);
 }
 
-void func_800BC220_AFF10(u8 *ghostSlots) {
+void updateGhostSlotStates(u8 *ghostSlots) {
     GameState *gameState;
     s32 i;
     s32 maxRaceState;
@@ -688,7 +688,7 @@ void func_800BC378_B0068(GhostRenderState *state) {
     gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
 
     for (i = 0; i < 8; i++) {
-        if (isObjectCulled(&D_800BCA00_B06F0[i]) == 0) {
+        if (isObjectCulled(&g_GhostSpawnPositions[i]) == 0) {
             u8 textureIndex = state->textureIndices[i];
 
             if (textureIndex != prevTextureIndex) {
