@@ -18,14 +18,14 @@ extern s16 D_800B09BA_1DC09A[];
 extern s16 D_800B09A8_1DC088[];
 
 void func_800B0920_1DC000(void *);
-void func_800B0968_1DC048(func_800B07A0_1DBE80_arg *);
-void func_800B0804_1DBEE4(func_800B07A0_1DBE80_arg *);
-void func_800B0610_1DBCF0(func_800B07A0_1DBE80_arg *);
-void func_800B0664_1DBD44(func_800B07A0_1DBE80_arg *);
+void func_800B0968_1DC048(PlayerSelectSpriteTask *);
+void func_800B0804_1DBEE4(PlayerSelectSpriteTask *);
+void enqueuePlayerSelectSpritesRender(PlayerSelectSpriteTask *);
+void func_800B0664_1DBD44(PlayerSelectSpriteTask *);
 void updatePlayerSelectAnim(PlayerSelectState *);
-void cleanupPlayerSelectTask(func_800B07A0_1DBE80_arg *);
-void func_800B070C_1DBDEC(func_800B07A0_1DBE80_arg *);
-void func_800B0774_1DBE54(func_800B07A0_1DBE80_arg *);
+void cleanupPlayerSelectTask(PlayerSelectSpriteTask *);
+void func_800B070C_1DBDEC(PlayerSelectSpriteTask *);
+void func_800B0774_1DBE54(PlayerSelectSpriteTask *);
 
 void initPlayerSelectSprites(PlayerSelectState *state) {
     Allocation_1DB7A0 *allocation;
@@ -82,11 +82,11 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
 
 INCLUDE_ASM("asm/nonmatchings/1DB7A0", updatePlayerSelectAnim);
 
-void cleanupPlayerSelectTask(func_800B07A0_1DBE80_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupPlayerSelectTask(PlayerSelectSpriteTask *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void func_800B054C_1DBC2C(func_800B07A0_1DBE80_arg *arg0) {
+void func_800B054C_1DBC2C(PlayerSelectSpriteTask *arg0) {
     void *temp;
     s32 i;
     s16 v0, v2;
@@ -97,20 +97,20 @@ void func_800B054C_1DBC2C(func_800B07A0_1DBE80_arg *arg0) {
 
     for (i = 0; i < 4; i++) {
         v0 = D_800B09A8_1DC088[i * 2];
-        arg0[i].unk0 = v0;
+        arg0[i].x = v0;
         v2 = D_800B09A8_1DC088[i * 2 + 1];
-        arg0[i].unk8 = i / 2;
-        arg0[i].unkD = 0;
-        arg0[i].unkC = i & 1;
-        arg0[i].unkA = 0xFF;
-        arg0[i].unk4 = temp;
-        arg0[i].unk2 = v2;
+        arg0[i].frameIndex = i / 2;
+        arg0[i].playerIndex = 0;
+        arg0[i].slotIndex = i & 1;
+        arg0[i].alpha = 0xFF;
+        arg0[i].spriteData = temp;
+        arg0[i].y = v2;
     }
 
-    setCallback(func_800B0610_1DBCF0);
+    setCallback(enqueuePlayerSelectSpritesRender);
 }
 
-void func_800B0610_1DBCF0(func_800B07A0_1DBE80_arg *arg0) {
+void enqueuePlayerSelectSpritesRender(PlayerSelectSpriteTask *arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -118,74 +118,74 @@ void func_800B0610_1DBCF0(func_800B07A0_1DBE80_arg *arg0) {
     }
 }
 
-void func_800B0664_1DBD44(func_800B07A0_1DBE80_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_800B0664_1DBD44(PlayerSelectSpriteTask *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void func_800B0690_1DBD70(func_800B07A0_1DBE80_arg *arg0) {
+void func_800B0690_1DBD70(PlayerSelectSpriteTask *arg0) {
     void *temp;
 
     getCurrentAllocation();
     temp = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
     setCleanupCallback(func_800B0774_1DBE54);
-    arg0->unk0 = -96;
-    arg0->unk2 = -80;
-    arg0->unk8 = 6;
-    arg0->unk4 = temp;
+    arg0->x = -96;
+    arg0->y = -80;
+    arg0->frameIndex = 6;
+    arg0->spriteData = temp;
     setCallback(func_800B070C_1DBDEC);
 }
 
-void func_800B070C_1DBDEC(func_800B07A0_1DBE80_arg *arg0) {
+void func_800B070C_1DBDEC(PlayerSelectSpriteTask *arg0) {
     GameState *allocation = getCurrentAllocation();
 
     if (allocation->unk1E6 == 10) {
-        arg0->unk0 = -80;
-        arg0->unk8 = 7;
+        arg0->x = -80;
+        arg0->frameIndex = 7;
     } else {
-        arg0->unk0 = -96;
-        arg0->unk8 = 6;
+        arg0->x = -96;
+        arg0->frameIndex = 6;
     }
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
 }
 
-void func_800B0774_1DBE54(func_800B07A0_1DBE80_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_800B0774_1DBE54(PlayerSelectSpriteTask *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void func_800B07A0_1DBE80(func_800B07A0_1DBE80_arg *arg0) {
+void func_800B07A0_1DBE80(PlayerSelectSpriteTask *arg0) {
     void *temp;
 
     getCurrentAllocation();
     temp = loadCompressedData(&_426EF0_ROM_START, &_42F1D0_ROM_START, 0xEEE8);
     setCleanupCallback(func_800B0774_1DBE54);
-    arg0->unk4 = temp;
+    arg0->spriteData = temp;
     setCallback(func_800B0804_1DBEE4);
 }
 
-void func_800B0804_1DBEE4(func_800B07A0_1DBE80_arg *arg0) {
+void func_800B0804_1DBEE4(PlayerSelectSpriteTask *arg0) {
     s32 pad[2];
     Allocation_1DB7A0 *allocation = getCurrentAllocation();
 
-    arg0->unk0 = D_800B09B8_1DC098[allocation->unk1E2 * 2];
-    arg0->unk2 = D_800B09BA_1DC09A[allocation->unk1E2 * 2];
-    arg0->unk8 = allocation->unk1E2 + 2;
+    arg0->x = D_800B09B8_1DC098[allocation->unk1E2 * 2];
+    arg0->y = D_800B09BA_1DC09A[allocation->unk1E2 * 2];
+    arg0->frameIndex = allocation->unk1E2 + 2;
 
     debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
 }
 
-void func_800B087C_1DBF5C(func_800B07A0_1DBE80_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_800B087C_1DBF5C(PlayerSelectSpriteTask *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void func_800B08A8_1DBF88(func_800B07A0_1DBE80_arg *arg0) {
+void func_800B08A8_1DBF88(PlayerSelectSpriteTask *arg0) {
     void *temp;
 
     temp = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     setCleanupCallback(func_800B0968_1DC048);
-    arg0->unk0 = -0x2C;
-    arg0->unk2 = -0x14;
-    arg0->unk8 = 0xD;
-    arg0->unk4 = temp;
+    arg0->x = -0x2C;
+    arg0->y = -0x14;
+    arg0->frameIndex = 0xD;
+    arg0->spriteData = temp;
     setCallback(func_800B0920_1DC000);
 }
 
@@ -197,6 +197,6 @@ void func_800B0920_1DC000(void *arg0) {
     }
 }
 
-void func_800B0968_1DC048(func_800B07A0_1DBE80_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void func_800B0968_1DC048(PlayerSelectSpriteTask *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
