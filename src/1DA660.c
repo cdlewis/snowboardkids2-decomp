@@ -36,16 +36,16 @@ typedef struct {
 } TextureDataTaskState;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-} func_800B0F18_arg;
+    s16 xOffset;
+    s16 yOffset;
+    void *spriteData;
+    s16 frameIndex;
+} CharacterSelectIndicatorTask;
 
 typedef struct {
     u8 _pad0[0x4];
-    void *unk4;
-} func_800B0FE0_arg;
+    void *spriteData;
+} CharacterSelectIndicatorCleanupTask;
 
 typedef struct {
     s16 coordX;
@@ -129,10 +129,10 @@ void animateCharacterPreview(CharacterPreviewState *);
 void awaitCharacterPreviewRotationReset(CharacterPreviewState *);
 void updateCharacterSelectSprites(CharacterSelectSprites *);
 void cleanupCharacterSelectSprites(CharacterSelectSprites *);
-void func_800B0E94_1DB434(void *);
-void func_800B0EEC_1DB48C(func_800B0FE0_arg *);
-void func_800B0F88_1DB528(void *);
-void func_800B0FE0_1DB580(func_800B0FE0_arg *);
+void updatePlayer3CharacterSelectIndicator(void *);
+void cleanupCharacterSelectIndicator(CharacterSelectIndicatorCleanupTask *);
+void updatePlayer2CharacterSelectIndicator(void *);
+void cleanupCharacterSelectIndicatorData(CharacterSelectIndicatorCleanupTask *);
 void initCharacterSelectTextureRenderState(TextureDataTaskState *);
 void func_800B10D4_1DB674(void *);
 void func_800B1104_1DB6A4(func_800B1104_arg *);
@@ -538,19 +538,19 @@ void enqueueCharacterSelectTextureRender(void *arg0) {
     debugEnqueueCallback(9, 0, func_80038420_39020, arg0);
 }
 
-void func_800B0E24_1DB3C4(func_800B0F18_arg *arg0) {
+void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
     void *temp;
     getCurrentAllocation();
     temp = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
-    arg0->unk0 = -44;
-    arg0->unk2 = -20;
-    arg0->unk8 = 13;
-    arg0->unk4 = temp;
-    setCleanupCallback(func_800B0EEC_1DB48C);
-    setCallbackWithContinue(func_800B0E94_1DB434);
+    arg0->xOffset = -44;
+    arg0->yOffset = -20;
+    arg0->frameIndex = 13;
+    arg0->spriteData = temp;
+    setCleanupCallback(cleanupCharacterSelectIndicator);
+    setCallbackWithContinue(updatePlayer3CharacterSelectIndicator);
 }
 
-void func_800B0E94_1DB434(void *arg0) {
+void updatePlayer3CharacterSelectIndicator(void *arg0) {
     GameState *state = getCurrentAllocation();
     if (state->unk59A[0] == 3) {
         debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
@@ -559,23 +559,23 @@ void func_800B0E94_1DB434(void *arg0) {
     }
 }
 
-void func_800B0EEC_1DB48C(func_800B0FE0_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupCharacterSelectIndicator(CharacterSelectIndicatorCleanupTask *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void func_800B0F18_1DB4B8(func_800B0F18_arg *arg0) {
+void initPlayer2CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
     void *temp;
     getCurrentAllocation();
     temp = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
-    arg0->unk0 = -76;
-    arg0->unk2 = -8;
-    arg0->unk8 = 12;
-    arg0->unk4 = temp;
-    setCleanupCallback(func_800B0FE0_1DB580);
-    setCallbackWithContinue(func_800B0F88_1DB528);
+    arg0->xOffset = -76;
+    arg0->yOffset = -8;
+    arg0->frameIndex = 12;
+    arg0->spriteData = temp;
+    setCleanupCallback(cleanupCharacterSelectIndicatorData);
+    setCallbackWithContinue(updatePlayer2CharacterSelectIndicator);
 }
 
-void func_800B0F88_1DB528(void *arg0) {
+void updatePlayer2CharacterSelectIndicator(void *arg0) {
     GameState *state = getCurrentAllocation();
     if (state->unk59A[0] == 2) {
         debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
@@ -584,8 +584,8 @@ void func_800B0F88_1DB528(void *arg0) {
     }
 }
 
-void func_800B0FE0_1DB580(func_800B0FE0_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupCharacterSelectIndicatorData(CharacterSelectIndicatorCleanupTask *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void func_800B100C_1DB5AC(func_800B100C_arg *arg0) {
