@@ -17,11 +17,11 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x40];
-    s16 unk40;
-    s16 padding2;
-    s16 unk44;
+    s16 flags;
+    s16 counter;
+    s16 animation_index;
     s16 _pad2;
-} func_8005F2FC_5FEFC_arg;
+} BoneAnimationStateIndexed;
 
 s32 func_8006097C_6157C(func_8006097C_6157C_arg *, s32);
 
@@ -36,4 +36,4 @@ void interpolatedBoneAnimationMirrored(BoneAnimationState *state, u16 progress);
 void func_8005DE98_5EA98(void *animData, s32 tableIndex, s32 boneIndex, BoneAnimationState *state);
 s32 advanceBoneAnimation(void *animData, s32 tableIndex, s32 boneIndex, BoneAnimationState *state);
 s32 advanceBoneAnimationMirrored(void *animData, s32 tableIndex, s32 boneIndex, void *state);
-void func_8005F2FC_5FEFC(void *arg0, s16 arg1, s16 arg2, func_8005F2FC_5FEFC_arg *arg3);
+void resetBoneAnimation(void *animData, s16 tableIndex, s16 boneIndex, BoneAnimationStateIndexed *state);

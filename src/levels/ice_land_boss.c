@@ -119,7 +119,7 @@ typedef struct {
     s32 unk47C;
     s32 unk480;
     u8 padding484[0x4];
-    func_8005F2FC_5FEFC_arg unk488[12];
+    BoneAnimationStateIndexed unk488[12];
     u8 padding888[0x4EC - 0x4 - 0x48 * 12];
     Transform3D unk970;
     Transform3D unk990;
@@ -446,7 +446,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     arg0->unkA8C = 0;
     arg0->unkBB7 = func_8006097C_6157C(arg0->unk0_3C[0].unk0, 0);
     for (i = 0; i < arg0->unkBB7; i++) {
-        func_8005F2FC_5FEFC(arg0->unk0_3C[0].unk0, arg0->unkA8C, i, &arg0->unk488[i]);
+        resetBoneAnimation(arg0->unk0_3C[0].unk0, arg0->unkA8C, i, &arg0->unk488[i]);
     }
 
     arg0->behaviorMode = 1;

@@ -638,12 +638,12 @@ ret0:
     return 0;
 }
 
-void func_8005F2FC_5FEFC(void *arg0, s16 arg1, s16 arg2, func_8005F2FC_5FEFC_arg *arg3) {
-    u16 new_var;
+void resetBoneAnimation(void *animData, s16 tableIndex, s16 boneIndex, BoneAnimationStateIndexed *state) {
+    u16 animFlags;
 
-    arg3->unk44 = 0;
-    new_var = *getAnimationDataByIndex(arg0, arg1, arg2);
-    arg3->unk40 = (s16)(new_var + 0x8000);
+    state->animation_index = 0;
+    animFlags = *getAnimationDataByIndex(animData, tableIndex, boneIndex);
+    state->flags = (s16)(animFlags + 0x8000);
 }
 
 typedef struct {
@@ -1045,7 +1045,7 @@ s32 func_800600E4_60CE4(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
     frame_data = getAnimationFrameData(arg0);
 
     if ((state->flags < 2) && (animation_data[state->animation_index * 5] == 0)) {
-        func_8005F2FC_5FEFC(arg0, arg1, arg2, (func_8005F2FC_5FEFC_arg *)state);
+        resetBoneAnimation(arg0, arg1, arg2, (BoneAnimationStateIndexed *)state);
         animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
     }
 
@@ -1151,7 +1151,7 @@ s32 func_80060504_61104(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
     frame_data = getAnimationFrameData(arg0);
 
     if ((state->flags < 2) && (animation_data[state->animation_index * 5] == 0)) {
-        func_8005F2FC_5FEFC(arg0, arg1, arg2, (func_8005F2FC_5FEFC_arg *)state);
+        resetBoneAnimation(arg0, arg1, arg2, (BoneAnimationStateIndexed *)state);
         animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
     }
 
