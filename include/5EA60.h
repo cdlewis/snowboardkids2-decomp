@@ -35,5 +35,5 @@ void interpolatedBoneAnimationMirrored(BoneAnimationState *state, u16 progress);
 
 void func_8005DE98_5EA98(void *animData, s32 tableIndex, s32 boneIndex, BoneAnimationState *state);
 s32 advanceBoneAnimation(void *animData, s32 tableIndex, s32 boneIndex, BoneAnimationState *state);
-s32 func_8005EFC4_5FBC4(void *arg0, s32 arg1, s32 arg2, void *arg3);
+s32 advanceBoneAnimationMirrored(void *animData, s32 tableIndex, s32 boneIndex, void *state);
 void func_8005F2FC_5FEFC(void *arg0, s16 arg1, s16 arg2, func_8005F2FC_5FEFC_arg *arg3);

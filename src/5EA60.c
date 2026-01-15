@@ -553,35 +553,35 @@ ret0:
     return 0;
 }
 
-s32 func_8005EFC4_5FBC4(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
-    BoneAnimationState *arg3 = (BoneAnimationState *)arg3_void;
-    s16 stack_data[16];
+s32 advanceBoneAnimationMirrored(void *animData, s32 tableIndex, s32 boneIndex, void *state_void) {
+    BoneAnimationState *state = (BoneAnimationState *)state_void;
+    s16 rotMatrix[16];
     u16 flags;
-    u16 frame_idx;
+    u16 frameIdx;
 
-    if ((arg3->flags < 2) && (*(u16 *)arg3->animation_data == 0)) {
-        initBoneAnimationState(arg0, (s16)arg1, (s16)arg2, arg3);
+    if ((state->flags < 2) && (*(u16 *)state->animation_data == 0)) {
+        initBoneAnimationState(animData, (s16)tableIndex, (s16)boneIndex, state);
     }
 
-    flags = arg3->flags;
+    flags = state->flags;
 
     if (flags & 0x8000) {
-        s16 *animation_data = arg3->animation_data;
-        arg3->flags = flags & 0x7FFF;
-        createBoneRotMatrix(animation_data[1], -animation_data[2], -animation_data[3], arg3->values);
+        s16 *animation_data = state->animation_data;
+        state->flags = flags & 0x7FFF;
+        createBoneRotMatrix(animation_data[1], -animation_data[2], -animation_data[3], state->values);
 
-        frame_idx = arg3->animation_data[4];
-        arg3->position[0] = -arg3->frame_data[frame_idx * 3] << 10;
+        frameIdx = state->animation_data[4];
+        state->position[0] = -state->frame_data[frameIdx * 3] << 10;
 
-        frame_idx = arg3->animation_data[4];
-        arg3->position[1] = arg3->frame_data[frame_idx * 3 + 1] << 10;
+        frameIdx = state->animation_data[4];
+        state->position[1] = state->frame_data[frameIdx * 3 + 1] << 10;
 
-        frame_idx = arg3->animation_data[4];
-        arg3->position[2] = arg3->frame_data[frame_idx * 3 + 2] << 10;
+        frameIdx = state->animation_data[4];
+        state->position[2] = state->frame_data[frameIdx * 3 + 2] << 10;
 
-        memcpy(arg3->prev_position, arg3->values, 0x20);
+        memcpy(state->prev_position, state->values, 0x20);
 
-        if (arg3->flags == 0) {
+        if (state->flags == 0) {
             goto ret0;
         }
         goto advance_animation;
@@ -591,48 +591,48 @@ s32 func_8005EFC4_5FBC4(void *arg0, s32 arg1, s32 arg2, void *arg3_void) {
         goto ret0;
     }
 
-    arg3->counter = arg3->counter - (arg3->counter / flags);
+    state->counter = state->counter - (state->counter / flags);
 
     {
-        s16 *animation_data = arg3->animation_data;
-        if (animation_data[3] != (arg3->counter & 0xFFFF)) {
-            createBoneRotMatrix(animation_data[1], -animation_data[2], arg3->counter - animation_data[3], stack_data);
-            func_8006BDBC_6C9BC(arg3, stack_data, arg3->prev_position);
+        s16 *animation_data = state->animation_data;
+        if (animation_data[3] != (state->counter & 0xFFFF)) {
+            createBoneRotMatrix(animation_data[1], -animation_data[2], state->counter - animation_data[3], rotMatrix);
+            func_8006BDBC_6C9BC(state, rotMatrix, state->prev_position);
         }
     }
 
-    frame_idx = arg3->animation_data[4];
-    arg3->interpolated[0] =
-        arg3->interpolated[0] + ((-arg3->frame_data[frame_idx * 3] << 10) - arg3->interpolated[0]) / (s32)arg3->flags;
+    frameIdx = state->animation_data[4];
+    state->interpolated[0] = state->interpolated[0] +
+                             ((-state->frame_data[frameIdx * 3] << 10) - state->interpolated[0]) / (s32)state->flags;
 
-    frame_idx = arg3->animation_data[4];
-    arg3->interpolated[1] = arg3->interpolated[1] +
-                            ((arg3->frame_data[frame_idx * 3 + 1] << 10) - arg3->interpolated[1]) / (s32)arg3->flags;
+    frameIdx = state->animation_data[4];
+    state->interpolated[1] = state->interpolated[1] +
+                             ((state->frame_data[frameIdx * 3 + 1] << 10) - state->interpolated[1]) / (s32)state->flags;
 
-    frame_idx = arg3->animation_data[4];
-    arg3->interpolated[2] = arg3->interpolated[2] +
-                            ((arg3->frame_data[frame_idx * 3 + 2] << 10) - arg3->interpolated[2]) / (s32)arg3->flags;
+    frameIdx = state->animation_data[4];
+    state->interpolated[2] = state->interpolated[2] +
+                             ((state->frame_data[frameIdx * 3 + 2] << 10) - state->interpolated[2]) / (s32)state->flags;
 
-    arg3->flags--;
-    if ((arg3->flags & 0xFFFF) != 0) {
+    state->flags--;
+    if ((state->flags & 0xFFFF) != 0) {
         goto ret0;
     }
 
-    arg3->flags = arg3->animation_data[0];
-    memcpy(arg3->values, arg3->prev_position, 0x20);
+    state->flags = state->animation_data[0];
+    memcpy(state->values, state->prev_position, 0x20);
 
-    if (arg3->flags == 0) {
+    if (state->flags == 0) {
         goto ret0;
     }
 
 advance_animation: {
-    s16 *animation_data = arg3->animation_data;
-    arg3->animation_data = animation_data + 5;
-    arg3->counter = animation_data[8];
+    s16 *animation_data = state->animation_data;
+    state->animation_data = animation_data + 5;
+    state->counter = animation_data[8];
 }
 
 ret0:
-    if (arg3->flags == 1 && *(u16 *)arg3->animation_data == 0) {
+    if (state->flags == 1 && *(u16 *)state->animation_data == 0) {
         return 1;
     }
     return 0;
