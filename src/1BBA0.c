@@ -93,7 +93,7 @@ void storyMapClearLocationArrivalsIfNoActivePlayers(void) {
         activePlayerCount = 0;
 
         for (playerIdx = 0; playerIdx < D_800AFE8C_A71FC->numPlayers; playerIdx++) {
-            if (state->unk59A[playerIdx] == 1 || state->unk59A[playerIdx] == 3) {
+            if (state->playerSlotState[playerIdx] == 1 || state->playerSlotState[playerIdx] == 3) {
                 activePlayerCount++;
             }
         }

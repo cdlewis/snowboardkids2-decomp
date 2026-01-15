@@ -111,7 +111,7 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x59A];
-    u8 unk59A[8];
+    u8 playerSlotState[8];
     u8 _pad5A2[0x1F];
     u8 unk5C1[8];
 } func_800B0A54_allocation;
@@ -308,7 +308,7 @@ void checkCharacterPreviewState(CharacterPreviewState *arg0) {
             i = 0;
             do {
                 if (ptr->unk9[i] == arg0->characterIndex) {
-                    u8 state = allocation->unk59A[i];
+                    u8 state = allocation->playerSlotState[i];
                     if (state == 1 || state == 3) {
                         arg0->timer = 0;
                         setCallback(animateCharacterPreview);
@@ -369,7 +369,7 @@ void animateCharacterPreview(CharacterPreviewState *arg0) {
             if (localPtr->unk9[i] != localIndex) {
                 i++;
             } else {
-                u8 state = allocation->unk59A[i];
+                u8 state = allocation->playerSlotState[i];
                 if (state == 1 || state == 3) {
                     break;
                 }
@@ -441,7 +441,7 @@ void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         positionCharacterSelectSprite(&arg0->sprites[i], i);
-        state = allocation->unk59A[i];
+        state = allocation->playerSlotState[i];
 
         if (state == 10) {
             arg0->sprites[i].scale = 0xFF;
@@ -464,7 +464,7 @@ void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
             arg0->sprites[i].scale = 0xFF;
         }
 
-        if (allocation->unk59A[i] == 2) {
+        if (allocation->playerSlotState[i] == 2) {
             allocation->unk5C1[i] = 0;
             arg0->sprites[i].alpha = 0;
             arg0->animTimers[i] = 0;
@@ -552,7 +552,7 @@ void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
 
 void updatePlayer3CharacterSelectIndicator(void *arg0) {
     GameState *state = getCurrentAllocation();
-    if (state->unk59A[0] == 3) {
+    if (state->playerSlotState[0] == 3) {
         debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
     } else {
         func_80069CF8_6A8F8();
@@ -577,7 +577,7 @@ void initPlayer2CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
 
 void updatePlayer2CharacterSelectIndicator(void *arg0) {
     GameState *state = getCurrentAllocation();
-    if (state->unk59A[0] == 2) {
+    if (state->playerSlotState[0] == 2) {
         debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
     } else {
         func_80069CF8_6A8F8();

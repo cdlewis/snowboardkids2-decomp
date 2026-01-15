@@ -336,7 +336,7 @@ typedef struct {
     s32 *unk58C;
     u16 unk590;
     u8 PAD_13[0x8];
-    u8 unk59A[8];
+    u8 playerSlotState[8];
     u8 PAD_13B[0xB];
     s8 unk5AD;
     s8 unk5AE;
