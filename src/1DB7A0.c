@@ -20,12 +20,9 @@ extern s16 D_800B09A8_1DC088[];
 void func_800B0920_1DC000(void *);
 void func_800B0968_1DC048(PlayerSelectSpriteTask *);
 void func_800B0804_1DBEE4(PlayerSelectSpriteTask *);
-void enqueuePlayerSelectSpritesRender(PlayerSelectSpriteTask *);
-void func_800B0664_1DBD44(PlayerSelectSpriteTask *);
+void func_800B0774_1DBE54(PlayerSelectSpriteTask *);
 void updatePlayerSelectAnim(PlayerSelectState *);
 void cleanupPlayerSelectTask(PlayerSelectSpriteTask *);
-void func_800B070C_1DBDEC(PlayerSelectSpriteTask *);
-void func_800B0774_1DBE54(PlayerSelectSpriteTask *);
 
 void initPlayerSelectSprites(PlayerSelectState *state) {
     Allocation_1DB7A0 *allocation;
@@ -93,7 +90,7 @@ void func_800B054C_1DBC2C(PlayerSelectSpriteTask *arg0) {
 
     getCurrentAllocation();
     temp = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
-    setCleanupCallback(func_800B0664_1DBD44);
+    setCleanupCallback(cleanupPlayerCountSelectSprites);
 
     for (i = 0; i < 4; i++) {
         v0 = D_800B09A8_1DC088[i * 2];
@@ -118,7 +115,7 @@ void enqueuePlayerSelectSpritesRender(PlayerSelectSpriteTask *arg0) {
     }
 }
 
-void func_800B0664_1DBD44(PlayerSelectSpriteTask *arg0) {
+void cleanupPlayerCountSelectSprites(PlayerSelectSpriteTask *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 

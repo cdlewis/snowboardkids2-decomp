@@ -38,6 +38,7 @@ typedef struct {
 
 void initPlayerSelectSprites(PlayerSelectState *state);
 void enqueuePlayerSelectSpritesRender(PlayerSelectSpriteTask *arg0);
+void cleanupPlayerCountSelectSprites(PlayerSelectSpriteTask *arg0);
 void func_800B0690_1DBD70(PlayerSelectSpriteTask *arg0);
 void func_800B070C_1DBDEC(PlayerSelectSpriteTask *arg0);
 void func_800B07A0_1DBE80(PlayerSelectSpriteTask *arg0);
