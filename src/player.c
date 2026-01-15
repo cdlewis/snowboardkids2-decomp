@@ -218,7 +218,7 @@ void __MusIntRemapPtrs(void *addr, void *offset, s32 count);
 void MusHandleUnPause(musHandle);
 void __MusIntFifoProcessCommand(fifo_t *command);
 void __MusIntHandleSetFlag(u32 handle, u32 clear, u32 set);
-s32 func_800744EC_750EC(song_t *, s32);
+s32 allocateSongChannel(song_t *, s32);
 void MusPtrBankInitialize(void *, u8 *);
 void __MusIntFifoOpen(s32);
 void __MusIntMemSet(void *, unsigned char, int);
@@ -769,7 +769,7 @@ musHandle __MusIntStartSong(void *addr, int marker) {
 
     for (i = 0; i < num_channels; i++) {
         if (song->channel_data[i] != 0) {
-            channel_index = func_800744EC_750EC(song, i);
+            channel_index = allocateSongChannel(song, i);
             cp = &mus_channels[channel_index];
             __MusIntInitialiseChannel(cp);
             cp->song_addr = song;
@@ -1811,7 +1811,7 @@ void __MusIntInitialiseChannel(channel_t *cp) {
     cp->channel_tempo = tempo;
 }
 
-s32 func_800744EC_750EC(song_t *arg0, s32 arg1) {
+s32 allocateSongChannel(song_t *song, s32 channel_index) {
     channel_t *cp;
     s32 i;
     s32 lowest_priority;
@@ -1844,12 +1844,12 @@ s32 func_800744EC_750EC(song_t *arg0, s32 arg1) {
         return best_channel;
     }
 
-    // return i if fx_addr == 0 and song_addr != arg0
+    // return i if fx_addr == 0 and song_addr != song
     cp = mus_channels;
     i = 0;
     for (i = 0; i < max_channels; i++) {
         if (cp->fx_addr != 0) {
-        } else if (cp->song_addr != arg0) {
+        } else if (cp->song_addr != song) {
             return i;
         }
     }
@@ -1859,14 +1859,14 @@ s32 func_800744EC_750EC(song_t *arg0, s32 arg1) {
 
     // find channel with same song and same channel data
     for (i = 0; i < max_channels; i++) {
-        if (cp->song_addr != arg0) {
-        } else if (arg0->channel_data[arg1] == cp->pbase) {
+        if (cp->song_addr != song) {
+        } else if (song->channel_data[channel_index] == cp->pbase) {
             return i;
         }
         cp++;
     }
 
-    return arg1 % max_channels;
+    return channel_index % max_channels;
 }
 
 void __MusIntMemSet(void *dest, unsigned char value, int length) {
