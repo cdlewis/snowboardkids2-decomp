@@ -473,7 +473,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     return 1;
 }
 
-void func_800BB8E0_B0DD0(func_800BC4AC_arg *arg0) {
+void dispatchIceLandBossChasePhase(func_800BC4AC_arg *arg0) {
     D_800BCA44_B1F34[arg0->behaviorPhase](arg0);
 }
 
