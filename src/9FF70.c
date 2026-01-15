@@ -3297,12 +3297,12 @@ s32 spinRampUpStep(Player *arg0) {
 
 typedef struct {
     u8 _pad0[0x63];
-    u8 unk63; // 0x63
-} func_800B75F4_alloc;
+    u8 shortcutGateState; // 0x63
+} MaintainMaxSpinStep_alloc;
 
-s32 func_800B75F4_A74A4(Player *arg0) {
-    func_800B75F4_alloc *alloc = (func_800B75F4_alloc *)getCurrentAllocation();
-    s32 temp;
+s32 maintainMaxSpinStep(Player *arg0) {
+    MaintainMaxSpinStep_alloc *alloc = (MaintainMaxSpinStep_alloc *)getCurrentAllocation();
+    s32 timerRemaining;
 
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
@@ -3311,20 +3311,20 @@ s32 func_800B75F4_A74A4(Player *arg0) {
     decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
     arg0->rotY = arg0->rotY + 0x400;
-    temp = arg0->unkB8C - 1;
-    arg0->unkB8C = temp;
+    timerRemaining = arg0->unkB8C - 1;
+    arg0->unkB8C = timerRemaining;
 
-    if (temp == 0) {
-        u8 temp2 = arg0->behaviorStep;
-        s32 temp3 = arg0->unkB84;
+    if (timerRemaining == 0) {
+        u8 nextStep = arg0->behaviorStep;
+        s32 flags = arg0->unkB84;
         arg0->unkBA0 = 0x2000;
         arg0->unkBA2 = 0x2000;
         arg0->unkB8C = 10;
-        temp2 = temp2 + 1;
-        temp3 = temp3 | 0x800000;
-        arg0->behaviorStep = temp2;
-        arg0->unkB84 = temp3;
-        alloc->unk63 = alloc->unk63 & 2;
+        nextStep = nextStep + 1;
+        flags = flags | 0x800000;
+        arg0->behaviorStep = nextStep;
+        arg0->unkB84 = flags;
+        alloc->shortcutGateState = alloc->shortcutGateState & 2;
         queueSoundAtPosition(&arg0->worldPos, 0x4E);
     }
 
