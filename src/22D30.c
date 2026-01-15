@@ -33,7 +33,6 @@ typedef struct {
 
 extern u8 D_8008DCC0_8E8C0[];
 extern void *D_800B054C;
-extern void *D_800B08A8;
 extern u8 gConnectedControllerMask;
 
 void handlePlayerCountSelectInput(void);
@@ -78,7 +77,7 @@ void initPlayerCountSelectState(void) {
     state->assetData1 = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
     state->assetData2 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     scheduleTask(&D_800B054C, 0, 0, 0x5A);
-    scheduleTask(&D_800B08A8, 0, 0, 0x5A);
+    scheduleTask(&initCharacterReadyIndicator, 0, 0, 0x5A);
     setGameStateHandler(func_80022304_22F04);
 }
 
@@ -95,7 +94,7 @@ void func_80022304_22F04(void) {
         state->frameCounter = 0;
         setGameStateHandler(&handlePlayerCountSelectInput);
         scheduleTask(&initPlayerCountHeaderSprite, 0, 0, 0x5A);
-        scheduleTask(&func_800B07A0_1DBE80, 0, 0, 0x5A);
+        scheduleTask(&initPlayerIndicatorSprite, 0, 0, 0x5A);
     } else {
         temp = state->frameCounter;
         if (temp < 4) {

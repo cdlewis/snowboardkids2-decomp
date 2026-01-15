@@ -17,11 +17,6 @@ extern s16 D_800B09B8_1DC098[];
 extern s16 D_800B09BA_1DC09A[];
 extern s16 D_800B09A8_1DC088[];
 
-void func_800B0920_1DC000(void *);
-void func_800B0968_1DC048(PlayerSelectSpriteTask *);
-void func_800B0804_1DBEE4(PlayerSelectSpriteTask *);
-void func_800B0774_1DBE54(PlayerSelectSpriteTask *);
-void updatePlayerCountHeaderSprite(PlayerSelectSpriteTask *);
 void updatePlayerSelectAnim(PlayerSelectState *);
 void cleanupPlayerSelectTask(PlayerSelectSpriteTask *);
 
@@ -125,7 +120,7 @@ void initPlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
 
     getCurrentAllocation();
     spriteData = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
-    setCleanupCallback(func_800B0774_1DBE54);
+    setCleanupCallback(cleanupPlayerCountHeaderSprite);
     arg0->x = -96;
     arg0->y = -80;
     arg0->frameIndex = 6;
@@ -146,21 +141,21 @@ void updatePlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
 }
 
-void func_800B0774_1DBE54(PlayerSelectSpriteTask *arg0) {
+void cleanupPlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void func_800B07A0_1DBE80(PlayerSelectSpriteTask *arg0) {
+void initPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
     void *temp;
 
     getCurrentAllocation();
     temp = loadCompressedData(&_426EF0_ROM_START, &_42F1D0_ROM_START, 0xEEE8);
-    setCleanupCallback(func_800B0774_1DBE54);
+    setCleanupCallback(cleanupPlayerCountHeaderSprite);
     arg0->spriteData = temp;
-    setCallback(func_800B0804_1DBEE4);
+    setCallback(updatePlayerIndicatorSprite);
 }
 
-void func_800B0804_1DBEE4(PlayerSelectSpriteTask *arg0) {
+void updatePlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
     s32 pad[2];
     Allocation_1DB7A0 *allocation = getCurrentAllocation();
 
@@ -171,23 +166,23 @@ void func_800B0804_1DBEE4(PlayerSelectSpriteTask *arg0) {
     debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
 }
 
-void func_800B087C_1DBF5C(PlayerSelectSpriteTask *arg0) {
+void cleanupPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void func_800B08A8_1DBF88(PlayerSelectSpriteTask *arg0) {
+void initCharacterReadyIndicator(PlayerSelectSpriteTask *arg0) {
     void *temp;
 
     temp = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
-    setCleanupCallback(func_800B0968_1DC048);
+    setCleanupCallback(cleanupCharacterReadyIndicator);
     arg0->x = -0x2C;
     arg0->y = -0x14;
     arg0->frameIndex = 0xD;
     arg0->spriteData = temp;
-    setCallback(func_800B0920_1DC000);
+    setCallback(updateCharacterReadyIndicator);
 }
 
-void func_800B0920_1DC000(void *arg0) {
+void updateCharacterReadyIndicator(void *arg0) {
     GameState *allocation = getCurrentAllocation();
 
     if (allocation->unk1E6 == 2) {
@@ -195,6 +190,6 @@ void func_800B0920_1DC000(void *arg0) {
     }
 }
 
-void func_800B0968_1DC048(PlayerSelectSpriteTask *arg0) {
+void cleanupCharacterReadyIndicator(PlayerSelectSpriteTask *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
