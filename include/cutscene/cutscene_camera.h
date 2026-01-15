@@ -3,11 +3,11 @@
 typedef struct {
     s16 step;
     s16 duration;
-} cutsceneCameraRotate_exec_arg0;
+} cutsceneCameraStepDuration_exec_arg0;
 typedef struct {
     u8 padding[0xC];
     s32 cameraState;
-} cutsceneCameraRotate_exec_arg1;
+} cutsceneCameraStepDuration_exec_arg1;
 
 typedef struct {
     s16 rotX;
@@ -42,8 +42,8 @@ void cutsceneCameraMove_exec(cutsceneCameraMove_exec_arg0 *arg0, cutsceneCameraM
 s32 cutsceneCameraMove_isDone(void);
 void cutsceneCameraShake_init(void);
 s32 cutsceneCameraShake_validate(void);
-void cutsceneCameraShake_exec(cutsceneCameraRotate_exec_arg0 *arg0, cutsceneCameraRotate_exec_arg1 *arg1);
+void cutsceneCameraShake_exec(cutsceneCameraStepDuration_exec_arg0 *arg0, cutsceneCameraStepDuration_exec_arg1 *arg1);
 void cutsceneCameraRotate_init(void);
 s32 cutsceneCameraRotate_validate(void);
-void cutsceneCameraRotate_exec(cutsceneCameraRotate_exec_arg0 *arg0, cutsceneCameraRotate_exec_arg1 *arg1);
+void cutsceneCameraRotate_exec(cutsceneCameraStepDuration_exec_arg0 *arg0, cutsceneCameraStepDuration_exec_arg1 *arg1);
 s32 cutsceneCameraRotate_isDone(void);

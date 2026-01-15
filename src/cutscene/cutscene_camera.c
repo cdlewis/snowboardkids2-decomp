@@ -45,7 +45,7 @@ s32 cutsceneCameraShake_validate(void) {
     return 0;
 }
 
-void cutsceneCameraShake_exec(cutsceneCameraRotate_exec_arg0 *arg0, cutsceneCameraRotate_exec_arg1 *arg1) {
+void cutsceneCameraShake_exec(cutsceneCameraStepDuration_exec_arg0 *arg0, cutsceneCameraStepDuration_exec_arg1 *arg1) {
     initCameraShake((CutsceneCameraShakeState *)arg1->cameraState, arg0->step * 0xA3D7, arg0->duration);
 }
 
@@ -56,7 +56,7 @@ s32 cutsceneCameraRotate_validate(void) {
     return 0;
 }
 
-void cutsceneCameraRotate_exec(cutsceneCameraRotate_exec_arg0 *arg0, cutsceneCameraRotate_exec_arg1 *arg1) {
+void cutsceneCameraRotate_exec(cutsceneCameraStepDuration_exec_arg0 *arg0, cutsceneCameraStepDuration_exec_arg1 *arg1) {
     animateCameraRotationYContinuous((CutsceneCameraState *)arg1->cameraState, arg0->step, arg0->duration);
 }
 
