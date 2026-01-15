@@ -1,4 +1,5 @@
 #include "6E840.h"
+#include "19E80.h"
 #include "common.h"
 
 typedef struct {
@@ -12,4 +13,4 @@ void enqueueTextRender(s16 x, s16 y, s16 palette, u8 *target_string, s32 arg4, s
 
 void renderTextPalette(TextData *);
 
-void func_800680F0_68CF0(DataTable_19E80 *arg0);
+void loadFontAssetsFromDataTable(DataTable_19E80 *dataTable);

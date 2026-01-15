@@ -97,11 +97,11 @@ void renderTexturedBillboardSpriteTile(TexturedSpriteState *);
 void renderRotatedBillboardSprite(RotatedBillboardSprite *);
 void renderAlphaSprite(AlphaSpriteState *);
 void renderAlphaBillboardSprite(AlphaSpriteState *);
-void func_800680C4_68CC4(void);
+void scheduleGameInitialization(void);
 void prepareDisplayListRenderState(DisplayListObject *);
 void setupDisplayListMatrix(DisplayListObject *);
 void setupBillboardDisplayListMatrix(DisplayListObject *);
-void func_80068060_68C60(void);
+void initializeFontSystemAndTransitionToMainMenu(void);
 
 void parseGameDataLayout(GameDataLayout *gameData) {
     u16 *parser;
@@ -2031,25 +2031,25 @@ void initializeOverlaySystem(void) {
     temp_s0 = (void **)allocateTaskMemory(4);
     LOAD_OVERLAY(rand)
     *temp_s0 = loadCompressedData(&_215D70_ROM_START, &_215D70_ROM_END, 0x918);
-    setGameStateHandler(&func_80068060_68C60);
+    setGameStateHandler(&initializeFontSystemAndTransitionToMainMenu);
 }
 
 typedef struct {
-    DataTable_19E80 *unk0;
-} alloc_68C60;
+    DataTable_19E80 *fontDataTable;
+} FontSystemInitData;
 
-void func_80068060_68C60(void) {
-    alloc_68C60 *alloc = (alloc_68C60 *)getCurrentAllocation();
-    func_800680F0_68CF0(alloc->unk0);
-    terminateSchedulerWithCallback(&func_800680C4_68CC4);
+void initializeFontSystemAndTransitionToMainMenu(void) {
+    FontSystemInitData *data = (FontSystemInitData *)getCurrentAllocation();
+    loadFontAssetsFromDataTable(data->fontDataTable);
+    terminateSchedulerWithCallback(&scheduleGameInitialization);
 }
 
 void func_80068090_68C90(void) {
     if (func_80069810_6A410() << 0x10 != 0) {
-        terminateSchedulerWithCallback(&func_800680C4_68CC4);
+        terminateSchedulerWithCallback(&scheduleGameInitialization);
     }
 }
 
-void func_800680C4_68CC4(void) {
+void scheduleGameInitialization(void) {
     func_800693C4_69FC4(&func_80014480_15080, 0xC8);
 }

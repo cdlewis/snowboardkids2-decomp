@@ -7,10 +7,10 @@
 extern s32 gFontTextureData;
 extern s32 gFontPaletteBase;
 
-void func_800680F0_68CF0(DataTable_19E80 *arg0) {
+void loadFontAssetsFromDataTable(DataTable_19E80 *dataTable) {
     OutputStruct_19E80 result;
 
-    getTableEntryByU16Index(arg0, 0, &result);
+    getTableEntryByU16Index(dataTable, 0, &result);
     gFontTextureData = (s32)result.data_ptr;
     gFontPaletteBase = (s32)result.index_ptr;
 }
