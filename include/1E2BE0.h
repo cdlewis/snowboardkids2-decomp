@@ -49,7 +49,7 @@ typedef struct {
 } func_800B6180_1E3230_arg0;
 
 void setAnimationLoopMode(func_800B5E64_1E2F14_arg0 *arg0, s8 mode);
-void func_800B5BFC_1E2CAC(void *arg0);
+void freeAnimationLoopState(void *arg0);
 void func_800B5EC4_1E2F74(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4, s32 arg5);
 void func_800B5F2C_1E2FDC(func_800B5E64_1E2F14_arg0 *, s16, s16);
 void func_800B5FB0_1E3060(func_800B5E64_1E2F14_arg0 *, s16, s16);

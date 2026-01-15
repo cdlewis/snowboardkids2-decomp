@@ -52,7 +52,7 @@ void initAnimationLoopState(func_800B5E64_1E2F14_arg0 *arg0, u16 arg1) {
     arg0->inputMode = 0;
 }
 
-void func_800B5BFC_1E2CAC(void *arg0) {
+void freeAnimationLoopState(void *arg0) {
     freeNodeMemory(arg0);
 }
 

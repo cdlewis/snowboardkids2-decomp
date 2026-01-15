@@ -128,7 +128,7 @@ void cleanupCutsceneManager(CutsceneManager *manager) {
 
     n_alSeqpDelete((Node_70B00 *)&manager->unkFF8);
 
-    func_800B5BFC_1E2CAC(manager->sceneContext);
+    freeAnimationLoopState(manager->sceneContext);
 
     for (i = 0; i < (getCutsceneSlotCount() & 0xFF); i++) {
         if (manager->slots[i].model != NULL) {
