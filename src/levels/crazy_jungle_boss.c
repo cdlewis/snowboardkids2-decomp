@@ -183,7 +183,11 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
         arg0->unkAA4 = 0x180000;
     } else {
         player = (Arg0Struct *)alloc->players;
-        dist = distance_3d(arg0->unk434.x - player->unk434.x, arg0->unk434.y - player->unk434.y, arg0->unk434.z - player->unk434.z);
+        dist = distance_3d(
+            arg0->unk434.x - player->unk434.x,
+            arg0->unk434.y - player->unk434.y,
+            arg0->unk434.z - player->unk434.z
+        );
 
         if (alloc->unk86 != 0) {
             if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
@@ -334,7 +338,8 @@ s32 func_800BB754_ABF84(Arg0Struct *arg0) {
         *(s32 *)(arg0_bytes + i * 0x3C + 0x60) = *(s32 *)(arg0_bytes + 0x8);
         *(s32 *)(arg0_bytes + i * 0x3C + 0x64) = 0;
         temp = i * 0x10;
-        *(void **)(arg0_bytes + i * 0x3C + 0x58) = (void *)(loadAssetByIndex_953B0(*(u8 *)(arg0_bytes + 0xBB9), *(u8 *)(arg0_bytes + 0xBBA)) + temp);
+        *(void **)(arg0_bytes + i * 0x3C + 0x58) =
+            (void *)(loadAssetByIndex_953B0(*(u8 *)(arg0_bytes + 0xBB9), *(u8 *)(arg0_bytes + 0xBBA)) + temp);
     }
 
     *(u16 *)(arg0_bytes + 0xA8C) = 0;
@@ -342,7 +347,12 @@ s32 func_800BB754_ABF84(Arg0Struct *arg0) {
     *(u8 *)(arg0_bytes + 0xBB7) = func_8006097C_6157C(*(void **)(arg0_bytes + 0x0), 0);
 
     for (i = 0; i < *(u8 *)(arg0_bytes + 0xBB7); i++) {
-        func_8005F2FC_5FEFC(*(void **)(arg0_bytes + 0x0), *(u16 *)(arg0_bytes + 0xA8C), i, (func_8005F2FC_5FEFC_arg *)(arg0_bytes + 0x488 + i * 0x48));
+        resetBoneAnimation(
+            *(void **)(arg0_bytes + 0x0),
+            *(u16 *)(arg0_bytes + 0xA8C),
+            i,
+            (BoneAnimationStateIndexed *)(arg0_bytes + 0x488 + i * 0x48)
+        );
     }
 
     *(u8 *)(arg0_bytes + 0xBBD) = 1;
@@ -366,7 +376,8 @@ s32 func_800BB754_ABF84(Arg0Struct *arg0) {
     *(s32 *)(arg0_bytes + 0xAA0) = *(s32 *)(*(s32 *)((u8 *)temp_s5 + 0x10) + 0xAA0) - 0x10000;
 
     if (*(void **)(arg0_bytes + 0x1C) != 0) {
-        *(s32 *)(arg0_bytes + 0x28) = (s32)(*(void **)(arg0_bytes + 0x1C)) + ((s32 *)(*(void **)(arg0_bytes + 0x1C)))[*(u8 *)(arg0_bytes + 0xBB8)];
+        *(s32 *)(arg0_bytes + 0x28) = (s32)(*(void **)(arg0_bytes + 0x1C)) +
+                                      ((s32 *)(*(void **)(arg0_bytes + 0x1C)))[*(u8 *)(arg0_bytes + 0xBB8)];
     }
 
     return 1;
@@ -641,7 +652,8 @@ void func_800BC330_ACB60(Arg0Struct *arg0) {
         u16 temp;
 
         arg0->unkA10[i].unk0 = arg0->unk970.translation.x + D_800BBA7C_AC2AC[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_0];
-        arg0->unkA10[i].unk8 = arg0->unk970.translation.z + D_800BBA84_AC2B4[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_2 + 2];
+        arg0->unkA10[i].unk8 =
+            arg0->unk970.translation.z + D_800BBA84_AC2B4[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_2 + 2];
         posPtr = &arg0->unkA10[i].unk0;
         temp = func_80059E90_5AA90(arg0, temp_s5, arg0->sectorIndex, posPtr);
         arg0->unkA10[i].unk4 = func_8005CFC0_5DBC0(temp_s5, temp, posPtr, 0x100000);
