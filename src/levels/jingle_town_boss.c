@@ -366,7 +366,7 @@ void dispatchChaseAttackPhase(Arg0Struct *arg0) {
     gChaseAttackPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
-s32 func_800BB89C_B2E5C(Arg0Struct *arg0) {
+s32 jingleTownBossChaseAttackIntroPhase(Arg0Struct *arg0) {
     s32 pad[3];
     GameState *gameState = getCurrentAllocation();
 
