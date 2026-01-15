@@ -864,7 +864,7 @@ void awaitRaceAssetsLoaded(void) {
             state->unk4C = 0;
         }
 
-        func_8006FEBC_70ABC(0);
+        disableViewportOverlay(NULL);
         setGameStateHandler(waitForFadeAndInitPlayers);
     }
 }
@@ -1664,7 +1664,7 @@ void cleanupGameSession(void) {
         return;
     }
 
-    func_8006FE94_70A94(0, 0, 0, 0);
+    setViewportOverlayRgbAndEnable(NULL, 0, 0, 0);
     terminateAllTasks();
 
     for (i = 0; i < gameState->unk5D; i++) {

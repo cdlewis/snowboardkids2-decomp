@@ -327,7 +327,7 @@ void updateSceneRenderTask(SceneRenderTaskCtx *ctx) {
         memcpy(rotMatrix, identityMatrix, 0x20);
         tempMatrix = &sp30;
         memcpy(tempMatrix, identityMatrix, 0x20);
-        func_8006FED8_70AD8(ctx->node);
+        enableViewportDisplayList(ctx->node);
         enqueueAuxBufferRender((AuxBufferContext *)ctx);
         nodeB = ctx->node;
 

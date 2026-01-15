@@ -410,7 +410,7 @@ void waitBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     if (delayTimer == 0) {
         setCallback(&animateBoardShopPreviewWipe);
     }
-    func_8006FED8_70AD8(arg0->unk0);
+    enableViewportDisplayList(arg0->unk0);
     enqueueDisplayListObject(1, (DisplayListObject *)&arg0->unk4);
 }
 
@@ -429,7 +429,7 @@ void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
         unlinkNode(arg0->unk0);
         func_80069CF8_6A8F8();
     } else {
-        func_8006FED8_70AD8(arg0->unk0);
+        enableViewportDisplayList(arg0->unk0);
         enqueueDisplayListObject(1, (DisplayListObject *)&arg0->unk4);
     }
 }
@@ -861,7 +861,7 @@ void updateBoardShopShopkeeper(BoardShopShopkeeperState *arg0) {
         }
     }
 
-    func_8006FED8_70AD8(&allocation->audioPlayer2);
+    enableViewportDisplayList(&allocation->audioPlayer2);
     updateModelGeometry(arg0->model);
 }
 

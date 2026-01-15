@@ -139,20 +139,21 @@ s32 isObjectCulled(Vec3i *arg0);
 
 typedef struct {
     u8 padding[0xB8];
-    s8 unkB8;
-} func_8006FEBC_70ABC_arg;
+    u8 viewportDisplayFlags;
+} ViewportNode;
 
 typedef struct {
     u8 padding[0xB8];
-    s8 unkB8;
-    s8 unkB9;
-    s8 unkBA;
-    s8 unkBB;
-} func_8006FE94_70A94_arg;
+    u8 viewportDisplayFlags;
+    u8 overlayR;
+    u8 overlayG;
+    u8 overlayB;
+} ViewportNodeWithOverlay;
 
-void func_8006FEBC_70ABC(func_8006FEBC_70ABC_arg *arg0);
-void func_8006FED8_70AD8(void *arg0);
-void func_8006FE94_70A94(func_8006FE94_70A94_arg *arg0, s8 arg1, s8 arg2, s8 arg3);
+void disableViewportOverlay(ViewportNode *arg0);
+void enableViewportDisplayList(void *arg0);
+void disableViewportDisplayList(ViewportNode *arg0);
+void setViewportOverlayRgbAndEnable(ViewportNodeWithOverlay *arg0, s8 r, s8 g, s8 b);
 
 typedef struct {
     /* 0x0 */ u8 r;

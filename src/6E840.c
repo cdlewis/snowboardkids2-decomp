@@ -562,27 +562,34 @@ void setViewportFogById(u16 viewportId, s16 fogMin, s16 fogMax, u8 fogR, u8 fogG
     }
 }
 
-void func_8006FE94_70A94(func_8006FE94_70A94_arg *arg0, s8 arg1, s8 arg2, s8 arg3) {
+void setViewportOverlayRgbAndEnable(ViewportNodeWithOverlay *arg0, s8 r, s8 g, s8 b) {
     if (arg0 != NULL) {
-        arg0->unkB9 = arg1;
-        arg0->unkBA = arg2;
-        arg0->unkBB = arg3;
-        arg0->unkB8 = (u8)(arg0->unkB8 | 1);
+        arg0->overlayR = r;
+        arg0->overlayG = g;
+        arg0->overlayB = b;
+        arg0->viewportDisplayFlags = (u8)(arg0->viewportDisplayFlags | 1);
     }
 }
 
-void func_8006FEBC_70ABC(func_8006FEBC_70ABC_arg *arg0) {
+void disableViewportOverlay(ViewportNode *arg0) {
     if (arg0 != NULL) {
-        arg0->unkB8 = (u8)(arg0->unkB8 & 0xFE);
+        arg0->viewportDisplayFlags = (u8)(arg0->viewportDisplayFlags & 0xFE);
     }
 }
 
-void func_8006FED8_70AD8(void *arg0) {
-    ((func_8006FEBC_70ABC_arg *)arg0)->unkB8 = (u8)(((func_8006FEBC_70ABC_arg *)arg0)->unkB8 | 0x2);
+// Aliases for non-matching assembly code
+void func_8006FE94_70A94(ViewportNodeWithOverlay *arg0, s8 arg1, s8 arg2, s8 arg3)
+    __attribute__((alias("setViewportOverlayRgbAndEnable")));
+void func_8006FEBC_70ABC(ViewportNode *arg0) __attribute__((alias("disableViewportOverlay")));
+
+void enableViewportDisplayList(void *arg0) {
+    ((ViewportNode *)arg0)->viewportDisplayFlags = (u8)(((ViewportNode *)arg0)->viewportDisplayFlags | 0x2);
 }
 
-void func_8006FEE8_70AE8(func_8006FEBC_70ABC_arg *arg0) {
-    arg0->unkB8 = (u8)(arg0->unkB8 & 0xFD);
+void func_8006FED8_70AD8(void *arg0) __attribute__((alias("enableViewportDisplayList")));
+
+void disableViewportDisplayList(ViewportNode *arg0) {
+    arg0->viewportDisplayFlags = (u8)(arg0->viewportDisplayFlags & 0xFD);
 }
 
 void func_8006FEF8_70AF8(Node_70B00 *arg0, u16 arg1) {

@@ -625,7 +625,7 @@ void updateMenuCharacterModel(MenuCharacterModelState *state) {
     allocation = (Allocation_202A0 *)getCurrentAllocation();
     applyTransformToModel(state->model, &state->transform);
     animationFinished = clearModelRotation(state->model);
-    func_8006FED8_70AD8(allocation);
+    enableViewportDisplayList(allocation);
     updateModelGeometry(state->model);
 
     if (allocation->unkB45 != 0) {
