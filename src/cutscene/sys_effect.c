@@ -160,7 +160,7 @@ void cutsceneEffectTrick_update(CutsceneManager *arg0, s8 arg1) {
     temp_s0 = getCutsceneSlot(arg0, arg1);
 
     if (temp_s0->unk0.TrickPayload.frameCount > 0) {
-        func_800B523C_1E22EC(slot->model, temp_s0->unk0.TrickPayload.effectParam);
+        spawnTrickSpriteEffect(slot->model, temp_s0->unk0.TrickPayload.effectParam);
         temp_s0->unk0.TrickPayload.frameCount -= 1;
     } else {
         disableSlotUpdate(arg0, arg1);

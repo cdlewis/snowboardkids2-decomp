@@ -15,8 +15,8 @@ USE_ASSET(_663BE0);
 
 typedef struct {
     s32 unk0;
-    void *unk4;
-} func_800B5210_1E22C0_arg;
+    void *modelData;
+} TrickSpriteEffectCleanupState;
 
 typedef struct {
     Node n;
@@ -29,58 +29,58 @@ typedef struct {
 typedef struct {
     struct {
         u8 padding[0x2C];
-        s32 unk2C;
-        s32 unk30;
-        s32 unk34;
+        s32 posX;
+        s32 posY;
+        s32 posZ;
     } *unk0;
-    DataTable_19E80 *unk4;
+    DataTable_19E80 *modelData;
     loadAssetMetadataByIndex_arg assetMetadata;
-    s32 unk24;
-    loadAssetMetadata_arg *unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    u8 *unk38;
-    TableEntry_19E80 *unk3C;
-    u8 unk40;
-    u8 unk41;
-    u8 unk42;
+    s32 offsetX;
+    loadAssetMetadata_arg *sprite2;
+    s32 spriteOffsetX;
+    s32 spriteOffsetY;
+    s32 spriteOffsetZ;
+    u8 *dataPtr;
+    TableEntry_19E80 *indexPtr;
+    u8 alpha;
+    u8 animFrame;
+    u8 alphaDecay;
     u8 padding43;
     s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s16 unk60;
-    s16 unk62;
-} func_800B50E4_1E2194_arg;
+    s32 sprite1OffsetX;
+    s32 sprite1OffsetY;
+    s32 sprite1OffsetZ;
+    s32 sprite2OffsetX;
+    s32 sprite2OffsetY;
+    s32 sprite2OffsetZ;
+    s16 frameIndex;
+    s16 effectParam;
+} TrickSpriteEffectUpdateState;
 
 typedef struct {
     struct {
         struct {
             u8 padding[0x3C0];
-            s16 unk3C0;
+            s16 rotationY;
         } *unk0;
         u8 padding[0x28];
-        s32 unk2C;
-        s32 unk30;
-        s32 unk34;
+        s32 posX;
+        s32 posY;
+        s32 posZ;
     } *unk0;
-    void *unk4;
-    s32 *unk8;
+    void *modelData;
+    s32 *vertexData;
     char pad[0x16];
-    u8 unk22;
+    u8 alpha;
     char pad2[5];
-    s32 *unk28;
+    s32 *vertexDataCopy;
     char pad3[0x16];
-    u8 unk42;
+    u8 alphaCopy;
     char pad4[5];
-    Vec3i unk48[2];
-    u16 unk60;
-    u16 unk62;
-} func_800B4FC0_1E2070_arg;
+    Vec3i spritePositions[2];
+    u16 frameIndex;
+    u16 effectParam;
+} TrickSpriteEffectInitState;
 
 typedef struct {
     DisplayListObject unk0;
@@ -102,90 +102,94 @@ typedef struct {
 void func_800B5438_1E24E8(func_800B5438_1E24E8_arg0 *);
 void func_800B54B4_1E2564(ScrollingTextureState *);
 void func_800B5318_1E23C8(ScrollingTextureState *);
-void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *);
-void func_800B5210_1E22C0(func_800B5210_1E22C0_arg *);
-void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *);
+void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *);
+void cleanupTrickSpriteEffectTask(TrickSpriteEffectCleanupState *);
+void initTrickSpriteEffectTask(TrickSpriteEffectInitState *);
 
 extern ScrollingTextureDisplayLists D_80089510_8A110;
 extern ScrollingTextureDisplayLists D_80089520;
 
-u32 D_800BAD10_1E7DC0[] = { 0xFFE80018, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180018, 0x00000000,
-                            0x07F0FFF0, 0xFFFFFFFF, 0x0018FFE8, 0x00000000, 0x07F007F0, 0xFFFFFFFF,
-                            0xFFE8FFE8, 0x00000000, 0xFFF007F0, 0xFFFFFFFF, 0x00040000, 0x00000000,
-                            0x000D0000, 0xFFFC0000, 0x00000000, 0x000D0000 };
+u32 gTrickSpriteEffectVertexData[] = { 0xFFE80018, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180018, 0x00000000,
+                                       0x07F0FFF0, 0xFFFFFFFF, 0x0018FFE8, 0x00000000, 0x07F007F0, 0xFFFFFFFF,
+                                       0xFFE8FFE8, 0x00000000, 0xFFF007F0, 0xFFFFFFFF, 0x00040000, 0x00000000,
+                                       0x000D0000, 0xFFFC0000, 0x00000000, 0x000D0000 };
 
-s32 D_800BAD68_1E7E18[2][3] = {
+s32 gTrickSpriteEffectTransformData[2][3] = {
     { 0xFFFC0000, 0x00000000, 0xFFF30000 },
     { 0x00040000, 0x00000000, 0xFFF30000 }
 };
 
-void func_800B4FC0_1E2070(func_800B4FC0_1E2070_arg *arg0) {
+void initTrickSpriteEffectTask(TrickSpriteEffectInitState *arg0) {
     s32 i;
 
-    arg0->unk4 = loadCompressedData(&_646DF0_ROM_START, &_646DF0_ROM_END, 0x1188);
-    arg0->unk8 = (s32 *)&D_800BAD10_1E7DC0;
-    arg0->unk22 = 0xFF;
+    arg0->modelData = loadCompressedData(&_646DF0_ROM_START, &_646DF0_ROM_END, 0x1188);
+    arg0->vertexData = (s32 *)&gTrickSpriteEffectVertexData;
+    arg0->alpha = 0xFF;
 
-    arg0->unk28 = arg0->unk8;
-    arg0->unk42 = arg0->unk22;
+    arg0->vertexDataCopy = arg0->vertexData;
+    arg0->alphaCopy = arg0->alpha;
 
     for (i = 0; i < 2; i++) {
         // vector is different size (32 vs 16 bit) because that helped
         // the data segment to match.
-        transformVector((s16 *)D_800BAD68_1E7E18[i], &arg0->unk0->unk0->unk3C0, &arg0->unk48[i]);
-        arg0->unk48[i].x -= arg0->unk0->unk2C;
-        arg0->unk48[i].y -= arg0->unk0->unk30;
-        arg0->unk48[i].z -= arg0->unk0->unk34;
+        transformVector(
+            (s16 *)gTrickSpriteEffectTransformData[i],
+            &arg0->unk0->unk0->rotationY,
+            &arg0->spritePositions[i]
+        );
+        arg0->spritePositions[i].x -= arg0->unk0->posX;
+        arg0->spritePositions[i].y -= arg0->unk0->posY;
+        arg0->spritePositions[i].z -= arg0->unk0->posZ;
     }
 
-    arg0->unk60 = 0;
-    arg0->unk62 = arg0->unk62;
+    arg0->frameIndex = 0;
+    arg0->effectParam = arg0->effectParam;
 
-    setCleanupCallback(&func_800B5210_1E22C0);
-    setCallbackWithContinue(&func_800B50E4_1E2194);
+    setCleanupCallback(&cleanupTrickSpriteEffectTask);
+    setCallbackWithContinue(&updateTrickSpriteEffect);
 }
 
-void func_800B50E4_1E2194(func_800B50E4_1E2194_arg *arg0) {
+void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *arg0) {
     s16 temp_v0;
 
-    loadAssetMetadataByIndex(&arg0->assetMetadata, arg0->unk4, arg0->unk60, arg0->unk62);
-    arg0->unk38 = arg0->assetMetadata.data_ptr;
-    arg0->unk3C = arg0->assetMetadata.index_ptr;
-    arg0->unk40 = arg0->assetMetadata.unk18;
-    arg0->unk41 = arg0->assetMetadata.unk19;
-    arg0->assetMetadata.unk4 = arg0->unk48 + arg0->unk0->unk2C;
-    arg0->assetMetadata.unk8 = arg0->unk4C + arg0->unk0->unk30;
-    arg0->assetMetadata.unkC = arg0->unk50 + arg0->unk0->unk34;
-    arg0->unk2C = arg0->unk54 + arg0->unk0->unk2C;
-    arg0->unk30 = arg0->unk58 + arg0->unk0->unk30;
-    arg0->unk34 = arg0->unk5C + arg0->unk0->unk34;
+    loadAssetMetadataByIndex(&arg0->assetMetadata, arg0->modelData, arg0->frameIndex, arg0->effectParam);
+    arg0->dataPtr = arg0->assetMetadata.data_ptr;
+    arg0->indexPtr = arg0->assetMetadata.index_ptr;
+    arg0->alpha = arg0->assetMetadata.unk18;
+    arg0->animFrame = arg0->assetMetadata.unk19;
+    arg0->assetMetadata.unk4 = arg0->sprite1OffsetX + arg0->unk0->posX;
+    arg0->assetMetadata.unk8 = arg0->sprite1OffsetY + arg0->unk0->posY;
+    arg0->assetMetadata.unkC = arg0->sprite1OffsetZ + arg0->unk0->posZ;
+    arg0->spriteOffsetX = arg0->sprite2OffsetX + arg0->unk0->posX;
+    arg0->spriteOffsetY = arg0->sprite2OffsetY + arg0->unk0->posY;
+    arg0->spriteOffsetZ = arg0->sprite2OffsetZ + arg0->unk0->posZ;
 
     enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&arg0->assetMetadata);
-    enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&arg0->unk28);
+    enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&arg0->sprite2);
 
     arg0->assetMetadata.unk1A -= 0x14;
-    arg0->unk42 -= 0x14;
-    temp_v0 = ++arg0->unk60;
+    arg0->alphaDecay -= 0x14;
+    temp_v0 = ++arg0->frameIndex;
 
     if (temp_v0 == 8) {
         func_80069CF8_6A8F8();
     }
 }
 
-void func_800B5210_1E22C0(func_800B5210_1E22C0_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupTrickSpriteEffectTask(TrickSpriteEffectCleanupState *arg0) {
+    arg0->modelData = freeNodeMemory(arg0->modelData);
 }
 
 typedef struct {
     Node n;
     u8 padding[0x36];
-    s16 unk62;
-} func_800B523C_1E22EC_task;
-void func_800B523C_1E22EC(void *arg0, s16 arg1) {
-    func_800B523C_1E22EC_task *task = (func_800B523C_1E22EC_task *)scheduleTask(&func_800B4FC0_1E2070, 1, 0, 0x64);
+    s16 effectParam;
+} TrickSpriteEffectTask;
+void spawnTrickSpriteEffect(void *arg0, s16 arg1) {
+    TrickSpriteEffectTask *task = (TrickSpriteEffectTask *)scheduleTask(&initTrickSpriteEffectTask, 1, 0, 0x64);
     if (task != NULL) {
         task->n.prev = arg0;
-        task->unk62 = arg1;
+        task->effectParam = arg1;
     }
 }
 
