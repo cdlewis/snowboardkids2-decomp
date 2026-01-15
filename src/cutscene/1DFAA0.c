@@ -49,7 +49,7 @@ extern u8 gCutsceneEntryCopyFlag;
 extern s16 gCutsceneEntryBufferFrameNumber;
 extern s8 gCutsceneEntryCutFlag;
 extern s16 gCutsceneEntryBufferSlotIndex;
-extern D_800BA960_1E7A10_node D_800BA960_1E7A10[];
+extern CutsceneFadeAssetNode gCutsceneFadeAssetTable[];
 extern s8 D_800BAE00_1E7EB0[];
 extern u8 identityMatrix[];
 extern CutsceneAssetTable gCutsceneAssetTable[];
@@ -1123,11 +1123,11 @@ void shiftCutsceneEntryFrame(u8 slotIndex, u16 frameNumber, s32 frameDelta) {
 }
 
 void *loadCutsceneSlotAsset(s8 slotIndex) {
-    D_800BA960_1E7A10_node *node;
+    CutsceneFadeAssetNode *node;
 
     if (slotIndex < 0x10) {
-        node = &D_800BA960_1E7A10[slotIndex];
-        if (D_800BA960_1E7A10[slotIndex].start != NULL) {
+        node = &gCutsceneFadeAssetTable[slotIndex];
+        if (gCutsceneFadeAssetTable[slotIndex].start != NULL) {
             return loadCompressedData(node->start, node->end, node->size);
         }
     }
@@ -1146,17 +1146,17 @@ void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration) {
         return;
     }
 
-    if (D_800BA960_1E7A10[slotIndex].start == NULL) {
+    if (gCutsceneFadeAssetTable[slotIndex].start == NULL) {
         return;
     }
 
-    task = (TaskData *)scheduleTask(&func_800B477C_1E182C, 1, 0, 0x64);
+    task = (TaskData *)scheduleTask(&initCutsceneFadeTask, 1, 0, 0x64);
     if (task != NULL) {
-        task->unk0 = 0;
-        task->unk1 = slotIndex;
-        task->unk2 = duration;
+        task->state = 0;
+        task->slotIndex = slotIndex;
+        task->duration = duration;
         task->unk4 = arg0;
-        task->unkE4 = 0xFF;
+        task->fadeAlpha = 0xFF;
     }
 }
 
@@ -1164,175 +1164,175 @@ typedef struct {
     void *start;
     void *end;
     u32 size;
-    s8 unkC;
-} FadeNode;
+    s8 fadeType;
+} CutsceneFadeAsset;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u8 unk12;
-    u8 unk13;
-    u8 unk14;
-} SubStruct;
+    s16 flags;
+    s16 y;
+    void *assetData;
+    s16 slotIndex;
+    s16 scaleY;
+    s16 scaleX;
+    s16 rotation;
+    s16 alpha;
+    u8 r;
+    u8 g;
+    u8 b;
+} FadeSprite;
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    s16 unk2;
+    s8 state;
+    s8 slotIndex;
+    s16 duration;
     s32 unk4;
-    void *unk8;
-    SubStruct unkC[6];
-    SubStruct unk9C;
-    SubStruct unkB4;
+    void *assetData;
+    FadeSprite sprites[6];
+    FadeSprite centerSprite;
+    FadeSprite bottomSprite;
     u8 unkCC[0x18];
-    s16 unkE4;
+    s16 fadeAlpha;
 } FadeTaskData2;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-non-prototype"
 #pragma clang diagnostic ignored "-Wstrict-prototypes"
-extern void func_800B4914_1E19C4();
-extern void func_800B4ACC_1E1B7C();
+extern void updateCutsceneFadeTask();
+extern void cleanupCutsceneFadeTask();
 #pragma clang diagnostic pop
 
-void func_800B477C_1E182C(void *varg0) {
-    FadeTaskData2 *arg0 = (FadeTaskData2 *)varg0;
-    FadeNode *node;
+void initCutsceneFadeTask(void *varg0) {
+    FadeTaskData2 *task = (FadeTaskData2 *)varg0;
+    CutsceneFadeAsset *node;
     s32 i;
 
-    node = (FadeNode *)&D_800BA960_1E7A10[arg0->unk1];
-    arg0->unk8 = loadCompressedData(node->start, node->end, node->size);
+    node = (CutsceneFadeAsset *)&gCutsceneFadeAssetTable[task->slotIndex];
+    task->assetData = loadCompressedData(node->start, node->end, node->size);
 
     for (i = 0; i < 6; i++) {
-        arg0->unkC[i].unk0 = 0;
-        arg0->unkC[i].unk2 = -0x50 + (i * 0x10);
-        arg0->unkC[i].unk4 = arg0->unk8;
-        arg0->unkC[i].unk8 = i;
-        arg0->unkC[i].unkC = 0x400;
-        arg0->unkC[i].unkA = 0x400;
-        arg0->unkC[i].unkE = 0;
-        arg0->unkC[i].unk10 = 0xFF;
-        arg0->unkC[i].unk12 = 0;
-        arg0->unkC[i].unk13 = 0;
-        arg0->unkC[i].unk14 = 0;
+        task->sprites[i].flags = 0;
+        task->sprites[i].y = -0x50 + (i * 0x10);
+        task->sprites[i].assetData = task->assetData;
+        task->sprites[i].slotIndex = i;
+        task->sprites[i].scaleX = 0x400;
+        task->sprites[i].scaleY = 0x400;
+        task->sprites[i].rotation = 0;
+        task->sprites[i].alpha = 0xFF;
+        task->sprites[i].r = 0;
+        task->sprites[i].g = 0;
+        task->sprites[i].b = 0;
     }
 
-    switch (node->unkC) {
+    switch (node->fadeType) {
         case 0:
-            arg0->unk9C.unk0 = 0;
-            arg0->unk9C.unk2 = -0x20;
-            arg0->unk9C.unk8 = 6;
-            arg0->unk9C.unkC = 0x400;
-            arg0->unk9C.unkA = 0x400;
-            arg0->unk9C.unkE = 0;
-            arg0->unk9C.unk10 = 0xFF;
-            arg0->unk9C.unk12 = 0;
-            arg0->unk9C.unk13 = 0;
-            arg0->unk9C.unk14 = 0;
-            arg0->unk9C.unk4 = arg0->unk8;
+            task->centerSprite.flags = 0;
+            task->centerSprite.y = -0x20;
+            task->centerSprite.slotIndex = 6;
+            task->centerSprite.scaleX = 0x400;
+            task->centerSprite.scaleY = 0x400;
+            task->centerSprite.rotation = 0;
+            task->centerSprite.alpha = 0xFF;
+            task->centerSprite.r = 0;
+            task->centerSprite.g = 0;
+            task->centerSprite.b = 0;
+            task->centerSprite.assetData = task->assetData;
             break;
         case 1:
-            arg0->unk9C.unk0 = 0;
-            arg0->unk9C.unk2 = -0x28;
-            arg0->unk9C.unk8 = 6;
-            arg0->unk9C.unkC = 0x400;
-            arg0->unk9C.unkA = 0x400;
-            arg0->unk9C.unkE = 0;
-            arg0->unk9C.unk10 = 0xFF;
-            arg0->unk9C.unk12 = 0;
-            arg0->unk9C.unk13 = 0;
-            arg0->unk9C.unk14 = 0;
-            arg0->unk9C.unk4 = arg0->unk8;
+            task->centerSprite.flags = 0;
+            task->centerSprite.y = -0x28;
+            task->centerSprite.slotIndex = 6;
+            task->centerSprite.scaleX = 0x400;
+            task->centerSprite.scaleY = 0x400;
+            task->centerSprite.rotation = 0;
+            task->centerSprite.alpha = 0xFF;
+            task->centerSprite.r = 0;
+            task->centerSprite.g = 0;
+            task->centerSprite.b = 0;
+            task->centerSprite.assetData = task->assetData;
 
-            arg0->unkB4.unk0 = 0;
-            arg0->unkB4.unk2 = -0x16;
-            arg0->unkB4.unk8 = 7;
-            arg0->unkB4.unkC = 0x400;
-            arg0->unkB4.unkA = 0x400;
-            arg0->unkB4.unkE = 0;
-            arg0->unkB4.unk10 = 0xFF;
-            arg0->unkB4.unk12 = 0;
-            arg0->unkB4.unk13 = 0;
-            arg0->unkB4.unk14 = 0;
-            arg0->unkB4.unk4 = arg0->unk8;
+            task->bottomSprite.flags = 0;
+            task->bottomSprite.y = -0x16;
+            task->bottomSprite.slotIndex = 7;
+            task->bottomSprite.scaleX = 0x400;
+            task->bottomSprite.scaleY = 0x400;
+            task->bottomSprite.rotation = 0;
+            task->bottomSprite.alpha = 0xFF;
+            task->bottomSprite.r = 0;
+            task->bottomSprite.g = 0;
+            task->bottomSprite.b = 0;
+            task->bottomSprite.assetData = task->assetData;
             break;
     }
 
-    arg0->unkE4 = 0;
-    setCleanupCallback((void (*)(void *))func_800B4ACC_1E1B7C);
-    setCallback((void (*)(void *))func_800B4914_1E19C4);
+    task->fadeAlpha = 0;
+    setCleanupCallback((void (*)(void *))cleanupCutsceneFadeTask);
+    setCallback((void (*)(void *))updateCutsceneFadeTask);
 }
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    s16 unk2;
+    s8 state;
+    s8 slotIndex;
+    s16 duration;
     s16 unk4;
     u16 unk6;
     void *unk8;
-    u8 unkC[0x90];
-    u8 unk9C[0x18];
-    u8 unkB4[0x18];
+    u8 sprites[0x90];
+    u8 centerSprite[0x18];
+    u8 bottomSprite[0x18];
     u8 unkCC[0x18];
-    s16 unkE4;
+    s16 fadeAlpha;
 } FadeTaskData;
 
-void func_800B4914_1E19C4(FadeTaskData *arg0) {
-    FadeNode *node;
+void updateCutsceneFadeTask(FadeTaskData *task) {
+    CutsceneFadeAsset *node;
     s32 offset;
     u8 *ptr;
     s32 i;
 
-    node = (FadeNode *)&D_800BA960_1E7A10[arg0->unk1];
+    node = (CutsceneFadeAsset *)&gCutsceneFadeAssetTable[task->slotIndex];
 
-    switch (arg0->unk0) {
+    switch (task->state) {
         case 0:
-            arg0->unkE4 += 10;
-            if (arg0->unkE4 >= 0xFF) {
-                arg0->unkE4 = 0xFF;
-                arg0->unk0 = 1;
+            task->fadeAlpha += 10;
+            if (task->fadeAlpha >= 0xFF) {
+                task->fadeAlpha = 0xFF;
+                task->state = 1;
             }
             break;
         case 1:
-            arg0->unk2--;
-            if (arg0->unk2 < 0) {
-                arg0->unk0 = 2;
+            task->duration--;
+            if (task->duration < 0) {
+                task->state = 2;
             }
             break;
         case 2:
-            arg0->unkE4 -= 10;
-            if (arg0->unkE4 <= 0) {
+            task->fadeAlpha -= 10;
+            if (task->fadeAlpha <= 0) {
                 func_80069CF8_6A8F8();
                 return;
             }
             break;
     }
 
-    switch (node->unkC) {
+    switch (node->fadeType) {
         case 0:
-            arg0->unk9C[0x14] = (u8)arg0->unkE4;
-            debugEnqueueCallback(arg0->unk6, 0, &func_80011924_12524, &arg0->unk9C);
+            task->centerSprite[0x14] = (u8)task->fadeAlpha;
+            debugEnqueueCallback(task->unk6, 0, &func_80011924_12524, &task->centerSprite);
             break;
         case 1:
-            arg0->unk9C[0x14] = (u8)arg0->unkE4;
-            debugEnqueueCallback(arg0->unk6, 0, &func_80011924_12524, &arg0->unk9C);
-            arg0->unkB4[0x14] = (u8)arg0->unkE4;
-            debugEnqueueCallback(arg0->unk6, 0, &func_80011924_12524, &arg0->unkB4);
+            task->centerSprite[0x14] = (u8)task->fadeAlpha;
+            debugEnqueueCallback(task->unk6, 0, &func_80011924_12524, &task->centerSprite);
+            task->bottomSprite[0x14] = (u8)task->fadeAlpha;
+            debugEnqueueCallback(task->unk6, 0, &func_80011924_12524, &task->bottomSprite);
             break;
     }
 
     i = 0;
     offset = 0xC;
-    ptr = (u8 *)arg0;
+    ptr = (u8 *)task;
     do {
-        ptr[0x20] = (u8)arg0->unkE4;
-        debugEnqueueCallback(arg0->unk6, 0, &func_80011924_12524, (u8 *)arg0 + offset);
+        ptr[0x20] = (u8)task->fadeAlpha;
+        debugEnqueueCallback(task->unk6, 0, &func_80011924_12524, (u8 *)task + offset);
         offset += 0x18;
         ptr += 0x18;
         i++;
@@ -1341,8 +1341,8 @@ void func_800B4914_1E19C4(FadeTaskData *arg0) {
 
 typedef struct {
     u8 padding[0x8];
-    void *unk8;
-} func_800B4ACC_1E1B7C_arg;
-void func_800B4ACC_1E1B7C(func_800B4ACC_1E1B7C_arg *arg0) {
-    freeNodeMemory(arg0->unk8);
+    void *assetData;
+} CutsceneFadeCleanupArgs;
+void cleanupCutsceneFadeTask(CutsceneFadeCleanupArgs *args) {
+    freeNodeMemory(args->assetData);
 }

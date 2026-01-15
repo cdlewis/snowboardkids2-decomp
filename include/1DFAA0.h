@@ -74,17 +74,17 @@ typedef struct {
     void *start;
     void *end;
     u32 size;
-    s8 unkC;
+    s8 fadeType;
     u8 padding[3];
-} D_800BA960_1E7A10_node;
+} CutsceneFadeAssetNode;
 
 typedef struct {
-    s8 unk0;
-    s8 unk1;
-    s16 unk2;
+    s8 state;
+    s8 slotIndex;
+    s16 duration;
     s32 unk4;
     u8 padding[0xDC];
-    s16 unkE4;
+    s16 fadeAlpha;
 } TaskData;
 
 typedef struct {
@@ -316,5 +316,5 @@ void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber);
 void shiftCutsceneEntryFrame(u8 slotIndex, u16 frameNumber, s32 frameDelta);
 void *loadCutsceneSlotAsset(s8 slotIndex);
 void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration);
-void func_800B477C_1E182C(void *);
+void initCutsceneFadeTask(void *);
 void initializeCutsceneSystem(void *);
