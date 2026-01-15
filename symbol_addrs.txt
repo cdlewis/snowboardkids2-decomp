@@ -1445,6 +1445,7 @@ MusPtrBankInitialize = 0x8007418C;
 mus_next_frame_time = 0x800A6500;
 __MusIntMain = 0x800730EC;
 __MusIntRandom = 0x80074324;
+__MusIntProcessContinuousVolume = 0x80073E20;
 __MusIntProcessContinuousPitchBend = 0x80073EE4;
 __MusIntSetPitch = 0x80073928;
 __MusIntInitEnvelope = 0x80073A3C; // rom:0x7463C

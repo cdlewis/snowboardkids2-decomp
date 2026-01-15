@@ -200,7 +200,7 @@ fifo_t *gFifoBuffer; // fifo_addr (buffer)
 void __MusIntFifoProcess(void);
 void func_80073738_74338(channel_t *cp, int x); // Flush pending wave table to audio channel
 void func_8007335C_73F5C(channel_t *cp, int x);
-void func_80073E20_74A20(channel_t *cp);
+void __MusIntProcessContinuousVolume(channel_t *cp);
 void __MusIntProcessContinuousPitchBend(channel_t *cp);
 u8 *Fstop(channel_t *cp, u8 *ptr);
 void processChannelEnvelope(channel_t *cp);
@@ -1337,7 +1337,7 @@ ALMicroTime __MusIntMain(void *node) {
         }
 
         if (cp->pvolume != NULL && (u32)cp->volume_frame < cp->channel_frame) {
-            func_80073E20_74A20(cp);
+            __MusIntProcessContinuousVolume(cp);
         }
 
         if (cp->ppitchbend != NULL && cp->pitchbend_frame < cp->channel_frame) {
@@ -1607,7 +1607,7 @@ f32 calculateVibratoModulation(channel_t *cp) {
     return cp->vibrato;
 }
 
-void func_80073E20_74A20(channel_t *cp) {
+void __MusIntProcessContinuousVolume(channel_t *cp) {
     u8 work_vol;
     u16 temp;
 
