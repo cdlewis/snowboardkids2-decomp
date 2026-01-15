@@ -504,7 +504,18 @@ Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex,
     return NULL;
 }
 
-void func_8005B730_5C330(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
+/**
+ * Handles collision between an oriented cylindrical area and all players.
+ * The area is defined by an origin point, a radial threshold (XY plane after rotation),
+ * and a depth extent (Z axis). Players in front (positive Z) get knocked back,
+ * players behind (negative Z) get pulled toward the origin.
+ *
+ * @param origin Center position of the oriented area
+ * @param radialThreshold Radius threshold in the XY plane (after rotation)
+ * @param depthExtent Forward/backward extent on the Z axis
+ * @param rotationAngle Rotation angle for the oriented area
+ */
+void handleOrientedAreaCollision(Vec3i *origin, s32 radialThreshold, s32 depthExtent, s16 rotationAngle) {
     Vec3i deltaPos;
     Vec3i rotatedPos;
     s32 negAngle;
@@ -517,26 +528,25 @@ void func_8005B730_5C330(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
     s32 playerIndex;
     Player *player;
     s32 dist;
-    s32 numPlayersToCheck;
 
     allocation = (GameState *)getCurrentAllocation();
     for (playerIndex = 0; playerIndex < allocation->numPlayers; playerIndex++) {
-        negAngle = (s16)-arg3;
+        negAngle = (s16)-rotationAngle;
 
         player = &allocation->players[playerIndex];
 
-        /* Use max of arg1, arg2 for combined radius */
-        if (arg1 < arg2) {
-            combinedRadius = arg2;
+        /* Use max of radialThreshold, depthExtent for combined radius */
+        if (radialThreshold < depthExtent) {
+            combinedRadius = depthExtent;
         } else {
-            combinedRadius = arg1;
+            combinedRadius = radialThreshold;
         }
         combinedRadius += player->collisionRadius;
 
         /* Calculate delta position */
-        deltaPos.x = (player->collisionOffset.x + player->worldPos.x) - arg0->x;
-        deltaPos.y = (player->collisionOffset.y + player->worldPos.y) - arg0->y;
-        deltaPos.z = (player->collisionOffset.z + player->worldPos.z) - arg0->z;
+        deltaPos.x = (player->collisionOffset.x + player->worldPos.x) - origin->x;
+        deltaPos.y = (player->collisionOffset.y + player->worldPos.y) - origin->y;
+        deltaPos.z = (player->collisionOffset.z + player->worldPos.z) - origin->z;
 
         /* AABB check */
         if (deltaPos.x >= combinedRadius) {
@@ -564,22 +574,22 @@ void func_8005B730_5C330(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
         /* Compute 2D distance in XY plane */
         dist = isqrt64((s64)rotatedPos.x * rotatedPos.x + (s64)rotatedPos.y * rotatedPos.y);
 
-        if (dist >= arg1) {
+        if (dist >= radialThreshold) {
             continue;
         }
 
         /* Check z direction and apply push */
         if (rotatedPos.z >= 0) {
             /* Forward collision */
-            if (rotatedPos.z >= arg2 + player->collisionRadius) {
+            if (rotatedPos.z >= depthExtent + player->collisionRadius) {
                 continue;
             }
 
             deltaPos.y = 0;
             deltaPos.x = 0;
-            deltaPos.z = (arg2 + player->collisionRadius) - rotatedPos.z;
+            deltaPos.z = (depthExtent + player->collisionRadius) - rotatedPos.z;
 
-            rotateVectorY(&deltaPos, arg3, &rotatedPos);
+            rotateVectorY(&deltaPos, rotationAngle, &rotatedPos);
 
             player->worldPos.x += rotatedPos.x;
             player->worldPos.y += rotatedPos.y;
@@ -587,17 +597,17 @@ void func_8005B730_5C330(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
 
             setPlayerCollisionKnockbackState(player, negAngle, deltaPos.z);
         } else {
-            /* Backward collision - condition uses collisionRadius */
-            if (-(arg2 + player->collisionRadius) >= rotatedPos.z) {
+            /* Backward collision */
+            if (-(depthExtent + player->collisionRadius) >= rotatedPos.z) {
                 continue;
             }
 
             deltaPos.y = 0;
             deltaPos.x = 0;
-            /* Push calculation uses field at offset 0xB64 */
-            deltaPos.z = -(arg2 + *(s32 *)((u8 *)player + 0xB64)) - rotatedPos.z;
+            /* Pull uses player's rear collision radius at offset 0xB64 */
+            deltaPos.z = -(depthExtent + *(s32 *)((u8 *)player + 0xB64)) - rotatedPos.z;
 
-            rotateVectorY(&deltaPos, arg3, &rotatedPos);
+            rotateVectorY(&deltaPos, rotationAngle, &rotatedPos);
 
             player->worldPos.x += rotatedPos.x;
             player->worldPos.y += rotatedPos.y;

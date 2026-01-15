@@ -98,7 +98,7 @@ void func_800BB350_B5560(func_800BB2B0_arg *arg0) {
 
     createRotationMatrixYZ(arg0->matrix, (u16)(approximateSin(arg0->unk3C) >> 4), 0xF800);
     transformVector((s16 *)&arg0->unk40, arg0->matrix, &temp);
-    func_8005B730_5C330(&temp, 0x500000, 0x100000, -0x800);
+    handleOrientedAreaCollision(&temp, 0x500000, 0x100000, -0x800);
 
     if (gameState->gamePaused == 0) {
         if ((arg0->unk3C & 0xFFF) == 0) {
