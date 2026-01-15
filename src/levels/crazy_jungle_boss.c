@@ -297,53 +297,59 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     arg0->unkB28 -= arg0->unk970.translation.z;
 }
 
-s32 func_800BB754_ABF84(Arg0Struct *arg0) {
-    void *temp_s5;
-    s32 sp10[3];
-    s32 sp20[3];
+s32 initCrazyJungleBoss(Arg0Struct *arg0) {
+    void *gameState;
+    s32 waypoint1[3];
+    s32 waypoint2[3];
     s32 i;
     u16 trackIdx;
-    s32 temp;
+    s32 assetOffset;
     u8 *arg0_bytes;
 
     arg0_bytes = (u8 *)arg0;
 
-    temp_s5 = getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
+    // Initialize rotation matrices
     memcpy(arg0_bytes + 0x970, identityMatrix, 0x20);
     createYRotationMatrix((Transform3D *)(arg0_bytes + 0x970), *(u16 *)(arg0_bytes + 0xA94));
     memcpy(arg0_bytes + 0x990, identityMatrix, 0x20);
     memcpy(arg0_bytes + 0x9B0, identityMatrix, 0x20);
 
+    // Set initial position based on boss index
     *(s32 *)(arg0_bytes + 0x434) = D_800BC44C_ACC7C[*(u8 *)(arg0_bytes + 0xBB8)];
-    getTrackSegmentWaypoints((u8 *)temp_s5 + 0x30, 0, sp10, sp20);
+    getTrackSegmentWaypoints((u8 *)gameState + 0x30, 0, waypoint1, waypoint2);
 
-    *(s32 *)(arg0_bytes + 0x43C) = sp10[2] + 0x200000;
+    *(s32 *)(arg0_bytes + 0x43C) = waypoint1[2] + 0x200000;
 
-    trackIdx = getOrUpdatePlayerSectorIndex(arg0, (u8 *)temp_s5 + 0x30, 0, arg0_bytes + 0x434);
+    // Initialize track/sector info
+    trackIdx = getOrUpdatePlayerSectorIndex(arg0, (u8 *)gameState + 0x30, 0, arg0_bytes + 0x434);
     *(u16 *)(arg0_bytes + 0xB94) = trackIdx;
-    *(s32 *)(arg0_bytes + 0x438) = func_8005CFC0_5DBC0((u8 *)temp_s5 + 0x30, trackIdx, arg0_bytes + 0x434, 0x100000);
+    *(s32 *)(arg0_bytes + 0x438) = func_8005CFC0_5DBC0((u8 *)gameState + 0x30, trackIdx, arg0_bytes + 0x434, 0x100000);
 
     memcpy(arg0_bytes + 0x440, arg0_bytes + 0x434, 0xC);
 
+    // Zero out velocity
     *(s32 *)(arg0_bytes + 0x44C) = 0;
     *(s32 *)(arg0_bytes + 0x450) = 0;
     *(s32 *)(arg0_bytes + 0x454) = 0;
 
     *(u16 *)(arg0_bytes + 0xA94) = 0x1000;
 
+    // Initialize bone matrices (17 bones)
     for (i = 0; i < 17; i++) {
         memcpy(arg0_bytes + i * 0x3C + 0x38, identityMatrix, 0x20);
         *(s32 *)(arg0_bytes + i * 0x3C + 0x5C) = *(s32 *)(arg0_bytes + 0x4);
         *(s32 *)(arg0_bytes + i * 0x3C + 0x60) = *(s32 *)(arg0_bytes + 0x8);
         *(s32 *)(arg0_bytes + i * 0x3C + 0x64) = 0;
-        temp = i * 0x10;
+        assetOffset = i * 0x10;
         *(void **)(arg0_bytes + i * 0x3C + 0x58) =
-            (void *)(loadAssetByIndex_953B0(*(u8 *)(arg0_bytes + 0xBB9), *(u8 *)(arg0_bytes + 0xBBA)) + temp);
+            (void *)(loadAssetByIndex_953B0(*(u8 *)(arg0_bytes + 0xBB9), *(u8 *)(arg0_bytes + 0xBBA)) + assetOffset);
     }
 
     *(u16 *)(arg0_bytes + 0xA8C) = 0;
 
+    // Get number of bones and reset animations
     *(u8 *)(arg0_bytes + 0xBB7) = func_8006097C_6157C(*(void **)(arg0_bytes + 0x0), 0);
 
     for (i = 0; i < *(u8 *)(arg0_bytes + 0xBB7); i++) {
@@ -355,6 +361,7 @@ s32 func_800BB754_ABF84(Arg0Struct *arg0) {
         );
     }
 
+    // Initialize behavior state
     *(u8 *)(arg0_bytes + 0xBBD) = 1;
     *(s32 *)(arg0_bytes + 0xAE0) = 0xA0000;
     *(s32 *)(arg0_bytes + 0xB2C) = 0x240000;
@@ -369,11 +376,12 @@ s32 func_800BB754_ABF84(Arg0Struct *arg0) {
     *(s32 *)(arg0_bytes + 0xB64) = 0x15E000;
     *(u8 *)(arg0_bytes + 0xB68) = *(u8 *)(arg0_bytes + 0xBB8);
 
+    // Spawn chase camera if needed
     if (*(u8 *)(arg0_bytes + 0xBC7) == 0) {
         spawnChaseCameraTask(*(u8 *)(arg0_bytes + 0xBB8));
     }
 
-    *(s32 *)(arg0_bytes + 0xAA0) = *(s32 *)(*(s32 *)((u8 *)temp_s5 + 0x10) + 0xAA0) - 0x10000;
+    *(s32 *)(arg0_bytes + 0xAA0) = *(s32 *)(*(s32 *)((u8 *)gameState + 0x10) + 0xAA0) - 0x10000;
 
     if (*(void **)(arg0_bytes + 0x1C) != 0) {
         *(s32 *)(arg0_bytes + 0x28) = (s32)(*(void **)(arg0_bytes + 0x1C)) +
