@@ -646,8 +646,8 @@ void initRaceViewports(void) {
         initViewportNode(&gs->unkC[i], 0, (u16)(i + 4), 5, 1);
         initViewportNode(&gs->unk8[i], &gs->unkC[i], (u16)i, 0xA, 1);
         initViewportNode(&gs->unk4[i], &gs->unk8[i], (u16)(i + 8), 0x14, 0);
-        func_8006FEF8_70AF8(&gs->unk8[i], (u16)(i + 0x64));
-        func_8006FEF8_70AF8(&gs->unkC[i], (u16)(i + 0x64));
+        setViewportId(&gs->unk8[i], (u16)(i + 0x64));
+        setViewportId(&gs->unkC[i], (u16)(i + 0x64));
 
         if (gs->unk7A == 0xB) {
             setViewportLightColors(i + 0x64, 1, &D_80090774_91374, &D_8009077C_9137C);

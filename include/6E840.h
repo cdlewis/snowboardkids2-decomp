@@ -119,7 +119,9 @@ void func_8006E054_6EC54(u16);
 
 void func_8006DC40_6E840(void);
 
-void func_8006FEF8_70AF8(Node_70B00 *, u16);
+void func_8006FEF8_70AF8(Node_70B00 *node, u16 id);
+
+void setViewportId(Node_70B00 *node, u16 id);
 
 void setViewportTransformById(u16 viewportId, void *transformMatrix);
 

@@ -101,7 +101,7 @@ void initCutsceneRenderer(void) {
     nodePtr = &s.taskMemory->sceneNode;
     initViewportNode(nodePtr, 0, 0, 10, scale);
     setViewportScale(nodePtr, scale, scale);
-    func_8006FEF8_70AF8(nodePtr, 1);
+    setViewportId(nodePtr, 1);
     setModelCameraTransform(nodePtr, 0, 0, -160, -120, 159, 119);
     func_8006FA0C_7060C(nodePtr, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     func_8006BEDC_6CADC(lightBuffer, 0, 0, 0x01000000, 0, 0, 0);
@@ -114,7 +114,7 @@ void initCutsceneRenderer(void) {
     initViewportNode(nodePtr, 0, 1, 11, 0);
     setViewportScale(nodePtr, scale, scale);
 
-    func_8006FEF8_70AF8(nodePtr, 1);
+    setViewportId(nodePtr, 1);
     setModelCameraTransform(nodePtr, 0, 0, -160, -120, 159, 119);
     setViewportEnvColor(nodePtr, 0, 0, 0);
     setViewportFadeValue(nodePtr, 0xFF, 0);
@@ -123,7 +123,7 @@ void initCutsceneRenderer(void) {
     uiNodePtr = &s.taskMemory->uiNode;
     initViewportNode(uiNodePtr, 0, 3, 8, 0);
     setViewportScale(uiNodePtr, scale, scale);
-    func_8006FEF8_70AF8(uiNodePtr, 1);
+    setViewportId(uiNodePtr, 1);
     setModelCameraTransform(uiNodePtr, 0, 0, -160, -120, 159, 119);
     setViewportEnvColor(uiNodePtr, 0, 0, 0);
     setViewportFadeValue(uiNodePtr, 0xFF, 0);

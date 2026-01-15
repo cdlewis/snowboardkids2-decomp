@@ -194,8 +194,8 @@ void func_8001E5EC_1F1EC(void) {
     initViewportNode(&alloc->unk588, &alloc->unk0, 4, 5, 1);
 
     initViewportNode(&alloc->previewNode, &alloc->unk588, 0, 0xA, 1);
-    func_8006FEF8_70AF8(&alloc->unk588, 0x65);
-    func_8006FEF8_70AF8(&alloc->previewNode, 0x64);
+    setViewportId(&alloc->unk588, 0x65);
+    setViewportId(&alloc->previewNode, 0x64);
 
     setModelCameraTransform(&alloc->previewNode, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
     setModelCameraTransform(&alloc->unk588, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
@@ -384,7 +384,7 @@ void handleLevelSelectInput(void) {
                 allocation->loadStartFrame = gFrameCounter;
                 allocation->menuState = 7;
                 initViewportNode(node760, &allocation->unk0, 0xB, 0x12, 0);
-                func_8006FEF8_70AF8(node760, 0xC);
+                setViewportId(node760, 0xC);
                 setModelCameraTransform(node760, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
                 setViewportFadeValue(node760, 0xFF, 0);
                 setViewportFadeValue(node760, 0, 8);
