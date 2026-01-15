@@ -225,7 +225,7 @@ typedef struct {
     u8 unkBC7;
     u8 paddingBC8[0xBDB - 0xBC8];
     u8 unkBDB;
-} func_800BB66C_B0B5C_arg;
+} IceLandBossArg;
 
 typedef struct {
     u8 unk0;
@@ -407,7 +407,7 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
     }
 }
 
-s32 func_800BB66C_B0B5C(func_800BB66C_B0B5C_arg *arg0) {
+s32 initIceLandBoss(IceLandBossArg *arg0) {
     Vec3i sp10;
     Vec3i sp20;
     GameState *state;
