@@ -65,7 +65,7 @@ typedef struct {
 typedef struct {
     /* 0x000 */ s32 flags;
     /* 0x004 */ u8 *pdata;
-    /* 0x008 */ void *pending;
+    /* 0x008 */ void *pending; // ALWaveTable* - wave table waiting to be played
     /* 0x00C */ u32 channel_frame;
     /* 0x010 */ s32 stopping;
     /* 0x014 */ s32 volume_frame;
@@ -198,7 +198,7 @@ s32 gFifoCapacity;   // fifo_limit (capacity)
 fifo_t *gFifoBuffer; // fifo_addr (buffer)
 
 void __MusIntFifoProcess(void);
-void func_80073738_74338(channel_t *cp, int x);
+void func_80073738_74338(channel_t *cp, int x); // Flush pending wave table to audio channel
 void func_8007335C_73F5C(channel_t *cp, int x);
 void func_80073E20_74A20(channel_t *cp);
 void __MusIntProcessContinuousPitchBend(channel_t *cp);
@@ -1388,6 +1388,10 @@ ALMicroTime __MusIntMain(void *node) {
 
 INCLUDE_ASM("asm/nonmatchings/player", func_8007335C_73F5C);
 
+// Flush a pending wave table to the audio channel.
+// Called by func_8007335C_73F5C (process note command) when a new note needs to play.
+// Stops any currently playing voice, marks the channel as playing, starts the new voice
+// with the pending wave table, and clears the pending pointer.
 void func_80073738_74338(channel_t *cp, int x) {
     if (cp->playing) {
         alSynStopVoice(&__libmus_alglobals.drvr, mus_voices + x);
