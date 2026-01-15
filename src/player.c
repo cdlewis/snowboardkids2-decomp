@@ -203,7 +203,7 @@ void func_8007335C_73F5C(channel_t *cp, int x);
 void func_80073E20_74A20(channel_t *cp);
 void __MusIntProcessContinuousPitchBend(channel_t *cp);
 u8 *Fstop(channel_t *cp, u8 *ptr);
-void func_80073AA4_746A4(channel_t *cp);
+void processChannelEnvelope(channel_t *cp);
 void func_80073CB4_748B4(channel_t *cp);
 f32 func_80073DC4_749C4(channel_t *cp);
 f32 func_80073D6C_7496C(channel_t *cp);
@@ -1357,7 +1357,7 @@ ALMicroTime __MusIntMain(void *node) {
 
         if (cp->playing != 0) {
             if (cp->env_phase != 0) {
-                func_80073AA4_746A4(cp);
+                processChannelEnvelope(cp);
             }
 
             if (cp->sweep_speed != 0 && cp->sweep_frame < cp->channel_frame) {
@@ -1484,7 +1484,7 @@ void __MusIntInitEnvelope(channel_t *cp) {
     cp->env_count = cp->env_speed;
 }
 
-void func_80073AA4_746A4(channel_t *cp) {
+void processChannelEnvelope(channel_t *cp) {
     s32 progress;
     u8 phase;
 
