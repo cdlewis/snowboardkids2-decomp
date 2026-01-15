@@ -11,8 +11,8 @@ s32 getTrackHeightInSector(void *gameData, s32 sectorIndex, void *pos, s32 heigh
     return func_80061A64_62664(gameData, sectorIndex, pos);
 }
 
-s32 func_8005CFDC_5DBDC(void *arg0, u16 arg1, void *arg2, s32 arg3, s32 arg4) {
-    return func_80061D6C_6296C(arg0, arg1, arg2, arg4);
+s32 getTrackHeightInSectorWithOffset(void *gameData, u16 sectorIndex, void *pos, s32 unused, s32 heightOffset) {
+    return func_80061D6C_6296C(gameData, sectorIndex, pos, heightOffset);
 }
 
 void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4) {

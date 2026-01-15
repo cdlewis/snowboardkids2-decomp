@@ -4,7 +4,7 @@
 #include "gamestate.h"
 
 s32 getTrackHeightInSector(void *gameData, s32 sectorIndex, void *pos, s32 heightOffset);
-s32 func_8005CFDC_5DBDC(void *arg0, u16 arg1, void *arg2, s32 arg3, s32 arg4);
+s32 getTrackHeightInSectorWithOffset(void *gameData, u16 sectorIndex, void *pos, s32 unused, s32 heightOffset);
 void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
 s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3);
 void func_8005D03C_5DC3C(Player *arg0);

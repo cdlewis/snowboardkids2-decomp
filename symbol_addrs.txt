@@ -3403,4 +3403,5 @@ updateGlintEffect = 0x80051760; // rom:0x52360
 cleanupGlintEffect = 0x80051800; // rom:0x52400
 spawnGlintEffect = 0x8005182C; // rom:0x5242C
 getTrackHeightInSector = 0x8005CFC0; // rom:0x5DBC0
+getTrackHeightInSectorWithOffset = 0x8005CFDC; // rom:0x5DBDC
 spinFadeInWaitStep = 0x800B7784; // rom:0xA7634
