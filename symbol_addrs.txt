@@ -3339,3 +3339,4 @@ maintainMaxSpinStep = 0x800B75F4; // rom:0xA74A4
 spinRampDownStep = 0x800B76BC; // rom:0xA756C
 cleanupPlayerCountSelectSprites = 0x800B0664; // rom:0x1DBD44
 setViewportEnvColor = 0x8006FE28; // rom:0x70A28
+copyRotDurationToPosX = 0x800B5F20; // rom:0x1E2FD0

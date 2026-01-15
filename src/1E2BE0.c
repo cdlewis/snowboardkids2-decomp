@@ -187,16 +187,8 @@ void initCutsceneCameraWithX(CutsceneCameraState *arg0, s16 rotX, s16 rotY, s32 
     arg0->posXDurationCopy = 0;
 }
 
-typedef struct {
-    u8 padding[0x34];
-    s32 posXCurrent;
-} func_800B5F20_1E2FD0_arg0;
-typedef struct {
-    u8 padding[0x2C];
-    s32 posXTarget;
-} func_800B5F20_1E2FD0_arg1;
-void func_800B5F20_1E2FD0(func_800B5F20_1E2FD0_arg0 *arg0, func_800B5F20_1E2FD0_arg1 *arg1) {
-    arg0->posXCurrent = arg1->posXTarget;
+void copyRotDurationToPosX(CutsceneCameraState *arg0, CutsceneCameraState *arg1) {
+    arg0->posXCurrent = *(s32 *)&arg1->rotXDuration;
 }
 
 void animateCameraRotationX(CutsceneCameraState *arg0, s16 targetRotX, s16 duration) {

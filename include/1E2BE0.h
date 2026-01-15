@@ -51,6 +51,7 @@ typedef struct {
 void setAnimationLoopMode(CutsceneCameraState *arg0, s8 mode);
 void freeAnimationLoopState(void *arg0);
 void initCutsceneCameraWithX(CutsceneCameraState *arg0, s16 rotX, s16 rotY, s32 posY, s32 posZ, s32 posX);
+void copyRotDurationToPosX(CutsceneCameraState *arg0, CutsceneCameraState *arg1);
 void animateCameraRotationX(CutsceneCameraState *arg0, s16 targetRotX, s16 duration);
 void animateCameraRotationY(CutsceneCameraState *arg0, s16 targetRotY, s16 duration);
 void animateCameraPositionX(CutsceneCameraState *arg0, s32 targetX, s16 duration);
