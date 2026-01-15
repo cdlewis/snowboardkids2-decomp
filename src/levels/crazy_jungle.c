@@ -28,33 +28,33 @@ typedef struct {
 } func_800BB808_B7A48_arg;
 
 typedef struct {
-    u16 unk0;
-    u16 unk2;
-    s32 unk4[3];
-} D_800BBB90_Entry;
+    u16 rotX;
+    u16 rotY;
+    s32 position[3];
+} RockPositionEntry;
 
-extern D_800BBB90_Entry D_800BBB90_B7DD0[];
+extern RockPositionEntry crazyJungleRockPositions[];
 
 typedef struct {
     /* 0x00 */ DisplayListObject node1;
     /* 0x3C */ DisplayListObject node2;
-    s32 unk78;
+    s32 rotationMatrix;
     s8 pad_7C[0x10];
-    s32 unk8C;
+    s32 posX;
     s8 pad_90[0x4];
-    s32 unk94;
-    s32 unk98;
-    s32 unk9C;
-    s32 unkA0;
-    s16 unkA4;
-    s16 unkA6;
-    s16 unkA8;
-} TrackHazard;
+    s32 posY;
+    s32 posZ;
+    s32 animTimer;
+    s32 posOffset;
+    s16 xRotation;
+    s16 positionIndex;
+    s16 respawnTimer;
+} FallingRockHazard;
 
 typedef struct {
     Node n;
     u8 padding[0x7A];
-    s16 unkA6;
+    s16 positionIndex;
 } NodeWithPayload;
 
 typedef struct {
@@ -65,51 +65,51 @@ typedef struct {
 
 extern s32 D_8009A8A4_9B4A4;
 
-void func_800BB468_B76A8(TrackHazard *arg0);
-void func_800BB658_B7898(TrackHazard *arg0);
+void renderFallingRockHazard(FallingRockHazard *arg0);
+void updateFallingRockHazard(FallingRockHazard *arg0);
+void func_800BB658_B7898(FallingRockHazard *arg0);
 void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0);
 void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *);
-void func_800BB71C_B795C(TrackHazard *);
+void func_800BB71C_B795C(FallingRockHazard *);
 void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0);
 
-void func_800BB2B0_B74F0(TrackHazard *arg0) {
+void initFallingRockHazard(FallingRockHazard *rock) {
     GameState *gameState;
-    s32 temp;
-    u16 var_v1;
+    s32 randVal;
     func_80055E68_56A68_result *result;
 
     gameState = (GameState *)getCurrentAllocation();
-    temp = randA();
+    randVal = randA();
 
-    arg0->unkA6 += (temp & 1);
+    rock->positionIndex += (randVal & 1);
     result = func_80055E68_56A68(gameState->memoryPoolId);
-    arg0->node1.displayLists = &result->unk90;
+    rock->node1.displayLists = &result->unk90;
     result = func_80055E68_56A68(gameState->memoryPoolId);
-    arg0->node2.displayLists = &result->unkA0;
-    arg0->node1.segment1 = func_80055DC4_569C4(gameState->memoryPoolId);
-    arg0->node1.segment2 = func_80055DF8_569F8(gameState->memoryPoolId);
-    arg0->node1.segment3 = 0;
-    arg0->unk98 = 0;
-    arg0->unk9C = 0;
-    arg0->unkA0 = 0;
-    arg0->node2.segment1 = arg0->node1.segment1;
-    arg0->node2.segment2 = arg0->node1.segment2;
-    arg0->node2.segment3 = arg0->node1.segment3;
-    memcpy(&arg0->unk8C, &D_800BBB90_B7DD0[arg0->unkA6].unk4, 0xC);
-    createCombinedRotationMatrix(&arg0->unk78, D_800BBB90_B7DD0[arg0->unkA6].unk0, D_800BBB90_B7DD0[arg0->unkA6].unk2);
-    arg0->unkA4 = 0;
+    rock->node2.displayLists = &result->unkA0;
+    rock->node1.segment1 = func_80055DC4_569C4(gameState->memoryPoolId);
+    rock->node1.segment2 = func_80055DF8_569F8(gameState->memoryPoolId);
+    rock->node1.segment3 = 0;
+    rock->posZ = 0;
+    rock->animTimer = 0;
+    rock->posOffset = 0;
+    rock->node2.segment1 = rock->node1.segment1;
+    rock->node2.segment2 = rock->node1.segment2;
+    rock->node2.segment3 = rock->node1.segment3;
+    memcpy(&rock->posX, &crazyJungleRockPositions[rock->positionIndex].position, 0xC);
+    createCombinedRotationMatrix(&rock->rotationMatrix, crazyJungleRockPositions[rock->positionIndex].rotX, crazyJungleRockPositions[rock->positionIndex].rotY);
+    rock->xRotation = 0;
 
     setCleanupCallback(func_800BB7D0_B7A10);
-    setCallback(func_800BB468_B76A8);
+    setCallback(updateFallingRockHazard);
 }
 
-void func_800BB3B8_B75F8(TrackHazard *arg0) {
+void renderFallingRockHazard(FallingRockHazard *arg0) {
     s32 matrix[8]; // this should be matrix[9] but it causes stack issues
     s32 i;
 
-    memcpy(&D_8009A8A4_9B4A4, &arg0->unk98, 0xC);
-    func_8006B084_6BC84(&D_8009A8A4_9B4A4 - 5, &arg0->unk78, arg0);
-    createXRotationMatrix((s16(*)[3])matrix, arg0->unkA4);
+    memcpy(&D_8009A8A4_9B4A4, &arg0->posZ, 0xC);
+    func_8006B084_6BC84(&D_8009A8A4_9B4A4 - 5, &arg0->rotationMatrix, arg0);
+    createXRotationMatrix((s16(*)[3])matrix, arg0->xRotation);
 
     matrix[6] = 0x3b333;
     matrix[5] = 0;
@@ -123,10 +123,9 @@ void func_800BB3B8_B75F8(TrackHazard *arg0) {
     }
 }
 
-void func_800BB468_B76A8(TrackHazard *arg0) {
+void updateFallingRockHazard(FallingRockHazard *arg0) {
     GameState *gs;
     s32 sp20;
-    s32 sp24;
     s32 sp28;
     s32 flag;
     s32 i;
@@ -135,8 +134,8 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
     flag = 0;
 
     for (i = 0; i < gs->numPlayers; i++) {
-        sp20 = gs->players[i].worldPos.x - arg0->unk8C;
-        sp28 = gs->players[i].worldPos.z - arg0->unk94;
+        sp20 = gs->players[i].worldPos.x - arg0->posX;
+        sp28 = gs->players[i].worldPos.z - arg0->posY;
         if (((0x27FFFFE >= ((u32)sp20) + 0x13FFFFF) & (0x13FFFFF >= sp28)) == 0) {
             continue;
         }
@@ -149,16 +148,16 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
 
     if (flag) {
         if (gs->gamePaused == 0) {
-            if (arg0->unk9C != 0x60000) {
-                arg0->unk9C += 0x20000;
+            if (arg0->animTimer != 0x60000) {
+                arg0->animTimer += 0x20000;
             }
 
-            if (arg0->unkA4 != (-0x600)) {
-                arg0->unkA4 -= 0x100;
+            if (arg0->xRotation != (-0x600)) {
+                arg0->xRotation -= 0x100;
             }
         }
 
-        func_800BB3B8_B75F8(arg0);
+        renderFallingRockHazard(arg0);
 
         if (gs->gamePaused == 0) {
             for (i = 0; i < gs->numPlayers; i++) {
@@ -173,61 +172,61 @@ void func_800BB468_B76A8(TrackHazard *arg0) {
         }
     } else {
         if (!gs->gamePaused) {
-            if (arg0->unk9C > 0) {
-                arg0->unk9C += 0xFFFE0000;
+            if (arg0->animTimer > 0) {
+                arg0->animTimer += 0xFFFE0000;
             }
 
-            if (arg0->unk9C < 0) {
-                arg0->unk9C += 0x20000;
+            if (arg0->animTimer < 0) {
+                arg0->animTimer += 0x20000;
             }
 
-            if (arg0->unkA4 != 0) {
-                arg0->unkA4 += 0x100;
+            if (arg0->xRotation != 0) {
+                arg0->xRotation += 0x100;
             }
         }
 
-        func_800BB3B8_B75F8(arg0);
+        renderFallingRockHazard(arg0);
     }
 }
 
-void func_800BB658_B7898(TrackHazard *arg0) {
+void func_800BB658_B7898(FallingRockHazard *arg0) {
     GameState *gs;
     s32 i;
 
     gs = (GameState *)getCurrentAllocation();
-    if (arg0->unk9C != 0xFFF00000) {
+    if (arg0->animTimer != 0xFFF00000) {
         if (gs->gamePaused == FALSE) {
-            arg0->unk9C = arg0->unk9C - 0x8000;
+            arg0->animTimer = arg0->animTimer - 0x8000;
         }
     } else {
-        arg0->unkA8 = 0x12C;
+        arg0->respawnTimer = 0x12C;
         setCallback(&func_800BB71C_B795C);
     }
-    arg0->unkA4 = 0;
-    func_800BB3B8_B75F8(arg0);
+    arg0->xRotation = 0;
+    renderFallingRockHazard(arg0);
 
     for (i = 0; i < gs->numPlayers; i++) {
         isPlayerInRangeAndPull(&arg0->node2.transform.translation, 0x12A000, &gs->players[i]);
     }
 }
 
-void func_800BB71C_B795C(TrackHazard *arg0) {
+void func_800BB71C_B795C(FallingRockHazard *arg0) {
     u8 temp;
 
     if (((GameState *)getCurrentAllocation())->gamePaused == FALSE) {
-        arg0->unkA8--;
+        arg0->respawnTimer--;
     }
 
-    if (!arg0->unkA8) {
+    if (!arg0->respawnTimer) {
         temp = randA() & 1;
-        arg0->unkA6 = temp + (arg0->unkA6 & 0xFE);
-        memcpy(&arg0->unk8C, &D_800BBB90_B7DD0[arg0->unkA6].unk4, 0xC);
+        arg0->positionIndex = temp + (arg0->positionIndex & 0xFE);
+        memcpy(&arg0->posX, &crazyJungleRockPositions[arg0->positionIndex].position, 0xC);
         createCombinedRotationMatrix(
-            &arg0->unk78,
-            D_800BBB90_B7DD0[arg0->unkA6].unk0,
-            D_800BBB90_B7DD0[arg0->unkA6].unk2
+            &arg0->rotationMatrix,
+            crazyJungleRockPositions[arg0->positionIndex].rotX,
+            crazyJungleRockPositions[arg0->positionIndex].rotY
         );
-        setCallback(&func_800BB468_B76A8);
+        setCallback(&updateFallingRockHazard);
     }
 }
 
@@ -318,29 +317,29 @@ void func_800BBA98(void) {
     s32 i;
     NodeWithPayload *temp;
 
-    temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    temp = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
     if (temp != NULL) {
-        temp->unkA6 = 0;
+        temp->positionIndex = 0;
     }
 
-    temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    temp = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
     if (temp != NULL) {
-        temp->unkA6 = 2;
+        temp->positionIndex = 2;
     }
 
-    temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    temp = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
     if (temp != NULL) {
-        temp->unkA6 = 4;
+        temp->positionIndex = 4;
     }
 
-    temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    temp = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
     if (temp != NULL) {
-        temp->unkA6 = 6;
+        temp->positionIndex = 6;
     }
 
-    temp = (NodeWithPayload *)scheduleTask(&func_800BB2B0_B74F0, 0, 0, 0x32);
+    temp = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
     if (temp != NULL) {
-        temp->unkA6 = 8;
+        temp->positionIndex = 8;
     }
 
     scheduleTask(&func_800BB808_B7A48, 0, 0, 0xC8);
