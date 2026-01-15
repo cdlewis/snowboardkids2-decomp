@@ -2281,6 +2281,7 @@ pirawread_rodata_0000 = 0x8009EFB4;
 pirawread_rodata_0004 = 0x8009EFB8; // type:asciz size:0x10
 mus_master_volume_effects = 0x800A6504;
 mus_master_volume_songs = 0x800A6506;
+__MusIntSetVolumeAndPan = 0x800737C4; // rom:0x743C4
 player_bss_003C = 0x8009BE28;
 positionCharacterSelectSprite = 0x800B0218; // rom:0x1DA7B8
 initCharacterPreview = 0x800B0368; // rom:0x1DA908

@@ -208,7 +208,7 @@ void func_80073CB4_748B4(channel_t *cp);
 f32 func_80073DC4_749C4(channel_t *cp);
 f32 func_80073D6C_7496C(channel_t *cp);
 void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset);
-void func_800737C4_743C4(channel_t *cp, s32 x);
+void __MusIntSetVolumeAndPan(channel_t *cp, s32 x);
 f32 __MusIntPowerOf2(f32 x);
 void MusSetMasterVolume(u32 flags, u32 volume);
 void __MusIntInitialiseChannel(channel_t *cp);
@@ -1376,7 +1376,7 @@ ALMicroTime __MusIntMain(void *node) {
 
             if (cp->pending == NULL) {
                 __MusIntSetPitch(cp, x, total);
-                func_800737C4_743C4(cp, x);
+                __MusIntSetVolumeAndPan(cp, x);
             }
         }
 
@@ -1401,7 +1401,7 @@ void func_80073738_74338(channel_t *cp, int x) {
     cp->pending = NULL;
 }
 
-void func_800737C4_743C4(channel_t *cp, s32 x) {
+void __MusIntSetVolumeAndPan(channel_t *cp, s32 x) {
     u32 volume;
     s32 stopping;
     u8 pan;
