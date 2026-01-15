@@ -96,8 +96,8 @@ typedef struct {
     u16 unkA92; /* 0xA92 */
     u16 unkA94; /* 0xA94 */
     u8 padA96[0xA9C - 0xA96];
-    u16 unkA9C; /* 0xA9C */
-    u16 unkA9E; /* 0xA9E */
+    u16 pitchAngle; /* 0xA9C */
+    u16 yawAngle;   /* 0xA9E */
     u8 padAA0[0x4];
     s32 unkAA4; /* 0xAA4 */
     s32 unkAA8; /* 0xAA8 */
@@ -477,7 +477,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
                 angleDiff = -0x80;
             }
 
-            arg0->unkA9E = (arg0->unkA9E + angleDiff) & 0x1FFF;
+            arg0->yawAngle = (arg0->yawAngle + angleDiff) & 0x1FFF;
 
             angleDiff = atan2Fixed(sp30.y, -distance_2d(sp30.x, sp30.z)) & 0x1FFF;
 
@@ -494,20 +494,20 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             }
 
             {
-                short temp = (arg0->unkA9C + angleDiff) & 0x1FFF;
-                arg0->unkA9C = temp;
+                short temp = (arg0->pitchAngle + angleDiff) & 0x1FFF;
+                arg0->pitchAngle = temp;
                 if (temp >= 0x1000) {
-                    arg0->unkA9C = temp - 0x2000;
+                    arg0->pitchAngle = temp - 0x2000;
                 }
             }
 
-            if ((s16)arg0->unkA9C >= 0x201) {
-                arg0->unkA9C = 0x200;
+            if ((s16)arg0->pitchAngle >= 0x201) {
+                arg0->pitchAngle = 0x200;
             }
 
-            if ((s16)arg0->unkA9C < -0x200) {
+            if ((s16)arg0->pitchAngle < -0x200) {
                 s16 negVal = -0x200;
-                arg0->unkA9C = negVal;
+                arg0->pitchAngle = negVal;
             }
 
             if (arg0->unkB8C != 0) {
@@ -528,7 +528,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             break;
 
         case 1:
-            arg0->unkA9E = arg0->unkA9E - 0x100;
+            arg0->yawAngle = arg0->yawAngle - 0x100;
             arg0->unkB8C--;
             if (arg0->unkB8C == 0) {
                 spawnAttackProjectile(2, arg0->unkBB8, 0);
@@ -538,7 +538,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             break;
 
         case 2:
-            arg0->unkA9E = arg0->unkA9E + 0x100;
+            arg0->yawAngle = arg0->yawAngle + 0x100;
             arg0->unkB8C--;
             if (arg0->unkB8C == 0) {
                 arg0->unkB8C = 4;
@@ -549,7 +549,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             break;
 
         case 3:
-            arg0->unkA9E = arg0->unkA9E + 0x100;
+            arg0->yawAngle = arg0->yawAngle + 0x100;
             arg0->unkB8C--;
             if (arg0->unkB8C == 0) {
                 spawnAttackProjectile(2, arg0->unkBB8, 0);
@@ -566,7 +566,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             if ((arg0->unkB8C & 3) == 0) {
                 spawnAttackProjectile(3, arg0->unkBB8, 0);
             }
-            arg0->unkA9E = arg0->unkA9E - 0x100;
+            arg0->yawAngle = arg0->yawAngle - 0x100;
             arg0->unkB8C--;
             if (arg0->unkB8C == 0) {
                 arg0->behaviorCounter = 0;
@@ -582,33 +582,33 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
     return 0;
 }
 
-void func_800BBE68_B3428(Arg0Struct *arg0) {
-    s16 val;
-    s16 adj;
+void applyPitchAngleDamping(Arg0Struct *arg0) {
+    s16 currentAngle;
+    s16 damping;
 
-    val = arg0->unkA9C;
-    adj = -val;
+    currentAngle = arg0->pitchAngle;
+    damping = -currentAngle;
 
-    if (adj >= 0x1000) {
-        adj -= 0x2000;
+    if (damping >= 0x1000) {
+        damping -= 0x2000;
     }
 
-    if (adj > 0x80) {
-        adj = 0x80;
+    if (damping > 0x80) {
+        damping = 0x80;
     }
 
-    if (adj < -0x80) {
-        adj = -0x80;
+    if (damping < -0x80) {
+        damping = -0x80;
     }
 
-    arg0->unkA9C = val + adj;
+    arg0->pitchAngle = currentAngle + damping;
 }
 
 s32 func_800BBEBC_B347C(Arg0Struct *arg0) {
     s32 pad[3];
 
-    func_800BBE68_B3428(arg0);
-    arg0->unkA9E -= 0x100;
+    applyPitchAngleDamping(arg0);
+    arg0->yawAngle -= 0x100;
     arg0->velocity -= arg0->velocity / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
@@ -683,11 +683,11 @@ s32 func_800BC094_B3654(Arg0Struct *arg0) {
     arg0->unk450 += -0x8000;
     arg0->unk468 += -0x8000;
 
-    func_800BBE68_B3428(arg0);
+    applyPitchAngleDamping(arg0);
 
     arg0->velocity = 0;
     arg0->unk454 = 0;
-    arg0->unkA9E = (arg0->unkA9E + 0x100) & 0x1FFF;
+    arg0->yawAngle = (arg0->yawAngle + 0x100) & 0x1FFF;
 
     if (arg0->unkB8C == 0) {
         u8 rand_val = randA();
@@ -750,8 +750,8 @@ s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
     arg0->velocity -= arg0->velocity / 8;
     arg0->unk454 -= arg0->unk454 / 8;
     arg0->unk450 += -0x8000;
-    func_800BBE68_B3428(arg0);
-    arg0->unkA9E += arg0->unk468;
+    applyPitchAngleDamping(arg0);
+    arg0->yawAngle += arg0->unk468;
     if (arg0->unk468 != 0) {
         arg0->unk468 -= 2;
     }
@@ -808,7 +808,7 @@ void func_800BC474_B3A34(Arg0Struct *arg0) {
         memcpy(arg0->unk38, temp_s2, 0x20);
     }
 
-    createCombinedRotationMatrix(&sp50, arg0->unkA9C, arg0->unkA9E);
+    createCombinedRotationMatrix(&sp50, arg0->pitchAngle, arg0->yawAngle);
     sp50.unk14 = 0;
     sp50.unk1C = 0;
 
