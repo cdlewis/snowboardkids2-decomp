@@ -317,7 +317,7 @@ void updateSlapstickProjectile(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        groundHeight = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
+        groundHeight = getTrackHeightInSector(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
         if (arg0->pos.y < groundHeight + 0x100000) {
             arg0->pos.y = groundHeight + 0x100000;
@@ -534,7 +534,7 @@ void updateParachuteProjectile(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
+        temp_v0 = getTrackHeightInSector(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
         if (arg0->pos.y < temp_v0 + 0x100000) {
             arg0->pos.y = temp_v0 + 0x100000;
@@ -756,7 +756,7 @@ void updateFryingPanProjectile(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
+        temp_v0 = getTrackHeightInSector(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
         if (arg0->pos.y < temp_v0 + 0x100000) {
             arg0->pos.y = temp_v0 + 0x100000;
@@ -1000,7 +1000,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
+        temp_v0 = getTrackHeightInSector(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
         if (arg0->pos.y < temp_v0 + 0x100000) {
             arg0->pos.y = temp_v0 + 0x100000;
@@ -1206,7 +1206,7 @@ void updateStarProjectile(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
+        temp_v0 = getTrackHeightInSector(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
         if (arg0->pos.y < temp_v0 + 0x100000) {
             arg0->pos.y = temp_v0 + 0x100000;
@@ -1426,7 +1426,7 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
+        temp_v0 = getTrackHeightInSector(alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
         if (arg0->pos.y < temp_v0 + 0x100000) {
             arg0->pos.y = temp_v0 + 0x100000;
@@ -1566,7 +1566,7 @@ void updateFallingStarProjectile(Struct_52880 *projectile) {
             projectile->hitCount++;
         }
 
-        groundHeight = func_8005CFC0_5DBC0(&alloc->unk30, projectile->unk40, &projectile->pos, 0x100000);
+        groundHeight = getTrackHeightInSector(&alloc->unk30, projectile->unk40, &projectile->pos, 0x100000);
 
         if (projectile->pos.y < groundHeight + 0x100000) {
             projectile->pos.y = groundHeight + 0x100000;
@@ -1690,7 +1690,7 @@ void updatePlayerGuidedStarProjectile(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
+        temp_v0 = getTrackHeightInSector(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
         if (arg0->pos.y < temp_v0 + 0x100000) {
             arg0->pos.y = temp_v0 + 0x100000;
@@ -1905,7 +1905,7 @@ void updateRandomEffectProjectile(RandomEffectProjectileUpdate *arg0) {
             arg0->hitCount++;
         }
 
-        temp_v0 = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
+        temp_v0 = getTrackHeightInSector(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000);
         temp_v1 = temp_v0 + 0x100000;
 
         if (arg0->pos.y < temp_v1) {
@@ -2077,7 +2077,7 @@ void updateGhostTargetProjectile(Struct_52880 *arg0) {
         arg0->hitCount++;
     }
 
-    temp_v0 = func_8005CFC0_5DBC0(&s3->unk30, arg0->unk40, &arg0->pos, 0x100000);
+    temp_v0 = getTrackHeightInSector(&s3->unk30, arg0->unk40, &arg0->pos, 0x100000);
 
     if (arg0->pos.y < (temp_v0 + 0x100000)) {
         arg0->pos.y = temp_v0 + 0x100000;
@@ -2219,7 +2219,7 @@ void func_80055A84_56684(Struct_52880 *arg0) {
             arg0->hitCount++;
         }
 
-        floorHeight = func_8005CFC0_5DBC0(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000) + 0x100000;
+        floorHeight = getTrackHeightInSector(&alloc->unk30, arg0->unk40, &arg0->pos, 0x100000) + 0x100000;
         if (arg0->pos.y < floorHeight) {
             arg0->pos.y = floorHeight;
         }

@@ -426,7 +426,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     arg0->unk43C = sp10.z + 0x200000;
     trackIdx = func_80059E90_5AA90(arg0, &state->gameData, 0, (Vec3i *)&arg0->unk434);
     arg0->sectorIndex = trackIdx;
-    arg0->unk438 = func_8005CFC0_5DBC0(&state->gameData, trackIdx, (Vec3i *)&arg0->unk434, 0x100000);
+    arg0->unk438 = getTrackHeightInSector(&state->gameData, trackIdx, (Vec3i *)&arg0->unk434, 0x100000);
     memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
     arg0->velocity.x = 0;
     arg0->velocity.y = 0;
@@ -1030,7 +1030,7 @@ void func_800BC89C_B1D8C(Player *boss) {
         jointOffset += 0xC;
         jointIndex += 1;
         // Compute terrain height at joint position
-        *(volatile s32 *)(jointWritePtr + 0xA14) = func_8005CFC0_5DBC0(gameData, sectorIndex, jointPos, 0x100000);
+        *(volatile s32 *)(jointWritePtr + 0xA14) = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);
 
         jointWritePtr += 0xC;
     } while (jointIndex < 9);

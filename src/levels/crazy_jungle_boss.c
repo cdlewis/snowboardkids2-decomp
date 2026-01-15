@@ -325,7 +325,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     // Initialize track/sector info
     trackIdx = getOrUpdatePlayerSectorIndex(arg0, (u8 *)gameState + 0x30, 0, arg0_bytes + 0x434);
     *(u16 *)(arg0_bytes + 0xB94) = trackIdx;
-    *(s32 *)(arg0_bytes + 0x438) = func_8005CFC0_5DBC0((u8 *)gameState + 0x30, trackIdx, arg0_bytes + 0x434, 0x100000);
+    *(s32 *)(arg0_bytes + 0x438) = getTrackHeightInSector((u8 *)gameState + 0x30, trackIdx, arg0_bytes + 0x434, 0x100000);
 
     memcpy(arg0_bytes + 0x440, arg0_bytes + 0x434, 0xC);
 
@@ -664,7 +664,7 @@ void func_800BC330_ACB60(Arg0Struct *arg0) {
             arg0->unk970.translation.z + D_800BBA84_AC2B4[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_2 + 2];
         posPtr = &arg0->unkA10[i].unk0;
         temp = func_80059E90_5AA90(arg0, temp_s5, arg0->sectorIndex, posPtr);
-        arg0->unkA10[i].unk4 = func_8005CFC0_5DBC0(temp_s5, temp, posPtr, 0x100000);
+        arg0->unkA10[i].unk4 = getTrackHeightInSector(temp_s5, temp, posPtr, 0x100000);
         i++;
     } while (i < 9);
 

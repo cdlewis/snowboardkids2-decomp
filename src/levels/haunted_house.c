@@ -228,7 +228,7 @@ s32 updateGhostPositionAndCheckEnd(AnimatedGhostEntity *ghost) {
 
         func_80060CDC_618DC(collisionContext, newHeight, posPtr, 0x80000, &surfaceNormal);
 
-        ghost->posY = func_8005CFC0_5DBC0(collisionContext, (u16)ghost->collisionHeight, posPtr, 0x100000) + 0x180000;
+        ghost->posY = getTrackHeightInSector(collisionContext, (u16)ghost->collisionHeight, posPtr, 0x100000) + 0x180000;
 
         if (ghost->entityType == 0) {
             shouldEnd = (ghost->collisionHeight != 0x1A);

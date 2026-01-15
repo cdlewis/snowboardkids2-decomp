@@ -315,7 +315,7 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     getTrackSegmentWaypoints((u8 *)alloc + 0x30, 0, &sp10, &sp20);
     arg0->unk434.z = sp10.z + 0x200000;
     arg0->sectorIndex = func_80059E90_5AA90(arg0, (u8 *)alloc + 0x30, 0, &arg0->unk434);
-    arg0->unk434.y = func_8005CFC0_5DBC0(
+    arg0->unk434.y = getTrackHeightInSector(
         (u8 *)alloc + 0x30,
         arg0->sectorIndex,
         &arg0->unk434,
@@ -961,7 +961,7 @@ void func_800BCA10_B3FD0(Arg0Struct *arg0) {
         arg0->unkA10[i].unk8 = arg0->unk970.translation.z + D_800BCBA0_B4160[6 + i][2];
         posPtr = &arg0->unkA10[i].unk0;
         temp = func_80059E90_5AA90(arg0, temp_s5, arg0->sectorIndex, posPtr);
-        arg0->unkA10[i].unk4 = func_8005CFC0_5DBC0(temp_s5, temp, posPtr, 0x100000);
+        arg0->unkA10[i].unk4 = getTrackHeightInSector(temp_s5, temp, posPtr, 0x100000);
         i++;
     } while (i < 9);
 

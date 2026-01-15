@@ -3551,7 +3551,7 @@ void func_800B98CC_A977C(Player *player) {
             player->unk970.translation.z + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
 
         sectorIndex = func_80059E90_5AA90((void *)player, gameData, player->sectorIndex, jointPos);
-        *(volatile s32 *)(jointWritePtr + 0xA14) = func_8005CFC0_5DBC0(gameData, sectorIndex, jointPos, 0x100000);
+        *(volatile s32 *)(jointWritePtr + 0xA14) = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);
 
         i++;
         offset += 0xC;

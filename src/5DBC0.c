@@ -7,8 +7,8 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-s32 func_8005CFC0_5DBC0(void *arg0, s32 arg1, void *arg2, s32 arg3) {
-    return func_80061A64_62664(arg0, arg1, arg2);
+s32 getTrackHeightInSector(void *gameData, s32 sectorIndex, void *pos, s32 heightOffset) {
+    return func_80061A64_62664(gameData, sectorIndex, pos);
 }
 
 s32 func_8005CFDC_5DBDC(void *arg0, u16 arg1, void *arg2, s32 arg3, s32 arg4) {
