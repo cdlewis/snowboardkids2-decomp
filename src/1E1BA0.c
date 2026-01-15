@@ -124,7 +124,7 @@ void playFanSoundOnChannel0(s16 fanIndex) {
     playSoundEffectOnChannelNoPriority(soundId, 0);
 }
 
-void func_800B4CB0_1E1D60(void) {
+void stopFanSoundOnChannel0(void) {
     stopSoundEffectChannel(0, 0);
 }
 

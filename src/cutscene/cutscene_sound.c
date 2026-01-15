@@ -13,7 +13,7 @@ void func_800B20D0_1DF180(void) {
     }
 
     if (input & B_BUTTON) {
-        func_800B4CB0_1E1D60();
+        stopFanSoundOnChannel0();
     }
 }
 
