@@ -149,29 +149,26 @@ void initTrickSpriteEffectTask(TrickSpriteEffectInitState *arg0) {
     setCallbackWithContinue(&updateTrickSpriteEffect);
 }
 
-void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *arg0) {
-    s16 temp_v0;
+void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *state) {
+    loadAssetMetadataByIndex(&state->assetMetadata, state->modelData, state->frameIndex, state->effectParam);
+    state->dataPtr = state->assetMetadata.data_ptr;
+    state->indexPtr = state->assetMetadata.index_ptr;
+    state->alpha = state->assetMetadata.unk18;
+    state->animFrame = state->assetMetadata.unk19;
+    state->assetMetadata.unk4 = state->sprite1OffsetX + state->unk0->posX;
+    state->assetMetadata.unk8 = state->sprite1OffsetY + state->unk0->posY;
+    state->assetMetadata.unkC = state->sprite1OffsetZ + state->unk0->posZ;
+    state->spriteOffsetX = state->sprite2OffsetX + state->unk0->posX;
+    state->spriteOffsetY = state->sprite2OffsetY + state->unk0->posY;
+    state->spriteOffsetZ = state->sprite2OffsetZ + state->unk0->posZ;
 
-    loadAssetMetadataByIndex(&arg0->assetMetadata, arg0->modelData, arg0->frameIndex, arg0->effectParam);
-    arg0->dataPtr = arg0->assetMetadata.data_ptr;
-    arg0->indexPtr = arg0->assetMetadata.index_ptr;
-    arg0->alpha = arg0->assetMetadata.unk18;
-    arg0->animFrame = arg0->assetMetadata.unk19;
-    arg0->assetMetadata.unk4 = arg0->sprite1OffsetX + arg0->unk0->posX;
-    arg0->assetMetadata.unk8 = arg0->sprite1OffsetY + arg0->unk0->posY;
-    arg0->assetMetadata.unkC = arg0->sprite1OffsetZ + arg0->unk0->posZ;
-    arg0->spriteOffsetX = arg0->sprite2OffsetX + arg0->unk0->posX;
-    arg0->spriteOffsetY = arg0->sprite2OffsetY + arg0->unk0->posY;
-    arg0->spriteOffsetZ = arg0->sprite2OffsetZ + arg0->unk0->posZ;
+    enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&state->assetMetadata);
+    enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&state->sprite2);
 
-    enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&arg0->assetMetadata);
-    enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&arg0->sprite2);
+    state->assetMetadata.unk1A -= 0x14;
+    state->alphaDecay -= 0x14;
 
-    arg0->assetMetadata.unk1A -= 0x14;
-    arg0->alphaDecay -= 0x14;
-    temp_v0 = ++arg0->frameIndex;
-
-    if (temp_v0 == 8) {
+    if (++state->frameIndex == 8) {
         func_80069CF8_6A8F8();
     }
 }
