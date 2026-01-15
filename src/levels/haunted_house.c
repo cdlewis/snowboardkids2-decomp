@@ -134,7 +134,7 @@ void updateFloatingSpriteEntity(FloatingSpriteEntity *);
 void initGhostTransformations(GhostManager *);
 void updateGhostSlotStates(u8 *ghostSlots);
 void cleanupGhostManager(GhostManager *);
-void func_800BC750_B0440(s16 *);
+void updateLapCounter(s16 *);
 void updateGhostAnimation(AnimatedGhostEntity *);
 void renderGhosts(GhostRenderState *);
 extern void cleanupFloatingSpriteEntity(void **);
@@ -730,13 +730,13 @@ void renderGhosts(GhostRenderState *state) {
     }
 }
 
-void func_800BC72C_B041C(s16 *arg0) {
-    *arg0 = 0;
-    setCallback(func_800BC750_B0440);
+void initLapCounterTask(s16 *lapCounter) {
+    *lapCounter = 0;
+    setCallback(updateLapCounter);
 }
 
-void func_800BC750_B0440(s16 *targetLap) {
-    s32 i;
+void updateLapCounter(s16 *currentLap) {
+    s32 playerIndex;
     GameState *gameState;
     Player *player;
     u32 playerOffset;
@@ -744,14 +744,14 @@ void func_800BC750_B0440(s16 *targetLap) {
 
     gameState = getCurrentAllocation();
 
-    for (i = 0; i < gameState->unk5F; i++) {
-        playerOffset = (u32)(i * sizeof(Player));
+    for (playerIndex = 0; playerIndex < gameState->unk5F; playerIndex++) {
+        playerOffset = (u32)(playerIndex * sizeof(Player));
         player = (Player *)((u32)playerOffset + (u32)gameState->players);
-        lapValue = *targetLap;
+        lapValue = *currentLap;
 
         if (player->currentLap == lapValue) {
             if ((u32)(player->sectorIndex - 7) < 4) {
-                *targetLap = lapValue + 1;
+                *currentLap = lapValue + 1;
                 playSoundEffectWithPriorityDefaultVolume(0xC, 6);
             }
         }

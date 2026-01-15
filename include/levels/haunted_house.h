@@ -41,4 +41,4 @@ void initFloatingBillboardSpawner(s16 *spawnTimer);
 
 void initGhostManager(GhostManager *ghostManager);
 
-void func_800BC72C_B041C(s16 *arg0);
+void initLapCounterTask(s16 *lapCounter);
