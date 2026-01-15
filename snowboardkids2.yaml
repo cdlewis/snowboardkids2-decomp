@@ -399,7 +399,7 @@ segments:
       - [0x94B90, data]
       - [0x94D10, data]
       - [0x94D80, data]
-      - [0x94E10, data, 5E590]
+      - [0x94E10, .data, 5E590]
       - [0x9B270, data, 46080]
       - [0x9B2B0, data]
       - [0x9B2C0, data]
