@@ -206,7 +206,7 @@ u8 *Fstop(channel_t *cp, u8 *ptr);
 void processChannelEnvelope(channel_t *cp);
 void processPanSweep(channel_t *cp);
 f32 func_80073DC4_749C4(channel_t *cp);
-f32 func_80073D6C_7496C(channel_t *cp);
+f32 calculateWobbleModulation(channel_t *cp);
 void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset);
 void __MusIntSetVolumeAndPan(channel_t *cp, s32 x);
 f32 __MusIntPowerOf2(f32 x);
@@ -1371,7 +1371,7 @@ ALMicroTime __MusIntMain(void *node) {
             }
 
             if (cp->wobble_on_speed != 0) {
-                total += func_80073D6C_7496C(cp);
+                total += calculateWobbleModulation(cp);
             }
 
             if (cp->pending == NULL) {
@@ -1581,7 +1581,7 @@ void processPanSweep(channel_t *cp) {
     } while (cp->sweep_frame < cp->channel_frame);
 }
 
-f32 func_80073D6C_7496C(channel_t *cp) {
+f32 calculateWobbleModulation(channel_t *cp) {
     cp->wobble_count--;
     if (cp->wobble_count == 0) {
         if (cp->wobble_current == 0) {
