@@ -743,17 +743,7 @@ ret0:
     return 0;
 }
 
-typedef struct {
-    s16 values[10];
-    s32 position[3];
-    s16 prev_position[10];
-    s32 interpolated[3];
-    u16 flags;
-    u16 counter;
-    u16 animation_index;
-} func_8005F6DC_602DC_arg;
-
-s32 func_8005F6DC_602DC(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg *state) {
+s32 advanceIndexedBoneAnimationMirrored(void *arg0, s16 arg1, s16 arg2, BoneAnimationStateIndexed *state) {
     u16 *animation_data;
     s16 *frame_data;
     s16 stack_data[16];
@@ -850,17 +840,7 @@ ret0:
     return 0;
 }
 
-typedef struct {
-    s16 values[10];
-    s32 position[3];
-    s16 prev_position[10];
-    s32 interpolated[3];
-    u16 flags;
-    u16 counter;
-    u16 animation_index;
-} func_8005FAA0_606A0_arg;
-
-void func_8005FAA0_606A0(void *arg0, s16 arg1, s16 arg2, func_8005FAA0_606A0_arg *entity, s16 param_2) {
+void interpolateIndexedBoneAnimation(void *arg0, s16 arg1, s16 arg2, BoneAnimationStateIndexed *entity, s16 param_2) {
     s16 *frame_data;
     u16 *animation_data;
     s16 stack_data[16];
@@ -941,17 +921,13 @@ void func_8005FAA0_606A0(void *arg0, s16 arg1, s16 arg2, func_8005FAA0_606A0_arg
     entity->interpolated[2] = (result >> 9) + entity->position[2];
 }
 
-typedef struct {
-    s16 values[10];
-    s32 position[3];
-    s16 prev_position[10];
-    s32 interpolated[3];
-    u16 flags;
-    u16 counter;
-    u16 animation_index;
-} func_8005FDAC_609AC_arg;
-
-void func_8005FDAC_609AC(void *arg0, s16 arg1, s16 arg2, func_8005FDAC_609AC_arg *entity, u16 param_2) {
+void interpolateIndexedBoneAnimationMirrored(
+    void *arg0,
+    s16 arg1,
+    s16 arg2,
+    BoneAnimationStateIndexed *entity,
+    u16 param_2
+) {
     u16 *animation_data;
     s16 *frame_data;
     s16 stack_data[16];
@@ -1032,7 +1008,7 @@ void func_8005FDAC_609AC(void *arg0, s16 arg1, s16 arg2, func_8005FDAC_609AC_arg
     entity->interpolated[2] = (result >> 9) + entity->position[2];
 }
 
-s32 func_800600E4_60CE4(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg *state) {
+s32 advanceIndexedBoneAnimationAuto(void *arg0, s16 arg1, s16 arg2, BoneAnimationStateIndexed *state) {
     u16 *animation_data;
     s16 *frame_data;
     s16 stack_data[16];
@@ -1138,7 +1114,7 @@ ret0:
     return 0;
 }
 
-s32 func_80060504_61104(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg *state) {
+s32 advanceIndexedBoneAnimationAutoMirrored(void *arg0, s16 arg1, s16 arg2, BoneAnimationStateIndexed *state) {
     u16 *animation_data;
     s16 *frame_data;
     s16 stack_data[16];
