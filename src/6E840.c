@@ -592,6 +592,8 @@ void disableViewportDisplayList(ViewportNode *arg0) {
     arg0->viewportDisplayFlags = (u8)(arg0->viewportDisplayFlags & 0xFD);
 }
 
+void func_8006FEE8_70AE8(ViewportNode *arg0) __attribute__((alias("disableViewportDisplayList")));
+
 void func_8006FEF8_70AF8(Node_70B00 *arg0, u16 arg1) {
     arg0->id = arg1;
 }

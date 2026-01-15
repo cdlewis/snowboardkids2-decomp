@@ -153,6 +153,7 @@ typedef struct {
 void disableViewportOverlay(ViewportNode *arg0);
 void enableViewportDisplayList(void *arg0);
 void disableViewportDisplayList(ViewportNode *arg0);
+void func_8006FEE8_70AE8(ViewportNode *arg0);
 void setViewportOverlayRgbAndEnable(ViewportNodeWithOverlay *arg0, s8 r, s8 g, s8 b);
 
 typedef struct {
