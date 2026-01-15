@@ -646,17 +646,7 @@ void resetBoneAnimation(void *animData, s16 tableIndex, s16 boneIndex, BoneAnima
     state->flags = (s16)(animFlags + 0x8000);
 }
 
-typedef struct {
-    s16 values[10];
-    s32 position[3];
-    s16 prev_position[10];
-    s32 interpolated[3];
-    u16 flags;
-    u16 counter;
-    u16 animation_index;
-} func_8005F6DC_602DC_arg;
-
-s32 func_8005F344_5FF44(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg *state) {
+s32 advanceIndexedBoneAnimation(void *animData, s16 tableIndex, s16 boneIndex, BoneAnimationStateIndexed *state) {
     u16 *animation_data;
     s16 *frame_data;
     s16 stack_data[16];
@@ -665,8 +655,8 @@ s32 func_8005F344_5FF44(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg 
     u16 frame_idx;
     u16 temp;
 
-    animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
-    frame_data = getAnimationFrameData(arg0);
+    animation_data = getAnimationDataByIndex(animData, tableIndex, boneIndex);
+    frame_data = getAnimationFrameData(animData);
     flags = state->flags;
 
     if (flags & 0x8000) {
@@ -752,6 +742,16 @@ advance_index:
 ret0:
     return 0;
 }
+
+typedef struct {
+    s16 values[10];
+    s32 position[3];
+    s16 prev_position[10];
+    s32 interpolated[3];
+    u16 flags;
+    u16 counter;
+    u16 animation_index;
+} func_8005F6DC_602DC_arg;
 
 s32 func_8005F6DC_602DC(void *arg0, s16 arg1, s16 arg2, func_8005F6DC_602DC_arg *state) {
     u16 *animation_data;
