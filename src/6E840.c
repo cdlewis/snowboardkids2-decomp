@@ -648,18 +648,18 @@ void debugEnqueueCallback(u16 index, u8 slotIndex, void *callback, void *callbac
     }
 }
 
-void func_8007001C_70C1C(Node_70B00 *arg0, u8 arg1, void *arg2, void *arg3) {
-    PoolEntry *entry;
-    PoolEntry *prev;
+void enqueueViewportCallback(Node_70B00 *viewport, u8 poolIndex, void *callback, void *callbackData) {
+    PoolEntry *newEntry;
+    PoolEntry *oldHead;
 
-    entry = (PoolEntry *)linearAlloc(0x10);
-    if (entry != NULL) {
-        prev = arg0->pool[arg1].next;
-        entry->callback = arg2;
-        entry->callbackData = arg3;
-        entry->poolIndex = arg1;
-        entry->next = prev;
-        arg0->pool[arg1].next = entry;
+    newEntry = (PoolEntry *)linearAlloc(0x10);
+    if (newEntry != NULL) {
+        oldHead = viewport->pool[poolIndex].next;
+        newEntry->callback = callback;
+        newEntry->callbackData = callbackData;
+        newEntry->poolIndex = poolIndex;
+        newEntry->next = oldHead;
+        viewport->pool[poolIndex].next = newEntry;
     }
 }
 
