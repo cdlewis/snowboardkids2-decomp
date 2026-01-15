@@ -199,8 +199,8 @@ void *getCommandDescription(u8 a0, u8 a1) {
 u8 incrementCommandIndexWithWrap(u8 categoryIndex, s32 commandIndex) {
     s32 nextIndex = commandIndex + 1;
     s16 count = commandCategories[categoryIndex].count;
-    u8 test = nextIndex;
-    s32 result = (test < count) ? nextIndex : 0;
+    u8 nextIndexMasked = nextIndex;
+    s32 result = (nextIndexMasked < count) ? nextIndex : 0;
     return result;
 }
 
