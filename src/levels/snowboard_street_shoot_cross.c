@@ -174,7 +174,7 @@ s32 func_800BB504(Vec3i *arg0, s32 arg1) {
 found:
     *entry = 1;
     allocation->unk5A = allocation->unk5A + 1;
-    func_80059BD4_5A7D4(allocation->unk10);
+    playTrickSuccessVoice(allocation->unk10);
     return 1;
 
 check_count:

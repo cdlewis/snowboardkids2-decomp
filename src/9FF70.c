@@ -230,7 +230,7 @@ s32 updatePlayerSlidingConstrained(Player *player) {
     if (player->unkB8C < 4) {
         player->unkB8C++;
     } else if (player->unkB8C == 4) {
-        func_80059BD4_5A7D4(player);
+        playTrickSuccessVoice(player);
         player->unkB8C++;
     }
 
@@ -943,7 +943,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
 
 skip_to_end:
     if (player->tricksPerformedMask != 0) {
-        func_80059BD4_5A7D4(player);
+        playTrickSuccessVoice(player);
         func_8005D804_5E404(player, 1, 0xF);
     }
 

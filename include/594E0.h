@@ -11,5 +11,5 @@ void func_80058CFC_598FC(void *arg0);
 
 void addPlayerRaceGold(Player *player, s32 amount);
 void playTrickLandingVoice(Player *player);
-void func_80059BD4_5A7D4(Player *arg0);
+void playTrickSuccessVoice(Player *player);
 void func_80059CE0_5A8E0(Player *arg0);
