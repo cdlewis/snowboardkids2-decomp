@@ -204,7 +204,7 @@ void func_80073E20_74A20(channel_t *cp);
 void __MusIntProcessContinuousPitchBend(channel_t *cp);
 u8 *Fstop(channel_t *cp, u8 *ptr);
 void processChannelEnvelope(channel_t *cp);
-void func_80073CB4_748B4(channel_t *cp);
+void processPanSweep(channel_t *cp);
 f32 func_80073DC4_749C4(channel_t *cp);
 f32 func_80073D6C_7496C(channel_t *cp);
 void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset);
@@ -1361,7 +1361,7 @@ ALMicroTime __MusIntMain(void *node) {
             }
 
             if (cp->sweep_speed != 0 && cp->sweep_frame < cp->channel_frame) {
-                func_80073CB4_748B4(cp);
+                processPanSweep(cp);
             }
 
             total = cp->freqoffset;
@@ -1538,8 +1538,8 @@ void processChannelEnvelope(channel_t *cp) {
     }
 }
 
-void func_80073C98_74898(channel_t *cp) {
-    s32 temp = cp->note_start_frame;
+void initPanSweep(channel_t *cp) {
+    u32 temp = cp->note_start_frame;
     u8 val = cp->pan;
 
     cp->sweep_timer = 0;
@@ -1547,7 +1547,7 @@ void func_80073C98_74898(channel_t *cp) {
     cp->sweep_dir = val & 0x40;
 }
 
-void func_80073CB4_748B4(channel_t *cp) {
+void processPanSweep(channel_t *cp) {
     u32 calc;
 
     do {
