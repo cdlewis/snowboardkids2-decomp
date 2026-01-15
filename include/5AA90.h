@@ -22,7 +22,7 @@ Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex,
 s32 func_8005A9A8_5B5A8(Player *player);
 s32 isPointInPlayerCollisionSphere(Player *player, Vec3i *point, s32 extraRadius);
 s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 maxHeight, s16 excludePlayerIdx);
-s32 func_8005BCB8_5C8B8(void *arg0, s32 arg1, s32 arg2);
+s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeight);
 s32 func_8005C250_5CE50(Vec3i *arg0, s32 arg1, s32 arg2);
 void func_8005C868_5D468(void *arg0);
 s32 isPlayerInRangeAndPull(Vec3i *arg0, s32 arg1, Player *arg2);

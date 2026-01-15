@@ -1097,19 +1097,19 @@ void updateSceneAnimationTask(SceneAnimationTaskNew *arg0) {
         }
 
         if (arg0->entries[i].unk6 == 1) {
-            func_8005BCB8_5C8B8(arg0->entries[i].unk8, 0x100000, 0xC00000);
+            checkPositionPlayerCollisionWithPull(arg0->entries[i].unk8, 0x100000, 0xC00000);
         }
 
         if (arg0->entries[i].unk6 == 2) {
-            func_8005BCB8_5C8B8(arg0->entries[i].unk8, 0x100000, 0x680000);
+            checkPositionPlayerCollisionWithPull(arg0->entries[i].unk8, 0x100000, 0x680000);
         }
 
         if (arg0->entries[i].unk6 == 3) {
-            func_8005BCB8_5C8B8(arg0->entries[i].unk8, 0x140000, 0x300000);
+            checkPositionPlayerCollisionWithPull(arg0->entries[i].unk8, 0x140000, 0x300000);
         }
 
         if (arg0->entries[i].unk6 == 4) {
-            func_8005BCB8_5C8B8(arg0->entries[i].unk8, 0x120000, 0xC00000);
+            checkPositionPlayerCollisionWithPull(arg0->entries[i].unk8, 0x120000, 0xC00000);
         }
     }
 

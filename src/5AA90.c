@@ -728,12 +728,12 @@ s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 m
  * Checks 2D collision (xz-plane) between a point and all players.
  * Pushes players out of collision and may call setPlayerPullState.
  *
- * @param arg0 Position to check collision against (Vec3i*)
- * @param arg1 Radius to add to player's collision radius
- * @param arg2 Maximum height difference for collision
+ * @param pos Position to check collision against (Vec3i*)
+ * @param extraRadius Radius to add to player's collision radius
+ * @param maxHeight Maximum height difference for collision
  * @return Always returns 0
  */
-s32 func_8005BCB8_5C8B8(void *arg0, s32 arg1, s32 arg2) {
+s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeight) {
     Vec3i deltaPos;
     s64 unused;
     GameState *allocation;
@@ -762,18 +762,18 @@ s32 func_8005BCB8_5C8B8(void *arg0, s32 arg1, s32 arg2) {
             deltaPos.y += targetPlayer->worldPos.y;
             deltaPos.z += targetPlayer->worldPos.z;
 
-            deltaPos.x -= ((Vec3i *)arg0)->x;
-            deltaPos.y -= ((Vec3i *)arg0)->y;
-            deltaPos.z -= ((Vec3i *)arg0)->z;
+            deltaPos.x -= ((Vec3i *)pos)->x;
+            deltaPos.y -= ((Vec3i *)pos)->y;
+            deltaPos.z -= ((Vec3i *)pos)->z;
 
             if (deltaPos.y <= 0) {
                 goto next;
             }
-            if (deltaPos.y >= arg2) {
+            if (deltaPos.y >= maxHeight) {
                 goto next;
             }
 
-            combinedRadius = targetPlayer->collisionRadius + arg1;
+            combinedRadius = targetPlayer->collisionRadius + extraRadius;
             negRadius = -combinedRadius;
 
             if ((negRadius >= deltaPos.x) || (deltaPos.x >= combinedRadius)) {

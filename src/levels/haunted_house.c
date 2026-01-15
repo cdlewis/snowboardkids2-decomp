@@ -563,7 +563,7 @@ void updateFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
     index = arg0->variantIndex;
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->spriteMetadata, arg0->spriteAsset, D_800BC9DC_B06CC[index]);
 
-    func_8005BCB8_5C8B8(&arg0->posX, 0x140000, 0x300000);
+    checkPositionPlayerCollisionWithPull(&arg0->posX, 0x140000, 0x300000);
 
     for (i = 0; i < 4; i++) {
         enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->spriteMetadata);

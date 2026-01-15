@@ -133,7 +133,7 @@ void activateShootCrossTargets(ShootCrossTargets *arg0) {
     s32 i;
 
     for (i = 0; i < arg0->targetCount; i++) {
-        func_8005BCB8_5C8B8(&arg0->targets[i].x, 0x180000, 0x300000);
+        checkPositionPlayerCollisionWithPull(&arg0->targets[i].x, 0x180000, 0x300000);
     }
 
     for (i = 0; i < 4; i++) {
