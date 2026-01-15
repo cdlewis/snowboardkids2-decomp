@@ -528,7 +528,7 @@ void cleanupCharacterSelectTextureData(TextureDataTaskState *arg0) {
     arg0->textureData = freeNodeMemory(arg0->textureData);
 }
 
-void func_800B0D78_1DB318(TextureDataTaskState *arg0) {
+void initCharacterSelectTextureDataLoad(TextureDataTaskState *arg0) {
     arg0->textureData = loadCompressedData(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
     setCleanupCallback(cleanupCharacterSelectTextureData);
     setCallback(func_800B0DD0_1DB370);
