@@ -48,7 +48,7 @@ typedef struct {
     u8 _padAE4[0xB2C - 0xAE4];
     s32 unkB2C;
     u8 _padB30[0xB84 - 0xB30];
-    s32 unkB84;
+    s32 bossFlags;
     s32 unkB88;
     u8 _padB8C[0xB94 - 0xB8C];
     u16 sectorIndex;
@@ -240,39 +240,39 @@ typedef struct {
 
 typedef struct {
     u8 pad[0x38];
-    s16 unk38[6];
+    s16 groundJointOffsets[6];
     u8 pad44[0xB0 - 0x44];
-    s16 unkB0[6];
+    s16 groundJointOffsets2[6];
     u8 padBC[0x128 - 0xBC];
-    s16 unk128[6];
+    s16 groundJointOffsets3[6];
     u8 pad134[0x434 - 0x134];
-    Vec3i unk434;
-    Vec3i unk440;
+    Vec3i position;
+    Vec3i prevPosition;
     Vec3i velocity;
     u8 pad458[0x970 - 0x458];
-    Transform3D unk970;
-    Transform3D unk990;
-    Transform3D unk9B0;
+    Transform3D yRotationMatrix;
+    Transform3D combinedRotationMatrix;
+    Transform3D zRotationMatrix;
     u8 pad9D0[0xA8E - 0x9D0];
     u16 unkA8E;
     u16 unkA90;
     u16 unkA92;
     u16 unkA94;
     u8 padA96[0xAA4 - 0xA96];
-    s32 unkAA4;
-    s32 unkAA8;
+    s32 targetSpeed;
+    s32 currentSpeed;
     u8 padAAC[0xAC2 - 0xAAC];
-    s16 unkAC2;
+    s16 behaviorTrigger;
     u8 padAC4[0xAD4 - 0xAC4];
-    Vec3i unkAD4;
+    Vec3i transformedPos;
     u8 padAE0[0x4];
     Vec3i unkAE4;
     Vec3i unkAF0;
     Vec3i unkAFC;
     u8 padB08[0xB50 - 0xB08];
-    ListNode_5AA90 unkB50;
+    ListNode_5AA90 sectorListNode;
     u8 padB6C[0xB84 - 0xB6C];
-    s32 unkB84;
+    s32 bossFlags;
     u8 padB88[0xBBD - 0xB88];
     u8 behaviorMode;
     u8 behaviorPhase;
@@ -310,35 +310,35 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
 
     alloc = getCurrentAllocation();
 
-    arg0->velocity.x = arg0->unk434.x - arg0->unk440.x;
-    arg0->velocity.y = arg0->unk434.y - arg0->unk440.y;
-    arg0->velocity.z = arg0->unk434.z - arg0->unk440.z;
-    memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+    arg0->velocity.x = arg0->position.x - arg0->prevPosition.x;
+    arg0->velocity.y = arg0->position.y - arg0->prevPosition.y;
+    arg0->velocity.z = arg0->position.z - arg0->prevPosition.z;
+    memcpy(&arg0->prevPosition, &arg0->position, 0xC);
 
     player = (IceBossArg *)alloc->players;
     dist = distance_3d(
-        arg0->unk434.x - player->unk434.x,
-        arg0->unk434.y - player->unk434.y,
-        arg0->unk434.z - player->unk434.z
+        arg0->position.x - player->position.x,
+        arg0->position.y - player->position.y,
+        arg0->position.z - player->position.z
     );
 
     if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
-        if (arg0->unkB84 & 0x400000) {
-            arg0->unkAA4 = getCharacterBoardStatParam0(0, 4) + -0x8000;
+        if (arg0->bossFlags & 0x400000) {
+            arg0->targetSpeed = getCharacterBoardStatParam0(0, 4) + -0x8000;
         } else if (dist > 0x8C00000) {
-            arg0->unkAA4 = 0x70000;
+            arg0->targetSpeed = 0x70000;
         } else {
-            arg0->unkAA4 = getCharacterBoardStatParam0(0, 0) + -0x8000;
+            arg0->targetSpeed = getCharacterBoardStatParam0(0, 0) + -0x8000;
         }
     } else {
-        arg0->unkAA4 = getCharacterBoardStatParam0(0, 8) + 0x18000;
+        arg0->targetSpeed = getCharacterBoardStatParam0(0, 8) + 0x18000;
     }
 
-    if (arg0->unkAA4 > 0x180000) {
-        arg0->unkAA4 = 0x180000;
+    if (arg0->targetSpeed > 0x180000) {
+        arg0->targetSpeed = 0x180000;
     }
 
-    diff = arg0->unkAA4 - arg0->unkAA8;
+    diff = arg0->targetSpeed - arg0->currentSpeed;
     if (diff >= 0x1001) {
         diff = 0x1000;
     }
@@ -346,64 +346,64 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
         diff = -0x80;
     }
 
-    arg0->unkAA8 = arg0->unkAA8 + diff;
-    arg0->unkB84 &= 0xFFFBFFFF;
+    arg0->currentSpeed = arg0->currentSpeed + diff;
+    arg0->bossFlags &= 0xFFFBFFFF;
 
     if (arg0->behaviorMode != 3) {
-        if (arg0->unkAC2 != 0) {
-            if (arg0->unkAC2 == 0x3D) {
+        if (arg0->behaviorTrigger != 0) {
+            if (arg0->behaviorTrigger == 0x3D) {
                 arg0->behaviorMode = 2;
                 arg0->behaviorPhase = 0;
                 arg0->behaviorStep = 0;
                 arg0->behaviorCounter = 0;
-                if (arg0->unkB84 & 0x400000) {
+                if (arg0->bossFlags & 0x400000) {
                     arg0->behaviorPhase = 1;
                 }
             }
         }
     }
-    arg0->unkAC2 = 0;
+    arg0->behaviorTrigger = 0;
 
     do {
     } while (D_800BCA14_B1F04[arg0->behaviorMode](arg0) != 0);
 
-    createZRotationMatrix(&arg0->unk9B0, arg0->unkA92);
-    createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
-    createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+    createZRotationMatrix(&arg0->zRotationMatrix, arg0->unkA92);
+    createCombinedRotationMatrix(&arg0->combinedRotationMatrix, arg0->unkA8E, arg0->unkA90);
+    createYRotationMatrix(&arg0->yRotationMatrix, arg0->unkA94);
 
-    func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk990, &sp10);
-    func_8006B084_6BC84(&sp10, &arg0->unk970, &sp30);
+    func_8006B084_6BC84(&arg0->zRotationMatrix, &arg0->combinedRotationMatrix, &sp10);
+    func_8006B084_6BC84(&sp10, &arg0->yRotationMatrix, &sp30);
 
-    sp30.translation.x -= arg0->unk970.translation.x;
-    sp30.translation.y -= arg0->unk970.translation.y;
-    sp30.translation.z -= arg0->unk970.translation.z;
+    sp30.translation.x -= arg0->yRotationMatrix.translation.x;
+    sp30.translation.y -= arg0->yRotationMatrix.translation.y;
+    sp30.translation.z -= arg0->yRotationMatrix.translation.z;
 
-    if (arg0->unkB84 & 0x400000) {
-        transformVector(D_800BCA30_B1F20, (s16 *)&sp30, &arg0->unkAD4);
+    if (arg0->bossFlags & 0x400000) {
+        transformVector(D_800BCA30_B1F20, (s16 *)&sp30, &arg0->transformedPos);
     } else {
-        transformVector(D_800BCA24_B1F14, (s16 *)&sp30, &arg0->unkAD4);
+        transformVector(D_800BCA24_B1F14, (s16 *)&sp30, &arg0->transformedPos);
     }
-    memcpy(&arg0->unkB50.localPos, &arg0->unkAD4, 0xC);
-    func_8005C838_5D438(&arg0->unkB50);
+    memcpy(&arg0->sectorListNode.localPos, &arg0->transformedPos, 0xC);
+    func_8005C838_5D438(&arg0->sectorListNode);
     func_800BC61C_B1B0C((Player *)arg0);
 
-    if (arg0->unkB84 & 0x400000) {
+    if (arg0->bossFlags & 0x400000) {
         transformVector(D_800BCA30_B1F20, (s16 *)&sp30, &arg0->unkAE4);
     } else {
-        transformVector(D_800BC9F0_B1EE0, arg0->unk38, &arg0->unkAE4);
-        arg0->unkAE4.x -= arg0->unk970.translation.x;
-        arg0->unkAE4.y -= arg0->unk970.translation.y;
-        arg0->unkAE4.z -= arg0->unk970.translation.z;
+        transformVector(D_800BC9F0_B1EE0, arg0->groundJointOffsets, &arg0->unkAE4);
+        arg0->unkAE4.x -= arg0->yRotationMatrix.translation.x;
+        arg0->unkAE4.y -= arg0->yRotationMatrix.translation.y;
+        arg0->unkAE4.z -= arg0->yRotationMatrix.translation.z;
 
-        transformVector(D_800BC9F0_B1EE0 + 6, arg0->unkB0, &arg0->unkAF0);
-        arg0->unkAF0.x -= arg0->unk970.translation.x;
-        arg0->unkAF0.y -= arg0->unk970.translation.y;
-        arg0->unkAF0.z -= arg0->unk970.translation.z;
+        transformVector(D_800BC9F0_B1EE0 + 6, arg0->groundJointOffsets2, &arg0->unkAF0);
+        arg0->unkAF0.x -= arg0->yRotationMatrix.translation.x;
+        arg0->unkAF0.y -= arg0->yRotationMatrix.translation.y;
+        arg0->unkAF0.z -= arg0->yRotationMatrix.translation.z;
 
-        transformVector(D_800BC9F0_B1EE0 + 12, arg0->unk128, &arg0->unkAFC);
-        arg0->unkAFC.x -= arg0->unk970.translation.x;
-        arg0->unkAFC.y -= arg0->unk970.translation.y;
-        arg0->unkAFC.z -= arg0->unk970.translation.z;
+        transformVector(D_800BC9F0_B1EE0 + 12, arg0->groundJointOffsets3, &arg0->unkAFC);
+        arg0->unkAFC.x -= arg0->yRotationMatrix.translation.x;
+        arg0->unkAFC.y -= arg0->yRotationMatrix.translation.y;
+        arg0->unkAFC.z -= arg0->yRotationMatrix.translation.z;
     }
 }
 
@@ -506,7 +506,7 @@ s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
     arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
-    if (arg0->unkB84 & 0x400000) {
+    if (arg0->bossFlags & 0x400000) {
         func_8005D180_5DD80(arg0, 2);
     } else {
         func_8005D180_5DD80(arg0, 0);
@@ -742,7 +742,7 @@ s32 func_800BC008_B14F8(func_800BC4AC_arg *arg0) {
     arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
-    if (arg0->unkB84 & 0x400000) {
+    if (arg0->bossFlags & 0x400000) {
         func_8005D180_5DD80(arg0, 2);
     } else {
         func_8005D180_5DD80(arg0, 0);
@@ -948,7 +948,7 @@ void func_800BC520_B1A10(func_800BC4AC_arg *arg0) {
     arg0->unk434.z = arg0->unk434.z + sp38.z;
     func_8005C868_5D468(arg0);
 
-    if (arg0->unkB84 & 0x10000) {
+    if (arg0->bossFlags & 0x10000) {
         arg0->unkBC9 = 0;
     } else {
         func_8005CFFC_5DBFC(allocPlus30, arg0->sectorIndex, &arg0->unk434, &arg0->unkBC9, &arg0->unkBCC);
