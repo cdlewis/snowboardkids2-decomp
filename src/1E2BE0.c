@@ -92,8 +92,8 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
 extern s32 gControllerInputs[];
 extern s32 gButtonsPressed[];
 extern s8 D_800AB04B;
-extern s8 D_800AB044_A23B4;
-extern u8 D_800AB048_A23B8;
+extern s8 gAnalogStickY;
+extern u8 gAnalogStickX;
 
 void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
     s8 mode = arg0->inputMode;
@@ -114,19 +114,19 @@ void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
 
             if (buttonCheck & R_TRIG) {
                 temp = arg0->unk38;
-                temp += D_800AB044_A23B4 << 12;
+                temp += gAnalogStickY << 12;
                 arg0->unk38 = temp;
             } else if (buttonCheck & Z_TRIG) {
                 temp = arg0->unk3C;
-                temp -= D_800AB044_A23B4 << 12;
+                temp -= gAnalogStickY << 12;
                 arg0->unk3C = temp;
             } else if (buttonCheck & L_TRIG) {
                 u16 temp_angle = arg0->unk20;
-                temp_angle -= D_800AB044_A23B4;
+                temp_angle -= gAnalogStickY;
                 arg0->unk20 = temp_angle & 0x1FFF;
             } else {
                 u16 temp_angle = arg0->unk22;
-                temp_angle -= (s8)D_800AB048_A23B8;
+                temp_angle -= (s8)gAnalogStickX;
                 arg0->unk22 = temp_angle & 0x1FFF;
             }
             break;
@@ -146,7 +146,7 @@ void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
 
             if (gButtonsPressed[0] & R_TRIG) {
                 temp = arg0->unk38;
-                temp += D_800AB044_A23B4 << 12;
+                temp += gAnalogStickY << 12;
                 arg0->unk38 = temp;
             }
             break;

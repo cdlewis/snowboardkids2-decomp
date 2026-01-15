@@ -2,8 +2,8 @@
 #include "1E2BE0.h"
 #include "geometry.h"
 
-extern s8 D_800AB044_A23B4;
-extern s8 D_800AB048_A23B8;
+extern s8 gAnalogStickY;
+extern s8 gAnalogStickX;
 extern s32 gButtonsPressed;
 extern s32 gControllerInputs;
 
@@ -226,25 +226,25 @@ void handleSlotDebugInput(CutsceneSlotData *slot, func_800B5E64_1E2F14_arg0 *cam
         return;
     }
     if (gButtonsPressed & Z_TRIG) {
-        slot->unk78 = slot->unk78 - (D_800AB048_A23B8 * 4);
+        slot->unk78 = slot->unk78 - (gAnalogStickX * 4);
         return;
     }
     if (gButtonsPressed & R_TRIG) {
-        slot->unk28 = slot->unk28 + (D_800AB044_A23B4 << 12);
+        slot->unk28 = slot->unk28 + (gAnalogStickY << 12);
         return;
     }
     if (gButtonsPressed & L_TRIG) {
         pRotX = &slot->unk80;
-        *pRotX = (u16)(*pRotX + (D_800AB044_A23B4 * 4));
+        *pRotX = (u16)(*pRotX + (gAnalogStickY * 4));
         pRotZ = &slot->unk82;
-        *pRotZ = (u16)(*pRotZ + (D_800AB048_A23B8 * 4));
+        *pRotZ = (u16)(*pRotZ + (gAnalogStickX * 4));
         return;
     }
 
     sinVal = approximateSin(camera->unk22) * 4;
     cosVal = (approximateCos(camera->unk22) * 4) >> 8;
-    inputX = D_800AB048_A23B8 * 16;
-    inputZ = -D_800AB044_A23B4 * 16;
+    inputX = gAnalogStickX * 16;
+    inputZ = -gAnalogStickY * 16;
     sinVal = sinVal >> 8;
 
     slot->unk20_u.unk20_s32 = slot->unk20_u.unk20_s32 + ((cosVal * inputX) + (sinVal * inputZ));

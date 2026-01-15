@@ -175,8 +175,8 @@ typedef struct {
 
 typedef s32 (*StateFunc)(void *);
 
-extern s8 D_800AB044_A23B4[];
-extern s8 D_800AB048_A23B8[];
+extern s8 gAnalogStickY[];
+extern s8 gAnalogStickX[];
 extern StateFunc D_800BCB20_B40E0[];
 extern s16 D_800BCB30_B40F0[];
 extern s16 D_800BCB3C_B40FC[];
@@ -191,21 +191,21 @@ extern s32 D_800BCB54_B4114[];
 void func_800BC474_B3A34(Arg0Struct *);
 extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
-void func_800BB2B0_B2870(Arg0Struct *arg0) {
+void updateJingleTownBoss(Arg0Struct *arg0) {
     Transform3D sp10;
     Transform3D sp30;
     GameState *alloc;
     s32 temp;
     s32 i;
-    s16 itemId;
+    s16 playerState;
     s32 diff;
 
     alloc = getCurrentAllocation();
     if (arg0->unkBC7 != 0) {
         func_800B9B90_A9A40((Player *)arg0);
     } else {
-        arg0->unkB7A = D_800AB048_A23B8[arg0->unkBB8] / 4;
-        arg0->unkB7B = D_800AB044_A23B4[arg0->unkBB8] / 4;
+        arg0->unkB7A = gAnalogStickX[arg0->unkBB8] / 4;
+        arg0->unkB7B = gAnalogStickY[arg0->unkBB8] / 4;
 
         arg0->unkB82 = arg0->unkB7C;
         arg0->unkB7C = gButtonsPressed[arg0->unkBB8];
@@ -249,10 +249,10 @@ void func_800BB2B0_B2870(Arg0Struct *arg0) {
     arg0->unkB84 &= 0xFFFBFFFF;
 
     if (arg0->behaviorMode != 3) {
-        itemId = arg0->unkAC2;
-        if (itemId != 0) {
-            if (itemId != 0x3D) {
-                if (itemId == 0x3E) {
+        playerState = arg0->unkAC2;
+        if (playerState != 0) {
+            if (playerState != 0x3D) {
+                if (playerState == 0x3E) {
                     arg0->behaviorMode = 2;
                     arg0->behaviorPhase = 0;
                     arg0->behaviorStep = 0;
