@@ -3324,5 +3324,6 @@ jingleTownBossChaseAttackExitPhase = 0x800BBEBC; // rom:0xB347C
 dispatchHoverAttackPhase = 0x800BBF40; // rom:0xB3500
 spinRampUpStep = 0x800B756C; // rom:0xA741C
 maintainMaxSpinStep = 0x800B75F4; // rom:0xA74A4
+spinRampDownStep = 0x800B76BC; // rom:0xA756C
 cleanupPlayerCountSelectSprites = 0x800B0664; // rom:0x1DBD44
 setViewportEnvColor = 0x8006FE28; // rom:0x70A28

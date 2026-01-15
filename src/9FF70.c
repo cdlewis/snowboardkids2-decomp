@@ -3333,34 +3333,34 @@ s32 maintainMaxSpinStep(Player *arg0) {
 
 typedef struct {
     u8 _pad0[0x81];
-    u8 unk81; // 0x81
-} func_800B76BC_alloc;
+    u8 shortcutWarpPlayerCount; // 0x81 - Number of players in shortcut warp sequence
+} SpinRampDownStep_alloc;
 
-s32 func_800B76BC_A756C(Player *arg0) {
-    func_800B76BC_alloc *alloc = (func_800B76BC_alloc *)getCurrentAllocation();
-    u16 temp1;
-    u16 temp2;
+s32 spinRampDownStep(Player *player) {
+    SpinRampDownStep_alloc *alloc = (SpinRampDownStep_alloc *)getCurrentAllocation();
+    u16 spinDecrementCounter;
+    u16 spinIncrementCounter;
 
-    arg0->velocity.x = 0;
-    arg0->velocity.z = 0;
-    arg0->velocity.y = arg0->velocity.y - 0x6000;
-    applyClampedVelocityToPosition(arg0);
-    decayPlayerSteeringAngles(arg0);
-    func_8005D180_5DD80(arg0, 0);
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->velocity.y = player->velocity.y - 0x6000;
+    applyClampedVelocityToPosition(player);
+    decayPlayerSteeringAngles(player);
+    func_8005D180_5DD80(player, 0);
 
-    temp1 = arg0->unkBA0;
-    temp2 = arg0->unkBA2;
-    temp1 -= 0x400;
-    arg0->unkBA0 = temp1;
-    arg0->rotY = arg0->rotY + 0x400;
-    temp2 += 0x400;
-    arg0->unkBA2 = temp2;
+    spinDecrementCounter = player->unkBA0;
+    spinIncrementCounter = player->unkBA2;
+    spinDecrementCounter -= 0x400;
+    player->unkBA0 = spinDecrementCounter;
+    player->rotY = player->rotY + 0x400;
+    spinIncrementCounter += 0x400;
+    player->unkBA2 = spinIncrementCounter;
 
-    if (arg0->unkBA0 == 0) {
-        arg0->unkB8C = 0x11;
-        arg0->behaviorStep = arg0->behaviorStep + 1;
-        setViewportFadeValueBySlotIndex(arg0->playerIndex, 0xFF, 0x10);
-        alloc->unk81 = alloc->unk81 + 1;
+    if (player->unkBA0 == 0) {
+        player->unkB8C = 0x11;
+        player->behaviorStep = player->behaviorStep + 1;
+        setViewportFadeValueBySlotIndex(player->playerIndex, 0xFF, 0x10);
+        alloc->shortcutWarpPlayerCount = alloc->shortcutWarpPlayerCount + 1;
         spawnDebugDisplayListTask(1);
     }
 
@@ -3448,7 +3448,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
 }
 
 s32 func_800B7998_A7848(Player *arg0) {
-    func_800B76BC_alloc *alloc = (func_800B76BC_alloc *)getCurrentAllocation();
+    SpinRampDownStep_alloc *alloc = (SpinRampDownStep_alloc *)getCurrentAllocation();
     s32 temp;
 
     decayPlayerSteeringAngles(arg0);
@@ -3461,7 +3461,7 @@ s32 func_800B7998_A7848(Player *arg0) {
     if (temp == 0) {
         arg0->unkB8C = 6;
         arg0->behaviorStep = arg0->behaviorStep + 1;
-        alloc->unk81 = alloc->unk81 - 1;
+        alloc->shortcutWarpPlayerCount = alloc->shortcutWarpPlayerCount - 1;
     }
 
     arg0->unkB84 = arg0->unkB84 | 0x10000;
