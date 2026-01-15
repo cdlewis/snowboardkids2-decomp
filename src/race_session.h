@@ -122,7 +122,7 @@ void setPlayerShrinkState(Player *arg0);
 void setPlayerFrozenState(Player *player);
 void playAttackHitVoice(Player *player);
 void playFinishBoostVoice(Player *player);
-void func_80059D30_5A930(Player *arg0);
+void playStunnedVoice(Player *arg0);
 Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex, s32 searchRadius);
 s16 func_8005CE98_5DA98(Player *arg0);
 void spawnHomingProjectile(void *arg0, s32 arg1, void *arg2);

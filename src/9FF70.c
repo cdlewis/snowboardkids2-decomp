@@ -1869,7 +1869,7 @@ void initStunnedAirborneBehavior(Player *player) {
     player->ghostEffectTimer = 0;
     player->invincibilityTimer = 0;
     player->unkB84 = player->unkB84 & 0xFFFF2FFF;
-    func_80059D30_5A930(player);
+    playStunnedVoice(player);
 }
 
 s32 updateStunnedAirbornePhase(Player *player) {

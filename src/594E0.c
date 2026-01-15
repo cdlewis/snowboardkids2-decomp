@@ -13,8 +13,8 @@ extern u16 D_80093FCC_94BCC[];
 extern u16 D_80093FE0_94BE0[];
 extern u16 gFinishBoostVoiceSounds[];
 extern u16 D_80094008_94C08[];
-extern u16 D_8009401C_94C1C[];
-extern u16 D_80094030_94C30[];
+extern u16 gStunnedVoiceSounds1[];
+extern u16 gStunnedVoiceSounds2[];
 extern u16 D_80094044_94C44[];
 extern u16 D_80094058_94C58[];
 
@@ -307,19 +307,19 @@ void playRaceWinVoice(Player *player) {
     }
 }
 
-void func_80059D30_5A930(Player *arg0) {
+void playStunnedVoice(Player *arg0) {
     if (arg0->characterId < 9) {
         if (randA() & 1) {
             queueSoundAtPositionWithPriority(
                 &arg0->worldPos,
-                D_8009401C_94C1C[arg0->characterId],
+                gStunnedVoiceSounds1[arg0->characterId],
                 5,
                 arg0->playerIndex + 4
             );
         } else {
             queueSoundAtPositionWithPriority(
                 &arg0->worldPos,
-                D_80094030_94C30[arg0->characterId],
+                gStunnedVoiceSounds2[arg0->characterId],
                 5,
                 arg0->playerIndex + 4
             );
