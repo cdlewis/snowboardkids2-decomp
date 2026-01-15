@@ -3341,3 +3341,7 @@ spinRampDownStep = 0x800B76BC; // rom:0xA756C
 cleanupPlayerCountSelectSprites = 0x800B0664; // rom:0x1DBD44
 setViewportEnvColor = 0x8006FE28; // rom:0x70A28
 copyRotDurationToPosX = 0x800B5F20; // rom:0x1E2FD0
+initGlintEffect = 0x800516F4; // rom:0x522F4
+updateGlintEffect = 0x80051760; // rom:0x52360
+cleanupGlintEffect = 0x80051800; // rom:0x52400
+spawnGlintEffect = 0x8005182C; // rom:0x5242C

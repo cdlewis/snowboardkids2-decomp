@@ -663,7 +663,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                 if (arg0->behaviorStep == 2) {
                     arg0->behaviorCounter = arg0->behaviorCounter - 1;
                     if (spawnPlayerGuidedStarProjectile(arg0->playerIndex) != 0) {
-                        func_8005182C_5242C(arg0);
+                        spawnGlintEffect(arg0);
                     }
 
                     if (arg0->behaviorCounter == 0) {
@@ -678,7 +678,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                 } else {
                     arg0->behaviorCounter = arg0->behaviorCounter - 1;
                     if (spawnRandomEffectProjectile(arg0->playerIndex) != 0) {
-                        func_8005182C_5242C(arg0);
+                        spawnGlintEffect(arg0);
                     }
 
                     if (arg0->behaviorCounter == 0) {
@@ -696,7 +696,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                     ) <= 0xDFFFFF) {
                     // Close range
                     if (spawnPlayerGuidedStarProjectile(arg0->playerIndex) != 0) {
-                        func_8005182C_5242C(arg0);
+                        spawnGlintEffect(arg0);
                     }
 
                     arg0->behaviorCounter = randA() & 0x3;
@@ -714,7 +714,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
                 } else {
                     // Far range
                     if (spawnRandomEffectProjectile(arg0->playerIndex) != 0) {
-                        func_8005182C_5242C(arg0);
+                        spawnGlintEffect(arg0);
                     }
 
                     if (gameState->unk86 != 0) {

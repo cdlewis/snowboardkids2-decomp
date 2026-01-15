@@ -82,14 +82,14 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x164];
-    s16 unk164[3];
-} func_800516F4_522F4_arg_unk0;
+    s16 rotation[3];
+} GlintEffectSource;
 
 typedef struct {
-    func_800516F4_522F4_arg_unk0 *unk0;
-    void *unk4;
-    loadAssetMetadata_arg unk8;
-} func_800516F4_522F4_arg;
+    GlintEffectSource *source;
+    void *assetTable;
+    loadAssetMetadata_arg particle;
+} GlintEffectTask;
 
 typedef struct {
     s32 unk0;
@@ -218,8 +218,8 @@ void updateFloatingItemSprite(FloatingItemSpriteTask *);
 void cleanupFloatingItemSpriteTask(FloatingItemSpriteTask *);
 void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *);
 void cleanupDualSnowSprayTask(DualSnowSprayTask *);
-void func_80051760_52360(func_800516F4_522F4_arg *);
-void func_80051800_52400(func_800516F4_522F4_arg *);
+void updateGlintEffect(GlintEffectTask *);
+void cleanupGlintEffect(GlintEffectTask *);
 void func_800518AC_524AC(func_800518AC_524AC_arg *);
 void func_80051B8C_5278C(func_8005186C_5246C_arg *);
 
@@ -784,41 +784,41 @@ void spawnSkiTrailTask(Player *player) {
     }
 }
 
-void func_800516F4_522F4(func_800516F4_522F4_arg *arg0) {
+void initGlintEffect(GlintEffectTask *arg0) {
     getCurrentAllocation();
-    arg0->unk4 = load_3ECE40();
-    arg0->unk8.unk0 = &D_80090EC0_91AC0;
-    arg0->unk8.unk1A = 0xFF;
-    loadAssetMetadata(&arg0->unk8, arg0->unk4, 0x6A);
-    setCleanupCallback(&func_80051800_52400);
-    setCallbackWithContinue(&func_80051760_52360);
+    arg0->assetTable = load_3ECE40();
+    arg0->particle.unk0 = &D_80090EC0_91AC0;
+    arg0->particle.unk1A = 0xFF;
+    loadAssetMetadata(&arg0->particle, arg0->assetTable, 0x6A);
+    setCleanupCallback(&cleanupGlintEffect);
+    setCallbackWithContinue(&updateGlintEffect);
 }
 
-void func_80051760_52360(func_800516F4_522F4_arg *arg0) {
+void updateGlintEffect(GlintEffectTask *arg0) {
     s32 i;
     GameState *gs;
 
     gs = (GameState *)getCurrentAllocation();
-    transformVector((s16 *)&D_80090EB0_91AB0, (s16 *)&arg0->unk0->unk164, &arg0->unk8.position);
+    transformVector((s16 *)&D_80090EB0_91AB0, arg0->source->rotation, &arg0->particle.position);
 
     for (i = 0; i < 4; i++) {
-        enqueueAlphaSprite(i, &arg0->unk8);
+        enqueueAlphaSprite(i, &arg0->particle);
     }
 
     if (gs->gamePaused == 0) {
-        arg0->unk8.unk1A -= 0x10;
-        if (arg0->unk8.unk1A < 0x40) {
+        arg0->particle.unk1A -= 0x10;
+        if (arg0->particle.unk1A < 0x40) {
             func_80069CF8_6A8F8();
         }
     }
 }
 
-void func_80051800_52400(func_800516F4_522F4_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupGlintEffect(GlintEffectTask *arg0) {
+    arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
-void func_8005182C_5242C(void *arg0) {
-    void *result = scheduleTask(&func_800516F4_522F4, 2, 0, 0xDD);
+void spawnGlintEffect(void *arg0) {
+    void *result = scheduleTask(&initGlintEffect, 2, 0, 0xDD);
     if (result != NULL) {
         *(void **)result = arg0;
     }
