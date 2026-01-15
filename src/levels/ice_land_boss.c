@@ -492,7 +492,7 @@ void setIceBossFlyingMode(Player *arg0) {
     arg0->unkB84 = arg0->unkB84 | 0x400000;
 }
 
-s32 func_800BB998_B0E88(func_800BC4AC_arg *arg0) {
+s32 iceLandBossChaseIntroPhase(func_800BC4AC_arg *arg0) {
     s32 pad[3];
     GameState *gameState = getCurrentAllocation();
 
