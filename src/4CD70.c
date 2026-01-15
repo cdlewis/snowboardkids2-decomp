@@ -2310,67 +2310,67 @@ typedef struct {
     s16 animAngle;     // 0x20 - animation angle
 } TrickPointsDisplayState;
 
-void cleanupTrickPointsDisplayTask(ShotCrossCountdownTimerState *arg0);
-void updateTrickPointsSlideIn(TrickPointsDisplayState *arg0);
-void func_8004FAB4_506B4(TrickPointsDisplayState *arg0);
-void updateTrickPointsSlideOut(TrickPointsDisplayState *arg0);
+void cleanupTrickPointsDisplayTask(ShotCrossCountdownTimerState *state);
+void updateTrickPointsSlideIn(TrickPointsDisplayState *state);
+void func_8004FAB4_506B4(TrickPointsDisplayState *state);
+void updateTrickPointsSlideOut(TrickPointsDisplayState *state);
 
-void initTrickPointsDisplayTask(TrickPointsDisplayState *arg0) {
+void initTrickPointsDisplayTask(TrickPointsDisplayState *state) {
     getCurrentAllocation();
-    arg0->spriteAsset = loadAsset_3505F0();
-    arg0->y = -0x20;
-    arg0->spriteFrame = 2;
-    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    sprintf(arg0->scoreText, sTrickPointsFormat, arg0->score);
-    arg0->animAngle = 0;
-    arg0->holdTimer = 0x1E;
+    state->spriteAsset = loadAsset_3505F0();
+    state->y = -0x20;
+    state->spriteFrame = 2;
+    state->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    sprintf(state->scoreText, sTrickPointsFormat, state->score);
+    state->animAngle = 0;
+    state->holdTimer = 0x1E;
     setCleanupCallback(cleanupTrickPointsDisplayTask);
     setCallback(updateTrickPointsSlideIn);
 }
 
 INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FAB4_506B4);
 
-void updateTrickPointsHold(TrickPointsDisplayState *arg0);
+void updateTrickPointsHold(TrickPointsDisplayState *state);
 
-void updateTrickPointsSlideIn(TrickPointsDisplayState *arg0) {
+void updateTrickPointsSlideIn(TrickPointsDisplayState *state) {
     s32 sinVal;
     s16 angle;
 
-    angle = arg0->animAngle + 0x80;
-    arg0->animAngle = angle;
+    angle = state->animAngle + 0x80;
+    state->animAngle = angle;
     sinVal = approximateSin(angle);
-    arg0->x = (0x2000 - sinVal) / 20;
-    if (arg0->animAngle == 0x800) {
+    state->x = (0x2000 - sinVal) / 20;
+    if (state->animAngle == 0x800) {
         setCallback(updateTrickPointsHold);
     }
-    func_8004FAB4_506B4(arg0);
+    func_8004FAB4_506B4(state);
 }
 
-void updateTrickPointsHold(TrickPointsDisplayState *arg0) {
-    arg0->holdTimer--;
-    if (arg0->holdTimer == 0) {
+void updateTrickPointsHold(TrickPointsDisplayState *state) {
+    state->holdTimer--;
+    if (state->holdTimer == 0) {
         setCallback(updateTrickPointsSlideOut);
     }
-    func_8004FAB4_506B4(arg0);
+    func_8004FAB4_506B4(state);
 }
 
-void updateTrickPointsSlideOut(TrickPointsDisplayState *arg0) {
+void updateTrickPointsSlideOut(TrickPointsDisplayState *state) {
     s32 sinVal;
     s16 angle;
 
-    angle = arg0->animAngle + 0x80;
-    arg0->animAngle = angle;
+    angle = state->animAngle + 0x80;
+    state->animAngle = angle;
     sinVal = approximateSin(angle);
-    arg0->x = -((0x2000 - sinVal) / 20);
-    if (arg0->animAngle == 0x1000) {
+    state->x = -((0x2000 - sinVal) / 20);
+    if (state->animAngle == 0x1000) {
         func_80069CF8_6A8F8();
     }
-    func_8004FAB4_506B4(arg0);
+    func_8004FAB4_506B4(state);
 }
 
-void cleanupTrickPointsDisplayTask(ShotCrossCountdownTimerState *arg0) {
-    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
-    arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
+void cleanupTrickPointsDisplayTask(ShotCrossCountdownTimerState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
+    state->digitAsset = freeNodeMemory(state->digitAsset);
 }
 
 void showTrickPointsDisplay(s32 arg0) {
