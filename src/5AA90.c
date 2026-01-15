@@ -240,8 +240,9 @@ void handlePlayerToPlayerCollision(Player *player) {
 /**
  * Checks collision between a player and the target player (player index 1).
  * Handles collision response including pushing the player out and knockback effects.
+ * The target player may have multiple collision boxes (controlled by targetPlayer->unkBB4).
  */
-void func_8005AE8C_5BA8C(Player *player) {
+void handleCollisionWithTargetPlayer(Player *player) {
     Vec3i deltaPos;
     u8 pad[0x8];
     void *collisionBoxPtr;
@@ -298,14 +299,14 @@ void func_8005AE8C_5BA8C(Player *player) {
                     isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z);
 
                 if (dist < combinedRadius) {
-                    /* Check for special knockback on collision boxes 4-5 when target is in state 1 */
+                    /* Check for special bounce-back on collision boxes 4-5 when target is in state 1 */
                     if (targetPlayer->unkBD9 == 1) {
                         if ((targetPlayer->unkB84 & 0x40000) && (u32)(boxIndex - 4) < 2U) {
                             setPlayerBouncedBackState(player);
                             goto next;
                         }
                     }
-                    /* Check for special knockback on collision boxes 1-2 when target is in state 3 */
+                    /* Check for special bounce-back on collision boxes 1-2 when target is in state 3 */
                     if (targetPlayer->unkBD9 == 3 && (targetPlayer->unkB84 & 0x40000) && (u32)(boxIndex - 1) < 2U) {
                         setPlayerBouncedBackState(player);
                         goto next;
