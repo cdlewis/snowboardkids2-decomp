@@ -32,7 +32,7 @@ void storyMapInitFadeIn(void) {
         return;
     }
 
-    func_8006FDA0_709A0(NULL, 0, 0x10);
+    setViewportFadeValue(NULL, 0, 0x10);
 
     setGameStateHandler(storyMapAwaitFadeIn);
 }

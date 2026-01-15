@@ -444,8 +444,8 @@ void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s3
     arg0->unkBC = 0;
     arg0->unkBD = 0;
     arg0->unkBE = 0;
-    arg0->unkBF = 0;
-    arg0->unkC1 = 0;
+    arg0->prevFadeValue = 0;
+    arg0->fadeMode = 0;
     arg0->scaleY = 1.0f;
     initViewportCallbackPool(arg0);
 }
@@ -498,31 +498,31 @@ void setViewportTransformById(u16 viewportId, void *transformMatrix) {
     }
 }
 
-void func_8006FDA0_709A0(Node_70B00 *arg0, u8 arg1, u8 arg2) {
-    Node_70B00 *var_a0;
+void setViewportFadeValue(Node_70B00 *node, u8 fadeValue, u8 fadeMode) {
+    Node_70B00 *targetNode;
 
-    var_a0 = arg0;
-    if (var_a0 == NULL) {
-        var_a0 = &D_800A3370_A3F70;
+    targetNode = node;
+    if (targetNode == NULL) {
+        targetNode = &D_800A3370_A3F70;
     }
 
-    var_a0->unkC0 = arg1;
-    var_a0->unkC1 = arg2;
-    if (!(arg2 & 0xFF)) {
-        var_a0->unkBF = arg1;
+    targetNode->fadeValue = fadeValue;
+    targetNode->fadeMode = fadeMode;
+    if (!(fadeMode & 0xFF)) {
+        targetNode->prevFadeValue = fadeValue;
     }
 }
 
-void func_8006FDC8_709C8(u16 arg0, u8 arg1, u8 arg2) {
+void setViewportFadeValueBySlotIndex(u16 slotIndex, u8 fadeValue, u8 fadeMode) {
     Node_70B00 *node;
 
     node = &D_800A3370_A3F70;
     while (node != NULL) {
-        if (node->slot_index == arg0) {
-            node->unkC0 = arg1;
-            node->unkC1 = arg2;
-            if (!(arg2 & 0xFF)) {
-                node->unkBF = arg1;
+        if (node->slot_index == slotIndex) {
+            node->fadeValue = fadeValue;
+            node->fadeMode = fadeMode;
+            if (!(fadeMode & 0xFF)) {
+                node->prevFadeValue = fadeValue;
             }
         }
         node = node->list3_next;
@@ -533,7 +533,7 @@ s32 func_8006FE10_70A10(Node_70B00 *arg0) {
     if (arg0 == NULL) {
         arg0 = &D_800A3370_A3F70;
     }
-    return arg0->unkC1;
+    return arg0->fadeMode;
 }
 
 void func_8006FE28_70A28(Node_70B00 *arg0, u8 arg1, u8 arg2, u8 arg3) {

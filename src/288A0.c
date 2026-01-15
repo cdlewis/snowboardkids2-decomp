@@ -59,7 +59,7 @@ void initMenuCameraNode(Node_70B00 *node, s32 slotIndex, s32 priority, s32 isSec
     func_8006BEDC_6CADC(&lightSettings, 0, 0, 0x200000, 0, 0, 0);
     setViewportTransformById(node->id, &lightSettings);
     func_8006FE28_70A28(node, 0, 0, 0);
-    func_8006FDA0_709A0(node, 0, 0);
+    setViewportFadeValue(node, 0, 0);
     setViewportLightColors(node->id, 1, &gMenuLightColor, &gMenuAmbientColor);
 }
 

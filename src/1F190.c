@@ -203,9 +203,9 @@ void func_8001E5EC_1F1EC(void) {
     func_8006FA0C_7060C(&alloc->previewNode, 70.0f, 1.4375f, 20.0f, 4000.0f);
     func_8006FA0C_7060C(&alloc->unk588, 70.0f, 1.4375f, 20.0f, 10000.0f);
 
-    func_8006FDA0_709A0(0, 0xFF, 0);
-    func_8006FDA0_709A0(&alloc->unk588, 0, 0);
-    func_8006FDA0_709A0(&alloc->previewNode, 0xFF, 0);
+    setViewportFadeValue(0, 0xFF, 0);
+    setViewportFadeValue(&alloc->unk588, 0, 0);
+    setViewportFadeValue(&alloc->previewNode, 0xFF, 0);
 
     scheduleTask(func_80020B44_21744, 1, 0, 0x5A);
     scheduleTask(initUnlockNotification, 1, 0, 0x5A);
@@ -260,7 +260,7 @@ void initLevelSelectTransition(void) {
     }
 
     allocation->transitionCounter = 0;
-    func_8006FDA0_709A0(0, 0, 0xE);
+    setViewportFadeValue(0, 0, 0xE);
     setGameStateHandler(waitForFadeToLevelSelect);
 }
 
@@ -312,8 +312,8 @@ void handleLevelSelectInput(void) {
                     terminateTasksByType(0);
                     allocation->isLoadingPreview = 1;
                     allocation->loadStartFrame = gFrameCounter;
-                    func_8006FDA0_709A0(&allocation->unk588, 0xFF, 0);
-                    func_8006FDA0_709A0(&allocation->previewNode, 0xFF, 0);
+                    setViewportFadeValue(&allocation->unk588, 0xFF, 0);
+                    setViewportFadeValue(&allocation->previewNode, 0xFF, 0);
                 } else {
                     allocation->previewLoadCounter = 0;
                 }
@@ -366,7 +366,7 @@ void handleLevelSelectInput(void) {
             loadLevelPreview();
             if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
                 func_800585C8_591C8(0x2C);
-                func_8006FDA0_709A0(&allocation->previewNode, 0xFF, 8);
+                setViewportFadeValue(&allocation->previewNode, 0xFF, 8);
                 allocation->menuState = 6;
             } else if (gControllerInputs[0] & B_BUTTON) {
                 func_800585C8_591C8(0x2E);
@@ -386,8 +386,8 @@ void handleLevelSelectInput(void) {
                 initViewportNode(node760, &allocation->unk0, 0xB, 0x12, 0);
                 func_8006FEF8_70AF8(node760, 0xC);
                 setModelCameraTransform(node760, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
-                func_8006FDA0_709A0(node760, 0xFF, 0);
-                func_8006FDA0_709A0(node760, 0, 8);
+                setViewportFadeValue(node760, 0xFF, 0);
+                setViewportFadeValue(node760, 0, 8);
             }
             break;
 
@@ -410,7 +410,7 @@ void handleLevelSelectInput(void) {
         case MENU_STATE_DETAIL:
             if (gControllerInputs[0] & B_BUTTON) {
                 func_800585C8_591C8(0x2E);
-                func_8006FDA0_709A0(&allocation->detailNode, 0xFF, 8);
+                setViewportFadeValue(&allocation->detailNode, 0xFF, 8);
                 allocation->menuState = 9;
                 allocation->previewLoadCounter = 0;
             } else if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
@@ -467,9 +467,9 @@ void handleLevelSelectInput(void) {
     if (allocation->exitMode != 0) {
         setMusicFadeOut(0xA);
         if (allocation->exitMode == 2) {
-            func_8006FDA0_709A0(NULL, 0xFF, 8);
+            setViewportFadeValue(NULL, 0xFF, 8);
         } else {
-            func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+            setViewportFadeValue(NULL, 0xFF, 0x10);
         }
         setGameStateHandler(cleanupLevelSelect);
     }
@@ -583,8 +583,8 @@ void loadLevelPreview(void) {
         allocation->previewLoadCounter = counter + 1;
     } else {
         if (getPendingDmaCount() == 0) {
-            func_8006FDA0_709A0(&allocation->unk588, 0, 0);
-            func_8006FDA0_709A0(&allocation->previewNode, 0, 0x14);
+            setViewportFadeValue(&allocation->unk588, 0, 0);
+            setViewportFadeValue(&allocation->previewNode, 0, 0x14);
         }
     }
 }

@@ -108,7 +108,7 @@ void initCutsceneRenderer(void) {
 
     overlayNodePtr = &s.taskMemory->overlayNode;
     setViewportTransformById(s.taskMemory->sceneNode.id, lightBuffer);
-    func_8006FDA0_709A0(NULL, 0, 0);
+    setViewportFadeValue(NULL, 0, 0);
 
     nodePtr = overlayNodePtr;
     initViewportNode(nodePtr, 0, 1, 11, 0);
@@ -117,8 +117,8 @@ void initCutsceneRenderer(void) {
     func_8006FEF8_70AF8(nodePtr, 1);
     setModelCameraTransform(nodePtr, 0, 0, -160, -120, 159, 119);
     func_8006FE28_70A28(nodePtr, 0, 0, 0);
-    func_8006FDA0_709A0(nodePtr, 0xFF, 0);
-    func_8006FDA0_709A0(nodePtr, 0, 8);
+    setViewportFadeValue(nodePtr, 0xFF, 0);
+    setViewportFadeValue(nodePtr, 0, 8);
 
     uiNodePtr = &s.taskMemory->uiNode;
     initViewportNode(uiNodePtr, 0, 3, 8, 0);
@@ -126,8 +126,8 @@ void initCutsceneRenderer(void) {
     func_8006FEF8_70AF8(uiNodePtr, 1);
     setModelCameraTransform(uiNodePtr, 0, 0, -160, -120, 159, 119);
     func_8006FE28_70A28(uiNodePtr, 0, 0, 0);
-    func_8006FDA0_709A0(uiNodePtr, 0xFF, 0);
-    func_8006FDA0_709A0(uiNodePtr, 0, 8);
+    setViewportFadeValue(uiNodePtr, 0xFF, 0);
+    setViewportFadeValue(uiNodePtr, 0, 8);
     setGameStateHandler(runCutsceneFrame);
 }
 
@@ -137,7 +137,7 @@ void runCutsceneFrame(void) {
     if (taskMemory->frameCount >= getCutsceneFrameCount(D_800AB070_A23E0, D_800AFEF0_A7260) ||
         taskMemory->exitRequested != 0) {
         if (D_800AB070_A23E0 == 0xB && D_800AFEF0_A7260 == 1) {
-            func_8006FDA0_709A0(&taskMemory->overlayNode, 0, 0);
+            setViewportFadeValue(&taskMemory->overlayNode, 0, 0);
             initScreenTransition(&taskMemory->transitionState);
             setGameStateHandler(&awaitCutsceneTransitionComplete);
 

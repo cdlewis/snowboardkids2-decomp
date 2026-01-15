@@ -73,8 +73,8 @@ void initPlayerCountSelectState(void) {
         state->playerCount.selectedPlayerIndex = numControllers - 1;
     }
     initMenuCameraNode(&state->node, 8, 0xA, 1);
-    func_8006FDA0_709A0(&state->node, 0xFF, 0);
-    func_8006FDA0_709A0(&state->node, 0, 0x10);
+    setViewportFadeValue(&state->node, 0xFF, 0);
+    setViewportFadeValue(&state->node, 0, 0x10);
     state->assetData1 = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
     state->assetData2 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     scheduleTask(&D_800B054C, 0, 0, 0x5A);
@@ -173,9 +173,9 @@ void handlePlayerCountSelectInput(void) {
     if (state->menuResult != 0) {
         setMusicFadeOut(0xA);
         if (state->menuResult == 0x63) {
-            func_8006FDA0_709A0((Node_70B00 *)state, 0xFF, 8);
+            setViewportFadeValue((Node_70B00 *)state, 0xFF, 8);
         } else {
-            func_8006FDA0_709A0((Node_70B00 *)state, 0xFF, 0x10);
+            setViewportFadeValue((Node_70B00 *)state, 0xFF, 0x10);
         }
         setGameStateHandler(&exitPlayerCountSelect);
     }

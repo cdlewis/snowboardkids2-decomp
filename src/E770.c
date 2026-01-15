@@ -73,12 +73,12 @@ void playBgmTrack(E770_struct *arg0, s16 bgmId) {
 }
 
 void beginMenuFadeOut(E770_struct *arg0) {
-    func_8006FDA0_709A0(&arg0->fadeNode, 0xFF, 10);
+    setViewportFadeValue(&arg0->fadeNode, 0xFF, 10);
     arg0->fadeTimer = 10;
 }
 
 void beginMenuFadeIn(E770_struct *arg0) {
-    func_8006FDA0_709A0(&arg0->fadeNode, 0, 10);
+    setViewportFadeValue(&arg0->fadeNode, 0, 10);
     arg0->fadeTimer = 10;
 }
 
@@ -130,7 +130,7 @@ void cleanupGalleryMenu(E770_struct *arg0) {
 void activateGalleryMenu(E770_struct *arg0) {
     func_800394BC_3A0BC(&arg0->pad5C8, (s32)arg0->unk5C4);
     func_800394BC_3A0BC(&arg0->pad5F8, (s32)arg0->unk5F4);
-    func_8006FDA0_709A0(NULL, 0, 10);
+    setViewportFadeValue(NULL, 0, 10);
     setMenuAnimation(arg0, 0x90, 0x90, -1, 0);
     arg0->fadeTimer = 10;
     arg0->menuState = 2;
@@ -172,7 +172,7 @@ void handleGalleryMenuInput(E770_struct *arg0) {
         beginMenuFadeOut(arg0);
         if (arg0->selectedOption == 5) {
             setMusicFadeOut(10);
-            func_8006FDA0_709A0(0, 0xFF, 10);
+            setViewportFadeValue(0, 0xFF, 10);
         }
         setMenuAnimation(arg0, 0x15A, 0x15B, 1, 0x14);
         sound = 0xD3;
@@ -327,7 +327,7 @@ void waitForGalleryViewerExit(E770_struct *arg0) {
 
 void beginGalleryMenuExit(E770_struct *arg0) {
     func_800585C8_591C8(0xDB);
-    func_8006FDA0_709A0(NULL, 0xFF, 10);
+    setViewportFadeValue(NULL, 0xFF, 10);
     setMenuAnimation(arg0, 0x15A, 0x15B, 1, -1);
     arg0->fadeTimer = 10;
     arg0->menuState = 6;

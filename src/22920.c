@@ -152,7 +152,7 @@ void func_800220AC_22CAC(void) {
     result = func_80069810_6A410();
 
     if (result != 0) {
-        func_8006FDA0_709A0(0, 0, 0);
+        setViewportFadeValue(0, 0, 0);
         if (result == 1) {
             setGameStateHandler(loadVersusRace);
         } else {

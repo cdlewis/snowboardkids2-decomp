@@ -153,13 +153,13 @@ void updateOrbitCamera(OrbitCameraState *camera) {
     camera->rotationAngle = newAngle;
     if (newAngle == 0x12E8) {
         func_8006FE28_70A28(allocation->sceneNode, 0xFF, 0xFF, 0xFF);
-        func_8006FDA0_709A0(allocation->sceneNode, 0xFF, 0x20);
+        setViewportFadeValue(allocation->sceneNode, 0xFF, 0x20);
     }
     currentAngle = camera->rotationAngle;
     if (currentAngle == 0x1EF0) {
         allocation->unk79 = allocation->unk79 - 1;
         func_80069CF8_6A8F8();
-        func_8006FDA0_709A0(allocation->sceneNode, 0, 0x10);
+        setViewportFadeValue(allocation->sceneNode, 0, 0x10);
         return;
     }
     createYRotationMatrix(&rotationMatrix, (currentAngle + 0x1000) & 0xFFFF);

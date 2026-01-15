@@ -620,7 +620,7 @@ void initRace(void) {
     }
 
     gControllerPollingEnabled = 1;
-    func_8006FDA0_709A0(0, 0xFF, 0);
+    setViewportFadeValue(0, 0xFF, 0);
     func_8006983C_6A43C((void *)initRaceViewports);
 }
 
@@ -859,7 +859,7 @@ void awaitRaceAssetsLoaded(void) {
         state->unk4C = 0x10;
 
         if (state->unk7A != 0xB) {
-            func_8006FDA0_709A0(0, 0, 0x10);
+            setViewportFadeValue(0, 0, 0x10);
         } else {
             state->unk4C = 0;
         }
@@ -982,7 +982,7 @@ void func_8003F368_3FF68(void) {
                         case 1:
                             D_800A24A0_A30A0 = 1;
                         case 2:
-                            func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+                            setViewportFadeValue(NULL, 0xFF, 0x10);
                             setMusicFadeOut(0x3C);
                             setGameStateHandler(cleanupGameSession);
                             func_800585C8_591C8(0x2E);
@@ -1147,14 +1147,14 @@ handleA:
     gs->unk50++;
     if (gs->unk50 >= 0x349) {
         D_800A24A0_A30A0 = 1;
-        func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+        setViewportFadeValue(NULL, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(cleanupGameSession);
         return;
     }
     if (gControllerInputs[0] & 0x1000) {
         D_800A24A0_A30A0 = 2;
-        func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+        setViewportFadeValue(NULL, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(cleanupGameSession);
     }
@@ -1163,7 +1163,7 @@ handleA:
 handleB:
     if (gs->gamePaused == 0) {
         if (gs->unk50 == 0) {
-            func_8006FDA0_709A0(NULL, 0, 8);
+            setViewportFadeValue(NULL, 0, 8);
         }
         gs->unk50++;
     }
@@ -1192,7 +1192,7 @@ handleB:
             if (gs->unk50 >= 0x39E) {
                 D_800A24A0_A30A0 = 2;
                 func_8006FE28_70A28(NULL, 0xFF, 0xFF, 0xFF);
-                func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+                setViewportFadeValue(NULL, 0xFF, 0x10);
                 setMusicFadeOut(0x20);
                 setGameStateHandler(cleanupGameSession);
                 return;
@@ -1200,7 +1200,7 @@ handleB:
             if (gControllerInputs[0] & 0x1000) {
                 D_800A24A0_A30A0 = 2;
                 func_8006FE28_70A28(NULL, 0, 0, 0);
-                func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+                setViewportFadeValue(NULL, 0xFF, 0x10);
                 setMusicFadeOut(0x20);
                 gs->unk61++;
             }
@@ -1270,7 +1270,7 @@ void awaitBossResultAndFadeOut(void) {
     delayTimer = state->unk4C - 1;
     state->unk4C = delayTimer;
     if (delayTimer == 0) {
-        func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+        setViewportFadeValue(NULL, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(&cleanupGameSession);
     }
@@ -1329,7 +1329,7 @@ void awaitSkillWinAndPromptContinue(void) {
 
 void awaitSkillWinContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
-        func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+        setViewportFadeValue(NULL, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(&cleanupGameSession);
     }
@@ -1341,7 +1341,7 @@ void awaitSkillLossAndFadeOut(void) {
     state->unk4C = delayTimer;
 
     if (delayTimer == 0) {
-        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        setViewportFadeValue(0, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(cleanupGameSession);
     }
@@ -1415,7 +1415,7 @@ void awaitShotCrossWinAndPromptContinue(void) {
 
 void awaitShotCrossWinContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
-        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        setViewportFadeValue(0, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(&cleanupGameSession);
     }
@@ -1427,7 +1427,7 @@ void awaitShotCrossLossAndFadeOut(void) {
     state->unk4C = delayTimer;
 
     if (delayTimer == 0) {
-        func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+        setViewportFadeValue(NULL, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(&cleanupGameSession);
     }
@@ -1498,7 +1498,7 @@ void awaitMeterWinAndPromptContinue(void) {
 
 void awaitMeterWinContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
-        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        setViewportFadeValue(0, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(cleanupGameSession);
     }
@@ -1509,7 +1509,7 @@ void awaitMeterLossAndFadeOut(void) {
     s32 delayTimer = state->unk4C - 1;
     state->unk4C = delayTimer;
     if (delayTimer == 0) {
-        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        setViewportFadeValue(0, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(cleanupGameSession);
     }
@@ -1590,7 +1590,7 @@ void awaitSpeedCrossAwardGold(void) {
 
 void awaitSpeedCrossContinuePress(void) {
     if (gControllerInputs[0] & A_BUTTON) {
-        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        setViewportFadeValue(0, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(&cleanupGameSession);
     }
@@ -1616,7 +1616,7 @@ void awaitBattleContinuePress(void) {
     state = (GameState *)getCurrentAllocation();
     for (i = 0; i < state->unk5F; i++) {
         if (gControllerInputs[i] & A_BUTTON) {
-            func_8006FDA0_709A0(0, 0xFF, 0x10);
+            setViewportFadeValue(0, 0xFF, 0x10);
             setMusicFadeOut(0x3C);
             setGameStateHandler(&cleanupGameSession);
             return;
@@ -1645,7 +1645,7 @@ void awaitExpertRaceContinuePress(void) {
 
     for (i = 0; i < (s32)state->unk5F; i++) {
         if (gControllerInputs[i] & A_BUTTON) {
-            func_8006FDA0_709A0(0, 0xFF, 0x10);
+            setViewportFadeValue(0, 0xFF, 0x10);
             setMusicFadeOut(0x3C);
             setGameStateHandler(&cleanupGameSession);
             return;

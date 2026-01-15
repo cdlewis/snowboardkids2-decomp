@@ -62,9 +62,9 @@ typedef struct Node_70B00 {
     /* 0xBC */ u8 unkBC;
     u8 unkBD;
     u8 unkBE;
-    u8 unkBF;
-    u8 unkC0;
-    u8 unkC1;
+    u8 prevFadeValue;
+    u8 fadeValue;
+    u8 fadeMode;
     u8 padding8[0x6];
     s16 viewportWidth;
     s16 viewportHeight;
@@ -93,9 +93,9 @@ typedef struct Node_70B00 {
 } Node_70B00;
 extern Node_70B00 D_800A3370_A3F70;
 
-void func_8006FDA0_709A0(Node_70B00 *arg0, u8 arg1, u8 arg2);
+void setViewportFadeValue(Node_70B00 *node, u8 fadeValue, u8 fadeMode);
 
-void func_8006FDC8_709C8(u16 arg0, u8 arg1, u8 arg2);
+void setViewportFadeValueBySlotIndex(u16 slotIndex, u8 fadeValue, u8 fadeMode);
 
 void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
 

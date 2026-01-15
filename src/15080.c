@@ -45,7 +45,7 @@ void func_80014480_15080(void) {
 
 void func_800144DC_150DC(void) {
     TaskData_1512C *data = allocateTaskMemory(4);
-    func_8006FDA0_709A0(NULL, 0, 0);
+    setViewportFadeValue(NULL, 0, 0);
     data->unk0 = 0;
     data->unk2 = 0;
     resetGameSession();
@@ -54,7 +54,7 @@ void func_800144DC_150DC(void) {
 
 void func_8001452C_1512C(void) {
     TaskData_1512C *data = allocateTaskMemory(4);
-    func_8006FDA0_709A0(NULL, 0, 0);
+    setViewportFadeValue(NULL, 0, 0);
     data->unk0 = 0;
     data->unk2 = 0;
     resetGameSession();

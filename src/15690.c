@@ -167,7 +167,7 @@ void awaitRaceResult(void) {
         }
 
         func_80015254_15E54();
-        func_8006FDA0_709A0(NULL, 0, 0);
+        setViewportFadeValue(NULL, 0, 0);
 
         if (result == 1) {
             handler = loadRace;

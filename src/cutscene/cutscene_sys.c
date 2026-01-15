@@ -39,7 +39,7 @@ s32 cutsceneSysFadeIn_validate(void) {
 void cutsceneSysFadeIn_exec(cutsceneSysFadeIn_exec_arg *arg0, Node_70B00 *arg1) {
     u8 brightness = gCutsceneFadeBrightnessTable[arg0->brightnessIndex];
     func_8006FE28_70A28(arg1->unk0.next, brightness, brightness, brightness);
-    func_8006FDA0_709A0(arg1->unk0.next, 0, arg0->fadeMode);
+    setViewportFadeValue(arg1->unk0.next, 0, arg0->fadeMode);
 }
 
 s32 cutsceneSysFadeIn_isDone(void) {
@@ -56,7 +56,7 @@ s32 cutsceneSysFadeOut_validate(void) {
 void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *fadeArgs, Node_70B00 *node) {
     u8 brightness = gCutsceneFadeBrightnessTable[fadeArgs->brightnessIndex];
     func_8006FE28_70A28(node->unk0.next, brightness, brightness, brightness);
-    func_8006FDA0_709A0(node->unk0.next, 0xFF, fadeArgs->fadeMode);
+    setViewportFadeValue(node->unk0.next, 0xFF, fadeArgs->fadeMode);
 }
 
 s32 cutsceneSysFadeOut_isDone(void) {
@@ -112,11 +112,11 @@ void cutsceneSysFlash_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
             slot->unk0.FlashPayload.colorToggle = screenAlpha;
         }
 
-        func_8006FDA0_709A0(cutsceneManager->uiResource, screenAlpha & 0xFF, 0);
+        setViewportFadeValue(cutsceneManager->uiResource, screenAlpha & 0xFF, 0);
         slot->unk0.FlashPayload.frameCounter--;
     } else {
         // Flash effect complete - clear the screen overlay
-        func_8006FDA0_709A0(cutsceneManager->uiResource, 0, 0);
+        setViewportFadeValue(cutsceneManager->uiResource, 0, 0);
         disableSlotUpdate(cutsceneManager, slotIndex);
     }
 }
@@ -237,7 +237,7 @@ void cutsceneSysFilter_exec(cutsceneSysFilter_exec_arg *filterArgs, Node_70B00 *
         filterArgs->envColorGreen,
         filterArgs->envColorBlue
     );
-    func_8006FDA0_709A0(sceneNode->unk0.next, filterArgs->cameraFilterParam, filterArgs->cameraFilterEnable);
+    setViewportFadeValue(sceneNode->unk0.next, filterArgs->cameraFilterParam, filterArgs->cameraFilterEnable);
 }
 
 s32 cutsceneSysFilter_isDone(void) {

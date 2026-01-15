@@ -179,7 +179,7 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
 
     camera->travelDistance = isqrt64((s64)targetX * targetX + (s64)targetZ * targetZ);
 
-    func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+    setViewportFadeValue(NULL, 0xFF, 0x10);
 
     createYRotationMatrix((Transform3D *)camera, (camera->viewAngle - camera->orbitAngle) & 0xFFFF);
 

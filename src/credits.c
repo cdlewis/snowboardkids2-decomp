@@ -281,11 +281,11 @@ void func_80003EE0_4AE0(void) {
     func_8006BEDC_6CADC(buffer, 0, 0, 0x01400000, 0, 0, 0);
     setViewportTransformById(taskMemory->unk768.id, buffer);
     func_8006FE28_70A28(&taskMemory->unk8, 0, 0, 0);
-    func_8006FDA0_709A0(&taskMemory->unk8, 0, 0);
-    func_8006FDA0_709A0(&taskMemory->unk1E0, 0, 0);
-    func_8006FDA0_709A0(&taskMemory->unk3B8, 0, 0);
-    func_8006FDA0_709A0(&taskMemory->unk590, 0, 0);
-    func_8006FDA0_709A0(&taskMemory->unk768, 0, 0);
+    setViewportFadeValue(&taskMemory->unk8, 0, 0);
+    setViewportFadeValue(&taskMemory->unk1E0, 0, 0);
+    setViewportFadeValue(&taskMemory->unk3B8, 0, 0);
+    setViewportFadeValue(&taskMemory->unk590, 0, 0);
+    setViewportFadeValue(&taskMemory->unk768, 0, 0);
     playMusicTrackWithFadeIn(0xB, 0x80, 0);
     initSceneLighting(taskMemory);
     setGameStateHandler(&updateCreditsSequence);
@@ -299,11 +299,11 @@ void updateCreditsSequence(void) {
     if (state->unk2 == 0x1C98) {
         state->unk2 = 0x1C98;
         setMusicFadeOut(4);
-        func_8006FDA0_709A0(&state->unk8, 0xFF, 0x1E);
-        func_8006FDA0_709A0(&state->unk1E0, 0xFF, 0x1E);
-        func_8006FDA0_709A0(&state->unk3B8, 0xFF, 0x1E);
-        func_8006FDA0_709A0(&state->unk590, 0xFF, 0x1E);
-        func_8006FDA0_709A0(&state->unk768, 0xFF, 0x1E);
+        setViewportFadeValue(&state->unk8, 0xFF, 0x1E);
+        setViewportFadeValue(&state->unk1E0, 0xFF, 0x1E);
+        setViewportFadeValue(&state->unk3B8, 0xFF, 0x1E);
+        setViewportFadeValue(&state->unk590, 0xFF, 0x1E);
+        setViewportFadeValue(&state->unk768, 0xFF, 0x1E);
         setGameStateHandler(fadeOutCreditsSequence);
     }
 

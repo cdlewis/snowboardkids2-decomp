@@ -3012,7 +3012,7 @@ s32 slideDiagonallyDuringKnockbackRecoveryStep(Player *player) {
     if (player->unkB8C != 0) {
         player->unkB8C--;
         if (player->unkB8C == 0x11) {
-            func_8006FDC8_709C8(player->playerIndex, 0xFF, 0x10);
+            setViewportFadeValueBySlotIndex(player->playerIndex, 0xFF, 0x10);
         }
     } else {
         player->behaviorStep++;
@@ -3052,7 +3052,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
         player->finishAnimState = 1;
         player->unkB8C = 0x32;
 
-        func_8006FDC8_709C8(player->playerIndex, 0, 0x10);
+        setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
 
         if (player->isBossRacer == 0) {
             if (player->currentLap == gameState->finalLapNumber) {
@@ -3177,7 +3177,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
 
     if (flags & 8) {
         player->ufoFlags = flags & 0xF7;
-        func_8006FDC8_709C8(player->playerIndex, 0xFF, 0x10);
+        setViewportFadeValueBySlotIndex(player->playerIndex, 0xFF, 0x10);
     }
 
     if (player->ufoFlags & 2) {
@@ -3189,7 +3189,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
         player->currentLap++;
         memcpy(&player->unk440, &player->worldPos.x, 0xC);
         player->finishAnimState = 1;
-        func_8006FDC8_709C8(player->playerIndex, 0, 0x10);
+        setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
         if (player->isBossRacer == 0 && player->currentLap == gameState->finalLapNumber) {
             showGoalBanner(player->playerIndex);
         }
@@ -3359,7 +3359,7 @@ s32 func_800B76BC_A756C(Player *arg0) {
     if (arg0->unkBA0 == 0) {
         arg0->unkB8C = 0x11;
         arg0->behaviorStep = arg0->behaviorStep + 1;
-        func_8006FDC8_709C8(arg0->playerIndex, 0xFF, 0x10);
+        setViewportFadeValueBySlotIndex(arg0->playerIndex, 0xFF, 0x10);
         alloc->unk81 = alloc->unk81 + 1;
         spawnDebugDisplayListTask(1);
     }
@@ -3419,7 +3419,7 @@ s32 func_800B781C_A76CC(Player *arg0) {
         memcpy(&arg0->unk440, &arg0->worldPos.x, 0xC);
 
         arg0->finishAnimState = 2;
-        func_8006FDC8_709C8(arg0->playerIndex, 0, 0x10);
+        setViewportFadeValueBySlotIndex(arg0->playerIndex, 0, 0x10);
 
         if (arg0->isBossRacer == 0) {
             if (arg0->currentLap == gameState->finalLapNumber) {

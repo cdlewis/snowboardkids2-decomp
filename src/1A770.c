@@ -241,7 +241,7 @@ void awaitBoardShopDmaComplete(void) {
         return;
     }
     if (getPendingDmaCount() == 0) {
-        func_8006FDA0_709A0(0, 0, 0x10);
+        setViewportFadeValue(0, 0, 0x10);
         setGameStateHandler(&awaitFadeLoadBoardShop);
     }
 }
@@ -270,10 +270,10 @@ void startBoardShopFadeOut(void) {
 
     if (temp_v1 != 0) {
         if (temp_v1 == 2) {
-            func_8006FDA0_709A0(NULL, 0xFF, 0xA);
+            setViewportFadeValue(NULL, 0xFF, 0xA);
 
         } else {
-            func_8006FDA0_709A0(NULL, 0xFF, 0x10);
+            setViewportFadeValue(NULL, 0xFF, 0x10);
         }
 
         setGameStateHandler(&awaitFadeCleanupBoardShop);
@@ -344,7 +344,7 @@ void initStoryMapLocationIntro(void) {
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->unk1D8.unk0.callback_selector = 0;
     initMenuCameraNode((Node_70B00 *)temp_s0, 0, 0xA, 0);
-    func_8006FDA0_709A0(0, 0, 8);
+    setViewportFadeValue(0, 0, 8);
     scheduleTask(&storyMapLocationTextTask, 0U, 0U, 0x5AU);
     setGameStateHandler(&awaitStoryMapLocationIntro);
 }

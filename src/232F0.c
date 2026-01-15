@@ -42,7 +42,7 @@ void awaitCharacterSelectLoad(void) {
         return;
     }
     state->stateCounter = 0;
-    func_8006FDA0_709A0(NULL, 0, 10);
+    setViewportFadeValue(NULL, 0, 10);
     setGameStateHandler(scheduleCharacterSelectTasks);
 }
 
@@ -93,12 +93,12 @@ void cleanupCharacterSelect(void) {
 }
 
 void onCharacterSelectProceed(void) {
-    func_8006FDA0_709A0(NULL, 0, 0);
+    setViewportFadeValue(NULL, 0, 0);
     func_800697F4_6A3F4(1);
 }
 
 void onCharacterSelectCancel(void) {
-    func_8006FDA0_709A0(NULL, 0, 0);
+    setViewportFadeValue(NULL, 0, 0);
     func_800697F4_6A3F4(0xFF);
 }
 

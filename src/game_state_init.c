@@ -104,7 +104,7 @@ void initializeGameState(void) {
     temp_s0->unk3E4 = loadUncompressedData(&_419440_ROM_START, &_419440_ROM_END);
     temp_s0->unk3DC = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
     temp_s0->unk3E0 = loadTextRenderAsset(1);
-    func_8006FDA0_709A0(NULL, 0xFF, 0);
+    setViewportFadeValue(NULL, 0xFF, 0);
     setGameStateHandler(&gameStateCountdownHandler);
 }
 
@@ -115,7 +115,7 @@ void gameStateCountdownHandler(void) {
         gameState->unk429--;
     } else {
         if (getPendingDmaCount() == 0) {
-            func_8006FDA0_709A0(NULL, 0, 0x10);
+            setViewportFadeValue(NULL, 0, 0x10);
             setGameStateHandler(gameStateCleanupHandler);
         }
     }

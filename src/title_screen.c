@@ -63,7 +63,7 @@ void cleanupTitleAndTransition(void) {
         return;
     }
 
-    func_8006FDA0_709A0(0, 0, 0);
+    setViewportFadeValue(0, 0, 0);
     gTitleExitMode = 1;
 
     menuSelection = state->menuSelection;
@@ -195,14 +195,14 @@ case_0:
             goto end;
         }
         setMusicFadeOut(0x20);
-        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        setViewportFadeValue(0, 0xFF, 0x10);
         func_8006983C_6A43C(cleanupTitleAndTransition);
         goto end;
     }
 
     if (state->frameCounter == 0x384) {
         setMusicFadeOut(0x20);
-        func_8006FDA0_709A0(0, 0xFF, 0x10);
+        setViewportFadeValue(0, 0xFF, 0x10);
         func_8006983C_6A43C(cleanupTitleAndTransition);
     }
     goto end;
@@ -254,7 +254,7 @@ case1_done_nav:
         }
         playSoundEffectOnChannelNoPriority(0x2C, 1);
         setMusicFadeOut(0x20);
-        func_8006FDA0_709A0(0, 0xFF, 8);
+        setViewportFadeValue(0, 0xFF, 8);
         func_8006983C_6A43C(cleanupTitleAndTransition);
     }
 
@@ -280,7 +280,7 @@ void waitForTitleAssetsReady(void) {
         state->frameCounter = 2;
         if (getPendingDmaCount() == 0) {
             state->frameCounter = 0;
-            func_8006FDA0_709A0(NULL, 0, 0x10);
+            setViewportFadeValue(NULL, 0, 0x10);
             setGameStateHandler(onTitleFadeInComplete);
         }
     }
@@ -294,7 +294,7 @@ void initTitleScreen(void) {
     void *checkResult;
 
     state = (TitleState *)allocateTaskMemory(0x3C8);
-    func_8006FDA0_709A0(NULL, 0xFF, 0);
+    setViewportFadeValue(NULL, 0xFF, 0);
     node2 = &state->node2;
     initDefaultFontPalette();
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
