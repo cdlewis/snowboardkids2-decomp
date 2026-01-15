@@ -2312,7 +2312,7 @@ typedef struct {
 
 void cleanupTrickPointsDisplayTask(ShotCrossCountdownTimerState *state);
 void updateTrickPointsSlideIn(TrickPointsDisplayState *state);
-void func_8004FAB4_506B4(TrickPointsDisplayState *state);
+void renderTrickPointsDisplay(TrickPointsDisplayState *state);
 void updateTrickPointsSlideOut(TrickPointsDisplayState *state);
 
 void initTrickPointsDisplayTask(TrickPointsDisplayState *state) {
@@ -2328,7 +2328,7 @@ void initTrickPointsDisplayTask(TrickPointsDisplayState *state) {
     setCallback(updateTrickPointsSlideIn);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004FAB4_506B4);
+INCLUDE_ASM("asm/nonmatchings/4CD70", renderTrickPointsDisplay);
 
 void updateTrickPointsHold(TrickPointsDisplayState *state);
 
@@ -2343,7 +2343,7 @@ void updateTrickPointsSlideIn(TrickPointsDisplayState *state) {
     if (state->animAngle == 0x800) {
         setCallback(updateTrickPointsHold);
     }
-    func_8004FAB4_506B4(state);
+    renderTrickPointsDisplay(state);
 }
 
 void updateTrickPointsHold(TrickPointsDisplayState *state) {
@@ -2351,7 +2351,7 @@ void updateTrickPointsHold(TrickPointsDisplayState *state) {
     if (state->holdTimer == 0) {
         setCallback(updateTrickPointsSlideOut);
     }
-    func_8004FAB4_506B4(state);
+    renderTrickPointsDisplay(state);
 }
 
 void updateTrickPointsSlideOut(TrickPointsDisplayState *state) {
@@ -2365,7 +2365,7 @@ void updateTrickPointsSlideOut(TrickPointsDisplayState *state) {
     if (state->animAngle == 0x1000) {
         func_80069CF8_6A8F8();
     }
-    func_8004FAB4_506B4(state);
+    renderTrickPointsDisplay(state);
 }
 
 void cleanupTrickPointsDisplayTask(ShotCrossCountdownTimerState *state) {
