@@ -112,9 +112,11 @@ void loadRandomEffectProjectileAsset(Struct_52880 *arg0);
 void launchRandomEffectProjectile(Struct_52880 *arg0);
 void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0);
 void updateRandomEffectProjectile(RandomEffectProjectileUpdate *arg0);
-void func_80055460_56060(Struct_52880 *arg0);
-void func_800554FC_560FC(Struct_52880 *arg0);
-void func_80055650_56250(Struct_52880 *arg0);
+void initGhostTargetProjectileTask(Struct_52880 *arg0);
+void loadGhostTargetProjectileAsset(Struct_52880 *arg0);
+void checkGhostTargetProjectileHit(Struct_52880 *arg0);
+void launchGhostTargetProjectile(Struct_52880 *arg0);
+void updateGhostTargetProjectile(Struct_52880 *arg0);
 void func_800558A4_564A4(Struct_52880 *arg0);
 void func_80055964_56564(Struct_52880 *arg0);
 void func_80055A84_56684(Struct_52880 *);
@@ -123,7 +125,7 @@ s32 spawnFryingPanProjectileTask(s32, s32);
 s32 spawnSnowmanProjectileTask(s32, s32);
 s32 spawnStarProjectileTask(s32, s32);
 s32 spawnHomingPanelProjectileTask(s32, s32);
-s32 func_80055820_56420(s32, s32);
+s32 spawnGhostTargetProjectileTask(s32, s32);
 void updateSnowmanProjectile(Struct_52880 *);
 void updateFryingPanProjectile(Struct_52880 *);
 void cleanupSlapstickProjectileTask(Struct_52880 *arg0);
@@ -1503,7 +1505,7 @@ s32 spawnAttackProjectile(s32 projectileType, s32 playerIdx, s32 arg2) {
         case 5:
             return spawnHomingPanelProjectileTask(playerIdx, arg2);
         case 6:
-            return func_80055820_56420(playerIdx, arg2);
+            return spawnGhostTargetProjectileTask(playerIdx, arg2);
     }
     return 0;
 }
@@ -1972,14 +1974,14 @@ s32 spawnRandomEffectProjectile(s32 arg0) {
     return (s32)task;
 }
 
-void func_80055418_56018(Struct_52880 *arg0) {
+void initGhostTargetProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
     arg0->assetData = load_3ECE40();
     setCleanupCallback(cleanupSlapstickProjectileTask);
-    setCallbackWithContinue(func_80055460_56060);
+    setCallbackWithContinue(loadGhostTargetProjectileAsset);
 }
 
-void func_80055460_56060(Struct_52880 *arg0) {
+void loadGhostTargetProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 0x6E);
@@ -1987,16 +1989,16 @@ void func_80055460_56060(Struct_52880 *arg0) {
     arg0->hitCount = 0;
     arg0->turnRate = 0;
     arg0->unk0 = ptr;
-    setCallbackWithContinue(func_800554FC_560FC);
+    setCallbackWithContinue(launchGhostTargetProjectile);
 }
 
-void func_800554BC_560BC(Struct_52880 *arg0) {
+void checkGhostTargetProjectileHit(Struct_52880 *arg0) {
     if (func_800BB504(&arg0->pos, 0x80000)) {
         arg0->hitCount++;
     }
 }
 
-void func_800554FC_560FC(Struct_52880 *arg0) {
+void launchGhostTargetProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s16 index;
     s32 i;
@@ -2017,8 +2019,8 @@ void func_800554FC_560FC(Struct_52880 *arg0) {
     arg0->unk40 = alloc->unk10[index].sectorIndex;
 
     queueSoundAtPosition(&arg0->pos, 0x10);
-    setCallback(func_80055650_56250);
-    func_800554BC_560BC(arg0);
+    setCallback(updateGhostTargetProjectile);
+    checkGhostTargetProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
         queueSoundAtPosition(&arg0->pos, 0x43);
@@ -2030,7 +2032,7 @@ void func_800554FC_560FC(Struct_52880 *arg0) {
     }
 }
 
-void func_80055650_56250(Struct_52880 *arg0) {
+void updateGhostTargetProjectile(Struct_52880 *arg0) {
     Vec3i sp18;
     s32 pad1;
     Vec3i savedVec;
@@ -2085,7 +2087,7 @@ void func_80055650_56250(Struct_52880 *arg0) {
     arg0->vel.y = arg0->pos.y - savedVec.y;
     arg0->vel.z = arg0->pos.z - savedVec.z;
 
-    func_800554BC_560BC(arg0);
+    checkGhostTargetProjectileHit(arg0);
 
 skip_main:
     if (arg0->hitCount != 0) {
@@ -2098,10 +2100,10 @@ skip_main:
     }
 }
 
-s32 func_80055820_56420(s32 arg0, s32 arg1) {
+s32 spawnGhostTargetProjectileTask(s32 arg0, s32 arg1) {
     Struct_52880 *task;
 
-    task = scheduleTask(func_80055418_56018, (arg0 + 4) & 0xFF, 0, 0x6F);
+    task = scheduleTask(initGhostTargetProjectileTask, (arg0 + 4) & 0xFF, 0, 0x6F);
     if (task != NULL) {
         task->ownerPlayerIdx = arg0;
     }
