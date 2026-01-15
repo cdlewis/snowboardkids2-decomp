@@ -151,20 +151,23 @@ s32 isPlayerNearShortcut(Player *player) {
     return 0;
 }
 
-void func_8005AB58_5B758(Player *player) {
+/**
+ * Handles player-to-player collision detection and response.
+ * Checks the given player against all other players and pushes them out of collision.
+ *
+ * @param player The player to check collisions for
+ */
+void handlePlayerToPlayerCollision(Player *player) {
     Vec3i deltaPos;
-    GameState *allocation;
-    s32 unused1;
+    GameState *gameState;
     s32 combinedRadius;
     s32 playerIndex;
     Player *targetPlayer;
-    s32 numPlayers;
 
-    allocation = (GameState *)getCurrentAllocation();
-    numPlayers = allocation->numPlayers;
+    gameState = (GameState *)getCurrentAllocation();
 
-    for (playerIndex = 0; playerIndex < allocation->numPlayers; playerIndex++) {
-        targetPlayer = &allocation->players[playerIndex];
+    for (playerIndex = 0; playerIndex < gameState->numPlayers; playerIndex++) {
+        targetPlayer = &gameState->players[playerIndex];
 
         /* Skip collision if players are on the same team */
         if (player->playerIndex == targetPlayer->playerIndex) {

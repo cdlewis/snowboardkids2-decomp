@@ -14,6 +14,7 @@ typedef struct ListNode_5AA90 {
 
 void func_8005A930_5B530(Player *player);
 s32 isPlayerNearShortcut(Player *player);
+void handlePlayerToPlayerCollision(Player *player);
 void func_8005C838_5D438(ListNode_5AA90 *arg0);
 void *func_8005B24C_5BE4C(Vec3i *arg0, s32 arg1, s32 arg2);
 s32 func_8005A9A8_5B5A8(Player *player);

@@ -3252,3 +3252,4 @@ cleanupSkiTrailTask = 0x80051688; // rom:0x52288
 spawnSkiTrailTask = 0x800516B4; // rom:0x522B4
 gSkiTrailOffsetTransformsForward = 0x80090E80; // rom:0x91A80 size:0x18
 gSkiTrailOffsetTransformsBackward = 0x80090E98; // rom:0x91A98 size:0x18
+handlePlayerToPlayerCollision = 0x8005AB58; // rom:0x5B758
