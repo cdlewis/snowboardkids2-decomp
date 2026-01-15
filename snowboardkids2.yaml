@@ -858,7 +858,170 @@ segments:
     vram: 0
     start: 0x1AFBA0
 
-  - [0x1B26E0, bin]
+  - name: _1B26E0
+    type: bin
+    vram: 0
+    start: 0x1B26E0
+
+  - name: _1B5A40
+    type: bin
+    vram: 0
+    start: 0x1B5A40
+
+  - name: _1B8DE0
+    type: bin
+    vram: 0
+    start: 0x1B8DE0
+
+  - name: _1BC420
+    type: bin
+    vram: 0
+    start: 0x1BC420
+
+  - name: _1BF7B0
+    type: bin
+    vram: 0
+    start: 0x1BF7B0
+
+  - name: _1C1B20
+    type: bin
+    vram: 0
+    start: 0x1C1B20
+
+  - name: _1C4240
+    type: bin
+    vram: 0
+    start: 0x1C4240
+
+  - name: _1C6520
+    type: bin
+    vram: 0
+    start: 0x1C6520
+
+  - name: _1C87D0
+    type: bin
+    vram: 0
+    start: 0x1C87D0
+
+  - name: _1CB5C0
+    type: bin
+    vram: 0
+    start: 0x1CB5C0
+
+  - name: _1CE250
+    type: bin
+    vram: 0
+    start: 0x1CE250
+
+  - name: _1D0CC0
+    type: bin
+    vram: 0
+    start: 0x1D0CC0
+
+  - name: _1D3FF0
+    type: bin
+    vram: 0
+    start: 0x1D3FF0
+
+  - name: _1D54C0
+    type: bin
+    vram: 0
+    start: 0x1D54C0
+
+  - name: _1D59D0
+    type: bin
+    vram: 0
+    start: 0x1D59D0
+
+  - name: _1D8E50
+    type: bin
+    vram: 0
+    start: 0x1D8E50
+
+  - name: _1D8FB0
+    type: bin
+    vram: 0
+    start: 0x1D8FB0
+
+  - name: _1D9110
+    type: bin
+    vram: 0
+    start: 0x1D9110
+
+  - name: _1D9270
+    type: bin
+    vram: 0
+    start: 0x1D9270
+
+  - name: _1D93E0
+    type: bin
+    vram: 0
+    start: 0x1D93E0
+
+  - name: _1D9550
+    type: bin
+    vram: 0
+    start: 0x1D9550
+
+  - name: _1D96C0
+    type: bin
+    vram: 0
+    start: 0x1D96C0
+
+  - name: _1D9810
+    type: bin
+    vram: 0
+    start: 0x1D9810
+
+  - name: _1D9960
+    type: bin
+    vram: 0
+    start: 0x1D9960
+
+  - name: _1D9AB0
+    type: bin
+    vram: 0
+    start: 0x1D9AB0
+
+  - name: _1D9C20
+    type: bin
+    vram: 0
+    start: 0x1D9C20
+
+  - name: _1D9D60
+    type: bin
+    vram: 0
+    start: 0x1D9D60
+
+  - name: _1D9EB0
+    type: bin
+    vram: 0
+    start: 0x1D9EB0
+
+  - name: _1D9FD0
+    type: bin
+    vram: 0
+    start: 0x1D9FD0
+
+  - name: _1DA0E0
+    type: bin
+    vram: 0
+    start: 0x1DA0E0
+
+  - name: _1DA1F0
+    type: bin
+    vram: 0
+    start: 0x1DA1F0
+
+  - name: _1DA3A0
+    type: bin
+    vram: 0
+    start: 0x1DA3A0
+
+  - name: _1DA4F0
+    type: bin
+    vram: 0
+    start: 0x1DA4F0
 
   - name: _1DA660
     type: code
@@ -1290,14 +1453,315 @@ segments:
     vram: 0
     start: 0x3505F0
 
-  - [0x350C70, bin]
+  - name: _350C70
+    type: bin
+    vram: 0
+    start: 0x350C70
+
+  - name: _352A40
+    type: bin
+    vram: 0
+    start: 0x352A40
+
+  - name: _354A80
+    type: bin
+    vram: 0
+    start: 0x354A80
+
+  - name: _356F50
+    type: bin
+    vram: 0
+    start: 0x356F50
+
+  - name: _358E80
+    type: bin
+    vram: 0
+    start: 0x358E80
+
+  - name: _35AC60
+    type: bin
+    vram: 0
+    start: 0x35AC60
+
+  - name: _35CA40
+    type: bin
+    vram: 0
+    start: 0x35CA40
+
+  - name: _35E810
+    type: bin
+    vram: 0
+    start: 0x35E810
+
+  - name: _360460
+    type: bin
+    vram: 0
+    start: 0x360460
+
+  - name: _3622B0
+    type: bin
+    vram: 0
+    start: 0x3622B0
+
+  - name: _364550
+    type: bin
+    vram: 0
+    start: 0x364550
+
+  - name: _366550
+    type: bin
+    vram: 0
+    start: 0x366550
+
+  - name: _3686A0
+    type: bin
+    vram: 0
+    start: 0x3686A0
+
+  - name: _36A3E0
+    type: bin
+    vram: 0
+    start: 0x36A3E0
+
+  - name: _36C090
+    type: bin
+    vram: 0
+    start: 0x36C090
+
+  - name: _36DE80
+    type: bin
+    vram: 0
+    start: 0x36DE80
+
+  - name: _36F920
+    type: bin
+    vram: 0
+    start: 0x36F920
+
+  - name: _372800
+    type: bin
+    vram: 0
+    start: 0x372800
+
+  - name: _3757D0
+    type: bin
+    vram: 0
+    start: 0x3757D0
+
+  - name: _378850
+    type: bin
+    vram: 0
+    start: 0x378850
+
+  - name: _37B1E0
+    type: bin
+    vram: 0
+    start: 0x37B1E0
+
+  - name: _37D270
+    type: bin
+    vram: 0
+    start: 0x37D270
+
+  - name: _37F6D0
+    type: bin
+    vram: 0
+    start: 0x37F6D0
+
+  - name: _381CD0
+    type: bin
+    vram: 0
+    start: 0x381CD0
+
+  - name: _383E00
+    type: bin
+    vram: 0
+    start: 0x383E00
+
+  - name: _3860C0
+    type: bin
+    vram: 0
+    start: 0x3860C0
+
+  - name: _388430
+    type: bin
+    vram: 0
+    start: 0x388430
+
+  - name: _38AC10
+    type: bin
+    vram: 0
+    start: 0x38AC10
+
+  - name: _38CF10
+    type: bin
+    vram: 0
+    start: 0x38CF10
+
+  - name: _38EA50
+    type: bin
+    vram: 0
+    start: 0x38EA50
+
+  - name: _390C10
+    type: bin
+    vram: 0
+    start: 0x390C10
+
+  - name: _392790
+    type: bin
+    vram: 0
+    start: 0x392790
+
+  - name: _3942D0
+    type: bin
+    vram: 0
+    start: 0x3942D0
+
+  - name: _3967C0
+    type: bin
+    vram: 0
+    start: 0x3967C0
+
+  - name: _398960
+    type: bin
+    vram: 0
+    start: 0x398960
+
+  - name: _39AC40
+    type: bin
+    vram: 0
+    start: 0x39AC40
+
+  - name: _39D100
+    type: bin
+    vram: 0
+    start: 0x39D100
+
+  - name: _39E030
+    type: bin
+    vram: 0
+    start: 0x39E030
+
+  - name: _39E710
+    type: bin
+    vram: 0
+    start: 0x39E710
+
+  - name: _3A0F70
+    type: bin
+    vram: 0
+    start: 0x3A0F70
+
+  - name: _3A89C0
+    type: bin
+    vram: 0
+    start: 0x3A89C0
+
+  - name: _3B0D30
+    type: bin
+    vram: 0
+    start: 0x3B0D30
+
+  - name: _3B8900
+    type: bin
+    vram: 0
+    start: 0x3B8900
+
+  - name: _3C0470
+    type: bin
+    vram: 0
+    start: 0x3C0470
+
+  - name: _3C8BC0
+    type: bin
+    vram: 0
+    start: 0x3C8BC0
+
+  - name: _3D0C20
+    type: bin
+    vram: 0
+    start: 0x3D0C20
+
+  - name: _3D9A90
+    type: bin
+    vram: 0
+    start: 0x3D9A90
+
+  - name: _3E13F0
+    type: bin
+    vram: 0
+    start: 0x3E13F0
+
+  - name: _3E9B20
+    type: bin
+    vram: 0
+    start: 0x3E9B20
+
+  - name: _3EADF0
+    type: bin
+    vram: 0
+    start: 0x3EADF0
 
   - name: _3ECE40
     type: bin
     vram: 0
     start: 0x3ECE40
 
-  - [0x3F2980, bin]
+  - name: _3F2980
+    type: bin
+    vram: 0
+    start: 0x3F2980
+
+  - name: _3F2AE0
+    type: bin
+    vram: 0
+    start: 0x3F2AE0
+
+  - name: _3F2C40
+    type: bin
+    vram: 0
+    start: 0x3F2C40
+
+  - name: _3F2DA0
+    type: bin
+    vram: 0
+    start: 0x3F2DA0
+
+  - name: _3F2F00
+    type: bin
+    vram: 0
+    start: 0x3F2F00
+
+  - name: _3F3060
+    type: bin
+    vram: 0
+    start: 0x3F3060
+
+  - name: _3F31B0
+    type: bin
+    vram: 0
+    start: 0x3F31B0
+
+  - name: _3F3320
+    type: bin
+    vram: 0
+    start: 0x3F3320
+
+  - name: _3F3450
+    type: bin
+    vram: 0
+    start: 0x3F3450
+
+  - name: _3F3580
+    type: bin
+    vram: 0
+    start: 0x3F3580
+
+  - name: _3F37C0
+    type: bin
+    vram: 0
+    start: 0x3F37C0
 
   - name: _3F3940
     type: bin
@@ -1336,7 +1800,147 @@ segments:
     vram: 0
     start: 0x3F6950
 
-  - [0x3F6BB0, bin]
+  - name: _3F6BB0
+    type: bin
+    vram: 0
+    start: 0x3F6BB0
+
+  - name: _3F6D90
+    type: bin
+    vram: 0
+    start: 0x3F6D90
+
+  - name: _3F6F90
+    type: bin
+    vram: 0
+    start: 0x3F6F90
+
+  - name: _3F71B0
+    type: bin
+    vram: 0
+    start: 0x3F71B0
+
+  - name: _3F73B0
+    type: bin
+    vram: 0
+    start: 0x3F73B0
+
+  - name: _3F75B0
+    type: bin
+    vram: 0
+    start: 0x3F75B0
+
+  - name: _3F77B0
+    type: bin
+    vram: 0
+    start: 0x3F77B0
+
+  - name: _3F7980
+    type: bin
+    vram: 0
+    start: 0x3F7980
+
+  - name: _3F7B50
+    type: bin
+    vram: 0
+    start: 0x3F7B50
+
+  - name: _3F7D20
+    type: bin
+    vram: 0
+    start: 0x3F7D20
+
+  - name: _3F80C0
+    type: bin
+    vram: 0
+    start: 0x3F80C0
+
+  - name: _3F86A0
+    type: bin
+    vram: 0
+    start: 0x3F86A0
+
+  - [0x3F8B90, bin]
+
+  - name: _3FAE90
+    type: bin
+    vram: 0
+    start: 0x3FAE90
+
+  - name: _3FB1F0
+    type: bin
+    vram: 0
+    start: 0x3FB1F0
+
+  - name: _3FB470
+    type: bin
+    vram: 0
+    start: 0x3FB470
+
+  - name: _3FB8D0
+    type: bin
+    vram: 0
+    start: 0x3FB8D0
+
+  - name: _3FBCF0
+    type: bin
+    vram: 0
+    start: 0x3FBCF0
+
+  - name: _3FC200
+    type: bin
+    vram: 0
+    start: 0x3FC200
+
+  - name: _3FC540
+    type: bin
+    vram: 0
+    start: 0x3FC540
+
+  - name: _3FCB80
+    type: bin
+    vram: 0
+    start: 0x3FCB80
+
+  - name: _3FD0B0
+    type: bin
+    vram: 0
+    start: 0x3FD0B0
+
+  - name: _3FD4F0
+    type: bin
+    vram: 0
+    start: 0x3FD4F0
+
+  - name: _3FD770
+    type: bin
+    vram: 0
+    start: 0x3FD770
+
+  - name: _3FDBB0
+    type: bin
+    vram: 0
+    start: 0x3FDBB0
+
+  - name: _3FE0C0
+    type: bin
+    vram: 0
+    start: 0x3FE0C0
+
+  - name: _3FE3A0
+    type: bin
+    vram: 0
+    start: 0x3FE3A0
+
+  - name: _3FE880
+    type: bin
+    vram: 0
+    start: 0x3FE880
+
+  - name: _3FECA0
+    type: bin
+    vram: 0
+    start: 0x3FECA0
 
   - name: _3FF010
     type: bin

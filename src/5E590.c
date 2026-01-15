@@ -4,20 +4,203 @@
 #include "task_scheduler.h"
 
 USE_ASSET(_3ECE40);
+USE_ASSET(_16D920);
+USE_ASSET(_170780);
+USE_ASSET(_1734B0);
+USE_ASSET(_1768E0);
+USE_ASSET(_1793A0);
+USE_ASSET(_17BE20);
+USE_ASSET(_17EA60);
+USE_ASSET(_1817F0);
+USE_ASSET(_184050);
+USE_ASSET(_186B10);
+USE_ASSET(_189C20);
+USE_ASSET(_18C490);
+USE_ASSET(_18F2B0);
+USE_ASSET(_191EA0);
+USE_ASSET(_194840);
+USE_ASSET(_197300);
+USE_ASSET(_199A90);
+USE_ASSET(_19CCF0);
+USE_ASSET(_1A0190);
+USE_ASSET(_1A35C0);
+USE_ASSET(_1A6B00);
+USE_ASSET(_1A9B70);
+USE_ASSET(_1ACCA0);
+USE_ASSET(_1AFBA0);
+USE_ASSET(_1B26E0);
+USE_ASSET(_1B5A40);
+USE_ASSET(_1B8DE0);
+USE_ASSET(_1BC420);
+USE_ASSET(_1BF7B0);
+USE_ASSET(_1C1B20);
+USE_ASSET(_1C4240);
+USE_ASSET(_1C6520);
+USE_ASSET(_1C87D0);
+USE_ASSET(_1CB5C0);
+USE_ASSET(_1CE250);
+USE_ASSET(_1D0CC0);
+USE_ASSET(_1D3FF0);
+USE_ASSET(_1D54C0);
+USE_ASSET(_1D59D0);
+USE_ASSET(_1D8E50);
+USE_ASSET(_1D8FB0);
+USE_ASSET(_1D9110);
+USE_ASSET(_1D9270);
+USE_ASSET(_1D93E0);
+USE_ASSET(_1D9550);
+USE_ASSET(_1D96C0);
+USE_ASSET(_1D9810);
+USE_ASSET(_1D9960);
+USE_ASSET(_1D9AB0);
+USE_ASSET(_1D9C20);
+USE_ASSET(_1D9D60);
+USE_ASSET(_1D9EB0);
+USE_ASSET(_1D9FD0);
+USE_ASSET(_1DA0E0);
+USE_ASSET(_1DA1F0);
+USE_ASSET(_1DA3A0);
+USE_ASSET(_1DA4F0);
+USE_ASSET(_1DA660);
+USE_ASSET(_350C70);
+USE_ASSET(_352A40);
+USE_ASSET(_354A80);
+USE_ASSET(_356F50);
+USE_ASSET(_358E80);
+USE_ASSET(_35AC60);
+USE_ASSET(_35CA40);
+USE_ASSET(_35E810);
+USE_ASSET(_360460);
+USE_ASSET(_3622B0);
+USE_ASSET(_364550);
+USE_ASSET(_366550);
+USE_ASSET(_3686A0);
+USE_ASSET(_36A3E0);
+USE_ASSET(_36C090);
+USE_ASSET(_36DE80);
+USE_ASSET(_36F920);
+USE_ASSET(_372800);
+USE_ASSET(_3757D0);
+USE_ASSET(_378850);
+USE_ASSET(_37B1E0);
+USE_ASSET(_37D270);
+USE_ASSET(_37F6D0);
+USE_ASSET(_381CD0);
+USE_ASSET(_383E00);
+USE_ASSET(_3860C0);
+USE_ASSET(_388430);
+USE_ASSET(_38AC10);
+USE_ASSET(_38CF10);
+USE_ASSET(_38EA50);
+USE_ASSET(_390C10);
+USE_ASSET(_392790);
+USE_ASSET(_3942D0);
+USE_ASSET(_3967C0);
+USE_ASSET(_398960);
+USE_ASSET(_39AC40);
+USE_ASSET(_39D100);
+USE_ASSET(_39E030);
+USE_ASSET(_39E710);
+USE_ASSET(_3A0F70);
+USE_ASSET(_3A89C0);
+USE_ASSET(_3B0D30);
+USE_ASSET(_3B8900);
+USE_ASSET(_3C0470);
+USE_ASSET(_3C8BC0);
+USE_ASSET(_3D0C20);
+USE_ASSET(_3D9A90);
+USE_ASSET(_3E13F0);
+USE_ASSET(_3E9B20);
+USE_ASSET(_3EADF0);
+USE_ASSET(_3F2980);
+USE_ASSET(_3F2AE0);
+USE_ASSET(_3F2C40);
+USE_ASSET(_3F2DA0);
+USE_ASSET(_3F2F00);
+USE_ASSET(_3F3060);
+USE_ASSET(_3F31B0);
+USE_ASSET(_3F3320);
+USE_ASSET(_3F3450);
+USE_ASSET(_3F3580);
+USE_ASSET(_3F37C0);
+USE_ASSET(_3F3940);
+USE_ASSET(_3F6BB0);
+USE_ASSET(_3F6D90);
+USE_ASSET(_3F6F90);
+USE_ASSET(_3F71B0);
+USE_ASSET(_3F73B0);
+USE_ASSET(_3F75B0);
+USE_ASSET(_3F77B0);
+USE_ASSET(_3F7980);
+USE_ASSET(_3F7B50);
+USE_ASSET(_3F7D20);
+USE_ASSET(_3F80C0);
+USE_ASSET(_3F86A0);
+USE_ASSET(_3F8B90);
+USE_ASSET(_3F9110);
+USE_ASSET(_3F9710);
+USE_ASSET(_3F9B90);
+USE_ASSET(_3FA1A0);
+USE_ASSET(_3FA830);
+USE_ASSET(_3FAE90);
+USE_ASSET(_3FB1F0);
+USE_ASSET(_3FB470);
+USE_ASSET(_3FB8D0);
+USE_ASSET(_3FBCF0);
+USE_ASSET(_3FC200);
+USE_ASSET(_3FC540);
+USE_ASSET(_3FCB80);
+USE_ASSET(_3FD0B0);
+USE_ASSET(_3FD4F0);
+USE_ASSET(_3FD770);
+USE_ASSET(_3FDBB0);
+USE_ASSET(_3FE0C0);
+USE_ASSET(_3FE3A0);
+USE_ASSET(_3FE880);
+USE_ASSET(_3FECA0);
+USE_ASSET(_3FF010);
+USE_ASSET(_406F00);
+USE_ASSET(_407160);
+USE_ASSET(_407490);
+USE_ASSET(_407860);
+USE_ASSET(_407C10);
+USE_ASSET(_407FD0);
+USE_ASSET(_408440);
+USE_ASSET(_408830);
+USE_ASSET(_408C00);
+USE_ASSET(_409010);
+USE_ASSET(_4093D0);
+USE_ASSET(_409770);
+USE_ASSET(_409B20);
+USE_ASSET(_409E10);
+USE_ASSET(_40A140);
+USE_ASSET(_40A370);
 USE_ASSET(_40A450);
 USE_ASSET(_40A590);
 USE_ASSET(_40A760);
+USE_ASSET(_40A930);
+USE_ASSET(_40AC00);
+USE_ASSET(_40AF90);
+USE_ASSET(_40B220);
+USE_ASSET(_40B4D0);
+USE_ASSET(_40B730);
+USE_ASSET(_40BA40);
+USE_ASSET(_40BCF0);
+USE_ASSET(_40C690);
+USE_ASSET(_40CF20);
+USE_ASSET(_40D7C0);
+USE_ASSET(_40E1C0);
 
 typedef struct {
     void *start;
     void *end;
-} AssetPair;
+} AssetMeta;
 
 typedef struct {
     void *start;
     void *end;
-    s32 size;
-} AssetWithSize;
+    s32 uncompressedSize;
+} CompressedAssetMeta;
 
 s32 D_80095AA0_966A0[];
 s32 D_80095BA0_967A0[];
@@ -89,188 +272,187 @@ s32 D_80099CA0_9A8A0[];
 s32 D_80099DA0_9A9A0[];
 s32 D_80099EA0_9AAA0[];
 s32 D_80099FA0_9ABA0[];
-AssetPair D_8009A0A0_9ACA0[];
-AssetPair D_8009A1A0_9ADA0[];
-AssetPair D_8009A2A0_9AEA0[];
-AssetPair D_8009A3A0_9AFA0[];
-AssetPair D_8009A3D0_9AFD0[];
-AssetPair D_8009A550_9B150[];
+AssetMeta D_8009A0A0_9ACA0[];
+AssetMeta D_8009A1A0_9ADA0[];
+AssetMeta D_8009A2A0_9AEA0[];
+AssetMeta D_8009A3A0_9AFA0[];
+AssetMeta D_8009A3D0_9AFD0[];
+AssetMeta D_8009A550_9B150[];
 
-USE_ASSET(_16D920);
-AssetPair D_80094210_94E10[] = {
-    { &_16D920_ROM_START, &_16D920_ROM_END   },
-    { (void *)0x00170780, (void *)0x001734B0 },
-    { (void *)0x001734B0, (void *)0x001768E0 },
-    { (void *)0x001768E0, (void *)0x001793A0 },
+AssetMeta D_80094210_94E10[] = {
+    { &_16D920_ROM_START, &_16D920_ROM_END },
+    { &_170780_ROM_START, &_170780_ROM_END },
+    { &_1734B0_ROM_START, &_1734B0_ROM_END },
+    { &_1768E0_ROM_START, &_1768E0_ROM_END },
 };
 
-AssetPair D_80094230_94E30[] = {
-    { (void *)0x001793A0, (void *)0x0017BE20 },
-    { (void *)0x0017BE20, (void *)0x0017EA60 },
-    { (void *)0x0017EA60, (void *)0x001817F0 },
-    { (void *)0x001817F0, (void *)0x00184050 },
+AssetMeta D_80094230_94E30[] = {
+    { &_1793A0_ROM_START, &_1793A0_ROM_END },
+    { &_17BE20_ROM_START, &_17BE20_ROM_END },
+    { &_17EA60_ROM_START, &_17EA60_ROM_END },
+    { &_1817F0_ROM_START, &_1817F0_ROM_END },
 };
 
-AssetPair D_80094250_94E50[] = {
-    { (void *)0x00184050, (void *)0x00186B10 },
-    { (void *)0x00186B10, (void *)0x00189C20 },
-    { (void *)0x00189C20, (void *)0x0018C490 },
-    { (void *)0x0018C490, (void *)0x0018F2B0 },
+AssetMeta D_80094250_94E50[] = {
+    { &_184050_ROM_START, &_184050_ROM_END },
+    { &_186B10_ROM_START, &_186B10_ROM_END },
+    { &_189C20_ROM_START, &_189C20_ROM_END },
+    { &_18C490_ROM_START, &_18C490_ROM_END },
 };
 
-AssetPair D_80094270_94E70[] = {
-    { (void *)0x0018F2B0, (void *)0x00191EA0 },
-    { (void *)0x00191EA0, (void *)0x00194840 },
-    { (void *)0x00194840, (void *)0x00197300 },
-    { (void *)0x00197300, (void *)0x00199A90 },
+AssetMeta D_80094270_94E70[] = {
+    { &_18F2B0_ROM_START, &_18F2B0_ROM_END },
+    { &_191EA0_ROM_START, &_191EA0_ROM_END },
+    { &_194840_ROM_START, &_194840_ROM_END },
+    { &_197300_ROM_START, &_197300_ROM_END },
 };
 
-AssetPair D_80094290_94E90[] = {
-    { (void *)0x00199A90, (void *)0x0019CCF0 },
-    { (void *)0x0019CCF0, (void *)0x001A0190 },
-    { (void *)0x001A0190, (void *)0x001A35C0 },
-    { (void *)0x001A35C0, (void *)0x001A6B00 },
+AssetMeta D_80094290_94E90[] = {
+    { &_199A90_ROM_START, &_199A90_ROM_END },
+    { &_19CCF0_ROM_START, &_19CCF0_ROM_END },
+    { &_1A0190_ROM_START, &_1A0190_ROM_END },
+    { &_1A35C0_ROM_START, &_1A35C0_ROM_END },
 };
 
-AssetPair D_800942B0_94EB0[] = {
-    { (void *)0x001A6B00, (void *)0x001A9B70 },
-    { (void *)0x001A9B70, (void *)0x001ACCA0 },
-    { (void *)0x001ACCA0, (void *)0x001AFBA0 },
-    { (void *)0x001AFBA0, (void *)0x001B26E0 },
+AssetMeta D_800942B0_94EB0[] = {
+    { &_1A6B00_ROM_START, &_1A6B00_ROM_END },
+    { &_1A9B70_ROM_START, &_1A9B70_ROM_END },
+    { &_1ACCA0_ROM_START, &_1ACCA0_ROM_END },
+    { &_1AFBA0_ROM_START, &_1AFBA0_ROM_END },
 };
 
-AssetPair D_800942D0_94ED0[] = {
-    { (void *)0x001B26E0, (void *)0x001B5A40 },
-    { (void *)0x001B5A40, (void *)0x001B8DE0 },
-    { (void *)0x001B8DE0, (void *)0x001BC420 },
-    { (void *)0x001BC420, (void *)0x001BF7B0 },
+AssetMeta D_800942D0_94ED0[] = {
+    { &_1B26E0_ROM_START, &_1B26E0_ROM_END },
+    { &_1B5A40_ROM_START, &_1B5A40_ROM_END },
+    { &_1B8DE0_ROM_START, &_1B8DE0_ROM_END },
+    { &_1BC420_ROM_START, &_1BC420_ROM_END },
 };
 
-AssetPair D_800942F0_94EF0[] = {
-    { (void *)0x001BF7B0, (void *)0x001C1B20 },
-    { (void *)0x001C1B20, (void *)0x001C4240 },
-    { (void *)0x001C4240, (void *)0x001C6520 },
-    { (void *)0x001C6520, (void *)0x001C87D0 },
+AssetMeta D_800942F0_94EF0[] = {
+    { &_1BF7B0_ROM_START, &_1BF7B0_ROM_END },
+    { &_1C1B20_ROM_START, &_1C1B20_ROM_END },
+    { &_1C4240_ROM_START, &_1C4240_ROM_END },
+    { &_1C6520_ROM_START, &_1C6520_ROM_END },
 };
 
-AssetPair D_80094310_94F10[] = {
-    { (void *)0x001C87D0, (void *)0x001CB5C0 },
-    { (void *)0x001CB5C0, (void *)0x001CE250 },
-    { (void *)0x001CE250, (void *)0x001D0CC0 },
-    { (void *)0x001D0CC0, (void *)0x001D3FF0 },
+AssetMeta D_80094310_94F10[] = {
+    { &_1C87D0_ROM_START, &_1C87D0_ROM_END },
+    { &_1CB5C0_ROM_START, &_1CB5C0_ROM_END },
+    { &_1CE250_ROM_START, &_1CE250_ROM_END },
+    { &_1D0CC0_ROM_START, &_1D0CC0_ROM_END },
 };
 
-AssetPair D_80094330_94F30[] = {
-    { (void *)0x001D3FF0, (void *)0x001D54C0 },
-    { (void *)0x001D3FF0, (void *)0x001D54C0 },
-    { (void *)0x001D3FF0, (void *)0x001D54C0 },
-    { (void *)0x001D3FF0, (void *)0x001D54C0 },
+AssetMeta D_80094330_94F30[] = {
+    { &_1D3FF0_ROM_START, &_1D3FF0_ROM_END },
+    { &_1D3FF0_ROM_START, &_1D3FF0_ROM_END },
+    { &_1D3FF0_ROM_START, &_1D3FF0_ROM_END },
+    { &_1D3FF0_ROM_START, &_1D3FF0_ROM_END },
 };
 
-AssetPair D_80094350_94F50[] = {
-    { (void *)0x001D54C0, (void *)0x001D59D0 },
-    { (void *)0x001D54C0, (void *)0x001D59D0 },
-    { (void *)0x001D54C0, (void *)0x001D59D0 },
-    { (void *)0x001D54C0, (void *)0x001D59D0 },
+AssetMeta D_80094350_94F50[] = {
+    { &_1D54C0_ROM_START, &_1D54C0_ROM_END },
+    { &_1D54C0_ROM_START, &_1D54C0_ROM_END },
+    { &_1D54C0_ROM_START, &_1D54C0_ROM_END },
+    { &_1D54C0_ROM_START, &_1D54C0_ROM_END },
 };
 
-AssetPair D_80094370_94F70[] = {
-    { (void *)0x001D59D0, (void *)0x001D8E50 },
-    { (void *)0x001D59D0, (void *)0x001D8E50 },
-    { (void *)0x001D59D0, (void *)0x001D8E50 },
-    { (void *)0x001D59D0, (void *)0x001D8E50 },
+AssetMeta D_80094370_94F70[] = {
+    { &_1D59D0_ROM_START, &_1D59D0_ROM_END },
+    { &_1D59D0_ROM_START, &_1D59D0_ROM_END },
+    { &_1D59D0_ROM_START, &_1D59D0_ROM_END },
+    { &_1D59D0_ROM_START, &_1D59D0_ROM_END },
 };
 
-AssetPair *D_80094390_94F90[] = {
+AssetMeta *D_80094390_94F90[] = {
     D_80094210_94E10, D_80094230_94E30, D_80094250_94E50, D_80094270_94E70, D_80094290_94E90, D_800942B0_94EB0,
     D_800942D0_94ED0, D_800942F0_94EF0, D_80094310_94F10, D_80094330_94F30, D_80094350_94F50, D_80094370_94F70,
 };
 
-AssetWithSize D_800943C0_94FC0[] = {
-    { (void *)0x00350C70, (void *)0x00352A40, 0x000045A0 },
-    { (void *)0x00352A40, (void *)0x00354A80, 0x00004870 },
-    { (void *)0x00354A80, (void *)0x00356F50, 0x000054D0 },
-    { (void *)0x00356F50, (void *)0x00358E80, 0x000048E0 },
+CompressedAssetMeta D_800943C0_94FC0[] = {
+    { &_350C70_ROM_START, &_350C70_ROM_END, 0x45A0 },
+    { &_352A40_ROM_START, &_352A40_ROM_END, 0x4870 },
+    { &_354A80_ROM_START, &_354A80_ROM_END, 0x54D0 },
+    { &_356F50_ROM_START, &_356F50_ROM_END, 0x48E0 },
 };
 
-AssetWithSize D_800943F0_94FF0[] = {
-    { (void *)0x00358E80, (void *)0x0035AC60, 0x000042A0 },
-    { (void *)0x0035AC60, (void *)0x0035CA40, 0x000043F0 },
-    { (void *)0x0035CA40, (void *)0x0035E810, 0x000043E0 },
-    { (void *)0x0035E810, (void *)0x00360460, 0x00004120 },
+CompressedAssetMeta D_800943F0_94FF0[] = {
+    { &_358E80_ROM_START, &_358E80_ROM_END, 0x42A0 },
+    { &_35AC60_ROM_START, &_35AC60_ROM_END, 0x43F0 },
+    { &_35CA40_ROM_START, &_35CA40_ROM_END, 0x43E0 },
+    { &_35E810_ROM_START, &_35E810_ROM_END, 0x4120 },
 };
 
-AssetWithSize D_80094420_95020[] = {
-    { (void *)0x00360460, (void *)0x003622B0, 0x00004300 },
-    { (void *)0x003622B0, (void *)0x00364550, 0x00004D10 },
-    { (void *)0x00364550, (void *)0x00366550, 0x00004640 },
-    { (void *)0x00366550, (void *)0x003686A0, 0x000049C0 },
+CompressedAssetMeta D_80094420_95020[] = {
+    { &_360460_ROM_START, &_360460_ROM_END, 0x4300 },
+    { &_3622B0_ROM_START, &_3622B0_ROM_END, 0x4D10 },
+    { &_364550_ROM_START, &_364550_ROM_END, 0x4640 },
+    { &_366550_ROM_START, &_366550_ROM_END, 0x49C0 },
 };
 
-AssetWithSize D_80094450_95050[] = {
-    { (void *)0x003686A0, (void *)0x0036A3E0, 0x00004360 },
-    { (void *)0x0036A3E0, (void *)0x0036C090, 0x00004160 },
-    { (void *)0x0036C090, (void *)0x0036DE80, 0x000045F0 },
-    { (void *)0x0036DE80, (void *)0x0036F920, 0x00003E40 },
+CompressedAssetMeta D_80094450_95050[] = {
+    { &_3686A0_ROM_START, &_3686A0_ROM_END, 0x4360 },
+    { &_36A3E0_ROM_START, &_36A3E0_ROM_END, 0x4160 },
+    { &_36C090_ROM_START, &_36C090_ROM_END, 0x45F0 },
+    { &_36DE80_ROM_START, &_36DE80_ROM_END, 0x3E40 },
 };
 
-AssetWithSize D_80094480_95080[] = {
-    { (void *)0x0036F920, (void *)0x00372800, 0x00005CB0 },
-    { (void *)0x00372800, (void *)0x003757D0, 0x000066D0 },
-    { (void *)0x003757D0, (void *)0x00378850, 0x00006850 },
-    { (void *)0x00378850, (void *)0x0037B1E0, 0x00005160 },
+CompressedAssetMeta D_80094480_95080[] = {
+    { &_36F920_ROM_START, &_36F920_ROM_END, 0x5CB0 },
+    { &_372800_ROM_START, &_372800_ROM_END, 0x66D0 },
+    { &_3757D0_ROM_START, &_3757D0_ROM_END, 0x6850 },
+    { &_378850_ROM_START, &_378850_ROM_END, 0x5160 },
 };
 
-AssetWithSize D_800944B0_950B0[] = {
-    { (void *)0x0037B1E0, (void *)0x0037D270, 0x00004710 },
-    { (void *)0x0037D270, (void *)0x0037F6D0, 0x00004F60 },
-    { (void *)0x0037F6D0, (void *)0x00381CD0, 0x00005550 },
-    { (void *)0x00381CD0, (void *)0x00383E00, 0x00004C40 },
+CompressedAssetMeta D_800944B0_950B0[] = {
+    { &_37B1E0_ROM_START, &_37B1E0_ROM_END, 0x4710 },
+    { &_37D270_ROM_START, &_37D270_ROM_END, 0x4F60 },
+    { &_37F6D0_ROM_START, &_37F6D0_ROM_END, 0x5550 },
+    { &_381CD0_ROM_START, &_381CD0_ROM_END, 0x4C40 },
 };
 
-AssetWithSize D_800944E0_950E0[] = {
-    { (void *)0x00383E00, (void *)0x003860C0, 0x00004EE0 },
-    { (void *)0x003860C0, (void *)0x00388430, 0x00005070 },
-    { (void *)0x00388430, (void *)0x0038AC10, 0x00005670 },
-    { (void *)0x0038AC10, (void *)0x0038CF10, 0x00004F60 },
+CompressedAssetMeta D_800944E0_950E0[] = {
+    { &_383E00_ROM_START, &_383E00_ROM_END, 0x4EE0 },
+    { &_3860C0_ROM_START, &_3860C0_ROM_END, 0x5070 },
+    { &_388430_ROM_START, &_388430_ROM_END, 0x5670 },
+    { &_38AC10_ROM_START, &_38AC10_ROM_END, 0x4F60 },
 };
 
-AssetWithSize D_80094510_95110[] = {
-    { (void *)0x0038CF10, (void *)0x0038EA50, 0x00004450 },
-    { (void *)0x0038EA50, (void *)0x00390C10, 0x00005350 },
-    { (void *)0x00390C10, (void *)0x00392790, 0x00004490 },
-    { (void *)0x00392790, (void *)0x003942D0, 0x00004420 },
+CompressedAssetMeta D_80094510_95110[] = {
+    { &_38CF10_ROM_START, &_38CF10_ROM_END, 0x4450 },
+    { &_38EA50_ROM_START, &_38EA50_ROM_END, 0x5350 },
+    { &_390C10_ROM_START, &_390C10_ROM_END, 0x4490 },
+    { &_392790_ROM_START, &_392790_ROM_END, 0x4420 },
 };
 
-AssetWithSize D_80094540_95140[] = {
-    { (void *)0x003942D0, (void *)0x003967C0, 0x00004BE0 },
-    { (void *)0x003967C0, (void *)0x00398960, 0x000047C0 },
-    { (void *)0x00398960, (void *)0x0039AC40, 0x000048A0 },
-    { (void *)0x0039AC40, (void *)0x0039D100, 0x00004DD0 },
+CompressedAssetMeta D_80094540_95140[] = {
+    { &_3942D0_ROM_START, &_3942D0_ROM_END, 0x4BE0 },
+    { &_3967C0_ROM_START, &_3967C0_ROM_END, 0x47C0 },
+    { &_398960_ROM_START, &_398960_ROM_END, 0x48A0 },
+    { &_39AC40_ROM_START, &_39AC40_ROM_END, 0x4DD0 },
 };
 
-AssetWithSize D_80094570_95170[] = {
-    { (void *)0x0039D100, (void *)0x0039E030, 0x00001D80 },
-    { (void *)0x0039D100, (void *)0x0039E030, 0x00001D80 },
-    { (void *)0x0039D100, (void *)0x0039E030, 0x00001D80 },
-    { (void *)0x0039D100, (void *)0x0039E030, 0x00001D80 },
+CompressedAssetMeta D_80094570_95170[] = {
+    { &_39D100_ROM_START, &_39D100_ROM_END, 0x1D80 },
+    { &_39D100_ROM_START, &_39D100_ROM_END, 0x1D80 },
+    { &_39D100_ROM_START, &_39D100_ROM_END, 0x1D80 },
+    { &_39D100_ROM_START, &_39D100_ROM_END, 0x1D80 },
 };
 
-AssetWithSize D_800945A0_951A0[] = {
-    { (void *)0x0039E030, (void *)0x0039E710, 0x00000D50 },
-    { (void *)0x0039E030, (void *)0x0039E710, 0x00000D50 },
-    { (void *)0x0039E030, (void *)0x0039E710, 0x00000D50 },
-    { (void *)0x0039E030, (void *)0x0039E710, 0x00000D50 },
+CompressedAssetMeta D_800945A0_951A0[] = {
+    { &_39E030_ROM_START, &_39E030_ROM_END, 0xD50 },
+    { &_39E030_ROM_START, &_39E030_ROM_END, 0xD50 },
+    { &_39E030_ROM_START, &_39E030_ROM_END, 0xD50 },
+    { &_39E030_ROM_START, &_39E030_ROM_END, 0xD50 },
 };
 
-AssetWithSize D_800945D0_951D0[] = {
-    { (void *)0x0039E710, (void *)0x003A0F70, 0x00005280 },
-    { (void *)0x0039E710, (void *)0x003A0F70, 0x00005280 },
-    { (void *)0x0039E710, (void *)0x003A0F70, 0x00005280 },
-    { (void *)0x0039E710, (void *)0x003A0F70, 0x00005280 },
+CompressedAssetMeta D_800945D0_951D0[] = {
+    { &_39E710_ROM_START, &_39E710_ROM_END, 0x5280 },
+    { &_39E710_ROM_START, &_39E710_ROM_END, 0x5280 },
+    { &_39E710_ROM_START, &_39E710_ROM_END, 0x5280 },
+    { &_39E710_ROM_START, &_39E710_ROM_END, 0x5280 },
 };
 
-AssetWithSize *D_80094600_95200[] = {
+CompressedAssetMeta *D_80094600_95200[] = {
     D_800943C0_94FC0, D_800943F0_94FF0, D_80094420_95020, D_80094450_95050, D_80094480_95080, D_800944B0_950B0,
     D_800944E0_950E0, D_80094510_95110, D_80094540_95140, D_80094570_95170, D_800945A0_951A0, D_800945D0_951D0,
 };
@@ -434,70 +616,70 @@ s32 *D_800947B0_953B0[] = {
     (s32 *)D_80094740_95340, (s32 *)D_80094750_95350, (s32 *)D_80094760_95360, (s32 *)D_80094770_95370,
 };
 
-AssetWithSize D_800947E0_953E0[] = {
-    { (void *)0x003A0F70, (void *)0x003A89C0, 0x0000AAFA },
-    { (void *)0x003A89C0, (void *)0x003B0D30, 0x0000B03C },
-    { (void *)0x003B0D30, (void *)0x003B8900, 0x0000B078 },
-    { (void *)0x003B8900, (void *)0x003C0470, 0x0000B4B6 },
-    { (void *)0x003C0470, (void *)0x003C8BC0, 0x0000C2D4 },
-    { (void *)0x003C8BC0, (void *)0x003D0C20, 0x0000B79E },
-    { (void *)0x003D0C20, (void *)0x003D9A90, 0x0000CA78 },
-    { (void *)0x003D9A90, (void *)0x003E13F0, 0x0000B678 },
-    { (void *)0x003E13F0, (void *)0x003E9B20, 0x0000BE9A },
-    { (void *)0x003E9B20, (void *)0x003EADF0, 0x00001DD0 },
-    { (void *)0x003A0F70, (void *)0x003A89C0, 0x0000AAFA },
-    { (void *)0x003EADF0, (void *)0x003ECE40, 0x00003094 },
+CompressedAssetMeta D_800947E0_953E0[] = {
+    { &_3A0F70_ROM_START, &_3A0F70_ROM_END, 0xAAFA },
+    { &_3A89C0_ROM_START, &_3A89C0_ROM_END, 0xB03C },
+    { &_3B0D30_ROM_START, &_3B0D30_ROM_END, 0xB078 },
+    { &_3B8900_ROM_START, &_3B8900_ROM_END, 0xB4B6 },
+    { &_3C0470_ROM_START, &_3C0470_ROM_END, 0xC2D4 },
+    { &_3C8BC0_ROM_START, &_3C8BC0_ROM_END, 0xB79E },
+    { &_3D0C20_ROM_START, &_3D0C20_ROM_END, 0xCA78 },
+    { &_3D9A90_ROM_START, &_3D9A90_ROM_END, 0xB678 },
+    { &_3E13F0_ROM_START, &_3E13F0_ROM_END, 0xBE9A },
+    { &_3E9B20_ROM_START, &_3E9B20_ROM_END, 0x1DD0 },
+    { &_3A0F70_ROM_START, &_3A0F70_ROM_END, 0xAAFA },
+    { &_3EADF0_ROM_START, &_3EADF0_ROM_END, 0x3094 },
 };
 
-AssetWithSize D_80094870_95470[] = {
-    { (void *)0x003F2980, (void *)0x003F2AE0, 0x000001F8 },
-    { (void *)0x003F2AE0, (void *)0x003F2C40, 0x000001F8 },
-    { (void *)0x003F2C40, (void *)0x003F2DA0, 0x000001F8 },
-    { (void *)0x003F2DA0, (void *)0x003F2F00, 0x000001F8 },
-    { (void *)0x003F2F00, (void *)0x003F3060, 0x000001F8 },
-    { (void *)0x003F3060, (void *)0x003F31B0, 0x000001F8 },
-    { (void *)0x003F31B0, (void *)0x003F3320, 0x000001F8 },
-    { (void *)0x003F3320, (void *)0x003F3450, 0x000001F8 },
-    { (void *)0x003F3450, (void *)0x003F3580, 0x000001F8 },
-    { (void *)0x003F3580, (void *)0x003F37C0, 0x000002A8 },
-    { (void *)0x003F37C0, (void *)0x003F3940, 0x00000210 },
-    { (void *)0x003F31B0, (void *)0x003F3320, 0x000001F8 },
+CompressedAssetMeta D_80094870_95470[] = {
+    { &_3F2980_ROM_START, &_3F2980_ROM_END, 0x1F8 },
+    { &_3F2AE0_ROM_START, &_3F2AE0_ROM_END, 0x1F8 },
+    { &_3F2C40_ROM_START, &_3F2C40_ROM_END, 0x1F8 },
+    { &_3F2DA0_ROM_START, &_3F2DA0_ROM_END, 0x1F8 },
+    { &_3F2F00_ROM_START, &_3F2F00_ROM_END, 0x1F8 },
+    { &_3F3060_ROM_START, &_3F3060_ROM_END, 0x1F8 },
+    { &_3F31B0_ROM_START, &_3F31B0_ROM_END, 0x1F8 },
+    { &_3F3320_ROM_START, &_3F3320_ROM_END, 0x1F8 },
+    { &_3F3450_ROM_START, &_3F3450_ROM_END, 0x1F8 },
+    { &_3F3580_ROM_START, &_3F3580_ROM_END, 0x2A8 },
+    { &_3F37C0_ROM_START, &_3F37C0_ROM_END, 0x210 },
+    { &_3F31B0_ROM_START, &_3F31B0_ROM_END, 0x1F8 },
 };
 
-AssetPair D_80094900_95500[] = {
-    { (void *)0x001D8E50, (void *)0x001D8FB0 },
-    { (void *)0x001D8FB0, (void *)0x001D9110 },
-    { (void *)0x001D9110, (void *)0x001D9270 },
-    { (void *)0x001D9270, (void *)0x001D93E0 },
-    { (void *)0x001D93E0, (void *)0x001D9550 },
-    { (void *)0x001D9550, (void *)0x001D96C0 },
-    { (void *)0x001D96C0, (void *)0x001D9810 },
-    { (void *)0x001D9810, (void *)0x001D9960 },
-    { (void *)0x001D9960, (void *)0x001D9AB0 },
-    { (void *)0x001D9AB0, (void *)0x001D9C20 },
-    { (void *)0x001D9C20, (void *)0x001D9D60 },
-    { (void *)0x001D9D60, (void *)0x001D9EB0 },
-    { (void *)0x001D9EB0, (void *)0x001D9FD0 },
-    { (void *)0x001D9FD0, (void *)0x001DA0E0 },
-    { (void *)0x001DA0E0, (void *)0x001DA1F0 },
-    { (void *)0x001DA1F0, (void *)0x001DA3A0 },
-    { (void *)0x001DA3A0, (void *)0x001DA4F0 },
-    { (void *)0x001DA4F0, (void *)0x001DA660 },
+AssetMeta D_80094900_95500[] = {
+    { &_1D8E50_ROM_START, &_1D8E50_ROM_END },
+    { &_1D8FB0_ROM_START, &_1D8FB0_ROM_END },
+    { &_1D9110_ROM_START, &_1D9110_ROM_END },
+    { &_1D9270_ROM_START, &_1D9270_ROM_END },
+    { &_1D93E0_ROM_START, &_1D93E0_ROM_END },
+    { &_1D9550_ROM_START, &_1D9550_ROM_END },
+    { &_1D96C0_ROM_START, &_1D96C0_ROM_END },
+    { &_1D9810_ROM_START, &_1D9810_ROM_END },
+    { &_1D9960_ROM_START, &_1D9960_ROM_END },
+    { &_1D9AB0_ROM_START, &_1D9AB0_ROM_END },
+    { &_1D9C20_ROM_START, &_1D9C20_ROM_END },
+    { &_1D9D60_ROM_START, &_1D9D60_ROM_END },
+    { &_1D9EB0_ROM_START, &_1D9EB0_ROM_END },
+    { &_1D9FD0_ROM_START, &_1D9FD0_ROM_END },
+    { &_1DA0E0_ROM_START, &_1DA0E0_ROM_END },
+    { &_1DA1F0_ROM_START, &_1DA1F0_ROM_END },
+    { &_1DA3A0_ROM_START, &_1DA3A0_ROM_END },
+    { &_1DA4F0_ROM_START, &_1DA4F0_ROM_END },
 };
 
-AssetWithSize D_80094990_95590[] = {
-    { (void *)0x003F6BB0, (void *)0x003F6D90, 0x00000320 },
-    { (void *)0x003F6D90, (void *)0x003F6F90, 0x00000300 },
-    { (void *)0x003F6F90, (void *)0x003F71B0, 0x00000300 },
-    { (void *)0x003F71B0, (void *)0x003F73B0, 0x00000360 },
-    { (void *)0x003F73B0, (void *)0x003F75B0, 0x00000360 },
-    { (void *)0x003F75B0, (void *)0x003F77B0, 0x00000360 },
-    { (void *)0x003F77B0, (void *)0x003F7980, 0x000002E0 },
-    { (void *)0x003F7980, (void *)0x003F7B50, 0x000002E0 },
-    { (void *)0x003F7B50, (void *)0x003F7D20, 0x000002E0 },
-    { (void *)0x003F7D20, (void *)0x003F80C0, 0x00000C00 },
-    { (void *)0x003F80C0, (void *)0x003F86A0, 0x00000A00 },
-    { (void *)0x003F86A0, (void *)0x003F8B90, 0x00000A90 },
+CompressedAssetMeta D_80094990_95590[] = {
+    { &_3F6BB0_ROM_START, &_3F6BB0_ROM_END, 0x320 },
+    { &_3F6D90_ROM_START, &_3F6D90_ROM_END, 0x300 },
+    { &_3F6F90_ROM_START, &_3F6F90_ROM_END, 0x300 },
+    { &_3F71B0_ROM_START, &_3F71B0_ROM_END, 0x360 },
+    { &_3F73B0_ROM_START, &_3F73B0_ROM_END, 0x360 },
+    { &_3F75B0_ROM_START, &_3F75B0_ROM_END, 0x360 },
+    { &_3F77B0_ROM_START, &_3F77B0_ROM_END, 0x2E0 },
+    { &_3F7980_ROM_START, &_3F7980_ROM_END, 0x2E0 },
+    { &_3F7B50_ROM_START, &_3F7B50_ROM_END, 0x2E0 },
+    { &_3F7D20_ROM_START, &_3F7D20_ROM_END, 0xC00 },
+    { &_3F80C0_ROM_START, &_3F80C0_ROM_END, 0xA00 },
+    { &_3F86A0_ROM_START, &_3F86A0_ROM_END, 0xA90 },
 };
 
 s32 D_80094A20_95620[] = {
@@ -505,64 +687,64 @@ s32 D_80094A20_95620[] = {
     0x003F9B90, 0x003FA1A0, 0x00000D60, 0x003FA1A0, 0x003FA830, 0x00000B00, 0x003FA830, 0x003FAE90, 0x00000BA0,
 };
 
-AssetWithSize D_80094A68_95668[] = {
-    { (void *)0x003FAE90, (void *)0x003FB1F0, 0x00000820 },
-    { (void *)0x003FB1F0, (void *)0x003FB470, 0x00000820 },
-    { (void *)0x003FB470, (void *)0x003FB8D0, 0x00000820 },
-    { (void *)0x003FB8D0, (void *)0x003FBCF0, 0x00000820 },
-    { (void *)0x003FBCF0, (void *)0x003FC200, 0x00000820 },
-    { (void *)0x003FC200, (void *)0x003FC540, 0x00000820 },
-    { (void *)0x003FC540, (void *)0x003FCB80, 0x00000820 },
-    { (void *)0x003FCB80, (void *)0x003FD0B0, 0x00000820 },
-    { (void *)0x003FD0B0, (void *)0x003FD4F0, 0x00000820 },
-    { (void *)0x003FD4F0, (void *)0x003FD770, 0x00000820 },
-    { (void *)0x003FD770, (void *)0x003FDBB0, 0x00000820 },
-    { (void *)0x003FDBB0, (void *)0x003FE0C0, 0x00000820 },
-    { (void *)0x003FE0C0, (void *)0x003FE3A0, 0x00000820 },
-    { (void *)0x003FE3A0, (void *)0x003FE880, 0x00000820 },
-    { (void *)0x003FE880, (void *)0x003FECA0, 0x00000820 },
-    { (void *)0x003FECA0, (void *)0x003FF010, 0x00000820 },
+CompressedAssetMeta D_80094A68_95668[] = {
+    { &_3FAE90_ROM_START, &_3FAE90_ROM_END, 0x820 },
+    { &_3FB1F0_ROM_START, &_3FB1F0_ROM_END, 0x820 },
+    { &_3FB470_ROM_START, &_3FB470_ROM_END, 0x820 },
+    { &_3FB8D0_ROM_START, &_3FB8D0_ROM_END, 0x820 },
+    { &_3FBCF0_ROM_START, &_3FBCF0_ROM_END, 0x820 },
+    { &_3FC200_ROM_START, &_3FC200_ROM_END, 0x820 },
+    { &_3FC540_ROM_START, &_3FC540_ROM_END, 0x820 },
+    { &_3FCB80_ROM_START, &_3FCB80_ROM_END, 0x820 },
+    { &_3FD0B0_ROM_START, &_3FD0B0_ROM_END, 0x820 },
+    { &_3FD4F0_ROM_START, &_3FD4F0_ROM_END, 0x820 },
+    { &_3FD770_ROM_START, &_3FD770_ROM_END, 0x820 },
+    { &_3FDBB0_ROM_START, &_3FDBB0_ROM_END, 0x820 },
+    { &_3FE0C0_ROM_START, &_3FE0C0_ROM_END, 0x820 },
+    { &_3FE3A0_ROM_START, &_3FE3A0_ROM_END, 0x820 },
+    { &_3FE880_ROM_START, &_3FE880_ROM_END, 0x820 },
+    { &_3FECA0_ROM_START, &_3FECA0_ROM_END, 0x820 },
 };
 
-AssetPair *D_80094B28_95728[] = {
+AssetMeta *D_80094B28_95728[] = {
     &D_8009A550_9B150[0],  &D_8009A550_9B150[2],  &D_8009A550_9B150[4],  &D_8009A550_9B150[6],  &D_8009A550_9B150[8],
     &D_8009A550_9B150[10], &D_8009A550_9B150[12], &D_8009A550_9B150[14], &D_8009A550_9B150[16], &D_8009A550_9B150[18],
     &D_8009A550_9B150[20], &D_8009A550_9B150[22], &D_8009A550_9B150[24], &D_8009A550_9B150[26], &D_8009A550_9B150[28],
     &D_8009A550_9B150[30], &D_8009A550_9B150[32], &D_8009A550_9B150[34],
 };
 
-AssetWithSize D_80094B70_95770[] = {
-    { (void *)0x00406F00, (void *)0x00407160, 0x000003D0 },
-    { (void *)0x00407160, (void *)0x00407490, 0x000005D0 },
-    { (void *)0x00407490, (void *)0x00407860, 0x000006E0 },
-    { (void *)0x00407860, (void *)0x00407C10, 0x000006E0 },
-    { (void *)0x00407C10, (void *)0x00407FD0, 0x00000790 },
-    { (void *)0x00407FD0, (void *)0x00408440, 0x000008A0 },
-    { (void *)0x00408440, (void *)0x00408830, 0x000006B0 },
-    { (void *)0x00408830, (void *)0x00408C00, 0x000006B0 },
-    { (void *)0x00408C00, (void *)0x00409010, 0x000007C0 },
-    { (void *)0x00409010, (void *)0x004093D0, 0x00000700 },
-    { (void *)0x004093D0, (void *)0x00409770, 0x00000710 },
-    { (void *)0x00409770, (void *)0x00409B20, 0x00000710 },
-    { (void *)0x00409B20, (void *)0x00409E10, 0x000005C0 },
-    { (void *)0x00409E10, (void *)0x0040A140, 0x000005C0 },
-    { (void *)0x0040A140, (void *)0x0040A370, 0x000002E0 },
-    { (void *)0x0040A370, (void *)0x0040A450, 0x00000100 },
+CompressedAssetMeta D_80094B70_95770[] = {
+    { &_406F00_ROM_START, &_406F00_ROM_END, 0x3D0 },
+    { &_407160_ROM_START, &_407160_ROM_END, 0x5D0 },
+    { &_407490_ROM_START, &_407490_ROM_END, 0x6E0 },
+    { &_407860_ROM_START, &_407860_ROM_END, 0x6E0 },
+    { &_407C10_ROM_START, &_407C10_ROM_END, 0x790 },
+    { &_407FD0_ROM_START, &_407FD0_ROM_END, 0x8A0 },
+    { &_408440_ROM_START, &_408440_ROM_END, 0x6B0 },
+    { &_408830_ROM_START, &_408830_ROM_END, 0x6B0 },
+    { &_408C00_ROM_START, &_408C00_ROM_END, 0x7C0 },
+    { &_409010_ROM_START, &_409010_ROM_END, 0x700 },
+    { &_4093D0_ROM_START, &_4093D0_ROM_END, 0x710 },
+    { &_409770_ROM_START, &_409770_ROM_END, 0x710 },
+    { &_409B20_ROM_START, &_409B20_ROM_END, 0x5C0 },
+    { &_409E10_ROM_START, &_409E10_ROM_END, 0x5C0 },
+    { &_40A140_ROM_START, &_40A140_ROM_END, 0x2E0 },
+    { &_40A370_ROM_START, &_40A370_ROM_END, 0x100 },
 };
 
-AssetWithSize D_80094C30_95830[] = {
-    { (void *)0x0040A930, (void *)0x0040AC00, 0x00000E10 },
-    { (void *)0x0040AC00, (void *)0x0040AF90, 0x00000E10 },
-    { (void *)0x0040AF90, (void *)0x0040B220, 0x00000E10 },
-    { (void *)0x0040B220, (void *)0x0040B4D0, 0x00000E10 },
-    { (void *)0x0040B4D0, (void *)0x0040B730, 0x00000E10 },
-    { (void *)0x0040B730, (void *)0x0040BA40, 0x00000E10 },
-    { (void *)0x0040BA40, (void *)0x0040BCF0, 0x00000E10 },
-    { (void *)0x0040BCF0, (void *)0x0040C690, 0x00003390 },
-    { (void *)0x0040C690, (void *)0x0040CF20, 0x00003390 },
-    { (void *)0x0040CF20, (void *)0x0040D7C0, 0x00003390 },
-    { (void *)0x0040D7C0, (void *)0x0040E1C0, 0x00003390 },
-    { (void *)0x00000000, (void *)0x00000000, 0x00000000 },
+CompressedAssetMeta D_80094C30_95830[] = {
+    { &_40A930_ROM_START, &_40A930_ROM_END, 0xE10  },
+    { &_40AC00_ROM_START, &_40AC00_ROM_END, 0xE10  },
+    { &_40AF90_ROM_START, &_40AF90_ROM_END, 0xE10  },
+    { &_40B220_ROM_START, &_40B220_ROM_END, 0xE10  },
+    { &_40B4D0_ROM_START, &_40B4D0_ROM_END, 0xE10  },
+    { &_40B730_ROM_START, &_40B730_ROM_END, 0xE10  },
+    { &_40BA40_ROM_START, &_40BA40_ROM_END, 0xE10  },
+    { &_40BCF0_ROM_START, &_40BCF0_ROM_END, 0x3390 },
+    { &_40C690_ROM_START, &_40C690_ROM_END, 0x3390 },
+    { &_40CF20_ROM_START, &_40CF20_ROM_END, 0x3390 },
+    { &_40D7C0_ROM_START, &_40D7C0_ROM_END, 0x3390 },
+    { (void *)0x0000,     (void *)0x0000,   0x0000 },
 };
 
 s32 D_80094CC0_958C0[] = {
@@ -1851,7 +2033,7 @@ s32 D_80099FA0_9ABA0[] = {
     0x00000000, 0x010029F0, 0x00000000, 0x00000000, 0x00000000, 0x01002A30, 0x00000000, 0x00000000,
 };
 
-AssetPair D_8009A0A0_9ACA0[] = {
+AssetMeta D_8009A0A0_9ACA0[] = {
     { (void *)0x00000000, (void *)0x01000000 },
     { (void *)0x00000000, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x01000070 },
@@ -1886,7 +2068,7 @@ AssetPair D_8009A0A0_9ACA0[] = {
     { (void *)0x00000000, (void *)0x00000000 },
 };
 
-AssetPair D_8009A1A0_9ADA0[] = {
+AssetMeta D_8009A1A0_9ADA0[] = {
     { (void *)0x00000000, (void *)0x01002F28 },
     { (void *)0x00000000, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x01002F68 },
@@ -1921,7 +2103,7 @@ AssetPair D_8009A1A0_9ADA0[] = {
     { (void *)0x00000000, (void *)0x00000000 },
 };
 
-AssetPair D_8009A2A0_9AEA0[] = {
+AssetMeta D_8009A2A0_9AEA0[] = {
     { (void *)0x00000000, (void *)0x01000000 },
     { (void *)0x01000178, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x01000290 },
@@ -1956,7 +2138,7 @@ AssetPair D_8009A2A0_9AEA0[] = {
     { (void *)0x00000000, (void *)0x00000000 },
 };
 
-AssetPair D_8009A3A0_9AFA0[] = {
+AssetMeta D_8009A3A0_9AFA0[] = {
     { (void *)0x00000000, (void *)0x01000000 },
     { (void *)0x00000000, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x010001E8 },
@@ -1965,7 +2147,7 @@ AssetPair D_8009A3A0_9AFA0[] = {
     { (void *)0x00000000, (void *)0x00000000 },
 };
 
-AssetPair D_8009A3D0_9AFD0[] = {
+AssetMeta D_8009A3D0_9AFD0[] = {
     { (void *)0x00000000, (void *)0x01000000 },
     { (void *)0x00000000, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x010003E0 },
@@ -2016,7 +2198,7 @@ AssetPair D_8009A3D0_9AFD0[] = {
     { (void *)0x00000000, (void *)0x00000000 },
 };
 
-AssetPair D_8009A550_9B150[] = {
+AssetMeta D_8009A550_9B150[] = {
     { (void *)0x00000000, (void *)0x01000000 },
     { (void *)0x00000000, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x01000000 },
@@ -2056,13 +2238,17 @@ AssetPair D_8009A550_9B150[] = {
 };
 
 void *loadAssetByIndex_94F90(s16 groupIndex, s16 pairIndex) {
-    AssetPair *assetArray = D_80094390_94F90[groupIndex];
+    AssetMeta *assetArray = D_80094390_94F90[groupIndex];
     return loadUncompressedData(assetArray[pairIndex].start, assetArray[pairIndex].end);
 }
 
 void *loadAssetByIndex_95200(s16 groupIndex, s16 pairIndex) {
-    AssetWithSize *assetArray = D_80094600_95200[groupIndex];
-    return loadCompressedData(assetArray[pairIndex].start, assetArray[pairIndex].end, assetArray[pairIndex].size);
+    CompressedAssetMeta *assetArray = D_80094600_95200[groupIndex];
+    return loadCompressedData(
+        assetArray[pairIndex].start,
+        assetArray[pairIndex].end,
+        assetArray[pairIndex].uncompressedSize
+    );
 }
 
 void *loadAssetByIndex_953E0(s16 index) {
@@ -2072,7 +2258,7 @@ void *loadAssetByIndex_953E0(s16 index) {
         return loadCompressedData(
             D_800947E0_953E0[index].start,
             D_800947E0_953E0[index].end,
-            D_800947E0_953E0[index].size
+            D_800947E0_953E0[index].uncompressedSize
         );
     }
 }
@@ -2092,7 +2278,11 @@ void *load_3ECE40(void) {
 }
 
 void *loadAssetByIndex_95470(s32 index) {
-    return loadCompressedData(D_80094870_95470[index].start, D_80094870_95470[index].end, D_80094870_95470[index].size);
+    return loadCompressedData(
+        D_80094870_95470[index].start,
+        D_80094870_95470[index].end,
+        D_80094870_95470[index].uncompressedSize
+    );
 }
 
 void *loadAssetByIndex_95500(s16 index) {
@@ -2100,7 +2290,11 @@ void *loadAssetByIndex_95500(s16 index) {
 }
 
 void *loadAssetByIndex_95590(s16 index) {
-    return loadCompressedData(D_80094990_95590[index].start, D_80094990_95590[index].end, D_80094990_95590[index].size);
+    return loadCompressedData(
+        D_80094990_95590[index].start,
+        D_80094990_95590[index].end,
+        D_80094990_95590[index].uncompressedSize
+    );
 }
 
 void *loadAssetByIndex_95668(s16 index) {
@@ -2118,7 +2312,7 @@ void *loadAssetByIndex_95668(s16 index) {
     return loadCompressedData(
         D_80094A68_95668[clamped_index].start,
         D_80094A68_95668[clamped_index].end,
-        D_80094A68_95668[clamped_index].size
+        D_80094A68_95668[clamped_index].uncompressedSize
     );
 }
 
@@ -2129,7 +2323,7 @@ void *loadAssetByIndex_95728(s16 index) {
 void *func_8005DC60_5E860(s32 index) {
     void *start;
     void *end;
-    s32 size;
+    s32 uncompressedSize;
     u8 val = ((GameState *)getCurrentAllocation())->unk7A;
 
     if (val == 1) {
@@ -2142,7 +2336,7 @@ void *func_8005DC60_5E860(s32 index) {
         return loadCompressedData(
             D_80094B70_95770[index].start,
             D_80094B70_95770[index].end,
-            D_80094B70_95770[index].size
+            D_80094B70_95770[index].uncompressedSize
         );
     }
 }
@@ -2163,11 +2357,15 @@ s32 loadAssetByIndex_95770(s32 index) {
         return 0x270;
     }
 
-    return D_80094B70_95770[index].size;
+    return D_80094B70_95770[index].uncompressedSize;
 }
 
 void *loadAssetByIndex_5E990(s32 index) {
-    return loadCompressedData(D_80094C30_95830[index].start, D_80094C30_95830[index].end, D_80094C30_95830[index].size);
+    return loadCompressedData(
+        D_80094C30_95830[index].start,
+        D_80094C30_95830[index].end,
+        D_80094C30_95830[index].uncompressedSize
+    );
 }
 
 MemoryAllocatorNode *func_8005DDD8_5E9D8(s16 groupIndex, s16 entityIndex) {
