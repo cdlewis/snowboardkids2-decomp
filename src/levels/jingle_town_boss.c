@@ -177,7 +177,7 @@ typedef s32 (*StateFunc)(void *);
 
 extern s8 gAnalogStickY[];
 extern s8 gAnalogStickX[];
-extern StateFunc D_800BCB20_B40E0[];
+extern StateFunc gJingleTownBossBehaviorModeHandlers[];
 extern s16 D_800BCB30_B40F0[];
 extern s16 D_800BCB3C_B40FC[];
 extern s32 gButtonsPressed[];
@@ -185,7 +185,7 @@ extern FuncPtr gChaseAttackPhaseHandlers[];
 extern FuncPtr gHoverAttackPhaseHandlers[];
 extern s16 gHoverIntroAnimTimers[];
 extern u16 gHoverIntroAnimFrames[];
-extern s32 D_800BCBA0_B4160[][3];
+extern s32 gJingleTownBossHoverExitOffsets[][3];
 extern Vec3i D_800BCB68_B4128;
 extern s32 gJingleTownBossSpawnPos[];
 void func_800BC474_B3A34(Arg0Struct *);
@@ -271,7 +271,7 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
     arg0->unkAC2 = 0;
 
     do {
-    } while (D_800BCB20_B40E0[arg0->behaviorMode](arg0) != 0);
+    } while (gJingleTownBossBehaviorModeHandlers[arg0->behaviorMode](arg0) != 0);
 
     createZRotationMatrix(&arg0->unk9B0, arg0->unkA92);
     createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
@@ -718,32 +718,32 @@ s32 jingleTownBossHoverAttackMainPhase(Arg0Struct *arg0) {
     return 0;
 }
 
-s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
-    Vec3i sp10;
-    Vec3i sp20;
-    u8 temp_v0;
+s32 jingleTownBossHoverAttackExitPhase(Arg0Struct *arg0) {
+    Vec3i posOffset;
+    Vec3i burstPos;
+    u8 phase;
 
     getCurrentAllocation();
 
-    temp_v0 = arg0->behaviorPhase;
-    if (temp_v0 == 0) {
+    phase = arg0->behaviorPhase;
+    if (phase == 0) {
         arg0->behaviorPhase++;
-        transformVector2((s16 *)D_800BCBA0_B4160[0], arg0->unk38, &sp10);
-        arg0->unk434.x += sp10.x;
-        arg0->unk434.y += sp10.y;
-        arg0->unk434.z += sp10.z;
+        transformVector2((s16 *)gJingleTownBossHoverExitOffsets[0], arg0->unk38, &posOffset);
+        arg0->unk434.x += posOffset.x;
+        arg0->unk434.y += posOffset.y;
+        arg0->unk434.z += posOffset.z;
         memcpy(&arg0->unk440, &arg0->unk434, 0xC);
         arg0->unkB84 |= 0x200000;
-        transformVector((s16 *)D_800BCBA0_B4160[1], arg0->unk38, &sp20);
-        spawnBurstEffect(&sp20);
-        transformVector((s16 *)D_800BCBA0_B4160[2], arg0->unk38, &sp20);
-        spawnBurstEffect(&sp20);
-        transformVector((s16 *)D_800BCBA0_B4160[3], arg0->unk38, &sp20);
-        spawnBurstEffect(&sp20);
-        transformVector((s16 *)D_800BCBA0_B4160[4], arg0->unk38, &sp20);
-        spawnBurstEffect(&sp20);
-        transformVector((s16 *)D_800BCBA0_B4160[5], arg0->unk38, &sp20);
-        spawnBurstEffect(&sp20);
+        transformVector((s16 *)gJingleTownBossHoverExitOffsets[1], arg0->unk38, &burstPos);
+        spawnBurstEffect(&burstPos);
+        transformVector((s16 *)gJingleTownBossHoverExitOffsets[2], arg0->unk38, &burstPos);
+        spawnBurstEffect(&burstPos);
+        transformVector((s16 *)gJingleTownBossHoverExitOffsets[3], arg0->unk38, &burstPos);
+        spawnBurstEffect(&burstPos);
+        transformVector((s16 *)gJingleTownBossHoverExitOffsets[4], arg0->unk38, &burstPos);
+        spawnBurstEffect(&burstPos);
+        transformVector((s16 *)gJingleTownBossHoverExitOffsets[5], arg0->unk38, &burstPos);
+        spawnBurstEffect(&burstPos);
         arg0->unk468 = 0x100;
     }
 
@@ -957,8 +957,8 @@ void func_800BCA10_B3FD0(Arg0Struct *arg0) {
         s32 *posPtr;
         u16 temp;
 
-        arg0->unkA10[i].unk0 = arg0->unk970.translation.x + D_800BCBA0_B4160[6 + i][0];
-        arg0->unkA10[i].unk8 = arg0->unk970.translation.z + D_800BCBA0_B4160[6 + i][2];
+        arg0->unkA10[i].unk0 = arg0->unk970.translation.x + gJingleTownBossHoverExitOffsets[6 + i][0];
+        arg0->unkA10[i].unk8 = arg0->unk970.translation.z + gJingleTownBossHoverExitOffsets[6 + i][2];
         posPtr = &arg0->unkA10[i].unk0;
         temp = func_80059E90_5AA90(arg0, temp_s5, arg0->sectorIndex, posPtr);
         arg0->unkA10[i].unk4 = getTrackHeightInSector(temp_s5, temp, posPtr, 0x100000);
