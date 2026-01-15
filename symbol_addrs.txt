@@ -1110,6 +1110,7 @@ getNextCategorySkipping = 0x800B0228;
 getPrevCategorySkipping = 0x800B02B4;
 executeValidateCommand = 0x800B043C;
 executeIsDoneCommand = 0x800B06FC;
+cutsceneCmdHelper = 0x800B07BC; // rom:0x1DD86C
 getCategorySkipValue = 0x800B07F0; // rom:0x1DD8A0
 
 commandCategories = 0x800BA570; // type:s32 size:0x48 rom:0x1E7620

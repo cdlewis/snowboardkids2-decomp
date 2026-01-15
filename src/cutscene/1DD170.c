@@ -410,8 +410,8 @@ s16 executeIsDoneCommand(CurrentCommand *currentCommand, CommandData *commandDat
     return 0;
 }
 
-void func_800B07BC_1DD86C(s32 arg0) {
-    func_800BB47C(arg0, 2, 0x14, 0x11, 8, 0x20);
+void cutsceneCmdHelper(s32 commandIndex) {
+    func_800BB47C(commandIndex, 2, 0x14, 0x11, 8, 0x20);
 }
 
 s32 getCategorySkipValue(u8 categoryIndex) {
