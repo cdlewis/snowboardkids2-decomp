@@ -315,6 +315,6 @@ void copyCutsceneEntry(u8 slotIndex, u16 frameNumber);
 void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber);
 void shiftCutsceneEntryFrame(u8 slotIndex, u16 frameNumber, s32 frameDelta);
 void *loadCutsceneSlotAsset(s8 slotIndex);
-void func_800B46E0(s32 arg0, s8 arg1, s16 arg2);
+void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration);
 void func_800B477C_1E182C(void *);
 void initializeCutsceneSystem(void *);

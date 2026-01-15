@@ -1135,26 +1135,26 @@ void *loadCutsceneSlotAsset(s8 slotIndex) {
     return NULL;
 }
 
-void func_800B46E0(s32 arg0, s8 arg1, s16 arg2) {
+void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration) {
     TaskData *task;
 
-    if (arg2 == 0) {
+    if (duration == 0) {
         return;
     }
 
-    if (arg1 >= 0x10) {
+    if (slotIndex >= 0x10) {
         return;
     }
 
-    if (D_800BA960_1E7A10[arg1].start == NULL) {
+    if (D_800BA960_1E7A10[slotIndex].start == NULL) {
         return;
     }
 
     task = (TaskData *)scheduleTask(&func_800B477C_1E182C, 1, 0, 0x64);
     if (task != NULL) {
         task->unk0 = 0;
-        task->unk1 = arg1;
-        task->unk2 = arg2;
+        task->unk1 = slotIndex;
+        task->unk2 = duration;
         task->unk4 = arg0;
         task->unkE4 = 0xFF;
     }
