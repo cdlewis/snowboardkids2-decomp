@@ -434,52 +434,65 @@ s32 isPointInPlayerCollisionSphere(Player *player, Vec3i *point, s32 extraRadius
     return 0;
 }
 
-Player *func_8005B548_5C148(Vec3i *arg0, s32 arg1, s32 arg2) {
-    Vec3i pos;
+/**
+ * Finds a vulnerable (non-invincible, collision-enabled) player within a given radius of a position.
+ * Similar to findPlayerNearPosition, but additionally filters out:
+ * - Players with collision disabled (unkB88 & 0x10)
+ * - Players with active invincibility (invincibilityTimer != 0)
+ *
+ * @param position Center position to search from (pointer to 3 consecutive s32 values: x, y, z)
+ * @param excludePlayerIndex Player index to skip (-1 to include all players)
+ * @param searchRadius Radius to search within (added to player's collision radius)
+ * @return Player pointer if found, NULL otherwise
+ */
+Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex, s32 searchRadius) {
+    Vec3i deltaPos;
     s32 combinedRadius;
     Allocation5AA90 *allocation;
     ListNode_5AA90 *node;
     Player *playerData;
     void *dataArray;
-    u8 id;
+    u8 playerId;
 
     allocation = getCurrentAllocation();
     node = allocation->list;
 
     for (; node != NULL; node = node->next) {
-        id = node->id;
-        if (arg1 == id) {
+        playerId = node->id;
+        if (excludePlayerIndex == playerId) {
             continue;
         }
 
         dataArray = allocation->dataArray;
-        playerData = (Player *)(id * 0xBE8 + (s32)dataArray);
+        playerData = (Player *)(playerId * 0xBE8 + (s32)dataArray);
 
+        /* Skip players with collision disabled */
         if (playerData->unkB88 & 0x10) {
             continue;
         }
 
+        /* Skip invincible players */
         if (playerData->invincibilityTimer != 0) {
             continue;
         }
 
-        memcpy(&pos, &node->localPos, 0xC);
+        memcpy(&deltaPos, &node->localPos, 0xC);
 
-        pos.x += node->posPtr->x;
-        pos.y += node->posPtr->y;
-        pos.z += node->posPtr->z;
+        deltaPos.x += node->posPtr->x;
+        deltaPos.y += node->posPtr->y;
+        deltaPos.z += node->posPtr->z;
 
-        pos.x -= arg0->x;
-        pos.y -= arg0->y;
-        pos.z -= arg0->z;
+        deltaPos.x -= ((Vec3i *)position)->x;
+        deltaPos.y -= ((Vec3i *)position)->y;
+        deltaPos.z -= ((Vec3i *)position)->z;
 
-        combinedRadius = node->radius + arg2;
+        combinedRadius = node->radius + searchRadius;
 
-        if (-combinedRadius < pos.x && pos.x < combinedRadius && -combinedRadius < pos.y && pos.y < combinedRadius &&
-            -combinedRadius < pos.z && pos.z < combinedRadius) {
+        if (-combinedRadius < deltaPos.x && deltaPos.x < combinedRadius && -combinedRadius < deltaPos.y &&
+            deltaPos.y < combinedRadius && -combinedRadius < deltaPos.z && deltaPos.z < combinedRadius) {
             s32 dist;
 
-            dist = isqrt64((s64)pos.x * pos.x + (s64)pos.y * pos.y + (s64)pos.z * pos.z);
+            dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z);
 
             if (dist < combinedRadius) {
                 u8 index = node->id;

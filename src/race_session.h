@@ -123,7 +123,7 @@ void setPlayerFrozenState(Player *player);
 void playAttackHitVoice(Player *player);
 void playFinishBoostVoice(Player *player);
 void func_80059D30_5A930(Player *arg0);
-Player *func_8005B548_5C148(Vec3i *arg0, s32 arg1, s32 arg2);
+Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex, s32 searchRadius);
 s16 func_8005CE98_5DA98(Player *arg0);
 void spawnHomingProjectile(void *arg0, s32 arg1, void *arg2);
 void setPlayerStarHitState(Player *player, Vec3i *hitPosition);

@@ -290,7 +290,7 @@ void oscillateGhostFade(AnimatedGhostEntity *ghost) {
         setCallback(fadeOutGhost);
     }
 
-    nearbyPlayer = func_8005B548_5C148(&ghost->posX, -1, 0x100000);
+    nearbyPlayer = findVulnerablePlayerNearPosition(&ghost->posX, -1, 0x100000);
 
     if (nearbyPlayer != NULL) {
         if (nearbyPlayer->unkBCF < 3) {

@@ -197,7 +197,7 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
 
     gameState = (GameState *)getCurrentAllocation();
     projectilePos = &arg0->pos;
-    hitPlayer = func_8005B548_5C148(projectilePos, arg0->ownerPlayerIdx, 0x80000);
+    hitPlayer = findVulnerablePlayerNearPosition(projectilePos, arg0->ownerPlayerIdx, 0x80000);
     if (hitPlayer != NULL) {
         if (!(hitPlayer->unkB84 & 0x1000)) {
             /* Player has no shield - apply hit effects */
@@ -420,7 +420,7 @@ void checkParachuteProjectileHit(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->pos;
-    result = func_8005B548_5C148((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
+    result = findVulnerablePlayerNearPosition((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
     if (result == 0) {
         return;
     }
@@ -636,7 +636,7 @@ void checkFryingPanProjectileHit(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->pos;
-    result = func_8005B548_5C148((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
+    result = findVulnerablePlayerNearPosition((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
     if (result == 0) {
         return;
     }
@@ -859,7 +859,7 @@ void checkSnowmanProjectileHit(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->pos;
-    result = func_8005B548_5C148((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
+    result = findVulnerablePlayerNearPosition((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
     if (result == 0) {
         return;
     }
@@ -1305,7 +1305,7 @@ void checkHomingPanelProjectileHit(Struct_52880 *arg0) {
     alloc = (GameState *)getCurrentAllocation();
     new_var3 = arg0;
     s1 = &arg0->pos;
-    result = func_8005B548_5C148((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
+    result = findVulnerablePlayerNearPosition((Vec3i *)s1, new_var3->ownerPlayerIdx, 0x80000);
     if (result == 0) {
         return;
     }
@@ -1751,7 +1751,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
 
     switch (randVal) {
         case 0:
-            player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
+            player = findVulnerablePlayerNearPosition((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
                 setPlayerHomingProjectileRetaliationState(player);
                 for (i = 0; i < 3; i++) {
@@ -1768,7 +1768,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
             }
             break;
         case 1:
-            player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
+            player = findVulnerablePlayerNearPosition((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
                 setPlayerParachuteState(player);
                 arg0->hitCount = arg0->hitCount + 1;
@@ -1779,7 +1779,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
             }
             break;
         case 2:
-            player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
+            player = findVulnerablePlayerNearPosition((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
                 setPlayerShrinkState(player);
                 arg0->hitCount = arg0->hitCount + 1;
@@ -1790,7 +1790,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
             }
             break;
         case 3:
-            player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
+            player = findVulnerablePlayerNearPosition((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
                 setPlayerFrozenState(player);
                 arg0->hitCount = arg0->hitCount + 1;
@@ -1801,7 +1801,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
             }
             break;
         case 4:
-            player = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
+            player = findVulnerablePlayerNearPosition((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
             if (player != NULL) {
                 setPlayerPanelHitState(player);
                 arg0->hitCount = arg0->hitCount + 1;
@@ -2131,7 +2131,7 @@ void func_80055900_56500(Struct_52880 *arg0) {
     Player *result;
 
     getCurrentAllocation();
-    result = func_8005B548_5C148((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
+    result = findVulnerablePlayerNearPosition((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
     if (result != NULL) {
         if ((result->unkB84 & 0x1000) == 0) {
             setPlayerShrinkState(result);

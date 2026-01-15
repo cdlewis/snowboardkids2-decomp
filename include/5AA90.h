@@ -18,6 +18,7 @@ void handlePlayerToPlayerCollision(Player *player);
 void handleCollisionWithTargetPlayer(Player *player);
 void func_8005C838_5D438(ListNode_5AA90 *arg0);
 Player *findPlayerNearPosition(Vec3i *position, s32 excludePlayerIndex, s32 searchRadius);
+Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex, s32 searchRadius);
 s32 func_8005A9A8_5B5A8(Player *player);
 s32 isPointInPlayerCollisionSphere(Player *player, Vec3i *point, s32 extraRadius);
 s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3);
