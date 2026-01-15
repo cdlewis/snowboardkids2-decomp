@@ -622,13 +622,13 @@ void handleOrientedAreaCollision(Vec3i *origin, s32 radialThreshold, s32 depthEx
  * Checks 2D collision (xz-plane) between a point and all players.
  * Pushes players out of collision and may apply knockback.
  *
- * @param arg0 Position to check collision against
- * @param arg1 Radius to add to player's collision radius
- * @param arg2 Maximum height difference for collision
- * @param arg3 Player index to skip (team check)
+ * @param pos Position to check collision against
+ * @param extraRadius Radius to add to player's collision radius
+ * @param maxHeight Maximum height difference for collision
+ * @param excludePlayerIdx Player index to skip (team check)
  * @return 1 if knockback was applied, 0 otherwise
  */
-s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
+s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 maxHeight, s16 excludePlayerIdx) {
     Vec3i deltaPos;
     GameState *allocation;
     s32 combinedRadius;
@@ -644,7 +644,7 @@ s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
         targetPlayer = &allocation->players[playerIndex];
 
         /* Skip collision if players are on the same team */
-        if (arg3 == targetPlayer->playerIndex) {
+        if (excludePlayerIdx == targetPlayer->playerIndex) {
             continue;
         }
 
@@ -657,20 +657,20 @@ s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
         deltaPos.z += targetPlayer->worldPos.z;
 
         /* Calculate relative position */
-        deltaPos.x -= arg0->x;
-        deltaPos.y -= arg0->y;
-        deltaPos.z -= arg0->z;
+        deltaPos.x -= pos->x;
+        deltaPos.y -= pos->y;
+        deltaPos.z -= pos->z;
 
         /* Height constraint check - must be above ground and within range */
         if (deltaPos.y <= 0) {
             continue;
         }
-        if (deltaPos.y >= arg2) {
+        if (deltaPos.y >= maxHeight) {
             continue;
         }
 
         /* Sum of both collision radii */
-        combinedRadius = targetPlayer->collisionRadius + arg1;
+        combinedRadius = targetPlayer->collisionRadius + extraRadius;
         negRadius = -combinedRadius;
 
         /* Quick AABB check on xz plane */
@@ -714,7 +714,7 @@ s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
         if (dist > 0x30000) {
             setPlayerCollisionKnockbackState(
                 targetPlayer,
-                func_8006D21C_6DE1C(arg0->x, arg0->z, targetPlayer->worldPos.x, targetPlayer->worldPos.z),
+                func_8006D21C_6DE1C(pos->x, pos->z, targetPlayer->worldPos.x, targetPlayer->worldPos.z),
                 dist
             );
             return 1;

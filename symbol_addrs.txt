@@ -3321,6 +3321,7 @@ gSkiTrailOffsetTransformsBackward = 0x80090E98; // rom:0x91A98 size:0x18
 handlePlayerToPlayerCollision = 0x8005AB58; // rom:0x5B758
 handleCollisionWithTargetPlayer = 0x8005AE8C; // rom:0x5BA8C
 handleOrientedAreaCollision = 0x8005B730; // rom:0x5C330
+checkPositionPlayerCollisionWithKnockback = 0x8005B9E4; // rom:0x5C5E4
 playSoundEffect = 0x800585C8; // rom:0x591C8
 playTrickSuccessVoice = 0x80059BD4; // rom:0x5A7D4
 playSoundEffectWithVoice = 0x8005854C; // rom:0x5914C
