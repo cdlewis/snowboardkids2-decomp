@@ -3287,4 +3287,5 @@ playSoundEffectWithVolumeAndVoice = 0x80058414; // rom:0x59014
 playSoundEffectWithVolumeAndPan = 0x800583F8; // rom:0x58FF8
 playSoundEffectWithVolumePanAndVoice = 0x80058380; // rom:0x58F80
 resetBoneAnimation = 0x8005F2FC; // rom:0x5FEFC
+jingleTownBossChaseAttackExitPhase = 0x800BBEBC; // rom:0xB347C
 spinRampUpStep = 0x800B756C; // rom:0xA741C

@@ -71,9 +71,9 @@ typedef struct {
     s32 unk440;   /* 0x440 */
     s32 unk444;   /* 0x444 */
     s32 unk448;   /* 0x448 */
-    s32 velocity; /* 0x44C */
-    s32 unk450;   /* 0x450 */
-    s32 unk454;   /* 0x454 */
+    s32 sideVelocity;     /* 0x44C */
+    s32 verticalVelocity; /* 0x450 */
+    s32 forwardVelocity;  /* 0x454 */
     u8 pad458[0x10];
     s32 unk468; /* 0x468 */
     u8 pad46C[0x8];
@@ -212,9 +212,9 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
         arg0->unkB7E = arg0->unkB7C & ~arg0->unkB82;
     }
 
-    arg0->velocity = arg0->unk434.x - arg0->unk440;
-    arg0->unk450 = arg0->unk434.y - arg0->unk444;
-    arg0->unk454 = arg0->unk434.z - arg0->unk448;
+    arg0->sideVelocity = arg0->unk434.x - arg0->unk440;
+    arg0->verticalVelocity = arg0->unk434.y - arg0->unk444;
+    arg0->forwardVelocity = arg0->unk434.z - arg0->unk448;
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
 
     temp = distance_3d(
@@ -322,9 +322,9 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
         0x100000
     );
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
-    arg0->velocity = 0;
-    arg0->unk450 = 0;
-    arg0->unk454 = 0;
+    arg0->sideVelocity = 0;
+    arg0->verticalVelocity = 0;
+    arg0->forwardVelocity = 0;
     arg0->unkA94 = 0x1000;
 
     {
@@ -375,9 +375,9 @@ s32 jingleTownBossChaseAttackIntroPhase(Arg0Struct *arg0) {
         return 1;
     }
 
-    arg0->velocity -= arg0->velocity / 8;
-    arg0->unk454 -= arg0->unk454 / 8;
-    arg0->unk450 += -0x8000;
+    arg0->sideVelocity -= arg0->sideVelocity / 8;
+    arg0->forwardVelocity -= arg0->forwardVelocity / 8;
+    arg0->verticalVelocity += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
     return 0;
@@ -433,7 +433,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         temp_s0 = &arg0->unk970;
         createYRotationMatrix(temp_s0, arg0->unkA94);
         func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, temp_s0, &sp10);
-        temp_s1 = (Vec3i *)&arg0->velocity;
+        temp_s1 = (Vec3i *)&arg0->sideVelocity;
         transformVector3(temp_s1, &sp10, &sp30);
         sp30.x = 0;
         transformVector2(&sp30, &sp10, temp_s1);
@@ -443,19 +443,19 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             sp30.y = 0;
         }
 
-        arg0->velocity += sp30.x;
-        arg0->unk450 += sp30.y;
-        arg0->unk454 += sp30.z;
+        arg0->sideVelocity += sp30.x;
+        arg0->verticalVelocity += sp30.y;
+        arg0->forwardVelocity += sp30.z;
     } else {
-        arg0->velocity -= arg0->velocity / 16;
-        arg0->unk454 -= arg0->unk454 / 16;
+        arg0->sideVelocity -= arg0->sideVelocity / 16;
+        arg0->forwardVelocity -= arg0->forwardVelocity / 16;
     }
 
-    if (arg0->unk450 > 0) {
-        arg0->unk450 = 0;
+    if (arg0->verticalVelocity > 0) {
+        arg0->verticalVelocity = 0;
     }
 
-    arg0->unk450 -= 0x8000;
+    arg0->verticalVelocity -= 0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
     switch (arg0->behaviorCounter) {
@@ -604,14 +604,14 @@ void applyPitchAngleDamping(Arg0Struct *arg0) {
     arg0->pitchAngle = currentAngle + damping;
 }
 
-s32 func_800BBEBC_B347C(Arg0Struct *arg0) {
+s32 jingleTownBossChaseAttackExitPhase(Arg0Struct *arg0) {
     s32 pad[3];
 
     applyPitchAngleDamping(arg0);
     arg0->yawAngle -= 0x100;
-    arg0->velocity -= arg0->velocity / 8;
-    arg0->unk454 -= arg0->unk454 / 8;
-    arg0->unk450 += -0x8000;
+    arg0->sideVelocity -= arg0->sideVelocity / 8;
+    arg0->forwardVelocity -= arg0->forwardVelocity / 8;
+    arg0->verticalVelocity += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
     return 0;
 }
@@ -627,8 +627,8 @@ s32 func_800BBF70_B3530(Arg0Struct *arg0) {
     if (temp_v1 == 0) {
         arg0->behaviorStep = temp_v1 + 1;
         arg0->unkB8C = 1;
-        if (arg0->unk450 > 0) {
-            arg0->unk450 = 0;
+        if (arg0->verticalVelocity > 0) {
+            arg0->verticalVelocity = 0;
         }
         if (!(arg0->unkB84 & 0x80000)) {
             u8 temp_v0 = arg0->unkBDB;
@@ -646,9 +646,9 @@ s32 func_800BBF70_B3530(Arg0Struct *arg0) {
     }
 
     arg0->unkB88 = 0x10;
-    arg0->velocity = 0;
-    arg0->unk454 = 0;
-    arg0->unk450 -= 0x8000;
+    arg0->sideVelocity = 0;
+    arg0->forwardVelocity = 0;
+    arg0->verticalVelocity -= 0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkB8C == -1) {
@@ -680,13 +680,13 @@ s32 func_800BC094_B3654(Arg0Struct *arg0) {
     }
 
     arg0->unkB88 = 0x200;
-    arg0->unk450 += -0x8000;
+    arg0->verticalVelocity += -0x8000;
     arg0->unk468 += -0x8000;
 
     applyPitchAngleDamping(arg0);
 
-    arg0->velocity = 0;
-    arg0->unk454 = 0;
+    arg0->sideVelocity = 0;
+    arg0->forwardVelocity = 0;
     arg0->yawAngle = (arg0->yawAngle + 0x100) & 0x1FFF;
 
     if (arg0->unkB8C == 0) {
@@ -747,9 +747,9 @@ s32 func_800BC1C0_B3780(Arg0Struct *arg0) {
         arg0->unk468 = 0x100;
     }
 
-    arg0->velocity -= arg0->velocity / 8;
-    arg0->unk454 -= arg0->unk454 / 8;
-    arg0->unk450 += -0x8000;
+    arg0->sideVelocity -= arg0->sideVelocity / 8;
+    arg0->forwardVelocity -= arg0->forwardVelocity / 8;
+    arg0->verticalVelocity += -0x8000;
     applyPitchAngleDamping(arg0);
     arg0->yawAngle += arg0->unk468;
     if (arg0->unk468 != 0) {
@@ -896,8 +896,8 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
 
     if (!(arg0->unkB84 & 0x10000)) {
         volume = isqrt64(
-                     (s64)arg0->velocity * arg0->velocity + (s64)arg0->unk450 * arg0->unk450 +
-                     (s64)arg0->unk454 * arg0->unk454
+                     (s64)arg0->sideVelocity * arg0->sideVelocity + (s64)arg0->verticalVelocity * arg0->verticalVelocity +
+                     (s64)arg0->forwardVelocity * arg0->forwardVelocity
                  ) >>
                  12;
         if (volume >= 0x81) {
@@ -910,12 +910,12 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
 
     if (!(arg0->unkB84 & 1)) {
         if (isqrt64(
-                (s64)arg0->velocity * arg0->velocity + (s64)arg0->unk450 * arg0->unk450 +
-                (s64)arg0->unk454 * arg0->unk454
+                (s64)arg0->sideVelocity * arg0->sideVelocity + (s64)arg0->verticalVelocity * arg0->verticalVelocity +
+                (s64)arg0->forwardVelocity * arg0->forwardVelocity
             ) > 0x40000) {
             s32 temp;
 
-            angle = atan2Fixed(-arg0->velocity, -arg0->unk454);
+            angle = atan2Fixed(-arg0->sideVelocity, -arg0->forwardVelocity);
             temp = randA();
             inputVec = &sp58;
             sp58.x = (temp & 0xFF) << 13;
@@ -937,7 +937,7 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
             temp = arg0->unkBCC & 0xF;
             if (temp >= 0) {
                 if (temp < 2) {
-                    spawnDualSnowSprayEffect_SingleSlot(outVec1, outVec2, (Vec3i *)&arg0->velocity, 0);
+                    spawnDualSnowSprayEffect_SingleSlot(outVec1, outVec2, (Vec3i *)&arg0->sideVelocity, 0);
                 }
             }
         }
