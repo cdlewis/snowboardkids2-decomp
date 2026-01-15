@@ -182,7 +182,7 @@ extern s16 D_800BCB30_B40F0[];
 extern s16 D_800BCB3C_B40FC[];
 extern s32 gButtonsPressed[];
 extern FuncPtr gChaseAttackPhaseHandlers[];
-extern FuncPtr D_800BCB74_B4134[];
+extern FuncPtr gHoverAttackPhaseHandlers[];
 extern s16 D_800BCB7C_B413C[];
 extern u16 D_800BCB7E_B413E[];
 extern s32 D_800BCBA0_B4160[][3];
@@ -616,8 +616,8 @@ s32 jingleTownBossChaseAttackExitPhase(Arg0Struct *arg0) {
     return 0;
 }
 
-void func_800BBF40_B3500(Arg0Struct *arg0) {
-    D_800BCB74_B4134[arg0->behaviorPhase](arg0);
+void dispatchHoverAttackPhase(Arg0Struct *arg0) {
+    gHoverAttackPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
 s32 func_800BBF70_B3530(Arg0Struct *arg0) {
