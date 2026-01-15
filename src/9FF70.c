@@ -3394,115 +3394,115 @@ s32 spinFadeInWaitStep(Player *player) {
     return 0;
 }
 
-s32 func_800B781C_A76CC(Player *arg0) {
+s32 warpToShortcutSpinUpStep(Player *player) {
     GameState *gameState;
-    D_80090F90_91B90_item *item;
+    D_80090F90_91B90_item *shortcutConfig;
     s32 pad[12];
 
     gameState = getCurrentAllocation();
-    item = func_80055D10_56910(gameState->memoryPoolId);
+    shortcutConfig = func_80055D10_56910(gameState->memoryPoolId);
 
-    if (arg0->behaviorCounter == 0) {
-        arg0->rotY = 0xE00;
-        arg0->shortcutLapCount = 0;
-        arg0->sectorIndex = 0;
-        arg0->unkB84 |= 0x200;
-        arg0->behaviorCounter++;
-        arg0->currentLap++;
+    if (player->behaviorCounter == 0) {
+        player->rotY = 0xE00;
+        player->shortcutLapCount = 0;
+        player->sectorIndex = 0;
+        player->unkB84 |= 0x200;
+        player->behaviorCounter++;
+        player->currentLap++;
 
-        createYRotationMatrix(&arg0->unk970, 0xE00);
+        createYRotationMatrix(&player->unk970, 0xE00);
 
-        arg0->worldPos.x = item->unkC.x;
-        arg0->worldPos.y = item->unkC.y;
-        arg0->worldPos.z = item->unkC.z;
+        player->worldPos.x = shortcutConfig->unkC.x;
+        player->worldPos.y = shortcutConfig->unkC.y;
+        player->worldPos.z = shortcutConfig->unkC.z;
 
-        memcpy(&arg0->unk440, &arg0->worldPos.x, 0xC);
+        memcpy(&player->unk440, &player->worldPos.x, 0xC);
 
-        arg0->finishAnimState = 2;
-        setViewportFadeValueBySlotIndex(arg0->playerIndex, 0, 0x10);
+        player->finishAnimState = 2;
+        setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
 
-        if (arg0->isBossRacer == 0) {
-            if (arg0->currentLap == gameState->finalLapNumber) {
-                showGoalBanner(arg0->playerIndex);
+        if (player->isBossRacer == 0) {
+            if (player->currentLap == gameState->finalLapNumber) {
+                showGoalBanner(player->playerIndex);
             }
         }
 
-        queueSoundAtPosition(&arg0->worldPos, 0x26);
+        queueSoundAtPosition(&player->worldPos, 0x26);
     }
 
-    decayPlayerSteeringAngles(arg0);
-    func_8005D180_5DD80(arg0, 0);
+    decayPlayerSteeringAngles(player);
+    func_8005D180_5DD80(player, 0);
 
-    arg0->unkBA0 += 0x400;
-    arg0->unkB8C = 0x400;
-    arg0->rotY = arg0->rotY + 0x400;
-    arg0->unkBA2 = arg0->unkBA2 - 0x400;
+    player->unkBA0 += 0x400;
+    player->unkB8C = 0x400;
+    player->rotY = player->rotY + 0x400;
+    player->unkBA2 = player->unkBA2 - 0x400;
 
-    if (arg0->unkBA0 == 0x2000) {
-        arg0->unkB84 &= 0xFF7FFFFF;
-        arg0->behaviorStep++;
+    if (player->unkBA0 == 0x2000) {
+        player->unkB84 &= 0xFF7FFFFF;
+        player->behaviorStep++;
     }
 
-    arg0->unkB84 |= 0x10000;
+    player->unkB84 |= 0x10000;
     return 0;
 }
 
-s32 func_800B7998_A7848(Player *arg0) {
+s32 shortcutSpinDownStep(Player *player) {
     SpinRampDownStep_alloc *alloc = (SpinRampDownStep_alloc *)getCurrentAllocation();
-    s32 temp;
+    s32 newSpinRate;
 
-    decayPlayerSteeringAngles(arg0);
-    func_8005D180_5DD80(arg0, 0);
+    decayPlayerSteeringAngles(player);
+    func_8005D180_5DD80(player, 0);
 
-    arg0->rotY = arg0->rotY + arg0->unkB8C;
-    temp = arg0->unkB8C - 0x10;
-    arg0->unkB8C = temp;
+    player->rotY = player->rotY + player->unkB8C;
+    newSpinRate = player->unkB8C - 0x10;
+    player->unkB8C = newSpinRate;
 
-    if (temp == 0) {
-        arg0->unkB8C = 6;
-        arg0->behaviorStep = arg0->behaviorStep + 1;
+    if (newSpinRate == 0) {
+        player->unkB8C = 6;
+        player->behaviorStep = player->behaviorStep + 1;
         alloc->shortcutWarpPlayerCount = alloc->shortcutWarpPlayerCount - 1;
     }
 
-    arg0->unkB84 = arg0->unkB84 | 0x10000;
+    player->unkB84 = player->unkB84 | 0x10000;
     return 0;
 }
 
-s32 func_800B7A30_A78E0(Player *arg0) {
-    func_8005D308_5DF08(arg0, 3);
+s32 shortcutPostSpinWaitStep(Player *player) {
+    func_8005D308_5DF08(player, 3);
 
-    arg0->unkB8C = arg0->unkB8C - 1;
-    if (arg0->unkB8C == 0) {
-        arg0->unkB8C = 0xE;
-        arg0->behaviorCounter = 0;
-        arg0->behaviorStep = arg0->behaviorStep + 1;
+    player->unkB8C = player->unkB8C - 1;
+    if (player->unkB8C == 0) {
+        player->unkB8C = 0xE;
+        player->behaviorCounter = 0;
+        player->behaviorStep = player->behaviorStep + 1;
     }
 
-    arg0->unkB84 = arg0->unkB84 | 0x10000;
+    player->unkB84 = player->unkB84 | 0x10000;
     return 0;
 }
 
-s32 func_800B7A94_A7944(Player *arg0) {
-    if (arg0->behaviorCounter == 0) {
-        arg0->velocity.z = 0xFFF80000;
-        arg0->velocity.x = 0;
-        arg0->velocity.y = 0x30000;
-        arg0->behaviorCounter = arg0->behaviorCounter + 1;
+s32 shortcutLaunchStep(Player *player) {
+    if (player->behaviorCounter == 0) {
+        player->velocity.z = 0xFFF80000;
+        player->velocity.x = 0;
+        player->velocity.y = 0x30000;
+        player->behaviorCounter = player->behaviorCounter + 1;
     }
 
-    arg0->unkB84 = arg0->unkB84 | 0x10000;
-    arg0->velocity.y = arg0->velocity.y - 0x6000;
-    applyClampedVelocityToPosition(arg0);
-    decayPlayerSteeringAngles(arg0);
+    player->unkB84 = player->unkB84 | 0x10000;
+    player->velocity.y = player->velocity.y - 0x6000;
+    applyClampedVelocityToPosition(player);
+    decayPlayerSteeringAngles(player);
 
-    if (arg0->unkB8C != 0) {
-        arg0->unkB8C = arg0->unkB8C - 1;
+    if (player->unkB8C != 0) {
+        player->unkB8C = player->unkB8C - 1;
     } else {
-        arg0->unkB84 = arg0->unkB84 & 0xFFFFDC7F;
-        resetPlayerBehaviorToDefault(arg0);
+        player->unkB84 = player->unkB84 & 0xFFFFDC7F;
+        resetPlayerBehaviorToDefault(player);
     }
 
-    func_8005D308_5DF08(arg0, 4);
+    func_8005D308_5DF08(player, 4);
     return 0;
 }
 

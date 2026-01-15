@@ -3406,3 +3406,7 @@ spawnGlintEffect = 0x8005182C; // rom:0x5242C
 getTrackHeightInSector = 0x8005CFC0; // rom:0x5DBC0
 getTrackHeightInSectorWithOffset = 0x8005CFDC; // rom:0x5DBDC
 spinFadeInWaitStep = 0x800B7784; // rom:0xA7634
+warpToShortcutSpinUpStep = 0x800B781C; // rom:0xA76CC
+shortcutSpinDownStep = 0x800B7998; // rom:0xA7848
+shortcutPostSpinWaitStep = 0x800B7A30; // rom:0xA78E0
+shortcutLaunchStep = 0x800B7A94; // rom:0xA7944
