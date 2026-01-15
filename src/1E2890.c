@@ -4,7 +4,7 @@
 #include "race_session.h"
 #include "task_scheduler.h"
 
-extern s8 D_800BAF08_1E7FB8;
+extern s8 gStopFanSoundTasks;
 
 typedef struct {
     s16 unk0;
@@ -34,8 +34,8 @@ typedef struct {
 
 void func_800B5A6C_1E2B1C(func_800B5A6C_1E2B1C_arg *arg0);
 
-void func_800B57E0_1E2890(void) {
-    D_800BAF08_1E7FB8 = 1;
+void stopFanSoundTasks(void) {
+    gStopFanSoundTasks = 1;
 }
 
 void func_800B57F0_1E28A0(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -60,12 +60,12 @@ void func_800B57F0_1E28A0(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 
 
 void func_800B5898_1E2948(void) {
     setCleanupCallback(func_800B5984_1E2A34);
-    D_800BAF08_1E7FB8 = 0;
+    gStopFanSoundTasks = 0;
     setCallback(func_800B58D0_1E2980);
 }
 
 void func_800B58D0_1E2980(func_800B58D0_1E2980_arg *arg0) {
-    if (arg0->unk6 == 0 || D_800BAF08_1E7FB8 != 0) {
+    if (arg0->unk6 == 0 || gStopFanSoundTasks != 0) {
         func_80069CF8_6A8F8();
         return;
     }
@@ -105,12 +105,12 @@ void func_800B598C_1E2A3C(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, Cuts
 
 void func_800B5A34_1E2AE4(void) {
     setCleanupCallback(func_800B5B20_1E2BD0);
-    D_800BAF08_1E7FB8 = 0;
+    gStopFanSoundTasks = 0;
     setCallback(func_800B5A6C_1E2B1C);
 }
 
 void func_800B5A6C_1E2B1C(func_800B5A6C_1E2B1C_arg *arg0) {
-    if (arg0->unk4 == 0 || D_800BAF08_1E7FB8 != 0) {
+    if (arg0->unk4 == 0 || gStopFanSoundTasks != 0) {
         func_80069CF8_6A8F8();
         return;
     }
