@@ -206,13 +206,13 @@ u8 incrementCommandIndexWithWrap(u8 categoryIndex, s32 commandIndex) {
 
 s32 decrementCommandIndexClamped(s32 categoryIndex, s32 commandIndex) {
     s16 count = commandCategories[categoryIndex & 0xFF].count;
-    u8 result = commandIndex - 1;
+    u8 decrementedIndex = commandIndex - 1;
 
-    if ((result & 0xFF) >= count) {
-        result = count - 1;
+    if ((decrementedIndex & 0xFF) >= count) {
+        decrementedIndex = count - 1;
     }
 
-    return result & 0xFF;
+    return decrementedIndex & 0xFF;
 }
 
 s32 clampCommandIndex(s32 categoryIndex, u8 commandIndex) {
