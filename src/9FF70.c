@@ -3369,26 +3369,26 @@ s32 spinRampDownStep(Player *player) {
 
 typedef struct {
     u8 _pad0[0x80];
-    u8 unk80; // 0x80
-} func_800B7784_alloc;
+    u8 fadeInPlayerCount; // 0x80 - Number of players in fade-in wait phase
+} SpinFadeInWaitStep_alloc;
 
-s32 func_800B7784_A7634(Player *arg0) {
-    func_800B7784_alloc *alloc = (func_800B7784_alloc *)getCurrentAllocation();
-    s32 temp;
+s32 spinFadeInWaitStep(Player *player) {
+    SpinFadeInWaitStep_alloc *alloc = (SpinFadeInWaitStep_alloc *)getCurrentAllocation();
+    s32 timerRemaining;
 
-    arg0->velocity.x = 0;
-    arg0->velocity.z = 0;
-    arg0->velocity.y = arg0->velocity.y - 0x6000;
-    applyClampedVelocityToPosition(arg0);
-    decayPlayerSteeringAngles(arg0);
-    func_8005D180_5DD80(arg0, 0);
-    arg0->rotY = arg0->rotY + 0x400;
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->velocity.y = player->velocity.y - 0x6000;
+    applyClampedVelocityToPosition(player);
+    decayPlayerSteeringAngles(player);
+    func_8005D180_5DD80(player, 0);
+    player->rotY = player->rotY + 0x400;
 
-    temp = arg0->unkB8C - 1;
-    arg0->unkB8C = temp;
-    if (temp == 0) {
-        arg0->behaviorStep = arg0->behaviorStep + 1;
-        alloc->unk80 = alloc->unk80 - 1;
+    timerRemaining = player->unkB8C - 1;
+    player->unkB8C = timerRemaining;
+    if (timerRemaining == 0) {
+        player->behaviorStep = player->behaviorStep + 1;
+        alloc->fadeInPlayerCount = alloc->fadeInPlayerCount - 1;
     }
 
     return 0;
