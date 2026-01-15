@@ -251,7 +251,6 @@ s32 getNextCategorySkipping(u8 categoryIndex, s16 skipValue) {
 }
 
 s32 getPrevCategorySkipping(s32 categoryIndex, s32 skipValue) {
-    s16 skipValueCast;
     s32 prevIndex;
 
     prevIndex = categoryIndex - 1;
@@ -259,8 +258,7 @@ s32 getPrevCategorySkipping(s32 categoryIndex, s32 skipValue) {
         prevIndex = gCutsceneCategoryCount - 1;
     }
 
-    skipValueCast = (s16)skipValue;
-    if (skipValueCast != -1 && commandCategories[prevIndex & 0xFF].requiresModel == skipValueCast) {
+    if ((s16)skipValue != -1 && commandCategories[prevIndex & 0xFF].requiresModel == (s16)skipValue) {
         prevIndex -= 1;
         if ((prevIndex & 0xFF) == 0xFF) {
             prevIndex = gCutsceneCategoryCount - 1;
