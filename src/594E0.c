@@ -11,7 +11,7 @@ extern u16 D_80093FA4_94BA4[];
 extern u16 D_80093FB8_94BB8[];
 extern u16 D_80093FCC_94BCC[];
 extern u16 D_80093FE0_94BE0[];
-extern u16 D_80093FF4_94BF4[];
+extern u16 gFinishBoostVoiceSounds[];
 extern u16 D_80094008_94C08[];
 extern u16 D_8009401C_94C1C[];
 extern u16 D_80094030_94C30[];
@@ -284,11 +284,16 @@ void playAttackHitVoice(Player *player) {
     }
 }
 
-void func_80059C90_5A890(Player *arg0) {
-    u8 index = arg0->characterId;
+void playFinishBoostVoice(Player *player) {
+    u8 index = player->characterId;
     if (index < 9) {
-        if (arg0->unkB88 == 0) {
-            queueSoundAtPositionWithPriority(&arg0->worldPos, D_80093FF4_94BF4[index], 5, arg0->playerIndex + 4);
+        if (player->unkB88 == 0) {
+            queueSoundAtPositionWithPriority(
+                &player->worldPos,
+                gFinishBoostVoiceSounds[index],
+                5,
+                player->playerIndex + 4
+            );
         }
     }
 }
