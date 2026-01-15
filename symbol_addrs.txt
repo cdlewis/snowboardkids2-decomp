@@ -3227,3 +3227,4 @@ updateStarlightFireworkComplex = 0x800BC1AC; // rom:0xAE56C
 updateStarlightFirework = 0x800BC3D0; // rom:0xAE790
 advanceBoneAnimation = 0x8005ECB8; // rom:0x5F8B8
 handleFallFromUfoStep = 0x800B7444; // rom:0xA72F4
+checkSchedulerFlagAndTransitionToGameInit = 0x80068090; // rom:0x68C90
