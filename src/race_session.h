@@ -43,7 +43,7 @@ typedef struct {
     s16 scale;             /* 0x82 */
 } PlayerFlashEffectState;
 
-void func_80014480_15080(void);
+void initGameSession(void);
 void func_8001452C_1512C(void);
 void initControllerMotors(void);
 void initRace(void);

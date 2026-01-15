@@ -221,5 +221,5 @@ void awaitCutsceneTaskComplete(void) {
 }
 
 void returnToMainGame(void) {
-    func_800693C4_69FC4(&func_80014480_15080, 0xC8);
+    func_800693C4_69FC4(&initGameSession, 200);
 }

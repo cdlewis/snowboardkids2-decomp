@@ -33,7 +33,7 @@ typedef struct {
     u8 pad;
 } TaskData_1512C;
 
-void func_80014480_15080(void) {
+void initGameSession(void) {
     u8 allocation;
 
     D_800AFE8C_A71FC = allocateMemoryNode(0, 0x28, &allocation);
