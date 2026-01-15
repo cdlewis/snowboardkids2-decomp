@@ -127,8 +127,8 @@ typedef struct {
     s32 unkAC8;
     s32 unkACC;
     s32 unkAD0;
-    s32 unkAD4[3];
-    s32 unkAE0;
+    Vec3i collisionOffset;
+    s32 collisionRadius;
     Vec3i unkAE4[6];
     s32 unkB2C;
     u8 paddingB30[0xB40 - 0xB30];

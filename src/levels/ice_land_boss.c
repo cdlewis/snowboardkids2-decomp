@@ -486,7 +486,7 @@ void func_800BB910_B0E00(Player *arg0) {
             (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + i * 16 + 0xC0);
     }
 
-    arg0->unkAE0 = 0x100000;
+    arg0->collisionRadius = 0x100000;
     arg0->unkB2C = 0x100000;
     arg0->unkBB4 = 1;
     arg0->unkB84 = arg0->unkB84 | 0x400000;

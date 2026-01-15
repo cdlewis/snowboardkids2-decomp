@@ -5,6 +5,7 @@ getPlayerRaceGold = 0x80059AC4; // rom:0x5A6C4
 playAttackHitVoice = 0x80059C24; // rom:0x5A824
 getOrUpdatePlayerSectorIndex = 0x80059E90; // rom:0x5AA90
 isPlayerNearShortcut = 0x8005AA9C; // rom:0x5B69C
+isPointInPlayerCollisionSphere = 0x8005B400; // rom:0x5C000
 initFloatingItemSpriteTask = 0x80050F18; // rom:0x51B18
 updateFloatingItemSprite = 0x80050F64; // rom:0x51B64
 cleanupFloatingItemSpriteTask = 0x80050FE0; // rom:0x51BE0

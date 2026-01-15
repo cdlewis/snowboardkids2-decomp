@@ -183,7 +183,7 @@ void handlePlayerToPlayerCollision(Player *player) {
         }
 
         /* Copy target's collision box local position */
-        memcpy(&deltaPos, &targetPlayer->unkAD4, 0xC);
+        memcpy(&deltaPos, &targetPlayer->collisionOffset, 0xC);
 
         /* Convert to world space */
         deltaPos.x += targetPlayer->worldPos.x;
@@ -191,12 +191,12 @@ void handlePlayerToPlayerCollision(Player *player) {
         deltaPos.z += targetPlayer->worldPos.z;
 
         /* Calculate relative position to player's collision box */
-        deltaPos.x -= player->worldPos.x + player->unkAD4[0];
-        deltaPos.y -= player->worldPos.y + player->unkAD4[1];
-        deltaPos.z -= player->worldPos.z + player->unkAD4[2];
+        deltaPos.x -= player->worldPos.x + player->collisionOffset.x;
+        deltaPos.y -= player->worldPos.y + player->collisionOffset.y;
+        deltaPos.z -= player->worldPos.z + player->collisionOffset.z;
 
         /* Sum of both collision box radii */
-        combinedRadius = targetPlayer->unkAE0 + player->unkAE0;
+        combinedRadius = targetPlayer->collisionRadius + player->collisionRadius;
 
         /* Quick AABB check before expensive distance calculation */
         if (-combinedRadius < deltaPos.x && deltaPos.x < combinedRadius && -combinedRadius < deltaPos.y &&
@@ -283,12 +283,12 @@ void handleCollisionWithTargetPlayer(Player *player) {
             deltaPos.z += targetPlayer->worldPos.z;
 
             /* Calculate relative position to player's collision box */
-            deltaPos.x -= player->worldPos.x + player->unkAD4[0];
-            deltaPos.y -= player->worldPos.y + player->unkAD4[1];
-            deltaPos.z -= player->worldPos.z + player->unkAD4[2];
+            deltaPos.x -= player->worldPos.x + player->collisionOffset.x;
+            deltaPos.y -= player->worldPos.y + player->collisionOffset.y;
+            deltaPos.z -= player->worldPos.z + player->collisionOffset.z;
 
             /* Sum of both collision box radii */
-            combinedRadius = (&targetPlayer->unkB2C)[boxIndex] + player->unkAE0;
+            combinedRadius = (&targetPlayer->unkB2C)[boxIndex] + player->collisionRadius;
             negRadius = -combinedRadius;
 
             /* Quick AABB check before expensive distance calculation */
@@ -404,29 +404,29 @@ Player *findPlayerNearPosition(Vec3i *position, s32 excludePlayerIndex, s32 sear
     return NULL;
 }
 
-s32 func_8005B400_5C000(Player *arg0, Vec3i *arg1, s32 arg2) {
-    Vec3i localVec;
-    s32 radius;
+s32 isPointInPlayerCollisionSphere(Player *player, Vec3i *point, s32 extraRadius) {
+    Vec3i delta;
+    s32 combinedRadius;
     s32 negRadius;
     s64 distSq;
 
-    memcpy(&localVec, &arg0->unkAD4, 0xC);
+    memcpy(&delta, &player->collisionOffset, 0xC);
 
-    localVec.x = localVec.x + arg0->worldPos.x;
-    localVec.y = localVec.y + arg0->worldPos.y;
-    localVec.z = localVec.z + arg0->worldPos.z;
+    delta.x += player->worldPos.x;
+    delta.y += player->worldPos.y;
+    delta.z += player->worldPos.z;
 
-    localVec.x = localVec.x - arg1->x;
-    localVec.y = localVec.y - arg1->y;
-    localVec.z = localVec.z - arg1->z;
+    delta.x -= point->x;
+    delta.y -= point->y;
+    delta.z -= point->z;
 
-    radius = arg0->unkAE0 + arg2;
-    negRadius = -radius;
+    combinedRadius = player->collisionRadius + extraRadius;
+    negRadius = -combinedRadius;
 
-    if (negRadius < localVec.x && localVec.x < radius && negRadius < localVec.y && localVec.y < radius &&
-        negRadius < localVec.z && localVec.z < radius) {
-        distSq = (s64)localVec.x * localVec.x + (s64)localVec.y * localVec.y + (s64)localVec.z * localVec.z;
-        if (isqrt64(distSq) < radius) {
+    if (negRadius < delta.x && delta.x < combinedRadius && negRadius < delta.y && delta.y < combinedRadius &&
+        negRadius < delta.z && delta.z < combinedRadius) {
+        distSq = (s64)delta.x * delta.x + (s64)delta.y * delta.y + (s64)delta.z * delta.z;
+        if (isqrt64(distSq) < combinedRadius) {
             return 1;
         }
     }
@@ -518,12 +518,12 @@ void func_8005B730_5C330(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
         } else {
             combinedRadius = arg1;
         }
-        combinedRadius += player->unkAE0;
+        combinedRadius += player->collisionRadius;
 
         /* Calculate delta position */
-        deltaPos.x = (player->unkAD4[0] + player->worldPos.x) - arg0->x;
-        deltaPos.y = (player->unkAD4[1] + player->worldPos.y) - arg0->y;
-        deltaPos.z = (player->unkAD4[2] + player->worldPos.z) - arg0->z;
+        deltaPos.x = (player->collisionOffset.x + player->worldPos.x) - arg0->x;
+        deltaPos.y = (player->collisionOffset.y + player->worldPos.y) - arg0->y;
+        deltaPos.z = (player->collisionOffset.z + player->worldPos.z) - arg0->z;
 
         /* AABB check */
         if (deltaPos.x >= combinedRadius) {
@@ -558,13 +558,13 @@ void func_8005B730_5C330(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
         /* Check z direction and apply push */
         if (rotatedPos.z >= 0) {
             /* Forward collision */
-            if (rotatedPos.z >= arg2 + player->unkAE0) {
+            if (rotatedPos.z >= arg2 + player->collisionRadius) {
                 continue;
             }
 
             deltaPos.y = 0;
             deltaPos.x = 0;
-            deltaPos.z = (arg2 + player->unkAE0) - rotatedPos.z;
+            deltaPos.z = (arg2 + player->collisionRadius) - rotatedPos.z;
 
             rotateVectorY(&deltaPos, arg3, &rotatedPos);
 
@@ -574,8 +574,8 @@ void func_8005B730_5C330(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
 
             setPlayerCollisionKnockbackState(player, negAngle, deltaPos.z);
         } else {
-            /* Backward collision - condition uses unkAE0 */
-            if (-(arg2 + player->unkAE0) >= rotatedPos.z) {
+            /* Backward collision - condition uses collisionRadius */
+            if (-(arg2 + player->collisionRadius) >= rotatedPos.z) {
                 continue;
             }
 
@@ -626,7 +626,7 @@ s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
         }
 
         /* Copy target's collision box local position */
-        memcpy(&deltaPos, &targetPlayer->unkAD4, 0xC);
+        memcpy(&deltaPos, &targetPlayer->collisionOffset, 0xC);
 
         /* Convert to world space */
         deltaPos.x += targetPlayer->worldPos.x;
@@ -647,7 +647,7 @@ s32 func_8005B9E4_5C5E4(Vec3i *arg0, s32 arg1, s32 arg2, s16 arg3) {
         }
 
         /* Sum of both collision radii */
-        combinedRadius = targetPlayer->unkAE0 + arg1;
+        combinedRadius = targetPlayer->collisionRadius + arg1;
         negRadius = -combinedRadius;
 
         /* Quick AABB check on xz plane */
@@ -733,7 +733,7 @@ s32 func_8005BCB8_5C8B8(void *arg0, s32 arg1, s32 arg2) {
         do {
             targetPlayer = &allocation->players[playerIndex];
 
-            memcpy(deltaPosPtr, &targetPlayer->unkAD4, 0xC);
+            memcpy(deltaPosPtr, &targetPlayer->collisionOffset, 0xC);
 
             deltaPos.x += targetPlayer->worldPos.x;
             deltaPos.y += targetPlayer->worldPos.y;
@@ -750,7 +750,7 @@ s32 func_8005BCB8_5C8B8(void *arg0, s32 arg1, s32 arg2) {
                 goto next;
             }
 
-            combinedRadius = targetPlayer->unkAE0 + arg1;
+            combinedRadius = targetPlayer->collisionRadius + arg1;
             negRadius = -combinedRadius;
 
             if ((negRadius >= deltaPos.x) || (deltaPos.x >= combinedRadius)) {
@@ -922,11 +922,11 @@ s32 isPlayerInRangeAndPull(Vec3i *arg0, s32 arg1, Player *arg2) {
 
     memcpy(&localVec, arg0, 0xC);
 
-    localVec.x = localVec.x - (arg2->worldPos.x + arg2->unkAD4[0]);
-    localVec.y = localVec.y - (arg2->worldPos.y + arg2->unkAD4[1]);
-    localVec.z = localVec.z - (arg2->worldPos.z + arg2->unkAD4[2]);
+    localVec.x = localVec.x - (arg2->worldPos.x + arg2->collisionOffset.x);
+    localVec.y = localVec.y - (arg2->worldPos.y + arg2->collisionOffset.y);
+    localVec.z = localVec.z - (arg2->worldPos.z + arg2->collisionOffset.z);
 
-    combinedRadius = arg1 + arg2->unkAE0;
+    combinedRadius = arg1 + arg2->collisionRadius;
     negRadius = -combinedRadius;
 
     if (negRadius < localVec.x && localVec.x < combinedRadius && negRadius < localVec.y &&

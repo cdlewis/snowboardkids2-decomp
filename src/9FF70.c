@@ -1490,8 +1490,8 @@ s32 updateRaceFinishWinStep(Player *player) {
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
 
-    if (player->unkAE0 <= 0xDFFFF) {
-        player->unkAE0 = player->unkAE0 + 0x8000;
+    if (player->collisionRadius <= 0xDFFFF) {
+        player->collisionRadius = player->collisionRadius + 0x8000;
     }
 
     switch (player->behaviorCounter) {
@@ -1538,7 +1538,7 @@ s32 updateRaceFinishLoseStep(Player *player) {
     s32 velocityY;
     s32 temp;
     u8 state;
-    s32 unkAE0;
+    s32 collisionRadius;
 
     flags = player->unkB84;
     velocityY = player->velocity.y;
@@ -1555,9 +1555,9 @@ s32 updateRaceFinishLoseStep(Player *player) {
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
 
-    unkAE0 = player->unkAE0;
-    if (!(0xDFFFF < unkAE0)) {
-        player->unkAE0 = unkAE0 + 0x8000;
+    collisionRadius = player->collisionRadius;
+    if (!(0xDFFFF < collisionRadius)) {
+        player->collisionRadius = collisionRadius + 0x8000;
     }
 
     state = player->behaviorCounter;
