@@ -8,7 +8,7 @@ extern s32 gControllerInputs[4];
 void func_800B20D0_1DF180(void) {
     s32 input = gControllerInputs[0x3];
     if (input & A_BUTTON) {
-        func_800B4C80_1E1D30();
+        playFanSoundOnChannel0();
         return;
     }
 

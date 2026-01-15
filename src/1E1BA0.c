@@ -117,7 +117,7 @@ void playFanSoundAtPosition(s16 fanIndex, s16 arg1, s16 duration, CutsceneSlotDa
     queueSoundAtPositionWithPriority(&position, soundId, 0, duration);
 }
 
-void func_800B4C80_1E1D30(s16 fanIndex) {
+void playFanSoundOnChannel0(s16 fanIndex) {
     s16 soundId;
 
     soundId = getFanSoundId(fanIndex);

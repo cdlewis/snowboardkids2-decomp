@@ -1,6 +1,7 @@
 gFanSoundCount = 0x800BAD0E; // rom:0x1E7DBE type:s16
 gFanSoundIds = 0x800BAA60; // rom:0x1E7B10 type:s16
 playFanSoundEffect = 0x800B4B30; // rom:0x1E1BE0
+playFanSoundOnChannel0 = 0x800B4C80; // rom:0x1E1D30
 D_800BBB50_B5450 = 0x800BBB50; // rom:0xB5450 size:0x18
 addPlayerRaceGold = 0x80059A48; // rom:0x5A648
 addPlayerSkillPoints = 0x80059A88; // rom:0x5A688
