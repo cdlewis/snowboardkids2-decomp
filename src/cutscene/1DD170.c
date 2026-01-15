@@ -150,11 +150,13 @@ struct {
 // clang-format on
 
 // clang-format off
-struct {
-    CommandEntry *unk0;
-    s16 unk4;
-    s16 unk6;
-} commandCategories[9] = {
+typedef struct {
+    CommandEntry *entries;
+    s16 count;
+    s16 requiresModel;
+} CommandCategory;
+
+CommandCategory commandCategories[9] = {
     { &commandTable.entries[COMMAND_INIT_TRACK],   0x01, 0 },
     { &commandTable.entries[COMMAND_SYS_DISP],     0x09, 0 },
     { &commandTable.entries[COMMAND_CHR_POSITION], 0x18, 1 },
@@ -163,18 +165,18 @@ struct {
     { &commandTable.entries[COMMAND_EFFECT_DISP],  0x05, 1 },
     { &commandTable.entries[COMMAND_BGM_PLAY],     0x03, 0 },
     { &commandTable.entries[COMMAND_EFFECT2_DISP], 0x01, 0 },
-    { &commandTable.entries[COMMAND_SYS2_WIPE],    0x02, 1 } 
+    { &commandTable.entries[COMMAND_SYS2_WIPE],    0x02, 1 }
 };
 // clang-format on
 
-u8 D_800BA5B8_1E7668 = 0;
-u8 D_800BA5B9_1E7669 = 9;
+u8 gFirstCutsceneCategoryIndex = 0;
+u8 gCutsceneCategoryCount = 9;
 
 void func_800BB47C(s32, s32, s32, s32, s32, s32);
 
-CommandEntry *getCommandEntry(s32 arg0, s32 arg1) {
-    CommandEntry *temp = commandCategories[(u8)arg0].unk0;
-    return &temp[(u8)arg1];
+CommandEntry *getCommandEntry(s32 categoryIndex, s32 commandIndex) {
+    CommandEntry *entries = commandCategories[(u8)categoryIndex].entries;
+    return &entries[(u8)commandIndex];
 }
 
 CommandEntry *getCommandEntryMasked(u8 arg0, u8 arg1) {
@@ -194,76 +196,74 @@ void *getCommandDescription(u8 a0, u8 a1) {
     return &getCommandEntry(a0, a1)->description;
 }
 
-u8 incrementCommandIndexWithWrap(u8 index, s32 value) {
-    s32 inc = value + 1;
-    s16 lim = commandCategories[index].unk4;
-    u8 test = inc;
-    s32 res = (test < lim) ? inc : 0;
-    return res;
+u8 incrementCommandIndexWithWrap(u8 categoryIndex, s32 commandIndex) {
+    s32 nextIndex = commandIndex + 1;
+    s16 count = commandCategories[categoryIndex].count;
+    u8 test = nextIndex;
+    s32 result = (test < count) ? nextIndex : 0;
+    return result;
 }
 
-s32 decrementCommandIndexClamped(s32 arg0, s32 arg1) {
-    s16 temp_v1 = commandCategories[arg0 & 0xFF].unk4;
-    u8 var_a1 = arg1 - 1;
+s32 decrementCommandIndexClamped(s32 categoryIndex, s32 commandIndex) {
+    s16 count = commandCategories[categoryIndex & 0xFF].count;
+    u8 result = commandIndex - 1;
 
-    if ((var_a1 & 0xFF) >= temp_v1) {
-        var_a1 = temp_v1 - 1;
+    if ((result & 0xFF) >= count) {
+        result = count - 1;
     }
 
-    return var_a1 & 0xFF;
+    return result & 0xFF;
 }
 
-s32 clampCommandIndex(s32 arg0, u8 arg1) {
-    s16 temp_v1 = commandCategories[arg0 & 0xFF].unk4;
-    u8 var_a1 = arg1;
+s32 clampCommandIndex(s32 categoryIndex, u8 commandIndex) {
+    s16 count = commandCategories[categoryIndex & 0xFF].count;
+    u8 result = commandIndex;
 
-    if (arg1 >= temp_v1) {
-        var_a1 = temp_v1 - 1;
+    if (commandIndex >= count) {
+        result = count - 1;
     }
 
-    return var_a1;
+    return result;
 }
 
-s32 getNextCategorySkipping(u8 nextIndex, s16 skipValue) {
-    u16 limit = *(u16 *)&D_800BA5B8_1E7668;
+s32 getNextCategorySkipping(u8 categoryIndex, s16 skipValue) {
+    u16 limit = *(u16 *)&gFirstCutsceneCategoryIndex;
 
-    nextIndex++;
-    if (nextIndex >= limit) {
-        nextIndex = 0;
+    categoryIndex++;
+    if (categoryIndex >= limit) {
+        categoryIndex = 0;
     }
 
     if (skipValue != -1) {
-        while (commandCategories[nextIndex].unk6 == skipValue) {
-            nextIndex++;
-            if (nextIndex >= limit) {
-                nextIndex = 0;
+        while (commandCategories[categoryIndex].requiresModel == skipValue) {
+            categoryIndex++;
+            if (categoryIndex >= limit) {
+                categoryIndex = 0;
             }
         }
     }
 
-    return nextIndex;
+    return categoryIndex;
 }
 
-s32 getPrevCategorySkipping(s32 arg0, s32 arg1) {
-    s16 temp_v1;
-    s32 var_a0;
-    s32 var_v0;
+s32 getPrevCategorySkipping(s32 categoryIndex, s32 skipValue) {
+    s16 skipValueCast;
+    s32 prevIndex;
 
-    var_a0 = arg0 - 1;
-    if ((var_a0 & 0xFF) == 0xFF) {
-        var_a0 = D_800BA5B9_1E7669 - 1;
-        var_v0 = arg1 << 0x10;
+    prevIndex = categoryIndex - 1;
+    if ((prevIndex & 0xFF) == 0xFF) {
+        prevIndex = gCutsceneCategoryCount - 1;
     }
 
-    temp_v1 = (s16)arg1;
-    if (temp_v1 != -1 && commandCategories[var_a0 & 0xFF].unk6 == temp_v1) {
-        var_a0 -= 1;
-        if ((var_a0 & 0xFF) == 0xFF) {
-            var_a0 = D_800BA5B9_1E7669 - 1;
+    skipValueCast = (s16)skipValue;
+    if (skipValueCast != -1 && commandCategories[prevIndex & 0xFF].requiresModel == skipValueCast) {
+        prevIndex -= 1;
+        if ((prevIndex & 0xFF) == 0xFF) {
+            prevIndex = gCutsceneCategoryCount - 1;
         }
     }
 
-    return var_a0 & 0xFF;
+    return prevIndex & 0xFF;
 }
 
 void initializeCutsceneCommand(
@@ -274,9 +274,8 @@ void initializeCutsceneCommand(
     u8 frameIndex
 ) {
     s32 shouldRun;
-    s32 temp;
     void (*handler)(CurrentCommand *, CommandData *, s8);
-    s32 *temp2;
+    s32 *isActivePtr;
 
     shouldRun = TRUE;
 
@@ -289,8 +288,8 @@ void initializeCutsceneCommand(
         handler = getCommandEntry(commandCategory, commandIndex & 0xFF)->init;
         if (handler) {
             // basically: !arg1[arg4].isActive
-            if ((*(temp2 = &commandData[(s8)frameIndex].isActive)) == FALSE) {
-                shouldRun = shouldRun & (-(commandCategories[commandCategory].unk6 != 1));
+            if ((*(isActivePtr = &commandData[(s8)frameIndex].isActive)) == FALSE) {
+                shouldRun = shouldRun & (-(commandCategories[commandCategory].requiresModel != 1));
             }
 
             if (shouldRun) {
@@ -300,22 +299,29 @@ void initializeCutsceneCommand(
     }
 }
 
-s32 executeValidateCommand(CurrentCommand *arg0, CommandData *arg1, s32 arg2, s32 arg3, s32 arg4, s8 arg5) {
+s32 executeValidateCommand(
+    CurrentCommand *currentCommand,
+    CommandData *commandData,
+    s32 arg2,
+    s32 arg3,
+    s32 arg4,
+    s8 frameIndex
+) {
     s32 check;
-    CommandEntry *temp_v0;
-    CommandData *ptr;
+    CommandEntry *commandEntry;
+    CommandData *dataPtr;
 
     check = 1;
-    temp_v0 = getCommandEntry(arg0->commandCategory, arg0->commandIndex);
+    commandEntry = getCommandEntry(currentCommand->commandCategory, currentCommand->commandIndex);
 
-    if (temp_v0->validate) {
-        ptr = &arg1[arg5];
-        if (ptr->isActive == 0) {
-            check = commandCategories[arg0->commandCategory].unk6 != 1;
+    if (commandEntry->validate) {
+        dataPtr = &commandData[frameIndex];
+        if (dataPtr->isActive == 0) {
+            check = commandCategories[currentCommand->commandCategory].requiresModel != 1;
         }
 
         if (check) {
-            return temp_v0->validate(arg0, arg1, arg2, arg3, arg4, arg5);
+            return commandEntry->validate(currentCommand, commandData, arg2, arg3, arg4, frameIndex);
         }
     }
 
@@ -338,7 +344,7 @@ s32 initializeSlotState(StateEntry *state, CutsceneManager *cutsceneManager, s8 
         activeSlot->unk43 = state->commandType;
 
         if (!cutsceneManager->slots[index].model) {
-            shouldExecute = commandCategories[state->commandCategory].unk6 != 1;
+            shouldExecute = commandCategories[state->commandCategory].requiresModel != 1;
         }
 
         if (shouldExecute) {
@@ -367,7 +373,7 @@ s32 updateSlotData(CutsceneManager *cutsceneManager, s8 index) {
 
         if (entry->update) {
             if (!cutsceneManager->slots[index].model) {
-                if (commandCategories[slot->unk42].unk6 == TRUE) {
+                if (commandCategories[slot->unk42].requiresModel == TRUE) {
                     shouldExecute = FALSE;
                 }
             }
@@ -383,19 +389,19 @@ s32 updateSlotData(CutsceneManager *cutsceneManager, s8 index) {
     return result;
 }
 
-s16 executeIsDoneCommand(CurrentCommand *arg0, CommandData *arg1, s8 arg2) {
-    s32 var_s2 = 1;
-    s16 (*temp_v1)(CurrentCommand *, CommandData *, s8) =
-        getCommandEntry(arg0->commandCategory, arg0->commandIndex)->isDone;
+s16 executeIsDoneCommand(CurrentCommand *currentCommand, CommandData *commandData, s8 frameIndex) {
+    s32 shouldRun = 1;
+    s16 (*isDoneFunc)(CurrentCommand *, CommandData *, s8) =
+        getCommandEntry(currentCommand->commandCategory, currentCommand->commandIndex)->isDone;
 
-    if (temp_v1 != 0) {
-        CommandData *temp = &arg1[arg2];
-        if (temp->isActive == 0) {
-            var_s2 = (commandCategories[arg0->commandCategory].unk6 != 1);
+    if (isDoneFunc != 0) {
+        CommandData *data = &commandData[frameIndex];
+        if (data->isActive == 0) {
+            shouldRun = (commandCategories[currentCommand->commandCategory].requiresModel != 1);
         }
 
-        if (var_s2 != 0) {
-            return temp_v1(arg0, arg1, arg2);
+        if (shouldRun != 0) {
+            return isDoneFunc(currentCommand, commandData, frameIndex);
         }
     }
 
@@ -406,6 +412,6 @@ void func_800B07BC_1DD86C(s32 arg0) {
     func_800BB47C(arg0, 2, 0x14, 0x11, 8, 0x20);
 }
 
-s32 getCategorySkipValue(u8 arg0) {
-    return commandCategories[arg0].unk6;
+s32 getCategorySkipValue(u8 categoryIndex) {
+    return commandCategories[categoryIndex].requiresModel;
 }
