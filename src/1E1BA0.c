@@ -70,16 +70,12 @@ s16 getFanSoundCount(void) {
     return gFanSoundCount;
 }
 
-s16 getFanSoundId(s16 arg0) {
-    s16 temp_v1;
-    s16 temp_v0;
+s16 getFanSoundId(s16 fanIndex) {
+    s16 count = gFanSoundCount;
     s16 index;
 
-    temp_v1 = gFanSoundCount;
-    temp_v0 = arg0;
-
-    if (temp_v0 < temp_v1) {
-        index = arg0;
+    if (fanIndex < count) {
+        index = fanIndex;
     } else {
         index = 0;
     }
@@ -87,21 +83,20 @@ s16 getFanSoundId(s16 arg0) {
     return gFanSoundIds[index];
 }
 
-void func_800B4B30_1E1BE0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    s16 temp;
+void func_800B4B30_1E1BE0(s16 fanIndex, s16 arg1, s16 arg2, s16 arg3) {
+    s16 soundId;
 
     if (arg3 <= 0) {
-        temp = getFanSoundId(arg0);
-        playSoundEffectWithPriorityAndPan(temp, arg1, arg2 + 0x80, 0);
+        soundId = getFanSoundId(fanIndex);
+        playSoundEffectWithPriorityAndPan(soundId, arg1, arg2 + 0x80, 0);
     } else {
-        temp = getFanSoundId(arg0);
-        playSoundEffectOnChannel(temp, arg1, arg2 + 0x80, 0, arg3);
+        soundId = getFanSoundId(fanIndex);
+        playSoundEffectOnChannel(soundId, arg1, arg2 + 0x80, 0, arg3);
     }
 }
 
-void func_800B4BDC_1E1C8C(s16 arg0, s16 arg1, s16 arg2, CutsceneSlotData *arg3) {
+void func_800B4BDC_1E1C8C(s16 fanIndex, s16 arg1, s16 duration, CutsceneSlotData *arg3) {
     Vec3i position;
-    s16 duration;
     s16 soundId;
 
     if (arg3 != NULL) {
@@ -112,22 +107,21 @@ void func_800B4BDC_1E1C8C(s16 arg0, s16 arg1, s16 arg2, CutsceneSlotData *arg3) 
         position.z = 0;
     }
 
-    duration = arg2;
     if (duration <= 0) {
-        soundId = getFanSoundId(arg0);
+        soundId = getFanSoundId(fanIndex);
         queueSoundAtPosition(&position, soundId);
         return;
     }
 
-    soundId = getFanSoundId(arg0);
+    soundId = getFanSoundId(fanIndex);
     queueSoundAtPositionWithPriority(&position, soundId, 0, duration);
 }
 
-void func_800B4C80_1E1D30(s16 arg0) {
-    s16 temp;
+void func_800B4C80_1E1D30(s16 fanIndex) {
+    s16 soundId;
 
-    temp = getFanSoundId(arg0);
-    playSoundEffectOnChannelNoPriority(temp, 0);
+    soundId = getFanSoundId(fanIndex);
+    playSoundEffectOnChannelNoPriority(soundId, 0);
 }
 
 void func_800B4CB0_1E1D60(void) {
@@ -222,12 +216,12 @@ void cleanupFanEffectTask(SceneModel_unk98 *arg0) {
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void spawnFanEffect(s32 arg0, s16 arg1) {
+void spawnFanEffect(s32 displayList, s16 frames) {
     FanEffectTask *task = (FanEffectTask *)scheduleTask(&initFanEffectTask, 1, 0, 0x64);
 
     if (task != NULL) {
-        task->unk78 = arg0;
+        task->unk78 = displayList;
         task->unk80 = 0;
-        task->unk86 = arg1;
+        task->unk86 = frames;
     }
 }
