@@ -28,7 +28,7 @@ typedef struct {
 
 typedef struct {
     void *ghostSlotData;
-    void *unk4;
+    void *ghostSpriteAsset;
 } GhostManager;
 
 void scheduleFloatingSpriteEntity(s16 variantIndex);
@@ -39,6 +39,6 @@ void initSwingingPendulumTrap(SwingingPendulumTrap *arg0);
 
 void initFloatingBillboardSpawner(s16 *spawnTimer);
 
-void func_800BC13C_AFE2C(GhostManager *ghostManager);
+void initGhostManager(GhostManager *ghostManager);
 
 void func_800BC72C_B041C(s16 *arg0);

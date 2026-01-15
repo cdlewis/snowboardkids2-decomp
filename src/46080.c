@@ -2980,7 +2980,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             scheduleFloatingSpriteEntity(2);
             scheduleFloatingSpriteEntity(3);
             scheduleFloatingSpriteEntity(4);
-            scheduleTask(&func_800BC13C_AFE2C, 0, 0, 0xD3);
+            scheduleTask(&initGhostManager, 0, 0, 0xD3);
             scheduleTask(&func_800BC72C_B041C, 0, 0, 0xD3);
             schedulePlayerSparkleTask();
             break;

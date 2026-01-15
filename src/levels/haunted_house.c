@@ -581,8 +581,8 @@ void scheduleFloatingSpriteEntity(s16 variantIndex) {
     }
 }
 
-void func_800BC13C_AFE2C(GhostManager *ghostManager) {
-    ghostManager->unk4 = func_80055D7C_5697C(9);
+void initGhostManager(GhostManager *ghostManager) {
+    ghostManager->ghostSpriteAsset = func_80055D7C_5697C(9);
     ghostManager->ghostSlotData = 0;
     setCleanupCallback(func_800BC340_B0030);
     setCallback(func_800BC184_AFE74);
@@ -675,7 +675,7 @@ void func_800BC220_AFF10(u8 *ghostSlots) {
 
 void func_800BC340_B0030(GhostManager *ghostManager) {
     ghostManager->ghostSlotData = freeNodeMemory(ghostManager->ghostSlotData);
-    ghostManager->unk4 = freeNodeMemory(ghostManager->unk4);
+    ghostManager->ghostSpriteAsset = freeNodeMemory(ghostManager->ghostSpriteAsset);
 }
 
 void func_800BC378_B0068(GhostRenderState *state) {
